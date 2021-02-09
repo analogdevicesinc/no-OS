@@ -18,10 +18,6 @@
 
 #include "adi_common_error.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 /* Extending Common Errors for ADRV9001 */
 #define ADI_ADRV9001_ERR_INV_TX_ATTEN_MODE          (ADI_COMMON_ERR_EXTENSION_1 + 0x01)     /*!< Invalid Tx attenuation control mode found */
 #define ADI_ADRV9001_ERR_GP_INTERRUPT               (ADI_COMMON_ERR_EXTENSION_1 + 0x02)     /*!< GP interrupt error has been detected, more info can be found in adrv9001_GpIntHandler */
@@ -63,10 +59,5 @@ extern "C" {
 #define ADI_ADRV9001_SRC_ARMINITCALS                 (ADI_COMMON_SRC_EXTENSION_1 + 0x13)    /*!< Error detected in adi_adrv9001_cals.c  arm cmd init cals */
 
 #define ADI_ADRV9001_SRC_STREAMCMD                   (ADI_COMMON_SRC_EXTENSION_1 + 0x20)    /*!< Error detected in adi_adrv9001_stream.c */
-
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif /* _ADI_ADRV9001_ERROR_H_ */

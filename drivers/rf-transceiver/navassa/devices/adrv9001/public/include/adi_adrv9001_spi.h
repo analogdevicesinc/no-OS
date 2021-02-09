@@ -12,11 +12,10 @@
  * see the "LICENSE.txt" file in this zip file.
  */
 
-#ifndef _ADI_ADRV9001_HAL_H_
-#define _ADI_ADRV9001_HAL_H_
+#ifndef _ADI_ADRV9001_SPI_H_
+#define _ADI_ADRV9001_SPI_H_
 
 #include "adi_adrv9001_spi_types.h"
-#include "adi_platform.h"
 
 #ifdef __KERNEL__
 #include <linux/types.h>
@@ -69,6 +68,25 @@ extern "C" {
 int32_t adi_adrv9001_spi_DataPack(adi_adrv9001_Device_t *adrv9001, uint8_t *wrData, uint16_t *numWrBytes, uint16_t addr, uint8_t mask, uint8_t data, uint8_t writeFlag);
 
 /**
+* \brief creates an array acceptable to the ADIHAL layer.
+* SPI write in ADRV9001 stream mode requires 6 bytes, two address and four data in order to change
+* all 8 bits in register. if only a few bits are to be changed then a
+* read Modify Write (RMW) operation is needed.
+* The ADRV9001 provides a write only RMW which reduces spi transactions.
+*
+* \param[in]     adrv9001       Context variable - Pointer to the ADRV9001 device data structure
+* \param[out]    wrData         The resulting array to be set to the HAL layer.
+* \param[in,out] numWrBytes     The number of elements filled in the wrData array
+* \param[in]     addr           The address to be added to wrData.
+* \param[in]     data           The data to be added to wrData.
+* \param[in]     count          The number of register addresses to write data to.
+* \param[in]     writeFlag      The value to be bitwise or'd into the MSB of the 16-bit address
+*
+* \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
+*/
+int32_t adi_adrv9001_spi_Stream_DataPack(adi_adrv9001_Device_t *adrv9001, uint8_t *wrData, uint32_t *numWrBytes, uint16_t addr, const uint8_t data[], uint32_t count, uint8_t writeFlag);
+
+/**
 * \brief writes a byte of data to the part.
 *
 * \param[in] adrv9001       Context variable - Pointer to the ADRV9001 device data structure
@@ -78,6 +96,18 @@ int32_t adi_adrv9001_spi_DataPack(adi_adrv9001_Device_t *adrv9001, uint8_t *wrDa
 * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
 */
 int32_t adi_adrv9001_spi_Byte_Write(adi_adrv9001_Device_t *adrv9001, uint16_t addr, uint8_t data);
+
+/**
+* \brief writes a byte of data to the part in ADRV9001 stream mode.
+*
+* \param[in] adrv9001       Context variable - Pointer to the ADRV9001 device data structure
+* \param[in] addr           The address of the register to write to.
+* \param[in] data           The value to write to the register.
+* \param[in] count          The number of register addresses to write data to.
+*
+* \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
+*/
+int32_t adi_adrv9001_spi_Bytes_Stream_Write(adi_adrv9001_Device_t *adrv9001, uint16_t addr, const uint8_t data[], uint32_t count);
 
 /**
 * \brief writes an array of bytes of data to the part.
@@ -169,4 +199,4 @@ int32_t adi_adrv9001_spi_Cache_Read(adi_adrv9001_Device_t *adrv9001, const uint3
 }
 #endif
 
-#endif /* _ADI_ADRV9001_HAL_H_ */
+#endif /* _ADI_ADRV9001_SPI_H_ */

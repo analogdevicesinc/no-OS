@@ -21,18 +21,16 @@
 #include <stdbool.h>
 #endif
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+#define ADI_ADRV9001_DPD_NUM_COEFFICIENTS 208
 
 /**
  * \brief Supported DPD amplifier types
  */
 typedef enum adi_adrv9001_DpdAmplifier
 {
-    ADI_ADRV9001_DPD_AMPLIFIER_NONE,
-    ADI_ADRV9001_DPD_AMPLIFIER_DEFAULT,
-    ADI_ADRV9001_DPD_AMPLIFIER_GAN
+    ADI_ADRV9001_DPDAMPLIFIER_NONE,
+    ADI_ADRV9001_DPDAMPLIFIER_DEFAULT,
+    ADI_ADRV9001_DPDAMPLIFIER_GAN
 } adi_adrv9001_DpdAmplifier_e;
 
 /**
@@ -40,8 +38,8 @@ typedef enum adi_adrv9001_DpdAmplifier
  */
 typedef enum adi_adrv9001_DpdLutSize
 {
-    ADI_ADRV9001_DPD_LUT_SIZE_256,
-    ADI_ADRV9001_DPD_LUT_SIZE_512
+    ADI_ADRV9001_DPDLUTSIZE_256,
+    ADI_ADRV9001_DPDLUTSIZE_512
 } adi_adrv9001_DpdLutSize_e;
 
 /**
@@ -49,10 +47,10 @@ typedef enum adi_adrv9001_DpdLutSize
  */
 typedef enum adi_adrv9001_DpdModel
 {
-    ADI_ADRV9001_DPD_MODEL_0 = 0,
-    ADI_ADRV9001_DPD_MODEL_1 = 1,
-    ADI_ADRV9001_DPD_MODEL_3 = 3,
-    ADI_ADRV9001_DPD_MODEL_4 = 4
+    ADI_ADRV9001_DPDMODEL_0 = 0,
+    ADI_ADRV9001_DPDMODEL_1 = 1,
+    ADI_ADRV9001_DPDMODEL_3 = 3,
+    ADI_ADRV9001_DPDMODEL_4 = 4
 } adi_adrv9001_DpdModel_e;
 
 /**
@@ -102,8 +100,10 @@ typedef struct adi_adrv9001_DpdCfg
     bool resetLuts;                         //!< Whether to reset LUTs to unity. Always read as 0 and is self-clearing */
 } adi_adrv9001_DpdCfg_t;
 
-#ifdef __cplusplus
-}
-#endif
+typedef struct adi_adrv9001_DpdCoefficients
+{
+    uint8_t region;     //!< The region of the LUT initialization data (valid 0 - 7); ignored on get - returns most recent
+    uint8_t coefficients[ADI_ADRV9001_DPD_NUM_COEFFICIENTS];    //!< DPD coefficients
+}adi_adrv9001_DpdCoefficients_t;
 
 #endif /* _ADI_ADRV9001_DPD_TYPES_H_ */

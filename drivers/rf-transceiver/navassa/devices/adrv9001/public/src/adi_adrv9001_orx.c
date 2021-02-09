@@ -80,10 +80,12 @@ int32_t adi_adrv9001_ORx_Gain_Set(adi_adrv9001_Device_t *device,
     if (channel == ADI_CHANNEL_1)
     {
         ADI_EXPECT(adrv9001_NvsRegmapRxb_AgcManualGainIndexOrx_Set, device, ADRV9001_BF_RXB1_CORE, gainIndex);
+        ADI_EXPECT(adrv9001_NvsRegmapRxb_AgcManualGainIndexOrxB_Set, device, ADRV9001_BF_RXB1_CORE, gainIndex);
     }
     else /* ORx2 */
     {
         ADI_EXPECT(adrv9001_NvsRegmapRxb_AgcManualGainIndexOrx_Set, device, ADRV9001_BF_RXB2_CORE, gainIndex);
+        ADI_EXPECT(adrv9001_NvsRegmapRxb_AgcManualGainIndexOrxB_Set, device, ADRV9001_BF_RXB2_CORE, gainIndex);
     }
 
     ADI_API_RETURN(device)

@@ -30,14 +30,14 @@ static int32_t __maybe_unused adi_adrv9001_dpd_Initial_Configure_Validate(adi_ad
     ADI_RANGE_CHECK(adrv9001, channel, ADI_CHANNEL_1, ADI_CHANNEL_2);
 
     ADI_NULL_PTR_RETURN(&adrv9001->common, dpdConfig);
-    ADI_RANGE_CHECK(adrv9001, dpdConfig->amplifierType, ADI_ADRV9001_DPD_AMPLIFIER_NONE, ADI_ADRV9001_DPD_AMPLIFIER_GAN);
-    ADI_RANGE_CHECK(adrv9001, dpdConfig->lutSize, ADI_ADRV9001_DPD_LUT_SIZE_256, ADI_ADRV9001_DPD_LUT_SIZE_512);
+    ADI_RANGE_CHECK(adrv9001, dpdConfig->amplifierType, ADI_ADRV9001_DPDAMPLIFIER_NONE, ADI_ADRV9001_DPDAMPLIFIER_GAN);
+    ADI_RANGE_CHECK(adrv9001, dpdConfig->lutSize, ADI_ADRV9001_DPDLUTSIZE_256, ADI_ADRV9001_DPDLUTSIZE_512);
     switch (dpdConfig->model)
     {
-    case ADI_ADRV9001_DPD_MODEL_0:  /* Falls through */
-    case ADI_ADRV9001_DPD_MODEL_1:  /* Falls through */
-    case ADI_ADRV9001_DPD_MODEL_3:  /* Falls through */
-    case ADI_ADRV9001_DPD_MODEL_4:
+    case ADI_ADRV9001_DPDMODEL_0:  /* Falls through */
+    case ADI_ADRV9001_DPDMODEL_1:  /* Falls through */
+    case ADI_ADRV9001_DPDMODEL_3:  /* Falls through */
+    case ADI_ADRV9001_DPDMODEL_4:
         break;
     default:
         ADI_ERROR_REPORT(&adrv9001->common,
@@ -245,5 +245,114 @@ int32_t adi_adrv9001_dpd_Inspect(adi_adrv9001_Device_t *adrv9001,
     dpdConfig->immediateLutSwitching = (bool)armReadBack[offset++];
     dpdConfig->useSpecialFrame = (bool)armReadBack[offset++];
 
+    ADI_API_RETURN(adrv9001);
+}
+
+static int32_t __maybe_unused adi_adrv9001_dpd_coefficients_Set_Validate(adi_adrv9001_Device_t *adrv9001,
+                                                                         adi_common_ChannelNumber_e channel,
+                                                                         adi_adrv9001_DpdCoefficients_t *coefficients)
+{
+    adi_adrv9001_ChannelState_e state = ADI_ADRV9001_CHANNEL_STANDBY;
+    uint8_t port_index = 0;
+    uint8_t chan_index = 0;
+    
+    ADI_RANGE_CHECK(adrv9001, channel, ADI_CHANNEL_1, ADI_CHANNEL_2);
+    ADI_NULL_PTR_RETURN(&adrv9001->common, coefficients);
+    ADI_RANGE_CHECK(adrv9001, coefficients->region, 0, 7);
+    
+    ADI_EXPECT(adi_adrv9001_Radio_Channel_State_Get, adrv9001, ADI_TX, channel, &state);
+    adi_common_port_to_index(ADI_TX, &port_index);
+    adi_common_channel_to_index(channel, &chan_index);
+    if (ADI_ADRV9001_CHANNEL_CALIBRATED != state)
+    {
+        ADI_ERROR_REPORT(&adrv9001->common,
+                         ADI_COMMON_ERRSRC_API,
+                         ADI_COMMON_ERR_INV_PARAM,
+                         ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                         channel,
+                         "Invalid channel state. Channel must be in CALIBRATED state");
+    }
+    
+    ADI_API_RETURN(adrv9001);
+}
+
+static const uint8_t OBJID_DPD_LUT_INITIALIZE = 0xA8;
+
+int32_t adi_adrv9001_dpd_coefficients_Set(adi_adrv9001_Device_t *adrv9001,
+                                          adi_common_ChannelNumber_e channel,
+                                          adi_adrv9001_DpdCoefficients_t *coefficients)
+{
+    uint8_t armData[216] = { 0 };
+    uint8_t extData[5] = { 0 };
+    uint32_t offset = 0;
+    uint8_t i = 0;
+    
+    ADI_PERFORM_VALIDATION(adi_adrv9001_dpd_coefficients_Set_Validate, adrv9001, channel, coefficients);
+    
+    adrv9001_LoadFourBytes(&offset, armData, sizeof(armData) - sizeof(uint32_t));
+    armData[offset++] = coefficients->region;
+    offset += 3;    // Reserved
+    for(i = 0 ; i < ADI_ADRV9001_DPD_NUM_COEFFICIENTS; i++)
+    {
+        armData[offset++] = coefficients->coefficients[i];
+    }
+    
+    extData[0] = adi_adrv9001_Radio_MailboxChannel_Get(ADI_TX, channel);
+    extData[1] = ADRV9001_ARM_OBJECTID_CONFIG;
+    extData[2] = OBJID_DPD_LUT_INITIALIZE;
+    
+    ADI_EXPECT(adi_adrv9001_arm_Config_Write, adrv9001, armData, sizeof(armData), extData, sizeof(extData))
+    
+    ADI_API_RETURN(adrv9001);
+}
+
+static int32_t __maybe_unused adi_adrv9001_dpd_coefficients_Get_Validate(adi_adrv9001_Device_t *adrv9001,
+                                                                         adi_common_ChannelNumber_e channel,
+                                                                         adi_adrv9001_DpdCoefficients_t *coefficients)
+{
+    adi_adrv9001_ChannelState_e state = ADI_ADRV9001_CHANNEL_STANDBY;
+    uint8_t port_index = 0;
+    uint8_t chan_index = 0;
+    
+    ADI_RANGE_CHECK(adrv9001, channel, ADI_CHANNEL_1, ADI_CHANNEL_2);
+    ADI_NULL_PTR_RETURN(&adrv9001->common, coefficients);
+ 
+    ADI_EXPECT(adi_adrv9001_Radio_Channel_State_Get, adrv9001, ADI_TX, channel, &state);
+    adi_common_port_to_index(ADI_TX, &port_index);
+    adi_common_channel_to_index(channel, &chan_index);
+    if (ADI_ADRV9001_CHANNEL_CALIBRATED != state)
+    {
+        ADI_ERROR_REPORT(&adrv9001->common,
+                         ADI_COMMON_ERRSRC_API,
+                         ADI_COMMON_ERR_INV_PARAM,
+                         ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                         channel,
+                         "Invalid channel state. Channel must be in CALIBRATED state");
+    }
+    
+    ADI_API_RETURN(adrv9001);
+}
+
+int32_t adi_adrv9001_dpd_coefficients_Get(adi_adrv9001_Device_t *adrv9001,
+                                          adi_common_ChannelNumber_e channel,
+                                          adi_adrv9001_DpdCoefficients_t *coefficients)
+{
+    uint8_t armReadBack[212] = { 0 };
+    uint8_t channelMask = 0;
+    uint32_t offset = 0;
+    uint8_t i = 0;
+    
+    ADI_PERFORM_VALIDATION(adi_adrv9001_dpd_coefficients_Get_Validate, adrv9001, channel, coefficients);
+    
+    channelMask = adi_adrv9001_Radio_MailboxChannel_Get(ADI_TX, channel);
+    ADI_EXPECT(adi_adrv9001_arm_Config_Read, adrv9001, OBJID_DPD_LUT_INITIALIZE, channelMask, offset, armReadBack, sizeof(armReadBack));
+    
+    coefficients->region = armReadBack[offset++]; 	// ARM returns '0' always; Read the value from ARM to avoid random number
+    offset += 3;    // Reserved
+    for(i = 0 ; i < ADI_ADRV9001_DPD_NUM_COEFFICIENTS ; i++)
+    {
+        coefficients->coefficients[i] = armReadBack[offset++];
+    }
+    
     ADI_API_RETURN(adrv9001);
 }

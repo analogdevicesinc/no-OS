@@ -16,6 +16,7 @@
 
 #include "adi_adrv9001_types.h"
 #include "adi_adrv9001_stream_types.h"
+#include "adi_adrv9001_arm_types.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -35,15 +36,16 @@ extern "C" {
  *
  * \pre This function is called after adi_adrv9001_Initialize, and before ARM is loaded.
  *
- * \param[in] adrv9001      Context variable - Pointer to the ADRV9001 device data structure
- * \param[in] byteOffset    Offset (starting from 0) of where to place the binary
- *                          array (if loaded in multiple function calls)
- * \param[in] binary        Byte array containing all valid ARM file data bytes
- * \param[in] byteCount     The number of bytes in the binary array file
+ * \param[in] adrv9001       Context variable - Pointer to the ADRV9001 device data structure
+ * \param[in] byteOffset     Offset (starting from 0) of where to place the binary
+ *                           array (if loaded in multiple function calls)
+ * \param[in] binary         Byte array containing all valid ARM file data bytes
+ * \param[in] byteCount      The number of bytes in the binary array file
+ * \param[in] spiWriteMode   Preferred SPI write mode
  *
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
  */
-int32_t adi_adrv9001_Stream_Image_Write(adi_adrv9001_Device_t *adrv9001, uint32_t byteOffset, uint8_t binary[], uint32_t byteCount);
+int32_t adi_adrv9001_Stream_Image_Write(adi_adrv9001_Device_t *adrv9001, uint32_t byteOffset, uint8_t binary[], uint32_t byteCount, adi_adrv9001_ArmSingleSpiWriteMode_e spiWriteMode);
 
  /**
  * \brief Reads back the version of the stream processor binary loaded in the ADRV9001 memory

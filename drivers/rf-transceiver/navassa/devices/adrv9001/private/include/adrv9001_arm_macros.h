@@ -100,6 +100,7 @@ extern "C" {
 #define ADRV9001_ARM_OBJECTID_CFG_RADIO_EVENT               0xA1
 #define ADRV9001_ARM_OBJECTID_ADC_SWITCHING                 0xA6
 #define ADRV9001_ARM_OBJECTID_LSSI_PADS_POWERDOWN           0xAF
+#define ADRV9001_ARM_OBJECTID_PLL_CONFIG                    0xB1
 
 /* ARM memory */
 #define ADRV9001_ADDR_ARM_START_PROG					    0x01000000
@@ -108,7 +109,8 @@ extern "C" {
 #define LDO_POWER_SAVING_MODES_LOCATION                     0x01000444
 #define ADRV9001_ADDR_P_FH_PRECAL_TABLE                     0x0100044C
 #define ADRV9001_ADDR_ARM_BUILD_CHKSUM					    0x01037FFC
-#define ADRV9001_ADDR_ARM_END_PROG						    0x0103FFFF
+//#define ADRV9001_ADDR_ARM_END_PROG						    0x0103FFFF  // TODO: Conditional for B0(this)/C0(below)
+#define ADRV9001_ADDR_ARM_END_PROG						    0x01047FFF
 #define ADRV9001_ADDR_ARM_START_DATA					    0x20000000
 #define ADRV9001_ADDR_ARM_END_DATA						    0x2004FFFF
 

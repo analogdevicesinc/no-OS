@@ -29,12 +29,6 @@
 #include "adi_common_types.h"
 #include "adi_common_macros.h"
 
-/*
-* *******************************
-* ADI Common error macros
-* *******************************
-*/
-
 /**
 * \brief Macro to check if device pointer is a valid pointer
 * if null pointer detected return ADI_COMMON_ACT_ERR_CHECK_PARAM action
@@ -62,7 +56,7 @@ if(ptr == NULL)\
 { \
     if(ptr == NULL) \
     { \
-         ADI_ERROR_REPORT(commonDev, ADI_COMMON_ERRSRC_API, ADI_COMMON_ERR_NULL_PARAM, ADI_COMMON_ACT_ERR_CHECK_PARAM, ptr, "NULL Pointer passed"); \
+         ADI_ERROR_REPORT((adi_common_Device_t *)(commonDev), ADI_COMMON_ERRSRC_API, ADI_COMMON_ERR_NULL_PARAM, ADI_COMMON_ACT_ERR_CHECK_PARAM, ptr, "NULL Pointer passed"); \
          return ADI_COMMON_ACT_ERR_CHECK_PARAM; \
     } \
 }
@@ -104,19 +98,19 @@ if(ptr == NULL)\
 * \retval ADI_COMMON_ACT_ERR_CHECK_PARAM
 */
 #define ADI_ERROR_REPORT(commonDev, errorSource, error, action, variable, customError) \
-    adi_common_ErrorReport(commonDev, (adi_common_ErrSources_e)errorSource, (int32_t)error, (int32_t)action, __FILE__, __FUNCTION__, __LINE__, #variable, customError)
+    adi_common_ErrorReport((adi_common_Device_t *)(commonDev), (adi_common_ErrSources_e)errorSource, (int32_t)error, (int32_t)action, __FILE__, __FUNCTION__, __LINE__, #variable, customError)
 #else 
 #define ADI_ERROR_REPORT(commonDev, errorSource, errorCode, action, variable, customError) \
 do \
 { \
-    (commonDev)->error.errSource = errorSource; \
-    (commonDev)->error.errCode = errorCode; \
-    (commonDev)->error.errFile = __FILE__; \
-    (commonDev)->error.errFunc = __FUNCTION__; \
-    (commonDev)->error.errLine = __LINE__; \
-    (commonDev)->error.varName = #variable; \
-    (commonDev)->error.lastAction = (errorCode == 0) ? ADI_COMMON_ACT_NO_ACTION :(commonDev)->error.newAction; \
-    (commonDev)->error.newAction = (errorCode == 0) ? ADI_COMMON_ACT_NO_ACTION : action; \
+    ((adi_common_Device_t *)(commonDev))->error.errSource = errorSource; \
+    ((adi_common_Device_t *)(commonDev))->error.errCode = errorCode; \
+    ((adi_common_Device_t *)(commonDev))->error.errFile = __FILE__; \
+    ((adi_common_Device_t *)(commonDev))->error.errFunc = __FUNCTION__; \
+    ((adi_common_Device_t *)(commonDev))->error.errLine = __LINE__; \
+    ((adi_common_Device_t *)(commonDev))->error.varName = #variable; \
+    ((adi_common_Device_t *)(commonDev))->error.lastAction = (errorCode == 0) ? ADI_COMMON_ACT_NO_ACTION : ((adi_common_Device_t *)(commonDev))->error.newAction; \
+    ((adi_common_Device_t *)(commonDev))->error.newAction = (errorCode == 0) ? ADI_COMMON_ACT_NO_ACTION : action; \
 } while (0) ;
 #endif /* ADI_COMMON_VERBOSE */
 
@@ -229,10 +223,10 @@ if ((value < minimum) || (value > maximum)) \
 * 
 * \retval ADI_COMMON_ACT_ERR_CHECK_PARAM
 */
-#define ADI_ENTRY_EXPECT(devicePtr, logLevel) \
+#define ADI_ENTRY_EXPECT(devicePtr) \
 { \
     ADI_NULL_DEVICE_PTR_RETURN(devicePtr); \
-    ADI_FUNCTION_ENTRY_LOG(&devicePtr->common, logLevel); \
+    ADI_FUNCTION_ENTRY_LOG(&devicePtr->common); \
 }
 
 /**
@@ -249,9 +243,9 @@ if ((value < minimum) || (value > maximum)) \
 * 
 * \retval ADI_COMMON_ACT_ERR_CHECK_PARAM
 */
-#define ADI_ENTRY_PTR_EXPECT(devicePtr, logLevel, ptr) \
+#define ADI_ENTRY_PTR_EXPECT(devicePtr, ptr) \
 { \
-    ADI_ENTRY_EXPECT(devicePtr, logLevel); \
+    ADI_ENTRY_EXPECT(devicePtr); \
     ADI_NULL_PTR_RETURN(&devicePtr->common, ptr); \
 }
 
@@ -271,9 +265,9 @@ if ((value < minimum) || (value > maximum)) \
 * 
 * \retval ADI_COMMON_ACT_ERR_CHECK_PARAM
 */
-#define ADI_ENTRY_PTR_ARRAY_EXPECT(devicePtr, logLevel, ptr, arraySize) \
+#define ADI_ENTRY_PTR_ARRAY_EXPECT(devicePtr, ptr, arraySize) \
 {\
-    ADI_ENTRY_PTR_EXPECT(devicePtr, logLevel, ptr); \
+    ADI_ENTRY_PTR_EXPECT(devicePtr, ptr); \
     if(arraySize == 0) \
     { \
         ADI_ERROR_REPORT(&devicePtr->common, \
@@ -287,127 +281,18 @@ if ((value < minimum) || (value > maximum)) \
 }
 
 /**
-* \brief Macro to perform succinct error handling used during API-only function entry
-*
-* This macro will create boilerplate code to:
-*     1) Test for device null pointer
-*     2) Log entry into this function
-*     
-* \param devicePtr function pointer to the device handle
-* 
-* \retval ADI_COMMON_ACT_ERR_CHECK_PARAM
-*/
-#define ADI_API_ENTRY_EXPECT(devicePtr) \
-{ \
-   ADI_ENTRY_EXPECT(devicePtr, ADI_COMMON_LOG_API); \
-}
-
-/**
-* \brief Macro to perform succinct error handling used during API-only function entry
-*
-* This macro will create boilerplate code to:
-*     1) Test for device null pointer
-*     2) Log entry into this function
-*     3) Test for null pointer which should be a struct pointer
-*     
-* \param devicePtr function pointer to the device handle
-* \param ptr pointer to be validated
-* 
-* \retval ADI_COMMON_ACT_ERR_CHECK_PARAM
-*/
-#define ADI_API_ENTRY_PTR_EXPECT(devicePtr, ptr) \
-{ \
-    ADI_ENTRY_PTR_EXPECT(devicePtr, ADI_COMMON_LOG_API, ptr); \
-}
-
-/**
-* \brief Macro to perform succinct error handling used during function API-only entry with an array
-*
-* This macro will create boilerplate code to:
-*     1) Test for device null pointer
-*     2) Log entry into this function
-*     3) Test for null pointer which should be an array
-*     4) Test that the array size is greater than zero
-*     
-* \param devicePtr function pointer to the device handle
-* \param ptr pointer to be validated
-* \param arraySize size of the ptr array
-* 
-* \retval ADI_COMMON_ACT_ERR_CHECK_PARAM
-*/
-#define ADI_API_ENTRY_PTR_ARRAY_EXPECT(devicePtr, ptr, arraySize) \
-{\
-    ADI_ENTRY_PTR_ARRAY_EXPECT(devicePtr, ADI_COMMON_LOG_API, ptr, arraySize); \
-}
-
-
-/**
-* \brief Macro to perform succinct error handling used during private API-only function entry
-*
-* This macro will create boilerplate code to:
-*     1) Test for device null pointer
-*     2) Log entry into this function
-*     
-* \param devicePtr function pointer to the device handle
-* 
-* \retval ADI_COMMON_ACT_ERR_CHECK_PARAM
-*/
-#define ADI_API_PRIV_ENTRY_EXPECT(devicePtr) \
-{ \
-   ADI_ENTRY_EXPECT(devicePtr, ADI_COMMON_LOG_API_PRIV); \
-}
-
-/**
-* \brief Macro to perform succinct error handling used during private API-only function entry
-*
-* This macro will create boilerplate code to:
-*     1) Test for device null pointer
-*     2) Log entry into this function
-*     3) Test for null pointer which should be a struct pointer
-*     
-* \param devicePtr function pointer to the device handle
-* \param ptr pointer to be validated
-* 
-* \retval ADI_COMMON_ACT_ERR_CHECK_PARAM
-*/
-#define ADI_API_PRIV_ENTRY_PTR_EXPECT(devicePtr, ptr) \
-{ \
-    ADI_ENTRY_PTR_EXPECT(devicePtr, ADI_COMMON_LOG_API_PRIV, ptr); \
-}
-
-/**
-* \brief Macro to perform succinct error handling used during private API-only function entry with an array
-*
-* This macro will create boilerplate code to:
-*     1) Test for device null pointer
-*     2) Log entry into this function
-*     3) Test for null pointer which should be an array
-*     4) Test that the array size is greater than zero
-*     
-* \param devicePtr function pointer to the device handle
-* \param ptr pointer to be validated
-* \param arraySize size of the ptr array
-* 
-* \retval ADI_COMMON_ACT_ERR_CHECK_PARAM
-*/
-#define ADI_API_PRIV_ENTRY_PTR_ARRAY_EXPECT(devicePtr, ptr, arraySize) \
-{\
-    ADI_ENTRY_PTR_ARRAY_EXPECT(devicePtr, ADI_COMMON_LOG_API_PRIV, ptr, arraySize); \
-}
-
-/**
 * \brief Macro to return an error code from an API function.
 * 
 * This macro returns from an API function with the current
 * error state.
 *     
-* \param devicePtr function pointer to the device handle
+* \param devicePtr pointer to device handle; can be any device type
 * 
 * \retval ADI_COMMON_ACT_ERR_CHECK_PARAM
 */
 #define ADI_API_RETURN(devicePtr) \
 { \
-    return (devicePtr->common.error.newAction); \
+    return (((adi_common_Device_t *)devicePtr)->error.newAction); \
 }
 
 #ifdef __cplusplus

@@ -48,17 +48,19 @@ static int32_t adrv9001_RefClockEnable(adi_adrv9001_Device_t *device)
 
     /* Digital REF Clock Block Power Up */
     /* -SPI : core_bf.dig_device_clk_buffer_enable = 1'b1(Default) */
-    ADRV9001_SPIWRITEBYTE(device, "ANALOG_CONTROL_18",
-        ADRV9001_ADDR_ANALOG_CONTROL_18,
-        (ANALOG_CONTROL_18_RESET | DIG_DEVICE_CLK_BUFFER_ENABLE));
+    ADRV9001_SPIWRITEBYTE(device,
+                          "ANALOG_CONTROL_18",
+                          ADRV9001_ADDR_ANALOG_CONTROL_18,
+                          (ANALOG_CONTROL_18_RESET | DIG_DEVICE_CLK_BUFFER_ENABLE));
 
     /* Analog REF Clock Block Power Up */
     /* -SPI : core_bf.device_clk_buffer_enable = 1'b1(Default) */
     /* Disable MCS Reset */
     /* - SPI: core_bf.devclk_divider_mcs_resetb =  1'b1 (Default) */
-    ADRV9001_SPIWRITEBYTE(device, "DEVICE_CLK_CONTROL_1",
-        ADRV9001_ADDR_DEVICE_CLK_CONTROL_1,
-        (DEVICE_CLK_BUFFER_ENABLE | DEVCLK_DIVIDER_MCS_RESETB));
+    ADRV9001_SPIWRITEBYTE(device,
+                          "DEVICE_CLK_CONTROL_1",
+                          ADRV9001_ADDR_DEVICE_CLK_CONTROL_1,
+                          (DEVICE_CLK_BUFFER_ENABLE | DEVCLK_DIVIDER_MCS_RESETB));
 
     ADI_API_RETURN(device);
 }
@@ -113,11 +115,11 @@ static int32_t adrv9001_ClockVerify(adi_adrv9001_Device_t *device, adi_adrv9001_
     if ((*modeAdc != 0) && (*modeAdc != 1) && (*modeAdc != 3) && (*modeAdc != 7) && (*modeAdc != 15))
     {
         ADI_ERROR_REPORT(&device->common,
-            ADI_COMMON_ERRSRC_API,
-            ADI_COMMON_ERR_INV_PARAM,
-            ADI_COMMON_ACT_ERR_CHECK_PARAM,
-            modeAdc,
-            "Invalid modeAdc from SPI read");
+                         ADI_COMMON_ERRSRC_API,
+                         ADI_COMMON_ERR_INV_PARAM,
+                         ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                         modeAdc,
+                         "Invalid modeAdc from SPI read");
         ADI_ERROR_RETURN(device->common.error.newAction);
     }
 
@@ -127,11 +129,11 @@ static int32_t adrv9001_ClockVerify(adi_adrv9001_Device_t *device, adi_adrv9001_
         if (init->clocks.deviceClock_kHz > LVDS_CLOCK_MAX_KHZ)
         {
             ADI_ERROR_REPORT(&device->common,
-                ADI_COMMON_ERRSRC_API,
-                ADI_COMMON_ERR_INV_PARAM,
-                ADI_COMMON_ACT_ERR_CHECK_PARAM,
-                init->clocks.deviceClock_kHz,
-                "Invalid LVDS mode frequency.  Valid Range 0-1GHz");
+                             ADI_COMMON_ERRSRC_API,
+                             ADI_COMMON_ERR_INV_PARAM,
+                             ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                             init->clocks.deviceClock_kHz,
+                             "Invalid LVDS mode frequency.  Valid Range 0-1GHz");
             ADI_ERROR_RETURN(device->common.error.newAction);
         }
     }
@@ -141,11 +143,11 @@ static int32_t adrv9001_ClockVerify(adi_adrv9001_Device_t *device, adi_adrv9001_
         if (init->clocks.deviceClock_kHz > CMOS_CLOCK_MAX_KHZ)
         {
             ADI_ERROR_REPORT(&device->common,
-                ADI_COMMON_ERRSRC_API,
-                ADI_COMMON_ERR_INV_PARAM,
-                ADI_COMMON_ACT_ERR_CHECK_PARAM,
-                init->clocks.deviceClock_kHz,
-                "Invalid CMOS or XTAL mode frequency.  Valid Range 0-80MHz");
+                             ADI_COMMON_ERRSRC_API,
+                             ADI_COMMON_ERR_INV_PARAM,
+                             ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                             init->clocks.deviceClock_kHz,
+                             "Invalid CMOS or XTAL mode frequency.  Valid Range 0-80MHz");
             ADI_ERROR_RETURN(device->common.error.newAction);
         }
     }
@@ -164,7 +166,7 @@ static int32_t adrv9001_ClocksSet(adi_adrv9001_Device_t *device,
     static const uint32_t DEV_CLOCK_MIN_KHZ = 10000;
     static const uint32_t DEV_CLOCK_MAX_KHZ = 1000000;
 
-    ADI_API_PRIV_ENTRY_PTR_EXPECT(device, init);
+    ADI_ENTRY_PTR_EXPECT(device, init);
     clocks = &init->clocks;
 
     ADI_RANGE_CHECK(device, clocks->deviceClock_kHz, DEV_CLOCK_MIN_KHZ, DEV_CLOCK_MAX_KHZ);
@@ -206,7 +208,7 @@ int32_t adrv9001_AnalogClockSet(adi_adrv9001_Device_t *device, adi_adrv9001_Init
 {
     uint8_t divRatio = 0;
     uint8_t divHsDigClk = 0;
-    uint8_t rfLvdsDiv = 0;
+    const uint8_t rfLvdsDiv = 9u;
     int i = 0;
     uint32_t maskBit = 0;
 
@@ -259,11 +261,11 @@ int32_t adrv9001_AnalogClockSet(adi_adrv9001_Device_t *device, adi_adrv9001_Init
         else
         {
             ADI_ERROR_REPORT(&device->common,
-                ADI_COMMON_ERRSRC_API,
-                ADI_COMMON_ERR_INV_PARAM,
-                ADI_COMMON_ACT_ERR_CHECK_PARAM,
-                device,
-                "Invalid clkPllHsDiv");
+                             ADI_COMMON_ERRSRC_API,
+                             ADI_COMMON_ERR_INV_PARAM,
+                             ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                             device,
+                             "Invalid clkPllHsDiv");
             ADI_ERROR_RETURN(device->common.error.newAction);
         }
 
@@ -297,11 +299,11 @@ int32_t adrv9001_AnalogClockSet(adi_adrv9001_Device_t *device, adi_adrv9001_Init
         else
         {
             ADI_ERROR_REPORT(&device->common,
-                ADI_COMMON_ERRSRC_API,
-                ADI_COMMON_ERR_INV_PARAM,
-                ADI_COMMON_ACT_ERR_CHECK_PARAM,
-                device,
-                "Invalid clkPllHsDiv");
+                             ADI_COMMON_ERRSRC_API,
+                             ADI_COMMON_ERR_INV_PARAM,
+                             ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                             device,
+                             "Invalid clkPllHsDiv");
             ADI_ERROR_RETURN(device->common.error.newAction);
         }
 
@@ -346,7 +348,6 @@ int32_t adrv9001_AnalogClockSet(adi_adrv9001_Device_t *device, adi_adrv9001_Init
         maskBit = (1 << i);
         if (ADRV9001_BF_EQUAL(init->rx.rxInitChannelMask, maskBit))
         {
-            rfLvdsDiv = init->rx.rxChannelCfg[i].profile.rxSsiConfig.rfLvdsDiv;
             ADRV9001_SPIWRITEBYTE(device,
                                   "ANALOG_CONTROL_2_OR_3",
                                   ADRV9001_ADDR_CH_RX_BASE[i],
@@ -359,7 +360,6 @@ int32_t adrv9001_AnalogClockSet(adi_adrv9001_Device_t *device, adi_adrv9001_Init
         maskBit = (1 << i);
         if (ADRV9001_BF_EQUAL(init->tx.txInitChannelMask, maskBit))
         {
-            rfLvdsDiv = init->tx.txProfile[i].txSsiConfig.rfLvdsDiv;
             ADRV9001_SPIWRITEBYTE(device,
                                   "ANALOG_CONTROL_4_OR_5",
                                   ADRV9001_ADDR_CH_TX_BASE[i],
@@ -383,7 +383,7 @@ int32_t adrv9001_InitAnalog(adi_adrv9001_Device_t *device,
                             adi_adrv9001_DeviceClockDivisor_e adrv9001DeviceClockOutDivisor)
 {
     uint8_t i = 0;
-    static const uint8_t refClockDivisor[7] = { 0, 1, 2, 3, 4, 5, 6};
+    static const uint8_t refClockDivisor[7] = { 0, 1, 2, 3, 4, 5, 6 };
     static const uint32_t REF_CLOCK_MAX_KHZ = 200000;
     adi_adrv9001_DeviceClockDivisor_e adrv9001ReferenceClockOutDivisor = ADI_ADRV9001_DEVICECLOCKDIVISOR_DISABLED;
 
@@ -409,11 +409,11 @@ int32_t adrv9001_InitAnalog(adi_adrv9001_Device_t *device,
     if (ADI_ADRV9001_DEVICECLOCKDIVISOR_DISABLED == adrv9001ReferenceClockOutDivisor)
     {
         ADI_ERROR_REPORT(&device->common,
-            ADI_COMMON_ERRSRC_API,
-            ADI_COMMON_ERR_INV_PARAM,
-            ADI_COMMON_ACT_ERR_CHECK_PARAM,
-            adrv9001ReferenceClockOutDivisor,
-            "Invalid ADRV9001 Device clock output divisor; (deviceClock_kHz / 2^DeviceClockOutDivisor) must be less than 200MHz");
+                         ADI_COMMON_ERRSRC_API,
+                         ADI_COMMON_ERR_INV_PARAM,
+                         ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                         adrv9001ReferenceClockOutDivisor,
+                         "Invalid ADRV9001 Device clock output divisor; (deviceClock_kHz / 2^DeviceClockOutDivisor) must be less than 200MHz");
         ADI_ERROR_RETURN(device->common.error.newAction);
     }
 
@@ -461,7 +461,7 @@ static int32_t adrv9001_VerifyTxProfile(adi_adrv9001_Device_t *device,
     static const uint32_t PRIMARY_SIGNAL_BW_MIN = 6250;
     static const uint32_t PRIMARY_SIGNAL_BW_MAX = MEGA_TO_BASE_UNIT(41);
 
-    ADI_API_PRIV_ENTRY_PTR_EXPECT(device, txProfile);
+    ADI_ENTRY_PTR_EXPECT(device, txProfile);
 
     /********************************/
     /* Check for a valid Tx profile */
@@ -497,7 +497,7 @@ static int32_t adrv9001_VerifyRxProfile(adi_adrv9001_Device_t *device,
     static const uint32_t RX_BANDWIDTH_MIN = 6250;
     static const uint32_t RX_BANDWIDTH_MAX = MEGA_TO_BASE_UNIT(41);
 
-    ADI_API_PRIV_ENTRY_PTR_EXPECT(device, rxProfile);
+    ADI_ENTRY_PTR_EXPECT(device, rxProfile);
 
     /********************************/
     /* Check for a valid Rx profile */
@@ -533,7 +533,7 @@ static int32_t adrv9001_VerifyOrxProfile(adi_adrv9001_Device_t *device,
     static const uint32_t ORX_BANDWIDTH_MIN = 6250;
     static const uint32_t ORX_BANDWIDTH_MAX = MEGA_TO_BASE_UNIT(41);
 
-    ADI_API_PRIV_ENTRY_PTR_EXPECT(device, orxProfile);
+    ADI_ENTRY_PTR_EXPECT(device, orxProfile);
 
     /********************************/
     /* Check for a valid ORx profile */
@@ -569,7 +569,7 @@ static int32_t adrv9001_VerifyLbProfile(adi_adrv9001_Device_t *device,
     static const uint32_t LB_BANDWIDTH_MIN = 6250;
     static const uint32_t LB_BANDWIDTH_MAX = MEGA_TO_BASE_UNIT(41);
 
-    ADI_API_PRIV_ENTRY_PTR_EXPECT(device, lbProfile);
+    ADI_ENTRY_PTR_EXPECT(device, lbProfile);
 
     /********************************/
     /* Check for a valid LB profile */
@@ -586,7 +586,6 @@ int32_t adrv9001_ProfilesVerify(adi_adrv9001_Device_t *device, adi_adrv9001_Init
     adi_adrv9001_RxProfile_t *rxProfile = NULL;
     adi_adrv9001_TxProfile_t *txProfile = NULL;
     int i = 0;
-    int ilbValidForTxMask = 0;
     uint32_t TX_CHANNELS[] = { ADI_ADRV9001_TX1, ADI_ADRV9001_TX2 };
     uint32_t RX_CHANNELS[] = {
         ADI_ADRV9001_RX1,
@@ -597,10 +596,10 @@ int32_t adrv9001_ProfilesVerify(adi_adrv9001_Device_t *device, adi_adrv9001_Init
         ADI_ADRV9001_ILB2,
         ADI_ADRV9001_ELB1,
         ADI_ADRV9001_ELB2
-     };
+    };
     uint8_t divHsDigClk = 0;
 
-    ADI_API_PRIV_ENTRY_PTR_EXPECT(device, init);
+    ADI_ENTRY_PTR_EXPECT(device, init);
 
     device->devStateInfo.profilesValid = 0;
 
@@ -621,11 +620,11 @@ int32_t adrv9001_ProfilesVerify(adi_adrv9001_Device_t *device, adi_adrv9001_Init
         else
         {
             ADI_ERROR_REPORT(&device->common,
-                ADI_COMMON_ERRSRC_API,
-                ADI_COMMON_ERR_INV_PARAM,
-                ADI_COMMON_ACT_ERR_CHECK_PARAM,
-                device,
-                "Invalid clkPllHsDiv");
+                             ADI_COMMON_ERRSRC_API,
+                             ADI_COMMON_ERR_INV_PARAM,
+                             ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                             device,
+                             "Invalid clkPllHsDiv");
             ADI_ERROR_RETURN(device->common.error.newAction);
         }
 
@@ -647,11 +646,11 @@ int32_t adrv9001_ProfilesVerify(adi_adrv9001_Device_t *device, adi_adrv9001_Init
         else
         {
             ADI_ERROR_REPORT(&device->common,
-                ADI_COMMON_ERRSRC_API,
-                ADI_COMMON_ERR_INV_PARAM,
-                ADI_COMMON_ACT_ERR_CHECK_PARAM,
-                device,
-                "Invalid clkPllHsDiv");
+                             ADI_COMMON_ERRSRC_API,
+                             ADI_COMMON_ERR_INV_PARAM,
+                             ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                             device,
+                             "Invalid clkPllHsDiv");
             ADI_ERROR_RETURN(device->common.error.newAction);
         }
 
@@ -659,18 +658,18 @@ int32_t adrv9001_ProfilesVerify(adi_adrv9001_Device_t *device, adi_adrv9001_Init
     else
     {
         ADI_ERROR_REPORT(&device->common,
-            ADI_COMMON_ERRSRC_API,
-            ADI_COMMON_ERR_INV_PARAM,
-            ADI_COMMON_ACT_ERR_CHECK_PARAM,
-            device,
-            "Invalid clkPllMode");
+                         ADI_COMMON_ERRSRC_API,
+                         ADI_COMMON_ERR_INV_PARAM,
+                         ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                         device,
+                         "Invalid clkPllMode");
         ADI_ERROR_RETURN(device->common.error.newAction);
     }
 
     device->devStateInfo.hsDigClk_Hz = init->clocks.clkPllVcoFreq_daHz / divHsDigClk * 10;
 
     // Validate Rx channels
-    for (i = 0; i < ADI_ADRV9001_MAX_RXCHANNELS; i++)
+    for(i = 0 ; i < ADI_ADRV9001_MAX_RXCHANNELS ; i++)
     {
         if (ADRV9001_BF_EQUAL(init->rx.rxInitChannelMask, RX_CHANNELS[i]))
         {
@@ -687,13 +686,8 @@ int32_t adrv9001_ProfilesVerify(adi_adrv9001_Device_t *device, adi_adrv9001_Init
                 ADI_EXPECT(adrv9001_VerifyOrxProfile, device, rxProfile);
                 device->devStateInfo.profilesValid |= ADI_ADRV9001_ORX_PROFILE_VALID;
                 break;
-            case ADI_ADRV9001_ILB1:
-                ADI_EXPECT(adrv9001_VerifyLbProfile, device, rxProfile);
-                ilbValidForTxMask |= TX_CHANNELS[0];
-                break;
+            case ADI_ADRV9001_ILB1: /* Defer ILB validation until Tx validation section */
             case ADI_ADRV9001_ILB2:
-                ADI_EXPECT(adrv9001_VerifyLbProfile, device, rxProfile);
-                ilbValidForTxMask |= TX_CHANNELS[1];
                 break;
             case ADI_ADRV9001_ELB1: /* Falls through */
             case ADI_ADRV9001_ELB2:
@@ -709,23 +703,24 @@ int32_t adrv9001_ProfilesVerify(adi_adrv9001_Device_t *device, adi_adrv9001_Init
     }
 
     // Validate Tx channels
-    for (i = 0; i < ADI_ADRV9001_MAX_TXCHANNELS; i++)
+    for(i = 0 ; i < ADI_ADRV9001_MAX_TXCHANNELS ; i++)
     {
         if (ADRV9001_BF_EQUAL(init->tx.txInitChannelMask, TX_CHANNELS[i]))
         {
             txProfile = &init->tx.txProfile[i];
+            rxProfile = &init->rx.rxChannelCfg[i + 4].profile; /* ILB channel */
+            
             ADI_EXPECT(adrv9001_VerifyTxProfile, device, txProfile);
-
-            // ILB for this Tx channel must be configured for Tx to be valid
-            if (ADRV9001_BF_EQUAL(ilbValidForTxMask, TX_CHANNELS[i]))
+            
+            if (txProfile->outputSignaling != ADI_ADRV9001_TX_DIRECT_FM_FSK)
             {
-                device->devStateInfo.profilesValid |= ADI_ADRV9001_TX_PROFILE_VALID;
-                device->devStateInfo.initializedChannels |= TX_CHANNELS[i];
+                /* Only validate ILB if Tx is enabled and not DIRECT_FM_FSK */
+                ADI_EXPECT(adrv9001_VerifyLbProfile, device, rxProfile);
+                device->devStateInfo.initializedChannels |= RX_CHANNELS[i + 4];
             }
-            else
-            {
-                device->devStateInfo.profilesValid = 0;
-            }
+                
+            device->devStateInfo.profilesValid |= ADI_ADRV9001_TX_PROFILE_VALID;
+            device->devStateInfo.initializedChannels |= TX_CHANNELS[i];
         }
     }
 
@@ -734,11 +729,11 @@ int32_t adrv9001_ProfilesVerify(adi_adrv9001_Device_t *device, adi_adrv9001_Init
         (init->clocks.rfPllPhaseSyncMode != ADI_ADRV9001_RFPLLMCS_INIT_AND_CONTTRACK))
     {
         ADI_ERROR_REPORT(&device->common,
-            ADI_COMMON_ERRSRC_API,
-            ADI_COMMON_ERR_INV_PARAM,
-            ADI_COMMON_ACT_ERR_CHECK_PARAM,
-            device,
-            "init->clocks.rfPllPhaseSyncMode structure member has invalid option for RFPLL phase sync mode");
+                         ADI_COMMON_ERRSRC_API,
+                         ADI_COMMON_ERR_INV_PARAM,
+                         ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                         device,
+                         "init->clocks.rfPllPhaseSyncMode structure member has invalid option for RFPLL phase sync mode");
         ADI_ERROR_RETURN(device->common.error.newAction);
     }
 

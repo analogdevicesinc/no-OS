@@ -35,8 +35,8 @@ extern "C" {
  *
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
  */
-int32_t adrv9001_powermanagement_Configure(adi_adrv9001_Device_t *adrv9001, 
-                                           adi_adrv9001_PowerManagementSettings_t *powerManagementSettings);
+int32_t adi_adrv9001_powermanagement_Configure(adi_adrv9001_Device_t *adrv9001, 
+                                               adi_adrv9001_PowerManagementSettings_t *powerManagementSettings);
 
 #ifdef __cplusplus
 }

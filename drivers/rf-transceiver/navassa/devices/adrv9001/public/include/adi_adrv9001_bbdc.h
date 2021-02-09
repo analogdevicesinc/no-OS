@@ -59,6 +59,40 @@ int32_t adi_adrv9001_bbdc_RejectionEnable_Get(adi_adrv9001_Device_t *adrv9001,
                                               adi_common_ChannelNumber_e channel,
                                               adi_adrv9001_BbdcRejectionStatus_e *bbdcRejectionStatus);
 
+/**
+ * \brief Set the loop/feedback gain for BBDC
+ * 
+ * \note Message type: \ref timing_mailbox "Mailbox command"
+ *
+ * \pre Channel state any of STANDBY, CALIBRATED
+ *
+ * \param[in] adrv9001	        Context variable - Pointer to the ADRV9001 device settings data structure
+ * \param[in] channel           The channel of interest - applies to both Rx and ORx
+ * \param[in] loopGain          Fractional number (U1.31) representing feedback gain for BBDC (default: 1/2048)
+ * 
+ * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
+ */
+int32_t adi_adrv9010_bbdc_LoopGain_Set(adi_adrv9001_Device_t *adrv9001,
+                                       adi_common_ChannelNumber_e channel,
+                                       uint32_t loopGain);
+
+/**
+ * \brief Get the loop/feedback gain for BBDC
+ * 
+ * \note Message type: \ref timing_mailbox "Mailbox command"
+ *
+ * \pre Channel state any of STANDBY, CALIBRATED, PRIMED, RF_ENABLED
+ *
+ * \param[in] adrv9001	        Context variable - Pointer to the ADRV9001 device settings data structure
+ * \param[in] channel           The channel of interest - applies to both Rx and ORx
+ * \param[out] loopGain         Fractional number (U1.31) representing feedback gain for BBDC (default: 1/2048)
+ * 
+ * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
+ */
+int32_t adi_adrv9010_bbdc_LoopGain_Get(adi_adrv9001_Device_t *adrv9001,
+                                       adi_common_ChannelNumber_e channel,
+                                       uint32_t *loopGain);
+
 #ifdef __cplusplus
 }
 #endif

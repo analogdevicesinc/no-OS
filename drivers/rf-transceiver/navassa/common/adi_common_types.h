@@ -15,11 +15,6 @@
 #define _ADI_COMMON_TYPES_H_
 
 #include "adi_common_error_types.h"
-#include "adi_common_hal_types.h"
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 /**
  * \brief Enumeration of channel numbers
@@ -68,8 +63,5 @@ typedef struct adi_common_ApiVersion
     uint32_t patch; /*!< API Patch Version number */
 } adi_common_ApiVersion_t;
 
-#ifdef __cplusplus
-}
-#endif
 #endif  /* _ADI_COMMON_TYPES_H_ */
 

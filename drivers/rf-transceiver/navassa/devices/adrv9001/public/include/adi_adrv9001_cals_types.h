@@ -1,14 +1,8 @@
 /**
  * \file
- * \brief Contains ADRV9001 API Calibration data types
- *
- * ADRV9001 API Version: $ADI_ADRV9001_API_VERSION$
- */
-
- /**
- * Copyright 2015 - 2018 Analog Devices Inc.
- * Released under the ADRV9001 API license, for more information
- * see the "LICENSE.txt" file in this zip file.
+ * \brief Type definitions for ADRV9001 calibrations
+ * \copyright Analog Devices Inc. 2019. All rights reserved.
+ * Released under the ADRV9001 API license, for more information see "LICENSE.txt" in the SDK
  */
 
 #ifndef _ADI_ADRV9001_CALS_TYPES_H_
@@ -16,14 +10,9 @@
 
 #include "adi_adrv9001_defines.h"
 
-#define ARMINITCAL_ERRCODE(armCalId, armCalErrCode) ((armCalId << 8) | armCalErrCode)
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 /**
  *  \brief Enum to select desired InitCals select bits in the initCalMask.
+ *  \note Maskable
  */
 typedef enum adi_adrv9001_InitCalibrations
 {
@@ -61,6 +50,7 @@ typedef enum adi_adrv9001_InitCalibrations
 
 /**
  *  \brief Enum to select desired TrackingCals select bits in the trackingCalMask.
+ *  \note Maskable
  */
 typedef enum adi_adrv9001_TrackingCalibrations
 {
@@ -79,14 +69,20 @@ typedef enum adi_adrv9001_TrackingCalibrations
     /* Bit 13-18:  Not used (Reserved for future purpose) */
     ADI_ADRV9001_TRACKING_CAL_RX_BBDC           = 0x00080000, //!< Rx Baseband DC rejection
     ADI_ADRV9001_TRACKING_CAL_RX_RFDC           = 0x00100000, //!< Rx RF DC
-     ADI_ADRV9001_TRACKING_CAL_RX_QEC_FIC       = 0x00200000, //!< Rx Quadrature Error Correction FIC
+    ADI_ADRV9001_TRACKING_CAL_RX_QEC_FIC        = 0x00200000, //!< Rx Quadrature Error Correction FIC
     ADI_ADRV9001_TRACKING_CAL_RX_AGC            = 0x00400000, //!< Rx Automatic Gain Control
     ADI_ADRV9001_TRACKING_CAL_RX_RSSI           = 0x00800000  //!< Rx RSSI
     /* Bit 24-31: Not used */
 }adi_adrv9001_TrackingCalibrations_e;
 
 /**
- *  \brief Enum to run desired InitCals algorithms.
+ * \brief Enum to run desired InitCals algorithms.
+ * 
+ * When using the internal LO, initial calibrations can be run all at once using ADI_ADRV9001_INIT_CAL_MODE_ALL. When
+ * using external LO, it may be necessary to run initial calibrations in two stages:
+ *   - Run ADI_ADRV9001_INIT_CAL_MODE_SYSTEM_AND_RX calibrations
+ *   - Change external LO frequency as necessary
+ *   - Run ADI_ADRV9001_INIT_CAL_MODE_LOOPBACK_AND_TX calibrations
  */
 typedef enum adi_adrv9001_InitCalMode
 {
@@ -102,12 +98,13 @@ typedef enum adi_adrv9001_InitCalMode
 */
 typedef struct adi_adrv9001_InitCals
 {
-    uint32_t sysInitCalMask;                              //!< Calibration bit mask for non-channel related init cals
-    uint32_t chanInitCalMask[ADI_ADRV9001_MAX_RX_ONLY];   /*!< Array containing calibration bit mask for channel related init cals.
-                                                               It contains two masks:
-                                                               1. chanInitCalMask[0]: CH_1 for masks on Rx1/Tx1 channels,
-                                                               2. chanInitCalMask[1]: CH_2 for masks on Rx2/Tx2 channels */
-    adi_adrv9001_InitCalMode_e  calMode;                  //!< Enum specifies the mode to run desired InitCals algorithms
+    adi_adrv9001_InitCalibrations_e sysInitCalMask;     //!< Calibration bit mask for non-channel related init cals
+    /** Array containing calibration bit mask for channel related init cals.
+        It contains two masks:
+        1. chanInitCalMask[0]: CH_1 for masks on Rx1/Tx1 channels,
+        2. chanInitCalMask[1]: CH_2 for masks on Rx2/Tx2 channels */
+    adi_adrv9001_InitCalibrations_e chanInitCalMask[ADI_ADRV9001_MAX_RX_ONLY];
+    adi_adrv9001_InitCalMode_e  calMode;                //!< Enum specifies the mode to run desired InitCals algorithms
 } adi_adrv9001_InitCals_t;
 
 /**
@@ -115,14 +112,11 @@ typedef struct adi_adrv9001_InitCals
 */
 typedef struct adi_adrv9001_TrackingCals
 {
-    uint32_t chanTrackingCalMask[ADI_ADRV9001_MAX_RX_ONLY];   /*!< Array containing calibration bit mask for channel related tracking cals.
-                                                                   It contains two masks:
-                                                                   1. chanTrackingCalMask[0]: CH_1 for masks on Rx1/Tx1 channels,
-                                                                   2. chanTrackingCalMask[1]: CH_2 for masks on Rx2/Tx2 channels */
+    /** Array containing calibration bit mask for channel related tracking cals.
+        It contains two masks:
+        1. chanTrackingCalMask[0]: CH_1 for masks on Rx1/Tx1 channels,
+        2. chanTrackingCalMask[1]: CH_2 for masks on Rx2/Tx2 channels */
+    adi_adrv9001_TrackingCalibrations_e chanTrackingCalMask[ADI_ADRV9001_MAX_RX_ONLY];
 } adi_adrv9001_TrackingCals_t;
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif /* _ADI_ADRV9001_CALS_TYPES_H_ */

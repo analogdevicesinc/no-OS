@@ -147,6 +147,8 @@ int32_t adi_adrv9001_arm_PfirProfiles_Write(adi_adrv9001_Device_t *adrv9001, con
 
 /**
 * \brief Loads binary array into ARM program memory
+*        'ADI_ADRV9001_ARM_SINGLE_SPI_WRITE_MODE_STANDARD_BYTES_252' and 'ADI_ADRV9001_ARM_SINGLE_SPI_WRITE_MODE_STREAMING_BYTES_4' 
+*        are supported only if byteCount is a multiple of 4
 *
 * This function sets the ARM DMA control register bits for an ARM memory write, auto-incrementing
 * the address. Valid memory addresses are: Program Memory (0x01000000 - 0x01037FFF)
@@ -162,13 +164,15 @@ int32_t adi_adrv9001_arm_PfirProfiles_Write(adi_adrv9001_Device_t *adrv9001, con
 * \param[in] byteOffset		Offset (from 0) in ARM memory to start writing (if loaded in multiple function calls)
 * \param[in] binary			Byte array containing all valid ARM file data bytes
 * \param[in] byteCount		The number of bytes in the binary array
+* \param[in] spiWriteMode   Preferred SPI write mode
 *
 * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
 */
 int32_t adi_adrv9001_arm_Image_Write(adi_adrv9001_Device_t *adrv9001,
                                      uint32_t byteOffset,
                                      const uint8_t binary[],
-                                     uint32_t byteCount);
+                                     uint32_t byteCount,
+                                     adi_adrv9001_ArmSingleSpiWriteMode_e spiWriteMode);
 
 /**
  * \brief Sets bit0 of SW_Interrupt_4 register, which issues wake up interrupt to ARM
@@ -220,9 +224,7 @@ int32_t adi_adrv9001_arm_ChannelPowerSaving_Inspect(adi_adrv9001_Device_t *adrv9
  *
  * \note Message type: \ref timing_prioritymailbox "High-priority mailbox command"
  *
- * \pre The ADI_ADRV9001_GPIO_SIGNAL_MON_ENABLE_SPS signal must be assigned to a pin, by either:
- *     - setting adi_adrv9001_RadioCtrlInit_t.adi_adrv9001_GpioCtrlInitCfg_t.systemPowerSavingAndMonitorEnable at init
- *     - calling adi_adrv9001_gpio_Configure with the mentioned signal
+ * \pre The ADI_ADRV9001_GPIO_SIGNAL_MON_ENABLE_SPS signal must be assigned to a pin with adi_adrv9001_gpio_Configure
  * \pre All channels in any of STANDBY, CALIBRATED, PRIMED, RF_ENABLE states
  *
  * \param[in] adrv9001		    Context variable - Pointer to the ADRV9001 device settings data structure
@@ -377,6 +379,8 @@ int32_t adi_adrv9001_arm_Memory_Read(adi_adrv9001_Device_t *adrv9001,
 
 /**
  * \brief Write to the ADRV9001 ARM program or data memory
+ *        'ADI_ADRV9001_ARM_SINGLE_SPI_WRITE_MODE_STANDARD_BYTES_252' and 'ADI_ADRV9001_ARM_SINGLE_SPI_WRITE_MODE_STREAMING_BYTES_4' 
+ *        are supported only if byteCount is a multiple of 4
  *
  * Valid memory addresses are: Program Memory (0x01000000 - 0x0101C000),
  * Data Memory (0x20000000 - 0x20014000).
@@ -389,13 +393,15 @@ int32_t adi_adrv9001_arm_Memory_Read(adi_adrv9001_Device_t *adrv9001,
  * \param[in] address			The 32-bit ARM address to write
  * \param[in] data				Byte array (uint8_t) containing data to be written to ARM memory
  * \param[in] byteCount			Number of bytes in the data array to be written
+ * \param[in] spiWriteMode      Preferred SPI write mode
  *
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
  */
 int32_t adi_adrv9001_arm_Memory_Write(adi_adrv9001_Device_t *adrv9001,
                                       uint32_t address,
                                       const uint8_t data[],
-                                      uint32_t byteCount);
+                                      uint32_t byteCount,
+                                      adi_adrv9001_ArmSingleSpiWriteMode_e spiWriteMode);
 
 /**
  * \brief Low level helper function used by ADRV9001 API to write the ARM memory config structures

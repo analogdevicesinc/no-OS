@@ -37,7 +37,7 @@ extern "C" {
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover   
  */
 int32_t adi_adrv9001_fh_Configure(adi_adrv9001_Device_t *adrv9001,
-		                          adi_adrv9001_FhCfg_t  *fhConfig);
+                                  adi_adrv9001_FhCfg_t  *fhConfig);
 
 /**
  * \brief Read the parameters in the frequency hopping configuration data struct
@@ -73,10 +73,10 @@ int32_t adi_adrv9001_fh_Configuration_Inspect(adi_adrv9001_Device_t *adrv9001,
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
  */
 /* This writes the buffer directly (it's too big for the mailbox), then uses mailbox to message ARM */
-int32_t adi_adrv9001_fh_HopTable_Configure(adi_adrv9001_Device_t *adrv9001,
-                                           adi_adrv9001_FhHopTable_e tableId, 
-                                           adi_adrv9001_FhHopFrame_t hopTable[],
-										   uint32_t hopTableSize);
+int32_t adi_adrv9001_fh_HopTable_Static_Configure(adi_adrv9001_Device_t *adrv9001,
+                                                  adi_adrv9001_FhHopTable_e tableId, 
+                                                  adi_adrv9001_FhHopFrame_t hopTable[],
+                                                  uint32_t hopTableSize);
 
 /**
  * \brief Inspect frequency hopping table in ARM memory
@@ -99,9 +99,9 @@ int32_t adi_adrv9001_fh_HopTable_Configure(adi_adrv9001_Device_t *adrv9001,
 /* This writes the buffer directly (it's too big for the mailbox), then uses mailbox to trigger the DMA table generation. */
 int32_t adi_adrv9001_fh_HopTable_Inspect(adi_adrv9001_Device_t *adrv9001,
                                          adi_adrv9001_FhHopTable_e tableId, 
-										 adi_adrv9001_FhHopFrame_t hopTable[],
-		                                 uint32_t hopTableSize,
-		                                 uint32_t *numEntriesRead);
+                                         adi_adrv9001_FhHopFrame_t hopTable[],
+                                         uint32_t hopTableSize,
+                                         uint32_t *numEntriesRead);
 
 /**
  * \brief Set which hop table to use 
@@ -134,7 +134,7 @@ int32_t adi_adrv9001_fh_HopTable_Get(adi_adrv9001_Device_t *adrv9001,
 /**
  * \brief Gets hop frame information for specified index
  *
- * Navassa maintains state for three frequency hopping frames; current frame, upcoming frame (frame at next hop edge), 
+ * Adrv9001 maintains state for three frequency hopping frames; current frame, upcoming frame (frame at next hop edge), 
  * and next frame (i.e. two hop edges in the future).
  * This command allows to fetch hop frame information, as specified by adi_adrv9001_FhHopFrame_t, from any of these states.
  * 
@@ -165,6 +165,45 @@ int32_t adi_adrv9001_fh_FrameInfo_Inspect(adi_adrv9001_Device_t *adrv9001,
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
  */
 int32_t adi_adrv9001_fh_Hop(adi_adrv9001_Device_t *adrv9001);
+
+/**
+ * \brief Load a frequency hopping table into ARM memory dynamically
+ * 
+ * \pre This function can be called by the user anytime after initialization.
+ * 
+ * \param[in]  adrv9001                   Context variable - Pointer to the adrv9001 device data structure
+ * \param[in]  hopTable                   Array of hop frame information to write as the frequency hopping table
+ * \param[in]  hopTableSize               Size of hopTable; Number of hop frames to write for Tables A and B. 
+ *                                        hopTableSize must be 2 * numberHopsPerDynamicLoad; 
+ *                                        For example, if numberHopsPerDynamicLoad = 4, then hopTableSize = 8
+ * \param[in]  numberHopsPerDynamicLoad   Number of Hops to be loaded in real time
+ * \param[out] spiPackedFhTable           Output buffer contains SPI formatted FH table
+ * \param[in]  length                     The length of the spiPackedFhTable array
+
+ *
+ * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
+ */
+int32_t adi_adrv9001_fh_HopTable_Dynamic_Configure(adi_adrv9001_Device_t *adrv9001,
+                                                   adi_adrv9001_FhHopFrame_t hopTable[],
+                                                   uint32_t hopTableSize,
+                                                   adi_adrv9001_FhPerDynamicLoad_e numberHopsPerDynamicLoad,
+                                                   uint8_t spiPackedFhTable[],
+                                                   uint32_t length);
+
+/**
+ * \brief Get number of SPI packed bytes per dynamic FH table load
+ * 
+ * \pre This function can be called by the user anytime after initialization.
+ * 
+ * \param[in]  adrv9001                   Context variable - Pointer to the adrv9001 device data structure
+ * \param[in]  numberHopsPerDynamicLoad   Number of Hops to be loaded in real time
+ * \param[out] bytesPerTable              The number of SPI packed bytes per dynamic FH table load
+ *
+ * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
+ */
+int32_t adi_adrv9001_fh_HopTable_BytesPerTable_Get(adi_adrv9001_Device_t *adrv9001,
+                                                   adi_adrv9001_FhPerDynamicLoad_e numberHopsPerDynamicLoad,
+                                                   uint32_t *bytesPerTable);
 
 #ifdef __cplusplus
 }

@@ -309,6 +309,19 @@ typedef enum adi_adrv9001_SsiStrobeType
     ADI_ADRV9001_SSI_LONG_STROBE  = 1  /*!< Long SSI Strobe */
 } adi_adrv9001_SsiStrobeType_e;
 
+
+/**
+ * \brief Tx SSI reference clock pin option enumeration
+ */
+typedef enum adi_adrv9001_SsiTxRefClockPin
+{
+    ADI_ADRV9001_SSI_TX_REF_CLOCK_PIN_DISABLED                   = 0u,   /*!< Tx reference clock out pin disabled */
+    ADI_ADRV9001_SSI_TX_REF_CLOCK_PIN_DCLK_OUT_ENABLED           = 1u,   /*!< Tx reference clock out pin TX_DCLK_OUT+/- enabled in LVDS mode or
+                                                                                                         TX_DCLK_OUT+   enabled in CMOS mode */
+    ADI_ADRV9001_SSI_TX_REF_CLOCK_PIN_CMOS_DCLK_OUT_N_ENABLED    = 2u,   /*!< Tx reference clock out pin TX_DCLK_OUT-   enabled in CMOS mode */
+    ADI_ADRV9001_SSI_TX_REF_CLOCK_PIN_CMOS_STROBE_IN_N_ENABLED   = 3u    /*!< Tx reference clock out pin TX_STROBE_IN-  enabled in CMOS mode */
+} adi_adrv9001_SsiTxRefClockPin_e;
+
 /**
  * \brief Data structure to hold ADRV9001 SSI configuration.
  */
@@ -320,16 +333,16 @@ typedef struct adi_adrv9001_SsiConfig
     adi_adrv9001_SsiStrobeType_e strobeType;				/*!< SSI strobe type */
     uint8_t						 lsbFirst;					/*!< SSI LSB first */
     uint8_t						 qFirst;					/*!< SSI Q data first */
-    bool						 refClockGpioEn;			/*!< Reference clock GPIO enable */
+    adi_adrv9001_SsiTxRefClockPin_e	txRefClockPin;			/*!< SSI Tx reference clock GPIO select */
     uint8_t						 lvdsBitInversion;			/*!< LVDS SSI bit inversion */
     uint8_t						 lvdsUseLsbIn12bitMode;		/*!< LVDS use LSB in 12 bit mode */
     bool						 lvdsTxFullRefClkEn;        /*!< LVDS Tx full refclk enable */
     bool						 lvdsRxClkInversionEn;      /*!< LVDS Rx clock inversion enable */
-    uint32_t					 rfLvdsDiv;					/*!< RF LVDS clock = BBPLL / rfLvdsDiv */
     bool                         cmosTxDdrNegStrobeEn;      /*!< CMOS Tx DDR negative strobe enable */
     bool                         cmosDdrPosClkEn;           /*!< CMOS DDR positive clock enable */
     bool                         cmosDdrClkInversionEn;     /*!< CMOS DDR clock inversion enable */
     bool                         cmosDdrEn;                 /*!< CMOS DDR enable */
+    bool                         rxMaskStrobeEn;            /*!< SSI Rx mask strobe enable */
 } adi_adrv9001_SsiConfig_t;
 
 /**

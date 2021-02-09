@@ -40,7 +40,7 @@ int32_t adi_adrv9001_arm_Enable(adi_adrv9001_Device_t *device)
 {
     uint8_t armCtl1 = 0;
 
-    ADI_API_ENTRY_EXPECT(device);
+    ADI_ENTRY_EXPECT(device);
 
     ADI_EXPECT(adi_adrv9001_arm_AhbSpiBridge_Enable, device);
 
@@ -59,7 +59,7 @@ int32_t adi_adrv9001_arm_Disable(adi_adrv9001_Device_t *device)
 {
     uint8_t armCtl1 = 0;
 
-    ADI_API_ENTRY_EXPECT(device);
+    ADI_ENTRY_EXPECT(device);
 
     /* TODO: Implement ISR to service ARM READY_FOR_MCS */
 
@@ -77,7 +77,7 @@ int32_t adi_adrv9001_arm_AhbSpiBridge_Enable(adi_adrv9001_Device_t *device)
 {
     uint8_t ahbSpiReg = 0;
 
-    ADI_API_ENTRY_EXPECT(device);
+    ADI_ENTRY_EXPECT(device);
 
     ADRV9001_SPIREADBYTE(device, "AHB_SPI_BRIDGE", ADRV9001_ADDR_AHB_SPI_BRIDGE, &ahbSpiReg);
 
@@ -91,7 +91,7 @@ int32_t adi_adrv9001_arm_AhbSpiBridge_Disable(adi_adrv9001_Device_t *device)
 {
     uint8_t ahbSpiReg = 0;
 
-    ADI_API_ENTRY_EXPECT(device);
+    ADI_ENTRY_EXPECT(device);
 
     ADRV9001_SPIREADBYTE(device, "AHB_SPI_BRIDGE", ADRV9001_ADDR_AHB_SPI_BRIDGE, &ahbSpiReg);
 
@@ -104,14 +104,14 @@ int32_t adi_adrv9001_arm_AhbSpiBridge_Disable(adi_adrv9001_Device_t *device)
 
 int32_t adi_adrv9001_arm_StartStatus_Check(adi_adrv9001_Device_t *device, uint32_t timeout_us)
 {
-    int32_t halError = (int32_t)ADI_COMMON_HAL_OK;
+    int32_t halError = 0;
     uint32_t waitInterval_us = 0;
     uint32_t numEventChecks = 1;
     uint32_t eventCheck = 0;
     adi_adrv9001_RadioState_t state = { 0 };
     uint8_t armDebugLoaded = ((device->devStateInfo.devState & ADI_ADRV9001_STATE_ARM_DEBUG_LOADED) == ADI_ADRV9001_STATE_ARM_DEBUG_LOADED) ? 1 : 0;
 
-    ADI_API_ENTRY_EXPECT(device);
+    ADI_ENTRY_EXPECT(device);
 
     /* Wait for ARM to exit BOOTUP state */
     waitInterval_us = (ADI_ADRV9001_GETARMBOOTUP_INTERVAL_US > timeout_us) ?
@@ -204,7 +204,7 @@ int32_t adi_adrv9001_arm_StartStatus_Check(adi_adrv9001_Device_t *device, uint32
 
 int32_t adi_adrv9001_arm_Profile_Write(adi_adrv9001_Device_t *device, const adi_adrv9001_Init_t *init)
 {
-    ADI_API_ENTRY_PTR_EXPECT(device, init);
+    ADI_ENTRY_PTR_EXPECT(device, init);
 
     /* FIXME: JS: Why does this function exist? */
     ADI_EXPECT(adrv9001_ArmProfileWrite, device, init);
@@ -214,7 +214,7 @@ int32_t adi_adrv9001_arm_Profile_Write(adi_adrv9001_Device_t *device, const adi_
 
 int32_t adi_adrv9001_arm_PfirProfiles_Write(adi_adrv9001_Device_t *device, const adi_adrv9001_Init_t *init)
 {
-    ADI_API_ENTRY_PTR_EXPECT(device, init);
+    ADI_ENTRY_PTR_EXPECT(device, init);
 
     /* FIXME: JS: Why does this function exist? */
     ADI_EXPECT(adrv9001_PfirProfilesWrite, device, init);
@@ -222,13 +222,14 @@ int32_t adi_adrv9001_arm_PfirProfiles_Write(adi_adrv9001_Device_t *device, const
     ADI_API_RETURN(device);
 }
 
-int32_t adi_adrv9001_arm_Image_Write(adi_adrv9001_Device_t *device, uint32_t byteOffset, const uint8_t binary[], uint32_t byteCount)
+int32_t adi_adrv9001_arm_Image_Write(adi_adrv9001_Device_t *device, uint32_t byteOffset, const uint8_t binary[], uint32_t byteCount, adi_adrv9001_ArmSingleSpiWriteMode_e spiWriteMode)
 {
     uint8_t stackPtr[4] = { 0 };
     uint8_t bootAddr[4] = { 0 };
     uint32_t i = 0;
 
-    ADI_API_ENTRY_PTR_EXPECT(device, binary);
+    ADI_ENTRY_PTR_EXPECT(device, binary);
+    ADI_RANGE_CHECK(device, spiWriteMode, ADI_ADRV9001_ARM_SINGLE_SPI_WRITE_MODE_STANDARD_BYTES_4, ADI_ADRV9001_ARM_SINGLE_SPI_WRITE_MODE_STREAMING_BYTES_4);
 
     if ((byteCount % 4) > 0)
     {
@@ -325,7 +326,7 @@ int32_t adi_adrv9001_arm_Image_Write(adi_adrv9001_Device_t *device, uint32_t byt
             (((uint32_t)binary[i + 2]) << 16) | (((uint32_t)binary[i + 1]) << 8) | ((uint32_t)binary[i]));
     }
 
-    ADI_EXPECT(adi_adrv9001_arm_Memory_Write, device, ADRV9001_ADDR_ARM_START_PROG + byteOffset, &binary[0], byteCount);
+    ADI_EXPECT(adi_adrv9001_arm_Memory_Write, device, ADRV9001_ADDR_ARM_START_PROG + byteOffset, &binary[0], byteCount, spiWriteMode);
 
     ADI_API_RETURN(device);
 }
@@ -334,9 +335,10 @@ static int32_t __maybe_unused adi_adrv9001_arm_Memory_ReadWrite_Validate(adi_adr
                                                                          uint32_t address,
                                                                          uint8_t returnData[],
                                                                          uint32_t byteCount,
+                                                                         adi_adrv9001_ArmSingleSpiWriteMode_e spiWriteMode,
                                                                          uint8_t autoIncrement)
 {
-    ADI_API_ENTRY_PTR_ARRAY_EXPECT(device, returnData, byteCount);
+    ADI_ENTRY_PTR_ARRAY_EXPECT(device, returnData, byteCount);
 
     if (!(address >= ADRV9001_ADDR_ARM_START_PROG && address <= ADRV9001_ADDR_ARM_END_PROG) &&
         !(address >= ADRV9001_ADDR_ARM_START_DATA && address <= ADRV9001_ADDR_ARM_END_DATA))
@@ -372,6 +374,8 @@ static int32_t __maybe_unused adi_adrv9001_arm_Memory_ReadWrite_Validate(adi_adr
                          "Invalid parameter value. byteCount must be a multiple of 4 when using autoIncrement");
         ADI_ERROR_RETURN(device->common.error.newAction);
     }
+    
+    ADI_RANGE_CHECK(device, spiWriteMode, ADI_ADRV9001_ARM_SINGLE_SPI_WRITE_MODE_STANDARD_BYTES_4, ADI_ADRV9001_ARM_SINGLE_SPI_WRITE_MODE_STREAMING_BYTES_4);
     ADI_API_RETURN(device);
 }
 
@@ -381,28 +385,28 @@ int32_t adi_adrv9001_arm_Memory_Read(adi_adrv9001_Device_t *device,
                                      uint32_t byteCount,
                                      uint8_t autoIncrement)
 {
-    ADI_PERFORM_VALIDATION(adi_adrv9001_arm_Memory_ReadWrite_Validate, device, address, returnData, byteCount, autoIncrement);
+    ADI_PERFORM_VALIDATION(adi_adrv9001_arm_Memory_ReadWrite_Validate, device, address, returnData, byteCount, 0, autoIncrement);
 
     ADI_EXPECT(adrv9001_DmaMemRead, device, address, returnData, byteCount, autoIncrement);
 
     ADI_API_RETURN(device);
 }
 
-int32_t adi_adrv9001_arm_Memory_Write(adi_adrv9001_Device_t *device, uint32_t address, const uint8_t data[], uint32_t byteCount)
+int32_t adi_adrv9001_arm_Memory_Write(adi_adrv9001_Device_t *device, uint32_t address, const uint8_t data[], uint32_t byteCount, adi_adrv9001_ArmSingleSpiWriteMode_e spiWriteMode)
 {
-    ADI_PERFORM_VALIDATION(adi_adrv9001_arm_Memory_ReadWrite_Validate, device, address, (uint8_t *)data, byteCount, false);
+    ADI_PERFORM_VALIDATION(adi_adrv9001_arm_Memory_ReadWrite_Validate, device, address, (uint8_t *)data, byteCount, spiWriteMode, false);
 
-    ADI_EXPECT(adrv9001_DmaMemWrite, device, address, data, byteCount);
+    ADI_EXPECT(adrv9001_DmaMemWrite, device, address, data, byteCount, spiWriteMode);
 
     ADI_API_RETURN(device);
 }
 
 int32_t adi_adrv9001_arm_Config_Write(adi_adrv9001_Device_t *device, const uint8_t armData[], uint32_t armDataSize, const uint8_t mailboxCmd[], uint32_t mailboxCmdSize)
 {
-    ADI_API_ENTRY_PTR_ARRAY_EXPECT(device, armData, armDataSize);
-    ADI_API_ENTRY_PTR_ARRAY_EXPECT(device, mailboxCmd, mailboxCmdSize);
+    ADI_ENTRY_PTR_ARRAY_EXPECT(device, armData, armDataSize);
+    ADI_ENTRY_PTR_ARRAY_EXPECT(device, mailboxCmd, mailboxCmdSize);
 
-    ADI_EXPECT(adi_adrv9001_arm_Memory_Write, device, (uint32_t)ADRV9001_ADDR_ARM_MAILBOX_SET, &armData[0], armDataSize);
+    ADI_EXPECT(adi_adrv9001_arm_Memory_Write, device, (uint32_t)ADRV9001_ADDR_ARM_MAILBOX_SET, &armData[0], armDataSize, ADI_ADRV9001_ARM_SINGLE_SPI_WRITE_MODE_STANDARD_BYTES_4);
 
     ADI_EXPECT(adi_adrv9001_arm_Cmd_Write, device, ADRV9001_ARM_SET_OPCODE, &mailboxCmd[0], mailboxCmdSize);
 
@@ -420,7 +424,7 @@ int32_t adi_adrv9001_arm_Config_Read(adi_adrv9001_Device_t *device, uint8_t obje
 {
     uint8_t extendedData[5] = { 0 };
 
-    ADI_API_ENTRY_PTR_ARRAY_EXPECT(device, returnData, byteCount);
+    ADI_ENTRY_PTR_ARRAY_EXPECT(device, returnData, byteCount);
 
     /* TODO: Validate objectId? */
 
@@ -429,7 +433,7 @@ int32_t adi_adrv9001_arm_Config_Read(adi_adrv9001_Device_t *device, uint8_t obje
     extendedData[2] = (uint8_t)((byteCount >> 16) & 0xFF);
     extendedData[3] = (uint8_t)((byteCount >> 24) & 0xFF);
 
-    ADI_EXPECT(adi_adrv9001_arm_Memory_Write, device, ADRV9001_ADDR_ARM_MAILBOX_GET, &extendedData[0], 4);
+    ADI_EXPECT(adi_adrv9001_arm_Memory_Write, device, ADRV9001_ADDR_ARM_MAILBOX_GET, &extendedData[0], 4, ADI_ADRV9001_ARM_SINGLE_SPI_WRITE_MODE_STANDARD_BYTES_4);
 
     /* ARM Object id, byte offset LSB, offset MSB = 0, byteCount will read that number of bytes */
     extendedData[0] = channelMask;
@@ -461,7 +465,7 @@ int32_t adi_adrv9001_arm_Config_Read(adi_adrv9001_Device_t *device, uint8_t obje
 
 int32_t adi_adrv9001_arm_SystemError_Get(adi_adrv9001_Device_t *device, uint8_t *objectId, uint8_t *errorCode)
 {
-    ADI_API_ENTRY_PTR_EXPECT(device, errorCode);
+    ADI_ENTRY_PTR_EXPECT(device, errorCode);
     ADI_NULL_PTR_RETURN(&device->common, objectId);
 
     ADRV9001_SPIREADBYTE(device, "arm_cmd_status_12", ADRV9001_ADDR_ARM_CMD_STATUS_12, errorCode);
@@ -485,7 +489,7 @@ int32_t adi_adrv9001_arm_CmdStatus_Get(adi_adrv9001_Device_t *device, uint16_t *
     static const uint8_t CMD_STATUS_MAX = 8;
 
 
-    ADI_API_ENTRY_PTR_EXPECT(device, errorWord);
+    ADI_ENTRY_PTR_EXPECT(device, errorWord);
 
     ADI_NULL_PTR_RETURN(&device->common, statusWord);
 
@@ -533,7 +537,7 @@ int32_t adi_adrv9001_arm_CmdStatusOpcode_Get(adi_adrv9001_Device_t *device, uint
     static const uint8_t ARM_STATUS_MASK = 0x0F;
     static const uint8_t ARM_STATUS_SHIFT_HI = 4;
 
-    ADI_API_ENTRY_PTR_EXPECT(device, cmdStatByte);
+    ADI_ENTRY_PTR_EXPECT(device, cmdStatByte);
 
     /* check for even-numbered opCodes including opcode 0, but must not be greater than 30 */
     if ((opCode != (uint8_t)ADRV9001_ARM_STREAM_TRIGGER_OPCODE) && ADRV9001_OPCODE_VALID(opCode))
@@ -573,13 +577,13 @@ int32_t adi_adrv9001_arm_CmdStatus_Wait(adi_adrv9001_Device_t *device,
                                         uint32_t waitInterval_us)
 {
     int32_t recoveryAction = ADI_COMMON_ACT_NO_ACTION;
-    int32_t halError = (int32_t)ADI_COMMON_HAL_OK;
+    int32_t halError = 0;
     uint32_t eventCheck = 0;
     uint32_t numEventChecks = 0;
     static const uint8_t ARM_ERR_MASK = 0x0E;
     static const uint8_t ARM_PENDING = 0x01;
 
-    ADI_API_ENTRY_PTR_EXPECT(device, cmdStatusByte);
+    ADI_ENTRY_PTR_EXPECT(device, cmdStatusByte);
 
     /* check for even-numbered opCodes including opcode 0, but must not be greater than 30 */
     if ((opCode != (uint8_t)ADRV9001_ARM_STREAM_TRIGGER_OPCODE) && ADRV9001_OPCODE_VALID(opCode))
@@ -659,7 +663,7 @@ int32_t adi_adrv9001_arm_CmdStatus_Wait(adi_adrv9001_Device_t *device,
 
 int32_t adi_adrv9001_arm_Cmd_Write(adi_adrv9001_Device_t *device, uint8_t opCode, const uint8_t extendedData[], uint32_t byteCount)
 {
-    int32_t halError = (int32_t)ADI_COMMON_HAL_OK;
+    int32_t halError = 0;
     bool armCommandBusy = false;
     uint8_t i = 0;
     uint32_t timeout_us = ADI_ADRV9001_SENDARMCMD_TIMEOUT_US;
@@ -670,7 +674,7 @@ int32_t adi_adrv9001_arm_Cmd_Write(adi_adrv9001_Device_t *device, uint8_t opCode
 
 #define EXT_CMD_BYTE_MAX 5
 
-    ADI_API_ENTRY_EXPECT(device);
+    ADI_ENTRY_EXPECT(device);
 
     if (byteCount > 0)
     {
@@ -773,7 +777,7 @@ int32_t adi_adrv9001_arm_Version(adi_adrv9001_Device_t *device, adi_adrv9001_Arm
     static const uint8_t ARMBUILD_TESTOBJ = 0x04;
     static const uint8_t ARMBUILD_USES_FOUR_DIGIT_VERSION = 0x01;
 
-    ADI_API_ENTRY_PTR_EXPECT(device, armVersion);
+    ADI_ENTRY_PTR_EXPECT(device, armVersion);
 
     if ((device->devStateInfo.devState & ADI_ADRV9001_STATE_ARM_LOADED) != ADI_ADRV9001_STATE_ARM_LOADED)
     {
@@ -785,7 +789,6 @@ int32_t adi_adrv9001_arm_Version(adi_adrv9001_Device_t *device, adi_adrv9001_Arm
             "ARM binary must be loaded before calling ArmVersionGet()");
         ADI_ERROR_RETURN(device->common.error.newAction);
     }
-
 
     recoveryAction = adi_adrv9001_arm_Memory_Read(device, ADRV9001_ADDR_ARM_VERSION, &ver[0], sizeof(ver), ADRV9001_ARM_MEM_READ_AUTOINCR);
     ADI_ERROR_REPORT(&device->common, ADI_COMMON_ERRSRC_API, ADI_COMMON_ERR_API_FAIL, recoveryAction, NULL, "Failed to read ARM memory");
@@ -834,7 +837,7 @@ int32_t adi_adrv9001_arm_Version(adi_adrv9001_Device_t *device, adi_adrv9001_Arm
 int32_t adi_adrv9001_arm_ChecksumTable_Get(adi_adrv9001_Device_t *device, adi_adrv9001_ChecksumTable_t *checksum, uint8_t *checksumValid)
 {
     int32_t recoveryAction = ADI_COMMON_ACT_NO_ACTION;
-    int32_t halError = (int32_t)ADI_COMMON_HAL_OK;
+    int32_t halError = 0;
     uint32_t buildTimeChecksum = 0x00000000;
     uint32_t calculatedChecksum = 0x00000000;
     uint8_t checkData[sizeof(adi_adrv9001_ChecksumTable_t)] = { 0 };
@@ -865,7 +868,7 @@ int32_t adi_adrv9001_arm_ChecksumTable_Get(adi_adrv9001_Device_t *device, adi_ad
     };
 
 
-    ADI_API_ENTRY_PTR_EXPECT(device, checksum);
+    ADI_ENTRY_PTR_EXPECT(device, checksum);
 
     ADI_NULL_PTR_RETURN(&device->common, checksumValid);
 
@@ -1087,7 +1090,7 @@ int32_t adi_adrv9001_arm_MailboxBusy_Get(adi_adrv9001_Device_t *device, bool *ma
     uint8_t bfVal = 0;
 
     /* Check device pointer is not null */
-    ADI_API_ENTRY_PTR_EXPECT(device, mailboxBusy);
+    ADI_ENTRY_PTR_EXPECT(device, mailboxBusy);
 
     /* Read arm_command_busy bit in arm_command(0x00c3) register*/
     ADI_EXPECT(adrv9001_NvsRegmapCore_ArmCommandBusy_Get, device, &bfVal);
@@ -1100,7 +1103,7 @@ int32_t adi_adrv9001_arm_FwStatus_Check(adi_adrv9001_Device_t *device, uint32_t 
     uint32_t fwCheckStatus)
 {
     int32_t recoveryAction = ADI_COMMON_ACT_NO_ACTION;
-    int32_t halError = (int32_t)ADI_COMMON_HAL_OK;
+    int32_t halError = 0;
     uint32_t fwStatus = 0;
     uint32_t waitInterval_us = 0;
     uint32_t numEventChecks = 1;
@@ -1109,7 +1112,7 @@ int32_t adi_adrv9001_arm_FwStatus_Check(adi_adrv9001_Device_t *device, uint32_t 
 
     static const uint32_t ADRV9001_ARM_FWSTATUS_ERROR = ADI_ADRV9001_SRC_ARMFWSTATUS << 16;
 
-    ADI_API_ENTRY_EXPECT(device);
+    ADI_ENTRY_EXPECT(device);
 
     /* Wait for ARM to exit BOOTUP state */
     waitInterval_us = (ADI_ADRV9001_GETARMBOOTUP_INTERVAL_US > timeout_us) ?
@@ -1169,7 +1172,7 @@ int32_t adi_adrv9001_arm_Profile_Program(adi_adrv9001_Device_t *device)
     uint8_t extData[2] = { 0 };
 
     /* Check device pointer is not null */
-    ADI_API_ENTRY_EXPECT(device);
+    ADI_ENTRY_EXPECT(device);
 
     /* Executing the SET Device Profile command */
     extData[0] = 0;
@@ -1194,7 +1197,7 @@ int32_t adi_adrv9001_arm_System_Program(adi_adrv9001_Device_t *device, uint8_t c
     int32_t recoveryAction = ADI_COMMON_ACT_NO_ACTION;
 
     /* Check device pointer is not null */
-    ADI_API_ENTRY_EXPECT(device);
+    ADI_ENTRY_EXPECT(device);
 
     /* Executing the SET System Config command */
     extData[0] = channelMask;
@@ -1228,7 +1231,7 @@ int32_t adi_adrv9001_arm_WakeupInterrupt_Set(adi_adrv9001_Device_t *device)
     uint8_t sw4RegisterRead = 0;
     static const uint8_t SET_SW_INTERRUPT_4 = 0x01;
 
-    ADI_API_ENTRY_EXPECT(device);
+    ADI_ENTRY_EXPECT(device);
 
     /* Read SW interrupt 4 register */
     ADRV9001_SPIREADBYTE(device, "ADRV9001_ADDR_SW_INTERRUPT_4", ADRV9001_ADDR_SW_INTERRUPT_4, &sw4RegisterRead);
@@ -1258,7 +1261,7 @@ int32_t adi_adrv9001_arm_NextDynamicProfile_Set(adi_adrv9001_Device_t *device,
     uint8_t extData[5] = { 0 };
 
     /* Check input pointers are not null */
-    ADI_API_ENTRY_PTR_EXPECT(device, init);
+    ADI_ENTRY_PTR_EXPECT(device, init);
 
     /* Send the profile data */
     ADI_EXPECT(adrv9001_DynamicProfile_Write, device, dynamicProfileIndex, init);
@@ -1285,7 +1288,7 @@ int32_t adi_adrv9001_arm_NextPfir_Set(adi_adrv9001_Device_t *device,
     uint8_t extData[5] = { 0 };
 
     /* Check input pointers are not null */
-    ADI_API_ENTRY_PTR_EXPECT(device, pfirCoeff);
+    ADI_ENTRY_PTR_EXPECT(device, pfirCoeff);
 
     /* Check the channelMask refers to valid channels (bits 0 to 3) and is not empty */
     ADI_RANGE_CHECK(device, channelMask, 1, 15)
@@ -1312,7 +1315,7 @@ int32_t adi_adrv9001_arm_NextRxChannelFilter_Set(adi_adrv9001_Device_t *device,
                                                  const adi_adrv9001_PfirWbNbBuffer_t *pfirRx1WbNbChFilterCoeff,
                                                  const adi_adrv9001_PfirWbNbBuffer_t *pfirRx2WbNbChFilterCoeff)
 {
-    ADI_API_ENTRY_EXPECT(device);
+    ADI_ENTRY_EXPECT(device);
 
     if (pfirRx1WbNbChFilterCoeff != NULL)
     {
@@ -1340,7 +1343,7 @@ int32_t adi_adrv9001_arm_NextTxPulseShaper_Set(adi_adrv9001_Device_t *device,
                                                const adi_adrv9001_PfirWbNbBuffer_t *pfirTx1WbNbPulShpCoeff,
                                                const adi_adrv9001_PfirWbNbBuffer_t *pfirTx2WbNbPulShpCoeff)
 {
-    ADI_API_ENTRY_EXPECT(device);
+    ADI_ENTRY_EXPECT(device);
 
     if (pfirTx1WbNbPulShpCoeff != NULL)
     {
@@ -1366,7 +1369,7 @@ int32_t adi_adrv9001_arm_NextTxPulseShaper_Set(adi_adrv9001_Device_t *device,
 
 int32_t adi_adrv9001_arm_Profile_Switch(adi_adrv9001_Device_t *device)
 {
-    ADI_API_ENTRY_EXPECT(device);
+    ADI_ENTRY_EXPECT(device);
 
     /* The SW_INTERRUPT bits are alone in their registers specifically so we don't need to read-modify-write */
 
@@ -1500,7 +1503,7 @@ static int32_t __maybe_unused adi_adrv9001_arm_ChannelPowerSaving_Inspect_Valida
     adi_adrv9001_ChannelState_e state = ADI_ADRV9001_CHANNEL_STANDBY;
 
     /* Check device pointer and rxInterfaceGainCtrl are not null */
-    ADI_API_ENTRY_PTR_EXPECT(device, powerSavingCfg);
+    ADI_ENTRY_PTR_EXPECT(device, powerSavingCfg);
 
     ADI_RANGE_CHECK(device, channel, ADI_CHANNEL_1, ADI_CHANNEL_2);
 
@@ -1628,7 +1631,7 @@ int32_t adi_adrv9001_arm_SystemPowerSavingAndMonitorMode_Configure(adi_adrv9001_
     armData[offset++] = (uint8_t)monitorModeCfg->externalPllEnable;
 
     /* Write monitor mode configuration parameters to ARM data memory */
-    ADI_EXPECT(adi_adrv9001_arm_Memory_Write, device, ADRV9001_ADDR_ARM_HIGHPRIORITY_MAILBOX_SET, &armData[0], sizeof(armData));
+    ADI_EXPECT(adi_adrv9001_arm_Memory_Write, device, ADRV9001_ADDR_ARM_HIGHPRIORITY_MAILBOX_SET, &armData[0], sizeof(armData), ADI_ADRV9001_ARM_SINGLE_SPI_WRITE_MODE_STANDARD_BYTES_4);
 
     extData[0] = 0;
     extData[1] = ADRV9001_ARM_HIGHPRIORITY_SET_MONITOR_MODE_CONFIG;
@@ -1656,7 +1659,7 @@ int32_t adi_adrv9001_arm_SystemPowerSavingAndMonitorMode_Inspect(adi_adrv9001_De
     uint32_t offset = 0;
 
     /* Check device pointer and rxInterfaceGainCtrl are not null */
-    ADI_API_ENTRY_PTR_EXPECT(device, monitorModeCfg);
+    ADI_ENTRY_PTR_EXPECT(device, monitorModeCfg);
 
     extData[0] = 0;
     extData[1] = ADRV9001_ARM_OBJECTID_GET_MONITOR_MODE_CONFIG;
@@ -2028,10 +2031,10 @@ int32_t adi_adrv9001_arm_Start(adi_adrv9001_Device_t *device)
     uint8_t armCtl1 = 0;
     uint8_t mailBox[4] = { 0xFF, 0xFF, 0xFF, 0xFF };
     
-    ADI_API_ENTRY_EXPECT(device);
+    ADI_ENTRY_EXPECT(device);
 
     /* Set MailBox 0xFF */
-    ADI_EXPECT(adi_adrv9001_arm_Memory_Write, device, ADRV9001_ADDR_ARM_MAILBOX_GET, &mailBox[0], 4);
+    ADI_EXPECT(adi_adrv9001_arm_Memory_Write, device, ADRV9001_ADDR_ARM_MAILBOX_GET, &mailBox[0], 4, ADI_ADRV9001_ARM_SINGLE_SPI_WRITE_MODE_STANDARD_BYTES_4);
     
     armCtl1 = ADRV9001_AC1_ARM_DEBUG_ENABLE | ADRV9001_AC1_ARM_MEM_HRESP_MASK | ADRV9001_AC1_ARM_M3_RUN;
     ADRV9001_SPIWRITEBYTE(device, "ARM_CTL_1", ADRV9001_ADDR_ARM_CTL_1, armCtl1);
@@ -2043,7 +2046,7 @@ int32_t adi_adrv9001_arm_Stop(adi_adrv9001_Device_t *device)
 {
     uint8_t armCtl1 = 0;
 
-    ADI_API_ENTRY_EXPECT(device);
+    ADI_ENTRY_EXPECT(device);
 
     armCtl1 = ADRV9001_AC1_ARM_DEBUG_ENABLE | ADRV9001_AC1_ARM_MEM_HRESP_MASK;
     ADRV9001_SPIWRITEBYTE(device, "ARM_CTL_1", ADRV9001_ADDR_ARM_CTL_1, armCtl1);

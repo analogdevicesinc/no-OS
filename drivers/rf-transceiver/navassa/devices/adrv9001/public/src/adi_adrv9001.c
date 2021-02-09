@@ -7,47 +7,23 @@
 */
 
 /**
-* Copyright 2015 - 2018 Analog Devices Inc.
+* Copyright 2015 - 2020 Analog Devices Inc.
 * Released under the ADRV9001 API license, for more information
 * see the "LICENSE.txt" file in this zip file.
 */
 
-/*
-*********************************************************************************************************
-*                                             INCLUDE FILES
-*********************************************************************************************************
-*/
-
-/* "adi_adrv9001_user.h" contains the #define that other header file use */
 #include "adi_adrv9001_user.h"
-
-/* Header file corresponding to the C file */
 #include "adi_adrv9001.h"
-
-/* ADI specific header files */
+#include "adi_adrv9001_hal.h"
 #include "adi_adrv9001_arm.h"
 #include "adi_adrv9001_spi.h"
 #include "adi_adrv9001_error.h"
 #include "adi_adrv9001_types.h"
-//#include "adi_adrv9001_tx.h"
 #include "adi_adrv9001_version.h"
 #include "adrv9001_init.h"
 #include "adrv9001_reg_addr_macros.h"
 #include "adrv9001_arm_macros.h"
 
-/* Header files related to libraries */
-
-
-/* System header files */
-#ifdef __KERNEL__
-#include <linux/kernel.h>
-#include <linux/string.h>
-#else
-#include <string.h>
-#include <stdlib.h>
-#endif
-
-/*********************************************************************************************************/
 int32_t adi_adrv9001_HwOpen(adi_adrv9001_Device_t *device, adi_adrv9001_SpiSettings_t *spiSettings)
 {
     ADI_NULL_DEVICE_PTR_RETURN(device);
@@ -64,63 +40,15 @@ int32_t adi_adrv9001_HwOpenNoReset(adi_adrv9001_Device_t *device, adi_adrv9001_S
 {
     int32_t recoveryAction = ADI_COMMON_ACT_NO_ACTION;
 
-    ADI_NULL_DEVICE_PTR_RETURN(device);
+    ADI_ENTRY_EXPECT(device);
 
-    recoveryAction = adi_common_hal_CallBack_Verify(&device->common);
-    if (recoveryAction != ADI_COMMON_ACT_NO_ACTION)
-    {
-        ADI_ERROR_REPORT(&device->common,
-            ADI_COMMON_ERRSRC_ADI_HAL,
-            ADI_HAL_LIBRARY_NOT_AVAILABLE,
-            ADI_COMMON_ACT_ERR_CHECK_PARAM,
-            NULL,
-            "HAL library Function pointers not set properly");
-        ADI_ERROR_RETURN(device->common.error.newAction);
-    }
-
-    adi_common_LogLevelSet(&device->common, ADI_ADRV9001_LOGGING);
-
-    recoveryAction = adi_common_hal_HwOpen(&device->common);
-
-    if (recoveryAction != ADI_COMMON_ACT_NO_ACTION)
-    {
-        switch (recoveryAction)
-        {
-        case ADI_COMMON_HAL_SPI_FAIL:
-            ADI_ERROR_REPORT(&device->common,
-                             ADI_COMMON_ERRSRC_ADI_HAL,
-                             device->common.error.errCode,
-                             ADI_COMMON_ACT_ERR_RESET_INTERFACE,
-                             NULL,
-                             "SPI error");
-            ADI_ERROR_RETURN(device->common.error.newAction);
-        case ADI_COMMON_HAL_GPIO_FAIL:
-            ADI_ERROR_REPORT(&device->common,
-                             ADI_COMMON_ERRSRC_ADI_HAL,
-                             device->common.error.errCode,
-                             ADI_COMMON_ACT_ERR_RESET_FEATURE,
-                             NULL,
-                             "GPIO error");
-            ADI_ERROR_RETURN(device->common.error.newAction);
-        case ADI_COMMON_HAL_TIMER_FAIL:
-            ADI_ERROR_REPORT(&device->common,
-                             ADI_COMMON_ERRSRC_ADI_HAL,
-                             device->common.error.errCode,
-                             ADI_COMMON_ACT_ERR_CHECK_TIMER,
-                             NULL,
-                             "Timer error");
-            ADI_ERROR_RETURN(device->common.error.newAction);
-        case ADI_COMMON_HAL_GEN_SW: /* fall through */
-        default:
-            ADI_ERROR_REPORT(&device->common,
-                             ADI_COMMON_ERRSRC_ADI_HAL,
-                             device->common.error.errCode,
-                             ADI_COMMON_ACT_ERR_CHECK_PARAM,
-                             NULL,
-                             "Param error");
-            ADI_ERROR_RETURN(device->common.error.newAction);
-        }
-    }
+    recoveryAction = adi_adrv9001_hal_open(device->common.devHalInfo);
+    ADI_ERROR_REPORT(&device->common,
+                     ADI_COMMON_ERRSRC_ADI_HAL,
+                     recoveryAction,
+                     ADI_COMMON_ACT_ERR_RESET_INTERFACE,
+                     NULL,
+                     "Error opening HW");
 
     device->spiSettings.autoIncAddrUp		= spiSettings->autoIncAddrUp;
     device->spiSettings.cmosPadDrvStrength	= spiSettings->cmosPadDrvStrength;
@@ -134,50 +62,16 @@ int32_t adi_adrv9001_HwOpenNoReset(adi_adrv9001_Device_t *device, adi_adrv9001_S
 int32_t adi_adrv9001_HwClose(adi_adrv9001_Device_t *device)
 {
     int32_t recoveryAction = ADI_COMMON_ACT_NO_ACTION;
+    ADI_ENTRY_EXPECT(device);
 
-    ADI_API_ENTRY_EXPECT(device);
-
-    recoveryAction = adi_common_hal_HwClose(&device->common);
-
-    if (recoveryAction != ADI_COMMON_ACT_NO_ACTION)
-    {
-        switch (recoveryAction)
-        {
-        case ADI_COMMON_HAL_SPI_FAIL:
-            ADI_ERROR_REPORT(&device->common,
-                             ADI_COMMON_ERRSRC_ADI_HAL,
-                             device->common.error.errCode,
-                             ADI_COMMON_ACT_ERR_RESET_INTERFACE,
-                             NULL,
-                             "SPI error");
-            ADI_ERROR_RETURN(device->common.error.newAction);
-        case ADI_COMMON_HAL_GPIO_FAIL:
-            ADI_ERROR_REPORT(&device->common,
-                             ADI_COMMON_ERRSRC_ADI_HAL,
-                             device->common.error.errCode,
-                             ADI_COMMON_ACT_ERR_RESET_FEATURE,
-                             NULL,
-                             "GPIO error");
-            ADI_ERROR_RETURN(device->common.error.newAction);
-        case ADI_COMMON_HAL_TIMER_FAIL:
-            ADI_ERROR_REPORT(&device->common,
-                             ADI_COMMON_ERRSRC_ADI_HAL,
-                             device->common.error.errCode,
-                             ADI_COMMON_ACT_ERR_CHECK_TIMER,
-                             NULL,
-                             "Timer error");
-            ADI_ERROR_RETURN(device->common.error.newAction);
-        case ADI_COMMON_HAL_GEN_SW: /* fall through */
-        default:
-            ADI_ERROR_REPORT(&device->common,
-                             ADI_COMMON_ERRSRC_ADI_HAL,
-                             device->common.error.errCode,
-                             ADI_COMMON_ACT_ERR_CHECK_PARAM,
-                             NULL,
-                             "Param error");
-            ADI_ERROR_RETURN(device->common.error.newAction);
-        }
-    }
+    adi_adrv9001_hal_close(device->common.devHalInfo);
+    recoveryAction = adi_adrv9001_hal_close(device->common.devHalInfo);
+    ADI_ERROR_REPORT(&device->common,
+                     ADI_COMMON_ERRSRC_ADI_HAL,
+                     recoveryAction,
+                     ADI_COMMON_ACT_ERR_RESET_INTERFACE,
+                     NULL,
+                     "Error closing HW");
 
     ADI_API_RETURN(device);
 }
@@ -188,12 +82,12 @@ int32_t adi_adrv9001_HwReset(adi_adrv9001_Device_t *device)
 
     static const uint8_t RESETB_LEVEL_LOW = 0;
     static const uint8_t RESETB_LEVEL_HIGH = 1;
-    static const uint8_t RESETB_WAIT_MS = 1;
+    static const uint32_t RESETB_WAIT_US = 1000;
 
-    ADI_API_ENTRY_EXPECT(device);
+    ADI_ENTRY_EXPECT(device);
 
     /* toggle RESETB on device with matching spi chip select index */
-    recoveryAction = adi_common_hal_HwReset(&device->common, RESETB_LEVEL_LOW);
+    recoveryAction = adi_adrv9001_hal_resetbPin_set(device->common.devHalInfo, RESETB_LEVEL_LOW);
     if (recoveryAction != ADI_COMMON_ACT_NO_ACTION)
     {
         ADI_ERROR_REPORT(&device->common,
@@ -205,7 +99,7 @@ int32_t adi_adrv9001_HwReset(adi_adrv9001_Device_t *device)
         ADI_ERROR_RETURN(device->common.error.newAction);
     }
 
-    recoveryAction = adi_common_hal_Wait_ms(&device->common, RESETB_WAIT_MS);
+    recoveryAction = adi_common_hal_Wait_us(&device->common, RESETB_WAIT_US);
 
     if (recoveryAction != ADI_COMMON_ACT_NO_ACTION)
     {
@@ -218,7 +112,7 @@ int32_t adi_adrv9001_HwReset(adi_adrv9001_Device_t *device)
         ADI_ERROR_RETURN(device->common.error.newAction);
     }
 
-    recoveryAction = adi_common_hal_HwReset(&device->common, RESETB_LEVEL_HIGH);
+    recoveryAction = adi_adrv9001_hal_resetbPin_set(device->common.devHalInfo, RESETB_LEVEL_HIGH);
     if (recoveryAction != ADI_COMMON_ACT_NO_ACTION)
     {
         ADI_ERROR_REPORT(&device->common,
@@ -246,7 +140,7 @@ static void cacheInitInfo(adi_adrv9001_Device_t *adrv9001, adi_adrv9001_Init_t *
     {
         adrv9001->devStateInfo.rxOutputRate_kHz[i] = init->rx.rxChannelCfg[i].profile.rxOutputRate_Hz / 1000;
     }
-
+    
     if (adrv9001->devStateInfo.profilesValid & ADI_ADRV9001_TX_PROFILE_VALID)
     {
         adrv9001->devStateInfo.outputSignaling[0] = init->tx.txProfile[0].outputSignaling;
@@ -254,6 +148,9 @@ static void cacheInitInfo(adi_adrv9001_Device_t *adrv9001, adi_adrv9001_Init_t *
         adrv9001->devStateInfo.txInputRate_kHz[0] = init->tx.txProfile[0].txInputRate_Hz / 1000;
         adrv9001->devStateInfo.txInputRate_kHz[1] = init->tx.txProfile[1].txInputRate_Hz / 1000;
     }
+    
+    /* Save whether we are in FH mode to state */
+    adrv9001->devStateInfo.frequencyHoppingEnabled = init->sysConfig.fhModeOn;
 }
 
 int32_t adi_adrv9001_InitAnalog(adi_adrv9001_Device_t *device,
@@ -261,9 +158,8 @@ int32_t adi_adrv9001_InitAnalog(adi_adrv9001_Device_t *device,
                                 adi_adrv9001_DeviceClockDivisor_e deviceClockOutDivisor)
 {
     adi_adrv9001_Info_t devStateInfoClear = { 0 };
-    static const uint8_t MAX_GAIN_INDEX = 0xFF;
 
-    ADI_API_ENTRY_PTR_EXPECT(device, init);
+    ADI_ENTRY_PTR_EXPECT(device, init);
 
 #if ADI_ADRV9001_SW_TEST > 0
     if (device->devStateInfo.swTest >  0)
@@ -273,9 +169,6 @@ int32_t adi_adrv9001_InitAnalog(adi_adrv9001_Device_t *device,
 #endif
 
     device->devStateInfo = devStateInfoClear;
-
-    device->devStateInfo.gainIndexes.rx1MaxGainIndex = MAX_GAIN_INDEX;
-    device->devStateInfo.gainIndexes.rx2MaxGainIndex = MAX_GAIN_INDEX;
 
     ADI_EXPECT(adrv9001_InitAnalog, device, init, deviceClockOutDivisor);
 
@@ -309,7 +202,7 @@ int32_t adi_adrv9001_spi_Configure(adi_adrv9001_Device_t *device, adi_adrv9001_S
     static const uint8_t SPICFG_FOURWIREMODE_OFF = 0;
     static const uint8_t SPICFG_ENSPISTREAMING_OFF = 0;
 
-    ADI_API_ENTRY_PTR_EXPECT(device, spi);
+    ADI_ENTRY_PTR_EXPECT(device, spi);
 
     if ((spi->cmosPadDrvStrength != ADI_ADRV9001_CMOSPAD_DRV_WEAK) &&
         (spi->cmosPadDrvStrength != ADI_ADRV9001_CMOSPAD_DRV_STRONG))
@@ -390,7 +283,7 @@ int32_t adi_adrv9001_spi_Inspect(adi_adrv9001_Device_t *device, adi_adrv9001_Spi
     static const uint8_t SPICFG_FOURWIREMODE_ON = 1;
     static const uint8_t SPICFG_ENSPISTREAMING_ON = 1;
 
-    ADI_API_ENTRY_PTR_EXPECT(device, spi);
+    ADI_ENTRY_PTR_EXPECT(device, spi);
 
     ADRV9001_SPIREADBYTE(device, "SPI_INTERFACE_CONFIG_A", ADRV9001_ADDR_SPI_INTERFACE_CONFIG_A, &spiConfigA);
 
@@ -448,7 +341,7 @@ int32_t adi_adrv9001_spi_Verify(adi_adrv9001_Device_t *device)
     static const uint8_t VENDOR_ID_0   = 0x56;
     static const uint8_t VENDOR_ID_1   = 0x04;
 
-    ADI_API_ENTRY_EXPECT(device);
+    ADI_ENTRY_EXPECT(device);
 
     /* Check SPI read - VENDOR_ID_0 */
     ADRV9001_SPIREADBYTE(device, "VENDOR_ID_0", ADRV9001_ADDR_VENDOR_ID_0, &spiReg);
@@ -587,7 +480,6 @@ int32_t adi_adrv9001_spi_Verify(adi_adrv9001_Device_t *device)
     ADI_API_RETURN(device);
 }
 
-#ifndef ADI_FILESYSTEM_AVAILABLE
 static uint32_t adi_adrv9001_Number_Extract(const char *src, uint8_t *location)
 {
     uint8_t i = 0;
@@ -609,27 +501,17 @@ static uint32_t adi_adrv9001_Number_Extract(const char *src, uint8_t *location)
     *location = i;
     return num;
 }
-#endif
 
 int32_t adi_adrv9001_ApiVersion_Get(adi_adrv9001_Device_t *device, adi_common_ApiVersion_t *apiVersion)
 {
     char *version = ADI_ADRV9001_CURRENT_VERSION;
-#ifdef __KERNEL__
     uint8_t location = 0;
-#endif
 
-    ADI_API_ENTRY_PTR_EXPECT(device, apiVersion);
+    ADI_ENTRY_PTR_EXPECT(device, apiVersion);
 
-#ifdef ADI_FILESYSTEM_AVAILABLE
-    sscanf(version, "%u.%u.%u", &apiVersion->major, &apiVersion->minor, &apiVersion->patch);
-#else
-#ifndef __KERNEL__
-    uint8_t location = 0;
-#endif
     apiVersion->major = adi_adrv9001_Number_Extract(version, &location);
     apiVersion->minor = adi_adrv9001_Number_Extract(version, &location);
     apiVersion->patch = adi_adrv9001_Number_Extract(version, &location);
-#endif // ADI_FILESYSTEM_AVAILABLE
 
     ADI_API_RETURN(device);
 }
@@ -638,7 +520,7 @@ int32_t adi_adrv9001_SiliconVersion_Get(adi_adrv9001_Device_t *device, adi_adrv9
 {
     uint8_t siVersion = 0;
 
-    ADI_API_ENTRY_PTR_EXPECT(device, siliconVersion);
+    ADI_ENTRY_PTR_EXPECT(device, siliconVersion);
 
     ADRV9001_SPIREADBYTE(device, "PRODUCT_ID_1", ADRV9001_ADDR_PRODUCT_ID_1, &siVersion);
 
@@ -650,7 +532,7 @@ int32_t adi_adrv9001_SiliconVersion_Get(adi_adrv9001_Device_t *device, adi_adrv9
 
 int32_t adi_adrv9001_Profiles_Verify(adi_adrv9001_Device_t *device, adi_adrv9001_Init_t *init)
 {
-    ADI_API_ENTRY_PTR_EXPECT(device, init);
+    ADI_ENTRY_PTR_EXPECT(device, init);
 
     ADI_EXPECT(adrv9001_ProfilesVerify, device, init);
 
@@ -697,6 +579,32 @@ int32_t adi_adrv9001_Temperature_Get(adi_adrv9001_Device_t *device, int16_t *tem
     /* Reconstruct temperature */
     *temperature_C = (int16_t)(((int16_t)armReadBack[0] << 0) |
                                ((int16_t)armReadBack[1] << 8));
+
+    ADI_API_RETURN(device);
+}
+
+int32_t adi_adrv9001_PartNumber_Get(adi_adrv9001_Device_t *device, adi_adrv9001_PartNumber_e *partNumber)
+{
+    uint8_t     swConfig[2];
+
+    ADI_ENTRY_PTR_EXPECT(device, partNumber);
+
+    ADRV9001_SPIREADBYTE(device, "EFUSE_SW_CONFIG_0", ADRV9001_ADDR_EFUSE_SW_CONFIG_0, &swConfig[0]);
+    ADRV9001_SPIREADBYTE(device, "EFUSE_SW_CONFIG_1", ADRV9001_ADDR_EFUSE_SW_CONFIG_1, &swConfig[1]);
+
+    *partNumber = (adi_adrv9001_PartNumber_e)(((uint16_t)swConfig[1] << 8) | (uint16_t)swConfig[0]);
+    if ((ADI_ADRV9001_PART_NUMBER_ADRV9002 != *partNumber) &&
+        (ADI_ADRV9001_PART_NUMBER_ADRV9003 != *partNumber) &&
+        (ADI_ADRV9001_PART_NUMBER_ADRV9004 != *partNumber))
+    {
+        *partNumber = ADI_ADRV9001_PART_NUMBER_UNKNOWN;
+        ADI_ERROR_REPORT(device, 
+                         ADI_COMMON_ERRSRC_API, 
+                         ADI_COMMON_ERR_API_FAIL, 
+                         ADI_COMMON_ACT_ERR_RESET_FULL, 
+                         NULL, 
+                         "Unknown part number detected");
+    }
 
     ADI_API_RETURN(device);
 }
