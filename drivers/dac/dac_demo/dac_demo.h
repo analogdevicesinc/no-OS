@@ -44,7 +44,8 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 
-#include <stdint.h>
+#include <stdio.h>
+#include "iio_types.h"
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -61,6 +62,10 @@
 struct dac_demo_desc {
 	/** Dummy registers of device for testing */
 	uint8_t reg[MAX_DAC_ADDR];
+	/** Demo global device attribute */
+	uint32_t dac_global_attr;
+	/** Demo device channel attribute */
+	uint32_t dac_ch_attr;
 	/** Active channel**/
 	uint32_t active_ch;
 	/** Buffer for adc/dac communication*/
@@ -72,6 +77,10 @@ struct dac_demo_desc {
  * @brief iio demo dac configuration.
  */
 struct dac_demo_init_param {
+	/** Demo global dac attribute */
+	uint32_t dev_global_attr;
+	/** Demo dac channel attribute */
+	uint32_t dev_ch_attr;
 	/** Buffer for adc/dac communication*/
 	uint16_t **loopback;
 	/* initializing number of channels*/
@@ -87,13 +96,17 @@ int32_t dac_demo_init(struct dac_demo_desc **desc,
 
 int32_t dac_demo_remove(struct dac_demo_desc *desc);
 
-int32_t dac_get_number_of_channels(void* dev);
-
 int32_t update_active_dac_channels(void *dev, int32_t mask);
 
 int32_t close_dac_channels(void* dev);
 
-int32_t dac_write_samples(void* dev, uint16_t* buff, uint32_t samples);
+uint32_t dac_write_samples(void* dev, uint16_t* buff, uint32_t samples);
+
+ssize_t get_dac_demo_attr(void *device, char *buf, size_t len,
+			  const struct iio_ch_info *channel, intptr_t priv);
+
+ssize_t set_dac_demo_attr(void *device, char *buf, size_t len,
+			  const struct iio_ch_info *channel, intptr_t priv);
 
 int32_t dac_demo_reg_read(struct dac_demo_desc *desc, uint8_t reg_index,
 			  uint8_t *readval);

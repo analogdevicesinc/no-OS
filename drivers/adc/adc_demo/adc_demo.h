@@ -45,6 +45,7 @@
 /******************************************************************************/
 
 #include <stdint.h>
+#include "iio_types.h"
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -61,6 +62,10 @@
 struct adc_demo_desc {
 	/** Dummy registers of device for testing */
 	uint8_t reg[MAX_ADC_ADDR];
+	/** Demo global device attribute */
+	uint32_t adc_global_attr;
+	/** Demo device channel attribute */
+	uint32_t adc_ch_attr;
 	/** Active channel**/
 	uint32_t active_ch;
 	/** buffer for communication between adc&dac, according to channel*/
@@ -74,6 +79,10 @@ struct adc_demo_desc {
  * @brief iio demo adc configuration.
  */
 struct adc_demo_init_param {
+	/** Demo global dac attribute */
+	uint32_t dev_global_attr;
+	/** Demo dac channel attribute */
+	uint32_t dev_ch_attr;
 	/* NUmber of channels*/
 	uint32_t channel_no;
 	/**buffer for communication between adc&dac, according to appropriate channel*/
@@ -91,17 +100,17 @@ int32_t adc_demo_remove(struct adc_demo_desc *desc);
 
 int32_t adc_get_number_of_channels(void* dev);
 
-/*_ssize_t get_adc_demo_attr(void *device, char *buf, size_t len,
-		      const struct iio_ch_info *channel, intptr_t attr_id);
+ssize_t get_adc_demo_attr(void *device, char *buf, size_t len,
+			  const struct iio_ch_info *channel, intptr_t attr_id);
 
-_ssize_t set_adc_demo_attr(void *device, char *buf, size_t len,
-		      const struct iio_ch_info *channel, intptr_t attr_id);*/
+ssize_t set_adc_demo_attr(void *device, char *buf, size_t len,
+			  const struct iio_ch_info *channel, intptr_t attr_id);
 
 int32_t update_active_adc_channels(void *dev, int32_t mask);
 
 int32_t close_adc_channels(void* dev);
 
-int32_t adc_read_samples(void* dev, uint16_t* buff, uint32_t samples);
+uint32_t adc_read_samples(void* dev, uint16_t* buff, uint32_t samples);
 
 int32_t adc_demo_reg_read(struct adc_demo_desc *desc, uint8_t reg_index,
 			  uint8_t *readval);
