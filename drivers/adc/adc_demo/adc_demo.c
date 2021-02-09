@@ -42,12 +42,12 @@
 /******************************************************************************/
 
 #include <stdlib.h>
-#include <math.h>
+#include <string.h>
+#include <inttypes.h>
 #include "adc_demo.h"
+#include "iio_adc_demo.h"
 #include "error.h"
 #include "util.h"
-
-#include "system_ADuCM3029.h"
 
 /* Default sine values if the user wants to use only ADC*/
 const uint16_t sine_lut[128] = {
@@ -90,6 +90,8 @@ int32_t adc_demo_init(struct adc_demo_desc **desc,
 
 	adesc->loopback = param->loopback;
 	adesc->active_ch = param->channel_no;
+	adesc->adc_ch_attr = param->dev_ch_attr;
+	adesc->adc_global_attr = param->dev_global_attr;
 	*desc = adesc;
 
 	return SUCCESS;
@@ -160,16 +162,15 @@ static bool get_next_ch_idx(uint32_t ch_mask, uint32_t last_idx,
  * @param dev - physical instance of adc device
  * @param buff - buffer for reading samples
  * @param samples - number of samples to receive
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return the number of samples.
 *******************************************************************************/
-int32_t adc_read_samples(void* dev, uint16_t* buff, uint32_t samples)
+uint32_t adc_read_samples(void* dev, uint16_t* buff, uint32_t samples)
 {
 	struct adc_demo_desc *desc = dev;
 	uint32_t k = 0;
 	uint32_t ch = -1;
 
-	if(desc->loopback == NULL)
-	{
+	if(desc->loopback == NULL) {
 		//default sin function
 		for(k = 0 ; k < samples; k++)
 			buff[k] = sine_lut[k%128];
@@ -177,12 +178,61 @@ int32_t adc_read_samples(void* dev, uint16_t* buff, uint32_t samples)
 		return samples;
 	}
 
-	for(int i = 0; i < samples; i++)
-	{
+	for(int i = 0; i < samples; i++) {
 		while(get_next_ch_idx(desc->active_ch,ch,&ch))
 			buff[k++] = desc->loopback[ch][i%DEFAULT_LOCAL_SAMPLES];
 	}
 	return samples;
+}
+
+/**
+ * @brief get attributes for adc.
+ * @param device- Physical instance of a iio_demo_device.
+ * @param buf - Where value is stored.
+ * @param len - Maximum length of value to be stored in buf.
+ * @param channel - Channel properties.
+ * @param attr_id - Attribute ID
+ * @return Length of chars written in buf, or negative value on failure.
+ */
+ssize_t get_adc_demo_attr(void *device, char *buf, size_t len,
+			  const struct iio_ch_info *channel, intptr_t attr_id)
+{
+	struct adc_demo_desc *desc = device;
+	if(channel)
+		if(attr_id == ADC_CHANNEL_ATTR)
+			return snprintf(buf,len,"%"PRIu32"",desc->adc_ch_attr);
+		else if (attr_id == ADC_GLOBAL_ATTR)
+			return snprintf(buf,len,"%"PRIu32"",desc->adc_global_attr);
+
+	return -EINVAL;
+}
+
+
+/**
+ * @brief set attributes for adc.
+ * @param device - Physical instance of a iio_demo_device.
+ * @param buf - Value to be written to attribute.
+ * @param len -	Length of the data in "buf".
+ * @param channel - Channel properties.
+ * @param attr_id - Attribute ID
+ * @return: Number of bytes written to device, or negative value on failure.
+ */
+ssize_t set_adc_demo_attr(void *device, char *buf, size_t len,
+			  const struct iio_ch_info *channel, intptr_t attr_id)
+{
+	struct adc_demo_desc *desc = device;
+	uint32_t value = srt_to_uint32(buf);
+
+	if(channel)
+		if(attr_id == ADC_CHANNEL_ATTR) {
+			desc->adc_ch_attr = value;
+			return len;
+		} else if (attr_id == ADC_GLOBAL_ATTR) {
+			desc->adc_global_attr = value;
+			return len;
+		}
+
+	return -EINVAL;
 }
 
 /***************************************************************************//**

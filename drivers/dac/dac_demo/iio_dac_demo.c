@@ -41,18 +41,7 @@
 #include <stdlib.h>
 #include "iio_dac_demo.h"
 #include "iio_types.h"
-
-#include "system_ADuCM3029.h"
-
-/*static struct iio_attribute dac_channel_attributes[] = {
-	DAC_DEMO_ATTR("dac_channel_attr", DAC_CHANNEL_ATTR),
-	END_ATTRIBUTES_ARRAY,
-};
-
-static struct iio_attribute dac_global_attributes[] = {
-	DAC_DEMO_ATTR("dac_global_attr", DAC_GLOBAL_ATTR),
-	END_ATTRIBUTES_ARRAY,
-};*/
+#include "error.h"
 
 static struct scan_type dac_scan_type = {
 	.sign = 's',
@@ -64,6 +53,16 @@ static struct scan_type dac_scan_type = {
 
 struct iio_channel iio_dac_channels[MAX_NR_CHANNELS];
 
+struct iio_attribute dac_channel_attributes[] = {
+	DAC_DEMO_ATTR("dac_channel_attr", DAC_CHANNEL_ATTR),
+	END_ATTRIBUTES_ARRAY,
+};
+
+struct iio_attribute dac_global_attributes[] = {
+	DAC_DEMO_ATTR("dac_global_attr", DAC_GLOBAL_ATTR),
+	END_ATTRIBUTES_ARRAY,
+};
+
 /***************************************************************************//**
  * @brief initialize the device number of channels with the number of channels in the init_param
  * @param dev - physical instance of an dac device
@@ -74,36 +73,21 @@ int32_t init_dac_channels(void* dev, uint32_t mask)
 {
 	struct dac_demo_desc *desc = dev;
 
-	for(int i = 0; i <desc->active_ch; i++)
-	{
+	for(int i = 0; i <desc->active_ch; i++) {
 		char buff[15];
 		sprintf(buff,"dac_channel_%d",i);
 		struct iio_channel ch = {
-				.name = buff,
-				.ch_type = IIO_VOLTAGE,
-				.channel = i,
-				.scan_index = i,
-				.indexed = true,
-				.scan_type = &dac_scan_type,
-				.attributes = NULL,
-				.ch_out = true
+			.name = buff,
+			.ch_type = IIO_VOLTAGE,
+			.channel = i,
+			.scan_index = i,
+			.indexed = true,
+			.scan_type = &dac_scan_type,
+			.attributes = dac_channel_attributes,
+			.ch_out = true
 		};
 		iio_dac_channels[i] = ch;
 	}
 
-
 	return SUCCESS;
 }
-
-
-/*struct iio_device dac_demo_iio_descriptor = {
-	.channels = iio_dac_channels,
-	.attributes = NULL,
-	.debug_attributes = NULL,
-	.buffer_attributes = NULL,
-	.prepare_transfer = init_dac_channels,
-	.end_transfer = close_dac_channels,
-	.write_dev = (int32_t (*)())dac_write_samples,
-	.debug_reg_read = (int32_t (*)()) dac_demo_reg_read,
-	.debug_reg_write = (int32_t (*)()) dac_demo_reg_write
-};*/

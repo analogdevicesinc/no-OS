@@ -51,7 +51,6 @@
 #include "dac_demo.h"
 #include "iio_dac_demo.h"
 
-
 #ifdef XILINX_PLATFORM
 #include <xparameters.h>
 #include <xil_cache.h>
@@ -185,7 +184,7 @@ int main(void)
 	struct dac_demo_desc *dac_desc;
 
 	status = platform_init();
-	if (status != 0)
+	if (status != SUCCESS)
 		return status;
 
 	iio_demo_out_init_par = (struct iio_demo_init_param) {
@@ -193,7 +192,7 @@ int main(void)
 		.dev_ch_attr = 1111,
 	};
 	status = iio_demo_dev_init(&iio_demo_out_desc, &iio_demo_out_init_par);
-	if (status < 0)
+	if (status < SUCCESS)
 		return status;
 
 	iio_demo_in_init_par = (struct iio_demo_init_param) {
@@ -201,7 +200,7 @@ int main(void)
 		.dev_ch_attr = 2211,
 	};
 	status = iio_demo_dev_init(&iio_demo_in_desc, &iio_demo_in_init_par);
-	if (status != 0)
+	if (status != SUCCESS)
 		return status;
 
 	struct iio_data_buffer rd_buf = {
@@ -214,33 +213,40 @@ int main(void)
 	};
 
 	struct iio_data_buffer buff = {
-			.buff = (void *)ADC_DDR_BASEADDR,
-			.size = MAX_SIZE_BASE_ADDR
-		};
-	
+		.buff = (void *)ADC_DDR_BASEADDR,
+		.size = MAX_SIZE_BASE_ADDR
+	};
+
 	struct iio_data_buffer buff1 = {
-				.buff = (void *)DAC_DDR_BASEADDR,
-				.size = MAX_SIZE_BASE_ADDR
-			};
+		.buff = (void *)DAC_DDR_BASEADDR,
+		.size = MAX_SIZE_BASE_ADDR
+	};
 
 	uint16_t** buf = (uint16_t**)malloc(10*sizeof(uint16_t*));
 
-	for(int i = 0; i < 500; i++)
-	{
+	for(int i = 0; i < 500; i++) {
 		buf[i] = (uint16_t*)malloc(800*sizeof(uint16_t));
 	}
 
-	adc_init_par.loopback = buf;
-	adc_init_par.channel_no = 2;
+	adc_init_par = (struct adc_demo_init_param) {
+		.loopback = buf,
+		.channel_no = 2,
+		.dev_global_attr = 3300,
+		.dev_ch_attr = 3311
+	};
 	status = adc_demo_init(&adc_desc, &adc_init_par);
-	if (status != 0)
+	if (status != SUCCESS)
 		return status;
 
 
-	dac_init_par.loopback = buf;
-	dac_init_par.channel_no = 2;
+	dac_init_par = (struct dac_demo_init_param) {
+		.loopback = buf,
+		.channel_no = 2,
+		.dev_global_attr = 4400,
+		.dev_ch_attr = 4411
+	};
 	status = dac_demo_init(&dac_desc, &dac_init_par);
-	if (status != 0)
+	if (status != SUCCESS)
 		return status;
 
 	struct iio_device iio_adc = ADC_DEMO_DEV(adc_desc->active_ch);
