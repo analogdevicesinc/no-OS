@@ -30,8 +30,8 @@ typedef enum adi_adrv9001_SsiTestModeData
     ADI_ADRV9001_SSI_TESTMODE_DATA_NORMAL = 0,      /*!< No check available for this data type */
     ADI_ADRV9001_SSI_TESTMODE_DATA_FIXED_PATTERN,   /*!< Length of pattern is dependent on SSI configuration.
                                                          Refer to 'fixedDataPatternToTransmit' in adi_adrv9001_RxSsiTestModeCfg_t for details */
-    ADI_ADRV9001_SSI_TESTMODE_DATA_RAMP_NIBBLE,
-    ADI_ADRV9001_SSI_TESTMODE_DATA_RAMP_16_BIT,     /*!< LSSI-Only */
+    ADI_ADRV9001_SSI_TESTMODE_DATA_RAMP_NIBBLE,     /*!< CSSI-Only */
+    ADI_ADRV9001_SSI_TESTMODE_DATA_RAMP_16_BIT,     /*!< CSSI and LSSI */
     ADI_ADRV9001_SSI_TESTMODE_DATA_PRBS15,          /*!< LSSI-Only */
     ADI_ADRV9001_SSI_TESTMODE_DATA_PRBS7,           /*!< LSSI-Only */
 } adi_adrv9001_SsiTestModeData_e;
@@ -54,11 +54,8 @@ typedef struct adi_adrv9001_RxSsiTestModeCfg
 {
     adi_adrv9001_SsiTestModeData_e testData;   /*!< Type of data to transmit over SSI */
     uint32_t fixedDataPatternToTransmit;       /*!< Value of Fixed pattern to transmit over interface. For various SSI data format:
-                                                    16_BIT_I_Q_DATA    --> I : bit16 - bit31; Q : bit0 - bit15
-                                                    12_BIT_I_Q_DATA    --> I : bit16 - bit27; Q : bit0 - bit11
-                                                    16_BIT_SYMBOL_DATA --> I : bit16 - bit31; Q : None (only I data)
-                                                    8_BIT_SYMBOL_DATA  --> I : bit16 - bit23; Q : None (only I data)
-                                                    2_BIT_SYMBOL_DATA  --> I : bit16 - bit17; Q : None (only I data) */
+                                                CMOS: Pattern is truncated to bit3  - bit0 value is transmitted on RxSSI I and Q (where applicable)
+                                                LVDS: Pattern is truncated to bit15 - bit0 value transmitted on RxSSI I and Q (where applicable) */
 } adi_adrv9001_RxSsiTestModeCfg_t;
 
 /**

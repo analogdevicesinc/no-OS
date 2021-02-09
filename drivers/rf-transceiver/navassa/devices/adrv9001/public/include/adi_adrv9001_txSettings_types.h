@@ -31,10 +31,11 @@ typedef enum adi_adrv9001_TxSignalType
  */
 typedef enum adi_adrv9001_TxDpPreProcMode
 {
-    ADI_ADRV9001_TX_DP_PREPROC_MODE0 = 0u, /*!< Selects mode0 for the Tx PreProc, bypass mode                  */
-    ADI_ADRV9001_TX_DP_PREPROC_MODE1 = 1u, /*!< Selects mode1 for the Tx PreProc, I and Q PFIR mode            */
-    ADI_ADRV9001_TX_DP_PREPROC_MODE2 = 2u, /*!< Selects mode2 for the Tx PreProc, I PFIR only mode             */
-    ADI_ADRV9001_TX_DP_PREPROC_MODE3 = 3u  /*!< Selects mode3 for the Tx PreProc, cascaded I and Q PFIR mode   */
+    ADI_ADRV9001_TX_DP_PREPROC_I_ONLY_DATA_BYPASS_PFIRS  = 0,  /*!< I-only data, bypass both PFIRs */
+    ADI_ADRV9001_TX_DP_PREPROC_IQ_DATA_WITH_PFIRS        = 1,  /*!< I/Q data, insert both PFIRs */
+    ADI_ADRV9001_TX_DP_PREPROC_I_ONLY_DATA_WITH_PFIR     = 2,  /*!< I-only data, insert I only PFIR */
+    ADI_ADRV9001_TX_DP_PREPROC_I_ONLY_DATA_CASCADE_PFIRS = 3,  /*!< I-only data, cascade I and Q PFIRS (256-tap total) */
+    ADI_ADRV9001_TX_DP_PREPROC_ENABLE_PFIRS              = 0x4 /*!< Mask bit to enable PFIRs */
 } adi_adrv9001_TxDpPreProcMode_e;
 
 /**

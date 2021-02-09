@@ -35,6 +35,16 @@ typedef enum adi_adrv9001_DuplexMode
 } adi_adrv9001_DuplexMode_e;
 
 /**
+ *  \brief Enum of MCS Modes
+ */
+typedef enum adi_adrv9001_McsMode
+{
+    ADI_ADRV9001_MCSMODE_DISABLED = 0,              /*!< Multi Chip Synchronization disabled */
+    ADI_ADRV9001_MCSMODE_ENABLED,                   /*!< Multi Chip Synchronization enabled */
+    ADI_ADRV9001_MCSMODE_ENABLED_WITH_RFPLL_PHASE   /*!< Multi Chip Synchronization enabled with RFPLL phase */
+} adi_adrv9001_McsMode_e;
+
+/**
 * \brief Data structure to hold Device system configuration
 */
 typedef struct adi_adrv9001_DeviceSysConfig
@@ -42,7 +52,7 @@ typedef struct adi_adrv9001_DeviceSysConfig
     adi_adrv9001_DuplexMode_e duplexMode;
     uint8_t fhModeOn;
     uint8_t numDynamicProfile;             /*!< Number of dynamic Profile */
-    uint8_t extMcsOn;                      /*!< External MCS On flag. 0 means off */
+    adi_adrv9001_McsMode_e mcsMode;        /*!< Multi Chip Synchronization mode */
     adi_adrv9001_AdcType_e adcTypeMonitor; /*!< ADC type used in Monitor Mode */
     uint16_t pllLockTime_us;               /*!< Required lock time in microseconds for PLLs, based on ref_clk and loop bandwidth */
     adi_adrv9001_pllModulus_t pllModulus;  /*!< PLL modulus */

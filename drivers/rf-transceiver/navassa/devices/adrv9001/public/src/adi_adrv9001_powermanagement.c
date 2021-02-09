@@ -11,12 +11,12 @@
  * see the "LICENSE.txt" file in this zip file.
  */
 
-#include "adrv9001_powermanagement.h"
+#include "adi_adrv9001_powermanagement.h"
 #include "adi_adrv9001_arm.h"
 #include "adrv9001_arm_macros.h"
 
-static int32_t adrv9001_ldo_Configure_Validate(adi_adrv9001_Device_t *adrv9001, 
-                                               adi_adrv9001_PowerManagementSettings_t *powerManagementSettings)
+static int32_t adi_adrv9001_ldo_Configure_Validate(adi_adrv9001_Device_t *adrv9001,
+                                                   adi_adrv9001_PowerManagementSettings_t *powerManagementSettings)
 {
     uint8_t i = 0;
     ADI_NULL_PTR_RETURN(&adrv9001->common, powerManagementSettings);
@@ -62,8 +62,8 @@ static int32_t adrv9001_ldo_Configure_Validate(adi_adrv9001_Device_t *adrv9001,
 }
 
 
-int32_t adrv9001_powermanagement_Configure(adi_adrv9001_Device_t *adrv9001, 
-                                           adi_adrv9001_PowerManagementSettings_t *powerManagementSettings)
+int32_t adi_adrv9001_powermanagement_Configure(adi_adrv9001_Device_t *adrv9001,
+                                               adi_adrv9001_PowerManagementSettings_t *powerManagementSettings)
 {
     uint8_t addrData[8] = { 0 };
     uint32_t offset = 0;
@@ -73,7 +73,7 @@ int32_t adrv9001_powermanagement_Configure(adi_adrv9001_Device_t *adrv9001,
     uint8_t modesData[ADI_ADRV9001_NUM_LDOS] = { 0 };
     uint8_t configData[ADI_ADRV9001_NUM_LDOS_CONFIGURABLE * 6] = { 0 };
     
-    ADI_PERFORM_VALIDATION(adrv9001_ldo_Configure_Validate, adrv9001, powerManagementSettings);
+    ADI_PERFORM_VALIDATION(adi_adrv9001_ldo_Configure_Validate, adrv9001, powerManagementSettings);
     
     ADI_EXPECT(adi_adrv9001_arm_Memory_Read, adrv9001, LDO_POWER_SAVING_MODES_LOCATION, addrData, sizeof(addrData), ADI_ADRV9001_ARM_MEM_AUTO_INCR);
     adrv9001_ParseFourBytes(&offset, addrData, &ldoPowerSavingModesAddr);
@@ -83,7 +83,7 @@ int32_t adrv9001_powermanagement_Configure(adi_adrv9001_Device_t *adrv9001,
     {
         modesData[i] = powerManagementSettings->ldoPowerSavingModes[i];
     }
-    ADI_EXPECT(adi_adrv9001_arm_Memory_Write, adrv9001, ldoPowerSavingModesAddr, modesData, sizeof(modesData));
+    ADI_EXPECT(adi_adrv9001_arm_Memory_Write, adrv9001, ldoPowerSavingModesAddr, modesData, sizeof(modesData), ADI_ADRV9001_ARM_SINGLE_SPI_WRITE_MODE_STANDARD_BYTES_4);
     
     for (i = 0; i < ADI_ADRV9001_NUM_LDOS_CONFIGURABLE; i++)
     {
@@ -94,7 +94,7 @@ int32_t adrv9001_powermanagement_Configure(adi_adrv9001_Device_t *adrv9001,
         configData[i * 6 + 4] = powerManagementSettings->ldoConfigs[i].shuntResistanceNormal;
         configData[i * 6 + 5] = powerManagementSettings->ldoConfigs[i].diffPairBiasNormal;
     }
-    ADI_EXPECT(adi_adrv9001_arm_Memory_Write, adrv9001, ldoConfigsAddr, configData, sizeof(configData));
+    ADI_EXPECT(adi_adrv9001_arm_Memory_Write, adrv9001, ldoConfigsAddr, configData, sizeof(configData), ADI_ADRV9001_ARM_SINGLE_SPI_WRITE_MODE_STANDARD_BYTES_4);
     
     ADI_API_RETURN(adrv9001);
 }

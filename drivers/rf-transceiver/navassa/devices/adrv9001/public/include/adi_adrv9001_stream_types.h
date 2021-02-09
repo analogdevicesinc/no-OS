@@ -25,6 +25,7 @@
 extern "C" {
 #endif
 
+#define ADI_ADRV9001_STREAM_BINARY_IMAGE_FILE_SIZE_BYTES	(32*1024)
 #define ADRV9001_MAX_NUM_STREAM			5		/* Maximum number of stream processors */
 
 /**

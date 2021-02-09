@@ -64,17 +64,25 @@ typedef enum adi_adrv9001_PllPower
  */
 typedef struct adi_adrv9001_Carrier
 {
-    adi_adrv9001_PllCalibration_e pllCalibration;
     /** LO Gen optimization mode
      * \note When carrierFrequency_Hz > 1 GHz this is automatically selected by the ADRV9001 regardless of what you set
      */
     adi_adrv9001_LoGenOptimization_e loGenOptimization;
-    adi_adrv9001_PllPower_e pllPower;   /*!< PLL power; ignored in CALIBRATED state */
     uint64_t carrierFrequency_Hz;       /*!< Carrier frequency, denoted in Hz. Valid range: 30MHz to 6 GHz*/
-    uint32_t intermediateFrequency_Hz;  /*!< Intermediate frequency, denoted in Hz.
-                                             Valid range: min: 200 kHz, 
-                                                          max: min(20 MHz, rfChannelBandwidth_Hz /2)) */
+    int32_t intermediateFrequency_Hz;  /*!< Intermediate frequency, denoted in Hz.
+                                             Valid range: between +/- min(20 MHz, rfChannelBandwidth_Hz /2)) */
 } adi_adrv9001_Carrier_t;
+
+/**
+ * \brief pll configuration
+ */
+typedef struct adi_adrv9001_PllConfig
+{
+	adi_adrv9001_PllCalibration_e pllCalibration;
+	adi_adrv9001_PllPower_e pllPower; 
+
+} adi_adrv9001_PllConfig_t;
+
 
 /**
  * \brief Modes controlling how a channel is enabled
@@ -87,10 +95,10 @@ typedef enum adi_adrv9001_ChannelEnableMode
 
 typedef enum adi_adrv9001_ChannelState
 {
-    ADI_ADRV9001_CHANNEL_STANDBY,       /*!< Initial state for all channels once ARM completes boot sequences */
-    ADI_ADRV9001_CHANNEL_CALIBRATED,    /*!< Minimum set of initial calibration done without errors; CLK PLL is on; data paths are off */
-    ADI_ADRV9001_CHANNEL_PRIMED,        /*!< Data path and interface are on; tracking algorithms NOT scheduled, TRx NOT transmitting or receiving data */
-    ADI_ADRV9001_CHANNEL_RF_ENABLED     /*!< Data path and interface are on; tracking algorithms are scheduled, TRx is transmitting or receiving data */
+    ADI_ADRV9001_CHANNEL_STANDBY,                /*!< Initial state for all channels once ARM completes boot sequences */
+    ADI_ADRV9001_CHANNEL_CALIBRATED,             /*!< Minimum set of initial calibration done without errors; CLK PLL is on; data paths are off */
+    ADI_ADRV9001_CHANNEL_PRIMED,                 /*!< Data path and interface are on; tracking algorithms NOT scheduled, TRx NOT transmitting or receiving data */
+    ADI_ADRV9001_CHANNEL_RF_ENABLED,             /*!< Data path and interface are on; tracking algorithms are scheduled, TRx is transmitting or receiving data */  
 } adi_adrv9001_ChannelState_e;
 
 /**
@@ -98,9 +106,10 @@ typedef enum adi_adrv9001_ChannelState
  */
 typedef struct adi_adrv9001_RadioState
 {
-    adi_adrv9001_ArmSystemStates_e systemState;             /*!< ARM System State */
+    adi_adrv9001_ArmSystemStates_e      systemState;        /*!< ARM System State */
     adi_adrv9001_ArmMonitorModeStates_e monitorModeState;   /*!< ARM Monitor Mode State (only valid when systemState is in Monitor Mode) */
-    adi_adrv9001_ArmBootStates_e bootState;                 /*!< ARM Boot State (only valid when systemState is in POWERUP state) */
+    adi_adrv9001_ArmMcsStates_e         mcsState;           /*!< ARM MCS state (only valid when systemState is MCS) */
+    adi_adrv9001_ArmBootStates_e        bootState;          /*!< ARM Boot State (only valid when systemState is in POWERUP state and not in MCS state) */
     /**
      * State of each channel; Use adi_common_port_to_index and adi_common_channel_to_index to access conveniently
      * e.g., RX1 is channelStates[adi_common_port_to_index(ADI_RX)][adi_common_channel_to_index(ADI_CHANNEL_1)]

@@ -22,7 +22,9 @@ static inline int atoi(const char *str)
 
     ret = kstrtoint(str, 10, &val);
     if (ret)
-	return ret;
+    {
+        return ret;
+    }
 
     return val;
 }

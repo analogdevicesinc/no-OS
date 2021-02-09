@@ -277,6 +277,18 @@ int32_t adi_adrv9001_Profiles_Verify(adi_adrv9001_Device_t *adrv9001, adi_adrv90
  */
 int32_t adi_adrv9001_Temperature_Get(adi_adrv9001_Device_t *adrv9001, int16_t *temperature_C);
 
+/**
+ * \brief Reads back the part number for the ADRV9001 variant device
+ *
+ * \note Message type: \ref timing_direct "Direct register access"
+ *
+ * \param[in]  adrv9001         Context variable - Pointer to the ADRV9001 device data structure
+ * \param[out] partNumber       Return value of the ADRV9001 part number
+ *
+ * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
+ */
+int32_t adi_adrv9001_PartNumber_Get(adi_adrv9001_Device_t *adrv9001, adi_adrv9001_PartNumber_e *partNumber);
+
 #ifdef __cplusplus
 }
 #endif

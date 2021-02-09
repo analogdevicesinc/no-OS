@@ -15,7 +15,6 @@
 #define _ADI_ADRV9001_SSI_H_
 
 #include "adi_adrv9001_ssi_types.h"
-#include "adi_adrv9001_utilities_types.h"
 #include "adi_common_error_types.h"
 
 #ifdef __cplusplus
@@ -51,7 +50,7 @@ int32_t adi_adrv9001_Ssi_Rx_TestMode_Configure(adi_adrv9001_Device_t *adrv9001,
  * \param[in] adrv9001             Context variable - Pointer to the ADRV9001 device data structure
  * \param[in] channel              The Tx channel for which to configure SSI test mode
  * \param[in] ssiType              The type (CMOS/LVDS) of SSI interface
- * \param[in] dataFormat            The data format (I-data or I/Q-data) of the SSI interface
+ * \param[in] dataFormat           The data format (I-data or I/Q-data) of the SSI interface
  * \param[in] ssiTestModeConfig    The desired SSI test mode to configure
  *
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
@@ -82,6 +81,23 @@ int32_t adi_adrv9001_Ssi_Tx_TestMode_Status_Inspect(adi_adrv9001_Device_t *adrv9
                                                     adi_adrv9001_SsiDataFormat_e dataFormat,
                                                     adi_adrv9001_TxSsiTestModeCfg_t *ssiTestModeConfig,
                                                     adi_adrv9001_TxSsiTestModeStatus_t *ssiTestModeStatus);
+
+/**
+ * \brief Set the enabledness of Tx SSI to Rx SSI interface loopback
+ *
+ * \note Message type: \ref timing_direct "Direct register acccess"
+ *
+ * \param[in] adrv9001              Context variable - Pointer to the ADRV9001 device data structure
+ * \param[in] channel               The channel for which to set SSI interface loopback
+ * \param[in] ssiType               The type (CMOS/LVDS) of SSI interface
+ * \param[in] loopbackEnable        A boolean flag to enable or disable ADRV9001 Tx SSI to Rx SSI interface loopback
+ *
+ * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
+ */
+int32_t adi_adrv9001_Ssi_Loopback_Set(adi_adrv9001_Device_t *adrv9001,
+                                      adi_common_ChannelNumber_e channel,
+                                      adi_adrv9001_SsiType_e ssiType,
+                                      bool loopbackEnable);
 
 /**
  * \brief This function programs the SSI delay configuration in ADRV9001 device through SPI.

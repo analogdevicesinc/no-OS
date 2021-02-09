@@ -101,28 +101,6 @@ int32_t adi_adrv9001_Rx_GainTable_Read(adi_adrv9001_Device_t *adrv9001,
                                        uint32_t arraySize,
                                        uint16_t *numGainIndicesRead);
 
-/**
- * \brief Updates the minimum and maximum gain indices for a requested Rx/ORx Channel
- *        in the device data structure
- *
- * This function is required to be called by the user right after loading the gain table.
- * This function is decoupled from the gain table loading function so that a user has
- * flexibility to load multiple gain table regions and switch between multiple gain table
- * regions during runtime
- *
- * \param[in] adrv9001       Context variable - Pointer to the ADRV9001 device data structure
- * \param[in] channelMask    An OR'd combination of adi_common_ChannelNumber_e specifying
- *                           the Rx Channels for which to set min and max gain indices
- * \param[in] minGainIndex   The lower limit of the gain index
- * \param[in] maxGainIndex   The upper limit of the gain index
- *
- * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
- */
-int32_t adi_adrv9001_Rx_MinMaxGainIndex_Set(adi_adrv9001_Device_t *adrv9001,
-                                            uint32_t channelMask,
-                                            uint8_t minGainIndex,
-                                            uint8_t maxGainIndex);
-
  /**
  * \brief Sets the Manual Gain Index for the given Rx channel
  *
@@ -251,7 +229,7 @@ int32_t adi_adrv9001_Rx_InterfaceGain_Configure(adi_adrv9001_Device_t *adrv9001,
  *
  * \note Message type: \ref timing_mailbox "Mailbox command"
  *
- * \pre Channel state is RF_ENABLED
+ * \pre Channel state is any of PRIMED, RF_ENABLED
  *
  * \pre This function may be called only when the specified channel is in RF_ENABLED state.
  * 'gainControlMode' in adi_adrv9001_RxInterfaceGainCtrl_t struct must be ADI_ADRV9001_RX_INTERFACE_GAIN_CONTROL_MANUAL

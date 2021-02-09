@@ -18,7 +18,6 @@
 #include "adi_common_hal.h"
 #include "adi_common_log.h"
 #include "adi_common_types.h"
-#include "adi_common_libc.h"
 
 #ifndef __maybe_unused
 #define __maybe_unused		__attribute__((__unused__))

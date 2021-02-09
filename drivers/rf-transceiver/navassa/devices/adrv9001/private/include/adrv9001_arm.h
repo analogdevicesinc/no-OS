@@ -27,6 +27,7 @@ extern "C" {
 
 /* ADI specific header files */
 #include "adi_adrv9001.h"
+#include "adi_adrv9001_arm_types.h"
 
 /**
 * \brief Read from the ADRV9001 ARM program or data memory
@@ -59,13 +60,14 @@ int32_t adrv9001_DmaMemRead(adi_adrv9001_Device_t *device, uint32_t address, uin
 * \param address   The 32-bit ARM address to write
 * \param data Byte Array (uint8_t) containing data to be written to ARM memory
 * \param byteCount Number of bytes in the data array to be written
+* \param[in] spiWriteMode      Preferred SPI write mode
 *
 * \retval ADI_COMMON_ACT_WARN_RESET_LOG      Recovery action for log reset
 * \retval ADI_COMMON_ACT_ERR_CHECK_PARAM     Recovery action for bad parameter check
 * \retval ADI_COMMON_ACT_ERR_RESET_INTERFACE Recovery action for SPI reset required
 * \retval ADI_COMMON_ACT_NO_ACTION           Function completed successfully, no action required
 */
-int32_t adrv9001_DmaMemWrite(adi_adrv9001_Device_t *device, uint32_t address, const uint8_t data[], uint32_t byteCount);
+int32_t adrv9001_DmaMemWrite(adi_adrv9001_Device_t *device, uint32_t address, const uint8_t data[], uint32_t byteCount, adi_adrv9001_ArmSingleSpiWriteMode_e spiWriteMode);
 
 /**
 * \brief Write to the ADRV9001 Flex Stream Processor(0 - 3) memory 
@@ -74,11 +76,12 @@ int32_t adrv9001_DmaMemWrite(adi_adrv9001_Device_t *device, uint32_t address, co
 *
 * \pre This function is private and is not called directly by the user.
 *
-* \param device        Structure pointer to the ADRV9001 data structure containing settings
-* \param address       The 32-bit ARM address to write
-* \param data          Byte Array (uint8_t) containing data to be written to the selected flex SP memory
-* \param byteCount     Number of bytes in the data array to be written
-* \param flexSpNumber  Flex Stream Procesor(SP) to select and write the data
+* \param device             Structure pointer to the ADRV9001 data structure containing settings
+* \param address            The 32-bit ARM address to write
+* \param data               Byte Array (uint8_t) containing data to be written to the selected flex SP memory
+* \param byteCount          Number of bytes in the data array to be written
+* \param flexSpNumber       Flex Stream Procesor(SP) to select and write the data
+* \param[in] spiWriteMode   Preferred SPI write mode
 *
 * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
 */
@@ -86,7 +89,8 @@ int32_t adrv9001_FlexStreamProcessorMemWrite(adi_adrv9001_Device_t *device,
                                              uint32_t address,
                                              const uint8_t data[],
                                              uint32_t byteCount,
-                                             uint8_t flexSpNumber);
+                                             uint8_t flexSpNumber,
+                                             adi_adrv9001_ArmSingleSpiWriteMode_e spiWriteMode);
 
 /**
 * \brief Read from the ADRV9001 Flex Stream Processor(0 - 3) memory

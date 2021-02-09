@@ -14,10 +14,6 @@
 #ifndef _ADI_ADRV9001_TX_TYPES_H_
 #define _ADI_ADRV9001_TX_TYPES_H_
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #ifdef __KERNEL__
 #include <linux/types.h>
 #else
@@ -26,7 +22,6 @@ extern "C" {
 
 #include "adi_adrv9001_auxdac_types.h"
 #include "adi_adrv9001_gpio_types.h"
-
 
 #define ADRV9001_TX_ATTEN_TABLE_MAX 960
 
@@ -178,8 +173,24 @@ typedef struct adi_adrv9001_TxAttenuationPinControlCfg
                                                  Once txAttenuation has reached index 0 subsequent rising edges on decrementPin will not change the txAttenuation */
 } adi_adrv9001_TxAttenuationPinControlCfg_t;
 
-#ifdef __cplusplus
-}
-#endif
+/**
+ * \brief Amplitude of the NCO tone
+ */
+typedef enum adi_adrv9001_TxInternalToneAmplitude
+{
+    ADI_ADRV9001_TXINTERNALTONEAMPLITUDE_0_DB,
+    ADI_ADRV9001_TXINTERNALTONEAMPLITUDE_6_DB,
+    ADI_ADRV9001_TXINTERNALTONEAMPLITUDE_12_DB
+} adi_adrv9001_TxInternalToneAmplitude_e;
+
+/**
+ * \brief Internal tone generation (NCO) settings
+ */
+typedef struct adi_adrv9001_TxInternalToneGeneration
+{
+    bool enable;                                        /*!< Whether to enable NCO tone generation */
+    adi_adrv9001_TxInternalToneAmplitude_e amplitude;   /*!< Amplitude of the tone */
+    int32_t frequency_Hz;                               /*!< Frequency of the tone, in Hertz (valid: +/- tx_interface_rate) */
+} adi_adrv9001_TxInternalToneGeneration_t;
 
 #endif /* _ADI_ADRV9001_TX_TYPES_H_ */

@@ -61,13 +61,13 @@ typedef struct adi_adrv9001_PeakDetector
      *  pin XX is the apd low threshold counter exceeded status and
      *  pin YY is the hb low threshold counter exceeded status
      */
-    adi_adrv9001_GpioPinCrumbSel_e feedback_low_threshold_counter_exceeded;
+    adi_adrv9001_GpioPinCrumbSel_e feedback_apd_low_hb_low;
 
     /** A pair of DGPIO pins - ADI_ADRV9001_GPIO_PIN_CRUMB_XX_YY - where
      *  pin XX is the apd high threshold counter exceeded status and
      *  pin YY is the hb high threshold counter exceeded status
      */
-    adi_adrv9001_GpioPinCrumbSel_e feedback_high_threshold_counter_exceeded;
+    adi_adrv9001_GpioPinCrumbSel_e feedback_apd_high_hb_high;
 } adi_adrv9001_PeakDetector_t;
 
 /**
@@ -91,16 +91,16 @@ typedef struct adi_adrv9001_PowerDetector
     uint8_t     overRangeLowPowerGainStepAttack;        /*!< AGC power measurement detect lower 1 attack gain step. Valid range from  0 to 31 */
 
     /** A pair of DGPIO pins - ADI_ADRV9001_GPIO_PIN_CRUMB_XX_YY - where
-     *  pin XX is the power detector inner low threshold not exceeded status and
-     *  pin YY is the gain change status
+     *  pin XX is the power detector inner high threshold exceeded status and
+     *  pin YY is the power detector inner low threshold exceeded status
      */
-    adi_adrv9001_GpioPinCrumbSel_e feedback_lowThreshold_gainChange;
+    adi_adrv9001_GpioPinCrumbSel_e feedback_inner_high_inner_low;
 
     /** A pair of DGPIO pins - ADI_ADRV9001_GPIO_PIN_CRUMB_XX_YY - where
      *  pin XX is the apd high threshold counter exceeded status and
-     *  pin YY is the power detector inner high threshold exceeded status
+     *  pin YY is the apd low threshold counter exceeded status
      */
-    adi_adrv9001_GpioPinCrumbSel_e feedback_high_threshold_exceeded;
+    adi_adrv9001_GpioPinCrumbSel_e feedback_apd_high_apd_low;
 } adi_adrv9001_PowerDetector_t;
 
 /**

@@ -306,7 +306,9 @@ static inline int32_t adrv9001_NvsRegmapRx_AdcDemuxClkEn_Get(void *device,
 
 /**
  * (B0 New) Enables ADC overload reset detector accumulators and to generate adc_overlod_reset to ADC and AGC.
+
  * 1 = enabled
+
  * 0 = disabled, accumulators and overload_reset output held = zero
  */
 static inline int32_t adrv9001_NvsRegmapRx_AdcOverloadResetEnable_Set(void *device,
@@ -322,7 +324,9 @@ static inline int32_t adrv9001_NvsRegmapRx_AdcOverloadResetEnable_Set(void *devi
 
 /**
  * (B0 New) Enables ADC overload reset detector accumulators and to generate adc_overlod_reset to ADC and AGC.
+
  * 1 = enabled
+
  * 0 = disabled, accumulators and overload_reset output held = zero
  */
 static inline int32_t adrv9001_NvsRegmapRx_AdcOverloadResetEnable_Get(void *device,
@@ -827,8 +831,11 @@ static inline int32_t adrv9001_NvsRegmapRx_ControlOutMuxSel_Get(void *device,
 
 /**
  * Bit[0]  1:  output correlator vector 1. 0: disable correlator vector 1
+
  * Bit[1]  1: output correlator vector 2, 0: disable correlator vector 2
+
  *         ….
+
  * Bit[15] 1: output correlator vector 16, 0: disable correlator vector 16
  */
 static inline int32_t adrv9001_NvsRegmapRx_CorrCtrl_Set(void *device,
@@ -847,8 +854,11 @@ static inline int32_t adrv9001_NvsRegmapRx_CorrCtrl_Set(void *device,
 
 /**
  * Bit[0]  1:  output correlator vector 1. 0: disable correlator vector 1
+
  * Bit[1]  1: output correlator vector 2, 0: disable correlator vector 2
+
  *         ….
+
  * Bit[15] 1: output correlator vector 16, 0: disable correlator vector 16
  */
 static inline int32_t adrv9001_NvsRegmapRx_CorrCtrl_Get(void *device,
@@ -1959,7 +1969,9 @@ static inline int32_t adrv9001_NvsRegmapRx_DpinfifoEn_Get(void *device,
 
 /**
  * (in B0 only) DPinFIFO read address offset value compared to read address when the FIFO is full.
+
  *             When RDCLK=2x/4x/8x of WRCLK,  use default value.
+
  *             When RDCLK=WRCLK,  set this value to 5.
  */
 static inline int32_t adrv9001_NvsRegmapRx_DpinfifoRdAddrOffset_Set(void *device,
@@ -1975,7 +1987,9 @@ static inline int32_t adrv9001_NvsRegmapRx_DpinfifoRdAddrOffset_Set(void *device
 
 /**
  * (in B0 only) DPinFIFO read address offset value compared to read address when the FIFO is full.
+
  *             When RDCLK=2x/4x/8x of WRCLK,  use default value.
+
  *             When RDCLK=WRCLK,  set this value to 5.
  */
 static inline int32_t adrv9001_NvsRegmapRx_DpinfifoRdAddrOffset_Get(void *device,
@@ -2611,9 +2625,13 @@ static inline int32_t adrv9001_NvsRegmapRx_GainChangeRampStepDuration_Get(void *
 
 /**
  * These bits configure the number of total steps in the ramp between initial and final gain that is generated according to the following settings.
+
  * 00      1 step          ( initial -  final )
+
  * 01      2 steps         ( initial -  intermediate   -  final )
+
  * 10      4 steps         ( initial -  intermediate 1 -  intermediate 2 -  intermediate 3 -  final )
+
  * 11      8 steps         ( initial -  intermediate 1 -      ....       -  intermediate 7 -  final )
  */
 static inline int32_t adrv9001_NvsRegmapRx_GainChangeRampSteps_Set(void *device,
@@ -2629,9 +2647,13 @@ static inline int32_t adrv9001_NvsRegmapRx_GainChangeRampSteps_Set(void *device,
 
 /**
  * These bits configure the number of total steps in the ramp between initial and final gain that is generated according to the following settings.
+
  * 00      1 step          ( initial -  final )
+
  * 01      2 steps         ( initial -  intermediate   -  final )
+
  * 10      4 steps         ( initial -  intermediate 1 -  intermediate 2 -  intermediate 3 -  final )
+
  * 11      8 steps         ( initial -  intermediate 1 -      ....       -  intermediate 7 -  final )
  */
 static inline int32_t adrv9001_NvsRegmapRx_GainChangeRampSteps_Get(void *device,
@@ -2650,14 +2672,23 @@ static inline int32_t adrv9001_NvsRegmapRx_GainChangeRampSteps_Get(void *device,
 
 /**
  * In dualband mode, setting this bit causes gain compensation to use the largest of 
+
  * the slicer values from both bands as the common slicer value, and slices both bands
+
  * with this value. The common slicer value can be observed on GPIO or in the data if
+
  * the slicer value has been embedded into the data stream.
+
  * 
+
  * If disabled, and both bands are enabled, the bands are compensated
+
  * independently but then they cannot be combined using rx_dualband_on_band_a or
+
  * rx_dualband_on_band_b since they may be normalized differently. GPIO's cannot
+
  * be used to observe slicer values here. The slicer values can be observed only
+
  * though the floating point format or through slicer values embedded in the data.
  */
 static inline int32_t adrv9001_NvsRegmapRx_GainCompDualbandCommon_Set(void *device,
@@ -2673,14 +2704,23 @@ static inline int32_t adrv9001_NvsRegmapRx_GainCompDualbandCommon_Set(void *devi
 
 /**
  * In dualband mode, setting this bit causes gain compensation to use the largest of 
+
  * the slicer values from both bands as the common slicer value, and slices both bands
+
  * with this value. The common slicer value can be observed on GPIO or in the data if
+
  * the slicer value has been embedded into the data stream.
+
  * 
+
  * If disabled, and both bands are enabled, the bands are compensated
+
  * independently but then they cannot be combined using rx_dualband_on_band_a or
+
  * rx_dualband_on_band_b since they may be normalized differently. GPIO's cannot
+
  * be used to observe slicer values here. The slicer values can be observed only
+
  * though the floating point format or through slicer values embedded in the data.
  */
 static inline int32_t adrv9001_NvsRegmapRx_GainCompDualbandCommon_Get(void *device,
@@ -12639,12 +12679,19 @@ static inline int32_t adrv9001_NvsRegmapRx_RxAdcFlashCal2Data_Get(void *device,
 
 /**
  * Number of samples to accumulate. {//      000 – 1K samples
+
  *    //         001 – 2K samples
+
  *    //         010 – 4K samples
+
  *    //         011 – 8K samples
+
  *    //         100 – 16K samples
+
  *    //         101 – 32K samples
+
  *    //         110 – 64K samples
+
  *    //         111 – 128K samples}
  */
 static inline int32_t adrv9001_NvsRegmapRx_RxAdcFlashCal2Length_Set(void *device,
@@ -12660,12 +12707,19 @@ static inline int32_t adrv9001_NvsRegmapRx_RxAdcFlashCal2Length_Set(void *device
 
 /**
  * Number of samples to accumulate. {//      000 – 1K samples
+
  *    //         001 – 2K samples
+
  *    //         010 – 4K samples
+
  *    //         011 – 8K samples
+
  *    //         100 – 16K samples
+
  *    //         101 – 32K samples
+
  *    //         110 – 64K samples
+
  *    //         111 – 128K samples}
  */
 static inline int32_t adrv9001_NvsRegmapRx_RxAdcFlashCal2Length_Get(void *device,
@@ -13087,9 +13141,13 @@ static inline int32_t adrv9001_NvsRegmapRx_RxAdcOverloadUpperThreshold_Get(void 
 
 /**
  * These bits set the number of ADC samples to accumulate in the ADC overload detector before comparing to the overload threshold according to the following settings: 
+
  * 00 --  4 
+
  * 01 --  8 
+
  * 10 --  16 
+
  * 11 --  16
  */
 static inline int32_t adrv9001_NvsRegmapRx_RxAdcOvldDuration_Set(void *device,
@@ -13105,9 +13163,13 @@ static inline int32_t adrv9001_NvsRegmapRx_RxAdcOvldDuration_Set(void *device,
 
 /**
  * These bits set the number of ADC samples to accumulate in the ADC overload detector before comparing to the overload threshold according to the following settings: 
+
  * 00 --  4 
+
  * 01 --  8 
+
  * 10 --  16 
+
  * 11 --  16
  */
 static inline int32_t adrv9001_NvsRegmapRx_RxAdcOvldDuration_Get(void *device,
@@ -13182,9 +13244,13 @@ static inline int32_t adrv9001_NvsRegmapRx_RxAdcSel_Get(void *device,
 
 /**
  * ADC clock sample rate, used for static RX gain compensation block 
+
  * ►	00: 1.105GHz
+
  * ►	01: 1.474GHz
+
  * ►	10: 2.211GHz
+
  * ►	11: 1.105GHz
  */
 static inline int32_t adrv9001_NvsRegmapRx_RxAdcSpeedSel_Set(void *device,
@@ -13200,9 +13266,13 @@ static inline int32_t adrv9001_NvsRegmapRx_RxAdcSpeedSel_Set(void *device,
 
 /**
  * ADC clock sample rate, used for static RX gain compensation block 
+
  * ►	00: 1.105GHz
+
  * ►	01: 1.474GHz
+
  * ►	10: 2.211GHz
+
  * ►	11: 1.105GHz
  */
 static inline int32_t adrv9001_NvsRegmapRx_RxAdcSpeedSel_Get(void *device,
@@ -14814,6 +14884,7 @@ static inline int32_t adrv9001_NvsRegmapRx_RxDdcZeroQ_Get(void *device,
 
 /**
  * This sets the window of clock cycles (at the HB2 output rate) to meet the overload count. 
+
  * Possible settings are (in decimal): 1, 4, 8, 12, 16, 24, and 32.
  */
 static inline int32_t adrv9001_NvsRegmapRx_RxDecOverloadDurationCount_Set(void *device,
@@ -14829,6 +14900,7 @@ static inline int32_t adrv9001_NvsRegmapRx_RxDecOverloadDurationCount_Set(void *
 
 /**
  * This sets the window of clock cycles (at the HB2 output rate) to meet the overload count. 
+
  * Possible settings are (in decimal): 1, 4, 8, 12, 16, 24, and 32.
  */
 static inline int32_t adrv9001_NvsRegmapRx_RxDecOverloadDurationCount_Get(void *device,
@@ -14909,10 +14981,15 @@ static inline int32_t adrv9001_NvsRegmapRx_RxDecOverloadThresholdCount_Get(void 
 
 /**
  * These bits set the value from full-scale that the HB2 overload detector thresholds are set (upper and lower) relative to full scale. The threshold should be set such that the resolution is maximized where the signal is present. 
+
  * The following settings are available: 
+
  * 00 --   0dB 
+
  * 01 --  -4dB 
+
  * 10 --  -5dB 
+
  * 11 --  -6dB
  */
 static inline int32_t adrv9001_NvsRegmapRx_RxDecThresholdConfig_Set(void *device,
@@ -14928,10 +15005,15 @@ static inline int32_t adrv9001_NvsRegmapRx_RxDecThresholdConfig_Set(void *device
 
 /**
  * These bits set the value from full-scale that the HB2 overload detector thresholds are set (upper and lower) relative to full scale. The threshold should be set such that the resolution is maximized where the signal is present. 
+
  * The following settings are available: 
+
  * 00 --   0dB 
+
  * 01 --  -4dB 
+
  * 10 --  -5dB 
+
  * 11 --  -6dB
  */
 static inline int32_t adrv9001_NvsRegmapRx_RxDecThresholdConfig_Get(void *device,
@@ -14950,7 +15032,9 @@ static inline int32_t adrv9001_NvsRegmapRx_RxDecThresholdConfig_Get(void *device
 
 /**
  * (B0 New) In multiple time constants in AGC loop mode, this field sets the lower level overload threshold for interval 0 to be compared with samples from the output of the HB2 filter. An offset to this value is always applied and set using dec_threshold_config. For details on using this field, see description in agc_enable_fast_recovery_loop.
+
  * This threshold is determined using the following equation:
+
  * lower threshold=20 * log10(decimated_data_overload_int0_lower_threshold/256)
  */
 static inline int32_t adrv9001_NvsRegmapRx_RxDecimatedDataOverloadInt0LowerThreshold_Set(void *device,
@@ -14969,7 +15053,9 @@ static inline int32_t adrv9001_NvsRegmapRx_RxDecimatedDataOverloadInt0LowerThres
 
 /**
  * (B0 New) In multiple time constants in AGC loop mode, this field sets the lower level overload threshold for interval 0 to be compared with samples from the output of the HB2 filter. An offset to this value is always applied and set using dec_threshold_config. For details on using this field, see description in agc_enable_fast_recovery_loop.
+
  * This threshold is determined using the following equation:
+
  * lower threshold=20 * log10(decimated_data_overload_int0_lower_threshold/256)
  */
 static inline int32_t adrv9001_NvsRegmapRx_RxDecimatedDataOverloadInt0LowerThreshold_Get(void *device,
@@ -14992,7 +15078,9 @@ static inline int32_t adrv9001_NvsRegmapRx_RxDecimatedDataOverloadInt0LowerThres
 
 /**
  * (B0 New) In multiple time constants in AGC loop mode, this field sets the lower level overload threshold for interval 1 to be compared with samples from the output of the HB2 filter. An offset to this value is always applied and set using dec_threshold_config. For details on using this field, see description in agc_enable_fast_recovery_loop.
+
  * This threshold is determined using the following equation:
+
  * lower threshold=20 * log10(decimated_data_overload_int0_lower_threshold/256)
  */
 static inline int32_t adrv9001_NvsRegmapRx_RxDecimatedDataOverloadInt1LowerThreshold_Set(void *device,
@@ -15011,7 +15099,9 @@ static inline int32_t adrv9001_NvsRegmapRx_RxDecimatedDataOverloadInt1LowerThres
 
 /**
  * (B0 New) In multiple time constants in AGC loop mode, this field sets the lower level overload threshold for interval 1 to be compared with samples from the output of the HB2 filter. An offset to this value is always applied and set using dec_threshold_config. For details on using this field, see description in agc_enable_fast_recovery_loop.
+
  * This threshold is determined using the following equation:
+
  * lower threshold=20 * log10(decimated_data_overload_int0_lower_threshold/256)
  */
 static inline int32_t adrv9001_NvsRegmapRx_RxDecimatedDataOverloadInt1LowerThreshold_Get(void *device,
@@ -15072,8 +15162,11 @@ static inline int32_t adrv9001_NvsRegmapRx_RxDecimatedDataOverloadIp3UpperThresh
 
 /**
  * (B0 New) This register sets the lower level overload threshold to be compared with samples from the output of the HB2 filter. An offset to this value is always applied and set using dec_threshold_config. 
+
  * When in The multiple time constants in AGC loop mode, this field sets the lower level overload threshold for interval 2. For details on using this field in multiple time constants in AGC loop mode, see description in agc_enable_fast_recovery_loop.
+
  * This threshold is determined using the following equation:
+
  * lower threshold=20 * log10(decimated_data_overload_lower_threshold/256)
  */
 static inline int32_t adrv9001_NvsRegmapRx_RxDecimatedDataOverloadLowerThreshold_Set(void *device,
@@ -15092,8 +15185,11 @@ static inline int32_t adrv9001_NvsRegmapRx_RxDecimatedDataOverloadLowerThreshold
 
 /**
  * (B0 New) This register sets the lower level overload threshold to be compared with samples from the output of the HB2 filter. An offset to this value is always applied and set using dec_threshold_config. 
+
  * When in The multiple time constants in AGC loop mode, this field sets the lower level overload threshold for interval 2. For details on using this field in multiple time constants in AGC loop mode, see description in agc_enable_fast_recovery_loop.
+
  * This threshold is determined using the following equation:
+
  * lower threshold=20 * log10(decimated_data_overload_lower_threshold/256)
  */
 static inline int32_t adrv9001_NvsRegmapRx_RxDecimatedDataOverloadLowerThreshold_Get(void *device,
@@ -15116,6 +15212,7 @@ static inline int32_t adrv9001_NvsRegmapRx_RxDecimatedDataOverloadLowerThreshold
 
 /**
  * (B0 New) This register sets the upper level overload threshold to be compared with samples from the output of the HB2 filter. An offset to this value is always applied and set using dec_threshold_config. This threshold is determined using the following equation:
+
  * upper threshold = 20 * log10(decimated_data_overload_upper_threshold/256)
  */
 static inline int32_t adrv9001_NvsRegmapRx_RxDecimatedDataOverloadUpperThreshold_Set(void *device,
@@ -15134,6 +15231,7 @@ static inline int32_t adrv9001_NvsRegmapRx_RxDecimatedDataOverloadUpperThreshold
 
 /**
  * (B0 New) This register sets the upper level overload threshold to be compared with samples from the output of the HB2 filter. An offset to this value is always applied and set using dec_threshold_config. This threshold is determined using the following equation:
+
  * upper threshold = 20 * log10(decimated_data_overload_upper_threshold/256)
  */
 static inline int32_t adrv9001_NvsRegmapRx_RxDecimatedDataOverloadUpperThreshold_Get(void *device,
@@ -17429,9 +17527,13 @@ static inline int32_t adrv9001_NvsRegmapRx_RxMisrBypass_Get(void *device,
 
 /**
  * Selects how the I and Q samples are hashed into the signature register.  
+
  * 00 - I[15:0] XOR Q[0:15] (Q is bit reversed.)
+
  * 01 - I[15:0] only
+
  * 10 - Q[15:0] only
+
  * 11 - I[15:0] XOR Q[15:0]
  */
 static inline int32_t adrv9001_NvsRegmapRx_RxMisrDatapathSel_Set(void *device,
@@ -17447,9 +17549,13 @@ static inline int32_t adrv9001_NvsRegmapRx_RxMisrDatapathSel_Set(void *device,
 
 /**
  * Selects how the I and Q samples are hashed into the signature register.  
+
  * 00 - I[15:0] XOR Q[0:15] (Q is bit reversed.)
+
  * 01 - I[15:0] only
+
  * 10 - Q[15:0] only
+
  * 11 - I[15:0] XOR Q[15:0]
  */
 static inline int32_t adrv9001_NvsRegmapRx_RxMisrDatapathSel_Get(void *device,
@@ -17499,9 +17605,13 @@ static inline int32_t adrv9001_NvsRegmapRx_RxMisrEnable_Get(void *device,
 
 /**
  * Sets the MISR counter_length (in samples)
+
  * 00: length = 0x07fff
+
  * 01: length = 0x0ffff
+
  * 10: length = 0x3ffff
+
  * 11: length = 0xfffff
  */
 static inline int32_t adrv9001_NvsRegmapRx_RxMisrLength_Set(void *device,
@@ -17517,9 +17627,13 @@ static inline int32_t adrv9001_NvsRegmapRx_RxMisrLength_Set(void *device,
 
 /**
  * Sets the MISR counter_length (in samples)
+
  * 00: length = 0x07fff
+
  * 01: length = 0x0ffff
+
  * 10: length = 0x3ffff
+
  * 11: length = 0xfffff
  */
 static inline int32_t adrv9001_NvsRegmapRx_RxMisrLength_Get(void *device,
@@ -18122,7 +18236,9 @@ static inline int32_t adrv9001_NvsRegmapRx_RxNbfFicCoefPhase_Get(void *device,
 
 /**
  * write pulse [phase and di]
+
  * write pulse [phase and di]
+
  * write pulse [phase and di]
  */
 static inline int32_t adrv9001_NvsRegmapRx_RxNbfFicCoefWr_Set(void *device,
@@ -18138,7 +18254,9 @@ static inline int32_t adrv9001_NvsRegmapRx_RxNbfFicCoefWr_Set(void *device,
 
 /**
  * write pulse [phase and di]
+
  * write pulse [phase and di]
+
  * write pulse [phase and di]
  */
 static inline int32_t adrv9001_NvsRegmapRx_RxNbfFicCoefWr_Get(void *device,
@@ -18216,6 +18334,7 @@ static inline int32_t adrv9001_NvsRegmapRx_RxNbfFicCtlRdata_Get(void *device,
 
 /**
  * write pulse [phase and di]
+
  * write pulse [phase and di]
  */
 static inline int32_t adrv9001_NvsRegmapRx_RxNbfFicCtrlWr_Set(void *device,
@@ -18231,6 +18350,7 @@ static inline int32_t adrv9001_NvsRegmapRx_RxNbfFicCtrlWr_Set(void *device,
 
 /**
  * write pulse [phase and di]
+
  * write pulse [phase and di]
  */
 static inline int32_t adrv9001_NvsRegmapRx_RxNbfFicCtrlWr_Get(void *device,
@@ -21389,11 +21509,17 @@ static inline int32_t adrv9001_NvsRegmapRx_SlicerPinControlMode_Get(void *device
 
 /**
  * These bits configure the step size of the slicer when external pin contol mode is enabled (slicer_pin_control_mode). Slicer gain in this mode is determined by multiplying the step size by the input bit code from the BBP. Step sizes are as follows: 
+
  * 00      1dB
+
  * 01      2dB
+
  * 10      3dB
+
  * 11      4dB
+
  * 100 6 db
+
  * 101, 110, 111 - 8 db
  */
 static inline int32_t adrv9001_NvsRegmapRx_SlicerPinControlStep_Set(void *device,
@@ -21409,11 +21535,17 @@ static inline int32_t adrv9001_NvsRegmapRx_SlicerPinControlStep_Set(void *device
 
 /**
  * These bits configure the step size of the slicer when external pin contol mode is enabled (slicer_pin_control_mode). Slicer gain in this mode is determined by multiplying the step size by the input bit code from the BBP. Step sizes are as follows: 
+
  * 00      1dB
+
  * 01      2dB
+
  * 10      3dB
+
  * 11      4dB
+
  * 100 6 db
+
  * 101, 110, 111 - 8 db
  */
 static inline int32_t adrv9001_NvsRegmapRx_SlicerPinControlStep_Get(void *device,

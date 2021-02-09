@@ -87,6 +87,43 @@ int32_t adi_adrv9001_dpd_Configure(adi_adrv9001_Device_t *adrv9001,
 int32_t adi_adrv9001_dpd_Inspect(adi_adrv9001_Device_t *adrv9001,
                                  adi_common_ChannelNumber_e channel,
                                  adi_adrv9001_DpdCfg_t *dpdConfig);
+	
+/**
+ * \brief Set DPD coefficients to be used at the next start of DPD
+ * 
+ * By default, DPD starts from unity coefficients. This allows the restoration of a previously saved set of
+ * coefficients to perform a "hot start."
+ * 
+ * \note Message type: \ref timing_mailbox "Mailbox command"
+ * 
+ * \pre Channel state is CALIBRATED
+ *
+ * \param[in] adrv9001		Context variable - Pointer to the ADRV9001 device settings data structure
+ * \param[in] channel       The channel of interest
+ * \param[in] coefficients	Coefficients to set
+ * 
+ * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
+ */
+int32_t adi_adrv9001_dpd_coefficients_Set(adi_adrv9001_Device_t *adrv9001,
+                                          adi_common_ChannelNumber_e channel,
+                                          adi_adrv9001_DpdCoefficients_t *coefficients);
+
+/**
+ * \brief Get DPD coefficients for the last solution
+ * 
+ * \note Message type: \ref timing_mailbox "Mailbox command"
+ * 
+ * \pre Channel state is CALIBRATED
+ *
+ * \param[in]  adrv9001		Context variable - Pointer to the ADRV9001 device settings data structure
+ * \param[in]  channel      The channel of interest
+ * \param[out] coefficients	The latest coefficients
+ * 
+ * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
+ */
+int32_t adi_adrv9001_dpd_coefficients_Get(adi_adrv9001_Device_t *adrv9001,
+                                          adi_common_ChannelNumber_e channel,
+                                          adi_adrv9001_DpdCoefficients_t *coefficients);
 
 #ifdef __cplusplus
 }
