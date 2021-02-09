@@ -53,7 +53,7 @@ int main(void)
 {
 	int32_t ret;
 	struct adf5902_dev *dev;
-	float temperature = 0;
+	float temperature = 0, freq = 0;
 
 	struct xil_spi_init_param xil_spi_init = {
 		.device_id = SPI_DEVICE_ID,
@@ -100,11 +100,12 @@ int main(void)
 		},
 	};
 
+
 	struct adf5902_init_param adf5902_param = {
 		.spi_init = &spi_init,
 		.gpio_ce_param = &gpio_ce_param,
 		.ref_in = 100000000,
-		.rf_out = 24125000000,
+		.rf_out = 24025000000,
 		.ref_div_factor = ADF5902_MIN_R_DIVIDER,
 		.ref_doubler_en = ADF5902_REF_DOUBLER_DISABLE,
 		.ref_div2_en= ADF5902_R_DIV_2_ENABLE,
@@ -120,6 +121,7 @@ int main(void)
 		.freq_dev = freq_deviation,
 		.tx_ramp_clk = ADF5902_TX_RAMP_CLK_DIV,
 		.tx_data_invert = AD5902_TX_DATA_INV_DISABLE,
+		.clk1_div_ramp = 10,
 		.clk2_div_no = ADF5902_MAX_CLK2_DIV_NO,
 		.clk2_div = {10, 10, 10, 10},
 		.le_sel = ADF5902_LE_FROM_PIN,
@@ -129,6 +131,10 @@ int main(void)
 	};
 
 	ret = adf5902_init(&dev, &adf5902_param);
+	if (ret != SUCCESS)
+		return FAILURE;
+
+	ret = adf5902f_compute_frequency(dev, &freq);
 	if (ret != SUCCESS)
 		return FAILURE;
 
