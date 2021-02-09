@@ -437,7 +437,7 @@ int32_t adi_adrv9001_Tx_Attenuation_Get(adi_adrv9001_Device_t* device,
 {
     adrv9001_BfNvsRegmapTx_e txBfChannel = ADRV9001_BF_TX1_CORE;
     uint32_t waitInterval_us = 0;
-    int32_t halError = (int32_t)ADI_COMMON_HAL_OK;
+    int32_t halError = 0;
     uint16_t txAttenReadBack = 0;
     uint16_t attenStepSizeDiv = 50;
     uint16_t regData = 0;
@@ -581,7 +581,7 @@ static int32_t __maybe_unused adi_adrv9001_Tx_AttenuationTable_Write_Validate(ad
     ADI_RANGE_CHECK(device, indexOffset, 0, ADRV9001_TX_ATTEN_TABLE_MAX);
 
     /* Check for a valid array */
-    ADI_API_ENTRY_PTR_ARRAY_EXPECT(device, attenTableRows, arraySize);
+    ADI_ENTRY_PTR_ARRAY_EXPECT(device, attenTableRows, arraySize);
 
     /* Check that the entire array fits */
     if (arraySize > ((ADRV9001_TX_ATTEN_TABLE_MAX - indexOffset)))
@@ -642,13 +642,11 @@ int32_t adi_adrv9001_Tx_AttenuationTable_Write(adi_adrv9001_Device_t *device,
 
     ADI_PERFORM_VALIDATION(adi_adrv9001_Tx_AttenuationTable_Write_Validate, device, channelMask, indexOffset, attenTableRows, arraySize);
 
-#ifdef SI_REV_B0
     /* Enable ARM clock to access attenuation table memory */
     ADI_EXPECT(adrv9001_NvsRegmapTxb_TxAlgArmOrGroup11ClkSel_Set, device, ADRV9001_BF_TXB1_CORE, true);
     ADI_EXPECT(adrv9001_NvsRegmapCore2_Tx1GainTableClkEn_Set, device, true);
     ADI_EXPECT(adrv9001_NvsRegmapTxb_TxAlgArmOrGroup11ClkSel_Set, device, ADRV9001_BF_TXB2_CORE, true);
     ADI_EXPECT(adrv9001_NvsRegmapCore2_Tx2GainTableClkEn_Set, device, true);
-#endif // SI_REV_B0
 
     for (idx = 0; idx < ADI_ADRV9001_MAX_TXCHANNELS; idx++)
     {
@@ -672,7 +670,7 @@ int32_t adi_adrv9001_Tx_AttenuationTable_Write(adi_adrv9001_Device_t *device,
                 start += TX_ENTRY_SIZE;
                 if (start >= ADI_ADRV9001_TX_ATTEN_TABLE_CACHE_MAX)
                 {
-                    ADI_EXPECT(adrv9001_DmaMemWrite, device, offset + stop, &cfgData[0], start);
+                    ADI_EXPECT(adrv9001_DmaMemWrite, device, offset + stop, &cfgData[0], start, ADI_ADRV9001_ARM_SINGLE_SPI_WRITE_MODE_STANDARD_BYTES_4);
 
                     stop += start;
                     start = 0;
@@ -681,20 +679,15 @@ int32_t adi_adrv9001_Tx_AttenuationTable_Write(adi_adrv9001_Device_t *device,
 
             if (start > 0)
             {
-                ADI_EXPECT(adrv9001_DmaMemWrite, device, offset + stop, &cfgData[0], start);
+                ADI_EXPECT(adrv9001_DmaMemWrite, device, offset + stop, &cfgData[0], start, ADI_ADRV9001_ARM_SINGLE_SPI_WRITE_MODE_STANDARD_BYTES_4);
             }
         }
         start = 0;
         stop = 0;
     }
 
-#ifdef SI_REV_B0
-    /* Disable ARM clock to Tx1/2 atten table memory access */
-    ADI_EXPECT(adrv9001_NvsRegmapCore2_Tx1GainTableClkEn_Set, device, false);
     ADI_EXPECT(adrv9001_NvsRegmapTxb_TxAlgArmOrGroup11ClkSel_Set, device, ADRV9001_BF_TXB1_CORE, false);
-    ADI_EXPECT(adrv9001_NvsRegmapCore2_Tx2GainTableClkEn_Set, device, false);
     ADI_EXPECT(adrv9001_NvsRegmapTxb_TxAlgArmOrGroup11ClkSel_Set, device, ADRV9001_BF_TXB2_CORE, false);
-#endif // SI_REV_B0
 
     ADI_API_RETURN(device);
 }
@@ -712,7 +705,7 @@ static int32_t __maybe_unused adi_adrv9001_Tx_AttenuationTable_Read_Validate(adi
 
     ADI_NULL_PTR_RETURN(&device->common, attenTableRows);
 
-    ADI_API_ENTRY_PTR_ARRAY_EXPECT(device, attenTableRows, arraySize);
+    ADI_ENTRY_PTR_ARRAY_EXPECT(device, attenTableRows, arraySize);
     if (arraySize > ((ADRV9001_TX_ATTEN_TABLE_MAX - indexOffset)))
     {
         ADI_ERROR_REPORT(&device->common,
@@ -770,23 +763,19 @@ int32_t adi_adrv9001_Tx_AttenuationTable_Read(adi_adrv9001_Device_t *device,
         numTxAttenEntriesRead = ADI_ADRV9001_TX_ATTEN_TABLE_CACHE_MAX;
     }
 
-#ifdef SI_REV_B0
     /* Enable ARM clock to access attenuation table memory */
     ADI_EXPECT(adrv9001_NvsRegmapTxb_TxAlgArmOrGroup11ClkSel_Set, device, ADRV9001_BF_TXB1_CORE, true);
     ADI_EXPECT(adrv9001_NvsRegmapCore2_Tx1GainTableClkEn_Set, device, true);
     ADI_EXPECT(adrv9001_NvsRegmapTxb_TxAlgArmOrGroup11ClkSel_Set, device, ADRV9001_BF_TXB2_CORE, true);
     ADI_EXPECT(adrv9001_NvsRegmapCore2_Tx2GainTableClkEn_Set, device, true);
-#endif // SI_REV_B0
 
     ADI_EXPECT(adrv9001_DmaMemRead, device, offset + stop, &cfgData[0], numTxAttenEntriesRead, ADRV9001_ARM_MEM_READ_AUTOINCR);
 
-#ifdef SI_REV_B0
     /* Disable ARM clock to Tx1/2 atten table memory access */
     ADI_EXPECT(adrv9001_NvsRegmapCore2_Tx1GainTableClkEn_Set, device, false);
     ADI_EXPECT(adrv9001_NvsRegmapTxb_TxAlgArmOrGroup11ClkSel_Set, device, ADRV9001_BF_TXB1_CORE, false);
     ADI_EXPECT(adrv9001_NvsRegmapCore2_Tx2GainTableClkEn_Set, device, false);
     ADI_EXPECT(adrv9001_NvsRegmapTxb_TxAlgArmOrGroup11ClkSel_Set, device, ADRV9001_BF_TXB2_CORE, false);
-#endif // SI_REV_B0
 
     for (idx = 0; idx < arraySize; idx++)
     {
@@ -913,93 +902,105 @@ int32_t adi_adrv9001_Tx_PaProtection_Inspect(adi_adrv9001_Device_t *device,
     ADI_API_RETURN(device);
 }
 
-static int32_t __maybe_unused adi_adrv9001_Tx_NcoFrequency_Set_Validate(adi_adrv9001_Device_t* device,
-                                                                        adi_common_ChannelNumber_e channel,
-                                                                        int32_t ncoFrequency_Hz)
+static int32_t __maybe_unused adi_adrv9001_Tx_InternalToneGeneration_Configure_Validate(adi_adrv9001_Device_t *adrv9001,
+                                                                                        adi_common_ChannelNumber_e channel,
+                                                                                        adi_adrv9001_TxInternalToneGeneration_t *tone)
 {
-    int32_t txSampleRateDiv2_Hz = 0;   // TODO: get profiles IQ rate from device data structure
+    int32_t txSampleRateDiv2_Hz = 0;
+    adi_adrv9001_ChannelState_e state = ADI_ADRV9001_CHANNEL_STANDBY;
+    
+    ADI_RANGE_CHECK(adrv9001, channel, ADI_CHANNEL_1, ADI_CHANNEL_2);
+    
+    ADI_NULL_PTR_RETURN(&adrv9001->common, tone);
+    if (tone->enable)
+    {
+        ADI_RANGE_CHECK(adrv9001, tone->amplitude, ADI_ADRV9001_TXINTERNALTONEAMPLITUDE_0_DB, ADI_ADRV9001_TXINTERNALTONEAMPLITUDE_12_DB);
+        txSampleRateDiv2_Hz = KILO_TO_BASE_UNIT(adrv9001->devStateInfo.txInputRate_kHz[channel-1] >> 1);
+        ADI_RANGE_CHECK(adrv9001, tone->frequency_Hz, NEGATIVE(txSampleRateDiv2_Hz), txSampleRateDiv2_Hz);
 
-    ADI_RANGE_CHECK(device, channel, ADI_CHANNEL_1, ADI_CHANNEL_2);
-
-    txSampleRateDiv2_Hz = KILO_TO_BASE_UNIT(device->devStateInfo.txInputRate_kHz[channel-1] >> 1);
-    ADI_RANGE_CHECK(device, ncoFrequency_Hz, NEGATIVE(txSampleRateDiv2_Hz), txSampleRateDiv2_Hz);
-
-    ADI_API_RETURN(device);
+        ADI_EXPECT(adi_adrv9001_Radio_Channel_State_Get, adrv9001, ADI_TX, channel, &state);
+        if (ADI_ADRV9001_CHANNEL_CALIBRATED != state)
+        {
+            ADI_ERROR_REPORT(&adrv9001->common,
+                             ADI_COMMON_ERRSRC_API,
+                             ADI_COMMON_ERR_INV_PARAM,
+                             ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                             state,
+                             "Channel state must be CALIBRATED");
+        }
+    }
+    
+    ADI_API_RETURN(adrv9001);
 }
 
-int32_t adi_adrv9001_Tx_NcoFrequency_Set(adi_adrv9001_Device_t* device,
-                                         adi_common_ChannelNumber_e channel,
-                                         int32_t ncoFrequency_Hz)
+static const uint8_t OBJID_TX_INTERNAL_TONE_GENERATION = 0xB0;
+int32_t adi_adrv9001_Tx_InternalToneGeneration_Configure(adi_adrv9001_Device_t *adrv9001,
+                                                         adi_common_ChannelNumber_e channel,
+                                                         adi_adrv9001_TxInternalToneGeneration_t *tone)
 {
-    adrv9001_BfNvsRegmapTx_e txChannelBaseAddr = ADRV9001_BF_TX1_CORE;
-    uint32_t tuneWord = 0;
-    int64_t tempResult = 0;
-    int64_t txSampleRateDiv2_Hz = 0;    // TODO: get profiles IQ rate from device data structure
+    uint8_t armData[12] = { 0 };
+    uint8_t extData[5] = { 0 };
+    uint32_t offset = 0;
+    
+    ADI_PERFORM_VALIDATION(adi_adrv9001_Tx_InternalToneGeneration_Configure_Validate, adrv9001, channel, tone);
 
-    ADI_PERFORM_VALIDATION(adi_adrv9001_Tx_NcoFrequency_Set_Validate, device, channel, ncoFrequency_Hz);
+    adrv9001_LoadFourBytes(&offset, armData, sizeof(armData) - sizeof(uint32_t));
+    armData[offset++] = tone->enable;
+    armData[offset++] = tone->amplitude;
+    offset += 2;
+    adrv9001_LoadFourBytes(&offset, armData, tone->frequency_Hz);
+    
+    extData[0] = adi_adrv9001_Radio_MailboxChannel_Get(ADI_TX, channel);
+    extData[1] = ADRV9001_ARM_OBJECTID_CONFIG;
+    extData[2] = OBJID_TX_INTERNAL_TONE_GENERATION;
 
-    txChannelBaseAddr = Tx_Addr_Get(channel);
+    ADI_EXPECT(adi_adrv9001_arm_Config_Write, adrv9001, armData, sizeof(armData), extData, sizeof(extData))
 
-    txSampleRateDiv2_Hz = KILO_TO_BASE_UNIT((int64_t)device->devStateInfo.txInputRate_kHz[channel-1]) >> 1;
-
-    /* '+1' and '>> 1' below are needed to round to the nearest integer*/
-    tempResult = ((int64_t)((0 - ncoFrequency_Hz))) << 32;
-#ifdef __KERNEL__
-    tempResult = div_s64(tempResult, txSampleRateDiv2_Hz) + 1;
-#else
-    tempResult = (tempResult / txSampleRateDiv2_Hz) + 1;
-#endif
-    tuneWord = (uint32_t)( tempResult >> 1 );
-
-    ADI_EXPECT(adrv9001_NvsRegmapTx_TxNcoFtw_Set, device, txChannelBaseAddr, tuneWord);
-
-    ADI_EXPECT(adrv9001_NvsRegmapTx_TxNcoFtwUpdate_Set, device, txChannelBaseAddr, true);
-
-    /* Configuring FTW enables NCO tone generation. */
-
-    ADI_API_RETURN(device)
+    ADI_API_RETURN(adrv9001)
 }
 
-static int32_t __maybe_unused adi_adrv9001_Tx_NcoFrequency_Get_Validate(adi_adrv9001_Device_t* device,
-                                                                        adi_common_ChannelNumber_e channel,
-                                                                        int32_t *ncoFrequency_Hz)
+static int32_t __maybe_unused adi_adrv9001_Tx_InternalToneGeneration_Inspect_Validate(adi_adrv9001_Device_t *adrv9001,
+                                                                                      adi_common_ChannelNumber_e channel,
+                                                                                      adi_adrv9001_TxInternalToneGeneration_t *tone)
 {
-    ADI_RANGE_CHECK(device, channel, ADI_CHANNEL_1, ADI_CHANNEL_2);
-    ADI_NULL_PTR_RETURN(&device->common, ncoFrequency_Hz);
-    ADI_API_RETURN(device);
+    adi_adrv9001_ChannelState_e state = ADI_ADRV9001_CHANNEL_STANDBY;
+    
+    ADI_RANGE_CHECK(adrv9001, channel, ADI_CHANNEL_1, ADI_CHANNEL_2);
+    ADI_NULL_PTR_RETURN(&adrv9001->common, tone);
+    
+    ADI_EXPECT(adi_adrv9001_Radio_Channel_State_Get, adrv9001, ADI_TX, channel, &state);
+    if (ADI_ADRV9001_CHANNEL_STANDBY == state)
+    {
+        ADI_ERROR_REPORT(&adrv9001->common,
+                         ADI_COMMON_ERRSRC_API,
+                         ADI_COMMON_ERR_INV_PARAM,
+                         ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                         state,
+                         "Channel state must be any of CALIBRATED, PRIMED, RF_ENABLED");
+    }
+    
+    ADI_API_RETURN(adrv9001);
 }
 
-int32_t adi_adrv9001_Tx_NcoFrequency_Get(adi_adrv9001_Device_t* device,
-                                         adi_common_ChannelNumber_e channel,
-                                         int32_t *ncoFrequency_Hz)
+int32_t adi_adrv9001_Tx_InternalToneGeneration_Inspect(adi_adrv9001_Device_t *adrv9001,
+                                                       adi_common_ChannelNumber_e channel,
+                                                       adi_adrv9001_TxInternalToneGeneration_t *tone)
 {
-    uint32_t tuneWord = 0;
-    int64_t tempResult = 0;
-    int64_t txSampleRateDiv2_Hz = 0;
+    uint8_t armReadBack[8] = { 0 };
+    uint8_t channelMask = 0;
+    uint32_t offset = 0;
+        
+    ADI_PERFORM_VALIDATION(adi_adrv9001_Tx_InternalToneGeneration_Inspect_Validate, adrv9001, channel, tone);
 
-    adrv9001_BfNvsRegmapTx_e txChannelBaseAddr = ADRV9001_BF_TX1_CORE;
+    channelMask = adi_adrv9001_Radio_MailboxChannel_Get(ADI_TX, channel);
+    ADI_EXPECT(adi_adrv9001_arm_Config_Read, adrv9001, OBJID_TX_INTERNAL_TONE_GENERATION, channelMask, offset, armReadBack, sizeof(armReadBack));
+    
+    tone->enable = (bool)armReadBack[offset++];
+    tone->amplitude = (adi_adrv9001_TxInternalToneAmplitude_e)armReadBack[offset++];
+    offset += 2;
+    adrv9001_ParseFourBytes(&offset, armReadBack, (uint32_t *)&tone->frequency_Hz);
 
-    ADI_PERFORM_VALIDATION(adi_adrv9001_Tx_NcoFrequency_Get_Validate, device, channel, ncoFrequency_Hz);
-
-    txChannelBaseAddr = Tx_Addr_Get(channel);
-
-    ADI_EXPECT(adrv9001_NvsRegmapTx_TxNcoFtw_Get, device, txChannelBaseAddr, &tuneWord);
-
-    txSampleRateDiv2_Hz = KILO_TO_BASE_UNIT((int64_t)device->devStateInfo.txInputRate_kHz[channel-1]) >> 1;
-
-    /*FIXME: Vivek - The commented code below has minor error in the result when tested in gtest.
-     *               For example: In adi_adrv9001_TxTestToneSet(), the txToneFreq_Hz = 11.52 MHz (i.e. 11520000).
-     *               But the commented calculation (which does -1 in between) results in txToneFreq_Hz = 11520001.
-     *               So gtest fails for this. If this subtraction is avoided, then the results are matching. TBD on this calculation
-    txNcoTestToneCfg->txToneFreq_Hz = (int32_t)(((int64_t)(0 - (((((tuneWord | 0xFFFFFFFF00000000) << 1) - 1) * txSampleRateDiv2_Hz) >> 32))));
-     */
-
-    tempResult = ( tuneWord | 0xFFFFFFFF00000000 ) << 1;
-    tempResult = ( tempResult * txSampleRateDiv2_Hz ) >> 32;
-    tempResult = ( 0 - tempResult );
-    *ncoFrequency_Hz = (int32_t)tempResult;
-
-    ADI_API_RETURN(device);
+    ADI_API_RETURN(adrv9001);
 }
 
 static int32_t __maybe_unused adi_adrv9001_SlewRateLimiter_Configure_Validate(adi_adrv9001_Device_t *device,
@@ -1048,7 +1049,8 @@ int32_t adi_adrv9001_Tx_SlewRateLimiter_Configure(adi_adrv9001_Device_t *device,
                    device,
                    (uint32_t)ADRV9001_ADDR_ARM_MAILBOX_SET,
                    &armData[0],
-                   sizeof(armData));
+                   sizeof(armData),
+                   ADI_ADRV9001_ARM_SINGLE_SPI_WRITE_MODE_STANDARD_BYTES_4);
 
     /* Command ARM to set rest of the configuration for slew rate limiter of selected Tx channel */
     extData[0] = adi_adrv9001_Radio_MailboxChannel_Get(ADI_TX, channel);
@@ -1117,8 +1119,8 @@ int32_t adi_adrv9001_Tx_SlewRateLimiter_Inspect(adi_adrv9001_Device_t *device,
 }
 
 static int32_t __maybe_unused adi_adrv9001_Tx_PaRamp_Configure_Validate(adi_adrv9001_Device_t *device,
-									adi_common_ChannelNumber_e channel,
-									adi_adrv9001_PaRampCfg_t *paRampCfg)
+                                    adi_common_ChannelNumber_e channel,
+                                    adi_adrv9001_PaRampCfg_t *paRampCfg)
 {
     /* Check device pointer and gain pointer are not null */
     ADI_NULL_DEVICE_PTR_RETURN(device);
@@ -1134,7 +1136,7 @@ static int32_t adrv9001_LutDataWrite(adi_adrv9001_Device_t *device, uint16_t lut
 {
     uint8_t lutWrEnableBit = 0;
     uint32_t eventCount = 0;
-    int32_t halError = (int32_t)ADI_COMMON_HAL_OK;
+    int32_t halError = 0;
     uint32_t numEventChecks = 0;
 
     static const uint32_t ADI_ADRV9001_PA_RAMP_WRITE_ENABLE_TIMEOUT_US = 10000;
@@ -1721,7 +1723,7 @@ int32_t adi_adrv9001_Tx_FrequencyCorrection_Set(adi_adrv9001_Device_t *device,
     adrv9001_LoadFourBytes(&offset, armData, frequencyOffset_Hz);
     armData[offset] = (uint8_t)immediate;
 
-    ADI_EXPECT(adi_adrv9001_arm_Memory_Write, device, (uint32_t)ADRV9001_ADDR_ARM_HIGHPRIORITY_MAILBOX_SET, &armData[0], sizeof(armData))
+    ADI_EXPECT(adi_adrv9001_arm_Memory_Write, device, (uint32_t)ADRV9001_ADDR_ARM_HIGHPRIORITY_MAILBOX_SET, &armData[0], sizeof(armData), ADI_ADRV9001_ARM_SINGLE_SPI_WRITE_MODE_STANDARD_BYTES_4)
 
     extData[0] = adi_adrv9001_Radio_MailboxChannel_Get(ADI_TX, channel);
     extData[1] = ADRV9001_ARM_HIGHPRIORITY_SET_TX_FREQCORRECTION;

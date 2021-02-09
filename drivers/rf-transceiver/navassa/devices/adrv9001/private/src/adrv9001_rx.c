@@ -58,7 +58,7 @@ int32_t adrv9001_RxGainTableFormat(adi_adrv9001_Device_t *device,
     uint16_t magnitude = 0;
 
     /*Perform NULL checks on pointers*/
-    ADI_API_PRIV_ENTRY_PTR_EXPECT(device, gainTablePtr);
+    ADI_ENTRY_PTR_EXPECT(device, gainTablePtr);
 
     ADI_NULL_PTR_RETURN(&device->common, formattedGainTablePtr);
 
@@ -138,7 +138,7 @@ int32_t adrv9001_RxGainTableParse(adi_adrv9001_Device_t *device,
     uint16_t magnitude = 0;
 
     /*Perform NULL checks on pointers*/
-    ADI_API_PRIV_ENTRY_PTR_EXPECT(device, gainTablePtr);
+    ADI_ENTRY_PTR_EXPECT(device, gainTablePtr);
 
     ADI_NULL_PTR_RETURN(&device->common, armDmaDataGainTablePtr);
 

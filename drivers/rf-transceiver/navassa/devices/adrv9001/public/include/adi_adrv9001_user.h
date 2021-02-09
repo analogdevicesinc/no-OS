@@ -16,18 +16,7 @@
 
 #include "adi_adrv9001_types.h"
 
-/*
-*****************************************
-* Interface Macros
-******************************************
-*/
-
-#ifndef ADI_ADRV9001_LOGGING
-#define ADI_ADRV9001_LOGGING     ADI_COMMON_LOG_MSG | \
-                                 ADI_COMMON_LOG_WARN | \
-                                 ADI_COMMON_LOG_ERR | \
-                                 ADI_COMMON_LOG_API /*LogLevel Set to API, Messages, Warnings, Error*/
-#endif /* !ADI_ADRV9001_LOGGING */
+#define HAL_SPIWRITEARRAY_BUFFERSIZE 256
 
 #define ADI_ADRV9001_RESET_ON_ERR  1                 /*API Reset on Severe Errors*/
 

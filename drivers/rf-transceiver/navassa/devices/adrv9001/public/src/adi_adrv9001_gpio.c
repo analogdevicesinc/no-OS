@@ -46,7 +46,7 @@ int32_t adi_adrv9001_gpio_GpIntHandler(adi_adrv9001_Device_t *device, adi_adrv90
     int32_t recoveryAction = ADI_COMMON_ACT_NO_ACTION;
     static const uint32_t GPINT_MASK_ALL_INTERRUPTS = 0xFFFFFFFF;
 
-    ADI_API_ENTRY_PTR_EXPECT(device, gpIntStatus);
+    ADI_ENTRY_PTR_EXPECT(device, gpIntStatus);
 
     /* retrieve the general purpose interrupt bitfield value */
     recoveryAction = adrv9001_GpInterruptsMaskPinBfGet(device, &gpIntStatus->gpIntSaveIrqMask);
@@ -91,7 +91,7 @@ int32_t adi_adrv9001_gpio_GpIntMask_Set(adi_adrv9001_Device_t *device, adi_adrv9
 {
     int32_t recoveryAction = ADI_COMMON_ACT_NO_ACTION;
 
-    ADI_API_ENTRY_PTR_EXPECT(device, maskArray);
+    ADI_ENTRY_PTR_EXPECT(device, maskArray);
 
     /* range check channel enum */
     if (maskSelect != ADI_ADRV9001_GPINT)
@@ -125,7 +125,7 @@ int32_t adi_adrv9001_gpio_GpIntMask_Get(adi_adrv9001_Device_t *device, adi_adrv9
 {
     int32_t recoveryAction = ADI_COMMON_ACT_NO_ACTION;
 
-    ADI_API_ENTRY_PTR_EXPECT(device, maskArray);
+    ADI_ENTRY_PTR_EXPECT(device, maskArray);
 
     /* range check channel enum */
     if (maskSelect != ADI_ADRV9001_GPINT)
@@ -159,7 +159,7 @@ int32_t adi_adrv9001_gpio_GpIntStatus_Get(adi_adrv9001_Device_t *device, uint32_
 {
     int32_t recoveryAction = ADI_COMMON_ACT_NO_ACTION;
 
-    ADI_API_ENTRY_PTR_EXPECT(device, gpIntStatus);
+    ADI_ENTRY_PTR_EXPECT(device, gpIntStatus);
 
     /* retrieve the general purpose interrupt Pin IRQ mask */
     recoveryAction = adrv9001_GpInterruptsStatusWordBfGet(device, gpIntStatus);
@@ -183,7 +183,7 @@ int32_t adi_adrv9001_gpio_OutputPinLevel_Set(adi_adrv9001_Device_t *device,
     uint16_t gpioLevels = 0;
 
     /* Check device pointer is not null */
-    ADI_API_ENTRY_EXPECT(device);
+    ADI_ENTRY_EXPECT(device);
 
     if (ADI_ADRV9001_GPIO_DIGITAL_00 <= pin && pin <= ADI_ADRV9001_GPIO_DIGITAL_15)
     {
@@ -239,7 +239,7 @@ int32_t adi_adrv9001_gpio_OutputPinLevel_Get(adi_adrv9001_Device_t *device,
     uint16_t pinLevelBitfield = 0;
 
     /* Check device pointer is not null */
-    ADI_API_ENTRY_PTR_EXPECT(device, gpioOutPinLevel);
+    ADI_ENTRY_PTR_EXPECT(device, gpioOutPinLevel);
 
     if (ADI_ADRV9001_GPIO_DIGITAL_00 <= pin && pin <= ADI_ADRV9001_GPIO_DIGITAL_15)
     {
@@ -268,7 +268,7 @@ int32_t adi_adrv9001_gpio_InputPinLevel_Get(adi_adrv9001_Device_t *device,
     uint16_t pinLevels = 0;
 
     /* Check device pointer is not null */
-    ADI_API_ENTRY_PTR_EXPECT(device, gpioInPinLevel);
+    ADI_ENTRY_PTR_EXPECT(device, gpioInPinLevel);
 
 
     if (ADI_ADRV9001_GPIO_DIGITAL_00 <= pin && pin <= ADI_ADRV9001_GPIO_DIGITAL_15)
@@ -364,7 +364,7 @@ int32_t adi_adrv9001_gpio_ManualAnalogOutput_Configure(adi_adrv9001_Device_t *de
     uint16_t gpioOutEn = 0;
     static const uint16_t ANALOG_GPIO_SOURCE_SEL_ADDR = 0x5C4;
 
-    ADI_API_ENTRY_EXPECT(device);
+    ADI_ENTRY_EXPECT(device);
 
     /* Configure pins as outputs */
     ADI_EXPECT(adrv9001_NvsRegmapCore1_NvsGpioAnalogDirectionControlOe_Get, device, &gpioOutEn);
@@ -381,7 +381,7 @@ int32_t adi_adrv9001_gpio_ControlInit_Configure(adi_adrv9001_Device_t *adrv9001,
                                                 adi_adrv9001_GpioCtrlInitCfg_t *initCfg)
 {
     /* Check adrv9001 pointer is not null */
-    ADI_API_ENTRY_EXPECT(adrv9001);
+    ADI_ENTRY_EXPECT(adrv9001);
 
     /* FIXME: JS: Determine if mailbox allows unassigned, reorder pin enum, and remove these if's */
     if (ADI_ADRV9001_GPIO_UNASSIGNED != initCfg->tx_ext_frontend_ctrl[0].pin)
@@ -455,7 +455,7 @@ static int32_t __maybe_unused adi_adrv9001_gpio_Configure_Validate(adi_adrv9001_
 								   adi_adrv9001_GpioCfg_t *gpioConfig)
 {
     /* Check device pointer is not null */
-    ADI_API_PRIV_ENTRY_PTR_EXPECT(device, gpioConfig);
+    ADI_ENTRY_PTR_EXPECT(device, gpioConfig);
 
     /*Check that GPIO signal is valid*/
     ADI_RANGE_CHECK(device, signal, 0x00, ADI_ADRV9001_GPIO_NUM_SIGNALS - 1);

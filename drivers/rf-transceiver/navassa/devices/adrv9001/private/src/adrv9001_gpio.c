@@ -235,19 +235,19 @@ int32_t adrv9001_GpInterruptsMaskPinBfSet(adi_adrv9001_Device_t *device, uint32_
     ADI_NULL_DEVICE_PTR_RETURN(device);
 
     /* Write to Field 8 bits */
-    status = adi_bf_hal_Register_Write(device, (0x200 + 0xA1), (uint8_t)(bfValue >> 24));
+    status = adi_bf_hal_Register_Write(device, (0x200 + 0x9E), (uint8_t)(bfValue >> 24));
     if (0 != status) return status;
 
     /* Write to Field 8 bits */
-    status = adi_bf_hal_Register_Write(device, (0x200 + 0xA0), (uint8_t)(bfValue >> 16));
+    status = adi_bf_hal_Register_Write(device, (0x200 + 0x9F), (uint8_t)(bfValue >> 16));
     if (0 != status) return status;
 
     /* Write to Field 8 bits */
-    status = adi_bf_hal_Register_Write(device, (0x200 + 0x9F), (uint8_t)(bfValue >> 8));
+    status = adi_bf_hal_Register_Write(device, (0x200 + 0xA0), (uint8_t)(bfValue >> 8));
     if (0 != status) return status;
 
     /* Write to Field 8 bits */
-    status = adi_bf_hal_Register_Write(device, (0x200 + 0x9E), (uint8_t)(bfValue >> 0));
+    status = adi_bf_hal_Register_Write(device, (0x200 + 0xA1), (uint8_t)(bfValue >> 0));
 
     return status;
 }
@@ -259,7 +259,7 @@ int32_t adrv9001_GpInterruptsMaskPinBfGet(adi_adrv9001_Device_t *device, uint32_
 
     ADI_NULL_DEVICE_PTR_RETURN(device);
 
-    ADI_FUNCTION_ENTRY_LOG(&device->common, ADI_COMMON_LOG_BF);
+    ADI_FUNCTION_ENTRY_LOG(&device->common);
 
 #ifdef ADRV9001_BITFIELD_NULL_CHECK
     /* NULL check */
@@ -267,13 +267,8 @@ int32_t adrv9001_GpInterruptsMaskPinBfGet(adi_adrv9001_Device_t *device, uint32_
 #endif /* ADRV9001_BITFIELD_NULL_CHECK */
 
     /* Read Field 8 bits */
-    status = adi_bf_hal_Register_Read(device, (0x200 + 0xA1), &register_value);
+    status = adi_bf_hal_Register_Read(device, (0x200 + 0x9E), &register_value);
     *bfValue = 0;
-    if (0 != status) return status;
-    *bfValue = (*bfValue << 8) | register_value;
-
-    /* Read Field 8 bits */
-    status = adi_bf_hal_Register_Read(device, (0x200 + 0xA0), &register_value);
     if (0 != status) return status;
     *bfValue = (*bfValue << 8) | register_value;
 
@@ -283,7 +278,12 @@ int32_t adrv9001_GpInterruptsMaskPinBfGet(adi_adrv9001_Device_t *device, uint32_
     *bfValue = (*bfValue << 8) | register_value;
 
     /* Read Field 8 bits */
-    status = adi_bf_hal_Register_Read(device, (0x200 + 0x9E), &register_value);
+    status = adi_bf_hal_Register_Read(device, (0x200 + 0xA0), &register_value);
+    if (0 != status) return status;
+    *bfValue = (*bfValue << 8) | register_value;
+
+    /* Read Field 8 bits */
+    status = adi_bf_hal_Register_Read(device, (0x200 + 0xA1), &register_value);
     *bfValue = (*bfValue << 8) | register_value;
 
     return status;
@@ -302,13 +302,8 @@ int32_t adrv9001_GpInterruptsStatusWordBfGet(adi_adrv9001_Device_t *device, uint
 #endif /* ADRV9001_BITFIELD_NULL_CHECK */
 
     /* Read Field 8 bits */
-    status = adi_bf_hal_Register_Read(device, (0x200 + 0xA6), &register_value);
+    status = adi_bf_hal_Register_Read(device, (0x200 + 0xA3), &register_value);
     *bfValue = 0;
-    if (0 != status) return status;
-    *bfValue = (*bfValue << 8) | register_value;
-
-    /* Read Field 8 bits */
-    status = adi_bf_hal_Register_Read(device, (0x200 + 0xA5), &register_value);
     if (0 != status) return status;
     *bfValue = (*bfValue << 8) | register_value;
 
@@ -318,7 +313,12 @@ int32_t adrv9001_GpInterruptsStatusWordBfGet(adi_adrv9001_Device_t *device, uint
     *bfValue = (*bfValue << 8) | register_value;
 
     /* Read Field 8 bits */
-    status = adi_bf_hal_Register_Read(device, (0x200 + 0xA3), &register_value);
+    status = adi_bf_hal_Register_Read(device, (0x200 + 0xA5), &register_value);
+    if (0 != status) return status;
+    *bfValue = (*bfValue << 8) | register_value;
+
+    /* Read Field 8 bits */
+    status = adi_bf_hal_Register_Read(device, (0x200 + 0xA6), &register_value);
     *bfValue = (*bfValue << 8) | register_value;
 
     return status;

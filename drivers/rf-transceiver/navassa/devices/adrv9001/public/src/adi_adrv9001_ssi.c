@@ -38,23 +38,21 @@ static int32_t __maybe_unused adi_adrv9001_Ssi_Rx_TestMode_Configure_Validate(ad
 
     if (ADI_ADRV9001_SSI_TYPE_CMOS == ssiType)
     {
-        ADI_RANGE_CHECK(device, ssiTestModeConfig->testData, ADI_ADRV9001_SSI_TESTMODE_DATA_NORMAL, ADI_ADRV9001_SSI_TESTMODE_DATA_RAMP_NIBBLE);
+        ADI_RANGE_CHECK(device, ssiTestModeConfig->testData, ADI_ADRV9001_SSI_TESTMODE_DATA_NORMAL, ADI_ADRV9001_SSI_TESTMODE_DATA_RAMP_16_BIT);
     }
     else
     {
         ADI_RANGE_CHECK(device, ssiTestModeConfig->testData, ADI_ADRV9001_SSI_TESTMODE_DATA_NORMAL, ADI_ADRV9001_SSI_TESTMODE_DATA_PRBS7);
-    }
-
-    if ((ADI_ADRV9001_SSI_TESTMODE_DATA_FIXED_PATTERN != ssiTestModeConfig->testData) &&
-        (dataFormat != ADI_ADRV9001_SSI_FORMAT_16_BIT_I_Q_DATA))
-    {
-        ADI_ERROR_REPORT(&device->common,
-            ADI_COMMON_ERRSRC_API,
-            ADI_COMMON_ERR_INV_PARAM,
-            ADI_COMMON_ACT_ERR_CHECK_PARAM,
-            dataFormat,
-            "Invalid SSI data format for the selected SSI calibration test type");
-        ADI_ERROR_RETURN(device->common.error.newAction);
+        if (ADI_ADRV9001_SSI_TESTMODE_DATA_RAMP_NIBBLE == ssiTestModeConfig->testData)
+        {
+            ADI_ERROR_REPORT(&device->common,
+                ADI_COMMON_ERRSRC_API,
+                ADI_COMMON_ERR_INV_PARAM,
+                ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                ssiTestModeConfig->testData,
+                "Nibble ramp pattern is not supported in LVDS");
+            ADI_ERROR_RETURN(device->common.error.newAction);
+        }
     }
 
     ADI_API_RETURN(device);
@@ -75,32 +73,26 @@ int32_t adi_adrv9001_Ssi_Rx_TestMode_Configure(adi_adrv9001_Device_t *device,
     adi_common_channel_to_index(channel, &channelIdx);
     instance = nvsRegmapRxInstances[channelIdx];
 
-    if ((ADI_ADRV9001_SSI_TESTMODE_DATA_FIXED_PATTERN != ssiTestModeConfig->testData) &&
-        (dataFormat != ADI_ADRV9001_SSI_FORMAT_16_BIT_I_Q_DATA))
-    {
-        ADI_ERROR_REPORT(&device->common,
-                         ADI_COMMON_ERRSRC_API,
-                         ADI_COMMON_ERR_INV_PARAM,
-                         ADI_COMMON_ACT_ERR_CHECK_PARAM,
-                         dataFormat,
-                         "Invalid SSI data format for the selected SSI calibration test type");
-        ADI_ERROR_RETURN(device->common.error.newAction);
-    }
-
     if (ADI_ADRV9001_SSI_TYPE_CMOS == ssiType)
     {
-	if (ADI_ADRV9001_SSI_TESTMODE_DATA_NORMAL == ssiTestModeConfig->testData)
-	{
-	    ADI_EXPECT(adrv9001_NvsRegmapRx_CssiRxDebugMode_Set, device, instance, 0x0);
-	}
-	else
-	{
-	    ADI_EXPECT(adrv9001_NvsRegmapRx_CssiRxDebugMode_Set, device, instance, 0x1);
+        if (ADI_ADRV9001_SSI_TESTMODE_DATA_NORMAL == ssiTestModeConfig->testData)
+        {
+            ADI_EXPECT(adrv9001_NvsRegmapRx_CssiRxDebugMode_Set, device, instance, 0x0);
+        }
+        else
+        {
+            ADI_EXPECT(adrv9001_NvsRegmapRx_CssiRxDebugMode_Set, device, instance, 0x1);
             if (ADI_ADRV9001_SSI_TESTMODE_DATA_RAMP_NIBBLE == ssiTestModeConfig->testData)
             {
+                ADI_EXPECT(adrv9001_NvsRegmapRx_CssiRxDebugLoad4bitsMode_Set, device, instance, 0x1);
                 ADI_EXPECT(adrv9001_NvsRegmapRx_CssiRxDebugStartRamp_Set, device, instance, 0x1);
             }
-            else
+            else if (ADI_ADRV9001_SSI_TESTMODE_DATA_RAMP_16_BIT == ssiTestModeConfig->testData)
+            {
+                ADI_EXPECT(adrv9001_NvsRegmapRx_CssiRxDebugLoad4bitsMode_Set, device, instance, 0x0);
+                ADI_EXPECT(adrv9001_NvsRegmapRx_CssiRxDebugStartRamp_Set, device, instance, 0x1);
+            }
+            else /* Fixed pattern */
             {
                 ADI_EXPECT(adrv9001_NvsRegmapRx_CssiRxDebugStartRamp_Set, device, instance, 0x0);
 
@@ -113,20 +105,20 @@ int32_t adi_adrv9001_Ssi_Rx_TestMode_Configure(adi_adrv9001_Device_t *device,
                     ADI_EXPECT(adrv9001_NvsRegmapRx_CssiRxDebugLoad_Set, device, instance, 0x0);
                 }
             }
-	}
+        }
     }
     else /* LVDS */
     {
-	ADI_EXPECT(adrv9001_NvsRegmapRx_LssiRxDebugPrbs7Enable_Set, device, instance, 0x0);
-	ADI_EXPECT(adrv9001_NvsRegmapRx_LssiRxDebugPrbs15Enable_Set, device, instance, 0x0);
-	ADI_EXPECT(adrv9001_NvsRegmapRx_LssiRxDebugStartRamp_Set, device, instance, 0x0);
-	if (ADI_ADRV9001_SSI_TESTMODE_DATA_NORMAL == ssiTestModeConfig->testData)
-	{
-	    ADI_EXPECT(adrv9001_NvsRegmapRx_LssiRxDebugMode_Set, device, instance, 0x0);
-	}
-	else
-	{
-	    ADI_EXPECT(adrv9001_NvsRegmapRx_LssiRxDebugMode_Set, device, instance, 0x1);
+        ADI_EXPECT(adrv9001_NvsRegmapRx_LssiRxDebugPrbs7Enable_Set, device, instance, 0x0);
+        ADI_EXPECT(adrv9001_NvsRegmapRx_LssiRxDebugPrbs15Enable_Set, device, instance, 0x0);
+        ADI_EXPECT(adrv9001_NvsRegmapRx_LssiRxDebugStartRamp_Set, device, instance, 0x0);
+        if (ADI_ADRV9001_SSI_TESTMODE_DATA_NORMAL == ssiTestModeConfig->testData)
+        {
+            ADI_EXPECT(adrv9001_NvsRegmapRx_LssiRxDebugMode_Set, device, instance, 0x0);
+        }
+        else
+        {
+            ADI_EXPECT(adrv9001_NvsRegmapRx_LssiRxDebugMode_Set, device, instance, 0x1);
             if (ADI_ADRV9001_SSI_TESTMODE_DATA_RAMP_16_BIT == ssiTestModeConfig->testData)
             {
                 ADI_EXPECT(adrv9001_NvsRegmapRx_LssiRxDebugStartRamp_Set, device, instance, 0x1);
@@ -147,7 +139,7 @@ int32_t adi_adrv9001_Ssi_Rx_TestMode_Configure(adi_adrv9001_Device_t *device,
                 ADI_EXPECT(adrv9001_NvsRegmapRx_LssiRxDebugLoad_Set, device, instance, 0x1);
                 ADI_EXPECT(adrv9001_NvsRegmapRx_LssiRxDebugLoad_Set, device, instance, 0x0);
             }
-	}
+        }
     }
 
     ADI_API_RETURN(device);
@@ -166,28 +158,43 @@ static int32_t __maybe_unused adi_adrv9001_Ssi_Tx_TestMode_Configure_Validate(ad
 
     if (ADI_ADRV9001_SSI_TYPE_CMOS == ssiType)
     {
-        ADI_RANGE_CHECK(device, ssiTestModeConfig->testData, ADI_ADRV9001_SSI_TESTMODE_DATA_NORMAL, ADI_ADRV9001_SSI_TESTMODE_DATA_RAMP_NIBBLE);
+        ADI_RANGE_CHECK(device, ssiTestModeConfig->testData, ADI_ADRV9001_SSI_TESTMODE_DATA_NORMAL, ADI_ADRV9001_SSI_TESTMODE_DATA_RAMP_16_BIT);
     }
     else
     {
         ADI_RANGE_CHECK(device, ssiTestModeConfig->testData, ADI_ADRV9001_SSI_TESTMODE_DATA_NORMAL, ADI_ADRV9001_SSI_TESTMODE_DATA_PRBS7);
-    }
-
-    if ((ADI_ADRV9001_SSI_TESTMODE_DATA_FIXED_PATTERN != ssiTestModeConfig->testData) &&
-        (dataFormat != ADI_ADRV9001_SSI_FORMAT_16_BIT_I_Q_DATA))
-    {
-        ADI_ERROR_REPORT(&device->common,
-            ADI_COMMON_ERRSRC_API,
-            ADI_COMMON_ERR_INV_PARAM,
-            ADI_COMMON_ACT_ERR_CHECK_PARAM,
-            dataFormat,
-            "Invalid SSI data format for the selected SSI calibration test type");
-        ADI_ERROR_RETURN(device->common.error.newAction);
+        if (ADI_ADRV9001_SSI_TESTMODE_DATA_RAMP_NIBBLE == ssiTestModeConfig->testData)
+        {
+            ADI_ERROR_REPORT(&device->common,
+                ADI_COMMON_ERRSRC_API,
+                ADI_COMMON_ERR_INV_PARAM,
+                ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                dataFormat,
+                "Nibble ramp pattern is not supported in LVDS");
+            ADI_ERROR_RETURN(device->common.error.newAction);
+        }
     }
 
     ADI_API_RETURN(device);
 }
 
+static int32_t adi_adrv9001_Ssi_Tx_CssiClearErrorFlags(adi_adrv9001_Device_t *device,
+                                                       adrv9001_BfNvsRegmapTx_e baseAddress)
+{
+    ADI_EXPECT(adrv9001_NvsRegmapTx_CssiTxDebugStartRamp_Set, device, baseAddress, 0x0);
+    ADI_EXPECT(adrv9001_NvsRegmapTx_CssiTxClearRampShiftError_Set, device, baseAddress, 0x0);
+    ADI_EXPECT(adrv9001_NvsRegmapTx_CssiTxClearRampShiftError_Set, device, baseAddress, 0x1);
+    ADI_EXPECT(adrv9001_NvsRegmapTx_CssiTxClearRampShiftError_Set, device, baseAddress, 0x0);
+    ADI_EXPECT(adrv9001_NvsRegmapTx_CssiTxFifoClear_Set, device, baseAddress, 0x0);
+    ADI_EXPECT(adrv9001_NvsRegmapTx_CssiTxFifoClear_Set, device, baseAddress, 0x1);
+    ADI_EXPECT(adrv9001_NvsRegmapTx_CssiTxFifoClear_Set, device, baseAddress, 0x0);
+    ADI_EXPECT(adrv9001_NvsRegmapTx_CssiTxClearStrobeAlignError_Set, device, baseAddress, 0x0);
+    ADI_EXPECT(adrv9001_NvsRegmapTx_CssiTxClearStrobeAlignError_Set, device, baseAddress, 0x1);
+    ADI_EXPECT(adrv9001_NvsRegmapTx_CssiTxClearStrobeAlignError_Set, device, baseAddress, 0x0);
+    ADI_EXPECT(adrv9001_NvsRegmapTx_CssiTxDebugStartRamp_Set, device, baseAddress, 0x1);
+    ADI_API_RETURN(device);
+}
+    
 int32_t adi_adrv9001_Ssi_Tx_TestMode_Configure(adi_adrv9001_Device_t *device,
                                                adi_common_ChannelNumber_e channel,
                                                adi_adrv9001_SsiType_e ssiType,
@@ -207,10 +214,9 @@ int32_t adi_adrv9001_Ssi_Tx_TestMode_Configure(adi_adrv9001_Device_t *device,
 
     if (ADI_ADRV9001_SSI_TYPE_CMOS == ssiType)
     {
-        ADI_EXPECT(adrv9001_NvsRegmapTx_CssiTxDebugStartRamp_Set, device, baseAddress, 0x0);
         if (ADI_ADRV9001_SSI_TESTMODE_DATA_NORMAL == ssiTestModeConfig->testData)
         {
-            ADI_EXPECT(adrv9001_NvsRegmapTx_CssiTxDebugMode_Set, device, baseAddress, 0x0);
+		    ADI_EXPECT(adrv9001_NvsRegmapTx_CssiTxDebugMode_Set, device, baseAddress, 0x0);
         }
         else
         {
@@ -218,21 +224,15 @@ int32_t adi_adrv9001_Ssi_Tx_TestMode_Configure(adi_adrv9001_Device_t *device,
             /* Nothing to be configured for fixed pattern */
             if (ADI_ADRV9001_SSI_TESTMODE_DATA_RAMP_NIBBLE == ssiTestModeConfig->testData)
             {
-                ADI_EXPECT(adrv9001_NvsRegmapTx_CssiTxClearRampShiftError_Set, device, baseAddress, 0x0);
-                ADI_EXPECT(adrv9001_NvsRegmapTx_CssiTxClearRampShiftError_Set, device, baseAddress, 0x1);
-                ADI_EXPECT(adrv9001_NvsRegmapTx_CssiTxClearRampShiftError_Set, device, baseAddress, 0x0);
-
-                ADI_EXPECT(adrv9001_NvsRegmapTx_CssiTxFifoClear_Set, device, baseAddress, 0x0);
-                ADI_EXPECT(adrv9001_NvsRegmapTx_CssiTxFifoClear_Set, device, baseAddress, 0x1);
-                ADI_EXPECT(adrv9001_NvsRegmapTx_CssiTxFifoClear_Set, device, baseAddress, 0x0);
-
-                ADI_EXPECT(adrv9001_NvsRegmapTx_CssiTxClearStrobeAlignError_Set, device, baseAddress, 0x0);
-                ADI_EXPECT(adrv9001_NvsRegmapTx_CssiTxClearStrobeAlignError_Set, device, baseAddress, 0x1);
-                ADI_EXPECT(adrv9001_NvsRegmapTx_CssiTxClearStrobeAlignError_Set, device, baseAddress, 0x0);
-
-                ADI_EXPECT(adrv9001_NvsRegmapTx_CssiTxDebugStartRamp_Set, device, baseAddress, 0x1);
+                ADI_EXPECT(adrv9001_NvsRegmapTx_CssiTxDebugLoad4bitsMode_Set, device, baseAddress, 0x1);
+                ADI_EXPECT(adi_adrv9001_Ssi_Tx_CssiClearErrorFlags, device, baseAddress);
             }
-	}
+            else if (ADI_ADRV9001_SSI_TESTMODE_DATA_RAMP_16_BIT == ssiTestModeConfig->testData)
+            {
+                ADI_EXPECT(adrv9001_NvsRegmapTx_CssiTxDebugLoad4bitsMode_Set, device, baseAddress, 0x0);
+                ADI_EXPECT(adi_adrv9001_Ssi_Tx_CssiClearErrorFlags, device, baseAddress);
+            }
+        }
     }
     else /* LVDS */
     {
@@ -240,12 +240,12 @@ int32_t adi_adrv9001_Ssi_Tx_TestMode_Configure(adi_adrv9001_Device_t *device,
         ADI_EXPECT(adrv9001_NvsRegmapTx_LssiTxDebugPrbs7Enable_Set, device, baseAddress, 0x0);
         ADI_EXPECT(adrv9001_NvsRegmapTx_LssiTxDebugPrbs15Enable_Set, device, baseAddress, 0x0);
         ADI_EXPECT(adrv9001_NvsRegmapTx_LssiTxDebugStartErrorCheck_Set, device, baseAddress, 0x0);
-	if (ADI_ADRV9001_SSI_TESTMODE_DATA_NORMAL == ssiTestModeConfig->testData)
+        if (ADI_ADRV9001_SSI_TESTMODE_DATA_NORMAL == ssiTestModeConfig->testData)
         {
-	    ADI_EXPECT(adrv9001_NvsRegmapTx_LssiTxDebugMode_Set, device, baseAddress, 0x0);
-	}
-	else
-	{
+            ADI_EXPECT(adrv9001_NvsRegmapTx_LssiTxDebugMode_Set, device, baseAddress, 0x0);
+        }
+        else
+        {
             ADI_EXPECT(adrv9001_NvsRegmapTx_LssiTxDebugMode_Set, device, baseAddress, 0x1);
             ADI_EXPECT(adrv9001_NvsRegmapTx_LssiTxDebugAfterFifoErrorClear_Set, device, baseAddress, 0x1);
             ADI_EXPECT(adrv9001_NvsRegmapTx_LssiTxDebugAfterFifoErrorClear_Set, device, baseAddress, 0x0);
@@ -281,11 +281,11 @@ int32_t adi_adrv9001_Ssi_Tx_TestMode_Configure(adi_adrv9001_Device_t *device,
                 recoveryAction = adi_common_hal_Wait_us(&device->common, 1000);
 
                 ADI_ERROR_REPORT(&device->common,
-                    ADI_ADRV9001_SRC_ARMCMD,
-                    recoveryAction,
-                    ADI_COMMON_ACT_ERR_CHECK_TIMER,
-                    device,
-                    "Timer not working in adi_adrv9001_Ssi_Tx_TestMode_Configure()");
+                                 ADI_ADRV9001_SRC_ARMCMD,
+                                 recoveryAction,
+                                 ADI_COMMON_ACT_ERR_CHECK_TIMER,
+                                 device,
+                                 "Timer not working in adi_adrv9001_Ssi_Tx_TestMode_Configure()");
                 ADI_ERROR_RETURN(device->common.error.newAction);
 
                 ADI_EXPECT(adrv9001_NvsRegmapTx_LssiTxDebugErrorCounterRead_Set, device, baseAddress, 0x1);
@@ -300,17 +300,17 @@ int32_t adi_adrv9001_Ssi_Tx_TestMode_Configure(adi_adrv9001_Device_t *device,
                 recoveryAction = adi_common_hal_Wait_us(&device->common, 1000);
 
                 ADI_ERROR_REPORT(&device->common,
-                    ADI_ADRV9001_SRC_ARMCMD,
-                    recoveryAction,
-                    ADI_COMMON_ACT_ERR_CHECK_TIMER,
-                    device,
-                    "Timer not working in adi_adrv9001_Ssi_Tx_TestMode_Configure()");
+                                 ADI_ADRV9001_SRC_ARMCMD,
+                                 recoveryAction,
+                                 ADI_COMMON_ACT_ERR_CHECK_TIMER,
+                                 device,
+                                 "Timer not working in adi_adrv9001_Ssi_Tx_TestMode_Configure()");
                 ADI_ERROR_RETURN(device->common.error.newAction);
 
                 ADI_EXPECT(adrv9001_NvsRegmapTx_LssiTxDebugErrorCounterRead_Set, device, baseAddress, 0x1);
                 ADI_EXPECT(adrv9001_NvsRegmapTx_LssiTxDebugErrorCounterRead_Set, device, baseAddress, 0x0);
             }
-	    /* Nothing to be configured for fixed pattern */
+            /* Nothing to be configured for fixed pattern */
         }
     }
 
@@ -331,7 +331,7 @@ static int32_t __maybe_unused adi_adrv9001_Ssi_Tx_TestMode_Status_Inspect_Valida
 
     if (ADI_ADRV9001_SSI_TYPE_CMOS == ssiType)
     {
-        ADI_RANGE_CHECK(device, ssiTestModeConfig->testData, ADI_ADRV9001_SSI_TESTMODE_DATA_NORMAL, ADI_ADRV9001_SSI_TESTMODE_DATA_RAMP_NIBBLE);
+        ADI_RANGE_CHECK(device, ssiTestModeConfig->testData, ADI_ADRV9001_SSI_TESTMODE_DATA_NORMAL, ADI_ADRV9001_SSI_TESTMODE_DATA_RAMP_16_BIT);
         ADI_RANGE_CHECK(device, dataFormat, ADI_ADRV9001_SSI_FORMAT_2_BIT_SYMBOL_DATA, ADI_ADRV9001_SSI_FORMAT_16_BIT_I_Q_DATA);
         if (ADI_ADRV9001_SSI_FORMAT_12_BIT_I_Q_DATA == dataFormat)
         {
@@ -347,6 +347,17 @@ static int32_t __maybe_unused adi_adrv9001_Ssi_Tx_TestMode_Status_Inspect_Valida
     else
     {
         ADI_RANGE_CHECK(device, ssiTestModeConfig->testData, ADI_ADRV9001_SSI_TESTMODE_DATA_NORMAL, ADI_ADRV9001_SSI_TESTMODE_DATA_PRBS7);
+        if (ADI_ADRV9001_SSI_TESTMODE_DATA_RAMP_NIBBLE == ssiTestModeConfig->testData)
+        {
+            ADI_ERROR_REPORT(&device->common,
+                ADI_COMMON_ERRSRC_API,
+                ADI_COMMON_ERR_INV_PARAM,
+                ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                ssiTestModeConfig->testData,
+                "Nibble ramp pattern is not supported in LVDS");
+            ADI_ERROR_RETURN(device->common.error.newAction);
+        }
+
         ADI_RANGE_CHECK(device, dataFormat, ADI_ADRV9001_SSI_FORMAT_12_BIT_I_Q_DATA, ADI_ADRV9001_SSI_FORMAT_16_BIT_I_Q_DATA);
     }
 
@@ -526,6 +537,38 @@ int32_t adi_adrv9001_Ssi_Tx_TestMode_Status_Inspect(adi_adrv9001_Device_t *devic
         ADI_EXPECT(adrv9001_NvsRegmapTx_LssiTxFifoEmpty_Get, device, baseAddress, &ssiTestModeStatus->fifoEmpty);
     }
 
+    ADI_API_RETURN(device);
+}
+
+static int32_t adi_adrv9001_Ssi_Loopback_Set_Validate(adi_adrv9001_Device_t *device,
+                                                      adi_common_ChannelNumber_e channel,
+                                                      adi_adrv9001_SsiType_e ssiType)
+{
+    ADI_RANGE_CHECK(device, ssiType, ADI_ADRV9001_SSI_TYPE_CMOS, ADI_ADRV9001_SSI_TYPE_LVDS);
+    ADI_API_RETURN(device);
+}
+
+int32_t adi_adrv9001_Ssi_Loopback_Set(adi_adrv9001_Device_t *device,
+                                      adi_common_ChannelNumber_e channel,
+                                      adi_adrv9001_SsiType_e ssiType,
+                                      bool loopbackEnable)
+{
+    adrv9001_BfNvsRegmapRx_e instance = ADRV9001_BF_RX1_CORE;
+    uint8_t channelIdx = 0;
+
+    ADI_PERFORM_VALIDATION(adi_adrv9001_Ssi_Loopback_Set_Validate, device, channel, ssiType);
+
+    adi_common_channel_to_index(channel, &channelIdx);
+    instance = nvsRegmapRxInstances[channelIdx];
+
+    if (ADI_ADRV9001_SSI_TYPE_CMOS == ssiType)
+    {
+        ADI_EXPECT(adrv9001_NvsRegmapRx_CssiRxLoopbackFromTx_Set, device, instance, (uint8_t)loopbackEnable);
+    }
+    else // LVDS
+    {
+        ADI_EXPECT(adrv9001_NvsRegmapRx_LssiRxLoopbackFromTx_Set, device, instance, (uint8_t)loopbackEnable);
+    }
     ADI_API_RETURN(device);
 }
 
@@ -865,7 +908,7 @@ int32_t adi_adrv9001_Ssi_PowerDown_Get(adi_adrv9001_Device_t *device,
 
     ADI_EXPECT(adi_adrv9001_arm_Config_Read, device, ADRV9001_ARM_OBJECTID_LSSI_PADS_POWERDOWN, channelMask, offset, armReadBack, sizeof(armReadBack))
 
-    *powerDownMode = (bool)armReadBack[0];
+    *powerDownMode = (adi_adrv9001_SsiPowerDown_e)armReadBack[0];
 
     ADI_API_RETURN(device);
 }

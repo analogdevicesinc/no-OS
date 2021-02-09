@@ -34,7 +34,7 @@ extern "C" {
 #define ADI_PERFORM_VALIDATION(rangeCheckFcn, devicePtr, ...) \
     do { \
         ADI_NULL_DEVICE_PTR_RETURN(devicePtr); \
-        ADI_FUNCTION_ENTRY_LOG(&devicePtr->common, ADI_COMMON_LOG_API); \
+        ADI_FUNCTION_ENTRY_LOG(&devicePtr->common); \
         ADI_EXPECT(rangeCheckFcn, devicePtr, ##__VA_ARGS__); \
     } while (0)
 #else

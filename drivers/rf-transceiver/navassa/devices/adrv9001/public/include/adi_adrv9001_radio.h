@@ -63,12 +63,44 @@ int32_t adi_adrv9001_Radio_Carrier_Inspect(adi_adrv9001_Device_t *adrv9001,
                                            adi_adrv9001_Carrier_t *carrier);
 
 /**
+ * \brief Sets the parameters for the given pll
+ *
+ * \note Message type: \ref timing_mailbox "Mailbox command"
+ *
+ * \pre This function should be called before running init calibration when all the channels are in STANDBY state. 
+ *
+ * \param[in] adrv9001	Context variable - Pointer to the ADRV9001 device settings data structure
+ * \param[in] pllId     The PLL of interest
+ * \param[in] pllConfig Desired pll configuration parameter
+ *
+ * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
+ */
+    int32_t adi_adrv9001_Radio_Pll_Configure(adi_adrv9001_Device_t *adrv9001,
+                                             adi_adrv9001_Pll_e pllId,
+	                                         adi_adrv9001_PllConfig_t *pllConfig);
+
+/**
+ * \brief Gets the parameters for the given pll
+ *
+ * \note Message type: \ref timing_mailbox "Mailbox command"
+ *
+ * \pre Channel state any of STANDBY, CALIBRATED, PRIMED, RF_ENABLED 
+ *
+ * \param[in] adrv9001	Context variable - Pointer to the ADRV9001 device settings data structure
+ * \param[in] pllId     The PLL of interest
+ * \param[in] pllConfig Desired pll configuration parameter
+ *
+ * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
+ */
+    int32_t adi_adrv9001_Radio_Pll_Inspect(adi_adrv9001_Device_t *adrv9001,
+                                           adi_adrv9001_Pll_e pllId,
+		                                   adi_adrv9001_PllConfig_t *pllConfig);
+/**
  * \brief Check if the specified PLL is locked
  *
  * \note Message type: \ref timing_direct "Direct register access"
  *
- * \pre This may be called any time after the PLLs have been configured and are operational. This also requires the
- * lockdet_mode<1:0> to have a value of either 1(Run Lock Detect once) or 2(Run Lock Detect Continuously)
+ * \pre This may be called any time after the PLLs have been configured and are operational
  *
  * \param[in]  adrv9001	    Context variable - Pointer to the ADRV9001 device settings data structure
  * \param[in]  pll          The PLL of interest
@@ -485,6 +517,21 @@ int32_t adi_adrv9001_Radio_ChannelEnablementDelays_Inspect(adi_adrv9001_Device_t
                                                            adi_common_Port_e port,
                                                            adi_common_ChannelNumber_e channel,
                                                            adi_adrv9001_ChannelEnablementDelays_t *delays);
+
+/**
+* \brief Set channels to MCS Ready substate
+*
+* This function transitions the all channels from the CALIBRATED state to the MCS
+* ready sub state.
+*
+* \note Message type: \ref timing_mailbox "Mailbox command"
+* \pre  All channels must be in CALIBRATED state before transitioning to MCS_READY
+*
+* \param[in] adrv9001      Context variable - Pointer to the ADRV9001 device data structure containing settings
+*
+* \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
+*/
+int32_t adi_adrv9001_Radio_ToMcsReady(adi_adrv9001_Device_t *adrv9001); 
 
 #ifdef __cplusplus
 }

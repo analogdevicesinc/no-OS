@@ -28,9 +28,10 @@
 */
 typedef enum adi_adrv9001_ArmSystemStates
 {
-    ADI_ADRV9001_ARM_SYSTEM_POWERUP,        /*!< Powerup State */
-    ADI_ADRV9001_ARM_SYSTEM_NORMALMODE,     /*!< Normal TDD/FDD State */
-    ADI_ADRV9001_ARM_SYSTEM_POWERSAVINGMODE /*!< System Power Saving Mode */
+    ADI_ADRV9001_ARM_SYSTEM_POWERUP,         /*!< Powerup State */
+    ADI_ADRV9001_ARM_SYSTEM_NORMALMODE,      /*!< Normal TDD/FDD State */
+    ADI_ADRV9001_ARM_SYSTEM_POWERSAVINGMODE, /*!< System Power Saving Mode */
+    ADI_ADRV9001_ARM_SYSTEM_MCS              /*!< MCS State */
 } adi_adrv9001_ArmSystemStates_e;
 
 /**
@@ -47,6 +48,16 @@ typedef enum adi_adrv9001_ArmMonitorModeStates
 } adi_adrv9001_ArmMonitorModeStates_e;
 
 /**
+ * \brief The MCS substates
+ */
+typedef enum adi_adrv9001_ArmMcsStates
+{
+    ADI_ADRV9001_ARMMCSSTATES_READY,      /*!< MCS Ready state */
+    ADI_ADRV9001_ARMMCSSTATES_TRANSITION, /*!< MCS Transition state */
+    ADI_ADRV9001_ARMMCSSTATES_DONE,       /*!< MCS Done state */
+} adi_adrv9001_ArmMcsStates_e;
+
+/**
 * \brief Enumerated list of ARM bootup states.
 */
 typedef enum adi_adrv9001_ArmBootStates
@@ -54,7 +65,7 @@ typedef enum adi_adrv9001_ArmBootStates
     ADI_ADRV9001_ARM_BOOT_POWERUP                           = 0,    /*!< Used to put API in wait for ARM state */
     ADI_ADRV9001_ARM_BOOT_READY                             = 1,    /*!< ARM booted with no failure */
     ADI_ADRV9001_ARM_BOOT_FW_CHECKSUM_ERR                   = 2,    /*!< ARM firmware checksum error */
-    ADI_ADRV9001_ARM_BOOT_DATAMEM_ERR                       = 3,    /*!< ARM data memory error */
+    ADI_ADRV9001_ARM_BOOT_EFUSE_DATA_ERR                    = 3,    /*!< Efuse data error */
     ADI_ADRV9001_ARM_BOOT_STREAM_IMG_CHECKSUM_ERR           = 4,    /*!< Stream image checksum error */
     ADI_ADRV9001_ARM_BOOT_DEVICE_PROFILE_CHECKSUM_ERR       = 5,    /*!< Device profile checksum error */
     ADI_ADRV9001_ARM_BOOT_CLKGEN_ERR                        = 6,    /*!< Bootup clkgen setup error */
@@ -128,6 +139,19 @@ typedef enum adi_adrv9001_MonitorModePatternLength
     ADI_ADRV9001_MONITOR_MODE_PATTERN_LENGTH_240,   /*!< 240 I/Q sample pairs */
     ADI_ADRV9001_MONITOR_MODE_PATTERN_LENGTH_480,    /*!< 480 I/Q sample pairs */
 }adi_adrv9001_MonitorModePatternLength_e;
+
+/**
+ * \brief ARM memory SPI write mode
+ */
+typedef enum adi_adrv9001_ArmSingleSpiWriteMode
+{
+    ADI_ADRV9001_ARM_SINGLE_SPI_WRITE_MODE_STANDARD_BYTES_4,    /*!< 4 bytes in a single SPI write in standard mode */
+                                                                /*!< Only one write operation (4 bytes per write operation) is performed regardless of the state of chip select */
+    ADI_ADRV9001_ARM_SINGLE_SPI_WRITE_MODE_STANDARD_BYTES_252,  /*!< 252 bytes in a single SPI write in standard mode */
+                                                                /*!< Only one write operation (up to 252 bytes per write operation) is performed regardless of the state of chip select */
+    ADI_ADRV9001_ARM_SINGLE_SPI_WRITE_MODE_STREAMING_BYTES_4,   /*!< 4 bytes in a single SPI write in streaming mode */
+                                                                /*!< Four write operation (but only 4 bytes per write operation) is performed in one chip select */
+}adi_adrv9001_ArmSingleSpiWriteMode_e;
 
 /**
 * \brief Data structure to hold ARM version information

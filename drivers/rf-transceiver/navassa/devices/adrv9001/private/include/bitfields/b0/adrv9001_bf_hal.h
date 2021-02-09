@@ -17,6 +17,10 @@
 #include <stdint.h>
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif // __cplusplus
+
 /**
  * \brief Write a field within a register (read, modify, write)
  *
@@ -75,5 +79,9 @@ int32_t adi_bf_hal_Register_Write(void *device, uint16_t address, uint8_t value)
  * \returns Zero (0) to indicate success; error otherwise
  */
 int32_t adi_bf_hal_Register_Read(void *device, uint16_t address, uint8_t *value);
+
+#ifdef __cplusplus
+}
+#endif // __cplusplus
 
 #endif // __ADRV9001_BF_HAL_H__

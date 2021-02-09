@@ -70,7 +70,7 @@ int32_t adi_adrv9001_Tx_Attenuation_Inspect(adi_adrv9001_Device_t *adrv9001,
  *
  * The relationship between Tx attenuation control mode and channel state is shown in the following timing diagram
  * 
- * \image html "ADRV9001_TxAtten_State_Transitions.png" "Tx Attenuation control modes and channel state diagram"
+ * \image html "ADRV9001_TxAtten_State_Transitions.jpg" "Tx Attenuation control modes and channel state diagram"
  * 
  * \note Message type: \ref timing_direct "Direct register acccess"
  * \note Tx attenuation control via GPIO pins is possible only in RF_ENABLED state
@@ -289,41 +289,38 @@ int32_t adi_adrv9001_Tx_PaProtection_Inspect(adi_adrv9001_Device_t *adrv9001,
                                              adi_adrv9001_TxPaProtectCfg_t *config);
 
 /**
- * \brief Set the Tx NCO test tone frequency for the specified Tx channel
+ * \brief Configure the Tx NCO test tone for the specified Tx channel
  *
- *  The TxAttenuation is forced in this function to max analog output power, but the digital attenuation is backed
- *  off 6dB to make sure the digital filter does not clip and cause spurs in the tx spectrum. Ensure no other API's are
- *  called that change the Tx attenuation mode when using this function
+ * \note Message type: \ref timing_mailbox "Mailbox command"
  *
- *  When the Tx NCO test tone is disabled, the function sets the Tx attenuation to the SPI mode. User may need to use
- *  other functions to change the mode.
+ * \pre Channel state is CALIBRATED
  *
- * \note Message type: \ref timing_direct "Direct register acccess"
- *
- * \param[in] adrv9001          Context variable - Pointer to the ADRV9001 device data structure
- * \param[in] channel           The Tx channel for which to set the NCO test tone frequency
- * \param[in] ncoFrequency_Hz   The desired NCO test tone frequency (Hz)
+ * \param[in] adrv9001      Context variable - Pointer to the ADRV9001 device data structure
+ * \param[in] channel       The Tx channel for which to set the NCO test tone frequency
+ * \param[in] tone          The desired NCO tone
  *
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
  */
-int32_t adi_adrv9001_Tx_NcoFrequency_Set(adi_adrv9001_Device_t *adrv9001,
-                                         adi_common_ChannelNumber_e channel,
-                                         int32_t ncoFrequency_Hz);
+int32_t adi_adrv9001_Tx_InternalToneGeneration_Configure(adi_adrv9001_Device_t *adrv9001,
+                                                         adi_common_ChannelNumber_e channel,
+                                                         adi_adrv9001_TxInternalToneGeneration_t *tone);
 
 /**
- * \brief Get the Tx NCO test tone frequency for the specified Tx channel
+ * \brief Inspect the Tx NCO test tone for the specified Tx channel
  *
- * \note Message type: \ref timing_direct "Direct register acccess"
+ * \note Message type: \ref timing_mailbox "Mailbox command"
  *
- * \param[in] adrv9001          Context variable - Pointer to the ADRV9001 device data structure
- * \param[in]  channel          The Tx channel for which to get the NCO test tone frequency
- * \param[out] ncoFrequency_Hz  The current NCO test tone frequency (Hz)
+ * \pre Channel state any of CALIBRATED, PRIMED, RF_ENABLED
+ *
+ * \param[in]  adrv9001     Context variable - Pointer to the ADRV9001 device data structure
+ * \param[in]  channel      The Tx channel for which to get the NCO test tone frequency
+ * \param[out] tone         The current NCO tone
  *
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
  */
-int32_t adi_adrv9001_Tx_NcoFrequency_Get(adi_adrv9001_Device_t *adrv9001,
-                                         adi_common_ChannelNumber_e channel,
-                                         int32_t *ncoFrequency_Hz);
+int32_t adi_adrv9001_Tx_InternalToneGeneration_Inspect(adi_adrv9001_Device_t *adrv9001,
+                                                       adi_common_ChannelNumber_e channel,
+                                                       adi_adrv9001_TxInternalToneGeneration_t *tone);
 
 
 /**
@@ -435,6 +432,8 @@ int32_t adi_adrv9001_Tx_Attenuation_PinControl_Inspect(adi_adrv9001_Device_t *ad
  * \note Message type: \ref timing_prioritymailbox "High-priority mailbox command"
  *
  * \pre Channel state any of CALIBRATED, PRIMED, RF_ENABLED
+ * \pre adi_adrv9001_Init_t.tx.txProfile.txDpProfile.txIqdmDuc.iqdmDucMode must be ADI_ADRV9001_TX_DP_IQDMDUC_MODE2
+ *
  * \param[in] adrv9001              Context variable - Pointer to the ADRV9001 device data structure
  * \param[in] channel               The Tx channel for which to set the NCO frequency
  * \param[in] frequencyOffset_Hz    The desired offset frequency, denoted in Hz

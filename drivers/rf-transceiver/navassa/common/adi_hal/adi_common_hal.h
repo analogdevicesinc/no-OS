@@ -47,38 +47,6 @@ extern "C" {
 int32_t adi_common_hal_CallBack_Verify(adi_common_Device_t *commonDev);
 
 /**
-* \brief Used to initialise the HAL hardware.
-*
-* \param commonDev Pointer to the common structure of type adi_common_Device_t
-*
-* \retval ADI_COMMON_ACT_WARN_RESET_LOG Recovery action for log reset
-* \retval ADI_COMMON_ACT_NO_ACTION Function completed successfully, no action required
-*/
-int32_t adi_common_hal_HwOpen(adi_common_Device_t *commonDev);
-
-/**
-* \brief Used to close the HAL hardware.
-*
-* \param commonDev Pointer to the common structure of type adi_common_Device_t
-*
-* \retval ADI_COMMON_ACT_ERR_RESET_INTERFACE Recovery action for SPI reset required
-* \retval ADI_COMMON_ACT_NO_ACTION Function completed successfully, no action required
-*/
-int32_t adi_common_hal_HwClose(adi_common_Device_t *commonDev);
-
-/**
-* \brief Used to reset the HAL hardware.
-*
-* \param commonDev Pointer to the common structure of type adi_common_Device_t
-* \param pinLevel Pin level to be set 1 will held the reset line high, 0 will held the reset line low
-*
-* \retval ADI_COMMON_ACT_WARN_RESET_LOG Recovery action for log reset
-* \retval ADI_COMMON_ACT_ERR_RESET_INTERFACE Recovery action for SPI reset required
-* \retval ADI_COMMON_ACT_NO_ACTION Function completed successfully, no action required
-*/
-int32_t adi_common_hal_HwReset(adi_common_Device_t *commonDev, uint8_t pinLevel);
-
-/**
 * \brief Used to sleep for a given number of microSeconds.
 *
 * \param commonDev Pointer to the common structure of type adi_common_Device_t
@@ -90,19 +58,6 @@ int32_t adi_common_hal_HwReset(adi_common_Device_t *commonDev, uint8_t pinLevel)
 * \retval ADI_COMMON_ACT_NO_ACTION Function completed successfully, no action required
 */
 int32_t adi_common_hal_Wait_us(adi_common_Device_t *commonDev, uint32_t time_us);
-
-/**
-* \brief Used to sleep for a given number of milliSeconds.
-*
-* \param commonDev Pointer to the common structure of type adi_common_Device_t
-* \param time_ms The number of milli seconds to sleep.
-*
-* \retval ADI_COMMON_ACT_WARN_RESET_LOG Recovery action for log reset
-* \retval ADI_COMMON_ACT_ERR_CHECK_PARAM Recovery action for bad parameter check
-* \retval ADI_COMMON_ACT_ERR_RESET_INTERFACE Recovery action for SPI reset required
-* \retval ADI_COMMON_ACT_NO_ACTION Function completed successfully, no action required
-*/
-int32_t adi_common_hal_Wait_ms(adi_common_Device_t *commonDev, uint32_t time_ms);
 
 #ifdef __cplusplus
 }

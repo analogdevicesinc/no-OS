@@ -66,6 +66,14 @@ extern "C" {
         ADRV9001_SPIDMAINFO("MESSAGE: WRITE: %30s: addr=0x%04x, data=0x%02x \n", (text), (addr), (data)); \
     }
 
+#define ADRV9001_SPIWRITEBYTESTREAMDMA(devicePtr, text, addr, dataArray, count) \
+    {\
+        int32_t recoveryAction = 0; \
+        recoveryAction = adi_adrv9001_spi_Bytes_Stream_Write(devicePtr, (addr), (dataArray), count); \
+        ADI_ERROR_REPORT(&devicePtr->common, ADI_COMMON_ERRSRC_API, ADI_COMMON_ERR_API_FAIL, recoveryAction, NULL, "Error while writing byte to DMA over SPI"); \
+        ADI_ERROR_RETURN(devicePtr->common.error.newAction); \
+        ADRV9001_DMAINFO((text), (addr), (count)); \
+    }
 
 #define ADRV9001_SPIREADBYTEDMA(devicePtr, text, addr, data) \
     {\
