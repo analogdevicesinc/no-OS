@@ -117,6 +117,12 @@ int32_t adf5902_readback(struct adf5902_dev *dev, uint32_t *data)
 int32_t adf5902_set_vco_freq(struct adf5902_dev *dev)
 {
 
+	dev->f_pfd = (dev->ref_in * (1 + dev->ref_doubler_en) /
+		      (dev->ref_div_factor *(1 + dev->ref_div2_en)));
+
+	if (dev->f_pfd > ADF5902_MAX_FREQ_PFD)
+		return FAILURE;
+
 	dev->int_div = (uint16_t)(dev->rf_out / (dev->f_pfd * 2));
 
 	if ((dev->int_div > ADF5902_MAX_INT_MSB_WORD)
@@ -318,12 +324,6 @@ int32_t adf5902_init(struct adf5902_dev **device,
 
 	dev->cp_tristate_en = init_param->cp_tristate_en;
 
-	dev->f_pfd = (dev->ref_in * (1 + dev->ref_doubler_en) /
-		      (dev->ref_div_factor *(1 + dev->ref_div2_en)));
-
-	if (dev->f_pfd > ADF5902_MAX_FREQ_PFD)
-		return FAILURE;
-
 	/* Set device specific parameters for obtaining the VCO frequency */
 	ret = adf5902_set_vco_freq(dev);
 	if (ret != SUCCESS)
@@ -341,7 +341,7 @@ int32_t adf5902_init(struct adf5902_dev **device,
 		return FAILURE;
 
 	/* Set clock divider value */
-	dev->clk1_div = dev->f_pfd / ADF5902_CLK1_DIV_25KHZ;
+	dev->clk1_div = 2048; //dev->f_pfd / ADF5902_CLK1_DIV_25KHZ;
 
 	/* f_PFD/25kHz <= clk1_div */
 	if (dev->f_pfd % ADF5902_CLK1_DIV_25KHZ)
@@ -595,17 +595,18 @@ int32_t adf5902_init(struct adf5902_dev **device,
 	if (ret != SUCCESS)
 		return ret;
 
-	dev->f_pfd = dev->ref_in;
+	dev->ref_div2_en = ADF5902_R_DIV_2_DISABLE;
+
+	/* Compute new f_pfd */
+	ret = adf5902_set_vco_freq(dev);
+	if (ret != SUCCESS)
+		return ret;
 
 	if (init_param->clk1_div_ramp > ADF5902_MAX_CLK_DIVIDER ||
 	    init_param->clk1_div_ramp < ADF5902_MIN_CLK_DIVIDER)
 		return FAILURE;
 
 	dev->clk1_div_ramp = init_param->clk1_div_ramp;
-
-	ret = adf5902_set_vco_freq(dev);
-	if (ret != SUCCESS)
-		return ret;
 
 	ret = adf5902_write(dev, ADF5902_REG7 | ADF5902_REG7_RESERVED |
 			    ADF5902_REG7_R_DIVIDER(dev->ref_div_factor) |
@@ -808,6 +809,7 @@ int32_t adf5902_recalibrate(struct adf5902_dev *dev)
 	if (ret != SUCCESS)
 		return ret;
 
+
 	ret = adf5902_write(dev, ADF5902_REG7 | ADF5902_REG7_RESERVED |
 			    ADF5902_REG7_R_DIVIDER(dev->ref_div_factor) |
 			    ADF5902_REG7_REF_DOUBLER(dev->ref_doubler_en) |
@@ -920,30 +922,21 @@ int32_t adf5902f_compute_frequency(struct adf5902_dev *dev, float *freq)
 	int32_t ret;
 	uint16_t clk1_div = 1808;
 	uint16_t clk2_div = 10;
-	uint32_t freq1, freq2, delay, clk_div, i;
+	uint64_t freq1, freq2, delay, clk_div, i;
 	uint64_t delta_freq, f_pfd;
 
 
-	clk_div = (dev->clk2_div[0] * pow(2, 12)) + dev->clk1_div;
+	clk_div = (clk2_div * pow(2, 12)) + clk1_div;
 	/* Delay conversion to us */
-	delay = clk_div * 10000000 / dev->f_pfd;
+	delay = ((clk_div * 1000000) / dev->f_pfd) + 1;
 
 	/* Read Frequency Data */
 	freq1 = ADF5902_REG3 | ADF5902_REG3_RESERVED |
 		ADF5902_REG3_READBACK_CTRL(ADF5902_FREQ_RB) |
 		ADF5902_REG3_IO_LVL(ADF5902_IO_LVL_3V3) |
 		ADF5902_REG3_MUXOUT(ADF5902_MUXOUT_RAMP_STATUS);
-	mdelay(10);
-	ret = adf5902_readback(dev, &freq1);
-	if (ret != SUCCESS)
-		return ret;
 
-	ret = adf5902_write(dev, ADF5902_REG7 | ADF5902_REG7_RESERVED |
-			    ADF5902_REG7_R_DIVIDER(dev->ref_div_factor) |
-			    ADF5902_REG7_REF_DOUBLER(dev->ref_doubler_en) |
-			    ADF5902_REG7_R_DIV_2(ADF5902_R_DIV_2_DISABLE) |
-			    ADF5902_REG7_CLK_DIV(clk1_div) |
-			    ADF5902_REG7_MASTER_RESET(ADF5902_MASTER_RESET_DISABLE));
+	ret = adf5902_readback(dev, &freq1);
 	if (ret != SUCCESS)
 		return ret;
 
@@ -951,11 +944,20 @@ int32_t adf5902f_compute_frequency(struct adf5902_dev *dev, float *freq)
 		ret = adf5902_write(dev, ADF5902_REG13 | ADF5902_REG13_RESERVED |
 				    ADF5902_REG13_CLK_DIV_2(clk2_div) |
 				    ADF5902_REG13_CLK_DIV_SEL(i) |
-				    ADF5902_REG13_CLK_DIV_MODE(dev->clk_div_mode) |
+				    ADF5902_REG13_CLK_DIV_MODE(ADF5902_CLK_DIV_OFF) |
 				    ADF5902_REG13_LE_SEL(dev->le_sel));
 		if (ret != SUCCESS)
 			return ret;
 	}
+
+	ret = adf5902_write(dev, ADF5902_REG7 | ADF5902_REG7_RESERVED |
+			    ADF5902_REG7_R_DIVIDER(dev->ref_div_factor) |
+			    ADF5902_REG7_REF_DOUBLER(dev->ref_doubler_en) |
+			    ADF5902_REG7_R_DIV_2(dev->ref_div2_en) |
+			    ADF5902_REG7_CLK_DIV(clk1_div) |
+			    ADF5902_REG7_MASTER_RESET(ADF5902_MASTER_RESET_DISABLE));
+	if (ret != SUCCESS)
+		return ret;
 
 	/* Ramp Mode Disabled */
 	ret = adf5902_write(dev, ADF5902_REG5 | ADF5902_REG5_RESERVED |
@@ -988,7 +990,7 @@ int32_t adf5902f_compute_frequency(struct adf5902_dev *dev, float *freq)
 			    ADF5902_REG7_R_DIVIDER(dev->ref_div_factor) |
 			    ADF5902_REG7_REF_DOUBLER(dev->ref_doubler_en) |
 			    ADF5902_REG7_R_DIV_2(ADF5902_R_DIV_2_DISABLE) |
-			    ADF5902_REG7_CLK_DIV(dev->clk1_div) |
+			    ADF5902_REG7_CLK_DIV(dev->clk1_div_ramp) |
 			    ADF5902_REG7_MASTER_RESET(ADF5902_MASTER_RESET_DISABLE));
 	if (ret != SUCCESS)
 		return ret;
@@ -1012,8 +1014,7 @@ int32_t adf5902f_compute_frequency(struct adf5902_dev *dev, float *freq)
 	f_pfd = (dev->ref_in * (1 + dev->ref_doubler_en) /
 		 (dev->ref_div_factor *(1 + dev->ref_div2_en)));
 
-	*freq = ((float)delta_freq / clk_div) * dev->f_pfd * ((float)dev->rf_out /
-			(dev->f_pfd * 2)) * 2;
+	*freq = ((float)delta_freq / clk_div) * dev->rf_out;
 
 	return ret;
 }
