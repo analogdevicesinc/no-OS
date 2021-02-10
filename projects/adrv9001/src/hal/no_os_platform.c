@@ -50,23 +50,27 @@
 #include "delay.h"
 #include "adi_common_error.h"
 #include "Navassa_EvaluationFw.h"
+#include "Navassa_Stream.h"
 #include "ORxGainTable.h"
 #include "RxGainTable.h"
 #include "TxAttenTable.h"
+#include "adi_platform.h"
+#include "adi_platform_types.h"
+#include "no_os_platform.h"
 
 /**
  * @brief Opens all neccessary files and device drivers for a specific device
  *
  * @param devHalCfg Pointer to device instance specific platform settings
  *
- * @retval ADI_HAL_OK Function completed successfully, no action required
- * @retval ADI_HAL_NULL_PTR The function has been called with a null pointer
+ * @retval ADI_COMMON_ERR_OK Function completed successfully, no action required
+ * @retval ADI_COMMON_ERR_NULL_PARAM The function has been called with a null pointer
  * @retval errors returned by other function calls.
  */
-int32_t no_os_HwOpen(void *devHalCfg)
+int32_t no_os_hw_open(void *devHalCfg)
 {
 	int32_t ret;
-	adi_hal_Cfg_t *phal = (adi_hal_Cfg_t *)devHalCfg;
+	struct adrv9002_hal_cfg *phal = (struct adrv9002_hal_cfg *)devHalCfg;
 	struct gpio_init_param gip_gpio_reset;
 #if defined(ADRV9002_RX2TX2)
 	struct gpio_init_param gip_gpio_ssi_sync;
@@ -125,7 +129,7 @@ int32_t no_os_HwOpen(void *devHalCfg)
 	if (ret)
 		return ret;
 
-	return ADI_HAL_OK;
+	return ADI_COMMON_ERR_OK;
 }
 
 /**
@@ -134,13 +138,13 @@ int32_t no_os_HwOpen(void *devHalCfg)
  *
  * @param devHalCfg Pointer to device instance specific platform settings
  *
- * @retval ADI_HAL_OK Function completed successfully, no action required
- * @retval ADI_HAL_NULL_PTR The function has been called with a null pointer
+ * @retval ADI_COMMON_ERR_OK Function completed successfully, no action required
+ * @retval ADI_COMMON_ERR_NULL_PARAM The function has been called with a null pointer
  */
-int32_t no_os_HwClose(void *devHalCfg)
+int32_t no_os_hw_close(void *devHalCfg)
 {
 	int32_t ret;
-	adi_hal_Cfg_t *phal = (adi_hal_Cfg_t *)devHalCfg;
+	struct adrv9002_hal_cfg *phal = (struct adrv9002_hal_cfg *)devHalCfg;
 	ret = gpio_remove(phal->gpio_reset_n);
 	if (ret)
 		return ret;
@@ -155,7 +159,7 @@ int32_t no_os_HwClose(void *devHalCfg)
 		return ret;
 #endif
 
-	return ADI_HAL_OK;
+	return ADI_COMMON_ERR_OK;
 }
 
 /**
@@ -168,19 +172,19 @@ int32_t no_os_HwClose(void *devHalCfg)
  * @param devHalCfg Pointer to device instance specific platform settings
  * @param pinLevel The desired pin logic level 0=low, 1=high to set the GPIO pin to.
  *
- * @retval ADI_HAL_OK Function completed successfully, no action required
- * @retval ADI_HAL_NULL_PTR The function has been called with a null pointer
+ * @retval ADI_COMMON_ERR_OK Function completed successfully, no action required
+ * @retval ADI_COMMON_ERR_NULL_PARAM The function has been called with a null pointer
  */
-int32_t no_os_HwReset(void *devHalCfg, uint8_t pinLevel)
+int32_t no_os_hw_reset(void *devHalCfg, uint8_t pinLevel)
 {
-	adi_hal_Cfg_t  *phal = (adi_hal_Cfg_t *)devHalCfg;
+	struct adrv9002_hal_cfg  *phal = (struct adrv9002_hal_cfg *)devHalCfg;
 
 	if (!devHalCfg)
-		return ADI_HAL_NULL_PTR;
+		return ADI_COMMON_ERR_NULL_PARAM;
 
 	gpio_set_value(phal->gpio_reset_n, pinLevel);
 
-	return ADI_HAL_OK;
+	return ADI_COMMON_ERR_OK;
 }
 
 /**
@@ -193,37 +197,35 @@ int32_t no_os_HwReset(void *devHalCfg, uint8_t pinLevel)
  * @param txData Pointer to byte array txData buffer that has numTxBytes number of bytes
  * @param numTxBytes The length of txData array
  *
- * @retval ADI_HAL_OK function completed successfully, no action required
- * @retval ADI_HAL_NULL_PTR the function has been called with a null pointer
- * @retval ADI_HAL_SPI_FAIL the data was not written successfully
+ * @retval ADI_COMMON_ERR_OK function completed successfully, no action required
+ * @retval ADI_COMMON_ERR_NULL_PARAM the function has been called with a null pointer
+ * @retval ADI_COMMON_ERR_API_FAIL the data was not written successfully
  */
-int32_t no_os_SpiWrite(void *devHalCfg, const uint8_t txData[],
-		       uint32_t numTxBytes)
+int32_t no_os_spi_write(void *devHalCfg, const uint8_t txData[],
+			uint32_t numTxBytes)
 {
 	static const int32_t MAX_SIZE = 4096;
 	uint32_t toWrite = 0;
+	int32_t result = 0;
 	int32_t remaining = numTxBytes;
-	adi_hal_Cfg_t *halCfg = NULL;
+	struct adrv9002_hal_cfg *halCfg = NULL;
 
 	if (devHalCfg == NULL)
-		return ADI_HAL_NULL_PTR;
+		return ADI_COMMON_ERR_NULL_PARAM;
 
-	halCfg = (adi_hal_Cfg_t *)devHalCfg;
+	halCfg = (struct adrv9002_hal_cfg *)devHalCfg;
 
-	if (halCfg->spiCfg.spiActionDisable == 0) {
-		int32_t result = 0;
-		do {
-			toWrite = (remaining > MAX_SIZE) ? MAX_SIZE : remaining;
-			result = spi_write_and_read(halCfg->spi, &txData[numTxBytes - remaining],
-						    toWrite);
-			if (result < 0)
-				return ADI_HAL_SPI_FAIL;
+	do {
+		toWrite = (remaining > MAX_SIZE) ? MAX_SIZE : remaining;
+		result = spi_write_and_read(halCfg->spi, &txData[numTxBytes - remaining],
+					    toWrite);
+		if (result < 0)
+			return ADI_COMMON_ERR_API_FAIL;
 
-			remaining -= toWrite;
-		} while (remaining > 0);
-	}
+		remaining -= toWrite;
+	} while (remaining > 0);
 
-	return ADI_HAL_OK;
+	return ADI_COMMON_ERR_OK;
 }
 
 /**
@@ -241,42 +243,41 @@ int32_t no_os_SpiWrite(void *devHalCfg, const uint8_t txData[],
  * @param rxData Pointer to byte array where read back data will be returned, that is at least numTxRxBytes in size.
  * @param numTxRxBytes The length of txData and rxData arrays
  *
- * @retval ADI_HAL_OK function completed successfully, no action required
- * @retval ADI_HAL_NULL_PTR the function has been called with a null pointer
- * @retval ADI_HAL_SPI_FAIL the data was not read successfully
+ * @retval ADI_COMMON_ERR_OK function completed successfully, no action required
+ * @retval ADI_COMMON_ERR_NULL_PARAM the function has been called with a null pointer
+ * @retval ADI_COMMON_ERR_API_FAIL the data was not read successfully
  */
-int32_t no_os_SpiRead(void *devHalCfg, const uint8_t txData[], uint8_t rxData[],
-		      uint32_t numTxRxBytes)
+int32_t no_os_spi_read(void *devHalCfg, const uint8_t txData[],
+		       uint8_t rxData[],
+		       uint32_t numTxRxBytes)
 {
 	static const int32_t MAX_SIZE = 4096;
 	uint32_t toWrite = 0;
+	int32_t result = 0;
 	int32_t remaining = numTxRxBytes;
-	int32_t halError = (int32_t)ADI_HAL_OK;
-	adi_hal_Cfg_t *halCfg = NULL;
+	int32_t halError = (int32_t)ADI_COMMON_ERR_OK;
+	struct adrv9002_hal_cfg *halCfg = NULL;
 
 	if (devHalCfg == NULL) {
-		halError = (int32_t)ADI_HAL_NULL_PTR;
+		halError = (int32_t)ADI_COMMON_ERR_NULL_PARAM;
 		return halError;
 	}
 
 	memcpy(rxData, txData, numTxRxBytes);
 
-	halCfg = (adi_hal_Cfg_t *)devHalCfg;
+	halCfg = (struct adrv9002_hal_cfg *)devHalCfg;
 
-	if (halCfg->spiCfg.spiActionDisable == 0) {
-		int32_t result = 0;
-		do {
-			toWrite = (remaining > MAX_SIZE) ? MAX_SIZE : remaining;
-			result = spi_write_and_read(halCfg->spi, &rxData[numTxRxBytes - remaining],
-						    toWrite);
-			if (result < 0)
-				return ADI_HAL_SPI_FAIL;
+	do {
+		toWrite = (remaining > MAX_SIZE) ? MAX_SIZE : remaining;
+		result = spi_write_and_read(halCfg->spi, &rxData[numTxRxBytes - remaining],
+					    toWrite);
+		if (result < 0)
+			return ADI_COMMON_ERR_API_FAIL;
 
-			remaining -= toWrite;
-		} while (remaining > 0);
-	}
+		remaining -= toWrite;
+	} while (remaining > 0);
 
-	return halError;
+	return ADI_COMMON_ERR_OK;
 }
 
 /**
@@ -288,13 +289,13 @@ int32_t no_os_SpiRead(void *devHalCfg, const uint8_t txData[], uint8_t rxData[],
  * @param devHalCfg Pointer to device instance specific platform settings
  * @param filename The user provided name of the file to open.
  *
- * @retval ADI_HAL_OK Function completed successfully, no action required
- * @retval ADI_HAL_NULL_PTR The function has been called with a null pointer
- * @retval ADI_HAL_LOGGING_FAIL If the function failed to open or write to the specified filename
+ * @retval ADI_COMMON_ERR_OK Function completed successfully, no action required
+ * @retval ADI_COMMON_ERR_NULL_PARAM The function has been called with a null pointer
+ * @retval ADI_COMMON_ERR_API_FAIL If the function failed to open or write to the specified filename
  */
-int32_t no_os_LogFileOpen(void *devHalCfg, const char *filename)
+int32_t no_os_log_file_open(void *devHalCfg, const char *filename)
 {
-	return ADI_HAL_OK;
+	return ADI_COMMON_ERR_OK;
 }
 
 /**
@@ -302,12 +303,12 @@ int32_t no_os_LogFileOpen(void *devHalCfg, const char *filename)
  *
  * @param devHalCfg Pointer to device instance specific platform settings
  *
- * @retval ADI_HAL_OK Function completed successfully, no action required
- * @retval ADI_HAL_NULL_PTR The function has been called with a null pointer
+ * @retval ADI_COMMON_ERR_OK Function completed successfully, no action required
+ * @retval ADI_COMMON_ERR_NULL_PARAM The function has been called with a null pointer
  */
 int32_t no_os_LogFileFlush(void *devHalCfg)
 {
-	return ADI_HAL_OK;
+	return ADI_COMMON_ERR_OK;
 }
 
 /**
@@ -315,65 +316,13 @@ int32_t no_os_LogFileFlush(void *devHalCfg)
  *
  * @param devHalCfg Pointer to device instance specific platform settings
  *
- * @retval ADI_HAL_OK Function completed successfully, no action required
- * @retval ADI_HAL_NULL_PTR The function has been called with a null pointer
- * @retval ADI_HAL_LOGGING_FAIL Error while flushing or closing the log file.
+ * @retval ADI_COMMON_ERR_OK Function completed successfully, no action required
+ * @retval ADI_COMMON_ERR_NULL_PARAM The function has been called with a null pointer
+ * @retval ADI_COMMON_ERR_API_FAIL Error while flushing or closing the log file.
  */
-int32_t no_os_LogFileClose(void *devHalCfg)
+int32_t no_os_log_file_close(void *devHalCfg)
 {
-	return ADI_HAL_OK;
-}
-
-/**
- * @brief Sets the log level, allowing the end user to select the granularity of
- *        what events get logged.
- *
- * @param devHalCfg Pointer to device instance specific platform settings
- * @param logLevel A mask of valid log levels to allow to be written to the log file.
- *
- * @retval ADI_COMMON_ACT_ERR_CHECK_PARAM    Recovery action for bad parameter check
- * @retval ADI_COMMON_ACT_NO_ACTION          Function completed successfully, no action required
- */
-int32_t no_os_LogLevelSet(void *devHalCfg, int32_t logLevel)
-{
-	adi_hal_Cfg_t *halCfg = NULL;
-
-	if (devHalCfg == NULL) {
-		return ADI_COMMON_ACT_ERR_CHECK_PARAM;
-	}
-
-	halCfg = (adi_hal_Cfg_t *)devHalCfg;
-
-	halCfg->logCfg.logLevel = (logLevel & (int32_t)ADI_HAL_LOG_ALL);
-
-	return ADI_COMMON_ACT_NO_ACTION;
-}
-
-/**
- * @brief Gets the currently set log level: the mask of different types of log
- *         events that are currently enabled to be logged.
- *
- * @param devHalCfg Pointer to device instance specific platform settings
- * @param logLevel Returns the current log level mask.
- *
- * @retval ADI_HAL_OK Function completed successfully, no action required
- * @retval ADI_HAL_NULL_PTR The function has been called with a null pointer
- */
-int32_t no_os_LogLevelGet(void *devHalCfg, int32_t *logLevel)
-{
-	int32_t halError = (int32_t)ADI_HAL_OK;
-	adi_hal_Cfg_t *halCfg = NULL;
-
-	if (devHalCfg == NULL) {
-		halError = (int32_t)ADI_HAL_NULL_PTR;
-		return halError;
-	}
-
-	halCfg = (adi_hal_Cfg_t *)devHalCfg;
-
-	*logLevel = halCfg->logCfg.logLevel;
-
-	return halError;
+	return ADI_COMMON_ERR_OK;
 }
 
 /**
@@ -384,92 +333,59 @@ int32_t no_os_LogLevelGet(void *devHalCfg, int32_t *logLevel)
  * the number of aguments that will be logged.
  *
  * @param devHalCfg Pointer to device instance specific platform settings
- * @param logLevel the log level to be written into
+ * @param log_level the log level to be written into
  * @param comment the string to include in the line added to the log.
  * @param argp variable argument list to be printed
  *
- * @retval ADI_HAL_OK Function completed successfully, no action required
- * @retval ADI_HAL_NULL_PTR The function has been called with a null pointer
- * @retval ADI_HAL_LOGGING_FAIL If the function failed to flush to write
+ * @retval ADI_COMMON_ERR_OK Function completed successfully, no action required
+ * @retval ADI_COMMON_ERR_NULL_PARAM The function has been called with a null pointer
+ * @retval ADI_COMMON_ERR_API_FAIL If the function failed to flush to write
  */
-int32_t no_os_LogWrite(void *devHalCfg, int32_t logLevel, const char *comment,
-		       va_list argp)
+int32_t no_os_log_write(void *devHalCfg, uint32_t log_level,
+			const char *comment,
+			va_list argp)
 {
-	int32_t halError = (int32_t)ADI_HAL_OK;
-	int32_t result = 0;
-	adi_hal_Cfg_t *halCfg = NULL;
-	char logMessage[ADI_HAL_MAX_LOG_LINE] = { 0 };
-	const char *logLevelChar = NULL;
-	logMessage[0] = 0;
+	int ret;
+	struct adrv9002_hal_cfg *hal_cfg = devHalCfg;
+	char fmt[512] = { 0 };
+	const char * const log_level_char[] = {
+		[ADI_LOGLEVEL_TRACE] = "[TRACE]",
+		[ADI_LOGLEVEL_DEBUG] = "[DEBUG]",
+		[ADI_LOGLEVEL_INFO] = "[INFO]",
+		[ADI_LOGLEVEL_WARN] = "[WARN]",
+		[ADI_LOGLEVEL_ERROR] = "[ERROR]",
+		[ADI_LOGLEVEL_FATAL] = "[FATAL]"
+	};
 
-	if (devHalCfg == NULL) {
-		halError = (int32_t)ADI_HAL_NULL_PTR;
-		return halError;
-	}
+	if (!hal_cfg)
+		return ADI_COMMON_ERR_NULL_PARAM;
 
-	halCfg = (adi_hal_Cfg_t *)devHalCfg;
-
-	if (halCfg->logCfg.logLevel == (int32_t)ADI_HAL_LOG_NONE) {
+	if (log_level == ADI_LOGLEVEL_NONE)
 		/* If logging disabled, exit gracefully */
-		halError = (int32_t)ADI_HAL_OK;
-		return halError;
+		return ADI_COMMON_ERR_OK;
+	else if (log_level > ADI_LOGLEVEL_FATAL)
+		return ADI_COMMON_ERR_INV_PARAM;
+
+	ret = snprintf(fmt, sizeof(fmt), "%s: %s", log_level_char[log_level], comment);
+	if (ret < 0)
+		return ADI_COMMON_ERR_API_FAIL;
+
+	switch (log_level) {
+	case ADI_LOGLEVEL_TRACE:
+	case ADI_LOGLEVEL_DEBUG:
+#ifdef DEBUG
+		vprintf(fmt, argp);
+#endif
+		break;
+	case ADI_LOGLEVEL_INFO:
+	case ADI_LOGLEVEL_WARN:
+	case ADI_LOGLEVEL_ERROR:
+	case ADI_LOGLEVEL_FATAL:
+		vprintf(fmt, argp);
+		break;
 	}
 
-	if(logLevel > (int32_t)ADI_HAL_LOG_ALL) {
-		halError = (int32_t)ADI_HAL_LOGGGING_LEVEL_FAIL;
-		return halError;
-	}
-
-	/* Print Log type */
-	if ((halCfg->logCfg.logLevel & ADI_HAL_LOG_MSG)
-	    && (logLevel == (int32_t)ADI_HAL_LOG_MSG)) {
-		logLevelChar = "MESSAGE:";
-	} else if ((halCfg->logCfg.logLevel & ADI_HAL_LOG_WARN)
-		   && (logLevel == (int32_t)ADI_HAL_LOG_WARN)) {
-		logLevelChar = "WARNING:";
-	} else if ((halCfg->logCfg.logLevel & ADI_HAL_LOG_ERR)
-		   && (logLevel == (int32_t)ADI_HAL_LOG_ERR)) {
-		logLevelChar = "ERROR:";
-	} else if ((halCfg->logCfg.logLevel & ADI_HAL_LOG_API)
-		   && (logLevel == (int32_t)ADI_HAL_LOG_API)) {
-		logLevelChar = "API_LOG:";
-	} else if ((halCfg->logCfg.logLevel & ADI_HAL_LOG_BF)
-		   && (logLevel == (int32_t)ADI_HAL_LOG_BF)) {
-		logLevelChar = "BF_LOG:";
-	} else if ((halCfg->logCfg.logLevel & ADI_HAL_LOG_HAL)
-		   && (logLevel == (int32_t)ADI_HAL_LOG_HAL)) {
-		logLevelChar = "ADI_HAL_LOG:";
-	} else if ((halCfg->logCfg.logLevel & ADI_HAL_LOG_SPI)
-		   && (logLevel == (int32_t)ADI_HAL_LOG_SPI)) {
-		logLevelChar = "SPI_LOG:";
-	} else if ((halCfg->logCfg.logLevel & ADI_HAL_LOG_API_PRIV)
-		   && (logLevel == (int32_t)ADI_HAL_LOG_API_PRIV)) {
-		logLevelChar = "API_PRIV_LOG:";
-	} else {
-		/* Nothing to log - exit cleanly */
-		return (int32_t)ADI_HAL_OK;
-	}
-
-	result = snprintf(logMessage, ADI_HAL_MAX_LOG_LINE, "%s", logLevelChar);
-	if (result < 0) {
-		halError = (int32_t)ADI_HAL_LOGGING_FAIL;
-		return halError;
-	}
-
-	result = vsnprintf(logMessage + strlen(logMessage), ADI_HAL_MAX_LOG_LINE,
-			   comment, argp) ;
-	if (result < 0) {
-		halError = (int32_t)ADI_HAL_LOGGING_FAIL;
-		return halError;
-	}
-
-	result = printf("%s\n", logMessage);
-	if (result < 0) {
-		halError = (int32_t)ADI_HAL_LOGGING_FAIL;
-		return halError;
-	}
-
-	return halError;
+	return ADI_COMMON_ERR_OK;
 }
 
 /**
@@ -478,63 +394,56 @@ int32_t no_os_LogWrite(void *devHalCfg, int32_t logLevel, const char *comment,
  * @param devHalCfg Pointer to device instance specific platform settings
  * @param time_us the time to delay in mico seconds
  *
- * @retval ADI_HAL_OK Function completed successfully
- * @retval ADI_HAL_NULL_PTR the function has been called with a null pointer
+ * @retval ADI_COMMON_ERR_OK Function completed successfully
+ * @retval ADI_COMMON_ERR_NULL_PARAM the function has been called with a null pointer
  */
-int32_t no_os_TimerWait_us(void *devHalCfg, uint32_t time_us)
+int32_t no_os_timer_wait_us(void *devHalCfg, uint32_t time_us)
 {
-	int32_t halError = (int32_t)ADI_HAL_OK;
+	int32_t halError = (int32_t)ADI_COMMON_ERR_OK;
 
 	udelay(time_us);
 
 	return halError;
 }
 
-/**
- * @brief Provides a blocking delay of the current thread
- *
- * @param devHalCfg Pointer to device instance specific platform settings
- * @param time_ms the Time to delay in milli seconds
- *
- * @retval ADI_HAL_OK Function completed successfully
- * @retval ADI_HAL_NULL_PTR the function has been called with a null pointer
- */
-int32_t no_os_TimerWait_ms(void *devHalCfg, uint32_t time_ms)
+/* Not supported yet */
+int32_t no_os_mcs_pulse(void* devHalCfg, uint8_t numberOfPulses)
 {
-	int32_t halError = (int32_t)ADI_HAL_OK;
-
-	mdelay(time_ms);
-
-	return halError;
+	return ADI_COMMON_ERR_OK;
 }
 
 /* Not supported yet */
-int32_t no_os_Mcs_Pulse(void* devHalCfg, uint8_t numberOfPulses)
+int32_t no_os_ssi_reset(void* devHalCfg)
 {
-	return ADI_HAL_FUNCTION_NOT_IMP;
+	return ADI_COMMON_ERR_OK;
 }
 
-/* Not supported yet */
-int32_t no_os_ssi_Reset(void* devHalCfg)
+int32_t no_os_image_page_get(void *devHalCfg, const char *ImagePath,
+			     uint32_t pageIndex, uint32_t pageSize, uint8_t *rdBuff)
 {
-	return ADI_HAL_FUNCTION_NOT_IMP;
+	unsigned char *bin;
+	if (!strcmp(ImagePath, "Navassa_EvaluationFw.bin")) {
+		if ((pageIndex * pageSize) > sizeof(Navassa_EvaluationFw_bin))
+			return -EINVAL;
+
+		bin = Navassa_EvaluationFw_bin;
+	} else if (!strcmp(ImagePath, "Navassa_Stream.bin")) {
+		if ((pageIndex * pageSize) > sizeof(Navassa_Stream_bin))
+			return -EINVAL;
+		bin = Navassa_Stream_bin;
+	} else
+		return ADI_COMMON_ERR_INV_PARAM;
+
+	memcpy(rdBuff, &bin[pageIndex * pageSize], pageSize);
+
+	return ADI_COMMON_ERR_OK;
 }
 
-int32_t no_os_ImagePageGet(void *devHalCfg, const char *ImagePath,
-			   uint32_t pageIndex, uint32_t pageSize, uint8_t *rdBuff)
-{
-	if ((pageIndex * pageSize) > sizeof(Navassa_EvaluationFw_bin))
-		return -EINVAL;
-
-	memcpy(rdBuff, &Navassa_EvaluationFw_bin[pageIndex * pageSize], pageSize);
-
-	return ADI_HAL_OK;
-}
-
-int32_t no_os_RxGainTableEntryGet(void *devHalCfg, const char *rxGainTablePath,
-				  uint16_t lineCount, uint8_t *gainIndex, uint8_t *rxFeGain,
-				  uint8_t *tiaControl, uint8_t *adcControl, uint8_t *extControl,
-				  uint16_t *phaseOffset, int16_t *digGain)
+int32_t no_os_rx_gain_table_entry_get(void *devHalCfg,
+				      const char *rxGainTablePath,
+				      uint16_t lineCount, uint8_t *gainIndex, uint8_t *rxFeGain,
+				      uint8_t *tiaControl, uint8_t *adcControl, uint8_t *extControl,
+				      uint16_t *phaseOffset, int16_t *digGain)
 {
 	if (!strcmp(rxGainTablePath, "RxGainTable.csv")) {
 		if (lineCount > sizeof(RxGainTable) / sizeof(struct RxGainTableEntry))
@@ -564,9 +473,9 @@ int32_t no_os_RxGainTableEntryGet(void *devHalCfg, const char *rxGainTablePath,
 	return 7; /* return the number of filled elements (emulate sscanf return value) */
 }
 
-int32_t no_os_TxAttenTableEntryGet(void *devHalCfg,
-				   const char *txAttenTablePath, uint16_t lineCount, uint16_t *attenIndex,
-				   uint8_t *txAttenHp, uint16_t *txAttenMult)
+int32_t no_os_tx_atten_table_entry_get(void *devHalCfg,
+				       const char *txAttenTablePath, uint16_t lineCount, uint16_t *attenIndex,
+				       uint8_t *txAttenHp, uint16_t *txAttenMult)
 {
 	if (lineCount > sizeof(TxAttenTable) / sizeof(struct TxAttenTableEntry))
 		return -EINVAL;
@@ -583,92 +492,46 @@ int32_t no_os_TxAttenTableEntryGet(void *devHalCfg,
  */
 
 /* Initialization interface to open, init, close drivers and pointers to resources */
-int32_t (*adi_hal_HwOpen)(void *devHalCfg) = no_os_HwOpen;
-int32_t (*adi_hal_HwClose)(void *devHalCfg) = no_os_HwClose;
-int32_t (*adi_hal_HwReset)(void *devHalCfg, uint8_t pinLevel) = no_os_HwReset;
+int32_t (*adi_adrv9001_hal_open)(void *devHalCfg) = no_os_hw_open;
+int32_t (*adi_adrv9001_hal_close)(void *devHalCfg) = no_os_hw_close;
+int32_t (*adi_adrv9001_hal_resetbPin_set)(void *devHalCfg,
+		uint8_t pinLevel) = no_os_hw_reset;
 
 /* SPI Interface */
 int32_t (*adi_hal_SpiWrite)(void *devHalCfg, const uint8_t txData[],
-			    uint32_t numTxBytes) = no_os_SpiWrite;
+			    uint32_t numTxBytes) = no_os_spi_write;
 int32_t (*adi_hal_SpiRead)(void *devHalCfg, const uint8_t txData[],
-			   uint8_t rxData[], uint32_t numRxBytes) = no_os_SpiRead;
+			   uint8_t rxData[], uint32_t numRxBytes) = no_os_spi_read;
 
 /* Logging interface */
 int32_t (*adi_hal_LogFileOpen)(void *devHalCfg,
-			       const char *filename) = no_os_LogFileOpen;
-int32_t(*adi_hal_LogLevelSet)(void *devHalCfg,
-			      int32_t logLevel) = no_os_LogLevelSet;
-int32_t(*adi_hal_LogLevelGet)(void *devHalCfg,
-			      int32_t *logLevel) = no_os_LogLevelGet;
-int32_t(*adi_hal_LogWrite)(void *devHalCfg, int32_t logLevel,
-			   const char *comment, va_list args) = no_os_LogWrite;
-int32_t(*adi_hal_LogFileClose)(void *devHalCfg) = no_os_LogFileClose;
+			       const char *filename) = no_os_log_file_open;
+int32_t(*adi_hal_LogWrite)(void *devHalCfg, uint32_t logLevel,
+			   const char *comment, va_list args) = no_os_log_write;
+int32_t(*adi_hal_LogFileClose)(void *devHalCfg) = no_os_log_file_close;
 
 /* Timer interface */
-int32_t (*adi_hal_Wait_ms)(void *devHalCfg,
-			   uint32_t time_ms) = no_os_TimerWait_ms;
 int32_t (*adi_hal_Wait_us)(void *devHalCfg,
-			   uint32_t time_us) = no_os_TimerWait_us;
+			   uint32_t time_us) = no_os_timer_wait_us;
 
 /* Mcs interface */
 int32_t(*adi_hal_Mcs_Pulse)(void *devHalCfg,
-			    uint8_t numberOfPulses) = no_os_Mcs_Pulse;
+			    uint8_t numberOfPulses) = no_os_mcs_pulse;
 
 /* ssi */
-int32_t(*adi_hal_ssi_Reset)(void *devHalCfg) = no_os_ssi_Reset;
+int32_t(*adi_hal_ssi_Reset)(void *devHalCfg) = no_os_ssi_reset;
 
 /* File IO abstraction */
 int32_t(*adi_hal_ArmImagePageGet)(void *devHalCfg, const char *ImagePath,
-				  uint32_t pageIndex, uint32_t pageSize, uint8_t *rdBuff) = no_os_ImagePageGet;
+				  uint32_t pageIndex, uint32_t pageSize, uint8_t *rdBuff) = no_os_image_page_get;
 int32_t(*adi_hal_StreamImagePageGet)(void *devHalCfg, const char *ImagePath,
-				     uint32_t pageIndex, uint32_t pageSize, uint8_t *rdBuff) = no_os_ImagePageGet;
+				     uint32_t pageIndex, uint32_t pageSize, uint8_t *rdBuff) = no_os_image_page_get;
 int32_t(*adi_hal_RxGainTableEntryGet)(void *devHalCfg,
 				      const char *rxGainTablePath, uint16_t lineCount, uint8_t *gainIndex,
 				      uint8_t *rxFeGain,
 				      uint8_t *tiaControl, uint8_t *adcControl, uint8_t *extControl,
-				      uint16_t *phaseOffset, int16_t *digGain) = no_os_RxGainTableEntryGet;
+				      uint16_t *phaseOffset, int16_t *digGain) = no_os_rx_gain_table_entry_get;
 int32_t(*adi_hal_TxAttenTableEntryGet)(void *devHalCfg,
 				       const char *txAttenTablePath, uint16_t lineCount, uint16_t *attenIndex,
 				       uint8_t *txAttenHp,
-				       uint16_t *txAttenMult) = no_os_TxAttenTableEntryGet;
-
-/**
- * @brief Platform setup
- *
- * @param devHalInfo void pointer to be casted to the HAL config structure
- * @param platform Platform to be assigning the function pointers
- *
- * \return
- */
-int32_t adi_hal_PlatformSetup(void *devHalInfo, adi_hal_Platforms_e platform)
-{
-	adi_hal_Err_e error = ADI_HAL_OK;
-
-	adi_hal_HwOpen = no_os_HwOpen;
-
-	adi_hal_HwClose = no_os_HwClose;
-	adi_hal_HwReset = no_os_HwReset;
-
-	adi_hal_SpiWrite = no_os_SpiWrite;
-	adi_hal_SpiRead = no_os_SpiRead;
-
-	adi_hal_LogFileOpen = no_os_LogFileOpen;
-	adi_hal_LogLevelSet = no_os_LogLevelSet;
-	adi_hal_LogLevelGet = no_os_LogLevelGet;
-	adi_hal_LogWrite = no_os_LogWrite;
-	adi_hal_LogFileClose = no_os_LogFileClose;
-
-	adi_hal_Wait_us = no_os_TimerWait_us;
-	adi_hal_Wait_ms = no_os_TimerWait_ms;
-
-	adi_hal_Mcs_Pulse = no_os_Mcs_Pulse;
-
-	adi_hal_ssi_Reset = no_os_ssi_Reset;
-
-	adi_hal_ArmImagePageGet = no_os_ImagePageGet;
-	adi_hal_StreamImagePageGet = no_os_ImagePageGet;
-	adi_hal_RxGainTableEntryGet = no_os_RxGainTableEntryGet;
-	adi_hal_TxAttenTableEntryGet = no_os_TxAttenTableEntryGet;
-
-	return error;
-}
+				       uint16_t *txAttenMult) = no_os_tx_atten_table_entry_get;
