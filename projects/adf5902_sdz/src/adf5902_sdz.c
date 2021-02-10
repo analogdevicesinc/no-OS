@@ -87,7 +87,7 @@ int main(void)
 			.dev_offset = 9
 		},
 		{
-			.dev_word = -1820,
+			.dev_word = -7280,
 			.dev_offset = 9
 		},
 		{
@@ -95,7 +95,7 @@ int main(void)
 			.dev_offset = 9
 		},
 		{
-			.dev_word = -1820,
+			.dev_word = -7280,
 			.dev_offset = 9
 		},
 	};
