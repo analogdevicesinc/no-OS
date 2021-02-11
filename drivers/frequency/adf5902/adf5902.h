@@ -402,8 +402,7 @@
 #define ADF5902_MIN_REFIN_FREQ		10000000
 #define ADF5902_MAX_REFIN_FREQ		260000000
 #define ADF5902_MAX_FREQ_PFD		110000000
-#define ADF5902_MAX_FREQ_DEV_NO		4
-#define ADF5902_MAX_STEP_WORD_NO	4
+#define ADF5902_MAX_SLOPE_NO		4
 #define ADF5902_MAX_DELAY_WORD_NO	4
 #define ADF5902_MAX_CLK2_DIV_NO		4
 #define ADF5902_VLSB				0.00733f
@@ -413,16 +412,21 @@
 #define ADF5902_FREQ_CAL_DIV_100KHZ	100000
 #define ADF5902_CLK1_DIV_25KHZ		25000
 #define ADF5902_ADC_CLK_DIV_1MHZ	1000000
+#define ADF5902_BUFF_SIZE_BYTES		4
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
-struct freq_dev {
+struct slope {
 	/* Deviation Word */
 	int16_t dev_word;
+
 	/* Deviation Offset */
 	uint8_t dev_offset;
+
+	/* Step Word */
+	uint32_t step_word;
 };
 
 struct adf5902_init_param {
@@ -452,18 +456,16 @@ struct adf5902_init_param {
 	uint8_t			delay_words_no;
 	/* Delay Words */
 	uint16_t		delay_wd[ADF5902_MAX_DELAY_WORD_NO];
-	/* Step words number */
-	uint8_t			step_words_no;
-	/* Step words */
-	uint32_t		step_words[ADF5902_MAX_STEP_WORD_NO];
 	/* Number of deviaton parameters */
-	uint8_t			freq_dev_no;
-	/* Deviation Word and Offset structure */
-	struct freq_dev		*freq_dev;
+	uint8_t			slopes_no;
+	/* Slope  structure */
+	struct slope		*slopes;
 	/* Tx Data Ramp Clock */
 	uint8_t			tx_ramp_clk;
 	/* Tx Data Invert */
 	uint8_t			tx_data_invert;
+	/* Ramp Status */
+	uint16_t			ramp_status;
 	/* Clock divider (CLK1) divider value in Ramp mode */
 	uint16_t		clk1_div_ramp;
 	/* 12-bit Clock Divider number */
@@ -478,6 +480,8 @@ struct adf5902_init_param {
 	uint8_t			cp_current;
 	/* Charge Pump tristate */
 	uint8_t			cp_tristate_en;
+	/* Ramp Mode */
+	uint8_t			ramp_mode;
 };
 
 struct adf5902_dev {
@@ -523,18 +527,16 @@ struct adf5902_dev {
 	uint8_t			delay_words_no;
 	/* Delay Words */
 	uint16_t		*delay_wd;
-	/* Number of step words */
-	uint8_t			step_words_no;
-	/* Step words */
-	uint32_t		*step_words;
 	/* Number of deviaton parameters */
-	uint8_t			freq_dev_no;
-	/* Deviation Word and Offset structure */
-	struct freq_dev		*freq_dev;
+	uint8_t			slopes_no;
+	/* Slope Structure */
+	struct slope	*slopes;
 	/* Tx Data Ramp Clock */
 	uint8_t			tx_ramp_clk;
 	/* Tx Data Invert */
 	uint8_t			tx_data_invert;
+	/* Ramp Status */
+	uint16_t		ramp_status;
 	/* 12-bit Clock Divider number */
 	uint8_t			clk2_div_no;
 	/* 12-bit Clock Divider */
@@ -547,6 +549,8 @@ struct adf5902_dev {
 	uint8_t			cp_current;
 	/* Charge Pump tristate */
 	uint8_t			cp_tristate_en;
+	/* Ramp Mode */
+	uint8_t			ramp_mode;
 };
 
 /******************************************************************************/
@@ -557,10 +561,10 @@ struct adf5902_dev {
 int32_t adf5902_write(struct adf5902_dev *device, uint32_t data);
 
 /** ADF5902 SPI Readback */
-int32_t adf5902_read(struct adf5902_dev *device, uint32_t *data);
+int32_t adf5902_readback(struct adf5902_dev *device, uint32_t *data);
 
-/** ADF5902 Set frequency */
-int32_t adf5902_set_vco_freq(struct adf5902_dev *device);
+/** ADF5902 Set Output Frequency */
+int32_t adf5902_vco_freq_param(struct adf5902_dev *device);
 
 /** ADF5902 Initialization */
 int32_t adf5902_init(struct adf5902_dev **device,
@@ -573,7 +577,7 @@ int32_t adf5902_recalibrate(struct adf5902_dev *dev);
 int32_t adf5902_read_temp(struct adf5902_dev *dev, float *temp);
 
 /* ADF5902 Measure Output locked frequency */
-int32_t adf5902f_compute_frequency(struct adf5902_dev *dev, float *freq);
+int32_t adf5902f_compute_frequency(struct adf5902_dev *dev, uint64_t *freq);
 
 /** ADF5902 Resources Deallocation */
 int32_t adf5902_remove(struct adf5902_dev *device);
