@@ -83,8 +83,8 @@ DFP_IGNORED_FILES += $(DFP_DRIVERS)/flash/adi_flash_data.c $(DFP_DRIVERS)/rtc/ad
 
 PLATFORM_SRCS += $(filter-out $(DFP_IGNORED_FILES), $(DFP_FILES))
 
-PLATFORM_INCS = "$(ADUCM_DFP)/Include"
-PLATFORM_INCS += "$(CMSIS_CORE)/Include"
+PLATFORM_INCS = -I"$(ADUCM_DFP)/Include"
+PLATFORM_INCS += -I"$(CMSIS_CORE)/Include"
 PIN_MUX = $(PROJECT)/pinmux_config.c
 PROJECT_PIN_MUX = $(PROJECT_BUILD)/system/pinmux/GeneratedSources/pinmux_config.c
 
@@ -93,9 +93,9 @@ PLATFORM_SRCS += $(PROJECT_BUILD)/system/adi_initialize.c
 PLATFORM_SRCS += $(PROJECT_BUILD)/RTE/Device/ADuCM3029/startup_ADuCM3029.c
 PLATFORM_SRCS += $(PROJECT_BUILD)/RTE/Device/ADuCM3029/system_ADuCM3029.c
 ASM_SRCS += $(PROJECT_BUILD)/RTE/Device/ADuCM3029/reset_ADuCM3029.S
-PLATFORM_INCS += $(PROJECT_BUILD)/RTE/Device/ADuCM3029
-PLATFORM_INCS += $(PROJECT_BUILD)/RTE
-PLATFORM_INCS += $(PROJECT_BUILD)/system
+PLATFORM_INCS += -I$(PROJECT_BUILD)/RTE/Device/ADuCM3029
+PLATFORM_INCS += -I$(PROJECT_BUILD)/RTE
+PLATFORM_INCS += -I$(PROJECT_BUILD)/system
 
 #------------------------------------------------------------------------------
 #                           COMPILING DATA                              
@@ -110,7 +110,7 @@ C_RELEASE_FLAGS = -O2
 
 CFLAGS += -DADUCM_PLATFORM
 
-ASFLAGS	+= $(GENERIC_FLAGS) $(addprefix -I,$(PLATFORM_INCS)) -x assembler-with-cpp 
+ASFLAGS	+= $(GENERIC_FLAGS) $(PLATFORM_INCS) -x assembler-with-cpp 
 CFLAGS	+= $(GENERIC_FLAGS) -Wall -ffunction-sections -fdata-sections
 
 CFLAGS	+= $(GENERIC_RELEASE_FLAGS) $(C_RELEASE_FLAGS)
