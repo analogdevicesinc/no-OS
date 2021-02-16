@@ -1,0 +1,9 @@
+{
+  "aducm3029": {
+    "iio_uart": "TINYIIOD=y",
+    "iio_wifi": "TINYIIOD=y CFLAGS=-DUSE_TCP_SOCKET"
+  },
+  "xilinx": {
+    "iio": "TINYIIOD=y"
+  }
+}
