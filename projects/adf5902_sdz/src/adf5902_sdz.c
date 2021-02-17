@@ -49,8 +49,15 @@
 #include "adf5902.h"
 #include "parameters.h"
 
+#ifdef IIO_SUPPORT
+#include "iio_app.h"
+#include "iio_adf5902.h"
+#endif
+
 #define LOG_LEVEL 6
 #include "print_log.h"
+
+#define NUMBER_OF_DEVICES 1
 
 int main(void)
 {
@@ -214,6 +221,14 @@ int main(void)
 	}
 
 	pr_info("ADF5902 Temperature value: %.2f degC \n", temperature);
+
+#ifdef IIO_SUPPORT
+	struct iio_app_device devices[] = {
+		IIO_APP_DEVICE("adf5902_dev", dev, &adf5902_iio_descriptor,
+			       NULL, NULL),
+	};
+	return iio_app_run(devices, NUMBER_OF_DEVICES);
+#endif
 
 	ret = adf5902_remove(dev);
 
