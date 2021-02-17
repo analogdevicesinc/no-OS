@@ -457,3 +457,29 @@ double ad5933_calculate_impedance(struct ad5933_dev *dev,
 
 	return impedance;
 }
+
+/***************************************************************************//**
+ * @brief Selects the number of settling cycles of the device.
+ *
+ * @param dev		 - The device structure.
+ * @param number_cycles	 - 9-bit number of cycles to wait before triggering ADC
+ *
+ * @param multiplier - Multiply number of cycles by X1, X2 or X4
+ *                Example: AD5933_SETTLING_X1
+ *                         AD5933_SETTLING_X2
+ *                         AD5933_SETTLING_X4
+ *
+ * @return None.
+*******************************************************************************/
+void ad5933_set_settling_time(struct ad5933_dev *dev,
+			      uint8_t multiplier,
+			      uint16_t number_cycles)
+{
+	if ((multiplier != AD5933_SETTLING_X2) && (multiplier != AD5933_SETTLING_X4))
+		multiplier = AD5933_SETTLING_X1;
+
+	ad5933_set_register_value(dev,
+				  AD5933_REG_SETTLING_CYCLES,
+				  number_cycles | (multiplier << 9),
+				  2);
+}
