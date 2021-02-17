@@ -91,6 +91,14 @@
 #define AD5933_GAIN_X5              0
 #define AD5933_GAIN_X1              1
 
+/* AD5933 Default number of settling cycles */
+#define AD5933_15_CYCLES			15
+
+/* AD5933 settling cycles mulitiplier */
+#define AD5933_SETTLING_X1			0
+#define AD5933_SETTLING_X2			1
+#define AD5933_SETTLING_X4			3
+
 /* AD5933_REG_STATUS Bits */
 #define AD5933_STAT_TEMP_VALID      (0x1 << 0)
 #define AD5933_STAT_DATA_VALID      (0x1 << 1)
@@ -188,5 +196,10 @@ double ad5933_calculate_gain_factor(struct ad5933_dev *dev,
 double ad5933_calculate_impedance(struct ad5933_dev *dev,
 				  double gain_factor,
 				  uint8_t freq_function);
+
+/*! Selects the number of settling cycles. */
+void ad5933_set_settling_time(struct ad5933_dev *dev,
+			      uint8_t mulitplier,
+			      uint16_t number_cycles);
 
 #endif /* __AD5933_H__ */
