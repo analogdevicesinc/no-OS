@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   parameters.h
- *   @brief  Platform dependent parameters.
+ *   @file   app_iio.h
+ *   @brief  Application IIO setup.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
  * Copyright 2021(c) Analog Devices, Inc.
@@ -36,30 +36,20 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-
-#ifndef _PARAMETERS_H_
-#define _PARAMETERS_H_
+#ifndef APP_IIO_H_
+#define APP_IIO_H_
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include <xparameters.h>
+#include <stdint.h>
+#include "adf5902.h"
 
 /******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
+/************************ Functions Declarations ******************************/
 /******************************************************************************/
-#define SPI_DEVICE_ID				XPAR_PS7_SPI_0_DEVICE_ID
-#define SPI_ADF5902_CS				0
 
-#define GPIO_DEVICE_ID				XPAR_PS7_GPIO_0_DEVICE_ID
+/* @brief Application IIO setup. */
+int32_t iio_server_init(struct adf5902_dev *adf5902_device);
 
-#define UART_DEVICE_ID				XPAR_XUARTPS_0_DEVICE_ID
-#define UART_IRQ_ID				    XPAR_XUARTPS_1_INTR
-
-#define INTC_DEVICE_ID				XPAR_SCUGIC_SINGLE_DEVICE_ID
-
-#define GPIO_OFFSET					32 + 54
-#define GPIO_CE						GPIO_OFFSET + 1
-#define GPIO_TX_DATA				GPIO_OFFSET + 2
-
-#endif /* _PARAMETERS_H_ */
+#endif //APP_IIO_H
