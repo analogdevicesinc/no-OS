@@ -366,6 +366,46 @@ void ad5933_start_sweep(struct ad5933_dev *dev)
 }
 
 /***************************************************************************//**
+ * @brief Reads the real and imaginary value from register
+ *
+ * @param dev                   - The device structure.
+ * @param freq_function         - Frequency function.
+ * @param imag_data         	- Pointer to imaginary data
+ * @param real_data         	- Pointer to real data
+ *
+ * @return None.
+*******************************************************************************/
+void ad5933_get_data(struct ad5933_dev *dev,
+		     uint8_t freq_function,
+		     short *imag_data,
+		     short *real_data)
+{
+	uint8_t status = 0;
+
+	if (!dev)
+		return;
+
+	ad5933_set_register_value(dev,
+				  AD5933_REG_CONTROL_HB,
+				  AD5933_CONTROL_FUNCTION(freq_function) |
+				  AD5933_CONTROL_RANGE(dev->current_range) |
+				  AD5933_CONTROL_PGA_GAIN(dev->current_gain),
+				  1);
+
+	while((status & AD5933_STAT_DATA_VALID) == 0) {
+		status = ad5933_get_register_value(dev,
+						   AD5933_REG_STATUS,
+						   1);
+	}
+	*real_data = ad5933_get_register_value(dev,
+					       AD5933_REG_REAL_DATA,
+					       2);
+	*imag_data = ad5933_get_register_value(dev,
+					       AD5933_REG_IMAG_DATA,
+					       2);
+}
+
+/***************************************************************************//**
  * @brief Reads the real and the imaginary data and calculates the Gain Factor.
  *
  * @param dev                   - The device structure.
@@ -386,26 +426,9 @@ double ad5933_calculate_gain_factor(struct ad5933_dev *dev,
 	double magnitude = 0;
 	signed short real_data = 0;
 	signed short imag_data = 0;
-	uint8_t status = 0;
 
-	ad5933_set_register_value(dev,
-				  AD5933_REG_CONTROL_HB,
-				  AD5933_CONTROL_FUNCTION(freq_function) |
-				  AD5933_CONTROL_RANGE(dev->current_range) |
-				  AD5933_CONTROL_PGA_GAIN(dev->current_gain),
-				  1);
-	status = 0;
-	while((status & AD5933_STAT_DATA_VALID) == 0) {
-		status = ad5933_get_register_value(dev,
-						   AD5933_REG_STATUS,
-						   1);
-	}
-	real_data = ad5933_get_register_value(dev,
-					      AD5933_REG_REAL_DATA,
-					      2);
-	imag_data = ad5933_get_register_value(dev,
-					      AD5933_REG_IMAG_DATA,
-					      2);
+	ad5933_get_data(dev, freq_function, &imag_data, &real_data);
+
 	magnitude = sqrt((real_data * real_data) + (imag_data * imag_data));
 	gain_factor = 1 / (magnitude * calibration_impedance);
 
@@ -431,26 +454,9 @@ double ad5933_calculate_impedance(struct ad5933_dev *dev,
 	signed short imag_data = 0;
 	double magnitude = 0;
 	double impedance = 0;
-	uint8_t status = 0;
 
-	ad5933_set_register_value(dev,
-				  AD5933_REG_CONTROL_HB,
-				  AD5933_CONTROL_FUNCTION(freq_function) |
-				  AD5933_CONTROL_RANGE(dev->current_range) |
-				  AD5933_CONTROL_PGA_GAIN(dev->current_gain),
-				  1);
-	status = 0;
-	while((status & AD5933_STAT_DATA_VALID) == 0) {
-		status = ad5933_get_register_value(dev,
-						   AD5933_REG_STATUS,
-						   1);
-	}
-	real_data = ad5933_get_register_value(dev,
-					      AD5933_REG_REAL_DATA,
-					      2);
-	imag_data = ad5933_get_register_value(dev,
-					      AD5933_REG_IMAG_DATA,
-					      2);
+	ad5933_get_data(dev, freq_function, &imag_data, &real_data);
+
 	magnitude = sqrt((real_data * real_data) + (imag_data * imag_data));
 
 	impedance =  1 / (magnitude * gain_factor);

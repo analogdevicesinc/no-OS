@@ -187,6 +187,12 @@ void ad5933_config_sweep(struct ad5933_dev *dev,
 /*! Starts the sweep operation. */
 void ad5933_start_sweep(struct ad5933_dev *dev);
 
+/*! Reads the real and imaginary value from register. */
+void ad5933_get_data(struct ad5933_dev *dev,
+		     uint8_t freq_function,
+		     short *imag_data,
+		     short *real_data);
+
 /*! Reads the real and the imaginary data and calculates the Gain Factor. */
 double ad5933_calculate_gain_factor(struct ad5933_dev *dev,
 				    uint32_t calibration_impedance,
