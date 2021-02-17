@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   parameters.h
- *   @brief  Platform dependent parameters.
+ *   @file   app_iio.c
+ *   @brief  Application IIO setup.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
  * Copyright 2021(c) Analog Devices, Inc.
@@ -37,29 +37,86 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef _PARAMETERS_H_
-#define _PARAMETERS_H_
-
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include <xparameters.h>
+
+#include "error.h"
+#include "uart.h"
+#include "uart_extra.h"
+#include "iio.h"
+#include "parameters.h"
+#include "app_iio.h"
+#include "iio_adf5902.h"
+#include "irq.h"
+#include "irq_extra.h"
 
 /******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
+/************************ Variables Definitions *******************************/
 /******************************************************************************/
-#define SPI_DEVICE_ID				XPAR_PS7_SPI_0_DEVICE_ID
-#define SPI_ADF5902_CS				0
+static struct irq_ctrl_desc *irq_desc;
 
-#define GPIO_DEVICE_ID				XPAR_PS7_GPIO_0_DEVICE_ID
+/******************************************************************************/
+/************************** Functions Implementation **************************/
+/******************************************************************************/
 
-#define UART_DEVICE_ID				XPAR_XUARTPS_0_DEVICE_ID
-#define UART_IRQ_ID				    XPAR_XUARTPS_1_INTR
+/**
+ * @brief Application IIO setup.
+ * @return SUCCESS in case of success, FAILURE otherwise.
+ */
+int32_t iio_server_init(struct adf5902_dev *adf5902_device)
+{
+	int32_t status;
 
-#define INTC_DEVICE_ID				XPAR_SCUGIC_SINGLE_DEVICE_ID
+	struct xil_irq_init_param xil_irq_init_param = {
+		.type = IRQ_PS,
+	};
 
-#define GPIO_OFFSET					32 + 54
-#define GPIO_CE						GPIO_OFFSET + 1
-#define GPIO_TX_DATA				GPIO_OFFSET + 2
+	struct irq_init_param irq_init_param = {
+		.irq_ctrl_id = INTC_DEVICE_ID,
+		.extra = &xil_irq_init_param,
+	};
 
-#endif /* _PARAMETERS_H_ */
+	status = irq_ctrl_init(&irq_desc, &irq_init_param);
+	if(IS_ERR_VALUE(status))
+		return status;
+
+	struct xil_uart_init_param xil_uart_init_par = {
+		.type = UART_PS,
+		.irq_id = UART_IRQ_ID,
+		.irq_desc = irq_desc,
+	};
+
+	struct uart_init_param uart_init_par = {
+		.baud_rate = 115200,
+		.device_id = UART_DEVICE_ID,
+		.extra = &xil_uart_init_par,
+	};
+
+	struct iio_desc *iio_desc;
+	struct iio_init_param iio_init_par = {
+		.phy_type = USE_UART,
+		.uart_init_param = &uart_init_par
+	};
+
+	status = irq_global_enable(irq_desc);
+	if (IS_ERR_VALUE(status))
+		return status;
+
+	status = iio_init(&iio_desc, &iio_init_par);
+	if (IS_ERR_VALUE(status))
+		return status;
+
+	status = iio_register(iio_desc, &adf5902_iio_descriptor, "adf5920_dev",
+			      adf5902_device, NULL, NULL);
+	if (IS_ERR_VALUE(status))
+		return status;
+
+	do {
+		status = iio_step(iio_desc);
+		if (IS_ERR_VALUE(status))
+			return status;
+	} while (true);
+
+	return SUCCESS;
+}
