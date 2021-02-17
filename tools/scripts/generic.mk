@@ -218,10 +218,6 @@ ifneq ($(REL_ASM_SRCS),$(ASM_OBJS_S))
 	ASM_OBJS += $(ASM_OBJS_S)
 endif
 
-#Add to include all directories containing a .h file
-EXTRA_INC_PATHS += $(sort $(foreach dir, $(INCS_IN_BUILD),$(dir $(dir))))
-CFLAGS += $(addprefix -I,$(EXTRA_INC_PATHS)) $(PLATFORM_INCS)
-
 #Will be used to add this flags to sdk project
 FLAGS_WITHOUT_D = $(sort $(subst -D,,$(filter -D%, $(CFLAGS))))
 
@@ -235,6 +231,10 @@ INCS_IN_BUILD = $(call relative_to_project, $(INCS))
 DIRS_TO_CREATE = $(sort $(dir $(call relative_to_project, $(FILES_OUT_OF_DIRS) $(SRC_DIRS))))
 #Prefixes from get_relative_path 
 DIRS_TO_REMOVE = $(addprefix $(PROJECT_BUILD)/,$(CREATED_DIRECTORIES))
+
+#Add to include all directories containing a .h file
+EXTRA_INC_PATHS += $(sort $(foreach dir, $(INCS_IN_BUILD),$(dir $(dir))))
+CFLAGS += $(addprefix -I,$(EXTRA_INC_PATHS)) $(PLATFORM_INCS)
 
 #------------------------------------------------------------------------------
 #                             Generic Goals                         
