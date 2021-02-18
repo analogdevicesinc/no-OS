@@ -11,9 +11,13 @@ pr:
 - 20*
 
 variables:
-  isMain: $[eq(variables['Build.SourceBranch'], 'refs/heads/master')]
-  runCondition: true
-  targetBranch: $[ variables['Build.SourceBranchName'] ]
+- group: noos_releases_group_variables
+- name: isMain
+  value: $[eq(variables['Build.SourceBranch'], 'refs/heads/master')]
+- name: runCondition
+  value: true
+- name: targetBranch
+  value: $[ variables['Build.SourceBranchName'] ]
 
 jobs:
 - job: LinuxBuilds
@@ -45,3 +49,30 @@ jobs:
   - script: ./ci/travis/run_build.sh
     condition: eq(variables.runCondition, true)
     displayName: 'Run $(BUILD_TYPE)'
+- job: Projects
+  strategy:
+    matrix:
+      aducm3029:
+        PLATFORM: aducm3029
+#      xilinx:
+#        PLATFORM: xilinx
+#      altera:
+#        PLATFORM: altera
+#      stm32:
+#        PLATFORM: stm32
+  pool: LocalPool
+  steps:
+  - checkout: self
+    condition: eq(variables.runCondition, true)
+    fetchDepth: 50
+    submodules: true
+    clean: true
+    persistCredentials: true
+  - script: 'python ./tools/scripts/build_projects.py . $(RELEASE_DIR) $(PLATFORM)'
+    condition: eq(variables.runCondition, true)
+    displayName: 'Run project build'
+  - task: PublishPipelineArtifact@1
+    inputs:
+      targetPath: '$(Build.Repository.LocalPath)/$(RELEASE_DIR).zip'
+      artifact: '$(ARTIFACT_NAME)'
+      publishLocation: 'pipeline'
