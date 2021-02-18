@@ -6,7 +6,12 @@ SRC_DIRS += $(NO-OS)/iio/iio_adxrs290
 
 # For the moment there is support only for aducm for iio with network backend
 ifeq (aducm3029,$(strip $(PLATFORM)))
-ENABLE_IIO_NETWORK = n
+ifeq '$(USE_TCP_SOCKET)' 'y'
+ENABLE_IIO_NETWORK ?= y
+CFLAGS += -DUSE_TCP_SOCKET
+else
+ENABLE_IIO_NETWORK ?= n
+endif
 endif
 
 ifeq (y,$(strip $(ENABLE_IIO_NETWORK)))
@@ -15,6 +20,10 @@ SRC_DIRS += $(NO-OS)/network
 SRCS	 += $(NO-OS)/util/circular_buffer.c
 SRCS	 += $(PLATFORM_DRIVERS)/delay.c
 SRCS	 += $(PLATFORM_DRIVERS)/timer.c
+INCS	 += $(INCLUDE)/delay.h
+INCS	 += $(INCLUDE)/timer.h
+INCS	 += $(INCLUDE)/circular_buffer.h
+INCS	 += $(PLATFORM_DRIVERS)/timer_extra.h
 endif
 
 

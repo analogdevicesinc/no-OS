@@ -18,6 +18,9 @@ INCS += $(INCLUDE)/xml.h						\
 ifeq ($(PLATFORM),$(filter $(PLATFORM),xilinx aducm3029))
 # For the moment there is support only for aducm for iio with network backend
 ifeq (aducm3029,$(strip $(PLATFORM)))
+ifeq '$(USE_TCP_SOCKET)' 'y'
+CFLAGS += -DUSE_TCP_SOCKET
+endif
 ENABLE_IIO_NETWORK = y
 endif
 

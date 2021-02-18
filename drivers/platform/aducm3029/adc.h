@@ -42,6 +42,8 @@
 
 #include <stdint.h>
 
+
+#define ADUCM3029_ADC_NUM_CH	6
 #define ADUCM3029_CH(x) (1 << x)
 
 struct adc_desc;
