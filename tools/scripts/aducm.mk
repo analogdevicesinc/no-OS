@@ -133,6 +133,9 @@ HEX = $(basename $(BINARY)).hex
 #                                 RULES                              
 #------------------------------------------------------------------------------
 
+PHONY += hex
+hex: $(HEX)
+
 $(HEX): $(BINARY)
 	$(MUTE) $(call print,[HEX] $(notdir $@))
 	$(MUTE) arm-none-eabi-objcopy -O ihex $(BINARY) $(HEX)

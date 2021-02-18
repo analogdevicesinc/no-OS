@@ -113,7 +113,7 @@ PROJECT_BUILD 		= $(BUILD_DIR)/app
 OBJECTS_DIR		= $(BUILD_DIR)/objs
 WORKSPACE		?= $(BUILD_DIR)
 PLATFORM_TOOLS	= $(NO-OS)/tools/scripts/platform/$(PLATFORM)
-BINARY			= $(BUILD_DIR)/$(PROJECT_NAME).elf
+BINARY			?= $(BUILD_DIR)/$(PROJECT_NAME).elf
 
 ifneq ($(words $(NO-OS)), 1)
 $(error $(ENDL)ERROR:$(ENDL)\
