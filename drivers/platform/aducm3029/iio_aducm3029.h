@@ -37,13 +37,14 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
+#ifdef IIO_SUPPORT
+
 #ifndef IIO_ADCUM3029
 #define IIO_ADCUM3029
 
 #include "iio_types.h"
 #include "adc.h"
 
-#define ADUCM3029_ADC_NUM_CH	6
 #define ADUCM3029_TIMERS_NUMS	3
 #define ADUCM3029_GPIOS_NUMS	44
 
@@ -196,3 +197,5 @@ static struct iio_device iio_aducm3029_desc = {
 };
 
 #endif
+
+#endif //IIO_SUPPORT
