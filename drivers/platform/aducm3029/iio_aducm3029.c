@@ -37,6 +37,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
+#ifdef IIO_SUPPORT
+
 #include "pwm.h"
 #include "util.h"
 #include "gpio.h"
@@ -375,3 +377,5 @@ int32_t iio_aducm3029_adc_read(struct iio_aducm3029_desc *desc, uint16_t *buff,
 
 	return aducm3029_adc_read(desc->adc, buff, nb_samples);
 }
+
+#endif //IIO_SUPPORT
