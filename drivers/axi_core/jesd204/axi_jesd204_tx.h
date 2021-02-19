@@ -62,6 +62,7 @@ struct jesd204_tx_config {
 	uint8_t jesd_version;
 	uint8_t subclass_version;
 	uint8_t control_bits_per_sample;
+	uint32_t version;
 	bool enable_scrambling;
 	bool high_density;
 };
@@ -79,6 +80,7 @@ struct axi_jesd204_tx {
 	uint32_t base;
 	uint32_t num_lanes;
 	uint32_t data_path_width;
+	uint32_t tpl_data_path_width;
 	struct jesd204_tx_config config;
 	uint32_t device_clk_khz;
 	uint32_t lane_clk_khz;
