@@ -72,6 +72,8 @@
 
 #define JESD204_TX_REG_CONF0			0x210
 
+#define JESD204_TX_REG_LINK_CONF4		0x21C
+
 #define JESD204_TX_REG_LINK_STATUS		0x280
 
 #define JESD204_TX_REG_ILAS(x, y)		\
@@ -79,6 +81,13 @@
 
 #define JESD204_TX_MAGIC				\
 	(('2' << 24) | ('0' << 16) | ('4' << 8) | ('T'))
+
+#define JESD204_SYNTH_DATA_PATH_WIDTH_MASK	GENMASK(7, 0)
+#define JESD204_SYNTH_DATA_PATH_WIDTH_GET(x)	field_get(JESD204_SYNTH_DATA_PATH_WIDTH_MASK, x)
+#define JESD204_TPL_DATA_PATH_WIDTH_MASK	GENMASK(15, 8)
+#define JESD204_TPL_DATA_PATH_WIDTH_GET(x)	field_get(JESD204_TPL_DATA_PATH_WIDTH_MASK, x)
+#define ADI_AXI_PCORE_VER(major, minor, patch)	\
+	(((major) << 16) | ((minor) << 8) | (patch))
 
 #define PCORE_VERSION_MAJOR(x)		((x) >> 16)
 #define PCORE_VERSION_MINOR(x)		(((x) >> 8) & 0xff)
@@ -302,7 +311,7 @@ int32_t axi_jesd204_tx_apply_config(struct axi_jesd204_tx *jesd,
 	octets_per_multiframe = config->frames_per_multiframe *
 				config->octets_per_frame;
 
-	multiframe_align = 1 << jesd->data_path_width;
+	multiframe_align = jesd->data_path_width;
 
 	if (jesd->encoder == JESD204_TX_ENCODER_64B66B &&
 	    (octets_per_multiframe % 256) != 0) {
@@ -326,6 +335,12 @@ int32_t axi_jesd204_tx_apply_config(struct axi_jesd204_tx *jesd,
 
 	axi_jesd204_tx_write(jesd, JESD204_TX_REG_CONF0, val);
 
+	if (jesd->config.version >= ADI_AXI_PCORE_VER(1, 6, 'a')) {
+		/* beats per multiframe */
+		val = (octets_per_multiframe / jesd->tpl_data_path_width) - 1;
+		axi_jesd204_tx_write(jesd, JESD204_TX_REG_LINK_CONF4, val);
+	}
+
 	for (lane = 0; lane < jesd->num_lanes; lane++)
 		if (jesd->encoder == JESD204_TX_ENCODER_8B10B)
 			axi_jesd204_tx_set_lane_ilas(jesd, config, lane);
@@ -344,6 +359,7 @@ int32_t axi_jesd204_tx_init(struct axi_jesd204_tx **jesd204,
 	uint32_t magic;
 	uint32_t version;
 	uint32_t status;
+	uint32_t tmp;
 
 	jesd = (struct axi_jesd204_tx *)malloc(sizeof(*jesd));
 	if (!jesd)
@@ -374,8 +390,10 @@ int32_t axi_jesd204_tx_init(struct axi_jesd204_tx **jesd204,
 
 	axi_jesd204_tx_read(jesd, JESD204_TX_REG_CONF_NUM_LANES,
 			    &jesd->num_lanes);
-	axi_jesd204_tx_read(jesd, JESD204_TX_REG_CONF_DATA_PATH_WIDTH,
-			    &jesd->data_path_width);
+	axi_jesd204_tx_read(jesd, JESD204_TX_REG_CONF_DATA_PATH_WIDTH, &tmp);
+	jesd->data_path_width = 1 << JESD204_SYNTH_DATA_PATH_WIDTH_GET(tmp);
+	jesd->tpl_data_path_width = JESD204_TPL_DATA_PATH_WIDTH_GET(tmp);
+
 	axi_jesd204_tx_read(jesd, JESD204_TX_REG_SYNTH_REG_1,
 			    &synth_1);
 	jesd->encoder = JESD204_TX_ENCODER_GET(synth_1);
@@ -384,6 +402,7 @@ int32_t axi_jesd204_tx_init(struct axi_jesd204_tx **jesd204,
 	else if (jesd->encoder >= JESD204_TX_ENCODER_MAX)
 		goto err;
 
+	jesd->config.version = version;
 	jesd->config.device_id = 0;
 	jesd->config.bank_id = 0;
 	jesd->config.enable_scrambling = true;
