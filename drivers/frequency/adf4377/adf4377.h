@@ -44,6 +44,7 @@
 /***************************** Include Files **********************************/
 #include <stdint.h>
 #include "spi.h"
+#include "gpio.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -532,11 +533,11 @@
 #define ADF4377_ADC_CLK_SEL_SPI_CLK         0x1
 
 /* ADF4377 REG003D Map */
-#define ADF4377_R032_RSV2                   (0x0 << 4)
+#define ADF4377_R03D_RSV2                   (0x0 << 4)
 #define ADF4377_O_VCO_BAND(x)               (((x) & 0x1) << 3)
 #define ADF4377_O_VCO_CORE(x)               (((x) & 0x1) << 2)
 #define ADF4377_O_VCO_BIAS(x)               (((x) & 0x1) << 1)
-#define ADF4377_R032_RSV1                   (0x0 << 0)
+#define ADF4377_R03D_RSV1                   (0x0 << 0)
 
 /* ADF4377 REG003D Bit Definition */
 #define ADF4377_O_VCO_BAND_VCO_CALIB        0x0
@@ -582,5 +583,54 @@
 
 /* ADF4377 REG0054 Map */
 #define ADF4377_CHIP_VERSION(x)             ((x) & 0xFF)
+
+/* Specifications */
+#define ADF4377_SPI_WRITE_CMD		(0x0 << 7)
+#define ADF4377_SPI_READ_CMD		(0x1 << 7)
+#define ADF4377_SPI_DUMMY_DATA		0x0
+#define ADF4377_BUFF_SIZE_BYTES		3
+
+/******************************************************************************/
+/*************************** Types Declarations *******************************/
+/******************************************************************************/
+
+struct adf4377_init_param {
+	/* SPI Initialization parameters */
+	struct spi_init_param	*spi_init;
+	/* GPIO Chip Enable */
+	struct gpio_init_param	*gpio_ce_param;
+	/* SPI 3-Wire */
+	bool spi3wire;
+};
+
+struct adf4377_dev {
+	/* SPI Descriptor */
+	struct spi_desc		*spi_desc;
+	/* GPIO Chip Enable */
+	struct gpio_desc	*gpio_ce;
+	/* SPI 3-Wire */
+	bool spi3wire;
+};
+
+/******************************************************************************/
+/************************ Functions Declarations ******************************/
+/******************************************************************************/
+
+/** ADF4377 SPI write */
+int32_t adf4377_spi_write(struct adf4377_dev *dev, uint8_t reg_addr,
+			  uint8_t data);
+
+/** ADF4377 SPI Read */
+int32_t adf4377_spi_read(struct adf4377_dev *dev, uint8_t reg_addr,
+			 uint8_t *data);
+
+/** ADF4377 Initialization */
+int32_t adf4377_init(struct adf4377_dev **device,
+		     struct adf4377_init_param *init_param);
+
+/** ADF4377 Resources Deallocation */
+int32_t adf4377_remove(struct adf4377_dev *dev);
+
+
 
 #endif /* ADF4377_H_ */
