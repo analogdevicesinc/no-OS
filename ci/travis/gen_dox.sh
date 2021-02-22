@@ -52,7 +52,7 @@ The following sections contain code documentation for ADI no-OS drivers.
 				if [[ -d "${part}" ]]
 				then
 					#exclude drivers that don't have homogenous directories and files structure
-					if [[ ${part} != *"talise"* && ${part} != *"navassa"* ]]
+					if [[ ${part} != *"talise"* && ${part} != *"navassa"* && ${part} != *"ad9083_api"* ]]
 					then
 						#add link to driver
 						append_to_dox "- \link_to_subdir{/drivers/$(basename -- ${drv_type})/$(basename -- ${part}) \"$(basename -- ${part^^})\"}" drivers_page.dox
