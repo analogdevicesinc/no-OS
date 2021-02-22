@@ -10,4 +10,5 @@ drivers/adc/ad9081/api
 drivers/rf-transceiver/navassa/common/
 drivers/rf-transceiver/navassa/devices/
 drivers/rf-transceiver/navassa/third_party/
+drivers/adc/ad9083/ad9083_api
 legacy/
