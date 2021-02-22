@@ -113,7 +113,7 @@ PROJECT_BUILD 		= $(BUILD_DIR)/app
 OBJECTS_DIR		= $(BUILD_DIR)/objs
 WORKSPACE		?= $(BUILD_DIR)
 PLATFORM_TOOLS	= $(NO-OS)/tools/scripts/platform/$(PLATFORM)
-BINARY			= $(BUILD_DIR)/$(PROJECT_NAME).elf
+BINARY			?= $(BUILD_DIR)/$(PROJECT_NAME).elf
 
 ifneq ($(words $(NO-OS)), 1)
 $(error $(ENDL)ERROR:$(ENDL)\
@@ -157,6 +157,7 @@ endif
 #------------------------------------------------------------------------------
 #                            COMMON COMPILER FLAGS                             
 #------------------------------------------------------------------------------
+CFLAGS += $(EXTRA_CFLAGS)
 CFLAGS += -Wall								\
 	 -Wmissing-field-initializers					\
 	 -Wclobbered 							\
@@ -290,12 +291,16 @@ $(BINARY): $(LIB_TARGETS) $(OBJS) $(ASM_OBJS) $(LSCRIPT)
 	@$(call print,[LD] $(notdir $(OBJS)))
 	$(MUTE) $(CC) -T$(LSCRIPT) $(LDFLAGS) $(LIB_PATHS) -o $(BINARY) $(OBJS) \
 			 $(ASM_OBJS) $(LIB_FLAGS)
+	$(MUTE) $(MAKE) --no-print-directory post_build
 
 PHONY += run
 run: $(PLATFORM)_run
 	@$(call print,$(notdir $(BINARY)) uploaded to board)
 
 project: $(PLATFORM)_project
+
+#Platform specific post build dependencies can be added to this rule.
+post_build:
 
 PHONY += update_srcs
 update_srcs:
