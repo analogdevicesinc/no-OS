@@ -20,7 +20,8 @@ endif
 PROJECT			?= $(realpath .)
 TARGET 			?= $(notdir $(realpath .))
 NO-OS			?= $(realpath ../..)
-WORKSPACE		?= $(PROJECT)/build
+BUILD_DIR_NAME		?= build
+WORKSPACE		?= $(PROJECT)/$(BUILD_DIR_NAME)
 
 INCLUDE			?= $(NO-OS)/include
 DRIVERS 		?= $(NO-OS)/drivers
