@@ -1,0 +1,6 @@
+{
+  "aducm3029": {
+    "iio_uart": "TINYIIOD=y",
+    "iio_wifi": "TINYIIOD=y USE_TCP_SOCKET=y"
+  }
+}
