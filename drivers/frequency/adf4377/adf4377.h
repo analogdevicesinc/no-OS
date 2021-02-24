@@ -98,14 +98,10 @@
 #define ADF4377_REG0054 		0x54
 
 /* ADF4377 REG0000 Map */
-#define ADF4377_SOFT_RESET_R(x)         (((x) & 0x1) << 7)
-#define ADF4377_LSB_FIRST_R(x)          (((x) & 0x1) << 6)
-#define ADF4377_ADDRESS_ASCENSION_R(x)  (((x) & 0x1) << 5)
-#define ADF4377_SDO_ACTIVE_R(x)         (((x) & 0x1) << 4)
-#define ADF4377_SDO_ACTIVE(x)           (((x) & 0x1) << 3)
-#define ADF4377_ADDRESS_ASCENSION(x)    (((x) & 0x1) << 2)
-#define ADF4377_LSB_FIRST(x)            (((x) & 0x1) << 1)
-#define ADF4377_SOFT_RESET(x)           (((x) & 0x1) << 0)
+#define ADF4377_SOFT_RESET(x)         	((((x) & 0x1) << 7) | (((x) & 0x1) << 0))
+#define ADF4377_LSB_FIRST(x)       		((((x) & 0x1) << 6) | (((x) & 0x1) << 1))
+#define ADF4377_ADDRESS_ASCENSION(x)  	((((x) & 0x1) << 5) | (((x) & 0x1) << 2))
+#define ADF4377_SDO_ACTIVE(x)         	((((x) & 0x1) << 4) | (((x) & 0x1) << 3))
 
 /* ADF4377 REG0000 Bit Definition */
 #define ADF4377_SDO_ACTIVE_SPI_3W       0x0
@@ -587,7 +583,10 @@
 /* Specifications */
 #define ADF4377_SPI_WRITE_CMD		(0x0 << 7)
 #define ADF4377_SPI_READ_CMD		(0x1 << 7)
-#define ADF4377_SPI_DUMMY_DATA		0x0
+#define ADF4377_SPI_SCRATCHPAD		0xAA
+#define ADF4377_SPI_DUMMY_DATA		0x00
+#define ADF4377_SPI_3WIRE			0x0
+#define ADF4377_SPI_4WIRE			0x1
 #define ADF4377_BUFF_SIZE_BYTES		3
 
 /******************************************************************************/
@@ -600,7 +599,7 @@ struct adf4377_init_param {
 	/* GPIO Chip Enable */
 	struct gpio_init_param	*gpio_ce_param;
 	/* SPI 3-Wire */
-	bool spi3wire;
+	uint8_t spi3wire;
 };
 
 struct adf4377_dev {
@@ -609,7 +608,7 @@ struct adf4377_dev {
 	/* GPIO Chip Enable */
 	struct gpio_desc	*gpio_ce;
 	/* SPI 3-Wire */
-	bool spi3wire;
+	uint8_t spi3wire;
 };
 
 /******************************************************************************/

@@ -88,6 +88,7 @@ int main(void)
 		.spi_init = &spi_init,
 		/* GPIO Chip Enable Initialization Structure */
 		.gpio_ce_param = &gpio_ce_param,
+		.spi3wire = ADF4377_SPI_4WIRE,
 	};
 
 	ret = adf4377_init(&dev, &adf4377_param);

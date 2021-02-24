@@ -41,7 +41,6 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include <malloc.h>
-#include <stdbool.h>
 #include "adf4377.h"
 #include "util.h"
 #include "error.h"
@@ -109,6 +108,60 @@ int32_t adf4377_spi_read(struct adf4377_dev *dev, uint8_t reg_addr,
 }
 
 /**
+ * @brief ADF4377 SPI Scratchpad check.
+ * @param dev - The device structure.
+ * @return Returns SUCCESS in case of success or negative error code.
+ */
+int32_t adf4377_check_scratchpad(struct adf4377_dev *dev)
+{
+	int32_t ret;
+	uint8_t scratchpad;
+
+	ret = adf4377_spi_write(dev, ADF4377_REG000A, ADF4377_SPI_SCRATCHPAD);
+	if (ret != SUCCESS)
+		return ret;
+
+	ret = adf4377_spi_read(dev, ADF4377_REG000A, &scratchpad);
+	if (ret != SUCCESS)
+		return ret;
+
+	if(scratchpad != ADF4377_SPI_SCRATCHPAD)
+		return FAILURE;
+
+	return SUCCESS;
+}
+
+/**
+ * @brief Software reset.
+ * @param dev - The device structure.
+ * @return Returns SUCCESS in case of success or negative error code.
+ */
+int32_t adf4377_soft_reset(struct adf4377_dev *dev)
+{
+	int32_t ret;
+	uint16_t timeout = 0xFFFF;
+	uint8_t data;
+
+	ret = adf4377_spi_write(dev, ADF4377_REG0000,
+				ADF4377_LSB_FIRST(dev->spi_desc->bit_order) |
+				ADF4377_SDO_ACTIVE(dev->spi3wire) |
+				ADF4377_SOFT_RESET(ADF4377_SOFT_RESET_EN));
+	if (ret != SUCCESS)
+		return ret;
+
+	while(timeout) {
+		ret = adf4377_spi_read(dev, ADF4377_REG0000, &data);
+		if (ret != SUCCESS)
+			return ret;
+
+		if( !(data & ADF4377_SOFT_RESET(ADF4377_SOFT_RESET_EN)))
+			return SUCCESS;
+	}
+
+	return FAILURE;
+}
+
+/**
  * @brief Initializes the ADF4377.
  * @param device - The device structure.
  * @param init_param - The structure containing the device initial parameters.
@@ -118,12 +171,14 @@ int32_t adf4377_init(struct adf4377_dev **device,
 		     struct adf4377_init_param *init_param)
 {
 	int32_t ret;
-
+	uint8_t chip_type;
 	struct adf4377_dev *dev;
 
 	dev = (struct adf4377_dev *)calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
+
+	dev->spi3wire = init_param->spi3wire;
 
 	/* GPIO Chip Enable */
 	ret = gpio_get(&dev->gpio_ce, init_param->gpio_ce_param);
@@ -138,6 +193,22 @@ int32_t adf4377_init(struct adf4377_dev **device,
 	ret = spi_init(&dev->spi_desc, init_param->spi_init);
 	if (ret != SUCCESS)
 		goto error_gpio;
+
+	/* Software Reset */
+	ret = adf4377_soft_reset(dev);
+	if (ret != SUCCESS)
+		goto error_spi;
+
+	ret = adf4377_spi_read(dev, ADF4377_REG0003, &chip_type);
+	if (ret != SUCCESS)
+		goto error_spi;
+
+	if (chip_type != ADF4377_CHIP_TYPE)
+		return FAILURE;
+
+	ret = adf4377_check_scratchpad(dev);
+	if (ret != SUCCESS)
+		goto error_spi;
 
 	*device = dev;
 
