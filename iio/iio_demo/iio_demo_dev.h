@@ -73,27 +73,36 @@ static struct scan_type scan_type = {
 	.is_big_endian = false
 };
 
+#define IIO_DEMO_INPUT_CHANNEL(_idx) {\
+		.name = "demo_in_ch" ## _idx,\
+		.ch_type = IIO_VOLTAGE,\
+		.channel = _idx,\
+		.scan_index = _idx,\
+		.indexed = true,\
+		.scan_type = &scan_type,\
+		.attributes = demo_channel_attributes,\
+		.ch_out = false,\
+	}
+
 static struct iio_channel iio_demo_channels_in[] = {
-	{
-		.name = "input_channel_0",
-		.ch_type = IIO_VOLTAGE,
-		.channel = 0,
-		.scan_index = 0,
-		.indexed = true,
-		.scan_type = &scan_type,
-		.attributes = demo_channel_attributes,
-		.ch_out = false,
-	},
-	{
-		.name = "input_channel_1",
-		.ch_type = IIO_VOLTAGE,
-		.channel = 1,
-		.scan_index = 1,
-		.indexed = true,
-		.scan_type = &scan_type,
-		.attributes = demo_channel_attributes,
-		.ch_out = false,
-	},
+	IIO_DEMO_INPUT_CHANNEL(0),
+	IIO_DEMO_INPUT_CHANNEL(1),
+#ifdef ENABLE_IIO_DMEO_16CH
+	IIO_DEMO_INPUT_CHANNEL(2),
+	IIO_DEMO_INPUT_CHANNEL(3),
+	IIO_DEMO_INPUT_CHANNEL(4),
+	IIO_DEMO_INPUT_CHANNEL(5),
+	IIO_DEMO_INPUT_CHANNEL(6),
+	IIO_DEMO_INPUT_CHANNEL(7),
+	IIO_DEMO_INPUT_CHANNEL(8),
+	IIO_DEMO_INPUT_CHANNEL(9),
+	IIO_DEMO_INPUT_CHANNEL(10),
+	IIO_DEMO_INPUT_CHANNEL(11),
+	IIO_DEMO_INPUT_CHANNEL(12),
+	IIO_DEMO_INPUT_CHANNEL(13),
+	IIO_DEMO_INPUT_CHANNEL(14),
+	IIO_DEMO_INPUT_CHANNEL(15)
+#endif
 };
 
 static struct iio_channel iio_demo_channels_out[] = {
