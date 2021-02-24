@@ -21,7 +21,9 @@
 #define AD400x_SPI_CS                   0
 #define AD400x_SPI_ENG_REF_CLK_FREQ_HZ	XPAR_PS7_SPI_0_SPI_CLK_FREQ_HZ
 
+#ifndef SPI_ENGINE_OFFLOAD_EXAMPLE
 #define SPI_ENGINE_OFFLOAD_EXAMPLE	1
+#endif
 
 int main()
 {
