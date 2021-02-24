@@ -1,5 +1,7 @@
 {
   "aducm3029": {
-    "simple": ""
+    "simple":  {
+      "flags" : ""
+    }
   }
 }

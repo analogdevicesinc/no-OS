@@ -1,6 +1,10 @@
 {
   "aducm3029": {
-    "serial_print": "",
-    "iio": "TINYIIOD=y"
+    "serial_print": {
+      "flags" : ""
+    },
+    "iio": {
+      "flags" : "TINYIIOD=y"
+    }
   }
 }
