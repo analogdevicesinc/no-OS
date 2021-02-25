@@ -59,7 +59,6 @@
 #include "axi_jesd204_rx.h"
 #include "axi_adxcvr.h"
 
-#define LOG_LEVEL 6
 #include "print_log.h"
 
 #ifdef IIO_SUPPORT

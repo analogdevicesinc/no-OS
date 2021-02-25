@@ -54,7 +54,6 @@
 #include "error.h"
 #include "app_config.h"
 
-#define LOG_LEVEL 6
 #include "print_log.h"
 
 #define AD738x_EVB_SAMPLE_NO		1000

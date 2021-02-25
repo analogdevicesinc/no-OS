@@ -58,7 +58,6 @@
 #include "app_iio.h"
 #endif
 
-#define LOG_LEVEL 6
 #include "print_log.h"
 
 /***************************************************************************//**
