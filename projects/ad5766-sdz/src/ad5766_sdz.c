@@ -53,7 +53,6 @@
 #include "spi.h"
 #include "spi_extra.h"
 
-#define LOG_LEVEL 6
 #include "print_log.h"
 
 /***************************************************************************//**
