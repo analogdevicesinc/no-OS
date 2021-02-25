@@ -55,7 +55,6 @@
 #include "ad7616.h"
 #include "parameters.h"
 
-#define LOG_LEVEL 6
 #include "print_log.h"
 
 /******************************************************************************/

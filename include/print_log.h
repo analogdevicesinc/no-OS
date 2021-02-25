@@ -51,6 +51,10 @@
 #define LOG_INFO	0x6
 #define LOG_DEBUG	0x7
 
+#ifndef LOG_LEVEL
+#define LOG_LEVEL LOG_INFO
+#endif
+
 #if defined(LOG_LEVEL) && LOG_LEVEL >= LOG_EMERG && LOG_LEVEL <= LOG_DEBUG
 #define pr_emerg(fmt, args...) printf("EMERG: %s:%d:%s(): " \
 fmt, __FILE__, __LINE__, __func__, ##args)
