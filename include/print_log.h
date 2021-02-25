@@ -80,29 +80,25 @@ fmt, __FILE__, __func__, __LINE__, ##args)
 #endif
 
 #if defined(LOG_LEVEL) && LOG_LEVEL >= LOG_WARNING && LOG_LEVEL <= LOG_DEBUG
-#define pr_warning(fmt, args...) printf("WARNING: %s:%s:%d(): " \
-fmt, __FILE__, __func__, __LINE__, ##args)
+#define pr_warning(fmt, args...) printf("WARNING: " fmt, ##args)
 #else
 #define pr_warning(fmt, args...)
 #endif
 
 #if defined(LOG_LEVEL) && LOG_LEVEL >= LOG_NOTICE && LOG_LEVEL <= LOG_DEBUG
-#define pr_notice(fmt, args...) printf("NOTICE: %s:%s:%d(): " \
-fmt, __FILE__, __func__, __LINE__, ##args)
+#define pr_notice(fmt, args...) printf("NOTICE: " fmt, ##args)
 #else
 #define pr_notice(fmt, args...)
 #endif
 
 #if defined(LOG_LEVEL) && LOG_LEVEL >= LOG_INFO && LOG_LEVEL <= LOG_DEBUG
-#define pr_info(fmt, args...) printf("%s:%s:%d(): " \
-fmt, __FILE__, __func__, __LINE__, ##args)
+#define pr_info(fmt, args...) printf(fmt, ##args)
 #else
 #define pr_info(fmt, args...)
 #endif
 
 #if defined(LOG_LEVEL) && LOG_LEVEL == LOG_DEBUG
-#define pr_debug(fmt, args...) printf("DEBUG: %s:%s:%d(): " \
-fmt, __FILE__, __func__, __LINE__, ##args)
+#define pr_debug(fmt, args...) printf("DEBUG: " fmt, ##args)
 #else
 #define pr_debug(fmt, args...)
 #endif
