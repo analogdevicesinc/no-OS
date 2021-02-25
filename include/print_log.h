@@ -52,29 +52,29 @@
 #define LOG_DEBUG	0x7
 
 #if defined(LOG_LEVEL) && LOG_LEVEL >= LOG_EMERG && LOG_LEVEL <= LOG_DEBUG
-#define pr_emerg(fmt, args...) printf("EMERG: %s:%s:%d(): " \
-fmt, __FILE__, __func__, __LINE__, ##args)
+#define pr_emerg(fmt, args...) printf("EMERG: %s:%d:%s(): " \
+fmt, __FILE__, __LINE__, __func__, ##args)
 #else
 #define pr_emerg(fmt, args...)
 #endif
 
 #if defined(LOG_LEVEL) && LOG_LEVEL >= LOG_ALERT && LOG_LEVEL <= LOG_DEBUG
-#define pr_alert(fmt, args...) printf("ALERT: %s:%s:%d(): " \
-fmt, __FILE__, __func__, __LINE__, ##args)
+#define pr_alert(fmt, args...) printf("ALERT: %s:%d:%s(): " \
+fmt, __FILE__, __LINE__, __func__, ##args)
 #else
 #define pr_alert(fmt, args...)
 #endif
 
 #if defined(LOG_LEVEL) && LOG_LEVEL >= LOG_CRIT && LOG_LEVEL <= LOG_DEBUG
-#define pr_crit(fmt, args...) printf("CRIT: %s:%s:%d(): " \
-fmt, __FILE__, __func__, __LINE__, ##args)
+#define pr_crit(fmt, args...) printf("CRIT: %s:%d:%s(): " \
+fmt, __FILE__, __LINE__, __func__, ##args)
 #else
 #define pr_crit(fmt, args...)
 #endif
 
 #if defined(LOG_LEVEL) && LOG_LEVEL >= LOG_ERR && LOG_LEVEL <= LOG_DEBUG
-#define pr_err(fmt, args...) printf("ERR: %s:%s:%d(): " \
-fmt, __FILE__, __func__, __LINE__, ##args)
+#define pr_err(fmt, args...) printf("ERR: %s:%d:%s(): " \
+fmt, __FILE__, __LINE__, __func__, ##args)
 #else
 #define pr_err(fmt, args...)
 #endif
