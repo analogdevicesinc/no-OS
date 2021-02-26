@@ -236,7 +236,7 @@ DIRS_TO_CREATE = $(sort $(dir $(call relative_to_project, $(FILES_OUT_OF_DIRS) $
 DIRS_TO_REMOVE = $(addprefix $(PROJECT_BUILD)/,$(CREATED_DIRECTORIES))
 
 #Add to include all directories containing a .h file
-EXTRA_INC_PATHS += $(sort $(foreach dir, $(INCS_IN_BUILD),$(dir $(dir))))
+EXTRA_INC_PATHS := $(sort $(foreach dir, $(INCS_IN_BUILD),$(dir $(dir))))
 CFLAGS += $(addprefix -I,$(EXTRA_INC_PATHS)) $(PLATFORM_INCS)
 
 #------------------------------------------------------------------------------
