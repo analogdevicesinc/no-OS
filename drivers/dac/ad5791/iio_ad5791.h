@@ -46,60 +46,9 @@
 
 #define AD5791_CH_NO 1
 
-/******************************************************************************/
-/************************ Functions Declarations ******************************/
-/******************************************************************************/
-ssize_t ad5791_iio_get_raw(void *device, char *buf, size_t len,
-			   const struct iio_ch_info *channel, intptr_t priv);
-ssize_t ad5791_iio_set_raw(void *device, char *buf, size_t len,
-			   const struct iio_ch_info *channel, intptr_t priv);
-
 /*****************************************************************************/
 /***************************** Constant definition ***************************/
 /*****************************************************************************/
-static struct scan_type const ad5791_iio_scan_type = {
-	.sign = 's',
-	.realbits = 20,
-	.storagebits = 32,
-	.shift = 0,
-	.is_big_endian = true
-};
-
-static struct iio_attribute const channel_attributes[] = {
-	{
-		.name = "raw",
-		.priv = 0,
-		.show = ad5791_iio_get_raw,
-		.store = ad5791_iio_set_raw
-	},
-	END_ATTRIBUTES_ARRAY
-};
-
-static struct iio_channel const ad5791_channels[] = {
-	{
-		.name = "ad5791_out",
-		.ch_type = IIO_VOLTAGE,
-		.channel = 0,
-		.channel2 = 0,
-		.scan_type = &ad5791_iio_scan_type,
-		.attributes = channel_attributes,
-		.ch_out = 1,
-		.indexed = 1,
-		.diferential = false
-	}
-};
-
-static struct iio_device const iio_ad5791_device = {
-	.num_ch = AD5791_CH_NO,
-	.channels = ad5791_channels,
-	.attributes = NULL,
-	.debug_attributes = NULL,
-	.buffer_attributes = NULL,
-	.prepare_transfer = NULL,
-	.end_transfer = NULL,
-	.read_dev = NULL,
-	.debug_reg_read = (int32_t (*)())ad5791_get_register_value,
-	.debug_reg_write = (int32_t (*)())ad5791_set_register_value
-};
+extern struct iio_device const iio_ad5791_device;
 
 #endif /* IIO_AD5791_H_ */
