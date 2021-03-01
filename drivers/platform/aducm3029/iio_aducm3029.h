@@ -56,7 +56,8 @@ struct iio_aducm3029_desc {
 	uint32_t		current_gpio;
 };
 
-static struct iio_aducm3029_desc g_aducm3029_desc;
+extern struct iio_aducm3029_desc g_aducm3029_desc;
+extern struct iio_device const iio_aducm3029_desc;
 
 ssize_t get_pwm_attr(void *device, char *buf, size_t len,
 		     const struct iio_ch_info *channel, intptr_t priv);
@@ -85,21 +86,6 @@ enum iio_pwm_attributes {
 	PWM_POLARITY_IS_HIGH
 };
 
-#define IIO_PWM_ATTR(_name, _priv) {\
-	.name = _name,\
-	.priv = _priv,\
-	.show = get_pwm_attr,\
-	.store = set_pwm_attr\
-}
-
-static struct iio_attribute pwm_attributes[] = {
-	IIO_PWM_ATTR("en", PWM_ENABLE),
-	IIO_PWM_ATTR("period", PWM_PERIOD),
-	IIO_PWM_ATTR("duty_cycle", PWM_DUTY_CYCLE),
-	IIO_PWM_ATTR("polarity_is_high", PWM_POLARITY_IS_HIGH),
-	END_ATTRIBUTES_ARRAY,
-};
-
 enum iio_gpio_attributes {
 	GPIO_ENABLE,
 	GPIO_VALUE,
@@ -107,93 +93,11 @@ enum iio_gpio_attributes {
 	GPIO_NUMBER,
 };
 
-#define IIO_GPIO_ATTR(_name, _priv) {\
-	.name = _name,\
-	.priv = _priv,\
-	.show = get_gpio_attr,\
-	.store = set_gpio_attr\
-}
-static struct iio_attribute gpio_attributes[] = {
-	IIO_GPIO_ATTR("en", GPIO_ENABLE),
-	IIO_GPIO_ATTR("value", GPIO_VALUE),
-	IIO_GPIO_ATTR("is_output", GPIO_DIRECTION_OUTPUT),
-	IIO_GPIO_ATTR("number", GPIO_NUMBER),
-	END_ATTRIBUTES_ARRAY,
-};
-
-#define ADCUM3029_ADC_CH(idx)  {\
-	.name = "adc" # idx, \
-	.ch_type = IIO_VOLTAGE,\
-	.channel = idx,\
-	.scan_index = idx,\
-	.scan_type = &adc_scan_type,\
-	.indexed = true}
-
-#define ADCUM3029_PWM_CH(idx)  {\
-	.name = "pwm" # idx, \
-	.ch_type = IIO_VOLTAGE,\
-	.channel = idx + ADUCM3029_ADC_NUM_CH,\
-	.indexed = true,\
-	.attributes = pwm_attributes,\
-	.ch_out = true}
-
-#define ADUCM3029_GPIO_CONTROLLER(idx)  {\
-	.name = "gpio_controller", \
-	.ch_type = IIO_VOLTAGE,\
-	.channel = idx + ADUCM3029_ADC_NUM_CH + ADUCM3029_TIMERS_NUMS,\
-	.indexed = true,\
-	.attributes = gpio_attributes,\
-	.ch_out = true}
-
-static struct scan_type adc_scan_type = {
-	.realbits = 12,
-	.storagebits = 16,
-	.shift = 0,
-	.sign = 'u',
-	.is_big_endian = false
-};
-
-static struct iio_channel aducm3029_channels[] = {
-	ADCUM3029_ADC_CH(0),
-	ADCUM3029_ADC_CH(1),
-	ADCUM3029_ADC_CH(2),
-	ADCUM3029_ADC_CH(3),
-	ADCUM3029_ADC_CH(4),
-	ADCUM3029_ADC_CH(5),
-	ADCUM3029_PWM_CH(0),
-	ADCUM3029_PWM_CH(1),
-	ADCUM3029_PWM_CH(2),
-	ADUCM3029_GPIO_CONTROLLER(0),
-};
-
 enum global_attributes {
 	PINMUX_PORT_0,
 	PINMUX_PORT_1,
 	PINMUX_PORT_2,
 	ADC_ENABLE
-};
-
-#define GLOBAL_ATTR(_name, _priv) {\
-	.name = _name,\
-	.priv = _priv,\
-	.show = get_global_attr,\
-	.store = set_global_attr\
-}
-
-static struct iio_attribute aducm3029_attributes[] = {
-	GLOBAL_ATTR("pinmux_port0_cfg", PINMUX_PORT_0),
-	GLOBAL_ATTR("pinmux_port1_cfg", PINMUX_PORT_1),
-	GLOBAL_ATTR("pinmux_port2_cfg", PINMUX_PORT_2),
-	GLOBAL_ATTR("adc_enable", ADC_ENABLE),
-	END_ATTRIBUTES_ARRAY,
-};
-
-static struct iio_device iio_aducm3029_desc = {
-	.num_ch = sizeof(aducm3029_channels) / sizeof(aducm3029_channels[0]),
-	.channels = aducm3029_channels,
-	.attributes = aducm3029_attributes,
-	.prepare_transfer = (int32_t (*)())iio_aducm3029_adc_set_mask,
-	.read_dev = (int32_t (*)())iio_aducm3029_adc_read,
 };
 
 #endif
