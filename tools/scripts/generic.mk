@@ -6,6 +6,10 @@ export CFLAGS
 export CC
 export AR
 
+# Used by the build utils
+export EXTRA_INC_PATHS
+export FLAGS_WITHOUT_D
+export PROJECT_BUILD
 #------------------------------------------------------------------------------
 #                              UTIL FUNCTIONS
 #------------------------------------------------------------------------------
