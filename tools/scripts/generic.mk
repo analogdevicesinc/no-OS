@@ -127,9 +127,13 @@ endif
 #------------------------------------------------------------------------------
 
 ifeq 'xilinx' '$(PLATFORM)'
-HARDWARE := $(filter %.hdf, $(HARDWARE))
+TMP_HW := $(filter %.xsa, $(HARDWARE))
+ifeq '' '$(TMP_HW)'
+TMP_HW := $(filter %.hdf, $(HARDWARE))
+endif
+HARDWARE := $(TMP_HW)
 ifeq '' '$(HARDWARE)'
-$(error 'No HARDWARE for xilinx found. Add .hdf file')
+$(error 'No HARDWARE for xilinx found.')
 endif
 include $(NO-OS)/tools/scripts/xilinx.mk
 endif
