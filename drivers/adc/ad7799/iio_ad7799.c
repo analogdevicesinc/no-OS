@@ -53,8 +53,8 @@
  * @param channel - IIO channel information.
  * @return Number of bytes printed in the output buffer, or negative error code.
  */
-ssize_t ad7799_iio_channel_read(void *device, char *buf, size_t len,
-				const struct iio_ch_info *channel)
+static ssize_t ad7799_iio_channel_read(void *device, char *buf, size_t len,
+				       const struct iio_ch_info *channel)
 {
 	struct ad7799_dev *dev = (struct ad7799_dev *)device;
 	uint32_t data;
@@ -75,8 +75,8 @@ ssize_t ad7799_iio_channel_read(void *device, char *buf, size_t len,
  * @param channel - IIO channel information.
  * @return Number of bytes printed in the output buffer, or negative error code.
  */
-ssize_t ad7799_iio_gain_read(void *device, char *buf, size_t len,
-			     const struct iio_ch_info *channel)
+static ssize_t ad7799_iio_gain_read(void *device, char *buf, size_t len,
+				    const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct ad7799_dev *dev = (struct ad7799_dev *)device;
 	uint8_t gain;
@@ -97,8 +97,8 @@ ssize_t ad7799_iio_gain_read(void *device, char *buf, size_t len,
  * @param channel - IIO channel information.
  * @return Number of bytes printed in the output buffer, or negative error code.
  */
-ssize_t ad7799_iio_gain_write(void *device, char *buf, size_t len,
-			      const struct iio_ch_info *channel)
+static ssize_t ad7799_iio_gain_write(void *device, char *buf, size_t len,
+				     const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct ad7799_dev *dev = (struct ad7799_dev *)device;
 	int32_t ret;
@@ -111,3 +111,68 @@ ssize_t ad7799_iio_gain_write(void *device, char *buf, size_t len,
 
 	return len;
 }
+
+/** ADC IIO channel attributes*/
+static struct iio_attribute ad7799_iio_channel_attributes[] = {
+	{
+		.name = "volts",
+		.show = ad7799_iio_channel_read,
+		.store = NULL
+	},
+	END_ATTRIBUTES_ARRAY,
+};
+
+/** Channel Scan Type */
+static struct scan_type channel_scan_type = {
+	.sign = 'u',
+	.realbits = 12,
+	.storagebits = 24,
+	.shift = 0,
+	.is_big_endian = false
+};
+
+#define AD7799_IIO_CHANN_DEF(nm, ch) \
+	{ \
+		.name = nm, \
+		.ch_type = IIO_VOLTAGE, \
+		.channel = ch, \
+		.scan_type = &channel_scan_type, \
+		.attributes = ad7799_iio_channel_attributes, \
+		.ch_out = false, \
+		.indexed = 1, \
+		.diferential = true, \
+	}
+
+/** IIO ADC Channels */
+static struct iio_channel ad7799_iio_channels[] = {
+	AD7799_IIO_CHANN_DEF("ch0", 0),
+	AD7799_IIO_CHANN_DEF("ch1", 1),
+	AD7799_IIO_CHANN_DEF("ch2", 2),
+	END_ATTRIBUTES_ARRAY
+};
+
+/** IIO attributes */
+static struct iio_attribute ad7799_iio_attributes[] = {
+	{
+		.name = "gain",
+		.show = ad7799_iio_gain_read,
+		.store = ad7799_iio_gain_write,
+	},
+	END_ATTRIBUTES_ARRAY,
+};
+
+/** IIO Descriptor */
+struct iio_device const ad7799_iio_descriptor = {
+	.num_ch = 3,
+	.channels = ad7799_iio_channels,
+	.attributes = ad7799_iio_attributes,
+	.debug_attributes = NULL,
+	.buffer_attributes = NULL,
+	.transfer_dev_to_mem = NULL,
+	.transfer_mem_to_dev = NULL,
+	.read_data = NULL,
+	.write_data = NULL,
+	.debug_reg_read = (int32_t (*)())ad7799_read,
+	.debug_reg_write = (int32_t (*)())ad7799_write,
+};
+
