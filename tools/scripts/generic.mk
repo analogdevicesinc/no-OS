@@ -191,6 +191,8 @@ endif
 
 include $(NO-OS)/tools/scripts/libraries.mk
 
+SRC_DIRS := $(patsubst %/,%,$(SRC_DIRS))
+
 # Get all .c and .h files from SRC_DIRS
 SRCS     += $(foreach dir, $(SRC_DIRS), $(call rwildcard, $(dir),*.c))
 INCS     += $(foreach dir, $(SRC_DIRS), $(call rwildcard, $(dir),*.h))
