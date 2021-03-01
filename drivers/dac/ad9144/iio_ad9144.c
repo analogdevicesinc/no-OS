@@ -1,7 +1,8 @@
 /***************************************************************************//**
- *   @file   iio_ad9144.h
- *   @brief  Header file of AD9144 iio.
- *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
+ *   @file   iio_ad9144.c
+ *
+ *   @brief  Implementation of AD9144 IIO Driver.
+ *   @author Andrei Drimbarean (andrei.drimbarean@analog.com)
 ********************************************************************************
  * Copyright 2021(c) Analog Devices, Inc.
  *
@@ -35,15 +36,13 @@
  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
 *******************************************************************************/
 
-#ifndef IIO_AD9144_H
-#define IIO_AD9144_H
+#include "iio_ad9144.h"
 
-#include "iio_types.h"
-#include "ad9144.h"
+struct iio_device const ad9144_iio_descriptor = {
+	.debug_reg_read = (int32_t (*)())ad9144_spi_read,
+	.debug_reg_write = (int32_t (*)())ad9144_spi_write,
+};
 
-/** IIO Descriptor */
-extern struct iio_device const ad9144_iio_descriptor;
-
-#endif //IIO_AD9144_H
