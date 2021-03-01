@@ -10,6 +10,7 @@ INCLUDES = -I../include/ \
 	 -I../projects/ad9361/src/ \
 	 -I./adc/ad9208/ad9208_api \
 	 -I./adc/ad9083/ad9083_api \
+	 -I../projects/ad9083/src/uc \
 	 -I./adc/ad9081/api \
 	 -I./axi_core/axi_adc_core \
 	 -I./axi_core/axi_dac_core \
