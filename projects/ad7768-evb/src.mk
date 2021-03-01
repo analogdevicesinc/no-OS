@@ -36,6 +36,7 @@ SRC_DIRS += $(PLATFORM_DRIVERS)
 SRC_DIRS += $(DRIVERS)/adc/ad7768/
 SRC_DIRS += $(DRIVERS)/axi_core/axi_dmac
 SRC_DIRS += $(DRIVERS)/axi_core/axi_adc_core
+SRC_DIRS += $(DRIVERS)/axi_core/spi_engine
 SRC_DIRS += $(DRIVERS)/spi
 SRC_DIRS += $(DRIVERS)/i2c
 SRC_DIRS += $(DRIVERS)/gpio
