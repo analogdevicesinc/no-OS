@@ -10,9 +10,7 @@ SRCS +=	$(NO-OS)/util/xml.c						\
 
 #drivers
 SRCS += $(DRIVERS)/adc/adc_demo/adc_demo.c				\
-		$(DRIVERS)/dac/dac_demo/dac_demo.c				\
-		$(DRIVERS)/dac/dac_demo/iio_dac_demo.c				\
-		$(DRIVERS)/adc/adc_demo/iio_adc_demo.c				\
+		$(DRIVERS)/dac/dac_demo/dac_demo.c
 
 INCS += $(INCLUDE)/xml.h						\
 	$(INCLUDE)/fifo.h						\
