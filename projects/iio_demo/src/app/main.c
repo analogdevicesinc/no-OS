@@ -78,6 +78,8 @@ static uint8_t out_buff[MAX_SIZE_BASE_ADDR];
 
 #define DAC_DDR_BASEADDR	((uint32_t)out_buff)
 #define ADC_DDR_BASEADDR	((uint32_t)in_buff)
+#define MAX_SAMPLES_PER_CHANNEL	800
+#define DEFAULT_CHANNEL_NO	16
 
 #endif
 
@@ -240,12 +242,6 @@ int main(void)
 	status = dac_demo_init(&dac_desc, &dac_init_par);
 	if (status != SUCCESS)
 		return status;
-	ADC_CHANNEL_NO = adc_desc->active_ch;
-	uint32_t adc_channels = ADC_CHANNEL_NO;
-	struct iio_device adc_demo_iio_descriptor = ADC_DEMO_DEV(adc_channels);
-	DAC_CHANNEL_NO = dac_desc->active_ch;
-	uint32_t dac_channels = DAC_CHANNEL_NO;
-	struct iio_device dac_demo_iio_descriptor = DAC_DEMO_DEV(dac_channels);
 
 	struct iio_app_device devices[] = {
 		IIO_APP_DEVICE("adc_demo", adc_desc,
