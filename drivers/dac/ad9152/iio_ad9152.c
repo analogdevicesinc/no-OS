@@ -1,7 +1,7 @@
 /***************************************************************************//**
- *   @file   iio_ad9152.h
- *   @brief  Header file of AD9152 iio.
- *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
+ *   @file   iio_ad9152.c
+ *   @brief  Implementation of AD9152 IIO Driver.
+ *   @author Andrei Drimbarean (andrei.drimbarean@analog.com)
 ********************************************************************************
  * Copyright 2021(c) Analog Devices, Inc.
  *
@@ -35,15 +35,14 @@
  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
 *******************************************************************************/
 
-#ifndef IIO_AD9152_H
-#define IIO_AD9152_H
-
-#include "iio_types.h"
-#include "ad9152.h"
+#include "iio_ad9152.h"
 
 /** IIO Descriptor */
-extern struct iio_device const ad9152_iio_descriptor;
+struct iio_device const ad9152_iio_descriptor = {
+	.debug_reg_read = (int32_t (*)())ad9152_spi_read,
+	.debug_reg_write = (int32_t (*)())ad9152_spi_write,
+};
 
-#endif //IIO_AD9152_H
