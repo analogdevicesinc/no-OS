@@ -1,7 +1,7 @@
 /***************************************************************************//**
- *   @file   iio_dac_demo.h
- *   @brief  Header file of DAC Demo iio.
- *   @author RNechita (ramona.nechita@analog.com)
+ *   @file   iio_dac_demo.c
+ *   @brief  Implementation of iio_dac_demo.
+ *   @author Andrei Drimbarean (andrei.drimbarean@analog.com)
 ********************************************************************************
  * Copyright 2021(c) Analog Devices, Inc.
  *
@@ -37,14 +37,73 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef IIO_DEMO_DAC
-#define IIO_DEMO_DAC
+#include "iio_dac_demo.h"
 
-#include <stdlib.h>
-#include <sys/types.h>
-#include "dac_demo.h"
-#include "iio.h"
+#define IIO_DAC_DEMO_DEFAULT_CH_NO 16
+#define DAC_DEMO_ATTR(_name, _priv) {\
+	.name = _name,\
+	.priv = _priv,\
+	.show = get_dac_demo_attr,\
+	.store = set_dac_demo_attr\
+}
 
-extern struct iio_device const dac_demo_iio_descriptor;
+#define IIO_DEMO_DAC_CHANNEL(_idx) {\
+	.name = "dac_out_ch",\
+	.ch_type = IIO_VOLTAGE,\
+	.channel = _idx,\
+	.scan_index = _idx,\
+	.indexed = true,\
+	.scan_type = &dac_scan_type,\
+	.attributes = dac_channel_attributes,\
+	.ch_out = true,\
+}
 
-#endif /* IIO_DEMO_DAC */
+struct scan_type dac_scan_type = {
+	.sign = 's',
+	.realbits = 16,
+	.storagebits = 16,
+	.shift = 0,
+	.is_big_endian = false
+};
+
+struct iio_attribute dac_channel_attributes[] = {
+	DAC_DEMO_ATTR("dac_channel_attr", DAC_CHANNEL_ATTR),
+	END_ATTRIBUTES_ARRAY,
+};
+
+struct iio_attribute dac_global_attributes[] = {
+	DAC_DEMO_ATTR("dac_global_attr", DAC_GLOBAL_ATTR),
+	END_ATTRIBUTES_ARRAY,
+};
+
+static struct iio_channel iio_dac_channels[] = {
+	IIO_DEMO_DAC_CHANNEL(0),
+	IIO_DEMO_DAC_CHANNEL(1),
+	IIO_DEMO_DAC_CHANNEL(2),
+	IIO_DEMO_DAC_CHANNEL(4),
+	IIO_DEMO_DAC_CHANNEL(5),
+	IIO_DEMO_DAC_CHANNEL(6),
+	IIO_DEMO_DAC_CHANNEL(7),
+	IIO_DEMO_DAC_CHANNEL(8),
+	IIO_DEMO_DAC_CHANNEL(9),
+	IIO_DEMO_DAC_CHANNEL(10),
+	IIO_DEMO_DAC_CHANNEL(11),
+	IIO_DEMO_DAC_CHANNEL(12),
+	IIO_DEMO_DAC_CHANNEL(13),
+	IIO_DEMO_DAC_CHANNEL(14),
+	IIO_DEMO_DAC_CHANNEL(15)
+};
+
+struct iio_device const dac_demo_iio_descriptor = {
+	.num_ch = TOTAL_DAC_CHANNELS,
+	.channels = iio_dac_channels,
+	.attributes = dac_global_attributes,
+	.debug_attributes = NULL,
+	.buffer_attributes = NULL,
+	.prepare_transfer = update_dac_channels,
+	.end_transfer = close_dac_channels,
+	.read_dev = (int32_t (*)())dac_write_samples,
+	.debug_reg_read = (int32_t (*)()) dac_demo_reg_read,
+	.debug_reg_write = (int32_t (*)()) dac_demo_reg_write
+};
+
