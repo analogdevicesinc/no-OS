@@ -52,7 +52,7 @@
 
 #define MAX_ADC_ADDR		16
 #define DEFAULT_LOCAL_SAMPLES 128
-#define TOTAL_CHANNEL_NO 16
+#define TOTAL_ADC_CHANNELS 16
 /**
  * @struct iio_demo_adc_desc
  * @brief Desciptor.
@@ -63,7 +63,7 @@ struct adc_demo_desc {
 	/** Demo global device attribute */
 	uint32_t adc_global_attr;
 	/** Demo device channel attribute */
-	uint32_t adc_ch_attr[TOTAL_CHANNEL_NO];
+	uint32_t adc_ch_attr[TOTAL_ADC_CHANNELS];
 	/** Active channel**/
 	uint32_t active_ch;
 	/** Array of buffers for each channel*/
@@ -78,7 +78,7 @@ struct adc_demo_init_param {
 	/** Demo global dac attribute */
 	uint32_t dev_global_attr;
 	/** Demo dac channel attribute */
-	uint32_t dev_ch_attr[TOTAL_CHANNEL_NO];
+	uint32_t dev_ch_attr[TOTAL_ADC_CHANNELS];
 	/* NUmber of channels*/
 	uint32_t channel_no;
 	/**Array of buffers for each channel*/
