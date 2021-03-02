@@ -1,7 +1,7 @@
 /***************************************************************************//**
- *   @file   iio_ad9680.h
- *   @brief  Header file of AD9680 iio.
- *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
+ *   @file   iio_ad9680.c
+ *   @brief  Implementation of AD9680 iio.
+ *   @author Andrei Drimbarean (andrei.drimbarean@analog.com)
 ********************************************************************************
  * Copyright 2021(c) Analog Devices, Inc.
  *
@@ -37,13 +37,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef IIO_AD9680_H
-#define IIO_AD9680_H
-
-#include "iio_types.h"
-#include "ad9680.h"
+#include "iio_ad9680.h"
 
 /** IIO Descriptor */
-extern struct iio_device const ad9680_iio_descriptor;
+struct iio_device const ad9680_iio_descriptor = {
+	.debug_reg_read = (int32_t (*)())ad9680_spi_read,
+	.debug_reg_write = (int32_t (*)())ad9680_spi_write,
+};
 
-#endif //IIO_AD9680_H
