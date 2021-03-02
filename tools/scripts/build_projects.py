@@ -54,8 +54,7 @@ def run_cmd(cmd):
 def to_blue(str):
 	return TBLUE + str + TWHITE
 
-#HDF_SERVER = os.environ['HDF_SERVER']
-HDF_SERVER = 'http://romlxstorage1.adlk.analog.com/jenkins_export/master/old_flow/hdl/latest'
+HDF_SERVER = os.environ['HDF_SERVER']
 
 def get_hardware(hardware, platform, projet_dir):
 	if platform == 'xilinx':
