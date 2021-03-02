@@ -192,7 +192,7 @@ int32_t adc_read_samples(void* dev, uint16_t* buff, uint32_t samples)
 
 	if(desc->loopback_buffers == NULL) {
 		//default sin function
-		int offset_per_ch = ARRAY_SIZE(sine_lut) / TOTAL_CHANNEL_NO;
+		int offset_per_ch = ARRAY_SIZE(sine_lut) / TOTAL_ADC_CHANNELS;
 		for(int i = 0; i < samples; i++) {
 			while(get_next_ch_idx(desc->active_ch, ch, &ch))
 				buff[k++] = sine_lut[(i + ch * offset_per_ch ) % ARRAY_SIZE(sine_lut)];
