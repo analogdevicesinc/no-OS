@@ -3,7 +3,7 @@
 #	IIO
 ifeq (y,$(strip $(TINYIIOD)))
 
-include ../../tools/scripts/iio_srcs.mk
+include $(NO-OS)/tools/scripts/iio_srcs.mk
 
 CFLAGS += -DTINYIIOD_VERSION_MAJOR=0	 \
 	   -DTINYIIOD_VERSION_MINOR=1		 \
@@ -62,16 +62,8 @@ endif
 
 #	MQTT
 ifneq ($(if $(findstring mqtt, $(LIBRARIES)), 1),)
-# Generic part
-MQTT_DIR					= $(NO-OS)/libraries/mqtt
-MQTT_LIB					= $(MQTT_DIR)/libmqtt.a
-EXTRA_LIBS					+= $(MQTT_LIB)
-EXTRA_LIBS_PATHS			+= $(MQTT_DIR)
-EXTRA_INC_PATHS		+= $(MQTT_DIR)
 
-CLEAN_MQTT	= $(MAKE) -C $(MQTT_DIR) clean
-$(MQTT_LIB):
-	$(MAKE) -C $(MQTT_DIR)
+include $(NO-OS)/tools/scripts/mqtt_srcs.mk
 
 endif
 
