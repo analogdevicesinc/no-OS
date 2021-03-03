@@ -1,7 +1,7 @@
 # Uncomment to use the desired platform
 # PLATFORM = xilinx
 # PLATFORM = altera
-# PLATFORM = aducm3029
+#PLATFORM = aducm3029
 # PLATFORM = stm32
 
 TINYIIOD=y

@@ -12,7 +12,8 @@ SRCS +=	$(NO-OS)/util/xml.c						\
 SRCS += $(DRIVERS)/adc/adc_demo/adc_demo.c				\
 		$(DRIVERS)/dac/dac_demo/dac_demo.c				\
 		$(DRIVERS)/dac/dac_demo/iio_dac_demo.c				\
-		$(DRIVERS)/adc/adc_demo/iio_adc_demo.c				\
+		$(DRIVERS)/adc/adc_demo/iio_adc_demo.c				
+
 INCS += $(INCLUDE)/xml.h						\
 	$(INCLUDE)/fifo.h						\
 	$(INCLUDE)/uart.h						\
@@ -84,3 +85,56 @@ INCS += $(PROJECT)/src/hal/stm32/main.h \
 LSCRIPT = $(PROJECT)/src/linker/STM32F446RETX_FLASH.ld
 endif
 
+ifeq (linux,$(PLATFORM))
+#ENABLE_IIO_NETWORK = y
+DISABLE_SECURE_SOCKET ?= y
+
+SRC_DIRS += $(NO-OS)/network
+SRC_DIRS += $(NO-OS)/libraries/mbedtls/include/mbedtls
+SRCS += $(NO-OS)/network/linux_s/linux_s.c \
+		$(NO-OS)/network/tcp_socket.c
+SRCS += $(NO-OS)/libraries/iio/iio.c
+SRCS += $(NO-OS)/libraries/iio/libtinyiiod/tinyiiod.c
+SRCS += $(NO-OS)/libraries/iio/libtinyiiod/parser.c
+SRCS += $(PROJECT)/src/app/main.c
+SRCS += $(NO-OS)/iio/iio_demo/demo_dev.c	\
+		$(NO-OS)/iio/iio_app/iio_app.c
+SRCS	 += $(NO-OS)/util/circular_buffer.c
+
+#SRCS += $(PLATFORM_DRIVERS)/linux_uart.c \
+		$(PLATFORM_DRIVERS)/linux_gpio.c
+
+SRCS += $(DRIVERS)/platform/generic/uart.c \
+		$(DRIVERS)/platform/generic/delay.c
+#INCS += $(PLATFORM_DRIVERS)/linux_uart.h \
+		$(PLATFORM_DRIVERS)/linux_gpio.h
+
+INCS += $(NO-OS)/network/tcp_socket.h \
+		$(NO-OS)/network/network_interface.h \
+		$(NO-OS)/network/noos_mbedtls_config.h \
+		$(NO-OS)/network/wifi/at_parser.h \
+		$(NO-OS)/network/wifi/wifi.h \
+		$(NO-OS)/network/wifi/at_params.h \
+		$(NO-OS)/network/linux_s/linux_s.h
+
+INCS	 += $(INCLUDE)/circular_buffer.h
+INCS += $(PROJECT)/src/app/app_config.h  \
+		$(PROJECT)/src/app/parameters.h	
+
+INCS += $(NO-OS)/iio/iio_demo/demo_dev.h \
+		$(NO-OS)/iio/iio_demo/iio_demo_dev.h \
+		$(NO-OS)/iio/iio_app/iio_app.h \
+		$(NO-OS)/libraries/iio/iio_types.h \
+		$(NO-OS)/libraries/iio/iio.h
+INCS += $(NO-OS)/libraries/iio/libtinyiiod/tinyiiod.h \
+		$(NO-OS)/libraries/iio/libtinyiiod/tinyiiod-private.h \
+		$(NO-OS)/libraries/iio/libtinyiiod/compat.h
+
+INCS += $(NO-OS)/libraries/mbedtls/include/mbedtls
+
+INCS += $(INCLUDE)/gpio.h \
+		$(INCLUDE)/delay.h \
+		$(INCLUDE)/irq.h \
+		$(INCLUDE)/trng.h
+
+endif
