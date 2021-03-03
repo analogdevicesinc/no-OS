@@ -37,7 +37,6 @@ CC = arm-none-eabi-gcc
 AS = arm-none-eabi-gcc
 AR = arm-none-eabi-ar
 
-rwildcard=$(foreach d,$(wildcard $(1:=/*)),$(call rwildcard,$d,$2) $(filter $(subst *,%,$2),$d))
 ifneq '' '$(call rwildcard,src,stm32f4*)'
 CFLAGS += -I$(STM32CUBE)/STM32CubeF4/Drivers/STM32F4xx_HAL_Driver/Inc \
 	-I$(STM32CUBE)/STM32CubeF4/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy \
