@@ -58,7 +58,7 @@ MUTE = @
 endif
 
 # recursive wildcard
-rwildcard = $(wildcard $1$2) $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2))
+rwildcard=$(foreach d,$(wildcard $(1:=/*)),$(call rwildcard,$d,$2) $(filter $(subst *,%,$2),$d))
 
 #Creates file with the specified name
 set_one_time_rule = echo Target file. Do not delete > $1
