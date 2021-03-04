@@ -632,7 +632,7 @@ int32_t ad77681_set_continuos_read(struct ad77681_dev *dev,
 				   enum ad77681_continuous_read continuous_enable);
 int32_t ad77681_clear_error_flags(struct ad77681_dev *dev);
 int32_t ad77681_data_to_voltage(struct ad77681_dev *dev,
-				int32_t *raw_code,
+				uint32_t *raw_code,
 				double *voltage);
 int32_t ad77681_CRC_status_handling(struct ad77681_dev *dev,
 				    uint16_t *data_buffer);
