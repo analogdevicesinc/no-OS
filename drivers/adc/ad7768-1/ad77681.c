@@ -401,7 +401,7 @@ int32_t ad77681_CRC_status_handling(struct ad77681_dev *dev,
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad77681_data_to_voltage(struct ad77681_dev *dev,
-				int32_t *raw_code,
+				uint32_t *raw_code,
 				double *voltage)
 {
 	int32_t converted_data;
