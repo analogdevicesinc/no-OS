@@ -42,7 +42,6 @@
 /******************************************************************************/
 #include <malloc.h>
 #include "adf4377.h"
-#include "util.h"
 #include "error.h"
 #include "delay.h"
 
@@ -73,6 +72,32 @@ int32_t adf4377_spi_write(struct adf4377_dev *dev, uint8_t reg_addr,
 	}
 
 	return spi_write_and_read(dev->spi_desc, buff, ADF4377_BUFF_SIZE_BYTES);
+}
+
+/**
+ * @brief Update ADF4377 register.
+ * @param dev - The device structure.
+ * @param reg_addr - The register address.
+ * @param mask - Mask for specific register bits to be updated.
+ * @param data - Data read from the device.
+ * @return Returns SUCCESS in case of success or negative error code otherwise.
+ */
+int32_t adf4377_update(struct adf4377_dev *dev, uint8_t reg_addr,
+		       uint8_t mask, uint8_t data)
+{
+	uint8_t read_val;
+	int32_t ret;
+
+	ret = adf4377_spi_read(dev, reg_addr, &read_val);
+	if (ret != SUCCESS)
+		return ret;
+
+	read_val &= ~mask;
+	read_val |= data;
+
+	ret = adf4377_spi_write(dev, reg_addr, read_val);
+
+	return ret;
 }
 
 /**
@@ -117,11 +142,11 @@ int32_t adf4377_check_scratchpad(struct adf4377_dev *dev)
 	int32_t ret;
 	uint8_t scratchpad;
 
-	ret = adf4377_spi_write(dev, ADF4377_REG000A, ADF4377_SPI_SCRATCHPAD);
+	ret = adf4377_spi_write(dev, ADF4377_REG(0x0A), ADF4377_SPI_SCRATCHPAD);
 	if (ret != SUCCESS)
 		return ret;
 
-	ret = adf4377_spi_read(dev, ADF4377_REG000A, &scratchpad);
+	ret = adf4377_spi_read(dev, ADF4377_REG(0x0A), &scratchpad);
 	if (ret != SUCCESS)
 		return ret;
 
@@ -142,19 +167,19 @@ int32_t adf4377_soft_reset(struct adf4377_dev *dev)
 	uint16_t timeout = 0xFFFF;
 	uint8_t data;
 
-	ret = adf4377_spi_write(dev, ADF4377_REG0000,
-				ADF4377_LSB_FIRST(dev->spi_desc->bit_order) |
-				ADF4377_SDO_ACTIVE(dev->spi3wire) |
-				ADF4377_SOFT_RESET(ADF4377_SOFT_RESET_EN));
+	ret = adf4377_update(dev, ADF4377_REG(0x00),
+			     ADF4377_SOFT_RESET_MSK | ADF4377_SOFT_RESET_R_MSK,
+			     ADF4377_SOFT_RESET(ADF4377_SOFT_RESET_EN) | ADF4377_SOFT_RESET_R(
+				     ADF4377_SOFT_RESET_EN));
 	if (ret != SUCCESS)
 		return ret;
 
 	while(timeout) {
-		ret = adf4377_spi_read(dev, ADF4377_REG0000, &data);
+		ret = adf4377_spi_read(dev, ADF4377_REG(0x00), &data);
 		if (ret != SUCCESS)
 			return ret;
 
-		if( !(data & ADF4377_SOFT_RESET(ADF4377_SOFT_RESET_EN)))
+		if(!(data & ADF4377_SOFT_RESET(ADF4377_SOFT_RESET_EN)))
 			return SUCCESS;
 	}
 
@@ -199,7 +224,15 @@ int32_t adf4377_init(struct adf4377_dev **device,
 	if (ret != SUCCESS)
 		goto error_spi;
 
-	ret = adf4377_spi_read(dev, ADF4377_REG0003, &chip_type);
+	ret = adf4377_spi_write(dev, ADF4377_REG(0x00),
+				ADF4377_LSB_FIRST_R(dev->spi_desc->bit_order) |
+				ADF4377_LSB_FIRST(dev->spi_desc->bit_order) |
+				ADF4377_SDO_ACTIVE_R(dev->spi3wire) |
+				ADF4377_SDO_ACTIVE(dev->spi3wire));
+	if (ret != SUCCESS)
+		goto error_spi;
+
+	ret = adf4377_spi_read(dev, ADF4377_REG(0x03), &chip_type);
 	if (ret != SUCCESS)
 		goto error_spi;
 

@@ -45,67 +45,36 @@
 #include <stdint.h>
 #include "spi.h"
 #include "gpio.h"
+#include "util.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 
 /* Registers Control Bits */
-#define ADF4377_REG0000			0x00
-#define ADF4377_REG0001			0x01
-#define ADF4377_REG0003			0x03
-#define ADF4377_REG0004			0x04
-#define ADF4377_REG0005			0x05
-#define ADF4377_REG000A			0x0A
-#define ADF4377_REG000B			0x0B
-#define ADF4377_REG000C			0x0C
-#define ADF4377_REG000D			0x0D
-#define ADF4377_REG0010			0x10
-#define ADF4377_REG0011			0x11
-#define ADF4377_REG0012			0x12
-#define ADF4377_REG0013			0x13
-#define ADF4377_REG0014			0x14
-#define ADF4377_REG0015			0x15
-#define ADF4377_REG0016			0x16
-#define ADF4377_REG0017			0x17
-#define ADF4377_REG0018			0x18
-#define ADF4377_REG0019			0x19
-#define ADF4377_REG001A			0x1A
-#define ADF4377_REG001B			0x1B
-#define ADF4377_REG001C			0x1C
-#define ADF4377_REG001D 		0x1D
-#define ADF4377_REG001F 		0x1F
-#define ADF4377_REG0020 		0x20
-#define ADF4377_REG0023 		0x23
-#define ADF4377_REG0024 		0x24
-#define ADF4377_REG0025 		0x25
-#define ADF4377_REG0026 		0x26
-#define ADF4377_REG0027 		0x27
-#define ADF4377_REG0028 		0x28
-#define ADF4377_REG0029 		0x29
-#define ADF4377_REG002A 		0x2A
-#define ADF4377_REG002D 		0x2D
-#define ADF4377_REG002E 		0x2E
-#define ADF4377_REG002F 		0x2F
-#define ADF4377_REG0032 		0x32
-#define ADF4377_REG003D 		0x3D
-#define ADF4377_REG0045 		0x45
-#define ADF4377_REG0049 		0x49
-#define ADF4377_REG004B 		0x4B
-#define ADF4377_REG004C 		0x4C
-#define ADF4377_REG004D 		0x4D
-#define ADF4377_REG004F 		0x4F
-#define ADF4377_REG0054 		0x54
+#define ADF4377_REG(x)					(x)
 
 /* ADF4377 REG0000 Map */
-#define ADF4377_SOFT_RESET(x)         	((((x) & 0x1) << 7) | (((x) & 0x1) << 0))
-#define ADF4377_LSB_FIRST(x)       		((((x) & 0x1) << 6) | (((x) & 0x1) << 1))
-#define ADF4377_ADDRESS_ASCENSION(x)  	((((x) & 0x1) << 5) | (((x) & 0x1) << 2))
-#define ADF4377_SDO_ACTIVE(x)         	((((x) & 0x1) << 4) | (((x) & 0x1) << 3))
+#define ADF4377_SOFT_RESET_R_MSK        BIT(7)
+#define ADF4377_SOFT_RESET_R(x)			field_prep(ADF4377_SOFT_RESET_R_MSK, x)
+#define ADF4377_SOFT_RESET_MSK         	BIT(0)
+#define ADF4377_SOFT_RESET(x)			field_prep(ADF4377_SOFT_RESET_MSK, x)
+#define ADF4377_LSB_FIRST_R_MSK			BIT(6)
+#define ADF4377_LSB_FIRST_R(x)       	field_prep(ADF4377_LSB_FIRST_R_MSK, x)
+#define ADF4377_LSB_FIRST_MSK			BIT(1)
+#define ADF4377_LSB_FIRST(x)       		field_prep(ADF4377_LSB_FIRST_MSK, x)
+#define ADF4377_ADDRESS_ASC_R_MSK		BIT(5)
+#define ADF4377_ADDRESS_ASC_R(x)		field_prep(ADF4377_ADDRESS_ASC_R_MSK, x)
+#define ADF4377_ADDRESS_ASC_MSK			BIT(2)
+#define ADF4377_ADDRESS_ASC(x)			field_prep(ADF4377_ADDRESS_ASC_MSK, x)
+#define ADF4377_SDO_ACTIVE_R_MSK       	BIT(4)
+#define ADF4377_SDO_ACTIVE_R(x)			field_prep(ADF4377_SDO_ACTIVE_R_MSK, x)
+#define ADF4377_SDO_ACTIVE_MSK         	BIT(3)
+#define ADF4377_SDO_ACTIVE(x)			field_prep(ADF4377_SDO_ACTIVE_MSK, x)
 
 /* ADF4377 REG0000 Bit Definition */
 #define ADF4377_SDO_ACTIVE_SPI_3W       0x0
-#define ADF4377_SDO_ACTIVE_SPI_4W       0x1
+#define ADF4377_SDO_ACTIVE_SPI_4W		0x1
 
 #define ADF4377_ADDR_ASC_AUTO_DECR      0x0
 #define ADF4377_ADDR_ASC_AUTO_INCR      0x1
@@ -117,9 +86,11 @@
 #define ADF4377_SOFT_RESET_EN           0x1
 
 /* ADF4377 REG0001 Map */
-#define ADF4377_SINGLE_INSTRUCTION(x)   (((x) & 0x1) << 7)
+#define ADF4377_SINGLE_INSTR_MSK		BIT(7)
+#define ADF4377_SINGLE_INSTR(x)   		field_prep(ADF4377_SINGLE_INSTRUCTION_MSK, x)
 #define ADF4377_R001_RSV6               ((0x0) << 6)
-#define ADF4377_MASTER_READBACK_CTRL(x) (((x) & 0x1) << 5)
+#define ADF4377_MASTER_RB_CTRL_MSK		BIT(5)
+#define ADF4377_MASTER_RB_CTRL(x)		field_prep(ADF4377_MASTER_RB_CTRL_MSK, x)
 #define ADF4377_R001_RSV4               ((0x0) << 4)
 #define ADF4377_R001_RSV2               ((0x0) << 2)
 #define ADF4377_R001_RSV1               ((0x0) << 1)
@@ -143,7 +114,8 @@
 #define ADF4377_PRODUCT_ID_MSB          0x0005
 
 /* ADF4377 REG000A Map */
-#define ADF4377_SCRATCHPAD(x)           ((x) & 0xFF)
+#define ADF4377_SCRATCHPAD_MSK			GENMASK(7, 0)
+#define ADF4377_SCRATCHPAD(x)           field_prep(ADF4377_SCRATCHPAD_MSK, x)
 
 /* ADF4377 REG000B Bit Definition */
 #define ADF4377_SPI_REVISION            0x01
@@ -155,13 +127,18 @@
 #define ADF4377_VENDOR_ID _MSB          0x456
 
 /* ADF4377 REG0010 Map*/
-#define ADF4377_N_INT_LSB(x)            ((x) & 0xFF)
+#define ADF4377_N_INT_LSB_MSK			GENMASK(7, 0)
+#define ADF4377_N_INT_LSB(x)            field_prep(ADF4377_N_INT_LSB_MSK, x)
 
 /* ADF4377 REG0011 Map*/
-#define ADF4377_EN_AUTOCAL(x)           (((x) & 0x1) << 7)
-#define ADF4377_EN_RDBLR(x)             (((x) & 0x1) << 6)
-#define ADF4377_DCLK_DIV2(x)            (((x) & 0x3) << 4)
-#define ADF4377_N_INT_MSB(x)            (((x) & 0xF) << 0)
+#define ADF4377_EN_AUTOCAL_MSK			BIT(7)
+#define ADF4377_EN_AUTOCAL(x)           field_prep(ADF4377_EN_AUTOCAL_MSK, x)
+#define ADF4377_EN_RDBLR_MSK			BIT(6)
+#define ADF4377_EN_RDBLR(x)             field_prep(ADF4377_EN_RDBLR_MSK, x)
+#define ADF4377_DCLK_DIV2_MSK			GENMASK(5,4)
+#define ADF4377_DCLK_DIV2(x)            field_prep(ADF4377_DCLK_DIV2_MSK, x)
+#define ADF4377_N_INT_MSB_MSK			GENMASK(3,0)
+#define ADF4377_N_INT_MSB(x)            field_prep(ADF4377_N_INT_MSB_MSK, x)
 
 /* ADF4377 REG0011 Bit Definition */
 #define ADF4377_VCO_CALIB_DIS           0x0
@@ -176,8 +153,10 @@
 #define ADF4377_CLK_DIV2_DIV_8          0x3
 
 /* ADF4377 REG0012 Map*/
-#define ADF4377_CLKOUT_DIV(x)           (((x) & 0x3) << 6)
-#define ADF4377_R_DIV(x)                (((x) & 0x3F) << 0)
+#define ADF4377_CLKOUT_DIV_MSK			GENMASK(7, 6)
+#define ADF4377_CLKOUT_DIV(x)           field_prep(ADF4377_CLKOUT_DIV_MSK, x)
+#define ADF4377_R_DIV_MSK				GENMASK(5, 0)
+#define ADF4377_R_DIV(x)                field_prep(ADF4377_R_DIV_MSK, x)
 
 /* ADF4377 REG0012 Bit Definition */
 #define ADF4377_CLKOUT_DIV_1            0x0
@@ -190,8 +169,10 @@
 
 /* ADF4377 REG0013 Map */
 #define ADF4377_R013_RSV1               (0x0 << 6)
-#define ADF4377_M_VCO_CORE(x)           (((x) & 0x3) << 4)
-#define ADF4377_M_VCO_BIAS(x)           (((x) & 0xF) << 0)
+#define ADF4377_M_VCO_CORE_MSK			GENMASK(5,4)
+#define ADF4377_M_VCO_CORE(x)           field_prep(ADF4377_M_VCO_CORE_MSK, x)
+#define ADF4377_M_VCO_BIAS_MSK          GENMASK(3,0)
+#define ADF4377_M_VCO_BIAS(x)          	field_prep(ADF4377_M_VCO_BIAS_MSK, x)
 
 /* ADF4377 REG0013 Bit Definition */
 #define ADF4377_M_VCO_0                 0x0
@@ -203,17 +184,22 @@
 #define M_VCO_BIAS_MAX                  0x0
 
 /* ADF4377 REG0014 Map */
-#define ADF4377_M_VCO_BAND(x)           (((x) & 0xFF))
+#define ADF4377_M_VCO_BAND_MSK          GENMASK(7,0)
+#define ADF4377_M_VCO_BAND(x)           field_prep(ADF4377_M_VCO_BAND_MSK, x)
 
 /* ADF4377 REG0014 Bit Definition */
 #define ADF4377_VCO_BAND_MIN            0xFF
 #define ADF4377_VCO_BAND_MAX            0x00
 
 /* ADF4377 REG0015 Map */
-#define ADF4377_BLEED_I_LSB(x)          (((x) & 0x3) << 6)
-#define ADF4377_BLEED_POL(x)            (((x) & 0x1) << 5)
-#define ADF4377_EN_BLEED(x)             (((x) & 0x1) << 4)
-#define ADF4377_CP_I(x)                 (((x) & 0xF) << 0)
+#define ADF4377_BLEED_I_LSB_MSK			GENMASK(7, 6)
+#define ADF4377_BLEED_I_LSB(x)          field_prep(ADF4377_BLEED_I_LSB_MSK, x)
+#define ADF4377_BLEED_POL_MSK			BIT(5)
+#define ADF4377_BLEED_POL(x)            field_prep(ADF4377_BLEED_POL_MSK, x)
+#define ADF4377_EN_BLEED_MSK			BIT(4)
+#define ADF4377_EN_BLEED(x)             field_prep(ADF4377_EN_BLEED_MSK, x)
+#define ADF4377_CP_I_MSK				GENMASK(3, 0)
+#define ADF4377_CP_I(x)                 field_prep(ADF4377_CP_I_MSK, x)
 
 /* ADF4377 REG0015 Bit Description */
 #define ADF4377_CURRENT_SINK            0x0
@@ -240,19 +226,25 @@
 #define ADF4377_CP_10MA1                0xF
 
 /* ADF4377 REG0016 Map */
-#define ADF4377_BLEED_I_MSB(x)          ((x) & 0xFF)
+
+#define ADF4377_BLEED_I_MSB_MSK			GENMASK(7, 0)
+#define ADF4377_BLEED_I_MSB(x)          field_prep(ADF4377_BLEED_I_MSB_MSK, x)
 
 /* ADF4377 REG0017 Map */
-#define ADF4377_INV_CLKOUT(x)            (((x) & 0x1) << 7)
-#define ADF4377_N_DEL(x)                 (((x) & 0x7F) << 0)
+#define ADF4377_INV_CLKOUT_MSK			BIT(7)
+#define ADF4377_INV_CLKOUT(x)           field_prep(ADF4377_INV_CLKOUT_MSK, x)
+#define ADF4377_N_DEL_MSK				GENMASK(6, 0)
+#define ADF4377_N_DEL(x)                field_prep(ADF4377_N_DEL_MSK, x)
 
 /* ADF4377 REG0017 Bit Definition */
 #define ADF4377_CLKOUT_INV_DIS          0x0
 #define ADF4377_CLKOUT_INV_EN           0x1
 
 /* ADF4377 REG0018 Map */
-#define ADF4377_CMOS_OV(x)              (((x) & 0x1) << 7)
-#define ADF4377_R_DEL(x)                (((x) & 0x7F) << 0)
+#define ADF4377_CMOS_OV_MSK				BIT(7)
+#define ADF4377_CMOS_OV(x)              field_prep(ADF4377_CMOS_OV_MSK, x)
+#define ADF4377_R_DEL_MSK				GENMASK(6, 0)
+#define ADF4377_R_DEL(x)                field_prep(ADF4377_R_DEL_MSK, x)
 
 /* ADF4377 REG0018 Bit Definition */
 #define ADF4377_1V8_LOGIC               0x0
@@ -262,12 +254,18 @@
 #define ADF4377_R_DEL_MAX               0x7F
 
 /* ADF4377 REG0019 Map */
-#define ADF4377_CLKOUT2_OP(x)           (((x) & 0x3) << 6)
-#define ADF4377_CLKOUT1_OP(x)           (((x) & 0x3) << 4)
-#define ADF4377_PD_CLK(x)               (((x) & 0x1) << 3)
-#define ADF4377_PD_RDET(x)              (((x) & 0x1) << 2)
-#define ADF4377_PD_ADC(x)               (((x) & 0x1) << 1)
-#define ADF4377_PD_CALADC(x)            (((x) & 0x1) << 0)
+#define ADF4377_CLKOUT2_OP_MSK			GENMASK(7, 6)
+#define ADF4377_CLKOUT2_OP(x)           field_prep(ADF4377_CLKOUT2_OP_MSK, x)
+#define ADF4377_CLKOUT1_OP_MSK			GENMASK(5, 4)
+#define ADF4377_CLKOUT1_OP(x)           field_prep(ADF4377_CLKOUT1_OP_MSK, x)
+#define ADF4377_PD_CLK_MSK				BIT(3)
+#define ADF4377_PD_CLK(x)               field_prep(ADF4377_PD_CLK_MSK, x)
+#define ADF4377_PD_RDET_MSK				BIT(2)
+#define ADF4377_PD_RDET(x)              field_prep(ADF4377_PD_RDET_MSK, x)
+#define ADF4377_PD_ADC_MSK				BIT(1)
+#define ADF4377_PD_ADC(x)               field_prep(ADF4377_PD_ADC_MSK, x)
+#define ADF4377_PD_CALADC_MSK			BIT(0)
+#define ADF4377_PD_CALADC(x)            field_prep(ADF4377_PD_CALADC_MSK, x)
 
 /* ADF4377 REG0019 Bit Definition */
 #define ADF4377_CLKOUT2_320MV           0x0
@@ -293,14 +291,22 @@
 #define ADF4377_PD_CALADC_PD            0x1
 
 /* ADF4377 REG001A Map */
-#define ADF4377_PD_ALL(x)               (((x) & 0x1) << 7)
-#define ADF4377_PD_RDIV(x)              (((x) & 0x1) << 6)
-#define ADF4377_PD_NDIV(x)              (((x) & 0x1) << 5)
-#define ADF4377_PD_VCO(x)               (((x) & 0x1) << 4)
-#define ADF4377_PD_LD(x)                (((x) & 0x1) << 3)
-#define ADF4377_PD_PFDCP(x)             (((x) & 0x1) << 2)
-#define ADF4377_PD_CLKOUT1(x)           (((x) & 0x1) << 1)
-#define ADF4377_PD_CLKOUT2(x)           (((x) & 0x1) << 0)
+#define ADF4377_PD_ALL_MSK				BIT(7)
+#define ADF4377_PD_ALL(x)               field_prep(ADF4377_PD_ALL_MSK, x)
+#define ADF4377_PD_RDIV_MSK				BIT(6)
+#define ADF4377_PD_RDIV(x)              field_prep(ADF4377_PD_RDIV_MSK, x)
+#define ADF4377_PD_NDIV_MSK				BIT(5)
+#define ADF4377_PD_NDIV(x)              field_prep(ADF4377_PD_NDIV_MSK, x)
+#define ADF4377_PD_VCO_MSK				BIT(4)
+#define ADF4377_PD_VCO(x)               field_prep(ADF4377_PD_VCO_MSK, x)
+#define ADF4377_PD_LD_MSK				BIT(3)
+#define ADF4377_PD_LD(x)                field_prep(ADF4377_PD_LD_MSK, x)
+#define ADF4377_PD_PFDCP_MSK			BIT(2)
+#define ADF4377_PD_PFDCP(x)             field_prep(ADF4377_PD_PFDCP_MSK, x)
+#define ADF4377_PD_CLKOUT1_MSK			BIT(1)
+#define ADF4377_PD_CLKOUT1(x)           field_prep(ADF4377_PD_CLKOUT1_MSK, x)
+#define ADF4377_PD_CLKOUT2_MSK			BIT(0)
+#define ADF4377_PD_CLKOUT2(x)           field_prep(ADF4377_PD_CLKOUT2_MSK, x)
 
 /* ADF4377 REG001A Bit Definition */
 #define ADF4377_PD_ALL_N_OP             0x0
@@ -328,10 +334,14 @@
 #define ADF4377_PD_CLKOUT2_PD            0x1
 
 /* ADF4377 REG001B Map */
-#define ADF4377_EN_LOL(x)               (((x) & 0x1) << 7)
-#define ADF4377_LDWIN_PW(x)             (((x) & 0x1) << 6)
-#define ADF4377_EN_LDWIN(x)             (((x) & 0x1) << 5)
-#define ADF4377_LD_COUNT(x)             (((x) & 0x1F) << 0)
+#define ADF4377_EN_LOL_MSK				BIT(7)
+#define ADF4377_EN_LOL(x)               field_prep(ADF4377_EN_LOL_MSK, x)
+#define ADF4377_LDWIN_PW_MSK			BIT(6)
+#define ADF4377_LDWIN_PW(x)             field_prep(ADF4377_LDWIN_PW_MSK, x)
+#define ADF4377_EN_LDWIN_MSK			BIT(5)
+#define ADF4377_EN_LDWIN(x)             field_prep(ADF4377_EN_LDWIN_MSK, x)
+#define ADF4377_LD_COUNT_MSK			GENMASK(4, 0)
+#define ADF4377_LD_COUNT(x)             field_prep(ADF4377_LD_COUNT_MSK, x)
 
 /* ADF4377 REG001B Bit Definition */
 #define ADF4377_EN_LOL_DIS              0x0
@@ -344,12 +354,15 @@
 #define ADF4377_EN_LDWIN_EN             0x1
 
 /* ADF4377 REG001C Map */
-#define ADF4377_EN_DNCLK(x)             (((x) & 0x1) << 7)
-#define ADF4377_EN_DRCLK(x)             (((x) & 0x1) << 6)
+#define ADF4377_EN_DNCLK_MSK			BIT(7)
+#define ADF4377_EN_DNCLK(x)            	field_prep(ADF4377_EN_DNCLK_MSK, x)
+#define ADF4377_EN_DRCLK_MSK			BIT(6)
+#define ADF4377_EN_DRCLK(x)             field_prep(ADF4377_EN_DRCLK_MSK, x)
 #define ADF4377_R01C_RSV4               0x0 << 5
 #define ADF4377_R01C_RSV3               0x0 << 4
 #define ADF4377_R01C_RSV2               0x0 << 3
-#define ADF4377_RST_LD(x)               (((x) & 0x1) << 2)
+#define ADF4377_RST_LD_MSK				BIT(2)
+#define ADF4377_RST_LD(x)               field_prep(ADF4377_RST_LD_MSK, x)
 #define ADF4377_R01C_RSV1               0x0 << 0
 
 /* ADF4377 REG001C Bit Definition */
@@ -363,11 +376,15 @@
 #define ADF4377_RST_LD_ACTIVE           0x1
 
 /* ADF4377 REG001D Map */
-#define ADF4377_MUXOUT(x)               (((x) & 0xF) << 4)
+#define ADF4377_MUXOUT_MSK				GENMASK(7, 4)
+#define ADF4377_MUXOUT(x)               field_prep(ADF4377_MUXOUT_MSK, x)
 #define ADF4377_R01D_RSV1               (0x0 << 3)
-#define ADF4377_EN_CPTEST(x)            (((x) & 0x1) << 2)
-#define ADF4377_CP_DOWN(x)              (((x) & 0x1) << 1)
-#define ADF4377_CP_UP(x)                (((x) & 0x1) << 0)
+#define ADF4377_EN_CPTEST_MSK			BIT(2)
+#define ADF4377_EN_CPTEST(x)            field_prep(ADF4377_EN_CPTEST_MSK, x)
+#define ADF4377_CP_DOWN_MSK				BIT(1)
+#define ADF4377_CP_DOWN(x)              field_prep(ADF4377_CP_DOWN_MSK, x)
+#define ADF4377_CP_UP_MSK				BIT(0)
+#define ADF4377_CP_UP(x)                field_prep(ADF4377_CP_UP_MSK, x)
 
 /* ADF4377 REG001D Bit Definitons */
 #define ADF4377_MUXOUT_HIGH_Z           0x0
@@ -388,9 +405,12 @@
 #define ADF4377_CP_UP_ON                0x1
 
 /* ADF4377 REG001F Map */
-#define ADF4377_BST_REF(x)              (((x) & 0x1) << 7)
-#define ADF4377_FILT_REF(x)             (((x) & 0x1) << 6)
-#define ADF4377_REF_SEL(x)              (((x) & 0x1) << 5)
+#define ADF4377_BST_REF_MSK				BIT(7)
+#define ADF4377_BST_REF(x)              field_prep(ADF4377_BST_REF_MSK, x)
+#define ADF4377_FILT_REF_MSK			BIT(6)
+#define ADF4377_FILT_REF(x)             field_prep(ADF4377_FILT_REF_MSK, x)
+#define ADF4377_REF_SEL_MSK				BIT(5)
+#define ADF4377_REF_SEL(x)              field_prep(ADF4377_REF_SEL_MSK, x)
 #define ADF4377_R01F_RSV2               (0x0 << 4)
 #define ADF4377_R01F_RSV1               (0x0 << 0)
 
@@ -407,8 +427,10 @@
 /* ADF4377 REG0020 Map */
 #define ADF4377_R020_RSV5                   (0x0 << 6)
 #define ADF4377_R020_RSV4                   (0x0 << 5)
-#define ADF4377_RST_SYS(x)                  (((x) & 0x1) << 4)
-#define ADF4377_EN_ADC_CLK(x)               (((x) & 0x1) << 3)
+#define ADF4377_RST_SYS_MSK					BIT(4)
+#define ADF4377_RST_SYS(x)                  field_prep(ADF4377_RST_SYS_MSK, x)
+#define ADF4377_EN_ADC_CLK_MSK				BIT(3)
+#define ADF4377_EN_ADC_CLK(x)               field_prep(ADF4377_EN_ADC_CLK_MSK, x)
 #define ADF4377_R020_RSV3                   (0x0 << 2)
 #define ADF4377_R020_RSV2                   (0x0 << 1)
 #define ADF4377_R020_RSV1                   (0x0 << 0)
@@ -428,7 +450,8 @@
 /* ADF4377 REG0024 Map */
 #define ADF4377_R024_RSV4                   (0x0 << 7)
 #define ADF4377_R024_RSV3                   (0x0 << 3)
-#define ADF4377_DCLK_MODE(x)                (((x) & 0x1) << 2)
+#define ADF4377_DCLK_MODE_MSK				BIT(2)
+#define ADF4377_DCLK_MODE(x)                field_prep(ADF4377_DCLK_MODE_MSK, x)
 #define ADF4377_R024_RSV2                   (0x0 << 1)
 #define ADF4377_R024_RSV1                   (0x0 << 0)
 
@@ -437,8 +460,10 @@
 #define ADF4377_DCLK_EN                     0x1
 
 /* ADF4377 REG0025 Map */
-#define ADF4377_CLKODIV_DB(x)               (((x) & 0x1) << 7)
-#define ADF4377_DCLK_DB(x)                  (((x) & 0x1) << 6)
+#define ADF4377_CLKODIV_DB_MSK				BIT(7)
+#define ADF4377_CLKODIV_DB(x)               field_prep(ADF4377_CLKODIV_DB_MSK, x)
+#define ADF4377_DCLK_DB_MSK					BIT(6)
+#define ADF4377_DCLK_DB(x)                  field_prep(ADF4377_DCLK_DB_MSK, x)
 #define ADF4377_R025_RSV3                   (0x0 << 5)
 #define ADF4377_R025_RSV2                   (0x0 << 4)
 #define ADF4377_R025_RSV1                   (0x0 << 0)
@@ -451,46 +476,57 @@
 #define ADF4377_DCLK_DIV_DB_EN              0x1
 
 /* ADF4377 REG0026 Map */
-#define ADF4377_VCO_BAND_DIV(x)             ((x) & 0xFF)
+#define ADF4377_VCO_BAND_DIV_MSK			GENMASK(7, 0)
+#define ADF4377_VCO_BAND_DIV(x)             field_prep(ADF4377_VCO_BAND_DIV_MSK, x)
 
 /* ADF4377 REG0026 Bit Definition */
 #define ADF4377_VCO_BAND_DIV_MIN            0x00
 #define ADF4377_VCO_BAND_DIV_MAX            0xFF
 
 /* ADF4377 REG0027 Map */
-#define ADF4377_SYNTH_LOCK_TIMEOUT_LSB(x)   ((x) & 0xFF)
+#define ADF4377_SYNTH_LOCK_TO_LSB_MSK		GENMASK(7, 0)
+#define ADF4377_SYNTH_LOCK_TO_LSB(x)   		field_prep(ADF4377_SYNTH_LOCK_TO_LSB_MSK, x)
 
 /* ADF4377 REG0028 Map */
-#define ADF4377_O_VCO_DB(x)                 (((x) & 0x1) << 7)
-#define ADF4377_SYNTH_LOCK_TIMEOUT_MSB(x)   (((x) & 0x7F) << 0)
+#define ADF4377_O_VCO_DB_MSK				BIT(7)
+#define ADF4377_O_VCO_DB(x)                 field_prep(ADF4377_O_VCO_DB_MSK, x)
+#define ADF4377_SYNTH_LOCK_TO_MSB_MSK		GENMASK(6, 0)
+#define ADF4377_SYNTH_LOCK_TO_MSB(x)   		field_prep(ADF4377_SYNTH_LOCK_TO_MSB_MSK, x)
 
 /* ADF4377 REG0028 Bit Definition */
 #define ADF4377_O_VCO_DB_DIS            0x0
 #define ADF4377_O_VCO_DB_EN             0x1
 
 /* ADF4377 REG0029 Map */
-#define ADF4377_VCO_ALC_TIMEOUT_LSB(x)     ((x) & 0xFF)
+#define ADF4377_VCO_ALC_TO_LSB_MSK			GENMASK(7, 0)
+#define ADF4377_VCO_ALC_TO_LSB(x)     		field_prep(ADF4377_VCO_ALC_TO_LSB_MSK, x)
 
 /* ADF4377 REG002A Map */
-#define ADF4377_DEL_CTRL_DB(x)              (((x) & 0x1) << 7)
-#define ADF4377_VCO_ALC_TIMEOUT_MSB(x)      (((x) & 0xFF) << 0)
+#define ADF4377_DEL_CTRL_DB_MSK				BIT(7)
+#define ADF4377_DEL_CTRL_DB(x)              field_prep(ADF4377_DEL_CTRL_DB_MSK, x)
+#define ADF4377_VCO_ALC_TO_MSB_MSK			GENMASK(6, 0)
+#define ADF4377_VCO_ALC_TO_MSB(x)      		field_prep(ADF4377_VCO_ALC_TO_MSB_MSK, x)
 
 /* ADF4377 REG002A Bit Definition */
 #define ADF4377_DEL_CTRL_DB_DIS             0x0
 #define ADF4377_DEL_CTRL_DB_EN              0x1
 
 /* ADF4377 REG002D Map */
-#define ADF4377_ADC_CLK_DIV(x)              ((x) & 0xFF)
+#define ADF4377_ADC_CLK_DIV_MSK				GENMASK(7, 0)
+#define ADF4377_ADC_CLK_DIV(x)              field_prep(ADF4377_ADC_CLK_DIV_MSK, x)
 
 /* ADF4377 REG002E Map */
-#define ADF4377_EN_ADC_CNV(x)               (((x) & 0x1) << 7)
+#define ADF4377_EN_ADC_CNV_MSK					BIT(7)
+#define ADF4377_EN_ADC_CNV(x)               field_prep(ADF4377_EN_ADC_CNV_MSK, x)
 #define ADF4377_R02E_RSV5                   (0x0 << 6)
 #define ADF4377_R02E_RSV4                   (0x0 << 5)
 #define ADF4377_R02E_RSV3                   (0x0 << 4)
 #define ADF4377_R02E_RSV2                   (0x0 << 3)
 #define ADF4377_R02E_RSV1                   (0x0 << 2)
-#define ADF4377_EN_ADC(x)                   (((x) & 0x1) << 1)
-#define ADF4377_ADC_A_CONV(x)               (((x) & 0x1) << 0)
+#define ADF4377_EN_ADC_MSK					BIT(1)
+#define ADF4377_EN_ADC(x)                   field_prep(ADF4377_EN_ADC_MSK, x)
+#define ADF4377_ADC_A_CONV_MSK				BIT(0)
+#define ADF4377_ADC_A_CONV(x)               field_prep(ADF4377_ADC_A_CONV_MSK, x)
 
 /* ADF4377 REG002E Bit Definition */
 #define ADF4377_EN_ADC_CNV_DIS              0x0
@@ -508,7 +544,8 @@
 #define ADF4377_R02F_RSV3                   (0x0 << 5)
 #define ADF4377_R02F_RSV2                   (0x0 << 4)
 #define ADF4377_R02F_RSV1                   (0x0 << 3)
-#define ADF4377_DCLK_DIV1(x)                (((x) & 0x3) << 0)
+#define ADF4377_DCLK_DIV1_MSK				GENMASK(1, 0)
+#define ADF4377_DCLK_DIV1(x)                field_prep(ADF4377_DCLK_DIV1_MSK, x)
 
 /* ADF4377 REG002F Bit Definition */
 #define ADF4377_DCLK_DIV1_1                 0x0
@@ -518,7 +555,8 @@
 
 /* ADF4377 REG0032 Map */
 #define ADF4377_R032_RSV5                   (0x0 << 7)
-#define ADF4377_ADC_CLK_SEL(x)              (((x) & 0x1) << 6)
+#define ADF4377_ADC_CLK_SEL_MSK				BIT(6)
+#define ADF4377_ADC_CLK_SEL(x)              field_prep(ADF4377_ADC_CLK_SEL_MSK, x)
 #define ADF4377_R032_RSV4                   (0x0 << 5)
 #define ADF4377_R032_RSV3                   (0x0 << 4)
 #define ADF4377_R032_RSV2                   (0x0 << 3)
@@ -530,9 +568,12 @@
 
 /* ADF4377 REG003D Map */
 #define ADF4377_R03D_RSV2                   (0x0 << 4)
-#define ADF4377_O_VCO_BAND(x)               (((x) & 0x1) << 3)
-#define ADF4377_O_VCO_CORE(x)               (((x) & 0x1) << 2)
-#define ADF4377_O_VCO_BIAS(x)               (((x) & 0x1) << 1)
+#define ADF4377_O_VCO_BAND_MSK				BIT(3)
+#define ADF4377_O_VCO_BAND(x)               field_prep(ADF4377_O_VCO_BAND_MSK, x)
+#define ADF4377_O_VCO_CORE_MSK				BIT(2)
+#define ADF4377_O_VCO_CORE(x)               field_prep(ADF4377_O_VCO_CORE_MSK, x)
+#define ADF4377_O_VCO_BIAS_MSK				BIT(1)
+#define ADF4377_O_VCO_BIAS(x)               field_prep(ADF4377_O_VCO_BIAS_MSK, x)
 #define ADF4377_R03D_RSV1                   (0x0 << 0)
 
 /* ADF4377 REG003D Bit Definition */
@@ -547,42 +588,54 @@
 
 /* ADF4377 REG0045 Map */
 #define ADF4377_R045_RESERVED               (0x0 << 1)
-#define ADF4377_ADC_ST_CNV(x)               (((x) & 0x1) << 0)
+#define ADF4377_ADC_ST_CNV_MSK				BIT(0)
+#define ADF4377_ADC_ST_CNV(x)               field_prep(ADF4377_ADC_ST_CNV_MSK, x)
 
 /* ADF4377 REG0045 Bit Definition */
 #define ADF4377_ADC_ST_ADC_DIS              0x0
 #define ADF4377_ADC_ST_ADC_EN               0x0
 
 /* ADF4377 REG0049 Map */
-#define ADF4377_EN_CLK2(x)                  (((x) & 0x1) << 7)
-#define ADF4377_EN_CLK1(x)                  (((x) & 0x1) << 6)
+#define ADF4377_EN_CLK2_MSK					BIT(7)
+#define ADF4377_EN_CLK2(x)                 	field_prep(ADF4377_EN_CLK2_MSK, x)
+#define ADF4377_EN_CLK1_MSK					BIT(6)
+#define ADF4377_EN_CLK1(x)                  field_prep(ADF4377_EN_CLK1_MSK, x)
 #define ADF4377_R049_RSV2                   (0x0 << 5)
 #define ADF4377_R049_RSV1                   (0x0 << 4)
-#define ADF4377_REF_OK(x)                   (((x) & 0x1) << 3)
-#define ADF4377_ADC_BUSY(x)                 (((x) & 0x1) << 2)
-#define ADF4377_FSM_BUSY(x)                 (((x) & 0x1) << 1)
-#define ADF4377_LOCKED(x)                   (((x) & 0x1) << 0)
+#define ADF4377_REF_OK_MSK					BIT(3)
+#define ADF4377_REF_OK(x)                   field_prep(ADF4377_REF_OK_MSK, x)
+#define ADF4377_ADC_BUSY_MSK				BIT(2)
+#define ADF4377_ADC_BUSY(x)                 field_prep(ADF4377_ADC_BUSY_MSK, x)
+#define ADF4377_FSM_BUSY_MSK				BIT(1)
+#define ADF4377_FSM_BUSY(x)                 field_prep(ADF4377_FSM_BUSY_MSK, x)
+#define ADF4377_LOCKED_MSK					BIT(0)
+#define ADF4377_LOCKED(x)                   field_prep(ADF4377_LOCKED_MSK, x)
 
 /* ADF4377 REG004B Map */
 #define ADF4377_R04B_RESERVED               (0x0 << 2)
-#define ADF4377_VCO_CORE(x)                 (((x) & 0x3) << 0)
+#define ADF4377_VCO_CORE_MSK				GENMASK(1, 0)
+#define ADF4377_VCO_CORE(x)                 field_prep(ADF4377_VCO_CORE_MSK, x)
 
 /* ADF4377 REG004C Map */
-#define ADF4377_CHIP_TEMP_LSB(x)            ((x) & 0xFF)
+#define ADF4377_CHIP_TEMP_LSB_MSK			GENMASK(7, 0)
+#define ADF4377_CHIP_TEMP_LSB(x)            field_prep(ADF4377_CHIP_TEMP_LSB_MSK, x)
 
 /* ADF4377 REG004D Map */
 #define ADF4377_R04D_RESERVED               (0x0 << 1)
-#define ADF4377_CHIP_TEMP_MSB(x)            (((x) & 0x1) << 0)
+#define ADF4377_CHIP_TEMP_MSB_MSK			BIT(0)
+#define ADF4377_CHIP_TEMP_MSB(x)            field_prep(ADF4377_CHIP_TEMP_MSB_MSK, x)
 
 /* ADF4377 REG004F Map */
-#define ADF4377_VCO_BAND(x)                 ((x) & 0xFF)
+#define ADF4377_VCO_BAND_MSK				GENMASK(7, 0)
+#define ADF4377_VCO_BAND(x)                 field_prep(ADF4377_VCO_BAND_MSK, x)
 
 /* ADF4377 REG0054 Map */
-#define ADF4377_CHIP_VERSION(x)             ((x) & 0xFF)
+#define ADF4377_CHIP_VERSION_MSK			GENMASK(7, 0)
+#define ADF4377_CHIP_VERSION(x)             field_prep(ADF4377_CHIP_VERSION_MSK, x)
 
 /* Specifications */
-#define ADF4377_SPI_WRITE_CMD		(0x0 << 7)
-#define ADF4377_SPI_READ_CMD		(0x1 << 7)
+#define ADF4377_SPI_WRITE_CMD		0x0
+#define ADF4377_SPI_READ_CMD		BIT(7)
 #define ADF4377_SPI_SCRATCHPAD		0xAA
 #define ADF4377_SPI_DUMMY_DATA		0x00
 #define ADF4377_SPI_3WIRE			0x0
@@ -623,13 +676,18 @@ int32_t adf4377_spi_write(struct adf4377_dev *dev, uint8_t reg_addr,
 int32_t adf4377_spi_read(struct adf4377_dev *dev, uint8_t reg_addr,
 			 uint8_t *data);
 
+/* ADF4377 Register Update */
+int32_t adf4377_update(struct adf4377_dev *dev, uint8_t reg_addr,
+		       uint8_t mask, uint8_t data);
+
+/* ADF4377 Scratchpad check */
+int32_t adf4377_check_scratchpad(struct adf4377_dev *dev);
+
 /** ADF4377 Initialization */
 int32_t adf4377_init(struct adf4377_dev **device,
 		     struct adf4377_init_param *init_param);
 
 /** ADF4377 Resources Deallocation */
 int32_t adf4377_remove(struct adf4377_dev *dev);
-
-
 
 #endif /* ADF4377_H_ */
