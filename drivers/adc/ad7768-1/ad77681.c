@@ -140,6 +140,10 @@ int32_t ad77681_spi_reg_read(struct ad77681_dev *dev,
 		/* In buf[2] is CRC from the ADC */
 		if (crc != buf[2])
 			ret = FAILURE;
+#ifdef CRC_DEBUG
+		printf("\n%x\t%x\tCRC/XOR: %s\n", crc,
+		       buf[2], ((crc !=  buf[2]) ? "FAULT" : "OK"));
+#endif /* CRC_DEBUG */
 	}
 
 	reg_data[0] = AD77681_REG_READ(reg_addr);
