@@ -54,7 +54,7 @@ int32_t spi_init(struct spi_desc **desc,
 	if (!param)
 		return FAILURE;
 
-	if ((param->platform_ops->spi_ops_init(desc, param)))
+	if ((param->platform_ops->init(desc, param)))
 		return FAILURE;
 
 	(*desc)->platform_ops = param->platform_ops;
@@ -69,7 +69,7 @@ int32_t spi_init(struct spi_desc **desc,
  */
 int32_t spi_remove(struct spi_desc *desc)
 {
-	return desc->platform_ops->spi_ops_remove(desc);
+	return desc->platform_ops->remove(desc);
 }
 
 /**
@@ -83,5 +83,5 @@ int32_t spi_write_and_read(struct spi_desc *desc,
 			   uint8_t *data,
 			   uint16_t bytes_number)
 {
-	return desc->platform_ops->spi_ops_write_and_read(desc, data, bytes_number);
+	return desc->platform_ops->write_and_read(desc, data, bytes_number);
 }

@@ -137,11 +137,11 @@ typedef struct spi_desc {
  */
 struct spi_platform_ops {
 	/** SPI initialization function pointer */
-	int32_t (*spi_ops_init)(struct spi_desc **, const struct spi_init_param *);
+	int32_t (*init)(struct spi_desc **, const struct spi_init_param *);
 	/** SPI write/read function pointer */
-	int32_t (*spi_ops_write_and_read)(struct spi_desc *, uint8_t *, uint16_t);
+	int32_t (*write_and_read)(struct spi_desc *, uint8_t *, uint16_t);
 	/** SPI remove function pointer */
-	int32_t (*spi_ops_remove)(struct spi_desc *);
+	int32_t (*remove)(struct spi_desc *);
 };
 
 /******************************************************************************/

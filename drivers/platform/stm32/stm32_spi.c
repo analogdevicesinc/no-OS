@@ -48,9 +48,9 @@
  * @brief stm32 platform specific SPI platform ops structure
  */
 const struct spi_platform_ops stm32_platform_ops = {
-	.spi_ops_init = &stm32_spi_init,
-	.spi_ops_write_and_read = &stm32_spi_write_and_read,
-	.spi_ops_remove = &stm32_spi_remove
+	.init = &stm32_spi_init,
+	.write_and_read = &stm32_spi_write_and_read,
+	.remove = &stm32_spi_remove
 };
 
 /**
