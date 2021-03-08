@@ -272,19 +272,8 @@ uint8_t ad77681_get_frame_byte(struct ad77681_dev *dev)
 int32_t ad77681_spi_read_adc_data(struct ad77681_dev *dev,
 				  uint8_t *adc_data)
 {
-	uint8_t crc_calc_buf[4], buf[6], crc, frames_8byte = 0;
+	uint8_t buf[6], crc_xor;
 	int32_t ret;
-
-	if (dev->conv_len == AD77681_CONV_24BIT)
-		frames_8byte += 3;
-	else
-		frames_8byte += 2;
-
-	if (dev->crc_sel != AD77681_NO_CRC)
-		frames_8byte++;
-
-	if (dev->status_bit)
-		frames_8byte++;
 
 	buf[0] = AD77681_REG_READ(AD77681_REG_ADC_DATA);
 	buf[1] = 0x00;
@@ -294,17 +283,27 @@ int32_t ad77681_spi_read_adc_data(struct ad77681_dev *dev,
 	buf[5] = 0x00;	/* register address + 3 bytes of data (24bit format) + CRC + Status bit */
 
 
-	ret = spi_write_and_read(dev->spi_desc, buf, frames_8byte + 1);
+	ret = spi_write_and_read(dev->spi_desc, buf, dev->data_frame_byte + 1);
 	if (ret < 0)
 		return ret;
 
-	if (dev->crc_sel == AD77681_CRC) {
-		memcpy(crc_calc_buf, buf, ARRAY_SIZE(buf));
-		crc = ad77681_compute_crc8(crc_calc_buf, 4, INITIAL_CRC);
-		if (crc != buf[3]) {
+	if (dev->crc_sel != AD77681_NO_CRC) {
+		if (dev->crc_sel == AD77681_CRC)
+			crc_xor = ad77681_compute_crc8(buf + 1, dev->data_frame_byte - 1,
+						       INITIAL_CRC_CRC8);
+		else
+			crc_xor = ad77681_compute_xor(buf + 1, dev->data_frame_byte - 1,
+						      INITIAL_CRC_XOR);
+
+		if (crc_xor != buf[dev->data_frame_byte]) {
 			printf("%s: CRC Error.\n", __func__);
 			ret = FAILURE;
 		}
+#ifdef CRC_DEBUG
+		printf("\n%x\t%x\tCRC/XOR: %s\n", crc_xor,
+		       buf[dev->data_frame_byte],
+		       ((crc_xor != buf[dev->data_frame_byte]) ? "FAULT" : "OK"));
+#endif /* CRC_DEBUG */
 	}
 
 	/* Fill the adc_data buffer */
