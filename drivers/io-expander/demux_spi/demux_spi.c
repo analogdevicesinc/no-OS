@@ -54,9 +54,9 @@
  * @brief Demux specific SPI platform ops structure
  */
 const struct spi_platform_ops demux_spi_platform_ops = {
-	.spi_ops_init = demux_spi_init,
-	.spi_ops_remove = demux_spi_remove,
-	.spi_ops_write_and_read = demux_spi_write_and_read
+	.init = demux_spi_init,
+	.remove = demux_spi_remove,
+	.write_and_read = demux_spi_write_and_read
 };
 
 /**

@@ -186,7 +186,7 @@ int32_t linux_spi_remove(struct spi_desc *desc)
  * @brief Linux platform specific SPI platform ops structure
  */
 const struct spi_platform_ops linux_spi_platform_ops = {
-	.spi_ops_init = &linux_spi_init,
-	.spi_ops_write_and_read = &linux_spi_write_and_read,
-	.spi_ops_remove = &linux_spi_remove
+	.init = &linux_spi_init,
+	.write_and_read = &linux_spi_write_and_read,
+	.remove = &linux_spi_remove
 };
