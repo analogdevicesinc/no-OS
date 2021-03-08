@@ -74,9 +74,9 @@
  * @brief Xilinx platform specific SPI platform ops structure
  */
 const struct spi_platform_ops xil_platform_ops = {
-	.spi_ops_init = &xil_spi_init,
-	.spi_ops_write_and_read = &xil_spi_write_and_read,
-	.spi_ops_remove = &xil_spi_remove
+	.init = &xil_spi_init,
+	.write_and_read = &xil_spi_write_and_read,
+	.remove = &xil_spi_remove
 };
 
 /**

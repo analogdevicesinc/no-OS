@@ -61,9 +61,9 @@ significant delays */
  * @brief Spi engine platform specific SPI platform ops structure
  */
 const struct spi_platform_ops spi_eng_platform_ops = {
-	.spi_ops_init = &spi_engine_init,
-	.spi_ops_write_and_read = &spi_engine_write_and_read,
-	.spi_ops_remove = &spi_engine_remove
+	.init = &spi_engine_init,
+	.write_and_read = &spi_engine_write_and_read,
+	.remove = &spi_engine_remove
 };
 
 /******************************************************************************/
