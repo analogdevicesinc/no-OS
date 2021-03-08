@@ -52,19 +52,6 @@
 /******************************************************************************/
 
 /**
- * @enum spi_channel
- * @brief Available SPI channels on the ADuCM3029
- */
-enum spi_channel {
-	/** SPI0 channel. */
-	SPI0,
-	/** SPI1 channel. */
-	SPI1,
-	/** SPI2 channel. */
-	SPI2
-};
-
-/**
  * @enum master_mode
  * @brief Available operations mode for a SPI channel
  */
@@ -104,8 +91,6 @@ struct aducm_device_desc {
  * spi_init_param.
  */
 struct aducm_spi_init_param {
-	/** Select the SPI channel */
-	enum spi_channel	spi_channel;
 	/** Select the operation mode */
 	enum master_mode	master_mode;
 	/** Enable or disable continuous mode */

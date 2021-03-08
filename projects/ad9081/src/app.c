@@ -88,9 +88,9 @@ int main(void)
 #else
 		.type = SPI_PS,
 #endif
-		.device_id = PHY_SPI_DEVICE_ID,
 	};
 	struct spi_init_param phy_spi_init_param = {
+		.device_id = PHY_SPI_DEVICE_ID,
 		.max_speed_hz = 1000000,
 		.mode = SPI_MODE_0,
 		.chip_select = PHY_CS,

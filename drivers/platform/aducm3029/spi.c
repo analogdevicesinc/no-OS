@@ -134,7 +134,7 @@ int32_t spi_init(struct spi_desc **desc,
 		return FAILURE;
 
 	config = param->extra;
-	if (config->spi_channel >= NB_SPI_DEVICES ||
+	if (param->device_id >= NB_SPI_DEVICES ||
 	    param->chip_select > MAX_CS_NUMBER)
 		return FAILURE;
 
@@ -154,8 +154,9 @@ int32_t spi_init(struct spi_desc **desc,
 	spi_desc->chip_select = (1 << param->chip_select);
 	spi_desc->max_speed_hz = param->max_speed_hz;
 	spi_desc->mode = param->mode;
+	spi_desc->device_id = param->device_id;
 
-	dev = devices[config->spi_channel];
+	dev = devices[param->device_id];
 	/* If device not initialized initialize it */
 	if (!dev) {
 		dev = (struct aducm_device_desc *)calloc(1, sizeof(*dev));
@@ -164,14 +165,14 @@ int32_t spi_init(struct spi_desc **desc,
 			free(aducm_desc);
 			return FAILURE;
 		}
-		if (ADI_SPI_SUCCESS != adi_spi_Open(config->spi_channel,
+		if (ADI_SPI_SUCCESS != adi_spi_Open(param->device_id,
 						    dev->buffer,
 						    ADI_SPI_MEMORY_SIZE,
 						    &dev->spi_handle))
 			goto failure;
 		if (SUCCESS != config_device(dev, spi_desc, true))
 			goto failure;
-		devices[config->spi_channel] = dev;
+		devices[param->device_id] = dev;
 	}
 	dev->ref_instances++;
 	aducm_desc->dev = dev;
@@ -206,7 +207,7 @@ int32_t spi_remove(struct spi_desc *desc)
 			    aducm_desc->dev->spi_handle))
 			return FAILURE;
 		free(aducm_desc->dev);
-		devices[aducm_desc->aducm_conf.spi_channel] = NULL;
+		devices[desc->device_id] = NULL;
 	}
 	free(aducm_desc);
 	free(desc);

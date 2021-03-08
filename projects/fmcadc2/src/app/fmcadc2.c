@@ -81,8 +81,8 @@ int main(void)
 #else
 		.type = SPI_PS,
 #endif
-		.device_id = SPI_DEVICE_ID
 	};
+	ad9625_spi_param.device_id = SPI_DEVICE_ID;
 	ad9625_spi_param.extra = &xil_spi_param;
 
 	struct gpio_init_param gpio_sysref_param = {

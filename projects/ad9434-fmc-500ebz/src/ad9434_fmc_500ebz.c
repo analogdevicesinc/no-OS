@@ -68,11 +68,11 @@ int main(void)
 
 	/* Initialize SPI structures */
 	struct xil_spi_init_param xil_spi_param = {
-		.device_id = SPI_DEVICE_ID,
 		.type = SPI_PS,
 	};
 
 	struct spi_init_param ad9434_spi_param = {
+		.device_id = SPI_DEVICE_ID,
 		.max_speed_hz = 10000000u,
 		.chip_select = 0,
 		.mode = SPI_MODE_0,

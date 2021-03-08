@@ -72,6 +72,7 @@ int main(void)
 
 	// SPI configuration
 	struct spi_init_param ad9625_0_spi_param = {
+		.device_id = SPI_DEVICE_ID,
 		.max_speed_hz = 2000000u,
 		.chip_select = 0,
 		.mode = SPI_MODE_0,
@@ -79,6 +80,7 @@ int main(void)
 	};
 
 	struct spi_init_param ad9625_1_spi_param = {
+		.device_id = SPI_DEVICE_ID,
 		.max_speed_hz = 2000000u,
 		.chip_select = 1,
 		.mode = SPI_MODE_0,
@@ -87,7 +89,6 @@ int main(void)
 
 	struct xil_spi_init_param xil_spi_param = {
 		.type = SPI_PL,
-		.device_id = SPI_DEVICE_ID
 	};
 	ad9625_0_spi_param.extra = &xil_spi_param;
 	ad9625_1_spi_param.extra = &xil_spi_param;

@@ -157,7 +157,6 @@ int main(void)
 	const uint32_t chan_no = AD7768_CH_NO, resolution = AD7768_RESOLUTION,
 		       sample_no = 1024;
 	struct xil_spi_init_param xil_spi_initial = {
-		.device_id = SPI_DEVICE_ID,
 		.flags = 0,
 		.type = SPI_PS
 	};
@@ -170,6 +169,7 @@ int main(void)
 	ad7768_init_param default_init_param = {
 		/* SPI */
 		.spi_init = {
+			.device_id = SPI_DEVICE_ID,
 			.max_speed_hz = 1000000,
 			.chip_select = SPI_AD7768_CS,
 			.mode = SPI_MODE_0,

@@ -220,16 +220,19 @@ static int fmcdaq2_spi_init(struct fmcdaq2_init_param *dev_init)
 {
 	/* Initialize SPI structures */
 	struct spi_init_param ad9523_spi_param = {
+		.device_id = SPI_DEVICE_ID,
 		.max_speed_hz = 2000000u,
 		.chip_select = 0,
 		.mode = SPI_MODE_0
 	};
 	struct spi_init_param ad9144_spi_param = {
+		.device_id = SPI_DEVICE_ID,
 		.max_speed_hz = 2000000u,
 		.chip_select = 1,
 		.mode = SPI_MODE_0
 	};
 	struct spi_init_param ad9680_spi_param = {
+		.device_id = SPI_DEVICE_ID,
 		.max_speed_hz = 2000000u,
 		.chip_select = 2,
 		.mode = SPI_MODE_0
@@ -242,7 +245,6 @@ static int fmcdaq2_spi_init(struct fmcdaq2_init_param *dev_init)
 #else
 		.type = SPI_PS,
 #endif
-		.device_id = SPI_DEVICE_ID
 	};
 	ad9523_spi_param.platform_ops = &xil_platform_ops;
 	ad9523_spi_param.extra = &xil_spi_param;
@@ -254,7 +256,6 @@ static int fmcdaq2_spi_init(struct fmcdaq2_init_param *dev_init)
 	ad9680_spi_param.extra = &xil_spi_param;
 #else
 	struct altera_spi_init_param altera_spi_param = {
-		.device_id = SPI_DEVICE_ID,
 		.type = NIOS_II_SPI,
 		.base_address = SYS_SPI_BASE
 	};

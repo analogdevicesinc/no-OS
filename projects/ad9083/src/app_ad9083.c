@@ -125,11 +125,11 @@ int32_t app_ad9083_init(struct app_ad9083 **app,
 	struct app_ad9083 *app_ad9083;
 	struct xil_spi_init_param xil_spi_param = {
 		.type = SPI_PS,
-		.device_id = 0,
 	};
 
 	// clock chip spi settings
 	struct spi_init_param ad9083_spi_init_param = {
+		.device_id = 0,
 		.max_speed_hz = 10000000,
 		.mode = SPI_MODE_0,
 		.chip_select = SPI_AD9083_CS,
