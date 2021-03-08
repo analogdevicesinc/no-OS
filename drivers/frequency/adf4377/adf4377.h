@@ -636,16 +636,39 @@
 /* Specifications */
 #define ADF4377_SPI_WRITE_CMD		0x0
 #define ADF4377_SPI_READ_CMD		BIT(7)
+#define ADF4377_BUFF_SIZE_BYTES		3
+#define ADF4377_MAX_VCO_FREQ		12800000000ull /* Hz */
+#define ADF4377_MIN_VCO_FREQ		6400000000ull /* Hz */
+#define ADF4377_MAX_REFIN_FREQ		1000000000 /* Hz */
+#define ADF4377_MIN_REFIN_FREQ		10000000 /* Hz */
+#define ADF4377_MAX_FREQ_PFD		500000000 /* Hz */
+#define ADF4377_MIN_FREQ_PFD		3000000 /* Hz */
+#define ADF4377_MAX_CLKPN_FREQ		ADF4377_MAX_VCO_FREQ /* Hz */
+#define ADF4377_MIN_CLKPN_FREQ		(ADF4377_MIN_VCO_FREQ / 8) /* Hz */
+
+/* ADF4377 Extra Definitions */
 #define ADF4377_SPI_SCRATCHPAD		0xAA
 #define ADF4377_SPI_DUMMY_DATA		0x00
-#define ADF4377_SPI_3WIRE			0x0
-#define ADF4377_SPI_4WIRE			0x1
-#define ADF4377_BUFF_SIZE_BYTES		3
+#define ADF4377_CHECK_RANGE(freq, range) \
+	((freq > ADF4377_MAX_ ## range) || (freq < ADF4377_MIN_ ## range))
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
+/**
+ * @enum adf4377_dev_id
+ * @brief ID of Devices supported by the driver.
+ */
+enum adf4377_dev_id {
+	ADF4377,
+	ADF4378
+};
+
+/**
+ * @struct adf4377_init_param
+ * @brief ADF4377 Initialization Parameters structure.
+ */
 struct adf4377_init_param {
 	/* SPI Initialization parameters */
 	struct spi_init_param	*spi_init;
@@ -653,8 +676,22 @@ struct adf4377_init_param {
 	struct gpio_init_param	*gpio_ce_param;
 	/* SPI 3-Wire */
 	uint8_t spi3wire;
+	/* Input Reference Clock */
+	uint32_t clkin_freq;
+	/* Output frequency */
+	uint64_t f_clk;
+	/* Charge Pump Current */
+	uint8_t cp_i;
+	/* MUXOUT Select */
+	uint32_t muxout_select;
+	/* Reference doubler enable */
+	uint8_t ref_doubler_en;
 };
 
+/**
+ * @struct adf4377_dev
+ * @brief ADF4377 Device Descriptor.
+ */
 struct adf4377_dev {
 	/* SPI Descriptor */
 	struct spi_desc		*spi_desc;
@@ -662,6 +699,26 @@ struct adf4377_dev {
 	struct gpio_desc	*gpio_ce;
 	/* SPI 3-Wire */
 	uint8_t spi3wire;
+	/* PFD Frequency */
+	uint32_t f_pfd;
+	/* Output frequency */
+	uint64_t f_clk;
+	/* Output frequency of the VCO */
+	uint64_t f_vco;
+	/* Input Reference Clock */
+	uint32_t clkin_freq;
+	/* Charge Pump Current */
+	uint8_t cp_i;
+	/* MUXOUT Default */
+	uint8_t muxout_default;
+	/* Reference doubler enable */
+	uint8_t	ref_doubler_en;
+	/* Reference Divider */
+	uint32_t ref_div_factor;
+	/* CLKOUT Divider */
+	uint8_t clkout_div_sel;
+	/* Feedback Divider (N) */
+	uint16_t n_int;
 };
 
 /******************************************************************************/

@@ -48,8 +48,6 @@
 #include "error.h"
 #include "adf4377.h"
 #include "parameters.h"
-
-#define LOG_LEVEL 6
 #include "print_log.h"
 
 int main(void)
@@ -84,11 +82,11 @@ int main(void)
 	};
 
 	struct adf4377_init_param adf4377_param = {
-		/* SPI Initialization Structure */
 		.spi_init = &spi_init,
-		/* GPIO Chip Enable Initialization Structure */
 		.gpio_ce_param = &gpio_ce_param,
-		.spi3wire = ADF4377_SPI_4WIRE,
+		.spi3wire = ADF4377_SDO_ACTIVE_SPI_4W,
+		.clkin_freq = 100000000,
+		.cp_i = ADF4377_CP_0MA7,
 	};
 
 	ret = adf4377_init(&dev, &adf4377_param);

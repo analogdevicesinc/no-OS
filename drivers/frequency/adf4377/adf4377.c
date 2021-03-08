@@ -187,6 +187,95 @@ int32_t adf4377_soft_reset(struct adf4377_dev *dev)
 }
 
 /**
+ * Set the output frequency.
+ * @param dev - The device structure.
+ * @param freq - The output frequency.
+ * @return SUCCESS in case of success, negative error code otherwise.
+ */
+static int32_t adf4377_set_freq(struct adf4377_dev *dev)
+{
+	int32_t ret;
+
+	dev->clkout_div_sel = 0;
+
+	if(ADF4377_CHECK_RANGE(dev->f_clk, CLKPN_FREQ))
+		return FAILURE;
+
+	dev->f_vco = dev->f_clk;
+
+	while (dev->f_vco < ADF4377_MIN_VCO_FREQ) {
+		dev->f_vco <<= 1;
+		dev->clkout_div_sel++;
+	}
+
+	dev->n_int = dev->f_clk / dev->f_pfd;
+
+	return ret;
+}
+
+/**
+ * Setup the device.
+ * @param dev - The device structure.
+ * @return SUCCESS in case of success, negative error code otherwise.
+ */
+static int32_t adf4377_setup(struct adf4377_dev *dev)
+{
+	int32_t ret;
+	uint8_t chip_type;
+
+	dev->ref_div_factor = 0;
+
+	/* Software Reset */
+	ret = adf4377_soft_reset(dev);
+	if (ret != SUCCESS)
+		return ret;
+
+	ret = adf4377_spi_write(dev, ADF4377_REG(0x00),
+				ADF4377_LSB_FIRST_R(dev->spi_desc->bit_order) |
+				ADF4377_LSB_FIRST(dev->spi_desc->bit_order) |
+				ADF4377_SDO_ACTIVE_R(dev->spi3wire) |
+				ADF4377_SDO_ACTIVE(dev->spi3wire) |
+				ADF4377_ADDRESS_ASC_R(ADF4377_ADDR_ASC_AUTO_INCR) |
+				ADF4377_ADDRESS_ASC(ADF4377_ADDR_ASC_AUTO_INCR));
+	if (ret != SUCCESS)
+		return ret;
+
+	/* Read Chip Type */
+	ret = adf4377_spi_read(dev, ADF4377_REG(0x03), &chip_type);
+	if (ret != SUCCESS)
+		return ret;
+
+	if (chip_type != ADF4377_CHIP_TYPE)
+		return ret;
+
+	/* Scratchpad Check */
+	ret = adf4377_check_scratchpad(dev);
+	if (ret != SUCCESS)
+		return ret;
+
+	/* Update Charge Pump Current Value */
+	ret = adf4377_update(dev, ADF4377_REG(0x15), ADF4377_CP_I_MSK,
+			     ADF4377_CP_I(dev->cp_i));
+	if (ret != SUCCESS)
+		return ret;
+
+	/*Compute PFD */
+	if (!(dev->ref_doubler_en))
+		do {
+			dev->ref_div_factor++;
+			dev->f_pfd = dev->clkin_freq / dev->ref_div_factor;
+		} while (dev->f_pfd > ADF4377_MAX_FREQ_PFD);
+	else
+		dev->f_pfd = dev->clkin_freq * (1 + dev->ref_doubler_en);
+
+	ret = adf4377_set_freq(dev);
+	if (ret != SUCCESS)
+		return ret;
+
+	return ret;
+}
+
+/**
  * @brief Initializes the ADF4377.
  * @param device - The device structure.
  * @param init_param - The structure containing the device initial parameters.
@@ -196,7 +285,6 @@ int32_t adf4377_init(struct adf4377_dev **device,
 		     struct adf4377_init_param *init_param)
 {
 	int32_t ret;
-	uint8_t chip_type;
 	struct adf4377_dev *dev;
 
 	dev = (struct adf4377_dev *)calloc(1, sizeof(*dev));
@@ -204,6 +292,15 @@ int32_t adf4377_init(struct adf4377_dev **device,
 		return -ENOMEM;
 
 	dev->spi3wire = init_param->spi3wire;
+
+	if (ADF4377_CHECK_RANGE(init_param->clkin_freq, REFIN_FREQ))
+		return FAILURE;
+
+	dev->clkin_freq = init_param->clkin_freq;
+	dev->cp_i = init_param->cp_i;
+	dev->muxout_default = init_param->muxout_select;
+	dev->ref_doubler_en = init_param->ref_doubler_en;
+	dev->f_clk = init_param->f_clk;
 
 	/* GPIO Chip Enable */
 	ret = gpio_get(&dev->gpio_ce, init_param->gpio_ce_param);
@@ -219,27 +316,7 @@ int32_t adf4377_init(struct adf4377_dev **device,
 	if (ret != SUCCESS)
 		goto error_gpio;
 
-	/* Software Reset */
-	ret = adf4377_soft_reset(dev);
-	if (ret != SUCCESS)
-		goto error_spi;
-
-	ret = adf4377_spi_write(dev, ADF4377_REG(0x00),
-				ADF4377_LSB_FIRST_R(dev->spi_desc->bit_order) |
-				ADF4377_LSB_FIRST(dev->spi_desc->bit_order) |
-				ADF4377_SDO_ACTIVE_R(dev->spi3wire) |
-				ADF4377_SDO_ACTIVE(dev->spi3wire));
-	if (ret != SUCCESS)
-		goto error_spi;
-
-	ret = adf4377_spi_read(dev, ADF4377_REG(0x03), &chip_type);
-	if (ret != SUCCESS)
-		goto error_spi;
-
-	if (chip_type != ADF4377_CHIP_TYPE)
-		return FAILURE;
-
-	ret = adf4377_check_scratchpad(dev);
+	ret = adf4377_setup(dev);
 	if (ret != SUCCESS)
 		goto error_spi;
 
