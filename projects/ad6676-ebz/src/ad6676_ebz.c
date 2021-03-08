@@ -278,10 +278,10 @@ int main(void)
 #else
 		.type = SPI_PS,
 #endif
-		.device_id = SPI_DEVICE_ID
 	};
 
 	struct spi_init_param ad6676_spi_param = {
+		.device_id = SPI_DEVICE_ID,
 		.max_speed_hz = 2000000u,
 		.chip_select = 0,
 		.mode = SPI_MODE_0,

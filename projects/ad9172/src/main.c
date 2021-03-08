@@ -70,11 +70,11 @@ int main(void)
 {
 	struct xil_spi_init_param xil_spi_param = {
 		.type = SPI_PS,
-		.device_id = SPI_DEVICE_ID,
 		.flags = 0
 	};
 
 	struct spi_init_param hmc7044_spi_param = {
+		.device_id = SPI_DEVICE_ID,
 		.max_speed_hz = 10000000,
 		.mode = SPI_MODE_0,
 		.chip_select = SPI_HMC7044_CS,

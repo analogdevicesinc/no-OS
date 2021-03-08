@@ -62,11 +62,11 @@ int main()
 		.continuous_mode = true,
 		.dma = false,
 		.half_duplex = false,
-		.master_mode = MASTER,
-		.spi_channel = SPI0
+		.master_mode = MASTER
 	};
 
 	struct spi_init_param init_param = {
+		.device_id = 0,
 		.chip_select = 1,
 		.extra = &spi_param,
 		.max_speed_hz = 1000000,

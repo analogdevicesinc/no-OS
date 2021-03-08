@@ -147,6 +147,7 @@
 #define CF_AD9361_RX_DMA_BASEADDR	2
 #define CF_AD9361_TX_DMA_BASEADDR	3
 
+#define SPI_DEVICE_ID		0
 #define SPI_CS			0
 
 #define GPIO_RESET_PIN	1006

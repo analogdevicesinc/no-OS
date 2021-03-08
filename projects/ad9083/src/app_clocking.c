@@ -174,11 +174,11 @@ int32_t app_clocking_init(struct app_clocking **app,
 
 	struct xil_spi_init_param xil_spi_param = {
 		.type = SPI_PS,
-		.device_id = 0,
 	};
 
 	/* clock chip spi settings */
 	struct spi_init_param clkchip_spi_init_param = {
+		.device_id = 0,
 		.max_speed_hz = 10000000,
 		.mode = SPI_MODE_0,
 		.chip_select = CLK_AD9258_CS,

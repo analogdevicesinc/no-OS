@@ -87,6 +87,7 @@ adiHalErr_t ADIHAL_openHw(void *devHalInfo, uint32_t halTimeout_ms)
 
 	status = gpio_get(&dev_hal_data->gpio_adrv_resetb, &gpio_adrv_resetb_param);
 
+	spi_param.device_id = 0;
 	spi_param.max_speed_hz = 25000000;
 	spi_param.mode = SPI_MODE_0;
 	spi_param.chip_select = dev_hal_data->spi_adrv_csn;

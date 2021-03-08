@@ -41,16 +41,6 @@
 #define LINUX_SPI_H_
 
 /**
- * @struct linux_spi_init_param
- * @brief Structure holding the initialization parameters for Linux platform
- * specific SPI parameters.
- */
-struct linux_spi_init_param {
-	/** SPI bus ID (/dev/spidev"device_id"."chip_select") */
-	uint32_t device_id;
-};
-
-/**
  * @brief Linux specific SPI platform ops structure
  */
 extern const struct spi_platform_ops linux_spi_platform_ops;

@@ -95,6 +95,8 @@ struct spi_platform_ops ;
  * @brief Structure holding the parameters for SPI initialization
  */
 typedef struct spi_init_param {
+	/** Device ID */
+	uint32_t	device_id;
 	/** maximum transfer speed */
 	uint32_t	max_speed_hz;
 	/** SPI chip select */
@@ -113,6 +115,8 @@ typedef struct spi_init_param {
  * @brief Structure holding SPI descriptor.
  */
 typedef struct spi_desc {
+	/** Device ID */
+	uint32_t	device_id;
 	/** maximum transfer speed */
 	uint32_t	max_speed_hz;
 	/** SPI chip select */

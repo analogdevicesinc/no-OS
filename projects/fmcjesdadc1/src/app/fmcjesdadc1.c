@@ -83,6 +83,7 @@ int main(void)
 	};
 
 	struct spi_init_param ad9250_0_spi_param = {
+		.device_id = SPI_DEVICE_ID,
 		.max_speed_hz = demux_spi_param.max_speed_hz,
 		.chip_select = 0,
 		.mode = demux_spi_param.mode,
@@ -90,6 +91,7 @@ int main(void)
 	};
 
 	struct spi_init_param ad9250_1_spi_param = {
+		.device_id = SPI_DEVICE_ID,
 		.max_speed_hz = demux_spi_param.max_speed_hz,
 		.chip_select = 1,
 		.mode = demux_spi_param.mode,
@@ -97,6 +99,7 @@ int main(void)
 	};
 
 	struct spi_init_param ad9517_spi_param = {
+		.device_id = SPI_DEVICE_ID,
 		.max_speed_hz = demux_spi_param.max_speed_hz,
 		.chip_select = 4,
 		.mode = demux_spi_param.mode,
@@ -109,7 +112,6 @@ int main(void)
 #else
 		.type = SPI_PS,
 #endif
-		.device_id = SPI_DEVICE_ID
 	};
 
 	demux_spi_param.extra = &xil_spi_param;
