@@ -544,7 +544,7 @@ struct ad77681_dev {
 	uint16_t                        vref;               /* Reference voltage*/
 	uint16_t                        mclk;               /* Mater clock*/
 	uint32_t                        sample_rate;        /* Sample rate*/
-	uint8_t                         data_frame_16bit;   /* SPI 16bit frames*/
+	uint8_t                         data_frame_byte;    /* SPI 8bit frames*/
 };
 
 struct ad77681_init_param {
@@ -570,7 +570,7 @@ struct ad77681_init_param {
 	uint16_t                        vref;
 	uint16_t                        mclk;
 	uint32_t                        sample_rate;
-	uint8_t                         data_frame_16bit;
+	uint8_t                         data_frame_byte;
 };
 
 /******************************************************************************/

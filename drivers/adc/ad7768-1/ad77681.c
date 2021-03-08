@@ -245,10 +245,10 @@ uint8_t ad77681_get_rx_buf_len(struct ad77681_dev *dev)
  * @param dev - The device structure.
  * @return frame_16bit - the number of 16 bit SPI frames
  */
-uint8_t ad77681_get_frame_16bit(struct ad77681_dev *dev)
+uint8_t ad77681_get_frame_byte(struct ad77681_dev *dev)
 {
 	/* number of 8bit frames */
-	uint8_t frame_bytes, frame_16bit;
+	uint8_t frame_bytes;
 	if (dev->conv_len == AD77681_CONV_24BIT)
 		frame_bytes = 3;
 	else
@@ -258,15 +258,9 @@ uint8_t ad77681_get_frame_16bit(struct ad77681_dev *dev)
 	if (dev->status_bit)
 		frame_bytes++;
 
-	/* Conversion from number of 8bit frames to number of 16bit frames */
-	if (frame_bytes %2)
-		frame_16bit = (frame_bytes / 2) + 1;
-	else
-		frame_16bit = frame_bytes / 2;
+	dev->data_frame_byte = frame_bytes;
 
-	dev->data_frame_16bit = frame_16bit;
-
-	return frame_16bit;
+	return frame_bytes;
 }
 
 /**
@@ -953,7 +947,7 @@ int32_t ad77681_set_convlen(struct ad77681_dev *dev,
 
 	if (ret == SUCCESS) {
 		dev->conv_len = conv_len;
-		ad77681_get_frame_16bit(dev);
+		ad77681_get_frame_byte(dev);
 	}
 
 	return ret;
@@ -993,7 +987,7 @@ int32_t ad77681_set_crc_sel(struct ad77681_dev *dev,
 
 	if (ret == SUCCESS) {
 		dev->crc_sel = crc_sel;
-		ad77681_get_frame_16bit(dev);
+		ad77681_get_frame_byte(dev);
 	}
 
 	return ret;
@@ -1020,7 +1014,7 @@ int32_t ad77681_set_status_bit(struct ad77681_dev *dev,
 
 	if (ret == SUCCESS) {
 		dev->status_bit = status_bit;
-		ad77681_get_frame_16bit(dev);
+		ad77681_get_frame_byte(dev);
 	}
 
 	return ret;
@@ -1786,7 +1780,7 @@ int32_t ad77681_setup(struct ad77681_dev **device,
 	dev->vref = init_param.vref;
 	dev->mclk = init_param.mclk;
 	dev->sample_rate = init_param.sample_rate;
-	dev->data_frame_16bit = init_param.data_frame_16bit;
+	dev->data_frame_byte = init_param.data_frame_byte;
 
 	ret = spi_init(&dev->spi_desc, &init_param.spi_eng_dev_init);
 	if (ret < 0) {
@@ -1827,7 +1821,7 @@ int32_t ad77681_setup(struct ad77681_dev **device,
 	ret |= ad77681_error_flags_enabe(dev);
 	ret |= ad77681_clear_error_flags(dev);
 	ret |= ad77681_status(dev, stat);
-	ad77681_get_frame_16bit(dev);
+	ad77681_get_frame_byte(dev);
 	ad77681_update_sample_rate(dev);
 	*status = stat;
 	*device = dev;
