@@ -189,7 +189,6 @@ int main(void)
 #else
 		.type = SPI_PS,
 #endif
-		.device_id = 0,
 		.flags = SPI_CS_DECODE
 	};
 	struct xil_gpio_init_param hal_gpio_param = {
@@ -203,7 +202,6 @@ int main(void)
 #else
 	struct altera_spi_init_param hal_spi_param = {
 		.type = NIOS_II_SPI,
-		.device_id = 0,
 		.base_address = SPI_BASEADDR
 	};
 	struct altera_gpio_init_param hal_gpio_param = {

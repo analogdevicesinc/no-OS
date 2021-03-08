@@ -56,15 +56,6 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
-/**
- * @struct linux_spi_desc
- * @brief Linux platform specific SPI descriptor
- */
-struct linux_spi_desc {
-	/** /dev/spidev"device_id"."chip_select" file descriptor */
-	int spidev_fd;
-};
-
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
@@ -97,7 +88,7 @@ int32_t linux_spi_init(struct spi_desc **desc,
 	linux_init = param->extra;
 
 	snprintf(path, sizeof(path), "/dev/spidev%d.%d",
-		 linux_init->device_id, param->chip_select);
+		 param->device_id, param->chip_select);
 
 	linux_desc->spidev_fd = open(path, O_RDWR);
 	if (linux_desc->spidev_fd < 0) {

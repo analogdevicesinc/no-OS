@@ -93,8 +93,7 @@ int main(void)
 	};
 
 	struct xil_spi_init_param xil_spi_param = {
-		.type = SPI_PS,
-		.device_id = SPI_DEVICE_ID
+		.type = SPI_PS
 	};
 
 	/* this pattern is outputed by the ad9656 chip after the JESD204 test is finished */
@@ -103,10 +102,13 @@ int main(void)
 		.user_test_pattern2 = 0xC3D4
 	};
 
+	ad9508_spi_param.device_id = SPI_DEVICE_ID;
 	ad9508_spi_param.platform_ops = &xil_platform_ops;
 	ad9508_spi_param.extra = &xil_spi_param;
+	ad9553_spi_param.device_id = SPI_DEVICE_ID;
 	ad9553_spi_param.platform_ops = &xil_platform_ops;
 	ad9553_spi_param.extra = &xil_spi_param;
+	ad9656_spi_param.device_id = SPI_DEVICE_ID;
 	ad9656_spi_param.platform_ops = &xil_platform_ops;
 	ad9656_spi_param.extra = &xil_spi_param;
 

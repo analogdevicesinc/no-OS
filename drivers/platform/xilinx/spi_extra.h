@@ -80,8 +80,6 @@ typedef struct xil_spi_init_param {
 	enum xil_spi_type	type;
 	/** SPI flags */
 	uint32_t		flags;
-	/** Device ID */
-	uint32_t		device_id;
 } xil_spi_init_param;
 
 /**

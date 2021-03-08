@@ -95,13 +95,13 @@ int main(void)
 		.continuous_mode = true,
 		.dma = false,
 		.half_duplex = false,
-		.master_mode = MASTER,
-		.spi_channel = SPI1
+		.master_mode = MASTER
 	};
 	struct spi_init_param spi_initial = {
 		.chip_select = 0x00,
 		.max_speed_hz = 10000000,
 		.mode = SPI_MODE_3,
+		.device_id = 1,
 		.extra = &aducm_spi_ini
 	};
 	struct ad7124_init_param ad7124_initial = {

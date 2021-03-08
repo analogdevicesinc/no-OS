@@ -128,18 +128,21 @@ int main(void)
 
 	/* Initialize SPI structures */
 	struct spi_init_param ad9528_spi_param = {
+		.device_id = SPI_DEVICE_ID,
 		.max_speed_hz = 2000000u,
 		.chip_select = 0,
 		.mode = SPI_MODE_0
 	};
 
 	struct spi_init_param ad9152_spi_param = {
+		.device_id = SPI_DEVICE_ID,
 		.max_speed_hz = 2000000u,
 		.chip_select = 1,
 		.mode = SPI_MODE_0
 	};
 
 	struct spi_init_param ad9680_spi_param = {
+		.device_id = SPI_DEVICE_ID,
 		.max_speed_hz = 2000000u,
 		.chip_select = 2,
 		.mode = SPI_MODE_0
@@ -152,7 +155,6 @@ int main(void)
 #else
 		.type = SPI_PS,
 #endif
-		.device_id = SPI_DEVICE_ID
 	};
 	ad9528_spi_param.platform_ops = &xil_platform_ops;
 	ad9528_spi_param.extra = &xil_spi_param;
@@ -162,7 +164,6 @@ int main(void)
 	ad9680_spi_param.extra = &xil_spi_param;
 #else
 	struct altera_spi_init_param altera_spi_param = {
-		.device_id = SPI_DEVICE_ID,
 		.type = NIOS_II_SPI,
 		.base_address = SYS_SPI_BASE
 	};

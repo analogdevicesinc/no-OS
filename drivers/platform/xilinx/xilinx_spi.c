@@ -109,7 +109,7 @@ static int32_t spi_init_pl(struct spi_desc *desc,
 	if(!xdesc->instance)
 		goto pl_error;
 
-	xdesc->config = XSpi_LookupConfig(xinit->device_id);
+	xdesc->config = XSpi_LookupConfig(param->device_id);
 	if(xdesc->config == NULL)
 		goto pl_error;
 
@@ -120,7 +120,7 @@ static int32_t spi_init_pl(struct spi_desc *desc,
 	if(ret != SUCCESS)
 		goto pl_error;
 
-	ret = XSpi_Initialize(xdesc->instance, xinit->device_id);
+	ret = XSpi_Initialize(xdesc->instance, param->device_id);
 	if (ret != SUCCESS)
 		goto pl_error;
 
@@ -183,7 +183,7 @@ static int32_t spi_init_ps(struct spi_desc *desc,
 	if(!xdesc->instance)
 		goto ps_error;
 
-	xdesc->config = XSpiPs_LookupConfig(xinit->device_id);
+	xdesc->config = XSpiPs_LookupConfig(param->device_id);
 	if(xdesc->config == NULL)
 		goto ps_error;
 
@@ -194,7 +194,7 @@ static int32_t spi_init_ps(struct spi_desc *desc,
 	if(ret != SUCCESS)
 		goto ps_error;
 
-	switch (xinit->device_id) {
+	switch (param->device_id) {
 #if (SPI_NUM_INSTANCES >= 1)
 	case 0:
 		input_clock = SPI_CLK_FREQ_HZ(0);

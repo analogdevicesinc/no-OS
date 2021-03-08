@@ -156,8 +156,7 @@ int main(void)
 		.continuous_mode = true,
 		.dma = false,
 		.half_duplex = false,
-		.master_mode = MASTER,
-		.spi_channel = SPI1
+		.master_mode = MASTER
 	};
 
 #endif // ADUCM_PLATFORM
@@ -207,6 +206,7 @@ int main(void)
 #endif //USE_TCP_SOCKET
 
 	struct spi_init_param init_param = {
+		.device_id = 1,
 		.chip_select = 0,
 		.extra = &spi_param,
 		.max_speed_hz = 900000,

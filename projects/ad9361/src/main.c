@@ -85,7 +85,6 @@ struct xil_spi_init_param xil_spi_param = {
 #else
 	.type = SPI_PS,
 #endif
-	.device_id = SPI_DEVICE_ID,
 	.flags = 0
 };
 
@@ -96,12 +95,6 @@ struct xil_gpio_init_param xil_gpio_param = {
 	.type = GPIO_PS,
 #endif
 	.device_id = GPIO_DEVICE_ID
-};
-#endif
-
-#ifdef LINUX_PLATFORM
-struct linux_spi_init_param linux_spi_param = {
-	.device_id = 0
 };
 #endif
 
@@ -410,6 +403,7 @@ AD9361_InitParam default_init_param = {
 	},		//gpio_cal_sw2 *** cal-sw2-gpios
 
 	{
+		.device_id = SPI_DEVICE_ID,
 		.mode = SPI_MODE_1,
 		.chip_select = SPI_CS,
 #ifdef XILINX_PLATFORM
@@ -417,7 +411,6 @@ AD9361_InitParam default_init_param = {
 		.platform_ops = &xil_platform_ops
 #endif
 #ifdef LINUX_PLATFORM
-		.extra = &linux_spi_param,
 		.platform_ops = &linux_spi_platform_ops
 #endif
 	},

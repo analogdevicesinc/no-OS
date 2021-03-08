@@ -89,9 +89,9 @@ int32_t altera_spi_init(struct spi_desc **desc,
 
 	descriptor->chip_select = param->chip_select;
 	descriptor->mode = param->mode;
+	descriptor->device_id = param->device_id;
 
 	altera_descriptor->type = altera_param->type;
-	altera_descriptor->device_id = altera_param->device_id;
 	altera_descriptor->base_address = altera_param->base_address;
 
 	*desc = descriptor;

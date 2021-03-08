@@ -82,14 +82,14 @@ int32_t app_clock_init(struct clk dev_refclk[MULTIDEVICE_INSTANCE_COUNT])
 #else
 		.type = SPI_PS,
 #endif
+	};
+
+	struct spi_init_param clkchip_spi_init_param = {
 #ifdef QUAD_MXFE
 		.device_id = SPI_2_DEVICE_ID,
 #else
 		.device_id = CLK_SPI_DEVICE_ID,
 #endif
-	};
-
-	struct spi_init_param clkchip_spi_init_param = {
 		.max_speed_hz = 10000000,
 		.mode = SPI_MODE_0,
 #ifdef QUAD_MXFE

@@ -56,7 +56,6 @@ int32_t platform_init(void)
 #else
 		.type = SPI_PS,
 #endif
-		.device_id = SPI_DEVICE_ID,
 		.flags = SPI_CS_DECODE
 	};
 
@@ -68,6 +67,7 @@ int32_t platform_init(void)
 #endif
 		.device_id = GPIO_DEVICE_ID
 	};
+	spi_param.device_id = SPI_DEVICE_ID;
 	spi_param.extra = &xilinx_spi_param;
 	spi_param.platform_ops = &xil_platform_ops;
 	gpio_ad9371_resetb_param.platform_ops = &xil_gpio_platform_ops;
@@ -78,7 +78,6 @@ int32_t platform_init(void)
 	gpio_ad9528_sysref_param.extra = &xilinx_gpio_param;
 #else
 	struct altera_spi_init_param altera_spi_param = {
-		.device_id = SPI_DEVICE_ID,
 		.type = NIOS_II_SPI,
 		.base_address = SPI_BASEADDR
 	};
@@ -88,6 +87,7 @@ int32_t platform_init(void)
 		.type = NIOS_II_GPIO,
 		.base_address = GPIO_BASEADDR
 	};
+	spi_param.device_id = SPI_DEVICE_ID;
 	spi_param.platform_ops = &altera_platform_ops;
 	spi_param.extra = &altera_spi_param;
 	gpio_ad9371_resetb_param.platform_ops = &altera_gpio_platform_ops;

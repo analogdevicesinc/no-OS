@@ -62,8 +62,6 @@ enum spi_type {
 struct altera_spi_init_param {
 	/** Altera architecture type */
 	enum spi_type	type;
-	/** Device ID */
-	uint32_t	device_id;
 	/** SPI base address */
 	uint32_t	base_address;
 };
@@ -75,8 +73,6 @@ struct altera_spi_init_param {
 struct altera_spi_desc {
 	/** Altera architecture type */
 	enum spi_type	type;
-	/** Device ID */
-	uint32_t		device_id;
 	/** SPI base address */
 	uint32_t	base_address;
 };

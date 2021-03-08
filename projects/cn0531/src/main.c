@@ -76,8 +76,7 @@ int main(void)
 		.continuous_mode = true,
 		.dma = false,
 		.half_duplex = false,
-		.master_mode = MASTER,
-		.spi_channel = SPI1
+		.master_mode = MASTER
 	};
 	struct ad5791_init_param ad5791_initial = {
 		.act_device = ID_AD5791,
@@ -87,6 +86,7 @@ int main(void)
 		.gpio_ldac.extra = NULL,
 		.gpio_reset.number = 0x0C,
 		.gpio_reset.extra = NULL,
+		.spi_init.device_id = 1,
 		.spi_init.chip_select = 0x00,
 		.spi_init.extra = &aducm_spi_ini,
 		.spi_init.max_speed_hz = 5000000,

@@ -369,7 +369,6 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 #else
 		.type = SPI_PS,
 #endif
-		.device_id = 0,
 #if defined(ZU11EG) || defined(FMCOMMS8_ZCU102)
 		.flags = SPI_CS_DECODE
 #endif
@@ -403,6 +402,7 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 
 	// clock chip spi settings
 	struct spi_init_param clkchip_spi_init_param = {
+		.device_id = 0,
 		.max_speed_hz = 10000000,
 		.mode = SPI_MODE_0,
 		.chip_select = CLK_CS,
@@ -417,6 +417,7 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 #if defined(ZU11EG) || defined(FMCOMMS8_ZCU102)
 	// clock chip spi settings
 	struct spi_init_param car_clkchip_spi_init_param = {
+		.device_id = 0,
 		.max_speed_hz = 10000000,
 		.mode = SPI_MODE_0,
 		.chip_select = CAR_CLK_CS,
