@@ -190,8 +190,8 @@ int main(void)
 		.out_clk_sel = 4,
 		.lpm_enable = 1,
 		.cpll_enable = 0,
-		.ref_rate_khz = 616500,
-		.lane_rate_khz = 12330000,
+		.ref_rate_khz = 308250,
+		.lane_rate_khz = 6165000
 	};
 
 	struct adxcvr_init ad9680_xcvr_param = {
@@ -201,20 +201,20 @@ int main(void)
 		.out_clk_sel = 4,
 		.lpm_enable = 1,
 		.cpll_enable = 1,
-		.ref_rate_khz = 616500,
-		.lane_rate_khz = 12330000
+		.ref_rate_khz = 308250,
+		.lane_rate_khz = 6165000
 	};
 
 #else
 	struct altera_a10_fpll_init ad9680_device_clk_pll_param = {
 		.name = "ad9680_device_clk_pll",
 		.base = RX_A10_FPLL_BASEADDR,
-		.parent_rate = 616500 * 1000
+		.parent_rate = 308250 * 1000
 	};
 	struct altera_a10_fpll_init ad9152_device_clk_pll_param = {
 		.name = "ad9152_device_clk_pll",
 		.base = TX_A10_FPLL_BASEADDR,
-		.parent_rate = 616500 * 1000
+		.parent_rate = 308250 * 1000
 	};
 
 	struct altera_a10_fpll *ad9680_device_clk_pll;
@@ -225,16 +225,16 @@ int main(void)
 		.base = TX_XCVR_BASEADDR,
 		.adxcfg_base = {TX_ADXCFG_0_BASEADDR, TX_ADXCFG_1_BASEADDR, TX_ADXCFG_2_BASEADDR, TX_ADXCFG_3_BASEADDR},
 		.atx_pll_base = TX_PLL_BASEADDR,
-		.lane_rate_khz = 12330000,
-		.parent_rate_khz = 616500,
+		.lane_rate_khz = 6165000,
+		.parent_rate_khz = 308250
 	};
 	struct adxcvr_init ad9680_xcvr_param = {
 		.name = "ad9680_xcvr",
 		.base = RX_XCVR_BASEADDR,
 		.adxcfg_base = {RX_ADXCFG_0_BASEADDR, RX_ADXCFG_1_BASEADDR, RX_ADXCFG_2_BASEADDR, RX_ADXCFG_3_BASEADDR},
 		.atx_pll_base = RX_PLL_BASEADDR,
-		.parent_rate_khz = 616500,
-		.lane_rate_khz = 12330000
+		.parent_rate_khz = 308250,
+		.lane_rate_khz = 6165000
 	};
 #endif
 
@@ -253,8 +253,8 @@ int main(void)
 		.high_density = false,
 		.control_bits_per_sample = 0,
 		.subclass = 1,
-		.device_clk_khz = 12330000 / 40,
-		.lane_clk_khz = 12330000
+		.device_clk_khz = 6165000 /40,
+		.lane_clk_khz = 6165000
 	};
 
 	struct jesd204_rx_init  ad9680_jesd_param = {
@@ -263,8 +263,8 @@ int main(void)
 		.octets_per_frame = 1,
 		.frames_per_multiframe = 32,
 		.subclass = 1,
-		.device_clk_khz = 12330000 / 40,
-		.lane_clk_khz = 12330000
+		.device_clk_khz = 6165000 / 40,
+		.lane_clk_khz = 6165000
 	};
 
 	struct axi_jesd204_tx *ad9152_jesd;
@@ -319,7 +319,7 @@ int main(void)
 
 	// dac-device-clock (1.233G)
 	ad9528_channels[0].channel_num = 2;
-	ad9528_channels[0].channel_divider = 1;
+	ad9528_channels[0].channel_divider = 2;
 
 	//adc sysref (4.9M)
 	ad9528_channels[1].channel_num = 8;
@@ -327,7 +327,7 @@ int main(void)
 
 	// adc-fpga-clock (616.5M)
 	ad9528_channels[2].channel_num = 9;
-	ad9528_channels[2].channel_divider = 2;
+	ad9528_channels[2].channel_divider = 4;
 
 	// adc dev sysref (4.9M)
 	ad9528_channels[3].channel_num = 7;
@@ -335,7 +335,7 @@ int main(void)
 
 	// adc-device-clock (1.233G)
 	ad9528_channels[4].channel_num = 13;
-	ad9528_channels[4].channel_divider = 1;
+	ad9528_channels[4].channel_divider = 2;
 
 	// dac sysref (4.9M)
 	ad9528_channels[5].channel_num = 5;
@@ -343,7 +343,7 @@ int main(void)
 
 	// dac-fpga-fmc (616.5M)
 	ad9528_channels[6].channel_num = 4;
-	ad9528_channels[6].channel_divider = 2;
+	ad9528_channels[6].channel_divider = 4;
 
 	// dac dev sysref (4.9M)
 	ad9528_channels[7].channel_num = 6;
@@ -386,10 +386,10 @@ int main(void)
 	ad9152_param.stpl_samples[1][3] =
 		(ad9152_channels[1].pat_data >> 16) & 0xffff;
 	ad9152_param.interpolation = 1;
-	ad9152_param.lane_rate_kbps = 12330000;
+	ad9152_param.lane_rate_kbps = 6165000;
 
 	// adc settings
-	ad9680_param.lane_rate_kbps = 12330000;
+	ad9680_param.lane_rate_kbps = 6165000;
 
 	/* set GPIOs */
 	gpio_get(&dac_txen,  &dac_txen_param);
