@@ -65,7 +65,6 @@
 #endif
 
 #include "error.h"
-
 #define DEMO_CHANNELS		max(TOTAL_ADC_CHANNELS, TOTAL_DAC_CHANNELS)
 #ifdef ENABLE_LOOPBACK
 #define SAMPLES_PER_CHANNEL	200
@@ -75,7 +74,7 @@ static uint16_t loopback_buffs[DEMO_CHANNELS][SAMPLES_PER_CHANNEL];
 #define loopback_buffs		NULL
 #endif //ENABLE_LOOPBACK
 
-#if defined(ADUCM_PLATFORM) || defined(STM32_PLATFORM)
+#if defined(ADUCM_PLATFORM) || defined(STM32_PLATFORM) || defined(LINUX_PLATFORM)
 
 #define MAX_SIZE_BASE_ADDR	(SAMPLES_PER_CHANNEL * DEMO_CHANNELS * \
 					sizeof(uint16_t))
