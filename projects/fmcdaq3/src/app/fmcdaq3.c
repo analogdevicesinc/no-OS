@@ -443,41 +443,6 @@ int main(void)
 	if (status != SUCCESS) {
 		printf("error: ad9680_setup() failed\n");
 	}
-	status = adxcvr_init(&ad9680_xcvr, &ad9680_xcvr_param);
-	if (status != SUCCESS) {
-		printf("error: %s: adxcvr_init() failed\n", ad9680_xcvr->name);
-	}
-#ifndef ALTERA_PLATFORM
-	status = adxcvr_clk_enable(ad9680_xcvr);
-	if (status != SUCCESS) {
-		printf("error: %s: adxcvr_clk_enable() failed\n", ad9680_xcvr->name);
-	}
-#endif
-	status = axi_jesd204_rx_init(&ad9680_jesd, &ad9680_jesd_param);
-	if (status != SUCCESS) {
-		printf("error: %s: axi_jesd204_rx_init() failed\n", ad9680_jesd->name);
-	}
-	status = axi_jesd204_rx_lane_clk_enable(ad9680_jesd);
-	if (status != SUCCESS) {
-		printf("error: %s: axi_jesd204_tx_lane_clk_enable() failed\n",
-		       ad9680_jesd->name);
-	}
-	status = axi_jesd204_rx_status_read(ad9680_jesd);
-	if (status != SUCCESS) {
-		printf("axi_jesd204_rx_status_read() error: %"PRIi32"\n", status);
-	}
-	status = axi_adc_init(&ad9680_core,  &ad9680_core_param);
-	if (status != SUCCESS) {
-		printf("axi_adc_init() error: %s\n", ad9680_core->name);
-	}
-	ad9680_test(ad9680_device, AD9680_TEST_PN9);
-	if(axi_adc_pn_mon(ad9680_core, AXI_ADC_PN9, 10) == -1) {
-		printf("%s ad9680 - PN9 sequence mismatch!\n", __func__);
-	};
-	ad9680_test(ad9680_device, AD9680_TEST_PN23);
-	if(axi_adc_pn_mon(ad9680_core, AXI_ADC_PN23A, 10) == -1) {
-		printf("%s ad9680 - PN23 sequence mismatch!\n", __func__);
-	};
 	status = axi_jesd204_tx_init(&ad9152_jesd, &ad9152_jesd_param);
 	if (status != SUCCESS) {
 		printf("error: %s: axi_jesd204_rx_init() failed\n", ad9152_jesd->name);
@@ -497,18 +462,57 @@ int main(void)
 		printf("error: %s: adxcvr_clk_enable() failed\n", ad9152_xcvr->name);
 	}
 #endif
+	status = adxcvr_init(&ad9680_xcvr, &ad9680_xcvr_param);
+	if (status != SUCCESS) {
+		printf("error: %s: adxcvr_init() failed\n", ad9680_xcvr->name);
+	}
+#ifndef ALTERA_PLATFORM
+	status = adxcvr_clk_enable(ad9680_xcvr);
+	if (status != SUCCESS) {
+		printf("error: %s: adxcvr_clk_enable() failed\n", ad9680_xcvr->name);
+	}
+#endif
+	status = axi_jesd204_rx_init(&ad9680_jesd, &ad9680_jesd_param);
+	if (status != SUCCESS) {
+		printf("error: %s: axi_jesd204_rx_init() failed\n", ad9680_jesd->name);
+	}
+	status = axi_jesd204_rx_lane_clk_enable(ad9680_jesd);
+	if (status != SUCCESS) {
+		printf("error: %s: axi_jesd204_tx_lane_clk_enable() failed\n",
+		       ad9680_jesd->name);
+	}
 	status = ad9152_setup(&ad9152_device, ad9152_param);
 	if (status != SUCCESS) {
 		printf("error: ad9152_setup() failed\n");
 	}
-	status = axi_jesd204_tx_status_read(ad9152_jesd);
+	status = axi_adc_init(&ad9680_core,  &ad9680_core_param);
 	if (status != SUCCESS) {
-		printf("axi_jesd204_tx_status_read() error: %"PRIi32"\n", status);
+		printf("axi_adc_init() error: %s\n", ad9680_core->name);
 	}
 	status = axi_dac_init(&ad9152_core, &ad9152_core_param);
 	if (status != SUCCESS) {
 		printf("axi_dac_init() error: %s\n", ad9152_core->name);
 	}
+
+	status = axi_jesd204_rx_status_read(ad9680_jesd);
+	if (status != SUCCESS) {
+		printf("axi_jesd204_rx_status_read() error: %"PRIi32"\n", status);
+	}
+
+	status = axi_jesd204_tx_status_read(ad9152_jesd);
+	if (status != SUCCESS) {
+		printf("axi_jesd204_tx_status_read() error: %"PRIi32"\n", status);
+	}
+
+	ad9680_test(ad9680_device, AD9680_TEST_PN9);
+	if(axi_adc_pn_mon(ad9680_core, AXI_ADC_PN9, 10) == -1) {
+		printf("%s ad9680 - PN9 sequence mismatch!\n", __func__);
+	};
+	ad9680_test(ad9680_device, AD9680_TEST_PN23);
+	if(axi_adc_pn_mon(ad9680_core, AXI_ADC_PN23A, 10) == -1) {
+		printf("%s ad9680 - PN23 sequence mismatch!\n", __func__);
+	};
+
 	ad9152_status(ad9152_device);
 
 	// ad9152-x1 do not support data path prbs (use short-tpl)
