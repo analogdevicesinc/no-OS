@@ -78,8 +78,6 @@ static uint8_t out_buff[MAX_SIZE_BASE_ADDR];
 
 #define DAC_DDR_BASEADDR	((uint32_t)out_buff)
 #define ADC_DDR_BASEADDR	((uint32_t)in_buff)
-#define MAX_SAMPLES_PER_CHANNEL	800
-#define DEFAULT_CHANNEL_NO	16
 
 #endif
 
@@ -150,8 +148,6 @@ int32_t platform_init()
 #endif
 	return 0;
 }
-
-uint16_t buf[DEFAULT_CHANNEL_NO][MAX_SAMPLES_PER_CHANNEL];
 
 /***************************************************************************//**
  * @brief main
