@@ -38,17 +38,28 @@ def parse_input():
 		args.platform, args.build_name)
 
 ERR = 0
+LOG_START = " -> "
+
+def log(msg):
+	print(TGREEN + LOG_START + TWHITE + msg)
+
+def log_err(msg):
+	print(TRED + LOG_START + msg + TWHITE)
+
+def log_success(msg):
+	print(TGREEN + LOG_START + msg + TWHITE)
 
 def run_cmd(cmd):
 	log_file = 'log.txt'
-	print(cmd)
+	log(cmd)
 	sys.stdout.flush()
 	err = os.system(cmd + ' > %s 2>&1' % log_file)
 	if (err != 0):
 		global ERR
-		print(TGREEN + "Error" + TWHITE)
-		print("See log:")
-		os.system("cat %s" % log_file)
+		log_err("ERROR")
+		log("See log:")
+		os.system("sed 's/^/" + TRED + LOG_START + TWHITE + "/' %s" % log_file)
+		os.system("sed 's/^/" + TRED + LOG_START + TWHITE + "/' %s" % log_file)
 		ERR = 1
 
 def to_blue(str):
@@ -71,11 +82,11 @@ def get_hardware(hardware, platform, projet_dir):
 		return local_file
 
 	cmd = 'wget %s/%s -O %s/%s' % (HDF_SERVER, sever_file, projet_dir, local_file)
-	print("Get %s" % sever_file)
+	log("Get %s" % sever_file)
 	err = os.system(cmd + ' > /dev/null 2>&1')
 	if (err != 0):
 		global ERR
-		print(TGREEN + "Error" + TWHITE)
+		log_err("ERROR")
 		ERR = 1
 
 	return local_file
@@ -100,10 +111,10 @@ class BuildConfig:
 			self.export_file = self.export_file.replace('.elf', '.hex')
 
 	def build(self):
-		print("Runing build:" )
-		print("\tname : %s" % to_blue(self.build_name))
-		print("\tproject : %s" % to_blue(self.project))
-		print("\tplatform : %s" % to_blue(self.platform))
+		log("Runing build:" )
+		log("\tname : %s" % to_blue(self.build_name))
+		log("\tproject : %s" % to_blue(self.project))
+		log("\tplatform : %s" % to_blue(self.platform))
 			
 		cmd = "make -C " + self.project_dir + \
 			" PLATFORM=" + self.platform + \
@@ -115,7 +126,7 @@ class BuildConfig:
 			" -j%d" % (multiprocessing.cpu_count() - 1)
 			
 		if self.hardware != '':
-			print("\thardware : %s" % to_blue(self.hardware))
+			log("\thardware : %s" % to_blue(self.hardware))
 			hardware_file = get_hardware(self.hardware,
 						self.platform, self.project_dir)
 			cmd = cmd + ' HARDWARE=%s' % hardware_file
@@ -123,7 +134,7 @@ class BuildConfig:
 		cmd = cmd + ' ra'
 		run_cmd(cmd)
 		
-		print(TGREEN + "DONE" + TWHITE)
+		log_success("DONE")
 
 def main():
 	create_dir_cmd = "test -d {0} || mkdir -p {0}"
