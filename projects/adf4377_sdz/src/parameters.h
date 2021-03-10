@@ -53,6 +53,13 @@
 
 #define GPIO_DEVICE_ID				XPAR_PS7_GPIO_0_DEVICE_ID
 
+#define UART_DEVICE_ID				XPAR_XUARTPS_0_DEVICE_ID
+#define UART_IRQ_ID				    XPAR_XUARTPS_1_INTR
+
+#define UART_BAUDRATE	            115200
+
+#define INTC_DEVICE_ID				XPAR_SCUGIC_SINGLE_DEVICE_ID
+
 #define GPIO_OFFSET					32 + 54
 #define GPIO_MUXOUT                 GPIO_OFFSET
 #define GPIO_LKDET                  GPIO_OFFSET + 1

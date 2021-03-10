@@ -41,5 +41,6 @@
 #define APP_CONFIG_H_
 
 //#define XILINX_PLATFORM
+//#define IIO_SUPPORT
 
 #endif /* APP_CONFIG_H_ */

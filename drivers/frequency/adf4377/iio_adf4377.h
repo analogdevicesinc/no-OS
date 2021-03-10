@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   projects/adf4377_sdz/src/adf4377_sdz.c
- *   @brief  Implementation of Main Function.
+ *   @file   iio_adf4377.h
+ *   @brief  Header file of adf4377 IIO.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
  * Copyright 2021(c) Analog Devices, Inc.
@@ -37,79 +37,20 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
+#ifndef IIO_ADF4377_H
+#define IIO_ADF4377_H
+
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include <xparameters.h>
-#include "spi.h"
-#include "spi_extra.h"
-#include "gpio.h"
-#include "gpio_extra.h"
-#include "error.h"
+#include "iio_types.h"
 #include "adf4377.h"
-#include "parameters.h"
-#include "print_log.h"
-#include "util.h"
 
-#ifdef IIO_SUPPORT
-#include "iio_app.h"
-#include "iio_adf4377.h"
-#endif
+/******************************************************************************/
+/*************************** Types Declarations *******************************/
+/******************************************************************************/
 
-int main(void)
-{
-	int32_t ret;
-	struct adf4377_dev *dev;
+/** IIO Descriptor */
+extern struct iio_device const adf4377_iio_descriptor;
 
-	struct xil_spi_init_param xil_spi_init = {
-		.device_id = SPI_DEVICE_ID,
-		.flags = 0,
-		.type = SPI_PS
-	};
-
-	struct xil_gpio_init_param xil_gpio_init = {
-		.device_id = GPIO_DEVICE_ID,
-		.type = GPIO_PS
-	};
-
-	struct gpio_init_param gpio_ce_param = {
-		.number = GPIO_CE,
-		.platform_ops = &xil_gpio_platform_ops,
-		.extra = &xil_gpio_init
-	};
-
-	struct spi_init_param spi_init = {
-		.max_speed_hz = 2000000,
-		.chip_select = SPI_ADF4377_CS,
-		.mode = SPI_MODE_0,
-		.bit_order = SPI_BIT_ORDER_MSB_FIRST,
-		.platform_ops = &xil_platform_ops,
-		.extra = &xil_spi_init
-	};
-
-	struct adf4377_init_param adf4377_param = {
-		.spi_init = &spi_init,
-		.gpio_ce_param = &gpio_ce_param,
-		.spi3wire = ADF4377_SDO_ACTIVE_SPI_4W,
-		.clkin_freq = 100000000,
-		.cp_i = ADF4377_CP_0MA7,
-	};
-
-	ret = adf4377_init(&dev, &adf4377_param);
-	if (ret != SUCCESS) {
-		pr_err("ADF4377 Initialization failed!\n");
-		return FAILURE;
-	}
-
-#ifdef IIO_SUPPORT
-	struct iio_app_device devices[] = {
-		IIO_APP_DEVICE("adf4377_dev", dev, &adf4377_iio_descriptor,
-			       NULL, NULL),
-	};
-	return iio_app_run(devices, ARRAY_SIZE(devices));
-#endif
-
-	ret = adf4377_remove(dev);
-
-	return ret;
-}
+#endif //IIO_ADF4377_H
