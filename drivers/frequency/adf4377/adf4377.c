@@ -210,6 +210,19 @@ static int32_t adf4377_set_freq(struct adf4377_dev *dev)
 
 	dev->n_int = dev->f_clk / dev->f_pfd;
 
+	ret = adf4377_update(dev, ADF4377_REG(0x11),
+			     ADF4377_EN_RDBLR_MSK | ADF4377_N_INT_MSB_MSK,
+			     ADF4377_EN_RDBLR(dev->ref_doubler_en) | ADF4377_N_INT_MSB(dev->n_int >> 8));
+	if (ret != SUCCESS)
+		return ret;
+
+	ret = adf4377_update(dev, ADF4377_REG(0x12),
+			     ADF4377_R_DIV_MSK | ADF4377_CLKOUT_DIV_MSK,
+			     ADF4377_CLKOUT_DIV(dev->clkout_div_sel) | ADF4377_R_DIV(dev->ref_div_factor));
+	if (ret != SUCCESS)
+		return ret;
+
+	ret = adf4377_spi_write(dev, ADF4377_REG(0x10), ADF4377_N_INT_LSB(dev->n_int));
 	return ret;
 }
 
@@ -222,6 +235,9 @@ static int32_t adf4377_setup(struct adf4377_dev *dev)
 {
 	int32_t ret;
 	uint8_t chip_type;
+	uint32_t f_div_rclk;
+	uint8_t dclk_div1, dclk_div2, dclk_mode;
+	uint8_t synth_lock_timeout, vco_alc_timeout, adc_clk_div, vco_band_div;
 
 	dev->ref_div_factor = 0;
 
@@ -267,6 +283,115 @@ static int32_t adf4377_setup(struct adf4377_dev *dev)
 		} while (dev->f_pfd > ADF4377_MAX_FREQ_PFD);
 	else
 		dev->f_pfd = dev->clkin_freq * (1 + dev->ref_doubler_en);
+
+	if(ADF4377_CHECK_RANGE(dev->f_pfd, FREQ_PFD))
+		return FAILURE;
+
+	f_div_rclk = dev->f_pfd;
+
+	if (dev->f_pfd <= ADF4377_FREQ_PFD_80MHZ) {
+		dclk_div1 = ADF4377_DCLK_DIV1_1;
+		dclk_div2 = ADF4377_DCLK_DIV2_1;
+		dclk_mode = ADF4377_DCLK_MODE_DIS;
+	} else if (dev->f_pfd <= ADF4377_FREQ_PFD_125MHZ) {
+		dclk_div1 = ADF4377_DCLK_DIV1_1;
+		dclk_div2 = ADF4377_DCLK_DIV2_1;
+		dclk_mode = ADF4377_DCLK_MODE_EN;
+	} else if (dev->f_pfd <= ADF4377_FREQ_PFD_160MHZ) {
+		dclk_div1 = ADF4377_DCLK_DIV1_2;
+		dclk_div2 = ADF4377_DCLK_DIV2_1;
+		dclk_mode = ADF4377_DCLK_MODE_DIS;
+		f_div_rclk /= 2;
+	} else if (dev->f_pfd <= ADF4377_FREQ_PFD_250MHZ) {
+		dclk_div1 = ADF4377_DCLK_DIV1_2;
+		dclk_div2 = ADF4377_DCLK_DIV2_1;
+		dclk_mode = ADF4377_DCLK_MODE_EN;
+		f_div_rclk /= 2;
+	} else if (dev->f_pfd <= ADF4377_FREQ_PFD_320MHZ) {
+		dclk_div1 = ADF4377_DCLK_DIV1_2;
+		dclk_div2 = ADF4377_DCLK_DIV2_2;
+		dclk_mode = ADF4377_DCLK_MODE_DIS;
+		f_div_rclk /= 4;
+	} else {
+		dclk_div1 = ADF4377_DCLK_DIV1_2;
+		dclk_div2 = ADF4377_DCLK_DIV2_2;
+		dclk_mode = ADF4377_DCLK_MODE_EN;
+		f_div_rclk /= 4;
+	}
+
+	synth_lock_timeout = DIV_ROUND_UP(f_div_rclk, 50000);
+	vco_alc_timeout = DIV_ROUND_UP(f_div_rclk, 20000);
+	vco_band_div = DIV_ROUND_UP(f_div_rclk, 150000 * 16 * (1 << dclk_mode));
+	adc_clk_div = DIV_ROUND_UP((f_div_rclk / 400000 - 2), 4);
+
+	ret = adf4377_update(dev, ADF4377_REG(0x1C),
+			     ADF4377_EN_DNCLK_MSK | ADF4377_EN_DRCLK_MSK,
+			     ADF4377_EN_DNCLK(ADF4377_EN_DNCLK_ON) | ADF4377_EN_DRCLK(ADF4377_EN_DRCLK_ON));
+	if (ret != SUCCESS)
+		return ret;
+
+	ret = adf4377_update(dev, ADF4377_REG(0x11),
+			     ADF4377_EN_AUTOCAL_MSK | ADF4377_DCLK_DIV2_MSK,
+			     ADF4377_EN_AUTOCAL(ADF4377_VCO_CALIB_EN) | ADF4377_DCLK_DIV2(dclk_div2));
+	if (ret != SUCCESS)
+		return ret;
+
+	ret = adf4377_update(dev, ADF4377_REG(0x2E),
+			     ADF4377_EN_ADC_CNV_MSK | ADF4377_EN_ADC_MSK | ADF4377_ADC_A_CONV_MSK,
+			     ADF4377_EN_ADC_CNV(ADF4377_EN_ADC_CNV_EN) | ADF4377_EN_ADC(
+				     ADF4377_EN_ADC_EN) | ADF4377_ADC_A_CONV(ADF4377_ADC_A_CONV_VCO_CALIB));
+	if (ret != SUCCESS)
+		return ret;
+
+	ret = adf4377_update(dev, ADF4377_REG(0x20), ADF4377_EN_ADC_CLK_MSK,
+			     ADF4377_EN_ADC_CLK(ADF4377_EN_ADC_CLK_EN));
+	if (ret != SUCCESS)
+		return ret;
+
+	ret = adf4377_update(dev, ADF4377_REG(0x2F), ADF4377_DCLK_DIV1_MSK,
+			     ADF4377_DCLK_DIV1(dclk_div1));
+	if (ret != SUCCESS)
+		return ret;
+
+	ret = adf4377_update(dev, ADF4377_REG(0x2F), ADF4377_DCLK_DIV1_MSK,
+			     ADF4377_DCLK_DIV1(dclk_div1));
+	if (ret != SUCCESS)
+		return ret;
+
+	ret = adf4377_update(dev, ADF4377_REG(0x24), ADF4377_DCLK_MODE_MSK,
+			     ADF4377_DCLK_MODE(dclk_mode));
+	if (ret != SUCCESS)
+		return ret;
+
+	ret = adf4377_spi_write(dev, ADF4377_REG(0x27),
+				ADF4377_SYNTH_LOCK_TO_LSB(synth_lock_timeout));
+	if (ret != SUCCESS)
+		return ret;
+
+	ret = adf4377_update(dev, ADF4377_REG(0x28), ADF4377_SYNTH_LOCK_TO_MSB_MSK,
+			     ADF4377_SYNTH_LOCK_TO_MSB(synth_lock_timeout >> 8));
+	if (ret != SUCCESS)
+		return ret;
+
+	ret = adf4377_spi_write(dev,ADF4377_REG(0x29),
+				ADF4377_VCO_ALC_TO_LSB(vco_alc_timeout));
+	if (ret != SUCCESS)
+		return ret;
+
+	ret = adf4377_update(dev, ADF4377_REG(0x2A), ADF4377_VCO_ALC_TO_MSB_MSK,
+			     ADF4377_VCO_ALC_TO_MSB(vco_alc_timeout >> 8));
+	if (ret != SUCCESS)
+		return ret;
+
+	ret = adf4377_spi_write(dev, ADF4377_REG(0x26),
+				ADF4377_VCO_BAND_DIV(vco_band_div));
+	if (ret != SUCCESS)
+		return ret;
+
+	ret = adf4377_spi_write(dev, ADF4377_REG(0x2D),
+				ADF4377_ADC_CLK_DIV(adc_clk_div));
+	if (ret != SUCCESS)
+		return ret;
 
 	ret = adf4377_set_freq(dev);
 	if (ret != SUCCESS)

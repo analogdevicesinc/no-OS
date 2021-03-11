@@ -147,10 +147,10 @@
 #define ADF4377_REF_DBLR_DIS            0x0
 #define ADF4377_REF_DBLR_EN             0x1
 
-#define ADF4377_CLK_DIV2_DIV_1          0x0
-#define ADF4377_CLK_DIV2_DIV_2          0x1
-#define ADF4377_CLK_DIV2_DIV_4          0x2
-#define ADF4377_CLK_DIV2_DIV_8          0x3
+#define ADF4377_DCLK_DIV2_1          0x0
+#define ADF4377_DCLK_DIV2_2          0x1
+#define ADF4377_DCLK_DIV2_4          0x2
+#define ADF4377_DCLK_DIV2_8          0x3
 
 /* ADF4377 REG0012 Map*/
 #define ADF4377_CLKOUT_DIV_MSK			GENMASK(7, 6)
@@ -456,8 +456,8 @@
 #define ADF4377_R024_RSV1                   (0x0 << 0)
 
 /* ADF4377 REG0024 Bit Definition */
-#define ADF4377_DCLK_DIS                    0x0
-#define ADF4377_DCLK_EN                     0x1
+#define ADF4377_DCLK_MODE_DIS				0x0
+#define ADF4377_DCLK_MODE_EN				0x1
 
 /* ADF4377 REG0025 Map */
 #define ADF4377_CLKODIV_DB_MSK				BIT(7)
@@ -645,9 +645,14 @@
 #define ADF4377_MIN_FREQ_PFD		3000000 /* Hz */
 #define ADF4377_MAX_CLKPN_FREQ		ADF4377_MAX_VCO_FREQ /* Hz */
 #define ADF4377_MIN_CLKPN_FREQ		(ADF4377_MIN_VCO_FREQ / 8) /* Hz */
+#define ADF4377_FREQ_PFD_80MHZ		80000000
+#define ADF4377_FREQ_PFD_125MHZ		125000000
+#define ADF4377_FREQ_PFD_160MHZ		160000000
+#define ADF4377_FREQ_PFD_250MHZ		250000000
+#define ADF4377_FREQ_PFD_320MHZ		320000000
 
 /* ADF4377 Extra Definitions */
-#define ADF4377_SPI_SCRATCHPAD		0xAA
+#define ADF4377_SPI_SCRATCHPAD		0xA5
 #define ADF4377_SPI_DUMMY_DATA		0x00
 #define ADF4377_CHECK_RANGE(freq, range) \
 	((freq > ADF4377_MAX_ ## range) || (freq < ADF4377_MIN_ ## range))
