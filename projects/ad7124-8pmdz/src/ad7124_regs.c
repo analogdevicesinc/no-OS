@@ -56,19 +56,19 @@ struct ad7124_st_reg ad7124_init_regs_default[AD7124_REG_NO] = {
 	{0x08, 0x00,   1, 2}, /* AD7124_Mclk_Count */
 	{0x09, 0x0001, 2, 1}, /* AD7124_Channel_0 */
 	{0x0A, 0x0043, 2, 1}, /* AD7124_Channel_1 */
-	{0x0B, 0x0085, 2, 1}, /* AD7124_Channel_2 */
+	{0x0B, 0x0043, 2, 1}, /* AD7124_Channel_2 */
 	{0x0C, 0x00C7, 2, 1}, /* AD7124_Channel_3 */
-	{0x0D, 0x0109, 2, 1}, /* AD7124_Channel_4 */
+	{0x0D, 0x0085, 2, 1}, /* AD7124_Channel_4 */
 	{0x0E, 0x014B, 2, 1}, /* AD7124_Channel_5 */
-	{0x0F, 0x018D, 2, 1}, /* AD7124_Channel_6 */
+	{0x0F, 0x00C7, 2, 1}, /* AD7124_Channel_6 */
 	{0x10, 0x01CF, 2, 1}, /* AD7124_Channel_7 */
-	{0x11, 0x0011, 2, 1}, /* AD7124_Channel_8 */
+	{0x11, 0x0109, 2, 1}, /* AD7124_Channel_8 */
 	{0x12, 0x0031, 2, 1}, /* AD7124_Channel_9 */
-	{0x13, 0x0051, 2, 1}, /* AD7124_Channel_10 */
+	{0x13, 0x014B, 2, 1}, /* AD7124_Channel_10 */
 	{0x14, 0x0071, 2, 1}, /* AD7124_Channel_11 */
-	{0x15, 0x0091, 2, 1}, /* AD7124_Channel_12 */
+	{0x15, 0x018D, 2, 1}, /* AD7124_Channel_12 */
 	{0x16, 0x00B1, 2, 1}, /* AD7124_Channel_13 */
-	{0x17, 0x00D1, 2, 1}, /* AD7124_Channel_14 */
+	{0x17, 0x01CF, 2, 1}, /* AD7124_Channel_14 */
 	{0x18, 0x00F1, 2, 1}, /* AD7124_Channel_15 */
 	{0x19, 0x0980, 2, 1}, /* AD7124_Config_0 */
 	{0x1A, 0x0981, 2, 1}, /* AD7124_Config_1 */
