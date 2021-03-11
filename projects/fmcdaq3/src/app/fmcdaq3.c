@@ -74,6 +74,50 @@
 #include "app_iio.h"
 #endif
 
+/* DAQ3 reconfiguration */
+void fmcdaq3_reconfig(struct ad9152_init_param *ad9152_param,
+		      struct adxcvr_init *ad9152_xcvr_param,
+		      struct ad9680_init_param *ad9680_param,
+		      struct adxcvr_init *ad9680_xcvr_param,
+		      struct ad9528_platform_data *ad9528_param)
+{
+
+	uint8_t mode = 0;
+
+	printf ("Available sampling rates:\n");
+	printf ("\t1 - ADC 1233 MSPS; DAC 1233 MSPS\n");
+	printf ("\t2 - ADC 616.5 MSPS; DAC 616.5 MSPS\n");
+
+	mode = getc(stdin);
+
+	switch (mode) {
+	case '2':
+		printf ("2 - ADC 616.5 MSPS; DAC 616.5 MSPS\n");
+		ad9680_param->lane_rate_kbps = 6165000;
+		ad9152_param->lane_rate_kbps = 6165000;
+		ad9152_xcvr_param->lane_rate_khz = 6165000;
+#ifndef ALTERA_PLATFORM
+		ad9152_xcvr_param->ref_rate_khz = 308250;
+#else
+		ad9152_xcvr_param->parent_rate_khz = 308250;
+#endif
+		ad9680_xcvr_param->lane_rate_khz = 6165000;
+#ifndef ALTERA_PLATFORM
+		ad9680_xcvr_param->ref_rate_khz = 308250;
+#else
+		ad9680_xcvr_param->parent_rate_khz = 308250;
+#endif
+		(&ad9528_param->channels[0])->channel_divider = 2;
+		(&ad9528_param->channels[2])->channel_divider = 4;
+		(&ad9528_param->channels[4])->channel_divider = 2;
+		(&ad9528_param->channels[6])->channel_divider = 4;
+		break;
+	default:
+		printf ("1 - ADC 1233 MSPS; DAC 1233 MSPS\n");
+		break;
+	}
+}
+
 /***************************************************************************//**
  * @brief main
  ******************************************************************************/
@@ -397,6 +441,18 @@ int main(void)
 
 	gpio_direction_output(dac_txen,  1);
 	gpio_direction_output(adc_pd,    0);
+
+	fmcdaq3_reconfig(&ad9152_param,
+			 &ad9152_xcvr_param,
+			 &ad9680_param,
+			 &ad9680_xcvr_param,
+			 ad9528_param.pdata);
+
+	/* Reconfigure the default JESD configurations */
+	ad9680_jesd_param.lane_clk_khz = ad9680_xcvr_param.lane_rate_khz;
+	ad9680_jesd_param.device_clk_khz = ad9680_xcvr_param.lane_rate_khz / 40;
+	ad9152_jesd_param.lane_clk_khz = ad9152_xcvr_param.lane_rate_khz;
+	ad9152_jesd_param.device_clk_khz = ad9152_xcvr_param.lane_rate_khz / 40;
 
 	status = ad9528_setup(&ad9528_device, ad9528_param);
 	if (status != SUCCESS) {
