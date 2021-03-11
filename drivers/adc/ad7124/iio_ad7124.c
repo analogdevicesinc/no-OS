@@ -141,6 +141,28 @@ static struct iio_channel ad7124_channels[] = {
 };
 
 /**
+ * @brief Get cofiguration option of channel.
+ * @param desc - Device driver descriptor.
+ * @param ch_no - Channel ID.
+ * @param config_opt - Pointer to the configuration opt.
+ * @return SUCCESS in case of success, error code otherwise.
+ */
+static int32_t ad7124_iio_get_ch_config_opt(struct ad7124_dev *desc,
+		uint8_t ch_no, uint8_t *config_opt)
+{
+	int32_t ret;
+	uint32_t value;
+
+	ret = ad7124_read_register2(desc, (AD7124_CH0_MAP_REG + ch_no),
+				    &value);
+	if (ret != SUCCESS)
+		return ret;
+	*config_opt = (value & AD7124_CH_MAP_REG_SETUP(0x7)) >> 12;
+
+	return ret;
+}
+
+/**
  * @brief Read and display channel offset.
  * @param device - Device driver descriptor.
  * @param buf - Output buffer.
@@ -154,8 +176,13 @@ static ssize_t ad7124_iio_read_offset_chan(void *device, char *buf, size_t len,
 	struct ad7124_dev	*desc = (struct ad7124_dev *)device;
 	uint32_t		value;
 	int32_t ret;
+	uint8_t config_opt;
 
-	ret = ad7124_read_register2(desc, (AD7124_OFFS0_REG + channel->ch_num),
+	ret = ad7124_iio_get_ch_config_opt(desc, channel->ch_num, &config_opt);
+	if (ret != SUCCESS)
+		return ret;
+
+	ret = ad7124_read_register2(desc, (AD7124_OFFS0_REG + config_opt),
 				    &value);
 	if (ret != SUCCESS)
 		return ret;
@@ -177,10 +204,15 @@ static ssize_t ad7124_iio_change_offset_chan(void *device, char *buf,
 	struct ad7124_dev	*desc = (struct ad7124_dev *)device;
 	uint32_t		reg_val;
 	int32_t ret;
+	uint8_t config_opt;
+
+	ret = ad7124_iio_get_ch_config_opt(desc, channel->ch_num, &config_opt);
+	if (ret != SUCCESS)
+		return ret;
 
 	sscanf(buf, "%ld", &reg_val);
 
-	ret = ad7124_write_register2(desc, (AD7124_OFFS0_REG + channel->ch_num),
+	ret = ad7124_write_register2(desc, (AD7124_OFFS0_REG + config_opt),
 				     reg_val);
 	if (ret != SUCCESS)
 		return ret;
@@ -246,10 +278,15 @@ static ssize_t ad7124_iio_read_filter_3db(void *device, char *buf, size_t len,
 	uint32_t		value, odr;
 	int32_t ret;
 	uint32_t reg_temp;
+	uint8_t config_opt;
 
-	odr = (uint32_t)ad7124_get_odr(desc, channel->ch_num);
+	ret = ad7124_iio_get_ch_config_opt(desc, channel->ch_num, &config_opt);
+	if (ret != SUCCESS)
+		return ret;
+
+	odr = (uint32_t)ad7124_get_odr(desc, config_opt);
 	ret = ad7124_read_register2(desc,
-				    (AD7124_FILT0_REG + channel->ch_num),
+				    (AD7124_FILT0_REG + config_opt),
 				    &reg_temp);
 	if (ret != SUCCESS)
 		return ret;
@@ -286,6 +323,11 @@ static ssize_t ad7124_iio_write_filter_3db(void *device, char *buf, size_t len,
 	uint32_t		new_filter, new_odr;
 	int32_t ret;
 	uint32_t reg_temp;
+	uint8_t config_opt;
+
+	ret = ad7124_iio_get_ch_config_opt(desc, channel->ch_num, &config_opt);
+	if (ret != SUCCESS)
+		return ret;
 
 	sscanf(buf, "%ld", &freq);
 
@@ -301,19 +343,19 @@ static ssize_t ad7124_iio_write_filter_3db(void *device, char *buf, size_t len,
 	}
 
 	ret = ad7124_read_register2(desc,
-				    (AD7124_FILT0_REG + channel->ch_num),
+				    (AD7124_FILT0_REG + config_opt),
 				    &reg_temp);
 	if (ret != SUCCESS)
 		return ret;
 	reg_temp &= ~AD7124_FILT_REG_FILTER(~0);
 	reg_temp |= AD7124_FILT_REG_FILTER(new_filter);
 	ret = ad7124_write_register2(desc,
-				     (AD7124_FILT0_REG + channel->ch_num),
+				     (AD7124_FILT0_REG + config_opt),
 				     reg_temp);
 	if (ret != SUCCESS)
 		return ret;
 
-	ret = ad7124_set_odr(desc, (float)new_odr, channel->ch_num);
+	ret = ad7124_set_odr(desc, (float)new_odr, config_opt);
 	if (ret != SUCCESS)
 		return ret;
 
@@ -333,8 +375,14 @@ static ssize_t ad7124_iio_read_odr_chan(void *device, char *buf, size_t len,
 {
 	struct ad7124_dev	*desc = (struct ad7124_dev *)device;
 	uint32_t		odr;
+	int32_t ret;
+	uint8_t config_opt;
 
-	odr = (uint32_t)ad7124_get_odr(desc, channel->ch_num);
+	ret = ad7124_iio_get_ch_config_opt(desc, channel->ch_num, &config_opt);
+	if (ret != SUCCESS)
+		return ret;
+
+	odr = (uint32_t)ad7124_get_odr(desc, config_opt);
 
 	return snprintf(buf, len, "%"PRId32"", odr);
 }
@@ -353,10 +401,15 @@ static ssize_t ad7124_iio_change_odr_chan(void *device, char *buf, size_t len,
 	struct ad7124_dev	*desc = (struct ad7124_dev *)device;
 	uint32_t		new_odr;
 	int32_t ret;
+	uint8_t config_opt;
+
+	ret = ad7124_iio_get_ch_config_opt(desc, channel->ch_num, &config_opt);
+	if (ret != SUCCESS)
+		return ret;
 
 	sscanf(buf, "%ld", &new_odr);
 
-	ret = ad7124_set_odr(desc, (float)new_odr, channel->ch_num);
+	ret = ad7124_set_odr(desc, (float)new_odr, config_opt);
 	if (ret != SUCCESS)
 		return ret;
 
@@ -380,9 +433,14 @@ static ssize_t ad7124_iio_read_scale_chan(void *device, char *buf, size_t len,
 	float			lsb_val;
 	int32_t ret;
 	uint32_t reg_temp;
+	uint8_t config_opt;
+
+	ret = ad7124_iio_get_ch_config_opt(desc, channel->ch_num, &config_opt);
+	if (ret != SUCCESS)
+		return ret;
 
 	ret = ad7124_read_register2(desc,
-				    (AD7124_CFG0_REG + channel->ch_num),
+				    (AD7124_CFG0_REG + config_opt),
 				    &reg_temp);
 	if (ret != SUCCESS)
 		return ret;
@@ -437,11 +495,16 @@ static ssize_t ad7124_iio_change_scale_chan(void *device, char *buf, size_t len,
 	uint32_t		new_gain;
 	uint32_t reg_temp;
 	int32_t ret;
+	uint8_t config_opt;
+
+	ret = ad7124_iio_get_ch_config_opt(desc, channel->ch_num, &config_opt);
+	if (ret != SUCCESS)
+		return ret;
 
 	sscanf(buf, "%f", &new_scale);
 
 	ret = ad7124_read_register2(desc,
-				    (AD7124_CFG0_REG + channel->ch_num),
+				    (AD7124_CFG0_REG + config_opt),
 				    &reg_temp);
 	if (ret != SUCCESS)
 		return ret;
@@ -457,7 +520,7 @@ static ssize_t ad7124_iio_change_scale_chan(void *device, char *buf, size_t len,
 	reg_temp &= ~AD7124_CFG_REG_PGA(~0);
 	reg_temp |= AD7124_CFG_REG_PGA(new_gain);
 	ret = ad7124_write_register2(desc,
-				     (AD7124_CFG0_REG + channel->ch_num),
+				     (AD7124_CFG0_REG + config_opt),
 				     reg_temp);
 	if (ret != SUCCESS)
 		return ret;
