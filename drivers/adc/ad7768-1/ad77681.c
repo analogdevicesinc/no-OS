@@ -271,42 +271,52 @@ uint8_t ad77681_get_frame_byte(struct ad77681_dev *dev)
  * Read conversion result from device.
  * @param dev - The device structure.
  * @param adc_data - The conversion result data
+ * @param mode - Data read mode
+ * 		Accepted values: AD77681_REGISTER_DATA_READ
+ *				 AD77681_CONTINUOUS_DATA_READ
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad77681_spi_read_adc_data(struct ad77681_dev *dev,
-				  uint8_t *adc_data)
+				  uint8_t *adc_data,
+				  enum ad77681_data_read_mode mode)
 {
-	uint8_t buf[6], crc_xor;
+	uint8_t buf[6], crc_xor, add_buff;
 	int32_t ret;
 
-	buf[0] = AD77681_REG_READ(AD77681_REG_ADC_DATA);
-	buf[1] = 0x00;
-	buf[2] = 0x00;
-	buf[3] = 0x00;
-	buf[4] = 0x00;	/* added 2 more array places for max data length read */
-	buf[5] = 0x00;	/* register address + 3 bytes of data (24bit format) + CRC + Status bit */
+	if (mode == AD77681_REGISTER_DATA_READ) {
+		buf[0] = AD77681_REG_READ(AD77681_REG_ADC_DATA);
+		add_buff = 1;
+	} else {
+		buf[0] = 0x00;
+		add_buff = 0;
+	}
+	buf[1] = 0x00; /* added 2 more array places for max data length read */
+	buf[2] = 0x00; /* For register data read */
+	buf[3] = 0x00; /* register address + 3 bytes of data (24bit format) + Status bit + CRC */
+	buf[4] = 0x00; /* For continuous data read */
+	buf[5] = 0x00; /* 3 bytes of data (24bit format) + Status bit + CRC */
 
 
-	ret = spi_write_and_read(dev->spi_desc, buf, dev->data_frame_byte + 1);
+	ret = spi_write_and_read(dev->spi_desc, buf, dev->data_frame_byte + add_buff);
 	if (ret < 0)
 		return ret;
 
 	if (dev->crc_sel != AD77681_NO_CRC) {
 		if (dev->crc_sel == AD77681_CRC)
-			crc_xor = ad77681_compute_crc8(buf + 1, dev->data_frame_byte - 1,
+			crc_xor = ad77681_compute_crc8(buf + add_buff, dev->data_frame_byte - 1,
 						       INITIAL_CRC_CRC8);
 		else
-			crc_xor = ad77681_compute_xor(buf + 1, dev->data_frame_byte - 1,
+			crc_xor = ad77681_compute_xor(buf + add_buff, dev->data_frame_byte - 1,
 						      INITIAL_CRC_XOR);
 
-		if (crc_xor != buf[dev->data_frame_byte]) {
+		if (crc_xor != buf[dev->data_frame_byte - (1 - add_buff)]) {
 			printf("%s: CRC Error.\n", __func__);
 			ret = FAILURE;
 		}
 #ifdef CRC_DEBUG
 		printf("\n%x\t%x\tCRC/XOR: %s\n", crc_xor,
-		       buf[dev->data_frame_byte],
-		       ((crc_xor != buf[dev->data_frame_byte]) ? "FAULT" : "OK"));
+		       buf[dev->data_frame_byte - (1 - add_buff)],
+		       ((crc_xor != buf[dev->data_frame_byte - (1 - add_buff)]) ? "FAULT" : "OK"));
 #endif /* CRC_DEBUG */
 	}
 
