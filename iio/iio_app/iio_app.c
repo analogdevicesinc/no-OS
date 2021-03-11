@@ -36,11 +36,12 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-
+#include <stdlib.h>
 #include "iio.h"
 #include "iio_app.h"
 #include "parameters.h"
 #include "uart.h"
+
 #if defined(ADUCM_PLATFORM) || defined(XILINX_PLATFORM)
 #include "irq.h"
 #include "irq_extra.h"
@@ -52,6 +53,11 @@
 
 #ifdef USE_TCP_SOCKET
 #include "wifi.h"
+#include "tcp_socket.h"
+#endif
+
+#ifdef LINUX_PLATFORM
+#include "linux_socket.h"
 #include "tcp_socket.h"
 #endif
 
@@ -71,6 +77,8 @@ int32_t iio_app_run(struct iio_app_device *devices, int32_t len)
 	struct wifi_init_param		wifi_param;
 	struct wifi_desc		*wifi;
 	struct uart_desc		*uart_desc;
+#elif defined(LINUX_PLATFORM)
+	struct tcp_socket_init_param	socket_param;
 #endif
 
 #ifdef XILINX_PLATFORM
@@ -135,6 +143,8 @@ int32_t iio_app_run(struct iio_app_device *devices, int32_t len)
 		.over_sampling = UART_OVERSAMPLING_16,
 	};
 #endif
+
+#ifdef XILINX_PLATFORM || ADUCM_PLATFORM || STM32_PLATFORM
 	uart_init_par = (struct uart_init_param) {
 		.device_id = UART_DEVICE_ID,
 		.baud_rate = UART_BAUDRATE,
@@ -143,6 +153,7 @@ int32_t iio_app_run(struct iio_app_device *devices, int32_t len)
 		.stop = UART_STOP_1,
 		.extra = &platform_uart_init_par
 	};
+#endif
 
 #if defined(ADUCM_PLATFORM) || defined(XILINX_PLATFORM)
 	status = irq_global_enable(irq_desc);
@@ -180,10 +191,16 @@ int32_t iio_app_run(struct iio_app_device *devices, int32_t len)
 	iio_init_param.phy_type = USE_NETWORK;
 	iio_init_param.tcp_socket_init_param = &socket_param;
 
-#else //USE_TCP_SOCKET
+#elif defined(LINUX_PLATFORM)
+	*socket_param.net = linux_net;
+	socket_param.max_buff_size = 0;
+
+	iio_init_param.phy_type = USE_NETWORK;
+	iio_init_param.tcp_socket_init_param = &socket_param;
+#else
 	iio_init_param.phy_type = USE_UART;
 	iio_init_param.uart_init_param = &uart_init_par;
-#endif //USE_TCP_SOCKET
+#endif//USE_TCP_SOCKET
 
 	status = iio_init(&iio_desc, &iio_init_param);
 	if(status < 0)
