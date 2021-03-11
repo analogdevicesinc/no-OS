@@ -475,10 +475,9 @@ static ssize_t ad7124_iio_change_scale_chan(void *device, char *buf, size_t len,
 static bool get_next_ch_idx(uint32_t ch_mask, uint32_t last_idx,
 			    uint32_t *new_idx)
 {
-	if (last_idx > 32)
-		return false;
-
 	last_idx++;
+	if (last_idx >= 32)
+		return 0;
 	ch_mask >>= last_idx;
 	if (!ch_mask) {
 		*new_idx = -1;
