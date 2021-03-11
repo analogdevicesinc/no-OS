@@ -422,7 +422,7 @@ static void at_callback(struct at_desc *desc, uint32_t event, uint8_t *data)
 	static const struct at_buff ready_msg = {PUI8("ready\r\n"), 7};
 
 	switch (event) {
-	case READ_DONE:
+	case IRQ_READ_DONE:
 		switch (desc->callback_operation) {
 		case RESETTING_MODULE:
 			if (match_message(&ready_msg, &desc->ready_idx,
@@ -464,7 +464,7 @@ static void at_callback(struct at_desc *desc, uint32_t event, uint8_t *data)
 			break;
 		}
 		break;
-	case ERROR:
+	case IRQ_ERROR:
 		if (desc->callback_operation != RESETTING_MODULE)
 			desc->errors |= AT_ERROR_UART;
 		break;

@@ -56,11 +56,11 @@
  */
 enum irq_uart_event_e {
 	/** Write operation finalized */
-	WRITE_DONE,
+	IRQ_WRITE_DONE,
 	/** Read operation finalized */
-	READ_DONE,
+	IRQ_READ_DONE,
 	/** An error occurred */
-	ERROR
+	IRQ_ERROR
 };
 
 enum irq_trig_level {
