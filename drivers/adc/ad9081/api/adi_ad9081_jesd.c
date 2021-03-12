@@ -107,7 +107,7 @@ int32_t adi_ad9081_jesd_rx_lane_xbar_set(adi_ad9081_device_t *device,
 		AD9081_ERROR_RETURN(err);
 		err = adi_ad9081_hal_bf_set(
 			device, REG_JRX_CORE_2_LANE0_ADDR + logical_lane,
-			BF_JRX_LINK_LANE_SEL_0_INFO, physical_lane);
+			BF_JRX_SRC_LANE_0_INFO, physical_lane);
 		AD9081_ERROR_RETURN(err);
 	}
 	if ((links & AD9081_LINK_1) > 0) {
@@ -115,7 +115,7 @@ int32_t adi_ad9081_jesd_rx_lane_xbar_set(adi_ad9081_device_t *device,
 		AD9081_ERROR_RETURN(err);
 		err = adi_ad9081_hal_bf_set(
 			device, REG_JRX_CORE_2_LANE0_ADDR + logical_lane,
-			BF_JRX_LINK_LANE_SEL_0_INFO, physical_lane);
+			BF_JRX_SRC_LANE_0_INFO, physical_lane);
 		AD9081_ERROR_RETURN(err);
 	}
 
@@ -949,8 +949,8 @@ int32_t adi_ad9081_jesd_rx_bit_rate_get(adi_ad9081_device_t *device,
 
 	/* get configuration */
 	err = adi_ad9081_hal_2bf_get(device, REG_INTRP_MODE_ADDR,
-				     BF_DP_INTERP_MODE_INFO, &main_interp,
-				     BF_CH_INTERP_MODE_INFO, &ch_interp,
+				     BF_FINE_INTERP_SEL_INFO, &main_interp,
+				     BF_COARSE_INTERP_SEL_INFO, &ch_interp,
 				     1); /* not paged */
 	AD9081_ERROR_RETURN(err);
 	if ((main_interp == 0) || (ch_interp == 0)) {
@@ -1085,40 +1085,36 @@ int32_t adi_ad9081_jesd_rx_pll_startup(adi_ad9081_device_t *device,
 		rx_div_rate = 8;
 	}
 	err = adi_ad9081_hal_3bf_set(device, REG_LCPLL_REF_CLK_DIV1_REG_ADDR,
-				     BF_REFINDIV_LCPLL_RC_INFO, ref_in_div,
+				     BF_SERDES_PLL_BF_0_INFO, ref_in_div,
 				     BF_DIVM_LCPLL_RC_INFO, div_m,
-				     BF_DIVP_LCPLL_RC_INFO,
+				     BF_SERDES_PLL_BF_1_INFO,
 				     div_p); /* not paged */
 	AD9081_ERROR_RETURN(err);
 	err = adi_ad9081_hal_bf_set(device, REG_PLL_DIV2_ADDR,
-				    BF_B_LCPLL_RC_INFO,
+				    BF_SERDES_PLL_BF_9_INFO,
 				    b_lcpll); /* not paged */
 	AD9081_ERROR_RETURN(err);
 	err = adi_ad9081_hal_bf_set(device, REG_PLL_RXDIVRATE_ADDR,
-				    BF_RXDIVRATE_LCPLL_RC_INFO,
+				    BF_SERDES_PLL_BF_7_INFO,
 				    rx_div_rate); /* not paged */
 	AD9081_ERROR_RETURN(err);
 	err = adi_ad9081_hal_bf_set(device, REG_PLL_DIVOVD_ADDR,
-				    BF_REFINDIVOVD_LCPLL_RC_INFO,
-				    1); /* not paged */
+				    BF_SERDES_PLL_BF_5_INFO, 1); /* not paged */
 	AD9081_ERROR_RETURN(err);
 	err = adi_ad9081_hal_bf_set(device, REG_PLL_REFCLK_CPL_ADDR,
-				    BF_SEL_REFINDIV3_LCPLL_RC_INFO,
-				    0); /* not paged */
+				    BF_SERDES_PLL_BF_8_INFO, 0); /* not paged */
 	AD9081_ERROR_RETURN(err);
 	err = adi_ad9081_hal_bf_set(device, REG_PLL_DIVOVD_ADDR,
-				    BF_BOVD_LCPLL_RC_INFO, 1); /* not paged */
+				    BF_SERDES_PLL_BF_3_INFO, 1); /* not paged */
 	AD9081_ERROR_RETURN(err);
 	err = adi_ad9081_hal_bf_set(device, REG_PLL_DIVOVD_ADDR,
-				    BF_DIVMOVD_LCPLL_RC_INFO,
-				    1); /* not paged */
+				    BF_SERDES_PLL_BF_4_INFO, 1); /* not paged */
 	AD9081_ERROR_RETURN(err);
 	err = adi_ad9081_hal_bf_set(device, REG_PLL_DIVOVD_ADDR,
-				    BF_RXDIVRATEOVD_LCPLL_RC_INFO,
-				    1); /* not paged */
+				    BF_SERDES_PLL_BF_6_INFO, 1); /* not paged */
 	AD9081_ERROR_RETURN(err);
 	err = adi_ad9081_hal_bf_set(device, REG_PLL_ENCAL_ADDR,
-				    BF_EN_OCTAVECAL_LCPLL_RC_INFO,
+				    BF_FIXED_SERDES_PLL_INFO,
 				    0); /* not paged */
 	AD9081_ERROR_RETURN(err);
 	err = adi_ad9081_hal_bf_set(device, REG_PLL_ENABLE_CTRL_ADDR,
@@ -1143,6 +1139,26 @@ int32_t adi_ad9081_jesd_rx_pll_startup(adi_ad9081_device_t *device,
 	if (jesd_pll_locked == 0) {
 		AD9081_LOG_ERR("JESD PLL is not locked.");
 	}
+
+	return API_CMS_ERROR_OK;
+}
+
+int32_t adi_ad9081_jesd_rx_power_down_des(adi_ad9081_device_t *device)
+{
+	int32_t err;
+	AD9081_NULL_POINTER_RETURN(device);
+	AD9081_LOG_FUNC();
+
+	err = adi_ad9081_hal_bf_set(device, REG_MASTER_PD_ADDR,
+				    BF_PD_MASTER_RC_INFO, 1); /* not paged */
+	AD9081_ERROR_RETURN(err);
+	err = adi_ad9081_hal_bf_set(device, REG_PHY_PD_ADDR,
+				    BF_PD_DES_RC_CH_INFO, 0xff); /* not paged */
+	AD9081_ERROR_RETURN(err);
+	err = adi_ad9081_hal_bf_set(device, REG_PLL_ENCAL_ADDR,
+				    BF_PD_TXCLK_DIST_RC_INFO,
+				    1); /* not paged */
+	AD9081_ERROR_RETURN(err);
 
 	return API_CMS_ERROR_OK;
 }
@@ -1916,13 +1932,13 @@ int32_t adi_ad9081_jesd_tx_pll_startup(adi_ad9081_device_t *device,
 	err = adi_ad9081_jesd_pll_default_changes(device);
 	AD9081_ERROR_RETURN(err);
 	err = adi_ad9081_hal_3bf_set(device, REG_LCPLL_REF_CLK_DIV1_REG_ADDR,
-				     BF_REFINDIV_LCPLL_RC_INFO, ref_in_div,
+				     BF_SERDES_PLL_BF_0_INFO, ref_in_div,
 				     BF_DIVM_LCPLL_RC_INFO, div_m,
-				     BF_DIVP_LCPLL_RC_INFO,
+				     BF_SERDES_PLL_BF_1_INFO,
 				     div_p); /* not paged */
 	AD9081_ERROR_RETURN(err);
 	err = adi_ad9081_hal_bf_set(device, REG_PLL_DIV2_ADDR,
-				    BF_B_LCPLL_RC_INFO,
+				    BF_SERDES_PLL_BF_9_INFO,
 				    b_lcpll); /* not paged */
 	AD9081_ERROR_RETURN(err);
 	err = adi_ad9081_hal_bf_set(device,
@@ -1931,16 +1947,15 @@ int32_t adi_ad9081_jesd_tx_pll_startup(adi_ad9081_device_t *device,
 				    sdsrefclk_ratio - 1); /* not paged */
 	AD9081_ERROR_RETURN(err);
 	err = adi_ad9081_hal_bf_set(device, REG_PLL_REFCLK_CPL_ADDR,
-				    BF_SEL_REFINDIV3_LCPLL_RC_INFO,
-				    0); /* not paged */
+				    BF_SERDES_PLL_BF_8_INFO, 0); /* not paged */
 	AD9081_ERROR_RETURN(err);
 	err = adi_ad9081_hal_4bf_set(
-		device, REG_PLL_DIVOVD_ADDR, BF_REFINDIVOVD_LCPLL_RC_INFO, 1,
-		BF_BOVD_LCPLL_RC_INFO, 1, BF_DIVMOVD_LCPLL_RC_INFO, 1,
-		BF_RXDIVRATEOVD_LCPLL_RC_INFO, 1); /* not paged */
+		device, REG_PLL_DIVOVD_ADDR, BF_SERDES_PLL_BF_5_INFO, 1,
+		BF_SERDES_PLL_BF_3_INFO, 1, BF_SERDES_PLL_BF_4_INFO, 1,
+		BF_SERDES_PLL_BF_6_INFO, 1); /* not paged */
 	AD9081_ERROR_RETURN(err);
 	err = adi_ad9081_hal_bf_set(device, REG_PLL_ENCAL_ADDR,
-				    BF_EN_OCTAVECAL_LCPLL_RC_INFO,
+				    BF_FIXED_SERDES_PLL_INFO,
 				    0); /* not paged */
 	AD9081_ERROR_RETURN(err);
 	err = adi_ad9081_hal_bf_set(device, REG_PLL_ENABLE_CTRL_ADDR,
@@ -3210,6 +3225,22 @@ int32_t adi_ad9081_jesd_tx_set_post_emp(adi_ad9081_device_t *device,
 				    addr_table[lane][1],
 				    post_emp); /* not paged */
 	AD9081_ERROR_RETURN(err);
+	return API_CMS_ERROR_OK;
+}
+
+int32_t adi_ad9081_jesd_tx_power_down_ser(adi_ad9081_device_t *device)
+{
+	int32_t err;
+	AD9081_NULL_POINTER_RETURN(device);
+	AD9081_LOG_FUNC();
+
+	err = adi_ad9081_hal_bf_set(device, REG_PWR_DN_ADDR, BF_PD_SER_INFO,
+				    0xffff); /* not paged */
+	AD9081_ERROR_RETURN(err);
+	err = adi_ad9081_hal_bf_set(device, REG_RSTB_ADDR, BF_RSTB_SER_INFO,
+				    0); /* not paged */
+	AD9081_ERROR_RETURN(err);
+
 	return API_CMS_ERROR_OK;
 }
 

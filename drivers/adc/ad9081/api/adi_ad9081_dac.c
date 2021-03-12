@@ -603,7 +603,7 @@ int32_t adi_ad9081_dac_duc_nco_set(adi_ad9081_device_t *device, uint8_t dacs,
 	/* set channel nco */
 	if (channels != AD9081_DAC_CH_NONE) {
 		err = adi_ad9081_hal_bf_get(device, REG_INTRP_MODE_ADDR,
-					    BF_DP_INTERP_MODE_INFO,
+					    BF_FINE_INTERP_SEL_INFO,
 					    &main_interp, 1);
 		AD9081_ERROR_RETURN(err);
 		err = adi_ad9081_dac_duc_nco_enable_set(device, AD9081_DAC_NONE,
@@ -649,7 +649,7 @@ int32_t adi_ad9081_dac_duc_nco_set_f(adi_ad9081_device_t *device, uint8_t dacs,
 	/* set channel nco */
 	if (channels != AD9081_DAC_CH_NONE) {
 		err = adi_ad9081_hal_bf_get(device, REG_INTRP_MODE_ADDR,
-					    BF_DP_INTERP_MODE_INFO,
+					    BF_FINE_INTERP_SEL_INFO,
 					    &main_interp, 1);
 		AD9081_ERROR_RETURN(err);
 		err = adi_ad9081_dac_duc_nco_enable_set(device, AD9081_DAC_NONE,
@@ -1269,7 +1269,7 @@ int32_t adi_ad9081_dac_xbar_set(adi_ad9081_device_t *device, uint8_t dacs,
 			err = adi_ad9081_dac_select_set(device, dac);
 			AD9081_ERROR_RETURN(err);
 			err = adi_ad9081_hal_bf_get(device, REG_INTRP_MODE_ADDR,
-						    BF_CH_INTERP_MODE_INFO,
+						    BF_COARSE_INTERP_SEL_INFO,
 						    &ch_interp,
 						    1); /* not paged */
 			AD9081_ERROR_RETURN(err);

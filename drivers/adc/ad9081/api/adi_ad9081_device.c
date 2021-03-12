@@ -184,11 +184,31 @@ int32_t adi_ad9081_device_boot_post_clock(adi_ad9081_device_t *device)
 	/* additional write, AD9081API-680 */
 	err = adi_ad9081_hal_reg_set(device, 0x2112, 0x01);
 	AD9081_ERROR_RETURN(err);
-	err = adi_ad9081_adc_core_analog_regs_enable_set(device, 0x3, 1);
+	err = adi_ad9081_hal_bf_set(device, REG_SPI_ENABLE_ADC_ADDR,
+				    BF_SPI_EN_REG8_ADC0_INFO, 1);
+	AD9081_ERROR_RETURN(err);
+	err = adi_ad9081_hal_bf_set(device, REG_SPI_ENABLE_ADC_ADDR,
+				    BF_SPI_EN_REG32_ADC0_INFO, 1);
+	AD9081_ERROR_RETURN(err);
+	err = adi_ad9081_hal_bf_set(device, REG_SPI_ENABLE_ADC_ADDR,
+				    BF_SPI_EN_REG8_ADC1_INFO, 1);
+	AD9081_ERROR_RETURN(err);
+	err = adi_ad9081_hal_bf_set(device, REG_SPI_ENABLE_ADC_ADDR,
+				    BF_SPI_EN_REG32_ADC1_INFO, 1);
 	AD9081_ERROR_RETURN(err);
 	err = adi_ad9081_hal_reg_set(device, 0x1400, 0xd4);
 	AD9081_ERROR_RETURN(err);
-	err = adi_ad9081_adc_core_analog_regs_enable_set(device, 0x3, 0);
+	err = adi_ad9081_hal_bf_set(device, REG_SPI_ENABLE_ADC_ADDR,
+				    BF_SPI_EN_REG8_ADC0_INFO, 0);
+	AD9081_ERROR_RETURN(err);
+	err = adi_ad9081_hal_bf_set(device, REG_SPI_ENABLE_ADC_ADDR,
+				    BF_SPI_EN_REG32_ADC0_INFO, 0);
+	AD9081_ERROR_RETURN(err);
+	err = adi_ad9081_hal_bf_set(device, REG_SPI_ENABLE_ADC_ADDR,
+				    BF_SPI_EN_REG8_ADC1_INFO, 0);
+	AD9081_ERROR_RETURN(err);
+	err = adi_ad9081_hal_bf_set(device, REG_SPI_ENABLE_ADC_ADDR,
+				    BF_SPI_EN_REG32_ADC1_INFO, 0);
 	AD9081_ERROR_RETURN(err);
 	err = adi_ad9081_hal_reg_set(device, 0x2112, 0x00);
 	AD9081_ERROR_RETURN(err);
@@ -331,12 +351,13 @@ int32_t adi_ad9081_device_clk_pll_div_set(adi_ad9081_device_t *device,
 
 int32_t adi_ad9081_device_clk_pll_startup(adi_ad9081_device_t *device,
 					  uint64_t dac_clk_hz,
+					  uint64_t adc_clk_hz,
 					  uint64_t ref_clk_hz)
 {
 	int32_t err;
 	uint64_t vco_clk_hz, pfd_clk_hz;
-	uint8_t ref_div = 1, n_div = 1, m_div = 1, pll_div = 1, fb_div = 1;
 	uint8_t i, total_feedback;
+	uint8_t ref_div = 1, n_div = 1, m_div = 1, pll_div = 1, fb_div = 1;
 	uint8_t n_div_vals[] = { 5, 7, 8, 11 };
 	AD9081_NULL_POINTER_RETURN(device);
 	AD9081_LOG_FUNC();
@@ -348,13 +369,14 @@ int32_t adi_ad9081_device_clk_pll_startup(adi_ad9081_device_t *device,
 #else
 		pfd_clk_hz = ref_clk_hz / ref_div;
 #endif
-		if (pfd_clk_hz > 750000000ULL) /* 25~750MHz */
-			continue;
+		if (pfd_clk_hz > 750000000ULL)
+			continue; /* 25~750MHz */
+
 		for (pll_div = 1; pll_div <= 4; pll_div++) {
 			vco_clk_hz = dac_clk_hz * pll_div;
-			if ((vco_clk_hz < 6000000000ULL) ||
-			    (1000000000ULL > 12000000000ULL)) /* 6~12GHz */
-				continue;
+			if ((vco_clk_hz < 5800000000ULL) ||
+			    (vco_clk_hz > 12000000000ULL))
+				continue; /* 5.8~12GHz */
 			for (i = 0; i <= 3; i++) {
 				n_div = n_div_vals[i];
 #ifdef __KERNEL__
@@ -532,7 +554,8 @@ int32_t adi_ad9081_device_clk_config_set(adi_ad9081_device_t *device,
 	AD9081_ERROR_RETURN(err);
 
 	/* enable dac spi regs access */
-	err = adi_ad9081_dac_spi_enable_set(device, 1);
+	err = adi_ad9081_hal_reg_set(device, REG_SPI_ENABLE_DAC_ADDR,
+				     0x1f); /* not paged */
 	AD9081_ERROR_RETURN(err);
 
 	/* power up analog clock receiver */
@@ -548,11 +571,11 @@ int32_t adi_ad9081_device_clk_config_set(adi_ad9081_device_t *device,
 		dac_clk_hz = ref_clk_hz;
 	} else {
 		err = adi_ad9081_device_clk_pll_startup(device, dac_clk_hz,
-							ref_clk_hz);
+							adc_clk_hz, ref_clk_hz);
 		AD9081_ERROR_RETURN(err);
 	}
 
-	/* set adc clk div */
+/* set adc clk div */
 #ifdef __KERNEL__
 	adc_clk_div = (uint8_t)div64_u64(dac_clk_hz, adc_clk_hz);
 #else
@@ -564,8 +587,7 @@ int32_t adi_ad9081_device_clk_config_set(adi_ad9081_device_t *device,
 		return API_CMS_ERROR_INVALID_PARAM;
 	}
 	if ((adc_clk_div == 0) ||
-	    (adc_clk_div >
-	     4)) { /* Fadc needs to be 1/2/3/4 factor of device clock */
+	    (adc_clk_div > 4)) { /* Fadc needs to be /1 ~ /4 of dac clock */
 		AD9081_ERROR_REPORT(API_CMS_ERROR_INVALID_PARAM, adc_clk_hz,
 				    "Cannot generate required adc clock.");
 		return API_CMS_ERROR_INVALID_PARAM;
@@ -582,7 +604,8 @@ int32_t adi_ad9081_device_clk_config_set(adi_ad9081_device_t *device,
 	AD9081_ERROR_RETURN(err);
 
 	/* enable dac spi regs access again, as firmware may change paging value after being triggerred in _post_clock() */
-	err = adi_ad9081_dac_spi_enable_set(device, 1);
+	err = adi_ad9081_hal_reg_set(device, REG_SPI_ENABLE_DAC_ADDR,
+				     0x1f); /* not paged */
 	AD9081_ERROR_RETURN(err);
 
 	/* enable adc clk */
@@ -811,7 +834,7 @@ int32_t adi_ad9081_device_init(adi_ad9081_device_t *device)
 				       "api v%d.%d.%d commit %s for ad%x ",
 				       (AD9081_API_REV & 0xff0000) >> 16,
 				       (AD9081_API_REV & 0xff00) >> 8,
-				       (AD9081_API_REV & 0xff), "6d0a285",
+				       (AD9081_API_REV & 0xff), "95cf02d",
 				       AD9081_ID);
 	AD9081_ERROR_RETURN(err);
 
@@ -1221,13 +1244,13 @@ int32_t adi_ad9081_device_get_temperature(adi_ad9081_device_t *device,
 		AD9081_ERROR_RETURN(err);
 		err = adi_ad9081_hal_reg_get(device, 0x2108, &temp[1]);
 		AD9081_ERROR_RETURN(err);
-		*max = (int16_t)((temp[1] << 8) + temp[0]);
+		*max = (int16_t)(((temp[1] << 8) + temp[0]) >> 7);
 
 		err = adi_ad9081_hal_reg_get(device, 0x210b, &temp[0]);
 		AD9081_ERROR_RETURN(err);
 		err = adi_ad9081_hal_reg_get(device, 0x210c, &temp[1]);
 		AD9081_ERROR_RETURN(err);
-		*min = (int16_t)((temp[1] << 8) + temp[0]);
+		*min = (int16_t)(((temp[1] << 8) + temp[0]) >> 7);
 	} else {
 		err = adi_ad9081_hal_log_write(
 			device, ADI_CMS_LOG_WARN,

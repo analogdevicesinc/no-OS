@@ -3615,21 +3615,6 @@ int32_t adi_ad9081_adc_trig_prog_delay_set(adi_ad9081_device_t *device,
 	return API_CMS_ERROR_OK;
 }
 
-int32_t adi_ad9081_adc_sysref_prog_delay_set(adi_ad9081_device_t *device,
-					     uint8_t delay)
-{
-	int32_t err;
-	AD9081_NULL_POINTER_RETURN(device);
-	AD9081_LOG_FUNC();
-
-	err = adi_ad9081_hal_bf_set(device, REG_SYSREF_PROG_DELAY_ADDR,
-				    BF_SYSREF_PROG_DELAY_INFO,
-				    delay); /* not paged */
-	AD9081_ERROR_RETURN(err);
-
-	return API_CMS_ERROR_OK;
-}
-
 int32_t adi_ad9081_adc_sysref_resync_mode_set(adi_ad9081_device_t *device,
 					      uint8_t mode)
 {
