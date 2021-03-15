@@ -43,8 +43,58 @@
 /******************************************************************************/
 #include <inttypes.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "iio_ad5791.h"
 #include "error.h"
+
+/**
+ * @brief IIO get method to the 'scale' attribute of the channel.
+ * @param device - Device driver descriptor.
+ * @param buf - Output buffer.
+ * @param len - Length of the input buffer (not used in this case).
+ * @param channel - IIO channel information.
+ * @param priv - Pointer
+ * @return Number of bytes printed in the output buffer, or negative error code.
+ */
+static ssize_t ad5791_iio_get_scale(void *device, char *buf, size_t len,
+				    const struct iio_ch_info *channel, intptr_t priv)
+{
+	struct ad5791_iio_desc *iio_drv = (struct ad5791_iio_desc *)device;
+	uint32_t int_part, fract_part;
+	uint64_t vref64;
+	uint8_t dac_bits = 20;
+
+	vref64 = (uint64_t)iio_drv->vref_mv * 1000000000ll;
+	vref64 /= 1 << dac_bits;
+	int_part = vref64 / 1000000000ll;
+	fract_part = vref64 - int_part * 1000000000ll;
+
+	return snprintf(buf, len, "%"PRId32".%.9"PRId32"", int_part, fract_part);
+}
+
+/**
+ * @brief IIO get method to the 'offset' attribute of the channel.
+ * @param device - Device driver descriptor.
+ * @param buf - Output buffer.
+ * @param len - Length of the input buffer (not used in this case).
+ * @param channel - IIO channel information.
+ * @param priv - Pointer
+ * @return Number of bytes printed in the output buffer, or negative error code.
+ */
+static ssize_t ad5791_iio_get_offset(void *device, char *buf, size_t len,
+				     const struct iio_ch_info *channel, intptr_t priv)
+{
+	struct ad5791_iio_desc *iio_drv = (struct ad5791_iio_desc *)device;
+	uint64_t val64;
+	uint8_t const dac_bits = 20;
+
+	val64 = iio_drv->vref_neg_mv << (dac_bits - 1);
+	val64 /= iio_drv->vref_mv;
+	val64 = -val64;
+
+	return snprintf(buf, len, "%"PRIi32"", (int32_t)val64);
+}
 
 /**
  * @brief IIO get method to the 'raw' attribute of the channel.
@@ -58,7 +108,8 @@
 static ssize_t ad5791_iio_get_raw(void *device, char *buf, size_t len,
 				  const struct iio_ch_info *channel, intptr_t priv)
 {
-	struct ad5791_dev *dev = (struct ad5791_dev *)device;
+	struct ad5791_iio_desc *iio_drv = (struct ad5791_iio_desc *)device;
+	struct ad5791_dev *dev = (struct ad5791_dev *)iio_drv->ad5791_handle;
 	int32_t ret;
 	uint32_t value;
 
@@ -67,6 +118,7 @@ static ssize_t ad5791_iio_get_raw(void *device, char *buf, size_t len,
 					&value);
 	if (ret != SUCCESS)
 		return ret;
+	value &= 0xFFFFF;
 
 	return snprintf(buf, len, "%"PRIX32"", value);
 }
@@ -83,7 +135,8 @@ static ssize_t ad5791_iio_get_raw(void *device, char *buf, size_t len,
 static ssize_t ad5791_iio_set_raw(void *device, char *buf, size_t len,
 				  const struct iio_ch_info *channel, intptr_t priv)
 {
-	struct ad5791_dev *dev = (struct ad5791_dev *)device;
+	struct ad5791_iio_desc *iio_drv = (struct ad5791_iio_desc *)device;
+	struct ad5791_dev *dev = (struct ad5791_dev *)iio_drv->ad5791_handle;
 	int32_t ret;
 	uint32_t value;
 
@@ -97,7 +150,149 @@ static ssize_t ad5791_iio_set_raw(void *device, char *buf, size_t len,
 	if (ret != SUCCESS)
 		return ret;
 
-	return  len;
+	return len;
+}
+
+/**
+ * @brief IIO get method to the 'powerdown' attribute of the channel.
+ * @param device - Device driver descriptor.
+ * @param buf - Output buffer.
+ * @param len - Length of the input buffer (not used in this case).
+ * @param channel - IIO channel information.
+ * @param priv - Pointer
+ * @return Number of bytes printed in the output buffer, or negative error code.
+ */
+static ssize_t ad5791_iio_get_powerdown(void *device, char *buf, size_t len,
+					const struct iio_ch_info *channel, intptr_t priv)
+{
+	struct ad5791_iio_desc *iio_drv = (struct ad5791_iio_desc *)device;
+	struct ad5791_dev *dev = (struct ad5791_dev *)iio_drv->ad5791_handle;
+	int32_t ret;
+	uint32_t value;
+	bool pwrdwn;
+
+	ret = ad5791_get_register_value(dev, AD5791_REG_CTRL, &value);
+	if (ret != SUCCESS)
+		return ret;
+
+	if ((value & AD5791_CTRL_OPGND) || (value & AD5791_CTRL_DACTRI)) {
+		pwrdwn = true;
+	} else {
+		pwrdwn = false;
+	}
+
+	return snprintf(buf, len, "%"PRId8"", pwrdwn);
+}
+
+/**
+ * @brief IIO set method to the 'powerdown' attribute of the channel.
+ * @param device - Device driver descriptor.
+ * @param buf - Output buffer.
+ * @param len - Length of the input buffer (not used in this case).
+ * @param channel - IIO channel information.
+ * @param priv - Pointer
+ * @return Number of bytes printed in the output buffer, or negative error code.
+ */
+static ssize_t ad5791_iio_set_powerdown(void *device, char *buf, size_t len,
+					const struct iio_ch_info *channel, intptr_t priv)
+{
+	struct ad5791_iio_desc *iio_drv = (struct ad5791_iio_desc *)device;
+	struct ad5791_dev *dev = (struct ad5791_dev *)iio_drv->ad5791_handle;
+	int32_t ret;
+	uint32_t value, pwr_dwn_opt;
+
+	sscanf(buf, "%"PRId32"", &value);
+
+	if (iio_drv->curr_mode == AD5791_6kOHMS_TO_GND) {
+		pwr_dwn_opt = AD5791_CTRL_OPGND;
+	} else if (iio_drv->curr_mode == AD5791_THREE_STATE) {
+		pwr_dwn_opt = AD5791_CTRL_DACTRI;
+	} else {
+		return -EINVAL;
+	}
+
+	ret = ad5791_get_register_value(dev, AD5791_REG_CTRL, &value);
+	if (ret != SUCCESS)
+		return ret;
+	if (!!value)
+		value |= pwr_dwn_opt;
+	else
+		value &= ~pwr_dwn_opt;
+	ret = ad5791_set_register_value(dev, AD5791_REG_CTRL, value);
+	if (ret != SUCCESS)
+		return ret;
+
+	return len;
+}
+
+static char const * const ad5791_iio_pwd_modes[] = {
+	"6kohm_to_gnd",
+	"three_state"
+};
+
+/**
+ * @brief IIO get method to the 'powerdown_modes' attribute of the channel.
+ * @param device - Device driver descriptor.
+ * @param buf - Output buffer.
+ * @param len - Length of the input buffer (not used in this case).
+ * @param channel - IIO channel information.
+ * @param priv - Pointer
+ * @return Number of bytes printed in the output buffer, or negative error code.
+ */
+static ssize_t ad5791_iio_get_pd_mode(void *device, char *buf, size_t len,
+				      const struct iio_ch_info *channel, intptr_t priv)
+{
+	struct ad5791_iio_desc *iio_drv = (struct ad5791_iio_desc *)device;
+
+	return snprintf(buf, len,
+			"%s", ad5791_iio_pwd_modes[iio_drv->curr_mode]);
+}
+
+/**
+ * @brief IIO set method to the 'powerdown_modes' attribute of the channel.
+ * @param device - Device driver descriptor.
+ * @param buf - Output buffer.
+ * @param len - Length of the input buffer (not used in this case).
+ * @param channel - IIO channel information.
+ * @param priv - Pointer
+ * @return Number of bytes printed in the output buffer, or negative error code.
+ */
+static ssize_t ad5791_iio_set_pd_mode(void *device, char *buf, size_t len,
+				      const struct iio_ch_info *channel, intptr_t priv)
+{
+	struct ad5791_iio_desc *iio_drv = (struct ad5791_iio_desc *)device;
+	int8_t i;
+
+	for (i = 0; i < ARRAY_SIZE(ad5791_iio_pwd_modes); i++)
+		if (!strncmp(buf, ad5791_iio_pwd_modes[i], len))
+			break;
+
+	iio_drv->curr_mode = i;
+
+	return len;
+}
+
+/**
+ * @brief IIO get method to the 'powerdown_modes_avail' attribute of the channel.
+ * @param device - Device driver descriptor.
+ * @param buf - Output buffer.
+ * @param len - Length of the input buffer (not used in this case).
+ * @param channel - IIO channel information.
+ * @param priv - Pointer
+ * @return Number of bytes printed in the output buffer, or negative error code.
+ */
+static ssize_t ad5791_iio_get_pd_mode_avail(void *device, char *buf, size_t len,
+		const struct iio_ch_info *channel, intptr_t priv)
+{
+	int8_t i;
+
+	strcpy(buf, "");
+	for (i = 0; i < ARRAY_SIZE(ad5791_iio_pwd_modes); i++) {
+		strcat(buf, ad5791_iio_pwd_modes[i]);
+		strcat(buf, " ");
+	}
+
+	return len;
 }
 
 static struct scan_type const ad5791_iio_scan_type = {
@@ -115,6 +310,36 @@ static struct iio_attribute const channel_attributes[] = {
 		.show = ad5791_iio_get_raw,
 		.store = ad5791_iio_set_raw
 	},
+	{
+		.name = "scale",
+		.priv = 0,
+		.show = ad5791_iio_get_scale,
+		.store = NULL
+	},
+	{
+		.name = "offset",
+		.priv = 0,
+		.show = ad5791_iio_get_offset,
+		.store = NULL
+	},
+	{
+		.name = "powerdown_mode",
+		.priv = 0,
+		.show = ad5791_iio_get_pd_mode,
+		.store = ad5791_iio_set_pd_mode
+	},
+	{
+		.name = "powerdown_mode_available",
+		.priv = 0,
+		.show = ad5791_iio_get_pd_mode_avail,
+		.store = NULL
+	},
+	{
+		.name = "powerdown",
+		.priv = 0,
+		.show = ad5791_iio_get_powerdown,
+		.store = ad5791_iio_set_powerdown
+	},
 	END_ATTRIBUTES_ARRAY
 };
 
@@ -124,8 +349,8 @@ static struct iio_channel const ad5791_channels[] = {
 		.ch_type = IIO_VOLTAGE,
 		.channel = 0,
 		.channel2 = 0,
-		.scan_type = &ad5791_iio_scan_type,
-		.attributes = channel_attributes,
+		.scan_type = (struct scan_type *)&ad5791_iio_scan_type,
+		.attributes = (struct iio_attribute *)channel_attributes,
 		.ch_out = 1,
 		.indexed = 1,
 		.diferential = false
@@ -134,7 +359,7 @@ static struct iio_channel const ad5791_channels[] = {
 
 struct iio_device const iio_ad5791_device = {
 	.num_ch = AD5791_CH_NO,
-	.channels = ad5791_channels,
+	.channels = (struct iio_channel *)ad5791_channels,
 	.attributes = NULL,
 	.debug_attributes = NULL,
 	.buffer_attributes = NULL,
@@ -144,4 +369,56 @@ struct iio_device const iio_ad5791_device = {
 	.debug_reg_read = (int32_t (*)())ad5791_get_register_value,
 	.debug_reg_write = (int32_t (*)())ad5791_set_register_value
 };
+
+/**
+ * @brief Initialize the AD5791 IIO driver.
+ * @param iio_dev - Pointer to the IIO driver handler.
+ * @param init_param - Pointer to the initialization structure.
+ * @return SUCCESS in case of success, negative error code otherwise.
+ */
+int32_t ad5791_iio_init(struct ad5791_iio_desc **iio_dev,
+			struct ad5791_iio_init_param *init_param)
+{
+	int32_t ret;
+	struct ad5791_iio_desc *desc;
+
+	desc = (struct ad5791_iio_desc *)calloc(1, sizeof(*desc));
+	if (!desc)
+		return FAILURE;
+
+	desc->vref_mv = init_param->vref_mv;
+	desc->vref_neg_mv = init_param->vref_neg_mv;
+	desc->ad5791_iio_dev = (struct iio_device *)&iio_ad5791_device;
+	desc->curr_mode = AD5791_THREE_STATE;
+
+	ret = ad5791_init(&desc->ad5791_handle, *init_param->ad5791_initial);
+	if (ret != SUCCESS)
+		goto error_desc;
+
+	*iio_dev = desc;
+
+	return SUCCESS;
+error_desc:
+	free(desc);
+
+	return ret;
+}
+
+/**
+ * @brief Free memory allocated by ad5791_iio_init().
+ * @param desc -Pointer to the driver handler.
+ * @return SUCCESS in case of success, negative error code otherwise.
+ */
+int32_t ad5791_iio_remove(struct ad5791_iio_desc *desc)
+{
+	int32_t ret;
+
+	ret = ad5791_remove(desc->ad5791_handle);
+	if (ret != SUCCESS)
+		return ret;
+
+	free(desc);
+
+	return SUCCESS;
+}
 
