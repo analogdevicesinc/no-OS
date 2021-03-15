@@ -610,7 +610,7 @@ int32_t ad77681_set_power_mode(struct ad77681_dev *dev,
 int32_t ad77681_set_mclk_div(struct ad77681_dev *dev,
 			     enum ad77681_mclk_div clk_div);
 int32_t ad77681_spi_read_adc_data(struct ad77681_dev *dev,
-				  uint8_t *adc_data
+				  uint8_t *adc_data,
 				  enum ad77681_data_read_mode mode);
 int32_t ad77681_set_conv_mode(struct ad77681_dev *dev,
 			      enum ad77681_conv_mode conv_mode,
