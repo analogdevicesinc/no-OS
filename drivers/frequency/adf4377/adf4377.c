@@ -196,6 +196,8 @@ static int32_t adf4377_set_freq(struct adf4377_dev *dev)
 {
 	int32_t ret;
 
+	uint8_t data;
+
 	dev->clkout_div_sel = 0;
 
 	if(ADF4377_CHECK_RANGE(dev->f_clk, CLKPN_FREQ))
@@ -223,7 +225,17 @@ static int32_t adf4377_set_freq(struct adf4377_dev *dev)
 		return ret;
 
 	ret = adf4377_spi_write(dev, ADF4377_REG(0x10), ADF4377_N_INT_LSB(dev->n_int));
+
+	mdelay(100);
+
+	adf4377_spi_write(dev, ADF4377_REG(0x1a), 0x00);
+
+	for(int i = 0; i< 0x55; i++)
+		adf4377_spi_read(dev, ADF4377_REG(i), &data);
+
+
 	return ret;
+
 }
 
 /**
@@ -345,11 +357,6 @@ static int32_t adf4377_setup(struct adf4377_dev *dev)
 
 	ret = adf4377_update(dev, ADF4377_REG(0x20), ADF4377_EN_ADC_CLK_MSK,
 			     ADF4377_EN_ADC_CLK(ADF4377_EN_ADC_CLK_EN));
-	if (ret != SUCCESS)
-		return ret;
-
-	ret = adf4377_update(dev, ADF4377_REG(0x2F), ADF4377_DCLK_DIV1_MSK,
-			     ADF4377_DCLK_DIV1(dclk_div1));
 	if (ret != SUCCESS)
 		return ret;
 
