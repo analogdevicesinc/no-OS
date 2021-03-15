@@ -41,9 +41,8 @@
 #define IIO_DEMO_ADC
 
 #include <stdlib.h>
-#include <sys/types.h>
-#include "adc_demo.h"
 #include "iio_types.h"
+#include "adc_demo.h"
 
 extern struct iio_device const adc_demo_iio_descriptor;
 

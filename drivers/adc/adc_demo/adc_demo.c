@@ -89,8 +89,7 @@ int32_t adc_demo_init(struct adc_demo_desc **desc,
 		return -ENOMEM;
 
 	adesc->loopback_buffers = param->loopback_buffers;
-	adesc->active_ch = param->channel_no;
-	for(int i = 0; i < adesc->active_ch; i++)
+	for(int i = 0; i < TOTAL_ADC_CHANNELS; i++)
 		adesc->adc_ch_attr[i] = param->dev_ch_attr[i];
 	adesc->adc_global_attr = param->dev_global_attr;
 	*desc = adesc;
@@ -203,7 +202,8 @@ int32_t adc_read_samples(void* dev, uint16_t* buff, uint32_t samples)
 
 	for(int i = 0; i < samples; i++) {
 		while(get_next_ch_idx(desc->active_ch, ch, &ch))
-			buff[k++] = desc->loopback_buffers[ch][i % DEFAULT_LOCAL_SAMPLES];
+			buff[k++] = desc->loopback_buffers[ch]
+				    [i % desc->loopback_buffer_len];
 	}
 	return samples;
 }

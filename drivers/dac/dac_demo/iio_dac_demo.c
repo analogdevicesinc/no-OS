@@ -39,7 +39,6 @@
 
 #include "iio_dac_demo.h"
 
-#define IIO_DAC_DEMO_DEFAULT_CH_NO 16
 #define DAC_DEMO_ATTR(_name, _priv) {\
 	.name = _name,\
 	.priv = _priv,\
@@ -48,7 +47,7 @@
 }
 
 #define IIO_DEMO_DAC_CHANNEL(_idx) {\
-	.name = "dac_out_ch",\
+	.name = "dac_out_ch" # _idx,\
 	.ch_type = IIO_VOLTAGE,\
 	.channel = _idx,\
 	.scan_index = _idx,\
@@ -80,6 +79,7 @@ static struct iio_channel iio_dac_channels[] = {
 	IIO_DEMO_DAC_CHANNEL(0),
 	IIO_DEMO_DAC_CHANNEL(1),
 	IIO_DEMO_DAC_CHANNEL(2),
+	IIO_DEMO_DAC_CHANNEL(3),
 	IIO_DEMO_DAC_CHANNEL(4),
 	IIO_DEMO_DAC_CHANNEL(5),
 	IIO_DEMO_DAC_CHANNEL(6),
@@ -100,7 +100,7 @@ struct iio_device const dac_demo_iio_descriptor = {
 	.attributes = dac_global_attributes,
 	.debug_attributes = NULL,
 	.buffer_attributes = NULL,
-	.prepare_transfer = update_dac_channels,
+	.prepare_transfer = (int32_t (*)())update_dac_channels,
 	.end_transfer = close_dac_channels,
 	.read_dev = (int32_t (*)())dac_write_samples,
 	.debug_reg_read = (int32_t (*)()) dac_demo_reg_read,

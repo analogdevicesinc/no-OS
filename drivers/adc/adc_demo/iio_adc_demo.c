@@ -41,7 +41,6 @@
 #include "error.h"
 #include "iio_adc_demo.h"
 
-#define IIO_ADC_DEMO_DEFAULT_CH_NO 16
 #define ADC_DEMO_ATTR(_name, _priv) {\
 	.name = _name,\
 	.priv = _priv,\
@@ -68,7 +67,7 @@ struct iio_attribute iio_adc_global_attributes[] = {
 };
 
 #define IIO_DEMO_ADC_CHANNEL(_idx) {\
-	.name = "adc_in_ch",\
+	.name = "adc_in_ch" # _idx,\
 	.ch_type = IIO_VOLTAGE,\
 	.channel = _idx,\
 	.scan_index = _idx,\

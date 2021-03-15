@@ -47,4 +47,6 @@
 //#define USE_TCP_SOCKET
 #endif
 
+//#define ENABLE_LOOPBACK
+
 #endif
