@@ -96,26 +96,34 @@ int main(void)
 		.buff = DAC_DDR_BASEADDR,
 		.size = MAX_SIZE_BASE_ADDR,
 	};
+	struct ad5791_iio_desc *ad5791_iio_handle;
+	struct ad5791_iio_init_param ad5791_iio_ini = {
+		.ad5791_initial = &ad5791_initial,
+		.vref_mv = 5000,
+		.vref_neg_mv = 5000
+	};
 
-	status = ad5791_init(&ad5791_device, ad5791_initial);
+	status = ad5791_iio_init(&ad5791_iio_handle, &ad5791_iio_ini);
 	if (status != SUCCESS)
 		return status;
 
-	status = ad5791_set_dac_value(ad5791_device, 0);
+	status = ad5791_set_dac_value(ad5791_iio_handle->ad5791_handle, 0);
 	if (status != SUCCESS)
 		return status;
 
-	status = ad5791_get_register_value(ad5791_device, AD5791_REG_CTRL, &val);
+	status = ad5791_get_register_value(ad5791_iio_handle->ad5791_handle,
+					   AD5791_REG_CTRL, &val);
 	if (status < SUCCESS)
 		return status;
 	val &= ~(AD5791_CTRL_OPGND | AD5791_CTRL_RBUF);
-	status = ad5791_set_register_value(ad5791_device, AD5791_REG_CTRL,
-					   (uint32_t)val);
+	status = ad5791_set_register_value(ad5791_iio_handle->ad5791_handle,
+					   AD5791_REG_CTRL, (uint32_t)val);
 	if (status != SUCCESS)
 		return status;
 
 	struct iio_app_device devices[] = {
-		IIO_APP_DEVICE("ad5791", ad5791_device, &iio_ad5791_device,
+		IIO_APP_DEVICE("ad5791", ad5791_iio_handle,
+			       ad5791_iio_handle->ad5791_iio_dev,
 			       &iio_ad5791_read_buff, NULL)
 	};
 
