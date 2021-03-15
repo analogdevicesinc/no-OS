@@ -41,9 +41,8 @@
 #define IIO_DEMO_DAC
 
 #include <stdlib.h>
-#include <sys/types.h>
+#include "iio_types.h"
 #include "dac_demo.h"
-#include "iio.h"
 
 extern struct iio_device const dac_demo_iio_descriptor;
 

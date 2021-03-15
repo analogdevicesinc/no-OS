@@ -66,9 +66,18 @@
 
 #include "error.h"
 
+#define DEMO_CHANNELS		max(TOTAL_ADC_CHANNELS, TOTAL_DAC_CHANNELS)
+#ifdef ENABLE_LOOPBACK
+#define SAMPLES_PER_CHANNEL	200
+static uint16_t loopback_buffs[DEMO_CHANNELS][SAMPLES_PER_CHANNEL];
+#else //ENABLE_LOOPBACK
+#define SAMPLES_PER_CHANNEL	0
+#define loopback_buffs		NULL
+#endif //ENABLE_LOOPBACK
+
 #if defined(ADUCM_PLATFORM) || defined(STM32_PLATFORM)
 
-#define MAX_SIZE_BASE_ADDR	(NB_LOCAL_SAMPLES * DEMO_NUM_CHANNELS *\
+#define MAX_SIZE_BASE_ADDR	(SAMPLES_PER_CHANNEL * DEMO_CHANNELS * \
 					sizeof(uint16_t))
 
 static uint8_t in_buff[MAX_SIZE_BASE_ADDR];
@@ -181,8 +190,8 @@ int main(void)
 	};
 
 	adc_init_par = (struct adc_demo_init_param) {
-		.loopback_buffers = NULL,
-		.channel_no = 2,
+		.loopback_buffer_len = SAMPLES_PER_CHANNEL,
+		.loopback_buffers = loopback_buffs,
 		.dev_global_attr = 3333,
 		.dev_ch_attr = {1111,1112,1113,1114,1115,1116,1117,1118,1119,1120,1121,1122,1123,1124,1125,1126}
 	};
@@ -191,8 +200,8 @@ int main(void)
 		return status;
 
 	dac_init_par = (struct dac_demo_init_param) {
-		.loopback_buffers = NULL,
-		.channel_no = 2,
+		.loopback_buffer_len = SAMPLES_PER_CHANNEL,
+		.loopback_buffers = loopback_buffs,
 		.dev_global_attr = 4444,
 		.dev_ch_attr = {1111,1112,1113,1114,1115,1116,1117,1118,1119,1120,1121,1122,1123,1124,1125,1126}
 	};
