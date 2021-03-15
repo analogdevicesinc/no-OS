@@ -45,14 +45,17 @@
 /******************************************************************************/
 
 #include <stdint.h>
+#include "iio_types.h"
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
 #define MAX_DAC_ADDR		16
-#define DEFAULT_LOCAL_SAMPLES 128
-#define TOTAL_DAC_CHANNELS 16
+/* For testing a maximum of 16 channels can be enabled */
+#ifndef TOTAL_DAC_CHANNELS
+#define TOTAL_DAC_CHANNELS 2
+#endif
 
 /**
  * @struct iio_demo_dac_desc
@@ -64,9 +67,11 @@ struct dac_demo_desc {
 	/** Demo global device attribute */
 	uint32_t dac_global_attr;
 	/** Demo device channel attribute */
-	uint32_t dac_ch_attr[TOTAL_DAC_CHANNELS];
+	uint32_t dac_ch_attr[MAX_DAC_ADDR];
 	/** Active channel**/
 	uint32_t active_ch;
+	/** Number of samples in each buffer */
+	uint32_t loopback_buffer_len;
 	/** Array of buffers for each channel*/
 	uint16_t **loopback_buffers;
 };
@@ -79,11 +84,11 @@ struct dac_demo_init_param {
 	/** Demo global dac attribute */
 	uint32_t dev_global_attr;
 	/** Demo dac channel attribute */
-	uint32_t dev_ch_attr[TOTAL_DAC_CHANNELS];
+	uint32_t dev_ch_attr[MAX_DAC_ADDR];
+	/** Number of samples in each buffer */
+	uint32_t loopback_buffer_len;
 	/** Buffer for adc/dac communication*/
 	uint16_t **loopback_buffers;
-	/* initializing number of channels*/
-	uint32_t channel_no;
 };
 
 enum iio_dac_demo_attributes {
