@@ -1,6 +1,5 @@
 # See No-OS/tool/scripts/src_model.mk for variable description
 SRC_DIRS += $(PROJECT)/src/app
-SRC_DIRS += $(NO-OS)/iio/iio_demo
 SRC_DIRS += $(NO-OS)/iio/iio_app
 
 SRCS +=	$(NO-OS)/util/xml.c						\

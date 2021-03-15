@@ -41,8 +41,6 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 
-#include "demo_dev.h"
-#include "iio_demo_dev.h"
 #include "app_config.h"
 #include "parameters.h"
 #include "iio_app.h"
@@ -156,23 +154,11 @@ int main(void)
 {
 	int32_t status;
 
-	/* iio demo configurations. */
-	struct iio_demo_init_param iio_demo_in_init_par;
-
-	/* iio demo configurations. */
-	struct iio_demo_init_param iio_demo_out_init_par;
-
 	/* adc demo configurations. */
 	struct adc_demo_init_param adc_init_par;
 
 	/* dac demo configurations. */
 	struct dac_demo_init_param dac_init_par;
-
-	/* iio instance descriptor. */
-	struct iio_demo_desc *iio_demo_in_desc;
-
-	/* iio instance descriptor. */
-	struct iio_demo_desc *iio_demo_out_desc;
 
 	/* adc instance descriptor. */
 	struct adc_demo_desc *adc_desc;
@@ -183,31 +169,6 @@ int main(void)
 	status = platform_init();
 	if (status != SUCCESS)
 		return status;
-
-	iio_demo_out_init_par = (struct iio_demo_init_param) {
-		.dev_global_attr = 1100,
-		.dev_ch_attr = 1111,
-	};
-	status = iio_demo_dev_init(&iio_demo_out_desc, &iio_demo_out_init_par);
-	if (status < SUCCESS)
-		return status;
-
-	iio_demo_in_init_par = (struct iio_demo_init_param) {
-		.dev_global_attr = 2200,
-		.dev_ch_attr = 2211,
-	};
-	status = iio_demo_dev_init(&iio_demo_in_desc, &iio_demo_in_init_par);
-	if (status != SUCCESS)
-		return status;
-
-	struct iio_data_buffer rd_buf = {
-		.buff = (void *)ADC_DDR_BASEADDR,
-		.size = MAX_SIZE_BASE_ADDR
-	};
-	struct iio_data_buffer wr_buf = {
-		.buff = (void *)DAC_DDR_BASEADDR,
-		.size = MAX_SIZE_BASE_ADDR
-	};
 
 	struct iio_data_buffer adc_buff = {
 		.buff = (void *)ADC_DDR_BASEADDR,
