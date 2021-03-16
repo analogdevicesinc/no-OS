@@ -92,10 +92,11 @@ int main(void)
 		.gpio_ce_param = &gpio_ce_param,
 		.spi3wire = ADF4377_SDO_ACTIVE_SPI_4W,
 		.clkin_freq = 100000000,
-		.cp_i = ADF4377_CP_0MA7,
+		.cp_i = ADF4377_CP_10MA1,
 		.muxout_select = ADF4377_MUXOUT_HIGH_Z,
 		.ref_doubler_en = ADF4377_REF_DBLR_DIS,
-		.f_clk = 1000000000
+		.f_clk = 1000000000,
+		.clkout_op = ADF4377_CLKOUT_320MV
 	};
 
 	ret = adf4377_init(&dev, &adf4377_param);

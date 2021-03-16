@@ -157,6 +157,83 @@ int32_t adf4377_check_scratchpad(struct adf4377_dev *dev)
 }
 
 /**
+ * @brief Set default registers.
+ * @param dev - The device structure.
+ * @return Returns SUCCESS in case of success or negative error code.
+ */
+static int32_t adf4377_set_default(struct adf4377_dev *dev)
+{
+	int32_t ret;
+
+	ret = adf4377_spi_write(dev, ADF4377_REG(0x0f), ADF4377_R00F_RSV1);
+	if (ret != SUCCESS)
+		return ret;
+
+	ret = adf4377_update(dev, ADF4377_REG(0x1c), ADF4377_R01C_RSV1_MSK,
+			     ADF4377_R01C_RSV1(0x1));
+	if (ret != SUCCESS)
+		return ret;
+
+	ret = adf4377_update(dev, ADF4377_REG(0x1f), ADF4377_R01F_RSV1_MSK,
+			     ADF4377_R01F_RSV1(0x7));
+	if (ret != SUCCESS)
+		return ret;
+
+	ret = adf4377_update(dev, ADF4377_REG(0x20), ADF4377_R020_RSV1_MSK,
+			     ADF4377_R020_RSV1(0x1));
+	if (ret != SUCCESS)
+		return ret;
+
+	ret = adf4377_spi_write(dev, ADF4377_REG(0x21), ADF4377_R021_RSV1);
+	if (ret != SUCCESS)
+		return ret;
+
+	ret = adf4377_spi_write(dev, ADF4377_REG(0x22), ADF4377_R022_RSV1);
+	if (ret != SUCCESS)
+		return ret;
+
+	ret = adf4377_spi_write(dev, ADF4377_REG(0x23), ADF4377_R023_RSV1);
+	if (ret != SUCCESS)
+		return ret;
+
+	ret = adf4377_update(dev, ADF4377_REG(0x25), ADF4377_R025_RSV1_MSK,
+			     ADF4377_R025_RSV1(0xB));
+	if (ret != SUCCESS)
+		return ret;
+
+	ret = adf4377_spi_write(dev, ADF4377_REG(0x2C), ADF4377_R02C_RSV1);
+	if (ret != SUCCESS)
+		return ret;
+
+	ret = adf4377_spi_write(dev, ADF4377_REG(0x31), ADF4377_R031_RSV1);
+	if (ret != SUCCESS)
+		return ret;
+
+	ret = adf4377_update(dev, ADF4377_REG(0x32), ADF4377_R032_RSV1_MSK,
+			     ADF4377_R032_RSV1(0x9));
+	if (ret != SUCCESS)
+		return ret;
+
+	ret = adf4377_spi_write(dev, ADF4377_REG(0x33), ADF4377_R033_RSV1);
+	if (ret != SUCCESS)
+		return ret;
+
+	ret = adf4377_spi_write(dev, ADF4377_REG(0x34), ADF4377_R034_RSV1);
+	if (ret != SUCCESS)
+		return ret;
+
+	ret = adf4377_spi_write(dev, ADF4377_REG(0x3A), ADF4377_R03A_RSV1);
+	if (ret != SUCCESS)
+		return ret;
+
+	ret = adf4377_spi_write(dev, ADF4377_REG(0x3B), ADF4377_R03B_RSV1);
+	if (ret != SUCCESS)
+		return ret;
+
+	return adf4377_spi_write(dev, ADF4377_REG(0x42), ADF4377_R042_RSV1);
+}
+
+/**
  * @brief Software reset.
  * @param dev - The device structure.
  * @return Returns SUCCESS in case of success or negative error code.
@@ -196,8 +273,6 @@ static int32_t adf4377_set_freq(struct adf4377_dev *dev)
 {
 	int32_t ret;
 
-	uint8_t data;
-
 	dev->clkout_div_sel = 0;
 
 	if(ADF4377_CHECK_RANGE(dev->f_clk, CLKPN_FREQ))
@@ -225,14 +300,10 @@ static int32_t adf4377_set_freq(struct adf4377_dev *dev)
 		return ret;
 
 	ret = adf4377_spi_write(dev, ADF4377_REG(0x10), ADF4377_N_INT_LSB(dev->n_int));
+	if (ret != SUCCESS)
+		return ret;
 
 	mdelay(100);
-
-	adf4377_spi_write(dev, ADF4377_REG(0x1a), 0x00);
-
-	for(int i = 0; i< 0x55; i++)
-		adf4377_spi_read(dev, ADF4377_REG(i), &data);
-
 
 	return ret;
 
@@ -249,7 +320,7 @@ static int32_t adf4377_setup(struct adf4377_dev *dev)
 	uint8_t chip_type;
 	uint32_t f_div_rclk;
 	uint8_t dclk_div1, dclk_div2, dclk_mode;
-	uint8_t synth_lock_timeout, vco_alc_timeout, adc_clk_div, vco_band_div;
+	uint16_t synth_lock_timeout, vco_alc_timeout, adc_clk_div, vco_band_div;
 
 	dev->ref_div_factor = 0;
 
@@ -263,8 +334,8 @@ static int32_t adf4377_setup(struct adf4377_dev *dev)
 				ADF4377_LSB_FIRST(dev->spi_desc->bit_order) |
 				ADF4377_SDO_ACTIVE_R(dev->spi3wire) |
 				ADF4377_SDO_ACTIVE(dev->spi3wire) |
-				ADF4377_ADDRESS_ASC_R(ADF4377_ADDR_ASC_AUTO_INCR) |
-				ADF4377_ADDRESS_ASC(ADF4377_ADDR_ASC_AUTO_INCR));
+				ADF4377_ADDRESS_ASC_R(ADF4377_ADDR_ASC_AUTO_DECR) |
+				ADF4377_ADDRESS_ASC(ADF4377_ADDR_ASC_AUTO_DECR));
 	if (ret != SUCCESS)
 		return ret;
 
@@ -278,6 +349,11 @@ static int32_t adf4377_setup(struct adf4377_dev *dev)
 
 	/* Scratchpad Check */
 	ret = adf4377_check_scratchpad(dev);
+	if (ret != SUCCESS)
+		return ret;
+
+	/* Set Default Registers */
+	ret = adf4377_set_default(dev);
 	if (ret != SUCCESS)
 		return ret;
 
@@ -338,7 +414,8 @@ static int32_t adf4377_setup(struct adf4377_dev *dev)
 
 	ret = adf4377_update(dev, ADF4377_REG(0x1C),
 			     ADF4377_EN_DNCLK_MSK | ADF4377_EN_DRCLK_MSK,
-			     ADF4377_EN_DNCLK(ADF4377_EN_DNCLK_ON) | ADF4377_EN_DRCLK(ADF4377_EN_DRCLK_ON));
+			     ADF4377_EN_DNCLK(ADF4377_EN_DNCLK_ON) | ADF4377_EN_DRCLK(
+				     ADF4377_EN_DRCLK_ON));
 	if (ret != SUCCESS)
 		return ret;
 
@@ -400,7 +477,39 @@ static int32_t adf4377_setup(struct adf4377_dev *dev)
 	if (ret != SUCCESS)
 		return ret;
 
+	/* Power Up */
+	ret = adf4377_spi_write(dev, ADF4377_REG(0x1a),
+				ADF4377_PD_ALL(ADF4377_PD_ALL_N_OP) |
+				ADF4377_PD_RDIV(ADF4377_PD_RDIV_N_OP) | ADF4377_PD_NDIV(ADF4377_PD_NDIV_N_OP) |
+				ADF4377_PD_VCO(ADF4377_PD_VCO_N_OP) | ADF4377_PD_LD(ADF4377_PD_LD_N_OP) |
+				ADF4377_PD_PFDCP(ADF4377_PD_PFDCP_N_OP) | ADF4377_PD_CLKOUT1(
+					ADF4377_PD_CLKOUT1_N_OP) |
+				ADF4377_PD_CLKOUT2(ADF4377_PD_CLKOUT2_N_OP));
+
 	ret = adf4377_set_freq(dev);
+	if (ret != SUCCESS)
+		return ret;
+
+
+
+	/* Disable EN_DNCLK, EN_DRCLK */
+	ret = adf4377_update(dev, ADF4377_REG(0x1C),
+			     ADF4377_EN_DNCLK_MSK | ADF4377_EN_DRCLK_MSK,
+			     ADF4377_EN_DNCLK(ADF4377_EN_DNCLK_OFF) | ADF4377_EN_DRCLK(
+				     ADF4377_EN_DRCLK_OFF));
+	if (ret != SUCCESS)
+		return ret;
+
+	/* Disable EN_ADC_CLK */
+	ret = adf4377_update(dev, ADF4377_REG(0x20), ADF4377_EN_ADC_CLK_MSK,
+			     ADF4377_EN_ADC_CLK(ADF4377_EN_ADC_CLK_DIS));
+
+	/* Set output Amplitude */
+	ret = adf4377_update(dev, ADF4377_REG(0x19),
+			     ADF4377_CLKOUT2_OP_MSK | ADF4377_CLKOUT1_OP_MSK,
+			     ADF4377_CLKOUT1_OP(dev->clkout_op) | ADF4377_CLKOUT2_OP(dev->clkout_op));
+
+
 	if (ret != SUCCESS)
 		return ret;
 
@@ -426,13 +535,14 @@ int32_t adf4377_init(struct adf4377_dev **device,
 	dev->spi3wire = init_param->spi3wire;
 
 	if (ADF4377_CHECK_RANGE(init_param->clkin_freq, REFIN_FREQ))
-		return FAILURE;
+		goto error_dev;
 
 	dev->clkin_freq = init_param->clkin_freq;
 	dev->cp_i = init_param->cp_i;
 	dev->muxout_default = init_param->muxout_select;
 	dev->ref_doubler_en = init_param->ref_doubler_en;
 	dev->f_clk = init_param->f_clk;
+	dev->clkout_op = init_param->clkout_op;
 
 	/* GPIO Chip Enable */
 	ret = gpio_get(&dev->gpio_ce, init_param->gpio_ce_param);
@@ -441,7 +551,7 @@ int32_t adf4377_init(struct adf4377_dev **device,
 
 	ret = gpio_direction_output(dev->gpio_ce, GPIO_HIGH);
 	if (ret != SUCCESS)
-		goto error_dev;
+		goto error_gpio;
 
 	/* SPI */
 	ret = spi_init(&dev->spi_desc, init_param->spi_init);
