@@ -67,7 +67,11 @@ int32_t adpd188_init(struct adpd188_dev **device,
 	dev = (struct adpd188_dev *)calloc(1, sizeof (*dev));
 	if(!dev)
 		return FAILURE;
-	dev->phy_opt = init_param->phy_opt;
+	dev->device = init_param->device;
+	if (dev->device == APDP108X)
+		dev->phy_opt = ADPD188_I2C;
+	else
+		dev->phy_opt = init_param->phy_opt;
 
 	if(dev->phy_opt == ADPD188_SPI)
 		ret = spi_init((struct spi_desc **)&dev->phy_desc,
@@ -80,10 +84,12 @@ int32_t adpd188_init(struct adpd188_dev **device,
 	if(ret != SUCCESS)
 		goto error_dev;
 
-	ret = adpd188_reg_read(dev, ADPD188_REG_I2CS_ID, &reg_data);
+	ret = adpd188_reg_read(dev, ADPD188_REG_DEVID, &reg_data);
 	if(ret != SUCCESS)
 		goto error_phy;
-	if(reg_data != 0x00C8)
+	if((dev->device == ADPD188BI) && (reg_data != ADPD188_DEVICE_ID))
+		goto error_phy;
+	else if((dev->device == APDP108X) && (reg_data != ADPD108X_DEVICE_ID))
 		goto error_phy;
 
 	ret = adpd188_sw_reset(dev);
@@ -549,7 +555,10 @@ int32_t adpd188_clk32mhz_cal(struct adpd188_dev *dev)
 	reg_data &= ADPD188_CLK_RATIO_CLK_RATIO_MASK;
 
 	clk_error = 32000000.0 * (1.0 - (float)reg_data/2000.0);
-	reg_data = clk_error / 109000;
+	if (dev->device == ADPD188BI)
+		reg_data = clk_error / 109000;
+	else
+		reg_data = clk_error / 112000;
 	reg_data &= ADPD188_CLK32M_ADJUST_CLK32M_ADJUST_MASK;
 
 	ret = adpd188_reg_write(dev, ADPD188_REG_CLK32M_ADJUST, reg_data);

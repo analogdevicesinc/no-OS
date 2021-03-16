@@ -183,6 +183,10 @@
 #define ADPD188_DEVID_DEV_ID_MASK	0x00FF
 #define ADPD188_DEVID_REV_NUM_POS	8
 #define ADPD188_DEVID_DEV_ID_POS	0
+/* ADPD188BI specific */
+#define ADPD188_DEVICE_ID		0x0916
+/* ADPD108X specific */
+#define ADPD108X_DEVICE_ID		0x0A16
 
 /* ADPD188_REG_I2CS_ID */
 #define ADPD188_I2CS_ID_ADDRESS_WRITE_KEY_MASK	0xFF00
@@ -365,28 +369,38 @@
 #define ADPD188_SLOTB_FLOAT_LED_FLT_LED_OFFSET_B_POS	0
 
 /* ADPD188_REG_SLOTA_TIA_CFG */
-#define ADPD188_SLOTA_TIA_CFG_SLOTA_AFE_MODE_MASK	0xFC00
+/* ADPD188BI specific registers */
 #define ADPD188_SLOTA_TIA_CFG_SLOTA_BUF_GAIN_MASK	0x0200
+#define ADPD188_SLOTA_TIA_CFG_SLOTA_BUF_GAIN_POS	9
+/* ADPD108X specific registers */
+#define ADPD108X_SLOTA_TIA_CFG_SLOTA_BUF_GAIN_MASK	0x0300
+#define ADPD108X_SLOTA_TIA_CFG_SLOTA_INT_GAIN_POS	8
+/* ADPD188_REG_SLOTA_TIA_CFG common registers */
+#define ADPD188_SLOTA_TIA_CFG_SLOTA_AFE_MODE_MASK	0xFC00
 #define ADPD188_SLOTA_TIA_CFG_SLOTA_INT_AS_BUF_MASK	0x0080
 #define ADPD188_SLOTA_TIA_CFG_SLOTA_TIA_IND_EN_MASK	0x0040
 #define ADPD188_SLOTA_TIA_CFG_SLOTA_TIA_VREF_MASK	0x0030
 #define ADPD188_SLOTA_TIA_CFG_SLOTA_TIA_GAIN_MASK	0x0003
 #define ADPD188_SLOTA_TIA_CFG_SLOTA_AFE_MODE_POS	10
-#define ADPD188_SLOTA_TIA_CFG_SLOTA_BUF_GAIN_POS	9
 #define ADPD188_SLOTA_TIA_CFG_SLOTA_INT_AS_BUF_POS	7
 #define ADPD188_SLOTA_TIA_CFG_SLOTA_TIA_IND_EN_POS	6
 #define ADPD188_SLOTA_TIA_CFG_SLOTA_TIA_VREF_POS	4
 #define ADPD188_SLOTA_TIA_CFG_SLOTA_TIA_GAIN_POS	0
 
 /* ADPD188_REG_SLOTB_TIA_CFG */
+/* ADPD188BI specific registers */
+#define ADPD188_SLOTB_TIA_CFG_SLOTA_BUF_GAIN_MASK	0x0200
+#define ADPD188_SLOTB_TIA_CFG_SLOTA_BUF_GAIN_POS	9
+/* ADPD108X specific registers */
+#define ADPD108X_SLOTB_TIA_CFG_SLOTA_BUF_GAIN_MASK	0x0300
+#define ADPD108X_SLOTB_TIA_CFG_SLOTA_INT_GAIN_POS	8
+/* ADPD188_REG_SLOTA_TIA_CFG common registers */
 #define ADPD188_SLOTB_TIA_CFG_SLOTB_AFE_MODE_MASK	0xFC00
-#define ADPD188_SLOTB_TIA_CFG_SLOTB_BUF_GAIN_MASK	0x0200
 #define ADPD188_SLOTB_TIA_CFG_SLOTB_INT_AS_BUF_MASK	0x0080
 #define ADPD188_SLOTB_TIA_CFG_SLOTB_TIA_IND_EN_MASK	0x0040
 #define ADPD188_SLOTB_TIA_CFG_SLOTB_TIA_VREF_MASK	0x0030
 #define ADPD188_SLOTB_TIA_CFG_SLOTB_TIA_GAIN_MASK	0x0003
 #define ADPD188_SLOTB_TIA_CFG_SLOTB_AFE_MODE_POS	10
-#define ADPD188_SLOTB_TIA_CFG_SLOTB_BUF_GAIN_POS	9
 #define ADPD188_SLOTB_TIA_CFG_SLOTB_INT_AS_BUF_POS	7
 #define ADPD188_SLOTB_TIA_CFG_SLOTB_TIA_IND_EN_POS	6
 #define ADPD188_SLOTB_TIA_CFG_SLOTB_TIA_VREF_POS	4
@@ -485,6 +499,15 @@
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
+
+/**
+ * @enum adpd_supported_devices
+ * @brief Devices supported by the driver.
+ */
+enum adpd_supported_devices {
+	ADPD188BI,
+	APDP108X
+};
 
 /**
  * @union adpd188_phy_init
@@ -635,6 +658,8 @@ struct adpd188_slot_config {
  * @brief Driver descriptor structure.
  */
 struct adpd188_dev {
+	/** Selected device */
+	enum adpd_supported_devices device;
 	/** Communication physical type. */
 	enum adpd188_phy_opt phy_opt;
 	/** Communication physical descriptor. */
@@ -650,6 +675,8 @@ struct adpd188_dev {
  * @brief Driver initialization structure.
  */
 struct adpd188_init_param {
+	/** Selected device */
+	enum adpd_supported_devices device;
 	/** Communication physical type. */
 	enum adpd188_phy_opt phy_opt;
 	/** Communication physical initialization structure. */
