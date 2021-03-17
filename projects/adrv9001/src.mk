@@ -60,7 +60,6 @@ SRCS += $(PROJECT)/src/app/app_iio.c \
 	$(PLATFORM_DRIVERS)/irq.c \
 	$(NO-OS)/util/list.c \
 	$(NO-OS)/util/fifo.c \
-	$(NO-OS)/util/xml.c \
 	$(NO-OS)/iio/iio_axi_adc/iio_axi_adc.c \
 	$(NO-OS)/iio/iio_axi_dac/iio_axi_dac.c
 INCS += $(PROJECT)/src/app/app_iio.h \
@@ -69,7 +68,6 @@ INCS += $(PROJECT)/src/app/app_iio.h \
 	$(PLATFORM_DRIVERS)/irq_extra.h \
 	$(PLATFORM_DRIVERS)/uart_extra.h \
 	$(INCLUDE)/fifo.h \
-	$(INCLUDE)/xml.h \
 	$(INCLUDE)/list.h \
 	$(NO-OS)/iio/iio_axi_adc/iio_axi_adc.h \
 	$(NO-OS)/iio/iio_axi_dac/iio_axi_dac.h

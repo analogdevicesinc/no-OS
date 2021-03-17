@@ -33,13 +33,11 @@ SRCS += $(PLATFORM_DRIVERS)/uart.c					\
 	$(PLATFORM_DRIVERS)/irq.c					\
 	$(PLATFORM_DRIVERS)/gpio.c					\
 	$(PLATFORM_DRIVERS)/spi.c					\
-	$(NO-OS)/util/xml.c						\
 	$(NO-OS)/util/list.c						\
 	$(NO-OS)/util/fifo.c						\
 	$(NO-OS)/util/util.c						\
 
-INCS += $(INCLUDE)/xml.h						\
-	$(INCLUDE)/fifo.h						\
+INCS += $(INCLUDE)/fifo.h					\
 	$(INCLUDE)/irq.h						\
 	$(INCLUDE)/uart.h						\
 	$(INCLUDE)/list.h						\
