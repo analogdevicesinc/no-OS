@@ -17,9 +17,8 @@ Code documentation is automatically generated using Doxygen tool, available at [
 
 ## Build
 
-Build guides for no-OS projects:
-  * [Linux](https://github.com/analogdevicesinc/no-OS/wiki/Building-no-OS-on-Linux)
-  * [Windows](https://github.com/analogdevicesinc/no-OS/wiki/Building-no-OS-on-Windows)
+Build guide for no-OS projects:
+  * [NO-OS Build Guide](https://wiki.analog.com/resources/no-os/build)
 
 ## Code Style
 When writing code, please follow the [style guidelines](https://github.com/analogdevicesinc/no-OS/wiki/Code-Style-guidelines).
