@@ -52,7 +52,6 @@ ifeq (y,$(strip $(TINYIIOD)))
 LIBRARIES += iio
 SRCS += $(PLATFORM_DRIVERS)/uart.c					\
 	$(PLATFORM_DRIVERS)/irq.c					\
-	$(NO-OS)/util/xml.c						\
 	$(NO-OS)/util/fifo.c						\
 	$(NO-OS)/util/list.c						\
 	$(NO-OS)/iio/iio_axi_adc/iio_axi_adc.c				\
@@ -98,8 +97,7 @@ INCS +=	$(INCLUDE)/axi_io.h						\
 	$(INCLUDE)/delay.h						\
 	$(INCLUDE)/util.h
 ifeq (y,$(strip $(TINYIIOD)))
-INCS += $(INCLUDE)/xml.h						\
-	$(INCLUDE)/fifo.h						\
+INCS += $(INCLUDE)/fifo.h						\
 	$(INCLUDE)/irq.h						\
 	$(INCLUDE)/uart.h						\
 	$(INCLUDE)/list.h						\

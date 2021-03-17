@@ -2,8 +2,7 @@
 SRC_DIRS += $(PROJECT)/src/app
 SRC_DIRS += $(NO-OS)/iio/iio_app
 
-SRCS +=	$(NO-OS)/util/xml.c						\
-	$(NO-OS)/util/list.c						\
+SRCS +=	$(NO-OS)/util/list.c					\
 	$(NO-OS)/util/fifo.c						\
 	$(NO-OS)/util/util.c
 
@@ -13,8 +12,7 @@ SRCS += $(DRIVERS)/adc/adc_demo/adc_demo.c				\
 	$(DRIVERS)/dac/dac_demo/iio_dac_demo.c				\
 	$(DRIVERS)/dac/dac_demo/dac_demo.c
 
-INCS += $(INCLUDE)/xml.h						\
-	$(INCLUDE)/fifo.h						\
+INCS += $(INCLUDE)/fifo.h					\
 	$(INCLUDE)/uart.h						\
 	$(INCLUDE)/list.h						\
 	$(INCLUDE)/util.h						\

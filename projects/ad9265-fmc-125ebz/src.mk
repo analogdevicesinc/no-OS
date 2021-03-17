@@ -20,8 +20,7 @@ SRCS += $(DRIVERS)/adc/ad9265/ad9265.c					\
 	$(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c			\
 	$(NO-OS)/util/util.c
 ifeq (y,$(strip $(TINYIIOD)))
-SRCS += $(NO-OS)/util/xml.c						\
-	$(NO-OS)/util/fifo.c						\
+SRCS += $(NO-OS)/util/fifo.c						\
 	$(NO-OS)/iio/iio_axi_adc/iio_axi_adc.c				\
 	$(NO-OS)/util/list.c						\
 	$(PLATFORM_DRIVERS)/uart.c					\
@@ -45,8 +44,7 @@ INCS +=	$(INCLUDE)/axi_io.h						\
 	$(INCLUDE)/print_log.h						\
 	$(INCLUDE)/util.h
 ifeq (y,$(strip $(TINYIIOD)))
-INCS +=	$(INCLUDE)/xml.h						\
-	$(INCLUDE)/fifo.h						\
+INCS +=	$(INCLUDE)/fifo.h						\
 	$(INCLUDE)/irq.h						\
 	$(INCLUDE)/uart.h						\
 	$(INCLUDE)/list.h						\

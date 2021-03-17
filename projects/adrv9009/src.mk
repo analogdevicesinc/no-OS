@@ -52,8 +52,7 @@ SRCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c			\
 	$(DRIVERS)/gpio/gpio.c
 ifeq (y,$(strip $(TINYIIOD)))
 LIBRARIES += iio
-SRCS += $(NO-OS)/util/xml.c						\
-	$(NO-OS)/util/fifo.c						\
+SRCS += $(NO-OS)/util/fifo.c						\
 	$(NO-OS)/util/list.c						\
 	$(NO-OS)/iio/iio_axi_adc/iio_axi_adc.c				\
 	$(NO-OS)/iio/iio_axi_dac/iio_axi_dac.c                          \
@@ -139,8 +138,7 @@ INCS +=	$(INCLUDE)/axi_io.h						\
 	$(INCLUDE)/delay.h						\
 	$(INCLUDE)/util.h
 ifeq (y,$(strip $(TINYIIOD)))
-INCS +=	$(INCLUDE)/xml.h						\
-	$(INCLUDE)/fifo.h						\
+INCS +=	$(INCLUDE)/fifo.h						\
 	$(INCLUDE)/irq.h						\
 	$(INCLUDE)/uart.h						\
 	$(INCLUDE)/list.h						\
