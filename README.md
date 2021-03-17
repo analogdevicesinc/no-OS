@@ -11,7 +11,7 @@ The majority of ADI's products are peripherals to a non-ADI digital engine (FPGA
 
 ## Documentation
 
-For more information about no-OS drivers, please visit our [wiki](https://wiki.analog.com/resources/tools-software/uc-drivers-all) page.
+For more information about no-OS drivers, please visit our [wiki](https://wiki.analog.com/resources/no-os/drivers) page.
 
 Code documentation is automatically generated using Doxygen tool, available at [no-OS Github Pages](http://analogdevicesinc.github.io/no-OS/).
 
