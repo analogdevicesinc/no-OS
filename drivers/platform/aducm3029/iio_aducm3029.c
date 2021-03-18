@@ -39,15 +39,15 @@
 
 #ifdef IIO_SUPPORT
 
+#include <stdio.h>
+#include <inttypes.h>
+#include <sys/platform.h>
 #include "pwm.h"
-#include "util.h"
 #include "gpio.h"
 #include "iio_aducm3029.h"
 #include "adc.h"
 #include "error.h"
-#include <stdio.h>
-#include <inttypes.h>
-#include <sys/platform.h>
+#include "util.h"
 
 #define GPIO_PIN(nb)	(1u << ((nb) & 0x0F))
 #define GPIO_PORT(nb)	(((nb) & 0xF0) >> 4)
