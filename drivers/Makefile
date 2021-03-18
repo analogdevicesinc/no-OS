@@ -31,10 +31,14 @@ IIOD_FLAGS += -DIIO_SUPPORT
 
 CFLAGS = -c -Wall -Wformat=0 $(IIOD_FLAGS) $(INCLUDES)
 
-SUBDIRS = $(shell find . $(SKIPDIR) -name '*.c')
+SRCS = $(shell find . $(SKIPDIR) -name '*.c')
+OBJS = $(SRCS:.c=.o)
 
-all:
-	$(CC) $(CFLAGS) $(SUBDIRS)
+%.o:%.c
+	@echo CC $(notdir $<)
+	@$(CC) -c $< $(CFLAGS)
+
+all: $(OBJS)
 
 clean:
-	rm *.o
+	rm -f $(OBJS)
