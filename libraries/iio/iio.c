@@ -720,7 +720,7 @@ static ssize_t iio_ch_write_attr(const char *device_id, const char *channel,
  * @return SUCCESS, negative value in case of failure.
  */
 static int32_t iio_open_dev(const char *device, size_t sample_size,
-			    uint32_t mask)
+			    uint32_t mask, bool cyclic)
 {
 	struct iio_interface *iface;
 	uint32_t ch_mask;
