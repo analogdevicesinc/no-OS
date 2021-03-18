@@ -45,7 +45,7 @@
 
 #include <stdbool.h>
 #include <stdint.h>
-#include <sys/types.h>
+#include "tinyiiod.h"
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
