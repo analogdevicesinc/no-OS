@@ -19,7 +19,7 @@ build_cppcheck() {
 
 build_drivers() {
     sudo apt-get install gcc-arm-none-eabi libnewlib-arm-none-eabi
-    make -C ./drivers -f Makefile
+    make -C ./drivers -f Makefile -j
 }
 
 build_doxygen() {
