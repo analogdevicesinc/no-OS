@@ -65,6 +65,6 @@
 #define GPIO_LKDET                  GPIO_OFFSET + 1
 #define GPIO_ENCLK2                 GPIO_OFFSET + 2
 #define GPIO_CE						GPIO_OFFSET + 3
-#define GPIO_ENCLK1                 GPIO_OFFSET + 2
+#define GPIO_ENCLK1                 GPIO_OFFSET + 4
 
 #endif /* _PARAMETERS_H_ */

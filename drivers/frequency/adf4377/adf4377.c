@@ -509,10 +509,6 @@ static int32_t adf4377_setup(struct adf4377_dev *dev)
 			     ADF4377_CLKOUT2_OP_MSK | ADF4377_CLKOUT1_OP_MSK,
 			     ADF4377_CLKOUT1_OP(dev->clkout_op) | ADF4377_CLKOUT2_OP(dev->clkout_op));
 
-
-	if (ret != SUCCESS)
-		return ret;
-
 	return ret;
 }
 
@@ -533,10 +529,6 @@ int32_t adf4377_init(struct adf4377_dev **device,
 		return -ENOMEM;
 
 	dev->spi3wire = init_param->spi3wire;
-
-	if (ADF4377_CHECK_RANGE(init_param->clkin_freq, REFIN_FREQ))
-		goto error_dev;
-
 	dev->clkin_freq = init_param->clkin_freq;
 	dev->cp_i = init_param->cp_i;
 	dev->muxout_default = init_param->muxout_select;
@@ -545,18 +537,34 @@ int32_t adf4377_init(struct adf4377_dev **device,
 	dev->clkout_op = init_param->clkout_op;
 
 	/* GPIO Chip Enable */
-	ret = gpio_get(&dev->gpio_ce, init_param->gpio_ce_param);
+	ret = gpio_get_optional(&dev->gpio_ce, init_param->gpio_ce_param);
 	if (ret != SUCCESS)
 		goto error_dev;
 
 	ret = gpio_direction_output(dev->gpio_ce, GPIO_HIGH);
 	if (ret != SUCCESS)
-		goto error_gpio;
+		goto error_gpio_ce;
+
+	ret = gpio_get_optional(&dev->gpio_enclk1, init_param->gpio_enclk1_param);
+	if (ret != SUCCESS)
+		goto error_gpio_ce;
+
+	ret = gpio_direction_output(dev->gpio_enclk1, GPIO_HIGH);
+	if (ret != SUCCESS)
+		goto error_gpio_enclk1;
+
+	ret = gpio_get_optional(&dev->gpio_enclk2, init_param->gpio_enclk2_param);
+	if (ret != SUCCESS)
+		goto error_gpio_enclk1;
+
+	ret = gpio_direction_output(dev->gpio_enclk2, GPIO_HIGH);
+	if (ret != SUCCESS)
+		goto error_gpio_enclk2;
 
 	/* SPI */
 	ret = spi_init(&dev->spi_desc, init_param->spi_init);
 	if (ret != SUCCESS)
-		goto error_gpio;
+		goto error_gpio_enclk2;
 
 	ret = adf4377_setup(dev);
 	if (ret != SUCCESS)
@@ -569,7 +577,13 @@ int32_t adf4377_init(struct adf4377_dev **device,
 error_spi:
 	spi_remove(dev->spi_desc);
 
-error_gpio:
+error_gpio_enclk2:
+	gpio_remove(dev->gpio_enclk2);
+
+error_gpio_enclk1:
+	gpio_remove(dev->gpio_enclk1);
+
+error_gpio_ce:
 	gpio_remove(dev->gpio_ce);
 
 error_dev:
@@ -592,6 +606,16 @@ int32_t adf4377_remove(struct adf4377_dev *dev)
 		return ret;
 
 	ret = gpio_remove(dev->gpio_ce);
+	if (ret != SUCCESS)
+		return ret;
+
+	ret = gpio_remove(dev->gpio_enclk1);
+	if (ret != SUCCESS)
+		return ret;
+
+	ret = gpio_remove(dev->gpio_enclk2);
+	if (ret != SUCCESS)
+		return ret;
 
 	free(dev);
 

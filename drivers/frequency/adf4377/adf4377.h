@@ -699,6 +699,10 @@ struct adf4377_init_param {
 	struct spi_init_param	*spi_init;
 	/* GPIO Chip Enable */
 	struct gpio_init_param	*gpio_ce_param;
+	/* GPIO ENCLK1 */
+	struct gpio_init_param	*gpio_enclk1_param;
+	/* GPIO ENCLK2 */
+	struct gpio_init_param	*gpio_enclk2_param;
 	/* SPI 3-Wire */
 	uint8_t spi3wire;
 	/* Input Reference Clock */
@@ -722,6 +726,10 @@ struct adf4377_init_param {
 struct adf4377_dev {
 	/* SPI Descriptor */
 	struct spi_desc		*spi_desc;
+	/* GPIO ENCLK1 */
+	struct gpio_desc	*gpio_enclk1;
+	/* GPIO ENCLK2 */
+	struct gpio_desc	*gpio_enclk2;
 	/* GPIO Chip Enable */
 	struct gpio_desc	*gpio_ce;
 	/* SPI 3-Wire */

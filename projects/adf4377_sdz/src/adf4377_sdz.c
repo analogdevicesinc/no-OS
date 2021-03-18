@@ -78,6 +78,18 @@ int main(void)
 		.extra = &xil_gpio_init
 	};
 
+	struct gpio_init_param gpio_enclk1_param = {
+		.number = GPIO_ENCLK1,
+		.platform_ops = &xil_gpio_platform_ops,
+		.extra = &xil_gpio_init
+	};
+
+	struct gpio_init_param gpio_enclk2_param = {
+		.number = GPIO_ENCLK2,
+		.platform_ops = &xil_gpio_platform_ops,
+		.extra = &xil_gpio_init
+	};
+
 	struct spi_init_param spi_init = {
 		.max_speed_hz = 2000000,
 		.chip_select = SPI_ADF4377_CS,
@@ -90,13 +102,15 @@ int main(void)
 	struct adf4377_init_param adf4377_param = {
 		.spi_init = &spi_init,
 		.gpio_ce_param = &gpio_ce_param,
+		.gpio_enclk1_param = &gpio_enclk1_param,
+		.gpio_enclk2_param = &gpio_enclk2_param,
 		.spi3wire = ADF4377_SDO_ACTIVE_SPI_4W,
 		.clkin_freq = 100000000,
 		.cp_i = ADF4377_CP_10MA1,
 		.muxout_select = ADF4377_MUXOUT_HIGH_Z,
 		.ref_doubler_en = ADF4377_REF_DBLR_DIS,
 		.f_clk = 1000000000,
-		.clkout_op = ADF4377_CLKOUT_320MV
+		.clkout_op = ADF4377_CLKOUT_427MV
 	};
 
 	ret = adf4377_init(&dev, &adf4377_param);
@@ -113,7 +127,5 @@ int main(void)
 	return iio_app_run(devices, ARRAY_SIZE(devices));
 #endif
 
-	ret = adf4377_remove(dev);
-
-	return ret;
+	return adf4377_remove(dev);;
 }
