@@ -251,7 +251,7 @@ int32_t adf4377_soft_reset(struct adf4377_dev *dev)
 	if (ret != SUCCESS)
 		return ret;
 
-	while(timeout) {
+	while(timeout--) {
 		ret = adf4377_spi_read(dev, ADF4377_REG(0x00), &data);
 		if (ret != SUCCESS)
 			return ret;
@@ -269,7 +269,7 @@ int32_t adf4377_soft_reset(struct adf4377_dev *dev)
  * @param freq - The output frequency.
  * @return SUCCESS in case of success, negative error code otherwise.
  */
-static int32_t adf4377_set_freq(struct adf4377_dev *dev)
+int32_t adf4377_set_freq(struct adf4377_dev *dev)
 {
 	int32_t ret;
 
@@ -317,40 +317,11 @@ static int32_t adf4377_set_freq(struct adf4377_dev *dev)
 static int32_t adf4377_setup(struct adf4377_dev *dev)
 {
 	int32_t ret;
-	uint8_t chip_type;
 	uint32_t f_div_rclk;
 	uint8_t dclk_div1, dclk_div2, dclk_mode;
 	uint16_t synth_lock_timeout, vco_alc_timeout, adc_clk_div, vco_band_div;
 
 	dev->ref_div_factor = 0;
-
-	/* Software Reset */
-	ret = adf4377_soft_reset(dev);
-	if (ret != SUCCESS)
-		return ret;
-
-	ret = adf4377_spi_write(dev, ADF4377_REG(0x00),
-				ADF4377_LSB_FIRST_R(dev->spi_desc->bit_order) |
-				ADF4377_LSB_FIRST(dev->spi_desc->bit_order) |
-				ADF4377_SDO_ACTIVE_R(dev->spi3wire) |
-				ADF4377_SDO_ACTIVE(dev->spi3wire) |
-				ADF4377_ADDRESS_ASC_R(ADF4377_ADDR_ASC_AUTO_DECR) |
-				ADF4377_ADDRESS_ASC(ADF4377_ADDR_ASC_AUTO_DECR));
-	if (ret != SUCCESS)
-		return ret;
-
-	/* Read Chip Type */
-	ret = adf4377_spi_read(dev, ADF4377_REG(0x03), &chip_type);
-	if (ret != SUCCESS)
-		return ret;
-
-	if (chip_type != ADF4377_CHIP_TYPE)
-		return ret;
-
-	/* Scratchpad Check */
-	ret = adf4377_check_scratchpad(dev);
-	if (ret != SUCCESS)
-		return ret;
 
 	/* Set Default Registers */
 	ret = adf4377_set_default(dev);
@@ -522,12 +493,14 @@ int32_t adf4377_init(struct adf4377_dev **device,
 		     struct adf4377_init_param *init_param)
 {
 	int32_t ret;
+	uint8_t device_id;
+	uint8_t chip_type;
 	struct adf4377_dev *dev;
 
 	dev = (struct adf4377_dev *)calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
-
+	dev->dev_id = init_param->dev_id;
 	dev->spi3wire = init_param->spi3wire;
 	dev->clkin_freq = init_param->clkin_freq;
 	dev->cp_i = init_param->cp_i;
@@ -545,26 +518,65 @@ int32_t adf4377_init(struct adf4377_dev **device,
 	if (ret != SUCCESS)
 		goto error_gpio_ce;
 
-	ret = gpio_get_optional(&dev->gpio_enclk1, init_param->gpio_enclk1_param);
-	if (ret != SUCCESS)
-		goto error_gpio_ce;
-
-	ret = gpio_direction_output(dev->gpio_enclk1, GPIO_HIGH);
-	if (ret != SUCCESS)
-		goto error_gpio_enclk1;
-
-	ret = gpio_get_optional(&dev->gpio_enclk2, init_param->gpio_enclk2_param);
-	if (ret != SUCCESS)
-		goto error_gpio_enclk1;
-
-	ret = gpio_direction_output(dev->gpio_enclk2, GPIO_HIGH);
-	if (ret != SUCCESS)
-		goto error_gpio_enclk2;
-
 	/* SPI */
 	ret = spi_init(&dev->spi_desc, init_param->spi_init);
 	if (ret != SUCCESS)
-		goto error_gpio_enclk2;
+		goto error_gpio_ce;
+
+	/* Software Reset */
+	ret = adf4377_soft_reset(dev);
+	if (ret != SUCCESS)
+		return ret;
+
+	ret = adf4377_spi_write(dev, ADF4377_REG(0x00),
+				ADF4377_LSB_FIRST_R(dev->spi_desc->bit_order) |
+				ADF4377_LSB_FIRST(dev->spi_desc->bit_order) |
+				ADF4377_SDO_ACTIVE_R(dev->spi3wire) |
+				ADF4377_SDO_ACTIVE(dev->spi3wire) |
+				ADF4377_ADDRESS_ASC_R(ADF4377_ADDR_ASC_AUTO_DECR) |
+				ADF4377_ADDRESS_ASC(ADF4377_ADDR_ASC_AUTO_DECR));
+	if (ret != SUCCESS)
+		return ret;
+
+	/* Read Chip Type */
+	ret = adf4377_spi_read(dev, ADF4377_REG(0x03), &chip_type);
+	if (ret != SUCCESS)
+		return ret;
+
+	if (chip_type != ADF4377_CHIP_TYPE)
+		return ret;
+
+	/* Scratchpad Check */
+	ret = adf4377_check_scratchpad(dev);
+	if (ret != SUCCESS)
+		return ret;
+
+	ret = adf4377_spi_read(dev, ADF4377_REG(0x04), &device_id);
+	if (ret != SUCCESS)
+		goto error_spi;
+
+	if (dev->dev_id == device_id) {
+		ret = gpio_get_optional(&dev->gpio_enclk1, init_param->gpio_enclk1_param);
+		if (ret != SUCCESS)
+			goto error_spi;
+
+		ret = gpio_direction_output(dev->gpio_enclk1, GPIO_HIGH);
+		if (ret != SUCCESS)
+			goto error_gpio_enclk1;
+
+		if (dev->dev_id == ADF4377) {
+			ret = gpio_get_optional(&dev->gpio_enclk2, init_param->gpio_enclk2_param);
+			if (ret != SUCCESS)
+				goto error_gpio_enclk1;
+
+			ret = gpio_direction_output(dev->gpio_enclk2, GPIO_HIGH);
+			if (ret != SUCCESS)
+				goto error_gpio_enclk2;
+		}
+	} else {
+		ret = -ENODEV;
+		goto error_spi;
+	}
 
 	ret = adf4377_setup(dev);
 	if (ret != SUCCESS)
@@ -574,14 +586,14 @@ int32_t adf4377_init(struct adf4377_dev **device,
 
 	return ret;
 
-error_spi:
-	spi_remove(dev->spi_desc);
-
 error_gpio_enclk2:
 	gpio_remove(dev->gpio_enclk2);
 
 error_gpio_enclk1:
 	gpio_remove(dev->gpio_enclk1);
+
+error_spi:
+	spi_remove(dev->spi_desc);
 
 error_gpio_ce:
 	gpio_remove(dev->gpio_ce);

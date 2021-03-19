@@ -59,6 +59,7 @@
 int main(void)
 {
 	int32_t ret;
+	uint8_t f_lock;
 	struct adf4377_dev *dev;
 
 	struct xil_spi_init_param xil_spi_init = {
@@ -100,6 +101,7 @@ int main(void)
 	};
 
 	struct adf4377_init_param adf4377_param = {
+		.dev_id = ADF4377,
 		.spi_init = &spi_init,
 		.gpio_ce_param = &gpio_ce_param,
 		.gpio_enclk1_param = &gpio_enclk1_param,
@@ -119,6 +121,18 @@ int main(void)
 		return FAILURE;
 	}
 
+	pr_info("ADF4377 Successfully initialized!");
+
+	ret = adf4377_spi_read(dev, ADF4377_REG(0x49), &f_lock);
+	if (ret != SUCCESS) {
+		pr_err("SPI Read Failed!");
+	}
+
+	if(ADF4377_LOCKED(f_lock))
+		pr_info("Output Frequency Locked!");
+	else
+		pr_err("Output Frequency not Locked!");
+
 #ifdef IIO_SUPPORT
 	struct iio_app_device devices[] = {
 		IIO_APP_DEVICE("adf4377_dev", dev, &adf4377_iio_descriptor,
@@ -127,5 +141,5 @@ int main(void)
 	return iio_app_run(devices, ARRAY_SIZE(devices));
 #endif
 
-	return adf4377_remove(dev);;
+	return adf4377_remove(dev);
 }

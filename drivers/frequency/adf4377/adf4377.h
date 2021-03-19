@@ -42,6 +42,7 @@
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
+/******************************************************************************/
 #include <stdint.h>
 #include "spi.h"
 #include "gpio.h"
@@ -686,8 +687,8 @@
  * @brief ID of Devices supported by the driver.
  */
 enum adf4377_dev_id {
-	ADF4377,
-	ADF4378
+	ADF4377 = 0x05,
+	ADF4378 = 0x06
 };
 
 /**
@@ -703,6 +704,8 @@ struct adf4377_init_param {
 	struct gpio_init_param	*gpio_enclk1_param;
 	/* GPIO ENCLK2 */
 	struct gpio_init_param	*gpio_enclk2_param;
+	/* Device ID */
+	enum adf4377_dev_id dev_id;
 	/* SPI 3-Wire */
 	uint8_t spi3wire;
 	/* Input Reference Clock */
@@ -732,6 +735,8 @@ struct adf4377_dev {
 	struct gpio_desc	*gpio_enclk2;
 	/* GPIO Chip Enable */
 	struct gpio_desc	*gpio_ce;
+	/* Device ID */
+	enum adf4377_dev_id dev_id;
 	/* SPI 3-Wire */
 	uint8_t spi3wire;
 	/* PFD Frequency */
@@ -766,16 +771,22 @@ struct adf4377_dev {
 int32_t adf4377_spi_write(struct adf4377_dev *dev, uint8_t reg_addr,
 			  uint8_t data);
 
-/** ADF4377 SPI Read */
-int32_t adf4377_spi_read(struct adf4377_dev *dev, uint8_t reg_addr,
-			 uint8_t *data);
-
 /* ADF4377 Register Update */
 int32_t adf4377_update(struct adf4377_dev *dev, uint8_t reg_addr,
 		       uint8_t mask, uint8_t data);
 
+/** ADF4377 SPI Read */
+int32_t adf4377_spi_read(struct adf4377_dev *dev, uint8_t reg_addr,
+			 uint8_t *data);
+
+/* Software Reset */
+int32_t adf4377_soft_reset(struct adf4377_dev *dev);
+
 /* ADF4377 Scratchpad check */
 int32_t adf4377_check_scratchpad(struct adf4377_dev *dev);
+
+/* Set Output frequency */
+int32_t adf4377_set_freq(struct adf4377_dev *dev);
 
 /** ADF4377 Initialization */
 int32_t adf4377_init(struct adf4377_dev **device,
