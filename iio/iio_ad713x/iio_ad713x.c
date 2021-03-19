@@ -46,7 +46,6 @@
 #include <errno.h>
 #include <stdlib.h>
 #include "error.h"
-#include "xml.h"
 #include "util.h"
 #include "iio.h"
 #include "iio_ad713x.h"
