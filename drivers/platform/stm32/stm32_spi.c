@@ -38,6 +38,7 @@
 *******************************************************************************/
 #include <stdlib.h>
 #include <errno.h>
+#include "util.h"
 #include "gpio.h"
 #include "stm32_gpio.h"
 #include "spi.h"
@@ -205,9 +206,11 @@ int32_t stm32_spi_write_and_read(struct spi_desc *desc,
 				 uint8_t *data,
 				 uint16_t bytes_number)
 {
-	int32_t	ret;
+	uint8_t *tx = data;
+	uint8_t *rx = data;
 	struct stm32_spi_desc *sdesc;
-
+	struct stm32_gpio_desc *gdesc;
+	SPI_TypeDef * SPIx;
 	if (!desc || !desc->extra || !data)
 		return -EINVAL;
 
@@ -215,20 +218,21 @@ int32_t stm32_spi_write_and_read(struct spi_desc *desc,
 		return 0;
 
 	sdesc = desc->extra;
+	gdesc = sdesc->chip_select->extra;
+	SPIx = sdesc->hspi.Instance;
 
-	ret = gpio_set_value(sdesc->chip_select, GPIO_LOW);
-	if (ret < 0)
-		goto error;
-
-	ret = HAL_SPI_TransmitReceive(&sdesc->hspi, data, data, bytes_number,
-				      HAL_MAX_DELAY);
-	if (ret != HAL_OK) {
-		if (ret == HAL_TIMEOUT)
-			ret = -ETIMEDOUT;
-		else
-			ret = -EIO;
+	gdesc->port->BSRR = BIT(sdesc->chip_select->number) << 16;
+	__HAL_SPI_ENABLE(&sdesc->hspi);
+	while(bytes_number--) {
+		while(!(SPIx->SR & SPI_SR_TXE))
+			;
+		*(volatile uint8_t *)&SPIx->DR = *tx++;
+		while(!(SPIx->SR & SPI_SR_RXNE))
+			;
+		*rx++ = *(volatile uint8_t *)&SPIx->DR;
 	}
+	__HAL_SPI_DISABLE(&sdesc->hspi);
+	gdesc->port->BSRR = BIT(sdesc->chip_select->number);
 
-error:
-	return gpio_set_value(sdesc->chip_select, GPIO_HIGH);
+	return SUCCESS;
 }
