@@ -60,7 +60,7 @@ endif
 $(BINARY).openocd:
 	@echo source [find interface/stlink-dap.cfg] > $(BINARY).openocd
 	@echo set WORKAREASIZE 0x8000 >> $(BINARY).openocd
-	@echo transport select "dapdirect_swd" >> $(BINARY).openocd
+	@echo transport select \"dapdirect_swd\" >> $(BINARY).openocd
 	@echo set CHIPNAME $(CHIPNAME) >> $(BINARY).openocd
 	@echo set ENABLE_LOW_POWER 1 >> $(BINARY).openocd
 	@echo set STOP_WATCHDOG 1 >> $(BINARY).openocd
