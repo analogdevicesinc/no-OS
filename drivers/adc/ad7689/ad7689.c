@@ -163,12 +163,12 @@ int32_t ad7689_init(struct ad7689_dev **dev,
 	if (ret < 0)
 		goto error_spi;
 
-	// write config twice to also perform two dummy conversions
 	ret = ad7689_write_config(d, &init_param->config);
 	if (ret < 0)
 		goto error_init;
 
-	ret = ad7689_write_config(d, &init_param->config);
+	// perform one extra dummy conversion (2 are needed after power-up)
+	ret = _ad7689_rac(d, NULL, NULL, NULL);
 	if (ret < 0)
 		goto error_init;
 
