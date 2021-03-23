@@ -65,7 +65,17 @@ def run_cmd(cmd):
 def to_blue(str):
 	return TBLUE + str + TWHITE
 
-HDF_SERVER = os.environ['HDF_SERVER']
+HDF_SERVER = None
+key = 'HDF_SERVER'
+
+if key in os.environ:
+	HDF_SERVER = os.environ[key]
+else:
+	HDF_SERVER = input("Server for .xsa files (ex: www.something.com/hdl_output/latest/): ")
+	print("To set as env call: export HDF_SERVER=%s" % HDF_SERVER)
+
+
+print(HDF_SERVER)
 
 def get_hardware(hardware, platform, projet_dir):
 	if platform == 'xilinx':
