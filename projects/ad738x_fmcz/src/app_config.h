@@ -43,6 +43,6 @@
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 
-#define SPI_ENGINE_OFFLOAD_EXAMPLE
+//#define SPI_ENGINE_OFFLOAD_EXAMPLE
 
 #endif

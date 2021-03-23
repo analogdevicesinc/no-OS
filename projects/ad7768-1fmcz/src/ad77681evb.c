@@ -95,7 +95,9 @@ struct ad77681_init_param ADC_default_init_param = {
 	16384,				/* MCLK in kHz*/
 };
 
+#ifndef SPI_ENGINE_OFFLOAD_EXAMPLE
 #define SPI_ENGINE_OFFLOAD_EXAMPLE	0
+#endif
 
 struct axi_clkgen_init clkgen_init = {
 	.name = "rx_clkgen",
