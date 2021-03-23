@@ -1,0 +1,16 @@
+{
+      "xilinx": {
+            "demo_zc702": {
+                  "flags": "EXTRA_CFLAGS=-DPLATFORM_ZC702",
+                  "hardware": ["adv7511_zc702"]
+            },
+            "demo_zc706": {
+                  "flags": "EXTRA_CFLAGS=-DPLATFORM_ZC706",
+                  "hardware": ["adv7511_zc706"]
+            },
+            "demo_zed": {
+                  "flags": "EXTRA_CFLAGS=-DPLATFORM_ZED",
+                  "hardware": ["adv7511_zed"]
+            }
+      }
+}

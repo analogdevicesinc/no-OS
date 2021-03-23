@@ -1,0 +1,40 @@
+{
+      "xilinx": {
+            "demo": {
+                  "flags": "",
+                  "hardware": [
+                        "adrv9001_zc706",
+                        "adrv9001_zcu102",
+                        "adrv9001_zcu102_lvds",
+                        "adrv9001_zed"
+                  ]
+            },
+            "demo_adrv9002": {
+                  "flags" : "EXTRA_CFLAGS=-DADRV9002_RX2TX2",
+                  "hardware": [
+                        "adrv9001_zc706",
+                        "adrv9001_zcu102",
+                        "adrv9001_zcu102_lvds",
+                        "adrv9001_zed"
+                  ]
+            },
+            "dma_example": {
+                  "flags" : "EXTRA_CFLAGS=-DDAC_DMA_EXAMPLE",
+                  "hardware": [
+                        "adrv9001_zc706",
+                        "adrv9001_zcu102",
+                        "adrv9001_zcu102_lvds",
+                        "adrv9001_zed"
+                  ]
+            },
+            "iio": {
+                  "flags": "TINYIIOD=y",
+                  "hardware": [
+                        "adrv9001_zc706",
+                        "adrv9001_zcu102",
+                        "adrv9001_zcu102_lvds",
+                        "adrv9001_zed"
+                  ]
+            }
+      }
+}

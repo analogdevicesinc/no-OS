@@ -1,0 +1,47 @@
+{
+	//builds for aducm platform
+	"aducm3029": {
+		//build with no flags
+		"demo": {
+			"flags": ""
+		},
+		//build with iio over uart
+		"iio_uart": {
+			"flags": "TINYIIOD=y"
+		},
+		//build with iio over wifi
+		"iio_wifi": {
+			"flags": "TINYIIOD=y USE_TCP_SOCKET=y"
+		}
+	},
+	//builds for xilinx platform
+	"xilinx": {
+		//build with no flags
+		"demo": {
+			"flags": "",
+			"hardware": [
+				"ad40xx_fmc_zed"
+			]
+		},
+		//iio build
+		"iio": {
+			"flags": "TINYIIOD=y",
+			"hardware": [
+				"ad40xx_fmc_zed"
+			]
+		},
+		//build for multiple hardware with same flags
+		"iio_multiple": {
+			"flags": "TINYIIOD=y",
+			"hardware": [
+				"ad6676evb_vc707",
+				"ad6676evb_vc706"
+			]
+		},
+		//build with compiler flags
+		"spi_engine_offload": {
+		      "flags" :  "EXTRA_CFLAGS=-DSPI_ENGINE_OFFLOAD_EXAMPLE",
+		      "hardware" : ["ad738x_fmc_zed"]
+		}
+	}
+}

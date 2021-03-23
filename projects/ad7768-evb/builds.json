@@ -1,0 +1,12 @@
+{
+      "xilinx": {
+        "demo": {
+              "flags" : "",
+              "hardware" : ["ad7768evb_zed"]
+        },
+        "iio": {
+              "flags" : "TINYIIOD=y",
+              "hardware" : ["ad7768evb_zed"]
+        }
+      }
+}

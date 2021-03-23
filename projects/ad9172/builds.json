@@ -1,0 +1,16 @@
+{
+      "xilinx": {
+        "demo": {
+              "flags" : "",
+              "hardware" : ["wherAmI?"]
+        },
+        "iio": {
+            "flags" :  "TINYIIOD=y",
+              "hardware" : ["wherAmI?"]
+        },
+        "dma": {
+            "flags" :  "EXTRA_CFLAGS=-DDAC_DMA_EXAMPLE",
+              "hardware" : ["wherAmI?"]
+        }
+      }
+}

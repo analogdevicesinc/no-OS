@@ -1,0 +1,12 @@
+{
+  "xilinx": {
+    "iio": {
+      "flags" : "TINYIIOD=y",
+      "hardware" : ["ad7134_fmc_zed"]
+    },
+    "uart": {
+      "flags" : "",
+      "hardware" : ["ad7134_fmc_zed"]
+    }
+  }
+}

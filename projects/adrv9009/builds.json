@@ -1,0 +1,25 @@
+{
+      "xilinx": {
+            "demo": {
+                  "flags": "",
+                  "hardware": [
+                        "adrv9009_zc706",
+                        "adrv9009_zcu102"
+                  ]
+            },
+            "dma_example": {
+                  "flags" : "EXTRA_CFLAGS=-DDAC_DMA_EXAMPLE",
+                  "hardware": [
+                        "adrv9009_zc706",
+                        "adrv9009_zcu102"
+                  ]
+            },
+            "iio": {
+                  "flags": "TINYIIOD=y",
+                  "hardware": [
+                        "adrv9009_zc706",
+                        "adrv9009_zcu102"
+                  ]
+            }
+      }
+}
