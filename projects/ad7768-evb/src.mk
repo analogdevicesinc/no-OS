@@ -33,7 +33,7 @@ INCS += $(PROJECT)/src/parameters.h
 # Add to SRC_DIRS directories to be used in the build. All .c and .h files from
 # the directory and subdirectories will be added to the build (recursively)
 SRC_DIRS += $(PLATFORM_DRIVERS)
-SRC_DIRS += $(DRIVERS)/adc/ad7768/
+SRC_DIRS += $(DRIVERS)/adc/ad7768
 SRC_DIRS += $(DRIVERS)/axi_core/axi_dmac
 SRC_DIRS += $(DRIVERS)/axi_core/axi_adc_core
 SRC_DIRS += $(DRIVERS)/axi_core/spi_engine
