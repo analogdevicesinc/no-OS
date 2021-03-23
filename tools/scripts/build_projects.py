@@ -69,7 +69,7 @@ HDF_SERVER = os.environ['HDF_SERVER']
 
 def get_hardware(hardware, platform, projet_dir):
 	if platform == 'xilinx':
-		ext = 'hdf'
+		ext = 'xsa'
 		base_name = 'system_top'
 	else:
 		ext = 'sopcinfo'
