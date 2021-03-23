@@ -29,12 +29,13 @@ def parse_input():
 				formatter_class=argparse.RawTextHelpFormatter)
 	parser.add_argument('noos_location', help="Path to noos location")
 	parser.add_argument('export_dir', help="Path where to save files")
+	parser.add_argument('log_dir', help="Path where to save log files")
 	parser.add_argument('-project', help="Name of project to be built")
 	parser.add_argument('-platform', help="Name of platform to be built")
 	parser.add_argument('-build_name', help="Name of built type to be built")
 	args = parser.parse_args()
 
-	return (args.noos_location, args.export_dir, args.project,
+	return (args.noos_location, args.export_dir, args.log_dir, args.project,
 		args.platform, args.build_name)
 
 ERR = 0
@@ -49,17 +50,17 @@ def log_err(msg):
 def log_success(msg):
 	print(TGREEN + LOG_START + msg + TWHITE)
 
+
+log_file = 'log.txt'
+
 def run_cmd(cmd):
-	log_file = 'log.txt'
 	log(cmd)
 	sys.stdout.flush()
 	err = os.system(cmd + ' > %s 2>&1' % log_file)
 	if (err != 0):
 		global ERR
 		log_err("ERROR")
-		log("See log:")
-		os.system("sed 's/^/" + TRED + LOG_START + TWHITE + "/' %s" % log_file)
-		os.system("sed 's/^/" + TRED + LOG_START + TWHITE + "/' %s" % log_file)
+		log("See log %s" % log_file)
 		ERR = 1
 
 def to_blue(str):
@@ -121,6 +122,9 @@ class BuildConfig:
 			self.export_file = self.export_file.replace('.elf', '.hex')
 
 	def build(self):
+		global log_file
+	
+		log_file = self.build_name
 		log("Runing build:" )
 		log("\tname : %s" % to_blue(self.build_name))
 		log("\tproject : %s" % to_blue(self.project))
@@ -148,7 +152,7 @@ class BuildConfig:
 
 def main():
 	create_dir_cmd = "test -d {0} || mkdir -p {0}"
-	(noos, export_dir, _project, _platform, _build_name) = parse_input()
+	(noos, export_dir, log_dir, _project, _platform, _build_name) = parse_input()
 	projets = os.path.join(noos,'projects')
 	run_cmd(create_dir_cmd.format(export_dir))
 
@@ -189,6 +193,7 @@ def main():
 					new_build.build()
 					run_cmd("cp %s %s" % 
 						(new_build.export_file, project_export))
+					run_cmd("cp %s %s 2>/dev/null || :" % (log_file, log_dir))
 					binary_created = True
 			
 		fp.close()
