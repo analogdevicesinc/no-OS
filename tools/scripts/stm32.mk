@@ -78,8 +78,7 @@ $(BINARY).gdb:
 	@echo target remote localhost:3333 > $(BINARY).gdb
 	@echo load $(BINARY) >> $(BINARY).gdb
 	@echo file $(BINARY) >> $(BINARY).gdb
-	@echo monitor reset init >> $(BINARY).gdb
-	@echo monitor halt >> $(BINARY).gdb
+	@echo monitor reset halt >> $(BINARY).gdb
 	@echo tb main >> $(BINARY).gdb
 	@echo tb HardFault_Handler >> $(BINARY).gdb
 	# These may be helpful but are disabled due to
