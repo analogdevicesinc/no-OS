@@ -15,7 +15,7 @@ BINARY		= $(BUILD_DIR)/$(PROJECT_NAME).elf
 define tcl_util
 	xsct $(PLATFORM_TOOLS)/util.tcl					\
 	     $(1)							\
-	     $(WORKSPACE) $(WORKSPACE)/tmp/$(HARDWARE)
+	     "$(WORKSPACE)" "$(WORKSPACE)/tmp/$(HARDWARE)"
 endef
 
 ARCH = $(shell $(call read_file, $(TEMP_DIR)/arch.txt))
@@ -132,8 +132,7 @@ xilinx_project: $(BUILD_DIR)/.bsp.target
 
 PHONY += xilinx_project_build
 xilinx_project_build: all
-	$(MUTE) $(MUTE) xsct $(NO-OS)/tools/scripts/platform/xilinx/build_project.tcl $(WORKSPACE) $(HIDE)
-
+	$(MUTE) xsct $(NO-OS)/tools/scripts/platform/xilinx/build_project.tcl $(WORKSPACE) $(HIDE)
 
 $(BUILD_DIR)/.bsp.target: $(LIB_TARGETS) $(TEMP_DIR)/arch.txt
 	$(call print,Creating and configuring the IDE project)
