@@ -134,6 +134,21 @@ enum ada4250_offset_range {
 };
 
 /**
+  * @enum ada4250_gain
+  * @brief Gain value.
+  */
+enum ada4250_gain {
+	ADA4250_GAIN_1 = 1,
+	ADA4250_GAIN_2 = 2,
+	ADA4250_GAIN_4 = 4,
+	ADA4250_GAIN_8 = 8,
+	ADA4250_GAIN_16 = 16,
+	ADA4250_GAIN_32 = 32,
+	ADA4250_GAIN_64 = 64,
+	ADA4250_GAIN_128 = 128,
+};
+
+/**
  * @struct ada4250_init_param
  * @brief ADA4250 Initialization Parameters structure.
  */
@@ -143,7 +158,7 @@ struct ada4250_init_param {
 	/* Reference Buffer Enable */
 	bool refbuf_en;
 	/* Gain Value */
-	uint8_t gain;
+	enum ada4250_gain gain;
 	/* Bias Set */
 	enum ada4250_bias bias;
 	/* Offset Range */
@@ -162,7 +177,7 @@ struct ada4250_dev {
 	/* Reference Buffer Enable */
 	bool refbuf_en;
 	/* Gain Value */
-	uint8_t gain;
+	enum ada4250_gain gain;
 	/* Bias Set */
 	enum ada4250_bias bias;
 	/* Offset Range */
@@ -201,7 +216,7 @@ int32_t ada4250_set_range(struct ada4250_dev *dev,
 			  enum ada4250_offset_range range);
 
 /* Set gain */
-int32_t ada4250_set_gain(struct ada4250_dev *dev, uint8_t gain);
+int32_t ada4250_set_gain(struct ada4250_dev *dev, enum ada4250_gain gain);
 
 /* Set offset value */
 int32_t ada4250_set_offset(struct ada4250_dev *dev, int8_t offset);
