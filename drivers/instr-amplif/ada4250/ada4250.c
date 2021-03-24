@@ -187,7 +187,7 @@ int32_t ada4250_set_range(struct ada4250_dev *dev,
  * @param gain - Gain Value.
  * @return Returns SUCCESS in case of success or negative error code.
  */
-int32_t ada4250_set_gain(struct ada4250_dev *dev, uint8_t gain)
+int32_t ada4250_set_gain(struct ada4250_dev *dev, enum ada4250_gain gain)
 {
 	return ada4250_update(dev, ADA4250_REG_GAIN_MUX, ADA4250_GAIN_MUX_MSK,
 			      ADA4250_GAIN_MUX(ADA4250_GAIN(gain)));

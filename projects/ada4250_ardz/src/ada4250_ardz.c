@@ -78,7 +78,7 @@ int main()
 		.spi_init = &init_param,
 		.refbuf_en = ADA4250_BUF_DISABLE,
 		.bias = ADA4250_BIAS_DISABLE,
-		.gain = 8,
+		.gain = ADA4250_GAIN_8,
 		.offset_range = ADA4250_RANGE1_1UA_MAX,
 		.offset_val = 0,
 	};
