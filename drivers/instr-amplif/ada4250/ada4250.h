@@ -123,6 +123,17 @@ enum ada4250_bias {
 };
 
 /**
+  * @enum ada4250_offset_range
+  * @brief Sensor offset trim range.
+  */
+enum ada4250_offset_range {
+	ADA4250_RANGE1_1UA_MAX,
+	ADA4250_RANGE2_3UA_MAX,
+	ADA4250_RANGE3_7UA_MAX,
+	ADA4250_RANGE4_15UA_MAX,
+};
+
+/**
  * @struct ada4250_init_param
  * @brief ADA4250 Initialization Parameters structure.
  */
@@ -136,7 +147,7 @@ struct ada4250_init_param {
 	/* Bias Set */
 	enum ada4250_bias bias;
 	/* Offset Range */
-	uint8_t offset_range;
+	enum ada4250_offset_range offset_range;
 	/* Offset Calibration Value */
 	int8_t offset_val;
 };
@@ -155,7 +166,7 @@ struct ada4250_dev {
 	/* Bias Set */
 	enum ada4250_bias bias;
 	/* Offset Range */
-	uint8_t offset_range;
+	enum ada4250_offset_range offset_range;
 	/* Offset Calibration Value */
 	int8_t offset_val;
 };
@@ -186,7 +197,8 @@ int32_t ada4250_en_refbuf(struct ada4250_dev *dev, bool refbuf);
 int32_t ada4250_set_bias(struct ada4250_dev *dev, enum ada4250_bias bias);
 
 /* Set offset trim range */
-int32_t ada4250_set_range(struct ada4250_dev *dev, uint8_t range);
+int32_t ada4250_set_range(struct ada4250_dev *dev,
+			  enum ada4250_offset_range range);
 
 /* Set gain */
 int32_t ada4250_set_gain(struct ada4250_dev *dev, uint8_t gain);
