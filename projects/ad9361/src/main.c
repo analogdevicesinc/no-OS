@@ -43,6 +43,7 @@
 #include <inttypes.h>
 #include "app_config.h"
 #include "ad9361_api.h"
+#include "adf5355.h"
 #include "parameters.h"
 #include "spi.h"
 #include "gpio.h"
@@ -150,8 +151,8 @@ AD9361_InitParam default_init_param = {
 	0,		//rx_fastlock_delay_ns *** adi,rx-fastlock-delay-ns
 	0,		//rx_fastlock_pincontrol_enable *** adi,rx-fastlock-pincontrol-enable
 	0,		//tx_fastlock_pincontrol_enable *** adi,tx-fastlock-pincontrol-enable
-	0,		//external_rx_lo_enable *** adi,external-rx-lo-enable
-	0,		//external_tx_lo_enable *** adi,external-tx-lo-enable
+	1,		//external_rx_lo_enable *** adi,external-rx-lo-enable
+	1,		//external_tx_lo_enable *** adi,external-tx-lo-enable
 	5,		//dc_offset_tracking_update_event_mask *** adi,dc-offset-tracking-update-event-mask
 	6,		//dc_offset_attenuation_high_range *** adi,dc-offset-attenuation-high-range
 	5,		//dc_offset_attenuation_low_range *** adi,dc-offset-attenuation-low-range
@@ -490,6 +491,54 @@ struct ad9361_rf_phy *ad9361_phy;
 struct ad9361_rf_phy *ad9361_phy_b;
 #endif
 
+#ifdef FMCOMMS5
+
+struct spi_init_param adf5355_spi_param = {
+	.mode = SPI_MODE_0,
+	.chip_select = SPI_CS_ADF5355,
+#ifdef XILINX_PLATFORM
+	.extra = &xil_spi_param,
+	.platform_ops = &xil_platform_ops
+#endif
+#ifdef LINUX_PLATFORM
+	.extra = &linux_spi_param,
+	.platform_ops = &linux_spi_platform_ops
+#endif
+};
+
+struct gpio_init_param gpio_ld_param = {
+	.number = GPIO_EXT_LO_LD,
+#ifdef XILINX_PLATFORM
+	.platform_ops = &xil_gpio_platform_ops,
+	.extra = &xil_gpio_param
+#endif
+#ifdef LINUX_PLATFORM
+	.platform_ops = &linux_gpio_platform_ops
+#endif
+};
+
+struct adf5355_init_param adf5355_param = {
+	.spi_init = &adf5355_spi_param,
+	.clkin_freq = 40000000,
+	.cp_gated_bleed_en = false,
+	.cp_neg_bleed_en = false,
+	.cp_ua = 900,
+	.dev_id = ADF5355,
+	.freq_req = 2400000000,
+	.freq_req_chan = 0,
+	.mute_till_lock_en = false,
+	.mux_out_3v3_en = false,
+	.mux_out_sel = 6,
+	.outa_en = true,
+	.outb_en = false,
+	.outb_power = 3,
+	.outa_power = 0,
+	.phase_detector_polarity_neg = false,
+	.ref_diff_en = true,
+	.ref_div2_en = false,
+	.ref_doubler_en = true,
+};
+#endif
 
 /***************************************************************************//**
  * @brief main
@@ -497,6 +546,47 @@ struct ad9361_rf_phy *ad9361_phy_b;
 int main(void)
 {
 	int32_t status;
+
+#ifdef FMCOMMS5
+	struct adf5355_dev *adf5355_dev;
+	struct gpio_desc *gpio_lock_detect;
+	uint8_t ld;
+
+	if (default_init_param.external_rx_lo_enable
+	    || default_init_param.external_tx_lo_enable) {
+		status = adf5355_init(&adf5355_dev, &adf5355_param);
+		if (status != SUCCESS) {
+			printf("ADF5355 Initialization failed!");
+			return status;
+		}
+
+		status = gpio_get_optional(&gpio_lock_detect, &gpio_ld_param);
+		if (status != SUCCESS) {
+			printf("Lock Detect GPIO Initialization failed!");
+			return status;
+		}
+
+		status = gpio_direction_input(gpio_lock_detect);
+		if (status != SUCCESS) {
+			printf("Lock Detect GPIO set input direction failed!");
+			return status;
+		}
+		status = gpio_get_value(gpio_lock_detect, &ld);
+		if (status != SUCCESS) {
+			printf("Lock Detect GPIO get value failed");
+			return status;
+		} else {
+			if (ld)
+				printf("ADF5355 Out freq locked!!!");
+			else {
+				printf("ADF5355 Out freq not locked!");
+				return FAILURE;
+			}
+		}
+	}
+
+#endif
+
 #ifdef XILINX_PLATFORM
 	Xil_ICacheEnable();
 	Xil_DCacheEnable();

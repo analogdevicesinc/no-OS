@@ -46,10 +46,10 @@
 #define AD9364_DEVICE			0 /* set it 1 if AD9364 device is used, 0 otherwise */
 #define AD9363A_DEVICE			0 /* set it 1 if AD9363A device is used, 0 otherwise */
 
-//#define XILINX_PLATFORM
+#define XILINX_PLATFORM
 //#define ALTERA_PLATFORM
 //#define LINUX_PLATFORM
-//#define FMCOMMS5
+#define FMCOMMS5
 //#define ADI_RF_SOM
 //#define ADI_RF_SOM_CMOS
 //#define ADC_DMA_EXAMPLE

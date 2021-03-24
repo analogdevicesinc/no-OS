@@ -111,6 +111,7 @@
 #define GPIO_CTL1_PIN				95
 #define GPIO_CTL2_PIN				96
 #define GPIO_CTL3_PIN				97
+#define GPIO_EXT_LO_LD				112
 
 #else
 #ifdef XPAR_DDR3_SDRAM_S_AXI_BASEADDR
@@ -131,6 +132,7 @@
 
 #define SPI_CS                  0
 #define SPI_CS_2                1
+#define SPI_CS_ADF5355			2
 
 #define RX_CORE_BASEADDR	AD9361_RX_0_BASEADDR
 #define TX_CORE_BASEADDR	AD9361_TX_0_BASEADDR
