@@ -245,7 +245,6 @@ $(PROJECT_BUILD)/.project.target: $(LIB_TARGETS)
 	,$(PLATFORM_TOOLS)/startup_ADuCM3029_patch.c,$(PROJECT_BUILD)/RTE/Device/ADuCM3029/startup_ADuCM3029.c) $(HIDE)
 #Remove default files from projectsrc
 	$(MUTE) $(call remove_dir,$(PROJECT_BUILD)/src) $(HIDE)
-	$(MUTE) $(call copy_fun,$(PIN_MUX),$(PROJECT_PIN_MUX)) $(HIDE)
 	$(MUTE) $(MAKE) --no-print-directory update_srcs
 	$(MUTE) $(call set_one_time_rule,$@)
 

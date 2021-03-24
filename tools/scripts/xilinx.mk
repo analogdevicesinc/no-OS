@@ -2,20 +2,13 @@
 #                           ENVIRONMENT VARIABLES                              
 #------------------------------------------------------------------------------
 
-# Used by the build utils
-export HARDWARE
-export WORKSPACE
-export TEMP_DIR
-export BINARY
-
 TEMP_DIR	= $(BUILD_DIR)/tmp
 BINARY		= $(BUILD_DIR)/$(PROJECT_NAME).elf
-
 
 define tcl_util
 	xsct $(PLATFORM_TOOLS)/util.tcl					\
 	     $(1)							\
-	     "$(WORKSPACE)" "$(WORKSPACE)/tmp/$(HARDWARE)"
+	     "$(WORKSPACE)" "$(WORKSPACE)/tmp" "$(HARDWARE)" "$(BINARY)"
 endef
 
 ARCH = $(shell $(call read_file, $(TEMP_DIR)/arch.txt))

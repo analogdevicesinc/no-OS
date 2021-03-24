@@ -5,6 +5,7 @@ import json
 import os
 import multiprocessing
 import sys
+import filecmp
 
 TGREEN =  '\033[32m' # Green Text	
 TBLUE =  '\033[34m' # Green Text	
@@ -14,11 +15,11 @@ TWHITE = '\033[39m' #Withe text
 description_help='''Build noos projects
 Examples:\n
 	Build all noos projects
-    	>python build_projects.py ..\.. export_dir
+    	>python build_projects.py ..\.. export_dir log_dir
 	Build all configurations for iio_demo
-	>python build_projects.py /home/user/noos /home/export_dir -project=iio_demo
+	>python build_projects.py /home/user/noos /home/export_dir log_dir -project=iio_demo
 	Build all configurations for iio_demo
-	>python tools/scripts/build_projects.py . export -project=iio_demo -platform=xilinx -build_name=iio_zed
+	>python tools/scripts/build_projects.py . export logs -project=iio_demo -platform=xilinx -build_name=iio_zed
 
 	Note: HDF_SERVER should be sent as enviroment variables:
 		Ex: export HDF_SERVER=ala.bala.com/hdf_builds/latest
@@ -33,10 +34,11 @@ def parse_input():
 	parser.add_argument('-project', help="Name of project to be built")
 	parser.add_argument('-platform', help="Name of platform to be built")
 	parser.add_argument('-build_name', help="Name of built type to be built")
+	parser.add_argument('-builds_dir', help="Directory where to build projects")
 	args = parser.parse_args()
 
 	return (args.noos_location, args.export_dir, args.log_dir, args.project,
-		args.platform, args.build_name)
+		args.platform, args.build_name, args.builds_dir)
 
 ERR = 0
 LOG_START = " -> "
@@ -50,19 +52,20 @@ def log_err(msg):
 def log_success(msg):
 	print(TGREEN + LOG_START + msg + TWHITE)
 
-
-log_file = 'log.txt'
+DEFAULT_LOG_FILE = 'log.txt'
+log_file = DEFAULT_LOG_FILE
 
 def run_cmd(cmd):
 	log(cmd)
 	sys.stdout.flush()
-	err = os.system(cmd + ' > %s 2>&1' % log_file)
+	err = os.system(cmd + ' >> %s 2>&1' % log_file)
 	if (err != 0):
 		global ERR
 		log_err("ERROR")
 		log("See log %s" % log_file)
 		ERR = 1
 
+	return err
 def to_blue(str):
 	return TBLUE + str + TWHITE
 
@@ -72,13 +75,10 @@ key = 'HDF_SERVER'
 if key in os.environ:
 	HDF_SERVER = os.environ[key]
 else:
-	HDF_SERVER = input("Server for .xsa files (ex: www.something.com/hdl_output/latest/): ")
+	HDF_SERVER = raw_input("Server for .xsa files (ex: www.something.com/hdl_output/latest/): ")
 	print("To set as env call: export HDF_SERVER=%s" % HDF_SERVER)
 
-
-print(HDF_SERVER)
-
-def get_hardware(hardware, platform, projet_dir):
+def get_hardware(hardware, platform, builds_dir):
 	if platform == 'xilinx':
 		ext = 'xsa'
 		base_name = 'system_top'
@@ -86,13 +86,13 @@ def get_hardware(hardware, platform, projet_dir):
 		ext = 'sopcinfo'
 		base_name = 'system_bd'
 
+	new_hdf = 0
 	sever_file = "%s/%s.%s" % (hardware, base_name, ext)
 	local_file = "%s.%s" % (hardware, ext)
 
-	if os.path.isfile(os.path.join(projet_dir, local_file)):
-		return local_file
-
-	cmd = 'wget %s/%s -O %s/%s' % (HDF_SERVER, sever_file, projet_dir, local_file)
+	filename = os.path.join(builds_dir, local_file)
+	tmp_filename = filename + '_tmp'
+	cmd = 'wget %s/%s -O %s' % (HDF_SERVER, sever_file, tmp_filename)
 	log("Get %s" % sever_file)
 	err = os.system(cmd + ' > /dev/null 2>&1')
 	if (err != 0):
@@ -100,31 +100,43 @@ def get_hardware(hardware, platform, projet_dir):
 		log_err("ERROR")
 		ERR = 1
 
-	return local_file
+	if os.path.isfile(filename):
+		#If equal
+		if filecmp.cmp(filename, tmp_filename):
+			return (filename, 0)
+	
+	run_cmd('cp %s %s' % (tmp_filename, filename))
+
+	return (filename, 1)
 
 class BuildConfig:
-	def __init__(self, project_dir, platform, flags, build_name, hardware):
+	def __init__(self, project_dir, platform, flags, build_name, hardware, _builds_dir):
 		self.project_dir = project_dir
+		if _builds_dir is None:
+			self.builds_dir = project_dir
+		else:
+			self.builds_dir = _builds_dir
 		self.project = os.path.basename(project_dir)
 		self.platform = platform
 		self.flags = flags
 		self.build_name = build_name
 		self.hardware = hardware
-		self.build_dir_name = 'build_%s_%s' % (platform, build_name)
-		_binary = "%s_%s_%s.elf" % (self.project, platform, build_name)
+		short_build_dir = 'build_%s' % platform
+		self._binary = "%s_%s_%s.elf" % (self.project,  platform, build_name)
 		if hardware != '':
-			self.build_dir_name += '_' + hardware
-			_binary = "%s_%s_%s_%s.elf" % (
+			short_build_dir = short_build_dir + '_' + hardware
+			self._binary = "%s_%s_%s_%s.elf" % (
 				self.project, platform, build_name, hardware)
-		self.binary = os.path.join(self.build_dir_name, _binary)
-		self.export_file = os.path.join(project_dir, self.binary)
+		self.build_dir = os.path.join(self.builds_dir, short_build_dir)
+		self.binary = os.path.join(self.build_dir, self._binary)
+		self.export_file = os.path.join(self.build_dir, self.binary)
 		if (platform == 'aducm3029'):
 			self.export_file = self.export_file.replace('.elf', '.hex')
 
 	def build(self):
 		global log_file
 	
-		log_file = self.build_name
+		log_file = self._binary.replace('.elf', '.txt')
 		log("Runing build:" )
 		log("\tname : %s" % to_blue(self.build_name))
 		log("\tproject : %s" % to_blue(self.project))
@@ -132,29 +144,50 @@ class BuildConfig:
 			
 		cmd = "make -C " + self.project_dir + \
 			" PLATFORM=" + self.platform + \
-			" BUILD_DIR_NAME=" + self.build_dir_name + \
+			" BUILD_DIR=" + self.build_dir + \
 			" BINARY=" + self.binary + \
 			" LOCAL_BUILD=n" + \
 			" LINK_SRCS=n" + \
 			" VERBOSE=y " + self.flags + \
-			" -j%d" % (multiprocessing.cpu_count() - 1)
+			" -j%d " % (multiprocessing.cpu_count() - 1)
 			
 		if self.hardware != '':
 			log("\thardware : %s" % to_blue(self.hardware))
-			hardware_file = get_hardware(self.hardware,
-						self.platform, self.project_dir)
-			cmd = cmd + ' HARDWARE=%s' % hardware_file
+			(hardware_file, new_hdf) = get_hardware(self.hardware,
+						self.platform, self.builds_dir)
+			cmd = cmd + 'HARDWARE=%s ' % hardware_file
 		
-		cmd = cmd + ' ra'
-		run_cmd(cmd)
-		
+		if new_hdf:
+			err = run_cmd(cmd + 'ra')
+			if err != 0:
+				return err
+		else:
+			err = run_cmd(cmd + 'project')
+			if err != 0:
+				return err
+			
+			err = run_cmd(cmd + 'update_srcs')
+			if err != 0:
+				return err
+
+			err = run_cmd(cmd)
+			if err != 0:
+				return err
+
 		log_success("DONE")
+		
+		log_file = DEFAULT_LOG_FILE
+		return 0
 
 def main():
 	create_dir_cmd = "test -d {0} || mkdir -p {0}"
-	(noos, export_dir, log_dir, _project, _platform, _build_name) = parse_input()
+	(noos, export_dir, log_dir, _project, _platform, _build_name, _builds_dir) = parse_input()
+	noos = os.path.abspath(noos)
 	projets = os.path.join(noos,'projects')
 	run_cmd(create_dir_cmd.format(export_dir))
+	run_cmd(create_dir_cmd.format(log_dir))
+	if _builds_dir is not None:
+		run_cmd(create_dir_cmd.format(_builds_dir))
 
 	for project in os.listdir(projets):
 		binary_created = False
@@ -189,11 +222,14 @@ def main():
 								platform,
 								flags,
 								build_name,
-								hardware)
-					new_build.build()
+								hardware,
+								_builds_dir)
+					err = new_build.build()
+					run_cmd("mv %s %s 2>/dev/null || :" % (log_file, log_dir))
+					if err != 0:
+						continue
 					run_cmd("cp %s %s" % 
 						(new_build.export_file, project_export))
-					run_cmd("cp %s %s 2>/dev/null || :" % (log_file, log_dir))
 					binary_created = True
 			
 		fp.close()

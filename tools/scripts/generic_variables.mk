@@ -21,7 +21,8 @@ PROJECT			?= $(realpath .)
 TARGET 			?= $(notdir $(realpath .))
 NO-OS			?= $(realpath ../..)
 BUILD_DIR_NAME		?= build
-WORKSPACE		?= $(PROJECT)/$(BUILD_DIR_NAME)
+BUILD_DIR		?= $(PROJECT)/$(BUILD_DIR_NAME)
+WORKSPACE		?= $(BUILD_DIR)
 
 INCLUDE			?= $(NO-OS)/include
 DRIVERS 		?= $(NO-OS)/drivers

@@ -111,13 +111,13 @@ PLATFORM_DRIVERS	?= $(NO-OS)/drivers/platform/$(PLATFORM)
 
 #USED IN MAKEFILE
 PROJECT_NAME	= $(notdir $(PROJECT))
-BUILD_DIR_NAME	?= build
-BUILD_DIR		?= $(PROJECT)/$(BUILD_DIR_NAME)
 PROJECT_BUILD 		= $(BUILD_DIR)/app
 OBJECTS_DIR		= $(BUILD_DIR)/objs
-WORKSPACE		?= $(BUILD_DIR)
 PLATFORM_TOOLS	= $(NO-OS)/tools/scripts/platform/$(PLATFORM)
 BINARY			?= $(BUILD_DIR)/$(PROJECT_NAME).elf
+
+test:
+	$(BUILD_DIR) $(WORKSPACE)
 
 ifneq ($(words $(NO-OS)), 1)
 $(error $(ENDL)ERROR:$(ENDL)\
