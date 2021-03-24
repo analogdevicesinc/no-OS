@@ -150,7 +150,7 @@ int32_t ada4250_soft_reset(struct ada4250_dev *dev)
  * @param refbuf - REFBUF enable/disable.
  * @return Returns SUCCESS in case of success or negative error code.
  */
-int32_t ada4250_set_refbuf(struct ada4250_dev *dev, uint8_t refbuf)
+int32_t ada4250_en_refbuf(struct ada4250_dev *dev, bool refbuf)
 {
 	return ada4250_update(dev, ADA4250_REG_REFBUF_EN, ADA4250_REFBUF_MSK,
 			      ADA4250_REFBUF(refbuf));
@@ -258,7 +258,7 @@ int32_t ada4250_init(struct ada4250_dev **device,
 	if(ret != SUCCESS)
 		return FAILURE;
 
-	ret = ada4250_set_refbuf(dev, dev->refbuf_en);
+	ret = ada4250_en_refbuf(dev, dev->refbuf_en);
 	if(ret != SUCCESS)
 		return FAILURE;
 
