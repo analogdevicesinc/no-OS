@@ -180,7 +180,7 @@ int32_t ada4250_update(struct ada4250_dev *dev, uint8_t reg_addr,
 int32_t ada4250_soft_reset(struct ada4250_dev *dev);
 
 /* Set Reference Buffer */
-int32_t ada4250_set_refbuf(struct ada4250_dev *dev, uint8_t refbuf);
+int32_t ada4250_en_refbuf(struct ada4250_dev *dev, bool refbuf);
 
 /* Set Current Bias */
 int32_t ada4250_set_bias(struct ada4250_dev *dev, uint8_t bias);
