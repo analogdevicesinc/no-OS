@@ -110,8 +110,9 @@ def get_hardware(hardware, platform, builds_dir):
 	return (filename, 1)
 
 class BuildConfig:
-	def __init__(self, project_dir, platform, flags, build_name, hardware, _builds_dir):
+	def __init__(self, project_dir, platform, flags, build_name, hardware, _builds_dir, log_dir):
 		self.project_dir = project_dir
+		self.log_dir = log_dir
 		if _builds_dir is None:
 			self.builds_dir = project_dir
 		else:
@@ -137,6 +138,7 @@ class BuildConfig:
 		global log_file
 	
 		log_file = self._binary.replace('.elf', '.txt')
+		log_file = os.path.join(self.log_dir, log_file)
 		log("Runing build:" )
 		log("\tname : %s" % to_blue(self.build_name))
 		log("\tproject : %s" % to_blue(self.project))
@@ -223,9 +225,9 @@ def main():
 								flags,
 								build_name,
 								hardware,
-								_builds_dir)
+								_builds_dir, 
+								log_dir)
 					err = new_build.build()
-					run_cmd("mv %s %s 2>/dev/null || :" % (log_file, log_dir))
 					if err != 0:
 						continue
 					run_cmd("cp %s %s" % 

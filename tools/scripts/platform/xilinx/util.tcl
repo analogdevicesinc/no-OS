@@ -239,7 +239,7 @@ proc upload {} {
 set function	[lindex $argv 0]
 set ws		[lindex $argv 1]
 set hw_path	[lindex $argv 2]
-set hw		[lindex $argv 3]
+set hw		$::hw_path/[lindex $argv 3]
 set binary      [lindex $argv 4]
 
 if {[file exists $::hw_path/ps7_init.tcl]} {

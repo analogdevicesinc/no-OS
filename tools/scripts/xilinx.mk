@@ -8,7 +8,7 @@ BINARY		= $(BUILD_DIR)/$(PROJECT_NAME).elf
 define tcl_util
 	xsct $(PLATFORM_TOOLS)/util.tcl					\
 	     $(1)							\
-	     "$(WORKSPACE)" "$(WORKSPACE)/tmp" "$(HARDWARE)" "$(BINARY)"
+	     "$(WORKSPACE)" "$(WORKSPACE)/tmp" "$(notdir $(HARDWARE))" "$(BINARY)"
 endef
 
 ARCH = $(shell $(call read_file, $(TEMP_DIR)/arch.txt))

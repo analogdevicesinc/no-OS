@@ -19,7 +19,7 @@ jobs:
     submodules: true
     clean: true
     persistCredentials: true
-  - script: 'python ./tools/scripts/build_projects.py . $(RELEASE_DIR) $(LOG_DIR)'
+  - script: 'python ./tools/scripts/build_projects.py . $(RELEASE_DIR) $(LOG_DIR) $(BUILDS_DIR)'
     displayName: 'Run project build'
   - task: PublishPipelineArtifact@1
     condition: eq(variables.isMaster, true)
