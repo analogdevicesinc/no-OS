@@ -183,7 +183,7 @@ int32_t ada4250_soft_reset(struct ada4250_dev *dev);
 int32_t ada4250_en_refbuf(struct ada4250_dev *dev, bool refbuf);
 
 /* Set Current Bias */
-int32_t ada4250_set_bias(struct ada4250_dev *dev, uint8_t bias);
+int32_t ada4250_set_bias(struct ada4250_dev *dev, enum ada4250_bias bias);
 
 /* Set offset trim range */
 int32_t ada4250_set_range(struct ada4250_dev *dev, uint8_t range);
