@@ -162,7 +162,7 @@ int32_t ada4250_en_refbuf(struct ada4250_dev *dev, bool refbuf)
  * @param bias - Current bias option.
  * @return Returns SUCCESS in case of success or negative error code.
  */
-int32_t ada4250_set_bias(struct ada4250_dev *dev, uint8_t bias)
+int32_t ada4250_set_bias(struct ada4250_dev *dev, enum ada4250_bias bias)
 {
 	return ada4250_update(dev, ADA4250_REG_SNSR_CAL_CNFG, ADA4250_BIAS_SET_MSK,
 			      ADA4250_BIAS_SET(bias));
