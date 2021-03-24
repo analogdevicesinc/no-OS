@@ -79,7 +79,7 @@ int main()
 		.refbuf_en = ADA4250_BUF_DISABLE,
 		.bias = ADA4250_BIAS_DISABLE,
 		.gain = 8,
-		.offset_range = 1,
+		.offset_range = ADA4250_RANGE1_1UA_MAX,
 		.offset_val = 0,
 	};
 
