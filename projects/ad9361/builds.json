@@ -29,7 +29,7 @@
                   "hardware": [
                         "fmcomms5_zc702",
                         "fmcomms5_zc706",
-                        "fmcomms5_zcu102",
+                        "fmcomms5_zcu102"
                   ]
             },
             "iio_fmcomms5": {
@@ -40,6 +40,5 @@
                         "fmcomms5_zcu102"
                   ]
             }
-            //There are more configurations. Should all be added?
       }
 }

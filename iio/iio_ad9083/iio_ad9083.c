@@ -37,6 +37,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 #include "iio_ad9083.h"
+#include "ad9083.h"
 
 struct iio_device ad9083_iio_descriptor = {
 	.debug_reg_read = (int32_t (*)())ad9083_reg_get,
