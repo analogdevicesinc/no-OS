@@ -1,11 +1,13 @@
 #!/bin/python
 
 import argparse
+import re
 import json
 import os
 import multiprocessing
 import sys
 import filecmp
+import requests
 
 TGREEN =  '\033[32m' # Green Text	
 TBLUE =  '\033[34m' # Green Text	
@@ -56,10 +58,16 @@ DEFAULT_LOG_FILE = 'log.txt'
 log_file = DEFAULT_LOG_FILE
 
 def run_cmd(cmd):
-	log(cmd)
+	tmp = cmd.split(' ')
+	if tmp[0] == 'make':
+		log('make ' + tmp[-1])
+	else:
+		log(cmd)
 	sys.stdout.flush()
-	err = os.system(cmd + ' >> %s 2>&1' % log_file)
-	if (err != 0):
+	err = os.system('echo %s >> %s 2>&1' % (cmd, log_file))
+	if err == 0:
+		err = os.system(cmd + ' >> %s 2>&1' % log_file)
+	if err != 0:
 		global ERR
 		log_err("ERROR")
 		log("See log %s" % log_file)
@@ -75,8 +83,15 @@ key = 'HDF_SERVER'
 if key in os.environ:
 	HDF_SERVER = os.environ[key]
 else:
-	HDF_SERVER = raw_input("Server for .xsa files (ex: www.something.com/hdl_output/latest/): ")
+	HDF_SERVER = input("Server for .xsa files (ex: www.something.com/master/hdl_output): ")
 	print("To set as env call: export HDF_SERVER=%s" % HDF_SERVER)
+
+#Get latest folder.
+req = requests.get(HDF_SERVER)
+expr = '([0-9]{4}_[0-9]{2}_[0-9]{2}-[0-9]{2}_[0-9]{2}_[0-9]{2})'
+#Get the last but one because the latest is not allways full 
+latest = re.findall(expr, req.text)[-3]
+HDF_SERVER = HDF_SERVER + '/%s' % latest
 
 def get_hardware(hardware, platform, builds_dir):
 	if platform == 'xilinx':
@@ -90,7 +105,7 @@ def get_hardware(hardware, platform, builds_dir):
 	sever_file = "%s/%s.%s" % (hardware, base_name, ext)
 	local_file = "%s.%s" % (hardware, ext)
 
-	filename = os.path.join(builds_dir, local_file)
+	filename = os.path.join(builds_dir, 'hardwares', local_file)
 	tmp_filename = filename + '_tmp'
 	cmd = 'wget %s/%s -O %s' % (HDF_SERVER, sever_file, tmp_filename)
 	log("Get %s" % sever_file)
@@ -103,9 +118,11 @@ def get_hardware(hardware, platform, builds_dir):
 	if os.path.isfile(filename):
 		#If equal
 		if filecmp.cmp(filename, tmp_filename):
+			log("Same hardware from last build, use existing bsp")
 			return (filename, 0)
 	
 	run_cmd('cp %s %s' % (tmp_filename, filename))
+	log("Hardware changed from last build")
 
 	return (filename, 1)
 
@@ -139,10 +156,9 @@ class BuildConfig:
 	
 		log_file = self._binary.replace('.elf', '.txt')
 		log_file = os.path.join(self.log_dir, log_file)
-		log("Runing build:" )
-		log("\tname : %s" % to_blue(self.build_name))
-		log("\tproject : %s" % to_blue(self.project))
-		log("\tplatform : %s" % to_blue(self.platform))
+
+		log_str = "Building %10s (%8s) -- %s " % (
+			to_blue(self.project), to_blue(self.build_name), to_blue(self.platform))
 			
 		cmd = "make -C " + self.project_dir + \
 			" PLATFORM=" + self.platform + \
@@ -150,34 +166,34 @@ class BuildConfig:
 			" BINARY=" + self.binary + \
 			" LOCAL_BUILD=n" + \
 			" LINK_SRCS=n" + \
-			" VERBOSE=y " + self.flags + \
-			" -j%d " % (multiprocessing.cpu_count() - 1)
+			" VERBOSE=y " + self.flags
 			
 		if self.hardware != '':
-			log("\thardware : %s" % to_blue(self.hardware))
+			log_str = log_str + "-- %20s" % to_blue(self.hardware)
 			(hardware_file, new_hdf) = get_hardware(self.hardware,
 						self.platform, self.builds_dir)
 			cmd = cmd + 'HARDWARE=%s ' % hardware_file
-		
-		if new_hdf:
-			err = run_cmd(cmd + 'ra')
-			if err != 0:
-				return err
 		else:
-			err = run_cmd(cmd + 'project')
-			if err != 0:
-				return err
-			
-			err = run_cmd(cmd + 'update_srcs')
+			if os.path.isdir(self.build_dir):
+				new_hdf = False
+			else:
+				new_hdf = True
+		
+		log(log_str)
+
+		if new_hdf:
+			err = run_cmd(cmd + 'clean_all')
 			if err != 0:
 				return err
 
-			err = run_cmd(cmd)
-			if err != 0:
-				return err
+		err = run_cmd(cmd + 'update_srcs')
+		if err != 0:
+			return err
+		err = run_cmd(cmd + ' -j%d all' % (multiprocessing.cpu_count() - 1))
+		if err != 0:
+			return err
 
 		log_success("DONE")
-		
 		log_file = DEFAULT_LOG_FILE
 		return 0
 
@@ -227,8 +243,12 @@ def main():
 								hardware,
 								_builds_dir, 
 								log_dir)
+
 					err = new_build.build()
 					if err != 0:
+						if err == 2:
+							#Keyboard interrupt
+							exit()
 						continue
 					run_cmd("cp %s %s" % 
 						(new_build.export_file, project_export))
