@@ -92,7 +92,7 @@ HW_SERVER = HW_SERVER + '/%s' % latest
 
 def get_hardware(hardware, platform, builds_dir):
 	if platform == 'xilinx':
-		ext = 'hdf'
+		ext = 'xsa'
 		base_name = 'system_top'
 	else:
 		ext = 'sopcinfo'
@@ -205,6 +205,12 @@ class BuildConfig:
 def main():
 	create_dir_cmd = "test -d {0} || mkdir -p {0}"
 	(noos, export_dir, log_dir, _project, _platform, _build_name, _builds_dir) = parse_input()
+	#noos = os.path.abspath(noos)
+	#log_dir = os.path.abspath(log_dir)
+	#export_dir = os.path.abspath(export_dir)
+	#if _builds_dir is not None:
+	#	_builds_dir = os.path.abspath(_builds_dir)
+
 	projets = os.path.join(noos,'projects')
 	run_cmd(create_dir_cmd.format(export_dir))
 	run_cmd(create_dir_cmd.format(log_dir))
