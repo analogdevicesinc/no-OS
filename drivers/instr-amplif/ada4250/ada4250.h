@@ -161,8 +161,6 @@ struct ada4250_init_param {
 	enum ada4250_gain gain;
 	/* Bias Set */
 	enum ada4250_bias bias;
-	/* Offset Range */
-	enum ada4250_offset_range offset_range;
 	/* Offset Calibration Value */
 	int8_t offset_val;
 };
@@ -210,10 +208,6 @@ int32_t ada4250_en_refbuf(struct ada4250_dev *dev, bool refbuf);
 
 /* Set Current Bias */
 int32_t ada4250_set_bias(struct ada4250_dev *dev, enum ada4250_bias bias);
-
-/* Set offset trim range */
-int32_t ada4250_set_range(struct ada4250_dev *dev,
-			  enum ada4250_offset_range range);
 
 /* Set gain */
 int32_t ada4250_set_gain(struct ada4250_dev *dev, enum ada4250_gain gain);
