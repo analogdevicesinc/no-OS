@@ -152,6 +152,8 @@ enum ada4250_gain {
 struct ada4250_init_param {
 	/* SPI Initialization parameters */
 	struct spi_init_param	*spi_init;
+	/* AVDD value in Volts */
+	int32_t avdd_v;
 	/* Reference Buffer Enable */
 	bool refbuf_en;
 	/* Gain Value */
@@ -169,6 +171,8 @@ struct ada4250_init_param {
 struct ada4250_dev {
 	/* SPI Initialization parameters */
 	struct spi_desc	*spi_desc;
+	/* AVDD value in Volts */
+	int32_t avdd_v;
 	/* Reference Buffer Enable */
 	bool refbuf_en;
 	/* Gain Value */
