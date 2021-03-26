@@ -23,8 +23,8 @@ Examples:\n
 	Build all configurations for iio_demo
 	>python tools/scripts/build_projects.py . export logs -project=iio_demo -platform=xilinx -build_name=iio_zed
 
-	Note: HDF_SERVER should be sent as enviroment variables:
-		Ex: export HDF_SERVER=ala.bala.com/hdf_builds
+	Note: HW_SERVER should be sent as enviroment variables:
+		Ex: export HW_SERVER=ala.bala.com/hdf_builds
 '''
 
 def parse_input():
@@ -75,20 +75,20 @@ def run_cmd(cmd):
 def to_blue(str):
 	return TBLUE + str + TWHITE
 
-HDL_SERVER = None
-key = 'HDL_SERVER'
+HW_SERVER = None
+key = 'HW_SERVER'
 if key in os.environ:
-	HDL_SERVER = os.environ[key]
+	HW_SERVER = os.environ[key]
 else:
-	HDL_SERVER = input("Server for .xsa files (ex: www.something.com/master/hdl_output): ")
-	print("To set as env call: export HDL_SERVER=%s" % HDL_SERVER)
+	HW_SERVER = input("Server for .xsa files (ex: www.something.com/master/hdl_output): ")
+	print("To set as env call: export HW_SERVER=%s" % HW_SERVER)
 
 #Get latest folder.
-req = requests.get(HDL_SERVER)
+req = requests.get(HW_SERVER)
 expr = '([0-9]{4}_[0-9]{2}_[0-9]{2}-[0-9]{2}_[0-9]{2}_[0-9]{2})'
 #Get the last but one because the latest is not allways full 
 latest = re.findall(expr, req.text)[-3]
-HDL_SERVER = HDL_SERVER + '/%s' % latest
+HW_SERVER = HW_SERVER + '/%s' % latest
 
 def get_hardware(hardware, platform, builds_dir):
 	if platform == 'xilinx':
