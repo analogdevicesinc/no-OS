@@ -196,15 +196,56 @@ int32_t ada4250_set_gain(struct ada4250_dev *dev, enum ada4250_gain gain)
 /**
  * @brief Set offset value for ADA4250.
  * @param dev - The device structure.
- * @param offset - Offset Value.
+ * @param offset - Offset Value in uV.
  * @return Returns SUCCESS in case of success or negative error code.
  */
-int32_t ada4250_set_offset(struct ada4250_dev *dev, int8_t offset)
+int32_t ada4250_set_offset(struct ada4250_dev *dev, int32_t offset)
 {
-	if (offset < 0)
-		return ada4250_write(dev, ADA4250_REG_SNSR_CAL_VAL, (1 << 8 | abs(offset)));
-	else
-		return ada4250_write(dev, ADA4250_REG_SNSR_CAL_VAL, offset);
+	int32_t ret;
+	uint32_t i;
+	uint8_t offset_raw;
+	enum ada4250_offset_range range;
+	int64_t x[8], vlsb, max_vos, min_vos;
+
+	if (dev->bias == ADA4250_BIAS_DISABLE)
+		return -EINVAL;
+
+	x[0] = (dev->bias == ADA4250_BIAS_AVDD) ? dev->avdd_v : 5;
+
+	x[1] = 126 * (x[0] - 1);
+	x[2] = x[1] * 1000 / 1333;
+	x[3] = x[1] * 1000 / 2301;
+	x[4] = x[1] * 1000 / 4283;
+	x[5] = x[1] * 1000 / 8289;
+	x[6] = x[1] * 1000 / 16311;
+	x[7] = x[1] * 1000 / 31599;
+
+	if (dev->gain != ADA4250_GAIN_1) {
+		for (i = ADA4250_RANGE1_1UA_MAX; i <= ADA4250_RANGE4_15UA_MAX; i++) {
+			max_vos = x[dev->gain] *  127 * ((1 << (i + 1)) - 1);
+			min_vos = (-1) * max_vos;
+			if(offset > min_vos && offset < max_vos) {
+				range = i;
+				vlsb = x[dev->gain] * ((1 << (i + 1)) - 1);
+				break;
+			}
+		}
+	} else
+		return -EINVAL;
+
+	offset_raw = abs(offset) / vlsb;
+
+	ret = ada4250_set_range(dev, range);
+	if (ret != SUCCESS)
+		return ret;
+
+	if (offset < 0) {
+		dev->offset_uv = (-1) * offset_raw * vlsb;
+		return ada4250_write(dev, ADA4250_REG_SNSR_CAL_VAL, (1 << 8 | abs(offset_raw)));
+	} else {
+		dev->offset_uv = offset_raw * vlsb;
+		return ada4250_write(dev, ADA4250_REG_SNSR_CAL_VAL, offset_raw);
+	}
 }
 
 /**
@@ -228,7 +269,7 @@ int32_t ada4250_init(struct ada4250_dev **device,
 	dev->refbuf_en = init_param->refbuf_en;
 	dev->gain = init_param->gain;
 	dev->bias = init_param->bias;
-	dev->offset_val = init_param->offset_val;
+	dev->offset_uv = init_param->offset_uv;
 	dev->avdd_v = init_param->avdd_v;
 
 	/* SPI */
@@ -267,7 +308,7 @@ int32_t ada4250_init(struct ada4250_dev **device,
 	if(ret != SUCCESS)
 		return FAILURE;
 
-	ret = ada4250_set_offset(dev, dev->offset_val);
+	ret = ada4250_set_offset(dev, dev->offset_uv);
 	if(ret != SUCCESS)
 		return FAILURE;
 
