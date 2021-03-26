@@ -207,10 +207,8 @@ RELATIVE_INCS=$(patsubst $(PROJECT_BUILD)/%,%,$(EXTRA_INC_PATHS))
 #Flags for each include directory using as reference the project directory
 INCLUDE_FLAGS = $(addprefix -append-switch compiler -I=$${ProjDirPath}/,$(RELATIVE_INCS))
 
-aducm3029_project: $(PROJECT_BUILD)/.project.target
-
 #Create new project with platform driver and utils source folders linked
-$(PROJECT_BUILD)/.project.target: $(LIB_TARGETS)
+$(PROJECT_TARGET):
 	$(call print,Creating IDE project)
 	$(MUTE) $(CCES) -nosplash -application com.analog.crosscore.headlesstools \
 		-command projectcreate \
@@ -245,9 +243,12 @@ $(PROJECT_BUILD)/.project.target: $(LIB_TARGETS)
 	,$(PLATFORM_TOOLS)/startup_ADuCM3029_patch.c,$(PROJECT_BUILD)/RTE/Device/ADuCM3029/startup_ADuCM3029.c) $(HIDE)
 #Remove default files from projectsrc
 	$(MUTE) $(call remove_dir,$(PROJECT_BUILD)/src) $(HIDE)
+	$(MUTE) $(call set_one_time_rule,$@) $(HIDE)
+
+copy_pinmux:
 	$(MUTE) $(call copy_fun,$(PIN_MUX),$(PROJECT_PIN_MUX)) $(HIDE)
-	$(MUTE) $(MAKE) --no-print-directory update_srcs
-	$(MUTE) $(call set_one_time_rule,$@)
+
+update_srcs: copy_pinmux
 
 PHONY += clean_project
 clean_project:

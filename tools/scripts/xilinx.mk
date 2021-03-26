@@ -121,17 +121,14 @@ $(TEMP_DIR)/arch.txt: $(HARDWARE)
 	$(call print,Evaluating hardware: $(HARDWARE))
 	$(MUTE)	$(call tcl_util, get_arch) $(HIDE)
 
-xilinx_project: $(BUILD_DIR)/.bsp.target
-
 PHONY += xilinx_project_build
 xilinx_project_build: all
 	$(MUTE) $(MUTE) xsct $(NO-OS)/tools/scripts/platform/xilinx/build_project.tcl $(WORKSPACE) $(HIDE)
 
 
-$(BUILD_DIR)/.bsp.target: $(LIB_TARGETS) $(TEMP_DIR)/arch.txt
+$(PROJECT_TARGET): $(TEMP_DIR)/arch.txt
 	$(call print,Creating and configuring the IDE project)
 	$(MUTE)	$(call tcl_util, create_project)  $(HIDE)
-	$(MUTE) $(MAKE) --no-print-directory update_srcs
 	$(MUTE) $(call set_one_time_rule,$@) $(HIDE)
 
 clean_all: xilinx_clean_all
