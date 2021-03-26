@@ -21,7 +21,7 @@ proc _get_processor {} {
 }
 
 proc _replace_heap {} {
-	set file_name "$::env(WORKSPACE)/app/src/lscript.ld"
+	set file_name "$::ws/app/src/lscript.ld"
 	set temp_name "$file_name.tmp"
 	set file [open [lindex $file_name] r]
 	set temp [open [lindex $temp_name] w+]
@@ -136,14 +136,14 @@ proc _xsdk_project {} {
 proc get_arch {} {
 	openhw $::hw
 	set cpu [_get_processor]
-	set file [open [lindex "$::env(WORKSPACE)/tmp/arch.txt"] w+]
+	set file [open [lindex "$::hw_path/arch.txt"] w+]
 	puts $file $cpu
 	close $file
 	closehw $::hw
 }
 
 proc create_project {} {
-	cd $::env(WORKSPACE)
+	cd $::ws
 	setws ./
 
 	if {[_file_is_xsa] == 1} {
@@ -211,14 +211,14 @@ proc _init_ps {cpu} {
 proc _write_ps {cpu} {
 	set name [dict get $::ps_dict $cpu]
 	targets -set -filter {name =~  "$name"}
-	dow "[file normalize $::env(BINARY)]"
+	dow "[file normalize $::binary]"
 	con
 	disconnect
 }
 
 proc upload {} {
 	openhw $::hw
-	set bitstream $::env(WORKSPACE)/tmp/system_top.bit
+	set bitstream $::hw_path/system_top.bit
 	set cpu [_get_processor]
 
 	# Connect to the fpga
@@ -236,8 +236,10 @@ proc upload {} {
 }
 
 set function	[lindex $argv 0]
-set hw_path	$::env(WORKSPACE)/tmp
-set hw		$::hw_path/$::env(HARDWARE)
+set ws		[lindex $argv 1]
+set hw_path	[lindex $argv 2]
+set hw		$::hw_path/[lindex $argv 3]
+set binary      [lindex $argv 4]
 
 if {[file exists $::hw_path/ps7_init.tcl]} {
 	source "[file normalize $::hw_path/ps7_init.tcl]"
