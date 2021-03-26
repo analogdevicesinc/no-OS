@@ -229,6 +229,7 @@ int32_t ada4250_init(struct ada4250_dev **device,
 	dev->gain = init_param->gain;
 	dev->bias = init_param->bias;
 	dev->offset_val = init_param->offset_val;
+	dev->avdd_v = init_param->avdd_v;
 
 	/* SPI */
 	ret = spi_init(&dev->spi_desc, init_param->spi_init);
