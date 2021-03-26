@@ -165,7 +165,7 @@ endif
 #------------------------------------------------------------------------------
 #                            COMMON COMPILER FLAGS                             
 #------------------------------------------------------------------------------
-CFLAGS += $(EXTRA_CFLAGS)
+CFLAGS += $(NEW_CFLAGS)
 CFLAGS += -Wall								\
 	 -Wmissing-field-initializers					\
 	 -Wclobbered 							\
