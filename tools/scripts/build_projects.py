@@ -6,6 +6,8 @@ import os
 import multiprocessing
 import sys
 import filecmp
+import re
+import requests
 
 TGREEN =  '\033[32m' # Green Text	
 TBLUE =  '\033[34m' # Green Text	
@@ -73,7 +75,20 @@ def run_cmd(cmd):
 def to_blue(str):
 	return TBLUE + str + TWHITE
 
-HDF_SERVER = os.environ['HDF_SERVER']
+HDL_SERVER = None
+key = 'HDL_SERVER'
+if key in os.environ:
+	HDL_SERVER = os.environ[key]
+else:
+	HDL_SERVER = input("Server for .xsa files (ex: www.something.com/master/hdl_output): ")
+	print("To set as env call: export HDL_SERVER=%s" % HDL_SERVER)
+
+#Get latest folder.
+req = requests.get(HDL_SERVER)
+expr = '([0-9]{4}_[0-9]{2}_[0-9]{2}-[0-9]{2}_[0-9]{2}_[0-9]{2})'
+#Get the last but one because the latest is not allways full 
+latest = re.findall(expr, req.text)[-3]
+HDL_SERVER = HDL_SERVER + '/%s' % latest
 
 def get_hardware(hardware, platform, builds_dir):
 	if platform == 'xilinx':
