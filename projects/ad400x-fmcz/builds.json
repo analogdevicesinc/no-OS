@@ -1,11 +1,11 @@
 {
       "xilinx": {
         "uart_print": {
-              "flags" : "EXTRA_CFLAGS=-DSPI_ENGINE_OFFLOAD_EXAMPLE=0",
+              "flags" : "NEW_CFLAGS=-DSPI_ENGINE_OFFLOAD_EXAMPLE=0",
               "hardware" : ["ad40xx_fmc_zed"]
         },
         "offload_example": {
-              "flags" : "EXTRA_CFLAGS=-DSPI_ENGINE_OFFLOAD_EXAMPLE=1",
+              "flags" : "NEW_CFLAGS=-DSPI_ENGINE_OFFLOAD_EXAMPLE=1",
               "hardware" : ["ad40xx_fmc_zed"]
         }
       }
