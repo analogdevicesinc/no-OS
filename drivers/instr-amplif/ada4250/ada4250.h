@@ -67,9 +67,6 @@
 #define ADA4250_GAIN_MUX_MSK        GENMASK(2, 0)
 #define ADA4250_GAIN_MUX(x)         field_prep(ADA4250_GAIN_MUX_MSK, x)
 
-/* ADA4250_REG_GAIN_MUX Bit Definition */
-#define ADA4250_GAIN(x)             log2(x)
-
 /* ADA4250_REG_REFBUF Map */
 #define ADA4250_REFBUF_MSK          BIT(0)
 #define ADA4250_REFBUF(x)           field_prep(ADA4250_REFBUF_MSK, x)
@@ -138,14 +135,14 @@ enum ada4250_offset_range {
   * @brief Gain value.
   */
 enum ada4250_gain {
-	ADA4250_GAIN_1 = 1,
-	ADA4250_GAIN_2 = 2,
-	ADA4250_GAIN_4 = 4,
-	ADA4250_GAIN_8 = 8,
-	ADA4250_GAIN_16 = 16,
-	ADA4250_GAIN_32 = 32,
-	ADA4250_GAIN_64 = 64,
-	ADA4250_GAIN_128 = 128,
+	ADA4250_GAIN_1,
+	ADA4250_GAIN_2,
+	ADA4250_GAIN_4,
+	ADA4250_GAIN_8,
+	ADA4250_GAIN_16,
+	ADA4250_GAIN_32,
+	ADA4250_GAIN_64,
+	ADA4250_GAIN_128,
 };
 
 /**
