@@ -174,8 +174,8 @@ int32_t ada4250_set_bias(struct ada4250_dev *dev, enum ada4250_bias bias)
  * @param range - Offset range option.
  * @return Returns SUCCESS in case of success or negative error code.
  */
-int32_t ada4250_set_range(struct ada4250_dev *dev,
-			  enum ada4250_offset_range range)
+static int32_t ada4250_set_range(struct ada4250_dev *dev,
+				 enum ada4250_offset_range range)
 {
 	return ada4250_update(dev, ADA4250_REG_SNSR_CAL_CNFG, ADA4250_RANGE_SET_MSK,
 			      ADA4250_RANGE_SET(ADA4250_RANGE(range)));
@@ -228,7 +228,6 @@ int32_t ada4250_init(struct ada4250_dev **device,
 	dev->refbuf_en = init_param->refbuf_en;
 	dev->gain = init_param->gain;
 	dev->bias = init_param->bias;
-	dev->offset_range = init_param->offset_range;
 	dev->offset_val = init_param->offset_val;
 
 	/* SPI */
@@ -264,10 +263,6 @@ int32_t ada4250_init(struct ada4250_dev **device,
 		return FAILURE;
 
 	ret = ada4250_set_bias(dev, dev->bias);
-	if(ret != SUCCESS)
-		return FAILURE;
-
-	ret = ada4250_set_range(dev, dev->offset_range);
 	if(ret != SUCCESS)
 		return FAILURE;
 
