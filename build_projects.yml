@@ -19,7 +19,8 @@ jobs:
     submodules: true
     clean: true
     persistCredentials: true
-  - script: 'python3 ./tools/scripts/build_projects.py . $(RELEASE_DIR)
+  - script: 'python3 ./tools/scripts/build_projects.py . 
+               -export_dir $(RELEASE_DIR)
                -log_dir $(LOG_DIR)'
     displayName: 'Run project build'
   - task: PublishPipelineArtifact@1
