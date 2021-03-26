@@ -7,17 +7,17 @@ proc _file_is_xsa {} {
 }
 
 proc _get_processor {} {
-	if {[_file_is_xsa] == 1} {
-		set processor [hsi::get_cells * -filter {IP_TYPE==PROCESSOR}]
-	} else {
-		set processor [lindex \
-		[hsi::get_cells * -filter {IP_TYPE==PROCESSOR}] 0]
+	set processor [hsi::get_cells * -filter {IP_TYPE==PROCESSOR}]
+
+	if {[llength $processor] == 0} {
+		return 0
 	}
-	
-	if {[llength $processor] != 0} {
+
+	if {[llength $processor] > 1} {
+		return [lindex $processor 0]
+	} else {
 		return $processor
 	}
-	return 0
 }
 
 proc _replace_heap {} {
@@ -74,7 +74,6 @@ proc _vitis_project {} {
 		-proc $cpu						\
 		-os standalone						\
 		-compile
-	closehw $::hw
 	
 	# Create app
 	app create							\
@@ -83,6 +82,8 @@ proc _vitis_project {} {
 		-proc $cpu						\
 		-os standalone						\
 		-template  {Empty Application}
+
+	closehw $::hw
 
 	# Increase heap size
 	_replace_heap
