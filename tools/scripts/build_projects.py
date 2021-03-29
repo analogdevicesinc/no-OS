@@ -62,9 +62,7 @@ def run_cmd(cmd):
 	else:
 		log(cmd)
 	sys.stdout.flush()
-	err = os.system('echo %s >> %s 2>&1' % (cmd, log_file))
-	if err == 0:
-		err = os.system(cmd + ' >> %s 2>&1' % log_file)
+	err = os.system(cmd + ' >> %s 2>&1' % log_file)
 	if err != 0:
 		global ERR
 		log_err("ERROR")
@@ -163,7 +161,6 @@ class BuildConfig:
 			" VERBOSE=y " + self.flags
 			
 		if self.hardware != '':
-			log("\thardware : %s" % to_blue(self.hardware))
 			(hardware_file, new_hdf, err) = get_hardware(self.hardware,
 						self.platform, self.builds_dir)
 			if err != 0:
