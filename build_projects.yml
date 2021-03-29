@@ -19,11 +19,17 @@ jobs:
     submodules: true
     clean: true
     persistCredentials: true
-  - script: 'python ./tools/scripts/build_projects.py . $(RELEASE_DIR)'
+  - script: 'python3 ./tools/scripts/build_projects.py . $(RELEASE_DIR)
+               -log_dir $(LOG_DIR)'
     displayName: 'Run project build'
   - task: PublishPipelineArtifact@1
     condition: eq(variables.isMaster, true)
     inputs:
       targetPath: '$(Build.Repository.LocalPath)/$(RELEASE_DIR)'
       artifact: '$(ARTIFACT_NAME)'
+      publishLocation: 'pipeline'
+  - task: PublishPipelineArtifact@1
+    inputs:
+      targetPath: '$(Build.Repository.LocalPath)/$(LOG_DIR)'
+      artifact: 'logs'
       publishLocation: 'pipeline'
