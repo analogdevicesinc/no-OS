@@ -99,6 +99,7 @@ debug: all openocd_paths $(BINARY).openocd $(BINARY).gdb
 		-c "init" &);
 	arm-none-eabi-gdb --command=$(BINARY).gdb
 
-stm32_project:
-	$(MUTE) $(MAKE) --no-print-directory update_srcs
+$(PROJECT_TARGET):
+	$(MUTE) $(call mk_dir $(BUILD_DIR))
+	$(MUTE) $(call set_one_time_rule,$@)
 
