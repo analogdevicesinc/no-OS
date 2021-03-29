@@ -60,7 +60,7 @@ $(FATFS_LIB):
 	$(MAKE) -C $(FATFS_DIR)
 
 # Custom settings
-CFLAGS		+= -I$(DRIVERS)/sd-card -I$(INCLUDE)
+CFLAGS		+= -I$(NO-OS)/drivers/sd-card -I$(NO-OS)/include
 
 endif
 
