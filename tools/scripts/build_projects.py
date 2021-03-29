@@ -75,36 +75,44 @@ def run_cmd(cmd):
 def to_blue(str):
 	return TBLUE + str + TWHITE
 
-HDF_SERVER = os.environ['HDF_SERVER']
+SKIP_DOWNLOAD = 0
+HW_DIR_NAME = 'hardware'
+NEW_HW_DIR_NAME = 'new_hardware'
+FILE_TO_DOWNLOAD = 'latest.zip'
+
+def download_all_hw(builds_dir):
+	release_link = os.path.join('https://github.com/mchindri/hdl/releases/download/Latest', FILE_TO_DOWNLOAD)
+	new_harware = os.path.join(builds_dir, FILE_TO_DOWNLOAD)
+	new_harware_dir = os.path.join(builds_dir, NEW_HW_DIR_NAME)
+	if SKIP_DOWNLOAD == 0:
+		err = run_cmd('wget %s -O %s' % (release_link, new_harware))
+		if err != 0:
+			return err
+
+		err = run_cmd('unzip -o %s -d %s' % (new_harware, new_harware_dir))
+		if err != 0:
+			return err
+	return 0
 
 def get_hardware(hardware, platform, builds_dir):
 	if platform == 'xilinx':
-		ext = 'hdf'
+		ext = 'xsa'
 		base_name = 'system_top'
 	else:
 		ext = 'sopcinfo'
 		base_name = 'system_bd'
 
 	new_hdf = 0
-	sever_file = "%s/%s.%s" % (hardware, base_name, ext)
-	local_file = "%s.%s" % (hardware, ext)
-
-	filename = os.path.join(builds_dir, local_file)
-	tmp_filename = filename + '_tmp'
-	cmd = 'wget %s/%s -O %s' % (HDF_SERVER, sever_file, tmp_filename)
-	log("Get %s" % sever_file)
-	err = os.system(cmd + ' > /dev/null 2>&1')
-	if (err != 0):
-		global ERR
-		log_err("ERROR")
-		ERR = 1
-		return ('', 0, err)
+	new_name = "%s.%s" % (base_name, ext)
+	tmp_filename = os.path.join(builds_dir, NEW_HW_DIR_NAME, hardware, new_name)
+	old_name = "%s.%s" % (hardware, ext)
+	filename = os.path.join(builds_dir, HW_DIR_NAME, old_name)
 
 	if os.path.isfile(filename):
 		#If equal
 		if filecmp.cmp(filename, tmp_filename):
 			log("Same hardware from last build, use existing bsp")
-			return (filename, 0, err)
+			return (filename, 0, 0)
 	
 	err = run_cmd('cp %s %s' % (tmp_filename, filename))
 	if err != 0:
@@ -197,6 +205,12 @@ def main():
 	run_cmd(create_dir_cmd.format(log_dir))
 	if _builds_dir is not None:
 		run_cmd(create_dir_cmd.format(_builds_dir))
+		hardwares = os.path.join(_builds_dir, HW_DIR_NAME)
+		run_cmd(create_dir_cmd.format(hardwares))
+
+	err = download_all_hw(_builds_dir)
+	if err != 0:
+		return
 
 	for project in os.listdir(projets):
 		binary_created = False
