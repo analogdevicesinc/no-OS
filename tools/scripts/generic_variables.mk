@@ -17,12 +17,13 @@ include ..\..\tools\scripts\local_variables.mk
 
 endif
 
-PROJECT			?= $(realpath .)
-TARGET 			?= $(notdir $(realpath .))
+#Variables needed by makefile
 NO-OS			?= $(realpath ../..)
-BUILD_DIR_NAME		?= build
-WORKSPACE		?= $(PROJECT)/$(BUILD_DIR_NAME)
+PROJECT			?= $(realpath .)
+BUILD_DIR		?= $(PROJECT)/build
+WORKSPACE		?= $(BUILD_DIR)
 
+#Useful variables for src.mk
 INCLUDE			?= $(NO-OS)/include
 DRIVERS 		?= $(NO-OS)/drivers
 PLATFORM_DRIVERS	?= $(NO-OS)/drivers/platform/$(PLATFORM)
