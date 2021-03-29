@@ -21,7 +21,8 @@ jobs:
     persistCredentials: true
   - script: 'python3 ./tools/scripts/build_projects.py . 
                -export_dir $(RELEASE_DIR)
-               -log_dir $(LOG_DIR)'
+               -log_dir $(LOG_DIR)
+               -builds_dir $(BUILDS_DIR)'
     displayName: 'Run project build'
   - task: PublishPipelineArtifact@1
     condition: eq(variables.isMaster, true)
