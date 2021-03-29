@@ -33,10 +33,11 @@ def parse_input():
 	parser.add_argument('-project', help="Name of project to be built")
 	parser.add_argument('-platform', help="Name of platform to be built")
 	parser.add_argument('-build_name', help="Name of built type to be built")
+	parser.add_argument('-builds_dir', help="Directory where to build projects")
 	args = parser.parse_args()
 
 	return (args.noos_location, args.export_dir, args.log_dir, args.project,
-		args.platform, args.build_name)
+		args.platform, args.build_name, args.builds_dir)
 
 ERR = 0
 LOG_START = " -> "
@@ -102,22 +103,28 @@ def get_hardware(hardware, platform, projet_dir):
 	return local_file
 
 class BuildConfig:
-	def __init__(self, project_dir, platform, flags, build_name, hardware, log_dir):
+	def __init__(self, project_dir, platform, flags, build_name, hardware,
+	             _builds_dir, log_dir):
 		self.project_dir = project_dir
+		if _builds_dir is None:
+			self.builds_dir = project_dir
+		else:
+			self.builds_dir = _builds_dir
 		self.log_dir = log_dir
 		self.project = os.path.basename(project_dir)
 		self.platform = platform
 		self.flags = flags
 		self.build_name = build_name
 		self.hardware = hardware
-		self.build_dir_name = 'build_%s_%s' % (platform, build_name)
+		short_build_dir = 'build_%s' % platform
 		self._binary = "%s_%s_%s.elf" % (self.project, platform, build_name)
 		if hardware != '':
-			self.build_dir_name += '_' + hardware
+			short_build_dir = short_build_dir + '_' + hardware
 			self._binary = "%s_%s_%s_%s.elf" % (
 				self.project, platform, build_name, hardware)
-		self.binary = os.path.join(self.build_dir_name, self._binary)
-		self.export_file = os.path.join(project_dir, self.binary)
+		self.build_dir = os.path.join(self.builds_dir, short_build_dir)
+		self.binary = os.path.join(self.build_dir, self._binary)
+		self.export_file = os.path.join(self.build_dir, self.binary)
 		if (platform == 'aducm3029'):
 			self.export_file = self.export_file.replace('.elf', '.hex')
 
@@ -135,7 +142,7 @@ class BuildConfig:
 
 		cmd = "make -C " + self.project_dir + \
 			" PLATFORM=" + self.platform + \
-			" BUILD_DIR_NAME=" + self.build_dir_name + \
+			" BUILD_DIR=" + self.build_dir + \
 			" BINARY=" + self.binary + \
 			" LOCAL_BUILD=n" + \
 			" LINK_SRCS=n" + \
@@ -159,10 +166,12 @@ class BuildConfig:
 
 def main():
 	create_dir_cmd = "test -d {0} || mkdir -p {0}"
-	(noos, export_dir, log_dir, _project, _platform, _build_name) = parse_input()
+	(noos, export_dir, log_dir, _project, _platform, _build_name, _builds_dir) = parse_input()
 	projets = os.path.join(noos,'projects')
 	run_cmd(create_dir_cmd.format(export_dir))
 	run_cmd(create_dir_cmd.format(log_dir))
+	if _builds_dir is not None:
+		run_cmd(create_dir_cmd.format(_builds_dir))
 
 	for project in os.listdir(projets):
 		binary_created = False
@@ -198,6 +207,7 @@ def main():
 								flags,
 								build_name,
 								hardware,
+								_builds_dir, 
 								log_dir)
 					err = new_build.build()
 					if err != 0:
