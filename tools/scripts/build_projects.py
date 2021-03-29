@@ -14,14 +14,14 @@ TWHITE = '\033[39m' #Withe text
 description_help='''Build noos projects
 Examples:\n
 	Build all noos projects
-    	>python build_projects.py ..\.. export_dir
+    	>python build_projects.py ..\.. export_dir log_dir
 	Build all configurations for iio_demo
-	>python build_projects.py /home/user/noos /home/export_dir -project=iio_demo
+	>python build_projects.py /home/user/noos /home/export_dir log_dir -project=iio_demo
 	Build all configurations for iio_demo
-	>python tools/scripts/build_projects.py . export -project=iio_demo -platform=xilinx -build_name=iio_zed
+	>python tools/scripts/build_projects.py . export logs -project=iio_demo -platform=xilinx -build_name=iio_zed
 
 	Note: HDF_SERVER should be sent as enviroment variables:
-		Ex: export HDF_SERVER=ala.bala.com/hdf_builds/latest
+		Ex: export HDF_SERVER=ala.bala.com/hdf_builds
 '''
 
 def parse_input():
@@ -29,12 +29,13 @@ def parse_input():
 				formatter_class=argparse.RawTextHelpFormatter)
 	parser.add_argument('noos_location', help="Path to noos location")
 	parser.add_argument('export_dir', help="Path where to save files")
+	parser.add_argument('-log_dir', default='logs', help="Path where to save log files")
 	parser.add_argument('-project', help="Name of project to be built")
 	parser.add_argument('-platform', help="Name of platform to be built")
 	parser.add_argument('-build_name', help="Name of built type to be built")
 	args = parser.parse_args()
 
-	return (args.noos_location, args.export_dir, args.project,
+	return (args.noos_location, args.export_dir, args.log_dir, args.project,
 		args.platform, args.build_name)
 
 ERR = 0
@@ -49,19 +50,24 @@ def log_err(msg):
 def log_success(msg):
 	print(TGREEN + LOG_START + msg + TWHITE)
 
+DEFAULT_LOG_FILE = 'log.txt'
+log_file = DEFAULT_LOG_FILE
+
 def run_cmd(cmd):
-	log_file = 'log.txt'
 	log(cmd)
 	sys.stdout.flush()
-	err = os.system(cmd + ' > %s 2>&1' % log_file)
-	if (err != 0):
+	err = os.system('echo %s >> %s 2>&1' % (cmd, log_file))
+	if err == 0:
+		err = os.system(cmd + ' >> %s 2>&1' % log_file)
+	if err != 0:
 		global ERR
 		log_err("ERROR")
-		log("See log:")
-		os.system("sed 's/^/" + TRED + LOG_START + TWHITE + "/' %s" % log_file)
-		os.system("sed 's/^/" + TRED + LOG_START + TWHITE + "/' %s" % log_file)
+		log("See log %s " \
+		    "-- Use cat (linux) or type (windows) to see colored output"
+		    % log_file)
 		ERR = 1
 
+	return err
 def to_blue(str):
 	return TBLUE + str + TWHITE
 
@@ -92,25 +98,31 @@ def get_hardware(hardware, platform, projet_dir):
 	return local_file
 
 class BuildConfig:
-	def __init__(self, project_dir, platform, flags, build_name, hardware):
+	def __init__(self, project_dir, platform, flags, build_name, hardware, log_dir):
 		self.project_dir = project_dir
+		self.log_dir = log_dir
 		self.project = os.path.basename(project_dir)
 		self.platform = platform
 		self.flags = flags
 		self.build_name = build_name
 		self.hardware = hardware
 		self.build_dir_name = 'build_%s_%s' % (platform, build_name)
-		_binary = "%s_%s_%s.elf" % (self.project, platform, build_name)
+		self._binary = "%s_%s_%s.elf" % (self.project, platform, build_name)
 		if hardware != '':
 			self.build_dir_name += '_' + hardware
-			_binary = "%s_%s_%s_%s.elf" % (
+			self._binary = "%s_%s_%s_%s.elf" % (
 				self.project, platform, build_name, hardware)
-		self.binary = os.path.join(self.build_dir_name, _binary)
+		self.binary = os.path.join(self.build_dir_name, self._binary)
 		self.export_file = os.path.join(project_dir, self.binary)
 		if (platform == 'aducm3029'):
 			self.export_file = self.export_file.replace('.elf', '.hex')
 
 	def build(self):
+		global log_file
+	
+		log_file = self._binary.replace('.elf', '.txt')
+		log_file = os.path.join(self.log_dir, log_file)
+
 		log("Runing build:" )
 		log("\tname : %s" % to_blue(self.build_name))
 		log("\tproject : %s" % to_blue(self.project))
@@ -135,12 +147,14 @@ class BuildConfig:
 		run_cmd(cmd)
 		
 		log_success("DONE")
+		log_file = DEFAULT_LOG_FILE
 
 def main():
 	create_dir_cmd = "test -d {0} || mkdir -p {0}"
-	(noos, export_dir, _project, _platform, _build_name) = parse_input()
+	(noos, export_dir, log_dir, _project, _platform, _build_name) = parse_input()
 	projets = os.path.join(noos,'projects')
 	run_cmd(create_dir_cmd.format(export_dir))
+	run_cmd(create_dir_cmd.format(log_dir))
 
 	for project in os.listdir(projets):
 		binary_created = False
@@ -175,7 +189,8 @@ def main():
 								platform,
 								flags,
 								build_name,
-								hardware)
+								hardware,
+								log_dir)
 					new_build.build()
 					run_cmd("cp %s %s" % 
 						(new_build.export_file, project_export))
