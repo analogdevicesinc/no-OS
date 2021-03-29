@@ -144,10 +144,14 @@ class BuildConfig:
 			cmd = cmd + ' HARDWARE=%s' % hardware_file
 		
 		cmd = cmd + ' ra'
-		run_cmd(cmd)
+		err = run_cmd(cmd)
+		if err != 0:
+			return err
 		
 		log_success("DONE")
 		log_file = DEFAULT_LOG_FILE
+
+		return 0
 
 def main():
 	create_dir_cmd = "test -d {0} || mkdir -p {0}"
@@ -191,7 +195,12 @@ def main():
 								build_name,
 								hardware,
 								log_dir)
-					new_build.build()
+					err = new_build.build()
+					if err != 0:
+						if err == 2:
+							#Keyboard interrupt
+							exit()
+						continue
 					run_cmd("cp %s %s" % 
 						(new_build.export_file, project_export))
 					binary_created = True
