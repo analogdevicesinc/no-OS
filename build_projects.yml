@@ -31,7 +31,8 @@ jobs:
       artifact: '$(ARTIFACT_NAME)'
       publishLocation: 'pipeline'
   - task: PublishPipelineArtifact@1
+    condition: true
     inputs:
       targetPath: '$(Build.Repository.LocalPath)/$(LOG_DIR)'
-      artifact: 'logs'
+      artifact: 'logs_$(System.JobId)'
       publishLocation: 'pipeline'
