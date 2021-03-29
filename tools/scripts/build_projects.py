@@ -54,7 +54,11 @@ DEFAULT_LOG_FILE = 'log.txt'
 log_file = DEFAULT_LOG_FILE
 
 def run_cmd(cmd):
-	log(cmd)
+	tmp = cmd.split(' ')
+	if tmp[0] == 'make':
+		log('make ' + tmp[-1])
+	else:
+		log(cmd)
 	sys.stdout.flush()
 	err = os.system('echo %s >> %s 2>&1' % (cmd, log_file))
 	if err == 0:
@@ -123,11 +127,12 @@ class BuildConfig:
 		log_file = self._binary.replace('.elf', '.txt')
 		log_file = os.path.join(self.log_dir, log_file)
 
-		log("Runing build:" )
-		log("\tname : %s" % to_blue(self.build_name))
-		log("\tproject : %s" % to_blue(self.project))
-		log("\tplatform : %s" % to_blue(self.platform))
-			
+		log_str = "Building %10s (%8s) -- %s " % (
+			to_blue(self.project), to_blue(self.build_name), to_blue(self.platform))
+		if self.hardware != '':
+			log_str = log_str + "-- %20s" % to_blue(self.hardware)	
+		log(log_str)
+
 		cmd = "make -C " + self.project_dir + \
 			" PLATFORM=" + self.platform + \
 			" BUILD_DIR_NAME=" + self.build_dir_name + \
@@ -138,7 +143,6 @@ class BuildConfig:
 			" -j%d" % (multiprocessing.cpu_count() - 1)
 			
 		if self.hardware != '':
-			log("\thardware : %s" % to_blue(self.hardware))
 			hardware_file = get_hardware(self.hardware,
 						self.platform, self.project_dir)
 			cmd = cmd + ' HARDWARE=%s' % hardware_file
