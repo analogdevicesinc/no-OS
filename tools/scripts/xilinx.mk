@@ -109,7 +109,11 @@ CFLAGS += -I$(BUILD_DIR)/app/src
 CFLAGS		+= -I$(BUILD_DIR)/bsp/$(ARCH)/include
 
 develop:
+ifeq '' '$(filter %.hdf, $(HARDWARE))'
+	vitis -workspace=$(WORKSPACE)
+else
 	xsdk -workspace=$(WORKSPACE)
+endif
 
 #Add more dependencies to $(BINARY) rule.
 $(BINARY): $(TEMP_DIR)/arch.txt
