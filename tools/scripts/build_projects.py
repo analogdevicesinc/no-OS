@@ -196,7 +196,6 @@ class BuildConfig:
 		log_file = DEFAULT_LOG_FILE
 
 		return 0
-
 def main():
 	create_dir_cmd = "test -d {0} || mkdir -p {0}"
 	(noos, export_dir, log_dir, _project, _platform, _build_name, _builds_dir) = parse_input()
