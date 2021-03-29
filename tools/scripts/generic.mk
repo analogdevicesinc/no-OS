@@ -61,6 +61,10 @@ HIDE = $(HIDE_OUTPUT)
 MUTE = @
 endif
 
+ifeq ($(strip $(VERBOSE)),2)
+HIDE = $(HIDE_OUTPUT)
+endif
+
 # recursive wildcard
 rwildcard=$(foreach d,$(wildcard $(1:=/*)),$(call rwildcard,$d,$2) $(filter $(subst *,%,$2),$d))
 
@@ -124,6 +128,7 @@ PROJECT_BUILD 		= $(BUILD_DIR)/app
 OBJECTS_DIR		= $(BUILD_DIR)/objs
 PLATFORM_TOOLS	= $(NO-OS)/tools/scripts/platform/$(PLATFORM)
 BINARY			?= $(BUILD_DIR)/$(PROJECT_NAME).elf
+PROJECT_TARGET		= $(BUILD_DIR)/.project.target
 
 ifneq ($(words $(NO-OS)), 1)
 $(error $(ENDL)ERROR:$(ENDL)\
@@ -261,13 +266,13 @@ CFLAGS += $(addprefix -I,$(EXTRA_INC_PATHS)) $(PLATFORM_INCS)
 PHONY += all
 # If the build dir was created just build the binary.
 # else the project will be build first. This will allow to run make with -j .
-ifneq ($(wildcard $(BUILD_DIR)),)
+ifneq ($(wildcard $(PROJECT_TARGET)),)
 all: print_build_type $(BINARY)
 	$(call print,Done ($(notdir $(BUILD_DIR))/$(notdir $(BINARY))))
 else
 all: print_build_type
 #Remove -j flag for running project target. (It doesn't work on xilinx on this target)
-	$(MUTE) $(MAKE) --no-print-directory project MAKEFLAGS=$(MAKEOVERRIDES)
+	$(MUTE) $(MAKE) --no-print-directory update_srcs MAKEFLAGS=$(MAKEOVERRIDES)
 	$(MUTE) $(MAKE) --no-print-directory $(BINARY)
 	$(call print,Done ($(notdir $(BUILD_DIR))/$(notdir $(BINARY))))
 endif
@@ -313,13 +318,15 @@ PHONY += run
 run: $(PLATFORM)_run
 	@$(call print,$(notdir $(BINARY)) uploaded to board)
 
-project: $(PLATFORM)_project
+project: $(PROJECT_TARGET)
+
+$(PROJECT_TARGET): $(LIB_TARGETS)
 
 #Platform specific post build dependencies can be added to this rule.
 post_build:
 
 PHONY += update_srcs
-update_srcs:
+update_srcs: $(PROJECT_TARGET)
 	@$(call print, $(ACTION) srcs to created project)
 	-$(MUTE)$(call remove_dir,$(DIRS_TO_REMOVE)) $(HIDE)
 	$(MUTE) -$(call mk_dir,$(DIRS_TO_CREATE)) $(HIDE)
