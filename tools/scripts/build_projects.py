@@ -5,6 +5,7 @@ import json
 import os
 import multiprocessing
 import sys
+import filecmp
 
 TGREEN =  '\033[32m' # Green Text	
 TBLUE =  '\033[34m' # Green Text	
@@ -78,7 +79,7 @@ def to_blue(str):
 
 HDF_SERVER = os.environ['HDF_SERVER']
 
-def get_hardware(hardware, platform, projet_dir):
+def get_hardware(hardware, platform, builds_dir):
 	if platform == 'xilinx':
 		ext = 'hdf'
 		base_name = 'system_top'
@@ -86,21 +87,34 @@ def get_hardware(hardware, platform, projet_dir):
 		ext = 'sopcinfo'
 		base_name = 'system_bd'
 
+	new_hdf = 0
 	sever_file = "%s/%s.%s" % (hardware, base_name, ext)
 	local_file = "%s.%s" % (hardware, ext)
 
-	if os.path.isfile(os.path.join(projet_dir, local_file)):
-		return local_file
-
-	cmd = 'wget %s/%s -O %s/%s' % (HDF_SERVER, sever_file, projet_dir, local_file)
+	filename = os.path.join(builds_dir, local_file)
+	tmp_filename = filename + '_tmp'
+	cmd = 'wget %s/%s -O %s' % (HDF_SERVER, sever_file, tmp_filename)
 	log("Get %s" % sever_file)
 	err = os.system(cmd + ' > /dev/null 2>&1')
 	if (err != 0):
 		global ERR
 		log_err("ERROR")
 		ERR = 1
+		return ('', 0, err)
 
-	return local_file
+	if os.path.isfile(filename):
+		#If equal
+		if filecmp.cmp(filename, tmp_filename):
+			log("Same hardware from last build, use existing bsp")
+			return (filename, 0, err)
+	
+	err = run_cmd('cp %s %s' % (tmp_filename, filename))
+	if err != 0:
+		return err
+
+	log("Hardware changed from last build")
+
+	return (filename, 1, err)
 
 class BuildConfig:
 	def __init__(self, project_dir, platform, flags, build_name, hardware,
@@ -146,16 +160,30 @@ class BuildConfig:
 			" BINARY=" + self.binary + \
 			" LOCAL_BUILD=n" + \
 			" LINK_SRCS=n" + \
-			" VERBOSE=y " + self.flags + \
-			" -j%d" % (multiprocessing.cpu_count() - 1)
+			" VERBOSE=y " + self.flags
 			
 		if self.hardware != '':
-			hardware_file = get_hardware(self.hardware,
-						self.platform, self.project_dir)
+			log("\thardware : %s" % to_blue(self.hardware))
+			(hardware_file, new_hdf, err) = get_hardware(self.hardware,
+						self.platform, self.builds_dir)
+			if err != 0:
+				return err
 			cmd = cmd + ' HARDWARE=%s' % hardware_file
+		else:
+			if os.path.isdir(self.build_dir):
+				new_hdf = False
+			else:
+				new_hdf = True
 		
-		cmd = cmd + ' ra'
-		err = run_cmd(cmd)
+		if new_hdf:
+			err = run_cmd(cmd + ' clean_all')
+			if err != 0:
+				return err
+
+		err = run_cmd(cmd + ' update_srcs')
+		if err != 0:
+			return err
+		err = run_cmd(cmd + ' -j%d all' % (multiprocessing.cpu_count() - 1))
 		if err != 0:
 			return err
 		
