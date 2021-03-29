@@ -71,11 +71,11 @@ set_one_time_rule = echo Target file. Do not delete > $1
 # $(PROJECT)/something -> srcs/something
 # $(NO-OS)/something -> noos/something
 # $(PLATFORM_TOOLS)/something -> aducm3029/something TODO test without these
-RELATIVE_PATH = $(patsubst $(NO-OS)%,noos%,$(patsubst $(PROJECT)%,$(TARGET)%,$(PLATFORM_RELATIVE_PATH)))
+RELATIVE_PATH = $(patsubst $(NO-OS)%,noos%,$(patsubst $(PROJECT)%,$(PROJECT_NAME)%,$(PLATFORM_RELATIVE_PATH)))
 
 # Transforme relative path to full path in order to find the needed .c files
 # Reverse of get_relative_path
-FULL_PATH = $(patsubst noos%,$(NO-OS)%,$(patsubst $(TARGET)%,$(PROJECT)%,$(PLATFORM_FULL_PATH)))
+FULL_PATH = $(patsubst noos%,$(NO-OS)%,$(patsubst $(PROJECT_NAME)%,$(PROJECT)%,$(PLATFORM_FULL_PATH)))
 
 ifeq ($(OS), Windows_NT)
 get_relative_path = $(patsubst $(ROOT_DRIVE)%,root%,$(RELATIVE_PATH))
@@ -101,21 +101,27 @@ endif
 #                           ENVIRONMENT VARIABLES                              
 #------------------------------------------------------------------------------
 
-NO-OS			?= $(realpath ../..)
+ifndef NO-OS
+$(error "NO-OS variable needs to be set")
+endif
+
 #Need in libraries
 export NO-OS
-PROJECT			?= $(realpath .)
-DRIVERS			?= $(NO-OS)/drivers
-INCLUDE			?= $(NO-OS)/include
-PLATFORM_DRIVERS	?= $(NO-OS)/drivers/platform/$(PLATFORM)
+
+ifndef PROJECT
+$(error "PROJECT variable needs to be set")
+endif
+ifndef BUILD_DIR
+$(error "BUILD_DIR variable needs to be set")
+endif
+ifndef WORKSPACE
+$(error "WORKSPACE variable needs to be set")
+endif
 
 #USED IN MAKEFILE
 PROJECT_NAME	= $(notdir $(PROJECT))
-BUILD_DIR_NAME	?= build
-BUILD_DIR		?= $(PROJECT)/$(BUILD_DIR_NAME)
 PROJECT_BUILD 		= $(BUILD_DIR)/app
 OBJECTS_DIR		= $(BUILD_DIR)/objs
-WORKSPACE		?= $(BUILD_DIR)
 PLATFORM_TOOLS	= $(NO-OS)/tools/scripts/platform/$(PLATFORM)
 BINARY			?= $(BUILD_DIR)/$(PROJECT_NAME).elf
 
@@ -257,13 +263,13 @@ PHONY += all
 # else the project will be build first. This will allow to run make with -j .
 ifneq ($(wildcard $(BUILD_DIR)),)
 all: print_build_type $(BINARY)
-	$(call print,Done ($(BUILD_DIR_NAME)/$(notdir $(BINARY))))
+	$(call print,Done ($(notdir $(BUILD_DIR))/$(notdir $(BINARY))))
 else
 all: print_build_type
 #Remove -j flag for running project target. (It doesn't work on xilinx on this target)
 	$(MUTE) $(MAKE) --no-print-directory project MAKEFLAGS=$(MAKEOVERRIDES)
 	$(MUTE) $(MAKE) --no-print-directory $(BINARY)
-	$(call print,Done ($(BUILD_DIR_NAME)/$(notdir $(BINARY))))
+	$(call print,Done ($(notdir $(BUILD_DIR))/$(notdir $(BINARY))))
 endif
 
 PHONY += print_build_type
