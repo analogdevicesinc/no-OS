@@ -115,6 +115,9 @@ CFLAGS += -I$(BUILD_DIR)/app/src
 # Xilinx's bsp include path
 CFLAGS		+= -I$(BUILD_DIR)/bsp/$(ARCH)/include
 
+develop:
+	xsdk -workspace=$(WORKSPACE)
+
 #Add more dependencies to $(BINARY) rule.
 $(BINARY): $(TEMP_DIR)/arch.txt
 

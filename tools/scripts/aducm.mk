@@ -168,6 +168,9 @@ aducm3029_run: all
 
 PROJECT_BINARY = $(PROJECT_BUILD)/Release/$(PROJECT_NAME)
 
+develop:
+	cces -data $(WORKSPACE)
+
 #This way will not work if the rest button is press or if a printf is executed
 #because there is a bug in crossCore that doesn't enable to remove semihosting
 #from command line. If semihosting is removed from the IDE this will work to
