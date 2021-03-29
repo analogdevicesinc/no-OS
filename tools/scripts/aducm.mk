@@ -205,7 +205,11 @@ ADD_COMPILER_DEFINES = $(foreach flag, $(EXTRA_FLAGS), \
 
 RELATIVE_INCS=$(patsubst $(PROJECT_BUILD)/%,%,$(EXTRA_INC_PATHS))
 #Flags for each include directory using as reference the project directory
+ifeq ($(OS), Windows_NT)
 INCLUDE_FLAGS = $(addprefix -append-switch compiler -I=$${ProjDirPath}/,$(RELATIVE_INCS))
+else
+INCLUDE_FLAGS = $(addprefix -append-switch compiler -I='$${ProjDirPath}/,$(addsuffix ',$(RELATIVE_INCS)))
+endif
 
 aducm3029_project: $(PROJECT_BUILD)/.project.target
 
