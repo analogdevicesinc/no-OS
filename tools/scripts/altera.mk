@@ -103,12 +103,9 @@ altera_run: all
 	$(WSL) nios2-download -r -g $(BINARY)
 	nios2-terminal
 
-altera_project: $(BUILD_DIR)/.bsp.target
-
-$(BUILD_DIR)/.bsp.target:
+$(PROJECT_TARGET):
 	$(WSL) nios2-bsp hal "$(BUILD_DIR)/bsp" $(HARDWARE) --cpu-name sys_cpu
 	$(WSL) $(MAKE) CFLAGS= -C $(call adjust_path, $(BUILD_DIR)/bsp)
-	$(MAKE) altera_update_srcs
 	$(call set_one_time_rule,$@)
 
 post_build:
