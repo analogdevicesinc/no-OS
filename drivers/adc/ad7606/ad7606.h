@@ -4,7 +4,7 @@
  *   @author Stefan Popa (stefan.popa@analog.com)
  *   @author Darius Berghe (darius.berghe@analog.com)
 ********************************************************************************
- * Copyright 2019(c) Analog Devices, Inc.
+ * Copyright 2019, 2021(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -48,6 +48,7 @@
 #include "delay.h"
 #include "gpio.h"
 #include "spi.h"
+#include "util.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
