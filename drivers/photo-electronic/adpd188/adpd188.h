@@ -506,7 +506,8 @@
  */
 enum adpd_supported_devices {
 	ADPD188BI,
-	APDP108X
+	APDP1080,
+	ADPD1081
 };
 
 /**
@@ -752,10 +753,10 @@ int32_t adpd188_slot_setup(struct adpd188_dev *dev,
 			   struct adpd188_slot_config config);
 
 /* Set sample frequency of the ADC. */
-int32_t adpd188_adc_fsample_set(struct adpd188_dev *dev, float freq_hz);
+int32_t adpd188_adc_fsample_set(struct adpd188_dev *dev, uint16_t freq_hz);
 
 /* Get sample frequency of the ADC. */
-int32_t adpd188_adc_fsample_get(struct adpd188_dev *dev, float *freq_hz);
+int32_t adpd188_adc_fsample_get(struct adpd188_dev *dev, uint16_t *freq_hz);
 
 /* Do initial configuration of the device to use as a smoke detector. */
 int32_t adpd188_smoke_detect_setup(struct adpd188_dev *dev);
