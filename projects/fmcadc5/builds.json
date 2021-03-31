@@ -1,0 +1,12 @@
+{
+      "xilinx": {
+        "demo": {
+              "flags" : "",
+              "hardware" : ["fmcadc5_vc707"]
+        },
+        "iio": {
+              "flags" : "TINYIIOD=y",
+              "hardware" : ["fmcadc5_vc707"]
+        }
+      }
+}

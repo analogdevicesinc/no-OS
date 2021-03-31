@@ -1,0 +1,12 @@
+{
+      "xilinx": {
+        "single_conversion": {
+              "flags" : "",
+              "hardware" : ["ad738x_fmc_zed"]
+        },
+        "spi_engine_offload": {
+              "flags" :  "NEW_CFLAGS=-DSPI_ENGINE_OFFLOAD_EXAMPLE",
+              "hardware" : ["ad738x_fmc_zed"]
+        }
+      }
+}
