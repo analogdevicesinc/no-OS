@@ -1052,8 +1052,10 @@ int main(void)
 	iio_axi_adc_init_par = (struct iio_axi_adc_init_param) {
 		.rx_adc = rx_adc,
 		.rx_dmac = rx_dmac,
+#ifndef PLATFORM_MB
 		.dcache_invalidate_range = (void (*)(uint32_t,
 						     uint32_t))Xil_DCacheInvalidateRange,
+#endif
 	};
 
 	status = iio_axi_adc_init(&iio_axi_adc_desc, &iio_axi_adc_init_par);
@@ -1063,8 +1065,10 @@ int main(void)
 	iio_axi_adc_obs_init_par = (struct iio_axi_adc_init_param) {
 		.rx_adc = rx_obs_adc,
 		.rx_dmac = rx_obs_dmac,
+#ifndef PLATFORM_MB
 		.dcache_invalidate_range = (void (*)(uint32_t,
 						     uint32_t))Xil_DCacheInvalidateRange,
+#endif
 	};
 
 	status = iio_axi_adc_init(&iio_axi_adc_obs_desc,
@@ -1085,7 +1089,9 @@ int main(void)
 	iio_axi_dac_init_par = (struct iio_axi_dac_init_param) {
 		.tx_dac = tx_dac,
 		.tx_dmac = tx_dmac,
+#ifndef PLATFORM_MB
 		.dcache_flush_range = (void (*)(uint32_t, uint32_t))Xil_DCacheFlushRange,
+#endif
 	};
 
 	status = iio_axi_dac_init(&iio_axi_dac_desc, &iio_axi_dac_init_par);
