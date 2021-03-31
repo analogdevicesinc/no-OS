@@ -144,7 +144,7 @@ int32_t iio_app_run(struct iio_app_device *devices, int32_t len)
 	};
 #endif
 
-#ifdef XILINX_PLATFORM || ADUCM_PLATFORM || STM32_PLATFORM
+#if defined(XILINX_PLATFORM) || defined(ADUCM_PLATFORM) || defined(STM32_PLATFORM)
 	uart_init_par = (struct uart_init_param) {
 		.device_id = UART_DEVICE_ID,
 		.baud_rate = UART_BAUDRATE,
