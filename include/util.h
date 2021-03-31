@@ -43,6 +43,7 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include <stdint.h>
+#include <stdlib.h>
 #include <stdbool.h>
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -73,9 +74,6 @@
 	(max(min((val), (max_val)), (min_val)))
 #define clamp_t(type, val, min_val, max_val) \
 	(type)clamp((type)(val), (type)(min_val), (type)(max_val))
-
-#define abs(x) \
-	((x) < 0 ? (-(x)) : (x))
 
 #define swap(x, y) \
 	{typeof(x) _tmp_ = (x); (x) = (y); (y) = _tmp_;}
