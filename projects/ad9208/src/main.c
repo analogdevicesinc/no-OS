@@ -62,8 +62,68 @@
 #include "gpio_extra.h"
 
 #ifdef IIO_SUPPORT
-#include "app_iio.h"
-#endif
+#include "iio_app.h"
+#include "iio_axi_adc.h"
+
+int32_t start_iiod(struct axi_adc *rx_0_adc, struct axi_adc *rx_1_adc,
+		   struct axi_dmac *rx_dmac)
+{
+	struct iio_axi_adc_init_param	iio_axi_adc_0_init_par;
+	struct iio_axi_adc_init_param	iio_axi_adc_1_init_par;
+	struct iio_axi_adc_desc		*iio_axi_adc_0_desc;
+	struct iio_axi_adc_desc		*iio_axi_adc_1_desc;
+	struct iio_device		*adc0_dev_desc;
+	struct iio_device		*adc1_dev_desc;
+	struct iio_data_buffer		rd_buff0;
+	struct iio_data_buffer		rd_buff1;
+	int32_t				status;
+	uint32_t			buff_len;
+
+	printf("The board accepts libiio clients connections through the serial backend.\n");
+
+	iio_axi_adc_0_init_par = (struct iio_axi_adc_init_param) {
+		.rx_adc = rx_0_adc,
+		.rx_dmac = rx_dmac
+	};
+	iio_axi_adc_1_init_par = (struct iio_axi_adc_init_param) {
+		.rx_adc = rx_1_adc,
+		.rx_dmac = rx_dmac
+	};
+
+	buff_len = (ADC_DDR_HIGHADDR - ADC_DDR_BASEADDR) / 2;
+	rd_buff0 = (struct iio_data_buffer) {
+		.buff = (void *)ADC_DDR_BASEADDR,
+		.size = buff_len
+	};
+
+	rd_buff1 = (struct iio_data_buffer) {
+		.buff = (void *)(ADC_DDR_BASEADDR + buff_len),
+		.size = buff_len
+	};
+
+	status = iio_axi_adc_init(&iio_axi_adc_0_desc, &iio_axi_adc_0_init_par);
+	if (IS_ERR_VALUE(status))
+		return FAILURE;
+
+	iio_axi_adc_get_dev_descriptor(iio_axi_adc_0_desc, &adc0_dev_desc);
+
+	status = iio_axi_adc_init(&iio_axi_adc_1_desc, &iio_axi_adc_1_init_par);
+	if (IS_ERR_VALUE(status))
+		return FAILURE;
+
+	iio_axi_adc_get_dev_descriptor(iio_axi_adc_1_desc, &adc1_dev_desc);
+
+	struct iio_app_device devices[2] = {
+		IIO_APP_DEVICE("axi_adc0", iio_axi_adc_0_desc, adc0_dev_desc,
+			       &rd_buff0, NULL),
+		IIO_APP_DEVICE("axi_adc1", iio_axi_adc_1_desc, adc1_dev_desc,
+			       &rd_buff1, NULL),
+	};
+
+	return iio_app_run(devices, ARRAY_SIZE(devices));
+}
+
+#endif /*IIO_SUPPORT */
 
 int main(void)
 {
@@ -495,23 +555,7 @@ int main(void)
 		xil_printf("axi_dmac_transfer() error: %"PRIi32"\n", status);
 
 #ifdef IIO_SUPPORT
-	printf("The board accepts libiio clients connections through the serial backend.\n");
-
-	struct iio_axi_adc_init_param iio_axi_adc_0_init_par;
-	iio_axi_adc_0_init_par = (struct iio_axi_adc_init_param) {
-		.rx_adc = rx_0_adc,
-		.rx_dmac = rx_dmac,
-		.adc_ddr_base = ADC_DDR_BASEADDR,
-	};
-	struct iio_axi_adc_init_param iio_axi_adc_1_init_par;
-	iio_axi_adc_1_init_par = (struct iio_axi_adc_init_param) {
-		.rx_adc = rx_1_adc,
-		.rx_dmac = rx_dmac,
-		.adc_ddr_base = ADC_DDR_BASEADDR,
-	};
-
-	return iio_server_init(&iio_axi_adc_0_init_par, &iio_axi_adc_1_init_par);
-
+	status = start_iiod(rx_0_adc, rx_1_adc, rx_dmac);
 #endif
 
 error_11:

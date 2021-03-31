@@ -1,0 +1,12 @@
+{
+      "xilinx": {
+        "demo": {
+              "flags" : "",
+              "hardware" : ["ad9208_dual_ebz_vcu118"]
+        },
+        "iio": {
+            "flags": "TINYIIOD=y",
+              "hardware" : ["ad9208_dual_ebz_vcu118"]
+        }
+      }
+}
