@@ -44,7 +44,7 @@ INCS +=	$(INCLUDE)/axi_io.h						\
 	$(INCLUDE)/print_log.h						\
 	$(INCLUDE)/util.h
 ifeq (y,$(strip $(TINYIIOD)))
-INCS +=	(INCLUDE)/fifo.h						\
+INCS +=	$(INCLUDE)/fifo.h						\
 	$(INCLUDE)/irq.h						\
 	$(INCLUDE)/uart.h						\
 	$(INCLUDE)/list.h						\
