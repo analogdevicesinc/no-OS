@@ -44,6 +44,6 @@
 #include "ad9144.h"
 
 /** IIO Descriptor */
-extern struct iio_device const ad9144_iio_descriptor;
+extern const struct iio_device ad9144_iio_descriptor;
 
 #endif //IIO_AD9144_H

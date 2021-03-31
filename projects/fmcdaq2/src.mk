@@ -37,6 +37,8 @@ ifeq (y,$(strip $(TINYIIOD)))
 LIBRARIES += iio
 SRCS += $(NO-OS)/util/fifo.c						\
 	$(NO-OS)/util/list.c						\
+	$(DRIVERS)/adc/ad9680/iio_ad9680.c				\
+	$(DRIVERS)/dac/ad9144/iio_ad9144.c				\
 	$(NO-OS)/iio/iio_axi_adc/iio_axi_adc.c				\
 	$(NO-OS)/iio/iio_axi_dac/iio_axi_dac.c				\
 	$(PLATFORM_DRIVERS)/uart.c					\
