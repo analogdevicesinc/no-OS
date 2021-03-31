@@ -1,0 +1,20 @@
+{
+      "xilinx": {
+        "uart_print": {
+              "flags" : "",
+              "hardware" : ["ad469x_fmc_zed"]
+        },
+        "iio": {
+              "flags" : "TINYIIOD=y",
+              "hardware" : ["ad469x_fmc_zed"]
+        },
+        "standard_seq": {
+              "flags" : "NEW_CFLAGS=-DSTANDARD_SEQ",
+              "hardware" : ["ad469x_fmc_zed"]
+        },
+        "advance_seq": {
+              "flags" : "NEW_CFLAGS=-DADVANCED_SEQ",
+              "hardware" : ["ad469x_fmc_zed"]
+        }
+      }
+}
