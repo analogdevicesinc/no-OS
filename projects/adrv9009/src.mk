@@ -51,6 +51,7 @@ SRCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c			\
 	$(DRIVERS)/spi/spi.c						\
 	$(DRIVERS)/gpio/gpio.c
 ifeq (y,$(strip $(TINYIIOD)))
+SRC_DIRS += $(NO-OS)/iio/iio_app
 LIBRARIES += iio
 SRCS += $(NO-OS)/util/fifo.c						\
 	$(NO-OS)/util/list.c						\
