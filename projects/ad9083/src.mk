@@ -13,7 +13,7 @@ ifeq (y,$(strip $(TINYIIOD)))
 LIBRARIES += iio
 endif
 
-SRC_DIRS += $(DRIVERS)/adc/ad9083/ad9083_api
+SRC_DIRS += $(DRIVERS)/adc/ad9083
 
 SRCS += $(PROJECT)/src/app.c						\
 	$(PROJECT)/src/app_ad9083.c					\
@@ -22,8 +22,8 @@ SRCS += $(PROJECT)/src/app.c						\
 	$(PROJECT)/src/uc/uc_settings.c					\
 	$(DRIVERS)/spi/spi.c						\
 	$(DRIVERS)/gpio/gpio.c						\
-	$(DRIVERS)/frequency/ad9528/ad9528.c				\
-	$(DRIVERS)/adc/ad9083/ad9083.c
+	$(DRIVERS)/frequency/ad9528/ad9528.c
+
 SRCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c			\
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.c				\
 	$(DRIVERS)/axi_core/clk_axi_clkgen/clk_axi_clkgen.c		\
@@ -40,7 +40,6 @@ SRCS +=	$(PLATFORM_DRIVERS)/axi_io.c					\
 	$(PLATFORM_DRIVERS)/delay.c
 ifeq (y,$(strip $(TINYIIOD)))
 SRCS += $(NO-OS)/util/fifo.c						\
-	$(NO-OS)/iio/iio_ad9083/iio_ad9083.c				\
 	$(NO-OS)/iio/iio_axi_adc/iio_axi_adc.c				\
 	$(NO-OS)/iio/iio_app/iio_app.c					\
 	$(NO-OS)/util/list.c						\
@@ -53,8 +52,8 @@ INCS += $(PROJECT)/src/app_ad9083.h					\
 	$(PROJECT)/src/app_jesd.h					\
 	$(PROJECT)/src/parameters.h					\
 	$(PROJECT)/src/uc/uc_settings.h					\
-	$(DRIVERS)/frequency/ad9528/ad9528.h				\
-	$(DRIVERS)/adc/ad9083/ad9083.h
+	$(DRIVERS)/frequency/ad9528/ad9528.h
+
 INCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.h			\
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.h				\
 	$(DRIVERS)/axi_core/clk_axi_clkgen/clk_axi_clkgen.h		\
@@ -80,7 +79,6 @@ INCS += $(INCLUDE)/fifo.h						\
 	$(INCLUDE)/list.h						\
 	$(PLATFORM_DRIVERS)/irq_extra.h					\
 	$(PLATFORM_DRIVERS)/uart_extra.h                                \
-	$(NO-OS)/iio/iio_ad9083/iio_ad9083.h				\
 	$(NO-OS)/iio/iio_axi_adc/iio_axi_adc.h				\
 	$(NO-OS)/iio/iio_app/iio_app.h
 endif

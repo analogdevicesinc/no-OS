@@ -37,6 +37,8 @@
 * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
+#ifdef IIO_SUPPORT
+
 #ifndef IIO_AD9083_H_
 #define IIO_AD9083_H_
 
@@ -50,3 +52,4 @@
 extern struct iio_device ad9083_iio_descriptor;
 
 #endif /* IIO_AD9083_H_ */
+#endif /* IIO_SUPPORT */
