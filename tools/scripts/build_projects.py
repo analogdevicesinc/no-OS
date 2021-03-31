@@ -33,12 +33,13 @@ def parse_input():
 	parser.add_argument('-log_dir', default='logs', help="Path where to save log files")
 	parser.add_argument('-project', help="Name of project to be built")
 	parser.add_argument('-platform', help="Name of platform to be built")
+	parser.add_argument('-hardware', help="Name of hardware to be built")
 	parser.add_argument('-build_name', help="Name of built type to be built")
 	parser.add_argument('-builds_dir', help="Directory where to build projects")
 	args = parser.parse_args()
 
 	return (args.noos_location, args.export_dir, args.log_dir, args.project,
-		args.platform, args.build_name, args.builds_dir)
+		args.platform, args.build_name, args.builds_dir, args.hardware)
 
 ERR = 0
 LOG_START = " -> "
@@ -56,15 +57,19 @@ DEFAULT_LOG_FILE = 'log.txt'
 log_file = DEFAULT_LOG_FILE
 
 def run_cmd(cmd):
+	global ERR
 	tmp = cmd.split(' ')
 	if tmp[0] == 'make':
 		log('make ' + tmp[-1])
 	else:
 		log(cmd)
 	sys.stdout.flush()
+	err = os.system('echo %s >> %s' % (cmd, log_file))
+	if err != 0:
+		ERR = 1
+		return err
 	err = os.system(cmd + ' >> %s 2>&1' % log_file)
 	if err != 0:
-		global ERR
 		log_err("ERROR")
 		log("See log %s " \
 		    "-- Use cat (linux) or type (windows) to see colored output"
@@ -75,23 +80,30 @@ def run_cmd(cmd):
 def to_blue(str):
 	return TBLUE + str + TWHITE
 
-SKIP_DOWNLOAD = 0
+SKIP_DOWNLOAD = None
+key = 'SKIP_DOWNLOAD'
+if key in os.environ:
+	SKIP_DOWNLOAD = int(os.environ[key])
+else:
+	SKIP_DOWNLOAD = 0
+
 HW_DIR_NAME = 'hardware'
 NEW_HW_DIR_NAME = 'new_hardware'
 FILE_TO_DOWNLOAD = 'latest.zip'
 
 def download_all_hw(builds_dir):
+	if SKIP_DOWNLOAD == 1:
+		return 0
 	release_link = os.path.join('https://github.com/mchindri/hdl/releases/download/Latest', FILE_TO_DOWNLOAD)
 	new_harware = os.path.join(builds_dir, FILE_TO_DOWNLOAD)
 	new_harware_dir = os.path.join(builds_dir, NEW_HW_DIR_NAME)
-	if SKIP_DOWNLOAD == 0:
-		err = run_cmd('wget %s -O %s' % (release_link, new_harware))
-		if err != 0:
-			return err
+	err = run_cmd('wget %s -O %s' % (release_link, new_harware))
+	if err != 0:
+		return err
 
-		err = run_cmd('unzip -o %s -d %s' % (new_harware, new_harware_dir))
-		if err != 0:
-			return err
+	err = run_cmd('unzip -o %s -d %s' % (new_harware, new_harware_dir))
+	if err != 0:
+		return err
 	return 0
 
 def get_hardware(hardware, platform, builds_dir):
@@ -116,7 +128,7 @@ def get_hardware(hardware, platform, builds_dir):
 	
 	err = run_cmd('cp %s %s' % (tmp_filename, filename))
 	if err != 0:
-		return err
+		return ('', 1, err)
 
 	log("Hardware changed from last build")
 
@@ -165,8 +177,7 @@ class BuildConfig:
 			" BUILD_DIR=" + self.build_dir + \
 			" BINARY=" + self.binary + \
 			" LOCAL_BUILD=n" + \
-			" LINK_SRCS=n" + \
-			" VERBOSE=y " + self.flags
+			" LINK_SRCS=y " + self.flags
 			
 		if self.hardware != '':
 			(hardware_file, new_hdf, err) = get_hardware(self.hardware,
@@ -188,7 +199,7 @@ class BuildConfig:
 		err = run_cmd(cmd + ' update_srcs')
 		if err != 0:
 			return err
-		err = run_cmd(cmd + ' -j%d all' % (multiprocessing.cpu_count() - 1))
+		err = run_cmd(cmd + ' -j%d re' % (multiprocessing.cpu_count() - 1))
 		if err != 0:
 			return err
 		
@@ -198,7 +209,8 @@ class BuildConfig:
 		return 0
 def main():
 	create_dir_cmd = "test -d {0} || mkdir -p {0}"
-	(noos, export_dir, log_dir, _project, _platform, _build_name, _builds_dir) = parse_input()
+	(noos, export_dir, log_dir, _project,
+	 _platform, _build_name, _builds_dir, _hw) = parse_input()
 	projets = os.path.join(noos,'projects')
 	run_cmd(create_dir_cmd.format(export_dir))
 	run_cmd(create_dir_cmd.format(log_dir))
@@ -225,6 +237,7 @@ def main():
 		run_cmd(create_dir_cmd.format(project_export))
 		fp = open(build_file)
 		configs = json.loads(fp.read())
+		ok = 1
 		for (platform, config) in configs.items():
 			if _platform is not None:
 				if _platform != platform:
@@ -240,6 +253,9 @@ def main():
 					hardwares = [""]
 				
 				for hardware in hardwares:
+					if _hw is not None:
+						if _hw != hardware:
+							continue
 					new_build = BuildConfig(project_dir,
 								platform,
 								flags,
@@ -249,6 +265,7 @@ def main():
 								log_dir)
 					err = new_build.build()
 					if err != 0:
+						ok = 0
 						if err == 2:
 							#Keyboard interrupt
 							exit()
@@ -258,6 +275,13 @@ def main():
 					binary_created = True
 			
 		fp.close()
+
+		if ok == 1:
+			status = 'OK'
+		else:
+			status = 'Fail'
+		all_status = os.path.join(log_dir, 'all_builds.txt')
+		os.system('echo Project %20s -- %s >> %s' % (project, status, all_status))
 		if binary_created:
 			run_cmd("zip -jm %s.zip %s" % (project_export, os.path.join(project_export, "*")))
 
