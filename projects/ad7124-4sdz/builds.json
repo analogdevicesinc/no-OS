@@ -1,0 +1,8 @@
+{
+      "xilinx": {
+        "demo": {
+              "flags" : "",
+              "hardware" : ["ad7134_fmc_zed"]
+        }
+      }
+}

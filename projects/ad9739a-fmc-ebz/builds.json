@@ -1,0 +1,16 @@
+{
+      "xilinx": {
+        "demo": {
+              "flags" : "",
+              "hardware" : ["ad9739a_fmc_zc706"]
+        },
+        "iio": {
+              "flags" : "TINYIIOD=y",
+              "hardware" : ["ad9739a_fmc_zc706"]
+        },
+        "dma_example": {
+              "flags" : "NEW_CFLAGS=-DDAC_DMA_EXAMPLE",
+              "hardware" : ["ad9739a_fmc_zc706"]
+        }
+      }
+}

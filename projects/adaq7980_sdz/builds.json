@@ -1,0 +1,8 @@
+{
+      "xilinx": {
+        "demo": {
+              "flags" : "",
+              "hardware" : ["adaq7980_sdz_zed"]
+        }
+      }
+}

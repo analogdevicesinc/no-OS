@@ -1,0 +1,18 @@
+{
+      "xilinx": {
+            "demo": {
+                  "flags": "",
+                  "hardware": [
+                        "ad9081_fmca_ebz_vcu118",
+                        "ad9081_fmca_ebz_zcu102"
+                  ]
+            },
+            "iio": {
+                  "flags": "TINYIIOD=y",
+                  "hardware": [
+                        "ad9081_fmca_ebz_vcu118",
+                        "ad9081_fmca_ebz_zcu102"
+                  ]
+            }
+      }
+}
