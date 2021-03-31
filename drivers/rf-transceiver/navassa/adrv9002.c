@@ -147,10 +147,6 @@
 	 ADRV9002_GP_MASK_TX_DP_TRANSMIT_ERROR |		\
 	 ADRV9002_GP_MASK_RX_DP_RECEIVE_ERROR)
 
-#ifdef DAC_DMA_EXAMPLE
-extern const uint32_t sine_lut_iq[1024];
-#endif
-
 int __adrv9002_dev_err(const struct adrv9002_rf_phy *phy,
 		       const char *function, const int line)
 {
