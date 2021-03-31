@@ -9,6 +9,9 @@
 #									       #
 ################################################################################
 
+
+SRC_DIRS += $(DRIVERS)/axi_core/clk_axi_clkgen
+
 SRCS += $(PROJECT)/src/ad77681evb.c
 SRCS += $(DRIVERS)/spi/spi.c						\
 	$(DRIVERS)/adc/ad7768-1/ad77681.c				\
@@ -16,7 +19,7 @@ SRCS += $(DRIVERS)/spi/spi.c						\
 	$(DRIVERS)/axi_core/spi_engine/spi_engine.c			\
 	$(NO-OS)/util/util.c
 SRCS +=	$(PLATFORM_DRIVERS)/axi_io.c					\
-	$(PLATFORM_DRIVERS)/gpio.c					\
+	$(PLATFORM_DRIVERS)/xilinx_gpio.c				\
 	$(PLATFORM_DRIVERS)/xilinx_spi.c				\
 	$(PLATFORM_DRIVERS)/delay.c
 INCS += $(PROJECT)/src/parameters.h
