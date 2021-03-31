@@ -37,35 +37,65 @@
 #ifdef IIO_SUPPORT
 
 #include "iio.h"
+#include "iio_app.h"
 #include "iio_axi_adc.h"
 #include "iio_axi_dac.h"
-#include "irq.h"
-#include "irq_extra.h"
-#include "uart.h"
-#include "uart_extra.h"
 
-static struct uart_desc *uart_desc;
-
-/**
- * iio_uart_write() - Write data to UART device wrapper.
- * @buf - Pointer to buffer containing data.
- * @len - Number of bytes to write.
- * @Return: SUCCESS in case of success, FAILURE otherwise.
- */
-static ssize_t iio_uart_write(const char *buf, size_t len)
+int32_t start_iiod(struct axi_dmac *rx_dmac, struct axi_dmac *tx_dmac,
+		   struct axi_adc *rx_adc, struct axi_dac *tx_dac)
 {
-	return uart_write(uart_desc, (const uint8_t *)buf, len);
-}
+	struct iio_axi_adc_init_param	iio_axi_adc_init_par;
+	struct iio_axi_dac_init_param	iio_axi_dac_init_par;
+	struct iio_axi_adc_desc		*iio_axi_adc_desc;
+	struct iio_axi_dac_desc		*iio_axi_dac_desc;
+	struct iio_device		*adc_dev_desc;
+	struct iio_device		*dac_dev_desc;
+	int32_t				status;
 
-/**
- * iio_uart_read() - Read data from UART device wrapper.
- * @buf - Pointer to buffer containing data.
- * @len - Number of bytes to read.
- * @Return: SUCCESS in case of success, FAILURE otherwise.
- */
-static ssize_t iio_uart_read(char *buf, size_t len)
-{
-	return uart_read(uart_desc, (uint8_t *)buf, len);
+	iio_axi_adc_init_par = (struct iio_axi_adc_init_param) {
+		.rx_adc = rx_adc,
+		.rx_dmac = rx_dmac,
+#ifndef PLATFORM_MB
+		.dcache_invalidate_range = (void (*)(uint32_t,
+						     uint32_t))Xil_DCacheInvalidateRange
+#endif
+	};
+	iio_axi_dac_init_par = (struct iio_axi_dac_init_param) {
+		.tx_dac = tx_dac,
+		.tx_dmac = tx_dmac,
+#ifndef PLATFORM_MB
+		.dcache_flush_range = (void (*)(uint32_t, uint32_t))Xil_DCacheFlushRange,
+#endif
+	};
+
+	status = iio_axi_adc_init(&iio_axi_adc_desc, &iio_axi_adc_init_par);
+	if (status < 0)
+		return status;
+
+	status = iio_axi_dac_init(&iio_axi_dac_desc, &iio_axi_dac_init_par);
+	if(status < 0)
+		return status;
+
+	iio_axi_adc_get_dev_descriptor(iio_axi_adc_desc, &adc_dev_desc);
+	iio_axi_dac_get_dev_descriptor(iio_axi_dac_desc, &dac_dev_desc);
+
+	struct iio_data_buffer read_buff = {
+		.buff = (void *)ADC_DDR_BASEADDR,
+		.size = 0xFFFFFFFF,
+	};
+	struct iio_data_buffer write_buff = {
+		.buff = (void *)DAC_DDR_BASEADDR,
+		.size = 0xFFFFFFFF,
+	};
+
+	struct iio_app_device devices[] = {
+		IIO_APP_DEVICE("axi_adc", iio_axi_adc_desc, adc_dev_desc,
+			       &read_buff, NULL),
+		IIO_APP_DEVICE("axi_dac", iio_axi_dac_desc, dac_dev_desc,
+			       NULL, &write_buff)
+	};
+
+	return iio_app_run(devices, ARRAY_SIZE(devices));
 }
 
 #endif // IIO_SUPPORT
@@ -264,6 +294,18 @@ int main(void)
 		goto error_3;
 	}
 
+	status = axi_dmac_init(&tx_dmac, &tx_dmac_init);
+	if (status) {
+		printf("axi_dmac_init() tx init error: %d\n", status);
+		goto error_3;
+	}
+
+	status = axi_dmac_init(&rx_dmac, &rx_dmac_init);
+	if (status) {
+		printf("axi_dmac_init() rx init error: %d\n", status);
+		goto error_3;
+	}
+
 #ifdef DAC_DMA_EXAMPLE
 	gpio_init_plddrbypass.extra = &hal_gpio_param;
 #ifndef ALTERA_PLATFORM
@@ -286,18 +328,6 @@ int main(void)
 	Xil_DCacheFlush();
 #endif
 
-	status = axi_dmac_init(&tx_dmac, &tx_dmac_init);
-	if (status) {
-		printf("axi_dmac_init() tx init error: %d\n", status);
-		goto error_3;
-	}
-
-	status = axi_dmac_init(&rx_dmac, &rx_dmac_init);
-	if (status) {
-		printf("axi_dmac_init() rx init error: %d\n", status);
-		goto error_3;
-	}
-
 	axi_dmac_transfer(tx_dmac, DAC_DDR_BASEADDR, sizeof(sine_lut_iq));
 
 	mdelay(1000);
@@ -315,154 +345,9 @@ int main(void)
 #endif
 
 #ifdef IIO_SUPPORT
-	/**
-	 * iio application configurations.
-	 */
-	struct iio_init_param iio_init_par;
-
-	/**
-	 * iio axi adc configurations.
-	 */
-	struct iio_axi_adc_init_param iio_axi_adc_init_par;
-
-	/**
-	 * iio axi dac configurations.
-	 */
-	struct iio_axi_dac_init_param iio_axi_dac_init_par;
-
-	/**
-	 * iio instance descriptor.
-	 */
-	struct iio_desc *iio_desc;
-
-	/**
-	 * iio instance descriptor.
-	 */
-	struct iio_axi_adc_desc *iio_axi_adc_desc;
-
-	/**
-	 * iio instance descriptor.
-	 */
-	struct iio_axi_dac_desc *iio_axi_dac_desc;
-
-	/**
-	 * Xilinx platform dependent initialization for IRQ.
-	 */
-	struct xil_irq_init_param xil_irq_init_par = {
-		.type = IRQ_PS,
-	};
-
-	/**
-	 * IRQ initial configuration.
-	 */
-	struct irq_init_param irq_init_param = {
-		.irq_ctrl_id = INTC_DEVICE_ID,
-		.extra = &xil_irq_init_par,
-	};
-
-	/**
-	 * IRQ instance.
-	 */
-	struct irq_ctrl_desc *irq_desc;
-
-	/**
-	 * Xilinx platform dependent initialization for UART.
-	 */
-	struct xil_uart_init_param xil_uart_init_par;
-
-	/**
-	 * Initialization for UART.
-	 */
-	struct uart_init_param uart_init_par;
-
-	struct iio_device *adc_dev_desc, *dac_dev_desc;
-
-	status = irq_ctrl_init(&irq_desc, &irq_init_param);
-	if(status < 0)
-		return status;
-
-	xil_uart_init_par = (struct xil_uart_init_param) {
-		.type = UART_PS,
-		.irq_id = UART_IRQ_ID,
-		.irq_desc = irq_desc,
-	};
-
-	uart_init_par = (struct uart_init_param) {
-		.baud_rate = 921600,
-		.device_id = UART_DEVICE_ID,
-		.extra = &xil_uart_init_par,
-	};
-
-	status = uart_init(&uart_desc, &uart_init_par);
-	if(status < 0)
-		return status;
-
-	status = irq_global_enable(irq_desc);
-	if (status < 0)
-		return status;
-
-	status = axi_dmac_init(&tx_dmac, &tx_dmac_init);
-	if(status < 0)
-		return status;
-
-	status = axi_dmac_init(&rx_dmac, &rx_dmac_init);
-	if(status < 0)
-		return status;
-
-	status = iio_init(&iio_desc, &iio_init_par);
-	if(status < 0)
-		return status;
-
-	iio_axi_adc_init_par = (struct iio_axi_adc_init_param) {
-		.rx_adc = rx_adc,
-		.rx_dmac = rx_dmac,
-		.dcache_invalidate_range = (void (*)(uint32_t,
-						     uint32_t))Xil_DCacheInvalidateRange
-	};
-
-	status = iio_axi_adc_init(&iio_axi_adc_desc, &iio_axi_adc_init_par);
-	if (status < 0)
-		return status;
-
-	struct iio_data_buffer read_buff = {
-		.buff = (void *)ADC_DDR_BASEADDR,
-		.size = 0xFFFFFFFF,
-	};
-	iio_axi_adc_get_dev_descriptor(iio_axi_adc_desc, &adc_dev_desc);
-	status = iio_register(iio_desc, adc_dev_desc, "axi_adc",
-			      iio_axi_adc_desc, &read_buff, NULL);
-	if (status < 0)
-		return status;
-
-	iio_axi_dac_init_par = (struct iio_axi_dac_init_param) {
-		.tx_dac = tx_dac,
-		.tx_dmac = tx_dmac,
-		.dac_ddr_base = DAC_DDR_BASEADDR,
-		.dcache_flush_range = (void (*)(uint32_t, uint32_t))Xil_DCacheFlushRange,
-	};
-
-	status = iio_axi_dac_init(&iio_axi_dac_desc, &iio_axi_dac_init_par);
-	if(status < 0)
-		return status;
-	if(status < 0)
-		return status;
-
-	struct iio_data_buffer write_buff = {
-		.buff = (void *)DAC_DDR_BASEADDR,
-		.size = 0xFFFFFFFF,
-	};
-	iio_axi_dac_get_dev_descriptor(iio_axi_dac_desc, &dac_dev_desc);
-	status = iio_register(iio_desc, dac_dev_desc, "axi_dac",
-			      iio_axi_dac_desc, NULL, &write_buff);
-
-	do {
-		status = iio_step(iio_desc);
-		if (status < 0)
-			return status;
-	} while (true);
-
-	return SUCCESS;
-
+	status = start_iiod(tx_dmac, rx_dmac, rx_adc, tx_dac);
+	if (status)
+		printf("Tinyiiod error: %d\n", status);
 #endif // IIO_SUPPORT
 
 	for (t = TALISE_A; t < TALISE_DEVICE_ID_MAX; t++) {
