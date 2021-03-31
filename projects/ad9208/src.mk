@@ -9,24 +9,31 @@
 #									       #
 ################################################################################
 
-SRCS += $(PROJECT)/src/main.c
+SRC_DIRS += $(PROJECT)/src \
+		$(DRIVERS)/adc/ad9208 \
+		$(DRIVERS)/axi_core/axi_adc_core \
+		$(DRIVERS)/axi_core/axi_dmac \
+		$(DRIVERS)/axi_core/clk_axi_clkgen
+
 ifeq (y,$(strip $(TINYIIOD)))
-SRCS += $(PROJECT)/src/app_iio.c
-LIBRARIES += iio
+SRC_DIRS += $(NO-OS)/iio/iio_axi_adc			\
+		$(NO-OS)/iio/iio_app
+
+SRCS	+= $(PLATFORM_DRIVERS)/uart.c			\
+		$(PLATFORM_DRIVERS)/irq.c		\
+		$(NO-OS)/util/list.c 
+INCS	+= $(INCLUDE)/uart.h				\
+		$(INCLUDE)/list.h			\
+		$(INCLUDE)/irq.h			\
+		$(PLATFORM_DRIVERS)/irq_extra.h		\
+		$(PLATFORM_DRIVERS)/uart_extra.h
+		
 endif
+
 SRCS += $(DRIVERS)/spi/spi.c						\
 	$(DRIVERS)/gpio/gpio.c						\
-	$(DRIVERS)/frequency/hmc7044/hmc7044.c				\
-	$(DRIVERS)/adc/ad9208/ad9208.c 					\
-	$(DRIVERS)/adc/ad9208/ad9208_api/ad9208_adc_api.c 		\
-	$(DRIVERS)/adc/ad9208/ad9208_api/ad9208_api.c 			\
-	$(DRIVERS)/adc/ad9208/ad9208_api/ad9208_jesd_api.c 		\
-	$(DRIVERS)/adc/ad9208/ad9208_api/ad9208_reg.c 			\
-	$(DRIVERS)/adc/ad9208/ad9208_api/ad9208_signal_monitor_api.c 
-SRCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c			\
-	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.c				\
-	$(DRIVERS)/axi_core/clk_axi_clkgen/clk_axi_clkgen.c		\
-	$(DRIVERS)/axi_core/jesd204/axi_adxcvr.c			\
+	$(DRIVERS)/frequency/hmc7044/hmc7044.c
+SRCS += $(DRIVERS)/axi_core/jesd204/axi_adxcvr.c			\
 	$(DRIVERS)/axi_core/jesd204/axi_jesd204_rx.c			\
 	$(DRIVERS)/axi_core/jesd204/axi_jesd204_tx.c			\
 	$(DRIVERS)/axi_core/jesd204/xilinx_transceiver.c		\
@@ -35,26 +42,8 @@ SRCS +=	$(PLATFORM_DRIVERS)/axi_io.c					\
 	$(PLATFORM_DRIVERS)/xilinx_spi.c				\
 	$(PLATFORM_DRIVERS)/xilinx_gpio.c				\
 	$(PLATFORM_DRIVERS)/delay.c
-ifeq (y,$(strip $(TINYIIOD)))
-SRCS += $(NO-OS)/util/fifo.c						\
-	$(NO-OS)/iio/iio_axi_adc/iio_axi_adc.c				\
-	$(NO-OS)/util/list.c						\
-	$(PLATFORM_DRIVERS)/uart.c					\
-	$(PLATFORM_DRIVERS)/irq.c
-endif
-INCS += $(PROJECT)/src/parameters.h
-ifeq (y,$(strip $(TINYIIOD)))
-INCS +=	$(PROJECT)/src/app_iio.h
-endif
+
 INCS += $(DRIVERS)/frequency/hmc7044/hmc7044.h				\
-	$(DRIVERS)/adc/ad9208/ad9208.h					\
-	$(DRIVERS)/adc/ad9208/ad9208_api/ad9208_api.h			\
-	$(DRIVERS)/adc/ad9208/ad9208_api/ad9208_reg.h			\
-	$(DRIVERS)/adc/ad9208/ad9208_api/api_def.h			\
-	$(DRIVERS)/adc/ad9208/ad9208_api/api_errors.h
-INCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.h			\
-	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.h				\
-	$(DRIVERS)/axi_core/clk_axi_clkgen/clk_axi_clkgen.h		\
 	$(DRIVERS)/axi_core/jesd204/axi_adxcvr.h			\
 	$(DRIVERS)/axi_core/jesd204/axi_jesd204_rx.h			\
 	$(DRIVERS)/axi_core/jesd204/axi_jesd204_tx.h			\
@@ -67,12 +56,3 @@ INCS +=	$(INCLUDE)/axi_io.h						\
 	$(INCLUDE)/error.h						\
 	$(INCLUDE)/delay.h						\
 	$(INCLUDE)/util.h
-ifeq (y,$(strip $(TINYIIOD)))
-INCS += $(INCLUDE)/fifo.h						\
-	$(INCLUDE)/irq.h						\
-	$(INCLUDE)/uart.h						\
-	$(INCLUDE)/list.h						\
-	$(PLATFORM_DRIVERS)/irq_extra.h					\
-	$(PLATFORM_DRIVERS)/uart_extra.h                                \
-	$(NO-OS)/iio/iio_axi_adc/iio_axi_adc.h
-endif
