@@ -36,9 +36,15 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
+
+#ifdef IIO_SUPPORT
+
+#include "ad9083.h"
 #include "iio_ad9083.h"
 
 struct iio_device ad9083_iio_descriptor = {
 	.debug_reg_read = (int32_t (*)())ad9083_reg_get,
 	.debug_reg_write = (int32_t (*)())ad9083_reg_set,
 };
+
+#endif /* IIO_SUPPORT */
