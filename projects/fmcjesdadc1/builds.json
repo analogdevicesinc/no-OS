@@ -1,0 +1,20 @@
+{
+      "xilinx": {
+            "demo": {
+                  "flags": "",
+                  "hardware": [
+                        "fmcjesdadc1_kc705",
+                        "fmcjesdadc1_vc707",
+                        "fmcjesdadc1_zc706"
+                  ]
+            },
+            "iio": {
+                  "flags": "TINYIIOD=y",
+                  "hardware": [
+                        "fmcjesdadc1_kc705",
+                        "fmcjesdadc1_vc707",
+                        "fmcjesdadc1_zc706"
+                  ]
+            }
+      }
+}

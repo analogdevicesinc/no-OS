@@ -59,14 +59,16 @@
 static struct irq_ctrl_desc *irq_desc;
 #endif
 
+#define ADC_DDR_SIZE	(ADC_1_DDR_BASEADDR - ADC_0_DDR_BASEADDR)
+
 struct iio_data_buffer g_read_buff0 = {
-	.buff = (void *)ADC_DDR_BASEADDR,
-	.size = 0xFFFFFFFF,
+	.buff = (void *)ADC_0_DDR_BASEADDR,
+	.size = ADC_DDR_SIZE,
 };
 
 struct iio_data_buffer g_read_buff1 = {
-	.buff = (void *)ADC_DDR_BASEADDR,
-	.size = 0xFFFFFFFF,
+	.buff = (void *)ADC_1_DDR_BASEADDR,
+	.size = ADC_DDR_SIZE,
 };
 
 /******************************************************************************/
