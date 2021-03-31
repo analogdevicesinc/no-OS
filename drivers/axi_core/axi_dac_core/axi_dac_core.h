@@ -87,6 +87,10 @@ struct axi_dac_channel {
 	enum axi_dac_data_sel sel;      // set to one of the enumerated type above.
 };
 
+extern const uint16_t sine_lut[128];
+
+extern const uint32_t sine_lut_iq[1024];
+
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
