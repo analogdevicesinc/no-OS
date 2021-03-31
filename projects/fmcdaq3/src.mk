@@ -39,6 +39,8 @@ SRCS += $(NO-OS)/util/fifo.c					\
 	$(NO-OS)/util/list.c						\
 	$(NO-OS)/iio/iio_axi_adc/iio_axi_adc.c		\
 	$(NO-OS)/iio/iio_axi_dac/iio_axi_dac.c		\
+	$(DRIVERS)/adc/ad9680/iio_ad9680.c				\
+	$(DRIVERS)/dac/ad9152/iio_ad9152.c				\
 	$(PLATFORM_DRIVERS)/uart.c					\
 	$(PLATFORM_DRIVERS)/irq.c
 endif
