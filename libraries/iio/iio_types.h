@@ -176,18 +176,6 @@ struct iio_device {
 	struct iio_attribute *debug_attributes;
 	/** Array of attributes. Last one should have its name set to NULL */
 	struct iio_attribute *buffer_attributes;
-	/** Transfer data from device into RAM */
-	ssize_t (*transfer_dev_to_mem)(void *dev_instance, size_t bytes_count,
-				       uint32_t ch_mask);
-	/** Read data from RAM to pbuf. It should be called after "transfer_dev_to_mem" */
-	ssize_t (*read_data)(void *dev_instance, char *pbuf, size_t offset,
-			     size_t bytes_count, uint32_t ch_mask);
-	/** Transfer data from RAM to device */
-	ssize_t (*transfer_mem_to_dev)(void *dev_instance, size_t bytes_count,
-				       uint32_t ch_mask);
-	/** Write data to RAM. It should be called before "transfer_mem_to_dev" */
-	ssize_t (*write_data)(void *dev_instance, char *pbuf, size_t offset,
-			      size_t bytes_count, uint32_t ch_mask);
 	/** Called before a transfer starts. The device should activate the
 	 * channels from the mask */
 	int32_t (*prepare_transfer)(void *dev, uint32_t mask);
