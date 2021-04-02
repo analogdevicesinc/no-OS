@@ -75,6 +75,7 @@ int main()
 	};
 
 	struct ada4250_init_param ada4250_param = {
+		.device_id = ADA4250,
 		.spi_init = &init_param,
 		.refbuf_en = ADA4250_BUF_DISABLE,
 		.bias = ADA4250_BIAS_DISABLE,
