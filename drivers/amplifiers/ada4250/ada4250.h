@@ -47,6 +47,7 @@
 #include <math.h>
 #include <stdbool.h>
 #include "spi.h"
+#include "gpio.h"
 #include "util.h"
 
 /******************************************************************************/
@@ -110,6 +111,15 @@
 /******************************************************************************/
 
 /**
+  * @enum ada4250_id
+  * @brief Current bias settings
+  */
+enum ada4250_id {
+	ADA4230,
+	ADA4250,
+};
+
+/**
   * @enum ada4250_bias
   * @brief Current bias settings
   */
@@ -150,8 +160,15 @@ enum ada4250_gain {
  * @brief ADA4250 Initialization Parameters structure.
  */
 struct ada4250_init_param {
+	/* Device ID */
+	enum ada4250_id device_id;
 	/* SPI Initialization parameters */
 	struct spi_init_param	*spi_init;
+	/* GPIO Initialization parameters */
+	struct gpio_init_param	*gpio_g2_param;
+	struct gpio_init_param	*gpio_g1_param;
+	struct gpio_init_param	*gpio_g0_param;
+	struct gpio_init_param	*gpio_bufen_param;
 	/* AVDD value in Volts */
 	int32_t avdd_v;
 	/* Reference Buffer Enable */
@@ -169,8 +186,15 @@ struct ada4250_init_param {
  * @brief ADA4250 Device Descriptor.
  */
 struct ada4250_dev {
+	/* Device ID */
+	enum ada4250_id device_id;
 	/* SPI Initialization parameters */
 	struct spi_desc	*spi_desc;
+	/* GPIO Descriptors */
+	struct gpio_desc	*gpio_g2;
+	struct gpio_desc	*gpio_g1;
+	struct gpio_desc	*gpio_g0;
+	struct gpio_desc	*gpio_bufen;
 	/* AVDD value in Volts */
 	int32_t avdd_v;
 	/* Reference Buffer Enable */
