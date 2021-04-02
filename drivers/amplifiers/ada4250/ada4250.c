@@ -60,6 +60,9 @@ int32_t ada4250_write(struct ada4250_dev *dev, uint8_t reg_addr,
 {
 	uint8_t buff[ADA4250_BUFF_SIZE_BYTES];
 
+	if(dev->device_id != ADA4250)
+		return -ENODEV;
+
 	buff[0] = ADA4250_SPI_WRITE_CMD | reg_addr;
 	buff[1] = data;
 
@@ -79,6 +82,9 @@ int32_t ada4250_read(struct ada4250_dev *dev, uint8_t reg_addr,
 {
 	int32_t ret;
 	uint8_t buff[ADA4250_BUFF_SIZE_BYTES];
+
+	if(dev->device_id != ADA4250)
+		return -ENODEV;
 
 	buff[0] = ADA4250_SPI_READ_CMD | reg_addr;
 	buff[1] = ADA4250_SPI_DUMMY_DATA;
@@ -106,6 +112,9 @@ int32_t ada4250_update(struct ada4250_dev *dev, uint8_t reg_addr,
 	uint8_t read_val;
 	int32_t ret;
 
+	if(dev->device_id != ADA4250)
+		return -ENODEV;
+
 	ret = ada4250_read(dev, reg_addr, &read_val);
 	if (ret != SUCCESS)
 		return ret;
@@ -128,6 +137,9 @@ int32_t ada4250_soft_reset(struct ada4250_dev *dev)
 	int32_t ret;
 	uint16_t timeout = 0xFFFF;
 	uint8_t data;
+
+	if(dev->device_id != ADA4250)
+		return -ENODEV;
 
 	ret = ada4250_update(dev, ADA4250_REG_RESET, ADA4250_RESET_MSK,
 			     ADA4250_RESET(ADA4250_RESET_ENABLE));
@@ -152,8 +164,15 @@ int32_t ada4250_soft_reset(struct ada4250_dev *dev)
  */
 int32_t ada4250_en_refbuf(struct ada4250_dev *dev, bool refbuf)
 {
-	return ada4250_update(dev, ADA4250_REG_REFBUF_EN, ADA4250_REFBUF_MSK,
-			      ADA4250_REFBUF(refbuf));
+	switch(dev->device_id) {
+	case ADA4250:
+		return ada4250_update(dev, ADA4250_REG_REFBUF_EN, ADA4250_REFBUF_MSK,
+				      ADA4250_REFBUF(refbuf));
+	case ADA4230:
+		return gpio_set_value(dev->gpio_bufen, dev->refbuf_en);
+	default:
+		return -ENODEV;
+	}
 }
 
 /**
@@ -164,6 +183,9 @@ int32_t ada4250_en_refbuf(struct ada4250_dev *dev, bool refbuf)
  */
 int32_t ada4250_set_bias(struct ada4250_dev *dev, enum ada4250_bias bias)
 {
+	if(dev->device_id != ADA4250)
+		return -ENODEV;
+
 	return ada4250_update(dev, ADA4250_REG_SNSR_CAL_CNFG, ADA4250_BIAS_SET_MSK,
 			      ADA4250_BIAS_SET(bias));
 }
@@ -177,6 +199,9 @@ int32_t ada4250_set_bias(struct ada4250_dev *dev, enum ada4250_bias bias)
 static int32_t ada4250_set_range(struct ada4250_dev *dev,
 				 enum ada4250_offset_range range)
 {
+	if(dev->device_id != ADA4250)
+		return -ENODEV;
+
 	return ada4250_update(dev, ADA4250_REG_SNSR_CAL_CNFG, ADA4250_RANGE_SET_MSK,
 			      ADA4250_RANGE_SET(ADA4250_RANGE(range)));
 }
@@ -189,8 +214,22 @@ static int32_t ada4250_set_range(struct ada4250_dev *dev,
  */
 int32_t ada4250_set_gain(struct ada4250_dev *dev, enum ada4250_gain gain)
 {
-	return ada4250_update(dev, ADA4250_REG_GAIN_MUX, ADA4250_GAIN_MUX_MSK,
-			      ADA4250_GAIN_MUX(gain));
+	int32_t ret;
+
+	if(dev->device_id == ADA4250) {
+		return ada4250_update(dev, ADA4250_REG_GAIN_MUX, ADA4250_GAIN_MUX_MSK,
+				      ADA4250_GAIN_MUX(gain));
+	} else {
+		ret = gpio_set_value(dev->gpio_g2, ((dev->gain >> 2) & 0x1));
+		if (ret != SUCCESS)
+			return ret;
+
+		ret = gpio_set_value(dev->gpio_g1, ((dev->gain >> 1) & 0x1));
+		if (ret != SUCCESS)
+			return ret;
+
+		return gpio_set_value(dev->gpio_g0, (dev->gain & 0x1));
+	}
 }
 
 /**
@@ -206,6 +245,9 @@ int32_t ada4250_set_offset(struct ada4250_dev *dev, int32_t offset)
 	uint8_t offset_raw;
 	enum ada4250_offset_range range;
 	int64_t x[8], vlsb, max_vos, min_vos;
+
+	if(dev->device_id != ADA4250)
+		return -ENODEV;
 
 	if (dev->bias == ADA4250_BIAS_DISABLE)
 		return -EINVAL;
@@ -272,29 +314,62 @@ int32_t ada4250_init(struct ada4250_dev **device,
 	dev->offset_uv = init_param->offset_uv;
 	dev->avdd_v = init_param->avdd_v;
 
-	/* SPI */
-	ret = spi_init(&dev->spi_desc, init_param->spi_init);
-	if (ret != SUCCESS)
-		goto error_dev;
+	if(dev->device_id == ADA4250) {
+		/* SPI */
+		ret = spi_init(&dev->spi_desc, init_param->spi_init);
+		if (ret != SUCCESS)
+			goto error_dev;
 
-	ret = ada4250_read(dev, ADA4250_REG_CHIP_ID2, &data);
-	if (ret != SUCCESS)
-		goto error_spi;
+		ret = ada4250_read(dev, ADA4250_REG_CHIP_ID2, &data);
+		if (ret != SUCCESS)
+			goto error_spi;
 
-	chip_id = data;
+		chip_id = data;
 
-	ret = ada4250_read(dev, ADA4250_REG_CHIP_ID1, &data);
-	if (ret != SUCCESS)
-		goto error_spi;
+		ret = ada4250_read(dev, ADA4250_REG_CHIP_ID1, &data);
+		if (ret != SUCCESS)
+			goto error_spi;
 
-	chip_id = (chip_id << 8 | data);
+		chip_id = (chip_id << 8 | data);
 
-	if (chip_id != ADA4250_CHIP_ID)
-		goto error_spi;
+		if (chip_id != ADA4250_CHIP_ID)
+			goto error_spi;
 
-	ret = ada4250_soft_reset(dev);
-	if(ret != SUCCESS)
-		return FAILURE;
+		ret = ada4250_soft_reset(dev);
+		if(ret != SUCCESS)
+			return FAILURE;
+	} else {
+		ret = gpio_get(&dev->gpio_g2, init_param->gpio_g2_param);
+		if (ret != SUCCESS)
+			goto error_dev;
+
+		ret = gpio_direction_output(dev->gpio_g2, GPIO_LOW);
+		if (ret != SUCCESS)
+			goto error_g2;
+
+		ret = gpio_get(&dev->gpio_g1, init_param->gpio_g1_param);
+		if (ret != SUCCESS)
+			goto error_g2;
+
+		ret = gpio_direction_output(dev->gpio_g1, GPIO_LOW);
+		if (ret != SUCCESS)
+			goto error_g1;
+
+		ret = gpio_get(&dev->gpio_g0, init_param->gpio_g0_param);
+		if (ret != SUCCESS)
+			goto error_g1;
+
+		ret = gpio_direction_output(dev->gpio_g0, GPIO_LOW);
+		if (ret != SUCCESS)
+			goto error_g0;
+
+		ret = gpio_get(&dev->gpio_bufen, init_param->gpio_bufen_param);
+		if (ret != SUCCESS)
+			goto error_g0;
+		ret = gpio_direction_output(dev->gpio_bufen, GPIO_LOW);
+		if (ret != SUCCESS)
+			goto error_bufen;
+	}
 
 	ret = ada4250_set_gain(dev, dev->gain);
 	if(ret != SUCCESS)
@@ -304,13 +379,15 @@ int32_t ada4250_init(struct ada4250_dev **device,
 	if(ret != SUCCESS)
 		return FAILURE;
 
-	ret = ada4250_set_bias(dev, dev->bias);
-	if(ret != SUCCESS)
-		return FAILURE;
+	if(dev->device_id == ADA4250) {
+		ret = ada4250_set_bias(dev, dev->bias);
+		if(ret != SUCCESS)
+			return FAILURE;
 
-	ret = ada4250_set_offset(dev, dev->offset_uv);
-	if(ret != SUCCESS)
-		return FAILURE;
+		ret = ada4250_set_offset(dev, dev->offset_uv);
+		if(ret != SUCCESS)
+			return FAILURE;
+	}
 
 	*device = dev;
 
@@ -318,6 +395,15 @@ int32_t ada4250_init(struct ada4250_dev **device,
 
 error_spi:
 	spi_remove(dev->spi_desc);
+	goto error_dev;
+error_bufen:
+	gpio_remove(dev->gpio_bufen);
+error_g0:
+	gpio_remove(dev->gpio_g0);
+error_g1:
+	gpio_remove(dev->gpio_g1);
+error_g2:
+	gpio_remove(dev->gpio_g2);
 error_dev:
 	free(dev);
 
@@ -332,9 +418,24 @@ int32_t ada4250_remove(struct ada4250_dev *dev)
 {
 	int32_t ret;
 
-	ret = spi_remove(dev->spi_desc);
-	if (ret != SUCCESS)
-		return ret;
+	if (dev->device_id == ADA4250) {
+		ret = spi_remove(dev->spi_desc);
+		if (ret != SUCCESS)
+			return ret;
+	} else {
+		ret = gpio_remove(dev->gpio_g2);
+		if (ret != SUCCESS)
+			return ret;
+		ret = gpio_remove(dev->gpio_g1);
+		if (ret != SUCCESS)
+			return ret;
+		ret = gpio_remove(dev->gpio_g0);
+		if (ret != SUCCESS)
+			return ret;
+		ret = gpio_remove(dev->gpio_bufen);
+		if (ret != SUCCESS)
+			return ret;
+	}
 
 	free(dev);
 
