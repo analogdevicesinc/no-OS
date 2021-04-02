@@ -85,3 +85,33 @@ int32_t spi_write_and_read(struct spi_desc *desc,
 {
 	return desc->platform_ops->write_and_read(desc, data, bytes_number);
 }
+
+/**
+ * @brief  Iterate over head list and send all spi messages
+ * @param desc - The SPI descriptor.
+ * @param msgs - Array of messages.
+ * @param len - Number of messages in the array.
+ * @return SUCCESS in case of success, negativ error code otherwise.
+ */
+int32_t spi_transfer(struct spi_desc *desc, struct spi_msg *msgs, uint32_t len)
+{
+	int32_t  ret;
+	uint32_t i;
+
+	if (!desc || !desc->platform_ops)
+		return -EINVAL;
+
+	if (desc->platform_ops->transfer)
+		return desc->platform_ops->transfer(desc, msgs, len);
+
+	for (i = 0; i < len; i++) {
+		if (msgs[i].rx_buff != msgs[i].tx_buff || !msgs[i].tx_buff)
+			return -EINVAL;
+		ret = spi_write_and_read(desc, msgs[i].rx_buff,
+					 msgs[i].bytes_number);
+		if (IS_ERR_VALUE(ret))
+			return ret;
+	}
+
+	return ret;
+}
