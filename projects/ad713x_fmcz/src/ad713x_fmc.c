@@ -59,53 +59,17 @@
 #include "gpio_extra.h"
 #include "util.h"
 #include "error.h"
+#include "parameters.h"
 
 #ifdef IIO_SUPPORT
 #include "irq.h"
 #include "irq_extra.h"
 #include "uart.h"
 #include "uart_extra.h"
+#include "iio_dual_ad713x.h"
 #include "iio_ad713x.h"
 #include "iio.h"
-#endif // IIO_SUPPORT
-
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
-#define SPI_DEVICE_ID			XPAR_PS7_SPI_0_DEVICE_ID
-#define GPIO_DEVICE_ID			XPAR_PS7_GPIO_0_DEVICE_ID
-#define AD7134_DMA_BASEADDR		XPAR_AXI_AD7134_DMA_BASEADDR
-#define AD7134_SPI_ENGINE_BASEADDR	XPAR_DUAL_AD7134_AXI_BASEADDR
-#define AD713x_SPI_ENG_REF_CLK_FREQ_HZ	XPAR_PS7_SPI_0_SPI_CLK_FREQ_HZ
-#define AD7134_1_SPI_CS			0
-#define AD7134_2_SPI_CS			1
-#define GPIO_DEVICE_ID			XPAR_PS7_GPIO_0_DEVICE_ID
-#define GPIO_OFFSET			54
-#define GPIO_RESETN_1			GPIO_OFFSET + 32
-#define GPIO_RESETN_2			GPIO_OFFSET + 33
-#define GPIO_PDN_1			GPIO_OFFSET + 34
-#define GPIO_PDN_2			GPIO_OFFSET + 35
-#define GPIO_MODE_1			GPIO_OFFSET + 36
-#define GPIO_MODE_2			GPIO_OFFSET + 37
-#define GPIO_0				GPIO_OFFSET + 38
-#define GPIO_1				GPIO_OFFSET + 39
-#define GPIO_2				GPIO_OFFSET + 40
-#define GPIO_3				GPIO_OFFSET + 41
-#define GPIO_4				GPIO_OFFSET + 42
-#define GPIO_5				GPIO_OFFSET + 43
-#define GPIO_6				GPIO_OFFSET + 44
-#define GPIO_7				GPIO_OFFSET + 45
-#define GPIO_DCLKIO_1			GPIO_OFFSET + 46
-#define GPIO_DCLKIO_2			GPIO_OFFSET + 47
-#define GPIO_PINBSPI			GPIO_OFFSET + 48
-#define GPIO_DCLKMODE			GPIO_OFFSET + 49
-#define AD7134_FMC_CH_NO		8
-#define AD7134_FMC_SAMPLE_NO		1024
-
-#ifdef IIO_SUPPORT
-#define UART_DEVICE_ID			XPAR_XUARTPS_0_DEVICE_ID
-#define UART_IRQ_ID			XPAR_XUARTPS_1_INTR
-#define INTC_DEVICE_ID			XPAR_SCUGIC_SINGLE_DEVICE_ID
+#include "iio_app.h"
 #endif // IIO_SUPPORT
 
 int main()
@@ -254,6 +218,7 @@ int main()
 
 	spi_engine_offload_init_param.rx_dma_baseaddr = AD7134_DMA_BASEADDR;
 	spi_engine_offload_init_param.offload_config = OFFLOAD_RX_EN;
+	spi_engine_offload_init_param.dma_flags = NULL;
 
 	ret = spi_init(&spi_eng_desc, &spi_eng_init_prm);
 	if (ret != SUCCESS)
@@ -271,71 +236,41 @@ int main()
 
 #ifdef IIO_SUPPORT
 	struct iio_ad713x *iio_ad713x;
-	struct iio_init_param iio_init_par;
 	/**
 	 * iio devices corresponding to every device.
 	 */
 	struct iio_device *ad713x_dev_desc;
 
-	struct xil_irq_init_param xil_irq_init_par = {
-		.type = IRQ_PS,
-	};
-
-	struct irq_init_param irq_init_param = {
-		.irq_ctrl_id = INTC_DEVICE_ID,
-		.extra = &xil_irq_init_par,
-	};
-
-	struct irq_ctrl_desc *irq_desc;
-
-	struct xil_uart_init_param xil_uart_init_par = {
-		.type = UART_PS,
-		.irq_id = UART_IRQ_ID,
-		.irq_desc = irq_desc,
-	};
-
-	struct iio_desc *iio_app_desc;
-
-	struct uart_init_param uart_init_par = {
-		.baud_rate = 115200,
-		.device_id = UART_DEVICE_ID,
-		.extra = &xil_uart_init_par,
-	};
-
 	struct iio_ad713x_init_par iio_ad713x_init_par = {
+		.dev = ad713x_dev_2,
 		.num_channels = 8,
 		.spi_eng_desc = spi_eng_desc,
 		.spi_engine_offload_message = &spi_engine_offload_message,
 		.dcache_invalidate_range = (void (*)(uint32_t, uint32_t))Xil_DCacheInvalidateRange,
 	};
 
-	iio_init_par.phy_type = USE_UART;
-	iio_init_par.uart_init_param = &uart_init_par;
-	ret = iio_init(&iio_app_desc, &iio_init_par);
-	if (ret < 0)
-		return ret;
-
-	ret = iio_ad713x_init(&iio_ad713x, &iio_ad713x_init_par);
+	ret = iio_dual_ad713x_init(&iio_ad713x, &iio_ad713x_init_par);
 	if(ret < 0)
 		return ret;
 
-	iio_ad713x_get_dev_descriptor(iio_ad713x, &ad713x_dev_desc);
-	ret = iio_register(iio_app_desc, ad713x_dev_desc, "adc", iio_ad713x, NULL,
-			   NULL);
-	if (ret < 0)
-		return ret;
+	iio_dual_ad713x_get_dev_descriptor(iio_ad713x, &ad713x_dev_desc);
 
-	ret = irq_ctrl_init(&irq_desc, &irq_init_param);
-	if(ret < 0)
-		return ret;
+	struct iio_data_buffer rd_buff = {
+		.buff = (void *)RX_BUFF_ADDR,
+		.size = SPI_ENGINE_TX_ADDR - RX_BUFF_ADDR
+	};
 
-	ret = irq_global_enable(irq_desc);
-	if (ret < 0)
-		return ret;
+	struct iio_app_device devices[] = {
+		IIO_APP_DEVICE("dual_ad7134", iio_ad713x, ad713x_dev_desc,
+			       &rd_buff, NULL),
+		IIO_APP_DEVICE("ad7134_1", ad713x_dev_1, &ad713x_iio_desc,
+			       NULL, NULL),
+		IIO_APP_DEVICE("ad7134_2", ad713x_dev_2, &ad713x_iio_desc,
+			       NULL, NULL)
 
-	do {
-		ret = iio_step(iio_app_desc);
-	} while (true);
+	};
+
+	return iio_app_run(devices, ARRAY_SIZE(devices));
 
 #endif /* IIO_SUPPORT */
 
@@ -364,7 +299,7 @@ int main()
 			data = lsb * ((int32_t)*(offload_data + j) & 0xFFFFFF);
 			if(data > 4.095)
 				data = data - 8.192;
-			printf("CH%d: 0x%lx = %fV ", j, *(offload_data + j),
+			printf("CH%d: 0x%08lx = %+1.3fV ", j, *(offload_data + j),
 			       data);
 			if(j == 7)
 				printf("\n");
