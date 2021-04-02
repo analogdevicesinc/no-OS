@@ -37,6 +37,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
+#ifdef IIO_SUPPORT
+
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
@@ -47,94 +49,99 @@
 #include <stdlib.h>
 #include "error.h"
 #include "util.h"
-#include "iio.h"
-#include "iio_ad713x.h"
+#include "iio_types.h"
 #include "spi_engine.h"
+#include "iio_dual_ad713x.h"
+#include "delay.h"
+
+/******************************************************************************/
+/*************************** Types Declarations *******************************/
+/******************************************************************************/
+
+#define BITS_PER_SAMPLE 32
+
+static struct scan_type adc_scan_type = {
+	.sign = 'u',
+	.realbits = BITS_PER_SAMPLE,
+	.storagebits = BITS_PER_SAMPLE,
+	.shift = 0,
+	.is_big_endian = false
+};
+
+#define IIO_AD713X_CHANNEL(_idx) {\
+	.name = "ch" # _idx,\
+	.ch_type = IIO_VOLTAGE,\
+	.channel = _idx,\
+	.scan_index = _idx,\
+	.indexed = true,\
+	.scan_type = &adc_scan_type,\
+	.ch_out = false,\
+}
+
+static struct iio_channel iio_adc_channels[] = {
+	IIO_AD713X_CHANNEL(0),
+	IIO_AD713X_CHANNEL(1),
+	IIO_AD713X_CHANNEL(2),
+	IIO_AD713X_CHANNEL(3),
+	IIO_AD713X_CHANNEL(4),
+	IIO_AD713X_CHANNEL(5),
+	IIO_AD713X_CHANNEL(6),
+	IIO_AD713X_CHANNEL(7),
+	IIO_AD713X_CHANNEL(8)
+};
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
 
-/**
- * @brief Transfer data from device into RAM.
- * @param iio_inst - Physical instance of a iio_axi_adc device.
- * @param bytes_count - Number of bytes to transfer.
- * @param ch_mask - Opened channels mask.
- * return bytes_count or negative value in case of error.
- */
-ssize_t iio_ad713x_transfer_dev_to_mem(void *iio_inst, size_t bytes_count,
-				       uint32_t ch_mask)
+static int32_t _iio_ad713x_prepare_transfer(struct iio_ad713x *desc,
+		uint32_t mask)
 {
-	struct iio_ad713x *iio_713x_inst;
-	ssize_t ret, bytes;
+	if (!desc)
+		return -EINVAL;
 
-	if (!iio_inst)
+	desc->mask = mask;
+
+	return SUCCESS;
+}
+
+static int32_t _iio_ad713x_read_dev(struct iio_ad713x *desc, uint32_t *buff,
+				    uint32_t nb_samples)
+{
+	struct spi_engine_offload_message *msg;
+	uint32_t bytes;
+	uint32_t data;
+	int32_t  ret;
+	uint8_t  ch;
+	uint32_t i;
+	uint32_t j;
+	uint32_t *rx;
+
+	if (!desc)
 		return FAILURE;
 
-	iio_713x_inst = (struct iio_ad713x *)iio_inst;
-	bytes = (bytes_count * iio_713x_inst->dev_descriptor.num_ch);
-
-	ret = spi_engine_offload_transfer(iio_713x_inst->spi_eng_desc,
-					  *(iio_713x_inst->spi_engine_offload_message), bytes);
+	bytes = nb_samples * desc->iio_dev_desc.num_ch *
+		(BITS_PER_SAMPLE / 8);
+	msg = desc->spi_engine_offload_message;
+	ret = spi_engine_offload_transfer(desc->spi_eng_desc, *msg, bytes);
 	if (ret < 0)
 		return ret;
 
-	if (iio_713x_inst->dcache_invalidate_range)
-		iio_713x_inst->dcache_invalidate_range(
-			iio_713x_inst->spi_engine_offload_message->tx_addr, bytes);
+	if (desc->dcache_invalidate_range)
+		desc->dcache_invalidate_range(msg->rx_addr, bytes);
 
-	return bytes_count;
-}
+	rx = (uint32_t *)desc->spi_engine_offload_message->rx_addr;
+	for (i = 0, j = 0; i < nb_samples; i++)
+		for (ch = 0; ch < desc->iio_dev_desc.num_ch; ch++)
+			if (desc->mask & BIT(ch)) {
+				data = rx[i * desc->iio_dev_desc.num_ch + ch];
+				data <<= 1;
+				data &= 0xffffff00;
+				data >>= 8;
+				buff[j++] = data;
+			}
 
-/**
- * @brief Read chunk of data from RAM to pbuf.
- * Call "iio_ad713x_transfer_dev_to_mem" first.
- * This function is probably called multiple times by libtinyiiod after a
- * "iio_ad713x_transfer_dev_to_mem" call, since we can only read "bytes_count"
- * bytes at a time.
- * @param iio_inst - Physical instance of a device.
- * @param pbuf - Buffer where value is stored.
- * @param offset - Offset to the remaining data after reading n chunks.
- * @param bytes_count - Number of bytes to read.
- * @param ch_mask - Opened channels mask.
- * @return bytes_count or negative value in case of error.
- */
-ssize_t iio_ad713x_read_dev(void *iio_inst, char *pbuf, size_t offset,
-			    size_t bytes_count, uint32_t ch_mask)
-{
-	struct iio_ad713x *iio_713x_inst;
-	uint32_t i, j = 0, current_ch = 0, offload_data;
-	uint16_t *pbuf16;
-	size_t samples;
-
-	if (!iio_inst)
-		return FAILURE;
-
-	iio_713x_inst = (struct iio_ad713x *)iio_inst;
-	pbuf16 = (uint16_t*)pbuf;
-	samples = (bytes_count * iio_713x_inst->dev_descriptor.num_ch) / hweight8(
-			  ch_mask);
-	samples /= 2; /* because of uint16_t *pbuf16 = (uint16_t*)pbuf; */
-	offset = (offset * iio_713x_inst->dev_descriptor.num_ch) / hweight8(ch_mask);
-
-	for (i = 0; i < samples; i++) {
-		if (ch_mask & BIT(current_ch)) {
-			offload_data = *(uint32_t*)(iio_713x_inst->spi_engine_offload_message->rx_addr +
-						    offset + i * 4);
-			offload_data <<= 1;
-			offload_data &= 0xffffff00;
-			offload_data >>= 8;
-			pbuf16[j] = offload_data;
-			j++;
-		}
-
-		if (current_ch < (uint8_t)(iio_713x_inst->dev_descriptor.num_ch - 1))
-			current_ch++;
-		else
-			current_ch = 0;
-	}
-
-	return bytes_count;
+	return nb_samples;
 }
 
 /**
@@ -142,10 +149,10 @@ ssize_t iio_ad713x_read_dev(void *iio_inst, char *pbuf, size_t offset,
  * @param desc - Descriptor.
  * @param dev_descriptor - iio device descriptor.
  */
-void iio_ad713x_get_dev_descriptor(struct iio_ad713x *desc,
-				   struct iio_device **dev_descriptor)
+void iio_dual_ad713x_get_dev_descriptor(struct iio_ad713x *desc,
+					struct iio_device **dev_descriptor)
 {
-	*dev_descriptor = &desc->dev_descriptor;
+	*dev_descriptor = &desc->iio_dev_desc;
 }
 
 /**
@@ -155,27 +162,26 @@ void iio_ad713x_get_dev_descriptor(struct iio_ad713x *desc,
  * @param param - Configuration structure.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t iio_ad713x_init(struct iio_ad713x **desc,
-			struct iio_ad713x_init_par *param)
+int32_t iio_dual_ad713x_init(struct iio_ad713x **desc,
+			     struct iio_ad713x_init_par *param)
 {
 	struct iio_ad713x *iio_ad713x;
 
 	iio_ad713x = (struct iio_ad713x *)calloc(1, sizeof(struct iio_ad713x));
 	if (!iio_ad713x)
 		return FAILURE;
+
 	iio_ad713x->spi_eng_desc = param->spi_eng_desc;
 	iio_ad713x->spi_engine_offload_message = param->spi_engine_offload_message;
 	iio_ad713x->dcache_invalidate_range = param->dcache_invalidate_range;
 
-	iio_ad713x->dev_descriptor.num_ch = param->num_channels;
-	iio_ad713x->dev_descriptor.channels = NULL;
-	iio_ad713x->dev_descriptor.attributes = NULL;
-	iio_ad713x->dev_descriptor.debug_attributes = NULL;
-	iio_ad713x->dev_descriptor.buffer_attributes = NULL;
-	iio_ad713x->dev_descriptor.transfer_dev_to_mem = iio_ad713x_transfer_dev_to_mem;
-	iio_ad713x->dev_descriptor.transfer_mem_to_dev = NULL;
-	iio_ad713x->dev_descriptor.read_data = iio_ad713x_read_dev;
-	iio_ad713x->dev_descriptor.write_data = NULL;
+	iio_ad713x->iio_dev_desc = (struct iio_device) {
+		.num_ch = param->num_channels,
+		.channels = iio_adc_channels,
+		.prepare_transfer = (int32_t (*)())_iio_ad713x_prepare_transfer,
+		.read_dev = (int32_t (*)())_iio_ad713x_read_dev
+	};
+
 	*desc = iio_ad713x;
 
 	return SUCCESS;
@@ -186,7 +192,7 @@ int32_t iio_ad713x_init(struct iio_ad713x **desc,
  * @param desc - Descriptor.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t iio_ad713x_remove(struct iio_ad713x *desc)
+int32_t iio_dual_ad713x_remove(struct iio_ad713x *desc)
 {
 	if (!desc)
 		return FAILURE;
@@ -195,3 +201,5 @@ int32_t iio_ad713x_remove(struct iio_ad713x *desc)
 
 	return SUCCESS;
 }
+
+#endif
