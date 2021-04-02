@@ -36,6 +36,9 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
+
+#ifdef IIO_SUPPORT
+
 #include <stdlib.h>
 #include "iio.h"
 #include "iio_app.h"
@@ -222,3 +225,5 @@ int32_t iio_app_run(struct iio_app_device *devices, int32_t len)
 		status = iio_step(iio_desc);
 	} while (true);
 }
+
+#endif
