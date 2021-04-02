@@ -62,8 +62,11 @@
 
 static struct list_desc *pl_list = NULL;
 static struct iterator  *pl_it = NULL;
+
+#ifdef XIICPS_H
 static struct list_desc *ps_list = NULL;
 static struct iterator  *ps_it = NULL;
+#endif /* XIICPS_H */
 
 /**
  * @struct inst_table_item
@@ -119,7 +122,9 @@ static int32_t xil_i2c_cmp(void *el1, void *el2)
 static int32_t xil_i2c_set_transmission_config(struct i2c_desc *desc)
 {
 	struct xil_i2c_desc *xil_i2c_desc = desc->extra;
+#ifdef XIICPS_H
 	int32_t ret;
+#endif
 
 	switch (xil_i2c_desc->type) {
 	case IIC_PL:
