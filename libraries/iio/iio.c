@@ -819,12 +819,6 @@ static uint32_t bytes_to_samples(struct iio_interface *intf, uint32_t bytes)
 static ssize_t iio_transfer_dev_to_mem(const char *device, size_t bytes_count)
 {
 	struct iio_interface *iio_interface = iio_get_interface(device);
-
-	if (iio_interface->dev_descriptor->transfer_dev_to_mem)
-		return iio_interface->dev_descriptor->transfer_dev_to_mem(
-			       iio_interface->dev_instance,
-			       bytes_count, iio_interface->ch_mask);
-	//else
 	struct iio_data_buffer	*r_buff;
 	uint32_t		samples;
 	ssize_t			ret;
@@ -858,14 +852,6 @@ static ssize_t iio_read_dev(const char *device, char *pbuf, size_t offset,
 			    size_t bytes_count)
 {
 	struct iio_interface *iio_interface = iio_get_interface(device);
-
-	if (iio_interface->dev_descriptor->read_data)
-		return iio_interface->dev_descriptor->read_data(
-			       iio_interface->dev_instance,
-			       pbuf, offset,
-			       bytes_count, iio_interface->ch_mask);
-
-	//else
 	struct iio_data_buffer *r_buff;
 
 	r_buff = iio_interface->read_buffer;
@@ -890,13 +876,6 @@ static ssize_t iio_read_dev(const char *device, char *pbuf, size_t offset,
 static ssize_t iio_transfer_mem_to_dev(const char *device, size_t bytes_count)
 {
 	struct iio_interface *iio_interface = iio_get_interface(device);
-
-	if (iio_interface->dev_descriptor->transfer_mem_to_dev)
-		return iio_interface->dev_descriptor->transfer_mem_to_dev(
-			       iio_interface->dev_instance,
-			       bytes_count, iio_interface->ch_mask);
-
-	//else
 	struct iio_data_buffer	*w_buff;
 	ssize_t			ret;
 	uint32_t		samples;
@@ -930,13 +909,6 @@ static ssize_t iio_write_dev(const char *device, const char *buf,
 			     size_t offset, size_t bytes_count)
 {
 	struct iio_interface *iio_interface = iio_get_interface(device);
-	if(iio_interface->dev_descriptor->write_data)
-		return iio_interface->dev_descriptor->write_data(
-			       iio_interface->dev_instance,
-			       (char*)buf, offset, bytes_count,
-			       iio_interface->ch_mask);
-
-	//else
 	struct iio_data_buffer	*w_buff;
 
 	w_buff = iio_interface->write_buffer;

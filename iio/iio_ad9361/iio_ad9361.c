@@ -2296,10 +2296,6 @@ int32_t iio_ad9361_init(struct iio_ad9361_desc **desc,
 	iio_ad9361_inst->dev_descriptor.attributes = global_attributes;
 	iio_ad9361_inst->dev_descriptor.debug_attributes = NULL;
 	iio_ad9361_inst->dev_descriptor.buffer_attributes = NULL;
-	iio_ad9361_inst->dev_descriptor.transfer_dev_to_mem = NULL;
-	iio_ad9361_inst->dev_descriptor.transfer_mem_to_dev = NULL;
-	iio_ad9361_inst->dev_descriptor.read_data = NULL;
-	iio_ad9361_inst->dev_descriptor.write_data = NULL;
 	*desc = iio_ad9361_inst;
 
 	return SUCCESS;

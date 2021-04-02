@@ -168,10 +168,6 @@ struct iio_device const ad7799_iio_descriptor = {
 	.attributes = ad7799_iio_attributes,
 	.debug_attributes = NULL,
 	.buffer_attributes = NULL,
-	.transfer_dev_to_mem = NULL,
-	.transfer_mem_to_dev = NULL,
-	.read_data = NULL,
-	.write_data = NULL,
 	.debug_reg_read = (int32_t (*)())ad7799_read,
 	.debug_reg_write = (int32_t (*)())ad7799_write,
 };
