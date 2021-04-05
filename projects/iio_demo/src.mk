@@ -90,8 +90,7 @@ SRC_DIRS += $(NO-OS)/libraries/mbedtls/include/mbedtls
 SRCS += $(NO-OS)/network/linux_socket/linux_socket.c 
 SRCS +=	$(NO-OS)/network/tcp_socket.c
 SRCS += $(PROJECT)/src/app/main.c
-SRCS += $(NO-OS)/iio/iio_demo/demo_dev.c	\
-		$(NO-OS)/iio/iio_app/iio_app.c
+SRCS += $(NO-OS)/iio/iio_app/iio_app.c
 SRCS	 += $(NO-OS)/util/circular_buffer.c
 
 SRCS += $(DRIVERS)/platform/generic/uart.c \
@@ -109,9 +108,7 @@ INCS	 += $(INCLUDE)/circular_buffer.h
 INCS += $(PROJECT)/src/app/app_config.h  \
 		$(PROJECT)/src/app/parameters.h	
 
-INCS += $(NO-OS)/iio/iio_demo/demo_dev.h \
-		$(NO-OS)/iio/iio_demo/iio_demo_dev.h \
-		$(NO-OS)/iio/iio_app/iio_app.h 
+INCS += $(NO-OS)/iio/iio_app/iio_app.h 
 
 
 INCS += $(NO-OS)/libraries/mbedtls/include/mbedtls
