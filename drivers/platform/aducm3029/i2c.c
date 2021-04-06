@@ -86,14 +86,14 @@ static uint32_t set_transmission_configuration(struct i2c_desc *desc)
 	if (desc->max_speed_hz != last_bitrate) {
 		i2c_ret = adi_i2c_SetBitRate(i2c_handler, desc->max_speed_hz);
 		if (i2c_ret != ADI_I2C_SUCCESS)
-			return FAILURE;
+			return -EINVAL;
 		last_bitrate = desc->max_speed_hz;
 	}
 	if (desc->slave_address != last_address) {
 		i2c_ret = adi_i2c_SetSlaveAddress(i2c_handler,
 						  desc->slave_address);
 		if (i2c_ret != ADI_I2C_SUCCESS)
-			return FAILURE;
+			return -EINVAL;
 		last_address = desc->slave_address;
 	}
 
@@ -115,11 +115,11 @@ int32_t i2c_init(struct i2c_desc **desc,
 		 const struct i2c_init_param *param)
 {
 	if (!desc || !param)
-		return FAILURE;
+		return -EINVAL;
 
 	*desc = calloc(1, sizeof(**desc));
 	if (!(*desc))
-		return FAILURE;
+		return -ENOMEM;
 
 	if (nb_created_desc == 0) {
 		if (ADI_I2C_SUCCESS != adi_i2c_Open(0, adi_i2c_buffer,
@@ -127,7 +127,7 @@ int32_t i2c_init(struct i2c_desc **desc,
 						    &i2c_handler)) {
 			free(*desc);
 			*desc = NULL;
-			return FAILURE;
+			return -EFAULT;
 		}
 		/* Driving strength must be enabled for I2C pins */
 		if (ADI_GPIO_SUCCESS != adi_gpio_DriveStrengthEnable(
@@ -137,7 +137,7 @@ int32_t i2c_init(struct i2c_desc **desc,
 			*desc = NULL;
 			adi_i2c_Close(i2c_handler);
 			i2c_handler = NULL;
-			return FAILURE;
+			return -EFAULT;
 		}
 	}
 
@@ -157,7 +157,7 @@ int32_t i2c_init(struct i2c_desc **desc,
 int32_t i2c_remove(struct i2c_desc *desc)
 {
 	if (!desc)
-		return FAILURE;
+		return -EINVAL;
 	nb_created_desc--;
 	if (nb_created_desc == 0) {
 		adi_i2c_Close(i2c_handler);
@@ -184,18 +184,20 @@ int32_t i2c_write(struct i2c_desc *desc,
 		  uint8_t stop_bit)
 {
 	if (!desc)
-		return FAILURE;
+		return -EINVAL;
 
 	ADI_I2C_TRANSACTION trans[1];
 	uint32_t errors;
+	int32_t ret;
 
-	if (SUCCESS != set_transmission_configuration(desc))
-		return FAILURE;
+	ret = set_transmission_configuration(desc);
+	if (ret < 0)
+		return ret;
 
 	if (desc->slave_address == 0) { //General call
 		if (ADI_I2C_SUCCESS != adi_i2c_IssueGeneralCall(i2c_handler,
 				data, bytes_number, &errors))
-			return FAILURE;
+			return -EIO;
 		return SUCCESS;
 	}
 
@@ -206,7 +208,7 @@ int32_t i2c_write(struct i2c_desc *desc,
 	trans->nDataSize = bytes_number;
 	trans->bReadNotWrite = 0;
 	if (ADI_I2C_SUCCESS != adi_i2c_ReadWrite(i2c_handler, trans, &errors))
-		return FAILURE;
+		return -EIO;
 
 	return SUCCESS;
 }
@@ -227,13 +229,15 @@ int32_t i2c_read(struct i2c_desc *desc,
 		 uint8_t stop_bit)
 {
 	if (!desc)
-		return FAILURE;
+		return -EINVAL;
 
 	ADI_I2C_TRANSACTION trans[1];
 	uint32_t errors;
+	int32_t ret;
 
-	if (SUCCESS != set_transmission_configuration(desc))
-		return FAILURE;
+	ret = set_transmission_configuration(desc);
+	if (ret < 0)
+		return ret;
 
 	trans->bRepeatStart = (stop_bit == 1) ? 0 : 1;
 	trans->pPrologue = 0;
@@ -242,7 +246,7 @@ int32_t i2c_read(struct i2c_desc *desc,
 	trans->nDataSize = bytes_number;
 	trans->bReadNotWrite = 1;
 	if (ADI_I2C_SUCCESS != adi_i2c_ReadWrite(i2c_handler, trans, &errors))
-		return FAILURE;
+		return -EIO;
 
 	return SUCCESS;
 }
