@@ -7,6 +7,7 @@ export HARDWARE
 export WORKSPACE
 export TEMP_DIR
 export BINARY
+export TARGET_CPU
 
 TEMP_DIR	= $(BUILD_DIR)/tmp
 BINARY		= $(BUILD_DIR)/$(PROJECT_NAME).elf
@@ -19,6 +20,7 @@ define tcl_util
 endef
 
 ARCH = $(shell $(call read_file, $(TEMP_DIR)/arch.txt))
+TARGET_CPU ?= ""
 
 # Define the platform compiler switch
 CFLAGS += -DXILINX_PLATFORM						\
@@ -37,7 +39,7 @@ PLATFORM_FULL_PATH = $1
 ################|--------------------------------------------------------------
 ################|                   Zynq                                       
 ################|--------------------------------------------------------------
-ifeq (ps7_cortexa9_0,$(strip $(ARCH)))
+ifneq (,$(findstring cortexa9,$(strip $(ARCH))))
 
 CC := arm-none-eabi-gcc
 AR := arm-none-eabi-ar
@@ -59,7 +61,7 @@ endif
 ################|--------------------------------------------------------------
 ################|                   ZynqMP                                     
 ################|--------------------------------------------------------------
-ifeq (psu_cortexa53_0,$(strip $(ARCH)))
+ifneq (,$(findstring cortexa53,$(strip $(ARCH))))
 
 CC := aarch64-none-elf-gcc
 AR := aarch64-none-elf-ar
@@ -67,10 +69,29 @@ AR := aarch64-none-elf-ar
 LD := $(CC)
 
 endif
+
+ifneq (,$(findstring cortexr5,$(strip $(ARCH))))
+
+CC := armr5-none-eabi-gcc 
+AR := armr5-none-eabi-ar
+
+LD := $(CC)
+
+CFLAGS += -mcpu=cortex-r5						\
+	  -mfloat-abi=hard						\
+	  -mfpu=vfpv3-d16
+
+LDFLAGS += -mcpu=cortex-r5						\
+           -mfloat-abi=hard						\
+	   -mfpu=vfpv3-d16						\
+	   -DARMR5
+
+
+endif
 ################|--------------------------------------------------------------
 ################|                  Microblaze                                  
 ################|--------------------------------------------------------------
-ifeq (sys_mb,$(strip $(ARCH)))
+ifneq (,$(findstring sys_mb,$(strip $(ARCH))))
 
 ifeq ($(OS), Windows_NT)
 CC := mb-gcc
@@ -137,7 +158,7 @@ xilinx_project_build: all
 
 $(BUILD_DIR)/.bsp.target: $(LIB_TARGETS) $(TEMP_DIR)/arch.txt
 	$(call print,Creating and configuring the IDE project)
-	$(MUTE)	$(call tcl_util, create_project)  $(HIDE)
+	$(call tcl_util, create_project)
 	$(MUTE) $(MAKE) --no-print-directory update_srcs
 	$(MUTE) $(call set_one_time_rule,$@) $(HIDE)
 

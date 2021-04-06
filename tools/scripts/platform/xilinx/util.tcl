@@ -7,15 +7,19 @@ proc _file_is_xsa {} {
 }
 
 proc _get_processor {} {
-	if {[_file_is_xsa] == 1} {
-		set processor [hsi::get_cells * -filter {IP_TYPE==PROCESSOR}]
-	} else {
-		set processor [lindex \
-		[hsi::get_cells * -filter {IP_TYPE==PROCESSOR}] 0]
-	}
+	set proc_list [hsi::get_cells * -filter {IP_TYPE==PROCESSOR}]
 	
-	if {[llength $processor] != 0} {
-		return $processor
+	if {[llength $proc_list] == 1} {
+		return $proc_list
+	}
+	if { $::env(TARGET_CPU) eq "" } {
+                return [lindex $proc_list 0]
+	} else {
+		foreach proc $proc_list {
+			if {[string first $::env(TARGET_CPU) $proc] != -1} {
+				return $proc
+			}
+		}
 	}
 	return 0
 }
@@ -67,15 +71,12 @@ proc _project_config {cmd {arg}} {
 proc _vitis_project {} {
 	openhw $::hw
 	set cpu [_get_processor]
-	
 	# Create bsp
 	hsi::generate_bsp						\
 		-dir bsp						\
 		-proc $cpu						\
 		-os standalone						\
 		-compile
-	closehw $::hw
-	
 	# Create app
 	app create							\
 		-name app						\
@@ -83,7 +84,7 @@ proc _vitis_project {} {
 		-proc $cpu						\
 		-os standalone						\
 		-template  {Empty Application}
-
+	closehw $::hw
 	# Increase heap size
 	_replace_heap
 
