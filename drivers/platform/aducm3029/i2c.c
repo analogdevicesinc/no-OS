@@ -47,6 +47,9 @@
 #include <drivers/i2c/adi_i2c.h>
 #include <drivers/gpio/adi_gpio.h>
 
+#define UNINITIALIZED_BITRATE 0
+#define UNINITIALIZED_ADDRESS 0xFF
+
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
@@ -65,10 +68,10 @@ static uint8_t adi_i2c_buffer[ADI_I2C_MEMORY_SIZE]
 __attribute__((aligned (4)));
 
 /** Save the current state of the bitrate to not change it each time */
-static uint32_t last_bitrate = 0;
+static uint32_t last_bitrate = UNINITIALIZED_BITRATE;
 
 /** Save the current slave_address to not change it each time */
-static uint8_t last_address = 0;
+static uint8_t last_address = UNINITIALIZED_ADDRESS;
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -162,6 +165,8 @@ int32_t i2c_remove(struct i2c_desc *desc)
 	if (nb_created_desc == 0) {
 		adi_i2c_Close(i2c_handler);
 		i2c_handler = NULL;
+		last_address = UNINITIALIZED_ADDRESS;
+		last_bitrate = UNINITIALIZED_BITRATE;
 	}
 	free(desc);
 
