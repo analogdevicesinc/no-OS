@@ -217,6 +217,10 @@ int32_t ad7799_set_channel(struct ad7799_dev *device, uint8_t ch);
 int32_t ad7799_get_channel(struct ad7799_dev *device, uint8_t ch,
 			   uint32_t *reg_data);
 
+/* Read specific ADC channel in mV. */
+int32_t ad7799_read_channel_mv(struct ad7799_dev *device, uint8_t ch,
+			       int32_t *data_mv);
+
 /* Set the ADC gain. */
 int32_t ad7799_set_gain(struct ad7799_dev *device, uint8_t gain);
 
