@@ -46,6 +46,7 @@
 #include <stdlib.h>
 #include <drivers/i2c/adi_i2c.h>
 #include <drivers/gpio/adi_gpio.h>
+#include <string.h>
 
 #define UNINITIALIZED_BITRATE 0
 #define UNINITIALIZED_ADDRESS 0xFF
@@ -72,6 +73,17 @@ static uint32_t last_bitrate = UNINITIALIZED_BITRATE;
 
 /** Save the current slave_address to not change it each time */
 static uint8_t last_address = UNINITIALIZED_ADDRESS;
+
+/**
+ * @struct i2c_extra
+ * @brief I2C platform specific parameters.
+ */
+struct aducm_i2c_extra {
+	/** Pointer to the prologue data. */
+	uint8_t *prologue_data;
+	/** Prologue size. */
+	uint8_t prologue_size;
+};
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -117,6 +129,8 @@ static uint32_t set_transmission_configuration(struct i2c_desc *desc)
 int32_t i2c_init(struct i2c_desc **desc,
 		 const struct i2c_init_param *param)
 {
+	struct aducm_i2c_extra *aducm_i2c;
+
 	if (!desc || !param)
 		return -EINVAL;
 
@@ -144,9 +158,10 @@ int32_t i2c_init(struct i2c_desc **desc,
 		}
 	}
 
+	aducm_i2c = calloc(1, sizeof(*aducm_i2c));
 	(*desc)->max_speed_hz = param->max_speed_hz;
 	(*desc)->slave_address = param->slave_address;
-	(*desc)->extra = NULL;
+	(*desc)->extra = aducm_i2c;
 	nb_created_desc++;
 
 	return SUCCESS;
@@ -159,6 +174,8 @@ int32_t i2c_init(struct i2c_desc **desc,
  */
 int32_t i2c_remove(struct i2c_desc *desc)
 {
+	struct aducm_i2c_extra *aducm_i2c = desc->extra;
+
 	if (!desc)
 		return -EINVAL;
 	nb_created_desc--;
@@ -168,6 +185,9 @@ int32_t i2c_remove(struct i2c_desc *desc)
 		last_address = UNINITIALIZED_ADDRESS;
 		last_bitrate = UNINITIALIZED_BITRATE;
 	}
+	if (aducm_i2c->prologue_data)
+		free(aducm_i2c->prologue_data);
+	free(aducm_i2c);
 	free(desc);
 
 	return SUCCESS;
@@ -188,12 +208,15 @@ int32_t i2c_write(struct i2c_desc *desc,
 		  uint8_t bytes_number,
 		  uint8_t stop_bit)
 {
+	struct aducm_i2c_extra *aducm_i2c = desc->extra;
+
 	if (!desc)
 		return -EINVAL;
 
 	ADI_I2C_TRANSACTION trans[1];
 	uint32_t errors;
 	int32_t ret;
+	uint8_t *temp_ptr = NULL;
 
 	ret = set_transmission_configuration(desc);
 	if (ret < 0)
@@ -206,7 +229,26 @@ int32_t i2c_write(struct i2c_desc *desc,
 		return SUCCESS;
 	}
 
-	trans->bRepeatStart = (stop_bit == 1) ? 0 : 1;
+	if (stop_bit == 0) {
+		aducm_i2c->prologue_size = bytes_number;
+		if (aducm_i2c->prologue_data) {
+			temp_ptr = realloc(aducm_i2c->prologue_data, bytes_number);
+			if (!temp_ptr) {
+				free(aducm_i2c->prologue_data);
+				return FAILURE;
+			}
+			aducm_i2c->prologue_data = temp_ptr;
+		} else {
+			aducm_i2c->prologue_data = malloc(bytes_number);
+			if (!aducm_i2c->prologue_data)
+				return FAILURE;
+		}
+		memcpy(aducm_i2c->prologue_data, data, bytes_number);
+
+		return SUCCESS;
+	}
+
+	trans->bRepeatStart = false;
 	trans->pPrologue = 0;
 	trans->nPrologueSize = 0;
 	trans->pData = data;
@@ -223,7 +265,7 @@ int32_t i2c_write(struct i2c_desc *desc,
  * @param desc - Descriptor of the I2C device
  * @param data - Buffer that stores the transmission data.
  * @param bytes_number - Number of bytes to write.
- * @param stop_bit - Stop condition control.
+ * @param stop_bit - Stop condition control. NOTE: not applicable in this case
  *                   Example: 0 - A stop condition will not be generated.
  *                            1 - A stop condition will be generated
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
@@ -233,6 +275,8 @@ int32_t i2c_read(struct i2c_desc *desc,
 		 uint8_t bytes_number,
 		 uint8_t stop_bit)
 {
+	struct aducm_i2c_extra *aducm_i2c = desc->extra;
+
 	if (!desc)
 		return -EINVAL;
 
@@ -244,14 +288,26 @@ int32_t i2c_read(struct i2c_desc *desc,
 	if (ret < 0)
 		return ret;
 
-	trans->bRepeatStart = (stop_bit == 1) ? 0 : 1;
-	trans->pPrologue = 0;
-	trans->nPrologueSize = 0;
+	if (aducm_i2c->prologue_size != 0) {
+		trans->bRepeatStart = true;
+		trans->pPrologue = aducm_i2c->prologue_data;
+		trans->nPrologueSize = aducm_i2c->prologue_size;
+	} else {
+		trans->bRepeatStart = false;
+		trans->pPrologue = NULL;
+		trans->nPrologueSize = 0;
+	}
+
 	trans->pData = data;
 	trans->nDataSize = bytes_number;
 	trans->bReadNotWrite = 1;
-	if (ADI_I2C_SUCCESS != adi_i2c_ReadWrite(i2c_handler, trans, &errors))
-		return -EIO;
+	ret = adi_i2c_ReadWrite(i2c_handler, trans, &errors);
 
-	return SUCCESS;
+	if (aducm_i2c->prologue_size != 0) {
+		free(aducm_i2c->prologue_data);
+		aducm_i2c->prologue_data = NULL;
+		aducm_i2c->prologue_size = 0;
+	}
+
+	return ret;
 }
