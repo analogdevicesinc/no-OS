@@ -145,9 +145,9 @@ static struct scan_type channel_scan_type = {
 
 /** IIO ADC Channels */
 static struct iio_channel ad7799_iio_channels[] = {
-	AD7799_IIO_CHANN_DEF("ch0", 0),
-	AD7799_IIO_CHANN_DEF("ch1", 1),
-	AD7799_IIO_CHANN_DEF("ch2", 2),
+	AD7799_IIO_CHANN_DEF("channel0", 0),
+	AD7799_IIO_CHANN_DEF("channel1", 1),
+	AD7799_IIO_CHANN_DEF("channel2", 2),
 	END_ATTRIBUTES_ARRAY
 };
 
