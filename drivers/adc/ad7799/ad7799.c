@@ -367,6 +367,9 @@ int32_t ad7799_init(struct ad7799_dev **device,
 		return FAILURE;
 
 	dev->chip_type = init_param->chip_type;
+	dev->polarity = init_param->polarity;
+	dev->gain = init_param->gain;
+	dev->vref_mv = init_param->vref_mv;
 
 	switch(dev->chip_type) {
 	case ID_AD7798:
@@ -414,12 +417,12 @@ int32_t ad7799_init(struct ad7799_dev **device,
 	}
 
 	/* Initially set gain to 1 */
-	ret = ad7799_set_gain(dev, AD7799_GAIN_1);
+	ret = ad7799_set_gain(dev, dev->gain);
 	if (ret)
 		return FAILURE;
 
 	/* Enable unipolar coding */
-	ret = ad7799_set_polarity(dev, AD7799_UNIPOLAR);
+	ret = ad7799_set_polarity(dev, dev->polarity);
 	if (ret)
 		return FAILURE;
 
