@@ -43,6 +43,7 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include <stdint.h>
+#include <stdbool.h>
 #include "spi.h"
 
 /******************************************************************************/
@@ -166,6 +167,12 @@ struct ad7799_dev {
 	uint8_t chip_type;
 	/** Register size */
 	const uint8_t *reg_size;
+	/** Gain */
+	uint8_t gain;
+	/** Unipolar/Bipolar Coding */
+	bool polarity;
+	/** Reference Voltage in mV */
+	uint32_t vref_mv;
 };
 
 /**
@@ -177,6 +184,12 @@ struct ad7799_init_param {
 	struct spi_init_param spi_init;
 	/** Chip type (AD7798/AD7799) */
 	enum ad7799_type chip_type;
+	/** Gain */
+	uint8_t gain;
+	/** Unipolar/Bipolar Coding */
+	bool polarity;
+	/** Reference Voltage in mV */
+	uint32_t vref_mv;
 };
 
 /******************************************************************************/
