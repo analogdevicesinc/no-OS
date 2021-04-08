@@ -94,8 +94,6 @@
 #define ADA4250_RANGE_SET_MSK       GENMASK(3, 2)
 #define ADA4250_RANGE_SET(x)        field_prep(ADA4250_SNSR_CAL_VAL_MSK, x)
 
-#define ADA4250_RANGE(x)           (x - 1)
-
 /* Specifications */
 #define ADA4250_SPI_WRITE_CMD		0x0
 #define ADA4250_BUFF_SIZE_BYTES     2
