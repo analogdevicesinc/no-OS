@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   generic/gpio.c
+ *   @file   generic/generic_gpio.c
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
  * Copyright 2019(c) Analog Devices, Inc.
@@ -40,7 +40,9 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 
+#include <stdint.h>
 #include "error.h"
+#include "util.h"
 #include "gpio.h"
 
 /******************************************************************************/
@@ -53,8 +55,8 @@
  * @param param - GPIO Initialization parameters.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t gpio_get(struct gpio_desc **desc,
-		 const struct gpio_init_param *param)
+int32_t generic_gpio_get(struct gpio_desc **desc,
+			 const struct gpio_init_param *param)
 {
 	if (desc) {
 		// Unused variable - fix compiler warning
@@ -73,8 +75,8 @@ int32_t gpio_get(struct gpio_desc **desc,
  * @param param - GPIO Initialization parameters.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t gpio_get_optional(struct gpio_desc **desc,
-			  const struct gpio_init_param *param)
+int32_t generic_gpio_get_optional(struct gpio_desc **desc,
+				  const struct gpio_init_param *param)
 {
 	if(param == NULL) {
 		*desc = NULL;
@@ -89,7 +91,7 @@ int32_t gpio_get_optional(struct gpio_desc **desc,
  * @param desc - The SPI descriptor.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t gpio_remove(struct gpio_desc *desc)
+int32_t generic_gpio_remove(struct gpio_desc *desc)
 {
 	if (desc) {
 		// Unused variable - fix compiler warning
@@ -103,7 +105,7 @@ int32_t gpio_remove(struct gpio_desc *desc)
  * @param desc - The GPIO descriptor.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t gpio_direction_input(struct gpio_desc *desc)
+int32_t generic_gpio_direction_input(struct gpio_desc *desc)
 {
 	if (desc) {
 		// Unused variable - fix compiler warning
@@ -120,8 +122,8 @@ int32_t gpio_direction_input(struct gpio_desc *desc)
  *                         GPIO_LOW
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t gpio_direction_output(struct gpio_desc *desc,
-			      uint8_t value)
+int32_t generic_gpio_direction_output(struct gpio_desc *desc,
+				      uint8_t value)
 {
 	if (desc) {
 		// Unused variable - fix compiler warning
@@ -142,8 +144,8 @@ int32_t gpio_direction_output(struct gpio_desc *desc,
  *                             GPIO_IN
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t gpio_get_direction(struct gpio_desc *desc,
-			   uint8_t *direction)
+int32_t generic_gpio_get_direction(struct gpio_desc *desc,
+				   uint8_t *direction)
 {
 	if (desc) {
 		// Unused variable - fix compiler warning
@@ -165,8 +167,8 @@ int32_t gpio_get_direction(struct gpio_desc *desc,
  *                         GPIO_HIGH_Z
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t gpio_set_value(struct gpio_desc *desc,
-		       uint8_t value)
+int32_t generic_gpio_set_value(struct gpio_desc *desc,
+			       uint8_t value)
 {
 	if (desc) {
 		// Unused variable - fix compiler warning
@@ -187,8 +189,8 @@ int32_t gpio_set_value(struct gpio_desc *desc,
  *                         GPIO_LOW
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t gpio_get_value(struct gpio_desc *desc,
-		       uint8_t *value)
+int32_t generic_gpio_get_value(struct gpio_desc *desc,
+			       uint8_t *value)
 {
 	if (desc) {
 		// Unused variable - fix compiler warning
@@ -200,3 +202,17 @@ int32_t gpio_get_value(struct gpio_desc *desc,
 
 	return SUCCESS;
 }
+
+/**
+ * @brief Generic platform GPIO ops
+ */
+const struct gpio_platform_ops generic_gpio_platform_ops = {
+	.gpio_ops_get = &generic_gpio_get,
+	.gpio_ops_get_optional = &generic_gpio_get_optional,
+	.gpio_ops_remove = &generic_gpio_remove,
+	.gpio_ops_direction_input = &generic_gpio_direction_input,
+	.gpio_ops_direction_output = &generic_gpio_direction_output,
+	.gpio_ops_get_direction = &generic_gpio_get_direction,
+	.gpio_ops_set_value = &generic_gpio_set_value,
+	.gpio_ops_get_value = &generic_gpio_get_value,
+};
