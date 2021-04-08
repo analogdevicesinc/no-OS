@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   generic/spi.c
+ *   @file   generic/generic_spi.c
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
  * Copyright 2019(c) Analog Devices, Inc.
@@ -53,8 +53,8 @@
  * @param param - The structure that contains the SPI parameters.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t spi_init(struct spi_desc **desc,
-		 const struct spi_init_param *param)
+int32_t generic_spi_init(struct spi_desc **desc,
+			 const struct spi_init_param *param)
 {
 	if (desc) {
 		// Unused variable - fix compiler warning
@@ -72,7 +72,7 @@ int32_t spi_init(struct spi_desc **desc,
  * @param desc - The SPI descriptor.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t spi_remove(struct spi_desc *desc)
+int32_t generic_spi_remove(struct spi_desc *desc)
 {
 	if (desc) {
 		// Unused variable - fix compiler warning
@@ -88,9 +88,9 @@ int32_t spi_remove(struct spi_desc *desc)
  * @param bytes_number - Number of bytes to write/read.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t spi_write_and_read(struct spi_desc *desc,
-			   uint8_t *data,
-			   uint16_t bytes_number)
+int32_t generic_spi_write_and_read(struct spi_desc *desc,
+				   uint8_t *data,
+				   uint16_t bytes_number)
 {
 	if (desc) {
 		// Unused variable - fix compiler warning
@@ -106,3 +106,12 @@ int32_t spi_write_and_read(struct spi_desc *desc,
 
 	return SUCCESS;
 }
+
+/**
+ * @brief Generic platform SPI ops
+ */
+const struct spi_platform_ops generic_spi_platform_ops = {
+	.init = &generic_spi_init,
+	.write_and_read = &generic_spi_write_and_read,
+	.remove = &generic_spi_remove
+};
