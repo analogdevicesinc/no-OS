@@ -89,10 +89,10 @@
 #define ADA4250_SNSR_CAL_VAL(x)     field_prep(ADA4250_SNSR_CAL_VAL_MSK, x)
 
 /* ADA4250_REG_SNSR_CAL_CNFG Bit Definition */
-#define ADA4250_BIAS_SET_MSK        GENMASK(1, 0)
-#define ADA4250_BIAS_SET(x)         field_prep(ADA4250_SNSR_CAL_VAL_MSK, x)
-#define ADA4250_RANGE_SET_MSK       GENMASK(3, 2)
-#define ADA4250_RANGE_SET(x)        field_prep(ADA4250_SNSR_CAL_VAL_MSK, x)
+#define ADA4250_BIAS_SET_MSK        GENMASK(3, 2)
+#define ADA4250_BIAS_SET(x)         field_prep(ADA4250_BIAS_SET_MSK, x)
+#define ADA4250_RANGE_SET_MSK       GENMASK(1, 0)
+#define ADA4250_RANGE_SET(x)        field_prep(ADA4250_RANGE_SET_MSK, x)
 
 /* Specifications */
 #define ADA4250_SPI_WRITE_CMD		0x0
