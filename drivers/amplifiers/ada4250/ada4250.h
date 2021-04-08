@@ -134,10 +134,10 @@ enum ada4250_bias {
   * @brief Sensor offset trim range.
   */
 enum ada4250_offset_range {
-	ADA4250_RANGE1_1UA_MAX,
-	ADA4250_RANGE2_3UA_MAX,
-	ADA4250_RANGE3_7UA_MAX,
-	ADA4250_RANGE4_15UA_MAX,
+	ADA4250_RANGE1,
+	ADA4250_RANGE2,
+	ADA4250_RANGE3,
+	ADA4250_RANGE4,
 };
 
 /**

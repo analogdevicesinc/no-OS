@@ -263,7 +263,7 @@ int32_t ada4250_set_offset(struct ada4250_dev *dev, int32_t offset)
 	x[7] = x[1] * 1000 / 31599;
 
 	if (dev->gain != ADA4250_GAIN_1) {
-		for (i = ADA4250_RANGE1_1UA_MAX; i <= ADA4250_RANGE4_15UA_MAX; i++) {
+		for (i = ADA4250_RANGE1; i <= ADA4250_RANGE4; i++) {
 			max_vos = x[dev->gain] *  127 * ((1 << (i + 1)) - 1);
 			min_vos = (-1) * max_vos;
 			if(offset > min_vos && offset < max_vos) {
