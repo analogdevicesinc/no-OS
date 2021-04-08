@@ -203,7 +203,7 @@ static int32_t ada4250_set_range(struct ada4250_dev *dev,
 		return -ENODEV;
 
 	return ada4250_update(dev, ADA4250_REG_SNSR_CAL_CNFG, ADA4250_RANGE_SET_MSK,
-			      ADA4250_RANGE_SET(ADA4250_RANGE(range)));
+			      ADA4250_RANGE_SET(range));
 }
 
 /**
