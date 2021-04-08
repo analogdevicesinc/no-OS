@@ -22,7 +22,6 @@ SRCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c			\
 	$(NO-OS)/util/util.c
 SRCS +=	$(PLATFORM_DRIVERS)/axi_io.c
 SRCS +=	$(PLATFORM_DRIVERS)/$(PLATFORM)_spi.c				\
-	$(PLATFORM_DRIVERS)/irq.c					\
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_gpio.c
 ifeq (linux,$(strip $(PLATFORM)))
 SRCS +=	$(PLATFORM_DRIVERS)/linux_delay.c
@@ -46,15 +45,11 @@ INCS += $(DRIVERS)/rf-transceiver/ad9361/ad9361.h			\
 	$(DRIVERS)/rf-transceiver/ad9361/ad9361_api.h
 INCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.h			\
 	$(DRIVERS)/axi_core/axi_dac_core/axi_dac_core.h			\
-	$(PLATFORM_DRIVERS)/irq_extra.h					\
 	$(INCLUDE)/irq.h						\
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.h
 ifeq (linux,$(strip $(PLATFORM)))
 INCS +=	$(PLATFORM_DRIVERS)/linux_spi.h					\
 	$(PLATFORM_DRIVERS)/linux_gpio.h
-else
-INCS +=	$(PLATFORM_DRIVERS)/spi_extra.h					\
-	$(PLATFORM_DRIVERS)/gpio_extra.h
 endif
 INCS +=	$(INCLUDE)/axi_io.h						\
 	$(INCLUDE)/spi.h						\
@@ -70,4 +65,10 @@ INCS += $(INCLUDE)/fifo.h						\
 	$(NO-OS)/iio/iio_ad9361/iio_ad9361.h				\
 	$(NO-OS)/iio/iio_axi_adc/iio_axi_adc.h				\
 	$(NO-OS)/iio/iio_axi_dac/iio_axi_dac.h
+endif
+ifeq (xilinx,$(strip $(PLATFORM)))
+SRCS +=	$(PLATFORM_DRIVERS)/irq.c
+INCS += $(PLATFORM_DRIVERS)/irq_extra.h				\
+	$(PLATFORM_DRIVERS)/spi_extra.h					\
+	$(PLATFORM_DRIVERS)/gpio_extra.h
 endif

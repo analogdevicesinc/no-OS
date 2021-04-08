@@ -47,13 +47,13 @@
 #include "spi.h"
 #include "gpio.h"
 #include "delay.h"
-#include "irq.h"
-#include "irq_extra.h"
 #ifdef XILINX_PLATFORM
 #include <xparameters.h>
 #include <xil_cache.h>
 #include "spi_extra.h"
 #include "gpio_extra.h"
+#include "irq.h"
+#include "irq_extra.h"
 #endif
 #ifdef LINUX_PLATFORM
 #include "linux_spi.h"
@@ -96,6 +96,11 @@ struct xil_gpio_init_param xil_gpio_param = {
 #endif
 	.device_id = GPIO_DEVICE_ID
 };
+#endif
+
+#ifdef GENERIC_PLATFORM
+extern const struct gpio_platform_ops generic_gpio_platform_ops;
+extern const struct spi_platform_ops generic_spi_platform_ops;
 #endif
 
 struct axi_adc_init rx_adc_init = {
@@ -367,6 +372,9 @@ AD9361_InitParam default_init_param = {
 #ifdef LINUX_PLATFORM
 		.platform_ops = &linux_gpio_platform_ops
 #endif
+#ifdef GENERIC_PLATFORM
+		.platform_ops = &generic_gpio_platform_ops
+#endif
 	},		//gpio_resetb *** reset-gpios
 	/* MCS Sync */
 	{
@@ -377,6 +385,9 @@ AD9361_InitParam default_init_param = {
 #endif
 #ifdef LINUX_PLATFORM
 		.platform_ops = &linux_gpio_platform_ops
+#endif
+#ifdef GENERIC_PLATFORM
+		.platform_ops = &generic_gpio_platform_ops
 #endif
 	},		//gpio_sync *** sync-gpios
 
@@ -389,6 +400,9 @@ AD9361_InitParam default_init_param = {
 #ifdef LINUX_PLATFORM
 		.platform_ops = &linux_gpio_platform_ops
 #endif
+#ifdef GENERIC_PLATFORM
+		.platform_ops = &generic_gpio_platform_ops
+#endif
 	},		//gpio_cal_sw1 *** cal-sw1-gpios
 
 	{
@@ -399,6 +413,9 @@ AD9361_InitParam default_init_param = {
 #endif
 #ifdef LINUX_PLATFORM
 		.platform_ops = &linux_gpio_platform_ops
+#endif
+#ifdef GENERIC_PLATFORM
+		.platform_ops = &generic_gpio_platform_ops
 #endif
 	},		//gpio_cal_sw2 *** cal-sw2-gpios
 
@@ -412,6 +429,9 @@ AD9361_InitParam default_init_param = {
 #endif
 #ifdef LINUX_PLATFORM
 		.platform_ops = &linux_spi_platform_ops
+#endif
+#ifdef GENERIC_PLATFORM
+		.platform_ops = &generic_spi_platform_ops
 #endif
 	},
 
