@@ -283,10 +283,10 @@ int32_t ada4250_set_offset(struct ada4250_dev *dev, int32_t offset)
 
 	if (offset < 0) {
 		dev->offset_uv = (-1) * offset_raw * vlsb;
-		return ada4250_write(dev, ADA4250_REG_SNSR_CAL_VAL, (1 << 8 | abs(offset_raw)));
+		return ada4250_write(dev, ADA4250_REG_SNSR_CAL_VAL, offset_raw);
 	} else {
 		dev->offset_uv = offset_raw * vlsb;
-		return ada4250_write(dev, ADA4250_REG_SNSR_CAL_VAL, offset_raw);
+		return ada4250_write(dev, ADA4250_REG_SNSR_CAL_VAL, (1 << 8 | offset_raw));
 	}
 }
 
