@@ -44,6 +44,7 @@
 #include "iio_app.h"
 #include "parameters.h"
 #include "uart.h"
+#include "delay.h"
 
 #if defined(ADUCM_PLATFORM) || defined(XILINX_PLATFORM)
 #include "irq.h"
@@ -64,9 +65,41 @@
 #include "tcp_socket.h"
 #endif
 
+// The default baudrate iio_app will use to print messages to console.
+#define UART_BAUDRATE_DEFAULT	115200
+
+char *uart_data_size[] = {
+	"5",
+	"6",
+	"7",
+	"8",
+	"9"
+};
+
+char *uart_parity[] = {
+	"none",
+	"mark",
+	"space",
+	"odd",
+	"even"
+};
+
+char *uart_stop[] = {
+	"1",
+	"2",
+};
+
+static inline uint32_t _calc_uart_xfer_time(uint32_t len, uint32_t baudrate)
+{
+	uint32_t ms = 1000ul * len * 8 / UART_BAUDRATE_DEFAULT;
+	ms += ms / 10; // overhead
+	return ms;
+}
+
 int32_t iio_app_run(struct iio_app_device *devices, int32_t len)
 {
 	int32_t			status;
+	char message[512];
 	struct iio_desc		*iio_desc;
 	struct iio_init_param	iio_init_param;
 	struct uart_init_param	uart_init_par;
@@ -74,12 +107,11 @@ int32_t iio_app_run(struct iio_app_device *devices, int32_t len)
 	struct irq_init_param	irq_init_param;
 	struct irq_ctrl_desc	*irq_desc;
 #endif
-
+	struct uart_desc		*uart_desc;
 #ifdef USE_TCP_SOCKET
 	struct tcp_socket_init_param	socket_param;
 	struct wifi_init_param		wifi_param;
 	struct wifi_desc		*wifi;
-	struct uart_desc		*uart_desc;
 #elif defined(LINUX_PLATFORM)
 	struct tcp_socket_init_param	socket_param;
 #endif
@@ -150,7 +182,7 @@ int32_t iio_app_run(struct iio_app_device *devices, int32_t len)
 #if defined(XILINX_PLATFORM) || defined(ADUCM_PLATFORM) || defined(STM32_PLATFORM)
 	uart_init_par = (struct uart_init_param) {
 		.device_id = UART_DEVICE_ID,
-		.baud_rate = UART_BAUDRATE,
+		.baud_rate = UART_BAUDRATE_DEFAULT,
 		.size = UART_CS_8,
 		.parity = UART_PAR_NO,
 		.stop = UART_STOP_1,
@@ -164,11 +196,43 @@ int32_t iio_app_run(struct iio_app_device *devices, int32_t len)
 		return status;
 #endif
 
-#ifdef USE_TCP_SOCKET
 	status = uart_init(&uart_desc, &uart_init_par);
 	if (status < 0)
 		return status;
 
+	uint32_t msglen = sprintf(message,
+				  "Running TinyIIOD server...\n"
+				  "If successful, you may connect an IIO client application by:\n"
+				  "1. Disconnecting the serial terminal you use to view this message.\n"
+				  "2. Connecting the IIO client application using the serial backend configured as shown:\n"
+				  "\tBaudrate: %d\n"
+				  "\tData size: %s bits\n"
+				  "\tParity: %s\n"
+				  "\tStop bits: %s\n"
+				  "\tFlow control: none\n",
+				  UART_BAUDRATE,
+				  uart_data_size[uart_init_par.size],
+				  uart_parity[uart_init_par.parity],
+				  uart_stop[uart_init_par.stop]);
+
+	uint32_t delay_ms = _calc_uart_xfer_time(msglen, UART_BAUDRATE_DEFAULT);
+	status = uart_write(uart_desc, (uint8_t *)message, msglen);
+	if (status < 0)
+		return status;
+
+	if (UART_BAUDRATE_DEFAULT != UART_BAUDRATE) {
+		// make sure the whole message gets printed befure uart gets reinitialized
+		mdelay(delay_ms);
+
+		uart_remove(uart_desc);
+
+		uart_init_par.baud_rate = UART_BAUDRATE;
+		status = uart_init(&uart_desc, &uart_init_par);
+		if (status < 0)
+			return status;
+	}
+
+#ifdef USE_TCP_SOCKET
 	wifi_param.irq_desc = irq_desc;
 	wifi_param.uart_desc = uart_desc;
 #ifdef ADUCM_PLATFORM
@@ -202,12 +266,12 @@ int32_t iio_app_run(struct iio_app_device *devices, int32_t len)
 	iio_init_param.tcp_socket_init_param = &socket_param;
 #else
 	iio_init_param.phy_type = USE_UART;
-	iio_init_param.uart_init_param = &uart_init_par;
+	iio_init_param.uart_desc = uart_desc;
 #endif//USE_TCP_SOCKET
 
 	status = iio_init(&iio_desc, &iio_init_param);
 	if(status < 0)
-		return status;
+		goto error;
 
 	int32_t i;
 	for (i = 0; i < len; i++) {
@@ -218,12 +282,30 @@ int32_t iio_app_run(struct iio_app_device *devices, int32_t len)
 				      devices[i].read_buff,
 				      devices[i].write_buff);
 		if (status < 0)
-			return status;
+			goto error;
 	}
 
 	do {
 		status = iio_step(iio_desc);
 	} while (true);
+error:
+	if (UART_BAUDRATE_DEFAULT != UART_BAUDRATE) {
+		uart_remove(uart_desc);
+
+		uart_init_par.baud_rate = UART_BAUDRATE_DEFAULT;
+		status = uart_init(&uart_desc, &uart_init_par);
+		if (status < 0)
+			return status;
+	}
+
+	msglen = sprintf(message, "TinyIIOD server failed with %d.\n", status);
+	uart_write(uart_desc, (uint8_t *)message, msglen);
+
+	delay_ms = _calc_uart_xfer_time(msglen, UART_BAUDRATE_DEFAULT);
+	mdelay(delay_ms);
+	uart_remove(uart_desc);
+
+	return status;
 }
 
 #endif
