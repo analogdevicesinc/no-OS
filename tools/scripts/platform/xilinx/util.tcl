@@ -169,7 +169,7 @@ proc _cpu_reset {cpu} {
 	stop
 	if {$cpu == "ps7_cortexa9_0"} {
 		rst 
-	} elseif {$arch == "psu_cortexa53_0"} {
+	} elseif {$cpu == "psu_cortexa53_0"} {
 		rst -system
 	}
 }
