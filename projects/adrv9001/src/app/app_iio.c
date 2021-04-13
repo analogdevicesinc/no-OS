@@ -74,6 +74,7 @@ int32_t iio_server_init(struct iio_axi_adc_init_param *adc1_init,
 			struct iio_axi_dac_init_param *dac1_init,
 			struct iio_axi_dac_init_param *dac2_init)
 {
+	struct uart_desc *uart_desc;
 	struct irq_ctrl_desc *irq_desc;
 	struct xil_irq_init_param xil_irq_init_par = {
 		.type = IRQ_PS,
@@ -108,8 +109,12 @@ int32_t iio_server_init(struct iio_axi_adc_init_param *adc1_init,
 	if (status < 0)
 		return status;
 
+	status = uart_init(&uart_desc, &uart_init_par);
+	if (status < 0)
+		return status;
+
 	iio_init_par.phy_type = USE_UART;
-	iio_init_par.uart_init_param = &uart_init_par;
+	iio_init_par.uart_desc = uart_desc;
 	status = iio_init(&iio_desc, &iio_init_par);
 	if (status < 0)
 		return status;
