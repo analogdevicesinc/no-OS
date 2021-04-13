@@ -71,23 +71,29 @@ struct iio_data_buffer g_read_buff1 = {
 int32_t iio_server_init(struct iio_axi_adc_init_param *adc_0_init,
 			struct iio_axi_adc_init_param *adc_1_init)
 {
+	int32_t status;
+	struct uart_desc *uart_desc;
 	struct xil_uart_init_param xil_uart_init_par = {
 		.type = UART_PL,
-	};
-	struct uart_init_param uart_init_par = {
-		.baud_rate = 115200,
-		.device_id = UART_DEVICE_ID,
-		.extra = &xil_uart_init_par,
-	};
-	struct iio_init_param iio_init_par = {
-		.phy_type = USE_UART,
-		.uart_init_param = &uart_init_par,
 	};
 	struct iio_device *adc_dev_desc;
 	struct iio_desc *iio_desc;
 	struct iio_axi_adc_desc *iio_axi_adc_0_desc;
 	struct iio_axi_adc_desc *iio_axi_adc_1_desc;
-	int32_t status;
+	struct uart_init_param uart_init_par = {
+		.baud_rate = 115200,
+		.device_id = UART_DEVICE_ID,
+		.extra = &xil_uart_init_par,
+	};
+
+	status = uart_init(&uart_desc, &uart_init_par);
+	if (status < 0)
+		return status;
+
+	struct iio_init_param iio_init_par = {
+		.phy_type = USE_UART,
+		.uart_desc = uart_desc,
+	};
 
 	status = iio_init(&iio_desc, &iio_init_par);
 	if (IS_ERR_VALUE(status))
