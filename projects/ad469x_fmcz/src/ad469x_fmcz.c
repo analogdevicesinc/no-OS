@@ -220,6 +220,7 @@ int main()
 		return ret;
 
 #ifdef IIO_SUPPORT
+	struct uart_desc *uart_desc;
 	struct iio_desc *iio_app_desc;
 	struct xil_irq_init_param xil_irq_init_par = {
 		.type = IRQ_PS,
@@ -242,9 +243,14 @@ int main()
 		.device_id = UART_DEVICE_ID,
 		.extra = &xil_uart_init_par,
 	};
+
+	ret = uart_init(&uart_desc, &uart_init_par);
+	if (ret < 0)
+		return ret;
+
 	struct iio_init_param iio_init_par = {
 		.phy_type = USE_UART,
-		.uart_init_param = &uart_init_par,
+		.uart_desc = uart_desc,
 	};
 
 	ret = irq_global_enable(irq_desc);
