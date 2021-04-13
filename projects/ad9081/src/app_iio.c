@@ -73,6 +73,7 @@ static struct iio_data_buffer g_write_buff = {
 int32_t iio_server_init(struct iio_axi_adc_init_param *adc_init,
 			struct iio_axi_dac_init_param *dac_init)
 {
+	struct uart_desc *uart_desc;
 	struct xil_uart_init_param xil_uart_init_par = {
 #ifdef PLATFORM_MB
 		.type = UART_PL,
@@ -94,8 +95,12 @@ int32_t iio_server_init(struct iio_axi_adc_init_param *adc_init,
 	struct iio_device *adc_dev_desc, *dac_dev_desc;
 	int32_t status;
 
+	status = uart_init(&uart_desc, &uart_init_par);
+	if (status < 0)
+		return status;
+
 	iio_init_par.phy_type = USE_UART;
-	iio_init_par.uart_init_param = &uart_init_par;
+	iio_init_par.uart_desc = uart_desc;
 	status = iio_init(&iio_app_desc, &iio_init_par);
 	if (status < 0)
 		return status;
