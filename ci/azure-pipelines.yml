@@ -1,0 +1,47 @@
+trigger:
+- main
+- master
+- staging/*
+- dev/*
+- 20*
+
+pr:
+- main
+- master
+- 20*
+
+variables:
+  isMain: $[eq(variables['Build.SourceBranch'], 'refs/heads/master')]
+  runCondition: true
+  targetBranch: $[ variables['Build.SourceBranchName'] ]
+
+jobs:
+- job: LinuxBuilds
+  strategy:
+    matrix:
+      astyle:
+        imageName: 'ubuntu-latest'
+        BUILD_TYPE: astyle
+        TARGET_BRANCH: '$(targetBranch)'
+      cppcheck:
+        imageName: 'ubuntu-latest'
+        BUILD_TYPE: cppcheck
+        TARGET_BRANCH: '$(targetBranch)'
+      drivers:
+        imageName: 'ubuntu-latest'
+        BUILD_TYPE: drivers
+      doxygen:
+        imageName: 'ubuntu-latest'
+        BUILD_TYPE: doxygen
+        UPDATE_GH_DOCS: 0
+  pool:
+    vmImage: $(imageName)
+  steps:
+  - checkout: self
+    condition: eq(variables.runCondition, true)
+    fetchDepth: 50
+    clean: true
+    persistCredentials: true
+  - script: ./ci/run_build.sh
+    condition: eq(variables.runCondition, true)
+    displayName: 'Run $(BUILD_TYPE)'
