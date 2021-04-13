@@ -121,8 +121,8 @@ int main(void)
 	struct tcp_socket_init_param	socket_param;
 	struct wifi_init_param		wifi_param;
 	struct wifi_desc		*wifi;
-	struct uart_desc		*uart_desc;
 #endif
+	struct uart_desc		*uart_desc;
 
 	status = platform_init();
 	if (IS_ERR_VALUE(status))
@@ -170,11 +170,10 @@ int main(void)
 	if (status < 0)
 		return status;
 
-#ifdef USE_TCP_SOCKET
 	status = uart_init(&uart_desc, &uart_init_par);
 	if (status < 0)
 		return status;
-
+#ifdef USE_TCP_SOCKET
 	wifi_param.irq_desc = irq_desc;
 	wifi_param.uart_desc = uart_desc;
 #ifdef ADUCM_PLATFORM
@@ -202,7 +201,7 @@ int main(void)
 
 #else //USE_TCP_SOCKET
 	iio_init_param.phy_type = USE_UART;
-	iio_init_param.uart_init_param = &uart_init_par;
+	iio_init_param.uart_desc = uart_desc;
 #endif //USE_TCP_SOCKET
 
 	struct spi_init_param init_param = {
