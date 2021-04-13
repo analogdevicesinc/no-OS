@@ -789,6 +789,7 @@ int main(void)
 	 * Initialization for UART.
 	 */
 	struct uart_init_param uart_init_par;
+	struct uart_desc *uart_desc;
 
 	status = irq_ctrl_init(&irq_desc, &irq_init_param);
 	if(status < 0)
@@ -814,8 +815,12 @@ int main(void)
 	if(status < 0)
 		return status;
 
+	status = uart_init(&uart_desc, &uart_init_par);
+	if (status < 0)
+		return status;
+
 	iio_init_par.phy_type = USE_UART;
-	iio_init_par.uart_init_param = &uart_init_par;
+	iio_init_par.uart_desc = uart_desc;
 	status = iio_init(&iio_app_desc, &iio_init_par);
 	if(status < 0)
 		return status;
