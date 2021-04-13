@@ -1225,10 +1225,7 @@ ssize_t iio_init(struct iio_desc **desc, struct iio_init_param *init_param)
 
 	ldesc->phy_type = init_param->phy_type;
 	if (init_param->phy_type == USE_UART) {
-		ret = uart_init((struct uart_desc **)&ldesc->uart_desc,
-				init_param->uart_init_param);
-		if (IS_ERR_VALUE(ret))
-			goto free_desc;
+		ldesc->uart_desc = init_param->uart_desc;
 	}
 #ifdef ENABLE_IIO_NETWORK
 	else if (init_param->phy_type == USE_NETWORK) {
@@ -1274,10 +1271,8 @@ ssize_t iio_init(struct iio_desc **desc, struct iio_init_param *init_param)
 free_list:
 	list_remove(ldesc->interfaces_list);
 free_pylink:
-	if (ldesc->phy_type == USE_UART)
-		uart_remove(ldesc->uart_desc);
 #ifdef ENABLE_IIO_NETWORK
-	else {
+	if (ldesc->phy_type == USE_NETWORK) {
 		socket_remove(ldesc->server);
 		if (ldesc->sockets)
 			cb_remove(ldesc->sockets);
