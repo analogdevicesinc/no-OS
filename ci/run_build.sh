@@ -7,14 +7,14 @@ sudo apt-get update
 TOP_DIR="$(pwd)"
 DEPS_DIR="${TOP_DIR}/deps"
 
-. ./ci/travis/lib.sh
+. ./ci/lib.sh
 
 build_astyle() {
-    . ./ci/travis/astyle.sh
+    . ./ci/astyle.sh
 }
 
 build_cppcheck() {
-    . ./ci/travis/cppcheck.sh
+    . ./ci/cppcheck.sh
 }
 
 build_drivers() {
@@ -35,7 +35,7 @@ build_doxygen() {
 
     # Install Doxygen
     cd doxygen
-    patch ./src/docparser.cpp < ${TOP_DIR}/ci/travis/patch_doxy.patch
+    patch ./src/docparser.cpp < ${TOP_DIR}/ci/patch_doxy.patch
     mkdir -p build && cd build
     cmake ..
     make -j${NUM_JOBS}
@@ -43,7 +43,7 @@ build_doxygen() {
     cd ../..
 
     #Generate *.dox files for drivers and projects
-    . ${TOP_DIR}/ci/travis/gen_dox.sh
+    . ${TOP_DIR}/ci/gen_dox.sh
 
     # Build Documentation
     cd ${TOP_DIR}/doc
@@ -51,7 +51,7 @@ build_doxygen() {
     cmake ..
     cd ../..
 
-    . ./ci/travis/doxygen.sh
+    . ./ci/doxygen.sh
 }
 
 build_${BUILD_TYPE}

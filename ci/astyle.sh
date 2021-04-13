@@ -2,24 +2,26 @@
 
 set -e
 
-. ./ci/travis/lib.sh
+. ./ci/lib.sh
 
 ASTYLE_EXT_LIST="${ASTYLE_EXT_LIST} .c .h"
 
-COMMIT_RANGE="${COMMIT_RANGE}"
+COMMIT_RANGE="$1"
+
+if [ -z "$COMMIT_RANGE" ]
+then
+	COMMIT_RANGE="${COMMIT_RANGE}"
+fi
+
 if [ -z "$COMMIT_RANGE" ]  && [ -n "$TARGET_BRANCH" ]
 then
 	COMMIT_RANGE="${TARGET_BRANCH}.."
 fi
 
 if [ -z "$COMMIT_RANGE" ]
-then 
-	COMMIT_RANGE=$TRAVIS_COMMIT_RANGE
-	if [ -z "$TRAVIS_PULL_REQUEST_SHA" ]
-	then
-		echo_green "Using only latest commit, since there is no Pull Request"
-		COMMIT_RANGE=HEAD~1
-	fi
+then
+	echo_green "Using only latest commit, since there is no Pull Request"
+	COMMIT_RANGE=HEAD~1
 fi
 
 echo_green "Running astyle on commit range '$COMMIT_RANGE'"
