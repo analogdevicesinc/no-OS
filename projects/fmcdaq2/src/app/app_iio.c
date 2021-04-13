@@ -86,6 +86,8 @@ int32_t iio_server_init(struct iio_axi_adc_init_param *adc_init,
 			struct ad9680_dev *ad9680_device,
 			struct ad9144_dev *ad9144_device)
 {
+	int32_t status;
+	struct uart_desc *uart_desc;
 	struct xil_uart_init_param xil_uart_init_par = {
 #ifdef PLATFORM_MB
 		.type = UART_PL,
@@ -99,15 +101,19 @@ int32_t iio_server_init(struct iio_axi_adc_init_param *adc_init,
 		.device_id = UART_DEVICE_ID,
 		.extra = &xil_uart_init_par,
 	};
+
+	status = uart_init(&uart_desc, &uart_init_par);
+	if (status < 0)
+		return status;
+
 	struct iio_init_param iio_init_par = {
 		.phy_type = USE_UART,
-		.uart_init_param = &uart_init_par,
+		.uart_desc = uart_desc,
 	};
 	struct iio_desc *iio_desc;
 	struct iio_axi_adc_desc *iio_axi_adc_desc;
 	struct iio_axi_dac_desc *iio_axi_dac_desc;
 	struct iio_device *adc_dev_desc, *dac_dev_desc;
-	int32_t status;
 
 #ifndef PLATFORM_MB
 	struct xil_irq_init_param xil_irq_init_param = {
