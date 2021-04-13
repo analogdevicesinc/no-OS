@@ -23,6 +23,9 @@ INCS += $(DRIVERS)/adc/adc_demo/iio_adc_demo.h			\
 		$(DRIVERS)/dac/dac_demo/iio_dac_demo.h			\
 		$(DRIVERS)/adc/adc_demo/adc_demo.h		\
 
+SRCS += $(PLATFORM_DRIVERS)/delay.c
+INCS += $(INCLUDE)/delay.h
+
 ifeq ($(PLATFORM),$(filter $(PLATFORM),xilinx aducm3029))
 # For the moment there is support only for aducm for iio with network backend
 ifeq (aducm3029,$(strip $(PLATFORM)))
@@ -36,10 +39,8 @@ ifeq (y,$(strip $(ENABLE_IIO_NETWORK)))
 DISABLE_SECURE_SOCKET ?= y
 SRC_DIRS += $(NO-OS)/network
 SRCS	 += $(NO-OS)/util/circular_buffer.c
-SRCS	 += $(PLATFORM_DRIVERS)/delay.c
 SRCS	 += $(PLATFORM_DRIVERS)/timer.c
-INCS	 += $(INCLUDE)/delay.h			\
-		$(INCLUDE)/timer.h		\
+INCS	 += $(INCLUDE)/timer.h		\
 		$(INCLUDE)/circular_buffer.h	\
 		$(PLATFORM_DRIVERS)/timer_extra.h\
 		$(PLATFORM_DRIVERS)/rtc_extra.h
