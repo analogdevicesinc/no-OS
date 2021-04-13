@@ -67,9 +67,9 @@ struct iio_desc;
 struct iio_init_param {
 	enum pysical_link_type	phy_type;
 	union {
-		struct uart_init_param		*uart_init_param;
+		struct uart_desc *uart_desc;
 #ifdef ENABLE_IIO_NETWORK
-		struct tcp_socket_init_param	*tcp_socket_init_param;
+		struct tcp_socket_init_param *tcp_socket_init_param;
 #endif
 	};
 };
