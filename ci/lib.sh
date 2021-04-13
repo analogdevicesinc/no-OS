@@ -7,8 +7,8 @@ get_script_path() {
 
 	[ -n "$script" ] || return 1
 
-	if [ -f "ci/travis/$script" ] ; then
-		echo "ci/travis/$script"
+	if [ -f "ci/$script" ] ; then
+		echo "ci/$script"
 	elif [ -f "build/$script" ] ; then
 		echo "build/$script"
 	else
@@ -50,10 +50,10 @@ echo_green() { printf "\033[1;32m$*\033[m\n"; }
 # in turn download the other scripts it needs.
 # This gives way more flexibility when changing things, as they propagate
 for script in $COMMON_SCRIPTS ; do
-	[ ! -f "ci/travis/$script" ] || continue
+	[ ! -f "ci/$script" ] || continue
 	[ ! -f "build/$script" ] || continue
 	mkdir -p build
 	ensure_command_exists wget
-	wget https://raw.githubusercontent.com/analogdevicesinc/no-OS/master/ci/travis/$script \
+	wget https://raw.githubusercontent.com/analogdevicesinc/no-OS/master/ci/$script \
 		-O build/$script
 done

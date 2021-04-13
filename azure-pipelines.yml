@@ -42,6 +42,6 @@ jobs:
     fetchDepth: 50
     clean: true
     persistCredentials: true
-  - script: ./ci/travis/run_build.sh
+  - script: ./ci/run_build.sh
     condition: eq(variables.runCondition, true)
     displayName: 'Run $(BUILD_TYPE)'
