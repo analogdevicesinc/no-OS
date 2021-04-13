@@ -67,6 +67,7 @@ struct iio_data_buffer g_read_buff = {
 int32_t iio_app_start(struct iio_axi_adc_init_param *adc_init)
 {
 	int32_t status;
+	struct uart_desc *uart_desc;
 
 	struct xil_irq_init_param xil_irq_init_param = {
 		.type = IRQ_PS,
@@ -95,9 +96,14 @@ int32_t iio_app_start(struct iio_axi_adc_init_param *adc_init)
 	struct iio_axi_adc_desc *iio_axi_adc_desc;
 	struct iio_device *dev_desc;
 	struct iio_desc *iio;
+
+	status = uart_init(&uart_desc, &uart_init_par);
+	if (status < 0)
+		return status;
+
 	struct iio_init_param iio_init_par = {
 		.phy_type = USE_UART,
-		.uart_init_param = &uart_init_par
+		.uart_desc = uart_desc
 	};
 
 	status = irq_global_enable(irq_desc);
