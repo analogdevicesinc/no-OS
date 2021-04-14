@@ -105,7 +105,7 @@ static int32_t linux_socket_connect(struct linux_desc *desc, uint32_t sock_id,
 	hptr = gethostbyname(addr->addr);
 	saddr.sin_addr.s_addr = ((struct in_addr*) hptr->h_addr_list[0])->s_addr;
 	socklen_t len = sizeof(saddr);
-
+	
 	ret = connect(sock_id,(struct sockaddr*) &saddr,len);
 
 	if(ret < 0)
@@ -212,6 +212,7 @@ static int32_t linux_socket_bind(struct linux_desc *desc, uint32_t sock_id,
 	int32_t ret;
 	struct sockaddr_in saddr = {0};
 	socklen_t len;
+	int32_t option = 1;
 
 	saddr.sin_family = AF_INET;
 	saddr.sin_port = htons(port);
@@ -219,7 +220,6 @@ static int32_t linux_socket_bind(struct linux_desc *desc, uint32_t sock_id,
 	len = sizeof(saddr);
 
 	ret = bind(sock_id, (struct sockaddr*) &saddr, len);
-
 	if(ret < 0)
 		return -errno;
 
@@ -247,10 +247,7 @@ static int32_t linux_socket_accept(struct linux_desc *desc, uint32_t sock_id,
 	int32_t ret;
 	int32_t flags;
 
-	ret = accept(sock_id, NULL, NULL);
-
-	flags = fcntl(sock_id, F_GETFL);
-	fcntl(sock_id, F_SETFL, flags | O_NONBLOCK);
+	ret = accept4(sock_id, NULL, NULL, SOCK_NONBLOCK);
 
 	if(ret < 0)
 		return -errno;
