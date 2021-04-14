@@ -255,3 +255,43 @@ int32_t i2c_read(struct i2c_desc *desc,
 
 	return SUCCESS;
 }
+
+/**
+ * @brief Read data after writing with repeated start (useful for
+ *        reading registers).
+ * @param desc - Descriptor of the I2C device
+ * @param write_data - Buffer that stores the data to be written.
+ * @param wr_bytes_number - Number of bytes to write.
+ * @param read_data - Buffer that stores the data that will be read.
+ * @param rd_bytes_number - Number of bytes to read.
+ * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ */
+int32_t i2c_writeread(struct i2c_desc *desc,
+		      uint8_t *write_data,
+		      uint8_t wr_bytes_number,
+		      uint8_t *read_data,
+		      uint8_t rd_bytes_number)
+{
+	if (!desc)
+		return -EINVAL;
+
+	ADI_I2C_TRANSACTION trans[1];
+	uint32_t errors;
+	int32_t ret;
+
+	ret = set_transmission_configuration(desc);
+	if (ret < 0)
+		return ret;
+
+	trans->bRepeatStart = true;
+	trans->pPrologue = write_data;
+	trans->nPrologueSize = wr_bytes_number;
+	trans->pData = read_data;
+	trans->nDataSize = rd_bytes_number;
+	trans->bReadNotWrite = 1;
+	if (ADI_I2C_SUCCESS != adi_i2c_ReadWrite(i2c_handler, trans, &errors))
+		return -EIO;
+
+	return SUCCESS;
+}
+

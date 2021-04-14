@@ -126,4 +126,10 @@ int32_t i2c_read(struct i2c_desc *desc,
 		 uint8_t bytes_number,
 		 uint8_t stop_bit);
 
+int32_t i2c_writeread(struct i2c_desc *desc,
+		      uint8_t *write_data,
+		      uint8_t wr_bytes_number,
+		      uint8_t *read_data,
+		      uint8_t rd_bytes_number);
+
 #endif // I2C_H_
