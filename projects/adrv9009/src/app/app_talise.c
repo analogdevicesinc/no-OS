@@ -64,6 +64,7 @@
 #include "axi_jesd204_tx.h"
 
 // hal
+#include "app_config.h"
 #include "parameters.h"
 #include "adi_hal.h"
 
@@ -93,12 +94,23 @@ adiHalErr_t talise_setup(taliseDevice_t * const pd, taliseInit_t * const pi)
 	uint8_t framerStatus = 0;
 	uint32_t count = sizeof(armBinary);
 	taliseArmVersionInfo_t talArmVersionInfo;
+#if defined(ADRV9008_1)
+	uint32_t initCalMask = TAL_ADC_TUNER | TAL_TIA_3DB_CORNER | TAL_DC_OFFSET |
+			       TAL_RX_GAIN_DELAY | TAL_FLASH_CAL | TAL_RX_QEC_INIT;
+#elif defined(ADRV9008_2)
+	uint32_t initCalMask = TAL_TX_BB_FILTER | TAL_ADC_TUNER | TAL_TIA_3DB_CORNER |
+			       TAL_DC_OFFSET | TAL_FLASH_CAL | TAL_PATH_DELAY |
+			       TAL_TX_LO_LEAKAGE_INTERNAL | TAL_TX_QEC_INIT |
+			       TAL_LOOPBACK_RX_LO_DELAY | TAL_LOOPBACK_RX_RX_QEC_INIT |
+			       TAL_ORX_QEC_INIT | TAL_TX_DAC  | TAL_ADC_STITCHING;
+#else
 	uint32_t initCalMask =  TAL_TX_BB_FILTER | TAL_ADC_TUNER |  TAL_TIA_3DB_CORNER |
 				TAL_DC_OFFSET | TAL_RX_GAIN_DELAY | TAL_FLASH_CAL |
 				TAL_PATH_DELAY | TAL_TX_LO_LEAKAGE_INTERNAL |
 				TAL_TX_QEC_INIT | TAL_LOOPBACK_RX_LO_DELAY |
 				TAL_LOOPBACK_RX_RX_QEC_INIT | TAL_RX_QEC_INIT |
 				TAL_ORX_QEC_INIT | TAL_TX_DAC  | TAL_ADC_STITCHING;
+#endif
 	uint32_t trackingCalMask =  TAL_TRACK_RX1_QEC |
 				    TAL_TRACK_RX2_QEC |
 				    TAL_TRACK_TX1_QEC |

@@ -573,6 +573,7 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 	}
 
 #ifdef ALTERA_PLATFORM
+#ifndef ADRV9008_2
 	/* Initialize A10 FPLLs */
 	status = altera_a10_fpll_init(&rx_device_clk_pll,
 				      &rx_device_clk_pll_init);
@@ -581,6 +582,8 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 		       rx_device_clk_pll_init.name);
 		goto error_1;
 	}
+#endif
+#ifndef ADRV9008_1
 	status = altera_a10_fpll_init(&tx_device_clk_pll,
 				      &tx_device_clk_pll_init);
 	if (status != SUCCESS) {
@@ -596,6 +599,8 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 		goto error_3;
 	}
 
+#endif
+#ifndef ADRV9008_2
 	altera_a10_fpll_disable(rx_device_clk_pll);
 	status = altera_a10_fpll_set_rate(rx_device_clk_pll,
 					  rx_div40_rate_hz);
@@ -605,6 +610,8 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 		goto error_4;
 	}
 	altera_a10_fpll_enable(rx_device_clk_pll);
+#endif
+#ifndef ADRV9008_1
 	altera_a10_fpll_disable(tx_device_clk_pll);
 	status = altera_a10_fpll_set_rate(tx_device_clk_pll,
 					  tx_div40_rate_hz);
@@ -623,14 +630,18 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 		goto error_4;
 	}
 	altera_a10_fpll_enable(rx_os_device_clk_pll);
+#endif
 #else
 #if !defined(ZU11EG) && !defined(FMCOMMS8_ZCU102)
 	/* Initialize CLKGEN */
+#ifndef ADRV9008_2
 	status = axi_clkgen_init(&rx_clkgen, &rx_clkgen_init);
 	if (status != SUCCESS) {
 		printf("error: %s: axi_clkgen_init() failed\n", rx_clkgen_init.name);
 		goto error_1;
 	}
+#endif
+#ifndef ADRV9008_1
 	status = axi_clkgen_init(&tx_clkgen, &tx_clkgen_init);
 	if (status != SUCCESS) {
 		printf("error: %s: axi_clkgen_init() failed\n", tx_clkgen_init.name);
@@ -642,11 +653,15 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 		goto error_3;
 	}
 
+#endif
+#ifndef ADRV9008_2
 	status = axi_clkgen_set_rate(rx_clkgen, rx_div40_rate_hz);
 	if (status != SUCCESS) {
 		printf("error: %s: axi_clkgen_set_rate() failed\n", rx_clkgen->name);
 		goto error_4;
 	}
+#endif
+#ifndef ADRV9008_1
 	status = axi_clkgen_set_rate(tx_clkgen, tx_div40_rate_hz);
 	if (status != SUCCESS) {
 		printf("error: %s: axi_clkgen_set_rate() failed\n", tx_clkgen->name);
@@ -659,6 +674,7 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 	}
 #endif
 #endif
+#endif
 
 	return ADIHAL_OK;
 
@@ -666,27 +682,39 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 error_4:
 #endif
 #ifdef ALTERA_PLATFORM
+#ifndef ADRV9008_1
 	altera_a10_fpll_remove(rx_os_device_clk_pll);
+#endif
 #elif !defined(ZU11EG) && !defined(FMCOMMS8_ZCU102)
+#ifndef ADRV9008_1
 	axi_clkgen_remove(rx_os_clkgen);
+#endif
 #endif
 
 #if !defined(ZU11EG) && !defined(FMCOMMS8_ZCU102)
 error_3:
 #endif
 #ifdef ALTERA_PLATFORM
+#ifndef ADRV9008_1
 	altera_a10_fpll_remove(tx_device_clk_pll);
+#endif
 #elif !defined(ZU11EG) && !defined(FMCOMMS8_ZCU102)
+#ifndef ADRV9008_1
 	axi_clkgen_remove(tx_clkgen);
+#endif
 #endif
 
 #if !defined(ZU11EG) && !defined(FMCOMMS8_ZCU102)
 error_2:
 #endif
 #ifdef ALTERA_PLATFORM
+#ifndef ADRV9008_2
 	altera_a10_fpll_remove(rx_device_clk_pll);
+#endif
 #elif !defined(ZU11EG) && !defined(FMCOMMS8_ZCU102)
+#ifndef ADRV9008_2
 	axi_clkgen_remove(rx_clkgen);
+#endif
 #endif
 error_1:
 #if defined(ZU11EG) || defined(FMCOMMS8_ZCU102)
@@ -701,13 +729,21 @@ error_0:
 void clocking_deinit(void)
 {
 #ifdef ALTERA_PLATFORM
+#ifndef ADRV9008_2
 	altera_a10_fpll_remove(rx_device_clk_pll);
+#endif
+#ifndef ADRV9008_1
 	altera_a10_fpll_remove(tx_device_clk_pll);
 	altera_a10_fpll_remove(rx_os_device_clk_pll);
+#endif
 #elif !defined(ZU11EG) && !defined(FMCOMMS8_ZCU102)
+#ifndef ADRV9008_1
 	axi_clkgen_remove(rx_os_clkgen);
 	axi_clkgen_remove(tx_clkgen);
+#endif
+#ifndef ADRV9008_2
 	axi_clkgen_remove(rx_clkgen);
+#endif
 #endif
 
 #if defined(ZU11EG) || defined(FMCOMMS8_ZCU102)

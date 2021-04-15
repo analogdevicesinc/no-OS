@@ -52,6 +52,7 @@ int32_t start_iiod(struct axi_dmac *rx_dmac, struct axi_dmac *tx_dmac,
 	struct iio_device		*dac_dev_desc;
 	int32_t				status;
 
+#ifndef ADRV9008_2
 	iio_axi_adc_init_par = (struct iio_axi_adc_init_param) {
 		.rx_adc = rx_adc,
 		.rx_dmac = rx_dmac,
@@ -60,6 +61,8 @@ int32_t start_iiod(struct axi_dmac *rx_dmac, struct axi_dmac *tx_dmac,
 						     uint32_t))Xil_DCacheInvalidateRange
 #endif
 	};
+#endif
+#ifndef ADRV9008_1
 	iio_axi_dac_init_par = (struct iio_axi_dac_init_param) {
 		.tx_dac = tx_dac,
 		.tx_dmac = tx_dmac,
@@ -67,32 +70,49 @@ int32_t start_iiod(struct axi_dmac *rx_dmac, struct axi_dmac *tx_dmac,
 		.dcache_flush_range = (void (*)(uint32_t, uint32_t))Xil_DCacheFlushRange,
 #endif
 	};
+#endif
 
+#ifndef ADRV9008_2
 	status = iio_axi_adc_init(&iio_axi_adc_desc, &iio_axi_adc_init_par);
 	if (status < 0)
 		return status;
+#endif
 
+#ifndef ADRV9008_1
 	status = iio_axi_dac_init(&iio_axi_dac_desc, &iio_axi_dac_init_par);
 	if(status < 0)
 		return status;
+#endif
 
+#ifndef ADRV9008_2
 	iio_axi_adc_get_dev_descriptor(iio_axi_adc_desc, &adc_dev_desc);
+#endif
+#ifndef ADRV9008_1
 	iio_axi_dac_get_dev_descriptor(iio_axi_dac_desc, &dac_dev_desc);
+#endif
 
+#ifndef ADRV9008_2
 	struct iio_data_buffer read_buff = {
 		.buff = (void *)ADC_DDR_BASEADDR,
 		.size = 0xFFFFFFFF,
 	};
+#endif
+#ifndef ADRV9008_1
 	struct iio_data_buffer write_buff = {
 		.buff = (void *)DAC_DDR_BASEADDR,
 		.size = 0xFFFFFFFF,
 	};
+#endif
 
 	struct iio_app_device devices[] = {
+#ifndef ADRV9008_2
 		IIO_APP_DEVICE("axi_adc", iio_axi_adc_desc, adc_dev_desc,
 			       &read_buff, NULL),
+#endif
+#ifndef ADRV9008_1
 		IIO_APP_DEVICE("axi_dac", iio_axi_dac_desc, dac_dev_desc,
 			       NULL, &write_buff)
+#endif
 	};
 
 	return iio_app_run(devices, ARRAY_SIZE(devices));
@@ -279,30 +299,38 @@ int main(void)
 	jesd_status();
 
 	/* Initialize the DAC core */
+#ifndef ADRV9008_1
 	status = axi_dac_init(&tx_dac, &tx_dac_init);
 	if (status) {
 		printf("axi_dac_init() failed with status %d\n", status);
 		goto error_3;
 	}
+#endif
 
 	/* Initialize the ADC core */
+#ifndef ADRV9008_2
 	status = axi_adc_init(&rx_adc, &rx_adc_init);
 	if (status) {
 		printf("axi_adc_init() failed with status %d\n", status);
 		goto error_3;
 	}
 
+#endif
+#ifndef ADRV9008_1
 	status = axi_dmac_init(&tx_dmac, &tx_dmac_init);
 	if (status) {
 		printf("axi_dmac_init() tx init error: %d\n", status);
 		goto error_3;
 	}
 
+#endif
+#ifndef ADRV9008_2
 	status = axi_dmac_init(&rx_dmac, &rx_dmac_init);
 	if (status) {
 		printf("axi_dmac_init() rx init error: %d\n", status);
 		goto error_3;
 	}
+#endif
 
 #ifdef DAC_DMA_EXAMPLE
 	gpio_init_plddrbypass.extra = &hal_gpio_param;
@@ -319,6 +347,7 @@ int main(void)
 	}
 	gpio_direction_output(gpio_plddrbypass, 0);
 
+#ifndef ADRV9008_1
 	axi_dac_load_custom_data(tx_dac, sine_lut_iq,
 				 ARRAY_SIZE(sine_lut_iq),
 				 DAC_DDR_BASEADDR);
@@ -329,8 +358,10 @@ int main(void)
 	axi_dmac_transfer(tx_dmac, DAC_DDR_BASEADDR, sizeof(sine_lut_iq));
 
 	mdelay(1000);
+#endif
 
 	/* Transfer 16384 samples from ADC to MEM */
+#ifndef ADRV9008_2
 	axi_dmac_transfer(rx_dmac,
 			  DDR_MEM_BASEADDR + 0x800000,
 			  16384 * TALISE_NUM_CHANNELS *
@@ -339,6 +370,7 @@ int main(void)
 	Xil_DCacheInvalidateRange(DDR_MEM_BASEADDR + 0x800000,
 				  16384 * TALISE_NUM_CHANNELS *
 				  DIV_ROUND_UP(talInit.jesd204Settings.framerA.Np, 8));
+#endif
 #endif
 #endif
 

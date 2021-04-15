@@ -50,6 +50,10 @@
  * by default for zc706 + adrv9009-w/pcbz.
  */
 
+/* To build ADRV9008-1/ADRV9008-2, uncomment one (only one) of the lines below: */
+//#define ADRV9008_1
+//#define ADRV9008_2
+
 /* To build a specific example, uncomment one (only one) of the lines below: */
 // #define DAC_DMA_EXAMPLE
 // #define IIO_SUPPORT

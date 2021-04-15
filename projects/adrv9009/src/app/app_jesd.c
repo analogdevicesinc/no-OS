@@ -104,11 +104,14 @@ adiHalErr_t jesd_init(uint32_t rx_div40_rate_hz,
 	};
 
 	/* Initialize JESD */
+#ifndef ADRV9008_2
 	status = axi_jesd204_rx_init(&rx_jesd, &rx_jesd_init);
 	if (status != SUCCESS) {
 		printf("error: %s: axi_jesd204_rx_init() failed\n", rx_jesd_init.name);
 		goto error_5;
 	}
+#endif
+#ifndef ADRV9008_1
 	status = axi_jesd204_tx_init(&tx_jesd, &tx_jesd_init);
 	if (status != SUCCESS) {
 		printf("error: %s: axi_jesd204_tx_init() failed\n", tx_jesd_init.name);
@@ -120,35 +123,54 @@ adiHalErr_t jesd_init(uint32_t rx_div40_rate_hz,
 		goto error_7;
 	}
 
+#endif
 	return ADIHAL_OK;
 
 error_7:
+#ifndef ADRV9008_1
 	axi_jesd204_rx_remove(rx_os_jesd);
+#endif
 error_6:
+#ifndef ADRV9008_1
 	axi_jesd204_tx_remove(tx_jesd);
+#endif
 error_5:
+#ifndef ADRV9008_2
 	axi_jesd204_rx_remove(rx_jesd);
+#endif
 
 	return ADIHAL_ERR;
 }
 
 void jesd_deinit(void)
 {
+#ifndef	ADRV9008_1
 	axi_jesd204_rx_remove(rx_os_jesd);
 	axi_jesd204_tx_remove(tx_jesd);
+#endif
+#ifndef ADRV9008_2
 	axi_jesd204_rx_remove(rx_jesd);
+#endif
 }
 
 void jesd_status(void)
 {
+#ifndef ADRV9008_2
 	axi_jesd204_rx_status_read(rx_jesd);
+#endif
+#ifndef ADRV9008_1
 	axi_jesd204_tx_status_read(tx_jesd);
 	axi_jesd204_rx_status_read(rx_os_jesd);
+#endif
 }
 
 void jesd_rx_watchdog(void)
 {
+#ifndef ADRV9008_2
 	axi_jesd204_rx_watchdog(rx_jesd);
+#endif
+#ifndef ADRV9008_1
 	axi_jesd204_rx_watchdog(rx_os_jesd);
+#endif
 }
 
