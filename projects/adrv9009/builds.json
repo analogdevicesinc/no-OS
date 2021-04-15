@@ -7,6 +7,20 @@
                         "adrv9009_zcu102"
                   ]
             },
+	    "adrv9008-1": {
+		"flags": "NEW_CFLAGS=-DADRV9008_1",
+		"hardware": [
+		      "adrv9009_zc706",
+		      "adrv9009_zcu102"
+		]
+	    },
+	    "adrv9008-2": {
+		"flags": "NEW_CFLAGS=-DADRV9008_2",
+		"hardware": [
+		      "adrv9009_zc706",
+		      "adrv9009_zcu102"
+		]
+	    },
             "dma_example": {
                   "flags" : "NEW_CFLAGS=-DDAC_DMA_EXAMPLE",
                   "hardware": [
