@@ -57,6 +57,8 @@
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 
+#define XPS_TYPE_WRITE		0x1
+#define XPS_TYPE_READ		0x2
 #define XSP_DEFAULT_SR_VALUE	0x25
 #define XSP_DUMMY_DATA		0xFF
 
@@ -76,6 +78,15 @@ struct xspi_desc {
 	uint32_t disable_slaves_mask;
 	uint32_t fifo_depth;
 	uint8_t  cs_asserted;
+};
+
+/* Structure used to iterate over SPI messages */
+struct msg_iter {
+	struct spi_msg	*msgs;
+	uint32_t	len;
+	uint32_t	i;
+	uint32_t	buff_i;
+	uint8_t		is_wr;
 };
 
 /******************************************************************************/
@@ -339,10 +350,182 @@ static int32_t xil_spi_write_and_read_pl(struct spi_desc *desc, uint8_t *data,
 	return SUCCESS;
 }
 
+/* Get type of message. It can be READ, WRITE or both */
+static uint32_t _get_msg_type(struct spi_msg *msg)
+{
+	uint32_t	type;
+
+	type = 0;
+	if (msg->tx_buff)
+		type |= XPS_TYPE_WRITE;
+	if (msg->rx_buff)
+		type |= XPS_TYPE_READ;
+
+	return type;
+}
+
+/* Get information based on current iterator position */
+static void _get_data(struct msg_iter *it, uint8_t **buff, uint32_t *len,
+		      uint32_t *type)
+{
+	struct spi_msg *msg;
+
+	if (it->i == it->len) {
+		*len = 0;
+		return ;
+	}
+
+	msg = it->msgs + it->i;
+	if (it->is_wr)
+		*buff = msg->tx_buff;
+	else
+		*buff = msg->rx_buff;
+
+	if (*buff)
+		*buff += it->buff_i;
+
+	*len = msg->bytes_number - it->buff_i;
+	if (type)
+		*type = _get_msg_type(msg);
+}
+
+/*
+ * Increment iterator position with desired length.
+ * If the new position has a different message type, new_type will be set to 1
+ * If a CS change is needed, cs_change is set
+ */
+static void _increment_iter(struct msg_iter *it, uint32_t len,
+			    uint8_t *cs_change, uint8_t *new_type)
+{
+	struct spi_msg	*msg;
+	uint32_t	type;
+	uint32_t	extra_len;
+
+	if (!len)
+		return ;
+
+	*cs_change = 0;
+	*new_type = 0;
+	msg = it->msgs + it->i;
+	if (it->buff_i + len > msg->bytes_number) {
+		extra_len = it->buff_i + len - msg->bytes_number;
+		_increment_iter(it, extra_len, cs_change, new_type);
+		len -= extra_len;
+	}
+
+	it->buff_i += len;
+	if (it->buff_i == msg->bytes_number) {
+		type = _get_msg_type(msg);
+		++it->i;
+		it->buff_i = 0;
+		if (cs_change && msg->cs_change)
+			*cs_change = 1;
+		if (new_type)
+			if (it->i == it->len ||
+			    type != _get_msg_type(it->msgs + it->i))
+				*new_type = 1;
+	}
+}
+
+/*
+ * SPI polling transfer of multiple messages.
+ */
+static int32_t xil_spi_transfer_pl(struct spi_desc *desc, struct spi_msg *msgs,
+				   uint32_t len)
+
+{
+	struct xspi_desc	*xdesc;
+	uint8_t			cs_change;
+	uint8_t			new_type;
+	struct msg_iter		rx = {.msgs = msgs, .len = len, .is_wr = 0};
+	struct msg_iter		tx = {.msgs = msgs, .len = len, .is_wr = 1};
+	uint8_t			*buff;
+	uint32_t		bytes;
+	uint32_t		type;
+	/* Bytes to increment rx when only a write transaction is executed */
+	uint32_t		to_inc_rx;
+	/* Difference between rx and tx iterators in bytes */
+	uint32_t		tx_advance;
+	/* Save bytes sent during a write loop */
+	uint32_t		tx_sent;
+	/* Used to loop if need to empty the RX FIFO */
+	uint32_t		loop;
+
+	if (!desc || !desc->extra)
+		return -EINVAL;
+
+	xdesc = desc->extra;
+	_update_mode(desc);
+
+	tx_advance = 0;
+	to_inc_rx = 0;
+	do {
+		_xil_spi_start_transfer(desc, 1);
+
+		tx_sent = 0;
+		/* Writing loop */
+		do {
+			_get_data(&tx, &buff, &bytes, &type);
+			if (type & XPS_TYPE_READ)
+				/*
+				 * Do not write more bytes than fifo_depth if
+				 * they haven't been read.
+				 */
+				bytes = min(bytes,
+					    xdesc->fifo_depth - tx_advance);
+			bytes = _wr_fifo(xdesc, buff, bytes);
+			tx_sent += bytes;
+			_increment_iter(&tx, bytes, &cs_change, &new_type);
+			tx_advance += bytes;
+		} while (!cs_change && !new_type && bytes);
+
+		if (type & XPS_TYPE_READ) {
+			loop = 1;
+			/*
+			 * Loop only when no more data to write otherwise read
+			 * only available data.
+			 */
+			while (loop) {
+				if (!new_type)
+					loop = 0;
+				_get_data(&rx, &buff, &bytes, NULL);
+				bytes = _rd_fifo(xdesc, buff, bytes);
+				_increment_iter(&rx, bytes, &cs_change, &new_type);
+				tx_advance -= bytes;
+				if (loop && new_type)
+					break;
+			}
+		} else {
+			/* Clean RX FIFO if it was only a WRITE message */
+			to_inc_rx += tx_sent;
+			if (new_type) {
+				/* Wait for TX to be sent */
+				while (!(_read(xdesc, XSP_SR_OFFSET) &
+					 XSP_SR_TX_EMPTY_MASK))
+					;
+				/* Reset fifo. Only write was performed */
+				_wr_mask(xdesc, XSP_CR_OFFSET,
+					 XSP_CR_RXFIFO_RESET_MASK,
+					 XSP_CR_RXFIFO_RESET_MASK);
+
+				_increment_iter(&rx, to_inc_rx, NULL, NULL);
+				tx_advance -= to_inc_rx;
+				to_inc_rx = 0;
+			}
+		}
+
+		if (cs_change)
+			_xil_spi_start_transfer(desc, 0);
+	} while (rx.i < len);
+
+	return SUCCESS;
+}
+
 const struct spi_platform_ops xil_spi_reg_ops_pl = {
 	.init = xil_spi_init_pl,
 	.remove = xil_spi_remove_pl,
-	.write_and_read = xil_spi_write_and_read_pl
+	.write_and_read = xil_spi_write_and_read_pl,
+	.transfer = xil_spi_transfer_pl
 };
 
 #endif // XPAR_XSPI_NUM_INSTANCES
