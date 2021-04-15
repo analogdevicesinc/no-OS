@@ -73,7 +73,7 @@ enum xil_spi_type {
 /**
  * @struct xil_spi_init_param
  * @brief Structure holding the initialization parameters for Xilinx platform
- * specific SPI parameters.
+ * specific SPI parameters when using xil_platform_ops.
  */
 typedef struct xil_spi_init_param {
 	/** Xilinx architecture */
@@ -106,6 +106,11 @@ extern const struct spi_platform_ops spi_eng_platform_ops;
  * @brief Xilinx specific SPI platform ops structure
  */
 extern const struct spi_platform_ops xil_platform_ops;
+
+/**
+ * @brief Xilinx SPI PS register functions. No extra param needed
+ */
+extern const struct spi_platform_ops xil_spi_reg_ops_pl;
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
