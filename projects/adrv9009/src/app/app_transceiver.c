@@ -132,11 +132,14 @@ adiHalErr_t fpga_xcvr_init(uint32_t rx_lane_rate_khz,
 #endif
 
 	/* Initialize ADXCR */
+#ifndef ADRV9008_2
 	status = adxcvr_init(&rx_adxcvr, &rx_adxcvr_init);
 	if (status != SUCCESS) {
 		printf("error: %s: adxcvr_init() failed\n", rx_adxcvr_init.name);
 		goto error_0;
 	}
+#endif
+#ifndef ADRV9008_1
 	status = adxcvr_init(&tx_adxcvr, &tx_adxcvr_init);
 	if (status != SUCCESS) {
 		printf("error: %s: adxcvr_init() failed\n", tx_adxcvr_init.name);
@@ -147,12 +150,16 @@ adiHalErr_t fpga_xcvr_init(uint32_t rx_lane_rate_khz,
 		printf("error: %s: adxcvr_init() failed\n", rx_os_adxcvr_init.name);
 		goto error_9;
 	}
+#endif
 #ifndef ALTERA_PLATFORM
+#ifndef ADRV9008_2
 	status = adxcvr_clk_enable(rx_adxcvr);
 	if (status != SUCCESS) {
 		printf("error: %s: adxcvr_clk_enable() failed\n", rx_adxcvr->name);
 		goto error_10;
 	}
+#endif
+#ifndef ADRV9008_1
 	status = adxcvr_clk_enable(tx_adxcvr);
 	if (status != SUCCESS) {
 		printf("error: %s: adxcvr_clk_enable() failed\n", tx_adxcvr->name);
@@ -164,24 +171,35 @@ adiHalErr_t fpga_xcvr_init(uint32_t rx_lane_rate_khz,
 		goto error_10;
 	}
 #endif
+#endif
 
 	return ADIHAL_OK;
 
 #ifndef ALTERA_PLATFORM
 error_10:
+#ifndef ADRV9008_1
 	adxcvr_remove(rx_os_adxcvr);
 #endif
+#endif
 error_9:
+#ifndef ADRV9008_1
 	adxcvr_remove(tx_adxcvr);
+#endif
 error_8:
+#ifndef ADRV9008_2
 	adxcvr_remove(rx_adxcvr);
+#endif
 error_0:
 	return ADIHAL_ERR;
 }
 
 void fpga_xcvr_deinit(void)
 {
+#ifndef ADRV9008_1
 	adxcvr_remove(rx_os_adxcvr);
 	adxcvr_remove(tx_adxcvr);
+#endif
+#ifndef ADRV9008_1
 	adxcvr_remove(rx_adxcvr);
+#endif
 }
