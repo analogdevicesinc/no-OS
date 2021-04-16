@@ -57,6 +57,8 @@
 #warning "TCP socket communication is not secured"
 #endif
 
+#define MAX_BACKLOG 0xFFFFFFFF
+
 /**
  * @struct tcp_socket_desc
  * @brief TCP Socket descriptor

@@ -985,7 +985,7 @@ static uint32_t iio_generate_device_xml(struct iio_device *device, char *name,
 	if (buff == NULL)
 		/* Set dummy value for buff. It is used only for counting */
 		buff = ch_id;
-
+		
 	i = 0;
 	i += snprintf(buff, max(n - i, 0),
 		      "<device id=\"device%"PRIi32"\" name=\"%s\">", id, name);
@@ -1080,7 +1080,7 @@ ssize_t iio_register(struct iio_desc *desc, struct iio_device *dev_descriptor,
 	int32_t	n;
 	int32_t	new_size;
 	char	*aux;
-
+	
 	iio_interface = (struct iio_interface *)calloc(1,
 			sizeof(*iio_interface));
 	if (!iio_interface)
@@ -1236,7 +1236,7 @@ ssize_t iio_init(struct iio_desc **desc, struct iio_init_param *init_param)
 		ret = socket_bind(ldesc->server, IIOD_PORT);
 		if (IS_ERR_VALUE(ret))
 			goto free_pylink;
-		ret = socket_listen(ldesc->server, 0);
+		ret = socket_listen(ldesc->server, MAX_BACKLOG);
 		if (IS_ERR_VALUE(ret))
 			goto free_pylink;
 		ret = cb_init(&ldesc->sockets, sizeof(struct tcp_socket_desc *)
