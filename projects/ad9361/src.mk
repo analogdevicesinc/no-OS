@@ -24,14 +24,23 @@ SRCS +=	$(PLATFORM_DRIVERS)/axi_io.c
 SRCS +=	$(PLATFORM_DRIVERS)/$(PLATFORM)_spi.c				\
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_gpio.c
 ifeq (linux,$(strip $(PLATFORM)))
-SRCS +=	$(PLATFORM_DRIVERS)/linux_delay.c
-else
-SRCS +=	$(PLATFORM_DRIVERS)/delay.c
+SRCS +=	$(PLATFORM_DRIVERS)/linux_delay.c	
+
+ifeq (y, $(strip $(TINYIIOD)))
+SRCS += $(NO-OS)/network/linux_socket/linux_socket.c	\
+		$(NO-OS)/network/tcp_socket.c	\
+	$(PLATFORM_DRIVERS)/linux_uart.c
 endif
+else
+SRCS +=	$(PLATFORM_DRIVERS)/delay.c		\
+	$(PLATFORM_DRIVERS)/irq.c	
+endif
+
 ifeq (y,$(strip $(TINYIIOD)))
 LIBRARIES += iio
-SRCS += $(PLATFORM_DRIVERS)/uart.c					\
-	$(NO-OS)/util/fifo.c						\
+SRCS += $(NO-OS)/iio/iio_app/iio_app.c \
+	$(NO-OS)/util/circular_buffer.c
+SRCS += $(NO-OS)/util/fifo.c						\
 	$(NO-OS)/util/list.c						\
 	$(NO-OS)/iio/iio_ad9361/iio_ad9361.c				\
 	$(NO-OS)/iio/iio_axi_adc/iio_axi_adc.c				\
@@ -44,12 +53,23 @@ INCS += $(DRIVERS)/rf-transceiver/ad9361/ad9361.h			\
 	$(DRIVERS)/rf-transceiver/ad9361/ad9361_util.h			\
 	$(DRIVERS)/rf-transceiver/ad9361/ad9361_api.h
 INCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.h			\
-	$(DRIVERS)/axi_core/axi_dac_core/axi_dac_core.h			\
+	$(DRIVERS)/axi_core/axi_dac_core/axi_dac_core.h				\
 	$(INCLUDE)/irq.h						\
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.h
 ifeq (linux,$(strip $(PLATFORM)))
 INCS +=	$(PLATFORM_DRIVERS)/linux_spi.h					\
-	$(PLATFORM_DRIVERS)/linux_gpio.h
+	$(PLATFORM_DRIVERS)/linux_gpio.h	\
+	$(PLATFORM_DRIVERS)/linux_uart.h
+ifeq (y,$(strip $(TINYIIOD)))
+INCS += $(NO-OS)/network/tcp_socket.h	\
+	$(NO-OS)/network/linux_socket/linux_socket.h	\
+	$(NO-OS)/network/network_interface.h	\
+	$(NO-OS)/network/noos_mbedtls_config.h	
+endif
+else
+INCS +=	$(PLATFORM_DRIVERS)/spi_extra.h					\
+	$(PLATFORM_DRIVERS)/gpio_extra.h	\
+	$(PLATFORM_DRIVERS)/irq_extra.h			
 endif
 INCS +=	$(INCLUDE)/axi_io.h						\
 	$(INCLUDE)/spi.h						\
@@ -58,17 +78,21 @@ INCS +=	$(INCLUDE)/axi_io.h						\
 	$(INCLUDE)/delay.h						\
 	$(INCLUDE)/util.h
 ifeq (y,$(strip $(TINYIIOD)))
+INCS += $(NO-OS)/iio/iio_app/iio_app.h 
+
 INCS += $(INCLUDE)/fifo.h						\
 	$(INCLUDE)/uart.h						\
 	$(INCLUDE)/list.h						\
-	$(PLATFORM_DRIVERS)/uart_extra.h				\
 	$(NO-OS)/iio/iio_ad9361/iio_ad9361.h				\
 	$(NO-OS)/iio/iio_axi_adc/iio_axi_adc.h				\
-	$(NO-OS)/iio/iio_axi_dac/iio_axi_dac.h
+	$(NO-OS)/iio/iio_axi_dac/iio_axi_dac.h			\
+	$(INCLUDE)/circular_buffer.h
 endif
 ifeq (xilinx,$(strip $(PLATFORM)))
-SRCS +=	$(PLATFORM_DRIVERS)/irq.c
+SRCS +=	$(PLATFORM_DRIVERS)/irq.c	\
+		$(PLATFORM_DRIVERS)/uart.c
 INCS += $(PLATFORM_DRIVERS)/irq_extra.h				\
 	$(PLATFORM_DRIVERS)/spi_extra.h					\
-	$(PLATFORM_DRIVERS)/gpio_extra.h
+	$(PLATFORM_DRIVERS)/gpio_extra.h	\
+	$(PLATFORM_DRIVERS)/uart_extra.h	
 endif

@@ -9,9 +9,23 @@ INCLUDE			= $(NO-OS)/include
 DRIVERS 		= $(NO-OS)/drivers
 PLATFORM_DRIVERS	= $(NO-OS)/drivers/platform/$(PLATFORM)
 
-include ../src.mk
-
 all: copy $(EXEC)
+
+TINYIIOD=y
+
+include ../src.mk
+include  $(NO-OS)/tools/scripts/iio_srcs.mk
+
+CFLAGS += -DTINYIIOD_VERSION_MAJOR=0	 \
+		-DTINYIIOD_VERSION_MINOR=1		 \
+		-DTINYIIOD_VERSION_GIT=0x$(shell git -C $(NO-OS)/libraries/iio/libtinyiiod/ \
+						rev-parse --short HEAD) \
+		-DIIOD_BUFFER_SIZE=0x1000		 \
+		-D_USE_STD_INT_TYPES	\
+		-DENABLE_IIO_NETWORK 	\
+		-DPLATFORM_MB
+CFLAGS += -DIIO_SUPPORT
+CFLAGS += -DDISABLE_SECURE_SOCKET
 
 copy:
 	mkdir -p $(BUILD_DIR)
