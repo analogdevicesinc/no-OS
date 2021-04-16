@@ -53,12 +53,14 @@
 #include "spi_extra.h"
 #include "gpio_extra.h"
 #include "irq.h"
-#include "irq_extra.h"
 #endif
 #ifdef LINUX_PLATFORM
 #include "linux_spi.h"
 #include "linux_gpio.h"
-#endif
+#else
+#include "irq_extra.h"
+#endif //LINUX
+
 #include "axi_adc_core.h"
 #include "axi_dac_core.h"
 #include "axi_dmac.h"
@@ -70,8 +72,12 @@
 #include "iio_axi_dac.h"
 #include "iio_ad9361.h"
 #include "uart.h"
+#include "iio_app.h"
+
+#ifdef XILINX_PLATFORM
 #include "uart_extra.h"
 #include "xil_cache.h"
+#endif //XILINX
 
 #endif // IIO_SUPPORT
 
@@ -755,6 +761,12 @@ int main(void)
 	 */
 	struct iio_ad9361_desc *iio_ad9361_desc;
 
+    /**
+	 * iio devices corresponding to every device.
+	 */
+	struct iio_device *adc_dev_desc, *dac_dev_desc, *ad9361_dev_desc;
+
+#ifdef XILINX_PLATFORM
 	/**
 	 * Xilinx platform dependent initialization for IRQ.
 	 */
@@ -771,11 +783,6 @@ int main(void)
 	};
 
 	/**
-	 * iio devices corresponding to every device.
-	 */
-	struct iio_device *adc_dev_desc, *dac_dev_desc, *ad9361_dev_desc;
-
-	/**
 	 * IRQ instance.
 	 */
 	struct irq_ctrl_desc *irq_desc;
@@ -785,7 +792,7 @@ int main(void)
 	 */
 	struct xil_uart_init_param xil_uart_init_par;
 
-	/**
+    /**
 	 * Initialization for UART.
 	 */
 	struct uart_init_param uart_init_par;
@@ -811,12 +818,12 @@ int main(void)
 	if (status < 0)
 		return status;
 
-	status = axi_dmac_init(&tx_dmac, &tx_dmac_init);
-	if(status < 0)
-		return status;
-
 	status = uart_init(&uart_desc, &uart_init_par);
 	if (status < 0)
+		return status;
+
+	status = axi_dmac_init(&tx_dmac, &tx_dmac_init);
+	if(status < 0)
 		return status;
 
 	iio_init_par.phy_type = USE_UART;
@@ -824,6 +831,7 @@ int main(void)
 	status = iio_init(&iio_app_desc, &iio_init_par);
 	if(status < 0)
 		return status;
+#endif //XILINX_PLATFORM
 
 	iio_axi_adc_init_par = (struct iio_axi_adc_init_param) {
 		.rx_adc = ad9361_phy->rx_adc,
@@ -842,10 +850,6 @@ int main(void)
 		.buff = (void *)ADC_DDR_BASEADDR,
 		.size = 0xFFFFFFFF,
 	};
-	status = iio_register(iio_app_desc, adc_dev_desc, "cf-ad9361-lpc",
-			      iio_axi_adc_desc, &read_buff, NULL);
-	if (status < 0)
-		return status;
 
 	iio_axi_dac_init_par = (struct iio_axi_dac_init_param) {
 		.tx_dac = ad9361_phy->tx_dac,
@@ -864,10 +868,6 @@ int main(void)
 		.buff = (void *)DAC_DDR_BASEADDR,
 		.size = 0xFFFFFFFF,
 	};
-	status = iio_register(iio_app_desc, dac_dev_desc, "cf-ad9361-dds-core-lpc",
-			      iio_axi_dac_desc, NULL, &write_buff);
-	if (status < 0)
-		return status;
 
 	iio_ad9361_init_param = (struct iio_ad9361_init_param) {
 		.ad9361_phy = ad9361_phy,
@@ -877,14 +877,14 @@ int main(void)
 	if (status < 0)
 		return status;
 	iio_ad9361_get_dev_descriptor(iio_ad9361_desc, &ad9361_dev_desc);
-	status = iio_register(iio_app_desc, ad9361_dev_desc, "ad9361-phy", ad9361_phy,
-			      NULL, NULL);
-	if (status < 0)
-		return status;
 
-	do {
-		status = iio_step(iio_app_desc);
-	} while (true);
+	struct iio_app_device devices[] = {
+		IIO_APP_DEVICE("axi_adc", iio_axi_adc_desc, adc_dev_desc, &read_buff, NULL),
+		IIO_APP_DEVICE("axi_dac", iio_axi_dac_desc, dac_dev_desc, &write_buff, NULL),
+		//IIO_APP_DEVICE("ad9361", ad9361_phy, ad9361_dev_desc, NULL, NULL)
+		};
+
+	iio_app_run(devices, ARRAY_SIZE(devices));
 
 #endif // IIO_SUPPORT
 

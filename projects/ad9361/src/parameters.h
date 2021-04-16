@@ -48,6 +48,10 @@
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
+#ifdef IIO_SUPPORT
+#define UART_BAUDRATE 115200
+#endif
+
 #ifdef XPAR_AXI_AD9361_0_BASEADDR
 #define AD9361_RX_0_BASEADDR		XPAR_AXI_AD9361_0_BASEADDR
 #define AD9361_TX_0_BASEADDR		XPAR_AXI_AD9361_0_BASEADDR + 0x4000
@@ -148,6 +152,14 @@
 #define CF_AD9361_TX_DMA_BASEADDR	3
 
 #define SPI_DEVICE_ID		0
+#define MAX_SIZE_BASE_ADDR 0x1000
+
+static uint8_t in_buff[MAX_SIZE_BASE_ADDR];
+static uint8_t out_buff[MAX_SIZE_BASE_ADDR];
+
+#define DAC_DDR_BASEADDR	0x10000000//((uint32_t)out_buff)
+#define ADC_DDR_BASEADDR	0x40000000//((uint32_t)in_buff)
+
 #define SPI_CS			0
 
 #define GPIO_RESET_PIN	1006
