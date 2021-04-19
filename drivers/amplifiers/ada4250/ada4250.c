@@ -313,6 +313,7 @@ int32_t ada4250_init(struct ada4250_dev **device,
 	dev->bias = init_param->bias;
 	dev->offset_uv = init_param->offset_uv;
 	dev->avdd_v = init_param->avdd_v;
+	dev->device_id = init_param->device_id;
 
 	if(dev->device_id == ADA4250) {
 		/* SPI */
