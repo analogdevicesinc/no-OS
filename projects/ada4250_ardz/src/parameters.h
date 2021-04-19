@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   ada4250_ardz/src/ada4250_ardz.c
- *   @brief  Implementation of Main Function.
+ *   @file   parameters.h
+ *   @brief  ADA4250_ardz Parameters Definitions.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
  * Copyright 2021(c) Analog Devices, Inc.
@@ -37,67 +37,22 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
+#ifndef PARAMETERS_H_
+#define PARAMETERS_H_
+
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
 
-#include <sys/platform.h>
-#include "adi_initialize.h"
-#include "error.h"
-#include "iio.h"
-#include "parameters.h"
-#include "ada4250.h"
-#include "iio_ada4250.h"
-#include "spi.h"
-#include "spi_extra.h"
-#include "iio_app.h"
+#include "irq_extra.h"
 
-/***************************************************************************//**
- * @brief main
-*******************************************************************************/
-int main()
-{
-	int32_t ret;
+/******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
 
-	adi_initComponents();
+#define UART_DEVICE_ID	0
+#define INTC_DEVICE_ID	0
+#define UART_IRQ_ID	ADUCM_UART_INT_ID
+#define UART_BAUDRATE	115200
 
-	struct ada4250_dev *ada4250_dev;
-
-	struct aducm_spi_init_param spi_param = {
-		.continuous_mode = true,
-		.dma = false,
-		.half_duplex = false,
-		.master_mode = MASTER
-	};
-
-	struct spi_init_param init_param = {
-		.device_id = 0,
-		.chip_select = 1,
-		.extra = &spi_param,
-		.max_speed_hz = 1000000,
-		.mode = SPI_MODE_3,
-		.platform_ops = NULL
-	};
-
-	struct ada4250_init_param ada4250_param = {
-		.device_id = ADA4250,
-		.spi_init = &init_param,
-		.refbuf_en = ADA4250_BUF_DISABLE,
-		.bias = ADA4250_BIAS_DISABLE,
-		.gain = ADA4250_GAIN_8,
-		.avdd_v = 5,
-		.offset_uv = 0,
-	};
-
-	ret = ada4250_init(&ada4250_dev, &ada4250_param);
-	if (IS_ERR_VALUE(ret))
-		return ret;
-
-	struct iio_app_device devices[] = {
-		IIO_APP_DEVICE("ADA4250", ada4250_dev,
-			       &ada4250_iio_descriptor,
-			       NULL, NULL)
-	};
-
-	return iio_app_run(devices, ARRAY_SIZE(devices));
-}
+#endif /* PARAMETERS_H_ */
