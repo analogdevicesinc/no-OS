@@ -173,6 +173,10 @@ ifeq 'stm32' '$(PLATFORM)'
 include $(NO-OS)/tools/scripts/stm32.mk
 endif
 
+ifeq 'linux' '$(PLATFORM)'
+include $(NO-OS)/tools/scripts/linux.mk
+endif
+
 #------------------------------------------------------------------------------
 #                            COMMON COMPILER FLAGS                             
 #------------------------------------------------------------------------------
