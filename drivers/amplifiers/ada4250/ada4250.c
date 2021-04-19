@@ -333,8 +333,10 @@ int32_t ada4250_init(struct ada4250_dev **device,
 
 		chip_id = (chip_id << 8 | data);
 
-		if (chip_id != ADA4250_CHIP_ID)
+		if (chip_id != ADA4250_CHIP_ID) {
+			ret = -EINVAL;
 			goto error_spi;
+		}
 
 		ret = ada4250_soft_reset(dev);
 		if(ret != SUCCESS)
