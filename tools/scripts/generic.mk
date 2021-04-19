@@ -308,9 +308,13 @@ $(OBJECTS_DIR)/%.o: $$(call get_full_path, %).S | $$(@D)/.
 	@$(call print,[AS] $(notdir $<))
 	$(MUTE) $(AS) -c $(ASFLAGS) $< -o $@
 
+ifneq ($(strip $(LSCRIPT)),)
+LSCRIPT_FLAG = -T$(LSCRIPT) $(LDFLAGS)
+endif
+
 $(BINARY): $(LIB_TARGETS) $(OBJS) $(ASM_OBJS) $(LSCRIPT)
 	@$(call print,[LD] $(notdir $(OBJS)))
-	$(MUTE) $(CC) -T$(LSCRIPT) $(LDFLAGS) $(LIB_PATHS) -o $(BINARY) $(OBJS) \
+	$(MUTE) $(CC) $(LSCRIPT_FLAG) $(LDFLAGS) $(LIB_PATHS) -o $(BINARY) $(OBJS) \
 			 $(ASM_OBJS) $(LIB_FLAGS)
 	$(MUTE) $(MAKE) --no-print-directory post_build
 

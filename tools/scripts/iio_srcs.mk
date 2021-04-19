@@ -12,5 +12,7 @@ ifeq (y,$(strip $(ENABLE_IIO_NETWORK)))
 DISABLE_SECURE_SOCKET ?= y
 SRC_DIRS += $(NO-OS)/network
 SRCS	 += $(NO-OS)/util/circular_buffer.c
+ifeq (aducm3029,$(strip $(PLATFORM)))
 SRCS	 += $(PLATFORM_DRIVERS)/timer.c
+endif
 endif
