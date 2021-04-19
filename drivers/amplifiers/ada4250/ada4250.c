@@ -385,9 +385,11 @@ int32_t ada4250_init(struct ada4250_dev **device,
 		if(ret != SUCCESS)
 			return FAILURE;
 
-		ret = ada4250_set_offset(dev, dev->offset_uv);
-		if(ret != SUCCESS)
-			return FAILURE;
+		if(dev->bias != ADA4250_BIAS_DISABLE) {
+			ret = ada4250_set_offset(dev, dev->offset_uv);
+			if(ret != SUCCESS)
+				return FAILURE;
+		}
 	}
 
 	*device = dev;
