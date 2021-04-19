@@ -100,6 +100,6 @@ debug: all openocd_paths $(BINARY).openocd $(BINARY).gdb
 	arm-none-eabi-gdb --command=$(BINARY).gdb
 
 $(PROJECT_TARGET):
-	$(MUTE) $(call mk_dir $(BUILD_DIR))
+	$(MUTE) $(call mk_dir, $(BUILD_DIR))
 	$(MUTE) $(call set_one_time_rule,$@)
 
