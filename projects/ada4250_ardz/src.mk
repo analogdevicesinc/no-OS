@@ -2,13 +2,15 @@
 
 SRC_DIRS += $(PROJECT)/src
 SRC_DIRS += $(DRIVERS)/amplifiers/ada4250
+SRC_DIRS += $(NO-OS)/iio/iio_app
 
-SRCS += $(PLATFORM_DRIVERS)/spi.c					\
-	$(PLATFORM_DRIVERS)/gpio.c					\
-	$(NO-OS)/util/util.c						\
+SRC_DIRS += $(PLATFORM_DRIVERS)
+SRC_DIRS += $(INCLUDE)
 
-INCS += $(INCLUDE)/util.h						\
-	$(INCLUDE)/error.h						\
-	$(INCLUDE)/spi.h						\
-	$(INCLUDE)/gpio.h						\
-	$(PLATFORM_DRIVERS)/spi_extra.h
+SRCS += $(NO-OS)/util/util.c				\
+	$(NO-OS)/util/list.c
+
+IGNORED_FILES += $(PLATFORM_DRIVERS)/uart_stdio.c
+IGNORED_FILES += $(PLATFORM_DRIVERS)/uart_stdio.h
+
+TINYIIOD=y
