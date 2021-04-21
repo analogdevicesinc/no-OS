@@ -314,6 +314,13 @@ int32_t pwm_init(struct pwm_desc **desc,
 	pwm_desc->period_ns = param->period_ns;
 	pwm_desc->polarity = param->polarity;
 
+
+	/* Enable the core */
+	ret = axi_pwmgen_write_mask(axi_desc->base_addr, AXI_PWMGEN_REG_CONFIG,
+				    AXI_PWMGEN_RESET, 0);
+	if (ret != SUCCESS)
+		goto error_xdesc;
+
 	ret = axi_io_write(axi_desc->base_addr, AXI_PWMGEN_REG_SCRATCHPAD,
 			   AXI_PWMGEN_TEST_DATA);
 	if (ret != SUCCESS)
