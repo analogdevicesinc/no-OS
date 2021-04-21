@@ -78,6 +78,7 @@ int main()
 	struct axi_pwm_init_param axi_pwm_init = {
 		.base_addr = AXI_PWMGEN_BASEADDR,
 		.ref_clock_Hz = 100000000,
+		.channel = 0,
 	};
 
 	struct pwm_init_param trigger_pwm_init = {
