@@ -35,7 +35,8 @@ SRCS += $(PLATFORM_DRIVERS)/uart.c					\
 	$(NO-OS)/util/list.c						\
 	$(NO-OS)/iio/iio_ad9361/iio_ad9361.c				\
 	$(NO-OS)/iio/iio_axi_adc/iio_axi_adc.c				\
-	$(NO-OS)/iio/iio_axi_dac/iio_axi_dac.c
+	$(NO-OS)/iio/iio_axi_dac/iio_axi_dac.c	\
+	$(NO-OS)/iio/iio_app/iio_app.c
 endif
 INCS += $(DRIVERS)/rf-transceiver/ad9361/common.h			\
 	$(PROJECT)/src/app_config.h
@@ -64,7 +65,8 @@ INCS += $(INCLUDE)/fifo.h						\
 	$(PLATFORM_DRIVERS)/uart_extra.h				\
 	$(NO-OS)/iio/iio_ad9361/iio_ad9361.h				\
 	$(NO-OS)/iio/iio_axi_adc/iio_axi_adc.h				\
-	$(NO-OS)/iio/iio_axi_dac/iio_axi_dac.h
+	$(NO-OS)/iio/iio_axi_dac/iio_axi_dac.h	\
+	$(NO-OS)/iio/iio_app/iio_app.h
 endif
 ifeq (xilinx,$(strip $(PLATFORM)))
 SRCS +=	$(PLATFORM_DRIVERS)/irq.c
