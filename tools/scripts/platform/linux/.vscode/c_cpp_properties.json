@@ -1,0 +1,19 @@
+{
+    "version": 4, 
+    "configurations": [
+        {
+            "intelliSenseMode": "linux-gcc-arm", 
+            "name": "App", 
+            "cppStandard": "gnu++14", 
+            "compilerArgs": [], 
+            "cStandard": "gnu17", 
+            "compilerPath": "/usr/bin/gcc", 
+            "browse": {
+                "databaseFilename": "", 
+                "limitSymbolsToIncludedHeaders": true
+            }, 
+            "includePath": [], 
+            "defines": []
+        }
+    ]
+}

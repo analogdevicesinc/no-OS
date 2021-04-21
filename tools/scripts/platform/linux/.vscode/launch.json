@@ -1,0 +1,16 @@
+{
+    "version": "0.2.0", 
+    "configurations": [
+        {
+            "name": "(gdb) Launch", 
+            "targetArchitecture": "arm", 
+            "externalConsole": false, 
+            "request": "launch", 
+            "preLaunchTask": "build", 
+            "program": "program.out", 
+            "miDebuggerPath": "/usr/bin/gdb", 
+            "type": "cppdbg", 
+            "cwd": "project_dir"
+        }
+    ]
+}
