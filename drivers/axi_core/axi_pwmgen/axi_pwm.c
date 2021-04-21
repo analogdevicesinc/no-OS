@@ -69,6 +69,29 @@
 /******************************************************************************/
 
 /**
+ * @brief Write the pwmgen axi register using a bitmask
+ *
+ * @param [in] base - Device baseaddress
+ * @param [in] offset - Device register offset
+ * @param [in] mask - Bitmask used to write
+ * @param [in] data - Data to write in register
+ * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ */
+static int32_t axi_pwmgen_write_mask(uint32_t base, uint32_t offset,
+				     uint32_t mask,
+				     uint32_t data)
+{
+	int32_t ret;
+	uint32_t temp;
+
+	ret = axi_io_read(base, offset, &temp);
+	if (ret != 0)
+		return ret;
+
+	return axi_io_write(base, offset, (temp & ~mask) | (data & mask));
+}
+
+/**
  * @brief Enable PWM generator device.
  *
  * @param [in] desc - Decriptor containing PWM generator parameters.
