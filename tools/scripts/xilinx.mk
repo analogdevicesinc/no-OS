@@ -8,7 +8,8 @@ BINARY		= $(BUILD_DIR)/$(PROJECT_NAME).elf
 define tcl_util
 	xsct $(PLATFORM_TOOLS)/util.tcl					\
 	     $(1)							\
-	     $(WORKSPACE) $(WORKSPACE)/tmp $(notdir $(HARDWARE)) $(BINARY)
+	     $(WORKSPACE) $(WORKSPACE)/tmp $(notdir $(HARDWARE))	\
+	     $(BINARY) $(TARGET_CPU)
 endef
 
 ARCH = $(shell $(call read_file, $(TEMP_DIR)/arch.txt))
@@ -30,7 +31,7 @@ PLATFORM_FULL_PATH = $1
 ################|--------------------------------------------------------------
 ################|                   Zynq                                       
 ################|--------------------------------------------------------------
-ifeq (ps7_cortexa9_0,$(strip $(ARCH)))
+ifneq (,$(findstring cortexa9,$(strip $(ARCH))))
 
 CC := arm-none-eabi-gcc
 AR := arm-none-eabi-ar
@@ -52,18 +53,35 @@ endif
 ################|--------------------------------------------------------------
 ################|                   ZynqMP                                     
 ################|--------------------------------------------------------------
-ifeq (psu_cortexa53_0,$(strip $(ARCH)))
+ifneq (,$(findstring cortexa53,$(strip $(ARCH))))
 
 CC := aarch64-none-elf-gcc
 AR := aarch64-none-elf-ar
 
 LD := $(CC)
-
 endif
+
+ifneq (,$(findstring cortexr5,$(strip $(ARCH))))
+
+CC := armr5-none-eabi-gcc 
+AR := armr5-none-eabi-ar
+
+LD := $(CC)
+
+CFLAGS += -mcpu=cortex-r5						\
+	  -mfloat-abi=hard						\
+	  -mfpu=vfpv3-d16
+
+LDFLAGS += -mcpu=cortex-r5						\
+           -mfloat-abi=hard						\
+	   -mfpu=vfpv3-d16						\
+	   -DARMR5
+endif
+
 ################|--------------------------------------------------------------
 ################|                  Microblaze                                  
 ################|--------------------------------------------------------------
-ifeq (sys_mb,$(strip $(ARCH)))
+ifneq (,$(findstring sys_mb,$(strip $(ARCH))))
 
 ifeq ($(OS), Windows_NT)
 CC := mb-gcc

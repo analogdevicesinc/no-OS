@@ -7,16 +7,25 @@ proc _file_is_xsa {} {
 }
 
 proc _get_processor {} {
-	set processor [hsi::get_cells * -filter {IP_TYPE==PROCESSOR}]
+	set proc_list [hsi::get_cells * -filter {IP_TYPE==PROCESSOR}]
 
-	if {[llength $processor] == 0} {
+	if {[llength $proc_list] == 0} {
 		return 0
 	}
-
-	if {[llength $processor] > 1} {
-		return [lindex $processor 0]
+	if {[llength $proc_list] > 1} {
+		if { $::target eq ""} {
+		return [lindex $proc_list 0]
+		} else {
+			foreach proc $proc_list {
+				if {[string first $::target $proc] != -1} {
+					return $proc
+				}
+			}
+			puts "Warning: Target cpu unavailable"
+			return [lindex $proc_list 0]
+		}
 	} else {
-		return $processor
+		return $proc_list
 	}
 }
 
@@ -201,7 +210,15 @@ proc _init_ps {cpu} {
 			mwr 0xFD1A0104 0x380E
 			targets -set -filter {name =~ "Cortex-A53 #0"}
 		}
-
+		"psu_cortexr5_0" {
+			targets -set -nocase -filter {name =~ "PSU"}
+			psu_init
+			after 1000
+			psu_ps_pl_isolation_removal
+			after 1000
+			psu_ps_pl_reset_config
+			targets -set -filter {name =~ "Cortex-R5 #0"}
+		}
 		"sys_mb" {
 			targets -set -filter {[dict get $::pl_dict $cpu]}
 
@@ -241,6 +258,7 @@ set ws		[lindex $argv 1]
 set hw_path	[lindex $argv 2]
 set hw		$::hw_path/[lindex $argv 3]
 set binary      [lindex $argv 4]
+set target	[lindex $argv 5]
 
 if {[file exists $::hw_path/ps7_init.tcl]} {
 	source "[file normalize $::hw_path/ps7_init.tcl]"
