@@ -41,4 +41,4 @@ OBJS = $(SRCS:.c=.o)
 all: $(OBJS)
 
 clean:
-	rm -f $(OBJS)
+	rm -f *.o
