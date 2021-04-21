@@ -57,6 +57,8 @@ struct axi_pwm_init_param {
 	uint32_t base_addr;
 	/** PWM reference clock */
 	uint32_t ref_clock_Hz;
+	/** Desired channel of the pwm controller */
+	uint32_t channel;
 };
 
 /**
@@ -68,6 +70,10 @@ struct axi_pwm_desc {
 	uint32_t base_addr;
 	/** PWM reference clock */
 	uint32_t ref_clock_Hz;
+	/** Desired channel of the pwm controller */
+	uint32_t channel;
+	/** Used to store the period when the channel is disabled */
+	uint32_t ch_period;
 };
 
 #endif
