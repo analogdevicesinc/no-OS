@@ -53,12 +53,14 @@
 #include "spi_extra.h"
 #include "gpio_extra.h"
 #include "irq.h"
-#include "irq_extra.h"
 #endif
 #ifdef LINUX_PLATFORM
 #include "linux_spi.h"
 #include "linux_gpio.h"
-#endif
+#else
+#include "irq_extra.h"
+#endif //LINUX
+
 #include "axi_adc_core.h"
 #include "axi_dac_core.h"
 #include "axi_dmac.h"
@@ -69,8 +71,13 @@
 #include "iio_axi_adc.h"
 #include "iio_axi_dac.h"
 #include "iio_ad9361.h"
+#include "uart.h"
 #include "iio_app.h"
+
+#ifdef XILINX_PLATFORM
+#include "uart_extra.h"
 #include "xil_cache.h"
+#endif //XILINX
 
 #endif // IIO_SUPPORT
 
