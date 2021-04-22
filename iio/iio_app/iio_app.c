@@ -195,7 +195,7 @@ int32_t iio_app_run(struct iio_app_device *devices, int32_t len)
 	if (status < 0)
 		return status;
 #endif
-
+#ifndef LINUX_PLATFORM
 	status = uart_init(&uart_desc, &uart_init_par);
 	if (status < 0)
 		return status;
@@ -231,6 +231,7 @@ int32_t iio_app_run(struct iio_app_device *devices, int32_t len)
 		if (status < 0)
 			return status;
 	}
+#endif
 
 #ifdef USE_TCP_SOCKET
 	wifi_param.irq_desc = irq_desc;
@@ -259,7 +260,7 @@ int32_t iio_app_run(struct iio_app_device *devices, int32_t len)
 	iio_init_param.tcp_socket_init_param = &socket_param;
 
 #elif defined(LINUX_PLATFORM)
-	*socket_param.net = linux_net;
+	socket_param.net = &linux_net;
 	socket_param.max_buff_size = 0;
 
 	iio_init_param.phy_type = USE_NETWORK;
@@ -289,6 +290,7 @@ int32_t iio_app_run(struct iio_app_device *devices, int32_t len)
 		status = iio_step(iio_desc);
 	} while (true);
 error:
+#ifndef LINUX_PLATFORM
 	if (UART_BAUDRATE_DEFAULT != UART_BAUDRATE) {
 		uart_remove(uart_desc);
 
@@ -304,7 +306,7 @@ error:
 	delay_ms = _calc_uart_xfer_time(msglen, UART_BAUDRATE_DEFAULT);
 	mdelay(delay_ms);
 	uart_remove(uart_desc);
-
+#endif
 	return status;
 }
 
