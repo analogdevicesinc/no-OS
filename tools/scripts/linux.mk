@@ -11,3 +11,6 @@ CFLAGS +=  -g3 \
 $(PROJECT_TARGET):
 	$(MUTE) $(call mk_dir, $(BUILD_DIR)) $(HIDE)
 	$(MUTE) $(call set_one_time_rule,$@)
+
+linux_run: $(BINARY)
+	$(BINARY)
