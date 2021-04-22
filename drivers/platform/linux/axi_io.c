@@ -111,6 +111,7 @@ close:
 	return status;
 }
 
+#ifdef DEVMEM
 /**
  * @brief AXI IO through devmem read/write function.
  * @param base - Base address.
@@ -157,7 +158,7 @@ close:
 
 	return ret;
 }
-
+#endif //DEVMEM
 /**
  * @brief AXI IO through UIO/devmem read function.
  * @param base - UIO index (/dev/uioX)/base address.

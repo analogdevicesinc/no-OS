@@ -192,7 +192,7 @@ static int32_t cb_prepare_async_operation(struct circular_buffer *desc,
 {
 	struct cb_ptr	*ptr;
 	uint32_t	available_size;
-	uint32_t	ret;
+	int32_t		ret;
 
 	if (!desc || !buff || !raw_size_available)
 		return -EINVAL;
