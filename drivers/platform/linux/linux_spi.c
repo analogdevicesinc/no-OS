@@ -189,11 +189,43 @@ int32_t linux_spi_remove(struct spi_desc *desc)
 	return SUCCESS;
 }
 
+static int32_t linux_spi_transfer(struct spi_desc *desc,
+				  struct spi_msg *msgs,
+				  uint32_t len)
+
+{
+	struct spi_ioc_transfer *tr;
+	struct linux_spi_desc	*linux_desc;
+	int			ret;
+	uint32_t		i;
+
+	linux_desc = desc->extra;
+
+	tr = (struct spi_ioc_transfer *)calloc(len, sizeof(*tr));
+	if (!tr)
+		return -ENOMEM;
+
+	for (i = 0; i < len; i++) {
+		tr[i].tx_buf = msgs[i].tx_buff;
+		tr[i].rx_buf = msgs[i].rx_buff;
+		tr[i].len = msgs[i].bytes_number;
+		tr[i].cs_change = msgs[i].cs_change;
+	}
+
+	ret = ioctl(linux_desc->spidev_fd, SPI_IOC_MESSAGE(len), tr);
+	if (ret < 0)
+		printf("%s: Can't send spi message (%d)\n\r", __func__, errno);
+
+	free(tr);
+
+	return ret;
+}
 /**
  * @brief Linux platform specific SPI platform ops structure
  */
 const struct spi_platform_ops linux_spi_platform_ops = {
 	.init = &linux_spi_init,
 	.write_and_read = &linux_spi_write_and_read,
-	.remove = &linux_spi_remove
+	.remove = &linux_spi_remove,
+	.transfer = &linux_spi_transfer
 };
