@@ -106,18 +106,17 @@ GENERIC_FLAGS += -DCORE0 -D_RTE_ -D__ADUCM3029__ -D__SILICON_REVISION__=0xffff -
 GENERIC_DEBUG_FLAGS = -g -gdwarf-2 -D_DEBUG
 
 GENERIC_RELEASE_FLAGS = -DNDEBUG 
-C_RELEASE_FLAGS = -O2
 
 CFLAGS += -DADUCM_PLATFORM
 
 ASFLAGS	+= $(GENERIC_FLAGS) $(PLATFORM_INCS) -x assembler-with-cpp 
 CFLAGS	+= $(GENERIC_FLAGS) -Wall -ffunction-sections -fdata-sections
 
-CFLAGS	+= $(GENERIC_RELEASE_FLAGS) $(C_RELEASE_FLAGS)
+CFLAGS	+= $(GENERIC_RELEASE_FLAGS)
 ASFLAGS += $(GENERIC_RELEASE_FLAGS)
 
-#CFLAGS	+= $(GENERIC_DEBUG_FLAGS)
-#ASFLAGS += $(GENERIC_DEBUG_FLAGS)
+CFLAGS	+= $(GENERIC_DEBUG_FLAGS)
+ASFLAGS += $(GENERIC_DEBUG_FLAGS)
 
 LSCRIPT	= $(PROJECT_BUILD)/RTE/Device/ADuCM3029/ADuCM3029.ld
 
@@ -161,6 +160,24 @@ aducm3029_run: all
 	$(MUTE) openocd -s "$(OPENOCD_SCRIPTS)" -f interface/cmsis-dap.cfg \
 		-s "$(ADUCM_DFP)/openocd/scripts" -f target/aducm3029.cfg \
 		-c "program  $(BINARY) verify reset exit" $(HIDE)
+
+.PHONY: $(BINARY).gdb
+$(BINARY).gdb:
+	@echo target remote localhost:3333 > $(BINARY).gdb
+	@echo load $(BINARY) >> $(BINARY).gdb
+	@echo file $(BINARY) >> $(BINARY).gdb
+	@echo monitor reset halt >> $(BINARY).gdb
+	@echo tb main >> $(BINARY).gdb
+	@echo c >> $(BINARY).gdb
+	@echo refresh >> $(BINARY).gdb
+
+.PHONY: debug
+debug: all $(BINARY).gdb
+	(openocd -s "$(OPENOCD_SCRIPTS)" -f interface/cmsis-dap.cfg \
+		-s "$(ADUCM_DFP)/openocd/scripts" -f target/aducm3029.cfg \
+		-c "init" &);
+	/usr/bin/arm-none-eabi-gdb -tui --command=$(BINARY).gdb || \
+		arm-none-eabi-gdb --command=$(BINARY).gdb
 
 #------------------------------------------------------------------------------
 #                             PROJECT RULES                              
