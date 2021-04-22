@@ -105,7 +105,7 @@ int32_t uart_init(struct uart_desc **desc, struct uart_init_param *param)
 	linux_init = param->extra;
 
 	ret = snprintf(path, sizeof(path), "/dev/%s", linux_init->device_id);
-	if (ret < 0 || ret >= sizeof(path)) {
+	if (ret < 0 || ret >= (int)sizeof(path)) {
 		ret = -ENOMEM;
 		goto free_linux_desc;
 	}
@@ -269,7 +269,7 @@ int32_t uart_write(struct uart_desc *desc, const uint8_t *data,
 		   uint32_t bytes_number)
 {
 	struct linux_uart_desc *linux_desc;
-	ssize_t count = 0;
+	uint32_t count = 0;
 	int32_t ret;
 
 	linux_desc = desc->extra;
@@ -294,7 +294,7 @@ int32_t uart_read(struct uart_desc *desc, uint8_t *data,
 		  uint32_t bytes_number)
 {
 	struct linux_uart_desc *linux_desc;
-	ssize_t count = 0;
+	uint32_t count = 0;
 	ssize_t ret;
 
 	linux_desc = desc->extra;
