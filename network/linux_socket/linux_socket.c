@@ -245,12 +245,8 @@ static int32_t linux_socket_accept(struct linux_desc *desc, uint32_t sock_id,
 				   uint32_t *client_socket_id)
 {
 	int32_t ret;
-	int32_t flags;
 
-	ret = accept(sock_id, NULL, NULL);
-
-	flags = fcntl(sock_id, F_GETFL);
-	fcntl(sock_id, F_SETFL, flags | O_NONBLOCK);
+	ret = accept4(sock_id, NULL, NULL, SOCK_NONBLOCK);
 
 	if(ret < 0)
 		return -errno;
