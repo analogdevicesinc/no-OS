@@ -1236,7 +1236,7 @@ ssize_t iio_init(struct iio_desc **desc, struct iio_init_param *init_param)
 		ret = socket_bind(ldesc->server, IIOD_PORT);
 		if (IS_ERR_VALUE(ret))
 			goto free_pylink;
-		ret = socket_listen(ldesc->server, 0);
+		ret = socket_listen(ldesc->server, MAX_BACKLOG);
 		if (IS_ERR_VALUE(ret))
 			goto free_pylink;
 		ret = cb_init(&ldesc->sockets, sizeof(struct tcp_socket_desc *)
