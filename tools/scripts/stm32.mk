@@ -86,6 +86,7 @@ $(BINARY).gdb:
 	# @echo tb UsageFault_Handler >> $(BINARY).gdb
 	# @echo tb MemManage_Handler >> $(BINARY).gdb
 	# @echo tb BusFault_Handler >> $(BINARY).gdb
+	@echo tui enable >> $(BINARY).gdb
 	@echo c >> $(BINARY).gdb
 
 .PHONY: stm32_run
