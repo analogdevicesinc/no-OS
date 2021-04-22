@@ -69,6 +69,8 @@ struct linux_gpio_desc {
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
 
+#define GPIO_TIMEOUT_MS 1000
+
 /**
  * @brief Obtain the GPIO decriptor.
  * @param desc - The GPIO descriptor.
@@ -84,6 +86,7 @@ int32_t linux_gpio_get(struct gpio_desc **desc,
 	int fd;
 	int len;
 	int ret;
+	int timeout;
 
 	descriptor = calloc(1, sizeof(*descriptor));
 	if (!descriptor)
@@ -117,14 +120,26 @@ int32_t linux_gpio_get(struct gpio_desc **desc,
 	}
 
 	sprintf(path, "/sys/class/gpio/gpio%d/direction", descriptor->number);
-	linux_desc->direction_fd = open(path, O_WRONLY);
+	timeout = GPIO_TIMEOUT_MS;
+	while (--timeout) {
+		linux_desc->direction_fd = open(path, O_WRONLY);
+		if (linux_desc->direction_fd >= 0)
+			break;
+		mdelay(1);
+	}
 	if (linux_desc->direction_fd < 0) {
 		printf("%s: Can't open %s\n\r", __func__, path);
 		goto free_linux_desc;
 	}
 
 	sprintf(path, "/sys/class/gpio/gpio%d/value", descriptor->number);
-	linux_desc->value_fd = open(path, O_WRONLY);
+	timeout = GPIO_TIMEOUT_MS;
+	while (--timeout) {
+		linux_desc->value_fd = open(path, O_WRONLY);
+		if (linux_desc->value_fd >= 0)
+			break;
+		mdelay(1);
+	}
 	if (linux_desc->value_fd < 0) {
 		printf("%s: Can't open %s\n\r", __func__, path);
 		goto close_dir;
