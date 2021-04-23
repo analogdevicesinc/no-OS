@@ -512,3 +512,47 @@ int32_t ad7746_get_cap_data(struct ad7746_dev *dev, uint32_t *cap_data)
 
 	return SUCCESS;
 }
+
+/***************************************************************************//**
+ * @brief Perform offset/gain calibration
+ *
+ * @param dev - Device descriptor pointer.
+ * @param md - AD7746 calibration mode specifier.
+ *
+ * @return return code.
+ *         Example: -EINVAL - Wrong input values.
+ *                  -EIO - I2C Communication error.
+ *                  SUCCESS - No errors encountered.
+*******************************************************************************/
+int32_t ad7746_calibrate(struct ad7746_dev *dev, enum ad7746_md md)
+{
+	struct ad7746_config *c = &dev->setup.config;
+	int32_t ret, timeout = 10;
+	uint8_t reg;
+
+	if (md != AD7746_MODE_OFFSET_CALIB &&
+	    md != AD7746_MODE_GAIN_CALIB)
+		return -EINVAL;
+
+	c->md = md;
+	ret = ad7746_set_config(dev, *c);
+	if (ret < 0)
+		return ret;
+
+	do {
+		// Wait an arbitrary time to avoid too many reg reads.
+		// This typically results in 1 read only.
+		mdelay(20);
+
+		ret = ad7746_reg_read(dev, AD7746_REG_CFG, &reg, 1);
+		if (ret < 0)
+			return ret;
+
+		c->md = reg & AD7746_CONF_MD_MSK;
+	} while ((c->md != AD7746_MODE_IDLE) && timeout--);
+
+	if (!timeout)
+		ret = -ETIMEDOUT;
+
+	return ret;
+}

@@ -204,5 +204,6 @@ int32_t ad7746_set_cap_gain(struct ad7746_dev *dev, uint16_t gain);
 int32_t ad7746_set_volt_gain(struct ad7746_dev *dev, uint16_t gain);
 int32_t ad7746_get_vt_data(struct ad7746_dev *dev, uint32_t *vt_data);
 int32_t ad7746_get_cap_data(struct ad7746_dev *dev, uint32_t *cap_data);
+int32_t ad7746_calibrate(struct ad7746_dev *dev, enum ad7746_md md);
 
 #endif // _AD7746_H
