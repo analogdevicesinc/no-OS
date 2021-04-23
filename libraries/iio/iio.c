@@ -102,6 +102,7 @@ static const char * const iio_chan_type_string[] = {
 	[IIO_ALTVOLTAGE] = "altvoltage",
 	[IIO_ANGL_VEL] = "anglvel",
 	[IIO_TEMP] = "temp",
+	[IIO_CAPACITANCE] = "capacitance",
 };
 
 static const char * const iio_modifier_names[] = {
