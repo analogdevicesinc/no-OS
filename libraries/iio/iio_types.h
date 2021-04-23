@@ -81,10 +81,16 @@ enum iio_modifier {
  * @brief Structure holding channel attributess.
  */
 struct iio_ch_info {
-	/** Channel number */
+	/** Channel number. TODO: refactor out the ch_ prefix. */
 	int16_t ch_num;
-	/** Channel type: input/output */
+	/** Channel direction: input/output. TODO: refactor out the ch_ prefix. */
 	bool ch_out;
+	/** Channel type */
+	enum iio_chan_type type;
+	/** Differential channel indicator */
+	bool differential;
+	/** Driver specific identifier. */
+	uint32_t address;
 };
 
 #define END_ATTRIBUTES_ARRAY {.name = NULL}
@@ -138,6 +144,8 @@ struct iio_channel {
 	 *  for angular rate when applied to channel2 will make make the
 	 *  IIO_ANGL_VEL have anglvel_x which corresponds to the x-axis. */
 	int 			channel2;
+	/** Driver specific identifier. */
+	unsigned long		address;
 	/** Index to give ordering in scans when read  from a buffer. */
 	int			scan_index;
 	/** */
