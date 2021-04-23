@@ -222,6 +222,15 @@ uint64_t div_u64_rem(uint64_t dividend, uint32_t divisor, uint32_t *remainder)
 }
 
 /**
+ * Signed 64bit divide with 32bit divisor with remainder
+ */
+int64_t div_s64_rem(int64_t dividend, int32_t divisor, int32_t *remainder)
+{
+	*remainder = dividend % divisor;
+	return dividend / divisor;
+}
+
+/**
  * Unsigned 64bit divide with 32bit divisor
  */
 uint64_t div_u64(uint64_t dividend, uint32_t divisor)
@@ -229,6 +238,15 @@ uint64_t div_u64(uint64_t dividend, uint32_t divisor)
 	uint32_t remainder;
 
 	return div_u64_rem(dividend, divisor, &remainder);
+}
+
+/**
+ * Signed 64bit divide with 32bit divisor
+ */
+int64_t div_s64(int64_t dividend, int32_t divisor)
+{
+	int32_t remainder;
+	return div_s64_rem(dividend, divisor, &remainder);
 }
 
 /**
