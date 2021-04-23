@@ -7,7 +7,7 @@ SRCS += $(NO-OS)/util/util.c \
 	$(PLATFORM_DRIVERS)/uart_stdio.c \
 	$(PLATFORM_DRIVERS)/rtc.c \
 	$(PLATFORM_DRIVERS)/platform_init.c \
-	$(DRIVERS)/adc/ad7746/ad7746.c \
+	$(DRIVERS)/cdc/ad7746/ad7746.c \
 	$(PROJECT)/src/app/headless.c
 
 INCS +=	$(INCLUDE)/uart.h \
@@ -26,6 +26,6 @@ INCS +=	$(INCLUDE)/uart.h \
 	$(PLATFORM_DRIVERS)/uart_stdio.h \
 	$(PLATFORM_DRIVERS)/rtc_extra.h \
 	$(PLATFORM_DRIVERS)/platform_init.h \
-	$(DRIVERS)/adc/ad7746/ad7746.h \
+	$(DRIVERS)/cdc/ad7746/ad7746.h \
 	$(PROJECT)/src/app/parameters.h
 
