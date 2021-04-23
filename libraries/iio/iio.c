@@ -323,7 +323,7 @@ static inline struct iio_channel *iio_get_channel(const char *channel,
 		struct iio_device *desc, bool ch_out)
 {
 	int16_t i = 0;
-	char	ch_id[20];
+	char	ch_id[64];
 
 	while (i < desc->num_ch) {
 		_print_ch_id(ch_id, &desc->channels[i]);
