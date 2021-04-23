@@ -378,7 +378,7 @@ static inline int32_t _ad7746_write_2byte(struct ad7746_dev *dev, uint8_t reg,
 	if (!dev)
 		return -EINVAL;
 
-	buf[0] = (uint8_t)(val >> 16);
+	buf[0] = (uint8_t)(val >> 8);
 	buf[1] = (uint8_t)val;
 
 	return ad7746_reg_write(dev, reg, buf, 2);
