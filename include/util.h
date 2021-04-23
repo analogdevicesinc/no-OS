@@ -111,6 +111,8 @@
 
 #define UNUSED_PARAM(x) ((void)x)
 
+#define shift_right(x, s) ((x) < 0 ? -(-(x) >> (s)) : (x) >> (s))
+
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
@@ -148,8 +150,10 @@ uint64_t div64_u64_rem(uint64_t dividend, uint64_t divisor,
 		       uint64_t *remainder);
 /* Unsigned 64bit divide with 32bit divisor with remainder */
 uint64_t div_u64_rem(uint64_t dividend, uint32_t divisor, uint32_t *remainder);
+int64_t div_s64_rem(int64_t dividend, int32_t divisor, int32_t *remainder);
 /* Unsigned 64bit divide with 32bit divisor */
 uint64_t div_u64(uint64_t dividend, uint32_t divisor);
+int64_t div_s64(int64_t dividend, int32_t divisor);
 /* Converts from string to int32_t */
 int32_t str_to_int32(const char *str);
 /* Converts from string to uint32_t */
