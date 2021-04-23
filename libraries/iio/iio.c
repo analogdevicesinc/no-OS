@@ -1131,13 +1131,81 @@ static uint32_t iio_generate_device_xml(struct iio_device *device, char *name,
 			if (ch->attributes)
 				for (k = 0; ch->attributes[k].name; k++) {
 					attr = &ch->attributes[k];
-					i += snprintf(buff + i, max(n - i, 0),
-						      "<attribute name=\"%s\""
-						      " filename=\"%s_%s_%s_%s\" />",
-						      attr->name,
-						      ch->ch_out ? "out" : "in",
-						      ch_id, ch->name,
-						      attr->name);
+					i += snprintf(buff + i, max(n - i, 0), "<attribute name=\"%s\" ", attr->name);
+					if (ch->diferential) {
+						switch (attr->shared) {
+						case IIO_SHARED_BY_ALL:
+							i += snprintf(buff + i, max(n - i, 0),
+								      "filename=\"%s\"",
+								      attr->name);
+							break;
+						case IIO_SHARED_BY_DIR:
+							i += snprintf(buff + i, max(n - i, 0),
+								      "filename=\"%s_%s\"",
+								      ch->ch_out ? "out" : "in",
+								      attr->name);
+							break;
+						case IIO_SHARED_BY_TYPE:
+							i += snprintf(buff + i, max(n - i, 0),
+								      "filename=\"%s_%s-%s_%s\"",
+								      ch->ch_out ? "out" : "in",
+								      iio_chan_type_string[ch->ch_type],
+								      iio_chan_type_string[ch->ch_type],
+								      attr->name);
+							break;
+						case IIO_SEPARATE:
+							if (!ch->indexed) {
+								// Differential channels must be indexed!
+								return -EINVAL;
+							}
+							i += snprintf(buff + i, max(n - i, 0),
+								      "filename=\"%s_%s%d-%s%d_%s\"",
+								      ch->ch_out ? "out" : "in",
+								      iio_chan_type_string[ch->ch_type],
+								      ch->channel,
+								      iio_chan_type_string[ch->ch_type],
+								      ch->channel2,
+								      attr->name);
+							break;
+						}
+					} else {
+						switch (attr->shared) {
+						case IIO_SHARED_BY_ALL:
+							i += snprintf(buff + i, max(n - i, 0),
+								      "filename=\"%s\"",
+								      attr->name);
+							break;
+						case IIO_SHARED_BY_DIR:
+							i += snprintf(buff + i, max(n - i, 0),
+								      "filename=\"%s_%s\"",
+								      ch->ch_out ? "out" : "in",
+								      attr->name);
+							break;
+						case IIO_SHARED_BY_TYPE:
+							i += snprintf(buff + i, max(n - i, 0),
+								      "filename=\"%s_%s_%s\"",
+								      ch->ch_out ? "out" : "in",
+								      iio_chan_type_string[ch->ch_type],
+								      attr->name);
+							break;
+						case IIO_SEPARATE:
+							if (ch->indexed)
+								i += snprintf(buff + i, max(n - i, 0),
+									      "filename=\"%s_%s%d_%s\"",
+									      ch->ch_out ? "out" : "in",
+									      iio_chan_type_string[ch->ch_type],
+									      ch->channel,
+									      attr->name);
+							else
+								i += snprintf(buff + i, max(n - i, 0),
+									      "filename=\"%s_%s_%s\"",
+									      ch->ch_out ? "out" : "in",
+									      iio_chan_type_string[ch->ch_type],
+									      attr->name);
+							break;
+						}
+					}
+					i += snprintf(buff + i, max(n - i, 0), " />", attr->name);
 				}
 
 			i += snprintf(buff + i, max(n - i, 0), "</channel>");

@@ -107,6 +107,13 @@ struct iio_ch_info {
 
 #define END_ATTRIBUTES_ARRAY {.name = NULL}
 
+enum iio_attribute_shared {
+	IIO_SEPARATE,
+	IIO_SHARED_BY_TYPE,
+	IIO_SHARED_BY_DIR,
+	IIO_SHARED_BY_ALL,
+};
+
 /**
  * @struct iio_attribute
  * @brief Structure holding pointers to show and store functions.
@@ -116,6 +123,11 @@ struct iio_attribute {
 	const char *name;
 	/** Attribute id */
 	intptr_t priv;
+	/** Whether this attribute is shared by all channels of the same type, or direction
+	 * or simply by all channels. If left uninitialized, the sharedness defaults to
+	 * separate.
+	*/
+	enum iio_attribute_shared shared;
 	/** Show function pointer */
 	ssize_t (*show)(void *device, char *buf, size_t len,
 			const struct iio_ch_info *channel, intptr_t priv);
@@ -146,8 +158,8 @@ struct scan_type {
  * @brief Structure holding attributes of a channel.
  */
 struct iio_channel {
-	/** channel name */
-	char			*name;
+	/** Channel name */
+	const char		*name;
 	/** Chanel type */
 	enum iio_chan_type	ch_type;
 	/** Channel number when the same channel type */
