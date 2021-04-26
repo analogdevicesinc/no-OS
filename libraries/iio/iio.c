@@ -524,6 +524,123 @@ static int32_t debug_reg_write(struct iio_interface *dev, const char *buf,
 	return len;
 }
 
+static int32_t __iio_str_parse(char *buf, int32_t *integer, int32_t *fract,
+			       bool scale_db)
+{
+	char *p;
+
+	p = strtok(buf, ".");
+	if (p == NULL)
+		return -EINVAL;
+
+	*integer = strtol(p, NULL, 0);
+
+	if (scale_db) {
+		p = strtok(NULL, "db");
+		if (p == NULL)
+			p = strtok(NULL, " db");
+	} else
+		p = strtok(NULL, "\n");
+
+	if (p == NULL)
+		return -EINVAL;
+
+	*fract = strtol(p, NULL, 0);
+
+	return 0;
+}
+
+int32_t iio_parse_value(char *buf, enum iio_val fmt, int32_t *val,
+			int32_t *val2)
+{
+	int32_t ret = 0;
+	int32_t integer, fract = 0;
+	char ch;
+
+	switch (fmt) {
+	case IIO_VAL_INT:
+		integer = strtol(buf, NULL, 0);
+		break;
+	case IIO_VAL_INT_PLUS_MICRO_DB:
+		ret = __iio_str_parse(buf, &integer, &fract, true);
+		if (ret < 0)
+			return ret;
+		fract *= 100000;
+		break;
+	case IIO_VAL_INT_PLUS_MICRO:
+		ret = __iio_str_parse(buf, &integer, &fract, false);
+		if (ret < 0)
+			return ret;
+		fract *= 100000;
+		break;
+	case IIO_VAL_INT_PLUS_NANO:
+		ret = __iio_str_parse(buf, &integer, &fract, false);
+		if (ret < 0)
+			return ret;
+		fract *= 100000000;
+		break;
+	case IIO_VAL_CHAR:
+		if (sscanf(buf, "%c", &ch) != 1)
+			return -EINVAL;
+		integer = ch;
+		break;
+	default:
+		return -EINVAL;
+	}
+
+	if (val)
+		*val = integer;
+	if (val2)
+		*val2 = fract;
+
+	return ret;
+}
+
+ssize_t iio_format_value(char *buf, size_t len, enum iio_val fmt,
+			 int32_t size, int32_t *vals)
+{
+	uint64_t tmp;
+	int32_t integer, fractional;
+	bool dB = false;
+	int32_t i = 0;
+	uint32_t l = 0;
+
+	switch (fmt) {
+	case IIO_VAL_INT:
+		return snprintf(buf, len, "%d", vals[0]);
+	case IIO_VAL_INT_PLUS_MICRO_DB:
+		dB = true;
+	/* intentional fall through */
+	case IIO_VAL_INT_PLUS_MICRO:
+		return snprintf(buf, len, "%d.%06u%s", vals[0], vals[1],
+				dB ? " dB" : "");
+	case IIO_VAL_INT_PLUS_NANO:
+		return snprintf(buf, len, "%d.%09u", vals[0], vals[1]);
+	case IIO_VAL_FRACTIONAL:
+		tmp = div_s64((int64_t)vals[0] * 1000000000LL, vals[1]);
+		fractional = vals[1];
+		integer = (int32_t)div_s64_rem(tmp, 1000000000, &fractional);
+		return snprintf(buf, len, "%d.%09u", integer, abs(fractional));
+	case IIO_VAL_FRACTIONAL_LOG2:
+		tmp = shift_right((int64_t)vals[0] * 1000000000LL, vals[1]);
+		integer = (int32_t)div_s64_rem(tmp, 1000000000LL, &fractional);
+		return snprintf(buf, len, "%d.%09u", integer, abs(fractional));
+	case IIO_VAL_INT_MULTIPLE: {
+		while (i < size) {
+			l += snprintf(&buf[l], len - l, "%d ", vals[i]);
+			if (l >= len)
+				break;
+			i++;
+		}
+		return l;
+	}
+	case IIO_VAL_CHAR:
+		return snprintf(buf, len, "%c", (char)vals[0]);
+	default:
+		return 0;
+	}
+}
+
 /**
  * @brief Read global attribute of a device.
  * @param device - String containing device name.

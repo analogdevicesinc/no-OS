@@ -92,5 +92,9 @@ ssize_t iio_register(struct iio_desc *desc, struct iio_device *dev_descriptor,
 		     struct iio_data_buffer *write_buff);
 /* Unregister interface. */
 ssize_t iio_unregister(struct iio_desc *desc, char *name);
+int32_t iio_parse_value(char *buf, enum iio_val fmt,
+			int32_t *val, int32_t *val2);
+ssize_t iio_format_value(char *buf, size_t len, enum iio_val fmt,
+			 int32_t size, int32_t *vals);
 
 #endif /* IIO_H_ */

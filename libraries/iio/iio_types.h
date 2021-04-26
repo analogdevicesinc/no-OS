@@ -51,6 +51,18 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
+
+enum iio_val {
+	IIO_VAL_INT = 1,
+	IIO_VAL_INT_PLUS_MICRO,
+	IIO_VAL_INT_PLUS_NANO,
+	IIO_VAL_INT_PLUS_MICRO_DB,
+	IIO_VAL_INT_MULTIPLE,
+	IIO_VAL_FRACTIONAL = 10,
+	IIO_VAL_FRACTIONAL_LOG2,
+	IIO_VAL_CHAR
+};
+
 /**
  * @struct iio_chan_type
  * @brief IIO channel types
