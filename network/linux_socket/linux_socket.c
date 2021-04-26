@@ -149,11 +149,18 @@ static int32_t linux_socket_recv(struct linux_desc *desc, uint32_t sock_id,
 {
 	int32_t ret;
 
+	if (!size)
+		return size;
+
 	ret = recv(sock_id, data, size, MSG_DONTWAIT);
 	if(ret < 0)
 		return -errno;
 
-	return size;
+	/* A stream socket peer has performed an orderly shutdown */
+	if(ret == 0)
+		return -ENOTCONN;
+
+	return ret;
 }
 
 /** @brief See \ref network_interface.socket_sendto */
