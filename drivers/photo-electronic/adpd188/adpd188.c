@@ -68,8 +68,10 @@ int32_t adpd188_init(struct adpd188_dev **device,
 	if(!dev)
 		return FAILURE;
 	dev->device = init_param->device;
-	if (dev->device == APDP108X)
+	if (dev->device == APDP1080)
 		dev->phy_opt = ADPD188_I2C;
+	else if (dev->device == ADPD1081)
+		dev->phy_opt = ADPD188_SPI;
 	else
 		dev->phy_opt = init_param->phy_opt;
 
@@ -89,7 +91,8 @@ int32_t adpd188_init(struct adpd188_dev **device,
 		goto error_phy;
 	if((dev->device == ADPD188BI) && (reg_data != ADPD188_DEVICE_ID))
 		goto error_phy;
-	else if((dev->device == APDP108X) && (reg_data != ADPD108X_DEVICE_ID))
+	else if(((dev->device == APDP1080) || (dev->device == ADPD1081)) &&
+		(reg_data != ADPD108X_DEVICE_ID))
 		goto error_phy;
 
 	ret = adpd188_sw_reset(dev);
@@ -624,7 +627,7 @@ int32_t adpd188_slot_setup(struct adpd188_dev *dev,
  * @param freq_hz - Desired ADC sample frequency.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t adpd188_adc_fsample_set(struct adpd188_dev *dev, float freq_hz)
+int32_t adpd188_adc_fsample_set(struct adpd188_dev *dev, uint16_t freq_hz)
 {
 	uint16_t reg_data;
 
@@ -642,7 +645,7 @@ int32_t adpd188_adc_fsample_set(struct adpd188_dev *dev, float freq_hz)
  * @param freq_hz - ADC sample frequency.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t adpd188_adc_fsample_get(struct adpd188_dev *dev, float *freq_hz)
+int32_t adpd188_adc_fsample_get(struct adpd188_dev *dev, uint16_t *freq_hz)
 {
 	int32_t ret;
 	uint16_t reg_data;
@@ -650,7 +653,7 @@ int32_t adpd188_adc_fsample_get(struct adpd188_dev *dev, float *freq_hz)
 	ret = adpd188_reg_read(dev, ADPD188_REG_FSAMPLE, &reg_data);
 	if(ret != SUCCESS)
 		return FAILURE;
-	*freq_hz = 32000.0 / (float)(reg_data * 4);
+	*freq_hz = 32000 / (reg_data * 4);
 
 	return SUCCESS;
 }
