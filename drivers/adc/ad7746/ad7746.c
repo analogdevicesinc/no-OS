@@ -69,6 +69,8 @@ int32_t ad7746_init(struct ad7746_dev **device,
 	if (ret < 0)
 		goto error_1;
 
+	dev->id = init_param->id;
+
 	ret = ad7746_reset(dev);
 	if (ret < 0)
 		goto error_2;

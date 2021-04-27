@@ -109,6 +109,12 @@
 #define AD7746_CAPDAC_DACEN_MSK		BIT(7)
 #define AD7746_CAPDAC_DACP_MSK		GENMASK(6,0)
 
+enum ad7746_id {
+	ID_AD7745,
+	ID_AD7746,
+	ID_AD7747,
+};
+
 struct ad7746_cap {
 	bool capen;
 	bool cin2;
@@ -176,11 +182,13 @@ struct ad7746_setup {
 
 struct ad7746_init_param {
 	struct i2c_init_param i2c_init;
+	enum ad7746_id id;
 	struct ad7746_setup setup;
 };
 
 struct ad7746_dev {
 	i2c_desc *i2c_dev;
+	enum ad7746_id id;
 	uint8_t buf[AD7746_NUM_REGISTERS + 1u];
 	struct ad7746_setup setup;
 };
