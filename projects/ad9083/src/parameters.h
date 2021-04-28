@@ -63,4 +63,6 @@
 #define ADC_DDR_BASEADDR	(XPAR_DDR_MEM_BASEADDR + 0x800000)
 #define UART_BAUDRATE		115200
 
+//#define SUBCLASS_1
+
 #endif /* __PARAMETERS_H__ */

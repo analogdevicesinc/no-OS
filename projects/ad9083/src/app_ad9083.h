@@ -35,6 +35,9 @@ int32_t app_ad9083_remove(struct app_ad9083 *app);
 /* Check SYSREF clock. */
 bool app_ad9083_check_sysref_rate(uint32_t lmfc, uint32_t sysref);
 
+/* Check AD9083 subclass 1 status. */
+int32_t app_ad9083_subclass1_status(struct app_ad9083 *app);
+
 /* Check AD9083 status. */
 int32_t app_ad9083_status(struct app_ad9083 *app);
 

@@ -44,6 +44,7 @@
 #include <stdlib.h>
 #include "inttypes.h"
 #include "app_ad9083.h"
+#include "adi_ad9083_bf_jtx_ip.h"
 #include "parameters.h"
 #include "spi.h"
 #include "spi_extra.h"
@@ -72,6 +73,31 @@ bool app_ad9083_check_sysref_rate(uint32_t lmfc, uint32_t sysref)
 
 	/* Ignore minor deviations that can be introduced by rounding. */
 	return mod <= div || mod >= sysref - div;
+}
+
+
+/**
+ * @brief Check AD9083 subclass 1 link status.
+ * @param app - AD9083 app descriptor.
+ * @return SUCCESS in case of success, FAILURE otherwise.
+ */
+int32_t app_ad9083_subclass1_status(struct app_ad9083 *app)
+{
+	uint8_t stat;
+	int32_t ret;
+
+	ret = ad9083_reg_get(app->ad9083_phy, REG_JTX_TPL_CONFIG1_ADDR, &stat);
+	if (ret)
+		return -EFAULT;
+
+	if ((stat & 0xF) != (BIT(1) | BIT(3)))
+		pr_err("JTX TPL ERROR CONFIG: %s, SYSREF: %s %s, LMFC PHASE: %s\n",
+		       stat & BIT(0) ? "Invalid" : "Valid",
+		       stat & BIT(1) ? "Received" : "Waiting",
+		       stat & BIT(2) ? "(Unaligned)" : "",
+		       stat & BIT(3) ? "Established" : "Lost");
+
+	return SUCCESS;
 }
 
 /**
