@@ -44,17 +44,24 @@
 #include <errno.h>
 #include <stdlib.h>
 #include "ad9083.h"
+#include "adi_ad9083_hal.h"
 #include "error.h"
 #include <inttypes.h>
 #include "delay.h"
 #include "clk.h"
 #include "uc_settings.h"
+#include "util.h"
+#include "print_log.h"
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 extern int32_t adi_ad9083_jtx_startup(adi_ad9083_device_t *device,
 				      adi_cms_jesd_param_t *jtx_param);
+
+extern int32_t adi_ad9083_jesd_tx_link_digital_reset(adi_ad9083_device_t
+		*device,
+		uint8_t reset);
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -220,6 +227,39 @@ int32_t ad9083_reset_pin_ctrl(void *user_data, uint8_t enable)
 }
 
 /**
+ * ad9083 link reset
+ * @param device - The device structure.
+ * @param uc - Configuration selection.
+ * @return SUCCESS in case of success, FAILURE otherwise.
+ */
+static int32_t ad9083_link_reset(struct ad9083_phy *device, uint8_t uc)
+{
+	struct uc_settings *uc_settings = get_uc_settings();
+	adi_cms_jesd_param_t *jtx_param = &uc_settings->jtx_param[uc];
+	int32_t ret;
+
+	if (jtx_param->jesd_subclass == 1) {
+		adi_ad9083_hal_bf_set(&device->adi_ad9083,
+				      BF_JTX_TPL_SYSREF_CLR_PHASE_ERR_INFO, 1);
+		adi_ad9083_hal_bf_set(&device->adi_ad9083,
+				      BF_JTX_TPL_SYSREF_CLR_PHASE_ERR_INFO, 0);
+	}
+
+	ret = adi_ad9083_jesd_tx_link_digital_reset(&device->adi_ad9083, 1);
+	if (ret != SUCCESS)
+		return ret;
+
+	mdelay(1);
+	ret = adi_ad9083_jesd_tx_link_digital_reset(&device->adi_ad9083, 0);
+	if (ret != SUCCESS)
+		return ret;
+
+	mdelay(1);
+
+	return SUCCESS;
+}
+
+/**
  * Setup ad9083 device
  * @param device - The device structure.
  * @param uc - Configuration selection.
@@ -264,6 +304,26 @@ static int32_t ad9083_setup(struct ad9083_phy *device, uint8_t uc)
 						nco0_datapath_mode, decimation, nco_freq_hz);
 	if (ret != SUCCESS)
 		return ret;
+
+	if (jtx_param->jesd_subclass == 1) {
+		ret = adi_ad9083_hal_bf_set(&device->adi_ad9083, BF_SYSREF_RESYNC_MODE_INFO, 1);
+		if (ret)
+			return ret;
+		ret = adi_ad9083_hal_bf_set(&device->adi_ad9083, BF_JTX_SYSREF_FOR_STARTUP_INFO,
+					    1);
+		if (ret)
+			return ret;
+		ret = adi_ad9083_hal_bf_set(&device->adi_ad9083, BF_JTX_SYSREF_FOR_RELINK_INFO,
+					    1);
+		if (ret)
+			return ret;
+		ret = adi_ad9083_hal_bf_set(&device->adi_ad9083, BF_SYSREF_RESYNC_MODE_INFO, 1);
+		if (ret)
+			return ret;
+		ret = adi_ad9083_hal_bf_set(&device->adi_ad9083, 0x00000D40, 0x00000101, 0);
+		if (ret)
+			return ret;
+	}
 
 	ret = adi_ad9083_jtx_startup(&device->adi_ad9083, jtx_param);
 	if (ret != SUCCESS)
@@ -329,6 +389,12 @@ int32_t ad9083_init(struct ad9083_phy **device,
 	ret = ad9083_setup(phy, init_param->uc);
 	if (ret != SUCCESS) {
 		printf("%s: ad9083_setup failed (%"PRId32")\n", __func__, ret);
+		goto error_4;
+	}
+
+	ret = ad9083_link_reset(phy, init_param->uc);
+	if (ret != SUCCESS) {
+		printf("%s: ad9083_link failed (%"PRId32")\n", __func__, ret);
 		goto error_4;
 	}
 

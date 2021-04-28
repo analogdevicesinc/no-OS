@@ -68,7 +68,11 @@
 int main(void)
 {
 	/* select configuration from uc_settings.c */
+#ifdef SUBCLASS_1
+	uint8_t uc = 9;
+#else
 	uint8_t uc = 7;
+#endif
 	int32_t status = SUCCESS;
 	struct axi_adc *rx_adc;
 	struct axi_dmac *rx_dmac;
@@ -134,6 +138,15 @@ int main(void)
 
 		return FAILURE;
 	}
+
+#ifdef SUBCLASS_1
+	status = app_ad9083_subclass1_status(app_ad9083);
+	if (status != SUCCESS) {
+		pr_err("error: %"PRIi32" app_ad9083_status()\n", status);
+
+		return FAILURE;
+	}
+#endif
 
 	status = app_ad9083_status(app_ad9083);
 	if (status != SUCCESS) {

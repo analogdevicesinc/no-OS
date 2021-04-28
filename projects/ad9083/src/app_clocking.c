@@ -134,7 +134,7 @@ int32_t app_clocking_init(struct app_clocking **app,
 
 	// SYSREF to ADC
 	ad9528_channels[ADC_SYSREF_CLK].output_dis = 0;
-	ad9528_channels[ADC_SYSREF_CLK].driver_mode = DRIVER_MODE_LVDS;
+	ad9528_channels[ADC_SYSREF_CLK].driver_mode = DRIVER_MODE_HSTL;
 	ad9528_channels[ADC_SYSREF_CLK].divider_phase = 0;
 	ad9528_channels[ADC_SYSREF_CLK].signal_source = SOURCE_SYSREF_VCO;
 
@@ -161,9 +161,8 @@ int32_t app_clocking_init(struct app_clocking **app,
 	ad9528_param.pdata->pll2_charge_pump_current_nA = 805000;
 	ad9528_param.pdata->pll2_bypass_en = false;
 	ad9528_param.pdata->sysref_src = SYSREF_SRC_INTERNAL;
-	ad9528_param.pdata->sysref_pattern_mode = SYSREF_PATTERN_CONTINUOUS;
-	ad9528_param.pdata->sysref_req_en = true;
-	ad9528_param.pdata->sysref_nshot_mode = SYSREF_NSHOT_4_PULSES;
+	ad9528_param.pdata->sysref_pattern_mode = SYSREF_PATTERN_NSHOT;
+	ad9528_param.pdata->sysref_nshot_mode = SYSREF_NSHOT_1_PULSE;
 	ad9528_param.pdata->sysref_req_trigger_mode = SYSREF_LEVEL_HIGH;
 	ad9528_param.pdata->rpole2 = RPOLE2_900_OHM;
 	ad9528_param.pdata->rzero = RZERO_1850_OHM;
