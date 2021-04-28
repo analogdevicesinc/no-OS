@@ -184,8 +184,8 @@
 #define AD9528_CLK_DIST_DIV_MAX 256
 #define AD9528_CLK_DIST_DIV(x)			((((x) - 1) & 0xFF) << 16)
 #define AD9528_CLK_DIST_DIV_REV(x)		((((x) >> 16) & 0xFF) + 1)
-#define AD9528_CLK_DIST_DRIVER_MODE(x)		(((x) & 0x3) << 13)
-#define AD9528_CLK_DIST_DRIVER_MODE_REV(x)	(((x) >> 13) & 0x3)
+#define AD9528_CLK_DIST_DRIVER_MODE(x)		(((x) & 0x3) << 14)
+#define AD9528_CLK_DIST_DRIVER_MODE_REV(x)	(((x) >> 14) & 0x3)
 #define AD9528_CLK_DIST_DIV_PHASE(x)		(((x) & 0x3F) << 8)
 #define AD9528_CLK_DIST_DIV_PHASE_REV(x)	(((x) >> 8) & 0x3F)
 #define AD9528_CLK_DIST_CTRL(x)			(((x) & 0x7) << 5)
