@@ -23,7 +23,9 @@ INCS += $(DRIVERS)/adc/adc_demo/iio_adc_demo.h			\
 		$(DRIVERS)/dac/dac_demo/iio_dac_demo.h			\
 		$(DRIVERS)/adc/adc_demo/adc_demo.h		\
 
+ifeq ($(PLATFORM),$(filter $(PLATFORM),xilinx aducm3029))
 SRCS += $(PLATFORM_DRIVERS)/delay.c
+endif
 INCS += $(INCLUDE)/delay.h
 
 ifeq ($(PLATFORM),$(filter $(PLATFORM),xilinx aducm3029))
@@ -86,13 +88,15 @@ LSCRIPT = $(PROJECT)/src/linker/STM32F446RETX_FLASH.ld
 endif
 
 ifeq (linux,$(PLATFORM))
+CFLAGS += -DENABLE_IIO_NETWORK \
+			-DDISABLE_SECURE_SOCKET
 
-SRC_DIRS += $(NO-OS)/libraries/mbedtls/include/mbedtls
+LIBRARIES += iio
 SRCS += $(NO-OS)/network/linux_socket/linux_socket.c 
 SRCS +=	$(NO-OS)/network/tcp_socket.c
 SRCS += $(PROJECT)/src/app/main.c
 SRCS += $(NO-OS)/iio/iio_app/iio_app.c
-SRCS	 += $(NO-OS)/util/circular_buffer.c
+SRCS += $(NO-OS)/util/circular_buffer.c
 
 SRCS += $(DRIVERS)/platform/generic/uart.c \
 		$(DRIVERS)/platform/generic/delay.c
@@ -100,9 +104,6 @@ SRCS += $(DRIVERS)/platform/generic/uart.c \
 INCS += $(NO-OS)/network/tcp_socket.h \
 		$(NO-OS)/network/network_interface.h \
 		$(NO-OS)/network/noos_mbedtls_config.h \
-		$(NO-OS)/network/wifi/at_parser.h \
-		$(NO-OS)/network/wifi/wifi.h \
-		$(NO-OS)/network/wifi/at_params.h \
 		$(NO-OS)/network/linux_socket/linux_socket.h
 
 INCS	 += $(INCLUDE)/circular_buffer.h
@@ -110,9 +111,6 @@ INCS += $(PROJECT)/src/app/app_config.h  \
 		$(PROJECT)/src/app/parameters.h	
 
 INCS += $(NO-OS)/iio/iio_app/iio_app.h 
-
-
-INCS += $(NO-OS)/libraries/mbedtls/include/mbedtls
 
 INCS += $(INCLUDE)/gpio.h \
 		$(INCLUDE)/delay.h \
