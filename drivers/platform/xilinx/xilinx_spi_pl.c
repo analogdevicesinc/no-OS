@@ -403,12 +403,11 @@ static void _increment_iter(struct msg_iter *it, uint32_t len,
 	*cs_change = 0;
 	*new_type = 0;
 	msg = it->msgs + it->i;
-	if (it->buff_i + len > msg->bytes_number) {
+	if (it->buff_i + len > msg->bytes_number)
 		extra_len = it->buff_i + len - msg->bytes_number;
-		_increment_iter(it, extra_len, cs_change, new_type);
-		len -= extra_len;
-	}
-
+	else
+		extra_len = 0;
+	len -= extra_len;
 	it->buff_i += len;
 	if (it->buff_i == msg->bytes_number) {
 		type = _get_msg_type(msg);
@@ -421,6 +420,8 @@ static void _increment_iter(struct msg_iter *it, uint32_t len,
 			    type != _get_msg_type(it->msgs + it->i))
 				*new_type = 1;
 	}
+	if (extra_len)
+		_increment_iter(it, extra_len, cs_change, new_type);
 }
 
 /*
