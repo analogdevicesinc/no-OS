@@ -513,7 +513,7 @@ static int32_t xil_spi_transfer_pl(struct spi_desc *desc, struct spi_msg *msgs,
 			}
 		}
 
-		if (cs_change)
+		if ((cs_change && rx.i != len) || (!cs_change && rx.i == len))
 			_xil_spi_start_transfer(desc, 0);
 	} while (rx.i < len);
 
