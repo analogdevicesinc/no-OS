@@ -191,19 +191,15 @@ static int32_t xil_spi_init_pl(struct spi_desc **desc,
 		return -EINVAL;
 
 	cfg = XSpi_LookupConfig(param->device_id);
-	if (!cfg) {
-		err = -EINVAL;
-		goto error;
-	}
+	if (!cfg)
+		return -EINVAL;
 
 	if (param->chip_select > cfg->NumSlaveBits)
 		return -EINVAL;
 
 	ldesc = (struct spi_desc *)calloc(1, sizeof(*ldesc));
-	if (!ldesc) {
-		err = -ENOMEM;
-		goto error;
-	}
+	if (!ldesc)
+		return -ENOMEM;
 
 	xdesc = (struct xspi_desc *)calloc(1, sizeof(*xdesc));
 	if (!xdesc) {
@@ -459,6 +455,8 @@ static int32_t xil_spi_transfer_pl(struct spi_desc *desc, struct spi_msg *msgs,
 
 	tx_advance = 0;
 	to_inc_rx = 0;
+	buff = NULL;
+	type = 0;
 	do {
 		_xil_spi_start_transfer(desc, 1);
 

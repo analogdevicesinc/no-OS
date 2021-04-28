@@ -113,5 +113,5 @@ int32_t spi_transfer(struct spi_desc *desc, struct spi_msg *msgs, uint32_t len)
 			return ret;
 	}
 
-	return ret;
+	return SUCCESS;
 }
