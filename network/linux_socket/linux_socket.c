@@ -64,15 +64,17 @@
 /******************************************************************************/
 
 /** @brief See \ref network_interface.socket_open */
-static int32_t linux_socket_open(struct linux_desc *desc, uint32_t *sock_id,
+static int32_t linux_socket_open(void *desc, uint32_t *sock_id,
 				 enum socket_protocol prot, uint32_t buff_size)
 {
 	int32_t flags;
+	int err;
 
-	*sock_id = socket(AF_INET,SOCK_STREAM,IPPROTO_TCP);
-	if(*sock_id < 0)
-		return *sock_id;
+	err = socket(AF_INET,SOCK_STREAM,IPPROTO_TCP);
+	if(err < 0)
+		return err;
 
+	*sock_id = err;
 	flags = fcntl(*sock_id, F_GETFL);
 	fcntl(*sock_id, F_SETFL, flags | O_NONBLOCK);
 
@@ -80,7 +82,7 @@ static int32_t linux_socket_open(struct linux_desc *desc, uint32_t *sock_id,
 }
 
 /** @brief See \ref network_interface.socket_close */
-static int32_t linux_socket_close(struct linux_desc *desc, uint32_t sock_id)
+static int32_t linux_socket_close(void *desc, uint32_t sock_id)
 {
 	int32_t ret;
 
@@ -92,11 +94,10 @@ static int32_t linux_socket_close(struct linux_desc *desc, uint32_t sock_id)
 }
 
 /** @brief See \ref network_interface.socket_connect */
-static int32_t linux_socket_connect(struct linux_desc *desc, uint32_t sock_id,
+static int32_t linux_socket_connect(void *desc, uint32_t sock_id,
 				    struct socket_address *addr)
 {
 	int32_t ret;
-	int32_t flags;
 	struct hostent* hptr;
 
 	struct sockaddr_in saddr = {0};
@@ -116,7 +117,7 @@ static int32_t linux_socket_connect(struct linux_desc *desc, uint32_t sock_id,
 }
 
 /** @brief See \ref network_interface.socket_disconnect */
-static int32_t linux_socket_disconnect(struct linux_desc *desc,
+static int32_t linux_socket_disconnect(void *desc,
 				       uint32_t sock_id)
 {
 	int32_t ret;
@@ -130,7 +131,7 @@ static int32_t linux_socket_disconnect(struct linux_desc *desc,
 }
 
 /** @brief See \ref network_interface.socket_send */
-static int32_t linux_socket_send(struct linux_desc *desc, uint32_t sock_id,
+static int32_t linux_socket_send(void *desc, uint32_t sock_id,
 				 const void *data, uint32_t size)
 {
 	int32_t ret;
@@ -144,7 +145,7 @@ static int32_t linux_socket_send(struct linux_desc *desc, uint32_t sock_id,
 }
 
 /** @brief See \ref network_interface.socket_recv */
-static int32_t linux_socket_recv(struct linux_desc *desc, uint32_t sock_id,
+static int32_t linux_socket_recv(void *desc, uint32_t sock_id,
 				 void *data, uint32_t size)
 {
 	int32_t ret;
@@ -164,7 +165,7 @@ static int32_t linux_socket_recv(struct linux_desc *desc, uint32_t sock_id,
 }
 
 /** @brief See \ref network_interface.socket_sendto */
-static int32_t linux_socket_sendto(struct linux_desc *desc, uint32_t sock_id,
+static int32_t linux_socket_sendto(void *desc, uint32_t sock_id,
 				   const void *data, uint32_t size,
 				   const struct socket_address* to)
 {
@@ -188,7 +189,7 @@ static int32_t linux_socket_sendto(struct linux_desc *desc, uint32_t sock_id,
 }
 
 /** @brief See \ref network_interface.socket_recvfrom */
-static int32_t linux_socket_recvfrom(struct linux_desc *desc, uint32_t sock_id,
+static int32_t linux_socket_recvfrom(void *desc, uint32_t sock_id,
 				     void *data, uint32_t size,
 				     struct socket_address *from)
 {
@@ -213,7 +214,7 @@ static int32_t linux_socket_recvfrom(struct linux_desc *desc, uint32_t sock_id,
 }
 
 /** @brief See \ref network_interface.socket_bind */
-static int32_t linux_socket_bind(struct linux_desc *desc, uint32_t sock_id,
+static int32_t linux_socket_bind(void *desc, uint32_t sock_id,
 				 uint16_t port)
 {
 	int32_t ret;
@@ -234,7 +235,7 @@ static int32_t linux_socket_bind(struct linux_desc *desc, uint32_t sock_id,
 }
 
 /** @brief See \ref network_interface.socket_listen */
-static int32_t linux_socket_listen(struct linux_desc *desc, uint32_t sock_id,
+static int32_t linux_socket_listen(void *desc, uint32_t sock_id,
 				   uint32_t back_log)
 {
 	int32_t ret;
@@ -248,7 +249,7 @@ static int32_t linux_socket_listen(struct linux_desc *desc, uint32_t sock_id,
 }
 
 /** @brief See \ref network_interface.socket_accept */
-static int32_t linux_socket_accept(struct linux_desc *desc, uint32_t sock_id,
+static int32_t linux_socket_accept(void *desc, uint32_t sock_id,
 				   uint32_t *client_socket_id)
 {
 	int32_t ret;
