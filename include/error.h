@@ -46,12 +46,14 @@
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 
-#ifndef SUCCESS
+#ifdef SUCCESS
+#undef SUCCESS
+#endif
 #define SUCCESS		0
+#ifdef FAILURE
+#undef FAILURE
 #endif
-#ifndef FAILURE
 #define FAILURE		-1
-#endif
 
 #ifndef __ELASTERROR
 #define __ELASTERROR 2000
