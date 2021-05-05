@@ -1214,13 +1214,25 @@ int32_t adpd410x_reset(struct adpd410x_dev *dev);
 int32_t adpd410x_set_opmode(struct adpd410x_dev *dev,
 			    enum adpd410x_opmode mode);
 
+/** Get operation mode. */
+int32_t adpd410x_get_opmode(struct adpd410x_dev *dev,
+			    enum adpd410x_opmode *mode);
+
 /** Set number of active time slots. */
 int32_t adpd410x_set_last_timeslot(struct adpd410x_dev *dev,
 				   uint8_t timeslot_no);
 
+/** Get number of active time slots. */
+int32_t adpd410x_get_last_timeslot(struct adpd410x_dev *dev,
+				   enum adpd410x_timeslots *timeslot_no);
+
 /** Set device sampling frequency. */
 int32_t adpd410x_set_sampling_freq(struct adpd410x_dev *dev,
 				   uint32_t sampling_freq);
+
+/** Get device sampling frequency. */
+int32_t adpd410x_get_sampling_freq(struct adpd410x_dev *dev,
+				   uint32_t *sampling_freq);
 
 /** Setup an active time slot. */
 int32_t adpd410x_timeslot_setup(struct adpd410x_dev *dev,

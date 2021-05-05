@@ -204,6 +204,27 @@ int32_t adpd410x_set_opmode(struct adpd410x_dev *dev,
 }
 
 /**
+ * @brief Get operation mode.
+ * @param dev - Device handler.
+ * @param mode - Operation mode.
+ * @return SUCCESS in case of success, FAILURE otherwise.
+ */
+int32_t adpd410x_get_opmode(struct adpd410x_dev *dev,
+			    enum adpd410x_opmode *mode)
+{
+	int32_t ret;
+	uint16_t data;
+
+	ret = adpd410x_reg_read(dev, ADPD410X_REG_OPMODE, &data);
+	if (ret != SUCCESS)
+		return ret;
+
+	*mode = data & BITM_OPMODE_OP_MODE;
+
+	return ret;
+}
+
+/**
  * @brief Set number of active time slots.
  * @param dev - Device handler.
  * @param timeslot_no - Last time slot to be enabled.
@@ -214,6 +235,27 @@ int32_t adpd410x_set_last_timeslot(struct adpd410x_dev *dev,
 {
 	return adpd410x_reg_write_mask(dev, ADPD410X_REG_OPMODE,
 				       timeslot_no, BITM_OPMODE_TIMESLOT_EN);
+}
+
+/**
+ * @brief Get number of active time slots.
+ * @param dev - Device handler.
+ * @param timeslot_no - Last time slot enabled.
+ * @return SUCCESS in case of success, FAILURE otherwise.
+ */
+int32_t adpd410x_get_last_timeslot(struct adpd410x_dev *dev,
+				   enum adpd410x_timeslots *timeslot_no)
+{
+	int32_t ret;
+	uint16_t data;
+
+	ret = adpd410x_reg_read(dev, ADPD410X_REG_OPMODE, &data);
+	if (ret != SUCCESS)
+		return ret;
+
+	*timeslot_no = (data & BITM_OPMODE_TIMESLOT_EN) >> 8;
+
+	return ret;
 }
 
 /**
@@ -249,6 +291,48 @@ int32_t adpd410x_set_sampling_freq(struct adpd410x_dev *dev,
 		return ret;
 	return adpd410x_reg_write(dev, ADPD410X_REG_TS_FREQH,
 				  ((reg_load & 0x7F0000) >> 16));
+}
+
+/**
+ * @brief Get device sampling frequency.
+ * @param dev - Device handler.
+ * @param sampling_freq - New sampling frequency.
+ * @return SUCCESS in case of success, FAILURE otherwise.
+ */
+int32_t adpd410x_get_sampling_freq(struct adpd410x_dev *dev,
+				   uint32_t *sampling_freq)
+{
+	int32_t ret;
+	uint32_t reg_load;
+	uint16_t reg_temp;
+
+	if ((dev->clk_opt == ADPD410X_INTLFO_INTHFO) ||
+	    (dev->clk_opt == ADPD410X_INTLFO_EXTHFO)) {
+		ret = adpd410x_reg_read(dev, ADPD410X_REG_SYS_CTL, &reg_temp);
+		if (ret != SUCCESS)
+			return ret;
+
+		if (reg_temp & BITP_SYS_CTL_LFOSC_SEL)
+			reg_load = ADPD410X_LOW_FREQ_OSCILLATOR_FREQ1;
+		else
+			reg_load = ADPD410X_LOW_FREQ_OSCILLATOR_FREQ2;
+	} else {
+		reg_load = dev->ext_lfo_freq;
+	}
+
+	ret = adpd410x_reg_read(dev, ADPD410X_REG_TS_FREQ, &reg_temp);
+	if (ret != SUCCESS)
+		return ret;
+
+	*sampling_freq = reg_temp;
+
+	ret = adpd410x_reg_read(dev, ADPD410X_REG_TS_FREQH, &reg_temp);
+	if (ret != SUCCESS)
+		return ret;
+
+	*sampling_freq = reg_load / (*sampling_freq | ((reg_temp & 0x7F) << 16));
+
+	return ret;
 }
 
 /**
