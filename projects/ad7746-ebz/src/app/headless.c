@@ -43,7 +43,11 @@
 #include <sys/platform.h>
 #include "adi_initialize.h"
 #include <drivers/pwr/adi_pwr.h>
-
+#ifdef IIO_SUPPORT
+#include "iio.h"
+#include "iio_ad7746.h"
+#include "iio_app.h"
+#endif
 #include "ad7746.h"
 #include "i2c.h"
 #include "delay.h"
@@ -73,22 +77,21 @@ int main(void)
 		.word_length = UART_WORDLEN_8BITS
 	};
 	struct uart_init_param uip = {
-		.device_id = UART_DEVICE,
+		.device_id = UART_DEVICE_ID,
 		.baud_rate = UART_BAUDRATE,
 		.size = UART_CS_8,
 		.parity = UART_PAR_NO,
 		.stop = UART_STOP_1,
 		.extra = &xuip,
 	};
+#ifdef IIO_SUPPORT
+	struct ad7746_iio_dev *adciio = NULL;
+	struct ad7746_iio_init_param adciio_init;
+#endif
 
 	ret = platform_init();
 	if (ret < 0)
 		goto error;
-	ret = uart_init(&uart, &uip);
-	if (ret < 0)
-		goto error;
-
-	init_uart_stdio(uart);
 
 	adcip.i2c_init = (struct i2c_init_param) {
 		.max_speed_hz = I2C_SPEED,
@@ -121,6 +124,13 @@ int main(void)
 			.md = AD7746_MODE_CONT
 		}
 	};
+	adcip.id = ID_AD7746;
+#ifndef IIO_SUPPORT
+	ret = uart_init(&uart, &uip);
+	if (ret < 0)
+		goto error;
+
+	init_uart_stdio(uart);
 
 	pr_info("Hello!\n");
 
@@ -184,4 +194,25 @@ int main(void)
 error:
 	pr_info("Bye!\n");
 	return 0;
+#else
+	adciio_init.ad7746_initial = &adcip;
+	ret = ad7746_iio_init(&adciio, &adciio_init);
+	if (ret < 0)
+		goto error;
+
+	struct iio_app_device iio_devices[] = {
+		{
+			.name = "ad7746",
+			.dev = adciio,
+			.dev_descriptor = adciio->iio_dev,
+			.read_buff = NULL,
+			.write_buff = NULL
+		}
+	};
+
+	ret = iio_app_run(iio_devices, ARRAY_SIZE(iio_devices));
+error:
+	ad7746_iio_remove(adciio);
+	return ret;
+#endif
 }

@@ -1,7 +1,10 @@
 {
   "aducm3029": {
-    "ruler_demo": {
+    "capacitive_length_demo": {
       "flags" : ""
-    }
+    },
+    "iio_capacitive_length_demo": {
+	"flags" : "TINYIIOD=y"
+      }
   }
 }
