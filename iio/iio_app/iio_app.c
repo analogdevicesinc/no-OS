@@ -41,6 +41,7 @@
 
 #include <stdlib.h>
 #include "iio.h"
+#include "error.h"
 #include "iio_app.h"
 #include "parameters.h"
 #include "uart.h"

@@ -94,6 +94,9 @@
 	((((x) & 0xff000000) >> 24) | (((x) & 0x00ff0000) >>  8) | \
 	 (((x) & 0x0000ff00) <<  8) | (((x) & 0x000000ff) << 24))
 
+#define bswap_constant_16(x) ((((x) & (uint16_t)0xff00) >> 8) | \
+				 (((x) & (uint16_t)0x00ff) << 8))
+
 #define bit_swap_constant_8(x) \
 	((((x) & 0x80) >> 7) | \
 	 (((x) & 0x40) >> 5) | \
@@ -126,6 +129,11 @@ uint32_t find_closest(int32_t val,
 uint32_t field_prep(uint32_t mask, uint32_t val);
 /* Get a field specified by a mask from a word. */
 uint32_t field_get(uint32_t mask, uint32_t word);
+/*
+ * Update the field specified by a mask from a word.
+ * Ex. Word = 0001, Mask = 100, Val = 1 -> return 0101
+ */
+uint32_t field_update(uint32_t mask, uint32_t word, uint32_t val);
 /* Log base 2 of the given number. */
 int32_t log_base_2(uint32_t x);
 /* Find greatest common divisor of the given two numbers. */

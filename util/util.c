@@ -121,6 +121,16 @@ uint32_t field_get(uint32_t mask, uint32_t word)
 }
 
 /**
+ * Update the field specified by a mask from a word.
+ * Ex. Word = 00001, Mask = 00100, Val = 1 -> return 00101
+ *     Word = 00001, Mask = 11100, Val = 2 -> return 01001
+ */
+uint32_t field_update(uint32_t mask, uint32_t word, uint32_t val)
+{
+	return (word & ~mask) | field_prep(mask, val);
+}
+
+/**
  * Log base 2 of the given number.
  */
 int32_t log_base_2(uint32_t x)

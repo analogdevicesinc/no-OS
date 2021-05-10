@@ -41,6 +41,7 @@
 #define ERROR_H_
 
 #include <errno.h>
+#include <stdio.h>
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -59,7 +60,12 @@
 
 #define EOVERRUN	(__ELASTERROR + 1) /* Circular buffer overrun */
 
+#include <stdio.h>
+#define IS_ERR_VALUE(ret) ((ret) < 0 ?\
+		((ret) == -EAGAIN || 0 < printf("Errors: %d(-0x%x). Func: %s. Line: %d\n", (int)ret, (int)-ret,\
+				__func__, __LINE__)):\
+		(0))
 
-#define IS_ERR_VALUE(x)	((x) < 0)
+//#define IS_ERR_VALUE(x)	((x) < 0)
 
 #endif // ERROR_H_
