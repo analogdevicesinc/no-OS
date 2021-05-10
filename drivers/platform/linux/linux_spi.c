@@ -52,6 +52,8 @@
 #include <unistd.h>
 #include <linux/spi/spidev.h>
 
+#define MAX_SPIDEV_BUFF_SIZE 4096
+
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
@@ -198,6 +200,12 @@ static int32_t linux_spi_transfer(struct spi_desc *desc,
 	struct linux_spi_desc	*linux_desc;
 	int			ret;
 	uint32_t		i;
+	uint32_t		is;
+	uint32_t		inc;
+	uint32_t		rem;
+	int32_t			extra;
+	uint32_t		cnt;
+	uint32_t		to_send;
 
 	linux_desc = desc->extra;
 
@@ -205,16 +213,42 @@ static int32_t linux_spi_transfer(struct spi_desc *desc,
 	if (!tr)
 		return -ENOMEM;
 
-	for (i = 0; i < len; i++) {
-		tr[i].tx_buf = msgs[i].tx_buff;
-		tr[i].rx_buf = msgs[i].rx_buff;
-		tr[i].len = msgs[i].bytes_number;
-		tr[i].cs_change = msgs[i].cs_change;
+	i = 0;
+	inc = 0;
+	while (i < len) {
+		cnt = 0;
+		is = 0;
+		while (cnt < MAX_SPIDEV_BUFF_SIZE && i < len) {
+			rem = msgs[i].bytes_number - inc;
+			extra = cnt + rem - MAX_SPIDEV_BUFF_SIZE;
+			if (extra < 0)
+				extra = 0;
+			to_send = rem - extra;
+			cnt += to_send;
+			tr[is].len = to_send;
+			if (msgs[i].tx_buff)
+				tr[is].tx_buf = msgs[i].tx_buff + inc;
+			else
+				tr[is].tx_buf = 0;
+			if (msgs[i].rx_buff)
+				tr[is].rx_buf = msgs[i].rx_buff + inc;
+			else
+				tr[is].rx_buf = 0;
+			inc += to_send;
+			if (extra > 0) {
+				tr[is].cs_change = 1;
+			} else {
+				tr[is].cs_change = msgs[i].cs_change;
+				i++;
+				inc = 0;
+			}
+			is++;
+		}
+		ret = ioctl(linux_desc->spidev_fd, SPI_IOC_MESSAGE(is), tr);
+		if (ret < 0)
+			printf("%s: Can't send spi message (%d)\n\r", __func__, errno);
 	}
 
-	ret = ioctl(linux_desc->spidev_fd, SPI_IOC_MESSAGE(len), tr);
-	if (ret < 0)
-		printf("%s: Can't send spi message (%d)\n\r", __func__, errno);
 
 	free(tr);
 
