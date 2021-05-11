@@ -43,9 +43,9 @@ endif
 
 SRCS += $(NO-OS)/util/fifo.c						\
 	$(NO-OS)/util/list.c						\
-	$(NO-OS)/iio/iio_ad9361/iio_ad9361.c				\
-	$(NO-OS)/iio/iio_axi_adc/iio_axi_adc.c				\
-	$(NO-OS)/iio/iio_axi_dac/iio_axi_dac.c		\
+	$(DRIVERS)/rf-transceiver/ad9361/iio_ad9361.c				\
+	$(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.c				\
+	$(DRIVERS)/axi_core/iio_axi_dac/iio_axi_dac.c		\
 	$(NO-OS)/iio/iio_app/iio_app.c		\
 	$(NO-OS)/util/circular_buffer.c
 endif
@@ -83,9 +83,9 @@ endif
 INCS += $(INCLUDE)/fifo.h						\
 	$(INCLUDE)/uart.h						\
 	$(INCLUDE)/list.h										\
-	$(NO-OS)/iio/iio_ad9361/iio_ad9361.h				\
-	$(NO-OS)/iio/iio_axi_adc/iio_axi_adc.h				\
-	$(NO-OS)/iio/iio_axi_dac/iio_axi_dac.h	\
+	$(DRIVERS)/rf-transceiver/ad9361/iio_ad9361.h				\
+	$(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.h				\
+	$(DRIVERS)/axi_core/iio_axi_dac/iio_axi_dac.h	\
 	$(NO-OS)/iio/iio_app/iio_app.h	\
 	$(INCLUDE)/circular_buffer.h
 endif

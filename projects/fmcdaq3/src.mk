@@ -37,8 +37,8 @@ ifeq (y,$(strip $(TINYIIOD)))
 LIBRARIES += iio
 SRCS += $(NO-OS)/util/fifo.c					\
 	$(NO-OS)/util/list.c						\
-	$(NO-OS)/iio/iio_axi_adc/iio_axi_adc.c		\
-	$(NO-OS)/iio/iio_axi_dac/iio_axi_dac.c		\
+	$(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.c		\
+	$(DRIVERS)/axi_core/iio_axi_dac/iio_axi_dac.c		\
 	$(DRIVERS)/adc/ad9680/iio_ad9680.c				\
 	$(DRIVERS)/dac/ad9152/iio_ad9152.c				\
 	$(PLATFORM_DRIVERS)/uart.c					\
@@ -77,6 +77,6 @@ INCS += $(INCLUDE)/fifo.h				    \
 	$(INCLUDE)/list.h						\
 	$(PLATFORM_DRIVERS)/irq_extra.h					\
 	$(PLATFORM_DRIVERS)/uart_extra.h                                \
-	$(NO-OS)/iio/iio_axi_adc/iio_axi_adc.h				\
-	$(NO-OS)/iio/iio_axi_dac/iio_axi_dac.h
+	$(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.h				\
+	$(DRIVERS)/axi_core/iio_axi_dac/iio_axi_dac.h
 endif

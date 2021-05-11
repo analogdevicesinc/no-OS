@@ -19,7 +19,7 @@ INCLUDES = -I../include/ \
 	 -I./axi_core/clk_axi_clkgen \
 	 -I./platform/xilinx \
 	 -I../projects/adrv9009/src/devices/adi_hal \
-	 -I../libraries/iio \
+	 -I../iio \
 	 -I../libraries/iio/libtinyiiod
 
 IIOD_FLAGS += -DTINYIIOD_VERSION_MAJOR=0	 \

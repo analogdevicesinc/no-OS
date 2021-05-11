@@ -2,7 +2,6 @@
 
 SRC_DIRS += $(PROJECT)/src
 SRC_DIRS += $(DRIVERS)/gyro/adxrs290 
-SRC_DIRS += $(NO-OS)/iio/iio_adxrs290 
 
 # For the moment there is support only for aducm for iio with network backend
 ifeq (aducm3029,$(strip $(PLATFORM)))
