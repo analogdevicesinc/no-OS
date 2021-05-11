@@ -484,7 +484,7 @@ static ssize_t get_frequency_available(void *device, char *buf, size_t len,
 				       const struct iio_ch_info *channel,
 				       intptr_t priv)
 {
-	return snprintf(buf, len, "[%"PRIu64" 1 %"PRIu64"]",
+	return snprintf(buf, len, "[%llu 1 %llu]",
 			AD9363A_MIN_CARRIER_FREQ_HZ,
 			AD9363A_MAX_CARRIER_FREQ_HZ);
 }
@@ -538,7 +538,7 @@ static ssize_t get_powerdown(void *device, char *buf, size_t len,
 	val = !!(ad9361_phy->cached_synth_pd[channel->ch_num ? 0 : 1] &
 		 RX_LO_POWER_DOWN);
 
-	return snprintf(buf, len, "%"PRIu64"", val);
+	return snprintf(buf, len, "%llu", val);
 }
 
 /**
@@ -595,7 +595,7 @@ static ssize_t get_frequency(void *device, char *buf, size_t len,
 	val = ad9361_from_clk(clk_get_rate(ad9361_phy,
 					   ad9361_phy->ref_clk_scale[channel->ch_num ?
 									   TX_RFPLL : RX_RFPLL]));
-	return snprintf(buf, len, "%"PRIu64"", (val));
+	return snprintf(buf, len, "%llu", (val));
 }
 
 /**

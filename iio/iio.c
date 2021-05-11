@@ -1247,6 +1247,8 @@ static uint32_t iio_generate_device_xml(struct iio_device *device, char *name,
  * @param dev_descriptor - Device descriptor
  * @param name - Name to identify the registered device
  * @param dev_instance - Opened instance of the device
+ * @param read_buff - read buffer
+ * @param write_buff - write buffer
  * @return SUCCESS in case of success or negative value otherwise.
  */
 ssize_t iio_register(struct iio_desc *desc, struct iio_device *dev_descriptor,
@@ -1309,6 +1311,7 @@ ssize_t iio_register(struct iio_desc *desc, struct iio_device *dev_descriptor,
 
 /**
  * @brief Unregister interface.
+ * @param desc - iio descriptor.
  * @param name - Name of the registered device
  * @return SUCCESS in case of success or negative value otherwise.
  */
@@ -1353,9 +1356,8 @@ static int32_t iio_cmp_interfaces(struct iio_interface *a,
 /**
  * @brief Set communication ops and read/write ops that will be called
  * from "libtinyiiod".
- * @param iiod - Structure containing new tinyiiod instance.
- * @param iio_server_ops - Structure containing read/write ops (Ex: read/write to
- * 			UART).
+ * @param desc - iio descriptor.
+ * @param init_param - appropriate init param.
  * @return SUCCESS in case of success or negative value otherwise.
  */
 ssize_t iio_init(struct iio_desc **desc, struct iio_init_param *init_param)
@@ -1467,7 +1469,7 @@ free_ops:
 
 /**
  * @brief Free the resources allocated by "iio_init()".
- * @param iiod: Structure containing tinyiiod instance.
+ * @param desc: iio descriptor.
  * @return SUCCESS in case of success or negative value otherwise.
  */
 ssize_t iio_remove(struct iio_desc *desc)
