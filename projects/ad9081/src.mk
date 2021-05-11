@@ -45,8 +45,8 @@ SRCS += $(PROJECT)/src/app_iio.c					\
 	$(PLATFORM_DRIVERS)/irq.c					\
 	$(NO-OS)/util/list.c						\
 	$(NO-OS)/util/fifo.c						\
-	$(NO-OS)/iio/iio_axi_adc/iio_axi_adc.c				\
-	$(NO-OS)/iio/iio_axi_dac/iio_axi_dac.c
+	$(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.c				\
+	$(DRIVERS)/axi_core/iio_axi_dac/iio_axi_dac.c
 endif
 INCS +=	$(PROJECT)/src/app_clock.h					\
 	$(PROJECT)/src/app_jesd.h					\
@@ -100,6 +100,6 @@ INCS += $(PROJECT)/src/app_iio.h					\
 	$(PLATFORM_DRIVERS)/uart_extra.h				\
 	$(INCLUDE)/fifo.h						\
 	$(INCLUDE)/list.h						\
-	$(NO-OS)/iio/iio_axi_adc/iio_axi_adc.h				\
-	$(NO-OS)/iio/iio_axi_dac/iio_axi_dac.h
+	$(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.h				\
+	$(DRIVERS)/axi_core/iio_axi_dac/iio_axi_dac.h
 endif

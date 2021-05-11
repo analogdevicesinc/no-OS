@@ -1,9 +1,9 @@
-SRCS += $(NO-OS)/libraries/iio/iio.c
+SRCS += $(NO-OS)/iio/iio.c
 SRCS += $(NO-OS)/libraries/iio/libtinyiiod/parser.c
 SRCS += $(NO-OS)/libraries/iio/libtinyiiod/tinyiiod.c
 					
-INCS += $(NO-OS)/libraries/iio/iio.h
-INCS += $(NO-OS)/libraries/iio/iio_types.h
+INCS += $(NO-OS)/iio/iio.h
+INCS += $(NO-OS)/iio/iio_types.h
 INCS += $(NO-OS)/libraries/iio/libtinyiiod/tinyiiod.h
 INCS += $(NO-OS)/libraries/iio/libtinyiiod/tinyiiod-private.h
 INCS += $(NO-OS)/libraries/iio/libtinyiiod/compat.h

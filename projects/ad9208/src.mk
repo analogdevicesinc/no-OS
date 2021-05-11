@@ -16,7 +16,7 @@ SRC_DIRS += $(PROJECT)/src \
 		$(DRIVERS)/axi_core/clk_axi_clkgen
 
 ifeq (y,$(strip $(TINYIIOD)))
-SRC_DIRS += $(NO-OS)/iio/iio_axi_adc			\
+SRC_DIRS += $(DRIVERS)/axi_core/iio_axi_adc			\
 		$(NO-OS)/iio/iio_app
 
 SRCS	+= $(PLATFORM_DRIVERS)/uart.c			\

@@ -54,8 +54,8 @@ SRCS += $(PLATFORM_DRIVERS)/uart.c					\
 	$(PLATFORM_DRIVERS)/irq.c					\
 	$(NO-OS)/util/fifo.c						\
 	$(NO-OS)/util/list.c						\
-	$(NO-OS)/iio/iio_axi_adc/iio_axi_adc.c				\
-	$(NO-OS)/iio/iio_axi_dac/iio_axi_dac.c
+	$(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.c				\
+	$(DRIVERS)/axi_core/iio_axi_dac/iio_axi_dac.c
 endif
 INCS +=	$(PROJECT)/src/app/app_config.h					\
 	$(PROJECT)/src/devices/ad9528/ad9528.h				\
@@ -103,6 +103,6 @@ INCS += $(INCLUDE)/fifo.h						\
 	$(INCLUDE)/list.h						\
 	$(PLATFORM_DRIVERS)/irq_extra.h					\
 	$(PLATFORM_DRIVERS)/uart_extra.h				\
-	$(NO-OS)/iio/iio_axi_adc/iio_axi_adc.h				\
-	$(NO-OS)/iio/iio_axi_dac/iio_axi_dac.h
+	$(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.h				\
+	$(DRIVERS)/axi_core/iio_axi_dac/iio_axi_dac.h
 endif
