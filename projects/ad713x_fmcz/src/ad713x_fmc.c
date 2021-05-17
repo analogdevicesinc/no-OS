@@ -173,6 +173,7 @@ int main()
 	ad713x_init_param_1.dclkio_out_nin = false;
 	ad713x_init_param_1.pnd = true;
 	ad713x_init_param_1.spi_init_prm.chip_select = AD7134_1_SPI_CS;
+	ad713x_init_param_1.spi_init_prm.device_id = SPI_DEVICE_ID;
 	ad713x_init_param_1.spi_init_prm.max_speed_hz = 10000000;
 	ad713x_init_param_1.spi_init_prm.mode = SPI_MODE_3;
 	ad713x_init_param_1.spi_init_prm.platform_ops = &xil_platform_ops;
@@ -193,6 +194,7 @@ int main()
 	ad713x_init_param_2.dclkmode_free_ngated = false;
 	ad713x_init_param_2.dclkio_out_nin = false;
 	ad713x_init_param_2.pnd = true;
+	ad713x_init_param_2.spi_init_prm.device_id = SPI_DEVICE_ID;
 	ad713x_init_param_2.spi_init_prm.chip_select = AD7134_2_SPI_CS;
 	ad713x_init_param_2.spi_init_prm.max_speed_hz = 10000000;
 	ad713x_init_param_2.spi_init_prm.mode = SPI_MODE_3;
