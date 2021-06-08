@@ -375,7 +375,7 @@ int main(void)
 #endif
 
 #ifdef IIO_SUPPORT
-	status = start_iiod(tx_dmac, rx_dmac, rx_adc, tx_dac);
+	status = start_iiod(rx_dmac, tx_dmac, rx_adc, tx_dac);
 	if (status)
 		printf("Tinyiiod error: %d\n", status);
 #endif // IIO_SUPPORT
