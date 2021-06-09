@@ -132,7 +132,6 @@ ad717x_st_reg ad7172_4_regs[] = {
 	{AD717X_GAIN5_REG, 0, 3 },
 	{AD717X_GAIN6_REG, 0, 3 },
 	{AD717X_GAIN7_REG, 0, 3 },
-	{AD717X_GAIN8_REG, 0, 3 },
 };
 #endif
 
