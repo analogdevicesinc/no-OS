@@ -1,0 +1,1 @@
+int app_jesd204_init(void);

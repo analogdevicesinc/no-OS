@@ -57,6 +57,7 @@
 #include "axi_dmac.h"
 #include "app_parameters.h"
 #include "app_config.h"
+#include "app_jesd204.h"
 
 #ifdef IIO_SUPPORT
 #include "app_iio.h"
@@ -206,6 +207,7 @@ int main(void)
 
 	printf("Hello\n");
 
+#if 0
 #ifdef QUAD_MXFE
 	struct xil_gpio_init_param  xil_gpio_param_2 = {
 #ifdef PLATFORM_MB
@@ -270,6 +272,13 @@ int main(void)
 
 	axi_dmac_init(&tx_dmac, &tx_dmac_init);
 	axi_dmac_init(&rx_dmac, &rx_dmac_init);
+#else
+	status = app_jesd204_init();
+	if (status < 0) {
+		printf("Failed to initialized JESD204 link with status %d.\n", status);
+		goto exit;
+	}
+#endif
 
 #ifdef IIO_SUPPORT
 	printf("The board accepts libiio clients connections through the serial backend.\n");
@@ -287,10 +296,9 @@ int main(void)
 	};
 
 	return iio_server_init(&iio_axi_adc_init_par, &iio_axi_dac_init_par);
-#else
+#endif
+exit:
 	printf("Bye\n");
 
-	return SUCCESS;
-#endif
-
+	return status;
 }

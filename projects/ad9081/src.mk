@@ -12,6 +12,8 @@
 SRCS += $(PROJECT)/src/app.c						\
 	$(PROJECT)/src/app_clock.c					\
 	$(PROJECT)/src/app_jesd.c					\
+	$(PROJECT)/src/app_jesd204.c					\
+	$(DRIVERS)/jesd204/jesd204.c					\
 	$(DRIVERS)/adc/ad9081/ad9081.c					\
 	$(DRIVERS)/adc/ad9081/api/adi_ad9081_adc.c			\
 	$(DRIVERS)/adc/ad9081/api/adi_ad9081_dac.c			\
@@ -52,6 +54,8 @@ INCS +=	$(PROJECT)/src/app_clock.h					\
 	$(PROJECT)/src/app_jesd.h					\
 	$(PROJECT)/src/app_config.h					\
 	$(PROJECT)/src/app_parameters.h					\
+	$(PROJECT)/src/app_jesd204.h					\
+	$(DRIVERS)/jesd204/jesd204.h					\
 	$(DRIVERS)/adc/ad9081/ad9081.h					\
 	$(DRIVERS)/adc/ad9081/api/adi_ad9081_bf_ad9081.h		\
 	$(DRIVERS)/adc/ad9081/api/adi_ad9081_bf_impala_tc.h		\
@@ -88,7 +92,8 @@ INCS +=	$(PROJECT)/src/app_clock.h					\
 	$(INCLUDE)/error.h						\
 	$(INCLUDE)/gpio.h						\
 	$(INCLUDE)/spi.h						\
-	$(INCLUDE)/util.h
+	$(INCLUDE)/util.h						\
+	$(INCLUDE)/print_log.h
 ifeq (y,$(strip $(QUAD_MXFE)))
 INCS += $(DRIVERS)/frequency/adf4371/adf4371.h
 endif
