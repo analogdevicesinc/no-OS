@@ -395,6 +395,7 @@ int32_t ad4110_spi_int_reg_write(struct ad4110_dev *dev,
 		data_size = 4;
 
 	buf[0] = (reg_map << 7) | AD4110_CMD_WR_COM_REG(reg_addr);
+	buf[0] |= (dev->addr << 4) & AD4110_DEV_ADDR_MASK;
 
 	switch(data_size) {
 	case 3:
@@ -449,10 +450,14 @@ int32_t ad4110_spi_int_reg_read(struct ad4110_dev *dev,
 	uint32_t data;
 	uint8_t crc;
 	int32_t ret;
+	uint8_t value;
+	uint8_t inc;
 
 	data_size = ad4110_get_data_size(dev, reg_map, reg_addr);
 
 	buf[0] = (reg_map << 7) | AD4110_CMD_READ_COM_REG(reg_addr); // cmd byte
+	buf[0] |= (dev->addr << 4) & AD4110_DEV_ADDR_MASK;
+
 	buf[1] = 0xAA; // dummy data byte
 	buf[2] = 0xAA; // dummy data byte
 	buf[3] = 0xAA; // dummy data byte
@@ -467,7 +472,18 @@ int32_t ad4110_spi_int_reg_read(struct ad4110_dev *dev,
 	else
 		buf_size = data_size;
 
-	ret = spi_write_and_read(dev->spi_dev, buf, buf_size);
+	inc = 0;
+	if (dev->gpio_nrdy) {
+		ret = spi_write_and_read(dev->spi_dev, buf, 1);
+		do {
+			ret |= gpio_get_value(dev->gpio_nrdy, &value);
+			if (ret != 0)
+				return ret;
+		} while (value == GPIO_HIGH);
+		inc = 1;
+	}
+
+	ret |= spi_write_and_read(dev->spi_dev, buf + inc, buf_size - inc);
 	switch (data_size) {
 	case 3:
 		data = (buf[1] << 8) | buf[2];
@@ -539,6 +555,10 @@ int32_t ad4110_setup(struct ad4110_dev **device,
 	ret |= gpio_set_value(dev->gpio_reset, GPIO_HIGH);
 	mdelay(10);
 
+	ret |= gpio_get_optional(&dev->gpio_nrdy, init_param.gpio_nrdy);
+	if (dev->gpio_nrdy)
+		ret |= gpio_direction_input(dev->gpio_nrdy);
+
 	/* Device Settings */
 	ad4110_spi_do_soft_reset(dev);
 	mdelay(10);
@@ -583,6 +603,7 @@ int32_t ad4110_setup(struct ad4110_dev **device,
 
 	ret |= ad4110_set_gain(dev, init_param.gain);
 	dev->gain = init_param.gain;
+	dev->addr = init_param.addr;
 
 	*device = dev;
 
