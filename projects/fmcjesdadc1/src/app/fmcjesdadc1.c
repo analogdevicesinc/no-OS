@@ -553,6 +553,8 @@ int main(void)
 	axi_dmac_init(&ad9250_1_dmac, &ad9250_1_dmac_param);
 	axi_dmac_transfer(ad9250_1_dmac, ADC_1_DDR_BASEADDR, 16384 * 2);
 
+	Xil_DCacheFlush();
+
 	// set up normal output
 	ad9250_test_mode(ad9250_0_device, AD9250_TEST_OFF);
 	ad9250_transfer(ad9250_0_device);
@@ -562,6 +564,8 @@ int main(void)
 	// capture data with DMA
 	axi_dmac_transfer(ad9250_0_dmac, ADC_0_DDR_BASEADDR, 16384 * 2);
 	axi_dmac_transfer(ad9250_1_dmac, ADC_1_DDR_BASEADDR, 16384 * 2);
+
+	Xil_DCacheFlush();
 
 #ifdef IIO_SUPPORT
 	printf("The board accepts libiio clients connections through the serial backend.\n");
