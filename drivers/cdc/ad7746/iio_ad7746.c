@@ -18,7 +18,8 @@ static int32_t _ad7746_read_register2(struct ad7746_iio_dev *dev, uint32_t reg,
 static int32_t _ad7746_write_register2(struct ad7746_iio_dev *dev, uint32_t reg,
 				       uint32_t writeval)
 {
-	return ad7746_reg_write(dev->ad7746_dev, reg, (uint8_t *)writeval, 1);
+	uint8_t val = writeval;
+	return ad7746_reg_write(dev->ad7746_dev, reg, &val, 1);
 }
 
 static inline bool _capdiff(struct ad7746_cap *cap1, struct ad7746_cap *cap2)
