@@ -10,6 +10,7 @@ export AR
 export EXTRA_INC_PATHS
 export FLAGS_WITHOUT_D
 export PROJECT_BUILD
+export JTAG_CABLE_ID
 #------------------------------------------------------------------------------
 #                              UTIL FUNCTIONS
 #------------------------------------------------------------------------------
