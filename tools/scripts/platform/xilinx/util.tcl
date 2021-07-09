@@ -174,7 +174,7 @@ set ps_dict [dict create					\
 	"sys_mb" "*MicroBlaze #*"]
 
 proc _cpu_reset {cpu} {
-	targets -set -filter {name =~ "APU*"}
+	targets -set -filter {name =~ "APU*" && jtag_cable_name =~ "*$::jtagtarget*"}
 	stop
 	if {$cpu == "ps7_cortexa9_0"} {
 		rst 
@@ -185,7 +185,7 @@ proc _cpu_reset {cpu} {
 
 proc _write_pl {cpu {bitstream}} {
 	set name [dict get $::pl_dict $cpu]
-	targets -set -filter {name =~ "$name"}
+	targets -set -filter {name =~ "$name" && jtag_cable_name =~ "*$::jtagtarget*"}
 	fpga -file [file normalize $bitstream]
 }
 
@@ -193,14 +193,14 @@ proc _init_ps {cpu} {
 	openhw $::hw
 	switch $cpu {
 		"ps7_cortexa9_0" {
-			targets -set -filter {name =~ "APU*"}
+			targets -set -filter {name =~ "APU*" && jtag_cable_name =~ "*$::jtagtarget*"}
 			ps7_init
 			ps7_post_config
 		}
 
 		"psu_cortexa53_0" {
 			# Configure PSU
-			targets -set -nocase -filter {name =~ "PSU"}
+			targets -set -nocase -filter {name =~ "PSU" && jtag_cable_name =~ "*$::jtagtarget*"}
 			psu_init
 			psu_post_config
 			psu_ps_pl_reset_config
@@ -208,16 +208,16 @@ proc _init_ps {cpu} {
 			# write bootloop and release A53-0 reset
 			mwr 0xffff0000 0x14000000
 			mwr 0xFD1A0104 0x380E
-			targets -set -filter {name =~ "Cortex-A53 #0"}
+			targets -set -filter {name =~ "Cortex-A53 #0" && jtag_cable_name =~ "*$::jtagtarget*"}
 		}
 		"psu_cortexr5_0" {
-			targets -set -nocase -filter {name =~ "PSU"}
+			targets -set -nocase -filter {name =~ "PSU" && jtag_cable_name =~ "*$::jtagtarget*"}
 			psu_init
 			after 1000
 			psu_ps_pl_isolation_removal
 			after 1000
 			psu_ps_pl_reset_config
-			targets -set -filter {name =~ "Cortex-R5 #0"}
+			targets -set -filter {name =~ "Cortex-R5 #0" && jtag_cable_name =~ "*$::jtagtarget*"}
 		}
 		"sys_mb" {
 			targets -set -filter {[dict get $::pl_dict $cpu]}
@@ -228,7 +228,7 @@ proc _init_ps {cpu} {
 
 proc _write_ps {cpu} {
 	set name [dict get $::ps_dict $cpu]
-	targets -set -filter {name =~  "$name"}
+	targets -set -filter {name =~  "$name" && jtag_cable_name =~ "*$::jtagtarget*"}
 	dow "[file normalize $::binary]"
 	con
 	disconnect
@@ -259,6 +259,9 @@ set hw_path	[lindex $argv 2]
 set hw		$::hw_path/[lindex $argv 3]
 set binary      [lindex $argv 4]
 set target	[lindex $argv 5]
+set jtagtarget [lindex $argv 6]
+
+if {$target == 0} {set $target ""}
 
 if {[file exists $::hw_path/ps7_init.tcl]} {
 	source "[file normalize $::hw_path/ps7_init.tcl]"
