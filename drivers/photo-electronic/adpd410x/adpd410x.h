@@ -667,10 +667,12 @@
 #define BITP_TS_CTRL_A_INPUT_R_SELECT         		10
 #define BITP_TS_CTRL_A_SAMPLE_TYPE            		12
 #define BITP_TS_CTRL_A_CH2_EN                 		14
+#define BITP_TS_CTRL_A_SUBSAMPLE                    15
 #define BITM_TS_CTRL_A_TIMESLOT_OFFSET        		0x03ff
 #define BITM_TS_CTRL_A_INPUT_R_SELECT         		0x0c00
 #define BITM_TS_CTRL_A_SAMPLE_TYPE            		0x3000
 #define BITM_TS_CTRL_A_CH2_EN                 		0x4000
+#define BITM_TS_CTRL_A_SUBSAMPLE                    0x8000
 
 /* ADPD410X_REG_TS_PATH */
 #define BITP_TS_PATH_A_AFE_PATH_CFG          	 	0
@@ -777,6 +779,8 @@
 /* ADPD410X_REG_INTEG_OFFSET */
 #define BITP_INTEG_OFFSET_A_INTEG_OFFSET      		0
 #define BITM_INTEG_OFFSET_A_INTEG_OFFSET      		0x1fff
+#define BITP_INTEG_OFFSET_A_INTEG_OFFSET_UPPER      5
+#define BITM_INTEG_OFFSET_A_INTEG_OFFSET_UPPER      0xff
 
 /* ADPD410X_REG_MOD_PULSE */
 #define BITP_MOD_PULSE_A_MOD_OFFSET           		0
@@ -868,6 +872,11 @@
 
 #define ADPD410X_MAX_SLOT_NUMBER			12
 #define ADPD410X_LED_CURR_LSB				1.333
+#define ADPD410X_MAX_NUM_INT                255
+#define ADPD410X_MAX_PULSE_LENGTH           255
+#define ADPD410X_MAX_INTEG_OS               255
+#define ADPD410X_FIFO_DEPTH                 512
+#define ADPD410X_MAX_SAMPLING_FREQ          9000
 
 #define ADPD410X_UPPDER_BYTE_SPI_MASK			0x7f80
 #define ADPD410X_LOWER_BYTE_SPI_MASK			0xfe
@@ -1199,6 +1208,10 @@ struct adpd410x_dev {
 int32_t adpd410x_reg_read(struct adpd410x_dev *dev, uint16_t address,
 			  uint16_t *data);
 
+/** Read a specified number of bytes from a register, from 1-255 */
+int32_t adpd410x_reg_read_bytes(struct adpd410x_dev *dev, uint16_t address,
+				uint8_t *data, uint16_t num_bytes);
+
 /** Write device register. */
 int32_t adpd410x_reg_write(struct adpd410x_dev *dev, uint16_t address,
 			   uint16_t data);
@@ -1241,6 +1254,11 @@ int32_t adpd410x_timeslot_setup(struct adpd410x_dev *dev,
 
 /** Get number of bytes in the device FIFO. */
 int32_t adpd410x_get_fifo_bytecount(struct adpd410x_dev *dev, uint16_t *bytes);
+
+/** Read a packet with a certain number of bytes from the FIFO. */
+int32_t adpd410x_read_fifo(struct adpd410x_dev *dev, uint32_t *data,
+			   uint16_t num_samples,
+			   uint8_t datawidth);
 
 /** Get a full data packet from the device containing data from all active time
  *  slots. */

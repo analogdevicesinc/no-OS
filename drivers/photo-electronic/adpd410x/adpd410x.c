@@ -62,37 +62,74 @@ int32_t adpd410x_reg_read(struct adpd410x_dev *dev, uint16_t address,
 			  uint16_t *data)
 {
 	int32_t ret;
-	uint8_t buff[] = {0, 0, 0, 0};
+	uint8_t buff[] = {0, 0};
+
+	ret = adpd410x_reg_read_bytes(dev, address, (uint8_t *) buff, 2);
+	if (ret != SUCCESS) {
+		return ret;
+	}
+
+	*data = ((uint16_t)buff[0] << 8) & 0xff00;
+	*data |= buff[1] & 0xff;
+
+	return SUCCESS;
+}
+
+/**
+ * @brief Read a specified number of bytes from device register.
+ * @param dev - Device handler.
+ * @param address - Register address.
+ * @param data - Pointer to the register value container.
+ * @param num_bytes - number of bytes to read. Max 255 for ADPD4101 (I2C).
+ * @return SUCCESS in case of success, FAILURE otherwise.
+ */
+int32_t adpd410x_reg_read_bytes(struct adpd410x_dev *dev, uint16_t address,
+				uint8_t *data, uint16_t num_bytes)
+{
+	int32_t ret;
+	uint8_t i;
+	uint8_t *buff;
 
 	switch (dev->dev_type) {
 	case ADPD4100:
+		buff = (uint8_t *) calloc(num_bytes + 2, sizeof(*buff));
 		buff[0] = field_get(ADPD410X_UPPDER_BYTE_SPI_MASK, address);
 		buff[1] = (address << 1) & ADPD410X_LOWER_BYTE_SPI_MASK;
 
-		ret = spi_write_and_read(dev->dev_ops.spi_phy_dev, buff, 4);
-		if(ret != SUCCESS)
+		ret = spi_write_and_read(dev->dev_ops.spi_phy_dev, buff, num_bytes + 2);
+		if(ret != SUCCESS) {
+			free(buff);
 			return ret;
+		}
+		for (i = 0; i < num_bytes; i++) {
+			data[i] = buff[i + 2];
+		}
 		break;
 	case ADPD4101:
+		// Number of bytes for an I2C read is an 8-bit number, or at most 255
+		if (num_bytes > 255)
+			return FAILURE;
+		buff = (uint8_t *) calloc(2, sizeof(*buff));
 		buff[0] = field_get(ADPD410X_UPPDER_BYTE_I2C_MASK, address);
 		buff[0] |= 0x80;
 		buff[1] = address & ADPD410X_LOWER_BYTE_I2C_MASK;
 
 		/* No stop bit */
 		ret = i2c_write(dev->dev_ops.i2c_phy_dev, buff, 2, 0);
-		if(ret != SUCCESS)
+		if(ret != SUCCESS) {
+			free(buff);
 			return ret;
-		ret = i2c_read(dev->dev_ops.i2c_phy_dev, (buff + 2), 2, 1);
-		if(ret != SUCCESS)
+		}
+		ret = i2c_read(dev->dev_ops.i2c_phy_dev, data, (uint8_t) num_bytes, 1);
+		if(ret != SUCCESS) {
+			free(buff);
 			return ret;
+		}
 		break;
 	default:
 		return FAILURE;
 	}
-
-	*data = ((uint16_t)buff[2] << 8) & 0xff00;
-	*data |= buff[3] & 0xff;
-
+	free(buff);
 	return SUCCESS;
 }
 
@@ -472,10 +509,10 @@ static int32_t adpd410x_get_data_packet(struct adpd410x_dev *dev,
 					uint16_t dual_chan)
 {
 	int32_t ret;
-	uint16_t j, temp_data, expect_byte_count = 0;
-	uint16_t *data_buff, sample_index;
+	uint16_t temp_data = 0;
+	uint16_t sample_index;
 	int8_t i, got_one = 0;
-	uint8_t *slot_bytecount_tab, *data_byte_buff;
+	uint8_t *slot_bytecount_tab;
 
 	slot_bytecount_tab = (uint8_t *)calloc(no_slots,
 					       sizeof (*slot_bytecount_tab));
@@ -486,62 +523,15 @@ static int32_t adpd410x_get_data_packet(struct adpd410x_dev *dev,
 		if(ret != SUCCESS)
 			goto error_slot;
 		slot_bytecount_tab[i] = (temp_data & BITM_DATA1_A_SIGNAL_SIZE);
-		expect_byte_count += slot_bytecount_tab[i];
-		if((dual_chan & (1 << i)) != 0)
-			expect_byte_count += slot_bytecount_tab[i];
-	}
-	if((expect_byte_count % 2) != 0)
-		expect_byte_count++;
-	data_buff = (uint16_t *)calloc((expect_byte_count / 2),
-				       sizeof (*data_buff));
-	if (!data_buff) {
-		ret = -ENOMEM;
-		goto error_slot;
-	}
-	data_byte_buff = (uint8_t *)calloc(expect_byte_count,
-					   sizeof (*data_byte_buff));
-	if (!data_byte_buff) {
-		ret = -ENOMEM;
-		goto error_data_buff;
-	}
-
-	for(i = 0; i < (expect_byte_count / 2); i++) {
-		ret = adpd410x_reg_read(dev, ADPD410X_REG_FIFO_DATA,
-					(data_buff + i));
-		if(ret != SUCCESS)
-			goto error_data_byte;
-	}
-	for(i = 0; i < (expect_byte_count / 2); i++) {
-		data_byte_buff[(i * 2)] = (data_buff[i] & 0xff00) >> 8;
-		data_byte_buff[(i * 2 + 1)] = data_buff[i] & 0xff;
 	}
 
 	i = 0;
-	j = 0;
 	sample_index = 0;
 	do {
-		switch(slot_bytecount_tab[i]) {
-		case 0:
-			continue;
-		case 1:
-			data[sample_index] = data_byte_buff[j++];
-			break;
-		case 2:
-			data[sample_index]  = data_byte_buff[j++] << 8;
-			data[sample_index] |= data_byte_buff[j++];
-			break;
-		case 3:
-			data[sample_index]  = data_byte_buff[j++] << 8;
-			data[sample_index] |= data_byte_buff[j++];
-			data[sample_index] |= data_byte_buff[j++] << 16;
-			break;
-		case 4:
-			data[sample_index]  = data_byte_buff[j++] << 8;
-			data[sample_index] |= data_byte_buff[j++];
-			data[sample_index] |= data_byte_buff[j++] << 24;
-			data[sample_index] |= data_byte_buff[j++] << 16;
-			break;
-		}
+		ret = adpd410x_read_fifo(dev, data + sample_index, 1, slot_bytecount_tab[i]);
+		if (ret != SUCCESS)
+			goto error_slot;
+
 		sample_index++;
 		if(((dual_chan & (1 << i)) != 0) && (got_one == 0)) {
 			got_one = 1;
@@ -551,19 +541,82 @@ static int32_t adpd410x_get_data_packet(struct adpd410x_dev *dev,
 		}
 	} while(i < no_slots);
 
-	free(data_byte_buff);
-	free(data_buff);
 	free(slot_bytecount_tab);
-
 	return SUCCESS;
 
-error_data_byte:
-	free(data_byte_buff);
-error_data_buff:
-	free(data_buff);
 error_slot:
 	free(slot_bytecount_tab);
 
+	return ret;
+}
+
+/**
+ * @brief Reads a certain number of bytes from the fifo and stores in data
+ *        Used to read a large amount of data from the fifo efficiently (using
+ *        as few register reads as possible.)
+ * @param dev - Device handler.
+ * @param data - Pointer to the data container.
+ * @param num_samples - number of samples to read
+ * @param datawidth - number of bytes per sample
+ * @return SUCCESS in case of success, FAILURE or an error code otherwise.
+ */
+int32_t adpd410x_read_fifo(struct adpd410x_dev *dev, uint32_t *data,
+			   uint16_t num_samples,
+			   uint8_t datawidth)
+{
+	int32_t ret = SUCCESS;
+	uint8_t *data_byte_buff, i, j;
+	uint16_t next_packet_size, bytes_read = 0,
+				   total_bytes = num_samples * datawidth;
+	if (datawidth > 4 || total_bytes > ADPD410X_FIFO_DEPTH || data == NULL)
+		return FAILURE;
+
+	data_byte_buff = (uint8_t *) calloc(total_bytes, sizeof (*data_byte_buff));
+	if (!data_byte_buff)
+		return -ENOMEM;
+
+	while (bytes_read < total_bytes) {
+		next_packet_size = total_bytes - bytes_read;
+		// Can read a maximum of 255 bytes at once for i2c
+		if (dev->dev_type == ADPD4101 && next_packet_size > 255)
+			next_packet_size = 255;
+		ret = adpd410x_reg_read_bytes(dev, ADPD410X_REG_FIFO_DATA,
+					      data_byte_buff + bytes_read,
+					      next_packet_size);
+		if(ret != SUCCESS)
+			goto fifo_free_return;
+
+		bytes_read += next_packet_size;
+	}
+
+	i = 0;
+	for (j = 0; j < num_samples; j++) {
+		switch(datawidth) {
+		case 0:
+			break;
+		case 1:
+			data[j] = data_byte_buff[i++];
+			break;
+		case 2:
+			data[j]  = data_byte_buff[i++] << 8;
+			data[j] |= data_byte_buff[i++];
+			break;
+		case 3:
+			data[j]  = data_byte_buff[i++] << 8;
+			data[j] |= data_byte_buff[i++];
+			data[j] |= data_byte_buff[i++] << 16;
+			break;
+		case 4:
+			data[j]  = data_byte_buff[i++] << 8;
+			data[j] |= data_byte_buff[i++];
+			data[j] |= data_byte_buff[i++] << 24;
+			data[j] |= data_byte_buff[i++] << 16;
+			break;
+		}
+	}
+
+fifo_free_return:
+	free(data_byte_buff);
 	return ret;
 }
 
