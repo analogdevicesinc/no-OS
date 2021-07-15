@@ -39,10 +39,15 @@
 #ifndef APP_CONFIG_H_
 #define APP_CONFIG_H_
 
+
 #ifdef QUAD_MXFE
 #define MULTIDEVICE_INSTANCE_COUNT	4
 #else
 #define MULTIDEVICE_INSTANCE_COUNT	1
+/*
+static struct dt_property trx0_ad9081_ps_init[] = {
+};
+*/
 #endif
 
 #define AD9081_DAC_FREQUENCY	12000000000

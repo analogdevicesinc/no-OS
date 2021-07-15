@@ -45,6 +45,9 @@
 #include <stdint.h>
 #include "clk.h"
 #include "app_config.h"
+#include "hmc7044.h"
+
+struct hmc7044_dev* hmc7044_dev;
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
