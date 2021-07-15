@@ -50,6 +50,11 @@
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
+enum HMC7044_variant {
+	HMC7044,
+	HMC7043
+};
+
 struct hmc7044_chan_spec {
 	unsigned int	num;
 	bool		disable;
@@ -58,6 +63,7 @@ struct hmc7044_chan_spec {
 	bool		dynamic_driver_enable;
 	bool		output_control0_rb4_enable;
 	bool		force_mute_enable;
+	bool		is_sysref;
 	unsigned int	divider;
 	unsigned int	driver_mode;
 	unsigned int	driver_impedance;
@@ -68,7 +74,7 @@ struct hmc7044_chan_spec {
 
 struct hmc7044_dev {
 	spi_desc	*spi_desc;
-	bool		is_hmc7043;
+	uint32_t	device_id;
 	uint32_t	clkin_freq[4];
 	uint32_t	clkin_freq_ccf[4];
 	uint32_t	vcxo_freq;
@@ -89,11 +95,19 @@ struct hmc7044_dev {
 	uint32_t	gpo_ctrl[4];
 	uint32_t	num_channels;
 	struct hmc7044_chan_spec	*channels;
+	struct jesd204_dev	*jdev;
+	uint32_t	jdev_lmfc_lemc_rate;
+	uint32_t	jdev_lmfc_lemc_gcd;
+	uint32_t	jdev_max_sysref_freq;
+	uint32_t	jdev_desired_sysref_freq;
+	bool		is_sysref_provider;
+	bool		hmc_two_level_tree_sync_en;
+	bool		read_write_confirmed;
 };
 
 struct hmc7044_init_param {
 	spi_init_param	*spi_init;
-	bool		is_hmc7043;
+	uint32_t	device_id;
 	uint32_t	clkin_freq[4];
 	uint32_t	clkin_freq_ccf[4];
 	uint32_t	vcxo_freq;
@@ -114,6 +128,10 @@ struct hmc7044_init_param {
 	uint32_t	gpo_ctrl[4];
 	uint32_t	num_channels;
 	struct hmc7044_chan_spec	*channels;
+	uint32_t	jdev_max_sysref_freq;
+	uint32_t	jdev_desired_sysref_freq;
+	bool		is_sysref_provider;
+	bool		hmc_two_level_tree_sync_en;
 };
 
 /******************************************************************************/
