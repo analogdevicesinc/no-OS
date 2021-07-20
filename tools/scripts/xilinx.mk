@@ -29,6 +29,25 @@ PLATFORM_RELATIVE_PATH = $1
 PLATFORM_FULL_PATH = $1
 JTAG_CABLE_ID = $2
 
+
+ifeq ($(OS), Windows_NT)
+HIDE_OUTPUT = > nul
+else
+HIDE_OUTPUT = > /dev/null
+endif
+
+VERBOSE ?= 0
+export VERBOSE
+
+ifeq ($(strip $(VERBOSE)),0)
+HIDE = $(HIDE_OUTPUT)
+MUTE = @
+endif
+
+ifeq ($(strip $(VERBOSE)),2)
+HIDE = $(HIDE_OUTPUT)
+endif
+
 ################|--------------------------------------------------------------
 ################|                   Zynq                                       
 ################|--------------------------------------------------------------
