@@ -28,25 +28,7 @@ LIB_PATHS	+= -L$(BUILD_DIR)/bsp/$(ARCH)/lib
 PLATFORM_RELATIVE_PATH = $1
 PLATFORM_FULL_PATH = $1
 JTAG_CABLE_ID = $2
-
-
-ifeq ($(OS), Windows_NT)
-HIDE_OUTPUT = > nul
-else
-HIDE_OUTPUT = > /dev/null
-endif
-
-VERBOSE ?= 0
-export VERBOSE
-
-ifeq ($(strip $(VERBOSE)),0)
-HIDE = $(HIDE_OUTPUT)
-MUTE = @
-endif
-
-ifeq ($(strip $(VERBOSE)),2)
-HIDE = $(HIDE_OUTPUT)
-endif
+TARGET_CPU ?= 0
 
 ################|--------------------------------------------------------------
 ################|                   Zynq                                       
@@ -158,7 +140,7 @@ $(BINARY): $(TEMP_DIR)/arch.txt
 
 PHONY += xilinx_run
 xilinx_run: all
-	$(MUTE) $(call tcl_util, upload) $(HIDE) $(JTAG_CABLE_ID)
+	$(MUTE) $(call tcl_util, upload) $(JTAG_CABLE_ID) $(HIDE)
 
 $(TEMP_DIR)/arch.txt: $(HARDWARE)
 	$(MUTE) $(call mk_dir,$(BUILD_DIR)/app $(BUILD_DIR)/app/src $(OBJECTS_DIR) $(TEMP_DIR)) $(HIDE)
