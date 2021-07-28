@@ -48,6 +48,7 @@
 #include "spi.h"
 #include "gpio.h"
 #include "adi_ad9081.h"
+#include "jesd204.h"
 
 /******************************************************************************/
 /********************** Macros and Types Declarations *************************/
@@ -58,10 +59,12 @@
 struct ad9081_jesd_link {
 	bool is_jrx;
 	adi_cms_jesd_param_t jesd_param;
+	struct jesd204_link jesd204_link;
 	uint32_t jrx_tpl_phase_adjust;
 	uint8_t logiclane_mapping[8];
 	uint8_t link_converter_select[16];
-	uint64_t lane_rate;
+	unsigned long lane_rate_kbps;
+	unsigned long lane_cal_rate_kbps;
 };
 
 struct dac_settings_cache {
@@ -71,6 +74,10 @@ struct dac_settings_cache {
 struct ad9081_phy {
 	spi_desc		*spi_desc;
 	gpio_desc		*gpio_reset;
+	gpio_desc		*rx1_en_gpio;
+	gpio_desc		*rx2_en_gpio;
+	gpio_desc		*tx1_en_gpio;
+	gpio_desc		*tx2_en_gpio;
 	struct clk		*jesd_rx_clk;
 	struct clk		*jesd_tx_clk;
 	struct clk		*dev_clk;
@@ -79,6 +86,7 @@ struct ad9081_phy {
 	struct ad9081_jesd_link	jesd_rx_link[2];
 	uint32_t	multidevice_instance_count;
 	bool		config_sync_01_swapped;
+	bool		config_sync_0a_cmos_en;
 	uint32_t	lmfc_delay;
 	uint32_t	nco_sync_ms_extra_lmfc_num;
 	/* TX */
@@ -103,12 +111,14 @@ struct ad9081_phy {
 	/* The 8 ADC Channelizers */
 	int64_t		rx_fddc_shift[MAX_NUM_CHANNELIZER];
 	uint32_t	adc_chan_decimation[MAX_NUM_CHANNELIZER];
+	uint32_t	adc_dcm;
 	uint8_t		rx_fddc_dcm[MAX_NUM_CHANNELIZER];
 	uint8_t 	rx_fddc_c2r[MAX_NUM_CHANNELIZER];
 	uint8_t 	rx_fddc_select;
 };
 
 struct link_init_param {
+	uint32_t	link_id;
 	uint32_t	device_id;
 	uint32_t	octets_per_frame;
 	uint32_t	frames_per_multiframe;

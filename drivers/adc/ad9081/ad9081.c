@@ -653,6 +653,8 @@ static int32_t ad9081_setup(struct ad9081_phy *phy)
 	if (ret != 0 || !dcm)
 		return ret;
 
+	phy->adc_dcm = dcm;
+
 	if (phy->config_sync_01_swapped &&
 	    phy->jesd_tx_link.jesd_param.jesd_jesdv != 2) {
 		adi_ad9081_hal_bf_set(&phy->ad9081, REG_SYNCB_CTRL_ADDR,
@@ -921,20 +923,20 @@ int32_t ad9081_parse_jesd_link_init_param(struct ad9081_jesd_link *link,
 	int32_t i;
 
 	link->jesd_param.jesd_scr = 1; /* Force scambling on */
-	link->jesd_param.jesd_did = init_param->device_id;
-	link->jesd_param.jesd_f = init_param->octets_per_frame;
-	link->jesd_param.jesd_k = init_param->frames_per_multiframe;
-	link->jesd_param.jesd_s = init_param->samples_per_converter_per_frame;
-	link->jesd_param.jesd_hd = init_param->high_density;
-	link->jesd_param.jesd_n = init_param->converter_resolution;
-	link->jesd_param.jesd_np = init_param->bits_per_sample;
-	link->jesd_param.jesd_m = init_param->converters_per_device;
-	link->jesd_param.jesd_cs = init_param->control_bits_per_sample;
-	link->jesd_param.jesd_l = init_param->lanes_per_device;
-	link->jesd_param.jesd_subclass = init_param->subclass;
+	link->jesd204_link.device_id = link->jesd_param.jesd_did = init_param->device_id;
+	link->jesd204_link.octets_per_frame = link->jesd_param.jesd_f = init_param->octets_per_frame;
+	link->jesd204_link.frames_per_multiframe = link->jesd_param.jesd_k = init_param->frames_per_multiframe;
+	link->jesd204_link.samples_per_conv_frame = link->jesd_param.jesd_s = init_param->samples_per_converter_per_frame;
+	link->jesd204_link.high_density = link->jesd_param.jesd_hd = init_param->high_density;
+	link->jesd204_link.converter_resolution = link->jesd_param.jesd_n = init_param->converter_resolution;
+	link->jesd204_link.bits_per_sample = link->jesd_param.jesd_np = init_param->bits_per_sample;
+	link->jesd204_link.num_converters = link->jesd_param.jesd_m = init_param->converters_per_device;
+	link->jesd204_link.ctrl_bits_per_sample = link->jesd_param.jesd_cs = init_param->control_bits_per_sample;
+	link->jesd204_link.num_lanes = link->jesd_param.jesd_l = init_param->lanes_per_device;
+	link->jesd204_link.subclass = link->jesd_param.jesd_subclass = init_param->subclass;
 	link->jesd_param.jesd_mode_id = init_param->link_mode;
 	link->jesd_param.jesd_duallink = init_param->dual_link;
-	link->jesd_param.jesd_jesdv = init_param->version;
+	link->jesd204_link.jesd_version = link->jesd_param.jesd_jesdv = init_param->version;
 	for (i = 0; i < ARRAY_SIZE(link->logiclane_mapping); i++)
 		link->logiclane_mapping[i] =
 			init_param->logical_lane_mapping[i];
