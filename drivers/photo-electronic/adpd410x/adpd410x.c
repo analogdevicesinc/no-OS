@@ -148,7 +148,7 @@ int32_t adpd410x_reg_write(struct adpd410x_dev *dev, uint16_t address,
 	switch (dev->dev_type) {
 	case ADPD4100:
 		buff[0] = field_get(ADPD410X_UPPDER_BYTE_SPI_MASK, address);
-		buff[1] = (address << 1) & ADPD410X_LOWER_BYTE_SPI_MASK;
+		buff[1] = ((address << 1) & ADPD410X_LOWER_BYTE_SPI_MASK) | 0x1 ;
 		buff[2] = field_get(0xff00, data);
 		buff[3] = data & 0xff;
 
