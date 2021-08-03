@@ -607,7 +607,7 @@ int32_t adpd188_slot_setup(struct adpd188_dev *dev,
 		reg_data &= ~ADPD188_SLOT_EN_SLOTA_FIFO_MODE_MASK;
 		reg_data |= (config.sot_fifo_mode <<
 			     ADPD188_SLOT_EN_SLOTA_FIFO_MODE_POS) &
-			    ADPD188_SLOT_EN_SLOTA_FIFO_MODE_POS;
+			    ADPD188_SLOT_EN_SLOTA_FIFO_MODE_MASK;
 	} else if(config.slot_id == ADPD188_SLOTB) {
 		reg_data &= ~ADPD188_SLOT_EN_SLOTB_EN_MASK;
 		reg_data |= (config.slot_en << ADPD188_SLOT_EN_SLOTB_EN_POS) &
@@ -615,7 +615,7 @@ int32_t adpd188_slot_setup(struct adpd188_dev *dev,
 		reg_data &= ~ADPD188_SLOT_EN_SLOTB_FIFO_MODE_MASK;
 		reg_data |= (config.sot_fifo_mode <<
 			     ADPD188_SLOT_EN_SLOTB_FIFO_MODE_POS) &
-			    ADPD188_SLOT_EN_SLOTB_FIFO_MODE_POS;
+			    ADPD188_SLOT_EN_SLOTB_FIFO_MODE_MASK;
 	}
 
 	return adpd188_reg_write(dev, ADPD188_REG_SLOT_EN, reg_data);
