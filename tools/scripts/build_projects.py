@@ -94,7 +94,7 @@ FILE_TO_DOWNLOAD = 'latest.zip'
 def download_all_hw(builds_dir):
 	if SKIP_DOWNLOAD == 1:
 		return 0
-	release_link = os.path.join('https://github.com/mchindri/hdl/releases/download/Latest', FILE_TO_DOWNLOAD)
+	release_link = os.path.join('https://github.com/mchindri/hdl/releases/tag/Latest', FILE_TO_DOWNLOAD)
 	new_harware = os.path.join(builds_dir, FILE_TO_DOWNLOAD)
 	new_harware_dir = os.path.join(builds_dir, NEW_HW_DIR_NAME)
 	err = run_cmd('wget %s -O %s' % (release_link, new_harware))
