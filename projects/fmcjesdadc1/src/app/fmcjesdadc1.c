@@ -159,35 +159,20 @@ int main(void)
 	};
 	struct axi_jesd204_rx *ad9250_jesd;
 
-	struct axi_adc_init ad9250_0_core_param = {
-		.name = "ad9250_0_adc",
-		.base = RX_0_CORE_BASEADDR,
-		.num_channels = 2
+	struct axi_adc_init ad9250_core_param = {
+		.name = "ad9250_adc",
+		.base = RX_CORE_BASEADDR,
+		.num_channels = 4
 	};
-	struct axi_adc	*ad9250_0_core;
+	struct axi_adc	*ad9250_core;
 
-	struct axi_adc_init ad9250_1_core_param = {
-		.name = "ad9250_1_adc",
-		.base = RX_1_CORE_BASEADDR,
-		.num_channels = 2
-	};
-	struct axi_adc	*ad9250_1_core;
-
-	struct axi_dmac_init ad9250_0_dmac_param = {
-		.name = "ad9250_0_dmac",
-		.base = RX_DMA_0_BASEADDR,
+	struct axi_dmac_init ad9250_dmac_param = {
+		.name = "ad9250_dmac",
+		.base = RX_DMA_BASEADDR,
 		.direction = DMA_DEV_TO_MEM,
 		.flags = 0
 	};
-	struct axi_dmac *ad9250_0_dmac;
-
-	struct axi_dmac_init ad9250_1_dmac_param = {
-		.name = "ad9250_1_dmac",
-		.base = RX_DMA_1_BASEADDR,
-		.direction = DMA_DEV_TO_MEM,
-		.flags = 0
-	};
-	struct axi_dmac *ad9250_1_dmac;
+	struct axi_dmac *ad9250_dmac;
 
 	struct ad9517_platform_data ad9517_pdata_lpc = {
 		/* PLL Reference */
@@ -484,7 +469,7 @@ int main(void)
 
 	status= ad9250_setup(&ad9250_1_device, ad9250_1_param);
 	if(status< 0)
-		printf("Error ad9250_0_setup()\n");
+		printf("Error ad9250_1_setup()\n");
 
 	// set up the XCVR core
 	status = adxcvr_init(&ad9250_xcvr, &ad9250_xcvr_param);
@@ -508,14 +493,9 @@ int main(void)
 	}
 
 	// interface core setup
-	status = axi_adc_init(&ad9250_0_core,  &ad9250_0_core_param);
+	status = axi_adc_init(&ad9250_core,  &ad9250_core_param);
 	if (status != SUCCESS) {
-		printf("axi_adc_init() error: %s\n", ad9250_0_core->name);
-	}
-
-	status = axi_adc_init(&ad9250_1_core,  &ad9250_1_core_param);
-	if (status != SUCCESS) {
-		printf("axi_adc_init() error: %s\n", ad9250_1_core->name);
+		printf("axi_adc_init() error: %s\n", ad9250_core->name);
 	}
 
 	// JESD core status
@@ -531,13 +511,11 @@ int main(void)
 	// PRBS test
 	ad9250_test_mode(ad9250_0_device, AD9250_TEST_PNLONG);
 	ad9250_transfer(ad9250_0_device);
-	if(axi_adc_pn_mon(ad9250_0_core, AXI_ADC_PN23, 10) == -1) {
-		printf("%s ad9250_0 - PN23 sequence mismatch!\n", __func__);
-	};
+
 	ad9250_test_mode(ad9250_1_device, AD9250_TEST_PNLONG);
 	ad9250_transfer(ad9250_1_device);
-	if(axi_adc_pn_mon(ad9250_1_core, AXI_ADC_PN23, 10) == -1) {
-		printf("%s ad9250_1 - PN23 sequence mismatch!\n", __func__);
+	if(axi_adc_pn_mon(ad9250_core, AXI_ADC_PN23, 10) == -1) {
+		printf("%s ad9250 - PN23 sequence mismatch!\n", __func__);
 	};
 
 	// set up ramp output
@@ -547,12 +525,8 @@ int main(void)
 	ad9250_transfer(ad9250_1_device);
 
 	// test the captured data
-	axi_dmac_init(&ad9250_0_dmac, &ad9250_0_dmac_param);
-	axi_dmac_transfer(ad9250_0_dmac, ADC_0_DDR_BASEADDR, 16384 * 2);
-
-	axi_dmac_init(&ad9250_1_dmac, &ad9250_1_dmac_param);
-	axi_dmac_transfer(ad9250_1_dmac, ADC_1_DDR_BASEADDR, 16384 * 2);
-
+	axi_dmac_init(&ad9250_dmac, &ad9250_dmac_param);
+	axi_dmac_transfer(ad9250_dmac, ADC_DDR_BASEADDR, 16384 * 4);
 	Xil_DCacheFlush();
 
 	// set up normal output
@@ -562,9 +536,7 @@ int main(void)
 	ad9250_transfer(ad9250_1_device);
 
 	// capture data with DMA
-	axi_dmac_transfer(ad9250_0_dmac, ADC_0_DDR_BASEADDR, 16384 * 2);
-	axi_dmac_transfer(ad9250_1_dmac, ADC_1_DDR_BASEADDR, 16384 * 2);
-
+	axi_dmac_transfer(ad9250_dmac, ADC_DDR_BASEADDR, 16384 * 4);
 	Xil_DCacheFlush();
 
 #ifdef IIO_SUPPORT
@@ -572,8 +544,8 @@ int main(void)
 
 	struct iio_axi_adc_init_param iio_axi_adc_0_init_par;
 	iio_axi_adc_0_init_par = (struct iio_axi_adc_init_param) {
-		.rx_adc = ad9250_0_core,
-		.rx_dmac = ad9250_0_dmac,
+		.rx_adc = ad9250_core,
+		.rx_dmac = ad9250_dmac,
 #ifndef PLATFORM_MB
 		.dcache_invalidate_range = (void (*)(uint32_t,
 						     uint32_t))Xil_DCacheInvalidateRange
@@ -581,8 +553,8 @@ int main(void)
 	};
 	struct iio_axi_adc_init_param iio_axi_adc_1_init_par;
 	iio_axi_adc_1_init_par = (struct iio_axi_adc_init_param) {
-		.rx_adc = ad9250_1_core,
-		.rx_dmac = ad9250_1_dmac,
+		.rx_adc = ad9250_core,
+		.rx_dmac = ad9250_dmac,
 #ifndef PLATFORM_MB
 		.dcache_invalidate_range = (void (*)(uint32_t,
 						     uint32_t))Xil_DCacheInvalidateRange
