@@ -11,8 +11,7 @@ include $(NO-OS)/tools/scripts/iio_srcs.mk
 
 CFLAGS += -DTINYIIOD_VERSION_MAJOR=0	 \
 	   -DTINYIIOD_VERSION_MINOR=1		 \
-	   -DTINYIIOD_VERSION_GIT=0x$(shell git -C $(NO-OS)/libraries/iio/libtinyiiod/ \
-	   				rev-parse --short HEAD) \
+	   -DTINYIIOD_VERSION_GIT=0x440e425	 \
 	   -DIIOD_BUFFER_SIZE=0x1000		 \
 	   -D_USE_STD_INT_TYPES
 CFLAGS += -DIIO_SUPPORT
