@@ -13,14 +13,14 @@
 
 ifeq '$(LOCAL_BUILD)' 'y'
 
-include ..\..\tools\scripts\local_variables.mk
+include ../../tools/scripts/local_variables.mk
 
 endif
 
 #Variables needed by makefile
 NO-OS			?= $(realpath ../..)
 PROJECT			?= $(realpath .)
-BUILD_DIR		?= $(PROJECT)/build
+BUILD_DIR		?= build
 WORKSPACE		?= $(BUILD_DIR)
 
 #Useful variables for src.mk

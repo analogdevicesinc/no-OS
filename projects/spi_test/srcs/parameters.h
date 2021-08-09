@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   error.h
- *   @brief  Error codes definition
+ *   @file   ad9361/src/parameters.h
+ *   @brief  Parameters Definitions.
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
- * Copyright 2019(c) Analog Devices, Inc.
+ * Copyright 2013(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -36,38 +36,86 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
+#ifndef __PARAMETERS_H__
+#define __PARAMETERS_H__
 
-#ifndef ERROR_H_
-#define ERROR_H_
+/******************************************************************************/
+/***************************** Include Files **********************************/
+/******************************************************************************/
 
-#include <errno.h>
-#include <stdio.h>
+#ifdef XILINX_PLATFORM
+#include <xparameters.h>
+#endif
+
+#ifdef ADUCM_PLATFORM
+#include "irq_extra.h"
+#endif
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 
-#ifdef SUCCESS
-#undef SUCCESS
-#endif
-#define SUCCESS		0
-#ifdef FAILURE
-#undef FAILURE
-#endif
-#define FAILURE		-1
+#define GPIO_BANK_0_PINS	32
+#define GPIO_BANK_1_PINS	22
+#define GPIO_BANK_2_PINS	32
+#define GPIO_BANK_3_OFFSET	(GPIO_BANK_0_PINS + GPIO_BANK_1_PINS + \
+				 GPIO_BANK_2_PINS)
+#define GPIO_OFFSET		GPIO_BANK_3_OFFSET
 
-#ifndef __ELASTERROR
-#define __ELASTERROR 2000
-#endif
+/* GPIO Indexes */
+#define GPIO_RESET_N				0
+#define GPIO_LDAC_N				1
+#define GPIO_SPI_QPI				2
+#define GPIO_ALERT_N				3
+#define GPIO_SYNC_EVENTS			4
+#define GPIO_6					5
+#define GPIO_7					6
+#define GPIO_8					7
+#define TOTAL_GPIOS				8
 
-#define EOVERRUN	(__ELASTERROR + 1) /* Circular buffer overrun */
+#ifdef XILINX_PLATFORM
 
-#include <stdio.h>
-#define IS_ERR_VALUE(ret) ((ret) < 0 ?\
-		(0 < printf("Errors: %d(-0x%x). Func: %s. Line: %d\n", (int)ret, (int)-ret,\
-				__func__, __LINE__)):\
-		(0))
+#define SPI_DEVICE_ID		XPAR_SPI_0_DEVICE_ID
+#define GPIO_DEVICE_ID		XPAR_PS7_GPIO_0_DEVICE_ID
+#define TIMER_DEVICE_ID		XPAR_XSCUTIMER_0_DEVICE_ID
+#define UART_DEVICE_ID		XPAR_XUARTPS_0_DEVICE_ID
+#define INTC_DEVICE_ID		XPAR_SCUGIC_SINGLE_DEVICE_ID
 
-//#define IS_ERR_VALUE(x)	((x) < 0)
+#define ADC_DDR_BASEADDR	(XPAR_DDR_MEM_BASEADDR + 0x800000)
+#define DAC_DDR_BASEADDR	(XPAR_DDR_MEM_BASEADDR + 0xA000000)
 
-#endif // ERROR_H_
+/* 400 * 8 * 2 = 6400‬ Default number of samples requested on a capture */
+#define MAX_SIZE_BASE_ADDR	10000
+//#define UART_BAUDRATE		921600
+#define UART_BAUDRATE		115200
+#define UART_IRQ_ID		XPAR_XUARTPS_1_INTR
+
+#define GPIO_IRQ_ID		XPAR_PS7_GPIO_0_INTR
+
+#define TIMER_IRPT_INTR		XPAR_SCUTIMER_INTR
+
+#endif // XILINX_PLATFORM
+
+#ifdef LINUX_PLATFORM
+#include <stdint.h>
+#define BUFF_SIZE 	2 * 10000
+const uint8_t dac_buff[BUFF_SIZE];
+#define DAC_DDR_BASEADDR	dac_buff
+#define UART_DEVICE_ID		0
+
+/* 400 * 8 * 2 = 6400‬ Default number of samples requested on a capture */
+#define MAX_SIZE_BASE_ADDR	10000
+//#define UART_BAUDRATE		921600
+#define UART_BAUDRATE		115200
+
+#define SPI_DEVICE_ID 				0
+#define UART_DEVICE_ID				0
+#define UART_IRQ_ID				0
+#define INTC_DEVICE_ID				0
+#define GPIO_DEVICE_ID				0
+#define GPIO_CHIP_BASE				906
+#define GPIO_OFFSET				(GPIO_BANK_3_OFFSET + GPIO_CHIP_BASE)
+
+#endif //LINUX_PLATFORM
+
+#endif // __PARAMETERS_H__

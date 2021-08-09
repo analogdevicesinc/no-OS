@@ -1,0 +1,36 @@
+{
+	"configurations": [
+	    {
+		"name": "App",
+		"includePath": [
+		    "${workspaceFolder}/ad3552rfmcz/srcs",
+		    "${workspaceFolder}/noos/drivers/dac/ad3552r",
+		    "${workspaceFolder}/noos/drivers/gpio",
+		    "${workspaceFolder}/noos/drivers/platform/linux",
+		    "${workspaceFolder}/noos/drivers/spi",
+		    "${workspaceFolder}/noos/iio/iio_app",
+		    "${workspaceFolder}/noos/include",
+		    "${workspaceFolder}/noos/libraries/iio/libtinyiiod",
+		    "${workspaceFolder}/noos/libraries/iio",
+		    "${workspaceFolder}/noos/network",
+		    "${workspaceFolder}/noos/network/linux_socket",
+		    "${workspaceFolder}/noos/util"
+		],
+		"defines": [
+		    "LINUX_PLATFORM",
+		    "IIO_SUPPORT",
+		    "DISABLE_SECURE_SOCKET"
+		],
+		"compilerPath": "/usr/bin/gcc",
+		"cStandard": "gnu17",
+		"cppStandard": "gnu++14",
+		"intelliSenseMode": "linux-gcc-arm",
+		"compilerArgs": [],
+		"browse": {
+		"limitSymbolsToIncludedHeaders": true,
+		"databaseFilename": ""
+		}
+	    }
+	],
+	"version": 4
+    }

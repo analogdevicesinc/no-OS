@@ -41,6 +41,7 @@
 
 #include <stdlib.h>
 #include "iio.h"
+#include "error.h"
 #include "iio_app.h"
 #include "parameters.h"
 #include "uart.h"
@@ -288,7 +289,7 @@ int32_t iio_app_run(struct iio_app_device *devices, int32_t len)
 
 	do {
 		status = iio_step(iio_desc);
-	} while (true);
+	} while (!IS_ERR_VALUE(status));
 error:
 #ifndef LINUX_PLATFORM
 	if (UART_BAUDRATE_DEFAULT != UART_BAUDRATE) {

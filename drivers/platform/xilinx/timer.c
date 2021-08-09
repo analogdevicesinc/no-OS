@@ -52,7 +52,7 @@
 /******************************************************************************/
 
 #if defined(_XPARAMETERS_PS_H_)
-#define CORE_PRIVATE_TIMER_CLOCK (XPAR_CPU_CORTEXA9_CORE_CLOCK_FREQ_HZ / 2)
+#define CORE_PRIVATE_TIMER_CLOCK	(XPAR_CPU_CORTEXA9_CORE_CLOCK_FREQ_HZ / 2)
 #endif
 
 /******************************************************************************/
@@ -106,7 +106,14 @@ int32_t timer_init(struct timer_desc **desc,
 			free(xdesc->instance);
 			goto error_xdesc;
 		}
-		XScuTimer_LoadTimer((XScuTimer *)xdesc->instance, dev->load_value);
+		ret = timer_count_clk_set(dev, param->freq_hz);
+		if (IS_ERR_VALUE(ret))
+			goto error_xdesc;
+
+		ret = timer_counter_set(dev, dev->load_value);
+		if (IS_ERR_VALUE(ret))
+			goto error_xdesc;
+
 		XScuTimer_EnableAutoReload((XScuTimer *)xdesc->instance);
 		XScuTimer_EnableInterrupt((XScuTimer *)xdesc->instance);
 		break;
@@ -282,6 +289,7 @@ int32_t timer_counter_get(struct timer_desc *desc, uint32_t *counter)
 	case TIMER_PS:
 #ifdef XSCUTIMER_H
 		*counter = XScuTimer_GetCounterValue((XScuTimer *)xdesc->instance);
+		++(*counter);
 		break;
 #endif
 		return FAILURE;
@@ -318,7 +326,7 @@ int32_t timer_counter_set(struct timer_desc *desc, uint32_t new_val)
 	switch (xdesc->type) {
 	case TIMER_PS:
 #ifdef XSCUTIMER_H
-		XScuTimer_LoadTimer((XScuTimer *)xdesc->instance, new_val);
+		XScuTimer_LoadTimer((XScuTimer *)xdesc->instance, new_val - 1);
 		break;
 #endif
 		return FAILURE;
@@ -354,9 +362,7 @@ int32_t timer_count_clk_get(struct timer_desc *desc, uint32_t *freq_hz)
 	switch (xdesc->type) {
 	case TIMER_PS:
 #ifdef XSCUTIMER_H
-		;
-		uint8_t prescaler = XScuTimer_GetPrescaler(xdesc->instance);
-		*freq_hz = CORE_PRIVATE_TIMER_CLOCK / prescaler;
+		*freq_hz = desc->freq_hz;
 		break;
 #endif
 		return FAILURE;
@@ -395,9 +401,10 @@ int32_t timer_count_clk_set(struct timer_desc *desc, uint32_t freq_hz)
 #ifdef XSCUTIMER_H
 		;
 		uint32_t prescaler = CORE_PRIVATE_TIMER_CLOCK / freq_hz;
-		if (prescaler >= 256)
+		if (prescaler == 0 || prescaler >= 256)
 			return FAILURE;
-		XScuTimer_SetPrescaler(xdesc->instance, (uint8_t)prescaler);
+		XScuTimer_SetPrescaler(xdesc->instance, prescaler - 1);
+		desc->freq_hz = CORE_PRIVATE_TIMER_CLOCK / prescaler;
 		break;
 #endif
 		return FAILURE;

@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   error.h
- *   @brief  Error codes definition
+ *   @file   app_config.h
+ *   @brief  Config file of AD9361/API Driver.
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
- * Copyright 2019(c) Analog Devices, Inc.
+ * Copyright 2015(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -36,38 +36,15 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
+#ifndef CONFIG_H_
+#define CONFIG_H_
 
-#ifndef ERROR_H_
-#define ERROR_H_
+//#define XILINX_PLATFORM
+//#define ALTERA_PLATFORM
+//#define ADUCM_PLATFORM
 
-#include <errno.h>
-#include <stdio.h>
-
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
-
-#ifdef SUCCESS
-#undef SUCCESS
-#endif
-#define SUCCESS		0
-#ifdef FAILURE
-#undef FAILURE
-#endif
-#define FAILURE		-1
-
-#ifndef __ELASTERROR
-#define __ELASTERROR 2000
+#ifdef ENABLE_IIO_NETWORK
+//#define USE_TCP_SOCKET
 #endif
 
-#define EOVERRUN	(__ELASTERROR + 1) /* Circular buffer overrun */
-
-#include <stdio.h>
-#define IS_ERR_VALUE(ret) ((ret) < 0 ?\
-		(0 < printf("Errors: %d(-0x%x). Func: %s. Line: %d\n", (int)ret, (int)-ret,\
-				__func__, __LINE__)):\
-		(0))
-
-//#define IS_ERR_VALUE(x)	((x) < 0)
-
-#endif // ERROR_H_
+#endif
