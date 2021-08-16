@@ -59,12 +59,7 @@
 static struct irq_ctrl_desc *irq_desc;
 #endif
 
-struct iio_data_buffer g_read_buff0 = {
-	.buff = (void *)ADC_DDR_BASEADDR,
-	.size = 0xFFFFFFFF,
-};
-
-struct iio_data_buffer g_read_buff1 = {
+struct iio_data_buffer g_read_buff = {
 	.buff = (void *)ADC_DDR_BASEADDR,
 	.size = 0xFFFFFFFF,
 };
@@ -77,8 +72,7 @@ struct iio_data_buffer g_read_buff1 = {
  * @brief Application IIO setup.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t iio_server_init(struct iio_axi_adc_init_param *adc_0_init,
-			struct iio_axi_adc_init_param *adc_1_init)
+int32_t iio_server_init(struct iio_axi_adc_init_param *adc_init)
 {
 	int32_t status;
 	struct uart_desc *uart_desc;
@@ -107,8 +101,7 @@ int32_t iio_server_init(struct iio_axi_adc_init_param *adc_0_init,
 	};
 	struct iio_device *adc_dev_desc;
 	struct iio_desc *iio_desc;
-	struct iio_axi_adc_desc *iio_axi_adc_0_desc;
-	struct iio_axi_adc_desc *iio_axi_adc_1_desc;
+	struct iio_axi_adc_desc *iio_axi_adc_desc;
 
 #ifndef PLATFORM_MB
 	struct xil_irq_init_param xil_irq_init_param = {
@@ -135,21 +128,14 @@ int32_t iio_server_init(struct iio_axi_adc_init_param *adc_0_init,
 	if (status < 0)
 		return status;
 
-	status = iio_axi_adc_init(&iio_axi_adc_0_desc, adc_0_init);
+	status = iio_axi_adc_init(&iio_axi_adc_desc, adc_init);
 	if (status < 0)
 		return status;
-	iio_axi_adc_get_dev_descriptor(iio_axi_adc_0_desc, &adc_dev_desc);
-	status = iio_register(iio_desc, adc_dev_desc, "axi_adc_0",
-			      iio_axi_adc_0_desc, &g_read_buff0, NULL);
+	iio_axi_adc_get_dev_descriptor(iio_axi_adc_desc, &adc_dev_desc);
+	status = iio_register(iio_desc, adc_dev_desc, "axi_adc",
+			      iio_axi_adc_desc, &g_read_buff, NULL);
 	if (status < 0)
 		return status;
-
-	status = iio_axi_adc_init(&iio_axi_adc_1_desc, adc_1_init);
-	if (status < 0)
-		return status;
-	iio_axi_adc_get_dev_descriptor(iio_axi_adc_1_desc, &adc_dev_desc);
-	status = iio_register(iio_desc, adc_dev_desc, "axi_adc_1",
-			      iio_axi_adc_1_desc, &g_read_buff1, NULL);
 
 	do {
 		status = iio_step(iio_desc);
