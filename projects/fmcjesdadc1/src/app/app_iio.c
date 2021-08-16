@@ -82,7 +82,6 @@ int32_t iio_server_init(struct iio_axi_adc_init_param *adc_init)
 #else
 		.type = UART_PS,
 		.irq_id = UART_IRQ_ID,
-		.irq_desc = irq_desc,
 #endif
 	};
 	struct uart_init_param uart_init_par = {
@@ -116,6 +115,8 @@ int32_t iio_server_init(struct iio_axi_adc_init_param *adc_init)
 	status = irq_ctrl_init(&irq_desc, &irq_init_param);
 	if(status < 0)
 		return status;
+
+	xil_uart_init_par.irq_desc = irq_desc,
 #endif
 
 #ifndef PLATFORM_MB
