@@ -12,9 +12,6 @@
 # Uncomment to select the profile
 
 SRCS += $(PROJECT)/src/app/fmcjesdadc1.c
-ifeq (y,$(strip $(TINYIIOD)))
-SRCS += $(PROJECT)/src/app/app_iio.c
-endif
 SRCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c			\
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.c				\
 	$(DRIVERS)/axi_core/clk_axi_clkgen/clk_axi_clkgen.c		\
@@ -36,14 +33,12 @@ LIBRARIES += iio
 SRCS += $(NO-OS)/util/fifo.c				    \
 	$(NO-OS)/util/list.c						\
 	$(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.c	    \
+	$(NO-OS)/iio/iio_app/iio_app.c					\
 	$(PLATFORM_DRIVERS)/uart.c					\
 	$(PLATFORM_DRIVERS)/irq.c
 endif
 INCS +=	$(PROJECT)/src/app/app_config.h					\
 	$(PROJECT)/src/devices/adi_hal/parameters.h			
-ifeq (y,$(strip $(TINYIIOD)))
-INCS +=	$(PROJECT)/src/app/app_iio.h
-endif
 INCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.h			\
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.h				\
 	$(DRIVERS)/axi_core/clk_axi_clkgen/clk_axi_clkgen.h		\
@@ -68,5 +63,6 @@ INCS += $(INCLUDE)/fifo.h					\
 	$(INCLUDE)/list.h						\
 	$(PLATFORM_DRIVERS)/irq_extra.h					\
 	$(PLATFORM_DRIVERS)/uart_extra.h                                \
+	$(NO-OS)/iio/iio_app/iio_app.h					\
 	$(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.h
 endif
