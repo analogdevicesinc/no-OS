@@ -60,6 +60,8 @@
 #include "util.h"
 #include "error.h"
 #include "parameters.h"
+#include "pwm.h"
+#include "axi_pwm_extra.h"
 
 #ifdef IIO_SUPPORT
 #include "irq.h"
@@ -144,15 +146,29 @@ int main()
 		.spi_engine_baseaddr = AD7134_SPI_ENGINE_BASEADDR,
 		.cs_delay = 0,
 		.data_width = 32,
-		.ref_clk_hz = AD713x_SPI_ENG_REF_CLK_FREQ_HZ,
+//		.ref_clk_hz = AD713x_SPI_ENG_REF_CLK_FREQ_HZ,
+		.ref_clk_hz = 100000000,
 	};
 	const struct spi_init_param spi_eng_init_prm  = {
 		.chip_select = AD7134_1_SPI_CS,
-		.max_speed_hz = 10000000,
+		.max_speed_hz = 50000000,
 		.mode = SPI_MODE_3,
 		.platform_ops = &spi_eng_platform_ops,
 		.extra = (void*)&spi_eng_init_param,
 
+	};
+
+	struct pwm_desc *axi_pwm;
+	struct axi_pwm_init_param axi_zed_pwm_init = {
+			.base_addr = XPAR_ODR_GENERATOR_BASEADDR,
+			.ref_clock_Hz = 100000000,
+			.channel = 0
+	};
+	struct pwm_init_param axi_pwm_init = {
+			.period_ns = 160000,
+			.duty_cycle_ns = 500,
+			.phase_ns = 0,
+			.extra = &axi_zed_pwm_init
 	};
 
 	gpio_extra_param.device_id = GPIO_DEVICE_ID;
@@ -168,7 +184,7 @@ int main()
 	ad713x_init_param_1.gpio_mode = &ad7134_1_mode;
 	ad713x_init_param_1.gpio_pnd = &ad7134_1_pnd;
 	ad713x_init_param_1.gpio_resetn = &ad7134_1_resetn;
-	ad713x_init_param_1.mode_master_nslave = true;
+	ad713x_init_param_1.mode_master_nslave = false;
 	ad713x_init_param_1.dclkmode_free_ngated = false;
 	ad713x_init_param_1.dclkio_out_nin = false;
 	ad713x_init_param_1.pnd = true;
@@ -202,7 +218,7 @@ int main()
 	ad713x_init_param_2.spi_init_prm.extra = (void *)&spi_engine_init_params;
 	ad713x_init_param_2.spi_common_dev = 0;
 
-	spi_eng_msg_cmds[0] = SLEEP(100);
+	spi_eng_msg_cmds[0] = SLEEP(0);
 	spi_eng_msg_cmds[1] = READ(1);
 
 	Xil_ICacheEnable();
@@ -278,6 +294,10 @@ int main()
 
 	ret = spi_engine_offload_transfer(spi_eng_desc, spi_engine_offload_message,
 					  (AD7134_FMC_CH_NO * AD7134_FMC_SAMPLE_NO));
+	if (ret != SUCCESS)
+		return ret;
+
+	ret = pwm_init(&axi_pwm, &axi_pwm_init);
 	if (ret != SUCCESS)
 		return ret;
 
