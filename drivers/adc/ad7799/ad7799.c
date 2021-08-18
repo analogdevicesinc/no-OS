@@ -235,17 +235,22 @@ int32_t ad7799_get_channel(struct ad7799_dev *device, uint8_t ch,
 }
 
 /**
- * @brief Read data in mV from specific ADC channel.
+ * @brief Read data from specific ADC channel with specified precision.
  * @param device - The device structure.
  * @param ch - The ADC channel.
- * @param data_mv - The content of the data converted in mV.
+ * @param data_scaled - The content of the data in mV/uV.
  * @return SUCCESS in case of success, negative error code otherwise.
  */
-int32_t ad7799_read_channel_mv(struct ad7799_dev *device, uint8_t ch,
-			       int32_t *data_mv)
+int32_t ad7799_read_channel(struct ad7799_dev *device, uint8_t ch,
+			    int32_t *data_scaled)
 {
 	int32_t ret;
 	uint32_t data, temp;
+
+	uint32_t vref_scaled = device->vref_mv;
+
+	if (device->precision)
+		vref_scaled *= 1000;
 
 	ret = ad7799_get_channel(device, ch, &data);
 	if(ret)
@@ -256,19 +261,19 @@ int32_t ad7799_read_channel_mv(struct ad7799_dev *device, uint8_t ch,
 		temp = 1 << ((device->reg_size[AD7799_REG_DATA] * 8) - 1);
 
 		if(data >= temp)
-			data = ((data - temp) * device->vref_mv) / (temp - 1);
+			data = ((data - temp) * vref_scaled) / (temp - 1);
 		else
-			data = -(((temp - data) * device->vref_mv) / (temp - 1));
+			data = -(((temp - data) * vref_scaled) / (temp - 1));
 		break;
 	case AD7799_UNIPOLAR:
 		temp = (1 << (device->reg_size[AD7799_REG_DATA] * 8));
-		data = data * device->vref_mv / temp;
+		data = data * vref_scaled / temp;
 		break;
 	default:
 		return -EINVAL;
 	}
 
-	*data_mv = data;
+	*data_scaled = data;
 
 	return ret;
 }
@@ -409,6 +414,7 @@ int32_t ad7799_init(struct ad7799_dev **device,
 	dev->polarity = init_param->polarity;
 	dev->gain = init_param->gain;
 	dev->vref_mv = init_param->vref_mv;
+	dev->precision = init_param->precision;
 
 	switch(dev->chip_type) {
 	case ID_AD7798:
