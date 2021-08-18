@@ -156,6 +156,13 @@ enum ad7799_type {
 	ID_AD7799 = 0x9
 };
 
+enum ad7799_precision {
+	/** ADC channel precision in mV */
+	AD7799_PRECISION_MV,
+	/** ADC channel precision in uV */
+	AD7799_PRECISION_UV,
+};
+
 /**
  * @struct ad7799_dev
  * @brief AD7798/AD7799 Device description
@@ -173,6 +180,8 @@ struct ad7799_dev {
 	bool polarity;
 	/** Reference Voltage in mV */
 	uint32_t vref_mv;
+	/** ADC channel precision (mV/uV) **/
+	enum ad7799_precision precision;
 };
 
 /**
@@ -190,6 +199,8 @@ struct ad7799_init_param {
 	bool polarity;
 	/** Reference Voltage in mV */
 	uint32_t vref_mv;
+	/** ADC channel precision (mV/uV) **/
+	enum ad7799_precision precision;
 };
 
 /******************************************************************************/
@@ -217,9 +228,9 @@ int32_t ad7799_set_channel(struct ad7799_dev *device, uint8_t ch);
 int32_t ad7799_get_channel(struct ad7799_dev *device, uint8_t ch,
 			   uint32_t *reg_data);
 
-/* Read specific ADC channel in mV. */
-int32_t ad7799_read_channel_mv(struct ad7799_dev *device, uint8_t ch,
-			       int32_t *data_mv);
+/* Read specific ADC channel data with the specified precision. */
+int32_t ad7799_read_channel(struct ad7799_dev *device, uint8_t ch,
+			    int32_t *data_scaled);
 
 /* Set the ADC gain. */
 int32_t ad7799_set_gain(struct ad7799_dev *device, uint8_t gain);
