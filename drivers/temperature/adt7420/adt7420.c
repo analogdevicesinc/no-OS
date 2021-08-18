@@ -3,7 +3,7 @@
  *   @brief  Implementation of ADT7420 Driver.
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
- * Copyright 2012(c) Analog Devices, Inc.
+ * Copyright 2012, 2019, 2021(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -40,55 +40,107 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
+#include <stdint.h>
 #include <stdlib.h>
+#include "spi.h"
+#include "i2c.h"
+#include "error.h"
 #include "adt7420.h"
 
+const struct adt7420_chip_info chip_info[] = {
+	[ID_ADT7410] = {
+		.resolution = 16,
+		.communication = I2C,
+	},
+	[ID_ADT7420] = {
+		.resolution = 16,
+		.communication = I2C,
+	},
+	[ID_ADT7422] = {
+		.resolution = 16,
+		.communication = I2C,
+	},
+	[ID_ADT7310] = {
+		.resolution = 16,
+		.communication = SPI,
+	},
+	[ID_ADT7320] = {
+		.resolution = 16,
+		.communication = SPI,
+	}
+};
+
 /***************************************************************************//**
- * @brief Reads the value of a register.
+ * @brief Reads the value of a register SPI/I2C interface.
  *
  * @param dev              - The device structure.
  * @param register_address - Address of the register.
  *
  * @return register_value  - Value of the register.
 *******************************************************************************/
-uint8_t adt7420_get_register_value(struct adt7420_dev *dev,
-				   uint8_t register_address)
+uint16_t adt7420_get_register_value(struct adt7420_dev *dev,
+				    uint8_t register_address)
 {
 	uint8_t register_value = 0;
+	uint8_t data[2] = {0,0xFF};
 
-	i2c_write(dev->i2c_desc,
-		  &register_address,
-		  1,
-		  0);
-	i2c_read(dev->i2c_desc,
-		 &register_value,
-		 1,
-		 1);
+	if (chip_info[dev->active_device].communication == SPI) {
+		/* Form the SPI register read command byte. Bits [5:3] of command byte 
+		 holds the register address.*/
+		data[0] = ADT7320_READ_CMD  | (register_address << 3);
 
-	return register_value;
+		return set_shift_reg(dev, register_address, data);
+	} else {
+		data[0] = register_address;
+
+		i2c_write(dev->i2c_desc,
+			  &register_address,
+			  1,
+			  0); //add a repeat start
+		i2c_read(dev->i2c_desc,
+			 &register_value,
+			 1,
+			 1);
+
+		return register_value;
+	}
 }
 
 /***************************************************************************//**
- * @brief Sets the value of a register.
+ * @brief Sets the value of a register SPI/I2C.
  *
  * @param dev              - The device structure.
  * @param register_address - Address of the register.
- * @param register_value   - Value of the register.
+ * @param num_data_bytes   - Number of bytes.
+ * @param data             - Data to be written in input register.
  *
  * @return None.
 *******************************************************************************/
-void adt7420_set_register_value(struct adt7420_dev *dev,
-				uint8_t register_address,
-				uint8_t register_value)
+void set_register_value(struct adt7420_dev *dev,
+			uint8_t register_address,
+			uint8_t num_data_bytes,
+			uint8_t *data)
 {
-	uint8_t data_buffer[2] = {0, 0};
 
-	data_buffer[0] = register_address;
-	data_buffer[1] = register_value;
-	i2c_write(dev->i2c_desc,
-		  data_buffer,
-		  2,
-		  1);
+	uint8_t data_buffer[3] = {0, 0, 0};
+
+
+	data_buffer[1] = data[0];
+	data_buffer[2] = data[1];
+
+	if (chip_info[dev->active_device].communication == SPI) {
+		/*Form the SPI register read command byte. Bits [5:3] of command byte 
+		 holds the register address.*/
+		data_buffer[0] = (register_address << 3) & ADT7320_WRITE_MASK_CMD;
+		spi_write_and_read(dev->spi_desc, data_buffer, num_data_bytes);
+	} else {
+		data_buffer[0] = register_address;
+
+		i2c_write(dev->i2c_desc,
+			  data_buffer,
+			  num_data_bytes,
+			  1); //no repeat start
+	}
 }
 
 /***************************************************************************//**
@@ -110,23 +162,46 @@ int32_t adt7420_init(struct adt7420_dev **device,
 {
 	struct adt7420_dev *dev;
 	int32_t status;
-	uint8_t test = 0;
+	uint8_t device_connected_check = 0;
 
 	dev = (struct adt7420_dev *)malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
-	/* I2C */
-	status = i2c_init(&dev->i2c_desc, &init_param.i2c_init);
+	dev->active_device = init_param.active_device;
 
-	/* Device Settings */
-	dev->resolution_setting = init_param.resolution_setting;
+	if (chip_info[dev->active_device].communication == SPI) {
+		status = spi_init(&dev->spi_desc, &init_param.spi_init);
+	} else {
+		status = i2c_init(&dev->i2c_desc, &init_param.i2c_init);
+	}
 
-	test   = adt7420_get_register_value(dev, ADT7420_REG_ID);
-	if(test != ADT7420_DEFAULT_ID)
-		status = -1;
+	if (status != FAILURE) {
+		/* Device Settings */
+		dev->resolution_setting = init_param.resolution_setting;
 
-	*device = dev;
+		/* Reset device to default values to ensure all internal circuitry is properly initialised*/
+		adt7420_reset_interface(dev);
+
+		/*Register read to ensure that next read will be valid - acts as 200us delay while
+		  device resets*/
+		if (chip_info[dev->active_device].communication == SPI) {
+			device_connected_check = adt7420_get_register_value(dev, ADT7320_REG_ID);
+		} else {
+			device_connected_check = adt7420_get_register_value(dev, ADT7420_REG_ID);
+		}
+
+		device_connected_check >>= 4; // Manufacturer ID
+
+		if(device_connected_check != 0xC) // AD7xxx ID Check
+			status = FAILURE;
+		else
+			status = SUCCESS;
+
+		*device = dev;
+
+		return status;
+	}
 
 	return status;
 }
@@ -142,35 +217,18 @@ int32_t adt7420_remove(struct adt7420_dev *dev)
 {
 	int32_t ret;
 
-	ret = i2c_remove(dev->i2c_desc);
-
+	if (chip_info[dev->active_device].communication == I2C) {
+		ret = i2c_remove(dev->i2c_desc);
+	} else {
+		ret = spi_remove(dev->spi_desc);
+	}
 	free(dev);
 
 	return ret;
 }
 
 /***************************************************************************//**
- * @brief Resets the ADT7420.
- *        The ADT7420 does not respond to I2C bus commands while the default
- *        values upload (approximately 200 us).
- *
- * @param dev - The device structure.
- *
- * @return None.
-*******************************************************************************/
-void adt7420_reset(struct adt7420_dev *dev)
-{
-	uint8_t register_address = ADT7420_REG_RESET;
-
-	i2c_write(dev->i2c_desc,
-		  &register_address,
-		  1,
-		  1);
-	dev->resolution_setting = 0;
-}
-
-/***************************************************************************//**
- * @brief Sets the operational mode for ADT7420.
+ * @brief Sets the operational mode for ADT7420/ADT7320.
  *
  * @param dev  - The device structure.
  * @param mode - Operation mode.
@@ -184,16 +242,25 @@ void adt7420_reset(struct adt7420_dev *dev)
 void adt7420_set_operation_mode(struct adt7420_dev *dev,
 				uint8_t mode)
 {
-	uint8_t register_value = 0;
+	uint8_t register_value [2] = { 0, 0 };
+	uint8_t device_reg_address;
 
-	register_value  = adt7420_get_register_value(dev, ADT7420_REG_CONFIG);
-	register_value &= ~ADT7420_CONFIG_OP_MODE(ADT7420_OP_MODE_SHUTDOWN);
-	register_value |= ADT7420_CONFIG_OP_MODE(mode);
-	adt7420_set_register_value(dev, ADT7420_REG_CONFIG, register_value);
+	if (chip_info[dev->active_device].communication == SPI) {
+		device_reg_address = ADT7320_REG_CONFIG;
+		register_value[0]  = adt7420_get_register_value(dev, device_reg_address);
+	} else {
+		device_reg_address = ADT7420_REG_CONFIG;
+		register_value[0]  = adt7420_get_register_value(dev, device_reg_address);
+	}
+
+	register_value[0] &= ~ADT7420_CONFIG_OP_MODE(ADT7420_OP_MODE_SHUTDOWN);
+	register_value[0] |= ADT7420_CONFIG_OP_MODE(mode);
+
+	set_register_value(dev, device_reg_address, 2, register_value);
 }
 
 /***************************************************************************//**
- * @brief Sets the resolution for ADT7420.
+ * @brief Sets the resolution for ADT7420/ADT7320.
  *
  * @param dev        - The device structure.
  * @param resolution - Resolution.
@@ -205,13 +272,46 @@ void adt7420_set_operation_mode(struct adt7420_dev *dev,
 void adt7420_set_resolution(struct adt7420_dev *dev,
 			    uint8_t resolution)
 {
-	uint8_t register_value = 0;
+	uint8_t register_value[1] = { 0 };
+	uint8_t device_reg_address;
 
-	register_value  = adt7420_get_register_value(dev, ADT7420_REG_CONFIG);
-	register_value &= ~ADT7420_CONFIG_RESOLUTION;
-	register_value |= (resolution * ADT7420_CONFIG_RESOLUTION);
-	adt7420_set_register_value(dev, ADT7420_REG_CONFIG, register_value);
+	if (chip_info[dev->active_device].communication == SPI) {
+		device_reg_address = ADT7320_REG_CONFIG;
+		register_value[0]  = adt7420_get_register_value(dev, device_reg_address);
+	} else {
+		device_reg_address = ADT7420_REG_CONFIG;
+		register_value[0]  = adt7420_get_register_value(dev, device_reg_address);
+	}
+
+	register_value[0] &= ~ADT7420_CONFIG_RESOLUTION;
+	register_value[0] |= (resolution * ADT7420_CONFIG_RESOLUTION);
+
+
+	set_register_value(dev, device_reg_address, 2, register_value);
 	dev->resolution_setting = resolution;
+}
+
+/***************************************************************************//**
+ * @brief Resets the SPI or I2C inteface for the ADT7420/ADT7320
+ *
+ * @param dev        - The device structure.
+ *
+ * @return None.
+*******************************************************************************/
+void adt7420_reset_interface(struct adt7420_dev *dev)
+{
+	uint8_t data_buffer[] = { 0xFF, 0xFF, 0xFF, 0xFF };
+
+	if (chip_info[dev->active_device].communication == SPI)
+		spi_write_and_read(dev->spi_desc, data_buffer, sizeof(data_buffer));
+	else {
+		uint8_t register_address = ADT7420_REG_RESET;
+		i2c_write(dev->i2c_desc,
+			  &register_address,
+			  1,
+			  1);//no repeat start
+	}
+	dev->resolution_setting = 0;
 }
 
 /***************************************************************************//**
@@ -223,14 +323,16 @@ void adt7420_set_resolution(struct adt7420_dev *dev,
 *******************************************************************************/
 float adt7420_get_temperature(struct adt7420_dev *dev)
 {
-	uint8_t msb_temp = 0;
-	uint8_t lsb_temp = 0;
 	uint16_t temp = 0;
 	float temp_c = 0;
 
-	msb_temp = adt7420_get_register_value(dev, ADT7420_REG_TEMP_MSB);
-	lsb_temp = adt7420_get_register_value(dev, ADT7420_REG_TEMP_LSB);
-	temp    = ((uint16_t)msb_temp << 8) + lsb_temp;
+	if (chip_info[dev->active_device].communication == SPI) {
+		temp = adt7420_get_register_value(dev, ADT7320_REG_TEMP);
+	} else {
+		temp  = adt7420_get_register_value(dev, ADT7420_REG_TEMP_MSB) << 8;
+		temp |= adt7420_get_register_value(dev, ADT7420_REG_TEMP_LSB);
+	}
+
 	if(dev->resolution_setting) {
 		if(temp & 0x8000)
 			/*! Negative temperature */
@@ -249,4 +351,49 @@ float adt7420_get_temperature(struct adt7420_dev *dev)
 	}
 
 	return temp_c;
+}
+
+
+/**************************************************************************//**
+ * @brief Write to input shift register SPI interface.
+ *
+ * @param dev               - The device structure.
+ * @param register_address  - Command control bits.
+ * @param data              - Data to be written in input register.
+ *
+ * @return  read_back_data  - value read from register.
+******************************************************************************/
+uint16_t set_shift_reg(struct adt7420_dev *dev,
+		       uint8_t register_address,
+		       uint8_t *data)
+{
+	uint8_t data_buffer[3] = { 0, 0, 0 };
+	uint16_t read_back_data = 0;
+	uint8_t numBytes;
+
+	switch (register_address) {
+	case ADT7320_REG_STATUS:
+	case ADT7320_REG_CONFIG:
+	case ADT7320_REG_ID:
+	case ADT7320_REG_HIST:
+		numBytes = 2;
+		break;
+	default:
+		numBytes = 3;
+		break;
+	}
+
+	if (numBytes == 2) {
+		data_buffer[0] = data[0];
+		data_buffer[1] = data[1] & 0x00FF;
+		spi_write_and_read(dev->spi_desc, data_buffer, 2);
+		read_back_data = (data_buffer[0] & 0xFF00) | data_buffer[1];
+	} else {
+		data_buffer[0] = data[0];
+		data_buffer[1] = data[1] & 0x00FF;
+		data_buffer[2] = (data[2] & 0x00FF) << 8;
+		spi_write_and_read(dev->spi_desc, data_buffer, 3);
+		read_back_data = data_buffer[1] << 8 | data_buffer[2];
+	}
+	return read_back_data;
 }
