@@ -421,7 +421,7 @@ int32_t xil_i2c_write(struct i2c_desc *desc,
 			return FAILURE;
 
 		ret = XIicPs_SetOptions(xdesc->instance,
-					stop_bit ? 0 : XIIC_REPEATED_START);
+					stop_bit ? 0 : XIICPS_REP_START_OPTION);
 		if(ret != SUCCESS)
 			goto error;
 
@@ -490,7 +490,7 @@ int32_t xil_i2c_read(struct i2c_desc *desc,
 			return FAILURE;
 
 		ret = XIicPs_SetOptions(xdesc->instance,
-					stop_bit ? 0 : XIIC_REPEATED_START);
+					stop_bit ? 0 : XIICPS_REP_START_OPTION);
 		if(ret != SUCCESS)
 			goto error;
 
