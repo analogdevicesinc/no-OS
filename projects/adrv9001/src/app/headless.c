@@ -62,6 +62,17 @@
 #include "adi_adrv9001_arm.h"
 #include "adi_adrv9001_radio.h"
 
+#ifdef DAC_DMA_EXAMPLE
+uint32_t dac1_buffer[DAC_BUFFER_SAMPLES] __attribute__ ((aligned));
+uint16_t adc1_buffer[ADC_BUFFER_SAMPLES * ADC1_CHANNELS] __attribute__ ((
+			aligned));
+#ifndef ADRV9002_RX2TX2
+uint32_t dac2_buffer[DAC_BUFFER_SAMPLES] __attribute__ ((aligned));
+uint16_t adc2_buffer[ADC_BUFFER_SAMPLES * ADC2_CHANNELS] __attribute__ ((
+			aligned));
+#endif
+#endif
+
 int get_sampling_frequency(struct axi_adc *dev, uint32_t chan,
 			   uint64_t *sampling_freq_hz)
 {
@@ -253,24 +264,24 @@ int main(void)
 #ifdef DAC_DMA_EXAMPLE
 	axi_dac_load_custom_data(phy.tx1_dac, sine_lut_iq,
 				 ARRAY_SIZE(sine_lut_iq),
-				 DAC1_DDR_BASEADDR);
+				 (uintptr_t)dac1_buffer);
 #ifndef ADRV9002_RX2TX2
 	axi_dac_load_custom_data(phy.tx2_dac, sine_lut_iq,
 				 ARRAY_SIZE(sine_lut_iq),
-				 DAC2_DDR_BASEADDR);
+				 (uintptr_t)dac2_buffer);
 #endif
 	Xil_DCacheFlush();
 
-	axi_dmac_transfer(phy.tx1_dmac, DAC1_DDR_BASEADDR, sizeof(sine_lut_iq));
+	axi_dmac_transfer(phy.tx1_dmac, (uintptr_t)dac1_buffer, sizeof(sine_lut_iq));
 #ifndef ADRV9002_RX2TX2
-	axi_dmac_transfer(phy.tx2_dmac, DAC2_DDR_BASEADDR, sizeof(sine_lut_iq));
+	axi_dmac_transfer(phy.tx2_dmac, (uintptr_t)dac2_buffer, sizeof(sine_lut_iq));
 #endif
 
 	mdelay(1000);
 
 	/* Transfer 16384 samples from ADC to MEM */
 	axi_dmac_transfer(phy.rx1_dmac,
-			  ADC1_DDR_BASEADDR,
+			  (uintptr_t)adc1_buffer,
 			  16384 * /* nr of samples */
 #ifndef ADRV9002_RX2TX2
 			  ADRV9001_NUM_SUBCHANNELS * /* rx1 i/q */
@@ -278,7 +289,7 @@ int main(void)
 			  ADRV9001_NUM_CHANNELS * /* rx1 i/q, rx2 i/q*/
 #endif
 			  2 /* bytes per sample */);
-	Xil_DCacheInvalidateRange(ADC1_DDR_BASEADDR,
+	Xil_DCacheInvalidateRange((uintptr_t)adc1_buffer,
 				  16384 * /* nr of samples */
 #ifndef ADRV9002_RX2TX2
 				  ADRV9001_NUM_SUBCHANNELS * /* rx1 i/q */
@@ -288,15 +299,21 @@ int main(void)
 				  2 /* bytes per sample */);
 #ifndef ADRV9002_RX2TX2
 	axi_dmac_transfer(phy.rx2_dmac,
-			  ADC2_DDR_BASEADDR,
+			  (uintptr_t)adc2_buffer,
 			  16384 * /* nr of samples */
 			  ADRV9001_NUM_SUBCHANNELS * /* nr of channels */
 			  2 /* bytes per sample */);
-	Xil_DCacheInvalidateRange(ADC2_DDR_BASEADDR,
+	Xil_DCacheInvalidateRange((uintptr_t)adc2_buffer,
 				  16384 * /* nr of samples */
 				  ADRV9001_NUM_SUBCHANNELS * /* nr of channels */
 				  2 /* bytes per sample */);
+	printf("DAC_DMA_EXAMPLE: address=%#lx samples=%lu channels=%u bits=%lu\n",
+	       (uintptr_t)adc2_buffer, 16384 * rx2_adc_init.num_channels,
+	       rx2_adc_init.num_channels, 8 * sizeof(adc2_buffer[0]));
 #endif
+	printf("DAC_DMA_EXAMPLE: address=%#lx samples=%lu channels=%u bits=%lu\n",
+	       (uintptr_t)adc1_buffer, 16384 * rx1_adc_init.num_channels,
+	       rx1_adc_init.num_channels, 8 * sizeof(adc1_buffer[0]));
 #endif
 
 #ifdef IIO_SUPPORT
