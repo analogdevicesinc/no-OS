@@ -1,8 +1,10 @@
 trigger:
+- main
 - master
-- dev/*
+- staging/*
 
 pr:
+- main
 - master
 
 variables:
