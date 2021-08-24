@@ -50,6 +50,18 @@
 	.write_buff = _write_buff\
 }
 
+#define IIO_APP_INPUT_DEVICE(_name, _dev, _dev_descriptor, _read_buff) \
+	IIO_APP_DEVICE(_name, _dev, _dev_descriptor, _read_buff, NULL)
+
+#define IIO_APP_OUTPUT_DEVICE(_name, _dev, _dev_descriptor, _write_buff) \
+	IIO_APP_DEVICE(_name, _dev, _dev_descriptor, NULL, _write_buff)
+
+#define IIO_APP_NO_BUFFER_DEVICE(_name, _dev, _dev_descriptor) \
+	IIO_APP_DEVICE(_name, _dev, _dev_descriptor, NULL, NULL)
+
+#define IIO_APP_TRIGGER(_name, _dev, _dev_descriptor) \
+	IIO_APP_DEVICE(_name, _dev, _dev_descriptor, NULL, NULL)
+
 struct iio_app_device {
 	char *name;
 	void *dev;
