@@ -125,7 +125,7 @@ struct attr_fun_params {
  */
 struct iio_interface {
 	/** Will be: device[0...n] n beeing the count of registerd devices */
-	char			dev_id[10];
+	char			dev_id[14];
 	/** Device name */
 	const char		*name;
 	/** Opened channels */
@@ -138,6 +138,10 @@ struct iio_interface {
 	struct iio_device	*dev_descriptor;
 	struct iio_data_buffer	*write_buffer;
 	struct iio_data_buffer	*read_buffer;
+	/* Trigger for an interface */
+	struct iio_interface	*trigger;
+	/* List of interfaces a trigger needs to notify */
+	struct list_desc	*linked_interfaces;
 };
 
 struct iio_desc {
@@ -893,6 +897,49 @@ static int32_t iio_get_mask(const char *device, uint32_t *mask)
 	return SUCCESS;
 }
 
+static int32_t iio_get_trigger(const char *device, char *trigger, size_t len)
+{
+	struct iio_interface *iface;
+
+	iface = iio_get_interface(device);
+	if (!iface)
+		return -ENODEV;
+
+	if (!iface->trigger)
+		return snprintf(trigger, len, "");
+
+	return snprintf(trigger, len, iface->trigger->dev_id);
+}
+
+static int32_t iio_set_trigger(const char *device, const char *trigger,
+			       size_t len)
+{
+	struct iio_interface *iface;
+	struct iio_interface *trig;
+
+	iface = iio_get_interface(device);
+	if (!iface)
+		return -ENODEV;
+
+	trig = iio_get_interface(trigger);
+	if (trig == iface->trigger)
+		return 0;
+	/* Remove current callback */
+	if (iface->trigger)
+		iface->trigger->dev_descriptor->remove_callback(iface->trigger,
+			iface->dev_descriptor->trigger_callback,
+			iface->dev_instance);
+
+	iface->trigger = trig;
+	if (trig) {
+		trig->dev_descriptor->add_callback(trig->dev_instance,
+				iface->dev_descriptor->trigger_callback,
+				iface->dev_instance);
+	}
+
+	return SUCCESS;
+}
+
 static uint32_t bytes_to_samples(struct iio_interface *intf, uint32_t bytes)
 {
 	uint32_t bytes_per_sample;
@@ -1272,8 +1319,12 @@ ssize_t iio_register(struct iio_desc *desc, struct iio_device *dev_descriptor,
 	iio_interface->read_buffer = read_buff;
 	iio_interface->write_buffer = write_buff;
 
-	sprintf((char *)iio_interface->dev_id, "iio:device%d",
-		(int)desc->dev_count);
+	if (dev_descriptor->is_trigger)
+		sprintf((char *)iio_interface->dev_id, "trigger%d",
+			(int)desc->dev_count);
+	else
+		sprintf((char *)iio_interface->dev_id, "iio:device%d",
+			(int)desc->dev_count);
 	/* Get number of bytes needed for the xml of the new device */
 	n = iio_generate_device_xml(iio_interface->dev_descriptor,
 				    (char *)iio_interface->name,
@@ -1394,6 +1445,8 @@ ssize_t iio_init(struct iio_desc **desc, struct iio_init_param *init_param)
 	ops->open = iio_open_dev;
 	ops->close = iio_close_dev;
 	ops->get_mask = iio_get_mask;
+	ops->get_trigger = iio_get_trigger;
+	ops->set_trigger = iio_set_trigger;
 
 	ops->read = iio_phy_read;
 	ops->write = iio_phy_write;
