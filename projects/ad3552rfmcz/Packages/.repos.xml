@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<repositories>
+  <repository>
+    <type>CMSIS Pack</type>
+    <name>Keil</name>
+    <url>http://www.keil.com/pack/index.idx</url>
+  </repository>
+  <repository>
+    <type>XCDL/CMSIS Pack</type>
+    <name>GNU ARM Eclipse</name>
+    <url>http://gnuarmeclipse.sourceforge.net/packages/content.xml</url>
+  </repository>
+</repositories>
