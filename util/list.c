@@ -685,23 +685,55 @@ int32_t iterator_remove(struct iterator *iter)
  * If the required position is outside the list, the call will fail and the
  * iterator will keep its position.
  * @param iter - Reference of the iterator
- * @param idx - Number of positions to be move. If positive, it will be moved
+ * @param step - Number of positions to be move. If positive, it will be moved
  * forward, otherwise backwords.
  * @return
  *  - \ref SUCCESS : On success
  *  - \ref FAILURE : Otherwise
  */
-int32_t iterator_move(struct iterator *iter, int32_t idx)
+int32_t iterator_move(struct iterator *iter, int32_t step)
 {
 	struct iterator		*it = iter;
 	struct list_elem	*elem;
-	int32_t			dir = (idx < 0) ? -1 : 1;
+	int32_t			dir = (step < 0) ? -1 : 1;
 
 	if (!it)
 		return FAILURE;
 
-	idx = abs(idx);
+	step = abs(step);
 	elem = it->elem;
+	while (step > 0 && elem) {
+		elem = dir > 0 ? elem->next : elem->prev;
+		step--;
+	}
+	if (!elem)
+		return FAILURE;
+
+	it->elem = elem;
+
+	return SUCCESS;
+}
+
+
+/**
+ * @brief Move the position of the iterator at the specified index of the list.
+ *
+ * @param iter - Reference of the iterator
+ * @param idx - Position in the list. If negative start counting backwords
+ * @return
+ *  - \ref SUCCESS : On success
+ *  - \ref FAILURE : Otherwise
+ */
+int32_t iterator_move_to_idx(struct iterator *iter, int32_t idx)
+{
+	struct list_elem	*elem;
+	int32_t			dir = (idx < 0) ? -1 : 1;
+
+	if (!iter)
+		return FAILURE;
+
+	idx = abs(idx);
+	elem = dir > 0 ? iter->list->first : iter->list->last;
 	while (idx > 0 && elem) {
 		elem = dir > 0 ? elem->next : elem->prev;
 		idx--;
@@ -709,7 +741,7 @@ int32_t iterator_move(struct iterator *iter, int32_t idx)
 	if (!elem)
 		return FAILURE;
 
-	it->elem = elem;
+	iter->elem = elem;
 
 	return SUCCESS;
 }
