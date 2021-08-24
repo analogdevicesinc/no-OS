@@ -41,6 +41,7 @@
 #define PRINT_LOG_H_
 
 #include <stdio.h>
+#include "error.h"
 
 #define LOG_EMERG	0x0
 #define LOG_ALERT	0x1
@@ -106,5 +107,22 @@ fmt, __FILE__, __LINE__, __func__, ##args)
 #else
 #define pr_debug(fmt, args...)
 #endif
+
+#define PRINT_AND_RET_ON_ERR(ret, msg) do {\
+		if (IS_ERR_VALUE(ret)) {\
+			pr_err("%s: %d (-0x%x)\n", msg, (int)-ret, (int)ret);\
+			return ret;\
+		}\
+	} while (0)
+
+
+#define CHECK_TEST(ret, msg) do {\
+		if (IS_ERR_VALUE(ret)) {\
+			pr_err("TEST %s FAILED -- %d (-0x%x)\n", msg, (int)-ret, (int)ret);\
+			return ret;\
+		} else {\
+			pr_info("TEST %s SUCCESS\n", msg);\
+		}\
+	} while (0)
 
 #endif /* PRINT_LOG_H_ */
