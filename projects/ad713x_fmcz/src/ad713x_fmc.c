@@ -62,6 +62,7 @@
 #include "parameters.h"
 #include "pwm.h"
 #include "axi_pwm_extra.h"
+#include "clk_axi_clkgen.h"
 
 #ifdef IIO_SUPPORT
 #include "irq.h"
@@ -76,6 +77,12 @@
 
 int main()
 {
+	struct axi_clkgen *clkgen_7134;
+	struct axi_clkgen_init clkgen_7134_init = {
+		.base = XPAR_AXI_AD7134_CLKGEN_BASEADDR,
+		.name = "whatever",
+		.parent_rate = 100000000
+	};
 	struct ad713x_dev *ad713x_dev_1;
 	struct ad713x_dev *ad713x_dev_2;
 	struct ad713x_init_param ad713x_init_param_1;
@@ -85,7 +92,7 @@ int main()
 	int32_t ret;
 	struct spi_engine_offload_init_param spi_engine_offload_init_param;
 	struct spi_engine_offload_message spi_engine_offload_message;
-	uint32_t spi_eng_msg_cmds[2];
+	uint32_t spi_eng_msg_cmds[1];
 	static struct xil_spi_init_param spi_engine_init_params = {
 		.type = SPI_PS,
 	};
@@ -147,15 +154,14 @@ int main()
 		.cs_delay = 0,
 		.data_width = 32,
 //		.ref_clk_hz = AD713x_SPI_ENG_REF_CLK_FREQ_HZ,
-		.ref_clk_hz = 100000000,
+		.ref_clk_hz = 96000000,
 	};
 	const struct spi_init_param spi_eng_init_prm  = {
 		.chip_select = AD7134_1_SPI_CS,
-		.max_speed_hz = 50000000,
+		.max_speed_hz = 48000000,
 		.mode = SPI_MODE_3,
 		.platform_ops = &spi_eng_platform_ops,
 		.extra = (void*)&spi_eng_init_param,
-
 	};
 
 	struct pwm_desc *axi_pwm;
@@ -164,8 +170,9 @@ int main()
 			.ref_clock_Hz = 100000000,
 			.channel = 0
 	};
+
 	struct pwm_init_param axi_pwm_init = {
-			.period_ns = 160000,
+			.period_ns = 2673,
 			.duty_cycle_ns = 500,
 			.phase_ns = 0,
 			.extra = &axi_zed_pwm_init
@@ -218,15 +225,25 @@ int main()
 	ad713x_init_param_2.spi_init_prm.extra = (void *)&spi_engine_init_params;
 	ad713x_init_param_2.spi_common_dev = 0;
 
-	spi_eng_msg_cmds[0] = SLEEP(0);
-	spi_eng_msg_cmds[1] = READ(1);
+	spi_eng_msg_cmds[0] = READ(1);
+//	spi_eng_msg_cmds[0] = SLEEP(0);
+//	spi_eng_msg_cmds[1] = READ(1);
 
 	Xil_ICacheEnable();
 	Xil_DCacheEnable();
 
+	ret = axi_clkgen_init(&clkgen_7134, &clkgen_7134_init);
+	if (ret != SUCCESS)
+		return FAILURE;
+
+	ret = axi_clkgen_set_rate(clkgen_7134, 96000000);
+	if (ret != SUCCESS)
+		return FAILURE;
+
 	ret = ad713x_init(&ad713x_dev_1, &ad713x_init_param_1);
 	if (ret != SUCCESS)
 		return FAILURE;
+
 	mdelay(1000);
 	ad713x_init_param_2.spi_common_dev = ad713x_dev_1->spi_desc;
 	ret = ad713x_init(&ad713x_dev_2, &ad713x_init_param_2);
@@ -321,8 +338,8 @@ int main()
 			data = lsb * ((int32_t)*(offload_data + j) & 0xFFFFFF);
 			if(data > 4.095)
 				data = data - 8.192;
-			printf("CH%d: 0x%08lx = %+1.3fV ", j, *(offload_data + j),
-			       data);
+			printf("CH%d: %+1.3fV ", j, data);
+//			printf("CH%d: 0x%08lx = %+1.3fV ", j, *(offload_data + j), data);
 			if(j == 7)
 				printf("\n");
 			j++;

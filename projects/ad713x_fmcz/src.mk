@@ -17,6 +17,7 @@ SRCS += $(DRIVERS)/spi/spi.c						\
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.c				\
 	$(DRIVERS)/axi_core/axi_pwmgen/axi_pwm.c			\
 	$(DRIVERS)/axi_core/spi_engine/spi_engine.c			\
+	$(DRIVERS)/axi_core/clk_axi_clkgen/clk_axi_clkgen.c             \
 	$(NO-OS)/util/util.c
 SRCS +=	$(PLATFORM_DRIVERS)/axi_io.c					\
 	$(PLATFORM_DRIVERS)/xilinx_gpio.c				\
@@ -33,7 +34,8 @@ endif
 INCS += $(DRIVERS)/axi_core/axi_dmac/axi_dmac.h				\
 	$(DRIVERS)/axi_core/axi_pwmgen/axi_pwm_extra.h			\
 	$(DRIVERS)/axi_core/spi_engine/spi_engine.h			\
-	$(DRIVERS)/axi_core/spi_engine/spi_engine_private.h
+	$(DRIVERS)/axi_core/spi_engine/spi_engine_private.h             \
+	$(DRIVERS)/axi_core/clk_axi_clkgen/clk_axi_clkgen.h
 INCS +=	$(PLATFORM_DRIVERS)/spi_extra.h					\
 	$(PLATFORM_DRIVERS)/irq_extra.h					\
 	$(PLATFORM_DRIVERS)/uart_extra.h				\
