@@ -206,8 +206,8 @@ static int32_t linux_spi_transfer(struct spi_desc *desc,
 		return -ENOMEM;
 
 	for (i = 0; i < len; i++) {
-		tr[i].tx_buf = msgs[i].tx_buff;
-		tr[i].rx_buf = msgs[i].rx_buff;
+		tr[i].tx_buf = (unsigned long) msgs[i].tx_buff;
+		tr[i].rx_buf = (unsigned long) msgs[i].rx_buff;
 		tr[i].len = msgs[i].bytes_number;
 		tr[i].cs_change = msgs[i].cs_change;
 	}
