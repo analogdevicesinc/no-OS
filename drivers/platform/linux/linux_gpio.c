@@ -43,6 +43,7 @@
 
 #include "error.h"
 #include "gpio.h"
+#include "delay.h"
 
 #include <fcntl.h>
 #include <stdio.h>
