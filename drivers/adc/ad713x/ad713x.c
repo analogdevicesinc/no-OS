@@ -203,7 +203,7 @@ int32_t ad713x_set_out_data_frame(struct ad713x_dev *dev,
 			return ad713x_spi_write_mask(dev,
 						     AD713X_REG_DATA_PACKET_CONFIG,
 						     AD713X_DATA_PACKET_CONFIG_FRAME_MSK,
-						     AD713X_DATA_PACKET_CONFIG_FRAME_MODE(i));
+						     AD713X_DATA_PACKET_CONFIG_FRAME_MODE(adc_data_len | crc_header));
 		}
 		i++;
 	}
@@ -543,7 +543,7 @@ int32_t ad713x_init(struct ad713x_dev **device,
 	if (IS_ERR_VALUE(ret))
 		goto error_gpio;
 
-	ret = ad713x_clkout_output_en(dev, true);
+	ret = ad713x_clkout_output_en(dev, false);
 	if (IS_ERR_VALUE(ret))
 		goto error_gpio;
 
