@@ -102,11 +102,25 @@ struct xil_gpio_init_param xil_gpio_param = {
 #endif
 	.device_id = GPIO_DEVICE_ID
 };
+#define GPIO_OPS	&xil_gpio_platform_ops
+#define SPI_OPS		&xil_platform_ops
+#define GPIO_PARAM	&xil_gpio_param
+#define SPI_PARAM	&xil_spi_param
 #endif
 
 #ifdef GENERIC_PLATFORM
-extern const struct gpio_platform_ops generic_gpio_platform_ops;
-extern const struct spi_platform_ops generic_spi_platform_ops;
+#define GPIO_OPS	&generic_gpio_platform_ops
+#define SPI_OPS		&generic_spi_platform_ops
+#define GPIO_PARAM	NULL
+#define SPI_PARAM	NULL
+#endif
+#ifdef XILINX_PLATFORM
+#endif
+#ifdef LINUX_PLATFORM
+#define GPIO_OPS	&linux_gpio_platform_ops
+#define SPI_OPS		&linux_spi_platform_ops
+#define GPIO_PARAM	NULL
+#define SPI_PARAM	NULL
 #endif
 
 struct axi_adc_init rx_adc_init = {
@@ -371,74 +385,34 @@ AD9361_InitParam default_init_param = {
 	/* GPIO definitions */
 	{
 		.number = -1,
-#ifdef XILINX_PLATFORM
-		.platform_ops = &xil_gpio_platform_ops,
-		.extra = &xil_gpio_param
-#endif
-#ifdef LINUX_PLATFORM
-		.platform_ops = &linux_gpio_platform_ops
-#endif
-#ifdef GENERIC_PLATFORM
-		.platform_ops = &generic_gpio_platform_ops
-#endif
+		.platform_ops = GPIO_OPS,
+		.extra = GPIO_PARAM
 	},		//gpio_resetb *** reset-gpios
 	/* MCS Sync */
 	{
 		.number = -1,
-#ifdef XILINX_PLATFORM
-		.platform_ops = &xil_gpio_platform_ops,
-		.extra = &xil_gpio_param
-#endif
-#ifdef LINUX_PLATFORM
-		.platform_ops = &linux_gpio_platform_ops
-#endif
-#ifdef GENERIC_PLATFORM
-		.platform_ops = &generic_gpio_platform_ops
-#endif
+		.platform_ops = GPIO_OPS,
+		.extra = GPIO_PARAM
 	},		//gpio_sync *** sync-gpios
 
 	{
 		.number = -1,
-#ifdef XILINX_PLATFORM
-		.platform_ops = &xil_gpio_platform_ops,
-		.extra = &xil_gpio_param
-#endif
-#ifdef LINUX_PLATFORM
-		.platform_ops = &linux_gpio_platform_ops
-#endif
-#ifdef GENERIC_PLATFORM
-		.platform_ops = &generic_gpio_platform_ops
-#endif
+		.platform_ops = GPIO_OPS,
+		.extra = GPIO_PARAM
 	},		//gpio_cal_sw1 *** cal-sw1-gpios
 
 	{
 		.number = -1,
-#ifdef XILINX_PLATFORM
-		.platform_ops = &xil_gpio_platform_ops,
-		.extra = &xil_gpio_param
-#endif
-#ifdef LINUX_PLATFORM
-		.platform_ops = &linux_gpio_platform_ops
-#endif
-#ifdef GENERIC_PLATFORM
-		.platform_ops = &generic_gpio_platform_ops
-#endif
+		.platform_ops = GPIO_OPS,
+		.extra = GPIO_PARAM
 	},		//gpio_cal_sw2 *** cal-sw2-gpios
 
 	{
 		.device_id = SPI_DEVICE_ID,
 		.mode = SPI_MODE_1,
 		.chip_select = SPI_CS,
-#ifdef XILINX_PLATFORM
-		.extra = &xil_spi_param,
-		.platform_ops = &xil_platform_ops
-#endif
-#ifdef LINUX_PLATFORM
-		.platform_ops = &linux_spi_platform_ops
-#endif
-#ifdef GENERIC_PLATFORM
-		.platform_ops = &generic_spi_platform_ops
-#endif
+		.platform_ops = SPI_OPS,
+		.extra = SPI_PARAM
 	},
 
 	/* External LO clocks */
