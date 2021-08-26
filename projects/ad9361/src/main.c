@@ -797,19 +797,23 @@ int main(void)
 
 #ifdef TDD_SWITCH_STATE_EXAMPLE
 	uint32_t ensm_mode;
+	struct gpio_init_param  gpio_init = {
+		.platform_ops = GPIO_OPS,
+		.extra = GPIO_PARAM
+	};
 	struct gpio_desc 	*gpio_enable_pin;
 	struct gpio_desc 	*gpio_txnrx_pin;
 	if (!ad9361_phy->pdata->fdd) {
 		if (ad9361_phy->pdata->ensm_pin_ctrl) {
 			gpio_init.number = GPIO_ENABLE_PIN;
-			status = gpio_get(&gpio_enable_pin, gpio_init);
+			status = gpio_get(&gpio_enable_pin, &gpio_init);
 			if (status != SUCCESS) {
 				printf("gpio_get() error: %"PRIi32"\n", status);
 				return status;
 			}
 			gpio_direction_output(gpio_enable_pin, 1);
 			gpio_init.number = GPIO_TXNRX_PIN;
-			status = gpio_get(&gpio_txnrx_pin, gpio_init);
+			status = gpio_get(&gpio_txnrx_pin, &gpio_init);
 			if (status != SUCCESS) {
 				printf("gpio_get() error: %"PRIi32"\n", status);
 				return status;
