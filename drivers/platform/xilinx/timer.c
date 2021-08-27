@@ -361,9 +361,7 @@ int32_t timer_count_clk_get(struct timer_desc *desc, uint32_t *freq_hz)
 	switch (xdesc->type) {
 	case TIMER_PS:
 #ifdef XSCUTIMER_H
-		;
-		uint8_t prescaler = XScuTimer_GetPrescaler(xdesc->instance);
-		*freq_hz = CORE_PRIVATE_TIMER_CLOCK / prescaler;
+		*freq_hz = desc->freq_hz;
 		break;
 #endif
 		return FAILURE;
@@ -405,6 +403,7 @@ int32_t timer_count_clk_set(struct timer_desc *desc, uint32_t freq_hz)
 		if (prescaler == 0 || prescaler >= 256)
 			return FAILURE;
 		XScuTimer_SetPrescaler(xdesc->instance, prescaler - 1);
+		desc->freq_hz = CORE_PRIVATE_TIMER_CLOCK / prescaler;
 		break;
 #endif
 		return FAILURE;
