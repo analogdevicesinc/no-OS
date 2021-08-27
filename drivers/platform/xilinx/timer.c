@@ -289,6 +289,7 @@ int32_t timer_counter_get(struct timer_desc *desc, uint32_t *counter)
 	case TIMER_PS:
 #ifdef XSCUTIMER_H
 		*counter = XScuTimer_GetCounterValue((XScuTimer *)xdesc->instance);
+		++(*counter);
 		break;
 #endif
 		return FAILURE;
@@ -325,7 +326,7 @@ int32_t timer_counter_set(struct timer_desc *desc, uint32_t new_val)
 	switch (xdesc->type) {
 	case TIMER_PS:
 #ifdef XSCUTIMER_H
-		XScuTimer_LoadTimer((XScuTimer *)xdesc->instance, new_val);
+		XScuTimer_LoadTimer((XScuTimer *)xdesc->instance, new_val - 1);
 		break;
 #endif
 		return FAILURE;
