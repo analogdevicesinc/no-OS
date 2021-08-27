@@ -402,9 +402,9 @@ int32_t timer_count_clk_set(struct timer_desc *desc, uint32_t freq_hz)
 #ifdef XSCUTIMER_H
 		;
 		uint32_t prescaler = CORE_PRIVATE_TIMER_CLOCK / freq_hz;
-		if (prescaler >= 256)
+		if (prescaler == 0 || prescaler >= 256)
 			return FAILURE;
-		XScuTimer_SetPrescaler(xdesc->instance, (uint8_t)prescaler);
+		XScuTimer_SetPrescaler(xdesc->instance, prescaler - 1);
 		break;
 #endif
 		return FAILURE;
