@@ -106,7 +106,14 @@ int32_t timer_init(struct timer_desc **desc,
 			free(xdesc->instance);
 			goto error_xdesc;
 		}
-		XScuTimer_LoadTimer((XScuTimer *)xdesc->instance, dev->load_value);
+		ret = timer_count_clk_set(dev, param->freq_hz);
+		if (IS_ERR_VALUE(ret))
+			goto error_xdesc;
+
+		ret = timer_counter_set(dev, dev->load_value);
+		if (IS_ERR_VALUE(ret))
+			goto error_xdesc;
+
 		XScuTimer_EnableAutoReload((XScuTimer *)xdesc->instance);
 		XScuTimer_EnableInterrupt((XScuTimer *)xdesc->instance);
 		break;
