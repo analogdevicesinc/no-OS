@@ -20,7 +20,8 @@ INCLUDES = -I../include/ \
 	 -I./platform/xilinx \
 	 -I../projects/adrv9009/src/devices/adi_hal \
 	 -I../iio \
-	 -I../libraries/iio/libtinyiiod
+	 -I../libraries/iio/libtinyiiod \
+	 -I./display
 
 IIOD_FLAGS += -DTINYIIOD_VERSION_MAJOR=0	 \
 	   -DTINYIIOD_VERSION_MINOR=1		 \
