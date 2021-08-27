@@ -264,7 +264,7 @@ int32_t list_get_size(struct list_desc *list_desc, uint32_t *out_size);
 int32_t iterator_init(struct iterator **iter, struct list_desc *list_desc,
 		      bool start);
 int32_t iterator_remove(struct iterator *iter);
-int32_t iterator_move(struct iterator *iter, int32_t idx);
+int32_t iterator_move(struct iterator *iter, int32_t steps);
 int32_t iterator_find(struct iterator *iter, void *cmp_data);
 int32_t iterator_insert(struct iterator *iter, void *data, bool after);
 int32_t iterator_edit(struct iterator *iter, void *new_data);
