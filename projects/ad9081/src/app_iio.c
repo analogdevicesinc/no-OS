@@ -74,6 +74,14 @@ int32_t iio_server_init(struct iio_axi_adc_init_param *adc_init,
 			struct iio_axi_dac_init_param *dac_init)
 {
 	struct uart_desc *uart_desc;
+	struct irq_ctrl_desc *irq_desc;
+	struct xil_irq_init_param xil_irq_init_par = {
+			.type = IRQ_PS,
+	};
+	struct irq_init_param irq_init_par = {
+			.irq_ctrl_id = INTC_DEVICE_ID,
+			.extra = &xil_irq_init_par
+	};
 	struct xil_uart_init_param xil_uart_init_par = {
 #ifdef PLATFORM_MB
 		.type = UART_PL,
@@ -94,6 +102,15 @@ int32_t iio_server_init(struct iio_axi_adc_init_param *adc_init,
 	struct iio_axi_dac_desc *iio_axi_dac_desc;
 	struct iio_device *adc_dev_desc, *dac_dev_desc;
 	int32_t status;
+
+	status = irq_ctrl_init(&irq_desc, &irq_init_par);
+	if (status < 0)
+		return status;
+	xil_uart_init_par.irq_desc = irq_desc;
+
+	status = irq_global_enable(irq_desc);
+	if (status < 0)
+		return status;
 
 	status = uart_init(&uart_desc, &uart_init_par);
 	if (status < 0)
