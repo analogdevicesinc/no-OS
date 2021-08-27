@@ -715,6 +715,37 @@ int32_t iterator_move(struct iterator *iter, int32_t steps)
 }
 
 /**
+ * @brief Move the position of the iterator at the specified index of the list.
+ *
+ * @param iter - Reference of the iterator
+ * @param idx - Position in the list. If negative start counting backwords
+ * @return
+ *  - \ref SUCCESS : On success
+ *  - \ref FAILURE : Otherwise
+ */
+int32_t iterator_move_to_idx(struct iterator *iter, int32_t idx)
+{
+	struct list_elem	*elem;
+	int32_t			dir = (idx < 0) ? -1 : 1;
+
+	if (!iter)
+		return FAILURE;
+
+	idx = abs(idx);
+	elem = dir > 0 ? iter->list->first : iter->list->last;
+	while (idx > 0 && elem) {
+		elem = dir > 0 ? elem->next : elem->prev;
+		idx--;
+	}
+	if (!elem)
+		return FAILURE;
+
+	iter->elem = elem;
+
+	return SUCCESS;
+}
+
+/**
  * @brief Place the iterator where cmp_data if found.
  * @param iter - Reference to the iterator
  * @param cmp_data - Data to be found
