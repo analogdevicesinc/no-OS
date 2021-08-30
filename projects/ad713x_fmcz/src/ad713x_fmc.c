@@ -152,13 +152,13 @@ int main()
 		.type = SPI_ENGINE,
 		.spi_engine_baseaddr = AD7134_SPI_ENGINE_BASEADDR,
 		.cs_delay = 0,
-		.data_width = 32,
+		.data_width = 24,
 //		.ref_clk_hz = AD713x_SPI_ENG_REF_CLK_FREQ_HZ,
 		.ref_clk_hz = 96000000,
 	};
 	const struct spi_init_param spi_eng_init_prm  = {
 		.chip_select = AD7134_1_SPI_CS,
-		.max_speed_hz = 24000000,
+		.max_speed_hz = 48000000,
 		.mode = SPI_MODE_1,
 		.platform_ops = &spi_eng_platform_ops,
 		.extra = (void*)&spi_eng_init_param,
@@ -173,7 +173,7 @@ int main()
 
 	struct pwm_init_param axi_pwm_init = {
 			.period_ns = 3333,
-			.duty_cycle_ns = 500,
+			.duty_cycle_ns = 600,
 			.phase_ns = 0,
 			.extra = &axi_zed_pwm_init
 	};
@@ -252,6 +252,42 @@ int main()
 		return FAILURE;
 	mdelay(1000);
 
+	uint8_t reg_addr[] = {
+			0x0,
+			0x1,
+			0x2,
+			0xf,
+			0x10,
+			0x11,
+			0x12,
+			0x13,
+			0x1e,
+			0x1f,
+			0x26
+	};
+	uint8_t reg_values[] = {
+			0x18,
+			0x80,
+			0xe1,
+			0x0,
+			0x2,
+			0x30,
+			0x02,
+			0x00,
+			0x00,
+			0x00,
+			0x00
+	};
+
+	for (int k = 0; k < ARRAY_SIZE(reg_addr); k++) {
+		ret = ad713x_spi_reg_write(ad713x_dev_1, reg_addr[k], reg_values[k]);
+		if (ret != SUCCESS)
+			return FAILURE;
+		ret = ad713x_spi_reg_write(ad713x_dev_2, reg_addr[k], reg_values[k]);
+		if (ret != SUCCESS)
+			return FAILURE;
+	}
+
 	spi_engine_offload_init_param.rx_dma_baseaddr = AD7134_DMA_BASEADDR;
 	spi_engine_offload_init_param.offload_config = OFFLOAD_RX_EN;
 	spi_engine_offload_init_param.dma_flags = NULL;
@@ -314,24 +350,20 @@ int main()
 	if (ret != SUCCESS)
 		return ret;
 
+	i = 0;
+	offload_data = (uint32_t*)spi_engine_offload_message.rx_addr;
+//	while (i <= AD7134_FMC_SAMPLE_NO) {
+//		ret = spi_engine_offload_transfer(spi_eng_desc, spi_engine_offload_message,
+//						  (AD7134_FMC_CH_NO));
+//		if (ret != SUCCESS)
+//			return ret;
+//		spi_engine_offload_message.rx_addr += AD7134_FMC_CH_NO*4;
+//		i++;
+//	}
 	ret = spi_engine_offload_transfer(spi_eng_desc, spi_engine_offload_message,
-					  (AD7134_FMC_CH_NO * AD7134_FMC_SAMPLE_NO));
+				(AD7134_FMC_CH_NO * AD7134_FMC_SAMPLE_NO));
 	if (ret != SUCCESS)
 		return ret;
-	
-	uint8_t filt_of, filt_set, int_error;
-	ret = ad713x_spi_reg_read(ad713x_dev_1, AD713X_REG_DIG_FILTER_OFUF,
-		    &filt_of);
-	if (ret != SUCCESS)
-		return FAILURE;
-	ret = ad713x_spi_reg_read(ad713x_dev_1, AD713X_REG_DIG_FILTER_SETTLED,
-		    &filt_set);
-	if (ret != SUCCESS)
-		return FAILURE;
-	ret = ad713x_spi_reg_read(ad713x_dev_1, AD713X_REG_INTERNAL_ERROR,
-		    &int_error);
-	if (ret != SUCCESS)
-		return FAILURE;
 
 	mdelay(1000);
 
@@ -341,22 +373,21 @@ int main()
 	float data;
 	uint8_t j;
 
-	offload_data = (uint32_t*)spi_engine_offload_message.rx_addr;
 	uint32_t rawodata;
 
 	for(i = 0; i < AD7134_FMC_SAMPLE_NO; i++) {
 		j = 0;
 		while(j < 8) {
 			rawodata = *(offload_data+j);
-			*(offload_data + j) <<= 1;
+//			*(offload_data + j) <<= 1;
 			*(offload_data + j) &= 0xffffff00;
 			*(offload_data + j) >>= 8;
 
 			data = lsb * ((int32_t)*(offload_data + j) & 0xFFFFFF);
 			if(data > 4.095)
 				data = data - 8.192;
-			printf("CH%d: %+1.3fV od: 0x%x ", j, data, rawodata);
-//			printf("CH%d: 0x%08lx = %+1.3fV ", j, *(offload_data + j), data);
+//			printf("CH%d: %+1.3fV od: 0x%lx ", j, data, rawodata);
+			printf("CH%d: 0x%08lx = %+1.3fV ", j, *(offload_data + j), data);
 			if(j == 7)
 				printf("\n");
 			j++;
@@ -369,13 +400,13 @@ int main()
 	printf("\r\nad713x_dev_1:\r\n");
 	for (i=0 ; i<=72; i++) {
 		ret = ad713x_spi_reg_read(ad713x_dev_1, i, &regdump);
-		printf("reg 0x%x = 0x%x \r\n", i, regdump);
+		printf("reg 0x%lx = 0x%x \r\n", i, regdump);
 	}
 
 	printf("\r\nad713x_dev_2:\r\n");
 	for (i=0 ; i<=72; i++) {
 		ret = ad713x_spi_reg_read(ad713x_dev_2, i, &regdump);
-		printf("reg 0x%x = 0x%x \r\n", i, regdump);
+		printf("reg 0x%lx = 0x%x \r\n", i, regdump);
 	}
 
 

@@ -426,16 +426,28 @@ static int32_t ad713x_init_gpio(struct ad713x_dev *dev,
 	}
 
 	/** Reset to configure pins */
-	if (init_param->gpio_resetn) {
-		ret = gpio_direction_output(dev->gpio_resetn, false);
+	if (init_param->gpio_pnd) {
+		ret = gpio_direction_output(dev->gpio_pnd, false);
 		if (IS_ERR_VALUE(ret))
 			return FAILURE;
 		mdelay(100);
-		ret = gpio_set_value(dev->gpio_resetn, true);
+		ret = gpio_set_value(dev->gpio_pnd, true);
 		if (IS_ERR_VALUE(ret))
 			return FAILURE;
 		mdelay(100);
 	}
+
+//	/** Reset to configure pins */
+//	if (init_param->gpio_resetn) {
+//		ret = gpio_direction_output(dev->gpio_resetn, false);
+//		if (IS_ERR_VALUE(ret))
+//			return FAILURE;
+//		mdelay(100);
+//		ret = gpio_set_value(dev->gpio_resetn, true);
+//		if (IS_ERR_VALUE(ret))
+//			return FAILURE;
+//		mdelay(100);
+//	}
 
 	return SUCCESS;
 }
