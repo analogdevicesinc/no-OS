@@ -179,7 +179,6 @@ typedef struct {
 /* Interface Mode Register bits */
 #define AD717X_IFMODE_REG_ALT_SYNC      (1 << 12)
 #define AD717X_IFMODE_REG_IOSTRENGTH    (1 << 11)
-#define AD717X_IFMODE_REG_HIDE_DELAY    (1 << 10)
 #define AD717X_IFMODE_REG_DOUT_RESET    (1 << 8)
 #define AD717X_IFMODE_REG_CONT_READ     (1 << 7)
 #define AD717X_IFMODE_REG_DATA_STAT     (1 << 6)
@@ -189,6 +188,9 @@ typedef struct {
 #define AD717X_IFMODE_REG_XOR_STAT(x)   (((x) & AD717X_IFMODE_REG_XOR_EN) == AD717X_IFMODE_REG_XOR_EN)
 #define AD717X_IFMODE_REG_CRC_STAT(x)   (((x) & AD717X_IFMODE_REG_CRC_EN) == AD717X_IFMODE_REG_CRC_EN)
 #define AD717X_IFMODE_REG_DATA_WL16     (1 << 0)
+
+/* Interface Mode Register additional bits for AD717x family, not for AD411x */
+#define AD717X_IFMODE_REG_HIDE_DELAY    (1 << 10)
 
 /* GPIO Configuration Register bits */
 #define AD717X_GPIOCON_REG_MUX_IO      (1 << 12)
@@ -217,6 +219,11 @@ typedef struct {
 #define AD4111_GPIOCON_REG_DATA1       (1 << 7)
 #define AD4111_GPIOCON_REG_DATA0       (1 << 6)
 
+/* GPIO Configuration Register additional bits for AD4116 */
+#define AD4116_GPIOCON_REG_OP_EN2_3    (1 << 13)
+#define AD4116_GPIOCON_REG_DATA3       (1 << 7)
+#define AD4116_GPIOCON_REG_DATA2       (1 << 6)
+
 /* GPIO Configuration Register additional bits for AD4111 */
 #define AD4111_GPIOCON_REG_OW_EN       (1 << 12)
 
@@ -226,7 +233,7 @@ typedef struct {
 #define AD717X_CHMAP_REG_AINPOS(x)     (((x) & 0x1F) << 5)
 #define AD717X_CHMAP_REG_AINNEG(x)     (((x) & 0x1F) << 0)
 
-/* Channel Map Register additional bits for AD4111, AD4112 */
+/* Channel Map Register additional bits for AD4111, AD4112, AD4114, AD4115, AD4116 */
 #define AD4111_CHMAP_REG_INPUT(x)      (((x) & 0x3FF) << 0)
 
 /* Setup Configuration Register 0-3 bits */
@@ -245,7 +252,7 @@ typedef struct {
 #define AD717X_SETUP_CONF_REG_AINBUF_P    (1 << 9)
 #define AD717X_SETUP_CONF_REG_AINBUF_N    (1 << 8)
 
-/* Setup Configuration Register additional bits for AD4111, AD4112 */
+/* Setup Configuration Register additional bits for AD4111, AD4112, AD4114, AD4115, AD4116 */
 #define AD4111_SETUP_CONF_REG_REFPOS_BUF   (1 << 11)
 #define AD4111_SETUP_CONF_REG_REFNEG_BUF   (1 << 10)
 #define AD4111_SETUP_CONF_REG_AIN_BUF(x)   (((x) & 0x3) << 8)
@@ -274,8 +281,12 @@ typedef struct {
 #define AD7176_2_ID_REG_VALUE 0x0C90
 /* AD7177-2 ID */
 #define AD7177_2_ID_REG_VALUE 0x4FD0
-/* AD411x ID */
+/* AD4111, AD4112 IDs */
 #define AD411X_ID_REG_VALUE   0x30D0
+/* AD4114, AD4115 IDs */
+#define AD4114_5_ID_REG_VALUE   0x31D0
+/* AD4116 ID */
+#define AD4116_ID_REG_VALUE   0x34D0
 
 /*****************************************************************************/
 /******************* AD717X Constants ****************************************/
