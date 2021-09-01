@@ -314,7 +314,7 @@ $(OBJECTS_DIR)/%.o: $$(call get_full_path, %).S | $$(@D)/.
 	$(MUTE) $(AS) -c $(ASFLAGS) $< -o $@
 
 ifneq ($(strip $(LSCRIPT)),)
-LSCRIPT_FLAG = -T$(LSCRIPT) $(LDFLAGS)
+LSCRIPT_FLAG = -T$(LSCRIPT)
 endif
 
 $(BINARY): $(LIB_TARGETS) $(OBJS) $(ASM_OBJS) $(LSCRIPT)
