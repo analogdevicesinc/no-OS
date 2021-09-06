@@ -156,7 +156,11 @@ $(PIN_MUX): $(PROJECT_PIN_MUX)
 
 # Upload binary to target
 PHONY += aducm3029_run
+ifeq ($(wildcard $(BUILD_DIR)),)
 aducm3029_run: all
+else
+aducm3029_run: $(BINARY)
+endif
 	$(MUTE) openocd -s "$(OPENOCD_SCRIPTS)" -f interface/cmsis-dap.cfg \
 		-s "$(ADUCM_DFP)/openocd/scripts" -f target/aducm3029.cfg \
 		-c "program  $(BINARY) verify reset exit" $(HIDE)
