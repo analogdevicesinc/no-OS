@@ -71,12 +71,21 @@ enum irq_trig_level {
 };
 
 /**
+ * @struct irq_platform_ops
+ * @brief Structure holding IRQ function pointers that point to the platform
+ * specific function
+ */
+struct irq_platform_ops ;
+
+/**
  * @struct irq_init_param
  * @brief Structure holding the initial parameters for Interrupt Request.
  */
 struct irq_init_param {
 	/** Interrupt request controller ID. */
 	uint32_t	irq_ctrl_id;
+	/** Platform specific IRQ platform ops structure. */
+	const struct irq_platform_ops *platform_ops;
 	/** IRQ extra parameters (device specific) */
 	void		*extra;
 };
@@ -88,6 +97,8 @@ struct irq_init_param {
 struct irq_ctrl_desc {
 	/** Interrupt request controller ID. */
 	uint32_t	irq_ctrl_id;
+	/** Platform specific IRQ platform ops structure. */
+	const struct irq_platform_ops *platform_ops;
 	/** IRQ extra parameters (device specific) */
 	void		*extra;
 };
@@ -108,6 +119,35 @@ struct callback_desc {
 	void *ctx;
 	/** Platform specific configuration for a callback */
 	void *config;
+};
+
+/**
+ * @struct irq_platform_ops
+ * @brief Structure holding IRQ function pointers that point to the platform
+ * specific function
+ */
+struct irq_platform_ops {
+	/** Initialize a interrupt controller peripheral. */
+	int32_t (*init)(struct irq_ctrl_desc **desc,
+			const struct irq_init_param *param);
+	/** Register a callback to handle the irq events */
+	int32_t (*register_callback)(struct irq_ctrl_desc *desc, uint32_t irq_id,
+				     struct callback_desc *callback_desc);
+	/** Unregisters a generic IRQ handling function */
+	int32_t (*unregister)(struct irq_ctrl_desc *desc, uint32_t irq_id);
+	/** Global interrupt enable */
+	int32_t (*global_enable)(struct irq_ctrl_desc *desc);
+	/** Global interrupt disable */
+	int32_t (*global_disable)(struct irq_ctrl_desc *desc);
+	/** Set interrupt trigger level. */
+	int32_t (*trigger_level_set)(struct irq_ctrl_desc *desc, uint32_t irq_id,
+				     enum irq_trig_level trig);
+	/** Enable specific interrupt */
+	int32_t (*enable)(struct irq_ctrl_desc *desc, uint32_t irq_id);
+	/** Disable specific interrupt */
+	int32_t (*disable)(struct irq_ctrl_desc *desc, uint32_t irq_id);
+	/** IRQ remove function pointer */
+	int32_t (*remove)(struct irq_ctrl_desc *desc);
 };
 
 /******************************************************************************/
