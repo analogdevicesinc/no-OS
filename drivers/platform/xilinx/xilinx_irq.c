@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   xilinx/irq.c
+ *   @file   xilinx/xilinx_irq.c
  *   @brief  Implementation of Xilinx IRQ Generic Driver.
  *   @author Cristian Pop (cristian.pop@analog.com)
 ********************************************************************************
@@ -61,13 +61,28 @@
 /******************************************************************************/
 
 /**
+ * @brief Xilinx platform specific IRQ platform ops structure
+ */
+const struct irq_platform_ops xil_irq_platform_ops = {
+	.init = &xil_irq_ctrl_init,
+	.register_callback = &xil_irq_register_callback,
+	.unregister = &xil_irq_unregister,
+	.global_enable = &xil_irq_global_enable,
+	.global_disable = &xil_irq_global_disable,
+	.trigger_level_set = &xil_irq_trigger_level_set,
+	.enable = &xil_irq_enable,
+	.disable = &xil_irq_disable,
+	.remove = &xil_irq_ctrl_remove
+};
+
+/**
  * @brief Initialize the IRQ interrupts.
  * @param desc - The IRQ controller descriptor.
  * @param param - The structure that contains the IRQ parameters.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t irq_ctrl_init(struct irq_ctrl_desc **desc,
-		      const struct irq_init_param *param)
+int32_t xil_irq_ctrl_init(struct irq_ctrl_desc **desc,
+			  const struct irq_init_param *param)
 {
 	int32_t status;
 	struct irq_ctrl_desc *descriptor;
@@ -156,7 +171,7 @@ error:
  * @brief Enable global interrupts.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t irq_global_enable(struct irq_ctrl_desc *desc)
+int32_t xil_irq_global_enable(struct irq_ctrl_desc *desc)
 {
 	/* Enable interrupts */
 	Xil_ExceptionEnable();
@@ -168,7 +183,7 @@ int32_t irq_global_enable(struct irq_ctrl_desc *desc)
  * @brief Disable global interrupts.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t irq_global_disable(struct irq_ctrl_desc *desc)
+int32_t xil_irq_global_disable(struct irq_ctrl_desc *desc)
 {
 	/* Disable interrupts */
 	Xil_ExceptionDisable();
@@ -182,7 +197,7 @@ int32_t irq_global_disable(struct irq_ctrl_desc *desc)
  * @param irq_id - Interrupt identifier.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t irq_enable(struct irq_ctrl_desc *desc, uint32_t irq_id)
+int32_t xil_irq_enable(struct irq_ctrl_desc *desc, uint32_t irq_id)
 {
 	struct xil_irq_desc *xil_dev = desc->extra;
 
@@ -211,7 +226,7 @@ int32_t irq_enable(struct irq_ctrl_desc *desc, uint32_t irq_id)
  * @param irq_id - Interrupt identifier.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t irq_disable(struct irq_ctrl_desc *desc, uint32_t irq_id)
+int32_t xil_irq_disable(struct irq_ctrl_desc *desc, uint32_t irq_id)
 {
 	struct xil_irq_desc *xil_dev = desc->extra;
 
@@ -241,8 +256,8 @@ int32_t irq_disable(struct irq_ctrl_desc *desc, uint32_t irq_id)
  * @param callback_desc - Callback descriptor
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t irq_register_callback(struct irq_ctrl_desc *desc, uint32_t irq_id,
-			      struct callback_desc *callback_desc)
+int32_t xil_irq_register_callback(struct irq_ctrl_desc *desc, uint32_t irq_id,
+				  struct callback_desc *callback_desc)
 {
 	struct xil_irq_desc *xil_dev = desc->extra;
 
@@ -288,8 +303,8 @@ int32_t irq_register_callback(struct irq_ctrl_desc *desc, uint32_t irq_id,
  * @param trig - New trigger level for the interrupt.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t irq_trigger_level_set(struct irq_ctrl_desc *desc, uint32_t irq_id,
-			      enum irq_trig_level trig)
+int32_t xil_irq_trigger_level_set(struct irq_ctrl_desc *desc, uint32_t irq_id,
+				  enum irq_trig_level trig)
 {
 	struct xil_irq_desc *xil_dev = desc->extra;
 
@@ -327,7 +342,7 @@ int32_t irq_trigger_level_set(struct irq_ctrl_desc *desc, uint32_t irq_id,
  * @param irq_id - Interrupt identifier.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t irq_unregister(struct irq_ctrl_desc *desc, uint32_t irq_id)
+int32_t xil_irq_unregister(struct irq_ctrl_desc *desc, uint32_t irq_id)
 {
 	struct xil_irq_desc *xil_dev = desc->extra;
 
@@ -355,7 +370,7 @@ int32_t irq_unregister(struct irq_ctrl_desc *desc, uint32_t irq_id)
  * @param desc - The IRQ control descriptor.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t irq_ctrl_remove(struct irq_ctrl_desc *desc)
+int32_t xil_irq_ctrl_remove(struct irq_ctrl_desc *desc)
 {
 	struct xil_irq_desc *xil_dev = desc->extra;
 	free(xil_dev->instance);

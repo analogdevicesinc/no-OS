@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   aducm3029/irq.c
+ *   @file   aducm3029/aducm3029_irq.c
  *   @brief  Implementation of External IRQ driver for ADuCM302x.
  *   @author Mihail Chindris (mihail.chindris@analog.com)
 ********************************************************************************
@@ -87,6 +87,20 @@ static const uint32_t id_map_event[NB_INTERRUPTS] = {
  */
 static uint32_t		initialized;
 
+/**
+ * @brief Aducm3029 platform specific IRQ platform ops structure
+ */
+const struct irq_platform_ops aducm3029_irq_platform_ops = {
+	.init = &aducm3029_irq_ctrl_init,
+	.register_callback = &aducm3029_irq_register_callback,
+	.unregister = &aducm3029_irq_unregister,
+	.global_enable = &aducm3029_irq_global_enable,
+	.global_disable = &aducm3029_irq_global_disable,
+	.enable = &aducm3029_irq_enable,
+	.disable = &aducm3029_irq_disable,
+	.remove = &aducm3029_irq_ctrl_remove
+};
+
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
@@ -98,8 +112,8 @@ static uint32_t		initialized;
  * @param param - Configuration information for the instance
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
  */
-int32_t irq_ctrl_init(struct irq_ctrl_desc **desc,
-		      const struct irq_init_param *param)
+int32_t aducm3029_irq_ctrl_init(struct irq_ctrl_desc **desc,
+				const struct irq_init_param *param)
 {
 	struct aducm_irq_ctrl_desc *aducm_desc;
 
@@ -131,7 +145,7 @@ int32_t irq_ctrl_init(struct irq_ctrl_desc **desc,
  * @param desc - Interrupt controller descriptor.
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
  */
-int32_t irq_ctrl_remove(struct irq_ctrl_desc *desc)
+int32_t aducm3029_irq_ctrl_remove(struct irq_ctrl_desc *desc)
 {
 	uint32_t i;
 
@@ -161,8 +175,9 @@ int32_t irq_ctrl_remove(struct irq_ctrl_desc *desc)
  * callback will be unregistered
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t irq_register_callback(struct irq_ctrl_desc *desc, uint32_t irq_id,
-			      struct callback_desc *callback_desc)
+int32_t aducm3029_irq_register_callback(struct irq_ctrl_desc *desc,
+					uint32_t irq_id,
+					struct callback_desc *callback_desc)
 {
 	struct aducm_irq_ctrl_desc	*aducm_desc;
 	struct uart_desc		*uart_desc;
@@ -252,7 +267,7 @@ int32_t irq_register_callback(struct irq_ctrl_desc *desc, uint32_t irq_id,
  * @param irq_id - Id of the interrupt
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
  */
-int32_t irq_unregister(struct irq_ctrl_desc *desc, uint32_t irq_id)
+int32_t aducm3029_irq_unregister(struct irq_ctrl_desc *desc, uint32_t irq_id)
 {
 	struct aducm_irq_ctrl_desc	*aducm_desc;
 	struct uart_desc		*uart_desc;
@@ -323,7 +338,7 @@ int32_t irq_unregister(struct irq_ctrl_desc *desc, uint32_t irq_id)
  * @param desc - Interrupt controller descriptor.
  * @return \ref SUCCESS
  */
-int32_t irq_global_enable(struct irq_ctrl_desc *desc)
+int32_t aducm3029_irq_global_enable(struct irq_ctrl_desc *desc)
 {
 	struct aducm_irq_ctrl_desc *aducm_desc;
 	if (!desc || !desc->extra || !initialized)
@@ -350,7 +365,7 @@ int32_t irq_global_enable(struct irq_ctrl_desc *desc)
  * @param desc - Interrupt controller descriptor.
  * @return \ref SUCCESS
  */
-int32_t irq_global_disable(struct irq_ctrl_desc *desc)
+int32_t aducm3029_irq_global_disable(struct irq_ctrl_desc *desc)
 {
 	struct aducm_irq_ctrl_desc *aducm_desc;
 	if (!desc || !desc->extra || !initialized)
@@ -387,7 +402,7 @@ int32_t irq_global_disable(struct irq_ctrl_desc *desc)
  * @param irq_id - Id of the interrupt
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
  */
-int32_t irq_enable(struct irq_ctrl_desc *desc, uint32_t irq_id)
+int32_t aducm3029_irq_enable(struct irq_ctrl_desc *desc, uint32_t irq_id)
 {
 	struct aducm_irq_ctrl_desc	*aducm_desc;
 	struct aducm_rtc_desc		*rtc_desc;
@@ -429,7 +444,7 @@ int32_t irq_enable(struct irq_ctrl_desc *desc, uint32_t irq_id)
  * @param irq_id - Id of the interrupt
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
  */
-int32_t irq_disable(struct irq_ctrl_desc *desc, uint32_t irq_id)
+int32_t aducm3029_irq_disable(struct irq_ctrl_desc *desc, uint32_t irq_id)
 {
 	struct aducm_irq_ctrl_desc	*aducm_desc;
 	struct aducm_rtc_desc		*rtc_desc;
