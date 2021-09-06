@@ -165,8 +165,16 @@ static ssize_t adpd188_iio_change_offset_chan(void *device, char *buf,
 
 	sscanf(buf, "%hx", &reg_val);
 
+	ret = adpd188_mode_set(desc, ADPD188_PROGRAM);
+	if (ret != SUCCESS)
+		return ret;
+
 	ret = adpd188_reg_write(desc, (ADPD188_REG_SLOTA_CH1_OFFSET + ch_offset),
 				reg_val);
+	if (ret != SUCCESS)
+		return ret;
+
+	ret = adpd188_mode_set(desc, ADPD188_STANDBY);
 	if (ret != SUCCESS)
 		return ret;
 
@@ -216,7 +224,15 @@ static ssize_t adpd188_iio_change_odr_chan(void *device, char *buf, size_t len,
 
 	sscanf(buf, "%hu", &freq_hz);
 
+	ret = adpd188_mode_set(desc, ADPD188_PROGRAM);
+	if (ret != SUCCESS)
+		return ret;
+
 	ret = adpd188_adc_fsample_set(desc, freq_hz);
+	if (ret != SUCCESS)
+		return ret;
+
+	ret = adpd188_mode_set(desc, ADPD188_STANDBY);
 	if (ret != SUCCESS)
 		return ret;
 
