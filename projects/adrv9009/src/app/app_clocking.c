@@ -124,7 +124,6 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 		.pll1_ref_prio_ctrl = 0xE5,
 		.sync_pin_mode = 0x1,
 		.high_performance_mode_clock_dist_en = true,
-		.high_performance_mode_pll_vco_en = true,
 		.pulse_gen_mode = 0x0,
 	};
 
