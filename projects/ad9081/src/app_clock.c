@@ -296,7 +296,6 @@ int32_t app_clock_init(struct clk dev_refclk[MULTIDEVICE_INSTANCE_COUNT])
 		.pll1_ref_prio_ctrl = 0xe4,
 		.sync_pin_mode = 0x1,
 		.high_performance_mode_clock_dist_en = false,
-		.high_performance_mode_pll_vco_en = false,
 		.pulse_gen_mode = 0x0,
 		.channels = chan_spec
 	};
