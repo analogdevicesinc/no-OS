@@ -38,14 +38,6 @@ SRCS +=	$(PLATFORM_DRIVERS)/axi_io.c					\
 	$(PLATFORM_DRIVERS)/xilinx_spi.c				\
 	$(PLATFORM_DRIVERS)/xilinx_gpio.c				\
 	$(PLATFORM_DRIVERS)/delay.c
-ifeq (y,$(strip $(TINYIIOD)))
-SRCS += $(NO-OS)/util/fifo.c						\
-	$(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.c				\
-	$(NO-OS)/iio/iio_app/iio_app.c					\
-	$(NO-OS)/util/list.c						\
-	$(PLATFORM_DRIVERS)/uart.c					\
-	$(PLATFORM_DRIVERS)/irq.c
-endif
 INCS += $(PROJECT)/src/app_ad9083.h					\
 	$(PROJECT)/src/app_clocking.h					\
 	$(PROJECT)/src/app_config.h					\
@@ -73,12 +65,20 @@ INCS +=	$(INCLUDE)/axi_io.h						\
 	$(INCLUDE)/print_log.h						\
 	$(INCLUDE)/util.h
 ifeq (y,$(strip $(TINYIIOD)))
+SRCS += $(NO-OS)/util/fifo.c						\
+	$(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.c			\
+	$(NO-OS)/iio/iio_app/iio_app.c					\
+	$(NO-OS)/util/list.c						\
+	$(PLATFORM_DRIVERS)/uart.c					\
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c				\
+	$(DRIVERS)/irq/irq.c                        			\
+
 INCS += $(INCLUDE)/fifo.h						\
 	$(INCLUDE)/irq.h						\
 	$(INCLUDE)/uart.h						\
 	$(INCLUDE)/list.h						\
 	$(PLATFORM_DRIVERS)/irq_extra.h					\
 	$(PLATFORM_DRIVERS)/uart_extra.h                                \
-	$(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.h				\
+	$(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.h			\
 	$(NO-OS)/iio/iio_app/iio_app.h
 endif
