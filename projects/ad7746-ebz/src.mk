@@ -2,12 +2,13 @@ SRCS += $(NO-OS)/util/util.c \
 	$(PLATFORM_DRIVERS)/delay.c \
 	$(PLATFORM_DRIVERS)/timer.c \
 	$(PLATFORM_DRIVERS)/i2c.c \
-	$(PLATFORM_DRIVERS)/irq.c \
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c \
 	$(PLATFORM_DRIVERS)/uart.c \
 	$(PLATFORM_DRIVERS)/uart_stdio.c \
 	$(PLATFORM_DRIVERS)/rtc.c \
 	$(PLATFORM_DRIVERS)/platform_init.c \
 	$(DRIVERS)/cdc/ad7746/ad7746.c \
+	$(DRIVERS)/irq/irq.c \
 	$(PROJECT)/src/app/headless.c
 
 INCS +=	$(INCLUDE)/uart.h \
