@@ -15,7 +15,7 @@ SRCS += $(NO-OS)/util/fifo.c
 SRCS += $(NO-OS)/util/util.c
 SRCS += $(NO-OS)/util/list.c
 
-# Add to INCS inlcude files to be build in the porject
+# Add to INCS inlcude files to be build in the project
 INCS += $(INCLUDE)/error.h
 INCS += $(INCLUDE)/gpio.h
 INCS += $(INCLUDE)/delay.h
@@ -24,9 +24,9 @@ INCS += $(INCLUDE)/axi_io.h
 INCS += $(INCLUDE)/spi.h
 INCS += $(INCLUDE)/timer.h
 INCS += $(INCLUDE)/i2c.h
-INCS += $(INCLUDE)/list.h
 INCS += $(INCLUDE)/uart.h
-INCS += $(INCLUDE)/irq.h
+INCS +=	$(INCLUDE)/irq.h
+INCS += $(INCLUDE)/list.h
 INCS += $(INCLUDE)/fifo.h
 INCS += $(PROJECT)/src/parameters.h
 
@@ -40,6 +40,7 @@ SRC_DIRS += $(DRIVERS)/axi_core/spi_engine
 SRC_DIRS += $(DRIVERS)/spi
 SRC_DIRS += $(DRIVERS)/i2c
 SRC_DIRS += $(DRIVERS)/gpio
+SRC_DIRS += $(DRIVERS)/irq
 
 # Add to LIBRARIES the libraries that need to be linked in the build
 # LIBRARIES += mqtt
@@ -51,7 +52,6 @@ ifeq (y,$(strip $(TINYIIOD)))
 LIBRARIES += iio
 INCS +=	$(PROJECT)/src/app_iio.h					\
 	$(INCLUDE)/fifo.h						\
-	$(INCLUDE)/irq.h						\
 	$(INCLUDE)/uart.h						\
 	$(INCLUDE)/list.h						\
 	$(PLATFORM_DRIVERS)/irq_extra.h					\
@@ -59,8 +59,8 @@ INCS +=	$(PROJECT)/src/app_iio.h					\
 	$(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.h
 SRCS += $(PROJECT)/src/app_iio.c					\
 	$(NO-OS)/util/fifo.c						\
-	$(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.c				\
+	$(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.c			\
 	$(NO-OS)/util/list.c						\
 	$(PLATFORM_DRIVERS)/uart.c					\
-	$(PLATFORM_DRIVERS)/irq.c
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c
 endif
