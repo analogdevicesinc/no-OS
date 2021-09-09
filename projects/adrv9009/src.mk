@@ -57,8 +57,9 @@ SRCS += $(NO-OS)/util/fifo.c						\
 	$(NO-OS)/util/list.c						\
 	$(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.c				\
 	$(DRIVERS)/axi_core/iio_axi_dac/iio_axi_dac.c                          \
+	$(DRIVERS)/irq/irq.c						\
 	$(PLATFORM_DRIVERS)/uart.c					\
-	$(PLATFORM_DRIVERS)/irq.c
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c
 endif
 SRCS +=	$(NO-OS)/util/util.c
 ifeq (xilinx,$(strip $(PLATFORM)))
