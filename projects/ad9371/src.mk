@@ -51,11 +51,12 @@ SRCS +=	$(PLATFORM_DRIVERS)/axi_io.c					\
 ifeq (y,$(strip $(TINYIIOD)))
 LIBRARIES += iio
 SRCS += $(PLATFORM_DRIVERS)/uart.c					\
-	$(PLATFORM_DRIVERS)/irq.c					\
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c				\
 	$(NO-OS)/util/fifo.c						\
 	$(NO-OS)/util/list.c						\
-	$(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.c				\
-	$(DRIVERS)/axi_core/iio_axi_dac/iio_axi_dac.c
+	$(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.c			\
+	$(DRIVERS)/axi_core/iio_axi_dac/iio_axi_dac.c			\
+	$(DRIVERS)/irq/irq.c
 endif
 INCS +=	$(PROJECT)/src/app/app_config.h					\
 	$(PROJECT)/src/devices/ad9528/ad9528.h				\
