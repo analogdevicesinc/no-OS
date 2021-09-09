@@ -27,10 +27,11 @@ SRCS +=	$(PLATFORM_DRIVERS)/axi_io.c					\
 	$(PLATFORM_DRIVERS)/delay.c
 ifeq (y,$(strip $(TINYIIOD)))
 SRCS += $(NO-OS)/util/fifo.c						\
-	$(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.c				\
+	$(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.c			\
+	$(DRIVERS)/irq/irq.c						\
 	$(NO-OS)/util/list.c						\
 	$(PLATFORM_DRIVERS)/uart.c					\
-	$(PLATFORM_DRIVERS)/irq.c
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c
 endif
 INCS +=	$(PROJECT)/src/app/app_config.h					\
 	$(PROJECT)/src/devices/adi_hal/parameters.h
