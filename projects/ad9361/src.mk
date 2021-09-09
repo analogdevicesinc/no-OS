@@ -90,7 +90,8 @@ INCS += $(INCLUDE)/fifo.h						\
 	$(INCLUDE)/circular_buffer.h
 endif
 ifeq (xilinx,$(strip $(PLATFORM)))
-SRCS +=	$(PLATFORM_DRIVERS)/irq.c	
+SRCS += $(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c \
+	$(DRIVERS)/irq/irq.c
 	
 INCS += $(PLATFORM_DRIVERS)/irq_extra.h				\
 	$(PLATFORM_DRIVERS)/spi_extra.h					\
