@@ -10,4 +10,5 @@ SRC_DIRS += $(PROJECT)/src \
 
 ifeq '$(TINYIIOD)' 'y'
 SRC_DIRS += $(NO-OS)/iio/iio_app
+SRC_DIRS += $(NO-OS)/drivers/irq
 endif
