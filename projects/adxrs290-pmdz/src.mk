@@ -24,11 +24,12 @@ endif
 LIBRARIES += iio
 
 SRCS += $(PLATFORM_DRIVERS)/uart.c					\
-	$(PLATFORM_DRIVERS)/irq.c					\
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c				\
 	$(PLATFORM_DRIVERS)/gpio.c					\
 	$(PLATFORM_DRIVERS)/spi.c					\
 	$(PLATFORM_DRIVERS)/delay.c					\
 	$(PLATFORM_DRIVERS)/timer.c					\
+	$(DRIVERS)/irq/irq.c						\
 	$(NO-OS)/util/list.c						\
 	$(NO-OS)/util/fifo.c						\
 	$(NO-OS)/util/util.c						\
