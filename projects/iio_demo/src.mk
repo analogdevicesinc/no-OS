@@ -10,7 +10,8 @@ SRCS +=	$(NO-OS)/util/list.c					\
 SRCS += $(DRIVERS)/adc/adc_demo/adc_demo.c				\
 	$(DRIVERS)/adc/adc_demo/iio_adc_demo.c				\
 	$(DRIVERS)/dac/dac_demo/iio_dac_demo.c				\
-	$(DRIVERS)/dac/dac_demo/dac_demo.c
+	$(DRIVERS)/dac/dac_demo/dac_demo.c                              \
+	$(DRIVERS)/irq/irq.c
 
 INCS += $(INCLUDE)/fifo.h					\
 	$(INCLUDE)/uart.h						\
@@ -48,8 +49,8 @@ INCS	 += $(INCLUDE)/timer.h		\
 		$(PLATFORM_DRIVERS)/rtc_extra.h
 endif
 
-SRCS += $(PLATFORM_DRIVERS)/uart.c					\
-	$(PLATFORM_DRIVERS)/irq.c
+SRCS += $(PLATFORM_DRIVERS)/uart.c \
+		$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c
 
 INCS += $(INCLUDE)/irq.h						\
 	$(INCLUDE)/rtc.h						\
