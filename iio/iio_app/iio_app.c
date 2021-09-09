@@ -132,13 +132,26 @@ int32_t iio_app_run(struct iio_app_device *devices, int32_t len)
 	int32_t platform_irq_init_par = 0;
 #endif //ADUCM_PLATFORM
 
-#if defined(ADUCM_PLATFORM) || defined(XILINX_PLATFORM)
+#if defined(ADUCM_PLATFORM)
+	irq_init_param = (struct irq_init_param ) {
+		.irq_ctrl_id = INTC_DEVICE_ID,
+		.platform_ops = &aducm3029_irq_platform_ops,
+		.extra = &platform_irq_init_par
+	};
+#endif
+
+#if defined(XILINX_PLATFORM)
 #ifndef PLATFORM_MB
 	irq_init_param = (struct irq_init_param ) {
 		.irq_ctrl_id = INTC_DEVICE_ID,
+		.platform_ops = &xil_irq_platform_ops,
 		.extra = &platform_irq_init_par
 	};
+#endif
+#endif
 
+#if defined(ADUCM_PLATFORM) || defined(XILINX_PLATFORM)
+#ifndef PLATFORM_MB
 	status = irq_ctrl_init(&irq_desc, &irq_init_param);
 	if(status < 0)
 		return status;
