@@ -14,6 +14,7 @@ INCS += $(NO-OS)/drivers/adc/ad7124/ad7124.h \
 SRC_DIRS += $(PLATFORM_DRIVERS)
 SRC_DIRS += $(NO-OS)/util
 SRC_DIRS += $(INCLUDE)
+SRC_DIRS += $(NO-OS)/drivers/irq
 
 TINYIIOD=y
 
