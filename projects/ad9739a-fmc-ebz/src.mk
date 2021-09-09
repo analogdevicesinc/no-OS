@@ -22,10 +22,11 @@ SRCS += $(DRIVERS)/dac/ad9739a/ad9739a.c				\
 	$(NO-OS)/util/util.c
 ifeq (y,$(strip $(TINYIIOD)))
 SRCS += $(NO-OS)/util/fifo.c						\
-	$(DRIVERS)/axi_core/iio_axi_dac/iio_axi_dac.c				\
+	$(DRIVERS)/axi_core/iio_axi_dac/iio_axi_dac.c			\
+	$(DRIVERS)/irq/irq.c                                            \
 	$(NO-OS)/util/list.c						\
 	$(PLATFORM_DRIVERS)/uart.c					\
-	$(PLATFORM_DRIVERS)/irq.c
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c
 endif
 SRCS +=	$(PLATFORM_DRIVERS)/axi_io.c					\
 	$(PLATFORM_DRIVERS)/xilinx_spi.c				\
