@@ -3,6 +3,7 @@
 SRC_DIRS += $(PROJECT)/src
 SRC_DIRS += $(DRIVERS)/amplifiers/ada4250
 SRC_DIRS += $(NO-OS)/iio/iio_app
+SRC_DIRS += $(NO-OS)/drivers/irq
 
 SRC_DIRS += $(PLATFORM_DRIVERS)
 SRC_DIRS += $(INCLUDE)
