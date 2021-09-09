@@ -57,11 +57,12 @@ ifeq (y,$(strip $(TINYIIOD)))
 LIBRARIES += iio
 SRCS += $(PROJECT)/src/app/app_iio.c \
 	$(PLATFORM_DRIVERS)/uart.c \
-	$(PLATFORM_DRIVERS)/irq.c \
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c \
 	$(NO-OS)/util/list.c \
 	$(NO-OS)/util/fifo.c \
 	$(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.c \
-	$(DRIVERS)/axi_core/iio_axi_dac/iio_axi_dac.c
+	$(DRIVERS)/axi_core/iio_axi_dac/iio_axi_dac.c \
+	$(DRIVERS)/irq/irq.c
 INCS += $(PROJECT)/src/app/app_iio.h \
 	$(INCLUDE)/uart.h \
 	$(INCLUDE)/irq.h \
