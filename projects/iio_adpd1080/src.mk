@@ -7,6 +7,10 @@ SRC_DIRS += $(NO-OS)/drivers/photo-electronic/adpd188
 SRC_DIRS += $(PLATFORM_DRIVERS)
 SRC_DIRS += $(NO-OS)/util
 SRC_DIRS += $(INCLUDE)
+SRCS += $(DRIVERS)/irq/irq.c
+SRCS +=	$(DRIVERS)/platform/$(PLATFORM)/$(PLATFORM)_irq.c
+INCS += $(INCLUDE)/irq.h
+INCS += $(DRIVERS)/platform/$(PLATFORM)/irq_extra.h
 
 TINYIIOD=y
 
