@@ -71,18 +71,6 @@ typedef struct stm32_spi_desc {
 /**
  * @brief stm32 specific SPI platform ops structure
  */
-extern const struct spi_platform_ops stm32_platform_ops;
-
-
-/* Initialize the SPI communication peripheral. */
-int32_t stm32_spi_init(struct spi_desc **desc,
-		       const struct spi_init_param *param);
-
-/* Free the resources allocated by spi_init(). */
-int32_t stm32_spi_remove(struct spi_desc *desc);
-
-/* Write and read data to/from SPI. */
-int32_t stm32_spi_write_and_read(struct spi_desc *desc, uint8_t *data,
-				 uint16_t bytes_number);
+extern const struct spi_platform_ops stm32_spi_ops;
 
 #endif // STM32_SPI_H_
