@@ -53,15 +53,6 @@
 /******************************************************************************/
 
 /**
- * @brief Altera platform specific SPI platform ops structure
- */
-const struct spi_platform_ops altera_platform_ops = {
-	.init = &altera_spi_init,
-	.write_and_read = &altera_spi_write_and_read,
-	.remove = &altera_spi_remove
-};
-
-/**
  * @brief Initialize the SPI communication peripheral.
  * @param desc - The SPI descriptor.
  * @param param - The structure that contains the SPI parameters.
@@ -164,4 +155,11 @@ int32_t altera_spi_write_and_read(struct spi_desc *desc,
 	return SUCCESS;
 }
 
-
+/**
+ * @brief Altera platform specific SPI platform ops structure
+ */
+const struct spi_platform_ops altera_spi_ops  = {
+	.init = &altera_spi_init,
+	.write_and_read = &altera_spi_write_and_read,
+	.remove = &altera_spi_remove
+};

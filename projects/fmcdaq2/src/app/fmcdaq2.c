@@ -259,13 +259,13 @@ static int fmcdaq2_spi_init(struct fmcdaq2_init_param *dev_init)
 		.type = NIOS_II_SPI,
 		.base_address = SYS_SPI_BASE
 	};
-	ad9523_spi_param.platform_ops = &altera_platform_ops;
+	ad9523_spi_param.platform_ops = &altera_spi_ops;
 	ad9523_spi_param.extra = &altera_spi_param;
 
-	ad9144_spi_param.platform_ops = &altera_platform_ops;
+	ad9144_spi_param.platform_ops = &altera_spi_ops;
 	ad9144_spi_param.extra = &altera_spi_param;
 
-	ad9680_spi_param.platform_ops = &altera_platform_ops;
+	ad9680_spi_param.platform_ops = &altera_spi_ops;
 	ad9680_spi_param.extra = &altera_spi_param;
 #endif
 
