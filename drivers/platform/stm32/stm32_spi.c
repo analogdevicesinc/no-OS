@@ -45,15 +45,6 @@
 #include "stm32_spi.h"
 
 /**
- * @brief stm32 platform specific SPI platform ops structure
- */
-const struct spi_platform_ops stm32_platform_ops = {
-	.init = &stm32_spi_init,
-	.write_and_read = &stm32_spi_write_and_read,
-	.remove = &stm32_spi_remove
-};
-
-/**
  * @brief Initialize the SPI communication peripheral.
  * @param desc - The SPI descriptor.
  * @param param - The structure that contains the SPI parameters.
@@ -236,3 +227,12 @@ int32_t stm32_spi_write_and_read(struct spi_desc *desc,
 
 	return SUCCESS;
 }
+
+/**
+ * @brief stm32 platform specific SPI platform ops structure
+ */
+const struct spi_platform_ops stm32_spi_ops = {
+	.init = &stm32_spi_init,
+	.write_and_read = &stm32_spi_write_and_read,
+	.remove = &stm32_spi_remove
+};
