@@ -408,7 +408,7 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 #ifndef ALTERA_PLATFORM
 		.platform_ops = &xil_spi_ops,
 #else
-		.platform_ops = &altera_platform_ops,
+		.platform_ops = &altera_spi_ops,
 #endif
 		.extra = &xil_spi_param
 	};

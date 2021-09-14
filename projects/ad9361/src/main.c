@@ -498,7 +498,7 @@ int main(void)
 #endif
 
 #ifdef ALTERA_PLATFORM
-	default_init_param.spi_param.platform_ops = &altera_platform_ops;
+	default_init_param.spi_param.platform_ops = &altera_spi_ops;
 
 	if (altera_bridge_init()) {
 		printf("Altera Bridge Init Error!\n");

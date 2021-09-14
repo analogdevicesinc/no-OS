@@ -88,7 +88,7 @@ int32_t platform_init(void)
 		.base_address = GPIO_BASEADDR
 	};
 	spi_param.device_id = SPI_DEVICE_ID;
-	spi_param.platform_ops = &altera_platform_ops;
+	spi_param.platform_ops = &altera_spi_ops;
 	spi_param.extra = &altera_spi_param;
 	gpio_ad9371_resetb_param.platform_ops = &altera_gpio_platform_ops;
 	gpio_ad9371_resetb_param.extra = &altera_gpio_param;
