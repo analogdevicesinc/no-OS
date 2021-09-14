@@ -156,11 +156,11 @@ int main(void)
 		.type = SPI_PS,
 #endif
 	};
-	ad9528_spi_param.platform_ops = &xil_platform_ops;
+	ad9528_spi_param.platform_ops = &xil_spi_ops;
 	ad9528_spi_param.extra = &xil_spi_param;
-	ad9152_spi_param.platform_ops = &xil_platform_ops;
+	ad9152_spi_param.platform_ops = &xil_spi_ops;
 	ad9152_spi_param.extra = &xil_spi_param;
-	ad9680_spi_param.platform_ops = &xil_platform_ops;
+	ad9680_spi_param.platform_ops = &xil_spi_ops;
 	ad9680_spi_param.extra = &xil_spi_param;
 #else
 	struct altera_spi_init_param altera_spi_param = {

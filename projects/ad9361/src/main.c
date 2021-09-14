@@ -103,7 +103,7 @@ struct xil_gpio_init_param xil_gpio_param = {
 	.device_id = GPIO_DEVICE_ID
 };
 #define GPIO_OPS	&xil_gpio_platform_ops
-#define SPI_OPS		&xil_platform_ops
+#define SPI_OPS		&xil_spi_ops
 #define GPIO_PARAM	&xil_gpio_param
 #define SPI_PARAM	&xil_spi_param
 #endif
@@ -494,7 +494,7 @@ int main(void)
 	Xil_ICacheEnable();
 	Xil_DCacheEnable();
 	default_init_param.spi_param.extra = &xil_spi_param;
-	default_init_param.spi_param.platform_ops = &xil_platform_ops;
+	default_init_param.spi_param.platform_ops = &xil_spi_ops;
 #endif
 
 #ifdef ALTERA_PLATFORM

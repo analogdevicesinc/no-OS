@@ -79,7 +79,7 @@ int main(void)
 		.chip_select = 0,
 		.mode = SPI_MODE_0,
 		.extra = &xil_spi_param,
-		.platform_ops = &xil_platform_ops,
+		.platform_ops = &xil_spi_ops,
 	};
 
 	struct spi_init_param ad9739_spi_param = {
@@ -88,7 +88,7 @@ int main(void)
 		.chip_select = 1,
 		.mode = SPI_MODE_0,
 		.extra = &xil_spi_param,
-		.platform_ops = &xil_platform_ops,
+		.platform_ops = &xil_spi_ops,
 	};
 
 	adf4350_init_param default_adf4350_init_param = {

@@ -160,7 +160,7 @@ int32_t app_ad9083_init(struct app_ad9083 **app,
 		.mode = SPI_MODE_0,
 		.chip_select = SPI_AD9083_CS,
 
-		.platform_ops = &xil_platform_ops,
+		.platform_ops = &xil_spi_ops,
 		.extra = &xil_spi_param
 	};
 	struct xil_gpio_init_param  xil_gpio_param = {

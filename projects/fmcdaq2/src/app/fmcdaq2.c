@@ -246,13 +246,13 @@ static int fmcdaq2_spi_init(struct fmcdaq2_init_param *dev_init)
 		.type = SPI_PS,
 #endif
 	};
-	ad9523_spi_param.platform_ops = &xil_platform_ops;
+	ad9523_spi_param.platform_ops = &xil_spi_ops;
 	ad9523_spi_param.extra = &xil_spi_param;
 
-	ad9144_spi_param.platform_ops = &xil_platform_ops;
+	ad9144_spi_param.platform_ops = &xil_spi_ops;
 	ad9144_spi_param.extra = &xil_spi_param;
 
-	ad9680_spi_param.platform_ops = &xil_platform_ops;
+	ad9680_spi_param.platform_ops = &xil_spi_ops;
 	ad9680_spi_param.extra = &xil_spi_param;
 #else
 	struct altera_spi_init_param altera_spi_param = {

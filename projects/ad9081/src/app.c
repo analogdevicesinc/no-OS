@@ -94,7 +94,7 @@ int main(void)
 		.max_speed_hz = 1000000,
 		.mode = SPI_MODE_0,
 		.chip_select = PHY_CS,
-		.platform_ops = &xil_platform_ops,
+		.platform_ops = &xil_spi_ops,
 		.extra = &xil_spi_param
 	};
 	struct link_init_param jesd_tx_link = {

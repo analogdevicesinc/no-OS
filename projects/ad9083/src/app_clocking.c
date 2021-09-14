@@ -181,7 +181,7 @@ int32_t app_clocking_init(struct app_clocking **app,
 		.max_speed_hz = 10000000,
 		.mode = SPI_MODE_0,
 		.chip_select = CLK_AD9258_CS,
-		.platform_ops = &xil_platform_ops,
+		.platform_ops = &xil_spi_ops,
 		.extra = &xil_spi_param
 	};
 

@@ -177,7 +177,7 @@ struct spi_engine_offload_message {
 /**
  * @brief Spi engine platform specific SPI platform ops structure
  */
-extern const struct spi_platform_ops xil_platform_ops;
+extern const struct spi_platform_ops xil_spi_ops;
 
 /* Write SPI Engine's axi registers */
 int32_t spi_engine_write(struct spi_engine_desc *desc,

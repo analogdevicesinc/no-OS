@@ -103,13 +103,13 @@ int main(void)
 	};
 
 	ad9508_spi_param.device_id = SPI_DEVICE_ID;
-	ad9508_spi_param.platform_ops = &xil_platform_ops;
+	ad9508_spi_param.platform_ops = &xil_spi_ops;
 	ad9508_spi_param.extra = &xil_spi_param;
 	ad9553_spi_param.device_id = SPI_DEVICE_ID;
-	ad9553_spi_param.platform_ops = &xil_platform_ops;
+	ad9553_spi_param.platform_ops = &xil_spi_ops;
 	ad9553_spi_param.extra = &xil_spi_param;
 	ad9656_spi_param.device_id = SPI_DEVICE_ID;
-	ad9656_spi_param.platform_ops = &xil_platform_ops;
+	ad9656_spi_param.platform_ops = &xil_spi_ops;
 	ad9656_spi_param.extra = &xil_spi_param;
 
 	struct ad9508_init_param	ad9508_param;
