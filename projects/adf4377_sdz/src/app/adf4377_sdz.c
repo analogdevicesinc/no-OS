@@ -96,7 +96,7 @@ int main(void)
 		.chip_select = SPI_ADF4377_CS,
 		.mode = SPI_MODE_0,
 		.bit_order = SPI_BIT_ORDER_MSB_FIRST,
-		.platform_ops = &xil_platform_ops,
+		.platform_ops = &xil_spi_ops,
 		.extra = &xil_spi_init
 	};
 

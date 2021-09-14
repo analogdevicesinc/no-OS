@@ -285,7 +285,7 @@ int main(void)
 		.max_speed_hz = 2000000u,
 		.chip_select = 0,
 		.mode = SPI_MODE_0,
-		.platform_ops = &xil_platform_ops,
+		.platform_ops = &xil_spi_ops,
 		.extra = &xil_spi_param
 	};
 

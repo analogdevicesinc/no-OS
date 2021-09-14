@@ -77,7 +77,7 @@ int main(void)
 		.chip_select = 0,
 		.mode = SPI_MODE_0,
 		.extra = &xil_spi_param,
-		.platform_ops = &xil_platform_ops,
+		.platform_ops = &xil_spi_ops,
 	};
 
 	/* ADC Core */

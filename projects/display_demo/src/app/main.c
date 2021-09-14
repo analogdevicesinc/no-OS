@@ -72,7 +72,7 @@ int main(void)
 		.mode = SPI_MODE_0,
 		.chip_select = 10U,
 		.bit_order = SPI_BIT_ORDER_MSB_FIRST,
-		.platform_ops = &xil_platform_ops,
+		.platform_ops = &xil_spi_ops,
 		.extra = &spi_extra
 	};
 

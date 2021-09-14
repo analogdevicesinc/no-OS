@@ -73,7 +73,7 @@ enum xil_spi_type {
 /**
  * @struct xil_spi_init_param
  * @brief Structure holding the initialization parameters for Xilinx platform
- * specific SPI parameters when using xil_platform_ops.
+ * specific SPI parameters when using xil_spi_ops.
  */
 typedef struct xil_spi_init_param {
 	/** Xilinx architecture */
@@ -105,26 +105,11 @@ extern const struct spi_platform_ops spi_eng_platform_ops;
 /**
  * @brief Xilinx specific SPI platform ops structure
  */
-extern const struct spi_platform_ops xil_platform_ops;
+extern const struct spi_platform_ops xil_spi_ops;
 
 /**
  * @brief Xilinx SPI PS register functions. No extra param needed
  */
 extern const struct spi_platform_ops xil_spi_reg_ops_pl;
-
-/******************************************************************************/
-/************************ Functions Declarations ******************************/
-/******************************************************************************/
-
-/* Initialize the SPI communication peripheral. */
-int32_t xil_spi_init(struct spi_desc **desc,
-		     const struct spi_init_param *param);
-
-/* Free the resources allocated by spi_init(). */
-int32_t xil_spi_remove(struct spi_desc *desc);
-
-/* Write and read data to/from SPI. */
-int32_t xil_spi_write_and_read(struct spi_desc *desc, uint8_t *data,
-			       uint16_t bytes_number);
 
 #endif // SPI_EXTRA_H_

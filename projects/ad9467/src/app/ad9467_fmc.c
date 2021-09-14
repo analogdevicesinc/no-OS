@@ -124,7 +124,7 @@ int main()
 	struct spi_init_param ad9467_spi_param = {
 		.max_speed_hz = 2000000u,
 		.chip_select = 0,
-		.platform_ops = &xil_platform_ops,
+		.platform_ops = &xil_spi_ops,
 		.mode = SPI_MODE_0
 	};
 
@@ -142,7 +142,7 @@ int main()
 		.device_id = SPI_DEVICE_ID,
 		.max_speed_hz = 2000000u,
 		.chip_select = 1,
-		.platform_ops = &xil_platform_ops,
+		.platform_ops = &xil_spi_ops,
 		.mode = SPI_MODE_0
 	};
 	ad9517_spi_param.extra = &xil_spi_param;

@@ -122,7 +122,7 @@ int32_t no_os_hw_open(void *devHalCfg)
 		.max_speed_hz = 20000000,
 		.mode = SPI_MODE_0,
 		.chip_select = SPI_CS,
-		.platform_ops = &xil_platform_ops,
+		.platform_ops = &xil_spi_ops,
 		.extra = &sip_extra
 	};
 	ret = spi_init(&phal->spi, &sip);

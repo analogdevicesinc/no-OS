@@ -69,16 +69,6 @@
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
 
-
-/**
- * @brief Xilinx platform specific SPI platform ops structure
- */
-const struct spi_platform_ops xil_platform_ops = {
-	.init = &xil_spi_init,
-	.write_and_read = &xil_spi_write_and_read,
-	.remove = &xil_spi_remove
-};
-
 /**
  * @brief Initialize the hardware SPI peripherial
  *
@@ -461,3 +451,12 @@ error:
 
 	return ret;
 }
+
+/**
+ * @brief Xilinx platform specific SPI platform ops structure
+ */
+const struct spi_platform_ops xil_spi_ops = {
+	.init = &xil_spi_init,
+	.write_and_read = &xil_spi_write_and_read,
+	.remove = &xil_spi_remove
+};

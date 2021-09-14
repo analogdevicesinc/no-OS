@@ -173,7 +173,7 @@ int main(void)
 			.max_speed_hz = 1000000,
 			.chip_select = SPI_AD7768_CS,
 			.mode = SPI_MODE_0,
-			.platform_ops = &xil_platform_ops,
+			.platform_ops = &xil_spi_ops,
 			.extra = &xil_spi_initial
 		},
 		/* GPIO */
