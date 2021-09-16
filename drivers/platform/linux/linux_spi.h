@@ -43,6 +43,6 @@
 /**
  * @brief Linux specific SPI platform ops structure
  */
-extern const struct spi_platform_ops linux_spi_platform_ops;
+extern const struct spi_platform_ops linux_spi_ops;
 
 #endif // LINUX_SPI_H_
