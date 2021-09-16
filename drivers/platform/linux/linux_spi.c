@@ -223,7 +223,7 @@ static int32_t linux_spi_transfer(struct spi_desc *desc,
 /**
  * @brief Linux platform specific SPI platform ops structure
  */
-const struct spi_platform_ops linux_spi_platform_ops = {
+const struct spi_platform_ops linux_spi_ops = {
 	.init = &linux_spi_init,
 	.write_and_read = &linux_spi_write_and_read,
 	.remove = &linux_spi_remove,
