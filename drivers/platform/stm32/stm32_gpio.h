@@ -41,6 +41,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include "gpio.h"
 #include "stm32_hal.h"
 
 /**
@@ -56,6 +57,8 @@ typedef struct stm32_gpio_init_param {
 	uint32_t pull;
 	/** Speed grade */
 	uint32_t speed;
+	/** Alternate functionality */
+	uint32_t alternate;
 } stm32_gpio_init_param;
 
 /**
@@ -71,6 +74,8 @@ typedef struct stm32_gpio_desc {
 	uint32_t pull;
 	/** Speed grade */
 	uint32_t speed;
+	/** Alternate functionality */
+	uint32_t alternate;
 } stm32_gpio_desc;
 
 /**

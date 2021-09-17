@@ -121,12 +121,14 @@ static int32_t _gpio_init(struct gpio_desc *desc,
 	extra->mode = pextra->mode;
 	extra->pull = pextra->pull;
 	extra->speed = pextra->speed;
+	extra->alternate = pextra->alternate;
 
 	/* configure gpio with user configuration */
 	gis.Pin = BIT(param->number);
 	gis.Mode = extra->mode;
 	gis.Pull = extra->pull;
 	gis.Speed = extra->speed;
+	gis.Alternate = extra->alternate;
 	HAL_GPIO_Init(extra->port, &gis);
 
 	return ret;
