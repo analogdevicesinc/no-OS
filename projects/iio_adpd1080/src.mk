@@ -12,5 +12,7 @@ SRCS +=	$(DRIVERS)/platform/$(PLATFORM)/$(PLATFORM)_irq.c
 INCS += $(INCLUDE)/irq.h
 INCS += $(DRIVERS)/platform/$(PLATFORM)/irq_extra.h
 
+SRCS += $(DRIVERS)/spi/spi.c
+
 TINYIIOD=y
 

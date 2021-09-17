@@ -76,7 +76,7 @@ int main()
 		.extra = &spi_param,
 		.max_speed_hz = 1000000,
 		.mode = SPI_MODE_3,
-		.platform_ops = NULL
+		.platform_ops = &aducm_spi_ops
 	};
 
 	struct ada4250_init_param ada4250_param = {
