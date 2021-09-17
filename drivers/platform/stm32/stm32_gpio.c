@@ -108,6 +108,10 @@ static int32_t _gpio_init(struct gpio_desc *desc,
 	else if (pextra->port == GPIOH)
 		__HAL_RCC_GPIOH_CLK_ENABLE();
 #endif
+#ifdef GPIOJ
+	else if (pextra->port == GPIOJ)
+		__HAL_RCC_GPIOJ_CLK_ENABLE();
+#endif
 	else
 		return -EINVAL;
 
