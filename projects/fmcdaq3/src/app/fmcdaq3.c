@@ -204,9 +204,9 @@ int main(void)
 		.device_id = GPIO_DEVICE_ID
 	};
 	dac_txen_param.extra = &altera_gpio_param;
-	dac_txen_param.platform_ops = &altera_gpio_platform_ops;
+	dac_txen_param.platform_ops = &altera_gpio_ops;
 	adc_pd_param.extra = &altera_gpio_param;
-	adc_pd_param.platform_ops = &altera_gpio_platform_ops;
+	adc_pd_param.platform_ops = &altera_gpio_ops;
 #endif
 
 	gpio_desc *dac_txen;
