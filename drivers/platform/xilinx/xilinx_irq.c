@@ -61,21 +61,6 @@
 /******************************************************************************/
 
 /**
- * @brief Xilinx platform specific IRQ platform ops structure
- */
-const struct irq_platform_ops xil_irq_platform_ops = {
-	.init = &xil_irq_ctrl_init,
-	.register_callback = &xil_irq_register_callback,
-	.unregister = &xil_irq_unregister,
-	.global_enable = &xil_irq_global_enable,
-	.global_disable = &xil_irq_global_disable,
-	.trigger_level_set = &xil_irq_trigger_level_set,
-	.enable = &xil_irq_enable,
-	.disable = &xil_irq_disable,
-	.remove = &xil_irq_ctrl_remove
-};
-
-/**
  * @brief Initialize the IRQ interrupts.
  * @param desc - The IRQ controller descriptor.
  * @param param - The structure that contains the IRQ parameters.
@@ -379,3 +364,18 @@ int32_t xil_irq_ctrl_remove(struct irq_ctrl_desc *desc)
 
 	return SUCCESS;
 }
+
+/**
+ * @brief Xilinx platform specific IRQ platform ops structure
+ */
+const struct irq_platform_ops xil_irq_ops = {
+	.init = &xil_irq_ctrl_init,
+	.register_callback = &xil_irq_register_callback,
+	.unregister = &xil_irq_unregister,
+	.global_enable = &xil_irq_global_enable,
+	.global_disable = &xil_irq_global_disable,
+	.trigger_level_set = &xil_irq_trigger_level_set,
+	.enable = &xil_irq_enable,
+	.disable = &xil_irq_disable,
+	.remove = &xil_irq_ctrl_remove
+};
