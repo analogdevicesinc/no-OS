@@ -337,7 +337,7 @@ int main(void)
 #ifndef ALTERA_PLATFORM
 	gpio_init_plddrbypass.platform_ops = &xil_gpio_ops;
 #else
-	gpio_init_plddrbypass.platform_ops = &altera_gpio_platform_ops;
+	gpio_init_plddrbypass.platform_ops = &altera_gpio_ops;
 #endif
 	gpio_init_plddrbypass.number = DAC_FIFO_BYPASS_GPIO;
 	status = gpio_get(&gpio_plddrbypass, &gpio_init_plddrbypass);

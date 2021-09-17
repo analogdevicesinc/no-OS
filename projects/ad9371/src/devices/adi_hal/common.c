@@ -90,11 +90,11 @@ int32_t platform_init(void)
 	spi_param.device_id = SPI_DEVICE_ID;
 	spi_param.platform_ops = &altera_spi_ops;
 	spi_param.extra = &altera_spi_param;
-	gpio_ad9371_resetb_param.platform_ops = &altera_gpio_platform_ops;
+	gpio_ad9371_resetb_param.platform_ops = &altera_gpio_ops;
 	gpio_ad9371_resetb_param.extra = &altera_gpio_param;
-	gpio_ad9528_resetb_param.platform_ops = &altera_gpio_platform_ops;
+	gpio_ad9528_resetb_param.platform_ops = &altera_gpio_ops;
 	gpio_ad9528_resetb_param.extra = &altera_gpio_param;
-	gpio_ad9528_sysref_param.platform_ops = &altera_gpio_platform_ops;
+	gpio_ad9528_sysref_param.platform_ops = &altera_gpio_ops;
 	gpio_ad9528_sysref_param.extra = &altera_gpio_param;
 #endif
 	status = gpio_get(&gpio_ad9371_resetb, &gpio_ad9371_resetb_param);

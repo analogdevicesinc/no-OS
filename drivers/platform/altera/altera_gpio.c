@@ -48,20 +48,6 @@
 #include "error.h"
 #include "parameters.h"
 
-/**
- * @brief Altera platform specific GPIO platform ops structure
- */
-const struct gpio_platform_ops altera_gpio_platform_ops = {
-	.gpio_ops_get = &altera_gpio_get,
-	.gpio_ops_get_optional = &altera_gpio_get_optional,
-	.gpio_ops_remove = &altera_gpio_remove,
-	.gpio_ops_direction_input = &altera_gpio_direction_input,
-	.gpio_ops_direction_output = &altera_gpio_direction_output,
-	.gpio_ops_get_direction = &altera_gpio_get_direction,
-	.gpio_ops_set_value = &altera_gpio_set_value,
-	.gpio_ops_get_value = &altera_gpio_get_value,
-};
-
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
@@ -265,3 +251,17 @@ int32_t altera_gpio_get_value(struct gpio_desc *desc,
 
 	return SUCCESS;
 }
+
+/**
+ * @brief Altera platform specific GPIO platform ops structure
+ */
+const struct gpio_platform_ops altera_gpio_ops = {
+	.gpio_ops_get = &altera_gpio_get,
+	.gpio_ops_get_optional = &altera_gpio_get_optional,
+	.gpio_ops_remove = &altera_gpio_remove,
+	.gpio_ops_direction_input = &altera_gpio_direction_input,
+	.gpio_ops_direction_output = &altera_gpio_direction_output,
+	.gpio_ops_get_direction = &altera_gpio_get_direction,
+	.gpio_ops_set_value = &altera_gpio_set_value,
+	.gpio_ops_get_value = &altera_gpio_get_value,
+};
