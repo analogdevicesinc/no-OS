@@ -210,7 +210,7 @@ int main(void)
 		.extra = &spi_param,
 		.max_speed_hz = 900000,
 		.mode = SPI_MODE_3,
-		.platform_ops = NULL
+		.platform_ops = &aducm_spi_ops
 	};
 
 	/* Initialization for Sync pin GPIO. */

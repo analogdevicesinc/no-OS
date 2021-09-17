@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   aducm3029/spi.c
+ *   @file   aducm3029/aducm3029_spi.c
  *   @brief  Implementation of SPI driver for ADuCM302x
  *   @author Mihail Chindris (mihail.chindris@analog.com)
 ********************************************************************************
@@ -121,8 +121,8 @@ static int32_t config_device(struct aducm_device_desc *dev,
  * @param param - The structure that contains the SPI parameters.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t spi_init(struct spi_desc **desc,
-		 const struct spi_init_param *param)
+int32_t aducm3029_spi_init(struct spi_desc **desc,
+			   const struct spi_init_param *param)
 {
 	struct spi_desc			*spi_desc;
 	struct aducm_spi_desc		*aducm_desc;
@@ -191,7 +191,7 @@ failure:
  * @param desc - The SPI descriptor.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t spi_remove(struct spi_desc *desc)
+int32_t aducm3029_spi_remove(struct spi_desc *desc)
 {
 	struct aducm_spi_desc *aducm_desc;
 
@@ -222,9 +222,9 @@ int32_t spi_remove(struct spi_desc *desc)
  * @param bytes_number - Number of bytes to write/read.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t spi_write_and_read(struct spi_desc *desc,
-			   uint8_t *data,
-			   uint16_t bytes_number)
+int32_t aducm3029_spi_write_and_read(struct spi_desc *desc,
+				     uint8_t *data,
+				     uint16_t bytes_number)
 {
 	struct aducm_spi_desc		*aducm_desc;
 	ADI_SPI_TRANSCEIVER		spi_trans;
@@ -279,3 +279,11 @@ int32_t spi_write_and_read(struct spi_desc *desc,
 	return SUCCESS;
 }
 
+/**
+ * @brief ADuCM3029 platform specific SPI platform ops structure
+ */
+const struct spi_platform_ops aducm_spi_ops = {
+	.init = &aducm3029_spi_init,
+	.write_and_read = &aducm3029_spi_write_and_read,
+	.remove = &aducm3029_spi_remove
+};

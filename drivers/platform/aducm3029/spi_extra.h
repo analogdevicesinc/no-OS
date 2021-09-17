@@ -105,6 +105,11 @@ struct aducm_spi_init_param {
 };
 
 /**
+ * @brief ADuCM3029 specific SPI platform ops structure
+ */
+extern const struct spi_platform_ops aducm_spi_ops;
+
+/**
  * @struct aducm_spi_desc
  * @brief SPI specific descriptor for the ADuCM3029. The structure is available
  * in the extra parameter from spi_desc.
