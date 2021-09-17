@@ -87,20 +87,6 @@ static const uint32_t id_map_event[NB_INTERRUPTS] = {
  */
 static uint32_t		initialized;
 
-/**
- * @brief Aducm3029 platform specific IRQ platform ops structure
- */
-const struct irq_platform_ops aducm3029_irq_platform_ops = {
-	.init = &aducm3029_irq_ctrl_init,
-	.register_callback = &aducm3029_irq_register_callback,
-	.unregister = &aducm3029_irq_unregister,
-	.global_enable = &aducm3029_irq_global_enable,
-	.global_disable = &aducm3029_irq_global_disable,
-	.enable = &aducm3029_irq_enable,
-	.disable = &aducm3029_irq_disable,
-	.remove = &aducm3029_irq_ctrl_remove
-};
-
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
@@ -475,3 +461,17 @@ int32_t aducm3029_irq_disable(struct irq_ctrl_desc *desc, uint32_t irq_id)
 
 	return SUCCESS;
 }
+
+/**
+ * @brief Aducm3029 platform specific IRQ platform ops structure
+ */
+const struct irq_platform_ops aducm_irq_ops = {
+	.init = &aducm3029_irq_ctrl_init,
+	.register_callback = &aducm3029_irq_register_callback,
+	.unregister = &aducm3029_irq_unregister,
+	.global_enable = &aducm3029_irq_global_enable,
+	.global_disable = &aducm3029_irq_global_disable,
+	.enable = &aducm3029_irq_enable,
+	.disable = &aducm3029_irq_disable,
+	.remove = &aducm3029_irq_ctrl_remove
+};

@@ -170,42 +170,6 @@ struct aducm_irq_ctrl_desc {
 /**
  * @brief ADuCM3029 specific IRQ platform ops structure
  */
-extern const struct irq_platform_ops aducm3029_irq_platform_ops;
-
-/******************************************************************************/
-/************************ Functions Declarations ******************************/
-/******************************************************************************/
-
-/* Initialize a interrupt controller peripheral. */
-int32_t aducm3029_irq_ctrl_init(struct irq_ctrl_desc **desc,
-				const struct irq_init_param *param);
-
-/* Free the resources allocated by irq_ctrl_init(). */
-int32_t aducm3029_irq_ctrl_remove(struct irq_ctrl_desc *desc);
-
-/* Register a callback to handle the irq events */
-int32_t aducm3029_irq_register_callback(struct irq_ctrl_desc *desc,
-					uint32_t irq_id,
-					struct callback_desc *callback_desc);
-
-/* Unregisters a generic IRQ handling function */
-int32_t aducm3029_irq_unregister(struct irq_ctrl_desc *desc, uint32_t irq_id);
-
-/* Global interrupt enable */
-int32_t aducm3029_irq_global_enable(struct irq_ctrl_desc *desc);
-
-/* Global interrupt disable */
-int32_t aducm3029_irq_global_disable(struct irq_ctrl_desc *desc);
-
-/* Set interrupt trigger level. */
-int32_t aducm3029_irq_trigger_level_set(struct irq_ctrl_desc *desc,
-					uint32_t irq_id,
-					enum irq_trig_level trig);
-
-/* Enable specific interrupt */
-int32_t aducm3029_irq_enable(struct irq_ctrl_desc *desc, uint32_t irq_id);
-
-/* Disable specific interrupt */
-int32_t aducm3029_irq_disable(struct irq_ctrl_desc *desc, uint32_t irq_id);
+extern const struct irq_platform_ops aducm_irq_ops;
 
 #endif // IRQ_EXTRA_H_
