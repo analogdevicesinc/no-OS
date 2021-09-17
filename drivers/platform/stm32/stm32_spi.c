@@ -88,7 +88,7 @@ int32_t stm32_spi_init(struct spi_desc **desc,
 	csip_extra.speed = GPIO_SPEED_FREQ_LOW;
 	csip.number = param->chip_select;
 	csip.extra = &csip_extra;
-	csip.platform_ops = &stm32_gpio_platform_ops;
+	csip.platform_ops = &stm32_gpio_ops;
 	ret = gpio_get(&sdesc->chip_select, &csip);
 	if (ret < 0)
 		goto error;

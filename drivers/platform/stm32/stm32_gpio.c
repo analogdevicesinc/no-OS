@@ -42,20 +42,6 @@
 #include "gpio.h"
 #include "stm32_gpio.h"
 
-/**
- * @brief stm32 platform specific GPIO platform ops structure
- */
-const struct gpio_platform_ops stm32_gpio_platform_ops = {
-	.gpio_ops_get = &stm32_gpio_get,
-	.gpio_ops_get_optional = &stm32_gpio_get_optional,
-	.gpio_ops_remove = &stm32_gpio_remove,
-	.gpio_ops_direction_input = &stm32_gpio_direction_input,
-	.gpio_ops_direction_output = &stm32_gpio_direction_output,
-	.gpio_ops_get_direction = &stm32_gpio_get_direction,
-	.gpio_ops_set_value = &stm32_gpio_set_value,
-	.gpio_ops_get_value = &stm32_gpio_get_value,
-};
-
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
@@ -347,3 +333,17 @@ int32_t stm32_gpio_get_value(struct gpio_desc *desc,
 
 	return 0;
 }
+
+/**
+ * @brief stm32 platform specific GPIO platform ops structure
+ */
+const struct gpio_platform_ops stm32_gpio_ops = {
+	.gpio_ops_get = &stm32_gpio_get,
+	.gpio_ops_get_optional = &stm32_gpio_get_optional,
+	.gpio_ops_remove = &stm32_gpio_remove,
+	.gpio_ops_direction_input = &stm32_gpio_direction_input,
+	.gpio_ops_direction_output = &stm32_gpio_direction_output,
+	.gpio_ops_get_direction = &stm32_gpio_get_direction,
+	.gpio_ops_set_value = &stm32_gpio_set_value,
+	.gpio_ops_get_value = &stm32_gpio_get_value,
+};
