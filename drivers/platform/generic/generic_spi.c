@@ -110,7 +110,7 @@ int32_t generic_spi_write_and_read(struct spi_desc *desc,
 /**
  * @brief Generic platform SPI ops
  */
-const struct spi_platform_ops generic_spi_platform_ops = {
+const struct spi_platform_ops generic_spi_ops = {
 	.init = &generic_spi_init,
 	.write_and_read = &generic_spi_write_and_read,
 	.remove = &generic_spi_remove
