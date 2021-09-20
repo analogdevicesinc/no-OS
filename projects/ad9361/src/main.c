@@ -110,7 +110,7 @@ struct xil_gpio_init_param xil_gpio_param = {
 
 #ifdef GENERIC_PLATFORM
 #define GPIO_OPS	&generic_gpio_platform_ops
-#define SPI_OPS		&generic_spi_platform_ops
+#define SPI_OPS		&generic_spi_ops
 #define GPIO_PARAM	NULL
 #define SPI_PARAM	NULL
 #endif
