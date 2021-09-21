@@ -25,11 +25,12 @@ LIBRARIES += iio
 
 SRCS += $(PLATFORM_DRIVERS)/uart.c					\
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c				\
-	$(PLATFORM_DRIVERS)/gpio.c					\
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_spi.c				\
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_gpio.c				\
 	$(PLATFORM_DRIVERS)/delay.c					\
 	$(PLATFORM_DRIVERS)/timer.c					\
 	$(DRIVERS)/irq/irq.c						\
+	$(DRIVERS)/gpio/gpio.c						\
 	$(NO-OS)/util/list.c						\
 	$(NO-OS)/util/fifo.c						\
 	$(NO-OS)/util/util.c						\
@@ -50,4 +51,5 @@ INCS += $(INCLUDE)/fifo.h						\
 	$(PLATFORM_DRIVERS)/irq_extra.h					\
 	$(PLATFORM_DRIVERS)/rtc_extra.h					\
 	$(PLATFORM_DRIVERS)/timer_extra.h				\
-	$(PLATFORM_DRIVERS)/uart_extra.h				
+	$(PLATFORM_DRIVERS)/uart_extra.h				\
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_gpio.h		

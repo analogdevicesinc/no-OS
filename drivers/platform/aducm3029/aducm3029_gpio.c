@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   aducm3029/gpio.c
+ *   @file   aducm3029/aducm3029_gpio.c
  *   @brief  Implementation of GPIO driver for ADuCM302x
  *   @author Mihail Chindris (mihail.chindris@analog.com)
 ********************************************************************************
@@ -45,6 +45,7 @@
 #include "gpio.h"
 #include <drivers/gpio/adi_gpio.h>
 #include <stdlib.h>
+#include "aducm3029_gpio.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -70,7 +71,8 @@ static uint8_t nb_gpio = 0;
  * @param param - Parameter describing the GPIO to be initialized
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
  */
-int32_t gpio_get(struct gpio_desc **desc, const struct gpio_init_param *param)
+int32_t aducm3029_gpio_get(struct gpio_desc **desc,
+			   const struct gpio_init_param *param)
 {
 	if (!desc || !param)
 		return FAILURE;
@@ -101,8 +103,8 @@ int32_t gpio_get(struct gpio_desc **desc, const struct gpio_init_param *param)
  * @param param - GPIO Initialization parameters.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t gpio_get_optional(struct gpio_desc **desc,
-			  const struct gpio_init_param *param)
+int32_t aducm3029_gpio_get_optional(struct gpio_desc **desc,
+				    const struct gpio_init_param *param)
 {
 	if(param == NULL) {
 		*desc = NULL;
@@ -117,7 +119,7 @@ int32_t gpio_get_optional(struct gpio_desc **desc,
  * @param desc - The GPIO descriptor.
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
  */
-int32_t gpio_remove(struct gpio_desc *desc)
+int32_t aducm3029_gpio_remove(struct gpio_desc *desc)
 {
 	if (!desc || !nb_gpio)
 		return FAILURE;
@@ -137,7 +139,7 @@ int32_t gpio_remove(struct gpio_desc *desc)
  * @param desc - The GPIO descriptor.
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
  */
-int32_t gpio_direction_input(struct gpio_desc *desc)
+int32_t aducm3029_gpio_direction_input(struct gpio_desc *desc)
 {
 	if (!desc || !nb_gpio)
 		return FAILURE;
@@ -156,7 +158,7 @@ int32_t gpio_direction_input(struct gpio_desc *desc)
  * @param value - The value. \ref GPIO_HIGH or \ref GPIO_LOW
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
  */
-int32_t gpio_direction_output(struct gpio_desc *desc, uint8_t value)
+int32_t aducm3029_gpio_direction_output(struct gpio_desc *desc, uint8_t value)
 {
 	ADI_GPIO_RESULT ret;
 
@@ -187,7 +189,7 @@ int32_t gpio_direction_output(struct gpio_desc *desc, uint8_t value)
  * GPIO_OUT or \ref GPIO_IN
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
  */
-int32_t gpio_get_direction(struct gpio_desc *desc, uint8_t *direction)
+int32_t aducm3029_gpio_get_direction(struct gpio_desc *desc, uint8_t *direction)
 {
 	uint16_t pins;
 
@@ -213,7 +215,7 @@ int32_t gpio_get_direction(struct gpio_desc *desc, uint8_t *direction)
  *                buffers.
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
  */
-int32_t gpio_set_value(struct gpio_desc *desc, uint8_t value)
+int32_t aducm3029_gpio_set_value(struct gpio_desc *desc, uint8_t value)
 {
 	ADI_GPIO_RESULT ret;
 
@@ -253,7 +255,7 @@ int32_t gpio_set_value(struct gpio_desc *desc, uint8_t value)
  * GPIO_HIGH or \ref GPIO_LOW
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
  */
-int32_t gpio_get_value(struct gpio_desc *desc, uint8_t *value)
+int32_t aducm3029_gpio_get_value(struct gpio_desc *desc, uint8_t *value)
 {
 	uint16_t pins;
 	uint16_t port;
@@ -279,3 +281,17 @@ int32_t gpio_get_value(struct gpio_desc *desc, uint8_t *value)
 
 	return SUCCESS;
 }
+
+/**
+ * @brief ADuCM3029 platform specific GPIO platform ops structure
+ */
+const struct gpio_platform_ops aducm_gpio_ops = {
+	.gpio_ops_get = &aducm3029_gpio_get,
+	.gpio_ops_get_optional = &aducm3029_gpio_get_optional,
+	.gpio_ops_remove = &aducm3029_gpio_remove,
+	.gpio_ops_direction_input = &aducm3029_gpio_direction_input,
+	.gpio_ops_direction_output = &aducm3029_gpio_direction_output,
+	.gpio_ops_get_direction = &aducm3029_gpio_get_direction,
+	.gpio_ops_set_value = &aducm3029_gpio_set_value,
+	.gpio_ops_get_value = &aducm3029_gpio_get_value
+};

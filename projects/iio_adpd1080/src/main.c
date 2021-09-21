@@ -46,6 +46,7 @@
 #include "util.h"
 #include "iio_adpd188.h"
 #include "iio_app.h"
+#include "aducm3029_gpio.h"
 
 #define MAX_SIZE_BASE_ADDR		1024
 
@@ -79,13 +80,13 @@ int main(void)
 		.drv_init_param.gpio0_init =
 		{
 			.number = 0,
-			.platform_ops = NULL,
+			.platform_ops = &aducm_gpio_ops,
 			.extra = 0
 		},
 		.drv_init_param.gpio1_init =
 		{
 			.number = 0,
-			.platform_ops = NULL,
+			.platform_ops = &aducm_gpio_ops,
 			.extra = 0
 		}
 	};
