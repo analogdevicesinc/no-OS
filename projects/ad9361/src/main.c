@@ -118,7 +118,7 @@ struct xil_gpio_init_param xil_gpio_param = {
 #ifdef XILINX_PLATFORM
 #endif
 #ifdef LINUX_PLATFORM
-#define GPIO_OPS	&linux_gpio_platform_ops
+#define GPIO_OPS	&linux_gpio_ops
 #define SPI_OPS		&linux_spi_ops
 #define GPIO_PARAM	NULL
 #define SPI_PARAM	NULL
