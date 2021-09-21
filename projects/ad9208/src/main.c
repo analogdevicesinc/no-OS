@@ -332,7 +332,7 @@ int main(void)
 		.spi_init = &ad9208_0_spi_param,
 		.gpio_powerdown = {
 			.number = 54 + 34, /* adc0_pwdn */
-			.platform_ops = &xil_gpio_platform_ops,
+			.platform_ops = &xil_gpio_ops,
 			.extra = &xilinx_gpio_init_param
 		},
 		.sampling_frequency_hz = 3000000000,
@@ -376,7 +376,7 @@ int main(void)
 		.spi_init = &ad9208_1_spi_param,
 		.gpio_powerdown = {
 			.number = 54 + 33, /* adc1_pwdn */
-			.platform_ops = &xil_gpio_platform_ops,
+			.platform_ops = &xil_gpio_ops,
 			.extra = &xilinx_gpio_init_param
 		},
 		.sampling_frequency_hz = 3000000000,

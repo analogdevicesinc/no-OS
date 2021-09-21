@@ -89,7 +89,7 @@ struct xil_gpio_init_param xil_gpio_param = {
 };
 struct gpio_init_param ad7616_gpio_reset = {
 	.number = GPIO_ADC_RESET_N,
-	.platform_ops = &xil_gpio_platform_ops,
+	.platform_ops = &xil_gpio_ops,
 	.extra = &xil_gpio_param
 };
 

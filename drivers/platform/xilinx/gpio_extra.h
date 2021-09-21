@@ -90,40 +90,6 @@ typedef struct xil_gpio_desc {
 /**
  * @brief Xilinx platform specific gpio platform ops structure
  */
-extern const struct gpio_platform_ops xil_gpio_platform_ops;
-
-/******************************************************************************/
-/************************ Functions Declarations ******************************/
-/******************************************************************************/
-
-/* Obtain the GPIO decriptor. */
-int32_t xil_gpio_get(struct gpio_desc **desc,
-		     const struct gpio_init_param *param);
-
-/* Obtain optional GPIO descriptor. */
-int32_t xil_gpio_get_optional(struct gpio_desc **desc,
-			      const struct gpio_init_param *param);
-
-/* Free the resources allocated by gpio_get() */
-int32_t xil_gpio_remove(struct gpio_desc *desc);
-
-/* Enable the input direction of the specified GPIO. */
-int32_t xil_gpio_direction_input(struct gpio_desc *desc);
-
-/* Enable the output direction of the specified GPIO. */
-int32_t xil_gpio_direction_output(struct gpio_desc *desc,
-				  uint8_t value);
-
-/* Get the direction of the specified GPIO. */
-int32_t xil_gpio_get_direction(struct gpio_desc *desc,
-			       uint8_t *direction);
-
-/* Set the value of the specified GPIO. */
-int32_t xil_gpio_set_value(struct gpio_desc *desc,
-			   uint8_t value);
-
-/* Get the value of the specified GPIO. */
-int32_t xil_gpio_get_value(struct gpio_desc *desc,
-			   uint8_t *value);
+extern const struct gpio_platform_ops xil_gpio_ops;
 
 #endif

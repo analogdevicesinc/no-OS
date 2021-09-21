@@ -65,7 +65,7 @@ void ad7768_evb_clear_status(struct xil_gpio_init_param *brd_gpio_init)
 	uint8_t i;
 	struct gpio_init_param temp_init = {
 		.number = 0,
-		.platform_ops = &xil_gpio_platform_ops,
+		.platform_ops = &xil_gpio_ops,
 		.extra = brd_gpio_init
 	};
 	struct gpio_desc *temp_desc;
@@ -93,7 +93,7 @@ uint8_t ad7768_evb_verify_status(struct xil_gpio_init_param *brd_gpio_init)
 	uint8_t status = 0;
 	struct gpio_init_param temp_init = {
 		.number = 0,
-		.platform_ops = &xil_gpio_platform_ops,
+		.platform_ops = &xil_gpio_ops,
 		.extra = brd_gpio_init
 	};
 	struct gpio_desc *temp_desc;
@@ -123,7 +123,7 @@ static int32_t ad7768_if_gpio_setup(uint32_t gpio_no, uint8_t gpio_val)
 	};
 	struct gpio_init_param temp_init = {
 		.number = gpio_no,
-		.platform_ops = &xil_gpio_platform_ops,
+		.platform_ops = &xil_gpio_ops,
 		.extra = &ps_gpio_init
 	};
 	struct gpio_desc *temp_desc;
@@ -179,27 +179,27 @@ int main(void)
 		/* GPIO */
 		.gpio_reset = {
 			.number = GPIO_RESET_N,
-			.platform_ops = &xil_gpio_platform_ops,
+			.platform_ops = &xil_gpio_ops,
 			.extra = &xil_gpio_initial
 		},
 		.gpio_mode0 = {
 			.number = GPIO_MODE_0_GPIO_0,
-			.platform_ops = &xil_gpio_platform_ops,
+			.platform_ops = &xil_gpio_ops,
 			.extra = &xil_gpio_initial
 		},
 		.gpio_mode1 = {
 			.number = GPIO_MODE_1_GPIO_1,
-			.platform_ops = &xil_gpio_platform_ops,
+			.platform_ops = &xil_gpio_ops,
 			.extra = &xil_gpio_initial
 		},
 		.gpio_mode2 = {
 			.number = GPIO_MODE_2_GPIO_2,
-			.platform_ops = &xil_gpio_platform_ops,
+			.platform_ops = &xil_gpio_ops,
 			.extra = &xil_gpio_initial
 		},
 		.gpio_mode3 = {
 			.number = GPIO_MODE_3_GPIO_3,
-			.platform_ops = &xil_gpio_platform_ops,
+			.platform_ops = &xil_gpio_ops,
 			.extra = &xil_gpio_initial
 		},
 		.gpio_reset_value = GPIO_HIGH,

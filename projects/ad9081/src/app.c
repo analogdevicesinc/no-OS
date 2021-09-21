@@ -79,7 +79,7 @@ int main(void)
 	};
 	struct gpio_init_param	gpio_phy_resetb = {
 		.number = PHY_RESET,
-		.platform_ops = &xil_gpio_platform_ops,
+		.platform_ops = &xil_gpio_ops,
 		.extra = &xil_gpio_param
 	};
 	struct xil_spi_init_param xil_spi_param = {
@@ -217,7 +217,7 @@ int main(void)
 	};
 	struct gpio_init_param	ad9081_gpio0_mux_init = {
 		.number = AD9081_GPIO_0_MUX,
-		.platform_ops = &xil_gpio_platform_ops,
+		.platform_ops = &xil_gpio_ops,
 		.extra = &xil_gpio_param_2
 	};
 	gpio_desc *ad9081_gpio0_mux;

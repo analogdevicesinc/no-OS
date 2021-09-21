@@ -95,17 +95,17 @@ int main()
 
 	struct gpio_init_param adaq7980_pd_ldo = {
 		.number = GPIO_0,
-		.platform_ops = &xil_gpio_platform_ops,
+		.platform_ops = &xil_gpio_ops,
 		.extra = &gpio_extra_param
 	};
 	struct gpio_init_param adaq7980_ref_pd= {
 		.number = GPIO_REF_PUB,
-		.platform_ops = &xil_gpio_platform_ops,
+		.platform_ops = &xil_gpio_ops,
 		.extra = &gpio_extra_param
 	};
 	struct gpio_init_param adaq7980_rbuf_pd = {
 		.number = GPIO_RBUF_PUB,
-		.platform_ops = &xil_gpio_platform_ops,
+		.platform_ops = &xil_gpio_ops,
 		.extra = &gpio_extra_param
 	};
 

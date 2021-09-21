@@ -435,7 +435,7 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 #else
 	struct gpio_init_param clkchip_gpio_init_param = {
 		.number = CLK_RESETB_GPIO,
-		.platform_ops = &xil_gpio_platform_ops,
+		.platform_ops = &xil_gpio_ops,
 		.extra = &xil_gpio_param
 	};
 	ad9528_param.gpio_resetb = &clkchip_gpio_init_param;

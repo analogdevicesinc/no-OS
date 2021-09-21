@@ -146,17 +146,17 @@ int main(void)
 		.spi_init = &ad9172_spi_param,	/* spi_init_param */
 		.gpio_reset = {
 			.number = 54 + 0,
-			.platform_ops = &xil_gpio_platform_ops,
+			.platform_ops = &xil_gpio_ops,
 			.extra = &xilinx_gpio_init_param
 		},
 		.gpio_txen0 = {
 			.number = 54 + 22,
-			.platform_ops = &xil_gpio_platform_ops,
+			.platform_ops = &xil_gpio_ops,
 			.extra = &xilinx_gpio_init_param
 		},
 		.gpio_txen1 = {
 			.number = 54 + 23,
-			.platform_ops = &xil_gpio_platform_ops,
+			.platform_ops = &xil_gpio_ops,
 			.extra = &xilinx_gpio_init_param
 		},
 		.dac_rate_khz = 11796480,		/* or sample rate */

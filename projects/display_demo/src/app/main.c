@@ -83,26 +83,26 @@ int main(void)
 
 	struct gpio_init_param dc_pin = {
 		.number = DC_PIN,
-		.platform_ops = &xil_gpio_platform_ops,
+		.platform_ops = &xil_gpio_ops,
 		.extra = &extra
 	};
 	struct gpio_init_param reset_pin = {
 		.number = RST_PIN,
-		.platform_ops = &xil_gpio_platform_ops,
+		.platform_ops = &xil_gpio_ops,
 		.extra = &extra
 	};
 
 	struct gpio_desc *vbat;
 	struct gpio_init_param vbat_pin = {
 		.number = VBAT_PIN,
-		.platform_ops = &xil_gpio_platform_ops,
+		.platform_ops = &xil_gpio_ops,
 		.extra = &extra
 	};
 
 	struct gpio_desc *vdd;
 	struct gpio_init_param vdd_pin = {
 		.number = VDD_PIN,
-		.platform_ops = &xil_gpio_platform_ops,
+		.platform_ops = &xil_gpio_ops,
 		.extra = &extra
 	};
 

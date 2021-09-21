@@ -74,19 +74,19 @@ int main(void)
 
 	struct gpio_init_param gpio_ce_param = {
 		.number = GPIO_CE,
-		.platform_ops = &xil_gpio_platform_ops,
+		.platform_ops = &xil_gpio_ops,
 		.extra = &xil_gpio_init
 	};
 
 	struct gpio_init_param gpio_enclk1_param = {
 		.number = GPIO_ENCLK1,
-		.platform_ops = &xil_gpio_platform_ops,
+		.platform_ops = &xil_gpio_ops,
 		.extra = &xil_gpio_init
 	};
 
 	struct gpio_init_param gpio_enclk2_param = {
 		.number = GPIO_ENCLK2,
-		.platform_ops = &xil_gpio_platform_ops,
+		.platform_ops = &xil_gpio_ops,
 		.extra = &xil_gpio_init
 	};
 

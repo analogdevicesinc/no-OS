@@ -126,19 +126,19 @@ static int fmcdaq2_gpio_init(struct fmcdaq2_dev *dev)
 	/* Initialize GPIO structures */
 	struct gpio_init_param gpio_clkd_sync_param = {
 		.number = GPIO_CLKD_SYNC,
-		.platform_ops = &xil_gpio_platform_ops
+		.platform_ops = &xil_gpio_ops
 	};
 	struct gpio_init_param gpio_dac_reset_param = {
 		.number = GPIO_DAC_RESET,
-		.platform_ops = &xil_gpio_platform_ops
+		.platform_ops = &xil_gpio_ops
 	};
 	struct gpio_init_param gpio_dac_txen_param = {
 		.number = GPIO_DAC_TXEN,
-		.platform_ops = &xil_gpio_platform_ops
+		.platform_ops = &xil_gpio_ops
 	};
 	struct gpio_init_param gpio_adc_pd_param = {
 		.number = GPIO_ADC_PD,
-		.platform_ops = &xil_gpio_platform_ops
+		.platform_ops = &xil_gpio_ops
 	};
 
 #ifndef ALTERA_PLATFORM

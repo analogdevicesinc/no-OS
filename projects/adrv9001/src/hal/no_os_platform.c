@@ -95,7 +95,7 @@ int32_t no_os_hw_open(void *devHalCfg)
 	/* Reset GPIO configuration */
 	gip_gpio_reset.number = GPIO_RESET;
 	gip_gpio_reset.extra = &gip_extra;
-	gip_gpio_reset.platform_ops = &xil_gpio_platform_ops;
+	gip_gpio_reset.platform_ops = &xil_gpio_ops;
 	ret = gpio_get(&phal->gpio_reset_n, &gip_gpio_reset);
 	if (ret)
 		return ret;
@@ -108,7 +108,7 @@ int32_t no_os_hw_open(void *devHalCfg)
 	/* SSI Sync GPIO configuration */
 	gip_gpio_ssi_sync.number = GPIO_SSI_SYNC;
 	gip_gpio_ssi_sync.extra = &gip_extra;
-	gip_gpio_ssi_sync.platform_ops = &xil_gpio_platform_ops;
+	gip_gpio_ssi_sync.platform_ops = &xil_gpio_ops;
 	ret = gpio_get(&phal->gpio_ssi_sync, &gip_gpio_ssi_sync);
 	if (ret < 0)
 		return ret;
