@@ -70,11 +70,11 @@ int32_t platform_init(void)
 	spi_param.device_id = SPI_DEVICE_ID;
 	spi_param.extra = &xilinx_spi_param;
 	spi_param.platform_ops = &xil_spi_ops;
-	gpio_ad9371_resetb_param.platform_ops = &xil_gpio_platform_ops;
+	gpio_ad9371_resetb_param.platform_ops = &xil_gpio_ops;
 	gpio_ad9371_resetb_param.extra = &xilinx_gpio_param;
-	gpio_ad9528_resetb_param.platform_ops = &xil_gpio_platform_ops;
+	gpio_ad9528_resetb_param.platform_ops = &xil_gpio_ops;
 	gpio_ad9528_resetb_param.extra = &xilinx_gpio_param;
-	gpio_ad9528_sysref_param.platform_ops = &xil_gpio_platform_ops;
+	gpio_ad9528_sysref_param.platform_ops = &xil_gpio_ops;
 	gpio_ad9528_sysref_param.extra = &xilinx_gpio_param;
 #else
 	struct altera_spi_init_param altera_spi_param = {

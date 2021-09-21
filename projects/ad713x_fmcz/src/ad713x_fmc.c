@@ -90,52 +90,52 @@ int main()
 	struct xil_gpio_init_param gpio_extra_param;
 	struct gpio_init_param ad7134_1_dclkio = {
 		.number = GPIO_DCLKIO_1,
-		.platform_ops = &xil_gpio_platform_ops,
+		.platform_ops = &xil_gpio_ops,
 		.extra = &gpio_extra_param
 	};
 	struct gpio_init_param ad7134_2_dclkio = {
 		.number = GPIO_DCLKIO_2,
-		.platform_ops = &xil_gpio_platform_ops,
+		.platform_ops = &xil_gpio_ops,
 		.extra = &gpio_extra_param
 	};
 	struct gpio_init_param ad7134_1_dclkmode = {
 		.number = GPIO_DCLKMODE,
-		.platform_ops = &xil_gpio_platform_ops,
+		.platform_ops = &xil_gpio_ops,
 		.extra = &gpio_extra_param
 	};
 	struct gpio_init_param ad7134_2_dclkmode = {
 		.number = GPIO_DCLKMODE,
-		.platform_ops = &xil_gpio_platform_ops,
+		.platform_ops = &xil_gpio_ops,
 		.extra = &gpio_extra_param
 	};
 	struct gpio_init_param ad7134_1_mode = {
 		.number = GPIO_MODE_1,
-		.platform_ops = &xil_gpio_platform_ops,
+		.platform_ops = &xil_gpio_ops,
 		.extra = &gpio_extra_param
 	};
 	struct gpio_init_param ad7134_2_mode = {
 		.number = GPIO_MODE_2,
-		.platform_ops = &xil_gpio_platform_ops,
+		.platform_ops = &xil_gpio_ops,
 		.extra = &gpio_extra_param
 	};
 	struct gpio_init_param ad7134_1_pnd = {
 		.number = GPIO_PDN_1,
-		.platform_ops = &xil_gpio_platform_ops,
+		.platform_ops = &xil_gpio_ops,
 		.extra = &gpio_extra_param
 	};
 	struct gpio_init_param ad7134_2_pnd = {
 		.number = GPIO_PDN_2,
-		.platform_ops = &xil_gpio_platform_ops,
+		.platform_ops = &xil_gpio_ops,
 		.extra = &gpio_extra_param
 	};
 	struct gpio_init_param ad7134_1_resetn = {
 		.number = GPIO_RESETN_1,
-		.platform_ops = &xil_gpio_platform_ops,
+		.platform_ops = &xil_gpio_ops,
 		.extra = &gpio_extra_param
 	};
 	struct gpio_init_param ad7134_2_resetn = {
 		.number = GPIO_RESETN_2,
-		.platform_ops = &xil_gpio_platform_ops,
+		.platform_ops = &xil_gpio_ops,
 		.extra = &gpio_extra_param
 	};
 	struct spi_desc *spi_eng_desc;

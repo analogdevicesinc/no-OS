@@ -169,12 +169,12 @@ int32_t app_ad9083_init(struct app_ad9083 **app,
 	};
 	struct gpio_init_param	gpio_phy_resetb = {
 		.number = AD9803_RSTB,
-		.platform_ops = &xil_gpio_platform_ops,
+		.platform_ops = &xil_gpio_ops,
 		.extra = &xil_gpio_param
 	};
 	struct gpio_init_param	gpio_phy_pd = {
 		.number = AD9803_PWDN,
-		.platform_ops = &xil_gpio_platform_ops,
+		.platform_ops = &xil_gpio_ops,
 		.extra = &xil_gpio_param
 	};
 

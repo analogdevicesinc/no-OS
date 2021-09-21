@@ -55,20 +55,6 @@
 #include "gpio.h"
 #include "gpio_extra.h"
 
-/**
- * @brief Xilinx platform specific GPIO platform ops structure
- */
-const struct gpio_platform_ops xil_gpio_platform_ops = {
-	.gpio_ops_get = &xil_gpio_get,
-	.gpio_ops_get_optional = &xil_gpio_get_optional,
-	.gpio_ops_remove = &xil_gpio_remove,
-	.gpio_ops_direction_input = &xil_gpio_direction_input,
-	.gpio_ops_direction_output = &xil_gpio_direction_output,
-	.gpio_ops_get_direction = &xil_gpio_get_direction,
-	.gpio_ops_set_value = &xil_gpio_set_value,
-	.gpio_ops_get_value = &xil_gpio_get_value,
-};
-
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
@@ -467,3 +453,17 @@ int32_t xil_gpio_get_value(struct gpio_desc *desc,
 
 	return SUCCESS;
 }
+
+/**
+ * @brief Xilinx platform specific GPIO platform ops structure
+ */
+const struct gpio_platform_ops xil_gpio_ops = {
+	.gpio_ops_get = &xil_gpio_get,
+	.gpio_ops_get_optional = &xil_gpio_get_optional,
+	.gpio_ops_remove = &xil_gpio_remove,
+	.gpio_ops_direction_input = &xil_gpio_direction_input,
+	.gpio_ops_direction_output = &xil_gpio_direction_output,
+	.gpio_ops_get_direction = &xil_gpio_get_direction,
+	.gpio_ops_set_value = &xil_gpio_set_value,
+	.gpio_ops_get_value = &xil_gpio_get_value,
+};

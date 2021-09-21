@@ -335,7 +335,7 @@ int main(void)
 #ifdef DAC_DMA_EXAMPLE
 	gpio_init_plddrbypass.extra = &hal_gpio_param;
 #ifndef ALTERA_PLATFORM
-	gpio_init_plddrbypass.platform_ops = &xil_gpio_platform_ops;
+	gpio_init_plddrbypass.platform_ops = &xil_gpio_ops;
 #else
 	gpio_init_plddrbypass.platform_ops = &altera_gpio_platform_ops;
 #endif

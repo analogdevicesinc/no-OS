@@ -122,7 +122,7 @@ int main(void)
 
 	struct gpio_init_param gpio_sysref_param = {
 		.number = GPIO_JESD204_SYSREF,
-		.platform_ops = &xil_gpio_platform_ops
+		.platform_ops = &xil_gpio_ops
 	};
 
 	struct xil_gpio_init_param xil_gpio_param = {

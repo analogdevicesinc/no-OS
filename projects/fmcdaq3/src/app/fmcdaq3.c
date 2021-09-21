@@ -194,9 +194,9 @@ int main(void)
 		.device_id = GPIO_DEVICE_ID
 	};
 	dac_txen_param.extra = &xil_gpio_param;
-	dac_txen_param.platform_ops = &xil_gpio_platform_ops;
+	dac_txen_param.platform_ops = &xil_gpio_ops;
 	adc_pd_param.extra = &xil_gpio_param;
-	adc_pd_param.platform_ops = &xil_gpio_platform_ops;
+	adc_pd_param.platform_ops = &xil_gpio_ops;
 #else
 	struct altera_gpio_init_param altera_gpio_param = {
 		.base_address = GPIO_BASEADDR,

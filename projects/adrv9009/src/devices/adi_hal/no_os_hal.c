@@ -69,13 +69,13 @@ adiHalErr_t ADIHAL_openHw(void *devHalInfo, uint32_t halTimeout_ms)
 
 	gpio_adrv_resetb_param.number = dev_hal_data->gpio_adrv_resetb_num;
 #ifndef ALTERA_PLATFORM
-	gpio_adrv_resetb_param.platform_ops = &xil_gpio_platform_ops;
+	gpio_adrv_resetb_param.platform_ops = &xil_gpio_ops;
 #else
 	gpio_adrv_resetb_param.platform_ops = &altera_gpio_platform_ops;
 #endif
 	gpio_adrv_sysref_req_param.number = SYSREF_REQ_GPIO;
 #ifndef ALTERA_PLATFORM
-	gpio_adrv_sysref_req_param.platform_ops = &xil_gpio_platform_ops;
+	gpio_adrv_sysref_req_param.platform_ops = &xil_gpio_ops;
 #else
 	gpio_adrv_sysref_req_param.platform_ops = &altera_gpio_platform_ops;
 #endif

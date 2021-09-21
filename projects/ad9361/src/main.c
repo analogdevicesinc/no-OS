@@ -102,7 +102,8 @@ struct xil_gpio_init_param xil_gpio_param = {
 #endif
 	.device_id = GPIO_DEVICE_ID
 };
-#define GPIO_OPS	&xil_gpio_platform_ops
+
+#define GPIO_OPS	&xil_gpio_ops
 #define SPI_OPS		&xil_spi_ops
 #define GPIO_PARAM	&xil_gpio_param
 #define SPI_PARAM	&xil_spi_param

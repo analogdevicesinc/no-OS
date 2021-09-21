@@ -84,56 +84,56 @@ int32_t ad6676_gpio_config(struct ad6676_init_param init_param)
 
 	struct gpio_init_param gpio_adc_oen_param = {
 		.number = GPIO_ADC_OEN,
-		.platform_ops = &xil_gpio_platform_ops,
+		.platform_ops = &xil_gpio_ops,
 		.extra = &xil_gpio_param
 	};
 	struct gpio_desc *gpio_adc_oen;
 
 	struct gpio_init_param gpio_adc_s0_param = {
 		.number = GPIO_ADC_S0,
-		.platform_ops = &xil_gpio_platform_ops,
+		.platform_ops = &xil_gpio_ops,
 		.extra = &xil_gpio_param
 	};
 	struct gpio_desc *gpio_adc_s0;
 
 	struct gpio_init_param gpio_adc_s1_param = {
 		.number = GPIO_ADC_S1,
-		.platform_ops = &xil_gpio_platform_ops,
+		.platform_ops = &xil_gpio_ops,
 		.extra = &xil_gpio_param
 	};
 	struct gpio_desc *gpio_adc_s1;
 
 	struct gpio_init_param gpio_adc_sela_param = {
 		.number = GPIO_ADC_SELA,
-		.platform_ops = &xil_gpio_platform_ops,
+		.platform_ops = &xil_gpio_ops,
 		.extra = &xil_gpio_param
 	};
 	struct gpio_desc *gpio_adc_sela;
 
 	struct gpio_init_param gpio_adc_selb_param = {
 		.number = GPIO_ADC_SELB,
-		.platform_ops = &xil_gpio_platform_ops,
+		.platform_ops = &xil_gpio_ops,
 		.extra = &xil_gpio_param
 	};
 	struct gpio_desc *gpio_adc_selb;
 
 	struct gpio_init_param gpio_adc_resetb_param = {
 		.number = GPIO_ADC_RESETB,
-		.platform_ops = &xil_gpio_platform_ops,
+		.platform_ops = &xil_gpio_ops,
 		.extra = &xil_gpio_param
 	};
 	struct gpio_desc *gpio_adc_resetb;
 
 	struct gpio_init_param gpio_adc_agc1_param = {
 		.number = GPIO_ADC_AGC1,
-		.platform_ops = &xil_gpio_platform_ops,
+		.platform_ops = &xil_gpio_ops,
 		.extra = &xil_gpio_param
 	};
 	struct gpio_desc *gpio_adc_agc1;
 
 	struct gpio_init_param gpio_adc_agc2_param = {
 		.number = GPIO_ADC_AGC2,
-		.platform_ops = &xil_gpio_platform_ops,
+		.platform_ops = &xil_gpio_ops,
 		.extra = &xil_gpio_param
 	};
 	struct gpio_desc *gpio_adc_agc2;
@@ -267,7 +267,7 @@ int main(void)
 
 	struct gpio_init_param gpio_sysref_param = {
 		.number = GPIO_JESD204_SYSREF,
-		.platform_ops = &xil_gpio_platform_ops,
+		.platform_ops = &xil_gpio_ops,
 		.extra = &xil_gpio_param
 	};
 	struct gpio_desc *gpio_sysref;

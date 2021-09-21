@@ -97,7 +97,7 @@ int main(void)
 #endif
 		.device_id = GPIO_DEVICE_ID
 	};
-	gpio_sysref_param.platform_ops = &xil_gpio_platform_ops;
+	gpio_sysref_param.platform_ops = &xil_gpio_ops;
 	gpio_sysref_param.extra = &xil_gpio_param;
 
 	gpio_desc *gpio_sysref;

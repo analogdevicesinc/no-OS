@@ -78,7 +78,7 @@ int main(void)
 
 	struct gpio_init_param ad5766_gpio_reset_param = {
 		.number = GPIO_RESET,
-		.platform_ops = &xil_gpio_platform_ops,
+		.platform_ops = &xil_gpio_ops,
 		.extra = &gpio_extra_param
 	};
 
