@@ -371,7 +371,7 @@ int32_t linux_gpio_get_direction(struct gpio_desc *desc,
 /**
  * @brief Linux platform specific GPIO platform ops structure
  */
-const struct gpio_platform_ops linux_gpio_platform_ops = {
+const struct gpio_platform_ops linux_gpio_ops = {
 	.gpio_ops_get = &linux_gpio_get,
 	.gpio_ops_get_optional = &linux_gpio_get_optional,
 	.gpio_ops_remove = &linux_gpio_remove,

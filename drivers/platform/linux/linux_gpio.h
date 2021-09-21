@@ -42,6 +42,6 @@
 /**
  * @brief Linux specific GPIO platform ops structure
  */
-extern const struct gpio_platform_ops linux_gpio_platform_ops;
+extern const struct gpio_platform_ops linux_gpio_ops;
 
 #endif // LINUX_GPIO_H_
