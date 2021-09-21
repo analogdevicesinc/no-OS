@@ -206,7 +206,7 @@ int32_t generic_gpio_get_value(struct gpio_desc *desc,
 /**
  * @brief Generic platform GPIO ops
  */
-const struct gpio_platform_ops generic_gpio_platform_ops = {
+const struct gpio_platform_ops generic_gpio_ops = {
 	.gpio_ops_get = &generic_gpio_get,
 	.gpio_ops_get_optional = &generic_gpio_get_optional,
 	.gpio_ops_remove = &generic_gpio_remove,
