@@ -94,4 +94,6 @@ int32_t adxcvr_remove(struct adxcvr *xcvr);
 int32_t adxcvr_clk_set_rate(struct adxcvr *xcvr,
 			    uint32_t rate,
 			    uint32_t parent_rate);
+int32_t adxcvr_write(struct adxcvr *xcvr, uint32_t reg_addr, uint32_t reg_val);
+int32_t adxcvr_read(struct adxcvr *xcvr, uint32_t reg_addr, uint32_t *reg_val);
 #endif
