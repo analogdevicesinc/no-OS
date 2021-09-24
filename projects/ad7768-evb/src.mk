@@ -50,15 +50,15 @@ SRC_DIRS += $(DRIVERS)/irq
 
 ifeq (y,$(strip $(TINYIIOD)))
 LIBRARIES += iio
-INCS +=	$(PROJECT)/src/app_iio.h					\
-	$(INCLUDE)/fifo.h						\
+SRC_DIRS += $(NO-OS)/iio/iio_app
+
+INCS +=	$(INCLUDE)/fifo.h						\
 	$(INCLUDE)/uart.h						\
 	$(INCLUDE)/list.h						\
 	$(PLATFORM_DRIVERS)/irq_extra.h					\
 	$(PLATFORM_DRIVERS)/uart_extra.h                                \
 	$(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.h
-SRCS += $(PROJECT)/src/app_iio.c					\
-	$(NO-OS)/util/fifo.c						\
+SRCS += $(NO-OS)/util/fifo.c						\
 	$(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.c			\
 	$(NO-OS)/util/list.c						\
 	$(PLATFORM_DRIVERS)/uart.c					\

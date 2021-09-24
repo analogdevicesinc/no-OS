@@ -42,6 +42,7 @@
 
 #include <xparameters.h>
 
+#define UART_BAUDRATE                           115200
 #define SPI_DEVICE_ID				XPAR_PS7_SPI_0_DEVICE_ID
 #define SPI_AD7768_CS				0
 #define GPIO_DEVICE_ID				XPAR_PS7_GPIO_0_DEVICE_ID
