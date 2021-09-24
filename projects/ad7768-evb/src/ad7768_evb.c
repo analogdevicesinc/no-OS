@@ -54,7 +54,8 @@
 #include "parameters.h"
 
 #ifdef IIO_SUPPORT
-#include "app_iio.h"
+#include "iio_app.h"
+#include "iio_axi_adc.h"
 #endif
 
 /***************************************************************************//**
@@ -287,15 +288,32 @@ int main(void)
 #ifdef IIO_SUPPORT
 	printf("The board accepts libiio clients connections through the serial backend.\n");
 
-	struct iio_axi_adc_init_param iio_axi_adc_init_par;
-	iio_axi_adc_init_par = (struct iio_axi_adc_init_param) {
+	struct iio_axi_adc_desc *iio_axi_adc_desc;
+	struct iio_device *dev_desc;
+	struct iio_axi_adc_init_param iio_axi_adc_init_par = {
 		.rx_adc = axi_adc_core_desc,
 		.rx_dmac = dma_desc,
 		.dcache_invalidate_range = (void (*)(uint32_t,
 						     uint32_t))Xil_DCacheInvalidateRange
 	};
 
-	return iio_app_start(&iio_axi_adc_init_par);
+	ret = iio_axi_adc_init(&iio_axi_adc_desc, &iio_axi_adc_init_par);
+	if (ret < 0)
+		return ret;
+
+	iio_axi_adc_get_dev_descriptor(iio_axi_adc_desc, &dev_desc);
+
+	struct iio_data_buffer read_buff = {
+		.buff = (void *)ADC_DDR_BASEADDR,
+		.size = 0xFFFFFFFF,
+	};
+
+	struct iio_app_device devs[] = {
+		IIO_APP_DEVICE("ad7768_dev", iio_axi_adc_desc, dev_desc,
+			       &read_buff, NULL),
+	};
+
+	return iio_app_run(devs, ARRAY_SIZE(devs));
 #endif
 
 	return 0;
