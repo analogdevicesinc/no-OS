@@ -66,8 +66,9 @@ enum irq_uart_event_e {
 enum irq_trig_level {
 	IRQ_LEVEL_LOW,
 	IRQ_LEVEL_HIGH,
-	IRQ_EDGE_LOW,
-	IRQ_EDGE_HIGH
+	IRQ_EDGE_FALLING,
+	IRQ_EDGE_RISING,
+	IRQ_EDGE_BOTH
 };
 
 /**
