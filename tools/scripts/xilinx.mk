@@ -155,7 +155,7 @@ xilinx_project_build: all
 $(PROJECT_TARGET): $(TEMP_DIR)/arch.txt
 	$(call print,Creating and configuring the IDE project)
 	$(MUTE)	$(call tcl_util, create_project)  $(HIDE)
-	$(MUTE) $(call set_one_time_rule,$@) $(HIDE)
+	$(MUTE) $(call set_one_time_rule,$@)
 
 clean_all: xilinx_clean_all
 
