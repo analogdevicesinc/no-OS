@@ -293,6 +293,9 @@ int32_t xil_irq_trigger_level_set(struct irq_ctrl_desc *desc, uint32_t irq_id,
 {
 	struct xil_irq_desc *xil_dev = desc->extra;
 
+	if(trig == IRQ_EDGE_BOTH)
+		return -EINVAL;
+
 	switch(xil_dev->type) {
 	case IRQ_PS:
 #ifdef XSCUGIC_H
