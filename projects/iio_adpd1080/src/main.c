@@ -47,12 +47,161 @@
 #include "iio_adpd188.h"
 #include "iio_app.h"
 #include "aducm3029_gpio.h"
+#include "gpio.h"
+#include "timer.h"
+#include "irq_extra.h"
 
 #define MAX_SIZE_BASE_ADDR		1024
 
 static uint8_t in_buff[MAX_SIZE_BASE_ADDR];
 
 #define ADC_DDR_BASEADDR	((uint32_t)in_buff)
+
+static void adpd1080_sync_gpio_cb(void *ctx, uint32_t event, void *config)
+{
+	int32_t *cnt = ctx;
+
+	*cnt += 1;
+}
+
+static int32_t adpd1080pmod_32k_calib(struct adpd188_dev *adpd1080_dev)
+{
+	int32_t status;
+	uint16_t temp_reg;
+	uint32_t t_start, t_stop = 0;
+	int32_t sync_gpio_pulse_no, min_diff = 0x7fffffff;
+	struct timer_desc *cal_timer;
+	struct timer_init_param cal_timer_init = {
+		.id = 0,
+		.load_value = 0,
+		.freq_hz = 1,
+		.extra = NULL
+	};
+	struct gpio_desc *sync_gpio;
+	struct gpio_init_param sync_gpio_init = {
+		.number = 0x0D,
+		.extra = NULL,
+		.platform_ops = &aducm_gpio_ops
+	};
+	struct irq_ctrl_desc *cal_irq;
+	struct irq_init_param cal_irq_init = {
+		.irq_ctrl_id = 0,
+		.platform_ops = &aducm_irq_ops,
+		.extra = NULL
+	};
+
+	status = timer_init(&cal_timer, &cal_timer_init);
+	if(status != SUCCESS)
+		return FAILURE;
+	status = timer_start(cal_timer);
+	if(status != SUCCESS)
+		goto timer_finish;
+
+	status = gpio_get(&sync_gpio, &sync_gpio_init);
+	if(status != SUCCESS)
+		goto timer_finish;
+	status = gpio_direction_input(sync_gpio);
+	if(status != SUCCESS)
+		goto gpio_finish;
+
+	status = irq_ctrl_init(&cal_irq, &cal_irq_init);
+	if(status != SUCCESS)
+		goto gpio_finish;
+
+	struct gpio_irq_config sync_irq_config = {
+		.gpio_handler = sync_gpio,
+		.mode = GPIO_GROUP_POSITIVE_EDGE
+	};
+	struct callback_desc sync_gpio_cb = {
+		.callback = adpd1080_sync_gpio_cb,
+		.ctx = &sync_gpio_pulse_no,
+		.config = &sync_irq_config
+	};
+	status = irq_register_callback(cal_irq, ADUCM_GPIO_A_INT_ID,
+				       &sync_gpio_cb);
+	if(status != SUCCESS)
+		goto gpio_finish;
+
+	status = adpd188_adc_fsample_set(adpd1080_dev, 1000);
+	if(status != SUCCESS)
+		goto finish;
+
+	status = adpd188_reg_write(adpd1080_dev, ADPD188_REG_GPIO_DRV,
+				   ADPD188_GPIO_DRV_GPIO0_ENA_MASK);
+	if(status != SUCCESS)
+		goto finish;
+
+	status = adpd188_reg_write(adpd1080_dev, ADPD188_REG_GPIO_CTRL, 2);
+	if(status != SUCCESS)
+		goto finish;
+
+	status = adpd188_mode_set(adpd1080_dev, ADPD188_NORMAL);
+	if (status != SUCCESS)
+		goto finish;
+
+	status = irq_enable(cal_irq, ADUCM_GPIO_A_INT_ID);
+	if(status != SUCCESS)
+		goto finish;
+
+	while (true) {
+		status = adpd188_reg_read(adpd1080_dev, ADPD188_REG_SAMPLE_CLK, &temp_reg);
+		if(status != SUCCESS)
+			goto finish;
+		status = timer_counter_get(cal_timer, &t_start);
+		if(status != SUCCESS)
+			goto finish;
+		sync_gpio_pulse_no = 0;
+		while (t_start >= t_stop) {
+			status = timer_counter_get(cal_timer, &t_stop);
+			if(status != SUCCESS)
+				goto finish;
+		}
+		if (sync_gpio_pulse_no < 1000)
+			temp_reg -= 1;
+		else if (sync_gpio_pulse_no > 1000)
+			temp_reg += 1;
+		if (abs(sync_gpio_pulse_no - 1000) >= min_diff)
+			break;
+		else
+			min_diff = abs(sync_gpio_pulse_no - 1000);
+		status = adpd188_reg_write(adpd1080_dev, ADPD188_REG_SAMPLE_CLK, temp_reg);
+		if(status != SUCCESS)
+			goto finish;
+	}
+
+	status = irq_disable(cal_irq, ADUCM_GPIO_A_INT_ID);
+	if(status != SUCCESS)
+		goto finish;
+
+	status = irq_unregister(cal_irq, ADUCM_GPIO_A_INT_ID);
+	if(status != SUCCESS)
+		goto gpio_finish;
+
+	status = adpd188_mode_set(adpd1080_dev, ADPD188_PROGRAM);
+	if (status != SUCCESS)
+		goto finish;
+
+	status = adpd188_adc_fsample_set(adpd1080_dev, 16);
+	if(status != SUCCESS)
+		goto finish;
+
+	status = adpd188_reg_write(adpd1080_dev, ADPD188_REG_GPIO_DRV, 0);
+	if(status != SUCCESS)
+		goto finish;
+
+	status = adpd188_reg_write(adpd1080_dev, ADPD188_REG_GPIO_CTRL, 0);
+	if(status != SUCCESS)
+		goto finish;
+
+finish:
+	irq_ctrl_remove(cal_irq);
+gpio_finish:
+	gpio_remove(sync_gpio);
+timer_finish:
+	timer_remove(cal_timer);
+
+	return status;
+}
 
 /***************************************************************************//**
  * @brief main
@@ -236,6 +385,14 @@ int main(void)
 
 	status = adpd188_reg_write(adpd1080_iio_device->drv_dev, ADPD188_REG_MATH,
 				   reg_data);
+	if(status != SUCCESS)
+		return FAILURE;
+
+	status = adpd1080pmod_32k_calib(adpd1080_iio_device->drv_dev);
+	if (status < 0)
+		return status;
+
+	status = adpd188_clk32mhz_cal(adpd1080_iio_device->drv_dev);
 	if(status != SUCCESS)
 		return FAILURE;
 
