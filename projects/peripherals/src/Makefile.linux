@@ -1,0 +1,26 @@
+
+EXEC			= peripherals
+PLATFORM		= linux
+SYMBOLS			= -DLINUX_PLATFORM
+BUILD_DIR		= ./build_$(PLATFORM)
+PROJECT			= $(realpath ..)
+NO-OS			= $(realpath ../../..)
+INCLUDE			= $(NO-OS)/include
+DRIVERS 		= $(NO-OS)/drivers
+PLATFORM_DRIVERS	= $(NO-OS)/drivers/platform/$(PLATFORM)
+
+include ../src.mk
+
+all: copy $(EXEC)
+
+copy:
+	mkdir -p $(BUILD_DIR)
+	cp -r $(SRCS) $(BUILD_DIR)
+	cp -r $(INCS) $(BUILD_DIR)
+
+$(EXEC):
+	$(CC) -I$(BUILD_DIR) $(wildcard $(BUILD_DIR)/*.c) $(SYMBOLS) -o $@
+
+clean:
+	rm -rf $(BUILD_DIR)
+	rm -f $(EXEC)
