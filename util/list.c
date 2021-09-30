@@ -95,7 +95,7 @@ struct _list_desc {
 /** @brief Default function used to compare element in the list ( \ref f_cmp) */
 static int32_t default_comparator(void *data1, void *data2)
 {
-	return (int32_t)(data1 - data2);
+	return (int32_t)((int32_t *)data1 - (int32_t *)data2);
 }
 
 /**
