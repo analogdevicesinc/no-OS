@@ -970,7 +970,7 @@ static ssize_t iio_read_dev(const char *device, char *pbuf, size_t offset,
 		if (offset + bytes_count > r_buff->size)
 			return -ENOMEM;
 
-		memcpy(pbuf, r_buff->buff + offset, bytes_count);
+		memcpy(pbuf, (char *)r_buff->buff + offset, bytes_count);
 
 		return bytes_count;
 	}
@@ -1026,7 +1026,7 @@ static ssize_t iio_write_dev(const char *device, const char *buf,
 	if (w_buff) {
 		if (offset + bytes_count > w_buff->size)
 			return -ENOMEM;
-		memcpy(w_buff->buff + offset, buf, bytes_count);
+		memcpy((char *)w_buff->buff + offset, buf, bytes_count);
 		return bytes_count;
 	}
 
