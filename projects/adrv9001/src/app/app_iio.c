@@ -81,6 +81,7 @@ int32_t iio_server_init(struct iio_axi_adc_init_param *adc1_init,
 	};
 	struct irq_init_param irq_init_par = {
 		.irq_ctrl_id = INTC_DEVICE_ID,
+		.platform_ops = &xil_irq_ops,
 		.extra = &xil_irq_init_par
 	};
 	struct xil_uart_init_param xil_uart_init_par = {
