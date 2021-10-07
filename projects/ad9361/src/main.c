@@ -84,6 +84,9 @@
 /******************************************************************************/
 /************************ Variables Definitions *******************************/
 /******************************************************************************/
+
+#define AD9361_ADC_DAC_BYTES_PER_SAMPLE 2
+
 #ifdef XILINX_PLATFORM
 struct xil_spi_init_param xil_spi_param = {
 #ifdef PLATFORM_MB
@@ -679,15 +682,35 @@ int main(void)
 	if(status < 0)
 		return status;
 
-	axi_dmac_transfer_nonblocking(tx_dmac, DAC_DDR_BASEADDR, samples * 16);
+#ifdef FMCOMMS5
+	axi_dmac_transfer_nonblocking(tx_dmac, DAC_DDR_BASEADDR,
+				      samples * AD9361_ADC_DAC_BYTES_PER_SAMPLE *
+				      (ad9361_phy_b->tx_dac->num_channels + ad9361_phy->tx_dac->num_channels));
+#else
+	axi_dmac_transfer_nonblocking(tx_dmac, DAC_DDR_BASEADDR,
+				      samples * AD9361_ADC_DAC_BYTES_PER_SAMPLE *
+				      ad9361_phy->tx_dac->num_channels);
 #endif
-	axi_dmac_transfer(rx_dmac, ADC_DDR_BASEADDR, samples * 16);
+#endif
+#ifdef FMCOMMS5
+	axi_dmac_transfer(rx_dmac, ADC_DDR_BASEADDR,
+			  samples * AD9361_ADC_DAC_BYTES_PER_SAMPLE *
+			  (ad9361_phy_b->rx_adc->num_channels + ad9361_phy->rx_adc->num_channels));
+#else
+	axi_dmac_transfer(rx_dmac, ADC_DDR_BASEADDR,
+			  samples * AD9361_ADC_DAC_BYTES_PER_SAMPLE *
+			  ad9361_phy->rx_adc->num_channels);
+#endif
 #ifdef XILINX_PLATFORM
 #ifdef FMCOMMS5
-	Xil_DCacheInvalidateRange(ADC_DDR_BASEADDR, samples * 16);
+	Xil_DCacheInvalidateRange(ADC_DDR_BASEADDR,
+				  samples * AD9361_ADC_DAC_BYTES_PER_SAMPLE * (ad9361_phy_b->rx_adc->num_channels
+						  +
+						  ad9361_phy->rx_adc->num_channels));
 #else
 	Xil_DCacheInvalidateRange(ADC_DDR_BASEADDR,
-				  ad9361_phy->pdata->rx2tx2 ? samples * 8 : samples * 4);
+				  samples * AD9361_ADC_DAC_BYTES_PER_SAMPLE *
+				  ad9361_phy_b->rx_adc->num_channels);
 #endif
 #endif
 #endif
