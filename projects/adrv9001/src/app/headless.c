@@ -62,17 +62,6 @@
 #include "adi_adrv9001_arm.h"
 #include "adi_adrv9001_radio.h"
 
-#ifdef DAC_DMA_EXAMPLE
-uint32_t dac1_buffer[DAC_BUFFER_SAMPLES] __attribute__ ((aligned));
-uint16_t adc1_buffer[ADC_BUFFER_SAMPLES * ADC1_CHANNELS] __attribute__ ((
-			aligned));
-#ifndef ADRV9002_RX2TX2
-uint32_t dac2_buffer[DAC_BUFFER_SAMPLES] __attribute__ ((aligned));
-uint16_t adc2_buffer[ADC_BUFFER_SAMPLES * ADC2_CHANNELS] __attribute__ ((
-			aligned));
-#endif
-#endif
-
 int get_sampling_frequency(struct axi_adc *dev, uint32_t chan,
 			   uint64_t *sampling_freq_hz)
 {
