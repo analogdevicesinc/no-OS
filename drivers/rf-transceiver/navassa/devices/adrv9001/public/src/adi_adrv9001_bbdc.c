@@ -17,14 +17,13 @@
 #include "adi_adrv9001_error.h"
 #include "adi_adrv9001_radio.h"
 #include "adrv9001_arm_macros.h"
+#include "object_ids.h"
 
-static int32_t __maybe_unused adi_adrv9001_bbdc_RejectionEnable_Set_Validate(adi_adrv9001_Device_t *device,
+static __maybe_unused int32_t __maybe_unused adi_adrv9001_bbdc_RejectionEnable_Set_Validate(adi_adrv9001_Device_t *device,
                                          adi_common_Port_e port,
                                          adi_common_ChannelNumber_e channel,
                                          adi_adrv9001_BbdcRejectionStatus_e bbdcRejectionStatus)
 {
-    adi_adrv9001_ChannelState_e state = ADI_ADRV9001_CHANNEL_STANDBY;
-
     ADI_RANGE_CHECK(device, channel, ADI_CHANNEL_1, ADI_CHANNEL_2);
     ADI_RANGE_CHECK(device, bbdcRejectionStatus, ADI_ADRV9001_BBDC_REJECTION_DISABLED, ADI_ADRV9001_BBDC_REJECTION_PAUSED);
 
@@ -38,20 +37,6 @@ static int32_t __maybe_unused adi_adrv9001_bbdc_RejectionEnable_Set_Validate(adi
                          port,
                          "Invalid parameter value. port must be ADI_RX or ADI_ORX");
         ADI_API_RETURN(device)
-    }
-    if (port == ADI_ORX)
-    {
-        port = ADI_RX;
-    }
-    ADI_EXPECT(adi_adrv9001_Radio_Channel_State_Get, device, port, channel, &state);
-    if (ADI_ADRV9001_CHANNEL_STANDBY == state)
-    {
-        ADI_ERROR_REPORT(&device->common,
-                         ADI_COMMON_ERRSRC_API,
-                         ADI_COMMON_ERR_INV_PARAM,
-                         ADI_COMMON_ACT_ERR_CHECK_PARAM,
-                         state,
-                         "Invalid channel state. Must be one of CALIBRATED, PRIMED, RF_ENABLED");
     }
 
     ADI_API_RETURN(device);
@@ -72,7 +57,7 @@ int32_t adi_adrv9001_bbdc_RejectionEnable_Set(adi_adrv9001_Device_t *device,
     ADI_EXPECT(adi_adrv9001_arm_Memory_Write, device, ADRV9001_ADDR_ARM_MAILBOX_SET, &armData, sizeof(armData), ADI_ADRV9001_ARM_SINGLE_SPI_WRITE_MODE_STANDARD_BYTES_4);
 
     armExtData[0] = adi_adrv9001_Radio_MailboxChannel_Get(port, channel);
-    armExtData[1] = ADRV9001_ARM_OBJECTID_BBDC_ENABLE;
+    armExtData[1] = OBJID_GS_BBDC_ENABLE;
 
     /* send ARM SET opcode */
     ADI_EXPECT(adi_adrv9001_arm_Cmd_Write, device, (uint8_t)ADRV9001_ARM_SET_OPCODE, armExtData, sizeof(armExtData));
@@ -87,7 +72,7 @@ int32_t adi_adrv9001_bbdc_RejectionEnable_Set(adi_adrv9001_Device_t *device,
     ADI_API_RETURN(device);
 }
 
-static int32_t __maybe_unused adi_adrv9001_bbdc_RejectionEnable_Get_Validate(adi_adrv9001_Device_t *device,
+static __maybe_unused int32_t __maybe_unused adi_adrv9001_bbdc_RejectionEnable_Get_Validate(adi_adrv9001_Device_t *device,
                                          adi_common_Port_e port,
                                          adi_common_ChannelNumber_e channel,
                                          adi_adrv9001_BbdcRejectionStatus_e *bbdcRejectionStatus)
@@ -123,7 +108,7 @@ int32_t adi_adrv9001_bbdc_RejectionEnable_Get(adi_adrv9001_Device_t *device,
     ADI_PERFORM_VALIDATION(adi_adrv9001_bbdc_RejectionEnable_Get_Validate, device, port, channel, bbdcRejectionStatus);
 
     armExtData[0] = adi_adrv9001_Radio_MailboxChannel_Get(port, channel);
-    armExtData[1] = ADRV9001_ARM_OBJECTID_BBDC_ENABLE;
+    armExtData[1] = OBJID_GS_BBDC_ENABLE;
 
     /* send ARM GET opcode */
     ADI_EXPECT(adi_adrv9001_arm_Cmd_Write, device, (uint8_t)ADRV9001_ARM_GET_OPCODE, armExtData, sizeof(armExtData));
@@ -148,7 +133,7 @@ int32_t adi_adrv9001_bbdc_RejectionEnable_Get(adi_adrv9001_Device_t *device,
     ADI_API_RETURN(device);
 }
 
-static int32_t __maybe_unused adi_adrv9010_bbdc_LoopGain_Set_Validate(adi_adrv9001_Device_t *adrv9001,
+static __maybe_unused int32_t __maybe_unused adi_adrv9010_bbdc_LoopGain_Set_Validate(adi_adrv9001_Device_t *adrv9001,
                                                                       adi_common_ChannelNumber_e channel,
                                                                       uint32_t loopGain)
 {
@@ -165,7 +150,6 @@ static int32_t __maybe_unused adi_adrv9010_bbdc_LoopGain_Set_Validate(adi_adrv90
     ADI_API_RETURN(adrv9001);
 }
 
-static const uint8_t OBJID_CFG_BBDC = 0xAA;
 int32_t adi_adrv9010_bbdc_LoopGain_Set(adi_adrv9001_Device_t *adrv9001,
                                        adi_common_ChannelNumber_e channel,
                                        uint32_t loopGain)
@@ -180,7 +164,7 @@ int32_t adi_adrv9010_bbdc_LoopGain_Set(adi_adrv9001_Device_t *adrv9001,
     adrv9001_LoadFourBytes(&offset, armData, loopGain);
     
     extData[0] = adi_adrv9001_Radio_MailboxChannel_Get(ADI_RX, channel);
-    extData[1] = ADRV9001_ARM_OBJECTID_CONFIG;
+    extData[1] = OBJID_GS_CONFIG;
     extData[2] = OBJID_CFG_BBDC;
     
     ADI_EXPECT(adi_adrv9001_arm_Config_Write, adrv9001, armData, sizeof(armData), extData, sizeof(extData))
@@ -188,7 +172,7 @@ int32_t adi_adrv9010_bbdc_LoopGain_Set(adi_adrv9001_Device_t *adrv9001,
     ADI_API_RETURN(adrv9001);
 }
 
-static int32_t __maybe_unused adi_adrv9010_bbdc_LoopGain_Get_Validate(adi_adrv9001_Device_t *adrv9001,
+static __maybe_unused int32_t __maybe_unused adi_adrv9010_bbdc_LoopGain_Get_Validate(adi_adrv9001_Device_t *adrv9001,
                                                                       adi_common_ChannelNumber_e channel,
                                                                       uint32_t *loopGain)
 {

@@ -174,7 +174,7 @@ int32_t adi_adrv9001_spi_Bytes_Stream_Write(adi_adrv9001_Device_t *device, uint1
 
     for (i = 0; i < count; i++)
     {
-        ADI_FUNCTION_ENTRY_VARIABLE_LOG(&device->common, "%s(0x%04X, 0x%02X)", addr[i], data[i]);
+        ADI_FUNCTION_ENTRY_VARIABLE_LOG(&device->common, "%s(0x%04X, 0x%02X)", addr + i, data[i]);
     }
 
     ADI_EXPECT(adi_adrv9001_spi_Stream_DataPack,device, &txData[0], &numTxBytes, addr, data, count, ADRV9001_SPI_WRITE_POLARITY);
@@ -447,15 +447,6 @@ int32_t adi_adrv9001_spi_Cache_Write(adi_adrv9001_Device_t *device,
     uint8_t wrData[HAL_SPIWRITEARRAY_BUFFERSIZE] = { 0 };
 
     ADI_NULL_DEVICE_PTR_RETURN(device);
-
-#ifdef ADI_ADRV9001_VERBOSE
-    ADI_FUNCTION_ENTRY_LOG(&device->common);
-
-    for (i = 0; i < count; i++)
-    {
-        ADI_FUNCTION_ENTRY_VARIABLE_LOG(&device->common, "%s(0x%04X, 0x%02X)", (uint16_t)(wrCache[i] >> SPI_ADDR_SIZE), (uint8_t)wrCache[i]);
-    }
-#endif
 
     for (i = 0; i < count; i++)
     {

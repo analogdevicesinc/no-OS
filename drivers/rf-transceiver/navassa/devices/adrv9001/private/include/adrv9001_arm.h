@@ -163,14 +163,12 @@ int32_t adrv9001_PfirProfilesWrite(adi_adrv9001_Device_t *device, const adi_adrv
 * This field must be initialized by calling #adi_adrv9001_InitAnalog or #adi_adrv9001_Profiles_Verify.
 *
 * \param device Context variable - Pointer to the ADRV9001 device settings data structure
-* \param[in]     dynamicProfileIndex  Identifier for the profile being loaded
-* \param[in]     init                 Pointer to the ADRV9001 initialization settings data structure
+* \param[in]     dynamicProfile       ADRV9001 dynamic profile structure
 *
 * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
 */
 int32_t adrv9001_DynamicProfile_Write(adi_adrv9001_Device_t *device,
-                                      uint8_t dynamicProfileIndex,
-                                      const adi_adrv9001_Init_t *init);
+                                      const adi_adrv9000_DynamicProfile_t *dynamicProfile);
 
 /**
 * \brief Writes one PfirWbNbBuffer_t into the ARM PFIR buffer

@@ -17,6 +17,7 @@
 #include "adi_adrv9001_defines.h"
 #include "adi_adrv9001_profile_types.h"
 
+#include "adi_adrv9001_common.h"
 #include "adi_common.h"
 
 #define ADI_ADRV9001_NUM_TXRX_CHANNELS         0x4
@@ -42,10 +43,10 @@
 */
 typedef enum adi_adrv9001_PartNumber
 {
-	ADI_ADRV9001_PART_NUMBER_UNKNOWN    = -1,
-	ADI_ADRV9001_PART_NUMBER_ADRV9002   = 0x0,
-	ADI_ADRV9001_PART_NUMBER_ADRV9003   = 0xC,
-	ADI_ADRV9001_PART_NUMBER_ADRV9004   = 0x8,
+    ADI_ADRV9001_PART_NUMBER_UNKNOWN    = -1,
+    ADI_ADRV9001_PART_NUMBER_ADRV9002   = 0x0,
+    ADI_ADRV9001_PART_NUMBER_ADRV9003   = 0xC,
+    ADI_ADRV9001_PART_NUMBER_ADRV9004   = 0x8,
 } adi_adrv9001_PartNumber_e;
 
 /**
@@ -195,7 +196,8 @@ typedef struct adi_adrv9001_Info
                                                                              customer through the api */
     uint32_t profilesValid;												/*!< Current device profilesValid bit field for use notification, i.e.,
                                                                              Tx = 0x01, Rx = 0x02, Orx = 0x04 */
-    adi_adrv9001_TxSignalType_e outputSignaling[ADI_ADRV9001_MAX_TXCHANNELS]; /*!< Output to Analog signal type */
+    adi_adrv9001_RxSignalType_e rxOutputSignaling[ADI_ADRV9001_MAX_RX_ONLY];      /*!< Rx Output to Analog signal type */
+    adi_adrv9001_TxSignalType_e txOutputSignaling[ADI_ADRV9001_MAX_TXCHANNELS];   /*!< Tx Output to Analog signal type */
     uint32_t swTest;													/*!< Software testmode signal */
     uint32_t hsDigClk_Hz;												/*!< Calculated in initialize() digital clock used throughout API functions */
     uint32_t deviceClock_kHz;                                           /*!< Device clock frequency in kHz (copy from adi_adrv9001_ClockSettings_t struct) */
@@ -217,6 +219,7 @@ typedef struct adi_adrv9001_Info
     uint8_t currentStreamImageIndex;									/*!< Index of current stream  */
     uint32_t currentStreamImageSize;									/*!< Image size of current stream */
     uint8_t frequencyHoppingEnabled;                                    /*!< Frequency hopping enabled flag from currently loaded profile */
+    adi_adrv9001_RxGainTableType_e gainTableType[ADI_ADRV9001_MAX_RX_ONLY]; /*!< type of gain table loaded during ADRV9001 initialization */
 } adi_adrv9001_Info_t;
 
 /**

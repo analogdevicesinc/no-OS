@@ -29,7 +29,9 @@ extern "C" {
 
 /**
  * \brief Configure ADRV9001 LDOs
- * 
+ *
+ * \pre All channels must be in STANDBY state
+ *
  * \param[in] adrv9001		            Context variable - Pointer to the ADRV9001 device settings data structure
  * \param[in] powerManagementSettings   Desired power management settings
  *

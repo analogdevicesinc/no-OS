@@ -26,6 +26,8 @@
 extern "C" {
 #endif
 
+#ifndef CLIENT_IGNORE
+
 #define ADI_ERROR_MSG_MAX_LEN 314
 
 /**
@@ -140,6 +142,8 @@ typedef enum adi_common_ErrSources
 #define ADI_COMMON_ACT_ERR_EXTENSION_3              (-300)      /*!< Recovery action error extension point */
 #define ADI_COMMON_ACT_ERR_EXTENSION_4              (-400)      /*!< Recovery action error extension point */
 #define ADI_COMMON_ACT_ERR_EXTENSION_5              (-500)      /*!< Recovery action error extension point */
+
+#endif
 
 #ifdef __cplusplus
 }

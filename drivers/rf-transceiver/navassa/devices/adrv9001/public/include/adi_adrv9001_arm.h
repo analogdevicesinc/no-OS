@@ -185,169 +185,7 @@ int32_t adi_adrv9001_arm_Image_Write(adi_adrv9001_Device_t *adrv9001,
  */
 int32_t adi_adrv9001_arm_WakeupInterrupt_Set(adi_adrv9001_Device_t *adrv9001);
 
-/**
- * \brief Configure the power saving settings for the specified channel
- *
- * \note Message type: \ref timing_prioritymailbox "High-priority mailbox command"
- *
- * \pre Both Rx and Tx channels must be in any of CALIBRATED, PRIMED, RF_ENABLE states
- *
- * \param[in] adrv9001		    Context variable - Pointer to the ADRV9001 device settings data structure
- * \param[in] channel           The Channel for which to configure the power saving settings
- * \param[in] powerSavingCfg    The desired power saving configuration
- *
- * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
- */
-int32_t adi_adrv9001_arm_ChannelPowerSaving_Configure(adi_adrv9001_Device_t *adrv9001,
-                                                      adi_common_ChannelNumber_e channel,
-                                                      adi_adrv9001_ChannelPowerSavingCfg_t *powerSavingCfg);
 
-/**
- * \brief Inspect the power saving settings for the specified channel
- *
- * \note Message type: \ref timing_mailbox "Mailbox command"
- *
- * \pre Both Rx and Tx channels must be in any of CALIBRATED, PRIMED, RF_ENABLE states
- *
- * \param[in] adrv9001		    Context variable - Pointer to the ADRV9001 device settings data structure
- * \param[in] channel           The Channel for which to inspect the power saving settings
- * \param[out] powerSavingCfg   The current power saving configuration
- *
- * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
- */
-int32_t adi_adrv9001_arm_ChannelPowerSaving_Inspect(adi_adrv9001_Device_t *adrv9001,
-                                                    adi_common_ChannelNumber_e channel,
-                                                    adi_adrv9001_ChannelPowerSavingCfg_t *powerSavingCfg);
-
-/**
- * \brief Configure the monitor mode settings for all channels
- *
- * \note Message type: \ref timing_prioritymailbox "High-priority mailbox command"
- *
- * \pre The ADI_ADRV9001_GPIO_SIGNAL_MON_ENABLE_SPS signal must be assigned to a pin with adi_adrv9001_gpio_Configure
- * \pre All channels in any of STANDBY, CALIBRATED, PRIMED, RF_ENABLE states
- *
- * \param[in] adrv9001		    Context variable - Pointer to the ADRV9001 device settings data structure
- * \param[in] monitorModeCfg    The desired monitor mode configuration
- *
- * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
- */
-int32_t adi_adrv9001_arm_SystemPowerSavingAndMonitorMode_Configure(adi_adrv9001_Device_t *adrv9001,
-    adi_adrv9001_SystemPowerSavingAndMonitorModeCfg_t *monitorModeCfg);
-
-/**
- * \brief Inspect the monitor mode settings for all channels
- *
- * \note Message type: \ref timing_mailbox "Mailbox command"
- *
- * \pre All channels in any of STANDBY, CALIBRATED, PRIMED, RF_ENABLE states
- *
- * \param[in] adrv9001		    Context variable - Pointer to the ADRV9001 device settings data structure
- * \param[out] monitorModeCfg   The current monitor mode configuration
- *
- * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
- */
-int32_t adi_adrv9001_arm_SystemPowerSavingAndMonitorMode_Inspect(adi_adrv9001_Device_t *adrv9001,
-    adi_adrv9001_SystemPowerSavingAndMonitorModeCfg_t *monitorModeCfg);
-    
-/**
- * \brief Set the System Power Saving mode
- * 
- * \note Message type: \ref timing_prioritymailbox "High-priority mailbox command"
- * 
- * \param[in] adrv9001		Context variable - Pointer to the ADRV9001 device settings data structure
- * \param[in] mode          The desired system power saving power down mode
- * 
- * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
- */
-int32_t adi_adrv9001_arm_SystemPowerSavingMode_Set(adi_adrv9001_Device_t *adrv9001, adi_adrv9001_SystemPowerDownMode_e mode);
-
-/**
- * \brief Get the System Power Saving mode
- * 
- * \note Message type: \ref timing_mailbox "Mailbox command"
- * 
- * \param[in]  adrv9001	    Context variable - Pointer to the ADRV9001 device settings data structure
- * \param[out] mode         The current system power saving power down mode
- * 
- * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
- */
-int32_t adi_adrv9001_arm_SystemPowerSavingMode_Get(adi_adrv9001_Device_t *adrv9001, adi_adrv9001_SystemPowerDownMode_e *mode);
-
-/**
- * \brief Configure monitor mode pattern and inspects each pattern by reading back
- *
- * \note Message type: \ref timing_direct "Direct register access"
- *
- * \param[in]  adrv9001			    Context variable - Pointer to the ADRV9001 device settings data structure
- * \param[in]  channel              The Channel for which to configure the monitor mode pattern
- * \param[in]  monitorModePattern   The desired monitor mode pattern
- *
- * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
- */
-int32_t adi_adrv9001_arm_MonitorMode_Pattern_Configure(adi_adrv9001_Device_t *adrv9001,
-                                                       adi_common_ChannelNumber_e channel,
-                                                       adi_adrv9001_MonitorModePatternCfg_t *monitorModePattern);
-
-/**
- * \brief Configure monitor mode vector
- *
- * \note Message type: \ref timing_direct "Direct register access"
- *
- * \param[in]  adrv9001			   Context variable - Pointer to the ADRV9001 device settings data structure
- * \param[in]  channel             The Channel for which to configure the monitor mode vector
- * \param[in]  monitorModeVector   The desired monitor mode pattern
- *
- * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
- */
-int32_t adi_adrv9001_arm_MonitorMode_Vector_Configure(adi_adrv9001_Device_t *adrv9001,
-                                                      adi_common_ChannelNumber_e channel,
-                                                      adi_adrv9001_MonitorModeVectorCfg_t *monitorModeVector);
-
-/**
- * \brief Configure monitor mode pattern
- *
- * \note Message type: \ref timing_direct "Direct register access"
- *
- * \param[in]  adrv9001 		   Context variable - Pointer to the ADRV9001 device settings data structure
- * \param[in]  channel             The Channel for which to inspect the monitor mode vector
- * \param[out] monitorModeVector   The current monitor mode pattern
- *
- * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
- */
-int32_t adi_adrv9001_arm_MonitorMode_Vector_Inspect(adi_adrv9001_Device_t *adrv9001,
-                                                    adi_common_ChannelNumber_e channel,
-                                                    adi_adrv9001_MonitorModeVectorCfg_t *monitorModeVector);
-
-/**
- * \brief Set the monitor mode RSSI configuration settings
- * 
- * \note Message type: \ref timing_mailbox "Mailbox command"
- * 
- * \pre Channel state is STANDBY
- * 
- * \param[in] adrv9001	           Context variable - Pointer to the ADRV9001 device settings data structure
- * \param[in] monitorModeRssiCfg   The desired monitor mode RSSI configuration settings
- * 
- * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
- */
-int32_t adi_adrv9001_arm_MonitorMode_Rssi_Configure(adi_adrv9001_Device_t *adrv9001,
-                                                    adi_adrv9001_arm_MonitorModeRssiCfg_t *monitorModeRssiCfg);
-
-/**
- * \brief Get the monitor mode RSSI configuration settings
- * 
- * \note Message type: \ref timing_mailbox "Mailbox command"
- * 
- * \pre Channel state any of STANDBY, CALIBRATED, PRIMED, RF_ENABLED
- * 
- * \param[in]  adrv9001	            Context variable - Pointer to the ADRV9001 device settings data structure
- * \param[out] monitorModeRssiCfg   The current monitor mode RSSI configuration settings
- * 
- * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
- */
-int32_t adi_adrv9001_arm_MonitorMode_Rssi_Inspect(adi_adrv9001_Device_t *adrv9001,
-                                                  adi_adrv9001_arm_MonitorModeRssiCfg_t *monitorModeRssiCfg);
 /****************************************************************************
  * Helper functions
  ****************************************************************************
@@ -426,6 +264,34 @@ int32_t adi_adrv9001_arm_Config_Write(adi_adrv9001_Device_t *adrv9001,
                                       uint32_t armDataSize,
                                       const uint8_t mailboxCmd[],
                                       uint32_t mailboxCmdSize);
+
+/**
+ * \brief Low level helper function used by ADRV9001 API to read the ARM memory config structures
+ *
+ * Normally this function should not be required to be used directly by the BBIC.  This is a helper
+ * function used by other ADRV9001 API commands to read settings from the ARM memory.
+ *
+ * \note Message type: \ref timing_mailbox "Mailbox command"
+ *
+ * \pre This function is private and is not called directly by the user
+ *
+ * \param[in]  adrv9001			Context variable - Pointer to the ADRV9001 device settings data structure
+ * \param[in]  objectId			ARM id of a particular structure or setting in ARM memory
+ * \param[in]  subObjectId      Additional ARM id of a particular structure or setting in ARM memory
+ * \param[in]  channelMask      The mask of Tx/Rx channels
+ * \param[in]  byteOffset		Byte offset from the start of the objectId's memory location in ARM memory
+ * \param[out] returnData		A byte array containing data read back from the ARM memory buffer
+ * \param[in]  byteCount		Number of bytes in the data array (Valid size = 1-255 bytes)
+ *
+ * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
+ */
+int32_t adi_adrv9001_arm_MailBox_Get(adi_adrv9001_Device_t *adrv9001, 
+                                     uint8_t objectId, 
+                                     uint8_t subObjectId, 
+                                     uint8_t channelMask, 
+                                     uint16_t byteOffset, 
+                                     uint8_t returnData[], 
+                                     uint32_t byteCount);
 
 /**
  * \brief Low level helper function used by ADRV9001 API to read the ARM memory config structures
@@ -582,6 +448,8 @@ int32_t adi_adrv9001_arm_Profile_Program(adi_adrv9001_Device_t *adrv9001);
  *                           bit 1     | RX2
  *                           bit 2     | TX1
  *                           bit 3     | TX2
+ *                           bit 4     | ORX1
+ *                           bit 5     | ORX2
  * \endparblock
  *
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
@@ -661,17 +529,15 @@ int32_t adi_adrv9001_arm_MailboxBusy_Get(adi_adrv9001_Device_t *adrv9001, bool *
  *
  * \note Message type: \ref timing_mailbox "Mailbox command"
  *
- * \pre This command is only supported in PRIMED or RF_ON state.
+ * \pre Channel state any of STANDBY, CALIBRATED, PRIMED, RF_ENABLED.
  *
  * \param[in] adrv9001              Context variable - Pointer to the ADRV9001 device data structure containing settings
- * \param[in] dynamicProfileIndex   Identifier for the profile being loaded
- * \param[in] init                  Pointer to the ADRV9001 initialization settings data structure
+ * \param[in] dynamicProfile        ADRV9001 dynamic profile structure
  *
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
  */
 int32_t adi_adrv9001_arm_NextDynamicProfile_Set(adi_adrv9001_Device_t *adrv9001, 
-                                                uint8_t dynamicProfileIndex, 
-                                                const adi_adrv9001_Init_t *init);
+                                                const adi_adrv9000_DynamicProfile_t *dynamicProfile);
 
 /** \brief Sends one bank for PFIR coefficients to ARM and waits for it to process them
  *
@@ -680,7 +546,7 @@ int32_t adi_adrv9001_arm_NextDynamicProfile_Set(adi_adrv9001_Device_t *adrv9001,
  *
  * \note Message type: \ref timing_mailbox "Mailbox command"
  *
- * \pre Channel state any of: PRIMED, RF_ENABLED
+ * \pre Channel state any of STANDBY, CALIBRATED, PRIMED, RF_ENABLED
  *
  * \param[in]  adrv9001       Context variable - Pointer to the ADRV9001 device data structure containing settings
  * \param[in]  channelMask  The mask of Tx/Rx channels. For Rx this function updates the channel filters, and
@@ -697,7 +563,7 @@ int32_t adi_adrv9001_arm_NextPfir_Set(adi_adrv9001_Device_t *adrv9001,
  *
  * \note Message type: \ref timing_interrupt "Software interrupt"
  *
- * \pre Channel state is PRIMED
+ * \pre Channel state must be CALIBRATED or PRIMED
  *
  * \param[in]  adrv9001     Context variable - Pointer to the ADRV9001 device data structure containing settings
  *

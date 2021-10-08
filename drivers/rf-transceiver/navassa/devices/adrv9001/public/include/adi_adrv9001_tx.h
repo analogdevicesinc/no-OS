@@ -146,9 +146,10 @@ int32_t adi_adrv9001_Tx_Attenuation_Set(adi_adrv9001_Device_t *adrv9001,
  * \note Message type: \ref timing_direct "Direct register acccess"
  *
  * \pre This feature requires the initialization to be complete and the attenuation table to be loaded.
- * \pre The Tx data path must be powered up for the current attenuation value to be valid. If the Tx data path
- *  is powered down or the radio is off, the last Tx attenuation setting when the Tx output was previously active will be
- *  read back.
+ *  
+ * \note During the transition from RF_ENABLED to PRIMED, attenuation will be ramped up to 40dB to protect the analog
+ * front-end. During the reverse transition, the attenuation will be ramped to the value last set by the user. As a
+ * result, unexpected values may be returned during TDD operation.
  *
  * \param[in]  adrv9001         Context variable - Pointer to the ADRV9001 device data structure
  * \param[in]  channel          The Tx channel for which to get the attenuation
@@ -361,10 +362,12 @@ int32_t adi_adrv9001_Tx_SlewRateLimiter_Inspect(adi_adrv9001_Device_t *adrv9001,
  * \brief This function configures the PA ramp for the specified Tx channel
  *
  * \note Message type: \ref timing_direct "Direct register acccess"
+ * 
+ * \pre Channel state any of STANDBY, CALIBRATED, PRIMED
  *
  * \param[in] adrv9001      Context variable - Pointer to the ADRV9001 device data structure
  * \param[in] channel       The Tx channel for which to configure the PA ramp
- * \param[in] paRampCfg     The desired PA ramp configuration to be written
+ * \param[in] paRampCfg     PA ramp configuration to be written, gpioSource can not equal ADI_ADRV9001_GPIO_UNASSIGNED even if triggerSelect != ADI_ADRV9001_TX_PA_RAMP_TRIGGER_GPIO
  *
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
  */
@@ -376,10 +379,12 @@ int32_t adi_adrv9001_Tx_PaRamp_Configure(adi_adrv9001_Device_t *adrv9001,
  * \brief This function reads back the PA ramp configuration for the specified Tx channel
  *
  * \note Message type: \ref timing_direct "Direct register acccess"
+ * 
+ * \pre Channel state any of STANDBY, CALIBRATED, PRIMED
  *
  * \param[in]  adrv9001     Context variable - Pointer to the ADRV9001 device data structure
  * \param[in]  channel      The Tx channel for which to configure the PA ramp
- * \param[out] paRampCfg    The actual PA ramp configuration read back
+ * \param[out] paRampCfg    PA ramp configuration read back, _Inspect will always return auxDacChannelSelect == ADI_ADRV9001_AUXDAC0
  *
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
  */
@@ -446,6 +451,25 @@ int32_t adi_adrv9001_Tx_FrequencyCorrection_Set(adi_adrv9001_Device_t *adrv9001,
                                                 adi_common_ChannelNumber_e channel,
                                                 int32_t frequencyOffset_Hz,
                                                 bool immediate);
+
+/**
+ * \brief Set the Rx datapath to Tx datapath loopback. 
+ *		  This function loops back Rx port A/B datapath to Tx datapath for hardware debug and SSI is bypassed. 
+ *		  Allows verification of the datapath using an RF signal applied to the Rx Port and observed at the Tx Port 
+ *		  without the need for SSI configuration.
+ *
+ * \note Message type: \ref timing_direct "Direct register acccess"
+ *
+ * \param[in] adrv9001              Context variable - Pointer to the ADRV9001 device data structure
+ * \param[in] channel               The channel for which to set datapath loopback
+ * \param[in] loopbackEnable        A boolean flag to enable or disable ADRV9001 Tx datapath to Rx datapath loopback
+ *
+ * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
+ */
+int32_t adi_adrv9001_Tx_DataPath_Loopback_Set(adi_adrv9001_Device_t *adrv9001,
+                                              adi_common_ChannelNumber_e channel,
+                                              bool loopbackEnable);
+
 
 #ifdef __cplusplus
 }

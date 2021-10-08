@@ -2,11 +2,7 @@
  * \file
  * \brief Contains ADRV9001 Digital Pre-Distortion (DPD) related function prototypes
  *
- * ADRV9001 API Version: $ADI_ADRV9001_API_VERSION$
- */
-
- /**
- * Copyright 2019 Analog Devices Inc.
+ * Copyright 2019-2021 Analog Devices Inc.
  * Released under the ADRV9001 API license, for more information
  * see the "LICENSE.txt" file in this zip file.
  */
@@ -87,7 +83,7 @@ int32_t adi_adrv9001_dpd_Configure(adi_adrv9001_Device_t *adrv9001,
 int32_t adi_adrv9001_dpd_Inspect(adi_adrv9001_Device_t *adrv9001,
                                  adi_common_ChannelNumber_e channel,
                                  adi_adrv9001_DpdCfg_t *dpdConfig);
-	
+    
 /**
  * \brief Set DPD coefficients to be used at the next start of DPD
  * 
@@ -117,13 +113,78 @@ int32_t adi_adrv9001_dpd_coefficients_Set(adi_adrv9001_Device_t *adrv9001,
  *
  * \param[in]  adrv9001		Context variable - Pointer to the ADRV9001 device settings data structure
  * \param[in]  channel      The channel of interest
- * \param[out] coefficients	The latest coefficients
+ * \param[in,out] coefficients	The latest coefficients
  * 
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
  */
 int32_t adi_adrv9001_dpd_coefficients_Get(adi_adrv9001_Device_t *adrv9001,
                                           adi_common_ChannelNumber_e channel,
                                           adi_adrv9001_DpdCoefficients_t *coefficients);
+
+/**
+ * \brief Read DPD captured data
+ * 
+ * \note Message type: \ref timing_direct "Direct register access"
+ * 
+ * \pre Channel state is CALIBRATED or PRIMED
+ *
+ * \param[in]  adrv9001		   Context variable - Pointer to the ADRV9001 device settings data structure
+ * \param[in]  channel         The channel of interest
+ * \param[out] iData_tx        The returned 18-bit(1.17 format) I values of DPD captured Tx data
+ * \param[out] qData_tx        The returned 18-bit(1.17 format) Q values of DPD captured Tx data
+ * \param[out] iData_elb       The returned 18-bit(1.17 format) I values of DPD captured ELB data
+ * \param[out] qData_elb       The returned 18-bit(1.17 format) Q values of DPD captured ELB data
+ * \param[in]  length          The length of the iData_tx, qData_tx, iData_elb, and qData_elb arrays
+ * \param[in]  autoIncrement   Boolean flag to enable or disable auto-increment of ARM register address
+ * 
+ * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
+ */
+int32_t adi_adrv9001_dpd_CaptureData_Read(adi_adrv9001_Device_t *adrv9001,
+                                          adi_common_ChannelNumber_e channel,
+                                          int32_t iData_tx[],
+                                          int32_t qData_tx[],
+                                          int32_t iData_elb[],
+                                          int32_t qData_elb[],
+                                          uint32_t length,
+                                          bool autoIncrement);
+
+/**
+ * \brief Configure DPD FH frequency regions
+ * 
+ * \note Message type: \ref timing_mailbox "Mailbox command"
+ * 
+ * \pre Channel state are STANDBY, CALIBRATED
+ *
+ * \param[in] adrv9001		Context variable - Pointer to the ADRV9001 device settings data structure
+ * \param[in] channel       The Tx channel of interest
+ * \param[in] dpdFhRegions	The DPD FH frequncy regions to configure
+ * \param[in] size          Size of DPD FH regions to configure
+ * 
+ * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
+ */
+int32_t adi_adrv9001_dpd_fh_regions_Configure(adi_adrv9001_Device_t *adrv9001,
+                                              adi_common_ChannelNumber_e channel,
+                                              adi_adrv9001_DpdFhRegions_t dpdFhRegions[],
+                                              uint32_t size);
+
+/**
+ * \brief Inspect DPD FH frequency regions
+ * 
+ * \note Message type: \ref timing_mailbox "Mailbox command"
+ * 
+ * \pre Channel state are STANDBY, CALIBRATED
+ *
+ * \param[in]  adrv9001		 Context variable - Pointer to the ADRV9001 device settings data structure
+ * \param[in]  channel       The Tx channel of interest
+ * \param[out] dpdFhRegions	 The DPD FH frequncy regions to configure; Maximum regions is '7'
+ * \param[in]  size          Size of DPD FH regions to inspect
+ * 
+ * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
+ */
+int32_t adi_adrv9001_dpd_fh_regions_Inspect(adi_adrv9001_Device_t *adrv9001,
+                                            adi_common_ChannelNumber_e channel,
+                                            adi_adrv9001_DpdFhRegions_t dpdFhRegions[],
+                                            uint32_t size);
 
 #ifdef __cplusplus
 }

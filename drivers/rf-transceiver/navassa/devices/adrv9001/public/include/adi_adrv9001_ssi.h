@@ -171,6 +171,40 @@ int32_t adi_adrv9001_Ssi_PowerDown_Get(adi_adrv9001_Device_t *adrv9001,
                                        adi_common_ChannelNumber_e channel,
                                        adi_adrv9001_SsiPowerDown_e *powerDownMode);
 
+/**
+ * \brief Configure SSI Rx gain selection
+ * 
+ * \note Message type: \ref timing_mailbox "Mailbox command"
+ *
+ * \pre Channel state is STANDBY or CALIBRATED
+ *
+ * \param[in] adrv9001             Context variable - Pointer to the ADRV9001 device data structure
+ * \param[in] channel              The channel for which to configure SSI Rx gain selection
+ * \param[in] ssiRxGainSelectCfg   The desired SSI Rx gain selection
+ *
+ * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
+ */
+int32_t adi_adrv9001_Ssi_Rx_GainSelect_Configure(adi_adrv9001_Device_t *adrv9001,
+                                                 adi_common_ChannelNumber_e channel,
+                                                 adi_adrv9001_SsiRxGainSelectCfg_t *ssiRxGainSelectCfg);
+
+/**
+ * \brief Inspect the current SSI Rx gain selection for the selected channel
+ * 
+ * \note Message type: \ref timing_mailbox "Mailbox command"
+ *
+ * \pre Channel state any of STANDBY, CALIBRATED, PRIMED, RF_ENABLED
+ *
+ * \param[in]  adrv9001             Context variable - Pointer to the ADRV9001 device data structure
+ * \param[in]  channel              The channel for which to inspect SSI Rx gain selection
+ * \param[out] ssiRxGainSelectCfg   The current SSI Rx gain selection
+ *
+ * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
+ */
+int32_t adi_adrv9001_Ssi_Rx_GainSelect_Inspect(adi_adrv9001_Device_t *adrv9001,
+                                               adi_common_ChannelNumber_e channel,
+                                               adi_adrv9001_SsiRxGainSelectCfg_t *ssiRxGainSelectCfg);
+
 #ifdef __cplusplus
 }
 #endif

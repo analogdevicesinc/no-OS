@@ -58,7 +58,7 @@ extern "C" {
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
 */
 int32_t adi_adrv9001_Mcs_Status_Get(adi_adrv9001_Device_t *adrv9001,
-		                            adi_adrv9001_McsStatus_t *mcsStatus);         
+                                    adi_adrv9001_McsStatus_t *mcsStatus);         
 
 /**
  * \brief Reads back the multi-chip sync software status
@@ -91,7 +91,7 @@ int32_t adi_adrv9001_Mcs_Status_Get(adi_adrv9001_Device_t *adrv9001,
 */
 int32_t adi_adrv9001_Mcs_SwStatus_Get(adi_adrv9001_Device_t *adrv9001,
                                       adi_adrv9001_McsSwStatus_e *mcsSwStatus);                                                            
-	                              
+                                  
 /**
  * \brief Gets MCS to strobe delay for Tx
  *
@@ -111,22 +111,42 @@ int32_t adi_adrv9001_Mcs_TxMcsToStrobeSampleLatency_Get (adi_adrv9001_Device_t *
                                                          uint16_t *latency);
 
 /**
- * \brief Sets MCS sample delay for Tx
+ * \brief Sets MCS delay for the specified channel
  *
- * Delays the MCS received by specified number of samples
+ * Delays the MCS received by specified number of samples and SSI FIFO read pointer delay
  * 
  * \note Message type: \ref timing_direct "Direct register access"
-*
+ *
  * \param[in] adrv9001      Context variable - Pointer to the ADRV9001 device data structure containing settings
+ * \param[in] port          The port of interest
  * \param[in] channel       Tx channel number
- * \param[in] delay         Delay specified in samples
+ * \param[in] mcsDelay      Delay specified in samples
  *
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
  */
-int32_t adi_adrv9001_Mcs_TxMcsSampleDelay_Set (adi_adrv9001_Device_t *adrv9001, 
-                                               adi_common_ChannelNumber_e channel, 
-                                               uint16_t delay);
-                          
+int32_t adi_adrv9001_Mcs_ChannelMcsDelay_Set (adi_adrv9001_Device_t *adrv9001, 
+                                              adi_common_Port_e port,
+                                              adi_common_ChannelNumber_e channel, 
+                                              adi_adrv9001_McsDelay_t *mcsDelay);
+
+/**
+ * \brief Get MCS delay for the specified channel
+ *
+ * Delays the MCS received by specified number of samples and SSI FIFO read pointer delay
+ * 
+ * \note Message type: \ref timing_direct "Direct register access"
+ *
+ * \param[in]  adrv9001     Context variable - Pointer to the ADRV9001 device data structure containing settings
+ * \param[in]  port         The port of interest
+ * \param[in]  channel      Tx channel number
+ * \param[out] mcsDelay     Current MCS delay set in ADRV9001 device
+ *
+ * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
+ */
+int32_t adi_adrv9001_Mcs_ChannelMcsDelay_Get (adi_adrv9001_Device_t *adrv9001, 
+                                              adi_common_Port_e port,
+                                              adi_common_ChannelNumber_e channel, 
+                                              adi_adrv9001_McsDelay_t *mcsDelay);
 #ifdef __cplusplus
 }
 #endif

@@ -67,6 +67,7 @@ int32_t adi_adrv9001_Channel_State_GenericValidate(adi_adrv9001_Device_t *adrv90
                                                    uint8_t length)
 {
     uint8_t i = 0;
+    static const uint8_t ADRV9001_MAX_NUM_CHANNELS = 4;
 
     /*Check that ARM and Stream processors have been loaded before enabling*/
     if (adrv9001->devStateInfo.devState < ADI_ADRV9001_STATE_ARM_LOADED)
@@ -80,7 +81,7 @@ int32_t adi_adrv9001_Channel_State_GenericValidate(adi_adrv9001_Device_t *adrv90
         ADI_ERROR_RETURN(adrv9001->common.error.newAction);
     }
     
-    ADI_RANGE_CHECK(adrv9001, length, 1, ADI_ADRV9001_MAX_NUM_CHANNELS);
+    ADI_RANGE_CHECK(adrv9001, length, 1, ADRV9001_MAX_NUM_CHANNELS);
 
     /* Check for valid channel and port */
     for (i = 0; i < length; i++)

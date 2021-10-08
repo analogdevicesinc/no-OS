@@ -26,12 +26,12 @@ extern "C" {
  *
  * \note Message type: \ref timing_mailbox "Mailbox command"
  *
- * \pre Channel state any of CALIBRATED, PRIMED, RF_ENABLED
+ * \pre Channel state any of STANDBY, CALIBRATED, PRIMED, RF_ENABLED
  *
  * \param[in] adrv9001	             Context variable - Pointer to the ADRV9001 device settings data structure
- * \param[in] port                   The port that the channel refers to
+ * \param[in] port                   The port of the specified channel, ADI_RX or ADI_ORX
  * \param[in] channel                The channel of the specified port
- * \param[in] bbdcRejectionStatus    The status to set for the ORx baseband DC rejection
+ * \param[in] bbdcRejectionStatus    The status to set for the baseband DC rejection
  *
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
  */

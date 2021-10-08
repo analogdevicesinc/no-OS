@@ -1,7 +1,8 @@
+
 /**
  * \file
  * \brief Type definitions for the ADRV9001 profile
- * \copyright Analog Devices Inc. 2019. All rights reserved.
+ * \copyright Analog Devices Inc. 2021. All rights reserved.
  * Released under the ADRV9001 API license, for more information see "LICENSE.txt" in the SDK
  */
 
@@ -17,6 +18,7 @@
 #include "adi_adrv9001_txSettings_types.h"
 #include "adi_adrv9001_deviceSysConfig_types.h"
 #include "adi_adrv9001_pfirBuffer_types.h"
+#include "adi_adrv9001_dynamicProfile_types.h"
 
 /**
  * \brief Data structure to hold ADRV9001 device instance initialization settings

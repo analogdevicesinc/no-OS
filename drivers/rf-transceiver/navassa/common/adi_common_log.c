@@ -13,9 +13,9 @@
 */
 
 #include <stdarg.h>
-#include "adi_platform.h"
 #include "adi_common_error.h"
 #include "adi_common_types.h"
+#include "adi_common_hal.h"
 
 
 void adi_common_LogWrite(adi_common_Device_t *commonDev, uint32_t logLevel, const char* comment, ...)
@@ -29,7 +29,7 @@ void adi_common_LogWrite(adi_common_Device_t *commonDev, uint32_t logLevel, cons
     {
         va_list argp;
         va_start(argp, comment);
-        halError = adi_hal_LogWrite(commonDev->devHalInfo, (int32_t)logLevel, comment, argp);
+        halError = adi_common_hal_LogWrite(commonDev->devHalInfo, (int32_t)logLevel, comment, argp);
         va_end(argp);
     }
 

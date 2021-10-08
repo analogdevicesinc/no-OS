@@ -1,14 +1,14 @@
 /**
  * \file
  * \brief Global definitions for ADRV9001 API
- * \copyright Analog Devices Inc. 2019. All rights reserved.
+ * \copyright Analog Devices Inc. 2021. All rights reserved.
  * Released under the ADRV9001 API license, for more information see "LICENSE.txt" in the SDK
  */
 
 #ifndef _ADI_ADRV9001_DEFINES_H_
 #define _ADI_ADRV9001_DEFINES_H_
 
-#define ADI_ADRV9001_MAX_NUM_CHANNELS         4
+#define ADI_ADRV9001_MAX_NUM_CHANNELS         2
 
 #define ADI_ADRV9001_MAX_TXCHANNELS           2
 #define ADI_ADRV9001_MAX_RXCHANNELS           8
@@ -27,5 +27,7 @@
 #define ADI_ADRV9001_MAX_LB_CHANNEL_END       7
 
 #define ADI_ADRV9001_MAX_RX_ORX_CHANNELS	  ( ADI_ADRV9001_MAX_RX_ONLY + ADI_ADRV9001_MAX_ORX_ONLY )
+
+#define ADI_ADRV9001_MAX_DYNAMIC_PROFILES     6
 
 #endif /* _ADI_ADRV9001_DEFINES_H_ */

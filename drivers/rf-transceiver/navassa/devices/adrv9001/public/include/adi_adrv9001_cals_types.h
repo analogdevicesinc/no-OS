@@ -37,15 +37,19 @@ typedef enum adi_adrv9001_InitCalibrations
     ADI_ADRV9001_INIT_CAL_RX_QEC_FIC            = 0x00020000, //!< Rx QEC Frequency-Independent
     ADI_ADRV9001_INIT_CAL_RX_QEC_ILB_LO_DELAY   = 0x00040000, //!< Rx Internal Loopback LO Delay
     ADI_ADRV9001_INIT_CAL_RX_RF_DC_OFFSET       = 0x00080000, //!< Rx RF DC Offset
-    ADI_ADRV9001_INIT_CAL_RX_GAIN_PATH_DELAY    = 0x00100000, //!< Rx Gain Path Delay
+	
+	ADI_ADRV9001_INIT_LO_RETUNE                 = 0x000B902B, //!< Minimium Subset of InitCals that must be run for LO Retune
 
-    ADI_ADRV9001_INIT_CAL_PLL                   = 0x00200000, //!< PLL
-    ADI_ADRV9001_INIT_CAL_AUX_PLL               = 0x00400000, //!< AUX PLL
+    ADI_ADRV9001_INIT_CAL_RX_GAIN_PATH_DELAY    = 0x00100000, //!< Rx Gain Path Delay
+    ADI_ADRV9001_INIT_CAL_RX_DMR_PATH_DELAY     = 0x00200000, //!< Rx DMR Path Delay
+
+    ADI_ADRV9001_INIT_CAL_PLL                   = 0x00400000, //!< PLL
+    ADI_ADRV9001_INIT_CAL_AUX_PLL               = 0x00800000, //!< AUX PLL
 
     ADI_ADRV9001_INIT_CAL_TX_ALL                = 0x000001FF, //!< Tx all Init Cals
     ADI_ADRV9001_INIT_CAL_RX_ALL                = 0x001FFE00, //!< Rx all Init Cals
     ADI_ADRV9001_INIT_CAL_RX_TX_ALL             = 0x001FFFFF, //!< Rx / Tx all Init Cals
-    ADI_ADRV9001_INIT_CAL_SYSTEM_ALL            = 0x00600000, //!< All system Init Cals
+    ADI_ADRV9001_INIT_CAL_SYSTEM_ALL            = 0x00C00000, //!< All system Init Cals
 }adi_adrv9001_InitCalibrations_e;
 
 /**
@@ -105,6 +109,7 @@ typedef struct adi_adrv9001_InitCals
         2. chanInitCalMask[1]: CH_2 for masks on Rx2/Tx2 channels */
     adi_adrv9001_InitCalibrations_e chanInitCalMask[ADI_ADRV9001_MAX_RX_ONLY];
     adi_adrv9001_InitCalMode_e  calMode;                //!< Enum specifies the mode to run desired InitCals algorithms
+    bool force;  //!< A value of true will force all enabled calibrations to re-run
 } adi_adrv9001_InitCals_t;
 
 /**
