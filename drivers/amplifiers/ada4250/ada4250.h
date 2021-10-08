@@ -167,10 +167,14 @@ struct ada4250_init_param {
 	struct gpio_init_param	*gpio_g1_param;
 	struct gpio_init_param	*gpio_g0_param;
 	struct gpio_init_param	*gpio_bufen_param;
+	struct gpio_init_param	*gpio_slp;
+	struct gpio_init_param	*gpio_shtdwn;
 	/* AVDD value in Volts */
 	int32_t avdd_v;
 	/* Reference Buffer Enable */
 	bool refbuf_en;
+	/* Sleep/Shutdown Pins Enable */
+	bool slp_shtdwn_en;
 	/* Gain Value */
 	enum ada4250_gain gain;
 	/* Bias Set */
@@ -193,6 +197,8 @@ struct ada4250_dev {
 	struct gpio_desc	*gpio_g1;
 	struct gpio_desc	*gpio_g0;
 	struct gpio_desc	*gpio_bufen;
+	struct gpio_desc	*gpio_slp;
+	struct gpio_desc	*gpio_shtdwn;
 	/* AVDD value in Volts */
 	int32_t avdd_v;
 	/* Reference Buffer Enable */
