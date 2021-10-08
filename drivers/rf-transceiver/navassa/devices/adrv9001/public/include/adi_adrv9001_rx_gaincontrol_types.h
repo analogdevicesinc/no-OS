@@ -43,8 +43,8 @@ typedef struct adi_adrv9001_PeakDetector
     bool        enableHbOverload;                   /*!< Enable or disables the HB overload detector. */
     uint8_t     hbOverloadDurationCount;            /*!< Sets the window of clock cycles (at the HB output rate) to meet the overload count. (0 = 2 cycles, 1 = 4 cycles, 2 = 8 cycles, 3 = 12 cycles, 4 = 16 cycles, 5 = 24 cycles, 6 = 32 cycles) */
     uint8_t     hbOverloadThreshCount;              /*!< Sets the number of actual overloads required to trigger the overload signal. Valid range from 1 to 15 */
-    uint16_t    hbHighThresh;                       /*!< AGC HB output high threshold. Valid range from  0 to (A0: 255, B0: 16383) */
-    uint16_t    hbUnderRangeLowThresh;              /*!< AGC HB output low threshold. Valid range from  0 to (A0: 255, B0: 16383) */
+    uint16_t    hbHighThresh;                       /*!< AGC HB output high threshold. Valid range from  0 to 16383 */
+    uint16_t    hbUnderRangeLowThresh;              /*!< AGC HB output low threshold. Valid range from  0 to 16383 */
     uint16_t    hbUnderRangeMidThresh;              /*!< AGC HB output low threshold for 2nd interval for multiple time constant AGC mode. Valid range from  0 to (A0: 255, B0: 16383) */
     uint16_t    hbUnderRangeHighThresh;             /*!< AGC HB output low threshold for 3rd interval for multiple time constant AGC mode. Valid range from  0 to (A0: 255, B0: 16383) */
     uint8_t     hbUpperThreshPeakExceededCount;     /*!< AGC HB output upper threshold count. Valid range from  0 to 255 */

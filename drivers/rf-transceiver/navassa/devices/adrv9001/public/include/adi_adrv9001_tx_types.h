@@ -32,8 +32,12 @@
 #define ADRV9001_ADDR_TX1_ATTEN_TABLE 0x45300000
 #define ADRV9001_ADDR_TX2_ATTEN_TABLE 0x45400000
 
+#define ADRV9001_TX_PA_RAMP_MIN_CLK_KHZ     48
+#define ADRV9001_TX_PA_RAMP_MAX_CLK_KHZ     1000
 #define ADRV9001_TX_PA_RAMP_LUT_SIZE        256
 
+#define ADRV9001_TX_MAX_ATTENUATION_MDB         41950
+#define ADRV9001_TX_ATTENUATION_RESOLUTION_MDB  50
 /**
 *  \brief Enum to set the Tx Attenuation step size
 */
@@ -85,6 +89,16 @@ typedef enum adi_adrv9001_PaProtectionInputSel
     ADI_ADRV9001_COMPLEX_MULT_OUTPUT   = 0x0000, /*!< Input data to PA protection block is probed from complex mult output */
     ADI_ADRV9001_TXQEC_ACTUATOR_OUTPUT = 0x0001  /*!< Input data to PA protection block is probed from tx qec actuator output */
 } adi_adrv9001_PaProtectionInputSel_e;
+
+/**
+*  \brief Enum select for PA ramp trigger
+*/
+typedef enum adi_adrv9001_TxPaRampTrigger
+{
+    ADI_ADRV9001_TX_PA_RAMP_TRIGGER_SPI         = 0x0, /*!< Trigger for PA Ramp is from SPI */
+    ADI_ADRV9001_TX_PA_RAMP_TRIGGER_GPIO        = 0x1, /*!< Trigger for PA Ramp is from GPIO */
+    ADI_ADRV9001_TX_PA_RAMP_TRIGGER_ENABLE_PIN  = 0x2  /*!< Trigger for PA Ramp is from the TX_ENABLE pin */
+} adi_adrv9001_TxPaRampTrigger_e;
 
 /**
  * \brief Configuration structure for Tx power control
@@ -148,14 +162,14 @@ typedef struct adi_adrv9001_SlewRateLimiterCfg
 typedef struct adi_adrv9001_PaRampCfg
 {
     bool     enable;                                   /*!< PA Ramp enable; True = Enable PA ramp of Tx channel; False = Disable */
-    bool     gpioTriggerSelect;                        /*!< Source of the enable signal. True: GPIO triggered; False: SPI triggered */
+    adi_adrv9001_TxPaRampTrigger_e triggerSelect;      /*!< Trigger source */
     uint16_t rampClock_kHz;                            /*!< Clock rate of Tx PA Ramp block */
     uint32_t triggerDelayRise;                         /*!< Programmable Delay Enable on the rising edge */
     uint32_t triggerDelayFall;                         /*!< Programmable Delay Enable on the falling edge */
     adi_adrv9001_GpioPin_e     gpioSource;             /*!< Desired GPIO pin to be used as source of trigger if gpioTriggered = True */
     uint8_t  upEndIndex;                               /*!< 8-bit look-up-table index. This index indicates the end of the ramp up waveform. */
     bool     asymmetricRamp;                           /*!< False = symmetric, True = Ramp-down waveform is asymmetric to the Ramp-up waveform */
-    uint8_t  downEndIndex;                             /*!< 8-bit look-up-table index. This index indicates the start of the ramp down waveform.
+    uint8_t  downEndIndex;                             /*!< 8-bit look-up-table index. This index indicates the end of the ramp down waveform.
                                                           Valid only when asymmetricRamp=1 */
     adi_adrv9001_AuxDac_e  auxDacChannelSelect;        /*!< Choose the AuxDacChannel [0, 1, 2, 3] to ouptut the Ramp or SPI signal */
     uint16_t paRampLUT[ADRV9001_TX_PA_RAMP_LUT_SIZE];  /*!< PA Ramp look-up-table. 256 depth Array of LUT elements */

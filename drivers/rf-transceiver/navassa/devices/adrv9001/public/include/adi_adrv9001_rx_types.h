@@ -29,7 +29,7 @@ extern "C" {
 
 #define ADI_ADRV9001_RX_GAIN_INDEX_MIN 187
 #define ADI_ADRV9001_RX_GAIN_INDEX_MAX 255
-    
+
 /**
 *  \brief Rx gain table SRAM base addresses
 */
@@ -48,18 +48,6 @@ typedef enum adi_adrv9001_RxGainControlMode
     ADI_ADRV9001_RX_GAIN_CONTROL_MODE_PIN,   /*!< Increment and decrement the gain index by pulsing GPIO pins */
     ADI_ADRV9001_RX_GAIN_CONTROL_MODE_AUTO   /*!< ADRV9001 Gain Control block sets the gain index based on thresholds */
 } adi_adrv9001_RxGainControlMode_e;
-
-/**
-* \brief Data structure to hold ADRV9001 Rx RSSI status
-*/
-typedef struct adi_adrv9001_RxRssiStatus
-{
-    uint16_t power_mdB;              /* Power in milli dB */
-
-    /* Linear power is calculated by this formula: linear power = (mantissa * 2^-15) * 2^-exponent */
-    uint16_t linearPower_mantissa;   /* Mantissa of Linear Power */
-    uint16_t linearPower_exponent;   /* Exponent of Linear Power */
-} adi_adrv9001_RxRssiStatus_t;
 
 /**
  * \brief Data structure to hold ADRV9001 Rx gain table row entry
@@ -135,22 +123,12 @@ typedef enum adi_adrv9001_rxManualGainPeakPowerSignalSel
 } adi_adrv9001_RxInterfaceGainUpdateTiming_e;
 
 /**
-*  \brief Enum to select the type of gain table loaded during ADRV9001 initialization
-*/
-typedef enum adi_adrv9001_RxGainTableType
-{
-    ADI_ADRV9001_RX_GAIN_CORRECTION_TABLE   = 0,   /*!< Gain table to use digital gain to adjust for coarse analog gain steps and maintain a constant gain */
-    ADI_ADRV9001_RX_GAIN_COMPENSATION_TABLE = 1    /*!< Gain table to adjust digital gain when analog gain changes to maintain a constant gain*/
-} adi_adrv9001_RxGainTableType_e;
-
-/**
 * \brief Data structure to set/get the Rx interface gain control parameters for the given Rx channel.
 */
 typedef struct adi_adrv9001_RxInterfaceGainCtrl
 {
     adi_adrv9001_RxInterfaceGainUpdateTiming_e  updateInstance;
     adi_adrv9001_RxInterfaceGainCtrlMode_e controlMode;
-    adi_adrv9001_RxGainTableType_e         gainTableType;
     adi_adrv9001_RxInterfaceGain_e         gain;
 } adi_adrv9001_RxInterfaceGainCtrl_t;
 
@@ -181,6 +159,18 @@ typedef struct adi_adrv9001_GainIndexPinCfg
     adi_adrv9001_GpioPinCrumbSel_e gainIndex_05_04;
     adi_adrv9001_GpioPinCrumbSel_e gainIndex_07_06;
 } adi_adrv9001_GainIndexPinCfg_t;
+
+/**
+ * \brief Structure which holds the ADC switch configuration
+ */
+typedef struct adi_adrv9001_RxPortSwitchCfg
+{
+    uint64_t  minFreqPortA_Hz;
+    uint64_t  maxFreqPortA_Hz;
+    uint64_t  minFreqPortB_Hz;
+    uint64_t  maxFreqPortB_Hz;
+    bool      enable;
+} adi_adrv9001_RxPortSwitchCfg_t;
 
 #ifdef __cplusplus
 }

@@ -61,6 +61,19 @@
 #define ADI_PPS_RECEIVER_ENABLE		(1 << 8)
 #define ADI_SCALECORRECTION_ONLY	(1 << 9)
 
+#define ADI_REG_RSTN			0x0040
+#define ADI_RSTN				(1 << 0)
+#define ADI_MMCM_RSTN 			(1 << 1)
+
+#define ADI_REG_CNTRL			0x0044
+#define ADI_R1_MODE			(1 << 2)
+#define ADI_DDR_EDGESEL			(1 << 1)
+#define ADI_PIN_MODE			(1 << 0)
+
+#define ADI_REG_CLK_RATIO		0x0058
+#define ADI_CLK_RATIO(x)		(((x) & 0xFFFFFFFF) << 0)
+#define ADI_TO_CLK_RATIO(x)		(((x) >> 0) & 0xFFFFFFFF)
+
 #define ADI_RX2_REG_OFF			0x1000
 #define ADI_TX1_REG_OFF			0x2000
 #define ADI_TX2_REG_OFF			0x4000
@@ -76,83 +89,84 @@
 #define NUM_LANES(x)			field_prep(NUM_LANES_MASK, x)
 #define SDR_DDR_MASK			BIT(16)
 #define SDR_DDR(x)			field_prep(SDR_DDR_MASK, x)
+#define TX_ONLY_MASK			BIT(10)
+#define TX_ONLY(x)			FIELD_GET(TX_ONLY_MASK, x)
 
 #define IS_CMOS(cfg)			((cfg) & (ADI_CMOS_OR_LVDS_N))
 
 void adrv9002_axi_interface_enable(struct adrv9002_rf_phy *phy, const int chan,
-				   const bool en)
+				   const bool tx, const bool en)
 {
-	const int rx_off = chan ? ADI_RX2_REG_OFF : 0;
-	const int tx_off = chan ? ADI_TX2_REG_OFF : ADI_TX1_REG_OFF;
+	int off = 0;
 
-	if (en) {
+	if (tx)
+		off = chan ? ADI_TX2_REG_OFF : ADI_TX1_REG_OFF;
+	else
+		off = chan ? ADI_RX2_REG_OFF : 0;
+
+	if (en)
 		/* bring axi core out of reset */
-		axi_adc_write(phy->rx1_adc, AIM_AXI_REG(rx_off, AXI_ADC_REG_RSTN),
-			      AXI_ADC_RSTN | AXI_ADC_MMCM_RSTN);
-		axi_adc_write(phy->rx1_adc, AIM_AXI_REG(tx_off, AXI_ADC_REG_RSTN),
-			      AXI_ADC_RSTN | AXI_ADC_MMCM_RSTN);
-	} else {
+		axi_adc_write(phy->rx1_adc, AIM_AXI_REG(off, ADI_REG_RSTN),
+			      ADI_RSTN | ADI_MMCM_RSTN);
+	else
 		/* reset axi core*/
-		axi_adc_write(phy->rx1_adc, AIM_AXI_REG(rx_off, AXI_ADC_REG_RSTN), 0);
-		axi_adc_write(phy->rx1_adc, AIM_AXI_REG(tx_off, AXI_ADC_REG_RSTN), 0);
-	}
+		axi_adc_write(phy->rx1_adc, AIM_AXI_REG(off, ADI_REG_RSTN), 0);
 }
 
 int adrv9002_axi_interface_set(struct adrv9002_rf_phy *phy,
 			       const uint8_t n_lanes,
 			       const bool cmos_ddr,
-			       const int channel)
+			       const int channel,
+			       const bool tx)
 {
-	uint32_t reg_ctrl = 0, tx_reg_ctrl;
+	uint32_t reg_ctrl, reg_value = 0, off, divider;
 	uint8_t rate;
-	const int rx_off = channel ? ADI_RX2_REG_OFF : 0;
-	const int tx_off = channel ? ADI_TX2_REG_OFF : ADI_TX1_REG_OFF;
 
-	axi_adc_read(phy->rx1_adc, AIM_AXI_REG(rx_off, AXI_ADC_REG_CNTRL), &reg_ctrl);
-	axi_adc_read(phy->rx1_adc, AIM_AXI_REG(tx_off, ADI_TX_REG_CTRL_2),
-		     &tx_reg_ctrl);
+	if (tx) {
+		off = channel ? ADI_TX2_REG_OFF : ADI_TX1_REG_OFF;
+		reg_ctrl = ADI_TX_REG_CTRL_2;
+	} else {
+		off = channel ? ADI_RX2_REG_OFF : 0;
+		reg_ctrl = ADI_REG_CNTRL;
+	}
 
-	reg_ctrl &= ~(NUM_LANES_MASK | SDR_DDR_MASK);
-	tx_reg_ctrl &= ~(NUM_LANES_MASK | SDR_DDR_MASK);
+	axi_adc_read(phy->rx1_adc, AIM_AXI_REG(off, reg_ctrl), &reg_value);
+	reg_value &= ~(NUM_LANES_MASK | SDR_DDR_MASK);
 
 	switch (n_lanes) {
 	case ADI_ADRV9001_SSI_1_LANE:
-		reg_ctrl |= NUM_LANES(1);
-		tx_reg_ctrl |= NUM_LANES(1);
-		if (phy->ssi_type == ADI_ADRV9001_SSI_TYPE_CMOS) {
-			rate = cmos_ddr ? 3 : 7;
-			reg_ctrl |= SDR_DDR(!cmos_ddr);
-			tx_reg_ctrl |= SDR_DDR(!cmos_ddr);
-		} else {
-			rate = 3;
-		}
+		reg_value |= NUM_LANES(1);
+		if (phy->ssi_type == ADI_ADRV9001_SSI_TYPE_CMOS)
+			reg_value |= SDR_DDR(!cmos_ddr);
 		break;
 	case ADI_ADRV9001_SSI_2_LANE:
 		if (phy->ssi_type == ADI_ADRV9001_SSI_TYPE_CMOS)
 			return -EINVAL;
 
-		reg_ctrl |= NUM_LANES(2);
-		tx_reg_ctrl |= NUM_LANES(2);
-		rate = 1;
+		reg_value |= NUM_LANES(2);
 		break;
 	case ADI_ADRV9001_SSI_4_LANE:
 		if (phy->ssi_type == ADI_ADRV9001_SSI_TYPE_LVDS)
 			return -EINVAL;
 
-		reg_ctrl |= NUM_LANES(4);
-		tx_reg_ctrl |= NUM_LANES(4);
-		rate = cmos_ddr ? 0 : 1;
-		reg_ctrl |= SDR_DDR(!cmos_ddr);
-		tx_reg_ctrl |= SDR_DDR(!cmos_ddr);
+		reg_value |= NUM_LANES(4);
+		reg_value |= SDR_DDR(!cmos_ddr);
 		break;
 	default:
 		return -EINVAL;
 	}
 
-	axi_adc_write(phy->rx1_adc, AIM_AXI_REG(rx_off, AXI_ADC_REG_CNTRL), reg_ctrl);
-	axi_adc_write(phy->rx1_adc, AIM_AXI_REG(tx_off, ADI_TX_REG_RATE), rate);
-	axi_adc_write(phy->rx1_adc, AIM_AXI_REG(tx_off, ADI_TX_REG_CTRL_2),
-		      tx_reg_ctrl);
+	axi_adc_write(phy->rx1_adc, AIM_AXI_REG(off, reg_ctrl), reg_value);
+	if (tx) {
+		uint32_t ddr = cmos_ddr;
+
+		axi_adc_read(phy->rx1_adc, AIM_AXI_REG(off, ADI_REG_CLK_RATIO), &divider);
+		/* in LVDS, data type is always DDR */
+		if (phy->ssi_type == ADI_ADRV9001_SSI_TYPE_LVDS)
+			ddr = 1;
+		rate = 32 / ((1 << n_lanes) * (1 + ddr) * divider) - 1;
+		axi_adc_write(phy->rx1_adc, AIM_AXI_REG(off, ADI_TX_REG_RATE), rate);
+	}
 
 	return 0;
 }
@@ -169,51 +183,48 @@ adi_adrv9001_SsiType_e adrv9002_axi_ssi_type_get(struct adrv9002_rf_phy *phy)
 }
 
 void adrv9002_get_ssi_interface(struct adrv9002_rf_phy *phy, const int chann,
-				uint8_t *n_lanes, bool *cmos_ddr_en)
+				const bool tx, uint8_t *n_lanes, bool *cmos_ddr_en)
 {
-	/*
-	 * Using the RX profile since with TX, we can have, for example, TX1 disabled
-	 * while RX1 is enabled (the other way around is not permitted). Since this API
-	 * only looks to the channel, we would return invalid values in such a case...
-	 */
-	adi_adrv9001_RxProfile_t *rx_cfg;
-	/*
-	 * We only look for one port. Although theoretical possible, we are
-	 * assuming that ports on the same channel have the same number of lanes
-	 * and, obviously, the same interface type
-	 */
-	rx_cfg = &phy->curr_profile->rx.rxChannelCfg[chann].profile;
-	*n_lanes = rx_cfg->rxSsiConfig.numLaneSel;
-	*cmos_ddr_en = rx_cfg->rxSsiConfig.cmosDdrEn;
+	if (tx) {
+		adi_adrv9001_TxProfile_t *tx_cfg;
+
+		tx_cfg = &phy->curr_profile->tx.txProfile[chann];
+		*n_lanes = tx_cfg->txSsiConfig.numLaneSel;
+		*cmos_ddr_en = tx_cfg->txSsiConfig.ddrEn;
+	} else {
+		adi_adrv9001_RxProfile_t *rx_cfg;
+
+		rx_cfg = &phy->curr_profile->rx.rxChannelCfg[chann].profile;
+		*n_lanes = rx_cfg->rxSsiConfig.numLaneSel;
+		*cmos_ddr_en = rx_cfg->rxSsiConfig.ddrEn;
+	}
 }
 
 static int adrv9002_ssi_configure(struct adrv9002_rf_phy *phy)
 {
 	bool cmos_ddr;
 	uint8_t n_lanes;
-	int c, ret;
+	int ret;
+	unsigned int c;
 
-	for (c = 0; c < ADRV9002_CHANN_MAX; c++) {
-		/*
-		 * Care only about RX because TX cannot be enabled while the RX on the
-		 * same channel is disabled. This will also work in rx2tx2 mode since we
-		 * only care at channel 1 and RX1 must be enabled. However, TX1 can be
-		 * disabled which would lead to problems since we would no configure channel 1...
-		 */
-		struct adrv9002_rx_chan *rx = &phy->rx_channels[c];
+	for (c = 0; c < ARRAY_SIZE(phy->channels); c++) {
+		struct adrv9002_chan *chann = phy->channels[c];
 
-		if (!rx->channel.enabled)
+		/* RX2/TX2 can only be enabled if RX1/TX1 are also enabled */
+		if (phy->rx2tx2 && chann->idx > ADRV9002_CHANN_1)
+			break;
+
+		if (!chann->enabled)
 			continue;
 
 		adrv9002_sync_gpio_toogle(phy);
 
-		adrv9002_get_ssi_interface(phy, c, &n_lanes, &cmos_ddr);
-		ret = adrv9002_axi_interface_set(phy, n_lanes, cmos_ddr, c);
+		adrv9002_get_ssi_interface(phy, chann->idx, chann->port == ADI_TX, &n_lanes,
+					   &cmos_ddr);
+		ret = adrv9002_axi_interface_set(phy, n_lanes, cmos_ddr, chann->idx,
+						 chann->port == ADI_TX);
 		if (ret)
 			return ret;
-
-		if (phy->rx2tx2)
-			break;
 	}
 
 	return 0;
@@ -222,17 +233,17 @@ static int adrv9002_ssi_configure(struct adrv9002_rf_phy *phy)
 static void adrv9002_axi_tx_test_pattern_set(struct adrv9002_rf_phy *phy,
 		struct axi_adc *axi_dev,
 		const int off,
+		const int n_chan,
 		uint32_t *ctrl_7)
 {
-	int n_chan = axi_dev->num_channels;
 	int c, sel;
 
 	if (phy->ssi_type == ADI_ADRV9001_SSI_TYPE_CMOS)
 		/* RAMP nibble */
 		sel = 10;
 	else
-		/* pn15 */
-		sel = 7;
+		/* pn7 */
+		sel = 6;
 
 	for (c = 0; c < n_chan; c++) {
 		axi_adc_read(axi_dev, AIM_AXI_REG(off, ADI_TX_REG_CHAN_CTRL_7(c)), &ctrl_7[c]);
@@ -243,9 +254,9 @@ static void adrv9002_axi_tx_test_pattern_set(struct adrv9002_rf_phy *phy,
 
 static void adrv9002_axi_tx_test_pattern_restore(struct axi_adc *axi_dev,
 		const int off,
+		const int n_chan,
 		const uint32_t *saved_ctrl_7)
 {
-	int n_chan = axi_dev->num_channels;
 	int c;
 
 	for (c = 0; c < n_chan; c++)
@@ -306,11 +317,10 @@ int adrv9002_check_tx_test_pattern(struct adrv9002_rf_phy *phy, const int chann)
 
 static void adrv9002_axi_rx_test_pattern_pn_sel(struct adrv9002_rf_phy *phy,
 		struct axi_adc *axi_dev,
-		const int off)
+		const int off,
+		const int n_chan)
 {
-	int n_chan = axi_dev->num_channels;
 	int c;
-	uint32_t reg;
 	enum axi_adc_pn_sel sel;
 
 	if (phy->ssi_type == ADI_ADRV9001_SSI_TYPE_CMOS)
@@ -318,11 +328,14 @@ static void adrv9002_axi_rx_test_pattern_pn_sel(struct adrv9002_rf_phy *phy,
 	else
 		sel = AXI_ADC_PN15;
 
-	for (c = 0; c < n_chan; c++) {
-		axi_adc_read(axi_dev, AIM_AXI_REG(off, AXI_ADC_REG_CHAN_CNTRL_3(c)), &reg);
-		reg = (reg & ~AXI_ADC_ADC_PN_SEL(~0)) | AXI_ADC_ADC_PN_SEL(sel);
-		axi_adc_write(axi_dev, AIM_AXI_REG(off, AXI_ADC_REG_CHAN_CNTRL_3(c)), reg);
-	}
+	for (c = 0; c < n_chan; c++)
+		/*
+		 * We are deliberately overwriting the DATA_SEL bits to DMA. If it's set to loopback
+		 * (if some user was playing with near end loopback before updating the profile or
+		 * reinitialize the device), TX tuning will fail...
+		 */
+		axi_adc_write(axi_dev, AIM_AXI_REG(off, AXI_ADC_REG_CHAN_CNTRL_3(c)),
+			      AXI_ADC_ADC_PN_SEL(sel));
 }
 
 static int adrv9002_axi_pn_check(struct adrv9002_rf_phy *phy,
@@ -340,18 +353,9 @@ static int adrv9002_axi_pn_check(struct adrv9002_rf_phy *phy,
 
 	/* check for errors in any channel */
 	for (chan = 0; chan < n_chan; chan++) {
-		/*
-		 * Dont search for errors on disabled ports. We won't have any
-		 * test signal in that case, so the core will treat it as an error
-		 */
-		if (!phy->rx_channels[chan / 2].channel.enabled) {
-			pr_debug("Ignore pn error in c:%d\n", chan);
-			continue;
-		}
-
 		axi_adc_read(axi_dev, AIM_AXI_REG(off, AXI_ADC_REG_CHAN_STATUS(chan)), &reg);
 		if (reg) {
-			pr_debug("pn error in c:%d\n", chan);
+			pr_debug("pn error in c:%d, reg: %02X\n", chan, reg);
 			return 1;
 		}
 	}
@@ -374,7 +378,7 @@ int adrv9002_intf_change_delay(struct adrv9002_rf_phy *phy, const int channel,
 		delays.txIDataDelay[channel] = data_delay;
 		delays.txQDataDelay[channel] = data_delay;
 		delays.txStrobeDelay[channel] = data_delay;
-		if (phy->rx2tx2 && !channel) {
+		if (phy->rx2tx2) {
 			delays.txClkDelay[channel + 1] = clk_delay;
 			delays.txIDataDelay[channel + 1] = data_delay;
 			delays.txQDataDelay[channel + 1] = data_delay;
@@ -440,19 +444,29 @@ int adrv9002_intf_test_cfg(struct adrv9002_rf_phy *phy, const int chann,
 {
 	int ret;
 	struct adrv9002_chan *chan;
-	adi_adrv9001_SsiTestModeData_e test_data = phy->ssi_type ==
-			ADI_ADRV9001_SSI_TYPE_CMOS ?
-			ADI_ADRV9001_SSI_TESTMODE_DATA_RAMP_NIBBLE :
-			ADI_ADRV9001_SSI_TESTMODE_DATA_PRBS15;
 
-	pr_debug("cfg test stop:%u, ssi:%d, c:%d, tx:%d\n", stop, phy->ssi_type, chann,
-		 tx);
+	pr_debug("cfg test stop:%u, ssi:%d, c:%d, tx:%d\n", stop,
+		 phy->ssi_type, chann, tx);
 
 	if (tx) {
 		struct adi_adrv9001_TxSsiTestModeCfg cfg = {0};
 		chan = &phy->tx_channels[chann].channel;
 
-		cfg.testData = stop ? ADI_ADRV9001_SSI_TESTMODE_DATA_NORMAL : test_data;
+		if (stop)
+			cfg.testData = ADI_ADRV9001_SSI_TESTMODE_DATA_NORMAL;
+		else if (phy->ssi_type == ADI_ADRV9001_SSI_TYPE_LVDS)
+			/*
+			 * Some low rate profiles don't play well with prbs15. The reason is
+			 * still unclear. We suspect that the chip error checker might have
+			 * some time constrains and cannot reliable validate prbs15 full
+			 * sequences in the test time. Using a shorter sequence fixes the
+			 * problem...
+			 */
+			cfg.testData = ADI_ADRV9001_SSI_TESTMODE_DATA_PRBS7;
+		else
+			/* CMOS */
+			cfg.testData = ADI_ADRV9001_SSI_TESTMODE_DATA_RAMP_NIBBLE;
+
 		ret = adi_adrv9001_Ssi_Tx_TestMode_Configure(phy->adrv9001, chan->number,
 				phy->ssi_type,
 				ADI_ADRV9001_SSI_FORMAT_16_BIT_I_Q_DATA,
@@ -460,9 +474,10 @@ int adrv9002_intf_test_cfg(struct adrv9002_rf_phy *phy, const int chann,
 		if (ret)
 			return adrv9002_dev_err(phy);
 
-		if (!phy->rx2tx2 || chann)
+		if (!phy->rx2tx2)
 			return 0;
 
+		/* on rx2tx2 we will only get here on index 0 so the following is fine */
 		chan = &phy->tx_channels[chann + 1].channel;
 		if (!chan->enabled)
 			return 0;
@@ -478,7 +493,14 @@ int adrv9002_intf_test_cfg(struct adrv9002_rf_phy *phy, const int chann,
 		struct adi_adrv9001_RxSsiTestModeCfg cfg = {0};
 		chan = &phy->rx_channels[chann].channel;
 
-		cfg.testData = stop ? ADI_ADRV9001_SSI_TESTMODE_DATA_NORMAL : test_data;
+		if (stop)
+			cfg.testData = ADI_ADRV9001_SSI_TESTMODE_DATA_NORMAL;
+		else if (phy->ssi_type == ADI_ADRV9001_SSI_TYPE_LVDS)
+			cfg.testData = ADI_ADRV9001_SSI_TESTMODE_DATA_PRBS15;
+		else
+			/* CMOS */
+			cfg.testData = ADI_ADRV9001_SSI_TESTMODE_DATA_RAMP_NIBBLE;
+
 		ret = adi_adrv9001_Ssi_Rx_TestMode_Configure(phy->adrv9001, chan->number,
 				phy->ssi_type,
 				ADI_ADRV9001_SSI_FORMAT_16_BIT_I_Q_DATA,
@@ -489,7 +511,7 @@ int adrv9002_intf_test_cfg(struct adrv9002_rf_phy *phy, const int chann,
 		if (!phy->rx2tx2)
 			return 0;
 
-		/* on rx2tx2 RX1 must be enabled so we are fine in assuming chan=0 at this point */
+		/* on rx2tx2 we will only get here on index 0 so the following is fine */
 		chan = &phy->rx_channels[chann + 1].channel;
 		if (!chan->enabled)
 			return 0;
@@ -505,6 +527,58 @@ int adrv9002_intf_test_cfg(struct adrv9002_rf_phy *phy, const int chann,
 	return 0;
 }
 
+static void adrv9002_axi_get_channel_range(struct adrv9002_rf_phy *phy, bool tx,
+		int *end)
+{
+	/*
+	 * The point here is that we only want to generate and check test patterns for enabled
+	 * channels. If in !rx2tx2 we only get here if the channel is enabled so just use
+	 * all the @conv channels for the test. In rx2tx2 mode, we will run the test
+	 * at the same time for both channels if both are enabled. However, if RX2/TX2 is
+	 * disabled we do not want to check for that so that we tweak @end to only go over
+	 * the first channel (1 phy channel == 2 hdl channels). RX2/TX2 start at index 2
+	 * in the channels array, so we use @tx to get the right one...
+	 */
+	if (phy->rx2tx2 && !phy->channels[tx + 2]->enabled)
+		*end = 2;
+	else {
+#ifdef ADRV9002_RX2TX2
+		*end = 4;
+#else
+		*end = 2;
+#endif
+	}
+}
+
+void adrv9002_axi_digital_tune_verbose(struct adrv9002_rf_phy *phy,
+				       uint8_t field[][8],
+				       const bool tx,
+				       const int channel)
+{
+	int i, j;
+	char c;
+
+	pr_debug("tuning: %s%d\n",
+		 tx ? "TX" : "RX",
+		 channel ? 2 : 1);
+	pr_debug("  ");
+	for (i = 0; i < 8; i++)
+		pr_debug("%x%s", i, i == 7 ? "" : ":");
+	pr_debug("\n");
+
+	for (i = 0; i < 8; i++) {
+		pr_debug("%x:", i);
+		for (j = 0; j < 8; j++) {
+			if (field[i][j])
+				c = '#';
+			else
+				c = 'o';
+			pr_debug("%c ", c);
+		}
+		pr_debug("\n");
+	}
+}
+
 int adrv9002_axi_intf_tune(struct adrv9002_rf_phy *phy, const bool tx,
 			   const int chann,
 			   uint8_t *clk_delay, uint8_t *data_delay)
@@ -513,23 +587,16 @@ int adrv9002_axi_intf_tune(struct adrv9002_rf_phy *phy, const bool tx,
 	uint8_t field[8][8] = {0};
 	uint8_t clk, data;
 	uint32_t saved_ctrl_7[4];
+	int n_chan;
 
+	adrv9002_axi_get_channel_range(phy, tx, &n_chan);
 	if (tx) {
-		if (phy->rx2tx2 || !chann)
-			off = ADI_TX1_REG_OFF;
-		else
-			off = ADI_TX2_REG_OFF;
-
+		off = chann ? ADI_TX2_REG_OFF : ADI_TX1_REG_OFF;
 		/* generate test pattern for tx test  */
-		adrv9002_axi_tx_test_pattern_set(phy, phy->rx1_adc, off, saved_ctrl_7);
+		adrv9002_axi_tx_test_pattern_set(phy, phy->rx1_adc, off, n_chan, saved_ctrl_7);
 	} else {
-		if (phy->rx2tx2 || !chann)
-			off = 0;
-		else
-			off = ADI_RX2_REG_OFF;
-
-		adrv9002_axi_rx_test_pattern_pn_sel(phy, phy->rx1_adc, off);
-
+		off = chann ? ADI_RX2_REG_OFF : 0;
+		adrv9002_axi_rx_test_pattern_pn_sel(phy, phy->rx1_adc, off, n_chan);
 		/* start test */
 		ret = adrv9002_intf_test_cfg(phy, chann, tx, false);
 		if (ret)
@@ -558,24 +625,19 @@ int adrv9002_axi_intf_tune(struct adrv9002_rf_phy *phy, const bool tx,
 				ret = adrv9002_check_tx_test_pattern(phy, chann);
 
 			field[clk][data] |= ret;
-
-			if (tx) {
-				ret = adrv9002_intf_test_cfg(phy, chann, tx, true);
-				if (ret)
-					return ret;
-			}
 		}
 	}
 
-	if (!tx) {
-		/* stop test */
-		ret = adrv9002_intf_test_cfg(phy, chann, tx, true);
-		if (ret)
-			return ret;
-	} else {
-		/* stop tx pattern */
-		adrv9002_axi_tx_test_pattern_restore(phy->rx1_adc, off, saved_ctrl_7);
-	}
+	adrv9002_axi_digital_tune_verbose(phy, field, tx, chann);
+
+	/* stop test */
+	ret = adrv9002_intf_test_cfg(phy, chann, tx, true);
+	if (ret)
+		return ret;
+
+	/* stop tx pattern */
+	if (tx)
+		adrv9002_axi_tx_test_pattern_restore(phy->rx1_adc, off, n_chan, saved_ctrl_7);
 
 	for (clk = 0; clk < ARRAY_SIZE(field); clk++) {
 		cnt = adrv9002_axi_find_point(&field[clk][0], sizeof(*field), &data);
@@ -662,6 +724,8 @@ static int adrv9002_intf_tuning(struct adrv9002_rf_phy *phy)
 int adrv9002_post_setup(struct adrv9002_rf_phy *phy)
 {
 	int i, ret;
+	unsigned int c;
+	struct adrv9002_chan *chan;
 
 	if (!phy->rx2tx2) {
 		/* set R1_MODE to 1 rf channel in all channels */
@@ -688,6 +752,29 @@ int adrv9002_post_setup(struct adrv9002_rf_phy *phy)
 	if (ret)
 		return ret;
 
+	/* re-enable the cores */
+	for (c = 0; c < ARRAY_SIZE(phy->channels); c++) {
+		chan = phy->channels[c];
+
+		if (phy->rx2tx2 && chan->idx > ADRV9002_CHANN_1)
+			break;
+
+		if (!chan->enabled)
+			continue;
+
+		adrv9002_axi_interface_enable(phy, chan->idx, chan->port == ADI_TX, true);
+	}
+
 	/* start interface tuning */
 	return adrv9002_intf_tuning(phy);
+}
+
+uint32_t adrv9002_axi_dds_rate_get(struct adrv9002_rf_phy *phy, const int chan)
+{
+	uint32_t reg;
+	const int off = chan ? ADI_TX2_REG_OFF : ADI_TX1_REG_OFF;
+
+	/* the rate is decremented by one when configured on the core */
+	axi_adc_read(phy->rx1_adc, AIM_AXI_REG(off, ADI_TX_REG_RATE), &reg);
+	return reg + 1;
 }

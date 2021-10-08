@@ -36,10 +36,10 @@
 
 #ifdef ADI_DYNAMIC_PROFILE_LOAD
 
+#define ADI_ADRV9001_TOKEN_MAX_LENGTH	32
+
 int32_t adi_adrv9001_profileutil_Parse(adi_adrv9001_Device_t *device, adi_adrv9001_Init_t *init, char * jsonBuffer, uint32_t length) 
-{ 
-#define ADI_ADRV9001_TOKEN_MAX_LENGTH	 32
- 
+{
     uint16_t ii = 0; 
     int16_t numTokens = 0; 
     jsmn_parser parser = { 0 }; 

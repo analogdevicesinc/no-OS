@@ -17,6 +17,7 @@
 
 #include "adi_adrv9001_types.h"
 #include "adi_adrv9001_arm_types.h"
+#include "adi_adrv9001_rx_types.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -68,16 +69,21 @@ int32_t adi_adrv9001_Utilities_StreamImage_Load(adi_adrv9001_Device_t *adrv9001,
  *
  * \note Message type: \ref timing_direct "Direct register acccess"
  *
- * \param[in] adrv9001          Context variable - Pointer to the ADRV9001 device data structure
- * \param[in] rxGainTablePath   Path to the Rx gain table in csv format to be programmed
- * \param[in] rxChannelMask     An OR'd combination of adi_common_ChannelNumber_e specifying which
- *                              Rx gain tables to load
- *
+ * \param[in] adrv9001           Context variable - Pointer to the ADRV9001 device data structure
+ * \param[in] port               The desired Rx or ORx port
+ * \param[in] rxGainTablePath    Path to the Rx gain table in csv format to be programmed
+ * \param[in] channel            The Rx Channel from which to write the gain table
+ * \param[in] lnaConfig          The desired LNA configuration
+ * \param[in] gainTableType      Gain table type loaded during initialization
+ * 
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
  */
 int32_t adi_adrv9001_Utilities_RxGainTable_Load(adi_adrv9001_Device_t *adrv9001,
+                                                adi_common_Port_e port,
                                                 const char *rxGainTablePath,
-                                                uint32_t rxChannelMask);
+                                                adi_common_ChannelNumber_e channel,
+                                                adi_adrv9001_RxLnaConfig_t *lnaConfig,
+                                                adi_adrv9001_RxGainTableType_e gainTableType);
 
 /**
  * \brief Load and write the ADRV9001 Tx attenuation table

@@ -43,13 +43,10 @@
 */
 
 /*********************************************************************************************************/
-static int32_t __maybe_unused adi_adrv9001_ORx_Gain_Set_Validate(adi_adrv9001_Device_t *device,
+static __maybe_unused int32_t __maybe_unused adi_adrv9001_ORx_Gain_Set_Validate(adi_adrv9001_Device_t *device,
 								 adi_common_ChannelNumber_e channel,
 								 uint8_t gainIndex)
 {
-    static const uint8_t ORX_MIN_GAIN_INDEX = 2;
-    static const uint8_t ORX_MAX_GAIN_INDEX = 14;
-
     /* Check for valid channel */
     ADI_RANGE_CHECK(device, channel, ADI_CHANNEL_1, ADI_CHANNEL_2);
 
@@ -65,7 +62,7 @@ static int32_t __maybe_unused adi_adrv9001_ORx_Gain_Set_Validate(adi_adrv9001_De
         ADI_ERROR_RETURN(device->common.error.newAction);
     }
 
-    ADI_RANGE_CHECK(device, gainIndex, ORX_MIN_GAIN_INDEX, ORX_MAX_GAIN_INDEX);
+    ADI_RANGE_CHECK(device, gainIndex, ADI_ADRV9001_ORX_GAIN_INDEX_MIN, ADI_ADRV9001_ORX_GAIN_INDEX_MAX);
     
     ADI_API_RETURN(device)
 }
@@ -91,7 +88,7 @@ int32_t adi_adrv9001_ORx_Gain_Set(adi_adrv9001_Device_t *device,
     ADI_API_RETURN(device)
 }
 
-static int32_t __maybe_unused adi_adrv9001_ORx_Gain_Get_Validate(adi_adrv9001_Device_t *device,
+static __maybe_unused int32_t __maybe_unused adi_adrv9001_ORx_Gain_Get_Validate(adi_adrv9001_Device_t *device,
 								 adi_common_ChannelNumber_e channel,
 								 uint8_t *gainIndex)
 {

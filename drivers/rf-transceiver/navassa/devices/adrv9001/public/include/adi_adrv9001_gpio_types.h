@@ -66,14 +66,6 @@ typedef enum adi_adrv9001_GpioPinCrumbSel
     ADI_ADRV9001_GPIO_PIN_CRUMB_15_14,
 } adi_adrv9001_GpioPinCrumbSel_e;
 
-typedef enum adi_adrv9001_GpioAnalogPinNibbleSel
-{
-    ADI_ADRV9001_GPIO_ANALOG_PIN_NIBBLE_UNASSIGNED,
-    ADI_ADRV9001_GPIO_ANALOG_PIN_NIBBLE_03_00,
-    ADI_ADRV9001_GPIO_ANALOG_PIN_NIBBLE_07_04,
-    ADI_ADRV9001_GPIO_ANALOG_PIN_NIBBLE_11_08,
-} adi_adrv9001_GpioAnalogPinNibbleSel_e;
-
 /**
 *  \brief Enum to select desired Tx1 SSI GPIO pins used by the API
 */
@@ -161,7 +153,7 @@ typedef enum adi_adrv9001_GpioSignal
     ADI_ADRV9001_GPIO_SIGNAL_ORX_ENABLE_1,          /*!< ORx Enable signal channel 1 */
     ADI_ADRV9001_GPIO_SIGNAL_ORX_ENABLE_2,          /*!< ORx Enable signal channel 2 */
     ADI_ADRV9001_GPIO_SIGNAL_MON_ENABLE_SPS,        /*!< Monitor mode enable and System Power Saving request signal */
-    ADI_ADRV9001_GPIO_SIGNAL_MON_WAKEUP,            /*!< Monitor mode wake up DSP signal */
+    ADI_ADRV9001_GPIO_SIGNAL_MON_BBIC_WAKEUP,       /*!< Monitor mode signal to wake up the BBIC */
     ADI_ADRV9001_GPIO_SIGNAL_POWER_SAVING_CHANNEL1, /*!< Power saving signal for channel 1 */
     ADI_ADRV9001_GPIO_SIGNAL_POWER_SAVING_CHANNEL2, /*!< Power saving signal for channel 2 */
     ADI_ADRV9001_GPIO_SIGNAL_FH_HOP,                /*!< Frequency hopping hop request signal */
@@ -174,7 +166,7 @@ typedef enum adi_adrv9001_GpioSignal
     ADI_ADRV9001_GPIO_SIGNAL_FH_TABLE_INDEX_3,      /*!< Frequency hopping frequency index select bit 3 */
     ADI_ADRV9001_GPIO_SIGNAL_FH_TABLE_INDEX_4,      /*!< Frequency hopping frequency index select bit 4 */
     ADI_ADRV9001_GPIO_SIGNAL_FH_TABLE_INDEX_5,      /*!< Frequency hopping frequency index select bit 5 */
-    ADI_ADRV9001_GPIO_SIGNAL_FH_HOP_TABLE_SWITCH,   /*!< Frequency hopping Hop table select signal */
+    ADI_ADRV9001_GPIO_SIGNAL_FH_HOP_TABLE_SELECT,   /*!< Frequency hopping Hop table select signal */
     ADI_ADRV9001_GPIO_SIGNAL_TX1_PA_RAMP_CTRL,              /*!< Tx1 Aux DAC ramp control request signal*/
     ADI_ADRV9001_GPIO_SIGNAL_TX2_PA_RAMP_CTRL,              /*!< Tx2 Aux DAC ramp control request signal*/
 
@@ -201,10 +193,11 @@ typedef enum adi_adrv9001_GpioSignal
     ADI_ADRV9001_GPIO_SIGNAL_AUX_ADC_2,                     /*!< Aux ADC control 2 signal */
     ADI_ADRV9001_GPIO_SIGNAL_AUX_ADC_3,                     /*!< Aux ADC control 3 signal */
 
-    /* Future GPIO Functions */
     ADI_ADRV9001_GPIO_SIGNAL_FH_HOP_2,                      /*!< Frequency hopping hop request signal   */
     ADI_ADRV9001_GPIO_SIGNAL_TX_CAL_EN,                     /*!< Tx channel 1 and 2  calibration enable signal */
     ADI_ADRV9001_GPIO_SIGNAL_CAL_UPDATE,                    /*!< Calibration update selection signal  */
+
+    ADI_ADRV9001_GPIO_SIGNAL_FH_HOP_2_TABLE_SELECT,         /*!< Frequency hopping table select for HOP 2 */
 
     ADI_ADRV9001_GPIO_SIGNAL_RX1_LNA_ATTENUATION_1,         /*!< Rx1 LNA attenuation control 1 */
     ADI_ADRV9001_GPIO_SIGNAL_RX1_LNA_ATTENUATION_2,         /*!< Rx1 LNA attenuation control 2 */
@@ -239,15 +232,6 @@ typedef enum adi_adrv9001_GpioSignal
 } adi_adrv9001_GpioSignal_e;
 
 /**
-* \brief Enum for selecting the GP_INT channel
-*/
-typedef enum adi_adrv9001_gpMaskSelect
-{
-    ADI_ADRV9001_GPINT,
-    ADI_ADRV9001_GPINT_NUMBER_OF_CHANNELS /* Keep this ENUM last as a reference to the total number of gp channel enum values */
-}adi_adrv9001_gpMaskSelect_e;	
-
-/**
 * \brief GP_INT status general structure
 */
 typedef struct adi_adrv9001_gpIntStatus
@@ -257,14 +241,6 @@ typedef struct adi_adrv9001_gpIntStatus
     uint32_t gpIntActiveSources;
     uint32_t gpIntSaveIrqMask;
 } adi_adrv9001_gpIntStatus_t;
-
-/**
-* \brief Data structure holding the GP interrupt mask values
-*/
-typedef struct adi_adrv9001_gpMaskArray
-{
-    uint32_t gpIntMask;
-}adi_adrv9001_gpMaskArray_t;
 
 /**
  * \brief Enumeration of GPIO signal polarity 
@@ -306,6 +282,9 @@ typedef struct adi_adrv9001_GpioCtrlInitCfg
     adi_adrv9001_GpioCfg_t channelPowerSaving[ADI_ADRV9001_NUM_CHANNELS];   /*!< (DGPIO) Channel Power Saving Enables */
     adi_adrv9001_GpioCfg_t systemPowerSavingAndMonitorEnable;               /*!< (DGPIO) System Power Saving and Monitor Enable */
     adi_adrv9001_GpioCfg_t systemPowerSavingAndMonitorWakeUp;               /*!< (DGPIO) Monitor WakeUp */
+    adi_adrv9001_GpioCfg_t rx1ExternalLnaPinCfg[2];                         /*!< (AGPIO) Rx1 External LNA attenuation control 1 and 2  */
+    adi_adrv9001_GpioCfg_t rx2ExternalLnaPinCfg[2];                         /*!< (AGPIO) Rx2 External LNA attenuation control 1 and 2  */
+
 } adi_adrv9001_GpioCtrlInitCfg_t;
 
 #endif /* _ADI_ADRV9001_GPIO_TYPES_H_ */

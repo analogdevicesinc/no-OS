@@ -48,6 +48,18 @@ typedef enum adi_adrv9001_SsiPowerDown
 }adi_adrv9001_SsiPowerDown_e;
 
 /**
+ * \brief SSI Rx gain selection
+ */
+typedef enum adi_adrv9001_SsiRxGainSelect
+{
+    ADI_ADRV9001_RX_GAIN_INDEX_GAIN_CHANGE_ZEROES = 0,         /*!< ADRV9001 passes zeroes to gainIndex and gainChange bits in 32-bit Rx SSI */
+    ADI_ADRV9001_RX_GAIN_INDEX_GAIN_CHANGE_INTERFACE_GAIN = 1, /*!< ADRV9001 passes Rx Interface gain and gainChange to 
+                                                                    gainIndex and gainChange bits in 32-bit Rx SSI */
+    ADI_ADRV9001_RX_GAIN_INDEX_GAIN_CHANGE_AGC = 2,            /*!< ADRV9001 passes RxAutomatedGainControl gainIndex and gainChange to 
+                                                                    gainIndex and gainChange bits in 32-bit Rx SSI */
+} adi_adrv9001_SsiRxGainSelect_e;
+
+/**
  * \brief Data structure to transmit ADRV9001 SSI test mode configuration for Rx channel.
  */
 typedef struct adi_adrv9001_RxSsiTestModeCfg
@@ -95,6 +107,16 @@ typedef struct adi_adrv9001_SsiCalibrationCfg
     uint8_t txQDataDelay[ADI_ADRV9001_MAX_TXCHANNELS];  /*!< Q data delay for Tx1/Tx2 channels */
 
 } adi_adrv9001_SsiCalibrationCfg_t;
+
+/**
+ * \brief Data structure to configure SSI Rx gain selection
+ */
+typedef struct adi_adrv9001_SsiRxGainSelectCfg
+{
+    adi_adrv9001_SsiRxGainSelect_e gainSelect;   /*!< Control of which gainIndex and gainChange bits to pass via 32-bit-RxSSI */
+    uint8_t agcGainDelay;                        /*!< Automated Gain Control gainIndex FIFO Delay; Range : 0 -> 255 Rx Sample Periods */
+    uint8_t interfaceGainDelay;                  /*!< Interface gainIndex FIFO Delay; Range : 0 -> 31 Rx Sample Periods */
+} adi_adrv9001_SsiRxGainSelectCfg_t;
 
 #ifdef __cplusplus
 }

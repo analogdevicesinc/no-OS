@@ -24,7 +24,7 @@
 /*
 Set Master Bias
 */
-static int32_t adrv9001_MasterBiasSet(adi_adrv9001_Device_t *device, adi_adrv9001_Init_t *init)
+static __maybe_unused int32_t adrv9001_MasterBiasSet(adi_adrv9001_Device_t *device, adi_adrv9001_Init_t *init)
 {
     uint8_t masterBiasConfig0 = 0;
 
@@ -38,7 +38,7 @@ static int32_t adrv9001_MasterBiasSet(adi_adrv9001_Device_t *device, adi_adrv900
     ADI_API_RETURN(device);
 }
 
-static int32_t adrv9001_RefClockEnable(adi_adrv9001_Device_t *device)
+static __maybe_unused int32_t adrv9001_RefClockEnable(adi_adrv9001_Device_t *device)
 {
     static const uint8_t DEVICE_CLK_BUFFER_ENABLE      = 0x02;
     static const uint8_t DEVCLK_DIVIDER_MCS_RESETB     = 0x10;
@@ -68,7 +68,7 @@ static int32_t adrv9001_RefClockEnable(adi_adrv9001_Device_t *device)
 /*
 Set pad configurations for SYSREF, REFCLK and SYNCB pins
 */
-static int32_t adrv9001_PadConfigsSet(adi_adrv9001_Device_t *device, adi_adrv9001_Init_t *init)
+static __maybe_unused int32_t adrv9001_PadConfigsSet(adi_adrv9001_Device_t *device, adi_adrv9001_Init_t *init)
 {
     static const uint8_t REF_CLK_GEN_PD_CLK_PLL        = 0x04;
     static const uint8_t REF_CLK_GEN_PD_LP_CLK_PLL     = 0x08;
@@ -104,7 +104,7 @@ static int32_t adrv9001_PadConfigsSet(adi_adrv9001_Device_t *device, adi_adrv900
     ADI_API_RETURN(device);
 }
 
-static int32_t adrv9001_ClockVerify(adi_adrv9001_Device_t *device, adi_adrv9001_Init_t *init, uint8_t *modeAdc)
+static __maybe_unused int32_t adrv9001_ClockVerify(adi_adrv9001_Device_t *device, adi_adrv9001_Init_t *init, uint8_t *modeAdc)
 {
     static const uint32_t LVDS_CLOCK_MAX_KHZ                        = 1000000;
     static const uint32_t CMOS_CLOCK_MAX_KHZ                        = 80000;
@@ -155,7 +155,7 @@ static int32_t adrv9001_ClockVerify(adi_adrv9001_Device_t *device, adi_adrv9001_
     ADI_API_RETURN(device);
 }
 
-static int32_t adrv9001_ClocksSet(adi_adrv9001_Device_t *device,
+static __maybe_unused int32_t adrv9001_ClocksSet(adi_adrv9001_Device_t *device,
                                   adi_adrv9001_Init_t *init,
                                   adi_adrv9001_DeviceClockDivisor_e adrv9001DeviceClockOutDivisor)
 {
@@ -370,9 +370,9 @@ int32_t adrv9001_AnalogClockSet(adi_adrv9001_Device_t *device, adi_adrv9001_Init
     ADI_API_RETURN(device);
 }
 
-static int32_t adrv9001_InitAnalog_Validate(adi_adrv9001_Device_t *device,
-                                            adi_adrv9001_Init_t *init,
-                                            adi_adrv9001_DeviceClockDivisor_e adrv9001DeviceClockOutDivisor)
+static __maybe_unused int32_t __maybe_unused adrv9001_InitAnalog_Validate(adi_adrv9001_Device_t *device,
+                                                           adi_adrv9001_Init_t *init,
+                                                           adi_adrv9001_DeviceClockDivisor_e adrv9001DeviceClockOutDivisor)
 {
     ADI_RANGE_CHECK(device, adrv9001DeviceClockOutDivisor, ADI_ADRV9001_DEVICECLOCKDIVISOR_BYPASS, ADI_ADRV9001_DEVICECLOCKDIVISOR_DISABLED);
     ADI_API_RETURN(device);
@@ -385,7 +385,9 @@ int32_t adrv9001_InitAnalog(adi_adrv9001_Device_t *device,
     uint8_t i = 0;
     static const uint8_t refClockDivisor[7] = { 0, 1, 2, 3, 4, 5, 6 };
     static const uint32_t REF_CLOCK_MAX_KHZ = 200000;
+    static const uint32_t DEVICE_CLOCK_OUT_MAX_KHZ = 80000;
     adi_adrv9001_DeviceClockDivisor_e adrv9001ReferenceClockOutDivisor = ADI_ADRV9001_DEVICECLOCKDIVISOR_DISABLED;
+    adi_adrv9001_DeviceClockDivisor_e adrv9001DevClockOutDivisor = ADI_ADRV9001_DEVICECLOCKDIVISOR_DISABLED;
 
     ADI_PERFORM_VALIDATION(adrv9001_InitAnalog_Validate, device, init, adrv9001DeviceClockOutDivisor);
 
@@ -421,8 +423,28 @@ int32_t adrv9001_InitAnalog(adi_adrv9001_Device_t *device,
        then use a different bitfield (core1.refclk_config(0x03DC)[D0] - refclk_pad_oe = 0x0) to disable the DEV_CLK_OUT pin */
     if (ADI_ADRV9001_DEVICECLOCKDIVISOR_DISABLED == adrv9001DeviceClockOutDivisor)
     {
-        adrv9001DeviceClockOutDivisor = ADI_ADRV9001_DEVICECLOCKDIVISOR_BYPASS;
-        ADI_EXPECT(adrv9001_ClocksSet, device, init, adrv9001DeviceClockOutDivisor);
+        /* Make sure that device clock out does not exceed 80MHz */
+        for (i = 0; i < ADI_ARRAY_LEN(refClockDivisor); i++)
+        {
+            if ((init->clocks.deviceClock_kHz >> i) <= DEVICE_CLOCK_OUT_MAX_KHZ)
+            {
+                adrv9001DevClockOutDivisor = (adi_adrv9001_DeviceClockDivisor_e)refClockDivisor[i];
+                break;
+            }
+        }
+
+        /* Error out if none of the divisor satisfy 'devClkOut <=80MHz' condition */
+        if (ADI_ADRV9001_DEVICECLOCKDIVISOR_DISABLED == adrv9001DevClockOutDivisor)
+        {
+            ADI_ERROR_REPORT(&device->common,
+                ADI_COMMON_ERRSRC_API,
+                ADI_COMMON_ERR_INV_PARAM,
+                ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                adrv9001DevClockOutDivisor,
+                "Invalid ADRV9001 Device clock output divisor; (deviceClock_kHz / 2^DeviceClockOutDivisor) must be less than 80MHz");
+            ADI_ERROR_RETURN(device->common.error.newAction);
+        }
+        ADI_EXPECT(adrv9001_ClocksSet, device, init, adrv9001DevClockOutDivisor);
         ADI_EXPECT(adrv9001_NvsRegmapCore1_RefclkPadOe_Set, device, 0);
     }
     else
@@ -452,7 +474,7 @@ int32_t adrv9001_InitAnalog(adi_adrv9001_Device_t *device,
 * \retval ADI_COMMON_ACT_ERR_CHECK_PARAM Recovery action for bad parameter check
 * \retval ADI_COMMON_ACT_NO_ACTION Function completed successfully, no action required
 */
-static int32_t adrv9001_VerifyTxProfile(adi_adrv9001_Device_t *device,
+static __maybe_unused int32_t adrv9001_VerifyTxProfile(adi_adrv9001_Device_t *device,
                                         adi_adrv9001_TxProfile_t *txProfile)
 {
     static const uint32_t TX_INPUT_RATE_MIN = KILO_TO_BASE_UNIT(1);
@@ -488,7 +510,7 @@ static int32_t adrv9001_VerifyTxProfile(adi_adrv9001_Device_t *device,
 * \retval ADI_COMMON_ACT_ERR_CHECK_PARAM Recovery action for bad parameter check
 * \retval ADI_COMMON_ACT_NO_ACTION Function completed successfully, no action required
 */
-static int32_t adrv9001_VerifyRxProfile(adi_adrv9001_Device_t *device,
+static __maybe_unused int32_t adrv9001_VerifyRxProfile(adi_adrv9001_Device_t *device,
                                         adi_adrv9001_RxProfile_t *rxProfile)
 {
     static const uint32_t RX_OUTPUT_RATE_MIN = KILO_TO_BASE_UNIT(1);
@@ -524,7 +546,7 @@ static int32_t adrv9001_VerifyRxProfile(adi_adrv9001_Device_t *device,
 * \retval ADI_COMMON_ACT_ERR_CHECK_PARAM Recovery action for bad parameter check
 * \retval ADI_COMMON_ACT_NO_ACTION Function completed successfully, no action required
 */
-static int32_t adrv9001_VerifyOrxProfile(adi_adrv9001_Device_t *device,
+static __maybe_unused int32_t adrv9001_VerifyOrxProfile(adi_adrv9001_Device_t *device,
                                          adi_adrv9001_RxProfile_t *orxProfile)
 {
     static const uint32_t ORX_OUTPUT_RATE_MIN = KILO_TO_BASE_UNIT(1);
@@ -560,7 +582,7 @@ static int32_t adrv9001_VerifyOrxProfile(adi_adrv9001_Device_t *device,
 * \retval ADI_COMMON_ACT_ERR_CHECK_PARAM Recovery action for bad parameter check
 * \retval ADI_COMMON_ACT_NO_ACTION Function completed successfully, no action required
 */
-static int32_t adrv9001_VerifyLbProfile(adi_adrv9001_Device_t *device,
+static __maybe_unused int32_t adrv9001_VerifyLbProfile(adi_adrv9001_Device_t *device,
                                         adi_adrv9001_RxProfile_t *lbProfile)
 {
     static const uint32_t LB_OUTPUT_RATE_MIN = KILO_TO_BASE_UNIT(1);

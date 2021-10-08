@@ -305,6 +305,8 @@ extern "C" {
 * *******************************
 */
 
+#ifndef CLIENT_IGNORE
+
 /**
  * \brief Common API error reporting facility
  *  
@@ -349,6 +351,8 @@ void adi_common_ErrorReport(adi_common_Device_t *commonDev,
  * \retval ADI_COMMON_ACT_NO_ACTION Function completed successfully, no action required
  */
 int32_t adi_common_ErrorClear(adi_common_Device_t *commonDev);
+
+#endif
 
 #ifdef __cplusplus
 }

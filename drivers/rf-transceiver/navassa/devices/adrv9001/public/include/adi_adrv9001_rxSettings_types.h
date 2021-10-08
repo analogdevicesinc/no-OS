@@ -287,7 +287,13 @@ typedef enum adi_adrv9001_SsiDataFormat
     ADI_ADRV9001_SSI_FORMAT_8_BIT_SYMBOL_DATA = 1,  /*!< 8 bit symbol data (CMOS) */
     ADI_ADRV9001_SSI_FORMAT_16_BIT_SYMBOL_DATA = 2, /*!< 16 bit symbol data (CMOS) */
     ADI_ADRV9001_SSI_FORMAT_12_BIT_I_Q_DATA = 3,    /*!< 12 bit I/Q data (LVDS) */
-    ADI_ADRV9001_SSI_FORMAT_16_BIT_I_Q_DATA = 4     /*!< 16 bit I/Q data (CMOS/LVDS) */
+    ADI_ADRV9001_SSI_FORMAT_16_BIT_I_Q_DATA = 4,    /*!< 16 bit I/Q data (CMOS/LVDS) */
+
+    /*!< 15 bit I/Q data, 1 bit Rx Gain Change (CMOS/LVDS) */
+    ADI_ADRV9001_SSI_FORMAT_15_BIT_I_Q_DATA_1_BIT_GAIN_CHANGE = 5,
+
+    /*!< 22 bit I/Q data, 1 bit Rx Gain Change, 8 bit Rx Gain Index (CMOS/LVDS) */
+    ADI_ADRV9001_SSI_FORMAT_22_BIT_I_Q_DATA_1_BIT_GAIN_CHANGE_8_BIT_GAIN_INDEX = 6
 } adi_adrv9001_SsiDataFormat_e;
 
 /**
@@ -322,6 +328,46 @@ typedef enum adi_adrv9001_SsiTxRefClockPin
     ADI_ADRV9001_SSI_TX_REF_CLOCK_PIN_CMOS_STROBE_IN_N_ENABLED   = 3u    /*!< Tx reference clock out pin TX_STROBE_IN-  enabled in CMOS mode */
 } adi_adrv9001_SsiTxRefClockPin_e;
 
+typedef enum adi_adrv9001_GpioAnalogPinNibbleSel
+{
+    ADI_ADRV9001_GPIO_ANALOG_PIN_NIBBLE_UNASSIGNED,
+    ADI_ADRV9001_GPIO_ANALOG_PIN_NIBBLE_03_00,
+    ADI_ADRV9001_GPIO_ANALOG_PIN_NIBBLE_07_04,
+    ADI_ADRV9001_GPIO_ANALOG_PIN_NIBBLE_11_08,
+} adi_adrv9001_GpioAnalogPinNibbleSel_e;
+
+typedef enum adi_adrv9001_ExternalLnaPinSel
+{
+	ADI_ADRV9001_EXTERNAL_LNA_PIN_RX1_LOWER_RX2_UPPER,
+	ADI_ADRV9001_EXTERNAL_LNA_PIN_RX1_UPPER_RX2_LOWER,
+} adi_adrv9001_ExternalLnaPinSel_e;
+
+/**
+*  \brief Enum to select the type of gain table loaded during ADRV9001 initialization
+*/
+typedef enum adi_adrv9001_RxGainTableType
+{
+    ADI_ADRV9001_RX_GAIN_CORRECTION_TABLE   = 0,   /*!< Gain table to use digital gain to adjust for coarse analog gain steps and maintain a constant gain */
+    ADI_ADRV9001_RX_GAIN_COMPENSATION_TABLE = 1    /*!< Gain table to adjust digital gain when analog gain changes to maintain a constant gain*/
+} adi_adrv9001_RxGainTableType_e;
+
+/**
+ * \brief Structure which holds the LNA configuration
+ */
+typedef struct adi_adrv9001_RxLnaConfig
+{
+    bool externalLnaPresent;	                            /*!< true: External LNA is added; false: No external LNA  */
+    adi_adrv9001_GpioAnalogPinNibbleSel_e gpioSourceSel;	/*!< GPIO Source Select Pin Configuration to output 
+                                                                 Rx1/2 external LNA controlto Analog GPIO pins */
+	adi_adrv9001_ExternalLnaPinSel_e externalLnaPinSel;		/*!< External LNA pin selection for RX channel. If ADI_ADRV9001_EXTERNAL_LNA_PIN_RX1_LOWER_RX2_UPPER, then
+																 lower 2 pins in analog GPIO pin nibble are selected for Rx1 channel */
+    uint8_t settlingDelay;                                  /*!< External LNA Settling Delay (Units: AGC clocks * 4) */
+    uint8_t numberLnaGainSteps;                             /*!< Number of Gain Step(s) required in external LNA */
+    uint16_t lnaGainSteps_mdB[4];							/*!< Array of Gain Step Size(s) in mdB corresponding to the value of the GPIO pin(s) */
+    uint16_t lnaDigitalGainDelay;
+	uint8_t minGainIndex;                                   /*!< The desired minimum gain index to be configured */
+} adi_adrv9001_RxLnaConfig_t;
+
 /**
  * \brief Data structure to hold ADRV9001 SSI configuration.
  */
@@ -334,14 +380,14 @@ typedef struct adi_adrv9001_SsiConfig
     uint8_t						 lsbFirst;					/*!< SSI LSB first */
     uint8_t						 qFirst;					/*!< SSI Q data first */
     adi_adrv9001_SsiTxRefClockPin_e	txRefClockPin;			/*!< SSI Tx reference clock GPIO select */
-    uint8_t						 lvdsBitInversion;			/*!< LVDS SSI bit inversion */
+    bool                         lvdsIBitInversion;         /*!< LVDS SSI I bit inversion. Rx: Inverts I and Q. Tx: inverts I only */
+    bool                         lvdsQBitInversion;         /*!< LVDS SSI Q bit inversion. Rx: Has no effect.   Tx: inverts Q only */
+    bool                         lvdsStrobeBitInversion;    /*!< LVDS SSI Strobe bit inversion */
     uint8_t						 lvdsUseLsbIn12bitMode;		/*!< LVDS use LSB in 12 bit mode */
-    bool						 lvdsTxFullRefClkEn;        /*!< LVDS Tx full refclk enable */
     bool						 lvdsRxClkInversionEn;      /*!< LVDS Rx clock inversion enable */
-    bool                         cmosTxDdrNegStrobeEn;      /*!< CMOS Tx DDR negative strobe enable */
     bool                         cmosDdrPosClkEn;           /*!< CMOS DDR positive clock enable */
-    bool                         cmosDdrClkInversionEn;     /*!< CMOS DDR clock inversion enable */
-    bool                         cmosDdrEn;                 /*!< CMOS DDR enable */
+    bool                         cmosClkInversionEn;        /*!< CMOS clock inversion enable */
+    bool                         ddrEn;                     /*!< Double Data Rate (DDR) enable */
     bool                         rxMaskStrobeEn;            /*!< SSI Rx mask strobe enable */
 } adi_adrv9001_SsiConfig_t;
 
@@ -368,7 +414,9 @@ typedef struct adi_adrv9001_RxProfile
     uint32_t	    channelType;		              /*!< Channel type described by this profile (Rx/ORx/Loopback) */
     adi_adrv9001_AdcType_e		adcType;			  /*!< ADC type: low/high power ADC */
     adi_adrv9001_Adc_LowPower_CalMode_e  lpAdcCalMode; /*!< Select periodic or continuous Low Power ADC calibration */
+    adi_adrv9001_RxGainTableType_e gainTableType;     /*!< type of gain table loaded during ADRV9001 initialization */
     adi_adrv9001_RxDpProfile_t	rxDpProfile;		  /*!< RX digital data path config */
+	adi_adrv9001_RxLnaConfig_t  lnaConfig;            /*!< Rx external LNA configuration */
     adi_adrv9001_SsiConfig_t	rxSsiConfig;		  /*!< RX Serial data interface config */
 } adi_adrv9001_RxProfile_t;
 

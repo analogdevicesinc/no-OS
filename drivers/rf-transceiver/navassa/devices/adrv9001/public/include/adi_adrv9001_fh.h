@@ -20,9 +20,6 @@ extern "C" {
 
 #include "adi_adrv9001_fh_types.h"
 
-#ifndef CLIENT_IGNORE
-#endif
-
 /**
  * \brief Configure Frequency Hopping settings
  * 
@@ -36,8 +33,7 @@ extern "C" {
  *
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover   
  */
-int32_t adi_adrv9001_fh_Configure(adi_adrv9001_Device_t *adrv9001,
-                                  adi_adrv9001_FhCfg_t  *fhConfig);
+int32_t adi_adrv9001_fh_Configure(adi_adrv9001_Device_t *adrv9001, adi_adrv9001_FhCfg_t  *fhConfig);
 
 /**
  * \brief Read the parameters in the frequency hopping configuration data struct
@@ -51,8 +47,7 @@ int32_t adi_adrv9001_fh_Configure(adi_adrv9001_Device_t *adrv9001,
  *
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
  */
-int32_t adi_adrv9001_fh_Configuration_Inspect(adi_adrv9001_Device_t *adrv9001,
-                                              adi_adrv9001_FhCfg_t *fhConfig);
+int32_t adi_adrv9001_fh_Configuration_Inspect(adi_adrv9001_Device_t *adrv9001, adi_adrv9001_FhCfg_t *fhConfig);
 
 /**
  * \brief Load a frequency hopping table into ARM memory
@@ -64,8 +59,12 @@ int32_t adi_adrv9001_fh_Configuration_Inspect(adi_adrv9001_Device_t *adrv9001,
  *       Maximum table size is 64
  *
  * \pre This function can be called by the user anytime after initialization.
+ *      mode should be set to the same as that set in fhConfig when calling 
+ *      adi_adrv9001_fh_Configure
  * 
  * \param[in] adrv9001      Context variable - Pointer to the ADRV9001 device data structure
+ * \param[in] mode          Frequency hopping mode
+ * \param[in] hopSignal     Hop signal to configure appropriate tableId
  * \param[in] tableId       FH_HOP_TABLE_A or FH_HOP_TABLE_B. Used for ping-pong hop tables.
  * \param[in] hopTable      Array of hop frame information to write as the frequency hopping table
  * \param[in] hopTableSize  Size of hopTable; Number of hop frames to write
@@ -74,6 +73,8 @@ int32_t adi_adrv9001_fh_Configuration_Inspect(adi_adrv9001_Device_t *adrv9001,
  */
 /* This writes the buffer directly (it's too big for the mailbox), then uses mailbox to message ARM */
 int32_t adi_adrv9001_fh_HopTable_Static_Configure(adi_adrv9001_Device_t *adrv9001,
+                                                  adi_adrv9001_FhMode_e mode,
+                                                  adi_adrv9001_FhHopSignal_e hopSignal,
                                                   adi_adrv9001_FhHopTable_e tableId, 
                                                   adi_adrv9001_FhHopFrame_t hopTable[],
                                                   uint32_t hopTableSize);
@@ -89,6 +90,7 @@ int32_t adi_adrv9001_fh_HopTable_Static_Configure(adi_adrv9001_Device_t *adrv900
  * \pre This function can be called by the user anytime after initialization.
  *
  * \param[in]  adrv9001        Context variable - Pointer to the ADRV9001 device data structure
+ * \param[in]  hopSignal       Hop signal to inspect appropriate tableId
  * \param[in]  tableId         FH_HOP_TABLE_A or FH_HOP_TABLE_B. Used for ping-pong hop tables
  * \param[out] hopTable        Read back array of hopTable which will be updated with the read back values
  * \param[in]  hopTableSize    Size of hopTable; Max number of hop frames to read back
@@ -98,6 +100,7 @@ int32_t adi_adrv9001_fh_HopTable_Static_Configure(adi_adrv9001_Device_t *adrv900
  */
 /* This writes the buffer directly (it's too big for the mailbox), then uses mailbox to trigger the DMA table generation. */
 int32_t adi_adrv9001_fh_HopTable_Inspect(adi_adrv9001_Device_t *adrv9001,
+                                         adi_adrv9001_FhHopSignal_e hopSignal,
                                          adi_adrv9001_FhHopTable_e tableId, 
                                          adi_adrv9001_FhHopFrame_t hopTable[],
                                          uint32_t hopTableSize,
@@ -106,16 +109,18 @@ int32_t adi_adrv9001_fh_HopTable_Inspect(adi_adrv9001_Device_t *adrv9001,
 /**
  * \brief Set which hop table to use 
  * 
- * Invoke the switch between FH_HOP_TABLE_A and FH_HOP_TABLE_B. 
+ * Invoke the selection of FH_HOP_TABLE_A or FH_HOP_TABLE_B. 
  * 
  * \note Message type: \ref timing_prioritymailbox "High-priority mailbox command"
  *
  * \param[in] adrv9001  Context variable - Pointer to the ADRV9001 device data structure
+ * \param[in] hopSignal Hop signal to set appropriate table Id
  * \param[in] tableId   FH_HOP_TABLE_A or FH_HOP_TABLE_B. Used for ping-pong hop tables.
  *
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
  */
 int32_t adi_adrv9001_fh_HopTable_Set(adi_adrv9001_Device_t *adrv9001,
+                                     adi_adrv9001_FhHopSignal_e hopSignal,
                                      adi_adrv9001_FhHopTable_e tableId);
 
 /**
@@ -124,11 +129,13 @@ int32_t adi_adrv9001_fh_HopTable_Set(adi_adrv9001_Device_t *adrv9001,
  * \note Message type: \ref timing_prioritymailbox "Mailbox command"
  *
  * \param[in]  adrv9001  Context variable - Pointer to the ADRV9001 device data structure
+ * \param[in]  hopSignal Hop signal to get appropriate table Id
  * \param[out] tableId   FH_HOP_TABLE_A or FH_HOP_TABLE_B.
  *
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
  */
 int32_t adi_adrv9001_fh_HopTable_Get(adi_adrv9001_Device_t *adrv9001,
+                                     adi_adrv9001_FhHopSignal_e hopSignal,
                                      adi_adrv9001_FhHopTable_e *tableId);
 
 /**
@@ -161,10 +168,11 @@ int32_t adi_adrv9001_fh_FrameInfo_Inspect(adi_adrv9001_Device_t *adrv9001,
  * \note Message type: \ref timing_direct "Direct register access"
  *       
  * \param[in] adrv9001  Context variable - Pointer to the ADRV9001 device data structure
+ * \param[in] hopSignal Hop signal to toggle
  * 
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
  */
-int32_t adi_adrv9001_fh_Hop(adi_adrv9001_Device_t *adrv9001);
+int32_t adi_adrv9001_fh_Hop(adi_adrv9001_Device_t *adrv9001, adi_adrv9001_FhHopSignal_e hopSignal);
 
 /**
  * \brief Load a frequency hopping table into ARM memory dynamically
@@ -172,6 +180,8 @@ int32_t adi_adrv9001_fh_Hop(adi_adrv9001_Device_t *adrv9001);
  * \pre This function can be called by the user anytime after initialization.
  * 
  * \param[in]  adrv9001                   Context variable - Pointer to the adrv9001 device data structure
+ * \param[in]  mode                       Frequency hopping mode
+ * \param[in]  hopSignal                  Hop signal to inspect appropriate tableId
  * \param[in]  hopTable                   Array of hop frame information to write as the frequency hopping table
  * \param[in]  hopTableSize               Size of hopTable; Number of hop frames to write for Tables A and B. 
  *                                        hopTableSize must be 2 * numberHopsPerDynamicLoad; 
@@ -184,6 +194,8 @@ int32_t adi_adrv9001_fh_Hop(adi_adrv9001_Device_t *adrv9001);
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
  */
 int32_t adi_adrv9001_fh_HopTable_Dynamic_Configure(adi_adrv9001_Device_t *adrv9001,
+                                                   adi_adrv9001_FhMode_e mode,
+                                                   adi_adrv9001_FhHopSignal_e hopSignal,
                                                    adi_adrv9001_FhHopFrame_t hopTable[],
                                                    uint32_t hopTableSize,
                                                    adi_adrv9001_FhPerDynamicLoad_e numberHopsPerDynamicLoad,

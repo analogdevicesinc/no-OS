@@ -21,7 +21,7 @@
 #endif
 
 #include "adi_common_types.h"
-#include "adi_platform_types.h"
+#include "adi_common_hal.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -117,6 +117,8 @@ extern "C" {
                   err.errormessage); \
 }
 
+#ifndef CLIENT_IGNORE
+
 /**
 * \brief Function to write to log with a selected comment
 *
@@ -126,6 +128,8 @@ extern "C" {
 * \param ... variable argument passed to adi_common_Logwrite
 */
 void adi_common_LogWrite(adi_common_Device_t *commonDev, uint32_t logLevel, const char *comment, ...);
+
+#endif
 
 #ifdef __cplusplus
 }

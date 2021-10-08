@@ -25,6 +25,18 @@ extern "C" {
 #endif
 
 /**
+ * \brief Minimum supported carrier frequency 
+ */
+#define ADI_ADRV9001_CARRIER_FREQUENCY_MIN_HZ 25000000llu    /* 25 MHz */
+/**
+ * \brief Maximum supported carrier frequency
+ */
+#define ADI_ADRV9001_CARRIER_FREQUENCY_MAX_HZ 6000000000llu  /* 6 GHz */
+/**
+ * \brief Maximum supported intermediate frequency
+ */
+#define ADI_ADRV9001_INTERMEDIATE_FREQUENCY_MAX_HZ 20000000  /* 20MHz */
+/**
  * \brief Sets the Carrier frequency for the given channel.
  *
  * \note Message type: \ref timing_mailbox "Mailbox command"
@@ -77,7 +89,7 @@ int32_t adi_adrv9001_Radio_Carrier_Inspect(adi_adrv9001_Device_t *adrv9001,
  */
     int32_t adi_adrv9001_Radio_Pll_Configure(adi_adrv9001_Device_t *adrv9001,
                                              adi_adrv9001_Pll_e pllId,
-	                                         adi_adrv9001_PllConfig_t *pllConfig);
+                                             adi_adrv9001_PllConfig_t *pllConfig);
 
 /**
  * \brief Gets the parameters for the given pll
@@ -94,7 +106,7 @@ int32_t adi_adrv9001_Radio_Carrier_Inspect(adi_adrv9001_Device_t *adrv9001,
  */
     int32_t adi_adrv9001_Radio_Pll_Inspect(adi_adrv9001_Device_t *adrv9001,
                                            adi_adrv9001_Pll_e pllId,
-		                                   adi_adrv9001_PllConfig_t *pllConfig);
+                                           adi_adrv9001_PllConfig_t *pllConfig);
 /**
  * \brief Check if the specified PLL is locked
  *

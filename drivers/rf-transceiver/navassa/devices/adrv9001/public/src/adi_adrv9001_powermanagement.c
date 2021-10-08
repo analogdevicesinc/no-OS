@@ -15,47 +15,42 @@
 #include "adi_adrv9001_arm.h"
 #include "adrv9001_arm_macros.h"
 
-static int32_t adi_adrv9001_ldo_Configure_Validate(adi_adrv9001_Device_t *adrv9001,
-                                                   adi_adrv9001_PowerManagementSettings_t *powerManagementSettings)
+static __maybe_unused int32_t adi_adrv9001_powermanagement_Configure_Validate(adi_adrv9001_Device_t *adrv9001,
+                                                                              adi_adrv9001_PowerManagementSettings_t *powerManagementSettings)
 {
     uint8_t i = 0;
+    uint8_t wrData[4] = { 0xDE, 0xAD, 0xBE, 0xEF };
+    uint8_t rdData[4] = { 0 };
+    uint32_t fixedPattern = 0;
+    uint32_t readPattern = 0;
+    uint32_t offset = 0;
+
     ADI_NULL_PTR_RETURN(&adrv9001->common, powerManagementSettings);
     
+    ADI_EXPECT(adi_adrv9001_arm_Memory_Write, adrv9001, ADRV9001_ADDR_ARM_START_DATA, wrData, sizeof(wrData), ADI_ADRV9001_ARM_SINGLE_SPI_WRITE_MODE_STANDARD_BYTES_4);
+    ADI_EXPECT(adi_adrv9001_arm_Memory_Read, adrv9001, ADRV9001_ADDR_ARM_START_DATA, rdData, sizeof(rdData), ADI_ADRV9001_ARM_MEM_AUTO_INCR);
+
+    adrv9001_ParseFourBytes(&offset, wrData, &fixedPattern);
+    offset = 0;
+    adrv9001_ParseFourBytes(&offset, rdData, &readPattern);
+
+    if (readPattern != fixedPattern)
+    {
+        ADI_ERROR_REPORT(&adrv9001->common,
+            ADI_COMMON_ERRSRC_API,
+            ADI_COMMON_ERR_INV_PARAM,
+            ADI_COMMON_ACT_ERR_CHECK_PARAM,
+            readPattern,
+            "ARM memory is not accessible. Check whether device clock and/or power is connected to the ADRV9001 board");
+        ADI_ERROR_RETURN(adrv9001->common.error.newAction);
+    }
+
     for (i = 0; i < ADI_ADRV9001_NUM_LDOS; i++)
     {
         ADI_RANGE_CHECK(adrv9001, 
                         powerManagementSettings->ldoPowerSavingModes[i],
                         ADI_ADRV9001_LDO_POWER_SAVING_MODE_1,
                         ADI_ADRV9001_LDO_POWER_SAVING_MODE_5);
-    }
-    
-    for (i = 0; i < ADI_ADRV9001_NUM_LDOS_CONFIGURABLE; i++)
-    {
-        ADI_RANGE_CHECK(adrv9001, 
-                        powerManagementSettings->ldoConfigs[i].shuntResistanceOff,
-                        ADI_ADRV9001_LDO_SHUNT_RESISTANCE_HIGH_Z,
-                        ADI_ADRV9001_LDO_SHUNT_RESISTANCE_300_OHM);
-        ADI_RANGE_CHECK(adrv9001, 
-                        powerManagementSettings->ldoConfigs[i].shuntResistancePowerSave,
-                        ADI_ADRV9001_LDO_SHUNT_RESISTANCE_HIGH_Z,
-                        ADI_ADRV9001_LDO_SHUNT_RESISTANCE_300_OHM);
-        ADI_RANGE_CHECK(adrv9001, 
-                        powerManagementSettings->ldoConfigs[i].shuntResistanceNormal,
-                        ADI_ADRV9001_LDO_SHUNT_RESISTANCE_HIGH_Z,
-                        ADI_ADRV9001_LDO_SHUNT_RESISTANCE_300_OHM);
-        
-        ADI_RANGE_CHECK(adrv9001, 
-                        powerManagementSettings->ldoConfigs[i].diffPairBiasOff,
-                        ADI_ADRV9001_LDO_DIFFERENTIAL_PAIR_BIAS_25_PERCENT,
-                        ADI_ADRV9001_LDO_DIFFERENTIAL_PAIR_BIAS_100_PERCENT);
-        ADI_RANGE_CHECK(adrv9001, 
-                        powerManagementSettings->ldoConfigs[i].diffPairBiasPowerSave,
-                        ADI_ADRV9001_LDO_DIFFERENTIAL_PAIR_BIAS_25_PERCENT,
-                        ADI_ADRV9001_LDO_DIFFERENTIAL_PAIR_BIAS_100_PERCENT);
-        ADI_RANGE_CHECK(adrv9001, 
-                        powerManagementSettings->ldoConfigs[i].diffPairBiasNormal,
-                        ADI_ADRV9001_LDO_DIFFERENTIAL_PAIR_BIAS_25_PERCENT,
-                        ADI_ADRV9001_LDO_DIFFERENTIAL_PAIR_BIAS_100_PERCENT);
     }
     
     ADI_API_RETURN(adrv9001);
@@ -71,9 +66,8 @@ int32_t adi_adrv9001_powermanagement_Configure(adi_adrv9001_Device_t *adrv9001,
     uint32_t ldoConfigsAddr = 0;
     uint8_t i = 0;
     uint8_t modesData[ADI_ADRV9001_NUM_LDOS] = { 0 };
-    uint8_t configData[ADI_ADRV9001_NUM_LDOS_CONFIGURABLE * 6] = { 0 };
     
-    ADI_PERFORM_VALIDATION(adi_adrv9001_ldo_Configure_Validate, adrv9001, powerManagementSettings);
+    ADI_PERFORM_VALIDATION(adi_adrv9001_powermanagement_Configure_Validate, adrv9001, powerManagementSettings);
     
     ADI_EXPECT(adi_adrv9001_arm_Memory_Read, adrv9001, LDO_POWER_SAVING_MODES_LOCATION, addrData, sizeof(addrData), ADI_ADRV9001_ARM_MEM_AUTO_INCR);
     adrv9001_ParseFourBytes(&offset, addrData, &ldoPowerSavingModesAddr);
@@ -84,17 +78,6 @@ int32_t adi_adrv9001_powermanagement_Configure(adi_adrv9001_Device_t *adrv9001,
         modesData[i] = powerManagementSettings->ldoPowerSavingModes[i];
     }
     ADI_EXPECT(adi_adrv9001_arm_Memory_Write, adrv9001, ldoPowerSavingModesAddr, modesData, sizeof(modesData), ADI_ADRV9001_ARM_SINGLE_SPI_WRITE_MODE_STANDARD_BYTES_4);
-    
-    for (i = 0; i < ADI_ADRV9001_NUM_LDOS_CONFIGURABLE; i++)
-    {
-        configData[i * 6 + 0] = powerManagementSettings->ldoConfigs[i].shuntResistanceOff;
-        configData[i * 6 + 1] = powerManagementSettings->ldoConfigs[i].diffPairBiasOff;
-        configData[i * 6 + 2] = powerManagementSettings->ldoConfigs[i].shuntResistancePowerSave;
-        configData[i * 6 + 3] = powerManagementSettings->ldoConfigs[i].diffPairBiasPowerSave;
-        configData[i * 6 + 4] = powerManagementSettings->ldoConfigs[i].shuntResistanceNormal;
-        configData[i * 6 + 5] = powerManagementSettings->ldoConfigs[i].diffPairBiasNormal;
-    }
-    ADI_EXPECT(adi_adrv9001_arm_Memory_Write, adrv9001, ldoConfigsAddr, configData, sizeof(configData), ADI_ADRV9001_ARM_SINGLE_SPI_WRITE_MODE_STANDARD_BYTES_4);
     
     ADI_API_RETURN(adrv9001);
 }

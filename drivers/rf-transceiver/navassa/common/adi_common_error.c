@@ -21,7 +21,6 @@
 
 #include "adi_common_error.h"
 #include "adi_common_log.h"
-#include "adi_platform.h"
 
 void adi_common_ErrorReport(adi_common_Device_t *commonDev,
                             adi_common_ErrSources_e errSrc,

@@ -11,7 +11,12 @@
 * see the "LICENSE.txt" file in this zip file.
 */
 
-#include "adi_common.h"
+#ifndef __KERNEL__
+#include <stdio.h>
+#else
+#include <linux/types.h>
+#endif
+#include "adi_adrv9001_common.h"
 
 int32_t adi_common_port_to_index(adi_common_Port_e port, uint8_t *index)
 {

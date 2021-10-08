@@ -14,14 +14,17 @@
 #include "adi_adrv9001_user.h"
 #include "adi_adrv9001_stream.h"
 #include "adi_adrv9001_arm.h"
-//#include "adi_adrv9001_gpio.h"
-#include "adi_adrv9001_spi.h"
-#include "adi_adrv9001_error.h"
 #include "adi_adrv9001.h"
-#include "adrv9001_init.h"
+#include "adi_adrv9001_error.h"
+//#include "adi_adrv9001_gpio.h"
+#include "adi_adrv9001_radio.h"
+#include "adi_adrv9001_spi.h"
+
 #include "adrv9001_arm.h"
 #include "adrv9001_arm_macros.h"
+#include "adrv9001_init.h"
 #include "adrv9001_reg_addr_macros.h"
+#include "object_ids.h"
 
 /****************************************************************************
  * Initialization functions
@@ -329,64 +332,71 @@ int32_t adi_adrv9001_Stream_Version(adi_adrv9001_Device_t *device, adi_adrv9001_
     ADI_API_RETURN(device);
 }
 
-#if 0 // FIXME: PTN Wait until GPIO is ported
-int32_t adi_adrv9001_StreamGpioConfigSet(adi_adrv9001_Device_t *device, adi_adrv9001_StreamGpioPinCfg_t *streamGpioPinCfg)
+static __maybe_unused int32_t __maybe_unused adi_adrv9001_Stream_Gpio_Debug_Set_Validate(adi_adrv9001_Device_t *adrv9001)
 {
-    static const uint8_t STREAM_GP_INPUT0_SIGNAL_ID = 0;
-    static const uint8_t STREAM_GP_INPUT1_SIGNAL_ID = 1;
-    static const uint8_t STREAM_GP_INPUT2_SIGNAL_ID = 2;
-    static const uint8_t STREAM_GP_INPUT3_SIGNAL_ID = 3;
-
-    int32_t recoveryAction = ADI_COMMON_ACT_NO_ACTION;
-
-    /* Check device pointer is not null */
-    ADI_ENTRY_PTR_EXPECT(device, streamGpioPinCfg);
-
-#if ADI_ADRV9001_STREAM_RANGE_CHECK > 0
-    recoveryAction = adrv9001_StreamGpioConfigSetRangeCheck(device, streamGpioPinCfg);
-    ADI_ERROR_RETURN(device->common.error.newAction);
-#endif
-
-    recoveryAction = adrv9001_StreamGpioPinSet(device, STREAM_GP_INPUT0_SIGNAL_ID, streamGpioPinCfg->steamGpInput0);
-    ADI_ERROR_RETURN(device->common.error.newAction);
-
-    recoveryAction = adrv9001_StreamGpioPinSet(device, STREAM_GP_INPUT1_SIGNAL_ID, streamGpioPinCfg->steamGpInput1);
-    ADI_ERROR_RETURN(device->common.error.newAction);
-
-    recoveryAction = adrv9001_StreamGpioPinSet(device, STREAM_GP_INPUT2_SIGNAL_ID, streamGpioPinCfg->steamGpInput2);
-    ADI_ERROR_RETURN(device->common.error.newAction);
-
-    recoveryAction = adrv9001_StreamGpioPinSet(device, STREAM_GP_INPUT3_SIGNAL_ID, streamGpioPinCfg->steamGpInput3);
-    ADI_ERROR_RETURN(device->common.error.newAction);
-
-    return recoveryAction;
+    adi_adrv9001_RadioState_t currentState = { 0 };
+    uint8_t chanId = 0u;
+    uint8_t portId = 0u;
+    /* Validate current state. All the channels must be in STANDBY or CALIBRATED state. */
+    ADI_EXPECT(adi_adrv9001_Radio_State_Get, adrv9001, &currentState);
+    for (portId = 0u; portId < ADI_ADRV9001_NUM_PORTS; portId++)
+    {
+        for (chanId = 0u; chanId < ADI_ADRV9001_NUM_CHANNELS; chanId++)
+        {
+            if ((currentState.channelStates[portId][chanId] == ADI_ADRV9001_CHANNEL_PRIMED) ||
+                (currentState.channelStates[portId][chanId] == ADI_ADRV9001_CHANNEL_RF_ENABLED))
+            {
+                ADI_ERROR_REPORT(&adrv9001->common,
+                                 ADI_COMMON_ERRSRC_API,
+                                 ADI_COMMON_ERR_API_FAIL,
+                                 ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                                 currentState.channelStates[portId][chanId],
+                                 "Error while attempting to send stream to GPIO debug mailbox command to ARM firmware. All the channels must be in STANDBY or CALIBRATED  state.");
+                ADI_API_RETURN(adrv9001)
+            }
+        }
+    }   
+    ADI_API_RETURN(adrv9001);
 }
 
-int32_t adi_adrv9001_StreamGpioConfigGet(adi_adrv9001_Device_t *device, adi_adrv9001_StreamGpioPinCfg_t *streamGpioPinCfg)
+int32_t adi_adrv9001_Stream_Gpio_Debug_Set(adi_adrv9001_Device_t *adrv9001, bool streamToGpioDebug)
 {
-    static const uint8_t STREAM_GP_INPUT0_SIGNAL_ID = 0;
-    static const uint8_t STREAM_GP_INPUT1_SIGNAL_ID = 1;
-    static const uint8_t STREAM_GP_INPUT2_SIGNAL_ID = 2;
-    static const uint8_t STREAM_GP_INPUT3_SIGNAL_ID = 3;
+    uint8_t armData[5] = { 0 };
+    uint8_t extData[5] = { 0 };
+    uint32_t offset = 0;
 
-    int32_t recoveryAction = ADI_COMMON_ACT_NO_ACTION;
+    ADI_PERFORM_VALIDATION(adi_adrv9001_Stream_Gpio_Debug_Set_Validate, adrv9001);
 
-    /* Check device pointer is not null */
-    ADI_ENTRY_PTR_EXPECT(device, streamGpioPinCfg);
+    adrv9001_LoadFourBytes(&offset, armData, sizeof(armData) - sizeof(uint32_t));
+    armData[offset++] = (uint8_t)streamToGpioDebug;
 
-    recoveryAction = adrv9001_StreamGpioPinGet(device, STREAM_GP_INPUT0_SIGNAL_ID, &streamGpioPinCfg->steamGpInput0);
-    ADI_ERROR_RETURN(device->common.error.newAction);
+    extData[0] =  0; /* Channel Mask; unused for this command */
+    extData[1] = OBJID_GS_CONFIG;
+    extData[2] = OBJID_CFG_GPIO_DEBUG_IN_STREAM;
+    ADI_EXPECT(adi_adrv9001_arm_Config_Write, adrv9001, armData, sizeof(armData), extData, sizeof(extData))
 
-    recoveryAction = adrv9001_StreamGpioPinGet(device, STREAM_GP_INPUT1_SIGNAL_ID, &streamGpioPinCfg->steamGpInput1);
-    ADI_ERROR_RETURN(device->common.error.newAction);
-
-    recoveryAction = adrv9001_StreamGpioPinGet(device, STREAM_GP_INPUT2_SIGNAL_ID, &streamGpioPinCfg->steamGpInput2);
-    ADI_ERROR_RETURN(device->common.error.newAction);
-
-    recoveryAction = adrv9001_StreamGpioPinGet(device, STREAM_GP_INPUT3_SIGNAL_ID, &streamGpioPinCfg->steamGpInput3);
-    ADI_ERROR_RETURN(device->common.error.newAction);
-
-    return recoveryAction;
+    ADI_API_RETURN(adrv9001);
 }
-#endif // FIXME: PTN Wait until GPIO is ported
+
+static __maybe_unused int32_t __maybe_unused adi_adrv9001_Stream_Gpio_Debug_Get_Validate(adi_adrv9001_Device_t *adrv9001,
+                                                                             bool *streamToGpioDebug)
+{
+    ADI_NULL_PTR_RETURN(&adrv9001->common, streamToGpioDebug);
+    ADI_API_RETURN(adrv9001);
+}
+
+int32_t adi_adrv9001_Stream_Gpio_Debug_Get(adi_adrv9001_Device_t *adrv9001, bool *streamToGpioDebug)
+{
+    uint8_t armReadBack[1] = { 0 };
+    uint8_t channelMask = 0;
+    uint32_t offset = 0;
+
+    ADI_PERFORM_VALIDATION(adi_adrv9001_Stream_Gpio_Debug_Get_Validate, adrv9001, streamToGpioDebug);
+
+    ADI_EXPECT(adi_adrv9001_arm_Config_Read, adrv9001, OBJID_CFG_GPIO_DEBUG_IN_STREAM, channelMask, offset, armReadBack, sizeof(armReadBack))
+
+    *streamToGpioDebug = (bool)armReadBack[0];
+
+    ADI_API_RETURN(adrv9001);
+}
 
