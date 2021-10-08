@@ -315,6 +315,31 @@ int32_t ada4250_init(struct ada4250_dev **device,
 	dev->avdd_v = init_param->avdd_v;
 	dev->device_id = init_param->device_id;
 
+	if (init_param->slp_shtdwn_en == true) {
+		/* Initialize gpio sleep/shutdown and pull it to high */
+		ret = gpio_get_optional(&dev->gpio_shtdwn, init_param->gpio_shtdwn);
+		if (ret != SUCCESS)
+			goto error_dev;
+
+		if (dev->gpio_shtdwn) {
+			ret = gpio_direction_output(dev->gpio_shtdwn, GPIO_HIGH);
+			if (ret != SUCCESS)
+				goto error_shtdwn;
+		}
+
+		ret = gpio_get_optional(&dev->gpio_slp, init_param->gpio_slp);
+		if (ret != SUCCESS)
+			goto error_slp;
+
+		if (dev->gpio_slp) {
+			ret = gpio_direction_output(dev->gpio_slp, GPIO_HIGH);
+			if (ret != SUCCESS)
+				goto error_slp;
+		}
+		/* Wait for the device to wake up*/
+		mdelay(1);
+	}
+
 	if(dev->device_id == ADA4250) {
 		/* SPI */
 		ret = spi_init(&dev->spi_desc, init_param->spi_init);
@@ -409,6 +434,10 @@ error_g1:
 	gpio_remove(dev->gpio_g1);
 error_g2:
 	gpio_remove(dev->gpio_g2);
+error_slp:
+	gpio_remove(dev->gpio_slp);
+error_shtdwn:
+	gpio_remove(dev->gpio_shtdwn);
 error_dev:
 	free(dev);
 
@@ -422,6 +451,13 @@ error_dev:
 int32_t ada4250_remove(struct ada4250_dev *dev)
 {
 	int32_t ret;
+
+	ret = gpio_remove(dev->gpio_slp);
+	if (ret != SUCCESS)
+		return ret;
+	ret = gpio_remove(dev->gpio_shtdwn);
+	if (ret != SUCCESS)
+		return ret;
 
 	if (dev->device_id == ADA4250) {
 		ret = spi_remove(dev->spi_desc);
