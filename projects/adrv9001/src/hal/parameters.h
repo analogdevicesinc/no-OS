@@ -56,10 +56,10 @@
 #define ADC1_CHANNELS 4
 #define ADC2_CHANNELS 2
 
-#if defined(PLATFORM_MB)
-#define GPIO_OFFSET			54
-#else
+#ifdef XPS_BOARD_ZCU102
 #define GPIO_OFFSET			78
+#else
+#define GPIO_OFFSET			54
 #endif
 
 /* GPIO */
