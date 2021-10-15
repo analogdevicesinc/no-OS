@@ -67,13 +67,9 @@
 
 #ifdef IIO_SUPPORT
 
-#include "iio.h"
 #include "iio_axi_adc.h"
 #include "iio_axi_dac.h"
-#include "irq.h"
-#include "irq_extra.h"
-#include "uart.h"
-#include "uart_extra.h"
+#include "iio_app.h"
 
 #endif // IIO_SUPPORT
 /******************************************************************************/
@@ -1005,69 +1001,11 @@ int main(void)
 	struct iio_axi_dac_desc *iio_axi_dac_desc;
 
 	/**
-	 * Xilinx platform dependent initialization for IRQ.
+	 * iio device instance descriptor.
 	 */
-	struct xil_irq_init_param xil_irq_init_par = {
-		.type = IRQ_PS,
-	};
-
-	/**
-	 * IRQ initial configuration.
-	 */
-	struct irq_init_param irq_init_param = {
-		.irq_ctrl_id = INTC_DEVICE_ID,
-		.extra = &xil_irq_init_par,
-	};
-
-	/**
-	 * IRQ instance.
-	 */
-	struct irq_ctrl_desc *irq_desc;
-
-	/**
-	 * Xilinx platform dependent initialization for UART.
-	 */
-	struct xil_uart_init_param xil_uart_init_par;
-
-	/**
-	 * Initialization for UART.
-	 */
-	struct uart_init_param uart_init_par;
-	struct uart_desc *uart_desc;
-
 	struct iio_device *adc_dev_desc, *dac_dev_desc;
 
-	status = irq_ctrl_init(&irq_desc, &irq_init_param);
-	if(status < 0)
-		return status;
-
-	xil_uart_init_par = (struct xil_uart_init_param) {
-		.type = UART_PS,
-		.irq_id = UART_IRQ_ID,
-		.irq_desc = irq_desc,
-	};
-
-	uart_init_par = (struct uart_init_param) {
-		.baud_rate = 921600,
-		.device_id = UART_DEVICE_ID,
-		.extra = &xil_uart_init_par,
-	};
-
-	status = irq_global_enable(irq_desc);
-	if (status < 0)
-		return status;
-
 	status = axi_dmac_init(&tx_dmac, &tx_dmac_init);
-	if(status < 0)
-		return status;
-
-	status = uart_init(&uart_desc, &uart_init_par);
-	if (status < 0)
-		return status;
-
-	iio_init_par.phy_type = USE_UART;
-	iio_init_par.uart_desc = uart_desc;
-	status = iio_init(&iio_app_desc, &iio_init_par);
 	if(status < 0)
 		return status;
 
@@ -1103,8 +1041,6 @@ int main(void)
 		.size = sizeof(adc_buffer),
 	};
 	iio_axi_adc_get_dev_descriptor(iio_axi_adc_desc, &adc_dev_desc);
-	status = iio_register(iio_app_desc, adc_dev_desc, "cf-ad9371-lpc",
-			      iio_axi_adc_desc, &read_buff, NULL);
 	if (status < 0)
 		return status;
 
@@ -1124,16 +1060,12 @@ int main(void)
 		.size = sizeof(dac_buffer),
 	};
 	iio_axi_dac_get_dev_descriptor(iio_axi_dac_desc, &dac_dev_desc);
-	status = iio_register(iio_app_desc, dac_dev_desc, "cf-ad9371-dds-core-lpc",
-			      iio_axi_dac_desc, NULL, &write_buff);
-	if (status < 0)
-		return status;
+	struct iio_app_device devices[] = {
+		IIO_APP_DEVICE("cf-ad9371-lpc", iio_axi_adc_desc, adc_dev_desc, &read_buff, NULL),
+		IIO_APP_DEVICE("cf-ad9371-dds-core-lpc", iio_axi_dac_desc, dac_dev_desc, NULL, &write_buff)
+	};
 
-	do {
-		status = iio_step(iio_app_desc);
-		if(status < 0)
-			return status;
-	} while (true);
+	iio_app_run(devices, ARRAY_SIZE(devices));
 
 #endif // IIO_SUPPORT
 

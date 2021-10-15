@@ -56,6 +56,7 @@ SRCS += $(PLATFORM_DRIVERS)/uart.c					\
 	$(NO-OS)/util/list.c						\
 	$(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.c			\
 	$(DRIVERS)/axi_core/iio_axi_dac/iio_axi_dac.c			\
+	$(NO-OS)/iio/iio_app/iio_app.c		\
 	$(DRIVERS)/irq/irq.c
 endif
 INCS +=	$(PROJECT)/src/app/app_config.h					\
@@ -105,5 +106,6 @@ INCS += $(INCLUDE)/fifo.h						\
 	$(PLATFORM_DRIVERS)/irq_extra.h					\
 	$(PLATFORM_DRIVERS)/uart_extra.h				\
 	$(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.h				\
+	$(NO-OS)/iio/iio_app/iio_app.h	\
 	$(DRIVERS)/axi_core/iio_axi_dac/iio_axi_dac.h
 endif
