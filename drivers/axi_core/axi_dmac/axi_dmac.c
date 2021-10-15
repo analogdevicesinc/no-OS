@@ -90,8 +90,7 @@ void axi_dmac_default_isr(void *instance)
 		axi_dmac_write(dmac, AXI_DMAC_REG_Y_LENGTH, 0x0);
 
 		axi_dmac_write(dmac, AXI_DMAC_REG_START_TRANSFER, 0x1);
-	}
-	if (reg_val & AXI_DMAC_IRQ_EOT) {
+	} else if (reg_val & AXI_DMAC_IRQ_EOT) {
 		dmac->big_transfer.transfer_done = true;
 		dmac->big_transfer.address = 0;
 		dmac->big_transfer.size = 0;
