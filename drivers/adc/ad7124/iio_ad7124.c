@@ -259,7 +259,7 @@ static ssize_t ad7124_iio_read_raw_chan(void *device, char *buf, size_t len,
 	if (ret != SUCCESS)
 		return ret;
 
-	return snprintf(buf, len, "%"PRIX32"", (uint32_t)value);
+	return snprintf(buf, len, "%"PRId32"", (uint32_t)value);
 }
 
 /**
