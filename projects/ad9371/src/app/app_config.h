@@ -47,4 +47,6 @@
 
 //#define IIO_SUPPORT
 
+#define UART_BAUDRATE 115200
+
 #endif /* APP_CONFIG_H_ */
