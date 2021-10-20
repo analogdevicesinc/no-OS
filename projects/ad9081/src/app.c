@@ -59,7 +59,10 @@
 #include "app_config.h"
 
 #ifdef IIO_SUPPORT
-#include "app_iio.h"
+#include "iio_app.h"
+#include "iio_axi_adc.h"
+#include "iio_axi_dac.h"
+#include "xil_cache.h"
 #endif
 
 extern struct axi_jesd204_rx *rx_jesd;
@@ -272,22 +275,70 @@ int main(void)
 	axi_dmac_init(&rx_dmac, &rx_dmac_init);
 
 #ifdef IIO_SUPPORT
-	printf("The board accepts libiio clients connections through the serial backend.\n");
 
+	/* iio axi adc configurations. */
 	struct iio_axi_adc_init_param iio_axi_adc_init_par;
+
+	/* iio axi dac configurations. */
+	struct iio_axi_dac_init_param iio_axi_dac_init_par;
+
+	/* iio instance descriptor. */
+	struct iio_axi_adc_desc *iio_axi_adc_desc;
+
+	/* iio instance descriptor. */
+	struct iio_axi_dac_desc *iio_axi_dac_desc;
+
+	/* iio devices corresponding to every device. */
+	struct iio_device *adc_dev_desc, *dac_dev_desc;
+
+	status = axi_dmac_init(&tx_dmac, &tx_dmac_init);
+	if(status < 0)
+		return status;
+
 	iio_axi_adc_init_par = (struct iio_axi_adc_init_param) {
 		.rx_adc = rx_adc,
 		.rx_dmac = rx_dmac,
+#ifndef PLATFORM_MB
+		.dcache_invalidate_range = (void (*)(uint32_t,
+						     uint32_t))Xil_DCacheInvalidateRange
+#endif
 	};
 
-	struct iio_axi_dac_init_param iio_axi_dac_init_par;
+	status = iio_axi_adc_init(&iio_axi_adc_desc, &iio_axi_adc_init_par);
+	if(status < 0)
+		return status;
+	iio_axi_adc_get_dev_descriptor(iio_axi_adc_desc, &adc_dev_desc);
+	struct iio_data_buffer read_buff = {
+		.buff = (void *)ADC_DDR_BASEADDR,
+		.size = 0xFFFFFFFF,
+	};
+
 	iio_axi_dac_init_par = (struct iio_axi_dac_init_param) {
 		.tx_dac = tx_dac,
 		.tx_dmac = tx_dmac,
+#ifndef PLATFORM_MB
+		.dcache_flush_range = (void (*)(uint32_t, uint32_t))Xil_DCacheFlushRange,
+#endif
 	};
 
-	return iio_server_init(&iio_axi_adc_init_par, &iio_axi_dac_init_par);
-#else
+	status = iio_axi_dac_init(&iio_axi_dac_desc, &iio_axi_dac_init_par);
+	if (status < 0)
+		return status;
+	iio_axi_dac_get_dev_descriptor(iio_axi_dac_desc, &dac_dev_desc);
+
+	struct iio_data_buffer write_buff = {
+		.buff = (void *)DAC_DDR_BASEADDR,
+		.size = 0xFFFFFFFF,
+	};
+
+	struct iio_app_device devices[] = {
+		IIO_APP_DEVICE("axi_adc", iio_axi_adc_desc, adc_dev_desc, &read_buff, NULL),
+		IIO_APP_DEVICE("axi_dac", iio_axi_dac_desc, dac_dev_desc, NULL, &write_buff)
+	};
+
+	iio_app_run(devices, ARRAY_SIZE(devices));
+
+#else // IIO_SUPPORT
 	printf("Bye\n");
 
 	return SUCCESS;
