@@ -608,27 +608,30 @@ ssize_t iio_format_value(char *buf, size_t len, enum iio_val fmt,
 
 	switch (fmt) {
 	case IIO_VAL_INT:
-		return snprintf(buf, len, "%d", vals[0]);
+		return snprintf(buf, len, "%"PRIi32"", vals[0]);
 	case IIO_VAL_INT_PLUS_MICRO_DB:
 		dB = true;
 	/* intentional fall through */
 	case IIO_VAL_INT_PLUS_MICRO:
-		return snprintf(buf, len, "%d.%06u%s", vals[0], vals[1],
-				dB ? " dB" : "");
+		return snprintf(buf, len, "%"PRIi32".%06"PRIu32"%s", vals[0],
+				(uint32_t)vals[1], dB ? " dB" : "");
 	case IIO_VAL_INT_PLUS_NANO:
-		return snprintf(buf, len, "%d.%09u", vals[0], vals[1]);
+		return snprintf(buf, len, "%"PRIi32".%09"PRIu32"", vals[0],
+				(uint32_t)vals[1]);
 	case IIO_VAL_FRACTIONAL:
 		tmp = div_s64((int64_t)vals[0] * 1000000000LL, vals[1]);
 		fractional = vals[1];
 		integer = (int32_t)div_s64_rem(tmp, 1000000000, &fractional);
-		return snprintf(buf, len, "%d.%09u", integer, abs(fractional));
+		return snprintf(buf, len, "%"PRIi32".%09u", integer,
+				abs(fractional));
 	case IIO_VAL_FRACTIONAL_LOG2:
 		tmp = shift_right((int64_t)vals[0] * 1000000000LL, vals[1]);
 		integer = (int32_t)div_s64_rem(tmp, 1000000000LL, &fractional);
-		return snprintf(buf, len, "%d.%09u", integer, abs(fractional));
+		return snprintf(buf, len, "%"PRIi32".%09u", integer,
+				abs(fractional));
 	case IIO_VAL_INT_MULTIPLE: {
 		while (i < size) {
-			l += snprintf(&buf[l], len - l, "%d ", vals[i]);
+			l += snprintf(&buf[l], len - l, "%"PRIi32" ", vals[i]);
 			if (l >= len)
 				break;
 			i++;
@@ -1206,7 +1209,7 @@ static uint32_t iio_generate_device_xml(struct iio_device *device, char *name,
 							break;
 						}
 					}
-					i += snprintf(buff + i, max(n - i, 0), " />", attr->name);
+					i += snprintf(buff + i, max(n - i, 0), " />");
 				}
 
 			i += snprintf(buff + i, max(n - i, 0), "</channel>");
