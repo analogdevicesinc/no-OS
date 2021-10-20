@@ -37,6 +37,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
+#if ENABLE_UART_STDIO
 #include <stdio.h>
 #include <errno.h>
 #include <sys/stat.h>
@@ -129,3 +130,4 @@ int _fstat(int fd, struct stat* st)
 	errno = EBADF;
 	return -1;
 }
+#endif

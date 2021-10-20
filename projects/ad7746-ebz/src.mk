@@ -1,3 +1,4 @@
+CFLAGS += -DENABLE_UART_STDIO
 SRCS += $(NO-OS)/util/util.c \
 	$(PLATFORM_DRIVERS)/delay.c \
 	$(PLATFORM_DRIVERS)/timer.c \
