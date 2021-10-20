@@ -20,36 +20,13 @@ SRCS	 += $(NO-OS)/util/circular_buffer.c
 INCS	 += $(INCLUDE)/circular_buffer.h
 endif
 
+SRC_DIRS += $(PLATFORM_DRIVERS)
+SRC_DIRS += $(NO-OS)/iio/iio_app
+SRC_DIRS += $(INCLUDE)
 
-LIBRARIES += iio
-
-SRCS += $(PLATFORM_DRIVERS)/uart.c					\
-	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c				\
-	$(PLATFORM_DRIVERS)/$(PLATFORM)_spi.c				\
-	$(PLATFORM_DRIVERS)/$(PLATFORM)_gpio.c				\
-	$(PLATFORM_DRIVERS)/delay.c					\
-	$(PLATFORM_DRIVERS)/timer.c					\
-	$(DRIVERS)/irq/irq.c						\
+SRCS +=	$(DRIVERS)/irq/irq.c						\
 	$(DRIVERS)/gpio/gpio.c						\
 	$(NO-OS)/util/list.c						\
 	$(NO-OS)/util/fifo.c						\
 	$(NO-OS)/util/util.c						\
 	$(DRIVERS)/spi/spi.c
-
-INCS += $(INCLUDE)/fifo.h						\
-	$(INCLUDE)/irq.h						\
-	$(INCLUDE)/uart.h						\
-	$(INCLUDE)/list.h						\
-	$(INCLUDE)/util.h						\
-	$(INCLUDE)/delay.h						\
-	$(INCLUDE)/timer.h						\
-	$(INCLUDE)/error.h						\
-	$(INCLUDE)/gpio.h						\
-	$(INCLUDE)/rtc.h						\
-	$(INCLUDE)/spi.h						\
-	$(PLATFORM_DRIVERS)/spi_extra.h					\
-	$(PLATFORM_DRIVERS)/irq_extra.h					\
-	$(PLATFORM_DRIVERS)/rtc_extra.h					\
-	$(PLATFORM_DRIVERS)/timer_extra.h				\
-	$(PLATFORM_DRIVERS)/uart_extra.h				\
-	$(PLATFORM_DRIVERS)/$(PLATFORM)_gpio.h		
