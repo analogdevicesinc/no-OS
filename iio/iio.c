@@ -525,7 +525,7 @@ static int32_t debug_reg_write(struct iio_interface *dev, const char *buf,
 	return len;
 }
 
-static int32_t __iio_str_parse(char *buf, int32_t *integer, int32_t *fract,
+static int32_t __iio_str_parse(char *buf, int32_t *integer, int32_t *_fract,
 			       bool scale_db)
 {
 	char *p;
@@ -546,7 +546,7 @@ static int32_t __iio_str_parse(char *buf, int32_t *integer, int32_t *fract,
 	if (p == NULL)
 		return -EINVAL;
 
-	*fract = strtol(p, NULL, 0);
+	*_fract = strtol(p, NULL, 0);
 
 	return 0;
 }
@@ -555,7 +555,7 @@ int32_t iio_parse_value(char *buf, enum iio_val fmt, int32_t *val,
 			int32_t *val2)
 {
 	int32_t ret = 0;
-	int32_t integer, fract = 0;
+	int32_t integer, _fract = 0;
 	char ch;
 
 	switch (fmt) {
@@ -563,22 +563,22 @@ int32_t iio_parse_value(char *buf, enum iio_val fmt, int32_t *val,
 		integer = strtol(buf, NULL, 0);
 		break;
 	case IIO_VAL_INT_PLUS_MICRO_DB:
-		ret = __iio_str_parse(buf, &integer, &fract, true);
+		ret = __iio_str_parse(buf, &integer, &_fract, true);
 		if (ret < 0)
 			return ret;
-		fract *= 100000;
+		_fract *= 100000;
 		break;
 	case IIO_VAL_INT_PLUS_MICRO:
-		ret = __iio_str_parse(buf, &integer, &fract, false);
+		ret = __iio_str_parse(buf, &integer, &_fract, false);
 		if (ret < 0)
 			return ret;
-		fract *= 100000;
+		_fract *= 100000;
 		break;
 	case IIO_VAL_INT_PLUS_NANO:
-		ret = __iio_str_parse(buf, &integer, &fract, false);
+		ret = __iio_str_parse(buf, &integer, &_fract, false);
 		if (ret < 0)
 			return ret;
-		fract *= 100000000;
+		_fract *= 100000000;
 		break;
 	case IIO_VAL_CHAR:
 		if (sscanf(buf, "%c", &ch) != 1)
@@ -592,7 +592,7 @@ int32_t iio_parse_value(char *buf, enum iio_val fmt, int32_t *val,
 	if (val)
 		*val = integer;
 	if (val2)
-		*val2 = fract;
+		*val2 = _fract;
 
 	return ret;
 }
