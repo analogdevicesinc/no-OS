@@ -44,6 +44,8 @@
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
+#define UART_BAUDRATE 115200
+
 #ifdef XPS_BOARD_ZCU102
 #define GPIO_OFFSET		78
 #else
@@ -73,9 +75,11 @@
 #define PHY_SPI_DEVICE_ID	XPAR_AXI_SPI_DEVICE_ID
 #define CLK_SPI_DEVICE_ID	XPAR_AXI_SPI_DEVICE_ID
 #define UART_DEVICE_ID		XPAR_AXI_UART_DEVICE_ID
+#define INTC_DEVICE_ID		XPAR_INTC_SINGLE_DEVICE_ID
 #define DDR_CNTRL_BASEADDR	XPAR_AXI_DDR_CNTRL_BASEADDR
 #define CLK_CS			1
 #elif defined(PLATFORM_ZYNQMP)
+#define INTC_DEVICE_ID		XPAR_SCUGIC_SINGLE_DEVICE_ID
 #define GPIO_DEVICE_ID		XPAR_PSU_GPIO_0_DEVICE_ID
 #define PHY_SPI_DEVICE_ID	XPAR_PSU_SPI_0_DEVICE_ID
 #define CLK_SPI_DEVICE_ID	XPAR_PSU_SPI_1_DEVICE_ID
