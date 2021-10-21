@@ -289,15 +289,6 @@ int32_t pwm_init(struct pwm_desc **desc,
 
 	axi_init = param->extra;
 
-	ret = axi_io_read(axi_desc->base_addr,
-			  AXI_PWMGEN_REG_NPWM,
-			  &data);
-	if (ret != SUCCESS)
-		return FAILURE;
-
-	if (axi_init->channel > (data - 1))
-		return FAILURE;
-
 	pwm_desc = (struct pwm_desc *)calloc(1, sizeof(*pwm_desc));
 	if (!pwm_desc)
 		return FAILURE;
@@ -314,6 +305,14 @@ int32_t pwm_init(struct pwm_desc **desc,
 	pwm_desc->period_ns = param->period_ns;
 	pwm_desc->polarity = param->polarity;
 
+	ret = axi_io_read(axi_desc->base_addr,
+			  AXI_PWMGEN_REG_NPWM,
+			  &data);
+	if (ret != SUCCESS)
+		goto error_xdesc;
+
+	if (axi_init->channel > (data - 1))
+		goto error_xdesc;
 
 	/* Enable the core */
 	ret = axi_pwmgen_write_mask(axi_desc->base_addr, AXI_PWMGEN_REG_CONFIG,
