@@ -46,7 +46,7 @@
 #include "axi_adxcvr.h"
 #include "jesd204_clk.h"
 #include "error.h"
-#include "app_parameters.h"
+#include "parameters.h"
 #include "app_jesd.h"
 #include "app_config.h"
 

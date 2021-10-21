@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   app_parameters.h
+ *   @file   parameters.h
  *   @brief  Application parameters.
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
