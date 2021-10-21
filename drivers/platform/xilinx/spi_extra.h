@@ -68,7 +68,7 @@ enum xil_spi_type {
 	SPI_PS,
 	/** SPI Engine */
 	SPI_ENGINE
-} xil_spi_type;
+};
 
 /**
  * @struct xil_spi_init_param
