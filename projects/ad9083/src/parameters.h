@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   app_parameters.h
+ *   @file   parameters.h
  *   @brief  Parameters Definitions.
  *   @author Cristian Pop (cristian.pop@analog.com)
 ********************************************************************************
