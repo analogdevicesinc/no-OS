@@ -49,7 +49,7 @@
 #include "gpio_extra.h"
 #endif
 #include "error.h"
-#include "app_parameters.h"
+#include "parameters.h"
 #include "app_clock.h"
 
 /******************************************************************************/

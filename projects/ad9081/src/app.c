@@ -55,7 +55,7 @@
 #include "axi_adc_core.h"
 #include "axi_dac_core.h"
 #include "axi_dmac.h"
-#include "app_parameters.h"
+#include "parameters.h"
 #include "app_config.h"
 
 #ifdef IIO_SUPPORT
