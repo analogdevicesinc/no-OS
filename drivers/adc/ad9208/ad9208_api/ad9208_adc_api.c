@@ -786,6 +786,10 @@ int ad9208_adc_set_ddc_nco(ad9208_handle_t *h, uint8_t ddc_ch,
 
 	if (h == NULL)
 		return API_ERROR_INVALID_HANDLE_PTR;
+
+	if (!carrier_freq_hz)
+		return API_ERROR_INVALID_PARAM;
+
 	if (!((carrier_freq_hz >= (int64_t) (0ll - h->adc_clk_freq_hz / 2)) &&
 	      (carrier_freq_hz < (int64_t) (h->adc_clk_freq_hz / 2))))
 		return API_ERROR_INVALID_PARAM;
