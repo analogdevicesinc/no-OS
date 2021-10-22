@@ -54,12 +54,12 @@ typedef struct {
 
 /*JESD Config Note F*/
 static jesd_serdes_pll_cfg ADI_REC_SERDES_PLL_CFG[] = {
-	{390, 781, 0xD},
-	{781, 1562, 0x9},
-	{1562, 3125, 0x5},
-	{3125, 6250, 0x1},
-	{6250, 12500, 0x0},
-	{12500, 16000, 0x3}
+	{390, 781, 0xD}, /* UNDEF */
+	{781, 1687, 0x9}, /* UNDEF */
+	{1687, 3375, 0x5},
+	{3375, 6750, 0x1},
+	{6750, 13500, 0x0},
+	{13500, 16000, 0x3}
 };
 
 static int get_jesd_serdes_vco_cfg(uint64_t slr_mbps, uint8_t *vco_cfg)
