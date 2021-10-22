@@ -76,7 +76,7 @@ int ad9208_is_sync_spi_update_enabled(ad9208_handle_t *h, uint8_t *enabled);
 #define AD9208_SYSREF_CTRL_1_REG       0x0121
 #define AD9208_SYSREF_TRANSITION_SEL(x) (((x)&0x1)<<4)
 #define AD9208_SYSREF_CLK_EDGE_SEL(x)   (((x)&0x1)<<3)
-#define AD9208_SYSREF_NSHOT_IGNORE(x)  (((x)&0x3)<<0)
+#define AD9208_SYSREF_NSHOT_IGNORE(x)  (((x)&0xF)<<0)
 #define AD9208_SYSREF_CTRL_2_REG       0x0122
 #define AD9208_SYSREF_WIN_NEG(x)       (((x)&0x3)<<2)
 #define AD9208_SYSREF_WIN_POS(x)       (((x)&0x3)<<0)
