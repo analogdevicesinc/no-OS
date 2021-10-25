@@ -291,6 +291,160 @@ int32_t ada4250_set_offset(struct ada4250_dev *dev, int32_t offset)
 }
 
 /**
+ * @brief Set the bandwidth value for ADA4250.
+ * @param dev - The device structure.
+ * @param bw - Bandwidth value.
+ * @return Returns SUCCESS in case of success or negative error code.
+ */
+int32_t ada4250_set_bandwidth(struct ada4250_dev *dev,
+			      enum ada4250_bandwidth bw)
+{
+	int32_t ret;
+	uint8_t val;
+
+	if (!dev)
+		return -ENOMEM;
+
+	switch (bw) {
+	case ADA4250_BANDWIDTH_LOW:
+		val = GPIO_LOW;
+		break;
+	case ADA4250_BANDWIDTH_HIGH:
+		val = GPIO_HIGH;
+		break;
+	default:
+		return -EINVAL;
+	}
+
+	ret = gpio_set_value(dev->gpio_bw, val);
+	if (ret == SUCCESS)
+		dev->bandwidth = bw;
+
+	return ret;
+}
+
+/**
+ * @brief Set the configurations for ADA4250.
+ * @param dev - The device structure.
+ * @return Returns SUCCESS in case of success or negative error code.
+ */
+static int32_t ada4250_set_config(struct ada4250_dev *dev)
+{
+	int32_t ret;
+
+	if (!dev)
+		return -ENOMEM;
+
+	ret = ada4250_set_bandwidth(dev, dev->bandwidth);
+	if (ret != SUCCESS)
+		return ret;
+
+	ret = ada4250_set_gain(dev, dev->gain);
+	if (ret != SUCCESS)
+		return ret;
+
+	ret = ada4250_en_refbuf(dev, dev->refbuf_en);
+	if (ret != SUCCESS)
+		return ret;
+
+	if (dev->device_id == ADA4250) {
+		ret = ada4250_set_bias(dev, dev->bias);
+		if (ret != SUCCESS)
+			return ret;
+
+		if (dev->bias != ADA4250_BIAS_DISABLE) {
+			ret = ada4250_set_offset(dev, dev->offset_uv);
+			if (ret != SUCCESS)
+				return ret;
+		}
+	}
+
+	return ret;
+}
+
+/**
+ * @brief Set the ADA4250 into sleep or shutdown mode.
+ * @param dev - The device structure.
+ * @param pwrmode - Power mode option.
+ * @return Returns SUCCESS in case of success or negative error code.
+ */
+int32_t ada4250_set_slp_shtdwn_mode(struct ada4250_dev *dev,
+				    enum ada4250_power_mode pwrmode)
+{
+	int32_t ret;
+
+	if (!dev)
+		return -ENOMEM;
+
+	switch (pwrmode) {
+	case ADA4250_POWER_SLEEP:
+		ret = gpio_set_value(dev->gpio_slp, GPIO_LOW);
+		break;
+	case ADA4250_POWER_SHUTDOWN:
+		ret = gpio_set_value(dev->gpio_shtdwn, GPIO_LOW);
+		break;
+	default:
+		return -EINVAL;
+	}
+
+	if (ret == SUCCESS)
+		dev->power_mode = pwrmode;
+
+	return ret;
+}
+
+/**
+ * @brief Sets the ADA4250 into normal mode and reconfigures it according
+ *        to the user input.
+ * @param dev - The device structure.
+ * @param reconfig - Reconfiguration enable/disable.
+ * @return Returns SUCCESS in case of success or negative error code.
+ */
+int32_t ada4250_set_normal_mode(struct ada4250_dev *dev, bool reconfig)
+{
+	int32_t ret;
+
+	if (!dev)
+		return -ENOMEM;
+
+	switch (dev->power_mode) {
+	case ADA4250_POWER_SHUTDOWN:
+		ret = gpio_set_value(dev->gpio_shtdwn, GPIO_HIGH);
+		break;
+	case ADA4250_POWER_SLEEP:
+		ret = gpio_set_value(dev->gpio_slp, GPIO_HIGH);
+		break;
+	default:
+		return -EINVAL;
+	}
+
+	if (ret != SUCCESS)
+		return ret;
+
+	/* Wait for the device to wake up */
+	mdelay(1);
+
+	if (dev->power_mode == ADA4250_POWER_SHUTDOWN) {
+		if (reconfig) {
+			/* Reconfiguring to state prior to shutdown */
+			ret = ada4250_set_config(dev);
+			if (ret != SUCCESS)
+				return ret;
+		} else { /* Reset driver configurations */
+			dev->gain = ADA4250_GAIN_1;
+			dev->refbuf_en = false;
+			dev->power_mode = ADA4250_POWER_NORMAL;
+			dev->bias = ADA4250_BIAS_DISABLE;
+			dev->offset_range = ADA4250_RANGE1;
+			dev->bandwidth = ADA4250_BANDWIDTH_LOW;
+		}
+	}
+
+	dev->power_mode = ADA4250_POWER_NORMAL;
+	return ret;
+}
+
+/**
  * @brief Initialize the ADA4250 device.
  * @param device - The device structure.
  * @param init_param - The structure containing the device initial parameters.
@@ -314,31 +468,28 @@ int32_t ada4250_init(struct ada4250_dev **device,
 	dev->offset_uv = init_param->offset_uv;
 	dev->avdd_v = init_param->avdd_v;
 	dev->device_id = init_param->device_id;
+	dev->bandwidth = init_param->bandwidth;
 
-	if (init_param->slp_shtdwn_en == true) {
-		/* Initialize gpio sleep/shutdown and pull it to high */
-		ret = gpio_get_optional(&dev->gpio_shtdwn, init_param->gpio_shtdwn);
-		if (ret != SUCCESS)
-			goto error_dev;
+	/* Initialize gpio sleep/shutdown and pull it to high */
+	ret = gpio_get_optional(&dev->gpio_shtdwn, init_param->gpio_shtdwn);
+	if (ret != SUCCESS)
+		goto error_dev;
 
-		if (dev->gpio_shtdwn) {
-			ret = gpio_direction_output(dev->gpio_shtdwn, GPIO_HIGH);
-			if (ret != SUCCESS)
-				goto error_shtdwn;
-		}
+	ret = gpio_direction_output(dev->gpio_shtdwn, GPIO_HIGH);
+	if (ret != SUCCESS)
+		goto error_shtdwn;
 
-		ret = gpio_get_optional(&dev->gpio_slp, init_param->gpio_slp);
-		if (ret != SUCCESS)
-			goto error_slp;
+	ret = gpio_get_optional(&dev->gpio_slp, init_param->gpio_slp);
+	if (ret != SUCCESS)
+		goto error_shtdwn;
 
-		if (dev->gpio_slp) {
-			ret = gpio_direction_output(dev->gpio_slp, GPIO_HIGH);
-			if (ret != SUCCESS)
-				goto error_slp;
-		}
-		/* Wait for the device to wake up*/
-		mdelay(1);
-	}
+	ret = gpio_direction_output(dev->gpio_slp, GPIO_HIGH);
+	if (ret != SUCCESS)
+		goto error_slp;
+
+	/* Wait for the device to wake up*/
+	mdelay(1);
+	dev->power_mode = ADA4250_POWER_NORMAL;
 
 	if(dev->device_id == ADA4250) {
 		/* SPI */
@@ -399,25 +550,18 @@ int32_t ada4250_init(struct ada4250_dev **device,
 			goto error_bufen;
 	}
 
-	ret = ada4250_set_gain(dev, dev->gain);
-	if(ret != SUCCESS)
+	/* Initialize gpio bandwidth and pull it to high */
+	ret = gpio_get_optional(&dev->gpio_bw, init_param->gpio_bw_param);
+	if (ret != SUCCESS)
 		return FAILURE;
 
-	ret = ada4250_en_refbuf(dev, dev->refbuf_en);
-	if(ret != SUCCESS)
+	ret = gpio_direction_output(&dev->gpio_bw, GPIO_HIGH);
+	if (ret != SUCCESS)
 		return FAILURE;
 
-	if(dev->device_id == ADA4250) {
-		ret = ada4250_set_bias(dev, dev->bias);
-		if(ret != SUCCESS)
-			return FAILURE;
-
-		if(dev->bias != ADA4250_BIAS_DISABLE) {
-			ret = ada4250_set_offset(dev, dev->offset_uv);
-			if(ret != SUCCESS)
-				return FAILURE;
-		}
-	}
+	ret = ada4250_set_config(dev);
+	if (ret != SUCCESS)
+		return FAILURE;
 
 	*device = dev;
 
@@ -456,6 +600,9 @@ int32_t ada4250_remove(struct ada4250_dev *dev)
 	if (ret != SUCCESS)
 		return ret;
 	ret = gpio_remove(dev->gpio_shtdwn);
+	if (ret != SUCCESS)
+		return ret;
+	ret = gpio_remove(dev->gpio_bw);
 	if (ret != SUCCESS)
 		return ret;
 

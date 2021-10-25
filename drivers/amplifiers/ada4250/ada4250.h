@@ -154,6 +154,25 @@ enum ada4250_gain {
 };
 
 /**
+  * @enum ada4250_bandwidth
+  * @brief Bandwidth modes.
+  */
+enum ada4250_bandwidth {
+	ADA4250_BANDWIDTH_LOW,
+	ADA4250_BANDWIDTH_HIGH
+};
+
+/**
+  * @enum ada4250_power_mode
+  * @brief Power Modes.
+  */
+enum ada4250_power_mode {
+	ADA4250_POWER_NORMAL,
+	ADA4250_POWER_SLEEP,
+	ADA4250_POWER_SHUTDOWN,
+};
+
+/**
  * @struct ada4250_init_param
  * @brief ADA4250 Initialization Parameters structure.
  */
@@ -166,6 +185,7 @@ struct ada4250_init_param {
 	struct gpio_init_param	*gpio_g2_param;
 	struct gpio_init_param	*gpio_g1_param;
 	struct gpio_init_param	*gpio_g0_param;
+	struct gpio_init_param	*gpio_bw_param;
 	struct gpio_init_param	*gpio_bufen_param;
 	struct gpio_init_param	*gpio_slp;
 	struct gpio_init_param	*gpio_shtdwn;
@@ -173,12 +193,12 @@ struct ada4250_init_param {
 	int32_t avdd_v;
 	/* Reference Buffer Enable */
 	bool refbuf_en;
-	/* Sleep/Shutdown Pins Enable */
-	bool slp_shtdwn_en;
 	/* Gain Value */
 	enum ada4250_gain gain;
 	/* Bias Set */
 	enum ada4250_bias bias;
+	/* Bandwidth Value */
+	enum ada4250_bandwidth bandwidth;
 	/* Offset Calibration Value */
 	int32_t offset_uv;
 };
@@ -196,6 +216,7 @@ struct ada4250_dev {
 	struct gpio_desc	*gpio_g2;
 	struct gpio_desc	*gpio_g1;
 	struct gpio_desc	*gpio_g0;
+	struct gpio_desc	*gpio_bw;
 	struct gpio_desc	*gpio_bufen;
 	struct gpio_desc	*gpio_slp;
 	struct gpio_desc	*gpio_shtdwn;
@@ -209,6 +230,10 @@ struct ada4250_dev {
 	enum ada4250_offset_range offset_range;
 	/* Bias Set */
 	enum ada4250_bias bias;
+	/* Bandwidth Value */
+	enum ada4250_bandwidth bandwidth;
+	/* Power Mode */
+	enum ada4250_power_mode power_mode;
 	/* Offset Calibration Value in uV*/
 	int32_t offset_uv;
 };
@@ -243,6 +268,17 @@ int32_t ada4250_set_gain(struct ada4250_dev *dev, enum ada4250_gain gain);
 
 /* Set offset value */
 int32_t ada4250_set_offset(struct ada4250_dev *dev, int32_t offset);
+
+/* Set bandwidth mode */
+int32_t ada4250_set_bandwidth(struct ada4250_dev *dev,
+			      enum ada4250_bandwidth bw);
+
+/* Set sleep/shutdown mode */
+int32_t ada4250_set_slp_shtdwn_mode(struct ada4250_dev *dev,
+				    enum ada4250_power_mode pwrmode);
+
+/* Set normal mode */
+int32_t ada4250_set_normal_mode(struct ada4250_dev *dev, bool reconfig);
 
 /* ADA4250 Initialization */
 int32_t ada4250_init(struct ada4250_dev **device,
