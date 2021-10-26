@@ -209,6 +209,9 @@ uint32_t axi_jesd204_rx_status_read(struct axi_jesd204_rx *jesd)
 	axi_jesd204_rx_read(jesd, JESD204_RX_REG_LINK_STATUS, &link_status);
 	axi_jesd204_rx_read(jesd, JESD204_RX_REG_SYSREF_STATUS, &sysref_status);
 	axi_jesd204_rx_read(jesd, JESD204_RX_REG_LINK_CLK_RATIO, &clock_ratio);
+uint32_t device_ratio;
+	axi_jesd204_rx_read(jesd, 0xCC, &device_ratio);
+
 	axi_jesd204_rx_read(jesd, JESD204_RX_REG_SYSREF_CONF, &sysref_config);
 	axi_jesd204_rx_read(jesd, JESD204_RX_REG_LINK_CONF0, &link_config0);
 
@@ -216,6 +219,7 @@ uint32_t axi_jesd204_rx_status_read(struct axi_jesd204_rx *jesd)
 
 	printf("\tLink is %s\n", (link_disabled & 0x1) ? "disabled" : "enabled");
 
+	uint32_t device_rate;
 	if (clock_ratio == 0) {
 		printf("\tMeasured Link Clock: off\n");
 	} else {
@@ -223,6 +227,10 @@ uint32_t axi_jesd204_rx_status_read(struct axi_jesd204_rx *jesd)
 						   1ULL << 16);
 		printf("\tMeasured Link Clock: %"PRIu32".%.3"PRIu32" MHz\n",\
 		       clock_rate / 1000, clock_rate % 1000);
+		device_rate = DIV_ROUND_CLOSEST_ULL(100000ULL * device_ratio,
+								   1ULL << 16);
+				printf("\tMeasured Device Clock: %"PRIu32".%.3"PRIu32" MHz\n",\
+				       device_rate / 1000, device_rate % 1000);
 	}
 
 	clock_rate = jesd->device_clk_khz;

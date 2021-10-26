@@ -142,6 +142,17 @@ int32_t ad9680_setup(struct ad9680_dev **device,
 			 0x81);	// RESET
 	mdelay(250);
 
+	ad9680_spi_write(dev,0x200,0x03);
+	ad9680_spi_write(dev,0x201,0x04);
+	ad9680_spi_write(dev,0x310,0x42);
+	ad9680_spi_write(dev,0x330,0x42);
+	ad9680_spi_write(dev,0x350,0x42);
+	ad9680_spi_write(dev,0x370,0x42);
+	ad9680_spi_write(dev,0x311,0x00);
+	ad9680_spi_write(dev,0x331,0x00);
+	ad9680_spi_write(dev,0x351,0x05);
+	ad9680_spi_write(dev,0x371,0x05);
+
 	ad9680_spi_write(dev,
 			 AD9680_REG_LINK_CONTROL,
 			 0x15);	// disable link, ilas enable
@@ -156,7 +167,7 @@ int32_t ad9680_setup(struct ad9680_dev **device,
 			 0x2f);	// subclass-1, N'=16
 	ad9680_spi_write(dev,
 			 AD9680_REG_JESD204B_QUICK_CONFIG,
-			 0x88);	// m=2, l=4, f= 1
+			 0x5B);	// m=8, l=2, f= 8 01011011
 	if (init_param->lane_rate_kbps < 6250000)
 		ad9680_spi_write(dev,
 				 AD9680_REG_JESD204B_LANE_RATE_CTRL,
@@ -179,6 +190,37 @@ int32_t ad9680_setup(struct ad9680_dev **device,
 	}
 
 	*device = dev;
+
+	ad9680_spi_write(dev,0x5B0,0xFA);
+	ad9680_spi_read(dev,0x58B,&pll_stat);
+	printf("AD9680: 0x58B= %x\n",pll_stat);
+	ad9680_spi_read(dev,0x58C,&pll_stat);
+	printf("AD9680: 0x58C= %x\n",pll_stat);
+	ad9680_spi_read(dev,0x58D,&pll_stat);
+	printf("AD9680: 0x58D= %x\n",pll_stat);
+	ad9680_spi_read(dev,0x58E,&pll_stat);
+	printf("AD9680: 0x58E= %x\n",pll_stat);
+	ad9680_spi_read(dev,0x591,&pll_stat);
+	printf("AD9680: 0x591= %x\n",pll_stat);
+	ad9680_spi_read(dev,0x5B2,&pll_stat);
+	printf("AD9680: 0x5B2= %x\n",pll_stat);
+	ad9680_spi_read(dev,0x5B3,&pll_stat);
+	printf("AD9680: 0x5B3= %x\n",pll_stat);
+	ad9680_spi_read(dev,0x5B5,&pll_stat);
+	printf("AD9680: 0x5B5= %x\n",pll_stat);
+	ad9680_spi_read(dev,0x5B6,&pll_stat);
+	printf("AD9680: 0x5B6= %x\n",pll_stat);
+	ad9680_spi_read(dev,0x5C1,&pll_stat);
+	printf("AD9680: 0x5C1= %x\n",pll_stat);
+	ad9680_spi_read(dev,0x5B0,&pll_stat);
+	printf("AD9680: 0x5B0= %x\n",pll_stat);
+	ad9680_spi_read(dev,0x56E,&pll_stat);
+	printf("AD9680: 0x56E = %x\n",pll_stat);
+
+	ad9680_spi_read(dev,0x570,&pll_stat);
+	printf("AD9680: 0x570 = %x\n",pll_stat);
+	ad9680_spi_read(dev,0x56F,&pll_stat);
+	printf("AD9680: 0x56F = %x\n",pll_stat);
 
 	return ret;
 }
