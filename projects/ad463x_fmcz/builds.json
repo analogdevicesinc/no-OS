@@ -3,6 +3,10 @@
         "uart": {
               "flags" : "",
               "hardware" : ["ad4630_fmc_zed"]
-        }
+        },
+        "iio": {
+            "flags" : "TINYIIOD=y",
+            "hardware" : ["ad4630_fmc_zed"]
+          }
       }
 }

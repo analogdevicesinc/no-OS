@@ -22,6 +22,16 @@ SRCS +=	$(PLATFORM_DRIVERS)/axi_io.c					\
 	$(PLATFORM_DRIVERS)/xilinx_gpio.c				\
 	$(PLATFORM_DRIVERS)/xilinx_spi.c				\
 	$(PLATFORM_DRIVERS)/delay.c
+ifeq (y,$(strip $(TINYIIOD)))
+LIBRARIES += iio
+SRC_DIRS += $(NO-OS)/iio/iio_app
+SRCS += $(PLATFORM_DRIVERS)/uart.c					\
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c				\
+	$(DRIVERS)/irq/irq.c						\
+	$(DRIVERS)/adc/ad463x/iio_ad463x.c				\
+	$(NO-OS)/util/fifo.c						\
+	$(NO-OS)/util/list.c
+endif
 INCS += $(PROJECT)/src/parameters.h
 INCS += $(DRIVERS)/adc/ad463x/ad463x.h					\
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.h				\
@@ -43,3 +53,8 @@ INCS +=	$(INCLUDE)/axi_io.h						\
 	$(INCLUDE)/uart.h						\
 	$(INCLUDE)/util.h						\
 	$(INCLUDE)/print_log.h
+ifeq (y,$(strip $(TINYIIOD)))
+INCS += $(DRIVERS)/adc/ad463x/iio_ad463x.h				\
+	$(INCLUDE)/fifo.h						\
+	$(INCLUDE)/list.h
+endif
