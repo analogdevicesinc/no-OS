@@ -204,6 +204,10 @@ int32_t adxcvr_clk_set_rate(struct adxcvr *xcvr,
 	uint32_t i;
 	int32_t ret;
 
+	ret = xilinx_xcvr_check_lane_rate(&xcvr->xlx_xcvr, rate);
+	if (ret < 0)
+		return ret;
+
 	clk25_div = DIV_ROUND_CLOSEST(parent_rate, 25000);
 
 	if (xcvr->cpll_enable)

@@ -167,6 +167,8 @@ struct xilinx_xcvr_qpll_config {
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
+int32_t xilinx_xcvr_check_lane_rate(struct xilinx_xcvr *xcvr,
+				    uint32_t lane_rate_khz);
 int32_t xilinx_xcvr_configure_cdr(struct xilinx_xcvr *xcvr,
 				  uint32_t drp_port, uint32_t lane_rate, uint32_t out_div,
 				  bool lpm_enable);
