@@ -54,6 +54,10 @@
 #include "parameters.h"
 #include "print_log.h"
 
+#ifdef IIO_SUPPORT
+#include "iio_app.h"
+#include "iio_ad463x.h"
+#endif
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
@@ -174,6 +178,7 @@ int main()
 	if (ret != SUCCESS)
 		return ret;
 
+#ifndef IIO_SUPPORT
 	/* Read data */
 	while (true) {
 		ret = ad463x_read_data(dev, buf, AD463x_EVB_SAMPLE_NO);
@@ -184,6 +189,26 @@ int main()
 		for (i = 1; i < AD463x_EVB_SAMPLE_NO; i+=2)
 			pr_info("ADC sample ch2: %lu : %lu \n", i-1, buf[i]);
 	}
+#else
+	struct iio_ad463x *iio_ad463x;
+
+	struct iio_data_buffer rd_buff = {
+		.buff = (void *)buf,
+		.size = sizeof(buf)
+	};
+
+	ret = iio_ad463x_init(&iio_ad463x, dev);
+	if(ret < 0)
+		return ret;
+
+	struct iio_app_device devices[] = {
+		IIO_APP_DEVICE("ad463x", iio_ad463x, &iio_ad463x->iio_dev_desc,
+			       &rd_buff, NULL),
+	};
+
+	return iio_app_run(devices, ARRAY_SIZE(devices));
+
+#endif
 
 	ad463x_remove(dev);
 
