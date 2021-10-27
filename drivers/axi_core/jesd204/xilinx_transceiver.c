@@ -321,6 +321,99 @@ int32_t xilinx_xcvr_configure_cdr(struct xilinx_xcvr *xcvr,
 }
 
 /**
+ * @brief xilinx_xcvr_check_lane_rate
+ */
+int32_t xilinx_xcvr_check_lane_rate(struct xilinx_xcvr *xcvr,
+				    uint32_t lane_rate_khz)
+{
+	uint32_t lane_rate_max_khz;
+
+	/* The minimum lane rate across families is 0.5 Gbps */
+	if (lane_rate_khz < 500000)
+		return FAILURE;
+
+	/* If the core includes voltage/speed grade info then use it, otherwise assume best conditions */
+	if (AXI_PCORE_VER_MAJOR(xcvr->version) > 0x10) {
+		uint32_t voltage = xcvr->voltage;
+		uint32_t speed_grade = xcvr->speed_grade / 10;
+		enum axi_fpga_dev_pack package = xcvr->dev_package;
+
+		switch (xcvr->type) {
+		case XILINX_XCVR_TYPE_S7_GTX2:
+
+			/* ds182 Kintex-7 FPGAs Data Sheet: DC and AC Switching Characteristics v2.19 Table 56
+			 * ds191 Zynq-7000 SoC (Z-7030, Z-7035, Z-7045, and Z-7100): DC and AC Switching Characteristics */
+			if (speed_grade == 3)
+				lane_rate_max_khz = 12500000;
+			else if ((speed_grade == 2) && (voltage == 900)) /* K7 0.9V/-2LE */
+				lane_rate_max_khz =  6600000;
+			else if (speed_grade == 2)
+				lane_rate_max_khz = 10312500;
+			else if (speed_grade == 1)
+				lane_rate_max_khz =  8000000;
+			else
+				return FAILURE;
+
+			/* FB/SB package is limited to 6.6 Gbps. NB FBG484 can go higher in some speed grades but we don't
+			 * have the full package name. */
+			if (package == AXI_FPGA_DEV_FB || package == AXI_FPGA_DEV_SB )
+				lane_rate_max_khz = min(lane_rate_max_khz, 6600000);
+
+			break;
+
+		case XILINX_XCVR_TYPE_US_GTH3:
+		case XILINX_XCVR_TYPE_US_GTH4:
+
+			/* ds892 Kintex UltraScale FPGAs Data Sheet: DC and AC Switching Characteristics v1.19 Table 51
+			 * ds893 Virtex UltraScale FPGAs Data Sheet: DC and AC Switching Characteristics v1.12 Table 69
+			 * ds925 Zynq UltraScale+ MPSoC Data Sheet: DC and AC Switching Characteristics */
+			if ((voltage == 950 && speed_grade == 1) ||  /* VU, KU */
+			    (voltage == 900 && speed_grade == 1) ||  /* KU */
+			    (voltage == 850 && speed_grade == 1) ||  /* ZU */
+			    (voltage == 720 && speed_grade == 2))    /* ZU */
+				lane_rate_max_khz = 12500000;
+			else if (voltage == 720 && speed_grade == 1) /* ZU */
+				lane_rate_max_khz = 10312500;
+			else {
+				/* All other voltage/speed grades use the highest rate */
+				lane_rate_max_khz = 16375000;
+			}
+
+			/* SF package is limited to 12.5 Gbps. */
+			if (package == AXI_FPGA_DEV_SF)
+				lane_rate_max_khz = min(lane_rate_max_khz, 12500000);
+
+			break;
+
+		case XILINX_XCVR_TYPE_US_GTY4:
+
+			/* ds893 Virtex UltraScale FPGAs Data Sheet: DC and AC Switching Characteristics v1.12 Table 69 */
+			if (voltage == 1000 && speed_grade == 3)
+				lane_rate_max_khz = 30500000;
+			else if (voltage == 1000 && speed_grade == 1)
+				lane_rate_max_khz = 25800000;
+			else if (voltage == 950 && speed_grade == 2)
+				lane_rate_max_khz = 28210000;
+			else if (voltage == 950 && speed_grade == 1)
+				lane_rate_max_khz = 12500000;
+			else
+				return FAILURE;
+			break;
+
+		default:
+			return FAILURE;
+		}
+	} else {
+		lane_rate_max_khz = 16375000;
+	}
+
+	if (lane_rate_khz > lane_rate_max_khz)
+		return FAILURE;
+
+	return SUCCESS;
+}
+
+/**
  * @brief xilinx_xcvr_configure_lpm_dfe_mode
  */
 int32_t xilinx_xcvr_configure_lpm_dfe_mode(struct xilinx_xcvr *xcvr,
@@ -346,53 +439,6 @@ int32_t xilinx_xcvr_configure_lpm_dfe_mode(struct xilinx_xcvr *xcvr,
 	return SUCCESS;
 }
 
-static void xilinx_xcvr_setup_cpll_vco_range(struct xilinx_xcvr *xcvr,
-		uint32_t *vco_max)
-{
-	if  ((xcvr->type == XILINX_XCVR_TYPE_US_GTH3) |
-	     (xcvr->type == XILINX_XCVR_TYPE_US_GTH4) |
-	     (xcvr->type == XILINX_XCVR_TYPE_US_GTY4)) {
-		if (xcvr->voltage < 850)
-			*vco_max = 4250000;
-		else if ((xcvr->speed_grade / 10) == 1)
-			*vco_max = 4250000;
-	}
-}
-
-static void xilinx_xcvr_setup_qpll_vco_range(struct xilinx_xcvr *xcvr,
-		uint32_t *vco0_min,
-		uint32_t *vco0_max,
-		uint32_t *vco1_min,
-		uint32_t *vco1_max)
-{
-	switch (xcvr->type) {
-	case XILINX_XCVR_TYPE_S7_GTX2:
-		if ((xcvr->dev_package == AXI_FPGA_DEV_FB) |
-		    (xcvr->dev_package == AXI_FPGA_DEV_SB))
-			*vco0_max = 6600000;
-		if ((xcvr->speed_grade / 10) == 2)
-			*vco1_max = 10312500;
-		break;
-	case XILINX_XCVR_TYPE_US_GTH3:
-	case XILINX_XCVR_TYPE_US_GTH4:
-	case XILINX_XCVR_TYPE_US_GTY4:
-		*vco1_min = 8000000;
-		*vco1_max = 13000000;
-		if (((xcvr->voltage < 900) | (xcvr->voltage > 720)) &
-		    ((xcvr->speed_grade / 10) == 1)) {
-			*vco0_max = 12500000;
-			*vco1_max = *vco0_max;
-		}
-		if (xcvr->voltage == 720) {
-			if ((xcvr->speed_grade / 10) == 2)
-				*vco0_max = 12500000;
-			else if ((xcvr->speed_grade / 10) == 1)
-				*vco0_max = 10312500;
-			*vco1_max = *vco0_max;
-		}
-	}
-}
-
 /**
  * @brief xilinx_xcvr_calc_cpll_config
  */
@@ -405,6 +451,13 @@ int32_t xilinx_xcvr_calc_cpll_config(struct xilinx_xcvr *xcvr,
 	uint32_t vco_min;
 	uint32_t vco_max;
 
+	/*
+	 * For PLL limits see:
+	 *
+	 * ds892 Kintex UltraScale FPGAs Data Sheet: DC and AC Switching Characteristics v1.19 Table 51
+	 * ds893 Virtex UltraScale FPGAs Data Sheet: DC and AC Switching Characteristics v1.12 Table 69
+	 * ds925 Zynq UltraScale+ MPSoC Data Sheet: DC and AC Switching Characteristics v1.19 Table 99
+	 */
 	switch (xcvr->type) {
 	case XILINX_XCVR_TYPE_S7_GTX2:
 		vco_min = 1600000;
@@ -415,13 +468,19 @@ int32_t xilinx_xcvr_calc_cpll_config(struct xilinx_xcvr *xcvr,
 	case XILINX_XCVR_TYPE_US_GTY4:
 		vco_min = 2000000;
 		vco_max = 6250000;
+
+		if (AXI_PCORE_VER_MAJOR(xcvr->version) > 0x10) {
+			if (xcvr->voltage < 850)
+				/* All GTX/GTY below 0.85V are 4.25 GHz */
+				vco_max = 4250000;
+			else if ((xcvr->speed_grade / 10) == 1 && xcvr->voltage < 1000)
+				/* All speed grade -1 GTX/GTY are 4.25 GHz except for GTY 1.0V/1H */
+				vco_max = 4250000;
+		}
 		break;
 	default:
 		return FAILURE;
 	}
-
-	if (AXI_PCORE_VER_MAJOR(xcvr->version) > 0x10)
-		xilinx_xcvr_setup_cpll_vco_range(xcvr, &vco_max);
 
 	for (m = 1; m <= 2; m++) {
 		for (d = 1; d <= 8; d <<= 1) {
@@ -473,6 +532,7 @@ int32_t xilinx_xcvr_calc_qpll_config(struct xilinx_xcvr *xcvr,
 					  112, 120, 125, 150, 160, 0
 					 };
 
+	/* The QPLL limits are constant across voltage/speed grade */
 	switch (xcvr->type) {
 	case XILINX_XCVR_TYPE_S7_GTX2:
 		N = N_gtx2;
@@ -487,17 +547,12 @@ int32_t xilinx_xcvr_calc_qpll_config(struct xilinx_xcvr *xcvr,
 		N = N_gth34;
 		vco0_min = 9800000;
 		vco0_max = 16375000;
-		vco1_min = vco0_min;
-		vco1_max = vco0_max;
+		vco1_min = 8000000;
+		vco1_max = 13000000;
 		break;
 	default:
 		return FAILURE;
 	}
-
-	if (AXI_PCORE_VER_MAJOR(xcvr->version) > 0x10)
-		xilinx_xcvr_setup_qpll_vco_range(xcvr,
-						 &vco0_min, &vco0_max,
-						 &vco1_min, &vco1_max);
 
 	for (m = 1; m <= 4; m++) {
 		for (d = 1; d <= 16; d <<= 1) {
