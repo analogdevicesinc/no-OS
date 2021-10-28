@@ -38,6 +38,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
+/*
+ * Supported parts:
+ *  - AD7134;
+ *  - AD4134.
+ */
+
 #ifndef SRC_AD713X_H_
 #define SRC_AD713X_H_
 
