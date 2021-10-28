@@ -85,6 +85,12 @@
 /************************ Variables Definitions *******************************/
 /******************************************************************************/
 
+#if defined(DAC_DMA_EXAMPLE) || defined(IIO_SUPPORT)
+uint32_t dac_buffer[DAC_BUFFER_SAMPLES] __attribute__ ((aligned));
+uint16_t adc_buffer[ADC_BUFFER_SAMPLES * ADC_CHANNELS] __attribute__ ((
+			aligned));
+#endif
+
 #define AD9361_ADC_DAC_BYTES_PER_SAMPLE 2
 
 #ifdef XILINX_PLATFORM
@@ -149,7 +155,7 @@ struct axi_dmac_init tx_dmac_init = {
 	"tx_dmac",
 	CF_AD9361_TX_DMA_BASEADDR,
 	DMA_MEM_TO_DEV,
-	0
+	DMA_CYCLIC
 };
 struct axi_dmac *tx_dmac;
 
@@ -588,8 +594,15 @@ int main(void)
 	axi_dac_set_datasel(ad9361_phy_b->tx_dac, -1, AXI_DAC_DATA_SEL_DMA);
 #endif
 	axi_dac_init(&ad9361_phy->tx_dac, &tx_dac_init);
+	axi_adc_init(&ad9361_phy->rx_adc, &rx_adc_init);
+	extern const uint32_t sine_lut_iq[1024];
 	axi_dac_set_datasel(ad9361_phy->tx_dac, -1, AXI_DAC_DATA_SEL_DMA);
-	axi_dac_set_sine_lut(ad9361_phy->tx_dac, DAC_DDR_BASEADDR);
+	axi_dac_load_custom_data(ad9361_phy->tx_dac, sine_lut_iq,
+				 ARRAY_SIZE(sine_lut_iq),
+				 (uintptr_t)dac_buffer);
+#ifdef XILINX_PLATFORM
+	Xil_DCacheFlush();
+#endif
 #else
 #ifdef FMCOMMS5
 	axi_dac_init(&ad9361_phy_b->tx_dac, &tx_dac_init);
@@ -622,6 +635,7 @@ int main(void)
 	 */
 	struct irq_init_param irq_init_param = {
 		.irq_ctrl_id = INTC_DEVICE_ID,
+		.platform_ops = &xil_irq_ops,
 		.extra = &xil_irq_init_par,
 	};
 
@@ -664,9 +678,9 @@ int main(void)
 	// cache after each axi_dmac_transfer() call, keeping in mind that the
 	// size of the capture and the start address must be alinged to the size
 	// of the cache line.
-	mdelay(1000);
 
 #ifdef DAC_DMA_EXAMPLE
+#ifdef ADC_DMA_IRQ_EXAMPLE
 	struct callback_desc tx_dmac_callback = {
 		.ctx = tx_dmac,
 		.callback = axi_dmac_default_isr,
@@ -681,15 +695,16 @@ int main(void)
 	status = irq_enable(irq_desc, XPAR_FABRIC_AXI_AD9361_DAC_DMA_IRQ_INTR);
 	if(status < 0)
 		return status;
+#endif
 
 #ifdef FMCOMMS5
 	axi_dmac_transfer_nonblocking(tx_dmac, DAC_DDR_BASEADDR,
 				      samples * AD9361_ADC_DAC_BYTES_PER_SAMPLE *
 				      (ad9361_phy_b->tx_dac->num_channels + ad9361_phy->tx_dac->num_channels));
 #else
-	axi_dmac_transfer_nonblocking(tx_dmac, DAC_DDR_BASEADDR,
-				      samples * AD9361_ADC_DAC_BYTES_PER_SAMPLE *
-				      ad9361_phy->tx_dac->num_channels);
+	axi_dmac_transfer_nonblocking(tx_dmac, (uintptr_t)dac_buffer,
+				      sizeof(sine_lut_iq));
+	mdelay(1000);
 #endif
 #endif
 #ifdef FMCOMMS5
@@ -697,9 +712,7 @@ int main(void)
 			  samples * AD9361_ADC_DAC_BYTES_PER_SAMPLE *
 			  (ad9361_phy_b->rx_adc->num_channels + ad9361_phy->rx_adc->num_channels));
 #else
-	axi_dmac_transfer(rx_dmac, ADC_DDR_BASEADDR,
-			  samples * AD9361_ADC_DAC_BYTES_PER_SAMPLE *
-			  ad9361_phy->rx_adc->num_channels);
+	axi_dmac_transfer(rx_dmac, (uintptr_t)adc_buffer, sizeof(adc_buffer));
 #endif
 #ifdef XILINX_PLATFORM
 #ifdef FMCOMMS5
@@ -708,10 +721,11 @@ int main(void)
 						  +
 						  ad9361_phy->rx_adc->num_channels));
 #else
-	Xil_DCacheInvalidateRange(ADC_DDR_BASEADDR,
-				  samples * AD9361_ADC_DAC_BYTES_PER_SAMPLE *
-				  ad9361_phy_b->rx_adc->num_channels);
+	Xil_DCacheInvalidateRange((uintptr_t)adc_buffer, sizeof(adc_buffer));
 #endif
+	printf("DAC_DMA_EXAMPLE: address=%#lx samples=%lu channels=%u bits=%lu\n",
+	       (uintptr_t)adc_buffer, ARRAY_SIZE(adc_buffer), rx_adc_init.num_channels,
+	       8 * sizeof(adc_buffer[0]));
 #endif
 #endif
 #endif
