@@ -87,7 +87,6 @@
 
 /* Interrupt */
 #define INTC_DEVICE_ID			XPAR_SCUGIC_SINGLE_DEVICE_ID
-#endif
 
 /* DMA Controller */
 #define RX1_DMA_BASEADDR		XPAR_AXI_ADRV9001_RX1_DMA_BASEADDR
@@ -102,6 +101,7 @@
 #define TX2_DAC_BASEADDR		(XPAR_AXI_ADRV9001_BASEADDR + 0x4000)
 
 /* ADC/DAC Buffers */
+#if defined(DAC_DMA_EXAMPLE) || defined(IIO_SUPPORT)
 static uint32_t dac1_buffer[DAC_BUFFER_SAMPLES] __attribute__((aligned));
 static uint16_t adc1_buffer[ADC_BUFFER_SAMPLES*ADC1_CHANNELS] __attribute__((
 			aligned));
@@ -109,4 +109,6 @@ static uint16_t adc1_buffer[ADC_BUFFER_SAMPLES*ADC1_CHANNELS] __attribute__((
 static uint32_t dac2_buffer[DAC_BUFFER_SAMPLES] __attribute__((aligned));
 static uint16_t adc2_buffer[ADC_BUFFER_SAMPLES*ADC2_CHANNELS] __attribute__((
 			aligned));
+#endif
+#endif
 #endif

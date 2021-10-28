@@ -100,7 +100,7 @@ int32_t no_os_hw_open(void *devHalCfg)
 	if (ret)
 		return ret;
 
-	ret = gpio_direction_output(phal->gpio_reset_n, GPIO_HIGH);
+	ret = gpio_direction_output(phal->gpio_reset_n, GPIO_LOW);
 	if (ret)
 		return ret;
 
@@ -126,6 +126,10 @@ int32_t no_os_hw_open(void *devHalCfg)
 		.extra = &sip_extra
 	};
 	ret = spi_init(&phal->spi, &sip);
+	if (ret)
+		return ret;
+
+	ret = gpio_set_value(phal->gpio_reset_n, GPIO_HIGH);
 	if (ret)
 		return ret;
 
@@ -506,32 +510,32 @@ int32_t (*adi_hal_SpiRead)(void *devHalCfg, const uint8_t txData[],
 /* Logging interface */
 int32_t (*adi_hal_LogFileOpen)(void *devHalCfg,
 			       const char *filename) = no_os_log_file_open;
-int32_t(*adi_hal_LogWrite)(void *devHalCfg, uint32_t logLevel,
-			   const char *comment, va_list args) = no_os_log_write;
+int32_t(*adi_common_hal_LogWrite)(void *devHalCfg, uint32_t logLevel,
+				  const char *comment, va_list args) = no_os_log_write;
 int32_t(*adi_hal_LogFileClose)(void *devHalCfg) = no_os_log_file_close;
 
 /* Timer interface */
-int32_t (*adi_hal_Wait_us)(void *devHalCfg,
-			   uint32_t time_us) = no_os_timer_wait_us;
+int32_t (*adi_common_hal_Wait_us)(void *devHalCfg,
+				  uint32_t time_us) = no_os_timer_wait_us;
 
 /* Mcs interface */
-int32_t(*adi_hal_Mcs_Pulse)(void *devHalCfg,
-			    uint8_t numberOfPulses) = no_os_mcs_pulse;
+int32_t (*adi_hal_Mcs_Pulse)(void *devHalCfg,
+			     uint8_t numberOfPulses) = no_os_mcs_pulse;
 
 /* ssi */
-int32_t(*adi_hal_ssi_Reset)(void *devHalCfg) = no_os_ssi_reset;
+int32_t (*adi_hal_ssi_Reset)(void *devHalCfg) = no_os_ssi_reset;
 
 /* File IO abstraction */
-int32_t(*adi_hal_ArmImagePageGet)(void *devHalCfg, const char *ImagePath,
-				  uint32_t pageIndex, uint32_t pageSize, uint8_t *rdBuff) = no_os_image_page_get;
-int32_t(*adi_hal_StreamImagePageGet)(void *devHalCfg, const char *ImagePath,
-				     uint32_t pageIndex, uint32_t pageSize, uint8_t *rdBuff) = no_os_image_page_get;
-int32_t(*adi_hal_RxGainTableEntryGet)(void *devHalCfg,
-				      const char *rxGainTablePath, uint16_t lineCount, uint8_t *gainIndex,
-				      uint8_t *rxFeGain,
-				      uint8_t *tiaControl, uint8_t *adcControl, uint8_t *extControl,
-				      uint16_t *phaseOffset, int16_t *digGain) = no_os_rx_gain_table_entry_get;
-int32_t(*adi_hal_TxAttenTableEntryGet)(void *devHalCfg,
-				       const char *txAttenTablePath, uint16_t lineCount, uint16_t *attenIndex,
-				       uint8_t *txAttenHp,
-				       uint16_t *txAttenMult) = no_os_tx_atten_table_entry_get;
+int32_t (*adi_hal_ArmImagePageGet)(void *devHalCfg, const char *ImagePath,
+				   uint32_t pageIndex, uint32_t pageSize, uint8_t *rdBuff) = no_os_image_page_get;
+int32_t (*adi_hal_StreamImagePageGet)(void *devHalCfg, const char *ImagePath,
+				      uint32_t pageIndex, uint32_t pageSize, uint8_t *rdBuff) = no_os_image_page_get;
+int32_t (*adi_hal_RxGainTableEntryGet)(void *devHalCfg,
+				       const char *rxGainTablePath, uint16_t lineCount, uint8_t *gainIndex,
+				       uint8_t *rxFeGain,
+				       uint8_t *tiaControl, uint8_t *adcControl, uint8_t *extControl,
+				       uint16_t *phaseOffset, int16_t *digGain) = no_os_rx_gain_table_entry_get;
+int32_t (*adi_hal_TxAttenTableEntryGet)(void *devHalCfg,
+					const char *txAttenTablePath, uint16_t lineCount, uint16_t *attenIndex,
+					uint8_t *txAttenHp,
+					uint16_t *txAttenMult) = no_os_tx_atten_table_entry_get;

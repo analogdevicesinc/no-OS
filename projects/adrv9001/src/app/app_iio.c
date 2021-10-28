@@ -79,18 +79,20 @@ int32_t iio_server_init(struct iio_axi_adc_init_param *adc1_init,
 		.buff = adc1_buffer,
 		.size = sizeof(adc1_buffer),
 	};
-	struct iio_data_buffer read_buff2 = {
-		.buff = adc2_buffer,
-		.size = sizeof(adc2_buffer),
-	};
 	static struct iio_data_buffer write_buff1 = {
 		.buff = dac1_buffer,
 		.size = sizeof(dac1_buffer),
+	};
+#ifndef ADRV9002_RX2TX2
+	struct iio_data_buffer read_buff2 = {
+		.buff = adc2_buffer,
+		.size = sizeof(adc2_buffer),
 	};
 	static struct iio_data_buffer write_buff2 = {
 		.buff = dac2_buffer,
 		.size = sizeof(dac2_buffer),
 	};
+#endif
 
 	struct iio_desc *iio_desc;
 	struct iio_axi_adc_desc *iio_axi_adc_desc;
@@ -139,6 +141,7 @@ int32_t iio_server_init(struct iio_axi_adc_init_param *adc1_init,
 	status = iio_axi_adc_init(&iio_axi_adc_desc, adc2_init);
 	if (adc2_init && status < 0)
 		return status;
+#ifndef ADRV9002_RX2TX2
 	iio_axi_adc_get_dev_descriptor(iio_axi_adc_desc, &iio_dev_desc);
 	status = iio_register(iio_desc, iio_dev_desc, "axi_adc2",
 			      iio_axi_adc_desc, &read_buff2, NULL);
@@ -153,6 +156,7 @@ int32_t iio_server_init(struct iio_axi_adc_init_param *adc1_init,
 			      iio_axi_dac_desc, NULL, &write_buff2);
 	if (status < 0)
 		return status;
+#endif
 
 	do {
 		status = iio_step(iio_desc);
