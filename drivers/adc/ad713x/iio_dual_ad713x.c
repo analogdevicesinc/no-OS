@@ -157,7 +157,7 @@ void iio_dual_ad713x_get_dev_descriptor(struct iio_ad713x *desc,
 
 /**
  * @brief Init for reading/writing and parameterization of a
- * ad9361 device.
+ * iio_ad713x device.
  * @param desc - Descriptor.
  * @param param - Configuration structure.
  * @return SUCCESS in case of success, FAILURE otherwise.
