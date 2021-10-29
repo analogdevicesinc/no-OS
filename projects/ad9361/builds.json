@@ -24,6 +24,30 @@
                         "fmcomms2_zed"
                   ]
             },
+            "dma-example": {
+                  "flags": "NEW_CFLAGS=-DDAC_DMA_EXAMPLE\\-DADC_DMA_EXAMPLE",
+                  "hardware": [
+                        "fmcomms2_kc705",
+                        "fmcomms2_kcu105",
+                        "fmcomms2_vc707",
+                        "fmcomms2_zc702",
+                        "fmcomms2_zc706",
+                        "fmcomms2_zcu102",
+                        "fmcomms2_zed"
+                  ]
+            },
+            "dma-irq-example": {
+                  "flags": "NEW_CFLAGS=-DDAC_DMA_EXAMPLE\\-DADC_DMA_EXAMPLE\\-DADC_DMA_IRQ_EXAMPLE",
+                  "hardware": [
+                        "fmcomms2_kc705",
+                        "fmcomms2_kcu105",
+                        "fmcomms2_vc707",
+                        "fmcomms2_zc702",
+                        "fmcomms2_zc706",
+                        "fmcomms2_zcu102",
+                        "fmcomms2_zed"
+                  ]
+            },
             "demo_fmcomms5": {
                   "flags": "NEW_CFLAGS=-DFMCOMMS5",
                   "hardware": [
