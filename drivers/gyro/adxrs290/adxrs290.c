@@ -313,6 +313,9 @@ int32_t adxrs290_get_data_ready(struct adxrs290_dev *dev, bool *rdy)
 	int32_t ret = SUCCESS;
 	uint8_t value;
 
+	if (!dev->gpio_sync)
+		return FAILURE;
+
 	ret = gpio_get_value(dev->gpio_sync, &value);
 	if (IS_ERR_VALUE(ret))
 		return ret;
@@ -369,13 +372,15 @@ int32_t adxrs290_init(struct adxrs290_dev **device,
 		goto error_spi;
 
 	// Set GPIO sync pin.
-	ret = gpio_get(&dev->gpio_sync, &init_param->gpio_sync);
+	ret = gpio_get_optional(&dev->gpio_sync, init_param->gpio_sync);
 	if (IS_ERR_VALUE(ret))
 		goto error_spi;
 
-	ret = gpio_direction_input(dev->gpio_sync);
-	if (IS_ERR_VALUE(ret))
-		goto error_gpio;
+	if (dev->gpio_sync) {
+		ret = gpio_direction_input(dev->gpio_sync);
+		if (IS_ERR_VALUE(ret))
+			goto error_gpio;
+	}
 
 	// Set adxrs290 to output on sync pin.
 	ret = adxrs290_reg_write(dev, ADXRS290_REG_DATA_READY,

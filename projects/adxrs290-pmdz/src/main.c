@@ -100,7 +100,7 @@ int main(void)
 	struct adxrs290_init_param adxrs290_param = {
 		.spi_init = init_param,
 		.mode = ADXRS290_MODE_MEASUREMENT,
-		.gpio_sync = gpio_sync_init_param,
+		.gpio_sync = &gpio_sync_init_param,
 		.lpf = ADXRS290_LPF_480HZ,
 		.hpf = ADXRS290_HPF_ALL_PASS
 	};
