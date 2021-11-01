@@ -353,32 +353,33 @@ int32_t adxrs290_init(struct adxrs290_dev **device,
 
 	// Enable measurement mode.
 	if (init_param->mode == ADXRS290_MODE_MEASUREMENT) {
-		ret |= adxrs290_reg_write(dev, ADXRS290_REG_POWER_CTL,
-					  ADXRS290_MEASUREMENT | ADXRS290_TSM);
+		ret = adxrs290_reg_write(dev, ADXRS290_REG_POWER_CTL,
+					 ADXRS290_MEASUREMENT | ADXRS290_TSM);
 		if (IS_ERR_VALUE(ret))
 			goto error_spi;
 
 	}
 	// Set initial Band pass filter poles.
-	ret |= adxrs290_set_lpf(dev, init_param->lpf);
+	ret = adxrs290_set_lpf(dev, init_param->lpf);
 	if (IS_ERR_VALUE(ret))
 		goto error_spi;
 
-	ret |= adxrs290_set_hpf(dev, init_param->hpf);
+	ret = adxrs290_set_hpf(dev, init_param->hpf);
 	if (IS_ERR_VALUE(ret))
 		goto error_spi;
 
 	// Set GPIO sync pin.
-	ret |= gpio_get(&dev->gpio_sync, &init_param->gpio_sync);
+	ret = gpio_get(&dev->gpio_sync, &init_param->gpio_sync);
 	if (IS_ERR_VALUE(ret))
 		goto error_spi;
 
-	ret |= gpio_direction_input(dev->gpio_sync);
+	ret = gpio_direction_input(dev->gpio_sync);
 	if (IS_ERR_VALUE(ret))
 		goto error_gpio;
 
 	// Set adxrs290 to output on sync pin.
-	ret |= adxrs290_reg_write(dev, ADXRS290_REG_DATA_READY, ADXRS290_DATA_RDY_OUT);
+	ret = adxrs290_reg_write(dev, ADXRS290_REG_DATA_READY,
+				 ADXRS290_DATA_RDY_OUT);
 	if (IS_ERR_VALUE(ret))
 		goto error_gpio;
 
