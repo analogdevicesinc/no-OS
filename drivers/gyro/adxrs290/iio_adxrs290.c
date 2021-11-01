@@ -78,9 +78,9 @@ static const int adxrs290_hpf_3db_freq_hz_table[][2] = {
 	[10] = {11, 300000},
 };
 
-ssize_t get_adxrs290_iio_ch_raw(void *device, char *buf, size_t len,
-				const struct iio_ch_info *channel,
-				intptr_t priv)
+static ssize_t get_adxrs290_iio_ch_raw(void *device, char *buf, size_t len,
+				       const struct iio_ch_info *channel,
+				       intptr_t priv)
 {
 	int16_t data;
 
@@ -93,9 +93,9 @@ ssize_t get_adxrs290_iio_ch_raw(void *device, char *buf, size_t len,
 }
 
 
-ssize_t get_adxrs290_iio_ch_scale(void *device, char *buf, size_t len,
-				  const struct iio_ch_info *channel,
-				  intptr_t priv)
+static ssize_t get_adxrs290_iio_ch_scale(void *device, char *buf, size_t len,
+		const struct iio_ch_info *channel,
+		intptr_t priv)
 {
 	if (channel->ch_num == ADXRS290_CHANNEL_TEMP)
 		// Temperature scale 1 LSB = 0.1 degree Celsius
@@ -105,9 +105,9 @@ ssize_t get_adxrs290_iio_ch_scale(void *device, char *buf, size_t len,
 	return snprintf(buf, len, "0.000087266");
 }
 
-ssize_t get_adxrs290_iio_ch_hpf(void *device, char *buf, size_t len,
-				const struct iio_ch_info *channel,
-				intptr_t priv)
+static ssize_t get_adxrs290_iio_ch_hpf(void *device, char *buf, size_t len,
+				       const struct iio_ch_info *channel,
+				       intptr_t priv)
 {
 	uint8_t index;
 	adxrs290_get_hpf((struct adxrs290_dev *)device, &index);
@@ -119,9 +119,9 @@ ssize_t get_adxrs290_iio_ch_hpf(void *device, char *buf, size_t len,
 			adxrs290_hpf_3db_freq_hz_table[index][1]);
 }
 
-ssize_t set_adxrs290_iio_ch_hpf(void *device, char *buf, size_t len,
-				const struct iio_ch_info *channel,
-				intptr_t priv)
+static ssize_t set_adxrs290_iio_ch_hpf(void *device, char *buf, size_t len,
+				       const struct iio_ch_info *channel,
+				       intptr_t priv)
 {
 	float hpf = strtof(buf, NULL);
 	int32_t val = (int32_t)hpf;
@@ -140,9 +140,9 @@ ssize_t set_adxrs290_iio_ch_hpf(void *device, char *buf, size_t len,
 	return FAILURE;
 }
 
-ssize_t get_adxrs290_iio_ch_lpf(void *device, char *buf, size_t len,
-				const struct iio_ch_info *channel,
-				intptr_t priv)
+static ssize_t get_adxrs290_iio_ch_lpf(void *device, char *buf, size_t len,
+				       const struct iio_ch_info *channel,
+				       intptr_t priv)
 {
 	uint8_t index;
 
@@ -154,9 +154,9 @@ ssize_t get_adxrs290_iio_ch_lpf(void *device, char *buf, size_t len,
 			adxrs290_lpf_3db_freq_hz_table[index][1]);
 }
 
-ssize_t set_adxrs290_iio_ch_lpf(void *device, char *buf, size_t len,
-				const struct iio_ch_info *channel,
-				intptr_t priv)
+static ssize_t set_adxrs290_iio_ch_lpf(void *device, char *buf, size_t len,
+				       const struct iio_ch_info *channel,
+				       intptr_t priv)
 {
 	float lpf = strtof(buf, NULL);
 	int32_t val = (int32_t)lpf;
@@ -174,7 +174,7 @@ ssize_t set_adxrs290_iio_ch_lpf(void *device, char *buf, size_t len,
 	return FAILURE;
 }
 
-int32_t adxrs290_update_active_channels(void *device, uint32_t mask)
+static int32_t adxrs290_update_active_channels(void *device, uint32_t mask)
 {
 	struct adxrs290_dev *dev = device;
 
@@ -183,7 +183,8 @@ int32_t adxrs290_update_active_channels(void *device, uint32_t mask)
 	return SUCCESS;
 }
 
-int32_t adxrs290_read_samples(void *device, uint16_t *buff, uint32_t nb_samples)
+static int32_t adxrs290_read_samples(void *device, uint16_t *buff,
+				     uint32_t nb_samples)
 {
 	struct adxrs290_dev	*dev = device;
 	uint32_t		i;
@@ -209,3 +210,98 @@ int32_t adxrs290_read_samples(void *device, uint16_t *buff, uint32_t nb_samples)
 
 	return nb_samples;
 }
+
+static struct iio_attribute adxrs290_iio_vel_attrs[] = {
+	{
+		.name = "filter_high_pass_3db_frequency",
+		.show = get_adxrs290_iio_ch_hpf,
+		.store = set_adxrs290_iio_ch_hpf
+	},
+	{
+		.name = "filter_low_pass_3db_frequency",
+		.show = get_adxrs290_iio_ch_lpf,
+		.store = set_adxrs290_iio_ch_lpf
+	},
+	{
+		.name = "raw",
+		.show = get_adxrs290_iio_ch_raw,
+		.store = NULL
+	},
+	{
+		.name = "scale",
+		.show = get_adxrs290_iio_ch_scale,
+		.store = NULL
+	},
+	END_ATTRIBUTES_ARRAY
+};
+
+static struct iio_attribute adxrs290_iio_temp_attrs[] = {
+	{
+		.name = "raw",
+		.show = get_adxrs290_iio_ch_raw,
+		.store = NULL
+	},
+	{
+		.name = "scale",
+		.show = get_adxrs290_iio_ch_scale,
+		.store = NULL
+	},
+	END_ATTRIBUTES_ARRAY,
+};
+
+static struct scan_type scan_type_gyro = {
+	.sign = 's',
+	.realbits = 16,
+	.storagebits = 16,
+	.shift = 0,
+	.is_big_endian = false
+};
+
+static struct scan_type scan_type_temp = {
+	.sign = 's',
+	.realbits = 12,
+	.storagebits = 16,
+	.shift = 0,
+	.is_big_endian = false
+};
+
+static struct iio_channel adxrs290_iio_channels[] = {
+	{
+		.ch_type = IIO_ANGL_VEL,
+		.modified=1,
+		.channel2=IIO_MOD_X,
+		.scan_index = 0,
+		.scan_type = &scan_type_gyro,
+		.attributes = adxrs290_iio_vel_attrs,
+		.ch_out = false,
+	},
+	{
+		.ch_type = IIO_ANGL_VEL,
+		.modified=1,
+		.channel2=IIO_MOD_Y,
+		.scan_index = 1,
+		.scan_type = &scan_type_gyro,
+		.attributes = adxrs290_iio_vel_attrs,
+		.ch_out = false,
+	},
+	{
+		.ch_type = IIO_TEMP,
+		.scan_index = 2,
+		.scan_type = &scan_type_temp,
+		.attributes = adxrs290_iio_temp_attrs,
+		.ch_out = false,
+	}
+};
+
+struct iio_device adxrs290_iio_descriptor = {
+	.num_ch = 3,
+	.channels = adxrs290_iio_channels,
+	.attributes = NULL,
+	.debug_attributes = NULL,
+	.buffer_attributes = NULL,
+	.prepare_transfer = adxrs290_update_active_channels,
+	.end_transfer = NULL,
+	.read_dev = (int32_t (*)())adxrs290_read_samples,
+	.debug_reg_read = (int32_t (*)())adxrs290_reg_read,
+	.debug_reg_write = (int32_t (*)())adxrs290_reg_write
+};
