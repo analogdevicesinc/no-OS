@@ -42,6 +42,7 @@
 /******************************************************************************/
 #include <malloc.h>
 #include "ada4250.h"
+#include "delay.h"
 #include "error.h"
 
 /******************************************************************************/
@@ -164,15 +165,23 @@ int32_t ada4250_soft_reset(struct ada4250_dev *dev)
  */
 int32_t ada4250_en_refbuf(struct ada4250_dev *dev, bool refbuf)
 {
+	int32_t ret;
+
 	switch(dev->device_id) {
 	case ADA4250:
-		return ada4250_update(dev, ADA4250_REG_REFBUF_EN, ADA4250_REFBUF_MSK,
-				      ADA4250_REFBUF(refbuf));
+		ret = ada4250_update(dev, ADA4250_REG_REFBUF_EN, ADA4250_REFBUF_MSK,
+				     ADA4250_REFBUF(refbuf));
 	case ADA4230:
-		return gpio_set_value(dev->gpio_bufen, dev->refbuf_en);
+		ret = gpio_set_value(dev->gpio_bufen, dev->refbuf_en);
 	default:
 		return -ENODEV;
 	}
+
+	if (ret < 0)
+		return ret;
+
+	dev->refbuf_en = refbuf;
+	return SUCCESS;
 }
 
 /**
@@ -183,11 +192,18 @@ int32_t ada4250_en_refbuf(struct ada4250_dev *dev, bool refbuf)
  */
 int32_t ada4250_set_bias(struct ada4250_dev *dev, enum ada4250_bias bias)
 {
+	int32_t ret;
+
 	if(dev->device_id != ADA4250)
 		return -ENODEV;
 
-	return ada4250_update(dev, ADA4250_REG_SNSR_CAL_CNFG, ADA4250_BIAS_SET_MSK,
-			      ADA4250_BIAS_SET(bias));
+	ret = ada4250_update(dev, ADA4250_REG_SNSR_CAL_CNFG, ADA4250_BIAS_SET_MSK,
+			     ADA4250_BIAS_SET(bias));
+	if (ret < 0)
+		return ret;
+
+	dev->bias = bias;
+	return SUCCESS;
 }
 
 /**
@@ -199,11 +215,18 @@ int32_t ada4250_set_bias(struct ada4250_dev *dev, enum ada4250_bias bias)
 static int32_t ada4250_set_range(struct ada4250_dev *dev,
 				 enum ada4250_offset_range range)
 {
+	int32_t ret;
+
 	if(dev->device_id != ADA4250)
 		return -ENODEV;
 
-	return ada4250_update(dev, ADA4250_REG_SNSR_CAL_CNFG, ADA4250_RANGE_SET_MSK,
-			      ADA4250_RANGE_SET(range));
+	ret = ada4250_update(dev, ADA4250_REG_SNSR_CAL_CNFG, ADA4250_RANGE_SET_MSK,
+			     ADA4250_RANGE_SET(range));
+	if (ret < 0)
+		return ret;
+
+	dev->offset_range = range;
+	return SUCCESS;
 }
 
 /**
@@ -217,8 +240,8 @@ int32_t ada4250_set_gain(struct ada4250_dev *dev, enum ada4250_gain gain)
 	int32_t ret;
 
 	if(dev->device_id == ADA4250) {
-		return ada4250_update(dev, ADA4250_REG_GAIN_MUX, ADA4250_GAIN_MUX_MSK,
-				      ADA4250_GAIN_MUX(gain));
+		ret = ada4250_update(dev, ADA4250_REG_GAIN_MUX, ADA4250_GAIN_MUX_MSK,
+				     ADA4250_GAIN_MUX(gain));
 	} else {
 		ret = gpio_set_value(dev->gpio_g2, ((dev->gain >> 2) & 0x1));
 		if (ret != SUCCESS)
@@ -228,8 +251,14 @@ int32_t ada4250_set_gain(struct ada4250_dev *dev, enum ada4250_gain gain)
 		if (ret != SUCCESS)
 			return ret;
 
-		return gpio_set_value(dev->gpio_g0, (dev->gain & 0x1));
+		ret = gpio_set_value(dev->gpio_g0, (dev->gain & 0x1));
 	}
+
+	if (ret < 0)
+		return ret;
+
+	dev->gain = gain;
+	return SUCCESS;
 }
 
 /**
@@ -317,10 +346,11 @@ int32_t ada4250_set_bandwidth(struct ada4250_dev *dev,
 	}
 
 	ret = gpio_set_value(dev->gpio_bw, val);
-	if (ret == SUCCESS)
-		dev->bandwidth = bw;
+	if (ret < 0)
+		return ret;
 
-	return ret;
+	dev->bandwidth = bw;
+	return SUCCESS;
 }
 
 /**
@@ -359,7 +389,7 @@ static int32_t ada4250_set_config(struct ada4250_dev *dev)
 		}
 	}
 
-	return ret;
+	return SUCCESS;
 }
 
 /**
@@ -387,10 +417,11 @@ int32_t ada4250_set_slp_shtdwn_mode(struct ada4250_dev *dev,
 		return -EINVAL;
 	}
 
-	if (ret == SUCCESS)
-		dev->power_mode = pwrmode;
+	if (ret < 0)
+		return ret;
 
-	return ret;
+	dev->power_mode = pwrmode;
+	return SUCCESS;
 }
 
 /**
@@ -421,8 +452,8 @@ int32_t ada4250_set_normal_mode(struct ada4250_dev *dev, bool reconfig)
 	if (ret != SUCCESS)
 		return ret;
 
-	/* Wait for the device to wake up */
-	mdelay(1);
+	/* Wait for 200/400 us for the device to wake up from sleep/shutdown mode */
+	udelay(dev->power_mode == ADA4250_POWER_SLEEP ? 200 : 400);
 
 	if (dev->power_mode == ADA4250_POWER_SHUTDOWN) {
 		if (reconfig) {
@@ -441,7 +472,7 @@ int32_t ada4250_set_normal_mode(struct ada4250_dev *dev, bool reconfig)
 	}
 
 	dev->power_mode = ADA4250_POWER_NORMAL;
-	return ret;
+	return SUCCESS;
 }
 
 /**
