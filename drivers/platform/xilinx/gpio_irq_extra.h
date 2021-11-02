@@ -70,6 +70,8 @@ struct xil_callback_desc {
 struct xil_gpio_irq_init_param {
 	struct irq_ctrl_desc *parent_desc;
 	int32_t gpio_device_id;
+	/* If retriggerable = false, irq pin remains disabled after irq execution */
+	bool retriggerable;
 };
 
 /**
@@ -81,6 +83,7 @@ struct xil_gpio_irq_desc {
 	XGpioPs my_Gpio;
 	struct list_desc *callback_list;
 	struct iterator *it;
+	bool retriggerable;
 };
 
 /**
