@@ -45,6 +45,7 @@
 #include "parameters.h"
 #include "uart.h"
 #include "delay.h"
+#include <stdio.h>
 
 #if defined(ADUCM_PLATFORM) || defined(XILINX_PLATFORM)
 #include "irq.h"
@@ -68,27 +69,6 @@
 // The default baudrate iio_app will use to print messages to console.
 #define UART_BAUDRATE_DEFAULT	115200
 
-char *uart_data_size[] = {
-	"5",
-	"6",
-	"7",
-	"8",
-	"9"
-};
-
-char *uart_parity[] = {
-	"none",
-	"mark",
-	"space",
-	"odd",
-	"even"
-};
-
-char *uart_stop[] = {
-	"1",
-	"2",
-};
-
 static inline uint32_t _calc_uart_xfer_time(uint32_t len, uint32_t baudrate)
 {
 	uint32_t ms = 1000ul * len * 8 / UART_BAUDRATE_DEFAULT;
@@ -96,6 +76,7 @@ static inline uint32_t _calc_uart_xfer_time(uint32_t len, uint32_t baudrate)
 	return ms;
 }
 
+#if !defined(LINUX_PLATFORM) && !defined(USE_TCP_SOCKET)
 static int32_t iio_print_uart_info_message(struct uart_desc **uart_desc,
 		struct uart_init_param *uart_init_par,
 		char *message, int32_t msglen)
@@ -125,11 +106,58 @@ static int32_t iio_print_uart_info_message(struct uart_desc **uart_desc,
 
 	return 0;
 }
+#endif
+
+static int32_t print_uart_hello_message(struct uart_desc **uart_desc,
+					struct uart_init_param *uart_init_par)
+{
+#if defined(LINUX_PLATFORM) || defined(USE_TCP_SOCKET)
+	return 0;
+#else
+	const char *uart_data_size[] = { "5", "6", "7", "8", "9" };
+	const char *uart_parity[] = { "none", "mark", "space", "odd", "even" };
+	const char *uart_stop[] = { "1", "2" };
+	char message[512];
+	uint32_t msglen = sprintf(message,
+				  "Running TinyIIOD server...\n"
+				  "If successful, you may connect an IIO client application by:\n"
+				  "1. Disconnecting the serial terminal you use to view this message.\n"
+				  "2. Connecting the IIO client application using the serial backend configured as shown:\n"
+				  "\tBaudrate: %d\n"
+				  "\tData size: %s bits\n"
+				  "\tParity: %s\n"
+				  "\tStop bits: %s\n"
+				  "\tFlow control: none\n",
+				  UART_BAUDRATE,
+				  uart_data_size[uart_init_par->size],
+				  uart_parity[uart_init_par->parity],
+				  uart_stop[uart_init_par->stop]);
+
+	return iio_print_uart_info_message(uart_desc, uart_init_par, message,
+					   msglen);
+#endif
+}
+
+static int32_t print_uart_error_message(struct uart_desc **uart_desc,
+					struct uart_init_param *uart_init_par,
+					int32_t status)
+{
+	char message[512];
+	uint32_t msglen = sprintf(message,
+				  "TinyIIOD server failed with code %d.\n",
+				  (int)status);
+#if defined(LINUX_PLATFORM) || defined(USE_TCP_SOCKET)
+	(void)msglen;
+	printf(message);
+	return 0;
+#else
+	return iio_print_uart_info_message(uart_desc, uart_init_par, message,
+					   msglen);
+}
 
 int32_t iio_app_run(struct iio_app_device *devices, int32_t len)
 {
 	int32_t			status;
-	char message[512];
 	struct iio_desc		*iio_desc;
 	struct iio_init_param	iio_init_param;
 	struct uart_init_param	uart_init_par;
@@ -245,23 +273,7 @@ int32_t iio_app_run(struct iio_app_device *devices, int32_t len)
 	if (status < 0)
 		return status;
 
-	uint32_t msglen = sprintf(message,
-				  "Running TinyIIOD server...\n"
-				  "If successful, you may connect an IIO client application by:\n"
-				  "1. Disconnecting the serial terminal you use to view this message.\n"
-				  "2. Connecting the IIO client application using the serial backend configured as shown:\n"
-				  "\tBaudrate: %d\n"
-				  "\tData size: %s bits\n"
-				  "\tParity: %s\n"
-				  "\tStop bits: %s\n"
-				  "\tFlow control: none\n",
-				  UART_BAUDRATE,
-				  uart_data_size[uart_init_par.size],
-				  uart_parity[uart_init_par.parity],
-				  uart_stop[uart_init_par.stop]);
-
-	status = iio_print_uart_info_message(&uart_desc, &uart_init_par,
-					     message, msglen);
+	status = print_uart_hello_message(&uart_desc, &uart_init_par);
 	if (status < 0)
 		return status;
 #endif
@@ -323,12 +335,7 @@ int32_t iio_app_run(struct iio_app_device *devices, int32_t len)
 		status = iio_step(iio_desc);
 	} while (true);
 error:
-#ifndef LINUX_PLATFORM
-
-	msglen = sprintf(message, "TinyIIOD server failed with %d.\n", status);
-	status = iio_print_uart_info_message(&uart_desc, &uart_init_par,
-					     message, msglen);
-#endif
+	status = print_uart_error_message(&uart_desc, &uart_init_par, status);
 	return status;
 }
 
