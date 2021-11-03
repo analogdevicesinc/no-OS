@@ -153,6 +153,53 @@ static int32_t print_uart_error_message(struct uart_desc **uart_desc,
 #else
 	return iio_print_uart_info_message(uart_desc, uart_init_par, message,
 					   msglen);
+#endif
+}
+
+static int32_t uart_setup(struct uart_desc **uart_desc,
+			  struct uart_init_param **uart_init_par,
+			  void *irq_desc)
+{
+#ifdef LINUX_PLATFORM
+	*uart_desc = NULL;
+	return 0;
+#else
+#ifdef XILINX_PLATFORM
+	static struct xil_uart_init_param platform_uart_init_par = {
+#ifdef XPAR_XUARTLITE_NUM_INSTANCES
+		.type = UART_PL,
+#else
+		.type = UART_PS,
+		.irq_id = UART_IRQ_ID
+#endif
+	};
+	platform_uart_init_par.irq_desc = irq_desc;
+#elif defined(ADUCM_PLATFORM)
+	static struct aducm_uart_init_param platform_uart_init_par = {
+		/* TODO: cleanup, these can be set using generic uart_init_param.*/
+		.parity = UART_NO_PARITY,
+		.stop_bits = UART_ONE_STOPBIT,
+		.word_length = UART_WORDLEN_8BITS
+	};
+#elif defined(STM32_PLATFORM)
+	static struct stm32_uart_init_param platform_uart_init_par = {
+		.mode = UART_MODE_TX_RX,
+		.hw_flow_ctl = UART_HWCONTROL_NONE,
+		.over_sampling = UART_OVERSAMPLING_16,
+	};
+#endif
+	static struct uart_init_param luart_par = {
+		.device_id = UART_DEVICE_ID,
+		.baud_rate = UART_BAUDRATE_DEFAULT,
+		.size = UART_CS_8,
+		.parity = UART_PAR_NO,
+		.stop = UART_STOP_1,
+		.extra = &platform_uart_init_par
+	};
+	*uart_init_par = &luart_par;
+
+	return uart_init(uart_desc, &luart_par);
+#endif
 }
 
 int32_t iio_app_run(struct iio_app_device *devices, int32_t len)
@@ -160,12 +207,12 @@ int32_t iio_app_run(struct iio_app_device *devices, int32_t len)
 	int32_t			status;
 	struct iio_desc		*iio_desc;
 	struct iio_init_param	iio_init_param;
-	struct uart_init_param	uart_init_par;
+	struct uart_desc	*uart_desc;
+	struct uart_init_param	*uart_init_par;
 #if defined(ADUCM_PLATFORM) || defined(XILINX_PLATFORM)
 	struct irq_init_param	irq_init_param;
 	struct irq_ctrl_desc	*irq_desc;
 #endif
-	struct uart_desc		*uart_desc;
 #ifdef USE_TCP_SOCKET
 	struct tcp_socket_init_param	socket_param;
 	struct wifi_init_param		wifi_param;
@@ -216,51 +263,6 @@ int32_t iio_app_run(struct iio_app_device *devices, int32_t len)
 #endif
 #endif
 
-#ifdef XILINX_PLATFORM
-	/* Xilinx platform dependent initialization for UART. */
-	struct xil_uart_init_param platform_uart_init_par;
-
-	platform_uart_init_par = (struct xil_uart_init_param) {
-#ifdef XPAR_XUARTLITE_NUM_INSTANCES
-		.type = UART_PL,
-#else
-		.type = UART_PS,
-		.irq_id = UART_IRQ_ID,
-		.irq_desc = irq_desc,
-#endif
-	};
-#endif // XILINX_PLATFORM
-
-#ifdef ADUCM_PLATFORM
-	/* Aducm platform dependent initialization for UART. */
-	struct aducm_uart_init_param platform_uart_init_par = {
-		/* TODO: cleanup, these can be set using generic uart_init_param. */
-		.parity = UART_NO_PARITY,
-		.stop_bits = UART_ONE_STOPBIT,
-		.word_length = UART_WORDLEN_8BITS
-	};
-#endif // ADUCM_PLATFORM
-
-#ifdef STM32_PLATFORM
-	/* stm32 platform dependent initialization for UART. */
-	struct stm32_uart_init_param platform_uart_init_par = {
-		.mode = UART_MODE_TX_RX,
-		.hw_flow_ctl = UART_HWCONTROL_NONE,
-		.over_sampling = UART_OVERSAMPLING_16,
-	};
-#endif
-
-#if defined(XILINX_PLATFORM) || defined(ADUCM_PLATFORM) || defined(STM32_PLATFORM)
-	uart_init_par = (struct uart_init_param) {
-		.device_id = UART_DEVICE_ID,
-		.baud_rate = UART_BAUDRATE_DEFAULT,
-		.size = UART_CS_8,
-		.parity = UART_PAR_NO,
-		.stop = UART_STOP_1,
-		.extra = &platform_uart_init_par
-	};
-#endif
-
 #if defined(ADUCM_PLATFORM) || defined(XILINX_PLATFORM)
 #ifndef PLATFORM_MB
 	status = irq_global_enable(irq_desc);
@@ -268,15 +270,14 @@ int32_t iio_app_run(struct iio_app_device *devices, int32_t len)
 		return status;
 #endif
 #endif
-#ifndef LINUX_PLATFORM
-	status = uart_init(&uart_desc, &uart_init_par);
+
+	status = uart_setup(&uart_desc, &uart_init_par, irq_desc);
 	if (status < 0)
 		return status;
 
-	status = print_uart_hello_message(&uart_desc, &uart_init_par);
+	status = print_uart_hello_message(&uart_desc, uart_init_par);
 	if (status < 0)
 		return status;
-#endif
 
 #ifdef USE_TCP_SOCKET
 	wifi_param.irq_desc = irq_desc;
@@ -335,7 +336,7 @@ int32_t iio_app_run(struct iio_app_device *devices, int32_t len)
 		status = iio_step(iio_desc);
 	} while (true);
 error:
-	status = print_uart_error_message(&uart_desc, &uart_init_par, status);
+	status = print_uart_error_message(&uart_desc, uart_init_par, status);
 	return status;
 }
 
