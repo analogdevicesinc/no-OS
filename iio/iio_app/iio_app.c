@@ -202,6 +202,35 @@ static int32_t uart_setup(struct uart_desc **uart_desc,
 #endif
 }
 
+#if defined(ADUCM_PLATFORM) || (defined(XILINX_PLATFORM) && !defined(PLATFORM_MB))
+static int32_t irq_setup(struct irq_ctrl_desc **irq_desc)
+{
+	int32_t status;
+#if defined(XILINX_PLATFORM) && !defined(PLATFORM_MB)
+	struct xil_irq_init_param p = {
+		.type = IRQ_PS,
+	};
+	struct xil_irq_init_param *platform_irq_init_par = &p;
+	const struct irq_platform_ops *platform_irq_ops = &xil_irq_ops;
+#elif defined(ADUCM_PLATFORM)
+	void *platform_irq_init_par = NULL;
+	const struct irq_platform_ops *platform_irq_ops = &aducm_irq_ops;
+#endif
+
+	struct irq_init_param irq_init_param = {
+		.irq_ctrl_id = INTC_DEVICE_ID,
+		.platform_ops = platform_irq_ops,
+		.extra = &platform_irq_init_par
+	};
+
+	status = irq_ctrl_init(irq_desc, &irq_init_param);
+	if (status < 0)
+		return status;
+
+	return irq_global_enable(*irq_desc);
+}
+#endif
+
 int32_t iio_app_run(struct iio_app_device *devices, int32_t len)
 {
 	int32_t			status;
@@ -209,10 +238,8 @@ int32_t iio_app_run(struct iio_app_device *devices, int32_t len)
 	struct iio_init_param	iio_init_param;
 	struct uart_desc	*uart_desc;
 	struct uart_init_param	*uart_init_par;
-#if defined(ADUCM_PLATFORM) || defined(XILINX_PLATFORM)
-	struct irq_init_param	irq_init_param;
-	struct irq_ctrl_desc	*irq_desc;
-#endif
+	void			*irq_desc = NULL;
+
 #ifdef USE_TCP_SOCKET
 	struct tcp_socket_init_param	socket_param;
 	struct wifi_init_param		wifi_param;
@@ -221,54 +248,10 @@ int32_t iio_app_run(struct iio_app_device *devices, int32_t len)
 	struct tcp_socket_init_param	socket_param;
 #endif
 
-#ifdef XILINX_PLATFORM
-#ifndef PLATFORM_MB
-	/* Xilinx platform dependent initialization for IRQ. */
-	struct xil_irq_init_param platform_irq_init_par;
-
-	platform_irq_init_par = (struct xil_irq_init_param ) {
-		.type = IRQ_PS,
-	};
-#endif
-#endif // XILINX_PLATFORM
-
-#ifdef ADUCM_PLATFORM
-	/* Dummy value for Aducm platform dependent initialization for IRQ. */
-	int32_t platform_irq_init_par = 0;
-#endif //ADUCM_PLATFORM
-
-#if defined(ADUCM_PLATFORM)
-	irq_init_param = (struct irq_init_param ) {
-		.irq_ctrl_id = INTC_DEVICE_ID,
-		.platform_ops = &aducm_irq_ops,
-		.extra = &platform_irq_init_par
-	};
-#endif
-
-#if defined(XILINX_PLATFORM)
-#ifndef PLATFORM_MB
-	irq_init_param = (struct irq_init_param ) {
-		.irq_ctrl_id = INTC_DEVICE_ID,
-		.platform_ops = &xil_irq_ops,
-		.extra = &platform_irq_init_par
-	};
-#endif
-#endif
-
-#if defined(ADUCM_PLATFORM) || defined(XILINX_PLATFORM)
-#ifndef PLATFORM_MB
-	status = irq_ctrl_init(&irq_desc, &irq_init_param);
-	if(status < 0)
-		return status;
-#endif
-#endif
-
-#if defined(ADUCM_PLATFORM) || defined(XILINX_PLATFORM)
-#ifndef PLATFORM_MB
-	status = irq_global_enable(irq_desc);
+#if defined(ADUCM_PLATFORM) || (defined(XILINX_PLATFORM) && !defined(PLATFORM_MB))
+	status = irq_setup((struct irq_ctrl_desc **)&irq_desc);
 	if (status < 0)
 		return status;
-#endif
 #endif
 
 	status = uart_setup(&uart_desc, &uart_init_par, irq_desc);
