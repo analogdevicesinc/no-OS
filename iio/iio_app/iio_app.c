@@ -96,6 +96,36 @@ static inline uint32_t _calc_uart_xfer_time(uint32_t len, uint32_t baudrate)
 	return ms;
 }
 
+static int32_t iio_print_uart_info_message(struct uart_desc **uart_desc,
+		struct uart_init_param *uart_init_par,
+		char *message, int32_t msglen)
+{
+	int32_t status;
+	uint32_t delay_ms;
+
+	if (UART_BAUDRATE_DEFAULT != UART_BAUDRATE) {
+		uart_remove(*uart_desc);
+
+		uart_init_par->baud_rate = UART_BAUDRATE_DEFAULT;
+		status = uart_init(uart_desc, uart_init_par);
+		if (status < 0)
+			return status;
+	}
+	status = uart_write(*uart_desc, (uint8_t *)message, msglen);
+	if (status < 0)
+		return status;
+
+	delay_ms = _calc_uart_xfer_time(msglen, UART_BAUDRATE_DEFAULT);
+	mdelay(delay_ms);
+	if (UART_BAUDRATE_DEFAULT != UART_BAUDRATE) {
+		uart_remove(*uart_desc);
+		uart_init_par->baud_rate = UART_BAUDRATE;
+		return uart_init(uart_desc, uart_init_par);
+	}
+
+	return 0;
+}
+
 int32_t iio_app_run(struct iio_app_device *devices, int32_t len)
 {
 	int32_t			status;
@@ -230,22 +260,10 @@ int32_t iio_app_run(struct iio_app_device *devices, int32_t len)
 				  uart_parity[uart_init_par.parity],
 				  uart_stop[uart_init_par.stop]);
 
-	uint32_t delay_ms = _calc_uart_xfer_time(msglen, UART_BAUDRATE_DEFAULT);
-	status = uart_write(uart_desc, (uint8_t *)message, msglen);
+	status = iio_print_uart_info_message(&uart_desc, &uart_init_par,
+					     message, msglen);
 	if (status < 0)
 		return status;
-
-	if (UART_BAUDRATE_DEFAULT != UART_BAUDRATE) {
-		// make sure the whole message gets printed befure uart gets reinitialized
-		mdelay(delay_ms);
-
-		uart_remove(uart_desc);
-
-		uart_init_par.baud_rate = UART_BAUDRATE;
-		status = uart_init(&uart_desc, &uart_init_par);
-		if (status < 0)
-			return status;
-	}
 #endif
 
 #ifdef USE_TCP_SOCKET
@@ -306,21 +324,10 @@ int32_t iio_app_run(struct iio_app_device *devices, int32_t len)
 	} while (true);
 error:
 #ifndef LINUX_PLATFORM
-	if (UART_BAUDRATE_DEFAULT != UART_BAUDRATE) {
-		uart_remove(uart_desc);
-
-		uart_init_par.baud_rate = UART_BAUDRATE_DEFAULT;
-		status = uart_init(&uart_desc, &uart_init_par);
-		if (status < 0)
-			return status;
-	}
 
 	msglen = sprintf(message, "TinyIIOD server failed with %d.\n", status);
-	uart_write(uart_desc, (uint8_t *)message, msglen);
-
-	delay_ms = _calc_uart_xfer_time(msglen, UART_BAUDRATE_DEFAULT);
-	mdelay(delay_ms);
-	uart_remove(uart_desc);
+	status = iio_print_uart_info_message(&uart_desc, &uart_init_par,
+					     message, msglen);
 #endif
 	return status;
 }
