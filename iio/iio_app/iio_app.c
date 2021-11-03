@@ -156,6 +156,47 @@ static int32_t print_uart_error_message(struct uart_desc **uart_desc,
 #endif
 }
 
+#if defined(USE_TCP_SOCKET) || defined(LINUX_PLATFORM)
+static int32_t network_setup(struct iio_init_param *iio_init_param,
+			     struct uart_desc *uart_desc,
+			     void *irq_desc)
+{
+	static struct tcp_socket_init_param socket_param;
+
+#ifdef LINUX_PLATFORM
+	socket_param.net = &linux_net;
+#else
+	int32_t status;
+	static struct wifi_desc *wifi;
+	struct wifi_init_param wifi_param = {
+		.irq_desc = irq_desc,
+		.uart_desc = uart_desc,
+		.uart_irq_conf = uart_desc,
+		.uart_irq_id = UART_IRQ_ID
+	};
+	status = wifi_init(&wifi, &wifi_param);
+	if (status < 0)
+		return status;
+
+	status = wifi_connect(wifi, WIFI_SSID, WIFI_PWD);
+	if (status < 0)
+		return status;
+
+	char buff[100];
+	wifi_get_ip(wifi, buff, 100);
+	printf("Tinyiiod ip is: %s\n", buff);
+
+	wifi_get_network_interface(wifi, &socket_param.net);
+#endif
+
+	socket_param.max_buff_size = 0;
+	iio_init_param->phy_type = USE_NETWORK;
+	iio_init_param->tcp_socket_init_param = &socket_param;
+
+	return 0;
+}
+#endif
+
 static int32_t uart_setup(struct uart_desc **uart_desc,
 			  struct uart_init_param **uart_init_par,
 			  void *irq_desc)
@@ -240,13 +281,6 @@ int32_t iio_app_run(struct iio_app_device *devices, int32_t len)
 	struct uart_init_param	*uart_init_par;
 	void			*irq_desc = NULL;
 
-#ifdef USE_TCP_SOCKET
-	struct tcp_socket_init_param	socket_param;
-	struct wifi_init_param		wifi_param;
-	struct wifi_desc		*wifi;
-#elif defined(LINUX_PLATFORM)
-	struct tcp_socket_init_param	socket_param;
-#endif
 
 #if defined(ADUCM_PLATFORM) || (defined(XILINX_PLATFORM) && !defined(PLATFORM_MB))
 	status = irq_setup((struct irq_ctrl_desc **)&irq_desc);
@@ -262,42 +296,14 @@ int32_t iio_app_run(struct iio_app_device *devices, int32_t len)
 	if (status < 0)
 		return status;
 
-#ifdef USE_TCP_SOCKET
-	wifi_param.irq_desc = irq_desc;
-	wifi_param.uart_desc = uart_desc;
-#ifdef ADUCM_PLATFORM
-	wifi_param.uart_irq_conf = uart_desc;
-#endif //ADUCM_PLATFORM
-	wifi_param.uart_irq_id = UART_IRQ_ID;
-
-	status = wifi_init(&wifi, &wifi_param);
-	if (status < 0)
-		return status;
-
-	status = wifi_connect(wifi, WIFI_SSID, WIFI_PWD);
-	if (status < 0)
-		return status;
-
-	char buff[100];
-	wifi_get_ip(wifi, buff, 100);
-	printf("Tinyiiod ip is: %s\n", buff);
-
-	wifi_get_network_interface(wifi, &socket_param.net);
-	socket_param.max_buff_size = 0;
-
-	iio_init_param.phy_type = USE_NETWORK;
-	iio_init_param.tcp_socket_init_param = &socket_param;
-
-#elif defined(LINUX_PLATFORM)
-	socket_param.net = &linux_net;
-	socket_param.max_buff_size = 0;
-
-	iio_init_param.phy_type = USE_NETWORK;
-	iio_init_param.tcp_socket_init_param = &socket_param;
+#if defined(USE_TCP_SOCKET) || defined(LINUX_PLATFORM)
+	status = network_setup(&iio_init_param, uart_desc, irq_desc);
+	if(status < 0)
+		goto error;
 #else
 	iio_init_param.phy_type = USE_UART;
 	iio_init_param.uart_desc = uart_desc;
-#endif//USE_TCP_SOCKET
+#endif
 
 	status = iio_init(&iio_desc, &iio_init_param);
 	if(status < 0)
