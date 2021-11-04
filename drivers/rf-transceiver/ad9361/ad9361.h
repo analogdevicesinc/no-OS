@@ -3339,7 +3339,6 @@ enum dev_id {
 
 struct ad9361_rf_phy {
 	enum dev_id		dev_sel;
-	uint8_t 		id_no;
 	struct spi_desc 	*spi;
 	struct gpio_desc 	*gpio_desc_resetb;
 	struct gpio_desc 	*gpio_desc_sync;
