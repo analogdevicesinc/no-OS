@@ -558,6 +558,7 @@ int main(void)
 	gpio_init(default_init_param.gpio_sync);
 #endif
 	default_init_param.id_no = SPI_CS_2;
+	default_init_param.spi_param.chip_select = SPI_CS_2;
 	default_init_param.gpio_resetb.number = GPIO_RESET_PIN_2;
 #ifdef LINUX_PLATFORM
 	gpio_init(default_init_param.gpio_resetb);
