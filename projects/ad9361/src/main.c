@@ -162,8 +162,6 @@ struct axi_dmac *tx_dmac;
 AD9361_InitParam default_init_param = {
 	/* Device selection */
 	ID_AD9361,	// dev_sel
-	/* Identification number */
-	0,		//id_no
 	/* Reference Clock */
 	40000000UL,	//reference_clk_rate
 	/* Base Configuration */
@@ -557,7 +555,6 @@ int main(void)
 #ifdef LINUX_PLATFORM
 	gpio_init(default_init_param.gpio_sync);
 #endif
-	default_init_param.id_no = SPI_CS_2;
 	default_init_param.spi_param.chip_select = SPI_CS_2;
 	default_init_param.gpio_resetb.number = GPIO_RESET_PIN_2;
 #ifdef LINUX_PLATFORM

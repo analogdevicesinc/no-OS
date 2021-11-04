@@ -116,9 +116,6 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy,
 	/* Device selection */
 	phy->dev_sel = init_param->dev_sel;
 
-	/* Identification number */
-	phy->id_no = init_param->id_no;
-
 	/* Reference Clock */
 	phy->clk_refin->rate = init_param->reference_clk_rate;
 
