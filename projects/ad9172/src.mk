@@ -12,7 +12,7 @@
 SRCS += $(PROJECT)/src/main.c
 ifeq (y,$(strip $(TINYIIOD)))
 LIBRARIES += iio
-SRCS += $(PROJECT)/src/app_iio.c
+SRC_DIRS += $(NO-OS)/iio/iio_app
 endif
 SRCS += $(DRIVERS)/api/spi.c \
 	$(DRIVERS)/api/gpio.c \
@@ -43,9 +43,6 @@ SRCS += $(NO-OS)/util/fifo.c \
 endif
 INCS += $(PROJECT)/src/parameters.h \
 	$(PROJECT)/src/app_config.h
-ifeq (y,$(strip $(TINYIIOD)))
-INCS +=	$(PROJECT)/src/app_iio.h
-endif
 INCS += $(DRIVERS)/frequency/hmc7044/hmc7044.h \
 	$(DRIVERS)/dac/ad917x/ad9172.h \
 	$(DRIVERS)/dac/ad917x/ad917x_api/ad917x_reg.h \
