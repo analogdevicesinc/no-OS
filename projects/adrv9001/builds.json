@@ -27,6 +27,13 @@
                         "adrv9001_zcu102",
                         "adrv9001_zcu102_lvds"
                   ]
+            },
+            "iio_adrv9002": {
+                  "flags": "TINYIIOD=y NEW_CFLAGS=-DADRV9002_RX2TX2",
+                  "hardware": [
+                        "adrv9001_zcu102",
+                        "adrv9001_zcu102_lvds"
+                  ]
             }
       }
 }
