@@ -55,10 +55,8 @@
 
 #ifdef IIO_SUPPORT
 #include "iio.h"
-#include "irq.h"
+#include "iio_app.h"
 #include "iio_types.h"
-#include "irq_extra.h"
-#include "uart.h"
 #include "uart_extra.h"
 #include "xil_cache.h"
 #endif // IIO_SUPPORT
@@ -221,59 +219,18 @@ int main()
 		return ret;
 
 #ifdef IIO_SUPPORT
-	struct uart_desc *uart_desc;
-	struct iio_desc *iio_app_desc;
-	struct xil_irq_init_param xil_irq_init_par = {
-		.type = IRQ_PS,
-	};
-	struct irq_init_param irq_init_param = {
-		.irq_ctrl_id = INTC_DEVICE_ID,
-		.extra = &xil_irq_init_par,
-	};
-	struct irq_ctrl_desc *irq_desc;
-	ret = irq_ctrl_init(&irq_desc, &irq_init_param);
-	if (ret < 0)
-		return ret;
-	struct xil_uart_init_param xil_uart_init_par = {
-		.type = UART_PS,
-		.irq_id = UART_IRQ_ID,
-		.irq_desc = irq_desc,
-	};
-	struct uart_init_param uart_init_par = {
-		.baud_rate = 115200,
-		.device_id = UART_DEVICE_ID,
-		.extra = &xil_uart_init_par,
-	};
-
-	ret = uart_init(&uart_desc, &uart_init_par);
-	if (ret < 0)
-		return ret;
-
-	struct iio_init_param iio_init_par = {
-		.phy_type = USE_UART,
-		.uart_desc = uart_desc,
-	};
-
-	ret = irq_global_enable(irq_desc);
-	if (ret < 0)
-		return ret;
-
-	ret = iio_init(&iio_app_desc, &iio_init_par);
-	if (ret < 0)
-		return ret;
 
 	struct iio_data_buffer read_buff = {
 		.buff = (void *)ADC_DDR_BASEADDR,
 		.size = MAX_SIZE_BASE_ADDR
 	};
-	ret = iio_register(iio_app_desc, &ad469x_iio_descriptor, "adc",
-			   dev, &read_buff, NULL);
-	if (ret < 0)
-		return ret;
 
-	do {
-		ret = iio_step(iio_app_desc);
-	} while (true);
+	struct iio_app_device devices[] = {
+		IIO_APP_DEVICE("adc", dev, &ad469x_iio_descriptor,
+			       &read_buff, NULL),
+	};
+
+	return iio_app_run(devices, ARRAY_SIZE(devices));
 
 #endif // IIO_SUPPORT
 
