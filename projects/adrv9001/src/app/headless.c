@@ -53,7 +53,9 @@
 #include "parameters.h"
 
 #ifdef IIO_SUPPORT
-#include "app_iio.h"
+#include "iio_app.h"
+#include "iio_axi_adc.h"
+#include "iio_axi_dac.h"
 #include "xil_cache.h"
 #endif
 
@@ -72,6 +74,55 @@ int get_sampling_frequency(struct axi_adc *dev, uint32_t chan,
 		adrv9002_init_get()->rx.rxChannelCfg[chan].profile.rxOutputRate_Hz;
 	return SUCCESS;
 }
+
+#ifdef IIO_SUPPORT
+
+static int32_t iio_run(struct iio_axi_adc_init_param *adc_pars,
+		       struct iio_axi_dac_init_param *dac_pars)
+{
+	char *names[] = {
+		"axi_adc1",
+		"axi_dac1",
+		"axi_adc2",
+		"axi_dac2"
+	};
+	struct iio_axi_adc_desc *adcs[IIO_DEV_COUNT];
+	struct iio_axi_dac_desc *dacs[IIO_DEV_COUNT];
+	struct iio_data_buffer iio_dac_buffers[IIO_DEV_COUNT];
+	struct iio_data_buffer iio_adc_buffers[IIO_DEV_COUNT];
+	struct iio_device *iio_descs[IIO_DEV_COUNT * 2];
+	struct iio_app_device app_devices[IIO_DEV_COUNT * 2] = {0};
+	int32_t i, ret;
+
+	for (i = 0; i < IIO_DEV_COUNT; i++) {
+		/* ADC setup */
+		iio_adc_buffers[i].buff = adc_buffers[i];
+		iio_adc_buffers[i].size = sizeof(adc_buffers[i]);
+		ret = iio_axi_adc_init(&adcs[i], &adc_pars[i]);
+		if (ret < 0)
+			return ret;
+		iio_axi_adc_get_dev_descriptor(adcs[i], &iio_descs[i]);
+		app_devices[i].name = names[i];
+		app_devices[i].dev = adcs[i];
+		app_devices[i].dev_descriptor = iio_descs[i];
+		app_devices[i].read_buff = &iio_adc_buffers[i];
+
+		/* DAC setup */
+		iio_dac_buffers[i].buff = dac_buffers[i];
+		iio_dac_buffers[i].size = sizeof(dac_buffers[i]);
+		ret = iio_axi_dac_init(&dacs[i], &dac_pars[i]);
+		if (ret < 0)
+			return ret;
+		iio_axi_dac_get_dev_descriptor(dacs[i + 1], &iio_descs[i + 1]);
+		app_devices[i + 1].name = names[i];
+		app_devices[i + 1].dev = dacs[i];
+		app_devices[i + 1].dev_descriptor = iio_descs[i + 1];
+		app_devices[i + 1].write_buff = &iio_dac_buffers[i];
+	}
+
+	return iio_app_run(app_devices, sizeof(app_devices));
+}
+#endif
 
 int main(void)
 {
@@ -273,24 +324,24 @@ int main(void)
 #ifdef DAC_DMA_EXAMPLE
 	axi_dac_load_custom_data(phy.tx1_dac, sine_lut_iq,
 				 ARRAY_SIZE(sine_lut_iq),
-				 (uintptr_t)dac1_buffer);
+				 (uintptr_t)dac_buffers[0]);
 #ifndef ADRV9002_RX2TX2
 	axi_dac_load_custom_data(phy.tx2_dac, sine_lut_iq,
 				 ARRAY_SIZE(sine_lut_iq),
-				 (uintptr_t)dac2_buffer);
+				 (uintptr_t)dac_buffers[1]);
 #endif
 	Xil_DCacheFlush();
 
-	axi_dmac_transfer(phy.tx1_dmac, (uintptr_t)dac1_buffer, sizeof(sine_lut_iq));
+	axi_dmac_transfer(phy.tx1_dmac, (uintptr_t)dac_buffers[0], sizeof(sine_lut_iq));
 #ifndef ADRV9002_RX2TX2
-	axi_dmac_transfer(phy.tx2_dmac, (uintptr_t)dac2_buffer, sizeof(sine_lut_iq));
+	axi_dmac_transfer(phy.tx2_dmac, (uintptr_t)dac_buffers[1], sizeof(sine_lut_iq));
 #endif
 
 	mdelay(1000);
 
 	/* Transfer 16384 samples from ADC to MEM */
 	axi_dmac_transfer(phy.rx1_dmac,
-			  (uintptr_t)adc1_buffer,
+			  (uintptr_t)adc_buffers[0],
 			  16384 * /* nr of samples */
 #ifndef ADRV9002_RX2TX2
 			  ADRV9001_NUM_SUBCHANNELS * /* rx1 i/q */
@@ -298,7 +349,7 @@ int main(void)
 			  ADRV9001_NUM_CHANNELS * /* rx1 i/q, rx2 i/q*/
 #endif
 			  2 /* bytes per sample */);
-	Xil_DCacheInvalidateRange((uintptr_t)adc1_buffer,
+	Xil_DCacheInvalidateRange((uintptr_t)adc_buffers[0],
 				  16384 * /* nr of samples */
 #ifndef ADRV9002_RX2TX2
 				  ADRV9001_NUM_SUBCHANNELS * /* rx1 i/q */
@@ -308,61 +359,59 @@ int main(void)
 				  2 /* bytes per sample */);
 #ifndef ADRV9002_RX2TX2
 	axi_dmac_transfer(phy.rx2_dmac,
-			  (uintptr_t)adc2_buffer,
+			  (uintptr_t)adc_buffers[1],
 			  16384 * /* nr of samples */
 			  ADRV9001_NUM_SUBCHANNELS * /* nr of channels */
 			  2 /* bytes per sample */);
-	Xil_DCacheInvalidateRange((uintptr_t)adc2_buffer,
+	Xil_DCacheInvalidateRange((uintptr_t)adc_buffers[1],
 				  16384 * /* nr of samples */
 				  ADRV9001_NUM_SUBCHANNELS * /* nr of channels */
 				  2 /* bytes per sample */);
 	printf("DAC_DMA_EXAMPLE: address=%#lx samples=%lu channels=%u bits=%lu\n",
-	       (uintptr_t)adc2_buffer, 16384 * rx2_adc_init.num_channels,
-	       rx2_adc_init.num_channels, 8 * sizeof(adc2_buffer[0]));
+	       (uintptr_t)adc_buffers[1], 16384 * rx2_adc_init.num_channels,
+	       rx2_adc_init.num_channels, 8 * sizeof(adc_buffers[1][0]));
 #endif
 	printf("DAC_DMA_EXAMPLE: address=%#lx samples=%lu channels=%u bits=%lu\n",
-	       (uintptr_t)adc1_buffer, 16384 * rx1_adc_init.num_channels,
-	       rx1_adc_init.num_channels, 8 * sizeof(adc1_buffer[0]));
+	       (uintptr_t)adc_buffers[0], 16384 * rx1_adc_init.num_channels,
+	       rx1_adc_init.num_channels, 8 * sizeof(adc_buffers[0][0]));
 #endif
 
 #ifdef IIO_SUPPORT
-	printf("The board accepts libiio clients connections through the serial backend.\n");
-
-	struct iio_axi_adc_init_param iio_axi_adc1_init_par = {
-		.rx_adc = phy.rx1_adc,
-		.rx_dmac = phy.rx1_dmac,
-		.dcache_invalidate_range = (void (*)(uint32_t, uint32_t))Xil_DCacheInvalidateRange,
-		.get_sampling_frequency = get_sampling_frequency,
-	};
-
-	struct iio_axi_dac_init_param iio_axi_dac1_init_par = {
-		.tx_dac = phy.tx1_dac,
-		.tx_dmac = phy.tx1_dmac,
-		.dcache_flush_range = (void (*)(uint32_t, uint32_t))Xil_DCacheFlushRange,
-	};
+	struct iio_axi_adc_init_param iio_axi_adcs_init_par[] = {{
+			.rx_adc = phy.rx1_adc,
+			.rx_dmac = phy.rx1_dmac,
+			.dcache_invalidate_range = (void (*)(uint32_t, uint32_t))Xil_DCacheInvalidateRange,
+			.get_sampling_frequency = get_sampling_frequency,
+		},
 #ifndef ADRV9002_RX2TX2
-	struct iio_axi_adc_init_param iio_axi_adc2_init_par = {
-		.rx_adc = phy.rx2_adc,
-		.rx_dmac = phy.rx2_dmac,
-		.dcache_invalidate_range = (void (*)(uint32_t, uint32_t))Xil_DCacheInvalidateRange,
-		.get_sampling_frequency = get_sampling_frequency,
+		{
+			.rx_adc = phy.rx2_adc,
+			.rx_dmac = phy.rx2_dmac,
+			.dcache_invalidate_range = (void (*)(uint32_t, uint32_t))Xil_DCacheInvalidateRange,
+			.get_sampling_frequency = get_sampling_frequency,
+		}
+#endif
 	};
 
-	struct iio_axi_dac_init_param iio_axi_dac2_init_par = {
-		.tx_dac = phy.tx2_dac,
-		.tx_dmac = phy.tx2_dmac,
-		.dcache_flush_range = (void (*)(uint32_t, uint32_t))Xil_DCacheFlushRange,
-	};
-	ret = iio_server_init(&iio_axi_adc1_init_par,
-			      &iio_axi_adc2_init_par,
-			      &iio_axi_dac1_init_par,
-			      &iio_axi_dac2_init_par);
-#else
-	ret = iio_server_init(&iio_axi_adc1_init_par,
-			      NULL,
-			      &iio_axi_dac1_init_par,
-			      NULL);
+	struct iio_axi_dac_init_param iio_axi_dacs_init_par[] = {{
+			.tx_dac = phy.tx1_dac,
+			.tx_dmac = phy.tx1_dmac,
+			.dcache_flush_range = (void (*)(uint32_t, uint32_t))Xil_DCacheFlushRange,
+		},
+#ifndef ADRV9002_RX2TX2
+		{
+			.tx_dac = phy.tx2_dac,
+			.tx_dmac = phy.tx2_dmac,
+			.dcache_flush_range = (void (*)(uint32_t, uint32_t))Xil_DCacheFlushRange,
+		}
 #endif
+	};
+
+	ret = iio_run(iio_axi_adcs_init_par, iio_axi_dacs_init_par);
+	if (ret < 0) {
+		printf("iio_run() failed with status %d\n", ret);
+		goto error;
+	}
 #endif
 	printf("Bye\n");
 
