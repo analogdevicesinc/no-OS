@@ -1,0 +1,25 @@
+{
+      "xilinx": {
+            "demo": {
+                  "flags": "",
+                  "hardware": [
+                        "dac_fmc_ebz_zc706",
+                        "dac_fmc_ebz_zcu102"
+                  ]
+            },
+            "iio": {
+                  "flags": "TINYIIOD=y",
+                  "hardware": [
+                        "dac_fmc_ebz_zc706",
+                        "dac_fmc_ebz_zcu102"
+                  ]
+            },
+            "dma_example": {
+                  "flags": "NEW_CFLAGS=-DDAC_DMA_EXAMPLE",
+                  "hardware": [
+                        "dac_fmc_ebz_zc706",
+                        "dac_fmc_ebz_zcu102"
+                  ]
+            }
+      }
+}
