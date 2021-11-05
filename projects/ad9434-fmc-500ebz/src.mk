@@ -12,7 +12,7 @@
 SRCS := $(PROJECT)/src/ad9434_fmc_500ebz.c
 ifeq (y,$(strip $(TINYIIOD)))
 LIBRARIES += iio
-SRCS += $(PROJECT)/src/app_iio.c
+SRC_DIRS += $(NO-OS)/iio/iio_app
 endif
 SRCS += $(DRIVERS)/adc/ad9434/ad9434.c					\
 	$(DRIVERS)/spi/spi.c						\
@@ -34,9 +34,6 @@ INCS += $(PROJECT)/src/parameters.h					\
 	$(DRIVERS)/adc/ad9434/ad9434.h					\
 	$(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.h			\
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.h
-ifeq (y,$(strip $(TINYIIOD)))
-INCS +=	$(PROJECT)/src/app_iio.h
-endif
 INCS +=	$(PLATFORM_DRIVERS)/spi_extra.h
 INCS +=	$(INCLUDE)/axi_io.h						\
 	$(INCLUDE)/spi.h						\
