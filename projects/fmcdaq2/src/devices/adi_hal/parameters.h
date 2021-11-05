@@ -48,6 +48,7 @@
 #endif
 
 #ifndef ALTERA_PLATFORM
+#define UART_BAUDRATE                           115200
 #ifdef PLATFORM_MB
 #define SPI_DEVICE_ID				XPAR_SPI_0_DEVICE_ID
 #define GPIO_DEVICE_ID				XPAR_GPIO_0_DEVICE_ID
