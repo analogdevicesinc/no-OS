@@ -12,9 +12,6 @@
 # Uncomment to select the profile
 
 SRCS += $(PROJECT)/src/app/fmcdaq2.c					
-ifeq (y,$(strip $(TINYIIOD)))
-SRCS += $(PROJECT)/src/app/app_iio.c
-endif
 SRCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c \
 	$(DRIVERS)/axi_core/axi_dac_core/axi_dac_core.c \
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.c \
@@ -35,6 +32,7 @@ SRCS +=	$(PLATFORM_DRIVERS)/axi_io.c \
 	$(PLATFORM_DRIVERS)/delay.c
 ifeq (y,$(strip $(TINYIIOD)))
 LIBRARIES += iio
+SRC_DIRS += $(NO-OS)/iio/iio_app
 SRCS += $(NO-OS)/util/fifo.c \
 	$(NO-OS)/util/list.c \
 	$(DRIVERS)/adc/ad9680/iio_ad9680.c \
@@ -48,8 +46,7 @@ endif
 INCS +=	$(PROJECT)/src/app/app_config.h \
 	$(PROJECT)/src/devices/adi_hal/parameters.h
 ifeq (y,$(strip $(TINYIIOD)))
-INCS +=	$(PROJECT)/src/app/app_iio.h \
-	$(DRIVERS)/adc/ad9680/iio_ad9680.h \
+INCS +=	$(DRIVERS)/adc/ad9680/iio_ad9680.h \
 	$(DRIVERS)/dac/ad9144/iio_ad9144.h
 endif
 INCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.h \
