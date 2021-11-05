@@ -47,6 +47,7 @@
 #include "xparameters.h"
 #endif
 
+#define UART_BAUDRATE                           115200
 #ifndef ALTERA_PLATFORM
 #ifdef PLATFORM_MB
 #define SPI_DEVICE_ID				XPAR_SPI_0_DEVICE_ID
