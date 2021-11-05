@@ -14,7 +14,7 @@
 SRCS += $(PROJECT)/src/app/ad9467_fmc.c
 ifeq (y,$(strip $(TINYIIOD)))
 LIBRARIES += iio
-SRCS += $(PROJECT)/src/app/app_iio.c
+SRC_DIRS += $(NO-OS)/iio/iio_app
 endif
 SRCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c			\
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.c				\
@@ -35,9 +35,6 @@ SRCS += $(NO-OS)/util/fifo.c						\
 endif
 INCS +=	$(PROJECT)/src/app/app_config.h					\
 	$(PROJECT)/src/devices/adi_hal/parameters.h
-ifeq (y,$(strip $(TINYIIOD)))
-INCS +=	$(PROJECT)/src/app/app_iio.h
-endif
 INCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.h			\
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.h				\
 	$(DRIVERS)/adc/ad9467/ad9467.h					\
