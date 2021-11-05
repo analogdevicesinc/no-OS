@@ -24,6 +24,7 @@ SRCS +=	$(PLATFORM_DRIVERS)/axi_io.c					\
 	$(PLATFORM_DRIVERS)/delay.c
 ifeq (y,$(strip $(TINYIIOD)))
 LIBRARIES += iio
+SRC_DIRS += $(NO-OS)/iio/iio_app	
 SRCS += $(PLATFORM_DRIVERS)/uart.c					\
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c				\
 	$(DRIVERS)/irq/irq.c						\
