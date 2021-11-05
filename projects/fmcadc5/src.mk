@@ -13,9 +13,6 @@
 
 SRCS += $(PROJECT)/src/app/fmcadc5.c \
 	$(PROJECT)/src/devices/i5g/i5g.c
-ifeq (y,$(strip $(TINYIIOD)))
-SRCS += $(PROJECT)/src/app/app_iio.c
-endif
 SRCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c \
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.c \
 	$(DRIVERS)/axi_core/clk_axi_clkgen/clk_axi_clkgen.c \
@@ -32,6 +29,7 @@ SRCS +=	$(PLATFORM_DRIVERS)/axi_io.c \
 	$(PLATFORM_DRIVERS)/delay.c
 ifeq (y,$(strip $(TINYIIOD)))
 LIBRARIES += iio
+SRC_DIRS += $(NO-OS)/iio/iio_app
 SRCS += $(NO-OS)/util/fifo.c \
 	$(NO-OS)/util/list.c \
 	$(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.c \
@@ -42,9 +40,6 @@ endif
 INCS +=	$(PROJECT)/src/app/app_config.h \
 	$(PROJECT)/src/devices/adi_hal/parameters.h \
 	$(PROJECT)/src/devices/i5g/i5g.h
-ifeq (y,$(strip $(TINYIIOD)))
-INCS +=	$(PROJECT)/src/app/app_iio.h
-endif
 INCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.h \
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.h \
 	$(DRIVERS)/axi_core/clk_axi_clkgen/clk_axi_clkgen.h \
