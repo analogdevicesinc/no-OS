@@ -71,7 +71,11 @@
 #include "axi_jesd204_rx.h"
 
 #ifdef IIO_SUPPORT
-#include "app_iio.h"
+#include "iio_app.h"
+#include "iio_ad9680.h"
+#include "iio_ad9152.h"
+#include "iio_axi_adc.h"
+#include "iio_axi_dac.h"
 #endif
 
 /* DAQ3 reconfiguration */
@@ -608,8 +612,6 @@ int main(void)
 			  16384 * 2);
 
 #ifdef IIO_SUPPORT
-	printf("The board accepts libiio clients connections through the serial backend.\n");
-
 	struct axi_dmac_init ad9152_dmac_param = {
 		.name = "ad9152_dmac",
 		.base = TX_DMA_BASEADDR,
@@ -621,6 +623,9 @@ int main(void)
 
 	axi_dmac_init(&ad9152_dmac, &ad9152_dmac_param);
 
+	struct iio_axi_adc_desc *iio_axi_adc_desc;
+	struct iio_axi_dac_desc *iio_axi_dac_desc;
+	struct iio_device *adc_dev_desc, *dac_dev_desc;
 	struct iio_axi_adc_init_param iio_axi_adc_init_par;
 	iio_axi_adc_init_par = (struct iio_axi_adc_init_param) {
 		.rx_adc = ad9680_core,
@@ -639,8 +644,38 @@ int main(void)
 #endif
 	};
 
-	return iio_server_init(&iio_axi_adc_init_par, &iio_axi_dac_init_par,
-			       ad9680_device, ad9152_device);
+	status = iio_axi_adc_init(&iio_axi_adc_desc, &iio_axi_adc_init_par);
+	if (IS_ERR_VALUE(status))
+		return FAILURE;
+	iio_axi_adc_get_dev_descriptor(iio_axi_adc_desc, &adc_dev_desc);
+
+	status = iio_axi_dac_init(&iio_axi_dac_desc, &iio_axi_dac_init_par);
+	if (IS_ERR_VALUE(status))
+		return FAILURE;
+	iio_axi_dac_get_dev_descriptor(iio_axi_dac_desc, &dac_dev_desc);
+
+	struct iio_data_buffer read_buff = {
+		.buff = (void *)ADC_DDR_BASEADDR,
+		.size = 0xFFFFFFFF,
+	};
+
+	static struct iio_data_buffer write_buff = {
+		.buff = (void *)DAC_DDR_BASEADDR,
+		.size = 0xFFFFFFFF,
+	};
+
+	struct iio_app_device devices[] = {
+		IIO_APP_DEVICE("axi_adc", iio_axi_adc_desc, adc_dev_desc,
+			       &read_buff, NULL),
+		IIO_APP_DEVICE("axi_dac", iio_axi_dac_desc, dac_dev_desc,
+			       NULL, &write_buff),
+		IIO_APP_DEVICE("ad9680_dev", ad9680_device,
+			       &ad9680_iio_descriptor, NULL, NULL),
+		IIO_APP_DEVICE("ad9152_dev", ad9152_device,
+			       &ad9152_iio_descriptor, NULL, NULL),
+	};
+
+	return iio_app_run(devices, ARRAY_SIZE(devices));
 
 #endif
 
