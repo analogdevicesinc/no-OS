@@ -320,7 +320,7 @@ int main(void)
 
 	iio_axi_dac_get_dev_descriptor(iio_axi_dac_desc, &dac_dev_desc);
 	static struct iio_data_buffer write_buff = {
-		.buff = (void *)DAC_DDR_BASEADDR,
+		.buff = (void *)DDR_MEM_BASEADDR,
 		.size = 0xFFFFFFFF,
 	};
 	struct iio_app_device devices[] = {
