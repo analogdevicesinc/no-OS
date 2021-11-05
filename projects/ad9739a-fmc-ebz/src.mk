@@ -12,7 +12,7 @@
 SRCS := $(PROJECT)/src/ad9739a_fmc_ebz.c
 ifeq (y,$(strip $(TINYIIOD)))
 LIBRARIES += iio
-SRCS += $(PROJECT)/src/app_iio.c
+SRC_DIRS += $(NO-OS)/iio/iio_app
 endif
 SRCS += $(DRIVERS)/dac/ad9739a/ad9739a.c				\
 	$(DRIVERS)/frequency/adf4350/adf4350.c				\
@@ -31,9 +31,6 @@ endif
 SRCS +=	$(PLATFORM_DRIVERS)/axi_io.c					\
 	$(PLATFORM_DRIVERS)/xilinx_spi.c				\
 	$(PLATFORM_DRIVERS)/delay.c
-ifeq (y,$(strip $(TINYIIOD)))
-INCS +=	$(PROJECT)/src/app_iio.h
-endif
 INCS += $(PROJECT)/src/parameters.h					\
 	$(DRIVERS)/frequency/adf4350/adf4350.h				\
 	$(DRIVERS)/dac/ad9739a/ad9739a.h				\
