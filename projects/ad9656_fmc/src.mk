@@ -16,7 +16,7 @@ SRCS += $(PROJECT)/src/app/ad9656_fmc.c                                 \
 	$(PROJECT)/src/app/ad9553.c
 ifeq (y,$(strip $(TINYIIOD)))
 LIBRARIES += iio
-SRCS += $(PROJECT)/src/app/app_iio.c
+SRC_DIRS += $(NO-OS)/iio/iio_app
 endif
 SRCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c			\
         $(DRIVERS)/axi_core/axi_dmac/axi_dmac.c				\
@@ -49,9 +49,6 @@ INCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.h			\
         $(DRIVERS)/axi_core/jesd204/axi_jesd204_rx.h			\
         $(DRIVERS)/axi_core/jesd204/xilinx_transceiver.h		\
         $(DRIVERS)/adc/ad9656/ad9656.h
-ifeq (y,$(strip $(TINYIIOD)))
-INCS +=	$(PROJECT)/src/app/app_iio.h
-endif
 INCS +=	$(PLATFORM_DRIVERS)/spi_extra.h
 INCS +=	$(INCLUDE)/axi_io.h						\
         $(INCLUDE)/spi.h						\
