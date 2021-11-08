@@ -49,7 +49,6 @@
 #include "ctype.h"
 #include "tinyiiod.h"
 #include "util.h"
-#include "list.h"
 #include "error.h"
 #include "uart.h"
 #include <inttypes.h>
@@ -145,10 +144,11 @@ struct iio_desc {
 	struct tinyiiod_ops	*iiod_ops;
 	enum pysical_link_type	phy_type;
 	void			*phy_desc;
-	struct list_desc	*interfaces_list;
 	char			*xml_desc;
 	uint32_t		xml_size;
 	uint32_t		xml_size_to_last_dev;
+	struct iio_interface	*devs;
+	uint32_t		nb_devs;
 	uint32_t		dev_count;
 	struct uart_desc	*uart_desc;
 #ifdef ENABLE_IIO_NETWORK
@@ -345,18 +345,14 @@ static inline struct iio_channel *iio_get_channel(const char *channel,
  */
 static struct iio_interface *iio_get_interface(const char *device_name)
 {
-	struct iio_interface	*interface;
-	struct iio_interface	cmp_val;
-	int32_t					ret;
+	uint32_t i;
 
-	strcpy(cmp_val.dev_id, device_name);
+	for (i = 0; i < g_desc->nb_devs; i++) {
+		if (strcmp(g_desc->devs[i].dev_id, device_name) == 0)
+			return &g_desc->devs[i];
+	}
 
-	ret = list_read_find(g_desc->interfaces_list,
-			     (void **)&interface, &cmp_val);
-	if (IS_ERR_VALUE(ret))
-		return NULL;
-
-	return interface;
+	return NULL;
 }
 
 /**
@@ -1080,7 +1076,7 @@ ssize_t iio_step(struct iio_desc *desc)
  * If buff_size is 0, no data will be written to buff, but size will be returned
  */
 static uint32_t iio_generate_device_xml(struct iio_device *device, char *name,
-					int32_t id, char *buff,
+					char *id, char *buff,
 					uint32_t buff_size)
 {
 	struct iio_channel	*ch;
@@ -1102,7 +1098,7 @@ static uint32_t iio_generate_device_xml(struct iio_device *device, char *name,
 
 	i = 0;
 	i += snprintf(buff, max(n - i, 0),
-		      "<device id=\"device%"PRIi32"\" name=\"%s\">", id, name);
+		      "<device id=\"%s\" name=\"%s\">", id, name);
 
 	/* Write channels */
 	if (device->channels)
@@ -1287,12 +1283,14 @@ ssize_t iio_register(struct iio_desc *desc, struct iio_device *dev_descriptor,
 		return -ENOMEM;
 	}
 
-	ret = desc->interfaces_list->push(desc->interfaces_list, iio_interface);
-	if (IS_ERR_VALUE(ret)) {
-		free(iio_interface);
-		free(aux);
-		return ret;
-	}
+	/* Not used anymore will remove function in next commit.
+	 * Commented for the build to work  */
+//	ret = desc->interfaces_list->push(desc->interfaces_list, iio_interface);
+//	if (IS_ERR_VALUE(ret)) {
+//		free(iio_interface);
+//		free(aux);
+//		return ret;
+//	}
 
 	desc->xml_desc = aux;
 	/* Print the new device xml at the end of the xml */
@@ -1328,10 +1326,12 @@ ssize_t iio_unregister(struct iio_desc *desc, char *name)
 
 	/* Get if the item is found, get will remove it from the list */
 	search_interface.name = name;
-	ret = list_get_find(desc->interfaces_list,
-			    (void **)&to_remove_interface, &search_interface);
-	if (IS_ERR_VALUE(ret))
-		return ret;
+	/* Not used anymore will remove function in next commit.
+	 * Commented for the build to work  */
+//	ret = list_get_find(desc->interfaces_list,
+//			    (void **)&to_remove_interface, &search_interface);
+//	if (IS_ERR_VALUE(ret))
+//		return ret;
 	free(to_remove_interface);
 
 	/* Get number of bytes needed for the xml of the device */
@@ -1356,20 +1356,69 @@ static int32_t iio_cmp_interfaces(struct iio_interface *a,
 	return strcmp(a->dev_id, b->dev_id);
 }
 
+static int32_t iio_init_xml(struct iio_desc *desc)
+{
+	struct iio_device ldev_desc;
+	struct iio_interface *dev;
+	uint32_t size, of;
+	int32_t i;
+
+	/* -2 because of the 0 character */
+	size = sizeof(header) + sizeof(header_end) - 2;
+	for (i = 0; i < desc->nb_devs; i++) {
+		dev = desc->devs + i;
+		size += iio_generate_device_xml(dev->dev_descriptor, dev->name,
+						dev->dev_id, NULL, -1);
+	}
+
+	desc->xml_desc = (char *)calloc(size + 1, sizeof(*desc->xml_desc));
+	if (!desc->xml_desc)
+		return -ENOMEM;
+
+	strcpy(desc->xml_desc, header);
+	of = sizeof(header) - 1;
+	for (i = 0; i < desc->nb_devs; i++) {
+		dev = desc->devs + i;
+		of += iio_generate_device_xml(dev->dev_descriptor, dev->name,
+					      dev->dev_id, desc->xml_desc + of,
+					      size - of);
+	}
+
+	strcpy(desc->xml_desc + of, header_end);
+
+	return SUCCESS;
+}
+
 static int32_t iio_init_devs(struct iio_desc *desc, struct iio_app_device *devs,
 			     int32_t n)
 {
-	int32_t i, ret;
+	uint32_t i;
+	int32_t ret;
+	struct iio_interface *ldev;
+	struct iio_app_device *ndev;
+
+	desc->nb_devs = n;
+	desc->devs = (struct iio_interface *)calloc(desc->nb_devs,
+			sizeof(*desc->devs));
+	if (!desc->devs)
+		return -ENOMEM;
 
 	for (i = 0; i < n; i++) {
-		ret = iio_register(desc, devs[i].dev_descriptor, devs[i].name,
-				   devs[i].dev, devs[i].read_buff,
-				   devs[i].write_buff);
-		if (ret < 0)
-			return ret;
+		ndev = devs + i;
+		ldev = desc->devs + i;
+		ldev->dev_descriptor = ndev->dev_descriptor;
+		ldev->read_buffer = devs[i].read_buff;
+		ldev->write_buffer = devs[i].write_buff;
+		sprintf(ldev->dev_id, "iio:device%"PRIu32"", i);
+		ldev->dev_instance = ndev->dev;
+		ldev->name = ndev->name;
 	}
 
-	return SUCCESS;
+	ret = iio_init_xml(desc);
+	if (IS_ERR_VALUE(ret))
+		free(desc->devs);
+
+	return ret;
 }
 
 /**
@@ -1414,15 +1463,6 @@ ssize_t iio_init(struct iio_desc **desc, struct iio_init_param *init_param)
 	ops->read = iio_phy_read;
 	ops->write = iio_phy_write;
 
-	ldesc->xml_size = sizeof(header) + sizeof(header_end);
-	ldesc->xml_desc = (char *)malloc(ldesc->xml_size);
-	if (!ldesc->xml_desc)
-		goto free_desc;
-
-	strcpy(ldesc->xml_desc, header);
-	strcat(ldesc->xml_desc, header_end);
-	ldesc->xml_size_to_last_dev = sizeof(header) - 1;
-
 	ldesc->phy_type = init_param->phy_type;
 	if (init_param->phy_type == USE_UART) {
 		ldesc->uart_desc = init_param->uart_desc;
@@ -1454,14 +1494,9 @@ ssize_t iio_init(struct iio_desc **desc, struct iio_init_param *init_param)
 
 	ops->get_xml = iio_get_xml;
 
-	ret = list_init(&ldesc->interfaces_list, LIST_PRIORITY_LIST,
-			(f_cmp)iio_cmp_interfaces);
-	if (IS_ERR_VALUE(ret))
-		goto free_pylink;
-
 	ret = iio_init_devs(ldesc, init_param->devs, init_param->nb_devs);
 	if (IS_ERR_VALUE(ret))
-		goto free_list;
+		goto free_pylink;
 
 	ldesc->iiod = tinyiiod_create(ops);
 	if (!(ldesc->iiod))
@@ -1475,8 +1510,6 @@ ssize_t iio_init(struct iio_desc **desc, struct iio_init_param *init_param)
 free_devs:
 	free(ldesc->devs);
 	free(ldesc->xml_desc);
-free_list:
-	list_remove(ldesc->interfaces_list);
 free_pylink:
 #ifdef ENABLE_IIO_NETWORK
 	if (ldesc->phy_type == USE_NETWORK) {
@@ -1500,17 +1533,11 @@ free_ops:
  */
 ssize_t iio_remove(struct iio_desc *desc)
 {
-	struct iio_interface	*iio_interface;
-
-	while (SUCCESS == list_get_first(desc->interfaces_list,
-					 (void **)&iio_interface))
-		free(iio_interface);
-	list_remove(desc->interfaces_list);
-
 	free(desc->iiod_ops);
 	tinyiiod_destroy(desc->iiod);
 
 	free(desc->xml_desc);
+	free(desc->devs);
 
 	if (desc->phy_type == USE_UART) {
 		uart_remove(desc->phy_desc);
