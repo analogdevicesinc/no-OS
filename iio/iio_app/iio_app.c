@@ -272,21 +272,14 @@ static int32_t irq_setup(struct irq_ctrl_desc **irq_desc)
 }
 #endif
 
-int32_t iio_app_run(struct iio_app_device *devices, int32_t len)
+static int32_t _iio_app_run_irq_param(struct iio_app_device *devices,
+				      int32_t len, void *irq_desc)
 {
 	int32_t			status;
 	struct iio_desc		*iio_desc;
 	struct iio_init_param	iio_init_param;
 	struct uart_desc	*uart_desc;
 	struct uart_init_param	*uart_init_par;
-	void			*irq_desc = NULL;
-
-
-#if defined(ADUCM_PLATFORM) || (defined(XILINX_PLATFORM) && !defined(PLATFORM_MB))
-	status = irq_setup((struct irq_ctrl_desc **)&irq_desc);
-	if (status < 0)
-		return status;
-#endif
 
 	status = uart_setup(&uart_desc, &uart_init_par, irq_desc);
 	if (status < 0)
@@ -318,5 +311,27 @@ error:
 	status = print_uart_error_message(&uart_desc, uart_init_par, status);
 	return status;
 }
+
+int32_t iio_app_run(struct iio_app_device *devices, int32_t len)
+{
+	int32_t status;
+	void *irq_desc = NULL;
+
+#if defined(ADUCM_PLATFORM) || (defined(XILINX_PLATFORM) && !defined(PLATFORM_MB))
+	status = irq_setup((struct irq_ctrl_desc **)&irq_desc);
+	if (status < 0)
+		return status;
+#endif
+
+	return _iio_app_run_irq_param(devices, len, (void *)irq_desc);
+}
+
+#if defined(ADUCM_PLATFORM) || defined(XILINX_PLATFORM)
+int32_t iio_app_run_irq_param(struct iio_app_device *devices, int32_t len,
+			      struct irq_ctrl_desc *irq_ctrl)
+{
+	return _iio_app_run_irq_param(devices, len, (void *)irq_ctrl);
+}
+#endif
 
 #endif
