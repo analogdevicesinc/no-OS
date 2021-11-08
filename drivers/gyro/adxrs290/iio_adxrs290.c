@@ -38,11 +38,14 @@
 *******************************************************************************/
 
 #include "iio_types.h"
+#include "iio.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include "adxrs290.h"
+#include "iio_adxrs290.h"
 #include "util.h"
+#include "irq.h"
 #include "error.h"
 
 /*
@@ -82,10 +85,10 @@ static ssize_t get_adxrs290_iio_ch_raw(void *device, char *buf, size_t len,
 				       const struct iio_ch_info *channel,
 				       intptr_t priv)
 {
+	struct iio_adxrs290_desc *iio_dev = device;
 	int16_t data;
 
-	adxrs290_get_rate_data((struct adxrs290_dev *)device,
-			       channel->ch_num, &data);
+	adxrs290_get_rate_data(iio_dev->dev, channel->ch_num, &data);
 	if (channel->ch_num == ADXRS290_CHANNEL_TEMP)
 		data = (data << 4) >> 4;
 
@@ -109,8 +112,9 @@ static ssize_t get_adxrs290_iio_ch_hpf(void *device, char *buf, size_t len,
 				       const struct iio_ch_info *channel,
 				       intptr_t priv)
 {
+	struct iio_adxrs290_desc *iio_dev = device;
 	uint8_t index;
-	adxrs290_get_hpf((struct adxrs290_dev *)device, &index);
+	adxrs290_get_hpf(iio_dev->dev, &index);
 	if (index > 0x0A)
 		index = 0x0A;
 
@@ -123,6 +127,7 @@ static ssize_t set_adxrs290_iio_ch_hpf(void *device, char *buf, size_t len,
 				       const struct iio_ch_info *channel,
 				       intptr_t priv)
 {
+	struct iio_adxrs290_desc *iio_dev = device;
 	float hpf = strtof(buf, NULL);
 	int32_t val = (int32_t)hpf;
 	int32_t val2 = (int32_t)(hpf * 1000000) % 1000000;
@@ -132,7 +137,7 @@ static ssize_t set_adxrs290_iio_ch_hpf(void *device, char *buf, size_t len,
 	for (i = 0; i < n; i++)
 		if (adxrs290_hpf_3db_freq_hz_table[i][0] == val
 		    && adxrs290_hpf_3db_freq_hz_table[i][1] == val2) {
-			adxrs290_set_hpf(device, (enum adxrs290_hpf) i);
+			adxrs290_set_hpf(iio_dev->dev, (enum adxrs290_hpf) i);
 
 			return len;
 		}
@@ -144,9 +149,10 @@ static ssize_t get_adxrs290_iio_ch_lpf(void *device, char *buf, size_t len,
 				       const struct iio_ch_info *channel,
 				       intptr_t priv)
 {
+	struct iio_adxrs290_desc *iio_dev = device;
 	uint8_t index;
 
-	adxrs290_get_lpf((struct adxrs290_dev *)device, &index);
+	adxrs290_get_lpf(iio_dev->dev, &index);
 	if (index > 0x07)
 		index = 0x07;
 
@@ -158,6 +164,7 @@ static ssize_t set_adxrs290_iio_ch_lpf(void *device, char *buf, size_t len,
 				       const struct iio_ch_info *channel,
 				       intptr_t priv)
 {
+	struct iio_adxrs290_desc *iio_dev = device;
 	float lpf = strtof(buf, NULL);
 	int32_t val = (int32_t)lpf;
 	int32_t val2 = (int32_t)(lpf * 1000000) % 1000000;
@@ -167,48 +174,144 @@ static ssize_t set_adxrs290_iio_ch_lpf(void *device, char *buf, size_t len,
 	for (i = 0; i < n; i++)
 		if (adxrs290_lpf_3db_freq_hz_table[i][0] == val
 		    && adxrs290_lpf_3db_freq_hz_table[i][1] == val2) {
-			adxrs290_set_lpf(device, (enum adxrs290_lpf) i);
+			adxrs290_set_lpf(iio_dev->dev, (enum adxrs290_lpf) i);
 			return len;
 		}
 
 	return FAILURE;
 }
 
+static int32_t iio_adxrs290_reg_read(void *dev, uint8_t address, uint8_t *data)
+{
+	struct iio_adxrs290_desc *iio_dev = dev;
+
+	return adxrs290_reg_read(iio_dev->dev, address, data);
+}
+
+static int32_t iio_adxrs290_reg_write(void *dev, uint8_t address, uint8_t data)
+{
+	struct iio_adxrs290_desc *iio_dev = dev;
+
+	return adxrs290_reg_write(iio_dev->dev, address, data);
+}
+
 static int32_t adxrs290_update_active_channels(void *device, uint32_t mask)
 {
-	struct adxrs290_dev *dev = device;
+	struct iio_adxrs290_desc *iio_dev = device;
 
-	adxrs290_set_active_channels(dev, mask);
+	adxrs290_set_active_channels(iio_dev->dev, mask);
+
+	adxrs290_set_op_mode(iio_dev->dev, ADXRS290_MODE_MEASUREMENT);
+
+	irq_enable(iio_dev->irq_ctrl, iio_dev->irq_nb);
+
+	iio_dev->mask = mask;
 
 	return SUCCESS;
+}
+
+static int32_t adxrs290_end_transfer(void *device)
+{
+	struct iio_adxrs290_desc *iio_dev = device;
+
+	adxrs290_set_active_channels(iio_dev->dev, 0);
+
+	adxrs290_set_op_mode(iio_dev->dev, ADXRS290_MODE_STANDBY);
+
+	irq_disable(iio_dev->irq_ctrl, iio_dev->irq_nb);
+
+	return SUCCESS;
+}
+
+static void adxrs290_trigger_handler(void *device)
+{
+	int16_t data[ADXRS290_CHANNEL_COUNT];
+	struct iio_adxrs290_desc *iio_dev = device;
+	uint8_t n;
+
+	//adxrs290_get_burst_data(iio_dev->dev, data, &n);
+	memset(data, 100, sizeof(data));
+
+	cb_write(iio_dev->buf, data, hweight8(iio_dev->mask)*sizeof(int16_t));
 }
 
 static int32_t adxrs290_read_samples(void *device, uint16_t *buff,
 				     uint32_t nb_samples)
 {
-	struct adxrs290_dev	*dev = device;
-	uint32_t		i;
-	uint32_t		offset;
-	int16_t			data[ADXRS290_CHANNEL_COUNT];
-	uint8_t			ch_cnt;
-	bool			rdy;
+	struct iio_adxrs290_desc *iio_dev = device;
+	uint32_t len;
+	uint32_t blen;
 
-	offset = 0;
-	for (i = 0; i < nb_samples; i++) {
-		/* Stop until data is available.
-		 * This will not block at first data since sync pin will
-		 * will always be high until read. */
-		while(true) {
-			adxrs290_get_data_ready(dev, &rdy);
-			if (rdy == true)
-				break;
-		}
-		adxrs290_get_burst_data(dev, data, &ch_cnt);
-		memcpy(&buff[offset], data, ch_cnt*sizeof(int16_t));
-		offset += ch_cnt;
-	}
+	len = nb_samples * hweight8(iio_dev->mask) * sizeof(int16_t);
+	do {
+		cb_size(iio_dev->buf, &blen);
+	} while (blen < len);
+
+	cb_read(iio_dev->buf, buff, len);
 
 	return nb_samples;
+}
+
+static void adxrs290_irq_handler(void *ctx, uint32_t event, void *extra)
+{
+	struct iio_adxrs290_desc *dev = ctx;
+
+	iio_trigger_notify(dev->trigger_name);
+}
+
+int32_t iio_adxrs290_cfg(struct iio_adxrs290_desc *desc,
+			  struct iio_adxrs290_init_param *param)
+{
+	struct callback_desc call;
+	int32_t ret;
+
+	if (!param || !desc)
+		return -EINVAL;
+
+	memset(desc, 0, sizeof(*desc));
+
+	desc->irq_ctrl = param->irq_ctrl;
+	desc->dev = param->dev;
+	desc->irq_nb = param->irq_nb;
+	strcpy(desc->trigger_name, param->trigger_name);
+
+	ret = cb_cfg(desc->buf, param->buf, param->buffer_size);
+	if (IS_ERR_VALUE(ret))
+		goto err_desc;
+
+	ret = gpio_get(&desc->sync, param->gpio_sync);
+	if (IS_ERR_VALUE(ret))
+		goto err_desc;
+
+	ret = gpio_direction_input(desc->sync);
+	if (IS_ERR_VALUE(ret))
+		goto err_gpio;
+
+	call.callback = adxrs290_irq_handler;
+	call.ctx = desc;
+	call.config = param->irq_config;
+
+	ret = irq_register_callback(desc->irq_ctrl, desc->irq_nb, &call);
+	if (IS_ERR_VALUE(ret))
+		goto err_gpio;
+
+	irq_enable(desc->irq_ctrl, desc->irq_nb);
+
+	return SUCCESS;
+
+err_gpio:
+	gpio_remove(desc->sync);
+err_desc:
+	free(desc);
+
+	return ret;
+}
+
+int32_t iio_adxrs290_remove(struct iio_adxrs290_desc *desc)
+{
+	free(desc);
+
+	return 0;
 }
 
 static struct iio_attribute adxrs290_iio_vel_attrs[] = {
@@ -300,8 +403,13 @@ struct iio_device adxrs290_iio_descriptor = {
 	.debug_attributes = NULL,
 	.buffer_attributes = NULL,
 	.prepare_transfer = adxrs290_update_active_channels,
-	.end_transfer = NULL,
+	.end_transfer = adxrs290_end_transfer,
 	.read_dev = (int32_t (*)())adxrs290_read_samples,
-	.debug_reg_read = (int32_t (*)())adxrs290_reg_read,
-	.debug_reg_write = (int32_t (*)())adxrs290_reg_write
+	.debug_reg_read = (int32_t (*)())iio_adxrs290_reg_read,
+	.debug_reg_write = (int32_t (*)())iio_adxrs290_reg_write
+};
+
+extern struct iio_trigger adxrs290_iio_trigger_descriptor = {
+	.attributes = NULL,
+	.trigger_handler = adxrs290_trigger_handler
 };

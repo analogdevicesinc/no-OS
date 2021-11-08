@@ -41,8 +41,36 @@
 #define IIO_ADXRS290_H
 
 #include "iio_types.h"
+#include "gpio.h"
+#include "irq.h"
+#include "circular_buffer.h"
 
+struct iio_adxrs290_desc {
+	struct adxrs290_dev *dev;
+	struct circular_buffer buf[1];
+	struct gpio_desc *sync;
+	struct irq_ctrl_desc *irq_ctrl;
+	uint32_t irq_nb;
+	uint32_t mask;
+	char trigger_name[20];
+};
+
+struct iio_adxrs290_init_param {
+	struct irq_ctrl_desc *irq_ctrl;
+	uint32_t irq_nb;
+	void *irq_config;
+	struct gpio_init_param *gpio_sync;
+	struct adxrs290_dev *dev;
+	int8_t *buf;
+	uint32_t buffer_size;
+	char *trigger_name;
+};
+
+int32_t iio_adxrs290_cfg(struct iio_adxrs290_desc *desc,
+			  struct iio_adxrs290_init_param *param);
+int32_t iio_adxrs290_remove(struct iio_adxrs290_desc *desc);
 
 extern struct iio_device adxrs290_iio_descriptor;
+extern struct iio_trigger adxrs290_iio_trigger_descriptor;
 
 #endif
