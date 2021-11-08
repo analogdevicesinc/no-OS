@@ -1356,6 +1356,22 @@ static int32_t iio_cmp_interfaces(struct iio_interface *a,
 	return strcmp(a->dev_id, b->dev_id);
 }
 
+static int32_t iio_init_devs(struct iio_desc *desc, struct iio_app_device *devs,
+			     int32_t n)
+{
+	int32_t i, ret;
+
+	for (i = 0; i < n; i++) {
+		ret = iio_register(desc, devs[i].dev_descriptor, devs[i].name,
+				   devs[i].dev, devs[i].read_buff,
+				   devs[i].write_buff);
+		if (ret < 0)
+			return ret;
+	}
+
+	return SUCCESS;
+}
+
 /**
  * @brief Set communication ops and read/write ops that will be called
  * from "libtinyiiod".
@@ -1443,15 +1459,22 @@ ssize_t iio_init(struct iio_desc **desc, struct iio_init_param *init_param)
 	if (IS_ERR_VALUE(ret))
 		goto free_pylink;
 
+	ret = iio_init_devs(ldesc, init_param->devs, init_param->nb_devs);
+	if (IS_ERR_VALUE(ret))
+		goto free_list;
+
 	ldesc->iiod = tinyiiod_create(ops);
 	if (!(ldesc->iiod))
-		goto free_list;
+		goto free_devs;
 
 	*desc = ldesc;
 	g_desc = ldesc;
 
 	return SUCCESS;
 
+free_devs:
+	free(ldesc->devs);
+	free(ldesc->xml_desc);
 free_list:
 	list_remove(ldesc->interfaces_list);
 free_pylink:

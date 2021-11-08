@@ -227,4 +227,12 @@ struct iio_device {
 
 };
 
+struct iio_app_device {
+	char *name;
+	void *dev;
+	struct iio_device *dev_descriptor;
+	struct iio_data_buffer *read_buff;
+	struct iio_data_buffer *write_buff;
+};
+
 #endif /* IIO_TYPES_H_ */
