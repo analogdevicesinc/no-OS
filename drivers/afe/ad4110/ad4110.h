@@ -153,6 +153,12 @@ enum ad4110_afe_clk_cfg {
 	AD4110_AFE_INT_CLOCK = 0,
 	AD4110_AFE_ADC_CLOCKED = 2
 };
+
+enum ad4110_sync_en {
+	AD4110_SYNC_DIS,
+	AD4110_SYNC_EN
+};
+
 enum ad4110_voltage_reference {
 	AD4110_EXT_REF = 0,
 	AD4110_INT_2_5V_REF = 2,
@@ -230,6 +236,7 @@ struct ad4110_dev {
 	enum ad4110_afe_crc_mode	afe_crc_en;
 	enum ad4110_op_mode 		op_mode;
 	enum ad4110_gain 		gain;
+	enum ad4110_sync_en 		sync;
 	enum ad4110_afe_clk_cfg		afe_clk;
 	enum ad4110_adc_clk_sel		adc_clk;
 	uint8_t				addr;
@@ -246,6 +253,7 @@ struct ad4110_init_param {
 	enum ad4110_adc_crc_mode	adc_crc_en;
 	enum ad4110_op_mode 		op_mode;
 	enum ad4110_gain 		gain;
+	enum ad4110_sync_en 		sync;
 	enum ad4110_afe_clk_cfg		afe_clk;
 	enum ad4110_adc_clk_sel		adc_clk;
 	uint8_t				addr;
