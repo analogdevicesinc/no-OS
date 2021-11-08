@@ -50,6 +50,21 @@
 	.write_buff = _write_buff\
 }
 
+#define IIO_APP_DEVICE_WITH_TRIGGER(_name, _dev, _dev_descriptor, _read_buff,\
+				    _write_buff, _trig_name) {\
+	.name = _name,\
+	.dev = _dev,\
+	.dev_descriptor = _dev_descriptor,\
+	.read_buff = _read_buff,\
+	.write_buff = _write_buff,\
+	.trigger_name = _trig_name\
+}
+
+#define IIO_APP_TRIGGER(_name, _dev, _trig_desc) {\
+	.name = _name,\
+	.dev = _dev,\
+	.trig_descriptor = _trig_desc \
+}
 
 /**
  * @brief Register devices and start an iio application
