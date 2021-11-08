@@ -146,10 +146,8 @@ struct iio_desc {
 	void			*phy_desc;
 	char			*xml_desc;
 	uint32_t		xml_size;
-	uint32_t		xml_size_to_last_dev;
 	struct iio_interface	*devs;
 	uint32_t		nb_devs;
-	uint32_t		dev_count;
 	struct uart_desc	*uart_desc;
 #ifdef ENABLE_IIO_NETWORK
 	/* FIFO for socket descriptors */
@@ -1238,122 +1236,6 @@ static uint32_t iio_generate_device_xml(struct iio_device *device, char *name,
 	i += snprintf(buff + i, max(n - i, 0), "</device>");
 
 	return i;
-}
-
-/**
- * @brief Register interface.
- * @param desc - iio descriptor
- * @param dev_descriptor - Device descriptor
- * @param name - Name to identify the registered device
- * @param dev_instance - Opened instance of the device
- * @param read_buff - read buffer
- * @param write_buff - write buffer
- * @return SUCCESS in case of success or negative value otherwise.
- */
-ssize_t iio_register(struct iio_desc *desc, struct iio_device *dev_descriptor,
-		     char *name, void *dev_instance,
-		     struct iio_data_buffer *read_buff,
-		     struct iio_data_buffer *write_buff)
-{
-	struct iio_interface	*iio_interface;
-	int32_t ret;
-	int32_t	n;
-	int32_t	new_size;
-	char	*aux;
-
-	iio_interface = (struct iio_interface *)calloc(1,
-			sizeof(*iio_interface));
-	if (!iio_interface)
-		return -ENOMEM;
-	iio_interface->dev_instance = dev_instance;
-	iio_interface->name = name;
-	iio_interface->dev_descriptor = dev_descriptor;
-	iio_interface->read_buffer = read_buff;
-	iio_interface->write_buffer = write_buff;
-
-	/* Get number of bytes needed for the xml of the new device */
-	n = iio_generate_device_xml(iio_interface->dev_descriptor,
-				    (char *)iio_interface->name,
-				    desc->dev_count, NULL, -1);
-
-	new_size = desc->xml_size + n;
-	aux = realloc(desc->xml_desc, new_size);
-	if (!aux) {
-		free(iio_interface);
-		return -ENOMEM;
-	}
-
-	/* Not used anymore will remove function in next commit.
-	 * Commented for the build to work  */
-//	ret = desc->interfaces_list->push(desc->interfaces_list, iio_interface);
-//	if (IS_ERR_VALUE(ret)) {
-//		free(iio_interface);
-//		free(aux);
-//		return ret;
-//	}
-
-	desc->xml_desc = aux;
-	/* Print the new device xml at the end of the xml */
-	iio_generate_device_xml(iio_interface->dev_descriptor,
-				(char *)iio_interface->name,
-				desc->dev_count,
-				desc->xml_desc + desc->xml_size_to_last_dev,
-				new_size - desc->xml_size_to_last_dev);
-	sprintf((char *)iio_interface->dev_id, "device%d", (int)desc->dev_count);
-	desc->xml_size_to_last_dev += n;
-	desc->xml_size += n;
-	/* Copy end header at the end */
-	strcat(desc->xml_desc, header_end);
-
-	desc->dev_count++;
-
-	return SUCCESS;
-}
-
-/**
- * @brief Unregister interface.
- * @param desc - iio descriptor.
- * @param name - Name of the registered device
- * @return SUCCESS in case of success or negative value otherwise.
- */
-ssize_t iio_unregister(struct iio_desc *desc, char *name)
-{
-	struct iio_interface	*to_remove_interface;
-	struct iio_interface	search_interface;
-	int32_t			ret;
-	int32_t			n;
-	char			*aux;
-
-	/* Get if the item is found, get will remove it from the list */
-	search_interface.name = name;
-	/* Not used anymore will remove function in next commit.
-	 * Commented for the build to work  */
-//	ret = list_get_find(desc->interfaces_list,
-//			    (void **)&to_remove_interface, &search_interface);
-//	if (IS_ERR_VALUE(ret))
-//		return ret;
-	free(to_remove_interface);
-
-	/* Get number of bytes needed for the xml of the device */
-	n = iio_generate_device_xml(to_remove_interface->dev_descriptor,
-				    (char *)to_remove_interface->name,
-				    desc->dev_count, NULL, -1);
-
-	/* Overwritte the deleted device */
-	aux = desc->xml_desc + desc->xml_size_to_last_dev - n;
-	memmove(aux, aux + n, strlen(aux + n));
-
-	/* Decrease the xml size */
-	desc->xml_size -= n;
-	desc->xml_size_to_last_dev -= n;
-
-	return SUCCESS;
-}
-
-static int32_t iio_cmp_interfaces(struct iio_interface *a,
-				  struct iio_interface *b)
-{
-	return strcmp(a->dev_id, b->dev_id);
 }
 
 static int32_t iio_init_xml(struct iio_desc *desc)
