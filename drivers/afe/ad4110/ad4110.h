@@ -205,8 +205,6 @@ enum ad4110_gain {
 struct ad4110_dev {
 	/* SPI */
 	struct spi_desc			*spi_dev;
-	/* GPIO */
-	struct gpio_desc		*gpio_reset;
 	/* Device Settings */
 	enum ad4110_state		data_stat;
 	enum ad4110_data_word_length 	data_length;
@@ -220,8 +218,6 @@ struct ad4110_dev {
 struct ad4110_init_param {
 	/* SPI */
 	struct spi_init_param		spi_init;
-	/* GPIO */
-	struct gpio_init_param		gpio_reset;
 	/* Device Settings */
 	enum ad4110_state		data_stat;
 	enum ad4110_data_word_length 	data_length;
