@@ -1322,11 +1322,13 @@ ssize_t iio_init(struct iio_desc **desc, struct iio_init_param *init_param)
 
 	ops = (struct tinyiiod_ops *)calloc(1, sizeof(struct tinyiiod_ops));
 	if (!ops)
-		return FAILURE;
+		return -ENOMEM;
 
 	ldesc = (struct iio_desc *)calloc(1, sizeof(*ldesc));
-	if (!ldesc)
+	if (!ldesc) {
+		ret = -ENOMEM;
 		goto free_ops;
+	}
 	ldesc->iiod_ops = ops;
 
 	/* device operations */
@@ -1406,7 +1408,7 @@ free_desc:
 free_ops:
 	free(ops);
 
-	return FAILURE;
+	return ret;
 }
 
 /**
