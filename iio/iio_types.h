@@ -192,6 +192,11 @@ struct iio_data_buffer {
 	void		*buff;
 };
 
+struct iio_trigger {
+	struct iio_attribute *attributes;
+	void (*trigger_handler)(void *dev);
+};
+
 /**
  * @struct iio_device
  * @brief Structure holding channels and attributes of a device.
@@ -227,12 +232,24 @@ struct iio_device {
 
 };
 
+/* Strucure to initialize a iio device or iio trigger */
 struct iio_app_device {
 	char *name;
 	void *dev;
 	struct iio_device *dev_descriptor;
 	struct iio_data_buffer *read_buff;
 	struct iio_data_buffer *write_buff;
+	union {
+		/* 
+		 * If dev_descriptor is set, a trigger name for the device can
+		 * be specified
+		 */
+		char *trigger_name;
+		
+		/* If dev_descriptor is NULL, a trig descriptor should be
+		 * specifed */
+		struct iio_trigger *trig_descriptor;
+	};
 };
 
 #endif /* IIO_TYPES_H_ */

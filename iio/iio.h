@@ -87,6 +87,9 @@ ssize_t iio_init(struct iio_desc **desc, struct iio_init_param *init_param);
 ssize_t iio_remove(struct iio_desc *desc);
 /* Execut an iio step. */
 ssize_t iio_step(struct iio_desc *desc);
+/* To call when need to notify a trigger. */
+/* TODO use name or trig_dev ? */
+void iio_trigger_notify(char *trigger_name);
 
 int32_t iio_parse_value(char *buf, enum iio_val fmt,
 			int32_t *val, int32_t *val2);

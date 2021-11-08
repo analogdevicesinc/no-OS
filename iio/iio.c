@@ -123,8 +123,8 @@ struct attr_fun_params {
  * with a "iio_device *iio" that describes capabilities of the device.
  */
 struct iio_interface {
-	/** Will be: device[0...n] n beeing the count of registerd devices */
-	char			dev_id[10];
+	/** Will be: device[0...n] or trigger[0..n] n beeing the dev nb */
+	char			dev_id[14];
 	/** Device name */
 	const char		*name;
 	/** Opened channels */
@@ -133,10 +133,13 @@ struct iio_interface {
 	void			*dev_instance;
 	/** Used to read debug attributes */
 	uint32_t		active_reg_addr;
+	struct iio_trigger	*trig_descriptor;
 	/** Device descriptor(describes channels and attributes) */
 	struct iio_device	*dev_descriptor;
 	struct iio_data_buffer	*write_buffer;
 	struct iio_data_buffer	*read_buffer;
+	/** Activ trigger of the device */
+	struct iio_interface	*trigger_ref;
 };
 
 struct iio_desc {
@@ -148,6 +151,8 @@ struct iio_desc {
 	uint32_t		xml_size;
 	struct iio_interface	*devs;
 	uint32_t		nb_devs;
+	struct iio_interface	*trigs;
+	uint32_t		nb_trigs;
 	struct uart_desc	*uart_desc;
 #ifdef ENABLE_IIO_NETWORK
 	/* FIFO for socket descriptors */
@@ -350,7 +355,67 @@ static struct iio_interface *iio_get_interface(const char *device_name)
 			return &g_desc->devs[i];
 	}
 
+	for (i = 0; i < g_desc->nb_trigs; i++) {
+		if (strcmp(g_desc->trigs[i].dev_id, device_name) == 0)
+			return &g_desc->trigs[i];
+	}
+
 	return NULL;
+}
+
+static int32_t iio_get_trigger(const char *device, char *trigger, size_t len)
+{
+	struct iio_interface *iface;
+
+	iface = iio_get_interface(device);
+	if (!iface)
+		return -ENODEV;
+
+	if (!iface->trigger_ref) {
+		trigger[0] = '\0';
+		return 0;
+	}
+
+	return snprintf(trigger, len, iface->trigger_ref->name);
+}
+
+static int32_t iio_set_trigger(const char *device, const char *trigger,
+			       size_t len)
+{
+	struct iio_interface *iface;
+	struct iio_interface *trig;
+
+	if (trigger == NULL)
+		return -EINVAL;
+	if (0 == strncmp("", trigger, len)) {
+		trig = NULL;
+	} else {
+		trig = iio_get_interface(trigger);
+		if (!trig)
+			return -ENODEV;
+	}
+
+	iface = iio_get_interface(device);
+	if (!iface)
+		return -ENODEV;
+
+	iface->trigger_ref = trig;
+	if (trig == iface->trigger_ref)
+		return 0;
+
+	return SUCCESS;
+}
+
+void iio_trigger_notify(char *trigger_name)
+{
+	struct iio_interface *dev;
+	uint32_t i;
+
+	for (i = 0; i < g_desc->nb_trigs; i++) {
+		dev = &g_desc->devs[i];
+		if (strcmp(dev->trigger_ref->name, trigger_name) == 0)
+			dev->trig_descriptor->trigger_handler(dev->dev_instance);
+	}
 }
 
 /**
@@ -675,7 +740,10 @@ static ssize_t iio_read_attr(const char *device_id, const char *attr, char *buf,
 		attributes = dev->dev_descriptor->debug_attributes;
 		break;
 	case IIO_ATTR_TYPE_DEVICE:
-		attributes = dev->dev_descriptor->attributes;
+		if (dev->dev_descriptor)
+			attributes = dev->dev_descriptor->attributes;
+		else
+			attributes = dev->trig_descriptor->attributes;
 		break;
 	case IIO_ATTR_TYPE_BUFFER:
 		attributes = dev->dev_descriptor->buffer_attributes;
@@ -725,7 +793,10 @@ static ssize_t iio_write_attr(const char *device_id, const char *attr,
 		attributes = dev->dev_descriptor->debug_attributes;
 		break;
 	case IIO_ATTR_TYPE_DEVICE:
-		attributes = dev->dev_descriptor->attributes;
+		if (dev->dev_descriptor)
+			attributes = dev->dev_descriptor->attributes;
+		else
+			attributes = dev->trig_descriptor->attributes;
 		break;
 	case IIO_ATTR_TYPE_BUFFER:
 		attributes = dev->dev_descriptor->buffer_attributes;
@@ -1252,6 +1323,14 @@ static int32_t iio_init_xml(struct iio_desc *desc)
 		size += iio_generate_device_xml(dev->dev_descriptor, dev->name,
 						dev->dev_id, NULL, -1);
 	}
+	for (i = 0; i < desc->nb_trigs; i++) {
+		dev = desc->trigs + i;
+		ldev_desc = (struct iio_device) {
+			.attributes = dev->trig_descriptor->attributes
+		};
+		size += iio_generate_device_xml(&ldev_desc, dev->name,
+						dev->dev_id, NULL, -1);
+	}
 
 	desc->xml_desc = (char *)calloc(size + 1, sizeof(*desc->xml_desc));
 	if (!desc->xml_desc)
@@ -1265,40 +1344,101 @@ static int32_t iio_init_xml(struct iio_desc *desc)
 					      dev->dev_id, desc->xml_desc + of,
 					      size - of);
 	}
+	for (i = 0; i < desc->nb_trigs; i++) {
+		dev = desc->trigs + i;
+		ldev_desc = (struct iio_device) {
+			.attributes = dev->trig_descriptor->attributes
+		};
+		of += iio_generate_device_xml(&ldev_desc, dev->name,
+					      dev->dev_id, desc->xml_desc + of,
+					      size - of);
+	}
 
 	strcpy(desc->xml_desc + of, header_end);
 
 	return SUCCESS;
 }
 
+char *iio_trigger_name_to_id(char *trigger_name)
+{
+	uint32_t i;
+
+	if (0 == strcmp("", trigger_name))
+		return NULL;
+
+	for (i = 0; i < g_desc->nb_trigs; i++)
+		if (strcmp(g_desc->trigs[i].name, trigger_name) == 0)
+			return (char *)g_desc->trigs[i].dev_id;
+
+	return NULL;
+}
+
 static int32_t iio_init_devs(struct iio_desc *desc, struct iio_app_device *devs,
 			     int32_t n)
 {
-	uint32_t i;
+	uint32_t i,j;
 	int32_t ret;
 	struct iio_interface *ldev;
 	struct iio_app_device *ndev;
 
-	desc->nb_devs = n;
-	desc->devs = (struct iio_interface *)calloc(desc->nb_devs,
-			sizeof(*desc->devs));
-	if (!desc->devs)
-		return -ENOMEM;
+	desc->nb_devs = 0;
+	desc->nb_trigs = 0;
+	for (i = 0; i < n; i++)
+		if (devs[i].dev_descriptor)
+			desc->nb_devs++;
+		else
+			desc->nb_trigs++;
 
+	if (desc->nb_devs) {
+		desc->devs = (struct iio_interface *)calloc(desc->nb_devs,
+				sizeof(*desc->devs));
+		if (!desc->devs)
+			return -ENOMEM;
+	}
+	if (desc->nb_trigs) {
+		desc->trigs = (struct iio_interface *)calloc(desc->nb_trigs,
+				sizeof(*desc->trigs));
+		if (!desc->trigs) {
+			free(desc->devs);
+			return -ENOMEM;
+		}
+	}
+
+	desc->nb_devs = 0;
+	desc->nb_trigs = 0;
 	for (i = 0; i < n; i++) {
 		ndev = devs + i;
-		ldev = desc->devs + i;
-		ldev->dev_descriptor = ndev->dev_descriptor;
-		ldev->read_buffer = devs[i].read_buff;
-		ldev->write_buffer = devs[i].write_buff;
-		sprintf(ldev->dev_id, "iio:device%"PRIu32"", i);
+		if (ndev->dev_descriptor) {
+			ldev = desc->devs + desc->nb_devs;
+			ldev->dev_descriptor = ndev->dev_descriptor;
+			ldev->read_buffer = devs[i].read_buff;
+			ldev->write_buffer = devs[i].write_buff;
+			sprintf(ldev->dev_id, "iio:device%"PRIu32"", desc->nb_devs);
+			++desc->nb_devs;
+		} else { //Is trigger
+			ldev = desc->trigs + desc->nb_trigs;
+			ldev->trig_descriptor = ndev->trig_descriptor;
+			sprintf(ldev->dev_id, "trigger%"PRIu32"", desc->nb_trigs);
+			++desc->nb_trigs;
+		}
 		ldev->dev_instance = ndev->dev;
 		ldev->name = ndev->name;
 	}
 
+	for (i = 0, j = 0; i < n; i++)
+		if (devs[i].dev_descriptor) {
+			if (devs[i].trigger_name)
+				iio_set_trigger(desc->devs[j].dev_id,
+						iio_trigger_name_to_id(devs[i].trigger_name),
+						strlen(devs[i].trigger_name));
+			++j;
+		}
+
 	ret = iio_init_xml(desc);
-	if (IS_ERR_VALUE(ret))
+	if (IS_ERR_VALUE(ret)) {
 		free(desc->devs);
+		free(desc->trigs);
+	}
 
 	return ret;
 }
@@ -1328,6 +1468,7 @@ ssize_t iio_init(struct iio_desc **desc, struct iio_init_param *init_param)
 		ret = -ENOMEM;
 		goto free_ops;
 	}
+	g_desc = ldesc;
 	ldesc->iiod_ops = ops;
 
 	/* device operations */
@@ -1343,6 +1484,8 @@ ssize_t iio_init(struct iio_desc **desc, struct iio_init_param *init_param)
 	ops->open = iio_open_dev;
 	ops->close = iio_close_dev;
 	ops->get_mask = iio_get_mask;
+	ops->get_trigger = iio_get_trigger;
+	ops->set_trigger = iio_set_trigger;
 
 	ops->read = iio_phy_read;
 	ops->write = iio_phy_write;
@@ -1387,7 +1530,6 @@ ssize_t iio_init(struct iio_desc **desc, struct iio_init_param *init_param)
 		goto free_devs;
 
 	*desc = ldesc;
-	g_desc = ldesc;
 
 	return SUCCESS;
 
@@ -1422,6 +1564,7 @@ ssize_t iio_remove(struct iio_desc *desc)
 
 	free(desc->xml_desc);
 	free(desc->devs);
+	free(desc->trigs);
 
 	if (desc->phy_type == USE_UART) {
 		uart_remove(desc->phy_desc);
