@@ -42,6 +42,10 @@
 
 #include "iio.h"
 
+#if defined(ADUCM_PLATFORM) || defined(XILINX_PLATFORM)
+#include "irq.h"
+#endif
+
 #define IIO_APP_DEVICE(_name, _dev, _dev_descriptor, _read_buff, _write_buff) {\
 	.name = _name,\
 	.dev = _dev,\
@@ -75,5 +79,10 @@
  * @return 0 on success, negative value otherwise
  */
 int32_t iio_app_run(struct iio_app_device *devices, int32_t len);
+
+#if defined(ADUCM_PLATFORM) || defined(XILINX_PLATFORM)
+int32_t iio_app_run_irq_param(struct iio_app_device *devices, int32_t len,
+			      struct irq_ctrl_desc *irq_ctrl);
+#endif
 
 #endif
