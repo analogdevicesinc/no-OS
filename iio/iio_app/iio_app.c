@@ -305,21 +305,11 @@ int32_t iio_app_run(struct iio_app_device *devices, int32_t len)
 	iio_init_param.uart_desc = uart_desc;
 #endif
 
+	iio_init_param.devs = devices;
+	iio_init_param.nb_devs = len;
 	status = iio_init(&iio_desc, &iio_init_param);
 	if(status < 0)
 		goto error;
-
-	int32_t i;
-	for (i = 0; i < len; i++) {
-		status = iio_register(iio_desc,
-				      devices[i].dev_descriptor,
-				      devices[i].name,
-				      devices[i].dev,
-				      devices[i].read_buff,
-				      devices[i].write_buff);
-		if (status < 0)
-			goto error;
-	}
 
 	do {
 		status = iio_step(iio_desc);

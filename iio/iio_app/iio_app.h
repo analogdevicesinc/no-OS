@@ -50,13 +50,6 @@
 	.write_buff = _write_buff\
 }
 
-struct iio_app_device {
-	char *name;
-	void *dev;
-	struct iio_device *dev_descriptor;
-	struct iio_data_buffer *read_buff;
-	struct iio_data_buffer *write_buff;
-};
 
 /**
  * @brief Register devices and start an iio application
