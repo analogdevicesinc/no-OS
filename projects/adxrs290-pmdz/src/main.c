@@ -56,11 +56,17 @@
 #ifdef ADUCM_PLATFORM
 
 #define MAX_SIZE_BASE_ADDR		3000
+#define IIO_ADXRS290_BUFFER_SIZE	3000
 
 static uint8_t in_buff[MAX_SIZE_BASE_ADDR];
+static uint8_t adxrs290_buff[IIO_ADXRS290_BUFFER_SIZE];
 
+#define IIO_ADXRS290_TRIGGER_NAME	"adxrs290_trigger_name"
 #define GYRO_DDR_BASEADDR		((uint32_t)in_buff)
 #define GPIO_SYNC_PIN_NUM		0x10
+
+#define IRQ_CTRL_ID			0
+#define IRQ_PLATFORM_OPS		(&aducm_irq_ops)
 
 #endif
 
@@ -72,6 +78,7 @@ int main(void)
 	int32_t status;
 
 	struct adxrs290_dev *adxrs290_device;
+	struct irq_ctrl_desc *irq_ctrl;
 
 	/* Aducm platform dependent initialization for SPI. */
 	struct aducm_spi_init_param spi_param = {
@@ -105,11 +112,37 @@ int main(void)
 		.hpf = ADXRS290_HPF_ALL_PASS
 	};
 
+	struct irq_init_param irq_param = {
+		.irq_ctrl_id = IRQ_CTRL_ID,
+		.platform_ops = IRQ_PLATFORM_OPS,
+		.extra = NULL
+	};
+
 	status = platform_init();
 	if (IS_ERR_VALUE(status))
 		return status;
 
+	status = irq_ctrl_init(&irq_ctrl, &irq_param);
+	if (IS_ERR_VALUE(status))
+		return status;
+
 	status = adxrs290_init(&adxrs290_device, &adxrs290_param);
+	if (IS_ERR_VALUE(status))
+		return status;
+
+	struct iio_adxrs290_desc iio_adxrs290_dev[1];
+	struct iio_adxrs290_init_param iio_adxrs290_param = {
+		.irq_nb = ADUCM_EXTERNAL_INT1_ID,
+		.irq_config = IRQ_RISING_EDGE,
+		.gpio_sync = &gpio_sync_init_param,
+		.buf = adxrs290_buff,
+		.buffer_size = IIO_ADXRS290_BUFFER_SIZE,
+		.trigger_name = IIO_ADXRS290_TRIGGER_NAME,
+		.irq_ctrl = irq_ctrl,
+		.dev = adxrs290_device
+	};
+
+	status = iio_adxrs290_cfg(iio_adxrs290_dev, &iio_adxrs290_param);
 	if (IS_ERR_VALUE(status))
 		return status;
 
@@ -119,9 +152,14 @@ int main(void)
 	};
 
 	struct iio_app_device devices[] = {
-		IIO_APP_DEVICE("adxrs290", adxrs290_device,
-			       &adxrs290_iio_descriptor, &rd_buf, NULL)
+		IIO_APP_DEVICE_WITH_TRIGGER("adxrs290", iio_adxrs290_dev,
+					    &adxrs290_iio_descriptor, &rd_buf,
+					    NULL, IIO_ADXRS290_TRIGGER_NAME),
+		IIO_APP_TRIGGER(IIO_ADXRS290_TRIGGER_NAME, NULL,
+				&adxrs290_iio_trigger_descriptor)
 	};
 
-	return iio_app_run(devices, ARRAY_SIZE(devices));
+	printf("Startin iio app\n");
+
+	return iio_app_run_irq_param(devices, ARRAY_SIZE(devices), irq_ctrl);
 }
