@@ -687,6 +687,7 @@ int32_t ad4110_setup(struct ad4110_dev **device,
 	dev->addr = init_param.addr;
 	dev->data_stat = init_param.data_stat;
 	dev->data_length = init_param.data_length;
+	dev->sync = init_param.sync;
 	dev->op_mode = init_param.op_mode;
 	dev->gain = init_param.gain;
 	dev->volt_ref = init_param.volt_ref;
@@ -739,6 +740,17 @@ int32_t ad4110_setup(struct ad4110_dev **device,
 		if (ret)
 			goto err_init;
 	}
+
+	if(dev->sync != AD4110_SYNC_EN) {
+		ret = ad4110_spi_int_reg_write_msk(dev,
+						   A4110_ADC,
+						   AD4110_REG_ADC_GPIO_CONFIG,
+						   AD4110_REG_GPIO_CONFIG_SYNC_EN(AD4110_SYNC_DIS),
+						   AD4110_REG_GPIO_CONFIG_SYNC_EN(0xF));
+		if (ret)
+			goto err_init;
+	}
+
 
 	ret = ad4110_set_op_mode(dev, dev->op_mode);
 	if (ret)
