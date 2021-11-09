@@ -600,61 +600,78 @@ int32_t ad4110_setup(struct ad4110_dev **device,
 
 	/* SPI */
 	ret = spi_init(&dev->spi_dev, &init_param.spi_init);
+	if (ret)
+		goto err_init;
 
 	dev->addr = init_param.addr;
 
 	/* Device Settings */
-	ad4110_spi_do_soft_reset(dev);
+	ret = ad4110_spi_do_soft_reset(dev);
+	if (ret)
+		goto err_init;
 	mdelay(10);
 
 	if(init_param.data_stat == AD4110_ENABLE) {
-		ret |= ad4110_spi_int_reg_write_msk(dev,
-						    A4110_ADC,
-						    AD4110_REG_ADC_INTERFACE,
-						    AD4110_DATA_STAT_EN,
-						    AD4110_REG_ADC_INTERFACE_DS_MSK);
+		ret = ad4110_spi_int_reg_write_msk(dev,
+						   A4110_ADC,
+						   AD4110_REG_ADC_INTERFACE,
+						   AD4110_DATA_STAT_EN,
+						   AD4110_REG_ADC_INTERFACE_DS_MSK);
+		if (ret)
+			goto err_init;
 	}
 	dev->data_stat = init_param.data_stat;
 
 	if(init_param.data_length == AD4110_DATA_WL16) {
-		ret |= ad4110_spi_int_reg_write_msk(dev,
-						    A4110_ADC,
-						    AD4110_REG_ADC_INTERFACE,
-						    AD4110_DATA_WL16,
-						    AD4110_REG_ADC_INTERFACE_WL16_MSK);
+		ret = ad4110_spi_int_reg_write_msk(dev,
+						   A4110_ADC,
+						   AD4110_REG_ADC_INTERFACE,
+						   AD4110_DATA_WL16,
+						   AD4110_REG_ADC_INTERFACE_WL16_MSK);
+		if (ret)
+			goto err_init;
 	}
 	dev->data_length = init_param.data_length;
 
 	if(init_param.afe_crc_en != AD4110_AFE_CRC_DISABLE) {
-		ret |= ad4110_spi_int_reg_write(dev,
-						A4110_AFE,
-						AD4110_REG_AFE_CNTRL1,
-						AD4110_REG_AFE_CNTRL1_CRC_EN);
+		ret = ad4110_spi_int_reg_write(dev,
+					       A4110_AFE,
+					       AD4110_REG_AFE_CNTRL1,
+					       AD4110_REG_AFE_CNTRL1_CRC_EN);
+		if (ret)
+			goto err_init;
 	}
 	dev->afe_crc_en = init_param.afe_crc_en;
 
 	if(init_param.adc_crc_en != AD4110_ADC_CRC_DISABLE) {
-		ret |= ad4110_spi_int_reg_write_msk(dev,
-						    A4110_ADC,
-						    AD4110_REG_ADC_INTERFACE,
-						    AD4110_ADC_CRC_EN(init_param.adc_crc_en),
-						    AD4110_REG_ADC_INTERFACE_CRC_EN_MSK);
+		ret = ad4110_spi_int_reg_write_msk(dev,
+						   A4110_ADC,
+						   AD4110_REG_ADC_INTERFACE,
+						   AD4110_ADC_CRC_EN(init_param.adc_crc_en),
+						   AD4110_REG_ADC_INTERFACE_CRC_EN_MSK);
+		if (ret)
+			goto err_init;
 	}
 	dev->adc_crc_en = init_param.adc_crc_en;
 
-	ret |= ad4110_set_op_mode(dev, init_param.op_mode);
+	ret = ad4110_set_op_mode(dev, init_param.op_mode);
+	if (ret)
+		goto err_init;
 	dev->op_mode = init_param.op_mode;
 
-	ret |= ad4110_set_gain(dev, init_param.gain);
+	ret = ad4110_set_gain(dev, init_param.gain);
+	if (ret)
+		goto err_init;
 	dev->gain = init_param.gain;
 
 	*device = dev;
 
-	if (!ret)
-		printf("AD4110 successfully initialized\n");
-	else
-		printf("AD4110 initialization error (%d)\n", ret);
+	printf("AD4110 successfully initialized\n");
+	return SUCCESS;
 
+err_init:
+	free(dev);
+	pr_err("AD4110 initialization error (%d)\n", ret);
 	return ret;
 }
 
