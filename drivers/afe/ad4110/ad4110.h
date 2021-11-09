@@ -273,6 +273,10 @@ int32_t ad4110_spi_int_reg_read(struct ad4110_dev *dev,
 				uint8_t reg_addr,
 				uint32_t *reg_data);
 
+/* SPI internal DATA register read from device. */
+int32_t ad4110_spi_int_data_reg_read(struct ad4110_dev *dev,
+				     uint32_t *reg_data);
+
 /* Initialize the device. */
 int32_t ad4110_setup(struct ad4110_dev **device,
 		     struct ad4110_init_param init_param);

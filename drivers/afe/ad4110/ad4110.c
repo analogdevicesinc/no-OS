@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include "ad4110.h"
 #include "error.h"
+#include "print_log.h"
 
 /******************************************************************************/
 /************************** Functions Implementation **************************/
@@ -426,6 +427,81 @@ int32_t ad4110_spi_int_reg_write(struct ad4110_dev *dev,
 }
 
 /***************************************************************************//**
+ * SPI internal DATA register read from device.
+ *
+ * @param dev      - The device structure.
+ * @param reg_data - The register data.
+ *
+ * @return SUCCESS in case of success, negative error code otherwise.
+*******************************************************************************/
+int32_t ad4110_spi_int_data_reg_read(struct ad4110_dev *dev,
+				     uint32_t *reg_data)
+{
+	uint8_t buf[6];
+
+	uint8_t buf_size;
+	uint8_t data_size;
+	uint32_t data;
+	uint8_t crc;
+	int32_t ret;
+
+	data_size = ad4110_get_data_size(dev, A4110_ADC, AD4110_REG_DATA);
+
+	buf[0] = (A4110_ADC << 7) |
+		 AD4110_CMD_READ_COM_REG(AD4110_REG_DATA) |
+		 ((dev->addr << 4) & AD4110_DEV_ADDR_MASK); // cmd byte
+
+	memset(buf + 1, 0xAA, 5); // dummy data bytes
+
+	if(dev->adc_crc_en != AD4110_ADC_CRC_DISABLE)
+		buf_size = data_size + 1; // 1 byte for crc
+	else
+		buf_size = data_size;
+
+	ret = spi_write_and_read(dev->spi_dev, buf, buf_size);
+	if (ret)
+		return ret;
+
+	switch (data_size) {
+	case 3:
+		data = (buf[1] << 8) | buf[2];
+		break;
+	case 4:
+		data = (buf[1] << 16) | (buf[2] << 8) | buf[3];
+		break;
+	case 2:
+		data = buf[1];
+		break;
+	case 5:
+		// ADC Data conversion result of 24 bits + status reg append
+		data = (buf[1] << 24) | (buf[2] << 16) | (buf[3] << 8) | buf[4];
+		break;
+	default:
+		return FAILURE;
+	}
+
+	*reg_data = data;
+
+	if(dev->adc_crc_en == AD4110_ADC_CRC_CRC) {
+		buf[0] = (A4110_ADC << 7) | AD4110_CMD_READ_COM_REG(AD4110_REG_DATA);
+		crc = ad4110_compute_crc8(&buf[0], data_size);
+		if (crc != buf[buf_size - 1]) {
+			pr_err("%s: CRC Error.\n", __func__);
+			return FAILURE;
+		}
+	} else if (dev->adc_crc_en == AD4110_ADC_XOR_CRC) {
+		buf[0] = (A4110_ADC << 7) | AD4110_CMD_READ_COM_REG(AD4110_REG_DATA);
+		crc = ad4110_compute_xor(&buf[0], data_size);
+		if (crc != buf[buf_size - 1]) {
+			pr_err("%s: CRC Error.\n", __func__);
+			return FAILURE;
+		}
+	}
+
+	return SUCCESS;
+}
+
+/***************************************************************************//**
  * SPI internal register read from device.
  *
  * @param dev      - The device structure.
@@ -476,12 +552,8 @@ int32_t ad4110_spi_int_reg_read(struct ad4110_dev *dev,
 	case 2:
 		data = buf[1];
 		break;
-	case 5:
-		// ADC Data conversion result of 24 bits + status reg append
-		data = (buf[1] << 24) | (buf[2] << 16) | (buf[3] << 8) | buf[4];
-		break;
 	default:
-		break;
+		return -EINVAL;
 	}
 
 	*reg_data = data;
