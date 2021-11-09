@@ -86,11 +86,11 @@ int32_t ad4110_spi_int_reg_write_msk(struct ad4110_dev *dev,
 	uint32_t reg_data;
 
 	ret = ad4110_spi_int_reg_read(dev, reg_map, reg_addr, &reg_data);
+	if (ret)
+		return ret;
 	reg_data &= ~mask;
 	reg_data |= data;
-	ret |= ad4110_spi_int_reg_write(dev, reg_map, reg_addr, reg_data);
-
-	return ret;
+	return ad4110_spi_int_reg_write(dev, reg_map, reg_addr, reg_data);
 }
 
 /***************************************************************************//**
@@ -109,20 +109,16 @@ int32_t ad4110_spi_int_reg_write_msk(struct ad4110_dev *dev,
 *******************************************************************************/
 int32_t ad4110_set_adc_mode(struct ad4110_dev *dev, enum ad4110_adc_mode mode)
 {
-	int32_t ret;
-
 	if(mode == AD4110_SYS_OFFSET_CAL)
 		printf("Assuming that the applied analog input is the zero scale point. \n");
 	else if(mode == AD4110_SYS_GAIN_CAL)
 		printf("Assuming that the applied analog input is the full scale point. \n");
 
-	ret = ad4110_spi_int_reg_write_msk(dev,
-					   A4110_ADC,
-					   AD4110_REG_ADC_MODE,
-					   AD4110_ADC_MODE(mode),
-					   AD4110_REG_ADC_MODE_MSK);
-
-	return ret;
+	return ad4110_spi_int_reg_write_msk(dev,
+					    A4110_ADC,
+					    AD4110_REG_ADC_MODE,
+					    AD4110_ADC_MODE(mode),
+					    AD4110_REG_ADC_MODE_MSK);
 }
 
 /***************************************************************************//**
@@ -151,15 +147,11 @@ int32_t ad4110_set_adc_mode(struct ad4110_dev *dev, enum ad4110_adc_mode mode)
 *******************************************************************************/
 int32_t ad4110_set_gain(struct ad4110_dev *dev, enum ad4110_gain gain)
 {
-	int32_t ret;
-
-	ret = ad4110_spi_int_reg_write_msk(dev,
-					   A4110_AFE,
-					   AD4110_REG_PGA_RTD_CTRL,
-					   AD4110_REG_PGA_RTD_CTRL_GAIN_CH(gain),
-					   AD4110_REG_PGA_RTD_CTRL_GAIN_CH(0xF));
-
-	return ret;
+	return ad4110_spi_int_reg_write_msk(dev,
+					    A4110_AFE,
+					    AD4110_REG_PGA_RTD_CTRL,
+					    AD4110_REG_PGA_RTD_CTRL_GAIN_CH(gain),
+					    AD4110_REG_PGA_RTD_CTRL_GAIN_CH(0xF));
 }
 
 /***************************************************************************//**
@@ -264,22 +256,18 @@ int32_t ad4110_set_op_mode(struct ad4110_dev *dev, enum ad4110_op_mode mode)
 	switch(mode) {
 	case AD4110_VOLTAGE_MODE:
 		// clear IMODE bit
-		ret = ad4110_spi_int_reg_write_msk(dev,
-						   A4110_AFE,
-						   AD4110_REG_AFE_CNTRL2,
-						   AD4110_DISABLE,
-						   AD4110_REG_AFE_CNTRL2_IMODE_MSK);
-		break;
+		return ad4110_spi_int_reg_write_msk(dev,
+						    A4110_AFE,
+						    AD4110_REG_AFE_CNTRL2,
+						    AD4110_DISABLE,
+						    AD4110_REG_AFE_CNTRL2_IMODE_MSK);
 	case AD4110_CURRENT_MODE:
 		// set IMODE bit
-		ret = ad4110_spi_int_reg_write_msk(dev,
-						   A4110_AFE,
-						   AD4110_REG_AFE_CNTRL2,
-						   AD4110_ENABLE,
-						   AD4110_REG_AFE_CNTRL2_IMODE_MSK);
-
-		break;
-
+		return ad4110_spi_int_reg_write_msk(dev,
+						    A4110_AFE,
+						    AD4110_REG_AFE_CNTRL2,
+						    AD4110_ENABLE,
+						    AD4110_REG_AFE_CNTRL2_IMODE_MSK);
 	case AD4110_CURRENT_MODE_EXT_R_SEL:
 		// set IMODE bit
 		ret = ad4110_spi_int_reg_write_msk(dev,
@@ -287,15 +275,15 @@ int32_t ad4110_set_op_mode(struct ad4110_dev *dev, enum ad4110_op_mode mode)
 						   AD4110_REG_AFE_CNTRL2,
 						   AD4110_ENABLE,
 						   AD4110_REG_AFE_CNTRL2_IMODE_MSK);
+		if (ret)
+			return ret;
 
 		// set EXT_R_SEL
-		ret |= ad4110_spi_int_reg_write_msk(dev,
+		return ad4110_spi_int_reg_write_msk(dev,
 						    A4110_AFE,
 						    AD4110_REG_AFE_CNTRL2,
 						    AD4110_ENABLE,
 						    AD4110_REG_AFE_CNTRL2_EXT_R_SEL_MSK);
-		break;
-
 	case AD4110_THERMOCOUPLE:
 		// clear IMODE bit
 		ret = ad4110_spi_int_reg_write_msk(dev,
@@ -303,15 +291,15 @@ int32_t ad4110_set_op_mode(struct ad4110_dev *dev, enum ad4110_op_mode mode)
 						   AD4110_REG_AFE_CNTRL2,
 						   AD4110_DISABLE,
 						   AD4110_REG_AFE_CNTRL2_IMODE_MSK);
+		if (ret)
+			return ret;
 
 		// enable VBIAS
-		ret |= ad4110_spi_int_reg_write_msk(dev,
+		return ad4110_spi_int_reg_write_msk(dev,
 						    A4110_AFE,
 						    AD4110_REG_AFE_CNTRL2,
 						    AD4110_AFE_VBIAS(AD4110_AFE_VBIAS_ON),
 						    AD4110_AFE_VBIAS(AD4110_AFE_VBIAS_OFF));
-		break;
-
 	case AD4110_FLD_POWER_MODE:
 		// set IMODE bit
 		ret = ad4110_spi_int_reg_write_msk(dev,
@@ -319,15 +307,15 @@ int32_t ad4110_set_op_mode(struct ad4110_dev *dev, enum ad4110_op_mode mode)
 						   AD4110_REG_AFE_CNTRL2,
 						   AD4110_ENABLE,
 						   AD4110_REG_AFE_CNTRL2_IMODE_MSK);
+		if (ret)
+			return ret;
 
 		// set EN_FLD_PWR
-		ret |= ad4110_spi_int_reg_write_msk(dev,
+		return ad4110_spi_int_reg_write_msk(dev,
 						    A4110_AFE,
 						    AD4110_REG_AFE_CNTRL2,
 						    AD4110_ENABLE,
 						    AD4110_REG_AFE_CNTRL2_EN_FLD_PWR_MSK);
-
-		break;
 
 	case AD4110_RTD_4W_MODE:
 		// clear IMODE bit
@@ -336,14 +324,15 @@ int32_t ad4110_set_op_mode(struct ad4110_dev *dev, enum ad4110_op_mode mode)
 						   AD4110_REG_AFE_CNTRL2,
 						   AD4110_DISABLE,
 						   AD4110_REG_AFE_CNTRL2_IMODE_MSK);
-		// clear RTD_3W4W bit
-		ret |= ad4110_spi_int_reg_write_msk(dev,
-						    A4110_AFE,
-						    AD4110_REG_PGA_RTD_CTRL,
-						    AD4110_DISABLE,
-						    AD4110_REG_PGA_RTD_CTRL_23W_EN_MSK);
-		break;
+		if (ret)
+			return ret;
 
+		// clear RTD_3W4W bit
+		return  ad4110_spi_int_reg_write_msk(dev,
+						     A4110_AFE,
+						     AD4110_REG_PGA_RTD_CTRL,
+						     AD4110_DISABLE,
+						     AD4110_REG_PGA_RTD_CTRL_23W_EN_MSK);
 	case AD4110_RTD_3W_MODE:
 		// clear IMODE bit
 		ret = ad4110_spi_int_reg_write_msk(dev,
@@ -351,14 +340,15 @@ int32_t ad4110_set_op_mode(struct ad4110_dev *dev, enum ad4110_op_mode mode)
 						   AD4110_REG_AFE_CNTRL2,
 						   AD4110_DISABLE,
 						   AD4110_REG_AFE_CNTRL2_IMODE_MSK);
+		if (ret)
+			return ret;
+
 		// set RTD_3W4W bit
-		ret |= ad4110_spi_int_reg_write_msk(dev,
+		return ad4110_spi_int_reg_write_msk(dev,
 						    A4110_AFE,
 						    AD4110_REG_PGA_RTD_CTRL,
 						    AD4110_ENABLE,
 						    AD4110_REG_PGA_RTD_CTRL_23W_EN_MSK);
-		break;
-
 	case AD4110_RTD_2W_MODE:
 		// clear IMODE bit
 		ret = ad4110_spi_int_reg_write_msk(dev,
@@ -366,33 +356,36 @@ int32_t ad4110_set_op_mode(struct ad4110_dev *dev, enum ad4110_op_mode mode)
 						   AD4110_REG_AFE_CNTRL2,
 						   AD4110_DISABLE,
 						   AD4110_REG_AFE_CNTRL2_IMODE_MSK);
+		if (ret)
+			return ret;
+
 		// set RTD_3W4W bit
-		ret |= ad4110_spi_int_reg_write_msk(dev,
-						    A4110_AFE,
-						    AD4110_REG_PGA_RTD_CTRL,
-						    AD4110_ENABLE,
-						    AD4110_REG_PGA_RTD_CTRL_23W_EN_MSK);
+		ret = ad4110_spi_int_reg_write_msk(dev,
+						   A4110_AFE,
+						   AD4110_REG_PGA_RTD_CTRL,
+						   AD4110_ENABLE,
+						   AD4110_REG_PGA_RTD_CTRL_23W_EN_MSK);
+		if (ret)
+			return ret;
+
 		// enable VBIAS
-		ret |=
-			ad4110_spi_int_reg_write_msk(dev,
-						     A4110_AFE,
-						     AD4110_REG_AFE_CNTRL2,
-						     AD4110_AFE_VBIAS(AD4110_AFE_VBIAS_ON),
-						     AD4110_AFE_VBIAS(AD4110_AFE_VBIAS_OFF));
+		ret = ad4110_spi_int_reg_write_msk(dev,
+						   A4110_AFE,
+						   AD4110_REG_AFE_CNTRL2,
+						   AD4110_AFE_VBIAS(AD4110_AFE_VBIAS_ON),
+						   AD4110_AFE_VBIAS(AD4110_AFE_VBIAS_OFF));
+		if (ret)
+			return ret;
 
 		// enable the 100 �A pull-down current source on AIN(-)
-		ret |= ad4110_spi_int_reg_write_msk(dev,
+		return ad4110_spi_int_reg_write_msk(dev,
 						    A4110_AFE,
 						    AD4110_REG_AFE_CNTRL2,
 						    AD4110_REG_AFE_CNTRL2_AINN_DN100,
 						    AD4110_REG_AFE_CNTRL2_AINN_DN100);
-		break;
-
 	default:
-		break;
+		return FAILURE;
 	}
-
-	return ret;
 }
 
 /***************************************************************************//**
@@ -404,14 +397,11 @@ int32_t ad4110_set_op_mode(struct ad4110_dev *dev, enum ad4110_op_mode mode)
 *******************************************************************************/
 int32_t ad4110_spi_do_soft_reset(struct ad4110_dev *dev)
 {
-	int32_t ret;
 	uint8_t buf [ 8 ] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 
 	/* The AD4110 can be reset by writing a series of 64 1�s to the DIN
 	 * input */
-	ret = spi_write_and_read(dev->spi_dev, buf, 8);
-
-	return ret;
+	return spi_write_and_read(dev->spi_dev, buf, 8);
 }
 
 
@@ -470,7 +460,6 @@ int32_t ad4110_spi_int_reg_write(struct ad4110_dev *dev,
 
 	uint8_t buf_size;
 	uint8_t data_size = 3;
-	int32_t ret;
 
 	if(reg_addr >= AD4110_ADC_OFFSET0)
 		data_size = 4;
@@ -490,7 +479,7 @@ int32_t ad4110_spi_int_reg_write(struct ad4110_dev *dev,
 		break;
 
 	default:
-		break;
+		return -EINVAL;
 	}
 
 	if(((dev->afe_crc_en != AD4110_AFE_CRC_DISABLE) &&
@@ -501,9 +490,7 @@ int32_t ad4110_spi_int_reg_write(struct ad4110_dev *dev,
 		buf[data_size] = ad4110_compute_crc8(&buf[0], data_size);
 	} else
 		buf_size = data_size;
-	ret = spi_write_and_read(dev->spi_dev, buf, buf_size);
-
-	return ret;
+	return spi_write_and_read(dev->spi_dev, buf, buf_size);
 }
 
 /***************************************************************************//**
@@ -622,6 +609,9 @@ int32_t ad4110_spi_int_reg_read(struct ad4110_dev *dev,
 		buf_size = data_size;
 
 	ret = spi_write_and_read(dev->spi_dev, buf, buf_size);
+	if (ret)
+		return ret;
+
 	switch (data_size) {
 	case 3:
 		data = (buf[1] << 8) | buf[2];
@@ -644,20 +634,20 @@ int32_t ad4110_spi_int_reg_read(struct ad4110_dev *dev,
 		buf[0] = (reg_map << 7) | AD4110_CMD_READ_COM_REG(reg_addr);
 		crc = ad4110_compute_crc8(&buf[0], data_size);
 		if (crc != buf[buf_size - 1]) {
-			printf("%s: CRC Error.\n", __func__);
-			ret = FAILURE;
+			pr_err("%s: CRC Error.\n", __func__);
+			return FAILURE;
 		}
 	} else if ((dev->adc_crc_en == AD4110_ADC_XOR_CRC) &&
 		   (reg_map == A4110_ADC)) {
 		buf[0] = (reg_map << 7) | AD4110_CMD_READ_COM_REG(reg_addr);
 		crc = ad4110_compute_xor(&buf[0], data_size);
 		if (crc != buf[buf_size - 1]) {
-			printf("%s: CRC Error.\n", __func__);
-			ret = FAILURE;
+			pr_err("%s: CRC Error.\n", __func__);
+			return FAILURE;
 		}
 	}
 
-	return ret;
+	return SUCCESS;
 }
 
 /***************************************************************************//**
@@ -698,7 +688,7 @@ int32_t ad4110_setup(struct ad4110_dev **device,
 	/* SPI */
 	ret = spi_init(&dev->spi_dev, &init_param.spi_init);
 	if (ret)
-		goto err_init;
+		goto err_dev;
 
 	dev->afe_crc_en = AD4110_AFE_CRC_DISABLE;
 	dev->adc_crc_en = AD4110_ADC_CRC_DISABLE;
@@ -717,7 +707,7 @@ int32_t ad4110_setup(struct ad4110_dev **device,
 	/* Device Settings */
 	ret = ad4110_spi_do_soft_reset(dev);
 	if (ret)
-		goto err_init;
+		goto err_spi;
 	mdelay(10);
 
 	if(init_param.afe_crc_en != AD4110_AFE_CRC_DISABLE) {
@@ -726,7 +716,7 @@ int32_t ad4110_setup(struct ad4110_dev **device,
 					       AD4110_REG_AFE_CNTRL1,
 					       AD4110_REG_AFE_CNTRL1_CRC_EN);
 		if (ret)
-			goto err_init;
+			goto err_spi;
 	}
 	dev->afe_crc_en = init_param.afe_crc_en;
 
@@ -737,7 +727,7 @@ int32_t ad4110_setup(struct ad4110_dev **device,
 						   AD4110_ADC_CRC_EN(init_param.adc_crc_en),
 						   AD4110_REG_ADC_INTERFACE_CRC_EN_MSK);
 		if (ret)
-			goto err_init;
+			goto err_spi;
 	}
 	dev->adc_crc_en = init_param.adc_crc_en;
 
@@ -748,7 +738,7 @@ int32_t ad4110_setup(struct ad4110_dev **device,
 						   AD4110_DATA_STAT_EN,
 						   AD4110_REG_ADC_INTERFACE_DS_MSK);
 		if (ret)
-			goto err_init;
+			goto err_spi;
 	}
 
 	if(dev->data_length == AD4110_DATA_WL16) {
@@ -758,7 +748,7 @@ int32_t ad4110_setup(struct ad4110_dev **device,
 						   AD4110_DATA_WL16,
 						   AD4110_REG_ADC_INTERFACE_WL16_MSK);
 		if (ret)
-			goto err_init;
+			goto err_spi;
 	}
 
 	if(dev->sync != AD4110_SYNC_EN) {
@@ -768,42 +758,44 @@ int32_t ad4110_setup(struct ad4110_dev **device,
 						   AD4110_REG_GPIO_CONFIG_SYNC_EN(AD4110_SYNC_DIS),
 						   AD4110_REG_GPIO_CONFIG_SYNC_EN(0xF));
 		if (ret)
-			goto err_init;
+			goto err_spi;
 	}
 
 
 	ret = ad4110_set_op_mode(dev, dev->op_mode);
 	if (ret)
-		goto err_init;
+		goto err_spi;
 
 	ret = ad4110_set_gain(dev, dev->gain);
 	if (ret)
-		goto err_init;
+		goto err_spi;
 
 	ret = ad4110_set_reference(dev, dev->volt_ref);
 	if (ret)
-		goto err_init;
+		goto err_spi;
 
 	/* When AD4110_AFE_ADC_CLOCKED selected, adc_clk must be AD4110_ADC_INT_CLK_CLKIO */
 	if((dev->afe_clk == AD4110_AFE_ADC_CLOCKED)
 	    && (dev->adc_clk != AD4110_ADC_INT_CLK_CLKIO))
-		goto err_init;
+		goto err_spi;
 	else {
 		ret = ad4110_set_adc_clk(dev, dev->adc_clk);
 		if (ret)
-			goto err_init;
+			goto err_spi;
 	}
 
 	ret = ad4110_set_afe_clk(dev, dev->afe_clk);
 	if (ret)
-		goto err_init;
+		goto err_spi;
 
 	*device = dev;
 
 	printf("AD4110 successfully initialized\n");
 	return SUCCESS;
 
-err_init:
+err_spi:
+	spi_remove(dev->spi_dev);
+err_dev:
 	free(dev);
 	pr_err("AD4110 initialization error (%d)\n", ret);
 	return ret;
