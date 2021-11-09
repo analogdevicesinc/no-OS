@@ -162,6 +162,46 @@ int32_t ad4110_set_gain(struct ad4110_dev *dev, enum ad4110_gain gain)
 }
 
 /***************************************************************************//**
+ * Set the voltage reference.
+ *
+ * @param dev  - The device structure.
+ * @param ref - The voltage reference.
+ * 		 Accepted values: AD4110_EXT_REF
+ * 				  AD4110_INT_2_5V_REF
+ * 				  AD4110_AVDD5_REF
+ *
+ * @return SUCCESS in case of success, negative error code otherwise.
+*******************************************************************************/
+int32_t ad4110_set_reference(struct ad4110_dev *dev,
+			     enum ad4110_voltage_reference ref)
+{
+	int32_t ret;
+
+	if(ref != AD4110_INT_2_5V_REF) {
+		return ad4110_spi_int_reg_write_msk(dev,
+						    A4110_ADC,
+						    AD4110_REG_ADC_CONFIG,
+						    AD4110_REG_ADC_CONFIG_REF_SEL(ref),
+						    AD4110_REG_ADC_CONFIG_REF_SEL(0xF));
+	} else {
+		// set REF_EN
+		ret = ad4110_spi_int_reg_write_msk(dev,
+						   A4110_ADC,
+						   AD4110_REG_ADC_MODE,
+						   AD4110_REG_ADC_MODE_REF_EN,
+						   AD4110_REG_ADC_MODE_REF_EN);
+		if (ret)
+			return ret;
+		// set REF_SEL to 10
+		return ad4110_spi_int_reg_write_msk(dev,
+						    A4110_ADC,
+						    AD4110_REG_ADC_CONFIG,
+						    AD4110_REG_ADC_CONFIG_REF_SEL(ref),
+						    AD4110_REG_ADC_CONFIG_REF_SEL(0xF));
+	}
+}
+
+/***************************************************************************//**
  * Set the operation mode.
  *
  * @param dev  - The device structure.
@@ -610,6 +650,7 @@ int32_t ad4110_setup(struct ad4110_dev **device,
 	dev->data_length = init_param.data_length;
 	dev->op_mode = init_param.op_mode;
 	dev->gain = init_param.gain;
+	dev->volt_ref = init_param.volt_ref;
 
 	/* Device Settings */
 	ret = ad4110_spi_do_soft_reset(dev);
@@ -663,6 +704,10 @@ int32_t ad4110_setup(struct ad4110_dev **device,
 		goto err_init;
 
 	ret = ad4110_set_gain(dev, dev->gain);
+	if (ret)
+		goto err_init;
+
+	ret = ad4110_set_reference(dev, dev->volt_ref);
 	if (ret)
 		goto err_init;
 	*device = dev;
