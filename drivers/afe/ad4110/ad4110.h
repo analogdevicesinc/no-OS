@@ -142,6 +142,17 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
+/* If AD4110_AFE_ADC_CLOCKED selected, select AD4110_ADC_INT_CLK_CLKIO */
+enum ad4110_adc_clk_sel {
+	AD4110_ADC_INT_CLK,
+	AD4110_ADC_INT_CLK_CLKIO,
+	AD4110_ADC_EXT_CLK,
+};
+
+enum ad4110_afe_clk_cfg {
+	AD4110_AFE_INT_CLOCK = 0,
+	AD4110_AFE_ADC_CLOCKED = 2
+};
 enum ad4110_voltage_reference {
 	AD4110_EXT_REF = 0,
 	AD4110_INT_2_5V_REF = 2,
@@ -219,6 +230,8 @@ struct ad4110_dev {
 	enum ad4110_afe_crc_mode	afe_crc_en;
 	enum ad4110_op_mode 		op_mode;
 	enum ad4110_gain 		gain;
+	enum ad4110_afe_clk_cfg		afe_clk;
+	enum ad4110_adc_clk_sel		adc_clk;
 	uint8_t				addr;
 };
 
@@ -233,6 +246,8 @@ struct ad4110_init_param {
 	enum ad4110_adc_crc_mode	adc_crc_en;
 	enum ad4110_op_mode 		op_mode;
 	enum ad4110_gain 		gain;
+	enum ad4110_afe_clk_cfg		afe_clk;
+	enum ad4110_adc_clk_sel		adc_clk;
 	uint8_t				addr;
 };
 
@@ -257,6 +272,12 @@ int32_t ad4110_set_adc_mode(struct ad4110_dev *dev, enum ad4110_adc_mode mode);
 
 /* Set the gain. */
 int32_t ad4110_set_gain(struct ad4110_dev *dev, enum ad4110_gain gain);
+
+/* Set ADC clock mode. */
+int32_t ad4110_set_adc_clk(struct ad4110_dev *dev, enum ad4110_adc_clk_sel clk);
+
+/* Set AFE clock mode. */
+int32_t ad4110_set_afe_clk(struct ad4110_dev *dev, enum ad4110_afe_clk_cfg clk);
 
 /* Set voltage reference. */
 int32_t ad4110_set_reference(struct ad4110_dev *dev,
