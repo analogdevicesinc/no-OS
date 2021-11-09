@@ -617,7 +617,28 @@ int32_t ad4110_setup(struct ad4110_dev **device,
 		goto err_init;
 	mdelay(10);
 
-	if(init_param.data_stat == AD4110_ENABLE) {
+	if(init_param.afe_crc_en != AD4110_AFE_CRC_DISABLE) {
+		ret = ad4110_spi_int_reg_write(dev,
+					       A4110_AFE,
+					       AD4110_REG_AFE_CNTRL1,
+					       AD4110_REG_AFE_CNTRL1_CRC_EN);
+		if (ret)
+			goto err_init;
+	}
+	dev->afe_crc_en = init_param.afe_crc_en;
+
+	if(init_param.adc_crc_en != AD4110_ADC_CRC_DISABLE) {
+		ret = ad4110_spi_int_reg_write_msk(dev,
+						   A4110_ADC,
+						   AD4110_REG_ADC_INTERFACE,
+						   AD4110_ADC_CRC_EN(init_param.adc_crc_en),
+						   AD4110_REG_ADC_INTERFACE_CRC_EN_MSK);
+		if (ret)
+			goto err_init;
+	}
+	dev->adc_crc_en = init_param.adc_crc_en;
+
+	if(dev->data_stat == AD4110_ENABLE) {
 		ret = ad4110_spi_int_reg_write_msk(dev,
 						   A4110_ADC,
 						   AD4110_REG_ADC_INTERFACE,
@@ -627,31 +648,12 @@ int32_t ad4110_setup(struct ad4110_dev **device,
 			goto err_init;
 	}
 
-	if(init_param.data_length == AD4110_DATA_WL16) {
+	if(dev->data_length == AD4110_DATA_WL16) {
 		ret = ad4110_spi_int_reg_write_msk(dev,
 						   A4110_ADC,
 						   AD4110_REG_ADC_INTERFACE,
 						   AD4110_DATA_WL16,
 						   AD4110_REG_ADC_INTERFACE_WL16_MSK);
-		if (ret)
-			goto err_init;
-	}
-
-	if(init_param.afe_crc_en != AD4110_AFE_CRC_DISABLE) {
-		ret = ad4110_spi_int_reg_write(dev,
-					       A4110_AFE,
-					       AD4110_REG_AFE_CNTRL1,
-					       AD4110_REG_AFE_CNTRL1_CRC_EN);
-		if (ret)
-			goto err_init;
-	}
-
-	if(init_param.adc_crc_en != AD4110_ADC_CRC_DISABLE) {
-		ret = ad4110_spi_int_reg_write_msk(dev,
-						   A4110_ADC,
-						   AD4110_REG_ADC_INTERFACE,
-						   AD4110_ADC_CRC_EN(init_param.adc_crc_en),
-						   AD4110_REG_ADC_INTERFACE_CRC_EN_MSK);
 		if (ret)
 			goto err_init;
 	}
