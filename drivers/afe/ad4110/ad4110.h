@@ -142,6 +142,12 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
+enum ad4110_voltage_reference {
+	AD4110_EXT_REF = 0,
+	AD4110_INT_2_5V_REF = 2,
+	AD4110_AVDD5_REF = 3
+};
+
 enum ad4110_state {
 	AD4110_DISABLE,
 	AD4110_ENABLE
@@ -206,6 +212,7 @@ struct ad4110_dev {
 	/* SPI */
 	struct spi_desc			*spi_dev;
 	/* Device Settings */
+	enum ad4110_voltage_reference volt_ref;
 	enum ad4110_state		data_stat;
 	enum ad4110_data_word_length 	data_length;
 	enum ad4110_adc_crc_mode 	adc_crc_en;
@@ -219,6 +226,7 @@ struct ad4110_init_param {
 	/* SPI */
 	struct spi_init_param		spi_init;
 	/* Device Settings */
+	enum ad4110_voltage_reference volt_ref;
 	enum ad4110_state		data_stat;
 	enum ad4110_data_word_length 	data_length;
 	enum ad4110_afe_crc_mode	afe_crc_en;
@@ -249,6 +257,10 @@ int32_t ad4110_set_adc_mode(struct ad4110_dev *dev, enum ad4110_adc_mode mode);
 
 /* Set the gain. */
 int32_t ad4110_set_gain(struct ad4110_dev *dev, enum ad4110_gain gain);
+
+/* Set voltage reference. */
+int32_t ad4110_set_reference(struct ad4110_dev *dev,
+			     enum ad4110_voltage_reference ref);
 
 /* Set the operation mode. */
 int32_t ad4110_set_op_mode(struct ad4110_dev *dev, enum ad4110_op_mode mode);
