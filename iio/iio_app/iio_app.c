@@ -178,7 +178,7 @@ static int32_t network_setup(struct iio_init_param *iio_init_param,
 	if (status < 0)
 		return status;
 
-	status = wifi_connect(wifi, WIFI_SSID, WIFI_PWD);
+	//status = wifi_connect(wifi, WIFI_SSID, WIFI_PWD);
 	if (status < 0)
 		return status;
 

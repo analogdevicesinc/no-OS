@@ -61,8 +61,8 @@
 #endif //ADUCM_PLATFORM
 
 #ifdef USE_TCP_SOCKET
-#define WIFI_SSID	"RouterSSID"
-#define WIFI_PWD	"******"
+#define WIFI_SSID	"InternetSlave"
+#define WIFI_PWD	"xL9.uE03zQ3\"eP7#"
 #endif /* USE_TCP_SOCKET */
 
 #endif // __PARAMETERS_H__

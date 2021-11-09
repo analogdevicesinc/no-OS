@@ -330,7 +330,7 @@ int32_t wifi_init(struct wifi_desc **desc, struct wifi_init_param *param)
 
 	wifi_init_interface(ldesc);
 
-	result = at_run_cmd(ldesc->at, AT_RESET, AT_EXECUTE_OP, NULL);
+	//result = at_run_cmd(ldesc->at, AT_RESET, AT_EXECUTE_OP, NULL);
 	if (IS_ERR_VALUE(result))
 		goto at_err;
 
