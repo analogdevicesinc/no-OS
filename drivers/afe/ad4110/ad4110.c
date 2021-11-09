@@ -162,6 +162,45 @@ int32_t ad4110_set_gain(struct ad4110_dev *dev, enum ad4110_gain gain)
 }
 
 /***************************************************************************//**
+ * Set ADC clock.
+ *
+ * @param dev  - The device structure.
+ * @param clk - The clock mode.
+ * 		 Accepted values: AD4110_ADC_INT_CLK
+ * 				  AD4110_ADC_INT_CLK_CLKIO
+ * 				  AD4110_ADC_EXT_CLK
+ *
+ * @return SUCCESS in case of success, negative error code otherwise.
+*******************************************************************************/
+int32_t ad4110_set_adc_clk(struct ad4110_dev *dev, enum ad4110_adc_clk_sel clk)
+{
+	return ad4110_spi_int_reg_write_msk(dev,
+					    A4110_ADC,
+					    AD4110_REG_ADC_MODE,
+					    AD4110_REG_ADC_CLK_SEL(clk),
+					    AD4110_REG_ADC_CLK_SEL(0xF));
+}
+
+/***************************************************************************//**
+ * Set AFE clock.
+ *
+ * @param dev  - The device structure.
+ * @param clk - The clock mode.
+ * 		 Accepted values: AD4110_AFE_INT_CLOCK
+ * 				  AD4110_AFE_ADC_CLOCKED
+ *
+ * @return SUCCESS in case of success, negative error code otherwise.
+*******************************************************************************/
+int32_t ad4110_set_afe_clk(struct ad4110_dev *dev, enum ad4110_afe_clk_cfg clk)
+{
+	return ad4110_spi_int_reg_write_msk(dev,
+					    A4110_AFE,
+					    AD4110_REG_AFE_CLK_CTRL,
+					    AD4110_REG_AFE_CLK_CTRL_CFG(clk),
+					    AD4110_REG_AFE_CLK_CTRL_CFG(0xF));
+}
+
+/***************************************************************************//**
  * Set the voltage reference.
  *
  * @param dev  - The device structure.
@@ -651,6 +690,8 @@ int32_t ad4110_setup(struct ad4110_dev **device,
 	dev->op_mode = init_param.op_mode;
 	dev->gain = init_param.gain;
 	dev->volt_ref = init_param.volt_ref;
+	dev->adc_clk = init_param.adc_clk;
+	dev->afe_clk = init_param.afe_clk;
 
 	/* Device Settings */
 	ret = ad4110_spi_do_soft_reset(dev);
@@ -710,6 +751,21 @@ int32_t ad4110_setup(struct ad4110_dev **device,
 	ret = ad4110_set_reference(dev, dev->volt_ref);
 	if (ret)
 		goto err_init;
+
+	/* When AD4110_AFE_ADC_CLOCKED selected, adc_clk must be AD4110_ADC_INT_CLK_CLKIO */
+	if((dev->afe_clk == AD4110_AFE_ADC_CLOCKED)
+	    && (dev->adc_clk != AD4110_ADC_INT_CLK_CLKIO))
+		goto err_init;
+	else {
+		ret = ad4110_set_adc_clk(dev, dev->adc_clk);
+		if (ret)
+			goto err_init;
+	}
+
+	ret = ad4110_set_afe_clk(dev, dev->afe_clk);
+	if (ret)
+		goto err_init;
+
 	*device = dev;
 
 	printf("AD4110 successfully initialized\n");
