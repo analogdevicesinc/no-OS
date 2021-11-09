@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include "ad4110.h"
 #include "error.h"
+#include "irq.h"
 #include "print_log.h"
 
 /******************************************************************************/
@@ -660,6 +661,23 @@ int32_t ad4110_spi_int_reg_read(struct ad4110_dev *dev,
 }
 
 /***************************************************************************//**
+ * IRQ handler for ADC continuous read.
+*******************************************************************************/
+static void irq_adc_read(struct ad4110_callback_ctx *ctx)
+{
+	struct ad4110_dev *dev = ctx->dev;
+	if(ctx->buffer_size > 0) {
+		if(ad4110_spi_int_data_reg_read(ctx->dev, ctx->buffer))
+			pr_err("DATA reg could not be read \n");
+		ctx->buffer_size--;
+		ctx->buffer++;
+		if(irq_enable(dev->irq_desc, dev->nready_pin))
+			pr_err("IRQ_enable error \n");
+	} else if(irq_disable(dev->irq_desc, dev->nready_pin))
+		pr_err("IRQ_disable error \n");
+}
+
+/***************************************************************************//**
  * Initialize the device.
  *
  * @param device     - The device structure.
@@ -685,6 +703,8 @@ int32_t ad4110_setup(struct ad4110_dev **device,
 	dev->afe_crc_en = AD4110_AFE_CRC_DISABLE;
 	dev->adc_crc_en = AD4110_ADC_CRC_DISABLE;
 	dev->addr = init_param.addr;
+	dev->nready_pin = init_param.nready_pin;
+	dev->irq_desc = init_param.irq_desc;
 	dev->data_stat = init_param.data_stat;
 	dev->data_length = init_param.data_length;
 	dev->sync = init_param.sync;
@@ -787,6 +807,53 @@ err_init:
 	free(dev);
 	pr_err("AD4110 initialization error (%d)\n", ret);
 	return ret;
+}
+
+/***************************************************************************//**
+ * ADC continuous read fills buffer with buffer_size number of samples.
+ *
+ * @param dev          - The device structure.
+ * @param buffer       - The buffer.
+ * @param buffer_size  - The buffer size = number of samples.
+ *
+ * @return SUCCESS in case of success, negative error code otherwise.
+*******************************************************************************/
+int32_t ad4110_continuous_read(struct ad4110_dev *dev, int32_t *buffer,
+			       int32_t buffer_size)
+{
+	int32_t ret;
+
+	struct ad4110_callback_ctx ctx = {
+		.dev = dev,
+		.buffer = buffer,
+		.buffer_size = buffer_size,
+	};
+
+	struct callback_desc irq_callback = {
+		.callback = &irq_adc_read,
+		.ctx = &ctx
+	};
+
+	ret = irq_trigger_level_set(dev->irq_desc, dev->nready_pin, IRQ_LEVEL_LOW);
+	if (ret)
+		return ret;
+	ret = irq_register_callback(dev->irq_desc, dev->nready_pin, &irq_callback);
+	if (ret)
+		return ret;
+
+
+	ret = ad4110_set_adc_mode(dev, AD4110_CONTINOUS_CONV_MODE);
+	if (ret)
+		return ret;
+	// make sure adc is fully initialized before irq enabling
+	mdelay(2U);
+	ret = irq_enable(dev->irq_desc, dev->nready_pin);
+	if (ret)
+		return ret;
+
+	while(ctx.buffer_size != 0U);
+
+	return SUCCESS;
 }
 
 /***************************************************************************//**

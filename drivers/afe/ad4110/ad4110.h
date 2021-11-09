@@ -8,6 +8,7 @@
 #include "delay.h"
 #include "gpio.h"
 #include "spi.h"
+#include "irq.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -240,6 +241,9 @@ struct ad4110_dev {
 	enum ad4110_afe_clk_cfg		afe_clk;
 	enum ad4110_adc_clk_sel		adc_clk;
 	uint8_t				addr;
+	/* GPIO - used only for continuous mode */
+	struct irq_ctrl_desc *irq_desc;
+	uint32_t nready_pin;
 };
 
 struct ad4110_init_param {
@@ -257,6 +261,15 @@ struct ad4110_init_param {
 	enum ad4110_afe_clk_cfg		afe_clk;
 	enum ad4110_adc_clk_sel		adc_clk;
 	uint8_t				addr;
+	/* GPIO - used only for continuous mode */
+	struct irq_ctrl_desc *irq_desc;
+	uint32_t nready_pin;
+};
+
+struct ad4110_callback_ctx {
+	struct ad4110_dev *dev;
+	int32_t *buffer;
+	int32_t buffer_size;
 };
 
 /******************************************************************************/
@@ -313,6 +326,10 @@ int32_t ad4110_spi_int_reg_read(struct ad4110_dev *dev,
 				uint8_t reg_map,
 				uint8_t reg_addr,
 				uint32_t *reg_data);
+
+/* Fills buffer with buffer_size number of samples using irq */
+int32_t ad4110_continuous_read(struct ad4110_dev *dev, int32_t *buffer,
+			       int32_t buffer_size);
 
 /* SPI internal DATA register read from device. */
 int32_t ad4110_spi_int_data_reg_read(struct ad4110_dev *dev,
