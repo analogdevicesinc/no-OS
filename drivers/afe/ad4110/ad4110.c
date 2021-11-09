@@ -603,7 +603,13 @@ int32_t ad4110_setup(struct ad4110_dev **device,
 	if (ret)
 		goto err_init;
 
+	dev->afe_crc_en = AD4110_AFE_CRC_DISABLE;
+	dev->adc_crc_en = AD4110_ADC_CRC_DISABLE;
 	dev->addr = init_param.addr;
+	dev->data_stat = init_param.data_stat;
+	dev->data_length = init_param.data_length;
+	dev->op_mode = init_param.op_mode;
+	dev->gain = init_param.gain;
 
 	/* Device Settings */
 	ret = ad4110_spi_do_soft_reset(dev);
@@ -620,7 +626,6 @@ int32_t ad4110_setup(struct ad4110_dev **device,
 		if (ret)
 			goto err_init;
 	}
-	dev->data_stat = init_param.data_stat;
 
 	if(init_param.data_length == AD4110_DATA_WL16) {
 		ret = ad4110_spi_int_reg_write_msk(dev,
@@ -631,7 +636,6 @@ int32_t ad4110_setup(struct ad4110_dev **device,
 		if (ret)
 			goto err_init;
 	}
-	dev->data_length = init_param.data_length;
 
 	if(init_param.afe_crc_en != AD4110_AFE_CRC_DISABLE) {
 		ret = ad4110_spi_int_reg_write(dev,
@@ -641,7 +645,6 @@ int32_t ad4110_setup(struct ad4110_dev **device,
 		if (ret)
 			goto err_init;
 	}
-	dev->afe_crc_en = init_param.afe_crc_en;
 
 	if(init_param.adc_crc_en != AD4110_ADC_CRC_DISABLE) {
 		ret = ad4110_spi_int_reg_write_msk(dev,
@@ -652,18 +655,14 @@ int32_t ad4110_setup(struct ad4110_dev **device,
 		if (ret)
 			goto err_init;
 	}
-	dev->adc_crc_en = init_param.adc_crc_en;
 
-	ret = ad4110_set_op_mode(dev, init_param.op_mode);
+	ret = ad4110_set_op_mode(dev, dev->op_mode);
 	if (ret)
 		goto err_init;
-	dev->op_mode = init_param.op_mode;
 
-	ret = ad4110_set_gain(dev, init_param.gain);
+	ret = ad4110_set_gain(dev, dev->gain);
 	if (ret)
 		goto err_init;
-	dev->gain = init_param.gain;
-
 	*device = dev;
 
 	printf("AD4110 successfully initialized\n");
