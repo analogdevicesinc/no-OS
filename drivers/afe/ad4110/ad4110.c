@@ -394,8 +394,8 @@ int32_t ad4110_spi_int_reg_write(struct ad4110_dev *dev,
 	if(reg_addr >= AD4110_ADC_OFFSET0)
 		data_size = 4;
 
-	buf[0] = (reg_map << 7) | AD4110_CMD_WR_COM_REG(reg_addr);
-
+	buf[0] = (reg_map << 7) | AD4110_CMD_WR_COM_REG(reg_addr) |
+		 ((dev->addr << 4) & AD4110_DEV_ADDR_MASK);
 	switch(data_size) {
 	case 3:
 		buf[1] = (reg_data & 0xFF00) >> 8;
@@ -452,12 +452,10 @@ int32_t ad4110_spi_int_reg_read(struct ad4110_dev *dev,
 
 	data_size = ad4110_get_data_size(dev, reg_map, reg_addr);
 
-	buf[0] = (reg_map << 7) | AD4110_CMD_READ_COM_REG(reg_addr); // cmd byte
-	buf[1] = 0xAA; // dummy data byte
-	buf[2] = 0xAA; // dummy data byte
-	buf[3] = 0xAA; // dummy data byte
-	buf[4] = 0xAA; // dummy data byte
-	buf[5] = 0x00; // dummy data byte
+	buf[0] = (reg_map << 7) | AD4110_CMD_READ_COM_REG(reg_addr) |
+		 ((dev->addr << 4) & AD4110_DEV_ADDR_MASK); // cmd byte
+
+	memset(buf + 1, 0xAA, 5); // dummy data bytes
 
 	if(((dev->afe_crc_en != AD4110_AFE_CRC_DISABLE) &&
 	    (reg_map == A4110_AFE))||
@@ -538,6 +536,7 @@ int32_t ad4110_setup(struct ad4110_dev **device,
 	mdelay(10);
 	ret |= gpio_set_value(dev->gpio_reset, GPIO_HIGH);
 	mdelay(10);
+	dev->addr = init_param.addr;
 
 	/* Device Settings */
 	ad4110_spi_do_soft_reset(dev);

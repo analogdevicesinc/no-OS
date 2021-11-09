@@ -15,6 +15,7 @@
 
 #define AD4110_CMD_WR_COM_REG(x)   (0x00 | ((x) & 0xF)) // Write to Register x
 #define AD4110_CMD_READ_COM_REG(x) (0x40 | ((x) & 0xF)) // Read from Register x
+#define AD4110_DEV_ADDR_MASK	   (0x30) // Device address mask
 
 /* Register map */
 #define A4110_ADC 0x00
@@ -213,6 +214,7 @@ struct ad4110_dev {
 	enum ad4110_afe_crc_mode	afe_crc_en;
 	enum ad4110_op_mode 		op_mode;
 	enum ad4110_gain 		gain;
+	uint8_t				addr;
 };
 
 struct ad4110_init_param {
@@ -227,6 +229,7 @@ struct ad4110_init_param {
 	enum ad4110_adc_crc_mode	adc_crc_en;
 	enum ad4110_op_mode 		op_mode;
 	enum ad4110_gain 		gain;
+	uint8_t				addr;
 };
 
 /******************************************************************************/
