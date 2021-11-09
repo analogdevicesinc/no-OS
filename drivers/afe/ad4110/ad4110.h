@@ -104,8 +104,8 @@
 #define AD4110_REG_ADC_MODE_MSK			0x70
 #define AD4110_ADC_MODE(x)			(((x) & 0x7) << 4)
 #define AD4110_REG_ADC_MODE_REF_EN		(1 << 15)
-#define AD4110_REG_ADC_DELAY			(((x) & 0x7) << 8)
-#define AD4110_REG_ADC_CLK_SEL			(((x) & 0x3) << 3)
+#define AD4110_REG_ADC_DELAY(x)			(((x) & 0x7) << 8)
+#define AD4110_REG_ADC_CLK_SEL(x)		(((x) & 0x3) << 2)
 
 /* ADC_INTERFACE Register */
 #define AD4110_REG_ADC_INTERFACE_CRC_EN_MSK	0x0C
@@ -120,7 +120,7 @@
 #define AD4110_REG_ADC_CONFIG_CHAN_EN_1		(1 << 1)
 #define AD4110_REG_ADC_CONFIG_CHAN_EN_2		(1 << 2)
 #define AD4110_REG_ADC_CONFIG_CHAN_EN_3		(1 << 3)
-#define AD4110_REG_ADC_CONFIG_REF_SEL(x)	((((x) & 0x3) << 4)
+#define AD4110_REG_ADC_CONFIG_REF_SEL(x)	(((x) & 0x3) << 4)
 #define AD4110_REG_ADC_CONFIG_BIT_6		(1 << 6)
 #define AD4110_REG_ADC_CONFIG_AIN_BUFF(x)	((((x) & 0x3) << 10)
 #define AD4110_REG_ADC_CONFIG_BI_UNIPOLAR	(1 << 12)
@@ -132,8 +132,8 @@
 #define AD4110_REG_ADC_FILTER_EN_ENH		(1 << 11)
 
 /* ADC_GPIO_CONFIG Register */
-#define AD4110_REG_GPIO_CONFIG_ERR_EN(x)	((((x) & 0x3) << 9)
-#define AD4110_REG_GPIO_CONFIG_SYNC_EN		(1 << 11)
+#define AD4110_REG_GPIO_CONFIG_ERR_EN(x)	(((x) & 0x3) << 9)
+#define AD4110_REG_GPIO_CONFIG_SYNC_EN(x)	(((x) & 0x1) << 11)
 
 /* 8-bits wide checksum generated using the polynomial */
 #define AD4110_CRC8_POLY	0x07 // x^8 + x^2 + x^1 + x^0
@@ -153,12 +153,12 @@ enum ad4110_data_word_length {
 };
 
 enum ad4110_adc_mode {
-	AD4110_CONTINOUS_CONV_MODE,
-	AD4110_SINGLE_CONV_MODE,
-	AD4110_STANDBY_MODE,
-	AD4110_PW_DOWN_MODE,
+	AD4110_CONTINOUS_CONV_MODE = 0,
+	AD4110_SINGLE_CONV_MODE = 1,
+	AD4110_STANDBY_MODE = 2,
+	AD4110_PW_DOWN_MODE = 3,
 	AD4110_SYS_OFFSET_CAL = 6,
-	AD4110_SYS_GAIN_CAL
+	AD4110_SYS_GAIN_CAL = 7
 };
 
 enum ad4110_op_mode {
