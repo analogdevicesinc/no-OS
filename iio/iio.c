@@ -153,7 +153,7 @@ struct iio_desc {
 	uint32_t		nb_devs;
 	struct iio_interface	*trigs;
 	uint32_t		nb_trigs;
-	struct uart_desc	*uart_desc;
+	struct bu_desc		uart_desc[1];
 #ifdef ENABLE_IIO_NETWORK
 	/* FIFO for socket descriptors */
 	struct circular_buffer	*sockets;
@@ -272,8 +272,9 @@ static int32_t network_read(const void *data, uint32_t len)
 static ssize_t iio_phy_read(char *buf, size_t len)
 {
 	if (g_desc->phy_type == USE_UART)
-		return (ssize_t)uart_read(g_desc->uart_desc, (uint8_t *)buf,
-					  (size_t)len);
+		return (ssize_t)buart_read_nonblocking(g_desc->uart_desc,
+						       (uint8_t *)buf,
+						       (size_t)len);
 #ifdef ENABLE_IIO_NETWORK
 	else
 		return network_read((void *)buf, (uint32_t)len);
@@ -286,7 +287,7 @@ static ssize_t iio_phy_read(char *buf, size_t len)
 static ssize_t iio_phy_write(const char *buf, size_t len)
 {
 	if (g_desc->phy_type == USE_UART)
-		return (ssize_t)uart_write(g_desc->uart_desc,
+		return (ssize_t)buart_write(g_desc->uart_desc,
 					   (uint8_t *)buf, (size_t)len);
 #ifdef ENABLE_IIO_NETWORK
 	else
