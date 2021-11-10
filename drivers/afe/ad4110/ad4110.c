@@ -547,8 +547,6 @@ int32_t ad4110_spi_int_data_reg_read(struct ad4110_dev *dev,
 		return FAILURE;
 	}
 
-	*reg_data = data;
-
 	if(dev->adc_crc_en == AD4110_ADC_CRC_CRC) {
 		buf[0] = (A4110_ADC << 7) | AD4110_CMD_READ_COM_REG(AD4110_REG_DATA);
 		crc = ad4110_compute_crc8(&buf[0], data_size);
@@ -564,6 +562,8 @@ int32_t ad4110_spi_int_data_reg_read(struct ad4110_dev *dev,
 			return FAILURE;
 		}
 	}
+
+	*reg_data = data;
 
 	return SUCCESS;
 }
@@ -626,8 +626,6 @@ int32_t ad4110_spi_int_reg_read(struct ad4110_dev *dev,
 		return -EINVAL;
 	}
 
-	*reg_data = data;
-
 	if(((dev->afe_crc_en == AD4110_AFE_CRC) && (reg_map == A4110_AFE))||
 	    ((dev->adc_crc_en == AD4110_ADC_CRC_CRC) &&
 	     (reg_map == A4110_ADC))) {
@@ -646,6 +644,8 @@ int32_t ad4110_spi_int_reg_read(struct ad4110_dev *dev,
 			return FAILURE;
 		}
 	}
+
+	*reg_data = data;
 
 	return SUCCESS;
 }
