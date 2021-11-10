@@ -227,7 +227,7 @@ static void adxrs290_trigger_handler(void *device)
 {
 	int16_t data[ADXRS290_CHANNEL_COUNT];
 	struct iio_adxrs290_desc *iio_dev = device;
-	uint8_t n;
+	//uint8_t n;
 
 	//adxrs290_get_burst_data(iio_dev->dev, data, &n);
 	memset(data, 100, sizeof(data));
@@ -409,7 +409,7 @@ struct iio_device adxrs290_iio_descriptor = {
 	.debug_reg_write = (int32_t (*)())iio_adxrs290_reg_write
 };
 
-extern struct iio_trigger adxrs290_iio_trigger_descriptor = {
+struct iio_trigger adxrs290_iio_trigger_descriptor = {
 	.attributes = NULL,
 	.trigger_handler = adxrs290_trigger_handler
 };
