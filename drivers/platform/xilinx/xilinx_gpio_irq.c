@@ -93,7 +93,7 @@ static void xil_gpio_irq_handler(struct xil_gpio_irq_desc *param)
 			XGpioPs_IntrDisablePin(&param->my_Gpio, callback_desc->pin_nb);
 			XGpioPs_IntrClearPin(&param->my_Gpio, callback_desc->pin_nb);
 			callback_desc->callback.callback(callback_desc->callback.ctx, 0U, NULL);
-			if(param->retriggerable)
+			if(callback_desc->enabled)
 				XGpioPs_IntrEnablePin(&param->my_Gpio, callback_desc->pin_nb);
 		}
 	}
@@ -107,9 +107,22 @@ static void xil_gpio_irq_handler(struct xil_gpio_irq_desc *param)
  */
 int32_t xil_gpio_irq_disable(struct irq_ctrl_desc *desc, uint32_t irq_id)
 {
+	int32_t status;
 	struct xil_gpio_irq_desc *extra;
+	struct xil_callback_desc *callback_desc;
 
 	extra = desc->extra;
+
+	status = iterator_move_to_idx(extra->it, 0);
+	while(!status) {
+		iterator_read(extra->it, &callback_desc);
+		status = iterator_move(extra->it, 1);
+		if(callback_desc->pin_nb == irq_id) {
+			callback_desc->enabled = false;
+			break;
+		}
+	}
+
 	XGpioPs_IntrDisablePin(&extra->my_Gpio, irq_id);
 
 	return SUCCESS;
@@ -152,7 +165,6 @@ int32_t xil_gpio_irq_ctrl_init(struct irq_ctrl_desc **desc,
 
 	ldesc->extra = xil_desc;
 	xil_desc->parent_desc = xil_ip->parent_desc;
-	xil_desc->retriggerable = xil_ip->retriggerable;
 
 	status = list_init(&xil_desc->callback_list, LIST_DEFAULT, call_cmp);
 	if(status)
@@ -282,10 +294,22 @@ int32_t xil_gpio_irq_unregister(struct irq_ctrl_desc *desc, uint32_t irq_id)
  */
 int32_t xil_gpio_irq_enable(struct irq_ctrl_desc *desc, uint32_t irq_id)
 {
-	int32_t i;
+	int32_t status;
 	struct xil_gpio_irq_desc *extra;
+	struct xil_callback_desc *callback_desc;
 
 	extra = desc->extra;
+
+	status = iterator_move_to_idx(extra->it, 0);
+	while(!status) {
+		iterator_read(extra->it, &callback_desc);
+		status = iterator_move(extra->it, 1);
+		if(callback_desc->pin_nb == irq_id) {
+			callback_desc->enabled = true;
+			break;
+		}
+	}
+
 	XGpioPs_IntrEnablePin(&extra->my_Gpio, irq_id);
 
 	return SUCCESS;
