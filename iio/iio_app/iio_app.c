@@ -261,7 +261,7 @@ static int32_t irq_setup(struct irq_ctrl_desc **irq_desc)
 	struct irq_init_param irq_init_param = {
 		.irq_ctrl_id = INTC_DEVICE_ID,
 		.platform_ops = platform_irq_ops,
-		.extra = &platform_irq_init_par
+		.extra = platform_irq_init_par
 	};
 
 	status = irq_ctrl_init(irq_desc, &irq_init_param);
