@@ -171,8 +171,10 @@ int32_t ada4250_en_refbuf(struct ada4250_dev *dev, bool refbuf)
 	case ADA4250:
 		ret = ada4250_update(dev, ADA4250_REG_REFBUF_EN, ADA4250_REFBUF_MSK,
 				     ADA4250_REFBUF(refbuf));
+		break;
 	case ADA4230:
 		ret = gpio_set_value(dev->gpio_bufen, dev->refbuf_en);
+		break;
 	default:
 		return -ENODEV;
 	}
@@ -586,7 +588,7 @@ int32_t ada4250_init(struct ada4250_dev **device,
 	if (ret != SUCCESS)
 		return FAILURE;
 
-	ret = gpio_direction_output(&dev->gpio_bw, GPIO_HIGH);
+	ret = gpio_direction_output(dev->gpio_bw, GPIO_HIGH);
 	if (ret != SUCCESS)
 		return FAILURE;
 
