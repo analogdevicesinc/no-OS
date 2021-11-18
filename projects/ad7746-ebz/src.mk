@@ -2,7 +2,7 @@ CFLAGS += -DENABLE_UART_STDIO
 SRCS += $(NO-OS)/util/util.c \
 	$(PLATFORM_DRIVERS)/delay.c \
 	$(PLATFORM_DRIVERS)/timer.c \
-	$(PLATFORM_DRIVERS)/i2c.c \
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_i2c.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c \
 	$(PLATFORM_DRIVERS)/uart.c \
 	$(PLATFORM_DRIVERS)/uart_stdio.c \
@@ -10,6 +10,7 @@ SRCS += $(NO-OS)/util/util.c \
 	$(PLATFORM_DRIVERS)/platform_init.c \
 	$(DRIVERS)/cdc/ad7746/ad7746.c \
 	$(DRIVERS)/irq/irq.c \
+	$(DRIVERS)/i2c/i2c.c \
 	$(PROJECT)/src/app/headless.c
 
 INCS +=	$(INCLUDE)/uart.h \
@@ -23,6 +24,7 @@ INCS +=	$(INCLUDE)/uart.h \
 	$(INCLUDE)/i2c.h \
 	$(INCLUDE)/print_log.h \
 	$(PLATFORM_DRIVERS)/irq_extra.h \
+	$(PLATFORM_DRIVERS)/i2c_extra.h \
 	$(PLATFORM_DRIVERS)/timer_extra.h \
 	$(PLATFORM_DRIVERS)/uart_extra.h \
 	$(PLATFORM_DRIVERS)/uart_stdio.h \

@@ -13,6 +13,11 @@ SRCS +=	$(DRIVERS)/platform/$(PLATFORM)/$(PLATFORM)_irq.c
 INCS += $(INCLUDE)/irq.h
 INCS += $(DRIVERS)/platform/$(PLATFORM)/irq_extra.h
 
+SRCS += $(DRIVERS)/i2c/i2c.c
+SRCS +=	$(DRIVERS)/platform/$(PLATFORM)/$(PLATFORM)_i2c.c
+INCS += $(INCLUDE)/i2c.h
+INCS += $(DRIVERS)/platform/$(PLATFORM)/i2c_extra.h
+
 SRCS += $(DRIVERS)/spi/spi.c
 
 TINYIIOD=y

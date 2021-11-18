@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   aducm3029/i2c.c
+ *   @file   aducm3029/aducm3029_i2c.c
  *   @brief  Implementation of I2C driver for ADuCM302x
  *   @author Mihail Chindris (mihail.chindris@analog.com)
 ********************************************************************************
