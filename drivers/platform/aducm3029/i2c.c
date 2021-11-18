@@ -42,6 +42,7 @@
 /******************************************************************************/
 
 #include "i2c.h"
+#include "i2c_extra.h"
 #include "error.h"
 #include <stdlib.h>
 #include <drivers/i2c/adi_i2c.h>
@@ -311,3 +312,13 @@ int32_t i2c_read(struct i2c_desc *desc,
 
 	return ret;
 }
+
+/**
+ * @brief ADuCM3029 platform specific I2C platform ops structure
+ */
+const struct i2c_platform_ops aducm_i2c_ops = {
+	.i2c_ops_init = &i2c_init,
+	.i2c_ops_write = &i2c_write,
+	.i2c_ops_read = &i2c_read,
+	.i2c_ops_remove = &i2c_remove
+};
