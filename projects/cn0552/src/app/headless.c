@@ -49,6 +49,7 @@
 #include "iio_app.h"
 #include "ad7746.h"
 #include "i2c.h"
+#include "i2c_extra.h"
 #include "delay.h"
 #include "print_log.h"
 #include "platform_init.h"
@@ -68,6 +69,7 @@ int32_t main(void)
 	adcip.i2c_init = (struct i2c_init_param) {
 		.max_speed_hz = I2C_SPEED,
 		.slave_address = AD7746_ADDRESS,
+		.platform_ops = &aducm_i2c_ops
 	};
 	adcip.setup = (struct ad7746_setup) {
 		.exc = {

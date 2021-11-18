@@ -50,6 +50,7 @@
 #include "gpio.h"
 #include "timer.h"
 #include "irq_extra.h"
+#include "i2c_extra.h"
 
 #define MAX_SIZE_BASE_ADDR		1024
 
@@ -223,7 +224,7 @@ int main(void)
 		{
 			.slave_address = 0x64,
 			.max_speed_hz = 400000,
-			.platform_ops = NULL,
+			.platform_ops = &aducm_i2c_ops,
 			.extra = NULL
 		},
 		.drv_init_param.gpio0_init =
