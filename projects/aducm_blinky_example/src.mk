@@ -12,11 +12,11 @@
 #In aducm projects the name of the source dir should be different from src
 #Direcory where app srcs are stored
 
-SRC_DIRS +=	$(PROJECT)/app_src		\
-		$(PLATFORM_DRIVERS)		\
-		$(INCLUDE)			\
-		$(NO-OS)/util			\
-		$(DRIVERS)/gpio                 \
+SRC_DIRS +=	$(PROJECT)/app_src \
+		$(PLATFORM_DRIVERS) \
+		$(INCLUDE) \
+		$(NO-OS)/util \
+		$(DRIVERS)/gpio \
 
 #Include makefiles from each source directory if they exist
 SUB_MAKES= $(wildcard $(addsuffix /src.mk, $(SRC_DIRS)))
