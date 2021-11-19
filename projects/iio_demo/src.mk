@@ -2,27 +2,27 @@
 SRC_DIRS += $(PROJECT)/src/app
 SRC_DIRS += $(NO-OS)/iio/iio_app
 
-SRCS +=	$(NO-OS)/util/list.c					\
-	$(NO-OS)/util/fifo.c						\
+SRCS +=	$(NO-OS)/util/list.c \
+	$(NO-OS)/util/fifo.c \
 	$(NO-OS)/util/util.c
 
 #drivers
-SRCS += $(DRIVERS)/adc/adc_demo/adc_demo.c				\
-	$(DRIVERS)/adc/adc_demo/iio_adc_demo.c				\
-	$(DRIVERS)/dac/dac_demo/iio_dac_demo.c				\
-	$(DRIVERS)/dac/dac_demo/dac_demo.c                              \
+SRCS += $(DRIVERS)/adc/adc_demo/adc_demo.c \
+	$(DRIVERS)/adc/adc_demo/iio_adc_demo.c \
+	$(DRIVERS)/dac/dac_demo/iio_dac_demo.c \
+	$(DRIVERS)/dac/dac_demo/dac_demo.c \
 	$(DRIVERS)/irq/irq.c
 
-INCS += $(INCLUDE)/fifo.h					\
-	$(INCLUDE)/uart.h						\
-	$(INCLUDE)/list.h						\
-	$(INCLUDE)/util.h						\
+INCS += $(INCLUDE)/fifo.h \
+	$(INCLUDE)/uart.h \
+	$(INCLUDE)/list.h \
+	$(INCLUDE)/util.h \
 	$(INCLUDE)/error.h
 
-INCS += $(DRIVERS)/adc/adc_demo/iio_adc_demo.h			\
-		$(DRIVERS)/dac/dac_demo/dac_demo.h		\
-		$(DRIVERS)/dac/dac_demo/iio_dac_demo.h			\
-		$(DRIVERS)/adc/adc_demo/adc_demo.h		\
+INCS += $(DRIVERS)/adc/adc_demo/iio_adc_demo.h \
+		$(DRIVERS)/dac/dac_demo/dac_demo.h \
+		$(DRIVERS)/dac/dac_demo/iio_dac_demo.h \
+		$(DRIVERS)/adc/adc_demo/adc_demo.h \
 
 ifeq ($(PLATFORM),$(filter $(PLATFORM),xilinx aducm3029))
 SRCS += $(PLATFORM_DRIVERS)/delay.c
@@ -43,19 +43,19 @@ DISABLE_SECURE_SOCKET ?= y
 SRC_DIRS += $(NO-OS)/network
 SRCS	 += $(NO-OS)/util/circular_buffer.c
 SRCS	 += $(PLATFORM_DRIVERS)/timer.c
-INCS	 += $(INCLUDE)/timer.h		\
-		$(INCLUDE)/circular_buffer.h	\
-		$(PLATFORM_DRIVERS)/timer_extra.h\
+INCS	 += $(INCLUDE)/timer.h \
+		$(INCLUDE)/circular_buffer.h \
+		$(PLATFORM_DRIVERS)/timer_extra.h \
 		$(PLATFORM_DRIVERS)/rtc_extra.h
 endif
 
 SRCS += $(PLATFORM_DRIVERS)/uart.c \
 		$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c
 
-INCS += $(INCLUDE)/irq.h						\
-	$(INCLUDE)/rtc.h						\
-	$(INCLUDE)/gpio.h						\
-	$(PLATFORM_DRIVERS)/irq_extra.h					\
+INCS += $(INCLUDE)/irq.h \
+	$(INCLUDE)/rtc.h \
+	$(INCLUDE)/gpio.h \
+	$(PLATFORM_DRIVERS)/irq_extra.h \
 	$(PLATFORM_DRIVERS)/uart_extra.h
 endif
 
@@ -108,7 +108,7 @@ INCS += $(NO-OS)/network/tcp_socket.h \
 		$(NO-OS)/network/linux_socket/linux_socket.h
 
 INCS	 += $(INCLUDE)/circular_buffer.h
-INCS += $(PROJECT)/src/app/app_config.h  \
+INCS += $(PROJECT)/src/app/app_config.h \
 		$(PROJECT)/src/app/parameters.h	
 
 INCS += $(NO-OS)/iio/iio_app/iio_app.h 

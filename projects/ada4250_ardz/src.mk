@@ -9,12 +9,12 @@ SRC_DIRS += $(NO-OS)/drivers/gpio
 SRC_DIRS += $(PLATFORM_DRIVERS)
 SRC_DIRS += $(INCLUDE)
 
-SRCS += $(NO-OS)/util/util.c					\
-	$(NO-OS)/util/list.c					\
-	$(DRIVERS)/spi/spi.c					\
-	$(DRIVERS)/platform/$(PLATFORM)/$(PLATFORM)_spi.c 	\
+SRCS += $(NO-OS)/util/util.c \
+	$(NO-OS)/util/list.c \
+	$(DRIVERS)/spi/spi.c \
+	$(DRIVERS)/platform/$(PLATFORM)/$(PLATFORM)_spi.c \
 
-INCS += $(INCLUDE)/spi.h					\
+INCS += $(INCLUDE)/spi.h \
 	$(DRIVERS)/platform/$(PLATFORM)/spi_extra.h
 
 IGNORED_FILES += $(PLATFORM_DRIVERS)/uart_stdio.c

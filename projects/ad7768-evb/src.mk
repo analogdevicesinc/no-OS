@@ -51,15 +51,15 @@ ifeq (y,$(strip $(TINYIIOD)))
 LIBRARIES += iio
 SRC_DIRS += $(NO-OS)/iio/iio_app
 
-INCS +=	$(INCLUDE)/fifo.h						\
-	$(INCLUDE)/uart.h						\
-	$(INCLUDE)/list.h						\
-	$(PLATFORM_DRIVERS)/irq_extra.h					\
-	$(PLATFORM_DRIVERS)/uart_extra.h                                \
+INCS +=	$(INCLUDE)/fifo.h \
+	$(INCLUDE)/uart.h \
+	$(INCLUDE)/list.h \
+	$(PLATFORM_DRIVERS)/irq_extra.h \
+	$(PLATFORM_DRIVERS)/uart_extra.h \
 	$(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.h
-SRCS += $(NO-OS)/util/fifo.c						\
-	$(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.c			\
-	$(NO-OS)/util/list.c						\
-	$(PLATFORM_DRIVERS)/uart.c					\
+SRCS += $(NO-OS)/util/fifo.c \
+	$(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.c \
+	$(NO-OS)/util/list.c \
+	$(PLATFORM_DRIVERS)/uart.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c
 endif
