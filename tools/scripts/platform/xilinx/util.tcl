@@ -90,7 +90,7 @@ proc _vitis_project {} {
 		-hw $::hw						\
 		-proc $cpu						\
 		-os standalone						\
-		-template  {Empty Application}
+		-template  {Empty Application(C)}
 
 	closehw $::hw
 
