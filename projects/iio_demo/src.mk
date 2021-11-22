@@ -65,15 +65,19 @@ SRCS += $(STM32CUBE)/STM32CubeF4/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.
 	$(STM32CUBE)/STM32CubeF4/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c \
 	$(STM32CUBE)/STM32CubeF4/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c \
 	$(STM32CUBE)/STM32CubeF4/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c \
-	$(STM32CUBE)/STM32CubeF4/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c
+	$(STM32CUBE)/STM32CubeF4/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c \
+	$(STM32CUBE)/STM32CubeF4/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c.c
+
 
 SRCS += $(PLATFORM_DRIVERS)/stm32_delay.c \
 	$(PLATFORM_DRIVERS)/stm32_uart.c \
+	$(PLATFORM_DRIVERS)/stm32_i2c.c \
 	$(PLATFORM_DRIVERS)/stm32_uart_stdio.c \
 	$(PROJECT)/src/hal/stm32/stm32f4xx_hal_msp.c \
 	$(PROJECT)/src/hal/stm32/stm32f4xx_it.c \
 	$(PROJECT)/src/hal/stm32/sysmem.c \
-	$(PROJECT)/src/hal/stm32/system_stm32f4xx.c
+	$(PROJECT)/src/hal/stm32/system_stm32f4xx.c \
+	$(DRIVERS)/i2c/i2c.c
 
 ASM_SRCS = $(PROJECT)/src/startup/startup_stm32f446retx.s
 
@@ -83,7 +87,9 @@ INCS += $(PROJECT)/src/hal/stm32/main.h \
 	$(PROJECT)/src/hal/stm32/stm32f4xx_hal_conf.h \
 	$(PROJECT)/src/hal/stm32/stm32f4xx_it.h \
 	$(PROJECT)/src/hal/stm32/stm32_hal.h \
-	$(PLATFORM_DRIVERS)/stm32_uart.h
+	$(PLATFORM_DRIVERS)/stm32_uart.h \
+	$(PLATFORM_DRIVERS)/stm32_i2c.h \
+	$(INCLUDE)/i2c.h
 
 LSCRIPT = $(PROJECT)/src/linker/STM32F446RETX_FLASH.ld
 endif

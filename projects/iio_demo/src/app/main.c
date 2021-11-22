@@ -62,6 +62,8 @@
 
 #ifdef STM32_PLATFORM
 #include "stm32_hal.h"
+#include "stm32_i2c.h"
+#include "i2c.h"
 #endif
 
 #include "error.h"
@@ -177,6 +179,26 @@ int main(void)
 	status = platform_init();
 	if (status != SUCCESS)
 		return status;
+
+	// #############################
+	int ret;
+	struct stm32_i2c_init_param xiip = {
+		.base = I2C1,
+	};
+	struct i2c_init_param iip = {
+		.max_speed_hz = 400000,
+		.slave_address = 0x70,
+		.platform_ops = &stm32_i2c_ops,
+		.extra = &xiip,
+	};
+	struct i2c_desc *i2c;
+	ret = i2c_init(&i2c, &iip);
+	if (ret) {
+		printf("i2c_init failed with %d\n", ret);
+		return ret;
+	}
+
+	// #############################
 
 	struct iio_data_buffer adc_buff = {
 		.buff = (void *)ADC_DDR_BASEADDR,
