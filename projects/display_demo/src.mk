@@ -2,8 +2,8 @@
 SRCS += $(PROJECT)/src/app/main.c \
         $(DRIVERS)/display/ssd_1306/ssd_1306.c \
         $(DRIVERS)/display/display.c \
-	$(DRIVERS)/gpio/gpio.c \
-        $(DRIVERS)/spi/spi.c \
+	$(DRIVERS)/api/gpio.c \
+        $(DRIVERS)/api/spi.c \
         $(DRIVERS)/platform/xilinx/xilinx_spi.c \
         $(DRIVERS)/platform/xilinx/xilinx_gpio.c \
 	$(NO-OS)/util/font_8x8.c

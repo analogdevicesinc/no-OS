@@ -30,8 +30,8 @@ SRCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c \
 	$(DRIVERS)/axi_core/jesd204/axi_jesd204_rx.c \
 	$(DRIVERS)/axi_core/jesd204/axi_jesd204_tx.c \
 	$(NO-OS)/util/util.c \
-	$(DRIVERS)/spi/spi.c \
-	$(DRIVERS)/gpio/gpio.c
+	$(DRIVERS)/api/spi.c \
+	$(DRIVERS)/api/gpio.c
 ifeq (xilinx,$(strip $(PLATFORM)))
 SRCS += $(DRIVERS)/axi_core/jesd204/xilinx_transceiver.c \
 	$(DRIVERS)/axi_core/jesd204/axi_adxcvr.c \
@@ -57,7 +57,7 @@ SRCS += $(PLATFORM_DRIVERS)/uart.c \
 	$(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.c \
 	$(DRIVERS)/axi_core/iio_axi_dac/iio_axi_dac.c \
 	$(NO-OS)/iio/iio_app/iio_app.c \
-	$(DRIVERS)/irq/irq.c
+	$(DRIVERS)/api/irq.c
 endif
 INCS +=	$(PROJECT)/src/app/app_config.h \
 	$(PROJECT)/src/devices/ad9528/ad9528.h \

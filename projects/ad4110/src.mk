@@ -10,9 +10,9 @@
 ################################################################################
 
 SRC_DIRS += $(PROJECT)/src
-SRCS += $(DRIVERS)/spi/spi.c \
-	$(DRIVERS)/irq/irq.c \
-	$(DRIVERS)/gpio/gpio.c \
+SRCS += $(DRIVERS)/api/spi.c \
+	$(DRIVERS)/api/irq.c \
+	$(DRIVERS)/api/gpio.c \
 	$(DRIVERS)/afe/ad4110/ad4110.c
 				
 SRCS += $(PLATFORM_DRIVERS)/xilinx_spi.c \

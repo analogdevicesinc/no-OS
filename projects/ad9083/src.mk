@@ -20,8 +20,8 @@ SRCS += $(PROJECT)/src/app.c \
 	$(PROJECT)/src/app_clocking.c \
 	$(PROJECT)/src/app_jesd.c \
 	$(PROJECT)/src/uc/uc_settings.c \
-	$(DRIVERS)/spi/spi.c \
-	$(DRIVERS)/gpio/gpio.c \
+	$(DRIVERS)/api/spi.c \
+	$(DRIVERS)/api/gpio.c \
 	$(DRIVERS)/frequency/ad9528/ad9528.c
 
 SRCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c \
@@ -71,7 +71,7 @@ SRCS += $(NO-OS)/util/fifo.c \
 	$(NO-OS)/util/list.c \
 	$(PLATFORM_DRIVERS)/uart.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c \
-	$(DRIVERS)/irq/irq.c \
+	$(DRIVERS)/api/irq.c \
 
 INCS += $(INCLUDE)/fifo.h \
 	$(INCLUDE)/irq.h \

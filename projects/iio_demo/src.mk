@@ -10,7 +10,8 @@ SRCS +=	$(NO-OS)/util/list.c \
 SRCS += $(DRIVERS)/adc/adc_demo/adc_demo.c \
 	$(DRIVERS)/adc/adc_demo/iio_adc_demo.c \
 	$(DRIVERS)/dac/dac_demo/iio_dac_demo.c \
-	$(DRIVERS)/dac/dac_demo/dac_demo.c
+	$(DRIVERS)/dac/dac_demo/dac_demo.c \
+	$(DRIVERS)/api/irq.c
 
 INCS += $(INCLUDE)/fifo.h \
 	$(INCLUDE)/uart.h \
@@ -25,7 +26,7 @@ INCS += $(DRIVERS)/adc/adc_demo/iio_adc_demo.h \
 
 ifeq ($(PLATFORM),$(filter $(PLATFORM),xilinx aducm3029))
 SRCS += $(PLATFORM_DRIVERS)/delay.c \
-	$(DRIVERS)/irq/irq.c
+	$(DRIVERS)/api/irq.c
 endif
 INCS += $(INCLUDE)/delay.h
 

@@ -24,9 +24,9 @@ SRC_DIRS += $(PLATFORM_DRIVERS)
 SRC_DIRS += $(NO-OS)/iio/iio_app
 SRC_DIRS += $(INCLUDE)
 
-SRCS +=	$(DRIVERS)/irq/irq.c \
-	$(DRIVERS)/gpio/gpio.c \
+SRCS +=	$(DRIVERS)/api/irq.c \
+	$(DRIVERS)/api/gpio.c \
 	$(NO-OS)/util/list.c \
 	$(NO-OS)/util/fifo.c \
 	$(NO-OS)/util/util.c \
-	$(DRIVERS)/spi/spi.c
+	$(DRIVERS)/api/spi.c

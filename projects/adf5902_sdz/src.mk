@@ -10,8 +10,8 @@
 ################################################################################
 
 SRCS += $(PROJECT)/src/adf5902_sdz.c
-SRCS += $(DRIVERS)/spi/spi.c \
-	$(DRIVERS)/gpio/gpio.c \
+SRCS += $(DRIVERS)/api/spi.c \
+	$(DRIVERS)/api/gpio.c \
 	$(DRIVERS)/frequency/adf5902/adf5902.c
 SRCS +=	$(PLATFORM_DRIVERS)/axi_io.c \
 	$(PLATFORM_DRIVERS)/xilinx_spi.c \
