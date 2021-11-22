@@ -209,6 +209,7 @@ int32_t xil_gpio_direction_input(struct gpio_desc *desc)
 {
 	struct xil_gpio_desc	*extra;
 #ifdef XGPIO_H
+	uint8_t pin = desc->number;
 	uint32_t channel = 1;
 	uint32_t config	 = 0;
 #endif
@@ -218,14 +219,14 @@ int32_t xil_gpio_direction_input(struct gpio_desc *desc)
 	case GPIO_PL:
 #ifdef XGPIO_H
 		/* We assume that pin 32 is the first pin from channel 2 */
-		if (desc->number >= 32) {
+		if (pin >= 32) {
 			channel = 2;
-			desc->number -= 32;
+			pin -= 32;
 		}
 
 		config = XGpio_GetDataDirection((XGpio *)extra->instance,
 						channel);
-		config |= (1 << desc->number);
+		config |= (1 << pin);
 		XGpio_SetDataDirection((XGpio *)extra->instance,
 				       channel,
 				       config);
