@@ -126,7 +126,6 @@ ps_error:
 error:
 	default:
 		return FAILURE;
-		break;
 	}
 
 	return SUCCESS;
@@ -241,7 +240,6 @@ int32_t xil_gpio_direction_input(struct gpio_desc *desc)
 		break;
 	default:
 		return FAILURE;
-		break;
 	}
 
 	return SUCCESS;
@@ -307,7 +305,6 @@ int32_t xil_gpio_direction_output(struct gpio_desc *desc,
 		break;
 	default:
 		return FAILURE;
-		break;
 	}
 
 	return SUCCESS;
@@ -354,7 +351,6 @@ int32_t xil_gpio_get_direction(struct gpio_desc *desc,
 		break;
 	default:
 		return FAILURE;
-		break;
 	}
 
 	return SUCCESS;
@@ -403,7 +399,6 @@ int32_t xil_gpio_set_value(struct gpio_desc *desc,
 		break;
 	default:
 		return FAILURE;
-		break;
 	}
 
 	return SUCCESS;
@@ -449,7 +444,6 @@ int32_t xil_gpio_get_value(struct gpio_desc *desc,
 		break;
 	default:
 		return FAILURE;
-		break;
 	}
 
 	return SUCCESS;

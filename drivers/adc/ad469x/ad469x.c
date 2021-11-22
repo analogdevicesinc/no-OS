@@ -414,7 +414,6 @@ int32_t ad469x_set_channel_sequence(struct ad469x_dev *dev,
 
 	default:
 		return FAILURE;
-		break;
 	}
 
 	dev->ch_sequence = seq;

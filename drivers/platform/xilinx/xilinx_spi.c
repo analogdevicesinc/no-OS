@@ -344,7 +344,6 @@ error:
 #endif
 	default:
 		return FAILURE;
-		break;
 	}
 
 	if(xdesc)
@@ -446,7 +445,6 @@ int32_t xil_spi_write_and_read(struct spi_desc *desc,
 error:
 	default:
 		return FAILURE;
-		break;
 	}
 
 	return ret;

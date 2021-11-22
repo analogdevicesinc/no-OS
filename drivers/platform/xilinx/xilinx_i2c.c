@@ -370,7 +370,6 @@ error:
 	default:
 
 		return FAILURE;
-		break;
 	}
 
 	free(desc->extra);
@@ -439,7 +438,6 @@ error:
 	default:
 
 		return FAILURE;
-		break;
 	}
 
 	return SUCCESS;
