@@ -214,7 +214,6 @@ int32_t uart_write(struct uart_desc *desc, const uint8_t *data,
 		break;
 	default:
 		return FAILURE;
-		break;
 	}
 
 	return SUCCESS;
@@ -314,7 +313,6 @@ static int32_t uart_irq_init(struct uart_desc *descriptor)
 		break;
 	default:
 		return FAILURE;
-		break;
 	}
 
 	status = irq_enable(xil_uart_desc->irq_desc, xil_uart_desc->irq_id);

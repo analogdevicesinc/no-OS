@@ -499,7 +499,6 @@ static int32_t spi_engine_write_cmd(struct spi_desc *desc,
 	default:
 
 		return FAILURE;
-		break;
 	}
 
 	return SUCCESS;

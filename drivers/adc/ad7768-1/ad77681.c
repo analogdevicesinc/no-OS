@@ -451,7 +451,6 @@ int32_t ad77681_update_sample_rate(struct ad77681_dev *dev)
 		break;
 	default:
 		return FAILURE;
-		break;
 	}
 
 	/* Finding out decimation ratio */
@@ -496,7 +495,6 @@ int32_t ad77681_update_sample_rate(struct ad77681_dev *dev)
 		break;
 	default:
 		return FAILURE;
-		break;
 	}
 
 	/* Sample rate to Hz */
@@ -538,7 +536,6 @@ int32_t ad77681_SINC3_ODR(struct ad77681_dev *dev,
 		break;
 	default:
 		return FAILURE;
-		break;
 	}
 
 	odr = ((float)(dev->mclk * 1000.0) / (sinc3_odr * (float)(32 * mclk_div))) - 1;
@@ -1355,7 +1352,6 @@ int32_t ad77681_gpio_read(struct ad77681_dev *dev,
 		break;
 	default:
 		return FAILURE;
-		break;
 	}
 
 	return ret;
@@ -1415,7 +1411,6 @@ int32_t ad77681_gpio_write(struct ad77681_dev *dev,
 		break;
 	default:
 		return FAILURE;
-		break;
 	}
 
 	return ret;
@@ -1475,7 +1470,6 @@ int32_t ad77681_gpio_inout(struct ad77681_dev *dev,
 		break;
 	default:
 		return FAILURE;
-		break;
 	}
 
 	return ret;
@@ -1578,7 +1572,6 @@ int32_t ad77681_gpio_open_drain(struct ad77681_dev *dev,
 		break;
 	default:
 		return FAILURE;
-		break;
 	}
 
 	return ret;
