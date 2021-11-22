@@ -6,7 +6,8 @@ SRC_DIRS += $(NO-OS)/iio/iio_app
 # Add to SRCS source files to be build in the project
 SRCS += $(NO-OS)/drivers/adc/ad7124/ad7124.c \
 	$(NO-OS)/drivers/adc/ad7124/iio_ad7124.c \
-	$(NO-OS)/drivers/spi/spi.c
+	$(DRIVERS)/api/spi.c \
+	$(DRIVERS)/api/irq.c
 
 # Add to INCS inlcude files to be build in the porject
 INCS += $(NO-OS)/drivers/adc/ad7124/ad7124.h \
@@ -15,7 +16,6 @@ INCS += $(NO-OS)/drivers/adc/ad7124/ad7124.h \
 SRC_DIRS += $(PLATFORM_DRIVERS)
 SRC_DIRS += $(NO-OS)/util
 SRC_DIRS += $(INCLUDE)
-SRC_DIRS += $(NO-OS)/drivers/irq
 
 TINYIIOD=y
 

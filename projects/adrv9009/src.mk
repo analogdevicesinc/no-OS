@@ -48,8 +48,8 @@ SRCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c \
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.c \
 	$(DRIVERS)/axi_core/jesd204/axi_jesd204_rx.c \
 	$(DRIVERS)/axi_core/jesd204/axi_jesd204_tx.c \
-	$(DRIVERS)/spi/spi.c \
-	$(DRIVERS)/gpio/gpio.c
+	$(DRIVERS)/api/spi.c \
+	$(DRIVERS)/api/gpio.c
 ifeq (y,$(strip $(TINYIIOD)))
 SRC_DIRS += $(NO-OS)/iio/iio_app
 LIBRARIES += iio
@@ -57,7 +57,7 @@ SRCS += $(NO-OS)/util/fifo.c \
 	$(NO-OS)/util/list.c \
 	$(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.c \
 	$(DRIVERS)/axi_core/iio_axi_dac/iio_axi_dac.c \
-	$(DRIVERS)/irq/irq.c \
+	$(DRIVERS)/api/irq.c \
 	$(PLATFORM_DRIVERS)/uart.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c
 endif

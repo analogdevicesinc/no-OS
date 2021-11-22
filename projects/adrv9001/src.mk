@@ -27,8 +27,8 @@ INCS += $(PROJECT)/src/hal/parameters.h \
 	$(PROJECT)/src/firmware/Navassa_Stream.h
 # no-OS drivers
 SRCS += $(PLATFORM_DRIVERS)/xilinx_gpio.c \
-	$(NO-OS)/drivers/gpio/gpio.c \
-	$(DRIVERS)/spi/spi.c \
+	$(DRIVERS)/api/gpio.c \
+	$(DRIVERS)/api/spi.c \
 	$(PLATFORM_DRIVERS)/xilinx_spi.c \
 	$(PLATFORM_DRIVERS)/delay.c \
 	$(NO-OS)/util/util.c \
@@ -62,7 +62,7 @@ SRCS += $(PROJECT)/src/app/app_iio.c \
 	$(NO-OS)/util/fifo.c \
 	$(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.c \
 	$(DRIVERS)/axi_core/iio_axi_dac/iio_axi_dac.c \
-	$(DRIVERS)/irq/irq.c
+	$(DRIVERS)/api/irq.c
 INCS += $(PROJECT)/src/app/app_iio.h \
 	$(INCLUDE)/uart.h \
 	$(INCLUDE)/irq.h \

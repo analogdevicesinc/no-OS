@@ -19,8 +19,8 @@ SRCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c \
 	$(DRIVERS)/axi_core/jesd204/axi_jesd204_rx.c \
 	$(DRIVERS)/axi_core/jesd204/xilinx_transceiver.c \
 	$(DRIVERS)/io-expander/demux_spi/demux_spi.c \
-	$(DRIVERS)/spi/spi.c \
-	$(DRIVERS)/gpio/gpio.c \
+	$(DRIVERS)/api/spi.c \
+	$(DRIVERS)/api/gpio.c \
 	$(DRIVERS)/adc/ad9250/ad9250.c \
 	$(DRIVERS)/frequency/ad9517/ad9517.c \
 	$(NO-OS)/util/util.c
@@ -33,7 +33,7 @@ LIBRARIES += iio
 SRCS += $(NO-OS)/util/fifo.c \
 	$(NO-OS)/util/list.c \
 	$(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.c \
-	$(DRIVERS)/irq/irq.c \
+	$(DRIVERS)/api/irq.c \
 	$(NO-OS)/iio/iio_app/iio_app.c \
 	$(PLATFORM_DRIVERS)/uart.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c

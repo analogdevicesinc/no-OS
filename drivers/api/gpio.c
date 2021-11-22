@@ -126,7 +126,7 @@ int32_t gpio_direction_output(struct gpio_desc *desc,
 {
 	if (desc)
 		return desc->platform_ops->
-			gpio_ops_direction_output(desc, value);
+		       gpio_ops_direction_output(desc, value);
 	else
 		return SUCCESS;
 }
@@ -144,7 +144,7 @@ int32_t gpio_get_direction(struct gpio_desc *desc,
 {
 	if (desc)
 		return desc->platform_ops->
-			gpio_ops_get_direction(desc, direction);
+		       gpio_ops_get_direction(desc, direction);
 	else
 		return SUCCESS;
 }

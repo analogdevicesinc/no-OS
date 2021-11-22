@@ -17,7 +17,7 @@ SRC_DIRS += $(PROJECT)/src \
 
 ifeq (y,$(strip $(TINYIIOD)))
 SRC_DIRS += $(DRIVERS)/axi_core/iio_axi_adc \
-	    $(DRIVERS)/irq/irq.c \
+	    $(DRIVERS)/api/irq.c \
 		$(NO-OS)/iio/iio_app
 
 SRCS	+= $(PLATFORM_DRIVERS)/uart.c \
@@ -31,8 +31,8 @@ INCS	+= $(INCLUDE)/uart.h \
 		
 endif
 
-SRCS += $(DRIVERS)/spi/spi.c \
-	$(DRIVERS)/gpio/gpio.c \
+SRCS += $(DRIVERS)/api/spi.c \
+	$(DRIVERS)/api/gpio.c \
 	$(DRIVERS)/frequency/hmc7044/hmc7044.c
 SRCS += $(DRIVERS)/axi_core/jesd204/axi_adxcvr.c \
 	$(DRIVERS)/axi_core/jesd204/axi_jesd204_rx.c \

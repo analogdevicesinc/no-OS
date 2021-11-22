@@ -26,8 +26,8 @@ SRCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c \
 	$(DRIVERS)/frequency/ad9523/ad9523.c \
 	$(DRIVERS)/adc/ad9680/ad9680.c \
 	$(DRIVERS)/dac/ad9144/ad9144.c \
-	$(DRIVERS)/spi/spi.c \
-	$(DRIVERS)/gpio/gpio.c \
+	$(DRIVERS)/api/spi.c \
+	$(DRIVERS)/api/gpio.c \
 	$(NO-OS)/util/util.c
 SRCS +=	$(PLATFORM_DRIVERS)/axi_io.c \
 	$(PLATFORM_DRIVERS)/xilinx_spi.c \
@@ -41,7 +41,7 @@ SRCS += $(NO-OS)/util/fifo.c \
 	$(DRIVERS)/dac/ad9144/iio_ad9144.c \
 	$(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.c \
 	$(DRIVERS)/axi_core/iio_axi_dac/iio_axi_dac.c \
-	$(DRIVERS)/irq/irq.c \
+	$(DRIVERS)/api/irq.c \
 	$(PLATFORM_DRIVERS)/uart.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c
 endif

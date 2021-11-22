@@ -17,8 +17,8 @@ SRCS += $(DRIVERS)/rf-transceiver/ad9361/ad9361_api.c \
 SRCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c \
 	$(DRIVERS)/axi_core/axi_dac_core/axi_dac_core.c \
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.c \
-	$(DRIVERS)/spi/spi.c \
-	$(DRIVERS)/gpio/gpio.c \
+	$(DRIVERS)/api/spi.c \
+	$(DRIVERS)/api/gpio.c \
 	$(NO-OS)/util/util.c
 SRCS +=	$(PLATFORM_DRIVERS)/axi_io.c
 SRCS +=	$(PLATFORM_DRIVERS)/$(PLATFORM)_spi.c \
@@ -91,7 +91,7 @@ INCS += $(INCLUDE)/fifo.h \
 endif
 ifeq (xilinx,$(strip $(PLATFORM)))
 SRCS += $(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c \
-	$(DRIVERS)/irq/irq.c
+	$(DRIVERS)/api/irq.c
 	
 INCS += $(PLATFORM_DRIVERS)/irq_extra.h \
 	$(PLATFORM_DRIVERS)/spi_extra.h \

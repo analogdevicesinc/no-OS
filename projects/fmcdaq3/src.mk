@@ -15,6 +15,7 @@ SRCS += $(PROJECT)/src/app/fmcdaq3.c
 ifeq (y,$(strip $(TINYIIOD)))
 SRCS += $(PROJECT)/src/app/app_iio.c
 endif
+
 SRCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c \
 	$(DRIVERS)/axi_core/axi_dac_core/axi_dac_core.c \
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.c \
@@ -26,8 +27,8 @@ SRCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c \
 	$(DRIVERS)/frequency/ad9528/ad9528.c \
 	$(DRIVERS)/adc/ad9680/ad9680.c \
 	$(DRIVERS)/dac/ad9152/ad9152.c \
-	$(DRIVERS)/spi/spi.c \
-	$(DRIVERS)/gpio/gpio.c \
+	$(DRIVERS)/api/spi.c \
+	$(DRIVERS)/api/gpio.c \
 	$(NO-OS)/util/util.c
 SRCS +=	$(PLATFORM_DRIVERS)/axi_io.c \
 	$(PLATFORM_DRIVERS)/xilinx_spi.c \
@@ -41,7 +42,7 @@ SRCS += $(NO-OS)/util/fifo.c \
 	$(DRIVERS)/axi_core/iio_axi_dac/iio_axi_dac.c \
 	$(DRIVERS)/adc/ad9680/iio_ad9680.c \
 	$(DRIVERS)/dac/ad9152/iio_ad9152.c \
-	$(DRIVERS)/irq/irq.c \
+	$(DRIVERS)/api/irq.c \
 	$(PLATFORM_DRIVERS)/uart.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c
 endif

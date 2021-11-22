@@ -16,14 +16,14 @@ SRCS += $(PROJECT)/src/app_iio.c
 endif
 SRCS += $(DRIVERS)/dac/ad9739a/ad9739a.c \
 	$(DRIVERS)/frequency/adf4350/adf4350.c \
-	$(DRIVERS)/spi/spi.c \
+	$(DRIVERS)/api/spi.c \
 	$(DRIVERS)/axi_core/axi_dac_core/axi_dac_core.c \
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.c \
 	$(NO-OS)/util/util.c
 ifeq (y,$(strip $(TINYIIOD)))
 SRCS += $(NO-OS)/util/fifo.c \
 	$(DRIVERS)/axi_core/iio_axi_dac/iio_axi_dac.c \
-	$(DRIVERS)/irq/irq.c \
+	$(DRIVERS)/api/irq.c \
 	$(NO-OS)/util/list.c \
 	$(PLATFORM_DRIVERS)/uart.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c

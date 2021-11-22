@@ -14,8 +14,8 @@ ifeq (y,$(strip $(TINYIIOD)))
 LIBRARIES += iio
 SRCS += $(PROJECT)/src/app_iio.c
 endif
-SRCS += $(DRIVERS)/spi/spi.c \
-	$(DRIVERS)/gpio/gpio.c \
+SRCS += $(DRIVERS)/api/spi.c \
+	$(DRIVERS)/api/gpio.c \
 	$(DRIVERS)/frequency/hmc7044/hmc7044.c \
 	$(DRIVERS)/dac/ad917x/ad9172.c \
 	$(DRIVERS)/dac/ad917x/ad917x_api/ad917x_api.c \

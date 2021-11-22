@@ -12,8 +12,8 @@
 SRC_DIRS += $(PROJECT)/src
 SRC_DIRS += $(DRIVERS)/adc/ad713x
 
-SRCS += $(DRIVERS)/spi/spi.c \
-	$(DRIVERS)/gpio/gpio.c \
+SRCS += $(DRIVERS)/api/spi.c \
+	$(DRIVERS)/api/gpio.c \
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.c \
 	$(DRIVERS)/axi_core/spi_engine/spi_engine.c \
 	$(NO-OS)/util/util.c
@@ -26,7 +26,7 @@ LIBRARIES += iio
 SRC_DIRS += $(NO-OS)/iio/iio_app
 SRCS += $(PLATFORM_DRIVERS)/uart.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c \
-	$(DRIVERS)/irq/irq.c \
+	$(DRIVERS)/api/irq.c \
 	$(NO-OS)/util/fifo.c \
 	$(NO-OS)/util/list.c	
 endif
