@@ -100,8 +100,8 @@ proc _vitis_project {} {
 	# Configure the project
 	_project_config "app" "config"
 
-	# Build the project
-	app build -name app
+	# Build bsp for make
+	bsp regenerate
 }
 
 proc _xsdk_project {} {
