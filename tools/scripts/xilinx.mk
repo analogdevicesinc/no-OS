@@ -157,6 +157,14 @@ $(PROJECT_TARGET): $(TEMP_DIR)/arch.txt
 	$(MUTE)	$(call tcl_util, create_project)  $(HIDE)
 	$(MUTE) $(call set_one_time_rule,$@)
 
+PHONY += sd_card
+sd_card:
+ifeq (,$(findstring sys_mb,$(strip $(ARCH))))
+	$(MUTE)	$(call tcl_util, sd_card_build)  $(HIDE)
+else
+	$(MUTE) echo Unable to create sd_card for microblaze
+endif
+
 clean_all: xilinx_clean_all
 
 xilinx_clean_all:
