@@ -33,7 +33,6 @@ jobs:
                -builds_dir $(BUILDS_DIR)
                --build_exports'
     displayName: 'Run project build with exports'
-    condition: eq(variables.isMaster, true)
   - task: PublishPipelineArtifact@1
     condition: eq(variables.isMaster, true)
     inputs:
@@ -45,4 +44,10 @@ jobs:
     inputs:
       targetPath: '$(Build.Repository.LocalPath)/$(LOG_DIR)'
       artifact: 'logs_$(System.JobId)'
+      publishLocation: 'pipeline'
+  - task: PublishPipelineArtifact@1
+    condition: true
+    inputs:
+      targetPath: '$(Build.Repository.LocalPath)/$(RELEASE_DIR)'
+      artifact: 'buildsss'
       publishLocation: 'pipeline'
