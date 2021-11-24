@@ -163,6 +163,22 @@ proc create_project {} {
 	}
 }
 
+proc sd_card_build {} {
+	cd $::ws
+	setws ./
+
+	openhw $::hw
+	set cpu [_get_processor]
+
+	closehw $::hw
+
+	# Build the project
+	app build -name app
+
+	# Build system to generate sd_card
+	sysproj build -name app_system
+}
+
 set pl_dict [dict create					\
 	"ps7_cortexa9_0" "xc7z*"				\
 	"psu_cortexa53_0" "PSU"					\
