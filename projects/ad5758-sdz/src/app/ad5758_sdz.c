@@ -1,9 +1,9 @@
 /***************************************************************************//**
-* @file ad5758_sdz.c
+* @file ad5758-sdz/src/app/ad5758_sdz.c
 * @brief Implementation of Main Function.
 * @author SPopa (stefan.popa@analog.com)
 ********************************************************************************
-* Copyright 2018(c) Analog Devices, Inc.
+* Copyright 2021(c) Analog Devices, Inc.
 *
 * All rights reserved.
 *
@@ -40,55 +40,82 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include <stdio.h>
-#include <sleep.h>
-#include <stdint.h>
-#include <stdlib.h>
 
-#include <xil_cache.h>
-#include <xparameters.h>
-#include "xil_printf.h"
-
-#include "platform_drivers.h"
 #include "ad5758.h"
+#include "error.h"
+#include "gpio.h"
+#include "gpio_extra.h"
+#include "parameters.h"
+#include "sleep.h"
+#include "spi.h"
+#include "spi_extra.h"
+#include "stdint.h"
+#include "stdio.h"
+#include "stdlib.h"
+#include "xil_cache.h"
+#include "xil_printf.h"
+#include "xparameters.h"
 
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
-#define SPI_DEVICE_ID                   XPAR_PS7_SPI_0_DEVICE_ID
-#define AD5758_SPI_CS                   0
-#define GPIO_DEVICE_ID			XPAR_PS7_GPIO_0_DEVICE_ID
-#define GPIO_OFFSET			54
-#define GPIO_DAC_FAULT_N		GPIO_OFFSET + 32
-#define GPIO_DAC_RESET_N		GPIO_OFFSET + 33
-#define GPIO_DAC_LDAC_N			GPIO_OFFSET + 34
+const struct xil_spi_init_param spi_extra = {
+	.type = SPI_PS,
+	.flags = NULL
+};
+const struct spi_init_param spi_ip = {
+	.device_id = SPI_DEVICE_ID,
+	.max_speed_hz = 10000,
+	.chip_select = AD5758_SPI_CS,
+	.mode = SPI_MODE_1,
+	.bit_order = SPI_BIT_ORDER_MSB_FIRST,
+	.platform_ops = &xil_spi_ops,
+	.extra = &spi_extra
+};
+
+const struct xil_gpio_init_param gpio_extra = {
+	.type = GPIO_PS,
+	.device_id = GPIO_DEVICE_ID
+};
+const struct gpio_init_param reset_ip = {
+	.number = GPIO_DAC_RESET_N,
+	.platform_ops = &xil_gpio_ops,
+	.extra = &gpio_extra
+};
+const struct gpio_init_param ldac_ip = {
+	.number = GPIO_DAC_LDAC_N,
+	.platform_ops = &xil_gpio_ops,
+	.extra = &gpio_extra
+};
 
 struct ad5758_init_param ad5758_default_init_param = {
 	/* SPI */
-	{ PS7_SPI, SPI_DEVICE_ID, 1000000, SPI_MODE_1, AD5758_SPI_CS },
+	.spi_init = spi_ip,
 	/* GPIO */
-	{ PS7_GPIO, GPIO_DEVICE_ID, GPIO_DAC_RESET_N }, // reset_n
-	{ PS7_GPIO, GPIO_DEVICE_ID, GPIO_DAC_LDAC_N }, 	// ldac_n
+	.reset_n = reset_ip, 			// reset_n
+	.ldac_n = ldac_ip, 			// ldac_n
 	/* Device Settings */
-	1, 			// crc_en
-	DPC_VOLTAGE_MODE, 	// dc_dc_mode
-	CLKOUT_DISABLE,		// clkout_config
-	CLKOUT_FREQ_500_KHZ,	// clkout_freq
-	ILIMIT_200_mA,		// dc_dc_ilimt
-	RANGE_0V_10V,		// output_range
-	SR_CLOCK_240_KHZ, 	// slew_rate_clk
+	.crc_en = true, 			// crc_en
+	.dc_dc_mode = DPC_VOLTAGE_MODE, 	// dc_dc_mode
+	.clkout_config = CLKOUT_DISABLE,	// clkout_config
+	.clkout_freq = CLKOUT_FREQ_500_KHZ,	// clkout_freq
+	.dc_dc_ilimit = ILIMIT_200_mA,		// dc_dc_ilimit
+	.output_range = RANGE_0V_10V,		// output_range
+	.slew_rate_clk = SR_CLOCK_240_KHZ, 	// slew_rate_clk
 };
 
 int main()
 {
+	int32_t ret;
 	struct ad5758_dev *dev;
 
-	ad5758_init(&dev, ad5758_default_init_param);
+	ret = ad5758_init(&dev, &ad5758_default_init_param);
+	if(ret)
+		return FAILURE;
 
-	/* Write mid-scale DAC code to the input register */
-	ad5758_dac_input_write(dev, 0x7FFF);
+	/* Write mid-scale DAC code to the input register
+	 * V1_OUT pin will have half the scale (5V) */
+	ret = ad5758_dac_input_write(dev, 0x7FFF);
+	if(ret)
+		return FAILURE;
 
-	printf("Done\n");
-
-	return 0;
+	printf("Success\n");
+	return SUCCESS;
 }
