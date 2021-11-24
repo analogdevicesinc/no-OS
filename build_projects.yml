@@ -26,6 +26,14 @@ jobs:
                -log_dir $(LOG_DIR)
                -builds_dir $(BUILDS_DIR)'
     displayName: 'Run project build'
+    condition: eq(variables.isMaster, false)
+  - script: 'python3 ./tools/scripts/build_projects.py . 
+               -export_dir $(RELEASE_DIR)
+               -log_dir $(LOG_DIR)
+               -builds_dir $(BUILDS_DIR)
+               --build_exports'
+    displayName: 'Run project build with exports'
+    condition: eq(variables.isMaster, true)
   - task: PublishPipelineArtifact@1
     condition: eq(variables.isMaster, true)
     inputs:
