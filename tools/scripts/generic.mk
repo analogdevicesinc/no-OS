@@ -327,6 +327,9 @@ PHONY += run
 run: $(PLATFORM)_run
 	@$(call print,$(notdir $(BINARY)) uploaded to board)
 
+PHONY += sd_card
+sd_card: $(PLATFORM)_sd_card
+
 project: $(PROJECT_TARGET)
 
 $(PROJECT_TARGET): $(LIB_TARGETS)

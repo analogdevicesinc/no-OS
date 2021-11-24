@@ -49,6 +49,8 @@ LDFLAGS += -specs=$(BUILD_DIR)/app/src/Xilinx.spec 			\
 	   -mcpu=cortex-a9						\
 	   -Wl,-build-id=none
 
+BIN_ARCH := zynq
+
 endif
 
 ################|--------------------------------------------------------------
@@ -60,6 +62,9 @@ CC := aarch64-none-elf-gcc
 AR := aarch64-none-elf-ar
 
 LD := $(CC)
+
+BIN_ARCH := zynqmp
+
 endif
 
 ifneq (,$(findstring cortexr5,$(strip $(ARCH))))
@@ -77,6 +82,9 @@ LDFLAGS += -mcpu=cortex-r5						\
            -mfloat-abi=hard						\
 	   -mfpu=vfpv3-d16						\
 	   -DARMR5
+
+BIN_ARCH := zynqmp
+
 endif
 
 ################|--------------------------------------------------------------
@@ -136,6 +144,11 @@ endif
 
 #Add more dependencies to $(BINARY) rule.
 $(BINARY): $(TEMP_DIR)/arch.txt
+
+PHONY += xilinx_sd_card
+xilinx_sd_card:
+	$(MUTE) $(shell $(PLATFORM_TOOLS)/sd_card.sh $(WORKSPACE) $(BIN_ARCH))
+	$(MUTE) bootgen -arch $(BIN_ARCH) -image $(WORKSPACE)/boot.bif -o BOOT.bin -w
 
 PHONY += xilinx_run
 xilinx_run: all
