@@ -36,10 +36,12 @@ def parse_input():
 	parser.add_argument('-hardware', help="Name of hardware to be built")
 	parser.add_argument('-build_name', help="Name of built type to be built")
 	parser.add_argument('-builds_dir', help="Directory where to build projects")
+	parser.add_argument('--build_exports', dest='build_exports', action='store_true')
 	args = parser.parse_args()
 
 	return (args.noos_location, args.export_dir, args.log_dir, args.project,
-		args.platform, args.build_name, args.builds_dir, args.hardware)
+		args.platform, args.build_name, args.builds_dir, args.hardware,
+		args.build_exports)
 
 ERR = 0
 LOG_START = " -> "
@@ -136,7 +138,7 @@ def get_hardware(hardware, platform, builds_dir):
 
 class BuildConfig:
 	def __init__(self, project_dir, platform, flags, build_name, hardware,
-	             _builds_dir, log_dir):
+	             _builds_dir, log_dir, build_exports):
 		self.project_dir = project_dir
 		if _builds_dir is None:
 			self.builds_dir = project_dir
@@ -156,9 +158,17 @@ class BuildConfig:
 				self.project, platform, build_name, hardware)
 		self.build_dir = os.path.join(self.builds_dir, short_build_dir)
 		self.binary = os.path.join(self.build_dir, self._binary)
-		self.export_file = os.path.join(self.build_dir, self.binary)
-		if (platform == 'aducm3029'):
-			self.export_file = self.export_file.replace('.elf', '.hex')
+		self.sd_build = platform == 'xilinx' and build_exports
+		self.sd_build = self.sd_build and hardware.find('kc') == -1
+		if platform == 'aducm3029':
+			tmp = os.path.join(self.build_dir, self.binary)
+			tmp = tmp.replace('.elf', '.hex')
+			self.export_file = tmp
+		elif platform == 'xilinx' and self.sd_build:
+			self.export_file = os.path.join(self.build_dir,
+							'app_system/Debug/sd_card/BOOT.bin')
+		else:
+			self.export_file = None
 
 	def build(self):
 		global log_file
@@ -191,7 +201,7 @@ class BuildConfig:
 			else:
 				new_hdf = True
 		
-		if new_hdf:
+		if new_hdf or self.sd_build:
 			err = run_cmd(cmd + ' clean_all')
 			if err != 0:
 				return err
@@ -199,10 +209,17 @@ class BuildConfig:
 		err = run_cmd(cmd + ' update_srcs')
 		if err != 0:
 			return err
-		err = run_cmd(cmd + ' -j%d re' % (multiprocessing.cpu_count() - 1))
-		if err != 0:
-			return err
-		
+
+		if not self.sd_build or self.platform != 'xilinx':
+			err = run_cmd(cmd + ' -j%d re' % (multiprocessing.cpu_count() - 1))
+			if err != 0:
+				return err
+
+		if self.sd_build:
+			err = run_cmd(cmd + ' VERBOSE=y sd_card')
+			if err != 0:
+				return err
+
 		log_success("DONE")
 		log_file = DEFAULT_LOG_FILE
 
@@ -210,7 +227,7 @@ class BuildConfig:
 def main():
 	create_dir_cmd = "test -d {0} || mkdir -p {0}"
 	(noos, export_dir, log_dir, _project,
-	 _platform, _build_name, _builds_dir, _hw) = parse_input()
+	 _platform, _build_name, _builds_dir, _hw, build_exports) = parse_input()
 	projets = os.path.join(noos,'projects')
 	run_cmd(create_dir_cmd.format(export_dir))
 	run_cmd(create_dir_cmd.format(log_dir))
@@ -262,7 +279,8 @@ def main():
 								build_name,
 								hardware,
 								_builds_dir, 
-								log_dir)
+								log_dir,
+								build_exports)
 					err = new_build.build()
 					if err != 0:
 						ok = 0
@@ -270,9 +288,10 @@ def main():
 							#Keyboard interrupt
 							exit()
 						continue
-					run_cmd("cp %s %s" % 
-						(new_build.export_file, project_export))
-					binary_created = True
+					if build_exports and new_build.export_file:
+						run_cmd("cp %s %s" % 
+							(new_build.export_file, project_export))
+						binary_created = True
 			
 		fp.close()
 
@@ -282,8 +301,9 @@ def main():
 			status = 'Fail'
 		all_status = os.path.join(log_dir, 'all_builds.txt')
 		os.system('echo Project %20s -- %s >> %s' % (project, status, all_status))
-		if binary_created:
-			run_cmd("zip -jm %s.zip %s" % (project_export, os.path.join(project_export, "*")))
+		if (build_exports):
+			if binary_created:
+				run_cmd("zip -jm %s.zip %s" % (project_export, os.path.join(project_export, "*")))
 
 main()
 
