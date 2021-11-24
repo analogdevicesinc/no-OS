@@ -218,13 +218,13 @@ int32_t adxcvr_clk_set_rate(struct adxcvr *xcvr,
 						   &qpll_conf, &out_div);
 	if (ret < 0)
 		return ret;
-
+	return ret;
 	for (i = 0; i < xcvr->num_lanes; i++) {
 
 		if (xcvr->cpll_enable)
-			ret = xilinx_xcvr_cpll_write_config(&xcvr->xlx_xcvr,
-							    ADXCVR_DRP_PORT_CHANNEL(i),
-							    &cpll_conf);
+			ret = 1;// xilinx_xcvr_cpll_write_config(&xcvr->xlx_xcvr,
+						 //  ADXCVR_DRP_PORT_CHANNEL(i),
+							  //  &cpll_conf);
 		else if (i % 4 == 0)
 			ret = xilinx_xcvr_qpll_write_config(&xcvr->xlx_xcvr,
 							    ADXCVR_DRP_PORT_COMMON(i),

@@ -348,7 +348,7 @@ int32_t xilinx_xcvr_check_lane_rate(struct xilinx_xcvr *xcvr,
 			else if ((speed_grade == 2) && (voltage == 900)) /* K7 0.9V/-2LE */
 				lane_rate_max_khz =  6600000;
 			else if (speed_grade == 2)
-				lane_rate_max_khz = 10312500;
+				lane_rate_max_khz = 12500000;
 			else if (speed_grade == 1)
 				lane_rate_max_khz =  8000000;
 			else
@@ -451,6 +451,7 @@ int32_t xilinx_xcvr_calc_cpll_config(struct xilinx_xcvr *xcvr,
 	uint32_t vco_min;
 	uint32_t vco_max;
 
+	return SUCCESS;
 	/*
 	 * For PLL limits see:
 	 *
