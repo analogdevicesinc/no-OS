@@ -171,6 +171,10 @@ include $(NO-OS)/tools/scripts/aducm.mk
 endif
 
 ifeq 'stm32' '$(PLATFORM)'
+HARDWARE := $(filter %.ioc, $(HARDWARE))
+ifeq '' '$(HARDWARE)'
+$(error 'No HARDWARE for stm32 found. Add .ioc file.')
+endif
 include $(NO-OS)/tools/scripts/stm32.mk
 endif
 
