@@ -22,7 +22,7 @@ INCS += $(INCLUDE)/fifo.h \
 INCS += $(DRIVERS)/adc/adc_demo/iio_adc_demo.h \
 		$(DRIVERS)/dac/dac_demo/dac_demo.h \
 		$(DRIVERS)/dac/dac_demo/iio_dac_demo.h \
-		$(DRIVERS)/adc/adc_demo/adc_demo.h \
+		$(DRIVERS)/adc/adc_demo/adc_demo.h
 
 ifeq ($(PLATFORM),$(filter $(PLATFORM),xilinx aducm3029))
 SRCS += $(PLATFORM_DRIVERS)/delay.c \
