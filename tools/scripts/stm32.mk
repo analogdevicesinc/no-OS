@@ -73,6 +73,8 @@ $(PROJECT_TARGET):
 	$(MUTE) java -jar $(STM32CUBEMX)/$(MX) -q $(BINARY).cubemx $(HIDE)
 	-$(MUTE)$(call remove_fun,$(BINARY).cubemx) $(HIDE)
 
+	# sed -i '/Core\/Inc"\/>/a <listOptionValue builtIn="false" value="../Core/xyz"\/>' $(PROJECT_BUILD)/.cproject
+
 	$(MUTE) sed -i 's/ main(/ generated_main(/' $(PROJECT_BUILD)/Core/Src/main.c $(HIDE)
 	$(MUTE) $(call copy_fun, $(PROJECT_BUILD)/Core/Src/main.c, $(PROJECT_BUILD)/Core/Src/generated_main.c) $(HIDE)
 	$(MUTE) $(call remove_fun, $(PROJECT_BUILD)/Core/Src/main.c) $(HIDE)
@@ -80,8 +82,9 @@ $(PROJECT_TARGET):
 	$(MUTE) $(call remove_fun, $(PROJECT_BUILD)/Core/Src/syscalls.c) $(HIDE)
 	
 	$(call print,Configuring project)
-	$(MUTE) $(STM32CUBEIDE)/$(IDE) -application org.eclipse.cdt.managedbuilder.core.headlessbuild \
-		-import $(PROJECT_BUILD) -data $(BUILD_DIR) -nosplash $(HIDE)
+	$(MUTE) $(STM32CUBEIDE)/$(IDE) -nosplash -application org.eclipse.cdt.managedbuilder.core.headlessbuild \
+		-import $(PROJECT_BUILD) -data $(BUILD_DIR) \
+		$(HIDE)
 
 	$(MUTE) $(call set_one_time_rule,$@)
 
