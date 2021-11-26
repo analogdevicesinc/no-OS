@@ -40,6 +40,7 @@ export PATH := $(CCES_EXE):$(OPENOCD_SCRIPTS):$(OPENOCD_BIN):$(COMPILER_BIN):$(P
 PLATFORM_RELATIVE_PATH = $1
 PLATFORM_FULL_PATH = $1
 
+relative_to_project = $(addprefix $(PROJECT_BUILD)/,$(call get_relative_path,$1))
 #------------------------------------------------------------------------------
 #                          FIX SPACES PROBLEM                              
 #------------------------------------------------------------------------------

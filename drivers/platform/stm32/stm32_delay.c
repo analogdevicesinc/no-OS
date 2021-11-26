@@ -37,8 +37,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 #include "delay.h"
-#include "stm32_hal.h"
-
+#include "stm32f4xx_hal.h"
 /**
  * @brief Generate microseconds delay.
  * @param usecs - Delay in microseconds.

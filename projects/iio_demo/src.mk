@@ -60,7 +60,13 @@ INCS += $(INCLUDE)/irq.h \
 endif
 
 # stm32
-# ifeq (stm32, $(PLATFORM))
+ifeq (stm32, $(PLATFORM))
+SRCS += $(PLATFORM_DRIVERS)/stm32_delay.c \
+	$(PLATFORM_DRIVERS)/stm32_uart.c \
+	$(PLATFORM_DRIVERS)/stm32_uart_stdio.c
+INCS += $(PLATFORM_DRIVERS)/stm32_uart_stdio.h \
+	$(PLATFORM_DRIVERS)/stm32_uart.h \
+	$(PLATFORM_DRIVERS)/stm32_hal.h
 # SRCS += $(STM32CUBE)/STM32CubeF4/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c \
 # 	$(STM32CUBE)/STM32CubeF4/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c \
 # 	$(STM32CUBE)/STM32CubeF4/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c \
@@ -86,7 +92,7 @@ endif
 # 	$(PLATFORM_DRIVERS)/stm32_uart.h
 # 
 # LSCRIPT = $(PROJECT)/src/linker/STM32F446RETX_FLASH.ld
-# endif
+endif
 
 ifeq (linux,$(PLATFORM))
 CFLAGS += -DENABLE_IIO_NETWORK \

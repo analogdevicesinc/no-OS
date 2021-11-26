@@ -24,16 +24,40 @@ STM32CUBEMX=/opt/stm32cubemx
 endif # STM32CUBEMX check
 endif # OS check 
 
-#Set PATH variables where used binaries are found
-#COMPILER_BIN = $(CCES_HOME)/ARM/gcc-arm-embedded/bin
-#OPENOCD_SCRIPTS = $(CCES_HOME)/ARM/openocd/share/openocd/scripts
-#OPENOCD_BIN = $(CCES_HOME)/ARM/openocd/bin
-#CCES_EXE = $(CCES_HOME)/Eclipse
+# Locate the compiler path under STM32CubeIDE plugins directory
+COMPILER_BIN = $(realpath $(dir $(call rwildcard, $(STM32CUBEIDE)/plugins, *arm-none-eabi-gcc)))
 
-#export PATH := $(CCES_EXE):$(OPENOCD_SCRIPTS):$(OPENOCD_BIN):$(COMPILER_BIN):$(PATH)
+# Locate openocd location under STM32CubeIDE plugins directory
+OPENOCD_SCRIPTS = $(realpath $(addsuffix ..,$(dir $(call rwildcard, $(STM32CUBEIDE)/plugins, *st_scripts/interface/stlink-dap.cfg))))
+OPENOCD_BIN = $(realpath $(dir $(call rwildcard, $(STM32CUBEIDE)/plugins, *bin/openocd)))
 
 PLATFORM_RELATIVE_PATH = $1
 PLATFORM_FULL_PATH = $1
+
+# stm32 specific implementation of this function, sources need to go under Core directory
+relative_to_project = $(addprefix $(PROJECT_BUILD)/Core/, $(call get_relative_path, $1))
+
+# Add all .c files related to stm32 to PLATFORM_SRCS in full path
+PLATFORM_SRCS += $(call rwildcard, $(PROJECT_BUILD)/Drivers, *.c)
+PLATFORM_SRCS += $(call rwildcard, $(PROJECT_BUILD)/Core/Src, *.c)
+
+# Add all relevant stm32 include directories with -I prefix
+EXTRA_INCS += $(call rwildcard, $(PROJECT_BUILD)/Drivers, *.h)
+EXTRA_INCS += $(call rwildcard, $(PROJECT_BUILD)/Core/Inc, *.h)
+PLATFORM_INCS += $(sort $(foreach h,$(EXTRA_INCS), -I$(dir $h)))
+
+# Get the path of the .s script
+ASM_SRCS += $(call rwildcard, $(PROJECT_BUILD)/Core/Startup,*.s)
+
+# Extract the TARGET and CHIPNAME from the .s script filename
+include gmsl
+TARGET=$(join $(call uc, $(call substr,$(notdir $(ASM_SRCS)),9,17)), xx)
+CHIPNAME=$(join $(call uc, $(call substr,$(notdir $(ASM_SRCS)),9,20)), x)
+TARGETCFG=$(join target/, $(join $(call substr,$(notdir $(ASM_SRCS)),9,15), x.cfg))
+CFLAGS += -D$(TARGET)
+
+# Get the path of the linker script 
+LSCRIPT=$(wildcard $(PROJECT_BUILD)/*FLASH.ld)
 
 $(PROJECT_TARGET):
 	$(call print,Creating IDE project)
@@ -49,8 +73,14 @@ $(PROJECT_TARGET):
 	$(MUTE) java -jar $(STM32CUBEMX)/$(MX) -q $(BINARY).cubemx $(HIDE)
 	-$(MUTE)$(call remove_fun,$(BINARY).cubemx) $(HIDE)
 
+	$(MUTE) sed -i 's/ main(/ generated_main(/' $(PROJECT_BUILD)/Core/Src/main.c $(HIDE)
+	$(MUTE) $(call copy_fun, $(PROJECT_BUILD)/Core/Src/main.c, $(PROJECT_BUILD)/Core/Src/generated_main.c) $(HIDE)
+	$(MUTE) $(call remove_fun, $(PROJECT_BUILD)/Core/Src/main.c) $(HIDE)
+
+	$(MUTE) $(call remove_fun, $(PROJECT_BUILD)/Core/Src/syscalls.c) $(HIDE)
+	
 	$(call print,Configuring project)
-	$(MUTE) $(STM32CUBEMX)/$(IDE) -application org.eclipse.cdt.managedbuilder.core.headlessbuild \
+	$(MUTE) $(STM32CUBEIDE)/$(IDE) -application org.eclipse.cdt.managedbuilder.core.headlessbuild \
 		-import $(PROJECT_BUILD) -data $(BUILD_DIR) -nosplash $(HIDE)
 
 	$(MUTE) $(call set_one_time_rule,$@)
@@ -66,17 +96,14 @@ CFLAGS += -std=gnu11 \
 	-O0 \
 	-ffunction-sections \
 	-fdata-sections \
-	--specs=nano.specs \
-	-mfpu=fpv4-sp-d16 \
 	-mfloat-abi=hard \
-	-mthumb \
+	-mfpu=fpv4-sp-d16 \
 	-mcpu=cortex-m4
 
 LDFLAGS	= -mcpu=cortex-m4 \
-	--specs=nosys.specs \
 	-Wl,--gc-sections \
 	-static \
-	--specs=nano.specs \
+	--specs=nosys.specs \
 	-mfpu=fpv4-sp-d16 \
 	-mfloat-abi=hard \
 	-mthumb \
@@ -84,29 +111,12 @@ LDFLAGS	= -mcpu=cortex-m4 \
 	-lc \
 	-lm \
 	-Wl,--end-group
-
-CC = arm-none-eabi-gcc
-AS = arm-none-eabi-gcc
+ 
 AR = arm-none-eabi-ar
-
-ifneq '' '$(call rwildcard,src,stm32f4*)'
-CFLAGS += -I$(STM32CUBE)/STM32CubeF4/Drivers/STM32F4xx_HAL_Driver/Inc \
-	-I$(STM32CUBE)/STM32CubeF4/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy \
-	-I$(STM32CUBE)/STM32CubeF4/Drivers/CMSIS/Device/ST/STM32F4xx/Include \
-	-I$(STM32CUBE)/STM32CubeF4/Drivers/CMSIS/Include
-TARGETCFG = target/stm32f4x.cfg
-else
-$(error Couldn't detect stm32 family.$(ENDL))
-endif
-
-openocd_paths:
-ifndef OPENOCD_SCRIPTS
-	$(error OPENOCD_SCRIPTS not found in shell environment.$(ENDL))
-endif
-
-ifndef OPENOCD_BIN
-	$(error OPENOCD_BIN not found in shell environment.$(ENDL))
-endif
+AS = arm-none-eabi-gcc
+CC = arm-none-eabi-gcc
+GDB = arm-none-eabi-gdb
+OC = arm-none-eabi-objcopy
 
 .PHONY: $(BINARY).openocd
 $(BINARY).openocd:
@@ -141,14 +151,29 @@ $(BINARY).gdb:
 	@echo tui enable >> $(BINARY).gdb
 	@echo c >> $(BINARY).gdb
 
+HEX = $(basename $(BINARY)).hex
+
+$(HEX): $(BINARY)
+	$(MUTE) $(call print,[HEX] $(notdir $@))
+	$(MUTE) $(OC) -O ihex $(BINARY) $(HEX)
+	$(MUTE) $(call print,$(notdir $@) is ready)
+
+post_build: $(HEX)
+
+clean_hex:
+	@$(call print,[Delete] $(HEX))
+	-$(MUTE) $(call remove_fun,$(HEX)) $(HIDE)
+
+clean: clean_hex
+
 .PHONY: stm32_run
-stm32_run: all openocd_paths $(BINARY).openocd 
-	$(OPENOCD_BIN)/openocd -s "$(OPENOCD_SCRIPTS)" -f $(BINARY).openocd \
+stm32_run: all $(BINARY).openocd 
+	openocd -s "$(OPENOCD_SCRIPTS)" -f $(BINARY).openocd \
 		-c "program $(BINARY) verify reset exit"
 
 .PHONY: debug
-debug: all openocd_paths $(BINARY).openocd $(BINARY).gdb
+debug: all $(BINARY).openocd $(BINARY).gdb
 	($(OPENOCD_BIN)/openocd -s "$(OPENOCD_SCRIPTS)" -f $(BINARY).openocd \
 		-c "init" &);
-	arm-none-eabi-gdb --command=$(BINARY).gdb
+	$(GDB) --command=$(BINARY).gdb
 

@@ -45,8 +45,8 @@ remove_fun = rm -rf $1
 remove_dir = rm -rf $1
 mk_dir = mkdir -p $1
 read_file = cat $1 2> /dev/null
-make_dir_link = ln -s $1 $2
-make_link = ln -s $1 $2
+make_dir_link = ln -sf $1 $2
+make_link = ln -sf $1 $2
 print_lines = @echo $1 | tr ' ' '\n'
 green = \\e[32m$1\\e[39m
 print = @printf "$(call green,[$(TIMESTAMP)]) $1\n"
@@ -90,7 +90,6 @@ get_relative_path = $(RELATIVE_PATH)
 get_full_path = $(FULL_PATH)
 endif
 
-relative_to_project = $(addprefix $(PROJECT_BUILD)/,$(call get_relative_path,$1))
 
 ifeq 'y' '$(strip $(LINK_SRCS))'
 file_fun = $(make_link)
@@ -224,6 +223,7 @@ SRC_DIRS := $(patsubst %/,%,$(SRC_DIRS))
 # Get all .c and .h files from SRC_DIRS
 SRCS     += $(foreach dir, $(SRC_DIRS), $(call rwildcard, $(dir),*.c))
 INCS     += $(foreach dir, $(SRC_DIRS), $(call rwildcard, $(dir),*.h))
+
 
 # Recursive ignored files. If a directory is in the variable IGNORED_FILES,
 # all files from inside the directory will be ignored
