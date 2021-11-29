@@ -107,26 +107,17 @@ struct scan_type ad469x_scan_type = {
 	.is_big_endian = false
 };
 
-static struct iio_channel ad469x_ch0 = {
-	.ch_type = IIO_VOLTAGE,
-	.channel = 0,
-	.scan_index = 0,
-	.scan_type = &ad469x_scan_type,
-	.indexed = true,
-};
+#define IIO_AD469X_CH(_ch) {\
+	.ch_type = IIO_VOLTAGE,\
+	.channel = (_ch),\
+	.scan_index = (_ch),\
+	.scan_type = &ad469x_scan_type,\
+	.indexed = true,\
+}
 
-static struct iio_channel ad469x_ch1 = {
-	.ch_type = IIO_VOLTAGE,
-	.channel = 1,
-	.scan_index = 1,
-	.scan_type = &ad469x_scan_type,
-	.indexed = true,
-};
-
-static struct iio_channel *ad469x_iio_channels[] = {
-	&ad469x_ch0,
-	&ad469x_ch1,
-	NULL,
+static struct iio_channel ad469x_iio_channels[] = {
+	IIO_AD469X_CH(0),
+	IIO_AD469X_CH(1)
 };
 
 struct iio_device ad469x_iio_descriptor = {
