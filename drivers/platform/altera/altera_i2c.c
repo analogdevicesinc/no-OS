@@ -53,7 +53,7 @@
 /**
  * @brief Altera platform specific I2C platform ops structure
  */
-const struct i2c_platform_ops xil_i2c_platform_ops = {
+const struct i2c_platform_ops altera_i2c_ops = {
 	.i2c_ops_init = &altera_i2c_init,
 	.i2c_ops_write = &altera_i2c_write,
 	.i2c_ops_read = &altera_i2c_read,
