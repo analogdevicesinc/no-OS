@@ -691,7 +691,7 @@ int32_t ad7779_get_reference_type(ad7779_dev *dev,
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad7779_set_dclk_div(ad7779_dev *dev,
-			    ad7768_dclk_div div)
+			    ad7779_dclk_div div)
 {
 	int32_t ret;
 
@@ -720,7 +720,7 @@ int32_t ad7779_set_dclk_div(ad7779_dev *dev,
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad7779_get_dclk_div(ad7779_dev *dev,
-			    ad7768_dclk_div *div)
+			    ad7779_dclk_div *div)
 {
 	*div = dev->dclk_div;
 
