@@ -59,6 +59,9 @@ CFLAGS += -D$(TARGET)
 # Get the path of the linker script 
 LSCRIPT=$(wildcard $(PROJECT_BUILD)/*FLASH.ld)
 
+# Get the extra flags that need to be added into the .cproject file
+CPROJECTFLAGS = $(sort $(subst -D,,$(filter -D%, $(CFLAGS))))
+
 $(PROJECT_TARGET):
 	$(call print,Creating IDE project)
 	$(MUTE) $(call mk_dir, $(BUILD_DIR))
@@ -72,8 +75,6 @@ $(PROJECT_TARGET):
 	@echo exit >> $(BINARY).cubemx
 	$(MUTE) java -jar $(STM32CUBEMX)/$(MX) -q $(BINARY).cubemx $(HIDE)
 	-$(MUTE)$(call remove_fun,$(BINARY).cubemx) $(HIDE)
-
-	# sed -i '/Core\/Inc"\/>/a <listOptionValue builtIn="false" value="../Core/xyz"\/>' $(PROJECT_BUILD)/.cproject
 
 	$(MUTE) sed -i 's/ main(/ generated_main(/' $(PROJECT_BUILD)/Core/Src/main.c $(HIDE)
 	$(MUTE) $(call copy_fun, $(PROJECT_BUILD)/Core/Src/main.c, $(PROJECT_BUILD)/Core/Src/generated_main.c) $(HIDE)
@@ -162,6 +163,13 @@ $(HEX): $(BINARY)
 	$(MUTE) $(call print,$(notdir $@) is ready)
 
 post_build: $(HEX)
+	$(MUTE) $(foreach inc, $(EXTRA_INC_PATHS), sed -i '/Core\/Inc"\/>/a <listOptionValue builtIn="false" value="$(inc)"\/>' $(PROJECT_BUILD)/.cproject;) $(HIDE)
+	$(MUTE) $(foreach flag, $(CPROJECTFLAGS), sed -i '/USE_HAL_DRIVER"\/>/a <listOptionValue builtIn="false" value="$(flag)"\/>' $(PROJECT_BUILD)/.cproject;) $(HIDE)
+
+PHONY += $(PLATFORM)_project_build
+$(PLATFORM)_project_build: $(PROJECT_TARGET) $(LIB_TARGETS)
+	$(MUTE) $(STM32CUBEIDE)/$(IDE) -nosplash -application org.eclipse.cdt.managedbuilder.core.headlessbuild \
+		-import $(PROJECT_BUILD) -data $(BUILD_DIR) -build app $(HIDE)
 
 clean_hex:
 	@$(call print,[Delete] $(HEX))
@@ -170,7 +178,7 @@ clean_hex:
 clean: clean_hex
 
 .PHONY: stm32_run
-stm32_run: all $(BINARY).openocd 
+$(PLATFORM)_run: all $(BINARY).openocd
 	openocd -s "$(OPENOCD_SCRIPTS)" -f $(BINARY).openocd \
 		-c "program $(BINARY) verify reset exit"
 
