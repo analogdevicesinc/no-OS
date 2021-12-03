@@ -91,7 +91,7 @@ typedef struct xil_i2c_desc {
 /**
  * @brief Xilinx platform specific i2c platform ops structure
  */
-extern const struct i2c_platform_ops xil_i2c_platform_ops;
+extern const struct i2c_platform_ops xil_i2c_ops;
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
