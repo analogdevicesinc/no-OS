@@ -78,7 +78,7 @@ struct altera_i2c_desc {
 /**
  * @brief Altera platform specific i2c platform ops structure
  */
-extern const struct i2c_platform_ops altera_i2c_platform_ops;
+extern const struct i2c_platform_ops altera_i2c_ops;
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
