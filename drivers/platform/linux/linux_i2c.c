@@ -221,7 +221,7 @@ int32_t linux_i2c_read(struct i2c_desc *desc,
 /**
  * @brief Linux platform specific I2C platform ops structure
  */
-const struct i2c_platform_ops linux_i2c_platform_ops = {
+const struct i2c_platform_ops linux_i2c_ops = {
 	.i2c_ops_init = &linux_i2c_init,
 	.i2c_ops_write = &linux_i2c_write,
 	.i2c_ops_read = &linux_i2c_read,
