@@ -47,6 +47,11 @@
 #include "no-os/delay.h"
 #include <stdio.h>
 
+#include "gpio_extra.h"
+#include "no_os/gpio.h"
+#include "rtc_extra.h"
+#include "no_os/rtc.h"
+
 #if defined(ADUCM_PLATFORM) || defined(XILINX_PLATFORM)
 #include "no-os/irq.h"
 #include "irq_extra.h"
@@ -102,6 +107,49 @@ static int32_t iio_print_uart_info_message(struct uart_desc **uart_desc,
 	status = uart_write(*uart_desc, (uint8_t *)message, msglen);
 	if (status < 0)
 		return status;
+
+	gpio_cfg_t param_extra = {
+		.port = 0,
+		.mask = 12,
+		.pad = GPIO_PAD_PULL_UP,
+		.func = GPIO_FUNC_OUT
+	};
+	gpio_desc *desc;
+	struct gpio_init_param param = {
+		.number = 0,
+		.platform_ops = NULL,
+		.extra = &param_extra
+	};
+
+	int32_t error = gpio_get(&desc, &param);
+	uint8_t val = 20;	
+
+	gpio_set_value(desc, GPIO_LOW);
+	gpio_get_value(desc, &val);
+
+	struct rtc_init_maxim rtc_maxim = {
+		.ms_load = 100
+	};
+	struct rtc_init_param rtc_init_p = {
+		.id = 0,
+		.freq = 32,
+		.load = 10,
+		.extra = &rtc_maxim
+	};
+	struct rtc_desc *rtc;
+	uint32_t cnt = 0;
+	int32_t rtc_get_err = 0;	
+
+	rtc_init(&rtc, &rtc_init_p);
+	rtc_start(rtc);
+	
+	do{
+		rtc_get_err = rtc_get_cnt(rtc, &cnt);
+	}while(rtc_get_err);
+	rtc_set_cnt(rtc, 10 * cnt);
+	mdelay(117);
+	rtc_get_cnt(rtc, &cnt);
+	rtc_stop(rtc);
 
 	delay_ms = _calc_uart_xfer_time(msglen, UART_BAUDRATE_DEFAULT);
 	mdelay(delay_ms);
@@ -237,7 +285,7 @@ static int32_t uart_setup(struct uart_desc **uart_desc,
 	};
 #elif defined(MAXIM_PLATFORM)
 	static struct maxim_uart_init_param platform_uart_init_par = {
-		.mode = 0,
+		.port = 1,
 		.parity = UART_PARITY_DISABLE,
 		.size = UART_DATA_SIZE_8_BITS,
 		.stop = UART_STOP_1,

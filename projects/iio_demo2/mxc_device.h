@@ -1,0 +1,1 @@
+/home/xvr/Documents/Maxim/sf_shared2/Firmware/MAX32660/Libraries/CMSIS/Device/Maxim/MAX32660/Include/mxc_device.h

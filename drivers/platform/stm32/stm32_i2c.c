@@ -217,3 +217,4 @@ const struct i2c_platform_ops stm32_i2c_ops = {
 	.i2c_ops_read = &stm32_i2c_read,
 	.i2c_ops_remove = &stm32_i2c_remove
 };
+

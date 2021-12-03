@@ -49,9 +49,7 @@
 #include "mxc_config.h"
 #include "mxc_sys.h"
 #include "board.h"
-//#include "uart.h"
 #include "uart_x.h"
-#include "uart_maxim.h"
 
 /**
  * Address of the UART registers for the console output.
@@ -195,7 +193,6 @@ int __write(int file, const unsigned char *ptr, size_t len)
                 }
                 UART_WriteByte(MXC_UARTn,*ptr++);
             }
-//            UART_WriteAsync(MXC_UARTn, (uint8_t *)ptr, len);
 
             break;
         default:
@@ -259,3 +256,4 @@ void _sys_exit(int return_code)
 }
 
 #endif /* __CC_ARM  */
+

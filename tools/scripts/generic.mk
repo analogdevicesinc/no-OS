@@ -233,6 +233,8 @@ SRC_DIRS := $(patsubst %/,%,$(SRC_DIRS))
 SRCS     += $(foreach dir, $(SRC_DIRS), $(call rwildcard, $(dir),*.c))
 INCS     += $(foreach dir, $(SRC_DIRS), $(call rwildcard, $(dir),*.h))
 
+#IGNORED_FILES += $(NO-OS)/include
+
 # Recursive ignored files. If a directory is in the variable IGNORED_FILES,
 # all files from inside the directory will be ignored
 ALL_IGNORED_FILES = $(foreach dir, $(IGNORED_FILES), $(call rwildcard, $(dir),*))
@@ -278,6 +280,8 @@ EXTRA_INC_PATHS += $(call relative_to_project, $(INCLUDE))
 
 CFLAGS += $(addprefix -I,$(EXTRA_INC_PATHS)) $(PLATFORM_INCS)
 
+$(warning $(CFLAGS))
+#CFLAGS += -I$(NO-OS)/include
 #------------------------------------------------------------------------------
 #                             Generic Goals                         
 #------------------------------------------------------------------------------

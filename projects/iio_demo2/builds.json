@@ -1,0 +1,16 @@
+{
+  "aducm3029": {
+    "iio_uart": {
+      "flags" : "TINYIIOD=y"
+    },
+    "iio_wifi": {
+      "flags" : "TINYIIOD=y USE_TCP_SOCKET=y"
+    }
+  },
+  "xilinx": {
+    "iio_zed": {
+      "flags" : "TINYIIOD=y",
+      "hardware" : ["ad40xx_fmc_zed"]
+    }
+  }
+}

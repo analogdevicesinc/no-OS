@@ -1,16 +1,21 @@
-#include "uart_maxim_pdriver.h"
+#include "uart.h"
 
-struct maxim_uart_desc{
-	uint32_t mode;	// rx or tx
+#define N_PORTS 2
+
+struct maxim_uart_desc {
+	uint32_t port;
 	uart_cfg_t *maxim_desc;
-	uart_req_t *request_descriptor;
 };
 
 struct maxim_uart_init_param {
-	uint32_t mode;
+	uint32_t port;
 	uart_parity_t parity;
 	uart_size_t size;
 	uart_stop_t stop;
-	uart_flow_ctrl_t flow;	
+	uart_flow_ctrl_t flow;
 	uart_flow_pol_t pol;
 };
+
+int32_t uart_register_callback(uint8_t, struct callback_desc *);
+int32_t uart_unregister_callback(uint8_t);
+
