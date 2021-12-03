@@ -191,7 +191,7 @@ typedef enum {
 	AD7779_DCLK_DIV_32,
 	AD7779_DCLK_DIV_64,
 	AD7779_DCLK_DIV_128,
-} ad7768_dclk_div;
+} ad7779_dclk_div;
 
 typedef enum {
 	AD7779_LOW_PWR,
@@ -263,7 +263,7 @@ typedef struct {
 	uint16_t		dec_rate_dec;
 	ad7779_ref_type		ref_type;
 	ad7779_pwr_mode		pwr_mode;
-	ad7768_dclk_div		dclk_div;
+	ad7779_dclk_div		dclk_div;
 	uint8_t			sync_offset[8];
 	uint32_t		offset_corr[8];
 	uint32_t		gain_corr[8];
@@ -297,7 +297,7 @@ typedef struct {
 	uint16_t		dec_rate_dec;
 	ad7779_ref_type		ref_type;
 	ad7779_pwr_mode		pwr_mode;
-	ad7768_dclk_div		dclk_div;
+	ad7779_dclk_div		dclk_div;
 	uint8_t			sync_offset[8];
 	uint32_t		offset_corr[8];
 	uint32_t		gain_corr[8];
@@ -380,10 +380,10 @@ int32_t ad7779_get_reference_type(ad7779_dev *dev,
 				  ad7779_ref_type *ref_type);
 /* Set the DCLK divider. */
 int32_t ad7779_set_dclk_div(ad7779_dev *dev,
-			    ad7768_dclk_div div);
+			    ad7779_dclk_div div);
 /* Get the DCLK divider. */
 int32_t ad7779_get_dclk_div(ad7779_dev *dev,
-			    ad7768_dclk_div *div);
+			    ad7779_dclk_div *div);
 /* Set the synchronization offset of the selected channel. */
 int32_t ad7779_set_sync_offset(ad7779_dev *dev,
 			       ad7779_ch ch,
