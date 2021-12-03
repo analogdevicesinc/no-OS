@@ -7,8 +7,6 @@
 # PLATFORM = xilinx
 # PLATFORM = altera
 # PLATFORM = aducm3029
-
-# For these platforms, the user must set the PLATFORM variable:
 # PLATFORM = stm32
 
 ifeq '$(LOCAL_BUILD)' 'y'
@@ -36,7 +34,7 @@ PLATFORM_DRIVERS	?= $(NO-OS)/drivers/platform/$(PLATFORM)
 # This way all needed files will be in one place and they can be tracked on git
 LINK_SRCS ?= y
 
-HARDWARE ?= $(wildcard *.xsa) $(wildcard *.hdf) $(wildcard *.sopcinfo) $(wildcard pinmux_config.c)
+HARDWARE ?= $(wildcard *.xsa) $(wildcard *.hdf) $(wildcard *.sopcinfo) $(wildcard *.ioc) $(wildcard pinmux_config.c)
 #If platform not set get it from HARDWARE file
 ifeq '' '$(PLATFORM)'
 ifneq '' '$(findstring .xsa,$(HARDWARE))'
@@ -48,10 +46,14 @@ else
 ifneq '' '$(findstring .sopcinfo,$(HARDWARE))'
 PLATFORM = altera
 else
+ifneq '' '$(findstring .ioc,$(HARDWARE))'
+PLATFORM = stm32
+else
 ifneq '' '$(findstring pinmux_config.c,$(HARDWARE))'
 PLATFORM = aducm3029
 else
 $(error No HARDWARE found)
+endif
 endif
 endif
 endif
