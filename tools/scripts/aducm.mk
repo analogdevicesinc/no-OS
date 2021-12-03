@@ -1,9 +1,3 @@
-# New line variable
-define ENDL
-
-
-endef
-
 # Initialize CCES_HOME to default, if directory not found show error
 #	WINDOWS
 ifeq ($(OS), Windows_NT)
@@ -39,6 +33,7 @@ export PATH := $(CCES_EXE):$(OPENOCD_SCRIPTS):$(OPENOCD_BIN):$(COMPILER_BIN):$(P
 
 PLATFORM_RELATIVE_PATH = $1
 PLATFORM_FULL_PATH = $1
+PROJECT_BUILD = $(BUILD_DIR)/app
 
 #------------------------------------------------------------------------------
 #                          FIX SPACES PROBLEM                              
