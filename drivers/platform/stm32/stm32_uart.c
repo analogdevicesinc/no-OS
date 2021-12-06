@@ -73,46 +73,62 @@ int32_t uart_init(struct uart_desc **desc, struct uart_init_param *param)
 	suip = param->extra;
 
 	switch (param->device_id) {
-#ifdef USART1
 	case 1:
+#if defined(USART1)
 		base = USART1;
-		break;
+#elif defined(UART1)
+		base = UART1;
 #endif
-#ifdef USART2
+		break;
 	case 2:
+#if defined(USART2)
 		base = USART2;
-		break;
+#elif defined(UART2)
+		base = UART2;
 #endif
-#ifdef USART3
+		break;
 	case 3:
+#if defined(USART3)
 		base = USART3;
-		break;
+#elif defined(UART3)
+		base = UART3;
 #endif
-#ifdef USART4
+		break;
 	case 4:
+#if defined(USART4)
 		base = USART4;
-		break;
+#elif defined(UART4)
+		base = UART4;
 #endif
-#ifdef USART5
+		break;
 	case 5:
+#if defined(USART5)
 		base = USART5;
-		break;
+#elif defined(UART5)
+		base = UART5;
 #endif
-#ifdef USART6
+		break;
 	case 6:
+#if defined(USART6)
 		base = USART6;
-		break;
+#elif defined(UART6)
+		base = UART6;
 #endif
-#ifdef USART7
+		break;
 	case 7:
+#if defined(USART7)
 		base = USART7;
-		break;
+#elif defined(UART7)
+		base = UART7;
 #endif
-#ifdef USART8
+		break;
 	case 8:
+#if defined(USART8)
 		base = USART8;
-		break;
+#elif defined(UART8)
+		base = UART8;
 #endif
+		break;
 	default:
 		ret = -EINVAL;
 		goto error;
