@@ -1,0 +1,1 @@
+/home/xvr/Downloads/no/drivers/platform/maxim/stdio.c

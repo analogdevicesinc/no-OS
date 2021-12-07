@@ -1,0 +1,209 @@
+GNU Make 4.2.1
+Built for x86_64-pc-linux-gnu
+Copyright (C) 1988-2016 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+Reading makefiles...
+Reading makefile 'Makefile'...
+Reading makefile '../../tools/scripts/generic_variables.mk' (search path) (no ~ expansion)...
+Reading makefile 'src.mk' (search path) (no ~ expansion)...
+Reading makefile '../../tools/scripts/generic.mk' (search path) (no ~ expansion)...
+Reading makefile '/home/xvr/Documents/no-OS/tools/scripts/maxim.mk' (search path) (no ~ expansion)...
+Reading makefile '/home/xvr/Documents/Maxim/sf_shared2/Firmware/MAX32660/Libraries/MAX32660PeriphDriver/periphdriver.mk' (search path) (no ~ expansion)...
+Reading makefile '/home/xvr/Documents/no-OS/tools/scripts/libraries.mk' (search path) (no ~ expansion)...
+Reading makefile '/home/xvr/Documents/no-OS/tools/scripts/iio_srcs.mk' (search path) (no ~ expansion)...
+Updating makefiles....
+Updating goal targets....
+Considering target file 'all'.
+ File 'all' does not exist.
+  Considering target file 'print_build_type'.
+   File 'print_build_type' does not exist.
+   Finished prerequisites of target file 'print_build_type'.
+  Must remake target 'print_build_type'.
+[32m[10:17:16][39m Building for [32mmaxim[39m
+  Successfully remade target file 'print_build_type'.
+ Finished prerequisites of target file 'all'.
+Must remake target 'all'.
+GNU Make 4.2.1
+Built for x86_64-pc-linux-gnu
+Copyright (C) 1988-2016 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+Reading makefiles...
+Reading makefile 'Makefile'...
+Reading makefile '../../tools/scripts/generic_variables.mk' (search path) (no ~ expansion)...
+Reading makefile 'src.mk' (search path) (no ~ expansion)...
+Reading makefile '../../tools/scripts/generic.mk' (search path) (no ~ expansion)...
+Reading makefile '/home/xvr/Documents/no-OS/tools/scripts/maxim.mk' (search path) (no ~ expansion)...
+Reading makefile '/home/xvr/Documents/Maxim/sf_shared2/Firmware/MAX32660/Libraries/MAX32660PeriphDriver/periphdriver.mk' (search path) (no ~ expansion)...
+Reading makefile '/home/xvr/Documents/no-OS/tools/scripts/libraries.mk' (search path) (no ~ expansion)...
+Reading makefile '/home/xvr/Documents/no-OS/tools/scripts/iio_srcs.mk' (search path) (no ~ expansion)...
+Updating makefiles....
+Updating goal targets....
+Considering target file 'update_srcs'.
+ File 'update_srcs' does not exist.
+  Considering target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/.project.target'.
+   File '/home/xvr/Documents/no-OS/projects/iio_demo/build/.project.target' does not exist.
+   Finished prerequisites of target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/.project.target'.
+  Must remake target '/home/xvr/Documents/no-OS/projects/iio_demo/build/.project.target'.
+  Successfully remade target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/.project.target'.
+ Finished prerequisites of target file 'update_srcs'.
+Must remake target 'update_srcs'.
+[32m[10:17:16][39m  Linking srcs to created project
+Successfully remade target file 'update_srcs'.
+GNU Make 4.2.1
+Built for x86_64-pc-linux-gnu
+Copyright (C) 1988-2016 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+Reading makefiles...
+Reading makefile 'Makefile'...
+Reading makefile '../../tools/scripts/generic_variables.mk' (search path) (no ~ expansion)...
+Reading makefile 'src.mk' (search path) (no ~ expansion)...
+Reading makefile '../../tools/scripts/generic.mk' (search path) (no ~ expansion)...
+Reading makefile '/home/xvr/Documents/no-OS/tools/scripts/maxim.mk' (search path) (no ~ expansion)...
+Reading makefile '/home/xvr/Documents/Maxim/sf_shared2/Firmware/MAX32660/Libraries/MAX32660PeriphDriver/periphdriver.mk' (search path) (no ~ expansion)...
+Reading makefile '/home/xvr/Documents/no-OS/tools/scripts/libraries.mk' (search path) (no ~ expansion)...
+Reading makefile '/home/xvr/Documents/no-OS/tools/scripts/iio_srcs.mk' (search path) (no ~ expansion)...
+Updating makefiles....
+Updating goal targets....
+Considering target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/iio_demo.elf'.
+ File '/home/xvr/Documents/no-OS/projects/iio_demo/build/iio_demo.elf' does not exist.
+  Considering target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/adc/adc_demo/adc_demo.o'.
+   File '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/adc/adc_demo/adc_demo.o' does not exist.
+    Considering target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/app/noos/drivers/adc/adc_demo/adc_demo.c'.
+     Finished prerequisites of target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/app/noos/drivers/adc/adc_demo/adc_demo.c'.
+    No need to remake target '/home/xvr/Documents/no-OS/projects/iio_demo/build/app/noos/drivers/adc/adc_demo/adc_demo.c'.
+   Considering target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/adc/adc_demo/.'.
+    File '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/adc/adc_demo/.' does not exist.
+    Finished prerequisites of target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/adc/adc_demo/.'.
+   Must remake target '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/adc/adc_demo/.'.
+   Successfully remade target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/adc/adc_demo/.'.
+   Finished prerequisites of target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/adc/adc_demo/adc_demo.o'.
+  Must remake target '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/adc/adc_demo/adc_demo.o'.
+[32m[10:17:16][39m [CC] adc_demo.c
+  Successfully remade target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/adc/adc_demo/adc_demo.o'.
+  Considering target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/adc/adc_demo/iio_adc_demo.o'.
+   File '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/adc/adc_demo/iio_adc_demo.o' does not exist.
+    Considering target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/app/noos/drivers/adc/adc_demo/iio_adc_demo.c'.
+     Finished prerequisites of target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/app/noos/drivers/adc/adc_demo/iio_adc_demo.c'.
+    No need to remake target '/home/xvr/Documents/no-OS/projects/iio_demo/build/app/noos/drivers/adc/adc_demo/iio_adc_demo.c'.
+   Considering target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/adc/adc_demo/.'.
+   File '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/adc/adc_demo/.' was considered already.
+   Finished prerequisites of target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/adc/adc_demo/iio_adc_demo.o'.
+  Must remake target '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/adc/adc_demo/iio_adc_demo.o'.
+[32m[10:17:16][39m [CC] iio_adc_demo.c
+  Successfully remade target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/adc/adc_demo/iio_adc_demo.o'.
+  Considering target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/dac/dac_demo/dac_demo.o'.
+   File '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/dac/dac_demo/dac_demo.o' does not exist.
+    Considering target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/app/noos/drivers/dac/dac_demo/dac_demo.c'.
+     Finished prerequisites of target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/app/noos/drivers/dac/dac_demo/dac_demo.c'.
+    No need to remake target '/home/xvr/Documents/no-OS/projects/iio_demo/build/app/noos/drivers/dac/dac_demo/dac_demo.c'.
+   Considering target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/dac/dac_demo/.'.
+    File '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/dac/dac_demo/.' does not exist.
+    Finished prerequisites of target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/dac/dac_demo/.'.
+   Must remake target '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/dac/dac_demo/.'.
+   Successfully remade target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/dac/dac_demo/.'.
+   Finished prerequisites of target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/dac/dac_demo/dac_demo.o'.
+  Must remake target '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/dac/dac_demo/dac_demo.o'.
+[32m[10:17:16][39m [CC] dac_demo.c
+  Successfully remade target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/dac/dac_demo/dac_demo.o'.
+  Considering target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/dac/dac_demo/iio_dac_demo.o'.
+   File '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/dac/dac_demo/iio_dac_demo.o' does not exist.
+    Considering target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/app/noos/drivers/dac/dac_demo/iio_dac_demo.c'.
+     Finished prerequisites of target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/app/noos/drivers/dac/dac_demo/iio_dac_demo.c'.
+    No need to remake target '/home/xvr/Documents/no-OS/projects/iio_demo/build/app/noos/drivers/dac/dac_demo/iio_dac_demo.c'.
+   Considering target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/dac/dac_demo/.'.
+   File '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/dac/dac_demo/.' was considered already.
+   Finished prerequisites of target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/dac/dac_demo/iio_dac_demo.o'.
+  Must remake target '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/dac/dac_demo/iio_dac_demo.o'.
+[32m[10:17:17][39m [CC] iio_dac_demo.c
+  Successfully remade target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/dac/dac_demo/iio_dac_demo.o'.
+  Considering target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/platform/maxim/stdio.o'.
+   File '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/platform/maxim/stdio.o' does not exist.
+    Considering target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/app/noos/drivers/platform/maxim/stdio.c'.
+     Finished prerequisites of target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/app/noos/drivers/platform/maxim/stdio.c'.
+    No need to remake target '/home/xvr/Documents/no-OS/projects/iio_demo/build/app/noos/drivers/platform/maxim/stdio.c'.
+   Considering target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/platform/maxim/.'.
+    File '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/platform/maxim/.' does not exist.
+    Finished prerequisites of target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/platform/maxim/.'.
+   Must remake target '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/platform/maxim/.'.
+   Successfully remade target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/platform/maxim/.'.
+   Finished prerequisites of target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/platform/maxim/stdio.o'.
+  Must remake target '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/platform/maxim/stdio.o'.
+[32m[10:17:17][39m [CC] stdio.c
+  Successfully remade target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/platform/maxim/stdio.o'.
+  Considering target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/platform/maxim/uart_maxim.o'.
+   File '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/platform/maxim/uart_maxim.o' does not exist.
+    Considering target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/app/noos/drivers/platform/maxim/uart_maxim.c'.
+     Finished prerequisites of target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/app/noos/drivers/platform/maxim/uart_maxim.c'.
+    No need to remake target '/home/xvr/Documents/no-OS/projects/iio_demo/build/app/noos/drivers/platform/maxim/uart_maxim.c'.
+   Considering target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/platform/maxim/.'.
+   File '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/platform/maxim/.' was considered already.
+   Finished prerequisites of target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/platform/maxim/uart_maxim.o'.
+  Must remake target '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/platform/maxim/uart_maxim.o'.
+[32m[10:17:17][39m [CC] uart_maxim.c
+  Successfully remade target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/platform/maxim/uart_maxim.o'.
+  Considering target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/platform/maxim/uart_maxim2.o'.
+   File '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/platform/maxim/uart_maxim2.o' does not exist.
+    Considering target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/app/noos/drivers/platform/maxim/uart_maxim2.c'.
+     Finished prerequisites of target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/app/noos/drivers/platform/maxim/uart_maxim2.c'.
+    No need to remake target '/home/xvr/Documents/no-OS/projects/iio_demo/build/app/noos/drivers/platform/maxim/uart_maxim2.c'.
+   Considering target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/platform/maxim/.'.
+   File '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/platform/maxim/.' was considered already.
+   Finished prerequisites of target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/platform/maxim/uart_maxim2.o'.
+  Must remake target '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/platform/maxim/uart_maxim2.o'.
+[32m[10:17:17][39m [CC] uart_maxim2.c
+  Successfully remade target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/platform/maxim/uart_maxim2.o'.
+  Considering target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/platform/maxim/uart_x.o'.
+   File '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/platform/maxim/uart_x.o' does not exist.
+    Considering target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/app/noos/drivers/platform/maxim/uart_x.c'.
+     Finished prerequisites of target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/app/noos/drivers/platform/maxim/uart_x.c'.
+    No need to remake target '/home/xvr/Documents/no-OS/projects/iio_demo/build/app/noos/drivers/platform/maxim/uart_x.c'.
+   Considering target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/platform/maxim/.'.
+   File '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/platform/maxim/.' was considered already.
+   Finished prerequisites of target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/platform/maxim/uart_x.o'.
+  Must remake target '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/platform/maxim/uart_x.o'.
+[32m[10:17:17][39m [CC] uart_x.c
+  Successfully remade target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/platform/maxim/uart_x.o'.
+  Considering target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/platform/maxim/wdt_maxim.o'.
+   File '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/platform/maxim/wdt_maxim.o' does not exist.
+    Considering target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/app/noos/drivers/platform/maxim/wdt_maxim.c'.
+     Finished prerequisites of target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/app/noos/drivers/platform/maxim/wdt_maxim.c'.
+    No need to remake target '/home/xvr/Documents/no-OS/projects/iio_demo/build/app/noos/drivers/platform/maxim/wdt_maxim.c'.
+   Considering target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/platform/maxim/.'.
+   File '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/platform/maxim/.' was considered already.
+   Finished prerequisites of target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/platform/maxim/wdt_maxim.o'.
+  Must remake target '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/platform/maxim/wdt_maxim.o'.
+[32m[10:17:17][39m [CC] wdt_maxim.c
+  Successfully remade target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/drivers/platform/maxim/wdt_maxim.o'.
+  Considering target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/iio/iio.o'.
+   File '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/iio/iio.o' does not exist.
+    Considering target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/app/noos/iio/iio.c'.
+     Finished prerequisites of target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/app/noos/iio/iio.c'.
+    No need to remake target '/home/xvr/Documents/no-OS/projects/iio_demo/build/app/noos/iio/iio.c'.
+   Considering target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/iio/.'.
+    File '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/iio/.' does not exist.
+    Finished prerequisites of target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/iio/.'.
+   Must remake target '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/iio/.'.
+   Successfully remade target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/iio/.'.
+   Finished prerequisites of target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/iio/iio.o'.
+  Must remake target '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/iio/iio.o'.
+[32m[10:17:17][39m [CC] iio.c
+  Successfully remade target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/iio/iio.o'.
+  Considering target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/iio/iio_app/iio_app.o'.
+   File '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/iio/iio_app/iio_app.o' does not exist.
+    Considering target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/app/noos/iio/iio_app/iio_app.c'.
+     Finished prerequisites of target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/app/noos/iio/iio_app/iio_app.c'.
+    No need to remake target '/home/xvr/Documents/no-OS/projects/iio_demo/build/app/noos/iio/iio_app/iio_app.c'.
+   Considering target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/iio/iio_app/.'.
+    File '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/iio/iio_app/.' does not exist.
+    Finished prerequisites of target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/iio/iio_app/.'.
+   Must remake target '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/iio/iio_app/.'.
+   Successfully remade target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/iio/iio_app/.'.
+   Finished prerequisites of target file '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/iio/iio_app/iio_app.o'.
+  Must remake target '/home/xvr/Documents/no-OS/projects/iio_demo/build/objs/iio_demo/build/app/noos/iio/iio_app/iio_app.o'.
+[32m[10:17:17][39m [CC] iio_app.c

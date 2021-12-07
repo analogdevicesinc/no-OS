@@ -107,14 +107,6 @@
 
 #endif // STM32_PLATFORM
 
-
-#ifdef MAXIM_PLATFORM	// MAXIM_PLATFORM
-
-#define UART_DEVICE_ID	1
-#define UART_BAUDRATE	115200
-
-#endif
-
 #ifdef USE_TCP_SOCKET
 #define WIFI_SSID	"RouterSSID"
 #define WIFI_PWD	"******"

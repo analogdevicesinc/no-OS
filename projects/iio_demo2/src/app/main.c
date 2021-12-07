@@ -64,10 +64,6 @@
 #include "stm32_hal.h"
 #endif
 
-#ifdef MAXIM_PLATFORM
-#include <stdio.h>
-#endif
-
 #include "error.h"
 #define DEMO_CHANNELS		max(TOTAL_ADC_CHANNELS, TOTAL_DAC_CHANNELS)
 #ifdef ENABLE_LOOPBACK
@@ -78,7 +74,7 @@ static uint16_t loopback_buffs[DEMO_CHANNELS][SAMPLES_PER_CHANNEL];
 #define loopback_buffs		NULL
 #endif //ENABLE_LOOPBACK
 
-#if defined(ADUCM_PLATFORM) || defined(STM32_PLATFORM) || defined(LINUX_PLATFORM) || defined(MAXIM_PLATFORM)
+#if defined(ADUCM_PLATFORM) || defined(STM32_PLATFORM) || defined(LINUX_PLATFORM)
 
 #define MAX_SIZE_BASE_ADDR	(SAMPLES_PER_CHANNEL * DEMO_CHANNELS * \
 					sizeof(uint16_t))
@@ -164,7 +160,6 @@ int32_t platform_init()
 *******************************************************************************/
 int main(void)
 {
-	printf("Test\n");
 	int32_t status;
 
 	/* adc demo configurations. */

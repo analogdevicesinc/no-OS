@@ -178,6 +178,10 @@ ifeq 'linux' '$(PLATFORM)'
 include $(NO-OS)/tools/scripts/linux.mk
 endif
 
+ifeq 'maxim' '$(PLATFORM)'
+include $(NO-OS)/tools/scripts/maxim.mk
+endif
+
 #------------------------------------------------------------------------------
 #                            COMMON COMPILER FLAGS                             
 #------------------------------------------------------------------------------

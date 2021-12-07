@@ -10,7 +10,8 @@ SRCS +=	$(NO-OS)/util/list.c \
 SRCS += $(DRIVERS)/adc/adc_demo/adc_demo.c \
 	$(DRIVERS)/adc/adc_demo/iio_adc_demo.c \
 	$(DRIVERS)/dac/dac_demo/iio_dac_demo.c \
-	$(DRIVERS)/dac/dac_demo/dac_demo.c
+	$(DRIVERS)/dac/dac_demo/dac_demo.c \
+	$(DRIVERS)/api/irq.c
 
 INCS += $(INCLUDE)/fifo.h \
 	$(INCLUDE)/uart.h \
@@ -21,11 +22,11 @@ INCS += $(INCLUDE)/fifo.h \
 INCS += $(DRIVERS)/adc/adc_demo/iio_adc_demo.h \
 		$(DRIVERS)/dac/dac_demo/dac_demo.h \
 		$(DRIVERS)/dac/dac_demo/iio_dac_demo.h \
-		$(DRIVERS)/adc/adc_demo/adc_demo.h \
+		$(DRIVERS)/adc/adc_demo/adc_demo.h
 
 ifeq ($(PLATFORM),$(filter $(PLATFORM),xilinx aducm3029))
 SRCS += $(PLATFORM_DRIVERS)/delay.c \
-	$(DRIVERS)/irq/irq.c
+	$(DRIVERS)/api/irq.c
 endif
 INCS += $(INCLUDE)/delay.h
 
@@ -87,44 +88,6 @@ INCS += $(PROJECT)/src/hal/stm32/main.h \
 
 LSCRIPT = $(PROJECT)/src/linker/STM32F446RETX_FLASH.ld
 endif
-
-
-#maxim
-
-ifeq (maxim, $(PLATFORM))
-
-SRCS += $(PLATFORM_DRIVERS)/uart_maxim.c 	\
-	$(PLATFORM_DRIVERS)/stdio.c			\
-	$(MAXIM_LIBRARIES)/MAX32660PeriphDriver/Source/uart_maxim_pdriver.c 	\
-	$(PLATFORM_DRIVERS)/delay_maxim.c 	\
-	$(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/MAX32660/Source/heap.c	 \
-	$(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/MAX32660/Source/system_max32660.c	 	\
-	$(MAXIM_LIBRARIES)/MAX32660PeriphDriver/Source/mxc_delay.c			\
-	$(MAXIM_LIBRARIES)/MAX32660PeriphDriver/Source/mxc_pins.c			\
-	$(MAXIM_LIBRARIES)/MAX32660PeriphDriver/Source/mxc_lock.c			\
-	$(MAXIM_LIBRARIES)/MAX32660PeriphDriver/Source/gpio.c			\
-	$(MAXIM_LIBRARIES)/MAX32660PeriphDriver/Source/mxc_sys.c	 	
-
-INCS += $(PLATFORM_DRIVERS)/uart_maxim.h			\
-	$(MAXIM_LIBRARIES)/MAX32660PeriphDriver/Include/uart_maxim_pdriver.h			\
-	$(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/MAX32660/Include/max32660.h	 \
-	$(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/MAX32660/Include/mxc_device.h	 \
-	$(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/MAX32660/Include/system_max32660.h	 \
-	$(MAXIM_LIBRARIES)/MAX32660PeriphDriver/Include/mxc_config.h			\
-	$(MAXIM_LIBRARIES)/MAX32660PeriphDriver/Include/mxc_errors.h			\
-	$(MAXIM_LIBRARIES)/MAX32660PeriphDriver/Include/mxc_assert.h			\
-	$(MAXIM_LIBRARIES)/MAX32660PeriphDriver/Include/mxc_lock.h			\
-	$(MAXIM_LIBRARIES)/MAX32660PeriphDriver/Include/mxc_pins.h			\
-	$(MAXIM_LIBRARIES)/MAX32660PeriphDriver/Include/rtc.h			\
-	$(MAXIM_LIBRARIES)/MAX32660PeriphDriver/Include/mxc_delay.h			\
-	$(MAXIM_LIBRARIES)/MAX32660PeriphDriver/Include/gpio.h			\
-	$(MAXIM_LIBRARIES)/MAX32660PeriphDriver/Include/dma.h			\
-	$(MAXIM_LIBRARIES)/MAX32660PeriphDriver/Include/mxc_sys.h	
-
-ASM_SRCS = $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/MAX32660/Source/GCC/startup_max32660.S
-
-endif
-
 
 ifeq (linux,$(PLATFORM))
 CFLAGS += -DENABLE_IIO_NETWORK \
