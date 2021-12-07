@@ -56,10 +56,6 @@
 #include "stm32_uart.h"
 #endif
 
-#ifdef MAXIM_PLATFORM
-#include "uart_maxim.h"
-#endif
-
 #ifdef USE_TCP_SOCKET
 #include "wifi.h"
 #include "tcp_socket.h"
@@ -72,9 +68,6 @@
 
 // The default baudrate iio_app will use to print messages to console.
 #define UART_BAUDRATE_DEFAULT	115200
-
-#define UART_HWCONTROL_NONE 0
-#define UART_DEVICE_ID 1
 
 static inline uint32_t _calc_uart_xfer_time(uint32_t len, uint32_t baudrate)
 {
@@ -244,7 +237,6 @@ static int32_t uart_setup(struct uart_desc **uart_desc,
 		.flow = UART_FLOW_CTRL_DIS,
 		.pol = UART_FLOW_POL_DIS
 	};
-
 #endif
 	static struct uart_init_param luart_par = {
 		.device_id = UART_DEVICE_ID,

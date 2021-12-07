@@ -1,1 +1,0 @@
-/CMSIS/Device/Maxim/MAX32660/Include/mxc_device.h
