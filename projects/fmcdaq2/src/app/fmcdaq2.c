@@ -861,9 +861,9 @@ int fmcdaq2_reconfig(struct ad9144_init_param *p_ad9144_param,
 		p_ad9680_param->lane_rate_kbps = 5000000;
 		ad9680_xcvr_param->lane_rate_khz = 5000000;
 #ifndef ALTERA_PLATFORM
-		ad9680_xcvr_param->ref_rate_khz = 500000;
+		ad9680_xcvr_param->ref_rate_khz = 250000;
 #else
-		ad9680_xcvr_param->parent_rate_khz = 500000;
+		ad9680_xcvr_param->parent_rate_khz = 250000;
 #endif
 #ifndef ALTERA_PLATFORM
 		ad9144_xcvr_param->lpm_enable = 0;
