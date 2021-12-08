@@ -215,7 +215,7 @@ int main(void)
 	};
 	struct axi_adc *axi_adc_core_desc;
 	struct axi_adc_init axi_adc_initial = {
-		.base = ADC_DDR_BASEADDR,
+		.base = AD7768_ADC_BASEADDR,
 		.name = "ad7768_axi_adc",
 		.num_channels = chan_no
 	};
