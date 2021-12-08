@@ -583,12 +583,6 @@ static int fmcdaq2_dac_init(struct fmcdaq2_dev *dev,
 		.channels = &dev->ad9144_channels[0]
 	};
 
-	dev_init->ad9144_param.spi3wire = 1;
-	dev_init->ad9144_param.interpolation = 1;
-	dev_init->ad9144_param.pll_enable = 0;
-	dev_init->ad9144_param.jesd204_subclass = 1;
-	dev_init->ad9144_param.jesd204_scrambling = 1;
-	dev_init->ad9144_param.jesd204_mode = 4;
 	for(uint32_t n=0;
 	    n < ARRAY_SIZE(dev_init->ad9144_param.jesd204_lane_xbar);
 	    n++)
@@ -926,6 +920,12 @@ static int fmcdaq2_setup(struct fmcdaq2_dev *dev,
 
 	dev_init->ad9680_param.lane_rate_kbps = 10000000;
 	dev_init->ad9144_param.lane_rate_kbps = 10000000;
+	dev_init->ad9144_param.spi3wire = 1;
+	dev_init->ad9144_param.interpolation = 1;
+	dev_init->ad9144_param.pll_enable = 0;
+	dev_init->ad9144_param.jesd204_subclass = 1;
+	dev_init->ad9144_param.jesd204_scrambling = 1;
+	dev_init->ad9144_param.jesd204_mode = 4;
 
 
 	/* change the default JESD configurations, if required */
