@@ -2,7 +2,7 @@
  *   @file   ad4110.c
  *   @brief  Implementation of AD4110 Driver.
  *   @author Stefan Popa (stefan.popa@analog.com)
- * 	     Andrei Porump (andrei.porumb@analog.com)
+ * 	     Andrei Porumb (andrei.porumb@analog.com)
  * 	     Mihail Chindris (mihail.chindris@analog.com)
 ********************************************************************************
  * Copyright 2021(c) Analog Devices, Inc.
