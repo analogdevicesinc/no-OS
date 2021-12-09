@@ -394,7 +394,7 @@ void adxl362_fifo_setup(struct adxl362_dev *dev,
 
 	write_val = ADXL362_FIFO_CTL_FIFO_MODE(mode) |
 		    (en_temp_read * ADXL362_FIFO_CTL_FIFO_TEMP) |
-		    ADXL362_FIFO_CTL_AH;
+		    ((0x100 & water_mark_lvl) >> 5);
 	adxl362_set_register_value(dev,
 				   write_val,
 				   ADXL362_REG_FIFO_CTL,
@@ -402,7 +402,7 @@ void adxl362_fifo_setup(struct adxl362_dev *dev,
 	adxl362_set_register_value(dev,
 				   water_mark_lvl,
 				   ADXL362_REG_FIFO_SAMPLES,
-				   2);
+				   1);
 }
 
 /***************************************************************************//**
