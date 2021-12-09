@@ -67,6 +67,7 @@
 
 #ifdef IIO_SUPPORT
 
+/* For loopback test, in app_config set the same NCO shift for both RX and TX */
 static int16_t dac_buffer[MAX_DAC_BUF_SAMPLES] __attribute__ ((aligned));
 static int16_t adc_buffer[MAX_ADC_BUF_SAMPLES] __attribute__ ((aligned));
 
