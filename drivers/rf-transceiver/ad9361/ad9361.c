@@ -2275,7 +2275,6 @@ static int32_t ad9361_gc_update(struct ad9361_rf_phy *phy)
 	/*
 	 * Settling Delay in 0x111.  Applies to all gain control modes:
 	 * 0x111[D4:D0]= ceiling(((0.2+Delay_LNA)*clkRF
-	dodebug = false;+14)/2)
 	 */
 
 	reg = (delay_lna + 200UL) * (clkrf / 2000UL);
