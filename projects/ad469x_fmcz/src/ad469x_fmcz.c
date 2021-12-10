@@ -212,8 +212,8 @@ int main()
 #ifdef IIO_SUPPORT
 
 	struct iio_data_buffer read_buff = {
-		.buff = (void *)ADC_DDR_BASEADDR,
-		.size = MAX_SIZE_BASE_ADDR
+		.buff = (void *)buf,
+		.size = sizeof(buf)
 	};
 
 	struct iio_app_device devices[] = {
