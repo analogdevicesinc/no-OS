@@ -44,16 +44,6 @@
 #include "stm32_hal.h"
 
 /**
- * @struct stm32_i2c_init_param
- * @brief Structure holding the initialization parameters for stm32 platform
- * specific I2C parameters.
- */
-struct stm32_i2c_init_param {
-	/** Device ID */
-	I2C_TypeDef *base;
-};
-
-/**
  * @struct stm32_i2c_desc
  * @brief stm32 platform specific I2C descriptor
  */

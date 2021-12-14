@@ -54,7 +54,7 @@ int32_t stm32_i2c_init(struct i2c_desc **desc,
 	int32_t ret;
 	struct i2c_desc *descriptor;
 	struct stm32_i2c_desc *xdesc;
-	struct stm32_i2c_init_param *xinit;
+	I2C_TypeDef *base = NULL;
 
 	if (!desc || !param)
 		return -EINVAL;
@@ -70,9 +70,29 @@ int32_t stm32_i2c_init(struct i2c_desc **desc,
 	}
 
 	descriptor->extra = xdesc;
-	xinit = param->extra;
 
-	xdesc->hi2c.Instance = xinit->base;
+	switch (param->device_id) {
+#if defined(I2C1)
+	case 1:
+		base = I2C1;
+		break;
+#endif
+#if defined(I2C2)
+	case 2:
+		base = I2C2;
+		break;
+#endif
+#if defined(I2C3)
+	case 3:
+		base = I2C3;
+		break;
+#endif
+	default:
+		ret = -EINVAL;
+		goto error_2;
+	};
+
+	xdesc->hi2c.Instance = base;
 	xdesc->hi2c.Init.ClockSpeed = param->max_speed_hz;
 	xdesc->hi2c.Init.DutyCycle = I2C_DUTYCYCLE_2;
 	xdesc->hi2c.Init.OwnAddress1 = 0;
@@ -89,6 +109,7 @@ int32_t stm32_i2c_init(struct i2c_desc **desc,
 	}
 
 	/* copy settings to device descriptor */
+	descriptor->device_id = param->device_id;
 	descriptor->max_speed_hz = param->max_speed_hz;
 	descriptor->slave_address = param->slave_address;
 	*desc = descriptor;
