@@ -172,6 +172,8 @@ int32_t uart_init(struct uart_desc **desc, struct uart_init_param *param)
 		goto error;
 	}
 
+	sud->timeout = suip->timeout ? suip->timeout : HAL_MAX_DELAY;
+
 	*desc = descriptor;
 
 	return 0;
@@ -223,9 +225,18 @@ int32_t uart_write(struct uart_desc *desc, const uint8_t *data,
 
 	sud = desc->extra;
 	ret = HAL_UART_Transmit(&sud->huart, (uint8_t *)data, bytes_number,
-				HAL_MAX_DELAY);
-	if (ret != HAL_OK)
+				sud->timeout);
+
+	switch (ret) {
+	case HAL_OK:
+		break;
+	case HAL_BUSY:
+		return -EBUSY;
+	case HAL_TIMEOUT:
+		return -ETIMEDOUT;
+	default:
 		return -EIO;
+	};
 
 	return 0;
 }
@@ -252,9 +263,18 @@ int32_t uart_read(struct uart_desc *desc, uint8_t *data,
 	sud = desc->extra;
 
 	ret = HAL_UART_Receive(&sud->huart, (uint8_t *)data, bytes_number,
-			       HAL_MAX_DELAY);
-	if (ret != HAL_OK)
+			       sud->timeout);
+
+	switch (ret) {
+	case HAL_OK:
+		break;
+	case HAL_BUSY:
+		return -EBUSY;
+	case HAL_TIMEOUT:
+		return -ETIMEDOUT;
+	default:
 		return -EIO;
+	};
 
 	return bytes_number;
 }
