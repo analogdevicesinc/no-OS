@@ -47,6 +47,7 @@
 #include <signal.h>
 #include <stdint.h>
 #include <stdio.h>
+#include "uart.h"
 #include "stm32_uart_stdio.h"
 #include "stm32_hal.h"
 
@@ -56,18 +57,14 @@
 #define STDOUT_FILENO 1
 #define STDERR_FILENO 2
 
-UART_HandleTypeDef *gHuart = NULL;
+static struct uart_desc *guart = NULL;
 
 void stm32_uart_stdio(struct uart_desc *desc)
 {
-	struct stm32_uart_desc *sud;
-
 	if(!desc || !desc->extra)
 		return;
 
-	sud = desc->extra;
-
-	gHuart = &sud->huart;
+	guart = desc;
 
 	/* Disable I/O buffering for STDOUT stream, so that
 	* chars are sent out as soon as they are printed. */
@@ -85,14 +82,16 @@ int _isatty(int fd)
 
 int _write(int fd, char* ptr, int len)
 {
-	HAL_StatusTypeDef hstatus;
+	int ret;
 
 	if (fd == STDOUT_FILENO || fd == STDERR_FILENO) {
-		hstatus = HAL_UART_Transmit(gHuart, (uint8_t *) ptr, len, HAL_MAX_DELAY);
-		if (hstatus == HAL_OK)
-			return len;
-		else
-			return EIO;
+		ret = uart_write(guart, (uint8_t *)ptr, len);
+		if (ret < 0) {
+			errno = -ret;
+			return -1;
+		}
+
+		return len;
 	}
 	errno = EBADF;
 	return -1;
@@ -119,14 +118,16 @@ int _lseek(int fd, int ptr, int dir)
 
 int _read(int fd, char* ptr, int len)
 {
-	HAL_StatusTypeDef hstatus;
+	int ret;
 
 	if (fd == STDIN_FILENO) {
-		hstatus = HAL_UART_Receive(gHuart, (uint8_t *) ptr, 1, HAL_MAX_DELAY);
-		if (hstatus == HAL_OK)
-			return 1;
-		else
-			return EIO;
+		ret = uart_read(guart, (uint8_t *)ptr, 1);
+		if (ret < 0) {
+			errno = -ret;
+			return -1;
+		}
+
+		return ret;
 	}
 	errno = EBADF;
 	return -1;
