@@ -13539,7 +13539,7 @@ mykonosErr_t MYKONOS_checkArmState(mykonosDevice_t *device, mykonosArmState_t ar
                 break;
         }
 
-        if (armStateCheck && armStatusMapped)
+        if ((armStateCheck & armStatusMapped) || !(armStateCheck || armStatusMapped))
         {
             retVal = MYKONOS_ERR_OK;
             break;
