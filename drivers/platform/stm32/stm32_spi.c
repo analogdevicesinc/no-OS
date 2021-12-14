@@ -60,6 +60,7 @@ int32_t stm32_spi_init(struct spi_desc **desc,
 	const uint32_t prescaler_max = SPI_BAUDRATEPRESCALER_256;
 	uint32_t prescaler_reg = 0u;
 	struct spi_desc	*spi_desc;
+	SPI_TypeDef *base = NULL;
 
 	if (!desc || !param)
 		return -EINVAL;
@@ -131,7 +132,43 @@ int32_t stm32_spi_init(struct spi_desc **desc,
 	} else
 		prescaler_reg = prescaler_default;
 
-	sdesc->hspi.Instance = sinit->base;
+	switch (param->device_id) {
+#if defined(SPI1)
+	case 1:
+		base = SPI1;
+		break;
+#endif
+#if defined(SPI2)
+	case 2:
+		base = SPI2;
+		break;
+#endif
+#if defined(SPI3)
+	case 3:
+		base = SPI3;
+		break;
+#endif
+		break;
+#if defined(SPI4)
+	case 4:
+		base = SPI4;
+		break;
+#endif
+#if defined(SPI5)
+	case 5:
+		base = SPI5;
+		break;
+#endif
+#if defined(SPI6)
+	case 6:
+		base = SPI6;
+		break;
+#endif
+	default:
+		ret = -EINVAL;
+		goto error;
+	};
+	sdesc->hspi.Instance = base;
 	sdesc->hspi.Init.Mode = SPI_MODE_MASTER;
 	sdesc->hspi.Init.Direction = SPI_DIRECTION_2LINES;
 	sdesc->hspi.Init.DataSize = SPI_DATASIZE_8BIT;

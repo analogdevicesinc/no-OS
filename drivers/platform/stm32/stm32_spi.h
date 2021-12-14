@@ -49,8 +49,6 @@
  * specific SPI parameters.
  */
 typedef struct stm32_spi_init_param {
-	/** Device ID */
-	SPI_TypeDef *base;
 	/** Chip select port */
 	GPIO_TypeDef *chip_select_port;
 	/** Get perihperal source clock function */
