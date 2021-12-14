@@ -62,6 +62,8 @@ struct i2c_platform_ops ;
  * @brief Structure holding the parameters for I2C initialization.
  */
 typedef struct i2c_init_param {
+	/** Device ID */
+	uint32_t	device_id;
 	/** I2C maximum transfer speed supported */
 	uint32_t	max_speed_hz;
 	/** Slave address */
@@ -77,6 +79,8 @@ typedef struct i2c_init_param {
  * @brief Structure holding I2C descriptor
  */
 typedef struct i2c_desc {
+	/** Device ID */
+	uint32_t	device_id;
 	/** I2C maximum transfer speed supported */
 	uint32_t	max_speed_hz;
 	/** Slave address */
