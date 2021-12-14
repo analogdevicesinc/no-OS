@@ -125,7 +125,8 @@ LDFLAGS	= -mcpu=cortex-m4 \
 	-Wl,--start-group \
 	-lc \
 	-lm \
-	-Wl,--end-group
+	-Wl,--end-group \
+	-u _printf_flags
 
 AR = arm-none-eabi-ar
 AS = arm-none-eabi-gcc
