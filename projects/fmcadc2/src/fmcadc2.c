@@ -64,6 +64,8 @@
 #include "iio_axi_adc.h"
 #endif
 
+static int16_t adc_buff[ADC_MAX_SAMPLES] __attribute__((aligned));
+
 int main(void)
 {
 	int32_t status;
@@ -206,8 +208,7 @@ int main(void)
 
 	axi_dmac_init(&ad9625_dmac, &ad9625_dmac_param);
 
-	axi_dmac_transfer(ad9625_dmac, ADC_DDR_BASEADDR,
-			  16384 * 2);
+	axi_dmac_transfer(ad9625_dmac, adc_buff, sizeof(adc_buff));
 
 #ifdef IIO_SUPPORT
 
@@ -232,8 +233,8 @@ int main(void)
 		return status;
 
 	struct iio_data_buffer read_buff = {
-		.buff = (void *)ADC_DDR_BASEADDR,
-		.size = 0xFFFFFFFF,
+		.buff = (void *)adc_buff,
+		.size = sizeof(adc_buff),
 	};
 
 	struct iio_app_device devices[] = {
