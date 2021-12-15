@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   projects/fmcadc2/src/app/app_config.h
+ *   @file   projects/fmcadc2/src/app_config.h
  *   @brief  Config file for FMCADC2 project.
  *   @author DBogdan (dragos.bogdan@analog.com)
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
