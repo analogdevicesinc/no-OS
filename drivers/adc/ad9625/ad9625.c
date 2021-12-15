@@ -115,7 +115,7 @@ int32_t ad9625_setup(struct ad9625_dev **device,
 	ad9625_spi_write(dev, AD9625_REG_JESD204B_LANE_POWER_MODE, 0x00);
 	ad9625_spi_write(dev, AD9625_REG_DIVCLK_OUT_CNTRL, 0x11);
 	ad9625_spi_write(dev, AD9625_REG_TEST_CNTRL, 0x00);
-	ad9625_spi_write(dev, AD9625_REG_OUTPUT_MODE, 0x00);
+	ad9625_spi_write(dev, AD9625_REG_OUTPUT_MODE, 0x01);
 	ad9625_spi_write(dev, AD9625_REG_OUTPUT_ADJUST, 0x10);
 	ad9625_spi_write(dev, AD9625_REG_JESD204B_LINK_CNTRL_1, 0x14);
 	ad9625_spi_write(dev, AD9625_REG_TRANSFER, 0x01);
