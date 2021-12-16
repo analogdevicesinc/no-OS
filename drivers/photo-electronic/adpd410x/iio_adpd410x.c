@@ -46,8 +46,8 @@
 #include <stdio.h>
 #include <string.h>
 #include "adpd410x.h"
-#include "util.h"
-#include "error.h"
+#include "no-os/util.h"
+#include "no-os/error.h"
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/

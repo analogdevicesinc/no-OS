@@ -27,10 +27,10 @@ INCS += $(PROJECT)/src/parameters.h \
 	$(DRIVERS)/axi_core/spi_engine/spi_engine_private.h
 INCS +=	$(PLATFORM_DRIVERS)/spi_extra.h \
 	$(PLATFORM_DRIVERS)/gpio_extra.h
-INCS +=	$(INCLUDE)/axi_io.h \
-	$(INCLUDE)/spi.h \
-	$(INCLUDE)/gpio.h \
-	$(INCLUDE)/error.h \
-	$(INCLUDE)/delay.h \
-	$(INCLUDE)/print_log.h \
-	$(INCLUDE)/util.h
+INCS +=	$(INCLUDE)/no-os/axi_io.h \
+	$(INCLUDE)/no-os/spi.h \
+	$(INCLUDE)/no-os/gpio.h \
+	$(INCLUDE)/no-os/error.h \
+	$(INCLUDE)/no-os/delay.h \
+	$(INCLUDE)/no-os/print_log.h \
+	$(INCLUDE)/no-os/util.h

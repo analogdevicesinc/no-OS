@@ -37,10 +37,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 #include <stdint.h>
-#include "error.h"
-#include "util.h"
-#include "print_log.h"
-#include "delay.h"
+#include "no-os/error.h"
+#include "no-os/util.h"
+#include "no-os/print_log.h"
+#include "no-os/delay.h"
 #include "adrv9002.h"
 #include "adi_adrv9001.h"
 #include "adi_adrv9001_arm.h"

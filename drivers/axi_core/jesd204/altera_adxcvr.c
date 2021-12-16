@@ -44,8 +44,8 @@
 #include <stdio.h>
 #include <inttypes.h>
 #include "io.h"
-#include "error.h"
-#include "util.h"
+#include "no-os/error.h"
+#include "no-os/util.h"
 #include "altera_a10_atx_pll.h"
 #include "altera_a10_cdr_pll.h"
 #include "altera_adxcvr.h"

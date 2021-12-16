@@ -43,7 +43,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "error.h"
+#include "no-os/error.h"
 #include "ad7799.h"
 
 /*****************************************************************************/

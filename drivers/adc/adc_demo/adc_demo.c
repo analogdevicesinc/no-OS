@@ -47,8 +47,8 @@
 #include <inttypes.h>
 #include "iio_types.h"
 #include "adc_demo.h"
-#include "error.h"
-#include "util.h"
+#include "no-os/error.h"
+#include "no-os/util.h"
 
 /* Default sine values if the user wants to use only ADC*/
 const uint16_t sine_lut[128] = {

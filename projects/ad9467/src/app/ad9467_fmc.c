@@ -46,14 +46,14 @@
 #include <stdio.h>
 #include "xil_cache.h"
 #include "xparameters.h"
-#include "spi.h"
+#include "no-os/spi.h"
 #include "spi_extra.h"
-#include "delay.h"
-#include "error.h"
+#include "no-os/delay.h"
+#include "no-os/error.h"
 
 #include "axi_adc_core.h"
 #include "axi_dmac.h"
-#include "axi_io.h"
+#include "no-os/axi_io.h"
 #include "ad9467.h"
 #include "ad9517.h"
 #include "parameters.h"

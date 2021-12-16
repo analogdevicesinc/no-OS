@@ -44,10 +44,10 @@
 #include "xil_cache.h"
 #include "ad7768.h"
 #include "axi_dmac.h"
-#include "gpio.h"
+#include "no-os/gpio.h"
 #include "spi_extra.h"
 #include "gpio_extra.h"
-#include "error.h"
+#include "no-os/error.h"
 #include "axi_adc_core.h"
 #include <xil_io.h>
 #include <stdio.h>

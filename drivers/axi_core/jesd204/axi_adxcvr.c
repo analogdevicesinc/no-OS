@@ -43,10 +43,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <inttypes.h>
-#include "axi_io.h"
-#include "util.h"
-#include "error.h"
-#include "delay.h"
+#include "no-os/axi_io.h"
+#include "no-os/util.h"
+#include "no-os/error.h"
+#include "no-os/delay.h"
 #include "xilinx_transceiver.h"
 #include "axi_adxcvr.h"
 

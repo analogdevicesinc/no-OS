@@ -49,12 +49,12 @@
 #include <xil_printf.h>
 #include <xil_cache.h>
 #include "axi_adxcvr.h"
-#include "spi.h"
-#include "gpio.h"
+#include "no-os/spi.h"
+#include "no-os/gpio.h"
 #include "spi_extra.h"
 #include "gpio_extra.h"
-#include "delay.h"
-#include "error.h"
+#include "no-os/delay.h"
+#include "no-os/error.h"
 #include "ad9625.h"
 #include "axi_adc_core.h"
 #include "axi_dmac.h"

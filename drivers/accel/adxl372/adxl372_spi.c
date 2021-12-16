@@ -40,7 +40,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
-#include "error.h"
+#include "no-os/error.h"
 #include "adxl372.h"
 
 /**

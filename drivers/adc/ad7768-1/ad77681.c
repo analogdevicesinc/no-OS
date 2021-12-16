@@ -45,8 +45,8 @@
 #include "stdbool.h"
 #include <string.h>
 #include "ad77681.h"
-#include "error.h"
-#include "delay.h"
+#include "no-os/error.h"
+#include "no-os/delay.h"
 
 /******************************************************************************/
 /************************** Functions Implementation **************************/

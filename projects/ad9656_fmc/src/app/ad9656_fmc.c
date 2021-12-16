@@ -54,8 +54,8 @@
 #include "axi_jesd204_rx.h"
 #include "spi_extra.h"
 #include "parameters.h"
-#include "error.h"
-#include "delay.h"
+#include "no-os/error.h"
+#include "no-os/delay.h"
 
 #ifdef IIO_SUPPORT
 #include "app_iio.h"

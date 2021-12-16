@@ -43,14 +43,14 @@
 #include <stdint.h>
 #include "parameters.h"
 #include "xparameters.h"
-#include "gpio.h"
+#include "no-os/gpio.h"
 #include "gpio_extra.h"
-#include "spi.h"
+#include "no-os/spi.h"
 #include "spi_extra.h"
 #include "ssd_1306.h"
 #include "display.h"
-#include "error.h"
-#include "delay.h"
+#include "no-os/error.h"
+#include "no-os/delay.h"
 
 /***************************************************************************//**
  * @brief main

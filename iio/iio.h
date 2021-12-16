@@ -46,7 +46,7 @@
 /******************************************************************************/
 
 #include "iio_types.h"
-#include "uart.h"
+#include "no-os/uart.h"
 #ifdef ENABLE_IIO_NETWORK
 #include "tcp_socket.h"
 #endif

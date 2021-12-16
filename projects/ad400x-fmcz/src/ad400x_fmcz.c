@@ -9,8 +9,8 @@
 #include "xil_printf.h"
 #include "spi_engine.h"
 #include "ad400x.h"
-#include "error.h"
-#include "delay.h"
+#include "no-os/error.h"
+#include "no-os/delay.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/

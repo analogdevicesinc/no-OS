@@ -37,8 +37,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 #include <stdbool.h>
-#include "delay.h"
 #include "stm32_hal.h"
+#include "no-os/delay.h"
 /**
  * @brief Generate microseconds delay.
  * @param usecs - Delay in microseconds.

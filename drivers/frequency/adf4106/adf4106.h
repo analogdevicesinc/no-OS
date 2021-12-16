@@ -45,9 +45,9 @@
 /****************************** Include Files ********************************/
 /*****************************************************************************/
 #include <stdint.h>
-#include "delay.h"
-#include "gpio.h"
-#include "spi.h"
+#include "no-os/delay.h"
+#include "no-os/gpio.h"
+#include "no-os/spi.h"
 
 /*****************************************************************************/
 /*  Device specific MACROs                                                   */

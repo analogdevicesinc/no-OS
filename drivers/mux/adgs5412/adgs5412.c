@@ -43,7 +43,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "adgs5412.h"
-#include "error.h"
+#include "no-os/error.h"
 
 /******************************************************************************/
 /************************** Functions Implementation **************************/

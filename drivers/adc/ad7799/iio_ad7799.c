@@ -42,8 +42,8 @@
 #include <stdio.h>
 #include <string.h>
 #include "ad7799.h"
-#include "util.h"
-#include "error.h"
+#include "no-os/util.h"
+#include "no-os/error.h"
 
 /**
  * @brief Read ADC Channel data.

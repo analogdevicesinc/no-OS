@@ -47,8 +47,8 @@
 
 #include <stdint.h>
 #include "network_interface.h"
-#include "uart.h"
-#include "irq.h"
+#include "no-os/uart.h"
+#include "no-os/irq.h"
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/

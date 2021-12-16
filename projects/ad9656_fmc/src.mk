@@ -53,16 +53,16 @@ ifeq (y,$(strip $(TINYIIOD)))
 INCS +=	$(PROJECT)/src/app/app_iio.h
 endif
 INCS +=	$(PLATFORM_DRIVERS)/spi_extra.h
-INCS +=	$(INCLUDE)/axi_io.h \
-        $(INCLUDE)/spi.h \
-        $(INCLUDE)/error.h \
-        $(INCLUDE)/delay.h \
-        $(INCLUDE)/util.h
+INCS +=	$(INCLUDE)/no-os/axi_io.h \
+        $(INCLUDE)/no-os/spi.h \
+        $(INCLUDE)/no-os/error.h \
+        $(INCLUDE)/no-os/delay.h \
+        $(INCLUDE)/no-os/util.h
 ifeq (y,$(strip $(TINYIIOD)))
-INCS +=	$(INCLUDE)/fifo.h \
-	$(INCLUDE)/irq.h \
-	$(INCLUDE)/uart.h \
-	$(INCLUDE)/list.h \
+INCS +=	$(INCLUDE)/no-os/fifo.h \
+	$(INCLUDE)/no-os/irq.h \
+	$(INCLUDE)/no-os/uart.h \
+	$(INCLUDE)/no-os/list.h \
 	$(PLATFORM_DRIVERS)/irq_extra.h \
 	$(PLATFORM_DRIVERS)/uart_extra.h \
 	$(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.h

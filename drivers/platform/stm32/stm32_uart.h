@@ -41,7 +41,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
-#include "uart.h"
+#include "no-os/uart.h"
 #include "stm32_hal.h"
 
 /**

@@ -39,7 +39,7 @@
 #ifndef GPIO_EXTRA_H_
 #define GPIO_EXTRA_H_
 
-#include "gpio.h"
+#include "no-os/gpio.h"
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/

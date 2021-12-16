@@ -43,11 +43,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <inttypes.h>
-#include "error.h"
-#include "delay.h"
-#include "util.h"
+#include "no-os/error.h"
+#include "no-os/delay.h"
+#include "no-os/util.h"
 #include "axi_dac_core.h"
-#include "axi_io.h"
+#include "no-os/axi_io.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/

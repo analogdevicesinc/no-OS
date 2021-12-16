@@ -39,10 +39,10 @@
 
 #include <drivers/adc/adi_adc.h>
 #include "adc.h"
-#include "error.h"
+#include "no-os/error.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "util.h"
+#include "no-os/util.h"
 
 #define ADUCM3029_DEV_ID 0
 

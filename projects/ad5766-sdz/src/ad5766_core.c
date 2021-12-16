@@ -45,7 +45,7 @@
 #include "spi_engine.h"
 #include "spi_engine_private.h"
 #include <xil_io.h>
-#include "error.h"
+#include "no-os/error.h"
 #include "ad5766_core.h"
 
 /******************************************************************************/

@@ -46,10 +46,10 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include <stdint.h>
-#include "delay.h"
-#include "gpio.h"
-#include "spi.h"
-#include "irq.h"
+#include "no-os/delay.h"
+#include "no-os/gpio.h"
+#include "no-os/spi.h"
+#include "no-os/irq.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/

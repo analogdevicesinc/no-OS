@@ -16,18 +16,18 @@ SRCS += $(NO-OS)/util/util.c
 SRCS += $(NO-OS)/util/list.c
 
 # Add to INCS inlcude files to be build in the project
-INCS += $(INCLUDE)/error.h
-INCS += $(INCLUDE)/gpio.h
-INCS += $(INCLUDE)/delay.h
-INCS += $(INCLUDE)/util.h
-INCS += $(INCLUDE)/axi_io.h
-INCS += $(INCLUDE)/spi.h
-INCS += $(INCLUDE)/timer.h
-INCS += $(INCLUDE)/i2c.h
-INCS += $(INCLUDE)/uart.h
-INCS +=	$(INCLUDE)/irq.h
-INCS += $(INCLUDE)/list.h
-INCS += $(INCLUDE)/fifo.h
+INCS += $(INCLUDE)/no-os/error.h
+INCS += $(INCLUDE)/no-os/gpio.h
+INCS += $(INCLUDE)/no-os/delay.h
+INCS += $(INCLUDE)/no-os/util.h
+INCS += $(INCLUDE)/no-os/axi_io.h
+INCS += $(INCLUDE)/no-os/spi.h
+INCS += $(INCLUDE)/no-os/timer.h
+INCS += $(INCLUDE)/no-os/i2c.h
+INCS += $(INCLUDE)/no-os/uart.h
+INCS +=	$(INCLUDE)/no-os/irq.h
+INCS += $(INCLUDE)/no-os/list.h
+INCS += $(INCLUDE)/no-os/fifo.h
 INCS += $(PROJECT)/src/parameters.h
 
 # Add to SRC_DIRS directories to be used in the build. All .c and .h files from
@@ -48,9 +48,9 @@ ifeq (y,$(strip $(TINYIIOD)))
 LIBRARIES += iio
 SRC_DIRS += $(NO-OS)/iio/iio_app
 
-INCS +=	$(INCLUDE)/fifo.h \
-	$(INCLUDE)/uart.h \
-	$(INCLUDE)/list.h \
+INCS +=	$(INCLUDE)/no-os/fifo.h \
+	$(INCLUDE)/no-os/uart.h \
+	$(INCLUDE)/no-os/list.h \
 	$(PLATFORM_DRIVERS)/irq_extra.h \
 	$(PLATFORM_DRIVERS)/uart_extra.h \
 	$(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.h

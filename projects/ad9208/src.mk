@@ -23,9 +23,9 @@ SRC_DIRS += $(DRIVERS)/axi_core/iio_axi_adc \
 SRCS	+= $(PLATFORM_DRIVERS)/uart.c \
 		$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c \
 		$(NO-OS)/util/list.c 
-INCS	+= $(INCLUDE)/uart.h \
-		$(INCLUDE)/list.h \
-		$(INCLUDE)/irq.h \
+INCS	+= $(INCLUDE)/no-os/uart.h \
+		$(INCLUDE)/no-os/list.h \
+		$(INCLUDE)/no-os/irq.h \
 		$(PLATFORM_DRIVERS)/irq_extra.h \
 		$(PLATFORM_DRIVERS)/uart_extra.h
 		
@@ -51,9 +51,9 @@ INCS += $(DRIVERS)/frequency/hmc7044/hmc7044.h \
 	$(DRIVERS)/axi_core/jesd204/xilinx_transceiver.h
 INCS +=	$(PLATFORM_DRIVERS)/spi_extra.h \
 	$(PLATFORM_DRIVERS)/gpio_extra.h
-INCS +=	$(INCLUDE)/axi_io.h \
-	$(INCLUDE)/spi.h \
-	$(INCLUDE)/gpio.h \
-	$(INCLUDE)/error.h \
-	$(INCLUDE)/delay.h \
-	$(INCLUDE)/util.h
+INCS +=	$(INCLUDE)/no-os/axi_io.h \
+	$(INCLUDE)/no-os/spi.h \
+	$(INCLUDE)/no-os/gpio.h \
+	$(INCLUDE)/no-os/error.h \
+	$(INCLUDE)/no-os/delay.h \
+	$(INCLUDE)/no-os/util.h

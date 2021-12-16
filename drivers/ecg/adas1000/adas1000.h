@@ -48,7 +48,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
-#include "spi.h"
+#include "no-os/spi.h"
 
 /******************************************************************************/
 /* ADAS1000 SPI Registers Memory Map */

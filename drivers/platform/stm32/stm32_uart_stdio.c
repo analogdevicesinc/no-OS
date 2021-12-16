@@ -47,7 +47,7 @@
 #include <signal.h>
 #include <stdint.h>
 #include <stdio.h>
-#include "uart.h"
+#include "no-os/uart.h"
 #include "stm32_uart_stdio.h"
 #include "stm32_hal.h"
 
