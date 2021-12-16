@@ -46,16 +46,17 @@
 #include "axi_adc_core.h"
 #include "axi_dmac.h"
 #include "ad9434.h"
-#include "spi.h"
+#include "no-os/spi.h"
 #include "spi_extra.h"
 #include "parameters.h"
-#include "error.h"
+#include "no-os/error.h"
 
 #ifdef IIO_SUPPORT
-#include "app_iio.h"
+#include "iio_app.h"
+#include "iio_axi_adc.h"
 #endif
 
-#include "print_log.h"
+#include "no-os/print_log.h"
 
 /***************************************************************************//**
 * @brief main
@@ -153,8 +154,9 @@ int main(void)
 	}
 
 #ifdef IIO_SUPPORT
-	pr_info("The board accepts libiio clients connections through the serial backend.\n");
 
+	struct iio_axi_adc_desc *iio_axi_adc_desc;
+	struct iio_device *dev_desc;
 	struct iio_axi_adc_init_param iio_axi_adc_init_par;
 	iio_axi_adc_init_par = (struct iio_axi_adc_init_param) {
 		.rx_adc = ad9434_core,
@@ -163,7 +165,21 @@ int main(void)
 						     uint32_t))Xil_DCacheInvalidateRange
 	};
 
-	return iio_app_start(&iio_axi_adc_init_par);
+	status = iio_axi_adc_init(&iio_axi_adc_desc, &iio_axi_adc_init_par);
+	if (status < 0)
+		return status;
+
+	iio_axi_adc_get_dev_descriptor(iio_axi_adc_desc, &dev_desc);
+	struct iio_data_buffer read_buff = {
+		.buff = (void *)ADC_DDR_BASEADDR,
+		.size = 0xFFFFFFFF,
+	};
+	struct iio_app_device devices[] = {
+		IIO_APP_DEVICE("ad9434_dev", iio_axi_adc_desc, dev_desc,
+			       &read_buff, NULL),
+	};
+
+	return iio_app_run(devices, ARRAY_SIZE(devices));
 #endif
 
 	pr_info("Capture done.\n");

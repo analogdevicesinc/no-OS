@@ -40,7 +40,7 @@
 #define STM32_TDM_H_
 
 #include <stdint.h>
-#include "tdm.h"
+#include "no-os/tdm.h"
 #include "stm32_hal.h"
 
 /**

@@ -51,13 +51,13 @@
 #endif
 
 // platform drivers
-#include "spi.h"
+#include "no-os/spi.h"
 #include "spi_extra.h"
-#include "gpio.h"
+#include "no-os/gpio.h"
 #include "gpio_extra.h"
-#include "error.h"
-#include "delay.h"
-#include "util.h"
+#include "no-os/error.h"
+#include "no-os/delay.h"
+#include "no-os/util.h"
 
 // platform specific
 #ifdef ALTERA_PLATFORM

@@ -55,12 +55,12 @@
 #include "clk_altera_a10_fpll.h"
 #include "altera_adxcvr.h"
 #endif
-#include "spi.h"
-#include "gpio.h"
+#include "no-os/spi.h"
+#include "no-os/gpio.h"
 #include "spi_extra.h"
 #include "gpio_extra.h"
-#include "delay.h"
-#include "error.h"
+#include "no-os/delay.h"
+#include "no-os/error.h"
 #include "ad9144.h"
 #include "ad9523.h"
 #include "ad9680.h"
@@ -583,12 +583,6 @@ static int fmcdaq2_dac_init(struct fmcdaq2_dev *dev,
 		.channels = &dev->ad9144_channels[0]
 	};
 
-	dev_init->ad9144_param.spi3wire = 1;
-	dev_init->ad9144_param.interpolation = 1;
-	dev_init->ad9144_param.pll_enable = 0;
-	dev_init->ad9144_param.jesd204_subclass = 1;
-	dev_init->ad9144_param.jesd204_scrambling = 1;
-	dev_init->ad9144_param.jesd204_mode = 4;
 	for(uint32_t n=0;
 	    n < ARRAY_SIZE(dev_init->ad9144_param.jesd204_lane_xbar);
 	    n++)
@@ -861,9 +855,9 @@ int fmcdaq2_reconfig(struct ad9144_init_param *p_ad9144_param,
 		p_ad9680_param->lane_rate_kbps = 5000000;
 		ad9680_xcvr_param->lane_rate_khz = 5000000;
 #ifndef ALTERA_PLATFORM
-		ad9680_xcvr_param->ref_rate_khz = 500000;
+		ad9680_xcvr_param->ref_rate_khz = 250000;
 #else
-		ad9680_xcvr_param->parent_rate_khz = 500000;
+		ad9680_xcvr_param->parent_rate_khz = 250000;
 #endif
 #ifndef ALTERA_PLATFORM
 		ad9144_xcvr_param->lpm_enable = 0;
@@ -926,6 +920,12 @@ static int fmcdaq2_setup(struct fmcdaq2_dev *dev,
 
 	dev_init->ad9680_param.lane_rate_kbps = 10000000;
 	dev_init->ad9144_param.lane_rate_kbps = 10000000;
+	dev_init->ad9144_param.spi3wire = 1;
+	dev_init->ad9144_param.interpolation = 1;
+	dev_init->ad9144_param.pll_enable = 0;
+	dev_init->ad9144_param.jesd204_subclass = 1;
+	dev_init->ad9144_param.jesd204_scrambling = 1;
+	dev_init->ad9144_param.jesd204_mode = 4;
 
 
 	/* change the default JESD configurations, if required */

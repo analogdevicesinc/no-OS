@@ -48,8 +48,8 @@
 #include <stdlib.h>
 #include <drivers/tmr/adi_tmr.h>
 #include "timer_extra.h"
-#include "timer.h"
-#include "error.h"
+#include "no-os/timer.h"
+#include "no-os/error.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/

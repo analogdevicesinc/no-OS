@@ -19,7 +19,7 @@
 #define __AD917XAPI_H__
 
 #include "api_def.h"
-#include "util.h"
+#include "no-os/util.h"
 
 /** \addtogroup API
  *  @{

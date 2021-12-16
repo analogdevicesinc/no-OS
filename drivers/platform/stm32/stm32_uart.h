@@ -41,7 +41,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
-#include "uart.h"
+#include "no-os/uart.h"
 #include "stm32_hal.h"
 
 /**
@@ -55,6 +55,8 @@ struct stm32_uart_init_param {
 	uint32_t hw_flow_ctl;
 	/** Specifies oversampling mode. */
 	uint32_t over_sampling;
+	/** UART transaction timeout (HAL_IncTick() units) */
+	uint32_t timeout;
 };
 
 /**
@@ -64,6 +66,8 @@ struct stm32_uart_init_param {
 struct stm32_uart_desc {
 	/** SPI instance */
 	UART_HandleTypeDef huart;
+	/** UART transaction timeout (HAL_IncTick() units) */
+	uint32_t timeout;
 };
 
 #endif

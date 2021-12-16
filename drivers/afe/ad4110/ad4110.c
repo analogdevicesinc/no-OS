@@ -2,7 +2,7 @@
  *   @file   ad4110.c
  *   @brief  Implementation of AD4110 Driver.
  *   @author Stefan Popa (stefan.popa@analog.com)
- * 	     Andrei Porump (andrei.porumb@analog.com)
+ * 	     Andrei Porumb (andrei.porumb@analog.com)
  * 	     Mihail Chindris (mihail.chindris@analog.com)
 ********************************************************************************
  * Copyright 2021(c) Analog Devices, Inc.
@@ -45,9 +45,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "ad4110.h"
-#include "error.h"
-#include "irq.h"
-#include "print_log.h"
+#include "no-os/error.h"
+#include "no-os/irq.h"
+#include "no-os/print_log.h"
 
 /******************************************************************************/
 /************************** Functions Implementation **************************/

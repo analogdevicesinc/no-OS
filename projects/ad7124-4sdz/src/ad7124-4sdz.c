@@ -42,7 +42,7 @@
 #include "ad7124.h"
 #include "ad7124_regs.h"
 #include "spi_extra.h"
-#include "error.h"
+#include "no-os/error.h"
 
 int main(void)
 {

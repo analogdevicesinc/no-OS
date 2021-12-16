@@ -49,19 +49,22 @@
 #include <xil_printf.h>
 #include <xil_cache.h>
 #include "axi_adxcvr.h"
-#include "spi.h"
-#include "gpio.h"
+#include "no-os/spi.h"
+#include "no-os/gpio.h"
 #include "spi_extra.h"
 #include "gpio_extra.h"
-#include "delay.h"
-#include "error.h"
+#include "no-os/delay.h"
+#include "no-os/error.h"
 #include "ad9625.h"
 #include "axi_adc_core.h"
 #include "axi_dmac.h"
 #include "axi_jesd204_rx.h"
 #ifdef IIO_SUPPORT
-#include "app_iio.h"
+#include "iio_app.h"
+#include "iio_axi_adc.h"
 #endif
+
+static int16_t adc_buff[ADC_MAX_SAMPLES] __attribute__((aligned));
 
 int main(void)
 {
@@ -205,12 +208,12 @@ int main(void)
 
 	axi_dmac_init(&ad9625_dmac, &ad9625_dmac_param);
 
-	axi_dmac_transfer(ad9625_dmac, ADC_DDR_BASEADDR,
-			  16384 * 2);
+	axi_dmac_transfer(ad9625_dmac, adc_buff, sizeof(adc_buff));
 
 #ifdef IIO_SUPPORT
-	printf("The board accepts libiio clients connections through the serial backend.\n");
 
+	struct iio_device *adc_dev_desc;
+	struct iio_axi_adc_desc *iio_axi_adc_desc;
 	struct iio_axi_adc_init_param iio_axi_adc_init_par;
 	iio_axi_adc_init_par = (struct iio_axi_adc_init_param) {
 		.rx_adc = ad9625_core,
@@ -221,7 +224,25 @@ int main(void)
 #endif
 	};
 
-	return iio_server_init(&iio_axi_adc_init_par);
+	status = iio_axi_adc_init(&iio_axi_adc_desc, &iio_axi_adc_init_par);
+	if (status < 0)
+		return status;
+
+	iio_axi_adc_get_dev_descriptor(iio_axi_adc_desc, &adc_dev_desc);
+	if (status < 0)
+		return status;
+
+	struct iio_data_buffer read_buff = {
+		.buff = (void *)adc_buff,
+		.size = sizeof(adc_buff),
+	};
+
+	struct iio_app_device devices[] = {
+		IIO_APP_DEVICE("axi-ad9625", iio_axi_adc_desc, adc_dev_desc,
+			       &read_buff, NULL),
+	};
+
+	return iio_app_run(devices, ARRAY_SIZE(devices));
 #endif
 
 	printf("adc2: setup and configuration is done\n");

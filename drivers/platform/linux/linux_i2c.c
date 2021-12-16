@@ -41,8 +41,8 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 
-#include "error.h"
-#include "i2c.h"
+#include "no-os/error.h"
+#include "no-os/i2c.h"
 #include "linux_i2c.h"
 
 #include <fcntl.h>

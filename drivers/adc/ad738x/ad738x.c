@@ -46,8 +46,8 @@
 #include "stdbool.h"
 #include "spi_engine.h"
 #include "ad738x.h"
-#include "delay.h"
-#include "error.h"
+#include "no-os/delay.h"
+#include "no-os/error.h"
 
 /******************************************************************************/
 /************************** Functions Implementation **************************/

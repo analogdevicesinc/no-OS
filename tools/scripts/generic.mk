@@ -90,8 +90,6 @@ get_relative_path = $(RELATIVE_PATH)
 get_full_path = $(FULL_PATH)
 endif
 
-relative_to_project = $(addprefix $(PROJECT_BUILD)/,$(call get_relative_path,$1))
-
 ifeq 'y' '$(strip $(LINK_SRCS))'
 file_fun = $(make_link)
 folder_fun = $(make_dir_link)
@@ -125,11 +123,16 @@ endif
 
 #USED IN MAKEFILE
 PROJECT_NAME	= $(notdir $(PROJECT))
-PROJECT_BUILD 		= $(BUILD_DIR)/app
 OBJECTS_DIR		= $(BUILD_DIR)/objs
 PLATFORM_TOOLS	= $(NO-OS)/tools/scripts/platform/$(PLATFORM)
 BINARY			?= $(BUILD_DIR)/$(PROJECT_NAME).elf
 PROJECT_TARGET		= $(BUILD_DIR)/.project.target
+
+# New line variable
+define ENDL
+
+
+endef
 
 ifneq ($(words $(NO-OS)), 1)
 $(error $(ENDL)ERROR:$(ENDL)\
@@ -171,6 +174,10 @@ include $(NO-OS)/tools/scripts/aducm.mk
 endif
 
 ifeq 'stm32' '$(PLATFORM)'
+HARDWARE := $(filter %.ioc, $(HARDWARE))
+ifeq '' '$(HARDWARE)'
+$(error 'No HARDWARE for stm32 found. Add .ioc file.')
+endif
 include $(NO-OS)/tools/scripts/stm32.mk
 endif
 
@@ -208,6 +215,7 @@ CFLAGS += -Wall								\
 #------------------------------------------------------------------------------
 #                          COMMON INITIALIZATION
 #------------------------------------------------------------------------------
+relative_to_project = $(addprefix $(PROJECT_BUILD)/,$(call get_relative_path,$1))
 
 ifeq (y,$(strip $(ENABLE_IIO_NETWORK)))
 CFLAGS += -DENABLE_IIO_NETWORK
@@ -265,6 +273,9 @@ DIRS_TO_REMOVE = $(addprefix $(PROJECT_BUILD)/,$(CREATED_DIRECTORIES))
 
 #Add to include all directories containing a .h file
 EXTRA_INC_PATHS := $(sort $(foreach dir, $(INCS_IN_BUILD),$(dir $(dir))))
+EXTRA_INC_PATHS := $(filter-out $(call relative_to_project,$(NO-OS)/include/no-os/),$(EXTRA_INC_PATHS))
+EXTRA_INC_PATHS += $(call relative_to_project, $(INCLUDE))
+
 CFLAGS += $(addprefix -I,$(EXTRA_INC_PATHS)) $(PLATFORM_INCS)
 
 #------------------------------------------------------------------------------

@@ -44,8 +44,8 @@
 
 
 // platform drivers
-#include "error.h"
-#include "util.h"
+#include "no-os/error.h"
+#include "no-os/util.h"
 
 // jesd
 #include "axi_jesd204_rx.h"

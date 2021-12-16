@@ -102,7 +102,7 @@
 
 #ifdef STM32_PLATFORM
 
-#define UART_DEVICE_ID	2
+#define UART_DEVICE_ID	5
 #define UART_BAUDRATE	115200
 
 #endif // STM32_PLATFORM

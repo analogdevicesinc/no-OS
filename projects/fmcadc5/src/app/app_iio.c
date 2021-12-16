@@ -41,8 +41,8 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 
-#include "error.h"
-#include "uart.h"
+#include "no-os/error.h"
+#include "no-os/uart.h"
 #include "uart_extra.h"
 #include "iio.h"
 #include "parameters.h"

@@ -41,8 +41,8 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 
-#include "error.h"
-#include "spi.h"
+#include "no-os/error.h"
+#include "no-os/spi.h"
 #include "linux_spi.h"
 
 #include <fcntl.h>

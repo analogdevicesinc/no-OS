@@ -44,9 +44,9 @@
 
 #include <stdlib.h>
 #include <drivers/rng/adi_rng.h>
-#include "trng.h"
-#include "util.h"
-#include "error.h"
+#include "no-os/trng.h"
+#include "no-os/util.h"
+#include "no-os/error.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/

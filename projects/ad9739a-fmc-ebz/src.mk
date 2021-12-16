@@ -12,7 +12,7 @@
 SRCS := $(PROJECT)/src/ad9739a_fmc_ebz.c
 ifeq (y,$(strip $(TINYIIOD)))
 LIBRARIES += iio
-SRCS += $(PROJECT)/src/app_iio.c
+SRC_DIRS += $(NO-OS)/iio/iio_app
 endif
 SRCS += $(DRIVERS)/dac/ad9739a/ad9739a.c \
 	$(DRIVERS)/frequency/adf4350/adf4350.c \
@@ -31,26 +31,23 @@ endif
 SRCS +=	$(PLATFORM_DRIVERS)/axi_io.c \
 	$(PLATFORM_DRIVERS)/xilinx_spi.c \
 	$(PLATFORM_DRIVERS)/delay.c
-ifeq (y,$(strip $(TINYIIOD)))
-INCS +=	$(PROJECT)/src/app_iio.h
-endif
 INCS += $(PROJECT)/src/parameters.h \
 	$(DRIVERS)/frequency/adf4350/adf4350.h \
 	$(DRIVERS)/dac/ad9739a/ad9739a.h \
 	$(DRIVERS)/axi_core/axi_dac_core/axi_dac_core.h \
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.h
 INCS +=	$(PLATFORM_DRIVERS)/spi_extra.h					
-INCS +=	$(INCLUDE)/axi_io.h \
-	$(INCLUDE)/spi.h \
-	$(INCLUDE)/error.h \
-	$(INCLUDE)/delay.h \
-	$(INCLUDE)/print_log.h \
-	$(INCLUDE)/util.h
+INCS +=	$(INCLUDE)/no-os/axi_io.h \
+	$(INCLUDE)/no-os/spi.h \
+	$(INCLUDE)/no-os/error.h \
+	$(INCLUDE)/no-os/delay.h \
+	$(INCLUDE)/no-os/print_log.h \
+	$(INCLUDE)/no-os/util.h
 ifeq (y,$(strip $(TINYIIOD)))
-INCS +=	$(INCLUDE)/fifo.h \
-	$(INCLUDE)/irq.h \
-	$(INCLUDE)/uart.h \
-	$(INCLUDE)/list.h \
+INCS +=	$(INCLUDE)/no-os/fifo.h \
+	$(INCLUDE)/no-os/irq.h \
+	$(INCLUDE)/no-os/uart.h \
+	$(INCLUDE)/no-os/list.h \
 	$(PLATFORM_DRIVERS)/irq_extra.h \
 	$(PLATFORM_DRIVERS)/uart_extra.h \
 	$(DRIVERS)/axi_core/iio_axi_dac/iio_axi_dac.h

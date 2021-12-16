@@ -44,10 +44,10 @@
 #include "xil_cache.h"
 #include "ad7768.h"
 #include "axi_dmac.h"
-#include "gpio.h"
+#include "no-os/gpio.h"
 #include "spi_extra.h"
 #include "gpio_extra.h"
-#include "error.h"
+#include "no-os/error.h"
 #include "axi_adc_core.h"
 #include <xil_io.h>
 #include <stdio.h>
@@ -215,7 +215,7 @@ int main(void)
 	};
 	struct axi_adc *axi_adc_core_desc;
 	struct axi_adc_init axi_adc_initial = {
-		.base = ADC_DDR_BASEADDR,
+		.base = AD7768_ADC_BASEADDR,
 		.name = "ad7768_axi_adc",
 		.num_channels = chan_no
 	};

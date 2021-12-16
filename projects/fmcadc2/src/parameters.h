@@ -43,6 +43,8 @@
 #include "app_config.h"
 #include "xparameters.h"
 
+#define ADC_MAX_SAMPLES				1000000
+#define UART_BAUDRATE                           115200
 #ifdef PLATFORM_MB
 #define SPI_DEVICE_ID				XPAR_SPI_0_DEVICE_ID
 #define GPIO_DEVICE_ID				XPAR_GPIO_0_DEVICE_ID
@@ -50,7 +52,6 @@
 
 #define GPIO_OFFSET				0
 
-#define ADC_DDR_BASEADDR			(XPAR_AXI_DDR_CNTRL_BASEADDR + 0x800000)
 #else
 #define SPI_DEVICE_ID				XPAR_XSPIPS_0_DEVICE_ID
 #define GPIO_DEVICE_ID				XPAR_XGPIOPS_0_DEVICE_ID
@@ -63,7 +64,6 @@
 #define GPIO_OFFSET				54
 #endif
 
-#define ADC_DDR_BASEADDR			(XPAR_DDR_MEM_BASEADDR + 0x800000)
 #endif
 
 #define RX_CORE_BASEADDR			XPAR_AXI_AD9625_CORE_BASEADDR

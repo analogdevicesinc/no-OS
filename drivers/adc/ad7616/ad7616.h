@@ -40,7 +40,7 @@
 #ifndef AD7616_H_
 #define AD7616_H_
 
-#include "gpio.h"
+#include "no-os/gpio.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/

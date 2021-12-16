@@ -36,19 +36,36 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#include "delay.h"
+#include <stdbool.h>
 #include "stm32_hal.h"
-
+#include "no-os/delay.h"
 /**
  * @brief Generate microseconds delay.
  * @param usecs - Delay in microseconds.
  * @return None.
  */
+#if defined(DWT)
+#pragma GCC push_options
+#pragma GCC optimize ("O3")
 void udelay(uint32_t usecs)
 {
-	/* HAL function is not more precise than 1ms so fallback to 1ms. */
+	static bool firstrun = true;
+	volatile uint32_t cycles = (SystemCoreClock / 1000000L) * usecs;
+	if (firstrun) {
+		DWT->CTRL |= 1;
+		firstrun = false;
+	}
+	volatile uint32_t start = DWT->CYCCNT;
+	while(DWT->CYCCNT - start < cycles);
+}
+#pragma GCC pop_options
+#else
+void udelay(uint32_t usecs)
+{
+	/* Fallback to lowest possible HAL delay of 1ms. */
 	HAL_Delay(1);
 }
+#endif
 
 /**
  * @brief Generate miliseconds delay.

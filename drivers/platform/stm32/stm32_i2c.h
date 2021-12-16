@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   crc.h
- *   @brief  Generic header file for all CRC computation algorithms.
+ *   @file   stm32/stm32_i2c.h
+ *   @brief  Header file for the stm32 i2c driver.
  *   @author Darius Berghe (darius.berghe@analog.com)
 ********************************************************************************
- * Copyright 2020(c) Analog Devices, Inc.
+ * Copyright 2021(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -36,11 +36,25 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __CRC_H
-#define __CRC_H
+#ifndef STM32_I2C_H_
+#define STM32_I2C_H_
 
-#include "crc8.h"
-#include "crc16.h"
-#include "crc24.h"
+#include <stdint.h>
+#include "no-os/i2c.h"
+#include "stm32_hal.h"
 
-#endif // __CRC_H
+/**
+ * @struct stm32_i2c_desc
+ * @brief stm32 platform specific I2C descriptor
+ */
+struct stm32_i2c_desc {
+	/** I2C instance */
+	I2C_HandleTypeDef hi2c;
+};
+
+/**
+ * @brief stm32 specific I2C platform ops structure
+ */
+extern const struct i2c_platform_ops stm32_i2c_ops;
+
+#endif // STM32_I2C_H_

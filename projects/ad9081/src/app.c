@@ -42,10 +42,10 @@
 /******************************************************************************/
 #include <stdio.h>
 #include <inttypes.h>
-#include "error.h"
-#include "gpio.h"
+#include "no-os/error.h"
+#include "no-os/gpio.h"
 #include "gpio_extra.h"
-#include "spi.h"
+#include "no-os/spi.h"
 #include "spi_extra.h"
 #include "ad9081.h"
 #include "app_clock.h"
@@ -63,6 +63,13 @@
 #include "iio_axi_adc.h"
 #include "iio_axi_dac.h"
 #include "xil_cache.h"
+#endif
+
+#ifdef IIO_SUPPORT
+
+static int16_t dac_buffer[MAX_DAC_BUF_SAMPLES] __attribute__ ((aligned));
+static int16_t adc_buffer[MAX_ADC_BUF_SAMPLES] __attribute__ ((aligned));
+
 #endif
 
 extern struct axi_jesd204_rx *rx_jesd;
@@ -309,8 +316,8 @@ int main(void)
 		return status;
 	iio_axi_adc_get_dev_descriptor(iio_axi_adc_desc, &adc_dev_desc);
 	struct iio_data_buffer read_buff = {
-		.buff = (void *)ADC_DDR_BASEADDR,
-		.size = 0xFFFFFFFF,
+		.buff = (void *)adc_buffer,
+		.size = sizeof(adc_buffer),
 	};
 
 	iio_axi_dac_init_par = (struct iio_axi_dac_init_param) {
@@ -327,8 +334,8 @@ int main(void)
 	iio_axi_dac_get_dev_descriptor(iio_axi_dac_desc, &dac_dev_desc);
 
 	struct iio_data_buffer write_buff = {
-		.buff = (void *)DAC_DDR_BASEADDR,
-		.size = 0xFFFFFFFF,
+		.buff = (void *)dac_buffer,
+		.size = sizeof(dac_buffer),
 	};
 
 	struct iio_app_device devices[] = {

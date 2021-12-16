@@ -44,12 +44,12 @@
 #include <inttypes.h>
 #include <xil_cache.h>
 #include "spi_engine.h"
-#include "pwm.h"
+#include "no-os/pwm.h"
 #include "axi_pwm_extra.h"
 #include "ad469x.h"
-#include "error.h"
+#include "no-os/error.h"
 #include "clk_axi_clkgen.h"
-#include "gpio.h"
+#include "no-os/gpio.h"
 #include "gpio_extra.h"
 #include "parameters.h"
 
@@ -212,12 +212,12 @@ int main()
 #ifdef IIO_SUPPORT
 
 	struct iio_data_buffer read_buff = {
-		.buff = (void *)ADC_DDR_BASEADDR,
-		.size = MAX_SIZE_BASE_ADDR
+		.buff = (void *)buf,
+		.size = sizeof(buf)
 	};
 
 	struct iio_app_device devices[] = {
-		IIO_APP_DEVICE("adc", dev, &ad469x_iio_descriptor,
+		IIO_APP_DEVICE("ad469x", dev, &ad469x_iio_descriptor,
 			       &read_buff, NULL),
 	};
 

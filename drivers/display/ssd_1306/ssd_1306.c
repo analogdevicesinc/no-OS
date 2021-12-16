@@ -42,8 +42,8 @@
 /******************************************************************************/
 #include <stdbool.h>
 #include "ssd_1306.h"
-#include "error.h"
-#include "spi.h"
+#include "no-os/error.h"
+#include "no-os/spi.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/

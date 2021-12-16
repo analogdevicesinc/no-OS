@@ -43,14 +43,14 @@
 /******************************************************************************/
 
 #include <stdlib.h>
-#include "error.h"
+#include "no-os/error.h"
 #include "tcp_socket.h"
-#include "util.h"
+#include "no-os/util.h"
 
 #ifndef DISABLE_SECURE_SOCKET
 #include "mbedtls/ssl.h"
 #include "noos_mbedtls_config.h"
-#include "trng.h"
+#include "no-os/trng.h"
 #endif /* DISABLE_SECURE_SOCKET */
 
 /******************************************************************************/

@@ -48,10 +48,10 @@
 #include <xspi.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include "spi.h"
-#include "error.h"
-#include "delay.h"
-#include "util.h"
+#include "no-os/spi.h"
+#include "no-os/error.h"
+#include "no-os/delay.h"
+#include "no-os/util.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/

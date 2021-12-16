@@ -47,9 +47,9 @@
 #include <string.h>
 #include <errno.h>
 #include "ad7606.h"
-#include "error.h"
-#include "util.h"
-#include "crc.h"
+#include "no-os/error.h"
+#include "no-os/util.h"
+#include "no-os/crc.h"
 
 struct ad7606_chip_info {
 	uint8_t num_channels;

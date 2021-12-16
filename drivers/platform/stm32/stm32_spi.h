@@ -40,7 +40,7 @@
 #define STM32_SPI_H_
 
 #include <stdint.h>
-#include "spi.h"
+#include "no-os/spi.h"
 #include "stm32_hal.h"
 
 /**
@@ -49,8 +49,6 @@
  * specific SPI parameters.
  */
 typedef struct stm32_spi_init_param {
-	/** Device ID */
-	SPI_TypeDef *base;
 	/** Chip select port */
 	GPIO_TypeDef *chip_select_port;
 	/** Get perihperal source clock function */

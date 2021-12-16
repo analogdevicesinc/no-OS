@@ -49,11 +49,11 @@
 #include "iio_app.h"
 #endif
 #include "ad7746.h"
-#include "i2c.h"
+#include "no-os/i2c.h"
 #include "i2c_extra.h"
-#include "delay.h"
-#include "print_log.h"
-#include "uart.h"
+#include "no-os/delay.h"
+#include "no-os/print_log.h"
+#include "no-os/uart.h"
 #include "uart_extra.h"
 #include "uart_stdio.h"
 #include "platform_init.h"
@@ -82,7 +82,7 @@ int main(void)
 		.baud_rate = UART_BAUDRATE,
 		.size = UART_CS_8,
 		.parity = UART_PAR_NO,
-		.stop = UART_STOP_1,
+		.stop = UART_STOP_1_BIT,
 		.extra = &xuip,
 	};
 #ifdef IIO_SUPPORT

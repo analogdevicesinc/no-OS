@@ -43,11 +43,11 @@
 #include <stdio.h>
 #include "ad9083.h"
 #include "inttypes.h"
-#include "error.h"
+#include "no-os/error.h"
 #include "app_clocking.h"
 #include "app_jesd.h"
 #include "app_ad9083.h"
-#include "print_log.h"
+#include "no-os/print_log.h"
 #include "parameters.h"
 #include "axi_adc_core.h"
 #include "axi_dmac.h"

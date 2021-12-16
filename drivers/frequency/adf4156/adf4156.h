@@ -1,6 +1,6 @@
 /***************************************************************************//**
 *   @file   adf4156.h
-*   @brief  Header file of AD9833 Driver for Microblaze processor.
+*   @brief  Header file of ADF4156 Driver for Microblaze processor.
 *   @author Lucian Sin (Lucian.Sin@analog.com)
 *
 ********************************************************************************
@@ -44,8 +44,8 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include <stdint.h>
-#include "gpio.h"
-#include "spi.h"
+#include "no-os/gpio.h"
+#include "no-os/spi.h"
 
 /******************************************************************************/
 /********************* Macros and Constants Definitions ***********************/

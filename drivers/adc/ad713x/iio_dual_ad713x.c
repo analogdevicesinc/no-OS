@@ -47,12 +47,12 @@
 #include <string.h>
 #include <errno.h>
 #include <stdlib.h>
-#include "error.h"
-#include "util.h"
+#include "no-os/error.h"
+#include "no-os/util.h"
 #include "iio_types.h"
 #include "spi_engine.h"
 #include "iio_dual_ad713x.h"
-#include "delay.h"
+#include "no-os/delay.h"
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/

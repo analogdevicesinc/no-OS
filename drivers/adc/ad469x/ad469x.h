@@ -45,8 +45,8 @@
 /******************************************************************************/
 #include "spi_engine.h"
 #include "clk_axi_clkgen.h"
-#include "pwm.h"
-#include "gpio.h"
+#include "no-os/pwm.h"
+#include "no-os/gpio.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/

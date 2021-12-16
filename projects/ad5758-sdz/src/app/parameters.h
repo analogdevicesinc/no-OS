@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   app_iio.c
- *   @brief  Application IIO setup.
- *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
+ *   @file   ad5758-sdz/src/app/parameters.h
+ *   @brief  Parameters Definitions.
+ *   @author Andrei Porumb (andrei.porumb@analog.com)
 ********************************************************************************
- * Copyright 2020(c) Analog Devices, Inc.
+ * Copyright 2021(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -37,94 +37,19 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-
-#include "error.h"
-#include "uart.h"
-#include "uart_extra.h"
-#include "parameters.h"
-#include "app_iio.h"
-#include "iio.h"
-#include "irq.h"
-#include "irq_extra.h"
+#ifndef PARAMETERS_H
+#define PARAMETERS_H
 
 /******************************************************************************/
-/************************ Variables Definitions *******************************/
+/********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-static struct irq_ctrl_desc *irq_desc;
 
-struct iio_data_buffer g_read_buff = {
-	.buff = (void *)ADC_DDR_BASEADDR,
-	.size = 0xFFFFFFFF,
-};
+#define SPI_DEVICE_ID           	XPAR_PS7_SPI_0_DEVICE_ID
+#define AD5758_SPI_CS           	0
+#define GPIO_DEVICE_ID			XPAR_PS7_GPIO_0_DEVICE_ID
+#define GPIO_OFFSET  			31U
+#define GPIO_DAC_FAULT_N		GPIO_OFFSET + 3
+#define GPIO_DAC_RESET_N		GPIO_OFFSET + 2
+#define GPIO_DAC_LDAC_N			GPIO_OFFSET + 1
 
-/**
- * @brief Application IIO setup.
- * @return SUCCESS in case of success, FAILURE otherwise.
- */
-int32_t iio_app_start(struct iio_axi_adc_init_param *adc_init)
-{
-	int32_t status;
-	struct uart_desc *uart_desc;
-
-	struct xil_irq_init_param xil_irq_init_param = {
-		.type = IRQ_PS,
-	};
-
-	struct irq_init_param irq_init_param = {
-		.irq_ctrl_id = INTC_DEVICE_ID,
-		.extra = &xil_irq_init_param,
-	};
-
-	status = irq_ctrl_init(&irq_desc, &irq_init_param);
-	if(status < 0)
-		return status;
-
-	struct xil_uart_init_param xil_uart_init_par = {
-		.type = UART_PS,
-		.irq_id = UART_IRQ_ID,
-		.irq_desc = irq_desc,
-	};
-
-	struct uart_init_param uart_init_par = {
-		.baud_rate = 115200,
-		.device_id = UART_DEVICE_ID,
-		.extra = &xil_uart_init_par,
-	};
-	struct iio_axi_adc_desc *iio_axi_adc_desc;
-	struct iio_device *dev_desc;
-	struct iio_desc *iio;
-
-	status = uart_init(&uart_desc, &uart_init_par);
-	if (status < 0)
-		return status;
-
-	struct iio_init_param iio_init_par = {
-		.phy_type = USE_UART,
-		.uart_desc = uart_desc
-	};
-
-	status = irq_global_enable(irq_desc);
-	if (status < 0)
-		return status;
-
-	status = iio_axi_adc_init(&iio_axi_adc_desc, adc_init);
-	if (status < 0)
-		return status;
-
-	iio_axi_adc_get_dev_descriptor(iio_axi_adc_desc, &dev_desc);
-
-	status = iio_init(&iio, &iio_init_par);
-	if (status < 0)
-		return status;
-
-	status = iio_register(iio, dev_desc, "ad9434_dev", iio_axi_adc_desc,
-			      &g_read_buff, NULL);
-	if (status < 0)
-		return status;
-
-	while (true)
-		iio_step(iio);
-}
+#endif

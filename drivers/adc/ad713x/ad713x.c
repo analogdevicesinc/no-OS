@@ -50,8 +50,8 @@
 
 #include <stdlib.h>
 #include "ad713x.h"
-#include "delay.h"
-#include "error.h"
+#include "no-os/delay.h"
+#include "no-os/error.h"
 
 /******************************************************************************/
 /***************************** Variable definition ****************************/

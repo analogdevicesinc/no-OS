@@ -1,7 +1,7 @@
 /***************************************************************************//**
- *   @file   app_iio.h
- *   @brief  Application IIO setup.
- *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
+ *   @file   crc.h
+ *   @brief  Generic header file for all CRC computation algorithms.
+ *   @author Darius Berghe (darius.berghe@analog.com)
 ********************************************************************************
  * Copyright 2020(c) Analog Devices, Inc.
  *
@@ -36,20 +36,11 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef APP_IIO_H_
-#define APP_IIO_H_
+#ifndef __CRC_H
+#define __CRC_H
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-#include <stdint.h>
-#include "iio_axi_adc.h"
+#include "no-os/crc8.h"
+#include "no-os/crc16.h"
+#include "no-os/crc24.h"
 
-/******************************************************************************/
-/************************ Functions Declarations ******************************/
-/******************************************************************************/
-
-/* @brief Application IIO setup. */
-int32_t iio_server_init(struct iio_axi_adc_init_param *adc_init);
-
-#endif
+#endif // __CRC_H

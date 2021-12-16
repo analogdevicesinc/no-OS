@@ -43,12 +43,12 @@
 
 #include "parameters.h"
 #include "platform_init.h"
-#include "error.h"
+#include "no-os/error.h"
 #include "adc.h"
-#include "uart.h"
+#include "no-os/uart.h"
 #include "uart_extra.h"
-#include "pwm.h"
-#include "util.h"
+#include "no-os/pwm.h"
+#include "no-os/util.h"
 #include <stdio.h>
 #include <string.h>
 

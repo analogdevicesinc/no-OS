@@ -2,7 +2,7 @@
  *   @file   ad4110.h
  *   @brief  Header file of AD4110 Driver.
  *   @author Stefan Popa (stefan.popa@analog.com)
- * 	     Andrei Porump (andrei.porumb@analog.com)
+ * 	     Andrei Porumb (andrei.porumb@analog.com)
  * 	     Mihail Chindris (mihail.chindris@analog.com)
 ********************************************************************************
  * Copyright 2021(c) Analog Devices, Inc.
@@ -46,10 +46,10 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include <stdint.h>
-#include "delay.h"
-#include "gpio.h"
-#include "spi.h"
-#include "irq.h"
+#include "no-os/delay.h"
+#include "no-os/gpio.h"
+#include "no-os/spi.h"
+#include "no-os/irq.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/

@@ -45,20 +45,21 @@
 #include <stdio.h>
 #include "xil_cache.h"
 #include "xparameters.h"
-#include "spi.h"
+#include "no-os/spi.h"
 #include "axi_dac_core.h"
 #include "axi_dmac.h"
 #include "ad9739a.h"
 #include "adf4350.h"
 #include "parameters.h"
 #include "spi_extra.h"
-#include "error.h"
+#include "no-os/error.h"
 
 #ifdef IIO_SUPPORT
-#include "app_iio.h"
+#include "iio_app.h"
+#include "iio_axi_dac.h"
 #endif
 
-#include "print_log.h"
+#include "no-os/print_log.h"
 
 /***************************************************************************//**
 * @brief main
@@ -192,8 +193,8 @@ int main(void)
 #endif
 
 #ifdef IIO_SUPPORT
-	pr_info("The board accepts libiio clients connections through the serial backend.\n");
-
+	struct iio_axi_dac_desc *iio_axi_dac_desc;
+	struct iio_device *dev_desc;
 	struct axi_dmac_init ad9739a_dmac_param = {
 		.name = "ad9739a_dmac",
 		.base = TX_DMA_BASEADDR,
@@ -211,7 +212,22 @@ int main(void)
 		.dcache_flush_range = (void (*)(uint32_t, uint32_t))Xil_DCacheFlushRange
 	};
 
-	return iio_app_start(&iio_axi_dac_init_par);
+	status = iio_axi_dac_init(&iio_axi_dac_desc, &iio_axi_dac_init_par);
+	if (status < 0)
+		return status;
+
+	iio_axi_dac_get_dev_descriptor(iio_axi_dac_desc, &dev_desc);
+
+	struct iio_data_buffer read_buff = {
+		.buff = (void *)DAC_DDR_BASEADDR,
+		.size = 0xFFFFFFFF,
+	};
+	struct iio_app_device devices[] = {
+		IIO_APP_DEVICE("ad9739a_dev", iio_axi_dac_desc, dev_desc,
+			       &read_buff, NULL),
+	};
+
+	return iio_app_run(devices, ARRAY_SIZE(devices));
 #endif
 	pr_info("Done.\n");
 

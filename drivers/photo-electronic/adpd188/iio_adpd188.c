@@ -44,8 +44,8 @@
 #include <stdint.h>
 #include <inttypes.h>
 #include "iio_adpd188.h"
-#include "error.h"
-#include "util.h"
+#include "no-os/error.h"
+#include "no-os/util.h"
 
 static ssize_t adpd188_iio_read_offset_chan(void *device, char *buf,
 		size_t len,

@@ -44,7 +44,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include "adgs1408.h"
-#include "error.h"
+#include "no-os/error.h"
 
 /******************************************************************************/
 /************************** Functions Implementation **************************/

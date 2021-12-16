@@ -53,8 +53,7 @@
 
 #define DAC_BUFFER_SAMPLES 1024
 #define ADC_BUFFER_SAMPLES 16384
-#define ADC1_CHANNELS 4
-#define ADC2_CHANNELS 2
+#define MAX_ADC_CHANNELS 4
 
 #ifdef XPS_BOARD_ZCU102
 #define GPIO_OFFSET			78
@@ -79,6 +78,7 @@
 
 /* UART */
 #define UART_DEVICE_ID			XPAR_XUARTPS_0_DEVICE_ID
+#define UART_BAUDRATE			921600
 #ifdef XPS_BOARD_ZCU102
 #define UART_IRQ_ID			XPAR_XUARTPS_0_INTR
 #else
@@ -100,15 +100,18 @@
 #define TX1_DAC_BASEADDR		(XPAR_AXI_ADRV9001_BASEADDR + 0x2000)
 #define TX2_DAC_BASEADDR		(XPAR_AXI_ADRV9001_BASEADDR + 0x4000)
 
+
+#ifdef ADRV9002_RX2TX2
+#define IIO_DEV_COUNT 2
+#else
+#define IIO_DEV_COUNT 1
+#endif
+
 /* ADC/DAC Buffers */
 #if defined(DAC_DMA_EXAMPLE) || defined(IIO_SUPPORT)
-static uint32_t dac1_buffer[DAC_BUFFER_SAMPLES] __attribute__((aligned));
-static uint16_t adc1_buffer[ADC_BUFFER_SAMPLES*ADC1_CHANNELS] __attribute__((
+static uint32_t dac_buffers[IIO_DEV_COUNT][DAC_BUFFER_SAMPLES] __attribute__((
 			aligned));
-#ifndef ADRV9002_RX2TX2
-static uint32_t dac2_buffer[DAC_BUFFER_SAMPLES] __attribute__((aligned));
-static uint16_t adc2_buffer[ADC_BUFFER_SAMPLES*ADC2_CHANNELS] __attribute__((
-			aligned));
-#endif
+static uint16_t adc_buffers[IIO_DEV_COUNT][ADC_BUFFER_SAMPLES*MAX_ADC_CHANNELS]
+__attribute__((aligned));
 #endif
 #endif

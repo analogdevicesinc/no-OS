@@ -49,13 +49,13 @@
 #include "axi_dac_core.h"
 #include "parameters.h"
 #include "inttypes.h"
-#include "error.h"
+#include "no-os/error.h"
 #include <xparameters.h>
 #include <xil_cache.h>
 #include "app_config.h"
-#include "spi.h"
+#include "no-os/spi.h"
 #include "spi_extra.h"
-#include "gpio.h"
+#include "no-os/gpio.h"
 #include "gpio_extra.h"
 
 #ifdef DAC_DMA_EXAMPLE
@@ -63,7 +63,8 @@
 #endif /* DAC_DMA_EXAMPLE */
 
 #ifdef IIO_SUPPORT
-#include "app_iio.h"
+#include "iio_app.h"
+#include "iio_axi_dac.h"
 #endif
 
 int main(void)
@@ -294,6 +295,8 @@ int main(void)
 #ifdef IIO_SUPPORT
 	printf("The board accepts libiio clients connections through the serial backend.\n");
 
+	struct iio_axi_dac_desc *iio_axi_dac_desc;
+	struct iio_device *dac_dev_desc;
 	struct axi_dmac_init tx_dmac_init = {
 		"tx_dmac",
 		TX_DMA_BASEADDR,
@@ -311,7 +314,22 @@ int main(void)
 		.dcache_flush_range = (void (*)(uint32_t, uint32_t))Xil_DCacheFlushRange
 	};
 
-	return iio_server_init(&iio_axi_dac_init_par);
+	status = iio_axi_dac_init(&iio_axi_dac_desc, &iio_axi_dac_init_par);
+	if (IS_ERR_VALUE(status))
+		return FAILURE;
+
+	iio_axi_dac_get_dev_descriptor(iio_axi_dac_desc, &dac_dev_desc);
+	static struct iio_data_buffer write_buff = {
+		.buff = (void *)DDR_MEM_BASEADDR,
+		.size = 0xFFFFFFFF,
+	};
+	struct iio_app_device devices[] = {
+		IIO_APP_DEVICE("axi_dac", iio_axi_dac_desc, dac_dev_desc,
+			       &write_buff, NULL),
+	};
+
+	return iio_app_run(devices, ARRAY_SIZE(devices));
+
 #endif
 
 	printf("Bye\n");

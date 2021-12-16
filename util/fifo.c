@@ -43,8 +43,8 @@
 
 #include <string.h>
 #include <stdlib.h>
-#include "fifo.h"
-#include "error.h"
+#include "no-os/fifo.h"
+#include "no-os/error.h"
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/

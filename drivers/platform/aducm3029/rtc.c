@@ -42,10 +42,10 @@
 /******************************************************************************/
 
 #include <stdlib.h>
-#include "error.h"
-#include "rtc.h"
+#include "no-os/error.h"
+#include "no-os/rtc.h"
 #include "rtc_extra.h"
-#include "irq.h"
+#include "no-os/irq.h"
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
