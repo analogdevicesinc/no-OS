@@ -1,6 +1,8 @@
 #include <errno.h>
 #include <stdlib.h>
 #include "no-os/gpio.h"
+#include "no-os/irq.h"
+#include "no-os/util.h"
 #include "gpio.h"
 #include "gpio_regs.h"
 #include "gpio_extra.h"
@@ -9,8 +11,7 @@
 #define N_INT	14
 
 struct gpio_platform_ops gpio_ops;
-
-struct callback_desc *gpio_callback[N_INT];
+static struct callback_desc *gpio_callback[N_INT];
 
 void GPIO0_IRQHandler()
 {
@@ -44,9 +45,10 @@ int32_t gpio_get(struct gpio_desc **desc,
 
 	descriptor->number = param->number;
 	descriptor->platform_ops = &gpio_ops;
-	descriptor->extra = (gpio_cfg_t *)param->extra;
-	
-	GPIO_Config((gpio_cfg_t *)param->extra);
+	descriptor->extra = param->extra;
+	((gpio_cfg_t *)descriptor->extra)->mask = BIT(param->number);
+
+	GPIO_Config(descriptor->extra);
 	*desc = descriptor;
 
 	return 0;
@@ -72,7 +74,7 @@ int32_t gpio_remove(struct gpio_desc *desc)
 
 int32_t gpio_direction_input(struct gpio_desc *desc)
 {
-	if(!desc || !desc->extra)
+	if(!desc || !desc->extra || desc->number >= N_PINS)
 		return -EINVAL;
 	
 	gpio_cfg_t *maxim_extra = (gpio_cfg_t *)desc->extra;
@@ -80,7 +82,7 @@ int32_t gpio_direction_input(struct gpio_desc *desc)
 	if(!maxim_extra || maxim_extra->port >= N_PORTS)
 		return -EINVAL;
 
-	maxim_extra->mask = (uint32_t)(1UL << desc->number);
+	maxim_extra->mask = BIT(desc->number);
 	maxim_extra->func = GPIO_FUNC_IN;
 	GPIO_Config(maxim_extra);
 
@@ -89,14 +91,14 @@ int32_t gpio_direction_input(struct gpio_desc *desc)
 
 int32_t gpio_direction_output(struct gpio_desc *desc, uint8_t value)
 {
-	if(!desc || !desc->extra)
+	if(!desc || !desc->extra || desc->number >= N_PINS)
 		return -EINVAL;
 	
 	gpio_cfg_t *maxim_extra = (gpio_cfg_t *)desc->extra;
 	if(maxim_extra->port >= N_PORTS)
 		return -EINVAL;
 
-	maxim_extra->mask = (uint32_t)(1UL << desc->number);
+	maxim_extra->mask = BIT(desc->number);
 	maxim_extra->func = GPIO_FUNC_OUT;
 	GPIO_Config(maxim_extra);
 
@@ -110,7 +112,7 @@ int32_t gpio_direction_output(struct gpio_desc *desc, uint8_t value)
 
 int32_t gpio_get_direction(struct gpio_desc *desc, uint8_t *direction)
 {
-	if(!desc)
+	if(!desc || desc->number >= N_PINS)
 		return -EINVAL;
 
 	gpio_cfg_t *maxim_extra = (gpio_cfg_t *)desc->extra;
@@ -130,7 +132,7 @@ int32_t gpio_get_direction(struct gpio_desc *desc, uint8_t *direction)
 int32_t gpio_set_value(struct gpio_desc *desc, uint8_t value)
 {
 
-	if(!desc)
+	if(!desc || !desc->extra || desc->number >= N_PINS)
 		return -EINVAL;
 
 	gpio_cfg_t *maxim_extra = (gpio_cfg_t *)desc->extra;
@@ -154,7 +156,7 @@ int32_t gpio_set_value(struct gpio_desc *desc, uint8_t value)
 
 int32_t gpio_get_value(struct gpio_desc *desc, uint8_t *value)
 {
-	if(!desc)
+	if(!desc || desc->number >= N_PINS)
 		return -EINVAL;
 	
 	gpio_cfg_t *maxim_extra = (gpio_cfg_t *)desc->extra;
@@ -171,32 +173,98 @@ int32_t gpio_get_value(struct gpio_desc *desc, uint8_t *value)
 	return 0;
 }
 
-int32_t gpio_register_callback(uint8_t pin, struct gpio_callback_desc *desc)
+int32_t gpio_irq_set_trigger_level(struct gpio_desc *desc, enum irq_trig_level trig_l)
 {
-	if(!desc || !desc->config || pin >= N_INT)
+	if(!desc || !desc->extra || desc->number >= N_PINS)
 		return -EINVAL;
 	
+	gpio_cfg_t *maxim_extra = (gpio_cfg_t *)desc->extra;
+	mxc_gpio_regs_t *gpio_regs = MXC_GPIO_GET_GPIO(maxim_extra->port);
+
+	/** Disable interrupts for pin desc->number */
+	gpio_regs->int_en &= ~(BIT(desc->number));
+	/** Clear pending interrupts for pin desc->number */
+	gpio_regs->int_clr |= BIT(desc->number);
+
+	switch(trig_l){
+	case IRQ_EDGE_RISING:
+		/** Select edge triggered interrupt mode */
+		gpio_regs->int_mod |= BIT(desc->number);
+		/** Select rising edge trigger condition */
+		gpio_regs->int_pol &= ~(BIT(desc->number));
+		break;
+	case IRQ_EDGE_FALLING:
+		/** Select edge triggered interrupt mode */
+		gpio_regs->int_mod |= BIT(desc->number);
+		/** Select falling edge trigger condition */
+		gpio_regs->int_pol |= BIT(desc->number);
+		break;
+	case IRQ_LEVEL_HIGH:
+		/** Select level triggered interrupt mode */
+		gpio_regs->int_mod &= ~(BIT(desc->number));
+		/** Select level high trigger condition */
+		gpio_regs->int_pol &= ~(BIT(desc->number));
+		break;
+	case IRQ_LEVEL_LOW:
+		/** Select level triggered interrupt mode */
+		gpio_regs->int_mod &= ~(BIT(desc->number));
+		/** Select level low trigger condition */
+		gpio_regs->int_pol |= BIT(desc->number);
+		break;
+	case IRQ_EDGE_BOTH:
+		/** Edge triggered on both rising and falling */
+		gpio_regs->int_dual_edge |= BIT(desc->number);
+		break;
+	default:
+		gpio_regs->int_en |= BIT(desc->number);
+		return -EINVAL;	
+	}
+	/** Enable interupts for pin desc->number */
+	gpio_regs->int_en |= BIT(desc->number);
+
+	return 0;
+}
+
+int32_t gpio_register_callback(struct irq_ctrl_desc *ctrl_desc, enum irq_trig_level trig_l, 
+				struct callback_desc *desc)
+{
+	if(!desc || !ctrl_desc || !ctrl_desc->extra)
+		return -EINVAL;
+	
+/*
 	if(!gpio_callback[pin]){
 		gpio_callback[pin] = calloc(1, sizeof(*gpio_callback));
 		if(!gpio_callback[pin])
 			return -ENOMEM;
 	}
+*/
+	int32_t error = 0;
+	struct gpio_desc *g_desc = ctrl_desc->extra;
+	struct callback_desc *descriptor = calloc(1, sizeof(*descriptor));
+	if(!descriptor)
+		return -ENOMEM;
+		
+	error = gpio_direction_input(g_desc);
+	error = gpio_irq_set_trigger_level(g_desc, trig_l);
+	if(error){
+		free(descriptor);
+		return error;
+	}
+	descriptor->ctx = desc->ctx;
+	descriptor->callback = desc->callback;
+	descriptor->config = desc->config;
 
-	gpio_callback[pin]->ctx = desc->ctx;
-	gpio_callback[pin]->callback = desc->callback;
-	gpio_callback[pin]->config = desc->config;
+	gpio_callback[g_desc->number] = descriptor;
 	
-	return 0;
+	return 0;	
 }	
 
 int32_t gpio_unregister_callback(uint8_t pin)
 {
 	if(!gpio_callback[pin])
 		return -EINVAL;
-
-	gpio_callback[pin]->ctx = NULL;
-	gpio_callback[pin]->callback = NULL;
-	gpio_callback[pin]->config = NULL;
+	
+	free(gpio_callback[pin]);
 	
 	return 0;
 }

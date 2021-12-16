@@ -1,4 +1,4 @@
-# See No-OS/tool/scripts/src_model.mk for variable description
+#See No-OS/tool/scripts/src_model.mk for variable description
 SRC_DIRS += $(PROJECT)/src/app
 SRC_DIRS += $(NO-OS)/iio/iio_app
 
@@ -7,13 +7,17 @@ SRCS +=	$(NO-OS)/util/list.c \
 	$(NO-OS)/util/util.c
 
 #drivers
-SRCS += $(DRIVERS)/adc/adc_demo/adc_demo.c \
+SRCS +=	$(DRIVERS)/adc/adc_demo/adc_demo.c \
 	$(DRIVERS)/adc/adc_demo/iio_adc_demo.c \
 	$(DRIVERS)/dac/dac_demo/iio_dac_demo.c \
 	$(DRIVERS)/dac/dac_demo/dac_demo.c
 
 INCS += $(INCLUDE)/no-os/fifo.h \
 	$(INCLUDE)/no-os/uart.h \
+	$(INCLUDE)/no-os/gpio.h \
+	$(INCLUDE)/no-os/spi.h \
+	$(INCLUDE)/no-os/rtc.h \
+	$(INCLUDE)/no-os/irq.h \
 	$(INCLUDE)/no-os/list.h \
 	$(INCLUDE)/no-os/util.h \
 	$(INCLUDE)/no-os/error.h
@@ -73,14 +77,14 @@ endif
 
 ifeq (maxim, $(PLATFORM))
 
-SRCS += $(PLATFORM_DRIVERS)/uart_maxim.c 	\
-	$(PLATFORM_DRIVERS)/stdio.c			\
-	$(PLATFORM_DRIVERS)/gpio_maxim.c			\
-	$(PLATFORM_DRIVERS)/irq_maxim.c			\
-	$(PLATFORM_DRIVERS)/rtc_maxim.c			\
-	$(PLATFORM_DRIVERS)/spi_maxim.c			\
+SRCS += $(PLATFORM_DRIVERS)/maxim_uart.c 	\
+	$(PLATFORM_DRIVERS)/maxim_stdio.c			\
+	$(PLATFORM_DRIVERS)/maxim_gpio.c			\
+	$(PLATFORM_DRIVERS)/maxim_irq.c			\
+	$(PLATFORM_DRIVERS)/maxim_rtc.c			\
+	$(PLATFORM_DRIVERS)/maxim_spi.c			\
 	$(MAXIM_LIBRARIES)/MAX32660PeriphDriver/Source/uart.c 	\
-	$(PLATFORM_DRIVERS)/delay_maxim.c 	\
+	$(PLATFORM_DRIVERS)/maxim_delay.c 	\
 	$(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/MAX32660/Source/heap.c	 \
 	$(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/MAX32660/Source/system_max32660.c	 \
 	$(MAXIM_LIBRARIES)/MAX32660PeriphDriver/Source/mxc_delay.c			\
@@ -93,23 +97,15 @@ SRCS += $(PLATFORM_DRIVERS)/uart_maxim.c 	\
 	$(MAXIM_LIBRARIES)/MAX32660PeriphDriver/Source/rtc.c			\
 	$(MAXIM_LIBRARIES)/MAX32660PeriphDriver/Source/mxc_sys.c	 	
 
-INCS += $(PLATFORM_DRIVERS)/uart_maxim.h			\
+INCS += $(PLATFORM_DRIVERS)/maxim_uart.h			\
 	$(PLATFORM_DRIVERS)/gpio_extra.h			\
-	$(PLATFORM_DRIVERS)/irq_maxim_extra.h			\
+	$(PLATFORM_DRIVERS)/maxim_stdio.h			\
+	$(PLATFORM_DRIVERS)/irq_extra.h			\
+	$(PLATFORM_DRIVERS)/spi_extra.h			\
 	$(PLATFORM_DRIVERS)/rtc_extra.h			\
 	$(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/MAX32660/Include/max32660.h	 \
 	$(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/MAX32660/Include/mxc_device.h	 \
 	$(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/MAX32660/Include/system_max32660.h	 #\
-#	$(MAXIM_LIBRARIES)/MAX32660PeriphDriver/Include/mxc_config.h			\
-#	$(MAXIM_LIBRARIES)/MAX32660PeriphDriver/Include/mxc_errors.h			\
-#	$(MAXIM_LIBRARIES)/MAX32660PeriphDriver/Include/mxc_assert.h			\
-#	$(MAXIM_LIBRARIES)/MAX32660PeriphDriver/Include/mxc_lock.h			\
-#	$(MAXIM_LIBRARIES)/MAX32660PeriphDriver/Include/mxc_pins.h			\
-#	$(MAXIM_LIBRARIES)/MAX32660PeriphDriver/Include/rtc.h			\
-#	$(MAXIM_LIBRARIES)/MAX32660PeriphDriver/Include/mxc_delay.h			\
-#	$(MAXIM_LIBRARIES)/MAX32660PeriphDriver/Include/gpio.h			\
-#	$(MAXIM_LIBRARIES)/MAX32660PeriphDriver/Include/dma.h			\
-#	$(MAXIM_LIBRARIES)/MAX32660PeriphDriver/Include/mxc_sys.h	
 
 ASM_SRCS = $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/MAX32660/Source/GCC/startup_max32660.S
 

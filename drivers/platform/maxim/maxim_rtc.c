@@ -1,9 +1,13 @@
 #include <stdlib.h>
 #include <errno.h>
 #include "no-os/rtc.h"
+#include "no-os/irq.h"
 #include "rtc.h"
 #include "rtc_extra.h"
 #include "rtc_regs.h"
+#include "no-os/util.h"
+
+#define MS_TO_RSSA(x) (0 - ((x * 256) / 1000))
 
 static struct callback_desc *cb;
 
@@ -12,7 +16,7 @@ void RTC_IRQHandler()
 	if(!cb)
 		return;
 
-	mxc_rtc_reg_t *rtc_regs = MXC_RTC;
+	mxc_rtc_regs_t *rtc_regs = MXC_RTC;
 	volatile uint32_t rtc_ctrl = rtc_regs->ctrl;
 	uint8_t n_int = 0;
 	/** Sub-second alarm flag clear */
@@ -28,7 +32,7 @@ void RTC_IRQHandler()
 	rtc_ctrl &= 0x7UL;
 	while(rtc_ctrl){
 		if((rtc_ctrl & 1) && (rtc_regs->ctrl & BIT(n_int))){
-			cb->callback(cb->ctx, n_int, ctx->config);
+			cb->callback(cb->ctx, n_int, cb->config);
 		}
 		n_int++;
 		rtc_ctrl >>= 1;
@@ -187,7 +191,7 @@ int32_t rtc_set_cnt(struct rtc_desc *dev, uint32_t tmr_cnt)
 
 int32_t rtc_register_callback(struct callback_desc *desc)
 {
-	if(!desc || !desc->config)
+	if(!desc)
 		return -EINVAL;
 	if(!cb){
 		cb = calloc(1, sizeof(*cb));
@@ -198,6 +202,10 @@ int32_t rtc_register_callback(struct callback_desc *desc)
 	cb->ctx = desc->ctx;
 	cb->callback = desc->callback;
 	cb->config = desc->config;
+
+	mxc_rtc_regs_t *r = MXC_RTC;
+	int32_t ret = RTC_EnableSubsecondInterrupt(r);
+	ret = RTC_SetSubsecondAlarm(r, MS_TO_RSSA(100));
 
 	return 0;
 }

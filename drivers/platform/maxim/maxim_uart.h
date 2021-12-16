@@ -1,4 +1,5 @@
 #include "uart.h"
+#include "no-os/irq.h"
 
 #define N_PORTS 2
 

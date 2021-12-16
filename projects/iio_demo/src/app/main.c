@@ -47,6 +47,7 @@
 #include "iio_adc_demo.h"
 #include "iio_dac_demo.h"
 #include "no-os/util.h"
+#include <stdio.h>
 
 #ifdef XILINX_PLATFORM
 #include <xparameters.h>

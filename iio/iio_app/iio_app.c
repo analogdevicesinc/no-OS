@@ -45,12 +45,13 @@
 #include "parameters.h"
 #include "no-os/uart.h"
 #include "no-os/delay.h"
-#include <stdio.h>
 
 #include "gpio_extra.h"
-#include "no_os/gpio.h"
+#include "no-os/gpio.h"
 #include "rtc_extra.h"
-#include "no_os/rtc.h"
+#include "no-os/irq.h"
+#include "no-os/spi.h"
+#include "no-os/rtc.h"
 
 #if defined(ADUCM_PLATFORM) || defined(XILINX_PLATFORM)
 #include "no-os/irq.h"
@@ -62,7 +63,12 @@
 #endif
 
 #ifdef MAXIM_PLATFORM
-#include "uart_maxim.h"
+#include "maxim_uart.h"
+#include "gpio_extra.h"
+#include "spi_extra.h"
+#include "irq_extra.h"
+#include "rtc_extra.h"
+#include "maxim_stdio.h"
 #endif
 
 #ifdef USE_TCP_SOCKET
@@ -80,6 +86,22 @@
 
 #define UART_HWCONTROL_NONE 0
 #define UART_DEVICE_ID 1
+
+volatile uint32_t tst = 0;
+volatile uint32_t uart_test = 0;
+volatile uint32_t rtc_test = 0;
+
+void uart_cb(void *ctx, uint32_t event, void *config){
+	uart_test = 1000;
+}
+
+void gpio_cb(void *ctx, uint32_t event, void *config){
+	tst = 1000;
+}
+
+void rtc_cb(void *ctx, uint32_t event, void *config){
+	rtc_test = 0;
+}
 
 static inline uint32_t _calc_uart_xfer_time(uint32_t len, uint32_t baudrate)
 {
@@ -104,9 +126,23 @@ static int32_t iio_print_uart_info_message(struct uart_desc **uart_desc,
 		if (status < 0)
 			return status;
 	}
+	maxim_uart_stdio(*uart_desc);	
+	int32_t er = 0;
+	er = printf("123");
 	status = uart_write(*uart_desc, (uint8_t *)message, msglen);
 	if (status < 0)
 		return status;
+
+	NVIC_DisableIRQ(RTC_IRQn);
+	NVIC_DisableIRQ(GPIO0_IRQn);
+	NVIC_DisableIRQ(UART0_IRQn);
+	NVIC_DisableIRQ(UART1_IRQn);
+	gpio_cfg_t param_extra2 = {
+		.port = 0,
+		.mask = 12,
+		.pad = GPIO_PAD_PULL_UP,
+		.func = GPIO_FUNC_OUT
+	};
 
 	gpio_cfg_t param_extra = {
 		.port = 0,
@@ -115,10 +151,16 @@ static int32_t iio_print_uart_info_message(struct uart_desc **uart_desc,
 		.func = GPIO_FUNC_OUT
 	};
 	gpio_desc *desc;
+	gpio_desc *desc2;
 	struct gpio_init_param param = {
-		.number = 0,
+		.number = 8,
 		.platform_ops = NULL,
 		.extra = &param_extra
+	};
+	struct gpio_init_param param2 = {
+		.number = 9,
+		.platform_ops = NULL,
+		.extra = &param_extra2
 	};
 
 	int32_t error = gpio_get(&desc, &param);
@@ -149,7 +191,54 @@ static int32_t iio_print_uart_info_message(struct uart_desc **uart_desc,
 	rtc_set_cnt(rtc, 10 * cnt);
 	mdelay(117);
 	rtc_get_cnt(rtc, &cnt);
-	rtc_stop(rtc);
+//	rtc_stop(rtc);
+
+
+	struct callback_desc cb = {
+		.ctx = NULL,
+		.callback = uart_cb,
+		.config = NULL
+	};
+	struct callback_desc gpio_callback = {
+		.ctx = NULL,
+		.callback = gpio_cb,
+		.config = NULL
+	};
+
+	struct callback_desc rtc_callback = {
+		.ctx = NULL,
+		.callback = rtc_cb,
+		.config = NULL
+	};
+
+
+	struct irq_init_param irq_param = {
+		.irq_ctrl_id = 10,
+		.platform_ops = NULL,
+		.extra = NULL
+	};
+
+	struct irq_ctrl_desc *irq_desc;
+	int32_t err = irq_ctrl_init(&irq_desc, &irq_param);
+	err = uart_register_callback(0, &cb);		
+	err = uart_register_callback(1, &cb);		
+	err = rtc_register_callback(&rtc_cb);
+
+	cb.callback = gpio_cb;
+	gpio_get(&desc2, &param2);
+	//error = gpio_get(&desc, &param);	
+
+	uint8_t v = 0;	
+	irq_desc->extra = desc;
+	gpio_set_value(desc2, GPIO_LOW);
+	gpio_get_value(desc, &v);
+
+	gpio_set_value(desc, GPIO_HIGH);
+	gpio_set_value(desc2, GPIO_HIGH);
+
+	gpio_register_callback(irq_desc, IRQ_EDGE_BOTH, &gpio_cb);
+	
+	mdelay(3000);
 
 	delay_ms = _calc_uart_xfer_time(msglen, UART_BAUDRATE_DEFAULT);
 	mdelay(delay_ms);

@@ -25,7 +25,7 @@ WORKSPACE		?= $(BUILD_DIR)
 INCLUDE			?= $(NO-OS)/include
 DRIVERS 		?= $(NO-OS)/drivers
 PLATFORM_DRIVERS	?= $(NO-OS)/drivers/platform/$(PLATFORM)
-$(info $PLATFORM_DRIVERS)
+
 #------------------------------------------------------------------------------
 #                          EVALUATE PLATFORM
 #------------------------------------------------------------------------------

@@ -1,11 +1,13 @@
 #include "mxc_sys.h"
-#include <stdio.h>
+#include "maxim_stdio.h"
 #include <stdlib.h>
 #include "mxc_sys.h"
 #include <errno.h>
 #include "uart.h"
-#include "uart_maxim.h"
+#include "maxim_uart.h"
 #include "no-os/uart.h"
+#include "no-os/irq.h"
+#include "no-os/util.h"
 
 static struct callback_desc *cb[2];
 
@@ -21,9 +23,9 @@ void UART0_IRQHandler()
 
 	while(reg_int){
 		if((reg_int & 1) && uart_regs->int_en && BIT(n_int)){
-			void *ctx = callback_desc[0]->ctx;
-			void *config = callback_desc[0]->config;
-			callback_desc[0]->callback(ctx, n_int, config)
+			void *ctx = cb[0]->ctx;
+			void *config = cb[0]->config;
+			cb[0]->callback(ctx, n_int, config);
 		}
 		n_int++;
 		reg_int >>= 1;
@@ -44,9 +46,9 @@ void UART1_IRQHandler()
 
 	while(reg_int){
 		if((reg_int & 1) && (uart_regs->int_en & BIT(n_int))){
-			void *ctx = callback_desc[1]->ctx;
-			void *config = callback_desc[1]->config;
-			callback_desc[1]->callback(ctx, n_int, config)
+			void *ctx = cb[1]->ctx;
+			void *config = cb[1]->config;
+			cb[1]->callback(ctx, n_int, config);
 		}
 		n_int++;
 		reg_int >>= 1;
@@ -237,7 +239,7 @@ uint32_t uart_get_errors(struct uart_desc *desc)
 
 int32_t uart_register_callback(uint8_t port, struct callback_desc *desc)
 {
-	if(!desc || !desc->config || port >= N_PORTS)
+	if(!desc || port >= N_PORTS)
 		return -EINVAL;
 	if(!cb[port]){
 		cb[port] = calloc(1, sizeof(*cb[port]));
