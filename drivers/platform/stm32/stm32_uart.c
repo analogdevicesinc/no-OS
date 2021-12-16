@@ -161,7 +161,7 @@ int32_t uart_init(struct uart_desc **desc, struct uart_init_param *param)
 		ret = -EINVAL;
 		goto error;
 	};
-	sud->huart.Init.StopBits = param->stop == UART_STOP_1 ? UART_STOPBITS_1 :
+	sud->huart.Init.StopBits = param->stop == UART_STOP_1_BIT ? UART_STOPBITS_1 :
 				   UART_STOPBITS_2;
 	sud->huart.Init.Mode = suip->mode;
 	sud->huart.Init.HwFlowCtl = suip->hw_flow_ctl;

@@ -81,7 +81,7 @@ int main(int argc, char *argv[])
 		.device_id = 0,
 		.parity = UART_PAR_NO,
 		.size = UART_CS_8,
-		.stop = UART_STOP_1,
+		.stop = UART_STOP_1_BIT,
 		.extra = &aducm_uart_init
 	};
 	struct irq_ctrl_desc *irq_dut;
