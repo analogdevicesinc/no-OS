@@ -1,7 +1,7 @@
 
 #include "xil_io.h"
 #include "ad9625.h"
-#include "i5g.h"
+#include "axi_fmcadc5_sync.h"
 
 /* Simple read */
 static inline int i5g_read(struct s_i5g *st, int reg)
