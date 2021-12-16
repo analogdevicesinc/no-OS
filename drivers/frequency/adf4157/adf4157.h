@@ -1,6 +1,6 @@
 /***************************************************************************//**
 *   @file   ADF4157.h
-*   @brief  Header file of AD9833 Driver for Microblaze processor.
+*   @brief  Header file of ADF4157 Driver for Microblaze processor.
 *   @author Lucian Sin (Lucian.Sin@analog.com)
 *
 ********************************************************************************
