@@ -59,7 +59,7 @@
 #include "axi_adc_core.h"
 #include "axi_dmac.h"
 #include "axi_jesd204_rx.h"
-#include "i5g.h"
+#include "axi_fmcadc5_sync.h"
 
 #ifdef IIO_SUPPORT
 #include "iio_app.h"

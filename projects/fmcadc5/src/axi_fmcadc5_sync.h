@@ -1,5 +1,5 @@
 /*
- * i5g.h
+ * axi_fmcadc5_sync.h
  *
  *  Created on: Mar 30, 2018
  *      Author: adrimbar
