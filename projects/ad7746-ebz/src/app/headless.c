@@ -82,7 +82,7 @@ int main(void)
 		.baud_rate = UART_BAUDRATE,
 		.size = UART_CS_8,
 		.parity = UART_PAR_NO,
-		.stop = UART_STOP_1,
+		.stop = UART_STOP_1_BIT,
 		.extra = &xuip,
 	};
 #ifdef IIO_SUPPORT

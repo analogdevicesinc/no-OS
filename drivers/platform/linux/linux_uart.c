@@ -209,7 +209,7 @@ int32_t uart_init(struct uart_desc **desc, struct uart_init_param *param)
 		goto free;
 	}
 
-	if (param->stop == UART_STOP_1)
+	if (param->stop == UART_STOP_1_BIT)
 		linux_desc->terminal->c_cflag &= ~CSTOPB;
 	else
 		linux_desc->terminal->c_cflag |= CSTOPB;

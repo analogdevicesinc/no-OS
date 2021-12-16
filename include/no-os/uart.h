@@ -89,9 +89,9 @@ enum uart_parity {
  */
 enum uart_stop {
 	/** one stop bit */
-	UART_STOP_1,
+	UART_STOP_1_BIT,
 	/** two stop bits */
-	UART_STOP_2
+	UART_STOP_2_BIT
 };
 
 /**
