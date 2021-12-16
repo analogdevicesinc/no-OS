@@ -1,18 +1,23 @@
-
-#include "xil_io.h"
+#include <stdlib.h>
+#include <stdio.h>
 #include "ad9625.h"
 #include "axi_fmcadc5_sync.h"
+#include "no-os/axi_io.h"
 
 /* Simple read */
 static inline int i5g_read(struct s_i5g *st, int reg)
 {
-	return(Xil_In32(st->regs + reg));
+	uint32_t data;
+
+	axi_io_read(st->regs, reg, &data);
+
+	return data;
 }
 
 /* Simple write */
 static inline void i5g_write(struct s_i5g *st, int reg, int val)
 {
-	Xil_Out32(st->regs + reg, val);
+	axi_io_write(st->regs, reg, val);
 	return;
 }
 
