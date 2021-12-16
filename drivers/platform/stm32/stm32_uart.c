@@ -38,7 +38,7 @@
 *******************************************************************************/
 #include <errno.h>
 #include <stdlib.h>
-#include "uart.h"
+#include "no-os/uart.h"
 #include "stm32_uart.h"
 #include "stm32_hal.h"
 

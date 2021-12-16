@@ -41,15 +41,15 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include <xparameters.h>
-#include "spi.h"
+#include "no-os/spi.h"
 #include "spi_extra.h"
-#include "gpio.h"
+#include "no-os/gpio.h"
 #include "gpio_extra.h"
-#include "error.h"
+#include "no-os/error.h"
 #include "adf4377.h"
 #include "parameters.h"
-#include "print_log.h"
-#include "util.h"
+#include "no-os/print_log.h"
+#include "no-os/util.h"
 
 #ifdef IIO_SUPPORT
 #include "iio_app.h"

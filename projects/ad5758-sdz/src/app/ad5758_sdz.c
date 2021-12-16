@@ -42,12 +42,12 @@
 /******************************************************************************/
 
 #include "ad5758.h"
-#include "error.h"
-#include "gpio.h"
+#include "no-os/error.h"
+#include "no-os/gpio.h"
 #include "gpio_extra.h"
 #include "parameters.h"
 #include "sleep.h"
-#include "spi.h"
+#include "no-os/spi.h"
 #include "spi_extra.h"
 #include "stdint.h"
 #include "stdio.h"

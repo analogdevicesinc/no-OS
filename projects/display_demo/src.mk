@@ -8,12 +8,12 @@ SRCS += $(PROJECT)/src/app/main.c \
         $(DRIVERS)/platform/xilinx/xilinx_gpio.c \
 	$(NO-OS)/util/font_8x8.c
 
-INCS += $(INCLUDE)/gpio.h \
-	$(INCLUDE)/spi.h \
+INCS += $(INCLUDE)/no-os/gpio.h \
+	$(INCLUDE)/no-os/spi.h \
         $(DRIVERS)/display/ssd_1306/ssd_1306.h \
         $(DRIVERS)/display/display.h \
         $(PROJECT)/src/app/parameters.h \
-        $(INCLUDE)/error.h \
-        $(INCLUDE)/delay.h \
+        $(INCLUDE)/no-os/error.h \
+        $(INCLUDE)/no-os/delay.h \
         $(DRIVERS)/platform/xilinx/gpio_extra.h \
 	$(DRIVERS)/platform/xilinx/spi_extra.h

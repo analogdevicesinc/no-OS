@@ -13,16 +13,16 @@ SRCS += $(NO-OS)/util/util.c \
 	$(DRIVERS)/api/irq.c \
 	$(PROJECT)/src/app/headless.c
 
-INCS +=	$(INCLUDE)/uart.h \
-	$(INCLUDE)/util.h \
-	$(INCLUDE)/delay.h \
-	$(INCLUDE)/timer.h \
-	$(INCLUDE)/error.h \
-	$(INCLUDE)/irq.h \
-	$(INCLUDE)/gpio.h \
-	$(INCLUDE)/rtc.h \
-	$(INCLUDE)/i2c.h \
-	$(INCLUDE)/print_log.h \
+INCS +=	$(INCLUDE)/no-os/uart.h \
+	$(INCLUDE)/no-os/util.h \
+	$(INCLUDE)/no-os/delay.h \
+	$(INCLUDE)/no-os/timer.h \
+	$(INCLUDE)/no-os/error.h \
+	$(INCLUDE)/no-os/irq.h \
+	$(INCLUDE)/no-os/gpio.h \
+	$(INCLUDE)/no-os/rtc.h \
+	$(INCLUDE)/no-os/i2c.h \
+	$(INCLUDE)/no-os/print_log.h \
 	$(PLATFORM_DRIVERS)/irq_extra.h \
 	$(PLATFORM_DRIVERS)/i2c_extra.h \
 	$(PLATFORM_DRIVERS)/timer_extra.h \
@@ -41,7 +41,7 @@ SRCS += $(DRIVERS)/cdc/ad7746/iio_ad7746.c \
 	$(NO-OS)/util/fifo.c
 INCS += $(DRIVERS)/cdc/ad7746/iio_ad7746.h \
 	$(NO-OS)/iio/iio_app/iio_app.h \
-	$(INCLUDE)/fifo.h \
-	$(INCLUDE)/list.h
+	$(INCLUDE)/no-os/fifo.h \
+	$(INCLUDE)/no-os/list.h
 endif
 

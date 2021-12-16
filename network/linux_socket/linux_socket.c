@@ -47,8 +47,8 @@
 
 #include <stdlib.h>
 #include <assert.h>
-#include "error.h"
-#include "util.h"
+#include "no-os/error.h"
+#include "no-os/util.h"
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/socket.h>

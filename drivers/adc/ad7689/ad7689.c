@@ -38,10 +38,10 @@
 *******************************************************************************/
 #include <stdlib.h>
 #include "ad7689.h"
-#include "util.h"
-#include "error.h"
-#include "print_log.h"
-#include "delay.h"
+#include "no-os/util.h"
+#include "no-os/error.h"
+#include "no-os/print_log.h"
+#include "no-os/delay.h"
 
 const char *ad7689_device_name[] = {
 	"AD7689",

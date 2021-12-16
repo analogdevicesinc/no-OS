@@ -18,7 +18,7 @@
 #define __AD9208API_H__
 
 #include "api_def.h"
-#include "util.h"
+#include "no-os/util.h"
 
 /** Enumerates Data Format Type Complex/Real*/
 typedef enum {

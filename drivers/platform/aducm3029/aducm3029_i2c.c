@@ -41,9 +41,9 @@
 /************************* Include Files **************************************/
 /******************************************************************************/
 
-#include "i2c.h"
+#include "no-os/i2c.h"
 #include "i2c_extra.h"
-#include "error.h"
+#include "no-os/error.h"
 #include <stdlib.h>
 #include <drivers/i2c/adi_i2c.h>
 #include <drivers/gpio/adi_gpio.h>

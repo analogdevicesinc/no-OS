@@ -38,7 +38,7 @@
 *******************************************************************************/
 
 #include "ad5592r-base.h"
-#include "error.h"
+#include "no-os/error.h"
 #include "ad5593r.h"
 
 #define AD5593R_MODE_CONF		(0 << 4)

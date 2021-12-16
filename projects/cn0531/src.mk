@@ -13,7 +13,7 @@ SRCS += $(DRIVERS)/api/spi.c \
 	$(DRIVERS)/api/irq.c \
 	$(DRIVERS)/api/gpio.c \
 	$(DRIVERS)/platform/$(PLATFORM)/$(PLATFORM)_spi.c
-INCS += $(INCLUDE)/spi.h \
+INCS += $(INCLUDE)/no-os/spi.h \
 	$(DRIVERS)/platform/$(PLATFORM)/spi_extra.h
 
 TINYIIOD=y

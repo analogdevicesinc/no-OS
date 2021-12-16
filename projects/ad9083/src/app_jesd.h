@@ -43,7 +43,7 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include <stdint.h>
-#include "clk.h"
+#include "no-os/clk.h"
 #include "jesd204_clk.h"
 #include "axi_jesd204_rx.h"
 

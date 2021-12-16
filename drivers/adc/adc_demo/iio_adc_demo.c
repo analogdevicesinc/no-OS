@@ -38,7 +38,7 @@
 *******************************************************************************/
 
 #include <stdlib.h>
-#include "error.h"
+#include "no-os/error.h"
 #include "iio_adc_demo.h"
 
 #define ADC_DEMO_ATTR(_name, _priv) {\

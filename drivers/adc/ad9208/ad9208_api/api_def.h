@@ -15,7 +15,7 @@
 #ifndef __API_DEF_H__
 #define __API_DEF_H__
 #include <stdint.h>
-#include "util.h"
+#include "no-os/util.h"
 
 #define ADI_POW2_48 ((uint64_t)1u << 48)
 #define ADI_MAXUINT48 (ADI_POW2_48 - 1)

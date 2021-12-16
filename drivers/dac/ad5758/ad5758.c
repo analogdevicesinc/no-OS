@@ -42,12 +42,12 @@
 /******************************************************************************/
 
 #include "ad5758.h"
-#include "delay.h"
-#include "error.h"
-#include "gpio.h"
+#include "no-os/delay.h"
+#include "no-os/error.h"
+#include "no-os/gpio.h"
 #include "inttypes.h"
-#include "print_log.h"
-#include "spi.h"
+#include "no-os/print_log.h"
+#include "no-os/spi.h"
 #include "stdbool.h"
 #include "stdio.h"
 #include "stdlib.h"

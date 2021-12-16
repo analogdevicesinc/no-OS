@@ -47,9 +47,9 @@
 #include <string.h>
 #include "ad9208_api.h"
 #include "ad9208_reg.h"
-#include "gpio.h"
-#include "spi.h"
-#include "delay.h"
+#include "no-os/gpio.h"
+#include "no-os/spi.h"
+#include "no-os/delay.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/

@@ -38,11 +38,11 @@
 *******************************************************************************/
 #include <stdlib.h>
 #include <errno.h>
-#include "gpio.h"
+#include "no-os/gpio.h"
 #include "stm32_gpio.h"
-#include "tdm.h"
+#include "no-os/tdm.h"
 #include "stm32_tdm.h"
-#include "error.h"
+#include "no-os/error.h"
 
 /**
  * @brief stm32 platform specific TDM platform ops structure

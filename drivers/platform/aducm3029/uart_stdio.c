@@ -41,7 +41,7 @@
 #include <stdio.h>
 #include <errno.h>
 #include <sys/stat.h>
-#include "uart.h"
+#include "no-os/uart.h"
 
 static struct uart_desc *g_uart;
 

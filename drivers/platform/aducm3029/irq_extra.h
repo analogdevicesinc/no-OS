@@ -47,7 +47,7 @@
 #include <drivers/xint/adi_xint.h>
 #include <stdbool.h>
 #include <stdint.h>
-#include "irq.h"
+#include "no-os/irq.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/

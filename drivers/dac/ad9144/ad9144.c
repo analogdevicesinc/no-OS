@@ -44,7 +44,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include "ad9144.h"
-#include "error.h"
+#include "no-os/error.h"
 
 struct ad9144_jesd204_link_mode {
 	uint8_t id;

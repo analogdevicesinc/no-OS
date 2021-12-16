@@ -40,10 +40,10 @@
 #define AD5592R_BASE_H_
 
 #include "stdint.h"
-#include "delay.h"
-#include "spi.h"
-#include "i2c.h"
-#include "util.h"
+#include "no-os/delay.h"
+#include "no-os/spi.h"
+#include "no-os/i2c.h"
+#include "no-os/util.h"
 #include <stdbool.h>
 
 #define CH_MODE_UNUSED			0

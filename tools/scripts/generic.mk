@@ -269,6 +269,9 @@ DIRS_TO_REMOVE = $(addprefix $(PROJECT_BUILD)/,$(CREATED_DIRECTORIES))
 
 #Add to include all directories containing a .h file
 EXTRA_INC_PATHS := $(sort $(foreach dir, $(INCS_IN_BUILD),$(dir $(dir))))
+EXTRA_INC_PATHS := $(filter-out $(call relative_to_project,$(NO-OS)/include/no-os/),$(EXTRA_INC_PATHS))
+EXTRA_INC_PATHS += $(call relative_to_project, $(INCLUDE))
+
 CFLAGS += $(addprefix -I,$(EXTRA_INC_PATHS)) $(PLATFORM_INCS)
 
 #------------------------------------------------------------------------------

@@ -40,16 +40,16 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "irq.h"
+#include "no-os/irq.h"
 #include "irq_extra.h"
 #include "gpio_irq_extra.h"
-#include "spi.h"
+#include "no-os/spi.h"
 #include "spi_extra.h"
 #include "ad4110.h"
-#include "error.h"
+#include "no-os/error.h"
 #include "xparameters.h"
 #include "parameters.h"
-#include "print_log.h"
+#include "no-os/print_log.h"
 #include <stdint.h>
 #include <inttypes.h>
 

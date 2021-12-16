@@ -40,7 +40,7 @@
 #define STM32_I2C_H_
 
 #include <stdint.h>
-#include "i2c.h"
+#include "no-os/i2c.h"
 #include "stm32_hal.h"
 
 /**

@@ -46,11 +46,11 @@
 #include <string.h>
 #include <inttypes.h>
 #include "ad9361.h"
-#include "spi.h"
-#include "gpio.h"
-#include "delay.h"
+#include "no-os/spi.h"
+#include "no-os/gpio.h"
+#include "no-os/delay.h"
 #include "ad9361_util.h"
-#include "util.h"
+#include "no-os/util.h"
 #include "app_config.h"
 
 #define diff_abs(x, y) ((x) > (y) ? (x - y) : (y - x))

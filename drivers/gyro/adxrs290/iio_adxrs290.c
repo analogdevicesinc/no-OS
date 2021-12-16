@@ -42,8 +42,8 @@
 #include <stdio.h>
 #include <string.h>
 #include "adxrs290.h"
-#include "util.h"
-#include "error.h"
+#include "no-os/util.h"
+#include "no-os/error.h"
 
 /*
  * Available cut-off frequencies of the low pass filter in Hz.

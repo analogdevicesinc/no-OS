@@ -46,9 +46,9 @@
 #include <stdlib.h>
 #include <malloc.h>
 #include <string.h>
-#include "flash.h"
+#include "no-os/flash.h"
 #include "flash_extra.h"
-#include "error.h"
+#include "no-os/error.h"
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/

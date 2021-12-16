@@ -40,7 +40,7 @@
 #include <sys/platform.h>
 #include "adi_initialize.h"
 #include <drivers/pwr/adi_pwr.h>
-#include "error.h"
+#include "no-os/error.h"
 
 /**
  * @brief Initialize the power controller and set the core and peripherals clock

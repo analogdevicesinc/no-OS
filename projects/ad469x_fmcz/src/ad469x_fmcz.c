@@ -44,12 +44,12 @@
 #include <inttypes.h>
 #include <xil_cache.h>
 #include "spi_engine.h"
-#include "pwm.h"
+#include "no-os/pwm.h"
 #include "axi_pwm_extra.h"
 #include "ad469x.h"
-#include "error.h"
+#include "no-os/error.h"
 #include "clk_axi_clkgen.h"
-#include "gpio.h"
+#include "no-os/gpio.h"
 #include "gpio_extra.h"
 #include "parameters.h"
 

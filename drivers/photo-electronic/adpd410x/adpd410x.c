@@ -43,8 +43,8 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <string.h>
-#include "error.h"
-#include "util.h"
+#include "no-os/error.h"
+#include "no-os/util.h"
 #include "adpd410x.h"
 
 /******************************************************************************/

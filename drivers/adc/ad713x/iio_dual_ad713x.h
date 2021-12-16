@@ -48,7 +48,7 @@
 #include <stdio.h>
 #include "ad713x.h"
 #include "iio_types.h"
-#include "spi.h"
+#include "no-os/spi.h"
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/

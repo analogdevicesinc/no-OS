@@ -45,7 +45,7 @@
 #include "stdbool.h"
 #include "ad400x.h"
 #include "spi_engine.h"
-#include "error.h"
+#include "no-os/error.h"
 
 /**
  * @brief Device resolution

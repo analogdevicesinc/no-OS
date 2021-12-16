@@ -40,7 +40,7 @@
 #define STM32_SPI_H_
 
 #include <stdint.h>
-#include "spi.h"
+#include "no-os/spi.h"
 #include "stm32_hal.h"
 
 /**

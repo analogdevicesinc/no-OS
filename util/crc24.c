@@ -36,7 +36,7 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#include "crc24.h"
+#include "no-os/crc24.h"
 
 /***************************************************************************//**
  * @brief Creates the CRC-24 lookup table for a given polynomial.

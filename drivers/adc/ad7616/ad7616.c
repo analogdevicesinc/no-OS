@@ -46,11 +46,11 @@
 #include <stdlib.h>
 #include "spi_engine.h"
 #include "axi_dmac.h"
-#include "gpio.h"
+#include "no-os/gpio.h"
 #include "ad7616.h"
-#include "error.h"
-#include "delay.h"
-#include "axi_io.h"
+#include "no-os/error.h"
+#include "no-os/delay.h"
+#include "no-os/axi_io.h"
 
 /**
  * Read from device.

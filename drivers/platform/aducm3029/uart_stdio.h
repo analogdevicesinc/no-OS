@@ -39,7 +39,7 @@
 #ifndef _UART_STDIO_H_
 #define _UART_STDIO_H_
 
-#include "uart.h"
+#include "no-os/uart.h"
 
 void init_uart_stdio(struct uart_desc *desc);
 

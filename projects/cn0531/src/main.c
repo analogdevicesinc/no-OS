@@ -42,11 +42,11 @@
 /******************************************************************************/
 
 #include "app_config.h"
-#include "error.h"
+#include "no-os/error.h"
 #include "iio.h"
-#include "irq.h"
+#include "no-os/irq.h"
 #include "irq_extra.h"
-#include "uart.h"
+#include "no-os/uart.h"
 #include "uart_extra.h"
 #include "ad5791.h"
 #include "iio_ad5791.h"

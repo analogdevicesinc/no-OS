@@ -42,9 +42,9 @@
 /******************************************************************************/
 #include "ad9361.h"
 #include "ad9361_api.h"
-#include "delay.h"
-#include "spi.h"
-#include "util.h"
+#include "no-os/delay.h"
+#include "no-os/spi.h"
+#include "no-os/util.h"
 #include "app_config.h"
 #include <string.h>
 #ifndef AXI_ADC_NOT_PRESENT

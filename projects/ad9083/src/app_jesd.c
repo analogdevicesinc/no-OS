@@ -45,11 +45,11 @@
 #include "axi_jesd204_rx.h"
 #include "axi_adxcvr.h"
 #include "jesd204_clk.h"
-#include "error.h"
+#include "no-os/error.h"
 #include "app_jesd.h"
 #include "adi_cms_api_common.h"
 #include "axi_jesd204_rx.h"
-#include "print_log.h"
+#include "no-os/print_log.h"
 #include "parameters.h"
 #include "uc_settings.h"
 

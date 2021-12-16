@@ -45,10 +45,10 @@
 /******************************************************************************/
 #include <stdint.h>
 #include <stdbool.h>
-#include "delay.h"
-#include "gpio.h"
-#include "spi.h"
-#include "util.h"
+#include "no-os/delay.h"
+#include "no-os/gpio.h"
+#include "no-os/spi.h"
+#include "no-os/util.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/

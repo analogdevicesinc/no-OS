@@ -41,14 +41,14 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 
-#include "error.h"
-#include "uart.h"
+#include "no-os/error.h"
+#include "no-os/uart.h"
 #include "uart_extra.h"
 #include "iio.h"
 #include "parameters.h"
 #include "app_iio.h"
 #ifndef PLATFORM_MB
-#include "irq.h"
+#include "no-os/irq.h"
 #include "irq_extra.h"
 #endif
 

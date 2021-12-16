@@ -17,7 +17,7 @@ ifeq (y,$(strip $(ENABLE_IIO_NETWORK)))
 DISABLE_SECURE_SOCKET ?= y
 SRC_DIRS += $(NO-OS)/network
 SRCS	 += $(NO-OS)/util/circular_buffer.c
-INCS	 += $(INCLUDE)/circular_buffer.h
+INCS	 += $(INCLUDE)/no-os/circular_buffer.h
 endif
 
 SRC_DIRS += $(PLATFORM_DRIVERS)

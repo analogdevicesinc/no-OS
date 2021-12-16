@@ -51,8 +51,8 @@
 #include <xspips.h>
 #endif
 
-#include "error.h"
-#include "spi.h"
+#include "no-os/error.h"
+#include "no-os/spi.h"
 #include "spi_extra.h"
 
 #if defined(PLATFORM_ZYNQ)

@@ -58,7 +58,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include <stdlib.h>
-#include "spi.h"
+#include "no-os/spi.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/

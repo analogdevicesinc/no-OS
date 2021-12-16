@@ -47,13 +47,13 @@
 #include "ad5766_core.h"
 #include "ad5766.h"
 #include "parameters.h"
-#include "gpio.h"
+#include "no-os/gpio.h"
 #include "gpio_extra.h"
-#include "error.h"
-#include "spi.h"
+#include "no-os/error.h"
+#include "no-os/spi.h"
 #include "spi_extra.h"
 
-#include "print_log.h"
+#include "no-os/print_log.h"
 
 /***************************************************************************//**
 * @brief main

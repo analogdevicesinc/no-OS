@@ -45,10 +45,10 @@
 #include <sys/platform.h>
 
 #include "adi_initialize.h"
-#include "flash.h"
-#include "irq.h"
+#include "no-os/flash.h"
+#include "no-os/irq.h"
 #include "platform_init.h"
-#include "uart.h"
+#include "no-os/uart.h"
 #include "uart_extra.h"
 #include "uart_stdio.h"
 

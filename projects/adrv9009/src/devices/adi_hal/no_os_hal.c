@@ -43,12 +43,12 @@
 #include <stdio.h>
 #include "adi_hal.h"
 #include "parameters.h"
-#include "spi.h"
+#include "no-os/spi.h"
 #include "spi_extra.h"
-#include "gpio.h"
+#include "no-os/gpio.h"
 #include "gpio_extra.h"
-#include "error.h"
-#include "delay.h"
+#include "no-os/error.h"
+#include "no-os/delay.h"
 
 /******************************************************************************/
 /************************** Functions Implementation **************************/

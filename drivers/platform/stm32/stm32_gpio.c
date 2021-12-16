@@ -38,8 +38,8 @@
 *******************************************************************************/
 #include <stdlib.h>
 #include <errno.h>
-#include "util.h"
-#include "gpio.h"
+#include "no-os/util.h"
+#include "no-os/gpio.h"
 #include "stm32_gpio.h"
 
 /******************************************************************************/

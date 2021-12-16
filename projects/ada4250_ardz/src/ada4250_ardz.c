@@ -43,12 +43,12 @@
 
 #include <sys/platform.h>
 #include "adi_initialize.h"
-#include "error.h"
+#include "no-os/error.h"
 #include "iio.h"
 #include "parameters.h"
 #include "ada4250.h"
 #include "iio_ada4250.h"
-#include "spi.h"
+#include "no-os/spi.h"
 #include "spi_extra.h"
 #include "iio_app.h"
 
