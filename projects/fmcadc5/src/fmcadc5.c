@@ -364,17 +364,10 @@ int main(void)
 
 #ifdef IIO_SUPPORT
 	struct iio_device *adc_dev_0_desc;
-	struct iio_device *adc_dev_1_desc;
 	struct iio_axi_adc_desc *iio_axi_adc_0_desc;
-	struct iio_axi_adc_desc *iio_axi_adc_1_desc;
 	struct iio_axi_adc_init_param iio_axi_adc_0_init_par;
 	iio_axi_adc_0_init_par = (struct iio_axi_adc_init_param) {
 		.rx_adc = ad9625_0_core,
-		.rx_dmac = ad9625_dmac,
-	};
-	struct iio_axi_adc_init_param iio_axi_adc_1_init_par;
-	iio_axi_adc_1_init_par = (struct iio_axi_adc_init_param) {
-		.rx_adc = ad9625_1_core,
 		.rx_dmac = ad9625_dmac,
 	};
 
@@ -383,13 +376,6 @@ int main(void)
 		.size = 0xFFFFFFFF,
 	};
 
-
-	struct iio_data_buffer read_buff1 = {
-		.buff = (void *)ADC_DDR_BASEADDR,
-		.size = 0xFFFFFFFF,
-	};
-
-
 	status = iio_axi_adc_init(&iio_axi_adc_0_desc, &iio_axi_adc_0_init_par);
 	if (IS_ERR_VALUE(status))
 		return FAILURE;
@@ -397,16 +383,9 @@ int main(void)
 	if (status < 0)
 		return status;
 
-	status = iio_axi_adc_init(&iio_axi_adc_1_desc, &iio_axi_adc_1_init_par);
-	if (IS_ERR_VALUE(status))
-		return FAILURE;
-	iio_axi_adc_get_dev_descriptor(iio_axi_adc_1_desc, &adc_dev_1_desc);
-
 	struct iio_app_device devices[] = {
 		IIO_APP_DEVICE("axi-ad9625-0", iio_axi_adc_0_desc, adc_dev_0_desc,
 			       &read_buff0, NULL),
-		IIO_APP_DEVICE("axi-ad9625-1", iio_axi_adc_1_desc, adc_dev_1_desc,
-			       &read_buff1, NULL),
 	};
 
 	return iio_app_run(devices, ARRAY_SIZE(devices));
