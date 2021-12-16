@@ -11,8 +11,8 @@
 
 # Uncomment to select the profile
 
-SRCS += $(PROJECT)/src/app/fmcadc5.c \
-	$(PROJECT)/src/devices/i5g/i5g.c
+SRC_DIRS += $(PROJECT)/src
+
 SRCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c \
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.c \
 	$(DRIVERS)/axi_core/clk_axi_clkgen/clk_axi_clkgen.c \
@@ -37,9 +37,7 @@ SRCS += $(NO-OS)/util/fifo.c \
 	$(PLATFORM_DRIVERS)/uart.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c
 endif
-INCS +=	$(PROJECT)/src/app/app_config.h \
-	$(PROJECT)/src/devices/adi_hal/parameters.h \
-	$(PROJECT)/src/devices/i5g/i5g.h
+
 INCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.h \
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.h \
 	$(DRIVERS)/axi_core/clk_axi_clkgen/clk_axi_clkgen.h \
