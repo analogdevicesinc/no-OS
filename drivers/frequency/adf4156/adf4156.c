@@ -1,6 +1,6 @@
 /**************************************************************************//**
 *   @file   adf4156.c
-*   @brief  Implementation of ad9833 Driver for Microblaze processor.
+*   @brief  Implementation of ADF4156 Driver for Microblaze processor.
 *   @author Lucian Sin (Lucian.Sin@analog.com)
 *******************************************************************************
 * Copyright 2013(c) Analog Devices, Inc.
