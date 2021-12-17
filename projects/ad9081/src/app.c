@@ -149,6 +149,7 @@ int main(void)
 		.dev_clk = &app_clk[0],
 		.jesd_tx_clk = &jesd_clk[1],
 		.jesd_rx_clk = &jesd_clk[0],
+		.sysref_coupling_ac_en = 0,
 		.multidevice_instance_count = 1,
 #ifdef QUAD_MXFE
 		.jesd_sync_pins_01_swap_enable = true,

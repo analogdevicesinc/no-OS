@@ -25,11 +25,45 @@
 extern "C" {
 #endif
 
+/**
+ * \brief Open and initialize resources and peripherals required for the TxFE device.
+ *
+ * \param[in]  device	         Pointer to device handler structure.
+ *
+ * \returns API_CMS_ERROR_OK is returned upon success. Otherwise, API_CMS_ERROR_HW_OPEN failure code.
+ */
 int32_t adi_ad9081_hal_hw_open(adi_ad9081_device_t *device);
+
+/**
+ * \brief Shutdown and close any resources opened by adi_aegir_hal_hw_open.
+ *
+ * \param[in]  device	         Pointer to device handler structure.
+ *
+ * \returns API_CMS_ERROR_OK is returned upon success. Otherwise, API_CMS_ERROR_HW_CLOSE failure code.
+ */
 int32_t adi_ad9081_hal_hw_close(adi_ad9081_device_t *device);
+
+/**
+ * \brief Perform a wait/thread sleep in units of microseconds.
+ *
+ * \param[in]  device	         Pointer to device handler structure.
+ * \param[in]  us                Delay duration in microseconds.
+ *
+ * \returns API_CMS_ERROR_OK is returned upon success. Otherwise, API_CMS_ERROR_DELAY_US failure code.
+ */
 int32_t adi_ad9081_hal_delay_us(adi_ad9081_device_t *device, uint32_t us);
+
+/**
+ * \brief Set ADI device RESETB pin high or low.
+ *
+ * \param[in]  device	         Pointer to device handler structure.
+ * \param[in]  enable            0: set RESETB pin low, 1: set RESETB pin high.
+ *
+ * \returns API_CMS_ERROR_OK is returned upon success. Otherwise, API_CMS_ERROR_RESET_PIN_CTRL failure code.
+ */
 int32_t adi_ad9081_hal_reset_pin_ctrl(adi_ad9081_device_t *device,
 				      uint8_t enable);
+
 int32_t adi_ad9081_hal_log_write(adi_ad9081_device_t *device,
 				 adi_cms_log_type_e type, const char *comment,
 				 ...);
