@@ -65,6 +65,70 @@ int32_t adi_ad9081_adc_core_analog_regs_enable_set(adi_ad9081_device_t *device,
 	return API_CMS_ERROR_OK;
 }
 
+int32_t
+adi_ad9081_adc_analog_input_buffer_set(adi_ad9081_device_t *device,
+				       uint8_t adc_cores,
+				       adi_cms_signal_coupling_e coupling)
+{
+	int32_t err;
+	uint8_t enable_adc_core = 3, enable_cmbuf, cmin_input, cmin_out,
+		cmin_out_pulldown;
+	AD9081_NULL_POINTER_RETURN(device);
+	AD9081_LOG_FUNC();
+
+	if (adc_cores == 1 && coupling == COUPLING_AC) {
+		enable_cmbuf = 3;
+		cmin_input = 14;
+		cmin_out = 14;
+		cmin_out_pulldown = 4;
+	} else if (adc_cores == 1 && coupling == COUPLING_DC) {
+		enable_cmbuf = 0;
+		cmin_input = 14;
+		cmin_out = 4;
+		cmin_out_pulldown = 7;
+	} else if (adc_cores == 2 && coupling == COUPLING_AC) {
+		enable_cmbuf = 2;
+		cmin_input = 0;
+		cmin_out = 0;
+		cmin_out_pulldown = 3;
+	} else if (adc_cores == 2 && coupling == COUPLING_DC) {
+		enable_cmbuf = 0;
+		cmin_input = 0;
+		cmin_out = 4;
+		cmin_out_pulldown = 7;
+	} else {
+		return API_CMS_ERROR_INVALID_PARAM;
+	}
+	err = adi_ad9081_hal_bf_set(
+		device, 0x2112, 0x0,
+		1); /* CAL_FREEZE_GLOBAL freeze calibration for reconfig of common-mode loop*/
+	AD9081_ERROR_RETURN(err);
+	err = adi_ad9081_adc_core_analog_regs_enable_set(
+		device, adc_cores,
+		enable_adc_core); /*Global enable of ADC0 and ADC1 SPI access */
+	AD9081_ERROR_RETURN(err);
+	err = adi_ad9081_hal_bf_set(device, 0x1721, 0x206,
+				    enable_cmbuf); /* Power down CMBUF_PD */
+	AD9081_ERROR_RETURN(err);
+	err = adi_ad9081_hal_bf_set(
+		device, 0x1732, 0x400,
+		cmin_input); /* SPI_CMIN_INPUT_SEL select common mode loop for TxFE or MxFE*/
+	AD9081_ERROR_RETURN(err);
+	err = adi_ad9081_hal_bf_set(
+		device, 0x1733, 0X403,
+		cmin_out); /* SPI_CMIN_OUT_SEL select common mode loop for TxFE or MxFE*/
+	AD9081_ERROR_RETURN(err);
+	err = adi_ad9081_hal_bf_set(
+		device, 0x1733, 0x300,
+		cmin_out_pulldown); /* SPI_CMIN_OUT_PULDWN pulls VCMx pin low when common mode buffer is disabled*/
+	AD9081_ERROR_RETURN(err);
+	err = adi_ad9081_hal_bf_set(device, 0x2112, 0x0,
+				    0); /* CAL_FREEZE_GLOBAL */
+	AD9081_ERROR_RETURN(err);
+
+	return API_CMS_ERROR_OK;
+}
+
 int32_t adi_ad9081_adc_power_up_set(adi_ad9081_device_t *device, uint8_t adcs,
 				    uint8_t enable)
 {
@@ -208,6 +272,32 @@ int32_t adi_ad9081_adc_clk_out_enable_set(adi_ad9081_device_t *device,
 
 	err = adi_ad9081_hal_bf_set(device, REG_CLK_CTRL1_ADDR,
 				    BF_PD_ADC_DRIVER_INFO, !enable);
+	AD9081_ERROR_RETURN(err);
+
+	return API_CMS_ERROR_OK;
+}
+
+int32_t adi_ad9081_adc_clk_out_voltage_swing_set(adi_ad9081_device_t *device,
+						 int16_t swing_mv)
+{
+	int32_t err;
+	uint8_t code;
+	AD9081_NULL_POINTER_RETURN(device);
+	AD9081_LOG_FUNC();
+
+	if (swing_mv > 1000 || swing_mv < -1000) {
+		return API_CMS_ERROR_INVALID_PARAM;
+	}
+
+	code = (993 - swing_mv + (99 / 2)) / 99;
+
+	/* Voltage Swing = 993mV - (code * 99mV).
+	0 -> 993mV;		1 -> 894mV;		2 -> 795mV;		3 -> 696mV;		4 -> 597mV;		5 -> 498mV;		6 -> 399mV;
+	7 -> 300mV;		8 -> 201mV;		9 -> 102mV;		10 -> 3mV;		11 -> -96mV;	12 -> -195mV;	13 -> -294mV;
+	14 -> -393mV;	15 -> -492mV;	16 -> -591mV;	17 -> -690mV;	18 -> -789mV;	19 -> -888mV;	20 -> -987mV;
+	*/
+	err = adi_ad9081_hal_bf_set(device, REG_ADC_CLK_CTRL0_ADDR,
+				    BF_ADC_DRIVER_DATA_CTRL_INFO, code);
 	AD9081_ERROR_RETURN(err);
 
 	return API_CMS_ERROR_OK;
@@ -2453,10 +2543,13 @@ int32_t adi_ad9081_adc_config(adi_ad9081_device_t *device, uint8_t cddcs,
 }
 
 int32_t adi_ad9081_adc_nyquist_zone_set(adi_ad9081_device_t *device,
+					adi_ad9081_adc_select_e adc_sel,
 					adi_ad9081_adc_nyquist_zone_e zone)
 {
 	int32_t err;
 	uint32_t reg_nyquist_zone_addr = 0x2110;
+	uint8_t nyquist_setting = 0x0;
+	int i = 0;
 	AD9081_NULL_POINTER_RETURN(device);
 	AD9081_LOG_FUNC();
 
@@ -2467,19 +2560,28 @@ int32_t adi_ad9081_adc_nyquist_zone_set(adi_ad9081_device_t *device,
 	    device->dev_info.dev_rev == 3) { /* r1r/r2 */
 		reg_nyquist_zone_addr = 0x2110;
 	}
+	err = adi_ad9081_hal_reg_get(device, reg_nyquist_zone_addr,
+				     &nyquist_setting);
 
+	nyquist_setting |= 0x1; /*enable default override*/
 	if (zone == AD9081_ADC_NYQUIST_ZONE_ODD) {
-		err = adi_ad9081_hal_reg_set(device, reg_nyquist_zone_addr,
-					     0x01);
-		AD9081_ERROR_RETURN(err);
+		for (i = 0; i < 4; i++) {
+			if ((1 << i) & adc_sel) {
+				nyquist_setting &= ~(0x2 << i);
+			}
+		}
 	}
 	if (zone == AD9081_ADC_NYQUIST_ZONE_EVEN) {
-		err = adi_ad9081_hal_reg_set(device, reg_nyquist_zone_addr,
-					     0x1f);
-		AD9081_ERROR_RETURN(err);
+		for (i = 0; i < 4; i++) {
+			if ((1 << i) & adc_sel) {
+				nyquist_setting |= (0x2 << i);
+			}
+		}
 	}
+	err = adi_ad9081_hal_reg_set(device, reg_nyquist_zone_addr,
+				     nyquist_setting);
 	err = adi_ad9081_hal_reg_set(device, 0x2100,
-				     1); /* @user_ctrl_transfer */
+				     1); /* Trigger Data Transfer */
 	AD9081_ERROR_RETURN(err);
 
 	return API_CMS_ERROR_OK;
@@ -2525,16 +2627,12 @@ int32_t adi_ad9081_adc_test_mode_config_set(adi_ad9081_device_t *device,
 	AD9081_LOG_FUNC();
 
 	/* set test mode on all converters */
-	adi_ad9081_jesd_tx_conv_test_mode_enable_set(
+	err = adi_ad9081_jesd_tx_conv_test_mode_enable_set(
 		device, links,
 		((i_mode == AD9081_TMODE_OFF) && (q_mode == AD9081_TMODE_OFF)) ?
 			0x0000 :
 			0xffff);
-
-	/* set output as 16bit resolution */
-	adi_ad9081_jesd_tx_res_sel_set(device, links,
-				       AD9081_CHIP_OUT_RES_16BIT);
-
+	AD9081_ERROR_RETURN(err);
 	/* set test mode type */
 	err = adi_ad9081_hal_bf_set(device, REG_TMODE_I_CTRL1_ADDR,
 				    BF_TMODE_I_TYPE_SEL_INFO,
@@ -3609,21 +3707,6 @@ int32_t adi_ad9081_adc_trig_prog_delay_set(adi_ad9081_device_t *device,
 
 	err = adi_ad9081_hal_bf_set(device, REG_TRIG_PROG_DELAY_ADDR,
 				    BF_TRIG_PROG_DELAY_INFO,
-				    delay); /* not paged */
-	AD9081_ERROR_RETURN(err);
-
-	return API_CMS_ERROR_OK;
-}
-
-int32_t adi_ad9081_adc_sysref_prog_delay_set(adi_ad9081_device_t *device,
-					     uint8_t delay)
-{
-	int32_t err;
-	AD9081_NULL_POINTER_RETURN(device);
-	AD9081_LOG_FUNC();
-
-	err = adi_ad9081_hal_bf_set(device, REG_SYSREF_PROG_DELAY_ADDR,
-				    BF_SYSREF_PROG_DELAY_INFO,
 				    delay); /* not paged */
 	AD9081_ERROR_RETURN(err);
 

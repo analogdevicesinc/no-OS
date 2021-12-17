@@ -52,6 +52,8 @@ typedef enum {
 	API_CMS_ERROR_PLL_NOT_LOCKED = -21, /*!< PLL is not locked */
 	API_CMS_ERROR_DLL_NOT_LOCKED = -22, /*!< DLL is not locked */
 	API_CMS_ERROR_MODE_NOT_IN_TABLE = -23, /*!< JESD Mode not in table */
+	API_CMS_ERROR_JESD_PLL_NOT_LOCKED = -24, /*!< PD STBY function error */
+	API_CMS_ERROR_JESD_SYNC_NOT_DONE = -25, /*!< JESD_SYNC_NOT_DONE */
 	API_CMS_ERROR_FTW_LOAD_ACK = -30, /*!< FTW acknowledge not received */
 	API_CMS_ERROR_NCO_NOT_ENABLED = -31, /*!< The NCO is not enabled */
 	API_CMS_ERROR_INIT_SEQ_FAIL =
@@ -66,7 +68,9 @@ typedef enum {
 	API_CMS_ERROR_LOG_OPEN = -67, /*!< Log open error */
 	API_CMS_ERROR_LOG_WRITE = -68, /*!< Log write error */
 	API_CMS_ERROR_LOG_CLOSE = -69, /*!< Log close error */
-	API_CMS_ERROR_DELAY_US = -70 /*!< Delay error */
+	API_CMS_ERROR_DELAY_US = -70, /*!< Delay error */
+	API_CMS_ERROR_PD_STBY_PIN_CTRL = -71 /*!< PD STBY function error */
+
 } adi_cms_error_e;
 
 /*!
@@ -363,6 +367,22 @@ typedef int32_t (*adi_event_handler_t)(uint16_t event, uint8_t ref, void *data);
  * @return Any non-zero value indicates an error
  */
 typedef int32_t (*adi_tx_en_pin_ctrl_t)(void *user_data, uint8_t enable);
+
+/**
+ * @brief  pd_stby pin control function
+ *
+ * @param  user_data A void pointer to a client defined structure containing
+ *                   any parameters/settings that may be required by the function
+ *                   to control the hardware for the ADI Device PD_STBY PIN.
+ * @param  enable    A uint8_t value indicating the desired enable/disable
+ *                   setting for the pd_stby pin.
+ *                   A value of 1 indicates pd_stby pin is set HIGH
+ *                   A value of 0 indicates pd_stby pin is set LOW
+ *
+ * @return 0 for success
+ * @return Any non-zero value indicates an error
+ */
+typedef int32_t (*adi_pd_stby_pin_ctrl_t)(void *user_data, uint8_t enable);
 
 /**
  * @brief  reset pin control function

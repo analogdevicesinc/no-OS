@@ -54,6 +54,10 @@
 #define CHIPID_AD9081	0x9081
 #define CHIPID_MASK	0xFFFF
 
+#define for_each_cddc(bit, mask) \
+	for ((bit) = 0; (bit) < MAX_NUM_MAIN_DATAPATHS; (bit)++) \
+		if ((mask) & BIT(bit))
+
 static int32_t ad9081_nco_sync_master_slave(struct ad9081_phy *phy,
 		bool master)
 {
@@ -299,6 +303,7 @@ static int32_t ad9081_jesd_tx_link_status_print(struct ad9081_phy *phy)
 
 static int32_t ad9081_multichip_sync(struct ad9081_phy *phy, int step)
 {
+	adi_cms_jesd_subclass_e subclass = JESD_SUBCLASS_0;
 	int ret;
 
 	printf("%s:%d\n", __func__, step);
@@ -381,7 +386,11 @@ static int32_t ad9081_multichip_sync(struct ad9081_phy *phy, int step)
 		if (ret != 0)
 			return ret;
 
-		ret = adi_ad9081_jesd_oneshot_sync(&phy->ad9081);
+		if (phy->jesd_tx_link.jesd_param.jesd_subclass ||
+			phy->jesd_rx_link[0].jesd_param.jesd_subclass)
+			subclass = JESD_SUBCLASS_1;
+
+		ret = adi_ad9081_jesd_oneshot_sync(&phy->ad9081, subclass);
 		if (ret != 0)
 			return ret;
 
@@ -516,8 +525,9 @@ static int32_t ad9081_setup(struct ad9081_phy *phy)
 	if (ret != 0)
 		return ret;
 
-	/* AC couple SYSREF */
-	ret = adi_ad9081_jesd_sysref_input_mode_set(&phy->ad9081, 0);
+	/* DC couple SYSREF default */
+	ret = adi_ad9081_jesd_sysref_input_mode_set(&phy->ad9081, 1, 1,
+		phy->sysref_coupling_ac_en ? COUPLING_AC : COUPLING_DC);
 	if (ret != 0)
 		return ret;
 
@@ -819,10 +829,12 @@ static int32_t ad9081_setup(struct ad9081_phy *phy)
 
 	//clk_set_rate(phy->clks[TX_SAMPL_CLK], sample_rate); // TODO
 
-	ret = adi_ad9081_adc_nyquist_zone_set(&phy->ad9081,
-					      phy->rx_nyquist_zone);
-	if (ret != 0)
-		return ret;
+	for_each_cddc(i, phy->rx_cddc_select) {
+		ret = adi_ad9081_adc_nyquist_zone_set(&phy->ad9081, BIT(i),
+			phy->rx_nyquist_zone[i]);
+		if (ret != 0)
+			return ret;
+	}
 
 	ret = ad9081_nco_sync_master_slave(phy,
 					   phy->jesd_rx_clk ? true : false);
@@ -964,6 +976,7 @@ int32_t ad9081_parse_init_param(struct ad9081_phy *phy,
 {
 	int32_t i;
 
+	phy->sysref_coupling_ac_en = init_param->sysref_coupling_ac_en;
 	phy->multidevice_instance_count = init_param->multidevice_instance_count;
 	phy->config_sync_01_swapped = init_param->jesd_sync_pins_01_swap_enable;
 	phy->lmfc_delay = init_param->lmfc_delay_dac_clk_cycles;
@@ -988,7 +1001,10 @@ int32_t ad9081_parse_init_param(struct ad9081_phy *phy,
 					  init_param->jesd_tx_link, false);
 	/* RX */
 	phy->adc_frequency_hz = init_param->adc_frequency_hz;
-	phy->rx_nyquist_zone = init_param->nyquist_zone;
+
+	for (i = 0; i < MAX_NUM_MAIN_DATAPATHS; i++)
+		phy->rx_nyquist_zone[i] = init_param->nyquist_zone[i];
+
 	/* The 4 ADC Main Datapaths */
 
 	for (i = 0; i < MAX_NUM_MAIN_DATAPATHS; i++) {
