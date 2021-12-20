@@ -161,5 +161,11 @@ int64_t div_s64(int64_t dividend, int32_t divisor);
 int32_t str_to_int32(const char *str);
 /* Converts from string to uint32_t */
 uint32_t srt_to_uint32(const char *str);
+
+void put_unaligned_be16(uint16_t val, uint8_t *buf);
+uint16_t get_unaligned_be16(uint8_t *buf);
+void put_unaligned_le16(uint16_t val, uint8_t *buf);
+uint16_t get_unaligned_le16(uint8_t *buf);
+
 #endif // UTIL_H_
 

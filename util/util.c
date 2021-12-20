@@ -280,3 +280,25 @@ uint32_t srt_to_uint32(const char *str)
 	else
 		return value;
 }
+
+void put_unaligned_be16(uint16_t val, uint8_t *buf)
+{
+	buf[1] = val & 0xFF;
+	buf[0] = val >> 8;
+}
+
+uint16_t get_unaligned_be16(uint8_t *buf)
+{
+	return buf[1] | ((uint16_t)buf[0] << 8);
+}
+
+void put_unaligned_le16(uint16_t val, uint8_t *buf)
+{
+	buf[0] = val & 0xFF;
+	buf[1] = val >> 8;
+}
+
+uint16_t get_unaligned_le16(uint8_t *buf)
+{
+	return buf[0] | ((uint16_t)buf[1] << 8);
+}
