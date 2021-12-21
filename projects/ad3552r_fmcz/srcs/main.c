@@ -57,6 +57,14 @@
 #include <xparameters.h>
 #include <xil_cache.h>
 
+#ifdef IIO_SUPPORT
+#include "iio_app.h"
+#include "iio_ad3552r.h"
+
+static uint8_t data_buffer[MAX_BUFF_SAMPLES];
+
+#endif
+
 /* Default structures */
 static struct xil_gpio_init_param xil_gpio_param = {
 	.device_id = GPIO_DEVICE_ID,
@@ -187,10 +195,13 @@ int main()
 		}
 	};
 
-	ret = ad3552r_init(&dac, &default_ad3552r_param);
-	if (IS_ERR_VALUE(ret)) {
-		pr_err("ad3552r_init failed with code: %"PRIi32"\n", ret);
-		return ret;
+#ifndef IIO_SUPPORT
+	struct ad3552r_desc *dac;
+
+	err = ad3552r_init(&dac, &default_ad3552r_param);
+	if (IS_ERR_VALUE(err)) {
+		pr_err("ad3552r_init failed with code: %"PRIi32"\n", err);
+		return err;
 	}
 
 	set_power_up_success_led();
@@ -202,6 +213,39 @@ int main()
 	}
 
 	ad3552r_remove(dac);
+
+#else //IIO_SUPPORT
+
+	struct iio_ad3552r_desc *iio_dac;
+	struct iio_device *iio_dac_descriptor;
+
+	struct iio_data_buffer wr_buff = {
+		.buff = data_buffer,
+		.size = sizeof(data_buffer)
+	};
+
+	err = iio_ad3552r_init(&iio_dac, &default_ad3552r_param);
+	if (IS_ERR_VALUE(err)) {
+		pr_err("Error initializing iio_dac. Code: %"PRIi32"\n", err);
+		return err;
+	}
+
+	set_power_up_success_led();
+
+	iio_ad3552r_get_descriptor(iio_dac, &iio_dac_descriptor);
+
+	struct iio_app_device devices[] = {
+		IIO_APP_DEVICE("ad3552r", iio_dac, iio_dac_descriptor, NULL,
+			       &wr_buff)
+	};
+
+	err = 0;
+	while (err >= 0) {
+		err = iio_app_run(devices, ARRAY_SIZE(devices));
+	}
+
+	iio_ad3552r_remove(iio_dac);
+#endif
 
 	pr_debug("Bye\n");
 
