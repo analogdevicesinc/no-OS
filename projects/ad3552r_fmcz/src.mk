@@ -6,3 +6,7 @@ SRC_DIRS += $(PROJECT)/srcs			\
 		$(PLATFORM_DRIVERS)		\
 		$(NO-OS)/util			\
 		$(INCLUDE)
+
+ifeq (y,$(strip $(TINYIIOD)))
+SRC_DIRS += $(NO-OS)/iio/iio_app
+endif
