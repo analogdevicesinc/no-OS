@@ -166,6 +166,9 @@
 #define AD7193_GPOCON_P1DAT     (1 << 1) // P1 state
 #define AD7193_GPOCON_P0DAT     (1 << 0) // P0 state
 
+/* Channel Mask */
+#define AD7193_CH_MASK(x)		BIT(x)
+
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
@@ -179,6 +182,12 @@ struct ad7193_dev {
 	/* Device Settings */
 	uint8_t		current_polarity;
 	uint8_t		current_gain;
+	uint8_t     operating_mode;
+	uint16_t    data_rate_code;
+	uint8_t     clock_source;
+	uint8_t		input_mode;
+	uint8_t		buffer;
+	uint8_t     bpdsw_mode;
 };
 
 struct ad7193_init_param {
@@ -189,7 +198,13 @@ struct ad7193_init_param {
 	struct gpio_init_param	gpio_miso;
 	/* Device Settings */
 	uint8_t		current_polarity;
-	uint8_t		current_gain;
+	uint8_t		current_gain_code;
+	uint8_t     operating_mode;
+	uint16_t    data_rate_code;
+	uint8_t     clock_source;
+	uint8_t		input_mode;
+	uint8_t		buffer;
+	uint8_t     bpdsw_mode;
 };
 
 /******************************************************************************/
@@ -198,63 +213,73 @@ struct ad7193_init_param {
 
 /*! Checks if the AD7139 part is present. */
 int ad7193_init(struct ad7193_dev **device,
-		   struct ad7193_init_param init_param);
+		struct ad7193_init_param init_param);
 
 /*! Free the resources allocated by ad7193_init(). */
 int ad7193_remove(struct ad7193_dev *dev);
 
 /*! Writes data into a register. */
-int ad7193_set_register_value(struct ad7193_dev *dev,
-	uint8_t reg_addr,
-	uint32_t reg_value,
-	uint8_t bytes_number,
-	uint8_t modify_cs);
+int ad7193_set_register_value(struct ad7193_dev *dev, uint8_t reg_addr,
+			      uint32_t reg_value, uint8_t bytes_number, uint8_t modify_cs);
 
 /*! Reads the value of a register. */
-int ad7193_get_register_value(struct ad7193_dev *dev,
-	uint8_t reg_addr,
-	uint8_t bytes_number,
-	uint32_t *reg_data,
-	uint8_t modify_cs);
+int ad7193_get_register_value(struct ad7193_dev *dev, uint8_t reg_addr,
+			      uint8_t bytes_number, uint32_t *reg_data, uint8_t modify_cs);
+
+/* Write masked data into device register. */
+int ad7193_set_masked_register_value(struct ad7193_dev *dev,
+				     uint8_t reg_addr, uint32_t mask, uint32_t data,
+				     uint8_t bytes, uint8_t modify_cs);
 
 /*! Resets the device. */
 int ad7193_reset(struct ad7193_dev *dev);
 
-/*! Set device to idle or power-down. */
-int ad7193_set_power(struct ad7193_dev *dev,
-		      uint8_t pwr_mode);
+/*! Set the device into specified operating mode. */
+int ad7193_set_operating_mode(struct ad7193_dev *dev,
+			      uint8_t opt_mode, uint8_t modify_cs);
 
 /*! Waits for RDY pin to go low. */
 int ad7193_wait_rdy_go_low(struct ad7193_dev *dev);
 
-/*! Selects the channel to be enabled. */
-int ad7193_channel_select(struct ad7193_dev *dev,
-			   uint16_t channel);
+/*! Selects the channels to be enabled. */
+int ad7193_channels_select(struct ad7193_dev *dev, uint16_t chn_mask);
 
 /*! Performs the given calibration to the specified channel. */
 int ad7193_calibrate(struct ad7193_dev *dev,
-		      uint8_t mode,
-		      uint8_t channel);
+		     uint8_t mode, uint8_t channel);
+
+/*! Configures the input mode of the ADC */
+int ad7193_config_input_mode(struct ad7193_dev *dev, uint8_t mode);
+
+/*! Enables or disables the buffer on the ADC input channels */
+int ad7193_buffer_select(struct ad7193_dev *dev, uint8_t buff_en);
+
+/*! Selects the filter output data rate of the ADC */
+int ad7193_output_rate_select(struct ad7193_dev *dev,
+			      uint16_t out_rate_code);
+
+/*! Selects the clock source of the ADC */
+int ad7193_clock_select(struct ad7193_dev *dev, uint16_t clk_select);
+
+/*! Opens or closes the bridge power-down switch of the ADC */
+int ad7193_set_bridge_switch(struct ad7193_dev *dev, uint8_t bpdsw_select);
 
 /*! Selects the polarity of the conversion and the ADC input range. */
 int ad7193_range_setup(struct ad7193_dev *dev,
-			uint8_t polarity,
-			uint8_t range);
+		       uint8_t polarity, uint8_t range);
 
 /*! Returns the result of a single conversion. */
 int ad7193_single_conversion(struct ad7193_dev *dev, uint32_t *reg_data);
 
 /*! Returns the average of several conversion results. */
 int ad7193_continuous_read_avg(struct ad7193_dev *dev,
-	uint8_t sample_number,
-	uint32_t *samples_avg);
+			       uint8_t sample_number, uint32_t *samples_avg);
 
 /*! Read data from temperature sensor and converts it to Celsius degrees. */
 int ad7193_temperature_read(struct ad7193_dev *dev, float *temp);
 
 /*! Converts 24-bit raw data to volts. */
 float ad7193_convert_to_volts(struct ad7193_dev *dev,
-			      uint32_t raw_data,
-			      float v_ref);
+			      uint32_t raw_data, float v_ref);
 
 #endif /* __AD7193_H__ */
