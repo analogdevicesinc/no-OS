@@ -46,6 +46,7 @@
 #include <stdint.h>
 #include "no-os/gpio.h"
 #include "no-os/spi.h"
+#include "no-os/util.h"
 
 /******************************************************************************/
 /******************************** AD7193 **************************************/
@@ -53,16 +54,6 @@
 
 /* SPI slave device ID */
 #define AD7193_SLAVE_ID         1
-
-/* AD74XX Chip Select Pin declaration */
-#define AD7193_CS_LOW           gpio_set_value(dev->gpio_cs,  \
-			        GPIO_LOW)
-#define AD7193_CS_HIGH          gpio_set_value(dev->gpio_cs,  \
-			        GPIO_HIGH)
-
-/* AD7193 GPIO */
-#define AD7193_RDY_STATE(value) gpio_get_value(dev->gpio_miso,  \
-                                &value)
 
 /* AD7193 Register Map */
 #define AD7193_REG_COMM         0 // Communications Register (WO, 8-bit)
@@ -206,58 +197,60 @@ struct ad7193_init_param {
 /******************************************************************************/
 
 /*! Checks if the AD7139 part is present. */
-int8_t ad7193_init(struct ad7193_dev **device,
+int ad7193_init(struct ad7193_dev **device,
 		   struct ad7193_init_param init_param);
 
 /*! Free the resources allocated by ad7193_init(). */
-int32_t ad7193_remove(struct ad7193_dev *dev);
+int ad7193_remove(struct ad7193_dev *dev);
 
 /*! Writes data into a register. */
-void ad7193_set_register_value(struct ad7193_dev *dev,
-			       uint8_t register_address,
-			       uint32_t register_value,
-			       uint8_t bytes_number,
-			       uint8_t modify_cs);
+int ad7193_set_register_value(struct ad7193_dev *dev,
+	uint8_t reg_addr,
+	uint32_t reg_value,
+	uint8_t bytes_number,
+	uint8_t modify_cs);
 
 /*! Reads the value of a register. */
-uint32_t ad7193_get_register_value(struct ad7193_dev *dev,
-				   uint8_t register_address,
-				   uint8_t bytes_number,
-				   uint8_t modify_cs);
+int ad7193_get_register_value(struct ad7193_dev *dev,
+	uint8_t reg_addr,
+	uint8_t bytes_number,
+	uint32_t *reg_data,
+	uint8_t modify_cs);
 
 /*! Resets the device. */
-void ad7193_reset(struct ad7193_dev *dev);
+int ad7193_reset(struct ad7193_dev *dev);
 
 /*! Set device to idle or power-down. */
-void ad7193_set_power(struct ad7193_dev *dev,
+int ad7193_set_power(struct ad7193_dev *dev,
 		      uint8_t pwr_mode);
 
 /*! Waits for RDY pin to go low. */
-void ad7193_wait_rdy_go_low(struct ad7193_dev *dev);
+int ad7193_wait_rdy_go_low(struct ad7193_dev *dev);
 
 /*! Selects the channel to be enabled. */
-void ad7193_channel_select(struct ad7193_dev *dev,
+int ad7193_channel_select(struct ad7193_dev *dev,
 			   uint16_t channel);
 
 /*! Performs the given calibration to the specified channel. */
-void ad7193_calibrate(struct ad7193_dev *dev,
+int ad7193_calibrate(struct ad7193_dev *dev,
 		      uint8_t mode,
 		      uint8_t channel);
 
 /*! Selects the polarity of the conversion and the ADC input range. */
-void ad7193_range_setup(struct ad7193_dev *dev,
+int ad7193_range_setup(struct ad7193_dev *dev,
 			uint8_t polarity,
 			uint8_t range);
 
 /*! Returns the result of a single conversion. */
-uint32_t ad7193_single_conversion(struct ad7193_dev *dev);
+int ad7193_single_conversion(struct ad7193_dev *dev, uint32_t *reg_data);
 
 /*! Returns the average of several conversion results. */
-uint32_t ad7193_continuous_read_avg(struct ad7193_dev *dev,
-				    uint8_t sample_number);
+int ad7193_continuous_read_avg(struct ad7193_dev *dev,
+	uint8_t sample_number,
+	uint32_t *samples_avg);
 
 /*! Read data from temperature sensor and converts it to Celsius degrees. */
-float ad7193_temperature_read(struct ad7193_dev *dev);
+int ad7193_temperature_read(struct ad7193_dev *dev, float *temp);
 
 /*! Converts 24-bit raw data to volts. */
 float ad7193_convert_to_volts(struct ad7193_dev *dev,
