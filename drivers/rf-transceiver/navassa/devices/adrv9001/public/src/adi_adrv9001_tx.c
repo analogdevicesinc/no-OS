@@ -134,13 +134,15 @@ static __maybe_unused int32_t __maybe_unused adi_adrv9001_Tx_AttenuationMode_Set
                                                                            adi_adrv9001_TxAttenuationControlMode_e mode)
 {
     adi_adrv9001_ChannelState_e state = ADI_ADRV9001_CHANNEL_STANDBY;
+	adi_adrv9001_TxAttenuationControlMode_e txModeRead = ADI_ADRV9001_TX_ATTENUATION_CONTROL_MODE_BYPASS;
 
     ADI_RANGE_CHECK(device, channel, ADI_CHANNEL_1, ADI_CHANNEL_2);
     switch (mode)
     {
     case ADI_ADRV9001_TX_ATTENUATION_CONTROL_MODE_BYPASS:   /* Falls through */
     case ADI_ADRV9001_TX_ATTENUATION_CONTROL_MODE_SPI:      /* Falls through */
-    case ADI_ADRV9001_TX_ATTENUATION_CONTROL_MODE_PIN:
+    case ADI_ADRV9001_TX_ATTENUATION_CONTROL_MODE_PIN:      /* Falls through */
+    case ADI_ADRV9001_TX_ATTENUATION_CONTROL_MODE_CLGC:
         break;
     default:
         ADI_ERROR_REPORT(&device->common,
@@ -166,6 +168,18 @@ static __maybe_unused int32_t __maybe_unused adi_adrv9001_Tx_AttenuationMode_Set
                          currentState.channelStates[port_index][chan_index],
                          "Error while attempting to set attenuation mode. Channel must be in STANDBY or CALIBRATED.");
     }
+	
+	/* Retrieve attenuation mode */
+	ADI_EXPECT(adi_adrv9001_Tx_AttenuationMode_Get, device, channel, &txModeRead);
+	if (txModeRead == ADI_ADRV9001_TX_ATTENUATION_CONTROL_MODE_CLGC)
+	{
+		ADI_ERROR_REPORT(&device->common,
+			ADI_COMMON_ERRSRC_API,
+			ADI_COMMON_ERR_API_FAIL,
+			ADI_COMMON_ACT_ERR_CHECK_PARAM,
+			txModeRead,
+			"Invalid TxAttenuation Control Mode. Cannot control when mode CLGC is enabled");
+	}
 
     ADI_API_RETURN(device);
 }
@@ -180,8 +194,15 @@ int32_t adi_adrv9001_Tx_AttenuationMode_Set(adi_adrv9001_Device_t *device,
 
     txChannelBaseAddr = Tx_Addr_Get(channel);
 
-    ADI_EXPECT(adrv9001_NvsRegmapTx_TxAttenMode_Set, device, txChannelBaseAddr, (uint8_t)mode);
+	device->devStateInfo.txAttenMode[channel - 1] = mode;
+	
+	if (mode == ADI_ADRV9001_TX_ATTENUATION_CONTROL_MODE_CLGC)
+	{
+		mode = ADI_ADRV9001_TX_ATTENUATION_CONTROL_MODE_SPI;
+	}
 
+    ADI_EXPECT(adrv9001_NvsRegmapTx_TxAttenMode_Set, device, txChannelBaseAddr, (uint8_t)mode);
+	
     ADI_API_RETURN(device)
 }
 
@@ -199,15 +220,18 @@ int32_t adi_adrv9001_Tx_AttenuationMode_Get(adi_adrv9001_Device_t *device,
                                             adi_common_ChannelNumber_e channel,
                                             adi_adrv9001_TxAttenuationControlMode_e *mode)
 {
-    uint8_t regData = 0;
-    adrv9001_BfNvsRegmapTx_e txChannelBaseAddr = ADRV9001_BF_TX1_CORE;
-
-    ADI_PERFORM_VALIDATION(adi_adrv9001_Tx_AttenuationMode_Get_Validate, device, channel, mode);
-
-    txChannelBaseAddr = Tx_Addr_Get(channel);
-
-    ADI_EXPECT(adrv9001_NvsRegmapTx_TxAttenMode_Get, device, txChannelBaseAddr, &regData);
-    *mode = (adi_adrv9001_TxAttenuationControlMode_e)regData;
+	ADI_PERFORM_VALIDATION(adi_adrv9001_Tx_AttenuationMode_Get_Validate, device, channel, mode);
+	
+	adi_adrv9001_ChannelState_e state = ADI_ADRV9001_CHANNEL_STANDBY;
+	ADI_EXPECT(adi_adrv9001_Radio_Channel_State_Get, device, ADI_TX, channel, &state);
+	if (state == ADI_ADRV9001_CHANNEL_PRIMED)
+	{
+		*mode = ADI_ADRV9001_TX_ATTENUATION_CONTROL_MODE_SPI;
+	}
+	else
+	{
+		*mode = (adi_adrv9001_TxAttenuationControlMode_e)device->devStateInfo.txAttenMode[channel - 1];
+	}
 
     ADI_API_RETURN(device);
 }
@@ -321,6 +345,8 @@ static __maybe_unused int32_t __maybe_unused adi_adrv9001_Tx_Attenuation_Set_Val
                                                                        uint16_t attenuation_mdB)
 {
     uint8_t chan_index = 0;
+	adi_adrv9001_TxAttenuationControlMode_e txModeRead = ADI_ADRV9001_TX_ATTENUATION_CONTROL_MODE_BYPASS;
+
     ADI_RANGE_CHECK(device, channel, ADI_CHANNEL_1, ADI_CHANNEL_2);
 
     adi_common_channel_to_index(channel, &chan_index);
@@ -354,6 +380,18 @@ static __maybe_unused int32_t __maybe_unused adi_adrv9001_Tx_Attenuation_Set_Val
                              "Invalid attenuation_mdB value. The resolution of adi_adrv9001_Tx_Attenuation_Set() is only 0.05dB");
         }
     }
+
+	/* Retrieve attenuation mode */
+	ADI_EXPECT(adi_adrv9001_Tx_AttenuationMode_Get, device, channel, &txModeRead);
+	if (txModeRead == ADI_ADRV9001_TX_ATTENUATION_CONTROL_MODE_CLGC)
+	{
+		ADI_ERROR_REPORT(&device->common,
+			ADI_COMMON_ERRSRC_API,
+			ADI_COMMON_ERR_API_FAIL,
+			ADI_COMMON_ACT_ERR_CHECK_PARAM,
+			txModeRead,
+			"Invalid TxAttenuation Control Mode. Cannot control when mode CLGC is enabled");
+	}
 
     ADI_API_RETURN(device);
 }
@@ -510,8 +548,21 @@ static __maybe_unused int32_t __maybe_unused adi_adrv9001_Tx_OutputPowerBoost_Se
                                                                             adi_common_ChannelNumber_e channel)
 {
     adi_adrv9001_ChannelState_e state = ADI_ADRV9001_CHANNEL_STANDBY;
+	adi_adrv9001_TxAttenuationControlMode_e txModeRead = ADI_ADRV9001_TX_ATTENUATION_CONTROL_MODE_BYPASS;
 
     ADI_EXPECT(adi_adrv9001_Channel_Validate, device, channel);
+
+	/* Retrieve attenuation mode */
+	ADI_EXPECT(adi_adrv9001_Tx_AttenuationMode_Get, device, channel, &txModeRead);
+	if (txModeRead == ADI_ADRV9001_TX_ATTENUATION_CONTROL_MODE_CLGC)
+	{
+		ADI_ERROR_REPORT(&device->common,
+			ADI_COMMON_ERRSRC_API,
+			ADI_COMMON_ERR_API_FAIL,
+			ADI_COMMON_ACT_ERR_CHECK_PARAM,
+			txModeRead,
+			"Invalid TxAttenuation Control Mode. Cannot control when mode CLGC is enabled");
+	}
 
     ADI_EXPECT(adi_adrv9001_Radio_Channel_State_Get, device, ADI_TX, channel, &state);
     if (state != ADI_ADRV9001_CHANNEL_STANDBY)
@@ -690,6 +741,10 @@ int32_t adi_adrv9001_Tx_AttenuationTable_Write(adi_adrv9001_Device_t *device,
 
     ADI_EXPECT(adrv9001_NvsRegmapTxb_TxAlgArmOrGroup11ClkSel_Set, device, ADRV9001_BF_TXB1_CORE, false);
     ADI_EXPECT(adrv9001_NvsRegmapTxb_TxAlgArmOrGroup11ClkSel_Set, device, ADRV9001_BF_TXB2_CORE, false);
+
+	/* Initialize TX Attenuation Mode */
+	device->devStateInfo.txAttenMode[0] = ADI_ADRV9001_TX_ATTENUATION_CONTROL_MODE_SPI;
+	device->devStateInfo.txAttenMode[1] = ADI_ADRV9001_TX_ATTENUATION_CONTROL_MODE_SPI;
 
     ADI_API_RETURN(device);
 }
@@ -1770,6 +1825,8 @@ static __maybe_unused int32_t __maybe_unused adi_adrv9001_Tx_Attenuation_PinCont
 
     adi_adrv9001_ChannelState_e state = ADI_ADRV9001_CHANNEL_STANDBY;
 
+	adi_adrv9001_TxAttenuationControlMode_e txModeRead = ADI_ADRV9001_TX_ATTENUATION_CONTROL_MODE_BYPASS;
+
     /* Check device pointer and gain pointer are not null */
     ADI_NULL_DEVICE_PTR_RETURN(device);
     ADI_NULL_PTR_RETURN(&device->common, config);
@@ -1800,6 +1857,18 @@ static __maybe_unused int32_t __maybe_unused adi_adrv9001_Tx_Attenuation_PinCont
             txAttenuationIndex,
             "Tx attenuation pin control configuration is not supported in TX_DIRECT_FM_FSK mode");
     }
+
+	/* Retrieve attenuation mode */
+	ADI_EXPECT(adi_adrv9001_Tx_AttenuationMode_Get, device, channel, &txModeRead);
+	if (txModeRead == ADI_ADRV9001_TX_ATTENUATION_CONTROL_MODE_CLGC)
+	{
+		ADI_ERROR_REPORT(&device->common,
+			ADI_COMMON_ERRSRC_API,
+			ADI_COMMON_ERR_API_FAIL,
+			ADI_COMMON_ACT_ERR_CHECK_PARAM,
+			txModeRead,
+			"Invalid TxAttenuation Control Mode. Cannot control when mode CLGC is enabled");
+	}
 
     ADI_EXPECT(adi_adrv9001_Radio_Channel_State_Get, device, ADI_TX, channel, &state);
     if (state != ADI_ADRV9001_CHANNEL_CALIBRATED)

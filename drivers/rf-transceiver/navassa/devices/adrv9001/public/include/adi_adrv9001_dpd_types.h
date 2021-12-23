@@ -77,7 +77,7 @@ typedef enum adi_adrv9001_DpdModel
 typedef struct adi_adrv9001_DpdInitCfg
 {
     bool enable;                                    /*!< When true, the DPD actuator is placed in the datapath and
-                                                     *   ADI_ADRV9001_TRACKING_CAL_TX_DPD may be used to enable DPD */
+                                                     *   ADI_ADRV9001_TRACKING_CAL_TX_DPD_CLGC may be used to enable DPD */
     adi_adrv9001_DpdAmplifier_e amplifierType;      //!< Type of Power Amplifier
     adi_adrv9001_DpdLutSize_e lutSize;              //!< Bit size of the DPD LUT
     adi_adrv9001_DpdModel_e model;                  //!< DPD Model to be used
@@ -86,6 +86,7 @@ typedef struct adi_adrv9001_DpdInitCfg
                                                      *   terms are included in the model (and thus the auto-correlation
                                                      *   matrix). Used when #changeModelTapOrders is true */
     uint8_t preLutScale;                            //!< Prescaler for the LUT (U2.2; min = 0; max = 3.75) */
+    uint8_t clgcEnable;                             //!< CLGC Enable */
 } adi_adrv9001_DpdInitCfg_t;
 
 /**
@@ -131,6 +132,11 @@ typedef struct adi_adrv9001_DpdCfg
     uint32_t timeFilterCoefficient;         /*!< Time filter coefficient in U1.31 format */
     uint32_t dpdSamplingRate_Hz;            /*!< sampling rate in Hz for the DPD actuator and capture.
                                                  'dpdSamplingRate_Hz' is read only and is ignored in adi_adrv9001_dpd_Configure() */
+	uint8_t clgcLoopOpen;                   /*!< If true, the loop is open and the TX attenuators are not updated.  Used to measure a target gain. */
+	int32_t clgcGainTarget_HundredthdB;     /*!< Sent in 1/100 dB. */
+	uint32_t clgcFilterAlpha;               /*!< filter coefficient for the filtered  gain values. */
+	int32_t clgcLastGain_HundredthdB;       /*!< last gain.  Only valid during Get. */
+	int32_t clgcFilteredGain_HundredthdB;   /*!< filtered gain.  Only valid during Get. */
 } adi_adrv9001_DpdCfg_t;
 
 typedef struct adi_adrv9001_DpdCoefficients

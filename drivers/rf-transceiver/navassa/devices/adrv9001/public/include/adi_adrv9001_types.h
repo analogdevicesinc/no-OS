@@ -206,8 +206,14 @@ typedef struct adi_adrv9001_Info
     uint32_t  profileAddr;												/*!< Address to load Profile */
     uint32_t  adcProfileAddr;											/*!< Address to load ADC Profile */
     uint32_t  pfirProfileAddr;                                          /*!< Address to load PFIR coefficients */
-    uint32_t  fhHopTable1Addr;                                          /*!< Address to load hop table 1 in frequency hopping mode */
-    uint32_t  fhHopTable2Addr;                                          /*!< Address to load hop table 2 in frequency hopping mode */
+    uint32_t  fhHopTableA1Addr;                                          /*!< Address to load hop table A1 in frequency hopping mode */
+    uint32_t  fhHopTableB1Addr;                                          /*!< Address to load hop table B1 in frequency hopping mode */
+	uint32_t  fhHopTableA2Addr;                                          /*!< Address to load hop table A2 in frequency hopping mode */
+	uint32_t  fhHopTableB2Addr;                                          /*!< Address to load hop table B2 in frequency hopping mode */
+	uint32_t  fhHopTableBufferA1Addr;                                    /*!< Address to load hop table A1 Buffer in frequency hopping mode */
+	uint32_t  fhHopTableBufferB1Addr;                                    /*!< Address to load hop table B1 Buffer in frequency hopping mode */
+	uint32_t  fhHopTableBufferA2Addr;                                    /*!< Address to load hop table A2 Buffer in frequency hopping mode */
+	uint32_t  fhHopTableBufferB2Addr;                                   /*!< Address to load hop table B2 Buffer in frequency hopping mode */
     uint32_t txInputRate_kHz[ADI_ADRV9001_MAX_TXCHANNELS];				/*!< Tx Input sample rate from currently loaded profile */
     uint32_t rxOutputRate_kHz[ADI_ADRV9001_MAX_RXCHANNELS];				/*!< Rx Output sample rate from currently loaded profile */
     uint32_t rx1InterfaceSampleRate_kHz;                                /*!< Rx1 Interface sample rate from currently loaded profile */
@@ -220,6 +226,7 @@ typedef struct adi_adrv9001_Info
     uint32_t currentStreamImageSize;									/*!< Image size of current stream */
     uint8_t frequencyHoppingEnabled;                                    /*!< Frequency hopping enabled flag from currently loaded profile */
     adi_adrv9001_RxGainTableType_e gainTableType[ADI_ADRV9001_MAX_RX_ONLY]; /*!< type of gain table loaded during ADRV9001 initialization */
+	uint8_t txAttenMode[ADI_ADRV9001_MAX_TXCHANNELS];					/* TX Attenuation Mode*/
 } adi_adrv9001_Info_t;
 
 /**

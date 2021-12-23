@@ -88,6 +88,7 @@ typedef struct adi_adrv9001_PowerSavingAndMonitorMode_SystemPowerSavingAndMonito
     uint32_t sleepTime_us;                                                       /*!< Timer for sleep state (us) */
     uint8_t detectionFirst;                                                      /*!< Select first state when entering Monitor Mode, 0-sleep first, 1-detection first */
     adi_adrv9001_PowerSavingAndMonitorMode_MonitorDetectionMode_e detectionMode; /*!< Mode of detection in the detect state */
+    bool bbicWakeupLevelEnable;                                               /*!< Enable  ADI_ADRV9001_GPIO_SIGNAL_MON_BBIC_WAKEUP as a Level instead of Pulse (0 = Pulse, 1 = Level) */
     bool externalPllEnable;                                                      /*!< External PLL Enable, 0-disable, 1-enable */
 } adi_adrv9001_PowerSavingAndMonitorMode_SystemPowerSavingAndMonitorModeCfg_t;
 
