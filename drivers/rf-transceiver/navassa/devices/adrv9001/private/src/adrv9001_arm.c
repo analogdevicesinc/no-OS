@@ -35,6 +35,7 @@
 #include "adrv9001_init.h"
 #include "adrv9001_reg_addr_macros.h"
 #include "adrv9001_bf.h"
+#include "adi_adrv9001_hal.h"
 
 /* Header files related to libraries */
 
@@ -67,6 +68,7 @@
 
 #define ADRV9001_PROFILE_CHUNK_MAX              256u
 #define ADRV9001_DYNAMIC_PROFILE_BLOB_SIZE      164
+#define ADRV9001_FREQ_HOPPING_MAX_NUM_BYTES     1536u
 const char* const adrv9001_error_table_ArmBootStatus[] =
 {
     "ARM is powering up",
@@ -1155,8 +1157,7 @@ static void adrv9001_LoadRxByte(adi_adrv9001_Device_t *device,
     /* 'rxOffsetLo_kHz' is referred as 'offsetLo_Hz' in FW */
     adrv9001_LoadFourBytes(&tempOffset, cfgData, KILO_TO_BASE_UNIT(rxProfile->rxOffsetLo_kHz));
 
-    /* 'rxSignalOnLo' is referred as 'signalOnLo' in FW */
-    cfgData[tempOffset++] = rxProfile->rxSignalOnLo;
+    cfgData[tempOffset++] = rxProfile->rxNcoEnable;
 
     cfgData[tempOffset++] = (uint8_t)(rxProfile->outputSignaling & 0xFF);
 
@@ -1559,16 +1560,16 @@ typedef struct
 {
     duplexMode_e    duplexMode;
     uint8_t         fhModeOn;
-    uint8_t         reserved1[1u];      //< Reserved for future feature
-    uint8_t         numDynamicProfile;  // Number of Profile. =1 means only one profile and no switching 
-    mcsMode_e       mcsMode;            // MCS mode selection: 0 - Disable, 1 - MCS Only, 2 - MCS + RFPLL phase sync
-    adcType_e       adcTypeMonitor;     // ADC type used in Monitor Mode 
-    uint16_t        pllLockTime_us;     // Required lock time in microseconds for PLLs, based on ref_clk and loop bandwidth 
-    pllModulus_t    pllModuli;          // PLL moduli 
+    uint8_t         reserved1[1u];       //< Reserved for future feature
+    uint8_t         numDynamicProfile;   // Number of Profile. =1 means only one profile and no switching 
+    mcsMode_e       mcsMode;             // MCS mode selection: 0 - Disable, 1 - MCS Only, 2 - MCS + RFPLL phase sync
+    adcType_e       adcTypeMonitor;      // ADC type used in Monitor Mode 
+    uint16_t        pllLockTime_us;      // Required lock time in microseconds for PLLs, based on ref_clk and loop bandwidth 
+    pllModulus_t    pllModuli;           // PLL moduli 
     uint16_t        pllPhaseSyncWait_us; // Worst case phase sync wait time in FH 
-    mcsInf_e        mcsInterfaceType;   // NEW  0-Disabled, 1-CMOS, 2-LVDS 
-    uint8_t         padding[1u];        // 32 bit alignment     
-    uint32_t        reserved[1u];       // Reserved for future feature 
+    mcsInf_e        mcsInterfaceType;    // 0-Disabled, 1-CMOS, 2-LVDS 
+    uint8_t         warmBootEnable;      // Enable WarmBoot - Load initCal cefficients instead of running initCals     
+    uint32_t        reserved[1u];        // Reserved for future feature 
 } deviceSysConfig_t;
 */
 static void adrv9001_DeviceSysConfigWrite(adi_adrv9001_Device_t *device, const adi_adrv9001_DeviceSysConfig_t *sysConfig, uint8_t cfgData[], uint32_t *offset)
@@ -1611,9 +1612,9 @@ static void adrv9001_DeviceSysConfigWrite(adi_adrv9001_Device_t *device, const a
     adrv9001_LoadTwoBytes(&tempOffset, cfgData, sysConfig->pllPhaseSyncWait_us);
 
     cfgData[tempOffset++] = sysConfig->mcsInterfaceType;
+    cfgData[tempOffset++] = sysConfig->warmBootEnable;
     
-    /* 8 bytes padding; Reserved for future use */
-    tempOffset += 1;
+    /* 4 bytes padding; Reserved for future use */
     tempOffset += 4;
 
     *offset = tempOffset;
@@ -1955,6 +1956,9 @@ static __maybe_unused int32_t adrv9001_PfirFilterCoeffWrite(adi_adrv9001_Device_
                &tempProfileAddr,
                &tempChecksum);
 
+    /* Needed for final checksum calculation */
+    tempChecksum = adrv9001_Crc32ForChunk(&cfgData[0], 0, tempChecksum, 1);
+
     adrv9001_LoadFourBytes(&offset, &cfgData[0], tempChecksum); /* Copy final Checksum in 'cfgData'*/
     recoveryAction = adi_adrv9001_arm_Memory_Write(device, tempProfileAddr, &cfgData[0], offset, ADI_ADRV9001_ARM_SINGLE_SPI_WRITE_MODE_STANDARD_BYTES_4);
     ADI_ERROR_REPORT(&device->common, ADI_COMMON_ERRSRC_API, ADI_COMMON_ERR_API_FAIL, recoveryAction, NULL, "Error from adi_adrv9001_arm_Memory_Write()");
@@ -2161,7 +2165,161 @@ int32_t adrv9001_DmaMemWrite(adi_adrv9001_Device_t *device, uint32_t address, co
 
     ADI_API_RETURN(device);
 }
+int32_t adrv9001_DmaMemWriteFH(adi_adrv9001_Device_t *device, adi_adrv9001_FhHopSignal_e hopSignal, adi_adrv9001_FhHopTable_e tableId, uint32_t hopTableAddress, const uint8_t numHopTableEntries[], uint32_t numHopTableEntriesByteCount, uint32_t hopTableBufferAddress, const uint8_t hopTableBufferData[], uint32_t hopTableBufferDataByteCount)
+{
+	uint32_t    i = 0;
+	uint32_t    j = 0;
+	uint8_t     regWrite = 0;
+	uint8_t     bitmSwInt;
+	uint8_t     autoInc = ADI_ADRV9001_ARM_MEM_AUTO_INCR;
+	uint32_t    addrIndex = 0;
+	uint32_t    dataIndex = 0;
+	uint32_t    spiBufferSize = ((HAL_SPIWRITEARRAY_BUFFERSIZE / 3) - 1);
+	uint8_t     spiWriteArrray[HAL_SPIWRITEARRAY_BUFFERSIZE] = { 0 };
+	uint8_t     addrMsbArray[ADRV9001_FREQ_HOPPING_MAX_NUM_BYTES] = { 0 };
+	uint8_t     addrLsbArray[ADRV9001_FREQ_HOPPING_MAX_NUM_BYTES] = { 0 };
+	uint8_t     dataArray[ADRV9001_FREQ_HOPPING_MAX_NUM_BYTES] = { 0 };
+	uint32_t    ADDR_ARM_DMA_DATA[4] = { ADRV9001_ADDR_ARM_DMA_DATA3, ADRV9001_ADDR_ARM_DMA_DATA2, ADRV9001_ADDR_ARM_DMA_DATA1, ADRV9001_ADDR_ARM_DMA_DATA0 };
+	uint32_t    index = 0;
+    
+	ADI_ENTRY_PTR_ARRAY_EXPECT(device, numHopTableEntries, numHopTableEntriesByteCount);
+	ADI_ENTRY_PTR_ARRAY_EXPECT(device, hopTableBufferData, hopTableBufferDataByteCount);
+	
+	/* Trigger appropriate SPI Interrupt upon table load */
+	if (hopSignal == ADI_ADRV9001_FH_HOP_SIGNAL_1)
+	{
+		/* Set bit 0 to SW_INTERRUPT_4 to trigger SWInt4 to load FH table A
+		   Set bit 1 to SW_INTERRUPT_4 to trigger SWInt11 to load FH table B */
+		bitmSwInt = (tableId == ADI_ADRV9001_FHHOPTABLE_A) ? 0x1 : 0x2;
+	}
+	else
+	{
+		/* Set bit 7 to SW_INTERRUPT_4 to trigger SWInt5 to load FH table A
+		   Set bit 6 to SW_INTERRUPT_4 to trigger SWInt6 to load FH table B */
+		bitmSwInt = (tableId == ADI_ADRV9001_FHHOPTABLE_A) ? 0x80 : 0x40;
+	}
 
+	ADRV9001_DMAINFO("ARM_MEM_WRITE", armMemAddress, byteCount);
+	
+	regWrite &= ~ADRV9001_DMA_CTL_RD_WRB;
+	regWrite |= ADRV9001_DMA_CTL_SYS_CODEB;
+	regWrite |= ADRV9001_BF_ENCODE(2, ADRV9001_DMA_CTL_BUS_SIZE_MASK, ADRV9001_DMA_CTL_BUS_SIZE_SHIFT);
+	/* address auto incremental, 1'b0=no; 1'b1=yes */
+	/* core_bf.auto_incr.write(bf_status, 1'b0); */
+	if (autoInc != 0)
+	{
+		regWrite |= ADRV9001_DMA_CTL_AUTO_INCR;
+	}
+	/* setting up the DMA control register for a write */
+	addrMsbArray[addrIndex] = (uint8_t)(((ADRV9001_SPI_WRITE_POLARITY & 0x01) << 7) | ((ADRV9001_ADDR_ARM_DMA_CTL >> 8) & 0x7F));
+	addrLsbArray[addrIndex] = (uint8_t)ADRV9001_ADDR_ARM_DMA_CTL;
+	dataArray[addrIndex] = regWrite;
+	addrIndex++;
+	addrMsbArray[addrIndex] = (uint8_t)(((ADRV9001_SPI_WRITE_POLARITY & 0x01) << 7) | ((ADRV9001_ADDR_ARM_DMA_ADDR3 >> 8) & 0x7F));
+	addrLsbArray[addrIndex] = (uint8_t)ADRV9001_ADDR_ARM_DMA_ADDR3;
+	dataArray[addrIndex] = (uint8_t)((hopTableAddress) >> ADRV9001_ADDR_ARM_DMA_ADDR3_BYTE_SHIFT);
+	addrIndex++;
+	addrMsbArray[addrIndex] = (uint8_t)(((ADRV9001_SPI_WRITE_POLARITY & 0x01) << 7) | ((ADRV9001_ADDR_ARM_DMA_ADDR2 >> 8) & 0x7F));
+	addrLsbArray[addrIndex] = (uint8_t)ADRV9001_ADDR_ARM_DMA_ADDR2;
+	dataArray[addrIndex] = (uint8_t)((hopTableAddress) >> ADRV9001_ADDR_ARM_DMA_ADDR2_BYTE_SHIFT);
+	addrIndex++;
+	addrMsbArray[addrIndex] = (uint8_t)(((ADRV9001_SPI_WRITE_POLARITY & 0x01) << 7) | ((ADRV9001_ADDR_ARM_DMA_ADDR1 >> 8) & 0x7F));
+	addrLsbArray[addrIndex] = (uint8_t)ADRV9001_ADDR_ARM_DMA_ADDR1;
+	dataArray[addrIndex] = (uint8_t)((hopTableAddress) >> ADRV9001_ADDR_ARM_DMA_ADDR1_BYTE_SHIFT);
+	addrIndex++;
+	addrMsbArray[addrIndex] = (uint8_t)(((ADRV9001_SPI_WRITE_POLARITY & 0x01) << 7) | ((ADRV9001_ADDR_ARM_DMA_ADDR0 >> 8) & 0x7F));
+	addrLsbArray[addrIndex] = (uint8_t)ADRV9001_ADDR_ARM_DMA_ADDR0;
+	dataArray[addrIndex] = (uint8_t)((hopTableAddress) >> ADRV9001_ADDR_ARM_DMA_ADDR0_BYTE_SHIFT);
+	addrIndex++;
+	/* Cache Enable and Auto Inc */
+	for (i = 0; i < numHopTableEntriesByteCount; i++)
+	{
+		/* Writing byte order: 3,2,1,0 */
+		if (i == 0)
+		{
+			dataIndex = i + 3;
+		}
+		else
+		{
+			dataIndex--;
+		}
+		addrMsbArray[addrIndex] = (uint8_t)(((ADRV9001_SPI_WRITE_POLARITY & 0x01) << 7) | ((ADDR_ARM_DMA_DATA[i] >> 8) & 0x7F));
+		addrLsbArray[addrIndex] = (uint8_t)ADDR_ARM_DMA_DATA[i];
+		dataArray[addrIndex] = numHopTableEntries[dataIndex];
+		addrIndex++;
+	}
+    
+	addrMsbArray[addrIndex] = (uint8_t)(((ADRV9001_SPI_WRITE_POLARITY & 0x01) << 7) | ((ADRV9001_ADDR_ARM_DMA_ADDR3 >> 8) & 0x7F));
+	addrLsbArray[addrIndex] = (uint8_t)ADRV9001_ADDR_ARM_DMA_ADDR3;
+	dataArray[addrIndex] = (uint8_t)((hopTableBufferAddress) >> ADRV9001_ADDR_ARM_DMA_ADDR3_BYTE_SHIFT);
+	addrIndex++;
+	addrMsbArray[addrIndex] = (uint8_t)(((ADRV9001_SPI_WRITE_POLARITY & 0x01) << 7) | ((ADRV9001_ADDR_ARM_DMA_ADDR2 >> 8) & 0x7F));
+	addrLsbArray[addrIndex] = (uint8_t)ADRV9001_ADDR_ARM_DMA_ADDR2;
+	dataArray[addrIndex] = (uint8_t)((hopTableBufferAddress) >> ADRV9001_ADDR_ARM_DMA_ADDR2_BYTE_SHIFT);
+	addrIndex++;
+	addrMsbArray[addrIndex] = (uint8_t)(((ADRV9001_SPI_WRITE_POLARITY & 0x01) << 7) | ((ADRV9001_ADDR_ARM_DMA_ADDR1 >> 8) & 0x7F));
+	addrLsbArray[addrIndex] = (uint8_t)ADRV9001_ADDR_ARM_DMA_ADDR1;
+	dataArray[addrIndex] = (uint8_t)((hopTableBufferAddress) >> ADRV9001_ADDR_ARM_DMA_ADDR1_BYTE_SHIFT);
+	addrIndex++;
+	addrMsbArray[addrIndex] = (uint8_t)(((ADRV9001_SPI_WRITE_POLARITY & 0x01) << 7) | ((ADRV9001_ADDR_ARM_DMA_ADDR0 >> 8) & 0x7F));
+	addrLsbArray[addrIndex] = (uint8_t)ADRV9001_ADDR_ARM_DMA_ADDR0;
+	dataArray[addrIndex] = (uint8_t)((hopTableBufferAddress) >> ADRV9001_ADDR_ARM_DMA_ADDR0_BYTE_SHIFT);
+	addrIndex++;
+
+	/* Cache Enable and Auto Inc */
+	for (i = 0; i < hopTableBufferDataByteCount; i++)
+	{
+		index = hopTableBufferAddress % 4;
+		/* Writing byte order: 3,2,1,0 */
+		if (index == 0)
+		{
+			dataIndex = i + 3;
+		}
+		else
+		{
+			dataIndex--;
+		}
+		addrMsbArray[addrIndex] = (uint8_t)(((ADRV9001_SPI_WRITE_POLARITY & 0x01) << 7) | ((ADDR_ARM_DMA_DATA[index] >> 8) & 0x7F));
+		addrLsbArray[addrIndex] = (uint8_t)ADDR_ARM_DMA_DATA[index];
+		dataArray[addrIndex] = hopTableBufferData[dataIndex];
+		if (addrIndex >= spiBufferSize)
+		{
+			for(j = 0 ; j <= addrIndex ; j++)
+			{
+				spiWriteArrray[3 * j] = addrMsbArray[j];
+				spiWriteArrray[3 * j + 1] = addrLsbArray[j];
+				spiWriteArrray[3 * j + 2] = dataArray[j];
+			}
+			adi_hal_SpiWrite(device->common.devHalInfo, spiWriteArrray, 3 * j + 2);
+			addrIndex = 0;
+		}
+		else
+		{
+			addrIndex++;
+		}
+		hopTableBufferAddress++;
+	}
+	if (addrIndex > 0)
+	{
+		/* Issue SW interrupt 4 or 11 to load FH table A or B.  The SPI reg is self-cleared so there is no need to do read/mod/write. */
+		addrMsbArray[addrIndex] = (uint8_t)(((ADRV9001_SPI_WRITE_POLARITY & 0x01) << 7) | ((ADRV9001_ADDR_SW_INTERRUPT_4 >> 8) & 0x7F));
+		addrLsbArray[addrIndex] = (uint8_t)ADRV9001_ADDR_SW_INTERRUPT_4;
+		dataArray[addrIndex] = bitmSwInt;
+		for(j = 0 ; j <= addrIndex ; j++)
+		{
+			spiWriteArrray[3 * j] = addrMsbArray[j];
+			spiWriteArrray[3 * j + 1] = addrLsbArray[j];
+			spiWriteArrray[3 * j + 2] = dataArray[j];
+		}
+		adi_hal_SpiWrite(device->common.devHalInfo, spiWriteArrray, 3 * j + 2);
+	}
+	else
+	{
+		ADRV9001_SPIWRITEBYTE(device, "ADRV9001_ADDR_SW_INTERRUPT_4", ADRV9001_ADDR_SW_INTERRUPT_4, bitmSwInt);
+	}
+
+	ADI_API_RETURN(device);
+}
 int32_t adrv9001_DmaMemRead(adi_adrv9001_Device_t *device, uint32_t address, uint8_t returnData[], uint32_t byteCount, uint8_t autoIncrement)
 {
     int32_t recoveryAction = ADI_COMMON_ACT_NO_ACTION;

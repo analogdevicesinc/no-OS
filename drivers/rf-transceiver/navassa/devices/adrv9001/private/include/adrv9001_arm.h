@@ -27,6 +27,7 @@ extern "C" {
 
 /* ADI specific header files */
 #include "adi_adrv9001.h"
+#include "adi_adrv9001_fh_types.h"
 #include "adi_adrv9001_arm_types.h"
 
 /**
@@ -69,6 +70,37 @@ int32_t adrv9001_DmaMemRead(adi_adrv9001_Device_t *device, uint32_t address, uin
 */
 int32_t adrv9001_DmaMemWrite(adi_adrv9001_Device_t *device, uint32_t address, const uint8_t data[], uint32_t byteCount, adi_adrv9001_ArmSingleSpiWriteMode_e spiWriteMode);
 
+/**
+* \brief Write to the ADRV9001 ARM program or data memory
+*
+* The user must make sure the memory addresses are valid.
+*
+* \pre This function is private and is not called directly by the user.
+*
+* \param device                         Structure pointer to the ADRV9001 data structure containing settings
+* \param[in] hopSignal                  Hop signal to configure appropriate tableId
+* \param[in] tableId                    FH_HOP_TABLE_A or FH_HOP_TABLE_B. Used for ping-pong hop tables.
+* \param hopTableAddress                The 32-bit ARM address to write
+* \param numHopTableEntries             Byte Array (uint8_t) containing data to be written to ARM memory
+* \param numHopTableEntriesByteCount    Number of bytes in the data array to be written
+* \param hopTableBufferAddress          The 32-bit ARM address to write
+* \param hopTableBufferData             Byte Array (uint8_t) containing data to be written to ARM memory
+* \param hopTableBufferDataByteCount    Number of bytes in the data array to be written
+*
+* \retval ADI_COMMON_ACT_WARN_RESET_LOG      Recovery action for log reset
+* \retval ADI_COMMON_ACT_ERR_CHECK_PARAM     Recovery action for bad parameter check
+* \retval ADI_COMMON_ACT_ERR_RESET_INTERFACE Recovery action for SPI reset required
+* \retval ADI_COMMON_ACT_NO_ACTION           Function completed successfully, no action required
+*/
+int32_t adrv9001_DmaMemWriteFH(adi_adrv9001_Device_t *device, 
+		                            adi_adrv9001_FhHopSignal_e hopSignal,
+		                            adi_adrv9001_FhHopTable_e tableId, 
+		                            uint32_t hopTableAddress, 
+		                            const uint8_t numHopTableEntries[], 
+		                            uint32_t numHopTableEntriesByteCount, 
+		                            uint32_t hopTableBufferAddress, 
+		                            const uint8_t hopTableBufferData[], 
+		                            uint32_t hopTableBufferDataByteCount);
 /**
 * \brief Write to the ADRV9001 Flex Stream Processor(0 - 3) memory 
 *

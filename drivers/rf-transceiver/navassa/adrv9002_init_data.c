@@ -99,7 +99,7 @@ struct adi_adrv9001_Init adrv9002_init_lvds = {
 					.rxOutputRate_Hz = 15360000,
 					.rxInterfaceSampleRate_Hz = 15360000,
 					.rxOffsetLo_kHz = 0,
-					.rxSignalOnLo = 0,
+					.rxNcoEnable = false,
 					.outputSignaling = ADI_ADRV9001_RX_IQ,
 					.filterOrder = 1,
 					.filterOrderLp = 1,
@@ -177,7 +177,7 @@ struct adi_adrv9001_Init adrv9002_init_lvds = {
 							{
 								.bankSel = ADI_ADRV9001_PFIR_BANK_A,
 								.rxWbNbCompPFirInMuxSel = ADI_ADRV9001_RP_FIR_IN_MUX_INT_IN,
-								.rxWbNbCompPFirEn = 1
+								.rxWbNbCompPFirEn = 0
 							},
 							.resamp =
 							{
@@ -190,6 +190,16 @@ struct adi_adrv9001_Init adrv9002_init_lvds = {
 							.rxRoundMode = ADI_ADRV9001_RX_ROUNDMODE_IQ,
 							.dpArmSel = ADI_ADRV9001_DP_SEL
 						}
+					},
+					.lnaConfig = {
+						.externalLnaPresent = false,
+						.gpioSourceSel = 0,
+						.externalLnaPinSel = 0,
+						.settlingDelay = 0,
+						.numberLnaGainSteps = 0,
+						.lnaGainSteps_mdB = { 0, 0, 0, 0 },
+						.lnaDigitalGainDelay = 0,
+						.minGainIndex = 0
 					},
 					.rxSsiConfig =
 					{
@@ -207,7 +217,7 @@ struct adi_adrv9001_Init adrv9002_init_lvds = {
 						.lvdsRxClkInversionEn = false,
 						.cmosDdrPosClkEn = false,
 						.cmosClkInversionEn = false,
-						.ddrEn = false,
+						.ddrEn = true,
 						.rxMaskStrobeEn = false
 					}
 				}
@@ -219,7 +229,7 @@ struct adi_adrv9001_Init adrv9002_init_lvds = {
 					.rxOutputRate_Hz = 15360000,
 					.rxInterfaceSampleRate_Hz = 15360000,
 					.rxOffsetLo_kHz = 0,
-					.rxSignalOnLo = 0,
+					.rxNcoEnable = false,
 					.outputSignaling = ADI_ADRV9001_RX_IQ,
 					.filterOrder = 1,
 					.filterOrderLp = 1,
@@ -297,7 +307,7 @@ struct adi_adrv9001_Init adrv9002_init_lvds = {
 							{
 								.bankSel = ADI_ADRV9001_PFIR_BANK_C,
 								.rxWbNbCompPFirInMuxSel = ADI_ADRV9001_RP_FIR_IN_MUX_INT_IN,
-								.rxWbNbCompPFirEn = 1
+								.rxWbNbCompPFirEn = 0
 							},
 							.resamp =
 							{
@@ -310,6 +320,16 @@ struct adi_adrv9001_Init adrv9002_init_lvds = {
 							.rxRoundMode = ADI_ADRV9001_RX_ROUNDMODE_IQ,
 							.dpArmSel = ADI_ADRV9001_DP_SEL
 						}
+					},
+					.lnaConfig = {
+						.externalLnaPresent = false,
+						.gpioSourceSel = 0,
+						.externalLnaPinSel = 0,
+						.settlingDelay = 0,
+						.numberLnaGainSteps = 0,
+						.lnaGainSteps_mdB = { 0, 0, 0, 0 },
+						.lnaDigitalGainDelay = 0,
+						.minGainIndex = 0
 					},
 					.rxSsiConfig =
 					{
@@ -327,7 +347,7 @@ struct adi_adrv9001_Init adrv9002_init_lvds = {
 						.lvdsRxClkInversionEn = false,
 						.cmosDdrPosClkEn = false,
 						.cmosClkInversionEn = false,
-						.ddrEn = false,
+						.ddrEn = true,
 						.rxMaskStrobeEn = false
 					}
 				}
@@ -339,7 +359,7 @@ struct adi_adrv9001_Init adrv9002_init_lvds = {
 					.rxOutputRate_Hz = 0,
 					.rxInterfaceSampleRate_Hz = 0,
 					.rxOffsetLo_kHz = 0,
-					.rxSignalOnLo = 0,
+					.rxNcoEnable = false,
 					.outputSignaling = ADI_ADRV9001_RX_IQ,
 					.filterOrder = 1,
 					.filterOrderLp = 1,
@@ -417,7 +437,7 @@ struct adi_adrv9001_Init adrv9002_init_lvds = {
 							{
 								.bankSel = ADI_ADRV9001_PFIR_BANK_A,
 								.rxWbNbCompPFirInMuxSel = ADI_ADRV9001_RP_FIR_IN_MUX_INT_IN,
-								.rxWbNbCompPFirEn = 1
+								.rxWbNbCompPFirEn = 0
 							},
 							.resamp =
 							{
@@ -430,6 +450,16 @@ struct adi_adrv9001_Init adrv9002_init_lvds = {
 							.rxRoundMode = ADI_ADRV9001_RX_ROUNDMODE_IQ,
 							.dpArmSel = ADI_ADRV9001_DP_SEL
 						}
+					},
+					.lnaConfig = {
+						.externalLnaPresent = false,
+						.gpioSourceSel = 0,
+						.externalLnaPinSel = 0,
+						.settlingDelay = 0,
+						.numberLnaGainSteps = 0,
+						.lnaGainSteps_mdB = { 0, 0, 0, 0 },
+						.lnaDigitalGainDelay = 0,
+						.minGainIndex = 0
 					},
 					.rxSsiConfig =
 					{
@@ -447,7 +477,7 @@ struct adi_adrv9001_Init adrv9002_init_lvds = {
 						.lvdsRxClkInversionEn = false,
 						.cmosDdrPosClkEn = false,
 						.cmosClkInversionEn = false,
-						.ddrEn = false,
+						.ddrEn = true,
 						.rxMaskStrobeEn = false
 					}
 				}
@@ -459,7 +489,7 @@ struct adi_adrv9001_Init adrv9002_init_lvds = {
 					.rxOutputRate_Hz = 0,
 					.rxInterfaceSampleRate_Hz = 0,
 					.rxOffsetLo_kHz = 0,
-					.rxSignalOnLo = 0,
+					.rxNcoEnable = false,
 					.outputSignaling = ADI_ADRV9001_RX_IQ,
 					.filterOrder = 1,
 					.filterOrderLp = 1,
@@ -537,7 +567,7 @@ struct adi_adrv9001_Init adrv9002_init_lvds = {
 							{
 								.bankSel = ADI_ADRV9001_PFIR_BANK_A,
 								.rxWbNbCompPFirInMuxSel = ADI_ADRV9001_RP_FIR_IN_MUX_INT_IN,
-								.rxWbNbCompPFirEn = 1
+								.rxWbNbCompPFirEn = 0
 							},
 							.resamp =
 							{
@@ -550,6 +580,16 @@ struct adi_adrv9001_Init adrv9002_init_lvds = {
 							.rxRoundMode = ADI_ADRV9001_RX_ROUNDMODE_IQ,
 							.dpArmSel = ADI_ADRV9001_DP_SEL
 						}
+					},
+					.lnaConfig = {
+						.externalLnaPresent = false,
+						.gpioSourceSel = 0,
+						.externalLnaPinSel = 0,
+						.settlingDelay = 0,
+						.numberLnaGainSteps = 0,
+						.lnaGainSteps_mdB = { 0, 0, 0, 0 },
+						.lnaDigitalGainDelay = 0,
+						.minGainIndex = 0
 					},
 					.rxSsiConfig =
 					{
@@ -567,7 +607,7 @@ struct adi_adrv9001_Init adrv9002_init_lvds = {
 						.lvdsRxClkInversionEn = false,
 						.cmosDdrPosClkEn = false,
 						.cmosClkInversionEn = false,
-						.ddrEn = false,
+						.ddrEn = true,
 						.rxMaskStrobeEn = false
 					}
 				}
@@ -579,7 +619,7 @@ struct adi_adrv9001_Init adrv9002_init_lvds = {
 					.rxOutputRate_Hz = 15360000,
 					.rxInterfaceSampleRate_Hz = 15360000,
 					.rxOffsetLo_kHz = 0,
-					.rxSignalOnLo = 0,
+					.rxNcoEnable = false,
 					.outputSignaling = ADI_ADRV9001_RX_IQ,
 					.filterOrder = 1,
 					.filterOrderLp = 1,
@@ -657,7 +697,7 @@ struct adi_adrv9001_Init adrv9002_init_lvds = {
 							{
 								.bankSel = ADI_ADRV9001_PFIR_BANK_B,
 								.rxWbNbCompPFirInMuxSel = ADI_ADRV9001_RP_FIR_IN_MUX_INT_IN,
-								.rxWbNbCompPFirEn = 1
+								.rxWbNbCompPFirEn = 0
 							},
 							.resamp =
 							{
@@ -670,6 +710,16 @@ struct adi_adrv9001_Init adrv9002_init_lvds = {
 							.rxRoundMode = ADI_ADRV9001_RX_ROUNDMODE_IQ,
 							.dpArmSel = ADI_ADRV9001_DP_SEL
 						}
+					},
+					.lnaConfig = {
+						.externalLnaPresent = false,
+						.gpioSourceSel = 0,
+						.externalLnaPinSel = 0,
+						.settlingDelay = 0,
+						.numberLnaGainSteps = 0,
+						.lnaGainSteps_mdB = { 0, 0, 0, 0 },
+						.lnaDigitalGainDelay = 0,
+						.minGainIndex = 0
 					},
 					.rxSsiConfig =
 					{
@@ -687,7 +737,7 @@ struct adi_adrv9001_Init adrv9002_init_lvds = {
 						.lvdsRxClkInversionEn = false,
 						.cmosDdrPosClkEn = false,
 						.cmosClkInversionEn = false,
-						.ddrEn = false,
+						.ddrEn = true,
 						.rxMaskStrobeEn = false
 					}
 				}
@@ -699,7 +749,7 @@ struct adi_adrv9001_Init adrv9002_init_lvds = {
 					.rxOutputRate_Hz = 15360000,
 					.rxInterfaceSampleRate_Hz = 15360000,
 					.rxOffsetLo_kHz = 0,
-					.rxSignalOnLo = 0,
+					.rxNcoEnable = false,
 					.outputSignaling = ADI_ADRV9001_RX_IQ,
 					.filterOrder = 1,
 					.filterOrderLp = 1,
@@ -777,7 +827,7 @@ struct adi_adrv9001_Init adrv9002_init_lvds = {
 							{
 								.bankSel = ADI_ADRV9001_PFIR_BANK_D,
 								.rxWbNbCompPFirInMuxSel = ADI_ADRV9001_RP_FIR_IN_MUX_INT_IN,
-								.rxWbNbCompPFirEn = 1
+								.rxWbNbCompPFirEn = 0
 							},
 							.resamp =
 							{
@@ -790,6 +840,16 @@ struct adi_adrv9001_Init adrv9002_init_lvds = {
 							.rxRoundMode = ADI_ADRV9001_RX_ROUNDMODE_IQ,
 							.dpArmSel = ADI_ADRV9001_DP_SEL
 						}
+					},
+					.lnaConfig = {
+						.externalLnaPresent = false,
+						.gpioSourceSel = 0,
+						.externalLnaPinSel = 0,
+						.settlingDelay = 0,
+						.numberLnaGainSteps = 0,
+						.lnaGainSteps_mdB = { 0, 0, 0, 0 },
+						.lnaDigitalGainDelay = 0,
+						.minGainIndex = 0
 					},
 					.rxSsiConfig =
 					{
@@ -807,7 +867,7 @@ struct adi_adrv9001_Init adrv9002_init_lvds = {
 						.lvdsRxClkInversionEn = false,
 						.cmosDdrPosClkEn = false,
 						.cmosClkInversionEn = false,
-						.ddrEn = false,
+						.ddrEn = true,
 						.rxMaskStrobeEn = false
 					}
 				}
@@ -819,7 +879,7 @@ struct adi_adrv9001_Init adrv9002_init_lvds = {
 					.rxOutputRate_Hz = 0,
 					.rxInterfaceSampleRate_Hz = 0,
 					.rxOffsetLo_kHz = 0,
-					.rxSignalOnLo = 0,
+					.rxNcoEnable = false,
 					.outputSignaling = ADI_ADRV9001_RX_IQ,
 					.filterOrder = 1,
 					.filterOrderLp = 1,
@@ -897,7 +957,7 @@ struct adi_adrv9001_Init adrv9002_init_lvds = {
 							{
 								.bankSel = ADI_ADRV9001_PFIR_BANK_A,
 								.rxWbNbCompPFirInMuxSel = ADI_ADRV9001_RP_FIR_IN_MUX_INT_IN,
-								.rxWbNbCompPFirEn = 1
+								.rxWbNbCompPFirEn = 0
 							},
 							.resamp =
 							{
@@ -910,6 +970,16 @@ struct adi_adrv9001_Init adrv9002_init_lvds = {
 							.rxRoundMode = ADI_ADRV9001_RX_ROUNDMODE_IQ,
 							.dpArmSel = ADI_ADRV9001_DP_SEL
 						}
+					},
+					.lnaConfig = {
+						.externalLnaPresent = false,
+						.gpioSourceSel = 0,
+						.externalLnaPinSel = 0,
+						.settlingDelay = 0,
+						.numberLnaGainSteps = 0,
+						.lnaGainSteps_mdB = { 0, 0, 0, 0 },
+						.lnaDigitalGainDelay = 0,
+						.minGainIndex = 0
 					},
 					.rxSsiConfig =
 					{
@@ -927,7 +997,7 @@ struct adi_adrv9001_Init adrv9002_init_lvds = {
 						.lvdsRxClkInversionEn = false,
 						.cmosDdrPosClkEn = false,
 						.cmosClkInversionEn = false,
-						.ddrEn = false,
+						.ddrEn = true,
 						.rxMaskStrobeEn = false
 					}
 				}
@@ -939,7 +1009,7 @@ struct adi_adrv9001_Init adrv9002_init_lvds = {
 					.rxOutputRate_Hz = 0,
 					.rxInterfaceSampleRate_Hz = 0,
 					.rxOffsetLo_kHz = 0,
-					.rxSignalOnLo = 0,
+					.rxNcoEnable = false,
 					.outputSignaling = ADI_ADRV9001_RX_IQ,
 					.filterOrder = 1,
 					.filterOrderLp = 1,
@@ -1017,7 +1087,7 @@ struct adi_adrv9001_Init adrv9002_init_lvds = {
 							{
 								.bankSel = ADI_ADRV9001_PFIR_BANK_A,
 								.rxWbNbCompPFirInMuxSel = ADI_ADRV9001_RP_FIR_IN_MUX_INT_IN,
-								.rxWbNbCompPFirEn = 1
+								.rxWbNbCompPFirEn = 0
 							},
 							.resamp =
 							{
@@ -1030,6 +1100,16 @@ struct adi_adrv9001_Init adrv9002_init_lvds = {
 							.rxRoundMode = ADI_ADRV9001_RX_ROUNDMODE_IQ,
 							.dpArmSel = ADI_ADRV9001_DP_SEL
 						}
+					},
+					.lnaConfig = {
+						.externalLnaPresent = false,
+						.gpioSourceSel = 0,
+						.externalLnaPinSel = 0,
+						.settlingDelay = 0,
+						.numberLnaGainSteps = 0,
+						.lnaGainSteps_mdB = { 0, 0, 0, 0 },
+						.lnaDigitalGainDelay = 0,
+						.minGainIndex = 0
 					},
 					.rxSsiConfig =
 					{
@@ -1047,7 +1127,7 @@ struct adi_adrv9001_Init adrv9002_init_lvds = {
 						.lvdsRxClkInversionEn = false,
 						.cmosDdrPosClkEn = false,
 						.cmosClkInversionEn = false,
-						.ddrEn = false,
+						.ddrEn = true,
 						.rxMaskStrobeEn = false
 					}
 				}
@@ -1158,7 +1238,7 @@ struct adi_adrv9001_Init adrv9002_init_lvds = {
 					.lvdsRxClkInversionEn = false,
 					.cmosDdrPosClkEn = false,
 					.cmosClkInversionEn = false,
-					.ddrEn = false,
+					.ddrEn = true,
 					.rxMaskStrobeEn = false
 				}
 			},
@@ -1263,7 +1343,7 @@ struct adi_adrv9001_Init adrv9002_init_lvds = {
 					.lvdsRxClkInversionEn = false,
 					.cmosDdrPosClkEn = false,
 					.cmosClkInversionEn = false,
-					.ddrEn = false,
+					.ddrEn = true,
 					.rxMaskStrobeEn = false
 				}
 			}
@@ -1492,7 +1572,7 @@ static struct adi_adrv9001_Init adrv9002_init_cmos = {
 					.rxOutputRate_Hz = 1920000,
 					.rxInterfaceSampleRate_Hz = 1920000,
 					.rxOffsetLo_kHz = 0,
-					.rxSignalOnLo = 0,
+					.rxNcoEnable = false,
 					.outputSignaling = ADI_ADRV9001_RX_IQ,
 					.filterOrder = 1,
 					.filterOrderLp = 1,
@@ -1612,7 +1692,7 @@ static struct adi_adrv9001_Init adrv9002_init_cmos = {
 					.rxOutputRate_Hz = 1920000,
 					.rxInterfaceSampleRate_Hz = 1920000,
 					.rxOffsetLo_kHz = 0,
-					.rxSignalOnLo = 0,
+					.rxNcoEnable = false,
 					.outputSignaling = ADI_ADRV9001_RX_IQ,
 					.filterOrder = 1,
 					.filterOrderLp = 1,
@@ -1732,7 +1812,7 @@ static struct adi_adrv9001_Init adrv9002_init_cmos = {
 					.rxOutputRate_Hz = 0,
 					.rxInterfaceSampleRate_Hz = 0,
 					.rxOffsetLo_kHz = 0,
-					.rxSignalOnLo = 0,
+					.rxNcoEnable = false,
 					.outputSignaling = ADI_ADRV9001_RX_IQ,
 					.filterOrder = 1,
 					.filterOrderLp = 1,
@@ -1852,7 +1932,7 @@ static struct adi_adrv9001_Init adrv9002_init_cmos = {
 					.rxOutputRate_Hz = 0,
 					.rxInterfaceSampleRate_Hz = 0,
 					.rxOffsetLo_kHz = 0,
-					.rxSignalOnLo = 0,
+					.rxNcoEnable = false,
 					.outputSignaling = ADI_ADRV9001_RX_IQ,
 					.filterOrder = 1,
 					.filterOrderLp = 1,
@@ -1972,7 +2052,7 @@ static struct adi_adrv9001_Init adrv9002_init_cmos = {
 					.rxOutputRate_Hz = 1920000,
 					.rxInterfaceSampleRate_Hz = 1920000,
 					.rxOffsetLo_kHz = 0,
-					.rxSignalOnLo = 0,
+					.rxNcoEnable = false,
 					.outputSignaling = ADI_ADRV9001_RX_IQ,
 					.filterOrder = 1,
 					.filterOrderLp = 1,
@@ -2092,7 +2172,7 @@ static struct adi_adrv9001_Init adrv9002_init_cmos = {
 					.rxOutputRate_Hz = 1920000,
 					.rxInterfaceSampleRate_Hz = 1920000,
 					.rxOffsetLo_kHz = 0,
-					.rxSignalOnLo = 0,
+					.rxNcoEnable = false,
 					.outputSignaling = ADI_ADRV9001_RX_IQ,
 					.filterOrder = 1,
 					.filterOrderLp = 1,
@@ -2212,7 +2292,7 @@ static struct adi_adrv9001_Init adrv9002_init_cmos = {
 					.rxOutputRate_Hz = 0,
 					.rxInterfaceSampleRate_Hz = 0,
 					.rxOffsetLo_kHz = 0,
-					.rxSignalOnLo = 0,
+					.rxNcoEnable = false,
 					.outputSignaling = ADI_ADRV9001_RX_IQ,
 					.filterOrder = 1,
 					.filterOrderLp = 1,
@@ -2332,7 +2412,7 @@ static struct adi_adrv9001_Init adrv9002_init_cmos = {
 					.rxOutputRate_Hz = 0,
 					.rxInterfaceSampleRate_Hz = 0,
 					.rxOffsetLo_kHz = 0,
-					.rxSignalOnLo = 0,
+					.rxNcoEnable = false,
 					.outputSignaling = ADI_ADRV9001_RX_IQ,
 					.filterOrder = 1,
 					.filterOrderLp = 1,

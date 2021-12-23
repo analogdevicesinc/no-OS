@@ -38,6 +38,7 @@
 
 #define ADRV9001_TX_MAX_ATTENUATION_MDB         41950
 #define ADRV9001_TX_ATTENUATION_RESOLUTION_MDB  50
+
 /**
 *  \brief Enum to set the Tx Attenuation step size
 */
@@ -57,6 +58,8 @@ typedef enum adi_adrv9001_TxAttenuationControlMode
     ADI_ADRV9001_TX_ATTENUATION_CONTROL_MODE_BYPASS  = 0, /*!< Tx attenuation mode Bypass: zero total attenuation */
     ADI_ADRV9001_TX_ATTENUATION_CONTROL_MODE_SPI     = 1, /*!< Tx attenuation mode set by 10-bit attenuation index used to determine total attenuation */
     ADI_ADRV9001_TX_ATTENUATION_CONTROL_MODE_PIN     = 3, /*!< Tx attenuation is control with GPIO Incr/Decr: total attenuation is altered incrementally using pin control */
+	ADI_ADRV9001_TX_ATTENUATION_CONTROL_MODE_CLGC    = 4, /*!< Tx attenuation : Closed Loop Gain Control : 
+	                                                      *    If CLGC is enabled in OBJID_CFG_DPD_PRE_INIT_CAL, limited to TX_ATTENUATION_CONTROL_MODE_CLGC */
 } adi_adrv9001_TxAttenuationControlMode_e;
 
 /**

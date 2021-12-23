@@ -10,13 +10,14 @@
 #include "adi_adrv9001_dpd.h"
 #include "adi_adrv9001_arm.h"
 #include "adi_adrv9001_radio.h"
+#include "adi_adrv9001_tx.h"
 
 #include "adi_adrv9001_arm.h"
 #include "adrv9001_arm_macros.h"
 #include "adrv9001_nvs_regmap_tx.h"
 #include "object_ids.h"
 
-#define MAX_PRELUTSCALE 0b1111
+#define MAX_PRELUTSCALE 15
 
 static __maybe_unused int32_t __maybe_unused adi_adrv9001_dpd_Initial_Configure_Validate(adi_adrv9001_Device_t *adrv9001,
                                                                           adi_common_ChannelNumber_e channel,
@@ -48,6 +49,7 @@ static __maybe_unused int32_t __maybe_unused adi_adrv9001_dpd_Initial_Configure_
         ADI_ERROR_RETURN(adrv9001->common.error.newAction);
     }
     ADI_RANGE_CHECK(adrv9001, dpdConfig->preLutScale, 0, MAX_PRELUTSCALE);
+	ADI_RANGE_CHECK(adrv9001, dpdConfig->clgcEnable, 0, 1);
 
     /* Validate state is STANDBY */
     ADI_EXPECT(adi_adrv9001_Radio_State_Get, adrv9001, &state);
@@ -70,9 +72,10 @@ int32_t adi_adrv9001_dpd_Initial_Configure(adi_adrv9001_Device_t *adrv9001,
                                            adi_common_ChannelNumber_e channel,
                                            adi_adrv9001_DpdInitCfg_t *dpdConfig)
 {
-    uint8_t armData[26] = { 0 };
+	uint8_t armData[27] = { 0 };
     uint8_t extData[5] = { 0 };
     uint32_t offset = 0;
+	adi_adrv9001_DpdCfg_t dpdClgcRead = { 0 };
 
     ADI_PERFORM_VALIDATION(adi_adrv9001_dpd_Initial_Configure_Validate, adrv9001, channel, dpdConfig);
 
@@ -87,12 +90,19 @@ int32_t adi_adrv9001_dpd_Initial_Configure(adi_adrv9001_Device_t *adrv9001,
     adrv9001_LoadFourBytes(&offset, armData, dpdConfig->modelOrdersForEachTap[2]);
     adrv9001_LoadFourBytes(&offset, armData, dpdConfig->modelOrdersForEachTap[3]);
     armData[offset++] = dpdConfig->preLutScale;
+	armData[offset++] = dpdConfig->clgcEnable;
 
     extData[0] = adi_adrv9001_Radio_MailboxChannel_Get(ADI_TX, channel);
     extData[1] = OBJID_GS_CONFIG;
     extData[2] = OBJID_CFG_DPD_PRE_INIT_CAL;
 
-    ADI_EXPECT(adi_adrv9001_arm_Config_Write, adrv9001, armData, sizeof(armData), extData, sizeof(extData))
+	ADI_EXPECT(adi_adrv9001_arm_Config_Write, adrv9001, armData, sizeof(armData), extData, sizeof(extData))
+
+	ADI_EXPECT(adi_adrv9001_dpd_Inspect, adrv9001, channel, &dpdClgcRead)
+	if (dpdConfig->clgcEnable != 0 && dpdClgcRead.clgcLoopOpen == 0)
+	{
+		ADI_EXPECT(adi_adrv9001_Tx_AttenuationMode_Set, adrv9001, channel, ADI_ADRV9001_TX_ATTENUATION_CONTROL_MODE_CLGC)
+	}
 
     ADI_API_RETURN(adrv9001);
 }
@@ -111,7 +121,7 @@ int32_t adi_adrv9001_dpd_Initial_Inspect(adi_adrv9001_Device_t *adrv9001,
                                          adi_common_ChannelNumber_e channel,
                                          adi_adrv9001_DpdInitCfg_t *dpdConfig)
 {
-    uint8_t armReadBack[22] = { 0 };
+	uint8_t armReadBack[23] = { 0 };
     uint8_t channelMask = 0;
     uint32_t offset = 0;
 
@@ -130,6 +140,7 @@ int32_t adi_adrv9001_dpd_Initial_Inspect(adi_adrv9001_Device_t *adrv9001,
     adrv9001_ParseFourBytes(&offset, armReadBack, &dpdConfig->modelOrdersForEachTap[2]);
     adrv9001_ParseFourBytes(&offset, armReadBack, &dpdConfig->modelOrdersForEachTap[3]);
     dpdConfig->preLutScale = armReadBack[offset++];
+	dpdConfig->clgcEnable = armReadBack[offset++];
 
     ADI_API_RETURN(adrv9001);
 }
@@ -141,9 +152,6 @@ static __maybe_unused int32_t __maybe_unused adi_adrv9001_dpd_Configure_Validate
     static const uint32_t DPD_MAX_SAMPLES = 4096;
     static const uint32_t MAX_RX_TX_NORMALIZATION_THRESHOLD_U2D30 = 1 << 30;    // 1.0 in U2.30
     static const uint32_t MAX_TIME_FILTER_COEFFICIENT = 0x7FFFFFFF;      // 0.999... in U1.31
-    adi_adrv9001_RadioState_t state = { 0 };
-    uint8_t port_index = 0;
-    uint8_t chan_index = 0;
 
     ADI_RANGE_CHECK(adrv9001, channel, ADI_CHANNEL_1, ADI_CHANNEL_2);
 
@@ -154,20 +162,7 @@ static __maybe_unused int32_t __maybe_unused adi_adrv9001_dpd_Configure_Validate
     ADI_RANGE_CHECK(adrv9001, dpdConfig->countsLessThanPowerThreshold, 0, 4096);
     ADI_RANGE_CHECK(adrv9001, dpdConfig->countsGreaterThanPeakThreshold, 0, 4096);
     ADI_RANGE_CHECK(adrv9001, dpdConfig->timeFilterCoefficient, 0, MAX_TIME_FILTER_COEFFICIENT);
-
-    /* Validate state is CALIBRATED */
-    ADI_EXPECT(adi_adrv9001_Radio_State_Get, adrv9001, &state);
-    adi_common_port_to_index(ADI_TX, &port_index);
-    adi_common_channel_to_index(channel, &chan_index);
-    if (ADI_ADRV9001_CHANNEL_CALIBRATED != state.channelStates[port_index][chan_index])
-    {
-        ADI_ERROR_REPORT(&adrv9001->common,
-                         ADI_COMMON_ERRSRC_API,
-                         ADI_COMMON_ERR_INV_PARAM,
-                         ADI_COMMON_ACT_ERR_CHECK_PARAM,
-                         channel,
-                         "Invalid channel state. Channel must be in CALIBRATED state");
-    }
+	ADI_RANGE_CHECK(adrv9001, dpdConfig->clgcLoopOpen, 0, 1);
 
     ADI_API_RETURN(adrv9001);
 }
@@ -176,10 +171,12 @@ int32_t adi_adrv9001_dpd_Configure(adi_adrv9001_Device_t *adrv9001,
                                    adi_common_ChannelNumber_e channel,
                                    adi_adrv9001_DpdCfg_t *dpdConfig)
 {
-    uint8_t armData[44] = { 0 };
+	uint8_t armData[64] = { 0 };
 
     uint8_t extData[5] = { 0 };
     uint32_t offset = 0;
+
+	adi_adrv9001_DpdInitCfg_t dpdClgcRead = { 0 };
 
     ADI_PERFORM_VALIDATION(adi_adrv9001_dpd_Configure_Validate, adrv9001, channel, dpdConfig);
 
@@ -201,12 +198,24 @@ int32_t adi_adrv9001_dpd_Configure(adi_adrv9001_Device_t *adrv9001,
     offset++;    /* 1 byte padding for word alignment */
     offset += 4; /* Leave space for 'dpdSampleRate_Hz', which is a read-only parameter */
     adrv9001_LoadFourBytes(&offset, armData, dpdConfig->timeFilterCoefficient);
+	/* CLGC */
+	armData[offset++] = dpdConfig->clgcLoopOpen;
+	offset += 3;				/* struct padding */
+	adrv9001_LoadFourBytes(&offset, armData, dpdConfig->clgcGainTarget_HundredthdB);
+	adrv9001_LoadFourBytes(&offset, armData, dpdConfig->clgcFilterAlpha);
+	offset += 8; /* space for clgcLastGain_HundredthdB & clgcFilteredGain_HundredthdB , which are read-only */
 
     extData[0] = adi_adrv9001_Radio_MailboxChannel_Get(ADI_TX, channel);
     extData[1] = OBJID_GS_CONFIG;
     extData[2] = OBJID_TC_TX_DPD;
 
     ADI_EXPECT(adi_adrv9001_arm_Config_Write, adrv9001, armData, sizeof(armData), extData, sizeof(extData))
+	
+	ADI_EXPECT(adi_adrv9001_dpd_Initial_Inspect, adrv9001, channel, &dpdClgcRead)
+	if (dpdClgcRead.clgcEnable != 0 && dpdConfig->clgcLoopOpen == 0)
+	{
+		ADI_EXPECT(adi_adrv9001_Tx_AttenuationMode_Set, adrv9001, channel, ADI_ADRV9001_TX_ATTENUATION_CONTROL_MODE_CLGC)
+	}
 
     ADI_API_RETURN(adrv9001);
 }
@@ -225,7 +234,7 @@ int32_t adi_adrv9001_dpd_Inspect(adi_adrv9001_Device_t *adrv9001,
                                  adi_common_ChannelNumber_e channel,
                                  adi_adrv9001_DpdCfg_t *dpdConfig)
 {
-    uint8_t armReadBack[40] = { 0 };
+	uint8_t armReadBack[60] = { 0 };
 
     uint8_t channelMask = 0;
     uint32_t offset = 0;
@@ -252,6 +261,13 @@ int32_t adi_adrv9001_dpd_Inspect(adi_adrv9001_Device_t *adrv9001,
     offset++;
     adrv9001_ParseFourBytes(&offset, armReadBack, &dpdConfig->dpdSamplingRate_Hz);
     adrv9001_ParseFourBytes(&offset, armReadBack, &dpdConfig->timeFilterCoefficient);
+	/* CLGC */
+	dpdConfig->clgcLoopOpen             = (bool)armReadBack[offset++];
+	offset += 3;			/* struct padding */
+	adrv9001_ParseFourBytes(&offset, armReadBack, (uint32_t*)&dpdConfig->clgcGainTarget_HundredthdB);
+	adrv9001_ParseFourBytes(&offset, armReadBack, &dpdConfig->clgcFilterAlpha);
+	adrv9001_ParseFourBytes(&offset, armReadBack, (uint32_t*)&dpdConfig->clgcLastGain_HundredthdB);
+	adrv9001_ParseFourBytes(&offset, armReadBack, (uint32_t*)&dpdConfig->clgcFilteredGain_HundredthdB);
 
     ADI_API_RETURN(adrv9001);
 }

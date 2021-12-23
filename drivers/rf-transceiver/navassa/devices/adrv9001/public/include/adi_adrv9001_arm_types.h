@@ -129,7 +129,7 @@ typedef struct adi_adrv9001_ChecksumTable
     adi_adrv9001_Checksum_t fwCheckSums;
     adi_adrv9001_Checksum_t streamsCheckSum[ADRV9001_MAX_NUM_STREAM];
     adi_adrv9001_Checksum_t deviceProfileCheckSum;
-    adi_adrv9001_Checksum_t adcProfilefwCheckSum;
+    adi_adrv9001_Checksum_t pfirProfileCheckSum;
     uint32_t fwError;
     uint32_t fwErrorCode;
 } adi_adrv9001_ChecksumTable_t;
