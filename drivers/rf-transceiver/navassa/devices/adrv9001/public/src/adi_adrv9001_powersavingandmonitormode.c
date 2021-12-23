@@ -330,7 +330,7 @@ int32_t adi_adrv9001_powerSavingAndMonitorMode_SystemPowerSavingAndMonitorMode_C
     adrv9001_LoadFourBytes(&offset, armData, monitorModeCfg->initialBatterySaverDelay_us);
     adrv9001_LoadFourBytes(&offset, armData, monitorModeCfg->detectionTime_us);
     adrv9001_LoadFourBytes(&offset, armData, monitorModeCfg->sleepTime_us);
-    offset++;
+    armData[offset++] = (uint8_t)monitorModeCfg->bbicWakeupLevelEnable;
     armData[offset++] = (uint8_t)monitorModeCfg->externalPllEnable;
 
     /* Write monitor mode configuration parameters to ARM data memory */
@@ -390,7 +390,7 @@ int32_t adi_adrv9001_powerSavingAndMonitorMode_SystemPowerSavingAndMonitorMode_I
     adrv9001_ParseFourBytes(&offset, armReadBack, &monitorModeCfg->sleepTime_us);
     monitorModeCfg->detectionFirst = armReadBack[offset++];
     monitorModeCfg->detectionMode = (adi_adrv9001_PowerSavingAndMonitorMode_MonitorDetectionMode_e)armReadBack[offset++];
-    offset++;
+    monitorModeCfg->bbicWakeupLevelEnable = (armReadBack[offset++] == 1) ? true : false;
     monitorModeCfg->externalPllEnable = (armReadBack[offset++] == 1) ? true : false;
 
     ADI_API_RETURN(device);
@@ -405,6 +405,7 @@ int32_t adi_adrv9001_powerSavingAndMonitorMode_SystemPowerSavingMode_Set(adi_adr
         .sleepTime_us = 0xFFFFFFFF,
         .detectionFirst = 0,
         .detectionMode = ADI_ADRV9001_POWERSAVINGANDMONITORMODE_MONITOR_DETECTION_MODE_RSSI,
+        .bbicWakeupLevelEnable = false,
     };
 
     config.powerDownMode = mode;
@@ -685,14 +686,14 @@ static __maybe_unused int32_t __maybe_unused adi_adrv9001_powerSavingAndMonitorM
         {
             adi_common_port_to_index(ports[port], &port_index);
             adi_common_channel_to_index(channels[channel], &chan_index);
-            if (ADI_ADRV9001_CHANNEL_STANDBY != state.channelStates[port_index][chan_index])
+	        if (ADI_ADRV9001_CHANNEL_RF_ENABLED == state.channelStates[port_index][chan_index])
             {
                 ADI_ERROR_REPORT(&adrv9001->common,
                                  ADI_COMMON_ERRSRC_API,
                                  ADI_COMMON_ERR_INV_PARAM,
                                  ADI_COMMON_ACT_ERR_CHECK_PARAM,
                                  channel,
-                                 "Invalid channel state. Channel must be in STANDBY state");
+                                 "Invalid channel state. Channel must be in STANDBY, CALIBRATED or PRIMED state");
                 ADI_ERROR_RETURN(adrv9001->common.error.newAction);
             }
         }

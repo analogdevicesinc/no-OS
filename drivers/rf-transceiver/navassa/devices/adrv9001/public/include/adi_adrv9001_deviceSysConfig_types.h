@@ -71,6 +71,7 @@ typedef struct adi_adrv9001_DeviceSysConfig
     uint16_t pllLockTime_us;                    /*!< Required lock time in microseconds for PLLs, based on ref_clk and loop bandwidth */
     uint16_t pllPhaseSyncWait_us;               /*!< Worst case phase sync wait time in FH */
     adi_adrv9001_pllModulus_t pllModulus;       /*!< PLL modulus */
+    bool warmBootEnable;                        /*!< Enable WarmBoot - Load initCal cefficients instead of running initCals */
 } adi_adrv9001_DeviceSysConfig_t;
 
 #endif /* _ADI_ADRV9001_DEVICESYSCONFIG_TYPES_H_ */

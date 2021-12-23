@@ -37,6 +37,7 @@ extern "C" {
  * \note Message type: \ref timing_direct "Direct register acccess"
  *
  * \pre Channel state any of STANDBY, CALIBRATED
+ * \pre Attenuation mode is not ADI_ADRV9001_TX_ATTENUATION_CONTROL_MODE_CLGC
  *
  * \param[in] adrv9001  Context variable - Pointer to the ADRV9001 device data structure
  * \param[in] channel   The Tx channel for which to configure the attenuation
@@ -90,7 +91,6 @@ int32_t adi_adrv9001_Tx_AttenuationMode_Set(adi_adrv9001_Device_t *adrv9001,
 /**
  * \brief Get the current attenuation control mode
  *
- * \note Message type: \ref timing_direct "Direct register acccess"
  * \note If channel state is PRIMED, will always read back as ADI_ADRV9001_TX_ATTENUATION_CONTROL_MODE_SPI
  *
  * \param[in]  adrv9001     Context variable - Pointer to the ADRV9001 device data structure
@@ -110,6 +110,7 @@ int32_t adi_adrv9001_Tx_AttenuationMode_Get(adi_adrv9001_Device_t *adrv9001,
  *      channel state must be any of STANDBY, CALIBRATED, PRIMED.
  * \pre If attenuation mode is ADI_ADRV9001_TX_ATTENUATION_CONTROL_MODE_SPI:
  *      channel state must be any of STANDBY, CALIBRATED, PRIMED, RF_ENABLED
+ * \pre Attenuation mode is not ADI_ADRV9001_TX_ATTENUATION_CONTROL_MODE_CLGC
  *
  * \note Message type: \ref timing_direct "Direct register acccess"
  * \note The new attenuation only takes effect in the RF_ENABLED state - may read back incorrect value otherwise
@@ -168,6 +169,7 @@ int32_t adi_adrv9001_Tx_Attenuation_Get(adi_adrv9001_Device_t *adrv9001,
  * degraded. Boost is disabled by default.
  *
  * \pre Channel state is STANDBY
+ * \pre Attenuation mode is not ADI_ADRV9001_TX_ATTENUATION_CONTROL_MODE_CLGC
  * \note Enabling power boost after calibrations requires running calibrations again or performance will be degraded
  *
  * \note Message type: \ref timing_direct "Direct register acccess"
@@ -404,6 +406,7 @@ int32_t adi_adrv9001_Tx_PaRamp_Inspect(adi_adrv9001_Device_t *adrv9001,
  * \note Tx attenuation control via GPIO pins is possible only in RF_ENABLED state
  *
  * \pre  Channel state must be CALIBRATED
+ * \pre  Attenuation mode is not ADI_ADRV9001_TX_ATTENUATION_CONTROL_MODE_CLGC
  *
  * \param[in]  adrv9001    Context variable - Pointer to the ADRV9001 device data structure
  * \param[in]  channel     The Tx channel for which to configure the Tx attenuation
