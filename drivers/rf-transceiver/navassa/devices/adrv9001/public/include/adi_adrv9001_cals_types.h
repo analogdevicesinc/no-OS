@@ -63,8 +63,7 @@ typedef enum adi_adrv9001_TrackingCalibrations
     ADI_ADRV9001_TRACKING_CAL_TX_LO_LEAKAGE     = 0x00000002, //!< Tx LO Leakage
     ADI_ADRV9001_TRACKING_CAL_TX_LB_PD          = 0x00000004, //!< Tx Loopback path delay
     ADI_ADRV9001_TRACKING_CAL_TX_PAC            = 0x00000008, //!< Tx Power Amplifier Correction
-    ADI_ADRV9001_TRACKING_CAL_TX_DPD            = 0x00000010, //!< Tx Digital Pre Distortion
-    ADI_ADRV9001_TRACKING_CAL_TX_CLGC           = 0x00000020, //!< Tx Close Loop Gain Control
+    ADI_ADRV9001_TRACKING_CAL_TX_DPD_CLGC       = 0x00000010, //!< Tx Digital Pre Distortion and Close Loop Gain Control
     /* Bit 6-7: Not used (Reserved for future purpose) */
     ADI_ADRV9001_TRACKING_CAL_RX_HD2            = 0x00000100, //!< Rx Harmonic Distortion
     ADI_ADRV9001_TRACKING_CAL_RX_QEC_WBPOLY     = 0x00000200, //!< Rx Quadrature Error Correction Wideband Poly

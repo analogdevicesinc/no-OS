@@ -161,10 +161,10 @@ static inline int32_t adrv9001_NvsRegmapCore2_Auxdac0_Set(void *const device,
 {
     int32_t status = 0;
 
-    status = adi_bf_hal_Field_Write(device, (0x400 + 0x1), (value >> 8), 0xf, 0x0);
+	status = adi_bf_hal_Register_Write(device, (0x400 + 0x0), (value >> 0));
     if (0 != status) return status;
 
-    status = adi_bf_hal_Register_Write(device, (0x400 + 0x0), (value >> 0));
+	status = adi_bf_hal_Field_Write(device, (0x400 + 0x1), (value >> 8), 0xf, 0x0);
 
     return status;
 }
@@ -255,10 +255,10 @@ static inline int32_t adrv9001_NvsRegmapCore2_Auxdac1_Set(void *const device,
 {
     int32_t status = 0;
 
-    status = adi_bf_hal_Field_Write(device, (0x400 + 0x3), (value >> 8), 0xf, 0x0);
+	status = adi_bf_hal_Register_Write(device, (0x400 + 0x2), (value >> 0));
     if (0 != status) return status;
 
-    status = adi_bf_hal_Register_Write(device, (0x400 + 0x2), (value >> 0));
+	status = adi_bf_hal_Field_Write(device, (0x400 + 0x3), (value >> 8), 0xf, 0x0);
 
     return status;
 }
@@ -349,10 +349,10 @@ static inline int32_t adrv9001_NvsRegmapCore2_Auxdac2_Set(void *const device,
 {
     int32_t status = 0;
 
-    status = adi_bf_hal_Field_Write(device, (0x400 + 0x5), (value >> 8), 0xf, 0x0);
+	status = adi_bf_hal_Register_Write(device, (0x400 + 0x4), (value >> 0));
     if (0 != status) return status;
 
-    status = adi_bf_hal_Register_Write(device, (0x400 + 0x4), (value >> 0));
+	status = adi_bf_hal_Field_Write(device, (0x400 + 0x5), (value >> 8), 0xf, 0x0);
 
     return status;
 }
@@ -443,10 +443,10 @@ static inline int32_t adrv9001_NvsRegmapCore2_Auxdac3_Set(void *const device,
 {
     int32_t status = 0;
 
-    status = adi_bf_hal_Field_Write(device, (0x400 + 0x7), (value >> 8), 0xf, 0x0);
+	status = adi_bf_hal_Register_Write(device, (0x400 + 0x6), (value >> 0));
     if (0 != status) return status;
 
-    status = adi_bf_hal_Register_Write(device, (0x400 + 0x6), (value >> 0));
+	status = adi_bf_hal_Field_Write(device, (0x400 + 0x7), (value >> 8), 0xf, 0x0);
 
     return status;
 }

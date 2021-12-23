@@ -150,23 +150,26 @@ typedef enum adi_adrv9001_GpioPinLevel
 typedef enum adi_adrv9001_GpioSignal
 {
     /* Digital GPIO Functions */
-    ADI_ADRV9001_GPIO_SIGNAL_ORX_ENABLE_1,          /*!< ORx Enable signal channel 1 */
-    ADI_ADRV9001_GPIO_SIGNAL_ORX_ENABLE_2,          /*!< ORx Enable signal channel 2 */
-    ADI_ADRV9001_GPIO_SIGNAL_MON_ENABLE_SPS,        /*!< Monitor mode enable and System Power Saving request signal */
-    ADI_ADRV9001_GPIO_SIGNAL_MON_BBIC_WAKEUP,       /*!< Monitor mode signal to wake up the BBIC */
-    ADI_ADRV9001_GPIO_SIGNAL_POWER_SAVING_CHANNEL1, /*!< Power saving signal for channel 1 */
-    ADI_ADRV9001_GPIO_SIGNAL_POWER_SAVING_CHANNEL2, /*!< Power saving signal for channel 2 */
-    ADI_ADRV9001_GPIO_SIGNAL_FH_HOP,                /*!< Frequency hopping hop request signal */
-    ADI_ADRV9001_GPIO_SIGNAL_FH_GAIN_SEL_0,         /*!< Frequency hopping gain select bit 0 */
-    ADI_ADRV9001_GPIO_SIGNAL_FH_GAIN_SEL_1,         /*!< Frequency hopping gain select bit 1 */
-    ADI_ADRV9001_GPIO_SIGNAL_FH_GAIN_SEL_2,         /*!< Frequency hopping gain select bit 2 */
-    ADI_ADRV9001_GPIO_SIGNAL_FH_TABLE_INDEX_0,      /*!< Frequency hopping frequency index select bit 0 */
-    ADI_ADRV9001_GPIO_SIGNAL_FH_TABLE_INDEX_1,      /*!< Frequency hopping frequency index select bit 1 */
-    ADI_ADRV9001_GPIO_SIGNAL_FH_TABLE_INDEX_2,      /*!< Frequency hopping frequency index select bit 2 */
-    ADI_ADRV9001_GPIO_SIGNAL_FH_TABLE_INDEX_3,      /*!< Frequency hopping frequency index select bit 3 */
-    ADI_ADRV9001_GPIO_SIGNAL_FH_TABLE_INDEX_4,      /*!< Frequency hopping frequency index select bit 4 */
-    ADI_ADRV9001_GPIO_SIGNAL_FH_TABLE_INDEX_5,      /*!< Frequency hopping frequency index select bit 5 */
-    ADI_ADRV9001_GPIO_SIGNAL_FH_HOP_TABLE_SELECT,   /*!< Frequency hopping Hop table select signal */
+    ADI_ADRV9001_GPIO_SIGNAL_ORX_ENABLE_1,                  /*!< ORx Enable signal channel 1 */
+    ADI_ADRV9001_GPIO_SIGNAL_ORX_ENABLE_2,                  /*!< ORx Enable signal channel 2 */
+    ADI_ADRV9001_GPIO_SIGNAL_MON_ENABLE_SPS,                /*!< Monitor mode enable and System Power Saving request signal */
+    ADI_ADRV9001_GPIO_SIGNAL_MON_BBIC_WAKEUP,               /*!< Monitor mode signal to wake up the BBIC */
+    ADI_ADRV9001_GPIO_SIGNAL_POWER_SAVING_CHANNEL1,         /*!< Power saving signal for channel 1 */
+    ADI_ADRV9001_GPIO_SIGNAL_POWER_SAVING_CHANNEL2,         /*!< Power saving signal for channel 2 */
+    ADI_ADRV9001_GPIO_SIGNAL_FH_HOP,                        /*!< Frequency hopping hop request signal */
+    ADI_ADRV9001_GPIO_SIGNAL_FH_CH1_GAIN_ATTEN_SEL_0,       /*!< Frequency hopping Channel1 gain/atten select bit 0 */
+    ADI_ADRV9001_GPIO_SIGNAL_FH_CH1_GAIN_ATTEN_SEL_1,       /*!< Frequency hopping Channel1 gain/atten select bit 1 */
+    ADI_ADRV9001_GPIO_SIGNAL_FH_CH1_GAIN_ATTEN_SEL_2,       /*!< Frequency hopping Channel1 gain/atten select bit 2 */
+    ADI_ADRV9001_GPIO_SIGNAL_FH_CH2_GAIN_ATTEN_SEL_0,       /*!< Frequency hopping Channel2 gain/atten select bit 0 */
+    ADI_ADRV9001_GPIO_SIGNAL_FH_CH2_GAIN_ATTEN_SEL_1,       /*!< Frequency hopping Channel2 gain/atten select bit 1 */
+    ADI_ADRV9001_GPIO_SIGNAL_FH_CH2_GAIN_ATTEN_SEL_2,       /*!< Frequency hopping Channel2 gain/atten select bit 2 */
+    ADI_ADRV9001_GPIO_SIGNAL_FH_TABLE_INDEX_0,              /*!< Frequency hopping frequency index select bit 0 */
+    ADI_ADRV9001_GPIO_SIGNAL_FH_TABLE_INDEX_1,              /*!< Frequency hopping frequency index select bit 1 */
+    ADI_ADRV9001_GPIO_SIGNAL_FH_TABLE_INDEX_2,              /*!< Frequency hopping frequency index select bit 2 */
+    ADI_ADRV9001_GPIO_SIGNAL_FH_TABLE_INDEX_3,              /*!< Frequency hopping frequency index select bit 3 */
+    ADI_ADRV9001_GPIO_SIGNAL_FH_TABLE_INDEX_4,              /*!< Frequency hopping frequency index select bit 4 */
+    ADI_ADRV9001_GPIO_SIGNAL_FH_TABLE_INDEX_5,              /*!< Frequency hopping frequency index select bit 5 */
+    ADI_ADRV9001_GPIO_SIGNAL_FH_HOP_TABLE_SELECT,           /*!< Frequency hopping Hop table select signal */
     ADI_ADRV9001_GPIO_SIGNAL_TX1_PA_RAMP_CTRL,              /*!< Tx1 Aux DAC ramp control request signal*/
     ADI_ADRV9001_GPIO_SIGNAL_TX2_PA_RAMP_CTRL,              /*!< Tx2 Aux DAC ramp control request signal*/
 
@@ -194,41 +197,10 @@ typedef enum adi_adrv9001_GpioSignal
     ADI_ADRV9001_GPIO_SIGNAL_AUX_ADC_3,                     /*!< Aux ADC control 3 signal */
 
     ADI_ADRV9001_GPIO_SIGNAL_FH_HOP_2,                      /*!< Frequency hopping hop request signal   */
-    ADI_ADRV9001_GPIO_SIGNAL_TX_CAL_EN,                     /*!< Tx channel 1 and 2  calibration enable signal */
-    ADI_ADRV9001_GPIO_SIGNAL_CAL_UPDATE,                    /*!< Calibration update selection signal  */
 
-    ADI_ADRV9001_GPIO_SIGNAL_FH_HOP_2_TABLE_SELECT,         /*!< Frequency hopping table select for HOP 2 */
+    ADI_ADRV9001_GPIO_SIGNAL_FH_HOP_2_TABLE_SELECT = 42,    /*!< Frequency hopping table select for HOP 2 */
 
-    ADI_ADRV9001_GPIO_SIGNAL_RX1_LNA_ATTENUATION_1,         /*!< Rx1 LNA attenuation control 1 */
-    ADI_ADRV9001_GPIO_SIGNAL_RX1_LNA_ATTENUATION_2,         /*!< Rx1 LNA attenuation control 2 */
-    ADI_ADRV9001_GPIO_SIGNAL_RX2_LNA_ATTENUATION_1,         /*!< Rx2 LNA attenuation control 1 */
-    ADI_ADRV9001_GPIO_SIGNAL_RX2_LNA_ATTENUATION_2,         /*!< Rx1 LNA attenuation control 2 */
-    ADI_ADRV9001_GPIO_SIGNAL_TX1_ATTN_INCREMENT,            /*!< Tx1 Attenuation Increment request signal */
-    ADI_ADRV9001_GPIO_SIGNAL_TX1_ATTN_DECREMENT,            /*!< Tx1 Attenuation Decrement request signal */
-    ADI_ADRV9001_GPIO_SIGNAL_TX2_ATTN_INCREMENT,            /*!< Tx2 Attenuation Increment request signal */
-    ADI_ADRV9001_GPIO_SIGNAL_TX2_ATTN_DECREMENT,            /*!< Tx2 Attenuation Decrement request signal */
-
-    ADI_ADRV9001_GPIO_SIGNAL_RX1_GAIN_CTRL_FEEDBACK_LSBS,   /*!< Rx1 AGC Feedback Signals Least Significant Bits */
-    ADI_ADRV9001_GPIO_SIGNAL_RX2_GAIN_CTRL_FEEDBACK_LSBS,   /*!< Rx2 AGC Feedback Signals Least Significant Bits */
-    ADI_ADRV9001_GPIO_SIGNAL_RX1_GAIN_CTRL_FEEDBACK_MSBS,   /*!< Rx1 AGC Feedback Signals Most Significant Bits */
-    ADI_ADRV9001_GPIO_SIGNAL_RX2_GAIN_CTRL_FEEDBACK_MSBS,   /*!< Rx2 AGC Feedback Signals Most Significant Bits */
-    ADI_ADRV9001_GPIO_SIGNAL_TX1_SSI_REF_CLK,               /*!< Tx1 Synchronous Serial Interface Reference Clock Signal */
-    ADI_ADRV9001_GPIO_SIGNAL_TX2_SSI_REF_CLK,               /*!< Tx2 Synchronous Serial Interface Reference Clock Signal */
-    ADI_ADRV9001_GPIO_SIGNAL_DIGITAL_GPIO_MANUAL_INPUT,     /*!< Digital GPIO Input Signal */
-    ADI_ADRV9001_GPIO_SIGNAL_DIGITAL_GPIO_MANUAL_OUTPUT,    /*!< Digital GPIO Output Signal */
-    ADI_ADRV9001_GPIO_SIGNAL_ANALOG_GPIO_MANUAL_INPUT,      /*!< Analog GPIO Input Signal */
-    ADI_ADRV9001_GPIO_SIGNAL_ANALOG_GPIO_MANUAL_OUTPUT,     /*!< Analog GPIO Output Signal */
-    ADI_ADRV9001_GPIO_SIGNAL_ANALOG_GPIO_MIRROR,            /*!< Mirror the value of a Digital GPIO signal as the source for the Analog GPIO Output signal */
-    ADI_ADRV9001_GPIO_SIGNAL_MODE_CTRL,                     /*!< MODE control Signal */
-    ADI_ADRV9001_GPIO_SIGNAL_JTAG_CTRL,                     /*!< JTAG control Signal */
-
-    /* TODO: Remove? */
-    ADI_ADRV9001_GPIO_SIGNAL_RX1_GAIN_INCREMENT,            /*!< Rx1 Gain Increment request signal */
-    ADI_ADRV9001_GPIO_SIGNAL_RX1_GAIN_DECREMENT,            /*!< Rx1 Gain Decrement request signal */
-    ADI_ADRV9001_GPIO_SIGNAL_RX2_GAIN_INCREMENT,            /*!< Rx2 Gain Increment request signal */
-    ADI_ADRV9001_GPIO_SIGNAL_RX2_GAIN_DECREMENT,            /*!< Rx2 Gain Decrement request signal */
-
-    ADI_ADRV9001_GPIO_NUM_SIGNALS,                          /*!< Total Number of signals from BBIC    */
+    ADI_ADRV9001_GPIO_NUM_SIGNALS = 43,                     /*!< Total Number of signals from BBIC    */
 } adi_adrv9001_GpioSignal_e;
 
 /**
@@ -282,8 +254,6 @@ typedef struct adi_adrv9001_GpioCtrlInitCfg
     adi_adrv9001_GpioCfg_t channelPowerSaving[ADI_ADRV9001_NUM_CHANNELS];   /*!< (DGPIO) Channel Power Saving Enables */
     adi_adrv9001_GpioCfg_t systemPowerSavingAndMonitorEnable;               /*!< (DGPIO) System Power Saving and Monitor Enable */
     adi_adrv9001_GpioCfg_t systemPowerSavingAndMonitorWakeUp;               /*!< (DGPIO) Monitor WakeUp */
-    adi_adrv9001_GpioCfg_t rx1ExternalLnaPinCfg[2];                         /*!< (AGPIO) Rx1 External LNA attenuation control 1 and 2  */
-    adi_adrv9001_GpioCfg_t rx2ExternalLnaPinCfg[2];                         /*!< (AGPIO) Rx2 External LNA attenuation control 1 and 2  */
 
 } adi_adrv9001_GpioCtrlInitCfg_t;
 

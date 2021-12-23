@@ -400,7 +400,7 @@ typedef struct adi_adrv9001_RxProfile
     uint32_t		rxOutputRate_Hz;				  /*!< Rx output data rate in Hz */
     uint32_t		rxInterfaceSampleRate_Hz;		  /*!< Rx sample rate at serial interface */
     int32_t			rxOffsetLo_kHz;                   /*!< Offset in kHz. 0: On LO */
-    uint8_t			rxSignalOnLo;                     /*!< !0: Signal on LO  0: no signal on LO */
+    bool			rxNcoEnable;                      /*!< Enable NCO in Rx datapath. NCO must be enabled if rxOffsetLo_kHz > 0  */
     adi_adrv9001_RxSignalType_e outputSignaling;      /*!< Output to BBIC signal type */
     uint8_t			filterOrder;					  /*!< 1st or 2nd order ABBF filter */
     uint8_t			filterOrderLp;					  /*!< 1st or 2nd order ABBF filter Low Power ADC*/

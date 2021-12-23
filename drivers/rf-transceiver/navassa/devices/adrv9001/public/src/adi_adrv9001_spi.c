@@ -14,9 +14,11 @@
 
 #include "adi_adrv9001_spi.h"
 #include "adi_common_error.h"
+#include "adi_adrv9001_arm.h"
 #include "adi_adrv9001_error.h"
 
 #include "adi_adrv9001_hal.h"
+#include "object_ids.h"
 
 /*********************************************************************************************************/
 int32_t adi_adrv9001_spi_DataPack(adi_adrv9001_Device_t *device,
@@ -532,4 +534,96 @@ int32_t adi_adrv9001_spi_Cache_Read(adi_adrv9001_Device_t *device,
     ADI_ERROR_RETURN(device->common.error.newAction);
 
     ADI_API_RETURN(device);
+}
+
+static __maybe_unused int32_t __maybe_unused adi_adrv9001_spi_Master_Configure_Validate(adi_adrv9001_Device_t *adrv9001,
+												adi_adrv9001_spiMasterConfig_t *spiMasterConfig)
+{
+	ADI_NULL_PTR_RETURN(&adrv9001->common, spiMasterConfig);
+	ADI_RANGE_CHECK(adrv9001, spiMasterConfig->numBytes, 1, SPI_MASTER_TOTAL_BYTES_MAX);
+	ADI_RANGE_CHECK(adrv9001, spiMasterConfig->baudRateDiv, 0, 31);
+	ADI_RANGE_CHECK(adrv9001, spiMasterConfig->transactionBytes, 1, SPI_MASTER_TOTAL_BYTES_MAX);
+
+	if(spiMasterConfig->csSource == ADI_ADRV9001_SPI_MASTER_CS_SOURCE_GPIO_ANALOG)
+	{
+		ADI_RANGE_CHECK(adrv9001, spiMasterConfig->pin, ADI_ADRV9001_GPIO_ANALOG_00, ADI_ADRV9001_GPIO_ANALOG_08);
+	}
+	else if(spiMasterConfig->csSource == ADI_ADRV9001_SPI_MASTER_CS_SOURCE_GPIO_DIGITAL)
+	{
+		ADI_RANGE_CHECK(adrv9001, spiMasterConfig->pin, ADI_ADRV9001_GPIO_DIGITAL_00, ADI_ADRV9001_GPIO_DIGITAL_08);
+	}
+
+	ADI_API_RETURN(adrv9001);
+}
+
+int32_t adi_adrv9001_spi_Master_Configure(adi_adrv9001_Device_t *device,
+										  adi_adrv9001_spiMasterConfig_t *spiMasterConfig)
+{
+	uint8_t armData[48] = { 0 };
+	uint8_t extData[5] = { 0 };
+	uint32_t offset = 0;
+	uint8_t cnt = 0;
+
+	ADI_PERFORM_VALIDATION(adi_adrv9001_spi_Master_Configure_Validate, device, spiMasterConfig);
+
+	adrv9001_LoadFourBytes(&offset, armData, sizeof(armData) - sizeof(uint32_t));
+	armData[offset++] = spiMasterConfig->numBytes;
+	armData[offset++] = spiMasterConfig->baudRateDiv;
+	armData[offset++] = spiMasterConfig->transactionBytes;
+	armData[offset++] = spiMasterConfig->assertionMode;
+	armData[offset++] = spiMasterConfig->spiSlaveDevicesConnected;
+	armData[offset++] = spiMasterConfig->csSource;
+	armData[offset++] = spiMasterConfig->pin - 1;
+	armData[offset++] = spiMasterConfig->triggerSource;
+	adrv9001_LoadFourBytes(&offset, armData, spiMasterConfig->wakeupTimer_us);
+
+	for (cnt = 0; cnt < SPI_MASTER_TOTAL_BYTES_MAX; cnt++)
+	{
+		armData[offset++] = spiMasterConfig->spiData[cnt];
+	}
+
+	extData[0] = 0;
+	extData[1] = OBJID_GS_CONFIG;
+	extData[2] = OBJID_CFG_SPI_MASTER_CONFIG;
+
+	ADI_EXPECT(adi_adrv9001_arm_Config_Write, device, armData, sizeof(armData), extData, sizeof(extData))
+
+	ADI_API_RETURN(device);
+}
+
+static __maybe_unused int32_t __maybe_unused adi_adrv9001_spi_Master_Inspect_Validate(adi_adrv9001_Device_t *adrv9001,
+	adi_adrv9001_spiMasterConfig_t *spiMasterConfig)
+{
+	ADI_NULL_PTR_RETURN(&adrv9001->common, spiMasterConfig);
+	ADI_API_RETURN(adrv9001);
+}
+
+int32_t adi_adrv9001_spi_Master_Inspect(adi_adrv9001_Device_t *device,
+										adi_adrv9001_spiMasterConfig_t *spiMasterConfig)
+{
+	uint8_t armReadBack[44] = { 0 };
+	uint8_t channelMask = 0;
+	uint32_t offset = 0;
+	uint8_t cnt = 0;
+
+	ADI_PERFORM_VALIDATION(adi_adrv9001_spi_Master_Inspect_Validate, device, spiMasterConfig);
+
+	ADI_EXPECT(adi_adrv9001_arm_Config_Read, device, OBJID_CFG_SPI_MASTER_CONFIG, channelMask, offset, armReadBack, sizeof(armReadBack))
+
+	spiMasterConfig->numBytes = armReadBack[offset++];
+	spiMasterConfig->baudRateDiv = armReadBack[offset++];
+	spiMasterConfig->transactionBytes = armReadBack[offset++];
+	spiMasterConfig->assertionMode = armReadBack[offset++];
+	spiMasterConfig->spiSlaveDevicesConnected = armReadBack[offset++];
+	spiMasterConfig->csSource = armReadBack[offset++];
+	spiMasterConfig->pin = (armReadBack[offset++] + 1);
+	spiMasterConfig->triggerSource = armReadBack[offset++];
+	adrv9001_ParseFourBytes(&offset, armReadBack, &spiMasterConfig->wakeupTimer_us);
+
+	for (cnt = 0; cnt < SPI_MASTER_TOTAL_BYTES_MAX; cnt++)
+	{
+		spiMasterConfig->spiData[cnt] = armReadBack[offset++];
+	}
+
+	ADI_API_RETURN(device);
 }

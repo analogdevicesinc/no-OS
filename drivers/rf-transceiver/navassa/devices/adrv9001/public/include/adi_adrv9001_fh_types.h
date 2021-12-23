@@ -97,7 +97,7 @@ typedef enum {
 } adi_adrv9001_FhFrameIndex_e;
 
 /**
- * \brief Enumeration of FH per dynamic load type
+ * \brief Enumeration of FH per dynamic load type used by FPGA in ADI eval system, not necesary in customer application
  */
 typedef enum adi_adrv9001_FhPerDynamicLoad
 {
@@ -127,12 +127,13 @@ typedef enum {
  * \brief Settings for HOP frame information
  */
 typedef struct {
-    uint64_t hopFrequencyHz;       /*!< Operating frequency in Hz */
-    int32_t  rx1OffsetFrequencyHz; /*!< Rx1 Offset frequency. This field is ignored by firmware if frame is not Rx, or if profile does not operate with an IF */
-    int32_t  rx2OffsetFrequencyHz; /*!< Rx2 Offset frequency. This field is ignored by firmware if frame is not Rx, or if profile does not operate with an IF */
-    uint8_t  rxGainIndex;          /*!< Starting gain index for hop frame. This field is ignored if frame is Tx */
-    uint8_t  reserved;             /*!< For word alignment */
-    uint16_t txAttenuation_mdB;    /*!< Tx attenuation index. This field is ignored if frame is Rx */
+    int32_t  rx1OffsetFrequencyHz;   /*!< Rx1 Offset frequency. This field is ignored by firmware if frame is not Rx */
+    int32_t  rx2OffsetFrequencyHz;   /*!< Rx2 Offset frequency. This field is ignored by firmware if frame is not Rx */
+    uint8_t tx1Attenuation_fifthdB;  /*!< Tx1 attenuation expressed in 0.2dBs. LSB = 0.2dB. Range 0 to 209 (0 to 41.8 dB). This field is ignored if frame is Rx */
+	uint8_t tx2Attenuation_fifthdB;  /*!< Tx2 attenuation expressed in 0.2dBs. Range 0 to 209 (0 to 41.8 dB). This field is ignored if frame is Rx */
+    uint8_t  rx1GainIndex;           /*!< Starting Rx1 gain index for hop frame. This field is ignored if frame is Tx */
+	uint8_t  rx2GainIndex;           /*!< Starting Rx2 gain index for hop frame. This field is ignored if frame is Tx */
+    uint64_t hopFrequencyHz; /*!< Operating frequency in Hz */
 } adi_adrv9001_FhHopFrame_t;
 
 /**
@@ -192,7 +193,7 @@ typedef struct {
     adi_adrv9001_GpioCfg_t             tableIndexGpioConfig[ADI_ADRV9001_FH_MAX_NUM_FREQ_SELECT_PINS]; /*!< Pin configuration for table index select. Ignored if tableIndexCtrl is not ADI_ADRV9001_TABLEINDEXCTRL_GPIO */
     
     bool                               gainSetupByPin;            /*!< Use GPIO Pins to provide a Tx/Rx gain index for next hop frame. If false, gain information is provided in hop table*/
-    adi_adrv9001_FhGainSetupByPinCfg_t gainSetupByPinConfig;      /*!< Configuration information for gain setup by pin. This structure is ignored if gainSetupByPin is false */
+	adi_adrv9001_FhGainSetupByPinCfg_t gainSetupByPinConfig[ADI_ADRV9001_NUM_CHANNELS];    /*!< Configuration information for gain setup by pin. This structure is ignored if gainSetupByPin is false */
 } adi_adrv9001_FhCfg_t;
 
 #ifdef __cplusplus
