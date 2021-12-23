@@ -145,6 +145,17 @@ int32_t adi_adrv9001_gpio_InputPinLevel_Get(adi_adrv9001_Device_t *device,
     if (ADI_ADRV9001_GPIO_DIGITAL_00 <= pin && pin <= ADI_ADRV9001_GPIO_DIGITAL_15)
     {
         ADI_EXPECT(adrv9001_NvsRegmapCore_NvsGpioSpiRead_Get, device, &pinLevels);
+		
+	    /* Work around for swapped bitfield DGPIO12 to DGPIO15 */
+	    if (ADI_ADRV9001_GPIO_DIGITAL_12 == pin || ADI_ADRV9001_GPIO_DIGITAL_14 == pin)
+	    {
+		    pin++;
+	    }
+	    else if (ADI_ADRV9001_GPIO_DIGITAL_13 == pin || ADI_ADRV9001_GPIO_DIGITAL_15 == pin)
+	    {
+		    pin--;
+	    }
+
         *gpioInPinLevel = (pinLevels & (1 << (pin - 1))) >> (pin - 1);
     }
     else if (ADI_ADRV9001_GPIO_ANALOG_00 <= pin && pin <= ADI_ADRV9001_GPIO_ANALOG_11)
@@ -210,38 +221,6 @@ static __maybe_unused int32_t __maybe_unused adi_adrv9001_gpio_ManualAnalogInput
                                              adi_adrv9001_GpioPin_e pin)
 {
     ADI_RANGE_CHECK(device, pin, ADI_ADRV9001_GPIO_ANALOG_00, ADI_ADRV9001_GPIO_ANALOG_11);
-    ADI_API_RETURN(device);
-}
-
-static __maybe_unused int32_t adi_adrv9001_gpio_PinDirection_Get_Validate(adi_adrv9001_Device_t *device,
-									  adi_adrv9001_GpioPin_e pin)
-{
-    ADI_API_RETURN(device);
-    ADI_RANGE_CHECK(device, pin, ADI_ADRV9001_GPIO_DIGITAL_00, ADI_ADRV9001_GPIO_ANALOG_11);
-}
-
-int32_t adi_adrv9001_gpio_PinDirection_Get(adi_adrv9001_Device_t *device,
-					   adi_adrv9001_GpioPin_e pin,
-					   adi_adrv9001_GpioPinDirection_e *direction)
-{
-    uint16_t gpioOutEn = 0;
-
-    ADI_PERFORM_VALIDATION(adi_adrv9001_gpio_PinDirection_Get_Validate, device, pin);
-    if (ADI_ADRV9001_GPIO_DIGITAL_00 <= pin && pin <= ADI_ADRV9001_GPIO_DIGITAL_15)
-    {
-        ADI_EXPECT(adrv9001_NvsRegmapCore_NvsGpioDirectionControlOe_Get, device, &gpioOutEn);
-	*direction = (gpioOutEn & (1 << (pin - 1))) >> (pin - 1);
-    }
-    else if (ADI_ADRV9001_GPIO_ANALOG_00 <= pin && pin <= ADI_ADRV9001_GPIO_ANALOG_11)
-    {
-        ADI_EXPECT(adrv9001_NvsRegmapCore1_NvsGpioAnalogDirectionControlOe_Get, device, &gpioOutEn);
-	*direction = (gpioOutEn & (1 << (pin - ADI_ADRV9001_GPIO_ANALOG_00))) >> (pin - ADI_ADRV9001_GPIO_ANALOG_00);
-    }
-    else
-    {
-        ADI_SHOULD_NOT_EXECUTE(device);
-    }
-
     ADI_API_RETURN(device);
 }
 
@@ -348,23 +327,6 @@ int32_t adi_adrv9001_gpio_ControlInit_Configure(adi_adrv9001_Device_t *adrv9001,
     if (ADI_ADRV9001_GPIO_UNASSIGNED != initCfg->systemPowerSavingAndMonitorWakeUp.pin)
     {
         ADI_EXPECT(adi_adrv9001_gpio_Configure, adrv9001, ADI_ADRV9001_GPIO_SIGNAL_MON_BBIC_WAKEUP, &initCfg->systemPowerSavingAndMonitorWakeUp);
-    }
-
-    if (ADI_ADRV9001_GPIO_UNASSIGNED != initCfg->rx1ExternalLnaPinCfg[0].pin)
-    {
-        ADI_EXPECT(adi_adrv9001_gpio_Configure, adrv9001, ADI_ADRV9001_GPIO_SIGNAL_RX1_LNA_ATTENUATION_1, &initCfg->rx1ExternalLnaPinCfg[0]);
-    }
-    if (ADI_ADRV9001_GPIO_UNASSIGNED != initCfg->rx1ExternalLnaPinCfg[1].pin)
-    {
-        ADI_EXPECT(adi_adrv9001_gpio_Configure, adrv9001, ADI_ADRV9001_GPIO_SIGNAL_RX1_LNA_ATTENUATION_2, &initCfg->rx1ExternalLnaPinCfg[1]);
-    }
-    if (ADI_ADRV9001_GPIO_UNASSIGNED != initCfg->rx2ExternalLnaPinCfg[0].pin)
-    {
-        ADI_EXPECT(adi_adrv9001_gpio_Configure, adrv9001, ADI_ADRV9001_GPIO_SIGNAL_RX2_LNA_ATTENUATION_1, &initCfg->rx2ExternalLnaPinCfg[0]);
-    }
-    if (ADI_ADRV9001_GPIO_UNASSIGNED != initCfg->rx2ExternalLnaPinCfg[1].pin)
-    {
-        ADI_EXPECT(adi_adrv9001_gpio_Configure, adrv9001, ADI_ADRV9001_GPIO_SIGNAL_RX2_LNA_ATTENUATION_2, &initCfg->rx2ExternalLnaPinCfg[1]);
     }
 
     ADI_API_RETURN(adrv9001);

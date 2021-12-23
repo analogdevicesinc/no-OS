@@ -70,8 +70,9 @@ typedef struct adi_adrv9001_Carrier
      */
     adi_adrv9001_LoGenOptimization_e loGenOptimization;
     uint64_t carrierFrequency_Hz;       /*!< Carrier frequency, denoted in Hz. Valid range: 30MHz to 6 GHz*/
-    int32_t intermediateFrequency_Hz;  /*!< Intermediate frequency, denoted in Hz.
+    int32_t intermediateFrequency_Hz;   /*!< Intermediate frequency, denoted in Hz.
                                              Valid range: between +/- min(20 MHz, rfChannelBandwidth_Hz /2)) */
+    adi_adrv9001_RxRfInputSel_e manualRxport; /*!< Port selection to manually switch Rx port */
 } adi_adrv9001_Carrier_t;
 
 /**

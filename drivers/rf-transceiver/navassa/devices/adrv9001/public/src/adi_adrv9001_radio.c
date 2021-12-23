@@ -84,6 +84,7 @@ int32_t adi_adrv9001_Radio_Carrier_Configure(adi_adrv9001_Device_t *adrv9001,
     armData[offset++] = carrier->loGenOptimization;
     /* Loading byte array with parsed bytes from intermediateFrequency_Hz word */
     adrv9001_LoadFourBytes(&offset, armData, carrier->intermediateFrequency_Hz);
+    armData[offset++] = (uint8_t)(carrier->manualRxport & 0x1);
 
     /* Write carrier Frequency to ARM mailbox */
     ADI_EXPECT(adi_adrv9001_arm_Memory_Write, adrv9001, (uint32_t)ADRV9001_ADDR_ARM_MAILBOX_SET, &armData[0], sizeof(armData), ADI_ADRV9001_ARM_SINGLE_SPI_WRITE_MODE_STANDARD_BYTES_4);

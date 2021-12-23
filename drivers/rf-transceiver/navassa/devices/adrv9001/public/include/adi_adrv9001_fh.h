@@ -160,7 +160,7 @@ int32_t adi_adrv9001_fh_FrameInfo_Inspect(adi_adrv9001_Device_t *adrv9001,
 /**
  * \brief Trigger the hop signal by either SPI or mailbox
  *     
- * Thia API will have no effect if it is called before any channel,
+ * This API will have no effect if it is called before any channel,
  * enabled for frequency hopping, is in PRIMED state.
  * 
  * \pre Channel state is PRIMED RF_ENABLED
@@ -175,7 +175,10 @@ int32_t adi_adrv9001_fh_FrameInfo_Inspect(adi_adrv9001_Device_t *adrv9001,
 int32_t adi_adrv9001_fh_Hop(adi_adrv9001_Device_t *adrv9001, adi_adrv9001_FhHopSignal_e hopSignal);
 
 /**
- * \brief Load a frequency hopping table into ARM memory dynamically
+ * \brief Generate a spiPackedFhTable array containing the SPI Transactions necessary to load FH Tables Dynamically from FPGA Memory to ADRV9001 ARM Memory
+ * 
+ * This function does not send the SPI Transactions to load ADRV9001 ARM Memory, instead it generates a spiPackedFhTable
+ * that can be used by FPGA to dynamically load FH Tables based on TDD signal activity
  * 
  * \pre This function can be called by the user anytime after initialization.
  * 

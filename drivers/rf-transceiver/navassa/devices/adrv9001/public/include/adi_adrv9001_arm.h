@@ -214,7 +214,29 @@ int32_t adi_adrv9001_arm_Memory_Read(adi_adrv9001_Device_t *adrv9001,
                                      uint8_t returnData[],
                                      uint32_t byteCount,
                                      uint8_t autoIncrement);
-
+/**
+ * \brief Read from the ADRV9001 ARM program or data memory
+ *
+ * Valid memory addresses are: Program Memory (0x01000000 - 0x0101C000),
+ * Data Memory (0x20000000 - 0x20014000).
+ *
+ * \note Message type: \ref timing_direct "Direct register access"
+ *
+ * \pre This function is private and is not called directly by the user.
+ *
+ * \param[in]  adrv9001			Context variable - Pointer to the ADRV9001 device settings data structure
+ * \param[in]  address			The 32bit ARM address to read from.
+ * \param[out] returnData		Byte array containing the data read from the ARM memory.
+ * \param[in]  byteCount			Number of bytes in the returnData array.
+ * \param[in]  autoIncrement		Boolean flag to enable or disable auto-increment of ARM register address
+ *
+ * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
+ */
+int32_t adi_adrv9001_arm_Memory_Read32(adi_adrv9001_Device_t *adrv9001,
+		uint32_t address,
+		uint32_t returnData[],
+		uint32_t byteCount,
+		uint8_t autoIncrement);
 /**
  * \brief Write to the ADRV9001 ARM program or data memory
  *        'ADI_ADRV9001_ARM_SINGLE_SPI_WRITE_MODE_STANDARD_BYTES_252' and 'ADI_ADRV9001_ARM_SINGLE_SPI_WRITE_MODE_STREAMING_BYTES_4' 
@@ -240,6 +262,40 @@ int32_t adi_adrv9001_arm_Memory_Write(adi_adrv9001_Device_t *adrv9001,
                                       const uint8_t data[],
                                       uint32_t byteCount,
                                       adi_adrv9001_ArmSingleSpiWriteMode_e spiWriteMode);
+
+/**
+* \brief Write to the ADRV9001 ARM program or data memory
+*        'ADI_ADRV9001_ARM_SINGLE_SPI_WRITE_MODE_STANDARD_BYTES_252' and 'ADI_ADRV9001_ARM_SINGLE_SPI_WRITE_MODE_STREAMING_BYTES_4' 
+*        are supported only if byteCount is a multiple of 4
+*
+* Valid memory addresses are: Program Memory (0x01000000 - 0x0101C000),
+* Data Memory (0x20000000 - 0x20014000).
+*
+* \note Message type: \ref timing_direct "Direct register access"
+*
+* \pre This function is private and is not called directly by the user.
+*
+* \param[in] adrv9001			            Context variable - Pointer to the ADRV9001 device settings data structure
+* \param[in] hopSignal                      Hop signal to configure appropriate tableId
+* \param[in] tableId                        FH_HOP_TABLE_A or FH_HOP_TABLE_B. Used for ping-pong hop tables.
+* \param[in] hopTableAddress                The 32-bit ARM address to write
+* \param[in] numHopTableEntries             Byte Array (uint8_t) containing data to be written to ARM memory
+* \param[in] numHopTableEntriesByteCount    Number of bytes in the data array to be written
+* \param[in] hopTableBufferAddress          The 32-bit ARM address to write
+* \param[in] hopTableBufferData             Byte Array (uint8_t) containing data to be written to ARM memory
+* \param[in] hopTableBufferDataByteCount    Number of bytes in the data array to be written
+*
+* \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
+*/
+int32_t adi_adrv9001_arm_Memory_WriteFH(adi_adrv9001_Device_t *adrv9001, 
+		                                    adi_adrv9001_FhHopSignal_e hopSignal,
+		                                    adi_adrv9001_FhHopTable_e tableId, 
+		                                    uint32_t hopTableAddress, 
+		                                    const uint8_t numHopTableEntries[], 
+		                                    uint32_t numHopTableEntriesByteCount, 
+		                                    uint32_t hopTableBufferAddress, 
+		                                    const uint8_t hopTableBufferData[], 
+		                                    uint32_t hopTableBufferDataByteCount);
 
 /**
  * \brief Low level helper function used by ADRV9001 API to write the ARM memory config structures

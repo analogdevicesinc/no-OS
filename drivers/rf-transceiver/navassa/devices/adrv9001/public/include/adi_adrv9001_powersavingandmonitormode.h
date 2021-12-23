@@ -168,7 +168,7 @@ int32_t adi_adrv9001_powerSavingAndMonitorMode_MonitorMode_Vector_Inspect(adi_ad
  *
  * \note Message type: \ref timing_mailbox "Mailbox command"
  *
- * \pre Channel state is STANDBY
+ * \pre Channel state is STANDBY, CALIBRATED or PRIMED
  *
  * \param[in] adrv9001	           Context variable - Pointer to the ADRV9001 device settings data structure
  * \param[in] monitorModeRssiCfg   The desired monitor mode RSSI configuration settings
