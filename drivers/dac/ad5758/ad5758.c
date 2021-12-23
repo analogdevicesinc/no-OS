@@ -796,12 +796,12 @@ int32_t ad5758_init(struct ad5758_dev **device,
 		goto error_gpio_ldac;
 
 	/* Get the DAC out of reset */
-	ret = gpio_set_value(dev->reset_n, GPIO_HIGH);
+	ret = gpio_direction_output(dev->reset_n, GPIO_HIGH);
 	if(ret)
 		goto err;
 
 	/* Tie the LDAC pin low */
-	ret = gpio_set_value(dev->ldac_n, GPIO_LOW);
+	ret = gpio_direction_output(dev->ldac_n, GPIO_LOW);
 	if(ret)
 		goto err;
 
