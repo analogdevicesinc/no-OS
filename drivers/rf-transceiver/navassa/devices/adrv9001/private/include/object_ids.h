@@ -185,6 +185,7 @@ typedef enum
     OBJID_GS_DYNAMIC_PROFILE          = GENERATE_OBJID(OBJ_GROUP_ID_GS, 0x1Au),    /*!< 0x9A: Preload dynamic components of device profile */
     OBJID_GS_FREQ_HOP_CONFIGURE       = GENERATE_OBJID(OBJ_GROUP_ID_GS, 0x1Bu),    /*!< 0x9B: Frequency Hopping commands */
     OBJID_GS_TDD_TIMING_PARAMS        = GENERATE_OBJID(OBJ_GROUP_ID_GS, 0x1Cu),    /*!< 0x9C: Set TDD Timing parameters */
+    OBJID_GS_LOID                      = GENERATE_OBJID(OBJ_GROUP_ID_GS, 0x1Du),    /*!< 0x9d: set LO ID command parameters */
 
     /* Configuration objects ids in OBJ_GROUP_ID_CFG group 
        1-to-1 mapping to IDs defined in cfgId_e
@@ -211,6 +212,9 @@ typedef enum
     OBJID_CFG_GPIO_DEBUG_IN_STREAM    = GENERATE_OBJID(OBJ_GROUP_ID_CFG, 0x13u),   /*!< 0xB3: Configure GPIO debug in stream */
     OBJID_CFG_CLK_PLL_TYPE            = GENERATE_OBJID(OBJ_GROUP_ID_CFG, 0x14u),   /*!< 0xB4: Configure clock PLL type */
     OBJID_CFG_RX_GAIN_OVER_SSI        = GENERATE_OBJID(OBJ_GROUP_ID_CFG, 0x15u),   /*!< 0xB5: Configure RX slicer gain or agc gain, and gain index delay for 32-bit SSI */
+    OBJID_CFG_SPI_MASTER_CONFIG       = GENERATE_OBJID(OBJ_GROUP_ID_CFG, 0x16u),   /*!< 0xB6: Configure SPI master to perform read/write transaction with slave device */
+    OBJID_CFG_REFERENCE_TIMER_CONFIG  = GENERATE_OBJID(OBJ_GROUP_ID_CFG, 0x17u),   /*!< 0xB7: Configure Reference Timer */
+    OBJID_CFG_REFERENCE_TIMER_START   = GENERATE_OBJID(OBJ_GROUP_ID_CFG, 0x18u),   /*!< 0xB8: Start Reference Timer */
 
     /* Driver objects in OBJ_GROUP_ID_DRV group */
     OBJID_DRV_NCO                     = GENERATE_OBJID(OBJ_GROUP_ID_DRV, 0x0u),    /*!< 0xC0: NCO driver      */

@@ -18,6 +18,7 @@ SRCS += $(PROJECT)/src/app.c \
 	$(DRIVERS)/adc/ad9081/api/adi_ad9081_device.c \
 	$(DRIVERS)/adc/ad9081/api/adi_ad9081_hal.c \
 	$(DRIVERS)/adc/ad9081/api/adi_ad9081_jesd.c \
+	$(DRIVERS)/adc/ad9081/api/adi_ad9081_sync.c \
 	$(DRIVERS)/frequency/hmc7044/hmc7044.c \
 	$(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c \
 	$(DRIVERS)/axi_core/axi_dac_core/axi_dac_core.c \

@@ -26,6 +26,7 @@
 #include "adi_adrv9001_radio.h"
 #include "adi_adrv9001_mcs.h"
 #include "adi_adrv9001_cals.h"
+#include "adi_adrv9001_fh.h"
 
 #include "adrv9001_arm.h"
 #include "adrv9001_arm_macros.h"
@@ -159,6 +160,10 @@ int32_t adi_adrv9001_arm_StartStatus_Check(adi_adrv9001_Device_t *device, uint32
         {
             ADI_EXPECT(adi_adrv9001_arm_SystemError_Get, device, &objId, (uint8_t *)(&errorCode));
             errorCode = ((uint16_t)objId << 8) | errorCode;
+            if (errorCode == 0)
+            {
+                errorCode = state.bootState;
+            }
             ADI_ERROR_REPORT(&device->common,
                              ADI_ADRV9001_SRC_ARMFWSTATUS,
                              errorCode,
@@ -189,19 +194,6 @@ int32_t adi_adrv9001_arm_StartStatus_Check(adi_adrv9001_Device_t *device, uint32
                          "Timed out waiting for ARM bootup to happen");
         ADI_ERROR_RETURN(device->common.error.newAction);
     }
-
-/* FIXME: Disabled Checksum verification as FW code disabled checksum calculation.
-          It may have to enabled in future*/
-#if 0
-    adi_adrv9001_ChecksumTable_t checksum = { { 0 } };
-    uint8_t checksumValid = 0;
-
-    if (armDebugLoaded == 0)
-    {
-        recoveryAction = adi_adrv9001_arm_ChecksumTable_Get(device, &checksum, &checksumValid);
-        ADI_ERROR_RETURN(device->common.error.newAction);
-    }
-#endif
 
     device->devStateInfo.devState = (adi_adrv9001_ApiStates_e)(device->devStateInfo.devState | ADI_ADRV9001_STATE_ARM_LOADED);
 
@@ -320,7 +312,7 @@ int32_t adi_adrv9001_arm_Image_Write(adi_adrv9001_Device_t *device, uint32_t byt
         (ADRV9001_ADDR_FH_HOP_TABLE_A_OFFSET < (byteOffset + byteCount + 4)))
     {
         i = ADRV9001_ADDR_FH_HOP_TABLE_A_OFFSET - byteOffset;
-        device->devStateInfo.fhHopTable1Addr = ((((uint32_t)binary[i + 3]) << 24) |
+	    device->devStateInfo.fhHopTableA1Addr = ((((uint32_t)binary[i + 3]) << 24) |
             (((uint32_t)binary[i + 2]) << 16) | (((uint32_t)binary[i + 1]) << 8) | ((uint32_t)binary[i]));
     }
 
@@ -328,7 +320,7 @@ int32_t adi_adrv9001_arm_Image_Write(adi_adrv9001_Device_t *device, uint32_t byt
         (ADRV9001_ADDR_FH_HOP_TABLE_B_OFFSET < (byteOffset + byteCount + 4)))
     {
         i = ADRV9001_ADDR_FH_HOP_TABLE_B_OFFSET - byteOffset;
-        device->devStateInfo.fhHopTable2Addr = ((((uint32_t)binary[i + 3]) << 24) |
+        device->devStateInfo.fhHopTableB1Addr = ((((uint32_t)binary[i + 3]) << 24) |
             (((uint32_t)binary[i + 2]) << 16) | (((uint32_t)binary[i + 1]) << 8) | ((uint32_t)binary[i]));
     }
 
@@ -398,6 +390,22 @@ int32_t adi_adrv9001_arm_Memory_Read(adi_adrv9001_Device_t *device,
     ADI_API_RETURN(device);
 }
 
+int32_t adi_adrv9001_arm_Memory_Read32(adi_adrv9001_Device_t *device,
+	uint32_t address,
+	uint32_t returnData[],
+	uint32_t byteCount,
+	uint8_t autoIncrement)
+{
+	//uint8_t data[] = { 0 };
+	
+	ADI_PERFORM_VALIDATION(adi_adrv9001_arm_Memory_ReadWrite_Validate, device, address, (uint8_t *)returnData, byteCount, 0, autoIncrement);
+
+	ADI_EXPECT(adrv9001_DmaMemRead, device, address, (uint8_t *)returnData, byteCount, autoIncrement);
+
+	ADI_API_RETURN(device);
+}
+
+
 int32_t adi_adrv9001_arm_Memory_Write(adi_adrv9001_Device_t *device, uint32_t address, const uint8_t data[], uint32_t byteCount, adi_adrv9001_ArmSingleSpiWriteMode_e spiWriteMode)
 {
     ADI_PERFORM_VALIDATION(adi_adrv9001_arm_Memory_ReadWrite_Validate, device, address, (uint8_t *)data, byteCount, spiWriteMode, false);
@@ -405,6 +413,13 @@ int32_t adi_adrv9001_arm_Memory_Write(adi_adrv9001_Device_t *device, uint32_t ad
     ADI_EXPECT(adrv9001_DmaMemWrite, device, address, data, byteCount, spiWriteMode);
 
     ADI_API_RETURN(device);
+}
+
+int32_t adi_adrv9001_arm_Memory_WriteFH(adi_adrv9001_Device_t *device,adi_adrv9001_FhHopSignal_e hopSignal, adi_adrv9001_FhHopTable_e tableId, uint32_t hopTableAddress, const uint8_t numHopTableEntries[], uint32_t numHopTableEntriesByteCount, uint32_t hopTableBufferAddress, const uint8_t hopTableBufferData[], uint32_t hopTableBufferDataByteCount)
+{
+	ADI_EXPECT(adrv9001_DmaMemWriteFH, device, hopSignal, tableId, hopTableAddress, numHopTableEntries, numHopTableEntriesByteCount, hopTableBufferAddress, hopTableBufferData, hopTableBufferDataByteCount);
+
+	ADI_API_RETURN(device);
 }
 
 int32_t adi_adrv9001_arm_Config_Write(adi_adrv9001_Device_t *device, const uint8_t armData[], uint32_t armDataSize, const uint8_t mailboxCmd[], uint32_t mailboxCmdSize)
@@ -857,7 +872,6 @@ int32_t adi_adrv9001_arm_ChecksumTable_Get(adi_adrv9001_Device_t *device, adi_ad
     uint32_t waitInterval_us = ADI_ADRV9001_VERIFY_ARM_CHKSUM_INTERVAL_US;
     uint32_t numEventChecks = 1;
     uint32_t eventCheck = 0;
-    int j = 0;
     int i = 0;
 
     static const uint8_t CHECKSUM_BYTES = 0x4;
@@ -865,6 +879,8 @@ int32_t adi_adrv9001_arm_ChecksumTable_Get(adi_adrv9001_Device_t *device, adi_ad
     static const uint32_t MIN_TIMEOUT_US = 10000;
 
     /* Arm stream checksum order: main, rx1/2, tx1/2, orx12 */
+#if ADI_ADRV9001_STREAM_CHECKSUM_ENABLE > 0
+    int j = 0;
     static const uint32_t streamChannel[] = {
         0xFFFFFFFF,
         ADI_ADRV9001_RX1,
@@ -877,21 +893,11 @@ int32_t adi_adrv9001_arm_ChecksumTable_Get(adi_adrv9001_Device_t *device, adi_ad
                              ADI_ADRV9001_ELB1 |
                              ADI_ADRV9001_ELB2),
     };
-
+#endif
 
     ADI_ENTRY_PTR_EXPECT(device, checksum);
 
     ADI_NULL_PTR_RETURN(&device->common, checksumValid);
-
-#if ADI_ADRV9001_SW_TEST > 0
-    if (device->devStateInfo.swTest == 1)
-    {
-        checksum->fwCheckSums.buildChecksum = 12345678;
-        checksum->fwCheckSums.runChecksum = 12345678;
-        *checksumValid = 1;
-        return (int32_t)recoveryAction;
-    }
-#endif
 
     if (timeout_us < MIN_TIMEOUT_US)
     {
@@ -903,13 +909,6 @@ int32_t adi_adrv9001_arm_ChecksumTable_Get(adi_adrv9001_Device_t *device, adi_ad
     ADI_ERROR_REPORT(&device->common, ADI_COMMON_ERRSRC_API, ADI_COMMON_ERR_API_FAIL, recoveryAction, NULL, "Failed to read ARM memory");
     ADI_ERROR_RETURN(device->common.error.newAction);
     checkAddr = ((((uint32_t)checkData[3]) << 24) | (((uint32_t)checkData[2]) << 16) | (((uint32_t)checkData[1]) << 8) | ((uint32_t)checkData[0]));
-
-#if ADI_ADRV9001_SW_TEST > 0
-    if (device->devStateInfo.swTest >= 2)
-    {
-        checkAddr = ADRV9001_ADDR_ARM_CALC_CHKSUM_PTR;
-    }
-#endif
 
     waitInterval_us = (waitInterval_us > timeout_us) ? timeout_us : waitInterval_us;
     numEventChecks = (waitInterval_us == 0) ? 1 : (timeout_us / waitInterval_us);
@@ -923,24 +922,10 @@ int32_t adi_adrv9001_arm_ChecksumTable_Get(adi_adrv9001_Device_t *device, adi_ad
         buildTimeChecksum = ((((uint32_t)checkData[3]) << 24) | (((uint32_t)checkData[2]) << 16) | (((uint32_t)checkData[1]) << 8) | ((uint32_t)checkData[0]));
         calculatedChecksum = ((((uint32_t)checkData[7]) << 24) | (((uint32_t)checkData[6]) << 16) | (((uint32_t)checkData[5]) << 8) | ((uint32_t)checkData[4]));
 
-#if ADI_ADRV9001_SW_TEST > 0
-        if (device->devStateInfo.swTest == 3)
-        {
-            calculatedChecksum = 0;
-            buildTimeChecksum = calculatedChecksum;
-        }
-#endif
-
         if ((calculatedChecksum == 0) && (eventCheck < numEventChecks))
         {
             /* wait */
             halError = adi_common_hal_Wait_us(&device->common, timeout_us);
-#if ADI_ADRV9001_SW_TEST > 0
-            if (device->devStateInfo.swTest == 3)
-            {
-                halError = 1;
-            }
-#endif
             ADI_ERROR_REPORT(&device->common,
                 ADI_COMMON_ERRSRC_ADI_HAL,
                 halError,
@@ -955,33 +940,12 @@ int32_t adi_adrv9001_arm_ChecksumTable_Get(adi_adrv9001_Device_t *device, adi_ad
         }
     }
 
-#if ADI_ADRV9001_SW_TEST > 0
-    if (device->devStateInfo.swTest >= 5)
-    {
-        calculatedChecksum = 12345678;
-        buildTimeChecksum = calculatedChecksum;
-    }
-    if (device->devStateInfo.swTest == 2)
-    {
-        calculatedChecksum = 0;
-        buildTimeChecksum = calculatedChecksum;
-    }
-#endif
-
     /* ARM completed calculating checksum */
     if ((calculatedChecksum > 0) && (buildTimeChecksum > 0))
     {
         *checksumValid = 1;
         checksum->fwCheckSums.buildChecksum = buildTimeChecksum;
         checksum->fwCheckSums.runChecksum = calculatedChecksum;
-
-#if ADI_ADRV9001_SW_TEST > 0
-        if (device->devStateInfo.swTest == 5)
-        {
-            calculatedChecksum = 12345678;
-            buildTimeChecksum = calculatedChecksum + 1;
-        }
-#endif
 
         /* performing checksum check, skip if checksum was not calculated (ARM DEBUG_MODE)*/
         if ((calculatedChecksum > 0) && (buildTimeChecksum != calculatedChecksum))
@@ -995,6 +959,8 @@ int32_t adi_adrv9001_arm_ChecksumTable_Get(adi_adrv9001_Device_t *device, adi_ad
             ADI_ERROR_RETURN(device->common.error.newAction);
         }
 
+/* Disabled Stream checksum verification as Firmware does not calculate checksum for Streams */
+#if  ADI_ADRV9001_STREAM_CHECKSUM_ENABLE > 0
         for (j = 0; j < ADRV9001_MAX_NUM_STREAM; j++)
         {
             i = CHECKSUMENTRYSIZE * (j + 1);
@@ -1003,13 +969,6 @@ int32_t adi_adrv9001_arm_ChecksumTable_Get(adi_adrv9001_Device_t *device, adi_ad
             buildTimeChecksum = ((((uint32_t)checkData[i + 3]) << 24) | (((uint32_t)checkData[i + 2]) << 16) | (((uint32_t)checkData[i + 1]) << 8) | ((uint32_t)checkData[i + 0]));
             calculatedChecksum = ((((uint32_t)checkData[i + 7]) << 24) | (((uint32_t)checkData[i + 6]) << 16) | (((uint32_t)checkData[i + 5]) << 8) | ((uint32_t)checkData[i + 4]));
 
-#if ADI_ADRV9001_SW_TEST > 0
-            if (device->devStateInfo.swTest == 6)
-            {
-                calculatedChecksum = 12345678;
-                buildTimeChecksum = calculatedChecksum + 1;
-            }
-#endif
             checksum->streamsCheckSum[j].buildChecksum = buildTimeChecksum;
             checksum->streamsCheckSum[j].runChecksum = calculatedChecksum;
 
@@ -1030,21 +989,13 @@ int32_t adi_adrv9001_arm_ChecksumTable_Get(adi_adrv9001_Device_t *device, adi_ad
             }
 
         }
-
-        //i = offsetof(adi_adrv9001_checksumTable_t, deviceProfileCheckSum);
+#endif
         i = CHECKSUMENTRYSIZE * (ADRV9001_MAX_NUM_STREAM + 1);
 
         /* Device profile checksum */
         buildTimeChecksum = ((((uint32_t)checkData[i + 3]) << 24) | (((uint32_t)checkData[i + 2]) << 16) | (((uint32_t)checkData[i + 1]) << 8) | ((uint32_t)checkData[i + 0]));
         calculatedChecksum = ((((uint32_t)checkData[i + 7]) << 24) | (((uint32_t)checkData[i + 6]) << 16) | (((uint32_t)checkData[i + 5]) << 8) | ((uint32_t)checkData[i + 4]));
 
-#if ADI_ADRV9001_SW_TEST > 0
-        if (device->devStateInfo.swTest == 7)
-        {
-            calculatedChecksum = 12345678;
-            buildTimeChecksum = calculatedChecksum + 1;
-        }
-#endif
         checksum->deviceProfileCheckSum.buildChecksum = buildTimeChecksum;
         checksum->deviceProfileCheckSum.runChecksum = calculatedChecksum;
 
@@ -1053,7 +1004,7 @@ int32_t adi_adrv9001_arm_ChecksumTable_Get(adi_adrv9001_Device_t *device, adi_ad
         if (buildTimeChecksum != calculatedChecksum)
         {
             ADI_ERROR_REPORT(&device->common,
-                ADI_COMMON_ERRSRC_ARMCMD,
+                ADI_ADRV9001_SRC_ARMCMD,
                 ADI_COMMON_ERR_API_FAIL,
                 ADI_ADRV9001_ACT_ERR_RESET_ARM,
                 calculatedChecksum,
@@ -1064,30 +1015,23 @@ int32_t adi_adrv9001_arm_ChecksumTable_Get(adi_adrv9001_Device_t *device, adi_ad
 
         i = CHECKSUMENTRYSIZE * (ADRV9001_MAX_NUM_STREAM + 2);
 
-        /* ADC profile checksum */
+        /* PFIR profile checksum */
         buildTimeChecksum = ((((uint32_t)checkData[i + 3]) << 24) | (((uint32_t)checkData[i + 2]) << 16) | (((uint32_t)checkData[i + 1]) << 8) | ((uint32_t)checkData[i + 0]));
         calculatedChecksum = ((((uint32_t)checkData[i + 7]) << 24) | (((uint32_t)checkData[i + 6]) << 16) | (((uint32_t)checkData[i + 5]) << 8) | ((uint32_t)checkData[i + 4]));
 
-#if ADI_ADRV9001_SW_TEST > 0
-        if (device->devStateInfo.swTest == 8)
-        {
-            calculatedChecksum = 12345678;
-            buildTimeChecksum = calculatedChecksum + 1;
-        }
-#endif
-        checksum->adcProfilefwCheckSum.buildChecksum = buildTimeChecksum;
-        checksum->adcProfilefwCheckSum.runChecksum = calculatedChecksum;
+        checksum->pfirProfileCheckSum.buildChecksum = buildTimeChecksum;
+        checksum->pfirProfileCheckSum.runChecksum = calculatedChecksum;
 
 #if ADI_ADRV9001_PROFILE_CHECKSUM_ENABLE > 0
         /* performing checksum check */
         if (buildTimeChecksum != calculatedChecksum)
         {
             ADI_ERROR_REPORT(&device->common,
-                ADI_COMMON_ERRSRC_ARMCMD,
+                ADI_ADRV9001_SRC_ARMCMD,
                 ADI_COMMON_ERR_API_FAIL,
                 ADI_ADRV9001_ACT_ERR_RESET_ARM,
                 calculatedChecksum,
-                "Adc Profile checksum is invalid");
+                "PFIR Profile checksum is invalid");
             ADI_ERROR_RETURN(device->common.error.newAction);
         }
 #endif

@@ -57,8 +57,6 @@ int32_t adi_adrv9001_dpd_Initial_Inspect(adi_adrv9001_Device_t *adrv9001,
  * 
  * \note Message type: \ref timing_mailbox "Mailbox command"
  *
- * \pre Channel state is CALIBRATED
- *
  * \param[in] adrv9001		Context variable - Pointer to the ADRV9001 device settings data structure
  * \param[in] channel       The channel to configure
  * \param[in] dpdConfig     The desired DPD configuration

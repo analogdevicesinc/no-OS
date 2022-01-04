@@ -195,6 +195,32 @@ int32_t adi_adrv9001_spi_Cache_Write(adi_adrv9001_Device_t *adrv9001, const uint
 */
 int32_t adi_adrv9001_spi_Cache_Read(adi_adrv9001_Device_t *adrv9001, const uint32_t rdCache[], uint8_t readData[], uint32_t count);
 
+/**
+* \brief Configure SPI Master
+*
+* \note Message type: \ref timing_mailbox "Mailbox command"
+*
+* \param[in] adrv9001			Context variable - Pointer to the ADRV9001 device settings data structure
+* \param[in] spiMasterConfig    The SPI Master configuration
+*
+* \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
+*/
+int32_t adi_adrv9001_spi_Master_Configure(adi_adrv9001_Device_t *adrv9001,
+										  adi_adrv9001_spiMasterConfig_t *spiMasterConfig);
+
+/**
+* \brief Inspect SPI Master
+*
+* \note Message type: \ref timing_mailbox "Mailbox command"
+*
+* \param[in] adrv9001			Context variable - Pointer to the ADRV9001 device settings data structure
+* \param[out] spiMasterConfig   The SPI Master configuration
+*
+* \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
+*/
+int32_t adi_adrv9001_spi_Master_Inspect(adi_adrv9001_Device_t *adrv9001,
+										adi_adrv9001_spiMasterConfig_t *spiMasterConfig);
+
 #ifdef __cplusplus
 }
 #endif

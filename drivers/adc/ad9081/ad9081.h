@@ -74,6 +74,7 @@ struct ad9081_phy {
 	struct clk		*jesd_rx_clk;
 	struct clk		*jesd_tx_clk;
 	struct clk		*dev_clk;
+	bool		sysref_coupling_ac_en;
 	adi_ad9081_device_t	ad9081;
 	struct ad9081_jesd_link	jesd_tx_link;
 	struct ad9081_jesd_link	jesd_rx_link[2];
@@ -93,7 +94,7 @@ struct ad9081_phy {
 	struct dac_settings_cache	dac_cache;
 	/* RX */
 	uint64_t 	adc_frequency_hz;
-	uint32_t	rx_nyquist_zone;
+	uint32_t	rx_nyquist_zone[MAX_NUM_MAIN_DATAPATHS];
 	/* The 4 ADC Main Datapaths */
 	int64_t		rx_cddc_shift[MAX_NUM_MAIN_DATAPATHS];
 	uint32_t	adc_main_decimation[MAX_NUM_MAIN_DATAPATHS];
@@ -136,6 +137,7 @@ struct ad9081_init_param {
 	struct clk	*dev_clk;
 	struct clk	*jesd_rx_clk;
 	struct clk	*jesd_tx_clk;
+	bool		sysref_coupling_ac_en;
 	uint32_t	multidevice_instance_count;
 	bool		jesd_sync_pins_01_swap_enable;
 	uint32_t	lmfc_delay_dac_clk_cycles;
@@ -153,7 +155,7 @@ struct ad9081_init_param {
 	struct link_init_param	*jesd_tx_link;
 	/* RX */
 	uint64_t 	adc_frequency_hz;
-	uint32_t	nyquist_zone;
+	uint32_t	nyquist_zone[MAX_NUM_MAIN_DATAPATHS];
 	/* The 4 ADC Main Datapaths */
 	int64_t		rx_main_nco_frequency_shift_hz[MAX_NUM_MAIN_DATAPATHS];
 	uint32_t	rx_main_decimation[MAX_NUM_MAIN_DATAPATHS];

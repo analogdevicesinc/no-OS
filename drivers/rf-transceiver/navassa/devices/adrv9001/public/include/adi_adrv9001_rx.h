@@ -125,9 +125,6 @@ int32_t adi_adrv9001_Rx_GainTable_Read(adi_adrv9001_Device_t *adrv9001,
  *       Clocks are disabled in the following transitions:
  *           RF_ENABLED->PRIMED
  *
- * \pre If gain control mode is ADI_ADRV9001_RX_GAIN_CONTROL_MODE_PIN: 
- *      channel state is any of CALIBRATED, PRIMED, RF_ENABLED 
- *      and can only take action in RF_ENABLED
  * \pre If gain control mode is ADI_ADRV9001_RX_GAIN_CONTROL_MODE_SPI:
  *      channel state is any of STANDBY, CALIBRATED, PRIMED, RF_ENABLED
  *
@@ -488,7 +485,42 @@ int32_t adi_adrv9001_Rx_ExternalLna_DigitalGainDelay_Set(adi_adrv9001_Device_t *
 int32_t adi_adrv9001_Rx_ExternalLna_DigitalGainDelay_Get(adi_adrv9001_Device_t *adrv9001,
                                                          adi_common_ChannelNumber_e channel,
                                                          uint16_t *lnaDigitalGainDelay);
+	
+/**
+ * \brief Configure LOID settings
+ * 
+ * \note Message type: \ref timing_mailbox "Mailbox command"
+ *
+ * \pre channel state is any of STANDBY, CALIBRATED
+ *
+ * \param[in] adrv9001		Context variable - Pointer to the ADRV9001 device settings data structure
+ * \param[in] channel       The channel to configure
+ * \param[in] loidConfig    The desired LOID configuration
+ * 
+ * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
+ */
+int32_t adi_adrv9001_Rx_Loid_Configure(adi_adrv9001_Device_t *adrv9001,
+                                   adi_common_ChannelNumber_e channel,
+		                           adi_adrv9001_RxrfdcLoidCfg_t *loidConfig);
 
+
+/**
+ * \brief Inspect LOID settings
+ * 
+ * \note Message type: \ref timing_mailbox "Mailbox command"
+ *
+ * \pre channel state is any of STANDBY, CALIBRATED, PRIMED, RF_ENABLED
+ *
+ * \param[in] adrv9001		Context variable - Pointer to the ADRV9001 device settings data structure
+ * \param[in] channel       The channel to configure
+ * \param[out] loidConfig   The current LOID configuration
+ * 
+ * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
+ */
+int32_t adi_adrv9001_Rx_Loid_Inspect(adi_adrv9001_Device_t *adrv9001,
+                                   adi_common_ChannelNumber_e channel,
+		                           adi_adrv9001_RxrfdcLoidCfg_t *loidConfig);
+	
 #ifdef __cplusplus
 }
 #endif

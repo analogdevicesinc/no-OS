@@ -1,6 +1,7 @@
 /***************************************************************************//**
- *   @file   app_iio.h
- *   @brief  Application IIO setup.
+ *   @file   projects/fmcadc5/src/app_config.h
+ *   @brief  Config file for FMCADC5 project.
+ *   @author DBogdan (dragos.bogdan@analog.com)
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
  * Copyright 2020(c) Analog Devices, Inc.
@@ -36,21 +37,11 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef APP_IIO_H_
-#define APP_IIO_H_
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-#include <stdint.h>
-#include "iio_axi_adc.h"
+#ifndef APP_CONFIG_H_
+#define APP_CONFIG_H_
 
-/******************************************************************************/
-/************************ Functions Declarations ******************************/
-/******************************************************************************/
+//#define XILINX_PLATFORM
+//#define IIO_SUPPORT
 
-/* @brief Application IIO setup. */
-int32_t iio_server_init(struct iio_axi_adc_init_param *adc_0_init,
-			struct iio_axi_adc_init_param *adc_1_init);
-
-#endif
+#endif /* APP_CONFIG_H_ */

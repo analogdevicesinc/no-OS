@@ -120,7 +120,7 @@ int32_t adi_adrv9001_gpio_GpIntStatus_Get(adi_adrv9001_Device_t *adrv9001, uint3
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
  */
 int32_t adi_adrv9001_gpio_OutputPinLevel_Set(adi_adrv9001_Device_t *adrv9001,
-                                             adi_adrv9001_GpioPin_e pin,
+                                             adi_adrv9001_GpioPin_e pin, 
                                              adi_adrv9001_GpioPinLevel_e level);
 
 /**
@@ -158,75 +158,58 @@ int32_t adi_adrv9001_gpio_OutputPinLevel_Get(adi_adrv9001_Device_t *adrv9001,
  *
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
  */
-int32_t adi_adrv9001_gpio_InputPinLevel_Get(adi_adrv9001_Device_t *adrv9001,
+int32_t adi_adrv9001_gpio_InputPinLevel_Get(adi_adrv9001_Device_t *adrv9001, 
                                             adi_adrv9001_GpioPin_e pin,
                                             adi_adrv9001_GpioPinLevel_e *gpioInPinLevels);
-
-/**
- * \brief Reads the ADRV9001 GPIO pin direction for BITBANG mode
- *
- *  This function allows reading the direction of the GPIO
- *
- * \note Message type: \ref timing_direct "Direct register access"
- *
- * \param[in]  adrv9001	        Context variable - Pointer to the ADRV9001 device settings data structure
- * \param[in]  pin              The pin for which to get the direction
- * \param[out] direction        Current direction of the pin
- *
- * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
- */
-int32_t adi_adrv9001_gpio_PinDirection_Get(adi_adrv9001_Device_t *device,
-					   adi_adrv9001_GpioPin_e pin,
-					   adi_adrv9001_GpioPinDirection_e *direction);
-
+    
 /**
  * \brief Configure specified pin as manual input
- *
+ * 
  * \note Message type: \ref timing_direct "Direct register access"
  *
  * \param[in] adrv9001	Context variable - Pointer to the ADRV9001 device settings data structure
  * \param[in] pin       The GPIO pin to configure
- *
+ * 
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
  */
 int32_t adi_adrv9001_gpio_ManualInput_Configure(adi_adrv9001_Device_t *adrv9001, adi_adrv9001_GpioPin_e pin);
-
+    
 /**
  * \brief Configure specified pin crumb as manual output
- *
+ * 
  * \note Message type: \ref timing_direct "Direct register access"
  *
  * \param[in] adrv9001	Context variable - Pointer to the ADRV9001 device settings data structure
  * \param[in] crumb     The GPIO pin crumb to configure
- *
+ * 
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
  */
 int32_t adi_adrv9001_gpio_ManualOutput_Configure(adi_adrv9001_Device_t *adrv9001, adi_adrv9001_GpioPinCrumbSel_e crumb);
 
 /**
  * \brief Configure specified analog GPIO pin as manual input
- *
+ * 
  * \note Message type: \ref timing_direct "Direct register access"
  *
  * \param[in] adrv9001	Context variable - Pointer to the ADRV9001 device settings data structure
  * \param[in] pin       The analog GPIO pin to configure
- *
+ * 
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
  */
-int32_t adi_adrv9001_gpio_ManualAnalogInput_Configure(adi_adrv9001_Device_t *adrv9001,
+int32_t adi_adrv9001_gpio_ManualAnalogInput_Configure(adi_adrv9001_Device_t *adrv9001, 
                                                       adi_adrv9001_GpioPin_e pin);
 /**
  * \brief Configure specified analog GPIO pin nibble as manual output
- *
+ * 
  * \note Message type: \ref timing_direct "Direct register access"
  *
  * \param[in] adrv9001	Context variable - Pointer to the ADRV9001 device settings data structure
  * \param[in] nibble    The analog GPIO pin nibble to configure
  * \param[in] source    The source signal to be output on the pins
- *
+ * 
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
  */
-int32_t adi_adrv9001_gpio_ManualAnalogOutput_Configure(adi_adrv9001_Device_t *adrv9001,
+int32_t adi_adrv9001_gpio_ManualAnalogOutput_Configure(adi_adrv9001_Device_t *adrv9001, 
                                                        adi_adrv9001_GpioAnalogPinNibbleSel_e nibble);
 
 /**
@@ -241,7 +224,7 @@ int32_t adi_adrv9001_gpio_ManualAnalogOutput_Configure(adi_adrv9001_Device_t *ad
  */
 int32_t adi_adrv9001_gpio_ControlInit_Configure(adi_adrv9001_Device_t *adrv9001,
                                                 adi_adrv9001_GpioCtrlInitCfg_t *gpioCtrlInitCfg);
-
+    
 /**
  * \brief Configure the ADRV9001 GPIO for the specified signal
  *
@@ -258,7 +241,7 @@ int32_t adi_adrv9001_gpio_ControlInit_Configure(adi_adrv9001_Device_t *adrv9001,
 int32_t adi_adrv9001_gpio_Configure(adi_adrv9001_Device_t *adrv9001,
                                     adi_adrv9001_GpioSignal_e signal,
                                     adi_adrv9001_GpioCfg_t *gpioConfig);
-
+    
 /**
  * \brief Retrieve the ADRV9001 GPIO configuration for the requested signal
  *
