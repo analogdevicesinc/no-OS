@@ -250,14 +250,8 @@ REL_SRCS = $(addprefix $(OBJECTS_DIR)/,$(call get_relative_path,$(SRCS_IN_BUILD)
 OBJS = $(REL_SRCS:.c=.o)
 
 REL_ASM_SRCS = $(addprefix $(OBJECTS_DIR)/,$(call get_relative_path,$(ASM_SRCS)))
-ASM_OBJS_s = $(REL_ASM_SRCS:.s=.o)
-ifneq ($(REL_ASM_SRCS),$(ASM_OBJS_s))
-	ASM_OBJS += $(ASM_OBJS_s)
-endif
-ASM_OBJS_S = $(REL_ASM_SRCS:.S=.o)
-ifneq ($(REL_ASM_SRCS),$(ASM_OBJS_S))
-	ASM_OBJS += $(ASM_OBJS_S)
-endif
+
+ASM_OBJS += $(subst .S,.o,$(subst .s,.o,$(REL_ASM_SRCS)))
 
 #Will be used to add this flags to sdk project
 FLAGS_WITHOUT_D = $(sort $(subst -D,,$(filter -D%, $(CFLAGS))))
@@ -320,15 +314,12 @@ $(OBJECTS_DIR)%/.:
 
 # Build .c files into .o files.
 .SECONDEXPANSION:
-$(OBJECTS_DIR)/%.o: $$(call get_full_path, %).c | $$(@D)/.
+$(OBJECTS_DIR)/%.o: $$(call get_full_path, %).c
 	@$(call print,[CC] $(notdir $<))
 	$(MUTE) $(CC) -c $(CFLAGS) $< -o $@
-
-$(OBJECTS_DIR)/%.o: $$(call get_full_path, %).s | $$(@D)/. 
-	@$(call print,[AS] $(notdir $<))
-	$(MUTE) $(AS) -c $(ASFLAGS) $< -o $@
-
-$(OBJECTS_DIR)/%.o: $$(call get_full_path, %).S | $$(@D)/. 
+	
+$(OBJECTS_DIR)/%.o: $(ASM_SRCS) #$$(call get_full_path, %).s 
+	$(info QWEQWE: $<)
 	@$(call print,[AS] $(notdir $<))
 	$(MUTE) $(AS) -c $(ASFLAGS) $< -o $@
 

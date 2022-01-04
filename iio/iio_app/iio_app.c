@@ -127,12 +127,13 @@ static int32_t iio_print_uart_info_message(struct uart_desc **uart_desc,
 			return status;
 	}
 	maxim_uart_stdio(*uart_desc);	
-	int32_t er = 0;
-	er = printf("123");
+	//int32_t er = 0;
+	//er = printf("123");
 	status = uart_write(*uart_desc, (uint8_t *)message, msglen);
 	if (status < 0)
 		return status;
 
+/*
 	NVIC_DisableIRQ(RTC_IRQn);
 	NVIC_DisableIRQ(GPIO0_IRQn);
 	NVIC_DisableIRQ(UART0_IRQn);
@@ -239,7 +240,7 @@ static int32_t iio_print_uart_info_message(struct uart_desc **uart_desc,
 	gpio_register_callback(irq_desc, IRQ_EDGE_BOTH, &gpio_cb);
 	
 	mdelay(3000);
-
+*/
 	delay_ms = _calc_uart_xfer_time(msglen, UART_BAUDRATE_DEFAULT);
 	mdelay(delay_ms);
 	if (UART_BAUDRATE_DEFAULT != UART_BAUDRATE) {

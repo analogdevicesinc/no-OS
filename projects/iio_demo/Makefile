@@ -10,11 +10,6 @@ TINYIIOD=y
 TARGET=32660
 TARGET_REV=0x4131
 
-ifeq (stm32,$(PLATFORM))
-CFLAGS = -DSTM32F446xx
-CHIPNAME = STM32F446RETx
-endif
-
 include ../../tools/scripts/generic_variables.mk
 
 include src.mk

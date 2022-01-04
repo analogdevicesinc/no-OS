@@ -17,7 +17,7 @@ endif
 
 CC=arm-none-eabi-gcc
 AR=arm-none-eabi-ar
-AS=arm-none-eabi-as
+AS=arm-none-eabi-gcc
 GDB=arm-none-eabi-gdb
 OC=arm-none-eabi-objcopy
 
