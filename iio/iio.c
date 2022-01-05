@@ -119,11 +119,11 @@ struct attr_fun_params {
 };
 
 /**
- * @struct iio_interface
+ * @struct iio_dev_priv
  * @brief Links a physical device instance "void *dev_instance"
  * with a "iio_device *iio" that describes capabilities of the device.
  */
-struct iio_interface {
+struct iio_dev_priv {
 	/** Will be: iio:device[0...n] n beeing the count of registerd devices*/
 	char			dev_id[21];
 	/** Device name */
@@ -147,7 +147,7 @@ struct iio_desc {
 	void			*phy_desc;
 	char			*xml_desc;
 	uint32_t		xml_size;
-	struct iio_interface	*devs;
+	struct iio_dev_priv	*devs;
 	uint32_t		nb_devs;
 	struct uart_desc	*uart_desc;
 #ifdef ENABLE_IIO_NETWORK
@@ -339,10 +339,10 @@ static inline struct iio_channel *iio_get_channel(const char *channel,
 /**
  * @brief Find interface with "device_name".
  * @param device_name - Device name.
- * @param iio_interfaces - List of interfaces.
+ * @param iio_dev_privs - List of interfaces.
  * @return Interface pointer if interface is found, NULL otherwise.
  */
-static struct iio_interface *iio_get_interface(const char *device_name)
+static struct iio_dev_priv *iio_get_interface(const char *device_name)
 {
 	uint32_t i;
 
@@ -466,7 +466,7 @@ static ssize_t iio_rd_wr_attribute(struct attr_fun_params *params,
 /* Read a device register. The register address to read is set on
  * in desc->active_reg_addr in the function set_demo_reg_attr
  */
-static int32_t debug_reg_read(struct iio_interface *dev, char *buf, size_t len)
+static int32_t debug_reg_read(struct iio_dev_priv *dev, char *buf, size_t len)
 {
 	uint32_t		value;
 	int32_t			ret;
@@ -492,7 +492,7 @@ static int32_t debug_reg_read(struct iio_interface *dev, char *buf, size_t len)
  * 	   sprintf(write_buf, "0x%x 0x%x", reg_addr, value);
  * 	1. debug_reg_write(dev, write_buf,len);
  */
-static int32_t debug_reg_write(struct iio_interface *dev, const char *buf,
+static int32_t debug_reg_write(struct iio_dev_priv *dev, const char *buf,
 			       size_t len)
 {
 	uint32_t		nb_filled;
@@ -652,7 +652,7 @@ ssize_t iio_format_value(char *buf, size_t len, enum iio_val fmt,
 static ssize_t iio_read_attr(const char *device_id, const char *attr, char *buf,
 			     size_t len, enum iio_attr_type type)
 {
-	struct iio_interface	*dev;
+	struct iio_dev_priv	*dev;
 	struct attr_fun_params	params;
 	struct iio_attribute	*attributes;
 
@@ -702,7 +702,7 @@ static ssize_t iio_write_attr(const char *device_id, const char *attr,
 			      const char *buf,
 			      size_t len, enum iio_attr_type type)
 {
-	struct iio_interface	*dev;
+	struct iio_dev_priv	*dev;
 	struct attr_fun_params	params;
 	struct iio_attribute	*attributes;
 
@@ -752,7 +752,7 @@ static ssize_t iio_write_attr(const char *device_id, const char *attr,
 static ssize_t iio_ch_read_attr(const char *device_id, const char *channel,
 				bool ch_out, const char *attr, char *buf, size_t len)
 {
-	struct iio_interface	*dev;
+	struct iio_dev_priv	*dev;
 	struct iio_ch_info	ch_info;
 	struct iio_channel	*ch;
 	struct attr_fun_params	params;
@@ -793,7 +793,7 @@ static ssize_t iio_ch_read_attr(const char *device_id, const char *channel,
 static ssize_t iio_ch_write_attr(const char *device_id, const char *channel,
 				 bool ch_out, const char *attr, const char *buf, size_t len)
 {
-	struct iio_interface	*dev;
+	struct iio_dev_priv	*dev;
 	struct iio_ch_info	ch_info;
 	struct iio_channel	*ch;
 	struct attr_fun_params	params;
@@ -831,7 +831,7 @@ static ssize_t iio_ch_write_attr(const char *device_id, const char *channel,
 static int32_t iio_open_dev(const char *device, size_t sample_size,
 			    uint32_t mask, bool cyclic)
 {
-	struct iio_interface *iface;
+	struct iio_dev_priv *iface;
 	uint32_t ch_mask;
 
 	iface = iio_get_interface(device);
@@ -859,7 +859,7 @@ static int32_t iio_open_dev(const char *device, size_t sample_size,
  */
 static int32_t iio_close_dev(const char *device)
 {
-	struct iio_interface *iface;
+	struct iio_dev_priv *iface;
 
 	iface = iio_get_interface(device);
 	if (!iface)
@@ -880,7 +880,7 @@ static int32_t iio_close_dev(const char *device)
  */
 static int32_t iio_get_mask(const char *device, uint32_t *mask)
 {
-	struct iio_interface *iface;
+	struct iio_dev_priv *iface;
 
 	iface = iio_get_interface(device);
 	if (!iface)
@@ -891,7 +891,7 @@ static int32_t iio_get_mask(const char *device, uint32_t *mask)
 	return SUCCESS;
 }
 
-static uint32_t bytes_to_samples(struct iio_interface *intf, uint32_t bytes)
+static uint32_t bytes_to_samples(struct iio_dev_priv *intf, uint32_t bytes)
 {
 	uint32_t bytes_per_sample;
 	uint32_t first_ch;
@@ -927,7 +927,7 @@ static uint32_t bytes_to_samples(struct iio_interface *intf, uint32_t bytes)
  */
 static ssize_t iio_transfer_dev_to_mem(const char *device, size_t bytes_count)
 {
-	struct iio_interface *iio_interface = iio_get_interface(device);
+	struct iio_dev_priv *iio_interface = iio_get_interface(device);
 	struct iio_data_buffer	*r_buff;
 	uint32_t		samples;
 	ssize_t			ret;
@@ -960,7 +960,7 @@ static ssize_t iio_transfer_dev_to_mem(const char *device, size_t bytes_count)
 static ssize_t iio_read_dev(const char *device, char *pbuf, size_t offset,
 			    size_t bytes_count)
 {
-	struct iio_interface *iio_interface = iio_get_interface(device);
+	struct iio_dev_priv *iio_interface = iio_get_interface(device);
 	struct iio_data_buffer *r_buff;
 
 	r_buff = iio_interface->read_buffer;
@@ -984,7 +984,7 @@ static ssize_t iio_read_dev(const char *device, char *pbuf, size_t offset,
  */
 static ssize_t iio_transfer_mem_to_dev(const char *device, size_t bytes_count)
 {
-	struct iio_interface *iio_interface = iio_get_interface(device);
+	struct iio_dev_priv *iio_interface = iio_get_interface(device);
 	struct iio_data_buffer	*w_buff;
 	ssize_t			ret;
 	uint32_t		samples;
@@ -1017,7 +1017,7 @@ static ssize_t iio_transfer_mem_to_dev(const char *device, size_t bytes_count)
 static ssize_t iio_write_dev(const char *device, const char *buf,
 			     size_t offset, size_t bytes_count)
 {
-	struct iio_interface *iio_interface = iio_get_interface(device);
+	struct iio_dev_priv *iio_interface = iio_get_interface(device);
 	struct iio_data_buffer	*w_buff;
 
 	w_buff = iio_interface->write_buffer;
@@ -1241,7 +1241,7 @@ static uint32_t iio_generate_device_xml(struct iio_device *device, char *name,
 
 static int32_t iio_init_xml(struct iio_desc *desc)
 {
-	struct iio_interface *dev;
+	struct iio_dev_priv *dev;
 	uint32_t size, of;
 	int32_t i;
 
@@ -1277,11 +1277,11 @@ static int32_t iio_init_devs(struct iio_desc *desc,
 {
 	uint32_t i;
 	int32_t ret;
-	struct iio_interface *ldev;
+	struct iio_dev_priv *ldev;
 	struct iio_device_init *ndev;
 
 	desc->nb_devs = n;
-	desc->devs = (struct iio_interface *)calloc(desc->nb_devs,
+	desc->devs = (struct iio_dev_priv *)calloc(desc->nb_devs,
 			sizeof(*desc->devs));
 	if (!desc->devs)
 		return -ENOMEM;
