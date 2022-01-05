@@ -7,9 +7,6 @@
 
 TINYIIOD=y
 
-TARGET=32660
-TARGET_REV=0x4131
-
 include ../../tools/scripts/generic_variables.mk
 
 include src.mk

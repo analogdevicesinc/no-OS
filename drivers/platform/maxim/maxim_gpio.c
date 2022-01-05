@@ -225,10 +225,9 @@ int32_t gpio_irq_set_trigger_level(struct gpio_desc *desc, enum irq_trig_level t
 	return 0;
 }
 
-int32_t gpio_register_callback(struct irq_ctrl_desc *ctrl_desc, enum irq_trig_level trig_l, 
-				struct callback_desc *desc)
+int32_t gpio_register_callback(struct irq_ctrl_desc *ctrl_desc, struct callback_desc *desc)
 {
-	if(!desc || !ctrl_desc || !ctrl_desc->extra)
+	if(!desc || !ctrl_desc || !desc->config)
 		return -EINVAL;
 	
 /*
@@ -239,13 +238,16 @@ int32_t gpio_register_callback(struct irq_ctrl_desc *ctrl_desc, enum irq_trig_le
 	}
 */
 	int32_t error = 0;
-	struct gpio_desc *g_desc = ctrl_desc->extra;
+	struct maxim_gpio_irq *g_irq = desc->config;
+	struct gpio_desc *g_desc = g_irq->desc;
+	enum irq_mode trig_level = g_irq->trig;
+
 	struct callback_desc *descriptor = calloc(1, sizeof(*descriptor));
 	if(!descriptor)
 		return -ENOMEM;
 		
 	error = gpio_direction_input(g_desc);
-	error = gpio_irq_set_trigger_level(g_desc, trig_l);
+	error = gpio_irq_set_trigger_level(g_desc, trig_level);
 	if(error){
 		free(descriptor);
 		return error;

@@ -22,8 +22,11 @@ int32_t spi_init(struct spi_desc **desc, const struct spi_init_param *param)
 	descriptor->platform_ops = &maxim_spi_ops;
 	descriptor->extra = param->extra;
 
-	if(SPI_Init(SPI0A, descriptor->mode, param->max_speed_hz) != 0)
-		return -1;
+	int32_t err = SPI_Init(SPI0A, descriptor->mode, param->max_speed_hz); 
+	if(err != 0) {
+		free(descriptor);
+		return err;
+	}
 
 	*desc = descriptor;		
 

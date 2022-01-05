@@ -50,6 +50,7 @@ int32_t rtc_init(struct rtc_desc **device, struct rtc_init_param *init_param)
 	int32_t ret = 0;
 	struct rtc_desc *dev;
 	sys_cfg_rtc_t sys_cfg;
+	tmr_cfg_t tmr;
 
 	if(!init_param)
 		return -EINVAL;
@@ -71,8 +72,15 @@ int32_t rtc_init(struct rtc_desc **device, struct rtc_init_param *init_param)
 	dev->load = init_param->load;
 	dev->extra = rtc_maxim;
 
-	sys_cfg.tmr = MXC_TMR0;
-	MXC_TMR0->cn |= MXC_F_TMR_CN_TEN;
+/*	sys_cfg.tmr = MXC_TMR0;
+	TMR_Disable(MXC_TMR0);
+	TMR_Init(MXC_TMR0, TMR_PRES_1, 0);
+	TMR_Enable(MXC_TMR0);
+*/	
+	//MXC_TMR0->cn |= MXC_F_TMR_CN_TEN;
+	
+	TMR_Enable(MXC_TMR0);	
+
 	if(RTC_Init(MXC_RTC, dev->load, maxim_init_param->ms_load, &sys_cfg) != E_NO_ERROR) {
 		ret = -1;
 		goto error;
@@ -218,6 +226,22 @@ int32_t rtc_unregister_callback()
 	cb->ctx = NULL;
 	cb->callback = NULL;
 	cb->config = NULL;
+
+	return 0;
+}
+
+int32_t rtc_enable_interrupt(enum rtc_interrupt_id interrupt_id)
+{
+	switch(interrupt_id) {
+	case RTC_TIMEOFDAY_IRQ:
+		RTC_EnableTimeofdayInterrupt(MXC_RTC);
+		break;
+	case RTC_SUBSEC_IRQ:
+		RTC_EnableSubsecInterrupt(MXC_RTC);
+		break;
+	case default:
+		return -EINVAL; 
+	}
 
 	return 0;
 }

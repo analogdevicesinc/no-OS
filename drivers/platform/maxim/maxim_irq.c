@@ -44,27 +44,21 @@ int32_t irq_register_callback(struct irq_ctrl_desc *desc, uint32_t irq_id,
 {
 	if(!desc || irq_id >= MXC_IRQ_COUNT)
 		return -EINVAL;
-
-	struct callback_desc *callback_d = calloc(1, sizeof(*callback_d));
-	if(!callback_d)
-		return -ENOMEM;
 	
-	callback_d->callback = callback_desc->callback;
-	callback_d->ctx = callback_desc->ctx;
-	callback_d->config = callback_d->config;
-
 	switch(irq_id){
 	case MAX_UART0_INT_ID:
-		uart_register_callback(0, callback_d);
+		uart_register_callback(0, callback_desc);
 		break;
 	case MAX_UART1_INT_ID:
-		uart_register_callback(1, callback_d);
+		uart_register_callback(1, callback_desc);
 		break;
 	case MAX_GPIO_INT_ID:
-		gpio_register_callback(0, callback_d);
+		struct maxim_gpio_irq *mconfig = callback_desc->config;
+		enum irq_mode trig_level = mconfig->desc->number;
+		gpio_register_callback(desc, callback_desc);
 		break;
 	case MAX_RTC_INT_ID:
-		rtc_register_callback(callback_d);
+		rtc_register_callback(callback_desc);
 		break;
 	}
 
