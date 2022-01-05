@@ -280,6 +280,8 @@ int32_t iio_app_run(struct iio_app_device *devices, int32_t len)
 	struct uart_desc	*uart_desc;
 	struct uart_init_param	*uart_init_par;
 	void			*irq_desc = NULL;
+	struct iio_device_init	*iio_init_devs;
+	uint32_t		i;
 
 
 #if defined(ADUCM_PLATFORM) || (defined(XILINX_PLATFORM) && !defined(PLATFORM_MB))
@@ -305,21 +307,35 @@ int32_t iio_app_run(struct iio_app_device *devices, int32_t len)
 	iio_init_param.uart_desc = uart_desc;
 #endif
 
+	iio_init_devs = calloc(len, sizeof(*iio_init_devs));
+	if (!iio_init_devs)
+		return -ENOMEM;
+
+	for (i = 0; i < len; ++i) {
+		/*
+		 * iio_app_device is from iio_app.h and we don't want to include
+		 * this in iio.h.
+		 * At the moment iio_device_init has the same parameters but
+		 * it will change.
+		 * When changes are done in iio. iio_app_device may be removed
+		 * and use iio_device_init instead.
+		 * This way faster changes can be done without changing all
+		 * project for each change.
+		 */
+		iio_init_devs[i].name = devices[i].name;
+		iio_init_devs[i].dev = devices[i].dev;
+		iio_init_devs[i].dev_descriptor = devices[i].dev_descriptor;
+		iio_init_devs[i].read_buff = devices[i].read_buff;
+		iio_init_devs[i].write_buff = devices[i].write_buff;
+	}
+
+	iio_init_param.devs = iio_init_devs;
+	iio_init_param.nb_devs = len;
 	status = iio_init(&iio_desc, &iio_init_param);
 	if(status < 0)
 		goto error;
 
-	int32_t i;
-	for (i = 0; i < len; i++) {
-		status = iio_register(iio_desc,
-				      devices[i].dev_descriptor,
-				      devices[i].name,
-				      devices[i].dev,
-				      devices[i].read_buff,
-				      devices[i].write_buff);
-		if (status < 0)
-			goto error;
-	}
+	free(iio_init_devs);
 
 	do {
 		status = iio_step(iio_desc);
