@@ -64,6 +64,14 @@ enum pysical_link_type {
 
 struct iio_desc;
 
+struct iio_device_init {
+	char *name;
+	void *dev;
+	struct iio_device *dev_descriptor;
+	struct iio_data_buffer *read_buff;
+	struct iio_data_buffer *write_buff;
+};
+
 struct iio_init_param {
 	enum pysical_link_type	phy_type;
 	union {
@@ -72,6 +80,8 @@ struct iio_init_param {
 		struct tcp_socket_init_param *tcp_socket_init_param;
 #endif
 	};
+	struct iio_device_init *devs;
+	int32_t nb_devs;
 };
 
 /******************************************************************************/
@@ -85,13 +95,7 @@ ssize_t iio_init(struct iio_desc **desc, struct iio_init_param *init_param);
 ssize_t iio_remove(struct iio_desc *desc);
 /* Execut an iio step. */
 ssize_t iio_step(struct iio_desc *desc);
-/* Register interface. */
-ssize_t iio_register(struct iio_desc *desc, struct iio_device *dev_descriptor,
-		     char *name, void *dev_instance,
-		     struct iio_data_buffer *read_buff,
-		     struct iio_data_buffer *write_buff);
-/* Unregister interface. */
-ssize_t iio_unregister(struct iio_desc *desc, char *name);
+
 int32_t iio_parse_value(char *buf, enum iio_val fmt,
 			int32_t *val, int32_t *val2);
 ssize_t iio_format_value(char *buf, size_t len, enum iio_val fmt,
