@@ -136,6 +136,20 @@ static int32_t iio_print_uart_info_message(struct uart_desc **uart_desc,
 	if (status < 0)
 		return status;
 
+	spi_init_param init_param = {
+		.device_id = 0,
+		.max_speed_hz = 500000,
+		.chip_select = 0,
+		.mode = SPI_MODE_2,
+		.bit_order = SPI_BIT_ORDER_MSB_FIRST,
+		.platform_ops = NULL,
+		.extra = NULL
+	};
+
+	spi_desc *s_desc;
+	int32_t err = spi_init(&s_desc, &init_param);
+	
+
 	/*
 		NVIC_DisableIRQ(RTC_IRQn);
 		NVIC_DisableIRQ(GPIO0_IRQn);
