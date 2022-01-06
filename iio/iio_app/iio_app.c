@@ -66,6 +66,7 @@
 #include "maxim_uart.h"
 #include "gpio_extra.h"
 #include "spi_extra.h"
+#include "no-os/util.h"
 #include "irq_extra.h"
 #include "rtc_extra.h"
 #include "maxim_stdio.h"
@@ -148,7 +149,8 @@ static int32_t iio_print_uart_info_message(struct uart_desc **uart_desc,
 
 	spi_desc *s_desc;
 	int32_t err = spi_init(&s_desc, &init_param);
-	
+	uint8_t *msg = "abcd!!";
+	err = spi_write_and_read(s_desc, msg, 6);	
 
 	/*
 		NVIC_DisableIRQ(RTC_IRQn);

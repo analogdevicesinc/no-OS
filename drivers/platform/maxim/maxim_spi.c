@@ -46,17 +46,17 @@ int32_t spi_write_and_read(struct spi_desc *desc,
 	if(!desc || !data)
 		return -EINVAL;
 	
-	uint8_t *tx_buffer = *data;
-	uint8_t *rx_buffer = *data;
+	uint8_t *tx_buffer = data;
+	uint8_t *rx_buffer = data;
 	spi_req_t req;
 	
 	req.bits = 8;
 	req.ssel = 0;
-	req.tx_data = *tx_buffer;
+	req.tx_data = tx_buffer;
 	req.tx_num = 0;
-	req.rx_data = *rx_buffer;
+	req.rx_data = rx_buffer;
 	req.rx_num = 0;	
-	req.deass = 1;
+	req.deass = 0;
 	req.len = bytes_number;	
 	
 	SPI_MasterTrans(SPI0A, &req);	
