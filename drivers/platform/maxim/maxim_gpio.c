@@ -238,9 +238,9 @@ int32_t gpio_register_callback(struct irq_ctrl_desc *ctrl_desc, struct callback_
 	}
 */
 	int32_t error = 0;
-	struct maxim_gpio_irq *g_irq = desc->config;
+	struct gpio_irq_config *g_irq = desc->config;
 	struct gpio_desc *g_desc = g_irq->desc;
-	enum irq_mode trig_level = g_irq->trig;
+	enum irq_trig_level trig_level = g_irq->mode;
 
 	struct callback_desc *descriptor = calloc(1, sizeof(*descriptor));
 	if(!descriptor)

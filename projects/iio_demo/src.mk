@@ -84,9 +84,9 @@ SRCS += $(PLATFORM_DRIVERS)/maxim_uart.c 	\
 	$(PLATFORM_DRIVERS)/maxim_rtc.c			\
 	$(PLATFORM_DRIVERS)/maxim_spi.c			\
 	$(MAXIM_LIBRARIES)/MAX32660PeriphDriver/Source/uart.c 	\
-	$(PLATFORM_DRIVERS)/maxim_delay.c 	\
 	$(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/MAX32660/Source/heap.c	 \
 	$(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/MAX32660/Source/system_max32660.c	 \
+	$(PLATFORM_DRIVERS)/maxim_delay.c 	\
 	$(MAXIM_LIBRARIES)/MAX32660PeriphDriver/Source/mxc_delay.c			\
 	$(MAXIM_LIBRARIES)/MAX32660PeriphDriver/Source/mxc_pins.c			\
 	$(MAXIM_LIBRARIES)/MAX32660PeriphDriver/Source/mxc_lock.c			\
@@ -143,3 +143,4 @@ INCS += $(INCLUDE)/no-os/gpio.h \
 		$(INCLUDE)/no-os/trng.h
 
 endif
+

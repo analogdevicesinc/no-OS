@@ -53,8 +53,6 @@ int32_t irq_register_callback(struct irq_ctrl_desc *desc, uint32_t irq_id,
 		uart_register_callback(1, callback_desc);
 		break;
 	case MAX_GPIO_INT_ID:
-		struct maxim_gpio_irq *mconfig = callback_desc->config;
-		enum irq_mode trig_level = mconfig->desc->number;
 		gpio_register_callback(desc, callback_desc);
 		break;
 	case MAX_RTC_INT_ID:

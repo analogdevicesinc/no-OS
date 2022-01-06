@@ -50,7 +50,6 @@ int32_t rtc_init(struct rtc_desc **device, struct rtc_init_param *init_param)
 	int32_t ret = 0;
 	struct rtc_desc *dev;
 	sys_cfg_rtc_t sys_cfg;
-	tmr_cfg_t tmr;
 
 	if(!init_param)
 		return -EINVAL;
@@ -239,7 +238,7 @@ int32_t rtc_enable_interrupt(enum rtc_interrupt_id interrupt_id)
 	case RTC_SUBSEC_IRQ:
 		RTC_EnableSubsecInterrupt(MXC_RTC);
 		break;
-	case default:
+	default:
 		return -EINVAL; 
 	}
 

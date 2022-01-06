@@ -314,12 +314,11 @@ $(OBJECTS_DIR)%/.:
 
 # Build .c files into .o files.
 .SECONDEXPANSION:
-$(OBJECTS_DIR)/%.o: $$(call get_full_path, %).c
+$(OBJECTS_DIR)/%.o: $$(call get_full_path, %).c | $$(@D)/.
 	@$(call print,[CC] $(notdir $<))
 	$(MUTE) $(CC) -c $(CFLAGS) $< -o $@
 	
-$(OBJECTS_DIR)/%.o: $(ASM_SRCS) #$$(call get_full_path, %).s 
-	$(info QWEQWE: $<)
+$(OBJECTS_DIR)/%.o: $(ASM_SRCS) | $$(@D)/. 
 	@$(call print,[AS] $(notdir $<))
 	$(MUTE) $(AS) -c $(ASFLAGS) $< -o $@
 
