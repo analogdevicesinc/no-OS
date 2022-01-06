@@ -13,7 +13,7 @@
 
 SRCS += $(PROJECT)/src/ad6676_ebz.c
 ifeq (y,$(strip $(TINYIIOD)))
-SRCS += $(PROJECT)/src/app_iio.c
+SRC_DIRS += $(NO-OS)/iio/iio_app
 endif
 SRCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c \
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.c \
@@ -40,9 +40,6 @@ SRCS += $(NO-OS)/util/fifo.c \
 endif
 INCS +=	$(PROJECT)/src/app_config.h \
 	$(PROJECT)/src/parameters.h
-ifeq (y,$(strip $(TINYIIOD)))
-INCS +=	$(PROJECT)/src/app_iio.h
-endif
 INCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.h \
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.h \
 	$(DRIVERS)/axi_core/clk_axi_clkgen/clk_axi_clkgen.h \

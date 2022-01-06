@@ -464,13 +464,12 @@ int32_t ltc2688_init(struct ltc2688_dev **device,
 		goto error;
 
 	*device = dev;
+	printf("LTC2688 successfully initialized\n");
 
-	if (!ret)
-		printf("LTC2688 successfully initialized\n");
-	else
-		printf("LTC2688 initialization error (%d)\n", ret);
+	return ret;
 
 error:
+	printf("LTC2688 initialization error (%d)\n", ret);
 	free(dev);
 	return ret;
 }
