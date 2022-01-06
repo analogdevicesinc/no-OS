@@ -10,7 +10,6 @@
 
 #define N_INT	14
 
-struct gpio_platform_ops gpio_ops;
 static struct callback_desc *gpio_callback[N_INT];
 
 void GPIO0_IRQHandler()
@@ -271,7 +270,7 @@ int32_t gpio_unregister_callback(uint8_t pin)
 	return 0;
 }
 
-struct gpio_platform_ops gpio_ops = {
+const struct gpio_platform_ops gpio_ops = {
 	.gpio_ops_get = &gpio_get,
 	.gpio_ops_get_optional = &gpio_get_optional,
 	.gpio_ops_remove = &gpio_remove,

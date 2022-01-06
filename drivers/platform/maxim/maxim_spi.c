@@ -2,8 +2,7 @@
 #include <errno.h>
 #include "no-os/spi.h"
 #include "spi.h"
-
-struct spi_platform_ops maxim_spi_ops;
+#include "spi_extra.h"
 
 int32_t spi_init(struct spi_desc **desc, const struct spi_init_param *param)
 {
@@ -19,7 +18,7 @@ int32_t spi_init(struct spi_desc **desc, const struct spi_init_param *param)
 	descriptor->chip_select = param->chip_select;
 	descriptor->mode = param->mode;
 	descriptor->bit_order = param->bit_order;
-	descriptor->platform_ops = &maxim_spi_ops;
+	descriptor->platform_ops = &spi_ops;
 	descriptor->extra = param->extra;
 
 	int32_t err = SPI_Init(SPI0A, descriptor->mode, param->max_speed_hz); 
@@ -86,7 +85,7 @@ int32_t spi_transfer(struct spi_desc *desc, struct spi_msg *msgs, uint32_t len)
 	return 0;
 }
 
-struct spi_platform_ops maxim_spi_ops = {
+const struct spi_platform_ops spi_ops = {
 	.init = &spi_init,
 	.write_and_read = &spi_write_and_read,
 	.transfer = &spi_transfer,

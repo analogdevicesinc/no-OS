@@ -7,7 +7,6 @@
 #include "gpio.h"
 
 static struct callback_desc *irq_callback_desc;
-const struct irq_platform_ops maxim_irq_ops;
 
 int32_t irq_ctrl_init(struct irq_ctrl_desc **desc,
 		      const struct irq_init_param *param)
@@ -20,7 +19,7 @@ int32_t irq_ctrl_init(struct irq_ctrl_desc **desc,
 		return -ENOMEM;
 
 	descriptor->irq_ctrl_id = param->irq_ctrl_id;
-	descriptor->platform_ops = &maxim_irq_ops;
+	descriptor->platform_ops = &irq_ops;
 	descriptor->extra = param->extra;
 	
 	*desc = descriptor;	
@@ -131,7 +130,7 @@ int32_t irq_disable(struct irq_ctrl_desc *desc, uint32_t irq_id)
 	return 0;
 }
 
-const struct irq_platform_ops maxim_irq_ops = {
+const struct irq_platform_ops irq_ops = {
 	.init = &irq_ctrl_init,
 	.register_callback = &irq_register_callback,
 	.unregister = &irq_unregister,

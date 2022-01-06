@@ -8,6 +8,8 @@
 #define N_PINS	14
 #define N_PORTS	1
 
+extern const struct gpio_platform_ops gpio_ops;
+
 struct gpio_irq_config {
 	struct gpio_desc *desc;
 	enum irq_trig_level mode;

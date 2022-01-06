@@ -14,5 +14,7 @@ enum irq_id {
 	MAX_RTC_INT_ID = RTC_IRQn,
 };
 
+extern const struct irq_platform_ops irq_ops;
+
 #endif
 
