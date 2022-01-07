@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   ad9361/src/parameters.h
+ *   @file   iio_demo/src/app/parameters.h
  *   @brief  Parameters Definitions.
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
