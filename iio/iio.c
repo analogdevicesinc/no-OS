@@ -1080,7 +1080,7 @@ ssize_t iio_step(struct iio_desc *desc)
  * If buff_size is 0, no data will be written to buff, but size will be returned
  */
 static uint32_t iio_generate_device_xml(struct iio_device *device, char *name,
-					int32_t id, char *buff,
+					char *id, char *buff,
 					uint32_t buff_size)
 {
 	struct iio_channel	*ch;
@@ -1102,7 +1102,7 @@ static uint32_t iio_generate_device_xml(struct iio_device *device, char *name,
 
 	i = 0;
 	i += snprintf(buff, max(n - i, 0),
-		      "<device id=\"device%"PRIi32"\" name=\"%s\">", id, name);
+		      "<device id=\"%s\" name=\"%s\">", id, name);
 
 	/* Write channels */
 	if (device->channels)
@@ -1275,10 +1275,11 @@ ssize_t iio_register(struct iio_desc *desc, struct iio_device *dev_descriptor,
 	iio_interface->read_buffer = read_buff;
 	iio_interface->write_buffer = write_buff;
 
+	sprintf((char *)iio_interface->dev_id, "iio:device%d", (int)desc->dev_count);
 	/* Get number of bytes needed for the xml of the new device */
 	n = iio_generate_device_xml(iio_interface->dev_descriptor,
 				    (char *)iio_interface->name,
-				    desc->dev_count, NULL, -1);
+				    (char *)iio_interface->dev_id, NULL, -1);
 
 	new_size = desc->xml_size + n;
 	aux = realloc(desc->xml_desc, new_size);
@@ -1298,10 +1299,9 @@ ssize_t iio_register(struct iio_desc *desc, struct iio_device *dev_descriptor,
 	/* Print the new device xml at the end of the xml */
 	iio_generate_device_xml(iio_interface->dev_descriptor,
 				(char *)iio_interface->name,
-				desc->dev_count,
+				(char *)iio_interface->dev_id,
 				desc->xml_desc + desc->xml_size_to_last_dev,
 				new_size - desc->xml_size_to_last_dev);
-	sprintf((char *)iio_interface->dev_id, "iio:device%d", (int)desc->dev_count);
 	desc->xml_size_to_last_dev += n;
 	desc->xml_size += n;
 	/* Copy end header at the end */
@@ -1337,7 +1337,7 @@ ssize_t iio_unregister(struct iio_desc *desc, char *name)
 	/* Get number of bytes needed for the xml of the device */
 	n = iio_generate_device_xml(to_remove_interface->dev_descriptor,
 				    (char *)to_remove_interface->name,
-				    desc->dev_count, NULL, -1);
+				    (char *)to_remove_interface->dev_id,, NULL, -1);
 
 	/* Overwritte the deleted device */
 	aux = desc->xml_desc + desc->xml_size_to_last_dev - n;
