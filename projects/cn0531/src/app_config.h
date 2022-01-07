@@ -1,6 +1,6 @@
 /***************************************************************************//**
  *   @file   app_config.h
- *   @brief  Config file of AD9361/API Driver.
+ *   @brief  Config file of CN0531 project.
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
  * Copyright 2015(c) Analog Devices, Inc.
