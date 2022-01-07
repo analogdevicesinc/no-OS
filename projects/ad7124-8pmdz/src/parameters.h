@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   ad9361/src/parameters.h
+ *   @file   ad7124-8pmdz/src/parameters.h
  *   @brief  Parameters Definitions.
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
