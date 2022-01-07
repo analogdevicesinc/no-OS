@@ -1,6 +1,6 @@
 /***************************************************************************//**
  *   @file   uc_settings.h
- *   @brief  Config file of AD9361/API Driver.
+ *   @brief  Use Case Settings of AD9083 project.
  *   @author Cristian Pop (cristian.pop@analog.com)
 ********************************************************************************
  * Copyright 2021(c) Analog Devices, Inc.
