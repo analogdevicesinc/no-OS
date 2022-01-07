@@ -164,7 +164,7 @@ int32_t axi_adc_delay_set(struct axi_adc *adc,
 	axi_adc_read(adc, 0x0, &pcore_version);
 	pcore_version >>= 16;
 	if (pcore_version < 9) {
-		printf(" pcore_version is : %d\n\r", pcore_version);
+		printf(" pcore_version is : %d\n\r", (int)pcore_version);
 		printf(" DRIVER DOES NOT SUPPORT PCORE VERSIONS OLDER THAN 10 !");
 		return FAILURE;
 	} else {
@@ -173,7 +173,7 @@ int32_t axi_adc_delay_set(struct axi_adc *adc,
 			axi_adc_read(adc, AXI_ADC_REG_DELAY(i), &rdata);
 			if (rdata != delay) {
 				printf("adc_delay_1: sel(%2d), rcv(%04x), exp(%04x)\n\r",
-				       i, rdata, delay);
+				       (int)i, (int)rdata, (int)delay);
 			}
 		}
 	}
