@@ -15,17 +15,18 @@ struct rtc_desc_maxim {
 };
 
 enum rtc_interrupt_id {
-	RTC_TIMEOFDAY_IRQ,
-	RTC_SUBSEC_IRQ
+	RTC_TIMEOFDAY_INT,
+	RTC_SUBSEC_INT
 };
 
 enum timer_freq {
 	MAX_1024HZ
 };
 
+int32_t rtc_enable_irq();
+int32_t rtc_disable_irq();
 int32_t rtc_register_callback(struct callback_desc *);
 int32_t rtc_unregister_callback();
-int32_t rtc_enable_interrupt(enum rtc_interrupt_id interrupt_id);
 
 #endif
 

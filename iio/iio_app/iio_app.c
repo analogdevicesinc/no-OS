@@ -139,11 +139,11 @@ static int32_t iio_print_uart_info_message(struct uart_desc **uart_desc,
 
 	spi_init_param init_param = {
 		.device_id = 0,
-		.max_speed_hz = 500000,
-		.chip_select = 0,
-		.mode = SPI_MODE_2,
+		.max_speed_hz = 600000,
+		.chip_select = 1,
+		.mode = SPI_MODE_3,
 		.bit_order = SPI_BIT_ORDER_MSB_FIRST,
-		.platform_ops = NULL,
+		.platform_ops = &max_spi_ops,
 		.extra = NULL
 	};
 
@@ -152,7 +152,6 @@ static int32_t iio_print_uart_info_message(struct uart_desc **uart_desc,
 	uint8_t *msg = "abcd!!";
 	err = spi_write_and_read(s_desc, msg, 6);	
 
-	/*
 		NVIC_DisableIRQ(RTC_IRQn);
 		NVIC_DisableIRQ(GPIO0_IRQn);
 		NVIC_DisableIRQ(UART0_IRQn);
@@ -174,12 +173,12 @@ static int32_t iio_print_uart_info_message(struct uart_desc **uart_desc,
 		gpio_desc *desc2;
 		struct gpio_init_param param = {
 			.number = 8,
-			.platform_ops = NULL,
+			.platform_ops = &gpio_ops,
 			.extra = &param_extra
 		};
 		struct gpio_init_param param2 = {
 			.number = 9,
-			.platform_ops = NULL,
+			.platform_ops = &gpio_ops,
 			.extra = &param_extra2
 		};
 
@@ -234,12 +233,18 @@ static int32_t iio_print_uart_info_message(struct uart_desc **uart_desc,
 
 		struct irq_init_param irq_param = {
 			.irq_ctrl_id = 10,
-			.platform_ops = NULL,
+			.platform_ops = &irq_ops,
 			.extra = NULL
 		};
 
+		struct gpio_irq_config g_config = {
+			.desc = &desc2,
+			.mode = IRQ_EDGE_RISING
+		}; 
+		irq_param.extra = &g_config;
+
 		struct irq_ctrl_desc *irq_desc;
-		int32_t err = irq_ctrl_init(&irq_desc, &irq_param);
+		err = irq_ctrl_init(&irq_desc, &irq_param);
 		err = uart_register_callback(0, &cb);
 		err = uart_register_callback(1, &cb);
 		err = rtc_register_callback(&rtc_cb);
@@ -247,7 +252,10 @@ static int32_t iio_print_uart_info_message(struct uart_desc **uart_desc,
 		cb.callback = gpio_cb;
 		gpio_get(&desc2, &param2);
 		//error = gpio_get(&desc, &param);
-
+	
+			
+		irq_register_callback(irq_desc, MAX_GPIO_INT_ID, &cb);
+	
 		uint8_t v = 0;
 		irq_desc->extra = desc;
 		gpio_set_value(desc2, GPIO_LOW);
@@ -256,10 +264,7 @@ static int32_t iio_print_uart_info_message(struct uart_desc **uart_desc,
 		gpio_set_value(desc, GPIO_HIGH);
 		gpio_set_value(desc2, GPIO_HIGH);
 
-		gpio_register_callback(irq_desc, IRQ_EDGE_BOTH, &gpio_cb);
-
 		mdelay(3000);
-	*/
 	delay_ms = _calc_uart_xfer_time(msglen, UART_BAUDRATE_DEFAULT);
 	mdelay(delay_ms);
 	if (UART_BAUDRATE_DEFAULT != UART_BAUDRATE) {

@@ -1,16 +1,30 @@
 #include <stdlib.h>
 #include <errno.h>
-#include "no-os/spi.h"
 #include "spi.h"
 #include "spi_extra.h"
+#include "gpio.h"
+#include "no-os/gpio.h"
+#include "no-os/spi.h"
+#include "no-os/util.h"
 
-int32_t spi_init(struct spi_desc **desc, const struct spi_init_param *param)
+int32_t max_spi_init(struct spi_desc **desc, const struct spi_init_param *param)
 {
 	if(!param)
 		return -EINVAL;
 
+	int32_t ret;
+	struct gpio_init_param cs_init_param;
+	struct gpio_desc *cs_desc = calloc(1, sizeof(*cs_desc));
 	struct spi_desc *descriptor = calloc(1, sizeof(*descriptor));
-	if(!descriptor)
+	
+	gpio_cfg_t g_cfg = {
+		.port = 0,
+		.mask = BIT(descriptor->chip_select),
+		.pad = GPIO_PAD_PULL_UP,
+		.func = GPIO_FUNC_OUT
+	};
+
+	if(!descriptor || !cs_desc)
 		return -ENOMEM;
 
 	descriptor->device_id = param->device_id;
@@ -18,13 +32,21 @@ int32_t spi_init(struct spi_desc **desc, const struct spi_init_param *param)
 	descriptor->chip_select = param->chip_select;
 	descriptor->mode = param->mode;
 	descriptor->bit_order = param->bit_order;
-	descriptor->platform_ops = &spi_ops;
-	descriptor->extra = param->extra;
+	descriptor->platform_ops = &max_spi_ops;
 
-	int32_t err = SPI_Init(SPI0A, descriptor->mode, param->max_speed_hz); 
-	if(err != 0) {
+	cs_init_param.number = 0;
+	cs_init_param.platform_ops = NULL;
+	cs_init_param.extra = &g_cfg;
+	
+	ret = max_gpio_get(&cs_desc, &cs_init_param);
+	ret = max_gpio_direction_output(cs_desc, GPIO_HIGH);
+	descriptor->extra = cs_desc;
+	
+	ret = SPI_Init(SPI0A, descriptor->mode, param->max_speed_hz); 
+	if(ret != 0) {
 		free(descriptor);
-		return err;
+		free(cs_desc);
+		return ret;
 	}
 
 	*desc = descriptor;		
@@ -32,14 +54,17 @@ int32_t spi_init(struct spi_desc **desc, const struct spi_init_param *param)
 	return 0;
 }
 
-int32_t spi_remove(struct spi_desc *desc)
-{	
+int32_t max_spi_remove(struct spi_desc *desc)
+{
+	if(!desc)
+		return -EINVAL;
+	max_gpio_remove(desc->extra);
 	free(desc);
 	
 	return 0;
 }
 
-int32_t spi_write_and_read(struct spi_desc *desc,
+int32_t max_spi_write_and_read(struct spi_desc *desc,
 			   uint8_t *data,
 			   uint16_t bytes_number)
 {	
@@ -64,7 +89,7 @@ int32_t spi_write_and_read(struct spi_desc *desc,
 	return 0;
 }
 
-int32_t spi_transfer(struct spi_desc *desc, struct spi_msg *msgs, uint32_t len)
+int32_t max_spi_transfer(struct spi_desc *desc, struct spi_msg *msgs, uint32_t len)
 {
 	if(!desc || !msgs)
 		return -EINVAL;
@@ -85,10 +110,10 @@ int32_t spi_transfer(struct spi_desc *desc, struct spi_msg *msgs, uint32_t len)
 	return 0;
 }
 
-const struct spi_platform_ops spi_ops = {
-	.init = &spi_init,
-	.write_and_read = &spi_write_and_read,
-	.transfer = &spi_transfer,
-	.remove = &spi_remove
+const struct spi_platform_ops max_spi_ops = {
+	.init = &max_spi_init,
+	.write_and_read = &max_spi_write_and_read,
+	.transfer = &max_spi_transfer,
+	.remove = &max_spi_remove
 };
 

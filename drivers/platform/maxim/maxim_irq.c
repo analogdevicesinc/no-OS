@@ -5,10 +5,12 @@
 #include "irq_extra.h"
 #include "nvic_table.h"
 #include "gpio.h"
+#include "gpio_extra.h"
+#include "rtc_extra.h"
 
 static struct callback_desc *irq_callback_desc;
 
-int32_t irq_ctrl_init(struct irq_ctrl_desc **desc,
+int32_t max_irq_ctrl_init(struct irq_ctrl_desc **desc,
 		      const struct irq_init_param *param)
 {
 	if(!param)
@@ -27,7 +29,7 @@ int32_t irq_ctrl_init(struct irq_ctrl_desc **desc,
 	return 0;
 }
 
-int32_t irq_ctrl_remove(struct irq_ctrl_desc *desc)
+int32_t max_irq_ctrl_remove(struct irq_ctrl_desc *desc)
 {
 	for(uint32_t i = 0; i < MXC_IRQ_COUNT; i++) {
 		NVIC_DisableIRQ(BASE_IRQ + i);
@@ -38,92 +40,143 @@ int32_t irq_ctrl_remove(struct irq_ctrl_desc *desc)
 	return 0;
 }
 
-int32_t irq_register_callback(struct irq_ctrl_desc *desc, uint32_t irq_id,
+int32_t max_irq_register_callback(struct irq_ctrl_desc *desc, uint32_t irq_id,
 			      struct callback_desc *callback_desc)
 {
-	if(!desc || irq_id >= MXC_IRQ_COUNT)
+	if(!desc)
 		return -EINVAL;
+	
+	int32_t ret = 0;
 	
 	switch(irq_id){
 	case MAX_UART0_INT_ID:
-		uart_register_callback(0, callback_desc);
+		ret = uart_register_callback(0, callback_desc);
 		break;
 	case MAX_UART1_INT_ID:
-		uart_register_callback(1, callback_desc);
+		ret = uart_register_callback(1, callback_desc);
 		break;
 	case MAX_GPIO_INT_ID:
-		gpio_register_callback(desc, callback_desc);
+		ret = max_gpio_register_callback(desc, callback_desc);
 		break;
 	case MAX_RTC_INT_ID:
-		rtc_register_callback(callback_desc);
+		ret = rtc_register_callback(callback_desc);
 		break;
+	default:
+		return -EINVAL;
 	}
 
-	return 0;
+	return ret;
 }
 
-int32_t irq_unregister(struct irq_ctrl_desc *desc, uint32_t irq_id)
+int32_t max_irq_unregister(struct irq_ctrl_desc *desc, uint32_t irq_id)
 {
-	if(!desc || irq_id >= MXC_IRQ_COUNT)
+	if(!desc)
 		return -EINVAL;
-
+	
+	int32_t ret = 0;
+	
 	switch(irq_id){
 	case MAX_UART0_INT_ID:
-		uart_unregister_callback(0);
+		ret = uart_unregister_callback(0);
 		break;
 	case MAX_UART1_INT_ID:
-		uart_unregister_callback(1);
+		ret = uart_unregister_callback(1);
 		break;
 	case MAX_GPIO_INT_ID:
-		gpio_unregister_callback(0);
+		ret = max_gpio_unregister_callback(desc);
 		break;
 	case MAX_RTC_INT_ID:
-		rtc_unregister_callback();
+		ret = rtc_unregister_callback();
 		break;
+	default:
+		return -EINVAL;
 	}
 
-	return 0;
+	return ret;
 }
 
-int32_t irq_global_enable(struct irq_ctrl_desc *desc)
+int32_t max_irq_global_enable(struct irq_ctrl_desc *desc)
 {
 	if(!desc)
 		return -EINVAL;
 
 	for(uint32_t i = 0; i < MXC_IRQ_COUNT; i++) {
 		NVIC_EnableIRQ(BASE_IRQ + i);
+		if(i == MAX_GPIO_INT_ID)
+			max_gpio_enable_irq(desc);
+		if(i == MAX_RTC_INT_ID) {
+			rtc_enable_irq(RTC_TIMEOFDAY_INT);
+			rtc_enable_irq(RTC_SUBSEC_INT);
+		}
 	}
 
 	return 0;
 }
 
-int32_t irq_global_disable(struct irq_ctrl_desc *desc)
+int32_t max_irq_global_disable(struct irq_ctrl_desc *desc)
 {
 	if(!desc)
 		return -EINVAL;
 
 	for(uint32_t i = 0; i < MXC_IRQ_COUNT; i++) {
 		NVIC_DisableIRQ(BASE_IRQ + i);
+		if(i == MAX_GPIO_INT_ID)
+			max_gpio_disable_irq(desc);
+		if(i == MAX_RTC_INT_ID) {
+			rtc_enable_irq(RTC_TIMEOFDAY_INT);
+			rtc_enable_irq(RTC_SUBSEC_INT);
+		}
+
 	}
 
 	return 0;
 }
 
-int32_t irq_enable(struct irq_ctrl_desc *desc, uint32_t irq_id)
+int32_t max_irq_enable(struct irq_ctrl_desc *desc, uint32_t irq_id)
 {
-	if(!desc || irq_id >= MXC_IRQ_COUNT)
+	if(!desc)
 		return -EINVAL;
+	
+	int32_t ret = 0;
+		
+	switch(irq_id){
+	case MAX_UART0_INT_ID:
+	case MAX_UART1_INT_ID:
+		break;
+	case MAX_GPIO_INT_ID:
+		max_gpio_enable_irq(desc);
+		break;
+	case MAX_RTC_INT_ID:
+		rtc_enable_irq();
+		break;
+	default:
+		return -EINVAL;
+	}
 
 	NVIC_EnableIRQ(BASE_IRQ + irq_id);
 
 	return 0;
 }
 
-int32_t irq_disable(struct irq_ctrl_desc *desc, uint32_t irq_id)
+int32_t max_irq_disable(struct irq_ctrl_desc *desc, uint32_t irq_id)
 {
-	if(!desc || irq_id >= MXC_IRQ_COUNT)
+	if(!desc)
 		return -EINVAL;
-	
+		
+	switch(irq_id){
+	case MAX_UART0_INT_ID:
+	case MAX_UART1_INT_ID:
+		break;
+	case MAX_GPIO_INT_ID:
+		max_gpio_enable_irq(desc);
+		break;
+	case MAX_RTC_INT_ID:
+		rtc_enable_irq();
+		break;
+	default:
+		return -EINVAL;
+	}
+
 	NVIC_ClearPendingIRQ(BASE_IRQ + irq_id);
 	NVIC_DisableIRQ(BASE_IRQ + irq_id);
 
@@ -131,13 +184,13 @@ int32_t irq_disable(struct irq_ctrl_desc *desc, uint32_t irq_id)
 }
 
 const struct irq_platform_ops irq_ops = {
-	.init = &irq_ctrl_init,
-	.register_callback = &irq_register_callback,
-	.unregister = &irq_unregister,
-	.global_enable = &irq_global_enable,
-	.global_disable = &irq_global_disable,
-	.enable = &irq_enable,
-	.disable = &irq_disable,
-	.remove = &irq_ctrl_remove
+	.init = &max_irq_ctrl_init,
+	.register_callback = &max_irq_register_callback,
+	.unregister = &max_irq_unregister,
+	.global_enable = &max_irq_global_enable,
+	.global_disable = &max_irq_global_disable,
+	.enable = &max_irq_enable,
+	.disable = &max_irq_disable,
+	.remove = &max_irq_ctrl_remove
 };
 

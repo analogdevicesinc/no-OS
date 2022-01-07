@@ -4,6 +4,7 @@
 #include "no-os/irq.h"
 #include "gpio.h"
 #include "max32660.h"
+#include "gpio_extra.h"
 
 #define BASE_IRQ	(0x40)
 
@@ -12,6 +13,12 @@ enum irq_id {
 	MAX_UART0_INT_ID = UART0_IRQn,
 	MAX_UART1_INT_ID = UART1_IRQn,
 	MAX_RTC_INT_ID = RTC_IRQn,
+};
+
+union maxim_desc {
+	struct gpio_irq_config *cfg;
+	struct rtc_desc *r_desc;
+	struct uart_desc *u_desc;
 };
 
 extern const struct irq_platform_ops irq_ops;

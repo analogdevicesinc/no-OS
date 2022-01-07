@@ -1,11 +1,11 @@
 #include <stdlib.h>
 #include <errno.h>
-#include "no-os/rtc.h"
 #include "no-os/irq.h"
+#include "no-os/rtc.h"
+#include "no-os/util.h"
 #include "rtc.h"
 #include "rtc_extra.h"
 #include "rtc_regs.h"
-#include "no-os/util.h"
 
 #define MS_TO_RSSA(x) (0 - ((x * 256) / 1000))
 
@@ -54,7 +54,7 @@ int32_t rtc_init(struct rtc_desc **device, struct rtc_init_param *init_param)
 	if(!init_param)
 		return -EINVAL;
 
-	struct rtc_init_maxim *maxim_init_param = (struct rtc_init_maxim *)init_param->extra;
+	struct rtc_init_maxim *maxim_init_param = init_param->extra;
 	struct rtc_desc_maxim *rtc_maxim = calloc(1, sizeof(*rtc_maxim));
 	mxc_rtc_regs_t *rtc_regs = MXC_RTC;
 	dev = calloc(1, sizeof(*dev));
@@ -71,13 +71,6 @@ int32_t rtc_init(struct rtc_desc **device, struct rtc_init_param *init_param)
 	dev->load = init_param->load;
 	dev->extra = rtc_maxim;
 
-/*	sys_cfg.tmr = MXC_TMR0;
-	TMR_Disable(MXC_TMR0);
-	TMR_Init(MXC_TMR0, TMR_PRES_1, 0);
-	TMR_Enable(MXC_TMR0);
-*/	
-	//MXC_TMR0->cn |= MXC_F_TMR_CN_TEN;
-	
 	TMR_Enable(MXC_TMR0);	
 
 	if(RTC_Init(MXC_RTC, dev->load, maxim_init_param->ms_load, &sys_cfg) != E_NO_ERROR) {
@@ -103,6 +96,9 @@ error:
  */
 int32_t rtc_remove(struct rtc_desc *dev)
 {
+	if(!dev)
+		return -EINVAL;
+	rtc_unregister_callback();
 	free(dev->extra);
 	free(dev);
 	return 0;
@@ -211,9 +207,8 @@ int32_t rtc_register_callback(struct callback_desc *desc)
 	cb->config = desc->config;
 
 	mxc_rtc_regs_t *r = MXC_RTC;
-	int32_t ret = RTC_EnableSubsecondInterrupt(r);
-	ret = RTC_SetSubsecondAlarm(r, MS_TO_RSSA(100));
-
+	RTC_EnableTimeofdayInterrupt(r);
+	
 	return 0;
 }
 
@@ -229,18 +224,16 @@ int32_t rtc_unregister_callback()
 	return 0;
 }
 
-int32_t rtc_enable_interrupt(enum rtc_interrupt_id interrupt_id)
+int32_t rtc_enable_irq()
 {
-	switch(interrupt_id) {
-	case RTC_TIMEOFDAY_IRQ:
-		RTC_EnableTimeofdayInterrupt(MXC_RTC);
-		break;
-	case RTC_SUBSEC_IRQ:
-		RTC_EnableSubsecInterrupt(MXC_RTC);
-		break;
-	default:
-		return -EINVAL; 
-	}
+	RTC_EnableTimeofdayInterrupt(MXC_RTC);
+
+	return 0;
+}
+
+int32_t rtc_disable_irq()
+{
+	RTC_DisableTimeofdayInterrupt(MXC_RTC);
 
 	return 0;
 }

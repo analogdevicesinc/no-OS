@@ -32,7 +32,7 @@ void GPIO0_IRQHandler()
 	}
 }
 
-int32_t gpio_get(struct gpio_desc **desc,
+int32_t max_gpio_get(struct gpio_desc **desc,
 		 const struct gpio_init_param *param)
 {
 	if(!param || param->number >= N_PINS)
@@ -53,7 +53,7 @@ int32_t gpio_get(struct gpio_desc **desc,
 	return 0;
 }
 
-int32_t gpio_get_optional(struct gpio_desc **desc,
+int32_t max_gpio_get_optional(struct gpio_desc **desc,
 			  const struct gpio_init_param *param)
 {
 	if(param == NULL) {
@@ -61,17 +61,20 @@ int32_t gpio_get_optional(struct gpio_desc **desc,
 		return 0;
 	}
 
-	return gpio_get(desc, param);
+	return max_gpio_get(desc, param);
 }
 
-int32_t gpio_remove(struct gpio_desc *desc)
+int32_t max_gpio_remove(struct gpio_desc *desc)
 {
+	if(!desc)
+		return -EINVAL;
+	max_gpio_unregister_callback(desc->number);
 	free(desc);
 
 	return 0;
 }
 
-int32_t gpio_direction_input(struct gpio_desc *desc)
+int32_t max_gpio_direction_input(struct gpio_desc *desc)
 {
 	if(!desc || !desc->extra || desc->number >= N_PINS)
 		return -EINVAL;
@@ -88,7 +91,7 @@ int32_t gpio_direction_input(struct gpio_desc *desc)
 	return 0;
 }
 
-int32_t gpio_direction_output(struct gpio_desc *desc, uint8_t value)
+int32_t max_gpio_direction_output(struct gpio_desc *desc, uint8_t value)
 {
 	if(!desc || !desc->extra || desc->number >= N_PINS)
 		return -EINVAL;
@@ -109,7 +112,7 @@ int32_t gpio_direction_output(struct gpio_desc *desc, uint8_t value)
 	return 0;
 }
 
-int32_t gpio_get_direction(struct gpio_desc *desc, uint8_t *direction)
+int32_t max_gpio_get_direction(struct gpio_desc *desc, uint8_t *direction)
 {
 	if(!desc || desc->number >= N_PINS)
 		return -EINVAL;
@@ -128,7 +131,7 @@ int32_t gpio_get_direction(struct gpio_desc *desc, uint8_t *direction)
 	return 0;
 }
 
-int32_t gpio_set_value(struct gpio_desc *desc, uint8_t value)
+int32_t max_gpio_set_value(struct gpio_desc *desc, uint8_t value)
 {
 
 	if(!desc || !desc->extra || desc->number >= N_PINS)
@@ -153,12 +156,12 @@ int32_t gpio_set_value(struct gpio_desc *desc, uint8_t value)
 	return 0;
 }
 
-int32_t gpio_get_value(struct gpio_desc *desc, uint8_t *value)
+int32_t max_gpio_get_value(struct gpio_desc *desc, uint8_t *value)
 {
 	if(!desc || desc->number >= N_PINS)
 		return -EINVAL;
 	
-	gpio_cfg_t *maxim_extra = (gpio_cfg_t *)desc->extra;
+	gpio_cfg_t *maxim_extra = desc->extra;
 	if(!maxim_extra)
 		return -EINVAL;
 
@@ -172,7 +175,7 @@ int32_t gpio_get_value(struct gpio_desc *desc, uint8_t *value)
 	return 0;
 }
 
-int32_t gpio_irq_set_trigger_level(struct gpio_desc *desc, enum irq_trig_level trig_l)
+int32_t max_gpio_irq_set_trigger_level(struct gpio_desc *desc, enum irq_trig_level trig_l)
 {
 	if(!desc || !desc->extra || desc->number >= N_PINS)
 		return -EINVAL;
@@ -224,20 +227,13 @@ int32_t gpio_irq_set_trigger_level(struct gpio_desc *desc, enum irq_trig_level t
 	return 0;
 }
 
-int32_t gpio_register_callback(struct irq_ctrl_desc *ctrl_desc, struct callback_desc *desc)
+int32_t max_gpio_register_callback(struct irq_ctrl_desc *ctrl_desc, struct callback_desc *desc)
 {
 	if(!desc || !ctrl_desc || !desc->config)
 		return -EINVAL;
 	
-/*
-	if(!gpio_callback[pin]){
-		gpio_callback[pin] = calloc(1, sizeof(*gpio_callback));
-		if(!gpio_callback[pin])
-			return -ENOMEM;
-	}
-*/
 	int32_t error = 0;
-	struct gpio_irq_config *g_irq = desc->config;
+	struct gpio_irq_config *g_irq = ctrl_desc->extra;
 	struct gpio_desc *g_desc = g_irq->desc;
 	enum irq_trig_level trig_level = g_irq->mode;
 
@@ -245,9 +241,9 @@ int32_t gpio_register_callback(struct irq_ctrl_desc *ctrl_desc, struct callback_
 	if(!descriptor)
 		return -ENOMEM;
 		
-	error = gpio_direction_input(g_desc);
-	error = gpio_irq_set_trigger_level(g_desc, trig_level);
-	if(error){
+	error = max_gpio_direction_input(g_desc);
+	error = max_gpio_irq_set_trigger_level(g_desc, trig_level);
+	if(error) {
 		free(descriptor);
 		return error;
 	}
@@ -260,24 +256,54 @@ int32_t gpio_register_callback(struct irq_ctrl_desc *ctrl_desc, struct callback_
 	return 0;	
 }	
 
-int32_t gpio_unregister_callback(uint8_t pin)
+int32_t max_gpio_unregister_callback(struct irq_ctrl_desc *desc)
 {
-	if(!gpio_callback[pin])
+	if(!desc || !desc->extra)
 		return -EINVAL;
+
+	struct gpio_irq_config *g_cfg = desc->extra;	
+	struct gpio_desc *g_desc = g_cfg->desc;
 	
-	free(gpio_callback[pin]);
+	max_gpio_disable_irq(desc);
+	free(gpio_callback[g_desc->number]);
 	
 	return 0;
 }
 
+int32_t max_gpio_enable_irq(struct irq_ctrl_desc *desc)
+{
+	if(!desc || !desc->extra)
+		return -EINVAL;
+	
+	struct gpio_irq_config *g_cfg = desc->extra;
+	struct gpio_desc *g_desc = g_cfg->desc;
+	const gpio_cfg_t *cfg = g_desc->extra; 	
+	GPIO_IntEnable(cfg);
+	
+	return 0;
+}
+
+int32_t max_gpio_disable_irq(struct irq_ctrl_desc *desc)
+{
+	if(!desc || !desc->extra)
+		return -EINVAL;
+	
+	struct gpio_irq_config *g_cfg = desc->extra;	
+	struct gpio_desc *g_desc = g_cfg->desc;
+	const gpio_cfg_t *cfg = g_desc->extra; 	
+	GPIO_IntDisable(cfg);
+		
+	return 0;
+}
+
 const struct gpio_platform_ops gpio_ops = {
-	.gpio_ops_get = &gpio_get,
-	.gpio_ops_get_optional = &gpio_get_optional,
-	.gpio_ops_remove = &gpio_remove,
-	.gpio_ops_direction_input = &gpio_direction_input,
-	.gpio_ops_direction_output = &gpio_direction_output,
-	.gpio_ops_get_direction = &gpio_get_direction,
-	.gpio_ops_set_value = &gpio_set_value,
-	.gpio_ops_get_value = &gpio_get_value
+	.gpio_ops_get = &max_gpio_get,
+	.gpio_ops_get_optional = &max_gpio_get_optional,
+	.gpio_ops_remove = &max_gpio_remove,
+	.gpio_ops_direction_input = &max_gpio_direction_input,
+	.gpio_ops_direction_output = &max_gpio_direction_output,
+	.gpio_ops_get_direction = &max_gpio_get_direction,
+	.gpio_ops_set_value = &max_gpio_set_value,
+	.gpio_ops_get_value = &max_gpio_get_value
 };
 

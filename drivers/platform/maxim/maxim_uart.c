@@ -1,8 +1,7 @@
-#include "mxc_sys.h"
-#include "maxim_stdio.h"
-#include <stdlib.h>
-#include "mxc_sys.h"
 #include <errno.h>
+#include <stdlib.h>
+#include "maxim_stdio.h"
+#include "mxc_sys.h"
 #include "uart.h"
 #include "maxim_uart.h"
 #include "no-os/uart.h"
@@ -19,7 +18,9 @@ void UART0_IRQHandler()
 	mxc_uart_regs_t *uart_regs = MXC_UART0;
 	uint8_t	n_int = 0;
 	volatile uint32_t reg_int = uart_regs->int_fl;
-	uart_regs->int_fl = 0xFFFF;	
+	
+	/** Clear all interrupt flags */
+	uart_regs->int_fl = 0x0;	
 
 	while(reg_int){
 		if((reg_int & 1) && uart_regs->int_en && BIT(n_int)){
@@ -42,7 +43,7 @@ void UART1_IRQHandler()
 	volatile uint32_t reg_int = uart_regs->int_fl;
 	
 	/** Clear all interrupt flags */
-	uart_regs->int_fl = 0xFFFF;	
+	uart_regs->int_fl = 0x0;	
 
 	while(reg_int){
 		if((reg_int & 1) && (uart_regs->int_en & BIT(n_int))){
@@ -221,8 +222,9 @@ int32_t uart_remove(struct uart_desc *desc)
 {
 	if(!desc)
 		return -EINVAL;
-
-	struct maxim_uart_desc *maxim_uart = (struct maxim_uart_desc *)desc->extra;
+	
+	struct maxim_uart_desc *maxim_uart = desc->extra;
+	uart_unregister_callback(desc->device_id);
 	free(maxim_uart->maxim_desc);
 	free(desc->extra);
 	free(desc->callback);
@@ -258,10 +260,10 @@ int32_t uart_unregister_callback(uint8_t port)
 {
 	if(port >= N_PORTS || !cb[port])
 		return -EINVAL;
-	
+
 	cb[port]->ctx = NULL;
 	cb[port]->callback = NULL;
-	cb[port]->config = NULL;
+	cb[port]->config = NULL;	
 
 	return 0;
 }

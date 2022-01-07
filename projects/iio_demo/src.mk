@@ -95,6 +95,7 @@ SRCS += $(PLATFORM_DRIVERS)/maxim_uart.c 	\
 	$(MAXIM_LIBRARIES)/MAX32660PeriphDriver/Source/spi.c			\
 	$(MAXIM_LIBRARIES)/MAX32660PeriphDriver/Source/spi17y.c			\
 	$(MAXIM_LIBRARIES)/MAX32660PeriphDriver/Source/rtc.c			\
+	$(MAXIM_LIBRARIES)/MAX32660PeriphDriver/Source/tmr.c			\
 	$(MAXIM_LIBRARIES)/MAX32660PeriphDriver/Source/mxc_sys.c	 	
 
 INCS += $(PLATFORM_DRIVERS)/maxim_uart.h			\
@@ -108,6 +109,10 @@ INCS += $(PLATFORM_DRIVERS)/maxim_uart.h			\
 	$(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/MAX32660/Include/system_max32660.h	 #\
 
 ASM_SRCS = $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/MAX32660/Source/GCC/startup_max32660.S
+
+SRCS += $(DRIVERS)/api/gpio.c	\
+	$(DRIVERS)/api/irq.c	\
+	$(DRIVERS)/api/spi.c
 
 endif
 
