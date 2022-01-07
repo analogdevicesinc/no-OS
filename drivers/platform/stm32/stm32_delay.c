@@ -52,6 +52,7 @@ void udelay(uint32_t usecs)
 	static bool firstrun = true;
 	volatile uint32_t cycles = (SystemCoreClock / 1000000L) * usecs;
 	if (firstrun) {
+		CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
 		DWT->CTRL |= 1;
 		firstrun = false;
 	}
