@@ -1258,6 +1258,8 @@ static int32_t iio_init_xml(struct iio_desc *desc)
 	if (!desc->xml_desc)
 		return -ENOMEM;
 
+	desc->xml_size = size;
+
 	strcpy(desc->xml_desc, header);
 	of = sizeof(header) - 1;
 	for (i = 0; i < desc->nb_devs; i++) {
