@@ -351,8 +351,10 @@ int32_t adxrs290_init(struct adxrs290_dev **device,
 		goto error_dev;
 
 	ret = adxrs290_reg_read(dev, ADXRS290_REG_DEV_ID, &val);
-	if (IS_ERR_VALUE(ret) || (val != ADXRS290_DEV_ID))
+	if (IS_ERR_VALUE(ret) || (val != ADXRS290_DEV_ID)) {
+		ret = -ENODEV;
 		goto error_spi;
+	}
 
 	// Enable measurement mode.
 	if (init_param->mode == ADXRS290_MODE_MEASUREMENT) {
