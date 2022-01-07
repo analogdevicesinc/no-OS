@@ -47,27 +47,45 @@
 #include "no-os/delay.h"
 #include <stdio.h>
 
+#undef USE_TCP_SOCKET
+
+#ifdef USE_TCP_SOCKET
+
+#include "tcp_socket.h"
+#if defined(ADUCM_PLATFORM)
+#include "wifi.h"
+#elif defined(XILINX_PLATFORM)
+#include "xil_eth.h"
+#elif defined(LINUX_PLATFORM)
+#include "linux_socket.h"
+#endif
+
+#else //USE_TCP_SOCKET
+
 #if defined(ADUCM_PLATFORM) || defined(XILINX_PLATFORM)
 #include "no-os/irq.h"
 #include "irq_extra.h"
 #include "uart_extra.h"
-#endif
-#if defined(STM32_PLATFORM)
+#elif defined(STM32_PLATFORM)
 #include "stm32_uart.h"
-#endif
+#endif //STM32_PLATFORM
 
-#ifdef USE_TCP_SOCKET
-#include "wifi.h"
-#include "tcp_socket.h"
-#endif
-
-#ifdef LINUX_PLATFORM
-#include "linux_socket.h"
-#include "tcp_socket.h"
-#endif
+#ifdef XILINX_PLATFORM
+#ifdef XPAR_XUARTLITE_NUM_INSTANCES
+#define XIL_UART_TYPE		UART_PL
+#define XIL_UART_IRQ_ID		0
+#else //XPAR_XUARTLITE_NUM_INSTANCES
+#define XIL_UART_TYPE		UART_PS
+#define XIL_UART_IRQ_ID		UART_IRQ_ID
+#endif //XPAR_XUARTLITE_NUM_INSTANCES
+#endif //XILINX_PLATFORM
 
 // The default baudrate iio_app will use to print messages to console.
 #define UART_BAUDRATE_DEFAULT	115200
+
+#endif //USE_TCP_SOCKET
+
+#ifndef USE_TCP_SOCKET
 
 static inline uint32_t _calc_uart_xfer_time(uint32_t len, uint32_t baudrate)
 {
@@ -76,7 +94,6 @@ static inline uint32_t _calc_uart_xfer_time(uint32_t len, uint32_t baudrate)
 	return ms;
 }
 
-#if !defined(LINUX_PLATFORM) && !defined(USE_TCP_SOCKET)
 static int32_t iio_print_uart_info_message(struct uart_desc **uart_desc,
 		struct uart_init_param *uart_init_par,
 		char *message, int32_t msglen)
@@ -106,14 +123,10 @@ static int32_t iio_print_uart_info_message(struct uart_desc **uart_desc,
 
 	return 0;
 }
-#endif
 
 static int32_t print_uart_hello_message(struct uart_desc **uart_desc,
 					struct uart_init_param *uart_init_par)
 {
-#if defined(LINUX_PLATFORM) || defined(USE_TCP_SOCKET)
-	return 0;
-#else
 	const char *uart_data_size[] = { "5", "6", "7", "8", "9" };
 	const char *uart_parity[] = { "none", "mark", "space", "odd", "even" };
 	const char *uart_stop[] = { "1", "2" };
@@ -135,7 +148,6 @@ static int32_t print_uart_hello_message(struct uart_desc **uart_desc,
 
 	return iio_print_uart_info_message(uart_desc, uart_init_par, message,
 					   msglen);
-#endif
 }
 
 static int32_t print_uart_error_message(struct uart_desc **uart_desc,
@@ -146,26 +158,58 @@ static int32_t print_uart_error_message(struct uart_desc **uart_desc,
 	uint32_t msglen = sprintf(message,
 				  "TinyIIOD server failed with code %d.\n",
 				  (int)status);
-#if defined(LINUX_PLATFORM) || defined(USE_TCP_SOCKET)
-	(void)msglen;
-	printf(message);
-	return 0;
-#else
+
 	return iio_print_uart_info_message(uart_desc, uart_init_par, message,
 					   msglen);
-#endif
+
 }
 
-#if defined(USE_TCP_SOCKET) || defined(LINUX_PLATFORM)
-static int32_t network_setup(struct iio_init_param *iio_init_param,
-			     struct uart_desc *uart_desc,
-			     void *irq_desc)
-{
-	static struct tcp_socket_init_param socket_param;
+#else //USE_TCP_SOCKET
 
-#ifdef LINUX_PLATFORM
-	socket_param.net = &linux_net;
-#else
+#if defined(XILINX_PLATFORM)
+static struct xil_eth_desc *eth;
+
+static int32_t net_init(struct network_interface **net,
+			struct uart_desc *uart_desc,
+			void *irq_desc)
+{
+	struct xil_eth_init_param eth_param = {
+		.emac_baseaddr = EMAC_BASEADDR,
+		.mac_ethernet_address = ETH_MAC_ADDRESS
+	};
+	int32_t ret;
+#ifdef IIO_USE_STATIC_IP
+	eth_param.use_static_ip = 1;
+	IP4_ADDR(&eth_param.ip_addr, 192,168,0,100);
+	IP4_ADDR(&eth_param.netmask, 255,255,255,0);
+	IP4_ADDR(&eth_param.gw,      192,168,0,1);
+#endif
+
+	ret = xil_eth_init(&eth, &eth_param);
+	if (ret < 0) {
+		printf("xil_eth_init failed with code: %"PRIi32"\n", ret);
+		return ret;
+	}
+	char ip_buff[100];
+	xil_eth_get_ip(eth, ip_buff, 100);
+	printf("TinyIIOD IP addr: %s\n", ip_buff);
+
+	xil_eth_get_network_interface(eth, net);
+
+	return 0;
+}
+#elif defined(LINUX_PLATFORM)
+static int32_t net_init(struct network_interface **net,
+			struct uart_desc *uart_desc,
+			void *irq_desc)
+{
+	*net = &linux_net;
+}
+#elif defined(ADUCM_PLATFORM)
+static int32_t net_init(struct network_interface **net,
+			struct uart_desc *uart_desc,
+			void *irq_desc)
+{
 	int32_t status;
 	static struct wifi_desc *wifi;
 	struct wifi_init_param wifi_param = {
@@ -184,10 +228,22 @@ static int32_t network_setup(struct iio_init_param *iio_init_param,
 
 	char buff[100];
 	wifi_get_ip(wifi, buff, 100);
-	printf("Tinyiiod ip is: %s\n", buff);
+	printf("TinyIIOD ip is: %s\n", buff);
 
-	wifi_get_network_interface(wifi, &socket_param.net);
-#endif
+	wifi_get_network_interface(wifi, net);
+}
+#endif //ADUCM_PLATFORM
+
+static int32_t network_setup(struct iio_init_param *iio_init_param,
+			     struct uart_desc *uart_desc,
+			     void *irq_desc)
+{
+	static struct tcp_socket_init_param socket_param;
+	int32_t status;
+
+	status = net_init(&socket_param.net, uart_desc, irq_desc);
+	if (status < 0)
+		return status;
 
 	socket_param.max_buff_size = 0;
 	iio_init_param->phy_type = USE_NETWORK;
@@ -195,24 +251,18 @@ static int32_t network_setup(struct iio_init_param *iio_init_param,
 
 	return 0;
 }
-#endif
 
+#endif //USE_TCP_SOCKET
+
+#if !defined(USE_TCP_SOCKET) || defined(ADUCM_PLATFORM)
 static int32_t uart_setup(struct uart_desc **uart_desc,
 			  struct uart_init_param **uart_init_par,
 			  void *irq_desc)
 {
-#ifdef LINUX_PLATFORM
-	*uart_desc = NULL;
-	return 0;
-#else
-#ifdef XILINX_PLATFORM
+#if defined(XILINX_PLATFORM)
 	static struct xil_uart_init_param platform_uart_init_par = {
-#ifdef XPAR_XUARTLITE_NUM_INSTANCES
-		.type = UART_PL,
-#else
-		.type = UART_PS,
-		.irq_id = UART_IRQ_ID
-#endif
+		.type = XIL_UART_TYPE,
+		.irq_id = XIL_UART_IRQ_ID
 	};
 	platform_uart_init_par.irq_desc = irq_desc;
 #elif defined(ADUCM_PLATFORM)
@@ -228,7 +278,7 @@ static int32_t uart_setup(struct uart_desc **uart_desc,
 		.hw_flow_ctl = UART_HWCONTROL_NONE,
 		.over_sampling = UART_OVERSAMPLING_16,
 	};
-#endif
+#endif //STM32_PLATFORM
 	static struct uart_init_param luart_par = {
 		.device_id = UART_DEVICE_ID,
 		.baud_rate = UART_BAUDRATE_DEFAULT,
@@ -240,10 +290,8 @@ static int32_t uart_setup(struct uart_desc **uart_desc,
 	*uart_init_par = &luart_par;
 
 	return uart_init(uart_desc, &luart_par);
-#endif
 }
 
-#if defined(ADUCM_PLATFORM) || (defined(XILINX_PLATFORM) && !defined(PLATFORM_MB))
 static int32_t irq_setup(struct irq_ctrl_desc **irq_desc)
 {
 	int32_t status;
@@ -256,7 +304,7 @@ static int32_t irq_setup(struct irq_ctrl_desc **irq_desc)
 #elif defined(ADUCM_PLATFORM)
 	void *platform_irq_init_par = NULL;
 	const struct irq_platform_ops *platform_irq_ops = &aducm_irq_ops;
-#endif
+#endif //ADUCM_PLATFORM
 
 	struct irq_init_param irq_init_param = {
 		.irq_ctrl_id = INTC_DEVICE_ID,
@@ -270,39 +318,38 @@ static int32_t irq_setup(struct irq_ctrl_desc **irq_desc)
 
 	return irq_global_enable(*irq_desc);
 }
-#endif
+#endif //!defined(USE_TCP_SOCKET) || defined(ADUCM_PLATFORM)
 
 int32_t iio_app_run(struct iio_app_device *devices, int32_t len)
 {
 	int32_t			status;
 	struct iio_desc		*iio_desc;
 	struct iio_init_param	iio_init_param;
-	struct uart_desc	*uart_desc;
+	struct uart_desc	*uart_desc = NULL;
 	struct uart_init_param	*uart_init_par;
 	void			*irq_desc = NULL;
 	struct iio_device_init	*iio_init_devs;
 	uint32_t		i;
 
 
-#if defined(ADUCM_PLATFORM) || (defined(XILINX_PLATFORM) && !defined(PLATFORM_MB))
+#if !defined(USE_TCP_SOCKET) || defined(ADUCM_PLATFORM)
 	status = irq_setup((struct irq_ctrl_desc **)&irq_desc);
 	if (status < 0)
 		return status;
-#endif
 
 	status = uart_setup(&uart_desc, &uart_init_par, irq_desc);
 	if (status < 0)
 		return status;
+#endif
 
-	status = print_uart_hello_message(&uart_desc, uart_init_par);
-	if (status < 0)
-		return status;
-
-#if defined(USE_TCP_SOCKET) || defined(LINUX_PLATFORM)
+#if defined(USE_TCP_SOCKET)
 	status = network_setup(&iio_init_param, uart_desc, irq_desc);
 	if(status < 0)
 		goto error;
 #else
+	status = print_uart_hello_message(&uart_desc, uart_init_par);
+	if (status < 0)
+		return status;
 	iio_init_param.phy_type = USE_UART;
 	iio_init_param.uart_desc = uart_desc;
 #endif
@@ -339,10 +386,15 @@ int32_t iio_app_run(struct iio_app_device *devices, int32_t len)
 
 	do {
 		status = iio_step(iio_desc);
+#if defined(USE_TCP_SOCKET) && defined(XILINX_PLATFORM)
+		xil_eth_step(eth);
+#endif
 	} while (true);
 error:
+#ifndef USE_TCP_SOCKET
 	status = print_uart_error_message(&uart_desc, uart_init_par, status);
+#endif
 	return status;
 }
 
-#endif
+#endif //IIO_SUPPORT

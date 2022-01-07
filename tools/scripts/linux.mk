@@ -9,6 +9,11 @@ PROJECT_BUILD = $(BUILD_DIR)/app
 CFLAGS +=  -g3 \
 		-DLINUX_PLATFORM \
 
+ifeq (y,$(strip $(TINYIIOD)))
+CFLAGS += -DUSE_TCP_SOCKET \
+		-DENABLE_IIO_NETWORK
+endif
+
 $(PROJECT_TARGET):
 	$(MUTE) $(call mk_dir, $(BUILD_DIR)) $(HIDE)
 	$(MUTE) $(call set_one_time_rule,$@)
