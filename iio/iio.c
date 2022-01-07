@@ -149,6 +149,8 @@ struct iio_desc {
 	char			*xml_desc;
 	uint32_t		xml_size;
 	uint32_t		xml_size_to_last_dev;
+	struct iio_interface	*devs;
+	uint32_t		nb_devs;
 	uint32_t		dev_count;
 	struct uart_desc	*uart_desc;
 #ifdef ENABLE_IIO_NETWORK
@@ -1354,6 +1356,39 @@ static int32_t iio_cmp_interfaces(struct iio_interface *a,
 				  struct iio_interface *b)
 {
 	return strcmp(a->dev_id, b->dev_id);
+}
+
+static int32_t iio_init_xml(struct iio_desc *desc)
+{
+	struct iio_interface *dev;
+	uint32_t size, of;
+	int32_t i;
+
+	/* -2 because of the 0 character */
+	size = sizeof(header) + sizeof(header_end) - 2;
+	for (i = 0; i < desc->nb_devs; i++) {
+		dev = desc->devs + i;
+		size += iio_generate_device_xml(dev->dev_descriptor,
+						(char *)dev->name,
+						dev->dev_id, NULL, -1);
+	}
+
+	desc->xml_desc = (char *)calloc(size + 1, sizeof(*desc->xml_desc));
+	if (!desc->xml_desc)
+		return -ENOMEM;
+
+	strcpy(desc->xml_desc, header);
+	of = sizeof(header) - 1;
+	for (i = 0; i < desc->nb_devs; i++) {
+		dev = desc->devs + i;
+		of += iio_generate_device_xml(dev->dev_descriptor,
+					      (char *)dev->name, dev->dev_id,
+					      desc->xml_desc + of, size - of);
+	}
+
+	strcpy(desc->xml_desc + of, header_end);
+
+	return SUCCESS;
 }
 
 static int32_t iio_init_devs(struct iio_desc *desc,
