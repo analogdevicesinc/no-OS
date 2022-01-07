@@ -216,7 +216,7 @@ int32_t uart_write(struct uart_desc *desc, const uint8_t *data,
 		return FAILURE;
 	}
 
-	return SUCCESS;
+	return bytes_number;
 }
 
 #ifdef XUARTPS_H
@@ -470,4 +470,10 @@ uint32_t uart_get_errors(struct uart_desc *desc)
 	xil_uart_desc->total_error_count = 0;
 
 	return total_error_count;
+}
+
+int32_t uart_read_nonblocking(struct uart_desc *desc, uint8_t *data,
+			      uint32_t bytes_number)
+{
+	return -EINVAL;
 }
