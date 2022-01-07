@@ -124,8 +124,8 @@ struct attr_fun_params {
  * with a "iio_device *iio" that describes capabilities of the device.
  */
 struct iio_interface {
-	/** Will be: device[0...n] n beeing the count of registerd devices */
-	char			dev_id[10];
+	/** Will be: iio:device[0...n] n beeing the count of registerd devices*/
+	char			dev_id[21];
 	/** Device name */
 	const char		*name;
 	/** Opened channels */
@@ -1301,7 +1301,7 @@ ssize_t iio_register(struct iio_desc *desc, struct iio_device *dev_descriptor,
 				desc->dev_count,
 				desc->xml_desc + desc->xml_size_to_last_dev,
 				new_size - desc->xml_size_to_last_dev);
-	sprintf((char *)iio_interface->dev_id, "device%d", (int)desc->dev_count);
+	sprintf((char *)iio_interface->dev_id, "iio:device%d", (int)desc->dev_count);
 	desc->xml_size_to_last_dev += n;
 	desc->xml_size += n;
 	/* Copy end header at the end */
