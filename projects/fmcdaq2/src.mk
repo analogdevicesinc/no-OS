@@ -44,7 +44,7 @@ SRCS += $(NO-OS)/util/fifo.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c
 endif
 INCS +=	$(PROJECT)/src/app/app_config.h \
-	$(PROJECT)/src/devices/adi_hal/parameters.h
+	$(PROJECT)/src/app/parameters.h
 ifeq (y,$(strip $(TINYIIOD)))
 INCS +=	$(DRIVERS)/adc/ad9680/iio_ad9680.h \
 	$(DRIVERS)/dac/ad9144/iio_ad9144.h
