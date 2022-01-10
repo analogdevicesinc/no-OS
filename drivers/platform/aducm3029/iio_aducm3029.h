@@ -59,19 +59,19 @@ struct iio_aducm3029_desc {
 extern struct iio_aducm3029_desc g_aducm3029_desc;
 extern struct iio_device const iio_aducm3029_desc;
 
-int get_pwm_attr(void *device, char *buf, size_t len,
+int get_pwm_attr(void *device, char *buf, uint32_t len,
 		     const struct iio_ch_info *channel, intptr_t priv);
-int set_pwm_attr(void *device, char *buf, size_t len,
+int set_pwm_attr(void *device, char *buf, uint32_t len,
 		     const struct iio_ch_info *channel, intptr_t priv);
 
-int get_global_attr(void *device, char *buf, size_t len,
+int get_global_attr(void *device, char *buf, uint32_t len,
 			const struct iio_ch_info *channel, intptr_t priv);
-int set_global_attr(void *device, char *buf, size_t len,
+int set_global_attr(void *device, char *buf, uint32_t len,
 			const struct iio_ch_info *channel, intptr_t priv);
 
-int get_gpio_attr(void *device, char *buf, size_t len,
+int get_gpio_attr(void *device, char *buf, uint32_t len,
 		      const struct iio_ch_info *channel, intptr_t priv);
-int set_gpio_attr(void *device, char *buf, size_t len,
+int set_gpio_attr(void *device, char *buf, uint32_t len,
 		      const struct iio_ch_info *channel, intptr_t priv);
 
 int32_t iio_aducm3029_adc_set_mask(struct iio_aducm3029_desc *desc,

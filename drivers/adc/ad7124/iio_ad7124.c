@@ -55,23 +55,23 @@
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
-static int ad7124_iio_read_filter_3db(void *device, char *buf, size_t len,
+static int ad7124_iio_read_filter_3db(void *device, char *buf, uint32_t len,
 		const struct iio_ch_info *channel, intptr_t priv);
-static int ad7124_iio_write_filter_3db(void *device, char *buf, size_t len,
+static int ad7124_iio_write_filter_3db(void *device, char *buf, uint32_t len,
 		const struct iio_ch_info *channel, intptr_t priv);
-static int ad7124_iio_read_offset_chan(void *device, char *buf, size_t len,
+static int ad7124_iio_read_offset_chan(void *device, char *buf, uint32_t len,
 		const struct iio_ch_info *channel, intptr_t priv);
 static int ad7124_iio_change_offset_chan(void *device, char *buf,
-		size_t len, const struct iio_ch_info *channel, intptr_t priv);
-static int ad7124_iio_read_raw_chan(void *device, char *buf, size_t len,
+		uint32_t len, const struct iio_ch_info *channel, intptr_t priv);
+static int ad7124_iio_read_raw_chan(void *device, char *buf, uint32_t len,
 					const struct iio_ch_info *channel, intptr_t priv);
-static int ad7124_iio_read_odr_chan(void *device, char *buf, size_t len,
+static int ad7124_iio_read_odr_chan(void *device, char *buf, uint32_t len,
 					const struct iio_ch_info *channel, intptr_t priv);
-static int ad7124_iio_change_odr_chan(void *device, char *buf, size_t len,
+static int ad7124_iio_change_odr_chan(void *device, char *buf, uint32_t len,
 		const struct iio_ch_info *channel, intptr_t priv);
-static int ad7124_iio_read_scale_chan(void *device, char *buf, size_t len,
+static int ad7124_iio_read_scale_chan(void *device, char *buf, uint32_t len,
 		const struct iio_ch_info *channel, intptr_t priv);
-static int ad7124_iio_change_scale_chan(void *device, char *buf, size_t len,
+static int ad7124_iio_change_scale_chan(void *device, char *buf, uint32_t len,
 		const struct iio_ch_info *channel, intptr_t priv);
 
 static struct iio_attribute channel_attributes[] = {
@@ -170,7 +170,7 @@ static int32_t ad7124_iio_get_ch_config_opt(struct ad7124_dev *desc,
  * @param channel - IIO channel information.
  * @return Number of bytes printed in the output buffer, or negative error code.
  */
-static int ad7124_iio_read_offset_chan(void *device, char *buf, size_t len,
+static int ad7124_iio_read_offset_chan(void *device, char *buf, uint32_t len,
 		const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct ad7124_dev	*desc = (struct ad7124_dev *)device;
@@ -199,7 +199,7 @@ static int ad7124_iio_read_offset_chan(void *device, char *buf, size_t len,
  * @return Number of bytes printed in the output buffer, or negative error code.
  */
 static int ad7124_iio_change_offset_chan(void *device, char *buf,
-		size_t len, const struct iio_ch_info *channel, intptr_t priv)
+		uint32_t len, const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct ad7124_dev	*desc = (struct ad7124_dev *)device;
 	uint32_t		reg_val;
@@ -228,7 +228,7 @@ static int ad7124_iio_change_offset_chan(void *device, char *buf,
  * @param channel - IIO channel information.
  * @return Number of bytes printed in the output buffer, or negative error code.
  */
-static int ad7124_iio_read_raw_chan(void *device, char *buf, size_t len,
+static int ad7124_iio_read_raw_chan(void *device, char *buf, uint32_t len,
 					const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct ad7124_dev	*desc = (struct ad7124_dev *)device;
@@ -270,7 +270,7 @@ static int ad7124_iio_read_raw_chan(void *device, char *buf, size_t len,
  * @param channel - IIO channel information.
  * @return Number of bytes printed in the output buffer, or negative error code.
  */
-static int ad7124_iio_read_filter_3db(void *device, char *buf, size_t len,
+static int ad7124_iio_read_filter_3db(void *device, char *buf, uint32_t len,
 		const struct iio_ch_info *channel, intptr_t priv)
 {
 
@@ -315,7 +315,7 @@ static int ad7124_iio_read_filter_3db(void *device, char *buf, size_t len,
  * @param channel - IIO channel information.
  * @return Number of bytes printed in the output buffer, or negative error code.
  */
-static int ad7124_iio_write_filter_3db(void *device, char *buf, size_t len,
+static int ad7124_iio_write_filter_3db(void *device, char *buf, uint32_t len,
 		const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct ad7124_dev	*desc = (struct ad7124_dev *)device;
@@ -370,7 +370,7 @@ static int ad7124_iio_write_filter_3db(void *device, char *buf, size_t len,
  * @param channel - IIO channel information.
  * @return Number of bytes printed in the output buffer, or negative error code.
  */
-static int ad7124_iio_read_odr_chan(void *device, char *buf, size_t len,
+static int ad7124_iio_read_odr_chan(void *device, char *buf, uint32_t len,
 					const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct ad7124_dev	*desc = (struct ad7124_dev *)device;
@@ -395,7 +395,7 @@ static int ad7124_iio_read_odr_chan(void *device, char *buf, size_t len,
  * @param channel - IIO channel information.
  * @return Number of bytes printed in the output buffer, or negative error code.
  */
-static int ad7124_iio_change_odr_chan(void *device, char *buf, size_t len,
+static int ad7124_iio_change_odr_chan(void *device, char *buf, uint32_t len,
 		const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct ad7124_dev	*desc = (struct ad7124_dev *)device;
@@ -424,7 +424,7 @@ static int ad7124_iio_change_odr_chan(void *device, char *buf, size_t len,
  * @param channel - IIO channel information.
  * @return Number of bytes printed in the output buffer, or negative error code.
  */
-static int ad7124_iio_read_scale_chan(void *device, char *buf, size_t len,
+static int ad7124_iio_read_scale_chan(void *device, char *buf, uint32_t len,
 		const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct ad7124_dev	*desc = (struct ad7124_dev *)device;
@@ -484,7 +484,7 @@ static uint32_t ad7124_iio_find_closest_gain(uint32_t new_gain)
  * @param channel - IIO channel information.
  * @return Number of bytes printed in the output buffer, or negative error code.
  */
-static int ad7124_iio_change_scale_chan(void *device, char *buf, size_t len,
+static int ad7124_iio_change_scale_chan(void *device, char *buf, uint32_t len,
 		const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct ad7124_dev	*desc = (struct ad7124_dev *)device;

@@ -98,7 +98,7 @@ extern const char *ad9361_ensm_states[12];
  * @param channel - Channel properties.
  * @return Length of chars written in buf, or negative value on failure.
  */
-static int get_rf_port_select(void *device, char *buf, size_t len,
+static int get_rf_port_select(void *device, char *buf, uint32_t len,
 				  const struct iio_ch_info *channel,
 				  intptr_t priv)
 {
@@ -123,7 +123,7 @@ static int get_rf_port_select(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Length of chars written in buf, or negative value on failure.
  */
-static int get_hardwaregain(void *device, char *buf, size_t len,
+static int get_hardwaregain(void *device, char *buf, uint32_t len,
 				const struct iio_ch_info *channel,
 				intptr_t priv)
 {
@@ -169,7 +169,7 @@ static int get_hardwaregain(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Length of chars written in buf, or negative value on failure.
  */
-static int get_rssi(void *device, char *buf, size_t len,
+static int get_rssi(void *device, char *buf, uint32_t len,
 			const struct iio_ch_info *channel,
 			intptr_t priv)
 {
@@ -199,7 +199,7 @@ static int get_rssi(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Length of chars written in buf, or negative value on failure.
  */
-static int get_hardwaregain_available(void *device, char *buf, size_t len,
+static int get_hardwaregain_available(void *device, char *buf, uint32_t len,
 		const struct iio_ch_info *channel,
 		intptr_t priv)
 {
@@ -226,7 +226,7 @@ static int get_hardwaregain_available(void *device, char *buf, size_t len,
  * @return Length of chars written in buf, or negative value on failure.
  */
 static int get_sampling_frequency_available(void *device, char *buf,
-		size_t len,
+		uint32_t len,
 		const struct iio_ch_info *channel,
 		intptr_t priv)
 {
@@ -263,7 +263,7 @@ static int get_sampling_frequency_available(void *device, char *buf,
  * @param channel - Channel properties.
  * @return Length of chars written in buf, or negative value on failure.
  */
-static int get_rf_port_select_available(void *device, char *buf, size_t len,
+static int get_rf_port_select_available(void *device, char *buf, uint32_t len,
 		const struct iio_ch_info *channel,
 		intptr_t priv)
 {
@@ -298,7 +298,7 @@ static int get_rf_port_select_available(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Length of chars written in buf, or negative value on failure.
  */
-static int get_filter_fir_en(void *device, char *buf, size_t len,
+static int get_filter_fir_en(void *device, char *buf, uint32_t len,
 				 const struct iio_ch_info *channel,
 				 intptr_t priv)
 {
@@ -324,7 +324,7 @@ static int get_filter_fir_en(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Length of chars written in buf, or negative value on failure.
  */
-static int get_sampling_frequency(void *device, char *buf, size_t len,
+static int get_sampling_frequency(void *device, char *buf, uint32_t len,
 				      const struct iio_ch_info *channel,
 				      intptr_t priv)
 {
@@ -346,7 +346,7 @@ static int get_sampling_frequency(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Length of chars written in buf, or negative value on failure.
  */
-static int get_rf_bandwidth_available(void *device, char *buf, size_t len,
+static int get_rf_bandwidth_available(void *device, char *buf, uint32_t len,
 		const struct iio_ch_info *channel,
 		intptr_t priv)
 {
@@ -364,7 +364,7 @@ static int get_rf_bandwidth_available(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Length of chars written in buf, or negative value on failure.
  */
-static int get_rf_bandwidth(void *device, char *buf, size_t len,
+static int get_rf_bandwidth(void *device, char *buf, uint32_t len,
 				const struct iio_ch_info *channel,
 				intptr_t priv)
 {
@@ -383,7 +383,7 @@ static int get_rf_bandwidth(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Length of chars written in buf, or negative value on failure.
  */
-static int get_gain_control_mode(void *device, char *buf, size_t len,
+static int get_gain_control_mode(void *device, char *buf, uint32_t len,
 				     const struct iio_ch_info *channel,
 				     intptr_t priv)
 {
@@ -400,7 +400,7 @@ static int get_gain_control_mode(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Length of chars written in buf, or negative value on failure.
  */
-static int get_rf_dc_offset_tracking_en(void *device, char *buf, size_t len,
+static int get_rf_dc_offset_tracking_en(void *device, char *buf, uint32_t len,
 		const struct iio_ch_info *channel,
 		intptr_t priv)
 {
@@ -420,7 +420,7 @@ static int get_rf_dc_offset_tracking_en(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Length of chars written in buf, or negative value on failure.
  */
-static int get_quadrature_tracking_en(void *device, char *buf, size_t len,
+static int get_quadrature_tracking_en(void *device, char *buf, uint32_t len,
 		const struct iio_ch_info *channel,
 		intptr_t priv)
 {
@@ -441,7 +441,7 @@ static int get_quadrature_tracking_en(void *device, char *buf, size_t len,
  * @return Length of chars written in buf, or negative value on failure.
  */
 static int get_gain_control_mode_available(void *device, char *buf,
-		size_t len,
+		uint32_t len,
 		const struct iio_ch_info *channel,
 		intptr_t priv)
 {
@@ -460,7 +460,7 @@ static int get_gain_control_mode_available(void *device, char *buf,
  * @param channel - Channel properties.
  * @return Length of chars written in buf, or negative value on failure.
  */
-static int get_bb_dc_offset_tracking_en(void *device, char *buf, size_t len,
+static int get_bb_dc_offset_tracking_en(void *device, char *buf, uint32_t len,
 		const struct iio_ch_info *channel,
 		intptr_t priv)
 {
@@ -480,7 +480,7 @@ static int get_bb_dc_offset_tracking_en(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Length of chars written in buf, or negative value on failure.
  */
-static int get_frequency_available(void *device, char *buf, size_t len,
+static int get_frequency_available(void *device, char *buf, uint32_t len,
 				       const struct iio_ch_info *channel,
 				       intptr_t priv)
 {
@@ -497,13 +497,13 @@ static int get_frequency_available(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Length of chars written in buf, or negative value on failure.
  */
-static int get_fastlock_save(void *device, char *buf, size_t len,
+static int get_fastlock_save(void *device, char *buf, uint32_t len,
 				 const struct iio_ch_info *channel,
 				 intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 	uint8_t faslock_vals[16];
-	size_t length;
+	uint32_t length;
 	int32_t ret = 0;
 	int32_t i;
 
@@ -528,7 +528,7 @@ static int get_fastlock_save(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Length of chars written in buf, or negative value on failure.
  */
-static int get_powerdown(void *device, char *buf, size_t len,
+static int get_powerdown(void *device, char *buf, uint32_t len,
 			     const struct iio_ch_info *channel,
 			     intptr_t priv)
 {
@@ -549,7 +549,7 @@ static int get_powerdown(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Length of chars written in buf, or negative value on failure.
  */
-static int get_fastlock_load(void *device, char *buf, size_t len,
+static int get_fastlock_load(void *device, char *buf, uint32_t len,
 				 const struct iio_ch_info *channel,
 				 intptr_t priv)
 {
@@ -567,7 +567,7 @@ static int get_fastlock_load(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Length of chars written in buf, or negative value on failure.
  */
-static int get_fastlock_store(void *device, char *buf, size_t len,
+static int get_fastlock_store(void *device, char *buf, uint32_t len,
 				  const struct iio_ch_info *channel,
 				  intptr_t priv)
 {
@@ -585,7 +585,7 @@ static int get_fastlock_store(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return: Length of chars written in buf, or negative value on failure.
  */
-static int get_frequency(void *device, char *buf, size_t len,
+static int get_frequency(void *device, char *buf, uint32_t len,
 			     const struct iio_ch_info *channel,
 			     intptr_t priv)
 {
@@ -606,7 +606,7 @@ static int get_frequency(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Length of chars written in buf, or negative value on failure.
  */
-static int get_external(void *device, char *buf, size_t len,
+static int get_external(void *device, char *buf, uint32_t len,
 			    const struct iio_ch_info *channel,
 			    intptr_t priv)
 {
@@ -628,7 +628,7 @@ static int get_external(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Length of chars written in buf, or negative value on failure.
  */
-static int get_fastlock_recall(void *device, char *buf, size_t len,
+static int get_fastlock_recall(void *device, char *buf, uint32_t len,
 				   const struct iio_ch_info *channel,
 				   intptr_t priv)
 {
@@ -646,7 +646,7 @@ static int get_fastlock_recall(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Length of chars written in buf, or negative value on failure.
  */
-static int get_temp0_input(void *device, char *buf, size_t len,
+static int get_temp0_input(void *device, char *buf, uint32_t len,
 			       const struct iio_ch_info *channel,
 			       intptr_t priv)
 {
@@ -667,7 +667,7 @@ static int get_temp0_input(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Length of chars written in buf, or negative value on failure.
  */
-static int get_voltage_filter_fir_en(void *device, char *buf, size_t len,
+static int get_voltage_filter_fir_en(void *device, char *buf, uint32_t len,
 		const struct iio_ch_info *channel,
 		intptr_t priv)
 {
@@ -693,7 +693,7 @@ static int get_voltage_filter_fir_en(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Number of bytes written to device, or negative value on failure.
  */
-static int set_hardwaregain_available(void *device, char *buf, size_t len,
+static int set_hardwaregain_available(void *device, char *buf, uint32_t len,
 		const struct iio_ch_info *channel,
 		intptr_t priv)
 {
@@ -711,7 +711,7 @@ static int set_hardwaregain_available(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Number of bytes written to device, or negative value on failure.
  */
-static int set_hardwaregain(void *device, char *buf, size_t len,
+static int set_hardwaregain(void *device, char *buf, uint32_t len,
 				const struct iio_ch_info *channel,
 				intptr_t priv)
 {
@@ -754,7 +754,7 @@ static int set_hardwaregain(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return  Number of bytes written to device, or negative value on failure.
  */
-static int set_rssi(void *device, char *buf, size_t len,
+static int set_rssi(void *device, char *buf, uint32_t len,
 			const struct iio_ch_info *channel,
 			intptr_t priv)
 {
@@ -772,7 +772,7 @@ static int set_rssi(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return: Number of bytes written to device, or negative value on failure.
  */
-static int set_rf_port_select(void *device, char *buf, size_t len,
+static int set_rf_port_select(void *device, char *buf, uint32_t len,
 				  const struct iio_ch_info *channel,
 				  intptr_t priv)
 {
@@ -813,7 +813,7 @@ static int set_rf_port_select(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Number of bytes written to device, or negative value on failure.
  */
-static int set_gain_control_mode(void *device, char *buf, size_t len,
+static int set_gain_control_mode(void *device, char *buf, uint32_t len,
 				     const struct iio_ch_info *channel,
 				     intptr_t priv)
 {
@@ -851,7 +851,7 @@ static int set_gain_control_mode(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Number of bytes written to device, or negative value on failure.
  */
-static int set_rf_port_select_available(void *device, char *buf, size_t len,
+static int set_rf_port_select_available(void *device, char *buf, uint32_t len,
 		const struct iio_ch_info *channel,
 		intptr_t priv)
 {
@@ -869,7 +869,7 @@ static int set_rf_port_select_available(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Number of bytes written to device, or negative value on failure.
  */
-static int set_rf_bandwidth(void *device, char *buf, size_t len,
+static int set_rf_bandwidth(void *device, char *buf, uint32_t len,
 				const struct iio_ch_info *channel,
 				intptr_t priv)
 {
@@ -901,7 +901,7 @@ static int set_rf_bandwidth(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Number of bytes written to device, or negative value on failure.
  */
-static int set_rf_dc_offset_tracking_en(void *device, char *buf, size_t len,
+static int set_rf_dc_offset_tracking_en(void *device, char *buf, uint32_t len,
 		const struct iio_ch_info *channel,
 		intptr_t priv)
 {
@@ -932,7 +932,7 @@ static int set_rf_dc_offset_tracking_en(void *device, char *buf, size_t len,
  * @return Number of bytes written to device, or negative value on failure.
  */
 static int set_sampling_frequency_available(void *device, char *buf,
-		size_t len,
+		uint32_t len,
 		const struct iio_ch_info *channel,
 		intptr_t priv)
 {
@@ -950,7 +950,7 @@ static int set_sampling_frequency_available(void *device, char *buf,
  * @param channel - Channel properties.
  * @return Number of bytes written to device, or negative value on failure.
  */
-static int set_quadrature_tracking_en(void *device, char *buf, size_t len,
+static int set_quadrature_tracking_en(void *device, char *buf, uint32_t len,
 		const struct iio_ch_info *channel,
 		intptr_t priv)
 {
@@ -980,7 +980,7 @@ static int set_quadrature_tracking_en(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Number of bytes written to device, or negative value on failure.
  */
-static int set_sampling_frequency(void *device, char *buf, size_t len,
+static int set_sampling_frequency(void *device, char *buf, uint32_t len,
 				      const struct iio_ch_info *channel,
 				      intptr_t priv)
 {
@@ -1003,7 +1003,7 @@ static int set_sampling_frequency(void *device, char *buf, size_t len,
  * @return Number of bytes written to device, or negative value on failure.
  */
 static int set_gain_control_mode_available(void *device, char *buf,
-		size_t len,
+		uint32_t len,
 		const struct iio_ch_info *channel,
 		intptr_t priv)
 {
@@ -1041,7 +1041,7 @@ static int set_gain_control_mode_available(void *device, char *buf,
  * @param channel - Channel properties.
  * @return Number of bytes written to device, or negative value on failure.
  */
-static int set_filter_fir_en(void *device, char *buf, size_t len,
+static int set_filter_fir_en(void *device, char *buf, uint32_t len,
 				 const struct iio_ch_info *channel,
 				 intptr_t priv)
 {
@@ -1071,7 +1071,7 @@ static int set_filter_fir_en(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Number of bytes written to device, or negative value on failure.
  */
-static int set_rf_bandwidth_available(void *device, char *buf, size_t len,
+static int set_rf_bandwidth_available(void *device, char *buf, uint32_t len,
 		const struct iio_ch_info *channel,
 		intptr_t priv)
 {
@@ -1089,7 +1089,7 @@ static int set_rf_bandwidth_available(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Number of bytes written to device, or negative value on failure.
  */
-static int set_bb_dc_offset_tracking_en(void *device, char *buf, size_t len,
+static int set_bb_dc_offset_tracking_en(void *device, char *buf, uint32_t len,
 		const struct iio_ch_info *channel,
 		intptr_t priv)
 {
@@ -1119,7 +1119,7 @@ static int set_bb_dc_offset_tracking_en(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Number of bytes written to device, or negative value on failure.
  */
-static int set_frequency_available(void *device, char *buf, size_t len,
+static int set_frequency_available(void *device, char *buf, uint32_t len,
 				       const struct iio_ch_info *channel,
 				       intptr_t priv)
 {
@@ -1137,7 +1137,7 @@ static int set_frequency_available(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Number of bytes written to device, or negative value on failure.
  */
-static int set_fastlock_save(void *device, char *buf, size_t len,
+static int set_fastlock_save(void *device, char *buf, uint32_t len,
 				 const struct iio_ch_info *channel,
 				 intptr_t priv)
 {
@@ -1157,7 +1157,7 @@ static int set_fastlock_save(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Number of bytes written to device, or negative value on failure.
  */
-static int set_powerdown(void *device, char *buf, size_t len,
+static int set_powerdown(void *device, char *buf, uint32_t len,
 			     const struct iio_ch_info *channel,
 			     intptr_t priv)
 {
@@ -1183,7 +1183,7 @@ static int set_powerdown(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return: Number of bytes written to device, or negative value on failure.
  */
-static int set_fastlock_load(void *device, char *buf, size_t len,
+static int set_fastlock_load(void *device, char *buf, uint32_t len,
 				 const struct iio_ch_info *channel,
 				 intptr_t priv)
 {
@@ -1226,7 +1226,7 @@ static int set_fastlock_load(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Number of bytes written to device, or negative value on failure.
  */
-static int set_fastlock_store(void *device, char *buf, size_t len,
+static int set_fastlock_store(void *device, char *buf, uint32_t len,
 				  const struct iio_ch_info *channel,
 				  intptr_t priv)
 {
@@ -1249,7 +1249,7 @@ static int set_fastlock_store(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Number of bytes written to device, or negative value on failure.
  */
-static int set_frequency(void *device, char *buf, size_t len,
+static int set_frequency(void *device, char *buf, uint32_t len,
 			     const struct iio_ch_info *channel,
 			     intptr_t priv)
 {
@@ -1283,7 +1283,7 @@ static int set_frequency(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Number of bytes written to device, or negative value on failure.
  */
-static int set_external(void *device, char *buf, size_t len,
+static int set_external(void *device, char *buf, uint32_t len,
 			    const struct iio_ch_info *channel,
 			    intptr_t priv)
 {
@@ -1309,7 +1309,7 @@ static int set_external(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Number of bytes written to device, or negative value on failure.
  */
-static int set_fastlock_recall(void *device, char *buf, size_t len,
+static int set_fastlock_recall(void *device, char *buf, uint32_t len,
 				   const struct iio_ch_info *channel,
 				   intptr_t priv)
 {
@@ -1332,7 +1332,7 @@ static int set_fastlock_recall(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Number of bytes written to device, or negative value on failure.
  */
-static int set_voltage_filter_fir_en(void *device, char *buf, size_t len,
+static int set_voltage_filter_fir_en(void *device, char *buf, uint32_t len,
 		const struct iio_ch_info *channel,
 		intptr_t priv)
 {
@@ -1358,7 +1358,7 @@ static int set_voltage_filter_fir_en(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Length of chars written in buf, or negative value on failure.
  */
-static int get_dcxo_tune_coarse(void *device, char *buf, size_t len,
+static int get_dcxo_tune_coarse(void *device, char *buf, uint32_t len,
 				    const struct iio_ch_info *channel,
 				    intptr_t priv)
 {
@@ -1378,7 +1378,7 @@ static int get_dcxo_tune_coarse(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Length of chars written in buf, or negative value on failure.
  */
-static int get_rx_path_rates(void *device, char *buf, size_t len,
+static int get_rx_path_rates(void *device, char *buf, uint32_t len,
 				 const struct iio_ch_info *channel,
 				 intptr_t priv)
 {
@@ -1402,7 +1402,7 @@ static int get_rx_path_rates(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Length of chars written in buf, or negative value on failure.
  */
-static int get_trx_rate_governor(void *device, char *buf, size_t len,
+static int get_trx_rate_governor(void *device, char *buf, uint32_t len,
 				     const struct iio_ch_info *channel,
 				     intptr_t priv)
 {
@@ -1424,7 +1424,7 @@ static int get_trx_rate_governor(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Length of chars written in buf, or negative value on failure.
  */
-static int get_calib_mode_available(void *device, char *buf, size_t len,
+static int get_calib_mode_available(void *device, char *buf, uint32_t len,
 					const struct iio_ch_info *channel,
 					intptr_t priv)
 {
@@ -1441,7 +1441,7 @@ static int get_calib_mode_available(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Length of chars written in buf, or negative value on failure.
  */
-static int get_xo_correction_available(void *device, char *buf, size_t len,
+static int get_xo_correction_available(void *device, char *buf, uint32_t len,
 		const struct iio_ch_info *channel,
 		intptr_t priv)
 {
@@ -1456,7 +1456,7 @@ static int get_xo_correction_available(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Length of chars written in buf, or negative value on failure.
  */
-static int get_gain_table_config(void *device, char *buf, size_t len,
+static int get_gain_table_config(void *device, char *buf, uint32_t len,
 				     const struct iio_ch_info *channel,
 				     intptr_t priv)
 {
@@ -1471,7 +1471,7 @@ static int get_gain_table_config(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Length of chars written in buf, or negative value on failure.
  */
-static int get_dcxo_tune_fine(void *device, char *buf, size_t len,
+static int get_dcxo_tune_fine(void *device, char *buf, uint32_t len,
 				  const struct iio_ch_info *channel,
 				  intptr_t priv)
 {
@@ -1491,7 +1491,7 @@ static int get_dcxo_tune_fine(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return: Length of chars written in buf, or negative value on failure.
  */
-static int get_dcxo_tune_fine_available(void *device, char *buf, size_t len,
+static int get_dcxo_tune_fine_available(void *device, char *buf, uint32_t len,
 		const struct iio_ch_info *channel,
 		intptr_t priv)
 {
@@ -1509,7 +1509,7 @@ static int get_dcxo_tune_fine_available(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Length of chars written in buf, or negative value on failure.
  */
-static int get_ensm_mode_available(void *device, char *buf, size_t len,
+static int get_ensm_mode_available(void *device, char *buf, uint32_t len,
 				       const struct iio_ch_info *channel,
 				       intptr_t priv)
 {
@@ -1528,7 +1528,7 @@ static int get_ensm_mode_available(void *device, char *buf, size_t len,
  * @param channel - sChannel properties.
  * @return: Length of chars written in buf, or negative value on failure.
  */
-static int get_multichip_sync(void *device, char *buf, size_t len,
+static int get_multichip_sync(void *device, char *buf, uint32_t len,
 				  const struct iio_ch_info *channel,
 				  intptr_t priv)
 {
@@ -1543,7 +1543,7 @@ static int get_multichip_sync(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Length of chars written in buf, or negative value on failure.
  */
-static int get_rssi_gain_step_error(void *device, char *buf, size_t len,
+static int get_rssi_gain_step_error(void *device, char *buf, uint32_t len,
 					const struct iio_ch_info *channel,
 					intptr_t priv)
 {
@@ -1559,7 +1559,7 @@ static int get_rssi_gain_step_error(void *device, char *buf, size_t len,
  * @return Length of chars written in buf, or negative value on failure.
  */
 static int get_dcxo_tune_coarse_available(void *device, char *buf,
-		size_t len,
+		uint32_t len,
 		const struct iio_ch_info *channel,
 		intptr_t priv)
 {
@@ -1577,7 +1577,7 @@ static int get_dcxo_tune_coarse_available(void *device, char *buf,
  * @param channel - Channel properties.
  * @return Length of chars written in buf, or negative value on failure.
  */
-static int get_tx_path_rates(void *device, char *buf, size_t len,
+static int get_tx_path_rates(void *device, char *buf, uint32_t len,
 				 const struct iio_ch_info *channel,
 				 intptr_t priv)
 {
@@ -1602,7 +1602,7 @@ static int get_tx_path_rates(void *device, char *buf, size_t len,
  * @return Length of chars written in buf, or negative value on failure.
  */
 static int get_trx_rate_governor_available(void *device, char *buf,
-		size_t len,
+		uint32_t len,
 		const struct iio_ch_info *channel,
 		intptr_t priv)
 {
@@ -1617,7 +1617,7 @@ static int get_trx_rate_governor_available(void *device, char *buf,
  * @param channel - Channel properties.
  * @return Length of chars written in buf, or negative value on failure.
  */
-static int get_xo_correction(void *device, char *buf, size_t len,
+static int get_xo_correction(void *device, char *buf, uint32_t len,
 				 const struct iio_ch_info *channel,
 				 intptr_t priv)
 {
@@ -1632,7 +1632,7 @@ static int get_xo_correction(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Length of chars written in buf, or negative value on failure.
  */
-static int get_ensm_mode(void *device, char *buf, size_t len,
+static int get_ensm_mode(void *device, char *buf, uint32_t len,
 			     const struct iio_ch_info *channel,
 			     intptr_t priv)
 {
@@ -1641,7 +1641,7 @@ static int get_ensm_mode(void *device, char *buf, size_t len,
 
 	if (ret < 0)
 		return ret;
-	if ((size_t)ret >= ARRAY_SIZE(ad9361_ensm_states) ||
+	if ((uint32_t)ret >= ARRAY_SIZE(ad9361_ensm_states) ||
 	    ad9361_ensm_states[ret] == NULL)
 		return -EIO;
 
@@ -1656,7 +1656,7 @@ static int get_ensm_mode(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Length of chars written in buf, or negative value on failure.
  */
-static int get_filter_fir_config(void *device, char *buf, size_t len,
+static int get_filter_fir_config(void *device, char *buf, uint32_t len,
 				     const struct iio_ch_info *channel,
 				     intptr_t priv)
 {
@@ -1675,7 +1675,7 @@ static int get_filter_fir_config(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Length of chars written in buf, or negative value on failure.
  */
-static int get_calib_mode(void *device, char *buf, size_t len,
+static int get_calib_mode(void *device, char *buf, uint32_t len,
 			      const struct iio_ch_info *channel,
 			      intptr_t priv)
 {
@@ -1697,7 +1697,7 @@ static int get_calib_mode(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Number of bytes written to device, or negative value on failure.
  */
-static int set_trx_rate_governor(void *device, char *buf, size_t len,
+static int set_trx_rate_governor(void *device, char *buf, uint32_t len,
 				     const struct iio_ch_info *channel,
 				     intptr_t priv)
 {
@@ -1722,7 +1722,7 @@ static int set_trx_rate_governor(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Number of bytes written to device, or negative value on failure.
  */
-static int set_dcxo_tune_coarse(void *device, char *buf, size_t len,
+static int set_dcxo_tune_coarse(void *device, char *buf, uint32_t len,
 				    const struct iio_ch_info *channel,
 				    intptr_t priv)
 {
@@ -1749,7 +1749,7 @@ static int set_dcxo_tune_coarse(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Number of bytes written to device, or negative value on failure.
  */
-static int set_dcxo_tune_fine(void *device, char *buf, size_t len,
+static int set_dcxo_tune_fine(void *device, char *buf, uint32_t len,
 				  const struct iio_ch_info *channel,
 				  intptr_t priv)
 {
@@ -1776,7 +1776,7 @@ static int set_dcxo_tune_fine(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Number of bytes written to device, or negative value on failure.
  */
-static int set_calib_mode(void *device, char *buf, size_t len,
+static int set_calib_mode(void *device, char *buf, uint32_t len,
 			      const struct iio_ch_info *channel,
 			      intptr_t priv)
 {
@@ -1820,7 +1820,7 @@ static int set_calib_mode(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return: Number of bytes written to device, or negative value on failure.
  */
-static int set_ensm_mode(void *device, char *buf, size_t len,
+static int set_ensm_mode(void *device, char *buf, uint32_t len,
 			     const struct iio_ch_info *channel,
 			     intptr_t priv)
 {
@@ -1872,7 +1872,7 @@ static int set_ensm_mode(void *device, char *buf, size_t len,
  * @param channel Channel properties.
  * @return Number of bytes written to device, or negative value on failure.
  */
-static int set_multichip_sync(void *device, char *buf, size_t len,
+static int set_multichip_sync(void *device, char *buf, uint32_t len,
 				  const struct iio_ch_info *channel,
 				  intptr_t priv)
 {
@@ -1898,7 +1898,7 @@ extern int32_t ad9361_parse_fir(struct ad9361_rf_phy *phy,
  * @param channel - Channel properties.
  * @return Number of bytes written to device, or negative value on failure.
  */
-static int set_filter_fir_config(void *device, char *buf, size_t len,
+static int set_filter_fir_config(void *device, char *buf, uint32_t len,
 				     const struct iio_ch_info *channel,
 				     intptr_t priv)
 {
