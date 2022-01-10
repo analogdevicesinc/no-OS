@@ -64,14 +64,13 @@
  * @return Length of chars written in buf, or negative value on failure.
  */
 static int get_calibphase(void *device, char *buf, uint32_t len,
-			      const struct iio_ch_info *channel,
-			      intptr_t priv)
+			  const struct iio_ch_info *channel, intptr_t priv)
 {
 	int32_t val, val2;
 	int32_t i = 0;
 	struct iio_axi_adc_desc *iio_adc = (struct iio_axi_adc_desc *)device;
 	int ret = axi_adc_get_calib_phase(iio_adc->adc, channel->ch_num, &val,
-					      &val2);
+					  &val2);
 	if (ret < 0)
 		return ret;
 
@@ -92,8 +91,7 @@ static int get_calibphase(void *device, char *buf, uint32_t len,
  * @return Length of chars written in buf, or negative value on failure.
  */
 static int get_calibbias(void *device, char *buf, uint32_t len,
-			     const struct iio_ch_info *channel,
-			     intptr_t priv)
+			 const struct iio_ch_info *channel, intptr_t priv)
 {
 	int32_t val;
 	int ret;
@@ -118,14 +116,13 @@ static int get_calibbias(void *device, char *buf, uint32_t len,
  * @return Length of chars written in buf, or negative value on failure.
  */
 static int get_calibscale(void *device, char *buf, uint32_t len,
-			      const struct iio_ch_info *channel,
-			      intptr_t priv)
+			  const struct iio_ch_info *channel, intptr_t priv)
 {
 	int32_t val, val2;
 	int32_t i = 0;
 	struct iio_axi_adc_desc *iio_adc = (struct iio_axi_adc_desc *)device;
 	int ret = axi_adc_get_calib_scale(iio_adc->adc, channel->ch_num, &val,
-					      &val2);
+					  &val2);
 	if (ret < 0)
 		return ret;
 
@@ -150,8 +147,7 @@ static int get_calibscale(void *device, char *buf, uint32_t len,
  * @return: Length of chars written in buf, or negative value on failure.
  */
 static int get_samples_pps(void *device, char *buf, uint32_t len,
-			       const struct iio_ch_info *channel,
-			       intptr_t priv)
+			   const struct iio_ch_info *channel, intptr_t priv)
 {
 	/* This function doesn't have an equivalent function in axi_adc_core,
 	 * and it should be implemented there first */
@@ -168,8 +164,8 @@ static int get_samples_pps(void *device, char *buf, uint32_t len,
  * @return Length of chars written in buf, or negative value on failure.
  */
 static int get_sampling_frequency(void *device, char *buf, uint32_t len,
-				      const struct iio_ch_info *channel,
-				      intptr_t priv)
+				  const struct iio_ch_info *channel,
+				  intptr_t priv)
 {
 	uint64_t sampling_freq_hz;
 	int ret;
@@ -196,8 +192,7 @@ static int get_sampling_frequency(void *device, char *buf, uint32_t len,
  * @return Number of bytes written to device, or negative value on failure.
  */
 static int set_calibphase(void *device, char *buf, uint32_t len,
-			      const struct iio_ch_info *channel,
-			      intptr_t priv)
+			  const struct iio_ch_info *channel, intptr_t priv)
 {
 	int ret;
 	float calib = strtof(buf, NULL);
@@ -221,8 +216,7 @@ static int set_calibphase(void *device, char *buf, uint32_t len,
  * @return Number of bytes written to device, or negative value on failure.
  */
 static int set_calibbias(void *device, char *buf, uint32_t len,
-			     const struct iio_ch_info *channel,
-			     intptr_t priv)
+			 const struct iio_ch_info *channel, intptr_t priv)
 {
 	int32_t val = str_to_int32(buf);
 	struct iio_axi_adc_desc *iio_adc = (struct iio_axi_adc_desc *)device;
@@ -247,15 +241,14 @@ static int set_calibbias(void *device, char *buf, uint32_t len,
  * @return Number of bytes written to device, or negative value on failure.
  */
 static int set_calibscale(void *device, char *buf, uint32_t len,
-			      const struct iio_ch_info *channel,
-			      intptr_t priv)
+			  const struct iio_ch_info *channel, intptr_t priv)
 {
 	float calib= strtof(buf, NULL);
 	int32_t val = (int32_t)calib;
 	int32_t val2 = (int32_t)(calib* 1000000) % 1000000;
 	struct iio_axi_adc_desc *iio_adc = (struct iio_axi_adc_desc *)device;
 	int ret = axi_adc_set_calib_scale(iio_adc->adc, channel->ch_num, val,
-					      val2);
+					  val2);
 	if (ret < 0)
 		return ret;
 
@@ -271,8 +264,7 @@ static int set_calibscale(void *device, char *buf, uint32_t len,
  * @return Number of bytes written to device, or negative value on failure.
  */
 static int set_samples_pps(void *device, char *buf, uint32_t len,
-			       const struct iio_ch_info *channel,
-			       intptr_t priv)
+			   const struct iio_ch_info *channel, intptr_t priv)
 {
 	/* This function doesn't have an equivalent function in axi_adc_core,
 	 * and it should be implemented there first */
@@ -289,8 +281,8 @@ static int set_samples_pps(void *device, char *buf, uint32_t len,
  * @return Number of bytes written to device, or negative value on failure.
  */
 static int set_sampling_frequency(void *device, char *buf, uint32_t len,
-				      const struct iio_ch_info *channel,
-				      intptr_t priv)
+				  const struct iio_ch_info *channel,
+				  intptr_t priv)
 {
 	/* This function doesn't have an equivalent function in axi_adc_core,
 	 * and it should be implemented there first */

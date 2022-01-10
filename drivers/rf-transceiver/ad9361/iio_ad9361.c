@@ -99,8 +99,7 @@ extern const char *ad9361_ensm_states[12];
  * @return Length of chars written in buf, or negative value on failure.
  */
 static int get_rf_port_select(void *device, char *buf, uint32_t len,
-				  const struct iio_ch_info *channel,
-				  intptr_t priv)
+			      const struct iio_ch_info *channel, intptr_t priv)
 {
 	int ret = 0;
 	uint32_t mode;
@@ -124,8 +123,7 @@ static int get_rf_port_select(void *device, char *buf, uint32_t len,
  * @return Length of chars written in buf, or negative value on failure.
  */
 static int get_hardwaregain(void *device, char *buf, uint32_t len,
-				const struct iio_ch_info *channel,
-				intptr_t priv)
+			    const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 	struct rf_rx_gain rx_gain = {0};
@@ -145,8 +143,9 @@ static int get_hardwaregain(void *device, char *buf, uint32_t len,
 				return ret;
 			i++;
 		}
-		ret = i + (int) snprintf(&buf[i], len, "%"PRIi32".%.6"PRIi32" dB", val1,
-					     labs(val2));
+		ret = i + (int) snprintf(&buf[i], len,
+					 "%"PRIi32".%.6"PRIi32" dB", val1,
+					 labs(val2));
 
 		return ret;
 	} else {
@@ -157,7 +156,7 @@ static int get_hardwaregain(void *device, char *buf, uint32_t len,
 			return ret;
 
 		return (int) snprintf(buf, len, "%"PRIi16".000000 dB",
-					  (int)rx_gain.gain_db);
+				      (int)rx_gain.gain_db);
 	}
 }
 
@@ -170,8 +169,7 @@ static int get_hardwaregain(void *device, char *buf, uint32_t len,
  * @return Length of chars written in buf, or negative value on failure.
  */
 static int get_rssi(void *device, char *buf, uint32_t len,
-			const struct iio_ch_info *channel,
-			intptr_t priv)
+		    const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 	int ret = 0;
@@ -200,21 +198,21 @@ static int get_rssi(void *device, char *buf, uint32_t len,
  * @return Length of chars written in buf, or negative value on failure.
  */
 static int get_hardwaregain_available(void *device, char *buf, uint32_t len,
-		const struct iio_ch_info *channel,
-		intptr_t priv)
+				      const struct iio_ch_info *channel,
+				      intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 
 	if (channel->ch_out)
 		return (int) snprintf(buf, len, "[%"PRIi16", %"PRIi16", %"PRIi16"]", 0, 250,
-					  89750);
+				      89750);
 	else
 		return (int) snprintf(buf, len, "[%"PRIi8", %"PRIi16", %"PRIi8"]",
-					  ad9361_phy->gt_info[ad9361_gt(ad9361_phy)].abs_gain_tbl[0],
-					  1,
-					  ad9361_phy->gt_info[ad9361_gt(ad9361_phy)].
-					  abs_gain_tbl[ad9361_phy->gt_info[ad9361_gt(ad9361_phy)].
-						       max_index - 1]);
+				      ad9361_phy->gt_info[ad9361_gt(ad9361_phy)].abs_gain_tbl[0],
+				      1,
+				      ad9361_phy->gt_info[ad9361_gt(ad9361_phy)].
+				      abs_gain_tbl[ad9361_phy->gt_info[ad9361_gt(ad9361_phy)].
+						   max_index - 1]);
 }
 
 /**
@@ -252,7 +250,7 @@ static int get_sampling_frequency_available(void *device, char *buf,
 	}
 
 	return (int) snprintf(buf, len, "[%"PRIu32" %"PRIi16" %"PRIu32"]",
-				  MIN_ADC_CLK / (12 * int_dec), 1, max);
+			      MIN_ADC_CLK / (12 * int_dec), 1, max);
 }
 
 /**
@@ -264,16 +262,16 @@ static int get_sampling_frequency_available(void *device, char *buf,
  * @return Length of chars written in buf, or negative value on failure.
  */
 static int get_rf_port_select_available(void *device, char *buf, uint32_t len,
-		const struct iio_ch_info *channel,
-		intptr_t priv)
+					const struct iio_ch_info *channel,
+					intptr_t priv)
 {
 	int bytes_no, ret;
 	uint16_t i;
 
 	if (channel->ch_out) {
 		return (int) sprintf(buf, "%s %s",
-					 ad9361_rf_tx_port[0],
-					 ad9361_rf_tx_port[1]);
+				     ad9361_rf_tx_port[0],
+				     ad9361_rf_tx_port[1]);
 	} else {
 		bytes_no = 0;
 		for (i = 0; i < sizeof(ad9361_rf_rx_port) / sizeof(ad9361_rf_rx_port[0]);
@@ -299,8 +297,7 @@ static int get_rf_port_select_available(void *device, char *buf, uint32_t len,
  * @return Length of chars written in buf, or negative value on failure.
  */
 static int get_filter_fir_en(void *device, char *buf, uint32_t len,
-				 const struct iio_ch_info *channel,
-				 intptr_t priv)
+			     const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 	uint8_t en_dis;
@@ -325,8 +322,8 @@ static int get_filter_fir_en(void *device, char *buf, uint32_t len,
  * @return Length of chars written in buf, or negative value on failure.
  */
 static int get_sampling_frequency(void *device, char *buf, uint32_t len,
-				      const struct iio_ch_info *channel,
-				      intptr_t priv)
+				  const struct iio_ch_info *channel,
+				  intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 	uint32_t sampling_freq_hz;
@@ -347,8 +344,8 @@ static int get_sampling_frequency(void *device, char *buf, uint32_t len,
  * @return Length of chars written in buf, or negative value on failure.
  */
 static int get_rf_bandwidth_available(void *device, char *buf, uint32_t len,
-		const struct iio_ch_info *channel,
-		intptr_t priv)
+				      const struct iio_ch_info *channel,
+				      intptr_t priv)
 {
 	if (channel->ch_out)
 		return snprintf(buf, len, "[200000 1 40000000]");
@@ -365,8 +362,8 @@ static int get_rf_bandwidth_available(void *device, char *buf, uint32_t len,
  * @return Length of chars written in buf, or negative value on failure.
  */
 static int get_rf_bandwidth(void *device, char *buf, uint32_t len,
-				const struct iio_ch_info *channel,
-				intptr_t priv)
+			    const struct iio_ch_info *channel,
+			    intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 	if (channel->ch_out)
@@ -384,12 +381,12 @@ static int get_rf_bandwidth(void *device, char *buf, uint32_t len,
  * @return Length of chars written in buf, or negative value on failure.
  */
 static int get_gain_control_mode(void *device, char *buf, uint32_t len,
-				     const struct iio_ch_info *channel,
-				     intptr_t priv)
+				 const struct iio_ch_info *channel,
+				 intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 	return (int) snprintf(buf, len, "%s",
-				  ad9361_agc_modes[ad9361_phy->agc_mode[channel->ch_num]]);
+			      ad9361_agc_modes[ad9361_phy->agc_mode[channel->ch_num]]);
 }
 
 /**
@@ -401,8 +398,8 @@ static int get_gain_control_mode(void *device, char *buf, uint32_t len,
  * @return Length of chars written in buf, or negative value on failure.
  */
 static int get_rf_dc_offset_tracking_en(void *device, char *buf, uint32_t len,
-		const struct iio_ch_info *channel,
-		intptr_t priv)
+					const struct iio_ch_info *channel,
+					intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 
@@ -421,8 +418,8 @@ static int get_rf_dc_offset_tracking_en(void *device, char *buf, uint32_t len,
  * @return Length of chars written in buf, or negative value on failure.
  */
 static int get_quadrature_tracking_en(void *device, char *buf, uint32_t len,
-		const struct iio_ch_info *channel,
-		intptr_t priv)
+				      const struct iio_ch_info *channel,
+				      intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 
@@ -446,10 +443,10 @@ static int get_gain_control_mode_available(void *device, char *buf,
 		intptr_t priv)
 {
 	return (int) snprintf(buf, len, "%s %s %s %s",
-				  ad9361_agc_modes[0],
-				  ad9361_agc_modes[1],
-				  ad9361_agc_modes[2],
-				  ad9361_agc_modes[3]);
+			      ad9361_agc_modes[0],
+			      ad9361_agc_modes[1],
+			      ad9361_agc_modes[2],
+			      ad9361_agc_modes[3]);
 }
 
 /**
@@ -461,8 +458,8 @@ static int get_gain_control_mode_available(void *device, char *buf,
  * @return Length of chars written in buf, or negative value on failure.
  */
 static int get_bb_dc_offset_tracking_en(void *device, char *buf, uint32_t len,
-		const struct iio_ch_info *channel,
-		intptr_t priv)
+					const struct iio_ch_info *channel,
+					intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 
@@ -481,8 +478,8 @@ static int get_bb_dc_offset_tracking_en(void *device, char *buf, uint32_t len,
  * @return Length of chars written in buf, or negative value on failure.
  */
 static int get_frequency_available(void *device, char *buf, uint32_t len,
-				       const struct iio_ch_info *channel,
-				       intptr_t priv)
+				   const struct iio_ch_info *channel,
+				   intptr_t priv)
 {
 	return snprintf(buf, len, "[%llu 1 %llu]",
 			AD9363A_MIN_CARRIER_FREQ_HZ,
@@ -498,8 +495,7 @@ static int get_frequency_available(void *device, char *buf, uint32_t len,
  * @return Length of chars written in buf, or negative value on failure.
  */
 static int get_fastlock_save(void *device, char *buf, uint32_t len,
-				 const struct iio_ch_info *channel,
-				 intptr_t priv)
+			     const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 	uint8_t faslock_vals[16];
@@ -529,8 +525,7 @@ static int get_fastlock_save(void *device, char *buf, uint32_t len,
  * @return Length of chars written in buf, or negative value on failure.
  */
 static int get_powerdown(void *device, char *buf, uint32_t len,
-			     const struct iio_ch_info *channel,
-			     intptr_t priv)
+			 const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 	uint64_t val = 0;
@@ -550,8 +545,7 @@ static int get_powerdown(void *device, char *buf, uint32_t len,
  * @return Length of chars written in buf, or negative value on failure.
  */
 static int get_fastlock_load(void *device, char *buf, uint32_t len,
-				 const struct iio_ch_info *channel,
-				 intptr_t priv)
+			     const struct iio_ch_info *channel, intptr_t priv)
 {
 	/* This function doesn't have an equivalent function in ad9361,
 	 * and it should be implemented there first */
@@ -568,8 +562,7 @@ static int get_fastlock_load(void *device, char *buf, uint32_t len,
  * @return Length of chars written in buf, or negative value on failure.
  */
 static int get_fastlock_store(void *device, char *buf, uint32_t len,
-				  const struct iio_ch_info *channel,
-				  intptr_t priv)
+			      const struct iio_ch_info *channel, intptr_t priv)
 {
 	/* This function doesn't have an equivalent function in ad9361,
 	 * and it should be implemented there first */
@@ -586,8 +579,8 @@ static int get_fastlock_store(void *device, char *buf, uint32_t len,
  * @return: Length of chars written in buf, or negative value on failure.
  */
 static int get_frequency(void *device, char *buf, uint32_t len,
-			     const struct iio_ch_info *channel,
-			     intptr_t priv)
+			 const struct iio_ch_info *channel,
+			 intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 	uint64_t val = 0;
@@ -607,17 +600,16 @@ static int get_frequency(void *device, char *buf, uint32_t len,
  * @return Length of chars written in buf, or negative value on failure.
  */
 static int get_external(void *device, char *buf, uint32_t len,
-			    const struct iio_ch_info *channel,
-			    intptr_t priv)
+			const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 
 	if (channel->ch_num == 0)
 		return (int) snprintf(buf, len, "%"PRIi16"",
-					  ad9361_phy->pdata->use_ext_rx_lo);
+				      ad9361_phy->pdata->use_ext_rx_lo);
 	else
 		return (int) snprintf(buf, len, "%"PRIi16"",
-					  ad9361_phy->pdata->use_ext_tx_lo);
+				      ad9361_phy->pdata->use_ext_tx_lo);
 }
 
 /**
@@ -629,8 +621,7 @@ static int get_external(void *device, char *buf, uint32_t len,
  * @return Length of chars written in buf, or negative value on failure.
  */
 static int get_fastlock_recall(void *device, char *buf, uint32_t len,
-				   const struct iio_ch_info *channel,
-				   intptr_t priv)
+			       const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 
@@ -647,8 +638,7 @@ static int get_fastlock_recall(void *device, char *buf, uint32_t len,
  * @return Length of chars written in buf, or negative value on failure.
  */
 static int get_temp0_input(void *device, char *buf, uint32_t len,
-			       const struct iio_ch_info *channel,
-			       intptr_t priv)
+			   const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 	int32_t temp;
@@ -668,8 +658,8 @@ static int get_temp0_input(void *device, char *buf, uint32_t len,
  * @return Length of chars written in buf, or negative value on failure.
  */
 static int get_voltage_filter_fir_en(void *device, char *buf, uint32_t len,
-		const struct iio_ch_info *channel,
-		intptr_t priv)
+				     const struct iio_ch_info *channel,
+				     intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 	uint8_t en_dis_tx, en_dis_rx;
@@ -694,8 +684,8 @@ static int get_voltage_filter_fir_en(void *device, char *buf, uint32_t len,
  * @return Number of bytes written to device, or negative value on failure.
  */
 static int set_hardwaregain_available(void *device, char *buf, uint32_t len,
-		const struct iio_ch_info *channel,
-		intptr_t priv)
+				      const struct iio_ch_info *channel,
+				      intptr_t priv)
 {
 	/* This function doesn't have an equivalent function in ad9361,
 	 * and it should be implemented there first */
@@ -712,8 +702,7 @@ static int set_hardwaregain_available(void *device, char *buf, uint32_t len,
  * @return Number of bytes written to device, or negative value on failure.
  */
 static int set_hardwaregain(void *device, char *buf, uint32_t len,
-				const struct iio_ch_info *channel,
-				intptr_t priv)
+			    const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 	int ret = 0;
@@ -755,8 +744,7 @@ static int set_hardwaregain(void *device, char *buf, uint32_t len,
  * @return  Number of bytes written to device, or negative value on failure.
  */
 static int set_rssi(void *device, char *buf, uint32_t len,
-			const struct iio_ch_info *channel,
-			intptr_t priv)
+		    const struct iio_ch_info *channel, intptr_t priv)
 {
 	/* This function doesn't have an equivalent function in ad9361,
 	 * and it should be implemented there first */
@@ -773,8 +761,7 @@ static int set_rssi(void *device, char *buf, uint32_t len,
  * @return: Number of bytes written to device, or negative value on failure.
  */
 static int set_rf_port_select(void *device, char *buf, uint32_t len,
-				  const struct iio_ch_info *channel,
-				  intptr_t priv)
+			      const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 	int ret = 0;
@@ -814,8 +801,8 @@ static int set_rf_port_select(void *device, char *buf, uint32_t len,
  * @return Number of bytes written to device, or negative value on failure.
  */
 static int set_gain_control_mode(void *device, char *buf, uint32_t len,
-				     const struct iio_ch_info *channel,
-				     intptr_t priv)
+				 const struct iio_ch_info *channel,
+				 intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 	struct rf_gain_ctrl gc = {0};
@@ -852,8 +839,8 @@ static int set_gain_control_mode(void *device, char *buf, uint32_t len,
  * @return Number of bytes written to device, or negative value on failure.
  */
 static int set_rf_port_select_available(void *device, char *buf, uint32_t len,
-		const struct iio_ch_info *channel,
-		intptr_t priv)
+					const struct iio_ch_info *channel,
+					intptr_t priv)
 {
 	/* This function doesn't have an equivalent function in ad9361,
 	 * and it should be implemented there first */
@@ -870,8 +857,7 @@ static int set_rf_port_select_available(void *device, char *buf, uint32_t len,
  * @return Number of bytes written to device, or negative value on failure.
  */
 static int set_rf_bandwidth(void *device, char *buf, uint32_t len,
-				const struct iio_ch_info *channel,
-				intptr_t priv)
+			    const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 	int ret = -ENOENT;
@@ -902,8 +888,8 @@ static int set_rf_bandwidth(void *device, char *buf, uint32_t len,
  * @return Number of bytes written to device, or negative value on failure.
  */
 static int set_rf_dc_offset_tracking_en(void *device, char *buf, uint32_t len,
-		const struct iio_ch_info *channel,
-		intptr_t priv)
+					const struct iio_ch_info *channel,
+					intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 	int8_t en_dis = str_to_int32(buf);
@@ -951,8 +937,8 @@ static int set_sampling_frequency_available(void *device, char *buf,
  * @return Number of bytes written to device, or negative value on failure.
  */
 static int set_quadrature_tracking_en(void *device, char *buf, uint32_t len,
-		const struct iio_ch_info *channel,
-		intptr_t priv)
+				      const struct iio_ch_info *channel,
+				      intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 	int8_t en_dis = str_to_int32(buf);
@@ -981,8 +967,8 @@ static int set_quadrature_tracking_en(void *device, char *buf, uint32_t len,
  * @return Number of bytes written to device, or negative value on failure.
  */
 static int set_sampling_frequency(void *device, char *buf, uint32_t len,
-				      const struct iio_ch_info *channel,
-				      intptr_t priv)
+				  const struct iio_ch_info *channel,
+				  intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 	uint32_t sampling_freq_hz = srt_to_uint32(buf);
@@ -1042,8 +1028,7 @@ static int set_gain_control_mode_available(void *device, char *buf,
  * @return Number of bytes written to device, or negative value on failure.
  */
 static int set_filter_fir_en(void *device, char *buf, uint32_t len,
-				 const struct iio_ch_info *channel,
-				 intptr_t priv)
+			     const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 	int8_t en_dis = str_to_int32(buf);
@@ -1072,8 +1057,8 @@ static int set_filter_fir_en(void *device, char *buf, uint32_t len,
  * @return Number of bytes written to device, or negative value on failure.
  */
 static int set_rf_bandwidth_available(void *device, char *buf, uint32_t len,
-		const struct iio_ch_info *channel,
-		intptr_t priv)
+				      const struct iio_ch_info *channel,
+				      intptr_t priv)
 {
 	/* This function doesn't have an equivalent function in ad9361,
 	 * and it should be implemented there first */
@@ -1090,8 +1075,8 @@ static int set_rf_bandwidth_available(void *device, char *buf, uint32_t len,
  * @return Number of bytes written to device, or negative value on failure.
  */
 static int set_bb_dc_offset_tracking_en(void *device, char *buf, uint32_t len,
-		const struct iio_ch_info *channel,
-		intptr_t priv)
+					const struct iio_ch_info *channel,
+					intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 	int8_t en_dis = str_to_int32(buf);
@@ -1120,8 +1105,8 @@ static int set_bb_dc_offset_tracking_en(void *device, char *buf, uint32_t len,
  * @return Number of bytes written to device, or negative value on failure.
  */
 static int set_frequency_available(void *device, char *buf, uint32_t len,
-				       const struct iio_ch_info *channel,
-				       intptr_t priv)
+				   const struct iio_ch_info *channel,
+				   intptr_t priv)
 {
 	/* This function doesn't have an equivalent function in ad9361,
 	 * and it should be implemented there first */
@@ -1138,8 +1123,7 @@ static int set_frequency_available(void *device, char *buf, uint32_t len,
  * @return Number of bytes written to device, or negative value on failure.
  */
 static int set_fastlock_save(void *device, char *buf, uint32_t len,
-				 const struct iio_ch_info *channel,
-				 intptr_t priv)
+			     const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 	uint32_t readin = srt_to_uint32(buf);
@@ -1158,8 +1142,7 @@ static int set_fastlock_save(void *device, char *buf, uint32_t len,
  * @return Number of bytes written to device, or negative value on failure.
  */
 static int set_powerdown(void *device, char *buf, uint32_t len,
-			     const struct iio_ch_info *channel,
-			     intptr_t priv)
+			 const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 	int ret = -ENOENT;
@@ -1184,8 +1167,7 @@ static int set_powerdown(void *device, char *buf, uint32_t len,
  * @return: Number of bytes written to device, or negative value on failure.
  */
 static int set_fastlock_load(void *device, char *buf, uint32_t len,
-				 const struct iio_ch_info *channel,
-				 intptr_t priv)
+			     const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 	int ret = 0;
@@ -1227,8 +1209,7 @@ static int set_fastlock_load(void *device, char *buf, uint32_t len,
  * @return Number of bytes written to device, or negative value on failure.
  */
 static int set_fastlock_store(void *device, char *buf, uint32_t len,
-				  const struct iio_ch_info *channel,
-				  intptr_t priv)
+			      const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 	uint32_t profile = srt_to_uint32(buf);
@@ -1250,8 +1231,7 @@ static int set_fastlock_store(void *device, char *buf, uint32_t len,
  * @return Number of bytes written to device, or negative value on failure.
  */
 static int set_frequency(void *device, char *buf, uint32_t len,
-			     const struct iio_ch_info *channel,
-			     intptr_t priv)
+			 const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 	uint64_t lo_freq_hz = srt_to_uint32(buf);
@@ -1284,8 +1264,7 @@ static int set_frequency(void *device, char *buf, uint32_t len,
  * @return Number of bytes written to device, or negative value on failure.
  */
 static int set_external(void *device, char *buf, uint32_t len,
-			    const struct iio_ch_info *channel,
-			    intptr_t priv)
+			const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 	bool select = str_to_int32(buf) ? 1 : 0;
@@ -1310,8 +1289,7 @@ static int set_external(void *device, char *buf, uint32_t len,
  * @return Number of bytes written to device, or negative value on failure.
  */
 static int set_fastlock_recall(void *device, char *buf, uint32_t len,
-				   const struct iio_ch_info *channel,
-				   intptr_t priv)
+			       const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 	int ret = 0;
@@ -1333,8 +1311,8 @@ static int set_fastlock_recall(void *device, char *buf, uint32_t len,
  * @return Number of bytes written to device, or negative value on failure.
  */
 static int set_voltage_filter_fir_en(void *device, char *buf, uint32_t len,
-		const struct iio_ch_info *channel,
-		intptr_t priv)
+				     const struct iio_ch_info *channel,
+				     intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 	int8_t en_dis = str_to_int32(buf) ? 1 : 0;
@@ -1359,8 +1337,8 @@ static int set_voltage_filter_fir_en(void *device, char *buf, uint32_t len,
  * @return Length of chars written in buf, or negative value on failure.
  */
 static int get_dcxo_tune_coarse(void *device, char *buf, uint32_t len,
-				    const struct iio_ch_info *channel,
-				    intptr_t priv)
+				const struct iio_ch_info *channel,
+				intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 
@@ -1379,8 +1357,7 @@ static int get_dcxo_tune_coarse(void *device, char *buf, uint32_t len,
  * @return Length of chars written in buf, or negative value on failure.
  */
 static int get_rx_path_rates(void *device, char *buf, uint32_t len,
-				 const struct iio_ch_info *channel,
-				 intptr_t priv)
+			     const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 	unsigned long clk[6];
@@ -1403,8 +1380,8 @@ static int get_rx_path_rates(void *device, char *buf, uint32_t len,
  * @return Length of chars written in buf, or negative value on failure.
  */
 static int get_trx_rate_governor(void *device, char *buf, uint32_t len,
-				     const struct iio_ch_info *channel,
-				     intptr_t priv)
+				 const struct iio_ch_info *channel,
+				 intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 	uint32_t rate_governor;
@@ -1425,12 +1402,12 @@ static int get_trx_rate_governor(void *device, char *buf, uint32_t len,
  * @return Length of chars written in buf, or negative value on failure.
  */
 static int get_calib_mode_available(void *device, char *buf, uint32_t len,
-					const struct iio_ch_info *channel,
-					intptr_t priv)
+				    const struct iio_ch_info *channel,
+				    intptr_t priv)
 {
 	return (int) snprintf(buf, len, "%s %s %s %s %s", ad9361_calib_mode[0],
-				  ad9361_calib_mode[1], ad9361_calib_mode[2],
-				  ad9361_calib_mode[3], ad9361_calib_mode[4]);
+			      ad9361_calib_mode[1], ad9361_calib_mode[2],
+			      ad9361_calib_mode[3], ad9361_calib_mode[4]);
 }
 
 /**
@@ -1442,8 +1419,8 @@ static int get_calib_mode_available(void *device, char *buf, uint32_t len,
  * @return Length of chars written in buf, or negative value on failure.
  */
 static int get_xo_correction_available(void *device, char *buf, uint32_t len,
-		const struct iio_ch_info *channel,
-		intptr_t priv)
+				       const struct iio_ch_info *channel,
+				       intptr_t priv)
 {
 	return (int) snprintf(buf, len, "%"PRIi16"", 0); /* dummy */
 }
@@ -1457,8 +1434,8 @@ static int get_xo_correction_available(void *device, char *buf, uint32_t len,
  * @return Length of chars written in buf, or negative value on failure.
  */
 static int get_gain_table_config(void *device, char *buf, uint32_t len,
-				     const struct iio_ch_info *channel,
-				     intptr_t priv)
+				 const struct iio_ch_info *channel,
+				 intptr_t priv)
 {
 	return (int) snprintf(buf, len, "%"PRIi16"", 0); /* dummy */
 }
@@ -1472,8 +1449,7 @@ static int get_gain_table_config(void *device, char *buf, uint32_t len,
  * @return Length of chars written in buf, or negative value on failure.
  */
 static int get_dcxo_tune_fine(void *device, char *buf, uint32_t len,
-				  const struct iio_ch_info *channel,
-				  intptr_t priv)
+			      const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 
@@ -1492,8 +1468,8 @@ static int get_dcxo_tune_fine(void *device, char *buf, uint32_t len,
  * @return: Length of chars written in buf, or negative value on failure.
  */
 static int get_dcxo_tune_fine_available(void *device, char *buf, uint32_t len,
-		const struct iio_ch_info *channel,
-		intptr_t priv)
+					const struct iio_ch_info *channel,
+					intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 
@@ -1510,14 +1486,14 @@ static int get_dcxo_tune_fine_available(void *device, char *buf, uint32_t len,
  * @return Length of chars written in buf, or negative value on failure.
  */
 static int get_ensm_mode_available(void *device, char *buf, uint32_t len,
-				       const struct iio_ch_info *channel,
-				       intptr_t priv)
+				   const struct iio_ch_info *channel,
+				   intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 
 	return (int) snprintf(buf, len, "%s", ad9361_phy->pdata->fdd ?
-				  "sleep wait alert fdd pinctrl pinctrl_fdd_indep" :
-				  "sleep wait alert rx tx pinctrl");
+			      "sleep wait alert fdd pinctrl pinctrl_fdd_indep" :
+			      "sleep wait alert rx tx pinctrl");
 }
 
 /**
@@ -1529,8 +1505,8 @@ static int get_ensm_mode_available(void *device, char *buf, uint32_t len,
  * @return: Length of chars written in buf, or negative value on failure.
  */
 static int get_multichip_sync(void *device, char *buf, uint32_t len,
-				  const struct iio_ch_info *channel,
-				  intptr_t priv)
+			      const struct iio_ch_info *channel,
+			      intptr_t priv)
 {
 	return (int) snprintf(buf, len, "%"PRIi16"", 0);  /* dummy */
 }
@@ -1544,8 +1520,8 @@ static int get_multichip_sync(void *device, char *buf, uint32_t len,
  * @return Length of chars written in buf, or negative value on failure.
  */
 static int get_rssi_gain_step_error(void *device, char *buf, uint32_t len,
-					const struct iio_ch_info *channel,
-					intptr_t priv)
+				    const struct iio_ch_info *channel,
+				    intptr_t priv)
 {
 	return (int) snprintf(buf, len, "%"PRIi16"", 0);  /* dummy */
 }
@@ -1566,7 +1542,7 @@ static int get_dcxo_tune_coarse_available(void *device, char *buf,
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 
 	return (int) snprintf(buf, len, "%s",
-				  ad9361_phy->pdata->use_extclk ? "[0 0 0]" : "[0 1 63]");
+			      ad9361_phy->pdata->use_extclk ? "[0 0 0]" : "[0 1 63]");
 }
 
 /**
@@ -1578,8 +1554,7 @@ static int get_dcxo_tune_coarse_available(void *device, char *buf,
  * @return Length of chars written in buf, or negative value on failure.
  */
 static int get_tx_path_rates(void *device, char *buf, uint32_t len,
-				 const struct iio_ch_info *channel,
-				 intptr_t priv)
+			     const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 	unsigned long clk[6];
@@ -1618,8 +1593,7 @@ static int get_trx_rate_governor_available(void *device, char *buf,
  * @return Length of chars written in buf, or negative value on failure.
  */
 static int get_xo_correction(void *device, char *buf, uint32_t len,
-				 const struct iio_ch_info *channel,
-				 intptr_t priv)
+			     const struct iio_ch_info *channel, intptr_t priv)
 {
 	return (int) snprintf(buf, len, "%"PRIi16"", 0); /* dummy */
 }
@@ -1633,8 +1607,7 @@ static int get_xo_correction(void *device, char *buf, uint32_t len,
  * @return Length of chars written in buf, or negative value on failure.
  */
 static int get_ensm_mode(void *device, char *buf, uint32_t len,
-			     const struct iio_ch_info *channel,
-			     intptr_t priv)
+			 const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 	int ret = ad9361_ensm_get_state(ad9361_phy);
@@ -1657,8 +1630,8 @@ static int get_ensm_mode(void *device, char *buf, uint32_t len,
  * @return Length of chars written in buf, or negative value on failure.
  */
 static int get_filter_fir_config(void *device, char *buf, uint32_t len,
-				     const struct iio_ch_info *channel,
-				     intptr_t priv)
+				 const struct iio_ch_info *channel,
+				 intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 
@@ -1676,8 +1649,7 @@ static int get_filter_fir_config(void *device, char *buf, uint32_t len,
  * @return Length of chars written in buf, or negative value on failure.
  */
 static int get_calib_mode(void *device, char *buf, uint32_t len,
-			      const struct iio_ch_info *channel,
-			      intptr_t priv)
+			  const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 	uint8_t en_dis;
@@ -1698,8 +1670,8 @@ static int get_calib_mode(void *device, char *buf, uint32_t len,
  * @return Number of bytes written to device, or negative value on failure.
  */
 static int set_trx_rate_governor(void *device, char *buf, uint32_t len,
-				     const struct iio_ch_info *channel,
-				     intptr_t priv)
+				 const struct iio_ch_info *channel,
+				 intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 	int ret = 0;
@@ -1723,8 +1695,8 @@ static int set_trx_rate_governor(void *device, char *buf, uint32_t len,
  * @return Number of bytes written to device, or negative value on failure.
  */
 static int set_dcxo_tune_coarse(void *device, char *buf, uint32_t len,
-				    const struct iio_ch_info *channel,
-				    intptr_t priv)
+				const struct iio_ch_info *channel,
+				intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 	uint32_t dcxo_coarse = srt_to_uint32(buf);
@@ -1750,8 +1722,7 @@ static int set_dcxo_tune_coarse(void *device, char *buf, uint32_t len,
  * @return Number of bytes written to device, or negative value on failure.
  */
 static int set_dcxo_tune_fine(void *device, char *buf, uint32_t len,
-				  const struct iio_ch_info *channel,
-				  intptr_t priv)
+			      const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 	uint32_t dcxo_fine = srt_to_uint32(buf);
@@ -1777,8 +1748,7 @@ static int set_dcxo_tune_fine(void *device, char *buf, uint32_t len,
  * @return Number of bytes written to device, or negative value on failure.
  */
 static int set_calib_mode(void *device, char *buf, uint32_t len,
-			      const struct iio_ch_info *channel,
-			      intptr_t priv)
+			  const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 	int32_t arg = -1;
@@ -1821,8 +1791,7 @@ static int set_calib_mode(void *device, char *buf, uint32_t len,
  * @return: Number of bytes written to device, or negative value on failure.
  */
 static int set_ensm_mode(void *device, char *buf, uint32_t len,
-			     const struct iio_ch_info *channel,
-			     intptr_t priv)
+			 const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 	uint32_t val = 0;
@@ -1873,8 +1842,7 @@ static int set_ensm_mode(void *device, char *buf, uint32_t len,
  * @return Number of bytes written to device, or negative value on failure.
  */
 static int set_multichip_sync(void *device, char *buf, uint32_t len,
-				  const struct iio_ch_info *channel,
-				  intptr_t priv)
+			      const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 	uint32_t readin = srt_to_uint32(buf);
@@ -1899,8 +1867,8 @@ extern int32_t ad9361_parse_fir(struct ad9361_rf_phy *phy,
  * @return Number of bytes written to device, or negative value on failure.
  */
 static int set_filter_fir_config(void *device, char *buf, uint32_t len,
-				     const struct iio_ch_info *channel,
-				     intptr_t priv)
+				 const struct iio_ch_info *channel,
+				 intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 	int32_t ret;

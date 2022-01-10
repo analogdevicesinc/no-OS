@@ -192,7 +192,7 @@ int32_t dac_write_samples(void* dev, uint16_t* buff, uint32_t samples)
  * @return Length of chars written in buf, or negative value on failure.
  */
 int get_dac_demo_attr(void *device, char *buf, uint32_t len,
-			  const struct iio_ch_info *channel, intptr_t attr_id)
+		      const struct iio_ch_info *channel, intptr_t attr_id)
 {
 	struct dac_demo_desc *desc;
 
@@ -223,7 +223,7 @@ int get_dac_demo_attr(void *device, char *buf, uint32_t len,
  * @return: Number of bytes written to device, or negative value on failure.
  */
 int set_dac_demo_attr(void *device, char *buf, uint32_t len,
-			  const struct iio_ch_info *channel, intptr_t attr_id)
+		      const struct iio_ch_info *channel, intptr_t attr_id)
 {
 	struct dac_demo_desc *desc;
 	uint32_t value = srt_to_uint32(buf);

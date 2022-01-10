@@ -138,7 +138,7 @@ static int32_t set_pin(uint32_t id, enum pin_type type)
 
 /* Get global iio attributes */
 int get_global_attr(void *device, char *buf, uint32_t len,
-			const struct iio_ch_info *channel, intptr_t priv)
+		    const struct iio_ch_info *channel, intptr_t priv)
 {
 	uint32_t val;
 	struct iio_aducm3029_desc *desc = device;
@@ -159,7 +159,7 @@ int get_global_attr(void *device, char *buf, uint32_t len,
 
 /* Set global iio attributes */
 int set_global_attr(void *device, char *buf, uint32_t len,
-			const struct iio_ch_info *channel, intptr_t priv)
+		    const struct iio_ch_info *channel, intptr_t priv)
 {
 	int32_t ret;
 	uint32_t i;
@@ -195,7 +195,7 @@ int set_global_attr(void *device, char *buf, uint32_t len,
 
 /* Set get iio attributes */
 int get_pwm_attr(void *device, char *buf, uint32_t len,
-		     const struct iio_ch_info *channel, intptr_t priv)
+		 const struct iio_ch_info *channel, intptr_t priv)
 {
 	int32_t ret;
 	uint32_t val;
@@ -228,7 +228,7 @@ int get_pwm_attr(void *device, char *buf, uint32_t len,
 
 /* Set gpio pwm attributes */
 int set_pwm_attr(void *device, char *buf, uint32_t len,
-		     const struct iio_ch_info *channel, intptr_t priv)
+		 const struct iio_ch_info *channel, intptr_t priv)
 {
 	int32_t ret;
 	uint32_t val = srt_to_uint32(buf);
@@ -281,7 +281,7 @@ int set_pwm_attr(void *device, char *buf, uint32_t len,
 
 /* Get gpio iio attributes */
 int get_gpio_attr(void *device, char *buf, uint32_t len,
-		      const struct iio_ch_info *channel, intptr_t priv)
+		  const struct iio_ch_info *channel, intptr_t priv)
 {
 	int32_t ret;
 	uint8_t val;
@@ -313,7 +313,7 @@ int get_gpio_attr(void *device, char *buf, uint32_t len,
 
 /* Set gpio iio attributes */
 int set_gpio_attr(void *device, char *buf, uint32_t len,
-		      const struct iio_ch_info *channel, intptr_t priv)
+		  const struct iio_ch_info *channel, intptr_t priv)
 {
 	int32_t ret;
 	uint32_t val = srt_to_uint32(buf);

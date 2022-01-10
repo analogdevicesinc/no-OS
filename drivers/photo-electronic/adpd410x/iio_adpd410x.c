@@ -61,9 +61,9 @@
  * @param channel - IIO channel information.
  * @return Number of bytes printed in the output buffer, or negative error code.
  */
-static int adpd410x_iio_read_raw_chan(void *device, char *buf,
-		uint32_t len,
-		const struct iio_ch_info *channel, intptr_t priv)
+static int adpd410x_iio_read_raw_chan(void *device, char *buf, uint32_t len,
+				      const struct iio_ch_info *channel,
+				      intptr_t priv)
 {
 	struct adpd410x_dev *dev = (struct adpd410x_dev *)device;
 	int32_t ret;
@@ -220,7 +220,8 @@ static char const * const adpd410x_iio_opmode[] = {
  * @return Number of bytes printed in the output buffer, or negative error code.
  */
 static int adpd410x_iio_set_opmode(void *device, char *buf, uint32_t len,
-				       const struct iio_ch_info *channel, intptr_t priv)
+				   const struct iio_ch_info *channel,
+				   intptr_t priv)
 {
 	struct adpd410x_dev *dev = (struct adpd410x_dev *)device;
 	int32_t ret;
@@ -246,7 +247,8 @@ static int adpd410x_iio_set_opmode(void *device, char *buf, uint32_t len,
  * @return Number of bytes printed in the output buffer, or negative error code.
  */
 static int adpd410x_iio_get_opmode(void *device, char *buf, uint32_t len,
-				       const struct iio_ch_info *channel, intptr_t priv)
+				   const struct iio_ch_info *channel,
+				   intptr_t priv)
 {
 	struct adpd410x_dev *dev = (struct adpd410x_dev *)device;
 	int32_t ret;

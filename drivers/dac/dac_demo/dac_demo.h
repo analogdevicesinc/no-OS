@@ -112,10 +112,10 @@ int32_t close_dac_channels(void* dev);
 int32_t dac_write_samples(void* dev, uint16_t* buff, uint32_t samples);
 
 int get_dac_demo_attr(void *device, char *buf, uint32_t len,
-			  const struct iio_ch_info *channel, intptr_t priv);
+		      const struct iio_ch_info *channel, intptr_t priv);
 
 int set_dac_demo_attr(void *device, char *buf, uint32_t len,
-			  const struct iio_ch_info *channel, intptr_t priv);
+		      const struct iio_ch_info *channel, intptr_t priv);
 
 int32_t dac_demo_reg_read(struct dac_demo_desc *desc, uint8_t reg_index,
 			  uint8_t *readval);

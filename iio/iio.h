@@ -99,6 +99,6 @@ int iio_step(struct iio_desc *desc);
 int32_t iio_parse_value(char *buf, enum iio_val fmt,
 			int32_t *val, int32_t *val2);
 int iio_format_value(char *buf, uint32_t len, enum iio_val fmt,
-			 int32_t size, int32_t *vals);
+		     int32_t size, int32_t *vals);
 
 #endif /* IIO_H_ */

@@ -58,7 +58,8 @@
  * @return Number of bytes printed in the output buffer, or negative error code.
  */
 static int ad5791_iio_get_scale(void *device, char *buf, uint32_t len,
-				    const struct iio_ch_info *channel, intptr_t priv)
+				const struct iio_ch_info *channel,
+				intptr_t priv)
 {
 	struct ad5791_iio_desc *iio_drv = (struct ad5791_iio_desc *)device;
 	uint32_t int_part, fract_part;
@@ -83,7 +84,8 @@ static int ad5791_iio_get_scale(void *device, char *buf, uint32_t len,
  * @return Number of bytes printed in the output buffer, or negative error code.
  */
 static int ad5791_iio_get_offset(void *device, char *buf, uint32_t len,
-				     const struct iio_ch_info *channel, intptr_t priv)
+				 const struct iio_ch_info *channel,
+				 intptr_t priv)
 {
 	struct ad5791_iio_desc *iio_drv = (struct ad5791_iio_desc *)device;
 	uint64_t val64;
@@ -106,7 +108,7 @@ static int ad5791_iio_get_offset(void *device, char *buf, uint32_t len,
  * @return Number of bytes printed in the output buffer, or negative error code.
  */
 static int ad5791_iio_get_raw(void *device, char *buf, uint32_t len,
-				  const struct iio_ch_info *channel, intptr_t priv)
+			      const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct ad5791_iio_desc *iio_drv = (struct ad5791_iio_desc *)device;
 	struct ad5791_dev *dev = (struct ad5791_dev *)iio_drv->ad5791_handle;
@@ -133,7 +135,7 @@ static int ad5791_iio_get_raw(void *device, char *buf, uint32_t len,
  * @return Number of bytes printed in the output buffer, or negative error code.
  */
 static int ad5791_iio_set_raw(void *device, char *buf, uint32_t len,
-				  const struct iio_ch_info *channel, intptr_t priv)
+			      const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct ad5791_iio_desc *iio_drv = (struct ad5791_iio_desc *)device;
 	struct ad5791_dev *dev = (struct ad5791_dev *)iio_drv->ad5791_handle;
@@ -163,7 +165,8 @@ static int ad5791_iio_set_raw(void *device, char *buf, uint32_t len,
  * @return Number of bytes printed in the output buffer, or negative error code.
  */
 static int ad5791_iio_get_powerdown(void *device, char *buf, uint32_t len,
-					const struct iio_ch_info *channel, intptr_t priv)
+				    const struct iio_ch_info *channel,
+				    intptr_t priv)
 {
 	struct ad5791_iio_desc *iio_drv = (struct ad5791_iio_desc *)device;
 	struct ad5791_dev *dev = (struct ad5791_dev *)iio_drv->ad5791_handle;
@@ -194,7 +197,8 @@ static int ad5791_iio_get_powerdown(void *device, char *buf, uint32_t len,
  * @return Number of bytes printed in the output buffer, or negative error code.
  */
 static int ad5791_iio_set_powerdown(void *device, char *buf, uint32_t len,
-					const struct iio_ch_info *channel, intptr_t priv)
+				    const struct iio_ch_info *channel,
+				    intptr_t priv)
 {
 	struct ad5791_iio_desc *iio_drv = (struct ad5791_iio_desc *)device;
 	struct ad5791_dev *dev = (struct ad5791_dev *)iio_drv->ad5791_handle;
@@ -240,7 +244,8 @@ static char const * const ad5791_iio_pwd_modes[] = {
  * @return Number of bytes printed in the output buffer, or negative error code.
  */
 static int ad5791_iio_get_pd_mode(void *device, char *buf, uint32_t len,
-				      const struct iio_ch_info *channel, intptr_t priv)
+				  const struct iio_ch_info *channel,
+				  intptr_t priv)
 {
 	struct ad5791_iio_desc *iio_drv = (struct ad5791_iio_desc *)device;
 
@@ -258,7 +263,8 @@ static int ad5791_iio_get_pd_mode(void *device, char *buf, uint32_t len,
  * @return Number of bytes printed in the output buffer, or negative error code.
  */
 static int ad5791_iio_set_pd_mode(void *device, char *buf, uint32_t len,
-				      const struct iio_ch_info *channel, intptr_t priv)
+				  const struct iio_ch_info *channel,
+				  intptr_t priv)
 {
 	struct ad5791_iio_desc *iio_drv = (struct ad5791_iio_desc *)device;
 	int8_t i;
@@ -282,7 +288,8 @@ static int ad5791_iio_set_pd_mode(void *device, char *buf, uint32_t len,
  * @return Number of bytes printed in the output buffer, or negative error code.
  */
 static int ad5791_iio_get_pd_mode_avail(void *device, char *buf, uint32_t len,
-		const struct iio_ch_info *channel, intptr_t priv)
+					const struct iio_ch_info *channel,
+					intptr_t priv)
 {
 	int8_t i;
 
