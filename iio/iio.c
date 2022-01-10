@@ -418,6 +418,9 @@ static int iio_write_all_attr(struct attr_fun_params *params,
 		i++;
 	}
 
+	if (params->len == 0)
+		return -ENOENT;
+
 	return params->len;
 }
 
