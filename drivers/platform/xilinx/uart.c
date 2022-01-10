@@ -159,7 +159,7 @@ static int32_t uart_read_byte(struct uart_desc *desc, uint8_t *data)
  */
 int32_t uart_read(struct uart_desc *desc, uint8_t *data, uint32_t bytes_number)
 {
-	ssize_t ret;
+	int ret;
 	for (uint32_t i = 0; i < bytes_number; i++) {
 		ret = uart_read_byte(desc, &data[i]);
 		if (ret < 0)

@@ -78,7 +78,7 @@ static const int adxrs290_hpf_3db_freq_hz_table[][2] = {
 	[10] = {11, 300000},
 };
 
-static ssize_t get_adxrs290_iio_ch_raw(void *device, char *buf, size_t len,
+static int get_adxrs290_iio_ch_raw(void *device, char *buf, size_t len,
 				       const struct iio_ch_info *channel,
 				       intptr_t priv)
 {
@@ -93,7 +93,7 @@ static ssize_t get_adxrs290_iio_ch_raw(void *device, char *buf, size_t len,
 }
 
 
-static ssize_t get_adxrs290_iio_ch_scale(void *device, char *buf, size_t len,
+static int get_adxrs290_iio_ch_scale(void *device, char *buf, size_t len,
 		const struct iio_ch_info *channel,
 		intptr_t priv)
 {
@@ -105,7 +105,7 @@ static ssize_t get_adxrs290_iio_ch_scale(void *device, char *buf, size_t len,
 	return snprintf(buf, len, "0.000087266");
 }
 
-static ssize_t get_adxrs290_iio_ch_hpf(void *device, char *buf, size_t len,
+static int get_adxrs290_iio_ch_hpf(void *device, char *buf, size_t len,
 				       const struct iio_ch_info *channel,
 				       intptr_t priv)
 {
@@ -119,7 +119,7 @@ static ssize_t get_adxrs290_iio_ch_hpf(void *device, char *buf, size_t len,
 			adxrs290_hpf_3db_freq_hz_table[index][1]);
 }
 
-static ssize_t set_adxrs290_iio_ch_hpf(void *device, char *buf, size_t len,
+static int set_adxrs290_iio_ch_hpf(void *device, char *buf, size_t len,
 				       const struct iio_ch_info *channel,
 				       intptr_t priv)
 {
@@ -140,7 +140,7 @@ static ssize_t set_adxrs290_iio_ch_hpf(void *device, char *buf, size_t len,
 	return FAILURE;
 }
 
-static ssize_t get_adxrs290_iio_ch_lpf(void *device, char *buf, size_t len,
+static int get_adxrs290_iio_ch_lpf(void *device, char *buf, size_t len,
 				       const struct iio_ch_info *channel,
 				       intptr_t priv)
 {
@@ -154,7 +154,7 @@ static ssize_t get_adxrs290_iio_ch_lpf(void *device, char *buf, size_t len,
 			adxrs290_lpf_3db_freq_hz_table[index][1]);
 }
 
-static ssize_t set_adxrs290_iio_ch_lpf(void *device, char *buf, size_t len,
+static int set_adxrs290_iio_ch_lpf(void *device, char *buf, size_t len,
 				       const struct iio_ch_info *channel,
 				       intptr_t priv)
 {

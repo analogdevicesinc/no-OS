@@ -61,7 +61,7 @@
  * @param channel - IIO channel information.
  * @return Number of bytes printed in the output buffer, or negative error code.
  */
-static ssize_t adpd410x_iio_read_raw_chan(void *device, char *buf,
+static int adpd410x_iio_read_raw_chan(void *device, char *buf,
 		size_t len,
 		const struct iio_ch_info *channel, intptr_t priv)
 {
@@ -92,7 +92,7 @@ static ssize_t adpd410x_iio_read_raw_chan(void *device, char *buf,
  * @param channel - IIO channel information.
  * @return Number of bytes printed in the output buffer, or negative error code.
  */
-static ssize_t adpd410x_iio_set_sampling_freq(void *device, char *buf,
+static int adpd410x_iio_set_sampling_freq(void *device, char *buf,
 		size_t len,
 		const struct iio_ch_info *channel, intptr_t priv)
 {
@@ -116,7 +116,7 @@ static ssize_t adpd410x_iio_set_sampling_freq(void *device, char *buf,
  * @param channel - IIO channel information.
  * @return Number of bytes printed in the output buffer, or negative error code.
  */
-static ssize_t adpd410x_iio_get_sampling_freq(void *device, char *buf,
+static int adpd410x_iio_get_sampling_freq(void *device, char *buf,
 		size_t len,
 		const struct iio_ch_info *channel, intptr_t priv)
 {
@@ -143,7 +143,7 @@ static char const * const adpd410x_iio_timeslots[] = {
  * @param channel - IIO channel information.
  * @return Number of bytes printed in the output buffer, or negative error code.
  */
-static ssize_t adpd410x_iio_set_last_timeslot(void *device, char *buf,
+static int adpd410x_iio_set_last_timeslot(void *device, char *buf,
 		size_t len,
 		const struct iio_ch_info *channel, intptr_t priv)
 {
@@ -170,7 +170,7 @@ static ssize_t adpd410x_iio_set_last_timeslot(void *device, char *buf,
  * @param channel - IIO channel information.
  * @return Number of bytes printed in the output buffer, or negative error code.
  */
-static ssize_t adpd410x_iio_get_last_timeslot(void *device, char *buf,
+static int adpd410x_iio_get_last_timeslot(void *device, char *buf,
 		size_t len,
 		const struct iio_ch_info *channel, intptr_t priv)
 {
@@ -193,7 +193,7 @@ static ssize_t adpd410x_iio_get_last_timeslot(void *device, char *buf,
  * @param channel - IIO channel information.
  * @return Number of bytes printed in the output buffer, or negative error code.
  */
-static ssize_t adpd410x_iio_get_last_timeslot_available(void *device, char *buf,
+static int adpd410x_iio_get_last_timeslot_available(void *device, char *buf,
 		size_t len,
 		const struct iio_ch_info *channel, intptr_t priv)
 {
@@ -219,7 +219,7 @@ static char const * const adpd410x_iio_opmode[] = {
  * @param channel - IIO channel information.
  * @return Number of bytes printed in the output buffer, or negative error code.
  */
-static ssize_t adpd410x_iio_set_opmode(void *device, char *buf, size_t len,
+static int adpd410x_iio_set_opmode(void *device, char *buf, size_t len,
 				       const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct adpd410x_dev *dev = (struct adpd410x_dev *)device;
@@ -245,7 +245,7 @@ static ssize_t adpd410x_iio_set_opmode(void *device, char *buf, size_t len,
  * @param channel - IIO channel information.
  * @return Number of bytes printed in the output buffer, or negative error code.
  */
-static ssize_t adpd410x_iio_get_opmode(void *device, char *buf, size_t len,
+static int adpd410x_iio_get_opmode(void *device, char *buf, size_t len,
 				       const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct adpd410x_dev *dev = (struct adpd410x_dev *)device;
@@ -267,7 +267,7 @@ static ssize_t adpd410x_iio_get_opmode(void *device, char *buf, size_t len,
  * @param channel - IIO channel information.
  * @return Number of bytes printed in the output buffer, or negative error code.
  */
-static ssize_t adpd410x_iio_get_opmode_available(void *device, char *buf,
+static int adpd410x_iio_get_opmode_available(void *device, char *buf,
 		size_t len,
 		const struct iio_ch_info *channel, intptr_t priv)
 {

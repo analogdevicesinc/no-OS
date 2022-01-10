@@ -90,15 +90,15 @@ struct iio_init_param {
 
 /* Set communication ops and read/write ops that will be called from
  * "libtinyiiod". */
-ssize_t iio_init(struct iio_desc **desc, struct iio_init_param *init_param);
+int iio_init(struct iio_desc **desc, struct iio_init_param *init_param);
 /* Free the resources allocated by iio_init(). */
-ssize_t iio_remove(struct iio_desc *desc);
+int iio_remove(struct iio_desc *desc);
 /* Execut an iio step. */
-ssize_t iio_step(struct iio_desc *desc);
+int iio_step(struct iio_desc *desc);
 
 int32_t iio_parse_value(char *buf, enum iio_val fmt,
 			int32_t *val, int32_t *val2);
-ssize_t iio_format_value(char *buf, size_t len, enum iio_val fmt,
+int iio_format_value(char *buf, size_t len, enum iio_val fmt,
 			 int32_t size, int32_t *vals);
 
 #endif /* IIO_H_ */

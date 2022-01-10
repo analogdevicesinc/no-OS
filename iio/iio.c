@@ -265,10 +265,10 @@ static int32_t network_read(const void *data, uint32_t len)
 }
 #endif
 
-static ssize_t iio_phy_read(char *buf, size_t len)
+static int iio_phy_read(char *buf, size_t len)
 {
 	if (g_desc->phy_type == USE_UART)
-		return (ssize_t)uart_read(g_desc->uart_desc, (uint8_t *)buf,
+		return (int)uart_read(g_desc->uart_desc, (uint8_t *)buf,
 					  (size_t)len);
 #ifdef ENABLE_IIO_NETWORK
 	else
@@ -279,10 +279,10 @@ static ssize_t iio_phy_read(char *buf, size_t len)
 }
 
 /** Write to a peripheral device (UART, USB, NETWORK) */
-static ssize_t iio_phy_write(const char *buf, size_t len)
+static int iio_phy_write(const char *buf, size_t len)
 {
 	if (g_desc->phy_type == USE_UART)
-		return (ssize_t)uart_write(g_desc->uart_desc,
+		return (int)uart_write(g_desc->uart_desc,
 					   (uint8_t *)buf, (size_t)len);
 #ifdef ENABLE_IIO_NETWORK
 	else
@@ -363,12 +363,12 @@ static struct iio_dev_priv *get_iio_device(const char *device_name)
  * @param attributes - List of attributes to be read.
  * @return Number of bytes read or negative value in case of error.
  */
-static ssize_t iio_read_all_attr(struct attr_fun_params *params,
+static int iio_read_all_attr(struct attr_fun_params *params,
 				 struct iio_attribute *attributes)
 {
 	int16_t i = 0, j = 0;
 	char local_buf[256];
-	ssize_t attr_length;
+	int attr_length;
 	uint32_t *pattr_length;
 
 	while (attributes[i].name) {
@@ -400,7 +400,7 @@ static ssize_t iio_read_all_attr(struct attr_fun_params *params,
  * @param attributes - List of attributes to be written.
  * @return Number of written bytes or negative value in case of error.
  */
-static ssize_t iio_write_all_attr(struct attr_fun_params *params,
+static int iio_write_all_attr(struct attr_fun_params *params,
 				  struct iio_attribute *attributes)
 {
 	int16_t i = 0, j = 0;
@@ -430,7 +430,7 @@ static ssize_t iio_write_all_attr(struct attr_fun_params *params,
  * 		attribute.
  * @return Length of chars written/read or negative value in case of error.
  */
-static ssize_t iio_rd_wr_attribute(struct attr_fun_params *params,
+static int iio_rd_wr_attribute(struct attr_fun_params *params,
 				   struct iio_attribute *attributes,
 				   char *attr_name,
 				   bool is_write)
@@ -592,7 +592,7 @@ int32_t iio_parse_value(char *buf, enum iio_val fmt, int32_t *val,
 	return ret;
 }
 
-ssize_t iio_format_value(char *buf, size_t len, enum iio_val fmt,
+int iio_format_value(char *buf, size_t len, enum iio_val fmt,
 			 int32_t size, int32_t *vals)
 {
 	uint64_t tmp;
@@ -649,7 +649,7 @@ ssize_t iio_format_value(char *buf, size_t len, enum iio_val fmt,
  * @param debug - Read raw value if set.
  * @return Number of bytes read.
  */
-static ssize_t iio_read_attr(const char *device_id, const char *attr, char *buf,
+static int iio_read_attr(const char *device_id, const char *attr, char *buf,
 			     size_t len, enum iio_attr_type type)
 {
 	struct iio_dev_priv	*dev;
@@ -698,7 +698,7 @@ static ssize_t iio_read_attr(const char *device_id, const char *attr, char *buf,
  * @param debug - Write raw value if set.
  * @return Number of written bytes.
  */
-static ssize_t iio_write_attr(const char *device_id, const char *attr,
+static int iio_write_attr(const char *device_id, const char *attr,
 			      const char *buf,
 			      size_t len, enum iio_attr_type type)
 {
@@ -749,7 +749,7 @@ static ssize_t iio_write_attr(const char *device_id, const char *attr,
  * @param len - Maximum length of value to be stored in buf.
  * @return - Number of bytes read.
  */
-static ssize_t iio_ch_read_attr(const char *device_id, const char *channel,
+static int iio_ch_read_attr(const char *device_id, const char *channel,
 				bool ch_out, const char *attr, char *buf, size_t len)
 {
 	struct iio_dev_priv	*dev;
@@ -790,7 +790,7 @@ static ssize_t iio_ch_read_attr(const char *device_id, const char *channel,
  * @param len - Length of data in "buf" parameter.
  * @return Number of written bytes.
  */
-static ssize_t iio_ch_write_attr(const char *device_id, const char *channel,
+static int iio_ch_write_attr(const char *device_id, const char *channel,
 				 bool ch_out, const char *attr, const char *buf, size_t len)
 {
 	struct iio_dev_priv	*dev;
@@ -925,12 +925,12 @@ static uint32_t bytes_to_samples(struct iio_dev_priv *intf, uint32_t bytes)
  * @param bytes_count - Number of bytes.
  * @return Bytes_count or negative value in case of error.
  */
-static ssize_t iio_transfer_dev_to_mem(const char *device, size_t bytes_count)
+static int iio_transfer_dev_to_mem(const char *device, size_t bytes_count)
 {
 	struct iio_dev_priv *dev = get_iio_device(device);
 	struct iio_data_buffer	*r_buff;
 	uint32_t		samples;
-	ssize_t			ret;
+	int			ret;
 
 	r_buff = dev->read_buffer;
 	if (r_buff && dev->dev_descriptor->read_dev) {
@@ -940,7 +940,7 @@ static ssize_t iio_transfer_dev_to_mem(const char *device, size_t bytes_count)
 		ret = dev->dev_descriptor->read_dev(
 			      dev->dev_instance,
 			      r_buff->buff, samples);
-		return ret < 0 ? ret : (ssize_t)bytes_count;
+		return ret < 0 ? ret : (int)bytes_count;
 	}
 
 	return -ENOENT;
@@ -957,7 +957,7 @@ static ssize_t iio_transfer_dev_to_mem(const char *device, size_t bytes_count)
  * @param bytes_count - Number of bytes to read.
  * @return: Bytes_count or negative value in case of error.
  */
-static ssize_t iio_read_dev(const char *device, char *pbuf, size_t offset,
+static int iio_read_dev(const char *device, char *pbuf, size_t offset,
 			    size_t bytes_count)
 {
 	struct iio_dev_priv *dev = get_iio_device(device);
@@ -982,11 +982,11 @@ static ssize_t iio_read_dev(const char *device, char *pbuf, size_t offset,
  * @param bytes_count - Number of bytes to transfer.
  * @return Bytes_count or negative value in case of error.
  */
-static ssize_t iio_transfer_mem_to_dev(const char *device, size_t bytes_count)
+static int iio_transfer_mem_to_dev(const char *device, size_t bytes_count)
 {
 	struct iio_dev_priv *dev = get_iio_device(device);
 	struct iio_data_buffer	*w_buff;
-	ssize_t			ret;
+	int			ret;
 	uint32_t		samples;
 
 	w_buff = dev->write_buffer;
@@ -997,7 +997,7 @@ static ssize_t iio_transfer_mem_to_dev(const char *device, size_t bytes_count)
 		ret = dev->dev_descriptor->write_dev(
 			      dev->dev_instance,
 			      w_buff->buff, samples);
-		return ret < 0 ? ret : (ssize_t)bytes_count;
+		return ret < 0 ? ret : (int)bytes_count;
 	}
 
 	return -ENOENT;
@@ -1014,7 +1014,7 @@ static ssize_t iio_transfer_mem_to_dev(const char *device, size_t bytes_count)
  * @param bytes_count - Number of bytes to write.
  * @return Bytes_count or negative value in case of error.
  */
-static ssize_t iio_write_dev(const char *device, const char *buf,
+static int iio_write_dev(const char *device, const char *buf,
 			     size_t offset, size_t bytes_count)
 {
 	struct iio_dev_priv *dev = get_iio_device(device);
@@ -1036,7 +1036,7 @@ static ssize_t iio_write_dev(const char *device, const char *buf,
  * @param outxml - Generated xml.
  * @return SUCCESS in case of success or negative value otherwise.
  */
-static ssize_t iio_get_xml(char **outxml)
+static int iio_get_xml(char **outxml)
 {
 	if (!outxml)
 		return FAILURE;
@@ -1051,7 +1051,7 @@ static ssize_t iio_get_xml(char **outxml)
  * @param desc - IIo descriptor
  * @return SUCCESS in case of success or negative value otherwise.
  */
-ssize_t iio_step(struct iio_desc *desc)
+int iio_step(struct iio_desc *desc)
 {
 #ifdef ENABLE_IIO_NETWORK
 	int32_t ret;
@@ -1313,7 +1313,7 @@ static int32_t iio_init_devs(struct iio_desc *desc,
  * @param init_param - appropriate init param.
  * @return SUCCESS in case of success or negative value otherwise.
  */
-ssize_t iio_init(struct iio_desc **desc, struct iio_init_param *init_param)
+int iio_init(struct iio_desc **desc, struct iio_init_param *init_param)
 {
 	int32_t			ret;
 	struct iio_desc		*ldesc;
@@ -1418,7 +1418,7 @@ free_ops:
  * @param desc: iio descriptor.
  * @return SUCCESS in case of success or negative value otherwise.
  */
-ssize_t iio_remove(struct iio_desc *desc)
+int iio_remove(struct iio_desc *desc)
 {
 	free(desc->iiod_ops);
 	tinyiiod_destroy(desc->iiod);

@@ -47,17 +47,17 @@
 #include "no-os/error.h"
 #include "no-os/util.h"
 
-static ssize_t adpd188_iio_read_offset_chan(void *device, char *buf,
+static int adpd188_iio_read_offset_chan(void *device, char *buf,
 		size_t len,
 		const struct iio_ch_info *channel, intptr_t priv);
-static ssize_t adpd188_iio_change_offset_chan(void *device, char *buf,
+static int adpd188_iio_change_offset_chan(void *device, char *buf,
 		size_t len,
 		const struct iio_ch_info *channel, intptr_t priv);
-static ssize_t adpd188_iio_read_raw_chan(void *device, char *buf, size_t len,
+static int adpd188_iio_read_raw_chan(void *device, char *buf, size_t len,
 		const struct iio_ch_info *channel, intptr_t priv);
-static ssize_t adpd188_iio_read_odr_chan(void *device, char *buf, size_t len,
+static int adpd188_iio_read_odr_chan(void *device, char *buf, size_t len,
 		const struct iio_ch_info *channel, intptr_t priv);
-static ssize_t adpd188_iio_change_odr_chan(void *device, char *buf, size_t len,
+static int adpd188_iio_change_odr_chan(void *device, char *buf, size_t len,
 		const struct iio_ch_info *channel, intptr_t priv);
 
 static struct iio_attribute adpd188_channel_attributes[] = {
@@ -124,7 +124,7 @@ static struct iio_channel adpd188_channels[] = {
  * @param priv - Private pointer not used in this case.
  * @return Length of the response or 0 in case of error.
  */
-static ssize_t adpd188_iio_read_offset_chan(void *device, char *buf,
+static int adpd188_iio_read_offset_chan(void *device, char *buf,
 		size_t len,
 		const struct iio_ch_info *channel, intptr_t priv)
 {
@@ -152,7 +152,7 @@ static ssize_t adpd188_iio_read_offset_chan(void *device, char *buf,
  * @param priv - Private pointer not used in this case.
  * @return Length of the input buffer.
  */
-static ssize_t adpd188_iio_change_offset_chan(void *device, char *buf,
+static int adpd188_iio_change_offset_chan(void *device, char *buf,
 		size_t len,
 		const struct iio_ch_info *channel, intptr_t priv)
 {
@@ -190,7 +190,7 @@ static ssize_t adpd188_iio_change_offset_chan(void *device, char *buf,
  * @param priv - Private pointer not used in this case.
  * @return Length of the response or 0 in case of error.
  */
-static ssize_t adpd188_iio_read_odr_chan(void *device, char *buf, size_t len,
+static int adpd188_iio_read_odr_chan(void *device, char *buf, size_t len,
 		const struct iio_ch_info *channel, intptr_t priv)
 {
 	int32_t ret;
@@ -214,7 +214,7 @@ static ssize_t adpd188_iio_read_odr_chan(void *device, char *buf, size_t len,
  * @param priv - Private pointer not used in this case.
  * @return Length of the output buffer.
  */
-static ssize_t adpd188_iio_change_odr_chan(void *device, char *buf, size_t len,
+static int adpd188_iio_change_odr_chan(void *device, char *buf, size_t len,
 		const struct iio_ch_info *channel, intptr_t priv)
 {
 	int32_t ret;
@@ -278,7 +278,7 @@ static int32_t adpd188_iio_standby_mode(struct adpd188_dev *desc)
  * @param priv - Private pointer not used in this case.
  * @return Length of the response or 0 in case of error.
  */
-static ssize_t adpd188_iio_read_raw_chan(void *device, char *buf, size_t len,
+static int adpd188_iio_read_raw_chan(void *device, char *buf, size_t len,
 		const struct iio_ch_info *channel, intptr_t priv)
 {
 	int32_t ret;

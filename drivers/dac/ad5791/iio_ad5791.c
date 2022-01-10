@@ -57,7 +57,7 @@
  * @param priv - Pointer
  * @return Number of bytes printed in the output buffer, or negative error code.
  */
-static ssize_t ad5791_iio_get_scale(void *device, char *buf, size_t len,
+static int ad5791_iio_get_scale(void *device, char *buf, size_t len,
 				    const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct ad5791_iio_desc *iio_drv = (struct ad5791_iio_desc *)device;
@@ -82,7 +82,7 @@ static ssize_t ad5791_iio_get_scale(void *device, char *buf, size_t len,
  * @param priv - Pointer
  * @return Number of bytes printed in the output buffer, or negative error code.
  */
-static ssize_t ad5791_iio_get_offset(void *device, char *buf, size_t len,
+static int ad5791_iio_get_offset(void *device, char *buf, size_t len,
 				     const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct ad5791_iio_desc *iio_drv = (struct ad5791_iio_desc *)device;
@@ -105,7 +105,7 @@ static ssize_t ad5791_iio_get_offset(void *device, char *buf, size_t len,
  * @param priv - Pointer
  * @return Number of bytes printed in the output buffer, or negative error code.
  */
-static ssize_t ad5791_iio_get_raw(void *device, char *buf, size_t len,
+static int ad5791_iio_get_raw(void *device, char *buf, size_t len,
 				  const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct ad5791_iio_desc *iio_drv = (struct ad5791_iio_desc *)device;
@@ -132,7 +132,7 @@ static ssize_t ad5791_iio_get_raw(void *device, char *buf, size_t len,
  * @param priv - Pointer
  * @return Number of bytes printed in the output buffer, or negative error code.
  */
-static ssize_t ad5791_iio_set_raw(void *device, char *buf, size_t len,
+static int ad5791_iio_set_raw(void *device, char *buf, size_t len,
 				  const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct ad5791_iio_desc *iio_drv = (struct ad5791_iio_desc *)device;
@@ -162,7 +162,7 @@ static ssize_t ad5791_iio_set_raw(void *device, char *buf, size_t len,
  * @param priv - Pointer
  * @return Number of bytes printed in the output buffer, or negative error code.
  */
-static ssize_t ad5791_iio_get_powerdown(void *device, char *buf, size_t len,
+static int ad5791_iio_get_powerdown(void *device, char *buf, size_t len,
 					const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct ad5791_iio_desc *iio_drv = (struct ad5791_iio_desc *)device;
@@ -193,7 +193,7 @@ static ssize_t ad5791_iio_get_powerdown(void *device, char *buf, size_t len,
  * @param priv - Pointer
  * @return Number of bytes printed in the output buffer, or negative error code.
  */
-static ssize_t ad5791_iio_set_powerdown(void *device, char *buf, size_t len,
+static int ad5791_iio_set_powerdown(void *device, char *buf, size_t len,
 					const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct ad5791_iio_desc *iio_drv = (struct ad5791_iio_desc *)device;
@@ -239,7 +239,7 @@ static char const * const ad5791_iio_pwd_modes[] = {
  * @param priv - Pointer
  * @return Number of bytes printed in the output buffer, or negative error code.
  */
-static ssize_t ad5791_iio_get_pd_mode(void *device, char *buf, size_t len,
+static int ad5791_iio_get_pd_mode(void *device, char *buf, size_t len,
 				      const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct ad5791_iio_desc *iio_drv = (struct ad5791_iio_desc *)device;
@@ -257,7 +257,7 @@ static ssize_t ad5791_iio_get_pd_mode(void *device, char *buf, size_t len,
  * @param priv - Pointer
  * @return Number of bytes printed in the output buffer, or negative error code.
  */
-static ssize_t ad5791_iio_set_pd_mode(void *device, char *buf, size_t len,
+static int ad5791_iio_set_pd_mode(void *device, char *buf, size_t len,
 				      const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct ad5791_iio_desc *iio_drv = (struct ad5791_iio_desc *)device;
@@ -281,7 +281,7 @@ static ssize_t ad5791_iio_set_pd_mode(void *device, char *buf, size_t len,
  * @param priv - Pointer
  * @return Number of bytes printed in the output buffer, or negative error code.
  */
-static ssize_t ad5791_iio_get_pd_mode_avail(void *device, char *buf, size_t len,
+static int ad5791_iio_get_pd_mode_avail(void *device, char *buf, size_t len,
 		const struct iio_ch_info *channel, intptr_t priv)
 {
 	int8_t i;
