@@ -196,82 +196,6 @@ static inline int32_t _nb_active_conns(struct iio_desc *desc)
 	return size / sizeof(uint32_t);
 }
 
-#if 0 //TO remove
-/* Blocking until new socket available.
- * Will iterate through a list of sockets */
-static int32_t _get_next_socket(struct iio_desc *desc)
-{
-	struct tcp_socket_desc	*sock;
-	int32_t			ret;
-	uint32_t		nb_active_sockets;
-
-	/* Get all new waiting sockets.
-	 * If none is available, wait until first connection */
-	do {
-		ret = socket_accept(desc->server, &sock);
-		if (ret == -EAGAIN) {
-			nb_active_sockets = _nb_active_sockets(desc);
-			if (nb_active_sockets == 0) {
-				/* Wait until a connection exists */
-				mdelay(1);
-				continue;
-			} else {
-				break;
-			}
-		} else if (IS_ERR_VALUE(ret)) {
-			return ret;
-		}
-		/* Add socket to queue */
-		ret = _push_sock(desc, sock);
-		if (IS_ERR_VALUE(ret))
-			return ret;
-	} while (true);
-
-	ret = _pop_sock(desc, &desc->current_sock);
-	if (IS_ERR_VALUE(ret)) {
-		desc->current_sock = NULL;
-		return ret;
-	}
-
-	return SUCCESS;
-}
-
-static int32_t network_read(const void *data, uint32_t len)
-{
-	uint32_t	i;
-	int32_t		ret;
-
-	if ((int32_t)g_desc->current_sock == -1)
-		return -1;
-
-	if (g_desc->current_sock == NULL) {
-		ret = _get_next_socket(g_desc);
-		if (IS_ERR_VALUE(ret))
-			return ret;
-	}
-
-	i = 0;
-	do {
-		ret = socket_recv(g_desc->current_sock,
-				  (void *)((uint8_t *)data + i), len - i);
-		if (IS_ERR_VALUE(ret)) {
-			*(int8_t *)data = '*';
-			break;
-		}
-
-		i += ret;
-	} while (i < len);
-
-	if (ret == -ENOTCONN) {
-		/* A socket connection is disconnected, so we release
-		 * the resources and don't add it again in the list */
-		socket_remove(g_desc->current_sock);
-		g_desc->current_sock = (void *)-1;
-	}
-
-	return i;
-}
-#endif //REMOVE
 
 static int iio_recv(struct iiod_ctx *ctx, uint8_t *buf, uint32_t len)
 {
@@ -787,90 +711,6 @@ static int iio_write_attr(struct iiod_ctx *ctx, const char *device,
 		return iio_rd_wr_attribute(&params, attributes, attr->name, 1);
 }
 
-#if 0 /* TODO remove */
-/**
- * @brief Read channel attribute.
- * @param device_name - String containing device name.
- * @param channel - String containing channel name.
- * @param ch_out -Channel type input/output.
- * @param attr - String containing attribute name.
- * @param buf - Buffer where value is stored.
- * @param len - Maximum length of value to be stored in buf.
- * @return - Number of bytes read.
- */
-static int iio_ch_read_attr(const char *device_id, const char *channel,
-			    bool ch_out, const char *attr, char *buf, uint32_t len)
-{
-	struct iio_dev_priv	*dev;
-	struct iio_ch_info	ch_info;
-	struct iio_channel	*ch;
-	struct attr_fun_params	params;
-
-	dev = get_iio_device(device_id);
-	if (!dev)
-		return FAILURE;
-
-	ch = iio_get_channel(channel, dev->dev_descriptor, ch_out);
-	if (!ch)
-		return -ENOENT;
-
-	ch_info.ch_out = ch_out;
-	ch_info.ch_num = ch->channel;
-	ch_info.type = ch->ch_type;
-	ch_info.differential = ch->diferential;
-	ch_info.address = ch->address;
-	params.buf = buf;
-	params.len = len;
-	params.dev_instance = dev->dev_instance;
-	params.ch_info = &ch_info;
-	if (!strcmp(attr, ""))
-		return iio_read_all_attr(&params, ch->attributes);
-	else
-		return iio_rd_wr_attribute(&params, ch->attributes, (char *)attr, 0);
-}
-
-/**
- * @brief Write channel attribute.
- * @param device - String containing device name.
- * @param channel - String containing channel name.
- * @param ch_out - Channel type input/output.
- * @param attr - String containing attribute name.
- * @param buf - Value to be written.
- * @param len - Length of data in "buf" parameter.
- * @return Number of written bytes.
- */
-static int iio_ch_write_attr(const char *device_id, const char *channel,
-			     bool ch_out, const char *attr, const char *buf, uint32_t len)
-{
-	struct iio_dev_priv	*dev;
-	struct iio_ch_info	ch_info;
-	struct iio_channel	*ch;
-	struct attr_fun_params	params;
-
-	dev = get_iio_device(device_id);
-	if (!dev)
-		return -ENOENT;
-
-	ch = iio_get_channel(channel, dev->dev_descriptor, ch_out);
-	if (!ch)
-		return -ENOENT;
-
-	ch_info.ch_out = ch_out;
-	ch_info.ch_num = ch->channel;
-	ch_info.type = ch->ch_type;
-	ch_info.differential = ch->diferential;
-	ch_info.address = ch->address;
-	params.buf = (char *)buf;
-	params.len = len;
-	params.dev_instance = dev->dev_instance;
-	params.ch_info = &ch_info;
-	if (!strcmp(attr, ""))
-		return iio_write_all_attr(&params, ch->attributes);
-	else
-		return iio_rd_wr_attribute(&params, ch->attributes, (char *)attr, 1);
-}
-#endif /* TODO remvoe */
-
 static uint32_t bytes_to_samples(struct iio_dev_priv *dev, uint32_t bytes)
 {
 	uint32_t bytes_per_sample;
@@ -986,81 +826,7 @@ static int iio_close_dev(struct iiod_ctx *ctx, const char *device)
 	return SUCCESS;
 }
 
-#if 0 /* TODO remove */
-/**
- * @brief Get device mask, this specifies the channels that are used.
- * @param device - String containing device name.
- * @param mask - Channels that are opened.
- * @return SUCCESS, negative value in case of failure.
- */
-static int32_t iio_get_mask(const char *device, uint32_t *mask)
-{
-	struct iio_dev_priv *dev;
 
-	dev = get_iio_device(device);
-	if (!dev)
-		return -ENODEV;
-
-	*mask = dev->ch_mask;
-
-	return SUCCESS;
-}
-
-static uint32_t bytes_to_samples(struct iio_dev_priv *intf, uint32_t bytes)
-{
-	uint32_t bytes_per_sample;
-	uint32_t first_ch;
-	bool	 first_ch_found;
-	uint32_t nb_active_ch;
-	uint32_t mask;
-
-	mask = intf->ch_mask;
-	first_ch = 0;
-	nb_active_ch = 0;
-	first_ch_found = false;
-	while (mask) {
-		if ((mask & 1)) {
-			if (!first_ch_found)
-				first_ch_found = true;
-			else
-				first_ch++;
-			nb_active_ch++;
-		}
-		mask >>= 1;
-	}
-	bytes_per_sample = intf->dev_descriptor->channels[first_ch]
-			   .scan_type->storagebits / 8;
-
-	return bytes / bytes_per_sample / nb_active_ch;
-}
-
-/**
- * @brief Transfer data from device into RAM.
- * @param device - String containing device name.
- * @param bytes_count - Number of bytes.
- * @return Bytes_count or negative value in case of error.
- */
-static int iio_transfer_dev_to_mem(const char *device, uint32_t bytes_count)
-{
-	struct iio_dev_priv *dev = get_iio_device(device);
-	struct iio_data_buffer	*r_buff;
-	uint32_t		samples;
-	int			ret;
-
-	r_buff = dev->read_buffer;
-	if (r_buff && dev->dev_descriptor->read_dev) {
-		if (bytes_count > r_buff->size)
-			return -ENOMEM;
-		samples = bytes_to_samples(dev, bytes_count);
-		ret = dev->dev_descriptor->read_dev(
-			      dev->dev_instance,
-			      r_buff->buff, samples);
-		return ret < 0 ? ret : (int)bytes_count;
-	}
-
-	return -ENOENT;
-}
-#endif /* TODO remove */
 
 /**
  * @brief Read chunk of data from RAM to pbuf. Call
@@ -1121,34 +887,6 @@ static int iio_read_buffer(struct iiod_ctx *ctx, const char *device, char *buf,
 	return bytes;
 }
 
-#if 0 /* TODO remove */
-/**
- * @brief Transfer memory to device.
- * @param device - String containing device name.
- * @param bytes_count - Number of bytes to transfer.
- * @return Bytes_count or negative value in case of error.
- */
-static int iio_transfer_mem_to_dev(const char *device, uint32_t bytes_count)
-{
-	struct iio_dev_priv *dev = get_iio_device(device);
-	struct iio_data_buffer	*w_buff;
-	int			ret;
-	uint32_t		samples;
-
-	w_buff = dev->write_buffer;
-	if (w_buff && dev->dev_descriptor->write_dev) {
-		if (bytes_count > w_buff->size)
-			return -ENOMEM;
-		samples = bytes_to_samples(dev, bytes_count);
-		ret = dev->dev_descriptor->write_dev(
-			      dev->dev_instance,
-			      w_buff->buff, samples);
-		return ret < 0 ? ret : (int)bytes_count;
-	}
-
-	return -ENOENT;
-}
-#endif /* TODO remove */
 
 /**
  * @brief Write chunk of data into RAM.
@@ -1211,22 +949,6 @@ static int iio_write_buffer(struct iiod_ctx *ctx, const char *device, char *buf,
 	return bytes;
 }
 
-#if 0 /* TODO remove */
-/**
- * @brief Get a merged xml containing all devices.
- * @param outxml - Generated xml.
- * @return SUCCESS in case of success or negative value otherwise.
- */
-static int iio_get_xml(char **outxml)
-{
-	if (!outxml)
-		return FAILURE;
-
-	*outxml = g_desc->xml_desc;
-
-	return g_desc->xml_size;
-}
-#endif
 
 #ifdef ENABLE_IIO_NETWORK
 
