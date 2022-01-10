@@ -169,7 +169,7 @@ static int32_t ad7746_select_channel(void *device,
 }
 
 static int ad7746_iio_read_raw(void *device, char *buf, uint32_t len,
-				   const struct iio_ch_info *channel, intptr_t priv)
+			       const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct ad7746_iio_dev *iiodev = (struct ad7746_iio_dev *)device;
 	struct ad7746_dev *desc = (struct ad7746_dev *)iiodev->ad7746_dev;
@@ -231,7 +231,8 @@ static int ad7746_iio_read_raw(void *device, char *buf, uint32_t len,
 }
 
 static int ad7746_iio_read_scale(void *device, char *buf, uint32_t len,
-				     const struct iio_ch_info *channel, intptr_t priv)
+				 const struct iio_ch_info *channel,
+				 intptr_t priv)
 {
 	int32_t valt;
 	int32_t vals[2];
@@ -258,7 +259,8 @@ static int ad7746_iio_read_scale(void *device, char *buf, uint32_t len,
 }
 
 static int ad7746_iio_read_offset(void *device, char *buf, uint32_t len,
-				      const struct iio_ch_info *channel, intptr_t priv)
+				  const struct iio_ch_info *channel,
+				  intptr_t priv)
 {
 	struct ad7746_iio_dev *iiodev = (struct ad7746_iio_dev *)device;
 	int32_t value;
@@ -269,8 +271,9 @@ static int ad7746_iio_read_offset(void *device, char *buf, uint32_t len,
 	return iio_format_value(buf, len, IIO_VAL_INT, 1, &value);
 }
 
-static int ad7746_iio_write_offset(void *device, char *buf,
-				       uint32_t len, const struct iio_ch_info *channel, intptr_t priv)
+static int ad7746_iio_write_offset(void *device, char *buf, uint32_t len,
+				   const struct iio_ch_info *channel,
+				   intptr_t priv)
 {
 	struct ad7746_iio_dev *iiodev = (struct ad7746_iio_dev *)device;
 	struct ad7746_dev *desc = (struct ad7746_dev *)iiodev->ad7746_dev;
@@ -319,7 +322,8 @@ static int ad7746_iio_write_offset(void *device, char *buf,
 }
 
 static int ad7746_iio_read_samp_freq(void *device, char *buf, uint32_t len,
-		const struct iio_ch_info *channel, intptr_t priv)
+				     const struct iio_ch_info *channel,
+				     intptr_t priv)
 {
 	struct ad7746_iio_dev *iiodev = (struct ad7746_iio_dev *)device;
 	struct ad7746_dev *desc = (struct ad7746_dev *)iiodev->ad7746_dev;
@@ -340,8 +344,9 @@ static int ad7746_iio_read_samp_freq(void *device, char *buf, uint32_t len,
 	return iio_format_value(buf, len, IIO_VAL_INT, 1, &value);
 }
 
-static int ad7746_iio_write_samp_freq(void *device, char *buf,
-		uint32_t len, const struct iio_ch_info *channel, intptr_t priv)
+static int ad7746_iio_write_samp_freq(void *device, char *buf, uint32_t len,
+				      const struct iio_ch_info *channel,
+				      intptr_t priv)
 {
 	struct ad7746_iio_dev *iiodev = (struct ad7746_iio_dev *)device;
 	struct ad7746_dev *desc = (struct ad7746_dev *)iiodev->ad7746_dev;
@@ -393,7 +398,8 @@ static int ad7746_iio_read_samp_freq_avail(void *device, char *buf,
 }
 
 static int ad7746_iio_read_calibscale(void *device, char *buf, uint32_t len,
-		const struct iio_ch_info *channel, intptr_t priv)
+				      const struct iio_ch_info *channel,
+				      intptr_t priv)
 {
 	struct ad7746_iio_dev *iiodev = (struct ad7746_iio_dev *)device;
 	struct ad7746_dev *desc = (struct ad7746_dev *)iiodev->ad7746_dev;
@@ -424,7 +430,8 @@ static int ad7746_iio_read_calibscale(void *device, char *buf, uint32_t len,
 }
 
 static int ad7746_iio_write_calibscale(void *device, char *buf, uint32_t len,
-		const struct iio_ch_info *channel, intptr_t priv)
+				       const struct iio_ch_info *channel,
+				       intptr_t priv)
 {
 	struct ad7746_iio_dev *iiodev = (struct ad7746_iio_dev *)device;
 	struct ad7746_dev *desc = (struct ad7746_dev *)iiodev->ad7746_dev;
@@ -453,7 +460,8 @@ static int ad7746_iio_write_calibscale(void *device, char *buf, uint32_t len,
 }
 
 static int ad7746_iio_read_calibbias(void *device, char *buf, uint32_t len,
-		const struct iio_ch_info *channel, intptr_t priv)
+				     const struct iio_ch_info *channel,
+				     intptr_t priv)
 {
 	struct ad7746_iio_dev *iiodev = (struct ad7746_iio_dev *)device;
 	struct ad7746_dev *desc = (struct ad7746_dev *)iiodev->ad7746_dev;
@@ -471,7 +479,8 @@ static int ad7746_iio_read_calibbias(void *device, char *buf, uint32_t len,
 }
 
 static int ad7746_iio_write_calibbias(void *device, char *buf, uint32_t len,
-		const struct iio_ch_info *channel, intptr_t priv)
+				      const struct iio_ch_info *channel,
+				      intptr_t priv)
 {
 	struct ad7746_iio_dev *iiodev = (struct ad7746_iio_dev *)device;
 	struct ad7746_dev *desc = (struct ad7746_dev *)iiodev->ad7746_dev;
@@ -489,7 +498,8 @@ static int ad7746_iio_write_calibbias(void *device, char *buf, uint32_t len,
 }
 
 static int ad7746_start_offset_calib(void *device, char *buf, uint32_t len,
-		const struct iio_ch_info *channel, intptr_t priv)
+				     const struct iio_ch_info *channel,
+				     intptr_t priv)
 {
 	int32_t ret;
 	struct ad7746_iio_dev *iiodev = (struct ad7746_iio_dev *)device;
@@ -511,7 +521,8 @@ static int ad7746_start_offset_calib(void *device, char *buf, uint32_t len,
 }
 
 static int ad7746_start_gain_calib(void *device, char *buf, uint32_t len,
-				       const struct iio_ch_info *channel, intptr_t priv)
+				   const struct iio_ch_info *channel,
+				   intptr_t priv)
 {
 	int32_t ret;
 	struct ad7746_iio_dev *iiodev = (struct ad7746_iio_dev *)device;

@@ -54,7 +54,7 @@
  * @return Number of bytes printed in the output buffer, or negative error code.
  */
 static int ad7799_iio_channel_read(void *device, char *buf, uint32_t len,
-				       const struct iio_ch_info *channel)
+				   const struct iio_ch_info *channel)
 {
 	struct ad7799_dev *dev = (struct ad7799_dev *)device;
 	int32_t ret, data;
@@ -75,7 +75,8 @@ static int ad7799_iio_channel_read(void *device, char *buf, uint32_t len,
  * @return Number of bytes printed in the output buffer, or negative error code.
  */
 static int ad7799_iio_gain_read(void *device, char *buf, uint32_t len,
-				    const struct iio_ch_info *channel, intptr_t priv)
+				const struct iio_ch_info *channel,
+				intptr_t priv)
 {
 	struct ad7799_dev *dev = (struct ad7799_dev *)device;
 	uint8_t gain;
@@ -97,7 +98,8 @@ static int ad7799_iio_gain_read(void *device, char *buf, uint32_t len,
  * @return Number of bytes printed in the output buffer, or negative error code.
  */
 static int ad7799_iio_gain_write(void *device, char *buf, uint32_t len,
-				     const struct iio_ch_info *channel, intptr_t priv)
+				 const struct iio_ch_info *channel,
+				 intptr_t priv)
 {
 	struct ad7799_dev *dev = (struct ad7799_dev *)device;
 	int32_t ret;

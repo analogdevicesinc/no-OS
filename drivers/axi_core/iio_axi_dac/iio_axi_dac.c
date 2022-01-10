@@ -64,13 +64,13 @@
  * @return Length of chars written in buf, or negative value on failure.
  */
 static int get_voltage_calibscale(void *device, char *buf, uint32_t len,
-				      const struct iio_ch_info *channel,
-				      intptr_t priv)
+				  const struct iio_ch_info *channel,
+				  intptr_t priv)
 {
 	int32_t val, val2;
 	struct iio_axi_dac_desc *iio_dac = (struct iio_axi_dac_desc*)device;
 	int ret = axi_dac_dds_get_calib_scale(iio_dac->dac, channel->ch_num,
-			&val, &val2);
+					      &val, &val2);
 	int32_t i = 0;
 	if(ret < 0)
 		return ret;
@@ -81,7 +81,7 @@ static int get_voltage_calibscale(void *device, char *buf, uint32_t len,
 		i++;
 	}
 	ret = i + (int) snprintf(&buf[i], len, "%"PRIi32".%.6"PRIi32"", val,
-				     labs(val2));
+				 labs(val2));
 
 	return ret;
 }
@@ -95,14 +95,14 @@ static int get_voltage_calibscale(void *device, char *buf, uint32_t len,
  * @return Number of bytes written in buf, or negative value on failure.
  */
 static int get_voltage_calibphase(void *device, char *buf, uint32_t len,
-				      const struct iio_ch_info *channel,
-				      intptr_t priv)
+				  const struct iio_ch_info *channel,
+				  intptr_t priv)
 {
 	int32_t val, val2;
 	int32_t i = 0;
 	struct iio_axi_dac_desc* iio_dac = (struct iio_axi_dac_desc*)device;
 	int ret = axi_dac_dds_get_calib_phase(iio_dac->dac, channel->ch_num,
-			&val, &val2);
+					      &val, &val2);
 	if(ret < 0)
 		return ret;
 	if(val2 < 0 && val >= 0) {
@@ -139,8 +139,8 @@ static int get_voltage_sampling_frequency(void *device, char *buf,
  * @return Number of bytes written in buf, or negative value on failure.
  */
 static int get_altvoltage_phase(void *device, char *buf, uint32_t len,
-				    const struct iio_ch_info *channel,
-				    intptr_t priv)
+				const struct iio_ch_info *channel,
+				intptr_t priv)
 {
 	uint32_t phase;
 	struct iio_axi_dac_desc* iio_dac = (struct iio_axi_dac_desc*)device;
@@ -160,8 +160,8 @@ static int get_altvoltage_phase(void *device, char *buf, uint32_t len,
  * @return Number of bytes written in buf, or negative value on failure.
  */
 static int get_altvoltage_scale(void *device, char *buf, uint32_t len,
-				    const struct iio_ch_info *channel,
-				    intptr_t priv)
+				const struct iio_ch_info *channel,
+				intptr_t priv)
 {
 	int32_t scale;
 	struct iio_axi_dac_desc* iio_dac = (struct iio_axi_dac_desc*)device;
@@ -182,8 +182,8 @@ static int get_altvoltage_scale(void *device, char *buf, uint32_t len,
  * @return Number of bytes written in buf, or negative value on failure.
  */
 static int get_altvoltage_frequency(void *device, char *buf, uint32_t len,
-					const struct iio_ch_info *channel,
-					intptr_t priv)
+				    const struct iio_ch_info *channel,
+				    intptr_t priv)
 {
 	uint32_t freq;
 	struct iio_axi_dac_desc* iio_dac = (struct iio_axi_dac_desc*)device;
@@ -203,8 +203,8 @@ static int get_altvoltage_frequency(void *device, char *buf, uint32_t len,
  * @return Number of bytes written in buf, or negative value on failure.
  */
 static int get_altvoltage_raw(void *device, char *buf, uint32_t len,
-				  const struct iio_ch_info *channel,
-				  intptr_t priv)
+			      const struct iio_ch_info *channel,
+			      intptr_t priv)
 {
 	/* This function doesn't have an equivalent function in axi_dac_core,
 	 * and it should be implemented there first */
@@ -240,15 +240,15 @@ static int get_altvoltage_sampling_frequency(void *device, char *buf,
  * @return Number of bytes written in buf, or negative value on failure.
  */
 static int set_voltage_calibscale(void *device, char *buf, uint32_t len,
-				      const struct iio_ch_info *channel,
-				      intptr_t priv)
+				  const struct iio_ch_info *channel,
+				  intptr_t priv)
 {
 	float calib= strtof(buf, NULL);
 	int32_t val = (int32_t)calib;
 	int32_t val2 = (int32_t)(calib* 1000000) % 1000000;
 	struct iio_axi_dac_desc* iio_dac = (struct iio_axi_dac_desc*)device;
 	int ret = axi_dac_dds_set_calib_scale(iio_dac->dac, channel->ch_num, val,
-			val2);
+					      val2);
 	if (ret < 0)
 		return ret;
 
@@ -264,15 +264,15 @@ static int set_voltage_calibscale(void *device, char *buf, uint32_t len,
  * @return Number of bytes written to device, or negative value on failure.
  */
 static int set_voltage_calibphase(void *device, char *buf, uint32_t len,
-				      const struct iio_ch_info *channel,
-				      intptr_t priv)
+				  const struct iio_ch_info *channel,
+				  intptr_t priv)
 {
 	float calib = strtof(buf, NULL);
 	int32_t val = (int32_t)calib;
 	int32_t val2 = (int32_t)(calib* 1000000) % 1000000;
 	struct iio_axi_dac_desc* iio_dac = (struct iio_axi_dac_desc*)device;
 	int ret = axi_dac_dds_set_calib_phase(iio_dac->dac, channel->ch_num, val,
-			val2);
+					      val2);
 	if (ret < 0)
 		return ret;
 
@@ -307,8 +307,8 @@ static int set_voltage_sampling_frequency(void *device, char *buf,
  * @return Number of bytes written to device, or negative value on failure.
  */
 static int set_altvoltage_phase(void *device, char *buf, uint32_t len,
-				    const struct iio_ch_info *channel,
-				    intptr_t priv)
+				const struct iio_ch_info *channel,
+				intptr_t priv)
 {
 	uint32_t phase = srt_to_uint32(buf);
 	struct iio_axi_dac_desc * iio_dac = (struct iio_axi_dac_desc *)device;
@@ -328,8 +328,8 @@ static int set_altvoltage_phase(void *device, char *buf, uint32_t len,
  * @return Number of bytes written to device, or negative value on failure.
  */
 static int set_altvoltage_scale(void *device, char *buf, uint32_t len,
-				    const struct iio_ch_info *channel,
-				    intptr_t priv)
+				const struct iio_ch_info *channel,
+				intptr_t priv)
 {
 	float fscale = strtof(buf, NULL);
 	int32_t scale = fscale * 1000000;
@@ -350,8 +350,8 @@ static int set_altvoltage_scale(void *device, char *buf, uint32_t len,
  * @return Number of bytes written to device, or negative value on failure.
  */
 static int set_altvoltage_frequency(void *device, char *buf, uint32_t len,
-					const struct iio_ch_info *channel,
-					intptr_t priv)
+				    const struct iio_ch_info *channel,
+				    intptr_t priv)
 {
 	uint32_t freq = srt_to_uint32(buf);
 	struct iio_axi_dac_desc* iio_dac = (struct iio_axi_dac_desc*)device;
@@ -371,8 +371,8 @@ static int set_altvoltage_frequency(void *device, char *buf, uint32_t len,
  * @return: Number of bytes written to device, or negative value on failure.
  */
 static int set_altvoltage_raw(void *device, char *buf, uint32_t len,
-				  const struct iio_ch_info *channel,
-				  intptr_t priv)
+			      const struct iio_ch_info *channel,
+			      intptr_t priv)
 {
 	uint32_t dds_mode = srt_to_uint32(buf);
 	struct iio_axi_dac_desc* iio_dac = (struct iio_axi_dac_desc*)device;

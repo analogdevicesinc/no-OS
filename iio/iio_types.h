@@ -129,10 +129,10 @@ struct iio_attribute {
 	enum iio_attribute_shared shared;
 	/** Show function pointer */
 	int (*show)(void *device, char *buf, uint32_t len,
-			const struct iio_ch_info *channel, intptr_t priv);
+		    const struct iio_ch_info *channel, intptr_t priv);
 	/** Store function pointer */
 	int (*store)(void *device, char *buf, uint32_t len,
-			 const struct iio_ch_info *channel, intptr_t priv);
+		     const struct iio_ch_info *channel, intptr_t priv);
 };
 
 /**
