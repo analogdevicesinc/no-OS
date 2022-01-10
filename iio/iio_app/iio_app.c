@@ -39,12 +39,15 @@
 
 #ifdef IIO_SUPPORT
 
+#undef USE_TCP_SOCKET
+
 #include <stdlib.h>
 #include "iio.h"
 #include "iio_app.h"
 #include "parameters.h"
 #include "no-os/uart.h"
 #include "no-os/delay.h"
+#include "no-os/error.h"
 #include <stdio.h>
 
 #if defined(ADUCM_PLATFORM) || defined(XILINX_PLATFORM)

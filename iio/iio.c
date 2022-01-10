@@ -46,13 +46,16 @@
 
 #include "iio.h"
 #include "iio_types.h"
+#include "iiod.h"
 #include "ctype.h"
-#include "tinyiiod.h"
 #include "no-os/util.h"
 #include "no-os/list.h"
 #include "no-os/error.h"
 #include "no-os/uart.h"
+#include "no-os/error.h"
 #include <inttypes.h>
+#include <stdio.h>
+#include <string.h>
 
 #ifdef ENABLE_IIO_NETWORK
 #include "no-os/delay.h"
@@ -65,8 +68,9 @@
 /******************************************************************************/
 
 #define IIOD_PORT		30431
-#define MAX_SOCKET_TO_HANDLE	4
+#define MAX_SOCKET_TO_HANDLE	10
 #define REG_ACCESS_ATTRIBUTE	"direct_reg_access"
+#define IIOD_CONN_BUFFER_SIZE	0x1000
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -134,6 +138,9 @@ struct iio_dev_priv {
 	void			*dev_instance;
 	/** Used to read debug attributes */
 	uint32_t		active_reg_addr;
+	/** Buffer to read or write data */
+	struct circular_buffer	*buf;
+	uint32_t		buf_size;
 	/** Device descriptor(describes channels and attributes) */
 	struct iio_device	*dev_descriptor;
 	struct iio_data_buffer	*write_buffer;
@@ -141,54 +148,55 @@ struct iio_dev_priv {
 };
 
 struct iio_desc {
-	struct tinyiiod		*iiod;
-	struct tinyiiod_ops	*iiod_ops;
-	enum pysical_link_type	phy_type;
+	struct iiod_desc	*iiod;
+	struct iiod_ops		iiod_ops;
 	void			*phy_desc;
 	char			*xml_desc;
 	uint32_t		xml_size;
 	struct iio_dev_priv	*devs;
 	uint32_t		nb_devs;
 	struct uart_desc	*uart_desc;
-#ifdef ENABLE_IIO_NETWORK
+	int (*recv)(void *conn, uint8_t *buf, uint32_t len);
+	int (*send)(void *conn, uint8_t *buf, uint32_t len);
 	/* FIFO for socket descriptors */
-	struct circular_buffer	*sockets;
-	/* Client socket active during an iio_step */
+	struct circular_buffer	*conns;
+#ifdef ENABLE_IIO_NETWORK
 	struct tcp_socket_desc	*current_sock;
 	/* Instance of server socket */
 	struct tcp_socket_desc	*server;
 #endif
 };
 
-static struct iio_desc			*g_desc;
-
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
 
-#ifdef ENABLE_IIO_NETWORK
-
-static inline int32_t _pop_sock(struct iio_desc *desc,
-				struct tcp_socket_desc **sock)
-{
-	return cb_read(desc->sockets, sock, sizeof(*sock));
-}
-
-static inline int32_t _push_sock(struct iio_desc *desc,
-				 struct tcp_socket_desc *sock)
-{
-	return cb_write(desc->sockets, &sock, sizeof(sock));
-}
-
-static inline int32_t _nb_active_sockets(struct iio_desc *desc)
+static inline int32_t _pop_conn(struct iio_desc *desc, uint32_t *conn_id)
 {
 	uint32_t size;
 
-	cb_size(desc->sockets, &size);
+	cb_size(desc->conns, &size);
+	if (size < sizeof(uint32_t))
+		return -EAGAIN;
 
-	return size / sizeof(struct tcp_socket_desc *);
+	return cb_read(desc->conns, conn_id, sizeof(*conn_id));
 }
 
+static inline int32_t _push_conn(struct iio_desc *desc, uint32_t conn_id)
+{
+	return cb_write(desc->conns, &conn_id, sizeof(conn_id));
+}
+
+static inline int32_t _nb_active_conns(struct iio_desc *desc)
+{
+	uint32_t size;
+
+	cb_size(desc->conns, &size);
+
+	return size / sizeof(uint32_t);
+}
+
+#if 0 //TO remove
 /* Blocking until new socket available.
  * Will iterate through a list of sockets */
 static int32_t _get_next_socket(struct iio_desc *desc)
@@ -263,33 +271,20 @@ static int32_t network_read(const void *data, uint32_t len)
 
 	return i;
 }
-#endif
+#endif //REMOVE
 
-static int iio_phy_read(char *buf, uint32_t len)
+static int iio_recv(struct iiod_ctx *ctx, uint8_t *buf, uint32_t len)
 {
-	if (g_desc->phy_type == USE_UART)
-		return (int)uart_read(g_desc->uart_desc, (uint8_t *)buf,
-				      (uint32_t)len);
-#ifdef ENABLE_IIO_NETWORK
-	else
-		return network_read((void *)buf, (uint32_t)len);
-#endif
+	struct iio_desc *desc = ctx->instance;
 
-	return -EINVAL;
+	return desc->recv(ctx->conn, buf, len);
 }
 
-/** Write to a peripheral device (UART, USB, NETWORK) */
-static int iio_phy_write(const char *buf, uint32_t len)
+static int iio_send(struct iiod_ctx *ctx, uint8_t *buf, uint32_t len)
 {
-	if (g_desc->phy_type == USE_UART)
-		return (int)uart_write(g_desc->uart_desc,
-				       (uint8_t *)buf, (uint32_t)len);
-#ifdef ENABLE_IIO_NETWORK
-	else
-		return socket_send(g_desc->current_sock, buf, len);
-#endif
+	struct iio_desc *desc = ctx->instance;
 
-	return -EINVAL;
+	return desc->send(ctx->conn, buf, len);
 }
 
 static inline void _print_ch_id(char *buff, struct iio_channel *ch)
@@ -342,13 +337,14 @@ static inline struct iio_channel *iio_get_channel(const char *channel,
  * @param iio_dev_privs - List of interfaces.
  * @return Interface pointer if interface is found, NULL otherwise.
  */
-static struct iio_dev_priv *get_iio_device(const char *device_name)
+static struct iio_dev_priv *get_iio_device(struct iio_desc *desc,
+		const char *device_name)
 {
 	uint32_t i;
 
-	for (i = 0; i < g_desc->nb_devs; i++) {
-		if (strcmp(g_desc->devs[i].dev_id, device_name) == 0)
-			return &g_desc->devs[i];
+	for (i = 0; i < desc->nb_devs; i++) {
+		if (strcmp(desc->devs[i].dev_id, device_name) == 0)
+			return &desc->devs[i];
 	}
 
 	return NULL;
@@ -376,10 +372,19 @@ static int iio_read_all_attr(struct attr_fun_params *params,
 						 local_buf, params->len,
 						 params->ch_info,
 						 attributes[i].priv);
+		if (IS_ERR_VALUE(attr_length))
+			attr_length = snprintf(local_buf, params->len, "%d",
+					       attr_length);
+
+		attr_length += 1;//Add '\0' to the count
 		pattr_length = (uint32_t *)(params->buf + j);
+		if (j + 4 > params->len)
+			return -EINVAL;
 		*pattr_length = bswap_constant_32(attr_length);
 		j += 4;
 		if (attr_length >= 0) {
+			if (attr_length + j > params->len)
+				return -EINVAL;
 			sprintf(params->buf + j, "%s", local_buf);
 			if (attr_length & 0x3) /* multiple of 4 */
 				attr_length = ((attr_length >> 2) + 1) << 2;
@@ -387,6 +392,8 @@ static int iio_read_all_attr(struct attr_fun_params *params,
 		}
 		i++;
 	}
+	if (j == 0)
+		return -ENOENT;
 
 	return j;
 }
@@ -435,7 +442,7 @@ static int iio_write_all_attr(struct attr_fun_params *params,
  */
 static int iio_rd_wr_attribute(struct attr_fun_params *params,
 			       struct iio_attribute *attributes,
-			       char *attr_name,
+			       const char *attr_name,
 			       bool is_write)
 {
 	int16_t i = 0;
@@ -643,105 +650,144 @@ int iio_format_value(char *buf, uint32_t len, enum iio_val fmt,
 	}
 }
 
+static struct iio_attribute *get_attributes(enum iio_attr_type type,
+		struct iio_dev_priv *dev,
+		struct iio_channel *ch)
+{
+	switch (type) {
+	case IIO_ATTR_TYPE_DEBUG:
+		return dev->dev_descriptor->debug_attributes;
+		break;
+	case IIO_ATTR_TYPE_DEVICE:
+		return dev->dev_descriptor->attributes;
+		break;
+	case IIO_ATTR_TYPE_BUFFER:
+		return dev->dev_descriptor->buffer_attributes;
+		break;
+	case IIO_ATTR_TYPE_CH_IN:
+	case IIO_ATTR_TYPE_CH_OUT:
+		return ch->attributes;
+	}
+
+	return NULL;
+}
+
 /**
  * @brief Read global attribute of a device.
+ * @param ctx - IIO instance and conn instance
  * @param device - String containing device name.
  * @param attr - String containing attribute name.
  * @param buf - Buffer where value is read.
  * @param len - Maximum length of value to be stored in buf.
- * @param debug - Read raw value if set.
  * @return Number of bytes read.
  */
-static int iio_read_attr(const char *device_id, const char *attr, char *buf,
-			 uint32_t len, enum iio_attr_type type)
+static int iio_read_attr(struct iiod_ctx *ctx, const char *device,
+			 struct iiod_attr *attr, char *buf, uint32_t len)
 {
-	struct iio_dev_priv	*dev;
-	struct attr_fun_params	params;
-	struct iio_attribute	*attributes;
+	struct iio_dev_priv *dev;
+	struct iio_ch_info ch_info;
+	struct iio_channel *ch = NULL;
+	struct attr_fun_params params;
+	struct iio_attribute *attributes;
+	int8_t ch_out;
 
-	dev = get_iio_device(device_id);
+	dev = get_iio_device(ctx->instance, device);
 	if (!dev)
 		return FAILURE;
+
+	if (attr->type == IIO_ATTR_TYPE_DEBUG &&
+	    strcmp(attr->name, REG_ACCESS_ATTRIBUTE) == 0) {
+		if (dev->dev_descriptor->debug_reg_read)
+			return debug_reg_read(dev, buf, len);
+		else
+			return -ENOENT;
+	}
+
+	if (attr->channel) {
+		ch_out = attr->type == IIO_ATTR_TYPE_CH_OUT ? 1 : 0;
+		ch = iio_get_channel(attr->channel, dev->dev_descriptor,
+				     ch_out);
+		if (!ch)
+			return -ENOENT;
+		ch_info.ch_out = ch_out;
+		ch_info.ch_num = ch->channel;
+		ch_info.type = ch->ch_type;
+		ch_info.differential = ch->diferential;
+		ch_info.address = ch->address;
+		params.ch_info = &ch_info;
+	} else {
+		params.ch_info = NULL;
+	}
 
 	params.buf = buf;
 	params.len = len;
 	params.dev_instance = dev->dev_instance;
-	params.ch_info = NULL;
-	attributes = NULL;
-	switch (type) {
-	case IIO_ATTR_TYPE_DEBUG:
-		if (strcmp(attr, REG_ACCESS_ATTRIBUTE) == 0) {
-			if (dev->dev_descriptor->debug_reg_read)
-				return debug_reg_read(dev, buf, len);
-			else
-				return -ENOENT;
-		}
-		attributes = dev->dev_descriptor->debug_attributes;
-		break;
-	case IIO_ATTR_TYPE_DEVICE:
-		attributes = dev->dev_descriptor->attributes;
-		break;
-	case IIO_ATTR_TYPE_BUFFER:
-		attributes = dev->dev_descriptor->buffer_attributes;
-		break;
-	}
-
-	if (!strcmp(attr, ""))
+	attributes = get_attributes(attr->type, dev, ch);
+	if (!strcmp(attr->name, ""))
 		return iio_read_all_attr(&params, attributes);
 	else
-		return iio_rd_wr_attribute(&params,attributes, (char *)attr, 0);
+		return iio_rd_wr_attribute(&params, attributes, attr->name, 0);
 }
 
 /**
  * @brief Write global attribute of a device.
  * @param device - String containing device name.
+ * @param ctx - IIO instance and conn instance
  * @param attr - String containing attribute name.
  * @param buf - Value to be written.
  * @param len - Length of data.
- * @param debug - Write raw value if set.
  * @return Number of written bytes.
  */
-static int iio_write_attr(const char *device_id, const char *attr,
-			  const char *buf,
-			  uint32_t len, enum iio_attr_type type)
+static int iio_write_attr(struct iiod_ctx *ctx, const char *device,
+			  struct iiod_attr *attr, char *buf, uint32_t len)
 {
 	struct iio_dev_priv	*dev;
 	struct attr_fun_params	params;
 	struct iio_attribute	*attributes;
+	struct iio_ch_info ch_info;
+	struct iio_channel *ch = NULL;
+	int8_t ch_out;
 
-	dev = get_iio_device(device_id);
+	dev = get_iio_device(ctx->instance, device);
 	if (!dev)
 		return -ENODEV;
+
+	if (attr->type == IIO_ATTR_TYPE_DEBUG &&
+	    strcmp(attr->name, REG_ACCESS_ATTRIBUTE) == 0) {
+		if (dev->dev_descriptor->debug_reg_write)
+			return debug_reg_write(dev, buf, len);
+		else
+			return -ENOENT;
+	}
+
+	if (attr->channel) {
+		ch_out = attr->type == IIO_ATTR_TYPE_CH_OUT ? 1 : 0;
+		ch = iio_get_channel(attr->channel, dev->dev_descriptor,
+				     ch_out);
+		if (!ch)
+			return -ENOENT;
+
+		ch_info.ch_out = ch_out;
+		ch_info.ch_num = ch->channel;
+		ch_info.type = ch->ch_type;
+		ch_info.differential = ch->diferential;
+		ch_info.address = ch->address;
+		params.ch_info = &ch_info;
+	} else {
+		params.ch_info = NULL;
+	}
 
 	params.buf = (char *)buf;
 	params.len = len;
 	params.dev_instance = dev->dev_instance;
-	params.ch_info = NULL;
-	attributes = NULL;
-	switch (type) {
-	case IIO_ATTR_TYPE_DEBUG:
-		if (strcmp(attr, REG_ACCESS_ATTRIBUTE) == 0) {
-			if (dev->dev_descriptor->debug_reg_write)
-				return debug_reg_write(dev, buf, len);
-			else
-				return -ENOENT;
-		}
-		attributes = dev->dev_descriptor->debug_attributes;
-		break;
-	case IIO_ATTR_TYPE_DEVICE:
-		attributes = dev->dev_descriptor->attributes;
-		break;
-	case IIO_ATTR_TYPE_BUFFER:
-		attributes = dev->dev_descriptor->buffer_attributes;
-		break;
-	}
-
-	if (!strcmp(attr, ""))
+	attributes = get_attributes(attr->type, dev, ch);
+	if (!strcmp(attr->name, ""))
 		return iio_write_all_attr(&params, attributes);
 	else
-		return iio_rd_wr_attribute(&params, attributes, (char *)attr, 1);
+		return iio_rd_wr_attribute(&params, attributes, attr->name, 1);
 }
 
+#if 0 /* TODO remove */
 /**
  * @brief Read channel attribute.
  * @param device_name - String containing device name.
@@ -823,21 +869,80 @@ static int iio_ch_write_attr(const char *device_id, const char *channel,
 	else
 		return iio_rd_wr_attribute(&params, ch->attributes, (char *)attr, 1);
 }
+#endif /* TODO remvoe */
+
+static uint32_t bytes_to_samples(struct iio_dev_priv *dev, uint32_t bytes)
+{
+	uint32_t bytes_per_sample;
+	uint32_t first_ch;
+	bool	 first_ch_found;
+	uint32_t nb_active_ch;
+	uint32_t mask;
+
+	mask = dev->ch_mask;
+	first_ch = 0;
+	nb_active_ch = 0;
+	first_ch_found = false;
+	while (mask) {
+		if ((mask & 1)) {
+			if (!first_ch_found)
+				first_ch_found = true;
+			else
+				first_ch++;
+			nb_active_ch++;
+		}
+		mask >>= 1;
+	}
+	bytes_per_sample = dev->dev_descriptor->channels[first_ch]
+			   .scan_type->storagebits / 8;
+
+	return bytes / bytes_per_sample / nb_active_ch;
+}
+
+static uint32_t samples_to_bytes(struct iio_dev_priv *dev, uint32_t samples)
+{
+	uint32_t bytes_per_sample;
+	uint32_t first_ch;
+	bool	 first_ch_found;
+	uint32_t nb_active_ch;
+	uint32_t mask;
+
+	mask = dev->ch_mask;
+	first_ch = 0;
+	nb_active_ch = 0;
+	first_ch_found = false;
+	while (mask) {
+		if ((mask & 1)) {
+			if (!first_ch_found)
+				first_ch_found = true;
+			else
+				first_ch++;
+			nb_active_ch++;
+		}
+		mask >>= 1;
+	}
+	bytes_per_sample = dev->dev_descriptor->channels[first_ch]
+			   .scan_type->storagebits / 8;
+
+	return samples * bytes_per_sample * nb_active_ch;
+}
 
 /**
  * @brief  Open device.
+ * @param ctx - IIO instance and conn instance
  * @param device - String containing device name.
  * @param sample_size - Sample size.
  * @param mask - Channels to be opened.
  * @return SUCCESS, negative value in case of failure.
  */
-static int32_t iio_open_dev(const char *device, uint32_t sample_size,
-			    uint32_t mask, bool cyclic)
+static int iio_open_dev(struct iiod_ctx *ctx, const char *device,
+			uint32_t samples, uint32_t mask, bool cyclic)
 {
 	struct iio_dev_priv *dev;
 	uint32_t ch_mask;
+	int32_t ret;
 
-	dev = get_iio_device(device);
+	dev = get_iio_device(ctx->instance, device);
 	if (!dev)
 		return -ENODEV;
 
@@ -847,6 +952,10 @@ static int32_t iio_open_dev(const char *device, uint32_t sample_size,
 		return -ENOENT;
 
 	dev->ch_mask = mask;
+	dev->buf_size = samples_to_bytes(dev, samples);;
+	ret = cb_init(&dev->buf, dev->buf_size);
+	if (IS_ERR_VALUE(ret))
+		return ret;
 
 	if (dev->dev_descriptor->prepare_transfer)
 		return dev->dev_descriptor->prepare_transfer(
@@ -857,17 +966,19 @@ static int32_t iio_open_dev(const char *device, uint32_t sample_size,
 
 /**
  * @brief Close device.
+ * @param ctx - IIO instance and conn instance
  * @param device - String containing device name.
  * @return SUCCESS, negative value in case of failure.
  */
-static int32_t iio_close_dev(const char *device)
+static int iio_close_dev(struct iiod_ctx *ctx, const char *device)
 {
 	struct iio_dev_priv *dev;
 
-	dev = get_iio_device(device);
+	dev = get_iio_device(ctx->instance, device);
 	if (!dev)
 		return FAILURE;
 
+	cb_remove(dev->buf);
 	dev->ch_mask = 0;
 	if (dev->dev_descriptor->end_transfer)
 		return dev->dev_descriptor->end_transfer(dev->dev_instance);
@@ -875,6 +986,7 @@ static int32_t iio_close_dev(const char *device)
 	return SUCCESS;
 }
 
+#if 0 /* TODO remove */
 /**
  * @brief Get device mask, this specifies the channels that are used.
  * @param device - String containing device name.
@@ -948,6 +1060,7 @@ static int iio_transfer_dev_to_mem(const char *device, uint32_t bytes_count)
 
 	return -ENOENT;
 }
+#endif /* TODO remove */
 
 /**
  * @brief Read chunk of data from RAM to pbuf. Call
@@ -960,25 +1073,55 @@ static int iio_transfer_dev_to_mem(const char *device, uint32_t bytes_count)
  * @param bytes_count - Number of bytes to read.
  * @return: Bytes_count or negative value in case of error.
  */
-static int iio_read_dev(const char *device, char *pbuf, uint32_t offset,
-			uint32_t bytes_count)
+static int iio_read_buffer(struct iiod_ctx *ctx, const char *device, char *buf,
+			   uint32_t bytes)
 {
-	struct iio_dev_priv *dev = get_iio_device(device);
-	struct iio_data_buffer *r_buff;
+	struct iio_dev_priv	*dev;
+	uint32_t		samples;
+	int32_t			ret;
+	uint32_t		size;
+	void			*cb_buff;
+	uint32_t		available;
 
-	r_buff = dev->read_buffer;
-	if (r_buff) {
-		if (offset + bytes_count > r_buff->size)
-			return -ENOMEM;
+	dev = get_iio_device(ctx->instance, device);
+	if (!dev)
+		return -EINVAL;
 
-		memcpy(pbuf, (char *)r_buff->buff + offset, bytes_count);
+	if (!dev->dev_descriptor->read_dev)
+		return -EINVAL;
 
-		return bytes_count;
+	ret = cb_size(dev->buf, &size);
+	if (IS_ERR_VALUE(ret))
+		return ret;
+
+	if (size == 0) {
+		/* Refill buffer */
+		ret = cb_prepare_async_write(dev->buf, dev->buf_size, &cb_buff,
+					     &available);
+		if (IS_ERR_VALUE(ret))
+			return ret;
+		if (available < dev->buf_size)
+			return -EINVAL;
+
+		samples = bytes_to_samples(dev, dev->buf_size);
+		ret = dev->dev_descriptor->read_dev(dev->dev_instance, cb_buff,
+						    samples);
+		if (ret < 0)
+			return ret;
+
+		ret = cb_end_async_write(dev->buf);
+		if (IS_ERR_VALUE(ret))
+			return ret;
 	}
 
-	return -ENOENT;
+	ret = cb_read(dev->buf, buf, bytes);
+	if (IS_ERR_VALUE(ret))
+		return ret;
+
+	return bytes;
 }
 
+#if 0 /* TODO remove */
 /**
  * @brief Transfer memory to device.
  * @param device - String containing device name.
@@ -1005,6 +1148,7 @@ static int iio_transfer_mem_to_dev(const char *device, uint32_t bytes_count)
 
 	return -ENOENT;
 }
+#endif /* TODO remove */
 
 /**
  * @brief Write chunk of data into RAM.
@@ -1017,23 +1161,57 @@ static int iio_transfer_mem_to_dev(const char *device, uint32_t bytes_count)
  * @param bytes_count - Number of bytes to write.
  * @return Bytes_count or negative value in case of error.
  */
-static int iio_write_dev(const char *device, const char *buf,
-			 uint32_t offset, uint32_t bytes_count)
+static int iio_write_buffer(struct iiod_ctx *ctx, const char *device, char *buf,
+			    uint32_t bytes)
 {
-	struct iio_dev_priv *dev = get_iio_device(device);
-	struct iio_data_buffer	*w_buff;
+	struct iio_dev_priv	*dev;
+	uint32_t		samples;
+	int32_t			ret;
+	void			*cb_buff;
+	uint32_t		available;
+	uint32_t		size;
 
-	w_buff = dev->write_buffer;
-	if (w_buff) {
-		if (offset + bytes_count > w_buff->size)
-			return -ENOMEM;
-		memcpy((char *)w_buff->buff + offset, buf, bytes_count);
-		return bytes_count;
+	dev = get_iio_device(ctx->instance, device);
+	if (!dev)
+		return -EINVAL;
+
+	if (!dev->dev_descriptor->write_dev)
+		return -EINVAL;
+
+	ret = cb_size(dev->buf, &size);
+	if (IS_ERR_VALUE(ret))
+		return ret;
+
+	if (size < dev->buf_size) {
+		ret = cb_write(dev->buf, buf, bytes);
+		if (IS_ERR_VALUE(ret))
+			return ret;
+		size += bytes;
+	}
+	if (size == dev->buf_size) {
+		/* Refill buffer */
+		ret = cb_prepare_async_read(dev->buf, dev->buf_size, &cb_buff,
+					    &available);
+		if (IS_ERR_VALUE(ret))
+			return ret;
+		if (available < dev->buf_size)
+			return -EINVAL;
+
+		samples = bytes_to_samples(dev, dev->buf_size);
+		ret = dev->dev_descriptor->write_dev(dev->dev_instance, cb_buff,
+						     samples);
+		if (ret < 0)
+			return ret;
+
+		ret = cb_end_async_read(dev->buf);
+		if (IS_ERR_VALUE(ret))
+			return ret;
 	}
 
-	return -ENOENT;
+	return bytes;
 }
 
+#if 0 /* TODO remove */
 /**
  * @brief Get a merged xml containing all devices.
  * @param outxml - Generated xml.
@@ -1048,6 +1226,37 @@ static int iio_get_xml(char **outxml)
 
 	return g_desc->xml_size;
 }
+#endif
+
+#ifdef ENABLE_IIO_NETWORK
+
+static int32_t accept_network_clients(struct iio_desc *desc)
+{
+	struct tcp_socket_desc *sock;
+	struct iiod_conn_data data;
+	int32_t ret;
+	do {
+		uint32_t id;
+		ret = socket_accept(desc->server, &sock);
+		if (IS_ERR_VALUE(ret))
+			return ret;
+
+		data.conn = sock;
+		data.buf = calloc(1, IIOD_CONN_BUFFER_SIZE);
+		data.len = IIOD_CONN_BUFFER_SIZE;
+
+		ret = iiod_conn_add(desc->iiod, &data, &id);
+		if (IS_ERR_VALUE(ret))
+			return ret;
+
+		ret = _push_conn(desc, id);
+		if (IS_ERR_VALUE(ret))
+			return ret;
+	} while (true);
+
+	return SUCCESS;
+}
+#endif
 
 /**
  * @brief Execute an iio step
@@ -1056,20 +1265,36 @@ static int iio_get_xml(char **outxml)
  */
 int iio_step(struct iio_desc *desc)
 {
-#ifdef ENABLE_IIO_NETWORK
+	struct iiod_conn_data data;
+	uint32_t conn_id;
 	int32_t ret;
 
-	if (desc->phy_type == USE_NETWORK) {
-		if (desc->current_sock != NULL &&
-		    (int32_t)desc->current_sock != -1) {
-			ret = _push_sock(desc, desc->current_sock);
-			if (IS_ERR_VALUE(ret))
-				return ret;
-		}
-		desc->current_sock = NULL;
+#ifdef ENABLE_IIO_NETWORK
+	if (desc->server) {
+		ret = accept_network_clients(desc);
+		if (IS_ERR_VALUE(ret) && ret != -EAGAIN)
+			return ret;
 	}
 #endif
-	return tinyiiod_read_command(desc->iiod);
+
+	ret = _pop_conn(desc, &conn_id);
+	if (IS_ERR_VALUE(ret))
+		return ret;
+
+	ret = iiod_conn_step(desc->iiod, conn_id);
+	if (ret == -ENOTCONN) {
+#ifdef ENABLE_IIO_NETWORK
+		if (desc->server) {
+			iiod_conn_remove(desc->iiod, conn_id, &data);
+			socket_remove(data.conn);
+			free(data.buf);
+		}
+#endif
+	} else {
+		_push_conn(desc, conn_id);
+	}
+
+	return ret;
 }
 
 /*
@@ -1320,98 +1545,99 @@ int iio_init(struct iio_desc **desc, struct iio_init_param *init_param)
 {
 	int32_t			ret;
 	struct iio_desc		*ldesc;
-	struct tinyiiod_ops	*ops;
+	struct iiod_ops		*ops;
+	struct iiod_init_param	iiod_param;
+	uint32_t		conn_id;
 
-	if (!init_param)
+	if (!desc || !init_param)
 		return -EINVAL;
 
-	ops = (struct tinyiiod_ops *)calloc(1, sizeof(struct tinyiiod_ops));
-	if (!ops)
+	ldesc = (struct iio_desc *)calloc(1, sizeof(*ldesc));
+	if (!ldesc)
 		return -ENOMEM;
 
-	ldesc = (struct iio_desc *)calloc(1, sizeof(*ldesc));
-	if (!ldesc) {
-		ret = -ENOMEM;
-		goto free_ops;
-	}
-	ldesc->iiod_ops = ops;
+	ret = iio_init_devs(ldesc, init_param->devs, init_param->nb_devs);
+	if (IS_ERR_VALUE(ret))
+		goto free_desc;
 
 	/* device operations */
+	ops = &ldesc->iiod_ops;
 	ops->read_attr = iio_read_attr;
 	ops->write_attr = iio_write_attr;
-	ops->ch_read_attr = iio_ch_read_attr;
-	ops->ch_write_attr = iio_ch_write_attr;
-	ops->transfer_dev_to_mem = iio_transfer_dev_to_mem;
-	ops->read_data = iio_read_dev;
-	ops->transfer_mem_to_dev = iio_transfer_mem_to_dev;
-	ops->write_data = iio_write_dev;
-
+	ops->read_buffer = iio_read_buffer;
+	ops->write_buffer = iio_write_buffer;
 	ops->open = iio_open_dev;
 	ops->close = iio_close_dev;
-	ops->get_mask = iio_get_mask;
+	ops->send = iio_send;
+	ops->recv = iio_recv;
 
-	ops->read = iio_phy_read;
-	ops->write = iio_phy_write;
+	iiod_param.instance = ldesc;
+	iiod_param.ops = ops;
+	iiod_param.xml = ldesc->xml_desc;
+	iiod_param.xml_len = ldesc->xml_size;
 
-	ldesc->phy_type = init_param->phy_type;
+	ret = iiod_init(&ldesc->iiod, &iiod_param);
+	if (IS_ERR_VALUE(ret))
+		goto free_devs;
+
+	ret = cb_init(&ldesc->conns,
+		      sizeof(uint32_t) * (IIOD_MAX_CONNECTIONS + 1));
+	if (IS_ERR_VALUE(ret))
+		goto free_iiod;
+
 	if (init_param->phy_type == USE_UART) {
+		ldesc->send = (int (*)())uart_write;
+		ldesc->recv = (int (*)())uart_read;
 		ldesc->uart_desc = init_param->uart_desc;
+
+		struct iiod_conn_data data = {
+			.conn = ldesc->uart_desc,
+			.buf = calloc(1, IIOD_CONN_BUFFER_SIZE),
+			.len = IIOD_CONN_BUFFER_SIZE
+		};
+		ret = iiod_conn_add(ldesc->iiod, &data, &conn_id);
+		if (IS_ERR_VALUE(ret))
+			goto free_conns;
+		_push_conn(ldesc, conn_id);
 	}
 #ifdef ENABLE_IIO_NETWORK
 	else if (init_param->phy_type == USE_NETWORK) {
+		ldesc->send = (int (*)())socket_send;
+		ldesc->recv = (int (*)())socket_recv;
 		ret = socket_init(&ldesc->server,
 				  init_param->tcp_socket_init_param);
 		if (IS_ERR_VALUE(ret))
-			goto free_desc;
+			goto free_conns;
 		ret = socket_bind(ldesc->server, IIOD_PORT);
 		if (IS_ERR_VALUE(ret))
 			goto free_pylink;
 		ret = socket_listen(ldesc->server, MAX_BACKLOG);
 		if (IS_ERR_VALUE(ret))
 			goto free_pylink;
-		ret = cb_init(&ldesc->sockets, sizeof(struct tcp_socket_desc *)
-			      * MAX_SOCKET_TO_HANDLE);
-		if (IS_ERR_VALUE(ret))
-			goto free_pylink;
 	}
 #endif
 	else {
-		goto free_desc;
+		ret = -EINVAL;
+		goto free_conns;
 	}
 
-	ops->read = iio_phy_read;
-	ops->write = iio_phy_write;
-
-	ops->get_xml = iio_get_xml;
-
-	ret = iio_init_devs(ldesc, init_param->devs, init_param->nb_devs);
-	if (IS_ERR_VALUE(ret))
-		goto free_pylink;
-
-	ldesc->iiod = tinyiiod_create(ops);
-	if (!(ldesc->iiod))
-		goto free_devs;
-
 	*desc = ldesc;
-	g_desc = ldesc;
 
 	return SUCCESS;
 
+free_pylink:
+#ifdef ENABLE_IIO_NETWORK
+	socket_remove(ldesc->server);
+#endif
+free_conns:
+	cb_remove(ldesc->conns);
+free_iiod:
+	iiod_remove(ldesc->iiod);
 free_devs:
 	free(ldesc->devs);
 	free(ldesc->xml_desc);
-free_pylink:
-#ifdef ENABLE_IIO_NETWORK
-	if (ldesc->phy_type == USE_NETWORK) {
-		socket_remove(ldesc->server);
-		if (ldesc->sockets)
-			cb_remove(ldesc->sockets);
-	}
-#endif
 free_desc:
 	free(ldesc);
-free_ops:
-	free(ops);
 
 	return ret;
 }
@@ -1423,22 +1649,16 @@ free_ops:
  */
 int iio_remove(struct iio_desc *desc)
 {
-	free(desc->iiod_ops);
-	tinyiiod_destroy(desc->iiod);
+	if (!desc)
+		return -EINVAL;
 
-	free(desc->xml_desc);
-	free(desc->devs);
-
-	if (desc->phy_type == USE_UART) {
-		uart_remove(desc->phy_desc);
-	}
 #ifdef ENABLE_IIO_NETWORK
-	else {
-		socket_remove(desc->server);
-		cb_remove(desc->sockets);
-	}
+	socket_remove(desc->server);
 #endif
-
+	cb_remove(desc->conns);
+	iiod_remove(desc->iiod);
+	free(desc->devs);
+	free(desc->xml_desc);
 	free(desc);
 
 	return SUCCESS;
