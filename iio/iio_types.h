@@ -128,10 +128,10 @@ struct iio_attribute {
 	*/
 	enum iio_attribute_shared shared;
 	/** Show function pointer */
-	ssize_t (*show)(void *device, char *buf, size_t len,
+	int (*show)(void *device, char *buf, size_t len,
 			const struct iio_ch_info *channel, intptr_t priv);
 	/** Store function pointer */
-	ssize_t (*store)(void *device, char *buf, size_t len,
+	int (*store)(void *device, char *buf, size_t len,
 			 const struct iio_ch_info *channel, intptr_t priv);
 };
 

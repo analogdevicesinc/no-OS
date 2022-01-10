@@ -63,14 +63,14 @@
  * @param channel - Channel properties.
  * @return Length of chars written in buf, or negative value on failure.
  */
-static ssize_t get_calibphase(void *device, char *buf, size_t len,
+static int get_calibphase(void *device, char *buf, size_t len,
 			      const struct iio_ch_info *channel,
 			      intptr_t priv)
 {
 	int32_t val, val2;
 	int32_t i = 0;
 	struct iio_axi_adc_desc *iio_adc = (struct iio_axi_adc_desc *)device;
-	ssize_t ret = axi_adc_get_calib_phase(iio_adc->adc, channel->ch_num, &val,
+	int ret = axi_adc_get_calib_phase(iio_adc->adc, channel->ch_num, &val,
 					      &val2);
 	if (ret < 0)
 		return ret;
@@ -91,12 +91,12 @@ static ssize_t get_calibphase(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Length of chars written in buf, or negative value on failure.
  */
-static ssize_t get_calibbias(void *device, char *buf, size_t len,
+static int get_calibbias(void *device, char *buf, size_t len,
 			     const struct iio_ch_info *channel,
 			     intptr_t priv)
 {
 	int32_t val;
-	ssize_t ret;
+	int ret;
 	struct iio_axi_adc_desc *iio_adc = (struct iio_axi_adc_desc *)device;
 
 	ret = axi_adc_get_calib_bias(iio_adc->adc,
@@ -117,14 +117,14 @@ static ssize_t get_calibbias(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Length of chars written in buf, or negative value on failure.
  */
-static ssize_t get_calibscale(void *device, char *buf, size_t len,
+static int get_calibscale(void *device, char *buf, size_t len,
 			      const struct iio_ch_info *channel,
 			      intptr_t priv)
 {
 	int32_t val, val2;
 	int32_t i = 0;
 	struct iio_axi_adc_desc *iio_adc = (struct iio_axi_adc_desc *)device;
-	ssize_t ret = axi_adc_get_calib_scale(iio_adc->adc, channel->ch_num, &val,
+	int ret = axi_adc_get_calib_scale(iio_adc->adc, channel->ch_num, &val,
 					      &val2);
 	if (ret < 0)
 		return ret;
@@ -149,7 +149,7 @@ static ssize_t get_calibscale(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return: Length of chars written in buf, or negative value on failure.
  */
-static ssize_t get_samples_pps(void *device, char *buf, size_t len,
+static int get_samples_pps(void *device, char *buf, size_t len,
 			       const struct iio_ch_info *channel,
 			       intptr_t priv)
 {
@@ -167,12 +167,12 @@ static ssize_t get_samples_pps(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Length of chars written in buf, or negative value on failure.
  */
-static ssize_t get_sampling_frequency(void *device, char *buf, size_t len,
+static int get_sampling_frequency(void *device, char *buf, size_t len,
 				      const struct iio_ch_info *channel,
 				      intptr_t priv)
 {
 	uint64_t sampling_freq_hz;
-	ssize_t ret;
+	int ret;
 	struct iio_axi_adc_desc *iio_adc = (struct iio_axi_adc_desc *)device;
 
 	if (iio_adc->get_sampling_frequency)
@@ -195,11 +195,11 @@ static ssize_t get_sampling_frequency(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Number of bytes written to device, or negative value on failure.
  */
-static ssize_t set_calibphase(void *device, char *buf, size_t len,
+static int set_calibphase(void *device, char *buf, size_t len,
 			      const struct iio_ch_info *channel,
 			      intptr_t priv)
 {
-	ssize_t ret;
+	int ret;
 	float calib = strtof(buf, NULL);
 	int32_t val = (int32_t)calib;
 	int32_t val2 = (int32_t)(calib * 1000000) % 1000000;
@@ -220,13 +220,13 @@ static ssize_t set_calibphase(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Number of bytes written to device, or negative value on failure.
  */
-static ssize_t set_calibbias(void *device, char *buf, size_t len,
+static int set_calibbias(void *device, char *buf, size_t len,
 			     const struct iio_ch_info *channel,
 			     intptr_t priv)
 {
 	int32_t val = str_to_int32(buf);
 	struct iio_axi_adc_desc *iio_adc = (struct iio_axi_adc_desc *)device;
-	ssize_t ret;
+	int ret;
 
 	ret = axi_adc_set_calib_bias(iio_adc->adc,
 				     channel->ch_num,
@@ -246,7 +246,7 @@ static ssize_t set_calibbias(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Number of bytes written to device, or negative value on failure.
  */
-static ssize_t set_calibscale(void *device, char *buf, size_t len,
+static int set_calibscale(void *device, char *buf, size_t len,
 			      const struct iio_ch_info *channel,
 			      intptr_t priv)
 {
@@ -254,7 +254,7 @@ static ssize_t set_calibscale(void *device, char *buf, size_t len,
 	int32_t val = (int32_t)calib;
 	int32_t val2 = (int32_t)(calib* 1000000) % 1000000;
 	struct iio_axi_adc_desc *iio_adc = (struct iio_axi_adc_desc *)device;
-	ssize_t ret = axi_adc_set_calib_scale(iio_adc->adc, channel->ch_num, val,
+	int ret = axi_adc_set_calib_scale(iio_adc->adc, channel->ch_num, val,
 					      val2);
 	if (ret < 0)
 		return ret;
@@ -270,7 +270,7 @@ static ssize_t set_calibscale(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Number of bytes written to device, or negative value on failure.
  */
-static ssize_t set_samples_pps(void *device, char *buf, size_t len,
+static int set_samples_pps(void *device, char *buf, size_t len,
 			       const struct iio_ch_info *channel,
 			       intptr_t priv)
 {
@@ -288,7 +288,7 @@ static ssize_t set_samples_pps(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Number of bytes written to device, or negative value on failure.
  */
-static ssize_t set_sampling_frequency(void *device, char *buf, size_t len,
+static int set_sampling_frequency(void *device, char *buf, size_t len,
 				      const struct iio_ch_info *channel,
 				      intptr_t priv)
 {
@@ -356,7 +356,7 @@ int32_t iio_axi_adc_prepare_transfer(void *dev, uint32_t mask)
 int32_t	iio_axi_adc_read_dev(void *dev, void *buff, uint32_t nb_samples)
 {
 	struct iio_axi_adc_desc *iio_adc;
-	ssize_t ret, bytes;
+	int ret, bytes;
 
 	if (!dev)
 		return FAILURE;
@@ -380,7 +380,7 @@ int32_t	iio_axi_adc_read_dev(void *dev, void *buff, uint32_t nb_samples)
  * @param iio_device - Structure describing a device, channels and attributes.
  * @return SUCCESS in case of success or negative value otherwise.
  */
-static ssize_t iio_axi_adc_delete_device_descriptor(
+static int iio_axi_adc_delete_device_descriptor(
 	struct iio_axi_adc_desc *desc)
 {
 	if (!desc)

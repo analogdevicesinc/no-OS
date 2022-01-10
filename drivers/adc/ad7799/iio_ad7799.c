@@ -53,7 +53,7 @@
  * @param channel - IIO channel information.
  * @return Number of bytes printed in the output buffer, or negative error code.
  */
-static ssize_t ad7799_iio_channel_read(void *device, char *buf, size_t len,
+static int ad7799_iio_channel_read(void *device, char *buf, size_t len,
 				       const struct iio_ch_info *channel)
 {
 	struct ad7799_dev *dev = (struct ad7799_dev *)device;
@@ -74,7 +74,7 @@ static ssize_t ad7799_iio_channel_read(void *device, char *buf, size_t len,
  * @param channel - IIO channel information.
  * @return Number of bytes printed in the output buffer, or negative error code.
  */
-static ssize_t ad7799_iio_gain_read(void *device, char *buf, size_t len,
+static int ad7799_iio_gain_read(void *device, char *buf, size_t len,
 				    const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct ad7799_dev *dev = (struct ad7799_dev *)device;
@@ -96,7 +96,7 @@ static ssize_t ad7799_iio_gain_read(void *device, char *buf, size_t len,
  * @param channel - IIO channel information.
  * @return Number of bytes printed in the output buffer, or negative error code.
  */
-static ssize_t ad7799_iio_gain_write(void *device, char *buf, size_t len,
+static int ad7799_iio_gain_write(void *device, char *buf, size_t len,
 				     const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct ad7799_dev *dev = (struct ad7799_dev *)device;

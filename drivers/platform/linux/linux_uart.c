@@ -295,7 +295,7 @@ int32_t uart_read(struct uart_desc *desc, uint8_t *data,
 {
 	struct linux_uart_desc *linux_desc;
 	uint32_t count = 0;
-	ssize_t ret;
+	int ret;
 
 	linux_desc = desc->extra;
 
