@@ -338,10 +338,10 @@ int32_t ada4250_set_bandwidth(struct ada4250_dev *dev,
 
 	switch (bw) {
 	case ADA4250_BANDWIDTH_LOW:
-		val = GPIO_LOW;
+		val = GPIO_HIGH;
 		break;
 	case ADA4250_BANDWIDTH_HIGH:
-		val = GPIO_HIGH;
+		val = GPIO_LOW;
 		break;
 	default:
 		return -EINVAL;
