@@ -137,7 +137,7 @@ static int32_t set_pin(uint32_t id, enum pin_type type)
 
 
 /* Get global iio attributes */
-int get_global_attr(void *device, char *buf, size_t len,
+int get_global_attr(void *device, char *buf, uint32_t len,
 			const struct iio_ch_info *channel, intptr_t priv)
 {
 	uint32_t val;
@@ -158,7 +158,7 @@ int get_global_attr(void *device, char *buf, size_t len,
 }
 
 /* Set global iio attributes */
-int set_global_attr(void *device, char *buf, size_t len,
+int set_global_attr(void *device, char *buf, uint32_t len,
 			const struct iio_ch_info *channel, intptr_t priv)
 {
 	int32_t ret;
@@ -194,7 +194,7 @@ int set_global_attr(void *device, char *buf, size_t len,
 }
 
 /* Set get iio attributes */
-int get_pwm_attr(void *device, char *buf, size_t len,
+int get_pwm_attr(void *device, char *buf, uint32_t len,
 		     const struct iio_ch_info *channel, intptr_t priv)
 {
 	int32_t ret;
@@ -227,7 +227,7 @@ int get_pwm_attr(void *device, char *buf, size_t len,
 }
 
 /* Set gpio pwm attributes */
-int set_pwm_attr(void *device, char *buf, size_t len,
+int set_pwm_attr(void *device, char *buf, uint32_t len,
 		     const struct iio_ch_info *channel, intptr_t priv)
 {
 	int32_t ret;
@@ -280,7 +280,7 @@ int set_pwm_attr(void *device, char *buf, size_t len,
 }
 
 /* Get gpio iio attributes */
-int get_gpio_attr(void *device, char *buf, size_t len,
+int get_gpio_attr(void *device, char *buf, uint32_t len,
 		      const struct iio_ch_info *channel, intptr_t priv)
 {
 	int32_t ret;
@@ -312,7 +312,7 @@ int get_gpio_attr(void *device, char *buf, size_t len,
 }
 
 /* Set gpio iio attributes */
-int set_gpio_attr(void *device, char *buf, size_t len,
+int set_gpio_attr(void *device, char *buf, uint32_t len,
 		      const struct iio_ch_info *channel, intptr_t priv)
 {
 	int32_t ret;

@@ -184,7 +184,7 @@ int32_t uart_write(struct uart_desc *desc, const uint8_t *data,
 	XUartLite *instance = xil_uart_desc->instance;
 #endif
 #ifdef XUARTPS_H
-	size_t bytes_sent, len;
+	uint32_t bytes_sent, len;
 #endif
 	uint32_t offset = 0;
 

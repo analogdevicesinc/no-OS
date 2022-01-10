@@ -218,7 +218,7 @@ int32_t adc_read_samples(void* dev, uint16_t* buff, uint32_t samples)
  * @param attr_id - Attribute ID
  * @return Length of chars written in buf, or negative value on failure.
  */
-int get_adc_demo_attr(void *device, char *buf, size_t len,
+int get_adc_demo_attr(void *device, char *buf, uint32_t len,
 			  const struct iio_ch_info *channel, intptr_t attr_id)
 {
 	struct adc_demo_desc *desc;
@@ -249,7 +249,7 @@ int get_adc_demo_attr(void *device, char *buf, size_t len,
  * @param attr_id - Attribute ID
  * @return: Number of bytes written to device, or negative value on failure.
  */
-int set_adc_demo_attr(void *device, char *buf, size_t len,
+int set_adc_demo_attr(void *device, char *buf, uint32_t len,
 			  const struct iio_ch_info *channel, intptr_t attr_id)
 {
 	struct adc_demo_desc *desc;

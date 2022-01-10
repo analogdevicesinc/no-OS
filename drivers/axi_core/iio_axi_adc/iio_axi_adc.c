@@ -63,7 +63,7 @@
  * @param channel - Channel properties.
  * @return Length of chars written in buf, or negative value on failure.
  */
-static int get_calibphase(void *device, char *buf, size_t len,
+static int get_calibphase(void *device, char *buf, uint32_t len,
 			      const struct iio_ch_info *channel,
 			      intptr_t priv)
 {
@@ -91,7 +91,7 @@ static int get_calibphase(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Length of chars written in buf, or negative value on failure.
  */
-static int get_calibbias(void *device, char *buf, size_t len,
+static int get_calibbias(void *device, char *buf, uint32_t len,
 			     const struct iio_ch_info *channel,
 			     intptr_t priv)
 {
@@ -117,7 +117,7 @@ static int get_calibbias(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Length of chars written in buf, or negative value on failure.
  */
-static int get_calibscale(void *device, char *buf, size_t len,
+static int get_calibscale(void *device, char *buf, uint32_t len,
 			      const struct iio_ch_info *channel,
 			      intptr_t priv)
 {
@@ -149,7 +149,7 @@ static int get_calibscale(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return: Length of chars written in buf, or negative value on failure.
  */
-static int get_samples_pps(void *device, char *buf, size_t len,
+static int get_samples_pps(void *device, char *buf, uint32_t len,
 			       const struct iio_ch_info *channel,
 			       intptr_t priv)
 {
@@ -167,7 +167,7 @@ static int get_samples_pps(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Length of chars written in buf, or negative value on failure.
  */
-static int get_sampling_frequency(void *device, char *buf, size_t len,
+static int get_sampling_frequency(void *device, char *buf, uint32_t len,
 				      const struct iio_ch_info *channel,
 				      intptr_t priv)
 {
@@ -195,7 +195,7 @@ static int get_sampling_frequency(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Number of bytes written to device, or negative value on failure.
  */
-static int set_calibphase(void *device, char *buf, size_t len,
+static int set_calibphase(void *device, char *buf, uint32_t len,
 			      const struct iio_ch_info *channel,
 			      intptr_t priv)
 {
@@ -220,7 +220,7 @@ static int set_calibphase(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Number of bytes written to device, or negative value on failure.
  */
-static int set_calibbias(void *device, char *buf, size_t len,
+static int set_calibbias(void *device, char *buf, uint32_t len,
 			     const struct iio_ch_info *channel,
 			     intptr_t priv)
 {
@@ -246,7 +246,7 @@ static int set_calibbias(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Number of bytes written to device, or negative value on failure.
  */
-static int set_calibscale(void *device, char *buf, size_t len,
+static int set_calibscale(void *device, char *buf, uint32_t len,
 			      const struct iio_ch_info *channel,
 			      intptr_t priv)
 {
@@ -270,7 +270,7 @@ static int set_calibscale(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Number of bytes written to device, or negative value on failure.
  */
-static int set_samples_pps(void *device, char *buf, size_t len,
+static int set_samples_pps(void *device, char *buf, uint32_t len,
 			       const struct iio_ch_info *channel,
 			       intptr_t priv)
 {
@@ -288,7 +288,7 @@ static int set_samples_pps(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Number of bytes written to device, or negative value on failure.
  */
-static int set_sampling_frequency(void *device, char *buf, size_t len,
+static int set_sampling_frequency(void *device, char *buf, uint32_t len,
 				      const struct iio_ch_info *channel,
 				      intptr_t priv)
 {

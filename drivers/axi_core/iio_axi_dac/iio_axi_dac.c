@@ -63,7 +63,7 @@
  * @param channel - Channel properties.
  * @return Length of chars written in buf, or negative value on failure.
  */
-static int get_voltage_calibscale(void *device, char *buf, size_t len,
+static int get_voltage_calibscale(void *device, char *buf, uint32_t len,
 				      const struct iio_ch_info *channel,
 				      intptr_t priv)
 {
@@ -94,7 +94,7 @@ static int get_voltage_calibscale(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Number of bytes written in buf, or negative value on failure.
  */
-static int get_voltage_calibphase(void *device, char *buf, size_t len,
+static int get_voltage_calibphase(void *device, char *buf, uint32_t len,
 				      const struct iio_ch_info *channel,
 				      intptr_t priv)
 {
@@ -120,7 +120,7 @@ static int get_voltage_calibphase(void *device, char *buf, size_t len,
  * @return Number of bytes written in buf, or negative value on failure.
  */
 static int get_voltage_sampling_frequency(void *device, char *buf,
-		size_t len,
+		uint32_t len,
 		const struct iio_ch_info *channel,
 		intptr_t priv)
 {
@@ -138,7 +138,7 @@ static int get_voltage_sampling_frequency(void *device, char *buf,
  * @param channel - Channel properties.
  * @return Number of bytes written in buf, or negative value on failure.
  */
-static int get_altvoltage_phase(void *device, char *buf, size_t len,
+static int get_altvoltage_phase(void *device, char *buf, uint32_t len,
 				    const struct iio_ch_info *channel,
 				    intptr_t priv)
 {
@@ -159,7 +159,7 @@ static int get_altvoltage_phase(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Number of bytes written in buf, or negative value on failure.
  */
-static int get_altvoltage_scale(void *device, char *buf, size_t len,
+static int get_altvoltage_scale(void *device, char *buf, uint32_t len,
 				    const struct iio_ch_info *channel,
 				    intptr_t priv)
 {
@@ -181,7 +181,7 @@ static int get_altvoltage_scale(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Number of bytes written in buf, or negative value on failure.
  */
-static int get_altvoltage_frequency(void *device, char *buf, size_t len,
+static int get_altvoltage_frequency(void *device, char *buf, uint32_t len,
 					const struct iio_ch_info *channel,
 					intptr_t priv)
 {
@@ -202,7 +202,7 @@ static int get_altvoltage_frequency(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Number of bytes written in buf, or negative value on failure.
  */
-static int get_altvoltage_raw(void *device, char *buf, size_t len,
+static int get_altvoltage_raw(void *device, char *buf, uint32_t len,
 				  const struct iio_ch_info *channel,
 				  intptr_t priv)
 {
@@ -221,7 +221,7 @@ static int get_altvoltage_raw(void *device, char *buf, size_t len,
  * @return Number of bytes written in buf, or negative value on failure.
  */
 static int get_altvoltage_sampling_frequency(void *device, char *buf,
-		size_t len,
+		uint32_t len,
 		const struct iio_ch_info *channel,
 		intptr_t priv)
 {
@@ -239,7 +239,7 @@ static int get_altvoltage_sampling_frequency(void *device, char *buf,
  * @param channel - Channel properties.
  * @return Number of bytes written in buf, or negative value on failure.
  */
-static int set_voltage_calibscale(void *device, char *buf, size_t len,
+static int set_voltage_calibscale(void *device, char *buf, uint32_t len,
 				      const struct iio_ch_info *channel,
 				      intptr_t priv)
 {
@@ -263,7 +263,7 @@ static int set_voltage_calibscale(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Number of bytes written to device, or negative value on failure.
  */
-static int set_voltage_calibphase(void *device, char *buf, size_t len,
+static int set_voltage_calibphase(void *device, char *buf, uint32_t len,
 				      const struct iio_ch_info *channel,
 				      intptr_t priv)
 {
@@ -288,7 +288,7 @@ static int set_voltage_calibphase(void *device, char *buf, size_t len,
  * @return: Number of bytes written to device, or negative value on failure.
  */
 static int set_voltage_sampling_frequency(void *device, char *buf,
-		size_t len,
+		uint32_t len,
 		const struct iio_ch_info *channel,
 		intptr_t priv)
 {
@@ -306,7 +306,7 @@ static int set_voltage_sampling_frequency(void *device, char *buf,
  * @param channel - Channel properties.
  * @return Number of bytes written to device, or negative value on failure.
  */
-static int set_altvoltage_phase(void *device, char *buf, size_t len,
+static int set_altvoltage_phase(void *device, char *buf, uint32_t len,
 				    const struct iio_ch_info *channel,
 				    intptr_t priv)
 {
@@ -327,7 +327,7 @@ static int set_altvoltage_phase(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Number of bytes written to device, or negative value on failure.
  */
-static int set_altvoltage_scale(void *device, char *buf, size_t len,
+static int set_altvoltage_scale(void *device, char *buf, uint32_t len,
 				    const struct iio_ch_info *channel,
 				    intptr_t priv)
 {
@@ -349,7 +349,7 @@ static int set_altvoltage_scale(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Number of bytes written to device, or negative value on failure.
  */
-static int set_altvoltage_frequency(void *device, char *buf, size_t len,
+static int set_altvoltage_frequency(void *device, char *buf, uint32_t len,
 					const struct iio_ch_info *channel,
 					intptr_t priv)
 {
@@ -370,7 +370,7 @@ static int set_altvoltage_frequency(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return: Number of bytes written to device, or negative value on failure.
  */
-static int set_altvoltage_raw(void *device, char *buf, size_t len,
+static int set_altvoltage_raw(void *device, char *buf, uint32_t len,
 				  const struct iio_ch_info *channel,
 				  intptr_t priv)
 {
@@ -394,7 +394,7 @@ static int set_altvoltage_raw(void *device, char *buf, size_t len,
  * @return Number of bytes written to device, or negative value on failure.
  */
 static int set_altvoltage_sampling_frequency(void *device, char *buf,
-		size_t len,
+		uint32_t len,
 		const struct iio_ch_info *channel,
 		intptr_t priv)
 {
