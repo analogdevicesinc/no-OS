@@ -45,6 +45,7 @@
 #include "no-os/gpio.h"
 #include "no-os/delay.h"
 
+#include <errno.h>
 #include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -108,7 +109,7 @@ int32_t linux_gpio_get(struct gpio_desc **desc,
 
 	len = sprintf(path, "%d", descriptor->number);
 	ret = write(fd, path, len);
-	if (ret < 0) {
+	if ((ret < 0) && (errno != EBUSY)) {
 		printf("%s: Can't write to file\n\r", __func__);
 		close(fd);
 		goto free_linux_desc;
