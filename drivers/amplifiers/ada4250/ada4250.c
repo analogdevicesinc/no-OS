@@ -129,6 +129,40 @@ int32_t ada4250_update(struct ada4250_dev *dev, uint8_t reg_addr,
 }
 
 /**
+ * @brief Update ADA4250 device descriptor.
+ * @param dev - The device structure.
+ * @return Returns SUCCESS in case of success or negative error code otherwise.
+ */
+int32_t ada4250_update_desc(struct ada4250_dev *dev)
+{
+	uint8_t reg_data;
+	int32_t ret;
+
+	ret = ada4250_read(dev, ADA4250_REG_GAIN_MUX, &reg_data);
+	if (ret != SUCCESS)
+		return ret;
+	dev->gain = reg_data & ADA4250_GAIN_MUX_MSK;
+
+	ret = ada4250_read(dev, ADA4250_REG_REFBUF_EN, &reg_data);
+	if (ret != SUCCESS)
+		return ret;
+	dev->refbuf_en = reg_data & ADA4250_REFBUF_MSK;
+
+	ret = ada4250_read(dev, ADA4250_REG_SNSR_CAL_VAL, &reg_data);
+	if (ret != SUCCESS)
+		return ret;
+	dev->offset_uv = reg_data & ADA4250_SNSR_CAL_VAL_MSK;
+
+	ret = ada4250_read(dev, ADA4250_REG_SNSR_CAL_CNFG, &reg_data);
+	if (ret != SUCCESS)
+		return ret;
+	dev->bias = (reg_data & ADA4250_BIAS_SET_MSK) >> 2;
+	dev->offset_range = reg_data & ADA4250_RANGE_SET_MSK;
+
+	return ret;
+}
+
+/**
  * @brief Software reset.
  * @param dev - The device structure.
  * @return Returns SUCCESS in case of success or negative error code.
@@ -150,11 +184,19 @@ int32_t ada4250_soft_reset(struct ada4250_dev *dev)
 		if (ret != SUCCESS)
 			return ret;
 
-		if(!(data & ADA4250_RESET(ADA4250_RESET_ENABLE)))
-			return SUCCESS;
+		if (!(data & ADA4250_RESET(ADA4250_RESET_ENABLE))) {
+			ret = ada4250_update_desc(dev);
+			if (ret != SUCCESS)
+				return ret;
+			else
+				break;
+		}
 	}
 
-	return FAILURE;
+	if (timeout < 1)
+		ret = -ETIME;
+
+	return ret;
 }
 
 /**
@@ -463,13 +505,10 @@ int32_t ada4250_set_normal_mode(struct ada4250_dev *dev, bool reconfig)
 			ret = ada4250_set_config(dev);
 			if (ret != SUCCESS)
 				return ret;
-		} else { /* Reset driver configurations */
-			dev->gain = ADA4250_GAIN_1;
-			dev->refbuf_en = false;
-			dev->power_mode = ADA4250_POWER_NORMAL;
-			dev->bias = ADA4250_BIAS_DISABLE;
-			dev->offset_range = ADA4250_RANGE1;
-			dev->bandwidth = ADA4250_BANDWIDTH_LOW;
+		} else { /* Update driver configurations */
+			ret = ada4250_update_desc(dev);
+			if (ret != SUCCESS)
+				return ret;
 		}
 	}
 
