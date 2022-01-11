@@ -16,6 +16,8 @@ SRCS += $(DRIVERS)/api/spi.c \
 	$(DRIVERS)/api/gpio.c \
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.c \
 	$(DRIVERS)/axi_core/spi_engine/spi_engine.c \
+	$(DRIVERS)/axi_core/axi_pwmgen/axi_pwm.c \
+	$(DRIVERS)/axi_core/clk_axi_clkgen/clk_axi_clkgen.c \
 	$(NO-OS)/util/util.c
 SRCS +=	$(PLATFORM_DRIVERS)/axi_io.c \
 	$(PLATFORM_DRIVERS)/xilinx_gpio.c \
@@ -31,8 +33,10 @@ SRCS += $(PLATFORM_DRIVERS)/uart.c \
 	$(NO-OS)/util/list.c	
 endif
 INCS += $(DRIVERS)/axi_core/axi_dmac/axi_dmac.h \
+	$(DRIVERS)/axi_core/axi_pwmgen/axi_pwm_extra.h \
 	$(DRIVERS)/axi_core/spi_engine/spi_engine.h \
-	$(DRIVERS)/axi_core/spi_engine/spi_engine_private.h
+	$(DRIVERS)/axi_core/spi_engine/spi_engine_private.h \
+	$(DRIVERS)/axi_core/clk_axi_clkgen/clk_axi_clkgen.h
 INCS +=	$(PLATFORM_DRIVERS)/spi_extra.h \
 	$(PLATFORM_DRIVERS)/irq_extra.h \
 	$(PLATFORM_DRIVERS)/uart_extra.h \
@@ -44,6 +48,7 @@ INCS +=	$(INCLUDE)/no-os/axi_io.h \
 	$(INCLUDE)/no-os/delay.h \
 	$(INCLUDE)/no-os/irq.h \
 	$(INCLUDE)/no-os/uart.h \
+	$(INCLUDE)/no-os/pwm.h \
 	$(INCLUDE)/no-os/util.h
 ifeq (y,$(strip $(TINYIIOD)))
 INCS += $(INCLUDE)/no-os/fifo.h \
