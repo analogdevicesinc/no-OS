@@ -254,6 +254,9 @@ int32_t ada4250_read(struct ada4250_dev *dev, uint8_t reg_addr,
 int32_t ada4250_update(struct ada4250_dev *dev, uint8_t reg_addr,
 		       uint8_t mask, uint8_t data);
 
+/* ADA4250 Device Descriptor Update */
+int32_t ada4250_update_desc(struct ada4250_dev *dev);
+
 /* Software Reset */
 int32_t ada4250_soft_reset(struct ada4250_dev *dev);
 
