@@ -78,7 +78,8 @@ enum dma_direction {
 
 enum dma_flags {
 	DMA_CYCLIC = 1,
-	DMA_LAST = 2
+	DMA_LAST = 2,
+	DMA_PARTIAL_REPORTING_EN = 4
 };
 
 struct axi_dma_transfer {
