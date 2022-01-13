@@ -371,13 +371,13 @@ project_build: $(PLATFORM)_project_build
 PHONY += clean
 clean:
 	$(call print,[Delete] $(notdir $(OBJS) $(BINARY) $(ASM_OBJS)))
-	-$(MUTE)$(call remove_fun,$(BINARY) $(OBJS) $(ASM_OBJS)) $(HIDE)
+	$(MUTE) $(call remove_fun,$(BINARY) $(OBJS) $(ASM_OBJS)) $(HIDE)
 
 # Remove the whole build directory
 PHONY += clean_all
 clean_all: clean_libs
 	@$(call print,[Delete] $(BUILD_DIR))
-	-$(MUTE)$(call remove_dir,$(BUILD_DIR)) $(HIDE)
+	$(MUTE) $(call remove_dir,$(BUILD_DIR)) $(HIDE)
 
 PHONY += ca
 ca: clean_all

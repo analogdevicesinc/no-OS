@@ -112,4 +112,4 @@ $(PROJECT_TARGET):
 post_build:
 	$(WSL) nios2-elf-insert $(BINARY) $(STAMP)
 	-$(call copy_fun,sw.map,$(TEMP_DIR))
-	-$(call remove_fun, sw.map)
+	$(call remove_fun, sw.map)

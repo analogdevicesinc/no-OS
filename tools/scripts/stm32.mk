@@ -71,7 +71,7 @@ $(PROJECT_TARGET):
 	@echo project generate >> $(BINARY).cubemx
 	@echo exit >> $(BINARY).cubemx
 	$(MUTE) java -jar $(STM32CUBEMX)/$(MX) -q $(BINARY).cubemx $(HIDE)
-	-$(MUTE)$(call remove_fun,$(BINARY).cubemx) $(HIDE)
+	$(MUTE) $(call remove_fun,$(BINARY).cubemx) $(HIDE)
 
 	$(MUTE) sed -i 's/ main(/ generated_main(/' $(PROJECT_BUILD)/Src/main.c $(HIDE)
 	$(MUTE) $(call copy_fun, $(PROJECT_BUILD)/Src/main.c, $(PROJECT_BUILD)/Src/generated_main.c) $(HIDE)
@@ -170,7 +170,7 @@ $(PLATFORM)_project_build: $(PROJECT_TARGET) $(LIB_TARGETS)
 
 clean_hex:
 	@$(call print,[Delete] $(HEX))
-	-$(MUTE) $(call remove_fun,$(HEX)) $(HIDE)
+	$(MUTE) $(call remove_fun,$(HEX)) $(HIDE)
 
 clean: clean_hex
 

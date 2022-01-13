@@ -161,4 +161,4 @@ $(PROJECT_TARGET): $(TEMP_DIR)/arch.txt
 clean_all: xilinx_clean_all
 
 xilinx_clean_all:
-	-$(MUTE) $(call remove_dir,.Xil) $(HIDE)
+	$(MUTE) $(call remove_dir,.Xil) $(HIDE)

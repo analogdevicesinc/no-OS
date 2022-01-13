@@ -138,7 +138,7 @@ clean: clean_hex
 
 clean_hex:
 	@$(call print,[Delete] $(HEX))
-	-$(MUTE) $(call remove_fun,$(HEX)) $(HIDE)
+	$(MUTE) $(call remove_fun,$(HEX)) $(HIDE)
 
 ifneq ($(wildcard $(BUILD_DIR)),)
 all: $(PIN_MUX)
@@ -275,7 +275,7 @@ update_srcs: copy_pinmux
 
 PHONY += clean_project
 clean_project:
-	-$(MUTE) $(call remove_dir,$(PROJECT_BUILD)/Release) $(HIDE)
+	$(MUTE) $(call remove_dir,$(PROJECT_BUILD)/Release) $(HIDE)
 #OR	
 #	$(CCES) -nosplash -application com.analog.crosscore.headlesstools \
  		-data $(WORKSPACE) \
