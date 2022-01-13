@@ -50,6 +50,11 @@
 	.write_buff = _write_buff\
 }
 
+struct iio_data_buffer {
+	uint32_t	size;
+	void		*buff;
+};
+
 struct iio_app_device {
 	char *name;
 	void *dev;

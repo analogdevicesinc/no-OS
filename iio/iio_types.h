@@ -187,11 +187,6 @@ struct iio_channel {
 	bool			diferential;
 };
 
-struct iio_data_buffer {
-	uint32_t	size;
-	void		*buff;
-};
-
 enum iio_buffer_direction {
 	IIO_DIRECTION_INPUT,
 	IIO_DIRECTION_OUTPUT

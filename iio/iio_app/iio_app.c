@@ -287,6 +287,7 @@ int32_t iio_app_run(struct iio_app_device *devices, int32_t len)
 	void			*irq_desc = NULL;
 	struct iio_device_init	*iio_init_devs;
 	uint32_t		i;
+	struct iio_data_buffer *buff;
 
 
 #if defined(ADUCM_PLATFORM) || (defined(XILINX_PLATFORM) && !defined(PLATFORM_MB))
@@ -330,8 +331,15 @@ int32_t iio_app_run(struct iio_app_device *devices, int32_t len)
 		iio_init_devs[i].name = devices[i].name;
 		iio_init_devs[i].dev = devices[i].dev;
 		iio_init_devs[i].dev_descriptor = devices[i].dev_descriptor;
-		iio_init_devs[i].read_buff = devices[i].read_buff;
-		iio_init_devs[i].write_buff = devices[i].write_buff;
+		buff = devices[i].read_buff ? devices[i].read_buff :
+		       devices[i].write_buff;
+		if (buff) {
+			iio_init_devs[i].raw_buf = buff->buff;
+			iio_init_devs[i].raw_buf_len = buff->size;
+		} else {
+			iio_init_devs[i].raw_buf = NULL;
+			iio_init_devs[i].raw_buf_len = 0;
+		}
 	}
 
 	iio_init_param.devs = iio_init_devs;

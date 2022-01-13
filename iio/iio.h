@@ -68,8 +68,14 @@ struct iio_device_init {
 	char *name;
 	void *dev;
 	struct iio_device *dev_descriptor;
-	struct iio_data_buffer *read_buff;
-	struct iio_data_buffer *write_buff;
+	/*
+	 * IIO buffer implementation can use a user provided buffer in raw_buf.
+	 * If raw_buf is NULL and iio_device has buffer callback function set,
+	 * it will allocate memory for it when needed.
+	 */
+	int8_t *raw_buf;
+	/* Length of raw_buf */
+	uint32_t raw_buf_len;
 };
 
 struct iio_init_param {
