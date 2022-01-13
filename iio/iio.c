@@ -124,6 +124,21 @@ struct attr_fun_params {
 	struct iio_ch_info	*ch_info;
 };
 
+struct iio_buffer_priv {
+	/* Field visible by user */
+	struct iio_buffer	public;
+	/** Buffer to read or write data. A reference will be found in buffer */
+	struct circular_buffer	cb;
+	/* Buffer provide by user. */
+	int8_t			*raw_buf;
+	/* Length of raw_buf */
+	uint32_t		raw_buf_len;
+	/* Set when this devices has buffer */
+	bool			initalized;
+	/* Set when calloc was used to initalize cb.buf */
+	bool			allocated;
+};
+
 /**
  * @struct iio_dev_priv
  * @brief Links a physical device instance "void *dev_instance"
@@ -140,15 +155,8 @@ struct iio_dev_priv {
 	uint32_t		active_reg_addr;
 	/** Device descriptor(describes channels and attributes) */
 	struct iio_device	*dev_descriptor;
-
-	/* IIO Buffer fields */
-	/** Buffer to read or write data */
-	struct circular_buffer	buf;
-	uint32_t		buf_size;
-	/** Opened channels for the active buffer */
-	uint32_t		ch_mask;
-	struct iio_data_buffer	*write_buffer;
-	struct iio_data_buffer	*read_buffer;
+	/* Structure storing buffer related fields */
+	struct iio_buffer_priv buffer;
 };
 
 struct iio_desc {
@@ -723,7 +731,7 @@ static uint32_t bytes_to_samples(struct iio_dev_priv *dev, uint32_t bytes)
 	uint32_t nb_active_ch;
 	uint32_t mask;
 
-	mask = dev->ch_mask;
+	mask = dev->buffer.public.active_mask;
 	first_ch = 0;
 	nb_active_ch = 0;
 	first_ch_found = false;
@@ -751,7 +759,7 @@ static uint32_t samples_to_bytes(struct iio_dev_priv *dev, uint32_t samples)
 	uint32_t nb_active_ch;
 	uint32_t mask;
 
-	mask = dev->ch_mask;
+	mask = dev->buffer.public.active_mask;
 	first_ch = 0;
 	nb_active_ch = 0;
 	first_ch_found = false;
@@ -783,7 +791,7 @@ static int iio_open_dev(struct iiod_ctx *ctx, const char *device,
 			uint32_t samples, uint32_t mask, bool cyclic)
 {
 	struct iio_dev_priv *dev;
-	uint32_t ch_mask, len;
+	uint32_t ch_mask;
 	int32_t ret;
 	int8_t *buf;
 
@@ -791,42 +799,54 @@ static int iio_open_dev(struct iiod_ctx *ctx, const char *device,
 	if (!dev)
 		return -ENODEV;
 
+	if (!dev->buffer.initalized)
+		return -EINVAL;
+
 	ch_mask = 0xFFFFFFFF >> (32 - dev->dev_descriptor->num_ch);
 
 	if (mask & ~ch_mask)
 		return -ENOENT;
 
-	dev->ch_mask = mask;
-	dev->buf_size = samples_to_bytes(dev, samples);
-	if (dev->read_buffer->buff) {
-		buf = dev->read_buffer->buff;
-		len = dev->read_buffer->size;
+	dev->buffer.public.active_mask = mask;
+	dev->buffer.public.size = samples_to_bytes(dev, samples);
+	if (dev->buffer.raw_buf && dev->buffer.raw_buf_len) {
+		if (dev->buffer.raw_buf_len < dev->buffer.public.size)
+			/* Need a bigger buffer or to allocate */
+			return -ENOMEM;
+
+		buf = dev->buffer.raw_buf;
 	} else {
-		buf = dev->write_buffer->buff;
-		len = dev->write_buffer->size;
+		if (dev->buffer.allocated) {
+			/* Free in case iio_close_dev wasn't called to free it*/
+			free(dev->buffer.cb.buff);
+			dev->buffer.allocated = 0;
+		}
+		buf = (int8_t *)calloc(dev->buffer.public.size, sizeof(*buf));
+		if (!buf)
+			return -ENOMEM;
+		dev->buffer.allocated = 1;
 	}
-	if (!buf)
-		/*
-		 * cb_init can be used for memory allocation, but on small platform may
-		 * not work. Use given pointer to static buffer.
-		 * Todo: Implement both possibilities. If no buffer provided,
-		 * allocate memory
-		 */
-		return -ENOMEM;
 
-	if (len < dev->buf_size)
-		/* Need a bigger buffer or to allocate */
-		return -ENOMEM;
+	ret = cb_cfg(&dev->buffer.cb, buf, dev->buffer.public.size);
+	if (IS_ERR_VALUE(ret)) {
+		if (dev->buffer.allocated) {
+			free(dev->buffer.cb.buff);
+			dev->buffer.allocated = 0;
+		}
 
-	ret = cb_cfg(&dev->buf, buf, dev->buf_size);
-	if (IS_ERR_VALUE(ret))
 		return ret;
+	}
 
-	if (dev->dev_descriptor->prepare_transfer)
-		return dev->dev_descriptor->prepare_transfer(
+	if (dev->dev_descriptor->prepare_transfer) {
+		ret = dev->dev_descriptor->prepare_transfer(
 			       dev->dev_instance, mask);
+		if (IS_ERR_VALUE(ret) && dev->buffer.allocated) {
+			free(dev->buffer.cb.buff);
+			dev->buffer.allocated = 0;
+		}
+	}
 
-	return SUCCESS;
+	return ret;
 }
 
 /**
@@ -843,14 +863,21 @@ static int iio_close_dev(struct iiod_ctx *ctx, const char *device)
 	if (!dev)
 		return FAILURE;
 
-	dev->ch_mask = 0;
+	if (!dev->buffer.initalized)
+		return -EINVAL;
+
+	if (dev->buffer.allocated) {
+		/* Should something else be used to free internal strucutre */
+		free(dev->buffer.cb.buff);
+		dev->buffer.allocated = 0;
+	}
+
+	dev->buffer.public.active_mask = 0;
 	if (dev->dev_descriptor->end_transfer)
 		return dev->dev_descriptor->end_transfer(dev->dev_instance);
 
 	return SUCCESS;
 }
-
-
 
 /**
  * @brief Read chunk of data from RAM to pbuf. Call
@@ -880,31 +907,32 @@ static int iio_read_buffer(struct iiod_ctx *ctx, const char *device, char *buf,
 	if (!dev->dev_descriptor->read_dev)
 		return -EINVAL;
 
-	ret = cb_size(&dev->buf, &size);
+	ret = cb_size(&dev->buffer.cb, &size);
 	if (IS_ERR_VALUE(ret))
 		return ret;
 
 	if (size == 0) {
 		/* Refill buffer */
-		ret = cb_prepare_async_write(&dev->buf, dev->buf_size, &cb_buff,
-					     &available);
+		ret = cb_prepare_async_write(&dev->buffer.cb,
+					     dev->buffer.public.size,
+					     &cb_buff, &available);
 		if (IS_ERR_VALUE(ret))
 			return ret;
-		if (available < dev->buf_size)
+		if (available < dev->buffer.public.size)
 			return -EINVAL;
 
-		samples = bytes_to_samples(dev, dev->buf_size);
+		samples = bytes_to_samples(dev, dev->buffer.public.size);
 		ret = dev->dev_descriptor->read_dev(dev->dev_instance, cb_buff,
 						    samples);
 		if (ret < 0)
 			return ret;
 
-		ret = cb_end_async_write(&dev->buf);
+		ret = cb_end_async_write(&dev->buffer.cb);
 		if (IS_ERR_VALUE(ret))
 			return ret;
 	}
 
-	ret = cb_read(&dev->buf, buf, bytes);
+	ret = cb_read(&dev->buffer.cb, buf, bytes);
 	if (IS_ERR_VALUE(ret))
 		return ret;
 
@@ -940,32 +968,32 @@ static int iio_write_buffer(struct iiod_ctx *ctx, const char *device, char *buf,
 	if (!dev->dev_descriptor->write_dev)
 		return -EINVAL;
 
-	ret = cb_size(&dev->buf, &size);
+	ret = cb_size(&dev->buffer.cb, &size);
 	if (IS_ERR_VALUE(ret))
 		return ret;
 
-	if (size < dev->buf_size) {
-		ret = cb_write(&dev->buf, buf, bytes);
+	if (size < dev->buffer.public.size) {
+		ret = cb_write(&dev->buffer.cb, buf, bytes);
 		if (IS_ERR_VALUE(ret))
 			return ret;
 		size += bytes;
 	}
-	if (size == dev->buf_size) {
+	if (size == dev->buffer.public.size) {
 		/* Refill buffer */
-		ret = cb_prepare_async_read(&dev->buf, dev->buf_size, &cb_buff,
-					    &available);
+		ret = cb_prepare_async_read(&dev->buffer.cb, dev->buffer.public.size,
+					    &cb_buff, &available);
 		if (IS_ERR_VALUE(ret))
 			return ret;
-		if (available < dev->buf_size)
+		if (available < dev->buffer.public.size)
 			return -EINVAL;
 
-		samples = bytes_to_samples(dev, dev->buf_size);
+		samples = bytes_to_samples(dev, dev->buffer.public.size);
 		ret = dev->dev_descriptor->write_dev(dev->dev_instance, cb_buff,
 						     samples);
 		if (ret < 0)
 			return ret;
 
-		ret = cb_end_async_read(&dev->buf);
+		ret = cb_end_async_read(&dev->buffer.cb);
 		if (IS_ERR_VALUE(ret))
 			return ret;
 	}
@@ -1251,10 +1279,11 @@ static int32_t iio_init_xml(struct iio_desc *desc)
 static int32_t iio_init_devs(struct iio_desc *desc,
 			     struct iio_device_init *devs, int32_t n)
 {
-	uint32_t i;
+	uint32_t i, len;
 	int32_t ret;
 	struct iio_dev_priv *ldev;
 	struct iio_device_init *ndev;
+	int8_t *buf;
 
 	desc->nb_devs = n;
 	desc->devs = (struct iio_dev_priv *)calloc(desc->nb_devs,
@@ -1266,11 +1295,24 @@ static int32_t iio_init_devs(struct iio_desc *desc,
 		ndev = devs + i;
 		ldev = desc->devs + i;
 		ldev->dev_descriptor = ndev->dev_descriptor;
-		ldev->read_buffer = devs[i].read_buff;
-		ldev->write_buffer = devs[i].write_buff;
 		sprintf(ldev->dev_id, "iio:device%"PRIu32"", i);
 		ldev->dev_instance = ndev->dev;
 		ldev->name = ndev->name;
+		if (devs[i].read_buff) {
+			buf = devs[i].read_buff->buff;
+			len = devs[i].read_buff->size;
+		} else {
+			buf = devs[i].write_buff->buff;
+			len = devs[i].write_buff->size;
+		}
+		if (buf) {
+			ldev->buffer.raw_buf = buf;
+			ldev->buffer.raw_buf_len = len;
+			ldev->buffer.public.buf = &ldev->buffer.cb;
+			ldev->buffer.initalized = 1;
+		} else {
+			ldev->buffer.initalized = 0;
+		}
 	}
 
 	ret = iio_init_xml(desc);
