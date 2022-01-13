@@ -260,7 +260,7 @@ $(PROJECT_TARGET):
 		-append-switch linker additionaloption="$(LIB_PATHS) $(LIB_FLAGS)" \
 		$(HIDE)
 #The default startup_ADuCM3029.c has compiling errors
-#TODO Replace with patch if team think is a better aproch to install a windows
+#TODO Replace with patch if team thinks it is a better approach to install a windows
 #program for patching	
 	$(MUTE) $(call copy_fun\
 	,$(PLATFORM_TOOLS)/startup_ADuCM3029_patch.c,$(PROJECT_BUILD)/RTE/Device/ADuCM3029/startup_ADuCM3029.c) $(HIDE)
