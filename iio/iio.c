@@ -1279,11 +1279,10 @@ static int32_t iio_init_xml(struct iio_desc *desc)
 static int32_t iio_init_devs(struct iio_desc *desc,
 			     struct iio_device_init *devs, int32_t n)
 {
-	uint32_t i, len;
+	uint32_t i;
 	int32_t ret;
 	struct iio_dev_priv *ldev;
 	struct iio_device_init *ndev;
-	int8_t *buf;
 
 	desc->nb_devs = n;
 	desc->devs = (struct iio_dev_priv *)calloc(desc->nb_devs,
@@ -1298,16 +1297,10 @@ static int32_t iio_init_devs(struct iio_desc *desc,
 		sprintf(ldev->dev_id, "iio:device%"PRIu32"", i);
 		ldev->dev_instance = ndev->dev;
 		ldev->name = ndev->name;
-		if (devs[i].read_buff) {
-			buf = devs[i].read_buff->buff;
-			len = devs[i].read_buff->size;
-		} else {
-			buf = devs[i].write_buff->buff;
-			len = devs[i].write_buff->size;
-		}
-		if (buf) {
-			ldev->buffer.raw_buf = buf;
-			ldev->buffer.raw_buf_len = len;
+		if (ndev->dev_descriptor->read_dev ||
+		    ndev->dev_descriptor->write_dev) {
+			ldev->buffer.raw_buf = ndev->raw_buf;
+			ldev->buffer.raw_buf_len = ndev->raw_buf_len;
 			ldev->buffer.public.buf = &ldev->buffer.cb;
 			ldev->buffer.initalized = 1;
 		} else {
