@@ -1017,6 +1017,67 @@ static int iio_write_buffer(struct iiod_ctx *ctx, const char *device, char *buf,
 	return bytes;
 }
 
+int iio_buffer_get_block(struct iio_buffer *buffer, void **addr)
+{
+	int32_t ret;
+	uint32_t size;
+
+	if (!buffer)
+		return -EINVAL;
+
+	if (buffer->dir == IIO_DIRECTION_INPUT)
+		ret = cb_prepare_async_write(buffer->buf, buffer->size, addr,
+					     &size);
+	else
+		ret = cb_prepare_async_read(buffer->buf, buffer->size, addr,
+					    &size);
+	if (IS_ERR_VALUE(ret))
+		/* ToDo: Implement async cancel. And cancel transaction here.
+		 * Also cancel may be needed for a posible future abort callback
+		 * If this is not done, after the first error all future calls
+		 * to async will fail.
+		 * An other option will be to call cb_cfg but then data is lost
+		 */
+		return ret;
+
+	/* This function is exepected to be called for a DMA transaction of the
+	 * full buffer. But if can't do in one transaction won't work.
+	 * This behavior is not expected anyway.
+	 */
+	if (size != buffer->size)
+		return -ENOMEM;
+
+	return SUCCESS;
+}
+
+int iio_buffer_block_done(struct iio_buffer *buffer)
+{
+	if (!buffer)
+		return -EINVAL;
+
+	if (buffer->dir == IIO_DIRECTION_INPUT)
+		return cb_end_async_write(buffer->buf);
+
+	return cb_end_async_read(buffer->buf);
+}
+
+/* Write to buffer iio_buffer.bytes_per_scan bytes from data */
+int iio_buffer_push_scan(struct iio_buffer *buffer, void *data)
+{
+	if (!buffer)
+		return -EINVAL;
+
+	return cb_write(buffer->buf, data, buffer->bytes_per_scan);
+}
+
+/* Read from buffer iio_buffer.bytes_per_scan bytes into data */
+int iio_buffer_pop_scan(struct iio_buffer *buffer, void *data)
+{
+	if (!buffer)
+		return -EINVAL;
+
+	return cb_read(buffer->buf, data, buffer->bytes_per_scan);
+}
 
 #ifdef ENABLE_IIO_NETWORK
 
