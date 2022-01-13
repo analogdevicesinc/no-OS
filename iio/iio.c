@@ -76,6 +76,8 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
+static uint8_t uart_buff[IIOD_CONN_BUFFER_SIZE];
+
 static char header[] =
 	"<?xml version=\"1.0\" encoding=\"utf-8\"?>"
 	"<!DOCTYPE context ["
@@ -1314,8 +1316,8 @@ int iio_init(struct iio_desc **desc, struct iio_init_param *init_param)
 
 		struct iiod_conn_data data = {
 			.conn = ldesc->uart_desc,
-			.buf = calloc(1, IIOD_CONN_BUFFER_SIZE),
-			.len = IIOD_CONN_BUFFER_SIZE
+			.buf = uart_buff,
+			.len = sizeof(uart_buff)
 		};
 		ret = iiod_conn_add(ldesc->iiod, &data, &conn_id);
 		if (IS_ERR_VALUE(ret))
