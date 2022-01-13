@@ -45,6 +45,7 @@
 
 #include <stdbool.h>
 #include <stdint.h>
+#include "no-os/circular_buffer.h"
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -191,6 +192,29 @@ struct iio_data_buffer {
 	void		*buff;
 };
 
+enum iio_buffer_direction {
+	IIO_DIRECTION_INPUT,
+	IIO_DIRECTION_OUTPUT
+};
+
+struct iio_buffer {
+	/* Mask with active channels */
+	uint32_t active_mask;
+	/* Size in bytes */
+	uint32_t size;
+	/* Number of bytes per sample * number of active channels */
+	uint32_t bytes_per_scan;
+	/* Buffer direction */
+	enum iio_buffer_direction dir;
+	/* Buffer where data is stored */
+	struct circular_buffer *buf;
+};
+
+struct iio_device_data {
+	void *dev;
+	struct iio_buffer *buffer;
+};
+
 /**
  * @struct iio_device
  * @brief Structure holding channels and attributes of a device.
@@ -219,6 +243,15 @@ struct iio_device {
 	 * samples * (storage_size_of_first_active_ch / 8) * nb_active_channels
 	 */
 	int32_t	(*write_dev)(void *dev, void *buff, uint32_t nb_samples);
+
+	/* Bufer callbacks */
+	/** Called before enabling buffer */
+	int32_t (*pre_enable)(void *dev, uint32_t mask);
+	/** Called after disabling buffer */
+	int32_t (*post_disable)(void *dev);
+	/** Called when buffer ready to transfer. Write/read to/from dev */
+	int32_t	(*submit)(struct iio_device_data *dev);
+
 	/* Read device register */
 	int32_t (*debug_reg_read)(void *dev, uint32_t reg, uint32_t *readval);
 	/* Write device register */
