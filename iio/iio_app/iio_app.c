@@ -60,6 +60,8 @@
 #endif
 
 #ifdef USE_TCP_SOCKET
+/* Fix: Use static buffers instead of calloc for new connections */
+#warning "iio may not work with WIFI on aducm3029."
 #include "wifi.h"
 #include "tcp_socket.h"
 #endif
