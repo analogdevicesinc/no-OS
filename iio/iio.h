@@ -107,4 +107,16 @@ int32_t iio_parse_value(char *buf, enum iio_val fmt,
 int iio_format_value(char *buf, uint32_t len, enum iio_val fmt,
 		     int32_t size, int32_t *vals);
 
+/* DMA buffer functions. */
+/* Get buffer addr where to write iio_buffer.size bytes */
+int iio_buffer_get_block(struct iio_buffer *buffer, void **addr);
+/* To be called to mark last iio_buffer_read as done */
+int iio_buffer_block_done(struct iio_buffer *buffer);
+
+/* Trigger buffer functions. */
+/* Write to buffer iio_buffer.bytes_per_scan bytes from data */
+int iio_buffer_push_scan(struct iio_buffer *buffer, void *data);
+/* Read from buffer iio_buffer.bytes_per_scan bytes into data */
+int iio_buffer_pop_scan(struct iio_buffer *buffer, void *data);
+
 #endif /* IIO_H_ */
