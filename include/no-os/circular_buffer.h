@@ -52,17 +52,42 @@
 /******************************************************************************/
 
 /**
- * @brief Reference type for circular buffer
- *
- * Abstract type of the circular buffer, used as reference for the functions.
+ * @struct cb_ptr
+ * @brief Circular buffer pointer
  */
-struct circular_buffer;
+struct cb_ptr {
+	/** Index of data in the buffer */
+	uint32_t	idx;
+	/** Counts the number of times idx exceeds the liniar buffer */
+	uint32_t	spin_count;
+	/** Set if async transaction is active */
+	bool		async_started;
+	/** Number of bytes to update after an async transaction is finished */
+	uint32_t	async_size;
+};
+
+/**
+ * @struct circular_buffer
+ * @brief Circular buffer descriptor
+ */
+struct circular_buffer {
+	/** Size of the buffer in bytes */
+	uint32_t	size;
+	/** Address of the buffer */
+	int8_t		*buff;
+	/** Write pointer */
+	struct cb_ptr	write;
+	/** Read pointer */
+	struct cb_ptr	read;
+};
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
 int32_t cb_init(struct circular_buffer **desc, uint32_t size);
+/* Configure cb structure with given parameters without memory allocation */
+int32_t cb_cfg(struct circular_buffer *desc, int8_t *buf, uint32_t size);
 int32_t cb_remove(struct circular_buffer *desc);
 int32_t cb_size(struct circular_buffer *desc, uint32_t *size);
 

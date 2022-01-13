@@ -50,42 +50,20 @@
 #include "no-os/util.h"
 
 /******************************************************************************/
-/*************************** Types Declarations *******************************/
-/******************************************************************************/
-
-/**
- * @struct cb_ptr
- * @brief Circular buffer pointer
- */
-struct cb_ptr {
-	/** Index of data in the buffer */
-	uint32_t	idx;
-	/** Counts the number of times idx exceeds the liniar buffer */
-	uint32_t	spin_count;
-	/** Set if async transaction is active */
-	bool		async_started;
-	/** Number of bytes to update after an async transaction is finished */
-	uint32_t	async_size;
-};
-
-/**
- * @struct circular_buffer
- * @brief Circular buffer descriptor
- */
-struct circular_buffer {
-	/** Size of the buffer in bytes */
-	uint32_t	size;
-	/** Address of the buffer */
-	int8_t		*buff;
-	/** Write pointer */
-	struct cb_ptr	write;
-	/** Read pointer */
-	struct cb_ptr	read;
-};
-
-/******************************************************************************/
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
+
+int32_t cb_cfg(struct circular_buffer *desc, int8_t *buff, uint32_t size)
+{
+	if (!desc)
+		return -EINVAL;
+
+	memset(desc, 0, sizeof(*desc));
+	desc->size = size;
+	desc->buff = buff;
+
+	return 0;
+}
 
 /**
  * @brief Create circular buffer structure
