@@ -343,6 +343,10 @@ int32_t iiod_copy_ops(struct iiod_ops *ops, struct iiod_ops *new_ops)
 	ops->set_timeout = SET_DUMMY_IF_NULL(new_ops->set_timeout, dummy_set_timeout);
 	ops->set_buffers_count = SET_DUMMY_IF_NULL(new_ops->set_buffers_count,
 				 dummy_set_buffers_count);
+	ops->refill_buffer = SET_DUMMY_IF_NULL(new_ops->refill_buffer,
+					       dummy_close);
+	ops->push_buffer = SET_DUMMY_IF_NULL(new_ops->push_buffer,
+					     dummy_close);
 
 	return SUCCESS;
 }
@@ -634,8 +638,13 @@ static int32_t iiod_run_cmd(struct iiod_desc *desc,
 		conn->res.write_val = 1;
 		break;
 	case IIOD_CMD_READBUF:
-		conn->res.val = data->bytes_count;
 		conn->res.write_val = 1;
+		ret = desc->ops.refill_buffer(&ctx, data->device);
+		if (IS_ERR_VALUE(ret)) {
+			conn->res.val = ret;
+			break;
+		}
+		conn->res.val = data->bytes_count;
 		ret = snprintf(conn->buf_mask, 10, "%08"PRIx32, conn->mask);
 		conn->res.buf.buf = conn->buf_mask;
 		conn->res.buf.len = ret;
@@ -696,6 +705,10 @@ end:
 static int32_t iiod_run_state(struct iiod_desc *desc,
 			      struct iiod_conn_priv *conn)
 {
+	struct iiod_ctx ctx = {
+		.instance = desc->app_instance,
+		.conn = conn->conn
+	};
 	int32_t ret;
 
 	switch (conn->state) {
@@ -775,9 +788,17 @@ static int32_t iiod_run_state(struct iiod_desc *desc,
 		else {
 			ret = do_write_buff(desc, conn);
 			if (ret == SUCCESS) {
+				conn->res.write_val = 1;
+				ret = desc->ops.push_buffer(&ctx,
+							    conn->cmd_data.device);
+				if (IS_ERR_VALUE(ret)) {
+					conn->res.val = ret;
+					conn->state = IIOD_LINE_DONE;
+
+					return SUCCESS;
+				}
 				memset(&conn->res.buf, 0, sizeof(conn->res.buf));
 				conn->res.val = conn->cmd_data.bytes_count;
-				conn->res.write_val = 1;
 				conn->cmd_data.cmd = IIOD_CMD_PRINT;
 				conn->state = IIOD_WRITING_CMD_RESULT;
 
