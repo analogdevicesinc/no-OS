@@ -134,17 +134,19 @@ struct iio_dev_priv {
 	char			dev_id[21];
 	/** Device name */
 	const char		*name;
-	/** Opened channels */
-	uint32_t		ch_mask;
 	/** Physical instance of a device */
 	void			*dev_instance;
 	/** Used to read debug attributes */
 	uint32_t		active_reg_addr;
+	/** Device descriptor(describes channels and attributes) */
+	struct iio_device	*dev_descriptor;
+
+	/* IIO Buffer fields */
 	/** Buffer to read or write data */
 	struct circular_buffer	buf;
 	uint32_t		buf_size;
-	/** Device descriptor(describes channels and attributes) */
-	struct iio_device	*dev_descriptor;
+	/** Opened channels for the active buffer */
+	uint32_t		ch_mask;
 	struct iio_data_buffer	*write_buffer;
 	struct iio_data_buffer	*read_buffer;
 };
