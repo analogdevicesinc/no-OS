@@ -53,6 +53,7 @@
 #include "no-os/error.h"
 #include "no-os/uart.h"
 #include "no-os/error.h"
+#include "no-os/circular_buffer.h"
 #include <inttypes.h>
 #include <stdio.h>
 #include <string.h>
@@ -60,7 +61,6 @@
 #ifdef ENABLE_IIO_NETWORK
 #include "no-os/delay.h"
 #include "tcp_socket.h"
-#include "no-os/circular_buffer.h"
 #endif
 
 /******************************************************************************/
@@ -141,7 +141,7 @@ struct iio_dev_priv {
 	/** Used to read debug attributes */
 	uint32_t		active_reg_addr;
 	/** Buffer to read or write data */
-	struct circular_buffer	*buf;
+	struct circular_buffer	buf;
 	uint32_t		buf_size;
 	/** Device descriptor(describes channels and attributes) */
 	struct iio_device	*dev_descriptor;
@@ -781,8 +781,9 @@ static int iio_open_dev(struct iiod_ctx *ctx, const char *device,
 			uint32_t samples, uint32_t mask, bool cyclic)
 {
 	struct iio_dev_priv *dev;
-	uint32_t ch_mask;
+	uint32_t ch_mask, len;
 	int32_t ret;
+	int8_t *buf;
 
 	dev = get_iio_device(ctx->instance, device);
 	if (!dev)
@@ -794,8 +795,28 @@ static int iio_open_dev(struct iiod_ctx *ctx, const char *device,
 		return -ENOENT;
 
 	dev->ch_mask = mask;
-	dev->buf_size = samples_to_bytes(dev, samples);;
-	ret = cb_init(&dev->buf, dev->buf_size);
+	dev->buf_size = samples_to_bytes(dev, samples);
+	if (dev->read_buffer->buff) {
+		buf = dev->read_buffer->buff;
+		len = dev->read_buffer->size;
+	} else {
+		buf = dev->write_buffer->buff;
+		len = dev->write_buffer->size;
+	}
+	if (!buf)
+		/*
+		 * cb_init can be used for memory allocation, but on small platform may
+		 * not work. Use given pointer to static buffer.
+		 * Todo: Implement both possibilities. If no buffer provided,
+		 * allocate memory
+		 */
+		return -ENOMEM;
+
+	if (len < dev->buf_size)
+		/* Need a bigger buffer or to allocate */
+		return -ENOMEM;
+
+	ret = cb_cfg(&dev->buf, buf, dev->buf_size);
 	if (IS_ERR_VALUE(ret))
 		return ret;
 
@@ -820,7 +841,6 @@ static int iio_close_dev(struct iiod_ctx *ctx, const char *device)
 	if (!dev)
 		return FAILURE;
 
-	cb_remove(dev->buf);
 	dev->ch_mask = 0;
 	if (dev->dev_descriptor->end_transfer)
 		return dev->dev_descriptor->end_transfer(dev->dev_instance);
@@ -858,13 +878,13 @@ static int iio_read_buffer(struct iiod_ctx *ctx, const char *device, char *buf,
 	if (!dev->dev_descriptor->read_dev)
 		return -EINVAL;
 
-	ret = cb_size(dev->buf, &size);
+	ret = cb_size(&dev->buf, &size);
 	if (IS_ERR_VALUE(ret))
 		return ret;
 
 	if (size == 0) {
 		/* Refill buffer */
-		ret = cb_prepare_async_write(dev->buf, dev->buf_size, &cb_buff,
+		ret = cb_prepare_async_write(&dev->buf, dev->buf_size, &cb_buff,
 					     &available);
 		if (IS_ERR_VALUE(ret))
 			return ret;
@@ -877,12 +897,12 @@ static int iio_read_buffer(struct iiod_ctx *ctx, const char *device, char *buf,
 		if (ret < 0)
 			return ret;
 
-		ret = cb_end_async_write(dev->buf);
+		ret = cb_end_async_write(&dev->buf);
 		if (IS_ERR_VALUE(ret))
 			return ret;
 	}
 
-	ret = cb_read(dev->buf, buf, bytes);
+	ret = cb_read(&dev->buf, buf, bytes);
 	if (IS_ERR_VALUE(ret))
 		return ret;
 
@@ -918,19 +938,19 @@ static int iio_write_buffer(struct iiod_ctx *ctx, const char *device, char *buf,
 	if (!dev->dev_descriptor->write_dev)
 		return -EINVAL;
 
-	ret = cb_size(dev->buf, &size);
+	ret = cb_size(&dev->buf, &size);
 	if (IS_ERR_VALUE(ret))
 		return ret;
 
 	if (size < dev->buf_size) {
-		ret = cb_write(dev->buf, buf, bytes);
+		ret = cb_write(&dev->buf, buf, bytes);
 		if (IS_ERR_VALUE(ret))
 			return ret;
 		size += bytes;
 	}
 	if (size == dev->buf_size) {
 		/* Refill buffer */
-		ret = cb_prepare_async_read(dev->buf, dev->buf_size, &cb_buff,
+		ret = cb_prepare_async_read(&dev->buf, dev->buf_size, &cb_buff,
 					    &available);
 		if (IS_ERR_VALUE(ret))
 			return ret;
@@ -943,7 +963,7 @@ static int iio_write_buffer(struct iiod_ctx *ctx, const char *device, char *buf,
 		if (ret < 0)
 			return ret;
 
-		ret = cb_end_async_read(dev->buf);
+		ret = cb_end_async_read(&dev->buf);
 		if (IS_ERR_VALUE(ret))
 			return ret;
 	}
