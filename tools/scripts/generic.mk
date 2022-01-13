@@ -24,8 +24,12 @@ ROOT_DRIVE = C:
 TIMESTAMP = 00:00:00
 copy_fun = xcopy /F /Y /B "$(subst /,\,$1)" "$(subst /,\,$2)"
 copy_folder = xcopy /F /S /Y /C /I "$(subst /,\,$1)" "$(subst /,\,$2)"
-remove_fun = del /S /Q $(subst /,\,$1)
-remove_dir = rd /S /Q $(addsuffix ",$(addprefix ",$(subst /,\,$1)))
+remove_fun_action = del /S /Q $(subst /,\,$1)
+remove_fun = $(if $(wildcard $1),$(call remove_fun_action,$(wildcard $1)),\
+			@echo rd /S /Q $(addsuffix ",$(addprefix ",$(subst /,\,$1))))
+remove_dir_action = rd /S /Q $(addsuffix ",$(addprefix ",$(subst /,\,$1)))
+remove_dir = $(if $(wildcard $1),$(call remove_dir_action,$(wildcard $1)),\
+			@echo rd /S /Q $(addsuffix ",$(addprefix ",$(subst /,\,$1))))
 mk_dir = md $(subst /,\,$1)
 read_file = type $(subst /,\,$1) 2> NUL
 make_dir_link = mklink /D "$(strip $(subst /,\,$2))" "$(strip $(subst /,\,$1))"
@@ -348,9 +352,7 @@ post_build:
 PHONY += update_srcs
 update_srcs: $(PROJECT_TARGET)
 	@$(call print, $(ACTION) srcs to created project)
-ifneq ($(wildcard $(DIRS_TO_REMOVE)),)
-	$(MUTE) $(call remove_dir,$(wildcard $(DIRS_TO_REMOVE))) $(HIDE)
-endif
+	$(MUTE) $(call remove_dir,$(DIRS_TO_REMOVE)) $(HIDE)
 	$(MUTE) -$(call mk_dir,$(DIRS_TO_CREATE)) $(HIDE)
 	$(MUTE) $(foreach dir,$(sort $(SRC_DIRS)),\
 		$(call folder_fun,$(dir),$(call relative_to_project,$(dir))) $(HIDE)\
