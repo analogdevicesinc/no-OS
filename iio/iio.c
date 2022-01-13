@@ -879,6 +879,22 @@ static int iio_close_dev(struct iiod_ctx *ctx, const char *device)
 	return SUCCESS;
 }
 
+static int iio_call_submit(struct iiod_ctx *ctx, const char *device,
+			   enum iio_buffer_direction dir)
+{
+	return SUCCESS;
+}
+
+static int iio_push_buffer(struct iiod_ctx *ctx, const char *device)
+{
+	return iio_call_submit(ctx, device, IIO_DIRECTION_OUTPUT);
+}
+
+static int iio_refill_buffer(struct iiod_ctx *ctx, const char *device)
+{
+	return iio_call_submit(ctx, device, IIO_DIRECTION_INPUT);
+}
+
 /**
  * @brief Read chunk of data from RAM to pbuf. Call
  * "iio_transfer_dev_to_mem()" first.
@@ -1347,6 +1363,8 @@ int iio_init(struct iio_desc **desc, struct iio_init_param *init_param)
 	ops->write_attr = iio_write_attr;
 	ops->read_buffer = iio_read_buffer;
 	ops->write_buffer = iio_write_buffer;
+	ops->refill_buffer = iio_refill_buffer;
+	ops->push_buffer = iio_push_buffer;
 	ops->open = iio_open_dev;
 	ops->close = iio_close_dev;
 	ops->send = iio_send;

@@ -110,25 +110,17 @@ struct iiod_ops {
 	/* Equivalent of iio_buffer_destroy */
 	int (*close)(struct iiod_ctx *ctx, const char *device);
 
-	/*
-	 * Read data from created buffer.
-	 * If buffer is empty it should be fully refilled first.
-	 * ?? Should I create a refill function instead ??
-	 * Must not block and process only available data.
-	 * It must return the number of read bytes
-	 */
+	/* Read data from opened buffer */
 	int (*read_buffer)(struct iiod_ctx *ctx, const char *device, char *buf,
 			   uint32_t bytes);
+	/* Called to notify that buffer must be refiiled */
+	int (*refill_buffer)(struct iiod_ctx *ctx, const char *device);
 
-	/*
-	 * Write data to created buffer.
-	 * If buffer is full it should be flashed to the hw.
-	 * ?? Should I create a buffer_push function instead ??
-	 * Must not block and process only available data.
-	 * It must return the number of read bytes
-	 */
+	/* Write data to opened buffer */
 	int (*write_buffer)(struct iiod_ctx *ctx, const char *device,
 			    const char *buf, uint32_t bytes);
+	/* Called to notify that buffer must be pushed to hardware */
+	int (*push_buffer)(struct iiod_ctx *ctx, const char *device);
 
 	/*
 	 * Attribute has to be read in buf and return the number of bytes
