@@ -41,6 +41,7 @@
 #define IIO_APP
 
 #include "iio.h"
+#include "no-os/irq.h"
 
 #define IIO_APP_DEVICE(_name, _dev, _dev_descriptor, _read_buff, _write_buff) {\
 	.name = _name,\
@@ -48,6 +49,12 @@
 	.dev_descriptor = _dev_descriptor,\
 	.read_buff = _read_buff,\
 	.write_buff = _write_buff\
+}
+
+#define IIO_APP_TRIGGER(_name, _dev, _trig_descriptor) {\
+	.name = _name,\
+	.dev = _dev,\
+	.descriptor = _trig_descriptor,\
 }
 
 struct iio_data_buffer {
@@ -73,4 +80,8 @@ struct iio_app_device {
  */
 int32_t iio_app_run(struct iio_app_device *devices, int32_t len);
 
+/* This function won't initialize irq_desc */
+int32_t iio_app_run2(struct iio_app_device *devices, int32_t len,
+		     struct iio_trigger_init *trigs, int32_t nb_trigs,
+		     void *irq_desc, struct iio_desc **iio_desc);
 #endif

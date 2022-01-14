@@ -277,24 +277,17 @@ static int32_t irq_setup(struct irq_ctrl_desc **irq_desc)
 }
 #endif
 
-int32_t iio_app_run(struct iio_app_device *devices, int32_t len)
+int32_t iio_app_run2(struct iio_app_device *devices, int32_t len,
+		     struct iio_trigger_init *trigs, int32_t nb_trigs,
+		     void *irq_desc, struct iio_desc **iio_desc)
 {
 	int32_t			status;
-	struct iio_desc		*iio_desc;
 	struct iio_init_param	iio_init_param;
 	struct uart_desc	*uart_desc;
 	struct uart_init_param	*uart_init_par;
-	void			*irq_desc = NULL;
 	struct iio_device_init	*iio_init_devs;
 	uint32_t		i;
 	struct iio_data_buffer *buff;
-
-
-#if defined(ADUCM_PLATFORM) || (defined(XILINX_PLATFORM) && !defined(PLATFORM_MB))
-	status = irq_setup((struct irq_ctrl_desc **)&irq_desc);
-	if (status < 0)
-		return status;
-#endif
 
 	status = uart_setup(&uart_desc, &uart_init_par, irq_desc);
 	if (status < 0)
@@ -342,21 +335,38 @@ int32_t iio_app_run(struct iio_app_device *devices, int32_t len)
 		}
 	}
 
+
 	iio_init_param.devs = iio_init_devs;
 	iio_init_param.nb_devs = len;
-	iio_init_param.nb_trigs = 0;
-	status = iio_init(&iio_desc, &iio_init_param);
+	iio_init_param.trigs = trigs;
+	iio_init_param.nb_trigs = nb_trigs;
+	status = iio_init(iio_desc, &iio_init_param);
 	if(status < 0)
 		goto error;
 
 	free(iio_init_devs);
 
 	do {
-		status = iio_step(iio_desc);
+		status = iio_step(*iio_desc);
 	} while (true);
 error:
 	status = print_uart_error_message(&uart_desc, uart_init_par, status);
 	return status;
+}
+
+int32_t iio_app_run(struct iio_app_device *devices, int32_t len)
+{
+	struct iio_desc	*iio_desc;
+	void *irq_desc = NULL;
+	int32_t status;
+
+#if defined(ADUCM_PLATFORM) || (defined(XILINX_PLATFORM) && !defined(PLATFORM_MB))
+	status = irq_setup((struct irq_ctrl_desc **)&irq_desc);
+	if (status < 0)
+		return status;
+#endif
+
+	return iio_app_run2(devices, len, NULL, 0, irq_desc, &iio_desc);
 }
 
 #endif
