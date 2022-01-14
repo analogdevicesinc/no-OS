@@ -138,7 +138,7 @@ clean: clean_hex
 
 clean_hex:
 	@$(call print,[Delete] $(HEX))
-	$(MUTE) $(call remove_fun,$(HEX)) $(HIDE)
+	$(MUTE) $(call remove_file,$(HEX)) $(HIDE)
 
 ifneq ($(wildcard $(BUILD_DIR)),)
 all: $(PIN_MUX)
@@ -147,7 +147,7 @@ endif
 #Used to update pinmux if updated on project
 $(PIN_MUX): $(PROJECT_PIN_MUX)
 	$(call print,Updating pinmux)
-	$(MUTE) $(call copy_fun,$(PROJECT_PIN_MUX),$(PIN_MUX)) $(HIDE)
+	$(MUTE) $(call copy_file,$(PROJECT_PIN_MUX),$(PIN_MUX)) $(HIDE)
 
 # Upload binary to target
 PHONY += aducm3029_run
@@ -246,7 +246,7 @@ $(PROJECT_TARGET):
 		-remove-switch linker -specs=rdimon.specs $(HIDE)
 	$(call print,Configuring project)
 #Overwrite system.rteconfig file with one that enables all DFP feautres neede by noos
-	$(MUTE) $(call copy_fun,$(PLATFORM_TOOLS)/system.rteconfig,$(PROJECT_BUILD)/system.rteconfig) $(HIDE)
+	$(MUTE) $(call copy_file,$(PLATFORM_TOOLS)/system.rteconfig,$(PROJECT_BUILD)/system.rteconfig) $(HIDE)
 #Adding pinmux plugin (Did not work to add it in the first command) and update project
 	$(MUTE) $(CCES) -nosplash -application com.analog.crosscore.headlesstools \
  		-command addaddin \
@@ -262,14 +262,14 @@ $(PROJECT_TARGET):
 #The default startup_ADuCM3029.c has compiling errors
 #TODO Replace with patch if team thinks it is a better approach to install a windows
 #program for patching	
-	$(MUTE) $(call copy_fun\
+	$(MUTE) $(call copy_file\
 	,$(PLATFORM_TOOLS)/startup_ADuCM3029_patch.c,$(PROJECT_BUILD)/RTE/Device/ADuCM3029/startup_ADuCM3029.c) $(HIDE)
 #Remove default files from projectsrc
 	$(MUTE) $(call remove_dir,$(PROJECT_BUILD)/src) $(HIDE)
 	$(MUTE) $(call set_one_time_rule,$@)
 
 copy_pinmux:
-	$(MUTE) $(call copy_fun,$(PIN_MUX),$(PROJECT_PIN_MUX)) $(HIDE)
+	$(MUTE) $(call copy_file,$(PIN_MUX),$(PROJECT_PIN_MUX)) $(HIDE)
 
 update_srcs: copy_pinmux
 

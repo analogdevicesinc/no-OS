@@ -31,7 +31,7 @@ EXTRA_INC_PATHS		+= $(MBEDTLS_DIR)/include
 
 #Rules
 MBED_TLS_CONFIG_FILE = $(NO-OS)/network/noos_mbedtls_config.h
-CLEAN_MBEDTLS	= $(call remove_fun,$(MBEDTLS_LIB_DIR)/*.o $(MBEDTLS_LIBS))
+CLEAN_MBEDTLS	= $(call remove_file,$(MBEDTLS_LIB_DIR)/*.o $(MBEDTLS_LIBS))
 $(MBEDTLS_LIB_DIR)/libmbedcrypto.a: $(MBED_TLS_CONFIG_FILE)
 	-$(CLEAN_MBEDTLS)
 	$(MAKE) -C $(MBEDTLS_LIB_DIR)

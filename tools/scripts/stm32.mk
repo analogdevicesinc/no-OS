@@ -1,3 +1,4 @@
+copy_fileifeq ($(OS),Windows_NT)
 ifeq ($(OS),Windows_NT)
 $(error STM32 builds on Windows are not currently supported.)
 else
@@ -71,13 +72,13 @@ $(PROJECT_TARGET):
 	@echo project generate >> $(BINARY).cubemx
 	@echo exit >> $(BINARY).cubemx
 	$(MUTE) java -jar $(STM32CUBEMX)/$(MX) -q $(BINARY).cubemx $(HIDE)
-	$(MUTE) $(call remove_fun,$(BINARY).cubemx) $(HIDE)
+	$(MUTE) $(call remove_file,$(BINARY).cubemx) $(HIDE)
 
 	$(MUTE) sed -i 's/ main(/ generated_main(/' $(PROJECT_BUILD)/Src/main.c $(HIDE)
-	$(MUTE) $(call copy_fun, $(PROJECT_BUILD)/Src/main.c, $(PROJECT_BUILD)/Src/generated_main.c) $(HIDE)
-	$(MUTE) $(call remove_fun, $(PROJECT_BUILD)/Src/main.c) $(HIDE)
+	$(MUTE) $(call copy_file, $(PROJECT_BUILD)/Src/main.c, $(PROJECT_BUILD)/Src/generated_main.c) $(HIDE)
+	$(MUTE) $(call remove_file, $(PROJECT_BUILD)/Src/main.c) $(HIDE)
 
-	$(MUTE) $(call remove_fun, $(PROJECT_BUILD)/Src/syscalls.c) $(HIDE)
+	$(MUTE) $(call remove_file, $(PROJECT_BUILD)/Src/syscalls.c) $(HIDE)
 
 	$(call print,Configuring project)
 	$(MUTE) $(STM32CUBEIDE)/$(IDE) -nosplash -application org.eclipse.cdt.managedbuilder.core.headlessbuild \
@@ -170,7 +171,7 @@ $(PLATFORM)_project_build: $(PROJECT_TARGET) $(LIB_TARGETS)
 
 clean_hex:
 	@$(call print,[Delete] $(HEX))
-	$(MUTE) $(call remove_fun,$(HEX)) $(HIDE)
+	$(MUTE) $(call remove_file,$(HEX)) $(HIDE)
 
 clean: clean_hex
 
