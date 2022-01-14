@@ -227,10 +227,12 @@ struct iio_device {
 	struct iio_attribute *buffer_attributes;
 	/* Numbers of bytes will be:
 	 * samples * (storage_size_of_first_active_ch / 8) * nb_active_channels
+	 * DEPRECATED.
 	 */
 	int32_t	(*read_dev)(void *dev, void *buff, uint32_t nb_samples);
 	/* Numbers of bytes will be:
 	 * samples * (storage_size_of_first_active_ch / 8) * nb_active_channels
+	 * DEPRECATED.
 	 */
 	int32_t	(*write_dev)(void *dev, void *buff, uint32_t nb_samples);
 
