@@ -344,6 +344,7 @@ int32_t iio_app_run(struct iio_app_device *devices, int32_t len)
 
 	iio_init_param.devs = iio_init_devs;
 	iio_init_param.nb_devs = len;
+	iio_init_param.nb_trigs = 0;
 	status = iio_init(&iio_desc, &iio_init_param);
 	if(status < 0)
 		goto error;
