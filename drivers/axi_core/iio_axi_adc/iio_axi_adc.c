@@ -436,7 +436,7 @@ static int32_t iio_axi_adc_create_device_descriptor(
 			goto error;
 	}
 
-	iio_device->prepare_transfer = iio_axi_adc_prepare_transfer;
+	iio_device->pre_enable = iio_axi_adc_prepare_transfer;
 	iio_device->read_dev = iio_axi_adc_read_dev;
 
 	return SUCCESS;

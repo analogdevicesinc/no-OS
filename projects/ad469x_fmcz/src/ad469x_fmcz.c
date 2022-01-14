@@ -123,7 +123,7 @@ static struct iio_channel ad469x_iio_channels[] = {
 struct iio_device ad469x_iio_descriptor = {
 	.num_ch = 2,
 	.channels = ad469x_iio_channels,
-	.prepare_transfer = (int32_t (*)(void *, uint32_t))iio_ad469x_prepare_conversion,
+	.pre_enable = (int32_t (*)(void *, uint32_t))iio_ad469x_prepare_conversion,
 	.read_dev = (int32_t (*)(void *, void *, uint32_t))ad469x_seq_read_data
 };
 

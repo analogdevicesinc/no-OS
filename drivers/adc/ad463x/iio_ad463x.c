@@ -154,7 +154,7 @@ int32_t iio_ad463x_remove(struct iio_ad463x *desc)
 struct iio_device ad463x_iio_desc = {
 	.channels = iio_adc_channels,
 	.num_ch = 2,
-	.prepare_transfer = (int32_t (*)())_iio_ad463x_prepare_transfer,
+	.pre_enable = (int32_t (*)())_iio_ad463x_prepare_transfer,
 	.read_dev = (int32_t (*)())_iio_ad463x_read_dev
 };
 

@@ -178,7 +178,7 @@ int32_t iio_dual_ad713x_init(struct iio_ad713x **desc,
 	iio_ad713x->iio_dev_desc = (struct iio_device) {
 		.num_ch = param->num_channels,
 		.channels = iio_adc_channels,
-		.prepare_transfer = (int32_t (*)())_iio_ad713x_prepare_transfer,
+		.pre_enable = (int32_t (*)())_iio_ad713x_prepare_transfer,
 		.read_dev = (int32_t (*)())_iio_ad713x_read_dev
 	};
 

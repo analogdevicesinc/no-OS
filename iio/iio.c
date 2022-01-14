@@ -837,9 +837,8 @@ static int iio_open_dev(struct iiod_ctx *ctx, const char *device,
 		return ret;
 	}
 
-	if (dev->dev_descriptor->prepare_transfer) {
-		ret = dev->dev_descriptor->prepare_transfer(
-			       dev->dev_instance, mask);
+	if (dev->dev_descriptor->pre_enable) {
+		ret = dev->dev_descriptor->pre_enable(dev->dev_instance, mask);
 		if (IS_ERR_VALUE(ret) && dev->buffer.allocated) {
 			free(dev->buffer.cb.buff);
 			dev->buffer.allocated = 0;
@@ -873,8 +872,8 @@ static int iio_close_dev(struct iiod_ctx *ctx, const char *device)
 	}
 
 	dev->buffer.public.active_mask = 0;
-	if (dev->dev_descriptor->end_transfer)
-		return dev->dev_descriptor->end_transfer(dev->dev_instance);
+	if (dev->dev_descriptor->post_disable)
+		return dev->dev_descriptor->post_disable(dev->dev_instance);
 
 	return SUCCESS;
 }
