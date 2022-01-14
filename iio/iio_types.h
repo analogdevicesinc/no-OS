@@ -225,11 +225,6 @@ struct iio_device {
 	struct iio_attribute *debug_attributes;
 	/** Array of attributes. Last one should have its name set to NULL */
 	struct iio_attribute *buffer_attributes;
-	/** Called before a transfer starts. The device should activate the
-	 * channels from the mask */
-	int32_t (*prepare_transfer)(void *dev, uint32_t mask);
-	/** Called after a tranfer ends */
-	int32_t (*end_transfer)(void *dev);
 	/* Numbers of bytes will be:
 	 * samples * (storage_size_of_first_active_ch / 8) * nb_active_channels
 	 */

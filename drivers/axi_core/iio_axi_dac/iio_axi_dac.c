@@ -614,7 +614,7 @@ static int32_t iio_axi_dac_create_device_descriptor(
 		if (ret < 0)
 			goto error;
 	}
-	iio_device->prepare_transfer = iio_axi_dac_prepare_transfer;
+	iio_device->pre_enable = iio_axi_dac_prepare_transfer;
 	iio_device->write_dev = iio_axi_dac_write_data;
 
 	return SUCCESS;
