@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   iio_adxrs290.h
- *   @brief  Implementation of ADXRS290 iio.
- *   @author Kister Genesis Jimenez (kister.jimenez@analog.com)
+ *   @file   iio_adxrs290_trig.c
+ *   @brief  Implementation of ADXRS290 iio trigger.
+ *   @author Mihail Chindris (Mihail.Chindris@analog.com)
 ********************************************************************************
- * Copyright 2020(c) Analog Devices, Inc.
+ * Copyright 2022(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -37,30 +37,84 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef IIO_ADXRS290_H
-#define IIO_ADXRS290_H
-
+#include <stdlib.h>
+#include <string.h>
+#include "iio_adxrs290.h"
 #include "iio_types.h"
-#include "no-os/irq.h"
-#include "no-os/gpio.h"
+#include "iio.h"
+#include "no-os/error.h"
 
-extern struct iio_device adxrs290_iio_descriptor;
-extern struct iio_trigger adxrs290_iio_trigger_desc;
+#define MAX_NAME_SIZE 20
 
-struct iio_adxrs290_trig;
-struct iio_adxrs290_trig_init {
-	/* Address where iio_will be found */
+struct iio_adxrs290_trig {
 	struct iio_desc		**iio_desc;
+	struct gpio_desc	*sync_gpio;
 	struct irq_ctrl_desc	*irq_ctrl;
-	struct gpio_init_param	*sync_gpio_param;
 	uint32_t		synq_irq_id;
-	void			*synq_irq_conf;
-	const char		*name;
+	char			name[MAX_NAME_SIZE + 1];
 };
 
+static void adxrs290_irq_trig_handler(void *ctx, uint32_t event, void *extra)
+{
+	struct iio_adxrs290_trig *trig = ctx;
+
+	iio_trigger_notify(*trig->iio_desc, trig->name);
+}
+
+static void iio_adxrs290_trigger_enable(void *trig, char *name)
+{
+	struct iio_adxrs290_trig *desc = trig;
+
+	irq_enable(desc->irq_ctrl, desc->synq_irq_id);
+}
+
+static void iio_adxrs290_trigger_disable(void *trig, char *name)
+{
+	struct iio_adxrs290_trig *desc = trig;
+
+	irq_disable(desc->irq_ctrl, desc->synq_irq_id);
+}
+
 int32_t iio_adxrs290_trigger_init(struct iio_adxrs290_trig **trig,
-				  struct iio_adxrs290_trig_init *param);
+				  struct iio_adxrs290_trig_init *param)
+{
+	struct iio_adxrs290_trig *ltrig;
+	struct callback_desc call;
+	int32_t ret;
 
-//TODO remove
+	ltrig = calloc(1, sizeof(*trig));
+	if (!ltrig)
+		return -ENOMEM;
 
-#endif
+	ltrig->irq_ctrl = param->irq_ctrl;
+	ltrig->synq_irq_id = param->synq_irq_id;
+	ltrig->iio_desc = param->iio_desc;
+	strncpy(ltrig->name, param->name, MAX_NAME_SIZE);
+
+	ret = gpio_get(&ltrig->sync_gpio, param->sync_gpio_param);
+	if (IS_ERR_VALUE(ret))
+		goto error;
+
+	ret = gpio_direction_input(ltrig->sync_gpio);
+	if (IS_ERR_VALUE(ret))
+		goto error;
+
+	call.callback = adxrs290_irq_trig_handler;
+	call.ctx = ltrig;
+	call.config = param->synq_irq_conf;
+	ret = irq_register_callback(ltrig->irq_ctrl, ltrig->synq_irq_id, &call);
+	if (IS_ERR_VALUE(ret))
+		goto error;
+
+	*trig = ltrig;
+
+	return SUCCESS;
+error:
+//TODO cleanup
+	return ret;
+}
+
+struct iio_trigger adxrs290_iio_trigger_desc = {
+	.enable = iio_adxrs290_trigger_enable,
+	.disable = iio_adxrs290_trigger_disable
+};
