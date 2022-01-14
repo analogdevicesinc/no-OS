@@ -19,13 +19,13 @@ export JTAG_CABLE_ID
 ifeq ($(OS), Windows_NT)
 SHELL=cmd
 ROOT_DRIVE = C:
-#Is slow to print timestamp in windows
+# It is slow to print timestamp in windows
 #TIMESTAMP = $(shell powershell Get-Date -Format "HH:mm.ss")
 TIMESTAMP = 00:00:00
-copy_fun = xcopy /F /Y /B "$(subst /,\,$1)" "$(subst /,\,$2)"
+copy_file = xcopy /F /Y /B "$(subst /,\,$1)" "$(subst /,\,$2)"
 copy_folder = xcopy /F /S /Y /C /I "$(subst /,\,$1)" "$(subst /,\,$2)"
-remove_fun_action = del /S /Q $(subst /,\,$1)
-remove_fun = $(if $(wildcard $1),$(call remove_fun_action,$(wildcard $1)),\
+remove_file_action = del /S /Q $(subst /,\,$1)
+remove_file = $(if $(wildcard $1),$(call remove_file_action,$(wildcard $1)),\
 			@echo rd /S /Q $(addsuffix ",$(addprefix ",$(subst /,\,$1))))
 remove_dir_action = rd /S /Q $(addsuffix ",$(addprefix ",$(subst /,\,$1)))
 remove_dir = $(if $(wildcard $1),$(call remove_dir_action,$(wildcard $1)),\
@@ -43,9 +43,9 @@ HIDE_OUTPUT = > nul
 #	LINUX
 else
 TIMESTAMP = $(shell date +"%T")
-copy_fun = cp $1 $2
+copy_file = cp $1 $2
 copy_folder = cp -r $1 $2
-remove_fun = rm -rf $1
+remove_file = rm -rf $1
 remove_dir = rm -rf $1
 mk_dir = mkdir -p $1
 read_file = cat $1 2> /dev/null
@@ -70,19 +70,19 @@ ifeq ($(strip $(VERBOSE)),2)
 HIDE = $(HIDE_OUTPUT)
 endif
 
-# recursive wildcard
+# Recursive wildcard
 rwildcard=$(foreach d,$(wildcard $(1:=/*)),$(call rwildcard,$d,$2) $(filter $(subst *,%,$2),$d))
 
-#Creates file with the specified name
+# Creates file with the specified name
 set_one_time_rule = echo Target file. Do not delete > $1
 
-# Transforme full path to relative path to be used in build
+# Transform full path to relative path to be used in build
 # $(PROJECT)/something -> srcs/something
 # $(NO-OS)/something -> noos/something
 # $(PLATFORM_TOOLS)/something -> aducm3029/something TODO test without these
 RELATIVE_PATH = $(patsubst $(NO-OS)%,noos%,$(patsubst $(PROJECT)%,$(PROJECT_NAME)%,$(PLATFORM_RELATIVE_PATH)))
 
-# Transforme relative path to full path in order to find the needed .c files
+# Transform relative path to full path in order to find the needed .c files
 # Reverse of get_relative_path
 FULL_PATH = $(patsubst noos%,$(NO-OS)%,$(patsubst $(PROJECT_NAME)%,$(PROJECT)%,$(PLATFORM_FULL_PATH)))
 
@@ -99,7 +99,7 @@ file_fun = $(make_link)
 folder_fun = $(make_dir_link)
 ACTION = Linking
 else
-file_fun = $(call copy_fun,$1,$(dir $2))
+file_fun = $(call copy_file,$1,$(dir $2))
 folder_fun = $(copy_folder)
 ACTION = Copying
 endif
@@ -112,7 +112,7 @@ ifndef NO-OS
 $(error "NO-OS variable needs to be set")
 endif
 
-#Need in libraries
+# Need in libraries
 export NO-OS
 
 ifndef PROJECT
@@ -125,7 +125,7 @@ ifndef WORKSPACE
 $(error "WORKSPACE variable needs to be set")
 endif
 
-#USED IN MAKEFILE
+# USED IN MAKEFILE
 PROJECT_NAME	= $(notdir $(PROJECT))
 OBJECTS_DIR		= $(BUILD_DIR)/objs
 PLATFORM_TOOLS	= $(NO-OS)/tools/scripts/platform/$(PLATFORM)
@@ -241,7 +241,7 @@ ALL_IGNORED_FILES = $(foreach dir, $(IGNORED_FILES), $(call rwildcard, $(dir),*)
 SRCS     := $(filter-out $(ALL_IGNORED_FILES),$(SRCS))
 INCS     := $(filter-out $(ALL_IGNORED_FILES),$(INCS))
 
-#Get all src files that are not in SRC_DRIS
+# Get all src files that are not in SRC_DRIS
 FILES_OUT_OF_DIRS := $(filter-out $(call rwildcard, $(SRC_DIRS),*), $(SRCS) $(INCS)) 
 
 REL_SRCS = $(addprefix $(OBJECTS_DIR)/,$(call get_relative_path,$(SRCS_IN_BUILD) $(PLATFORM_SRCS)))
@@ -257,10 +257,10 @@ ifneq ($(REL_ASM_SRCS),$(ASM_OBJS_S))
 	ASM_OBJS += $(ASM_OBJS_S)
 endif
 
-#Will be used to add this flags to sdk project
+# Will be used to add these flags to sdk project
 FLAGS_WITHOUT_D = $(sort $(subst -D,,$(filter -D%, $(CFLAGS))))
 
-#Remove duplicates
+# Remove duplicates
 SRCS := $(sort $(SRCS))
 INCS := $(sort $(INCS))
 
@@ -268,10 +268,10 @@ CREATED_DIRECTORIES += noos root $(PROJECT_NAME)
 SRCS_IN_BUILD = $(call relative_to_project, $(SRCS))
 INCS_IN_BUILD = $(call relative_to_project, $(INCS))
 DIRS_TO_CREATE = $(sort $(dir $(call relative_to_project, $(FILES_OUT_OF_DIRS) $(SRC_DIRS))))
-#Prefixes from get_relative_path 
+# Prefixes from get_relative_path
 DIRS_TO_REMOVE = $(addprefix $(PROJECT_BUILD)/,$(CREATED_DIRECTORIES))
 
-#Add to include all directories containing a .h file
+# Add to include all directories containing a .h file
 EXTRA_INC_PATHS := $(sort $(foreach dir, $(INCS_IN_BUILD),$(dir $(dir))))
 EXTRA_INC_PATHS := $(filter-out $(call relative_to_project,$(NO-OS)/include/no-os/),$(EXTRA_INC_PATHS))
 EXTRA_INC_PATHS += $(call relative_to_project, $(INCLUDE))
@@ -291,7 +291,7 @@ all: print_build_type $(BINARY)
 	$(call print,Done ($(notdir $(BUILD_DIR))/$(notdir $(BINARY))))
 else
 all: print_build_type
-#Remove -j flag for running project target. (It doesn't work on xilinx on this target)
+# Remove -j flag for running project target. (It doesn't work on xilinx on this target)
 	$(MUTE) $(MAKE) --no-print-directory update_srcs MAKEFLAGS=$(MAKEOVERRIDES)
 	$(MUTE) $(MAKE) --no-print-directory $(BINARY)
 	$(call print,Done ($(notdir $(BUILD_DIR))/$(notdir $(BINARY))))
@@ -301,12 +301,12 @@ PHONY += print_build_type
 print_build_type:
 	$(call print,Building for $(call green,$(PLATFORM)))
 
-#This is used to keep directory targets between makefile executions
-#More details: http://ismail.badawi.io/blog/2017/03/28/automatic-directory-creation-in-make/
-#Also the last . is explained
+# This is used to keep directory targets between makefile executions
+# More details: http://ismail.badawi.io/blog/2017/03/28/automatic-directory-creation-in-make/
+# Also the last . is explained
 .PRECIOUS: $(OBJECTS_DIR)/. $(OBJECTS_DIR)%/.
 
-#Create directories for binary files. This is needed in order to know from which
+# Create directories for binary files. This is needed in order to know from which
 # .c it was build
 $(OBJECTS_DIR)/.:
 	-@$(call mk_dir,$@) $(HIDE)
@@ -346,7 +346,7 @@ project: $(PROJECT_TARGET)
 
 $(PROJECT_TARGET): $(LIB_TARGETS)
 
-#Platform specific post build dependencies can be added to this rule.
+# Platform specific post build dependencies can be added to this rule.
 post_build:
 
 PHONY += update_srcs
@@ -371,7 +371,7 @@ project_build: $(PLATFORM)_project_build
 PHONY += clean
 clean:
 	$(call print,[Delete] $(notdir $(OBJS) $(BINARY) $(ASM_OBJS)))
-	$(MUTE) $(call remove_fun,$(BINARY) $(OBJS) $(ASM_OBJS)) $(HIDE)
+	$(MUTE) $(call remove_file,$(BINARY) $(OBJS) $(ASM_OBJS)) $(HIDE)
 
 # Remove the whole build directory
 PHONY += clean_all

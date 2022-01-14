@@ -144,7 +144,7 @@ xilinx_run: all
 
 $(TEMP_DIR)/arch.txt: $(HARDWARE)
 	$(MUTE) $(call mk_dir,$(BUILD_DIR)/app $(BUILD_DIR)/app/src $(OBJECTS_DIR) $(TEMP_DIR)) $(HIDE)
-	$(MUTE) $(call copy_fun,$(HARDWARE),$(TEMP_DIR)) $(HIDE)
+	$(MUTE) $(call copy_file,$(HARDWARE),$(TEMP_DIR)) $(HIDE)
 	$(call print,Evaluating hardware: $(HARDWARE))
 	$(MUTE)	$(call tcl_util, get_arch) $(HIDE)
 
