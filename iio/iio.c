@@ -151,6 +151,8 @@ struct iio_dev_priv {
 	const char		*name;
 	/** Physical instance of a device */
 	void			*dev_instance;
+	/** Structure to be passed to callbacks */
+	struct iio_device_data  dev_data;
 	/** Used to read debug attributes */
 	uint32_t		active_reg_addr;
 	/** Device descriptor(describes channels and attributes) */
@@ -723,60 +725,20 @@ static int iio_write_attr(struct iiod_ctx *ctx, const char *device,
 		return iio_rd_wr_attribute(&params, attributes, attr->name, 1);
 }
 
-static uint32_t bytes_to_samples(struct iio_dev_priv *dev, uint32_t bytes)
+static uint32_t bytes_per_scan(struct iio_channel *channels, uint32_t mask)
 {
-	uint32_t bytes_per_sample;
-	uint32_t first_ch;
-	bool	 first_ch_found;
-	uint32_t nb_active_ch;
-	uint32_t mask;
+	uint32_t cnt, i;
 
-	mask = dev->buffer.public.active_mask;
-	first_ch = 0;
-	nb_active_ch = 0;
-	first_ch_found = false;
+	cnt = 0;
+	i = 0;
 	while (mask) {
-		if ((mask & 1)) {
-			if (!first_ch_found)
-				first_ch_found = true;
-			else
-				first_ch++;
-			nb_active_ch++;
-		}
+		if ((mask & 1))
+			cnt += channels[i].scan_type->storagebits / 8;
 		mask >>= 1;
+		++i;
 	}
-	bytes_per_sample = dev->dev_descriptor->channels[first_ch]
-			   .scan_type->storagebits / 8;
 
-	return bytes / bytes_per_sample / nb_active_ch;
-}
-
-static uint32_t samples_to_bytes(struct iio_dev_priv *dev, uint32_t samples)
-{
-	uint32_t bytes_per_sample;
-	uint32_t first_ch;
-	bool	 first_ch_found;
-	uint32_t nb_active_ch;
-	uint32_t mask;
-
-	mask = dev->buffer.public.active_mask;
-	first_ch = 0;
-	nb_active_ch = 0;
-	first_ch_found = false;
-	while (mask) {
-		if ((mask & 1)) {
-			if (!first_ch_found)
-				first_ch_found = true;
-			else
-				first_ch++;
-			nb_active_ch++;
-		}
-		mask >>= 1;
-	}
-	bytes_per_sample = dev->dev_descriptor->channels[first_ch]
-			   .scan_type->storagebits / 8;
-
-	return samples * bytes_per_sample * nb_active_ch;
+	return cnt;
 }
 
 /**
@@ -803,12 +765,14 @@ static int iio_open_dev(struct iiod_ctx *ctx, const char *device,
 		return -EINVAL;
 
 	ch_mask = 0xFFFFFFFF >> (32 - dev->dev_descriptor->num_ch);
-
-	if (mask & ~ch_mask)
+	mask &= ch_mask;
+	if (!mask)
 		return -ENOENT;
 
 	dev->buffer.public.active_mask = mask;
-	dev->buffer.public.size = samples_to_bytes(dev, samples);
+	dev->buffer.public.bytes_per_scan =
+		bytes_per_scan(dev->dev_descriptor->channels, mask);
+	dev->buffer.public.size = dev->buffer.public.bytes_per_scan * samples;
 	if (dev->buffer.raw_buf && dev->buffer.raw_buf_len) {
 		if (dev->buffer.raw_buf_len < dev->buffer.public.size)
 			/* Need a bigger buffer or to allocate */
@@ -881,6 +845,41 @@ static int iio_close_dev(struct iiod_ctx *ctx, const char *device)
 static int iio_call_submit(struct iiod_ctx *ctx, const char *device,
 			   enum iio_buffer_direction dir)
 {
+	struct iio_dev_priv *dev;
+
+	dev = get_iio_device(ctx->instance, device);
+	if (!dev || !dev->buffer.initalized)
+		return -EINVAL;
+
+	dev->buffer.public.dir = dir;
+	if (dev->dev_descriptor->submit)
+		return dev->dev_descriptor->submit(&dev->dev_data);
+	else if ((dir == IIO_DIRECTION_INPUT && dev->dev_descriptor->read_dev)
+		 || (dir == IIO_DIRECTION_OUTPUT &&
+		     dev->dev_descriptor->write_dev)) {
+		/* Code used to don't break devices using read_dev */
+		int32_t ret;
+		uint32_t nb_scans;
+		void *buff;
+		struct iio_buffer *buffer = &dev->buffer.public;
+
+		ret = iio_buffer_get_block(buffer, &buff);
+		if (IS_ERR_VALUE(ret))
+			return ret;
+
+		nb_scans = buffer->size / buffer->bytes_per_scan;
+		if (dir == IIO_DIRECTION_INPUT)
+			ret = dev->dev_descriptor->read_dev(dev->dev_instance,
+							    buff, nb_scans);
+		else
+			ret = dev->dev_descriptor->write_dev(dev->dev_instance,
+							     buff, nb_scans);
+		if (IS_ERR_VALUE(ret))
+			return ret;
+
+		return iio_buffer_block_done(buffer);
+	}
+
 	return SUCCESS;
 }
 
@@ -909,43 +908,21 @@ static int iio_read_buffer(struct iiod_ctx *ctx, const char *device, char *buf,
 			   uint32_t bytes)
 {
 	struct iio_dev_priv	*dev;
-	uint32_t		samples;
 	int32_t			ret;
 	uint32_t		size;
-	void			*cb_buff;
-	uint32_t		available;
 
 	dev = get_iio_device(ctx->instance, device);
-	if (!dev)
-		return -EINVAL;
-
-	if (!dev->dev_descriptor->read_dev)
+	if (!dev || !dev->buffer.initalized)
 		return -EINVAL;
 
 	ret = cb_size(&dev->buffer.cb, &size);
 	if (IS_ERR_VALUE(ret))
 		return ret;
 
-	if (size == 0) {
-		/* Refill buffer */
-		ret = cb_prepare_async_write(&dev->buffer.cb,
-					     dev->buffer.public.size,
-					     &cb_buff, &available);
-		if (IS_ERR_VALUE(ret))
-			return ret;
-		if (available < dev->buffer.public.size)
-			return -EINVAL;
+	bytes = min(size, bytes);
+	if (!bytes)
+		return -EAGAIN;
 
-		samples = bytes_to_samples(dev, dev->buffer.public.size);
-		ret = dev->dev_descriptor->read_dev(dev->dev_instance, cb_buff,
-						    samples);
-		if (ret < 0)
-			return ret;
-
-		ret = cb_end_async_write(&dev->buffer.cb);
-		if (IS_ERR_VALUE(ret))
-			return ret;
-	}
 
 	ret = cb_read(&dev->buffer.cb, buf, bytes);
 	if (IS_ERR_VALUE(ret))
@@ -970,48 +947,23 @@ static int iio_write_buffer(struct iiod_ctx *ctx, const char *device, char *buf,
 			    uint32_t bytes)
 {
 	struct iio_dev_priv	*dev;
-	uint32_t		samples;
 	int32_t			ret;
-	void			*cb_buff;
 	uint32_t		available;
 	uint32_t		size;
 
 	dev = get_iio_device(ctx->instance, device);
-	if (!dev)
-		return -EINVAL;
-
-	if (!dev->dev_descriptor->write_dev)
+	if (!dev || !dev->buffer.initalized)
 		return -EINVAL;
 
 	ret = cb_size(&dev->buffer.cb, &size);
 	if (IS_ERR_VALUE(ret))
 		return ret;
 
-	if (size < dev->buffer.public.size) {
-		ret = cb_write(&dev->buffer.cb, buf, bytes);
-		if (IS_ERR_VALUE(ret))
-			return ret;
-		size += bytes;
-	}
-	if (size == dev->buffer.public.size) {
-		/* Refill buffer */
-		ret = cb_prepare_async_read(&dev->buffer.cb, dev->buffer.public.size,
-					    &cb_buff, &available);
-		if (IS_ERR_VALUE(ret))
-			return ret;
-		if (available < dev->buffer.public.size)
-			return -EINVAL;
-
-		samples = bytes_to_samples(dev, dev->buffer.public.size);
-		ret = dev->dev_descriptor->write_dev(dev->dev_instance, cb_buff,
-						     samples);
-		if (ret < 0)
-			return ret;
-
-		ret = cb_end_async_read(&dev->buffer.cb);
-		if (IS_ERR_VALUE(ret))
-			return ret;
-	}
+	available = dev->buffer.public.size - size;
+	bytes = min(available, bytes);
+	ret = cb_write(&dev->buffer.cb, buf, bytes);
+	if (IS_ERR_VALUE(ret))
+		return ret;
 
 	return bytes;
 }
@@ -1372,9 +1324,12 @@ static int32_t iio_init_devs(struct iio_desc *desc,
 		ldev->dev_descriptor = ndev->dev_descriptor;
 		sprintf(ldev->dev_id, "iio:device%"PRIu32"", i);
 		ldev->dev_instance = ndev->dev;
+		ldev->dev_data.dev = ndev->dev;
+		ldev->dev_data.buffer = &ldev->buffer.public;
 		ldev->name = ndev->name;
 		if (ndev->dev_descriptor->read_dev ||
-		    ndev->dev_descriptor->write_dev) {
+		    ndev->dev_descriptor->write_dev ||
+		    ndev->dev_descriptor->submit) {
 			ldev->buffer.raw_buf = ndev->raw_buf;
 			ldev->buffer.raw_buf_len = ndev->raw_buf_len;
 			ldev->buffer.public.buf = &ldev->buffer.cb;
