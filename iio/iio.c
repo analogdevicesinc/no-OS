@@ -305,6 +305,9 @@ static int iio_read_all_attr(struct attr_fun_params *params,
 	int attr_length;
 	uint32_t *pattr_length;
 
+	/* TODO Not sure if working corectly */
+	return -EINVAL;
+
 	while (attributes[i].name) {
 		attr_length = attributes[i].show(params->dev_instance,
 						 local_buf, params->len,
@@ -350,6 +353,9 @@ static int iio_write_all_attr(struct attr_fun_params *params,
 {
 	int16_t i = 0, j = 0;
 	int16_t attr_length;
+
+	/* TODO Not sure if working corectly */
+	return -EINVAL;
 
 	while (attributes[i].name) {
 		attr_length = bswap_constant_32((uint32_t)(params->buf + j));
