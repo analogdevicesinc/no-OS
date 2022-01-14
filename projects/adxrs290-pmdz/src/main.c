@@ -55,12 +55,12 @@
 
 #ifdef ADUCM_PLATFORM
 
-#define MAX_SIZE_BASE_ADDR		3000
+#define IIO_ADXRS290_TRIGGER_NAME	"adxrs290_sync_trigger"
+#define IRQ_CTRL_ID		0
 
 static uint8_t in_buff[MAX_SIZE_BASE_ADDR];
 
-#define GYRO_DDR_BASEADDR		((uint32_t)in_buff)
-#define GPIO_SYNC_PIN_NUM		0x10
+static uint16_t in_buff[MAX_SAMPLES];
 
 #endif
 
@@ -100,7 +100,6 @@ int main(void)
 	struct adxrs290_init_param adxrs290_param = {
 		.spi_init = init_param,
 		.mode = ADXRS290_MODE_MEASUREMENT,
-		.gpio_sync = &gpio_sync_init_param,
 		.lpf = ADXRS290_LPF_480HZ,
 		.hpf = ADXRS290_HPF_ALL_PASS
 	};
@@ -114,14 +113,40 @@ int main(void)
 		return status;
 
 	struct iio_data_buffer rd_buf = {
-		.buff = (void *)GYRO_DDR_BASEADDR,
-		.size = MAX_SIZE_BASE_ADDR
+		.buff = (void *)in_buff,
+		.size = sizeof(in_buff)
 	};
 
+
+	struct irq_init_param irq_param = {
+		.irq_ctrl_id = IRQ_CTRL_ID,
+		.platform_ops = 0,//&aducm_irq_ops
+		.extra = NULL
+	};
+
+	irq_ctrl_init(&irq_ctrl, &irq_param);
+
+	struct iio_desc *iio_desc;
+	struct iio_adxrs290_trig *trig;
+	struct iio_adxrs290_trig_init trig_param = {
+		.iio_desc = &iio_desc,
+		.irq_ctrl = irq_ctrl,
+		.name = IIO_ADXRS290_TRIGGER_NAME,
+		.synq_irq_conf = 0,//IRQ_RISING_EDGE,
+		.sync_gpio_param = &gpio_sync_init_param,
+		.synq_irq_id = 0,//ADUCM_EXTERNAL_INT1_ID
+	};
+	iio_adxrs290_trigger_init(&trig, &trig_param);
 	struct iio_app_device devices[] = {
 		IIO_APP_DEVICE("adxrs290", adxrs290_device,
 			       &adxrs290_iio_descriptor, &rd_buf, NULL)
 	};
 
-	return iio_app_run(devices, ARRAY_SIZE(devices));
+	struct iio_trigger_init trigs[] = {
+		IIO_APP_TRIGGER(IIO_ADXRS290_TRIGGER_NAME, trig,
+		                &adxrs290_iio_trigger_desc)
+	};
+
+	return iio_app_run2(devices, ARRAY_SIZE(devices),
+	                   trigs, ARRAY_SIZE(trigs), irq_ctrl, &iio_desc);
 }

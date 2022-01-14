@@ -183,32 +183,15 @@ static int32_t adxrs290_update_active_channels(void *device, uint32_t mask)
 	return SUCCESS;
 }
 
-static int32_t adxrs290_read_samples(void *device, uint16_t *buff,
-				     uint32_t nb_samples)
+static int32_t adxrs290_trigger_handler(struct iio_device_data *device)
 {
-	struct adxrs290_dev	*dev = device;
-	uint32_t		i;
-	uint32_t		offset;
+	struct adxrs290_dev	*dev = device->dev;
 	int16_t			data[ADXRS290_CHANNEL_COUNT];
 	uint8_t			ch_cnt;
-	bool			rdy;
 
-	offset = 0;
-	for (i = 0; i < nb_samples; i++) {
-		/* Stop until data is available.
-		 * This will not block at first data since sync pin will
-		 * will always be high until read. */
-		while(true) {
-			adxrs290_get_data_ready(dev, &rdy);
-			if (rdy == true)
-				break;
-		}
-		adxrs290_get_burst_data(dev, data, &ch_cnt);
-		memcpy(&buff[offset], data, ch_cnt*sizeof(int16_t));
-		offset += ch_cnt;
-	}
+	adxrs290_get_burst_data(dev, data, &ch_cnt);
 
-	return nb_samples;
+	return iio_buffer_push_scan(device->buffer, data);
 }
 
 static struct iio_attribute adxrs290_iio_vel_attrs[] = {
@@ -301,7 +284,7 @@ struct iio_device adxrs290_iio_descriptor = {
 	.buffer_attributes = NULL,
 	.pre_enable = adxrs290_update_active_channels,
 	.post_disable = NULL,
-	.read_dev = (int32_t (*)())adxrs290_read_samples,
+	.trigger_handler = (int32_t (*)())adxrs290_trigger_handler,
 	.debug_reg_read = (int32_t (*)())adxrs290_reg_read,
 	.debug_reg_write = (int32_t (*)())adxrs290_reg_write
 };

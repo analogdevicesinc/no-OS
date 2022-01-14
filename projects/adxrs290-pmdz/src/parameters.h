@@ -51,6 +51,9 @@
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 
+#define MAX_SAMPLES		1000
+#define UART_BAUDRATE		115200
+
 #ifdef ADUCM_PLATFORM
 
 #define UART_DEVICE_ID	0
