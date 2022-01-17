@@ -13,6 +13,7 @@ dfp_drivers
 aducm_project
 aducm_build
 .vscode
+.Xil
 
 *.a
 *.o
