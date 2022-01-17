@@ -271,6 +271,42 @@ int32_t app_clock_init(struct clk dev_refclk[MULTIDEVICE_INSTANCE_COUNT])
 			.driver_mode = 2,	// LVDS
 		}
 	};
+#elif defined(PLATFORM_ZYNQ)
+	struct hmc7044_chan_spec chan_spec[] = {
+		{
+			.num = 0,		// CORE_CLK_RX
+			.divider = 12,		// 250 MHz
+			.driver_mode = 2,	// LVDS
+		}, {
+			.num = 2,		// DEV_REFCLK
+			.divider = 12,		// 250 MHz
+			.driver_mode = 2,	// LVDS
+		}, {
+			.num = 3,		// DEV_SYSREF
+			.divider = 1536,	// 1.953125 MHz
+			.driver_mode = 2,	// LVDS
+		}, {
+			.num = 6,		// CORE_CLK_TX
+			.divider = 12,		// 250 MHz
+			.driver_mode = 2,	// LVDS
+		}, {
+			.num = 8,		// CORE_CLK_RX_ALT2
+			.divider = 12,		// 250 MHz
+			.driver_mode = 2,	// LVDS
+		}, {
+			.num = 10,		// CORE_CLK_RX_ALT
+			.divider = 12,		// 250 MHz
+			.driver_mode = 2,	// LVDS
+		}, {
+			.num = 12,		// FPGA_REFCLK2
+			.divider = 6,		// 500 MHz
+			.driver_mode = 2,	// LVDS
+		}, {
+			.num = 13,		// FPGA_SYSREF
+			.divider = 1536,	// 1.953125 MHz
+			.driver_mode = 2,	// LVDS
+		}
+	};
 #endif
 
 	struct hmc7044_init_param hmc7044_param = {
