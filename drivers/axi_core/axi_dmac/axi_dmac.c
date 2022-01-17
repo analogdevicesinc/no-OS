@@ -294,7 +294,7 @@ int32_t axi_dmac_init(struct axi_dmac **dmac_core,
 {
 	struct axi_dmac *dmac;
 
-	dmac = (struct axi_dmac *)malloc(sizeof(*dmac));
+	dmac = (struct axi_dmac *)calloc(1, sizeof(*dmac));
 	if (!dmac)
 		return FAILURE;
 
@@ -303,9 +303,6 @@ int32_t axi_dmac_init(struct axi_dmac **dmac_core,
 	dmac->direction = init->direction;
 	dmac->flags = init->flags;
 	dmac->transfer_max_size = -1;
-	dmac->big_transfer.address = 0;
-	dmac->big_transfer.size = 0;
-	dmac->big_transfer.size_done = 0;
 
 	axi_dmac_write(dmac, AXI_DMAC_REG_X_LENGTH, dmac->transfer_max_size);
 	axi_dmac_read(dmac, AXI_DMAC_REG_X_LENGTH, &dmac->transfer_max_size);
