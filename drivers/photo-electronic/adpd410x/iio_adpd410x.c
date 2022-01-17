@@ -91,6 +91,41 @@ static int adpd410x_iio_read_raw_chan(void *device, char *buf, uint32_t len,
 }
 
 /**
+ * @brief Read ADC data samples .
+ * @param device - Device driver descriptor.
+ * @param buff - Input buffer.
+ * @param nb_samples - Input number of samples.
+ * @return Number of samples, or negative code.
+ */
+static int32_t adpd410x_read_samples(void *device, uint32_t *buff,
+				     uint32_t nb_samples)
+{
+	struct adpd410x_dev *dev = (struct adpd410x_dev *)device;
+
+	int32_t ret;
+	uint32_t data[ADPD410X_IIO_NUM_CH], i, offset = 0;
+
+	for (i = 0; i < nb_samples; i++) {
+		ret = adpd410x_set_opmode(dev, ADPD410X_GOMODE);
+		if (ret != SUCCESS)
+			return ret;
+
+		ret = adpd410x_get_data(dev, data);
+		if (ret != SUCCESS)
+			return ret;
+
+		ret = adpd410x_set_opmode(dev, ADPD410X_STANDBY);
+		if (ret != SUCCESS)
+			return ret;
+
+		memcpy(&buff[offset], data, ADPD410X_IIO_NUM_CH * sizeof(uint32_t));
+		offset += ADPD410X_IIO_NUM_CH;
+	}
+
+	return nb_samples;
+}
+
+/**
  * @brief Set device sampling frequency.
  * @param device - Device driver descriptor.
  * @param buf - Input buffer.
@@ -368,6 +403,7 @@ struct iio_device const adpd410x_iio_descriptor = {
 	.num_ch = ADPD410X_IIO_NUM_CH,
 	.channels = adpd410x_iio_channels,
 	.attributes = adpd410x_iio_attributes,
+	.read_dev = (int32_t (*)())adpd410x_read_samples,
 	.debug_reg_read = (int32_t (*)())adpd410x_reg_read,
 	.debug_reg_write = (int32_t (*)())adpd410x_reg_write,
 };
