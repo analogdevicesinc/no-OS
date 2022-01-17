@@ -23,7 +23,7 @@ ROOT_DRIVE = C:
 #TIMESTAMP = $(shell powershell Get-Date -Format "HH:mm.ss")
 TIMESTAMP = 00:00:00
 copy_file = xcopy /F /Y /B "$(subst /,\,$1)" "$(subst /,\,$2)"
-copy_folder = xcopy /F /S /Y /C /I "$(subst /,\,$1)" "$(subst /,\,$2)"
+copy_dir = xcopy /F /S /Y /C /I "$(subst /,\,$1)" "$(subst /,\,$2)"
 remove_file_action = del /S /Q $(subst /,\,$1)
 remove_file = $(if $(wildcard $1),$(call remove_file_action,$(wildcard $1)),\
 			@echo rd /S /Q $(addsuffix ",$(addprefix ",$(subst /,\,$1))))
@@ -44,7 +44,7 @@ HIDE_OUTPUT = > nul
 else
 TIMESTAMP = $(shell date +"%T")
 copy_file = cp $1 $2
-copy_folder = cp -r $1 $2
+copy_dir = cp -r $1 $2
 remove_file = rm -rf $1
 remove_dir = rm -rf $1
 mk_dir = mkdir -p $1
@@ -95,12 +95,12 @@ get_full_path = $(FULL_PATH)
 endif
 
 ifeq 'y' '$(strip $(LINK_SRCS))'
-file_fun = $(make_link)
-folder_fun = $(make_dir_link)
+update_file = $(make_link)
+update_dir = $(make_dir_link)
 ACTION = Linking
 else
-file_fun = $(call copy_file,$1,$(dir $2))
-folder_fun = $(copy_folder)
+update_file = $(call copy_file,$1,$(dir $2))
+update_dir = $(copy_dir)
 ACTION = Copying
 endif
 
@@ -355,10 +355,10 @@ update_srcs: $(PROJECT_TARGET)
 	$(MUTE) $(call remove_dir,$(DIRS_TO_REMOVE)) $(HIDE)
 	$(MUTE) -$(call mk_dir,$(DIRS_TO_CREATE)) $(HIDE)
 	$(MUTE) $(foreach dir,$(sort $(SRC_DIRS)),\
-		$(call folder_fun,$(dir),$(call relative_to_project,$(dir))) $(HIDE)\
+		$(call update_dir,$(dir),$(call relative_to_project,$(dir))) $(HIDE)\
 		$(cmd_separator)) echo . $(HIDE)
 	$(MUTE) $(foreach file,$(sort $(FILES_OUT_OF_DIRS)),\
-		$(call file_fun,$(file),$(call relative_to_project,$(file))) $(HIDE)\
+		$(call update_file,$(file),$(call relative_to_project,$(file))) $(HIDE)\
 		$(cmd_separator)) echo . $(HIDE)
 
 standalone:
