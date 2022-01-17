@@ -307,6 +307,7 @@ static struct scan_type channel_scan_type = {
 		.ch_type = IIO_VOLTAGE, \
 		.channel = ch, \
 		.scan_type = &channel_scan_type, \
+		.scan_index = ch, \
 		.attributes = adpd410x_iio_channel_attributes, \
 		.ch_out = false, \
 		.indexed = 1, \
