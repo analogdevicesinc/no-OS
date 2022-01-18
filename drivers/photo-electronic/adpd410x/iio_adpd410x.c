@@ -50,6 +50,12 @@
 #include "no-os/error.h"
 
 /******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
+
+#define ADPD410X_IIO_NUM_CH 8
+
+/******************************************************************************/
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
 
@@ -67,7 +73,7 @@ static int adpd410x_iio_read_raw_chan(void *device, char *buf, uint32_t len,
 {
 	struct adpd410x_dev *dev = (struct adpd410x_dev *)device;
 	int32_t ret;
-	uint32_t data[8];
+	uint32_t data[ADPD410X_IIO_NUM_CH];
 
 	ret = adpd410x_set_opmode(dev, ADPD410X_GOMODE);
 	if (ret != SUCCESS)
@@ -359,7 +365,7 @@ static struct iio_attribute adpd410x_iio_attributes[] = {
 
 /** IIO Descriptor */
 struct iio_device const adpd410x_iio_descriptor = {
-	.num_ch = 8,
+	.num_ch = ADPD410X_IIO_NUM_CH,
 	.channels = adpd410x_iio_channels,
 	.attributes = adpd410x_iio_attributes,
 	.debug_reg_read = (int32_t (*)())adpd410x_reg_read,
