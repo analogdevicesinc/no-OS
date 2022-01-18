@@ -107,7 +107,7 @@ int main(void)
 		.platform_ops = &xil_spi_ops,
 		.extra = &xil_spi_param
 	};
-	struct link_init_param jesd_tx_link = {
+	struct link_init_param jrx_link_tx = {
 		.device_id = 0,
 		.octets_per_frame = AD9081_TX_JESD_F,
 		.frames_per_multiframe = AD9081_TX_JESD_K,
@@ -125,7 +125,7 @@ int main(void)
 		.logical_lane_mapping = AD9081_TX_LOGICAL_LANE_MAPPING,
 		.tpl_phase_adjust = 12
 	};
-	struct link_init_param jesd_rx_link = {
+	struct link_init_param jtx_link_rx = {
 		.device_id = 0,
 		.octets_per_frame = AD9081_RX_JESD_F,
 		.frames_per_multiframe = AD9081_RX_JESD_K,
@@ -168,7 +168,7 @@ int main(void)
 		.tx_channel_interpolation = AD9081_TX_CHAN_INTERPOLATION,
 		.tx_channel_nco_frequency_shift_hz = AD9081_TX_CHAN_NCO_SHIFT,
 		.tx_channel_gain = AD9081_TX_CHAN_GAIN,
-		.jesd_tx_link = &jesd_tx_link,
+		.jrx_link_tx = &jrx_link_tx,
 		/* RX */
 		.adc_frequency_hz = AD9081_ADC_FREQUENCY,
 		.nyquist_zone = AD9081_ADC_NYQUIST_ZONE,
@@ -182,8 +182,8 @@ int main(void)
 		.rx_channel_decimation = AD9081_RX_CHAN_DECIMATION,
 		.rx_channel_complex_to_real_enable = {0, 0, 0, 0, 0, 0, 0, 0},
 		.rx_channel_enable = AD9081_RX_CHAN_ENABLE,
-		.jesd_rx_link[0] = &jesd_rx_link,
-		.jesd_rx_link[1] = NULL,
+		.jtx_link_rx[0] = &jtx_link_rx,
+		.jtx_link_rx[1] = NULL,
 	};
 
 	struct axi_adc_init rx_adc_init = {
@@ -258,17 +258,17 @@ int main(void)
 		gpio_phy_resetb.number = PHY_RESET + i;
 		phy_spi_init_param.chip_select = PHY_CS + i;
 		phy_param.dev_clk = &app_clk[i];
-		jesd_rx_link.device_id = i;
+		jtx_link_rx.device_id = i;
 
 		status = ad9081_init(&phy[i], &phy_param);
 		if (status != SUCCESS)
 			printf("ad9081_init() error: %" PRId32 "\n", status);
 
-		rx_adc_init.num_channels += phy[i]->jesd_rx_link[0].jesd_param.jesd_m +
-					    phy[i]->jesd_rx_link[1].jesd_param.jesd_m;
+		rx_adc_init.num_channels += phy[i]->jtx_link_rx[0].jesd_param.jesd_m +
+					    phy[i]->jtx_link_rx[1].jesd_param.jesd_m;
 
-		tx_dac_init.num_channels += phy[i]->jesd_tx_link.jesd_param.jesd_m *
-					    (phy[i]->jesd_tx_link.jesd_param.jesd_duallink > 0 ? 2 : 1);
+		tx_dac_init.num_channels += phy[i]->jrx_link_tx.jesd_param.jesd_m *
+					    (phy[i]->jrx_link_tx.jesd_param.jesd_duallink > 0 ? 2 : 1);
 	}
 
 	axi_jesd204_rx_watchdog(rx_jesd);

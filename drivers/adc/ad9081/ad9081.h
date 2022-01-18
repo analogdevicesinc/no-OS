@@ -76,8 +76,8 @@ struct ad9081_phy {
 	struct clk		*dev_clk;
 	bool		sysref_coupling_ac_en;
 	adi_ad9081_device_t	ad9081;
-	struct ad9081_jesd_link	jesd_tx_link;
-	struct ad9081_jesd_link	jesd_rx_link[2];
+	struct ad9081_jesd_link	jrx_link_tx;
+	struct ad9081_jesd_link	jtx_link_rx[2];
 	uint32_t	multidevice_instance_count;
 	bool		config_sync_01_swapped;
 	uint32_t	lmfc_delay;
@@ -152,7 +152,7 @@ struct ad9081_init_param {
 	uint32_t	tx_channel_interpolation;
 	int64_t		tx_channel_nco_frequency_shift_hz[MAX_NUM_CHANNELIZER];
 	uint16_t	tx_channel_gain[MAX_NUM_CHANNELIZER];
-	struct link_init_param	*jesd_tx_link;
+	struct link_init_param	*jrx_link_tx;
 	/* RX */
 	uint64_t 	adc_frequency_hz;
 	uint32_t	nyquist_zone[MAX_NUM_MAIN_DATAPATHS];
@@ -166,7 +166,7 @@ struct ad9081_init_param {
 	uint32_t	rx_channel_decimation[MAX_NUM_CHANNELIZER];
 	uint8_t		rx_channel_complex_to_real_enable[MAX_NUM_CHANNELIZER];
 	uint8_t		rx_channel_enable[MAX_NUM_CHANNELIZER];
-	struct link_init_param	*jesd_rx_link[2];
+	struct link_init_param	*jtx_link_rx[2];
 };
 
 /******************************************************************************/
