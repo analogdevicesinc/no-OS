@@ -1,4 +1,3 @@
-copy_fileifeq ($(OS),Windows_NT)
 ifeq ($(OS),Windows_NT)
 $(error STM32 builds on Windows are not currently supported.)
 else
