@@ -82,7 +82,6 @@ int main(void)
 	struct adrv9002_rf_phy phy;
 	struct adi_adrv9001_GainControlCfg *agc_settings;
 	unsigned int c;
-	struct adrv9002_chan *chan;
 
 	struct axi_adc_init rx1_adc_init = {
 		"axi-adrv9002-rx-lpc",
@@ -167,17 +166,6 @@ int main(void)
 #if defined(ADRV9002_RX2TX2)
 	phy.rx2tx2 = true;
 #endif
-
-	/*
-	 * Disable all the cores as it might interfere with init calibrations.
-	 */
-	for (c = 0; c < ARRAY_SIZE(phy.channels); c++) {
-		chan = phy.channels[c];
-
-		if (phy.rx2tx2 && chan->idx > ADRV9002_CHANN_1)
-			break;
-		adrv9002_axi_interface_enable(&phy, chan->idx, chan->port == ADI_TX, false);
-	}
 
 	/* Initialize AGC */
 	agc_settings = adrv9002_agc_settings_get();
