@@ -56,7 +56,6 @@
 #include "iio_app.h"
 #include "iio_axi_adc.h"
 #include "iio_axi_dac.h"
-#include "xil_cache.h"
 #endif
 
 #include "adrv9002.h"
