@@ -857,17 +857,6 @@ int adrv9002_setup(struct adrv9002_rf_phy *phy,
 	adi_adrv9001_ChannelState_e init_state;
 	struct adrv9002_chan *chan;
 
-	/*
-	 * Disable all the cores as it might interfere with init calibrations.
-	 */
-	for (c = 0; c < ARRAY_SIZE(phy->channels); c++) {
-		chan = phy->channels[c];
-
-		if (phy->rx2tx2 && chan->idx > ADRV9002_CHANN_1)
-			break;
-		adrv9002_axi_interface_enable(phy, chan->idx, chan->port == ADI_TX, false);
-	}
-
 	phy->curr_profile = adrv9002_init;
 
 	phy->ssi_type =
@@ -883,6 +872,17 @@ int adrv9002_setup(struct adrv9002_rf_phy *phy,
 		phy->tx_channels[c].channel.number = c + ADI_CHANNEL_1;
 		phy->tx_channels[c].channel.port = ADI_TX;
 		phy->channels[c * 2 + 1] = &phy->tx_channels[c].channel;
+	}
+
+	/*
+	 * Disable all the cores as it might interfere with init calibrations.
+	 */
+	for (c = 0; c < ARRAY_SIZE(phy->channels); c++) {
+		chan = phy->channels[c];
+
+		if (phy->rx2tx2 && chan->idx > ADRV9002_CHANN_1)
+			break;
+		adrv9002_axi_interface_enable(phy, chan->idx, chan->port == ADI_TX, false);
 	}
 
 	/* in TDD we cannot start with all ports enabled as RX/TX cannot be on at the same time */
