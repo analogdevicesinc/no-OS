@@ -2986,10 +2986,13 @@ struct adi_adrv9001_SpiSettings *adrv9002_spi_settings_get(void)
 	return &spiSettings;
 }
 
-struct adi_adrv9001_Init *adrv9002_init_get(void)
+struct adi_adrv9001_Init *adrv9002_init_get(struct axi_adc *adc)
 {
-	uint32_t *axi_config = (uint32_t *)(RX1_ADC_BASEADDR + 0xC);
-	if (*axi_config & (1<<7))
+	uint32_t axi_config;
+
+	axi_adc_read(adc, 0xC, &axi_config);
+
+	if (axi_config & (1<<7))
 		return &adrv9002_init_cmos;
 	else
 		return &adrv9002_init_lvds;

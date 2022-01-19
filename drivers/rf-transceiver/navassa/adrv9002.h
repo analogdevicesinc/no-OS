@@ -53,6 +53,8 @@
 
 #include "no_os_platform.h"
 
+#include "axi_adc_core.h"
+
 #define ADRV_ADDRESS(port, chan)	((port) << 8 | (chan))
 #define ADRV_ADDRESS_PORT(addr)		((addr) >> 8)
 #define ADRV_ADDRESS_CHAN(addr)		((addr) & 0xFF)
@@ -276,7 +278,7 @@ uint32_t adrv9002_axi_dds_rate_get(struct adrv9002_rf_phy *phy, const int chan);
 
 /* get init structs */
 struct adi_adrv9001_SpiSettings *adrv9002_spi_settings_get(void);
-struct adi_adrv9001_Init *adrv9002_init_get(void);
+struct adi_adrv9001_Init *adrv9002_init_get(struct axi_adc *adc);
 struct adi_adrv9001_GainControlCfg *adrv9002_agc_settings_get(void);
 
 static inline void adrv9002_sync_gpio_toogle(const struct adrv9002_rf_phy *phy)
