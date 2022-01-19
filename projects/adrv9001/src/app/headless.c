@@ -72,7 +72,7 @@ int get_sampling_frequency(struct axi_adc *dev, uint32_t chan,
 		return -EINVAL;
 
 	*sampling_freq_hz =
-		adrv9002_init_get()->rx.rxChannelCfg[chan].profile.rxOutputRate_Hz;
+		adrv9002_init_get(dev)->rx.rxChannelCfg[chan].profile.rxOutputRate_Hz;
 	return SUCCESS;
 }
 
@@ -239,7 +239,7 @@ int main(void)
 		phy.rx_channels[c].agc = *agc_settings;
 	}
 
-	ret = adrv9002_setup(&phy, adrv9002_init_get());
+	ret = adrv9002_setup(&phy, adrv9002_init_get(phy.rx1_adc));
 	if (ret)
 		return ret;
 
@@ -265,7 +265,7 @@ int main(void)
 		printf("axi_dac_init() failed with status %d\n", ret);
 		goto error;
 	}
-	phy.tx1_dac->clock_hz = adrv9002_init_get()->tx.txProfile[0].txInputRate_Hz;
+	phy.tx1_dac->clock_hz = adrv9002_init_get(phy.rx1_adc)->tx.txProfile[0].txInputRate_Hz;
 #ifndef ADRV9002_RX2TX2
 	ret = axi_adc_init(&phy.rx2_adc, &rx2_adc_init);
 	if (ret) {
@@ -278,7 +278,7 @@ int main(void)
 		printf("axi_dac_init() failed with status %d\n", ret);
 		goto error;
 	}
-	phy.tx2_dac->clock_hz = adrv9002_init_get()->tx.txProfile[1].txInputRate_Hz;
+	phy.tx2_dac->clock_hz = adrv9002_init_get(phy.rx1_adc)->tx.txProfile[1].txInputRate_Hz;
 #endif
 
 	/* Post AXI DAC/ADC setup, digital interface tuning */
