@@ -482,6 +482,7 @@ void ad9081_work_func(struct ad9081_phy *phy)
 
 static int32_t ad9081_setup(struct ad9081_phy *phy)
 {
+	adi_cms_jesd_subclass_e subclass = JESD_SUBCLASS_0;
 	uint64_t tx_lane_rate_kbps;
 	uint64_t dev_frequency_hz;
 	uint8_t txfe_pll_stat;
@@ -602,6 +603,14 @@ static int32_t ad9081_setup(struct ad9081_phy *phy)
 					   phy->rx_fddc_dcm, phy->rx_cddc_c2r,
 					   phy->rx_fddc_c2r, jesd_param,
 					   jesd_conv_sel);
+	if (ret != 0)
+		return ret;
+
+	if (phy->jrx_link_tx.jesd_param.jesd_subclass ||
+		phy->jtx_link_rx[0].jesd_param.jesd_subclass)
+		subclass = JESD_SUBCLASS_1;
+
+	ret = adi_ad9081_jesd_oneshot_sync(&phy->ad9081, subclass);
 	if (ret != 0)
 		return ret;
 
