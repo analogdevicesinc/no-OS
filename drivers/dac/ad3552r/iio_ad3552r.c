@@ -258,7 +258,7 @@ int32_t iio_ad3552r_init(struct iio_ad3552r_desc **iio_dac,
 	liio_dac->iio_desc.num_ch = j;
 	liio_dac->iio_desc.channels = liio_dac->channels;
 	liio_dac->iio_desc.write_dev = (int32_t (*)())iio_ad3552r_wr_dev;
-	liio_dac->iio_desc.prepare_transfer = (int32_t (*)())iio_ad3552r_prep_wr;
+	liio_dac->iio_desc.pre_enable = (int32_t (*)())iio_ad3552r_prep_wr;
 	liio_dac->iio_desc.debug_reg_read = (int32_t (*)())iio_ad3552r_read_reg;
 	liio_dac->iio_desc.debug_reg_write = (int32_t (*)())iio_ad3552r_write_reg;
 
