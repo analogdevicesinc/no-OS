@@ -779,7 +779,7 @@ void adrv9002_en_delays_arm_to_ns(const struct adrv9002_rf_phy *phy,
 static int adrv9002_radio_init(struct adrv9002_rf_phy *phy)
 {
 	int ret;
-	int chan;
+	unsigned int chan;
 	uint8_t channel_mask = (phy->curr_profile->tx.txInitChannelMask |
 				phy->curr_profile->rx.rxInitChannelMask) & 0xFF;
 	struct adi_adrv9001_PllLoopFilterCfg pll_loop_filter = {
