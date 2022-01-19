@@ -40,7 +40,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+#ifdef XILINX_PLATFORM
 #include "xil_cache.h"
+#endif /* XILINX_PLATFORM */
 
 #include "no-os/error.h"
 #include "no-os/util.h"
@@ -207,8 +209,10 @@ int main(void)
 	};
 #endif
 
+#ifdef XILINX_PLATFORM
 	Xil_ICacheEnable();
 	Xil_DCacheEnable();
+#endif /* XILINX_PLATFORM */
 
 	printf("Hello\n");
 
@@ -329,7 +333,9 @@ int main(void)
 				 ARRAY_SIZE(sine_lut_iq),
 				 (uintptr_t)dac_buffers[1]);
 #endif
+#ifdef XILINX_PLATFORM
 	Xil_DCacheFlush();
+#endif /* XILINX_PLATFORM */
 
 	axi_dmac_transfer(phy.tx1_dmac, (uintptr_t)dac_buffers[0], sizeof(sine_lut_iq));
 #ifndef ADRV9002_RX2TX2
@@ -348,6 +354,7 @@ int main(void)
 			  ADRV9001_NUM_CHANNELS * /* rx1 i/q, rx2 i/q*/
 #endif
 			  2 /* bytes per sample */);
+#ifdef XILINX_PLATFORM
 	Xil_DCacheInvalidateRange((uintptr_t)adc_buffers[0],
 				  16384 * /* nr of samples */
 #ifndef ADRV9002_RX2TX2
@@ -356,16 +363,19 @@ int main(void)
 				  ADRV9001_NUM_CHANNELS * /* rx1 i/q, rx2 i/q*/
 #endif
 				  2 /* bytes per sample */);
+#endif /* XILINX_PLATFORM */
 #ifndef ADRV9002_RX2TX2
 	axi_dmac_transfer(phy.rx2_dmac,
 			  (uintptr_t)adc_buffers[1],
 			  16384 * /* nr of samples */
 			  ADRV9001_NUM_SUBCHANNELS * /* nr of channels */
 			  2 /* bytes per sample */);
+#ifdef XILINX_PLATFORM
 	Xil_DCacheInvalidateRange((uintptr_t)adc_buffers[1],
 				  16384 * /* nr of samples */
 				  ADRV9001_NUM_SUBCHANNELS * /* nr of channels */
 				  2 /* bytes per sample */);
+#endif /* XILINX_PLATFORM */
 	printf("DAC_DMA_EXAMPLE: address=%#lx samples=%lu channels=%u bits=%lu\n",
 	       (uintptr_t)adc_buffers[1], 16384 * rx2_adc_init.num_channels,
 	       rx2_adc_init.num_channels, 8 * sizeof(adc_buffers[1][0]));
@@ -379,14 +389,18 @@ int main(void)
 	struct iio_axi_adc_init_param iio_axi_adcs_init_par[] = {{
 			.rx_adc = phy.rx1_adc,
 			.rx_dmac = phy.rx1_dmac,
+#ifdef XILINX_PLATFORM
 			.dcache_invalidate_range = (void (*)(uint32_t, uint32_t))Xil_DCacheInvalidateRange,
+#endif /* XILINX_PLATFORM */
 			.get_sampling_frequency = get_sampling_frequency,
 		},
 #ifndef ADRV9002_RX2TX2
 		{
 			.rx_adc = phy.rx2_adc,
 			.rx_dmac = phy.rx2_dmac,
+#ifdef XILINX_PLATFORM
 			.dcache_invalidate_range = (void (*)(uint32_t, uint32_t))Xil_DCacheInvalidateRange,
+#endif /* XILINX_PLATFORM */
 			.get_sampling_frequency = get_sampling_frequency,
 		}
 #endif
@@ -395,13 +409,17 @@ int main(void)
 	struct iio_axi_dac_init_param iio_axi_dacs_init_par[] = {{
 			.tx_dac = phy.tx1_dac,
 			.tx_dmac = phy.tx1_dmac,
+#ifdef XILINX_PLATFORM
 			.dcache_flush_range = (void (*)(uint32_t, uint32_t))Xil_DCacheFlushRange,
+#endif /* XILINX_PLATFORM */
 		},
 #ifndef ADRV9002_RX2TX2
 		{
 			.tx_dac = phy.tx2_dac,
 			.tx_dmac = phy.tx2_dmac,
+#ifdef XILINX_PLATFORM
 			.dcache_flush_range = (void (*)(uint32_t, uint32_t))Xil_DCacheFlushRange,
+#endif /* XILINX_PLATFORM */
 		}
 #endif
 	};
