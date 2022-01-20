@@ -95,15 +95,6 @@
 #define AD7193_MODE_REJ60       (1 << 10)                          // 50/60Hz notch filter.
 #define AD7193_MODE_RATE(x)     ((x) & 0x3FF)                      // Filter Update Rate Select.
 
-/* Mode Register: AD7193_MODE_CLKSRC(x) options */
-#define AD7193_CLK_EXT_MCLK1_2          0 // External crystal. The external crystal
-// is connected from MCLK1 to MCLK2.
-#define AD7193_CLK_EXT_MCLK2            1 // External Clock applied to MCLK2
-#define AD7193_CLK_INT                  2 // Internal 4.92 MHz clock.
-// Pin MCLK2 is tristated.
-#define AD7193_CLK_INT_CO               3 // Internal 4.92 MHz clock. The internal
-// clock is available on MCLK2.
-
 /* Mode Register: AD7193_MODE_AVG(x) options */
 #define AD7193_AVG_NONE                 0 // No averaging (fast settling mode disabled).
 #define AD7193_AVG_BY_2                 1 // Average by 2.
@@ -163,6 +154,18 @@ enum ad7193_adc_range {
 	AD7193_ADC_39_06mV = 6,		// Gain 64   +-39.06 mV
 	AD7193_ADC_19_53mV = 7		// Gain 128  +-19.53 mV
 };
+
+enum ad7193_adc_clock {
+	// External crystal. The external crystal is connected from MCLK1 to MCLK2.
+	AD7193_EXT_CRYSTAL_MCLK1_MCLK2,
+	// External Clock applied to MCLK2
+	AD7193_EXT_CRYSTAL_MCLK2,
+	// Internal 4.92 MHz clock. Pin MCLK2 is tristated.
+	AD7193_INT_CLK_4_92_MHZ_TRIST,
+	// Internal 4.92 MHz clock. The internal clock is available on MCLK2.
+	AD7193_INT_CLK_4_92_MHZ
+};
+
 enum ad7193_adc_modes {
 	// Continuous Conversion Mode
 	AD7193_MODE_CONT,
@@ -190,12 +193,12 @@ struct ad7193_dev {
 	/* Device Settings */
 	uint8_t		current_polarity;
 	uint16_t    data_rate_code;
-	uint8_t     clock_source;
 	uint8_t		input_mode;
 	uint8_t		buffer;
 	uint8_t     bpdsw_mode;
 	enum ad7193_adc_range	current_gain;
 	enum ad7193_adc_modes	operating_mode;
+	enum ad7193_adc_clock	clock_source;
 };
 
 struct ad7193_init_param {
@@ -206,12 +209,12 @@ struct ad7193_init_param {
 	/* Device Settings */
 	uint8_t		current_polarity;
 	uint16_t    data_rate_code;
-	uint8_t     clock_source;
 	uint8_t		input_mode;
 	uint8_t		buffer;
 	uint8_t     bpdsw_mode;
 	enum ad7193_adc_range	current_gain;
 	enum ad7193_adc_modes	operating_mode;
+	enum ad7193_adc_clock	clock_source;
 };
 
 /******************************************************************************/
@@ -266,7 +269,8 @@ int ad7193_output_rate_select(struct ad7193_dev *dev,
 			      uint16_t out_rate_code);
 
 /*! Selects the clock source of the ADC */
-int ad7193_clock_select(struct ad7193_dev *dev, uint16_t clk_select);
+int ad7193_clock_select(struct ad7193_dev *dev,
+			enum ad7193_adc_clock clk_select);
 
 /*! Opens or closes the bridge power-down switch of the ADC */
 int ad7193_set_bridge_switch(struct ad7193_dev *dev, uint8_t bpdsw_select);
