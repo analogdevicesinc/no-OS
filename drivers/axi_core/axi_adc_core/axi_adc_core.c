@@ -461,15 +461,13 @@ int32_t axi_adc_update_active_channels(struct axi_adc *adc, uint32_t mask)
 }
 
 /***************************************************************************//**
- * @brief axi_adc_init
+ * @brief axi_adc_init_begin - Creates an axi_adc instance, takes out of reset
+ *        the core and configures the CHAN_CNTRL registers.
  *******************************************************************************/
-int32_t axi_adc_init(struct axi_adc **adc_core,
-		     const struct axi_adc_init *init)
+int32_t axi_adc_init_begin(struct axi_adc **adc_core,
+			   const struct axi_adc_init *init)
 {
 	struct axi_adc *adc;
-	uint32_t reg_data;
-	uint32_t freq;
-	uint32_t ratio;
 	uint8_t ch;
 
 	adc = (struct axi_adc *)malloc(sizeof(*adc));
@@ -489,12 +487,25 @@ int32_t axi_adc_init(struct axi_adc **adc_core,
 			      AXI_ADC_FORMAT_SIGNEXT | AXI_ADC_FORMAT_ENABLE |
 			      AXI_ADC_ENABLE);
 
-	mdelay(100);
+	*adc_core = adc;
+
+	return SUCCESS;
+};
+
+/***************************************************************************//**
+ * @brief axi_adc_init_finish - To be called once the interface clock is
+ *        available.
+ *******************************************************************************/
+int32_t axi_adc_init_finish(struct axi_adc *adc)
+{
+	uint32_t reg_data;
+	uint32_t freq;
+	uint32_t ratio;
 
 	axi_adc_read(adc, AXI_ADC_REG_STATUS, &reg_data);
 	if(reg_data == 0x0) {
 		printf("%s: Status errors\n", adc->name);
-		goto error;
+		return FAILURE;
 	}
 
 	axi_adc_read(adc, AXI_ADC_REG_CLK_FREQ, &freq);
@@ -504,6 +515,28 @@ int32_t axi_adc_init(struct axi_adc **adc_core,
 
 	printf("%s: Successfully initialized (%"PRIu64" Hz)\n",
 	       adc->name, adc->clock_hz);
+
+	return SUCCESS;
+}
+
+/***************************************************************************//**
+ * @brief axi_adc_init
+ *******************************************************************************/
+int32_t axi_adc_init(struct axi_adc **adc_core,
+		     const struct axi_adc_init *init)
+{
+	struct axi_adc *adc;
+	int32_t ret;
+
+	ret = axi_adc_init_begin(&adc, init);
+	if (ret)
+		return ret;
+
+	mdelay(100);
+
+	ret = axi_adc_init_finish(adc);
+	if (ret)
+		goto error;
 
 	*adc_core = adc;
 
