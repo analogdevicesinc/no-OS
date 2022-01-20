@@ -221,6 +221,36 @@ int main(void)
 	phy.rx2tx2 = true;
 #endif
 
+	/* Initialize the ADC/DAC cores */
+	ret = axi_adc_init_begin(&phy.rx1_adc, &rx1_adc_init);
+	if (ret) {
+		printf("axi_adc_init_begin() failed with status %d\n", ret);
+		goto error;
+	}
+
+	ret = axi_dac_init_begin(&phy.tx1_dac, &tx1_dac_init);
+	if (ret) {
+		printf("axi_dac_init_begin() failed with status %d\n", ret);
+		goto error;
+	}
+	phy.tx1_dac->clock_hz = adrv9002_init_get(
+					phy.rx1_adc)->tx.txProfile[0].txInputRate_Hz;
+#ifndef ADRV9002_RX2TX2
+	ret = axi_adc_init_begin(&phy.rx2_adc, &rx2_adc_init);
+	if (ret) {
+		printf("axi_adc_init_begin() failed with status %d\n", ret);
+		goto error;
+	}
+
+	ret = axi_dac_init_begin(&phy.tx2_dac, &tx2_dac_init);
+	if (ret) {
+		printf("axi_dac_init_begin() failed with status %d\n", ret);
+		goto error;
+	}
+	phy.tx2_dac->clock_hz = adrv9002_init_get(
+					phy.rx1_adc)->tx.txProfile[1].txInputRate_Hz;
+#endif
+
 	/* Initialize AGC */
 	agc_settings = adrv9002_agc_settings_get();
 	for (c = 0; c < ADRV9002_CHANN_MAX; c++) {
@@ -241,42 +271,38 @@ int main(void)
 	       arm_version.maintVer, arm_version.rcVer, api_version.major,
 	       api_version.minor, api_version.patch);
 
-	/* Initialize the ADC/DAC cores */
-	ret = axi_adc_init(&phy.rx1_adc, &rx1_adc_init);
-	if (ret) {
-		printf("axi_adc_init() failed with status %d\n", ret);
-		goto error;
-	}
-
-	ret = axi_dac_init(&phy.tx1_dac, &tx1_dac_init);
-	if (ret) {
-		printf("axi_dac_init() failed with status %d\n", ret);
-		goto error;
-	}
-	phy.tx1_dac->clock_hz = adrv9002_init_get(
-					phy.rx1_adc)->tx.txProfile[0].txInputRate_Hz;
-#ifndef ADRV9002_RX2TX2
-	ret = axi_adc_init(&phy.rx2_adc, &rx2_adc_init);
-	if (ret) {
-		printf("axi_adc_init() failed with status %d\n", ret);
-		goto error;
-	}
-
-	ret = axi_dac_init(&phy.tx2_dac, &tx2_dac_init);
-	if (ret) {
-		printf("axi_dac_init() failed with status %d\n", ret);
-		goto error;
-	}
-	phy.tx2_dac->clock_hz = adrv9002_init_get(
-					phy.rx1_adc)->tx.txProfile[1].txInputRate_Hz;
-#endif
-
 	/* Post AXI DAC/ADC setup, digital interface tuning */
 	ret = adrv9002_post_setup(&phy);
 	if (ret) {
 		printf("adrv9002_post_setup() failed with status %d\n", ret);
 		goto error;
 	}
+
+	/* Finalize the ADC/DAC cores initialization */
+	ret = axi_adc_init_finish(phy.rx1_adc);
+	if (ret) {
+		printf("axi_adc_init_finish() failed with status %d\n", ret);
+		goto error;
+	}
+
+	ret = axi_dac_init_finish(phy.tx1_dac);
+	if (ret) {
+		printf("axi_dac_init_finish() failed with status %d\n", ret);
+		goto error;
+	}
+#ifndef ADRV9002_RX2TX2
+	ret = axi_adc_init_finish(phy.rx2_adc);
+	if (ret) {
+		printf("axi_adc_init_finish() failed with status %d\n", ret);
+		goto error;
+	}
+
+	ret = axi_dac_init_finish(phy.tx2_dac);
+	if (ret) {
+		printf("axi_dac_init_finish() failed with status %d\n", ret);
+		goto error;
+	}
+#endif
 
 	/* TODO: Remove this when it gets fixed in the API. */
 	adi_adrv9001_Radio_Channel_ToState(phy.adrv9001, ADI_RX,
