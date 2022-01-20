@@ -187,34 +187,34 @@ enum ad7193_adc_modes {
 
 struct ad7193_dev {
 	/* SPI */
-	spi_desc	*spi_desc;
+	spi_desc		*spi_desc;
 	/* GPIO */
 	struct gpio_desc	*gpio_miso;
 	/* Device Settings */
-	uint8_t		current_polarity;
-	uint16_t    data_rate_code;
-	uint8_t		input_mode;
-	uint8_t		buffer;
-	uint8_t     bpdsw_mode;
+	uint8_t			current_polarity;
 	enum ad7193_adc_range	current_gain;
 	enum ad7193_adc_modes	operating_mode;
+	uint16_t    		data_rate_code;
 	enum ad7193_adc_clock	clock_source;
+	uint8_t			input_mode;
+	uint8_t			buffer;
+	uint8_t     		bpdsw_mode;
 };
 
 struct ad7193_init_param {
 	/* SPI */
-	spi_init_param	spi_init;
+	spi_init_param		spi_init;
 	/* GPIO */
 	struct gpio_init_param	gpio_miso;
 	/* Device Settings */
-	uint8_t		current_polarity;
-	uint16_t    data_rate_code;
-	uint8_t		input_mode;
-	uint8_t		buffer;
-	uint8_t     bpdsw_mode;
+	uint8_t			current_polarity;
 	enum ad7193_adc_range	current_gain;
 	enum ad7193_adc_modes	operating_mode;
+	uint16_t    		data_rate_code;
 	enum ad7193_adc_clock	clock_source;
+	uint8_t			input_mode;
+	uint8_t			buffer;
+	uint8_t     		bpdsw_mode;
 };
 
 /******************************************************************************/
