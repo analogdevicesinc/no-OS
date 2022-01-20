@@ -144,15 +144,6 @@
 #define AD7193_CH_TEMP   8 //           Temperature sensor
 #define AD7193_CH_SHORT  9 // AIN2(+) - AIN2(-);       AINCOM(+) - AINCOM(-)
 
-/* Configuration Register: AD7193_CONF_GAIN(x) options */
-//                              ADC Input Range (5 V Reference)
-#define AD7193_CONF_GAIN_1	0 // Gain 1    +-2.5 V
-#define AD7193_CONF_GAIN_8	3 // Gain 8    +-312.5 mV
-#define AD7193_CONF_GAIN_16	4 // Gain 16   +-156.2 mV
-#define AD7193_CONF_GAIN_32	5 // Gain 32   +-78.125 mV
-#define AD7193_CONF_GAIN_64	6 // Gain 64   +-39.06 mV
-#define AD7193_CONF_GAIN_128	7 // Gain 128  +-19.53 mV
-
 /* ID Register Bit Designations (AD7193_REG_ID) */
 #define ID_AD7193               0x2
 #define AD7193_ID_MASK          0x0F
@@ -173,6 +164,15 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
+enum ad7193_adc_range {
+//                              ADC Input Range (5 V Reference)
+	AD7193_ADC_2_5V = 0, 		// Gain 1    +-2.5 V
+	AD7193_ADC_312_5_mV = 3, 	// Gain 8    +-312.5 mV
+	AD7193_ADC_156_2_mV = 4,	// Gain 16   +-156.2 mV
+	AD7193_ADC_78_125mV = 5,	// Gain 32   +-78.125 mV
+	AD7193_ADC_39_06mV = 6,		// Gain 64   +-39.06 mV
+	AD7193_ADC_19_53mV = 7		// Gain 128  +-19.53 mV
+};
 struct ad7193_dev {
 	/* SPI */
 	spi_desc	*spi_desc;
@@ -180,13 +180,13 @@ struct ad7193_dev {
 	struct gpio_desc	*gpio_miso;
 	/* Device Settings */
 	uint8_t		current_polarity;
-	uint8_t		current_gain;
 	uint8_t     operating_mode;
 	uint16_t    data_rate_code;
 	uint8_t     clock_source;
 	uint8_t		input_mode;
 	uint8_t		buffer;
 	uint8_t     bpdsw_mode;
+	enum ad7193_adc_range	current_gain;
 };
 
 struct ad7193_init_param {
@@ -196,13 +196,13 @@ struct ad7193_init_param {
 	struct gpio_init_param	gpio_miso;
 	/* Device Settings */
 	uint8_t		current_polarity;
-	uint8_t		current_gain_code;
 	uint8_t     operating_mode;
 	uint16_t    data_rate_code;
 	uint8_t     clock_source;
 	uint8_t		input_mode;
 	uint8_t		buffer;
 	uint8_t     bpdsw_mode;
+	enum ad7193_adc_range	current_gain;
 };
 
 /******************************************************************************/
@@ -264,7 +264,7 @@ int ad7193_set_bridge_switch(struct ad7193_dev *dev, uint8_t bpdsw_select);
 
 /*! Selects the polarity of the conversion and the ADC input range. */
 int ad7193_range_setup(struct ad7193_dev *dev,
-		       uint8_t polarity, uint8_t range);
+		       uint8_t polarity, enum ad7193_adc_range range);
 
 /*! Returns the result of a single conversion. */
 int ad7193_single_conversion(struct ad7193_dev *dev, uint32_t *reg_data);

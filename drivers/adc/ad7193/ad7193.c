@@ -98,7 +98,7 @@ int ad7193_init(struct ad7193_dev **device,
 
 	/* Initialization */
 	ret = ad7193_range_setup(dev, init_param.current_polarity,
-				 init_param.current_gain_code);
+				 init_param.current_gain);
 	if (ret != SUCCESS)
 		goto error_miso;
 
@@ -517,7 +517,7 @@ int ad7193_set_bridge_switch(struct ad7193_dev *dev, uint8_t bpdsw_select)
  * @return SUCCESS in case of success or negative error code.
 *******************************************************************************/
 int ad7193_range_setup(struct ad7193_dev *dev,
-		       uint8_t polarity, uint8_t range)
+		       uint8_t polarity, enum ad7193_adc_range range)
 {
 	int ret;
 
@@ -621,7 +621,7 @@ int ad7193_temperature_read(struct ad7193_dev *dev, float *temp)
 	int ret;
 
 	// Bipolar operation, 0 Gain.
-	ret = ad7193_range_setup(dev, 0, AD7193_CONF_GAIN_1);
+	ret = ad7193_range_setup(dev, 0, AD7193_ADC_2_5V);
 	if (ret != SUCCESS)
 		return ret;
 
