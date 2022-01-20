@@ -797,17 +797,14 @@ int32_t axi_dac_load_custom_data(struct axi_dac *dac,
 	return SUCCESS;
 }
 
-
 /***************************************************************************//**
- * @brief axi_dac_init
+ * @brief axi_dac_init_begin - Creates an axi_dac instance and takes out of
+ *        reset the core.
  *******************************************************************************/
-int32_t axi_dac_init(struct axi_dac **dac_core,
+int32_t axi_dac_init_begin(struct axi_dac **dac_core,
 		     const struct axi_dac_init *init)
 {
 	struct axi_dac *dac;
-	uint32_t reg_data;
-	uint32_t freq;
-	uint32_t ratio;
 
 	dac = (struct axi_dac *)malloc(sizeof(*dac));
 	if (!dac)
@@ -822,12 +819,25 @@ int32_t axi_dac_init(struct axi_dac **dac_core,
 	axi_dac_write(dac, AXI_DAC_REG_RSTN,
 		      AXI_DAC_MMCM_RSTN | AXI_DAC_RSTN);
 
-	mdelay(100);
+	*dac_core = dac;
+
+	return SUCCESS;
+}
+
+/***************************************************************************//**
+ * @brief axi_dac_init_finish - To be called once the interface clock is
+ *        available.
+ *******************************************************************************/
+int32_t axi_dac_init_finish(struct axi_dac *dac)
+{
+	uint32_t reg_data;
+	uint32_t freq;
+	uint32_t ratio;
 
 	axi_dac_read(dac, AXI_DAC_REG_STATUS, &reg_data);
 	if(reg_data == 0x0) {
 		printf("%s: Status errors\n", dac->name);
-		goto error;
+		return FAILURE;
 	}
 
 	axi_dac_write(dac, AXI_DAC_REG_RATECNTRL, AXI_DAC_RATE(3));
@@ -843,6 +853,28 @@ int32_t axi_dac_init(struct axi_dac **dac_core,
 
 	printf("%s: Successfully initialized (%"PRIu64" Hz)\n",
 	       dac->name, dac->clock_hz);
+
+	return SUCCESS;
+}
+
+/***************************************************************************//**
+ * @brief axi_dac_init
+ *******************************************************************************/
+int32_t axi_dac_init(struct axi_dac **dac_core,
+		     const struct axi_dac_init *init)
+{
+	struct axi_dac *dac;
+	int32_t ret;
+
+	ret = axi_dac_init_begin(&dac, init);
+	if (ret)
+		return ret;
+
+	mdelay(100);
+
+	ret = axi_dac_init_finish(dac);
+	if (ret)
+		goto error;
 
 	*dac_core = dac;
 

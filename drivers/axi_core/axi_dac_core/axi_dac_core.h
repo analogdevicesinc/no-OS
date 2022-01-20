@@ -94,6 +94,9 @@ extern const uint32_t sine_lut_iq[1024];
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
+int32_t axi_dac_init_begin(struct axi_dac **dac_core,
+		     const struct axi_dac_init *init);
+int32_t axi_dac_init_finish(struct axi_dac *dac);
 int32_t axi_dac_init(struct axi_dac **dac_core,
 		     const struct axi_dac_init *init);
 int32_t axi_dac_remove(struct axi_dac *dac);

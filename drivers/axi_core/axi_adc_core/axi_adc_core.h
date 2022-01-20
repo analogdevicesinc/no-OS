@@ -147,6 +147,9 @@ enum axi_adc_pn_sel {
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
+int32_t axi_adc_init_begin(struct axi_adc **adc_core,
+		     const struct axi_adc_init *init);
+int32_t axi_adc_init_finish(struct axi_adc *adc);
 int32_t axi_adc_init(struct axi_adc **adc_core,
 		     const struct axi_adc_init *init);
 int32_t axi_adc_remove(struct axi_adc *adc);
