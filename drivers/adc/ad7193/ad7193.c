@@ -75,23 +75,15 @@ int ad7193_init(struct ad7193_dev **device,
 		goto error_dev;
 
 	/* GPIO */
-	ret = gpio_get(&dev->gpio_cs, &init_param.gpio_cs);
-	if (ret != SUCCESS)
-		goto error_spi;
-
-	ret = gpio_direction_output(dev->gpio_cs, GPIO_HIGH);
-	if (ret != SUCCESS)
-		goto error_cs;
-
 	ret = gpio_get(&dev->gpio_miso, &init_param.gpio_miso);
 	if (ret != SUCCESS)
-		goto error_cs;
+		goto error_spi;
 
 	ret = gpio_direction_input(dev->gpio_miso);
 	if (ret != SUCCESS)
 		goto error_miso;
 
-	ret = ad7193_get_register_value(dev, AD7193_REG_ID, 1, &reg_val, 1);
+	ret = ad7193_get_register_value(dev, AD7193_REG_ID, 1, &reg_val);
 	if (ret != SUCCESS)
 		goto error_miso;
 
@@ -100,13 +92,7 @@ int ad7193_init(struct ad7193_dev **device,
 	}
 
 	/* Reset */
-	ret = gpio_set_value(dev->gpio_cs, GPIO_LOW);
-	if (ret != SUCCESS)
-		goto error_miso;
 	ret = ad7193_reset(dev);
-	if (ret != SUCCESS)
-		goto error_miso;
-	ret = gpio_set_value(dev->gpio_cs, GPIO_HIGH);
 	if (ret != SUCCESS)
 		goto error_miso;
 
@@ -136,7 +122,7 @@ int ad7193_init(struct ad7193_dev **device,
 	if (ret != SUCCESS)
 		goto error_miso;
 
-	ret = ad7193_set_operating_mode(dev, init_param.operating_mode, 1);
+	ret = ad7193_set_operating_mode(dev, init_param.operating_mode);
 	if (ret != SUCCESS)
 		goto error_miso;
 
@@ -146,8 +132,6 @@ int ad7193_init(struct ad7193_dev **device,
 
 error_miso:
 	gpio_remove(dev->gpio_miso);
-error_cs:
-	gpio_remove(dev->gpio_cs);
 error_spi:
 	spi_remove(dev->spi_desc);
 error_dev:
@@ -171,10 +155,6 @@ int ad7193_remove(struct ad7193_dev *dev)
 	if (ret != SUCCESS)
 		return ret;
 
-	ret = gpio_remove(dev->gpio_cs);
-	if (ret != SUCCESS)
-		return ret;
-
 	ret = gpio_remove(dev->gpio_miso);
 	if (ret != SUCCESS)
 		return ret;
@@ -191,15 +171,13 @@ int ad7193_remove(struct ad7193_dev *dev)
  * @param reg_addr         - Address of the register.
  * @param reg_val          - Data value to write.
  * @param bytes_number     - Number of bytes to be written.
- * @param modify_cs        - Allows Chip Select to be modified.
  *
  * @return SUCCESS in case of success or negative error code.
 *******************************************************************************/
 int ad7193_set_register_value(struct ad7193_dev *dev,
 			      uint8_t reg_addr,
 			      uint32_t reg_val,
-			      uint8_t bytes_number,
-			      uint8_t modify_cs)
+			      uint8_t bytes_number)
 {
 	uint8_t write_command[5] = {0, 0, 0, 0, 0};
 	uint8_t* data_pointer    = (uint8_t*)&reg_val;
@@ -213,21 +191,9 @@ int ad7193_set_register_value(struct ad7193_dev *dev,
 		bytes_nr--;
 	}
 
-	if (modify_cs) {
-		ret = gpio_set_value(dev->gpio_cs, GPIO_LOW);
-		if (ret != SUCCESS)
-			return ret;
-	}
-
 	ret = spi_write_and_read(dev->spi_desc, write_command, bytes_number + 1);
 	if (ret != SUCCESS)
 		return ret;
-
-	if (modify_cs) {
-		ret = gpio_set_value(dev->gpio_cs, GPIO_HIGH);
-		if (ret != SUCCESS)
-			return ret;
-	}
 
 	return ret;
 }
@@ -239,12 +205,11 @@ int ad7193_set_register_value(struct ad7193_dev *dev,
  * @param reg_addr         - Address of the register.
  * @param bytes_number     - Number of bytes that will be read.
  * @param reg_data         - Data read from the register.
- * @param modify_cs        - Allows Chip Select to be modified.
  *
  * @return SUCCESS in case of success or negative error code.
 *******************************************************************************/
 int ad7193_get_register_value(struct ad7193_dev *dev, uint8_t reg_addr,
-			      uint8_t bytes_number, uint32_t *reg_data, uint8_t modify_cs)
+			      uint8_t bytes_number, uint32_t *reg_data)
 {
 	uint8_t reg_word[5] = {0, 0, 0, 0, 0};
 	uint8_t i = 0;
@@ -255,21 +220,9 @@ int ad7193_get_register_value(struct ad7193_dev *dev, uint8_t reg_addr,
 
 	reg_word[0] = AD7193_COMM_READ | AD7193_COMM_ADDR(reg_addr);
 
-	if (modify_cs) {
-		ret = gpio_set_value(dev->gpio_cs, GPIO_LOW);
-		if (ret != SUCCESS)
-			return ret;
-	}
-
 	ret = spi_write_and_read(dev->spi_desc, reg_word, bytes_number + 1);
 	if (ret != SUCCESS)
 		return ret;
-
-	if (modify_cs) {
-		ret = gpio_set_value(dev->gpio_cs, GPIO_HIGH);
-		if (ret != SUCCESS)
-			return ret;
-	}
 
 	*reg_data = 0; // Clearing the buffer
 	for(i = 1; i < bytes_number + 1; i++) {
@@ -287,26 +240,25 @@ int ad7193_get_register_value(struct ad7193_dev *dev, uint8_t reg_addr,
  * @param mask             - The mask.
  * @param reg_data         - Register data to be written.
  * @param bytes            - Number of bytes that will be read.
- * @param modify_cs        - Allows Chip Select to be modified.
  *
  * @return SUCCESS in case of success or negative error code.
 *******************************************************************************/
 int ad7193_set_masked_register_value(struct ad7193_dev *dev,
 				     uint8_t reg_addr, uint32_t mask, uint32_t reg_data,
-				     uint8_t bytes, uint8_t modify_cs)
+				     uint8_t bytes)
 {
 	uint32_t old_reg_data = 0x00;
 	uint32_t new_reg_data = 0x00;
 	int ret;
 
-	ret = ad7193_get_register_value(dev, reg_addr, bytes, &old_reg_data, modify_cs);
+	ret = ad7193_get_register_value(dev, reg_addr, bytes, &old_reg_data);
 	if (ret != SUCCESS)
 		return ret;
 
 	old_reg_data &= ~mask;
 	new_reg_data = old_reg_data | reg_data;
 
-	return ad7193_set_register_value(dev, reg_addr, new_reg_data, bytes, modify_cs);
+	return ad7193_set_register_value(dev, reg_addr, new_reg_data, bytes);
 }
 
 /***************************************************************************//**
@@ -334,18 +286,16 @@ int ad7193_reset(struct ad7193_dev *dev)
  *
  * @param dev        - The device structure.
  * @param opt_mode	 - Operating mode to be set.
- * @param modify_cs  - Allows Chip Select to be modified.
- *
  * @return SUCCESS in case of success or negative error code.
 *******************************************************************************/
 int ad7193_set_operating_mode(struct ad7193_dev *dev,
-			      uint8_t opt_mode, uint8_t modify_cs)
+			      uint8_t opt_mode)
 {
 	int ret;
 
 	ret = ad7193_set_masked_register_value(dev, AD7193_REG_MODE,
 					       AD7193_MODE_SEL(0x7), AD7193_MODE_SEL(opt_mode),
-					       3, modify_cs);
+					       3);
 
 	if (ret == SUCCESS) {
 		/* Store the last settings regarding operating mode. */
@@ -397,7 +347,7 @@ int ad7193_channels_select(struct ad7193_dev *dev,
 
 	return ad7193_set_masked_register_value(dev, AD7193_REG_CONF,
 						AD7193_CONF_CHAN(0x3FF), AD7193_CONF_CHAN(chn_mask),
-						3, 1);
+						3);
 }
 
 /***************************************************************************//**
@@ -418,21 +368,13 @@ int ad7193_calibrate(struct ad7193_dev *dev,
 	if (ret != SUCCESS)
 		return ret;
 
-	ret = gpio_set_value(dev->gpio_cs, GPIO_LOW);
-	if (ret != SUCCESS)
-		return ret;
-
 	ret = ad7193_set_masked_register_value(dev, AD7193_REG_MODE,
 					       AD7193_MODE_SEL(0x7), AD7193_MODE_SEL(mode),
-					       3, 0);
+					       3);
 	if (ret != SUCCESS)
 		return ret;
 
-	ret = ad7193_wait_rdy_go_low(dev);
-	if (ret != SUCCESS)
-		return ret;
-
-	return gpio_set_value(dev->gpio_cs, GPIO_HIGH);
+	return ad7193_wait_rdy_go_low(dev);
 }
 
 /***************************************************************************//**
@@ -451,7 +393,7 @@ int ad7193_config_input_mode(struct ad7193_dev *dev, uint8_t mode)
 
 	ret = ad7193_set_masked_register_value(dev, AD7193_REG_CONF,
 					       AD7193_CONF_PSEUDO, (AD7193_CONF_PSEUDO * mode),
-					       3, 1);
+					       3);
 
 	if (ret == SUCCESS) {
 		/* Store the last settings regarding input mode. */
@@ -477,7 +419,7 @@ int ad7193_buffer_select(struct ad7193_dev *dev, uint8_t buff_en)
 
 	ret = ad7193_set_masked_register_value(dev, AD7193_REG_CONF,
 					       AD7193_CONF_BUF, (AD7193_CONF_BUF * buff_en),
-					       3, 1);
+					       3);
 
 	if (ret == SUCCESS) {
 		/* Store the last settings regarding buffer selection. */
@@ -502,7 +444,7 @@ int ad7193_output_rate_select(struct ad7193_dev *dev,
 
 	ret = ad7193_set_masked_register_value(dev, AD7193_REG_MODE,
 					       AD7193_MODE_RATE(0x3FF), AD7193_MODE_RATE(out_rate_code),
-					       3, 1);
+					       3);
 
 	if (ret == SUCCESS) {
 		/* Store the last settings regarding filter output data rate. */
@@ -526,7 +468,7 @@ int ad7193_clock_select(struct ad7193_dev *dev, uint16_t clk_select)
 
 	ret = ad7193_set_masked_register_value(dev, AD7193_REG_MODE,
 					       AD7193_MODE_CLKSRC(0x3), AD7193_MODE_CLKSRC(clk_select),
-					       3, 1);
+					       3);
 
 	if (ret == SUCCESS) {
 		/* Store the last settings regarding clock source. */
@@ -552,7 +494,7 @@ int ad7193_set_bridge_switch(struct ad7193_dev *dev, uint8_t bpdsw_select)
 
 	ret = ad7193_set_masked_register_value(dev, AD7193_REG_GPOCON,
 					       AD7193_GPOCON_BPDSW, (AD7193_GPOCON_BPDSW * bpdsw_select),
-					       1, 1);
+					       1);
 
 	if (ret == SUCCESS) {
 		/* Store the last settings regarding bridge power-down switch */
@@ -582,7 +524,7 @@ int ad7193_range_setup(struct ad7193_dev *dev,
 	ret = ad7193_set_masked_register_value(dev, AD7193_REG_CONF,
 					       (AD7193_CONF_UNIPOLAR | AD7193_CONF_GAIN(0x7)),
 					       (polarity * AD7193_CONF_UNIPOLAR) | AD7193_CONF_GAIN(range),
-					       3, 1);
+					       3);
 
 	if (ret == SUCCESS) {
 		/* Store the last settings regarding polarity and gain. */
@@ -612,12 +554,7 @@ int ad7193_single_conversion(struct ad7193_dev *dev, uint32_t *reg_data)
 	command = AD7193_MODE_SEL(AD7193_MODE_SINGLE) | AD7193_MODE_CLKSRC(
 			  AD7193_CLK_INT) | AD7193_MODE_RATE(dev->data_rate_code);
 
-	ret = gpio_set_value(dev->gpio_cs, GPIO_LOW);
-	if (ret != SUCCESS)
-		return ret;
-
-	// CS is not modified.
-	ret = ad7193_set_register_value(dev, AD7193_REG_MODE, command, 3, 0);
+	ret = ad7193_set_register_value(dev, AD7193_REG_MODE, command, 3);
 	if (ret != SUCCESS)
 		return ret;
 
@@ -625,12 +562,7 @@ int ad7193_single_conversion(struct ad7193_dev *dev, uint32_t *reg_data)
 	if (ret != SUCCESS)
 		return ret;
 
-	// CS is not modified.
-	ret = ad7193_get_register_value(dev, AD7193_REG_DATA, 3, reg_data, 0);
-	if (ret != SUCCESS)
-		return ret;
-
-	return gpio_set_value(dev->gpio_cs, GPIO_HIGH);
+	return ad7193_get_register_value(dev, AD7193_REG_DATA, 3, reg_data);
 }
 
 /***************************************************************************//**
@@ -654,12 +586,7 @@ int ad7193_continuous_read_avg(struct ad7193_dev *dev,
 		  AD7193_MODE_CLKSRC(AD7193_CLK_INT) |
 		  AD7193_MODE_RATE(dev->data_rate_code);
 
-	ret = gpio_set_value(dev->gpio_cs, GPIO_LOW);
-	if (ret != SUCCESS)
-		return ret;
-
-	// CS is not modified.
-	ret = ad7193_set_register_value(dev, AD7193_REG_MODE, command, 3, 0);
+	ret = ad7193_set_register_value(dev, AD7193_REG_MODE, command, 3);
 	if (ret != SUCCESS)
 		return ret;
 
@@ -668,21 +595,16 @@ int ad7193_continuous_read_avg(struct ad7193_dev *dev,
 		if (ret != SUCCESS)
 			return ret;
 
-		// CS is not modified.
-		ret = ad7193_get_register_value(dev, AD7193_REG_DATA, 3, &samples, 0);
+		ret = ad7193_get_register_value(dev, AD7193_REG_DATA, 3, &samples);
 		if(ret != SUCCESS)
 			return ret;
 
 		*samples_avg += samples;
 	}
 
-	ret = gpio_set_value(dev->gpio_cs, GPIO_HIGH);
-	if (ret != SUCCESS)
-		return ret;
-
 	*samples_avg = *samples_avg / sample_number;
 
-	return ret;
+	return SUCCESS;
 }
 
 /***************************************************************************//**

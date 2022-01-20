@@ -177,7 +177,6 @@ struct ad7193_dev {
 	/* SPI */
 	spi_desc	*spi_desc;
 	/* GPIO */
-	struct gpio_desc	*gpio_cs;
 	struct gpio_desc	*gpio_miso;
 	/* Device Settings */
 	uint8_t		current_polarity;
@@ -194,7 +193,6 @@ struct ad7193_init_param {
 	/* SPI */
 	spi_init_param	spi_init;
 	/* GPIO */
-	struct gpio_init_param	gpio_cs;
 	struct gpio_init_param	gpio_miso;
 	/* Device Settings */
 	uint8_t		current_polarity;
@@ -220,23 +218,23 @@ int ad7193_remove(struct ad7193_dev *dev);
 
 /*! Writes data into a register. */
 int ad7193_set_register_value(struct ad7193_dev *dev, uint8_t reg_addr,
-			      uint32_t reg_value, uint8_t bytes_number, uint8_t modify_cs);
+			      uint32_t reg_value, uint8_t bytes_number);
 
 /*! Reads the value of a register. */
 int ad7193_get_register_value(struct ad7193_dev *dev, uint8_t reg_addr,
-			      uint8_t bytes_number, uint32_t *reg_data, uint8_t modify_cs);
+			      uint8_t bytes_number, uint32_t *reg_data);
 
 /* Write masked data into device register. */
 int ad7193_set_masked_register_value(struct ad7193_dev *dev,
 				     uint8_t reg_addr, uint32_t mask, uint32_t data,
-				     uint8_t bytes, uint8_t modify_cs);
+				     uint8_t bytes);
 
 /*! Resets the device. */
 int ad7193_reset(struct ad7193_dev *dev);
 
 /*! Set the device into specified operating mode. */
 int ad7193_set_operating_mode(struct ad7193_dev *dev,
-			      uint8_t opt_mode, uint8_t modify_cs);
+			      uint8_t opt_mode);
 
 /*! Waits for RDY pin to go low. */
 int ad7193_wait_rdy_go_low(struct ad7193_dev *dev);
