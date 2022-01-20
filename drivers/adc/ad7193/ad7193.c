@@ -286,10 +286,18 @@ int ad7193_reset(struct ad7193_dev *dev)
  *
  * @param dev        - The device structure.
  * @param opt_mode	 - Operating mode to be set.
+ *		     Accepted values: AD7193_MODE_CONT
+ *				      AD7193_MODE_SINGLE
+ *				      AD7193_MODE_IDLE
+ *				      AD7193_MODE_PWRDN
+ *				      AD7193_MODE_CAL_INT_ZERO
+ *				      AD7193_MODE_CAL_INT_FULL
+ *				      AD7193_MODE_CAL_SYS_ZERO
+ *				      AD7193_MODE_CAL_SYS_FULL
  * @return SUCCESS in case of success or negative error code.
 *******************************************************************************/
 int ad7193_set_operating_mode(struct ad7193_dev *dev,
-			      uint8_t opt_mode)
+			      enum ad7193_adc_modes opt_mode)
 {
 	int ret;
 
