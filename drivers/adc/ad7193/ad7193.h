@@ -95,16 +95,6 @@
 #define AD7193_MODE_REJ60       (1 << 10)                          // 50/60Hz notch filter.
 #define AD7193_MODE_RATE(x)     ((x) & 0x3FF)                      // Filter Update Rate Select.
 
-/* Mode Register: AD7193_MODE_SEL(x) options */
-#define AD7193_MODE_CONT                0 // Continuous Conversion Mode.
-#define AD7193_MODE_SINGLE              1 // Single Conversion Mode.
-#define AD7193_MODE_IDLE                2 // Idle Mode.
-#define AD7193_MODE_PWRDN               3 // Power-Down Mode.
-#define AD7193_MODE_CAL_INT_ZERO        4 // Internal Zero-Scale Calibration.
-#define AD7193_MODE_CAL_INT_FULL        5 // Internal Full-Scale Calibration.
-#define AD7193_MODE_CAL_SYS_ZERO        6 // System Zero-Scale Calibration.
-#define AD7193_MODE_CAL_SYS_FULL        7 // System Full-Scale Calibration.
-
 /* Mode Register: AD7193_MODE_CLKSRC(x) options */
 #define AD7193_CLK_EXT_MCLK1_2          0 // External crystal. The external crystal
 // is connected from MCLK1 to MCLK2.
@@ -173,6 +163,25 @@ enum ad7193_adc_range {
 	AD7193_ADC_39_06mV = 6,		// Gain 64   +-39.06 mV
 	AD7193_ADC_19_53mV = 7		// Gain 128  +-19.53 mV
 };
+enum ad7193_adc_modes {
+	// Continuous Conversion Mode
+	AD7193_MODE_CONT,
+	// Single Conversion Mode
+	AD7193_MODE_SINGLE,
+	// Idle Mode
+	AD7193_MODE_IDLE,
+	// Power-Down Mode
+	AD7193_MODE_PWRDN,
+	// Internal Zero-Scale Calibration
+	AD7193_MODE_CAL_INT_ZERO,
+	// Internal Full-Scale Calibration4
+	AD7193_MODE_CAL_INT_FULL,
+	// System Zero-Scale Calibration5
+	AD7193_MODE_CAL_SYS_ZERO,
+	// System Full-Scale Calibration
+	AD7193_MODE_CAL_SYS_FULL,
+};
+
 struct ad7193_dev {
 	/* SPI */
 	spi_desc	*spi_desc;
@@ -180,13 +189,13 @@ struct ad7193_dev {
 	struct gpio_desc	*gpio_miso;
 	/* Device Settings */
 	uint8_t		current_polarity;
-	uint8_t     operating_mode;
 	uint16_t    data_rate_code;
 	uint8_t     clock_source;
 	uint8_t		input_mode;
 	uint8_t		buffer;
 	uint8_t     bpdsw_mode;
 	enum ad7193_adc_range	current_gain;
+	enum ad7193_adc_modes	operating_mode;
 };
 
 struct ad7193_init_param {
@@ -196,13 +205,13 @@ struct ad7193_init_param {
 	struct gpio_init_param	gpio_miso;
 	/* Device Settings */
 	uint8_t		current_polarity;
-	uint8_t     operating_mode;
 	uint16_t    data_rate_code;
 	uint8_t     clock_source;
 	uint8_t		input_mode;
 	uint8_t		buffer;
 	uint8_t     bpdsw_mode;
 	enum ad7193_adc_range	current_gain;
+	enum ad7193_adc_modes	operating_mode;
 };
 
 /******************************************************************************/
@@ -234,7 +243,7 @@ int ad7193_reset(struct ad7193_dev *dev);
 
 /*! Set the device into specified operating mode. */
 int ad7193_set_operating_mode(struct ad7193_dev *dev,
-			      uint8_t opt_mode);
+			      enum ad7193_adc_modes opt_mode);
 
 /*! Waits for RDY pin to go low. */
 int ad7193_wait_rdy_go_low(struct ad7193_dev *dev);
