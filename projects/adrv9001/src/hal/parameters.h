@@ -47,13 +47,18 @@
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-#define ADRV9001_NUM_SUBCHANNELS	2 /* I - in-phase and Q - quadrature channels */
-#define ADRV9001_NUM_CHAIN_CHANNELS	2 /* channels per RX/TX chain */
-#define ADRV9001_NUM_CHANNELS		(ADRV9001_NUM_CHAIN_CHANNELS * ADRV9001_NUM_SUBCHANNELS)
+#ifndef ADRV9002_RX2TX2
+#define IIO_DEV_COUNT 		2
+#define IIO_DEV_CHANNELS	1
+#else
+#define IIO_DEV_COUNT 		1
+#define IIO_DEV_CHANNELS	2
+#endif
+
+#define ADRV9001_I_Q_CHANNELS			(IIO_DEV_CHANNELS * 2)
 
 #define DAC_BUFFER_SAMPLES 1024
 #define ADC_BUFFER_SAMPLES 16384
-#define MAX_ADC_CHANNELS 4
 
 #ifdef XPS_BOARD_ZCU102
 #define GPIO_OFFSET			78
@@ -100,18 +105,4 @@
 #define TX1_DAC_BASEADDR		(XPAR_AXI_ADRV9001_BASEADDR + 0x2000)
 #define TX2_DAC_BASEADDR		(XPAR_AXI_ADRV9001_BASEADDR + 0x4000)
 
-
-#ifdef ADRV9002_RX2TX2
-#define IIO_DEV_COUNT 2
-#else
-#define IIO_DEV_COUNT 1
-#endif
-
-/* ADC/DAC Buffers */
-#if defined(DAC_DMA_EXAMPLE) || defined(IIO_SUPPORT)
-static uint32_t dac_buffers[IIO_DEV_COUNT][DAC_BUFFER_SAMPLES] __attribute__((
-			aligned));
-static uint16_t adc_buffers[IIO_DEV_COUNT][ADC_BUFFER_SAMPLES*MAX_ADC_CHANNELS]
-__attribute__((aligned));
-#endif
 #endif
