@@ -43,6 +43,7 @@
 #include <stdlib.h>
 #include "ad7193.h"    // AD7193 definitions.
 #include "no-os/error.h"
+#include "no-os/delay.h"
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -83,6 +84,11 @@ int ad7193_init(struct ad7193_dev **device,
 	if (ret != SUCCESS)
 		goto error_miso;
 
+	/* Reset */
+	ret = ad7193_reset(dev);
+	if (ret != SUCCESS)
+		goto error_miso;
+
 	ret = ad7193_get_register_value(dev, AD7193_REG_ID, 1, &reg_val);
 	if (ret != SUCCESS)
 		goto error_miso;
@@ -91,10 +97,6 @@ int ad7193_init(struct ad7193_dev **device,
 		goto error_miso;
 	}
 
-	/* Reset */
-	ret = ad7193_reset(dev);
-	if (ret != SUCCESS)
-		goto error_miso;
 
 	/* Initialization */
 	ret = ad7193_range_setup(dev, init_param.current_polarity,
@@ -270,15 +272,19 @@ int ad7193_set_masked_register_value(struct ad7193_dev *dev,
 *******************************************************************************/
 int ad7193_reset(struct ad7193_dev *dev)
 {
-	uint8_t register_word[6] = {0, 0, 0, 0, 0, 0};
+	int ret;
+	uint8_t register_word[5];
 
-	register_word[0] = 0xFF;
-	register_word[1] = 0xFF;
-	register_word[2] = 0xFF;
-	register_word[3] = 0xFF;
-	register_word[4] = 0xFF;
-	register_word[5] = 0xFF;
-	return spi_write_and_read(dev->spi_desc, register_word, 6);
+	memset(register_word, 0xFF, 5);
+
+	ret = spi_write_and_read(dev->spi_desc, register_word, 5);
+	if (ret != SUCCESS)
+		return ret;
+
+	// user must allow a period of 500 us
+	udelay(500);
+
+	return ret;
 }
 
 /***************************************************************************//**
