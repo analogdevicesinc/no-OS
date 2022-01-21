@@ -65,6 +65,13 @@
 #include "adi_adrv9001_arm.h"
 #include "adi_adrv9001_radio.h"
 
+/* ADC/DAC Buffers */
+#if defined(DAC_DMA_EXAMPLE) || defined(IIO_SUPPORT)
+static uint32_t dac_buffers[IIO_DEV_COUNT][IIO_DEV_CHANNELS][DAC_BUFFER_SAMPLES] __attribute__((
+			aligned));
+static uint16_t adc_buffers[IIO_DEV_COUNT][IIO_DEV_CHANNELS][ADC_BUFFER_SAMPLES] __attribute__((aligned));
+#endif
+
 int get_sampling_frequency(struct axi_adc *dev, uint32_t chan,
 			   uint64_t *sampling_freq_hz)
 {
@@ -81,47 +88,44 @@ int get_sampling_frequency(struct axi_adc *dev, uint32_t chan,
 static int32_t iio_run(struct iio_axi_adc_init_param *adc_pars,
 		       struct iio_axi_dac_init_param *dac_pars)
 {
-	char *names[] = {
-		"axi_adc1",
-		"axi_dac1",
-		"axi_adc2",
-		"axi_dac2"
-	};
 	struct iio_axi_adc_desc *adcs[IIO_DEV_COUNT];
 	struct iio_axi_dac_desc *dacs[IIO_DEV_COUNT];
 	struct iio_data_buffer iio_dac_buffers[IIO_DEV_COUNT];
 	struct iio_data_buffer iio_adc_buffers[IIO_DEV_COUNT];
 	struct iio_device *iio_descs[IIO_DEV_COUNT * 2];
 	struct iio_app_device app_devices[IIO_DEV_COUNT * 2] = {0};
-	int32_t i, ret;
+	int32_t d, ret;
+	int32_t a; // linear iterator for iio_descs and app_devices flat arrays
 
-	for (i = 0; i < IIO_DEV_COUNT; i++) {
+	for (d = 0; d < IIO_DEV_COUNT; d++) {
 		/* ADC setup */
-		iio_adc_buffers[i].buff = adc_buffers[i];
-		iio_adc_buffers[i].size = sizeof(adc_buffers[i]);
-		ret = iio_axi_adc_init(&adcs[i], &adc_pars[i]);
+		iio_adc_buffers[d].buff = adc_buffers[d];
+		iio_adc_buffers[d].size = sizeof(adc_buffers[d]);
+		ret = iio_axi_adc_init(&adcs[d], &adc_pars[d]);
 		if (ret < 0)
 			return ret;
-		iio_axi_adc_get_dev_descriptor(adcs[i], &iio_descs[i]);
-		app_devices[i].name = names[i];
-		app_devices[i].dev = adcs[i];
-		app_devices[i].dev_descriptor = iio_descs[i];
-		app_devices[i].read_buff = &iio_adc_buffers[i];
+		a = 2 * d;
+		iio_axi_adc_get_dev_descriptor(adcs[d], &iio_descs[a]);
+		app_devices[a].name = adc_pars[d].rx_adc->name;
+		app_devices[a].dev = adcs[d];
+		app_devices[a].dev_descriptor = iio_descs[a];
+		app_devices[a].read_buff = &iio_adc_buffers[d];
 
 		/* DAC setup */
-		iio_dac_buffers[i].buff = dac_buffers[i];
-		iio_dac_buffers[i].size = sizeof(dac_buffers[i]);
-		ret = iio_axi_dac_init(&dacs[i], &dac_pars[i]);
+		iio_dac_buffers[d].buff = dac_buffers[d];
+		iio_dac_buffers[d].size = sizeof(dac_buffers[d]);
+		ret = iio_axi_dac_init(&dacs[d], &dac_pars[d]);
 		if (ret < 0)
 			return ret;
-		iio_axi_dac_get_dev_descriptor(dacs[i + 1], &iio_descs[i + 1]);
-		app_devices[i + 1].name = names[i];
-		app_devices[i + 1].dev = dacs[i];
-		app_devices[i + 1].dev_descriptor = iio_descs[i + 1];
-		app_devices[i + 1].write_buff = &iio_dac_buffers[i];
+		a = 2 * d + 1;
+		iio_axi_dac_get_dev_descriptor(dacs[d], &iio_descs[a]);
+		app_devices[a].name = dac_pars[d].tx_dac->name;
+		app_devices[a].dev = dacs[d];
+		app_devices[a].dev_descriptor = iio_descs[a];
+		app_devices[a].write_buff = &iio_dac_buffers[d];
 	}
 
-	return iio_app_run(app_devices, sizeof(app_devices));
+	return iio_app_run(app_devices, ARRAY_SIZE(app_devices));
 }
 #endif
 
@@ -138,11 +142,7 @@ int main(void)
 	struct axi_adc_init rx1_adc_init = {
 		"axi-adrv9002-rx-lpc",
 		RX1_ADC_BASEADDR,
-#ifndef ADRV9002_RX2TX2
-		ADRV9001_NUM_SUBCHANNELS,
-#else
-		ADRV9001_NUM_CHANNELS,
-#endif
+		ADRV9001_I_Q_CHANNELS,
 	};
 
 	struct axi_dac_channel  tx1_dac_channels[2];
@@ -152,11 +152,7 @@ int main(void)
 	struct axi_dac_init tx1_dac_init = {
 		"axi-adrv9002-tx-lpc",
 		TX1_DAC_BASEADDR,
-#ifndef ADRV9002_RX2TX2
-		ADRV9001_NUM_SUBCHANNELS,
-#else
-		ADRV9001_NUM_CHANNELS,
-#endif
+		ADRV9001_I_Q_CHANNELS,
 		tx1_dac_channels,
 	};
 
@@ -164,7 +160,7 @@ int main(void)
 	struct axi_adc_init rx2_adc_init = {
 		"axi-adrv9002-rx2-lpc",
 		RX2_ADC_BASEADDR,
-		ADRV9001_NUM_SUBCHANNELS,
+		ADRV9001_I_Q_CHANNELS,
 	};
 
 	struct axi_dac_channel  tx2_dac_channels[2];
@@ -174,7 +170,7 @@ int main(void)
 	struct axi_dac_init tx2_dac_init = {
 		"axi-adrv9002-tx2-lpc",
 		TX2_DAC_BASEADDR,
-		ADRV9001_NUM_SUBCHANNELS,
+		ADRV9001_I_Q_CHANNELS,
 		tx2_dac_channels,
 	};
 #endif
@@ -362,32 +358,24 @@ int main(void)
 	axi_dmac_transfer(phy.rx1_dmac,
 			  (uintptr_t)adc_buffers[0],
 			  16384 * /* nr of samples */
-#ifndef ADRV9002_RX2TX2
-			  ADRV9001_NUM_SUBCHANNELS * /* rx1 i/q */
-#else
-			  ADRV9001_NUM_CHANNELS * /* rx1 i/q, rx2 i/q*/
-#endif
+			  ADRV9001_I_Q_CHANNELS * /* rx1 i/q, rx2 i/q*/
 			  2 /* bytes per sample */);
 #ifdef XILINX_PLATFORM
 	Xil_DCacheInvalidateRange((uintptr_t)adc_buffers[0],
 				  16384 * /* nr of samples */
-#ifndef ADRV9002_RX2TX2
-				  ADRV9001_NUM_SUBCHANNELS * /* rx1 i/q */
-#else
-				  ADRV9001_NUM_CHANNELS * /* rx1 i/q, rx2 i/q*/
-#endif
+				  ADRV9001_I_Q_CHANNELS * /* rx1 i/q, rx2 i/q*/
 				  2 /* bytes per sample */);
 #endif /* XILINX_PLATFORM */
 #ifndef ADRV9002_RX2TX2
 	axi_dmac_transfer(phy.rx2_dmac,
 			  (uintptr_t)adc_buffers[1],
 			  16384 * /* nr of samples */
-			  ADRV9001_NUM_SUBCHANNELS * /* nr of channels */
+			  ADRV9001_I_Q_CHANNELS * /* nr of channels */
 			  2 /* bytes per sample */);
 #ifdef XILINX_PLATFORM
 	Xil_DCacheInvalidateRange((uintptr_t)adc_buffers[1],
 				  16384 * /* nr of samples */
-				  ADRV9001_NUM_SUBCHANNELS * /* nr of channels */
+				  ADRV9001_I_Q_CHANNELS * /* nr of channels */
 				  2 /* bytes per sample */);
 #endif /* XILINX_PLATFORM */
 	printf("DAC_DMA_EXAMPLE: address=%#lx samples=%lu channels=%u bits=%lu\n",
