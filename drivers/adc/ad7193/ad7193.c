@@ -557,25 +557,25 @@ int ad7193_set_bridge_switch(struct ad7193_dev *dev, uint8_t bpdsw_select)
  * @param polarity - Polarity select bit.
  *                   Example: 0 - bipolar operation is selected.
  *                            1 - unipolar operation is selected.
- *@param range     - Gain select bits. These bits are written by the user to select
+ *@param gain      - Gain select bits. These bits are written by the user to select
  *                   the ADC input range.
  *
  * @return SUCCESS in case of success or negative error code.
 *******************************************************************************/
 int ad7193_range_setup(struct ad7193_dev *dev,
-		       uint8_t polarity, enum ad7193_adc_range range)
+		       uint8_t polarity, enum ad719x_adc_gain gain)
 {
 	int ret;
 
 	ret = ad7193_set_masked_register_value(dev, AD7193_REG_CONF,
 					       (AD7193_CONF_UNIPOLAR | AD7193_CONF_GAIN(0x7)),
-					       (polarity * AD7193_CONF_UNIPOLAR) | AD7193_CONF_GAIN(range),
+					       (polarity * AD7193_CONF_UNIPOLAR) | AD7193_CONF_GAIN(gain),
 					       3);
 
 	if (ret == SUCCESS) {
 		/* Store the last settings regarding polarity and gain. */
 		dev->current_polarity = polarity;
-		dev->current_gain     = 1 << range;
+		dev->current_gain     = 1 << gain;
 	}
 
 	return ret;
@@ -666,8 +666,8 @@ int ad7193_temperature_read(struct ad7193_dev *dev, float *temp)
 	uint32_t data_reg = 0;
 	int ret;
 
-	// Bipolar operation, 0 Gain.
-	ret = ad7193_range_setup(dev, 0, AD7193_ADC_2_5V);
+	// Bipolar operation, 1 Gain.
+	ret = ad7193_range_setup(dev, 0, AD719X_ADC_GAIN_1);
 	if (ret != SUCCESS)
 		return ret;
 
