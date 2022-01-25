@@ -144,14 +144,14 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
-enum ad7193_adc_range {
-//                              ADC Input Range (5 V Reference)
-	AD7193_ADC_2_5V = 0, 		// Gain 1    +-2.5 V
-	AD7193_ADC_312_5_mV = 3, 	// Gain 8    +-312.5 mV
-	AD7193_ADC_156_2_mV = 4,	// Gain 16   +-156.2 mV
-	AD7193_ADC_78_125mV = 5,	// Gain 32   +-78.125 mV
-	AD7193_ADC_39_06mV = 6,		// Gain 64   +-39.06 mV
-	AD7193_ADC_19_53mV = 7		// Gain 128  +-19.53 mV
+enum ad719x_adc_gain {
+//                           ADC Gain (CONF Reg)
+	AD719X_ADC_GAIN_1 = 0, 		// Gain 1
+	AD719X_ADC_GAIN_8 = 3, 		// Gain 8
+	AD719X_ADC_GAIN_16 = 4,		// Gain 16
+	AD719X_ADC_GAIN_32 = 5,		// Gain 32
+	AD719X_ADC_GAIN_64 = 6,		// Gain 64
+	AD719X_ADC_GAIN_128 = 7		// Gain 128
 };
 
 enum ad7193_adc_clock {
@@ -199,7 +199,7 @@ struct ad7193_dev {
 	struct gpio_desc	*gpio_miso;
 	/* Device Settings */
 	uint8_t			current_polarity;
-	enum ad7193_adc_range	current_gain;
+	enum ad719x_adc_gain	current_gain;
 	enum ad7193_adc_modes	operating_mode;
 	uint16_t    		data_rate_code;
 	enum ad7193_adc_clock	clock_source;
@@ -216,7 +216,7 @@ struct ad7193_init_param {
 	struct gpio_init_param	gpio_miso;
 	/* Device Settings */
 	uint8_t			current_polarity;
-	enum ad7193_adc_range	current_gain;
+	enum ad719x_adc_gain	current_gain;
 	enum ad7193_adc_modes	operating_mode;
 	uint16_t    		data_rate_code;
 	enum ad7193_adc_clock	clock_source;
@@ -286,7 +286,7 @@ int ad7193_set_bridge_switch(struct ad7193_dev *dev, uint8_t bpdsw_select);
 
 /*! Selects the polarity of the conversion and the ADC input range. */
 int ad7193_range_setup(struct ad7193_dev *dev,
-		       uint8_t polarity, enum ad7193_adc_range range);
+		       uint8_t polarity, enum ad719x_adc_gain gain);
 
 /*! Returns the result of a single conversion. */
 int ad7193_single_conversion(struct ad7193_dev *dev, uint32_t *reg_data);
