@@ -319,18 +319,18 @@ int ad7193_reset(struct ad7193_dev *dev)
  *
  * @param dev        - The device structure.
  * @param opt_mode	 - Operating mode to be set.
- *		     Accepted values: AD7193_MODE_CONT
- *				      AD7193_MODE_SINGLE
- *				      AD7193_MODE_IDLE
- *				      AD7193_MODE_PWRDN
- *				      AD7193_MODE_CAL_INT_ZERO
- *				      AD7193_MODE_CAL_INT_FULL
- *				      AD7193_MODE_CAL_SYS_ZERO
- *				      AD7193_MODE_CAL_SYS_FULL
+ *		     Accepted values: AD719X_MODE_CONT
+ *				      AD719X_MODE_SINGLE
+ *				      AD719X_MODE_IDLE
+ *				      AD719X_MODE_PWRDN
+ *				      AD719X_MODE_CAL_INT_ZERO
+ *				      AD719X_MODE_CAL_INT_FULL
+ *				      AD719X_MODE_CAL_SYS_ZERO
+ *				      AD719X_MODE_CAL_SYS_FULL
  * @return SUCCESS in case of success or negative error code.
 *******************************************************************************/
 int ad7193_set_operating_mode(struct ad7193_dev *dev,
-			      enum ad7193_adc_modes opt_mode)
+			      enum ad719x_adc_modes opt_mode)
 {
 	int ret;
 
@@ -500,15 +500,15 @@ int ad7193_output_rate_select(struct ad7193_dev *dev,
  *
  * @param dev         - The device structure.
  * @param clk_select  - Clock source to be selected.
- * 		     Accepted values: AD7193_EXT_CRYSTAL_MCLK1_MCLK2
- *				      AD7193_EXT_CRYSTAL_MCLK2
- *				      AD7193_INT_CLK_4_92_MHZ_TRIST
- *				      AD7193_INT_CLK_4_92_MHZ
+ * 		     Accepted values: AD719X_EXT_CRYSTAL_MCLK1_MCLK2
+ *				      AD719X_EXT_CRYSTAL_MCLK2
+ *				      AD719X_INT_CLK_4_92_MHZ_TRIST
+ *				      AD719X_INT_CLK_4_92_MHZ
  *
  * @return SUCCESS in case of success or negative error code.
 *******************************************************************************/
 int ad7193_clock_select(struct ad7193_dev *dev,
-			enum ad7193_adc_clock clk_select)
+			enum ad719x_adc_clock clk_select)
 {
 	int ret;
 
@@ -597,8 +597,8 @@ int ad7193_single_conversion(struct ad7193_dev *dev, uint32_t *reg_data)
 	if (!reg_data)
 		return FAILURE;
 
-	command = AD7193_MODE_SEL(AD7193_MODE_SINGLE) | AD7193_MODE_CLKSRC(
-			  AD7193_INT_CLK_4_92_MHZ_TRIST) | AD7193_MODE_RATE(dev->data_rate_code);
+	command = AD7193_MODE_SEL(AD719X_MODE_SINGLE) | AD7193_MODE_CLKSRC(
+			  AD719X_INT_CLK_4_92_MHZ_TRIST) | AD7193_MODE_RATE(dev->data_rate_code);
 
 	ret = ad7193_set_register_value(dev, AD7193_REG_MODE, command, 3);
 	if (ret != SUCCESS)
@@ -628,8 +628,8 @@ int ad7193_continuous_read_avg(struct ad7193_dev *dev,
 	uint8_t count = 0;
 	int ret;
 
-	command = AD7193_MODE_SEL(AD7193_MODE_CONT) |
-		  AD7193_MODE_CLKSRC(AD7193_INT_CLK_4_92_MHZ_TRIST) |
+	command = AD7193_MODE_SEL(AD719X_MODE_CONT) |
+		  AD7193_MODE_CLKSRC(AD719X_INT_CLK_4_92_MHZ_TRIST) |
 		  AD7193_MODE_RATE(dev->data_rate_code);
 
 	ret = ad7193_set_register_value(dev, AD7193_REG_MODE, command, 3);
