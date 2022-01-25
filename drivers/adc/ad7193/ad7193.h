@@ -154,34 +154,34 @@ enum ad719x_adc_gain {
 	AD719X_ADC_GAIN_128 = 7		// Gain 128
 };
 
-enum ad7193_adc_clock {
+enum ad719x_adc_clock {
 	// External crystal. The external crystal is connected from MCLK1 to MCLK2.
-	AD7193_EXT_CRYSTAL_MCLK1_MCLK2,
+	AD719X_EXT_CRYSTAL_MCLK1_MCLK2,
 	// External Clock applied to MCLK2
-	AD7193_EXT_CRYSTAL_MCLK2,
+	AD719X_EXT_CRYSTAL_MCLK2,
 	// Internal 4.92 MHz clock. Pin MCLK2 is tristated.
-	AD7193_INT_CLK_4_92_MHZ_TRIST,
+	AD719X_INT_CLK_4_92_MHZ_TRIST,
 	// Internal 4.92 MHz clock. The internal clock is available on MCLK2.
-	AD7193_INT_CLK_4_92_MHZ
+	AD719X_INT_CLK_4_92_MHZ
 };
 
-enum ad7193_adc_modes {
+enum ad719x_adc_modes {
 	// Continuous Conversion Mode
-	AD7193_MODE_CONT,
+	AD719X_MODE_CONT,
 	// Single Conversion Mode
-	AD7193_MODE_SINGLE,
+	AD719X_MODE_SINGLE,
 	// Idle Mode
-	AD7193_MODE_IDLE,
+	AD719X_MODE_IDLE,
 	// Power-Down Mode
-	AD7193_MODE_PWRDN,
+	AD719X_MODE_PWRDN,
 	// Internal Zero-Scale Calibration
-	AD7193_MODE_CAL_INT_ZERO,
+	AD719X_MODE_CAL_INT_ZERO,
 	// Internal Full-Scale Calibration4
-	AD7193_MODE_CAL_INT_FULL,
+	AD719X_MODE_CAL_INT_FULL,
 	// System Zero-Scale Calibration5
-	AD7193_MODE_CAL_SYS_ZERO,
+	AD719X_MODE_CAL_SYS_ZERO,
 	// System Full-Scale Calibration
-	AD7193_MODE_CAL_SYS_FULL,
+	AD719X_MODE_CAL_SYS_FULL,
 };
 
 enum ad719x_chip_id {
@@ -200,9 +200,9 @@ struct ad7193_dev {
 	/* Device Settings */
 	uint8_t			current_polarity;
 	enum ad719x_adc_gain	current_gain;
-	enum ad7193_adc_modes	operating_mode;
+	enum ad719x_adc_modes	operating_mode;
 	uint16_t    		data_rate_code;
-	enum ad7193_adc_clock	clock_source;
+	enum ad719x_adc_clock	clock_source;
 	uint8_t			input_mode;
 	uint8_t			buffer;
 	uint8_t     		bpdsw_mode;
@@ -217,9 +217,9 @@ struct ad7193_init_param {
 	/* Device Settings */
 	uint8_t			current_polarity;
 	enum ad719x_adc_gain	current_gain;
-	enum ad7193_adc_modes	operating_mode;
+	enum ad719x_adc_modes	operating_mode;
 	uint16_t    		data_rate_code;
-	enum ad7193_adc_clock	clock_source;
+	enum ad719x_adc_clock	clock_source;
 	uint8_t			input_mode;
 	uint8_t			buffer;
 	uint8_t     		bpdsw_mode;
@@ -255,7 +255,7 @@ int ad7193_reset(struct ad7193_dev *dev);
 
 /*! Set the device into specified operating mode. */
 int ad7193_set_operating_mode(struct ad7193_dev *dev,
-			      enum ad7193_adc_modes opt_mode);
+			      enum ad719x_adc_modes opt_mode);
 
 /*! Waits for RDY pin to go low. */
 int ad7193_wait_rdy_go_low(struct ad7193_dev *dev);
@@ -279,7 +279,7 @@ int ad7193_output_rate_select(struct ad7193_dev *dev,
 
 /*! Selects the clock source of the ADC */
 int ad7193_clock_select(struct ad7193_dev *dev,
-			enum ad7193_adc_clock clk_select);
+			enum ad719x_adc_clock clk_select);
 
 /*! Opens or closes the bridge power-down switch of the ADC */
 int ad7193_set_bridge_switch(struct ad7193_dev *dev, uint8_t bpdsw_select);
