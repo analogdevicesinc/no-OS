@@ -70,6 +70,8 @@ int ad7193_init(struct ad7193_dev **device,
 	if (!dev)
 		return -ENOMEM;
 
+	dev->chip_id = init_param.chip_id;
+
 	/* SPI */
 	ret = spi_init(&dev->spi_desc, &init_param.spi_init);
 	if (ret != SUCCESS)
@@ -93,10 +95,35 @@ int ad7193_init(struct ad7193_dev **device,
 	if (ret != SUCCESS)
 		goto error_miso;
 
-	if((reg_val & AD7193_ID_MASK) != ID_AD7193) {
-		goto error_miso;
+	switch (dev->chip_id) {
+	case AD7190:
+		if((reg_val & AD719X_ID_MASK) != AD7190) {
+			goto error_miso;
+		}
+		break;
+	case AD7192:
+		if((reg_val & AD719X_ID_MASK) != AD7192) {
+			goto error_miso;
+		}
+		break;
+	case AD7193:
+		if((reg_val & AD719X_ID_MASK) != AD7193) {
+			goto error_miso;
+		}
+		break;
+	case AD7194:
+		if((reg_val & AD719X_ID_MASK) != AD7194) {
+			goto error_miso;
+		}
+		break;
+	case AD7195:
+		if((reg_val & AD719X_ID_MASK) != AD7195) {
+			goto error_miso;
+		}
+		break;
+	default:
+		return FAILURE;
 	}
-
 
 	/* Initialization */
 	ret = ad7193_range_setup(dev, init_param.current_polarity,

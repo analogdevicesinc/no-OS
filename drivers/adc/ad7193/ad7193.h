@@ -126,8 +126,7 @@
 #define AD7193_CH_SHORT  9 // AIN2(+) - AIN2(-);       AINCOM(+) - AINCOM(-)
 
 /* ID Register Bit Designations (AD7193_REG_ID) */
-#define ID_AD7193               0x2
-#define AD7193_ID_MASK          0x0F
+#define AD719X_ID_MASK          0x0F
 
 /* GPOCON Register Bit Designations (AD7193_REG_GPOCON) */
 #define AD7193_GPOCON_BPDSW     (1 << 6) // Bridge power-down switch enable
@@ -185,6 +184,14 @@ enum ad7193_adc_modes {
 	AD7193_MODE_CAL_SYS_FULL,
 };
 
+enum ad719x_chip_id {
+	AD7190 = 0x4,
+	AD7192 = 0x0,
+	AD7193 = 0x2,
+	AD7194 = 0x3,
+	AD7195 = 0xA6
+};
+
 struct ad7193_dev {
 	/* SPI */
 	spi_desc		*spi_desc;
@@ -199,6 +206,7 @@ struct ad7193_dev {
 	uint8_t			input_mode;
 	uint8_t			buffer;
 	uint8_t     		bpdsw_mode;
+	enum ad719x_chip_id chip_id;
 };
 
 struct ad7193_init_param {
@@ -215,6 +223,7 @@ struct ad7193_init_param {
 	uint8_t			input_mode;
 	uint8_t			buffer;
 	uint8_t     		bpdsw_mode;
+	enum ad719x_chip_id chip_id;
 };
 
 /******************************************************************************/
