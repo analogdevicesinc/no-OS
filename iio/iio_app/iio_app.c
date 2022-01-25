@@ -42,20 +42,21 @@
 #undef USE_TCP_SOCKET
 
 #include <stdlib.h>
+#include <stdio.h>
 #include "iio.h"
 #include "iio_app.h"
 #include "parameters.h"
 #include "no-os/uart.h"
 #include "no-os/delay.h"
-#include "no-os/error.h"
-#include <stdio.h>
 
 #if defined(ADUCM_PLATFORM) || defined(XILINX_PLATFORM)
 #include "no-os/irq.h"
+#include "no-os/error.h"
 #include "irq_extra.h"
 #include "uart_extra.h"
 #endif
 #if defined(STM32_PLATFORM)
+#include <errno.h>
 #include "stm32_uart.h"
 #endif
 
