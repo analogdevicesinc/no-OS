@@ -43,11 +43,11 @@
 
 #include "mqtt_noos_support.h"
 #include <stdlib.h>
-#include "timer.h"
-#include "error.h"
-#include "util.h"
-#include "delay.h"
-#include "error.h"
+#include "no-os/timer.h"
+#include "no-os/error.h"
+#include "no-os/util.h"
+#include "no-os/delay.h"
+#include "no-os/error.h"
 
 /******************************************************************************/
 /**************************** Global Variables ********************************/
