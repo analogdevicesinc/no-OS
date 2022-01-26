@@ -45,7 +45,7 @@
 #include "diskio.h"		/* Declarations of disk functions */
 
 #include "sd.h"
-#include "error.h"
+#include "no-os/error.h"
 #include <stdio.h>
 
 /******************************************************************************/
