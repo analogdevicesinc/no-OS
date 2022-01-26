@@ -158,16 +158,16 @@ int mqtt_noos_read(Network* net, unsigned char* buff, int len, int timeout)
 
 	sent = 0;
 	do {
- 		rc = socket_recv(net->sock, (void *)(buff + sent),
-				(uint32_t)(len - sent));
- 		if (rc != -EAGAIN) { //If data available or error
- 			if (IS_ERR_VALUE(rc))
- 				return rc;
-				 
- 			sent += rc;
- 			if (sent >= len)
- 				return sent;
- 		}
+		rc = socket_recv(net->sock, (void *)(buff + sent),
+				 (uint32_t)(len - sent));
+		if (rc != -EAGAIN) { //If data available or error
+			if (IS_ERR_VALUE(rc))
+				return rc;
+
+			sent += rc;
+			if (sent >= len)
+				return sent;
+		}
 
 		mdelay(1);
 	} while (--timeout);
