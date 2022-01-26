@@ -684,9 +684,15 @@ int ad7193_temperature_read(struct ad7193_dev *dev, float *temp)
 	if (ret != SUCCESS)
 		return ret;
 
-	ret = ad7193_channels_select(dev, AD719X_CH_MASK(AD719X_CH_TEMP));
-	if (ret != SUCCESS)
-		return ret;
+	if(dev->chip_id == AD7190 || dev->chip_id == AD7192 || dev->chip_id == AD7195) {
+		ret = ad7193_channels_select(dev, AD719X_CH_MASK(AD719X_CH_2));
+		if (ret != SUCCESS)
+			return ret;
+	} else {
+		ret = ad7193_channels_select(dev, AD719X_CH_MASK(AD719X_CH_TEMP));
+		if (ret != SUCCESS)
+			return ret;
+	}
 
 	ret = ad7193_single_conversion(dev, &data_reg);
 	if (ret != SUCCESS)
