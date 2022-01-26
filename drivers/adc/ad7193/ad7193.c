@@ -139,9 +139,11 @@ int ad7193_init(struct ad7193_dev **device,
 	if (ret != SUCCESS)
 		goto error_miso;
 
-	ret = ad7193_config_input_mode(dev, init_param.input_mode);
-	if (ret != SUCCESS)
-		goto error_miso;
+	if(dev->chip_id == AD7193 || dev->chip_id == AD7194) {
+		ret = ad7193_config_input_mode(dev, init_param.input_mode);
+		if (ret != SUCCESS)
+			goto error_miso;
+	}
 
 	ret = ad7193_clock_select(dev, init_param.clock_source);
 	if (ret != SUCCESS)
@@ -445,16 +447,17 @@ int ad7193_config_input_mode(struct ad7193_dev *dev, uint8_t mode)
 {
 	int ret;
 
-	ret = ad7193_set_masked_register_value(dev, AD7193_REG_CONF,
-					       AD7193_CONF_PSEUDO, (AD7193_CONF_PSEUDO * mode),
-					       3);
-
-	if (ret == SUCCESS) {
-		/* Store the last settings regarding input mode. */
-		dev->input_mode = mode;
-	}
-
-	return ret;
+	if(dev->chip_id == AD7193 || dev->chip_id == AD7194) {
+		ret = ad7193_set_masked_register_value(dev, AD7193_REG_CONF,
+						       AD7193_CONF_PSEUDO, (AD7193_CONF_PSEUDO * mode),
+						       3);
+		if (ret == SUCCESS) {
+			/* Store the last settings regarding input mode. */
+			dev->input_mode = mode;
+		}
+		return ret;
+	} else
+		return -ENOTSUP;
 }
 
 /***************************************************************************//**
@@ -550,6 +553,10 @@ int ad7193_clock_select(struct ad7193_dev *dev,
 int ad7193_set_bridge_switch(struct ad7193_dev *dev, uint8_t bpdsw_select)
 {
 	int ret;
+
+	if(dev->chip_id == AD7194) {
+		return -ENOTSUP;
+	}
 
 	ret = ad7193_set_masked_register_value(dev, AD7193_REG_GPOCON,
 					       AD7193_GPOCON_BPDSW, (AD7193_GPOCON_BPDSW * bpdsw_select),
