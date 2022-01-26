@@ -112,18 +112,20 @@
 #define AD7193_CONF_UNIPOLAR    (1 << 3)                            // Unipolar/Bipolar Enable.
 #define AD7193_CONF_GAIN(x)     ((x) & 0x7)                         // Gain Select.
 
+/* Channel Mask */
+#define AD719X_CH_MASK(channel)		BIT(channel)
+
 /* Configuration Register: AD7193_CONF_CHAN(x) options */
-//                            Pseudo Bit = 0           Pseudo Bit = 1
-#define AD7193_CH_0      0 // AIN1(+) - AIN2(-);       AIN1 - AINCOM
-#define AD7193_CH_1      1 // AIN3(+) - AIN4(-);       AIN2 - AINCOM
-#define AD7193_CH_2      2 // AIN5(+) - AIN6(-);       AIN3 - AINCOM
-#define AD7193_CH_3      3 // AIN7(+) - AIN8(-);       AIN4 - AINCOM
-#define AD7193_CH_4      4 // AIN1(+) - AIN2(-);       AIN5 - AINCOM
-#define AD7193_CH_5      5 // AIN3(+) - AIN4(-);       AIN6 - AINCOM
-#define AD7193_CH_6      6 // AIN5(+) - AIN6(-);       AIN7 - AINCOM
-#define AD7193_CH_7      7 // AIN7(+) - AIN8(-);       AIN8 - AINCOM
-#define AD7193_CH_TEMP   8 //           Temperature sensor
-#define AD7193_CH_SHORT  9 // AIN2(+) - AIN2(-);       AINCOM(+) - AINCOM(-)
+#define AD719X_CH_0      0
+#define AD719X_CH_1      1
+#define AD719X_CH_2      2
+#define AD719X_CH_3      3
+#define AD719X_CH_4      4
+#define AD719X_CH_5      5
+#define AD719X_CH_6      6
+#define AD719X_CH_7      7
+#define AD719X_CH_TEMP   8
+#define AD719X_CH_SHORT  9
 
 /* ID Register Bit Designations (AD7193_REG_ID) */
 #define AD719X_ID_MASK          0x0F
@@ -136,9 +138,6 @@
 #define AD7193_GPOCON_P2DAT     (1 << 2) // P2 state
 #define AD7193_GPOCON_P1DAT     (1 << 1) // P1 state
 #define AD7193_GPOCON_P0DAT     (1 << 0) // P0 state
-
-/* Channel Mask */
-#define AD7193_CH_MASK(x)		BIT(x)
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/

@@ -372,18 +372,31 @@ int ad7193_wait_rdy_go_low(struct ad7193_dev *dev)
  *
  * @param dev      - The device structure.
  * @param chn_mask - Channel mask.
- *                  Example: AD7193_CH_0 - AIN1(+) - AIN2(-);  (Pseudo = 0)
- *                           AD7193_CH_1 - AIN3(+) - AIN4(-);  (Pseudo = 0)
- *                           AD7193_TEMP - Temperature sensor
- *                           AD7193_SHORT - AIN2(+) - AIN2(-); (Pseudo = 0)
+ *                  Example: AD719X_CH_0 - AIN1(+) - AIN2(-);  (Pseudo = 0)
+ *                           AD719X_CH_1 - AIN3(+) - AIN4(-);  (Pseudo = 0)
+ *                           AD719X_TEMP - Temperature sensor
+ *                           AD719X_SHORT - AIN2(+) - AIN2(-); (Pseudo = 0)
  *
  * @return SUCCESS in case of success or negative error code.
 *******************************************************************************/
 int ad7193_channels_select(struct ad7193_dev *dev,
 			   uint16_t chn_mask)
 {
-	if (chn_mask > 0x3FF) {
-		return -EINVAL;
+	switch (dev->chip_id) {
+	case AD7193:
+		if (chn_mask > 0x3FF) {
+			return -EINVAL;
+		}
+		break;
+	case AD7194:
+		if (chn_mask > 0x1FF) {
+			return -EINVAL;
+		}
+		break;
+	default:
+		if (chn_mask > 0xFF) {
+			return -EINVAL;
+		}
 	}
 
 	return ad7193_set_masked_register_value(dev, AD7193_REG_CONF,
@@ -671,7 +684,7 @@ int ad7193_temperature_read(struct ad7193_dev *dev, float *temp)
 	if (ret != SUCCESS)
 		return ret;
 
-	ret = ad7193_channels_select(dev, AD7193_CH_MASK(AD7193_CH_TEMP));
+	ret = ad7193_channels_select(dev, AD719X_CH_MASK(AD719X_CH_TEMP));
 	if (ret != SUCCESS)
 		return ret;
 
