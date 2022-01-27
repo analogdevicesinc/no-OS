@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   AD7193.c
- *   @brief  Implementation of AD7193 Driver.
+ *   @file   AD719X.c
+ *   @brief  Implementation of AD7190/2/3/4/5 Driver.
  *   @author DNechita (Dan.Nechita@analog.com)
 ********************************************************************************
  * Copyright 2012(c) Analog Devices, Inc.
@@ -41,7 +41,7 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include <stdlib.h>
-#include "ad7193.h"    // AD7193 definitions.
+#include "ad719x.h"    // AD719X definitions.
 #include "no-os/error.h"
 #include "no-os/delay.h"
 
@@ -51,7 +51,7 @@
 
 /***************************************************************************//**
  * @brief Initializes the communication peripheral and the initial Values for
- *        AD7193 Board and resets the device.
+ *        AD719X Board and resets the device.
  *
  * @param device     - The device structure.
  * @param init_param - The structure that contains the device initial
@@ -59,14 +59,14 @@
  *
  * @return SUCCESS in case of success or negative error code.
 *******************************************************************************/
-int ad7193_init(struct ad7193_dev **device,
-		struct ad7193_init_param init_param)
+int ad719x_init(struct ad719x_dev **device,
+		struct ad719x_init_param init_param)
 {
-	struct ad7193_dev *dev;
+	struct ad719x_dev *dev;
 	uint32_t reg_val;
 	int ret;
 
-	dev = (struct ad7193_dev *)malloc(sizeof(*dev));
+	dev = (struct ad719x_dev *)malloc(sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -87,11 +87,11 @@ int ad7193_init(struct ad7193_dev **device,
 		goto error_miso;
 
 	/* Reset */
-	ret = ad7193_reset(dev);
+	ret = ad719x_reset(dev);
 	if (ret != SUCCESS)
 		goto error_miso;
 
-	ret = ad7193_get_register_value(dev, AD7193_REG_ID, 1, &reg_val);
+	ret = ad719x_get_register_value(dev, AD719X_REG_ID, 1, &reg_val);
 	if (ret != SUCCESS)
 		goto error_miso;
 
@@ -126,34 +126,34 @@ int ad7193_init(struct ad7193_dev **device,
 	}
 
 	/* Initialization */
-	ret = ad7193_range_setup(dev, init_param.current_polarity,
+	ret = ad719x_range_setup(dev, init_param.current_polarity,
 				 init_param.current_gain);
 	if (ret != SUCCESS)
 		goto error_miso;
 
-	ret = ad7193_output_rate_select(dev, init_param.data_rate_code);
+	ret = ad719x_output_rate_select(dev, init_param.data_rate_code);
 	if (ret != SUCCESS)
 		goto error_miso;
 
-	ret = ad7193_buffer_select(dev, init_param.buffer);
+	ret = ad719x_buffer_select(dev, init_param.buffer);
 	if (ret != SUCCESS)
 		goto error_miso;
 
 	if(dev->chip_id == AD7193 || dev->chip_id == AD7194) {
-		ret = ad7193_config_input_mode(dev, init_param.input_mode);
+		ret = ad719x_config_input_mode(dev, init_param.input_mode);
 		if (ret != SUCCESS)
 			goto error_miso;
 	}
 
-	ret = ad7193_clock_select(dev, init_param.clock_source);
+	ret = ad719x_clock_select(dev, init_param.clock_source);
 	if (ret != SUCCESS)
 		goto error_miso;
 
-	ret = ad7193_set_bridge_switch(dev, init_param.bpdsw_mode);
+	ret = ad719x_set_bridge_switch(dev, init_param.bpdsw_mode);
 	if (ret != SUCCESS)
 		goto error_miso;
 
-	ret = ad7193_set_operating_mode(dev, init_param.operating_mode);
+	ret = ad719x_set_operating_mode(dev, init_param.operating_mode);
 	if (ret != SUCCESS)
 		goto error_miso;
 
@@ -172,13 +172,13 @@ error_dev:
 }
 
 /***************************************************************************//**
- * @brief Free the resources allocated by ad7193_init().
+ * @brief Free the resources allocated by ad719x_init().
  *
  * @param dev - The device structure.
  *
  * @return SUCCESS in case of success or negative error code.
 *******************************************************************************/
-int ad7193_remove(struct ad7193_dev *dev)
+int ad719x_remove(struct ad719x_dev *dev)
 {
 	int ret;
 
@@ -205,7 +205,7 @@ int ad7193_remove(struct ad7193_dev *dev)
  *
  * @return SUCCESS in case of success or negative error code.
 *******************************************************************************/
-int ad7193_set_register_value(struct ad7193_dev *dev,
+int ad719x_set_register_value(struct ad719x_dev *dev,
 			      uint8_t reg_addr,
 			      uint32_t reg_val,
 			      uint8_t bytes_number)
@@ -215,7 +215,7 @@ int ad7193_set_register_value(struct ad7193_dev *dev,
 	uint8_t bytes_nr         = bytes_number;
 	int ret;
 
-	write_command[0] = AD7193_COMM_WRITE | AD7193_COMM_ADDR(reg_addr);
+	write_command[0] = AD719X_COMM_WRITE | AD719X_COMM_ADDR(reg_addr);
 	while (bytes_nr > 0) {
 		write_command[bytes_nr] = *data_pointer;
 		data_pointer++;
@@ -239,7 +239,7 @@ int ad7193_set_register_value(struct ad7193_dev *dev,
  *
  * @return SUCCESS in case of success or negative error code.
 *******************************************************************************/
-int ad7193_get_register_value(struct ad7193_dev *dev, uint8_t reg_addr,
+int ad719x_get_register_value(struct ad719x_dev *dev, uint8_t reg_addr,
 			      uint8_t bytes_number, uint32_t *reg_data)
 {
 	uint8_t reg_word[5] = {0, 0, 0, 0, 0};
@@ -249,7 +249,7 @@ int ad7193_get_register_value(struct ad7193_dev *dev, uint8_t reg_addr,
 	if (!reg_data)
 		return FAILURE;
 
-	reg_word[0] = AD7193_COMM_READ | AD7193_COMM_ADDR(reg_addr);
+	reg_word[0] = AD719X_COMM_READ | AD719X_COMM_ADDR(reg_addr);
 
 	ret = spi_write_and_read(dev->spi_desc, reg_word, bytes_number + 1);
 	if (ret != SUCCESS)
@@ -274,7 +274,7 @@ int ad7193_get_register_value(struct ad7193_dev *dev, uint8_t reg_addr,
  *
  * @return SUCCESS in case of success or negative error code.
 *******************************************************************************/
-int ad7193_set_masked_register_value(struct ad7193_dev *dev,
+int ad719x_set_masked_register_value(struct ad719x_dev *dev,
 				     uint8_t reg_addr, uint32_t mask, uint32_t reg_data,
 				     uint8_t bytes)
 {
@@ -282,14 +282,14 @@ int ad7193_set_masked_register_value(struct ad7193_dev *dev,
 	uint32_t new_reg_data = 0x00;
 	int ret;
 
-	ret = ad7193_get_register_value(dev, reg_addr, bytes, &old_reg_data);
+	ret = ad719x_get_register_value(dev, reg_addr, bytes, &old_reg_data);
 	if (ret != SUCCESS)
 		return ret;
 
 	old_reg_data &= ~mask;
 	new_reg_data = old_reg_data | reg_data;
 
-	return ad7193_set_register_value(dev, reg_addr, new_reg_data, bytes);
+	return ad719x_set_register_value(dev, reg_addr, new_reg_data, bytes);
 }
 
 /***************************************************************************//**
@@ -299,7 +299,7 @@ int ad7193_set_masked_register_value(struct ad7193_dev *dev,
  *
  * @return SUCCESS in case of success or negative error code.
 *******************************************************************************/
-int ad7193_reset(struct ad7193_dev *dev)
+int ad719x_reset(struct ad719x_dev *dev)
 {
 	int ret;
 	uint8_t register_word[5];
@@ -331,13 +331,13 @@ int ad7193_reset(struct ad7193_dev *dev)
  *				      AD719X_MODE_CAL_SYS_FULL
  * @return SUCCESS in case of success or negative error code.
 *******************************************************************************/
-int ad7193_set_operating_mode(struct ad7193_dev *dev,
+int ad719x_set_operating_mode(struct ad719x_dev *dev,
 			      enum ad719x_adc_modes opt_mode)
 {
 	int ret;
 
-	ret = ad7193_set_masked_register_value(dev, AD7193_REG_MODE,
-					       AD7193_MODE_SEL(0x7), AD7193_MODE_SEL(opt_mode),
+	ret = ad719x_set_masked_register_value(dev, AD719X_REG_MODE,
+					       AD719X_MODE_SEL(0x7), AD719X_MODE_SEL(opt_mode),
 					       3);
 
 	if (ret == SUCCESS) {
@@ -353,7 +353,7 @@ int ad7193_set_operating_mode(struct ad7193_dev *dev,
  *
  * @return SUCCESS in case of success or negative error code.
 *******************************************************************************/
-int ad7193_wait_rdy_go_low(struct ad7193_dev *dev)
+int ad719x_wait_rdy_go_low(struct ad719x_dev *dev)
 {
 	uint8_t wait = 1;
 	uint16_t timeout = 0xFFFF;
@@ -381,7 +381,7 @@ int ad7193_wait_rdy_go_low(struct ad7193_dev *dev)
  *
  * @return SUCCESS in case of success or negative error code.
 *******************************************************************************/
-int ad7193_channels_select(struct ad7193_dev *dev,
+int ad719x_channels_select(struct ad719x_dev *dev,
 			   uint16_t chn_mask)
 {
 	switch (dev->chip_id) {
@@ -401,8 +401,8 @@ int ad7193_channels_select(struct ad7193_dev *dev,
 		}
 	}
 
-	return ad7193_set_masked_register_value(dev, AD7193_REG_CONF,
-						AD7193_CONF_CHAN(0x3FF), AD7193_CONF_CHAN(chn_mask),
+	return ad719x_set_masked_register_value(dev, AD719X_REG_CONF,
+						AD719X_CONF_CHAN(0x3FF), AD719X_CONF_CHAN(chn_mask),
 						3);
 }
 
@@ -415,22 +415,22 @@ int ad7193_channels_select(struct ad7193_dev *dev,
  *
  * @return SUCCESS in case of success or negative error code.
 *******************************************************************************/
-int ad7193_calibrate(struct ad7193_dev *dev,
+int ad719x_calibrate(struct ad719x_dev *dev,
 		     uint8_t mode, uint8_t channel)
 {
 	int ret;
 
-	ret = ad7193_channels_select(dev, channel);
+	ret = ad719x_channels_select(dev, channel);
 	if (ret != SUCCESS)
 		return ret;
 
-	ret = ad7193_set_masked_register_value(dev, AD7193_REG_MODE,
-					       AD7193_MODE_SEL(0x7), AD7193_MODE_SEL(mode),
+	ret = ad719x_set_masked_register_value(dev, AD719X_REG_MODE,
+					       AD719X_MODE_SEL(0x7), AD719X_MODE_SEL(mode),
 					       3);
 	if (ret != SUCCESS)
 		return ret;
 
-	return ad7193_wait_rdy_go_low(dev);
+	return ad719x_wait_rdy_go_low(dev);
 }
 
 /***************************************************************************//**
@@ -443,13 +443,13 @@ int ad7193_calibrate(struct ad7193_dev *dev,
  *
  * @return SUCCESS in case of success or negative error code.
 *******************************************************************************/
-int ad7193_config_input_mode(struct ad7193_dev *dev, uint8_t mode)
+int ad719x_config_input_mode(struct ad719x_dev *dev, uint8_t mode)
 {
 	int ret;
 
 	if(dev->chip_id == AD7193 || dev->chip_id == AD7194) {
-		ret = ad7193_set_masked_register_value(dev, AD7193_REG_CONF,
-						       AD7193_CONF_PSEUDO, (AD7193_CONF_PSEUDO * mode),
+		ret = ad719x_set_masked_register_value(dev, AD719X_REG_CONF,
+						       AD719X_CONF_PSEUDO, (AD719X_CONF_PSEUDO * mode),
 						       3);
 		if (ret == SUCCESS) {
 			/* Store the last settings regarding input mode. */
@@ -470,12 +470,12 @@ int ad7193_config_input_mode(struct ad7193_dev *dev, uint8_t mode)
  *
  * @return SUCCESS in case of success or negative error code.
 *******************************************************************************/
-int ad7193_buffer_select(struct ad7193_dev *dev, uint8_t buff_en)
+int ad719x_buffer_select(struct ad719x_dev *dev, uint8_t buff_en)
 {
 	int ret;
 
-	ret = ad7193_set_masked_register_value(dev, AD7193_REG_CONF,
-					       AD7193_CONF_BUF, (AD7193_CONF_BUF * buff_en),
+	ret = ad719x_set_masked_register_value(dev, AD719X_REG_CONF,
+					       AD719X_CONF_BUF, (AD719X_CONF_BUF * buff_en),
 					       3);
 
 	if (ret == SUCCESS) {
@@ -494,13 +494,13 @@ int ad7193_buffer_select(struct ad7193_dev *dev, uint8_t buff_en)
  *
  * @return SUCCESS in case of success or negative error code.
 *******************************************************************************/
-int ad7193_output_rate_select(struct ad7193_dev *dev,
+int ad719x_output_rate_select(struct ad719x_dev *dev,
 			      uint16_t out_rate_code)
 {
 	int ret;
 
-	ret = ad7193_set_masked_register_value(dev, AD7193_REG_MODE,
-					       AD7193_MODE_RATE(0x3FF), AD7193_MODE_RATE(out_rate_code),
+	ret = ad719x_set_masked_register_value(dev, AD719X_REG_MODE,
+					       AD719X_MODE_RATE(0x3FF), AD719X_MODE_RATE(out_rate_code),
 					       3);
 
 	if (ret == SUCCESS) {
@@ -523,13 +523,13 @@ int ad7193_output_rate_select(struct ad7193_dev *dev,
  *
  * @return SUCCESS in case of success or negative error code.
 *******************************************************************************/
-int ad7193_clock_select(struct ad7193_dev *dev,
+int ad719x_clock_select(struct ad719x_dev *dev,
 			enum ad719x_adc_clock clk_select)
 {
 	int ret;
 
-	ret = ad7193_set_masked_register_value(dev, AD7193_REG_MODE,
-					       AD7193_MODE_CLKSRC(0x3), AD7193_MODE_CLKSRC(clk_select),
+	ret = ad719x_set_masked_register_value(dev, AD719X_REG_MODE,
+					       AD719X_MODE_CLKSRC(0x3), AD719X_MODE_CLKSRC(clk_select),
 					       3);
 
 	if (ret == SUCCESS) {
@@ -550,7 +550,7 @@ int ad7193_clock_select(struct ad7193_dev *dev,
  *
  * @return SUCCESS in case of success or negative error code.
 *******************************************************************************/
-int ad7193_set_bridge_switch(struct ad7193_dev *dev, uint8_t bpdsw_select)
+int ad719x_set_bridge_switch(struct ad719x_dev *dev, uint8_t bpdsw_select)
 {
 	int ret;
 
@@ -558,8 +558,8 @@ int ad7193_set_bridge_switch(struct ad7193_dev *dev, uint8_t bpdsw_select)
 		return -ENOTSUP;
 	}
 
-	ret = ad7193_set_masked_register_value(dev, AD7193_REG_GPOCON,
-					       AD7193_GPOCON_BPDSW, (AD7193_GPOCON_BPDSW * bpdsw_select),
+	ret = ad719x_set_masked_register_value(dev, AD719X_REG_GPOCON,
+					       AD719X_GPOCON_BPDSW, (AD719X_GPOCON_BPDSW * bpdsw_select),
 					       1);
 
 	if (ret == SUCCESS) {
@@ -582,14 +582,14 @@ int ad7193_set_bridge_switch(struct ad7193_dev *dev, uint8_t bpdsw_select)
  *
  * @return SUCCESS in case of success or negative error code.
 *******************************************************************************/
-int ad7193_range_setup(struct ad7193_dev *dev,
+int ad719x_range_setup(struct ad719x_dev *dev,
 		       uint8_t polarity, enum ad719x_adc_gain gain)
 {
 	int ret;
 
-	ret = ad7193_set_masked_register_value(dev, AD7193_REG_CONF,
-					       (AD7193_CONF_UNIPOLAR | AD7193_CONF_GAIN(0x7)),
-					       (polarity * AD7193_CONF_UNIPOLAR) | AD7193_CONF_GAIN(gain),
+	ret = ad719x_set_masked_register_value(dev, AD719X_REG_CONF,
+					       (AD719X_CONF_UNIPOLAR | AD719X_CONF_GAIN(0x7)),
+					       (polarity * AD719X_CONF_UNIPOLAR) | AD719X_CONF_GAIN(gain),
 					       3);
 
 	if (ret == SUCCESS) {
@@ -609,7 +609,7 @@ int ad7193_range_setup(struct ad7193_dev *dev,
  *
  * @return SUCCESS in case of success or negative error code.
 *******************************************************************************/
-int ad7193_single_conversion(struct ad7193_dev *dev, uint32_t *reg_data)
+int ad719x_single_conversion(struct ad719x_dev *dev, uint32_t *reg_data)
 {
 	uint32_t command = 0x0;
 	int ret;
@@ -617,18 +617,18 @@ int ad7193_single_conversion(struct ad7193_dev *dev, uint32_t *reg_data)
 	if (!reg_data)
 		return FAILURE;
 
-	command = AD7193_MODE_SEL(AD719X_MODE_SINGLE) | AD7193_MODE_CLKSRC(
-			  AD719X_INT_CLK_4_92_MHZ_TRIST) | AD7193_MODE_RATE(dev->data_rate_code);
+	command = AD719X_MODE_SEL(AD719X_MODE_SINGLE) | AD719X_MODE_CLKSRC(
+			  AD719X_INT_CLK_4_92_MHZ_TRIST) | AD719X_MODE_RATE(dev->data_rate_code);
 
-	ret = ad7193_set_register_value(dev, AD7193_REG_MODE, command, 3);
+	ret = ad719x_set_register_value(dev, AD719X_REG_MODE, command, 3);
 	if (ret != SUCCESS)
 		return ret;
 
-	ret = ad7193_wait_rdy_go_low(dev);
+	ret = ad719x_wait_rdy_go_low(dev);
 	if (ret != SUCCESS)
 		return ret;
 
-	return ad7193_get_register_value(dev, AD7193_REG_DATA, 3, reg_data);
+	return ad719x_get_register_value(dev, AD719X_REG_DATA, 3, reg_data);
 }
 
 /***************************************************************************//**
@@ -640,7 +640,7 @@ int ad7193_single_conversion(struct ad7193_dev *dev, uint32_t *reg_data)
  *
  * @return SUCCESS in case of success or negative error code.
 *******************************************************************************/
-int ad7193_continuous_read_avg(struct ad7193_dev *dev,
+int ad719x_continuous_read_avg(struct ad719x_dev *dev,
 			       uint8_t sample_number, uint32_t *samples_avg)
 {
 	uint32_t samples = 0;
@@ -648,20 +648,20 @@ int ad7193_continuous_read_avg(struct ad7193_dev *dev,
 	uint8_t count = 0;
 	int ret;
 
-	command = AD7193_MODE_SEL(AD719X_MODE_CONT) |
-		  AD7193_MODE_CLKSRC(AD719X_INT_CLK_4_92_MHZ_TRIST) |
-		  AD7193_MODE_RATE(dev->data_rate_code);
+	command = AD719X_MODE_SEL(AD719X_MODE_CONT) |
+		  AD719X_MODE_CLKSRC(AD719X_INT_CLK_4_92_MHZ_TRIST) |
+		  AD719X_MODE_RATE(dev->data_rate_code);
 
-	ret = ad7193_set_register_value(dev, AD7193_REG_MODE, command, 3);
+	ret = ad719x_set_register_value(dev, AD719X_REG_MODE, command, 3);
 	if (ret != SUCCESS)
 		return ret;
 
 	for (count = 0; count < sample_number; count++) {
-		ret = ad7193_wait_rdy_go_low(dev);
+		ret = ad719x_wait_rdy_go_low(dev);
 		if (ret != SUCCESS)
 			return ret;
 
-		ret = ad7193_get_register_value(dev, AD7193_REG_DATA, 3, &samples);
+		ret = ad719x_get_register_value(dev, AD719X_REG_DATA, 3, &samples);
 		if(ret != SUCCESS)
 			return ret;
 
@@ -681,27 +681,27 @@ int ad7193_continuous_read_avg(struct ad7193_dev *dev,
  *
  * @return SUCCESS in case of success or negative error code.
 *******************************************************************************/
-int ad7193_temperature_read(struct ad7193_dev *dev, float *temp)
+int ad719x_temperature_read(struct ad719x_dev *dev, float *temp)
 {
 	uint32_t data_reg = 0;
 	int ret;
 
 	// Bipolar operation, 1 Gain.
-	ret = ad7193_range_setup(dev, 0, AD719X_ADC_GAIN_1);
+	ret = ad719x_range_setup(dev, 0, AD719X_ADC_GAIN_1);
 	if (ret != SUCCESS)
 		return ret;
 
 	if(dev->chip_id == AD7190 || dev->chip_id == AD7192 || dev->chip_id == AD7195) {
-		ret = ad7193_channels_select(dev, AD719X_CH_MASK(AD719X_CH_2));
+		ret = ad719x_channels_select(dev, AD719X_CH_MASK(AD719X_CH_2));
 		if (ret != SUCCESS)
 			return ret;
 	} else {
-		ret = ad7193_channels_select(dev, AD719X_CH_MASK(AD719X_CH_TEMP));
+		ret = ad719x_channels_select(dev, AD719X_CH_MASK(AD719X_CH_TEMP));
 		if (ret != SUCCESS)
 			return ret;
 	}
 
-	ret = ad7193_single_conversion(dev, &data_reg);
+	ret = ad719x_single_conversion(dev, &data_reg);
 	if (ret != SUCCESS)
 		return ret;
 
@@ -721,7 +721,7 @@ int ad7193_temperature_read(struct ad7193_dev *dev, float *temp)
  *
  * @return voltage - The result of the conversion expressed as volts.
 *******************************************************************************/
-float ad7193_convert_to_volts(struct ad7193_dev *dev,
+float ad719x_convert_to_volts(struct ad719x_dev *dev,
 			      uint32_t raw_data,
 			      float v_ref)
 {
