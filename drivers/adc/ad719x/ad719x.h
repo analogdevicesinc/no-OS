@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   AD7193.h
- *   @brief  Header file of AD7193 Driver.
+ *   @file   AD719X.h
+ *   @brief  Header file of AD7190/2/3/4/5 Driver.
  *   @author DNechita (Dan.Nechita@analog.com)
 ********************************************************************************
  * Copyright 2012(c) Analog Devices, Inc.
@@ -37,8 +37,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef __AD7193_H__
-#define __AD7193_H__
+#ifndef __AD719X_H__
+#define __AD719X_H__
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
@@ -49,73 +49,73 @@
 #include "no-os/util.h"
 
 /******************************************************************************/
-/******************************** AD7193 **************************************/
+/******************************** AD719X **************************************/
 /******************************************************************************/
 
 /* SPI slave device ID */
-#define AD7193_SLAVE_ID         1
+#define AD719X_SLAVE_ID         1
 
-/* AD7193 Register Map */
-#define AD7193_REG_COMM         0 // Communications Register (WO, 8-bit)
-#define AD7193_REG_STAT         0 // Status Register         (RO, 8-bit)
-#define AD7193_REG_MODE         1 // Mode Register           (RW, 24-bit
-#define AD7193_REG_CONF         2 // Configuration Register  (RW, 24-bit)
-#define AD7193_REG_DATA         3 // Data Register           (RO, 24/32-bit)
-#define AD7193_REG_ID           4 // ID Register             (RO, 8-bit)
-#define AD7193_REG_GPOCON       5 // GPOCON Register         (RW, 8-bit)
-#define AD7193_REG_OFFSET       6 // Offset Register         (RW, 24-bit
-#define AD7193_REG_FULLSCALE    7 // Full-Scale Register     (RW, 24-bit)
+/* AD719X Register Map */
+#define AD719X_REG_COMM         0 // Communications Register (WO, 8-bit)
+#define AD719X_REG_STAT         0 // Status Register         (RO, 8-bit)
+#define AD719X_REG_MODE         1 // Mode Register           (RW, 24-bit
+#define AD719X_REG_CONF         2 // Configuration Register  (RW, 24-bit)
+#define AD719X_REG_DATA         3 // Data Register           (RO, 24/32-bit)
+#define AD719X_REG_ID           4 // ID Register             (RO, 8-bit)
+#define AD719X_REG_GPOCON       5 // GPOCON Register         (RW, 8-bit)
+#define AD719X_REG_OFFSET       6 // Offset Register         (RW, 24-bit
+#define AD719X_REG_FULLSCALE    7 // Full-Scale Register     (RW, 24-bit)
 
-/* Communications Register Bit Designations (AD7193_REG_COMM) */
-#define AD7193_COMM_WEN         (1 << 7)           // Write Enable.
-#define AD7193_COMM_WRITE       (0 << 6)           // Write Operation.
-#define AD7193_COMM_READ        (1 << 6)           // Read Operation.
-#define AD7193_COMM_ADDR(x)     (((x) & 0x7) << 3) // Register Address.
-#define AD7193_COMM_CREAD       (1 << 2)           // Continuous Read of Data Register.
+/* Communications Register Bit Designations (AD719X_REG_COMM) */
+#define AD719X_COMM_WEN         (1 << 7)           // Write Enable.
+#define AD719X_COMM_WRITE       (0 << 6)           // Write Operation.
+#define AD719X_COMM_READ        (1 << 6)           // Read Operation.
+#define AD719X_COMM_ADDR(x)     (((x) & 0x7) << 3) // Register Address.
+#define AD719X_COMM_CREAD       (1 << 2)           // Continuous Read of Data Register.
 
-/* Status Register Bit Designations (AD7193_REG_STAT) */
-#define AD7193_STAT_RDY         (1 << 7) // Ready.
-#define AD7193_STAT_ERR         (1 << 6) // ADC error bit.
-#define AD7193_STAT_NOREF       (1 << 5) // Error no external reference.
-#define AD7193_STAT_PARITY      (1 << 4) // Parity check of the data register.
-#define AD7193_STAT_CH3         (1 << 3) // Channel 3.
-#define AD7193_STAT_CH2         (1 << 2) // Channel 2.
-#define AD7193_STAT_CH1         (1 << 1) // Channel 1.
-#define AD7193_STAT_CH0         (1 << 0) // Channel 0.
+/* Status Register Bit Designations (AD719X_REG_STAT) */
+#define AD719X_STAT_RDY         (1 << 7) // Ready.
+#define AD719X_STAT_ERR         (1 << 6) // ADC error bit.
+#define AD719X_STAT_NOREF       (1 << 5) // Error no external reference.
+#define AD719X_STAT_PARITY      (1 << 4) // Parity check of the data register.
+#define AD719X_STAT_CH3         (1 << 3) // Channel 3.
+#define AD719X_STAT_CH2         (1 << 2) // Channel 2.
+#define AD719X_STAT_CH1         (1 << 1) // Channel 1.
+#define AD719X_STAT_CH0         (1 << 0) // Channel 0.
 
-/* Mode Register Bit Designations (AD7193_REG_MODE) */
-#define AD7193_MODE_SEL(x)      (((uint32_t)(x) & 0x7) << 21) // Operation Mode Select.
-#define AD7193_MODE_DAT_STA     ((uint32_t)1 << 20)           // Status Register transmission.
-#define AD7193_MODE_CLKSRC(x)   (((uint32_t)(x) & 0x3) << 18) // Clock Source Select.
-#define AD7193_MODE_AVG(x)      (((uint32_t)(x) & 0x3) << 16) // Fast settling filter.
-#define AD7193_MODE_SINC3       (1 << 15)                          // SINC3 Filter Select.
-#define AD7193_MODE_ENPAR       (1 << 13)                          // Parity Enable.
-#define AD7193_MODE_CLKDIV      (1 << 12)                          // Clock divide by 2 (AD7190/2 only).
-#define AD7193_MODE_SCYCLE      (1 << 11)                          // Single cycle conversion.
-#define AD7193_MODE_REJ60       (1 << 10)                          // 50/60Hz notch filter.
-#define AD7193_MODE_RATE(x)     ((x) & 0x3FF)                      // Filter Update Rate Select.
+/* Mode Register Bit Designations (AD719X_REG_MODE) */
+#define AD719X_MODE_SEL(x)      (((uint32_t)(x) & 0x7) << 21) // Operation Mode Select.
+#define AD719X_MODE_DAT_STA     ((uint32_t)1 << 20)           // Status Register transmission.
+#define AD719X_MODE_CLKSRC(x)   (((uint32_t)(x) & 0x3) << 18) // Clock Source Select.
+#define AD719X_MODE_AVG(x)      (((uint32_t)(x) & 0x3) << 16) // Fast settling filter.
+#define AD719X_MODE_SINC3       (1 << 15)                          // SINC3 Filter Select.
+#define AD719X_MODE_ENPAR       (1 << 13)                          // Parity Enable.
+#define AD719X_MODE_CLKDIV      (1 << 12)                          // Clock divide by 2 (AD7190/2 only).
+#define AD719X_MODE_SCYCLE      (1 << 11)                          // Single cycle conversion.
+#define AD719X_MODE_REJ60       (1 << 10)                          // 50/60Hz notch filter.
+#define AD719X_MODE_RATE(x)     ((x) & 0x3FF)                      // Filter Update Rate Select.
 
-/* Mode Register: AD7193_MODE_AVG(x) options */
-#define AD7193_AVG_NONE                 0 // No averaging (fast settling mode disabled).
-#define AD7193_AVG_BY_2                 1 // Average by 2.
-#define AD7193_AVG_BY_8                 2 // Average by 8.
-#define AD7193_AVG_BY_16                3 // Average by 16.
+/* Mode Register: AD719X_MODE_AVG(x) options */
+#define AD719X_AVG_NONE                 0 // No averaging (fast settling mode disabled).
+#define AD719X_AVG_BY_2                 1 // Average by 2.
+#define AD719X_AVG_BY_8                 2 // Average by 8.
+#define AD719X_AVG_BY_16                3 // Average by 16.
 
-/* Configuration Register Bit Designations (AD7193_REG_CONF) */
-#define AD7193_CONF_CHOP        ((uint32_t)1 << 23)            // CHOP enable.
-#define AD7193_CONF_REFSEL      ((uint32_t)1 << 20)            // REFIN1/REFIN2 Reference Select.
-#define AD7193_CONF_PSEUDO      ((uint32_t)1 << 18)            // Pseudo differential analog inputs.
-#define AD7193_CONF_CHAN(x)     ((uint32_t)((x) & 0x3FF) << 8) // Channel select.
-#define AD7193_CONF_BURN        (1 << 7)                            // Burnout current enable.
-#define AD7193_CONF_REFDET      (1 << 6)                            // Reference detect enable.
-#define AD7193_CONF_BUF         (1 << 4)                            // Buffered Mode Enable.
-#define AD7193_CONF_UNIPOLAR    (1 << 3)                            // Unipolar/Bipolar Enable.
-#define AD7193_CONF_GAIN(x)     ((x) & 0x7)                         // Gain Select.
+/* Configuration Register Bit Designations (AD719X_REG_CONF) */
+#define AD719X_CONF_CHOP        ((uint32_t)1 << 23)            // CHOP enable.
+#define AD719X_CONF_REFSEL      ((uint32_t)1 << 20)            // REFIN1/REFIN2 Reference Select.
+#define AD719X_CONF_PSEUDO      ((uint32_t)1 << 18)            // Pseudo differential analog inputs.
+#define AD719X_CONF_CHAN(x)     ((uint32_t)((x) & 0x3FF) << 8) // Channel select.
+#define AD719X_CONF_BURN        (1 << 7)                            // Burnout current enable.
+#define AD719X_CONF_REFDET      (1 << 6)                            // Reference detect enable.
+#define AD719X_CONF_BUF         (1 << 4)                            // Buffered Mode Enable.
+#define AD719X_CONF_UNIPOLAR    (1 << 3)                            // Unipolar/Bipolar Enable.
+#define AD719X_CONF_GAIN(x)     ((x) & 0x7)                         // Gain Select.
 
 /* Channel Mask */
 #define AD719X_CH_MASK(channel)		BIT(channel)
 
-/* Configuration Register: AD7193_CONF_CHAN(x) options */
+/* Configuration Register: AD719X_CONF_CHAN(x) options */
 #define AD719X_CH_0      0
 #define AD719X_CH_1      1
 #define AD719X_CH_2      2
@@ -130,14 +130,14 @@
 /* ID Register Bit Designations (AD7193_REG_ID) */
 #define AD719X_ID_MASK          0x0F
 
-/* GPOCON Register Bit Designations (AD7193_REG_GPOCON) */
-#define AD7193_GPOCON_BPDSW     (1 << 6) // Bridge power-down switch enable
-#define AD7193_GPOCON_GP32EN    (1 << 5) // Digital Output P3 and P2 enable
-#define AD7193_GPOCON_GP10EN    (1 << 4) // Digital Output P1 and P0 enable
-#define AD7193_GPOCON_P3DAT     (1 << 3) // P3 state
-#define AD7193_GPOCON_P2DAT     (1 << 2) // P2 state
-#define AD7193_GPOCON_P1DAT     (1 << 1) // P1 state
-#define AD7193_GPOCON_P0DAT     (1 << 0) // P0 state
+/* GPOCON Register Bit Designations (AD719X_REG_GPOCON) */
+#define AD719X_GPOCON_BPDSW     (1 << 6) // Bridge power-down switch enable
+#define AD719X_GPOCON_GP32EN    (1 << 5) // Digital Output P3 and P2 enable
+#define AD719X_GPOCON_GP10EN    (1 << 4) // Digital Output P1 and P0 enable
+#define AD719X_GPOCON_P3DAT     (1 << 3) // P3 state
+#define AD719X_GPOCON_P2DAT     (1 << 2) // P2 state
+#define AD719X_GPOCON_P1DAT     (1 << 1) // P1 state
+#define AD719X_GPOCON_P0DAT     (1 << 0) // P0 state
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -191,7 +191,7 @@ enum ad719x_chip_id {
 	AD7195 = 0xA6
 };
 
-struct ad7193_dev {
+struct ad719x_dev {
 	/* SPI */
 	spi_desc		*spi_desc;
 	/* GPIO */
@@ -208,7 +208,7 @@ struct ad7193_dev {
 	enum ad719x_chip_id chip_id;
 };
 
-struct ad7193_init_param {
+struct ad719x_init_param {
 	/* SPI */
 	spi_init_param		spi_init;
 	/* GPIO */
@@ -230,75 +230,75 @@ struct ad7193_init_param {
 /******************************************************************************/
 
 /*! Checks if the AD7139 part is present. */
-int ad7193_init(struct ad7193_dev **device,
-		struct ad7193_init_param init_param);
+int ad719x_init(struct ad719x_dev **device,
+		struct ad719x_init_param init_param);
 
-/*! Free the resources allocated by ad7193_init(). */
-int ad7193_remove(struct ad7193_dev *dev);
+/*! Free the resources allocated by ad719x_init(). */
+int ad719x_remove(struct ad719x_dev *dev);
 
 /*! Writes data into a register. */
-int ad7193_set_register_value(struct ad7193_dev *dev, uint8_t reg_addr,
+int ad719x_set_register_value(struct ad719x_dev *dev, uint8_t reg_addr,
 			      uint32_t reg_value, uint8_t bytes_number);
 
 /*! Reads the value of a register. */
-int ad7193_get_register_value(struct ad7193_dev *dev, uint8_t reg_addr,
+int ad719x_get_register_value(struct ad719x_dev *dev, uint8_t reg_addr,
 			      uint8_t bytes_number, uint32_t *reg_data);
 
 /* Write masked data into device register. */
-int ad7193_set_masked_register_value(struct ad7193_dev *dev,
+int ad719x_set_masked_register_value(struct ad719x_dev *dev,
 				     uint8_t reg_addr, uint32_t mask, uint32_t data,
 				     uint8_t bytes);
 
 /*! Resets the device. */
-int ad7193_reset(struct ad7193_dev *dev);
+int ad719x_reset(struct ad719x_dev *dev);
 
 /*! Set the device into specified operating mode. */
-int ad7193_set_operating_mode(struct ad7193_dev *dev,
+int ad719x_set_operating_mode(struct ad719x_dev *dev,
 			      enum ad719x_adc_modes opt_mode);
 
 /*! Waits for RDY pin to go low. */
-int ad7193_wait_rdy_go_low(struct ad7193_dev *dev);
+int ad719x_wait_rdy_go_low(struct ad719x_dev *dev);
 
 /*! Selects the channels to be enabled. */
-int ad7193_channels_select(struct ad7193_dev *dev, uint16_t chn_mask);
+int ad719x_channels_select(struct ad719x_dev *dev, uint16_t chn_mask);
 
 /*! Performs the given calibration to the specified channel. */
-int ad7193_calibrate(struct ad7193_dev *dev,
+int ad719x_calibrate(struct ad719x_dev *dev,
 		     uint8_t mode, uint8_t channel);
 
 /*! Configures the input mode of the ADC */
-int ad7193_config_input_mode(struct ad7193_dev *dev, uint8_t mode);
+int ad719x_config_input_mode(struct ad719x_dev *dev, uint8_t mode);
 
 /*! Enables or disables the buffer on the ADC input channels */
-int ad7193_buffer_select(struct ad7193_dev *dev, uint8_t buff_en);
+int ad719x_buffer_select(struct ad719x_dev *dev, uint8_t buff_en);
 
 /*! Selects the filter output data rate of the ADC */
-int ad7193_output_rate_select(struct ad7193_dev *dev,
+int ad719x_output_rate_select(struct ad719x_dev *dev,
 			      uint16_t out_rate_code);
 
 /*! Selects the clock source of the ADC */
-int ad7193_clock_select(struct ad7193_dev *dev,
+int ad719x_clock_select(struct ad719x_dev *dev,
 			enum ad719x_adc_clock clk_select);
 
 /*! Opens or closes the bridge power-down switch of the ADC */
-int ad7193_set_bridge_switch(struct ad7193_dev *dev, uint8_t bpdsw_select);
+int ad719x_set_bridge_switch(struct ad719x_dev *dev, uint8_t bpdsw_select);
 
 /*! Selects the polarity of the conversion and the ADC input range. */
-int ad7193_range_setup(struct ad7193_dev *dev,
-		       uint8_t polarity, enum ad719x_adc_gain gain);
+int ad719x_range_setup(struct ad719x_dev *dev,
+		       uint8_t polarity, enum ad719x_adc_gain range);
 
 /*! Returns the result of a single conversion. */
-int ad7193_single_conversion(struct ad7193_dev *dev, uint32_t *reg_data);
+int ad719x_single_conversion(struct ad719x_dev *dev, uint32_t *reg_data);
 
 /*! Returns the average of several conversion results. */
-int ad7193_continuous_read_avg(struct ad7193_dev *dev,
+int ad719x_continuous_read_avg(struct ad719x_dev *dev,
 			       uint8_t sample_number, uint32_t *samples_avg);
 
 /*! Read data from temperature sensor and converts it to Celsius degrees. */
-int ad7193_temperature_read(struct ad7193_dev *dev, float *temp);
+int ad719x_temperature_read(struct ad719x_dev *dev, float *temp);
 
 /*! Converts 24-bit raw data to volts. */
-float ad7193_convert_to_volts(struct ad7193_dev *dev,
+float ad719x_convert_to_volts(struct ad719x_dev *dev,
 			      uint32_t raw_data, float v_ref);
 
-#endif /* __AD7193_H__ */
+#endif /* __AD719X_H__ */
