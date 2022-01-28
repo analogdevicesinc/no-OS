@@ -634,6 +634,7 @@ static int32_t iiod_run_cmd(struct iiod_desc *desc,
 		ret = desc->ops.write_attr(&ctx, data->device, &attr,
 					   conn->payload_buf,
 					   data->bytes_count);
+		conn->nb_buf.len = 0;
 		conn->res.val = ret;
 		conn->res.write_val = 1;
 		break;
@@ -728,6 +729,9 @@ static int32_t iiod_run_state(struct iiod_desc *desc,
 			conn->state = IIOD_WRITING_CMD_RESULT;
 		} else if (conn->cmd_data.cmd == IIOD_CMD_WRITE) {
 			/* Special case. Attribute needs to be read */
+			conn->nb_buf.buf = conn->payload_buf;
+			conn->nb_buf.len = conn->cmd_data.bytes_count;
+			conn->nb_buf.idx = 0;
 			conn->state = IIOD_READING_WRITE_DATA;
 		} else {
 			conn->state = IIOD_RUNNING_CMD;
