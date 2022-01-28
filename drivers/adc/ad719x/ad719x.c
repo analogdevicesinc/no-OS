@@ -73,12 +73,12 @@ int ad719x_init(struct ad719x_dev **device,
 	dev->chip_id = init_param.chip_id;
 
 	/* SPI */
-	ret = spi_init(&dev->spi_desc, &init_param.spi_init);
+	ret = spi_init(&dev->spi_desc, init_param.spi_init);
 	if (ret != SUCCESS)
 		goto error_dev;
 
 	/* GPIO */
-	ret = gpio_get(&dev->gpio_miso, &init_param.gpio_miso);
+	ret = gpio_get(&dev->gpio_miso, init_param.gpio_miso);
 	if (ret != SUCCESS)
 		goto error_spi;
 
@@ -86,39 +86,47 @@ int ad719x_init(struct ad719x_dev **device,
 	if (ret != SUCCESS)
 		goto error_miso;
 
-	/* Reset */
-	ret = ad719x_reset(dev);
+	ret = gpio_get_optional(&dev->sync_pin, init_param.sync_pin);
 	if (ret != SUCCESS)
 		goto error_miso;
 
+	ret = gpio_direction_output(dev->sync_pin, GPIO_HIGH);
+	if (ret != SUCCESS)
+		goto error_sync;
+
+	/* Reset */
+	ret = ad719x_reset(dev);
+	if (ret != SUCCESS)
+		goto error_sync;
+
 	ret = ad719x_get_register_value(dev, AD719X_REG_ID, 1, &reg_val);
 	if (ret != SUCCESS)
-		goto error_miso;
+		goto error_sync;
 
 	switch (dev->chip_id) {
 	case AD7190:
 		if((reg_val & AD719X_ID_MASK) != AD7190) {
-			goto error_miso;
+			goto error_sync;
 		}
 		break;
 	case AD7192:
 		if((reg_val & AD719X_ID_MASK) != AD7192) {
-			goto error_miso;
+			goto error_sync;
 		}
 		break;
 	case AD7193:
 		if((reg_val & AD719X_ID_MASK) != AD7193) {
-			goto error_miso;
+			goto error_sync;
 		}
 		break;
 	case AD7194:
 		if((reg_val & AD719X_ID_MASK) != AD7194) {
-			goto error_miso;
+			goto error_sync;
 		}
 		break;
 	case AD7195:
 		if((reg_val & AD719X_ID_MASK) != AD7195) {
-			goto error_miso;
+			goto error_sync;
 		}
 		break;
 	default:
@@ -129,38 +137,40 @@ int ad719x_init(struct ad719x_dev **device,
 	ret = ad719x_range_setup(dev, init_param.current_polarity,
 				 init_param.current_gain);
 	if (ret != SUCCESS)
-		goto error_miso;
+		goto error_sync;
 
 	ret = ad719x_output_rate_select(dev, init_param.data_rate_code);
 	if (ret != SUCCESS)
-		goto error_miso;
+		goto error_sync;
 
 	ret = ad719x_buffer_select(dev, init_param.buffer);
 	if (ret != SUCCESS)
-		goto error_miso;
+		goto error_sync;
 
 	if(dev->chip_id == AD7193 || dev->chip_id == AD7194) {
 		ret = ad719x_config_input_mode(dev, init_param.input_mode);
 		if (ret != SUCCESS)
-			goto error_miso;
+			goto error_sync;
 	}
 
 	ret = ad719x_clock_select(dev, init_param.clock_source);
 	if (ret != SUCCESS)
-		goto error_miso;
+		goto error_sync;
 
 	ret = ad719x_set_bridge_switch(dev, init_param.bpdsw_mode);
 	if (ret != SUCCESS)
-		goto error_miso;
+		goto error_sync;
 
 	ret = ad719x_set_operating_mode(dev, init_param.operating_mode);
 	if (ret != SUCCESS)
-		goto error_miso;
+		goto error_sync;
 
 	*device = dev;
 
 	return ret;
 
+error_sync:
+	gpio_remove(dev->sync_pin);
 error_miso:
 	gpio_remove(dev->gpio_miso);
 error_spi:
@@ -735,4 +745,23 @@ float ad719x_convert_to_volts(struct ad719x_dev *dev,
 	}
 
 	return voltage;
+}
+
+/***************************************************************************//**
+ * @brief Control SYNC pin for synchronization of multiple devices.
+ *
+ * @param dev       - The device structure.
+ * @param value     - Pin level to be written.
+ * 						0 - LOW
+ *						1 - HIGH
+ *
+ * @return SUCCESS in case of success or negative error code.
+*******************************************************************************/
+int ad719x_sync_control(struct ad719x_dev *dev, uint8_t value)
+{
+	if(dev->sync_pin) {
+		return gpio_set_value(dev->sync_pin, value);
+	} else {
+		return -ENOTSUP;
+	}
 }
