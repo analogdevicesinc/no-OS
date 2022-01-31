@@ -59,7 +59,7 @@ static int ad7799_iio_channel_read(void *device, char *buf, uint32_t len,
 	struct ad7799_dev *dev = (struct ad7799_dev *)device;
 	int32_t ret, data;
 
-	ret = ad7799_read_channel(dev, channel->ch_num, &data);
+	ret = ad7799_get_channel(dev, channel->ch_num, &data);
 	if (ret != SUCCESS)
 		return ret;
 
