@@ -163,6 +163,13 @@ proc create_project {} {
 	}
 }
 
+proc clean_build {} {
+	cd $::ws
+	setws ./
+
+	app clean -name app
+}
+
 set pl_dict [dict create					\
 	"ps7_cortexa9_0" "xc7z*"				\
 	"psu_cortexa53_0" "PSU"					\
