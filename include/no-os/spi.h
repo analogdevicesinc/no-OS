@@ -115,7 +115,7 @@ typedef struct spi_init_param {
 	/** maximum transfer speed */
 	uint32_t	max_speed_hz;
 	/** SPI chip select */
-	uint8_t		chip_select;
+	uint16_t		chip_select;
 	/** SPI mode */
 	enum spi_mode	mode;
 	/** SPI bit order */
@@ -135,7 +135,7 @@ typedef struct spi_desc {
 	/** maximum transfer speed */
 	uint32_t	max_speed_hz;
 	/** SPI chip select */
-	uint8_t		chip_select;
+	uint16_t		chip_select;
 	/** SPI mode */
 	enum spi_mode	mode;
 	/** SPI bit order */
