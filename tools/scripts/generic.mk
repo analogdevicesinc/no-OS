@@ -367,7 +367,7 @@ standalone:
 	$(MUTE) $(MAKE) --no-print-directory project LINK_SRCS=n MAKEFLAGS=$(MAKEOVERRIDES)
 
 # Build project using SDK
-project_build: $(PLATFORM)_project_build
+sdkbuild: $(PLATFORM)_sdkbuild
 
 # Remove build artefacts
 PHONY += clean

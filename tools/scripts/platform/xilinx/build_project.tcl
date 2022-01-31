@@ -5,6 +5,6 @@ if { $argc != 1 } {
 
 sdk setws [lindex $argv 0]
 
-projects -build -name app -type app
+app build -name app
 
 exit
