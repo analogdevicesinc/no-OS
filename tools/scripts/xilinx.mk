@@ -152,6 +152,10 @@ PHONY += $(PLATFORM)_sdkbuild
 $(PLATFORM)_sdkbuild: all
 	$(MUTE) $(MUTE) xsct $(NO-OS)/tools/scripts/platform/xilinx/build_project.tcl $(WORKSPACE) $(HIDE)
 
+PHONY += $(PLATFORM)_sdkclean
+$(PLATFORM)_sdkclean:
+	$(call print,[Delete] SDK created artefacts from $(BUILD_DIR))
+	$(MUTE) $(call tcl_util, clean_build) $(HIDE)
 
 $(PROJECT_TARGET): $(TEMP_DIR)/arch.txt
 	$(call print,Creating and configuring the IDE project)

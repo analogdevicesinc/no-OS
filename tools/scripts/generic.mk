@@ -369,6 +369,9 @@ standalone:
 # Build project using SDK
 sdkbuild: $(PLATFORM)_sdkbuild
 
+# Remove build artefacts created using the sdkbuild rule
+sdkclean: $(PLATFORM)_sdkclean
+
 # Remove build artefacts
 PHONY += clean
 clean:
