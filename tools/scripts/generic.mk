@@ -372,6 +372,9 @@ sdkbuild: $(PLATFORM)_sdkbuild
 # Remove build artefacts created using the sdkbuild rule
 sdkclean: $(PLATFORM)_sdkclean
 
+# Open the project using the corresponding SDK
+sdkopen: $(PLATFORM)_sdkopen
+
 # Remove build artefacts
 PHONY += clean
 clean:
