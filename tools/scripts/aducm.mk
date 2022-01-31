@@ -283,4 +283,12 @@ clean_project:
  		-project $(PROJECT_NAME) \
  		-cleanOnly all
 
+PHONY += $(PLATFORM)_sdkclean
+$(PLATFORM)_sdkclean:
+	$(call print,[Delete] SDK artefacts from $(BUILD_DIR))
+	$(MUTE) $(CCES) -nosplash -application com.analog.crosscore.headlesstools \
+		-data $(WORKSPACE) \
+		-project $(CCES_PROJ_NAME) \
+		-cleanOnly all $(HIDE)
+
 .PHONY: $(PHONY)

@@ -33,6 +33,8 @@ PLATFORM_FULL_PATH = $1
 # stm32 specific build directory tree (project goes under app, but user .c/.h sources must go under app/Core)
 PROJECT_BUILDROOT = $(BUILD_DIR)/app
 PROJECT_BUILD = $(PROJECT_BUILDROOT)/Core
+RELEASE_DIR = $(PROJECT_BUILDROOT)/Release
+DEBUG_DIR = $(PROJECT_BUILDROOT)/Debug
 
 # Add all .c files related to stm32 to PLATFORM_SRCS in full path
 PLATFORM_SRCS += $(call rwildcard, $(PROJECT_BUILDROOT)/Drivers, *.c)
@@ -167,6 +169,13 @@ PHONY += $(PLATFORM)_sdkbuild
 $(PLATFORM)_sdkbuild:
 	$(MUTE) $(STM32CUBEIDE)/$(IDE) -nosplash -application org.eclipse.cdt.managedbuilder.core.headlessbuild \
 		-import $(PROJECT_BUILDROOT) -data $(BUILD_DIR) -build app $(HIDE)
+
+PHONY += $(PLATFORM)_sdkclean
+$(PLATFORM)_sdkclean:
+	$(call print,[Delete] SDK artefacts from $(DEBUG_DIR))
+	$(MUTE) $(call remove_dir,$(DEBUG_DIR)) $(HIDE)
+	$(call print,[Delete] SDK artefacts from $(RELEASE_DIR))
+	$(MUTE) $(call remove_dir,$(RELEASE_DIR)) $(HIDE)
 
 clean_hex:
 	@$(call print,[Delete] $(HEX))
