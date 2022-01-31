@@ -90,7 +90,7 @@ $(PROJECT_TARGET):
 
 	$(MUTE) $(call set_one_time_rule,$@)
 
-develop:
+$(PLATFORM)_sdkopen:
 	$(MUTE) $(STM32CUBEIDE)/$(IDE) -nosplash -import $(PROJECT_BUILDROOT) -data $(BUILD_DIR) $(HIDE)
 
 CFLAGS += -std=gnu11 \

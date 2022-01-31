@@ -13,7 +13,7 @@ $(PROJECT_TARGET):
 	$(MUTE) $(call mk_dir, $(BUILD_DIR)) $(HIDE)
 	$(MUTE) $(call set_one_time_rule,$@)
 
-develop:
+$(PLATFORM)_sdkopen:
 	$(MUTE) $(call mk_dir, $(PROJECT_BUILD)) $(HIDE)
 	$(MUTE) $(call copy_dir, $(PLATFORM_TOOLS)/.vscode, $(PROJECT_BUILD)/.vscode) $(HIDE)
 	$(MUTE) python $(PLATFORM_TOOLS)/config_build.py $(NO-OS) $(PROJECT) $(BINARY) $(HIDE)
