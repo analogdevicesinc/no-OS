@@ -210,8 +210,9 @@ project_run: build_project
 	-c "resume" \
 	-c exit $(HIDE)
 
-PHONY += aducm3029_project_build
-aducm3029_project_build: aducm3029_project $(LIB_TARGETS)
+PHONY += $(PLATFORM)_sdkbuild
+$(PLATFORM)_sdkbuild: $(LIB_TARGETS)
+	$(call print,[Build] using CCES)
 	$(MUTE) $(CCES) -nosplash -application com.analog.crosscore.headlesstools \
 		-data $(WORKSPACE) \
 		-project $(CCES_PROJ_NAME) \
@@ -265,7 +266,7 @@ $(PROJECT_TARGET):
 	$(MUTE) $(call copy_file\
 	,$(PLATFORM_TOOLS)/startup_ADuCM3029_patch.c,$(PROJECT_BUILD)/RTE/Device/ADuCM3029/startup_ADuCM3029.c) $(HIDE)
 #Remove default files from projectsrc
-	$(MUTE) $(call remove_dir,$(PROJECT_BUILD)/src) $(HIDE)
+	$(MUTE) $(call remove_dir_action,$(PROJECT_BUILD)/src) $(HIDE)
 	$(MUTE) $(call set_one_time_rule,$@)
 
 copy_pinmux:

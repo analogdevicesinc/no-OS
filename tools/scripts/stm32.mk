@@ -73,13 +73,15 @@ $(PROJECT_TARGET):
 	$(MUTE) java -jar $(STM32CUBEMX)/$(MX) -q $(BINARY).cubemx $(HIDE)
 	$(MUTE) $(call remove_file,$(BINARY).cubemx) $(HIDE)
 
+	$(call print,Configuring project)
 	$(MUTE) sed -i 's/ main(/ generated_main(/' $(PROJECT_BUILD)/Src/main.c $(HIDE)
 	$(MUTE) $(call copy_file, $(PROJECT_BUILD)/Src/main.c, $(PROJECT_BUILD)/Src/generated_main.c) $(HIDE)
 	$(MUTE) $(call remove_file, $(PROJECT_BUILD)/Src/main.c) $(HIDE)
 
 	$(MUTE) $(call remove_file, $(PROJECT_BUILD)/Src/syscalls.c) $(HIDE)
 
-	$(call print,Configuring project)
+	$(MUTE) $(foreach inc, $(EXTRA_INC_PATHS), sed -i '/Core\/Inc"\/>/a <listOptionValue builtIn="false" value="$(inc)"\/>' $(PROJECT_BUILDROOT)/.cproject;) $(HIDE)
+	$(MUTE) $(foreach flag, $(CPROJECTFLAGS), sed -i '/USE_HAL_DRIVER"\/>/a <listOptionValue builtIn="false" value="$(flag)"\/>' $(PROJECT_BUILDROOT)/.cproject;) $(HIDE)
 	$(MUTE) $(STM32CUBEIDE)/$(IDE) -nosplash -application org.eclipse.cdt.managedbuilder.core.headlessbuild \
 		-import $(PROJECT_BUILDROOT) -data $(BUILD_DIR) \
 		$(HIDE)
@@ -160,11 +162,9 @@ $(HEX): $(BINARY)
 	$(MUTE) $(call print,$(notdir $@) is ready)
 
 post_build: $(HEX)
-	$(MUTE) $(foreach inc, $(EXTRA_INC_PATHS), sed -i '/Core\/Inc"\/>/a <listOptionValue builtIn="false" value="$(inc)"\/>' $(PROJECT_BUILDROOT)/.cproject;) $(HIDE)
-	$(MUTE) $(foreach flag, $(CPROJECTFLAGS), sed -i '/USE_HAL_DRIVER"\/>/a <listOptionValue builtIn="false" value="$(flag)"\/>' $(PROJECT_BUILDROOT)/.cproject;) $(HIDE)
 
-PHONY += $(PLATFORM)_project_build
-$(PLATFORM)_project_build: $(PROJECT_TARGET) $(LIB_TARGETS)
+PHONY += $(PLATFORM)_sdkbuild
+$(PLATFORM)_sdkbuild:
 	$(MUTE) $(STM32CUBEIDE)/$(IDE) -nosplash -application org.eclipse.cdt.managedbuilder.core.headlessbuild \
 		-import $(PROJECT_BUILDROOT) -data $(BUILD_DIR) -build app $(HIDE)
 

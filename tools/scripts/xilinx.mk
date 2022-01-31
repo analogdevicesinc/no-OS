@@ -148,8 +148,8 @@ $(TEMP_DIR)/arch.txt: $(HARDWARE)
 	$(call print,Evaluating hardware: $(HARDWARE))
 	$(MUTE)	$(call tcl_util, get_arch) $(HIDE)
 
-PHONY += xilinx_project_build
-xilinx_project_build: all
+PHONY += $(PLATFORM)_sdkbuild
+$(PLATFORM)_sdkbuild: all
 	$(MUTE) $(MUTE) xsct $(NO-OS)/tools/scripts/platform/xilinx/build_project.tcl $(WORKSPACE) $(HIDE)
 
 
