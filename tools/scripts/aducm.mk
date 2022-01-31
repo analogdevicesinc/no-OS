@@ -271,7 +271,7 @@ $(PROJECT_TARGET):
 copy_pinmux:
 	$(MUTE) $(call copy_file,$(PIN_MUX),$(PROJECT_PIN_MUX)) $(HIDE)
 
-update_srcs: copy_pinmux
+update: copy_pinmux
 
 PHONY += clean_project
 clean_project:

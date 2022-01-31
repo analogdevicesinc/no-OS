@@ -26,7 +26,7 @@ copy_file = xcopy /F /Y /B "$(subst /,\,$1)" "$(subst /,\,$2)"
 copy_dir = xcopy /F /S /Y /C /I "$(subst /,\,$1)" "$(subst /,\,$2)"
 remove_file_action = del /S /Q $(subst /,\,$1)
 remove_file = $(if $(wildcard $1),$(call remove_file_action,$(wildcard $1)),\
-			@echo rd /S /Q $(addsuffix ",$(addprefix ",$(subst /,\,$1))))
+			@echo del /S /Q $(subst /,\,$1))
 remove_dir_action = rd /S /Q $(addsuffix ",$(addprefix ",$(subst /,\,$1)))
 remove_dir = $(if $(wildcard $1),$(call remove_dir_action,$(wildcard $1)),\
 			@echo rd /S /Q $(addsuffix ",$(addprefix ",$(subst /,\,$1))))
@@ -103,6 +103,9 @@ update_file = $(call copy_file,$1,$(dir $2))
 update_dir = $(copy_dir)
 ACTION = Copying
 endif
+
+# Display the platform for which build is launched
+print_build_type = $(call print,Building for $(call green,$1))
 
 #------------------------------------------------------------------------------
 #                           ENVIRONMENT VARIABLES                              
@@ -287,19 +290,18 @@ PHONY += all
 # If the build dir was created just build the binary.
 # else the project will be build first. This will allow to run make with -j .
 ifneq ($(wildcard $(PROJECT_TARGET)),)
-all: print_build_type $(BINARY)
+all:
+	$(call print_build_type,$(PLATFORM))
+	$(MUTE) $(MAKE) --no-print-directory $(BINARY)
 	$(call print,Done ($(notdir $(BUILD_DIR))/$(notdir $(BINARY))))
 else
-all: print_build_type
+all:
+	$(call print_build_type,$(PLATFORM))
 # Remove -j flag for running project target. (It doesn't work on xilinx on this target)
-	$(MUTE) $(MAKE) --no-print-directory update_srcs MAKEFLAGS=$(MAKEOVERRIDES)
+	$(MUTE) $(MAKE) --no-print-directory update MAKEFLAGS=$(MAKEOVERRIDES)
 	$(MUTE) $(MAKE) --no-print-directory $(BINARY)
 	$(call print,Done ($(notdir $(BUILD_DIR))/$(notdir $(BINARY))))
 endif
-
-PHONY += print_build_type
-print_build_type:
-	$(call print,Building for $(call green,$(PLATFORM)))
 
 # This is used to keep directory targets between makefile executions
 # More details: http://ismail.badawi.io/blog/2017/03/28/automatic-directory-creation-in-make/
@@ -349,8 +351,8 @@ $(PROJECT_TARGET): $(LIB_TARGETS)
 # Platform specific post build dependencies can be added to this rule.
 post_build:
 
-PHONY += update_srcs
-update_srcs: $(PROJECT_TARGET)
+PHONY += update
+update: $(PROJECT_TARGET)
 	@$(call print, $(ACTION) srcs to created project)
 	$(MUTE) $(call remove_dir,$(DIRS_TO_REMOVE)) $(HIDE)
 	$(MUTE) -$(call mk_dir,$(DIRS_TO_CREATE)) $(HIDE)
@@ -374,22 +376,10 @@ clean:
 	$(MUTE) $(call remove_file,$(BINARY) $(OBJS) $(ASM_OBJS)) $(HIDE)
 
 # Remove the whole build directory
-PHONY += clean_all
-clean_all: clean_libs
+PHONY += reset
+reset: clean_libs
 	@$(call print,[Delete] $(BUILD_DIR))
 	$(MUTE) $(call remove_dir,$(BUILD_DIR)) $(HIDE)
-
-PHONY += ca
-ca: clean_all
-
-# Rebuild porject
-PHONY += re
-re: clean
-	$(MAKE) all
-
-PHONY += ra
-ra: clean_all
-	$(MAKE) all
 
 PHONY += list
 list:
