@@ -158,7 +158,7 @@ $(PROJECT_TARGET): $(TEMP_DIR)/arch.txt
 	$(MUTE)	$(call tcl_util, create_project)  $(HIDE)
 	$(MUTE) $(call set_one_time_rule,$@)
 
-clean_all: xilinx_clean_all
+reset: xilinx_clean_all
 
 xilinx_clean_all:
 	$(MUTE) $(call remove_dir,.Xil) $(HIDE)
