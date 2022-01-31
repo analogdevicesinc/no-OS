@@ -46,6 +46,7 @@ TIMESTAMP = $(shell date +"%T")
 copy_file = cp $1 $2
 copy_dir = cp -r $1 $2
 remove_file = rm -rf $1
+remove_dir_action = rm -rf $1
 remove_dir = rm -rf $1
 mk_dir = mkdir -p $1
 read_file = cat $1 2> /dev/null
@@ -367,7 +368,7 @@ standalone:
 	$(MUTE) $(MAKE) --no-print-directory project LINK_SRCS=n MAKEFLAGS=$(MAKEOVERRIDES)
 
 # Build project using SDK
-project_build: $(PLATFORM)_project_build
+sdkbuild: $(PLATFORM)_sdkbuild
 
 # Remove build artefacts
 PHONY += clean
