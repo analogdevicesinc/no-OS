@@ -184,7 +184,7 @@ debug: all $(BINARY).gdb
 
 PROJECT_BINARY = $(PROJECT_BUILD)/Release/$(PROJECT_NAME)
 
-develop:
+$(PLATFORM)_sdkopen:
 	cces -data $(WORKSPACE)
 
 #This way will not work if the rest button is press or if a printf is executed

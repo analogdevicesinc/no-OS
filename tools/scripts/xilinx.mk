@@ -128,7 +128,7 @@ CFLAGS += -I$(BUILD_DIR)/app/src
 # Xilinx's bsp include path
 CFLAGS		+= -I$(BUILD_DIR)/bsp/$(ARCH)/include
 
-develop:
+$(PLATFORM)_sdkopen:
 ifeq '' '$(filter %.hdf, $(HARDWARE))'
 	vitis -workspace=$(WORKSPACE)
 else
