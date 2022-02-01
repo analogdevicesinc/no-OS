@@ -9,14 +9,15 @@
 #									       #
 ################################################################################
 # app
-SRCS += $(DRIVERS)/rf-transceiver/navassa/adrv9002_init_data.c \
-	$(DRIVERS)/rf-transceiver/navassa/adrv9002_conv.c \
+SRCS +=	$(DRIVERS)/rf-transceiver/navassa/adrv9002_conv.c \
 	$(DRIVERS)/rf-transceiver/navassa/adrv9002.c \
 	$(PROJECT)/src/app/headless.c
 INCS += $(DRIVERS)/rf-transceiver/navassa/adrv9002.h \
 	$(PROJECT)/src/app/ORxGainTable.h \
 	$(PROJECT)/src/app/RxGainTable.h \
-	$(PROJECT)/src/app/TxAttenTable.h
+	$(PROJECT)/src/app/TxAttenTable.h \
+	$(PROJECT)/src/app/Navassa_CMOS_profile.h \
+	$(PROJECT)/src/app/Navassa_LVDS_profile.h
 # hal
 SRCS += $(PROJECT)/src/hal/no_os_platform.c
 INCS += $(PROJECT)/src/hal/parameters.h \
