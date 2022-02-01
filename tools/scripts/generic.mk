@@ -293,14 +293,14 @@ PHONY += all
 ifneq ($(wildcard $(PROJECT_TARGET)),)
 all:
 	$(call print_build_type,$(PLATFORM))
-	$(MUTE) $(MAKE) --no-print-directory $(BINARY)
+	$(MUTE) $(MAKE) --no-print-directory build
 	$(call print,Done ($(notdir $(BUILD_DIR))/$(notdir $(BINARY))))
 else
 all:
 	$(call print_build_type,$(PLATFORM))
 # Remove -j flag for running project target. (It doesn't work on xilinx on this target)
 	$(MUTE) $(MAKE) --no-print-directory update MAKEFLAGS=$(MAKEOVERRIDES)
-	$(MUTE) $(MAKE) --no-print-directory $(BINARY)
+	$(MUTE) $(MAKE) --no-print-directory build
 	$(call print,Done ($(notdir $(BUILD_DIR))/$(notdir $(BINARY))))
 endif
 
@@ -366,6 +366,9 @@ update: $(PROJECT_TARGET)
 
 standalone:
 	$(MUTE) $(MAKE) --no-print-directory project LINK_SRCS=n MAKEFLAGS=$(MAKEOVERRIDES)
+
+# Build project using generic compiler
+build: $(BINARY)
 
 # Build project using SDK
 sdkbuild: $(PLATFORM)_sdkbuild
