@@ -847,8 +847,7 @@ static int adrv9002_radio_init(struct adrv9002_rf_phy *phy)
 	return 0;
 }
 
-int adrv9002_setup(struct adrv9002_rf_phy *phy,
-		   adi_adrv9001_Init_t *adrv9002_init)
+int adrv9002_setup(struct adrv9002_rf_phy *phy)
 {
 	struct adi_adrv9001_Device *adrv9001_device;
 	int ret;
@@ -856,11 +855,6 @@ int adrv9002_setup(struct adrv9002_rf_phy *phy,
 	uint8_t init_cals_error = 0;
 	adi_adrv9001_ChannelState_e init_state;
 	struct adrv9002_chan *chan;
-
-	phy->curr_profile = adrv9002_init;
-
-	phy->ssi_type =
-		phy->curr_profile->rx.rxChannelCfg[0].profile.rxSsiConfig.ssiType;
 
 	/* initialize channel numbers and ports here since these will never change */
 	for (c = 0; c < ADRV9002_CHANN_MAX; c++) {
@@ -908,7 +902,7 @@ int adrv9002_setup(struct adrv9002_rf_phy *phy,
 
 	adrv9002_log_enable(&adrv9001_device->common);
 
-	ret = adi_adrv9001_InitAnalog(adrv9001_device, adrv9002_init,
+	ret = adi_adrv9001_InitAnalog(adrv9001_device, phy->curr_profile,
 				      ADI_ADRV9001_DEVICECLOCKDIVISOR_2);
 	if (ret)
 		return adrv9002_dev_err(phy);

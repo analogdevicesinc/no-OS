@@ -64,6 +64,8 @@
 #include "adi_adrv9001.h"
 #include "adi_adrv9001_arm.h"
 #include "adi_adrv9001_radio.h"
+#include "adi_adrv9001_profileutil.h"
+#include "Navassa_CMOS_profile.h"
 
 /* ADC/DAC Buffers */
 #if defined(DAC_DMA_EXAMPLE) || defined(IIO_SUPPORT)
@@ -73,16 +75,113 @@ static uint16_t adc_buffers[IIO_DEV_COUNT][ADC_BUFFER_SAMPLES]
 __attribute__((aligned));
 #endif
 
+uint64_t sampling_freq;
+
 int get_sampling_frequency(struct axi_adc *dev, uint32_t chan,
 			   uint64_t *sampling_freq_hz)
 {
 	if (!dev || !sampling_freq_hz)
 		return -EINVAL;
 
-	*sampling_freq_hz =
-		adrv9002_init_get(dev)->rx.rxChannelCfg[chan].profile.rxOutputRate_Hz;
+	*sampling_freq_hz = sampling_freq;
 	return SUCCESS;
 }
+
+static struct adi_adrv9001_SpiSettings spiSettings = {
+	.msbFirst = 1,
+	.enSpiStreaming = 0,
+	.autoIncAddrUp = 1,
+	.fourWireMode = 1,
+	.cmosPadDrvStrength = ADI_ADRV9001_CMOSPAD_DRV_STRONG,
+};
+
+struct adi_adrv9001_SpiSettings *adrv9002_spi_settings_get(void)
+{
+	return &spiSettings;
+}
+
+enum adi_adrv9001_SsiType adrv9002_ssi_type_detect(struct adrv9002_rf_phy *phy)
+{
+	enum adi_adrv9001_SsiType ssi, ssi2;
+	char *ssi_str[3] = {
+		"[SSI Disabled]",
+		"CMOS",
+		"LVDS"
+	};
+
+	ssi = adrv9002_axi_ssi_type_get(phy);
+
+	ssi2 = phy->curr_profile->rx.rxChannelCfg[0].profile.rxSsiConfig.ssiType;
+	if (ssi != ssi2) {
+		printf("SSI mismatch: detected %s in HDL and %s in profile.\n", ssi_str[ssi],
+		       ssi_str[ssi2]);
+		return ADI_ADRV9001_SSI_TYPE_DISABLE;
+	}
+
+	return ssi;
+}
+
+static struct adi_adrv9001_GainControlCfg agc_defaults = {
+	.peakWaitTime = 4,
+	.maxGainIndex = ADI_ADRV9001_RX_GAIN_INDEX_MAX,
+	.minGainIndex = ADI_ADRV9001_RX_GAIN_INDEX_MIN,
+	.gainUpdateCounter = 11520,
+	.attackDelay_us = 10,
+	.lowThreshPreventGainInc = false,
+	.slowLoopSettlingDelay = 16,
+	.changeGainIfThreshHigh = 3,
+	.agcMode = 1,
+	.resetOnRxon = false,
+	.resetOnRxonGainIndex = ADI_ADRV9001_RX_GAIN_INDEX_MAX,
+	.enableSyncPulseForGainCounter = false,
+	.enableFastRecoveryLoop = false,
+	.power = {
+		.powerEnableMeasurement = true,
+		.underRangeHighPowerThresh = 10,
+		.underRangeLowPowerThresh = 4,
+		.underRangeHighPowerGainStepRecovery = 2,
+		.underRangeLowPowerGainStepRecovery = 4,
+		.powerMeasurementDuration = 10,
+		.powerMeasurementDelay = 2,
+		.rxTddPowerMeasDuration = 0,
+		.rxTddPowerMeasDelay = 0,
+		.overRangeHighPowerThresh = 0,
+		.overRangeLowPowerThresh = 7,
+		.overRangeHighPowerGainStepAttack = 4,
+		.overRangeLowPowerGainStepAttack = 4,
+		.feedback_inner_high_inner_low = ADI_ADRV9001_GPIO_PIN_CRUMB_UNASSIGNED,
+		.feedback_apd_high_apd_low = ADI_ADRV9001_GPIO_PIN_CRUMB_UNASSIGNED,
+	},
+	.peak = {
+		.agcUnderRangeLowInterval = 50,
+		.agcUnderRangeMidInterval = 2,
+		.agcUnderRangeHighInterval = 4,
+		.apdHighThresh = 21,
+		.apdLowThresh = 12,
+		.apdUpperThreshPeakExceededCount = 6,
+		.apdLowerThreshPeakExceededCount = 3,
+		.apdGainStepAttack = 2,
+		.apdGainStepRecovery = 0,
+		.enableHbOverload = true,
+		.hbOverloadDurationCount = 1,
+		.hbOverloadThreshCount = 1,
+		.hbHighThresh = 13044,
+		.hbUnderRangeLowThresh = 5826,
+		.hbUnderRangeMidThresh = 8230,
+		.hbUnderRangeHighThresh = 7335,
+		.hbUpperThreshPeakExceededCount = 6,
+		.hbUnderRangeHighThreshExceededCount = 3,
+		.hbGainStepHighRecovery = 2,
+		.hbGainStepLowRecovery = 6,
+		.hbGainStepMidRecovery = 4,
+		.hbGainStepAttack = 2,
+		.hbOverloadPowerMode = 0,
+		.hbUnderRangeMidThreshExceededCount = 3,
+		.hbUnderRangeLowThreshExceededCount = 3,
+		.feedback_apd_low_hb_low = ADI_ADRV9001_GPIO_PIN_CRUMB_UNASSIGNED,
+		.feedback_apd_high_hb_high = ADI_ADRV9001_GPIO_PIN_CRUMB_UNASSIGNED,
+	},
+};
 
 #ifdef IIO_SUPPORT
 
@@ -137,7 +236,6 @@ int main(void)
 	struct adi_adrv9001_ArmVersion arm_version;
 	struct adi_adrv9001_SiliconVersion silicon_version;
 	struct adrv9002_rf_phy phy;
-	struct adi_adrv9001_GainControlCfg *agc_settings;
 	unsigned int c;
 
 	struct axi_adc_init rx1_adc_init = {
@@ -218,6 +316,15 @@ int main(void)
 	phy.rx2tx2 = true;
 #endif
 
+	ret = adi_adrv9001_profileutil_Parse(phy.adrv9001, &phy.profile,
+					     (char *)json_profile, strlen(json_profile));
+	if (ret)
+		goto error;
+
+	phy.curr_profile = &phy.profile;
+
+	sampling_freq = phy.curr_profile->rx.rxChannelCfg[0].profile.rxOutputRate_Hz;
+
 	/* Initialize the ADC/DAC cores */
 	ret = axi_adc_init_begin(&phy.rx1_adc, &rx1_adc_init);
 	if (ret) {
@@ -230,8 +337,6 @@ int main(void)
 		printf("axi_dac_init_begin() failed with status %d\n", ret);
 		goto error;
 	}
-	phy.tx1_dac->clock_hz = adrv9002_init_get(
-					phy.rx1_adc)->tx.txProfile[0].txInputRate_Hz;
 #ifndef ADRV9002_RX2TX2
 	ret = axi_adc_init_begin(&phy.rx2_adc, &rx2_adc_init);
 	if (ret) {
@@ -244,17 +349,18 @@ int main(void)
 		printf("axi_dac_init_begin() failed with status %d\n", ret);
 		goto error;
 	}
-	phy.tx2_dac->clock_hz = adrv9002_init_get(
-					phy.rx1_adc)->tx.txProfile[1].txInputRate_Hz;
 #endif
 
+	phy.ssi_type = adrv9002_ssi_type_detect(&phy);
+	if (phy.ssi_type == ADI_ADRV9001_SSI_TYPE_DISABLE)
+		goto error;
+
 	/* Initialize AGC */
-	agc_settings = adrv9002_agc_settings_get();
 	for (c = 0; c < ADRV9002_CHANN_MAX; c++) {
-		phy.rx_channels[c].agc = *agc_settings;
+		phy.rx_channels[c].agc = agc_defaults;
 	}
 
-	ret = adrv9002_setup(&phy, adrv9002_init_get(phy.rx1_adc));
+	ret = adrv9002_setup(&phy);
 	if (ret)
 		return ret;
 
@@ -287,6 +393,7 @@ int main(void)
 		printf("axi_dac_init_finish() failed with status %d\n", ret);
 		goto error;
 	}
+	phy.tx1_dac->clock_hz = phy.curr_profile->tx.txProfile[0].txInputRate_Hz;
 #ifndef ADRV9002_RX2TX2
 	ret = axi_adc_init_finish(phy.rx2_adc);
 	if (ret) {
@@ -299,6 +406,7 @@ int main(void)
 		printf("axi_dac_init_finish() failed with status %d\n", ret);
 		goto error;
 	}
+	phy.tx2_dac->clock_hz = phy.curr_profile->tx.txProfile[1].txInputRate_Hz;
 #endif
 
 	/* TODO: Remove this when it gets fixed in the API. */

@@ -231,8 +231,7 @@ struct adrv9002_rf_phy {
 };
 
 int adrv9002_post_setup(struct adrv9002_rf_phy *phy);
-int adrv9002_setup(struct adrv9002_rf_phy *phy,
-		   adi_adrv9001_Init_t *adrv9002_init);
+int adrv9002_setup(struct adrv9002_rf_phy *phy);
 adi_adrv9001_SsiType_e adrv9002_axi_ssi_type_get(struct adrv9002_rf_phy *phy);
 
 void adrv9002_en_delays_ns_to_arm(const struct adrv9002_rf_phy *phy,
@@ -276,10 +275,8 @@ int adrv9002_intf_change_delay(struct adrv9002_rf_phy *phy, const int channel,
 			       uint8_t data_delay, const bool tx);
 uint32_t adrv9002_axi_dds_rate_get(struct adrv9002_rf_phy *phy, const int chan);
 
-/* get init structs */
 struct adi_adrv9001_SpiSettings *adrv9002_spi_settings_get(void);
-struct adi_adrv9001_Init *adrv9002_init_get(struct axi_adc *adc);
-struct adi_adrv9001_GainControlCfg *adrv9002_agc_settings_get(void);
+
 
 static inline void adrv9002_sync_gpio_toogle(const struct adrv9002_rf_phy *phy)
 {
