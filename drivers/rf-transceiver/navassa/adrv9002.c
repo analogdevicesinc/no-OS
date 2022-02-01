@@ -823,9 +823,9 @@ static int adrv9002_radio_init(struct adrv9002_rf_phy *phy)
 			return adrv9002_dev_err(phy);
 
 		if (c->port == ADI_RX)
-			carrier.carrierFrequency_Hz = 2400000000ULL;
+			carrier.carrierFrequency_Hz = 2000000000ULL;
 		else
-			carrier.carrierFrequency_Hz = 2450000000ULL;
+			carrier.carrierFrequency_Hz = 2000000000ULL;
 
 		ret = adi_adrv9001_Radio_Carrier_Configure(phy->adrv9001, c->port, c->number,
 				&carrier);
