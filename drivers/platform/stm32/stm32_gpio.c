@@ -97,6 +97,14 @@ static int32_t _gpio_init(struct gpio_desc *desc,
 	else
 		return -EINVAL;
 
+	switch (pextra->mode & GPIO_MODE) {
+	case MODE_INPUT:
+	case MODE_OUTPUT:
+		break;
+	default:
+		return -EINVAL;
+	}
+
 	/* copy the settings to gpio descriptor */
 	desc->number = param->number;
 	extra->port = pextra->port;
@@ -272,12 +280,7 @@ int32_t stm32_gpio_get_direction(struct gpio_desc *desc,
 		return -EINVAL;
 
 	struct stm32_gpio_desc *extra = desc->extra;
-	uint8_t pin = desc->number;
-
-	/* MODER = 0x00 - input */
-	/* MODER = 0x01 - general purpose output mode */
-	*direction = (extra->port->MODER >> (2 * pin)) & 0x3;
-
+	*direction = (extra->mode & GPIO_MODE) ? GPIO_OUT : GPIO_IN;
 	return 0;
 }
 
