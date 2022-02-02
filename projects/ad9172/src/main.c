@@ -70,7 +70,7 @@
 int main(void)
 {
 	struct xil_spi_init_param xil_spi_param = {
-		.type = SPI_PS,
+		.type = SPI_PL,
 		.flags = 0
 	};
 
@@ -140,7 +140,7 @@ int main(void)
 	};
 
 	struct xil_gpio_init_param xilinx_gpio_init_param = {
-		.type = GPIO_PS,
+		.type = GPIO_PL,
 		.device_id = GPIO_DEVICE_ID
 	};
 	struct ad9172_init_param ad9172_param = {
