@@ -91,6 +91,7 @@ void fmcdaq3_reconfig(struct ad9152_init_param *ad9152_param,
 	printf ("Available sampling rates:\n");
 	printf ("\t1 - ADC 1233 MSPS; DAC 1233 MSPS\n");
 	printf ("\t2 - ADC 616.5 MSPS; DAC 616.5 MSPS\n");
+	printf ("\t3 - ADC 1000 MSPS; DAC 1000 MSPS\n");
 
 	mode = getc(stdin);
 
@@ -115,6 +116,38 @@ void fmcdaq3_reconfig(struct ad9152_init_param *ad9152_param,
 		(&ad9528_param->channels[2])->channel_divider = 4;
 		(&ad9528_param->channels[4])->channel_divider = 2;
 		(&ad9528_param->channels[6])->channel_divider = 4;
+		break;
+	case '3':
+		printf ("3 - ADC 1000 MSPS; DAC 1000 MSPS\n");
+
+		ad9680_param->lane_rate_kbps = 10000000;
+		ad9152_param->lane_rate_kbps = 10000000;
+		ad9152_xcvr_param->lane_rate_khz = 10000000;
+#ifndef ALTERA_PLATFORM
+		ad9152_xcvr_param->ref_rate_khz = 250000;
+#else
+		ad9152_xcvr_param->parent_rate_khz = 250000;
+#endif
+		ad9680_xcvr_param->lane_rate_khz = 10000000;
+#ifndef ALTERA_PLATFORM
+		ad9680_xcvr_param->ref_rate_khz = 250000;
+#else
+		ad9680_xcvr_param->parent_rate_khz = 250000;
+#endif
+		(&ad9528_param->channels[0])->channel_divider = 1;
+		(&ad9528_param->channels[2])->channel_divider = 2;
+		(&ad9528_param->channels[4])->channel_divider = 1;
+		(&ad9528_param->channels[6])->channel_divider = 2;
+
+		ad9680_xcvr_param->cpll_enable = 0;
+
+		ad9528_param->pll2_vco_div_m1 = 4;
+		ad9528_param->pll2_r1_div = 1;
+		ad9528_param->pll2_ndiv_a_cnt = 0;
+		ad9528_param->pll2_ndiv_b_cnt = 10;
+		ad9528_param->pll2_n2_div = 10;
+		ad9528_param->sysref_k_div = 128;
+
 		break;
 	default:
 		printf ("1 - ADC 1233 MSPS; DAC 1233 MSPS\n");
