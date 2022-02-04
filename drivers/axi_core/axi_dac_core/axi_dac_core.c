@@ -798,8 +798,7 @@ int32_t axi_dac_load_custom_data(struct axi_dac *dac,
 }
 
 /***************************************************************************//**
- * @brief axi_dac_init_begin - Creates an axi_dac instance and takes out of
- *        reset the core.
+ * @brief axi_dac_init_begin - Allocate an axi_dac instance and populate its fields.
  *******************************************************************************/
 int32_t axi_dac_init_begin(struct axi_dac **dac_core,
 			   const struct axi_dac_init *init)
@@ -814,10 +813,6 @@ int32_t axi_dac_init_begin(struct axi_dac **dac_core,
 	dac->base = init->base;
 	dac->num_channels = init->num_channels;
 	dac->channels = init->channels;
-
-	axi_dac_write(dac, AXI_DAC_REG_RSTN, 0);
-	axi_dac_write(dac, AXI_DAC_REG_RSTN,
-		      AXI_DAC_MMCM_RSTN | AXI_DAC_RSTN);
 
 	*dac_core = dac;
 
@@ -840,16 +835,10 @@ int32_t axi_dac_init_finish(struct axi_dac *dac)
 		return FAILURE;
 	}
 
-	axi_dac_write(dac, AXI_DAC_REG_RATECNTRL, AXI_DAC_RATE(3));
-
 	axi_dac_read(dac, AXI_DAC_REG_CLK_FREQ, &freq);
 	axi_dac_read(dac, AXI_DAC_REG_CLK_RATIO, &ratio);
 	dac->clock_hz = freq * ratio;
 	dac->clock_hz = (dac->clock_hz * 390625) >> 8;
-
-	axi_dac_data_setup(dac);
-
-	axi_dac_write(dac, AXI_DAC_REG_SYNC_CONTROL, AXI_DAC_SYNC);
 
 	printf("%s: Successfully initialized (%"PRIu64" Hz)\n",
 	       dac->name, dac->clock_hz);
@@ -869,6 +858,14 @@ int32_t axi_dac_init(struct axi_dac **dac_core,
 	ret = axi_dac_init_begin(&dac, init);
 	if (ret)
 		return ret;
+
+	axi_dac_write(dac, AXI_DAC_REG_RSTN, 0);
+	axi_dac_write(dac, AXI_DAC_REG_RSTN,
+		      AXI_DAC_MMCM_RSTN | AXI_DAC_RSTN);
+
+	axi_dac_write(dac, AXI_DAC_REG_RATECNTRL, AXI_DAC_RATE(3));
+	axi_dac_data_setup(dac);
+	axi_dac_write(dac, AXI_DAC_REG_SYNC_CONTROL, AXI_DAC_SYNC);
 
 	mdelay(100);
 
