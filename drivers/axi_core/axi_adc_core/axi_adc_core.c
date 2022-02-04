@@ -461,14 +461,12 @@ int32_t axi_adc_update_active_channels(struct axi_adc *adc, uint32_t mask)
 }
 
 /***************************************************************************//**
- * @brief axi_adc_init_begin - Creates an axi_adc instance, takes out of reset
- *        the core and configures the CHAN_CNTRL registers.
+ * @brief axi_adc_init_begin - Create an axi_adc instance and populate its fields.
  *******************************************************************************/
 int32_t axi_adc_init_begin(struct axi_adc **adc_core,
 			   const struct axi_adc_init *init)
 {
 	struct axi_adc *adc;
-	uint8_t ch;
 
 	adc = (struct axi_adc *)malloc(sizeof(*adc));
 	if (!adc)
@@ -477,15 +475,6 @@ int32_t axi_adc_init_begin(struct axi_adc **adc_core,
 	adc->name = init->name;
 	adc->base = init->base;
 	adc->num_channels = init->num_channels;
-
-	axi_adc_write(adc, AXI_ADC_REG_RSTN, 0);
-	axi_adc_write(adc, AXI_ADC_REG_RSTN,
-		      AXI_ADC_MMCM_RSTN | AXI_ADC_RSTN);
-
-	for (ch = 0; ch < adc->num_channels; ch++)
-		axi_adc_write(adc, AXI_ADC_REG_CHAN_CNTRL(ch),
-			      AXI_ADC_FORMAT_SIGNEXT | AXI_ADC_FORMAT_ENABLE |
-			      AXI_ADC_ENABLE);
 
 	*adc_core = adc;
 
@@ -527,10 +516,20 @@ int32_t axi_adc_init(struct axi_adc **adc_core,
 {
 	struct axi_adc *adc;
 	int32_t ret;
+	uint8_t ch;
 
 	ret = axi_adc_init_begin(&adc, init);
 	if (ret)
 		return ret;
+
+	axi_adc_write(adc, AXI_ADC_REG_RSTN, 0);
+	axi_adc_write(adc, AXI_ADC_REG_RSTN,
+		      AXI_ADC_MMCM_RSTN | AXI_ADC_RSTN);
+
+	for (ch = 0; ch < adc->num_channels; ch++)
+		axi_adc_write(adc, AXI_ADC_REG_CHAN_CNTRL(ch),
+			      AXI_ADC_FORMAT_SIGNEXT | AXI_ADC_FORMAT_ENABLE |
+			      AXI_ADC_ENABLE);
 
 	mdelay(100);
 
