@@ -215,7 +215,7 @@ struct ad719x_init_param {
 	/* GPIO */
 	struct gpio_init_param	*gpio_miso;
 	/* Optional GPIO pin - only for multiple devices */
-	struct gpio_desc	*sync_pin;
+	struct gpio_init_param	*sync_pin;
 	/* Device Settings */
 	uint8_t			current_polarity;
 	enum ad719x_adc_gain	current_gain;
