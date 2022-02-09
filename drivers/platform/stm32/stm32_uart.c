@@ -238,7 +238,7 @@ int32_t uart_write(struct uart_desc *desc, const uint8_t *data,
 		return -EIO;
 	};
 
-	return 0;
+	return bytes_number;
 }
 
 /**

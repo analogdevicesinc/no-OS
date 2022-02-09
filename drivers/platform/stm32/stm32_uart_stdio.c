@@ -91,7 +91,7 @@ int _write(int fd, char* ptr, int len)
 			return -1;
 		}
 
-		return len;
+		return ret;
 	}
 	errno = EBADF;
 	return -1;
