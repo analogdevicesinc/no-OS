@@ -51,15 +51,8 @@
  */
 enum max_uart_flow_ctrl {
 	UART_FLOW_DIS,
-	UART_FLOW_EN
-};
-
-/**
- * @brief UART flow control polarity
- */
-enum max_uart_pol {
-	UART_FPOL_DIS,
-	UART_FPOL_EN
+	UART_FLOW_LOW,
+	UART_FLOW_HIGH
 };
 
 /**
@@ -67,7 +60,6 @@ enum max_uart_pol {
  */
 struct max_uart_init_param {
 	enum max_uart_flow_ctrl flow;
-	enum max_uart_pol pol;
 };
 
 /**

@@ -61,8 +61,8 @@ static struct callback_desc *cb[2];
 * @brief Descriptors to hold the state of nonblocking read and writes
 * on each port
 */
-static uart_req_t rx_state[2];
-static uart_req_t tx_state[2];
+static mxc_uart_req_t rx_state[2];
+static mxc_uart_req_t tx_state[2];
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -80,7 +80,7 @@ static void _uart_irq(uint8_t port)
 	reg_int_en = uart_regs->int_en;
 
 	/** Handle nonblocking write and read, also clears the interrupt flags */
-	UART_Handler(uart_regs);
+	MXC_UART_AsyncHandler(uart_regs);
 
 	/** Disable all interrupts */
 	uart_regs->int_en = 0x0;
@@ -126,18 +126,20 @@ void UART1_IRQHandler()
 int32_t uart_read(struct uart_desc *desc, uint8_t *data, uint32_t bytes_number)
 {
 	int32_t ret;
-	uint32_t bytes_read;
+	uint32_t total_read = 0;
+	uint32_t read;
 
 	if (!desc || !data || !bytes_number)
 		return -EINVAL;
 
-	ret = UART_Read(MXC_UART_GET_UART(desc->device_id), data, bytes_number,
-			&bytes_read);
+	while (bytes_number) {
+		read = MXC_UART_ReadRXFIFO(MXC_UART_GET_UART(desc->device_id),
+					   data + total_read, bytes_number);
+		total_read += read;
+		bytes_number -= read;
+	}
 
-	if (ret == E_BUSY)
-		return -EBUSY;
-
-	return bytes_read;
+	return total_read;
 }
 
 /**
@@ -151,16 +153,22 @@ int32_t uart_write(struct uart_desc *desc, const uint8_t *data,
 		   uint32_t bytes_number)
 {
 	uint32_t ret;
+	uint32_t written = 0;
+	uint32_t total_written = 0;
+	mxc_uart_regs_t *uart_regs;
 
 	if(!desc || !data || !bytes_number)
 		return -EINVAL;
 
-	ret = UART_Write(MXC_UART_GET_UART(desc->device_id), data, bytes_number);
+	uart_regs = MXC_UART_GET_UART(desc->device_id);
+	while (bytes_number) {
+		written = MXC_UART_WriteTXFIFO(MXC_UART_GET_UART(desc->device_id),
+					       data + total_written, bytes_number);
+		total_written += written;
+		bytes_number -= written;
+	}
 
-	if (ret == E_BUSY)
-		return -EBUSY;
-
-	return 0;
+	return total_written;
 }
 
 /**
@@ -174,16 +182,20 @@ int32_t uart_read_nonblocking(struct uart_desc *desc, uint8_t *data,
 			      uint32_t bytes_number)
 {
 	int32_t ret;
+	uint32_t id;
 
 	if (!desc || !data || !bytes_number)
 		return -EINVAL;
 
-	rx_state[desc->device_id].data = data;
-	rx_state[desc->device_id].len = bytes_number;
-	rx_state[desc->device_id].callback = NULL;
+	id = desc->device_id;
+	rx_state[id].uart = MXC_UART_GET_UART(id);
+	rx_state[id].rxData = data;
+	rx_state[id].rxLen = bytes_number;
+	rx_state[id].txData = NULL;
+	rx_state[id].txLen = 0;
+	rx_state[id].callback = NULL;
 
-	ret = UART_ReadAsync(MXC_UART_GET_UART(desc->device_id),
-			     &rx_state[desc->device_id]);
+	ret = MXC_UART_TransactionAsync(&rx_state[id]);
 
 	if (ret == E_BUSY)
 		return -EBUSY;
@@ -203,16 +215,20 @@ int32_t uart_write_nonblocking(struct uart_desc *desc, const uint8_t *data,
 			       uint32_t bytes_number)
 {
 	int32_t ret;
+	uint32_t id;
 
 	if (!desc || !data || !bytes_number)
 		return -EINVAL;
 
-	tx_state[desc->device_id].data = data;
-	tx_state[desc->device_id].len = bytes_number;
-	tx_state[desc->device_id].callback = NULL;
+	id = desc->device_id;
+	tx_state[id].uart = MXC_UART_GET_UART(id);
+	tx_state[id].txData = data;
+	tx_state[id].txLen = bytes_number;
+	tx_state[id].rxData = NULL;
+	tx_state[id].rxLen = 0;
+	tx_state[id].callback = NULL;
 
-	ret = UART_WriteAsync(MXC_UART_GET_UART(desc->device_id),
-			      &tx_state[desc->device_id]);
+	ret = MXC_UART_TransactionAsync(&tx_state[id]);
 
 	if (ret == E_BUSY)
 		return -EBUSY;
@@ -229,10 +245,11 @@ int32_t uart_write_nonblocking(struct uart_desc *desc, const uint8_t *data,
 int32_t uart_init(struct uart_desc **desc, struct uart_init_param *param)
 {
 	int32_t ret;
+	int32_t stop, size, flow, parity;
+	mxc_uart_regs_t *uart_regs;
 	struct max_uart_init_param *eparam;
 	struct uart_desc *descriptor;
-	uart_cfg_t maxim_desc;
-	sys_cfg_uart_t maxim_desc_sys;
+	sys_map_t map;
 
 	if (!param || !param->extra)
 		return -EINVAL;
@@ -241,28 +258,28 @@ int32_t uart_init(struct uart_desc **desc, struct uart_init_param *param)
 	if (!descriptor)
 		return -ENOMEM;
 
+	map = MAP_A;
+	uart_regs = MXC_UART_GET_UART(param->device_id);
 	eparam = param->extra;
-	maxim_desc_sys.map = MAP_A;
-	maxim_desc_sys.flow_flag = UART_FLOW_DISABLE;
 
 	descriptor->device_id = param->device_id;
 	descriptor->baud_rate = param->baud_rate;
 
 	switch(param->parity) {
 	case UART_PAR_NO:
-		maxim_desc.parity = UART_PARITY_DISABLE;
+		parity = MXC_UART_PARITY_DISABLE;
 		break;
-	case UART_PARITY_MARK:
-		maxim_desc.parity = UART_PARITY_MARK;
+	case UART_PAR_MARK:
+		parity = MXC_UART_PARITY_MARK;
 		break;
 	case UART_PAR_SPACE:
-		maxim_desc.parity = UART_PARITY_SPACE;
+		parity = MXC_UART_PARITY_SPACE;
 		break;
 	case UART_PAR_ODD:
-		maxim_desc.parity = UART_PARITY_ODD;
+		parity = MXC_UART_PARITY_ODD;
 		break;
 	case UART_PAR_EVEN:
-		maxim_desc.parity = UART_PARITY_EVEN;
+		parity = MXC_UART_PARITY_EVEN;
 		break;
 	default:
 		ret = -EINVAL;
@@ -271,16 +288,16 @@ int32_t uart_init(struct uart_desc **desc, struct uart_init_param *param)
 
 	switch(param->size) {
 	case UART_CS_5:
-		maxim_desc.size = UART_DATA_SIZE_5_BITS;
+		size = 5;
 		break;
 	case UART_CS_6:
-		maxim_desc.size = UART_DATA_SIZE_6_BITS;
+		size = 6;
 		break;
 	case UART_CS_7:
-		maxim_desc.size = UART_DATA_SIZE_7_BITS;
+		size = 7;
 		break;
 	case UART_CS_8:
-		maxim_desc.size = UART_DATA_SIZE_8_BITS;
+		size = 8;
 		break;
 	default:
 		ret = -EINVAL;
@@ -289,30 +306,57 @@ int32_t uart_init(struct uart_desc **desc, struct uart_init_param *param)
 
 	switch(param->stop) {
 	case UART_STOP_1_BIT:
-		maxim_desc.stop = UART_STOP_1;
+		stop = MXC_UART_STOP_1;
 		break;
 	case UART_STOP_2_BIT:
-		maxim_desc.stop = UART_STOP_2;
+		stop = MXC_UART_STOP_2;
 		break;
 	default:
 		ret = -EINVAL;
 		goto error;
 	}
 
-	maxim_desc.baud = param->baud_rate;
+	switch (eparam->flow) {
+	case UART_FLOW_DIS:
+		flow = MXC_UART_FLOW_DIS;
+		break;
+	case UART_FLOW_LOW:
+		flow = MXC_UART_FLOW_EN_LOW;
+		break;
+	case UART_FLOW_HIGH:
+		flow = MXC_UART_FLOW_EN_HIGH;
+		break;
+	default:
+		ret = -EINVAL;
+		goto error;
+	}
 
-	if (eparam->flow == UART_FLOW_DIS)
-		maxim_desc.flow = UART_FLOW_CTRL_DIS;
-	else
-		maxim_desc.flow = UART_FLOW_CTRL_EN;
+	ret = MXC_UART_Init(uart_regs, descriptor->baud_rate, map);
 
-	if (eparam->pol == UART_FPOL_DIS)
-		maxim_desc.pol = UART_FLOW_POL_DIS;
-	else
-		maxim_desc.pol = UART_FLOW_POL_EN;
+	if (ret != E_NO_ERROR) {
+		ret = -EINVAL;
+		goto error;
+	}
 
-	ret = UART_Init(MXC_UART_GET_UART(descriptor->device_id), &maxim_desc,
-			&maxim_desc_sys);
+	ret = MXC_UART_SetDataSize(uart_regs, size);
+	if (ret != E_NO_ERROR) {
+		ret = -EINVAL;
+		goto error;
+	}
+
+	ret = MXC_UART_SetParity(uart_regs, parity);
+	if (ret != E_NO_ERROR) {
+		ret = -EINVAL;
+		goto error;
+	}
+
+	ret = MXC_UART_SetStopBits(uart_regs, stop);
+	if (ret != E_NO_ERROR) {
+		ret = -EINVAL;
+		goto error;
+	}
+
+	ret = MXC_UART_SetFlowCtrl(uart_regs, flow, 8);
 	if (ret != E_NO_ERROR) {
 		ret = -EINVAL;
 		goto error;
@@ -323,6 +367,7 @@ int32_t uart_init(struct uart_desc **desc, struct uart_init_param *param)
 	return 0;
 error:
 	free(descriptor);
+	MXC_UART_Shutdown(uart_regs);
 
 	return ret;
 }
@@ -337,6 +382,7 @@ int32_t uart_remove(struct uart_desc *desc)
 	if (!desc)
 		return -EINVAL;
 
+	MXC_UART_Shutdown(MXC_UART_GET_UART(desc->device_id));
 	free(desc);
 
 	return 0;
