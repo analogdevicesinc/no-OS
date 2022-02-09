@@ -91,7 +91,7 @@ int32_t max_gpio_get(struct gpio_desc **desc,
 		     const struct gpio_init_param *param)
 {
 	int32_t ret;
-	gpio_cfg_t *g_cfg;
+	mxc_gpio_cfg_t *g_cfg;
 	struct max_gpio_init_param *pextra;
 	uint32_t m_pad, m_func;
 	struct gpio_desc *descriptor;
@@ -110,15 +110,15 @@ int32_t max_gpio_get(struct gpio_desc **desc,
 	}
 
 	pextra = param->extra;
-	m_pad = (pextra->pull == 0) ? GPIO_PAD_PULL_UP :  GPIO_PAD_PULL_DOWN;
-	m_func = (pextra->mode == 0) ? GPIO_FUNC_IN : GPIO_FUNC_OUT;
+	m_pad = (pextra->pull == 0) ? MXC_GPIO_PAD_PULL_UP :  MXC_GPIO_PAD_PULL_DOWN;
+	m_func = (pextra->mode == 0) ? MXC_GPIO_FUNC_IN : MXC_GPIO_FUNC_OUT;
 
 	if (pextra->port >= N_PORTS) {
 		ret = -EINVAL;
 		goto free_g_cfg;
 	}
 
-	g_cfg->port = pextra->port;
+	g_cfg->port = MXC_GPIO_GET_GPIO(pextra->port);
 	g_cfg->mask = BIT(param->number);
 	g_cfg->pad = m_pad;
 	g_cfg->func = m_func;
@@ -127,7 +127,8 @@ int32_t max_gpio_get(struct gpio_desc **desc,
 	descriptor->platform_ops = param->platform_ops;
 	descriptor->extra = g_cfg;
 
-	GPIO_Config(descriptor->extra);
+	MXC_GPIO_Init(pextra->port);
+	MXC_GPIO_Config(descriptor->extra);
 
 	*desc = descriptor;
 
@@ -182,18 +183,14 @@ int32_t max_gpio_remove(struct gpio_desc *desc)
 int32_t max_gpio_direction_input(struct gpio_desc *desc)
 {
 	int32_t ret;
-	gpio_cfg_t *maxim_extra;
+	mxc_gpio_cfg_t *maxim_extra;
 
 	if (!desc || desc->number >= N_PINS)
 		return -EINVAL;
 
 	maxim_extra = desc->extra;
-
-	if (maxim_extra->port >= N_PORTS)
-		return -EINVAL;
-
-	maxim_extra->func = GPIO_FUNC_IN;
-	GPIO_Config(maxim_extra);
+	maxim_extra->func = MXC_GPIO_FUNC_IN;
+	MXC_GPIO_Config(maxim_extra);
 
 	return 0;
 }
@@ -209,30 +206,30 @@ int32_t max_gpio_direction_input(struct gpio_desc *desc)
 int32_t max_gpio_direction_output(struct gpio_desc *desc, uint8_t value)
 {
 	mxc_gpio_regs_t *gpio_regs;
-	gpio_cfg_t *maxim_extra;
+	mxc_gpio_cfg_t *maxim_extra;
 
 	if (!desc || desc->number >= N_PINS || value > GPIO_HIGH_Z)
 		return -EINVAL;
 
 	gpio_regs = MXC_GPIO_GET_GPIO(desc->number);
 	maxim_extra = desc->extra;
-	maxim_extra->func = GPIO_FUNC_OUT;
-	GPIO_Config(maxim_extra);
+	maxim_extra->func = MXC_GPIO_FUNC_OUT;
+	MXC_GPIO_Config(maxim_extra);
 
 	switch(value) {
 	case GPIO_LOW:
-		GPIO_OutClr(maxim_extra);
+		MXC_GPIO_OutClr(gpio_regs, BIT(desc->number));
 		/** Enable gpio if it was previously set to HIGH_Z */
-		if ((gpio_regs->en & BIT(desc->number)) == 0)
-			gpio_regs->en |= BIT(desc->number);
+		if ((gpio_regs->en0 & BIT(desc->number)) == 0)
+			gpio_regs->en0 |= BIT(desc->number);
 		break;
 	case GPIO_HIGH:
-		GPIO_OutSet(maxim_extra);
-		if ((gpio_regs->en & BIT(desc->number)) == 0)
-			gpio_regs->en |= BIT(desc->number);
+		MXC_GPIO_OutSet(gpio_regs, BIT(desc->number));
+		if ((gpio_regs->en0 & BIT(desc->number)) == 0)
+			gpio_regs->en0 |= BIT(desc->number);
 		break;
 	case GPIO_HIGH_Z:
-		gpio_regs->en &= ~BIT(desc->number);
+		gpio_regs->en0 &= ~BIT(desc->number);
 		break;
 	}
 
@@ -249,14 +246,14 @@ int32_t max_gpio_direction_output(struct gpio_desc *desc, uint8_t value)
  */
 int32_t max_gpio_get_direction(struct gpio_desc *desc, uint8_t *direction)
 {
-	gpio_cfg_t *maxim_extra;
+	mxc_gpio_cfg_t *maxim_extra;
 
 	if (!desc || desc->number >= N_PINS)
 		return -EINVAL;
 
 	maxim_extra = desc->extra;
 
-	if (maxim_extra->func == GPIO_FUNC_OUT)
+	if (maxim_extra->func == MXC_GPIO_FUNC_OUT)
 		*direction = GPIO_OUT;
 	else
 		*direction = GPIO_IN;
@@ -274,7 +271,7 @@ int32_t max_gpio_get_direction(struct gpio_desc *desc, uint8_t *direction)
  */
 int32_t max_gpio_set_value(struct gpio_desc *desc, uint8_t value)
 {
-	gpio_cfg_t *max_gpio_cfg;
+	mxc_gpio_cfg_t *max_gpio_cfg;
 	mxc_gpio_regs_t *gpio_regs;
 
 	if (!desc || desc->number >= N_PINS)
@@ -285,17 +282,17 @@ int32_t max_gpio_set_value(struct gpio_desc *desc, uint8_t value)
 
 	switch(value) {
 	case GPIO_LOW:
-		GPIO_OutClr(max_gpio_cfg);
-		if (gpio_regs->en & BIT(desc->number) == 0)
-			gpio_regs->en |= BIT(desc->number);
+		MXC_GPIO_OutClr(gpio_regs, BIT(desc->number));
+		if (gpio_regs->en0 & BIT(desc->number) == 0)
+			gpio_regs->en0 |= BIT(desc->number);
 		break;
 	case GPIO_HIGH:
-		GPIO_OutSet(max_gpio_cfg);
-		if (gpio_regs->en & BIT(desc->number) == 0)
-			gpio_regs->en |= BIT(desc->number);
+		MXC_GPIO_OutSet(gpio_regs, BIT(desc->number));
+		if (gpio_regs->en0 & BIT(desc->number) == 0)
+			gpio_regs->en0 |= BIT(desc->number);
 		break;
 	case GPIO_HIGH_Z:
-		gpio_regs->en &= ~BIT(desc->number);
+		gpio_regs->en0 &= ~BIT(desc->number);
 		break;
 	default:
 		return -EINVAL;
@@ -315,7 +312,7 @@ int32_t max_gpio_set_value(struct gpio_desc *desc, uint8_t value)
  */
 int32_t max_gpio_get_value(struct gpio_desc *desc, uint8_t *value)
 {
-	gpio_cfg_t *max_gpio_cfg;
+	mxc_gpio_cfg_t *max_gpio_cfg;
 	mxc_gpio_regs_t *gpio_regs;
 
 	if (!desc || desc->number >= N_PINS)
@@ -327,12 +324,12 @@ int32_t max_gpio_get_value(struct gpio_desc *desc, uint8_t *value)
 	if (!max_gpio_cfg)
 		return -EINVAL;
 
-	if (!(gpio_regs->en & BIT(desc->number)))
+	if (!(gpio_regs->en0 & BIT(desc->number)))
 		*value = GPIO_HIGH_Z;
-	else if (max_gpio_cfg->func == GPIO_FUNC_IN)
-		*value = GPIO_InGet(max_gpio_cfg);
+	else if (max_gpio_cfg->func == MXC_GPIO_FUNC_IN)
+		*value = MXC_GPIO_InGet(gpio_regs, BIT(desc->number));
 	else
-		*value = GPIO_OutGet(max_gpio_cfg);
+		*value = MXC_GPIO_OutGet(gpio_regs, BIT(desc->number));
 
 	return 0;
 }
@@ -391,7 +388,7 @@ static int32_t max_gpio_irq_set_trigger_level(struct irq_ctrl_desc *desc,
 		enum irq_trig_level trig_l)
 {
 	struct gpio_desc *g_desc;
-	gpio_cfg_t *max_gpio_cfg;
+	mxc_gpio_cfg_t *max_gpio_cfg;
 	mxc_gpio_regs_t *gpio_regs;
 	uint32_t is_enabled;
 
@@ -400,7 +397,7 @@ static int32_t max_gpio_irq_set_trigger_level(struct irq_ctrl_desc *desc,
 
 	g_desc = desc->extra;
 	max_gpio_cfg = g_desc->extra;
-	gpio_regs = MXC_GPIO_GET_GPIO(max_gpio_cfg->port);
+	gpio_regs = max_gpio_cfg->port;
 	is_enabled = gpio_regs->int_en & BIT(irq_id);
 
 	/** Disable interrupts for pin desc->number */
@@ -462,10 +459,11 @@ static int32_t max_gpio_register_callback(struct irq_ctrl_desc *desc,
 		uint32_t irq_id, struct callback_desc *callback_desc)
 {
 	int32_t ret;
+	uint32_t port_id;
 	struct callback_desc *descriptor;
 	struct gpio_irq_config *g_irq;
 	struct gpio_desc *g_desc;
-	gpio_cfg_t *max_gpio_cfg;
+	mxc_gpio_cfg_t *max_gpio_cfg;
 	enum irq_trig_level trig_level;
 
 	if (!desc || !desc->extra || !callback_desc || !callback_desc->config
@@ -476,6 +474,7 @@ static int32_t max_gpio_register_callback(struct irq_ctrl_desc *desc,
 	g_desc = desc->extra;
 	max_gpio_cfg = g_desc->extra;
 	trig_level = g_irq->mode;
+	port_id = MXC_GPIO_GET_IDX(max_gpio_cfg->port);
 
 	descriptor = calloc(1, sizeof(*descriptor));
 	if (!descriptor)
@@ -497,7 +496,7 @@ static int32_t max_gpio_register_callback(struct irq_ctrl_desc *desc,
 	descriptor->callback = callback_desc->callback;
 	descriptor->config = callback_desc->config;
 
-	gpio_callback[max_gpio_cfg->port][irq_id] = descriptor;
+	gpio_callback[port_id][irq_id] = descriptor;
 
 	return 0;
 }
@@ -511,17 +510,19 @@ static int32_t max_gpio_register_callback(struct irq_ctrl_desc *desc,
 static int32_t max_gpio_unregister_callback(struct irq_ctrl_desc *desc,
 		uint32_t irq_id)
 {
+	uint32_t port_id;
 	struct gpio_desc *g_desc;
-	gpio_cfg_t *max_gpio_cfg;
+	mxc_gpio_cfg_t *max_gpio_cfg;
 
 	if (!desc || !desc->extra)
 		return -EINVAL;
 
 	g_desc = desc->extra;
 	max_gpio_cfg = g_desc->extra;
+	port_id = MXC_GPIO_GET_IDX(max_gpio_cfg->port);
 
-	free(gpio_callback[max_gpio_cfg->port][irq_id]);
-	gpio_callback[max_gpio_cfg->port][irq_id] = NULL;
+	free(gpio_callback[port_id][irq_id]);
+	gpio_callback[port_id][irq_id] = NULL;
 
 	return 0;
 }
@@ -534,14 +535,18 @@ static int32_t max_gpio_unregister_callback(struct irq_ctrl_desc *desc,
  */
 static int32_t max_gpio_enable_irq(struct irq_ctrl_desc *desc, uint32_t irq_id)
 {
-	gpio_cfg_t *max_gpio_cfg;
+	mxc_gpio_cfg_t *max_gpio_cfg;
+	mxc_gpio_regs_t *gpio_regs;
+	struct gpio_desc *g_desc;
 
 	if (!desc || !desc->extra)
 		return -EINVAL;
 
-	struct gpio_desc *g_desc = desc->extra;
+	g_desc = desc->extra;
 	max_gpio_cfg = g_desc->extra;
-	GPIO_IntEnable(max_gpio_cfg);
+	gpio_regs = max_gpio_cfg->port;
+
+	MXC_GPIO_EnableInt(gpio_regs, BIT(irq_id));
 
 	return 0;
 }
@@ -554,14 +559,17 @@ static int32_t max_gpio_enable_irq(struct irq_ctrl_desc *desc, uint32_t irq_id)
  */
 static int32_t max_gpio_disable_irq(struct irq_ctrl_desc *desc, uint32_t irq_id)
 {
-	gpio_cfg_t *max_gpio_cfg;
+	mxc_gpio_cfg_t *max_gpio_cfg;
+	mxc_gpio_regs_t *gpio_regs;
+	struct gpio_desc *g_desc;
 
 	if (!desc || !desc->extra)
 		return -EINVAL;
 
-	struct gpio_desc *g_desc = desc->extra;
-	max_gpio_cfg = g_desc->extra;
-	GPIO_IntDisable(max_gpio_cfg);
+	g_desc = desc->extra;
+	gpio_regs = MXC_GPIO_GET_GPIO(g_desc->number);
+
+	MXC_GPIO_DisableInt(gpio_regs, BIT(irq_id));
 
 	return 0;
 }
