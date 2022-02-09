@@ -75,7 +75,7 @@ struct max_gpio_init_param {
 
 struct max_gpio_irq_param {
 	struct irq_ctrl_desc *parent;
-	struct gpio_desc *desc
-	};
+	struct gpio_desc *desc;
+};
 
 #endif
