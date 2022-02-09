@@ -45,4 +45,14 @@
  */
 extern const struct spi_platform_ops max_spi_ops;
 
+enum spi_ss_polarity {
+	SPI_SS_POL_LOW,
+	SPI_SS_POL_HIGH
+};
+
+struct max_spi_init_param {
+	uint32_t numSlaves;
+	enum spi_ss_polarity polarity;
+};
+
 #endif
