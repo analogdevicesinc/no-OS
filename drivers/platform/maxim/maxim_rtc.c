@@ -103,7 +103,6 @@ int32_t rtc_init(struct rtc_desc **device, struct rtc_init_param *init_param)
 {
 	int32_t ret;
 	struct rtc_desc *dev;
-	sys_cfg_rtc_t sys_cfg;
 
 	if(!init_param)
 		return -EINVAL;
@@ -117,7 +116,7 @@ int32_t rtc_init(struct rtc_desc **device, struct rtc_init_param *init_param)
 	dev->load = init_param->load;
 	dev->extra = init_param->extra;
 
-	if (RTC_Init(MXC_RTC, dev->load, 0, &sys_cfg) != E_NO_ERROR) {
+	if (MXC_RTC_Init(dev->load, 0) != E_NO_ERROR) {
 		ret = -EINVAL;
 		goto error;
 	}
@@ -154,10 +153,10 @@ int32_t rtc_remove(struct rtc_desc *dev)
  */
 int32_t rtc_start(struct rtc_desc *dev)
 {
-	RTC_EnableRTCE(MXC_RTC);
+	MXC_RTC_Start();
 
 	/** Wait for synchronization */
-	if (RTC_CheckBusy())
+	if (MXC_RTC_CheckBusy())
 		return -EBUSY;
 
 	return 0;
@@ -170,7 +169,11 @@ int32_t rtc_start(struct rtc_desc *dev)
  */
 int32_t rtc_stop(struct rtc_desc *dev)
 {
-	RTC_DisableRTCE(MXC_RTC);
+	int32_t ret;
+
+	ret = MXC_RTC_Stop();
+	if (ret == E_BUSY)
+		return -EBUSY;
 
 	return 0;
 }
@@ -183,10 +186,10 @@ int32_t rtc_stop(struct rtc_desc *dev)
  */
 int32_t rtc_get_cnt(struct rtc_desc *dev, uint32_t *tmr_cnt)
 {
-	if (RTC_CheckBusy())
+	if (MXC_RTC_CheckBusy())
 		return -EBUSY;
 
-	*tmr_cnt = RTC_GetSecond();
+	*tmr_cnt = MXC_RTC_GetSecond();
 
 	return 0;
 }
@@ -206,19 +209,19 @@ int32_t rtc_set_cnt(struct rtc_desc *dev, uint32_t tmr_cnt)
 
 	rtc_regs = MXC_RTC;
 
-	if (RTC_CheckBusy())
+	if (MXC_RTC_CheckBusy())
 		return -EBUSY;
 
 	rtc_regs->ctrl |= MXC_F_RTC_CTRL_WE;
 	rtc_stop(dev);
 
-	if (RTC_CheckBusy())
+	if (MXC_RTC_CheckBusy())
 		return -EBUSY;
 
 	rtc_regs->sec = tmr_cnt;
 	rtc_start(dev);
 
-	if (RTC_CheckBusy())
+	if (MXC_RTC_CheckBusy())
 		return -EBUSY;
 
 	rtc_regs->ctrl &= ~MXC_F_RTC_CTRL_WE;
@@ -278,9 +281,9 @@ static int32_t max_rtc_register_callback(struct irq_ctrl_desc *desc,
 	alarm_desc = callback_desc->config;
 
 	if (irq_id == RTC_TIMEOFDAY_INT)
-		RTC_SetTimeofdayAlarm(MXC_RTC, alarm_desc->irq_time);
+		MXC_RTC_SetTimeofdayAlarm(alarm_desc->irq_time);
 	else if (irq_id == RTC_SUBSEC_INT)
-		RTC_SetSubsecondAlarm(MXC_RTC, alarm_desc->irq_time);
+		MXC_RTC_SetSubsecondAlarm(MS_TO_RSSA(alarm_desc->irq_time));
 	else {
 		free(cb);
 		return -EINVAL;
@@ -317,11 +320,11 @@ static int32_t max_rtc_unregister_callback(struct irq_ctrl_desc *desc,
  */
 static int32_t max_rtc_enable_irq(struct irq_ctrl_desc *desc, uint32_t irq_id)
 {
-	if (irq_id == RTC_TIMEOFDAY_INT) {
-		RTC_EnableTimeofdayInterrupt(MXC_RTC);
-	} else if (irq_id == RTC_SUBSEC_INT) {
-		RTC_EnableSubsecondInterrupt(MXC_RTC);
-	} else
+	if (irq_id == RTC_TIMEOFDAY_INT)
+		MXC_RTC_EnableInt(MXC_RTC_INT_EN_LONG);
+	else if (irq_id == RTC_SUBSEC_INT)
+		MXC_RTC_EnableInt(MXC_RTC_INT_EN_SHORT);
+	else
 		return -EINVAL;
 
 	return 0;
@@ -335,9 +338,9 @@ static int32_t max_rtc_enable_irq(struct irq_ctrl_desc *desc, uint32_t irq_id)
 static int32_t max_rtc_disable_irq(struct irq_ctrl_desc *desc, uint32_t irq_id)
 {
 	if (irq_id == RTC_TIMEOFDAY_INT)
-		RTC_DisableTimeofdayInterrupt(MXC_RTC);
+		MXC_RTC_DisableInt(MXC_RTC_INT_EN_LONG);
 	else if (irq_id == RTC_SUBSEC_INT)
-		RTC_DisableSubsecondInterrupt(MXC_RTC);
+		MXC_RTC_DisableInt(MXC_RTC_INT_EN_SHORT);
 	else
 		return -EINVAL;
 
