@@ -48,6 +48,9 @@
 #include "no-os/spi.h"
 #include "no-os/util.h"
 
+#define SPI_MASTER_MODE	1
+#define SPI_SINGLE_MODE	0
+
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
@@ -62,8 +65,9 @@ int32_t max_spi_init(struct spi_desc **desc, const struct spi_init_param *param)
 {
 	int32_t ret;
 	struct spi_desc *descriptor;
+	struct max_spi_init_param *eparam;
 
-	if (!param)
+	if (!param || !param->extra)
 		return -EINVAL;
 
 	descriptor = calloc(1, sizeof(*descriptor));
@@ -71,6 +75,7 @@ int32_t max_spi_init(struct spi_desc **desc, const struct spi_init_param *param)
 	if (!descriptor)
 		return -ENOMEM;
 
+	eparam = param->extra;
 	descriptor->device_id = param->device_id;
 	descriptor->max_speed_hz = param->max_speed_hz;
 	descriptor->chip_select = param->chip_select;
@@ -79,22 +84,34 @@ int32_t max_spi_init(struct spi_desc **desc, const struct spi_init_param *param)
 	descriptor->platform_ops = &max_spi_ops;
 
 	if (descriptor->device_id == 0)
-		ret = SPI_Init(SPI0A, descriptor->mode, param->max_speed_hz);
-#ifdef MXC_SPI1A
+		ret = MXC_SPI_Init(MXC_SPI0, SPI_MASTER_MODE, SPI_SINGLE_MODE,
+				   eparam->numSlaves, eparam->polarity, param->max_speed_hz);
+#ifdef MXC_SPI1
 	else if (descriptor->device_id == 1)
-		ret = SPI_Init(SPI1A, descriptor->mode, param->max_speed_hz);
+		ret = MXC_SPI_Init(MXC_SPI1, SPI_MASTER_MODE, SPI_SINGLE_MODE,
+				   eparam->numSlaves, eparam->polarity, param->max_speed_hz);
 #endif
 	else {
 		ret = -EINVAL;
 		goto err;
 	}
 
-	if (ret == E_BAD_PARAM) {
+	ret = MXC_SPI_SetMode(MXC_SPI_GET_SPI(descriptor->device_id), descriptor->mode);
+	if (ret) {
 		ret = -EINVAL;
 		goto err;
 	}
-	if (ret == E_NO_DEVICE) {
-		ret = -ENODEV;
+
+	ret = MXC_SPI_SetWidth(MXC_SPI_GET_SPI(descriptor->device_id),
+			       SPI_WIDTH_STANDARD);
+	if (ret) {
+		ret = -EINVAL;
+		goto err;
+	}
+
+	ret = MXC_SPI_SetDataSize(MXC_SPI_GET_SPI(descriptor->device_id), 8);
+	if (ret) {
+		ret = -EINVAL;
 		goto err;
 	}
 
@@ -103,6 +120,7 @@ int32_t max_spi_init(struct spi_desc **desc, const struct spi_init_param *param)
 	return 0;
 err:
 	free(descriptor);
+	MXC_SPI_Shutdown(MXC_SPI_GET_SPI(descriptor->device_id));
 
 	return ret;
 }
@@ -117,6 +135,7 @@ int32_t max_spi_remove(struct spi_desc *desc)
 	if (!desc)
 		return -EINVAL;
 
+	MXC_SPI_Shutdown(MXC_SPI_GET_SPI(desc->device_id));
 	free(desc);
 
 	return 0;
@@ -136,7 +155,7 @@ int32_t max_spi_write_and_read(struct spi_desc *desc,
 	int32_t ret;
 	uint8_t *tx_buffer;
 	uint8_t *rx_buffer;
-	spi_req_t req;
+	mxc_spi_req_t req;
 
 	if (!desc || !data)
 		return -EINVAL;
@@ -144,25 +163,17 @@ int32_t max_spi_write_and_read(struct spi_desc *desc,
 	rx_buffer = data;
 	tx_buffer = data;
 
-	req.bits = 8;
-	req.ssel = desc->chip_select;
-	req.tx_data = tx_buffer;
-	req.tx_num = 0;
-	req.rx_data = rx_buffer;
-	req.rx_num = 0;
-	req.deass = 1;
-	req.width = SPI17Y_WIDTH_1;
-	req.ssel_pol = SPI17Y_POL_LOW;
-	req.len = bytes_number;
+	req.spi = MXC_SPI_GET_SPI(desc->device_id);
+	req.ssIdx = desc->chip_select;
+	req.txData = tx_buffer;
+	req.txCnt = 0;
+	req.rxData = rx_buffer;
+	req.rxCnt= 0;
+	req.ssDeassert = 1;
+	req.txLen= bytes_number;
+	req.rxLen= bytes_number;
 
-	if (desc->device_id == 0)
-		ret = SPI_MasterTrans(SPI0A, &req);
-#ifdef MXC_SPI1
-	else if (desc->device_id == 1)
-		ret = SPI_MasterTrans(SPI1A, &req);
-#endif
-	else
-		return -EINVAL;
+	ret = MXC_SPI_MasterTransaction(&req);
 
 	if (ret == E_BAD_PARAM)
 		return -EINVAL;
@@ -182,32 +193,23 @@ int32_t max_spi_write_and_read(struct spi_desc *desc,
 int32_t max_spi_transfer(struct spi_desc *desc, struct spi_msg *msgs,
 			 uint32_t len)
 {
-	spi_req_t req;
+	mxc_spi_req_t req;
 	int32_t ret;
 
-	if (!desc || !desc->extra || !msgs)
+	if (!desc || !msgs)
 		return -EINVAL;
 
-	req.bits = 8;
-	req.ssel = desc->chip_select;
-	req.ssel_pol = SPI17Y_POL_LOW;
-
+	req.spi = MXC_SPI_GET_SPI(desc->device_id);
 	for (uint32_t i = 0; i < len; i++) {
-		req.tx_data = msgs[i].tx_buff;
-		req.rx_data = msgs[i].rx_buff;
-		req.tx_num = 0;
-		req.rx_num = 0;
-		req.deass = msgs[i].cs_change;
-		req.len = msgs[i].bytes_number;
+		req.txData = msgs[i].tx_buff;
+		req.rxData = msgs[i].rx_buff;
+		req.txCnt = 0;
+		req.rxCnt = 0;
+		req.ssDeassert = msgs[i].cs_change;
+		req.txLen = msgs[i].bytes_number;
+		req.rxLen = msgs[i].bytes_number;
 
-		if (desc->device_id == 0)
-			ret = SPI_MasterTrans(SPI0A, &req);
-#ifdef MXC_SPI1
-		else if (desc->device_id == 1)
-			ret = SPI_MasterTrans(SPI1A, &req);
-#endif
-		else
-			return -EINVAL;
+		ret = MXC_SPI_MasterTransaction(&req);
 
 		if (ret == E_BAD_PARAM)
 			return -EINVAL;
