@@ -46,7 +46,7 @@
  */
 void udelay(uint32_t usecs)
 {
-	mxc_delay(MXC_DELAY_USEC(usecs));
+	MXC_Delay(MXC_DELAY_USEC(usecs));
 }
 
 /**
@@ -56,5 +56,5 @@ void udelay(uint32_t usecs)
  */
 void mdelay(uint32_t msecs)
 {
-	mxc_delay(MXC_DELAY_MSEC(msecs));
+	MXC_Delay(MXC_DELAY_MSEC(msecs));
 }
