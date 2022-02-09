@@ -43,7 +43,11 @@
 #define SPI_CS			15
 #define SPI_CS_PORT		GPIOA
 #define UART_DEVICE_ID	5
+#ifdef IIO_SUPPORT
+#define UART_BAUDRATE	115200
+#else
 #define UART_BAUDRATE	230400
+#endif
 #define I2C_DEVICE_ID	1
 #define I2C_BAUDRATE	400000
 

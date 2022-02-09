@@ -101,14 +101,18 @@ int ad5940_init(struct ad5940_dev **device,
 	if (ret < 0)
 		goto error_1;
 
-	ret = ad5940_HWReset(dev);
+	ret = gpio_get(&dev->gp0_gpio, &init_param->gp0_gpio_init);
 	if (ret < 0)
 		goto error_2;
+
+	ret = ad5940_HWReset(dev);
+	if (ret < 0)
+		goto error_3;
 
 	/* Platform configuration */
 	ret = AD5940_Initialize(dev);
 	if (ret < 0)
-		goto error_2;
+		goto error_3;
 	/* Step1. Configure clock */
 	clk_cfg.ADCClkDiv = ADCCLKDIV_1;
 	clk_cfg.ADCCLkSrc = ADCCLKSRC_HFOSC;
@@ -120,7 +124,7 @@ int ad5940_init(struct ad5940_dev **device,
 	clk_cfg.LFOSCEn = true;
 	ret = ad5940_CLKCfg(dev, &clk_cfg);
 	if (ret < 0)
-		goto error_2;
+		goto error_3;
 
 	/* Step2. Configure FIFO and Sequencer*/
 	fifo_cfg.FIFOEn = false;
@@ -133,24 +137,24 @@ int ad5940_init(struct ad5940_dev **device,
 	 * imaginary part */
 	ret = ad5940_FIFOCfg(dev, &fifo_cfg); /* Disable to reset FIFO. */
 	if (ret < 0)
-		goto error_2;
+		goto error_3;
 	fifo_cfg.FIFOEn = true;
 	ret = ad5940_FIFOCfg(dev, &fifo_cfg); /* Enable FIFO here */
 	if (ret < 0)
-		goto error_2;
+		goto error_3;
 
 	/* Step3. Interrupt controller */
 	/* Enable all interrupt in Interrupt Controller 1, so we can check INTC flags */
 	ret = ad5940_INTCCfg(dev, AFEINTC_1, AFEINTSRC_ALLINT, true);
 	if (ret < 0)
-		goto error_2;
+		goto error_3;
 	/* Interrupt Controller 0 will control GP0 to generate interrupt to MCU */
 	ret = ad5940_INTCCfg(dev, AFEINTC_0, AFEINTSRC_DATAFIFOTHRESH, true);
 	if (ret < 0)
-		goto error_2;
+		goto error_3;
 	ret = ad5940_INTCClrFlag(dev, AFEINTSRC_ALLINT);
 	if (ret < 0)
-		goto error_2;
+		goto error_3;
 
 	/* Step4: Reconfigure GPIO */
 	gpio_cfg.FuncSet = GP0_INT | GP1_GPIO;
@@ -161,14 +165,16 @@ int ad5940_init(struct ad5940_dev **device,
 
 	ret = ad5940_AGPIOCfg(dev, &gpio_cfg);
 	if (ret)
-		goto error_2;
+		goto error_3;
 	ret = ad5940_SleepKeyCtrlS(dev,
 				   SLPKEY_UNLOCK); /* Allow AFE to enter sleep mode. */
 	if (ret < 0)
-		goto error_2;
+		goto error_3;
 
 	*device = dev;
 	return 0;
+error_3:
+	gpio_remove(dev->gp0_gpio);
 error_2:
 	gpio_remove(dev->reset_gpio);
 error_1:
@@ -731,6 +737,21 @@ int ad5940_ReadReg(struct ad5940_dev *dev, uint16_t RegAddr, uint32_t *RegData)
 		return AD5940_SEQReadReg(dev, RegAddr, RegData);
 	else
 		return AD5940_SPIReadReg(dev->spi, RegAddr, RegData);
+}
+
+/** Write only masked bits to address @ref RegAddr with data @RegData  */
+int ad5940_WriteReg_mask(struct ad5940_dev *dev, uint16_t RegAddr, uint32_t mask, uint32_t RegData)
+{
+	int ret;
+	uint32_t reg;
+
+	ret = ad5940_ReadReg(dev, RegAddr, &reg);
+	if (ret)
+		return ret;
+
+	reg &= ~mask;
+	reg |= RegData;
+	return ad5940_WriteReg(dev, RegAddr, reg);
 }
 /**
  * @} SPI_Block_Functions
