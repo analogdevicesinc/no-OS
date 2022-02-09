@@ -36,3 +36,15 @@ INCS +=	$(INCLUDE)/no-os/delay.h \
 	$(PLATFORM_DRIVERS)/stm32_gpio.h \
 	$(PLATFORM_DRIVERS)/stm32_hal.h
 
+ifeq (y,$(strip $(TINYIIOD)))
+LIBRARIES += iio
+SRC_DIRS += $(NO-OS)/iio/iio_app
+SRCS += $(DRIVERS)/afe/ad5940/iio_ad5940.c
+INCS += $(DRIVERS)/afe/ad5940/iio_ad5940.h \
+	$(INCLUDE)/no-os/uart.h \
+	$(INCLUDE)/no-os/irq.h \
+	$(PLATFORM_DRIVERS)/irq_extra.h \
+	$(PLATFORM_DRIVERS)/uart_extra.h \
+	$(INCLUDE)/no-os/fifo.h \
+	$(INCLUDE)/no-os/list.h 
+endif

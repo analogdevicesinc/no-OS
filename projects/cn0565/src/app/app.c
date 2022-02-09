@@ -325,7 +325,7 @@ uint16_t generateSwitchCombination(struct eit_config eitCfg,
 	return seqCtr;
 }
 
-int app_main(struct i2c_desc *i2c)
+int app_main(struct i2c_desc *i2c, struct ad5940_init_param *ad5940_ip)
 {
 	int ret;
 	static uint32_t IntCount;
@@ -345,42 +345,11 @@ int app_main(struct i2c_desc *i2c)
 	int32_t cmd_err = 0;
 	uint8_t lastConfig = 'C';
 
-	struct stm32_spi_init_param xsip  = {
-		.chip_select_port = SPI_CS_PORT,
-		.get_input_clock = HAL_RCC_GetPCLK1Freq,
-	};
-
-	struct spi_init_param sip = {
-		.device_id = SPI_DEVICE_ID,
-		.max_speed_hz = 3000000,
-		.bit_order = SPI_BIT_ORDER_MSB_FIRST,
-		.mode = SPI_MODE_0,
-		.extra = &xsip,
-		.platform_ops = &stm32_spi_ops,
-		.chip_select = SPI_CS,
-	};
-
-	struct stm32_gpio_init_param xgip = {
-		.port = GPIOD,
-		.mode = GPIO_MODE_OUTPUT_PP,
-		.pull = GPIO_NOPULL,
-		.speed = GPIO_SPEED_FREQ_VERY_HIGH,
-	};
-
-	struct gpio_init_param reset_gip = {
-		.number = 12,
-		.platform_ops = &stm32_gpio_ops,
-		.extra = &xgip,
-	};
-
-	struct ad5940_init_param ad5940_ip = {
-		.spi_init = sip,
-		.reset_gpio_init = reset_gip,
-	};
 	struct ad5940_dev *ad5940;
-	ret = ad5940_init(&ad5940, &ad5940_ip);
+	ret = ad5940_init(&ad5940, ad5940_ip);
 	if (ret)
 		return ret;
+
 	AD5940BiaStructInit(); /* Configure your parameters in this function */
 
 	oldMeasCfg.bImpedanceReadMode = true;

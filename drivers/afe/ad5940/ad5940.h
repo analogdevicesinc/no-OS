@@ -2574,13 +2574,16 @@ typedef enum {
  * @brief The available AFE results type. Used for function @ref AD5940_ReadAfeResult
  * @{
 */
-#define AFERESULT_SINC3             0 /**< SINC3 result */
-#define AFERESULT_SINC2             1 /**< SINC2+NOTCH result */
-#define AFERESULT_TEMPSENSOR        2 /**< Temperature sensor result */
-#define AFERESULT_DFTREAL           3 /**< DFT Real result */
-#define AFERESULT_DFTIMAGE          4 /**< DFT Imaginary result */
-#define AFERESULT_STATSMEAN         5 /**< Statistic Mean result */
-#define AFERESULT_STATSVAR          6 /**< Statistic Variance result */
+enum ad5940_afe_result {
+	AFERESULT_SINC3, /**< SINC3 result */
+	AFERESULT_SINC2, /**< SINC2+NOTCH result */
+	AFERESULT_TEMPSENSOR , /**< Temperature sensor result */
+	AFERESULT_DFTREAL, /**< DFT Real result */
+	AFERESULT_DFTIMAGE, /**< DFT Imaginary result */
+	AFERESULT_STATSMEAN, /**< Statistic Mean result */
+	AFERESULT_STATSVAR, /**< Statistic Variance result */
+	AFERESULT_COUNT
+};
 /** @} */
 
 /**
@@ -3964,6 +3967,7 @@ struct SeqGen {
 struct ad5940_init_param {
 	struct spi_init_param spi_init;
 	struct gpio_init_param reset_gpio_init;
+	struct gpio_init_param gp0_gpio_init;
 };
 
 /**
@@ -3972,6 +3976,7 @@ struct ad5940_init_param {
 struct ad5940_dev {
 	struct spi_desc *spi;
 	struct gpio_desc *reset_gpio;
+	struct gpio_desc *gp0_gpio;
 	struct SeqGen SeqGenDB;
 };
 
@@ -3991,6 +3996,7 @@ int ad5940_remove(struct ad5940_dev *dev);
 /* 1. Basic SPI functions */
 int ad5940_WriteReg(struct ad5940_dev *dev, uint16_t RegAddr, uint32_t RegData);
 int ad5940_ReadReg(struct ad5940_dev *dev, uint16_t RegAddr, uint32_t *RegData);
+int ad5940_WriteReg_mask(struct ad5940_dev *dev, uint16_t RegAddr, uint32_t mask, uint32_t RegData);
 int ad5940_FIFORd(struct ad5940_dev *dev, uint32_t *pBuffer,
 		  uint32_t uiReadCount);
 
