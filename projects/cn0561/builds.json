@@ -1,0 +1,20 @@
+{
+  "xilinx": {
+    "iio_zed": {
+      "flags" : "TINYIIOD=y NEW_CFLAGS=-DCN0561_ZED_CARRIER",
+      "hardware" : ["cn0561_fmc_zed"]
+    },
+    "uart_zed": {
+      "flags" : "NEW_CFLAGS=-DCN0561_ZED_CARRIER",
+      "hardware" : ["cn0561_fmc_zed"]
+    },
+    "iio_cora": {
+      "flags" : "TINYIIOD=y NEW_CFLAGS=-DCN0561_CORAZ7S_CARRIER",
+      "hardware" : ["cn0561_ard_cora"]
+    },
+    "uart_cora": {
+      "flags" : "NEW_CFLAGS=-DCN0561_CORAZ7S_CARRIER",
+      "hardware" : ["cn0561_ard_cora"]
+    }
+  }
+}
