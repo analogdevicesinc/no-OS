@@ -105,27 +105,27 @@ int ad719x_init(struct ad719x_dev **device,
 
 	switch (dev->chip_id) {
 	case AD7190:
-		if((reg_val & AD719X_ID_MASK) != AD7190) {
+		if((reg_val & AD7190_4_ID_MASK) != AD7190) {
 			goto error_sync;
 		}
 		break;
 	case AD7192:
-		if((reg_val & AD719X_ID_MASK) != AD7192) {
+		if((reg_val & AD7190_4_ID_MASK) != AD7192) {
 			goto error_sync;
 		}
 		break;
 	case AD7193:
-		if((reg_val & AD719X_ID_MASK) != AD7193) {
+		if((reg_val & AD7190_4_ID_MASK) != AD7193) {
 			goto error_sync;
 		}
 		break;
 	case AD7194:
-		if((reg_val & AD719X_ID_MASK) != AD7194) {
+		if((reg_val & AD7190_4_ID_MASK) != AD7194) {
 			goto error_sync;
 		}
 		break;
 	case AD7195:
-		if((reg_val & AD719X_ID_MASK) != AD7195) {
+		if((reg_val & AD7195_ID_MASK) != AD7195) {
 			goto error_sync;
 		}
 		break;
