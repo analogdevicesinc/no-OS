@@ -127,8 +127,10 @@
 #define AD719X_CH_TEMP   8
 #define AD719X_CH_SHORT  9
 
+
 /* ID Register Bit Designations (AD7193_REG_ID) */
-#define AD719X_ID_MASK          0x0F
+#define AD7190_4_ID_MASK			0x0F
+#define AD7195_ID_MASK				0xFF
 
 /* GPOCON Register Bit Designations (AD719X_REG_GPOCON) */
 #define AD719X_GPOCON_BPDSW     (1 << 6) // Bridge power-down switch enable
