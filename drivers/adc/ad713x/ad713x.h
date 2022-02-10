@@ -173,6 +173,7 @@
  */
 #define AD713X_CHIP_TYPE_BITS_MSK			NO_OS_GENMASK(7, 0)
 #define AD713X_CHIP_TYPE_BITS_MODE(x)			(((x) & 0xFF) << 0)
+#define AD713X_CHIP_TYPE				0x07
 
 /*
  * AD713X_REG_PRODUCT_ID_LSB
@@ -575,7 +576,8 @@
 enum ad713x_supported_dev_ids {
 	ID_AD7132,
 	ID_AD7134,
-	ID_AD7136
+	ID_AD7136,
+	ID_AD4134
 };
 
 /**
