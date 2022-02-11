@@ -50,7 +50,7 @@
 /******************************************************************************/
 struct jesd204_rx_config {
 	uint8_t octets_per_frame;
-	uint8_t frames_per_multiframe;
+	uint16_t frames_per_multiframe;
 	uint8_t subclass_version;
 };
 
@@ -79,7 +79,7 @@ struct jesd204_rx_init {
 	const char *name;
 	uint32_t base;
 	uint8_t octets_per_frame;
-	uint8_t frames_per_multiframe;
+	uint16_t frames_per_multiframe;
 	uint8_t subclass;
 	uint32_t device_clk_khz;
 	uint32_t lane_clk_khz;

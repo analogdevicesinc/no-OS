@@ -54,7 +54,7 @@ struct jesd204_tx_config {
 	uint8_t lane_id;
 	uint8_t lanes_per_device;
 	uint8_t octets_per_frame;
-	uint8_t frames_per_multiframe;
+	uint16_t frames_per_multiframe;
 	uint8_t converters_per_device;
 	uint8_t resolution;
 	uint8_t bits_per_sample;
@@ -91,7 +91,7 @@ struct jesd204_tx_init {
 	const char *name;
 	uint32_t base;
 	uint8_t octets_per_frame;
-	uint8_t frames_per_multiframe;
+	uint16_t frames_per_multiframe;
 	uint8_t converters_per_device;
 	uint8_t converter_resolution;
 	uint8_t bits_per_sample;
