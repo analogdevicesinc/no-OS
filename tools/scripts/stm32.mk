@@ -138,7 +138,6 @@ $(BINARY).openocd:
 	@echo set AP_NUM 0 >> $(BINARY).openocd
 	@echo set GDB_PORT 3333 >> $(BINARY).openocd
 	@echo source [find $(TARGETCFG)] >> $(BINARY).openocd
-	@echo tpiu config disable >> $(BINARY).openocd
 
 .PHONY: $(BINARY).gdb
 $(BINARY).gdb:
