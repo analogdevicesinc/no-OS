@@ -149,7 +149,7 @@ $(TEMP_DIR)/arch.txt: $(HARDWARE)
 	$(MUTE)	$(call tcl_util, get_arch) $(HIDE)
 
 PHONY += $(PLATFORM)_sdkbuild
-$(PLATFORM)_sdkbuild: all
+$(PLATFORM)_sdkbuild:
 	$(MUTE) $(MUTE) xsct $(NO-OS)/tools/scripts/platform/xilinx/build_project.tcl $(WORKSPACE) $(HIDE)
 
 PHONY += $(PLATFORM)_sdkclean
