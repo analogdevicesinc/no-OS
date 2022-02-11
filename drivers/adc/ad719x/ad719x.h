@@ -127,7 +127,6 @@
 #define AD719X_CH_TEMP   8
 #define AD719X_CH_SHORT  9
 
-
 /* ID Register Bit Designations (AD7193_REG_ID) */
 #define AD7190_4_ID_MASK			0x0F
 #define AD7195_ID_MASK				0xFF
