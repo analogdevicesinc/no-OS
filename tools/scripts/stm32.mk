@@ -147,11 +147,6 @@ $(BINARY).gdb:
 	@echo monitor reset halt >> $(BINARY).gdb
 	@echo tb main >> $(BINARY).gdb
 	@echo tb HardFault_Handler >> $(BINARY).gdb
-	# These may be helpful but are disabled due to
-	# limited number of breakpoints:
-	# @echo tb UsageFault_Handler >> $(BINARY).gdb
-	# @echo tb MemManage_Handler >> $(BINARY).gdb
-	# @echo tb BusFault_Handler >> $(BINARY).gdb
 	@echo tui enable >> $(BINARY).gdb
 	@echo c >> $(BINARY).gdb
 
