@@ -6155,6 +6155,15 @@ int32_t ad9361_validate_enable_fir(struct ad9361_rf_phy *phy)
 		}
 	}
 
+	if (!phy->bypass_rx_fir && !phy->bypass_tx_fir) {
+		if (phy->rx_fir_ntaps != phy->tx_fir_ntaps) {
+			dev_err(dev,
+				"%s: Invalid: Rx and Tx number of taps mismatch (Rx: %"PRIu8", Tx: %"PRIu8")",
+				__func__, phy->rx_fir_ntaps, phy->tx_fir_ntaps);
+			return -EINVAL;
+		}
+	}
+
 	ret = ad9361_set_trx_clock_chain(phy, rx, tx);
 	if (ret < 0)
 		return ret;
