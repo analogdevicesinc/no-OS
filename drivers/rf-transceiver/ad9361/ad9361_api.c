@@ -2130,7 +2130,7 @@ int32_t ad9361_trx_load_enable_fir(struct ad9361_rf_phy *phy,
 				   AD9361_RXFIRConfig rx_fir_cfg,
 				   AD9361_TXFIRConfig tx_fir_cfg)
 {
-	int32_t rtx = -1, rrx = -1;
+	int32_t rtx = -1, rrx = -1, ret;
 
 	phy->filt_rx_bw_Hz = 0;
 	phy->filt_tx_bw_Hz = 0;
@@ -2156,13 +2156,20 @@ int32_t ad9361_trx_load_enable_fir(struct ad9361_rf_phy *phy,
 		phy->filt_rx_bw_Hz = rx_fir_cfg.rx_bandwidth;
 	}
 
-	ad9361_set_tx_fir_config(phy, tx_fir_cfg);
-	ad9361_set_rx_fir_config(phy, rx_fir_cfg);
+	ret = ad9361_set_tx_fir_config(phy, tx_fir_cfg);
+	if (ret < 0)
+		return ret;
+
+	ret = ad9361_set_rx_fir_config(phy, rx_fir_cfg);
+	if (ret < 0)
+		return ret;
 
 	if (!(rrx | rtx))
 		phy->filt_valid = true;
 
-	ad9361_set_trx_fir_en_dis(phy, 1);
+	ret = ad9361_set_trx_fir_en_dis(phy, 1);
+	if (ret < 0)
+		return ret;
 
 	return 0;
 }
