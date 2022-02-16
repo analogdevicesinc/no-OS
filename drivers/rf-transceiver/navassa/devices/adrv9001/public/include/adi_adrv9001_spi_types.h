@@ -75,16 +75,16 @@ typedef enum
 
 typedef enum
 {
-	ADI_ADRV9001_SPI_MASTER_CS_ASSERTION_PER_BYTE = 0u,		/* CS is asserted per byte */
-	ADI_ADRV9001_SPI_MASTER_CS_ASSERTION_CONTINUOUS = 1u    /* CS is asserted for the entire transactionBytes duration */
-} adi_adrv9001_spiMasterAssertionMode_e;
+	ADI_ADRV9001_SPI_MASTER_CS_TRANSFER_TRANSACTION_BYTES = 0u, /* CS assert for transactionBytes and only sends transactionBytes bytes */
+	ADI_ADRV9001_SPI_MASTER_CS_TRANSFER_NUM_BYTES = 1u			/* CS assert for numBytes and send all numBytes */
+} adi_adrv9001_spiMasterTransferMode_e;
 
 typedef struct
 {
 	uint8_t                       numBytes;                               /* Number of bytes to write. Valid range is 1 - 30 */
 	uint8_t                       baudRateDiv;                            /* SPI baudRate = DEV_CLK_IN / baudRateDiv; Valid range is 0 - 31 */
 	uint8_t                       transactionBytes;                       /* Number of bytes per CS assertion.Valid range is 1 - 30 */
-	adi_adrv9001_spiMasterAssertionMode_e      assertionMode;             /* CS assert/deassert during frame duration */
+	adi_adrv9001_spiMasterTransferMode_e       transferMode;              /* CS transfer during frame duration */
 	adi_adrv9001_spiMasterSlaveDevices_e       spiSlaveDevicesConnected;  /* Single or multiple(only in future) SPI slaves connected with ADRV9001 */
 	adi_adrv9001_spiMasterSource_e			   csSource;                  /* GPIO type for all SPI pins: Analog or Digital */
 	adi_adrv9001_GpioPin_e                     pin;                       /* CS pin - Other SPI signals have dedicated pins: Pin9 = SPI_CLK, 

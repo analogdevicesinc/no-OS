@@ -92,8 +92,8 @@ typedef enum {
  */
 typedef enum {
     ADI_ADRV9001_FHFRAMEINDEX_CURRENT_FRAME  = 0u, /*!< Hop frame currently in progress */
-    ADI_ADRV9001_FHFRAMEINDEX_UPCOMING_FRAME = 1u, /*!< The upcoming hop frame after the current*/
-    ADI_ADRV9001_FHFRAMEINDEX_NEXT_FRAME     = 2u, /*!< Next hop frame after the upcoming one (i.e. next-after-next) */
+    ADI_ADRV9001_FHFRAMEINDEX_UPCOMING_FRAME = 1u, /*!< The upcoming hop frame after the current. 
+                                                        Only applicable in LO_MUX, will match CURRENT in LO_RETUNE*/
 } adi_adrv9001_FhFrameIndex_e;
 
 /**

@@ -59,22 +59,22 @@ typedef enum adi_adrv9001_InitCalibrations
 typedef enum adi_adrv9001_TrackingCalibrations
 {
     /* SW and HW tracking cals */
-    ADI_ADRV9001_TRACKING_CAL_TX_QEC            = 0x00000001, //!< Tx Quadrature Error Correction
-    ADI_ADRV9001_TRACKING_CAL_TX_LO_LEAKAGE     = 0x00000002, //!< Tx LO Leakage
-    ADI_ADRV9001_TRACKING_CAL_TX_LB_PD          = 0x00000004, //!< Tx Loopback path delay
-    ADI_ADRV9001_TRACKING_CAL_TX_PAC            = 0x00000008, //!< Tx Power Amplifier Correction
-    ADI_ADRV9001_TRACKING_CAL_TX_DPD_CLGC       = 0x00000010, //!< Tx Digital Pre Distortion and Close Loop Gain Control
+    ADI_ADRV9001_TRACKING_CAL_TX_QEC                                = 0x00000001, //!< Tx Quadrature Error Correction
+    ADI_ADRV9001_TRACKING_CAL_TX_LO_LEAKAGE                         = 0x00000002, //!< Tx LO Leakage
+    ADI_ADRV9001_TRACKING_CAL_TX_LB_PD                              = 0x00000004, //!< Tx Loopback path delay
+    ADI_ADRV9001_TRACKING_CAL_TX_PAC                                = 0x00000008, //!< Tx Power Amplifier Correction
+    ADI_ADRV9001_TRACKING_CAL_TX_DPD_CLGC                           = 0x00000010, //!< Tx Digital Pre Distortion and Close Loop Gain Control
     /* Bit 6-7: Not used (Reserved for future purpose) */
-    ADI_ADRV9001_TRACKING_CAL_RX_HD2            = 0x00000100, //!< Rx Harmonic Distortion
-    ADI_ADRV9001_TRACKING_CAL_RX_QEC_WBPOLY     = 0x00000200, //!< Rx Quadrature Error Correction Wideband Poly
+    ADI_ADRV9001_TRACKING_CAL_RX_HD2                                = 0x00000100, //!< Rx Harmonic Distortion
+    ADI_ADRV9001_TRACKING_CAL_RX_QEC_WBPOLY                         = 0x00000200, //!< Rx Quadrature Error Correction Wideband Poly
     /* Bit 10-11: Not used (Reserved for future purpose) */
-    ADI_ADRV9001_TRACKING_CAL_ORX_QEC_WBPOLY    = 0x00001000, //!< ORx Quadrature Error Correction Wideband Poly
+    ADI_ADRV9001_TRACKING_CAL_ORX_QEC_WBPOLY                        = 0x00001000, //!< ORx Quadrature Error Correction Wideband Poly
     /* Bit 13-18:  Not used (Reserved for future purpose) */
-    ADI_ADRV9001_TRACKING_CAL_RX_BBDC           = 0x00080000, //!< Rx Baseband DC rejection
-    ADI_ADRV9001_TRACKING_CAL_RX_RFDC           = 0x00100000, //!< Rx RF DC
-    ADI_ADRV9001_TRACKING_CAL_RX_QEC_FIC        = 0x00200000, //!< Rx Quadrature Error Correction FIC
-    ADI_ADRV9001_TRACKING_CAL_RX_AGC            = 0x00400000, //!< Rx Automatic Gain Control
-    ADI_ADRV9001_TRACKING_CAL_RX_RSSI           = 0x00800000  //!< Rx RSSI
+    ADI_ADRV9001_TRACKING_CAL_RX_BBDC                               = 0x00080000, //!< Rx Baseband DC rejection
+    ADI_ADRV9001_TRACKING_CAL_RX_RFDC                               = 0x00100000, //!< Rx RF DC
+    ADI_ADRV9001_TRACKING_CAL_RX_QEC_FIC                            = 0x00200000, //!< Rx Quadrature Error Correction FIC
+    ADI_ADRV9001_TRACKING_CAL_RX_GAIN_CONTROL_DETECTORS             = 0x00400000, //!< Rx Gain Control Detectors (Power, Analog Peak and Half Band)
+    ADI_ADRV9001_TRACKING_CAL_RX_RSSI                               = 0x00800000  //!< Rx RSSI
     /* Bit 24-31: Not used */
 }adi_adrv9001_TrackingCalibrations_e;
 

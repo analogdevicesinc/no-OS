@@ -24,6 +24,7 @@
 #include "adi_adrv9001_gpio.h"
 #include "adi_adrv9001_spi.h"
 #include "adi_adrv9001_radio.h"
+#include "adi_adrv9001_rx.h"
 #include "adi_adrv9001_mcs.h"
 #include "adi_adrv9001_cals.h"
 #include "adi_adrv9001_fh.h"
@@ -1150,6 +1151,11 @@ int32_t adi_adrv9001_arm_System_Program(adi_adrv9001_Device_t *device, uint8_t c
     uint8_t extData[2] = { 0 };
     uint8_t cmdStatusByte = 0;
     int32_t recoveryAction = ADI_COMMON_ACT_NO_ACTION;
+	int orxFlgShift = 3;   //ORX flag shift from FW bit position, lsb bit 1, to API bit position ADRV9001_ORX1
+	int ilbFlgShift = 4;   //ILB flag shift from FW bit position, lsb bit 2, to API bit position ADRV9001_ILB1
+	int elbFlgShift = 5;   //ELB flag shift from FW bit position, lsb bit 3, to API bit position ADRV9001_ELB1
+	int txFlgShiftUp = 3;   // TX enable flag, lsb bit 5
+	int adcPortBFlg = 64;   // ADC port B enable flag, lsb bit 6
 
     /* Check device pointer is not null */
     ADI_ENTRY_EXPECT(device);
@@ -1178,6 +1184,29 @@ int32_t adi_adrv9001_arm_System_Program(adi_adrv9001_Device_t *device, uint8_t c
         }
     }
 
+	adi_adrv9001_RxPortSwitchCfg_t portSwitchCfg = { 0 };
+	ADI_EXPECT(adi_adrv9001_Rx_PortSwitch_Inspect, device, &portSwitchCfg);
+
+	/*Mask for Channel 1 */
+	device->devStateInfo.chProfEnMask[0] = ((device->devStateInfo.initializedChannels & ADI_ADRV9001_RX1) |
+								   ((device->devStateInfo.initializedChannels & ADI_ADRV9001_ORX1) >> (orxFlgShift)) |
+								   ((device->devStateInfo.initializedChannels & ADI_ADRV9001_ILB1) >> (ilbFlgShift)) |
+								   ((device->devStateInfo.initializedChannels & ADI_ADRV9001_ELB1) >> (elbFlgShift)) |
+								   ((device->devStateInfo.initializedChannels & ADI_ADRV9001_TX1) << (txFlgShiftUp)));
+	
+	/*Mask for Channel 2 */
+	device->devStateInfo.chProfEnMask[1] = (((device->devStateInfo.initializedChannels & ADI_ADRV9001_RX2) >> 1) |
+								   ((device->devStateInfo.initializedChannels & ADI_ADRV9001_ORX2) >> (orxFlgShift  + 1)) |
+								   ((device->devStateInfo.initializedChannels & ADI_ADRV9001_ILB2) >> (ilbFlgShift  + 1)) |
+								   ((device->devStateInfo.initializedChannels & ADI_ADRV9001_ELB2) >> (elbFlgShift  + 1)) |
+								   ((device->devStateInfo.initializedChannels & ADI_ADRV9001_TX2) << (txFlgShiftUp  - 1)));
+
+	if (portSwitchCfg.enable == true)
+	{
+		device->devStateInfo.chProfEnMask[0] = device->devStateInfo.chProfEnMask[0] | adcPortBFlg;
+		device->devStateInfo.chProfEnMask[1] = device->devStateInfo.chProfEnMask[1] | adcPortBFlg;
+	}
+	
     ADI_API_RETURN(device);
 }
 

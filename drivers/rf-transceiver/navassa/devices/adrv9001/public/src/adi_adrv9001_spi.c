@@ -570,7 +570,7 @@ int32_t adi_adrv9001_spi_Master_Configure(adi_adrv9001_Device_t *device,
 	armData[offset++] = spiMasterConfig->numBytes;
 	armData[offset++] = spiMasterConfig->baudRateDiv;
 	armData[offset++] = spiMasterConfig->transactionBytes;
-	armData[offset++] = spiMasterConfig->assertionMode;
+	armData[offset++] = spiMasterConfig->transferMode;
 	armData[offset++] = spiMasterConfig->spiSlaveDevicesConnected;
 	armData[offset++] = spiMasterConfig->csSource;
 	armData[offset++] = spiMasterConfig->pin - 1;
@@ -613,7 +613,7 @@ int32_t adi_adrv9001_spi_Master_Inspect(adi_adrv9001_Device_t *device,
 	spiMasterConfig->numBytes = armReadBack[offset++];
 	spiMasterConfig->baudRateDiv = armReadBack[offset++];
 	spiMasterConfig->transactionBytes = armReadBack[offset++];
-	spiMasterConfig->assertionMode = armReadBack[offset++];
+	spiMasterConfig->transferMode = armReadBack[offset++];
 	spiMasterConfig->spiSlaveDevicesConnected = armReadBack[offset++];
 	spiMasterConfig->csSource = armReadBack[offset++];
 	spiMasterConfig->pin = (armReadBack[offset++] + 1);

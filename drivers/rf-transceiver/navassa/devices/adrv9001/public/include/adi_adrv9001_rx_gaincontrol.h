@@ -61,7 +61,7 @@ int32_t adi_adrv9001_Rx_GainControl_Mode_Get(adi_adrv9001_Device_t *adrv9001,
 /**
  * \brief Configure Automatic Gain Control (AGC) for the specified Rx channel
  *
- * \pre This function may be called any time after device initialization
+ * \pre Channel state is any of CALIBRATED, PRIMED, or RF_ENABLED
  *
  * \note This function does NOT enable AGC mode. Call adi_adrv9001_Rx_GainCtrlMode_Set() afterwards
  * \note Message type: \ref timing_direct "Direct register acccess"
@@ -81,7 +81,7 @@ int32_t adi_adrv9001_Rx_GainControl_Configure(adi_adrv9001_Device_t *adrv9001,
  *
  * \note Message type: \ref timing_direct "Direct register acccess"
  *
- * \pre This function may be used only if AGC is active
+ * \pre Channel state is any of CALIBRATED, PRIMED, or RF_ENABLED
  *
  * \param[in]  adrv9001      Context variable - Pointer to the ADRV9001 device data structure
  * \param[in]  channel       The Rx Channel for which to configure AGC

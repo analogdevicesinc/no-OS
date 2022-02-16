@@ -213,12 +213,12 @@ int32_t adi_adrv9001_gpio_ManualAnalogOutput_Configure(adi_adrv9001_Device_t *ad
                                                        adi_adrv9001_GpioAnalogPinNibbleSel_e nibble);
 
 /**
- * \brief Sets the configuration for the Front End GPIO
+ * \brief Configures GPIO pins for ARM functionality
  *
  * \note Message type: \ref timing_mailbox "Mailbox command"
  *
  * \param[in] adrv9001          Context variable - Pointer to the ADRV9001 device data structure containing settings
- * \param[in] gpioCtrlInitCfg   GPIO signal configuration
+ * \param[in] gpioCtrlInitCfg   GPIO signal configuration for ARM functionality
  *
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
  */

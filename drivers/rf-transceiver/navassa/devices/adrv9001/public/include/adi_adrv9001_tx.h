@@ -110,7 +110,9 @@ int32_t adi_adrv9001_Tx_AttenuationMode_Get(adi_adrv9001_Device_t *adrv9001,
  *      channel state must be any of STANDBY, CALIBRATED, PRIMED.
  * \pre If attenuation mode is ADI_ADRV9001_TX_ATTENUATION_CONTROL_MODE_SPI:
  *      channel state must be any of STANDBY, CALIBRATED, PRIMED, RF_ENABLED
- * \pre Attenuation mode is not ADI_ADRV9001_TX_ATTENUATION_CONTROL_MODE_CLGC
+ * \pre Attenuation mode is ADI_ADRV9001_TX_ATTENUATION_CONTROL_MODE_CLGC
+ *      channel state must be any of STANDBY, CALIBRATED, PRIMED, RF_ENABLED
+ *      clgcLoopOpen must be 0
  *
  * \note Message type: \ref timing_direct "Direct register acccess"
  * \note The new attenuation only takes effect in the RF_ENABLED state - may read back incorrect value otherwise

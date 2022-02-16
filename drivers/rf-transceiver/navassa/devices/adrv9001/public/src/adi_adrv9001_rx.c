@@ -1807,9 +1807,9 @@ int32_t adi_adrv9001_Rx_Loid_Configure(adi_adrv9001_Device_t *adrv9001,
     ADI_PERFORM_VALIDATION(adi_adrv9001_Rx_Loid_Configure_Validate, adrv9001, channel, loidConfig);
 
 	armData[0] = loidConfig->loidEnable;
-	armData[1] = loidConfig->loidInterval;
-	armData[2] = loidConfig->loidThHigh;
-	armData[3] = loidConfig->loidThLow;
+	armData[1] = 1;
+	armData[2] = loidConfig->loidThreshold_negdBFS - 6;
+	armData[3] = loidConfig->loidThreshold_negdBFS - 6;
 
     /* Write LOID config to ARM mailbox */
     ADI_EXPECT(adi_adrv9001_arm_Memory_Write, adrv9001, ADRV9001_ADDR_ARM_MAILBOX_SET, &armData[0], sizeof(armData), ADI_ADRV9001_ARM_SINGLE_SPI_WRITE_MODE_STANDARD_BYTES_4);
@@ -1867,9 +1867,7 @@ int32_t adi_adrv9001_Rx_Loid_Inspect(adi_adrv9001_Device_t *adrv9001,
 		ADRV9001_ARM_MEM_READ_AUTOINCR)
 		
 	loidConfig->loidEnable = armReadBack[0];
-	loidConfig->loidInterval = (adi_adrv9001_LoidInterval_e) armReadBack[1];
-	loidConfig->loidThHigh = armReadBack[2];
-	loidConfig->loidThLow = armReadBack[3];
+	loidConfig->loidThreshold_negdBFS = armReadBack[2] + 6;
 
     ADI_API_RETURN(adrv9001);
 }
