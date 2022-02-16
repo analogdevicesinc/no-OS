@@ -328,6 +328,15 @@ int32_t adi_adrv9001_gpio_ControlInit_Configure(adi_adrv9001_Device_t *adrv9001,
     {
         ADI_EXPECT(adi_adrv9001_gpio_Configure, adrv9001, ADI_ADRV9001_GPIO_SIGNAL_MON_BBIC_WAKEUP, &initCfg->systemPowerSavingAndMonitorWakeUp);
     }
+	
+	if (ADI_ADRV9001_GPIO_UNASSIGNED != initCfg->fh_update_rx_nco[0].pin)
+	{
+		ADI_EXPECT(adi_adrv9001_gpio_Configure, adrv9001, ADI_ADRV9001_GPIO_SIGNAL_FH_HOP1_NCO_ASYNC_CHANGE, &initCfg->fh_update_rx_nco[0]);
+	}
+	if (ADI_ADRV9001_GPIO_UNASSIGNED != initCfg->fh_update_rx_nco[1].pin)
+	{
+		ADI_EXPECT(adi_adrv9001_gpio_Configure, adrv9001, ADI_ADRV9001_GPIO_SIGNAL_FH_HOP2_NCO_ASYNC_CHANGE, &initCfg->fh_update_rx_nco[1]);
+	}
 
     ADI_API_RETURN(adrv9001);
 }

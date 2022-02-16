@@ -143,6 +143,8 @@ typedef struct adi_adrv9001_GainControlCfg
     adi_adrv9001_PowerDetector_t power;
     adi_adrv9001_PeakDetector_t peak;
     adi_adrv9001_ExtLna_t extLna;
+	bool rxQecFreezeEnable;		/*!< RXQEC Freeze Enable/Disable, only applies in AGC mode*/
+	adi_adrv9001_GpioPin_e gpioFreezePin; /*!< GPIO pin to activate to freeze AGC - set to 0/UNASSIGNED if unused */
 } adi_adrv9001_GainControlCfg_t;
 
 typedef struct adi_adrv9001_RxGainControlPinCfg

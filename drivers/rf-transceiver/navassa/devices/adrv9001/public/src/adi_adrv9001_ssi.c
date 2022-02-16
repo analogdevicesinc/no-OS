@@ -412,6 +412,7 @@ int32_t adi_adrv9001_Ssi_Tx_TestMode_Status_Inspect(adi_adrv9001_Device_t *devic
     uint8_t captureComplete = 0;
     uint32_t timeout_us = ADI_ADRV9001_SSI_DEBUG_TIMEOUT_US;
     adrv9001_BfNvsRegmapTx_e baseAddress = ADRV9001_BF_TX1_CORE;
+	uint8_t ddrSet = 0;
 
     waitInterval_us = (ADI_ADRV9001_SSI_DEBUG_INTERVAL_US > timeout_us) ?
     timeout_us : ADI_ADRV9001_SSI_DEBUG_INTERVAL_US;
@@ -578,7 +579,15 @@ int32_t adi_adrv9001_Ssi_Tx_TestMode_Status_Inspect(adi_adrv9001_Device_t *devic
             ADI_EXPECT(adrv9001_NvsRegmapTx_CssiTxDebugRampShiftError_Get, device, baseAddress, &ssiTestModeStatus->dataError);
         }
 
-        ADI_EXPECT(adrv9001_NvsRegmapTx_CssiTxStrobeAlignError_Get, device, baseAddress, &ssiTestModeStatus->strobeAlignError);
+	    ADI_EXPECT(adrv9001_NvsRegmapTx_CssiTxDdrSel_Get, device, baseAddress, &ddrSet);
+	    if (ddrSet == 0)
+	    {
+		    ADI_EXPECT(adrv9001_NvsRegmapTx_CssiTxStrobeAlignError_Get, device, baseAddress, &ssiTestModeStatus->strobeAlignError);
+	    }
+	    else
+	    {
+		    ADI_EXPECT(adrv9001_NvsRegmapTx_CssiTxDdrStrobeAlignError_Get, device, baseAddress, &ssiTestModeStatus->strobeAlignError);
+	    }
 
         ADI_EXPECT(adrv9001_NvsRegmapTx_CssiTxFifoFull_Get, device, baseAddress, &ssiTestModeStatus->fifoFull);
 

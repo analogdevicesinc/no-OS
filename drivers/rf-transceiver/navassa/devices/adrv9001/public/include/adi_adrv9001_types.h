@@ -37,6 +37,8 @@
 /* TODO: Determine a reasonable value */
 #define ADI_ADRV9001_READY_FOR_MCS_DELAY_US 100U
 
+#define ADI_ADRV9001_WB_MAX_NUM_ENTRY 16384
+#define ADI_ADRV9001_WB_MAX_NUM_COEFF 6000
 
 /**
 * \brief ADRV9001 part number
@@ -178,6 +180,14 @@ typedef struct adi_adrv9001_SiliconVersion
     uint8_t minor; /*!< Minor silicon version */
 } adi_adrv9001_SiliconVersion_t;
 
+/**
+ * \brief WarmBoot InitCals Coefficients
+ */
+typedef struct adi_adrv9001_Warmboot_Coeff
+{
+	uint8_t calValue[ADI_ADRV9001_WB_MAX_NUM_ENTRY][ADI_ADRV9001_WB_MAX_NUM_COEFF];
+} adi_adrv9001_Warmboot_Coeff_t;
+
 #ifndef CLIENT_IGNORE
 /**
 * \brief Data structure to hold a ADRV9001 device instance status information
@@ -227,6 +237,7 @@ typedef struct adi_adrv9001_Info
     uint8_t frequencyHoppingEnabled;                                    /*!< Frequency hopping enabled flag from currently loaded profile */
     adi_adrv9001_RxGainTableType_e gainTableType[ADI_ADRV9001_MAX_RX_ONLY]; /*!< type of gain table loaded during ADRV9001 initialization */
 	uint8_t txAttenMode[ADI_ADRV9001_MAX_TXCHANNELS];					/* TX Attenuation Mode*/
+	uint32_t chProfEnMask[ADI_ADRV9001_MAX_NUM_CHANNELS];				/* Mask for enabled channels and profiles in FW format - used for warmboot*/
 } adi_adrv9001_Info_t;
 
 /**

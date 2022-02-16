@@ -179,25 +179,12 @@ typedef struct adi_adrv9001_RxPortSwitchCfg
 } adi_adrv9001_RxPortSwitchCfg_t;
     
 /**
- * \brief Supported LOID intervals
- */
-typedef enum adi_adrv9001_LoidInterval
-{
-    ADI_ADRV9001_LOIDINTERVAL_RFDCINTERVAL_DIV_2 = 0,	/* 1/2 rfdc estimation interval */
-    ADI_ADRV9001_LOIDINTERVAL_RFDCINTERVAL_DIV_4 = 1,	/* 1/4 rfdc estimation interval */
-    ADI_ADRV9001_LOIDINTERVAL_RFDCINTERVAL_DIV_8 = 2,	/* 1/8 rfdc estimation interval */
-    ADI_ADRV9001_LOIDINTERVAL_RFDCINTERVAL_DIV_16 = 3	/* 1/16 rfdc estimation interval */
-} adi_adrv9001_LoidInterval_e;
-    
-/**
  * \brief Structure which holds the LOID configuration parameters
  */
 typedef struct adi_adrv9001_RxrfdcLoidCfg
 {
 	bool loidEnable;								/* LOID enable flag for RX1 and RX2 */
-	adi_adrv9001_LoidInterval_e loidInterval;       /* Estimation interval */
-	uint8_t loidThLow;								/* Lower threshold for LO detection (in -dB) */
-	uint8_t loidThHigh;								/* Upper threshold for LO detection (in -dB) */  
+	uint8_t loidThreshold_negdBFS;				    /* Threshold for LO detection (in -dBFS) */  
 } adi_adrv9001_RxrfdcLoidCfg_t ;	
     
 #ifdef __cplusplus

@@ -44,6 +44,8 @@
                                                       FREQ_HOPPING_CONFIGURATION_NUM_BYTES)
 #define FREQ_HOPPING_MAX_NUM_BYTES                   1536u
 #define FREQ_HOPPING_HOP_TABLE_PARTITION_ADDR_OFFSET 16u
+#define FREQ_HOPPING_HOP1_OFFSET_FREQ_OVERWRITE_ADDR 0x2001FFF0
+#define FREQ_HOPPING_HOP2_OFFSET_FREQ_OVERWRITE_ADDR 0x2001FFF8
 
 #define ADI_FH_CHECK_FH_ENABLED(device) \
 if (device->devStateInfo.frequencyHoppingEnabled == 0) \
@@ -976,10 +978,11 @@ int32_t adi_adrv9001_fh_HopTable_Get(adi_adrv9001_Device_t *adrv9001,
 }
 
 int32_t adi_adrv9001_fh_FrameInfo_Inspect(adi_adrv9001_Device_t *adrv9001, 
+	                                         adi_adrv9001_FhHopSignal_e fhHopSignal,
                                              adi_adrv9001_FhFrameIndex_e frameIndex,
                                              adi_adrv9001_FhHopFrame_t *hopFrame)
 {
-    uint8_t armData[16u]  = { 0 };
+	uint8_t armData[sizeof(adrv9001_FhHopFrame_t)] = { 0 };
     uint8_t extData[5u]   = { 0 };
     uint32_t offset = 0;
     uint32_t hopFrequencyHz_LSB = 0;
@@ -988,7 +991,9 @@ int32_t adi_adrv9001_fh_FrameInfo_Inspect(adi_adrv9001_Device_t *adrv9001,
     /* Check if FH is enabled in device profile */
     ADI_FH_CHECK_FH_ENABLED(adrv9001);
     ADI_NULL_PTR_RETURN(&adrv9001->common, hopFrame);
-    ADI_RANGE_CHECK(adrv9001, frameIndex, ADI_ADRV9001_FHFRAMEINDEX_CURRENT_FRAME, ADI_ADRV9001_FHFRAMEINDEX_NEXT_FRAME);
+	ADI_RANGE_CHECK(adrv9001, fhHopSignal, ADI_ADRV9001_FH_HOP_SIGNAL_1, ADI_ADRV9001_FH_HOP_SIGNAL_2);
+	ADI_RANGE_CHECK(adrv9001, frameIndex, ADI_ADRV9001_FHFRAMEINDEX_CURRENT_FRAME, ADI_ADRV9001_FHFRAMEINDEX_UPCOMING_FRAME);
+	
     
     /* Write the size to the GET buffer */
     adrv9001_LoadFourBytes(&offset, armData, sizeof(armData));
@@ -998,6 +1003,7 @@ int32_t adi_adrv9001_fh_FrameInfo_Inspect(adi_adrv9001_Device_t *adrv9001,
     extData[0] =  0;   /* Channel Mask; unused for this command */
     extData[1] = OBJID_GO_GET_FREQ_HOP_FRAME_INFO;
     extData[2] = frameIndex;
+	extData[3] = fhHopSignal;
     ADI_EXPECT(adi_adrv9001_arm_Cmd_Write, adrv9001, ADRV9001_ARM_GET_OPCODE, extData, sizeof(extData));
 
     /* check the command status for timeout */
@@ -1354,4 +1360,22 @@ int32_t adi_adrv9001_fh_HopTable_BytesPerTable_Get(adi_adrv9001_Device_t *adrv90
     *bytesPerTable = payloadBytes + spiPackBytesPerTable;
 
     ADI_API_RETURN(adrv9001);
+}
+int32_t adi_adrv9001_fh_RxOffsetFrequency_Set(adi_adrv9001_Device_t *adrv9001, adi_adrv9001_FhHopSignal_e hopSignal, int32_t  rx1OffsetFrequencyHz, int32_t  rx2OffsetFrequencyHz)
+{
+	uint32_t offset = 0;
+	uint8_t rxOffsetFrequencyHzArray[8] = { 0 };
+	adrv9001_LoadFourBytes(&offset, rxOffsetFrequencyHzArray, rx1OffsetFrequencyHz);
+	adrv9001_LoadFourBytes(&offset, rxOffsetFrequencyHzArray, rx2OffsetFrequencyHz);
+	if (hopSignal == ADI_ADRV9001_FH_HOP_SIGNAL_1)
+	{
+		
+		ADI_EXPECT(adi_adrv9001_arm_Memory_Write, adrv9001, FREQ_HOPPING_HOP1_OFFSET_FREQ_OVERWRITE_ADDR, rxOffsetFrequencyHzArray, sizeof(rxOffsetFrequencyHzArray), ADI_ADRV9001_ARM_SINGLE_SPI_WRITE_MODE_STANDARD_BYTES_4);
+	}
+	else
+	{
+		ADI_EXPECT(adi_adrv9001_arm_Memory_Write, adrv9001, FREQ_HOPPING_HOP2_OFFSET_FREQ_OVERWRITE_ADDR, rxOffsetFrequencyHzArray, sizeof(rxOffsetFrequencyHzArray), ADI_ADRV9001_ARM_SINGLE_SPI_WRITE_MODE_STANDARD_BYTES_4);
+	}
+
+	ADI_API_RETURN(adrv9001);
 }

@@ -32,6 +32,7 @@
 #include "adi_adrv9001_spi.h"
 #include "adi_adrv9001_radio.h"
 #include "adi_adrv9001_auxdac.h"
+#include "adi_adrv9001_dpd.h"
 
 #include "adrv9001_validators.h"
 #include "adrv9001_arm.h"
@@ -346,6 +347,7 @@ static __maybe_unused int32_t __maybe_unused adi_adrv9001_Tx_Attenuation_Set_Val
 {
     uint8_t chan_index = 0;
 	adi_adrv9001_TxAttenuationControlMode_e txModeRead = ADI_ADRV9001_TX_ATTENUATION_CONTROL_MODE_BYPASS;
+	adi_adrv9001_DpdCfg_t dpdCfgRead = { 0 };
 
     ADI_RANGE_CHECK(device, channel, ADI_CHANNEL_1, ADI_CHANNEL_2);
 
@@ -383,14 +385,15 @@ static __maybe_unused int32_t __maybe_unused adi_adrv9001_Tx_Attenuation_Set_Val
 
 	/* Retrieve attenuation mode */
 	ADI_EXPECT(adi_adrv9001_Tx_AttenuationMode_Get, device, channel, &txModeRead);
-	if (txModeRead == ADI_ADRV9001_TX_ATTENUATION_CONTROL_MODE_CLGC)
+	ADI_EXPECT(adi_adrv9001_dpd_Inspect, device, channel, &dpdCfgRead);
+	if ((txModeRead == ADI_ADRV9001_TX_ATTENUATION_CONTROL_MODE_CLGC) & (dpdCfgRead.clgcLoopOpen != true))
 	{
 		ADI_ERROR_REPORT(&device->common,
 			ADI_COMMON_ERRSRC_API,
 			ADI_COMMON_ERR_API_FAIL,
 			ADI_COMMON_ACT_ERR_CHECK_PARAM,
 			txModeRead,
-			"Invalid TxAttenuation Control Mode. Cannot control when mode CLGC is enabled");
+			"Cannot set TxAtten when CLGC is enabled and loop is closed");
 	}
 
     ADI_API_RETURN(device);
@@ -413,7 +416,7 @@ int32_t adi_adrv9001_Tx_Attenuation_Set(adi_adrv9001_Device_t* device,
 
     /* Save the current attenuation mode and set to the required mode */
     ADI_EXPECT(adi_adrv9001_Tx_AttenuationMode_Get, device, channel, &attenMode);
-    if (attenMode != ADI_ADRV9001_TX_ATTENUATION_CONTROL_MODE_SPI)
+    if ((attenMode != ADI_ADRV9001_TX_ATTENUATION_CONTROL_MODE_SPI)&(attenMode != ADI_ADRV9001_TX_ATTENUATION_CONTROL_MODE_CLGC))
     {
         ADI_EXPECT(adi_adrv9001_Tx_AttenuationMode_Set, device, channel, ADI_ADRV9001_TX_ATTENUATION_CONTROL_MODE_SPI);
     }
@@ -453,7 +456,7 @@ int32_t adi_adrv9001_Tx_Attenuation_Set(adi_adrv9001_Device_t* device,
     ADI_EXPECT(adrv9001_NvsRegmapTx_TxAttenuation_Set, device, txChannelBaseAddr, regData);
 
     /* Restore the atten mode */
-    if (attenMode != ADI_ADRV9001_TX_ATTENUATION_CONTROL_MODE_SPI)
+	if ((attenMode != ADI_ADRV9001_TX_ATTENUATION_CONTROL_MODE_SPI) & (attenMode != ADI_ADRV9001_TX_ATTENUATION_CONTROL_MODE_CLGC))
     {
         ADI_EXPECT(adi_adrv9001_Tx_AttenuationMode_Set, device, channel, attenMode);
     }

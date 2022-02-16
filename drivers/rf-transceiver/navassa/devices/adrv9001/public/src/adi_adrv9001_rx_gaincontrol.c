@@ -364,8 +364,8 @@ int32_t adi_adrv9001_Rx_GainControl_Configure(adi_adrv9001_Device_t *device,
 #endif
     /* The new formula should be:
        "decimated_data_overload_secondary_upper_threshold = Round((hbHighThresh - 0.33352)/1.33352)"
-       The equation above is derived based on the fact that the 2nd high counter should be set 1.5dB below the hbHighThresh value.
-       20*log10((hbHighThresh + 1)/2^15) - 20*log10((secondary_upper_threshold + 1)/2^15) = 1.5
+       The equation above is derived based on the fact that the 2nd high counter should be set 2.5dB below the hbHighThresh value.
+       20*log10((hbHighThresh + 1)/2^15) - 20*log10((secondary_upper_threshold + 1)/2^15) = 2.5
     */
     threshCalc = (agcCfg->peak.hbHighThresh * APD_LOW_FREQ_THRESH_MULTIPLICATION_FACTOR) - APD_LOW_FREQ_THRESH_SUBTRACTION_FACTOR;
     threshCalc = DIV_ROUND_CLOSEST(threshCalc, APD_LOW_FREQ_THRESH_DIVISION_FACTOR);
@@ -461,7 +461,35 @@ int32_t adi_adrv9001_Rx_GainControl_Configure(adi_adrv9001_Device_t *device,
     ADRV9001_SPIWRITEBYTE(device, "GPIO_SOURCE_SEL", (GPIO_SOURCE_SEL_ADDR + gpioCrumb3_2 - 1), gpioSource3_2);
 
     ADI_EXPECT(adrv9001_NvsRegmapRx_ControlOutMuxSel_Set, device, rxAddr, controlMuxAddress);
+
+	/* Enable/Disable RXQEC Freeze*/
+	if (ADI_CHANNEL_1 == channel)
+	{
+		ADI_EXPECT(adrv9001_NvsRegmapCore2_Rx1Fic2CaptPedSoftOverrideEnable_Set, device, agcCfg->rxQecFreezeEnable);
+	}
+	else
+	{
+		ADI_EXPECT(adrv9001_NvsRegmapCore2_Rx2Fic2CaptPedSoftOverrideEnable_Set, device, agcCfg->rxQecFreezeEnable);
+	}
     
+	if (agcCfg->gpioFreezePin != ADI_ADRV9001_GPIO_UNASSIGNED)
+	{
+		/* Enable freeze mode */
+		ADI_EXPECT(adrv9001_NvsRegmapRxb_AgcEnableGainFreeze_Set, device, rxbAddr, 0x1);
+
+		/* Set up GPIO pins */
+		ADI_EXPECT(adi_adrv9001_gpio_ManualInput_Configure, device, agcCfg->gpioFreezePin);
+		if (ADI_CHANNEL_1 == channel)
+		{
+			ADI_EXPECT(adrv9001_NvsRegmapCore1_Rx1AgcSlowloopFreezeGpioSelect_Set, device, (agcCfg->gpioFreezePin - 1));
+			ADI_EXPECT(adrv9001_NvsRegmapCore1_Rx1AgcSlowloopFreezeGpioMask_Set, device, 0);
+		}
+		else
+		{
+			ADI_EXPECT(adrv9001_NvsRegmapCore1_Rx2AgcSlowloopFreezeGpioSelect_Set, device, (agcCfg->gpioFreezePin - 1));
+			ADI_EXPECT(adrv9001_NvsRegmapCore1_Rx2AgcSlowloopFreezeGpioMask_Set, device, 0);
+		}
+	}
 
     ADI_API_RETURN(device);
 }
@@ -634,6 +662,36 @@ int32_t adi_adrv9001_Rx_GainControl_Inspect(adi_adrv9001_Device_t *device,
             }
         }
     }
+
+	/* Enable/Disable RXQEC Freeze flag*/
+	if (ADI_CHANNEL_1 == channel)
+	{
+		ADI_EXPECT(adrv9001_NvsRegmapCore2_Rx1Fic2CaptPedSoftOverrideEnable_Get, device, &bfValue);
+	}
+	else
+	{
+		ADI_EXPECT(adrv9001_NvsRegmapCore2_Rx2Fic2CaptPedSoftOverrideEnable_Get, device, &bfValue);
+	}
+	agcCfg->rxQecFreezeEnable = (bool)bfValue;
+
+	/* GPIO Freeze Pin*/
+	ADI_EXPECT(adrv9001_NvsRegmapRxb_AgcEnableGainFreeze_Get, device, rxbAddr, &bfValue);
+	if (bfValue == 0x1)
+	{
+		if (ADI_CHANNEL_1 == channel)
+		{
+			ADI_EXPECT(adrv9001_NvsRegmapCore1_Rx1AgcSlowloopFreezeGpioSelect_Get, device, &bfValue);
+		}
+		else
+		{
+			ADI_EXPECT(adrv9001_NvsRegmapCore1_Rx2AgcSlowloopFreezeGpioSelect_Get, device, &bfValue);
+		}
+		agcCfg->gpioFreezePin = (adi_adrv9001_GpioPin_e)(bfValue + 1);
+	}
+	else
+	{
+		agcCfg->gpioFreezePin = ADI_ADRV9001_GPIO_UNASSIGNED;
+	}
 
     ADI_API_RETURN(device);
 }

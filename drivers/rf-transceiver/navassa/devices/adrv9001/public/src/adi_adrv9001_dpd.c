@@ -75,7 +75,6 @@ int32_t adi_adrv9001_dpd_Initial_Configure(adi_adrv9001_Device_t *adrv9001,
 	uint8_t armData[27] = { 0 };
     uint8_t extData[5] = { 0 };
     uint32_t offset = 0;
-	adi_adrv9001_DpdCfg_t dpdClgcRead = { 0 };
 
     ADI_PERFORM_VALIDATION(adi_adrv9001_dpd_Initial_Configure_Validate, adrv9001, channel, dpdConfig);
 
@@ -98,8 +97,7 @@ int32_t adi_adrv9001_dpd_Initial_Configure(adi_adrv9001_Device_t *adrv9001,
 
 	ADI_EXPECT(adi_adrv9001_arm_Config_Write, adrv9001, armData, sizeof(armData), extData, sizeof(extData))
 
-	ADI_EXPECT(adi_adrv9001_dpd_Inspect, adrv9001, channel, &dpdClgcRead)
-	if (dpdConfig->clgcEnable != 0 && dpdClgcRead.clgcLoopOpen == 0)
+	if (dpdConfig->clgcEnable != 0)
 	{
 		ADI_EXPECT(adi_adrv9001_Tx_AttenuationMode_Set, adrv9001, channel, ADI_ADRV9001_TX_ATTENUATION_CONTROL_MODE_CLGC)
 	}
@@ -176,8 +174,6 @@ int32_t adi_adrv9001_dpd_Configure(adi_adrv9001_Device_t *adrv9001,
     uint8_t extData[5] = { 0 };
     uint32_t offset = 0;
 
-	adi_adrv9001_DpdInitCfg_t dpdClgcRead = { 0 };
-
     ADI_PERFORM_VALIDATION(adi_adrv9001_dpd_Configure_Validate, adrv9001, channel, dpdConfig);
 
     adrv9001_LoadFourBytes(&offset, armData, sizeof(armData) - sizeof(uint32_t));
@@ -210,12 +206,6 @@ int32_t adi_adrv9001_dpd_Configure(adi_adrv9001_Device_t *adrv9001,
     extData[2] = OBJID_TC_TX_DPD;
 
     ADI_EXPECT(adi_adrv9001_arm_Config_Write, adrv9001, armData, sizeof(armData), extData, sizeof(extData))
-	
-	ADI_EXPECT(adi_adrv9001_dpd_Initial_Inspect, adrv9001, channel, &dpdClgcRead)
-	if (dpdClgcRead.clgcEnable != 0 && dpdConfig->clgcLoopOpen == 0)
-	{
-		ADI_EXPECT(adi_adrv9001_Tx_AttenuationMode_Set, adrv9001, channel, ADI_ADRV9001_TX_ATTENUATION_CONTROL_MODE_CLGC)
-	}
 
     ADI_API_RETURN(adrv9001);
 }

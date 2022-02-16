@@ -141,19 +141,21 @@ int32_t adi_adrv9001_fh_HopTable_Get(adi_adrv9001_Device_t *adrv9001,
 /**
  * \brief Gets hop frame information for specified index
  *
- * Adrv9001 maintains state for three frequency hopping frames; current frame, upcoming frame (frame at next hop edge), 
- * and next frame (i.e. two hop edges in the future).
+ * Adrv9001 maintains state for two frequency hopping frames; current frame and upcoming frame (frame at next hop edge)
  * This command allows to fetch hop frame information, as specified by adi_adrv9001_FhHopFrame_t, from any of these states.
+ * Rx Offset frequency information is only valid for Rx Channel(s) in the RF_ENABLED state
  * 
  * \note Message type: \ref timing_mailbox "Mailbox command"
  *
  * \param[in]  adrv9001    Context variable - Pointer to the ADRV9001 device data structure
+ * \param[in]  fhHopSignal FH Hop Signal to get frame information from, as specified by adi_adrv9001_FhHopSignal_e
  * \param[in]  frameIndex  Frame index to get from, as specified by fh_adrv9001_FrameIndexSel_e
  * \param[out] hopFrame    Hop frame info for specified frame index
  * 
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
  */
-int32_t adi_adrv9001_fh_FrameInfo_Inspect(adi_adrv9001_Device_t *adrv9001, 
+int32_t adi_adrv9001_fh_FrameInfo_Inspect(adi_adrv9001_Device_t *adrv9001,
+		                                  adi_adrv9001_FhHopSignal_e fhHopSignal,
                                           adi_adrv9001_FhFrameIndex_e frameIndex,
                                           adi_adrv9001_FhHopFrame_t *hopFrame);
 
@@ -219,6 +221,24 @@ int32_t adi_adrv9001_fh_HopTable_Dynamic_Configure(adi_adrv9001_Device_t *adrv90
 int32_t adi_adrv9001_fh_HopTable_BytesPerTable_Get(adi_adrv9001_Device_t *adrv9001,
                                                    adi_adrv9001_FhPerDynamicLoad_e numberHopsPerDynamicLoad,
                                                    uint32_t *bytesPerTable);
+/**
+ * \brief Write the Rx offset frequency to update NCO with subsequent GPIO Pulse
+ *     
+ * \pre Channel state is RF_ENABLED
+ * 
+ * \note Message type: \ref timing_direct "Direct register access"
+ *       
+ * \param[in] adrv9001  Context variable - Pointer to the ADRV9001 device data structure
+ * \param[in] hopSignal Hop signal associated with Rx port of interest
+ * \param[in] rx1OffsetFrequencyHz Rx1 NCO Update Frequency
+ * \param[in] rx2OffsetFrequencyHz Rx2 NCO Update Frequency
+ * 
+ * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
+ */
+int32_t adi_adrv9001_fh_RxOffsetFrequency_Set(adi_adrv9001_Device_t *adrv9001, 
+		                                      adi_adrv9001_FhHopSignal_e hopSignal, 
+		                                      int32_t  rx1OffsetFrequencyHz, 
+		                                      int32_t  rx2OffsetFrequencyHz);
 
 #ifdef __cplusplus
 }

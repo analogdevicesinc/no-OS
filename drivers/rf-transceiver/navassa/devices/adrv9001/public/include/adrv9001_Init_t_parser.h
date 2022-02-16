@@ -1,6 +1,6 @@
 /* Auto-generated file - DO NOT MANUALLY EDIT */
-/* Filename: A:\profile-types\include\adrv9001_Init_t_parser.h */
-/* Created on: 10/29/2021 1:22:26 PM */
+/* Filename: C:\Jenkins\workspace\vice-driver_profile-types_master\include\adrv9001_Init_t_parser.h */
+/* Created on: 1/26/2022 1:23:20 PM */
 
 /**
  * Contains auto-generated C macros for loading fields from a JSON file
@@ -9,7 +9,7 @@
  */
 
 /** 
- * Copyright 2021 Analog Devices Inc.
+ * Copyright 2022 Analog Devices Inc.
  */
 
 #include "adi_pmag_macros.h"
