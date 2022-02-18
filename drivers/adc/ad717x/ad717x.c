@@ -46,11 +46,335 @@
 /******************************************************************************/
 #include <stdlib.h>
 #include "ad717x.h"
+#include "no-os/error.h"
 
 /* Error codes */
 #define INVALID_VAL -1 /* Invalid argument */
 #define COMM_ERR    -2 /* Communication error on receive */
 #define TIMEOUT     -3 /* A timeout has occured */
+
+/***************************************************************************//**
+ * @brief Set channel status - Enable/Disable
+ * @param device - AD717x Device descriptor.
+ * @param channel_id - Channel ID (number) of the channel whose status is to be set.
+ * @param channel_status - Required status of the channel-True in case of Enable
+ *			    	and False in case of Disable
+ * @return Returns 0 for success or negative error code in case of failure.
+*******************************************************************************/
+int ad717x_set_channel_status(ad717x_dev *device, uint8_t channel_id,
+			      bool channel_status)
+{
+	ad717x_st_reg *chn_register;
+	int ret;
+
+	if (!device)
+		return -EINVAL;
+
+	/* Point to the Channel register */
+	chn_register = AD717X_GetReg(device, AD717X_CHMAP0_REG + channel_id);
+	if (!chn_register)
+		return -EINVAL;
+
+	if (channel_status)
+		/* Assign the Channel enable bit and write to channel register */
+		chn_register->value |= AD717X_CHMAP_REG_CH_EN;
+	else
+		chn_register->value &= ~(AD717X_CHMAP_REG_CH_EN);
+
+	ret = AD717X_WriteRegister(device, AD717X_CHMAP0_REG + channel_id);
+	if (ret < 0)
+		return ret;
+	device->chan_map[channel_id].channel_enable = channel_status;
+
+	return 0;
+}
+
+/***************************************************************************//**
+ * @brief Set ADC Mode
+ * @param device - AD717x Device Descriptor
+ * @param adc_mode - ADC Mode to be configured
+ * @return Returns 0 for success or negative error code in case of failure.
+******************************************************************************/
+int ad717x_set_adc_mode(ad717x_dev *device, enum ad717x_mode adc_mode)
+{
+	ad717x_st_reg *adc_mode_reg;
+
+	if (!device)
+		return -EINVAL;
+
+	/* Retrieve the ADC Mode reigster */
+	adc_mode_reg = AD717X_GetReg(device, AD717X_ADCMODE_REG);
+	if (!adc_mode_reg)
+		return -EINVAL;
+
+	/* Clear the Mode[6:4] bits in the ADC Mode Register */
+	adc_mode_reg->value &= ~(AD717X_ADCMODE_REG_MODE_MSK);
+
+	/* Set the required conversion mode, write to register */
+	adc_mode_reg->value |= AD717X_ADCMODE_REG_MODE(adc_mode);
+	if (AD717X_WriteRegister(device, AD717X_ADCMODE_REG) < 0)
+		return -EINVAL;
+	device->mode = adc_mode;
+
+	return 0;
+}
+
+/***************************************************************************//**
+ * @brief Set Analog Inputs to channel
+ * @param device - AD717x Device Descriptor
+ * @param channel_id - Channel whose Analog input is to be configured
+ * @param analog_input - Analog Inputs to the Channel
+ * @return Returns SUCCESS for success or negative error code in case of failure.
+*****************************************************************************/
+int ad717x_connect_analog_input(ad717x_dev *device, uint8_t channel_id,
+				union ad717x_analog_inputs analog_input)
+{
+	ad717x_st_reg *channel_reg;
+
+	if (!device)
+		return -EINVAL;
+
+	/* Retrieve the channel register */
+	channel_reg = AD717X_GetReg(device, AD717X_CHMAP0_REG + channel_id);
+	if (!channel_reg)
+		return -EINVAL;
+
+	switch ((uint8_t)device->active_device) {
+	case ID_AD4111 :
+	case ID_AD4112 :
+	case ID_AD4114 :
+	case ID_AD4115 :
+		/* Clear and Set the required analog input pair to channel */
+		channel_reg->value  &= ~AD717x_CHANNEL_INPUT_MASK;
+		channel_reg->value |= AD4111_CHMAP_REG_INPUT(analog_input.analog_input_pairs);
+		if (AD717X_WriteRegister(device, AD717X_CHMAP0_REG + channel_id) < 0)
+			return -EINVAL;
+
+		device->chan_map[channel_id].analog_inputs.analog_input_pairs =
+			analog_input.analog_input_pairs;
+		break;
+
+	case ID_AD7172_4:
+	case ID_AD7173_8:
+	case ID_AD7175_2:
+	case ID_AD7175_8:
+	case ID_AD7176_2:
+	case ID_AD7177_2:
+	case ID_AD7172_2:
+		/* Select the Positive Analog Input */
+		channel_reg->value &= ~AD717X_CHMAP_REG_AINPOS_MSK;
+		channel_reg->value |=  AD717X_CHMAP_REG_AINPOS(
+					       analog_input.ainp.pos_analog_input);
+
+		/* Select the Negative Analog Input */
+		channel_reg->value &= AD717X_CHMAP_REG_AINNEG_MSK;
+		channel_reg->value |= AD717X_CHMAP_REG_AINNEG(
+					      analog_input.ainp.neg_analog_input);
+		if (AD717X_WriteRegister(device, AD717X_CHMAP0_REG + channel_id) < 0)
+			return -EINVAL;
+
+		device->chan_map[channel_id].analog_inputs.ainp.pos_analog_input =
+			analog_input.ainp.pos_analog_input;
+		device->chan_map[channel_id].analog_inputs.ainp.neg_analog_input =
+			analog_input.ainp.neg_analog_input;
+		break;
+
+	default :
+		return -EINVAL;
+	}
+
+	return 0;
+}
+
+/***************************************************************************//**
+ * @brief Assign Setup to Channel
+ * @param device - AD717x Device Descriptor
+ * @param channel_id - Channel ID (number)
+ * @param setup - Setup ID (number)
+ * @return Returns SUCCESS for success or negative error code in case of failure.
+******************************************************************************/
+int ad717x_assign_setup(ad717x_dev *device, uint8_t channel_id, uint8_t setup)
+{
+	ad717x_st_reg *p_register;
+
+	if (!device)
+		return -EINVAL;
+
+	/* Retrieve the Channel Register */
+	p_register = AD717X_GetReg(device, AD717X_CHMAP0_REG + channel_id);
+	if (!p_register)
+		return -EINVAL;
+
+	/* Assign set up to the chosen channel */
+	p_register->value &= ~AD717X_CHMAP_REG_SETUP_SEL_MSK;
+	p_register->value |= AD717X_CHMAP_REG_SETUP_SEL(setup);
+
+	if (AD717X_WriteRegister(device, AD717X_CHMAP0_REG + channel_id) < 0)
+		return -EINVAL;
+	device->chan_map[channel_id].setup_sel = setup;
+
+	return 0;
+}
+
+/***************************************************************************//**
+ * @brief Set Polarity
+ * @param device - AD717x Device Descriptor
+ * @param bipolar - Polarity Select:True in case of Bipolar, False in case of Unipolar
+ * @param setup_id - Setup ID (number)
+ * @return Returns 0 for success or negative error code in case of failure.
+*****************************************************************************/
+int ad717x_set_polarity(ad717x_dev* device, bool bipolar, uint8_t setup_id)
+{
+	ad717x_st_reg* setup_reg;
+
+	if (!device)
+		return -EINVAL;
+
+	/* Retrieve the SETUPCON Register */
+	setup_reg = AD717X_GetReg(device, AD717X_SETUPCON0_REG + setup_id);
+	if (!setup_reg)
+		return -EINVAL;
+
+	/* Set the BI_UNIPOLAR bit in case of BIPOLAR operation */
+	if (bipolar)
+		setup_reg->value |= AD717X_SETUP_CONF_REG_BI_UNIPOLAR;
+	else
+		setup_reg->value &= ~(AD717X_SETUP_CONF_REG_BI_UNIPOLAR);
+
+	if (AD717X_WriteRegister(device,
+				 AD717X_SETUPCON0_REG + setup_id) < 0)
+		return -EINVAL;
+	device->setups[setup_id].bi_unipolar = bipolar;
+
+	return 0;
+}
+
+/***************************************************************************//**
+ * @brief Select the reference source
+ * @param device - AD717x Device Descriptor
+ * @param ref_source - Reference source
+ * @param setup_id - Setup ID (Number)
+ * @return Returns SUCCESS for success or negative error code in case of failure.
+******************************************************************************/
+int ad717x_set_reference_source(ad717x_dev* device,
+				enum ad717x_reference_source ref_source, uint8_t setup_id)
+{
+	ad717x_st_reg* setup_reg;
+	ad717x_st_reg *adc_mode_reg;
+
+	if (!device)
+		return -EINVAL;
+
+	/* Retrieve the SETUPCON Register */
+	setup_reg = AD717X_GetReg(device, AD717X_SETUPCON0_REG + setup_id);
+	if (!setup_reg)
+		return -EINVAL;
+
+	/* Choose the reference source for the selected setup */
+	setup_reg->value &= ~AD717X_SETUP_CONF_REG_REF_SEL_MSK;
+	setup_reg->value |= (AD717X_SETUP_CONF_REG_REF_SEL(ref_source));
+
+	if (AD717X_WriteRegister(device,
+				 AD717X_SETUPCON0_REG + setup_id) < 0)
+		return -EINVAL;
+	device->setups[setup_id].ref_source = ref_source;
+
+	/* Enable the REF_EN Bit in case of Internal reference */
+	if (ref_source == INTERNAL_REF) {
+		/* Retrieve the ADC Mode reigster */
+		adc_mode_reg = AD717X_GetReg(device, AD717X_ADCMODE_REG);
+		if (!adc_mode_reg)
+			return -EINVAL;
+
+		/* Set the REF_EN Bit */
+		adc_mode_reg->value |= AD717X_ADCMODE_REG_REF_EN;
+		if (AD717X_WriteRegister(device, AD717X_ADCMODE_REG) < 0)
+			return -EINVAL;
+		device->ref_en = true;
+	}
+
+	return 0;
+}
+
+/***************************************************************************//**
+ * @brief Enable Input Buffer
+ * @param device - AD717x Device Descriptor
+ * @param inbuf_en - Enable Inpur Buffer
+ * @param refbuf_en - Enable referece Buffer
+ * @param setup_id - Setup ID (Number)
+ * @return Returns 0 for success or negative error code in case of failure.
+******************************************************************************/
+int ad717x_enable_input_buffer(ad717x_dev* device,
+			       bool inbuf_en, bool refbuf_en, uint8_t setup_id)
+{
+	ad717x_st_reg* setup_reg;
+
+	if (!device)
+		return -EINVAL;
+
+	/* Retrieve the SETUPCON Register */
+	setup_reg = AD717X_GetReg(device, AD717X_SETUPCON0_REG + setup_id);
+	if (!setup_reg)
+		return -EINVAL;
+
+	if (inbuf_en)
+		/* Enable input buffer for the chosen set up */
+		setup_reg->value |= (AD717X_SETUP_CONF_REG_AINBUF_P |
+				     AD717X_SETUP_CONF_REG_AINBUF_N);
+	else
+		setup_reg->value &= (~(AD717X_SETUP_CONF_REG_AINBUF_P |
+				       AD717X_SETUP_CONF_REG_AINBUF_N));
+	if (refbuf_en)
+		/* Enable reference buffer for the chosen set up */
+		setup_reg->value |= (AD717X_SETUP_CONF_REG_REFBUF_P |
+				     AD717X_SETUP_CONF_REG_REFBUF_N);
+	else
+		setup_reg->value &= (~(AD717X_SETUP_CONF_REG_REFBUF_P |
+				       AD717X_SETUP_CONF_REG_REFBUF_N));
+
+	if (AD717X_WriteRegister(device,
+				 AD717X_SETUPCON0_REG + setup_id) < 0)
+		return -EINVAL;
+	device->setups[setup_id].input_buff = inbuf_en;
+	device->setups[setup_id].ref_buff = refbuf_en;
+
+	return 0;
+}
+
+/***************************************************************************//**
+ * @brief Perform Single Conversion
+ * @param device - AD717x Device Descriptor
+ * @param id - Channel ID (number) requested
+ * @param adc_raw_data ADC Raw Value
+ * @return Returns SUCCESS for success or negative error code in case of failure.
+******************************************************************************/
+int ad717x_single_read(ad717x_dev* device,  uint8_t id, int32_t *adc_raw_data)
+{
+	int ret;
+
+	/* Enable the requested channel */
+	ret = ad717x_set_channel_status(device, id, true);
+	if (ret < 0)
+		return ret;
+
+	/* Set Mode to Single Conversion */
+	ret = ad717x_set_adc_mode(device, SINGLE);
+	if (ret < 0)
+		return ret;
+
+	/* Wait for Conversion completion */
+	ret = AD717X_WaitForReady(device, AD717X_CONV_TIMEOUT);
+	if (ret < 0)
+		return ret;
+
+	/* Read the data register */
+	ret = AD717X_ReadData(device, adc_raw_data);
+	if (ret < 0)
+		return ret;
+
+	/* Disable the current channel */
+	return ad717x_set_channel_status(device, id, false);
+}
 
 /***************************************************************************//**
 * @brief  Searches through the list of registers of the driver instance and
@@ -429,6 +753,8 @@ int32_t AD717X_Init(ad717x_dev **device,
 	ad717x_dev *dev;
 	int32_t ret;
 	ad717x_st_reg *preg;
+	uint8_t setup_index;
+	uint8_t ch_index;
 
 	dev = (ad717x_dev *)malloc(sizeof(*dev));
 	if (!dev)
@@ -483,7 +809,54 @@ int32_t AD717X_Init(ad717x_dev **device,
 	ret = AD717X_ReadRegister(dev, AD717X_ID_REG);
 	if(ret < 0)
 		return ret;
+	dev->active_device = init_param.active_device;
+	dev->num_channels = init_param.num_channels;
 
+	for (setup_index = 0; setup_index < ARRAY_SIZE(init_param.setups);
+	     setup_index++) {
+		/* Set Polarity */
+		ret = ad717x_set_polarity(dev, init_param.setups[setup_index].bi_unipolar,
+					  setup_index);
+		if (ret < 0)
+			return ret;
+
+		/* Select the reference source */
+		ret = ad717x_set_reference_source(dev,
+						  init_param.setups[setup_index].ref_source, setup_index);
+		if (ret < 0)
+			return ret;
+
+		/* Enable reference and input buffers */
+		ret = ad717x_enable_input_buffer(dev,
+						 init_param.setups[setup_index].input_buff,
+						 init_param.setups[setup_index].ref_buff,
+						 setup_index);
+		if (ret < 0)
+			return ret;
+	}
+
+	/* Set Conversion Mode */
+	ret = ad717x_set_adc_mode(dev, init_param.mode);
+	if (ret < 0)
+		return ret;
+
+	/*  Connect Analog Inputs, Assign Setup, Disable all channels */
+	for (ch_index = 0; ch_index < init_param.num_channels; ch_index++) {
+		ret = ad717x_connect_analog_input(dev, ch_index,
+						  init_param.chan_map[ch_index].analog_inputs);
+		if (ret < 0)
+			return ret;
+
+		ret = ad717x_assign_setup(dev, ch_index,
+					  init_param.chan_map[ch_index].setup_sel);
+		if (ret < 0)
+			return ret;
+
+		ret = ad717x_set_channel_status(dev,ch_index,
+						init_param.chan_map[ch_index].channel_enable);
+		if (ret < 0)
+			return ret;
+	}
 	*device = dev;
 
 	return ret;
