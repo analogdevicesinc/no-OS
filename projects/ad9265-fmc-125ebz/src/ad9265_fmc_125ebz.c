@@ -1,88 +1,74 @@
-/***************************************************************************//**
- *   @file   ad9265_fmc_125ebz.c
- *   @brief  Implementation of Main Function.
- *   @author DBogdan (dragos.bogdan@analog.com)
- *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
-********************************************************************************
- * Copyright 2020(c) Analog Devices, Inc.
- *
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are met:
- *  - Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- *  - Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in
- *    the documentation and/or other materials provided with the
- *    distribution.
- *  - Neither the name of Analog Devices, Inc. nor the names of its
- *    contributors may be used to endorse or promote products derived
- *    from this software without specific prior written permission.
- *  - The use of this software may or may not infringe the patent rights
- *    of one or more patent holders.  This license does not release you
- *    from the requirement that you obtain separate licenses from these
- *    patent holders to use this software.
- *  - Use of the software either in source or binary form, must be run
- *    on or directly connected to an Analog Devices Inc. component.
- *
- * THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES "AS IS" AND ANY EXPRESS OR
- * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, NON-INFRINGEMENT,
- * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
- * IN NO EVENT SHALL ANALOG DEVICES BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
- * LIMITED TO, INTELLECTUAL PROPERTY RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR
- * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
- * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*******************************************************************************/
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
 #include "xil_cache.h"
 #include "xparameters.h"
 #include "axi_adc_core.h"
 #include "axi_dmac.h"
 #include "ad9265.h"
 #include "no-os/spi.h"
+#include "no-os/gpio.h"
 #include "spi_extra.h"
 #include "parameters.h"
 #include "no-os/error.h"
-
-#ifdef IIO_SUPPORT
-#include "iio_app.h"
-#include "iio_axi_adc.h"
-#endif
+#include "gpio_extra.h"
 
 #include "no-os/print_log.h"
+
+
+static int32_t adaq8092_if_gpio_setup(uint32_t gpio_no, uint8_t gpio_val)
+{
+	struct xil_gpio_init_param ps_gpio_init = {
+		.device_id = GPIO_DEVICE_ID,
+		.type = GPIO_PS
+	};
+	struct gpio_init_param temp_init = {
+		.number = gpio_no,
+		.platform_ops = &xil_gpio_ops,
+		.extra = &ps_gpio_init
+	};
+	struct gpio_desc *temp_desc;
+	int32_t ret;
+
+	ret = gpio_get(&temp_desc, &temp_init);
+	if (ret != SUCCESS)
+		return FAILURE;
+	ret = gpio_direction_output(temp_desc, gpio_val);
+	if (ret != SUCCESS)
+		return FAILURE;
+	return SUCCESS;
+}
+
+
+
+
 
 /***************************************************************************//**
 * @brief main
 *******************************************************************************/
 int main(void)
 {
-	int32_t status;
+ 	int32_t status,ret;
+ 	uint16_t adc_buffer[1023 * 2] __attribute__ ((
+ 				aligned));
 
 	/* Initialize SPI structures */
-	struct xil_spi_init_param xil_spi_param = {
-		.type = SPI_PS,
+	struct xil_spi_init_param xil_spi_initial = {
+	    .flags = 0,
+		.type = SPI_PS
 	};
 
 	struct spi_init_param ad9265_spi_param = {
-		.device_id = SPI_DEVICE_ID,
-		.max_speed_hz = 10000000u,
-		.chip_select = 0,
-		.mode = SPI_MODE_0,
-		.extra = &xil_spi_param,
-		.platform_ops = &xil_spi_ops,
+			.device_id = SPI_DEVICE_ID,
+			.max_speed_hz =  1000000u,
+			.chip_select = 0,
+			.mode = SPI_MODE_0,
+			.platform_ops = &xil_spi_ops,
+			.extra = &xil_spi_initial
 	};
 
 	/* ADC Core */
 	struct axi_adc_init ad9265_core_param = {
 		.name = "ad9265_core",
-		.num_channels = 1,
+		.num_channels = 2,
 		.base = RX_CORE_BASEADDR
 	};
 	struct axi_adc *ad9265_core;
@@ -96,7 +82,26 @@ int main(void)
 	};
 	struct axi_dmac *ad9265_dmac;
 
-	/* AD9265 */
+	 mdelay(500);
+	 ret = adaq8092_if_gpio_setup(GPIO_1V8_ENABLE,GPIO_HIGH);
+
+			if (ret != 0)
+					return ret;
+
+
+   mdelay(500);
+   ret = adaq8092_if_gpio_setup(GPIO_PD1_ENABLE,GPIO_HIGH);
+
+   			if (ret != 0)
+   					return ret;
+
+   mdelay(500);
+
+   ret = adaq8092_if_gpio_setup(GPIO_PD2_ENABLE,GPIO_HIGH);
+
+   		   	if (ret != 0)
+   		   		     return ret;
+
 	struct ad9265_init_param ad9265_param = {
 		.spi_init = ad9265_spi_param
 	};
@@ -115,60 +120,36 @@ int main(void)
 	}
 
 	status = ad9265_setup(&ad9265_device, ad9265_param, *ad9265_core);
-	if (status != SUCCESS) {
-		pr_err("ad9265_setup() failed!\n");
-		return FAILURE;
-	}
+			if (status != SUCCESS) {
+				pr_err("ad9265_setup() failed!\n");
+				return FAILURE;
+			}
 
-	status = ad9265_testmode_set(ad9265_device, TESTMODE_ONE_ZERO_TOGGLE);
-	if (status != SUCCESS) {
-		pr_err("ad9265_testmode_set() TESTMODE_ONE_ZERO_TOGGLE failed!\n");
-		return FAILURE;
-	}
 
-	status = axi_dmac_transfer(ad9265_dmac, ADC_DDR_BASEADDR, 16384 * 2);
-	if (status != SUCCESS) {
-		pr_err("axi_dmac_transfer() failed!\n");
-		return FAILURE;
-	}
 
-	pr_info("Capture done.\n");
 
-	status = ad9265_testmode_set(ad9265_device, TESTMODE_OFF);
-	if (status != SUCCESS) {
-		pr_err("ad9265_testmode_set() TESTMODE_OFF failed!\n");
-		return FAILURE;
-	}
 
-#ifdef IIO_SUPPORT
 
-	struct iio_axi_adc_desc *iio_axi_adc_desc;
-	struct iio_device *dev_desc;
-	struct iio_axi_adc_init_param iio_axi_adc_init_par;
-	iio_axi_adc_init_par = (struct iio_axi_adc_init_param) {
-		.rx_adc = ad9265_core,
-		.rx_dmac = ad9265_dmac,
-		.dcache_invalidate_range = (void (*)(uint32_t,
-						     uint32_t))Xil_DCacheInvalidateRange
-	};
+					printf("Test pattern All Digital Outputs = 0 \n ");
 
-	struct iio_data_buffer read_buff = {
-		.buff = (void *)ADC_DDR_BASEADDR,
-		.size = 0xFFFFFFFF,
-	};
+				      status = ad9265_testmode_set(ad9265_device, 0x01);
 
-	status = iio_axi_adc_init(&iio_axi_adc_desc, &iio_axi_adc_init_par);
-	if (status < 0)
-		return status;
-	iio_axi_adc_get_dev_descriptor(iio_axi_adc_desc, &dev_desc);
+					axi_dmac_transfer(ad9265_dmac, (uintptr_t)adc_buffer, sizeof(adc_buffer));
 
-	struct iio_app_device devices[] = {
-		IIO_APP_DEVICE("ad9265_dev", iio_axi_adc_desc, dev_desc,
-			       &read_buff, NULL),
-	};
+						for (int i = 0; i < 1023*2; i++) {
+								if ((i % 2) == 0)
+									printf("\n\r");
 
-	return iio_app_run(devices, ARRAY_SIZE(devices));
-#endif
+								printf("%d  ",adc_buffer[i]);
+						}
+
+
+				pr_info("\n Capture done.\n");
+
+
+
+
+
 
 	pr_info("Done\n");
 

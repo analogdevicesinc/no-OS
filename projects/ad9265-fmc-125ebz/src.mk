@@ -34,12 +34,14 @@ INCS += $(PROJECT)/src/parameters.h \
 	$(DRIVERS)/adc/ad9265/ad9265.h \
 	$(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.h \
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.h
-INCS +=	$(PLATFORM_DRIVERS)/spi_extra.h
+INCS +=	$(PLATFORM_DRIVERS)/spi_extra.h\
+INCS +=	$(PLATFORM_DRIVERS)/gpio_extra.h\
 INCS +=	$(INCLUDE)/no-os/axi_io.h \
 	$(INCLUDE)/no-os/spi.h \
 	$(INCLUDE)/no-os/error.h \
 	$(INCLUDE)/no-os/delay.h \
 	$(INCLUDE)/no-os/print_log.h \
+	$(INCLUDE)/no-os/gpio.h \
 	$(INCLUDE)/no-os/util.h
 ifeq (y,$(strip $(TINYIIOD)))
 INCS +=	$(INCLUDE)/no-os/fifo.h \

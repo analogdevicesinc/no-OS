@@ -492,10 +492,13 @@ int32_t axi_adc_init_finish(struct axi_adc *adc)
 	uint32_t ratio;
 
 	axi_adc_read(adc, AXI_ADC_REG_STATUS, &reg_data);
-	if(reg_data == 0x0) {
+
+/*	if(reg_data == 0x0) {
 		printf("%s: Status errors\n", adc->name);
 		return FAILURE;
 	}
+	*/
+
 
 	axi_adc_read(adc, AXI_ADC_REG_CLK_FREQ, &freq);
 	axi_adc_read(adc, AXI_ADC_REG_CLK_RATIO, &ratio);
@@ -504,6 +507,8 @@ int32_t axi_adc_init_finish(struct axi_adc *adc)
 
 	printf("%s: Successfully initialized (%"PRIu64" Hz)\n",
 	       adc->name, adc->clock_hz);
+	printf("freq:0x%lx",freq);
+	printf("freq:0x%lx",ratio);
 
 	return SUCCESS;
 }
@@ -517,25 +522,39 @@ int32_t axi_adc_init(struct axi_adc **adc_core,
 	struct axi_adc *adc;
 	int32_t ret;
 	uint8_t ch;
+	uint32_t ver;
 
 	ret = axi_adc_init_begin(&adc, init);
 	if (ret)
 		return ret;
 
-	axi_adc_write(adc, AXI_ADC_REG_RSTN, 0);
+	axi_adc_write(adc, AXI_ADC_REG_RSTN, 1);
 	axi_adc_write(adc, AXI_ADC_REG_RSTN,
 		      AXI_ADC_MMCM_RSTN | AXI_ADC_RSTN);
 
 	for (ch = 0; ch < adc->num_channels; ch++)
 		axi_adc_write(adc, AXI_ADC_REG_CHAN_CNTRL(ch),
-			      AXI_ADC_FORMAT_SIGNEXT | AXI_ADC_FORMAT_ENABLE |
+				AXI_ADC_FORMAT_SIGNEXT | AXI_ADC_FORMAT_TYPE| AXI_ADC_FORMAT_ENABLE |
 			      AXI_ADC_ENABLE);
 
 	mdelay(100);
 
+	axi_adc_read(adc, 0x0000, &ver);
+
+	printf("axi-core_version: 0x%x\n",ver);
+
+	axi_adc_read(adc, 0x0400, &ver);
+
+	printf("FORMAT_SIGNEXT ---: 0x%x\n",ver);
+
 	ret = axi_adc_init_finish(adc);
-	if (ret)
-		goto error;
+
+
+	//if (ret)
+	//	goto error;
+
+
+
 
 	*adc_core = adc;
 
