@@ -306,6 +306,7 @@ int32_t xil_gpio_irq_enable(struct irq_ctrl_desc *desc, uint32_t irq_id)
 		status = iterator_move(extra->it, 1);
 		if(callback_desc->pin_nb == irq_id) {
 			callback_desc->enabled = true;
+			XGpioPs_IntrClearPin(&extra->my_Gpio, irq_id);
 			break;
 		}
 	}
