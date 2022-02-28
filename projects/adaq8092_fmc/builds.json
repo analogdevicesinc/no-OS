@@ -1,0 +1,12 @@
+{
+	"xilinx": {
+	  "demo": {
+		"flags" : "",
+		"hardware" : ["adaq8092_fmc_zed"]
+	  },
+	  "iio": {
+		"flags" : "TINYIIOD=y",
+		"hardware" : ["adaq8092_fmc_zed"]
+	  }
+	}
+}
