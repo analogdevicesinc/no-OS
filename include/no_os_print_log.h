@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   print_log.h
+ *   @file   no_os_print_log.h
  *   @brief  Print messages helpers.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************

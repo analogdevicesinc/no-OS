@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   spi.h
+ *   @file   no_os_spi.h
  *   @brief  Header file of SPI Interface
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************

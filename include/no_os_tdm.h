@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   tdm.h
+ *   @file   no_os_tdm.h
  *   @brief  Header file of TDM Interface
  *   @author Darius Berghe (darius.berghe@analog.com)
 ********************************************************************************

@@ -1,5 +1,5 @@
 /***************************************************************************//**
-*   @file   timer.h
+*   @file   no_os_timer.h
 *   @brief  Timer control module header.
 *   @author Andrei Drimbarean (andrei.drimbarean@analog.com)
 ********************************************************************************

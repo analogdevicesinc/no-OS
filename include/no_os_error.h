@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   error.h
+ *   @file   no_os_error.h
  *   @brief  Error codes definition
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************

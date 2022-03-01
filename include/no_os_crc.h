@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   crc.h
+ *   @file   no_os_crc.h
  *   @brief  Generic header file for all CRC computation algorithms.
  *   @author Darius Berghe (darius.berghe@analog.com)
 ********************************************************************************

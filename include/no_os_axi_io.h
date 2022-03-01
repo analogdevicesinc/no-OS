@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   axi_io.h
+ *   @file   no_os_axi_io.h
  *   @brief  Header file of AXI IO.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************

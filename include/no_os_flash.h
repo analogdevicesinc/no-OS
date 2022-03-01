@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   flash.h
+ *   @file   no_os_flash.h
  *   @brief  Header file for flash controller driver.
  *   @author Andrei Drimbarean (andrei.drimbarean@analog.com)
 ********************************************************************************
