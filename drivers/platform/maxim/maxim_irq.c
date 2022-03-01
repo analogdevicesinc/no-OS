@@ -105,7 +105,7 @@ int32_t max_irq_ctrl_remove(struct irq_ctrl_desc *desc)
  * @return -ENOSYS
  */
 int32_t max_irq_register_callback(struct irq_ctrl_desc *desc, uint32_t irq_id,
-				  struct callback_desc *callback_desc)
+				  void *callback_desc)
 {
 	return -ENOSYS;
 }
