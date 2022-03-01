@@ -116,7 +116,7 @@ int32_t max_irq_register_callback(struct irq_ctrl_desc *desc, uint32_t irq_id,
  * @param irq_id - Id of the interrupt
  * @return -ENOSYS
  */
-int32_t max_irq_unregister(struct irq_ctrl_desc *desc, uint32_t irq_id)
+int32_t max_irq_unregister_callback(struct irq_ctrl_desc *desc, uint32_t irq_id, void *callback)
 {
 	return -ENOSYS;
 }
@@ -188,7 +188,7 @@ int32_t max_irq_disable(struct irq_ctrl_desc *desc, uint32_t irq_id)
 const struct irq_platform_ops irq_ops = {
 	.init = &max_irq_ctrl_init,
 	.register_callback = &max_irq_register_callback,
-	.unregister = &max_irq_unregister,
+	.unregister_callback = &max_irq_unregister_callback,
 	.global_enable = &max_irq_global_enable,
 	.global_disable = &max_irq_global_disable,
 	.enable = &max_irq_enable,

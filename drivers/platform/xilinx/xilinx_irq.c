@@ -330,7 +330,7 @@ int32_t xil_irq_trigger_level_set(struct irq_ctrl_desc *desc, uint32_t irq_id,
  * @param irq_id - Interrupt identifier.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t xil_irq_unregister(struct irq_ctrl_desc *desc, uint32_t irq_id)
+int32_t xil_irq_unregister_callback(struct irq_ctrl_desc *desc, uint32_t irq_id, void *callback)
 {
 	struct xil_irq_desc *xil_dev = desc->extra;
 
@@ -374,7 +374,7 @@ int32_t xil_irq_ctrl_remove(struct irq_ctrl_desc *desc)
 const struct irq_platform_ops xil_irq_ops = {
 	.init = &xil_irq_ctrl_init,
 	.register_callback = &xil_irq_register_callback,
-	.unregister = &xil_irq_unregister,
+	.unregister_callback = &xil_irq_unregister_callback,
 	.global_enable = &xil_irq_global_enable,
 	.global_disable = &xil_irq_global_disable,
 	.trigger_level_set = &xil_irq_trigger_level_set,
