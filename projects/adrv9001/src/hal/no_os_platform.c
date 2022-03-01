@@ -120,7 +120,7 @@ int32_t no_os_hw_open(void *devHalCfg)
 	struct spi_init_param sip = {
 		.device_id = SPI_DEVICE_ID,
 		.max_speed_hz = 20000000,
-		.mode = SPI_MODE_0,
+		.mode = NO_OS_SPI_MODE_0,
 		.chip_select = SPI_CS,
 		.platform_ops = &xil_spi_ops,
 		.extra = &sip_extra

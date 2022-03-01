@@ -112,7 +112,7 @@ int main()
 	struct spi_init_param spi_init = {
 		.chip_select = SPI_ADAQ7980_CS,
 		.max_speed_hz = 10000000,
-		.mode = SPI_MODE_2,
+		.mode = NO_OS_SPI_MODE_2,
 		.platform_ops = &spi_eng_platform_ops,
 		.extra = (void*)&spi_eng_init_param,
 	};

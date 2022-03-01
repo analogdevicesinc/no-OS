@@ -78,7 +78,7 @@ int main(void)
 		.device_id = SPI_DEVICE_ID,
 		.max_speed_hz = 5000000u,
 		.chip_select = 0,
-		.mode = SPI_MODE_0,
+		.mode = NO_OS_SPI_MODE_0,
 		.extra = &xil_spi_param,
 		.platform_ops = &xil_spi_ops,
 	};
@@ -87,7 +87,7 @@ int main(void)
 		.device_id = SPI_DEVICE_ID,
 		.max_speed_hz = 20000000u,
 		.chip_select = 1,
-		.mode = SPI_MODE_0,
+		.mode = NO_OS_SPI_MODE_0,
 		.extra = &xil_spi_param,
 		.platform_ops = &xil_spi_ops,
 	};

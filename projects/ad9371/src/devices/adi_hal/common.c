@@ -101,7 +101,7 @@ int32_t platform_init(void)
 	status |= gpio_get(&gpio_ad9528_resetb, &gpio_ad9528_resetb_param);
 	status |= gpio_get(&gpio_ad9528_sysref_req, &gpio_ad9528_sysref_param);
 
-	spi_param.mode = SPI_MODE_0;
+	spi_param.mode = NO_OS_SPI_MODE_0;
 	spi_param.chip_select = AD9371_CS;
 	spi_param.max_speed_hz = 2000000u;
 

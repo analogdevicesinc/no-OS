@@ -176,7 +176,7 @@ int main()
 		.spi_param = {
 			.device_id = SPI_DEVICE_ID,
 			.chip_select = 0,
-			.mode = SPI_MODE_0,
+			.mode = NO_OS_SPI_MODE_0,
 			.bit_order = SPI_BIT_ORDER_MSB_FIRST,
 			.platform_ops = &xil_spi_reg_ops_pl,
 			.extra = NULL

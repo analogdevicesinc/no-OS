@@ -135,7 +135,7 @@ int main(void)
 	struct spi_init_param hmc7044_spi_param = {
 		.device_id = SPI_DEVICE_ID,
 		.max_speed_hz = 10000000,
-		.mode = SPI_MODE_0,
+		.mode = NO_OS_SPI_MODE_0,
 		.chip_select = SPI_HMC7044_CS,
 		.platform_ops = &xil_spi_ops,
 		.extra = &xil_spi_param
@@ -209,7 +209,7 @@ int main(void)
 
 	struct spi_init_param ad9208_0_spi_param = {
 		.max_speed_hz = 10000000,
-		.mode = SPI_MODE_3,
+		.mode = NO_OS_SPI_MODE_3,
 		.chip_select = SPI_AD9208_0_CS,
 		.platform_ops = &xil_spi_ops,
 		.extra = &xil_spi_param
@@ -217,7 +217,7 @@ int main(void)
 
 	struct spi_init_param ad9208_1_spi_param = {
 		.max_speed_hz = 10000000,
-		.mode = SPI_MODE_3,
+		.mode = NO_OS_SPI_MODE_3,
 		.chip_select = SPI_AD9208_CS,
 		.platform_ops = &xil_spi_ops,
 		.extra = &xil_spi_param

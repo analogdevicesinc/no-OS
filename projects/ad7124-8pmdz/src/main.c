@@ -100,7 +100,7 @@ int main(void)
 	struct spi_init_param spi_initial = {
 		.chip_select = 0x00,
 		.max_speed_hz = 10000000,
-		.mode = SPI_MODE_3,
+		.mode = NO_OS_SPI_MODE_3,
 		.device_id = 1,
 		.platform_ops = &aducm_spi_ops,
 		.extra = &aducm_spi_ini

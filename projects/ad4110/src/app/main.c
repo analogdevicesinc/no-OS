@@ -70,7 +70,7 @@ int main()
 	struct spi_init_param spi_ip = {
 		.device_id = SPI_DEVICE_ID,
 		.max_speed_hz = 100000,
-		.mode = SPI_MODE_0,
+		.mode = NO_OS_SPI_MODE_0,
 		.chip_select = 0U,
 		.bit_order = SPI_BIT_ORDER_MSB_FIRST,
 		.platform_ops = &xil_spi_ops,

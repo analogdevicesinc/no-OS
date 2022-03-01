@@ -173,7 +173,7 @@ int main(void)
 			.device_id = SPI_DEVICE_ID,
 			.max_speed_hz = 1000000,
 			.chip_select = SPI_AD7768_CS,
-			.mode = SPI_MODE_0,
+			.mode = NO_OS_SPI_MODE_0,
 			.platform_ops = &xil_spi_ops,
 			.extra = &xil_spi_initial
 		},

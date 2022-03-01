@@ -85,7 +85,7 @@ int main(void)
 	struct spi_init_param ad5766_spi_init = {
 		.chip_select = SPI_AD5766_CS,
 		.max_speed_hz = 50000000,
-		.mode = SPI_MODE_1,
+		.mode = NO_OS_SPI_MODE_1,
 		.platform_ops = &spi_eng_platform_ops,
 		.extra = (void*)&spi_eng_init_param,
 	};

@@ -396,7 +396,7 @@ int32_t ad7616_read_data_serial(struct ad7616_dev *dev,
 		CS_HIGH,
 	};
 
-	dev->spi_desc->mode = SPI_MODE_3;
+	dev->spi_desc->mode = NO_OS_SPI_MODE_3;
 	spi_engine_set_speed(dev->spi_desc, dev->spi_desc->max_speed_hz);
 
 	ret = spi_engine_offload_init(dev->spi_desc, dev->offload_init_param);

@@ -135,21 +135,21 @@ int main(void)
 		.device_id = SPI_DEVICE_ID,
 		.max_speed_hz = 2000000u,
 		.chip_select = 0,
-		.mode = SPI_MODE_0
+		.mode = NO_OS_SPI_MODE_0
 	};
 
 	struct spi_init_param ad9152_spi_param = {
 		.device_id = SPI_DEVICE_ID,
 		.max_speed_hz = 2000000u,
 		.chip_select = 1,
-		.mode = SPI_MODE_0
+		.mode = NO_OS_SPI_MODE_0
 	};
 
 	struct spi_init_param ad9680_spi_param = {
 		.device_id = SPI_DEVICE_ID,
 		.max_speed_hz = 2000000u,
 		.chip_select = 2,
-		.mode = SPI_MODE_0
+		.mode = NO_OS_SPI_MODE_0
 	};
 
 #ifndef ALTERA_PLATFORM
