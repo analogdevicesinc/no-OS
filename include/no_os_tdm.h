@@ -36,8 +36,8 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef TDM_H_
-#define TDM_H_
+#ifndef _NO_OS_TDM_H_
+#define _NO_OS_TDM_H_
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -129,4 +129,4 @@ int32_t tdm_write(struct tdm_desc *desc,
 		  void *data,
 		  uint16_t bytes_number);
 
-#endif // TDM_H_
+#endif // _NO_OS_TDM_H_

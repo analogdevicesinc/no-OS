@@ -36,8 +36,8 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __CRC16_H
-#define __CRC16_H
+#ifndef _NO_OS_CRC16_H_
+#define _NO_OS_CRC16_H_
 
 #include <stdint.h>
 #include <stddef.h>
@@ -51,4 +51,4 @@ void crc16_populate_msb(uint16_t * table, const uint16_t polynomial);
 uint16_t crc16(const uint16_t * table, const uint8_t *pdata, size_t nbytes,
 	       uint16_t crc);
 
-#endif // __CRC16_H
+#endif // _NO_OS_CRC16_H_

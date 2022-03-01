@@ -37,8 +37,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef I2C_H_
-#define I2C_H_
+#ifndef _NO_OS_I2C_H_
+#define _NO_OS_I2C_H_
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
@@ -130,4 +130,4 @@ int32_t i2c_read(struct i2c_desc *desc,
 		 uint8_t bytes_number,
 		 uint8_t stop_bit);
 
-#endif // I2C_H_
+#endif // _NO_OS_I2C_H_

@@ -36,8 +36,8 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __CRC8_H
-#define __CRC8_H
+#ifndef _NO_OS_CRC8_H_
+#define _NO_OS_CRC8_H_
 
 #include <stdint.h>
 #include <stddef.h>
@@ -51,4 +51,4 @@ void crc8_populate_msb(uint8_t * table, const uint8_t polynomial);
 uint8_t crc8(const uint8_t * table, const uint8_t *pdata, size_t nbytes,
 	     uint8_t crc);
 
-#endif // __CRC8_H
+#endif // _NO_OS_CRC8_H_

@@ -36,11 +36,11 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __CRC_H
-#define __CRC_H
+#ifndef _NO_OS_CRC_H_
+#define _NO_OS_CRC_H_
 
 #include "no_os_crc8.h"
 #include "no_os_crc16.h"
 #include "no_os_crc24.h"
 
-#endif // __CRC_H
+#endif // _NO_OS_CRC_H_

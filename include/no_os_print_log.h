@@ -37,8 +37,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef PRINT_LOG_H_
-#define PRINT_LOG_H_
+#ifndef _NO_OS_PRINT_LOG_H_
+#define _NO_OS_PRINT_LOG_H_
 
 #include <stdio.h>
 
@@ -107,4 +107,4 @@ fmt, __FILE__, __LINE__, __func__, ##args)
 #define pr_debug(fmt, args...)
 #endif
 
-#endif /* PRINT_LOG_H_ */
+#endif // _NO_OS_PRINT_LOG_H_

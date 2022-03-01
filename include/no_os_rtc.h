@@ -37,8 +37,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef RTC_H_
-#define RTC_H_
+#ifndef _NO_OS_RTC_H_
+#define _NO_OS_RTC_H_
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
@@ -102,4 +102,4 @@ int32_t rtc_get_cnt(struct rtc_desc *dev, uint32_t *tmr_cnt);
 /** Set the current count for the real time clock. */
 int32_t rtc_set_cnt(struct rtc_desc *dev, uint32_t tmr_cnt);
 
-#endif /* RTC_H_ */
+#endif // _NO_OS_RTC_H_

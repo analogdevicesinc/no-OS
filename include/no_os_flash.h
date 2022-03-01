@@ -37,8 +37,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef FLASH_H_
-#define FLASH_H_
+#ifndef _NO_OS_FLASH_H_
+#define _NO_OS_FLASH_H_
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
@@ -109,4 +109,4 @@ int32_t flash_write(struct flash_dev *dev, uint32_t flash_addr,
 int32_t flash_read(struct flash_dev *dev, uint32_t flash_addr, uint32_t *array,
 		   uint32_t size);
 
-#endif /* FLASH_H_ */
+#endif // _NO_OS_FLASH_H_

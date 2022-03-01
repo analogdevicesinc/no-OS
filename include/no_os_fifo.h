@@ -36,8 +36,8 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef FIFO_H_
-#define FIFO_H_
+#ifndef _NO_OS_FIFO_H_
+#define _NO_OS_FIFO_H_
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
@@ -72,4 +72,4 @@ int32_t fifo_insert(struct fifo_element **p_fifo, char *buff, uint32_t len);
 /* Remove fifo head. */
 struct fifo_element *fifo_remove(struct fifo_element *p_fifo);
 
-#endif /* FIFO_H_ */
+#endif // _NO_OS_FIFO_H_

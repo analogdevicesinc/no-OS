@@ -36,8 +36,8 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef UART_H_
-#define UART_H_
+#ifndef _NO_OS_UART_H_
+#define _NO_OS_UART_H_
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
@@ -159,4 +159,4 @@ int32_t uart_remove(struct uart_desc *desc);
 /* Check if UART errors occurred. */
 uint32_t uart_get_errors(struct uart_desc *desc);
 
-#endif /* UART_H_ */
+#endif // _NO_OS_UART_H_

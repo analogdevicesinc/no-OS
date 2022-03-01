@@ -37,8 +37,8 @@
 * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef SRC_TIMER_H_
-#define SRC_TIMER_H_
+#ifndef _NO_OS_SRC_TIMER_H_
+#define _NO_OS_SRC_TIMER_H_
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
@@ -113,5 +113,5 @@ int32_t timer_count_clk_set(struct timer_desc *desc, uint32_t freq_hz);
 int32_t timer_get_elapsed_time_nsec(struct timer_desc *desc,
 				    uint64_t *elapsed_time);
 
-#endif /* SRC_TIMER_H_ */
+#endif // _NO_OS_SRC_TIMER_H_
 
