@@ -163,6 +163,13 @@ int32_t stm32_irq_register_callback(struct irq_ctrl_desc *desc, uint32_t irq_id,
 		}
 		hexti[((EXTI_HandleTypeDef *)desc->extra)->Line & 0xff] = desc->extra;
 		break;
+	case NO_OS_UART_IRQ:
+		ret = HAL_UART_RegisterCallback(desc->extra,
+						((struct stm32_callback *)callback)->event,
+						((struct stm32_callback *)callback)->callback);
+		if (ret != HAL_OK)
+			ret = -EFAULT;
+		break;
 	default:
 		ret = -EINVAL;
 		break;
@@ -184,6 +191,12 @@ int32_t stm32_irq_unregister_callback(struct irq_ctrl_desc *desc, uint32_t irq_i
 	switch (desc->source) {
 	case NO_OS_GPIO_IRQ:
 		hexti[((EXTI_HandleTypeDef *)desc->extra)->Line & 0xff] = NULL;
+		break;
+	case NO_OS_UART_IRQ:
+		ret = HAL_UART_UnRegisterCallback(desc->extra,
+						((struct stm32_callback *)callback)->event);
+		if (ret != HAL_OK)
+			ret = -EFAULT;
 		break;
 	default:
 		ret = -EINVAL;
