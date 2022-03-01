@@ -163,7 +163,7 @@ int32_t aducm3029_irq_ctrl_remove(struct irq_ctrl_desc *desc)
  */
 int32_t aducm3029_irq_register_callback(struct irq_ctrl_desc *desc,
 					uint32_t irq_id,
-					struct callback_desc *callback_desc)
+					void *callback)
 {
 	struct aducm_irq_ctrl_desc	*aducm_desc;
 	struct uart_desc		*uart_desc;
@@ -172,6 +172,7 @@ int32_t aducm3029_irq_register_callback(struct irq_ctrl_desc *desc,
 	struct gpio_desc		*gpio_desc;
 	uint16_t			gpio_pin;
 	uint8_t				gpio_port;
+	struct callback_desc *callback_desc = (struct callback_desc *)callback;
 
 	if (!desc || !desc->extra || !initialized ||  irq_id >= NB_INTERRUPTS)
 		return FAILURE;

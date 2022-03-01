@@ -241,10 +241,11 @@ int32_t xil_gpio_irq_trigger_level_set(struct irq_ctrl_desc *desc,
  */
 int32_t xil_gpio_irq_register_callback(struct irq_ctrl_desc *desc,
 				       uint32_t irq_id,
-				       struct callback_desc *callback_desc)
+				       void *callback)
 {
 	struct xil_callback_desc *dev_callback;
 	struct xil_gpio_irq_desc *extra;
+	struct callback_desc *callback_desc = (struct callback_desc *)callback;
 
 	dev_callback = (struct xil_callback_desc *)calloc(1, sizeof(*dev_callback));
 	if(!dev_callback)
