@@ -12,11 +12,11 @@ SRCS += $(DRIVERS)/adc/adc_demo/adc_demo.c \
 	$(DRIVERS)/dac/dac_demo/iio_dac_demo.c \
 	$(DRIVERS)/dac/dac_demo/dac_demo.c
 
-INCS += $(INCLUDE)/no-os/fifo.h \
-	$(INCLUDE)/no-os/uart.h \
-	$(INCLUDE)/no-os/list.h \
-	$(INCLUDE)/no-os/util.h \
-	$(INCLUDE)/no-os/error.h
+INCS += $(INCLUDE)/no_os_fifo.h \
+	$(INCLUDE)/no_os_uart.h \
+	$(INCLUDE)/no_os_list.h \
+	$(INCLUDE)/no_os_util.h \
+	$(INCLUDE)/no_os_error.h
 
 INCS += $(DRIVERS)/adc/adc_demo/iio_adc_demo.h \
 		$(DRIVERS)/dac/dac_demo/dac_demo.h \
@@ -27,7 +27,7 @@ ifeq ($(PLATFORM),$(filter $(PLATFORM),xilinx aducm3029))
 SRCS += $(PLATFORM_DRIVERS)/delay.c \
 	$(DRIVERS)/api/irq.c
 endif
-INCS += $(INCLUDE)/no-os/delay.h
+INCS += $(INCLUDE)/no_os_delay.h
 
 ifeq ($(PLATFORM),$(filter $(PLATFORM),xilinx aducm3029))
 # For the moment there is support only for aducm for iio with network backend
@@ -43,8 +43,8 @@ DISABLE_SECURE_SOCKET ?= y
 SRC_DIRS += $(NO-OS)/network
 SRCS	 += $(NO-OS)/util/circular_buffer.c
 SRCS	 += $(PLATFORM_DRIVERS)/timer.c
-INCS	 += $(INCLUDE)/no-os/timer.h \
-		$(INCLUDE)/no-os/circular_buffer.h \
+INCS	 += $(INCLUDE)/no_os_timer.h \
+		$(INCLUDE)/no_os_circular_buffer.h \
 		$(PLATFORM_DRIVERS)/timer_extra.h \
 		$(PLATFORM_DRIVERS)/rtc_extra.h
 endif
@@ -52,9 +52,9 @@ endif
 SRCS += $(PLATFORM_DRIVERS)/uart.c \
 		$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c
 
-INCS += $(INCLUDE)/no-os/irq.h \
-	$(INCLUDE)/no-os/rtc.h \
-	$(INCLUDE)/no-os/gpio.h \
+INCS += $(INCLUDE)/no_os_irq.h \
+	$(INCLUDE)/no_os_rtc.h \
+	$(INCLUDE)/no_os_gpio.h \
 	$(PLATFORM_DRIVERS)/irq_extra.h \
 	$(PLATFORM_DRIVERS)/uart_extra.h
 endif
@@ -88,15 +88,15 @@ INCS += $(NO-OS)/network/tcp_socket.h \
 		$(NO-OS)/network/noos_mbedtls_config.h \
 		$(NO-OS)/network/linux_socket/linux_socket.h
 
-INCS	 += $(INCLUDE)/no-os/circular_buffer.h
+INCS	 += $(INCLUDE)/no_os_circular_buffer.h
 INCS += $(PROJECT)/src/app/app_config.h \
 		$(PROJECT)/src/app/parameters.h	
 
 INCS += $(NO-OS)/iio/iio_app/iio_app.h 
 
-INCS += $(INCLUDE)/no-os/gpio.h \
-		$(INCLUDE)/no-os/delay.h \
-		$(INCLUDE)/no-os/irq.h \
-		$(INCLUDE)/no-os/trng.h
+INCS += $(INCLUDE)/no_os_gpio.h \
+		$(INCLUDE)/no_os_delay.h \
+		$(INCLUDE)/no_os_irq.h \
+		$(INCLUDE)/no_os_trng.h
 
 endif

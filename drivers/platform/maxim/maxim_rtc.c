@@ -43,9 +43,9 @@
 
 #include <stdlib.h>
 #include <errno.h>
-#include "no-os/irq.h"
-#include "no-os/rtc.h"
-#include "no-os/util.h"
+#include "no_os_irq.h"
+#include "no_os_rtc.h"
+#include "no_os_util.h"
 #include "rtc.h"
 #include "rtc_extra.h"
 #include "rtc_regs.h"

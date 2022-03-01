@@ -43,9 +43,9 @@
 
 #include <stdlib.h>
 #include <xparameters.h>
-#include "no-os/timer.h"
+#include "no_os_timer.h"
 #include "timer_extra.h"
-#include "no-os/error.h"
+#include "no_os_error.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/

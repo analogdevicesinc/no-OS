@@ -45,21 +45,21 @@
 #include <stdio.h>
 #include "xil_cache.h"
 #include "xparameters.h"
-#include "no-os/spi.h"
+#include "no_os_spi.h"
 #include "axi_dac_core.h"
 #include "axi_dmac.h"
 #include "ad9739a.h"
 #include "adf4350.h"
 #include "parameters.h"
 #include "spi_extra.h"
-#include "no-os/error.h"
+#include "no_os_error.h"
 
 #ifdef IIO_SUPPORT
 #include "iio_app.h"
 #include "iio_axi_dac.h"
 #endif
 
-#include "no-os/print_log.h"
+#include "no_os_print_log.h"
 
 /***************************************************************************//**
 * @brief main

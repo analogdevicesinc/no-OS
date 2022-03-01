@@ -40,7 +40,7 @@
 #ifndef SRC_AD77681_H_
 #define SRC_AD77681_H_
 
-#include "no-os/spi.h"
+#include "no_os_spi.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/

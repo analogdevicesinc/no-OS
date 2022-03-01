@@ -42,8 +42,8 @@
 /******************************************************************************/
 #include <malloc.h>
 #include "adf4377.h"
-#include "no-os/error.h"
-#include "no-os/delay.h"
+#include "no_os_error.h"
+#include "no_os_delay.h"
 
 /******************************************************************************/
 /************************** Functions Implementation **************************/

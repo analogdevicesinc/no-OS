@@ -19,10 +19,10 @@ SRCS += $(NO-OS)/util/util.c \
 	$(DRIVERS)/platform/$(PLATFORM)/timer.c \
 	$(DRIVERS)/platform/$(PLATFORM)/uart.c
 
-INCS += $(INCLUDE)/no-os/spi.h \
-	$(INCLUDE)/no-os/irq.h \
-	$(INCLUDE)/no-os/uart.h \
-	$(INCLUDE)/no-os/timer.h \
+INCS += $(INCLUDE)/no_os_spi.h \
+	$(INCLUDE)/no_os_irq.h \
+	$(INCLUDE)/no_os_uart.h \
+	$(INCLUDE)/no_os_timer.h \
 	$(DRIVERS)/platform/$(PLATFORM)/spi_extra.h \
 	$(DRIVERS)/platform/$(PLATFORM)/irq_extra.h \
 	$(DRIVERS)/platform/$(PLATFORM)/aducm3029_gpio.h \

@@ -46,12 +46,12 @@
 #include "iio.h"
 #include "iio_app.h"
 #include "parameters.h"
-#include "no-os/uart.h"
-#include "no-os/delay.h"
+#include "no_os_uart.h"
+#include "no_os_delay.h"
 
 #if defined(ADUCM_PLATFORM) || defined(XILINX_PLATFORM)
-#include "no-os/irq.h"
-#include "no-os/error.h"
+#include "no_os_irq.h"
+#include "no_os_error.h"
 #include "irq_extra.h"
 #include "uart_extra.h"
 #endif

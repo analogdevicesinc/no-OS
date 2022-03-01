@@ -91,7 +91,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "at_params.h"
-#include "no-os/circular_buffer.h"
+#include "no_os_circular_buffer.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/

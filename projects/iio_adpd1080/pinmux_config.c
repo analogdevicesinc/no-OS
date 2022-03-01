@@ -21,7 +21,7 @@
 
 #include <sys/platform.h>
 #include <stdint.h>
-#include "no-os/util.h"
+#include "no_os_util.h"
 
 #define I2C0_SCL0_PORTP0_MUX  BIT(8)
 #define I2C0_SDA0_PORTP0_MUX  BIT(10)

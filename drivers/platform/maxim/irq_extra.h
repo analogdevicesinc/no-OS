@@ -40,7 +40,9 @@
 #define IRQ_MAXIM_EXTRA_H
 
 #include "max32660.h"
-#include "no-os/irq.h"
+#include "gpio.h"
+#include "gpio_extra.h"
+#include "no_os_irq.h"
 
 /**
  * @enum irq_id

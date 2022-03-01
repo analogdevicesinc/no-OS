@@ -48,8 +48,8 @@
 #include "iio_types.h"
 #include "iio.h"
 #include "ad3552r.h"
-#include "no-os/error.h"
-#include "no-os/util.h"
+#include "no_os_error.h"
+#include "no_os_util.h"
 
 /*****************************************************************************/
 /******************** Macros and Constants Definitions ***********************/

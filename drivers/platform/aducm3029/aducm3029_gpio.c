@@ -41,8 +41,8 @@
 /************************* Include Files **************************************/
 /******************************************************************************/
 
-#include "no-os/error.h"
-#include "no-os/gpio.h"
+#include "no_os_error.h"
+#include "no_os_gpio.h"
 #include <drivers/gpio/adi_gpio.h>
 #include <stdlib.h>
 #include "aducm3029_gpio.h"

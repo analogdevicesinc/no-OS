@@ -40,7 +40,7 @@
 #define _STM32_UART_STDIO_H_
 
 #include <sys/stat.h>
-#include "no-os/uart.h"
+#include "no_os_uart.h"
 #include "stm32_uart.h"
 
 void stm32_uart_stdio(struct uart_desc *desc);

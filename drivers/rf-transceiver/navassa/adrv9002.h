@@ -39,8 +39,8 @@
 #ifndef IIO_TRX_ADRV9002_H_
 #define IIO_TRX_ADRV9002_H_
 
-#include "no-os/gpio.h"
-#include "no-os/delay.h"
+#include "no_os_gpio.h"
+#include "no_os_delay.h"
 
 #include "adi_common_log.h"
 #include "adi_adrv9001_user.h"

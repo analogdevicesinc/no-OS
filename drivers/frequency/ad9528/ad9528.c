@@ -42,7 +42,7 @@
 /******************************************************************************/
 #include <stdlib.h>
 #include <stdio.h>
-#include "no-os/util.h"
+#include "no_os_util.h"
 #include "ad9528.h"
 
 static bool ad9528_pll2_valid_calib_div(unsigned int div)

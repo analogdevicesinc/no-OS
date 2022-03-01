@@ -44,9 +44,9 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdint.h>
-#include "no-os/axi_io.h"
-#include "no-os/error.h"
-#include "no-os/delay.h"
+#include "no_os_axi_io.h"
+#include "no_os_error.h"
+#include "no_os_delay.h"
 #include "axi_dmac.h"
 
 /***************************************************************************//**

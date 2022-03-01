@@ -45,8 +45,7 @@
 #include "spi_engine.h"
 #include "spi_engine_private.h"
 #include <xil_io.h>
-#include "no-os/error.h"
-#include "no-os/util.h"
+#include "no_os_error.h"
 #include "ad5766_core.h"
 
 /******************************************************************************/
@@ -244,7 +243,7 @@ int32_t ad5766_core_setup(struct spi_engine_desc *eng_desc,
 	uint32_t index_mem = 0;
 	uint32_t phase_offset;
 
-	no_of_samples = ARRAY_SIZE(sine_lut);
+	no_of_samples = sizeof(sine_lut) / sizeof(typeof(sine_lut[0]));
 	phase_offset = no_of_samples/16;
 
 	for (index = 0; index < no_of_samples; index ++) {

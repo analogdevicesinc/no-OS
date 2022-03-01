@@ -38,7 +38,7 @@
 *******************************************************************************/
 #include <stdbool.h>
 #include "stm32_hal.h"
-#include "no-os/delay.h"
+#include "no_os_delay.h"
 /**
  * @brief Generate microseconds delay.
  * @param usecs - Delay in microseconds.

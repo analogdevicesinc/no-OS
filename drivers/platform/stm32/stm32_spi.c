@@ -38,10 +38,10 @@
 *******************************************************************************/
 #include <stdlib.h>
 #include <errno.h>
-#include "no-os/util.h"
-#include "no-os/gpio.h"
+#include "no_os_util.h"
+#include "no_os_gpio.h"
 #include "stm32_gpio.h"
-#include "no-os/spi.h"
+#include "no_os_spi.h"
 #include "stm32_spi.h"
 
 /**

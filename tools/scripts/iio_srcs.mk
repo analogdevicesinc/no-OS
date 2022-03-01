@@ -6,7 +6,7 @@ INCS += $(NO-OS)/iio/iio.h
 INCS += $(NO-OS)/iio/iio_types.h
 INCS += $(NO-OS)/iio/iiod.h
 INCS += $(NO-OS)/iio/iiod_private.h
-INCS += $(INCLUDE)/no-os/circular_buffer.h
+INCS += $(INCLUDE)/no_os_circular_buffer.h
 
 ifeq (y,$(strip $(ENABLE_IIO_NETWORK)))
 DISABLE_SECURE_SOCKET ?= y

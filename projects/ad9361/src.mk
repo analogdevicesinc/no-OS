@@ -57,7 +57,7 @@ INCS += $(DRIVERS)/rf-transceiver/ad9361/ad9361.h \
 	$(DRIVERS)/rf-transceiver/ad9361/ad9361_api.h
 INCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.h \
 	$(DRIVERS)/axi_core/axi_dac_core/axi_dac_core.h \
-	$(INCLUDE)/no-os/irq.h \
+	$(INCLUDE)/no_os_irq.h \
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.h
 ifeq (linux,$(strip $(PLATFORM)))
 CFLAGS += -DPLATFORM_MB
@@ -65,12 +65,12 @@ INCS +=	$(PLATFORM_DRIVERS)/linux_spi.h \
 	$(PLATFORM_DRIVERS)/linux_gpio.h \
 	$(PLATFORM_DRIVERS)/linux_uart.h
 endif
-INCS +=	$(INCLUDE)/no-os/axi_io.h \
-	$(INCLUDE)/no-os/spi.h \
-	$(INCLUDE)/no-os/gpio.h \
-	$(INCLUDE)/no-os/error.h \
-	$(INCLUDE)/no-os/delay.h \
-	$(INCLUDE)/no-os/util.h
+INCS +=	$(INCLUDE)/no_os_axi_io.h \
+	$(INCLUDE)/no_os_spi.h \
+	$(INCLUDE)/no_os_gpio.h \
+	$(INCLUDE)/no_os_error.h \
+	$(INCLUDE)/no_os_delay.h \
+	$(INCLUDE)/no_os_util.h
 ifeq (y,$(strip $(TINYIIOD)))
 
 ifeq (linux,$(strip $(PLATFORM)))
@@ -80,14 +80,14 @@ INCS += $(NO-OS)/network/tcp_socket.h \
 	$(NO-OS)/network/noos_mbedtls_config.h
 endif
 
-INCS += $(INCLUDE)/no-os/fifo.h \
-	$(INCLUDE)/no-os/uart.h \
-	$(INCLUDE)/no-os/list.h \
+INCS += $(INCLUDE)/no_os_fifo.h \
+	$(INCLUDE)/no_os_uart.h \
+	$(INCLUDE)/no_os_list.h \
 	$(DRIVERS)/rf-transceiver/ad9361/iio_ad9361.h \
 	$(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.h \
 	$(DRIVERS)/axi_core/iio_axi_dac/iio_axi_dac.h \
 	$(NO-OS)/iio/iio_app/iio_app.h \
-	$(INCLUDE)/no-os/circular_buffer.h
+	$(INCLUDE)/no_os_circular_buffer.h
 endif
 ifeq (xilinx,$(strip $(PLATFORM)))
 SRCS += $(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c \

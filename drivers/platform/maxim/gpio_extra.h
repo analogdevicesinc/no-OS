@@ -41,8 +41,8 @@
 
 #include <stdbool.h>
 #include <stdint.h>
-#include "no-os/irq.h"
-#include "no-os/gpio.h"
+#include "no_os_irq.h"
+#include "no_os_gpio.h"
 #include "max32660.h"
 
 #define N_PINS	MXC_CFG_GPIO_PINS_PORT

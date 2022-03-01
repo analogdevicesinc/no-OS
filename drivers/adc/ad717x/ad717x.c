@@ -46,7 +46,7 @@
 /******************************************************************************/
 #include <stdlib.h>
 #include "ad717x.h"
-#include "no-os/error.h"
+#include "no_os_error.h"
 
 /* Error codes */
 #define INVALID_VAL -1 /* Invalid argument */

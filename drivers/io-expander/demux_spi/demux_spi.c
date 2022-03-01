@@ -42,7 +42,7 @@
 /******************************************************************************/
 
 #include "demux_spi.h"
-#include "no-os/error.h"
+#include "no_os_error.h"
 #include <stdlib.h>
 #include <string.h>
 

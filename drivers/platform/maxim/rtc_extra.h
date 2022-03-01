@@ -41,7 +41,7 @@
 #define RTC_EXTRA_H_
 
 #include <stdint.h>
-#include "no-os/rtc.h"
+#include "no_os_rtc.h"
 
 #define MAX_RTC_MAX_VALUE	(0xFFFFF)
 

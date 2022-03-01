@@ -44,9 +44,9 @@
 /******************************************************************************/
 #include <stdint.h>
 #include <string.h>
-#include "no-os/util.h"
-#include "no-os/i2c.h"
-#include "no-os/spi.h"
+#include "no_os_util.h"
+#include "no_os_i2c.h"
+#include "no_os_spi.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/

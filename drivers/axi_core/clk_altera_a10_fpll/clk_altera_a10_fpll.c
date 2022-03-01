@@ -47,8 +47,8 @@
 #include <inttypes.h>
 #include <limits.h>
 #include "io.h"
-#include "no-os/util.h"
-#include "no-os/error.h"
+#include "no_os_util.h"
+#include "no_os_error.h"
 #include "clk_altera_a10_fpll.h"
 
 /******************************************************************************/

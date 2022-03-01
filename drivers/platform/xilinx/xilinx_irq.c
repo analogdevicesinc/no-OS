@@ -43,8 +43,8 @@
 
 #include <xparameters.h>
 #include <stdlib.h>
-#include "no-os/error.h"
-#include "no-os/irq.h"
+#include "no_os_error.h"
+#include "no_os_irq.h"
 #include "irq_extra.h"
 #ifdef XPAR_XSCUGIC_NUM_INSTANCES
 #include <xscugic.h>

@@ -44,7 +44,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <errno.h>
-#include "no-os/irq.h"
+#include "no_os_irq.h"
 #include "irq_extra.h"
 
 /******************************************************************************/

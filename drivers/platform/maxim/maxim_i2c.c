@@ -42,9 +42,9 @@
 #include <stdlib.h>
 
 #include "i2c.h"
-#include "no-os/error.h"
-#include "no-os/i2c.h"
-#include "no-os/util.h"
+#include "no_os_error.h"
+#include "no_os_i2c.h"
+#include "no_os_util.h"
 #include "i2c_extra.h"
 
 #define I2C_MASTER_MODE	1

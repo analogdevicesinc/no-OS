@@ -46,7 +46,7 @@
 #include "maxim_stdio.h"
 
 #include "mxc_sys.h"
-#include "no-os/uart.h"
+#include "no_os_uart.h"
 #include "uart.h"
 
 #include <unistd.h>

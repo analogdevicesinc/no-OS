@@ -43,7 +43,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "ad5766.h"
-#include "no-os/error.h"
+#include "no_os_error.h"
 
 /******************************************************************************/
 /************************** Functions Implementation **************************/

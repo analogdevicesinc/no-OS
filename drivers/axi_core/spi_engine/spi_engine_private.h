@@ -43,8 +43,8 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#include "no-os/spi.h"
-#include "no-os/util.h"
+#include "no_os_spi.h"
+#include "no_os_util.h"
 
 /******************************************************************************/
 /*************************** Spi Engine registers *****************************/

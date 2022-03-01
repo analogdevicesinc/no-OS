@@ -44,7 +44,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include "ad7124.h"
-#include "no-os/delay.h"
+#include "no_os_delay.h"
 
 /* Error codes */
 #define INVALID_VAL -1 /* Invalid argument */

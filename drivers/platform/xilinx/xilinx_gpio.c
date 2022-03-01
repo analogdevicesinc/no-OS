@@ -51,8 +51,8 @@
 #include <xgpiops.h>
 #endif
 
-#include "no-os/error.h"
-#include "no-os/gpio.h"
+#include "no_os_error.h"
+#include "no_os_gpio.h"
 #include "gpio_extra.h"
 
 /******************************************************************************/

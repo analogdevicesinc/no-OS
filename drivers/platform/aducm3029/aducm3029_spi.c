@@ -42,10 +42,10 @@
 /******************************************************************************/
 
 #include "spi_extra.h"
-#include "no-os/spi.h"
-#include "no-os/error.h"
+#include "no_os_spi.h"
+#include "no_os_error.h"
 #include <stdlib.h>
-#include "no-os/util.h"
+#include "no_os_util.h"
 
 #define	NB_SPI_DEVICES	3
 #define	MAX_CS_NUMBER	3

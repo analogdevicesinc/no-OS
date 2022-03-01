@@ -44,8 +44,8 @@
 
 
 // platform drivers
-#include "no-os/error.h"
-#include "no-os/util.h"
+#include "no_os_error.h"
+#include "no_os_util.h"
 
 // xcvr
 #ifdef ALTERA_PLATFORM

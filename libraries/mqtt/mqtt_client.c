@@ -45,7 +45,7 @@
 #include <string.h>
 #include "mqtt_client.h"
 #include "MQTTClient.h"
-#include "no-os/error.h"
+#include "no_os_error.h"
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/

@@ -46,9 +46,9 @@
 #include "mxc_sys.h"
 #include "uart.h"
 #include "maxim_uart.h"
-#include "no-os/uart.h"
-#include "no-os/irq.h"
-#include "no-os/util.h"
+#include "no_os_uart.h"
+#include "no_os_irq.h"
+#include "no_os_util.h"
 
 /**
 * @brief Callback descriptor that contains a function to be called when an

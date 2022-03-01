@@ -38,9 +38,9 @@
 *******************************************************************************/
 
 #include <inttypes.h>
-#include "no-os/i2c.h"
+#include "no_os_i2c.h"
 #include <stdlib.h>
-#include "no-os/error.h"
+#include "no_os_error.h"
 
 /**
  * @brief Initialize the I2C communication peripheral.

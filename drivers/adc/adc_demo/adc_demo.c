@@ -45,8 +45,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include "adc_demo.h"
-#include "no-os/error.h"
-#include "no-os/util.h"
+#include "no_os_error.h"
+#include "no_os_util.h"
 
 /* default sine lookup table to be used if ext_buff is not available */
 const uint16_t sine_lut[128] = {

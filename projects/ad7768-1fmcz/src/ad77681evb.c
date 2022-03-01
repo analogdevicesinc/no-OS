@@ -52,8 +52,8 @@
 #include "ad77681.h"
 #include "spi_engine.h"
 #include "parameters.h"
-#include "no-os/delay.h"
-#include "no-os/error.h"
+#include "no_os_delay.h"
+#include "no_os_error.h"
 
 uint32_t spi_msg_cmds[6] = {CS_LOW, CS_HIGH, CS_LOW, WRITE_READ(1), CS_HIGH};
 

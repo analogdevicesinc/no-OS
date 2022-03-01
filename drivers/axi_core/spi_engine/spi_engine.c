@@ -53,8 +53,8 @@ significant delays */
 #include <inttypes.h>
 
 #include "axi_dmac.h"
-#include "no-os/axi_io.h"
-#include "no-os/error.h"
+#include "no_os_axi_io.h"
+#include "no_os_error.h"
 #include "spi_engine.h"
 
 /**

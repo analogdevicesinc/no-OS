@@ -2,18 +2,18 @@ SRC_DIRS += $(PROJECT)/src
 
 SRCS +=	$(NO-OS)/util/util.c
 
-INCS +=	$(INCLUDE)/no-os/uart.h \
-	$(INCLUDE)/no-os/spi.h \
-	$(INCLUDE)/no-os/i2c.h \
-	$(INCLUDE)/no-os/util.h \
-	$(INCLUDE)/no-os/error.h \
-	$(INCLUDE)/no-os/delay.h \
-	$(INCLUDE)/no-os/timer.h \
-	$(INCLUDE)/no-os/irq.h \
-	$(INCLUDE)/no-os/rtc.h \
-    $(INCLUDE)/no-os/util.h \
-    $(INCLUDE)/no-os/print_log.h \
-	$(INCLUDE)/no-os/gpio.h
+INCS +=	$(INCLUDE)/no_os_uart.h \
+	$(INCLUDE)/no_os_spi.h \
+	$(INCLUDE)/no_os_i2c.h \
+	$(INCLUDE)/no_os_util.h \
+	$(INCLUDE)/no_os_error.h \
+	$(INCLUDE)/no_os_delay.h \
+	$(INCLUDE)/no_os_timer.h \
+	$(INCLUDE)/no_os_irq.h \
+	$(INCLUDE)/no_os_rtc.h \
+    $(INCLUDE)/no_os_util.h \
+    $(INCLUDE)/no_os_print_log.h \
+	$(INCLUDE)/no_os_gpio.h
 
 SRCS += $(DRIVERS)/api/spi.c \
 	$(DRIVERS)/api/i2c.c \
@@ -28,7 +28,7 @@ SRCS += $(PLATFORM_DRIVERS)/stm32_delay.c \
 	$(PLATFORM_DRIVERS)/stm32_uart.c \
 	$(PLATFORM_DRIVERS)/stm32_uart_stdio.c
 
-INCS +=	$(INCLUDE)/no-os/delay.h \
+INCS +=	$(INCLUDE)/no_os_delay.h \
 	$(PLATFORM_DRIVERS)/stm32_uart_stdio.h \
 	$(PLATFORM_DRIVERS)/stm32_uart.h \
 	$(PLATFORM_DRIVERS)/stm32_spi.h \
