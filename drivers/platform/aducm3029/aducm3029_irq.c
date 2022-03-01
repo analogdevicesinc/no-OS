@@ -144,8 +144,8 @@ int32_t aducm3029_irq_ctrl_remove(struct irq_ctrl_desc *desc)
 	adi_xint_UnInit();
 
 	/* Free UART */
-	irq_unregister(desc, ADUCM_UART_INT_ID);
-	irq_unregister(desc, ADUCM_RTC_INT_ID);
+	irq_unregister_callback(desc, ADUCM_UART_INT_ID, NULL);
+	irq_unregister_callback(desc, ADUCM_RTC_INT_ID, NULL);
 	free(desc->extra);
 	free(desc);
 	initialized = 0;
@@ -178,7 +178,7 @@ int32_t aducm3029_irq_register_callback(struct irq_ctrl_desc *desc,
 		return FAILURE;
 
 	if (!callback_desc)
-		return irq_unregister(desc, irq_id);
+		return irq_unregister_callback(desc, irq_id, NULL);
 
 	aducm_desc = desc->extra;
 
@@ -252,9 +252,11 @@ int32_t aducm3029_irq_register_callback(struct irq_ctrl_desc *desc,
  * @brief Unregister IRQ handling function for the specified <em>irq_id</em>.
  * @param desc - Interrupt controller descriptor.
  * @param irq_id - Id of the interrupt
+ * @param callback - Descriptor of the callback.
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
  */
-int32_t aducm3029_irq_unregister(struct irq_ctrl_desc *desc, uint32_t irq_id)
+int32_t aducm3029_irq_unregister_callback(struct irq_ctrl_desc *desc,
+		uint32_t irq_id, void *callback)
 {
 	struct aducm_irq_ctrl_desc	*aducm_desc;
 	struct uart_desc		*uart_desc;
@@ -469,7 +471,7 @@ int32_t aducm3029_irq_disable(struct irq_ctrl_desc *desc, uint32_t irq_id)
 const struct irq_platform_ops aducm_irq_ops = {
 	.init = &aducm3029_irq_ctrl_init,
 	.register_callback = &aducm3029_irq_register_callback,
-	.unregister = &aducm3029_irq_unregister,
+	.unregister_callback = &aducm3029_irq_unregister_callback,
 	.global_enable = &aducm3029_irq_global_enable,
 	.global_disable = &aducm3029_irq_global_disable,
 	.enable = &aducm3029_irq_enable,

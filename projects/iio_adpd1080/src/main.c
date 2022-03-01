@@ -174,7 +174,7 @@ static int32_t adpd1080pmod_32k_calib(struct adpd188_dev *adpd1080_dev)
 	if(status != SUCCESS)
 		goto finish;
 
-	status = irq_unregister(cal_irq, ADUCM_GPIO_A_INT_ID);
+	status = irq_unregister_callback(cal_irq, ADUCM_GPIO_A_INT_ID, &sync_gpio_cb);
 	if(status != SUCCESS)
 		goto gpio_finish;
 
