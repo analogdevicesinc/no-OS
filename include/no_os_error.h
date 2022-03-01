@@ -37,8 +37,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef ERROR_H_
-#define ERROR_H_
+#ifndef _NO_OS_ERROR_H_
+#define _NO_OS_ERROR_H_
 
 #include <errno.h>
 
@@ -64,4 +64,4 @@
 
 #define IS_ERR_VALUE(x)	((x) < 0)
 
-#endif // ERROR_H_
+#endif // _NO_OS_ERROR_H_

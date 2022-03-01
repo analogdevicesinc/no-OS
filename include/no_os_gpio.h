@@ -37,8 +37,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef GPIO_H_
-#define GPIO_H_
+#ifndef _NO_OS_GPIO_H_
+#define _NO_OS_GPIO_H_
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
@@ -180,4 +180,4 @@ int32_t gpio_set_value(struct gpio_desc *desc,
 int32_t gpio_get_value(struct gpio_desc *desc,
 		       uint8_t *value);
 
-#endif // GPIO_H_
+#endif // _NO_OS_GPIO_H_

@@ -36,8 +36,8 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __CRC24_H
-#define __CRC24_H
+#ifndef _NO_OS_CRC24_H_
+#define _NO_OS_CRC24_H_
 
 #include <stdint.h>
 #include <stddef.h>
@@ -51,4 +51,4 @@ void crc24_populate_msb(uint32_t * table, const uint32_t polynomial);
 uint32_t crc24(const uint32_t * table, const uint8_t *pdata, size_t nbytes,
 	       uint32_t crc);
 
-#endif // __CRC24_H
+#endif // _NO_OS_CRC24_H_

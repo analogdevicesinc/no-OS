@@ -38,8 +38,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef TRNG_H
-#define TRNG_H
+#ifndef _NO_OS_TRNG_H_
+#define _NO_OS_TRNG_H_
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
@@ -81,4 +81,4 @@ void trng_remove(struct trng_desc *desc);
 /* Fill buffer with random numbers */
 int32_t trng_fill_buffer(struct trng_desc *desc, uint8_t *buff, uint32_t len);
 
-#endif
+#endif // _NO_OS_TRNG_H_

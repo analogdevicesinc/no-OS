@@ -36,8 +36,8 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef UTIL_H_
-#define UTIL_H_
+#ifndef _NO_OS_UTIL_H_
+#define _NO_OS_UTIL_H_
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
@@ -175,5 +175,5 @@ uint32_t get_unaligned_be32(uint8_t *buf);
 void put_unaligned_le32(uint32_t val, uint8_t *buf);
 uint32_t get_unaligned_le32(uint8_t *buf);
 
-#endif // UTIL_H_
+#endif // _NO_OS_UTIL_H_
 

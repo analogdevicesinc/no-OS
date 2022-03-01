@@ -36,8 +36,8 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef PWM_H_
-#define PWM_H_
+#ifndef _NO_OS_PWM_H_
+#define _NO_OS_PWM_H_
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
@@ -147,4 +147,4 @@ int32_t pwm_set_polarity(struct pwm_desc *desc,
 int32_t pwm_get_polarity(struct pwm_desc *desc,
 			 enum pwm_polarity *polarity);
 
-#endif
+#endif // _NO_OS_PWM_H_

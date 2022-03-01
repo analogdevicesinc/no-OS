@@ -37,8 +37,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef IRQ_H_
-#define IRQ_H_
+#ifndef _NO_OS_IRQ_H_
+#define _NO_OS_IRQ_H_
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
@@ -185,4 +185,4 @@ int32_t irq_enable(struct irq_ctrl_desc *desc, uint32_t irq_id);
 /* Disable specific interrupt */
 int32_t irq_disable(struct irq_ctrl_desc *desc, uint32_t irq_id);
 
-#endif // IRQ_H_
+#endif // _NO_OS_IRQ_H_

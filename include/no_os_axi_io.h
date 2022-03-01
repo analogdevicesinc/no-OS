@@ -37,8 +37,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef AXI_IO_H_
-#define AXI_IO_H_
+#ifndef _NO_OS_AXI_IO_H_
+#define _NO_OS_AXI_IO_H_
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
@@ -56,4 +56,4 @@ int32_t axi_io_read(uint32_t base, uint32_t offset, uint32_t *data);
 /* AXI IO Write data */
 int32_t axi_io_write(uint32_t base, uint32_t offset, uint32_t data);
 
-#endif // AXI_IO_H_
+#endif // _NO_OS_AXI_IO_H_

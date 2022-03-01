@@ -37,8 +37,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef DELAY_H_
-#define DELAY_H_
+#ifndef _NO_OS_DELAY_H_
+#define _NO_OS_DELAY_H_
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
@@ -56,4 +56,4 @@ void udelay(uint32_t usecs);
 /* Generate miliseconds delay. */
 void mdelay(uint32_t msecs);
 
-#endif // DELAY_H_
+#endif // _NO_OS_DELAY_H_

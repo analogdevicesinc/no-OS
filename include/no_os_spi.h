@@ -37,8 +37,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef SPI_H_
-#define SPI_H_
+#ifndef _NO_OS_SPI_H_
+#define _NO_OS_SPI_H_
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
@@ -181,4 +181,4 @@ int32_t spi_write_and_read(struct spi_desc *desc,
 int32_t spi_transfer(struct spi_desc *desc, struct spi_msg *msgs, uint32_t len);
 
 
-#endif // SPI_H_
+#endif // _NO_OS_SPI_H_

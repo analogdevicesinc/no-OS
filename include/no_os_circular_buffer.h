@@ -38,8 +38,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef CIRCULAR_BUFFER_H
-#define CIRCULAR_BUFFER_H
+#ifndef _NO_OS_CIRCULAR_BUFFER_H_
+#define _NO_OS_CIRCULAR_BUFFER_H_
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
@@ -107,4 +107,4 @@ int32_t cb_prepare_async_read(struct circular_buffer *desc,
 			      uint32_t *raw_size_avilable);
 int32_t cb_end_async_read(struct circular_buffer *desc);
 
-#endif
+#endif //_NO_OS_CIRCULAR_BUFFER_H_

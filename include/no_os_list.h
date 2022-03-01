@@ -87,8 +87,8 @@
  *    @endcode
 *******************************************************************************/
 
-#ifndef LIST_H
-#define LIST_H
+#ifndef _NO_OS_LIST_H_
+#define _NO_OS_LIST_H_
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
@@ -315,4 +315,4 @@ int32_t list_read_find(struct list_desc *list_desc, void **data,
 int32_t list_get_find(struct list_desc *list_desc, void **data, void *cmp_data);
 /** @}*/
 
-#endif //LIST_H
+#endif // _NO_OS_LIST_H_

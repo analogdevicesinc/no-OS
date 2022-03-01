@@ -36,8 +36,8 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef CLK_H_
-#define CLK_H_
+#ifndef _NO_OS_CLK_H_
+#define _NO_OS_CLK_H_
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
@@ -85,4 +85,4 @@ int32_t clk_round_rate(struct clk *clk,
 int32_t clk_set_rate(struct clk *clk,
 		     uint64_t rate);
 
-#endif // CLK_H_
+#endif // _NO_OS_CLK_H_
