@@ -84,24 +84,24 @@ INCS +=	$(PROJECT)/src/app_clock.h \
 	$(DRIVERS)/axi_core/jesd204/xilinx_transceiver.h \
 	$(PLATFORM_DRIVERS)/gpio_extra.h \
 	$(PLATFORM_DRIVERS)/spi_extra.h \
-	$(INCLUDE)/no-os/axi_io.h \
-	$(INCLUDE)/no-os/clk.h \
-	$(INCLUDE)/no-os/delay.h \
-	$(INCLUDE)/no-os/error.h \
-	$(INCLUDE)/no-os/gpio.h \
-	$(INCLUDE)/no-os/spi.h \
-	$(INCLUDE)/no-os/util.h
+	$(INCLUDE)/no_os_axi_io.h \
+	$(INCLUDE)/no_os_clk.h \
+	$(INCLUDE)/no_os_delay.h \
+	$(INCLUDE)/no_os_error.h \
+	$(INCLUDE)/no_os_gpio.h \
+	$(INCLUDE)/no_os_spi.h \
+	$(INCLUDE)/no_os_util.h
 ifeq (y,$(strip $(QUAD_MXFE)))
 INCS += $(DRIVERS)/frequency/adf4371/adf4371.h
 endif
 ifeq (y,$(strip $(TINYIIOD)))
 INCS += $(NO-OS)/iio/iio_app/iio_app.h \
-	$(INCLUDE)/no-os/uart.h \
-	$(INCLUDE)/no-os/irq.h \
+	$(INCLUDE)/no_os_uart.h \
+	$(INCLUDE)/no_os_irq.h \
 	$(PLATFORM_DRIVERS)/irq_extra.h \
 	$(PLATFORM_DRIVERS)/uart_extra.h \
-	$(INCLUDE)/no-os/fifo.h \
-	$(INCLUDE)/no-os/list.h \
+	$(INCLUDE)/no_os_fifo.h \
+	$(INCLUDE)/no_os_list.h \
 	$(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.h \
 	$(DRIVERS)/axi_core/iio_axi_dac/iio_axi_dac.h
 endif

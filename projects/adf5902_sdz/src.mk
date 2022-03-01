@@ -34,18 +34,18 @@ endif
 INCS += $(DRIVERS)/frequency/adf5902/adf5902.h
 INCS +=	$(PLATFORM_DRIVERS)/spi_extra.h \
 	$(PLATFORM_DRIVERS)/gpio_extra.h
-INCS +=	$(INCLUDE)/no-os/axi_io.h \
-	$(INCLUDE)/no-os/spi.h \
-	$(INCLUDE)/no-os/gpio.h \
-	$(INCLUDE)/no-os/error.h \
-	$(INCLUDE)/no-os/delay.h \
-	$(INCLUDE)/no-os/util.h \
-	$(INCLUDE)/no-os/print_log.h
+INCS +=	$(INCLUDE)/no_os_axi_io.h \
+	$(INCLUDE)/no_os_spi.h \
+	$(INCLUDE)/no_os_gpio.h \
+	$(INCLUDE)/no_os_error.h \
+	$(INCLUDE)/no_os_delay.h \
+	$(INCLUDE)/no_os_util.h \
+	$(INCLUDE)/no_os_print_log.h
 ifeq (y,$(strip $(TINYIIOD)))
-INCS += $(INCLUDE)/no-os/fifo.h \
-	$(INCLUDE)/no-os/irq.h \
-	$(INCLUDE)/no-os/uart.h \
-	$(INCLUDE)/no-os/list.h \
+INCS += $(INCLUDE)/no_os_fifo.h \
+	$(INCLUDE)/no_os_irq.h \
+	$(INCLUDE)/no_os_uart.h \
+	$(INCLUDE)/no_os_list.h \
 	$(PLATFORM_DRIVERS)/irq_extra.h \
 	$(PLATFORM_DRIVERS)/uart_extra.h \
 	$(NO-OS)/iio/iio_app/iio_app.h

@@ -39,9 +39,9 @@
 #include <stdint.h>
 #include <errno.h>
 #include <string.h>
-#include "no-os/util.h"
-#include "no-os/print_log.h"
-#include "no-os/delay.h"
+#include "no_os_util.h"
+#include "no_os_print_log.h"
+#include "no_os_delay.h"
 #include "adrv9002.h"
 #include "axi_adc_core.h"
 #include "axi_dac_core.h"

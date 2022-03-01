@@ -47,8 +47,8 @@
 #include "iiod.h"
 #include "iiod_private.h"
 
-#include "no-os/error.h"
-#include "no-os/util.h"
+#include "no_os_error.h"
+#include "no_os_util.h"
 
 #define SET_DUMMY_IF_NULL(func, dummy) ((func) ? (func) : (dummy))
 

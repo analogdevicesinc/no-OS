@@ -41,7 +41,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
-#include "no-os/spi.h"
+#include "no_os_spi.h"
 
 #define AD7689_CFG_CFG_MSK      BIT(13)
 #define AD7689_CFG_INCC_MSK     GENMASK(12,10)

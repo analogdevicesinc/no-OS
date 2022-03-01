@@ -46,8 +46,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/mman.h>
-#include "no-os/error.h"
-#include "no-os/axi_io.h"
+#include "no_os_error.h"
+#include "no_os_axi_io.h"
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/

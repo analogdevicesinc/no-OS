@@ -48,12 +48,12 @@
 #include <string.h>
 #include <stdio.h>
 #include "at_parser.h"
-#include "no-os/error.h"
-#include "no-os/delay.h"
-#include "no-os/uart.h"
-#include "no-os/irq.h"
-#include "no-os/util.h"
-#include "no-os/error.h"
+#include "no_os_error.h"
+#include "no_os_delay.h"
+#include "no_os_uart.h"
+#include "no_os_irq.h"
+#include "no_os_util.h"
+#include "no_os_error.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/

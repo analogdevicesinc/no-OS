@@ -43,7 +43,7 @@
 
 #include <stdint.h>
 #include <string.h>
-#include "no-os/error.h"
+#include "no_os_error.h"
 #include "adxrs290.h"
 
 /******************************************************************************/

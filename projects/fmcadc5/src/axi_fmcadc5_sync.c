@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include "ad9625.h"
 #include "axi_fmcadc5_sync.h"
-#include "no-os/axi_io.h"
+#include "no_os_axi_io.h"
 
 /* Simple read */
 static inline int i5g_read(struct s_i5g *st, int reg)

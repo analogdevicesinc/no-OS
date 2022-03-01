@@ -43,8 +43,8 @@
 #include "stdio.h"
 #include "stdlib.h"
 #include "adaq7980.h"
-#include "no-os/error.h"
-#include "no-os/delay.h"
+#include "no_os_error.h"
+#include "no_os_delay.h"
 
 /**
  * @brief Read from device.

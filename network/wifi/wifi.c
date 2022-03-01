@@ -46,8 +46,8 @@
 #include <string.h>
 #include "wifi.h"
 #include "at_parser.h"
-#include "no-os/error.h"
-#include "no-os/util.h"
+#include "no_os_error.h"
+#include "no_os_util.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/

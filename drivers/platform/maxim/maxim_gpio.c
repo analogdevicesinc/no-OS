@@ -40,9 +40,9 @@
 #include <stdio.h>
 #include <errno.h>
 #include <stdlib.h>
-#include "no-os/gpio.h"
-#include "no-os/irq.h"
-#include "no-os/util.h"
+#include "no_os_gpio.h"
+#include "no_os_irq.h"
+#include "no_os_util.h"
 #include "gpio.h"
 #include "gpio_regs.h"
 #include "gpio_extra.h"

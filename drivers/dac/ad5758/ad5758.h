@@ -39,8 +39,8 @@
 #ifndef AD5758_H_
 #define AD5758_H_
 
-#include "no-os/gpio.h"
-#include "no-os/spi.h"
+#include "no_os_gpio.h"
+#include "no_os_spi.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/

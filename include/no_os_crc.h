@@ -39,8 +39,8 @@
 #ifndef __CRC_H
 #define __CRC_H
 
-#include "no-os/crc8.h"
-#include "no-os/crc16.h"
-#include "no-os/crc24.h"
+#include "no_os_crc8.h"
+#include "no_os_crc16.h"
+#include "no_os_crc24.h"
 
 #endif // __CRC_H

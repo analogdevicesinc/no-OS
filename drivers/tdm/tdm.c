@@ -38,9 +38,9 @@
 *******************************************************************************/
 
 #include <inttypes.h>
-#include "no-os/tdm.h"
+#include "no_os_tdm.h"
 #include <stdlib.h>
-#include "no-os/error.h"
+#include "no_os_error.h"
 
 /**
  * @brief Initialize the TDM communication peripheral.

@@ -45,8 +45,8 @@
 #include <errno.h>
 #include "spi.h"
 #include "spi_extra.h"
-#include "no-os/spi.h"
-#include "no-os/util.h"
+#include "no_os_spi.h"
+#include "no_os_util.h"
 
 #define SPI_MASTER_MODE	1
 #define SPI_SINGLE_MODE	0

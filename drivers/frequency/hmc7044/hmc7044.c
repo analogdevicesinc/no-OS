@@ -42,8 +42,8 @@
 /******************************************************************************/
 #include <stdlib.h>
 #include <stdio.h>
-#include "no-os/error.h"
-#include "no-os/util.h"
+#include "no_os_error.h"
+#include "no_os_util.h"
 #include "hmc7044.h"
 
 /******************************************************************************/

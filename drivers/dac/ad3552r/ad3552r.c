@@ -44,13 +44,13 @@
 #include <inttypes.h>
 #include <stdlib.h>
 #include <string.h>
-#include "no-os/delay.h"
-#include "no-os/error.h"
-#include "no-os/gpio.h"
-#include "no-os/print_log.h"
-#include "no-os/spi.h"
-#include "no-os/timer.h"
-#include "no-os/util.h"
+#include "no_os_delay.h"
+#include "no_os_error.h"
+#include "no_os_gpio.h"
+#include "no_os_print_log.h"
+#include "no_os_spi.h"
+#include "no_os_timer.h"
+#include "no_os_util.h"
 
 /* Private attributes */
 enum ad3552r_spi_attributes {

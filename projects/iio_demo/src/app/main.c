@@ -46,7 +46,7 @@
 #include "iio_app.h"
 #include "iio_adc_demo.h"
 #include "iio_dac_demo.h"
-#include "no-os/util.h"
+#include "no_os_util.h"
 
 #ifdef XILINX_PLATFORM
 #include <xparameters.h>
@@ -64,7 +64,7 @@
 #include "stm32_hal.h"
 #endif
 
-#include "no-os/error.h"
+#include "no_os_error.h"
 #define DEMO_CHANNELS		max(TOTAL_ADC_CHANNELS, TOTAL_DAC_CHANNELS)
 #ifdef ENABLE_LOOPBACK
 #define SAMPLES_PER_CHANNEL	200

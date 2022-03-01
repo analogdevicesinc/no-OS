@@ -38,9 +38,9 @@
 *******************************************************************************/
 
 #include <inttypes.h>
-#include "no-os/gpio.h"
+#include "no_os_gpio.h"
 #include <stdlib.h>
-#include "no-os/error.h"
+#include "no_os_error.h"
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/

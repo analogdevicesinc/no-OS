@@ -41,7 +41,7 @@
 #define IIO_AD5791_H_
 
 #include "iio.h"
-#include "no-os/util.h"
+#include "no_os_util.h"
 #include "ad5791.h"
 
 #define AD5791_CH_NO 1

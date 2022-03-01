@@ -46,7 +46,7 @@
 #include <inttypes.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "no-os/error.h"
+#include "no_os_error.h"
 #include "iio.h"
 #include "iio_axi_adc.h"
 

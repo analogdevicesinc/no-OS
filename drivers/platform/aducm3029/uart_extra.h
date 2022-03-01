@@ -46,7 +46,7 @@
 
 #include <stdbool.h>
 #include <stdint.h>
-#include "no-os/error.h"
+#include "no_os_error.h"
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/

@@ -46,17 +46,17 @@
 #include "axi_adc_core.h"
 #include "axi_dmac.h"
 #include "ad9265.h"
-#include "no-os/spi.h"
+#include "no_os_spi.h"
 #include "spi_extra.h"
 #include "parameters.h"
-#include "no-os/error.h"
+#include "no_os_error.h"
 
 #ifdef IIO_SUPPORT
 #include "iio_app.h"
 #include "iio_axi_adc.h"
 #endif
 
-#include "no-os/print_log.h"
+#include "no_os_print_log.h"
 
 /***************************************************************************//**
 * @brief main

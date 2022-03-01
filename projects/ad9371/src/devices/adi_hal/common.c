@@ -16,11 +16,11 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include "common.h"
-#include "no-os/spi.h"
+#include "no_os_spi.h"
 #include "spi_extra.h"
 #include "gpio_extra.h"
-#include "no-os/gpio.h"
-#include "no-os/delay.h"
+#include "no_os_gpio.h"
+#include "no_os_delay.h"
 
 #include "parameters.h"
 

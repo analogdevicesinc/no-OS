@@ -40,7 +40,7 @@
 #define _MAXIM_UART_STDIO_H_
 
 #include <sys/stat.h>
-#include "no-os/uart.h"
+#include "no_os_uart.h"
 
 void maxim_uart_stdio(struct uart_desc *);
 int _isatty(int);

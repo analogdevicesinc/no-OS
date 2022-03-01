@@ -47,19 +47,19 @@
 #include <xparameters.h>
 #include <xil_printf.h>
 #include <xil_cache.h>
-#include "no-os/spi.h"
-#include "no-os/gpio.h"
+#include "no_os_spi.h"
+#include "no_os_gpio.h"
 #include "spi_extra.h"
 #include "gpio_extra.h"
-#include "no-os/delay.h"
-#include "no-os/error.h"
+#include "no_os_delay.h"
+#include "no_os_error.h"
 #include "ad6676.h"
 #include "axi_adc_core.h"
 #include "axi_dmac.h"
 #include "axi_jesd204_rx.h"
 #include "axi_adxcvr.h"
 
-#include "no-os/print_log.h"
+#include "no_os_print_log.h"
 
 #ifdef IIO_SUPPORT
 #include "iio_app.h"

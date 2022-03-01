@@ -48,11 +48,11 @@
 #include <xil_cache.h>
 #include "parameters.h"
 #include "adaq7980.h"
-#include "no-os/pwm.h"
+#include "no_os_pwm.h"
 #include "axi_pwm_extra.h"
-#include "no-os/gpio.h"
+#include "no_os_gpio.h"
 #include "gpio_extra.h"
-#include "no-os/error.h"
+#include "no_os_error.h"
 
 #define ADAQ7980_EVB_SAMPLE_NO 1000
 

@@ -25,9 +25,9 @@ INCS += $(PROJECT)/src/app_config.h \
 	$(DRIVERS)/axi_core/spi_engine/spi_engine.h \
 	$(DRIVERS)/axi_core/spi_engine/spi_engine_private.h
 INCS +=	$(PLATFORM_DRIVERS)/spi_extra.h					
-INCS +=	$(INCLUDE)/no-os/axi_io.h \
-	$(INCLUDE)/no-os/spi.h \
-	$(INCLUDE)/no-os/error.h \
-	$(INCLUDE)/no-os/delay.h \
-	$(INCLUDE)/no-os/print_log.h \
-	$(INCLUDE)/no-os/util.h
+INCS +=	$(INCLUDE)/no_os_axi_io.h \
+	$(INCLUDE)/no_os_spi.h \
+	$(INCLUDE)/no_os_error.h \
+	$(INCLUDE)/no_os_delay.h \
+	$(INCLUDE)/no_os_print_log.h \
+	$(INCLUDE)/no_os_util.h

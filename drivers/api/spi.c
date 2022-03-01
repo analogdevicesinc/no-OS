@@ -38,9 +38,9 @@
 *******************************************************************************/
 
 #include <inttypes.h>
-#include "no-os/spi.h"
+#include "no_os_spi.h"
 #include <stdlib.h>
-#include "no-os/error.h"
+#include "no_os_error.h"
 
 /**
  * @brief Initialize the SPI communication peripheral.

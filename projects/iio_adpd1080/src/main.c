@@ -42,13 +42,13 @@
 /******************************************************************************/
 
 #include "app_config.h"
-#include "no-os/error.h"
-#include "no-os/util.h"
+#include "no_os_error.h"
+#include "no_os_util.h"
 #include "iio_adpd188.h"
 #include "iio_app.h"
 #include "aducm3029_gpio.h"
-#include "no-os/gpio.h"
-#include "no-os/timer.h"
+#include "no_os_gpio.h"
+#include "no_os_timer.h"
 #include "irq_extra.h"
 #include "i2c_extra.h"
 

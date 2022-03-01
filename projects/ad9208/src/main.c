@@ -54,11 +54,11 @@
 #include "parameters.h"
 #include "xil_printf.h"
 #include <xparameters.h>
-#include "no-os/error.h"
-#include "no-os/delay.h"
-#include "no-os/spi.h"
+#include "no_os_error.h"
+#include "no_os_delay.h"
+#include "no_os_spi.h"
 #include "spi_extra.h"
-#include "no-os/gpio.h"
+#include "no_os_gpio.h"
 #include "gpio_extra.h"
 
 #ifdef IIO_SUPPORT

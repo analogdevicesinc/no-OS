@@ -50,11 +50,11 @@
 #include "spi_engine.h"
 #include "ad738x.h"
 #include "parameters.h"
-#include "no-os/delay.h"
-#include "no-os/error.h"
+#include "no_os_delay.h"
+#include "no_os_error.h"
 #include "app_config.h"
 
-#include "no-os/print_log.h"
+#include "no_os_print_log.h"
 
 #define AD738x_EVB_SAMPLE_NO		1000
 

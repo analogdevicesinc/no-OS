@@ -11,12 +11,12 @@ SRC_DIRS += $(INCLUDE)
 SRCS += $(DRIVERS)/api/gpio.c
 SRCS += $(DRIVERS)/api/irq.c
 SRCS +=	$(DRIVERS)/platform/$(PLATFORM)/$(PLATFORM)_irq.c
-INCS += $(INCLUDE)/no-os/irq.h
+INCS += $(INCLUDE)/no_os_irq.h
 INCS += $(DRIVERS)/platform/$(PLATFORM)/irq_extra.h
 
 SRCS += $(DRIVERS)/api/i2c.c
 SRCS +=	$(DRIVERS)/platform/$(PLATFORM)/$(PLATFORM)_i2c.c
-INCS += $(INCLUDE)/no-os/i2c.h
+INCS += $(INCLUDE)/no_os_i2c.h
 INCS += $(DRIVERS)/platform/$(PLATFORM)/i2c_extra.h
 
 SRCS += $(DRIVERS)/api/spi.c

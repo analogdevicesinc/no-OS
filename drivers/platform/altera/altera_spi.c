@@ -44,8 +44,8 @@
 #include <stdlib.h>
 #include <altera_avalon_spi_regs.h>
 #include "parameters.h"
-#include "no-os/error.h"
-#include "no-os/spi.h"
+#include "no_os_error.h"
+#include "no_os_spi.h"
 #include "spi_extra.h"
 
 /******************************************************************************/

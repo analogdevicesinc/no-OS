@@ -36,7 +36,7 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#include "no-os/crc16.h"
+#include "no_os_crc16.h"
 
 /***************************************************************************//**
  * @brief Creates the CRC-16 lookup table for a given polynomial.

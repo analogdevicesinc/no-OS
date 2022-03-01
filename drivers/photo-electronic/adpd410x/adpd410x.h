@@ -44,9 +44,9 @@
 /******************************************************************************/
 
 #include <stdbool.h>
-#include "no-os/spi.h"
-#include "no-os/i2c.h"
-#include "no-os/gpio.h"
+#include "no_os_spi.h"
+#include "no_os_i2c.h"
+#include "no_os_gpio.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/

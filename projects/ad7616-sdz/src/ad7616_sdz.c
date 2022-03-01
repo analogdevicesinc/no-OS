@@ -47,15 +47,15 @@
 #include "spi_engine.h"
 #include <xil_cache.h>
 #include <xparameters.h>
-#include "no-os/error.h"
-#include "no-os/spi.h"
+#include "no_os_error.h"
+#include "no_os_spi.h"
 #include "spi_extra.h"
-#include "no-os/gpio.h"
+#include "no_os_gpio.h"
 #include "gpio_extra.h"
 #include "ad7616.h"
 #include "parameters.h"
 
-#include "no-os/print_log.h"
+#include "no_os_print_log.h"
 
 /******************************************************************************/
 /************************ Variables Definitions *******************************/

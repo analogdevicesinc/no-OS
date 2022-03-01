@@ -46,7 +46,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "iio_ad5791.h"
-#include "no-os/error.h"
+#include "no_os_error.h"
 
 /**
  * @brief IIO get method to the 'scale' attribute of the channel.

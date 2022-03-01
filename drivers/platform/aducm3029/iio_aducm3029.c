@@ -42,12 +42,12 @@
 #include <stdio.h>
 #include <inttypes.h>
 #include <sys/platform.h>
-#include "no-os/pwm.h"
-#include "no-os/gpio.h"
+#include "no_os_pwm.h"
+#include "no_os_gpio.h"
 #include "iio_aducm3029.h"
 #include "adc.h"
-#include "no-os/error.h"
-#include "no-os/util.h"
+#include "no_os_error.h"
+#include "no_os_util.h"
 
 #define GPIO_PIN(nb)	(1u << ((nb) & 0x0F))
 #define GPIO_PORT(nb)	(((nb) & 0xF0) >> 4)
