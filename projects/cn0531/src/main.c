@@ -90,7 +90,7 @@ int main(void)
 		.spi_init.chip_select = 0x00,
 		.spi_init.extra = &aducm_spi_ini,
 		.spi_init.max_speed_hz = 5000000,
-		.spi_init.mode = SPI_MODE_3
+		.spi_init.mode = NO_OS_SPI_MODE_3
 	};
 	struct iio_data_buffer iio_ad5791_read_buff = {
 		.buff = DAC_DDR_BASEADDR,

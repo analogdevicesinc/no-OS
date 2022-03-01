@@ -102,7 +102,7 @@ int main(void)
 	struct spi_init_param phy_spi_init_param = {
 		.device_id = PHY_SPI_DEVICE_ID,
 		.max_speed_hz = 1000000,
-		.mode = SPI_MODE_0,
+		.mode = NO_OS_SPI_MODE_0,
 		.chip_select = PHY_CS,
 		.platform_ops = &xil_spi_ops,
 		.extra = &xil_spi_param

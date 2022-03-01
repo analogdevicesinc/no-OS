@@ -86,7 +86,7 @@ int main(void)
 		.chip_select = 0,
 		.extra = &spi_param,
 		.max_speed_hz = 900000,
-		.mode = SPI_MODE_3,
+		.mode = NO_OS_SPI_MODE_3,
 		.platform_ops = &aducm_spi_ops
 	};
 

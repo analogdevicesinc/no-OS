@@ -75,7 +75,7 @@ int main(void)
 		.max_speed_hz = 2000000u,
 		.chip_select = 0,
 		.platform_ops = &xil_spi_ops,
-		.mode = SPI_MODE_0
+		.mode = NO_OS_SPI_MODE_0
 	};
 
 	struct xil_spi_init_param xil_spi_param = {

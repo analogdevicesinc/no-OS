@@ -422,7 +422,7 @@ AD9361_InitParam default_init_param = {
 
 	{
 		.device_id = SPI_DEVICE_ID,
-		.mode = SPI_MODE_1,
+		.mode = NO_OS_SPI_MODE_1,
 		.chip_select = SPI_CS,
 		.platform_ops = SPI_OPS,
 		.extra = SPI_PARAM

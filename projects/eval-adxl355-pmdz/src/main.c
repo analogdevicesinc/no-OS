@@ -36,7 +36,7 @@ int main ()
 		.device_id = SPI_DEVICE_ID,
 		.max_speed_hz = 4000000,
 		.bit_order = SPI_BIT_ORDER_MSB_FIRST,
-		.mode = SPI_MODE_0,
+		.mode = NO_OS_SPI_MODE_0,
 		.extra = &xsip,
 		.platform_ops = &stm32_spi_ops,
 		.chip_select = SPI_CS,

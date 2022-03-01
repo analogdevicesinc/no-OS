@@ -91,7 +91,7 @@ int32_t app_clock_init(struct clk dev_refclk[MULTIDEVICE_INSTANCE_COUNT])
 		.device_id = CLK_SPI_DEVICE_ID,
 #endif
 		.max_speed_hz = 10000000,
-		.mode = SPI_MODE_0,
+		.mode = NO_OS_SPI_MODE_0,
 #ifdef QUAD_MXFE
 		.chip_select = HMC7043_CS,
 #else

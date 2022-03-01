@@ -50,7 +50,7 @@ int main()
 		.spi_init = {
 			.chip_select = AD400x_SPI_CS,
 			.max_speed_hz = 83333333,
-			.mode = SPI_MODE_0,
+			.mode = NO_OS_SPI_MODE_0,
 			.platform_ops = &spi_eng_platform_ops,
 			.extra = (void*)&spi_eng_init_param,
 		},

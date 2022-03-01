@@ -70,7 +70,7 @@ struct ad77681_init_param ADC_default_init_param = {
 	{
 		.chip_select = AD77681_SPI_CS,
 		.max_speed_hz = 1000000,
-		.mode = SPI_MODE_3,
+		.mode = NO_OS_SPI_MODE_3,
 		.platform_ops = &spi_eng_platform_ops,
 		.extra = (void*)&spi_eng_init_param,
 	},

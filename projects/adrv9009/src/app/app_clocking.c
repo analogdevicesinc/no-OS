@@ -403,7 +403,7 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 	struct spi_init_param clkchip_spi_init_param = {
 		.device_id = 0,
 		.max_speed_hz = 10000000,
-		.mode = SPI_MODE_0,
+		.mode = NO_OS_SPI_MODE_0,
 		.chip_select = CLK_CS,
 #ifndef ALTERA_PLATFORM
 		.platform_ops = &xil_spi_ops,
@@ -418,7 +418,7 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 	struct spi_init_param car_clkchip_spi_init_param = {
 		.device_id = 0,
 		.max_speed_hz = 10000000,
-		.mode = SPI_MODE_0,
+		.mode = NO_OS_SPI_MODE_0,
 		.chip_select = CAR_CLK_CS,
 		.platform_ops = &xil_spi_ops,
 		.extra = &xil_spi_param

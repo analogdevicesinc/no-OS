@@ -81,7 +81,7 @@ int main()
 	struct spi_init_param ad738x_spi_init = {
 		.chip_select = AD738X_SPI_CS,
 		.max_speed_hz = 10000000,
-		.mode = SPI_MODE_1,
+		.mode = NO_OS_SPI_MODE_1,
 		.platform_ops = &spi_eng_platform_ops,
 		.extra = (void*)&spi_eng_init_param,
 	};
