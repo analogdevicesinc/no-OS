@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   trng.h
+ *   @file   no_os_trng.h
  *   @brief  Header file of true random number generator
  *   @author Mihail Chindris (mihail.chindris@analog.com)
 ********************************************************************************

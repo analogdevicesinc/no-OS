@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   fifo.h
+ *   @file   no_os_fifo.h
  *   @brief  Implementation of fifo
  *   @author Cristian Pop (cristian.pop@analog.com)
 ********************************************************************************

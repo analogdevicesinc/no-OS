@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   uart.h
+ *   @file   no_os_uart.h
  *   @brief  Header file of UART interface.
  *   @author Cristian Pop (cristian.pop@analog.com)
 ********************************************************************************

@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   crc24.h
+ *   @file   no_os_crc24.h
  *   @brief  Header file of CRC-24 computation.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************

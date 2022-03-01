@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   util.h
+ *   @file   no_os_util.h
  *   @brief  Implementation of utility functions.
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************

@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   gpio.h
+ *   @file   no_os_gpio.h
  *   @brief  Header file of GPIO Interface
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************

@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   pwm.h
+ *   @file   no_os_pwm.h
  *   @brief  Header file of PWM Interface
  *   @author Cristian Pop (cristian.pop@analog.com)
 ********************************************************************************

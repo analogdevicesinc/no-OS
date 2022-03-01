@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   irq.h
+ *   @file   no_os_irq.h
  *   @brief  Header file of IRQ interface.
  *   @author Cristian Pop (cristian.pop@analog.com)
 ********************************************************************************

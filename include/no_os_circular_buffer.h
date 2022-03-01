@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   circular_buffer.h
+ *   @file   no_os_circular_buffer.h
  *   @brief  Circular buffer library header
  *   @author Mihail Chindris (mihail.chindris@analog.com)
 ********************************************************************************

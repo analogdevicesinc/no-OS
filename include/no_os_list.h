@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   list.h
+ *   @file   no_os_list.h
  *   @brief  List library header
  *   @author Mihail Chindris (mihail.chindris@analog.com)
 ********************************************************************************

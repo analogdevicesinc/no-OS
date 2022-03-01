@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   crc16.h
+ *   @file   no_os_crc16.h
  *   @brief  Header file of CRC-16 computation.
  *   @author Darius Berghe (darius.berghe@analog.com)
 ********************************************************************************

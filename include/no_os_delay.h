@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   delay.h
+ *   @file   no_os_delay.h
  *   @brief  Header file of Delay functions
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************

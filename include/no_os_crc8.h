@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   crc8.h
+ *   @file   no_os_crc8.h
  *   @brief  Header file of CRC-8 computation.
  *   @author Darius Berghe (darius.berghe@analog.com)
 ********************************************************************************

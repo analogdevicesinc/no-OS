@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   rtc.h
+ *   @file   no_os_rtc.h
  *   @brief  Header of the RTC interface
  *   @author Andrei Drimbarean (andrei.drimbarean@analog.com)
 ********************************************************************************
