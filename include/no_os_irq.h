@@ -53,6 +53,7 @@
 /**
  * @enum no_os_irq_uart_event_e
  * @brief Possible events for uart interrupt
+ * @todo replace this with enum no_os_irq_event
  */
 enum no_os_irq_uart_event_e {
 	/** Write operation finalized */
@@ -63,12 +64,24 @@ enum no_os_irq_uart_event_e {
 	NO_OS_IRQ_ERROR
 };
 
+enum no_os_irq_event {
+	NO_OS_EVT_GPIO,
+	NO_OS_EVT_UART_TX_COMPLETE,
+	NO_OS_EVT_UART_RX_COMPLETE,
+	NO_OS_EVT_UART_ERROR,
+};
+
 enum no_os_irq_trig_level {
 	NO_OS_IRQ_LEVEL_LOW,
 	NO_OS_IRQ_LEVEL_HIGH,
 	NO_OS_IRQ_EDGE_FALLING,
 	NO_OS_IRQ_EDGE_RISING,
 	NO_OS_IRQ_EDGE_BOTH
+};
+
+enum no_os_irq_peripheral {
+	NO_OS_GPIO_IRQ,
+	NO_OS_UART_IRQ,
 };
 
 /**
@@ -107,19 +120,27 @@ struct no_os_irq_ctrl_desc {
 /**
  * @struct no_os_callback_desc
  * @brief Structure describing a callback to be registered
+ * @todo: remove this, use struct irq_callback instead.
  */
 struct no_os_callback_desc {
+	/** Callback to be called when the event an event occurs. */
+	void (*callback)(void *context);
 	/**
 	 * Callback to be called when the event an event occurs
 	 *  @param ctx - Same as \ref no_os_callback_desc.ctx
 	 *  @param event - Event that generated the callback
 	 *  @param extra - Platform specific data
 	 */
-	void (*callback)(void *ctx, uint32_t event, void *extra);
+	void (*legacy_callback)(void *ctx, uint32_t event,
+				void *extra); /* TODO: remove this. */
 	/** Parameter to be passed when the callback is called */
 	void *ctx;
 	/** Platform specific configuration for a callback */
-	void *config;
+	void *legacy_config; /* TODO: remove this. */
+	/** Platform specific event that triggers the calling of the callback. */
+	enum no_os_irq_event event;
+	/** Interrupt source peripheral specifier. */
+	enum no_os_irq_peripheral peripheral;
 };
 
 /**
@@ -131,11 +152,13 @@ struct no_os_irq_platform_ops {
 	/** Initialize a interrupt controller peripheral. */
 	int32_t (*init)(struct no_os_irq_ctrl_desc **desc,
 			const struct no_os_irq_init_param *param);
-	/** Register a callback to handle the irq events */
+	/** Register a legacy_callback to handle the irq events */
 	int32_t (*register_callback)(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id,
-				     struct no_os_callback_desc *callback_desc);
+				     struct no_os_callback_desc *callback);
 	/** Unregisters a generic IRQ handling function */
-	int32_t (*unregister)(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id);
+	int32_t (*unregister_callback)(struct no_os_irq_ctrl_desc *desc,
+				       uint32_t irq_id,
+				       struct no_os_callback_desc *callback);
 	/** Global interrupt enable */
 	int32_t (*global_enable)(struct no_os_irq_ctrl_desc *desc);
 	/** Global interrupt disable */
@@ -168,7 +191,9 @@ int32_t no_os_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 				    struct no_os_callback_desc *callback_desc);
 
 /* Unregisters a generic IRQ handling function */
-int32_t no_os_irq_unregister(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id);
+int32_t no_os_irq_unregister_callback(struct no_os_irq_ctrl_desc *desc,
+				      uint32_t irq_id,
+				      struct no_os_callback_desc *callback_desc);
 
 /* Global interrupt enable */
 int32_t no_os_irq_global_enable(struct no_os_irq_ctrl_desc *desc);

@@ -38,8 +38,8 @@
 *******************************************************************************/
 
 #include <inttypes.h>
-#include "no_os_irq.h"
 #include <stdlib.h>
+#include "no_os_irq.h"
 #include "no_os_error.h"
 
 /**
@@ -76,25 +76,28 @@ int32_t no_os_irq_ctrl_remove(struct no_os_irq_ctrl_desc *desc)
  * @brief Register a callback to handle the irq events.
  * @param desc - The IRQ controller descriptor.
  * @param irq_id - Interrupt identifier.
- * @param callback_desc - Callback descriptor
- * @return 0 in case of success, -1 otherwise.
+ * @param callback - Callback descriptor - platform specific type.
+ * @return SUCCESS in case of success, FAILURE otherwise.
  */
 int32_t no_os_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 				    uint32_t irq_id,
-				    struct no_os_callback_desc *callback_desc)
+				    struct no_os_callback_desc *callback)
 {
-	return desc->platform_ops->register_callback(desc, irq_id, callback_desc);
+	return desc->platform_ops->register_callback(desc, irq_id, callback);
 }
 
 /**
  * @brief Unregisters a generic IRQ handling function.
  * @param desc - The IRQ controller descriptor.
  * @param irq_id - Interrupt identifier.
- * @return 0 in case of success, -1 otherwise.
+ * @param callback - Callback descriptor - platform specific type.
+ * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t no_os_irq_unregister(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
+int32_t no_os_irq_unregister_callback(struct no_os_irq_ctrl_desc *desc,
+				      uint32_t irq_id,
+				      struct no_os_callback_desc *callback)
 {
-	return desc->platform_ops->unregister(desc, irq_id);
+	return desc->platform_ops->unregister_callback(desc, irq_id, callback);
 }
 
 /**
