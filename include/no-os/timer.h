@@ -109,5 +109,9 @@ int32_t timer_count_clk_get(struct timer_desc *desc, uint32_t *freq_hz);
 /* Set the timer clock frequency. */
 int32_t timer_count_clk_set(struct timer_desc *desc, uint32_t freq_hz);
 
+/* Get the elapsed time in nsec for the timer. */
+int32_t timer_get_elapsed_time_nsec(struct timer_desc *desc,
+				    uint64_t *elapsed_time);
+
 #endif /* SRC_TIMER_H_ */
 
