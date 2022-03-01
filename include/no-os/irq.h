@@ -49,6 +49,9 @@
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
+enum irq_source {
+	NO_OS_GPIO_IRQ,
+};
 
 /**
  * @enum irq_uart_event_e
@@ -85,6 +88,8 @@ struct irq_platform_ops ;
 struct irq_init_param {
 	/** Interrupt request controller ID. */
 	uint32_t	irq_ctrl_id;
+	/** Interrupt source peripheral. */
+	enum irq_source source;
 	/** Platform specific IRQ platform ops structure. */
 	const struct irq_platform_ops *platform_ops;
 	/** IRQ extra parameters (device specific) */
@@ -98,6 +103,8 @@ struct irq_init_param {
 struct irq_ctrl_desc {
 	/** Interrupt request controller ID. */
 	uint32_t	irq_ctrl_id;
+	/** Interrupt source peripheral. */
+	enum irq_source source;
 	/** Platform specific IRQ platform ops structure. */
 	const struct irq_platform_ops *platform_ops;
 	/** IRQ extra parameters (device specific) */
