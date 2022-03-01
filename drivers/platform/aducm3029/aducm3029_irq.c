@@ -157,13 +157,13 @@ int32_t aducm3029_irq_ctrl_remove(struct irq_ctrl_desc *desc)
  * @brief Registers a IRQ callback function to irq controller.
  * @param desc - The IRQ controller descriptor.
  * @param irq_id - Interrupt identifier.
- * @param callback_desc - Descriptor of the callback. If it is NULL, the
+ * @param callback - Descriptor of the callback. If it is NULL, the
  * callback will be unregistered
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
 int32_t aducm3029_irq_register_callback(struct irq_ctrl_desc *desc,
 					uint32_t irq_id,
-					struct callback_desc *callback_desc)
+					void *callback)
 {
 	struct aducm_irq_ctrl_desc	*aducm_desc;
 	struct uart_desc		*uart_desc;
@@ -172,6 +172,7 @@ int32_t aducm3029_irq_register_callback(struct irq_ctrl_desc *desc,
 	struct gpio_desc		*gpio_desc;
 	uint16_t			gpio_pin;
 	uint8_t				gpio_port;
+	struct callback_desc *callback_desc = (struct callback_desc *)callback;
 
 	if (!desc || !desc->extra || !initialized ||  irq_id >= NB_INTERRUPTS)
 		return FAILURE;

@@ -238,14 +238,14 @@ int32_t xil_irq_disable(struct irq_ctrl_desc *desc, uint32_t irq_id)
  * @brief Register a callback to handle the irq events.
  * @param desc - The IRQ controller descriptor.
  * @param irq_id - Interrupt identifier.
- * @param callback_desc - Callback descriptor
+ * @param callback - Callback descriptor.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
 int32_t xil_irq_register_callback(struct irq_ctrl_desc *desc, uint32_t irq_id,
-				  struct callback_desc *callback_desc)
+				  void *callback)
 {
 	struct xil_irq_desc *xil_dev = desc->extra;
-
+	struct callback_desc *callback_desc = (struct callback_desc *)callback;
 	switch(xil_dev->type) {
 	case IRQ_PS:
 #ifdef XSCUGIC_H

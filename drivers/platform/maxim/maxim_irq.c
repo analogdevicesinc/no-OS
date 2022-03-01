@@ -101,11 +101,11 @@ int32_t max_irq_ctrl_remove(struct irq_ctrl_desc *desc)
  * @brief Not implemented.
  * @param desc - The IRQ controller descriptor.
  * @param irq_id - Interrupt identifier.
- * @param callback_desc - Descriptor of the callback.
+ * @param callback - Descriptor of the callback.
  * @return -ENOSYS
  */
 int32_t max_irq_register_callback(struct irq_ctrl_desc *desc, uint32_t irq_id,
-				  struct callback_desc *callback_desc)
+				  void *callback)
 {
 	return -ENOSYS;
 }
