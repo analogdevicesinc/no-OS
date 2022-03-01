@@ -142,7 +142,8 @@ struct irq_platform_ops {
 	int32_t (*register_callback)(struct irq_ctrl_desc *desc, uint32_t irq_id,
 				     void *callback);
 	/** Unregisters a generic IRQ handling function */
-	int32_t (*unregister)(struct irq_ctrl_desc *desc, uint32_t irq_id);
+	int32_t (*unregister_callback)(struct irq_ctrl_desc *desc, uint32_t irq_id,
+					 void *callback);
 	/** Global interrupt enable */
 	int32_t (*global_enable)(struct irq_ctrl_desc *desc);
 	/** Global interrupt disable */
@@ -174,7 +175,8 @@ int32_t irq_register_callback(struct irq_ctrl_desc *desc, uint32_t irq_id,
 			      void *callback_desc);
 
 /* Unregisters a generic IRQ handling function */
-int32_t irq_unregister(struct irq_ctrl_desc *desc, uint32_t irq_id);
+int32_t irq_unregister_callback(struct irq_ctrl_desc *desc, uint32_t irq_id,
+				  void *callback_desc);
 
 /* Global interrupt enable */
 int32_t irq_global_enable(struct irq_ctrl_desc *desc);
