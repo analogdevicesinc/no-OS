@@ -112,7 +112,7 @@ struct irq_ctrl_desc {
 };
 
 /**
- * @struct callback_desc
+ * @struct callback_desc TODO: move this to each [platform]_irq.h.
  * @brief Structure describing a callback to be registered
  */
 struct callback_desc {
@@ -140,7 +140,7 @@ struct irq_platform_ops {
 			const struct irq_init_param *param);
 	/** Register a callback to handle the irq events */
 	int32_t (*register_callback)(struct irq_ctrl_desc *desc, uint32_t irq_id,
-				     struct callback_desc *callback_desc);
+				     void *callback);
 	/** Unregisters a generic IRQ handling function */
 	int32_t (*unregister)(struct irq_ctrl_desc *desc, uint32_t irq_id);
 	/** Global interrupt enable */
@@ -171,7 +171,7 @@ int32_t irq_ctrl_remove(struct irq_ctrl_desc *desc);
 
 /* Register a callback to handle the irq events */
 int32_t irq_register_callback(struct irq_ctrl_desc *desc, uint32_t irq_id,
-			      struct callback_desc *callback_desc);
+			      void *callback_desc);
 
 /* Unregisters a generic IRQ handling function */
 int32_t irq_unregister(struct irq_ctrl_desc *desc, uint32_t irq_id);
