@@ -269,7 +269,7 @@ int32_t xil_gpio_irq_register_callback(struct irq_ctrl_desc *desc,
  * @param irq_id - Pin number.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t xil_gpio_irq_unregister(struct irq_ctrl_desc *desc, uint32_t irq_id)
+int32_t xil_gpio_irq_unregister_callback(struct irq_ctrl_desc *desc, uint32_t irq_id, void *callback)
 {
 	int32_t status;
 	struct xil_gpio_irq_desc *extra;
@@ -351,6 +351,6 @@ const struct irq_platform_ops xil_gpio_irq_ops = {
 	.disable = &xil_gpio_irq_disable,
 	.trigger_level_set = &xil_gpio_irq_trigger_level_set,
 	.register_callback = &xil_gpio_irq_register_callback,
-	.unregister = xil_gpio_irq_unregister,
+	.unregister_callback = xil_gpio_irq_unregister_callback,
 	.remove = &xil_gpio_irq_ctrl_remove
 };

@@ -973,7 +973,7 @@ int32_t at_init(struct at_desc **desc, const struct at_init_param *param)
 	return SUCCESS;
 
 free_irq:
-	irq_unregister(ldesc->irq_desc, ldesc->uart_irq_id);
+	irq_unregister_callback(ldesc->irq_desc, ldesc->uart_irq_id, &callback_desc);
 free_desc:
 	free(ldesc);
 	*desc = NULL;
@@ -992,7 +992,7 @@ int32_t at_remove(struct at_desc *desc)
 	if (!desc)
 		return FAILURE;
 
-	irq_unregister(desc->irq_desc, desc->uart_irq_id);
+	irq_unregister_calback(desc->irq_desc, desc->uart_irq_id, NULL);
 	free(desc);
 
 	return SUCCESS;
