@@ -92,9 +92,10 @@ int32_t irq_register_callback(struct irq_ctrl_desc *desc, uint32_t irq_id,
  * @param callback - Callback descriptor - platform specific type.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t irq_unregister(struct irq_ctrl_desc *desc, uint32_t irq_id)
+int32_t irq_unregister_callback(struct irq_ctrl_desc *desc, uint32_t irq_id,
+				void *callback)
 {
-	return desc->platform_ops->unregister(desc, irq_id);
+	return desc->platform_ops->unregister_callback(desc, irq_id, callback);
 }
 
 /**
