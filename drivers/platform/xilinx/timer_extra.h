@@ -1,5 +1,5 @@
 /***************************************************************************//**
-*   @file   timer.h
+*   @file   timer_extra.h
 *   @brief  Timer control module header.
 *   @author Andrei Drimbarean (andrei.drimbarean@analog.com)
 ********************************************************************************
