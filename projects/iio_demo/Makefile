@@ -3,6 +3,7 @@
 # PLATFORM = altera
 # PLATFORM = aducm3029
 # PLATFORM = stm32
+# PLATFORM = linux
 
 TINYIIOD=y
 
