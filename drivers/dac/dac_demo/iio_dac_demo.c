@@ -37,7 +37,75 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
+#include <inttypes.h>
+#include <stdlib.h>
+#include "no-os/error.h"
 #include "iio_dac_demo.h"
+
+/**
+ * @brief get attributes for dac.
+ * @param device- Physical instance of a iio_demo_device.
+ * @param buf - Where value is stored.
+ * @param len - Maximum length of value to be stored in buf.
+ * @param channel - Channel properties.
+ * @param attr_id - Attribute ID
+ * @return Length of chars written in buf, or negative value on failure.
+ */
+int get_dac_demo_attr(void *device, char *buf, uint32_t len,
+		      const struct iio_ch_info *channel, intptr_t attr_id)
+{
+	struct dac_demo_desc *desc;
+
+	if(!device)
+		return -ENODEV;
+
+	desc = device;
+
+	switch(attr_id) {
+	case DAC_GLOBAL_ATTR:
+		return snprintf(buf,len,"%"PRIu32"",desc->dac_global_attr);
+	case DAC_CHANNEL_ATTR:
+		return snprintf(buf,len,"%"PRIu32"",desc->dac_ch_attr[channel->ch_num]);
+	default:
+		return -EINVAL;
+	}
+
+	return -EINVAL;
+}
+
+/**
+ * @brief set attributes for dac.
+ * @param device - Physical instance of a iio_demo_device.
+ * @param buf - Value to be written to attribute.
+ * @param len -	Length of the data in "buf".
+ * @param channel - Channel properties.
+ * @param attr_id - Attribute ID
+ * @return: Number of bytes written to device, or negative value on failure.
+ */
+int set_dac_demo_attr(void *device, char *buf, uint32_t len,
+		      const struct iio_ch_info *channel, intptr_t attr_id)
+{
+	struct dac_demo_desc *desc;
+	uint32_t value = srt_to_uint32(buf);
+
+	if(!device)
+		return -ENODEV;
+
+	desc = device;
+
+	switch(attr_id) {
+	case DAC_GLOBAL_ATTR:
+		desc->dac_global_attr = value;
+		return len;
+	case DAC_CHANNEL_ATTR:
+		desc->dac_ch_attr[channel->ch_num] = value;
+		return len;
+	default:
+		return -EINVAL;
+	}
+
+	return -EINVAL;
+}
 
 #define DAC_DEMO_ATTR(_name, _priv) {\
 	.name = _name,\
