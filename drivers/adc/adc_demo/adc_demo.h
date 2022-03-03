@@ -71,9 +71,9 @@ struct adc_demo_desc {
 	/** Active channel**/
 	uint32_t active_ch;
 	/** Number of samples in each buffer */
-	uint32_t loopback_buffer_len;
+	uint32_t ext_buff_len;
 	/** Array of buffers for each channel*/
-	uint16_t **loopback_buffers;
+	uint16_t **ext_buff;
 };
 
 /**
@@ -86,9 +86,9 @@ struct adc_demo_init_param {
 	/** Demo dac channel attribute */
 	uint32_t dev_ch_attr[MAX_ADC_ADDR];
 	/** Number of samples in each buffer */
-	uint32_t loopback_buffer_len;
+	uint32_t ext_buff_len;
 	/**Array of buffers for each channel*/
-	uint16_t **loopback_buffers;
+	uint16_t **ext_buff;
 };
 
 enum iio_adc_demo_attributes {
