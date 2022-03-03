@@ -48,7 +48,7 @@
 #include "no-os/error.h"
 #include "no-os/util.h"
 
-/* Default sine values if the user wants to use only ADC*/
+/* default sine lookup table to be used if ext_buff is not available */
 const uint16_t sine_lut[128] = {
 	0x000, 0x064, 0x0C8, 0x12C, 0x18F, 0x1F1, 0x252, 0x2B1,
 	0x30F, 0x36B, 0x3C5, 0x41C, 0x471, 0x4C3, 0x512, 0x55F,
@@ -72,12 +72,12 @@ const uint16_t sine_lut[128] = {
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
 
-/***************************************************************************//**
+/**
  * @brief init function for the adc demo driver
  * @param desc - descriptor for the adc
  * @param param - initialization param for adc
  * @return SUCCESS in case of success, negative error code otherwise.
-*******************************************************************************/
+ */
 int32_t adc_demo_init(struct adc_demo_desc **desc,
 		      struct adc_demo_init_param *param)
 {
@@ -97,11 +97,11 @@ int32_t adc_demo_init(struct adc_demo_desc **desc,
 	return SUCCESS;
 }
 
-/***************************************************************************//**
+/**
  * @brief free allocated resources
  * @param desc - descriptor for the adc
  * @return SUCCESS in case of success, FAILURE otherwise.
-*******************************************************************************/
+ */
 int32_t adc_demo_remove(struct adc_demo_desc *desc)
 {
 	if(!desc)
@@ -112,6 +112,12 @@ int32_t adc_demo_remove(struct adc_demo_desc *desc)
 	return SUCCESS;
 }
 
+/**
+ * @brief active adc channels
+ * @param dev - descriptor for the adc
+ * @param mask - active channels mask
+ * @return SUCCESS in case of success, FAILURE otherwise.
+ */
 int32_t update_adc_channels(void *dev, uint32_t mask)
 {
 	struct adc_demo_desc *desc;
@@ -127,11 +133,11 @@ int32_t update_adc_channels(void *dev, uint32_t mask)
 	return SUCCESS;
 }
 
-/*
-* @brief close all channels
-* @param dev - physical instance of an adc device
-* @return SUCCESS in case of success.
-******************************************************************************/
+/**
+ * @brief close all channels
+ * @param dev - physical instance of an adc device
+ * @return SUCCESS in case of success.
+ */
 int32_t close_adc_channels(void* dev)
 {
 	struct adc_demo_desc *desc;
@@ -146,13 +152,13 @@ int32_t close_adc_channels(void* dev)
 	return SUCCESS;
 }
 
-/***************************************************************************//**
+/**
  * @brief utility function for computing next upcoming channel
  * @param ch_mask - active channels .
  * @param last_idx -  previous index.
  * @param new_idx - upcoming channel index, return param.
  * @return 1 if there are more channels, 0 if done.
-*******************************************************************************/
+ */
 static bool get_next_ch_idx(uint32_t ch_mask, uint32_t last_idx,
 			    uint32_t *new_idx)
 {
@@ -171,13 +177,13 @@ static bool get_next_ch_idx(uint32_t ch_mask, uint32_t last_idx,
 	return 1;
 }
 
-/***************************************************************************//**
+/**
  * @brief function for reading samples
  * @param dev - physical instance of adc device
  * @param buff - buffer for reading samples
  * @param samples - number of samples to receive
  * @return the number of samples.
-*******************************************************************************/
+ */
 int32_t adc_read_samples(void* dev, uint16_t* buff, uint32_t samples)
 {
 	struct adc_demo_desc *desc;
@@ -190,7 +196,7 @@ int32_t adc_read_samples(void* dev, uint16_t* buff, uint32_t samples)
 	desc = dev;
 
 	if(desc->ext_buff == NULL) {
-		//default sin function
+		//default sine lookup table
 		int offset_per_ch = ARRAY_SIZE(sine_lut) / TOTAL_ADC_CHANNELS;
 		for(int i = 0; i < samples; i++) {
 			while(get_next_ch_idx(desc->active_ch, ch, &ch))
@@ -208,13 +214,13 @@ int32_t adc_read_samples(void* dev, uint16_t* buff, uint32_t samples)
 	return samples;
 }
 
-/***************************************************************************//**
+/**
  * @brief read function for the adc demo driver
  * @param desc - descriptor for the adc
  * @param reg_index - the address at which we want to read
  * @param readval- the value read from register
  * @return SUCCESS in case of success, negative error code otherwise.
-*******************************************************************************/
+ */
 int32_t adc_demo_reg_read(struct adc_demo_desc *desc, uint8_t reg_index,
 			  uint8_t *readval)
 {
@@ -226,13 +232,13 @@ int32_t adc_demo_reg_read(struct adc_demo_desc *desc, uint8_t reg_index,
 	return SUCCESS;
 }
 
-/***************************************************************************//**
+/**
  * @brief write function for the adc demo driver
  * @param desc - descriptor for the adc
  * @param reg_index - the address at which we want to write
  * @param writeval - the value to be written
  * @return SUCCESS in case of success, negative error code otherwise.
-*******************************************************************************/
+ */
 int32_t adc_demo_reg_write(struct adc_demo_desc *desc, uint8_t reg_index,
 			   uint8_t writeval)
 {
