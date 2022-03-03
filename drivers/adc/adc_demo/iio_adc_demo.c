@@ -40,6 +40,7 @@
 #include <inttypes.h>
 #include <stdlib.h>
 #include "no-os/error.h"
+#include "no-os/util.h"
 #include "iio_adc_demo.h"
 
 /**
