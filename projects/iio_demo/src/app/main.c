@@ -100,8 +100,7 @@ int32_t platform_init()
 		return FAILURE;
 	adi_initComponents();
 #elif defined(STM32_PLATFORM)
-	HAL_Init();
-	SystemClock_Config();
+	stm32_init();
 #endif
 	return 0;
 }
