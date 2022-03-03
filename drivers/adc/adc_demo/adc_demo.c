@@ -87,8 +87,8 @@ int32_t adc_demo_init(struct adc_demo_desc **desc,
 	if(!adesc)
 		return -ENOMEM;
 
-	adesc->loopback_buffers = param->loopback_buffers;
-	adesc->loopback_buffer_len = param->loopback_buffer_len;
+	adesc->ext_buff = param->ext_buff;
+	adesc->ext_buff_len = param->ext_buff_len;
 	for(int i = 0; i < TOTAL_ADC_CHANNELS; i++)
 		adesc->adc_ch_attr[i] = param->dev_ch_attr[i];
 	adesc->adc_global_attr = param->dev_global_attr;
@@ -189,7 +189,7 @@ int32_t adc_read_samples(void* dev, uint16_t* buff, uint32_t samples)
 
 	desc = dev;
 
-	if(desc->loopback_buffers == NULL) {
+	if(desc->ext_buff == NULL) {
 		//default sin function
 		int offset_per_ch = ARRAY_SIZE(sine_lut) / TOTAL_ADC_CHANNELS;
 		for(int i = 0; i < samples; i++) {
@@ -202,8 +202,8 @@ int32_t adc_read_samples(void* dev, uint16_t* buff, uint32_t samples)
 
 	for(int i = 0; i < samples; i++) {
 		while(get_next_ch_idx(desc->active_ch, ch, &ch))
-			buff[k++] = ((uint16_t (*)[desc->loopback_buffer_len])(desc->loopback_buffers))[ch]
-				    [i % desc->loopback_buffer_len];
+			buff[k++] = ((uint16_t (*)[desc->ext_buff_len])(desc->ext_buff))[ch]
+				    [i % desc->ext_buff_len];
 	}
 	return samples;
 }
