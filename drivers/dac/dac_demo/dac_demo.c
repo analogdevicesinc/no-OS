@@ -172,7 +172,7 @@ int32_t dac_write_samples(void* dev, uint16_t* buff, uint32_t samples)
 	if (!desc->loopback_buffers)
 		return -EINVAL;
 
-	for(int i = 0; i < samples; i++)
+	for(uint32_t i = 0; i < samples; i++)
 		while (get_next_ch_idx(desc->active_ch, ch, &ch))
 			desc->loopback_buffers[ch]
 			[i % desc->loopback_buffer_len] = buff[k++];
