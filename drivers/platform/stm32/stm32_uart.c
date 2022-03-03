@@ -53,7 +53,6 @@ int32_t uart_init(struct uart_desc **desc, struct uart_init_param *param)
 	struct stm32_uart_init_param *suip;
 	struct stm32_uart_desc *sud;
 	struct uart_desc *descriptor;
-	USART_TypeDef *base = NULL;
 	int ret;
 
 	if (!desc || !param)
@@ -72,76 +71,14 @@ int32_t uart_init(struct uart_desc **desc, struct uart_init_param *param)
 	descriptor->extra = sud;
 	suip = param->extra;
 
-	switch (param->device_id) {
-	case 1:
-#if defined(USART1)
-		base = USART1;
-#elif defined(UART1)
-		base = UART1;
-#endif
-		break;
-	case 2:
-#if defined(USART2)
-		base = USART2;
-#elif defined(UART2)
-		base = UART2;
-#endif
-		break;
-	case 3:
-#if defined(USART3)
-		base = USART3;
-#elif defined(UART3)
-		base = UART3;
-#endif
-		break;
-	case 4:
-#if defined(USART4)
-		base = USART4;
-#elif defined(UART4)
-		base = UART4;
-#endif
-		break;
-	case 5:
-#if defined(USART5)
-		base = USART5;
-#elif defined(UART5)
-		base = UART5;
-#endif
-		break;
-	case 6:
-#if defined(USART6)
-		base = USART6;
-#elif defined(UART6)
-		base = UART6;
-#endif
-		break;
-	case 7:
-#if defined(USART7)
-		base = USART7;
-#elif defined(UART7)
-		base = UART7;
-#endif
-		break;
-	case 8:
-#if defined(USART8)
-		base = USART8;
-#elif defined(UART8)
-		base = UART8;
-#endif
-		break;
-	default:
-		ret = -EINVAL;
-		goto error;
-	};
-
-	sud->huart.Instance = base;
-	sud->huart.Init.BaudRate = param->baud_rate;
+	sud->huart = suip->huart;
+	sud->huart->Init.BaudRate = param->baud_rate;
 	switch (param->size) {
 	case UART_CS_8:
-		sud->huart.Init.WordLength = UART_WORDLENGTH_8B;
+		sud->huart->Init.WordLength = UART_WORDLENGTH_8B;
 		break;
 	case UART_CS_9:
-		sud->huart.Init.WordLength = UART_WORDLENGTH_9B;
+		sud->huart->Init.WordLength = UART_WORDLENGTH_9B;
 		break;
 	default:
 		ret = -EINVAL;
@@ -149,24 +86,21 @@ int32_t uart_init(struct uart_desc **desc, struct uart_init_param *param)
 	};
 	switch (param->parity) {
 	case UART_PAR_NO:
-		sud->huart.Init.Parity = UART_PARITY_NONE;
+		sud->huart->Init.Parity = UART_PARITY_NONE;
 		break;
 	case UART_PAR_ODD:
-		sud->huart.Init.Parity = UART_PARITY_ODD;
+		sud->huart->Init.Parity = UART_PARITY_ODD;
 		break;
 	case UART_PAR_EVEN:
-		sud->huart.Init.Parity = UART_PARITY_EVEN;
+		sud->huart->Init.Parity = UART_PARITY_EVEN;
 		break;
 	default:
 		ret = -EINVAL;
 		goto error;
 	};
-	sud->huart.Init.StopBits = param->stop == UART_STOP_1_BIT ? UART_STOPBITS_1 :
-				   UART_STOPBITS_2;
-	sud->huart.Init.Mode = suip->mode;
-	sud->huart.Init.HwFlowCtl = suip->hw_flow_ctl;
-	sud->huart.Init.OverSampling = suip->over_sampling;
-	ret = HAL_UART_Init(&sud->huart);
+	sud->huart->Init.StopBits = param->stop == UART_STOP_1_BIT ? UART_STOPBITS_1 :
+				    UART_STOPBITS_2;
+	ret = HAL_UART_Init(sud->huart);
 	if (ret != HAL_OK) {
 		ret = -EIO;
 		goto error;
@@ -197,7 +131,7 @@ int32_t uart_remove(struct uart_desc *desc)
 		return -EINVAL;
 
 	sud = desc->extra;
-	HAL_UART_DeInit(&sud->huart);
+	HAL_UART_DeInit(sud->huart);
 	free(desc->extra);
 	free(desc);
 
@@ -224,7 +158,7 @@ int32_t uart_write(struct uart_desc *desc, const uint8_t *data,
 		return 0;
 
 	sud = desc->extra;
-	ret = HAL_UART_Transmit(&sud->huart, (uint8_t *)data, bytes_number,
+	ret = HAL_UART_Transmit(sud->huart, (uint8_t *)data, bytes_number,
 				sud->timeout);
 
 	switch (ret) {
@@ -262,7 +196,7 @@ int32_t uart_read(struct uart_desc *desc, uint8_t *data,
 
 	sud = desc->extra;
 
-	ret = HAL_UART_Receive(&sud->huart, (uint8_t *)data, bytes_number,
+	ret = HAL_UART_Receive(sud->huart, (uint8_t *)data, bytes_number,
 			       sud->timeout);
 
 	switch (ret) {

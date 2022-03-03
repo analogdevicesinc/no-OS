@@ -231,9 +231,7 @@ static int32_t uart_setup(struct uart_desc **uart_desc,
 	};
 #elif defined(STM32_PLATFORM)
 	static struct stm32_uart_init_param platform_uart_init_par = {
-		.mode = UART_MODE_TX_RX,
-		.hw_flow_ctl = UART_HWCONTROL_NONE,
-		.over_sampling = UART_OVERSAMPLING_16,
+		.huart = IIO_APP_HUART,
 	};
 #endif
 	static struct uart_init_param luart_par = {

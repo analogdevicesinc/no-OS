@@ -49,12 +49,8 @@
  * @brief Specific initialization parameters for stm32 UART.
  */
 struct stm32_uart_init_param {
-	/** Specifies the Receive or Transmit mode. */
-	uint32_t mode;
-	/** Specifies the hardware flow control mode. */
-	uint32_t hw_flow_ctl;
-	/** Specifies oversampling mode. */
-	uint32_t over_sampling;
+	/** UART instance */
+	UART_HandleTypeDef *huart;
 	/** UART transaction timeout (HAL_IncTick() units) */
 	uint32_t timeout;
 };
@@ -64,8 +60,8 @@ struct stm32_uart_init_param {
  * @brief stm32 platform specific UART descriptor
  */
 struct stm32_uart_desc {
-	/** SPI instance */
-	UART_HandleTypeDef huart;
+	/** UART instance */
+	UART_HandleTypeDef *huart;
 	/** UART transaction timeout (HAL_IncTick() units) */
 	uint32_t timeout;
 };
