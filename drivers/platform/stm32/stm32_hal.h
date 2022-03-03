@@ -2,6 +2,6 @@
 #define _STM32_HAL_H
 
 #include "main.h"
-extern void SystemClock_Config(void);
+int stm32_init(void);
 
 #endif
