@@ -17,12 +17,14 @@ INCS +=	$(INCLUDE)/no-os/uart.h \
 SRCS += $(DRIVERS)/api/spi.c \
 	$(DRIVERS)/api/gpio.c \
 	$(DRIVERS)/api/i2c.c \
+	$(DRIVERS)/api/irq.c \
 	$(DRIVERS)/afe/ad5940/ad5940.c
 
 INCS += $(DRIVERS)/afe/ad5940/ad5940.h
 
 SRCS += $(PLATFORM_DRIVERS)/stm32_delay.c \
 	$(PLATFORM_DRIVERS)/stm32_gpio.c \
+	$(PLATFORM_DRIVERS)/stm32_irq.c \
 	$(PLATFORM_DRIVERS)/stm32_spi.c \
 	$(PLATFORM_DRIVERS)/stm32_i2c.c \
 	$(PLATFORM_DRIVERS)/stm32_uart.c \
@@ -34,6 +36,7 @@ INCS +=	$(INCLUDE)/no-os/delay.h \
 	$(PLATFORM_DRIVERS)/stm32_spi.h \
 	$(PLATFORM_DRIVERS)/stm32_i2c.h \
 	$(PLATFORM_DRIVERS)/stm32_gpio.h \
+	$(PLATFORM_DRIVERS)/stm32_irq.h \
 	$(PLATFORM_DRIVERS)/stm32_hal.h
 
 ifeq (y,$(strip $(TINYIIOD)))

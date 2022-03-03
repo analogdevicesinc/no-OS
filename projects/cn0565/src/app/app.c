@@ -16,8 +16,10 @@
 #include "no-os/delay.h"
 #include "no-os/uart.h"
 #include "no-os/spi.h"
+#include "no-os/irq.h"
 #include "no-os/gpio.h"
 #include "stm32_spi.h"
+#include "stm32_irq.h"
 #include "stm32_gpio.h"
 #include "bia_measurement.h"
 #include "mux_board.h"
@@ -36,6 +38,11 @@ unsigned int runningCmd = 0;
 
 volatile uint32_t ucInterrupted = 0; /* Flag to indicate interrupt occurred */
 extern volatile unsigned char szInSring[32];
+
+void ad5940_int_callback(void)
+{
+	ucInterrupted = 1;
+}
 
 /* Since the reset pin is mapped to GPIO of AD5940, Access it through
  * AD5940 GPIO Register. */
@@ -348,6 +355,44 @@ int app_main(struct i2c_desc *i2c, struct ad5940_init_param *ad5940_ip)
 	struct ad5940_dev *ad5940;
 	ret = ad5940_init(&ad5940, ad5940_ip);
 	if (ret)
+		return ret;
+
+	/* Interrupt configuration */
+	EXTI_ConfigTypeDef ad5940_int_exticonfig = {
+		.Line = EXTI_LINE_7,
+		.Trigger = EXTI_TRIGGER_FALLING,
+		.GPIOSel = EXTI_GPIOG,
+		.Mode = EXTI_MODE_INTERRUPT,
+	};
+	EXTI_HandleTypeDef ad5940_int_hexti;
+	ret = HAL_EXTI_SetConfigLine(&ad5940_int_hexti, &ad5940_int_exticonfig);
+	if (ret != HAL_OK)
+		return ret;
+
+	struct stm32_callback ad5940_int_cb = {
+			.callback = ad5940_int_callback,
+			.event = HAL_EXTI_COMMON_CB_ID,
+	};
+	struct irq_init_param ad5940_int_ip = {
+		.source = NO_OS_GPIO_IRQ,
+		.platform_ops = &stm32_irq_ops,
+		.extra = &ad5940_int_hexti,
+	};
+	struct irq_ctrl_desc *ad5940_int;
+	ret = irq_ctrl_init(&ad5940_int, &ad5940_int_ip);
+	if (ret < 0)
+		return ret;
+
+	ret = irq_register_callback(ad5940_int, AD5940_INT_EXTI_IRQn, &ad5940_int_cb);
+	if (ret < 0)
+		return ret;
+
+	ret = irq_trigger_level_set(ad5940_int, AD5940_INT_EXTI_IRQn, IRQ_EDGE_FALLING);
+	if (ret < 0)
+		return ret;
+
+	ret = irq_enable(ad5940_int, AD5940_INT_EXTI_IRQn);
+	if (ret < 0)
 		return ret;
 
 	AD5940BiaStructInit(); /* Configure your parameters in this function */
