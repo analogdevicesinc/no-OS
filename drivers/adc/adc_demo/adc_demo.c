@@ -88,6 +88,7 @@ int32_t adc_demo_init(struct adc_demo_desc **desc,
 		return -ENOMEM;
 
 	adesc->loopback_buffers = param->loopback_buffers;
+	adesc->loopback_buffer_len = param->loopback_buffer_len;
 	for(int i = 0; i < TOTAL_ADC_CHANNELS; i++)
 		adesc->adc_ch_attr[i] = param->dev_ch_attr[i];
 	adesc->adc_global_attr = param->dev_global_attr;
