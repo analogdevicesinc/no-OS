@@ -48,10 +48,10 @@
 #include "parameters.h"
 #include "no-os/uart.h"
 #include "no-os/delay.h"
-#include "no-os/error.h"
 
 #if defined(ADUCM_PLATFORM) || defined(XILINX_PLATFORM)
 #include "no-os/irq.h"
+#include "no-os/error.h"
 #include "irq_extra.h"
 #include "uart_extra.h"
 #endif
@@ -70,6 +70,7 @@
 #ifdef LINUX_PLATFORM
 #include "linux_socket.h"
 #include "tcp_socket.h"
+#include "no-os/error.h"
 #endif
 
 // The default baudrate iio_app will use to print messages to console.
