@@ -51,6 +51,10 @@
 #include "irq_extra.h"
 #endif
 
+#ifdef STM32_PLATFORM
+#include "stm32_hal.h"
+#endif
+
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
@@ -103,6 +107,8 @@
 #ifdef STM32_PLATFORM
 
 #define UART_DEVICE_ID	5
+extern UART_HandleTypeDef huart5;
+#define IIO_APP_HUART	(&huart5)
 #define UART_BAUDRATE	115200
 
 #endif // STM32_PLATFORM
