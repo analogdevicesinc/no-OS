@@ -167,7 +167,7 @@ int ad717x_connect_analog_input(ad717x_dev *device, uint8_t channel_id,
 					       analog_input.ainp.pos_analog_input);
 
 		/* Select the Negative Analog Input */
-		channel_reg->value &= AD717X_CHMAP_REG_AINNEG_MSK;
+		channel_reg->value &= ~AD717X_CHMAP_REG_AINNEG_MSK;
 		channel_reg->value |= AD717X_CHMAP_REG_AINNEG(
 					      analog_input.ainp.neg_analog_input);
 		if (AD717X_WriteRegister(device, AD717X_CHMAP0_REG + channel_id) < 0)
