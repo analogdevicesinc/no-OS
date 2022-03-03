@@ -45,15 +45,9 @@
 #include <stdio.h>
 #include "maxim_stdio.h"
 
-#include "mxc_config.h"
 #include "mxc_sys.h"
-#include "board.h"
 #include "no-os/uart.h"
 #include "uart.h"
-
-#define CONSOLE_UART	(1)
-#define MXC_UARTn   MXC_UART_GET_UART(CONSOLE_UART)
-#define UART_FIFO   MXC_UART_GET_FIFO(CONSOLE_UART)
 
 #include <unistd.h>
 #include <sys/stat.h>
@@ -62,72 +56,83 @@
 #define STDOUT_FILENO   1   /**> Definition of stdout */
 #define STDERR_FILENO   2   /**> Definition of stderr */
 
-static struct uart_desc *mdesc;
+static struct uart_desc *guart = NULL;
 
 void maxim_uart_stdio(struct uart_desc *desc)
 {
 	if (!desc)
 		return;
-	mdesc = desc;
+	guart = desc;
+
+	setvbuf(stdout, NULL, _IONBF, 0);
 }
 
-int _open(const char *name, int flags, int mode)
-{
-	return -1;
-}
 int _close(int file)
 {
+	if (file >= STDIN_FILENO && file <= STDERR_FILENO)
+		return 0;
+
+	errno = EBADF;
 	return -1;
 }
 int _isatty(int file)
 {
-	return -1;
+	if (file >= STDIN_FILENO && file <= STDERR_FILENO)
+		return 1;
+
+	errno = EBADF;
+	return 0;
 }
 int _lseek(int file, off_t offset, int whence)
 {
+	(void) file;
+	(void) offset;
+	(void) whence;
+
+	errno = EBADF;
 	return -1;
 }
 int _fstat(int file, struct stat *st)
 {
-	return -1;
+	if (file >= STDIN_FILENO && file <= STDERR_FILENO) {
+		st->st_mode = S_IFCHR;
+		return 0;
+	}
+
+	errno = EBADF;
+	return 0;
 }
 
 int _read(int file, char *ptr, int len)
 {
-	int ret = 0;
+	int ret;
 
-	switch (file) {
-	case STDIN_FILENO:
-		ret = uart_read(mdesc, (uint8_t *)ptr, len);
+	if (file == STDIN_FILENO) {
+		ret = uart_read(guart, (uint8_t *)ptr, len);
 		if (ret < 0) {
-			errno = ret;
+			errno = -ret;
 			return -1;
 		}
-		break;
-	default:
-		errno = EBADF;
-		return -1;
+
+		return ret;
 	}
-	return ret;
+	errno = EBADF;
+	return -1;
 }
 
 int _write(int file, char *ptr, int len)
 {
-	int32_t ret = 0;
-	switch (file) {
-	case STDOUT_FILENO:
-	case STDERR_FILENO:
-		ret = uart_write(mdesc, (const uint8_t *)ptr, len);
+	int ret;
+
+	if (file == STDOUT_FILENO || file == STDERR_FILENO) {
+		ret = uart_write(guart, (uint8_t *)ptr, len);
 		if (ret < 0) {
-			errno = ret;
+			errno = -ret;
 			return -1;
 		}
 
-		break;
-	default:
-		errno = EBADF;
-		return -1;
+		return ret;
 	}
-
-	return len;
+	errno = EBADF;
+	return -1;
 }

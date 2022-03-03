@@ -43,7 +43,6 @@
 #include "no-os/uart.h"
 
 void maxim_uart_stdio(struct uart_desc *);
-int _open(const char *, int, int);
 int _isatty(int);
 int _write(int, char *, int);
 int _close(int);
