@@ -39,12 +39,16 @@
 #ifndef __PARAMETERS_H__
 #define __PARAMETERS_H__
 
+#include "stm32_hal.h"
+
 #define SPI_DEVICE_ID	1
 #define SPI_CS			15
 #define SPI_CS_PORT		GPIOA
 #define UART_DEVICE_ID	5
 #ifdef IIO_SUPPORT
 #define UART_BAUDRATE	115200
+extern UART_HandleTypeDef huart5;
+#define IIO_APP_HUART	(&huart5)
 #else
 #define UART_BAUDRATE	230400
 #endif

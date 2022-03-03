@@ -1,14 +1,17 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "parameters.h"
 #include "no-os/uart.h"
 #include "no-os/gpio.h"
+#include "no-os/irq.h"
 #include "no-os/i2c.h"
 #include "no-os/spi.h"
 #include "no-os/delay.h"
 #include "no-os/util.h"
 #include "stm32_spi.h"
 #include "stm32_gpio.h"
+#include "stm32_irq.h"
 #include "app.h"
 #include "ad5940.h"
 
@@ -25,16 +28,29 @@
 struct spi_desc *spi;
 struct i2c_desc *i2c;
 struct uart_desc *uart;
+struct uart_desc *uart4;
+extern UART_HandleTypeDef huart4;
+extern UART_HandleTypeDef huart5;
+
+volatile int tx = 0;
+volatile int rx = 0;
+
+void uart_tx_callback(UART_HandleTypeDef *huart) {
+	tx++;
+}
+
+void uart_rx_callback(UART_HandleTypeDef *huart) {
+	rx++;
+}
 
 int main(void)
 {
 	int ret;
 
-	HAL_Init();
-	SystemClock_Config();
+	stm32_init();
 
-	struct stm32_uart_init_param xuip = {
-		.mode = UART_MODE_TX_RX,
+	struct stm32_uart_init_param xu5ip = {
+		.huart = &huart5,
 		.timeout = 10,
 	};
 	struct uart_init_param uip = {
@@ -43,7 +59,7 @@ int main(void)
 		.size = UART_CS_8,
 		.parity = UART_PAR_NO,
 		.stop = UART_STOP_1_BIT,
-		.extra = &xuip,
+		.extra = &xu5ip,
 	};
 
 	ret = uart_init(&uart, &uip);
@@ -53,6 +69,58 @@ int main(void)
 	stm32_uart_stdio(uart);
 	printf("Hello!\n");
 
+//#define UART_IRQ
+#ifdef UART_IRQ
+	struct stm32_callback uart_tx_cb = {
+			.callback.uart = uart_tx_callback,
+			.event = HAL_UART_TX_COMPLETE_CB_ID,
+			.source = STM32_UART_IRQ,
+	};
+	struct stm32_callback uart_rx_cb = {
+			.callback.uart = uart_rx_callback,
+			.event = HAL_UART_RX_COMPLETE_CB_ID,
+			.source = STM32_UART_IRQ,
+	};
+	UART_HandleTypeDef *huart = ((struct stm32_uart_desc *)uart->extra)->huart;
+	struct irq_init_param uart_int_ip = {
+		.platform_ops = &stm32_irq_ops,
+		.extra = huart,
+	};
+	struct irq_ctrl_desc *nvic;
+	ret = irq_ctrl_init(&nvic, &uart_int_ip);
+	if (ret < 0)
+		return ret;
+
+	ret = irq_register_callback(nvic, UART5_IRQn, &uart_tx_cb);
+	if (ret < 0)
+		return ret;
+
+	ret = irq_register_callback(nvic, UART5_IRQn, &uart_rx_cb);
+	if (ret < 0)
+		return ret;
+
+	ret = irq_enable(nvic, UART5_IRQn);
+	if (ret < 0)
+		return ret;
+
+	uint8_t c;
+	while(1) {
+		c = '?';
+
+		HAL_UART_Receive_IT(huart, &c, 1);
+
+		while(!rx)
+			;
+		rx = 0;
+
+		HAL_UART_Transmit_IT(huart, &c, 1);
+
+		while(!tx)
+			;
+		tx = 0;
+	}
+#endif
+// ------------------------------------------------------------------------------------------------
 	struct i2c_init_param i2cip = {
 		.device_id = I2C_DEVICE_ID,
 		.max_speed_hz = 100000,
@@ -93,7 +161,7 @@ int main(void)
 
 	struct stm32_gpio_init_param gp0_xgip = {
 		.port = GPIOG,
-		.mode = GPIO_MODE_INPUT,
+		.mode = GPIO_MODE_IT_FALLING,
 		.pull = GPIO_NOPULL,
 		.speed = GPIO_SPEED_FREQ_VERY_HIGH,
 	};
@@ -111,17 +179,6 @@ int main(void)
 	};
 
 #ifndef IIO_SUPPORT
-	/*Configure GPIO interrupt pin : AD5940_INT_Pin */
-	GPIO_InitTypeDef GPIO_InitStruct = {0};
-	GPIO_InitStruct.Pin = AD5940_INT_Pin;
-	GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	HAL_GPIO_Init(AD5940_INT_GPIO_Port, &GPIO_InitStruct);
-
-	/* EXTI interrupt init*/
-	HAL_NVIC_SetPriority(EXTI9_5_IRQn, 0, 0);
-	HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
-
 	ret = app_main(i2c, &ad5940_ip);
 	if (ret < 0)
 		goto error;
@@ -204,10 +261,4 @@ int main(void)
 error:
 	printf("Bye! (%d)\n", ret);
 	return ret;
-}
-
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
-{
-	if (GPIO_Pin == GPIO_PIN_7)
-		ucInterrupted = 1;
 }
