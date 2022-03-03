@@ -202,7 +202,7 @@ int32_t adc_read_samples(void* dev, uint16_t* buff, uint32_t samples)
 
 	for(int i = 0; i < samples; i++) {
 		while(get_next_ch_idx(desc->active_ch, ch, &ch))
-			buff[k++] = desc->loopback_buffers[ch]
+			buff[k++] = ((uint16_t (*)[desc->loopback_buffer_len])(desc->loopback_buffers))[ch]
 				    [i % desc->loopback_buffer_len];
 	}
 	return samples;
