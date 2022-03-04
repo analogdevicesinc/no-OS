@@ -42,6 +42,7 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 
+#include <sys/types.h>
 #include <inttypes.h>
 #include <string.h>
 #include <errno.h>
@@ -533,7 +534,7 @@ static int get_powerdown(void *device, char *buf, uint32_t len,
 	val = !!(ad9361_phy->cached_synth_pd[channel->ch_num ? 0 : 1] &
 		 RX_LO_POWER_DOWN);
 
-	return snprintf(buf, len, "%llu", val);
+	return snprintf(buf, len, "%"PRIu64, val);
 }
 
 /**
@@ -588,7 +589,7 @@ static int get_frequency(void *device, char *buf, uint32_t len,
 	val = ad9361_from_clk(clk_get_rate(ad9361_phy,
 					   ad9361_phy->ref_clk_scale[channel->ch_num ?
 									   TX_RFPLL : RX_RFPLL]));
-	return snprintf(buf, len, "%llu", (val));
+	return snprintf(buf, len, "%"PRIu64, val);
 }
 
 /**
