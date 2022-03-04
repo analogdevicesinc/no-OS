@@ -198,18 +198,7 @@ endif
 #------------------------------------------------------------------------------
 CFLAGS += $(NEW_CFLAGS)
 CFLAGS += -Wall								\
-	 -Wmissing-field-initializers					\
-	 -Wclobbered 							\
-	 -Wempty-body 							\
-	 -Wignored-qualifiers 						\
-	 -Wmissing-parameter-type					\
-	 -Wno-format  							\
-	 -Wold-style-declaration					\
-	 -Woverride-init 						\
-	 -Wsign-compare							\
-	 -Wtype-limits							\
-	 -Wuninitialized						\
-	 -Wunused-but-set-parameter					\
+	 -Wextra							\
 	 -Wno-unused-parameter						\
 	 -MMD 								\
 	 -MP								\
