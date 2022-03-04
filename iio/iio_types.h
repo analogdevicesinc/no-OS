@@ -73,7 +73,8 @@ enum iio_chan_type {
 	IIO_ALTVOLTAGE,
 	IIO_ANGL_VEL,
 	IIO_TEMP,
-	IIO_CAPACITANCE
+	IIO_CAPACITANCE,
+	IIO_ACCEL
 };
 
 /**
