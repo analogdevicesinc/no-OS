@@ -300,13 +300,14 @@ static struct iio_dev_priv *get_iio_device(struct iio_desc *desc,
 static int iio_read_all_attr(struct attr_fun_params *params,
 			     struct iio_attribute *attributes)
 {
+	/* TODO Not sure if working corectly */
+	return -EINVAL;
+
+#if 0
 	int16_t i = 0, j = 0;
 	char local_buf[256];
 	int attr_length;
 	uint32_t *pattr_length;
-
-	/* TODO Not sure if working corectly */
-	return -EINVAL;
 
 	while (attributes[i].name) {
 		attr_length = attributes[i].show(params->dev_instance,
@@ -337,6 +338,7 @@ static int iio_read_all_attr(struct attr_fun_params *params,
 		return -ENOENT;
 
 	return j;
+#endif
 }
 
 /**
@@ -351,11 +353,12 @@ static int iio_read_all_attr(struct attr_fun_params *params,
 static int iio_write_all_attr(struct attr_fun_params *params,
 			      struct iio_attribute *attributes)
 {
-	int16_t i = 0, j = 0;
-	int16_t attr_length;
-
 	/* TODO Not sure if working corectly */
 	return -EINVAL;
+
+#if 0
+	int16_t i = 0, j = 0;
+	int16_t attr_length;
 
 	while (attributes[i].name) {
 		attr_length = bswap_constant_32((uint32_t)(params->buf + j));
@@ -373,6 +376,7 @@ static int iio_write_all_attr(struct attr_fun_params *params,
 		return -ENOENT;
 
 	return params->len;
+#endif
 }
 
 /**
