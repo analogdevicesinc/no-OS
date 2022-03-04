@@ -356,3 +356,29 @@ uint32_t no_os_get_unaligned_le32(uint8_t *buf)
 	return buf[0] | ((uint16_t)buf[1] << 8) | ((uint32_t)buf[2] << 16)
 	       | ((uint32_t)buf[3] << 24);
 }
+
+int32_t no_os_sign_extend32(uint32_t value, int index)
+{
+	uint8_t shift = 31 - index;
+	return (int32_t)(value << shift) >> shift;
+}
+
+uint64_t no_os_mul_u32_u32(uint32_t a, uint32_t b)
+{
+	return (uint64_t)a * b;
+}
+
+uint64_t no_os_mul_u64_u32_shr(uint64_t a, uint32_t mul, unsigned int shift)
+{
+	uint32_t ah, al;
+	uint64_t ret;
+
+	al = a;
+	ah = a >> 32;
+
+	ret = no_os_mul_u32_u32(al, mul) >> shift;
+	if (ah)
+		ret += no_os_mul_u32_u32(ah, mul) << (32 - shift);
+
+	return ret;
+}
