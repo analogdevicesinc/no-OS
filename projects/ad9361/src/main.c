@@ -738,7 +738,7 @@ int main(void)
 	/**
 	 * iio application configurations.
 	 */
-	struct iio_init_param iio_init_par;
+	//struct iio_init_param iio_init_par;
 
 	/**
 	 * iio axi adc configurations.
