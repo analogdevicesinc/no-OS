@@ -82,7 +82,7 @@ static int get_voltage_calibscale(void *device, char *buf, uint32_t len,
 		i++;
 	}
 	ret = i + (int) snprintf(&buf[i], len, "%"PRIi32".%.6"PRIi32"", val,
-				 labs(val2));
+				 abs(val2));
 
 	return ret;
 }
@@ -109,7 +109,8 @@ static int get_voltage_calibphase(void *device, char *buf, uint32_t len,
 	if(val2 < 0 && val >= 0) {
 		i++;
 	}
-	return i + snprintf(&buf[i], len, "%"PRIi32".%.6"PRIi32"", val, labs(val2));
+
+	return i + snprintf(&buf[i], len, "%"PRIi32".%.6"PRIi32"", val, abs(val2));
 }
 
 /**
