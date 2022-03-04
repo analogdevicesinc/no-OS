@@ -595,7 +595,7 @@ static int32_t iio_axi_dac_create_device_descriptor(
 		iio_device->channels[i] = default_voltage_channel;
 		iio_device->channels[i].scan_index = i;
 		iio_device->channels[i].name = desc->ch_names[i];
-		ret = sprintf(iio_device->channels[i].name, "voltage%"PRIi32"", i);
+		ret = sprintf(desc->ch_names[i], "voltage%"PRIi32"", i);
 		if (ret < 0)
 			goto error;
 	}
@@ -611,7 +611,7 @@ static int32_t iio_axi_dac_create_device_descriptor(
 		if (altvoltage_ch % 4 == 0 || altvoltage_ch % 4 == 1)
 			ch = 'I';
 		j = ((altvoltage_ch % 4) % 2) + 1;
-		ret = sprintf(iio_device->channels[i].name, "TX%"PRIi32"_%c_F%"PRIi32"",
+		ret = sprintf(desc->ch_names[i], "TX%"PRIi32"_%c_F%"PRIi32"",
 			      altvoltage_ch / 4 + 1, ch, j);
 		if (ret < 0)
 			goto error;
