@@ -279,7 +279,7 @@ static int32_t irq_setup(struct irq_ctrl_desc **irq_desc)
 }
 #endif
 
-int32_t iio_app_run(struct iio_app_device *devices, int32_t len)
+int32_t iio_app_run(struct iio_app_device *devices, uint32_t len)
 {
 	int32_t			status;
 	struct iio_desc		*iio_desc;

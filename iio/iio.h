@@ -87,7 +87,7 @@ struct iio_init_param {
 #endif
 	};
 	struct iio_device_init *devs;
-	int32_t nb_devs;
+	uint32_t nb_devs;
 };
 
 /******************************************************************************/

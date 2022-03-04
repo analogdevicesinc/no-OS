@@ -1278,8 +1278,7 @@ static uint32_t iio_generate_device_xml(struct iio_device *device, char *name,
 static int32_t iio_init_xml(struct iio_desc *desc)
 {
 	struct iio_dev_priv *dev;
-	uint32_t size, of;
-	int32_t i;
+	uint32_t i, size, of;
 
 	/* -2 because of the 0 character */
 	size = sizeof(header) + sizeof(header_end) - 2;
@@ -1311,7 +1310,7 @@ static int32_t iio_init_xml(struct iio_desc *desc)
 }
 
 static int32_t iio_init_devs(struct iio_desc *desc,
-			     struct iio_device_init *devs, int32_t n)
+			     struct iio_device_init *devs, uint32_t n)
 {
 	uint32_t i;
 	int32_t ret;
