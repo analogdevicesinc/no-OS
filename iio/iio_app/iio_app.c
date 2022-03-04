@@ -155,7 +155,7 @@ static int32_t print_uart_error_message(struct uart_desc **uart_desc,
 				  (int)status);
 #if defined(LINUX_PLATFORM) || defined(USE_TCP_SOCKET)
 	(void)msglen;
-	printf(message);
+	printf("%s", message);
 	return 0;
 #else
 	return iio_print_uart_info_message(uart_desc, uart_init_par, message,
