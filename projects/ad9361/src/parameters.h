@@ -157,11 +157,8 @@
 
 #define MAX_SIZE_BASE_ADDR 0x1000
 
-static uint8_t in_buff[MAX_SIZE_BASE_ADDR];
-static uint8_t out_buff[MAX_SIZE_BASE_ADDR];
-
-#define DAC_DDR_BASEADDR	((uint32_t)out_buff)
-#define ADC_DDR_BASEADDR	((uint32_t)in_buff)
+#define DAC_DDR_BASEADDR	((uintptr_t)out_buff)
+#define ADC_DDR_BASEADDR	((uintptr_t)in_buff)
 
 #define GPIO_RESET_PIN	1006
 #endif

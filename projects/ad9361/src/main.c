@@ -79,6 +79,11 @@
 #include "xil_cache.h"
 #endif //XILINX
 
+#if defined LINUX_PLATFORM || defined GENERIC_PLATFORM
+static uint8_t in_buff[MAX_SIZE_BASE_ADDR];
+static uint8_t out_buff[MAX_SIZE_BASE_ADDR];
+#endif
+
 #endif // IIO_SUPPORT
 
 /******************************************************************************/
