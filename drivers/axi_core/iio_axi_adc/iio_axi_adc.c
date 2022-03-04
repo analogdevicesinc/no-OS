@@ -358,12 +358,12 @@ int32_t	iio_axi_adc_read_dev(void *dev, void *buff, uint32_t nb_samples)
 	bytes = nb_samples * hweight8(iio_adc->mask) * (STORAGE_BITS / 8);
 
 	iio_adc->dmac->flags = 0;
-	ret = axi_dmac_transfer(iio_adc->dmac, (uint32_t)buff, bytes);
+	ret = axi_dmac_transfer(iio_adc->dmac, (uintptr_t)buff, bytes);
 	if (ret < 0)
 		return ret;
 
 	if (iio_adc->dcache_invalidate_range)
-		iio_adc->dcache_invalidate_range((uint32_t)buff, bytes);
+		iio_adc->dcache_invalidate_range((uintptr_t)buff, bytes);
 
 	return SUCCESS;
 }
