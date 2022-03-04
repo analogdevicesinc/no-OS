@@ -949,8 +949,8 @@ static int iio_read_buffer(struct iiod_ctx *ctx, const char *device, char *buf,
  * @param bytes_count - Number of bytes to write.
  * @return Bytes_count or negative value in case of error.
  */
-static int iio_write_buffer(struct iiod_ctx *ctx, const char *device, char *buf,
-			    uint32_t bytes)
+static int iio_write_buffer(struct iiod_ctx *ctx, const char *device,
+			    const char *buf, uint32_t bytes)
 {
 	struct iio_dev_priv	*dev;
 	int32_t			ret;
