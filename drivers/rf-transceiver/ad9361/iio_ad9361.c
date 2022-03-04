@@ -145,7 +145,7 @@ static int get_hardwaregain(void *device, char *buf, uint32_t len,
 		}
 		ret = i + (int) snprintf(&buf[i], len,
 					 "%"PRIi32".%.6"PRIi32" dB", val1,
-					 labs(val2));
+					 abs(val2));
 
 		return ret;
 	} else {
