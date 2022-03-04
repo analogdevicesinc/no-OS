@@ -71,6 +71,6 @@ struct iio_app_device {
  * @param len - is the number of devices
  * @return 0 on success, negative value otherwise
  */
-int32_t iio_app_run(struct iio_app_device *devices, int32_t len);
+int32_t iio_app_run(struct iio_app_device *devices, uint32_t len);
 
 #endif
