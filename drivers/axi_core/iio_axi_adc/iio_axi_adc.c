@@ -80,7 +80,7 @@ static int get_calibphase(void *device, char *buf, uint32_t len,
 		i++;
 	}
 
-	return i + snprintf(&buf[i], len, "%"PRIi32".%.6"PRIi32"", val, labs(val2));
+	return i + snprintf(&buf[i], len, "%"PRIi32".%.6"PRIi32"", val, abs(val2));
 }
 
 /**
@@ -134,7 +134,7 @@ static int get_calibscale(void *device, char *buf, uint32_t len,
 		i++;
 	}
 	ret = i + snprintf(&buf[i], len, "%"PRIi32".%.6"PRIi32"", val,
-			   labs(val2));
+			   abs(val2));
 
 	return ret;
 }
