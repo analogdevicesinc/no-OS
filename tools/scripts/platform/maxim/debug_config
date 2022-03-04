@@ -1,0 +1,17 @@
+{
+                        "showDevDebugOutput": true,
+                        "name": "Maxim Debug",
+                        "type": "cortex-debug",
+                        "request": "launch",
+                        "program": "BINARY",
+                        "servertype": "openocd",
+                        "serverpath": "",
+                        "cwd": "",
+                        "device": "cmsis-dap",
+                        "armToolchainPath": "",
+                        "executable": "BINARY",
+                        "preLaunchTask": "Maxim Build",
+                        "configFiles": [],
+                        "runToEntryPoint": "main",
+                        "svdFile": ""
+}

@@ -1,0 +1,14 @@
+{
+	"tasks": [
+		{
+			"label": "Maxim Run",
+                        "type": "shell",
+                        "command": "make run -C PROJECT PLATFORM=maxim TARGET=YYYY"
+		},
+		{
+			"label": "Maxim Build",
+                        "type": "shell",
+                        "command": "make -C PROJECT PLATFORM=maxim TARGET=YYYY"
+		}
+	]
+}
