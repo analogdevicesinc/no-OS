@@ -215,6 +215,9 @@ struct iio_device_data {
  * @brief Structure holding channels and attributes of a device.
  */
 struct iio_device {
+	/** Structure for existing initialized irq controllers. Has to be
+	 * set to NULL if there isn't any irq controller initialized. */
+	struct irq_ctrl_desc *irq_desc;
 	/** Device number of channels */
 	uint16_t num_ch;
 	/** List of channels */
