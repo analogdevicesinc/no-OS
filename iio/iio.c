@@ -76,7 +76,7 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
-static uint8_t uart_buff[IIOD_CONN_BUFFER_SIZE];
+static char uart_buff[IIOD_CONN_BUFFER_SIZE];
 
 static char header[] =
 	"<?xml version=\"1.0\" encoding=\"utf-8\"?>"
