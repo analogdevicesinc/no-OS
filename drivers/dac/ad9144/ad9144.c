@@ -374,7 +374,7 @@ int32_t ad9144_set_nco(struct ad9144_dev *dev, int32_t f_carrier_khz,
 	uint64_t ftw;
 	int32_t ret;
 
-	if (phase > abs(180))
+	if (phase < -180 || phase >= 180)
 		return FAILURE;
 	if (f_carrier_khz < 0) {
 		f_carrier_khz *= -1;
