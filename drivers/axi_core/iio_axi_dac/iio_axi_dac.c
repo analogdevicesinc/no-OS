@@ -507,11 +507,11 @@ int32_t iio_axi_dac_write_data(void *dev, void *buff, uint32_t nb_samples)
 	bytes = nb_samples * hweight8(iio_dac->mask) * (STORAGE_BITS / 8);
 
 	if(iio_dac->dcache_flush_range)
-		iio_dac->dcache_flush_range((uint32_t)buff, bytes);
+		iio_dac->dcache_flush_range((uintptr_t)buff, bytes);
 
 	iio_dac->dmac->flags = DMA_CYCLIC;
 
-	return axi_dmac_transfer(iio_dac->dmac, (uint32_t)buff, bytes);
+	return axi_dmac_transfer(iio_dac->dmac, (uintptr_t)buff, bytes);
 }
 
 enum ch_type {
