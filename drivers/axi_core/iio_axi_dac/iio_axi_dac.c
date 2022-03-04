@@ -44,6 +44,7 @@
 /******************************************************************************/
 #include <string.h>
 #include <inttypes.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include "no-os/error.h"
 #include "iio.h"
