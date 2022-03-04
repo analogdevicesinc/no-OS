@@ -48,6 +48,9 @@ PLATFORM_INCS += $(sort $(foreach h,$(EXTRA_INCS), -I$(dir $h)))
 # Get the path of the .s script
 ASM_SRCS += $(call rwildcard, $(PROJECT_BUILD)/Startup,*.s)
 
+# Get the path of the interrupts file
+ITC = $(call rwildcard, $(PROJECT_BUILD)/Src,*_it.c)
+
 ifneq (,$(wildcard $(PROJECT_BUILD)))
 TARGET = $(shell sed -rn 's|^.*(STM32[A-Z][0-9][0-9][0-9]x+)"/>$$|\1|p' $(PROJECT_BUILDROOT)/.cproject | head -n 1)
 CFLAGS += -D$(TARGET)
@@ -74,9 +77,13 @@ $(PROJECT_TARGET):
 	@echo exit >> $(BINARY).cubemx
 	$(MUTE) java -jar $(STM32CUBEMX)/$(MX) -q $(BINARY).cubemx $(HIDE)
 	$(MUTE) $(call remove_file,$(BINARY).cubemx) $(HIDE)
+	$(MUTE) $(MAKE) --no-print-directory $(PROJECT_TARGET)_configure
+	$(MUTE) $(call set_one_time_rule,$@)
 
+$(PROJECT_TARGET)_configure:
 	$(call print,Configuring project)
 	$(MUTE) sed -i 's/ main(/ generated_main(/' $(PROJECT_BUILD)/Src/main.c $(HIDE)
+	$(MUTE) sed -i 's/HAL_GPIO_EXTI_IRQHandler/HAL_GPIO_EXTI_Callback/' $(ITC) $(HIDE)
 	$(MUTE) $(call copy_file, $(PROJECT_BUILD)/Src/main.c, $(PROJECT_BUILD)/Src/generated_main.c) $(HIDE)
 	$(MUTE) $(call remove_file, $(PROJECT_BUILD)/Src/main.c) $(HIDE)
 
@@ -87,8 +94,6 @@ $(PROJECT_TARGET):
 	$(MUTE) $(STM32CUBEIDE)/$(IDE) -nosplash -application org.eclipse.cdt.managedbuilder.core.headlessbuild \
 		-import $(PROJECT_BUILDROOT) -data $(BUILD_DIR) \
 		$(HIDE)
-
-	$(MUTE) $(call set_one_time_rule,$@)
 
 $(PLATFORM)_sdkopen:
 	$(STM32CUBEIDE)/$(IDE) -nosplash -import $(PROJECT_BUILDROOT) -data $(BUILD_DIR) &
