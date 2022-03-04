@@ -291,11 +291,21 @@ int32_t iio_app_run(struct iio_app_device *devices, int32_t len)
 	uint32_t		i;
 	struct iio_data_buffer *buff;
 
-
 #if defined(ADUCM_PLATFORM) || (defined(XILINX_PLATFORM) && !defined(PLATFORM_MB))
-	status = irq_setup((struct irq_ctrl_desc **)&irq_desc);
-	if (status < 0)
-		return status;
+	/* Only one irq controller can exist and be initialized in
+	 * any of the iio_devices. */
+	for (i = 0; i < len; i++) {
+		if (devices[i].dev_descriptor->irq_desc) {
+			irq_desc = (struct irq_ctrl_desc *)devices[i].dev_descriptor->irq_desc;
+			break;
+		}
+	}
+
+	if (!irq_desc) {
+		status = irq_setup((struct irq_ctrl_desc **)&irq_desc);
+		if (status < 0)
+			return status;
+	}
 #endif
 
 	status = uart_setup(&uart_desc, &uart_init_par, irq_desc);
