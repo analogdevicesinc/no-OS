@@ -253,7 +253,7 @@ static int32_t cb_operation(struct circular_buffer *desc,
 			    bool is_read)
 {
 	uint8_t		*buff;
-	uint32_t	available_size;
+	uint32_t	available_size = 0;
 	int32_t		ret;
 	uint32_t	i;
 	bool		sticky_overrun;
