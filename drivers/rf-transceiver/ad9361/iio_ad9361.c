@@ -1360,7 +1360,7 @@ static int get_rx_path_rates(void *device, char *buf, uint32_t len,
 			     const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
-	unsigned long clk[6];
+	uint32_t clk[6];
 	int ret = ad9361_get_trx_clock_chain(ad9361_phy, clk, NULL);
 
 	if (ret < 0)
@@ -1557,7 +1557,7 @@ static int get_tx_path_rates(void *device, char *buf, uint32_t len,
 			     const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
-	unsigned long clk[6];
+	uint32_t clk[6];
 	int ret = ad9361_get_trx_clock_chain(ad9361_phy, NULL, clk);
 
 	if (ret < 0)
