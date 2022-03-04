@@ -432,7 +432,7 @@ static int32_t iio_axi_adc_create_device_descriptor(
 		iio_device->channels[i] = default_channel;
 		iio_device->channels[i].name = desc->ch_names[i];
 		iio_device->channels[i].scan_index = i;
-		ret = sprintf(iio_device->channels[i].name, "voltage%"PRIi32"", i);
+		ret = sprintf(desc->ch_names[i], "voltage%"PRIi32"", i);
 		if (ret < 0)
 			goto error;
 	}
