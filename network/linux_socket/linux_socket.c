@@ -42,6 +42,7 @@
 /******************************************************************************/
 
 #ifdef LINUX_PLATFORM
+#define _GNU_SOURCE
 
 #include "linux_socket.h"
 
