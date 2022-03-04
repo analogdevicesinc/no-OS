@@ -1,4 +1,4 @@
-CC = gcc
+CC ?= gcc
 
 BINARY		= $(BUILD_DIR)/$(PROJECT_NAME).out
 
