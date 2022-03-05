@@ -44,6 +44,6 @@
 #include "iio_types.h"
 #include "dac_demo.h"
 
-extern struct iio_device const dac_demo_iio_descriptor;
+extern struct iio_device dac_demo_iio_descriptor;
 
 #endif /* IIO_DEMO_DAC */
