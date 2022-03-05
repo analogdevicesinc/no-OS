@@ -164,7 +164,7 @@ static struct iio_channel iio_dac_channels[] = {
 	IIO_DEMO_DAC_CHANNEL(15)
 };
 
-struct iio_device const dac_demo_iio_descriptor = {
+struct iio_device dac_demo_iio_descriptor = {
 	.num_ch = TOTAL_DAC_CHANNELS,
 	.channels = iio_dac_channels,
 	.attributes = dac_global_attributes,
