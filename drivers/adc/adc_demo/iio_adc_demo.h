@@ -44,6 +44,6 @@
 #include "iio_types.h"
 #include "adc_demo.h"
 
-extern struct iio_device const adc_demo_iio_descriptor;
+extern struct iio_device adc_demo_iio_descriptor;
 
 #endif /* IIO_DEMO_ADC */
