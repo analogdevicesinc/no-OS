@@ -141,7 +141,7 @@ int main(void)
 
 	adc_init_par = (struct adc_demo_init_param) {
 		.ext_buff_len = SAMPLES_PER_CHANNEL,
-		.ext_buff = loopback_buffs,
+		.ext_buff = (uint16_t **)loopback_buffs,
 		.dev_global_attr = 3333,
 		.dev_ch_attr = {1111,1112,1113,1114,1115,1116,1117,1118,1119,1120,1121,1122,1123,1124,1125,1126}
 	};
@@ -151,7 +151,7 @@ int main(void)
 
 	dac_init_par = (struct dac_demo_init_param) {
 		.loopback_buffer_len = SAMPLES_PER_CHANNEL,
-		.loopback_buffers = loopback_buffs,
+		.loopback_buffers = (uint16_t **)loopback_buffs,
 		.dev_global_attr = 4444,
 		.dev_ch_attr = {1111,1112,1113,1114,1115,1116,1117,1118,1119,1120,1121,1122,1123,1124,1125,1126}
 	};
