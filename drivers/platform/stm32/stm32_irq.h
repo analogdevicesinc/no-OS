@@ -49,6 +49,7 @@
 enum stm32_irq_source {
 	STM32_INVALID_IRQ,
 	STM32_EXTI_IRQ,
+	STM32_UART_IRQ,
 };
 
 /**
@@ -60,6 +61,7 @@ struct stm32_callback {
 	/** Callback function pointer. Used as the 3rd parameter of HAL_*_RegisterCallback(). */
 	union {
 		void (*exti)(void);
+		void (*uart)(UART_HandleTypeDef *);
 	} callback;
 	/** Specific event that triggers the callback. Used as the 2nd parameter of HAL_*_RegisterCallback(). */
 	uint32_t event;

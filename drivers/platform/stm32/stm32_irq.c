@@ -160,6 +160,11 @@ int32_t stm32_irq_register_callback(struct irq_ctrl_desc *desc, uint32_t irq_id,
 		}
 		hexti[((EXTI_HandleTypeDef *)desc->extra)->Line & 0xff] = desc->extra;
 		break;
+	case STM32_UART_IRQ:
+		ret = HAL_UART_RegisterCallback(desc->extra, cb->event, cb->callback.uart);
+		if (ret != HAL_OK)
+			ret = -EFAULT;
+		break;
 	default:
 		ret = -EINVAL;
 		break;
@@ -184,6 +189,11 @@ int32_t stm32_irq_unregister_callback(struct irq_ctrl_desc *desc,
 	switch (cb->source) {
 	case STM32_EXTI_IRQ:
 		hexti[((EXTI_HandleTypeDef *)desc->extra)->Line & 0xff] = NULL;
+		break;
+	case STM32_UART_IRQ:
+		ret = HAL_UART_UnRegisterCallback(desc->extra, cb->event);
+		if (ret != HAL_OK)
+			ret = -EFAULT;
 		break;
 	default:
 		ret = -EINVAL;
