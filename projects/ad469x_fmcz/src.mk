@@ -11,7 +11,7 @@
 
 SRCS += $(PROJECT)/src/ad469x_fmcz.c
 SRCS += $(DRIVERS)/api/spi.c \
-	$(DRIVERS)/api/gpio.c \
+	$(DRIVERS)/api/no_os_gpio.c \
 	$(DRIVERS)/adc/ad469x/ad469x.c \
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.c \
 	$(DRIVERS)/axi_core/clk_axi_clkgen/clk_axi_clkgen.c \

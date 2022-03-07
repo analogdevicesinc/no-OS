@@ -78,8 +78,8 @@ static int32_t adpd1080pmod_32k_calib(struct adpd188_dev *adpd1080_dev)
 		.freq_hz = 1,
 		.extra = NULL
 	};
-	struct gpio_desc *sync_gpio;
-	struct gpio_init_param sync_gpio_init = {
+	struct no_os_gpio_desc *sync_gpio;
+	struct no_os_gpio_init_param sync_gpio_init = {
 		.number = 0x0D,
 		.extra = NULL,
 		.platform_ops = &aducm_gpio_ops
@@ -98,10 +98,10 @@ static int32_t adpd1080pmod_32k_calib(struct adpd188_dev *adpd1080_dev)
 	if(status != SUCCESS)
 		goto timer_finish;
 
-	status = gpio_get(&sync_gpio, &sync_gpio_init);
+	status = no_os_gpio_get(&sync_gpio, &sync_gpio_init);
 	if(status != SUCCESS)
 		goto timer_finish;
-	status = gpio_direction_input(sync_gpio);
+	status = no_os_gpio_direction_input(sync_gpio);
 	if(status != SUCCESS)
 		goto gpio_finish;
 
@@ -197,7 +197,7 @@ static int32_t adpd1080pmod_32k_calib(struct adpd188_dev *adpd1080_dev)
 finish:
 	irq_ctrl_remove(cal_irq);
 gpio_finish:
-	gpio_remove(sync_gpio);
+	no_os_gpio_remove(sync_gpio);
 timer_finish:
 	timer_remove(cal_timer);
 

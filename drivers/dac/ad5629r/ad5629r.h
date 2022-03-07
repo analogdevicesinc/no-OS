@@ -73,19 +73,19 @@
 
 /* AD5629R GPIO */
 /* LDAC - GPIO0 */
-#define AD5629R_LDAC_OUT            gpio_direction_output(dev->gpio_ldac, \
-			            GPIO_HIGH);
-#define AD5629R_LDAC_LOW            gpio_set_value(dev->gpio_ldac,        \
-			            GPIO_LOW)
-#define AD5629R_LDAC_HIGH           gpio_set_value(dev->gpio_ldac,        \
-			            GPIO_HIGH)
+#define AD5629R_LDAC_OUT            no_os_gpio_direction_output(dev->gpio_ldac, \
+			            NO_OS_GPIO_HIGH);
+#define AD5629R_LDAC_LOW            no_os_gpio_set_value(dev->gpio_ldac,        \
+			            NO_OS_GPIO_LOW)
+#define AD5629R_LDAC_HIGH           no_os_gpio_set_value(dev->gpio_ldac,        \
+			            NO_OS_GPIO_HIGH)
 /* CLR - GPIO1 */
-#define AD5629R_CLR_OUT             gpio_direction_output(dev->gpio_clr,  \
-			            GPIO_HIGH);
-#define AD5629R_CLR_LOW             gpio_set_value(dev->gpio_clr,         \
-			            GPIO_LOW)
-#define AD5629R_CLR_HIGH            gpio_set_value(dev->gpio_clr,         \
-			            GPIO_HIGH)
+#define AD5629R_CLR_OUT             no_os_gpio_direction_output(dev->gpio_clr,  \
+			            NO_OS_GPIO_HIGH);
+#define AD5629R_CLR_LOW             no_os_gpio_set_value(dev->gpio_clr,         \
+			            NO_OS_GPIO_LOW)
+#define AD5629R_CLR_HIGH            no_os_gpio_set_value(dev->gpio_clr,         \
+			            NO_OS_GPIO_HIGH)
 
 /* DAC Addresses */
 #define AD5629R_DAC_A_ADDR          0x0
@@ -152,8 +152,8 @@ struct ad5629r_dev {
 	/* SPI */
 	spi_desc		*spi_desc;
 	/* GPIO */
-	struct gpio_desc	*gpio_ldac;
-	struct gpio_desc	*gpio_clr;
+	struct no_os_gpio_desc	*gpio_ldac;
+	struct no_os_gpio_desc	*gpio_clr;
 	/* Device Settings */
 	enum ad5629r_type		act_device;
 };
@@ -164,8 +164,8 @@ struct ad5629r_init_param {
 	/* SPI */
 	spi_init_param	spi_init;
 	/* GPIO */
-	struct gpio_init_param	gpio_ldac;
-	struct gpio_init_param	gpio_clr;
+	struct no_os_gpio_init_param	gpio_ldac;
+	struct no_os_gpio_init_param	gpio_clr;
 	/* Device Settings */
 	enum ad5629r_type	act_device;
 };

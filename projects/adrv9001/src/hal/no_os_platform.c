@@ -71,9 +71,9 @@ int32_t no_os_hw_open(void *devHalCfg)
 {
 	int32_t ret;
 	struct adrv9002_hal_cfg *phal = (struct adrv9002_hal_cfg *)devHalCfg;
-	struct gpio_init_param gip_gpio_reset;
+	struct no_os_gpio_init_param gip_gpio_reset;
 #if defined(ADRV9002_RX2TX2)
-	struct gpio_init_param gip_gpio_ssi_sync;
+	struct no_os_gpio_init_param gip_gpio_ssi_sync;
 #endif
 	struct xil_gpio_init_param gip_extra = {
 #ifdef PLATFORM_MB
@@ -96,11 +96,11 @@ int32_t no_os_hw_open(void *devHalCfg)
 	gip_gpio_reset.number = GPIO_RESET;
 	gip_gpio_reset.extra = &gip_extra;
 	gip_gpio_reset.platform_ops = &xil_gpio_ops;
-	ret = gpio_get(&phal->gpio_reset_n, &gip_gpio_reset);
+	ret = no_os_gpio_get(&phal->gpio_reset_n, &gip_gpio_reset);
 	if (ret)
 		return ret;
 
-	ret = gpio_direction_output(phal->gpio_reset_n, GPIO_LOW);
+	ret = no_os_gpio_direction_output(phal->gpio_reset_n, NO_OS_GPIO_LOW);
 	if (ret)
 		return ret;
 
@@ -109,11 +109,11 @@ int32_t no_os_hw_open(void *devHalCfg)
 	gip_gpio_ssi_sync.number = GPIO_SSI_SYNC;
 	gip_gpio_ssi_sync.extra = &gip_extra;
 	gip_gpio_ssi_sync.platform_ops = &xil_gpio_ops;
-	ret = gpio_get(&phal->gpio_ssi_sync, &gip_gpio_ssi_sync);
+	ret = no_os_gpio_get(&phal->gpio_ssi_sync, &gip_gpio_ssi_sync);
 	if (ret < 0)
 		return ret;
 
-	ret = gpio_direction_output(phal->gpio_ssi_sync, GPIO_LOW);
+	ret = no_os_gpio_direction_output(phal->gpio_ssi_sync, NO_OS_GPIO_LOW);
 	if (ret)
 		return ret;
 #endif
@@ -129,7 +129,7 @@ int32_t no_os_hw_open(void *devHalCfg)
 	if (ret)
 		return ret;
 
-	ret = gpio_set_value(phal->gpio_reset_n, GPIO_HIGH);
+	ret = no_os_gpio_set_value(phal->gpio_reset_n, NO_OS_GPIO_HIGH);
 	if (ret)
 		return ret;
 
@@ -149,7 +149,7 @@ int32_t no_os_hw_close(void *devHalCfg)
 {
 	int32_t ret;
 	struct adrv9002_hal_cfg *phal = (struct adrv9002_hal_cfg *)devHalCfg;
-	ret = gpio_remove(phal->gpio_reset_n);
+	ret = no_os_gpio_remove(phal->gpio_reset_n);
 	if (ret)
 		return ret;
 
@@ -158,7 +158,7 @@ int32_t no_os_hw_close(void *devHalCfg)
 		return ret;
 
 #if defined(ADRV9002_RX2TX2)
-	ret = gpio_remove(phal->gpio_ssi_sync);
+	ret = no_os_gpio_remove(phal->gpio_ssi_sync);
 	if (ret)
 		return ret;
 #endif
@@ -186,7 +186,7 @@ int32_t no_os_hw_reset(void *devHalCfg, uint8_t pinLevel)
 	if (!devHalCfg)
 		return ADI_COMMON_ERR_NULL_PARAM;
 
-	gpio_set_value(phal->gpio_reset_n, pinLevel);
+	no_os_gpio_set_value(phal->gpio_reset_n, pinLevel);
 
 	return ADI_COMMON_ERR_OK;
 }

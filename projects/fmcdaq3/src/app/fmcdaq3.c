@@ -180,11 +180,11 @@ int main(void)
 #endif
 
 	/* Initialize GPIO structures */
-	struct gpio_init_param dac_txen_param = {
+	struct no_os_gpio_init_param dac_txen_param = {
 		.number = GPIO_DAC_TXEN,
 	};
 
-	struct gpio_init_param adc_pd_param = {
+	struct no_os_gpio_init_param adc_pd_param = {
 		.number = GPIO_ADC_PD
 	};
 
@@ -213,8 +213,8 @@ int main(void)
 	adc_pd_param.platform_ops = &altera_gpio_ops;
 #endif
 
-	gpio_desc *dac_txen;
-	gpio_desc *adc_pd;
+	no_os_gpio_desc *dac_txen;
+	no_os_gpio_desc *adc_pd;
 
 	struct ad9528_dev* ad9528_device;
 	struct ad9152_dev* ad9152_device;
@@ -441,11 +441,11 @@ int main(void)
 	ad9680_param.lane_rate_kbps = 12330000;
 
 	/* set GPIOs */
-	gpio_get(&dac_txen,  &dac_txen_param);
-	gpio_get(&adc_pd,    &adc_pd_param);
+	no_os_gpio_get(&dac_txen,  &dac_txen_param);
+	no_os_gpio_get(&adc_pd,    &adc_pd_param);
 
-	gpio_direction_output(dac_txen,  1);
-	gpio_direction_output(adc_pd,    0);
+	no_os_gpio_direction_output(dac_txen,  1);
+	no_os_gpio_direction_output(adc_pd,    0);
 
 	fmcdaq3_reconfig(&ad9152_param,
 			 &ad9152_xcvr_param,
@@ -684,8 +684,8 @@ int main(void)
 	ad9528_remove(ad9528_device);
 	ad9152_remove(ad9152_device);
 	ad9680_remove(ad9680_device);
-	gpio_remove(dac_txen);
-	gpio_remove(adc_pd);
+	no_os_gpio_remove(dac_txen);
+	no_os_gpio_remove(adc_pd);
 
 	return(0);
 }

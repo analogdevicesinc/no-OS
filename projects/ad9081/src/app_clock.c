@@ -182,19 +182,19 @@ int32_t app_clock_init(struct clk dev_refclk[MULTIDEVICE_INSTANCE_COUNT])
 #endif
 		.device_id = GPIO_DEVICE_ID
 	};
-	struct gpio_init_param gpio_adrf5020_ctrl = {
+	struct no_os_gpio_init_param gpio_adrf5020_ctrl = {
 		.number = ADRF5020_CTRL_GPIO,
 		.platform_ops = &xil_gpio_ops,
 		.extra = &xil_gpio_param
 	};
-	gpio_desc *adrf5020_ctrl;
+	no_os_gpio_desc *adrf5020_ctrl;
 	int32_t i;
 
-	ret = gpio_get(&adrf5020_ctrl, &gpio_adrf5020_ctrl);
+	ret = no_os_gpio_get(&adrf5020_ctrl, &gpio_adrf5020_ctrl);
 	if (ret)
 		return ret;
 
-	ret = gpio_set_value(adrf5020_ctrl, 1);
+	ret = no_os_gpio_set_value(adrf5020_ctrl, 1);
 	if (ret)
 		return ret;
 

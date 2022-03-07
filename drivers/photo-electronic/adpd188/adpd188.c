@@ -99,17 +99,17 @@ int32_t adpd188_init(struct adpd188_dev **device,
 	if(ret != SUCCESS)
 		goto error_phy;
 
-	ret = gpio_get(&dev->gpio0, &init_param->gpio0_init);
+	ret = no_os_gpio_get(&dev->gpio0, &init_param->gpio0_init);
 	if(ret != SUCCESS)
 		goto error_phy;
-	ret = gpio_get(&dev->gpio1, &init_param->gpio1_init);
+	ret = no_os_gpio_get(&dev->gpio1, &init_param->gpio1_init);
 	if(ret != SUCCESS)
 		goto error_gpio0;
 
-	ret = gpio_direction_input(dev->gpio0);
+	ret = no_os_gpio_direction_input(dev->gpio0);
 	if(ret != SUCCESS)
 		goto error_gpio1;
-	ret = gpio_direction_input(dev->gpio1);
+	ret = no_os_gpio_direction_input(dev->gpio1);
 	if(ret != SUCCESS)
 		goto error_gpio1;
 
@@ -118,9 +118,9 @@ int32_t adpd188_init(struct adpd188_dev **device,
 	return SUCCESS;
 
 error_gpio1:
-	gpio_remove(dev->gpio1);
+	no_os_gpio_remove(dev->gpio1);
 error_gpio0:
-	gpio_remove(dev->gpio0);
+	no_os_gpio_remove(dev->gpio0);
 error_phy:
 	if(dev->phy_opt == ADPD188_SPI)
 		spi_remove(dev->phy_desc);
@@ -150,10 +150,10 @@ int32_t adpd188_remove(struct adpd188_dev *dev)
 	if(ret != SUCCESS)
 		return FAILURE;
 
-	ret = gpio_remove(dev->gpio0);
+	ret = no_os_gpio_remove(dev->gpio0);
 	if(ret != SUCCESS)
 		return FAILURE;
-	ret = gpio_remove(dev->gpio1);
+	ret = no_os_gpio_remove(dev->gpio1);
 	if(ret != SUCCESS)
 		return FAILURE;
 

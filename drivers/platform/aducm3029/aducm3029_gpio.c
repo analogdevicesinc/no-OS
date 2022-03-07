@@ -66,13 +66,13 @@ static uint8_t nb_gpio = 0;
 /******************************************************************************/
 
 /**
- * @brief Obtain the GPIO descriptor from the number specified in param
+ * @brief Obtain the GPIO descriptor from the number specified in param.
  * @param desc - Pointer to a structure were the descriptor will be stored.
  * @param param - Parameter describing the GPIO to be initialized
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
  */
-int32_t aducm3029_gpio_get(struct gpio_desc **desc,
-			   const struct gpio_init_param *param)
+int32_t aducm3029_gpio_get(struct no_os_gpio_desc **desc,
+			   const struct no_os_gpio_init_param *param)
 {
 	if (!desc || !param)
 		return FAILURE;
@@ -103,23 +103,23 @@ int32_t aducm3029_gpio_get(struct gpio_desc **desc,
  * @param param - GPIO Initialization parameters.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t aducm3029_gpio_get_optional(struct gpio_desc **desc,
-				    const struct gpio_init_param *param)
+int32_t aducm3029_gpio_get_optional(struct no_os_gpio_desc **desc,
+				    const struct no_os_gpio_init_param *param)
 {
 	if(param == NULL) {
 		*desc = NULL;
 		return SUCCESS;
 	}
 
-	return gpio_get(desc, param);
+	return no_os_gpio_get(desc, param);
 }
 
 /**
- * @brief Free the resources allocated by gpio_get().
+ * @brief Free the resources allocated by no_os_gpio_get().
  * @param desc - The GPIO descriptor.
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
  */
-int32_t aducm3029_gpio_remove(struct gpio_desc *desc)
+int32_t aducm3029_gpio_remove(struct no_os_gpio_desc *desc)
 {
 	if (!desc || !nb_gpio)
 		return FAILURE;
@@ -139,7 +139,7 @@ int32_t aducm3029_gpio_remove(struct gpio_desc *desc)
  * @param desc - The GPIO descriptor.
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
  */
-int32_t aducm3029_gpio_direction_input(struct gpio_desc *desc)
+int32_t aducm3029_gpio_direction_input(struct no_os_gpio_desc *desc)
 {
 	if (!desc || !nb_gpio)
 		return FAILURE;
@@ -155,10 +155,11 @@ int32_t aducm3029_gpio_direction_input(struct gpio_desc *desc)
  * @brief Enable the output direction of the specified GPIO and set the GPIO to
  * the specified value
  * @param desc - The GPIO descriptor.
- * @param value - The value. \ref GPIO_HIGH or \ref GPIO_LOW
+ * @param value - The value. \ref NO_OS_GPIO_HIGH or \ref NO_OS_GPIO_LOW
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
  */
-int32_t aducm3029_gpio_direction_output(struct gpio_desc *desc, uint8_t value)
+int32_t aducm3029_gpio_direction_output(struct no_os_gpio_desc *desc,
+					uint8_t value)
 {
 	ADI_GPIO_RESULT ret;
 
@@ -186,10 +187,11 @@ int32_t aducm3029_gpio_direction_output(struct gpio_desc *desc, uint8_t value)
  * @brief Get the direction of the specified GPIO.
  * @param desc - The GPIO descriptor.
  * @param direction - Variable where to store the direction. Will be set to \ref
- * GPIO_OUT or \ref GPIO_IN
+ * NO_OS_GPIO_OUT or \ref NO_OS_GPIO_IN
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
  */
-int32_t aducm3029_gpio_get_direction(struct gpio_desc *desc, uint8_t *direction)
+int32_t aducm3029_gpio_get_direction(struct no_os_gpio_desc *desc,
+				     uint8_t *direction)
 {
 	uint16_t pins;
 
@@ -200,9 +202,9 @@ int32_t aducm3029_gpio_get_direction(struct gpio_desc *desc, uint8_t *direction)
 			&pins))
 		return FAILURE;
 	if (pins & PIN(desc->number))
-		*direction = GPIO_OUT;
+		*direction = NO_OS_GPIO_OUT;
 	else
-		*direction = GPIO_IN;
+		*direction = NO_OS_GPIO_IN;
 
 	return SUCCESS;
 }
@@ -210,12 +212,12 @@ int32_t aducm3029_gpio_get_direction(struct gpio_desc *desc, uint8_t *direction)
 /**
  * @brief Set the value of the specified GPIO.
  * @param desc - The GPIO descriptor.
- * @param value - The value: GPIO_HIGH, GPIO_LOW or GPIO_HIGH_Z
- *                Choosing GPIO_HIGH_Z will deactivate the input and output
+ * @param value - The value: NO_OS_GPIO_HIGH, NO_OS_GPIO_LOW or NO_OS_GPIO_HIGH_Z
+ *                Choosing NO_OS_GPIO_HIGH_Z will deactivate the input and output
  *                buffers.
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
  */
-int32_t aducm3029_gpio_set_value(struct gpio_desc *desc, uint8_t value)
+int32_t aducm3029_gpio_set_value(struct no_os_gpio_desc *desc, uint8_t value)
 {
 	ADI_GPIO_RESULT ret;
 
@@ -223,13 +225,13 @@ int32_t aducm3029_gpio_set_value(struct gpio_desc *desc, uint8_t value)
 		return FAILURE;
 
 	switch (value) {
-	case GPIO_LOW:
+	case NO_OS_GPIO_LOW:
 		ret = adi_gpio_SetLow(PORT(desc->number), PIN(desc->number));
 		break;
-	case GPIO_HIGH:
+	case NO_OS_GPIO_HIGH:
 		ret = adi_gpio_SetHigh(PORT(desc->number), PIN(desc->number));
 		break;
-	case GPIO_HIGH_Z:
+	case NO_OS_GPIO_HIGH_Z:
 		ret = adi_gpio_OutputEnable(PORT(desc->number),
 					    PIN(desc->number), false);
 		if (ret != ADI_GPIO_SUCCESS)
@@ -252,10 +254,11 @@ int32_t aducm3029_gpio_set_value(struct gpio_desc *desc, uint8_t value)
  * @brief Get the value of the specified GPIO.
  * @param desc - The GPIO descriptor.
  * @param value - Variable where to store the direction. Will be set to \ref
- * GPIO_HIGH or \ref GPIO_LOW
+ * NO_OS_GPIO_HIGH or \ref NO_OS_GPIO_LOW
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
  */
-int32_t aducm3029_gpio_get_value(struct gpio_desc *desc, uint8_t *value)
+int32_t aducm3029_gpio_get_value(struct no_os_gpio_desc *desc,
+				 uint8_t *value)
 {
 	uint16_t pins;
 	uint16_t port;
@@ -285,7 +288,7 @@ int32_t aducm3029_gpio_get_value(struct gpio_desc *desc, uint8_t *value)
 /**
  * @brief ADuCM3029 platform specific GPIO platform ops structure
  */
-const struct gpio_platform_ops aducm_gpio_ops = {
+const struct no_os_gpio_platform_ops aducm_gpio_ops = {
 	.gpio_ops_get = &aducm3029_gpio_get,
 	.gpio_ops_get_optional = &aducm3029_gpio_get_optional,
 	.gpio_ops_remove = &aducm3029_gpio_remove,

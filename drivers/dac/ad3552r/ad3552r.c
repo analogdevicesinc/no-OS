@@ -1049,14 +1049,14 @@ static int32_t ad3552r_configure_device(struct ad3552r_desc *desc,
 		}
 	}
 
-	err = gpio_get_optional(&desc->ldac, param->ldac_gpio_param_optional);
+	err = no_os_gpio_get_optional(&desc->ldac, param->ldac_gpio_param_optional);
 	if (IS_ERR_VALUE(err))
 		return err;
 
 	if (desc->ldac) {
-		err = gpio_direction_output(desc->ldac, GPIO_HIGH);
+		err = no_os_gpio_direction_output(desc->ldac, NO_OS_GPIO_HIGH);
 		if (IS_ERR_VALUE(err)) {
-			gpio_remove(desc->ldac);
+			no_os_gpio_remove(desc->ldac);
 			return err;
 		}
 	}
@@ -1083,13 +1083,13 @@ int32_t ad3552r_init(struct ad3552r_desc **desc,
 
 	crc8_populate_msb(ldesc->crc_table, AD3552R_CRC_POLY);
 
-	err = gpio_get_optional(&ldesc->reset,
-				param->reset_gpio_param_optional);
+	err = no_os_gpio_get_optional(&ldesc->reset,
+				      param->reset_gpio_param_optional);
 	if (IS_ERR_VALUE(err))
 		goto err_spi;
 
 	if (ldesc->reset) {
-		err = gpio_direction_output(ldesc->reset, GPIO_HIGH);
+		err = no_os_gpio_direction_output(ldesc->reset, NO_OS_GPIO_HIGH);
 		if (IS_ERR_VALUE(err))
 			goto err_reset;
 	}
@@ -1144,7 +1144,7 @@ int32_t ad3552r_init(struct ad3552r_desc **desc,
 
 	return SUCCESS;
 err_reset:
-	gpio_remove(ldesc->reset);
+	no_os_gpio_remove(ldesc->reset);
 err_spi:
 	spi_remove(ldesc->spi);
 err:
@@ -1156,9 +1156,9 @@ err:
 int32_t ad3552r_remove(struct ad3552r_desc *desc)
 {
 	if (desc->ldac)
-		gpio_remove(desc->ldac);
+		no_os_gpio_remove(desc->ldac);
 	if (desc->reset)
-		gpio_remove(desc->reset);
+		no_os_gpio_remove(desc->reset);
 	spi_remove(desc->spi);
 	free(desc);
 
@@ -1173,9 +1173,9 @@ int32_t ad3552r_reset(struct ad3552r_desc *desc)
 	uint8_t first_check;
 
 	if (desc->reset) {
-		gpio_set_value(desc->reset, GPIO_LOW);
+		no_os_gpio_set_value(desc->reset, NO_OS_GPIO_LOW);
 		mdelay(1);
-		gpio_set_value(desc->reset, GPIO_HIGH);
+		no_os_gpio_set_value(desc->reset, NO_OS_GPIO_HIGH);
 	} else {
 		err = _ad3552r_update_reg_field(desc,
 						AD3552R_REG_ADDR_INTERFACE_CONFIG_A,
@@ -1214,9 +1214,9 @@ int32_t ad3552r_ldac_trigger(struct ad3552r_desc *desc, uint16_t mask)
 		return ad3552r_write_reg(desc, AD3552R_REG_ADDR_SW_LDAC_24B,
 					 mask);
 
-	gpio_set_value(desc->ldac, GPIO_LOW);
+	no_os_gpio_set_value(desc->ldac, NO_OS_GPIO_LOW);
 	udelay(AD3552R_LDAC_PULSE_US);
-	gpio_set_value(desc->ldac, GPIO_HIGH);
+	no_os_gpio_set_value(desc->ldac, NO_OS_GPIO_HIGH);
 
 	return SUCCESS;
 }

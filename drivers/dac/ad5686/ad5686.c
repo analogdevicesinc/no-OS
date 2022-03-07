@@ -331,18 +331,18 @@ int32_t ad5686_init(struct ad5686_dev **device,
 
 
 	/* GPIO */
-	ret |= gpio_get(&dev->gpio_reset, &init_param.gpio_reset);
-	ret |= gpio_get(&dev->gpio_ldac, &init_param.gpio_ldac);
-	ret |= gpio_get(&dev->gpio_gain, &init_param.gpio_gain);
+	ret |= no_os_gpio_get(&dev->gpio_reset, &init_param.gpio_reset);
+	ret |= no_os_gpio_get(&dev->gpio_ldac, &init_param.gpio_ldac);
+	ret |= no_os_gpio_get(&dev->gpio_gain, &init_param.gpio_gain);
 
 	if (dev->gpio_ldac)
-		ret |= gpio_direction_output(dev->gpio_ldac, GPIO_LOW);
+		ret |= no_os_gpio_direction_output(dev->gpio_ldac, NO_OS_GPIO_LOW);
 
 	if (dev->gpio_reset)
-		ret |= gpio_direction_output(dev->gpio_reset, GPIO_HIGH);
+		ret |= no_os_gpio_direction_output(dev->gpio_reset, NO_OS_GPIO_HIGH);
 
 	if (dev->gpio_gain)
-		ret |= gpio_direction_output(dev->gpio_gain, GPIO_LOW);
+		ret |= no_os_gpio_direction_output(dev->gpio_gain, NO_OS_GPIO_LOW);
 	*device = dev;
 
 	return ret;
@@ -365,13 +365,13 @@ int32_t ad5686_remove(struct ad5686_dev *dev)
 		ret = i2c_remove(dev->i2c_desc);
 
 	if (dev->gpio_ldac)
-		ret |= gpio_remove(dev->gpio_ldac);
+		ret |= no_os_gpio_remove(dev->gpio_ldac);
 
 	if (dev->gpio_reset)
-		ret |= gpio_remove(dev->gpio_reset);
+		ret |= no_os_gpio_remove(dev->gpio_reset);
 
 	if (dev->gpio_gain)
-		ret |= gpio_remove(dev->gpio_gain);
+		ret |= no_os_gpio_remove(dev->gpio_gain);
 
 	free(dev);
 

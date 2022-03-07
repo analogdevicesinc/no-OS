@@ -198,14 +198,14 @@ int32_t ad7768_set_mode_pins(ad7768_dev *dev,
 
 	if (dev->gpio_mode0 && dev->gpio_mode1 &&
 	    dev->gpio_mode2 && dev->gpio_mode3) {
-		ret = gpio_set_value(dev->gpio_mode0,
-				     ((state & 0x01) >> 0));
-		ret |= gpio_set_value(dev->gpio_mode1,
-				      ((state & 0x02) >> 1));
-		ret |= gpio_set_value(dev->gpio_mode2,
-				      ((state & 0x04) >> 2));
-		ret |= gpio_set_value(dev->gpio_mode3,
-				      ((state & 0x08) >> 3));
+		ret = no_os_gpio_set_value(dev->gpio_mode0,
+					   ((state & 0x01) >> 0));
+		ret |= no_os_gpio_set_value(dev->gpio_mode1,
+					    ((state & 0x02) >> 1));
+		ret |= no_os_gpio_set_value(dev->gpio_mode2,
+					    ((state & 0x04) >> 2));
+		ret |= no_os_gpio_set_value(dev->gpio_mode3,
+					    ((state & 0x08) >> 3));
 	} else {
 		printf ("MODE GPIOs are not defined.");
 		ret = -1;
@@ -637,25 +637,25 @@ int32_t ad7768_setup(ad7768_dev **device,
 	dev->pin_spi_ctrl = dev->pin_spi_input_value ?
 			    AD7768_SPI_CTRL : AD7768_PIN_CTRL;
 
-	ret |= gpio_get(&dev->gpio_reset, &init_param.gpio_reset);
+	ret |= no_os_gpio_get(&dev->gpio_reset, &init_param.gpio_reset);
 	dev->gpio_reset_value = init_param.gpio_reset_value;
 
-	ret |= gpio_get(&dev->gpio_mode0, &init_param.gpio_mode0);
-	ret |= gpio_get(&dev->gpio_mode1, &init_param.gpio_mode1);
-	ret |= gpio_get(&dev->gpio_mode2, &init_param.gpio_mode2);
-	ret |= gpio_get(&dev->gpio_mode3, &init_param.gpio_mode3);
+	ret |= no_os_gpio_get(&dev->gpio_mode0, &init_param.gpio_mode0);
+	ret |= no_os_gpio_get(&dev->gpio_mode1, &init_param.gpio_mode1);
+	ret |= no_os_gpio_get(&dev->gpio_mode2, &init_param.gpio_mode2);
+	ret |= no_os_gpio_get(&dev->gpio_mode3, &init_param.gpio_mode3);
 
 	if (dev->gpio_reset)
-		ret |= gpio_direction_output(dev->gpio_reset, dev->gpio_reset_value);
+		ret |= no_os_gpio_direction_output(dev->gpio_reset, dev->gpio_reset_value);
 
 	if (dev->gpio_mode0)
-		ret |= gpio_direction_output(dev->gpio_mode0, GPIO_LOW);
+		ret |= no_os_gpio_direction_output(dev->gpio_mode0, NO_OS_GPIO_LOW);
 	if (dev->gpio_mode1)
-		ret |= gpio_direction_output(dev->gpio_mode1, GPIO_LOW);
+		ret |= no_os_gpio_direction_output(dev->gpio_mode1, NO_OS_GPIO_LOW);
 	if (dev->gpio_mode2)
-		ret |= gpio_direction_output(dev->gpio_mode2, GPIO_LOW);
+		ret |= no_os_gpio_direction_output(dev->gpio_mode2, NO_OS_GPIO_LOW);
 	if (dev->gpio_mode3)
-		ret |= gpio_direction_output(dev->gpio_mode3, GPIO_LOW);
+		ret |= no_os_gpio_direction_output(dev->gpio_mode3, NO_OS_GPIO_LOW);
 
 	dev->sleep_mode = init_param.sleep_mode;
 	dev->mclk_div = init_param.mclk_div;

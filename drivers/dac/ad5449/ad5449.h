@@ -77,8 +77,8 @@ struct ad5449_dev {
 	/* SPI */
 	spi_desc		*spi_desc;
 	/* GPIO */
-	struct gpio_desc	*gpio_ldac;
-	struct gpio_desc	*gpio_clr;
+	struct no_os_gpio_desc	*gpio_ldac;
+	struct no_os_gpio_desc	*gpio_clr;
 	/* Device Settings */
 	enum ad5449_type_t		act_device;
 	uint16_t		control_reg;
@@ -88,8 +88,8 @@ struct ad5449_init_param {
 	/* SPI */
 	spi_init_param	spi_init;
 	/* GPIO */
-	struct gpio_init_param	gpio_ldac;
-	struct gpio_init_param	gpio_clr;
+	struct no_os_gpio_init_param	gpio_ldac;
+	struct no_os_gpio_init_param	gpio_clr;
 	/* Device Settings */
 	enum ad5449_type_t	act_device;
 };
@@ -134,19 +134,19 @@ struct ad5449_init_param {
 #define AD5449_SCLK_BIT          7
 
 /* AD5449 GPIO */
-#define AD5449_LDAC_OUT             gpio_direction_output(dev->gpio_ldac,   \
-			            GPIO_HIGH)
-#define AD5449_LDAC_LOW             gpio_set_value(dev->gpio_ldac,          \
-			            GPIO_LOW)
-#define AD5449_LDAC_HIGH            gpio_set_value(dev->gpio_ldac,          \
-			            GPIO_HIGH)
+#define AD5449_LDAC_OUT             no_os_gpio_direction_output(dev->gpio_ldac,   \
+			            NO_OS_GPIO_HIGH)
+#define AD5449_LDAC_LOW             no_os_gpio_set_value(dev->gpio_ldac,          \
+			            NO_OS_GPIO_LOW)
+#define AD5449_LDAC_HIGH            no_os_gpio_set_value(dev->gpio_ldac,          \
+			            NO_OS_GPIO_HIGH)
 
-#define AD5449_CLR_OUT              gpio_direction_output(dev->gpio_clr,   \
-			            GPIO_HIGH)
-#define AD5449_CLR_LOW              gpio_set_value(dev->gpio_clr,          \
-			            GPIO_LOW)
-#define AD5449_CLR_HIGH             gpio_set_value(dev->gpio_clr,          \
-			            GPIO_HIGH)
+#define AD5449_CLR_OUT              no_os_gpio_direction_output(dev->gpio_clr,   \
+			            NO_OS_GPIO_HIGH)
+#define AD5449_CLR_LOW              no_os_gpio_set_value(dev->gpio_clr,          \
+			            NO_OS_GPIO_LOW)
+#define AD5449_CLR_HIGH             no_os_gpio_set_value(dev->gpio_clr,          \
+			            NO_OS_GPIO_HIGH)
 
 /* SDO Control Bits */
 #define AD5449_SDO_FULL             0

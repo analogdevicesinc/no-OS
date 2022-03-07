@@ -49,7 +49,7 @@ SRCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c \
 	$(DRIVERS)/axi_core/jesd204/axi_jesd204_rx.c \
 	$(DRIVERS)/axi_core/jesd204/axi_jesd204_tx.c \
 	$(DRIVERS)/api/spi.c \
-	$(DRIVERS)/api/gpio.c
+	$(DRIVERS)/api/no_os_gpio.c
 ifeq (y,$(strip $(TINYIIOD)))
 SRC_DIRS += $(NO-OS)/iio/iio_app
 LIBRARIES += iio

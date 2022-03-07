@@ -378,8 +378,8 @@ struct ad5758_dev {
 	/* SPI */
 	struct spi_desc *spi_desc;
 	/* GPIO */
-	struct gpio_desc *reset_n;
-	struct gpio_desc *ldac_n;
+	struct no_os_gpio_desc *reset_n;
+	struct no_os_gpio_desc *ldac_n;
 	/* Device Settings */
 	uint8_t crc_en;
 	enum ad5758_dc_dc_mode dc_dc_mode;
@@ -394,8 +394,8 @@ struct ad5758_init_param {
 	/* SPI */
 	struct spi_init_param spi_init;
 	/* GPIO */
-	struct gpio_init_param reset_n;
-	struct gpio_init_param ldac_n;
+	struct no_os_gpio_init_param reset_n;
+	struct no_os_gpio_init_param ldac_n;
 	/* Device Settings */
 	uint8_t crc_en;
 	enum ad5758_dc_dc_mode dc_dc_mode;

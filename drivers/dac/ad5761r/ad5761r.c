@@ -480,8 +480,8 @@ int32_t ad5761r_get_brownout_condition(struct ad5761r_dev *dev,
  * Set the reset pin value.
  * @param dev - The device structure.
  * @param value - The pin value.
- *		  Accepted values: GPIO_LOW
- *  				   GPIO_HIGH
+ *		  Accepted values: NO_OS_GPIO_LOW
+ *  				   NO_OS_GPIO_HIGH
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad5761r_set_reset_pin(struct ad5761r_dev *dev,
@@ -489,8 +489,8 @@ int32_t ad5761r_set_reset_pin(struct ad5761r_dev *dev,
 {
 	if (dev->gpio_reset) {
 		dev->gpio_reset_value = value;
-		return gpio_set_value(dev->gpio_reset,
-				      dev->gpio_reset_value);
+		return no_os_gpio_set_value(dev->gpio_reset,
+					    dev->gpio_reset_value);
 	} else
 		return -1;
 }
@@ -515,8 +515,8 @@ int32_t ad5761r_get_reset_pin(struct ad5761r_dev *dev,
  * Set the clr pin value.
  * @param dev - The device structure.
  * @param value - The pin value.
- *		  Accepted values: GPIO_LOW
- *  				   GPIO_HIGH
+ *		  Accepted values: NO_OS_GPIO_LOW
+ *  				   NO_OS_GPIO_HIGH
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad5761r_set_clr_pin(struct ad5761r_dev *dev,
@@ -524,8 +524,8 @@ int32_t ad5761r_set_clr_pin(struct ad5761r_dev *dev,
 {
 	if (dev->gpio_clr) {
 		dev->gpio_clr_value = value;
-		return gpio_set_value(dev->gpio_clr,
-				      dev->gpio_clr_value);
+		return no_os_gpio_set_value(dev->gpio_clr,
+					    dev->gpio_clr_value);
 	} else
 		return -1;
 }
@@ -550,8 +550,8 @@ int32_t ad5761r_get_clr_pin(struct ad5761r_dev *dev,
  * Set the ldac pin value.
  * @param dev - The device structure.
  * @param value - The pin value.
- *		  Accepted values: GPIO_LOW
- *  				   GPIO_HIGH
+ *		  Accepted values: NO_OS_GPIO_LOW
+ *  				   NO_OS_GPIO_HIGH
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad5761r_set_ldac_pin(struct ad5761r_dev *dev,
@@ -559,8 +559,8 @@ int32_t ad5761r_set_ldac_pin(struct ad5761r_dev *dev,
 {
 	if (dev->gpio_ldac) {
 		dev->gpio_ldac_value = value;
-		return gpio_set_value(dev->gpio_ldac,
-				      dev->gpio_ldac_value);
+		return no_os_gpio_set_value(dev->gpio_ldac,
+					    dev->gpio_ldac_value);
 	} else
 		return -1;
 }
@@ -671,23 +671,23 @@ int32_t ad5761r_init(struct ad5761r_dev **device,
 	ret = spi_init(&dev->spi_desc, &init_param.spi_init);
 
 	/* GPIO */
-	ret |= gpio_get(&dev->gpio_reset, &init_param.gpio_reset);
+	ret |= no_os_gpio_get(&dev->gpio_reset, &init_param.gpio_reset);
 	dev->gpio_reset_value = init_param.gpio_reset_value;
-	ret |= gpio_get(&dev->gpio_clr, &init_param.gpio_clr);
+	ret |= no_os_gpio_get(&dev->gpio_clr, &init_param.gpio_clr);
 	dev->gpio_clr_value = init_param.gpio_clr_value;
-	ret |= gpio_get(&dev->gpio_ldac, &init_param.gpio_ldac);
+	ret |= no_os_gpio_get(&dev->gpio_ldac, &init_param.gpio_ldac);
 	dev->gpio_ldac_value = init_param.gpio_ldac_value;
 
 	if (dev->gpio_reset)
-		ret |= gpio_direction_output(dev->gpio_reset,
-					     dev->gpio_reset_value);
+		ret |= no_os_gpio_direction_output(dev->gpio_reset,
+						   dev->gpio_reset_value);
 
 	if (dev->gpio_clr)
-		ret |= gpio_direction_output(dev->gpio_clr,
-					     dev->gpio_clr_value);
+		ret |= no_os_gpio_direction_output(dev->gpio_clr,
+						   dev->gpio_clr_value);
 	if (dev->gpio_ldac)
-		ret |= gpio_direction_output(dev->gpio_ldac,
-					     dev->gpio_ldac_value);
+		ret |= no_os_gpio_direction_output(dev->gpio_ldac,
+						   dev->gpio_ldac_value);
 
 	/* Device Settings */
 	dev->type = init_param.type;
@@ -720,13 +720,13 @@ int32_t ad5761r_remove(struct ad5761r_dev *dev)
 	ret = spi_remove(dev->spi_desc);
 
 	if (dev->gpio_reset)
-		ret |= gpio_remove(dev->gpio_reset);
+		ret |= no_os_gpio_remove(dev->gpio_reset);
 
 	if (dev->gpio_clr)
-		ret |= gpio_remove(dev->gpio_clr);
+		ret |= no_os_gpio_remove(dev->gpio_clr);
 
 	if (dev->gpio_ldac)
-		ret |= gpio_remove(dev->gpio_ldac);
+		ret |= no_os_gpio_remove(dev->gpio_ldac);
 
 	free(dev);
 

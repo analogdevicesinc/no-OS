@@ -87,7 +87,7 @@ struct xil_gpio_init_param xil_gpio_param = {
 	.device_id = GPIO_DEVICE_ID,
 	.type = GPIO_PS,
 };
-struct gpio_init_param ad7616_gpio_reset = {
+struct no_os_gpio_init_param ad7616_gpio_reset = {
 	.number = GPIO_ADC_RESET_N,
 	.platform_ops = &xil_gpio_ops,
 	.extra = &xil_gpio_param

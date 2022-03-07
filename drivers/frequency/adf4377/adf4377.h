@@ -620,11 +620,11 @@ struct adf4377_init_param {
 	/** SPI Initialization parameters */
 	struct spi_init_param	*spi_init;
 	/** GPIO Chip Enable */
-	struct gpio_init_param	*gpio_ce_param;
+	struct no_os_gpio_init_param	*gpio_ce_param;
 	/** GPIO ENCLK1 */
-	struct gpio_init_param	*gpio_enclk1_param;
+	struct no_os_gpio_init_param	*gpio_enclk1_param;
 	/** GPIO ENCLK2 */
-	struct gpio_init_param	*gpio_enclk2_param;
+	struct no_os_gpio_init_param	*gpio_enclk2_param;
 	/** Device ID */
 	enum adf4377_dev_id dev_id;
 	/** SPI 3-Wire */
@@ -651,11 +651,11 @@ struct adf4377_dev {
 	/** SPI Descriptor */
 	struct spi_desc		*spi_desc;
 	/** GPIO ENCLK1 */
-	struct gpio_desc	*gpio_enclk1;
+	struct no_os_gpio_desc	*gpio_enclk1;
 	/** GPIO ENCLK2 */
-	struct gpio_desc	*gpio_enclk2;
+	struct no_os_gpio_desc	*gpio_enclk2;
 	/** GPIO Chip Enable */
-	struct gpio_desc	*gpio_ce;
+	struct no_os_gpio_desc	*gpio_ce;
 	/** Device ID */
 	enum adf4377_dev_id dev_id;
 	/** SPI 3-Wire */

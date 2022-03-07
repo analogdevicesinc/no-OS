@@ -145,12 +145,12 @@ struct ad7616_dev {
 	struct spi_engine_offload_init_param *offload_init_param;
 	uint32_t reg_access_speed;
 	/* GPIO */
-	struct gpio_desc	*gpio_hw_rngsel0;
-	struct gpio_desc	*gpio_hw_rngsel1;
-	struct gpio_desc	*gpio_reset;
-	struct gpio_desc	*gpio_os0;
-	struct gpio_desc	*gpio_os1;
-	struct gpio_desc	*gpio_os2;
+	struct no_os_gpio_desc	*gpio_hw_rngsel0;
+	struct no_os_gpio_desc	*gpio_hw_rngsel1;
+	struct no_os_gpio_desc	*gpio_reset;
+	struct no_os_gpio_desc	*gpio_os0;
+	struct no_os_gpio_desc	*gpio_os1;
+	struct no_os_gpio_desc	*gpio_os2;
 	/* AXI Core */
 	uint32_t core_baseaddr;
 	/* Device Settings */
@@ -168,12 +168,12 @@ struct ad7616_init_param {
 	struct spi_engine_offload_init_param *offload_init_param;
 	uint32_t reg_access_speed;
 	/* GPIO */
-	gpio_init_param		*gpio_hw_rngsel0_param;
-	gpio_init_param		*gpio_hw_rngsel1_param;
-	gpio_init_param		*gpio_reset_param;
-	gpio_init_param		*gpio_os0_param;
-	gpio_init_param		*gpio_os1_param;
-	gpio_init_param		*gpio_os2_param;
+	no_os_gpio_init_param		*gpio_hw_rngsel0_param;
+	no_os_gpio_init_param		*gpio_hw_rngsel1_param;
+	no_os_gpio_init_param		*gpio_reset_param;
+	no_os_gpio_init_param		*gpio_os0_param;
+	no_os_gpio_init_param		*gpio_os1_param;
+	no_os_gpio_init_param		*gpio_os2_param;
 	/* Core */
 	uint32_t			core_baseaddr;
 	/* Device Settings */

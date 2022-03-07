@@ -433,7 +433,7 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 #if defined(ZU11EG) || defined(FMCOMMS8_ZCU102)
 	// reset pin not needed, hmc7044_init performs a soft reset over SPI.
 #else
-	struct gpio_init_param clkchip_gpio_init_param = {
+	struct no_os_gpio_init_param clkchip_gpio_init_param = {
 		.number = CLK_RESETB_GPIO,
 		.platform_ops = &xil_gpio_ops,
 		.extra = &xil_gpio_param

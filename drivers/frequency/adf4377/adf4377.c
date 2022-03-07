@@ -537,12 +537,12 @@ int32_t adf4377_init(struct adf4377_dev **device,
 	dev->clkout_op = init_param->clkout_op;
 
 	/* GPIO Chip Enable */
-	ret = gpio_get_optional(&dev->gpio_ce, init_param->gpio_ce_param);
+	ret = no_os_gpio_get_optional(&dev->gpio_ce, init_param->gpio_ce_param);
 	if (ret < 0)
 		goto error_dev;
 
 	if(dev->gpio_ce) {
-		ret = gpio_direction_output(dev->gpio_ce, GPIO_HIGH);
+		ret = no_os_gpio_direction_output(dev->gpio_ce, NO_OS_GPIO_HIGH);
 		if (ret < 0)
 			goto error_gpio_ce;
 	}
@@ -585,23 +585,23 @@ int32_t adf4377_init(struct adf4377_dev **device,
 		goto error_spi;
 
 	if (dev->dev_id == device_id) {
-		ret = gpio_get_optional(&dev->gpio_enclk1, init_param->gpio_enclk1_param);
+		ret = no_os_gpio_get_optional(&dev->gpio_enclk1, init_param->gpio_enclk1_param);
 		if (ret < 0)
 			goto error_spi;
 
 		if(dev->gpio_enclk1) {
-			ret = gpio_direction_output(dev->gpio_enclk1, GPIO_HIGH);
+			ret = no_os_gpio_direction_output(dev->gpio_enclk1, NO_OS_GPIO_HIGH);
 			if (ret < 0)
 				goto error_gpio_enclk1;
 		}
 
 		if (dev->dev_id == ADF4377) {
-			ret = gpio_get_optional(&dev->gpio_enclk2, init_param->gpio_enclk2_param);
+			ret = no_os_gpio_get_optional(&dev->gpio_enclk2, init_param->gpio_enclk2_param);
 			if (ret < 0)
 				goto error_gpio_enclk1;
 
 			if(dev->gpio_enclk2) {
-				ret = gpio_direction_output(dev->gpio_enclk2, GPIO_HIGH);
+				ret = no_os_gpio_direction_output(dev->gpio_enclk2, NO_OS_GPIO_HIGH);
 				if (ret < 0)
 					goto error_gpio_enclk2;
 			}
@@ -624,16 +624,16 @@ int32_t adf4377_init(struct adf4377_dev **device,
 	return ret;
 
 error_gpio_enclk2:
-	gpio_remove(dev->gpio_enclk2);
+	no_os_gpio_remove(dev->gpio_enclk2);
 
 error_gpio_enclk1:
-	gpio_remove(dev->gpio_enclk1);
+	no_os_gpio_remove(dev->gpio_enclk1);
 
 error_spi:
 	spi_remove(dev->spi_desc);
 
 error_gpio_ce:
-	gpio_remove(dev->gpio_ce);
+	no_os_gpio_remove(dev->gpio_ce);
 
 error_dev:
 	free(dev);
@@ -654,15 +654,15 @@ int32_t adf4377_remove(struct adf4377_dev *dev)
 	if (ret < 0)
 		return ret;
 
-	ret = gpio_remove(dev->gpio_ce);
+	ret = no_os_gpio_remove(dev->gpio_ce);
 	if (ret < 0)
 		return ret;
 
-	ret = gpio_remove(dev->gpio_enclk1);
+	ret = no_os_gpio_remove(dev->gpio_enclk1);
 	if (ret < 0)
 		return ret;
 
-	ret = gpio_remove(dev->gpio_enclk2);
+	ret = no_os_gpio_remove(dev->gpio_enclk2);
 	if (ret < 0)
 		return ret;
 

@@ -387,7 +387,7 @@ static int32_t ad9081_multichip_sync(struct ad9081_phy *phy, int step)
 			return ret;
 
 		if (phy->jrx_link_tx.jesd_param.jesd_subclass ||
-			phy->jtx_link_rx[0].jesd_param.jesd_subclass)
+		    phy->jtx_link_rx[0].jesd_param.jesd_subclass)
 			subclass = JESD_SUBCLASS_1;
 
 		ret = adi_ad9081_jesd_oneshot_sync(&phy->ad9081, subclass);
@@ -528,7 +528,7 @@ static int32_t ad9081_setup(struct ad9081_phy *phy)
 
 	/* DC couple SYSREF default */
 	ret = adi_ad9081_jesd_sysref_input_mode_set(&phy->ad9081, 1, 1,
-		phy->sysref_coupling_ac_en ? COUPLING_AC : COUPLING_DC);
+			phy->sysref_coupling_ac_en ? COUPLING_AC : COUPLING_DC);
 	if (ret != 0)
 		return ret;
 
@@ -607,7 +607,7 @@ static int32_t ad9081_setup(struct ad9081_phy *phy)
 		return ret;
 
 	if (phy->jrx_link_tx.jesd_param.jesd_subclass ||
-		phy->jtx_link_rx[0].jesd_param.jesd_subclass)
+	    phy->jtx_link_rx[0].jesd_param.jesd_subclass)
 		subclass = JESD_SUBCLASS_1;
 
 	ret = adi_ad9081_jesd_oneshot_sync(&phy->ad9081, subclass);
@@ -840,7 +840,7 @@ static int32_t ad9081_setup(struct ad9081_phy *phy)
 
 	for_each_cddc(i, phy->rx_cddc_select) {
 		ret = adi_ad9081_adc_nyquist_zone_set(&phy->ad9081, BIT(i),
-			phy->rx_nyquist_zone[i]);
+						      phy->rx_nyquist_zone[i]);
 		if (ret != 0)
 			return ret;
 	}
@@ -878,7 +878,7 @@ int32_t ad9081_reset_pin_ctrl(void *user_data, uint8_t enable)
 {
 	struct ad9081_phy *phy = user_data;
 
-	return gpio_set_value(phy->gpio_reset, enable);
+	return no_os_gpio_set_value(phy->gpio_reset, enable);
 }
 
 static int32_t ad9081_spi_xfer(void *user_data, uint8_t *in_data,
@@ -1062,7 +1062,7 @@ int32_t ad9081_init(struct ad9081_phy **dev,
 	if (!phy)
 		return FAILURE;
 
-	ret = gpio_get(&phy->gpio_reset, init_param->gpio_reset);
+	ret = no_os_gpio_get(&phy->gpio_reset, init_param->gpio_reset);
 	if (ret < 0)
 		goto error_1;
 
@@ -1086,7 +1086,7 @@ int32_t ad9081_init(struct ad9081_phy **dev,
 	phy->ad9081.hal_info.spi_xfer = ad9081_spi_xfer;
 	phy->ad9081.hal_info.log_write = ad9081_log_write;
 
-	ret = gpio_direction_output(phy->gpio_reset, 1);
+	ret = no_os_gpio_direction_output(phy->gpio_reset, 1);
 	if (ret < 0)
 		goto error_3;
 
@@ -1129,7 +1129,7 @@ int32_t ad9081_init(struct ad9081_phy **dev,
 error_3:
 	spi_remove(phy->spi_desc);
 error_2:
-	gpio_remove(phy->gpio_reset);
+	no_os_gpio_remove(phy->gpio_reset);
 error_1:
 	free(phy);
 
@@ -1145,7 +1145,7 @@ int32_t ad9081_remove(struct ad9081_phy *dev)
 {
 	int32_t ret;
 
-	ret = gpio_remove(dev->gpio_reset);
+	ret = no_os_gpio_remove(dev->gpio_reset);
 	ret += spi_remove(dev->spi_desc);
 	free(dev);
 

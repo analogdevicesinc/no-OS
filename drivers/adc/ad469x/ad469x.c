@@ -219,18 +219,18 @@ static int32_t ad469x_init_gpio(struct ad469x_dev *dev,
 {
 	int32_t ret;
 
-	ret = gpio_get_optional(&dev->gpio_resetn, init_param->gpio_resetn);
+	ret = no_os_gpio_get_optional(&dev->gpio_resetn, init_param->gpio_resetn);
 	if (ret != SUCCESS)
 		return ret;
 
 	/** Reset to configure pins */
 	if (init_param->gpio_resetn) {
-		ret = gpio_direction_output(dev->gpio_resetn, GPIO_LOW);
+		ret = no_os_gpio_direction_output(dev->gpio_resetn, NO_OS_GPIO_LOW);
 		if (ret != SUCCESS)
 			return ret;
 
 		mdelay(100);
-		ret = gpio_set_value(dev->gpio_resetn, GPIO_HIGH);
+		ret = no_os_gpio_set_value(dev->gpio_resetn, NO_OS_GPIO_HIGH);
 		if (ret != SUCCESS)
 			return ret;
 
@@ -826,7 +826,7 @@ int32_t ad469x_init(struct ad469x_dev **device,
 error_spi:
 	spi_remove(dev->spi_desc);
 error_gpio:
-	gpio_remove(dev->gpio_resetn);
+	no_os_gpio_remove(dev->gpio_resetn);
 error_clkgen:
 	axi_clkgen_remove(dev->clkgen);
 error_dev:
@@ -855,7 +855,7 @@ int32_t ad469x_remove(struct ad469x_dev *dev)
 	if (ret != SUCCESS)
 		return ret;
 
-	ret = gpio_remove(dev->gpio_resetn);
+	ret = no_os_gpio_remove(dev->gpio_resetn);
 	if (ret != SUCCESS)
 		return ret;
 

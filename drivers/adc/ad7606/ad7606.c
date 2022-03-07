@@ -426,14 +426,14 @@ int32_t ad7606_convst(struct ad7606_dev *dev)
 		dev->reg_mode = false;
 	}
 
-	ret = gpio_set_value(dev->gpio_convst, 0);
+	ret = no_os_gpio_set_value(dev->gpio_convst, 0);
 	if (ret < 0)
 		return ret;
 
 	/* wait LP_CNV time */
 	udelay(1);
 
-	return gpio_set_value(dev->gpio_convst, 1);
+	return no_os_gpio_set_value(dev->gpio_convst, 1);
 }
 
 /***************************************************************************//**
@@ -552,7 +552,7 @@ int32_t ad7606_read(struct ad7606_dev *dev, uint32_t * data)
 	if (dev->gpio_busy) {
 		/* Wait for BUSY falling edge */
 		while(timeout) {
-			ret = gpio_get_value(dev->gpio_busy, &busy);
+			ret = no_os_gpio_get_value(dev->gpio_busy, &busy);
 			if (ret < 0)
 				return ret;
 
@@ -622,13 +622,13 @@ int32_t ad7606_reset(struct ad7606_dev *dev)
 {
 	int32_t ret;
 
-	ret = gpio_set_value(dev->gpio_reset, 1);
+	ret = no_os_gpio_set_value(dev->gpio_reset, 1);
 	if (ret < 0)
 		return ret;
 
 	udelay(3);
 
-	ret = gpio_set_value(dev->gpio_reset, 0);
+	ret = no_os_gpio_set_value(dev->gpio_reset, 0);
 	if (ret < 0)
 		return ret;
 
@@ -643,52 +643,52 @@ static int32_t ad7606_request_gpios(struct ad7606_dev *dev,
 {
 	int32_t ret;
 
-	ret = gpio_get_optional(&dev->gpio_reset, init_param->gpio_reset);
+	ret = no_os_gpio_get_optional(&dev->gpio_reset, init_param->gpio_reset);
 	if (ret < 0)
 		return ret;
 
 	if (dev->gpio_reset) {
-		ret = gpio_direction_output(dev->gpio_reset, GPIO_LOW);
+		ret = no_os_gpio_direction_output(dev->gpio_reset, NO_OS_GPIO_LOW);
 		if (ret < 0)
 			return ret;
 	}
 
-	ret = gpio_get_optional(&dev->gpio_convst, init_param->gpio_convst);
+	ret = no_os_gpio_get_optional(&dev->gpio_convst, init_param->gpio_convst);
 	if (ret < 0)
 		return ret;
 
 	if (dev->gpio_convst) {
-		ret = gpio_direction_output(dev->gpio_convst, GPIO_LOW);
+		ret = no_os_gpio_direction_output(dev->gpio_convst, NO_OS_GPIO_LOW);
 		if (ret < 0)
 			return ret;
 	}
 
-	ret = gpio_get_optional(&dev->gpio_busy, init_param->gpio_busy);
+	ret = no_os_gpio_get_optional(&dev->gpio_busy, init_param->gpio_busy);
 	if (ret < 0)
 		return ret;
 
 	if (dev->gpio_busy) {
-		ret = gpio_direction_input(dev->gpio_busy);
+		ret = no_os_gpio_direction_input(dev->gpio_busy);
 		if (ret < 0)
 			return ret;
 	}
 
-	ret = gpio_get_optional(&dev->gpio_stby_n, init_param->gpio_stby_n);
+	ret = no_os_gpio_get_optional(&dev->gpio_stby_n, init_param->gpio_stby_n);
 	if (ret < 0)
 		return ret;
 
 	if (dev->gpio_stby_n) {
-		ret = gpio_direction_output(dev->gpio_stby_n, GPIO_HIGH);
+		ret = no_os_gpio_direction_output(dev->gpio_stby_n, NO_OS_GPIO_HIGH);
 		if (ret < 0)
 			return ret;
 	}
 
-	ret = gpio_get_optional(&dev->gpio_range, init_param->gpio_range);
+	ret = no_os_gpio_get_optional(&dev->gpio_range, init_param->gpio_range);
 	if (ret < 0)
 		return ret;
 
 	if (dev->gpio_range) {
-		ret = gpio_direction_output(dev->gpio_range, GPIO_LOW);
+		ret = no_os_gpio_direction_output(dev->gpio_range, NO_OS_GPIO_LOW);
 		if (ret < 0)
 			return ret;
 	}
@@ -696,44 +696,44 @@ static int32_t ad7606_request_gpios(struct ad7606_dev *dev,
 	if (!ad7606_chip_info_tbl[dev->device_id].has_oversampling)
 		return ret;
 
-	ret = gpio_get_optional(&dev->gpio_os0, init_param->gpio_os0);
+	ret = no_os_gpio_get_optional(&dev->gpio_os0, init_param->gpio_os0);
 	if (ret < 0)
 		return ret;
 
 	if (dev->gpio_os0) {
-		ret = gpio_direction_output(dev->gpio_os0, GPIO_LOW);
+		ret = no_os_gpio_direction_output(dev->gpio_os0, NO_OS_GPIO_LOW);
 		if (ret < 0)
 			return ret;
 	}
 
-	ret = gpio_get_optional(&dev->gpio_os1, init_param->gpio_os1);
+	ret = no_os_gpio_get_optional(&dev->gpio_os1, init_param->gpio_os1);
 	if (ret < 0)
 		return ret;
 
 	if (dev->gpio_os1) {
-		ret = gpio_direction_output(dev->gpio_os1, GPIO_LOW);
+		ret = no_os_gpio_direction_output(dev->gpio_os1, NO_OS_GPIO_LOW);
 		if (ret < 0)
 			return ret;
 	}
 
-	ret = gpio_get_optional(&dev->gpio_os2, init_param->gpio_os2);
+	ret = no_os_gpio_get_optional(&dev->gpio_os2, init_param->gpio_os2);
 	if (ret < 0)
 		return ret;
 
 	if (dev->gpio_os2) {
-		ret = gpio_direction_output(dev->gpio_os2, GPIO_LOW);
+		ret = no_os_gpio_direction_output(dev->gpio_os2, NO_OS_GPIO_LOW);
 		if (ret < 0)
 			return ret;
 	}
 
-	ret = gpio_get_optional(&dev->gpio_par_ser, init_param->gpio_par_ser);
+	ret = no_os_gpio_get_optional(&dev->gpio_par_ser, init_param->gpio_par_ser);
 	if (ret < 0)
 		return ret;
 
 	if (dev->gpio_par_ser) {
 		/* Driver currently supports only serial interface, therefore,
 		 * if available, pull the GPIO HIGH. */
-		ret = gpio_direction_output(dev->gpio_par_ser, GPIO_HIGH);
+		ret = no_os_gpio_direction_output(dev->gpio_par_ser, NO_OS_GPIO_HIGH);
 		if (ret < 0)
 			return ret;
 	}
@@ -772,15 +772,18 @@ int32_t ad7606_set_oversampling(struct ad7606_dev *dev,
 		if (oversampling.os_ratio > AD7606_OSR_64)
 			oversampling.os_ratio = AD7606_OSR_64;
 
-		ret = gpio_set_value(dev->gpio_os0, ((oversampling.os_ratio & 0x01) >> 0));
+		ret = no_os_gpio_set_value(dev->gpio_os0,
+					   ((oversampling.os_ratio & 0x01) >> 0));
 		if (ret < 0)
 			return ret;
 
-		ret = gpio_set_value(dev->gpio_os1, ((oversampling.os_ratio & 0x02) >> 1));
+		ret = no_os_gpio_set_value(dev->gpio_os1,
+					   ((oversampling.os_ratio & 0x02) >> 1));
 		if (ret < 0)
 			return ret;
 
-		ret = gpio_set_value(dev->gpio_os2, ((oversampling.os_ratio & 0x04) >> 2));
+		ret = no_os_gpio_set_value(dev->gpio_os2,
+					   ((oversampling.os_ratio & 0x04) >> 2));
 		if (ret < 0)
 			return ret;
 	}
@@ -853,7 +856,7 @@ int32_t ad7606_set_ch_range(struct ad7606_dev *dev, uint8_t ch,
 					    AD7606_RANGE_CH_MSK(ch),
 					    AD7606_RANGE_CH_MODE(ch, value));
 	else
-		ret = gpio_set_value(dev->gpio_range, value);
+		ret = no_os_gpio_set_value(dev->gpio_range, value);
 
 	if (ret)
 		return ret;
@@ -1015,26 +1018,26 @@ int32_t ad7606_set_config(struct ad7606_dev *dev,
 	} else {
 		switch(config.op_mode) {
 		case AD7606_NORMAL:
-			range_pin = GPIO_LOW;
-			stby_n_pin = GPIO_HIGH;
+			range_pin = NO_OS_GPIO_LOW;
+			stby_n_pin = NO_OS_GPIO_HIGH;
 			break;
 		case AD7606_STANDBY:
-			range_pin = GPIO_LOW;
-			stby_n_pin = GPIO_LOW;
+			range_pin = NO_OS_GPIO_LOW;
+			stby_n_pin = NO_OS_GPIO_LOW;
 			break;
 		case AD7606_SHUTDOWN:
-			range_pin = GPIO_HIGH;
-			stby_n_pin = GPIO_LOW;
+			range_pin = NO_OS_GPIO_HIGH;
+			stby_n_pin = NO_OS_GPIO_LOW;
 			break;
 		default:
 			return -EINVAL;
 		};
 
-		ret = gpio_set_value(dev->gpio_stby_n, stby_n_pin);
+		ret = no_os_gpio_set_value(dev->gpio_stby_n, stby_n_pin);
 		if (ret)
 			return ret;
 
-		ret = gpio_set_value(dev->gpio_range, range_pin);
+		ret = no_os_gpio_set_value(dev->gpio_range, range_pin);
 		if (ret)
 			return ret;
 	}
@@ -1127,15 +1130,15 @@ int32_t ad7606_init(struct ad7606_dev **device,
 		goto error;
 
 	if (init_param->sw_mode) {
-		ret = gpio_set_value(dev->gpio_os0, GPIO_HIGH);
+		ret = no_os_gpio_set_value(dev->gpio_os0, NO_OS_GPIO_HIGH);
 		if (ret < 0)
 			goto error;
 
-		ret = gpio_set_value(dev->gpio_os1, GPIO_HIGH);
+		ret = no_os_gpio_set_value(dev->gpio_os1, NO_OS_GPIO_HIGH);
 		if (ret < 0)
 			goto error;
 
-		ret = gpio_set_value(dev->gpio_os2, GPIO_HIGH);
+		ret = no_os_gpio_set_value(dev->gpio_os2, NO_OS_GPIO_HIGH);
 		if (ret < 0)
 			goto error;
 	}
@@ -1202,7 +1205,7 @@ int32_t ad7606_init(struct ad7606_dev **device,
 			goto error;
 	}
 
-	ret = gpio_set_value(dev->gpio_convst, 1);
+	ret = no_os_gpio_set_value(dev->gpio_convst, 1);
 	if (ret < 0)
 		goto error;
 
@@ -1233,15 +1236,15 @@ int32_t ad7606_remove(struct ad7606_dev *dev)
 {
 	int32_t ret;
 
-	gpio_remove(dev->gpio_reset);
-	gpio_remove(dev->gpio_convst);
-	gpio_remove(dev->gpio_busy);
-	gpio_remove(dev->gpio_stby_n);
-	gpio_remove(dev->gpio_range);
-	gpio_remove(dev->gpio_os0);
-	gpio_remove(dev->gpio_os1);
-	gpio_remove(dev->gpio_os2);
-	gpio_remove(dev->gpio_par_ser);
+	no_os_gpio_remove(dev->gpio_reset);
+	no_os_gpio_remove(dev->gpio_convst);
+	no_os_gpio_remove(dev->gpio_busy);
+	no_os_gpio_remove(dev->gpio_stby_n);
+	no_os_gpio_remove(dev->gpio_range);
+	no_os_gpio_remove(dev->gpio_os0);
+	no_os_gpio_remove(dev->gpio_os1);
+	no_os_gpio_remove(dev->gpio_os2);
+	no_os_gpio_remove(dev->gpio_par_ser);
 
 	ret = spi_remove(dev->spi_desc);
 

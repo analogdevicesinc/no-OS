@@ -272,23 +272,23 @@ struct ad7606_dev {
 	/** SPI descriptor*/
 	spi_desc *spi_desc;
 	/** RESET GPIO descriptor */
-	struct gpio_desc *gpio_reset;
+	struct no_os_gpio_desc *gpio_reset;
 	/** CONVST GPIO descriptor */
-	struct gpio_desc *gpio_convst;
+	struct no_os_gpio_desc *gpio_convst;
 	/** BUSY GPIO descriptor */
-	struct gpio_desc *gpio_busy;
+	struct no_os_gpio_desc *gpio_busy;
 	/** STBYn GPIO descriptor */
-	struct gpio_desc *gpio_stby_n;
+	struct no_os_gpio_desc *gpio_stby_n;
 	/** RANGE GPIO descriptor */
-	struct gpio_desc *gpio_range;
+	struct no_os_gpio_desc *gpio_range;
 	/** OS0 GPIO descriptor */
-	struct gpio_desc *gpio_os0;
+	struct no_os_gpio_desc *gpio_os0;
 	/** OS1 GPIO descriptor */
-	struct gpio_desc *gpio_os1;
+	struct no_os_gpio_desc *gpio_os1;
 	/** OS2 GPIO descriptor */
-	struct gpio_desc *gpio_os2;
+	struct no_os_gpio_desc *gpio_os2;
 	/** PARn/SER GPIO descriptor */
-	struct gpio_desc *gpio_par_ser;
+	struct no_os_gpio_desc *gpio_par_ser;
 	/** Device ID */
 	enum ad7606_device_id device_id;
 	/** Oversampling settings */
@@ -325,23 +325,23 @@ struct ad7606_init_param {
 	/** SPI initialization parameters */
 	spi_init_param spi_init;
 	/** RESET GPIO initialization parameters */
-	struct gpio_init_param *gpio_reset;
+	struct no_os_gpio_init_param *gpio_reset;
 	/** CONVST GPIO initialization parameters */
-	struct gpio_init_param *gpio_convst;
+	struct no_os_gpio_init_param *gpio_convst;
 	/** BUSY GPIO initialization parameters */
-	struct gpio_init_param *gpio_busy;
+	struct no_os_gpio_init_param *gpio_busy;
 	/** STBYn GPIO initialization parameters */
-	struct gpio_init_param *gpio_stby_n;
+	struct no_os_gpio_init_param *gpio_stby_n;
 	/** RANGE GPIO initialization parameters */
-	struct gpio_init_param *gpio_range;
+	struct no_os_gpio_init_param *gpio_range;
 	/** OS0 GPIO initialization parameters */
-	struct gpio_init_param *gpio_os0;
+	struct no_os_gpio_init_param *gpio_os0;
 	/** OS1 GPIO initialization parameters */
-	struct gpio_init_param *gpio_os1;
+	struct no_os_gpio_init_param *gpio_os1;
 	/** OS2 GPIO initialization parameters */
-	struct gpio_init_param *gpio_os2;
+	struct no_os_gpio_init_param *gpio_os2;
 	/** PARn/SER GPIO initialization parameters */
-	struct gpio_init_param *gpio_par_ser;
+	struct no_os_gpio_init_param *gpio_par_ser;
 	/** Device ID */
 	enum ad7606_device_id device_id;
 	/** Oversampling settings */

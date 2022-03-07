@@ -72,9 +72,9 @@ int8_t ad7280a_init(struct ad7280a_dev **device,
 		return -1;
 
 	/* GPIO */
-	status = gpio_get(&dev->gpio_pd, &init_param.gpio_pd);
-	status |= gpio_get(&dev->gpio_cnvst, &init_param.gpio_cnvst);
-	status |= gpio_get(&dev->gpio_alert, &init_param.gpio_alert);
+	status = no_os_gpio_get(&dev->gpio_pd, &init_param.gpio_pd);
+	status |= no_os_gpio_get(&dev->gpio_cnvst, &init_param.gpio_cnvst);
+	status |= no_os_gpio_get(&dev->gpio_alert, &init_param.gpio_alert);
 
 	AD7280A_PD_OUT;
 	AD7280A_PD_HIGH;
@@ -129,9 +129,9 @@ int32_t ad7280a_remove(struct ad7280a_dev *dev)
 
 	ret = spi_remove(dev->spi_desc);
 
-	ret |= gpio_remove(dev->gpio_pd);
-	ret |= gpio_remove(dev->gpio_cnvst);
-	ret |= gpio_remove(dev->gpio_alert);
+	ret |= no_os_gpio_remove(dev->gpio_pd);
+	ret |= no_os_gpio_remove(dev->gpio_cnvst);
+	ret |= no_os_gpio_remove(dev->gpio_alert);
 
 	free(dev);
 
@@ -755,8 +755,8 @@ uint8_t ad7280a_alert_pin(struct ad7280a_dev *dev)
 {
 	uint8_t alert_ad7280a = 0;
 
-	gpio_get_value(dev->gpio_alert,
-		       &alert_ad7280a);
+	no_os_gpio_get_value(dev->gpio_alert,
+			     &alert_ad7280a);
 
 	return alert_ad7280a;
 }

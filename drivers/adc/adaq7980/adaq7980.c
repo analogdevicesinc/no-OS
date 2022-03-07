@@ -96,7 +96,7 @@ int32_t adaq7980_setup(struct adaq7980_dev **device,
 	if (!dev)
 		return FAILURE;
 
-	ret = gpio_get_optional(&dev->gpio_pd_ldo, init_param->gpio_pd_ldo);
+	ret = no_os_gpio_get_optional(&dev->gpio_pd_ldo, init_param->gpio_pd_ldo);
 	if (ret != SUCCESS)
 		goto error_dev;
 
@@ -105,12 +105,12 @@ int32_t adaq7980_setup(struct adaq7980_dev **device,
 		goto error_dev;
 
 	if (init_param->gpio_pd_ldo) {
-		ret = gpio_direction_output(dev->gpio_pd_ldo, GPIO_LOW);
+		ret = no_os_gpio_direction_output(dev->gpio_pd_ldo, NO_OS_GPIO_LOW);
 		if (ret != SUCCESS)
 			goto error_dev;
 
 		mdelay(10);
-		ret = gpio_set_value(dev->gpio_pd_ldo, GPIO_HIGH);
+		ret = no_os_gpio_set_value(dev->gpio_pd_ldo, NO_OS_GPIO_HIGH);
 		if (ret != SUCCESS)
 			goto error_dev;
 

@@ -28,7 +28,7 @@ INCS += $(PROJECT)/src/hal/parameters.h \
 	$(PROJECT)/src/firmware/Navassa_Stream.h
 # no-OS drivers
 SRCS += $(PLATFORM_DRIVERS)/xilinx_gpio.c \
-	$(DRIVERS)/api/gpio.c \
+	$(DRIVERS)/api/no_os_gpio.c \
 	$(DRIVERS)/api/spi.c \
 	$(PLATFORM_DRIVERS)/xilinx_spi.c \
 	$(PLATFORM_DRIVERS)/delay.c \

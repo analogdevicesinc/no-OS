@@ -96,14 +96,14 @@ int8_t ad9833_init(struct ad9833_dev **device,
 		return -1;
 
 	/* Setup GPIO pads. */
-	status |= gpio_get(&dev->gpio_psel,
-			   &init_param.gpio_psel);
-	status |= gpio_get(&dev->gpio_fsel,
-			   &init_param.gpio_fsel);
-	status |= gpio_get(&dev->gpio_reset,
-			   &init_param.gpio_reset);
-	status |= gpio_get(&dev->gpio_sleep,
-			   &init_param.gpio_sleep);
+	status |= no_os_gpio_get(&dev->gpio_psel,
+				 &init_param.gpio_psel);
+	status |= no_os_gpio_get(&dev->gpio_fsel,
+				 &init_param.gpio_fsel);
+	status |= no_os_gpio_get(&dev->gpio_reset,
+				 &init_param.gpio_reset);
+	status |= no_os_gpio_get(&dev->gpio_sleep,
+				 &init_param.gpio_sleep);
 
 	AD9834_PSEL_OUT;
 	AD9834_PSEL_LOW;
@@ -154,10 +154,10 @@ int32_t ad9833_remove(struct ad9833_dev *dev)
 
 	ret = spi_remove(dev->spi_desc);
 
-	ret |= gpio_remove(dev->gpio_psel);
-	ret |= gpio_remove(dev->gpio_fsel);
-	ret |= gpio_remove(dev->gpio_reset);
-	ret |= gpio_remove(dev->gpio_sleep);
+	ret |= no_os_gpio_remove(dev->gpio_psel);
+	ret |= no_os_gpio_remove(dev->gpio_fsel);
+	ret |= no_os_gpio_remove(dev->gpio_reset);
+	ret |= no_os_gpio_remove(dev->gpio_sleep);
 
 	free(dev);
 

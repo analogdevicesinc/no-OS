@@ -396,15 +396,15 @@ int32_t ad9208_initialize(ad9208_dev **device, ad9208_init_param *init_param)
 		goto error;
 
 	/* GPIO */
-	ret = gpio_get(&dev->gpio_powerdown, &init_param->gpio_powerdown);
+	ret = no_os_gpio_get(&dev->gpio_powerdown, &init_param->gpio_powerdown);
 	if (ret < 0)
 		goto error;
 
-	ret = gpio_direction_output(dev->gpio_powerdown, GPIO_LOW);
+	ret = no_os_gpio_direction_output(dev->gpio_powerdown, NO_OS_GPIO_LOW);
 	if (ret < 0)
 		goto error;
 
-	ret = gpio_set_value(dev->gpio_powerdown, GPIO_LOW);
+	ret = no_os_gpio_set_value(dev->gpio_powerdown, NO_OS_GPIO_LOW);
 	if (ret < 0)
 		goto error;
 
@@ -488,7 +488,7 @@ error:
 	if (st)
 		free(st);
 	if (dev->gpio_powerdown)
-		gpio_remove(dev->gpio_powerdown);
+		no_os_gpio_remove(dev->gpio_powerdown);
 	if (dev->spi_desc)
 		spi_remove(dev->spi_desc);
 	if (dev->st)
@@ -503,7 +503,7 @@ int32_t ad9208_remove(ad9208_dev *device)
 {
 	int32_t ret;
 
-	ret = gpio_remove(device->gpio_powerdown);
+	ret = no_os_gpio_remove(device->gpio_powerdown);
 	ret |= spi_remove(device->spi_desc);
 
 	if (device->st->adc_h)

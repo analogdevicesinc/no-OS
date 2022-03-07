@@ -63,7 +63,7 @@ typedef struct stm32_spi_desc {
 	/** SPI instance */
 	SPI_HandleTypeDef hspi;
 	/** Chip select gpio descriptor */
-	struct gpio_desc *chip_select;
+	struct no_os_gpio_desc *chip_select;
 } stm32_spi_desc;
 
 /**

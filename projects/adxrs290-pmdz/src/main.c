@@ -91,7 +91,7 @@ int main(void)
 	};
 
 	/* Initialization for Sync pin GPIO. */
-	struct gpio_init_param gpio_sync_init_param = {
+	struct no_os_gpio_init_param gpio_sync_init_param = {
 		.number = GPIO_SYNC_PIN_NUM,
 		.platform_ops = &aducm_gpio_ops,
 		.extra = NULL

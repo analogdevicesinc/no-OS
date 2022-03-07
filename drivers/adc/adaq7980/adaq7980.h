@@ -61,7 +61,7 @@ struct adaq7980_init_param {
 	/* PWM generator init structure */
 	struct pwm_init_param	*trigger_pwm_init;
 	/** Power down GPIO initialization structure. */
-	struct gpio_init_param	*gpio_pd_ldo;
+	struct no_os_gpio_init_param	*gpio_pd_ldo;
 };
 
 /**
@@ -76,7 +76,7 @@ struct adaq7980_dev {
 	/* SPI module offload init */
 	struct spi_engine_offload_init_param *offload_init_param;
 	/** Power down GPIO handler. */
-	struct gpio_desc	*gpio_pd_ldo;
+	struct no_os_gpio_desc	*gpio_pd_ldo;
 };
 
 /******************************************************************************/

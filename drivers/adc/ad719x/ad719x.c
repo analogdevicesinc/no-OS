@@ -78,19 +78,19 @@ int ad719x_init(struct ad719x_dev **device,
 		goto error_dev;
 
 	/* GPIO */
-	ret = gpio_get(&dev->gpio_miso, init_param.gpio_miso);
+	ret = no_os_gpio_get(&dev->gpio_miso, init_param.gpio_miso);
 	if (ret != SUCCESS)
 		goto error_spi;
 
-	ret = gpio_direction_input(dev->gpio_miso);
+	ret = no_os_gpio_direction_input(dev->gpio_miso);
 	if (ret != SUCCESS)
 		goto error_miso;
 
-	ret = gpio_get_optional(&dev->sync_pin, init_param.sync_pin);
+	ret = no_os_gpio_get_optional(&dev->sync_pin, init_param.sync_pin);
 	if (ret != SUCCESS)
 		goto error_miso;
 
-	ret = gpio_direction_output(dev->sync_pin, GPIO_HIGH);
+	ret = no_os_gpio_direction_output(dev->sync_pin, NO_OS_GPIO_HIGH);
 	if (ret != SUCCESS)
 		goto error_sync;
 
@@ -170,9 +170,9 @@ int ad719x_init(struct ad719x_dev **device,
 	return ret;
 
 error_sync:
-	gpio_remove(dev->sync_pin);
+	no_os_gpio_remove(dev->sync_pin);
 error_miso:
-	gpio_remove(dev->gpio_miso);
+	no_os_gpio_remove(dev->gpio_miso);
 error_spi:
 	spi_remove(dev->spi_desc);
 error_dev:
@@ -196,7 +196,7 @@ int ad719x_remove(struct ad719x_dev *dev)
 	if (ret != SUCCESS)
 		return ret;
 
-	ret = gpio_remove(dev->gpio_miso);
+	ret = no_os_gpio_remove(dev->gpio_miso);
 	if (ret != SUCCESS)
 		return ret;
 
@@ -370,7 +370,7 @@ int ad719x_wait_rdy_go_low(struct ad719x_dev *dev)
 	int ret;
 
 	while (wait && (timeout > 0)) {
-		ret = gpio_get_value(dev->gpio_miso, &wait);
+		ret = no_os_gpio_get_value(dev->gpio_miso, &wait);
 		if (ret != SUCCESS)
 			break;
 		timeout--;
@@ -760,7 +760,7 @@ float ad719x_convert_to_volts(struct ad719x_dev *dev,
 int ad719x_sync_control(struct ad719x_dev *dev, uint8_t value)
 {
 	if(dev->sync_pin) {
-		return gpio_set_value(dev->sync_pin, value);
+		return no_os_gpio_set_value(dev->sync_pin, value);
 	} else {
 		return -ENOTSUP;
 	}

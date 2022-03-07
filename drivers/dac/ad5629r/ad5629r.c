@@ -106,8 +106,8 @@ int8_t ad5629r_init(struct ad5629r_dev **device,
 		status = i2c_init(&dev->i2c_desc, &init_param.i2c_init);
 	}
 
-	status |= gpio_get(&dev->gpio_ldac, &init_param.gpio_ldac);
-	status |= gpio_get(&dev->gpio_clr, &init_param.gpio_clr);
+	status |= no_os_gpio_get(&dev->gpio_ldac, &init_param.gpio_ldac);
+	status |= no_os_gpio_get(&dev->gpio_clr, &init_param.gpio_clr);
 
 	AD5629R_LDAC_OUT;
 	AD5629R_LDAC_LOW;
@@ -136,10 +136,10 @@ int32_t ad5629r_remove(struct ad5629r_dev *dev)
 		ret = i2c_remove(dev->i2c_desc);
 
 	if (dev->gpio_ldac)
-		ret |= gpio_remove(dev->gpio_ldac);
+		ret |= no_os_gpio_remove(dev->gpio_ldac);
 
 	if (dev->gpio_clr)
-		ret |= gpio_remove(dev->gpio_clr);
+		ret |= no_os_gpio_remove(dev->gpio_clr);
 
 	free(dev);
 

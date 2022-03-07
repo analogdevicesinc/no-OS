@@ -57,13 +57,13 @@
  */
 typedef struct ssd_1306_extra {
 	/** Data/Command pin gpio initial param */
-	struct gpio_init_param	   *dc_pin_ip;
+	struct no_os_gpio_init_param	   *dc_pin_ip;
 	/** RESET pin gpio initial param */
-	struct gpio_init_param     *reset_pin_ip;
+	struct no_os_gpio_init_param     *reset_pin_ip;
 	/** Data/Command pin gpio desc */
-	struct gpio_desc	       *dc_pin;
+	struct no_os_gpio_desc	       *dc_pin;
 	/** RESET pin gpio desc*/
-	struct gpio_desc     	   *reset_pin;
+	struct no_os_gpio_desc     	   *reset_pin;
 	/* SPI initial param */
 	struct spi_init_param      *spi_ip;
 	/* SPI descriptor*/

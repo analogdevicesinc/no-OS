@@ -67,8 +67,8 @@ int8_t adf4157_init(struct adf4157_dev **device,
 		return -1;
 
 	/* Setup GPIO pads */
-	status = gpio_get(&dev->gpio_le, &init_param.gpio_le);
-	status |= gpio_get(&dev->gpio_ce, &init_param.gpio_ce);
+	status = no_os_gpio_get(&dev->gpio_le, &init_param.gpio_le);
+	status |= no_os_gpio_get(&dev->gpio_ce, &init_param.gpio_ce);
 
 	/* Setup Control GPIO Pins */
 	ADF4157_LE_OUT;
@@ -140,8 +140,8 @@ int32_t adf4157_remove(struct adf4157_dev *dev)
 
 	ret = spi_remove(dev->spi_desc);
 
-	ret |= gpio_remove(dev->gpio_le);
-	ret |= gpio_remove(dev->gpio_ce);
+	ret |= no_os_gpio_remove(dev->gpio_le);
+	ret |= no_os_gpio_remove(dev->gpio_ce);
 
 	free(dev);
 

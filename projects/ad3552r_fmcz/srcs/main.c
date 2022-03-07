@@ -71,7 +71,7 @@ static struct xil_gpio_init_param xil_gpio_param = {
 	.type = GPIO_PS
 };
 
-static struct gpio_init_param default_gpio_param = {
+static struct no_os_gpio_init_param default_gpio_param = {
 	.platform_ops = &xil_gpio_ops,
 	.extra = &xil_gpio_param
 };
@@ -79,35 +79,35 @@ static struct gpio_init_param default_gpio_param = {
 int32_t init_gpios_to_defaults()
 {
 	const uint8_t gpios_initial_value[][2] = {
-		[GPIO_RESET_N] = {GPIO_OUT, GPIO_HIGH},
-		[GPIO_LDAC_N] = {GPIO_OUT, GPIO_HIGH},
-		[GPIO_SPI_QPI] = {GPIO_OUT, GPIO_LOW},
-		[GPIO_ALERT_N] = {GPIO_IN, 0},
-		[GPIO_SYNC_EVENTS] = {GPIO_OUT, GPIO_HIGH},
-		[GPIO_RED] = {GPIO_OUT, GPIO_HIGH},
-		[GPIO_GREEN] = {GPIO_OUT, GPIO_HIGH},
-		[GPIO_BLUE] = {GPIO_OUT, GPIO_HIGH},
+		[GPIO_RESET_N] = {NO_OS_GPIO_OUT, NO_OS_GPIO_HIGH},
+		[GPIO_LDAC_N] = {NO_OS_GPIO_OUT, NO_OS_GPIO_HIGH},
+		[GPIO_SPI_QPI] = {NO_OS_GPIO_OUT, NO_OS_GPIO_LOW},
+		[GPIO_ALERT_N] = {NO_OS_GPIO_IN, 0},
+		[GPIO_SYNC_EVENTS] = {NO_OS_GPIO_OUT, NO_OS_GPIO_HIGH},
+		[GPIO_RED] = {NO_OS_GPIO_OUT, NO_OS_GPIO_HIGH},
+		[GPIO_GREEN] = {NO_OS_GPIO_OUT, NO_OS_GPIO_HIGH},
+		[GPIO_BLUE] = {NO_OS_GPIO_OUT, NO_OS_GPIO_HIGH},
 	};
-	struct gpio_desc *gpio;
-	struct gpio_init_param param = default_gpio_param;
+	struct no_os_gpio_desc *gpio;
+	struct no_os_gpio_init_param param = default_gpio_param;
 	uint32_t i;
 	int32_t	 err;
 
 	for (i = 0; i < TOTAL_GPIOS; i++) {
 		param.number = GPIO_OFFSET + i;
-		err = gpio_get(&gpio, &param);
+		err = no_os_gpio_get(&gpio, &param);
 		if (IS_ERR_VALUE(err))
 			return err;
-		if (gpios_initial_value[i][0] == GPIO_IN)
-			err = gpio_direction_input(gpio);
+		if (gpios_initial_value[i][0] == NO_OS_GPIO_IN)
+			err = no_os_gpio_direction_input(gpio);
 		else
-			err = gpio_direction_output(gpio,
-						    gpios_initial_value[i][1]);
+			err = no_os_gpio_direction_output(gpio,
+							  gpios_initial_value[i][1]);
 
 		if (IS_ERR_VALUE(err))
 			return err;
 
-		gpio_remove(gpio);
+		no_os_gpio_remove(gpio);
 	}
 
 	return SUCCESS;
@@ -115,13 +115,13 @@ int32_t init_gpios_to_defaults()
 
 void set_power_up_success_led()
 {
-	struct gpio_desc *gpio;
-	struct gpio_init_param param = default_gpio_param;
+	struct no_os_gpio_desc *gpio;
+	struct no_os_gpio_init_param param = default_gpio_param;
 
 	param.number = GPIO_OFFSET + GPIO_GREEN;
-	gpio_get(&gpio, &param);
-	gpio_direction_output(gpio, GPIO_LOW);
-	gpio_remove(gpio);
+	no_os_gpio_get(&gpio, &param);
+	no_os_gpio_direction_output(gpio, NO_OS_GPIO_LOW);
+	no_os_gpio_remove(gpio);
 }
 
 extern const uint16_t sine_lut_16[512];
@@ -163,10 +163,11 @@ int main()
 	if (IS_ERR_VALUE(err)) {
 		pr_err("init_gpios_to_defaults failed: %"PRIi32"\n", err);
 		return err;
+		fmcdaq3.c
 	}
 
-	struct gpio_init_param ldac_param = default_gpio_param;
-	struct gpio_init_param reset_param = default_gpio_param;
+	struct no_os_gpio_init_param ldac_param = default_gpio_param;
+	struct no_os_gpio_init_param reset_param = default_gpio_param;
 
 	ldac_param.number = GPIO_OFFSET + GPIO_LDAC_N;
 	reset_param.number = GPIO_OFFSET + GPIO_RESET_N;

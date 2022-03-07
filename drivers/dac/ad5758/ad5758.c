@@ -788,20 +788,20 @@ int32_t ad5758_init(struct ad5758_dev **device,
 		goto error_init;
 
 	/* GPIO */
-	ret = gpio_get(&dev->reset_n, &init_param->reset_n);
+	ret = no_os_gpio_get(&dev->reset_n, &init_param->reset_n);
 	if(ret)
 		goto error_init;
-	ret = gpio_get(&dev->ldac_n, &init_param->ldac_n);
+	ret = no_os_gpio_get(&dev->ldac_n, &init_param->ldac_n);
 	if(ret)
 		goto error_gpio_ldac;
 
 	/* Get the DAC out of reset */
-	ret = gpio_direction_output(dev->reset_n, GPIO_HIGH);
+	ret = no_os_gpio_direction_output(dev->reset_n, NO_OS_GPIO_HIGH);
 	if(ret)
 		goto err;
 
 	/* Tie the LDAC pin low */
-	ret = gpio_direction_output(dev->ldac_n, GPIO_LOW);
+	ret = no_os_gpio_direction_output(dev->ldac_n, NO_OS_GPIO_LOW);
 	if(ret)
 		goto err;
 
@@ -867,9 +867,9 @@ int32_t ad5758_init(struct ad5758_dev **device,
 	return SUCCESS;
 
 err:
-	gpio_remove(dev->ldac_n);
+	no_os_gpio_remove(dev->ldac_n);
 error_gpio_ldac:
-	gpio_remove(dev->reset_n);
+	no_os_gpio_remove(dev->reset_n);
 error_init:
 	pr_err("ad5758 could not be initialized\n");
 	free(dev);

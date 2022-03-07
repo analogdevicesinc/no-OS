@@ -838,28 +838,28 @@ int main(void)
 
 #ifdef TDD_SWITCH_STATE_EXAMPLE
 	uint32_t ensm_mode;
-	struct gpio_init_param  gpio_init = {
+	struct no_os_gpio_init_param  gpio_init = {
 		.platform_ops = GPIO_OPS,
 		.extra = GPIO_PARAM
 	};
-	struct gpio_desc 	*gpio_enable_pin;
-	struct gpio_desc 	*gpio_txnrx_pin;
+	struct no_os_gpio_desc 	*gpio_enable_pin;
+	struct no_os_gpio_desc 	*gpio_txnrx_pin;
 	if (!ad9361_phy->pdata->fdd) {
 		if (ad9361_phy->pdata->ensm_pin_ctrl) {
 			gpio_init.number = GPIO_ENABLE_PIN;
-			status = gpio_get(&gpio_enable_pin, &gpio_init);
+			status = no_os_gpio_get(&gpio_enable_pin, &gpio_init);
 			if (status != SUCCESS) {
-				printf("gpio_get() error: %"PRIi32"\n", status);
+				printf("no_os_gpio_get() error: %"PRIi32"\n", status);
 				return status;
 			}
-			gpio_direction_output(gpio_enable_pin, 1);
+			no_os_gpio_direction_output(gpio_enable_pin, 1);
 			gpio_init.number = GPIO_TXNRX_PIN;
-			status = gpio_get(&gpio_txnrx_pin, &gpio_init);
+			status = no_os_gpio_get(&gpio_txnrx_pin, &gpio_init);
 			if (status != SUCCESS) {
-				printf("gpio_get() error: %"PRIi32"\n", status);
+				printf("no_os_gpio_get() error: %"PRIi32"\n", status);
 				return status;
 			}
-			gpio_direction_output(gpio_txnrx_pin, 0);
+			no_os_gpio_direction_output(gpio_txnrx_pin, 0);
 			udelay(10);
 			ad9361_get_en_state_machine_mode(ad9361_phy, &ensm_mode);
 			printf("TXNRX control - Alert: %s\n",
@@ -868,37 +868,37 @@ int main(void)
 
 			if (ad9361_phy->pdata->ensm_pin_pulse_mode) {
 				while(1) {
-					gpio_set_value(gpio_txnrx_pin, 0);
+					no_os_gpio_set_value(gpio_txnrx_pin, 0);
 					udelay(10);
-					gpio_set_value(gpio_enable_pin, 1);
+					no_os_gpio_set_value(gpio_enable_pin, 1);
 					udelay(10);
-					gpio_set_value(gpio_enable_pin, 0);
+					no_os_gpio_set_value(gpio_enable_pin, 0);
 					ad9361_get_en_state_machine_mode(ad9361_phy, &ensm_mode);
 					printf("TXNRX Pulse control - RX: %s\n",
 					       ensm_mode == ENSM_MODE_RX ? "OK" : "Error");
 					mdelay(1000);
 
-					gpio_set_value(gpio_enable_pin, 1);
+					no_os_gpio_set_value(gpio_enable_pin, 1);
 					udelay(10);
-					gpio_set_value(gpio_enable_pin, 0);
+					no_os_gpio_set_value(gpio_enable_pin, 0);
 					ad9361_get_en_state_machine_mode(ad9361_phy, &ensm_mode);
 					printf("TXNRX Pulse control - Alert: %s\n",
 					       ensm_mode == ENSM_MODE_ALERT ? "OK" : "Error");
 					mdelay(1000);
 
-					gpio_set_value(gpio_txnrx_pin, 1);
+					no_os_gpio_set_value(gpio_txnrx_pin, 1);
 					udelay(10);
-					gpio_set_value(gpio_enable_pin, 1);
+					no_os_gpio_set_value(gpio_enable_pin, 1);
 					udelay(10);
-					gpio_set_value(gpio_enable_pin, 0);
+					no_os_gpio_set_value(gpio_enable_pin, 0);
 					ad9361_get_en_state_machine_mode(ad9361_phy, &ensm_mode);
 					printf("TXNRX Pulse control - TX: %s\n",
 					       ensm_mode == ENSM_MODE_TX ? "OK" : "Error");
 					mdelay(1000);
 
-					gpio_set_value(gpio_enable_pin, 1);
+					no_os_gpio_set_value(gpio_enable_pin, 1);
 					udelay(10);
-					gpio_set_value(gpio_enable_pin, 0);
+					no_os_gpio_set_value(gpio_enable_pin, 0);
 					ad9361_get_en_state_machine_mode(ad9361_phy, &ensm_mode);
 					printf("TXNRX Pulse control - Alert: %s\n",
 					       ensm_mode == ENSM_MODE_ALERT ? "OK" : "Error");
@@ -906,32 +906,32 @@ int main(void)
 				}
 			} else {
 				while(1) {
-					gpio_set_value(gpio_txnrx_pin, 0);
+					no_os_gpio_set_value(gpio_txnrx_pin, 0);
 					udelay(10);
-					gpio_set_value(gpio_enable_pin, 1);
+					no_os_gpio_set_value(gpio_enable_pin, 1);
 					udelay(10);
 					ad9361_get_en_state_machine_mode(ad9361_phy, &ensm_mode);
 					printf("TXNRX control - RX: %s\n",
 					       ensm_mode == ENSM_MODE_RX ? "OK" : "Error");
 					mdelay(1000);
 
-					gpio_set_value(gpio_enable_pin, 0);
+					no_os_gpio_set_value(gpio_enable_pin, 0);
 					udelay(10);
 					ad9361_get_en_state_machine_mode(ad9361_phy, &ensm_mode);
 					printf("TXNRX control - Alert: %s\n",
 					       ensm_mode == ENSM_MODE_ALERT ? "OK" : "Error");
 					mdelay(1000);
 
-					gpio_set_value(gpio_txnrx_pin, 1);
+					no_os_gpio_set_value(gpio_txnrx_pin, 1);
 					udelay(10);
-					gpio_set_value(gpio_enable_pin, 1);
+					no_os_gpio_set_value(gpio_enable_pin, 1);
 					udelay(10);
 					ad9361_get_en_state_machine_mode(ad9361_phy, &ensm_mode);
 					printf("TXNRX control - TX: %s\n",
 					       ensm_mode == ENSM_MODE_TX ? "OK" : "Error");
 					mdelay(1000);
 
-					gpio_set_value(gpio_enable_pin, 0);
+					no_os_gpio_set_value(gpio_enable_pin, 0);
 					udelay(10);
 					ad9361_get_en_state_machine_mode(ad9361_phy, &ensm_mode);
 					printf("TXNRX control - Alert: %s\n",

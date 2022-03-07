@@ -66,7 +66,7 @@ static struct pwm_init_param default_pwm_init_par = {
 	.polarity = PWM_POLARITY_HIGH,
 	.extra = NULL
 };
-static struct gpio_init_param default_gpio_init_par = {
+static struct no_os_gpio_init_param default_gpio_init_par = {
 	.number = 0,
 	.extra = NULL
 };
@@ -295,10 +295,10 @@ int get_gpio_attr(void *device, char *buf, uint32_t len,
 		val = !!desc->gpio[idx];
 		break;
 	case GPIO_VALUE:
-		ret = gpio_get_value(desc->gpio[idx], &val);
+		ret = no_os_gpio_get_value(desc->gpio[idx], &val);
 		break;
 	case GPIO_DIRECTION_OUTPUT:
-		ret = gpio_get_direction(desc->gpio[idx], &val);
+		ret = no_os_gpio_get_direction(desc->gpio[idx], &val);
 		break;
 	case GPIO_NUMBER:
 		ret = SUCCESS;
@@ -329,22 +329,22 @@ int set_gpio_attr(void *device, char *buf, uint32_t len,
 			} else {
 				set_pin(idx, PIN_TYPE_GPIO);
 				default_gpio_init_par.number = idx;
-				ret = gpio_get(&desc->gpio[idx],
-					       &default_gpio_init_par);
+				ret = no_os_gpio_get(&desc->gpio[idx],
+						     &default_gpio_init_par);
 			}
 		} else {
-			ret = gpio_remove(desc->gpio[idx]);
+			ret = no_os_gpio_remove(desc->gpio[idx]);
 			desc->gpio[idx] = NULL;
 		}
 		break;
 	case GPIO_VALUE:
-		ret = gpio_set_value(desc->gpio[idx], val);
+		ret = no_os_gpio_set_value(desc->gpio[idx], val);
 		break;
 	case GPIO_DIRECTION_OUTPUT:
 		if (val)
-			ret = gpio_direction_output(desc->gpio[idx], 0);
+			ret = no_os_gpio_direction_output(desc->gpio[idx], 0);
 		else
-			ret = gpio_direction_input(desc->gpio[idx]);
+			ret = no_os_gpio_direction_input(desc->gpio[idx]);
 
 		break;
 	case GPIO_NUMBER:

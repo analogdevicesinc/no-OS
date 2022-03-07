@@ -198,8 +198,8 @@ int main(void)
 	struct axi_dmac *tx_dmac;
 
 #ifdef DAC_DMA_EXAMPLE
-	struct gpio_desc *gpio_plddrbypass;
-	struct gpio_init_param gpio_init_plddrbypass;
+	struct no_os_gpio_desc *gpio_plddrbypass;
+	struct no_os_gpio_init_param gpio_init_plddrbypass;
 	extern const uint32_t sine_lut_iq[1024];
 #endif
 #ifndef ALTERA_PLATFORM
@@ -340,12 +340,12 @@ int main(void)
 	gpio_init_plddrbypass.platform_ops = &altera_gpio_ops;
 #endif
 	gpio_init_plddrbypass.number = DAC_FIFO_BYPASS_GPIO;
-	status = gpio_get(&gpio_plddrbypass, &gpio_init_plddrbypass);
+	status = no_os_gpio_get(&gpio_plddrbypass, &gpio_init_plddrbypass);
 	if (status) {
-		printf("gpio_get() failed with status %d", status);
+		printf("no_os_gpio_get() failed with status %d", status);
 		goto error_3;
 	}
-	gpio_direction_output(gpio_plddrbypass, 0);
+	no_os_gpio_direction_output(gpio_plddrbypass, 0);
 
 #ifndef ADRV9008_1
 	axi_dac_load_custom_data(tx_dac, sine_lut_iq,

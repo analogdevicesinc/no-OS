@@ -75,11 +75,11 @@ int8_t ad74xx_init(struct ad74xx_dev **device,
 	status = spi_init(&dev->spi_desc, &init_param.spi_init);
 
 	/* GPIO */
-	status |= gpio_get(&dev->gpio_cs, &init_param.gpio_cs);
+	status |= no_os_gpio_get(&dev->gpio_cs, &init_param.gpio_cs);
 
 	if (dev->gpio_cs)
-		status |= gpio_direction_output(dev->gpio_cs,
-						GPIO_HIGH);
+		status |= no_os_gpio_direction_output(dev->gpio_cs,
+						      NO_OS_GPIO_HIGH);
 
 	dev->device_bits_number = init_param.device_bits_number;
 	dev->part_number = init_param.part_number;
@@ -102,7 +102,7 @@ int32_t ad74xx_remove(struct ad74xx_dev *dev)
 
 	status = spi_remove(dev->spi_desc);
 
-	status = gpio_remove(dev->gpio_cs);
+	status = no_os_gpio_remove(dev->gpio_cs);
 
 	free(dev);
 

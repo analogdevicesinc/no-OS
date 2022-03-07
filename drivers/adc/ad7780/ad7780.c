@@ -72,13 +72,13 @@ int8_t ad7780_init(struct ad7780_dev **device,
 	if (!dev)
 		return -1;
 
-	init_status = gpio_get(&dev->gpio_pdrst, &init_param.gpio_pdrst);
-	init_status = gpio_get(&dev->gpio_miso, &init_param.gpio_miso);
-	init_status = gpio_get(&dev->gpio_filter, &init_param.gpio_filter);
-	init_status = gpio_get(&dev->gpio_gain, &init_param.gpio_gain);
+	init_status = no_os_gpio_get(&dev->gpio_pdrst, &init_param.gpio_pdrst);
+	init_status = no_os_gpio_get(&dev->gpio_miso, &init_param.gpio_miso);
+	init_status = no_os_gpio_get(&dev->gpio_filter, &init_param.gpio_filter);
+	init_status = no_os_gpio_get(&dev->gpio_gain, &init_param.gpio_gain);
 
 	if (dev->gpio_miso)
-		init_status = gpio_direction_input(dev->gpio_miso);
+		init_status = no_os_gpio_direction_input(dev->gpio_miso);
 
 	/* Set PDRST, FILTER and GAIN pins as output. */
 	AD7780_PDRST_PIN_OUT;
@@ -122,10 +122,10 @@ int32_t ad7780_remove(struct ad7780_dev *dev)
 
 	ret = spi_remove(dev->spi_desc);
 
-	ret |= gpio_remove(dev->gpio_pdrst);
-	ret |= gpio_remove(dev->gpio_miso);
-	ret |= gpio_remove(dev->gpio_filter);
-	ret |= gpio_remove(dev->gpio_gain);
+	ret |= no_os_gpio_remove(dev->gpio_pdrst);
+	ret |= no_os_gpio_remove(dev->gpio_miso);
+	ret |= no_os_gpio_remove(dev->gpio_filter);
+	ret |= no_os_gpio_remove(dev->gpio_gain);
 
 	free(dev);
 

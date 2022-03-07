@@ -380,7 +380,7 @@ int32_t ad9528_setup(struct ad9528_dev **device,
 		return ret;
 
 	/* GPIO */
-	ret = gpio_get_optional(&dev->gpio_resetb, init_param.gpio_resetb);
+	ret = no_os_gpio_get_optional(&dev->gpio_resetb, init_param.gpio_resetb);
 	if (ret < 0)
 		return ret;
 
@@ -884,13 +884,13 @@ int32_t ad9528_reset(struct ad9528_dev *dev)
 		return -1;
 
 	if(dev->gpio_resetb) {
-		s = gpio_direction_output(dev->gpio_resetb, 0);
+		s = no_os_gpio_direction_output(dev->gpio_resetb, 0);
 		if(s < 0)
 			return s;
 
 		mdelay(100);
 
-		s = gpio_direction_output(dev->gpio_resetb, 1);
+		s = no_os_gpio_direction_output(dev->gpio_resetb, 1);
 		if(s < 0)
 			return s;
 		mdelay(100);

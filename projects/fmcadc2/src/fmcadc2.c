@@ -88,7 +88,7 @@ int main(void)
 	ad9625_spi_param.device_id = SPI_DEVICE_ID;
 	ad9625_spi_param.extra = &xil_spi_param;
 
-	struct gpio_init_param gpio_sysref_param = {
+	struct no_os_gpio_init_param gpio_sysref_param = {
 		.number = GPIO_JESD204_SYSREF
 	};
 
@@ -103,7 +103,7 @@ int main(void)
 	gpio_sysref_param.platform_ops = &xil_gpio_ops;
 	gpio_sysref_param.extra = &xil_gpio_param;
 
-	gpio_desc *gpio_sysref;
+	no_os_gpio_desc *gpio_sysref;
 
 	struct adxcvr_init ad9625_xcvr_param = {
 		.name = "ad9152_xcvr",
@@ -155,8 +155,8 @@ int main(void)
 	ad9625_param.test_samples[3] = 0x444;
 
 	// setup GPIOs
-	gpio_get(&gpio_sysref,  &gpio_sysref_param);
-	gpio_direction_output(gpio_sysref,  1);
+	no_os_gpio_get(&gpio_sysref,  &gpio_sysref_param);
+	no_os_gpio_direction_output(gpio_sysref,  1);
 	mdelay(10);
 
 	// set up the device
@@ -248,7 +248,7 @@ int main(void)
 	printf("adc2: setup and configuration is done\n");
 
 	ad9625_remove(ad9625_device);
-	gpio_remove(gpio_sysref);
+	no_os_gpio_remove(gpio_sysref);
 
 	return(0);
 }

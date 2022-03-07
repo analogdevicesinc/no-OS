@@ -3340,10 +3340,10 @@ enum dev_id {
 struct ad9361_rf_phy {
 	enum dev_id		dev_sel;
 	struct spi_desc 	*spi;
-	struct gpio_desc 	*gpio_desc_resetb;
-	struct gpio_desc 	*gpio_desc_sync;
-	struct gpio_desc 	*gpio_desc_cal_sw1;
-	struct gpio_desc 	*gpio_desc_cal_sw2;
+	struct no_os_gpio_desc 	*gpio_desc_resetb;
+	struct no_os_gpio_desc 	*gpio_desc_sync;
+	struct no_os_gpio_desc 	*gpio_desc_cal_sw1;
+	struct no_os_gpio_desc 	*gpio_desc_cal_sw2;
 #ifndef AXI_ADC_NOT_PRESENT
 	struct axi_adc		*rx_adc;
 	struct axi_dac		*tx_dac;

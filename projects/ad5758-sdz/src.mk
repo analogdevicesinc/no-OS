@@ -1,6 +1,6 @@
 # See No-OS/tool/scripts/src_model.mk for variable description
 SRC_DIRS += $(PROJECT)/src
-SRCS += $(DRIVERS)/api/gpio.c \
+SRCS += $(DRIVERS)/api/no_os_gpio.c \
         $(DRIVERS)/api/spi.c \
         $(PLATFORM_DRIVERS)/$(PLATFORM)_spi.c \
         $(PLATFORM_DRIVERS)/$(PLATFORM)_gpio.c \

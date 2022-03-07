@@ -157,7 +157,7 @@ struct adrv9002_rx_chan {
 	struct adrv9002_chan channel;
 	struct adi_adrv9001_GainControlCfg agc;
 	struct adi_adrv9001_RxGainControlPinCfg *pin_cfg;
-	struct gpio_desc *orx_gpio;
+	struct no_os_gpio_desc *orx_gpio;
 	uint8_t orx_en;
 #ifdef CONFIG_DEBUG_FS
 	struct adi_adrv9001_RxSsiTestModeCfg ssi_test;
@@ -188,8 +188,8 @@ struct mutex {
 struct adrv9002_rf_phy {
 	struct spi_device		*spi;
 	struct iio_dev			*indio_dev;
-	struct gpio_desc		*reset_gpio;
-	struct gpio_desc		*ssi_sync;
+	struct no_os_gpio_desc		*reset_gpio;
+	struct no_os_gpio_desc		*ssi_sync;
 	struct mutex			lock;
 	struct adrv9002_clock		clk_priv[NUM_ADRV9002_CLKS];
 	uint8_t				*stream_buf;
@@ -282,9 +282,9 @@ static inline void adrv9002_sync_gpio_toogle(const struct adrv9002_rf_phy *phy)
 {
 	if (phy->rx2tx2) {
 		/* toogle ssi sync gpio */
-		gpio_set_value(phy->ssi_sync, 1);
+		no_os_gpio_set_value(phy->ssi_sync, 1);
 		udelay(5000);
-		gpio_set_value(phy->ssi_sync, 0);
+		no_os_gpio_set_value(phy->ssi_sync, 0);
 	}
 }
 #endif

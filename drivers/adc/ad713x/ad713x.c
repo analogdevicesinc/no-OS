@@ -378,39 +378,39 @@ static int32_t ad713x_init_gpio(struct ad713x_dev *dev,
 
 	int32_t ret;
 
-	ret = gpio_get_optional(&dev->gpio_mode, init_param->gpio_mode);
+	ret = no_os_gpio_get_optional(&dev->gpio_mode, init_param->gpio_mode);
 	if (IS_ERR_VALUE(ret))
 		return FAILURE;
 
-	ret = gpio_get_optional(&dev->gpio_dclkmode, init_param->gpio_dclkmode);
+	ret = no_os_gpio_get_optional(&dev->gpio_dclkmode, init_param->gpio_dclkmode);
 	if (IS_ERR_VALUE(ret))
 		return FAILURE;
 
-	ret = gpio_get_optional(&dev->gpio_dclkio, init_param->gpio_dclkio);
+	ret = no_os_gpio_get_optional(&dev->gpio_dclkio, init_param->gpio_dclkio);
 	if (IS_ERR_VALUE(ret))
 		return FAILURE;
 
-	ret = gpio_get_optional(&dev->gpio_resetn, init_param->gpio_resetn);
+	ret = no_os_gpio_get_optional(&dev->gpio_resetn, init_param->gpio_resetn);
 	if (IS_ERR_VALUE(ret))
 		return FAILURE;
 
-	ret = gpio_get_optional(&dev->gpio_pnd, init_param->gpio_pnd);
+	ret = no_os_gpio_get_optional(&dev->gpio_pnd, init_param->gpio_pnd);
 	if (IS_ERR_VALUE(ret))
 		return FAILURE;
 
 	/** Tie this pin to IOVDD for master mode operation, tie this pin to
 	 *  IOGND for slave mode operation. */
 	if (init_param->gpio_mode) {
-		ret = gpio_direction_output(dev->gpio_mode,
-					    init_param->mode_master_nslave);
+		ret = no_os_gpio_direction_output(dev->gpio_mode,
+						  init_param->mode_master_nslave);
 		if (IS_ERR_VALUE(ret))
 			return FAILURE;
 	}
 
 	/* Tie this pin low to ground to make DLCK operating in gated mode */
 	if (init_param->gpio_dclkmode) {
-		ret = gpio_direction_output(dev->gpio_dclkmode,
-					    init_param->dclkmode_free_ngated);
+		ret = no_os_gpio_direction_output(dev->gpio_dclkmode,
+						  init_param->dclkmode_free_ngated);
 		if (IS_ERR_VALUE(ret))
 			return FAILURE;
 	}
@@ -418,26 +418,26 @@ static int32_t ad713x_init_gpio(struct ad713x_dev *dev,
 	/** Tie this pin high to make DCLK an output, tie this pin low to make
 	 *  DLCK an input. */
 	if (init_param->gpio_dclkio) {
-		ret = gpio_direction_output(dev->gpio_dclkio,
-					    init_param->dclkio_out_nin);
+		ret = no_os_gpio_direction_output(dev->gpio_dclkio,
+						  init_param->dclkio_out_nin);
 		if (IS_ERR_VALUE(ret))
 			return FAILURE;
 	}
 
 	/** Get the ADCs out of power down state */
 	if (init_param->gpio_pnd) {
-		ret = gpio_direction_output(dev->gpio_pnd, init_param->pnd);
+		ret = no_os_gpio_direction_output(dev->gpio_pnd, init_param->pnd);
 		if (IS_ERR_VALUE(ret))
 			return FAILURE;
 	}
 
 	/** Reset to configure pins */
 	if (init_param->gpio_resetn) {
-		ret = gpio_direction_output(dev->gpio_resetn, false);
+		ret = no_os_gpio_direction_output(dev->gpio_resetn, false);
 		if (IS_ERR_VALUE(ret))
 			return FAILURE;
 		mdelay(100);
-		ret = gpio_set_value(dev->gpio_resetn, true);
+		ret = no_os_gpio_set_value(dev->gpio_resetn, true);
 		if (IS_ERR_VALUE(ret))
 			return FAILURE;
 		mdelay(100);
@@ -456,27 +456,27 @@ static int32_t ad713x_remove_gpio(struct ad713x_dev *dev)
 	int32_t ret;
 
 	if (dev->gpio_dclkio) {
-		ret = gpio_remove(dev->gpio_dclkio);
+		ret = no_os_gpio_remove(dev->gpio_dclkio);
 		if(IS_ERR_VALUE(ret))
 			return FAILURE;
 	}
 	if (dev->gpio_dclkio) {
-		ret = gpio_remove(dev->gpio_dclkmode);
+		ret = no_os_gpio_remove(dev->gpio_dclkmode);
 		if(IS_ERR_VALUE(ret))
 			return FAILURE;
 	}
 	if (dev->gpio_mode) {
-		ret = gpio_remove(dev->gpio_mode);
+		ret = no_os_gpio_remove(dev->gpio_mode);
 		if(IS_ERR_VALUE(ret))
 			return FAILURE;
 	}
 	if (dev->gpio_pnd) {
-		ret = gpio_remove(dev->gpio_pnd);
+		ret = no_os_gpio_remove(dev->gpio_pnd);
 		if(IS_ERR_VALUE(ret))
 			return FAILURE;
 	}
 	if (dev->gpio_resetn) {
-		ret = gpio_remove(dev->gpio_resetn);
+		ret = no_os_gpio_remove(dev->gpio_resetn);
 		if(IS_ERR_VALUE(ret))
 			return FAILURE;
 	}

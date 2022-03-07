@@ -450,13 +450,13 @@ int32_t ad7091r5_reset(struct ad7091r5_dev *dev, bool is_software)
 					       REG_CONF_RESET_MASK,
 					       REG_CONF_RESET(1));
 	} else {
-		ret = gpio_set_value(dev->gpio_resetn, GPIO_LOW);
+		ret = no_os_gpio_set_value(dev->gpio_resetn, NO_OS_GPIO_LOW);
 		if (ret < 0)
 			return ret;
 
 		/* reset pulse width, at least 10 ns*/
 		udelay(1);
-		return gpio_set_value(dev->gpio_resetn, GPIO_HIGH);
+		return no_os_gpio_set_value(dev->gpio_resetn, NO_OS_GPIO_HIGH);
 	}
 }
 
@@ -475,11 +475,11 @@ static int32_t ad7091r5_init_gpio(struct ad7091r5_dev *dev,
 	if (!dev || !init_param)
 		return -EINVAL;
 
-	ret = gpio_get_optional(&dev->gpio_resetn, init_param->gpio_resetn);
+	ret = no_os_gpio_get_optional(&dev->gpio_resetn, init_param->gpio_resetn);
 	if (ret < 0)
 		return ret;
 
-	ret = gpio_direction_output(dev->gpio_resetn, GPIO_LOW);
+	ret = no_os_gpio_direction_output(dev->gpio_resetn, NO_OS_GPIO_LOW);
 	if (ret < 0)
 		return ret;
 
@@ -563,7 +563,7 @@ int32_t ad7091r5_init(struct ad7091r5_dev **device,
 error_i2c:
 	i2c_remove(dev->i2c_desc);
 error_gpio:
-	gpio_remove(dev->gpio_resetn);
+	no_os_gpio_remove(dev->gpio_resetn);
 error_dev:
 	free(dev);
 
@@ -586,7 +586,7 @@ int32_t ad7091r5_remove(struct ad7091r5_dev *dev)
 	if (ret < 0)
 		return ret;
 
-	ret = gpio_remove(dev->gpio_resetn);
+	ret = no_os_gpio_remove(dev->gpio_resetn);
 	if (ret < 0)
 		return ret;
 

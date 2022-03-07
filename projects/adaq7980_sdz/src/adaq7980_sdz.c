@@ -93,17 +93,17 @@ int main()
 		.type = GPIO_PS,
 	};
 
-	struct gpio_init_param adaq7980_pd_ldo = {
+	struct no_os_gpio_init_param adaq7980_pd_ldo = {
 		.number = GPIO_0,
 		.platform_ops = &xil_gpio_ops,
 		.extra = &gpio_extra_param
 	};
-	struct gpio_init_param adaq7980_ref_pd= {
+	struct no_os_gpio_init_param adaq7980_ref_pd= {
 		.number = GPIO_REF_PUB,
 		.platform_ops = &xil_gpio_ops,
 		.extra = &gpio_extra_param
 	};
-	struct gpio_init_param adaq7980_rbuf_pd = {
+	struct no_os_gpio_init_param adaq7980_rbuf_pd = {
 		.number = GPIO_RBUF_PUB,
 		.platform_ops = &xil_gpio_ops,
 		.extra = &gpio_extra_param

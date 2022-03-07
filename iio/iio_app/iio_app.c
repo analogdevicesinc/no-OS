@@ -70,7 +70,7 @@
 #ifdef LINUX_PLATFORM
 #include "linux_socket.h"
 #include "tcp_socket.h"
-#include "no-os/error.h"
+#include "no_os_error.h"
 #endif
 
 // The default baudrate iio_app will use to print messages to console.

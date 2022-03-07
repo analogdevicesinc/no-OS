@@ -63,17 +63,17 @@ extern "C"
  * @param param[in] - The structure that contains the GPIO init parameters.
  * @return SUCCESS in case of success, negative error code otherwise.
  */
-int32_t mbed_gpio_get(struct gpio_desc **desc,
-		      const struct gpio_init_param *param)
+int32_t mbed_gpio_get(struct no_os_gpio_desc **desc,
+		      const struct no_os_gpio_init_param *param)
 {
-	struct gpio_desc *gpio_desc;
+	struct no_os_gpio_desc *gpio_desc;
 	struct mbed_gpio_desc *mbed_gpio_desc;
 
 	if (!desc || !param)
 		return -EINVAL;
 
 	/* Create gpio description object for the device */
-	gpio_desc = (struct gpio_desc *)calloc(1, sizeof(*gpio_desc));
+	gpio_desc = (struct no_os_gpio_desc *)calloc(1, sizeof(*gpio_desc));
 	if (!gpio_desc)
 		return -ENOMEM;
 
@@ -85,7 +85,7 @@ int32_t mbed_gpio_get(struct gpio_desc **desc,
 	if (!mbed_gpio_desc)
 		goto err_mbed_gpio_desc;
 
-	mbed_gpio_desc->direction = GPIO_IN;
+	mbed_gpio_desc->direction = NO_OS_GPIO_IN;
 	mbed_gpio_desc->gpio_pin = NULL;
 
 	if (param->extra)
@@ -111,8 +111,8 @@ err_mbed_gpio_desc:
  * @param param[in] - GPIO Initialization parameters.
  * @return SUCCESS in case of success, negative error code otherwise.
  */
-int32_t mbed_gpio_get_optional(struct gpio_desc **desc,
-			       const struct gpio_init_param *param)
+int32_t mbed_gpio_get_optional(struct no_os_gpio_desc **desc,
+			       const struct no_os_gpio_init_param *param)
 {
 	if (param == NULL) {
 		*desc = NULL;
@@ -127,14 +127,14 @@ int32_t mbed_gpio_get_optional(struct gpio_desc **desc,
  * @param desc[in] - The GPIO descriptor.
  * @return SUCCESS in case of success, negative error code otherwise.
  */
-int32_t mbed_gpio_remove(struct gpio_desc *desc)
+int32_t mbed_gpio_remove(struct no_os_gpio_desc *desc)
 {
 	if (!desc || !desc->extra)
 		return -EINVAL;
 
 	/* Free the gpio object */
 	if (((struct mbed_gpio_desc *)(desc->extra))->gpio_pin) {
-		if (((struct mbed_gpio_desc *)(desc->extra))->direction == GPIO_IN)
+		if (((struct mbed_gpio_desc *)(desc->extra))->direction == NO_OS_GPIO_IN)
 			delete((DigitalIn *)(((struct mbed_gpio_desc *)(desc->extra))->gpio_pin));
 		else
 			delete((DigitalOut *)(((struct mbed_gpio_desc *)(desc->extra))->gpio_pin));
@@ -153,7 +153,7 @@ int32_t mbed_gpio_remove(struct gpio_desc *desc)
  * @return SUCCESS in case of success, negative error code otherwise.
  * @note does not support reconfiguration of already set pin direction
  */
-int32_t mbed_gpio_direction_input(struct gpio_desc *desc)
+int32_t mbed_gpio_direction_input(struct no_os_gpio_desc *desc)
 {
 	DigitalIn *gpio_input;				// pointer to gpio input object
 	struct mbed_gpio_desc
@@ -177,7 +177,7 @@ int32_t mbed_gpio_direction_input(struct gpio_desc *desc)
 	}
 
 	gpio_desc_extra->gpio_pin = (struct mbed_gpio_desc *)gpio_input;
-	gpio_desc_extra->direction = GPIO_IN;
+	gpio_desc_extra->direction = NO_OS_GPIO_IN;
 
 	/* Set the gpio pin mode */
 	gpio_input->mode((PinMode)gpio_desc_extra->pin_mode);
@@ -189,12 +189,12 @@ int32_t mbed_gpio_direction_input(struct gpio_desc *desc)
  * @brief Enable the output direction of the specified GPIO.
  * @param desc[in] - The GPIO descriptor.
  * @param value[in] - The GPIO value.
- *                Example: GPIO_HIGH
- *                         GPIO_LOW
+ *                Example: NO_OS_GPIO_HIGH
+ *                         NO_OS_GPIO_LOW
  * @return SUCCESS in case of success, negative error code otherwise.
  * @note does not support reconfiguration of already set pin direction
  */
-int32_t mbed_gpio_direction_output(struct gpio_desc *desc, uint8_t value)
+int32_t mbed_gpio_direction_output(struct no_os_gpio_desc *desc, uint8_t value)
 {
 	DigitalOut *gpio_output;    	// pointer to gpio output object
 	struct mbed_gpio_desc
@@ -218,7 +218,7 @@ int32_t mbed_gpio_direction_output(struct gpio_desc *desc, uint8_t value)
 	}
 
 	gpio_desc_extra->gpio_pin = (struct mbed_gpio_desc *)gpio_output;
-	gpio_desc_extra->direction = GPIO_OUT;
+	gpio_desc_extra->direction = NO_OS_GPIO_OUT;
 
 	/* Set the GPIO value */
 	gpio_output->write(value);
@@ -230,11 +230,11 @@ int32_t mbed_gpio_direction_output(struct gpio_desc *desc, uint8_t value)
  * @brief Get the direction of the specified GPIO.
  * @param desc[in] - The GPIO descriptor.
  * @param direction[in,out] - The GPIO direction.
- *                    Example: GPIO_OUT
- *                             GPIO_IN
+ *                    Example: NO_OS_GPIO_OUT
+ *                             NO_OS_GPIO_IN
  * @return SUCCESS in case of success, negative error code otherwise.
  */
-int32_t mbed_gpio_get_direction(struct gpio_desc *desc, uint8_t *direction)
+int32_t mbed_gpio_get_direction(struct no_os_gpio_desc *desc, uint8_t *direction)
 {
 	mbed_gpio_desc *gpio_desc_extra;     // pointer to gpio desc extra parameters
 
@@ -245,7 +245,7 @@ int32_t mbed_gpio_get_direction(struct gpio_desc *desc, uint8_t *direction)
 	if (!gpio_desc_extra->gpio_pin)
 		return -EINVAL;
 
-	*direction = gpio_desc_extra->direction;
+	*direction = no_os_gpio_desc_extra->direction;
 
 	return SUCCESS;
 }
@@ -254,11 +254,11 @@ int32_t mbed_gpio_get_direction(struct gpio_desc *desc, uint8_t *direction)
  * @brief Set the value of the specified GPIO.
  * @param desc[in] - The GPIO descriptor.
  * @param value[in] - The GPIO value.
- *                Example: GPIO_HIGH
- *                         GPIO_LOW
+ *                Example: NO_OS_GPIO_HIGH
+ *                         NO_OS_GPIO_LOW
  * @return SUCCESS in case of success, negative error code otherwise.
  */
-int32_t mbed_gpio_set_value(struct gpio_desc *desc, uint8_t value)
+int32_t mbed_gpio_set_value(struct no_os_gpio_desc *desc, uint8_t value)
 {
 	DigitalOut *gpio_output; 		// pointer to gpio output object
 	mbed_gpio_desc *gpio_desc_extra;    // pointer to gpio desc extra parameters
@@ -267,7 +267,7 @@ int32_t mbed_gpio_set_value(struct gpio_desc *desc, uint8_t value)
 		return -EINVAL;
 
 	gpio_desc_extra = (struct mbed_gpio_desc *)(desc->extra);
-	if (!gpio_desc_extra->gpio_pin || (gpio_desc_extra->direction != GPIO_OUT))
+	if (!gpio_desc_extra->gpio_pin || (gpio_desc_extra->direction != NO_OS_GPIO_OUT))
 		return -EINVAL;
 
 	gpio_output = (DigitalOut *)(gpio_desc_extra->gpio_pin);
@@ -283,11 +283,11 @@ int32_t mbed_gpio_set_value(struct gpio_desc *desc, uint8_t value)
  * @brief Get the value of the specified GPIO.
  * @param desc[in] - The GPIO descriptor.
  * @param value[in,out] - The GPIO value.
- *                Example: GPIO_HIGH
- *                         GPIO_LOW
+ *                Example: NO_OS_GPIO_HIGH
+ *                         NO_OS_GPIO_LOW
  * @return SUCCESS in case of success, negative error code otherwise.
  */
-int32_t mbed_gpio_get_value(struct gpio_desc *desc, uint8_t *value)
+int32_t mbed_gpio_get_value(struct no_os_gpio_desc *desc, uint8_t *value)
 {
 	DigitalIn *gpio_input;    	// pointer to gpio input object
 
@@ -306,7 +306,7 @@ int32_t mbed_gpio_get_value(struct gpio_desc *desc, uint8_t *value)
 /**
  * @brief Mbed platform specific GPIO platform ops structure
  */
-const struct gpio_platform_ops mbed_gpio_ops = {
+const struct no_os_gpio_platform_ops mbed_gpio_ops = {
 	.gpio_ops_get = &mbed_gpio_get,
 	.gpio_ops_get_optional = &mbed_gpio_get_optional,
 	.gpio_ops_remove = &mbed_gpio_remove,

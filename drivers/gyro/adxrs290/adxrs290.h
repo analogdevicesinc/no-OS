@@ -164,7 +164,7 @@ struct adxrs290_init_param {
 	/** SPI Initialization structure. */
 	struct spi_init_param	spi_init;
 	/** Optional. If not set adxrs290_get_data_ready will fail */
-	struct gpio_init_param	*gpio_sync;
+	struct no_os_gpio_init_param	*gpio_sync;
 	/** Initial Mode */
 	enum adxrs290_mode	mode;
 	/** Initial lpf settings */
@@ -181,7 +181,7 @@ struct adxrs290_dev {
 	/** SPI handler */
 	struct spi_desc		*spi_desc;
 	/** GPIO */
-	struct gpio_desc	*gpio_sync;
+	struct no_os_gpio_desc	*gpio_sync;
 	/** Active Channels */
 	uint8_t			ch_mask;
 };

@@ -204,7 +204,7 @@ struct ad469x_init_param {
 	/* PWM generator init structure */
 	struct pwm_init_param	*trigger_pwm_init;
 	/** RESET GPIO initialization structure. */
-	struct gpio_init_param	*gpio_resetn;
+	struct no_os_gpio_init_param	*gpio_resetn;
 	/* Clock gen for hdl design init structure */
 	struct axi_clkgen_init	*clkgen_init;
 	/* Clock generator rate */
@@ -243,7 +243,7 @@ struct ad469x_dev {
 	/* Device Settings */
 	enum ad469x_supported_dev_ids dev_id;
 	/** RESET GPIO handler. */
-	struct gpio_desc	*gpio_resetn;
+	struct no_os_gpio_desc	*gpio_resetn;
 	/** Invalidate the Data cache for the given address range */
 	void (*dcache_invalidate_range)(uint32_t address, uint32_t bytes_count);
 	/** Current channel sequence */

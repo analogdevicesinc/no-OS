@@ -11,7 +11,7 @@
 
 SRCS += $(PROJECT)/src/app/adf4377_sdz.c
 SRCS += $(DRIVERS)/api/spi.c \
-	$(DRIVERS)/api/gpio.c \
+	$(DRIVERS)/api/no_os_gpio.c \
 	$(DRIVERS)/frequency/adf4377/adf4377.c
 SRCS +=	$(PLATFORM_DRIVERS)/axi_io.c \
 	$(PLATFORM_DRIVERS)/xilinx_spi.c \

@@ -48,7 +48,7 @@
 /**
  * @brief Altera platform specific gpio platform ops structure
  */
-extern const struct gpio_platform_ops altera_gpio_ops;
+extern const struct no_os_gpio_platform_ops altera_gpio_ops;
 
 /**
  * @enum gpio_type

@@ -182,13 +182,13 @@ struct ada4250_init_param {
 	/* SPI Initialization parameters */
 	struct spi_init_param	*spi_init;
 	/* GPIO Initialization parameters */
-	struct gpio_init_param	*gpio_g2_param;
-	struct gpio_init_param	*gpio_g1_param;
-	struct gpio_init_param	*gpio_g0_param;
-	struct gpio_init_param	*gpio_bw_param;
-	struct gpio_init_param	*gpio_bufen_param;
-	struct gpio_init_param	*gpio_slp;
-	struct gpio_init_param	*gpio_shtdwn;
+	struct no_os_gpio_init_param	*gpio_g2_param;
+	struct no_os_gpio_init_param	*gpio_g1_param;
+	struct no_os_gpio_init_param	*gpio_g0_param;
+	struct no_os_gpio_init_param	*gpio_bw_param;
+	struct no_os_gpio_init_param	*gpio_bufen_param;
+	struct no_os_gpio_init_param	*gpio_slp;
+	struct no_os_gpio_init_param	*gpio_shtdwn;
 	/* AVDD value in Volts */
 	int32_t avdd_v;
 	/* Reference Buffer Enable */
@@ -213,13 +213,13 @@ struct ada4250_dev {
 	/* SPI Initialization parameters */
 	struct spi_desc	*spi_desc;
 	/* GPIO Descriptors */
-	struct gpio_desc	*gpio_g2;
-	struct gpio_desc	*gpio_g1;
-	struct gpio_desc	*gpio_g0;
-	struct gpio_desc	*gpio_bw;
-	struct gpio_desc	*gpio_bufen;
-	struct gpio_desc	*gpio_slp;
-	struct gpio_desc	*gpio_shtdwn;
+	struct no_os_gpio_desc	*gpio_g2;
+	struct no_os_gpio_desc	*gpio_g1;
+	struct no_os_gpio_desc	*gpio_g0;
+	struct no_os_gpio_desc	*gpio_bw;
+	struct no_os_gpio_desc	*gpio_bufen;
+	struct no_os_gpio_desc	*gpio_slp;
+	struct no_os_gpio_desc	*gpio_shtdwn;
 	/* AVDD value in Volts */
 	int32_t avdd_v;
 	/* Reference Buffer Enable */

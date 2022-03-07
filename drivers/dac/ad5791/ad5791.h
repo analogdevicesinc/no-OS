@@ -68,9 +68,9 @@ struct ad5791_dev {
 	/* SPI */
 	spi_desc		*spi_desc;
 	/* GPIO */
-	struct gpio_desc	*gpio_reset;
-	struct gpio_desc	*gpio_clr;
-	struct gpio_desc	*gpio_ldac;
+	struct no_os_gpio_desc	*gpio_reset;
+	struct no_os_gpio_desc	*gpio_clr;
+	struct no_os_gpio_desc	*gpio_ldac;
 	/* Device Settings */
 	enum ad5791_type act_device;
 };
@@ -79,9 +79,9 @@ struct ad5791_init_param {
 	/* SPI */
 	spi_init_param	spi_init;
 	/* GPIO */
-	struct gpio_init_param		gpio_reset;
-	struct gpio_init_param		gpio_clr;
-	struct gpio_init_param		gpio_ldac;
+	struct no_os_gpio_init_param		gpio_reset;
+	struct no_os_gpio_init_param		gpio_clr;
+	struct no_os_gpio_init_param		gpio_ldac;
 	/* Device Settings */
 	enum ad5791_type act_device;
 };
@@ -89,26 +89,26 @@ struct ad5791_init_param {
 /******************************************************************************/
 /*********************************** GPIO *************************************/
 /******************************************************************************/
-#define AD5791_RESET_OUT       gpio_direction_output(dev->gpio_reset, \
-			       GPIO_HIGH);
-#define AD5791_RESET_LOW       gpio_set_value(dev->gpio_reset,        \
-			       GPIO_LOW)
-#define AD5791_RESET_HIGH      gpio_set_value(dev->gpio_reset,        \
-			       GPIO_HIGH)
+#define AD5791_RESET_OUT       no_os_gpio_direction_output(dev->gpio_reset, \
+			       NO_OS_GPIO_HIGH);
+#define AD5791_RESET_LOW       no_os_gpio_set_value(dev->gpio_reset,        \
+			       NO_OS_GPIO_LOW)
+#define AD5791_RESET_HIGH      no_os_gpio_set_value(dev->gpio_reset,        \
+			       NO_OS_GPIO_HIGH)
 
-#define AD5791_CLR_OUT         gpio_direction_output(dev->gpio_clr,  \
-			       GPIO_HIGH);
-#define AD5791_CLR_LOW         gpio_set_value(dev->gpio_clr,         \
-			       GPIO_LOW)
-#define AD5791_CLR_HIGH        gpio_set_value(dev->gpio_clr,         \
-			       GPIO_HIGH)
+#define AD5791_CLR_OUT         no_os_gpio_direction_output(dev->gpio_clr,  \
+			       NO_OS_GPIO_HIGH);
+#define AD5791_CLR_LOW         no_os_gpio_set_value(dev->gpio_clr,         \
+			       NO_OS_GPIO_LOW)
+#define AD5791_CLR_HIGH        no_os_gpio_set_value(dev->gpio_clr,         \
+			       NO_OS_GPIO_HIGH)
 
-#define AD5791_LDAC_OUT        gpio_direction_output(dev->gpio_ldac, \
-			       GPIO_HIGH);
-#define AD5791_LDAC_LOW        gpio_set_value(dev->gpio_ldac,        \
-			       GPIO_LOW)
-#define AD5791_LDAC_HIGH       gpio_set_value(dev->gpio_ldac,        \
-			       GPIO_HIGH)
+#define AD5791_LDAC_OUT        no_os_gpio_direction_output(dev->gpio_ldac, \
+			       NO_OS_GPIO_HIGH);
+#define AD5791_LDAC_LOW        no_os_gpio_set_value(dev->gpio_ldac,        \
+			       NO_OS_GPIO_LOW)
+#define AD5791_LDAC_HIGH       no_os_gpio_set_value(dev->gpio_ldac,        \
+			       NO_OS_GPIO_HIGH)
 
 /******************************************************************************/
 /********************************** AD5791 ************************************/

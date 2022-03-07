@@ -319,17 +319,17 @@ int32_t ad9172_init(ad9172_dev **device,
 		goto error_2;
 
 	/* GPIO */
-	ret |= gpio_get(&dev->gpio_reset, &init_param->gpio_reset);
-	ret |= gpio_get(&dev->gpio_txen0, &init_param->gpio_txen0);
-	ret |= gpio_get(&dev->gpio_txen1, &init_param->gpio_txen1);
+	ret |= no_os_gpio_get(&dev->gpio_reset, &init_param->gpio_reset);
+	ret |= no_os_gpio_get(&dev->gpio_txen0, &init_param->gpio_txen0);
+	ret |= no_os_gpio_get(&dev->gpio_txen1, &init_param->gpio_txen1);
 
-	ret |= gpio_direction_output(dev->gpio_reset, GPIO_HIGH);
-	ret |= gpio_direction_output(dev->gpio_txen0, GPIO_HIGH);
-	ret |= gpio_direction_output(dev->gpio_txen1, GPIO_HIGH);
+	ret |= no_os_gpio_direction_output(dev->gpio_reset, NO_OS_GPIO_HIGH);
+	ret |= no_os_gpio_direction_output(dev->gpio_txen0, NO_OS_GPIO_HIGH);
+	ret |= no_os_gpio_direction_output(dev->gpio_txen1, NO_OS_GPIO_HIGH);
 
-	ret |= gpio_set_value(dev->gpio_reset, GPIO_HIGH);
-	ret |= gpio_set_value(dev->gpio_txen0, GPIO_HIGH);
-	ret |= gpio_set_value(dev->gpio_txen1, GPIO_HIGH);
+	ret |= no_os_gpio_set_value(dev->gpio_reset, NO_OS_GPIO_HIGH);
+	ret |= no_os_gpio_set_value(dev->gpio_txen0, NO_OS_GPIO_HIGH);
+	ret |= no_os_gpio_set_value(dev->gpio_txen1, NO_OS_GPIO_HIGH);
 
 	if (ret < 0)
 		goto error_3;
@@ -384,9 +384,9 @@ int32_t ad9172_remove(ad9172_dev *device)
 	int32_t ret;
 
 	ret = spi_remove(device->spi_desc);
-	ret += gpio_remove(device->gpio_reset);
-	ret += gpio_remove(device->gpio_txen0);
-	ret += gpio_remove(device->gpio_txen1);
+	ret += no_os_gpio_remove(device->gpio_reset);
+	ret += no_os_gpio_remove(device->gpio_txen0);
+	ret += no_os_gpio_remove(device->gpio_txen1);
 
 	free(device->st);
 

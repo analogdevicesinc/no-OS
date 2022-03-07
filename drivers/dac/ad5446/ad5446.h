@@ -99,8 +99,8 @@ struct ad5446_dev {
 	/* SPI */
 	spi_desc		*spi_desc;
 	/* GPIO */
-	struct gpio_desc	*gpio_ladc;
-	struct gpio_desc	*gpio_clrout;
+	struct no_os_gpio_desc	*gpio_ladc;
+	struct no_os_gpio_desc	*gpio_clrout;
 	/* Device Settings */
 	enum ad5446_type_t act_device;
 };
@@ -109,8 +109,8 @@ struct ad5446_init_param {
 	/* SPI */
 	spi_init_param	spi_init;
 	/* GPIO */
-	struct gpio_init_param	gpio_ladc;
-	struct gpio_init_param	gpio_clrout;
+	struct no_os_gpio_init_param	gpio_ladc;
+	struct no_os_gpio_init_param	gpio_clrout;
 	/* Device Settings */
 	enum ad5446_type_t act_device;
 };
@@ -120,19 +120,19 @@ struct ad5446_init_param {
 #define AD5446_CTRL_ACTIVE_POSEDGE  0x3
 
 /* AD5446 GPIO */
-#define AD5446_LDAC_OUT             gpio_direction_output(dev->gpio_ladc,   \
-			            GPIO_HIGH)
-#define AD5446_LDAC_LOW             gpio_set_value(dev->gpio_ladc,          \
-			            GPIO_LOW)
-#define AD5446_LDAC_HIGH            gpio_set_value(dev->gpio_ladc,          \
-			            GPIO_HIGH)
+#define AD5446_LDAC_OUT             no_os_gpio_direction_output(dev->gpio_ladc,   \
+			            NO_OS_GPIO_HIGH)
+#define AD5446_LDAC_LOW             no_os_gpio_set_value(dev->gpio_ladc,          \
+			            NO_OS_GPIO_LOW)
+#define AD5446_LDAC_HIGH            no_os_gpio_set_value(dev->gpio_ladc,          \
+			            NO_OS_GPIO_HIGH)
 
-#define AD5446_CLR_OUT              gpio_direction_output(dev->gpio_clrout, \
-			            GPIO_HIGH)
-#define AD5446_CLR_LOW              gpio_set_value(dev->gpio_clrout,        \
-			            GPIO_LOW)
-#define AD5446_CLR_HIGH             gpio_set_value(dev->gpio_clrout,        \
-			            GPIO_HIGH)
+#define AD5446_CLR_OUT              no_os_gpio_direction_output(dev->gpio_clrout, \
+			            NO_OS_GPIO_HIGH)
+#define AD5446_CLR_LOW              no_os_gpio_set_value(dev->gpio_clrout,        \
+			            NO_OS_GPIO_LOW)
+#define AD5446_CLR_HIGH             no_os_gpio_set_value(dev->gpio_clrout,        \
+			            NO_OS_GPIO_HIGH)
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/

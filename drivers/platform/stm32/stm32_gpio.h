@@ -76,6 +76,6 @@ typedef struct stm32_gpio_desc {
 /**
  * @brief stm32 platform specific gpio platform ops structure
  */
-extern const struct gpio_platform_ops stm32_gpio_ops;
+extern const struct no_os_gpio_platform_ops stm32_gpio_ops;
 
 #endif

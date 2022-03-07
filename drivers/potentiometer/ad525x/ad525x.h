@@ -55,29 +55,29 @@
 /*  Device specific MACROs                                                   */
 /*****************************************************************************/
 /* GPIOs */
-#define AD525X_RESET_OUT                    gpio_direction_output(dev->gpio_reset,    \
-			                    GPIO_HIGH)
-#define AD525X_RESET_LOW                    gpio_set_value(dev->gpio_reset,           \
-			                    GPIO_LOW)
-#define AD525X_RESET_HIGH                   gpio_set_value(dev->gpio_reset,           \
-			                    GPIO_HIGH)
-#define AD525X_SHUTDOWN_OUT                 gpio_direction_output(dev->gpio_shutdown, \
-			                    GPIO_HIGH)
-#define AD525X_SHUTDOWN_LOW                 gpio_set_value(dev->gpio_shutdown,        \
-			                    GPIO_LOW)
-#define AD525X_SHUTDOWN_HIGH                gpio_set_value(dev->gpio_shutdown,        \
-			                    GPIO_HIGH)
-#define AD525X_READY_IN                     gpio_direction_input(dev->gpio_ready)
-#define AD525X_READY_LOW                    gpio_set_value(dev->gpio_ready,           \
-			                    GPIO_LOW)
-#define AD525X_READY_HIGH                   gpio_set_value(dev->gpio_ready,           \
-			                    GPIO_HIGH)
-#define AD525X_WP_BF_OUT                    gpio_direction_output(dev->gpio_wpbf,     \
-			                    GPIO_HIGH)
-#define AD525X_WP_BF_LOW                    gpio_set_value(dev->gpio_wpbf,            \
-			                    GPIO_LOW)
-#define AD525X_WP_BF_HIGH                   gpio_set_value(dev->gpio_wpbf,            \
-			                    GPIO_HIGH)
+#define AD525X_RESET_OUT                    no_os_gpio_direction_output(dev->gpio_reset,    \
+			                    NO_OS_GPIO_HIGH)
+#define AD525X_RESET_LOW                    no_os_gpio_set_value(dev->gpio_reset,           \
+			                    NO_OS_GPIO_LOW)
+#define AD525X_RESET_HIGH                   no_os_gpio_set_value(dev->gpio_reset,           \
+			                    NO_OS_GPIO_HIGH)
+#define AD525X_SHUTDOWN_OUT                 no_os_gpio_direction_output(dev->gpio_shutdown, \
+			                    NO_OS_GPIO_HIGH)
+#define AD525X_SHUTDOWN_LOW                 no_os_gpio_set_value(dev->gpio_shutdown,        \
+			                    NO_OS_GPIO_LOW)
+#define AD525X_SHUTDOWN_HIGH                no_os_gpio_set_value(dev->gpio_shutdown,        \
+			                    NO_OS_GPIO_HIGH)
+#define AD525X_READY_IN                     no_os_gpio_direction_input(dev->gpio_ready)
+#define AD525X_READY_LOW                    no_os_gpio_set_value(dev->gpio_ready,           \
+			                    NO_OS_GPIO_LOW)
+#define AD525X_READY_HIGH                   no_os_gpio_set_value(dev->gpio_ready,           \
+			                    NO_OS_GPIO_HIGH)
+#define AD525X_WP_BF_OUT                    no_os_gpio_direction_output(dev->gpio_wpbf,     \
+			                    NO_OS_GPIO_HIGH)
+#define AD525X_WP_BF_LOW                    no_os_gpio_set_value(dev->gpio_wpbf,            \
+			                    NO_OS_GPIO_LOW)
+#define AD525X_WP_BF_HIGH                   no_os_gpio_set_value(dev->gpio_wpbf,            \
+			                    NO_OS_GPIO_HIGH)
 
 /* Data word masks */
 #define AD525X_MEM_ADDR_MASK                0xF
@@ -176,10 +176,10 @@ struct ad525x_dev {
 	/* SPI */
 	spi_desc	*spi_desc;
 	/* GPIO */
-	struct gpio_desc	*gpio_reset;
-	struct gpio_desc	*gpio_shutdown;
-	struct gpio_desc	*gpio_ready;
-	struct gpio_desc	*gpio_wpbf;
+	struct no_os_gpio_desc	*gpio_reset;
+	struct no_os_gpio_desc	*gpio_shutdown;
+	struct no_os_gpio_desc	*gpio_ready;
+	struct no_os_gpio_desc	*gpio_wpbf;
 	/* Device Settings */
 	enum ad525_x_type_t	this_device;
 };
@@ -190,10 +190,10 @@ struct ad525x_init_param {
 	/* SPI */
 	spi_init_param	spi_init;
 	/* GPIO */
-	struct gpio_init_param	gpio_reset;
-	struct gpio_init_param	gpio_shutdown;
-	struct gpio_init_param	gpio_ready;
-	struct gpio_init_param	gpio_wpbf;
+	struct no_os_gpio_init_param	gpio_reset;
+	struct no_os_gpio_init_param	gpio_shutdown;
+	struct no_os_gpio_init_param	gpio_ready;
+	struct no_os_gpio_init_param	gpio_wpbf;
 	/* Device Settings */
 	enum ad525_x_type_t	this_device;
 };

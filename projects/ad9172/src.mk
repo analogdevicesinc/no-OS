@@ -15,7 +15,7 @@ LIBRARIES += iio
 SRC_DIRS += $(NO-OS)/iio/iio_app
 endif
 SRCS += $(DRIVERS)/api/spi.c \
-	$(DRIVERS)/api/gpio.c \
+	$(DRIVERS)/api/no_os_gpio.c \
 	$(DRIVERS)/frequency/hmc7044/hmc7044.c \
 	$(DRIVERS)/dac/ad917x/ad9172.c \
 	$(DRIVERS)/dac/ad917x/ad917x_api/ad917x_api.c \
