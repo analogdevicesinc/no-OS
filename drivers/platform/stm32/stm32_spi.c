@@ -71,7 +71,7 @@ int32_t stm32_spi_init(struct spi_desc **desc,
 
 	struct stm32_spi_desc *sdesc;
 	struct stm32_spi_init_param *sinit;
-	struct gpio_init_param csip;
+	struct no_os_gpio_init_param csip;
 	struct stm32_gpio_init_param csip_extra;
 
 	sdesc = (stm32_spi_desc*)calloc(1,sizeof(stm32_spi_desc));
@@ -90,11 +90,11 @@ int32_t stm32_spi_init(struct spi_desc **desc,
 	csip.number = param->chip_select;
 	csip.extra = &csip_extra;
 	csip.platform_ops = &stm32_gpio_ops;
-	ret = gpio_get(&sdesc->chip_select, &csip);
+	ret = no_os_gpio_get(&sdesc->chip_select, &csip);
 	if (ret < 0)
 		goto error;
 
-	ret = gpio_direction_output(sdesc->chip_select, GPIO_HIGH);
+	ret = no_os_gpio_direction_output(sdesc->chip_select, NO_OS_GPIO_HIGH);
 	if (ret < 0)
 		goto error;
 
@@ -217,7 +217,7 @@ int32_t stm32_spi_remove(struct spi_desc *desc)
 
 	sdesc = desc->extra;
 	HAL_SPI_DeInit(&sdesc->hspi);
-	gpio_remove(sdesc->chip_select);
+	no_os_gpio_remove(sdesc->chip_select);
 	free(desc->extra);
 	free(desc);
 	return 0;

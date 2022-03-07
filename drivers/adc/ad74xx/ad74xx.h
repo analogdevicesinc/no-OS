@@ -52,10 +52,10 @@
 /******************************************************************************/
 
 /* AD74XX Chip Select Pin declaration */
-#define AD74XX_CS_LOW           gpio_set_value(dev->gpio_cs,  \
-			        GPIO_LOW)
-#define AD74XX_CS_HIGH          gpio_set_value(dev->gpio_cs,  \
-			        GPIO_HIGH)
+#define AD74XX_CS_LOW           no_os_gpio_set_value(dev->gpio_cs,  \
+			        NO_OS_GPIO_LOW)
+#define AD74XX_CS_HIGH          no_os_gpio_set_value(dev->gpio_cs,  \
+			        NO_OS_GPIO_HIGH)
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -80,7 +80,7 @@ struct ad74xx_dev {
 	/* SPI */
 	spi_desc		*spi_desc;
 	/* GPIO */
-	struct gpio_desc	*gpio_cs;
+	struct no_os_gpio_desc	*gpio_cs;
 	/* Device Settings */
 	int8_t			device_bits_number;
 	enum ad74xx_type	part_number;
@@ -90,7 +90,7 @@ struct ad74xx_init_param {
 	/* SPI */
 	spi_init_param		spi_init;
 	/* GPIO */
-	struct gpio_init_param	gpio_cs;
+	struct no_os_gpio_init_param	gpio_cs;
 	/* Device Settings */
 	int8_t			device_bits_number;
 	enum ad74xx_type	part_number;

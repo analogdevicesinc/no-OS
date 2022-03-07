@@ -167,12 +167,12 @@ int32_t app_ad9083_init(struct app_ad9083 **app,
 		.type = GPIO_PS,
 		.device_id = GPIO_DEVICE_ID
 	};
-	struct gpio_init_param	gpio_phy_resetb = {
+	struct no_os_gpio_init_param	gpio_phy_resetb = {
 		.number = AD9803_RSTB,
 		.platform_ops = &xil_gpio_ops,
 		.extra = &xil_gpio_param
 	};
-	struct gpio_init_param	gpio_phy_pd = {
+	struct no_os_gpio_init_param	gpio_phy_pd = {
 		.number = AD9803_PWDN,
 		.platform_ops = &xil_gpio_ops,
 		.extra = &xil_gpio_param

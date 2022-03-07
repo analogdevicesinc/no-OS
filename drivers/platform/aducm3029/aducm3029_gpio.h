@@ -1,6 +1,6 @@
 /*******************************************************************************
  *   @file   aducm3029/aducm3029_gpio.h
- *   @brief  Header containing gpio_platform_ops used by the GPIO driver.
+ *   @brief  Header containing no_os_gpio_platform_ops used by the GPIO driver.
  *   @author Andrei Porumb (andrei.porumb@analog.com)
 ********************************************************************************
  * Copyright 2021(c) Analog Devices, Inc.
@@ -42,6 +42,6 @@
 /**
  * @brief ADuCM3029 specific GPIO platform ops structure
  */
-extern const struct gpio_platform_ops aducm_gpio_ops;
+extern const struct no_os_gpio_platform_ops aducm_gpio_ops;
 
 #endif // ADUCM3029_GPIO_H_

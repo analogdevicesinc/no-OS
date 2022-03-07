@@ -87,7 +87,7 @@ int main(void)
 #endif
 		.device_id = GPIO_DEVICE_ID
 	};
-	struct gpio_init_param	gpio_phy_resetb = {
+	struct no_os_gpio_init_param	gpio_phy_resetb = {
 		.number = PHY_RESET,
 		.platform_ops = &xil_gpio_ops,
 		.extra = &xil_gpio_param
@@ -226,18 +226,18 @@ int main(void)
 #endif
 		.device_id = GPIO_2_DEVICE_ID
 	};
-	struct gpio_init_param	ad9081_gpio0_mux_init = {
+	struct no_os_gpio_init_param	ad9081_gpio0_mux_init = {
 		.number = AD9081_GPIO_0_MUX,
 		.platform_ops = &xil_gpio_ops,
 		.extra = &xil_gpio_param_2
 	};
-	gpio_desc *ad9081_gpio0_mux;
+	no_os_gpio_desc *ad9081_gpio0_mux;
 
-	status = gpio_get(&ad9081_gpio0_mux, &ad9081_gpio0_mux_init);
+	status = no_os_gpio_get(&ad9081_gpio0_mux, &ad9081_gpio0_mux_init);
 	if (status)
 		return status;
 
-	status = gpio_set_value(ad9081_gpio0_mux, 1);
+	status = no_os_gpio_set_value(ad9081_gpio0_mux, 1);
 	if (status)
 		return status;
 #endif

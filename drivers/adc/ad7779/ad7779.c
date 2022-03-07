@@ -377,20 +377,20 @@ int32_t ad7779_do_update_mode_pins(ad7779_dev *dev)
 	if (mode == 0xFF)
 		goto error;
 
-	ret = gpio_set_value(dev->gpio_mode0,
-			     ((mode & 0x01) >> 0));
-	ret |= gpio_set_value(dev->gpio_mode1,
-			      ((mode & 0x02) >> 1));
-	ret |= gpio_set_value(dev->gpio_mode2,
-			      ((mode & 0x04) >> 2));
-	ret |= gpio_set_value(dev->gpio_mode3,
-			      ((mode & 0x08) >> 3));
+	ret = no_os_gpio_set_value(dev->gpio_mode0,
+				   ((mode & 0x01) >> 0));
+	ret |= no_os_gpio_set_value(dev->gpio_mode1,
+				    ((mode & 0x02) >> 1));
+	ret |= no_os_gpio_set_value(dev->gpio_mode2,
+				    ((mode & 0x04) >> 2));
+	ret |= no_os_gpio_set_value(dev->gpio_mode3,
+				    ((mode & 0x08) >> 3));
 
 	/* All the pins that define the AD7779 configuration mode are re-evaluated
 	 * every time SYNC_IN pin is pulsed. */
-	ret |= gpio_set_value(dev->gpio_sync_in, GPIO_LOW);
+	ret |= no_os_gpio_set_value(dev->gpio_sync_in, NO_OS_GPIO_LOW);
 	mdelay(10);
-	ret |= gpio_set_value(dev->gpio_sync_in, GPIO_HIGH);
+	ret |= no_os_gpio_set_value(dev->gpio_sync_in, NO_OS_GPIO_HIGH);
 
 	return ret;
 
@@ -696,12 +696,12 @@ int32_t ad7779_set_dclk_div(ad7779_dev *dev,
 	int32_t ret;
 
 	if (dev->ctrl_mode == AD7779_PIN_CTRL) {
-		ret = gpio_set_value(dev->gpio_dclk0,
-				     ((div & 0x01) >> 0));
-		ret |= gpio_set_value(dev->gpio_dclk1,
-				      ((div & 0x02) >> 1));
-		ret |= gpio_set_value(dev->gpio_dclk2,
-				      ((div & 0x04) >> 2));
+		ret = no_os_gpio_set_value(dev->gpio_dclk0,
+					   ((div & 0x01) >> 0));
+		ret |= no_os_gpio_set_value(dev->gpio_dclk1,
+					    ((div & 0x02) >> 1));
+		ret |= no_os_gpio_set_value(dev->gpio_dclk2,
+					    ((div & 0x04) >> 2));
 	} else {
 		ret = ad7779_spi_int_reg_write_mask(dev,
 						    AD7779_REG_DOUT_FORMAT,
@@ -1159,9 +1159,9 @@ int32_t ad7779_do_single_sar_conv(ad7779_dev *dev,
 	restore_sar_state = dev->sar_state;
 	ret = ad7779_set_sar_cfg(dev, AD7779_ENABLE, mux);
 	ret |= ad7779_set_spi_op_mode(dev, AD7779_SAR_CONV);
-	ret |= gpio_set_value(dev->gpio_convst_sar, GPIO_LOW);
+	ret |= no_os_gpio_set_value(dev->gpio_convst_sar, NO_OS_GPIO_LOW);
 	mdelay(10);	// Acquisition Time = min 500 ns
-	ret |= gpio_set_value(dev->gpio_convst_sar, GPIO_HIGH);
+	ret |= no_os_gpio_set_value(dev->gpio_convst_sar, NO_OS_GPIO_HIGH);
 	mdelay(10);	// Conversion Time = max 3.4 us
 	ad7779_spi_sar_read_code(dev, mux, sar_code);
 	ret |= ad7779_set_sar_cfg(dev, restore_sar_state, mux);
@@ -1258,50 +1258,50 @@ int32_t ad7779_init(ad7779_dev **device,
 	ret = spi_init(&dev->spi_desc, &init_param.spi_init);
 
 	/* GPIO */
-	ret |= gpio_get(&dev->gpio_reset,
-			&init_param.gpio_reset);
-	ret |= gpio_get(&dev->gpio_mode0,
-			&init_param.gpio_mode0);
-	ret |= gpio_get(&dev->gpio_mode1,
-			&init_param.gpio_mode1);
-	ret |= gpio_get(&dev->gpio_mode2,
-			&init_param.gpio_mode2);
-	ret |= gpio_get(&dev->gpio_mode3,
-			&init_param.gpio_mode3);
-	ret |= gpio_get(&dev->gpio_dclk0,
-			&init_param.gpio_dclk0);
-	ret |= gpio_get(&dev->gpio_dclk1,
-			&init_param.gpio_dclk1);
-	ret |= gpio_get(&dev->gpio_dclk2,
-			&init_param.gpio_dclk2);
-	ret |= gpio_get(&dev->gpio_sync_in,
-			&init_param.gpio_sync_in);
-	ret |= gpio_get(&dev->gpio_convst_sar,
-			&init_param.gpio_convst_sar);
+	ret |= no_os_gpio_get(&dev->gpio_reset,
+			      &init_param.gpio_reset);
+	ret |= no_os_gpio_get(&dev->gpio_mode0,
+			      &init_param.gpio_mode0);
+	ret |= no_os_gpio_get(&dev->gpio_mode1,
+			      &init_param.gpio_mode1);
+	ret |= no_os_gpio_get(&dev->gpio_mode2,
+			      &init_param.gpio_mode2);
+	ret |= no_os_gpio_get(&dev->gpio_mode3,
+			      &init_param.gpio_mode3);
+	ret |= no_os_gpio_get(&dev->gpio_dclk0,
+			      &init_param.gpio_dclk0);
+	ret |= no_os_gpio_get(&dev->gpio_dclk1,
+			      &init_param.gpio_dclk1);
+	ret |= no_os_gpio_get(&dev->gpio_dclk2,
+			      &init_param.gpio_dclk2);
+	ret |= no_os_gpio_get(&dev->gpio_sync_in,
+			      &init_param.gpio_sync_in);
+	ret |= no_os_gpio_get(&dev->gpio_convst_sar,
+			      &init_param.gpio_convst_sar);
 
-	ret |= gpio_direction_output(dev->gpio_reset,
-				     GPIO_LOW);
+	ret |= no_os_gpio_direction_output(dev->gpio_reset,
+					   NO_OS_GPIO_LOW);
 	mdelay(10);	// RESET Hold Time = min 2 x MCLK
-	ret |= gpio_set_value(dev->gpio_reset, GPIO_HIGH);
+	ret |= no_os_gpio_set_value(dev->gpio_reset, NO_OS_GPIO_HIGH);
 	mdelay(10);	// RESET Rising Edge to First DRDY = min 225 us
-	ret |= gpio_direction_output(dev->gpio_mode0,
-				     GPIO_LOW);
-	ret |= gpio_direction_output(dev->gpio_mode1,
-				     GPIO_LOW);
-	ret |= gpio_direction_output(dev->gpio_mode2,
-				     GPIO_LOW);
-	ret |= gpio_direction_output(dev->gpio_mode3,
-				     GPIO_LOW);
-	ret |= gpio_direction_output(dev->gpio_dclk0,
-				     GPIO_LOW);
-	ret |= gpio_direction_output(dev->gpio_dclk1,
-				     GPIO_LOW);
-	ret |= gpio_direction_output(dev->gpio_dclk2,
-				     GPIO_LOW);
-	ret |= gpio_direction_output(dev->gpio_sync_in,
-				     GPIO_HIGH);
-	ret |= gpio_direction_output(dev->gpio_convst_sar,
-				     GPIO_HIGH);
+	ret |= no_os_gpio_direction_output(dev->gpio_mode0,
+					   NO_OS_GPIO_LOW);
+	ret |= no_os_gpio_direction_output(dev->gpio_mode1,
+					   NO_OS_GPIO_LOW);
+	ret |= no_os_gpio_direction_output(dev->gpio_mode2,
+					   NO_OS_GPIO_LOW);
+	ret |= no_os_gpio_direction_output(dev->gpio_mode3,
+					   NO_OS_GPIO_LOW);
+	ret |= no_os_gpio_direction_output(dev->gpio_dclk0,
+					   NO_OS_GPIO_LOW);
+	ret |= no_os_gpio_direction_output(dev->gpio_dclk1,
+					   NO_OS_GPIO_LOW);
+	ret |= no_os_gpio_direction_output(dev->gpio_dclk2,
+					   NO_OS_GPIO_LOW);
+	ret |= no_os_gpio_direction_output(dev->gpio_sync_in,
+					   NO_OS_GPIO_HIGH);
+	ret |= no_os_gpio_direction_output(dev->gpio_convst_sar,
+					   NO_OS_GPIO_HIGH);
 	/* Device Settings */
 	dev->ctrl_mode = init_param.ctrl_mode;
 	dev->spi_crc_en = AD7779_DISABLE;
@@ -1392,16 +1392,16 @@ int32_t ad7779_remove(ad7779_dev *dev)
 
 	ret = spi_remove(dev->spi_desc);
 
-	ret |= gpio_remove(dev->gpio_reset);
-	ret |= gpio_remove(dev->gpio_mode0);
-	ret |= gpio_remove(dev->gpio_mode1);
-	ret |= gpio_remove(dev->gpio_mode2);
-	ret |= gpio_remove(dev->gpio_mode3);
-	ret |= gpio_remove(dev->gpio_dclk0);
-	ret |= gpio_remove(dev->gpio_dclk1);
-	ret |= gpio_remove(dev->gpio_dclk2);
-	ret |= gpio_remove(dev->gpio_sync_in);
-	ret |= gpio_remove(dev->gpio_convst_sar);
+	ret |= no_os_gpio_remove(dev->gpio_reset);
+	ret |= no_os_gpio_remove(dev->gpio_mode0);
+	ret |= no_os_gpio_remove(dev->gpio_mode1);
+	ret |= no_os_gpio_remove(dev->gpio_mode2);
+	ret |= no_os_gpio_remove(dev->gpio_mode3);
+	ret |= no_os_gpio_remove(dev->gpio_dclk0);
+	ret |= no_os_gpio_remove(dev->gpio_dclk1);
+	ret |= no_os_gpio_remove(dev->gpio_dclk2);
+	ret |= no_os_gpio_remove(dev->gpio_sync_in);
+	ret |= no_os_gpio_remove(dev->gpio_convst_sar);
 
 	free(dev);
 

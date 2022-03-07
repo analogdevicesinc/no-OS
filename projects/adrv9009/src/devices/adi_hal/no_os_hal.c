@@ -63,8 +63,8 @@ adiHalErr_t ADIHAL_openHw(void *devHalInfo, uint32_t halTimeout_ms)
 {
 	struct adi_hal *dev_hal_data = (struct adi_hal *)devHalInfo;
 	struct spi_init_param spi_param;
-	struct gpio_init_param gpio_adrv_resetb_param;
-	struct gpio_init_param gpio_adrv_sysref_req_param;
+	struct no_os_gpio_init_param gpio_adrv_resetb_param;
+	struct no_os_gpio_init_param gpio_adrv_sysref_req_param;
 	int32_t status = 0;
 
 	gpio_adrv_resetb_param.number = dev_hal_data->gpio_adrv_resetb_num;
@@ -85,7 +85,8 @@ adiHalErr_t ADIHAL_openHw(void *devHalInfo, uint32_t halTimeout_ms)
 		gpio_adrv_sysref_req_param.extra = dev_hal_data->extra_gpio;
 	}
 
-	status = gpio_get(&dev_hal_data->gpio_adrv_resetb, &gpio_adrv_resetb_param);
+	status = no_os_gpio_get(&dev_hal_data->gpio_adrv_resetb,
+				&gpio_adrv_resetb_param);
 
 	spi_param.device_id = 0;
 	spi_param.max_speed_hz = 25000000;
@@ -101,8 +102,8 @@ adiHalErr_t ADIHAL_openHw(void *devHalInfo, uint32_t halTimeout_ms)
 
 	status |= spi_init(&dev_hal_data->spi_adrv_desc, &spi_param);
 
-	status |= gpio_get(&dev_hal_data->gpio_adrv_sysref_req,
-			   &gpio_adrv_sysref_req_param);
+	status |= no_os_gpio_get(&dev_hal_data->gpio_adrv_sysref_req,
+				 &gpio_adrv_sysref_req_param);
 
 	if (status != SUCCESS)
 		return ADIHAL_ERR;
@@ -115,9 +116,9 @@ adiHalErr_t ADIHAL_closeHw(void *devHalInfo)
 	struct adi_hal *dev_hal_data = (struct adi_hal *)devHalInfo;
 	int32_t status;
 
-	status = gpio_remove(dev_hal_data->gpio_adrv_resetb);
+	status = no_os_gpio_remove(dev_hal_data->gpio_adrv_resetb);
 
-	status |= gpio_remove(dev_hal_data->gpio_adrv_sysref_req);
+	status |= no_os_gpio_remove(dev_hal_data->gpio_adrv_sysref_req);
 
 	status |= spi_remove(dev_hal_data->spi_adrv_desc);
 
@@ -131,11 +132,11 @@ adiHalErr_t ADIHAL_resetHw(void *devHalInfo)
 {
 	struct adi_hal *devHalData = (struct adi_hal *)devHalInfo;
 
-	gpio_direction_output(devHalData->gpio_adrv_resetb, 1);
+	no_os_gpio_direction_output(devHalData->gpio_adrv_resetb, 1);
 	mdelay(10);
-	gpio_direction_output(devHalData->gpio_adrv_resetb, 0);
+	no_os_gpio_direction_output(devHalData->gpio_adrv_resetb, 0);
 	mdelay(10);
-	gpio_direction_output(devHalData->gpio_adrv_resetb, 1);
+	no_os_gpio_direction_output(devHalData->gpio_adrv_resetb, 1);
 	mdelay(10);
 
 	return ADIHAL_OK;
@@ -146,13 +147,13 @@ adiHalErr_t ADIHAL_sysrefReq(void *devHalInfo, sysrefReqMode_t mode)
 	struct adi_hal *devHalData = (struct adi_hal *)devHalInfo;
 
 	if (mode == SYSREF_CONT_ON)
-		gpio_direction_output(devHalData->gpio_adrv_sysref_req, 1);
+		no_os_gpio_direction_output(devHalData->gpio_adrv_sysref_req, 1);
 	else if (mode == SYSREF_CONT_OFF)
-		gpio_direction_output(devHalData->gpio_adrv_sysref_req, 0);
+		no_os_gpio_direction_output(devHalData->gpio_adrv_sysref_req, 0);
 	else if (mode == SYSREF_PULSE) {
-		gpio_direction_output(devHalData->gpio_adrv_sysref_req, 1);
+		no_os_gpio_direction_output(devHalData->gpio_adrv_sysref_req, 1);
 		mdelay(1);
-		gpio_direction_output(devHalData->gpio_adrv_sysref_req, 0);
+		no_os_gpio_direction_output(devHalData->gpio_adrv_sysref_req, 0);
 	} else
 		return ADIHAL_ERR;
 

@@ -81,26 +81,26 @@ int main(void)
 		.device_id = XPAR_PS7_GPIO_0_DEVICE_ID
 	};
 
-	struct gpio_init_param dc_pin = {
+	struct no_os_gpio_init_param dc_pin = {
 		.number = DC_PIN,
 		.platform_ops = &xil_gpio_ops,
 		.extra = &extra
 	};
-	struct gpio_init_param reset_pin = {
+	struct no_os_gpio_init_param reset_pin = {
 		.number = RST_PIN,
 		.platform_ops = &xil_gpio_ops,
 		.extra = &extra
 	};
 
-	struct gpio_desc *vbat;
-	struct gpio_init_param vbat_pin = {
+	struct no_os_gpio_desc *vbat;
+	struct no_os_gpio_init_param vbat_pin = {
 		.number = VBAT_PIN,
 		.platform_ops = &xil_gpio_ops,
 		.extra = &extra
 	};
 
-	struct gpio_desc *vdd;
-	struct gpio_init_param vdd_pin = {
+	struct no_os_gpio_desc *vdd;
+	struct no_os_gpio_init_param vdd_pin = {
 		.number = VDD_PIN,
 		.platform_ops = &xil_gpio_ops,
 		.extra = &extra
@@ -120,19 +120,19 @@ int main(void)
 	};
 
 	/* Turn VBAT and VDD on, Zedboard platform specific */
-	ret = gpio_get(&vbat, &vbat_pin);
+	ret = no_os_gpio_get(&vbat, &vbat_pin);
 	if (ret != SUCCESS)
 		return FAILURE;
 
-	ret = gpio_direction_output(vbat, VBAT_ON);
+	ret = no_os_gpio_direction_output(vbat, VBAT_ON);
 	if (ret != SUCCESS)
 		return FAILURE;
 
-	ret = gpio_get(&vdd, &vdd_pin);
+	ret = no_os_gpio_get(&vdd, &vdd_pin);
 	if (ret != SUCCESS)
 		return FAILURE;
 
-	ret = gpio_direction_output(vdd, VDD_ON);
+	ret = no_os_gpio_direction_output(vdd, VDD_ON);
 	if (ret != SUCCESS)
 		return FAILURE;
 

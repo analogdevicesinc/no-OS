@@ -433,7 +433,7 @@ struct adf5902_init_param {
 	/* SPI Initialization parameters */
 	struct spi_init_param	*spi_init;
 	/* GPIO Chip Enable */
-	struct gpio_init_param	*gpio_ce_param;
+	struct no_os_gpio_init_param	*gpio_ce_param;
 	/* Reference input frequency */
 	uint64_t		ref_in;
 	/* Output frequency of the internal VCO */
@@ -486,7 +486,7 @@ struct adf5902_dev {
 	/* SPI Descriptor */
 	struct spi_desc		*spi_desc;
 	/* GPIO Chip Enable */
-	struct gpio_desc	*gpio_ce;
+	struct no_os_gpio_desc	*gpio_ce;
 	/* Reference input frequency*/
 	uint64_t		ref_in;
 	/* Output frequency(Hz) of the internal VCO */

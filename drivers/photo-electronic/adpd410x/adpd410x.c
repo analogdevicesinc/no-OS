@@ -681,16 +681,16 @@ int32_t adpd410x_setup(struct adpd410x_dev **device,
 	if(ret != SUCCESS)
 		goto error_dev;
 
-	ret = gpio_get(&dev->gpio0, &init_param->gpio0);
+	ret = no_os_gpio_get(&dev->gpio0, &init_param->gpio0);
 	if(ret != SUCCESS)
 		goto error_phy;
-	ret = gpio_get(&dev->gpio1, &init_param->gpio1);
+	ret = no_os_gpio_get(&dev->gpio1, &init_param->gpio1);
 	if(ret != SUCCESS)
 		goto error_gpio0;
-	ret = gpio_get(&dev->gpio2, &init_param->gpio2);
+	ret = no_os_gpio_get(&dev->gpio2, &init_param->gpio2);
 	if(ret != SUCCESS)
 		goto error_gpio1;
-	ret = gpio_get(&dev->gpio3, &init_param->gpio3);
+	ret = no_os_gpio_get(&dev->gpio3, &init_param->gpio3);
 	if(ret != SUCCESS)
 		goto error_gpio2;
 
@@ -699,7 +699,7 @@ int32_t adpd410x_setup(struct adpd410x_dev **device,
 		goto error_gpio3;
 
 	/* Do power-up sequence described in errata. */
-	ret = gpio_direction_output(dev->gpio0, GPIO_HIGH);
+	ret = no_os_gpio_direction_output(dev->gpio0, NO_OS_GPIO_HIGH);
 	if(ret != SUCCESS)
 		goto error_gpio3;
 	ret = adpd410x_reg_write(dev, 0xB5, 0x04);
@@ -708,7 +708,7 @@ int32_t adpd410x_setup(struct adpd410x_dev **device,
 	ret = adpd410x_reg_write(dev, 0xB5, 0x00);
 	if(ret != SUCCESS)
 		goto error_gpio3;
-	ret = gpio_set_value(dev->gpio0, GPIO_HIGH_Z);
+	ret = no_os_gpio_set_value(dev->gpio0, NO_OS_GPIO_HIGH_Z);
 	if(ret != SUCCESS)
 		goto error_gpio3;
 
@@ -746,13 +746,13 @@ int32_t adpd410x_setup(struct adpd410x_dev **device,
 	return SUCCESS;
 
 error_gpio3:
-	gpio_remove(dev->gpio3);
+	no_os_gpio_remove(dev->gpio3);
 error_gpio2:
-	gpio_remove(dev->gpio2);
+	no_os_gpio_remove(dev->gpio2);
 error_gpio1:
-	gpio_remove(dev->gpio1);
+	no_os_gpio_remove(dev->gpio1);
 error_gpio0:
-	gpio_remove(dev->gpio0);
+	no_os_gpio_remove(dev->gpio0);
 error_phy:
 	if(dev->dev_type == ADPD4100)
 		spi_remove(dev->dev_ops.spi_phy_dev);
@@ -783,16 +783,16 @@ int32_t adpd410x_remove(struct adpd410x_dev *dev)
 	if(ret != SUCCESS)
 		return ret;
 
-	ret = gpio_remove(dev->gpio0);
+	ret = no_os_gpio_remove(dev->gpio0);
 	if(ret != SUCCESS)
 		return ret;
-	ret = gpio_remove(dev->gpio1);
+	ret = no_os_gpio_remove(dev->gpio1);
 	if(ret != SUCCESS)
 		return ret;
-	ret = gpio_remove(dev->gpio2);
+	ret = no_os_gpio_remove(dev->gpio2);
 	if(ret != SUCCESS)
 		return ret;
-	ret = gpio_remove(dev->gpio3);
+	ret = no_os_gpio_remove(dev->gpio3);
 	if(ret != SUCCESS)
 		return ret;
 

@@ -489,11 +489,11 @@ int32_t adf5902_init(struct adf5902_dev **device,
 		return -ENOMEM;
 
 	/* GPIO Chip Enable */
-	ret = gpio_get(&dev->gpio_ce, init_param->gpio_ce_param);
+	ret = no_os_gpio_get(&dev->gpio_ce, init_param->gpio_ce_param);
 	if (ret != SUCCESS)
 		goto error_dev;
 
-	ret = gpio_direction_output(dev->gpio_ce, GPIO_HIGH);
+	ret = no_os_gpio_direction_output(dev->gpio_ce, NO_OS_GPIO_HIGH);
 	if (ret != SUCCESS)
 		goto error_dev;
 
@@ -665,7 +665,7 @@ error_spi:
 	spi_remove(dev->spi_desc);
 
 error_gpio:
-	gpio_remove(dev->gpio_ce);
+	no_os_gpio_remove(dev->gpio_ce);
 
 error_dev:
 	free(dev);
@@ -914,7 +914,7 @@ int32_t adf5902_remove(struct adf5902_dev *dev)
 	if (ret != SUCCESS)
 		return ret;
 
-	ret = gpio_remove(dev->gpio_ce);
+	ret = no_os_gpio_remove(dev->gpio_ce);
 
 	free(dev);
 

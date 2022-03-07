@@ -666,9 +666,9 @@ struct adpd188_dev {
 	/** Communication physical descriptor. */
 	void *phy_desc;
 	/** GPIO 0 descriptor. */
-	struct gpio_desc *gpio0;
+	struct no_os_gpio_desc *gpio0;
 	/** GPIO 1 descriptor. */
-	struct gpio_desc *gpio1;
+	struct no_os_gpio_desc *gpio1;
 };
 
 /**
@@ -683,9 +683,9 @@ struct adpd188_init_param {
 	/** Communication physical initialization structure. */
 	union adpd188_phy_init phy_init;
 	/** GPIO 0 initialization structure. */
-	struct gpio_init_param gpio0_init;
+	struct no_os_gpio_init_param gpio0_init;
 	/** GPIO 0 initialization structure. */
-	struct gpio_init_param gpio1_init;
+	struct no_os_gpio_init_param gpio1_init;
 };
 
 /******************************************************************************/

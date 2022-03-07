@@ -481,13 +481,13 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy,
 
 	phy->pdata->debug_mode = true;
 
-	gpio_get(&phy->gpio_desc_resetb, &init_param->gpio_resetb);
+	no_os_gpio_get(&phy->gpio_desc_resetb, &init_param->gpio_resetb);
 	/* Optional: next three GPIOs are used for MCS synchronization */
-	gpio_get_optional(&phy->gpio_desc_sync, &init_param->gpio_sync);
-	gpio_get_optional(&phy->gpio_desc_cal_sw1, &init_param->gpio_cal_sw1);
-	gpio_get_optional(&phy->gpio_desc_cal_sw2, &init_param->gpio_cal_sw2);
+	no_os_gpio_get_optional(&phy->gpio_desc_sync, &init_param->gpio_sync);
+	no_os_gpio_get_optional(&phy->gpio_desc_cal_sw1, &init_param->gpio_cal_sw1);
+	no_os_gpio_get_optional(&phy->gpio_desc_cal_sw2, &init_param->gpio_cal_sw2);
 
-	gpio_direction_output(phy->gpio_desc_resetb, 0);
+	no_os_gpio_direction_output(phy->gpio_desc_resetb, 0);
 
 	spi_init(&phy->spi, &init_param->spi_param);
 
@@ -587,10 +587,10 @@ int32_t ad9361_remove(struct ad9361_rf_phy *phy)
 {
 	ad9361_unregister_clocks(phy);
 	spi_remove(phy->spi);
-	gpio_remove(phy->gpio_desc_resetb);
-	gpio_remove(phy->gpio_desc_sync);
-	gpio_remove(phy->gpio_desc_cal_sw1);
-	gpio_remove(phy->gpio_desc_cal_sw2);
+	no_os_gpio_remove(phy->gpio_desc_resetb);
+	no_os_gpio_remove(phy->gpio_desc_sync);
+	no_os_gpio_remove(phy->gpio_desc_cal_sw1);
+	no_os_gpio_remove(phy->gpio_desc_cal_sw2);
 #ifndef AXI_ADC_NOT_PRESENT
 	free(phy->adc_conv);
 	free(phy->adc_state);

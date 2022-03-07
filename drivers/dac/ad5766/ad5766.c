@@ -303,10 +303,10 @@ int32_t ad5766_init(struct ad5766_dev **device,
 	ret = spi_init(&dev->spi_desc, &init_param.spi_init);
 
 	/* GPIO */
-	ret |= gpio_get(&dev->gpio_reset, &init_param.gpio_reset);
-	ret |= gpio_direction_output(dev->gpio_reset, GPIO_LOW);
+	ret |= no_os_gpio_get(&dev->gpio_reset, &init_param.gpio_reset);
+	ret |= no_os_gpio_direction_output(dev->gpio_reset, NO_OS_GPIO_LOW);
 	mdelay(10);
-	ret |= gpio_set_value(dev->gpio_reset, GPIO_HIGH);
+	ret |= no_os_gpio_set_value(dev->gpio_reset, NO_OS_GPIO_HIGH);
 	mdelay(10);
 
 	/* Device Settings */
@@ -342,7 +342,7 @@ int32_t ad5766_remove(struct ad5766_dev *dev)
 
 	ret = spi_remove(dev->spi_desc);
 
-	ret |= gpio_remove(dev->gpio_reset);
+	ret |= no_os_gpio_remove(dev->gpio_reset);
 
 	free(dev);
 

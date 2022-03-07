@@ -83,128 +83,128 @@ int32_t ad6676_gpio_config(struct ad6676_init_param init_param)
 		.device_id = GPIO_DEVICE_ID
 	};
 
-	struct gpio_init_param gpio_adc_oen_param = {
+	struct no_os_gpio_init_param gpio_adc_oen_param = {
 		.number = GPIO_ADC_OEN,
 		.platform_ops = &xil_gpio_ops,
 		.extra = &xil_gpio_param
 	};
-	struct gpio_desc *gpio_adc_oen;
+	struct no_os_gpio_desc *gpio_adc_oen;
 
-	struct gpio_init_param gpio_adc_s0_param = {
+	struct no_os_gpio_init_param gpio_adc_s0_param = {
 		.number = GPIO_ADC_S0,
 		.platform_ops = &xil_gpio_ops,
 		.extra = &xil_gpio_param
 	};
-	struct gpio_desc *gpio_adc_s0;
+	struct no_os_gpio_desc *gpio_adc_s0;
 
-	struct gpio_init_param gpio_adc_s1_param = {
+	struct no_os_gpio_init_param gpio_adc_s1_param = {
 		.number = GPIO_ADC_S1,
 		.platform_ops = &xil_gpio_ops,
 		.extra = &xil_gpio_param
 	};
-	struct gpio_desc *gpio_adc_s1;
+	struct no_os_gpio_desc *gpio_adc_s1;
 
-	struct gpio_init_param gpio_adc_sela_param = {
+	struct no_os_gpio_init_param gpio_adc_sela_param = {
 		.number = GPIO_ADC_SELA,
 		.platform_ops = &xil_gpio_ops,
 		.extra = &xil_gpio_param
 	};
-	struct gpio_desc *gpio_adc_sela;
+	struct no_os_gpio_desc *gpio_adc_sela;
 
-	struct gpio_init_param gpio_adc_selb_param = {
+	struct no_os_gpio_init_param gpio_adc_selb_param = {
 		.number = GPIO_ADC_SELB,
 		.platform_ops = &xil_gpio_ops,
 		.extra = &xil_gpio_param
 	};
-	struct gpio_desc *gpio_adc_selb;
+	struct no_os_gpio_desc *gpio_adc_selb;
 
-	struct gpio_init_param gpio_adc_resetb_param = {
+	struct no_os_gpio_init_param gpio_adc_resetb_param = {
 		.number = GPIO_ADC_RESETB,
 		.platform_ops = &xil_gpio_ops,
 		.extra = &xil_gpio_param
 	};
-	struct gpio_desc *gpio_adc_resetb;
+	struct no_os_gpio_desc *gpio_adc_resetb;
 
-	struct gpio_init_param gpio_adc_agc1_param = {
+	struct no_os_gpio_init_param gpio_adc_agc1_param = {
 		.number = GPIO_ADC_AGC1,
 		.platform_ops = &xil_gpio_ops,
 		.extra = &xil_gpio_param
 	};
-	struct gpio_desc *gpio_adc_agc1;
+	struct no_os_gpio_desc *gpio_adc_agc1;
 
-	struct gpio_init_param gpio_adc_agc2_param = {
+	struct no_os_gpio_init_param gpio_adc_agc2_param = {
 		.number = GPIO_ADC_AGC2,
 		.platform_ops = &xil_gpio_ops,
 		.extra = &xil_gpio_param
 	};
-	struct gpio_desc *gpio_adc_agc2;
+	struct no_os_gpio_desc *gpio_adc_agc2;
 
-	ret = gpio_get(&gpio_adc_oen, &gpio_adc_oen_param);
+	ret = no_os_gpio_get(&gpio_adc_oen, &gpio_adc_oen_param);
 	if(ret != SUCCESS)
 		return FAILURE;
 
-	ret = gpio_get(&gpio_adc_s0, &gpio_adc_s0_param);
+	ret = no_os_gpio_get(&gpio_adc_s0, &gpio_adc_s0_param);
 	if(ret != SUCCESS)
 		return FAILURE;
 
-	ret = gpio_get(&gpio_adc_s1, &gpio_adc_s1_param);
+	ret = no_os_gpio_get(&gpio_adc_s1, &gpio_adc_s1_param);
 	if(ret != SUCCESS)
 		return FAILURE;
 
-	ret = gpio_get(&gpio_adc_sela, &gpio_adc_sela_param);
+	ret = no_os_gpio_get(&gpio_adc_sela, &gpio_adc_sela_param);
 	if(ret != SUCCESS)
 		return FAILURE;
 
-	ret = gpio_get(&gpio_adc_selb, &gpio_adc_selb_param);
+	ret = no_os_gpio_get(&gpio_adc_selb, &gpio_adc_selb_param);
 	if(ret != SUCCESS)
 		return FAILURE;
 
-	ret = gpio_get(&gpio_adc_resetb, &gpio_adc_resetb_param);
+	ret = no_os_gpio_get(&gpio_adc_resetb, &gpio_adc_resetb_param);
 	if(ret != SUCCESS)
 		return FAILURE;
 
-	ret = gpio_get(&gpio_adc_agc1, &gpio_adc_agc1_param);
+	ret = no_os_gpio_get(&gpio_adc_agc1, &gpio_adc_agc1_param);
 	if(ret != SUCCESS)
 		return FAILURE;
 
-	ret = gpio_get(&gpio_adc_agc2, &gpio_adc_agc2_param);
+	ret = no_os_gpio_get(&gpio_adc_agc2, &gpio_adc_agc2_param);
 	if(ret != SUCCESS)
 		return FAILURE;
 
-	ret = gpio_direction_output(gpio_adc_oen, 0);
+	ret = no_os_gpio_direction_output(gpio_adc_oen, 0);
 	if(ret != SUCCESS)
 		return FAILURE;
 
 	switch (init_param.decimation) {
 	case 12:
-		ret = gpio_direction_output(gpio_adc_s0, 1);
+		ret = no_os_gpio_direction_output(gpio_adc_s0, 1);
 		if(ret != SUCCESS)
 			return FAILURE;
-		ret = gpio_direction_output(gpio_adc_s1, 1);
+		ret = no_os_gpio_direction_output(gpio_adc_s1, 1);
 		if(ret != SUCCESS)
 			return FAILURE;
 		break;
 	case 16:
-		ret = gpio_direction_output(gpio_adc_s0, 0);
+		ret = no_os_gpio_direction_output(gpio_adc_s0, 0);
 		if(ret != SUCCESS)
 			return FAILURE;
-		ret = gpio_direction_output(gpio_adc_s1, 1);
+		ret = no_os_gpio_direction_output(gpio_adc_s1, 1);
 		if(ret != SUCCESS)
 			return FAILURE;
 		break;
 	case 24:
-		ret = gpio_direction_output(gpio_adc_s0, 0);
+		ret = no_os_gpio_direction_output(gpio_adc_s0, 0);
 		if(ret != SUCCESS)
 			return FAILURE;
-		ret = gpio_direction_output(gpio_adc_s1, 1);
+		ret = no_os_gpio_direction_output(gpio_adc_s1, 1);
 		if(ret != SUCCESS)
 			return FAILURE;
 		break;
 	case 32:
-		ret = gpio_direction_output(gpio_adc_s0, 0);
+		ret = no_os_gpio_direction_output(gpio_adc_s0, 0);
 		if(ret != SUCCESS)
 			return FAILURE;
-		ret = gpio_direction_output(gpio_adc_s1, 0);
+		ret = no_os_gpio_direction_output(gpio_adc_s1, 0);
 		if(ret != SUCCESS)
 			return FAILURE;
 		break;
@@ -213,39 +213,39 @@ int32_t ad6676_gpio_config(struct ad6676_init_param init_param)
 	}
 
 	if (init_param.use_extclk) {
-		ret = gpio_direction_output(gpio_adc_sela, 1);
+		ret = no_os_gpio_direction_output(gpio_adc_sela, 1);
 		if(ret != SUCCESS)
 			return FAILURE;
-		ret = gpio_direction_output(gpio_adc_selb, 0);
+		ret = no_os_gpio_direction_output(gpio_adc_selb, 0);
 		if(ret != SUCCESS)
 			return FAILURE;
 	} else {
-		ret = gpio_direction_output(gpio_adc_sela, 0);
+		ret = no_os_gpio_direction_output(gpio_adc_sela, 0);
 		if(ret != SUCCESS)
 			return FAILURE;
-		ret = gpio_direction_output(gpio_adc_selb, 1);
+		ret = no_os_gpio_direction_output(gpio_adc_selb, 1);
 		if(ret != SUCCESS)
 			return FAILURE;
 	}
 
-	ret = gpio_direction_output(gpio_adc_resetb, 1);
+	ret = no_os_gpio_direction_output(gpio_adc_resetb, 1);
 	if(ret != SUCCESS)
 		return FAILURE;
-	ret = gpio_direction_output(gpio_adc_agc1, 0);
+	ret = no_os_gpio_direction_output(gpio_adc_agc1, 0);
 	if(ret != SUCCESS)
 		return FAILURE;
-	ret = gpio_direction_output(gpio_adc_agc2, 0);
+	ret = no_os_gpio_direction_output(gpio_adc_agc2, 0);
 	if(ret != SUCCESS)
 		return FAILURE;
 
-	gpio_remove(gpio_adc_oen);
-	gpio_remove(gpio_adc_s0);
-	gpio_remove(gpio_adc_s1);
-	gpio_remove(gpio_adc_sela);
-	gpio_remove(gpio_adc_selb);
-	gpio_remove(gpio_adc_resetb);
-	gpio_remove(gpio_adc_agc1);
-	gpio_remove(gpio_adc_agc2);
+	no_os_gpio_remove(gpio_adc_oen);
+	no_os_gpio_remove(gpio_adc_s0);
+	no_os_gpio_remove(gpio_adc_s1);
+	no_os_gpio_remove(gpio_adc_sela);
+	no_os_gpio_remove(gpio_adc_selb);
+	no_os_gpio_remove(gpio_adc_resetb);
+	no_os_gpio_remove(gpio_adc_agc1);
+	no_os_gpio_remove(gpio_adc_agc2);
 
 	return SUCCESS;
 }
@@ -266,12 +266,12 @@ int main(void)
 		.device_id = GPIO_DEVICE_ID
 	};
 
-	struct gpio_init_param gpio_sysref_param = {
+	struct no_os_gpio_init_param gpio_sysref_param = {
 		.number = GPIO_JESD204_SYSREF,
 		.platform_ops = &xil_gpio_ops,
 		.extra = &xil_gpio_param
 	};
-	struct gpio_desc *gpio_sysref;
+	struct no_os_gpio_desc *gpio_sysref;
 
 	struct xil_spi_init_param xil_spi_param = {
 #ifdef PLATFORM_MB
@@ -356,11 +356,11 @@ int main(void)
 	ad6676_param.frames_per_multiframe = 16;
 
 	// receiver DMA configuration
-	ret = gpio_get(&gpio_sysref, &gpio_sysref_param);
+	ret = no_os_gpio_get(&gpio_sysref, &gpio_sysref_param);
 	if(ret != SUCCESS)
 		return FAILURE;
 
-	ret = gpio_direction_output(gpio_sysref, 1);
+	ret = no_os_gpio_direction_output(gpio_sysref, 1);
 	if(ret != SUCCESS)
 		return FAILURE;
 

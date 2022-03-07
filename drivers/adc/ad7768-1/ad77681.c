@@ -1361,8 +1361,8 @@ int32_t ad77681_gpio_read(struct ad77681_dev *dev,
  * Write value to GPIOs present in AD7768-1 separately, or all GPIOS at once.
  * @param dev - The device structure.
  * @param value - Value to be written into GPIO
- *		  Accepted values: GPIO_HIGH
- *				   GPIO_LOW
+ *		  Accepted values: NO_OS_GPIO_HIGH
+ *				   NO_OS_GPIO_LOW
  *				   4-bit value for all gpios
  * @param gpio_number - Number of GPIO, the value will be written into
  *			Accepted values: AD77681_GPIO0
@@ -1420,8 +1420,8 @@ int32_t ad77681_gpio_write(struct ad77681_dev *dev,
  * Set AD7768-1s GPIO as input or output.
  * @param dev - The device structure.
  * @param direction - Direction of the GPIO
- *			Accepted values: GPIO_INPUT
- *					 GPIO_OUTPUT
+ *			Accepted values: NO_OS_GPIO_IN
+ *					 NO_OS_GPIO_OUT
  *					 4-bit value for all gpios
  * @param gpio_number - Number of GPIO, which will be affected
  *			Accepted values: AD77681_GPIO0

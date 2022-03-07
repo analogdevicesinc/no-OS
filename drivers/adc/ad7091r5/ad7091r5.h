@@ -205,7 +205,7 @@ struct ad7091r5_init_param {
 	/* I2C */
 	i2c_init_param		*i2c_init;
 	/** RESET GPIO initialization structure. */
-	struct gpio_init_param	*gpio_resetn;
+	struct no_os_gpio_init_param	*gpio_resetn;
 };
 
 /**
@@ -216,7 +216,7 @@ struct ad7091r5_dev {
 	/* I2C descriptor */
 	struct i2c_desc 	*i2c_desc;
 	/** RESET GPIO handler. */
-	struct gpio_desc	*gpio_resetn;
+	struct no_os_gpio_desc	*gpio_resetn;
 };
 
 /******************************************************************************/

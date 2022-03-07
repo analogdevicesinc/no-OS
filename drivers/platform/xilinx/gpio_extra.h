@@ -90,6 +90,6 @@ typedef struct xil_gpio_desc {
 /**
  * @brief Xilinx platform specific gpio platform ops structure
  */
-extern const struct gpio_platform_ops xil_gpio_ops;
+extern const struct no_os_gpio_platform_ops xil_gpio_ops;
 
 #endif

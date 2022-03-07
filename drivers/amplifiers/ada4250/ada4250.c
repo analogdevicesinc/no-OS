@@ -215,7 +215,7 @@ int32_t ada4250_en_refbuf(struct ada4250_dev *dev, bool refbuf)
 				     ADA4250_REFBUF(refbuf));
 		break;
 	case ADA4230:
-		ret = gpio_set_value(dev->gpio_bufen, dev->refbuf_en);
+		ret = no_os_gpio_set_value(dev->gpio_bufen, dev->refbuf_en);
 		break;
 	default:
 		return -ENODEV;
@@ -287,15 +287,15 @@ int32_t ada4250_set_gain(struct ada4250_dev *dev, enum ada4250_gain gain)
 		ret = ada4250_update(dev, ADA4250_REG_GAIN_MUX, ADA4250_GAIN_MUX_MSK,
 				     ADA4250_GAIN_MUX(gain));
 	} else {
-		ret = gpio_set_value(dev->gpio_g2, ((dev->gain >> 2) & 0x1));
+		ret = no_os_gpio_set_value(dev->gpio_g2, ((dev->gain >> 2) & 0x1));
 		if (ret != SUCCESS)
 			return ret;
 
-		ret = gpio_set_value(dev->gpio_g1, ((dev->gain >> 1) & 0x1));
+		ret = no_os_gpio_set_value(dev->gpio_g1, ((dev->gain >> 1) & 0x1));
 		if (ret != SUCCESS)
 			return ret;
 
-		ret = gpio_set_value(dev->gpio_g0, (dev->gain & 0x1));
+		ret = no_os_gpio_set_value(dev->gpio_g0, (dev->gain & 0x1));
 	}
 
 	if (ret < 0)
@@ -380,16 +380,16 @@ int32_t ada4250_set_bandwidth(struct ada4250_dev *dev,
 
 	switch (bw) {
 	case ADA4250_BANDWIDTH_LOW:
-		val = GPIO_HIGH;
+		val = NO_OS_GPIO_HIGH;
 		break;
 	case ADA4250_BANDWIDTH_HIGH:
-		val = GPIO_LOW;
+		val = NO_OS_GPIO_LOW;
 		break;
 	default:
 		return -EINVAL;
 	}
 
-	ret = gpio_set_value(dev->gpio_bw, val);
+	ret = no_os_gpio_set_value(dev->gpio_bw, val);
 	if (ret < 0)
 		return ret;
 
@@ -452,10 +452,10 @@ int32_t ada4250_set_slp_shtdwn_mode(struct ada4250_dev *dev,
 
 	switch (pwrmode) {
 	case ADA4250_POWER_SLEEP:
-		ret = gpio_set_value(dev->gpio_slp, GPIO_LOW);
+		ret = no_os_gpio_set_value(dev->gpio_slp, NO_OS_GPIO_LOW);
 		break;
 	case ADA4250_POWER_SHUTDOWN:
-		ret = gpio_set_value(dev->gpio_shtdwn, GPIO_LOW);
+		ret = no_os_gpio_set_value(dev->gpio_shtdwn, NO_OS_GPIO_LOW);
 		break;
 	default:
 		return -EINVAL;
@@ -484,10 +484,10 @@ int32_t ada4250_set_normal_mode(struct ada4250_dev *dev, bool reconfig)
 
 	switch (dev->power_mode) {
 	case ADA4250_POWER_SHUTDOWN:
-		ret = gpio_set_value(dev->gpio_shtdwn, GPIO_HIGH);
+		ret = no_os_gpio_set_value(dev->gpio_shtdwn, NO_OS_GPIO_HIGH);
 		break;
 	case ADA4250_POWER_SLEEP:
-		ret = gpio_set_value(dev->gpio_slp, GPIO_HIGH);
+		ret = no_os_gpio_set_value(dev->gpio_slp, NO_OS_GPIO_HIGH);
 		break;
 	default:
 		return -EINVAL;
@@ -543,19 +543,19 @@ int32_t ada4250_init(struct ada4250_dev **device,
 	dev->bandwidth = init_param->bandwidth;
 
 	/* Initialize gpio sleep/shutdown and pull it to high */
-	ret = gpio_get_optional(&dev->gpio_shtdwn, init_param->gpio_shtdwn);
+	ret = no_os_gpio_get_optional(&dev->gpio_shtdwn, init_param->gpio_shtdwn);
 	if (ret != SUCCESS)
 		goto error_dev;
 
-	ret = gpio_direction_output(dev->gpio_shtdwn, GPIO_HIGH);
+	ret = no_os_gpio_direction_output(dev->gpio_shtdwn, NO_OS_GPIO_HIGH);
 	if (ret != SUCCESS)
 		goto error_shtdwn;
 
-	ret = gpio_get_optional(&dev->gpio_slp, init_param->gpio_slp);
+	ret = no_os_gpio_get_optional(&dev->gpio_slp, init_param->gpio_slp);
 	if (ret != SUCCESS)
 		goto error_shtdwn;
 
-	ret = gpio_direction_output(dev->gpio_slp, GPIO_HIGH);
+	ret = no_os_gpio_direction_output(dev->gpio_slp, NO_OS_GPIO_HIGH);
 	if (ret != SUCCESS)
 		goto error_slp;
 
@@ -590,44 +590,44 @@ int32_t ada4250_init(struct ada4250_dev **device,
 		if(ret != SUCCESS)
 			return FAILURE;
 	} else {
-		ret = gpio_get(&dev->gpio_g2, init_param->gpio_g2_param);
+		ret = no_os_gpio_get(&dev->gpio_g2, init_param->gpio_g2_param);
 		if (ret != SUCCESS)
 			goto error_dev;
 
-		ret = gpio_direction_output(dev->gpio_g2, GPIO_LOW);
+		ret = no_os_gpio_direction_output(dev->gpio_g2, NO_OS_GPIO_LOW);
 		if (ret != SUCCESS)
 			goto error_g2;
 
-		ret = gpio_get(&dev->gpio_g1, init_param->gpio_g1_param);
+		ret = no_os_gpio_get(&dev->gpio_g1, init_param->gpio_g1_param);
 		if (ret != SUCCESS)
 			goto error_g2;
 
-		ret = gpio_direction_output(dev->gpio_g1, GPIO_LOW);
+		ret = no_os_gpio_direction_output(dev->gpio_g1, NO_OS_GPIO_LOW);
 		if (ret != SUCCESS)
 			goto error_g1;
 
-		ret = gpio_get(&dev->gpio_g0, init_param->gpio_g0_param);
+		ret = no_os_gpio_get(&dev->gpio_g0, init_param->gpio_g0_param);
 		if (ret != SUCCESS)
 			goto error_g1;
 
-		ret = gpio_direction_output(dev->gpio_g0, GPIO_LOW);
+		ret = no_os_gpio_direction_output(dev->gpio_g0, NO_OS_GPIO_LOW);
 		if (ret != SUCCESS)
 			goto error_g0;
 
-		ret = gpio_get(&dev->gpio_bufen, init_param->gpio_bufen_param);
+		ret = no_os_gpio_get(&dev->gpio_bufen, init_param->gpio_bufen_param);
 		if (ret != SUCCESS)
 			goto error_g0;
-		ret = gpio_direction_output(dev->gpio_bufen, GPIO_LOW);
+		ret = no_os_gpio_direction_output(dev->gpio_bufen, NO_OS_GPIO_LOW);
 		if (ret != SUCCESS)
 			goto error_bufen;
 	}
 
 	/* Initialize gpio bandwidth and pull it to high */
-	ret = gpio_get_optional(&dev->gpio_bw, init_param->gpio_bw_param);
+	ret = no_os_gpio_get_optional(&dev->gpio_bw, init_param->gpio_bw_param);
 	if (ret != SUCCESS)
 		return FAILURE;
 
-	ret = gpio_direction_output(dev->gpio_bw, GPIO_HIGH);
+	ret = no_os_gpio_direction_output(dev->gpio_bw, NO_OS_GPIO_HIGH);
 	if (ret != SUCCESS)
 		return FAILURE;
 
@@ -643,17 +643,17 @@ error_spi:
 	spi_remove(dev->spi_desc);
 	goto error_dev;
 error_bufen:
-	gpio_remove(dev->gpio_bufen);
+	no_os_gpio_remove(dev->gpio_bufen);
 error_g0:
-	gpio_remove(dev->gpio_g0);
+	no_os_gpio_remove(dev->gpio_g0);
 error_g1:
-	gpio_remove(dev->gpio_g1);
+	no_os_gpio_remove(dev->gpio_g1);
 error_g2:
-	gpio_remove(dev->gpio_g2);
+	no_os_gpio_remove(dev->gpio_g2);
 error_slp:
-	gpio_remove(dev->gpio_slp);
+	no_os_gpio_remove(dev->gpio_slp);
 error_shtdwn:
-	gpio_remove(dev->gpio_shtdwn);
+	no_os_gpio_remove(dev->gpio_shtdwn);
 error_dev:
 	free(dev);
 
@@ -668,13 +668,13 @@ int32_t ada4250_remove(struct ada4250_dev *dev)
 {
 	int32_t ret;
 
-	ret = gpio_remove(dev->gpio_slp);
+	ret = no_os_gpio_remove(dev->gpio_slp);
 	if (ret != SUCCESS)
 		return ret;
-	ret = gpio_remove(dev->gpio_shtdwn);
+	ret = no_os_gpio_remove(dev->gpio_shtdwn);
 	if (ret != SUCCESS)
 		return ret;
-	ret = gpio_remove(dev->gpio_bw);
+	ret = no_os_gpio_remove(dev->gpio_bw);
 	if (ret != SUCCESS)
 		return ret;
 
@@ -683,16 +683,16 @@ int32_t ada4250_remove(struct ada4250_dev *dev)
 		if (ret != SUCCESS)
 			return ret;
 	} else {
-		ret = gpio_remove(dev->gpio_g2);
+		ret = no_os_gpio_remove(dev->gpio_g2);
 		if (ret != SUCCESS)
 			return ret;
-		ret = gpio_remove(dev->gpio_g1);
+		ret = no_os_gpio_remove(dev->gpio_g1);
 		if (ret != SUCCESS)
 			return ret;
-		ret = gpio_remove(dev->gpio_g0);
+		ret = no_os_gpio_remove(dev->gpio_g0);
 		if (ret != SUCCESS)
 			return ret;
-		ret = gpio_remove(dev->gpio_bufen);
+		ret = no_os_gpio_remove(dev->gpio_bufen);
 		if (ret != SUCCESS)
 			return ret;
 	}

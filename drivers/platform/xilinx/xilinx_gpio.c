@@ -65,8 +65,8 @@
  * @param param - The structure that contains the GPIO parameters.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t _gpio_init(struct gpio_desc *desc,
-		   const struct gpio_init_param *param)
+int32_t _gpio_init(struct no_os_gpio_desc *desc,
+		   const struct no_os_gpio_init_param *param)
 {
 	int32_t				ret;
 	struct xil_gpio_desc		*xdesc;
@@ -137,14 +137,14 @@ error:
  * @param param - GPIO initialization parameters
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t xil_gpio_get(struct gpio_desc **desc,
-		     const struct gpio_init_param *param)
+int32_t xil_gpio_get(struct no_os_gpio_desc **desc,
+		     const struct no_os_gpio_init_param *param)
 {
-	struct gpio_desc	*descriptor;
+	struct no_os_gpio_desc	*descriptor;
 	struct xil_gpio_desc	*extra;
 	int32_t			ret;
 
-	descriptor = (struct gpio_desc *)malloc(sizeof(*descriptor));
+	descriptor = (struct no_os_gpio_desc *)malloc(sizeof(*descriptor));
 	extra = (struct xil_gpio_desc*)malloc(sizeof(*extra));
 
 	if (!descriptor || !extra)
@@ -172,8 +172,8 @@ error:
  * @param param - GPIO Initialization parameters.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t xil_gpio_get_optional(struct gpio_desc **desc,
-			      const struct gpio_init_param *param)
+int32_t xil_gpio_get_optional(struct no_os_gpio_desc **desc,
+			      const struct no_os_gpio_init_param *param)
 {
 	if(param == NULL) {
 		*desc = NULL;
@@ -184,11 +184,11 @@ int32_t xil_gpio_get_optional(struct gpio_desc **desc,
 }
 
 /**
- * @brief Free the resources allocated by gpio_get().
+ * @brief Free the resources allocated by no_os_gpio_get().
  * @param desc - The GPIO descriptor.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t xil_gpio_remove(struct gpio_desc *desc)
+int32_t xil_gpio_remove(struct no_os_gpio_desc *desc)
 {
 	if (desc != NULL) {
 		free(((xil_gpio_desc *)(desc->extra))->instance);
@@ -204,7 +204,7 @@ int32_t xil_gpio_remove(struct gpio_desc *desc)
  * @param desc - The GPIO descriptor.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t xil_gpio_direction_input(struct gpio_desc *desc)
+int32_t xil_gpio_direction_input(struct no_os_gpio_desc *desc)
 {
 	struct xil_gpio_desc	*extra;
 #ifdef XGPIO_H
@@ -235,7 +235,7 @@ int32_t xil_gpio_direction_input(struct gpio_desc *desc)
 #ifdef XGPIOPS_H
 		XGpioPs_SetDirectionPin(extra->instance,
 					desc->number,
-					GPIO_IN);
+					NO_OS_GPIO_IN);
 #endif
 		break;
 	default:
@@ -249,11 +249,11 @@ int32_t xil_gpio_direction_input(struct gpio_desc *desc)
  * @brief Enable the output direction of the specified GPIO.
  * @param desc - The GPIO descriptor.
  * @param value - The value.
- *                Example: GPIO_HIGH
- *                         GPIO_LOW
+ *                Example: NO_OS_GPIO_HIGH
+ *                         NO_OS_GPIO_LOW
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t xil_gpio_direction_output(struct gpio_desc *desc,
+int32_t xil_gpio_direction_output(struct no_os_gpio_desc *desc,
 				  uint8_t value)
 {
 	struct xil_gpio_desc	*extra;
@@ -294,10 +294,10 @@ int32_t xil_gpio_direction_output(struct gpio_desc *desc,
 #ifdef XGPIOPS_H
 		XGpioPs_SetDirectionPin(extra->instance,
 					desc->number,
-					GPIO_OUT);
+					NO_OS_GPIO_OUT);
 		XGpioPs_SetOutputEnablePin(extra->instance,
 					   desc->number,
-					   GPIO_OUT);
+					   NO_OS_GPIO_OUT);
 		XGpioPs_WritePin(extra->instance,
 				 desc->number,
 				 value);
@@ -314,11 +314,11 @@ int32_t xil_gpio_direction_output(struct gpio_desc *desc,
  * @brief Get the direction of the specified GPIO.
  * @param desc - The GPIO descriptor.
  * @param direction - The direction.
- *                    Example: GPIO_OUT
- *                             GPIO_IN
+ *                    Example: NO_OS_GPIO_OUT
+ *                             NO_OS_GPIO_IN
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t xil_gpio_get_direction(struct gpio_desc *desc,
+int32_t xil_gpio_get_direction(struct no_os_gpio_desc *desc,
 			       uint8_t *direction)
 {
 	if (!desc)
@@ -360,11 +360,11 @@ int32_t xil_gpio_get_direction(struct gpio_desc *desc,
  * @brief Set the value of the specified GPIO.
  * @param desc - The GPIO descriptor.
  * @param value - The value.
- *                Example: GPIO_HIGH
- *                         GPIO_LOW
+ *                Example: NO_OS_GPIO_HIGH
+ *                         NO_OS_GPIO_LOW
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t xil_gpio_set_value(struct gpio_desc *desc,
+int32_t xil_gpio_set_value(struct no_os_gpio_desc *desc,
 			   uint8_t value)
 {
 	struct xil_gpio_desc	*extra;
@@ -408,11 +408,11 @@ int32_t xil_gpio_set_value(struct gpio_desc *desc,
  * @brief Get the value of the specified GPIO.
  * @param desc - The GPIO descriptor.
  * @param value - The value.
- *                Example: GPIO_HIGH
- *                         GPIO_LOW
+ *                Example: NO_OS_GPIO_HIGH
+ *                         NO_OS_GPIO_LOW
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t xil_gpio_get_value(struct gpio_desc *desc,
+int32_t xil_gpio_get_value(struct no_os_gpio_desc *desc,
 			   uint8_t *value)
 {
 	if (!desc)
@@ -452,7 +452,7 @@ int32_t xil_gpio_get_value(struct gpio_desc *desc,
 /**
  * @brief Xilinx platform specific GPIO platform ops structure
  */
-const struct gpio_platform_ops xil_gpio_ops = {
+const struct no_os_gpio_platform_ops xil_gpio_ops = {
 	.gpio_ops_get = &xil_gpio_get,
 	.gpio_ops_get_optional = &xil_gpio_get_optional,
 	.gpio_ops_remove = &xil_gpio_remove,

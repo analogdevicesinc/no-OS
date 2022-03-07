@@ -124,40 +124,40 @@
 #define ADF4156_R4_CTRL             0x04
 
 /* GPIO */
-#define ADF4156_LE_OUT              gpio_direction_output(dev->gpio_le,  \
-			            GPIO_HIGH);
-#define ADF4156_LE_LOW              gpio_set_value(dev->gpio_le,         \
-			            GPIO_LOW)
-#define ADF4156_LE_HIGH             gpio_set_value(dev->gpio_le,         \
-			            GPIO_HIGH)
+#define ADF4156_LE_OUT              no_os_gpio_direction_output(dev->gpio_le,  \
+			            NO_OS_GPIO_HIGH);
+#define ADF4156_LE_LOW              no_os_gpio_set_value(dev->gpio_le,         \
+			            NO_OS_GPIO_LOW)
+#define ADF4156_LE_HIGH             no_os_gpio_set_value(dev->gpio_le,         \
+			            NO_OS_GPIO_HIGH)
 
-#define ADF4156_MUX_OUT             gpio_direction_output(dev->gpio_mux, \
-			            GPIO_HIGH);
-#define ADF4156_MUX_LOW             gpio_set_value(dev->gpio_mux,        \
-			            GPIO_LOW)
-#define ADF4156_MUX_HIGH            gpio_set_value(dev->gpio_mux,        \
-			            GPIO_HIGH)
+#define ADF4156_MUX_OUT             no_os_gpio_direction_output(dev->gpio_mux, \
+			            NO_OS_GPIO_HIGH);
+#define ADF4156_MUX_LOW             no_os_gpio_set_value(dev->gpio_mux,        \
+			            NO_OS_GPIO_LOW)
+#define ADF4156_MUX_HIGH            no_os_gpio_set_value(dev->gpio_mux,        \
+			            NO_OS_GPIO_HIGH)
 
-#define ADF4156_CE_OUT              gpio_direction_output(dev->gpio_ce,  \
-			            GPIO_HIGH);
-#define ADF4156_CE_LOW              gpio_set_value(dev->gpio_ce,         \
-			            GPIO_LOW)
-#define ADF4156_CE_HIGH             gpio_set_value(dev->gpio_ce,         \
-			            GPIO_HIGH)
+#define ADF4156_CE_OUT              no_os_gpio_direction_output(dev->gpio_ce,  \
+			            NO_OS_GPIO_HIGH);
+#define ADF4156_CE_LOW              no_os_gpio_set_value(dev->gpio_ce,         \
+			            NO_OS_GPIO_LOW)
+#define ADF4156_CE_HIGH             no_os_gpio_set_value(dev->gpio_ce,         \
+			            NO_OS_GPIO_HIGH)
 
-#define ADF4156_LE2_OUT             gpio_direction_output(dev->gpio_le2, \
-			            GPIO_HIGH);
-#define ADF4156_LE2_LOW             gpio_set_value(dev->gpio_le2,        \
-			            GPIO_LOW)
-#define ADF4156_LE2_HIGH            gpio_set_value(dev->gpio_le2,        \
-			            GPIO_HIGH)
+#define ADF4156_LE2_OUT             no_os_gpio_direction_output(dev->gpio_le2, \
+			            NO_OS_GPIO_HIGH);
+#define ADF4156_LE2_LOW             no_os_gpio_set_value(dev->gpio_le2,        \
+			            NO_OS_GPIO_LOW)
+#define ADF4156_LE2_HIGH            no_os_gpio_set_value(dev->gpio_le2,        \
+			            NO_OS_GPIO_HIGH)
 
-#define ADF4156_CE2_OUT             gpio_direction_output(dev->gpio_ce2, \
-			            GPIO_HIGH);
-#define ADF4156_CE2_LOW             gpio_set_value(dev->gpio_ce2,        \
-			            GPIO_LOW)
-#define ADF4156_CE2_HIGH            gpio_set_value(dev->gpio_ce2,        \
-			            GPIO_HIGH)
+#define ADF4156_CE2_OUT             no_os_gpio_direction_output(dev->gpio_ce2, \
+			            NO_OS_GPIO_HIGH);
+#define ADF4156_CE2_LOW             no_os_gpio_set_value(dev->gpio_ce2,        \
+			            NO_OS_GPIO_LOW)
+#define ADF4156_CE2_HIGH            no_os_gpio_set_value(dev->gpio_ce2,        \
+			            NO_OS_GPIO_HIGH)
 
 /* Specifications */
 #define ADF4156_MAX_OUT_FREQ        6200          /* MHz */
@@ -211,8 +211,8 @@ struct adf4156_dev {
 	/* SPI */
 	spi_desc		*spi_desc;
 	/* GPIO */
-	struct gpio_desc	*gpio_le;
-	struct gpio_desc	*gpio_ce;
+	struct no_os_gpio_desc	*gpio_le;
+	struct no_os_gpio_desc	*gpio_ce;
 	/* Device Settings */
 	struct adf4156_state	adf4156_st;
 };
@@ -221,8 +221,8 @@ struct adf4156_init_param {
 	/* SPI */
 	spi_init_param	spi_init;
 	/* GPIO */
-	struct gpio_init_param	gpio_le;
-	struct gpio_init_param	gpio_ce;
+	struct no_os_gpio_init_param	gpio_le;
+	struct no_os_gpio_init_param	gpio_ce;
 };
 
 /******************************************************************************/

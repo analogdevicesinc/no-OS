@@ -17,7 +17,7 @@ INCS +=	$(INCLUDE)/no_os_uart.h \
 
 SRCS += $(DRIVERS)/api/spi.c \
 	$(DRIVERS)/api/i2c.c \
-	$(DRIVERS)/api/gpio.c \
+	$(DRIVERS)/api/no_os_gpio.c \
 	$(DRIVERS)/accel/adxl355/adxl355.c
 
 INCS += $(DRIVERS)/accel/adxl355/adxl355.h

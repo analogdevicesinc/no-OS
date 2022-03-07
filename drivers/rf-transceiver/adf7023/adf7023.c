@@ -47,10 +47,10 @@
 /******************************************************************************/
 /*************************** Macros Definitions *******************************/
 /******************************************************************************/
-#define ADF7023_CS_ASSERT   gpio_set_value(dev->gpio_cs,  \
-			    GPIO_LOW)
-#define ADF7023_CS_DEASSERT gpio_set_value(dev->gpio_cs,  \
-			    GPIO_HIGH)
+#define ADF7023_CS_ASSERT   no_os_gpio_set_value(dev->gpio_cs,  \
+			    NO_OS_GPIO_LOW)
+#define ADF7023_CS_DEASSERT no_os_gpio_set_value(dev->gpio_cs,  \
+			    NO_OS_GPIO_HIGH)
 
 /******************************************************************************/
 /************************ Variables Definitions *******************************/
@@ -108,19 +108,19 @@ int32_t adf7023_init(struct adf7023_dev **device,
 	ret = spi_init(&dev->spi_desc, &init_param.spi_init);
 
 	/* GPIO */
-	ret |= gpio_get(&dev->gpio_cs, &init_param.gpio_cs);
-	ret |= gpio_get(&dev->gpio_miso, &init_param.gpio_miso);
+	ret |= no_os_gpio_get(&dev->gpio_cs, &init_param.gpio_cs);
+	ret |= no_os_gpio_get(&dev->gpio_miso, &init_param.gpio_miso);
 
 	dev->adf7023_bbram_current = adf7023_bbram_default;
 
 	if (dev->gpio_cs)
-		ret |= gpio_direction_output(dev->gpio_cs,
-					     GPIO_HIGH);
+		ret |= no_os_gpio_direction_output(dev->gpio_cs,
+						   NO_OS_GPIO_HIGH);
 
 	ADF7023_CS_ASSERT;
 
 	while ((miso == 0) && (timeout < 1000)) {
-		gpio_get_value(dev->gpio_miso, &miso);
+		no_os_gpio_get_value(dev->gpio_miso, &miso);
 		timeout++;
 	}
 	if (timeout == 1000)
@@ -148,8 +148,8 @@ int32_t adf7023_remove(struct adf7023_dev *dev)
 
 	ret = spi_remove(dev->spi_desc);
 
-	ret |= gpio_remove(dev->gpio_cs);
-	ret |= gpio_remove(dev->gpio_miso);
+	ret |= no_os_gpio_remove(dev->gpio_cs);
+	ret |= no_os_gpio_remove(dev->gpio_miso);
 
 	free(dev);
 

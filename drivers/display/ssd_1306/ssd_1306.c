@@ -87,18 +87,18 @@ int32_t ssd_1306_init(struct display_dev *device)
 	ret = spi_init(&extra->spi_desc, extra->spi_ip);
 	if (ret != SUCCESS)
 		return FAILURE;
-	ret = gpio_get(&extra->dc_pin, extra->dc_pin_ip);
+	ret = no_os_gpio_get(&extra->dc_pin, extra->dc_pin_ip);
 	if (ret != SUCCESS)
 		return FAILURE;
-	ret = gpio_get(&extra->reset_pin, extra->reset_pin_ip);
+	ret = no_os_gpio_get(&extra->reset_pin, extra->reset_pin_ip);
 	if (ret != SUCCESS)
 		return FAILURE;
 
 	// initial pin state
-	ret = gpio_direction_output(extra->dc_pin, SSD1306_DC_CMD);
+	ret = no_os_gpio_direction_output(extra->dc_pin, SSD1306_DC_CMD);
 	if (ret != SUCCESS)
 		return FAILURE;
-	ret = gpio_direction_output(extra->reset_pin, SSD1306_RST_OFF);
+	ret = no_os_gpio_direction_output(extra->reset_pin, SSD1306_RST_OFF);
 	if (ret != SUCCESS)
 		return FAILURE;
 
@@ -106,12 +106,12 @@ int32_t ssd_1306_init(struct display_dev *device)
 	ret = spi_write_and_read(extra->spi_desc, command, 1U);
 	if (ret != SUCCESS)
 		return FAILURE;
-	ret = gpio_set_value(extra->reset_pin, SSD1306_RST_ON);
+	ret = no_os_gpio_set_value(extra->reset_pin, SSD1306_RST_ON);
 	if (ret != SUCCESS)
 		return FAILURE;
 	// Post reset delay, Treset=3us (See datasheet -> power on sequence)
 	usleep(3U);
-	ret = gpio_set_value(extra->reset_pin, SSD1306_RST_OFF);
+	ret = no_os_gpio_set_value(extra->reset_pin, SSD1306_RST_OFF);
 	if (ret != SUCCESS)
 		return FAILURE;
 	// charge pump
@@ -172,7 +172,7 @@ int32_t ssd_1306_display_on_off(struct display_dev *device, uint8_t on_off)
 	ssd_1306_extra *extra;
 
 	extra = device->extra;
-	ret = gpio_set_value(extra->dc_pin, SSD1306_DC_CMD);
+	ret = no_os_gpio_set_value(extra->dc_pin, SSD1306_DC_CMD);
 	if (ret != SUCCESS)
 		return FAILURE;
 	command = (on_off == true) ? SSD1306_DISP_ON : SSD1306_DISP_OFF;
@@ -195,7 +195,7 @@ int32_t ssd_1306_move_cursor(struct display_dev *device, uint8_t row,
 	ssd_1306_extra *extra;
 
 	extra = device->extra;
-	ret = gpio_set_value(extra->dc_pin, SSD1306_DC_CMD);
+	ret = no_os_gpio_set_value(extra->dc_pin, SSD1306_DC_CMD);
 	if (ret != SUCCESS)
 		return FAILURE;
 	command[0] = 0x21;
@@ -231,7 +231,7 @@ int32_t ssd_1306_print_ascii(struct display_dev *device, uint8_t ascii,
 	ret = ssd_1306_move_cursor(device, row, column);
 	if (ret != SUCCESS)
 		return FAILURE;
-	ret = gpio_set_value(extra->dc_pin, SSD1306_DC_DATA);
+	ret = no_os_gpio_set_value(extra->dc_pin, SSD1306_DC_DATA);
 	if (ret != SUCCESS)
 		return FAILURE;
 	return spi_write_and_read(extra->spi_desc, &ch, SSD1306_CHARSZ);
@@ -249,10 +249,10 @@ int32_t ssd_1306_remove(struct display_dev *device)
 	ssd_1306_extra *extra;
 
 	extra = device->extra;
-	ret = gpio_remove(extra->reset_pin);
+	ret = no_os_gpio_remove(extra->reset_pin);
 	if (ret != SUCCESS)
 		return FAILURE;
-	ret = gpio_remove(extra->dc_pin);
+	ret = no_os_gpio_remove(extra->dc_pin);
 	if (ret != SUCCESS)
 		return FAILURE;
 	return spi_remove(extra->spi_desc);

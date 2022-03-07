@@ -32,16 +32,16 @@ ADI_LOGLEVEL CMB_LOGLEVEL = ADIHAL_LOG_NONE;
 
 static uint32_t _desired_time_to_elapse_us = 0;
 struct spi_desc 	*spi_ad_desc;
-struct gpio_desc	*gpio_ad9371_resetb;
-struct gpio_desc	*gpio_ad9528_resetb;
-struct gpio_desc	*gpio_ad9528_sysref_req;
+struct no_os_gpio_desc	*gpio_ad9371_resetb;
+struct no_os_gpio_desc	*gpio_ad9528_resetb;
+struct no_os_gpio_desc	*gpio_ad9528_sysref_req;
 
 int32_t platform_init(void)
 {
 	struct spi_init_param spi_param;
-	struct gpio_init_param gpio_ad9371_resetb_param;
-	struct gpio_init_param gpio_ad9528_resetb_param;
-	struct gpio_init_param gpio_ad9528_sysref_param;
+	struct no_os_gpio_init_param gpio_ad9371_resetb_param;
+	struct no_os_gpio_init_param gpio_ad9528_resetb_param;
+	struct no_os_gpio_init_param gpio_ad9528_sysref_param;
 
 	int32_t status = 0;
 
@@ -97,9 +97,9 @@ int32_t platform_init(void)
 	gpio_ad9528_sysref_param.platform_ops = &altera_gpio_ops;
 	gpio_ad9528_sysref_param.extra = &altera_gpio_param;
 #endif
-	status = gpio_get(&gpio_ad9371_resetb, &gpio_ad9371_resetb_param);
-	status |= gpio_get(&gpio_ad9528_resetb, &gpio_ad9528_resetb_param);
-	status |= gpio_get(&gpio_ad9528_sysref_req, &gpio_ad9528_sysref_param);
+	status = no_os_gpio_get(&gpio_ad9371_resetb, &gpio_ad9371_resetb_param);
+	status |= no_os_gpio_get(&gpio_ad9528_resetb, &gpio_ad9528_resetb_param);
+	status |= no_os_gpio_get(&gpio_ad9528_sysref_req, &gpio_ad9528_sysref_param);
 
 	spi_param.mode = NO_OS_SPI_MODE_0;
 	spi_param.chip_select = AD9371_CS;
@@ -114,9 +114,9 @@ int32_t platform_remove(void)
 {
 	int32_t status;
 
-	status = gpio_remove(gpio_ad9371_resetb);
-	status |= gpio_remove(gpio_ad9528_resetb);
-	status |= gpio_remove(gpio_ad9528_sysref_req);
+	status = no_os_gpio_remove(gpio_ad9371_resetb);
+	status |= no_os_gpio_remove(gpio_ad9528_resetb);
+	status |= no_os_gpio_remove(gpio_ad9528_sysref_req);
 
 	status |= spi_remove(spi_ad_desc);
 
@@ -135,7 +135,7 @@ commonErr_t CMB_setGPIO(uint32_t GPIO)
 
 commonErr_t CMB_hardReset(uint8_t spiChipSelectIndex)
 {
-	struct gpio_desc *reset_gpio;
+	struct no_os_gpio_desc *reset_gpio;
 
 	switch (spiChipSelectIndex) {
 	case AD9371_CS:
@@ -148,11 +148,11 @@ commonErr_t CMB_hardReset(uint8_t spiChipSelectIndex)
 		return(COMMONERR_FAILED);
 	}
 
-	gpio_direction_output(reset_gpio, 1);
+	no_os_gpio_direction_output(reset_gpio, 1);
 	CMB_wait_ms(1);
-	gpio_direction_output(reset_gpio, 0);
+	no_os_gpio_direction_output(reset_gpio, 0);
 	CMB_wait_ms(1);
-	gpio_direction_output(reset_gpio, 1);
+	no_os_gpio_direction_output(reset_gpio, 1);
 	CMB_wait_ms(1);
 
 	return(COMMONERR_OK);

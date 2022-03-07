@@ -51,32 +51,32 @@
 /******************************************************************************/
 
 /* DOUT/RDY pin */
-#define AD7780_RDY_STATE(value) gpio_get_value(dev->gpio_miso,             \
+#define AD7780_RDY_STATE(value) no_os_gpio_get_value(dev->gpio_miso,             \
 		                &value)
 
 /* PDRST pin */
-#define AD7780_PDRST_PIN_OUT    gpio_direction_output(dev->gpio_pdrst,     \
-					              GPIO_HIGH);
-#define AD7780_PDRST_HIGH       gpio_set_value(dev->gpio_pdrst,            \
-			        GPIO_HIGH)
-#define AD7780_PDRST_LOW        gpio_set_value(dev->gpio_pdrst,            \
-			        GPIO_LOW)
+#define AD7780_PDRST_PIN_OUT    no_os_gpio_direction_output(dev->gpio_pdrst,     \
+					              NO_OS_GPIO_HIGH);
+#define AD7780_PDRST_HIGH       no_os_gpio_set_value(dev->gpio_pdrst,            \
+			        NO_OS_GPIO_HIGH)
+#define AD7780_PDRST_LOW        no_os_gpio_set_value(dev->gpio_pdrst,            \
+			        NO_OS_GPIO_LOW)
 
 /* FILTER pin */
-#define AD7780_FILTER_PIN_OUT   gpio_direction_output(dev->gpio_filter,    \
-					              GPIO_HIGH);
-#define AD7780_FILTER_HIGH      gpio_set_value(dev->gpio_filter,           \
-			        GPIO_HIGH)
-#define AD7780_FILTER_LOW       gpio_set_value(dev->gpio_filter,           \
-			        GPIO_LOW)
+#define AD7780_FILTER_PIN_OUT   no_os_gpio_direction_output(dev->gpio_filter,    \
+					              NO_OS_GPIO_HIGH);
+#define AD7780_FILTER_HIGH      no_os_gpio_set_value(dev->gpio_filter,           \
+			        NO_OS_GPIO_HIGH)
+#define AD7780_FILTER_LOW       no_os_gpio_set_value(dev->gpio_filter,           \
+			        NO_OS_GPIO_LOW)
 
 /* GAIN pin */
-#define AD7780_GAIN_PIN_OUT     gpio_direction_output(dev->gpio_gain,      \
-					              GPIO_HIGH);
-#define AD7780_GAIN_HIGH        gpio_set_value(dev->gpio_gain,             \
-			        GPIO_HIGH)
-#define AD7780_GAIN_LOW         gpio_set_value(dev->gpio_gain,             \
-			        GPIO_LOW)
+#define AD7780_GAIN_PIN_OUT     no_os_gpio_direction_output(dev->gpio_gain,      \
+					              NO_OS_GPIO_HIGH);
+#define AD7780_GAIN_HIGH        no_os_gpio_set_value(dev->gpio_gain,             \
+			        NO_OS_GPIO_HIGH)
+#define AD7780_GAIN_LOW         no_os_gpio_set_value(dev->gpio_gain,             \
+			        NO_OS_GPIO_LOW)
 
 /* Status bits */
 #define AD7780_STAT_RDY         (1 << 7) // Ready bit.
@@ -98,20 +98,20 @@ struct ad7780_dev {
 	/* SPI */
 	spi_desc	*spi_desc;
 	/* GPIO */
-	struct gpio_desc	*gpio_pdrst;
-	struct gpio_desc	*gpio_miso;
-	struct gpio_desc	*gpio_filter;
-	struct gpio_desc	*gpio_gain;
+	struct no_os_gpio_desc	*gpio_pdrst;
+	struct no_os_gpio_desc	*gpio_miso;
+	struct no_os_gpio_desc	*gpio_filter;
+	struct no_os_gpio_desc	*gpio_gain;
 };
 
 struct ad7780_init_param {
 	/* SPI */
 	spi_init_param	spi_init;
 	/* GPIO */
-	struct gpio_init_param	gpio_pdrst;
-	struct gpio_init_param	gpio_miso;
-	struct gpio_init_param	gpio_filter;
-	struct gpio_init_param	gpio_gain;
+	struct no_os_gpio_init_param	gpio_pdrst;
+	struct no_os_gpio_init_param	gpio_miso;
+	struct no_os_gpio_init_param	gpio_filter;
+	struct no_os_gpio_init_param	gpio_gain;
 };
 
 /******************************************************************************/

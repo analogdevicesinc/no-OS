@@ -75,7 +75,7 @@ int main(void)
 		.type = GPIO_PS
 	};
 
-	struct gpio_init_param gpio_ce_param = {
+	struct no_os_gpio_init_param gpio_ce_param = {
 		.number = GPIO_CE,
 		.platform_ops = &xil_gpio_ops,
 		.extra = &xil_gpio_init

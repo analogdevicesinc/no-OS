@@ -121,10 +121,10 @@ int8_t ad525x_init(struct ad525x_dev **device,
 		status = i2c_init(&dev->i2c_desc, &init_param.i2c_init);
 	}
 
-	status |= gpio_get(&dev->gpio_reset, &init_param.gpio_reset);
-	status |= gpio_get(&dev->gpio_shutdown, &init_param.gpio_shutdown);
-	status |= gpio_get(&dev->gpio_ready, &init_param.gpio_ready);
-	status |= gpio_get(&dev->gpio_wpbf, &init_param.gpio_wpbf);
+	status |= no_os_gpio_get(&dev->gpio_reset, &init_param.gpio_reset);
+	status |= no_os_gpio_get(&dev->gpio_shutdown, &init_param.gpio_shutdown);
+	status |= no_os_gpio_get(&dev->gpio_ready, &init_param.gpio_ready);
+	status |= no_os_gpio_get(&dev->gpio_wpbf, &init_param.gpio_wpbf);
 
 	/* Deactivate Hardware Reset */
 	AD525X_RESET_OUT;
@@ -160,16 +160,16 @@ int32_t ad525x_remove(struct ad525x_dev *dev)
 		ret = i2c_remove(dev->i2c_desc);
 
 	if (dev->gpio_shutdown)
-		ret |= gpio_remove(dev->gpio_shutdown);
+		ret |= no_os_gpio_remove(dev->gpio_shutdown);
 
 	if (dev->gpio_reset)
-		ret |= gpio_remove(dev->gpio_reset);
+		ret |= no_os_gpio_remove(dev->gpio_reset);
 
 	if (dev->gpio_ready)
-		ret |= gpio_remove(dev->gpio_ready);
+		ret |= no_os_gpio_remove(dev->gpio_ready);
 
 	if (dev->gpio_wpbf)
-		ret |= gpio_remove(dev->gpio_wpbf);
+		ret |= no_os_gpio_remove(dev->gpio_wpbf);
 
 	free(dev);
 

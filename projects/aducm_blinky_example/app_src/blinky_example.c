@@ -23,11 +23,12 @@ int initPower()
 	return 1;
 }
 
-void toggle(struct gpio_desc *led)
+void toggle(struct no_os_gpio_desc *led)
 {
 	uint8_t value;
-	gpio_get_value(led, &value);
-	gpio_set_value(led, value == GPIO_HIGH ? GPIO_LOW : GPIO_HIGH);
+	no_os_gpio_get_value(led, &value);
+	no_os_gpio_set_value(led, value == NO_OS_GPIO_HIGH ? NO_OS_GPIO_LOW :
+			     NO_OS_GPIO_HIGH);
 }
 
 int main(int argc, char *argv[])
@@ -42,24 +43,24 @@ int main(int argc, char *argv[])
 	if (!initPower())
 		return 1;
 
-	struct gpio_init_param init_blue = {
+	struct no_os_gpio_init_param init_blue = {
 		.number = 31,
 		.platform_ops = &aducm_gpio_ops,
 		.extra = NULL
 	};
-	struct gpio_init_param init_green = {
+	struct no_os_gpio_init_param init_green = {
 		.number = 32,
 		.platform_ops = &aducm_gpio_ops,
 		.extra = NULL
 	};
-	struct gpio_desc *blue;
-	struct gpio_desc *green;
+	struct no_os_gpio_desc *blue;
+	struct no_os_gpio_desc *green;
 
-	gpio_get(&blue, &init_blue);
-	gpio_get(&green, &init_green);
+	no_os_gpio_get(&blue, &init_blue);
+	no_os_gpio_get(&green, &init_green);
 
-	gpio_direction_output(blue, GPIO_LOW);
-	gpio_direction_output(green, GPIO_LOW);
+	no_os_gpio_direction_output(blue, NO_OS_GPIO_LOW);
+	no_os_gpio_direction_output(green, NO_OS_GPIO_LOW);
 
 	while (1) {
 		toggle(blue);

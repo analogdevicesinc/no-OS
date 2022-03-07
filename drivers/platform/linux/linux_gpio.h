@@ -1,6 +1,6 @@
 /*******************************************************************************
  *   @file   linux/linux_gpio.h
- *   @brief  Header containing gpio_platform_ops used by the GPIO driver.
+ *   @brief  Header containing no_os_gpio_platform_ops used by the GPIO driver.
  *   @author Dragos Bogdan (dragos.bogdan@analog.com)
 ********************************************************************************
  * Copyright 2020(c) Analog Devices, Inc.
@@ -42,6 +42,6 @@
 /**
  * @brief Linux specific GPIO platform ops structure
  */
-extern const struct gpio_platform_ops linux_gpio_ops;
+extern const struct no_os_gpio_platform_ops linux_gpio_ops;
 
 #endif // LINUX_GPIO_H_

@@ -71,11 +71,11 @@ int8_t ad7980_init(struct ad7980_dev **device,
 	/* SPI */
 	status = spi_init(&dev->spi_desc, &init_param.spi_init);
 	/* GPIO */
-	status |= gpio_get(&dev->gpio_cs, &init_param.gpio_cs);
+	status |= no_os_gpio_get(&dev->gpio_cs, &init_param.gpio_cs);
 
 	if (dev->gpio_cs)
-		status |= gpio_direction_output(dev->gpio_cs,
-						GPIO_HIGH);
+		status |= no_os_gpio_direction_output(dev->gpio_cs,
+						      NO_OS_GPIO_HIGH);
 
 	*device = dev;
 
@@ -95,7 +95,7 @@ int32_t ad7980_remove(struct ad7980_dev *dev)
 
 	ret = spi_remove(dev->spi_desc);
 
-	ret |= gpio_remove(dev->gpio_cs);
+	ret |= no_os_gpio_remove(dev->gpio_cs);
 
 	free(dev);
 

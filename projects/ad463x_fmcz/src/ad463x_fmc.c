@@ -107,7 +107,7 @@ int main()
 		.type = GPIO_PS,
 	};
 
-	struct gpio_init_param ad463x_resetn = {
+	struct no_os_gpio_init_param ad463x_resetn = {
 		.number = GPIO_RESETN_1,
 		.platform_ops = &xil_gpio_ops,
 		.extra = &gpio_extra_param

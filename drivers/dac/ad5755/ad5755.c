@@ -76,10 +76,10 @@ int8_t ad5755_init(struct ad5755_dev **device,
 	dev->this_device = init_param.this_device;
 
 	/* GPIO */
-	status = gpio_get(&dev->gpio_ldac, &init_param.gpio_ldac);
-	status |= gpio_get(&dev->gpio_rst, &init_param.gpio_rst);
-	status |= gpio_get(&dev->gpio_clr, &init_param.gpio_clr);
-	status |= gpio_get(&dev->gpio_poc, &init_param.gpio_poc);
+	status = no_os_gpio_get(&dev->gpio_ldac, &init_param.gpio_ldac);
+	status |= no_os_gpio_get(&dev->gpio_rst, &init_param.gpio_rst);
+	status |= no_os_gpio_get(&dev->gpio_clr, &init_param.gpio_clr);
+	status |= no_os_gpio_get(&dev->gpio_poc, &init_param.gpio_poc);
 
 	/* GPIO configuration. */
 	AD5755_LDAC_OUT;
@@ -166,10 +166,10 @@ int32_t ad5755_remove(struct ad5755_dev *dev)
 
 	ret = spi_remove(dev->spi_desc);
 
-	ret |= gpio_remove(dev->gpio_ldac);
-	ret |= gpio_remove(dev->gpio_rst);
-	ret |= gpio_remove(dev->gpio_clr);
-	ret |= gpio_remove(dev->gpio_poc);
+	ret |= no_os_gpio_remove(dev->gpio_ldac);
+	ret |= no_os_gpio_remove(dev->gpio_rst);
+	ret |= no_os_gpio_remove(dev->gpio_clr);
+	ret |= no_os_gpio_remove(dev->gpio_poc);
 
 	free(dev);
 

@@ -181,7 +181,7 @@ struct ad463x_init_param {
 	/** SPI */
 	struct spi_init_param *spi_init;
 	/** GPIO */
-	struct gpio_init_param *gpio_resetn;
+	struct no_os_gpio_init_param *gpio_resetn;
 	/** PWM */
 	struct pwm_init_param *trigger_pwm_init;
 	/** SPI module offload init */
@@ -216,7 +216,7 @@ struct ad463x_dev {
 	/** SPI */
 	struct spi_desc *spi_desc;
 	/** GPIO */
-	struct gpio_desc *gpio_resetn;
+	struct no_os_gpio_desc *gpio_resetn;
 	/** PWM */
 	struct pwm_desc *trigger_pwm_desc;
 	/** SPI module offload init */

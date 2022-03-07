@@ -316,11 +316,11 @@ int32_t adxrs290_get_data_ready(struct adxrs290_dev *dev, bool *rdy)
 	if (!dev->gpio_sync)
 		return FAILURE;
 
-	ret = gpio_get_value(dev->gpio_sync, &value);
+	ret = no_os_gpio_get_value(dev->gpio_sync, &value);
 	if (IS_ERR_VALUE(ret))
 		return ret;
 
-	if (value == GPIO_HIGH)
+	if (value == NO_OS_GPIO_HIGH)
 		*rdy = true;
 	else
 		*rdy = false;
@@ -374,12 +374,12 @@ int32_t adxrs290_init(struct adxrs290_dev **device,
 		goto error_spi;
 
 	// Set GPIO sync pin.
-	ret = gpio_get_optional(&dev->gpio_sync, init_param->gpio_sync);
+	ret = no_os_gpio_get_optional(&dev->gpio_sync, init_param->gpio_sync);
 	if (IS_ERR_VALUE(ret))
 		goto error_spi;
 
 	if (dev->gpio_sync) {
-		ret = gpio_direction_input(dev->gpio_sync);
+		ret = no_os_gpio_direction_input(dev->gpio_sync);
 		if (IS_ERR_VALUE(ret))
 			goto error_gpio;
 	}
@@ -398,7 +398,7 @@ int32_t adxrs290_init(struct adxrs290_dev **device,
 	return ret;
 
 error_gpio:
-	gpio_remove(dev->gpio_sync);
+	no_os_gpio_remove(dev->gpio_sync);
 
 error_spi:
 	spi_remove(dev->spi_desc);
@@ -417,7 +417,7 @@ error_dev:
 int32_t adxrs290_remove(struct adxrs290_dev *dev)
 {
 	spi_remove(dev->spi_desc);
-	gpio_remove(dev->gpio_sync);
+	no_os_gpio_remove(dev->gpio_sync);
 	free(dev);
 
 	return SUCCESS;

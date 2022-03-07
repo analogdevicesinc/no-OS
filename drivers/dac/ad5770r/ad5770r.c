@@ -641,17 +641,17 @@ static int32_t ad5770r_remove_gpio(struct ad5770r_dev *dev)
 	int32_t ret;
 
 	if (dev->gpio_alarm_n) {
-		ret = gpio_remove(dev->gpio_alarm_n);
+		ret = no_os_gpio_remove(dev->gpio_alarm_n);
 		if(IS_ERR_VALUE(ret))
 			return FAILURE;
 	}
 	if (dev->gpio_ldac_n) {
-		ret = gpio_remove(dev->gpio_ldac_n);
+		ret = no_os_gpio_remove(dev->gpio_ldac_n);
 		if(IS_ERR_VALUE(ret))
 			return FAILURE;
 	}
 	if (dev->gpio_reset_n) {
-		ret = gpio_remove(dev->gpio_reset_n);
+		ret = no_os_gpio_remove(dev->gpio_reset_n);
 		if(IS_ERR_VALUE(ret))
 			return FAILURE;
 	}
@@ -687,27 +687,27 @@ int32_t ad5770r_init(struct ad5770r_dev **device,
 		goto error_dev;
 
 	/* GPIO */
-	ret = gpio_get_optional(&dev->gpio_alarm_n, init_param->gpio_alarm_n);
+	ret = no_os_gpio_get_optional(&dev->gpio_alarm_n, init_param->gpio_alarm_n);
 	if (IS_ERR_VALUE(ret))
 		goto error_spi;
-	ret = gpio_get_optional(&dev->gpio_ldac_n, init_param->gpio_ldac_n);
+	ret = no_os_gpio_get_optional(&dev->gpio_ldac_n, init_param->gpio_ldac_n);
 	if (IS_ERR_VALUE(ret))
 		goto error_gpio;
-	ret = gpio_get_optional(&dev->gpio_reset_n, init_param->gpio_reset_n);
+	ret = no_os_gpio_get_optional(&dev->gpio_reset_n, init_param->gpio_reset_n);
 	if (IS_ERR_VALUE(ret))
 		goto error_gpio;
 	if (dev->gpio_alarm_n) {
-		ret = gpio_direction_input(dev->gpio_alarm_n);
+		ret = no_os_gpio_direction_input(dev->gpio_alarm_n);
 		if (IS_ERR_VALUE(ret))
 			goto error_gpio;
 	}
 	if (dev->gpio_ldac_n) {
-		ret = gpio_direction_output(dev->gpio_ldac_n, GPIO_HIGH);
+		ret = no_os_gpio_direction_output(dev->gpio_ldac_n, NO_OS_GPIO_HIGH);
 		if (IS_ERR_VALUE(ret))
 			goto error_gpio;
 	}
 	if (dev->gpio_reset_n) {
-		ret = gpio_direction_output(dev->gpio_reset_n, GPIO_HIGH);
+		ret = no_os_gpio_direction_output(dev->gpio_reset_n, NO_OS_GPIO_HIGH);
 		if (IS_ERR_VALUE(ret))
 			goto error_gpio;
 	}

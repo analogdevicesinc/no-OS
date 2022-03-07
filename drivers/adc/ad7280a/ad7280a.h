@@ -55,20 +55,20 @@
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 /* GPIOs */
-#define AD7280A_PD_OUT              gpio_direction_output(dev->gpio_pd,    \
-			            GPIO_HIGH)
-#define AD7280A_PD_HIGH             gpio_set_value(dev->gpio_pd,           \
-			            GPIO_HIGH)
-#define AD7280A_PD_LOW              gpio_set_value(dev->gpio_pd,           \
-			            GPIO_LOW)
-#define AD7280A_CNVST_OUT           gpio_direction_output(dev->gpio_cnvst, \
-			            GPIO_HIGH)
-#define AD7280A_CNVST_HIGH          gpio_set_value(dev->gpio_cnvst,        \
-			            GPIO_HIGH)
-#define AD7280A_CNVST_LOW           gpio_set_value(dev->gpio_cnvst,        \
-			            GPIO_LOW)
+#define AD7280A_PD_OUT              no_os_gpio_direction_output(dev->gpio_pd,    \
+			            NO_OS_GPIO_HIGH)
+#define AD7280A_PD_HIGH             no_os_gpio_set_value(dev->gpio_pd,           \
+			            NO_OS_GPIO_HIGH)
+#define AD7280A_PD_LOW              no_os_gpio_set_value(dev->gpio_pd,           \
+			            NO_OS_GPIO_LOW)
+#define AD7280A_CNVST_OUT           no_os_gpio_direction_output(dev->gpio_cnvst, \
+			            NO_OS_GPIO_HIGH)
+#define AD7280A_CNVST_HIGH          no_os_gpio_set_value(dev->gpio_cnvst,        \
+			            NO_OS_GPIO_HIGH)
+#define AD7280A_CNVST_LOW           no_os_gpio_set_value(dev->gpio_cnvst,        \
+			            NO_OS_GPIO_LOW)
 
-#define AD7280A_ALERT_IN            gpio_direction_input(dev->gpio_alert)
+#define AD7280A_ALERT_IN            no_os_gpio_direction_input(dev->gpio_alert)
 #define AD7280_ALERT                (1 << 6)
 
 /* Acquisition time */
@@ -172,9 +172,9 @@ struct ad7280a_dev {
 	/* SPI */
 	spi_desc		*spi_desc;
 	/* GPIO */
-	struct gpio_desc	*gpio_pd;
-	struct gpio_desc	*gpio_cnvst;
-	struct gpio_desc	*gpio_alert;
+	struct no_os_gpio_desc	*gpio_pd;
+	struct no_os_gpio_desc	*gpio_cnvst;
+	struct no_os_gpio_desc	*gpio_alert;
 	/* Device Settings */
 	uint32_t		read_data[24];
 	float			cell_voltage[12];
@@ -185,9 +185,9 @@ struct ad7280a_init_param {
 	/* SPI */
 	spi_init_param	spi_init;
 	/* GPIO */
-	struct gpio_init_param	gpio_pd;
-	struct gpio_init_param	gpio_cnvst;
-	struct gpio_init_param	gpio_alert;
+	struct no_os_gpio_init_param	gpio_pd;
+	struct no_os_gpio_init_param	gpio_cnvst;
+	struct no_os_gpio_init_param	gpio_alert;
 };
 
 /*****************************************************************************/

@@ -127,11 +127,11 @@ struct ad5761r_dev {
 	/* SPI */
 	spi_desc	*spi_desc;
 	/* GPIO */
-	struct gpio_desc	*gpio_reset;
+	struct no_os_gpio_desc	*gpio_reset;
 	uint8_t		gpio_reset_value;
-	struct gpio_desc	*gpio_clr;
+	struct no_os_gpio_desc	*gpio_clr;
 	uint8_t		gpio_clr_value;
-	struct gpio_desc	*gpio_ldac;
+	struct no_os_gpio_desc	*gpio_ldac;
 	uint8_t		gpio_ldac_value;
 	/* Device Settings */
 	enum ad5761r_type	type;
@@ -149,11 +149,11 @@ struct ad5761r_init_param {
 	/* SPI */
 	spi_init_param	spi_init;
 	/* GPIO */
-	struct gpio_init_param	gpio_reset;
+	struct no_os_gpio_init_param	gpio_reset;
 	uint8_t		gpio_reset_value;
-	struct gpio_init_param	gpio_clr;
+	struct no_os_gpio_init_param	gpio_clr;
 	uint8_t		gpio_clr_value;
-	struct gpio_init_param	gpio_ldac;
+	struct no_os_gpio_init_param	gpio_ldac;
 	uint8_t		gpio_ldac_value;
 	/* Device Settings */
 	enum ad5761r_type	type;

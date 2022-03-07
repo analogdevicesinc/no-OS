@@ -380,8 +380,8 @@ struct ad3552r_ch_data {
 struct ad3552r_desc {
 	struct ad3552_transfer_config spi_cfg;
 	struct spi_desc *spi;
-	struct gpio_desc *ldac;
-	struct gpio_desc *reset;
+	struct no_os_gpio_desc *ldac;
+	struct no_os_gpio_desc *reset;
 	struct ad3552r_ch_data ch_data[AD3552R_NUM_CH];
 	uint8_t crc_table[CRC8_TABLE_SIZE];
 	uint8_t chip_id;
@@ -417,9 +417,9 @@ struct ad3552r_init_param {
 	enum ad3552r_id	chip_id;
 	struct spi_init_param spi_param;
 	/* If set, reset is done with RESET pin, otherwise it will be soft */
-	struct gpio_init_param	*reset_gpio_param_optional;
+	struct no_os_gpio_init_param	*reset_gpio_param_optional;
 	/* If set, input register are used and LDAC pulse is sent */
-	struct gpio_init_param	*ldac_gpio_param_optional;
+	struct no_os_gpio_init_param	*ldac_gpio_param_optional;
 	/* If set, use external Vref */
 	bool use_external_vref;
 	/* If set, output internal Vref on Vref pin */

@@ -683,15 +683,15 @@ struct ad713x_dev {
 	/** SPI layer handler. */
 	struct spi_desc        	*spi_desc;
 	/** MODE GPIO handler. */
-	struct gpio_desc		*gpio_mode;
+	struct no_os_gpio_desc		*gpio_mode;
 	/** DCLKMODE GPIO handler. */
-	struct gpio_desc		*gpio_dclkmode;
+	struct no_os_gpio_desc		*gpio_dclkmode;
 	/** DCLKIO GPIO handler. */
-	struct gpio_desc		*gpio_dclkio;
+	struct no_os_gpio_desc		*gpio_dclkio;
 	/** RESET GPIO handler. */
-	struct gpio_desc		*gpio_resetn;
+	struct no_os_gpio_desc		*gpio_resetn;
 	/** PDN GPIO handler. */
-	struct gpio_desc		*gpio_pnd;
+	struct no_os_gpio_desc		*gpio_pnd;
 	/** ID of supported device. */
 	enum ad713x_supported_dev_ids dev_id;
 	/** Length of data in bits. */
@@ -708,15 +708,15 @@ struct ad713x_init_param {
 	/** SPI layer initialization structure. */
 	struct spi_init_param spi_init_prm;
 	/** MODE GPIO initialization structure. */
-	struct gpio_init_param *gpio_mode;
+	struct no_os_gpio_init_param *gpio_mode;
 	/** DCLKMODE GPIO initialization structure. */
-	struct gpio_init_param *gpio_dclkmode;
+	struct no_os_gpio_init_param *gpio_dclkmode;
 	/** DCLKIO GPIO initialization structure. */
-	struct gpio_init_param *gpio_dclkio;
+	struct no_os_gpio_init_param *gpio_dclkio;
 	/** RESET GPIO initialization structure. */
-	struct gpio_init_param *gpio_resetn;
+	struct no_os_gpio_init_param *gpio_resetn;
 	/** PDN GPIO initialization structure. */
-	struct gpio_init_param *gpio_pnd;
+	struct no_os_gpio_init_param *gpio_pnd;
 	/** MODE GPIO starting value */
 	bool mode_master_nslave;
 	/** DCLKMODE GPIO starting value */

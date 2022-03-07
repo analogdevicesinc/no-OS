@@ -97,27 +97,27 @@ int main(void)
 	ad9625_1_spi_param.extra = &xil_spi_param;
 
 	// GPIO configuration
-	struct gpio_init_param gpio_sysref_param = {
+	struct no_os_gpio_init_param gpio_sysref_param = {
 		.number = GPIO_JESD204_SYSREF,
 		.platform_ops = &xil_gpio_ops
 	};
-	struct gpio_init_param gpio_rst_0_param = {
+	struct no_os_gpio_init_param gpio_rst_0_param = {
 		.number = GPIO_RST_0,
 		.platform_ops = &xil_gpio_ops
 	};
-	struct gpio_init_param gpio_rst_1_param = {
+	struct no_os_gpio_init_param gpio_rst_1_param = {
 		.number = GPIO_RST_1,
 		.platform_ops = &xil_gpio_ops
 	};
-	struct gpio_init_param gpio_pwdn_0_param = {
+	struct no_os_gpio_init_param gpio_pwdn_0_param = {
 		.number = GPIO_PWDN_0,
 		.platform_ops = &xil_gpio_ops
 	};
-	struct gpio_init_param gpio_pwdn_1_param = {
+	struct no_os_gpio_init_param gpio_pwdn_1_param = {
 		.number = GPIO_PWDN_1,
 		.platform_ops = &xil_gpio_ops
 	};
-	struct gpio_init_param gpio_pwr_good_param = {
+	struct no_os_gpio_init_param gpio_pwr_good_param = {
 		.number = GPIO_PWR_GOOD,
 		.platform_ops = &xil_gpio_ops
 	};
@@ -133,12 +133,12 @@ int main(void)
 	gpio_pwdn_1_param.extra = &xil_gpio_param;
 	gpio_pwr_good_param.extra = &xil_gpio_param;
 
-	gpio_desc *gpio_sysref;
-	gpio_desc *gpio_rst_0;
-	gpio_desc *gpio_rst_1;
-	gpio_desc *gpio_pwdn_0;
-	gpio_desc *gpio_pwdn_1;
-	gpio_desc *gpio_pwr_good;
+	no_os_gpio_desc *gpio_sysref;
+	no_os_gpio_desc *gpio_rst_0;
+	no_os_gpio_desc *gpio_rst_1;
+	no_os_gpio_desc *gpio_pwdn_0;
+	no_os_gpio_desc *gpio_pwdn_1;
+	no_os_gpio_desc *gpio_pwr_good;
 
 	struct adxcvr_init ad9625_0_xcvr_param = {
 		.name = "ad9152_0_xcvr",
@@ -230,28 +230,28 @@ int main(void)
 	ad9625_1_param.test_samples[3] = 0x444;
 
 	// setup GPIOs
-	gpio_get(&gpio_sysref,  &gpio_sysref_param);
-	gpio_get(&gpio_rst_0,  &gpio_rst_0_param);
-	gpio_get(&gpio_rst_1,  &gpio_rst_1_param);
-	gpio_get(&gpio_pwdn_0,  &gpio_pwdn_0_param);
-	gpio_get(&gpio_pwdn_1,  &gpio_pwdn_1_param);
-	gpio_get(&gpio_pwr_good,  &gpio_pwr_good_param);
+	no_os_gpio_get(&gpio_sysref,  &gpio_sysref_param);
+	no_os_gpio_get(&gpio_rst_0,  &gpio_rst_0_param);
+	no_os_gpio_get(&gpio_rst_1,  &gpio_rst_1_param);
+	no_os_gpio_get(&gpio_pwdn_0,  &gpio_pwdn_0_param);
+	no_os_gpio_get(&gpio_pwdn_1,  &gpio_pwdn_1_param);
+	no_os_gpio_get(&gpio_pwr_good,  &gpio_pwr_good_param);
 
-	gpio_direction_output(gpio_rst_0,  0);
-	gpio_direction_output(gpio_rst_1,  0);
-	gpio_direction_output(gpio_pwdn_0,  0);
-	gpio_direction_output(gpio_pwdn_1,  0);
+	no_os_gpio_direction_output(gpio_rst_0,  0);
+	no_os_gpio_direction_output(gpio_rst_1,  0);
+	no_os_gpio_direction_output(gpio_pwdn_0,  0);
+	no_os_gpio_direction_output(gpio_pwdn_1,  0);
 	mdelay(10);
 
-	gpio_get_value(gpio_pwr_good, &pwr_good);
+	no_os_gpio_get_value(gpio_pwr_good, &pwr_good);
 	if (!pwr_good) {
 		xil_printf("Error: GPIO Power Good NOT set.\n\r");
 		return FAILURE;
 	}
 
-	gpio_direction_output(gpio_rst_0,  1);
-	gpio_direction_output(gpio_rst_1,  1);
-	gpio_direction_output(gpio_sysref,  1);
+	no_os_gpio_direction_output(gpio_rst_0,  1);
+	no_os_gpio_direction_output(gpio_rst_1,  1);
+	no_os_gpio_direction_output(gpio_sysref,  1);
 	mdelay(100);
 
 	// set up the device
@@ -397,12 +397,12 @@ int main(void)
 	ad9625_remove(ad9625_0_device);
 	ad9625_remove(ad9625_1_device);
 
-	gpio_remove(gpio_sysref);
-	gpio_remove(gpio_rst_0);
-	gpio_remove(gpio_rst_1);
-	gpio_remove(gpio_pwdn_0);
-	gpio_remove(gpio_pwdn_1);
-	gpio_remove(gpio_pwr_good);
+	no_os_gpio_remove(gpio_sysref);
+	no_os_gpio_remove(gpio_rst_0);
+	no_os_gpio_remove(gpio_rst_1);
+	no_os_gpio_remove(gpio_pwdn_0);
+	no_os_gpio_remove(gpio_pwdn_1);
+	no_os_gpio_remove(gpio_pwr_good);
 
 	return(0);
 }

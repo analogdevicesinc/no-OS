@@ -152,8 +152,8 @@ int8_t ad5446_init(struct ad5446_dev **device,
 	status = spi_init(&dev->spi_desc, &init_param.spi_init);
 
 	/* GPIO */
-	status |= gpio_get(&dev->gpio_ladc, &init_param.gpio_ladc);
-	status |= gpio_get(&dev->gpio_clrout, &init_param.gpio_clrout);
+	status |= no_os_gpio_get(&dev->gpio_ladc, &init_param.gpio_ladc);
+	status |= no_os_gpio_get(&dev->gpio_clrout, &init_param.gpio_clrout);
 
 	/* Initialize configuration pins, if exist. */
 	if(dev->act_device == ID_AD5542A) {
@@ -189,8 +189,8 @@ int32_t ad5446_remove(struct ad5446_dev *dev)
 
 	ret = spi_remove(dev->spi_desc);
 
-	ret |= gpio_remove(dev->gpio_ladc);
-	ret |= gpio_remove(dev->gpio_clrout);
+	ret |= no_os_gpio_remove(dev->gpio_ladc);
+	ret |= no_os_gpio_remove(dev->gpio_clrout);
 
 	free(dev);
 

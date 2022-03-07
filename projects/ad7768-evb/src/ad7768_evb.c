@@ -64,21 +64,21 @@
 void ad7768_evb_clear_status(struct xil_gpio_init_param *brd_gpio_init)
 {
 	uint8_t i;
-	struct gpio_init_param temp_init = {
+	struct no_os_gpio_init_param temp_init = {
 		.number = 0,
 		.platform_ops = &xil_gpio_ops,
 		.extra = brd_gpio_init
 	};
-	struct gpio_desc *temp_desc;
+	struct no_os_gpio_desc *temp_desc;
 	int32_t ret;
 
 	for (i = 0; i < 32; i ++) {
 		temp_init.number = UP_STATUS_OFFSET + i;
-		ret = gpio_get(&temp_desc, &temp_init);
+		ret = no_os_gpio_get(&temp_desc, &temp_init);
 		if (ret != SUCCESS)
 			return;
-		gpio_direction_output(temp_desc, GPIO_HIGH);
-		ret = gpio_remove(temp_desc);
+		no_os_gpio_direction_output(temp_desc, NO_OS_GPIO_HIGH);
+		ret = no_os_gpio_remove(temp_desc);
 		if (ret != SUCCESS)
 			return;
 	}
@@ -92,22 +92,22 @@ uint8_t ad7768_evb_verify_status(struct xil_gpio_init_param *brd_gpio_init)
 	uint8_t i;
 	uint8_t value;
 	uint8_t status = 0;
-	struct gpio_init_param temp_init = {
+	struct no_os_gpio_init_param temp_init = {
 		.number = 0,
 		.platform_ops = &xil_gpio_ops,
 		.extra = brd_gpio_init
 	};
-	struct gpio_desc *temp_desc;
+	struct no_os_gpio_desc *temp_desc;
 	int32_t ret;
 
 	for (i = 0; i < 32; i ++) {
 		temp_init.number = UP_STATUS_OFFSET + i;
-		ret = gpio_get(&temp_desc, &temp_init);
+		ret = no_os_gpio_get(&temp_desc, &temp_init);
 		if (ret != SUCCESS)
 			return FAILURE;
-		gpio_direction_input(temp_desc);
-		gpio_get_value(temp_desc, &value);
-		ret = gpio_remove(temp_desc);
+		no_os_gpio_direction_input(temp_desc);
+		no_os_gpio_get_value(temp_desc, &value);
+		ret = no_os_gpio_remove(temp_desc);
 		if (ret != SUCCESS)
 			return FAILURE;
 		status += value;
@@ -122,21 +122,21 @@ static int32_t ad7768_if_gpio_setup(uint32_t gpio_no, uint8_t gpio_val)
 		.device_id = GPIO_DEVICE_ID,
 		.type = GPIO_PS
 	};
-	struct gpio_init_param temp_init = {
+	struct no_os_gpio_init_param temp_init = {
 		.number = gpio_no,
 		.platform_ops = &xil_gpio_ops,
 		.extra = &ps_gpio_init
 	};
-	struct gpio_desc *temp_desc;
+	struct no_os_gpio_desc *temp_desc;
 	int32_t ret;
 
-	ret = gpio_get(&temp_desc, &temp_init);
+	ret = no_os_gpio_get(&temp_desc, &temp_init);
 	if (ret != SUCCESS)
 		return FAILURE;
-	ret = gpio_direction_output(temp_desc, gpio_val);
+	ret = no_os_gpio_direction_output(temp_desc, gpio_val);
 	if (ret != SUCCESS)
 		return FAILURE;
-	return gpio_remove(temp_desc);
+	return no_os_gpio_remove(temp_desc);
 }
 
 /***************************************************************************//**
@@ -203,7 +203,7 @@ int main(void)
 			.platform_ops = &xil_gpio_ops,
 			.extra = &xil_gpio_initial
 		},
-		.gpio_reset_value = GPIO_HIGH,
+		.gpio_reset_value = NO_OS_GPIO_HIGH,
 		/* Configuration */
 		.pin_spi_input_value = AD7768_SPI_CTRL,
 		.sleep_mode = AD7768_ACTIVE,
@@ -221,26 +221,27 @@ int main(void)
 	};
 	int32_t *data_ptr, i;
 
-	ret = ad7768_if_gpio_setup(GPIO_UP_SSHOT, GPIO_LOW);
+	ret = ad7768_if_gpio_setup(GPIO_UP_SSHOT, NO_OS_GPIO_LOW);
 	if (ret != 0)
 		return ret;
 
 	/* Configure HDL */
-	ret = ad7768_if_gpio_setup(GPIO_UP_FORMAT_1, GPIO_LOW);
+	ret = ad7768_if_gpio_setup(GPIO_UP_FORMAT_1, NO_OS_GPIO_LOW);
 	if (ret != 0)
 		return ret;
 
-	ret = ad7768_if_gpio_setup(GPIO_UP_FORMAT_0, GPIO_LOW);
+	ret = ad7768_if_gpio_setup(GPIO_UP_FORMAT_0, NO_OS_GPIO_LOW);
 	if (ret != 0)
 		return ret;
 
 	ret = ad7768_if_gpio_setup(GPIO_UP_CRC_ENABLE,
-				   default_init_param.crc_sel ? GPIO_HIGH : GPIO_LOW);
+				   default_init_param.crc_sel ? NO_OS_GPIO_HIGH : NO_OS_GPIO_LOW);
 	if (ret != 0)
 		return ret;
 
 	ret = ad7768_if_gpio_setup(GPIO_UP_CRC_4_OR_16_N,
-				   (default_init_param.crc_sel == AD7768_CRC_4) ? GPIO_HIGH : GPIO_LOW);
+				   (default_init_param.crc_sel == AD7768_CRC_4) ? NO_OS_GPIO_HIGH :
+				   NO_OS_GPIO_LOW);
 	if (ret != 0)
 		return ret;
 

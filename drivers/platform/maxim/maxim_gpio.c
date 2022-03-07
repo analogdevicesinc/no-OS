@@ -109,14 +109,14 @@ void GPIO3_IRQHandler()
  * @param param - GPIO initialization parameters
  * @return 0 in case of success, errno error codes otherwise.
  */
-int32_t max_gpio_get(struct gpio_desc **desc,
-		     const struct gpio_init_param *param)
+int32_t max_gpio_get(struct no_os_gpio_desc **desc,
+		     const struct no_os_gpio_init_param *param)
 {
 	int32_t ret;
 	mxc_gpio_cfg_t *g_cfg;
 	struct max_gpio_init_param *pextra;
 	uint32_t m_pad, m_func;
-	struct gpio_desc *descriptor;
+	struct no_os_gpio_desc *descriptor;
 
 	if (!param || !param->extra || param->number >= N_PINS)
 		return -EINVAL;
@@ -190,8 +190,8 @@ free_descriptor:
  * @param param - GPIO initialization parameters
  * @return 0 in case of success, errno error codes otherwise.
  */
-int32_t max_gpio_get_optional(struct gpio_desc **desc,
-			      const struct gpio_init_param *param)
+int32_t max_gpio_get_optional(struct no_os_gpio_desc **desc,
+			      const struct no_os_gpio_init_param *param)
 {
 	if (param == NULL) {
 		*desc = NULL;
@@ -202,11 +202,11 @@ int32_t max_gpio_get_optional(struct gpio_desc **desc,
 }
 
 /**
- * @brief Free the resources allocated by gpio_get().
+ * @brief Free the resources allocated by no_os_gpio_get().
  * @param desc - The GPIO descriptor.
  * @return 0 in case of success, errno error codes otherwise.
  */
-int32_t max_gpio_remove(struct gpio_desc *desc)
+int32_t max_gpio_remove(struct no_os_gpio_desc *desc)
 {
 	if (!desc)
 		return -EINVAL;
@@ -222,7 +222,7 @@ int32_t max_gpio_remove(struct gpio_desc *desc)
  * @param desc - The GPIO descriptor.
  * @return 0 in case of success, errno error codes otherwise.
  */
-int32_t max_gpio_direction_input(struct gpio_desc *desc)
+int32_t max_gpio_direction_input(struct no_os_gpio_desc *desc)
 {
 	int32_t ret;
 	mxc_gpio_cfg_t *maxim_extra;
@@ -241,16 +241,16 @@ int32_t max_gpio_direction_input(struct gpio_desc *desc)
  * @brief Enable the output direction of the specified GPIO.
  * @param desc - The GPIO descriptor.
  * @param value - The value.
- *                Example: GPIO_HIGH
- *                         GPIO_LOW
+ *                Example: NO_OS_GPIO_HIGH
+ *                         NO_OS_GPIO_LOW
  * @return 0 in case of success, errno error codes otherwise.
  */
-int32_t max_gpio_direction_output(struct gpio_desc *desc, uint8_t value)
+int32_t max_gpio_direction_output(struct no_os_gpio_desc *desc, uint8_t value)
 {
 	mxc_gpio_regs_t *gpio_regs;
 	mxc_gpio_cfg_t *maxim_extra;
 
-	if (!desc || desc->number >= N_PINS || value >= GPIO_HIGH_Z)
+	if (!desc || desc->number >= N_PINS || value > NO_OS_GPIO_HIGH_Z)
 		return -EINVAL;
 
 	maxim_extra = desc->extra;
@@ -260,10 +260,10 @@ int32_t max_gpio_direction_output(struct gpio_desc *desc, uint8_t value)
 
 	gpio_regs->en0 |= BIT(desc->number);
 	switch(value) {
-	case GPIO_LOW:
+	case NO_OS_GPIO_LOW:
 		MXC_GPIO_OutClr(gpio_regs, BIT(desc->number));
 		break;
-	case GPIO_HIGH:
+	case NO_OS_GPIO_HIGH:
 		MXC_GPIO_OutSet(gpio_regs, BIT(desc->number));
 		break;
 	}
@@ -275,11 +275,12 @@ int32_t max_gpio_direction_output(struct gpio_desc *desc, uint8_t value)
  * @brief Get the direction of the specified GPIO.
  * @param desc - The GPIO descriptor.
  * @param direction - The direction.
- *                    Example: GPIO_OUT
- *                             GPIO_IN
+ *                    Example: NO_OS_GPIO_OUT
+ *                             NO_OS_GPIO_IN
  * @return 0 in case of success, errno error codes otherwise.
  */
-int32_t max_gpio_get_direction(struct gpio_desc *desc, uint8_t *direction)
+int32_t max_gpio_get_direction(struct no_os_gpio_desc *desc,
+			       uint8_t *direction)
 {
 	mxc_gpio_cfg_t *maxim_extra;
 
@@ -289,9 +290,9 @@ int32_t max_gpio_get_direction(struct gpio_desc *desc, uint8_t *direction)
 	maxim_extra = desc->extra;
 
 	if (maxim_extra->func == MXC_GPIO_FUNC_OUT)
-		*direction = GPIO_OUT;
+		*direction = NO_OS_GPIO_OUT;
 	else
-		*direction = GPIO_IN;
+		*direction = NO_OS_GPIO_IN;
 
 	return 0;
 }
@@ -300,11 +301,11 @@ int32_t max_gpio_get_direction(struct gpio_desc *desc, uint8_t *direction)
  * @brief Set the value of the specified GPIO.
  * @param desc - The GPIO descriptor.
  * @param value - The value.
- *                Example: GPIO_HIGH
- *                         GPIO_LOW
+ *                Example: NO_OS_GPIO_HIGH
+ *                         NO_OS_GPIO_LOW
  * @return 0 in case of success, errno error codes otherwise.
  */
-int32_t max_gpio_set_value(struct gpio_desc *desc, uint8_t value)
+int32_t max_gpio_set_value(struct no_os_gpio_desc *desc, uint8_t value)
 {
 	mxc_gpio_cfg_t *max_gpio_cfg;
 	mxc_gpio_regs_t *gpio_regs;
@@ -315,13 +316,13 @@ int32_t max_gpio_set_value(struct gpio_desc *desc, uint8_t value)
 	max_gpio_cfg = desc->extra;
 	gpio_regs = max_gpio_cfg->port;
 	switch(value) {
-	case GPIO_LOW:
+	case NO_OS_GPIO_LOW:
 		MXC_GPIO_OutClr(gpio_regs, BIT(desc->number));
 		break;
-	case GPIO_HIGH:
+	case NO_OS_GPIO_HIGH:
 		MXC_GPIO_OutSet(gpio_regs, BIT(desc->number));
 		break;
-	case GPIO_HIGH_Z:
+	case NO_OS_GPIO_HIGH_Z:
 		gpio_regs->en0 &= ~BIT(desc->number);
 		break;
 	default:
@@ -335,11 +336,11 @@ int32_t max_gpio_set_value(struct gpio_desc *desc, uint8_t value)
  * @brief Get the value of the specified GPIO.
  * @param desc - The GPIO descriptor.
  * @param value - The value.
- *                Example: GPIO_HIGH
- *                         GPIO_LOW
+ *                Example: NO_OS_GPIO_HIGH
+ *                         NO_OS_GPIO_LOW
  * @return 0 in case of success, errno error codes otherwise.
  */
-int32_t max_gpio_get_value(struct gpio_desc *desc, uint8_t *value)
+int32_t max_gpio_get_value(struct no_os_gpio_desc *desc, uint8_t *value)
 {
 	mxc_gpio_cfg_t *max_gpio_cfg;
 	mxc_gpio_regs_t *gpio_regs;
@@ -412,7 +413,7 @@ static int32_t max_gpio_irq_set_trigger_level(struct irq_ctrl_desc *desc,
 		uint32_t irq_id,
 		enum irq_trig_level trig_l)
 {
-	struct gpio_desc *g_desc;
+	struct no_os_gpio_desc *g_desc;
 	mxc_gpio_cfg_t *max_gpio_cfg;
 	mxc_gpio_regs_t *gpio_regs;
 	uint32_t mask;
@@ -465,7 +466,7 @@ static int32_t max_gpio_register_callback(struct irq_ctrl_desc *desc,
 	uint32_t port_id;
 	struct callback_desc *descriptor;
 	struct gpio_irq_config *g_irq;
-	struct gpio_desc *g_desc;
+	struct no_os_gpio_desc *g_desc;
 	mxc_gpio_cfg_t *max_gpio_cfg;
 	enum irq_trig_level trig_level;
 
@@ -506,7 +507,7 @@ static int32_t max_gpio_unregister_callback(struct irq_ctrl_desc *desc,
 		uint32_t irq_id)
 {
 	uint32_t port_id;
-	struct gpio_desc *g_desc;
+	struct no_os_gpio_desc *g_desc;
 	mxc_gpio_cfg_t *max_gpio_cfg;
 
 	if (!desc || !desc->extra)
@@ -532,7 +533,7 @@ static int32_t max_gpio_enable_irq(struct irq_ctrl_desc *desc, uint32_t irq_id)
 {
 	mxc_gpio_cfg_t *max_gpio_cfg;
 	mxc_gpio_regs_t *gpio_regs;
-	struct gpio_desc *g_desc;
+	struct no_os_gpio_desc *g_desc;
 
 	if (!desc || !desc->extra)
 		return -EINVAL;
@@ -556,7 +557,7 @@ static int32_t max_gpio_disable_irq(struct irq_ctrl_desc *desc, uint32_t irq_id)
 {
 	mxc_gpio_cfg_t *max_gpio_cfg;
 	mxc_gpio_regs_t *gpio_regs;
-	struct gpio_desc *g_desc;
+	struct no_os_gpio_desc *g_desc;
 
 	if (!desc || !desc->extra)
 		return -EINVAL;
@@ -572,7 +573,7 @@ static int32_t max_gpio_disable_irq(struct irq_ctrl_desc *desc, uint32_t irq_id)
 /**
  * @brief maxim platform specific GPIO platform ops structure
  */
-const struct gpio_platform_ops max_gpio_ops = {
+const struct no_os_gpio_platform_ops max_gpio_ops = {
 	.gpio_ops_get = &max_gpio_get,
 	.gpio_ops_get_optional = &max_gpio_get_optional,
 	.gpio_ops_remove = &max_gpio_remove,

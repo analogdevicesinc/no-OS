@@ -377,8 +377,8 @@ struct adf7023_dev {
 	/* SPI */
 	spi_desc		*spi_desc;
 	/* GPIO */
-	struct gpio_desc	*gpio_cs;
-	struct gpio_desc	*gpio_miso;
+	struct no_os_gpio_desc	*gpio_cs;
+	struct no_os_gpio_desc	*gpio_miso;
 	/* Device Settings */
 	struct adf7023_bbram	adf7023_bbram_current;
 };
@@ -387,8 +387,8 @@ struct adf7023_init_param {
 	/* SPI */
 	spi_init_param	spi_init;
 	/* GPIO */
-	struct gpio_init_param	gpio_cs;
-	struct gpio_init_param	gpio_miso;
+	struct no_os_gpio_init_param	gpio_cs;
+	struct no_os_gpio_init_param	gpio_miso;
 };
 
 /******************************************************************************/

@@ -82,7 +82,7 @@ struct mbed_gpio_desc {
 /**
  * @brief Mbed specific GPIO platform ops structure
  */
-extern const struct gpio_platform_ops mbed_gpio_ops;
+extern const struct no_os_gpio_platform_ops mbed_gpio_ops;
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/

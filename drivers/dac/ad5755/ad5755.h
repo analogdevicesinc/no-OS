@@ -57,36 +57,36 @@
 /******************************************************************************/
 
 /* LDAC */
-#define AD5755_LDAC_OUT        gpio_direction_output(dev->gpio_ldac,  \
-			       GPIO_HIGH);
-#define AD5755_LDAC_LOW        gpio_set_value(dev->gpio_ldac,         \
-			       GPIO_LOW)
-#define AD5755_LDAC_HIGH       gpio_set_value(dev->gpio_ldac,         \
-			       GPIO_HIGH)
+#define AD5755_LDAC_OUT        no_os_gpio_direction_output(dev->gpio_ldac,  \
+			       NO_OS_GPIO_HIGH);
+#define AD5755_LDAC_LOW        no_os_gpio_set_value(dev->gpio_ldac,         \
+			       NO_OS_GPIO_LOW)
+#define AD5755_LDAC_HIGH       no_os_gpio_set_value(dev->gpio_ldac,         \
+			       NO_OS_GPIO_HIGH)
 
 /* RESET */
-#define AD5755_RESET_OUT       gpio_direction_output(dev->gpio_rst,  \
-			       GPIO_HIGH);
-#define AD5755_RESET_LOW       gpio_set_value(dev->gpio_rst,         \
-			       GPIO_LOW)
-#define AD5755_RESET_HIGH      gpio_set_value(dev->gpio_rst,         \
-			       GPIO_HIGH)
+#define AD5755_RESET_OUT       no_os_gpio_direction_output(dev->gpio_rst,  \
+			       NO_OS_GPIO_HIGH);
+#define AD5755_RESET_LOW       no_os_gpio_set_value(dev->gpio_rst,         \
+			       NO_OS_GPIO_LOW)
+#define AD5755_RESET_HIGH      no_os_gpio_set_value(dev->gpio_rst,         \
+			       NO_OS_GPIO_HIGH)
 
 /* CLEAR */
-#define AD5755_CLEAR_OUT        gpio_direction_output(dev->gpio_clr, \
-			        GPIO_HIGH);
-#define AD5755_CLEAR_LOW        gpio_set_value(dev->gpio_clr,        \
-			        GPIO_LOW)
-#define AD5755_CLEAR_HIGH       gpio_set_value(dev->gpio_clr,        \
-			        GPIO_HIGH)
+#define AD5755_CLEAR_OUT        no_os_gpio_direction_output(dev->gpio_clr, \
+			        NO_OS_GPIO_HIGH);
+#define AD5755_CLEAR_LOW        no_os_gpio_set_value(dev->gpio_clr,        \
+			        NO_OS_GPIO_LOW)
+#define AD5755_CLEAR_HIGH       no_os_gpio_set_value(dev->gpio_clr,        \
+			        NO_OS_GPIO_HIGH)
 
 /* POC */
-#define AD5755_POC_OUT          gpio_direction_output(dev->gpio_poc, \
-			        GPIO_HIGH);
-#define AD5755_POC_LOW          gpio_set_value(dev->gpio_poc,        \
-			        GPIO_LOW)
-#define AD5755_POC_HIGH         gpio_set_value(dev->gpio_poc,        \
-			        GPIO_HIGH)
+#define AD5755_POC_OUT          no_os_gpio_direction_output(dev->gpio_poc, \
+			        NO_OS_GPIO_HIGH);
+#define AD5755_POC_LOW          no_os_gpio_set_value(dev->gpio_poc,        \
+			        NO_OS_GPIO_LOW)
+#define AD5755_POC_HIGH         no_os_gpio_set_value(dev->gpio_poc,        \
+			        NO_OS_GPIO_HIGH)
 
 /* Input Shift Register Contents for a Write Operation. */
 #define AD5755_ISR_WRITE            (0ul << 23)           /* R/nW */
@@ -340,10 +340,10 @@ struct ad5755_dev {
 	/* SPI */
 	spi_desc		*spi_desc;
 	/* GPIO */
-	struct gpio_desc	*gpio_ldac;
-	struct gpio_desc	*gpio_rst;
-	struct gpio_desc	*gpio_clr;
-	struct gpio_desc	*gpio_poc;
+	struct no_os_gpio_desc	*gpio_ldac;
+	struct no_os_gpio_desc	*gpio_rst;
+	struct no_os_gpio_desc	*gpio_clr;
+	struct no_os_gpio_desc	*gpio_poc;
 	/* Device Settings */
 	struct ad5755_setup *p_ad5755_st;
 	enum ad5755_type_t this_device;
@@ -353,10 +353,10 @@ struct ad5755_init_param {
 	/* SPI */
 	spi_init_param	spi_init;
 	/* GPIO */
-	struct gpio_init_param	gpio_ldac;
-	struct gpio_init_param	gpio_rst;
-	struct gpio_init_param	gpio_clr;
-	struct gpio_init_param	gpio_poc;
+	struct no_os_gpio_init_param	gpio_ldac;
+	struct no_os_gpio_init_param	gpio_rst;
+	struct no_os_gpio_init_param	gpio_clr;
+	struct no_os_gpio_init_param	gpio_poc;
 	/* Device Settings */
 	enum ad5755_type_t this_device;
 };

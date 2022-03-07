@@ -41,8 +41,8 @@
 
 struct adrv9002_hal_cfg {
 	struct spi_desc *spi;
-	struct gpio_desc *gpio_reset_n;
-	struct gpio_desc *gpio_ssi_sync;
+	struct no_os_gpio_desc *gpio_reset_n;
+	struct no_os_gpio_desc *gpio_ssi_sync;
 };
 
 #endif

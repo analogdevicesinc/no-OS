@@ -48,8 +48,8 @@ extern "C"
 {
 #endif	//__cplusplus
 
-#include "no-os/timer.h"
-#include "no-os/error.h"
+#include "no_os_timer.h"
+#include "no_os_error.h"
 #include "mbed_timer.h"
 
 using namespace std::chrono;

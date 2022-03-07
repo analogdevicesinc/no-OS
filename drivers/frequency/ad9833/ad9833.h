@@ -66,33 +66,33 @@
 #define AD9833_CTRLMODE         (1 << 1)
 
 /* GPIOs */
-#define AD9834_PSEL_OUT         gpio_direction_output(dev->gpio_psel,  \
-			        GPIO_HIGH)
-#define AD9834_PSEL_LOW         gpio_set_value(dev->gpio_psel,         \
-			        GPIO_LOW)
-#define AD9834_PSEL_HIGH        gpio_set_value(dev->gpio_psel,         \
-			        GPIO_HIGH)
+#define AD9834_PSEL_OUT         no_os_gpio_direction_output(dev->gpio_psel,  \
+			        NO_OS_GPIO_HIGH)
+#define AD9834_PSEL_LOW         no_os_gpio_set_value(dev->gpio_psel,         \
+			        NO_OS_GPIO_LOW)
+#define AD9834_PSEL_HIGH        no_os_gpio_set_value(dev->gpio_psel,         \
+			        NO_OS_GPIO_HIGH)
 
-#define AD9834_FSEL_OUT         gpio_direction_output(dev->gpio_fsel,  \
-			        GPIO_HIGH)
-#define AD9834_FSEL_LOW         gpio_set_value(dev->gpio_fsel,         \
-			        GPIO_LOW)
-#define AD9834_FSEL_HIGH        gpio_set_value(dev->gpio_fsel,         \
-			        GPIO_HIGH)
+#define AD9834_FSEL_OUT         no_os_gpio_direction_output(dev->gpio_fsel,  \
+			        NO_OS_GPIO_HIGH)
+#define AD9834_FSEL_LOW         no_os_gpio_set_value(dev->gpio_fsel,         \
+			        NO_OS_GPIO_LOW)
+#define AD9834_FSEL_HIGH        no_os_gpio_set_value(dev->gpio_fsel,         \
+			        NO_OS_GPIO_HIGH)
 
-#define AD9834_RESET_OUT        gpio_direction_output(dev->gpio_reset, \
-			        GPIO_HIGH)
-#define AD9834_RESET_LOW        gpio_set_value(dev->gpio_reset,        \
-			        GPIO_LOW)
+#define AD9834_RESET_OUT        no_os_gpio_direction_output(dev->gpio_reset, \
+			        NO_OS_GPIO_HIGH)
+#define AD9834_RESET_LOW        no_os_gpio_set_value(dev->gpio_reset,        \
+			        NO_OS_GPIO_LOW)
 #define AD9834_RESET_HIGH       pio_set_value(dev->gpio_reset,         \
-			        GPIO_HIGH)
+			        NO_OS_GPIO_HIGH)
 
-#define AD9834_SLEEP_OUT        gpio_direction_output(dev->gpio_sleep, \
-			        GPIO_HIGH)
-#define AD9834_SLEEP_LOW        gpio_set_value(dev->gpio_sleep,        \
-			        GPIO_LOW)
-#define AD9834_SLEEP_HIGH       gpio_set_value(dev->gpio_sleep,         \
-			        GPIO_HIGH)
+#define AD9834_SLEEP_OUT        no_os_gpio_direction_output(dev->gpio_sleep, \
+			        NO_OS_GPIO_HIGH)
+#define AD9834_SLEEP_LOW        no_os_gpio_set_value(dev->gpio_sleep,        \
+			        NO_OS_GPIO_LOW)
+#define AD9834_SLEEP_HIGH       no_os_gpio_set_value(dev->gpio_sleep,         \
+			        NO_OS_GPIO_HIGH)
 
 
 #define BIT_F0ADDRESS           0x4000      // Frequency Register 0 address.
@@ -116,10 +116,10 @@ struct ad9833_dev {
 	/* SPI */
 	spi_desc			*spi_desc;
 	/* GPIO */
-	struct gpio_desc		*gpio_psel;
-	struct gpio_desc		*gpio_fsel;
-	struct gpio_desc		*gpio_reset;
-	struct gpio_desc		*gpio_sleep;
+	struct no_os_gpio_desc		*gpio_psel;
+	struct no_os_gpio_desc		*gpio_fsel;
+	struct no_os_gpio_desc		*gpio_reset;
+	struct no_os_gpio_desc		*gpio_sleep;
 	/* Device Settings */
 	enum ad9833_type		act_device;
 	uint8_t				prog_method;
@@ -131,10 +131,10 @@ struct ad9833_init_param {
 	/* SPI */
 	spi_init_param			spi_init;
 	/* GPIO */
-	struct gpio_init_param		gpio_psel;
-	struct gpio_init_param		gpio_fsel;
-	struct gpio_init_param		gpio_reset;
-	struct gpio_init_param		gpio_sleep;
+	struct no_os_gpio_init_param		gpio_psel;
+	struct no_os_gpio_init_param		gpio_fsel;
+	struct no_os_gpio_init_param		gpio_reset;
+	struct no_os_gpio_init_param		gpio_sleep;
 	/* Device Settings */
 	enum ad9833_type		act_device;
 };

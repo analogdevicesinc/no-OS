@@ -289,18 +289,18 @@ static int32_t ad463x_init_gpio(struct ad463x_dev *dev,
 {
 	int32_t ret;
 
-	ret = gpio_get_optional(&dev->gpio_resetn, init_param->gpio_resetn);
+	ret = no_os_gpio_get_optional(&dev->gpio_resetn, init_param->gpio_resetn);
 	if (ret != SUCCESS)
 		return ret;
 
 	/** Reset to configure pins */
 	if (dev->gpio_resetn) {
-		ret = gpio_direction_output(dev->gpio_resetn, GPIO_LOW);
+		ret = no_os_gpio_direction_output(dev->gpio_resetn, NO_OS_GPIO_LOW);
 		if (ret != SUCCESS)
 			return ret;
 
 		mdelay(100);
-		ret = gpio_set_value(dev->gpio_resetn, GPIO_HIGH);
+		ret = no_os_gpio_set_value(dev->gpio_resetn, NO_OS_GPIO_HIGH);
 		if (ret != SUCCESS)
 			return ret;
 
@@ -502,7 +502,7 @@ error_spi:
 error_clkgen:
 	axi_clkgen_remove(dev->clkgen);
 error_gpio:
-	gpio_remove(dev->gpio_resetn);
+	no_os_gpio_remove(dev->gpio_resetn);
 error_dev:
 	free(dev);
 
@@ -529,7 +529,7 @@ int32_t ad463x_remove(struct ad463x_dev *dev)
 	if (ret != SUCCESS)
 		return ret;
 
-	ret = gpio_remove(dev->gpio_resetn);
+	ret = no_os_gpio_remove(dev->gpio_resetn);
 	if (ret != SUCCESS)
 		return ret;
 

@@ -105,7 +105,7 @@ int32_t mbed_spi_init(struct spi_desc **desc,
 			if (csb) {
 				mbed_spi_desc->use_sw_csb = true;
 				mbed_spi_desc->csb_gpio = (DigitalOut *)csb;
-				csb->write(GPIO_HIGH);
+				csb->write(NO_OS_GPIO_HIGH);
 			} else
 				goto err_csb;
 		}
@@ -202,14 +202,14 @@ int32_t mbed_spi_write_and_read(struct spi_desc *desc,
 
 	if (((struct mbed_spi_desc *)desc->extra)->use_sw_csb) {
 		csb = (DigitalOut *)(((struct mbed_spi_desc *)(desc->extra))->csb_gpio);
-		csb->write(GPIO_LOW);
+		csb->write(NO_OS_GPIO_LOW);
 	}
 
 	/* Perform synchronous SPI write and read */
 	spi->write((const char *)data, bytes_number, (char *)data, bytes_number);
 
 	if (((struct mbed_spi_desc *)desc->extra)->use_sw_csb)
-		csb->write(GPIO_HIGH);
+		csb->write(NO_OS_GPIO_HIGH);
 
 	return SUCCESS;
 }
@@ -239,7 +239,7 @@ int32_t mbed_spi_transfer(struct spi_desc *desc, struct spi_msg *msgs,
 	csb = (DigitalOut *)(((struct mbed_spi_desc *)(desc->extra))->csb_gpio);
 
 	for (msg_cnt = 0; msg_cnt < num_of_msgs; msg_cnt++) {
-		csb->write(GPIO_LOW);
+		csb->write(NO_OS_GPIO_LOW);
 
 		/* Perform synchronous SPI write and read */
 		if (!msgs[msg_cnt].tx_buff) {
@@ -251,10 +251,10 @@ int32_t mbed_spi_transfer(struct spi_desc *desc, struct spi_msg *msgs,
 		}
 
 		if (msgs[msg_cnt].cs_change)
-			csb->write(GPIO_HIGH);
+			csb->write(NO_OS_GPIO_HIGH);
 	}
 
-	csb->write(GPIO_HIGH);
+	csb->write(NO_OS_GPIO_HIGH);
 	return SUCCESS;
 }
 

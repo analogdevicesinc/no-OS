@@ -74,12 +74,12 @@ const struct xil_gpio_init_param gpio_extra = {
 	.type = GPIO_PS,
 	.device_id = GPIO_DEVICE_ID
 };
-const struct gpio_init_param reset_ip = {
+const struct no_os_gpio_init_param reset_ip = {
 	.number = GPIO_DAC_RESET_N,
 	.platform_ops = &xil_gpio_ops,
 	.extra = &gpio_extra
 };
-const struct gpio_init_param ldac_ip = {
+const struct no_os_gpio_init_param ldac_ip = {
 	.number = GPIO_DAC_LDAC_N,
 	.platform_ops = &xil_gpio_ops,
 	.extra = &gpio_extra

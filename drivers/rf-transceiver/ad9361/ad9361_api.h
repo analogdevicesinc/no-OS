@@ -277,11 +277,11 @@ typedef struct {
 	uint32_t	tx1_mon_lo_cm;	/* adi,txmon-1-lo-cm */
 	uint32_t	tx2_mon_lo_cm;	/* adi,txmon-2-lo-cm */
 	/* GPIO definitions */
-	struct gpio_init_param	gpio_resetb;	/* reset-gpios */
+	struct no_os_gpio_init_param	gpio_resetb;	/* reset-gpios */
 	/* MCS Sync */
-	struct gpio_init_param	gpio_sync;	/* sync-gpios */
-	struct gpio_init_param	gpio_cal_sw1;	/* cal-sw1-gpios */
-	struct gpio_init_param	gpio_cal_sw2;	/* cal-sw2-gpios */
+	struct no_os_gpio_init_param	gpio_sync;	/* sync-gpios */
+	struct no_os_gpio_init_param	gpio_cal_sw1;	/* cal-sw1-gpios */
+	struct no_os_gpio_init_param	gpio_cal_sw2;	/* cal-sw2-gpios */
 
 	struct spi_init_param	spi_param;
 

@@ -69,13 +69,13 @@
 #define AD5421_CMD(x)			((x & 0xFF) << 16)
 
 /* AD5421 GPIO */
-#define AD5421_LDAC_OUT			gpio_direction_output(dev->gpio_ldac,   \
-			                GPIO_HIGH)
-#define AD5421_LDAC_LOW			gpio_set_value(dev->gpio_ldac,          \
-			                GPIO_LOW)
-#define AD5421_LDAC_HIGH		gpio_set_value(dev->gpio_ldac,          \
-			                GPIO_HIGH)
-#define AD5421_FAULT_IN 		gpio_direction_input(dev->gpio_faultin)
+#define AD5421_LDAC_OUT			no_os_gpio_direction_output(dev->gpio_ldac,   \
+			                NO_OS_GPIO_HIGH)
+#define AD5421_LDAC_LOW			no_os_gpio_set_value(dev->gpio_ldac,          \
+			                NO_OS_GPIO_LOW)
+#define AD5421_LDAC_HIGH		no_os_gpio_set_value(dev->gpio_ldac,          \
+			                NO_OS_GPIO_HIGH)
+#define AD5421_FAULT_IN 		no_os_gpio_direction_input(dev->gpio_faultin)
 
 /* CONTROL register bits */
 #define CTRL_SPI_WATCHDOG		(1 << 12)
@@ -91,16 +91,16 @@ struct ad5421_dev {
 	/* SPI */
 	spi_desc		*spi_desc;
 	/* GPIO */
-	struct gpio_desc	*gpio_ldac;
-	struct gpio_desc	*gpio_faultin;
+	struct no_os_gpio_desc	*gpio_ldac;
+	struct no_os_gpio_desc	*gpio_faultin;
 };
 
 struct ad5421_init_param {
 	/* SPI */
 	spi_init_param	spi_init;
 	/* GPIO */
-	struct gpio_init_param	gpio_ldac;
-	struct gpio_init_param	gpio_faultin;
+	struct no_os_gpio_init_param	gpio_ldac;
+	struct no_os_gpio_init_param	gpio_faultin;
 };
 
 /*****************************************************************************/

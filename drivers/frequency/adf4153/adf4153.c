@@ -97,10 +97,10 @@ int8_t adf4153_init(struct adf4153_dev **device,
 	status = spi_init(&dev->spi_desc, &init_param.spi_init);
 
 	/* GPIO */
-	status |= gpio_get(&dev->gpio_le, &init_param.gpio_le);
-	status |= gpio_get(&dev->gpio_ce, &init_param.gpio_ce);
-	status |= gpio_get(&dev->gpio_le2, &init_param.gpio_le2);
-	status |= gpio_get(&dev->gpio_ce2, &init_param.gpio_ce2);
+	status |= no_os_gpio_get(&dev->gpio_le, &init_param.gpio_le);
+	status |= no_os_gpio_get(&dev->gpio_ce, &init_param.gpio_ce);
+	status |= no_os_gpio_get(&dev->gpio_le2, &init_param.gpio_le2);
+	status |= no_os_gpio_get(&dev->gpio_ce2, &init_param.gpio_ce2);
 
 	/* Bring CE high to put device to power up */
 	ADF4153_CE_OUT;
@@ -184,10 +184,10 @@ int32_t adf4153_remove(struct adf4153_dev *dev)
 
 	ret = spi_remove(dev->spi_desc);
 
-	ret |= gpio_remove(dev->gpio_le);
-	ret |= gpio_remove(dev->gpio_ce);
-	ret |= gpio_remove(dev->gpio_le2);
-	ret |= gpio_remove(dev->gpio_ce2);
+	ret |= no_os_gpio_remove(dev->gpio_le);
+	ret |= no_os_gpio_remove(dev->gpio_ce);
+	ret |= no_os_gpio_remove(dev->gpio_le2);
+	ret |= no_os_gpio_remove(dev->gpio_ce2);
 
 	free(dev);
 

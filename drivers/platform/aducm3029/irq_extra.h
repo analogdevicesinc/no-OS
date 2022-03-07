@@ -132,7 +132,7 @@ enum gpio_irq_mode {
  */
 struct gpio_irq_config {
 	/** GPIO driver handler */
-	struct gpio_desc	*gpio_handler;
+	struct no_os_gpio_desc	*gpio_handler;
 	/** Interrupt condition */
 	enum gpio_irq_mode	mode;
 };

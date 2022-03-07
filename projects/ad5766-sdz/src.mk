@@ -13,7 +13,7 @@ SRCS += $(PROJECT)/src/ad5766_sdz.c
 SRCS += $(PROJECT)/src/ad5766_core.c \
 	$(DRIVERS)/dac/ad5766/ad5766.c \
 	$(DRIVERS)/api/spi.c \
-	$(DRIVERS)/api/gpio.c \
+	$(DRIVERS)/api/no_os_gpio.c \
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.c \
 	$(DRIVERS)/axi_core/spi_engine/spi_engine.c \
 	$(NO-OS)/util/util.c

@@ -120,7 +120,7 @@ int main(void)
 	ad9250_1_spi_param.extra = &demux_spi_param;
 	ad9517_spi_param.extra = &demux_spi_param;
 
-	struct gpio_init_param gpio_sysref_param = {
+	struct no_os_gpio_init_param gpio_sysref_param = {
 		.number = GPIO_JESD204_SYSREF,
 		.platform_ops = &xil_gpio_ops
 	};
@@ -135,7 +135,7 @@ int main(void)
 	};
 	gpio_sysref_param.extra = &xil_gpio_param;
 
-	gpio_desc *gpio_sysref;
+	no_os_gpio_desc *gpio_sysref;
 
 	struct adxcvr_init ad9250_xcvr_param = {
 		.name = "ad9250_xcvr",
@@ -353,8 +353,8 @@ int main(void)
 	ad9250_1_param.spi_init = ad9250_1_spi_param;
 
 	// setup GPIOs
-	gpio_get(&gpio_sysref,  &gpio_sysref_param);
-	gpio_direction_output(gpio_sysref,  1);
+	no_os_gpio_get(&gpio_sysref,  &gpio_sysref_param);
+	no_os_gpio_direction_output(gpio_sysref,  1);
 	mdelay(10);
 
 	// set up clock generator
@@ -580,7 +580,7 @@ int main(void)
 	ad9517_remove(ad9517_device);
 	ad9250_remove(ad9250_0_device);
 	ad9250_remove(ad9250_1_device);
-	gpio_remove(gpio_sysref);
+	no_os_gpio_remove(gpio_sysref);
 
 	return SUCCESS;
 }

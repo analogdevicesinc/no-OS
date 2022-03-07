@@ -85,10 +85,10 @@ struct fmcdaq2_dev {
 
 	struct ad9523_channel_spec ad9523_channels[8];
 
-	struct gpio_desc *gpio_clkd_sync;
-	struct gpio_desc *gpio_dac_reset;
-	struct gpio_desc *gpio_dac_txen;
-	struct gpio_desc *gpio_adc_pd;
+	struct no_os_gpio_desc *gpio_clkd_sync;
+	struct no_os_gpio_desc *gpio_dac_reset;
+	struct no_os_gpio_desc *gpio_dac_txen;
+	struct no_os_gpio_desc *gpio_adc_pd;
 
 	struct adxcvr *ad9144_xcvr;
 	struct adxcvr *ad9680_xcvr;
@@ -128,19 +128,19 @@ static int fmcdaq2_gpio_init(struct fmcdaq2_dev *dev)
 	int status;
 
 	/* Initialize GPIO structures */
-	struct gpio_init_param gpio_clkd_sync_param = {
+	struct no_os_gpio_init_param gpio_clkd_sync_param = {
 		.number = GPIO_CLKD_SYNC,
 		.platform_ops = &xil_gpio_ops
 	};
-	struct gpio_init_param gpio_dac_reset_param = {
+	struct no_os_gpio_init_param gpio_dac_reset_param = {
 		.number = GPIO_DAC_RESET,
 		.platform_ops = &xil_gpio_ops
 	};
-	struct gpio_init_param gpio_dac_txen_param = {
+	struct no_os_gpio_init_param gpio_dac_txen_param = {
 		.number = GPIO_DAC_TXEN,
 		.platform_ops = &xil_gpio_ops
 	};
-	struct gpio_init_param gpio_adc_pd_param = {
+	struct no_os_gpio_init_param gpio_adc_pd_param = {
 		.number = GPIO_ADC_PD,
 		.platform_ops = &xil_gpio_ops
 	};
@@ -171,53 +171,53 @@ static int fmcdaq2_gpio_init(struct fmcdaq2_dev *dev)
 #endif
 
 	/* set GPIOs */
-	status = gpio_get(&dev->gpio_clkd_sync, &gpio_clkd_sync_param);
+	status = no_os_gpio_get(&dev->gpio_clkd_sync, &gpio_clkd_sync_param);
 	if (status < 0)
 		return status;
 
-	status = gpio_get(&dev->gpio_dac_reset, &gpio_dac_reset_param);
+	status = no_os_gpio_get(&dev->gpio_dac_reset, &gpio_dac_reset_param);
 	if (status < 0)
 		return status;
 
-	status = gpio_get(&dev->gpio_dac_txen, &gpio_dac_txen_param);
+	status = no_os_gpio_get(&dev->gpio_dac_txen, &gpio_dac_txen_param);
 	if (status < 0)
 		return status;
 
-	status = gpio_get(&dev->gpio_adc_pd, &gpio_adc_pd_param);
+	status = no_os_gpio_get(&dev->gpio_adc_pd, &gpio_adc_pd_param);
 	if (status < 0)
 		return status;
 
-	status = gpio_direction_output(dev->gpio_clkd_sync, GPIO_LOW);
+	status = no_os_gpio_direction_output(dev->gpio_clkd_sync, NO_OS_GPIO_LOW);
 	if (status < 0)
 		return status;
 
-	status = gpio_direction_output(dev->gpio_dac_reset, GPIO_LOW);
+	status = no_os_gpio_direction_output(dev->gpio_dac_reset, NO_OS_GPIO_LOW);
 	if (status < 0)
 		return status;
 
-	status = gpio_direction_output(dev->gpio_dac_txen, GPIO_LOW);
+	status = no_os_gpio_direction_output(dev->gpio_dac_txen, NO_OS_GPIO_LOW);
 	if (status < 0)
 		return status;
 
-	status = gpio_direction_output(dev->gpio_adc_pd, GPIO_HIGH);
+	status = no_os_gpio_direction_output(dev->gpio_adc_pd, NO_OS_GPIO_HIGH);
 	if (status < 0)
 		return status;
 
 	mdelay(5);
 
-	status = gpio_set_value(dev->gpio_clkd_sync, GPIO_HIGH);
+	status = no_os_gpio_set_value(dev->gpio_clkd_sync, NO_OS_GPIO_HIGH);
 	if (status < 0)
 		return status;
 
-	status = gpio_set_value(dev->gpio_dac_reset, GPIO_HIGH);
+	status = no_os_gpio_set_value(dev->gpio_dac_reset, NO_OS_GPIO_HIGH);
 	if (status < 0)
 		return status;
 
-	status = gpio_set_value(dev->gpio_dac_txen, GPIO_HIGH);
+	status = no_os_gpio_set_value(dev->gpio_dac_txen, NO_OS_GPIO_HIGH);
 	if (status < 0)
 		return status;
 
-	return gpio_set_value(dev->gpio_adc_pd, GPIO_LOW);
+	return no_os_gpio_set_value(dev->gpio_adc_pd, NO_OS_GPIO_LOW);
 }
 
 static int fmcdaq2_spi_init(struct fmcdaq2_init_param *dev_init)
@@ -702,10 +702,10 @@ static void fmcdaq2_remove(struct fmcdaq2_dev *dev)
 	axi_jesd204_rx_remove(dev->ad9680_jesd);
 
 	/* Memory deallocation for gpios */
-	gpio_remove(dev->gpio_clkd_sync);
-	gpio_remove(dev->gpio_dac_reset);
-	gpio_remove(dev->gpio_dac_txen);
-	gpio_remove(dev->gpio_adc_pd);
+	no_os_gpio_remove(dev->gpio_clkd_sync);
+	no_os_gpio_remove(dev->gpio_dac_reset);
+	no_os_gpio_remove(dev->gpio_dac_txen);
+	no_os_gpio_remove(dev->gpio_adc_pd);
 }
 
 int fmcdaq2_reconfig(struct ad9144_init_param *p_ad9144_param,

@@ -223,7 +223,7 @@ int32_t ad9083_reset_pin_ctrl(void *user_data, uint8_t enable)
 {
 	struct ad9083_phy *phy = user_data;
 
-	return gpio_set_value(phy->gpio_reset, enable);
+	return no_os_gpio_set_value(phy->gpio_reset, enable);
 }
 
 /**
@@ -351,14 +351,14 @@ int32_t ad9083_init(struct ad9083_phy **device,
 	if (!phy)
 		return -ENOMEM;
 
-	ret = gpio_get_optional(&phy->gpio_reset, init_param->gpio_reset);
+	ret = no_os_gpio_get_optional(&phy->gpio_reset, init_param->gpio_reset);
 	if (ret != SUCCESS)
 		goto error_1;
-	ret = gpio_get_optional(&phy->gpio_pd, init_param->gpio_pd);
+	ret = no_os_gpio_get_optional(&phy->gpio_pd, init_param->gpio_pd);
 	if (ret != SUCCESS)
 		goto error_2;
 
-	gpio_direction_output(phy->gpio_reset, GPIO_HIGH);
+	no_os_gpio_direction_output(phy->gpio_reset, NO_OS_GPIO_HIGH);
 
 	ret = spi_init(&phy->spi_desc, init_param->spi_init);
 	if (ret != SUCCESS)
@@ -421,9 +421,9 @@ int32_t ad9083_init(struct ad9083_phy **device,
 error_4:
 	spi_remove(phy->spi_desc);
 error_3:
-	gpio_remove(phy->gpio_pd);
+	no_os_gpio_remove(phy->gpio_pd);
 error_2:
-	gpio_remove(phy->gpio_reset);
+	no_os_gpio_remove(phy->gpio_reset);
 error_1:
 	if (phy)
 		free(phy);
@@ -447,11 +447,11 @@ int32_t ad9083_remove(struct ad9083_phy *dev)
 	if (ret != SUCCESS)
 		return ret;
 
-	ret = gpio_remove(dev->gpio_pd);
+	ret = no_os_gpio_remove(dev->gpio_pd);
 	if (ret != SUCCESS)
 		return ret;
 
-	ret = gpio_remove(dev->gpio_reset);
+	ret = no_os_gpio_remove(dev->gpio_reset);
 	if (ret != SUCCESS)
 		return ret;
 

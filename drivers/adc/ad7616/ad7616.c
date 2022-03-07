@@ -238,10 +238,10 @@ int32_t ad7616_reset(struct ad7616_dev *dev)
 {
 	int32_t ret;
 
-	ret = gpio_set_value(dev->gpio_reset, GPIO_LOW);
+	ret = no_os_gpio_set_value(dev->gpio_reset, NO_OS_GPIO_LOW);
 	/* Low pulse width for a full reset should be at least 1200 ns */
 	mdelay(20);
-	ret |= gpio_set_value(dev->gpio_reset, GPIO_HIGH);
+	ret |= no_os_gpio_set_value(dev->gpio_reset, NO_OS_GPIO_HIGH);
 	/* 15 ms are required to completely reconfigure the device */
 	mdelay(150);
 
@@ -314,8 +314,8 @@ int32_t ad7616_set_range(struct ad7616_dev *dev,
 			dev->va[i] = range;
 			dev->vb[i] = range;
 		}
-		ret = gpio_set_value(dev->gpio_hw_rngsel0, ((range & 0x01) >> 0));
-		ret |= gpio_set_value(dev->gpio_hw_rngsel1, ((range & 0x02) >> 1));
+		ret = no_os_gpio_set_value(dev->gpio_hw_rngsel0, ((range & 0x01) >> 0));
+		ret |= no_os_gpio_set_value(dev->gpio_hw_rngsel1, ((range & 0x02) >> 1));
 	}
 
 	return ret;
@@ -367,9 +367,9 @@ int32_t ad7616_set_oversampling_ratio(struct ad7616_dev *dev,
 		ret = ad7616_write_mask(dev, AD7616_REG_CONFIG,
 					AD7616_OS(0x7), AD7616_OS(osr));
 	} else {
-		ret = gpio_set_value(dev->gpio_os0, ((osr & 0x01) >> 0));
-		ret |= gpio_set_value(dev->gpio_os1, ((osr & 0x02) >> 1));
-		ret |= gpio_set_value(dev->gpio_os2, ((osr & 0x04) >> 2));
+		ret = no_os_gpio_set_value(dev->gpio_os0, ((osr & 0x01) >> 0));
+		ret |= no_os_gpio_set_value(dev->gpio_os1, ((osr & 0x02) >> 1));
+		ret |= no_os_gpio_set_value(dev->gpio_os2, ((osr & 0x04) >> 2));
 	}
 
 	return ret;
@@ -525,34 +525,34 @@ int32_t ad7616_setup(struct ad7616_dev **device,
 
 	spi_engine_set_speed(dev->spi_desc, dev->reg_access_speed);
 
-	ret = gpio_get_optional(&dev->gpio_hw_rngsel0,
-				init_param->gpio_hw_rngsel0_param);
+	ret = no_os_gpio_get_optional(&dev->gpio_hw_rngsel0,
+				      init_param->gpio_hw_rngsel0_param);
 	if (ret != SUCCESS)
 		return ret;
 
-	ret = gpio_get_optional(&dev->gpio_hw_rngsel1,
-				init_param->gpio_hw_rngsel1_param);
+	ret = no_os_gpio_get_optional(&dev->gpio_hw_rngsel1,
+				      init_param->gpio_hw_rngsel1_param);
 	if (ret != SUCCESS)
 		return ret;
 
-	ret = gpio_get_optional(&dev->gpio_reset, init_param->gpio_reset_param);
+	ret = no_os_gpio_get_optional(&dev->gpio_reset, init_param->gpio_reset_param);
 	if (ret != SUCCESS)
 		return ret;
 
-	ret = gpio_get_optional(&dev->gpio_os0, init_param->gpio_os0_param);
+	ret = no_os_gpio_get_optional(&dev->gpio_os0, init_param->gpio_os0_param);
 	if (ret != SUCCESS)
 		return ret;
 
-	ret = gpio_get_optional(&dev->gpio_os1, init_param->gpio_os1_param);
+	ret = no_os_gpio_get_optional(&dev->gpio_os1, init_param->gpio_os1_param);
 	if (ret != SUCCESS)
 		return ret;
 
-	ret = gpio_get_optional(&dev->gpio_os2, init_param->gpio_os2_param);
+	ret = no_os_gpio_get_optional(&dev->gpio_os2, init_param->gpio_os2_param);
 	if (ret != SUCCESS)
 		return ret;
 
 	if (dev->gpio_reset) {
-		ret = gpio_direction_output(dev->gpio_reset, GPIO_HIGH);
+		ret = no_os_gpio_direction_output(dev->gpio_reset, NO_OS_GPIO_HIGH);
 		if (ret != SUCCESS)
 			return ret;
 

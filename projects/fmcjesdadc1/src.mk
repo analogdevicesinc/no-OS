@@ -20,7 +20,7 @@ SRCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c \
 	$(DRIVERS)/axi_core/jesd204/xilinx_transceiver.c \
 	$(DRIVERS)/io-expander/demux_spi/demux_spi.c \
 	$(DRIVERS)/api/spi.c \
-	$(DRIVERS)/api/gpio.c \
+	$(DRIVERS)/api/no_os_gpio.c \
 	$(DRIVERS)/adc/ad9250/ad9250.c \
 	$(DRIVERS)/frequency/ad9517/ad9517.c \
 	$(NO-OS)/util/util.c

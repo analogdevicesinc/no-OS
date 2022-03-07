@@ -1166,13 +1166,13 @@ struct adpd410x_init_param {
 	/** Device clock option */
 	enum adpd410x_clk_opt clk_opt;
 	/** GPIO 0 initialization */
-	struct gpio_init_param gpio0;
+	struct no_os_gpio_init_param gpio0;
 	/** GPIO 1 initialization */
-	struct gpio_init_param gpio1;
+	struct no_os_gpio_init_param gpio1;
 	/** GPIO 2 initialization */
-	struct gpio_init_param gpio2;
+	struct no_os_gpio_init_param gpio2;
 	/** GPIO 3 initialization */
-	struct gpio_init_param gpio3;
+	struct no_os_gpio_init_param gpio3;
 	/** External low frequency oscillator frequency, if applicable */
 	uint32_t ext_lfo_freq;
 };
@@ -1189,13 +1189,13 @@ struct adpd410x_dev {
 	/** Device clock option */
 	enum adpd410x_clk_opt clk_opt;
 	/** GPIO 0 handler */
-	struct gpio_desc *gpio0;
+	struct no_os_gpio_desc *gpio0;
 	/** GPIO 1 handler */
-	struct gpio_desc *gpio1;
+	struct no_os_gpio_desc *gpio1;
 	/** GPIO 2 handler */
-	struct gpio_desc *gpio2;
+	struct no_os_gpio_desc *gpio2;
 	/** GPIO 3 handler */
-	struct gpio_desc *gpio3;
+	struct no_os_gpio_desc *gpio3;
 	/** External low frequency oscillator frequency, if applicable */
 	uint32_t ext_lfo_freq;
 };
