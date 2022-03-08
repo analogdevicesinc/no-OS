@@ -370,7 +370,6 @@
 #define ADF4377_MUXOUT_DIV_RCLK_2       0x4
 #define ADF4377_MUXOUT_DIV_NCLK_2       0x5
 #define ADF4377_MUXOUT_HIGH             0x8
-#define ADF4377_MUXOUT_REF_OK           0xE
 
 #define ADF4377_EN_CPTEST_OFF           0x0
 #define ADF4377_EN_CPTEST_ON            0x1
