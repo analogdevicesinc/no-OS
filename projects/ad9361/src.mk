@@ -42,7 +42,7 @@ SRCS += $(PLATFORM_DRIVERS)/uart.c
 endif
 
 SRCS += $(NO-OS)/util/fifo.c \
-	$(NO-OS)/util/list.c \
+	$(NO-OS)/util/no_os_list.c \
 	$(DRIVERS)/rf-transceiver/ad9361/iio_ad9361.c \
 	$(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.c \
 	$(DRIVERS)/axi_core/iio_axi_dac/iio_axi_dac.c \

@@ -60,12 +60,12 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
-static struct list_desc *pl_list = NULL;
-static struct iterator  *pl_it = NULL;
+static struct no_os_list_desc *pl_list = NULL;
+static struct no_os_iterator  *pl_it = NULL;
 
 #ifdef XIICPS_H
-static struct list_desc *ps_list = NULL;
-static struct iterator  *ps_it = NULL;
+static struct no_os_list_desc *ps_list = NULL;
+static struct no_os_iterator  *ps_it = NULL;
 #endif /* XIICPS_H */
 
 /**
@@ -186,14 +186,14 @@ int32_t xil_i2c_init(struct no_os_i2c_desc **desc,
 		struct inst_table_item *temp_el_pl;
 
 		if (!pl_list)
-			list_init(&pl_list, LIST_DEFAULT, xil_i2c_cmp);
+			no_os_list_init(&pl_list, NO_OS_LIST_DEFAULT, xil_i2c_cmp);
 		if (!pl_it)
-			iterator_init(&pl_it, pl_list, true);
+			no_os_iterator_init(&pl_it, pl_list, true);
 
 		tab_check_pl.device_id = xdesc->device_id;
 
-		if (!IS_ERR_VALUE(list_read_find(pl_list, (void **)&temp_el_pl,
-						 &tab_check_pl))) {
+		if (!IS_ERR_VALUE(no_os_list_read_find(pl_list, (void **)&temp_el_pl,
+						       &tab_check_pl))) {
 			xdesc->instance = temp_el_pl->instance;
 			temp_el_pl->inst_no++;
 			break;
@@ -250,14 +250,14 @@ pl_error:
 		struct inst_table_item *temp_el_ps;
 
 		if (!pl_list)
-			list_init(&ps_list, LIST_DEFAULT, xil_i2c_cmp);
+			no_os_list_init(&ps_list, NO_OS_LIST_DEFAULT, xil_i2c_cmp);
 		if (!pl_it)
-			iterator_init(&ps_it, ps_list, true);
+			no_os_iterator_init(&ps_it, ps_list, true);
 
 		tab_check_ps.device_id = xdesc->device_id;
 
-		if (!IS_ERR_VALUE(list_read_find(ps_list, (void **)&temp_el_ps,
-						 &tab_check_ps))) {
+		if (!NO_OS_IS_ERR_VALUE(no_os_list_read_find(ps_list, (void **)&temp_el_ps,
+					&tab_check_ps))) {
 			xdesc->instance = temp_el_ps->instance;
 			temp_el_ps->inst_no++;
 			break;
@@ -327,10 +327,10 @@ int32_t xil_i2c_remove(struct no_os_i2c_desc *desc)
 		struct inst_table_item tab_check_pl;
 		struct inst_table_item *temp_el_pl;
 		tab_check_pl.device_id = xdesc->device_id;
-		ret = iterator_find(pl_it, &tab_check_pl);
+		ret = no_os_iterator_find(pl_it, &tab_check_pl);
 		if (ret != SUCCESS)
 			goto error;
-		iterator_read(pl_it, (void **)&temp_el_pl);
+		no_os_iterator_read(pl_it, (void **)&temp_el_pl);
 		temp_el_pl->inst_no--;
 		if (temp_el_pl->inst_no != 0)
 			break;
@@ -341,7 +341,7 @@ int32_t xil_i2c_remove(struct no_os_i2c_desc *desc)
 			goto error;
 
 		/** Remove list element */
-		iterator_get(pl_it, (void **)&temp_el_pl);
+		no_os_iterator_get(pl_it, (void **)&temp_el_pl);
 		free(temp_el_pl);
 		break;
 #endif
@@ -352,16 +352,16 @@ int32_t xil_i2c_remove(struct no_os_i2c_desc *desc)
 		struct inst_table_item tab_check_ps;
 		struct inst_table_item *temp_el_ps;
 		tab_check_ps.device_id = xdesc->device_id;
-		ret = iterator_find(ps_it, &tab_check_ps);
+		ret = no_os_iterator_find(ps_it, &tab_check_ps);
 		if (ret != SUCCESS)
 			goto error;
-		iterator_read(ps_it, (void **)&temp_el_ps);
+		no_os_iterator_read(ps_it, (void **)&temp_el_ps);
 		temp_el_ps->inst_no--;
 		if (temp_el_ps->inst_no != 0)
 			break;
 
 		/** Remove list element */
-		iterator_get(ps_it, (void **)&temp_el_ps);
+		no_os_iterator_get(ps_it, (void **)&temp_el_ps);
 		free(temp_el_ps);
 		break;
 #endif

@@ -31,7 +31,7 @@ SRCS += $(PLATFORM_DRIVERS)/uart.c \
 	$(DRIVERS)/api/no_os_irq.c \
 	$(DRIVERS)/adc/ad463x/iio_ad463x.c \
 	$(NO-OS)/util/fifo.c \
-	$(NO-OS)/util/list.c
+	$(NO-OS)/util/no_os_list.c
 endif
 INCS += $(PROJECT)/src/parameters.h
 INCS += $(DRIVERS)/adc/ad463x/ad463x.h \

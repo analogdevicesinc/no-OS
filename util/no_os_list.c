@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   list.c
+ *   @file   no_os_list.c
  *   @brief  List library implementation
  *   @author Mihail Chindris (mihail.chindris@analog.com)
 ********************************************************************************
@@ -50,27 +50,27 @@
 /******************************************************************************/
 
 /**
- * @struct list_elem
+ * @struct no_os_list_elem
  * @brief Format of each element of the list
  */
-struct list_elem {
+struct no_os_list_elem {
 	/** User data */
 	void			*data;
 	/** Reference to previous element */
-	struct list_elem	*prev;
+	struct no_os_list_elem	*prev;
 	/** Reference to next element */
-	struct list_elem	*next;
+	struct no_os_list_elem	*next;
 };
 
 /**
  * @struct list_iterator
  * @brief Structure used to iterate through the list
  */
-struct iterator {
+struct no_os_iterator {
 	/** List reference */
 	struct _list_desc	*list;
 	/** Current element reference */
-	struct list_elem	*elem;
+	struct no_os_list_elem	*elem;
 };
 
 /**
@@ -79,9 +79,9 @@ struct iterator {
  */
 struct _list_desc {
 	/** Reference to first element in the list */
-	struct list_elem	*first;
+	struct no_os_list_elem	*first;
 	/** Reference to last element in the list*/
-	struct list_elem	*last;
+	struct no_os_list_elem	*last;
 	/** Number of elements in the list */
 	uint32_t		nb_elements;
 	/** Function used to compare elements */
@@ -89,11 +89,11 @@ struct _list_desc {
 	/** Number of current active iterators */
 	uint32_t		nb_iterators;
 	/** Internal list iterator */
-	struct iterator		l_it;
+	struct no_os_iterator		l_it;
 };
 
 /** @brief Default function used to compare element in the list ( \ref f_cmp) */
-static int32_t default_comparator(void *data1, void *data2)
+static int32_t no_os_default_comparator(void *data1, void *data2)
 {
 	return (int32_t)((int32_t *)data1 - (int32_t *)data2);
 }
@@ -105,13 +105,13 @@ static int32_t default_comparator(void *data1, void *data2)
  * @param next - To set list_elem.next
  * @return Address of the new element or NULL if allocation fails.
  */
-static inline struct list_elem *create_element(void *data,
-		struct list_elem *prev,
-		struct list_elem *next)
+static inline struct no_os_list_elem *create_element(void *data,
+		struct no_os_list_elem *prev,
+		struct no_os_list_elem *next)
 {
-	struct list_elem *elem;
+	struct no_os_list_elem *elem;
 
-	elem = (struct list_elem *)calloc(1, sizeof(*elem));
+	elem = (struct no_os_list_elem *)calloc(1, sizeof(*elem));
 	if (!elem)
 		return NULL;
 	elem->data = data;
@@ -127,8 +127,9 @@ static inline struct list_elem *create_element(void *data,
  * @param elem - Middle element
  * @param next - High element
  */
-static inline void update_links(struct list_elem *prev, struct list_elem *elem,
-				struct list_elem *next)
+static inline void no_os_update_links(struct no_os_list_elem *prev,
+				      struct no_os_list_elem *elem,
+				      struct no_os_list_elem *next)
 {
 	if (prev)
 		prev->next = elem ? elem : next;
@@ -146,9 +147,9 @@ static inline void update_links(struct list_elem *prev, struct list_elem *elem,
  * @param new_first - New first element
  * @param new_last - New last element
  */
-static inline void update_desc(struct _list_desc *list,
-			       struct list_elem *new_first,
-			       struct list_elem *new_last)
+static inline void no_os_update_desc(struct _list_desc *list,
+				     struct no_os_list_elem *new_first,
+				     struct no_os_list_elem *new_last)
 {
 	if (new_first == list->first) {
 		list->last = new_last;
@@ -166,31 +167,32 @@ static inline void update_desc(struct _list_desc *list,
  * @param ad - Reference of the adapter
  * @param type - Type of the adapter
  */
-static inline void set_adapter(struct list_desc *ad, enum adapter_type type)
+static inline void no_os_set_adapter(struct no_os_list_desc *ad,
+				     enum no_os_adapter_type type)
 {
 	switch (type) {
-	case LIST_PRIORITY_LIST:
-		ad->push = list_add_find;
-		ad->pop = list_get_first;
-		ad->top_next = list_read_first;
-		ad->back = list_read_last;
-		ad->swap = list_edit_first;
+	case NO_OS_LIST_PRIORITY_LIST:
+		ad->push = no_os_list_add_find;
+		ad->pop = no_os_list_get_first;
+		ad->top_next = no_os_list_read_first;
+		ad->back = no_os_list_read_last;
+		ad->swap = no_os_list_edit_first;
 		break;
-	case LIST_QUEUE:
-		ad->push = list_add_last;
-		ad->pop = list_get_first;
-		ad->top_next = list_read_first;
-		ad->back = list_read_last;
-		ad->swap = list_edit_first;
+	case NO_OS_LIST_QUEUE:
+		ad->push = no_os_list_add_last;
+		ad->pop = no_os_list_get_first;
+		ad->top_next = no_os_list_read_first;
+		ad->back = no_os_list_read_last;
+		ad->swap = no_os_list_edit_first;
 		break;
-	case LIST_DEFAULT:
-	case LIST_STACK:
+	case NO_OS_LIST_DEFAULT:
+	case NO_OS_LIST_STACK:
 	default:
-		ad->push = list_add_last;
-		ad->pop = list_get_last;
-		ad->top_next = list_read_last;
-		ad->back = list_read_first;
-		ad->swap = list_edit_last;
+		ad->push = no_os_list_add_last;
+		ad->pop = no_os_list_get_last;
+		ad->top_next = no_os_list_read_last;
+		ad->back = no_os_list_read_first;
+		ad->swap = no_os_list_edit_last;
 		break;
 	}
 }
@@ -205,16 +207,17 @@ static inline void set_adapter(struct list_desc *ad, enum adapter_type type)
  *  - \ref SUCCESS : On success
  *  - \ref FAILURE : Otherwise
  */
-int32_t list_init(struct list_desc **list_desc, enum adapter_type type,
-		  f_cmp comparator)
+int32_t no_os_list_init(struct no_os_list_desc **list_desc,
+			enum no_os_adapter_type type,
+			f_cmp comparator)
 {
-	struct list_desc	*l_desc;
+	struct no_os_list_desc	*l_desc;
 	struct _list_desc	*list;
 
 
 	if (!list_desc)
 		return FAILURE;
-	l_desc = (struct list_desc *)calloc(1, sizeof(*l_desc));
+	l_desc = (struct no_os_list_desc *)calloc(1, sizeof(*l_desc));
 	if (!l_desc)
 		return FAILURE;
 	list = (struct _list_desc *)calloc(1, sizeof(*list));
@@ -225,10 +228,10 @@ int32_t list_init(struct list_desc **list_desc, enum adapter_type type,
 
 	*list_desc = l_desc;
 	l_desc->priv_desc = list;
-	list->comparator = comparator ? comparator : default_comparator;
+	list->comparator = comparator ? comparator : no_os_default_comparator;
 
 	/* Configure wrapper */
-	set_adapter(l_desc, type);
+	no_os_set_adapter(l_desc, type);
 	list->l_it.list = list;
 
 	return SUCCESS;
@@ -244,7 +247,7 @@ int32_t list_init(struct list_desc **list_desc, enum adapter_type type,
  *  - \ref SUCCESS : On success
  *  - \ref FAILURE : Otherwise
  */
-int32_t list_remove(struct list_desc *list_desc)
+int32_t no_os_list_remove(struct no_os_list_desc *list_desc)
 {
 	void			*data;
 	struct _list_desc	*list;
@@ -257,7 +260,7 @@ int32_t list_remove(struct list_desc *list_desc)
 		return FAILURE;
 
 	/* Remove all the elements */
-	while (SUCCESS == list_get_first(list_desc, &data))
+	while (0 == no_os_list_get_first(list_desc, &data))
 		;
 	free(list_desc->priv_desc);
 	free(list_desc);
@@ -273,7 +276,8 @@ int32_t list_remove(struct list_desc *list_desc)
  *  - \ref SUCCESS : On success
  *  - \ref FAILURE : Otherwise
  */
-int32_t list_get_size(struct list_desc *list_desc, uint32_t *out_size)
+int32_t no_os_list_get_size(struct no_os_list_desc *list_desc,
+			    uint32_t *out_size)
 {
 	struct _list_desc	*list;
 
@@ -287,11 +291,11 @@ int32_t list_get_size(struct list_desc *list_desc, uint32_t *out_size)
 }
 
 /** @brief Add element at the begining of the list. Refer to \ref f_add */
-int32_t list_add_first(struct list_desc *list_desc, void *data)
+int32_t no_os_list_add_first(struct no_os_list_desc *list_desc, void *data)
 {
-	struct list_elem	*prev;
-	struct list_elem	*next;
-	struct list_elem	*elem;
+	struct no_os_list_elem	*prev;
+	struct no_os_list_elem	*next;
+	struct no_os_list_elem	*elem;
 	struct _list_desc	*list;
 
 	if (!list_desc)
@@ -305,9 +309,9 @@ int32_t list_add_first(struct list_desc *list_desc, void *data)
 	if (!elem)
 		return FAILURE;
 
-	update_links(prev, elem, next);
+	no_os_update_links(prev, elem, next);
 
-	update_desc(list, elem, list->last);
+	no_os_update_desc(list, elem, list->last);
 
 	list->nb_elements++;
 
@@ -315,11 +319,11 @@ int32_t list_add_first(struct list_desc *list_desc, void *data)
 }
 
 /** @brief Add element at the end of the list. Refer to \ref f_add */
-int32_t list_add_last(struct list_desc *list_desc, void *data)
+int32_t no_os_list_add_last(struct no_os_list_desc *list_desc, void *data)
 {
-	struct list_elem	*prev;
-	struct list_elem	*next;
-	struct list_elem	*elem;
+	struct no_os_list_elem	*prev;
+	struct no_os_list_elem	*next;
+	struct no_os_list_elem	*elem;
 	struct _list_desc	*list;
 
 	if (!list_desc)
@@ -332,9 +336,9 @@ int32_t list_add_last(struct list_desc *list_desc, void *data)
 	if (!elem)
 		return FAILURE;
 
-	update_links(prev, elem, next);
+	no_os_update_links(prev, elem, next);
 
-	update_desc(list, list->first, elem);
+	no_os_update_desc(list, list->first, elem);
 
 	list->nb_elements++;
 
@@ -342,7 +346,8 @@ int32_t list_add_last(struct list_desc *list_desc, void *data)
 }
 
 /** @brief Add element at the specified idx. Refer to \ref f_add */
-int32_t list_add_idx(struct list_desc *list_desc, void *data, uint32_t idx)
+int32_t no_os_list_add_idx(struct no_os_list_desc *list_desc, void *data,
+			   uint32_t idx)
 {
 	struct _list_desc	*list;
 
@@ -352,21 +357,21 @@ int32_t list_add_idx(struct list_desc *list_desc, void *data, uint32_t idx)
 
 	/* If there are no elements the creation of an iterator will fail */
 	if (list->nb_elements == 0 || idx == 0)
-		return list_add_first(list_desc, data);
+		return no_os_list_add_first(list_desc, data);
 	if (list->nb_elements == idx)
-		return list_add_last(list_desc, data);
+		return no_os_list_add_last(list_desc, data);
 
 	list->l_it.elem = list->first;
-	if (SUCCESS != iterator_move(&(list->l_it), idx))
+	if (0 != no_os_iterator_move(&(list->l_it), idx))
 		return FAILURE;
 
-	return iterator_insert(&(list->l_it), data, 0);
+	return no_os_iterator_insert(&(list->l_it), data, 0);
 }
 
 /** @brief Add element in ascending order. Refer to \ref f_add */
-int32_t list_add_find(struct list_desc *list_desc, void *data)
+int32_t no_os_list_add_find(struct no_os_list_desc *list_desc, void *data)
 {
-	struct list_elem	*elem;
+	struct no_os_list_elem	*elem;
 	struct _list_desc	*list;
 
 	if (!list_desc)
@@ -383,16 +388,16 @@ int32_t list_add_find(struct list_desc *list_desc, void *data)
 	}
 	if (elem == NULL) {
 		list->l_it.elem = list->last;
-		return iterator_insert(&(list->l_it), data, 1);
+		return no_os_iterator_insert(&(list->l_it), data, 1);
 	} else {
 		list->l_it.elem = elem;
-		return iterator_insert(&(list->l_it), data, 0);
+		return no_os_iterator_insert(&(list->l_it), data, 0);
 	}
 
 }
 
 /** @brief Edit the first element of the list. Refer to \ref f_edit */
-int32_t list_edit_first(struct list_desc *list_desc, void *new_data)
+int32_t no_os_list_edit_first(struct no_os_list_desc *list_desc, void *new_data)
 {
 	struct _list_desc	*list;
 
@@ -406,7 +411,7 @@ int32_t list_edit_first(struct list_desc *list_desc, void *new_data)
 }
 
 /** @brief Edit the last element of the list. Refer to \ref f_edit */
-int32_t list_edit_last(struct list_desc *list_desc, void *new_data)
+int32_t no_os_list_edit_last(struct no_os_list_desc *list_desc, void *new_data)
 {
 	struct _list_desc	*list;
 
@@ -420,7 +425,8 @@ int32_t list_edit_last(struct list_desc *list_desc, void *new_data)
 }
 
 /** @brief Edit the element at the specified idx. Refer to \ref f_edit */
-int32_t list_edit_idx(struct list_desc *list_desc, void *new_data, uint32_t idx)
+int32_t no_os_list_edit_idx(struct no_os_list_desc *list_desc, void *new_data,
+			    uint32_t idx)
 {
 	struct _list_desc	*list;
 
@@ -429,15 +435,15 @@ int32_t list_edit_idx(struct list_desc *list_desc, void *new_data, uint32_t idx)
 	list = list_desc->priv_desc;
 
 	list->l_it.elem = list->first;
-	if (SUCCESS != iterator_move(&(list->l_it), idx))
+	if (0 != no_os_iterator_move(&(list->l_it), idx))
 		return FAILURE;
 
-	return iterator_edit(&(list->l_it), new_data);
+	return no_os_iterator_edit(&(list->l_it), new_data);
 }
 
 /** @brief Edit the element which match with cmp_data. Refer to \ref f_edit */
-int32_t list_edit_find(struct list_desc *list_desc, void *new_data,
-		       void *cmp_data)
+int32_t no_os_list_edit_find(struct no_os_list_desc *list_desc, void *new_data,
+			     void *cmp_data)
 {
 	struct _list_desc	*list;
 
@@ -446,14 +452,14 @@ int32_t list_edit_find(struct list_desc *list_desc, void *new_data,
 	list = list_desc->priv_desc;
 
 	list->l_it.elem = list->first;
-	if (SUCCESS != iterator_find(&(list->l_it), cmp_data))
+	if (0 != no_os_iterator_find(&(list->l_it), cmp_data))
 		return FAILURE;
 
-	return iterator_edit(&(list->l_it), new_data);
+	return no_os_iterator_edit(&(list->l_it), new_data);
 }
 
 /** @brief Read the first element of the list. Refer to \ref f_read */
-int32_t list_read_first(struct list_desc *list_desc, void **data)
+int32_t no_os_list_read_first(struct no_os_list_desc *list_desc, void **data)
 {
 	struct _list_desc	*list;
 
@@ -471,7 +477,7 @@ int32_t list_read_first(struct list_desc *list_desc, void **data)
 }
 
 /** @brief Read the last element of the list. Refer to \ref f_read */
-int32_t list_read_last(struct list_desc *list_desc, void **data)
+int32_t no_os_list_read_last(struct no_os_list_desc *list_desc, void **data)
 {
 	struct _list_desc	*list;
 
@@ -489,7 +495,8 @@ int32_t list_read_last(struct list_desc *list_desc, void **data)
 }
 
 /** @brief Read the element at the specified idx. Refer to \ref f_read */
-int32_t list_read_idx(struct list_desc *list_desc, void **data, uint32_t idx)
+int32_t no_os_list_read_idx(struct no_os_list_desc *list_desc, void **data,
+			    uint32_t idx)
 {
 	struct _list_desc	*list;
 
@@ -505,15 +512,15 @@ int32_t list_read_idx(struct list_desc *list_desc, void **data, uint32_t idx)
 		return FAILURE;
 
 	list->l_it.elem = list->first;
-	if (SUCCESS != iterator_move(&(list->l_it), idx))
+	if (0 != no_os_iterator_move(&(list->l_it), idx))
 		return FAILURE;
 
-	return iterator_read(&(list->l_it), data);
+	return no_os_iterator_read(&(list->l_it), data);
 }
 
 /** @brief Read the element which match with cmp_data. Refer to \ref f_read */
-int32_t list_read_find(struct list_desc *list_desc, void **data,
-		       void *cmp_data)
+int32_t no_os_list_read_find(struct no_os_list_desc *list_desc, void **data,
+			     void *cmp_data)
 {
 	struct _list_desc	*list;
 
@@ -527,18 +534,18 @@ int32_t list_read_find(struct list_desc *list_desc, void **data,
 
 	list = list_desc->priv_desc;
 	list->l_it.elem = list->first;
-	if (SUCCESS != iterator_find(&(list->l_it), cmp_data))
+	if (0 != no_os_iterator_find(&(list->l_it), cmp_data))
 		return FAILURE;
 
-	return iterator_read(&(list->l_it), data);
+	return no_os_iterator_read(&(list->l_it), data);
 }
 
 /** @brief Read and delete the first element of the list. Refer to \ref f_get */
-int32_t list_get_first(struct list_desc *list_desc, void **data)
+int32_t no_os_list_get_first(struct no_os_list_desc *list_desc, void **data)
 {
-	struct list_elem 	*prev;
-	struct list_elem 	*next;
-	struct list_elem 	*elem;
+	struct no_os_list_elem 	*prev;
+	struct no_os_list_elem 	*next;
+	struct no_os_list_elem 	*elem;
 	struct _list_desc	*list;
 
 	if (!list_desc || !data)
@@ -553,8 +560,8 @@ int32_t list_get_first(struct list_desc *list_desc, void **data)
 	prev = elem->prev;
 	next = elem->next;
 
-	update_links(prev, NULL, next);
-	update_desc(list, next, list->last);
+	no_os_update_links(prev, NULL, next);
+	no_os_update_desc(list, next, list->last);
 	list->nb_elements--;
 
 	*data = elem->data;
@@ -564,11 +571,11 @@ int32_t list_get_first(struct list_desc *list_desc, void **data)
 }
 
 /** @brief Read and delete the last element of the list. Refer to \ref f_get */
-int32_t list_get_last(struct list_desc *list_desc, void **data)
+int32_t no_os_list_get_last(struct no_os_list_desc *list_desc, void **data)
 {
-	struct list_elem 	*prev;
-	struct list_elem	 *next;
-	struct list_elem 	*elem;
+	struct no_os_list_elem 	*prev;
+	struct no_os_list_elem	 *next;
+	struct no_os_list_elem 	*elem;
 	struct _list_desc	*list;
 
 	if (!list_desc || !data)
@@ -583,8 +590,8 @@ int32_t list_get_last(struct list_desc *list_desc, void **data)
 	prev = elem->prev;
 	next = elem->next;
 
-	update_links(prev, NULL, next);
-	update_desc(list, list->first, prev);
+	no_os_update_links(prev, NULL, next);
+	no_os_update_desc(list, list->first, prev);
 	list->nb_elements--;
 
 	*data = elem->data;
@@ -594,7 +601,8 @@ int32_t list_get_last(struct list_desc *list_desc, void **data)
 }
 
 /** @brief Read and delete the element at idx. Refer to \ref f_get */
-int32_t list_get_idx(struct list_desc *list_desc, void **data, uint32_t idx)
+int32_t no_os_list_get_idx(struct no_os_list_desc *list_desc, void **data,
+			   uint32_t idx)
 {
 	struct _list_desc	*list;
 
@@ -604,17 +612,18 @@ int32_t list_get_idx(struct list_desc *list_desc, void **data, uint32_t idx)
 	*data = NULL;
 	list = list_desc->priv_desc;
 	list->l_it.elem = list->first;
-	if (SUCCESS != iterator_move(&(list->l_it), idx))
+	if (0 != no_os_iterator_move(&(list->l_it), idx))
 		return FAILURE;
 
-	return iterator_get(&(list->l_it), data);
+	return no_os_iterator_get(&(list->l_it), data);
 }
 
 /**
  * @brief Read and delete the element which match with cmp_data.
  * Refer to \ref f_get
  */
-int32_t list_get_find(struct list_desc *list_desc, void **data, void *cmp_data)
+int32_t no_os_list_get_find(struct no_os_list_desc *list_desc, void **data,
+			    void *cmp_data)
 {
 	struct _list_desc	*list;
 
@@ -624,10 +633,10 @@ int32_t list_get_find(struct list_desc *list_desc, void **data, void *cmp_data)
 	*data = NULL;
 	list = list_desc->priv_desc;
 	list->l_it.elem = list->first;
-	if (SUCCESS != iterator_find(&(list->l_it), cmp_data))
+	if (0 != no_os_iterator_find(&(list->l_it), cmp_data))
 		return FAILURE;
 
-	return iterator_get(&(list->l_it), data);
+	return no_os_iterator_get(&(list->l_it), data);
 }
 
 /**
@@ -640,15 +649,16 @@ int32_t list_get_find(struct list_desc *list_desc, void **data, void *cmp_data)
  *  - \ref SUCCESS : On success
  *  - \ref FAILURE : Otherwise
  */
-int32_t iterator_init(struct iterator **iter, struct list_desc *list_desc,
-		      bool start)
+int32_t no_os_iterator_init(struct no_os_iterator **iter,
+			    struct no_os_list_desc *list_desc,
+			    bool start)
 {
-	struct iterator	*it;
+	struct no_os_iterator	*it;
 
 	if (!list_desc)
 		return FAILURE;
 
-	it = (struct iterator *)calloc(1, sizeof(*it));
+	it = (struct no_os_iterator *)calloc(1, sizeof(*it));
 	if (!it)
 		return FAILURE;
 	it->list = list_desc->priv_desc;
@@ -666,9 +676,9 @@ int32_t iterator_init(struct iterator **iter, struct list_desc *list_desc,
  *  - \ref SUCCESS : On success
  *  - \ref FAILURE : Otherwise
  */
-int32_t iterator_remove(struct iterator *iter)
+int32_t no_os_iterator_remove(struct no_os_iterator *iter)
 {
-	struct iterator *it = iter;
+	struct no_os_iterator *it = iter;
 
 	if (!it)
 		return FAILURE;
@@ -691,10 +701,10 @@ int32_t iterator_remove(struct iterator *iter)
  *  - \ref SUCCESS : On success
  *  - \ref FAILURE : Otherwise
  */
-int32_t iterator_move(struct iterator *iter, int32_t steps)
+int32_t no_os_iterator_move(struct no_os_iterator *iter, int32_t steps)
 {
-	struct iterator		*it = iter;
-	struct list_elem	*elem;
+	struct no_os_iterator		*it = iter;
+	struct no_os_list_elem	*elem;
 	int32_t			dir = (steps < 0) ? -1 : 1;
 
 	if (!it)
@@ -723,9 +733,9 @@ int32_t iterator_move(struct iterator *iter, int32_t steps)
  *  - \ref SUCCESS : On success
  *  - \ref FAILURE : Otherwise
  */
-int32_t iterator_move_to_idx(struct iterator *iter, int32_t idx)
+int32_t no_os_iterator_move_to_idx(struct no_os_iterator *iter, int32_t idx)
 {
-	struct list_elem	*elem;
+	struct no_os_list_elem	*elem;
 	int32_t			dir = (idx < 0) ? -1 : 1;
 
 	if (!iter)
@@ -753,10 +763,10 @@ int32_t iterator_move_to_idx(struct iterator *iter, int32_t idx)
  *  - \ref SUCCESS : On success
  *  - \ref FAILURE : Otherwise
  */
-int32_t iterator_find(struct iterator *iter, void *cmp_data)
+int32_t no_os_iterator_find(struct no_os_iterator *iter, void *cmp_data)
 {
-	struct iterator		*it = iter;
-	struct list_elem	*elem;
+	struct no_os_iterator		*it = iter;
+	struct no_os_list_elem	*elem;
 
 	if (!it)
 		return FAILURE;
@@ -776,9 +786,9 @@ int32_t iterator_find(struct iterator *iter, void *cmp_data)
 /**
  * @brief Replace the data at the current position. Refer to \ref f_edit
  */
-int32_t iterator_edit(struct iterator *iter, void *new_data)
+int32_t no_os_iterator_edit(struct no_os_iterator *iter, void *new_data)
 {
-	struct iterator *it = iter;
+	struct no_os_iterator *it = iter;
 
 	if (!it)
 		return FAILURE;
@@ -794,20 +804,20 @@ int32_t iterator_edit(struct iterator *iter, void *new_data)
  * If the current item is the last one, the iterator will be moved to the
  * previous one.
  */
-int32_t iterator_get(struct iterator *iter, void **data)
+int32_t no_os_iterator_get(struct no_os_iterator *iter, void **data)
 {
-	struct iterator		*it = iter;
-	struct list_elem	*next;
+	struct no_os_iterator		*it = iter;
+	struct no_os_list_elem	*next;
 
 
 	if (!it || !it->elem || !data)
 		return FAILURE;
 
-	update_links(it->elem->prev, NULL, it->elem->next);
+	no_os_update_links(it->elem->prev, NULL, it->elem->next);
 	if (it->elem == it->list->first)
-		update_desc(it->list, it->elem->next, it->list->last);
+		no_os_update_desc(it->list, it->elem->next, it->list->last);
 	else if (it->elem == it->list->last)
-		update_desc(it->list, it->list->first, it->elem->prev);
+		no_os_update_desc(it->list, it->list->first, it->elem->prev);
 	it->list->nb_elements--;
 
 	*data = it->elem->data;
@@ -824,9 +834,9 @@ int32_t iterator_get(struct iterator *iter, void **data)
 /**
  * @brief Read the data at the current position. Refer to \ref f_read
  */
-int32_t iterator_read(struct iterator *iter, void **data)
+int32_t no_os_iterator_read(struct no_os_iterator *iter, void **data)
 {
-	struct iterator *it = iter;
+	struct no_os_iterator *it = iter;
 
 	if (!it || !it->elem || !data)
 		return FAILURE;
@@ -843,20 +853,21 @@ int32_t iterator_read(struct iterator *iter, void **data)
  * @param after - If true, the item will be inserted after the current position.
  * Otherwise it will be inserted before.
  */
-int32_t iterator_insert(struct iterator *iter, void *data, bool after)
+int32_t no_os_iterator_insert(struct no_os_iterator *iter, void *data,
+			      bool after)
 {
-	struct iterator		*it = iter;
-	struct list_elem	*elem;
-	struct list_desc	list_desc;
+	struct no_os_iterator		*it = iter;
+	struct no_os_list_elem	*elem;
+	struct no_os_list_desc	list_desc;
 
 	if (!it)
 		return FAILURE;
 
 	list_desc.priv_desc = iter->list;
 	if (after && it->elem == it->list->last)
-		return list_add_last(&list_desc, data);
+		return no_os_list_add_last(&list_desc, data);
 	if (!after && it->elem == it->list->first)
-		return list_add_first(&list_desc, data);
+		return no_os_list_add_first(&list_desc, data);
 
 	if (after)
 		elem = create_element(data, it->elem, it->elem->next);
@@ -865,7 +876,7 @@ int32_t iterator_insert(struct iterator *iter, void *data, bool after)
 	if (!elem)
 		return FAILURE;
 
-	update_links(elem->prev, elem, elem->next);
+	no_os_update_links(elem->prev, elem, elem->next);
 
 	it->list->nb_elements++;
 

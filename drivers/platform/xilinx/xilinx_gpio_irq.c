@@ -76,18 +76,18 @@ static void xil_gpio_irq_handler(struct xil_gpio_irq_desc *param)
 	int32_t pin_nb;
 	struct xil_callback_desc *callback_desc;
 
-	status = iterator_move_to_idx(param->it, 0);
+	status = no_os_iterator_move_to_idx(param->it, 0);
 	while(!status) {
-		iterator_read(param->it, &callback_desc);
-		status = iterator_move(param->it, 1);
+		no_os_iterator_read(param->it, &callback_desc);
+		status = no_os_iterator_move(param->it, 1);
 		if(XGpioPs_IntrGetStatusPin(&param->my_Gpio, callback_desc->pin_nb))
 			callback_desc->triggered = true;
 	}
 
-	status = iterator_move_to_idx(param->it, 0);
+	status = no_os_iterator_move_to_idx(param->it, 0);
 	while(!status) {
-		iterator_read(param->it, &callback_desc);
-		status = iterator_move(param->it, 1);
+		no_os_iterator_read(param->it, &callback_desc);
+		status = no_os_iterator_move(param->it, 1);
 		if(callback_desc->triggered == true) {
 			callback_desc->triggered = false;
 			XGpioPs_IntrDisablePin(&param->my_Gpio, callback_desc->pin_nb);
@@ -113,10 +113,10 @@ int32_t xil_gpio_irq_disable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
 
 	extra = desc->extra;
 
-	status = iterator_move_to_idx(extra->it, 0);
+	status = no_os_iterator_move_to_idx(extra->it, 0);
 	while(!status) {
-		iterator_read(extra->it, &callback_desc);
-		status = iterator_move(extra->it, 1);
+		no_os_iterator_read(extra->it, &callback_desc);
+		status = no_os_iterator_move(extra->it, 1);
 		if(callback_desc->pin_nb == irq_id) {
 			callback_desc->enabled = false;
 			break;
@@ -166,13 +166,14 @@ int32_t xil_gpio_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
 	ldesc->extra = xil_desc;
 	xil_desc->parent_desc = xil_ip->parent_desc;
 
-	status = list_init(&xil_desc->callback_list, LIST_DEFAULT, call_cmp);
+	status = no_os_list_init(&xil_desc->callback_list, NO_OS_LIST_DEFAULT,
+				 call_cmp);
 	if(status)
 		goto error_list;
 
-	status = iterator_init(&xil_desc->it, xil_desc->callback_list, 0);
+	status = no_os_iterator_init(&xil_desc->it, xil_desc->callback_list, 0);
 	if(status) {
-		iterator_remove(xil_desc->it);
+		no_os_iterator_remove(xil_desc->it);
 		goto error_list;
 	}
 
@@ -198,9 +199,9 @@ int32_t xil_gpio_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
 	return SUCCESS;
 
 error_op:
-	iterator_remove(xil_desc->it);
+	no_os_iterator_remove(xil_desc->it);
 error_list:
-	list_remove(xil_desc->callback_list);
+	no_os_list_remove(xil_desc->callback_list);
 error_desc:
 	free(xil_desc);
 	free(ldesc);
@@ -257,7 +258,7 @@ int32_t xil_gpio_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 
 	extra = desc->extra;
 	XGpioPs_SetDirectionPin(&extra->my_Gpio, irq_id, 0);
-	list_add_last(extra->callback_list, dev_callback);
+	no_os_list_add_last(extra->callback_list, dev_callback);
 
 	return SUCCESS;
 }
@@ -278,7 +279,8 @@ int32_t xil_gpio_irq_unregister(struct no_os_irq_ctrl_desc *desc,
 
 	extra = desc->extra;
 	search_callback.pin_nb = irq_id;
-	status = list_get_find(extra->callback_list, &dev_callback, &search_callback);
+	status = no_os_list_get_find(extra->callback_list, &dev_callback,
+				     &search_callback);
 	if(status)
 		return -ENXIO;
 
@@ -301,10 +303,10 @@ int32_t xil_gpio_irq_enable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
 
 	extra = desc->extra;
 
-	status = iterator_move_to_idx(extra->it, 0);
+	status = no_os_iterator_move_to_idx(extra->it, 0);
 	while(!status) {
-		iterator_read(extra->it, &callback_desc);
-		status = iterator_move(extra->it, 1);
+		no_os_iterator_read(extra->it, &callback_desc);
+		status = no_os_iterator_move(extra->it, 1);
 		if(callback_desc->pin_nb == irq_id) {
 			callback_desc->enabled = true;
 			XGpioPs_IntrClearPin(&extra->my_Gpio, irq_id);
@@ -331,11 +333,11 @@ int32_t xil_gpio_irq_ctrl_remove(struct no_os_irq_ctrl_desc *desc)
 		return -EINVAL;
 
 	extra = desc->extra;
-	while (SUCCESS == list_get_first(extra->callback_list, &callback_desc))
+	while (0 == no_os_list_get_first(extra->callback_list, &callback_desc))
 		free(callback_desc);
 
-	iterator_remove(extra->it);
-	list_remove(extra->callback_list);
+	no_os_iterator_remove(extra->it);
+	no_os_list_remove(extra->callback_list);
 	free(extra);
 	free(desc);
 

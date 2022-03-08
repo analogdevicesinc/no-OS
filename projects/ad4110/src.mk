@@ -20,7 +20,7 @@ SRCS += $(PLATFORM_DRIVERS)/xilinx_spi.c \
 	$(PLATFORM_DRIVERS)/xilinx_gpio.c \
 	$(PLATFORM_DRIVERS)/xilinx_gpio_irq.c \
 	$(PLATFORM_DRIVERS)/delay.c \
-	$(NO-OS)/util/list.c
+	$(NO-OS)/util/no_os_list.c
 
 INCS += $(DRIVERS)/afe/ad4110/ad4110.h
 
