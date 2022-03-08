@@ -9,7 +9,7 @@ SRCS += $(NO-OS)/util/util.c \
 	$(PLATFORM_DRIVERS)/rtc.c \
 	$(PLATFORM_DRIVERS)/platform_init.c \
 	$(DRIVERS)/cdc/ad7746/ad7746.c \
-	$(DRIVERS)/api/i2c.c \
+	$(DRIVERS)/api/no_os_i2c.c \
 	$(DRIVERS)/api/irq.c \
 	$(PROJECT)/src/app/headless.c
 

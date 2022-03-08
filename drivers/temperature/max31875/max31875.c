@@ -67,11 +67,11 @@ int32_t max31875_reg_read(struct max31875_dev *dev,
 
 	data[0] = reg;
 
-	ret = i2c_write(dev->i2c_desc, data, 1, 0);
+	ret = no_os_i2c_write(dev->i2c_desc, data, 1, 0);
 	if (IS_ERR_VALUE(ret))
 		return ret;
 
-	ret = i2c_read(dev->i2c_desc, data, 2, 1);
+	ret = no_os_i2c_read(dev->i2c_desc, data, 2, 1);
 	if (IS_ERR_VALUE(ret))
 		return ret;
 
@@ -101,7 +101,7 @@ int32_t max31875_reg_write(struct max31875_dev *dev,
 	data[1] = (writeval >> 8) & 0xff;
 	data[2] = writeval & 0xff;
 
-	return i2c_write(dev->i2c_desc, data, 3, 1);
+	return no_os_i2c_write(dev->i2c_desc, data, 3, 1);
 }
 
 /**
@@ -153,7 +153,7 @@ int32_t max31875_init(struct max31875_dev **device,
 	if (!dev)
 		return -ENOMEM;
 
-	ret = i2c_init(&dev->i2c_desc, &init_param->i2c_init);
+	ret = no_os_i2c_init(&dev->i2c_desc, &init_param->i2c_init);
 	if (IS_ERR_VALUE(ret))
 		goto error;
 
@@ -178,7 +178,7 @@ int32_t max31875_remove(struct max31875_dev *dev)
 	if (!dev)
 		return -EINVAL;
 
-	ret = i2c_remove(dev->i2c_desc);
+	ret = no_os_i2c_remove(dev->i2c_desc);
 	if (IS_ERR_VALUE(ret))
 		return ret;
 

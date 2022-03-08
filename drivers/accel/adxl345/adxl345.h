@@ -186,7 +186,7 @@
  */
 struct adxl345_dev {
 	/** I2C Descriptor */
-	i2c_desc	*i2c_desc;
+	no_os_i2c_desc	*i2c_desc;
 	/** SPI Descriptor */
 	spi_desc	*spi_desc;
 	/** Device Communication type: ADXL345_SPI_COMM, ADXL345_I2C_COMM */
@@ -203,7 +203,7 @@ struct adxl345_dev {
  */
 struct adxl345_init_param {
 	/** I2C Initialization structure. */
-	i2c_init_param	i2c_init;
+	no_os_i2c_init_param	i2c_init;
 	/** SPI Initialization structure. */
 	spi_init_param	spi_init;
 	/** Device Communication type: ADXL345_SPI_COMM, ADXL345_I2C_COMM */

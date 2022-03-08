@@ -82,10 +82,10 @@ int adxl355_read_device_data(struct adxl355_dev *dev, uint8_t base_address,
 		for (uint16_t idx = 0; idx < size; idx++)
 			read_data[idx] = dev->comm_buff[idx+1];
 	} else {
-		ret = i2c_write(dev->com_desc.i2c_desc, &base_address, 1, 0);
+		ret = no_os_i2c_write(dev->com_desc.i2c_desc, &base_address, 1, 0);
 		if (ret)
 			return ret;
-		ret = i2c_read(dev->com_desc.i2c_desc, read_data, size, 1);
+		ret = no_os_i2c_read(dev->com_desc.i2c_desc, read_data, size, 1);
 	}
 
 	return ret;
@@ -115,7 +115,7 @@ int adxl355_write_device_data(struct adxl355_dev *dev, uint8_t base_address,
 		ret = spi_write_and_read(dev->com_desc.spi_desc, dev->comm_buff, size + 1);
 	} else {
 		dev->comm_buff[0] = base_address;
-		ret = i2c_write(dev->com_desc.i2c_desc, dev->comm_buff, size + 1, 1);
+		ret = no_os_i2c_write(dev->com_desc.i2c_desc, dev->comm_buff, size + 1, 1);
 	}
 
 	return ret;
@@ -150,7 +150,7 @@ int adxl355_init(struct adxl355_dev **device,
 		if (ret)
 			goto error_dev;
 	} else {
-		ret = i2c_init(&dev->com_desc.i2c_desc, &init_param.comm_init.i2c_init);
+		ret = no_os_i2c_init(&dev->com_desc.i2c_desc, &init_param.comm_init.i2c_init);
 		if (ret)
 			goto error_dev;
 	}
@@ -197,7 +197,7 @@ error_com:
 	if (dev->comm_type == ADXL355_SPI_COMM)
 		spi_remove(dev->com_desc.spi_desc);
 	else
-		i2c_remove(dev->com_desc.i2c_desc);
+		no_os_i2c_remove(dev->com_desc.i2c_desc);
 	free(dev);
 	return ret;
 error_dev:
@@ -219,7 +219,7 @@ int adxl355_remove(struct adxl355_dev *dev)
 	if (dev->comm_type == ADXL355_SPI_COMM)
 		ret = spi_remove(dev->com_desc.spi_desc);
 	else
-		ret = i2c_remove(dev->com_desc.i2c_desc);
+		ret = no_os_i2c_remove(dev->com_desc.i2c_desc);
 
 	free(dev);
 

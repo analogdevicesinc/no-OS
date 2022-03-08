@@ -81,8 +81,8 @@ void I2C1_IRQHandler(void)
  * it is not used and must be set to NULL.
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
  */
-static int32_t max32660_i2c_init(struct i2c_desc **desc,
-				 const struct i2c_init_param *param)
+static int32_t max32660_i2c_init(struct no_os_i2c_desc **desc,
+				 const struct no_os_i2c_init_param *param)
 {
 	int32_t ret;
 	struct max32660_i2c_extra *max32660_i2c;
@@ -153,7 +153,7 @@ error_desc:
  * @param desc - Descriptor of the I2C device
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
  */
-static int32_t max32660_i2c_remove(struct i2c_desc *desc)
+static int32_t max32660_i2c_remove(struct no_os_i2c_desc *desc)
 {
 	struct max32660_i2c_extra *max32660_i2c = desc->extra;
 	int32_t ret;
@@ -185,7 +185,7 @@ static int32_t max32660_i2c_remove(struct i2c_desc *desc)
  *                            1 - A stop condition will be generated.
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
  */
-static int32_t max32660_i2c_write(struct i2c_desc *desc,
+static int32_t max32660_i2c_write(struct no_os_i2c_desc *desc,
 				  uint8_t *data,
 				  uint8_t bytes_number,
 				  uint8_t stop_bit)
@@ -239,7 +239,7 @@ static int32_t max32660_i2c_write(struct i2c_desc *desc,
  *                            1 - A stop condition will be generated
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
  */
-static int32_t max32660_i2c_read(struct i2c_desc *desc,
+static int32_t max32660_i2c_read(struct no_os_i2c_desc *desc,
 				 uint8_t *data,
 				 uint8_t bytes_number,
 				 uint8_t stop_bit)
@@ -283,7 +283,7 @@ static int32_t max32660_i2c_read(struct i2c_desc *desc,
 /**
  * @brief MAX32660 platform specific I2C platform ops structure
  */
-const struct i2c_platform_ops max32660_i2c_ops = {
+const struct no_os_i2c_platform_ops max32660_i2c_ops = {
 	.i2c_ops_init = &max32660_i2c_init,
 	.i2c_ops_write = &max32660_i2c_write,
 	.i2c_ops_read = &max32660_i2c_read,

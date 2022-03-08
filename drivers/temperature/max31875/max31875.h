@@ -94,7 +94,7 @@ enum max31875_i2c_addr {
  */
 struct max31875_dev {
 	/* I2C */
-	struct i2c_desc *i2c_desc;
+	struct no_os_i2c_desc *i2c_desc;
 };
 
 /**
@@ -103,7 +103,7 @@ struct max31875_dev {
  */
 struct max31875_init_param {
 	/* I2C */
-	struct i2c_init_param i2c_init;
+	struct no_os_i2c_init_param i2c_init;
 };
 
 /******************************************************************************/

@@ -118,7 +118,7 @@ int8_t ad525x_init(struct ad525x_dev **device,
 		/* CPHA = 0; CPOL = 0; */
 		status = spi_init(&dev->spi_desc, &init_param.spi_init);
 	} else {
-		status = i2c_init(&dev->i2c_desc, &init_param.i2c_init);
+		status = no_os_i2c_init(&dev->i2c_desc, &init_param.i2c_init);
 	}
 
 	status |= no_os_gpio_get(&dev->gpio_reset, &init_param.gpio_reset);
@@ -157,7 +157,7 @@ int32_t ad525x_remove(struct ad525x_dev *dev)
 	if (chip_info[dev->this_device].comm_type == SPI)
 		ret = spi_remove(dev->spi_desc);
 	else
-		ret = i2c_remove(dev->i2c_desc);
+		ret = no_os_i2c_remove(dev->i2c_desc);
 
 	if (dev->gpio_shutdown)
 		ret |= no_os_gpio_remove(dev->gpio_shutdown);
@@ -218,15 +218,15 @@ uint16_t ad525x_read_mem(struct ad525x_dev *dev,
 		data_buffer[0] |= AD525X_I2C_EE_OR_RDAC;              // set EE/RDAC_n
 		data_buffer[0] |= address & AD525X_I2C_MEM_ADDR_MASK; // set address
 		/* Dummy write to select the desired register */
-		i2c_write(dev->i2c_desc,
-			  data_buffer,
-			  1,
-			  1);
+		no_os_i2c_write(dev->i2c_desc,
+				data_buffer,
+				1,
+				1);
 		data_buffer[0] &= AD525X_CMD_NOP;
-		i2c_read(dev->i2c_desc,
-			 data_buffer,
-			 1,
-			 1);
+		no_os_i2c_read(dev->i2c_desc,
+			       data_buffer,
+			       1,
+			       1);
 		data = (uint16_t)data_buffer[0];
 		return data;
 	}
@@ -270,10 +270,10 @@ void ad525x_write_mem(struct ad525x_dev *dev,
 		data_buffer[0] |= address & AD525X_MEM_ADDR_MASK; // set address
 
 		data_buffer[1] = (data & LSB_BYTE_MASK);
-		i2c_write(dev->i2c_desc,
-			  data_buffer,
-			  2,
-			  1);
+		no_os_i2c_write(dev->i2c_desc,
+				data_buffer,
+				2,
+				1);
 	}
 }
 
@@ -326,15 +326,15 @@ uint16_t ad525x_read_rdac(struct ad525x_dev *dev,
 		data_buffer[0] &= ~AD525X_I2C_EE_OR_RDAC;         // reset EE/RDAC_n
 		data_buffer[0] |= address & AD525X_MEM_ADDR_MASK; // set address
 		/* Dummy write to select the desired register */
-		i2c_write(dev->i2c_desc,
-			  data_buffer,
-			  1,
-			  1);
+		no_os_i2c_write(dev->i2c_desc,
+				data_buffer,
+				1,
+				1);
 		data_buffer[0] &= AD525X_CMD_NOP;
-		i2c_read(dev->i2c_desc,
-			 data_buffer,
-			 1,
-			 1);
+		no_os_i2c_read(dev->i2c_desc,
+			       data_buffer,
+			       1,
+			       1);
 		data = (uint16_t)data_buffer[0];
 		return data;
 	}
@@ -378,10 +378,10 @@ void ad525x_write_rdac(struct ad525x_dev *dev,
 		data_buffer[0] |= address & AD525X_MEM_ADDR_MASK; // set address
 
 		data_buffer[1] = (data & LSB_BYTE_MASK);
-		i2c_write(dev->i2c_desc,
-			  data_buffer,
-			  2,
-			  1);
+		no_os_i2c_write(dev->i2c_desc,
+				data_buffer,
+				2,
+				1);
 	}
 	mdelay(25);
 }
@@ -444,16 +444,16 @@ void ad525x_write_command(struct ad525x_dev *dev,
 		data_buffer[0] |= (command & AD525X_CMD_MASK) << AD525X_CMD_I2C_OFFSET;
 		data_buffer[0] |= address & AD525X_RDAC_ADDR_MASK_3BIT; // set address
 
-		i2c_write(dev->i2c_desc,
-			  data_buffer,
-			  2,
-			  1);
+		no_os_i2c_write(dev->i2c_desc,
+				data_buffer,
+				2,
+				1);
 		if(command == AD525X_CMD_MEM2RDAC) {
 			data_buffer[0] &= AD525X_CMD_NOP;
-			i2c_write(dev->i2c_desc,
-				  data_buffer,
-				  1,
-				  1);
+			no_os_i2c_write(dev->i2c_desc,
+					data_buffer,
+					1,
+					1);
 		}
 	}
 	mdelay(25);

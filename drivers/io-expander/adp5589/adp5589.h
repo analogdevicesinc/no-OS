@@ -333,12 +333,12 @@
 
 struct adp5589_dev {
 	/* I2C */
-	i2c_desc	*i2c_desc;
+	no_os_i2c_desc	*i2c_desc;
 };
 
 struct adp5589_init_param {
 	/* I2C */
-	i2c_init_param	i2c_init;
+	no_os_i2c_init_param	i2c_init;
 };
 
 

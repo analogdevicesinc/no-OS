@@ -121,9 +121,9 @@ int32_t set_register_value(struct adt7420_dev *dev,
 	} else {
 		data_buffer[0] = register_address;
 
-		if (i2c_write(dev->i2c_desc,
-			      data_buffer,
-			      num_data_bytes,
+		if (no_os_i2c_write(dev->i2c_desc,
+				    data_buffer,
+				    num_data_bytes,
 			      1) != SUCCESS)
 			//no repeat start
 			return FAILURE;
@@ -161,7 +161,7 @@ int32_t adt7420_init(struct adt7420_dev **device,
 	if (adt7420_is_spi(dev))
 		status = spi_init(&dev->spi_desc, &init_param.interface_init.spi_init);
 	else
-		status = i2c_init(&dev->i2c_desc, &init_param.interface_init.i2c_init);
+		status = no_os_i2c_init(&dev->i2c_desc, &init_param.interface_init.i2c_init);
 
 	if (status != FAILURE) {
 		/* Device Settings */
@@ -210,7 +210,7 @@ int32_t adt7420_remove(struct adt7420_dev *dev)
 	int32_t ret;
 
 	if (!(adt7420_is_spi(dev)))
-		ret = i2c_remove(dev->i2c_desc);
+		ret = no_os_i2c_remove(dev->i2c_desc);
 	else
 		ret = spi_remove(dev->spi_desc);
 	free(dev);
@@ -295,9 +295,9 @@ int32_t adt7420_reset(struct adt7420_dev *dev)
 			return FAILURE;
 	} else {
 		uint8_t register_address = ADT7420_REG_RESET;
-		if (i2c_write(dev->i2c_desc,
-			      &register_address,
-			      1,
+		if (no_os_i2c_write(dev->i2c_desc,
+				    &register_address,
+				    1,
 			      1) != SUCCESS) {
 			//no repeat start
 			return FAILURE;
@@ -422,14 +422,14 @@ uint16_t adt7420_i2c_get_register_value(struct adt7420_dev *dev,
 	uint8_t data[2] = { 0, 0xFF };
 	data[0] = register_address;
 
-	i2c_write(dev->i2c_desc,
-		  &register_address,
-		  1,
-		  0); //add a repeat start
-	i2c_read(dev->i2c_desc,
-		 &register_value,
-		 1,
-		 1);
+	no_os_i2c_write(dev->i2c_desc,
+			&register_address,
+			1,
+			0); //add a repeat start
+	no_os_i2c_read(dev->i2c_desc,
+		       &register_value,
+		       1,
+		       1);
 
 	return register_value;
 }

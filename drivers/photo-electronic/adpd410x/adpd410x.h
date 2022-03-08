@@ -895,7 +895,7 @@ union phy_comm_dev {
 	/** SPI handler */
 	struct spi_desc *spi_phy_dev;
 	/** I2C handler */
-	struct i2c_desc *i2c_phy_dev;
+	struct no_os_i2c_desc *i2c_phy_dev;
 };
 
 /**
@@ -906,7 +906,7 @@ union phy_comm_init_param {
 	/** SPI initialization structure */
 	struct spi_init_param spi_phy_init;
 	/** I2C initialization structure */
-	struct i2c_init_param i2c_phy_init;
+	struct no_os_i2c_init_param i2c_phy_init;
 };
 
 /**

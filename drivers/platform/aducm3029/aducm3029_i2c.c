@@ -95,7 +95,7 @@ struct aducm_i2c_extra {
  * @param desc - Descriptor of the I2C device
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
  */
-static uint32_t set_transmission_configuration(struct i2c_desc *desc)
+static uint32_t set_transmission_configuration(struct no_os_i2c_desc *desc)
 {
 	ADI_I2C_RESULT i2c_ret;
 
@@ -127,8 +127,8 @@ static uint32_t set_transmission_configuration(struct i2c_desc *desc)
  * it is not used and must be set to NULL.
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
  */
-static int32_t aducm3029_i2c_init(struct i2c_desc **desc,
-				  const struct i2c_init_param *param)
+static int32_t aducm3029_i2c_init(struct no_os_i2c_desc **desc,
+				  const struct no_os_i2c_init_param *param)
 {
 	struct aducm_i2c_extra *aducm_i2c;
 
@@ -173,7 +173,7 @@ static int32_t aducm3029_i2c_init(struct i2c_desc **desc,
  * @param desc - Descriptor of the I2C device
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
  */
-static int32_t aducm3029_i2c_remove(struct i2c_desc *desc)
+static int32_t aducm3029_i2c_remove(struct no_os_i2c_desc *desc)
 {
 	struct aducm_i2c_extra *aducm_i2c = desc->extra;
 
@@ -204,7 +204,7 @@ static int32_t aducm3029_i2c_remove(struct i2c_desc *desc)
  *                            1 - A stop condition will be generated.
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
  */
-static int32_t aducm3029_i2c_write(struct i2c_desc *desc,
+static int32_t aducm3029_i2c_write(struct no_os_i2c_desc *desc,
 				   uint8_t *data,
 				   uint8_t bytes_number,
 				   uint8_t stop_bit)
@@ -271,7 +271,7 @@ static int32_t aducm3029_i2c_write(struct i2c_desc *desc,
  *                            1 - A stop condition will be generated
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
  */
-static int32_t aducm3029_i2c_read(struct i2c_desc *desc,
+static int32_t aducm3029_i2c_read(struct no_os_i2c_desc *desc,
 				  uint8_t *data,
 				  uint8_t bytes_number,
 				  uint8_t stop_bit)
@@ -316,7 +316,7 @@ static int32_t aducm3029_i2c_read(struct i2c_desc *desc,
 /**
  * @brief ADuCM3029 platform specific I2C platform ops structure
  */
-const struct i2c_platform_ops aducm_i2c_ops = {
+const struct no_os_i2c_platform_ops aducm_i2c_ops = {
 	.i2c_ops_init = &aducm3029_i2c_init,
 	.i2c_ops_write = &aducm3029_i2c_write,
 	.i2c_ops_read = &aducm3029_i2c_read,

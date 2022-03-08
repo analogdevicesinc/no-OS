@@ -122,7 +122,7 @@
 
 struct ad5933_dev {
 	/* I2C */
-	i2c_desc	*i2c_desc;
+	no_os_i2c_desc	*i2c_desc;
 	/* Device Settings */
 	uint32_t current_sys_clk;
 	uint8_t current_clock_source;
@@ -132,7 +132,7 @@ struct ad5933_dev {
 
 struct ad5933_init_param {
 	/* I2C */
-	i2c_init_param	i2c_init;
+	no_os_i2c_init_param	i2c_init;
 	/* Device Settings */
 	uint32_t current_sys_clk;
 	uint8_t current_clock_source;

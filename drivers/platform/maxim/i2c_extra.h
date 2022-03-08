@@ -72,6 +72,6 @@ enum max32660_i2c_speed {
 /**
  * @brief MAX32660 specific I2C platform ops structure
  */
-extern const struct i2c_platform_ops max32660_i2c_ops;
+extern const struct no_os_i2c_platform_ops max32660_i2c_ops;
 
 #endif /* I2C_EXTRA_H_ */

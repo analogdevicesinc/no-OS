@@ -172,7 +172,7 @@ struct ad525x_chip_info {
 
 struct ad525x_dev {
 	/* I2C */
-	i2c_desc	*i2c_desc;
+	no_os_i2c_desc	*i2c_desc;
 	/* SPI */
 	spi_desc	*spi_desc;
 	/* GPIO */
@@ -186,7 +186,7 @@ struct ad525x_dev {
 
 struct ad525x_init_param {
 	/* I2C */
-	i2c_init_param	i2c_init;
+	no_os_i2c_init_param	i2c_init;
 	/* SPI */
 	spi_init_param	spi_init;
 	/* GPIO */

@@ -81,7 +81,7 @@ int32_t ad5593r_write_dac(struct ad5592r_dev *dev, uint8_t chan,
 	data[1] = (value >> 8) & 0xF ;
 	data[2] = value & 0xFF;
 
-	return i2c_write(dev->i2c, data, sizeof(data), STOP_BIT);
+	return no_os_i2c_write(dev->i2c, data, sizeof(data), STOP_BIT);
 }
 
 /**
@@ -108,16 +108,16 @@ int32_t ad5593r_read_adc(struct ad5592r_dev *dev, uint8_t chan,
 	data[1] = temp >> 8;
 	data[2] = temp & 0xFF;
 
-	ret = i2c_write(dev->i2c, data, sizeof(data), STOP_BIT);
+	ret = no_os_i2c_write(dev->i2c, data, sizeof(data), STOP_BIT);
 	if (ret < 0)
 		return ret;
 
 	data[0] = AD5593R_MODE_ADC_READBACK;
-	ret = i2c_write(dev->i2c, data, 1, STOP_BIT);
+	ret = no_os_i2c_write(dev->i2c, data, 1, STOP_BIT);
 	if (ret < 0)
 		return ret;
 
-	ret = i2c_read(dev->i2c, data, 2, STOP_BIT);
+	ret = no_os_i2c_read(dev->i2c, data, 2, STOP_BIT);
 	if (ret < 0)
 		return ret;
 
@@ -150,16 +150,16 @@ int32_t ad5593r_multi_read_adc(struct ad5592r_dev *dev, uint16_t chans,
 	data[1] = chans >> 8;
 	data[2] = chans & 0xFF;
 
-	ret = i2c_write(dev->i2c, data, 3, STOP_BIT);
+	ret = no_os_i2c_write(dev->i2c, data, 3, STOP_BIT);
 	if (ret < 0)
 		return ret;
 
 	data[0] = AD5593R_MODE_ADC_READBACK;
-	ret = i2c_write(dev->i2c, data, 1, RESTART_BIT);
+	ret = no_os_i2c_write(dev->i2c, data, 1, RESTART_BIT);
 	if (ret < 0)
 		return ret;
 
-	ret = i2c_read(dev->i2c, data, (2 * samples), STOP_BIT);
+	ret = no_os_i2c_read(dev->i2c, data, (2 * samples), STOP_BIT);
 	if (ret < 0)
 		return ret;
 
@@ -191,7 +191,7 @@ int32_t ad5593r_reg_write(struct ad5592r_dev *dev, uint8_t reg,
 	data[1] = value >> 8;
 	data[2] = value;
 
-	ret = i2c_write(dev->i2c, data,sizeof(data), STOP_BIT);
+	ret = no_os_i2c_write(dev->i2c, data,sizeof(data), STOP_BIT);
 
 	if (reg == AD5592R_REG_RESET && ret < 0) {
 		return SUCCESS;
@@ -219,11 +219,11 @@ int32_t ad5593r_reg_read(struct ad5592r_dev *dev, uint8_t reg,
 
 	data[0] = AD5593R_MODE_REG_READBACK | reg;
 
-	ret = i2c_write(dev->i2c, data, 1, STOP_BIT);
+	ret = no_os_i2c_write(dev->i2c, data, 1, STOP_BIT);
 	if (ret < 0)
 		return ret;
 
-	ret = i2c_read(dev->i2c, data, sizeof(data), STOP_BIT);
+	ret = no_os_i2c_read(dev->i2c, data, sizeof(data), STOP_BIT);
 	if (ret < 0)
 		return ret;
 
@@ -248,11 +248,11 @@ int32_t ad5593r_gpio_read(struct ad5592r_dev *dev, uint8_t *value)
 		return FAILURE;
 
 	data[0] = AD5593R_MODE_GPIO_READBACK;
-	ret = i2c_write(dev->i2c, data, 1, STOP_BIT);
+	ret = no_os_i2c_write(dev->i2c, data, 1, STOP_BIT);
 	if (ret < 0)
 		return ret;
 
-	ret = i2c_read(dev->i2c, data, sizeof(data), STOP_BIT);
+	ret = no_os_i2c_read(dev->i2c, data, sizeof(data), STOP_BIT);
 	if (ret < 0)
 		return ret;
 

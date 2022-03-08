@@ -103,7 +103,7 @@ int8_t ad5629r_init(struct ad5629r_dev **device,
 	if (chip_info[dev->act_device].communication == com_spi) {
 		status = spi_init(&dev->spi_desc, &init_param.spi_init);
 	} else {
-		status = i2c_init(&dev->i2c_desc, &init_param.i2c_init);
+		status = no_os_i2c_init(&dev->i2c_desc, &init_param.i2c_init);
 	}
 
 	status |= no_os_gpio_get(&dev->gpio_ldac, &init_param.gpio_ldac);
@@ -133,7 +133,7 @@ int32_t ad5629r_remove(struct ad5629r_dev *dev)
 	if (chip_info[dev->act_device].communication == com_spi)
 		ret = spi_remove(dev->spi_desc);
 	else
-		ret = i2c_remove(dev->i2c_desc);
+		ret = no_os_i2c_remove(dev->i2c_desc);
 
 	if (dev->gpio_ldac)
 		ret |= no_os_gpio_remove(dev->gpio_ldac);
@@ -180,10 +180,10 @@ void ad5629r_set_ctrl(struct ad5629r_dev *dev,
 			data_buff[1] = (data & 0xFF00) >> 8;
 			data_buff[2] = (data & 0x00FF) >> 0;
 
-			i2c_write(dev->i2c_desc,
-				  data_buff,
-				  3,
-				  1);
+			no_os_i2c_write(dev->i2c_desc,
+					data_buff,
+					3,
+					1);
 		}
 	}
 }
@@ -224,10 +224,10 @@ void ad5629r_set_input_reg(struct ad5629r_dev *dev,
 		data_buff[1] = (dac_value & 0xFF00) >> 8;
 		data_buff[2] = (dac_value & 0x00FF) >> 0;
 
-		i2c_write(dev->i2c_desc,
-			  data_buff,
-			  3,
-			  1);
+		no_os_i2c_write(dev->i2c_desc,
+				data_buff,
+				3,
+				1);
 	}
 }
 

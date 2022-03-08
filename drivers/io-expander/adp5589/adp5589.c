@@ -64,7 +64,7 @@ void adp5589_set_register_value(struct adp5589_dev *dev,
 
 	write_data[0] = register_address;
 	write_data[1] = register_value;
-	i2c_write(dev->i2c_desc, write_data, 2, 1);
+	no_os_i2c_write(dev->i2c_desc, write_data, 2, 1);
 }
 
 /***************************************************************************//**
@@ -82,8 +82,8 @@ uint8_t adp5589_get_register_value(struct adp5589_dev *dev,
 	static uint8_t register_value = 0;
 
 	read_data[0] = register_address;
-	i2c_write(dev->i2c_desc, read_data, 1, 0);
-	i2c_read(dev->i2c_desc, read_data, 1, 1);
+	no_os_i2c_write(dev->i2c_desc, read_data, 1, 0);
+	no_os_i2c_read(dev->i2c_desc, read_data, 1, 1);
 	register_value = read_data[0];
 
 	return register_value;
@@ -113,7 +113,7 @@ int8_t adp5589_init(struct adp5589_dev **device,
 	if (!dev)
 		return -1;
 
-	status = i2c_init(&dev->i2c_desc, &init_param.i2c_init);
+	status = no_os_i2c_init(&dev->i2c_desc, &init_param.i2c_init);
 	if((adp5589_get_register_value(dev,ADP5589_ADR_ID) & ADP5589_ID_MAN_ID) !=
 	    ADP5589_ID) {
 		status = -1;
@@ -140,7 +140,7 @@ int32_t adp5589_remove(struct adp5589_dev *dev)
 {
 	int32_t ret;
 
-	ret = i2c_remove(dev->i2c_desc);
+	ret = no_os_i2c_remove(dev->i2c_desc);
 
 	free(dev);
 

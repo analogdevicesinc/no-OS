@@ -69,7 +69,7 @@ int8_t ad799x_init(struct ad799x_dev **device,
 		return -1;
 
 	/* Initialize I2C peripheral. */
-	status = i2c_init(&dev->i2c_desc, &init_param.i2c_init);
+	status = no_os_i2c_init(&dev->i2c_desc, &init_param.i2c_init);
 
 	/* Determine the number of bits available for a conversion. */
 	switch(init_param.part_number) {
@@ -100,7 +100,7 @@ int32_t ad799x_remove(struct ad799x_dev *dev)
 {
 	int32_t ret;
 
-	ret = i2c_remove(dev->i2c_desc);
+	ret = no_os_i2c_remove(dev->i2c_desc);
 
 	free(dev);
 
@@ -118,7 +118,7 @@ int32_t ad799x_remove(struct ad799x_dev *dev)
 void ad799x_set_configuration_reg(struct ad799x_dev *dev,
 				  uint8_t register_value)
 {
-	i2c_write(dev->i2c_desc, &register_value, 1, 1);
+	no_os_i2c_write(dev->i2c_desc, &register_value, 1, 1);
 }
 
 /***************************************************************************//**
@@ -137,7 +137,7 @@ void ad799x_get_conversion_result(struct ad799x_dev *dev,
 	uint8_t rx_data[2] = {0, 0};
 	int16_t conv_word = 0;
 
-	i2c_read(dev->i2c_desc, rx_data, 2, 1);
+	no_os_i2c_read(dev->i2c_desc, rx_data, 2, 1);
 	conv_word = (rx_data[0] << 8) + rx_data[1];
 	*channel = (conv_word & 0x3000) >> 12;
 	*conv_value = (conv_word & 0x0FFF) >> (12 - dev->bits_number);

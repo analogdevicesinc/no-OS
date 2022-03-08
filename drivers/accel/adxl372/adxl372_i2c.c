@@ -59,11 +59,11 @@ int32_t adxl372_i2c_reg_read(struct adxl372_dev *dev,
 
 	data = reg_addr;
 
-	ret = i2c_write(dev->i2c_desc, &data, 1, 0);
+	ret = no_os_i2c_write(dev->i2c_desc, &data, 1, 0);
 	if (ret < 0)
 		return ret;
 
-	ret = i2c_read(dev->i2c_desc, &data, 1, 0);
+	ret = no_os_i2c_read(dev->i2c_desc, &data, 1, 0);
 	if (ret < 0)
 		return ret;
 
@@ -88,7 +88,7 @@ int32_t adxl372_i2c_reg_write(struct adxl372_dev *dev,
 	buf[0] = reg_addr;
 	buf[1] = reg_data & 0xFF;
 
-	return i2c_write(dev->i2c_desc, buf, ARRAY_SIZE(buf), 0);
+	return no_os_i2c_write(dev->i2c_desc, buf, ARRAY_SIZE(buf), 0);
 }
 
 /**
@@ -114,11 +114,11 @@ int32_t adxl372_i2c_reg_read_multiple(struct adxl372_dev *dev,
 	buf[0] = reg_addr;
 	memset(&buf[1], 0x00, count - 1);
 
-	ret = i2c_write(dev->i2c_desc, buf, 1, 0);
+	ret = no_os_i2c_write(dev->i2c_desc, buf, 1, 0);
 	if (ret < 0)
 		return ret;
 
-	ret = i2c_read(dev->i2c_desc, buf, count, 0);
+	ret = no_os_i2c_read(dev->i2c_desc, buf, count, 0);
 	if (ret < 0)
 		return ret;
 

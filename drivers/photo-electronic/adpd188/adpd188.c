@@ -79,8 +79,8 @@ int32_t adpd188_init(struct adpd188_dev **device,
 		ret = spi_init((struct spi_desc **)&dev->phy_desc,
 			       (const struct spi_init_param *)&init_param->phy_init);
 	else if(dev->phy_opt == ADPD188_I2C)
-		ret = i2c_init((struct i2c_desc **)&dev->phy_desc,
-			       (const struct i2c_init_param *)&init_param->phy_init);
+		ret = no_os_i2c_init((struct no_os_i2c_desc **)&dev->phy_desc,
+				     (const struct no_os_i2c_init_param *)&init_param->phy_init);
 	else
 		ret = FAILURE;
 	if(ret != SUCCESS)
@@ -125,7 +125,7 @@ error_phy:
 	if(dev->phy_opt == ADPD188_SPI)
 		spi_remove(dev->phy_desc);
 	else if(dev->phy_opt == ADPD188_I2C)
-		i2c_remove(dev->phy_desc);
+		no_os_i2c_remove(dev->phy_desc);
 error_dev:
 	free(dev);
 
@@ -144,7 +144,7 @@ int32_t adpd188_remove(struct adpd188_dev *dev)
 	if(dev->phy_opt == ADPD188_SPI)
 		ret = spi_remove(dev->phy_desc);
 	else if(dev->phy_opt == ADPD188_I2C)
-		ret = i2c_remove(dev->phy_desc);
+		ret = no_os_i2c_remove(dev->phy_desc);
 	else
 		ret = FAILURE;
 	if(ret != SUCCESS)
@@ -179,7 +179,7 @@ int32_t adpd188_reg_read(struct adpd188_dev *dev, uint8_t reg_addr,
 		buff[0] = (reg_addr << 1) & 0xFE;
 		ret = spi_write_and_read(dev->phy_desc, buff, 3);
 	} else if(dev->phy_opt == ADPD188_I2C) {
-		ret = i2c_write(dev->phy_desc, &reg_addr, 1, 0);
+		ret = no_os_i2c_write(dev->phy_desc, &reg_addr, 1, 0);
 		if(ret != SUCCESS)
 			return FAILURE;
 		/**
@@ -187,7 +187,7 @@ int32_t adpd188_reg_read(struct adpd188_dev *dev, uint8_t reg_addr,
 		 *  have the value in the same spaces as in the SPI case. This way the
 		 *  register value can be compiled only once outside the if clause.
 		 */
-		ret = i2c_read(dev->phy_desc, (buff + 1), 2, 1);
+		ret = no_os_i2c_read(dev->phy_desc, (buff + 1), 2, 1);
 	} else {
 		ret = FAILURE;
 	}
@@ -221,7 +221,7 @@ int32_t adpd188_reg_write(struct adpd188_dev *dev, uint8_t reg_addr,
 		ret = spi_write_and_read(dev->phy_desc, buff, 3);
 	} else if(dev->phy_opt == ADPD188_I2C) {
 		buff[0] = reg_addr;
-		ret = i2c_write(dev->phy_desc, buff, 3, 1);
+		ret = no_os_i2c_write(dev->phy_desc, buff, 3, 1);
 	} else {
 		ret = FAILURE;
 	}
