@@ -533,6 +533,11 @@ int32_t iio_parse_value(char *buf, enum iio_val fmt, int32_t *val,
 			return ret;
 		_fract *= 100000000;
 		break;
+	case IIO_VAL_FRACTIONAL:
+		ret = __iio_str_parse(buf, &integer, &_fract, false);
+		if (ret < 0)
+			return ret;
+		break;
 	case IIO_VAL_CHAR:
 		if (sscanf(buf, "%c", &ch) != 1)
 			return -EINVAL;
