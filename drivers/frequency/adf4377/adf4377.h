@@ -259,8 +259,8 @@
 
 /* ADF4377 REG0019 Bit Definition */
 #define ADF4377_CLKOUT_320MV            0x0
-#define ADF4377_CLKOUT_427MV            0x1
-#define ADF4377_CLKOUT_533MV            0x2
+#define ADF4377_CLKOUT_420MV            0x1
+#define ADF4377_CLKOUT_530MV            0x2
 #define ADF4377_CLKOUT_640MV            0x3
 
 #define ADF4377_PD_CLK_N_OP             0x0

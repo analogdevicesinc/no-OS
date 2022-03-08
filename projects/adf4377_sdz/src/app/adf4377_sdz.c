@@ -112,7 +112,7 @@ int main(void)
 		.muxout_select = ADF4377_MUXOUT_HIGH_Z,
 		.ref_doubler_en = ADF4377_REF_DBLR_DIS,
 		.f_clk = 1000000000,
-		.clkout_op = ADF4377_CLKOUT_427MV
+		.clkout_op = ADF4377_CLKOUT_420MV
 	};
 
 	ret = adf4377_init(&dev, &adf4377_param);
