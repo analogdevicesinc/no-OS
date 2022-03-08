@@ -10,7 +10,7 @@ SRCS += $(NO-OS)/util/util.c \
 	$(DRIVERS)/cdc/ad7746/ad7746.c \
 	$(DRIVERS)/cdc/ad7746/iio_ad7746.c \
 	$(DRIVERS)/api/irq.c \
-	$(DRIVERS)/api/i2c.c \
+	$(DRIVERS)/api/no_os_i2c.c \
 	$(PROJECT)/src/app/headless.c
 
 INCS +=	$(INCLUDE)/no_os_uart.h \

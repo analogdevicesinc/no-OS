@@ -69,11 +69,11 @@ int32_t ad7091r5_i2c_reg_read(struct ad7091r5_dev *dev,
 	if (!dev || !reg_data)
 		return -EINVAL;
 
-	ret = i2c_write(dev->i2c_desc, &reg_addr, 1, 1);
+	ret = no_os_i2c_write(dev->i2c_desc, &reg_addr, 1, 1);
 	if (ret < 0)
 		return ret;
 
-	ret = i2c_read(dev->i2c_desc, buf, 2, 1);
+	ret = no_os_i2c_read(dev->i2c_desc, buf, 2, 1);
 	if (ret < 0)
 		return ret;
 
@@ -102,7 +102,7 @@ int32_t ad7091r5_i2c_reg_write(struct ad7091r5_dev *dev,
 	buf[1] = (reg_data & 0xFF00) >> 8;
 	buf[2] = reg_data & 0xFF;
 
-	return i2c_write(dev->i2c_desc, buf, ARRAY_SIZE(buf), 1);
+	return no_os_i2c_write(dev->i2c_desc, buf, ARRAY_SIZE(buf), 1);
 }
 
 /**
@@ -547,7 +547,7 @@ int32_t ad7091r5_init(struct ad7091r5_dev **device,
 	if (ret < 0)
 		goto error_dev;
 
-	ret = i2c_init(&dev->i2c_desc, init_param->i2c_init);
+	ret = no_os_i2c_init(&dev->i2c_desc, init_param->i2c_init);
 	if (ret < 0)
 		goto error_gpio;
 
@@ -561,7 +561,7 @@ int32_t ad7091r5_init(struct ad7091r5_dev **device,
 	return SUCCESS;
 
 error_i2c:
-	i2c_remove(dev->i2c_desc);
+	no_os_i2c_remove(dev->i2c_desc);
 error_gpio:
 	no_os_gpio_remove(dev->gpio_resetn);
 error_dev:
@@ -582,7 +582,7 @@ int32_t ad7091r5_remove(struct ad7091r5_dev *dev)
 	if (!dev)
 		return -EINVAL;
 
-	ret = i2c_remove(dev->i2c_desc);
+	ret = no_os_i2c_remove(dev->i2c_desc);
 	if (ret < 0)
 		return ret;
 

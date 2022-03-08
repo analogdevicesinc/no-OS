@@ -66,7 +66,7 @@ int32_t main(void)
 	if (ret < 0)
 		goto error;
 
-	adcip.i2c_init = (struct i2c_init_param) {
+	adcip.i2c_init = (struct no_os_i2c_init_param) {
 		.max_speed_hz = I2C_SPEED,
 		.slave_address = AD7746_ADDRESS,
 		.platform_ops = &aducm_i2c_ops

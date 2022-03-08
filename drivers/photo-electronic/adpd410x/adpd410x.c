@@ -115,12 +115,12 @@ int32_t adpd410x_reg_read_bytes(struct adpd410x_dev *dev, uint16_t address,
 		buff[1] = address & ADPD410X_LOWER_BYTE_I2C_MASK;
 
 		/* No stop bit */
-		ret = i2c_write(dev->dev_ops.i2c_phy_dev, buff, 2, 0);
+		ret = no_os_i2c_write(dev->dev_ops.i2c_phy_dev, buff, 2, 0);
 		if(ret != SUCCESS) {
 			free(buff);
 			return ret;
 		}
-		ret = i2c_read(dev->dev_ops.i2c_phy_dev, data, (uint8_t) num_bytes, 1);
+		ret = no_os_i2c_read(dev->dev_ops.i2c_phy_dev, data, (uint8_t) num_bytes, 1);
 		if(ret != SUCCESS) {
 			free(buff);
 			return ret;
@@ -160,7 +160,7 @@ int32_t adpd410x_reg_write(struct adpd410x_dev *dev, uint16_t address,
 		buff[2] = field_get(0xff00, data);
 		buff[3] = data & 0xff;
 
-		return i2c_write(dev->dev_ops.i2c_phy_dev, buff, 4, 1);
+		return no_os_i2c_write(dev->dev_ops.i2c_phy_dev, buff, 4, 1);
 	default:
 		return -EINVAL;
 	}
@@ -676,8 +676,8 @@ int32_t adpd410x_setup(struct adpd410x_dev **device,
 		ret = spi_init(&dev->dev_ops.spi_phy_dev,
 			       &init_param->dev_ops_init.spi_phy_init);
 	else
-		ret = i2c_init(&dev->dev_ops.i2c_phy_dev,
-			       &init_param->dev_ops_init.i2c_phy_init);
+		ret = no_os_i2c_init(&dev->dev_ops.i2c_phy_dev,
+				     &init_param->dev_ops_init.i2c_phy_init);
 	if(ret != SUCCESS)
 		goto error_dev;
 
@@ -757,7 +757,7 @@ error_phy:
 	if(dev->dev_type == ADPD4100)
 		spi_remove(dev->dev_ops.spi_phy_dev);
 	else
-		i2c_remove(dev->dev_ops.i2c_phy_dev);
+		no_os_i2c_remove(dev->dev_ops.i2c_phy_dev);
 error_dev:
 	free(dev);
 
@@ -779,7 +779,7 @@ int32_t adpd410x_remove(struct adpd410x_dev *dev)
 	if(dev->dev_type == ADPD4100)
 		ret = spi_remove(dev->dev_ops.spi_phy_dev);
 	else
-		ret = i2c_remove(dev->dev_ops.i2c_phy_dev);
+		ret = no_os_i2c_remove(dev->dev_ops.i2c_phy_dev);
 	if(ret != SUCCESS)
 		return ret;
 

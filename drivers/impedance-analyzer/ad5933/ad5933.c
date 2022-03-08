@@ -82,7 +82,7 @@ int32_t ad5933_init(struct ad5933_dev **device,
 	dev->current_gain = init_param.current_gain;
 	dev->current_range = init_param.current_range;
 
-	status = i2c_init(&dev->i2c_desc, &init_param.i2c_init);
+	status = no_os_i2c_init(&dev->i2c_desc, &init_param.i2c_init);
 
 	*device = dev;
 
@@ -100,7 +100,7 @@ int32_t ad5933_remove(struct ad5933_dev *dev)
 {
 	int32_t status;
 
-	status = i2c_remove(dev->i2c_desc);
+	status = no_os_i2c_remove(dev->i2c_desc);
 
 	free(dev);
 
@@ -128,7 +128,7 @@ void ad5933_set_register_value(struct ad5933_dev *dev,
 	for(byte = 0; byte < bytes_number; byte++) {
 		write_data[0] = register_address + bytes_number - byte - 1;
 		write_data[1] = (uint8_t)((register_value >> (byte * 8)) & 0xFF);
-		i2c_write(dev->i2c_desc, write_data, 2, 1);
+		no_os_i2c_write(dev->i2c_desc, write_data, 2, 1);
 	}
 }
 
@@ -154,10 +154,10 @@ uint32_t ad5933_get_register_value(struct ad5933_dev *dev,
 		/* Set the register pointer. */
 		write_data[0] = AD5933_ADDR_POINTER;
 		write_data[1] = register_address + byte;
-		i2c_write(dev->i2c_desc, write_data, 2, 1);
+		no_os_i2c_write(dev->i2c_desc, write_data, 2, 1);
 		/* Read Register Data. */
 		read_data[0] = 0xFF;
-		i2c_read(dev->i2c_desc, read_data, 1, 1);
+		no_os_i2c_read(dev->i2c_desc, read_data, 1, 1);
 		register_value = register_value << 8;
 		register_value += read_data[0];
 	}

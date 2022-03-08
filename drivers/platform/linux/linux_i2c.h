@@ -52,6 +52,6 @@ struct linux_i2c_init_param {
 /**
  * @brief Linux specific I2C platform ops structure
  */
-extern const struct i2c_platform_ops linux_i2c_ops;
+extern const struct no_os_i2c_platform_ops linux_i2c_ops;
 
 #endif // LINUX_I2C_H_

@@ -155,7 +155,7 @@
 
 struct ad7156_dev {
 	/* I2C */
-	i2c_desc	*i2c_desc;
+	no_os_i2c_desc	*i2c_desc;
 	/* Device Settings */
 	float ad7156_channel1_range;
 	float ad7156_channel2_range;
@@ -163,7 +163,7 @@ struct ad7156_dev {
 
 struct ad7156_init_param {
 	/* I2C */
-	i2c_init_param	i2c_init;
+	no_os_i2c_init_param	i2c_init;
 	/* Device Settings */
 	float ad7156_channel1_range;
 	float ad7156_channel2_range;

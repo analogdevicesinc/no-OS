@@ -82,7 +82,7 @@ struct mbed_i2c_desc {
 /**
  * @brief Mbed specific I2C platform ops structure
  */
-extern const struct i2c_platform_ops mbed_i2c_ops;
+extern const struct no_os_i2c_platform_ops mbed_i2c_ops;
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/

@@ -65,7 +65,7 @@ int32_t ad7746_init(struct ad7746_dev **device,
 	if (!dev)
 		return -ENOMEM;
 
-	ret = i2c_init(&dev->i2c_dev, &init_param->i2c_init);
+	ret = no_os_i2c_init(&dev->i2c_dev, &init_param->i2c_init);
 	if (ret < 0)
 		goto error_1;
 
@@ -98,7 +98,7 @@ int32_t ad7746_init(struct ad7746_dev **device,
 
 	return SUCCESS;
 error_2:
-	i2c_remove(dev->i2c_dev);
+	no_os_i2c_remove(dev->i2c_dev);
 error_1:
 	free(dev);
 	return ret;
@@ -126,7 +126,7 @@ int32_t ad7746_reg_write(struct ad7746_dev *dev, uint8_t reg,
 	dev->buf[0] = reg;
 	memcpy(&dev->buf[1], data, bytes_number);
 
-	return i2c_write(dev->i2c_dev, dev->buf, bytes_number + 1, 1);
+	return no_os_i2c_write(dev->i2c_dev, dev->buf, bytes_number + 1, 1);
 }
 
 /***************************************************************************//**
@@ -152,11 +152,11 @@ int32_t ad7746_reg_read(struct ad7746_dev *dev,
 	if (!data || bytes_number > AD7746_NUM_REGISTERS || reg >= AD7746_NUM_REGISTERS)
 		return -EINVAL;
 
-	ret = i2c_write(dev->i2c_dev, &reg, 1, 0);
+	ret = no_os_i2c_write(dev->i2c_dev, &reg, 1, 0);
 	if (ret < 0)
 		return ret;
 
-	return i2c_read(dev->i2c_dev, data, bytes_number, 1);
+	return no_os_i2c_read(dev->i2c_dev, data, bytes_number, 1);
 }
 
 /***************************************************************************//**
@@ -174,7 +174,7 @@ int32_t ad7746_reset(struct ad7746_dev *dev)
 	if (!dev)
 		return -EINVAL;
 
-	return i2c_write(dev->i2c_dev, &cmd, 1, 1);
+	return no_os_i2c_write(dev->i2c_dev, &cmd, 1, 1);
 }
 
 /***************************************************************************//**
@@ -188,7 +188,7 @@ int32_t ad7746_remove(struct ad7746_dev *dev)
 	if (!dev)
 		return SUCCESS;
 
-	i2c_remove(dev->i2c_dev);
+	no_os_i2c_remove(dev->i2c_dev);
 	dev->i2c_dev = NULL;
 	free(dev);
 

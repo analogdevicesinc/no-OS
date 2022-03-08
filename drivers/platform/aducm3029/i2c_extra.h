@@ -47,6 +47,6 @@
 /**
  * @brief ADuCM3029 specific IRQ platform ops structure
  */
-extern const struct i2c_platform_ops aducm_i2c_ops;
+extern const struct no_os_i2c_platform_ops aducm_i2c_ops;
 
 #endif // I2C_EXTRA_H_

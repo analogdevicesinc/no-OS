@@ -18,7 +18,7 @@ SRCS += $(PROJECT)/src/main.c \
 	$(PROJECT)/src/wrapper.c
 SRCS += $(DRIVERS)/axi_core/axi_dmac/axi_dmac.c \
 	$(DRIVERS)/axi_core/clk_axi_clkgen/clk_axi_clkgen.c \
-	$(DRIVERS)/api/i2c.c \
+	$(DRIVERS)/api/no_os_i2c.c \
 	$(DRIVERS)/api/no_os_gpio.c \
 	$(DRIVERS)/api/spi.c \
 	$(NO-OS)/util/util.c \

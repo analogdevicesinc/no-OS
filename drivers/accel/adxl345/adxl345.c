@@ -69,14 +69,14 @@ uint8_t adxl345_get_register_value(struct adxl345_dev *dev,
 				   2);
 		register_value = data_buffer[1];
 	} else {
-		i2c_write(dev->i2c_desc,
-			  &register_address, // Transmission data.
-			  1,                 // Number of bytes to write.
-			  0);                // Stop condition control.
-		i2c_read(dev->i2c_desc,
-			 &register_value,    // Received data.
-			 1,                  // Number of bytes to read.
-			 1);                 // Stop condition control.
+		no_os_i2c_write(dev->i2c_desc,
+				&register_address, // Transmission data.
+				1,                 // Number of bytes to write.
+				0);                // Stop condition control.
+		no_os_i2c_read(dev->i2c_desc,
+			       &register_value,    // Received data.
+			       1,                  // Number of bytes to read.
+			       1);                 // Stop condition control.
 	}
 
 	return register_value;
@@ -106,10 +106,10 @@ void adxl345_set_register_value(struct adxl345_dev *dev,
 	} else {
 		data_buffer[0] = register_address;
 		data_buffer[1] = register_value;
-		i2c_write(dev->i2c_desc,
-			  data_buffer,        // Received data.
-			  2,                  // Number of bytes to read.
-			  1);                 // Stop condition control.
+		no_os_i2c_write(dev->i2c_desc,
+				data_buffer,        // Received data.
+				2,                  // Number of bytes to read.
+				1);                 // Stop condition control.
 	}
 }
 
@@ -142,7 +142,7 @@ int32_t adxl345_init(struct adxl345_dev **device,
 	if (dev->communication_type == ADXL345_SPI_COMM)
 		status = spi_init(&dev->spi_desc, &init_param.spi_init);
 	else
-		status = i2c_init(&dev->i2c_desc, &init_param.i2c_init);
+		status = no_os_i2c_init(&dev->i2c_desc, &init_param.i2c_init);
 
 	if (adxl345_get_register_value(dev, ADXL345_DEVID) != ADXL345_ID)
 		status = -1;
@@ -169,7 +169,7 @@ int32_t adxl345_remove(struct adxl345_dev *dev)
 	if (dev->communication_type == ADXL345_SPI_COMM)
 		ret = spi_remove(dev->spi_desc);
 	else
-		ret = i2c_remove(dev->i2c_desc);
+		ret = no_os_i2c_remove(dev->i2c_desc);
 
 	free(dev);
 
@@ -233,14 +233,14 @@ void adxl345_get_xyz(struct adxl345_dev *dev,
 		/* z = ((ADXL345_DATAZ1) << 8) + ADXL345_DATAZ0 */
 		*z = ((int16_t)read_buffer[6] << 8) + read_buffer[5];
 	} else {
-		i2c_write(dev->i2c_desc,
-			  &first_reg_address, // Transmission data.
-			  1,                  // Number of bytes to write.
-			  0);                 // Stop condition control.
-		i2c_read(dev->i2c_desc,
-			 read_buffer,         // Received data.
-			 6,                   // Number of bytes to read.
-			 1);                  // Stop condition control.
+		no_os_i2c_write(dev->i2c_desc,
+				&first_reg_address, // Transmission data.
+				1,                  // Number of bytes to write.
+				0);                 // Stop condition control.
+		no_os_i2c_read(dev->i2c_desc,
+			       read_buffer,         // Received data.
+			       6,                   // Number of bytes to read.
+			       1);                  // Stop condition control.
 		/* x = ((ADXL345_DATAX1) << 8) + ADXL345_DATAX0 */
 		*x = ((int16_t)read_buffer[1] << 8) + read_buffer[0];
 		/* y = ((ADXL345_DATAY1) << 8) + ADXL345_DATAY0 */

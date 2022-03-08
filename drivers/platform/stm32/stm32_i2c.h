@@ -55,6 +55,6 @@ struct stm32_i2c_desc {
 /**
  * @brief stm32 specific I2C platform ops structure
  */
-extern const struct i2c_platform_ops stm32_i2c_ops;
+extern const struct no_os_i2c_platform_ops stm32_i2c_ops;
 
 #endif // STM32_I2C_H_

@@ -62,18 +62,18 @@ extern "C"
  * @param param[in] - The structure that contains the I2C parameters.
  * @return SUCCESS in case of success, negative error code otherwise.
  */
-int32_t mbed_i2c_init(struct i2c_desc **desc,
-		      const struct i2c_init_param *param)
+int32_t mbed_i2c_init(struct no_os_i2c_desc **desc,
+		      const struct no_os_i2c_init_param *param)
 {
 	mbed::I2C *i2c;		// pointer to new I2C instance
 	struct mbed_i2c_desc *mbed_i2c_desc;	// pointer to mbed i2c desc
-	struct i2c_desc *i2c_desc;
+	struct no_os_i2c_desc *i2c_desc;
 
 	if (!desc || !param)
 		return -EINVAL;
 
 	/* Create an i2c descriptor object for the device */
-	i2c_desc = (struct i2c_desc *)calloc(1, sizeof(*i2c_desc));
+	i2c_desc = (struct no_os_i2c_desc *)calloc(1, sizeof(*i2c_desc));
 	if (!i2c_desc)
 		return -ENOMEM;
 
@@ -114,7 +114,7 @@ err_i2c:
  * @param desc[in] - The I2C descriptor.
  * @return SUCCESS in case of success, negative error code otherwise.
  */
-int32_t mbed_i2c_remove(struct i2c_desc *desc)
+int32_t mbed_i2c_remove(struct no_os_i2c_desc *desc)
 {
 	if (!desc || !desc->extra)
 		return -EINVAL;
@@ -140,7 +140,7 @@ int32_t mbed_i2c_remove(struct i2c_desc *desc)
  *                            1 - A stop condition will be generated.
  * @return SUCCESS in case of success, negative error code otherwise.
  */
-int32_t mbed_i2c_write(struct i2c_desc *desc,
+int32_t mbed_i2c_write(struct no_os_i2c_desc *desc,
 		       uint8_t *data,
 		       uint8_t bytes_number,
 		       uint8_t stop_bit)
@@ -174,7 +174,7 @@ int32_t mbed_i2c_write(struct i2c_desc *desc,
  *                            1 - A stop condition will be generated.
  * @return SUCCESS in case of success, negative error code otherwise.
  */
-int32_t mbed_i2c_read(struct i2c_desc *desc,
+int32_t mbed_i2c_read(struct no_os_i2c_desc *desc,
 		      uint8_t *data,
 		      uint8_t bytes_number,
 		      uint8_t stop_bit)
@@ -201,7 +201,7 @@ int32_t mbed_i2c_read(struct i2c_desc *desc,
 /**
 * @brief Mbed platform specific I2C platform ops structure
 */
-const struct i2c_platform_ops mbed_i2c_ops = {
+const struct no_os_i2c_platform_ops mbed_i2c_ops = {
 	.i2c_ops_init = &mbed_i2c_init,
 	.i2c_ops_write = &mbed_i2c_write,
 	.i2c_ops_read = &mbed_i2c_read,

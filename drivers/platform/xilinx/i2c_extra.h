@@ -91,25 +91,25 @@ typedef struct xil_i2c_desc {
 /**
  * @brief Xilinx platform specific i2c platform ops structure
  */
-extern const struct i2c_platform_ops xil_i2c_ops;
+extern const struct no_os_i2c_platform_ops xil_i2c_ops;
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
 /* Initialize the I2C communication peripheral. */
-int32_t xil_i2c_init(struct i2c_desc **desc,
-		     const struct i2c_init_param *param);
+int32_t xil_i2c_init(struct no_os_i2c_desc **desc,
+		     const struct no_os_i2c_init_param *param);
 
-/* Free the resources allocated by i2c_init(). */
-int32_t xil_i2c_remove(struct i2c_desc *desc);
+/* Free the resources allocated by no_os_i2c_init(). */
+int32_t xil_i2c_remove(struct no_os_i2c_desc *desc);
 
 /* I2C Write data */
-int32_t xil_i2c_write(struct i2c_desc *desc, uint8_t *data,
+int32_t xil_i2c_write(struct no_os_i2c_desc *desc, uint8_t *data,
 		      uint8_t bytes_number, uint8_t stop_bit);
 
 /* I2C Read data. */
-int32_t xil_i2c_read(struct i2c_desc *desc, uint8_t *data,
+int32_t xil_i2c_read(struct no_os_i2c_desc *desc, uint8_t *data,
 		     uint8_t bytes_number, uint8_t stop_bit);
 
 #endif // I2C_EXTRA_H_

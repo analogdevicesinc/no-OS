@@ -327,7 +327,7 @@ int32_t ad5686_init(struct ad5686_dev **device,
 	if (chip_info[dev->act_device].communication == SPI)
 		ret = spi_init(&dev->spi_desc, &init_param.spi_init);
 	else
-		ret = i2c_init(&dev->i2c_desc, &init_param.i2c_init);
+		ret = no_os_i2c_init(&dev->i2c_desc, &init_param.i2c_init);
 
 
 	/* GPIO */
@@ -362,7 +362,7 @@ int32_t ad5686_remove(struct ad5686_dev *dev)
 	if (chip_info[dev->act_device].communication == SPI)
 		ret = spi_remove(dev->spi_desc);
 	else
-		ret = i2c_remove(dev->i2c_desc);
+		ret = no_os_i2c_remove(dev->i2c_desc);
 
 	if (dev->gpio_ldac)
 		ret |= no_os_gpio_remove(dev->gpio_ldac);
@@ -417,7 +417,7 @@ uint16_t ad5686_set_shift_reg(struct ad5686_dev *dev,
 					 data_buff[1] << AD5683_MIDB_OFFSET |
 					 data_buff[2] >> AD5683_LSB_OFFSET;
 	} else
-		i2c_write(dev->i2c_desc, data_buff, PKT_LENGTH, 1);
+		no_os_i2c_write(dev->i2c_desc, data_buff, PKT_LENGTH, 1);
 
 	return read_back_data;
 }
@@ -576,8 +576,8 @@ uint16_t ad5686_read_back_register(struct ad5686_dev *dev,
 			rb_data_i2c[0] = (AD5686_CTRL_RB_REG << CMD_OFFSET) |
 					 address;
 
-		i2c_write(dev->i2c_desc, rb_data_i2c, 3, 0);
-		i2c_read(dev->i2c_desc, rb_data_i2c, 2, 1);
+		no_os_i2c_write(dev->i2c_desc, rb_data_i2c, 3, 0);
+		no_os_i2c_read(dev->i2c_desc, rb_data_i2c, 2, 1);
 		read_back_data = (rb_data_i2c[0] << 8) | rb_data_i2c[1];
 	}
 

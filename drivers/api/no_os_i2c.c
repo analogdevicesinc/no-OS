@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   i2c.c
+ *   @file   no_os_i2c.c
  *   @brief  Implementation of the I2C Interface
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
@@ -48,8 +48,8 @@
  * @param param - The structure that contains the I2C parameters.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t i2c_init(struct i2c_desc **desc,
-		 const struct i2c_init_param *param)
+int32_t no_os_i2c_init(struct no_os_i2c_desc **desc,
+		       const struct no_os_i2c_init_param *param)
 {
 	if (!param)
 		return FAILURE;
@@ -63,11 +63,11 @@ int32_t i2c_init(struct i2c_desc **desc,
 }
 
 /**
- * @brief Free the resources allocated by i2c_init().
+ * @brief Free the resources allocated by no_os_i2c_init().
  * @param desc - The I2C descriptor.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t i2c_remove(struct i2c_desc *desc)
+int32_t no_os_i2c_remove(struct no_os_i2c_desc *desc)
 {
 	return desc->platform_ops->i2c_ops_remove(desc);
 }
@@ -82,10 +82,10 @@ int32_t i2c_remove(struct i2c_desc *desc)
  *                            1 - A stop condition will be generated.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t i2c_write(struct i2c_desc *desc,
-		  uint8_t *data,
-		  uint8_t bytes_number,
-		  uint8_t stop_bit)
+int32_t no_os_i2c_write(struct no_os_i2c_desc *desc,
+			uint8_t *data,
+			uint8_t bytes_number,
+			uint8_t stop_bit)
 {
 	return desc->platform_ops->i2c_ops_write(desc, data, bytes_number,
 			stop_bit);
@@ -101,10 +101,10 @@ int32_t i2c_write(struct i2c_desc *desc,
  *                            1 - A stop condition will be generated.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t i2c_read(struct i2c_desc *desc,
-		 uint8_t *data,
-		 uint8_t bytes_number,
-		 uint8_t stop_bit)
+int32_t no_os_i2c_read(struct no_os_i2c_desc *desc,
+		       uint8_t *data,
+		       uint8_t bytes_number,
+		       uint8_t stop_bit)
 {
 	return desc->platform_ops->i2c_ops_read(desc, data, bytes_number,
 						stop_bit);

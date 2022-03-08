@@ -718,7 +718,7 @@ int32_t adxl372_init(struct adxl372_dev **device,
 		dev->reg_write = adxl372_spi_reg_write;
 		dev->reg_read_multiple = adxl372_spi_reg_read_multiple;
 	} else { /* I2C */
-		ret = i2c_init(&dev->i2c_desc, &init_param.i2c_init);
+		ret = no_os_i2c_init(&dev->i2c_desc, &init_param.i2c_init);
 		if (ret < 0)
 			goto error;
 

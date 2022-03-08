@@ -89,7 +89,7 @@ static uint32_t ps_last_bitrate = 0;
 /**
  * @brief Xilinx platform specific I2C platform ops structure
  */
-const struct i2c_platform_ops xil_i2c_ops = {
+const struct no_os_i2c_platform_ops xil_i2c_ops = {
 	.i2c_ops_init = &xil_i2c_init,
 	.i2c_ops_write = &xil_i2c_write,
 	.i2c_ops_read = &xil_i2c_read,
@@ -119,7 +119,7 @@ static int32_t xil_i2c_cmp(void *el1, void *el2)
  * @param desc - Descriptor of the I2C device
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
  */
-static int32_t xil_i2c_set_transmission_config(struct i2c_desc *desc)
+static int32_t xil_i2c_set_transmission_config(struct no_os_i2c_desc *desc)
 {
 	struct xil_i2c_desc *xil_i2c_desc = desc->extra;
 #ifdef XIICPS_H
@@ -157,15 +157,15 @@ static int32_t xil_i2c_set_transmission_config(struct i2c_desc *desc)
  * @param param - The structure that contains the I2C parameters.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t xil_i2c_init(struct i2c_desc **desc,
-		     const struct i2c_init_param *param)
+int32_t xil_i2c_init(struct no_os_i2c_desc **desc,
+		     const struct no_os_i2c_init_param *param)
 {
 	int32_t		ret;
-	i2c_desc	*idesc;
+	no_os_i2c_desc	*idesc;
 	xil_i2c_desc	*xdesc;
 	xil_i2c_init_param	*xinit;
 
-	idesc = (struct i2c_desc *)malloc(sizeof(*idesc));
+	idesc = (struct no_os_i2c_desc *)malloc(sizeof(*idesc));
 	xdesc = (struct xil_i2c_desc *)malloc(sizeof(*xdesc));
 
 	if(!idesc || !xdesc)
@@ -309,11 +309,11 @@ error:
 }
 
 /**
- * @brief Free the resources allocated by i2c_init().
+ * @brief Free the resources allocated by no_os_i2c_init().
  * @param desc - The I2C descriptor.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t xil_i2c_remove(struct i2c_desc *desc)
+int32_t xil_i2c_remove(struct no_os_i2c_desc *desc)
 {
 	xil_i2c_desc	*xdesc;
 	int32_t		ret;
@@ -388,7 +388,7 @@ error:
  *                            1 - A stop condition will be generated.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t xil_i2c_write(struct i2c_desc *desc,
+int32_t xil_i2c_write(struct no_os_i2c_desc *desc,
 		      uint8_t *data,
 		      uint8_t bytes_number,
 		      uint8_t stop_bit)
@@ -453,7 +453,7 @@ error:
  *                            1 - A stop condition will be generated.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t xil_i2c_read(struct i2c_desc *desc,
+int32_t xil_i2c_read(struct no_os_i2c_desc *desc,
 		     uint8_t *data,
 		     uint8_t bytes_number,
 		     uint8_t stop_bit)

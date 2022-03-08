@@ -62,8 +62,8 @@ void ad7156_get_register_value(struct ad7156_dev *dev,
 			       uint8_t register_address,
 			       uint8_t bytes_number)
 {
-	i2c_write(dev->i2c_desc, &register_address, 1, 0);
-	i2c_read(dev->i2c_desc, p_read_data, bytes_number, 1);
+	no_os_i2c_write(dev->i2c_desc, &register_address, 1, 0);
+	no_os_i2c_read(dev->i2c_desc, p_read_data, bytes_number, 1);
 }
 
 /***************************************************************************//**
@@ -86,7 +86,7 @@ void ad7156_set_register_value(struct ad7156_dev *dev,
 	data_buffer[0] = register_address;
 	data_buffer[1] = (register_value >> 8);
 	data_buffer[bytes_number] = (register_value & 0x00FF);
-	i2c_write(dev->i2c_desc, data_buffer, bytes_number + 1, 1);
+	no_os_i2c_write(dev->i2c_desc, data_buffer, bytes_number + 1, 1);
 }
 
 /***************************************************************************//**
@@ -117,7 +117,7 @@ int8_t ad7156_init(struct ad7156_dev **device,
 	dev->ad7156_channel1_range = init_param.ad7156_channel1_range;
 	dev->ad7156_channel2_range = init_param.ad7156_channel2_range;
 
-	status = i2c_init(&dev->i2c_desc, &init_param.i2c_init);
+	status = no_os_i2c_init(&dev->i2c_desc, &init_param.i2c_init);
 	ad7156_get_register_value(dev,
 				  &test,
 				  AD7156_REG_CHIP_ID,
@@ -142,7 +142,7 @@ int32_t ad7156_remove(struct ad7156_dev *dev)
 {
 	int32_t status;
 
-	status = i2c_remove(dev->i2c_desc);
+	status = no_os_i2c_remove(dev->i2c_desc);
 
 	free(dev);
 
@@ -161,7 +161,7 @@ void ad7156_reset(struct ad7156_dev *dev)
 	uint8_t address_pointer = 0;
 
 	address_pointer = AD7156_RESET_CMD;
-	i2c_write(dev->i2c_desc, &address_pointer, 1, 1);
+	no_os_i2c_write(dev->i2c_desc, &address_pointer, 1, 1);
 }
 
 /***************************************************************************//**

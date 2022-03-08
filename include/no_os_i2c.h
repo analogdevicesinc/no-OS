@@ -51,17 +51,17 @@
 /******************************************************************************/
 
 /**
- * @struct i2c_platform_ops
+ * @struct no_os_i2c_platform_ops
  * @brief Structure holding I2C function pointers that point to the platform
  * specific function
  */
-struct i2c_platform_ops ;
+struct no_os_i2c_platform_ops ;
 
 /**
- * @struct i2c_init_param
+ * @struct no_os_i2c_init_param
  * @brief Structure holding the parameters for I2C initialization.
  */
-typedef struct i2c_init_param {
+typedef struct no_os_i2c_init_param {
 	/** Device ID */
 	uint32_t	device_id;
 	/** I2C maximum transfer speed supported */
@@ -69,16 +69,16 @@ typedef struct i2c_init_param {
 	/** Slave address */
 	uint8_t		slave_address;
 	/** I2C platform specific functions */
-	const struct i2c_platform_ops *platform_ops;
+	const struct no_os_i2c_platform_ops *platform_ops;
 	/** I2C extra parameters (device specific parameters) */
 	void		*extra;
-} i2c_init_param;
+} no_os_i2c_init_param;
 
 /**
- * @struct i2c_desc
+ * @struct no_os_i2c_desc
  * @brief Structure holding I2C descriptor
  */
-typedef struct i2c_desc {
+typedef struct no_os_i2c_desc {
 	/** Device ID */
 	uint32_t	device_id;
 	/** I2C maximum transfer speed supported */
@@ -86,25 +86,26 @@ typedef struct i2c_desc {
 	/** Slave address */
 	uint8_t		slave_address;
 	/** I2C platform specific functions */
-	const struct i2c_platform_ops *platform_ops;
+	const struct no_os_i2c_platform_ops *platform_ops;
 	/** I2C extra parameters (device specific parameters) */
 	void		*extra;
-} i2c_desc;
+} no_os_i2c_desc;
 
 /**
- * @struct i2c_platform_ops
+ * @struct no_os_i2c_platform_ops
  * @brief Structure holding i2c function pointers that point to the platform
  * specific function
  */
-struct i2c_platform_ops {
+struct no_os_i2c_platform_ops {
 	/** i2c initialization function pointer */
-	int32_t (*i2c_ops_init)(struct i2c_desc **, const struct i2c_init_param *);
+	int32_t (*i2c_ops_init)(struct no_os_i2c_desc **,
+				const struct no_os_i2c_init_param *);
 	/** i2c write function pointer */
-	int32_t (*i2c_ops_write)(struct i2c_desc *, uint8_t *, uint8_t, uint8_t);
+	int32_t (*i2c_ops_write)(struct no_os_i2c_desc *, uint8_t *, uint8_t, uint8_t);
 	/** i2c write function pointer */
-	int32_t (*i2c_ops_read)(struct i2c_desc *, uint8_t *, uint8_t, uint8_t);
+	int32_t (*i2c_ops_read)(struct no_os_i2c_desc *, uint8_t *, uint8_t, uint8_t);
 	/** i2c remove function pointer */
-	int32_t (*i2c_ops_remove)(struct i2c_desc *);
+	int32_t (*i2c_ops_remove)(struct no_os_i2c_desc *);
 };
 
 /******************************************************************************/
@@ -112,22 +113,22 @@ struct i2c_platform_ops {
 /******************************************************************************/
 
 /* Initialize the I2C communication peripheral. */
-int32_t i2c_init(struct i2c_desc **desc,
-		 const struct i2c_init_param *param);
+int32_t no_os_i2c_init(struct no_os_i2c_desc **desc,
+		       const struct no_os_i2c_init_param *param);
 
-/* Free the resources allocated by i2c_init(). */
-int32_t i2c_remove(struct i2c_desc *desc);
+/* Free the resources allocated by no_os_i2c_init(). */
+int32_t no_os_i2c_remove(struct no_os_i2c_desc *desc);
 
 /* Write data to a slave device. */
-int32_t i2c_write(struct i2c_desc *desc,
-		  uint8_t *data,
-		  uint8_t bytes_number,
-		  uint8_t stop_bit);
+int32_t no_os_i2c_write(struct no_os_i2c_desc *desc,
+			uint8_t *data,
+			uint8_t bytes_number,
+			uint8_t stop_bit);
 
 /* Read data from a slave device. */
-int32_t i2c_read(struct i2c_desc *desc,
-		 uint8_t *data,
-		 uint8_t bytes_number,
-		 uint8_t stop_bit);
+int32_t no_os_i2c_read(struct no_os_i2c_desc *desc,
+		       uint8_t *data,
+		       uint8_t bytes_number,
+		       uint8_t stop_bit);
 
 #endif // _NO_OS_I2C_H_

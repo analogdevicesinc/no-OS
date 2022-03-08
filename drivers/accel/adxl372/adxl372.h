@@ -369,7 +369,7 @@ struct adxl372_dev {
 	/* SPI */
 	spi_desc			*spi_desc;
 	/* I2C */
-	i2c_desc			*i2c_desc;
+	no_os_i2c_desc			*i2c_desc;
 	/* GPIO */
 	struct no_os_gpio_desc		*gpio_int1;
 	struct no_os_gpio_desc		*gpio_int2;
@@ -390,7 +390,7 @@ struct adxl372_init_param {
 	/* SPI */
 	spi_init_param			spi_init;
 	/* I2C */
-	i2c_init_param			i2c_init;
+	no_os_i2c_init_param			i2c_init;
 	/* GPIO */
 	struct no_os_gpio_init_param			gpio_int1;
 	struct no_os_gpio_init_param			gpio_int2;

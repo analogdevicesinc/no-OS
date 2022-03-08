@@ -85,7 +85,7 @@ CONSTANT UCHAR UserTxRegInitTable[] = {0};
 CONSTANT UCHAR UserTxFieldInitTable[] = {0};
 #endif
 
-struct i2c_desc *i2c_handler;
+struct no_os_i2c_desc *i2c_handler;
 volatile uint32_t timer_counter_intr = 0;
 STATIC UINT32 MsCnt = 0;
 STATIC UINT32 Last250usCount = 0;
@@ -600,11 +600,11 @@ UINT16 HAL_I2CReadBlock (UCHAR Dev, UCHAR Reg, UCHAR *Data, UINT16 NofBytes)
 
 	do {
 		reg_addr = Reg + i;
-		ret = i2c_write(i2c_handler, &reg_addr, 1, 0);
+		ret = no_os_i2c_write(i2c_handler, &reg_addr, 1, 0);
 		if(ret != 0)
 			return 0xDEAD;
 
-		ret = i2c_read(i2c_handler, Data + i, 1, 1);
+		ret = no_os_i2c_read(i2c_handler, Data + i, 1, 1);
 		if(ret != 0)
 			return 0xDEAD;
 		i++;
@@ -634,7 +634,7 @@ UINT16  HAL_I2CWriteBlock (UCHAR Dev, UCHAR Reg, UCHAR *Data,
 	for(i = 1; i <= NumberBytes; i++)
 		data_write[i] = Data[(i - 1)];
 
-	ret = i2c_write(i2c_handler, data_write, (NumberBytes + 1), 1);
+	ret = no_os_i2c_write(i2c_handler, data_write, (NumberBytes + 1), 1);
 	if(ret != 0)
 		goto error;
 
@@ -657,11 +657,11 @@ UCHAR HAL_I2CReadByte (UCHAR Dev, UCHAR Reg, UCHAR *Data)
 
 	i2c_handler->slave_address = i2c_addr;
 
-	ret = i2c_write(i2c_handler, &Reg, 1, 0);
+	ret = no_os_i2c_write(i2c_handler, &Reg, 1, 0);
 	if(ret != 0)
 		return 0xDD;
 
-	ret = i2c_read(i2c_handler, Data, 1, 1);
+	ret = no_os_i2c_read(i2c_handler, Data, 1, 1);
 	if(ret != 0)
 		return 0xDD;
 
@@ -682,7 +682,7 @@ UCHAR HAL_I2CWriteByte (UCHAR Dev, UCHAR Reg, UCHAR Data)
 	data_write[0] = Reg;
 	data_write[1] = Data;
 
-	ret = i2c_write(i2c_handler, data_write, 2, 1);
+	ret = no_os_i2c_write(i2c_handler, data_write, 2, 1);
 	if(ret != 0)
 		return 0xDD;
 

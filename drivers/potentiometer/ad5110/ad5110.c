@@ -66,7 +66,7 @@ int8_t ad5110_init(struct ad5110_dev **device,
 		return -1;
 
 	dev->ad5110_dev_addr = init_param.ad5110_dev_addr;
-	status = i2c_init(&dev->i2c_desc, &init_param.i2c_init);
+	status = no_os_i2c_init(&dev->i2c_desc, &init_param.i2c_init);
 
 	*device = dev;
 
@@ -84,7 +84,7 @@ int32_t ad5110_remove(struct ad5110_dev *dev)
 {
 	int32_t ret;
 
-	ret = i2c_remove(dev->i2c_desc);
+	ret = no_os_i2c_remove(dev->i2c_desc);
 
 	free(dev);
 
@@ -106,10 +106,10 @@ void ad5110_write_rdac(struct ad5110_dev *dev,
 
 	data_buffer[0] = CMD_WR_RDAC;
 	data_buffer[1] = rdac_value;
-	i2c_write(dev->i2c_desc,
-		  data_buffer,
-		  2,
-		  1);
+	no_os_i2c_write(dev->i2c_desc,
+			data_buffer,
+			2,
+			1);
 }
 
 /***************************************************************************//**
@@ -126,15 +126,15 @@ uint8_t ad5110_read_rdac(struct ad5110_dev *dev)
 
 	data_buffer[0] = CMD_RD_RDAC;
 	data_buffer[1] = 0;
-	i2c_write(dev->i2c_desc,
-		  data_buffer,
-		  2,
-		  1);
+	no_os_i2c_write(dev->i2c_desc,
+			data_buffer,
+			2,
+			1);
 
-	i2c_read(dev->i2c_desc,
-		 data_buffer,
-		 1,
-		 1);
+	no_os_i2c_read(dev->i2c_desc,
+		       data_buffer,
+		       1,
+		       1);
 
 	return data_buffer[0];
 }
@@ -153,10 +153,10 @@ void ad5110_write_rdac_eeprom(struct ad5110_dev *dev)
 
 	data_buffer[0] = CMD_WR_RDAC_EEPROM;
 	data_buffer[1] = 0;
-	i2c_write(dev->i2c_desc,
-		  data_buffer,
-		  2,
-		  1);
+	no_os_i2c_write(dev->i2c_desc,
+			data_buffer,
+			2,
+			1);
 }
 
 /***************************************************************************//**
@@ -173,15 +173,15 @@ uint8_t ad5110_read_wiper(struct ad5110_dev *dev)
 
 	data_buffer[0] = CMD_RD_EEPROM;
 	data_buffer[1] = WIPER_POSITION;
-	i2c_write(dev->i2c_desc,
-		  data_buffer,
-		  2,
-		  1);
+	no_os_i2c_write(dev->i2c_desc,
+			data_buffer,
+			2,
+			1);
 
-	i2c_read(dev->i2c_desc,
-		 data_buffer,
-		 1,
-		 1);
+	no_os_i2c_read(dev->i2c_desc,
+		       data_buffer,
+		       1,
+		       1);
 
 	return data_buffer[0];
 }
@@ -200,15 +200,15 @@ uint8_t ad5110_read_res_tolerance(struct ad5110_dev *dev)
 
 	data_buffer[0] = CMD_RD_EEPROM;
 	data_buffer[1] = RESISTOR_TOLERANCE;
-	i2c_write(dev->i2c_desc,
-		  data_buffer,
-		  2,
-		  1);
+	no_os_i2c_write(dev->i2c_desc,
+			data_buffer,
+			2,
+			1);
 
-	i2c_read(dev->i2c_desc,
-		 data_buffer,
-		 1,
-		 1);
+	no_os_i2c_read(dev->i2c_desc,
+		       data_buffer,
+		       1,
+		       1);
 
 	return data_buffer[0];
 }
@@ -227,10 +227,10 @@ void ad5110_reset(struct ad5110_dev *dev)
 
 	data_buffer[0] = CMD_RESET;
 	data_buffer[1] = 0;
-	i2c_write(dev->i2c_desc,
-		  data_buffer,
-		  2,
-		  1);
+	no_os_i2c_write(dev->i2c_desc,
+			data_buffer,
+			2,
+			1);
 }
 
 /***************************************************************************//**
@@ -251,8 +251,8 @@ void ad5110_shut_down(struct ad5110_dev *dev,
 
 	data_buffer[0] = CMD_SHUT_DOWN;
 	data_buffer[1] = value;
-	i2c_write(dev->i2c_desc,
-		  data_buffer,
-		  2,
-		  1);
+	no_os_i2c_write(dev->i2c_desc,
+			data_buffer,
+			2,
+			1);
 }
