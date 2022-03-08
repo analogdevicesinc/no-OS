@@ -636,7 +636,7 @@ int main(void)
 	/**
 	 * IRQ initial configuration.
 	 */
-	struct irq_init_param irq_init_param = {
+	struct no_os_irq_init_param irq_init_param = {
 		.irq_ctrl_id = INTC_DEVICE_ID,
 		.platform_ops = &xil_irq_ops,
 		.extra = &xil_irq_init_par,
@@ -645,33 +645,33 @@ int main(void)
 	/**
 	 * IRQ instance.
 	 */
-	struct irq_ctrl_desc *irq_desc;
+	struct no_os_irq_ctrl_desc *irq_desc;
 
-	status = irq_ctrl_init(&irq_desc, &irq_init_param);
+	status = no_os_irq_ctrl_init(&irq_desc, &irq_init_param);
 	if(status < 0)
 		return status;
 
-	status = irq_global_enable(irq_desc);
+	status = no_os_irq_global_enable(irq_desc);
 	if (status < 0)
 		return status;
 
-	struct callback_desc rx_dmac_callback = {
+	struct no_os_callback_desc rx_dmac_callback = {
 		.ctx = rx_dmac,
 		.callback = axi_dmac_default_isr,
 		.config = NULL
 	};
 
-	status = irq_register_callback(irq_desc,
-				       XPAR_FABRIC_AXI_AD9361_ADC_DMA_IRQ_INTR, &rx_dmac_callback);
+	status = no_os_irq_register_callback(irq_desc,
+					     XPAR_FABRIC_AXI_AD9361_ADC_DMA_IRQ_INTR, &rx_dmac_callback);
 	if(status < 0)
 		return status;
 
-	status = irq_trigger_level_set(irq_desc,
-				       XPAR_FABRIC_AXI_AD9361_ADC_DMA_IRQ_INTR, IRQ_LEVEL_HIGH);
+	status = no_os_irq_trigger_level_set(irq_desc,
+					     XPAR_FABRIC_AXI_AD9361_ADC_DMA_IRQ_INTR, NO_OS_IRQ_LEVEL_HIGH);
 	if(status < 0)
 		return status;
 
-	status = irq_enable(irq_desc, XPAR_FABRIC_AXI_AD9361_ADC_DMA_IRQ_INTR);
+	status = no_os_irq_enable(irq_desc, XPAR_FABRIC_AXI_AD9361_ADC_DMA_IRQ_INTR);
 	if(status < 0)
 		return status;
 
@@ -684,18 +684,18 @@ int main(void)
 
 #ifdef DAC_DMA_EXAMPLE
 #ifdef ADC_DMA_IRQ_EXAMPLE
-	struct callback_desc tx_dmac_callback = {
+	struct no_os_callback_desc tx_dmac_callback = {
 		.ctx = tx_dmac,
 		.callback = axi_dmac_default_isr,
 		.config = NULL
 	};
 
-	status = irq_register_callback(irq_desc,
-				       XPAR_FABRIC_AXI_AD9361_DAC_DMA_IRQ_INTR, &tx_dmac_callback);
+	status = no_os_irq_register_callback(irq_desc,
+					     XPAR_FABRIC_AXI_AD9361_DAC_DMA_IRQ_INTR, &tx_dmac_callback);
 	if(status < 0)
 		return status;
 
-	status = irq_enable(irq_desc, XPAR_FABRIC_AXI_AD9361_DAC_DMA_IRQ_INTR);
+	status = no_os_irq_enable(irq_desc, XPAR_FABRIC_AXI_AD9361_DAC_DMA_IRQ_INTR);
 	if(status < 0)
 		return status;
 #endif

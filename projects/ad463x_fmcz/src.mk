@@ -12,7 +12,7 @@
 SRCS := $(PROJECT)/src/ad463x_fmc.c
 SRCS += $(DRIVERS)/api/spi.c \
 	$(DRIVERS)/api/no_os_gpio.c \
-	$(DRIVERS)/api/irq.c \
+	$(DRIVERS)/api/no_os_irq.c \
 	$(DRIVERS)/adc/ad463x/ad463x.c \
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.c \
 	$(DRIVERS)/axi_core/clk_axi_clkgen/clk_axi_clkgen.c \
@@ -28,7 +28,7 @@ LIBRARIES += iio
 SRC_DIRS += $(NO-OS)/iio/iio_app
 SRCS += $(PLATFORM_DRIVERS)/uart.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c \
-	$(DRIVERS)/api/irq.c \
+	$(DRIVERS)/api/no_os_irq.c \
 	$(DRIVERS)/adc/ad463x/iio_ad463x.c \
 	$(NO-OS)/util/fifo.c \
 	$(NO-OS)/util/list.c

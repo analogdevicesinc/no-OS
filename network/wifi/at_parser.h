@@ -314,7 +314,7 @@ union in_out_param {
 struct at_init_param {
 	/* Should be initialized outside in order to fill uart_irq_conf */
 	struct uart_desc	*uart_desc;
-	struct irq_ctrl_desc	*irq_desc;
+	struct no_os_irq_ctrl_desc	*irq_desc;
 	uint32_t		uart_irq_id;
 	void			*uart_irq_conf;
 	/* Context that will be passed to the callback */

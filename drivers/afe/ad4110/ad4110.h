@@ -325,7 +325,7 @@ struct ad4110_dev {
 	enum ad4110_odr			odr;
 	enum ad4110_order		order;
 	/* GPIO - used only for continuous mode */
-	struct irq_ctrl_desc *irq_desc;
+	struct no_os_irq_ctrl_desc *irq_desc;
 	uint32_t nready_pin;
 };
 
@@ -349,7 +349,7 @@ struct ad4110_init_param {
 	enum ad4110_odr			odr;
 	enum ad4110_order		order;
 	/* GPIO - used only for continuous mode */
-	struct irq_ctrl_desc *irq_desc;
+	struct no_os_irq_ctrl_desc *irq_desc;
 	uint32_t nready_pin;
 };
 

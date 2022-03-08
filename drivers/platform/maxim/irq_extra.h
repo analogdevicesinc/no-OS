@@ -59,6 +59,6 @@ enum irq_id {
 /**
  * @brief maxim platform specific irq platform ops structure
  */
-extern const struct irq_platform_ops max_irq_ops;
+extern const struct no_os_irq_platform_ops max_irq_ops;
 
 #endif

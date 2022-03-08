@@ -65,6 +65,6 @@ struct max_rtc_alarm_desc {
 /**
  * @brief maxim specific RTC IRQ platform ops structure
  */
-extern const struct irq_platform_ops max_rtc_irq_ops;
+extern const struct no_os_irq_platform_ops max_rtc_irq_ops;
 
 #endif

@@ -9,7 +9,7 @@ SRC_DIRS += $(NO-OS)/util
 SRC_DIRS += $(INCLUDE)
 
 SRCS += $(DRIVERS)/api/no_os_gpio.c
-SRCS += $(DRIVERS)/api/irq.c
+SRCS += $(DRIVERS)/api/no_os_irq.c
 SRCS +=	$(DRIVERS)/platform/$(PLATFORM)/$(PLATFORM)_irq.c
 INCS += $(INCLUDE)/no_os_irq.h
 INCS += $(DRIVERS)/platform/$(PLATFORM)/irq_extra.h

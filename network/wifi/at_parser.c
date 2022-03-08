@@ -124,7 +124,7 @@ struct at_desc {
 	/* Uart descriptor */
 	struct uart_desc	*uart_desc;
 	/* Irq descriptor */
-	struct irq_ctrl_desc	*irq_desc;
+	struct no_os_irq_ctrl_desc	*irq_desc;
 	/* Uart irq id */
 	uint32_t		uart_irq_id;
 
@@ -422,7 +422,7 @@ static void at_callback(struct at_desc *desc, uint32_t event, uint8_t *data)
 	static const struct at_buff ready_msg = {PUI8("ready\r\n"), 7};
 
 	switch (event) {
-	case IRQ_READ_DONE:
+	case NO_OS_IRQ_READ_DONE:
 		switch (desc->callback_operation) {
 		case RESETTING_MODULE:
 			if (match_message(&ready_msg, &desc->ready_idx,
@@ -464,7 +464,7 @@ static void at_callback(struct at_desc *desc, uint32_t event, uint8_t *data)
 			break;
 		}
 		break;
-	case IRQ_ERROR:
+	case NO_OS_IRQ_ERROR:
 		if (desc->callback_operation != RESETTING_MODULE)
 			desc->errors |= AT_ERROR_UART;
 		break;
@@ -908,7 +908,7 @@ int32_t at_init(struct at_desc **desc, const struct at_init_param *param)
 {
 	struct at_desc		*ldesc;
 	union in_out_param	result;
-	struct callback_desc	callback_desc;
+	struct no_os_callback_desc	callback_desc;
 	uint32_t		conn;
 	uint8_t			*str;
 
@@ -929,12 +929,12 @@ int32_t at_init(struct at_desc **desc, const struct at_init_param *param)
 		(void (*)(void*, uint32_t, void*))at_callback;
 	callback_desc.ctx = ldesc;
 	callback_desc.config = param->uart_irq_conf;
-	if (SUCCESS != irq_register_callback(ldesc->irq_desc,
+	if (0 != no_os_irq_register_callback(ldesc->irq_desc,
 					     ldesc->uart_irq_id,
 					     &callback_desc))
 		goto free_desc;
 
-	if (SUCCESS != irq_enable(ldesc->irq_desc, ldesc->uart_irq_id))
+	if (0 != no_os_irq_enable(ldesc->irq_desc, ldesc->uart_irq_id))
 		goto free_irq;
 
 	/* The read will be handled by the callback */
@@ -973,7 +973,7 @@ int32_t at_init(struct at_desc **desc, const struct at_init_param *param)
 	return SUCCESS;
 
 free_irq:
-	irq_unregister(ldesc->irq_desc, ldesc->uart_irq_id);
+	no_os_irq_unregister(ldesc->irq_desc, ldesc->uart_irq_id);
 free_desc:
 	free(ldesc);
 	*desc = NULL;
@@ -992,7 +992,7 @@ int32_t at_remove(struct at_desc *desc)
 	if (!desc)
 		return FAILURE;
 
-	irq_unregister(desc->irq_desc, desc->uart_irq_id);
+	no_os_irq_unregister(desc->irq_desc, desc->uart_irq_id);
 	free(desc);
 
 	return SUCCESS;

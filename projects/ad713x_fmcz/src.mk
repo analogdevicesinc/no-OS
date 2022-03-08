@@ -28,7 +28,7 @@ LIBRARIES += iio
 SRC_DIRS += $(NO-OS)/iio/iio_app
 SRCS += $(PLATFORM_DRIVERS)/uart.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c \
-	$(DRIVERS)/api/irq.c \
+	$(DRIVERS)/api/no_os_irq.c \
 	$(NO-OS)/util/fifo.c \
 	$(NO-OS)/util/list.c	
 endif

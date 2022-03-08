@@ -86,6 +86,6 @@ struct xil_irq_desc {
 /**
  * @brief Xilinx specific IRQ platform ops structure
  */
-extern const struct irq_platform_ops xil_irq_ops;
+extern const struct no_os_irq_platform_ops xil_irq_ops;
 
 #endif

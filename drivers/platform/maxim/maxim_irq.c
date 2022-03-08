@@ -57,10 +57,10 @@
  * @param param - Configuration information for the instance
  * @return 0 in case of success, errno error codes otherwise.
  */
-int32_t max_irq_ctrl_init(struct irq_ctrl_desc **desc,
-			  const struct irq_init_param *param)
+int32_t max_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
+			  const struct no_os_irq_init_param *param)
 {
-	struct irq_ctrl_desc *descriptor;
+	struct no_os_irq_ctrl_desc *descriptor;
 
 	if (!param)
 		return -EINVAL;
@@ -79,11 +79,11 @@ int32_t max_irq_ctrl_init(struct irq_ctrl_desc **desc,
 }
 
 /**
- * @brief Free the resources allocated by irq_ctrl_init()
+ * @brief Free the resources allocated by no_os_irq_ctrl_init()
  * @param desc - Interrupt controller descriptor.
  * @return 0 in case of success, errno error codes otherwise.
  */
-int32_t max_irq_ctrl_remove(struct irq_ctrl_desc *desc)
+int32_t max_irq_ctrl_remove(struct no_os_irq_ctrl_desc *desc)
 {
 	if (!desc)
 		return -EINVAL;
@@ -104,8 +104,9 @@ int32_t max_irq_ctrl_remove(struct irq_ctrl_desc *desc)
  * @param callback_desc - Descriptor of the callback.
  * @return -ENOSYS
  */
-int32_t max_irq_register_callback(struct irq_ctrl_desc *desc, uint32_t irq_id,
-				  struct callback_desc *callback_desc)
+int32_t max_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
+				  uint32_t irq_id,
+				  struct no_os_callback_desc *callback_desc)
 {
 	return -ENOSYS;
 }
@@ -116,7 +117,7 @@ int32_t max_irq_register_callback(struct irq_ctrl_desc *desc, uint32_t irq_id,
  * @param irq_id - Id of the interrupt
  * @return -ENOSYS
  */
-int32_t max_irq_unregister(struct irq_ctrl_desc *desc, uint32_t irq_id)
+int32_t max_irq_unregister(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
 {
 	return -ENOSYS;
 }
@@ -126,7 +127,7 @@ int32_t max_irq_unregister(struct irq_ctrl_desc *desc, uint32_t irq_id)
  * @param desc - Interrupt controller descriptor.
  * @return 0
  */
-int32_t max_irq_global_enable(struct irq_ctrl_desc *desc)
+int32_t max_irq_global_enable(struct no_os_irq_ctrl_desc *desc)
 {
 	for(uint32_t i = 0; i < MXC_IRQ_COUNT; i++) {
 		NVIC_EnableIRQ(i);
@@ -140,7 +141,7 @@ int32_t max_irq_global_enable(struct irq_ctrl_desc *desc)
  * @param desc - Interrupt controller descriptor.
  * @return 0
  */
-int32_t max_irq_global_disable(struct irq_ctrl_desc *desc)
+int32_t max_irq_global_disable(struct no_os_irq_ctrl_desc *desc)
 {
 	for(uint32_t i = 0; i < MXC_IRQ_COUNT; i++) {
 		NVIC_ClearPendingIRQ(i);
@@ -156,7 +157,7 @@ int32_t max_irq_global_disable(struct irq_ctrl_desc *desc)
  * @param irq_id - Interrupt identifier
  * @return 0 in case of success, errno error codes otherwise.
  */
-int32_t max_irq_enable(struct irq_ctrl_desc *desc, uint32_t irq_id)
+int32_t max_irq_enable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
 {
 	if (irq_id >= MXC_IRQ_EXT_COUNT)
 		return -EINVAL;
@@ -172,7 +173,7 @@ int32_t max_irq_enable(struct irq_ctrl_desc *desc, uint32_t irq_id)
  * @param irq_id - Interrupt identifier
  * @return 0 in case of success, -EINVAL otherwise.
  */
-int32_t max_irq_disable(struct irq_ctrl_desc *desc, uint32_t irq_id)
+int32_t max_irq_disable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
 {
 	if (irq_id >= MXC_IRQ_EXT_COUNT)
 		return -EINVAL;
@@ -185,7 +186,7 @@ int32_t max_irq_disable(struct irq_ctrl_desc *desc, uint32_t irq_id)
 /**
  * @brief maxim specific IRQ platform ops structure
  */
-const struct irq_platform_ops max_irq_ops = {
+const struct no_os_irq_platform_ops max_irq_ops = {
 	.init = &max_irq_ctrl_init,
 	.register_callback = &max_irq_register_callback,
 	.unregister = &max_irq_unregister,

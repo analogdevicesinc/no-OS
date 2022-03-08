@@ -78,36 +78,36 @@ int main()
 	};
 
 	/* IRQ instance. */
-	struct irq_ctrl_desc *irq_desc;
+	struct no_os_irq_ctrl_desc *irq_desc;
 	struct xil_irq_init_param irq_extra = {
 		.type = IRQ_PS
 	};
-	struct irq_init_param irq_ip = {
+	struct no_os_irq_init_param irq_ip = {
 		.irq_ctrl_id = 0U,
 		.platform_ops = &xil_irq_ops,
 		.extra = &irq_extra
 	};
 
-	ret = irq_ctrl_init(&irq_desc, &irq_ip);
+	ret = no_os_irq_ctrl_init(&irq_desc, &irq_ip);
 	if(ret)
 		return FAILURE;
-	ret = irq_global_enable(irq_desc);
+	ret = no_os_irq_global_enable(irq_desc);
 	if(ret)
 		return FAILURE;
 
 	/* GPIO IRQ instance. */
-	struct irq_ctrl_desc *gpio_irq_desc;
+	struct no_os_irq_ctrl_desc *gpio_irq_desc;
 	struct xil_gpio_irq_init_param gpio_irq_extra = {
 		.parent_desc = irq_desc,
 		.gpio_device_id = XPAR_PS7_GPIO_0_DEVICE_ID
 	};
-	struct irq_init_param gpio_irq_ip = {
+	struct no_os_irq_init_param gpio_irq_ip = {
 		.irq_ctrl_id = GPIO_IRQ_ID,
 		.platform_ops = &xil_gpio_irq_ops,
 		.extra = &gpio_irq_extra
 	};
 
-	ret = irq_ctrl_init(&gpio_irq_desc, &gpio_irq_ip);
+	ret = no_os_irq_ctrl_init(&gpio_irq_desc, &gpio_irq_ip);
 	if(ret)
 		return FAILURE;
 

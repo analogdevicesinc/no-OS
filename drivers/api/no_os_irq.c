@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   irq.c
+ *   @file   no_os_irq.c
  *   @brief  Implementation of the IRQ Interface
  *   @author Andrei Porumb (andrei.porumb@analog.com)
 ********************************************************************************
@@ -48,8 +48,8 @@
  * @param param - The structure that contains the IRQ parameters.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t irq_ctrl_init(struct irq_ctrl_desc **desc,
-		      const struct irq_init_param *param)
+int32_t no_os_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
+			    const struct no_os_irq_init_param *param)
 {
 	if (!param)
 		return FAILURE;
@@ -63,11 +63,11 @@ int32_t irq_ctrl_init(struct irq_ctrl_desc **desc,
 }
 
 /**
- * @brief Free the resources allocated by irq_ctrl_init().
+ * @brief Free the resources allocated by no_os_irq_ctrl_init().
  * @param desc - The SPI descriptor.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t irq_ctrl_remove(struct irq_ctrl_desc *desc)
+int32_t no_os_irq_ctrl_remove(struct no_os_irq_ctrl_desc *desc)
 {
 	return desc->platform_ops->remove(desc);
 }
@@ -79,8 +79,9 @@ int32_t irq_ctrl_remove(struct irq_ctrl_desc *desc)
  * @param callback_desc - Callback descriptor
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t irq_register_callback(struct irq_ctrl_desc *desc, uint32_t irq_id,
-			      struct callback_desc *callback_desc)
+int32_t no_os_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
+				    uint32_t irq_id,
+				    struct no_os_callback_desc *callback_desc)
 {
 	return desc->platform_ops->register_callback(desc, irq_id, callback_desc);
 }
@@ -91,7 +92,7 @@ int32_t irq_register_callback(struct irq_ctrl_desc *desc, uint32_t irq_id,
  * @param irq_id - Interrupt identifier.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t irq_unregister(struct irq_ctrl_desc *desc, uint32_t irq_id)
+int32_t no_os_irq_unregister(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
 {
 	return desc->platform_ops->unregister(desc, irq_id);
 }
@@ -100,7 +101,7 @@ int32_t irq_unregister(struct irq_ctrl_desc *desc, uint32_t irq_id)
  * @brief Enable global interrupts.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t irq_global_enable(struct irq_ctrl_desc *desc)
+int32_t no_os_irq_global_enable(struct no_os_irq_ctrl_desc *desc)
 {
 	return desc->platform_ops->global_enable(desc);
 }
@@ -109,7 +110,7 @@ int32_t irq_global_enable(struct irq_ctrl_desc *desc)
  * @brief Disable global interrupts.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t irq_global_disable(struct irq_ctrl_desc *desc)
+int32_t no_os_irq_global_disable(struct no_os_irq_ctrl_desc *desc)
 {
 	return desc->platform_ops->global_disable(desc);
 }
@@ -121,8 +122,9 @@ int32_t irq_global_disable(struct irq_ctrl_desc *desc)
  * @param trig - New trigger level for the interrupt.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t irq_trigger_level_set(struct irq_ctrl_desc *desc, uint32_t irq_id,
-			      enum irq_trig_level trig)
+int32_t no_os_irq_trigger_level_set(struct no_os_irq_ctrl_desc *desc,
+				    uint32_t irq_id,
+				    enum no_os_irq_trig_level trig)
 {
 	if(desc->platform_ops->trigger_level_set)
 		return desc->platform_ops->trigger_level_set(desc, irq_id, trig);
@@ -136,7 +138,7 @@ int32_t irq_trigger_level_set(struct irq_ctrl_desc *desc, uint32_t irq_id,
  * @param irq_id - Interrupt identifier.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t irq_enable(struct irq_ctrl_desc *desc, uint32_t irq_id)
+int32_t no_os_irq_enable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
 {
 	return desc->platform_ops->enable(desc, irq_id);
 }
@@ -147,7 +149,7 @@ int32_t irq_enable(struct irq_ctrl_desc *desc, uint32_t irq_id)
  * @param irq_id - Interrupt identifier.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t irq_disable(struct irq_ctrl_desc *desc, uint32_t irq_id)
+int32_t no_os_irq_disable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
 {
 	return desc->platform_ops->disable(desc, irq_id);
 }

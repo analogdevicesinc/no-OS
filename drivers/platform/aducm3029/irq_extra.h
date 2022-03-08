@@ -170,6 +170,6 @@ struct aducm_irq_ctrl_desc {
 /**
  * @brief ADuCM3029 specific IRQ platform ops structure
  */
-extern const struct irq_platform_ops aducm_irq_ops;
+extern const struct no_os_irq_platform_ops aducm_irq_ops;
 
 #endif // IRQ_EXTRA_H_

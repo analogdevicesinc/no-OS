@@ -48,7 +48,7 @@ SRCS += $(NO-OS)/iio/iio_app/iio_app.c \
 	$(NO-OS)/util/fifo.c \
 	$(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.c \
 	$(DRIVERS)/axi_core/iio_axi_dac/iio_axi_dac.c \
-	$(DRIVERS)/api/irq.c
+	$(DRIVERS)/api/no_os_irq.c
 endif
 INCS +=	$(PROJECT)/src/app_clock.h \
 	$(PROJECT)/src/app_jesd.h \
