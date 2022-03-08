@@ -826,19 +826,12 @@ int32_t axi_dac_init_begin(struct axi_dac **dac_core,
 int32_t axi_dac_init_finish(struct axi_dac *dac)
 {
 	uint32_t reg_data;
-	uint32_t freq;
-	uint32_t ratio;
 
 	axi_dac_read(dac, AXI_DAC_REG_STATUS, &reg_data);
 	if(reg_data == 0x0) {
 		printf("%s: Status errors\n", dac->name);
 		return -1;
 	}
-
-	axi_dac_read(dac, AXI_DAC_REG_CLK_FREQ, &freq);
-	axi_dac_read(dac, AXI_DAC_REG_CLK_RATIO, &ratio);
-	dac->clock_hz = freq * ratio;
-	dac->clock_hz = (dac->clock_hz * 390625) >> 8;
 
 	printf("%s: Successfully initialized (%"PRIu64" Hz)\n",
 	       dac->name, dac->clock_hz);
@@ -854,6 +847,8 @@ int32_t axi_dac_init(struct axi_dac **dac_core,
 {
 	struct axi_dac *dac;
 	int32_t ret;
+	uint32_t freq;
+	uint32_t ratio;
 
 	ret = axi_dac_init_begin(&dac, init);
 	if (ret)
@@ -863,11 +858,16 @@ int32_t axi_dac_init(struct axi_dac **dac_core,
 	axi_dac_write(dac, AXI_DAC_REG_RSTN,
 		      AXI_DAC_MMCM_RSTN | AXI_DAC_RSTN);
 
+	no_os_mdelay(100);
+
+	axi_dac_read(dac, AXI_DAC_REG_CLK_FREQ, &freq);
+	axi_dac_read(dac, AXI_DAC_REG_CLK_RATIO, &ratio);
+	dac->clock_hz = freq * ratio;
+	dac->clock_hz = (dac->clock_hz * 390625) >> 8;
+
 	axi_dac_write(dac, AXI_DAC_REG_RATECNTRL, AXI_DAC_RATE(3));
 	axi_dac_data_setup(dac);
 	axi_dac_write(dac, AXI_DAC_REG_SYNC_CONTROL, AXI_DAC_SYNC);
-
-	no_os_mdelay(100);
 
 	ret = axi_dac_init_finish(dac);
 	if (ret)
