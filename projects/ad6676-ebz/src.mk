@@ -32,7 +32,7 @@ SRCS +=	$(PLATFORM_DRIVERS)/axi_io.c \
 ifeq (y,$(strip $(TINYIIOD)))
 LIBRARIES += iio
 SRCS += $(NO-OS)/util/fifo.c \
-	$(NO-OS)/util/list.c \
+	$(NO-OS)/util/no_os_list.c \
 	$(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.c \
 	$(PLATFORM_DRIVERS)/uart.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c \

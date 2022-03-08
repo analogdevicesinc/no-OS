@@ -2,7 +2,7 @@
 SRC_DIRS += $(PROJECT)/src/app
 SRC_DIRS += $(NO-OS)/iio/iio_app
 
-SRCS +=	$(NO-OS)/util/list.c \
+SRCS +=	$(NO-OS)/util/no_os_list.c \
 	$(NO-OS)/util/fifo.c \
 	$(NO-OS)/util/util.c
 

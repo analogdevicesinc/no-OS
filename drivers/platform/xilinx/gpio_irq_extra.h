@@ -80,8 +80,8 @@ struct xil_gpio_irq_init_param {
 struct xil_gpio_irq_desc {
 	struct no_os_irq_ctrl_desc *parent_desc;
 	XGpioPs my_Gpio;
-	struct list_desc *callback_list;
-	struct iterator *it;
+	struct no_os_list_desc *callback_list;
+	struct no_os_iterator *it;
 };
 
 /**

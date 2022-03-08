@@ -30,7 +30,7 @@ SRCS += $(PLATFORM_DRIVERS)/uart.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c \
 	$(DRIVERS)/api/no_os_irq.c \
 	$(NO-OS)/util/fifo.c \
-	$(NO-OS)/util/list.c	
+	$(NO-OS)/util/no_os_list.c	
 endif
 INCS += $(DRIVERS)/axi_core/axi_dmac/axi_dmac.h \
 	$(DRIVERS)/axi_core/axi_pwmgen/axi_pwm_extra.h \

@@ -53,7 +53,7 @@ LIBRARIES += iio
 SRCS += $(PLATFORM_DRIVERS)/uart.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c \
 	$(NO-OS)/util/fifo.c \
-	$(NO-OS)/util/list.c \
+	$(NO-OS)/util/no_os_list.c \
 	$(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.c \
 	$(DRIVERS)/axi_core/iio_axi_dac/iio_axi_dac.c \
 	$(NO-OS)/iio/iio_app/iio_app.c \

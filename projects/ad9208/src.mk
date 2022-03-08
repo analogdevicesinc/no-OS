@@ -22,7 +22,7 @@ SRC_DIRS += $(DRIVERS)/axi_core/iio_axi_adc \
 
 SRCS	+= $(PLATFORM_DRIVERS)/uart.c \
 		$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c \
-		$(NO-OS)/util/list.c 
+		$(NO-OS)/util/no_os_list.c 
 INCS	+= $(INCLUDE)/no_os_uart.h \
 		$(INCLUDE)/no_os_list.h \
 		$(INCLUDE)/no_os_irq.h \

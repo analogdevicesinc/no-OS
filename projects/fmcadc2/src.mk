@@ -30,7 +30,7 @@ ifeq (y,$(strip $(TINYIIOD)))
 LIBRARIES += iio
 SRC_DIRS += $(NO-OS)/iio/iio_app
 SRCS += $(NO-OS)/util/fifo.c \
-	$(NO-OS)/util/list.c \
+	$(NO-OS)/util/no_os_list.c \
 	$(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.c \
 	$(DRIVERS)/api/no_os_irq.c \
 	$(PLATFORM_DRIVERS)/uart.c \

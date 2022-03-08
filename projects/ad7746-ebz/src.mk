@@ -37,7 +37,7 @@ ifeq (y,$(strip $(TINYIIOD)))
 LIBRARIES += iio
 SRCS += $(DRIVERS)/cdc/ad7746/iio_ad7746.c \
 	$(NO-OS)/iio/iio_app/iio_app.c \
-	$(NO-OS)/util/list.c \
+	$(NO-OS)/util/no_os_list.c \
 	$(NO-OS)/util/fifo.c
 INCS += $(DRIVERS)/cdc/ad7746/iio_ad7746.h \
 	$(NO-OS)/iio/iio_app/iio_app.h \
