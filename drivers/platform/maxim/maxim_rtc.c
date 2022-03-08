@@ -56,7 +56,7 @@
 * @brief Callback descriptor that contains a function to be called when an
 * interrupt occurs.
 */
-static struct callback_desc *cb;
+static struct no_os_callback_desc *cb;
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -229,10 +229,10 @@ int32_t rtc_set_cnt(struct rtc_desc *dev, uint32_t tmr_cnt)
 	return 0;
 }
 
-static int32_t max_rtc_irq_ctrl_init(struct irq_ctrl_desc **desc,
-				     const struct irq_init_param *param)
+static int32_t max_rtc_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
+				     const struct no_os_irq_init_param *param)
 {
-	struct irq_ctrl_desc *descriptor;
+	struct no_os_irq_ctrl_desc *descriptor;
 
 	if (!param)
 		return -EINVAL;
@@ -251,7 +251,7 @@ static int32_t max_rtc_irq_ctrl_init(struct irq_ctrl_desc **desc,
 	return 0;
 }
 
-static int32_t max_rtc_irq_ctrl_remove(struct irq_ctrl_desc *desc)
+static int32_t max_rtc_irq_ctrl_remove(struct no_os_irq_ctrl_desc *desc)
 {
 	if (!desc)
 		return -EINVAL;
@@ -264,8 +264,8 @@ static int32_t max_rtc_irq_ctrl_remove(struct irq_ctrl_desc *desc)
  * @param dev - the callback descriptor.
  * @return 0 in case of success, errno codes otherwise.
  */
-static int32_t max_rtc_register_callback(struct irq_ctrl_desc *desc,
-		uint32_t irq_id, struct callback_desc *callback_desc)
+static int32_t max_rtc_register_callback(struct no_os_irq_ctrl_desc *desc,
+		uint32_t irq_id, struct no_os_callback_desc *callback_desc)
 {
 	struct max_rtc_alarm_desc *alarm_desc;
 
@@ -300,7 +300,7 @@ static int32_t max_rtc_register_callback(struct irq_ctrl_desc *desc,
  * @brief Unregister a callback function.
  * @return 0 in case of success, errno codes otherwise.
  */
-static int32_t max_rtc_unregister_callback(struct irq_ctrl_desc *desc,
+static int32_t max_rtc_unregister_callback(struct no_os_irq_ctrl_desc *desc,
 		uint32_t irq_id)
 {
 	if (!cb)
@@ -318,7 +318,8 @@ static int32_t max_rtc_unregister_callback(struct irq_ctrl_desc *desc,
  * @param irq_time - the time at which the interrupt must occur (one-shot).
  * @return 0 in case of success, errno codes otherwise.
  */
-static int32_t max_rtc_enable_irq(struct irq_ctrl_desc *desc, uint32_t irq_id)
+static int32_t max_rtc_enable_irq(struct no_os_irq_ctrl_desc *desc,
+				  uint32_t irq_id)
 {
 	if (irq_id == RTC_TIMEOFDAY_INT)
 		MXC_RTC_EnableInt(MXC_RTC_INT_EN_LONG);
@@ -335,7 +336,8 @@ static int32_t max_rtc_enable_irq(struct irq_ctrl_desc *desc, uint32_t irq_id)
  * @param int_id - the interrupt identifier.
  * @return 0 in case of success, errno codes otherwise.
  */
-static int32_t max_rtc_disable_irq(struct irq_ctrl_desc *desc, uint32_t irq_id)
+static int32_t max_rtc_disable_irq(struct no_os_irq_ctrl_desc *desc,
+				   uint32_t irq_id)
 {
 	if (irq_id == RTC_TIMEOFDAY_INT)
 		MXC_RTC_DisableInt(MXC_RTC_INT_EN_LONG);
@@ -347,7 +349,7 @@ static int32_t max_rtc_disable_irq(struct irq_ctrl_desc *desc, uint32_t irq_id)
 	return 0;
 }
 
-const struct irq_platform_ops max_rtc_irq_ops = {
+const struct no_os_irq_platform_ops max_rtc_irq_ops = {
 	.init = &max_rtc_irq_ctrl_init,
 	.remove = &max_rtc_irq_ctrl_remove,
 	.register_callback = &max_rtc_register_callback,

@@ -69,10 +69,10 @@ static int32_t uart_fifo_insert(struct uart_desc *desc)
 {
 	int32_t ret;
 	struct xil_uart_desc *xil_uart_desc = desc->extra;
-	struct irq_ctrl_desc *irq_desc = xil_uart_desc->irq_desc;
+	struct no_os_irq_ctrl_desc *irq_desc = xil_uart_desc->irq_desc;
 
 	if (xil_uart_desc->bytes_received > 0) {
-		ret = irq_disable(irq_desc, xil_uart_desc->irq_id);
+		ret = no_os_irq_disable(irq_desc, xil_uart_desc->irq_id);
 		if (ret < 0)
 			return ret;
 		ret = fifo_insert(&xil_uart_desc->fifo, xil_uart_desc->buff,
@@ -92,7 +92,7 @@ static int32_t uart_fifo_insert(struct uart_desc *desc)
 			return FAILURE;
 			break;
 		}
-		ret = irq_enable(irq_desc, xil_uart_desc->irq_id);
+		ret = no_os_irq_enable(irq_desc, xil_uart_desc->irq_id);
 		if (ret < 0)
 			return ret;
 	}
@@ -285,15 +285,15 @@ static int32_t uart_irq_init(struct uart_desc *descriptor)
 	int32_t status;
 	uint32_t uart_irq_mask;
 	struct xil_uart_desc *xil_uart_desc = descriptor->extra;
-	struct callback_desc callback_desc;
+	struct no_os_callback_desc callback_desc;
 
 	switch(xil_uart_desc->type) {
 	case UART_PS:
 		callback_desc.callback = (void (*)())XUartPs_InterruptHandler;
 		callback_desc.ctx = xil_uart_desc->instance;
-		status = irq_register_callback(xil_uart_desc->irq_desc,
-					       xil_uart_desc->irq_id,
-					       &callback_desc);
+		status = no_os_irq_register_callback(xil_uart_desc->irq_desc,
+						     xil_uart_desc->irq_id,
+						     &callback_desc);
 		if (status < 0)
 			return status;
 		XUartPs_SetHandler(xil_uart_desc->instance, uart_irq_handler, xil_uart_desc);
@@ -315,7 +315,7 @@ static int32_t uart_irq_init(struct uart_desc *descriptor)
 		return FAILURE;
 	}
 
-	status = irq_enable(xil_uart_desc->irq_desc, xil_uart_desc->irq_id);
+	status = no_os_irq_enable(xil_uart_desc->irq_desc, xil_uart_desc->irq_id);
 	if (status < 0)
 		return status;
 

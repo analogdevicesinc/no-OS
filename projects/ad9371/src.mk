@@ -57,7 +57,7 @@ SRCS += $(PLATFORM_DRIVERS)/uart.c \
 	$(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.c \
 	$(DRIVERS)/axi_core/iio_axi_dac/iio_axi_dac.c \
 	$(NO-OS)/iio/iio_app/iio_app.c \
-	$(DRIVERS)/api/irq.c
+	$(DRIVERS)/api/no_os_irq.c
 endif
 INCS +=	$(PROJECT)/src/app/app_config.h \
 	$(PROJECT)/src/devices/ad9528/ad9528.h \

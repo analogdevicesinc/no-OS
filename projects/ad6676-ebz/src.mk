@@ -36,7 +36,7 @@ SRCS += $(NO-OS)/util/fifo.c \
 	$(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.c \
 	$(PLATFORM_DRIVERS)/uart.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c \
-	$(DRIVERS)/api/irq.c
+	$(DRIVERS)/api/no_os_irq.c
 endif
 INCS +=	$(PROJECT)/src/app_config.h \
 	$(PROJECT)/src/parameters.h

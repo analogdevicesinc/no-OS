@@ -50,7 +50,7 @@
 #include "max32660.h"
 #include "mxc_errors.h"
 
-static struct callback_desc *gpio_callback[N_PORTS][N_PINS];
+static struct no_os_callback_desc *gpio_callback[N_PORTS][N_PINS];
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -366,10 +366,10 @@ int32_t max_gpio_get_value(struct no_os_gpio_desc *desc, uint8_t *value)
  * @param param - The init param for the gpio irq descriptor.
  * @return 0 in case of success, -EINVAL otherwise.
  */
-static int32_t max_gpio_irq_ctrl_init(struct irq_ctrl_desc **desc,
-				      const struct irq_init_param *param)
+static int32_t max_gpio_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
+				      const struct no_os_irq_init_param *param)
 {
-	struct irq_ctrl_desc *descriptor;
+	struct no_os_irq_ctrl_desc *descriptor;
 
 	if (!param)
 		return -EINVAL;
@@ -392,7 +392,7 @@ static int32_t max_gpio_irq_ctrl_init(struct irq_ctrl_desc **desc,
  * @param desc - The GPIO descriptor.
  * @return 0 in case of success, -EINVAL otherwise.
  */
-static int32_t max_gpio_irq_ctrl_remove(struct irq_ctrl_desc *desc)
+static int32_t max_gpio_irq_ctrl_remove(struct no_os_irq_ctrl_desc *desc)
 {
 	if (!desc)
 		return -EINVAL;
@@ -409,9 +409,9 @@ static int32_t max_gpio_irq_ctrl_remove(struct irq_ctrl_desc *desc)
  * @param trig_l - the trigger condition.
  * @return 0 in case of success, -EINVAL otherwise.
  */
-static int32_t max_gpio_irq_set_trigger_level(struct irq_ctrl_desc *desc,
+static int32_t max_gpio_irq_set_trigger_level(struct no_os_irq_ctrl_desc *desc,
 		uint32_t irq_id,
-		enum irq_trig_level trig_l)
+		enum no_os_irq_trig_level trig_l)
 {
 	struct no_os_gpio_desc *g_desc;
 	mxc_gpio_cfg_t *max_gpio_cfg;
@@ -427,19 +427,19 @@ static int32_t max_gpio_irq_set_trigger_level(struct irq_ctrl_desc *desc,
 	max_gpio_cfg->mask = BIT(irq_id);
 
 	switch (trig_l) {
-	case IRQ_EDGE_RISING:
+	case NO_OS_IRQ_EDGE_RISING:
 		MXC_GPIO_IntConfig(max_gpio_cfg, MXC_GPIO_INT_RISING);
 		break;
-	case IRQ_EDGE_FALLING:
+	case NO_OS_IRQ_EDGE_FALLING:
 		MXC_GPIO_IntConfig(max_gpio_cfg, MXC_GPIO_INT_FALLING);
 		break;
-	case IRQ_LEVEL_HIGH:
+	case NO_OS_IRQ_LEVEL_HIGH:
 		MXC_GPIO_IntConfig(max_gpio_cfg, MXC_GPIO_INT_HIGH);
 		break;
-	case IRQ_LEVEL_LOW:
+	case NO_OS_IRQ_LEVEL_LOW:
 		MXC_GPIO_IntConfig(max_gpio_cfg, MXC_GPIO_INT_LOW);
 		break;
-	case IRQ_EDGE_BOTH:
+	case NO_OS_IRQ_EDGE_BOTH:
 		MXC_GPIO_IntConfig(max_gpio_cfg, MXC_GPIO_INT_BOTH);
 		break;
 	default:
@@ -459,16 +459,16 @@ static int32_t max_gpio_irq_set_trigger_level(struct irq_ctrl_desc *desc,
  * @param callback_desc - The callback descriptor
  * @return 0 in case of success, errno error codes otherwise.
  */
-static int32_t max_gpio_register_callback(struct irq_ctrl_desc *desc,
-		uint32_t irq_id, struct callback_desc *callback_desc)
+static int32_t max_gpio_register_callback(struct no_os_irq_ctrl_desc *desc,
+		uint32_t irq_id, struct no_os_callback_desc *callback_desc)
 {
 	int32_t ret;
 	uint32_t port_id;
-	struct callback_desc *descriptor;
+	struct no_os_callback_desc *descriptor;
 	struct gpio_irq_config *g_irq;
 	struct no_os_gpio_desc *g_desc;
 	mxc_gpio_cfg_t *max_gpio_cfg;
-	enum irq_trig_level trig_level;
+	enum no_os_irq_trig_level trig_level;
 
 	if (!desc || !desc->extra || !callback_desc || irq_id >= N_PINS)
 		return -EINVAL;
@@ -503,7 +503,7 @@ static int32_t max_gpio_register_callback(struct irq_ctrl_desc *desc,
  * @param irq_id - The pin number
  * @return 0 in case of success, errno error codes otherwise.
  */
-static int32_t max_gpio_unregister_callback(struct irq_ctrl_desc *desc,
+static int32_t max_gpio_unregister_callback(struct no_os_irq_ctrl_desc *desc,
 		uint32_t irq_id)
 {
 	uint32_t port_id;
@@ -529,7 +529,8 @@ static int32_t max_gpio_unregister_callback(struct irq_ctrl_desc *desc,
  * @param irq_id - The pin number
  * @return 0 in case of success, errno error codes otherwise.
  */
-static int32_t max_gpio_enable_irq(struct irq_ctrl_desc *desc, uint32_t irq_id)
+static int32_t max_gpio_enable_irq(struct no_os_irq_ctrl_desc *desc,
+				   uint32_t irq_id)
 {
 	mxc_gpio_cfg_t *max_gpio_cfg;
 	mxc_gpio_regs_t *gpio_regs;
@@ -553,7 +554,8 @@ static int32_t max_gpio_enable_irq(struct irq_ctrl_desc *desc, uint32_t irq_id)
  * @param irq_id - The pin on which the interrupt will be disabled
  * @return 0 in case of success, errno error codes otherwise.
  */
-static int32_t max_gpio_disable_irq(struct irq_ctrl_desc *desc, uint32_t irq_id)
+static int32_t max_gpio_disable_irq(struct no_os_irq_ctrl_desc *desc,
+				    uint32_t irq_id)
 {
 	mxc_gpio_cfg_t *max_gpio_cfg;
 	mxc_gpio_regs_t *gpio_regs;
@@ -587,7 +589,7 @@ const struct no_os_gpio_platform_ops max_gpio_ops = {
 /**
  * @brief maxim platform specific GPIO IRQ platform ops structure
  */
-const struct irq_platform_ops max_gpio_irq_ops = {
+const struct no_os_irq_platform_ops max_gpio_irq_ops = {
 	.init = &max_gpio_irq_ctrl_init,
 	.register_callback = &max_gpio_register_callback,
 	.unregister = &max_gpio_unregister_callback,

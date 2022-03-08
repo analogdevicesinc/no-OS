@@ -81,10 +81,10 @@ int main(void)
 	struct uart_init_param uart_init_par;
 
 	/* IRQ initial configuration. */
-	struct irq_init_param irq_init_param;
+	struct no_os_irq_init_param irq_init_param;
 
 	/* IRQ instance. */
-	struct irq_ctrl_desc *irq_desc;
+	struct no_os_irq_ctrl_desc *irq_desc;
 
 	status = platform_init();
 	if (IS_ERR_VALUE(status))

@@ -229,7 +229,7 @@ static void uart_callback(void *ctx, uint32_t event, void *buff)
 		} else {
 			extra->read_desc.is_nonblocking = false;
 			if (desc->callback)
-				desc->callback(desc->callback_ctx, IRQ_READ_DONE,
+				desc->callback(desc->callback_ctx, NO_OS_IRQ_READ_DONE,
 					       NULL);
 		}
 		break;
@@ -247,7 +247,7 @@ static void uart_callback(void *ctx, uint32_t event, void *buff)
 		} else {
 			extra->write_desc.is_nonblocking = false;
 			if (desc->callback)
-				desc->callback(desc->callback_ctx, IRQ_WRITE_DONE,
+				desc->callback(desc->callback_ctx, NO_OS_IRQ_WRITE_DONE,
 					       NULL);
 		}
 		break;
@@ -256,7 +256,7 @@ static void uart_callback(void *ctx, uint32_t event, void *buff)
 		extra->read_desc.is_nonblocking = false;
 		extra->write_desc.is_nonblocking = false;
 		if (desc->callback)
-			desc->callback(desc->callback_ctx, IRQ_ERROR, buff);
+			desc->callback(desc->callback_ctx, NO_OS_IRQ_ERROR, buff);
 		break;
 	}
 }

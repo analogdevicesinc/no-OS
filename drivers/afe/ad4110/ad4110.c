@@ -702,9 +702,9 @@ static void irq_adc_read(struct ad4110_callback_ctx *ctx)
 			pr_err("DATA reg could not be read \n");
 		ctx->buffer_size--;
 		ctx->buffer++;
-		if(irq_enable(dev->irq_desc, dev->nready_pin))
+		if(no_os_irq_enable(dev->irq_desc, dev->nready_pin))
 			pr_err("IRQ_enable error \n");
-	} else if(irq_disable(dev->irq_desc, dev->nready_pin)) {
+	} else if(no_os_irq_disable(dev->irq_desc, dev->nready_pin)) {
 		pr_err("IRQ_disable error \n");
 	}
 }
@@ -1044,15 +1044,17 @@ int32_t ad4110_continuous_read(struct ad4110_dev *dev, int32_t *buffer,
 		.buffer_size = buffer_size,
 	};
 
-	struct callback_desc irq_callback = {
+	struct no_os_callback_desc irq_callback = {
 		.callback = &irq_adc_read,
 		.ctx = &ctx
 	};
 
-	ret = irq_trigger_level_set(dev->irq_desc, dev->nready_pin, IRQ_LEVEL_LOW);
+	ret = no_os_irq_trigger_level_set(dev->irq_desc, dev->nready_pin,
+					  NO_OS_IRQ_LEVEL_LOW);
 	if (ret)
 		return ret;
-	ret = irq_register_callback(dev->irq_desc, dev->nready_pin, &irq_callback);
+	ret = no_os_irq_register_callback(dev->irq_desc, dev->nready_pin,
+					  &irq_callback);
 	if (ret)
 		return ret;
 
@@ -1062,7 +1064,7 @@ int32_t ad4110_continuous_read(struct ad4110_dev *dev, int32_t *buffer,
 		return ret;
 	// make sure adc is fully initialized before irq enabling
 	mdelay(2U);
-	ret = irq_enable(dev->irq_desc, dev->nready_pin);
+	ret = no_os_irq_enable(dev->irq_desc, dev->nready_pin);
 	if (ret)
 		return ret;
 

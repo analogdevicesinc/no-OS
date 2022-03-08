@@ -54,7 +54,7 @@
 * @brief Callback descriptor that contains a function to be called when an
 * interrupt occurs.
 */
-static struct callback_desc *cb[2];
+static struct no_os_callback_desc *cb[2];
 
 /**
 * @brief Descriptors to hold the state of nonblocking read and writes
@@ -403,10 +403,10 @@ uint32_t uart_get_errors(struct uart_desc *desc)
  * @param desc - The init parameter.
  * @return 0 in case of success, errno codes otherwise.
  */
-static int32_t max_uart_irq_ctrl_init(struct irq_ctrl_desc **desc,
-				      const struct irq_init_param *param)
+static int32_t max_uart_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
+				      const struct no_os_irq_init_param *param)
 {
-	struct irq_ctrl_desc *descriptor;
+	struct no_os_irq_ctrl_desc *descriptor;
 
 	if (!param)
 		return -EINVAL;
@@ -430,7 +430,7 @@ static int32_t max_uart_irq_ctrl_init(struct irq_ctrl_desc **desc,
  * @param desc - The UART descriptor.
  * @return 0 in case of success, errno codes otherwise.
  */
-static int32_t max_uart_irq_ctrl_remove(struct irq_ctrl_desc *desc)
+static int32_t max_uart_irq_ctrl_remove(struct no_os_irq_ctrl_desc *desc)
 {
 	if (!desc)
 		return -EINVAL;
@@ -447,9 +447,9 @@ static int32_t max_uart_irq_ctrl_remove(struct irq_ctrl_desc *desc)
  * @param callback_desc - The callback_descriptor.
  * @return 0 in case of success, errno codes otherwise.
  */
-static int32_t max_uart_register_callback(struct irq_ctrl_desc *desc,
+static int32_t max_uart_register_callback(struct no_os_irq_ctrl_desc *desc,
 		uint32_t irq_id,
-		struct callback_desc *callback_desc)
+		struct no_os_callback_desc *callback_desc)
 {
 	if (!desc || !callback_desc || irq_id >= N_PORTS)
 		return -EINVAL;
@@ -473,7 +473,7 @@ static int32_t max_uart_register_callback(struct irq_ctrl_desc *desc,
  * @param irq_id - The UART port.
  * @return 0 in case of success, errno codes otherwise.
  */
-static int32_t max_uart_unregister_callback(struct irq_ctrl_desc *desc,
+static int32_t max_uart_unregister_callback(struct no_os_irq_ctrl_desc *desc,
 		uint32_t irq_id)
 {
 	if (irq_id >= N_PORTS || !cb[irq_id])
@@ -485,7 +485,7 @@ static int32_t max_uart_unregister_callback(struct irq_ctrl_desc *desc,
 	return 0;
 }
 
-const struct irq_platform_ops max_uart_irq_ops = {
+const struct no_os_irq_platform_ops max_uart_irq_ops = {
 	.init = &max_uart_irq_ctrl_init,
 	.remove = &max_uart_irq_ctrl_remove,
 	.register_callback = &max_uart_register_callback,

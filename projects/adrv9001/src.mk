@@ -63,7 +63,7 @@ SRCS += $(PLATFORM_DRIVERS)/uart.c \
 	$(NO-OS)/util/fifo.c \
 	$(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.c \
 	$(DRIVERS)/axi_core/iio_axi_dac/iio_axi_dac.c \
-	$(DRIVERS)/api/irq.c
+	$(DRIVERS)/api/no_os_irq.c
 INCS += $(INCLUDE)/no_os_uart.h \
 	$(INCLUDE)/no_os_irq.h \
 	$(PLATFORM_DRIVERS)/irq_extra.h \

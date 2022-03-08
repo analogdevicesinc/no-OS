@@ -249,7 +249,7 @@ static int32_t uart_setup(struct uart_desc **uart_desc,
 }
 
 #if defined(ADUCM_PLATFORM) || (defined(XILINX_PLATFORM) && !defined(PLATFORM_MB))
-static int32_t irq_setup(struct irq_ctrl_desc **irq_desc)
+static int32_t irq_setup(struct no_os_irq_ctrl_desc **irq_desc)
 {
 	int32_t status;
 #if defined(XILINX_PLATFORM) && !defined(PLATFORM_MB)
@@ -257,23 +257,23 @@ static int32_t irq_setup(struct irq_ctrl_desc **irq_desc)
 		.type = IRQ_PS,
 	};
 	struct xil_irq_init_param *platform_irq_init_par = &p;
-	const struct irq_platform_ops *platform_irq_ops = &xil_irq_ops;
+	const struct no_os_irq_platform_ops *platform_irq_ops = &xil_irq_ops;
 #elif defined(ADUCM_PLATFORM)
 	void *platform_irq_init_par = NULL;
-	const struct irq_platform_ops *platform_irq_ops = &aducm_irq_ops;
+	const struct no_os_irq_platform_ops *platform_irq_ops = &aducm_irq_ops;
 #endif
 
-	struct irq_init_param irq_init_param = {
+	struct no_os_irq_init_param irq_init_param = {
 		.irq_ctrl_id = INTC_DEVICE_ID,
 		.platform_ops = platform_irq_ops,
 		.extra = platform_irq_init_par
 	};
 
-	status = irq_ctrl_init(irq_desc, &irq_init_param);
+	status = no_os_irq_ctrl_init(irq_desc, &irq_init_param);
 	if (status < 0)
 		return status;
 
-	return irq_global_enable(*irq_desc);
+	return no_os_irq_global_enable(*irq_desc);
 }
 #endif
 
@@ -294,13 +294,13 @@ int32_t iio_app_run(struct iio_app_device *devices, uint32_t len)
 	 * any of the iio_devices. */
 	for (i = 0; i < len; i++) {
 		if (devices[i].dev_descriptor->irq_desc) {
-			irq_desc = (struct irq_ctrl_desc *)devices[i].dev_descriptor->irq_desc;
+			irq_desc = (struct no_os_irq_ctrl_desc *)devices[i].dev_descriptor->irq_desc;
 			break;
 		}
 	}
 
 	if (!irq_desc) {
-		status = irq_setup((struct irq_ctrl_desc **)&irq_desc);
+		status = irq_setup((struct no_os_irq_ctrl_desc **)&irq_desc);
 		if (status < 0)
 			return status;
 	}

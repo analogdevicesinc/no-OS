@@ -58,7 +58,7 @@
  */
 struct xil_callback_desc {
 	int32_t pin_nb;
-	struct callback_desc callback;
+	struct no_os_callback_desc callback;
 	bool triggered;
 	bool enabled;
 };
@@ -69,7 +69,7 @@ struct xil_callback_desc {
  * specific GPIO IRQ parameters.
  */
 struct xil_gpio_irq_init_param {
-	struct irq_ctrl_desc *parent_desc;
+	struct no_os_irq_ctrl_desc *parent_desc;
 	int32_t gpio_device_id;
 };
 
@@ -78,7 +78,7 @@ struct xil_gpio_irq_init_param {
  * @brief Xilinx platform specific GPIO IRQ descriptor
  */
 struct xil_gpio_irq_desc {
-	struct irq_ctrl_desc *parent_desc;
+	struct no_os_irq_ctrl_desc *parent_desc;
 	XGpioPs my_Gpio;
 	struct list_desc *callback_list;
 	struct iterator *it;
@@ -87,6 +87,6 @@ struct xil_gpio_irq_desc {
 /**
  * @brief Xilinx specific GPIO IRQ platform ops structure
  */
-extern const struct irq_platform_ops xil_gpio_irq_ops;
+extern const struct no_os_irq_platform_ops xil_gpio_irq_ops;
 
 #endif

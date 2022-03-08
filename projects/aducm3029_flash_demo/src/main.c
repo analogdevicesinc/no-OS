@@ -84,9 +84,9 @@ int main(int argc, char *argv[])
 		.stop = UART_STOP_1_BIT,
 		.extra = &aducm_uart_init
 	};
-	struct irq_ctrl_desc *irq_dut;
+	struct no_os_irq_ctrl_desc *irq_dut;
 	int32_t platform_irq_init_par = 0;
-	struct irq_init_param irq_init = {
+	struct no_os_irq_init_param irq_init = {
 		.irq_ctrl_id = 0,
 		.extra = &platform_irq_init_par
 	};
@@ -95,11 +95,11 @@ int main(int argc, char *argv[])
 	if(ret < 0)
 		return ret;
 
-	ret = irq_ctrl_init(&irq_dut, &irq_init);
+	ret = no_os_irq_ctrl_init(&irq_dut, &irq_init);
 	if(ret < 0)
 		return ret;
 
-	ret = irq_global_enable(irq_dut);
+	ret = no_os_irq_global_enable(irq_dut);
 	if (ret < 0)
 		return ret;
 
@@ -143,10 +143,10 @@ int main(int argc, char *argv[])
 	flash_read(flash_dut, 0x3E004, &flash_val, 1);
 	printf("Address 0x3E004: %lX\n", flash_val);
 
-	ret = irq_global_disable(irq_dut);
+	ret = no_os_irq_global_disable(irq_dut);
 	if (ret < 0)
 		return ret;
-	ret = irq_ctrl_remove(irq_dut);
+	ret = no_os_irq_ctrl_remove(irq_dut);
 	if (ret < 0)
 		return ret;
 	ret = uart_remove(uart_dut);

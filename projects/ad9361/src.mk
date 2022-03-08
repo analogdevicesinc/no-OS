@@ -91,7 +91,7 @@ INCS += $(INCLUDE)/no_os_fifo.h \
 endif
 ifeq (xilinx,$(strip $(PLATFORM)))
 SRCS += $(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c \
-	$(DRIVERS)/api/irq.c
+	$(DRIVERS)/api/no_os_irq.c
 	
 INCS += $(PLATFORM_DRIVERS)/irq_extra.h \
 	$(PLATFORM_DRIVERS)/spi_extra.h \

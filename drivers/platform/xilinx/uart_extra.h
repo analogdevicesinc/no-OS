@@ -76,7 +76,7 @@ struct xil_uart_init_param {
 	/** Interrupt Request ID */
 	uint32_t			irq_id;
 	/** Interrupt Request Descriptor */
-	struct irq_ctrl_desc *irq_desc;
+	struct no_os_irq_ctrl_desc *irq_desc;
 };
 
 /**
@@ -89,7 +89,7 @@ struct xil_uart_desc {
 	/** Interrupt Request ID */
 	uint32_t			irq_id;
 	/** Interrupt Request Descriptor */
-	struct irq_ctrl_desc *irq_desc;
+	struct no_os_irq_ctrl_desc *irq_desc;
 	/** FIFO */
 	struct fifo_element	*fifo;
 	/** FIFO read offset */

@@ -84,8 +84,8 @@ static int32_t adpd1080pmod_32k_calib(struct adpd188_dev *adpd1080_dev)
 		.extra = NULL,
 		.platform_ops = &aducm_gpio_ops
 	};
-	struct irq_ctrl_desc *cal_irq;
-	struct irq_init_param cal_irq_init = {
+	struct no_os_irq_ctrl_desc *cal_irq;
+	struct no_os_irq_init_param cal_irq_init = {
 		.irq_ctrl_id = 0,
 		.platform_ops = &aducm_irq_ops,
 		.extra = NULL
@@ -105,7 +105,7 @@ static int32_t adpd1080pmod_32k_calib(struct adpd188_dev *adpd1080_dev)
 	if(status != SUCCESS)
 		goto gpio_finish;
 
-	status = irq_ctrl_init(&cal_irq, &cal_irq_init);
+	status = no_os_irq_ctrl_init(&cal_irq, &cal_irq_init);
 	if(status != SUCCESS)
 		goto gpio_finish;
 
@@ -113,13 +113,13 @@ static int32_t adpd1080pmod_32k_calib(struct adpd188_dev *adpd1080_dev)
 		.gpio_handler = sync_gpio,
 		.mode = GPIO_GROUP_POSITIVE_EDGE
 	};
-	struct callback_desc sync_gpio_cb = {
+	struct no_os_callback_desc sync_gpio_cb = {
 		.callback = adpd1080_sync_gpio_cb,
 		.ctx = &sync_gpio_pulse_no,
 		.config = &sync_irq_config
 	};
-	status = irq_register_callback(cal_irq, ADUCM_GPIO_A_INT_ID,
-				       &sync_gpio_cb);
+	status = no_os_irq_register_callback(cal_irq, ADUCM_GPIO_A_INT_ID,
+					     &sync_gpio_cb);
 	if(status != SUCCESS)
 		goto gpio_finish;
 
@@ -140,7 +140,7 @@ static int32_t adpd1080pmod_32k_calib(struct adpd188_dev *adpd1080_dev)
 	if (status != SUCCESS)
 		goto finish;
 
-	status = irq_enable(cal_irq, ADUCM_GPIO_A_INT_ID);
+	status = no_os_irq_enable(cal_irq, ADUCM_GPIO_A_INT_ID);
 	if(status != SUCCESS)
 		goto finish;
 
@@ -170,11 +170,11 @@ static int32_t adpd1080pmod_32k_calib(struct adpd188_dev *adpd1080_dev)
 			goto finish;
 	}
 
-	status = irq_disable(cal_irq, ADUCM_GPIO_A_INT_ID);
+	status = no_os_irq_disable(cal_irq, ADUCM_GPIO_A_INT_ID);
 	if(status != SUCCESS)
 		goto finish;
 
-	status = irq_unregister(cal_irq, ADUCM_GPIO_A_INT_ID);
+	status = no_os_irq_unregister(cal_irq, ADUCM_GPIO_A_INT_ID);
 	if(status != SUCCESS)
 		goto gpio_finish;
 
@@ -195,7 +195,7 @@ static int32_t adpd1080pmod_32k_calib(struct adpd188_dev *adpd1080_dev)
 		goto finish;
 
 finish:
-	irq_ctrl_remove(cal_irq);
+	no_os_irq_ctrl_remove(cal_irq);
 gpio_finish:
 	no_os_gpio_remove(sync_gpio);
 timer_finish:
