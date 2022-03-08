@@ -86,7 +86,7 @@ int main()
 		.bias = ADA4250_BIAS_DISABLE,
 		.gain = ADA4250_GAIN_8,
 		.avdd_v = 5,
-		.offset_uv = 0,
+		.offset_raw = 0,
 	};
 
 	ret = ada4250_init(&ada4250_dev, &ada4250_param);

@@ -151,7 +151,7 @@ int32_t ada4250_update_desc(struct ada4250_dev *dev)
 	ret = ada4250_read(dev, ADA4250_REG_SNSR_CAL_VAL, &reg_data);
 	if (ret != SUCCESS)
 		return ret;
-	dev->offset_uv = reg_data & ADA4250_SNSR_CAL_VAL_MSK;
+	dev->offset_raw = reg_data & ADA4250_SNSR_CAL_VAL_MSK;
 
 	ret = ada4250_read(dev, ADA4250_REG_SNSR_CAL_CNFG, &reg_data);
 	if (ret != SUCCESS)
@@ -308,16 +308,16 @@ int32_t ada4250_set_gain(struct ada4250_dev *dev, enum ada4250_gain gain)
 /**
  * @brief Set offset value for ADA4250.
  * @param dev - The device structure.
- * @param offset - Offset Value in uV.
+ * @param offset - Offset Value in mV.
  * @return Returns SUCCESS in case of success or negative error code.
  */
-int32_t ada4250_set_offset(struct ada4250_dev *dev, int32_t offset)
+int32_t ada4250_set_offset(struct ada4250_dev *dev, float offset)
 {
 	int32_t ret;
 	uint32_t i;
 	uint8_t offset_raw;
 	enum ada4250_offset_range range;
-	int64_t x[8], vlsb, max_vos, min_vos;
+	float x[8], vlsb, max_vos, min_vos;
 
 	if(dev->device_id != ADA4250)
 		return -ENODEV;
@@ -327,7 +327,7 @@ int32_t ada4250_set_offset(struct ada4250_dev *dev, int32_t offset)
 
 	x[0] = (dev->bias == ADA4250_BIAS_AVDD) ? dev->avdd_v : 5;
 
-	x[1] = 126 * (x[0] - 1);
+	x[1] = 0.126 * (x[0] - 1);
 	x[2] = x[1] * 1000 / 1333;
 	x[3] = x[1] * 1000 / 2301;
 	x[4] = x[1] * 1000 / 4283;
@@ -355,10 +355,10 @@ int32_t ada4250_set_offset(struct ada4250_dev *dev, int32_t offset)
 		return ret;
 
 	if (offset < 0) {
-		dev->offset_uv = (-1) * offset_raw * vlsb;
+		dev->offset_raw = offset_raw;
 		return ada4250_write(dev, ADA4250_REG_SNSR_CAL_VAL, offset_raw);
 	} else {
-		dev->offset_uv = offset_raw * vlsb;
+		dev->offset_raw = (1 << 8 | offset_raw);
 		return ada4250_write(dev, ADA4250_REG_SNSR_CAL_VAL, (1 << 8 | offset_raw));
 	}
 }
@@ -427,7 +427,7 @@ static int32_t ada4250_set_config(struct ada4250_dev *dev)
 			return ret;
 
 		if (dev->bias != ADA4250_BIAS_DISABLE) {
-			ret = ada4250_set_offset(dev, dev->offset_uv);
+			ret = ada4250_set_offset(dev, dev->offset_raw);
 			if (ret != SUCCESS)
 				return ret;
 		}
@@ -537,7 +537,7 @@ int32_t ada4250_init(struct ada4250_dev **device,
 	dev->refbuf_en = init_param->refbuf_en;
 	dev->gain = init_param->gain;
 	dev->bias = init_param->bias;
-	dev->offset_uv = init_param->offset_uv;
+	dev->offset_raw = init_param->offset_raw;
 	dev->avdd_v = init_param->avdd_v;
 	dev->device_id = init_param->device_id;
 	dev->bandwidth = init_param->bandwidth;
