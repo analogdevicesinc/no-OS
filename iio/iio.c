@@ -499,7 +499,7 @@ static int32_t __iio_str_parse(char *buf, int32_t *integer, int32_t *_fract,
 	if (p == NULL)
 		return -EINVAL;
 
-	*_fract = strtol(p, NULL, 0);
+	*_fract = strtol(p, NULL, 10);
 
 	return 0;
 }
