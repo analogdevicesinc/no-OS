@@ -469,7 +469,7 @@ static struct iio_attribute aducm3029_attributes[] = {
 };
 
 struct iio_device const iio_aducm3029_desc = {
-	.num_ch = sizeof(aducm3029_channels) / sizeof(aducm3029_channels[0]),
+	.num_ch = ARRAY_SIZE(aducm3029_channels),
 	.channels = aducm3029_channels,
 	.attributes = aducm3029_attributes,
 	.pre_enable = (int32_t (*)())iio_aducm3029_adc_set_mask,
