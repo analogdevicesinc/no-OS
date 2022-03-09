@@ -65,9 +65,9 @@ int get_dac_demo_attr(void *device, char *buf, uint32_t len,
 
 	switch(attr_id) {
 	case DAC_GLOBAL_ATTR:
-		return snprintf(buf,len,"%"PRIu32"",desc->dac_global_attr);
+		return iio_snprintf(buf, len, "%"PRIu32"", desc->dac_global_attr);
 	case DAC_CHANNEL_ATTR:
-		return snprintf(buf,len,"%"PRIu32"",desc->dac_ch_attr[channel->ch_num]);
+		return iio_snprintf(buf, len, "%"PRIu32"", desc->dac_ch_attr[channel->ch_num]);
 	default:
 		return -EINVAL;
 	}

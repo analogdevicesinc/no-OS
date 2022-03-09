@@ -76,11 +76,19 @@ static int get_calibphase(void *device, char *buf, uint32_t len,
 		return ret;
 
 	if (val2 < 0 && val >= 0) {
-		snprintf(buf, len, "-");
+		ret = iio_snprintf(buf, len, "-");
+		if (ret < 0)
+			return ret;
 		i++;
 	}
 
-	return i + snprintf(&buf[i], len, "%"PRIi32".%.6"PRIi32"", val, abs(val2));
+	ret = iio_snprintf(buf+i, len-i, "%"PRIi32".%.6"PRIi32"", val,
+			   abs(val2));
+
+	if (ret < 0)
+		return ret;
+
+	return i + ret;
 }
 
 /**
@@ -105,7 +113,7 @@ static int get_calibbias(void *device, char *buf, uint32_t len,
 	if (ret < 0)
 		return ret;
 
-	return snprintf(buf, len, "%"PRIi32"", val);
+	return iio_snprintf(buf, len, "%"PRIi32"", val);
 }
 
 /**
@@ -128,15 +136,19 @@ static int get_calibscale(void *device, char *buf, uint32_t len,
 		return ret;
 
 	if (val2 < 0 && val >= 0) {
-		ret = snprintf(buf, len, "-");
+		ret = iio_snprintf(buf, len, "-");
 		if (ret < 0)
 			return ret;
 		i++;
 	}
-	ret = i + snprintf(&buf[i], len, "%"PRIi32".%.6"PRIi32"", val,
+
+	ret = iio_snprintf(buf+i, len-i, "%"PRIi32".%.6"PRIi32"", val,
 			   abs(val2));
 
-	return ret;
+	if (ret < 0)
+		return ret;
+
+	return i + ret;
 }
 
 /**
@@ -181,7 +193,7 @@ static int get_sampling_frequency(void *device, char *buf, uint32_t len,
 	if (ret < 0)
 		return ret;
 
-	return snprintf(buf, len, "%"PRIi64"", sampling_freq_hz);
+	return iio_snprintf(buf, len, "%"PRIi64"", sampling_freq_hz);
 }
 
 /**

@@ -69,22 +69,27 @@ static int get_voltage_calibscale(void *device, char *buf, uint32_t len,
 				  intptr_t priv)
 {
 	int32_t val, val2;
+	int i = 0;
 	struct iio_axi_dac_desc *iio_dac = (struct iio_axi_dac_desc*)device;
 	int ret = axi_dac_dds_get_calib_scale(iio_dac->dac, channel->ch_num,
 					      &val, &val2);
-	int32_t i = 0;
-	if(ret < 0)
+	if (ret < 0)
 		return ret;
-	if(val2 < 0 && val >= 0) {
-		ret = (int) snprintf(buf, len, "-");
-		if(ret < 0)
+
+	if (val2 < 0 && val >= 0) {
+		ret = iio_snprintf(buf, len, "-");
+		if (ret < 0)
 			return ret;
 		i++;
 	}
-	ret = i + (int) snprintf(&buf[i], len, "%"PRIi32".%.6"PRIi32"", val,
-				 abs(val2));
 
-	return ret;
+	ret = iio_snprintf(buf+i, len-i, "%"PRIi32".%.6"PRIi32"", val,
+			   abs(val2));
+
+	if (ret < 0)
+		return ret;
+
+	return i + ret;
 }
 
 /**
@@ -100,17 +105,25 @@ static int get_voltage_calibphase(void *device, char *buf, uint32_t len,
 				  intptr_t priv)
 {
 	int32_t val, val2;
-	int32_t i = 0;
+	int i = 0;
 	struct iio_axi_dac_desc* iio_dac = (struct iio_axi_dac_desc*)device;
 	int ret = axi_dac_dds_get_calib_phase(iio_dac->dac, channel->ch_num,
 					      &val, &val2);
-	if(ret < 0)
+	if (ret < 0)
 		return ret;
-	if(val2 < 0 && val >= 0) {
+
+	if (val2 < 0 && val >= 0) {
+		ret = iio_snprintf(buf, len, "-");
+		if (ret < 0)
+			return ret;
 		i++;
 	}
 
-	return i + snprintf(&buf[i], len, "%"PRIi32".%.6"PRIi32"", val, abs(val2));
+	ret = iio_snprintf(buf+i, len-i, "%"PRIi32".%.6"PRIi32"", val, abs(val2));
+	if (ret < 0)
+		return ret;
+
+	return i + ret;
 }
 
 /**
@@ -150,7 +163,7 @@ static int get_altvoltage_phase(void *device, char *buf, uint32_t len,
 	if (ret < 0)
 		return ret;
 
-	return snprintf(buf, len, "%"PRIu32"", phase);
+	return iio_snprintf(buf, len, "%"PRIu32"", phase);
 }
 
 /**
@@ -171,8 +184,8 @@ static int get_altvoltage_scale(void *device, char *buf, uint32_t len,
 	if (ret < 0)
 		return ret;
 
-	return snprintf(buf, len, "%"PRIi32".%.6"PRIi32"", (scale / 1000000),
-			(scale % 1000000));
+	return iio_snprintf(buf, len, "%"PRIi32".%.6"PRIi32"",
+			    (scale / 1000000), (scale % 1000000));
 }
 
 /**
@@ -193,7 +206,7 @@ static int get_altvoltage_frequency(void *device, char *buf, uint32_t len,
 	if (ret < 0)
 		return ret;
 
-	return snprintf(buf, len, "%"PRIi32"", freq);
+	return iio_snprintf(buf, len, "%"PRIi32"", freq);
 }
 
 /**

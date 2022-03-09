@@ -292,6 +292,7 @@ int32_t ad9361_dig_interface_timing_analysis(struct ad9361_rf_phy *phy,
 	int32_t i, j, len = 0;
 	uint8_t field[16][16];
 	uint8_t rx;
+	int ret;
 
 	dev_dbg(&phy->spi->dev, "%s:\n", __func__);
 
@@ -327,22 +328,49 @@ int32_t ad9361_dig_interface_timing_analysis(struct ad9361_rf_phy *phy,
 
 	ad9361_tx_mute(phy, 0);
 
-	len += snprintf(buf + len, buflen, "CLK: %"PRIu32" Hz 'o' = PASS\n",
-			clk_get_rate(phy, phy->ref_clk_scale[RX_SAMPL_CLK]));
-	len += snprintf(buf + len, buflen, "DC");
-	for (i = 0; i < 16; i++)
-		len += snprintf(buf + len, buflen, "%"PRIx32":", i);
-	len += snprintf(buf + len, buflen, "\n");
+	ret = snprintf(buf+len, buflen-len, "CLK: %"PRIu32" Hz 'o' = PASS\n",
+		       clk_get_rate(phy, phy->ref_clk_scale[RX_SAMPL_CLK]));
+	if (ret < 0 || ret >= buflen-len)
+		return -1;
+	len += ret;
+
+	ret = snprintf(buf+len, buflen-len, "DC");
+	if (ret < 0 || ret >= buflen-len)
+		return -1;
+	len += ret;
 
 	for (i = 0; i < 16; i++) {
-		len += snprintf(buf + len, buflen, "%"PRIx32":", i);
-		for (j = 0; j < 16; j++) {
-			len += snprintf(buf + len, buflen, "%c ",
-					(field[i][j] ? '.' : 'o'));
-		}
-		len += snprintf(buf + len, buflen, "\n");
+		ret = snprintf(buf+len, buflen-len, "%"PRIx32":", i);
+		if (ret < 0 || ret >= buflen-len)
+			return -1;
+		len += ret;
 	}
-	len += snprintf(buf + len, buflen, "\n");
+	ret = snprintf(buf+len, buflen-len, "\n");
+	if (ret < 0 || ret >= buflen-len)
+		return -1;
+	len += ret;
+
+	for (i = 0; i < 16; i++) {
+		ret = snprintf(buf+len, buflen-len, "%"PRIx32":", i);
+		if (ret < 0 || ret >= buflen-len)
+			return -1;
+		len += ret;
+		for (j = 0; j < 16; j++) {
+			ret = snprintf(buf+len, buflen-len, "%c ",
+				       (field[i][j] ? '.' : 'o'));
+			if (ret < 0 || ret >= buflen-len)
+				return -1;
+			len += ret;
+		}
+		ret = snprintf(buf+len, buflen-len, "\n");
+		if (ret < 0 || ret >= buflen-len)
+			return -1;
+		len += ret;
+	}
+	ret = snprintf(buf+len, buflen-len, "\n");
+	if (ret < 0 || ret >= buflen-len)
+		return -1;
+	len += ret;
 
 	return len;
 }

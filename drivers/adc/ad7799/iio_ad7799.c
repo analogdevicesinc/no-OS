@@ -63,7 +63,7 @@ static int ad7799_iio_channel_read(void *device, char *buf, uint32_t len,
 	if (ret != SUCCESS)
 		return ret;
 
-	return snprintf(buf, len, "%d", data);
+	return iio_snprintf(buf, len, "%d", data);
 }
 
 /**
@@ -86,7 +86,7 @@ static int ad7799_iio_gain_read(void *device, char *buf, uint32_t len,
 	if (ret != SUCCESS)
 		return ret;
 
-	return snprintf(buf, len, "%d", gain);
+	return iio_snprintf(buf, len, "%d", gain);
 }
 
 /**

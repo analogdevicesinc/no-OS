@@ -125,7 +125,7 @@ static struct iio_channel adpd188_channels[] = {
  * @param len - Length of the output buffer.
  * @param channel - Structure containing the channel ID data.
  * @param priv - Private pointer not used in this case.
- * @return Length of the response or 0 in case of error.
+ * @return Number of bytes printed in the output buffer, or negative error code.
  */
 static int adpd188_iio_read_offset_chan(void *device, char *buf, uint32_t len,
 					const struct iio_ch_info *channel,
@@ -143,7 +143,7 @@ static int adpd188_iio_read_offset_chan(void *device, char *buf, uint32_t len,
 	if (ret != SUCCESS)
 		return ret;
 
-	return snprintf(buf, len, "%"PRIX16"", reg_val);
+	return iio_snprintf(buf, len, "%"PRIX16"", reg_val);
 }
 
 /**
@@ -191,7 +191,7 @@ static int adpd188_iio_change_offset_chan(void *device, char *buf,
  * @param len - Length of the output buffer.
  * @param channel - Structure containing the channel ID data.
  * @param priv - Private pointer not used in this case.
- * @return Length of the response or 0 in case of error.
+ * @return Number of bytes printed in the output buffer, or negative error code.
  */
 static int adpd188_iio_read_odr_chan(void *device, char *buf, uint32_t len,
 				     const struct iio_ch_info *channel,
@@ -206,7 +206,7 @@ static int adpd188_iio_read_odr_chan(void *device, char *buf, uint32_t len,
 	if (ret != SUCCESS)
 		return ret;
 
-	return snprintf(buf, len, "%"PRId16"", freq_hz);
+	return iio_snprintf(buf, len, "%"PRId16"", freq_hz);
 }
 
 /**
@@ -281,7 +281,7 @@ static int32_t adpd188_iio_standby_mode(struct adpd188_dev *desc)
  * @param len - Length of the output buffer.
  * @param channel - Structure containing the channel ID data.
  * @param priv - Private pointer not used in this case.
- * @return Length of the response or 0 in case of error.
+ * @return Number of bytes printed in the output buffer, or negative error code.
  */
 static int adpd188_iio_read_raw_chan(void *device, char *buf, uint32_t len,
 				     const struct iio_ch_info *channel,
@@ -320,7 +320,7 @@ static int adpd188_iio_read_raw_chan(void *device, char *buf, uint32_t len,
 	req_sample = data[(2 * channel->ch_num)] |
 		     (data[(2 * channel->ch_num + 1)] << 16);
 
-	return snprintf(buf, len, "%"PRIX32"", req_sample);
+	return iio_snprintf(buf, len, "%"PRIX32"", req_sample);
 }
 
 /**

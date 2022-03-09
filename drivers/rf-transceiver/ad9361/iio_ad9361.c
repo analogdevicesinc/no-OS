@@ -108,10 +108,10 @@ static int get_rf_port_select(void *device, char *buf, uint32_t len,
 
 	if (channel->ch_out) {
 		ret = ad9361_get_tx_rf_port_output(ad9361_phy, &mode);
-		return ret < 0 ? ret : sprintf(buf, "%s", ad9361_rf_tx_port[mode]);
+		return ret < 0 ? ret : iio_snprintf(buf, len, "%s", ad9361_rf_tx_port[mode]);
 	} else {
 		ret = ad9361_get_rx_rf_port_input(ad9361_phy, &mode);
-		return ret < 0 ? ret : sprintf(buf, "%s", ad9361_rf_rx_port[mode]);
+		return ret < 0 ? ret : iio_snprintf(buf, len, "%s", ad9361_rf_rx_port[mode]);
 	}
 }
 
@@ -128,7 +128,7 @@ static int get_hardwaregain(void *device, char *buf, uint32_t len,
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 	struct rf_rx_gain rx_gain = {0};
-	int32_t i = 0, ret, val1, val2;
+	int32_t i = 0, ret, val1, val2, res;
 
 	if (channel->ch_out) {
 		ret = ad9361_get_tx_atten(ad9361_phy, channel->ch_num + 1);
@@ -139,14 +139,16 @@ static int get_hardwaregain(void *device, char *buf, uint32_t len,
 		if (!val1)
 			val2 *= -1;
 		if (val2 < 0 && val1 >= 0) {
-			ret = (int) snprintf(buf, len, "-");
+			ret = iio_snprintf(buf, len, "-");
 			if (ret < 0)
 				return ret;
 			i++;
 		}
-		ret = i + (int) snprintf(&buf[i], len,
-					 "%"PRIi32".%.6"PRIi32" dB", val1,
-					 abs(val2));
+		res = iio_snprintf(buf+i, len, "%"PRIi32".%.6"PRIi32" dB", val1,
+				   abs(val2));
+		if (res < 0)
+			return res;
+		ret = i + res;
 
 		return ret;
 	} else {
@@ -156,8 +158,8 @@ static int get_hardwaregain(void *device, char *buf, uint32_t len,
 		if (ret < 0)
 			return ret;
 
-		return (int) snprintf(buf, len, "%"PRIi16".000000 dB",
-				      (int)rx_gain.gain_db);
+		return iio_snprintf(buf, len, "%"PRIi32".000000 dB",
+				    rx_gain.gain_db);
 	}
 }
 
@@ -180,13 +182,13 @@ static int get_rssi(void *device, char *buf, uint32_t len,
 		ret = ad9361_get_tx_rssi(ad9361_phy, channel->ch_num, &rssi_db_x_1000);
 		if (ret < 0)
 			return -EINVAL;
-		return ret < 0 ? ret : sprintf(buf, "%"PRIu32".%02"PRIu32" dB",
-					       rssi_db_x_1000 / 1000, rssi_db_x_1000 % 1000);
+		return ret < 0 ? ret : iio_snprintf(buf, len, "%"PRIu32".%02"PRIu32" dB",
+						    rssi_db_x_1000 / 1000, rssi_db_x_1000 % 1000);
 	} else {
 		struct rf_rssi rssi = {0};
 		ret = ad9361_get_rx_rssi (ad9361_phy, channel->ch_num, &rssi);
-		return ret < 0 ? ret : sprintf(buf, "%"PRIu32".%02"PRIu32" dB",
-					       rssi.symbol / rssi.multiplier, rssi.symbol % rssi.multiplier);
+		return ret < 0 ? ret : iio_snprintf(buf, len, "%"PRIu32".%02"PRIu32" dB",
+						    rssi.symbol / rssi.multiplier, rssi.symbol % rssi.multiplier);
 	}
 }
 
@@ -205,15 +207,15 @@ static int get_hardwaregain_available(void *device, char *buf, uint32_t len,
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 
 	if (channel->ch_out)
-		return (int) snprintf(buf, len, "[%"PRIi16", %"PRIi16", %"PRIi16"]", 0, 250,
-				      89750);
+		return iio_snprintf(buf, len, "[%"PRIi16", %"PRIi16", %"PRIi16"]", 0, 250,
+				    89750);
 	else
-		return (int) snprintf(buf, len, "[%"PRIi8", %"PRIi16", %"PRIi8"]",
-				      ad9361_phy->gt_info[ad9361_gt(ad9361_phy)].abs_gain_tbl[0],
-				      1,
-				      ad9361_phy->gt_info[ad9361_gt(ad9361_phy)].
-				      abs_gain_tbl[ad9361_phy->gt_info[ad9361_gt(ad9361_phy)].
-						   max_index - 1]);
+		return iio_snprintf(buf, len, "[%"PRIi8", %"PRIi16", %"PRIi8"]",
+				    ad9361_phy->gt_info[ad9361_gt(ad9361_phy)].abs_gain_tbl[0],
+				    1,
+				    ad9361_phy->gt_info[ad9361_gt(ad9361_phy)].
+				    abs_gain_tbl[ad9361_phy->gt_info[ad9361_gt(ad9361_phy)].
+						 max_index - 1]);
 }
 
 /**
@@ -250,8 +252,8 @@ static int get_sampling_frequency_available(void *device, char *buf,
 			int_dec = ad9361_phy->rx_fir_dec;
 	}
 
-	return (int) snprintf(buf, len, "[%"PRIu32" %"PRIi16" %"PRIu32"]",
-			      MIN_ADC_CLK / (12 * int_dec), 1, max);
+	return iio_snprintf(buf, len, "[%"PRIu32" %"PRIi16" %"PRIu32"]",
+			    MIN_ADC_CLK / (12 * int_dec), 1, max);
 }
 
 /**
@@ -270,16 +272,20 @@ static int get_rf_port_select_available(void *device, char *buf, uint32_t len,
 	uint16_t i;
 
 	if (channel->ch_out) {
-		return (int) sprintf(buf, "%s %s",
-				     ad9361_rf_tx_port[0],
-				     ad9361_rf_tx_port[1]);
+		return iio_snprintf(buf, len, "%s %s",
+				    ad9361_rf_tx_port[0],
+				    ad9361_rf_tx_port[1]);
 	} else {
 		bytes_no = 0;
 		for (i = 0; i < sizeof(ad9361_rf_rx_port) / sizeof(ad9361_rf_rx_port[0]);
 		     i++) {
-			if (i > 0)
-				bytes_no += sprintf(buf + bytes_no, " ");
-			ret = sprintf(buf + bytes_no, "%s", ad9361_rf_rx_port[i]);
+			if (i > 0) {
+				ret = iio_snprintf(buf + bytes_no, len-bytes_no, " ");
+				if (ret < 0)
+					return ret;
+				bytes_no += ret;
+			}
+			ret = iio_snprintf(buf + bytes_no, len-bytes_no, "%s", ad9361_rf_rx_port[i]);
 			if (ret < 0)
 				return ret;
 			bytes_no += ret;
@@ -311,7 +317,7 @@ static int get_filter_fir_en(void *device, char *buf, uint32_t len,
 	if (ret < 0)
 		return ret;
 
-	return (int) snprintf(buf, len, "%"PRIi16"", en_dis);
+	return iio_snprintf(buf, len, "%"PRIi16"", en_dis);
 }
 
 /**
@@ -333,7 +339,7 @@ static int get_sampling_frequency(void *device, char *buf, uint32_t len,
 	if (ret < 0)
 		return ret;
 
-	return (int) snprintf(buf, len, "%"PRIi32"", sampling_freq_hz);
+	return iio_snprintf(buf, len, "%"PRIi32"", sampling_freq_hz);
 }
 
 /**
@@ -349,9 +355,9 @@ static int get_rf_bandwidth_available(void *device, char *buf, uint32_t len,
 				      intptr_t priv)
 {
 	if (channel->ch_out)
-		return snprintf(buf, len, "[200000 1 40000000]");
+		return iio_snprintf(buf, len, "[200000 1 40000000]");
 	else
-		return snprintf(buf, len, "[200000 1 56000000]");
+		return iio_snprintf(buf, len, "[200000 1 56000000]");
 }
 
 /**
@@ -368,9 +374,9 @@ static int get_rf_bandwidth(void *device, char *buf, uint32_t len,
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 	if (channel->ch_out)
-		return snprintf(buf, len, "%"PRIu32"", ad9361_phy->current_tx_bw_Hz);
+		return iio_snprintf(buf, len, "%"PRIu32"", ad9361_phy->current_tx_bw_Hz);
 	else
-		return snprintf(buf, len, "%"PRIu32"", ad9361_phy->current_rx_bw_Hz);
+		return iio_snprintf(buf, len, "%"PRIu32"", ad9361_phy->current_rx_bw_Hz);
 }
 
 /**
@@ -386,8 +392,8 @@ static int get_gain_control_mode(void *device, char *buf, uint32_t len,
 				 intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
-	return (int) snprintf(buf, len, "%s",
-			      ad9361_agc_modes[ad9361_phy->agc_mode[channel->ch_num]]);
+	return iio_snprintf(buf, len, "%s",
+			    ad9361_agc_modes[ad9361_phy->agc_mode[channel->ch_num]]);
 }
 
 /**
@@ -405,7 +411,7 @@ static int get_rf_dc_offset_tracking_en(void *device, char *buf, uint32_t len,
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 
 	if (!channel->ch_out)
-		return (int) snprintf(buf, len, "%"PRIi16"", ad9361_phy->rfdc_track_en) + 1;
+		return iio_snprintf(buf, len, "%"PRIi16"", ad9361_phy->rfdc_track_en) + 1;
 
 	return -ENOENT;
 }
@@ -425,7 +431,7 @@ static int get_quadrature_tracking_en(void *device, char *buf, uint32_t len,
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 
 	if (!channel->ch_out)
-		return (int) snprintf(buf, len, "%"PRIi16"", ad9361_phy->quad_track_en) + 1;
+		return iio_snprintf(buf, len, "%"PRIi16"", ad9361_phy->quad_track_en) + 1;
 
 	return -ENOENT;
 }
@@ -443,11 +449,11 @@ static int get_gain_control_mode_available(void *device, char *buf,
 		const struct iio_ch_info *channel,
 		intptr_t priv)
 {
-	return (int) snprintf(buf, len, "%s %s %s %s",
-			      ad9361_agc_modes[0],
-			      ad9361_agc_modes[1],
-			      ad9361_agc_modes[2],
-			      ad9361_agc_modes[3]);
+	return iio_snprintf(buf, len, "%s %s %s %s",
+			    ad9361_agc_modes[0],
+			    ad9361_agc_modes[1],
+			    ad9361_agc_modes[2],
+			    ad9361_agc_modes[3]);
 }
 
 /**
@@ -465,7 +471,7 @@ static int get_bb_dc_offset_tracking_en(void *device, char *buf, uint32_t len,
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 
 	if (!channel->ch_out)
-		return (int) snprintf(buf, len, "%"PRIi16"", ad9361_phy->bbdc_track_en) + 1;
+		return iio_snprintf(buf, len, "%"PRIi16"", ad9361_phy->bbdc_track_en) + 1;
 
 	return -ENOENT;
 }
@@ -482,9 +488,9 @@ static int get_frequency_available(void *device, char *buf, uint32_t len,
 				   const struct iio_ch_info *channel,
 				   intptr_t priv)
 {
-	return snprintf(buf, len, "[%llu 1 %llu]",
-			AD9363A_MIN_CARRIER_FREQ_HZ,
-			AD9363A_MAX_CARRIER_FREQ_HZ);
+	return iio_snprintf(buf, len, "[%llu 1 %llu]",
+			    AD9363A_MIN_CARRIER_FREQ_HZ,
+			    AD9363A_MAX_CARRIER_FREQ_HZ);
 }
 
 /**
@@ -500,7 +506,7 @@ static int get_fastlock_save(void *device, char *buf, uint32_t len,
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 	uint8_t faslock_vals[16];
-	uint32_t length;
+	uint32_t length = 0;
 	int32_t ret = 0;
 	int32_t i;
 
@@ -508,11 +514,22 @@ static int get_fastlock_save(void *device, char *buf, uint32_t len,
 				   ad9361_phy->fastlock.save_profile, faslock_vals);
 	if (ret < 0)
 		return ret;
-	length = snprintf(buf, len, "%"PRIu8" ", ad9361_phy->fastlock.save_profile);
 
-	for (i = 0; i < RX_FAST_LOCK_CONFIG_WORD_NUM; i++)
-		length += sprintf(buf + length, "%"PRIu8"%c", faslock_vals[i],
-				  i == 15 ? '\n' : ',');
+	ret = iio_snprintf(buf, len, "%"PRIu8" ", ad9361_phy->fastlock.save_profile);
+
+	if (ret < 0)
+		return ret;
+
+	length += ret;
+
+	for (i = 0; i < RX_FAST_LOCK_CONFIG_WORD_NUM; i++) {
+		ret = iio_snprintf(buf+length, len-length, "%"PRIu8"%c", faslock_vals[i],
+				   i == 15 ? '\n' : ',');
+		if (ret < 0)
+			return ret;
+
+		length += ret;
+	}
 
 	return length;
 }
@@ -534,7 +551,7 @@ static int get_powerdown(void *device, char *buf, uint32_t len,
 	val = !!(ad9361_phy->cached_synth_pd[channel->ch_num ? 0 : 1] &
 		 RX_LO_POWER_DOWN);
 
-	return snprintf(buf, len, "%"PRIu64, val);
+	return iio_snprintf(buf, len, "%"PRIu64, val);
 }
 
 /**
@@ -589,7 +606,7 @@ static int get_frequency(void *device, char *buf, uint32_t len,
 	val = ad9361_from_clk(clk_get_rate(ad9361_phy,
 					   ad9361_phy->ref_clk_scale[channel->ch_num ?
 									   TX_RFPLL : RX_RFPLL]));
-	return snprintf(buf, len, "%"PRIu64, val);
+	return iio_snprintf(buf, len, "%"PRIu64, val);
 }
 
 /**
@@ -606,11 +623,11 @@ static int get_external(void *device, char *buf, uint32_t len,
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 
 	if (channel->ch_num == 0)
-		return (int) snprintf(buf, len, "%"PRIi16"",
-				      ad9361_phy->pdata->use_ext_rx_lo);
+		return iio_snprintf(buf, len, "%"PRIi16"",
+				    ad9361_phy->pdata->use_ext_rx_lo);
 	else
-		return (int) snprintf(buf, len, "%"PRIi16"",
-				      ad9361_phy->pdata->use_ext_tx_lo);
+		return iio_snprintf(buf, len, "%"PRIi16"",
+				    ad9361_phy->pdata->use_ext_tx_lo);
 }
 
 /**
@@ -626,8 +643,8 @@ static int get_fastlock_recall(void *device, char *buf, uint32_t len,
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 
-	return snprintf(buf, len, "%"PRIi16"",
-			ad9361_phy->fastlock.current_profile[channel->ch_num]);
+	return iio_snprintf(buf, len, "%"PRIi16"",
+			    ad9361_phy->fastlock.current_profile[channel->ch_num]);
 }
 
 /**
@@ -647,7 +664,7 @@ static int get_temp0_input(void *device, char *buf, uint32_t len,
 	if (ret < 0)
 		return ret;
 
-	return (int) snprintf(buf, len, "%"PRIi32"", temp);
+	return iio_snprintf(buf, len, "%"PRIi32"", temp);
 }
 
 /**
@@ -673,7 +690,7 @@ static int get_voltage_filter_fir_en(void *device, char *buf, uint32_t len,
 	if (ret < 0)
 		return ret;
 
-	return (int) snprintf(buf, len, "%"PRIi16"", en_dis_rx && en_dis_tx);
+	return iio_snprintf(buf, len, "%"PRIi16"", en_dis_rx && en_dis_tx);
 }
 
 /**
@@ -1346,7 +1363,7 @@ static int get_dcxo_tune_coarse(void *device, char *buf, uint32_t len,
 	if (ad9361_phy->pdata->use_extclk)
 		return -ENOENT;
 	else
-		return snprintf(buf, len, "%"PRIi32"", ad9361_phy->pdata->dcxo_coarse);
+		return iio_snprintf(buf, len, "%"PRIi32"", ad9361_phy->pdata->dcxo_coarse);
 }
 
 /**
@@ -1367,9 +1384,9 @@ static int get_rx_path_rates(void *device, char *buf, uint32_t len,
 	if (ret < 0)
 		return ret;
 
-	return snprintf(buf, len,
-			"BBPLL:%"PRIu32" ADC:%"PRIu32" R2:%"PRIu32" R1:%"PRIu32" RF:%"PRIu32" RXSAMP:%"PRIu32"",
-			clk[0], clk[1], clk[2], clk[3], clk[4], clk[5]);
+	return iio_snprintf(buf, len,
+			    "BBPLL:%"PRIu32" ADC:%"PRIu32" R2:%"PRIu32" R1:%"PRIu32" RF:%"PRIu32" RXSAMP:%"PRIu32"",
+			    clk[0], clk[1], clk[2], clk[3], clk[4], clk[5]);
 }
 
 /**
@@ -1391,7 +1408,7 @@ static int get_trx_rate_governor(void *device, char *buf, uint32_t len,
 	if (ret < 0)
 		return ret;
 
-	return snprintf(buf, len, "%s", rate_governor ? "nominal" : "highest_osr");
+	return iio_snprintf(buf, len, "%s", rate_governor ? "nominal" : "highest_osr");
 }
 
 /**
@@ -1406,9 +1423,9 @@ static int get_calib_mode_available(void *device, char *buf, uint32_t len,
 				    const struct iio_ch_info *channel,
 				    intptr_t priv)
 {
-	return (int) snprintf(buf, len, "%s %s %s %s %s", ad9361_calib_mode[0],
-			      ad9361_calib_mode[1], ad9361_calib_mode[2],
-			      ad9361_calib_mode[3], ad9361_calib_mode[4]);
+	return iio_snprintf(buf, len, "%s %s %s %s %s", ad9361_calib_mode[0],
+			    ad9361_calib_mode[1], ad9361_calib_mode[2],
+			    ad9361_calib_mode[3], ad9361_calib_mode[4]);
 }
 
 /**
@@ -1423,7 +1440,7 @@ static int get_xo_correction_available(void *device, char *buf, uint32_t len,
 				       const struct iio_ch_info *channel,
 				       intptr_t priv)
 {
-	return (int) snprintf(buf, len, "%"PRIi16"", 0); /* dummy */
+	return iio_snprintf(buf, len, "%"PRIi16"", 0); /* dummy */
 }
 
 /**
@@ -1438,7 +1455,7 @@ static int get_gain_table_config(void *device, char *buf, uint32_t len,
 				 const struct iio_ch_info *channel,
 				 intptr_t priv)
 {
-	return (int) snprintf(buf, len, "%"PRIi16"", 0); /* dummy */
+	return iio_snprintf(buf, len, "%"PRIi16"", 0); /* dummy */
 }
 
 /**
@@ -1457,7 +1474,7 @@ static int get_dcxo_tune_fine(void *device, char *buf, uint32_t len,
 	if (ad9361_phy->pdata->use_extclk)
 		return -ENOENT;
 	else
-		return snprintf(buf, len, "%"PRIu32"", ad9361_phy->pdata->dcxo_fine);
+		return iio_snprintf(buf, len, "%"PRIu32"", ad9361_phy->pdata->dcxo_fine);
 }
 
 /**
@@ -1474,8 +1491,8 @@ static int get_dcxo_tune_fine_available(void *device, char *buf, uint32_t len,
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 
-	return snprintf(buf, len, "%s",
-			ad9361_phy->pdata->use_extclk ? "[0 0 0]" : "[0 1 8191]");
+	return iio_snprintf(buf, len, "%s",
+			    ad9361_phy->pdata->use_extclk ? "[0 0 0]" : "[0 1 8191]");
 }
 
 /**
@@ -1492,9 +1509,9 @@ static int get_ensm_mode_available(void *device, char *buf, uint32_t len,
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 
-	return (int) snprintf(buf, len, "%s", ad9361_phy->pdata->fdd ?
-			      "sleep wait alert fdd pinctrl pinctrl_fdd_indep" :
-			      "sleep wait alert rx tx pinctrl");
+	return iio_snprintf(buf, len, "%s", ad9361_phy->pdata->fdd ?
+			    "sleep wait alert fdd pinctrl pinctrl_fdd_indep" :
+			    "sleep wait alert rx tx pinctrl");
 }
 
 /**
@@ -1509,7 +1526,7 @@ static int get_multichip_sync(void *device, char *buf, uint32_t len,
 			      const struct iio_ch_info *channel,
 			      intptr_t priv)
 {
-	return (int) snprintf(buf, len, "%"PRIi16"", 0);  /* dummy */
+	return iio_snprintf(buf, len, "%"PRIi16"", 0);  /* dummy */
 }
 
 /**
@@ -1524,7 +1541,7 @@ static int get_rssi_gain_step_error(void *device, char *buf, uint32_t len,
 				    const struct iio_ch_info *channel,
 				    intptr_t priv)
 {
-	return (int) snprintf(buf, len, "%"PRIi16"", 0);  /* dummy */
+	return iio_snprintf(buf, len, "%"PRIi16"", 0);  /* dummy */
 }
 
 /**
@@ -1542,8 +1559,8 @@ static int get_dcxo_tune_coarse_available(void *device, char *buf,
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 
-	return (int) snprintf(buf, len, "%s",
-			      ad9361_phy->pdata->use_extclk ? "[0 0 0]" : "[0 1 63]");
+	return iio_snprintf(buf, len, "%s",
+			    ad9361_phy->pdata->use_extclk ? "[0 0 0]" : "[0 1 63]");
 }
 
 /**
@@ -1564,9 +1581,9 @@ static int get_tx_path_rates(void *device, char *buf, uint32_t len,
 	if (ret < 0)
 		return ret;
 
-	return snprintf(buf, len,
-			"BBPLL:%"PRIu32" DAC:%"PRIu32" T2:%"PRIu32" T1:%"PRIu32" TF:%"PRIu32" TXSAMP:%"PRIu32"",
-			clk[0], clk[1], clk[2], clk[3], clk[4], clk[5]);
+	return iio_snprintf(buf, len,
+			    "BBPLL:%"PRIu32" DAC:%"PRIu32" T2:%"PRIu32" T1:%"PRIu32" TF:%"PRIu32" TXSAMP:%"PRIu32"",
+			    clk[0], clk[1], clk[2], clk[3], clk[4], clk[5]);
 }
 
 /**
@@ -1582,7 +1599,7 @@ static int get_trx_rate_governor_available(void *device, char *buf,
 		const struct iio_ch_info *channel,
 		intptr_t priv)
 {
-	return snprintf(buf, len, "%s", "nominal highest_osr");
+	return iio_snprintf(buf, len, "%s", "nominal highest_osr");
 }
 
 /**
@@ -1596,7 +1613,7 @@ static int get_trx_rate_governor_available(void *device, char *buf,
 static int get_xo_correction(void *device, char *buf, uint32_t len,
 			     const struct iio_ch_info *channel, intptr_t priv)
 {
-	return (int) snprintf(buf, len, "%"PRIi16"", 0); /* dummy */
+	return iio_snprintf(buf, len, "%"PRIi16"", 0); /* dummy */
 }
 
 /**
@@ -1619,7 +1636,7 @@ static int get_ensm_mode(void *device, char *buf, uint32_t len,
 	    ad9361_ensm_states[ret] == NULL)
 		return -EIO;
 
-	return snprintf(buf, len, "%s", ad9361_ensm_states[ret]);
+	return iio_snprintf(buf, len, "%s", ad9361_ensm_states[ret]);
 }
 
 /**
@@ -1636,9 +1653,9 @@ static int get_filter_fir_config(void *device, char *buf, uint32_t len,
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 
-	return snprintf(buf, len, "FIR Rx: %"PRIu8",%"PRIu8" Tx: %"PRIu8",%"PRIu8"",
-			ad9361_phy->rx_fir_ntaps, ad9361_phy->rx_fir_dec,
-			ad9361_phy->tx_fir_ntaps, ad9361_phy->tx_fir_int);
+	return iio_snprintf(buf, len, "FIR Rx: %"PRIu8",%"PRIu8" Tx: %"PRIu8",%"PRIu8"",
+			    ad9361_phy->rx_fir_ntaps, ad9361_phy->rx_fir_dec,
+			    ad9361_phy->tx_fir_ntaps, ad9361_phy->tx_fir_int);
 }
 
 /**
@@ -1659,7 +1676,7 @@ static int get_calib_mode(void *device, char *buf, uint32_t len,
 	if (ret < 0)
 		return ret;
 
-	return (int) snprintf(buf, len, "%s", en_dis ? "auto" : "manual");
+	return iio_snprintf(buf, len, "%s", en_dis ? "auto" : "manual");
 }
 
 /**

@@ -87,7 +87,7 @@ static int adpd410x_iio_read_raw_chan(void *device, char *buf, uint32_t len,
 	if (ret != SUCCESS)
 		return ret;
 
-	return snprintf(buf, len, "%d", data[channel->ch_num]);
+	return iio_snprintf(buf, len, "%d", data[channel->ch_num]);
 }
 
 /**
@@ -169,7 +169,7 @@ static int adpd410x_iio_get_sampling_freq(void *device, char *buf,
 	if (ret != SUCCESS)
 		return ret;
 
-	return snprintf(buf, len, "%d", sampling_freq);
+	return iio_snprintf(buf, len, "%d", sampling_freq);
 }
 
 static char const * const adpd410x_iio_timeslots[] = {
@@ -223,7 +223,7 @@ static int adpd410x_iio_get_last_timeslot(void *device, char *buf,
 	if (ret != SUCCESS)
 		return ret;
 
-	return snprintf(buf, len, "%d", timeslot_no);
+	return iio_snprintf(buf, len, "%d", timeslot_no);
 }
 
 /**
@@ -299,7 +299,7 @@ static int adpd410x_iio_get_opmode(void *device, char *buf, uint32_t len,
 	if (ret != SUCCESS)
 		return ret;
 
-	return snprintf(buf, len, "%d", mode);
+	return iio_snprintf(buf, len, "%d", mode);
 }
 
 /**

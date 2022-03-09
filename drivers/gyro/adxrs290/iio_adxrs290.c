@@ -89,7 +89,7 @@ static int get_adxrs290_iio_ch_raw(void *device, char *buf, uint32_t len,
 	if (channel->ch_num == ADXRS290_CHANNEL_TEMP)
 		data = (data << 4) >> 4;
 
-	return snprintf(buf, len, "%d", data);
+	return iio_snprintf(buf, len, "%d", data);
 }
 
 
@@ -99,10 +99,10 @@ static int get_adxrs290_iio_ch_scale(void *device, char *buf, uint32_t len,
 {
 	if (channel->ch_num == ADXRS290_CHANNEL_TEMP)
 		// Temperature scale 1 LSB = 0.1 degree Celsius
-		return snprintf(buf, len, "100");
+		return iio_snprintf(buf, len, "100");
 
 	// Angular velocity scale 1 LSB = 0.005 degrees/sec = 0.000087266 rad/sec
-	return snprintf(buf, len, "0.000087266");
+	return iio_snprintf(buf, len, "0.000087266");
 }
 
 static int get_adxrs290_iio_ch_hpf(void *device, char *buf, uint32_t len,
@@ -114,9 +114,9 @@ static int get_adxrs290_iio_ch_hpf(void *device, char *buf, uint32_t len,
 	if (index > 0x0A)
 		index = 0x0A;
 
-	return snprintf(buf, len, "%d.%d",
-			adxrs290_hpf_3db_freq_hz_table[index][0],
-			adxrs290_hpf_3db_freq_hz_table[index][1]);
+	return iio_snprintf(buf, len, "%d.%d",
+			    adxrs290_hpf_3db_freq_hz_table[index][0],
+			    adxrs290_hpf_3db_freq_hz_table[index][1]);
 }
 
 static int set_adxrs290_iio_ch_hpf(void *device, char *buf, uint32_t len,
@@ -150,8 +150,8 @@ static int get_adxrs290_iio_ch_lpf(void *device, char *buf, uint32_t len,
 	if (index > 0x07)
 		index = 0x07;
 
-	return snprintf(buf, len, "%d.%d", adxrs290_lpf_3db_freq_hz_table[index][0],
-			adxrs290_lpf_3db_freq_hz_table[index][1]);
+	return iio_snprintf(buf, len, "%d.%d", adxrs290_lpf_3db_freq_hz_table[index][0],
+			    adxrs290_lpf_3db_freq_hz_table[index][1]);
 }
 
 static int set_adxrs290_iio_ch_lpf(void *device, char *buf, uint32_t len,

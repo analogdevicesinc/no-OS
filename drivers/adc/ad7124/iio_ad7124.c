@@ -196,7 +196,7 @@ static int ad7124_iio_read_offset_chan(void *device, char *buf, uint32_t len,
 	if (ret != SUCCESS)
 		return ret;
 
-	return snprintf(buf, len, "%"PRIX32"", value);
+	return iio_snprintf(buf, len, "%"PRIX32, value);
 }
 
 /**
@@ -269,7 +269,7 @@ static int ad7124_iio_read_raw_chan(void *device, char *buf, uint32_t len,
 	if (ret != SUCCESS)
 		return ret;
 
-	return snprintf(buf, len, "%"PRId32"", (uint32_t)value);
+	return iio_snprintf(buf, len, "%"PRId32, value);
 }
 
 /**
@@ -315,7 +315,7 @@ static int ad7124_iio_read_filter_3db(void *device, char *buf, uint32_t len,
 		return -EINVAL;
 	}
 
-	return snprintf(buf, len, "%"PRId32"", value);
+	return iio_snprintf(buf, len, "%"PRIu32, value);
 }
 
 /**
@@ -395,9 +395,9 @@ static int ad7124_iio_read_odr_chan(void *device, char *buf, uint32_t len,
 	if (ret != SUCCESS)
 		return ret;
 
-	odr = (uint32_t)ad7124_get_odr(desc, config_opt);
+	odr = (uint32_t) ad7124_get_odr(desc, config_opt);
 
-	return snprintf(buf, len, "%"PRId32"", odr);
+	return iio_snprintf(buf, len, "%"PRIu32, odr);
 }
 
 /**
@@ -466,7 +466,7 @@ static int ad7124_iio_read_scale_chan(void *device, char *buf, uint32_t len,
 	else
 		lsb_val = vref_mv / pow(2, (adc_bit_no + pga_bits));
 
-	return snprintf(buf, len, "%f", lsb_val);
+	return iio_snprintf(buf, len, "%f", lsb_val);
 }
 
 /**

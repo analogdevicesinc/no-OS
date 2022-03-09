@@ -45,6 +45,8 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 
+#include <stdarg.h>
+#include <stddef.h>
 #include "iio_types.h"
 #include "no-os/uart.h"
 #ifdef ENABLE_IIO_NETWORK
@@ -102,6 +104,7 @@ int iio_remove(struct iio_desc *desc);
 /* Execut an iio step. */
 int iio_step(struct iio_desc *desc);
 
+int iio_snprintf(char *str, size_t size, const char *format, ...);
 int32_t iio_parse_value(char *buf, enum iio_val fmt,
 			int32_t *val, int32_t *val2);
 int iio_format_value(char *buf, uint32_t len, enum iio_val fmt,

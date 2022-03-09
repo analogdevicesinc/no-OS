@@ -504,6 +504,38 @@ static int32_t __iio_str_parse(char *buf, int32_t *integer, int32_t *_fract,
 	return 0;
 }
 
+/**
+ * @brief Wrapper for snprintf which return error on too small buffer.
+ * @param str - Buffer to print to
+ * @param size - Length of str buffer
+ * @param format - Format string
+ * @param ... VA list of arguments
+ * @return Number of chars written or negative value in case of error or out of
+ * 		buffer space.
+ */
+__attribute__((format(printf, 3, 4)))
+int iio_snprintf(char *str, size_t size, const char *format, ...)
+{
+	int n;
+	va_list args;
+
+	va_start(args, format);
+	n = vsnprintf(str, size, format, args);
+	va_end(args);
+
+	if (n < 0)
+		// vsnprintf failed
+		return n;
+	else if (size == 0 && n == 0)
+		// passed buf len was 0 and no characters were written
+		return 0;
+	else if ((unsigned int) n >= size)
+		// vsnprintf buffer too small
+		return -ENOBUFS;
+
+	return n;
+}
+
 int32_t iio_parse_value(char *buf, enum iio_val fmt, int32_t *val,
 			int32_t *val2)
 {
@@ -563,41 +595,44 @@ int iio_format_value(char *buf, uint32_t len, enum iio_val fmt,
 	bool dB = false;
 	int32_t i = 0;
 	uint32_t l = 0;
+	int ret;
 
 	switch (fmt) {
 	case IIO_VAL_INT:
-		return snprintf(buf, len, "%"PRIi32"", vals[0]);
+		return iio_snprintf(buf, len, "%"PRIi32"", vals[0]);
 	case IIO_VAL_INT_PLUS_MICRO_DB:
 		dB = true;
 	/* intentional fall through */
 	case IIO_VAL_INT_PLUS_MICRO:
-		return snprintf(buf, len, "%"PRIi32".%06"PRIu32"%s", vals[0],
-				(uint32_t)vals[1], dB ? " dB" : "");
+		return iio_snprintf(buf, len, "%"PRIi32".%06"PRIu32"%s",
+				    vals[0], (uint32_t)vals[1],
+				    dB ? " dB" : "");
 	case IIO_VAL_INT_PLUS_NANO:
-		return snprintf(buf, len, "%"PRIi32".%09"PRIu32"", vals[0],
-				(uint32_t)vals[1]);
+		return iio_snprintf(buf, len, "%"PRIi32".%09"PRIu32"", vals[0],
+				    (uint32_t)vals[1]);
 	case IIO_VAL_FRACTIONAL:
 		tmp = div_s64((int64_t)vals[0] * 1000000000LL, vals[1]);
 		fractional = vals[1];
 		integer = (int32_t)div_s64_rem(tmp, 1000000000, &fractional);
-		return snprintf(buf, len, "%"PRIi32".%09u", integer,
-				abs(fractional));
+		return iio_snprintf(buf, len, "%"PRIi32".%09u", integer,
+				    abs(fractional));
 	case IIO_VAL_FRACTIONAL_LOG2:
 		tmp = shift_right((int64_t)vals[0] * 1000000000LL, vals[1]);
 		integer = (int32_t)div_s64_rem(tmp, 1000000000LL, &fractional);
-		return snprintf(buf, len, "%"PRIi32".%09u", integer,
-				abs(fractional));
+		return iio_snprintf(buf, len, "%"PRIi32".%09u", integer,
+				    abs(fractional));
 	case IIO_VAL_INT_MULTIPLE: {
 		while (i < size) {
-			l += snprintf(&buf[l], len - l, "%"PRIi32" ", vals[i]);
-			if (l >= len)
-				break;
+			ret = iio_snprintf(buf+l, len-l, "%"PRIi32" ", vals[i]);
+			if (ret < 0)
+				return ret;
+			l += ret;
 			i++;
 		}
 		return l;
 	}
 	case IIO_VAL_CHAR:
-		return snprintf(buf, len, "%c", (char)vals[0]);
+		return iio_snprintf(buf, len, "%c", (char)vals[0]);
 	default:
 		return 0;
 	}

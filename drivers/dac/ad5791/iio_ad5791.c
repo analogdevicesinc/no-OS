@@ -71,7 +71,7 @@ static int ad5791_iio_get_scale(void *device, char *buf, uint32_t len,
 	int_part = vref64 / 1000000000ll;
 	fract_part = vref64 - int_part * 1000000000ll;
 
-	return snprintf(buf, len, "%"PRId32".%.9"PRId32"", int_part, fract_part);
+	return iio_snprintf(buf, len, "%"PRId32".%.9"PRId32"", int_part, fract_part);
 }
 
 /**
@@ -95,7 +95,7 @@ static int ad5791_iio_get_offset(void *device, char *buf, uint32_t len,
 	val64 /= iio_drv->vref_mv;
 	val64 = -val64;
 
-	return snprintf(buf, len, "%"PRIi32"", (int32_t)val64);
+	return iio_snprintf(buf, len, "%"PRIi32"", (int32_t)val64);
 }
 
 /**
@@ -122,7 +122,7 @@ static int ad5791_iio_get_raw(void *device, char *buf, uint32_t len,
 		return ret;
 	value &= 0xFFFFF;
 
-	return snprintf(buf, len, "%"PRIX32"", value);
+	return iio_snprintf(buf, len, "%"PRIX32"", value);
 }
 
 /**
@@ -184,7 +184,7 @@ static int ad5791_iio_get_powerdown(void *device, char *buf, uint32_t len,
 		pwrdwn = false;
 	}
 
-	return snprintf(buf, len, "%"PRId8"", pwrdwn);
+	return iio_snprintf(buf, len, "%"PRId8"", pwrdwn);
 }
 
 /**
@@ -249,8 +249,8 @@ static int ad5791_iio_get_pd_mode(void *device, char *buf, uint32_t len,
 {
 	struct ad5791_iio_desc *iio_drv = (struct ad5791_iio_desc *)device;
 
-	return snprintf(buf, len,
-			"%s", ad5791_iio_pwd_modes[iio_drv->curr_mode]);
+	return iio_snprintf(buf, len,
+			    "%s", ad5791_iio_pwd_modes[iio_drv->curr_mode]);
 }
 
 /**

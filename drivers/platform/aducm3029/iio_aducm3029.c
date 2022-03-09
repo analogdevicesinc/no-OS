@@ -148,10 +148,10 @@ int get_global_attr(void *device, char *buf, uint32_t len,
 	case PINMUX_PORT_1:
 	case PINMUX_PORT_2:
 		val = *pinmux_addrs[priv];
-		return snprintf(buf, len, "%"PRIx32"", val);
+		return iio_snprintf(buf, len, "%"PRIx32"", val);
 	case ADC_ENABLE:
 		val = !!desc->adc;
-		return snprintf(buf, len, "%"PRIu32"", val);
+		return iio_snprintf(buf, len, "%"PRIu32"", val);
 	}
 
 	return -EINVAL;
@@ -223,7 +223,7 @@ int get_pwm_attr(void *device, char *buf, uint32_t len,
 	if (IS_ERR_VALUE(ret))
 		return ret;
 
-	return snprintf(buf, len, "%"PRIu32"", val);
+	return iio_snprintf(buf, len, "%"PRIu32"", val);
 }
 
 /* Set gpio pwm attributes */
@@ -308,7 +308,7 @@ int get_gpio_attr(void *device, char *buf, uint32_t len,
 	if (IS_ERR_VALUE(ret))
 		return ret;
 
-	return snprintf(buf, len, "%"PRIu8"", val);
+	return iio_snprintf(buf, len, "%"PRIu8"", val);
 }
 
 /* Set gpio iio attributes */
