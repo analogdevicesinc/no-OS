@@ -42,66 +42,66 @@
 
 #include <stdio.h>
 
-#define LOG_EMERG	0x0
-#define LOG_ALERT	0x1
-#define LOG_CRIT	0x2
-#define LOG_ERR		0x3
-#define LOG_WARNING	0x4
-#define LOG_NOTICE	0x5
-#define LOG_INFO	0x6
-#define LOG_DEBUG	0x7
+#define NO_OS_LOG_EMERG	0x0
+#define NO_OS_LOG_ALERT	0x1
+#define NO_OS_LOG_CRIT	0x2
+#define NO_OS_LOG_ERR		0x3
+#define NO_OS_LOG_WARNING	0x4
+#define NO_OS_LOG_NOTICE	0x5
+#define NO_OS_LOG_INFO	0x6
+#define NO_OS_LOG_DEBUG	0x7
 
-#ifndef LOG_LEVEL
-#define LOG_LEVEL LOG_INFO
+#ifndef NO_OS_LOG_LEVEL
+#define NO_OS_LOG_LEVEL NO_OS_LOG_INFO
 #endif
 
-#if defined(LOG_LEVEL) && LOG_LEVEL >= LOG_EMERG && LOG_LEVEL <= LOG_DEBUG
+#if defined(NO_OS_LOG_LEVEL) && NO_OS_LOG_LEVEL >= NO_OS_LOG_EMERG && NO_OS_LOG_LEVEL <= NO_OS_LOG_DEBUG
 #define pr_emerg(fmt, args...) printf("EMERG: %s:%d:%s(): " \
 fmt, __FILE__, __LINE__, __func__, ##args)
 #else
 #define pr_emerg(fmt, args...)
 #endif
 
-#if defined(LOG_LEVEL) && LOG_LEVEL >= LOG_ALERT && LOG_LEVEL <= LOG_DEBUG
+#if defined(NO_OS_LOG_LEVEL) && NO_OS_LOG_LEVEL >= NO_OS_LOG_ALERT && NO_OS_LOG_LEVEL <= NO_OS_LOG_DEBUG
 #define pr_alert(fmt, args...) printf("ALERT: %s:%d:%s(): " \
 fmt, __FILE__, __LINE__, __func__, ##args)
 #else
 #define pr_alert(fmt, args...)
 #endif
 
-#if defined(LOG_LEVEL) && LOG_LEVEL >= LOG_CRIT && LOG_LEVEL <= LOG_DEBUG
+#if defined(NO_OS_LOG_LEVEL) && NO_OS_LOG_LEVEL >= NO_OS_LOG_CRIT && NO_OS_LOG_LEVEL <= NO_OS_LOG_DEBUG
 #define pr_crit(fmt, args...) printf("CRIT: %s:%d:%s(): " \
 fmt, __FILE__, __LINE__, __func__, ##args)
 #else
 #define pr_crit(fmt, args...)
 #endif
 
-#if defined(LOG_LEVEL) && LOG_LEVEL >= LOG_ERR && LOG_LEVEL <= LOG_DEBUG
+#if defined(NO_OS_LOG_LEVEL) && NO_OS_LOG_LEVEL >= NO_OS_LOG_ERR && NO_OS_LOG_LEVEL <= NO_OS_LOG_DEBUG
 #define pr_err(fmt, args...) printf("ERR: %s:%d:%s(): " \
 fmt, __FILE__, __LINE__, __func__, ##args)
 #else
 #define pr_err(fmt, args...)
 #endif
 
-#if defined(LOG_LEVEL) && LOG_LEVEL >= LOG_WARNING && LOG_LEVEL <= LOG_DEBUG
+#if defined(NO_OS_LOG_LEVEL) && NO_OS_LOG_LEVEL >= NO_OS_LOG_WARNING && NO_OS_LOG_LEVEL <= NO_OS_LOG_DEBUG
 #define pr_warning(fmt, args...) printf("WARNING: " fmt, ##args)
 #else
 #define pr_warning(fmt, args...)
 #endif
 
-#if defined(LOG_LEVEL) && LOG_LEVEL >= LOG_NOTICE && LOG_LEVEL <= LOG_DEBUG
+#if defined(NO_OS_LOG_LEVEL) && NO_OS_LOG_LEVEL >= NO_OS_LOG_NOTICE && NO_OS_LOG_LEVEL <= NO_OS_LOG_DEBUG
 #define pr_notice(fmt, args...) printf("NOTICE: " fmt, ##args)
 #else
 #define pr_notice(fmt, args...)
 #endif
 
-#if defined(LOG_LEVEL) && LOG_LEVEL >= LOG_INFO && LOG_LEVEL <= LOG_DEBUG
+#if defined(NO_OS_LOG_LEVEL) && NO_OS_LOG_LEVEL >= NO_OS_LOG_INFO && NO_OS_LOG_LEVEL <= NO_OS_LOG_DEBUG
 #define pr_info(fmt, args...) printf(fmt, ##args)
 #else
 #define pr_info(fmt, args...)
 #endif
 
-#if defined(LOG_LEVEL) && LOG_LEVEL == LOG_DEBUG
+#if defined(NO_OS_LOG_LEVEL) && NO_OS_LOG_LEVEL == NO_OS_LOG_DEBUG
 #define pr_debug(fmt, args...) printf("DEBUG: " fmt, ##args)
 #else
 #define pr_debug(fmt, args...)

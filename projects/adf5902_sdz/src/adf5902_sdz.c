@@ -55,7 +55,7 @@
 #include "iio_adf5902.h"
 #endif
 
-#define LOG_LEVEL 6
+#define NO_OS_LOG_LEVEL 6
 #include "no_os_print_log.h"
 
 int main(void)
