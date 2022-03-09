@@ -71,7 +71,7 @@ int main(void)
 	int32_t status;
 
 	// SPI configuration
-	struct spi_init_param ad9625_spi_param = {
+	struct no_os_spi_init_param ad9625_spi_param = {
 		.max_speed_hz = 2000000u,
 		.chip_select = 0,
 		.platform_ops = &xil_spi_ops,

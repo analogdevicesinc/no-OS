@@ -1075,7 +1075,7 @@
 
 struct adas1000_dev {
 	/** SPI Descriptor */
-	struct spi_desc *spi_desc;
+	struct no_os_spi_desc *spi_desc;
 	/** ADAS1000 frame size in bytes */
 	uint32_t frame_size;
 	/** ADAS1000 frame rate */
@@ -1086,7 +1086,7 @@ struct adas1000_dev {
 
 struct adas1000_init_param {
 	/** SPI Initialization Parameters */
-	struct spi_init_param spi_init;
+	struct no_os_spi_init_param spi_init;
 	/** ADAS1000 frame rate */
 	uint32_t frame_rate;
 };

@@ -74,7 +74,7 @@ int main(void)
 		.flags = 0
 	};
 
-	struct spi_init_param hmc7044_spi_param = {
+	struct no_os_spi_init_param hmc7044_spi_param = {
 		.device_id = SPI_DEVICE_ID,
 		.max_speed_hz = 10000000,
 		.mode = NO_OS_SPI_MODE_0,
@@ -131,7 +131,7 @@ int main(void)
 		.ref_rate_khz = 368640,		/* FPGA_CLK, output 12 of HMC 7044 */
 	};
 
-	struct spi_init_param ad9172_spi_param = {
+	struct no_os_spi_init_param ad9172_spi_param = {
 		.max_speed_hz = 1000000,
 		.mode = NO_OS_SPI_MODE_0,
 		.chip_select = SPI_AD9172_CS,
@@ -144,7 +144,7 @@ int main(void)
 		.device_id = GPIO_DEVICE_ID
 	};
 	struct ad9172_init_param ad9172_param = {
-		.spi_init = &ad9172_spi_param,	/* spi_init_param */
+		.spi_init = &ad9172_spi_param,	/* no_os_spi_init_param */
 		.gpio_reset = {
 			.number = 54 + 0,
 			.platform_ops = &xil_gpio_ops,

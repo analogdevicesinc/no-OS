@@ -56,7 +56,7 @@ int main(void)
 		.type = SPI_PS,
 	};
 
-	struct spi_init_param spi_init = {
+	struct no_os_spi_init_param spi_init = {
 		.platform_ops = &xil_spi_ops,
 		.chip_select = 0,
 		.max_speed_hz = 1000000,

@@ -162,7 +162,7 @@ enum adxrs290_hpf {
  */
 struct adxrs290_init_param {
 	/** SPI Initialization structure. */
-	struct spi_init_param	spi_init;
+	struct no_os_spi_init_param	spi_init;
 	/** Optional. If not set adxrs290_get_data_ready will fail */
 	struct no_os_gpio_init_param	*gpio_sync;
 	/** Initial Mode */
@@ -179,7 +179,7 @@ struct adxrs290_init_param {
  */
 struct adxrs290_dev {
 	/** SPI handler */
-	struct spi_desc		*spi_desc;
+	struct no_os_spi_desc		*spi_desc;
 	/** GPIO */
 	struct no_os_gpio_desc	*gpio_sync;
 	/** Active Channels */

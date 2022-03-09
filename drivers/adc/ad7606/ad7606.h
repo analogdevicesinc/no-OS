@@ -270,7 +270,7 @@ struct ad7606_digital_diag {
  */
 struct ad7606_dev {
 	/** SPI descriptor*/
-	spi_desc *spi_desc;
+	no_os_spi_desc *spi_desc;
 	/** RESET GPIO descriptor */
 	struct no_os_gpio_desc *gpio_reset;
 	/** CONVST GPIO descriptor */
@@ -323,7 +323,7 @@ struct ad7606_dev {
  */
 struct ad7606_init_param {
 	/** SPI initialization parameters */
-	spi_init_param spi_init;
+	no_os_spi_init_param spi_init;
 	/** RESET GPIO initialization parameters */
 	struct no_os_gpio_init_param *gpio_reset;
 	/** CONVST GPIO initialization parameters */

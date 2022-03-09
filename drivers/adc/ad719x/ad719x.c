@@ -73,7 +73,7 @@ int ad719x_init(struct ad719x_dev **device,
 	dev->chip_id = init_param.chip_id;
 
 	/* SPI */
-	ret = spi_init(&dev->spi_desc, init_param.spi_init);
+	ret = no_os_spi_init(&dev->spi_desc, init_param.spi_init);
 	if (ret != SUCCESS)
 		goto error_dev;
 
@@ -174,7 +174,7 @@ error_sync:
 error_miso:
 	no_os_gpio_remove(dev->gpio_miso);
 error_spi:
-	spi_remove(dev->spi_desc);
+	no_os_spi_remove(dev->spi_desc);
 error_dev:
 	free(dev);
 
@@ -192,7 +192,7 @@ int ad719x_remove(struct ad719x_dev *dev)
 {
 	int ret;
 
-	ret = spi_remove(dev->spi_desc);
+	ret = no_os_spi_remove(dev->spi_desc);
 	if (ret != SUCCESS)
 		return ret;
 
@@ -232,7 +232,7 @@ int ad719x_set_register_value(struct ad719x_dev *dev,
 		bytes_nr--;
 	}
 
-	ret = spi_write_and_read(dev->spi_desc, write_command, bytes_number + 1);
+	ret = no_os_spi_write_and_read(dev->spi_desc, write_command, bytes_number + 1);
 	if (ret != SUCCESS)
 		return ret;
 
@@ -261,7 +261,7 @@ int ad719x_get_register_value(struct ad719x_dev *dev, uint8_t reg_addr,
 
 	reg_word[0] = AD719X_COMM_READ | AD719X_COMM_ADDR(reg_addr);
 
-	ret = spi_write_and_read(dev->spi_desc, reg_word, bytes_number + 1);
+	ret = no_os_spi_write_and_read(dev->spi_desc, reg_word, bytes_number + 1);
 	if (ret != SUCCESS)
 		return ret;
 
@@ -316,7 +316,7 @@ int ad719x_reset(struct ad719x_dev *dev)
 
 	memset(register_word, 0xFF, 5);
 
-	ret = spi_write_and_read(dev->spi_desc, register_word, 5);
+	ret = no_os_spi_write_and_read(dev->spi_desc, register_word, 5);
 	if (ret != SUCCESS)
 		return ret;
 

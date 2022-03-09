@@ -367,7 +367,7 @@ typedef int32_t (*adxl372_reg_read_multi_func)(struct adxl372_dev *dev,
 
 struct adxl372_dev {
 	/* SPI */
-	spi_desc			*spi_desc;
+	no_os_spi_desc			*spi_desc;
 	/* I2C */
 	no_os_i2c_desc			*i2c_desc;
 	/* GPIO */
@@ -388,7 +388,7 @@ struct adxl372_dev {
 
 struct adxl372_init_param {
 	/* SPI */
-	spi_init_param			spi_init;
+	no_os_spi_init_param			spi_init;
 	/* I2C */
 	no_os_i2c_init_param			i2c_init;
 	/* GPIO */

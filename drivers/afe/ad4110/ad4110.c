@@ -442,7 +442,7 @@ int32_t ad4110_spi_do_soft_reset(struct ad4110_dev *dev)
 
 	/* The AD4110 can be reset by writing a series of 64 1�s to the DIN
 	 * input */
-	return spi_write_and_read(dev->spi_dev, buf, 8);
+	return no_os_spi_write_and_read(dev->spi_dev, buf, 8);
 }
 
 
@@ -531,7 +531,7 @@ int32_t ad4110_spi_int_reg_write(struct ad4110_dev *dev,
 		buf[data_size] = ad4110_compute_crc8(&buf[0], data_size);
 	} else
 		buf_size = data_size;
-	return spi_write_and_read(dev->spi_dev, buf, buf_size);
+	return no_os_spi_write_and_read(dev->spi_dev, buf, buf_size);
 }
 
 /***************************************************************************//**
@@ -566,7 +566,7 @@ int32_t ad4110_spi_int_data_reg_read(struct ad4110_dev *dev,
 	else
 		buf_size = data_size;
 
-	ret = spi_write_and_read(dev->spi_dev, buf, buf_size);
+	ret = no_os_spi_write_and_read(dev->spi_dev, buf, buf_size);
 	if (ret)
 		return ret;
 
@@ -649,7 +649,7 @@ int32_t ad4110_spi_int_reg_read(struct ad4110_dev *dev,
 	else
 		buf_size = data_size;
 
-	ret = spi_write_and_read(dev->spi_dev, buf, buf_size);
+	ret = no_os_spi_write_and_read(dev->spi_dev, buf, buf_size);
 	if (ret)
 		return ret;
 
@@ -893,7 +893,7 @@ int32_t ad4110_setup(struct ad4110_dev **device,
 		return FAILURE;
 
 	/* SPI */
-	ret = spi_init(&dev->spi_dev, &init_param.spi_init);
+	ret = no_os_spi_init(&dev->spi_dev, &init_param.spi_init);
 	if (ret)
 		goto err_dev;
 
@@ -1017,7 +1017,7 @@ int32_t ad4110_setup(struct ad4110_dev **device,
 	return SUCCESS;
 
 err_spi:
-	spi_remove(dev->spi_dev);
+	no_os_spi_remove(dev->spi_dev);
 err_dev:
 	free(dev);
 	pr_err("AD4110 initialization error (%d)\n", ret);
@@ -1084,7 +1084,7 @@ int32_t ad4110_remove(struct ad4110_dev *dev)
 {
 	int32_t ret;
 
-	ret = spi_remove(dev->spi_dev);
+	ret = no_os_spi_remove(dev->spi_dev);
 
 	free(dev);
 

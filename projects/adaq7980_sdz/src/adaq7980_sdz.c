@@ -109,7 +109,7 @@ int main()
 		.extra = &gpio_extra_param
 	};
 
-	struct spi_init_param spi_init = {
+	struct no_os_spi_init_param spi_init = {
 		.chip_select = SPI_ADAQ7980_CS,
 		.max_speed_hz = 10000000,
 		.mode = NO_OS_SPI_MODE_2,

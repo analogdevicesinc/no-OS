@@ -100,7 +100,7 @@ int32_t adaq7980_setup(struct adaq7980_dev **device,
 	if (ret != SUCCESS)
 		goto error_dev;
 
-	ret = spi_init(&dev->spi_desc, init_param->spi_init);
+	ret = no_os_spi_init(&dev->spi_desc, init_param->spi_init);
 	if (ret != SUCCESS)
 		goto error_dev;
 
@@ -129,7 +129,7 @@ int32_t adaq7980_setup(struct adaq7980_dev **device,
 	return SUCCESS;
 
 error_spi:
-	spi_remove(dev->spi_desc);
+	no_os_spi_remove(dev->spi_desc);
 error_dev:
 	free(dev);
 

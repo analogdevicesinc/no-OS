@@ -122,7 +122,7 @@ int8_t ad5449_init(struct ad5449_dev **device,
 	dev->act_device = init_param.act_device;
 
 	/* Initialize SPI communication. */
-	status = spi_init(&dev->spi_desc, &init_param.spi_init);
+	status = no_os_spi_init(&dev->spi_desc, &init_param.spi_init);
 
 	/* GPIO */
 	status |= no_os_gpio_get(&dev->gpio_ldac, &init_param.gpio_ldac);
@@ -164,7 +164,7 @@ int32_t ad5449_remove(struct ad5449_dev *dev)
 {
 	int32_t ret;
 
-	ret = spi_remove(dev->spi_desc);
+	ret = no_os_spi_remove(dev->spi_desc);
 
 	ret |= no_os_gpio_remove(dev->gpio_ldac);
 	ret |= no_os_gpio_remove(dev->gpio_clr);
@@ -204,9 +204,9 @@ uint16_t ad5449_set_input_shift_reg(struct ad5449_dev *dev,
 	spi_data[0] = (input_shift_reg & MSB_MASK) >> MSB_OFFSET;
 	spi_data[1] = (input_shift_reg & LSB_MASK) >> LSB_OFFSET;
 
-	spi_write_and_read(dev->spi_desc,
-			   spi_data,
-			   PKT_LENGTH);
+	no_os_spi_write_and_read(dev->spi_desc,
+				 spi_data,
+				 PKT_LENGTH);
 	readback = ((uint16_t)spi_data[0] << MSB_OFFSET) | \
 		   ((uint16_t)spi_data[1] << LSB_OFFSET);
 

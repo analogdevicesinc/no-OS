@@ -1346,7 +1346,7 @@
 
 struct ad9152_init_param {
 	/* SPI */
-	spi_init_param	spi_init;
+	no_os_spi_init_param	spi_init;
 	/* Device Settings */
 	uint32_t stpl_samples[2][4];
 	uint32_t interpolation;
@@ -1356,7 +1356,7 @@ struct ad9152_init_param {
 
 struct ad9152_dev {
 	/* SPI */
-	spi_desc *spi_desc;
+	no_os_spi_desc *spi_desc;
 };
 
 /******************************************************************************/

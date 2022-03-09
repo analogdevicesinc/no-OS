@@ -59,9 +59,9 @@ int32_t ad9680_spi_read(struct ad9680_dev *dev,
 	buf[1] = reg_addr & 0xFF;
 	buf[2] = 0x00;
 
-	ret = spi_write_and_read(dev->spi_desc,
-				 buf,
-				 3);
+	ret = no_os_spi_write_and_read(dev->spi_desc,
+				       buf,
+				       3);
 	*reg_data = buf[2];
 
 	return ret;
@@ -82,9 +82,9 @@ int32_t ad9680_spi_write(struct ad9680_dev *dev,
 	buf[1] = reg_addr & 0xFF;
 	buf[2] = reg_data;
 
-	ret = spi_write_and_read(dev->spi_desc,
-				 buf,
-				 3);
+	ret = no_os_spi_write_and_read(dev->spi_desc,
+				       buf,
+				       3);
 
 	return ret;
 }
@@ -127,7 +127,7 @@ int32_t ad9680_setup(struct ad9680_dev **device,
 		return -1;
 
 	/* SPI */
-	ret = spi_init(&dev->spi_desc, &init_param->spi_init);
+	ret = no_os_spi_init(&dev->spi_desc, &init_param->spi_init);
 
 	ad9680_spi_read(dev,
 			AD9680_REG_CHIP_ID_LOW,
@@ -194,7 +194,7 @@ int32_t ad9680_remove(struct ad9680_dev *dev)
 {
 	int32_t ret;
 
-	ret = spi_remove(dev->spi_desc);
+	ret = no_os_spi_remove(dev->spi_desc);
 
 	free(dev);
 

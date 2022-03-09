@@ -379,7 +379,7 @@ struct ad3552r_ch_data {
 
 struct ad3552r_desc {
 	struct ad3552_transfer_config spi_cfg;
-	struct spi_desc *spi;
+	struct no_os_spi_desc *spi;
 	struct no_os_gpio_desc *ldac;
 	struct no_os_gpio_desc *reset;
 	struct ad3552r_ch_data ch_data[AD3552R_NUM_CH];
@@ -415,7 +415,7 @@ struct ad3552r_channel_init {
 
 struct ad3552r_init_param {
 	enum ad3552r_id	chip_id;
-	struct spi_init_param spi_param;
+	struct no_os_spi_init_param spi_param;
 	/* If set, reset is done with RESET pin, otherwise it will be soft */
 	struct no_os_gpio_init_param	*reset_gpio_param_optional;
 	/* If set, input register are used and LDAC pulse is sent */

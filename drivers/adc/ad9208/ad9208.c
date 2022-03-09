@@ -59,13 +59,13 @@
 static int ad9208_spi_xfer(void *user_data, uint8_t *wbuf,
 			   uint8_t *rbuf, int len)
 {
-	struct spi_desc *spi = user_data;
+	struct no_os_spi_desc *spi = user_data;
 	uint8_t * buffer = (uint8_t *) malloc(len);
 	int32_t ret;
 
 	memcpy(buffer, wbuf, 3);
 
-	ret = spi_write_and_read(spi, buffer, len);
+	ret = no_os_spi_write_and_read(spi, buffer, len);
 	if (ret < 0)
 		printf("Read Error %"PRId32, ret);
 	else
@@ -391,7 +391,7 @@ int32_t ad9208_initialize(ad9208_dev **device, ad9208_init_param *init_param)
 		goto error;
 	}
 	/* SPI */
-	ret = spi_init(&dev->spi_desc, init_param->spi_init);
+	ret = no_os_spi_init(&dev->spi_desc, init_param->spi_init);
 	if (ret < 0)
 		goto error;
 
@@ -490,7 +490,7 @@ error:
 	if (dev->gpio_powerdown)
 		no_os_gpio_remove(dev->gpio_powerdown);
 	if (dev->spi_desc)
-		spi_remove(dev->spi_desc);
+		no_os_spi_remove(dev->spi_desc);
 	if (dev->st)
 		free(dev->st);
 	if (dev)
@@ -504,7 +504,7 @@ int32_t ad9208_remove(ad9208_dev *device)
 	int32_t ret;
 
 	ret = no_os_gpio_remove(device->gpio_powerdown);
-	ret |= spi_remove(device->spi_desc);
+	ret |= no_os_spi_remove(device->spi_desc);
 
 	if (device->st->adc_h)
 		free(device->st->adc_h);

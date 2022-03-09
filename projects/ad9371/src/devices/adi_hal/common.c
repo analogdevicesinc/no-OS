@@ -31,14 +31,14 @@
 ADI_LOGLEVEL CMB_LOGLEVEL = ADIHAL_LOG_NONE;
 
 static uint32_t _desired_time_to_elapse_us = 0;
-struct spi_desc 	*spi_ad_desc;
+struct no_os_spi_desc 	*spi_ad_desc;
 struct no_os_gpio_desc	*gpio_ad9371_resetb;
 struct no_os_gpio_desc	*gpio_ad9528_resetb;
 struct no_os_gpio_desc	*gpio_ad9528_sysref_req;
 
 int32_t platform_init(void)
 {
-	struct spi_init_param spi_param;
+	struct no_os_spi_init_param spi_param;
 	struct no_os_gpio_init_param gpio_ad9371_resetb_param;
 	struct no_os_gpio_init_param gpio_ad9528_resetb_param;
 	struct no_os_gpio_init_param gpio_ad9528_sysref_param;
@@ -105,7 +105,7 @@ int32_t platform_init(void)
 	spi_param.chip_select = AD9371_CS;
 	spi_param.max_speed_hz = 2000000u;
 
-	status |= spi_init(&spi_ad_desc, &spi_param);
+	status |= no_os_spi_init(&spi_ad_desc, &spi_param);
 
 	return status;
 }
@@ -118,7 +118,7 @@ int32_t platform_remove(void)
 	status |= no_os_gpio_remove(gpio_ad9528_resetb);
 	status |= no_os_gpio_remove(gpio_ad9528_sysref_req);
 
-	status |= spi_remove(spi_ad_desc);
+	status |= no_os_spi_remove(spi_ad_desc);
 
 	return status;
 }
@@ -179,7 +179,7 @@ commonErr_t CMB_SPIWriteByte(spiSettings_t *spiSettings, uint16_t addr,
 	buf[1] = (uint8_t) (addr & 0xff);
 	buf[2] = (uint8_t) data;
 
-	spi_write_and_read(spi_ad_desc, buf, 3);
+	no_os_spi_write_and_read(spi_ad_desc, buf, 3);
 
 	return(COMMONERR_OK);
 }
@@ -208,7 +208,7 @@ commonErr_t CMB_SPIReadByte(spiSettings_t *spiSettings, uint16_t addr,
 	buf[1] = (uint8_t) (addr & 0xff);
 	buf[2] = (uint8_t) 0x00;
 
-	spi_write_and_read(spi_ad_desc, buf, 3);
+	no_os_spi_write_and_read(spi_ad_desc, buf, 3);
 	*readdata = buf[2];
 
 	return(COMMONERR_OK);

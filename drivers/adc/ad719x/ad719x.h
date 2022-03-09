@@ -194,7 +194,7 @@ enum ad719x_chip_id {
 
 struct ad719x_dev {
 	/* SPI */
-	spi_desc		*spi_desc;
+	no_os_spi_desc		*spi_desc;
 	/* GPIO */
 	struct no_os_gpio_desc	*gpio_miso;
 	struct no_os_gpio_desc	*sync_pin;
@@ -212,7 +212,7 @@ struct ad719x_dev {
 
 struct ad719x_init_param {
 	/* SPI */
-	spi_init_param		*spi_init;
+	no_os_spi_init_param		*spi_init;
 	/* GPIO */
 	struct no_os_gpio_init_param	*gpio_miso;
 	/* Optional GPIO pin - only for multiple devices */

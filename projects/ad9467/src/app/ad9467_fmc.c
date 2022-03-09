@@ -122,7 +122,7 @@ int main()
 	Xil_ICacheDisable();
 
 	// SPI configuration
-	struct spi_init_param ad9467_spi_param = {
+	struct no_os_spi_init_param ad9467_spi_param = {
 		.max_speed_hz = 2000000u,
 		.chip_select = 0,
 		.platform_ops = &xil_spi_ops,
@@ -139,7 +139,7 @@ int main()
 	ad9467_spi_param.device_id = SPI_DEVICE_ID;
 	ad9467_spi_param.extra = &xil_spi_param;
 
-	struct spi_init_param ad9517_spi_param = {
+	struct no_os_spi_init_param ad9517_spi_param = {
 		.device_id = SPI_DEVICE_ID,
 		.max_speed_hz = 2000000u,
 		.chip_select = 1,

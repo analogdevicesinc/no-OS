@@ -74,11 +74,11 @@ int32_t ad7768_spi_read(ad7768_dev *dev,
 
 	buf[0] = 0x80 | (reg_addr & 0x7F);
 	buf[1] = 0x00;
-	ret = spi_write_and_read(dev->spi_desc, buf, 2);
+	ret = no_os_spi_write_and_read(dev->spi_desc, buf, 2);
 
 	buf[0] = 0x80 | (reg_addr & 0x7F);
 	buf[1] = 0x00;
-	ret |= spi_write_and_read(dev->spi_desc, buf, 2);
+	ret |= no_os_spi_write_and_read(dev->spi_desc, buf, 2);
 	*reg_data = buf[1];
 
 	return ret;
@@ -100,7 +100,7 @@ int32_t ad7768_spi_write(ad7768_dev *dev,
 
 	buf[0] = (reg_addr & 0x7F);
 	buf[1] = reg_data;
-	ret = spi_write_and_read(dev->spi_desc, buf, 2);
+	ret = no_os_spi_write_and_read(dev->spi_desc, buf, 2);
 
 	return ret;
 }
@@ -630,7 +630,7 @@ int32_t ad7768_setup(ad7768_dev **device,
 		return -1;
 	}
 
-	ret = spi_init(&dev->spi_desc, &init_param.spi_init);
+	ret = no_os_spi_init(&dev->spi_desc, &init_param.spi_init);
 
 	dev->pin_spi_input_value = init_param.pin_spi_input_value;
 

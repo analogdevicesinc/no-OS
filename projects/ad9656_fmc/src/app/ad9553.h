@@ -72,12 +72,12 @@
 
 struct ad9553_init_param {
 	/* SPI */
-	struct spi_init_param	spi_init;
+	struct no_os_spi_init_param	spi_init;
 };
 
 struct ad9553_dev {
 	/* SPI */
-	struct spi_desc	*spi_desc;
+	struct no_os_spi_desc	*spi_desc;
 };
 
 /******************************************************************************/

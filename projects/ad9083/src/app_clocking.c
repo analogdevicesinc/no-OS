@@ -176,7 +176,7 @@ int32_t app_clocking_init(struct app_clocking **app,
 	};
 
 	/* clock chip spi settings */
-	struct spi_init_param clkchip_spi_init_param = {
+	struct no_os_spi_init_param clkchip_spi_init_param = {
 		.device_id = 0,
 		.max_speed_hz = 10000000,
 		.mode = NO_OS_SPI_MODE_0,

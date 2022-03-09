@@ -69,7 +69,7 @@ int8_t ad7980_init(struct ad7980_dev **device,
 		return -1;
 
 	/* SPI */
-	status = spi_init(&dev->spi_desc, &init_param.spi_init);
+	status = no_os_spi_init(&dev->spi_desc, &init_param.spi_init);
 	/* GPIO */
 	status |= no_os_gpio_get(&dev->gpio_cs, &init_param.gpio_cs);
 
@@ -93,7 +93,7 @@ int32_t ad7980_remove(struct ad7980_dev *dev)
 {
 	int32_t ret;
 
-	ret = spi_remove(dev->spi_desc);
+	ret = no_os_spi_remove(dev->spi_desc);
 
 	ret |= no_os_gpio_remove(dev->gpio_cs);
 
@@ -116,15 +116,15 @@ uint16_t ad7980_conversion(struct ad7980_dev *dev)
 	uint8_t rx_data[2] = {0, 0};
 
 	tx_data[0] = 0x7F;
-	spi_write_and_read(dev->spi_desc,
-			   tx_data,
-			   1);
+	no_os_spi_write_and_read(dev->spi_desc,
+				 tx_data,
+				 1);
 	AD7980_CS_LOW;
 	rx_data[0] = 0xFF;
 	rx_data[1] = 0xFF;
-	spi_write_and_read(dev->spi_desc,
-			   rx_data,
-			   2);
+	no_os_spi_write_and_read(dev->spi_desc,
+				 rx_data,
+				 2);
 	AD7980_CS_HIGH;
 	received_data = (rx_data[0] << 8) + rx_data[1];
 

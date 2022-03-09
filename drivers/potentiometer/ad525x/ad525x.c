@@ -116,7 +116,7 @@ int8_t ad525x_init(struct ad525x_dev **device,
 
 	if(chip_info[dev->this_device].comm_type == SPI) {
 		/* CPHA = 0; CPOL = 0; */
-		status = spi_init(&dev->spi_desc, &init_param.spi_init);
+		status = no_os_spi_init(&dev->spi_desc, &init_param.spi_init);
 	} else {
 		status = no_os_i2c_init(&dev->i2c_desc, &init_param.i2c_init);
 	}
@@ -155,7 +155,7 @@ int32_t ad525x_remove(struct ad525x_dev *dev)
 	int32_t ret;
 
 	if (chip_info[dev->this_device].comm_type == SPI)
-		ret = spi_remove(dev->spi_desc);
+		ret = no_os_spi_remove(dev->spi_desc);
 	else
 		ret = no_os_i2c_remove(dev->i2c_desc);
 
@@ -197,20 +197,20 @@ uint16_t ad525x_read_mem(struct ad525x_dev *dev,
 		data_buffer[0] |= address & AD525X_MEM_ADDR_MASK;
 		/* 3 byte data word */
 		if((dev->this_device == ID_AD5235) || (dev->this_device == ID_ADN2850)) {
-			spi_write_and_read(dev->spi_desc,
-					   data_buffer,
-					   3);
+			no_os_spi_write_and_read(dev->spi_desc,
+						 data_buffer,
+						 3);
 			data_buffer[0] &= AD525X_CMD_NOP << AD525X_CMD_SPI_OFFSET;
 
-			spi_write_and_read(dev->spi_desc,
-					   data_buffer,
-					   3);
+			no_os_spi_write_and_read(dev->spi_desc,
+						 data_buffer,
+						 3);
 			data = (data_buffer[1] << ONEBYTE_OFFSET) | data_buffer[2];
 			return data;
 		} else { /* 2 byte data word */
-			spi_write_and_read(dev->spi_desc,
-					   data_buffer,
-					   2);
+			no_os_spi_write_and_read(dev->spi_desc,
+						 data_buffer,
+						 2);
 			return (uint16_t)data_buffer[1];
 		}
 	} else { /* Communication interface is I2C */
@@ -255,14 +255,14 @@ void ad525x_write_mem(struct ad525x_dev *dev,
 		    || (dev->this_device == ID_ADN2850)) { /* 3 byte data word */
 			data_buffer[1] = (data & MSB_BYTE_MASK) >> ONEBYTE_OFFSET;
 			data_buffer[2] = data & LSB_BYTE_MASK;
-			spi_write_and_read(dev->spi_desc,
-					   data_buffer,
-					   3);
+			no_os_spi_write_and_read(dev->spi_desc,
+						 data_buffer,
+						 3);
 		} else { /* 2 byte data word */
 			data_buffer[1] = data & LSB_BYTE_MASK;
-			spi_write_and_read(dev->spi_desc,
-					   data_buffer,
-					   2);
+			no_os_spi_write_and_read(dev->spi_desc,
+						 data_buffer,
+						 2);
 		}
 	} else { /* Communication interface is I2C */
 		data_buffer[0] &= ~AD525X_I2C_CMD_OR_REG;         // reset CMD/REG_n
@@ -298,26 +298,26 @@ uint16_t ad525x_read_rdac(struct ad525x_dev *dev,
 		data_buffer[0] |= address & AD525X_MEM_ADDR_MASK;
 		/* 3 byte data word */
 		if((dev->this_device == ID_AD5235) || (dev->this_device == ID_ADN2850)) {
-			spi_write_and_read(dev->spi_desc,
-					   data_buffer,
-					   3);
+			no_os_spi_write_and_read(dev->spi_desc,
+						 data_buffer,
+						 3);
 			mdelay(50);
 			data_buffer[0] &= AD525X_CMD_NOP << AD525X_CMD_SPI_OFFSET;
-			spi_write_and_read(dev->spi_desc,
-					   data_buffer,
-					   3);
+			no_os_spi_write_and_read(dev->spi_desc,
+						 data_buffer,
+						 3);
 			data = (data_buffer[1] << ONEBYTE_OFFSET) | data_buffer[2];
 			return (data & AD525X_DATA10_MASK);
 		} else { /* 2 byte data word */
-			spi_write_and_read(dev->spi_desc,
-					   data_buffer,
-					   2);
+			no_os_spi_write_and_read(dev->spi_desc,
+						 data_buffer,
+						 2);
 			mdelay(50);
 			/* Sending a dummy frame to read the result */
 			data_buffer[0] &= AD525X_CMD_NOP << AD525X_CMD_SPI_OFFSET;
-			spi_write_and_read(dev->spi_desc,
-					   data_buffer,
-					   2);
+			no_os_spi_write_and_read(dev->spi_desc,
+						 data_buffer,
+						 2);
 			data = (uint16_t)data_buffer[1];
 			return data;
 		}
@@ -363,14 +363,14 @@ void ad525x_write_rdac(struct ad525x_dev *dev,
 		    || (dev->this_device == ID_ADN2850)) { /* 3 byte data word */
 			data_buffer[1] = (data & MSB_BYTE_MASK) >> ONEBYTE_OFFSET;
 			data_buffer[2] = data & LSB_BYTE_MASK;
-			spi_write_and_read(dev->spi_desc,
-					   data_buffer,
-					   3);
+			no_os_spi_write_and_read(dev->spi_desc,
+						 data_buffer,
+						 3);
 		} else { /* 2 byte data word */
 			data_buffer[1] = data & LSB_BYTE_MASK;
-			spi_write_and_read(dev->spi_desc,
-					   data_buffer,
-					   2);
+			no_os_spi_write_and_read(dev->spi_desc,
+						 data_buffer,
+						 2);
 		}
 	} else { /* Communication interface is I2C */
 		data_buffer[0] &= ~AD525X_I2C_CMD_OR_REG;         // reset CMD/REG_n
@@ -420,23 +420,23 @@ void ad525x_write_command(struct ad525x_dev *dev,
 
 		if((dev->this_device == ID_AD5235)
 		    || (dev->this_device == ID_ADN2850)) { /* 3 byte data word */
-			spi_write_and_read(dev->spi_desc,
-					   data_buffer,
-					   3);
+			no_os_spi_write_and_read(dev->spi_desc,
+						 data_buffer,
+						 3);
 			if(command == AD525X_CMD_MEM2RDAC) {
 				data_buffer[0] &= AD525X_CMD_NOP;
-				spi_write_and_read(dev->spi_desc,
-						   data_buffer,
-						   3);
+				no_os_spi_write_and_read(dev->spi_desc,
+							 data_buffer,
+							 3);
 			}
 		} else { /* 2 byte data word */
-			spi_write_and_read(dev->spi_desc,
-					   data_buffer,
-					   2);
+			no_os_spi_write_and_read(dev->spi_desc,
+						 data_buffer,
+						 2);
 			if(command == AD525X_CMD_MEM2RDAC) {
-				spi_write_and_read(dev->spi_desc,
-						   data_buffer,
-						   2);
+				no_os_spi_write_and_read(dev->spi_desc,
+							 data_buffer,
+							 2);
 			}
 		}
 	} else { /* Communication interface is I2C */

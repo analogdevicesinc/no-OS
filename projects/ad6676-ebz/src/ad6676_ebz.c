@@ -281,7 +281,7 @@ int main(void)
 #endif
 	};
 
-	struct spi_init_param ad6676_spi_param = {
+	struct no_os_spi_init_param ad6676_spi_param = {
 		.device_id = SPI_DEVICE_ID,
 		.max_speed_hz = 2000000u,
 		.chip_select = 0,

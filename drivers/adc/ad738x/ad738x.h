@@ -151,7 +151,7 @@ enum ad738x_ref_sel {
 
 struct ad738x_dev {
 	/* SPI */
-	spi_desc		*spi_desc;
+	no_os_spi_desc		*spi_desc;
 	/** SPI module offload init */
 	struct spi_engine_offload_init_param *offload_init_param;
 	/* Device Settings */
@@ -164,7 +164,7 @@ struct ad738x_dev {
 
 struct ad738x_init_param {
 	/* SPI */
-	spi_init_param		*spi_param;
+	no_os_spi_init_param		*spi_param;
 	/** SPI module offload init */
 	struct spi_engine_offload_init_param *offload_init_param;
 	/* Device Settings */

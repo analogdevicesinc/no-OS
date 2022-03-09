@@ -198,7 +198,7 @@ enum ad469x_osr_ratios {
  */
 struct ad469x_init_param {
 	/* SPI */
-	spi_init_param		*spi_init;
+	no_os_spi_init_param		*spi_init;
 	/* SPI module offload init */
 	struct spi_engine_offload_init_param *offload_init_param;
 	/* PWM generator init structure */
@@ -227,7 +227,7 @@ struct ad469x_init_param {
  */
 struct ad469x_dev {
 	/* SPI descriptor */
-	spi_desc		*spi_desc;
+	no_os_spi_desc		*spi_desc;
 	/* Clock gen for hdl design structure */
 	struct axi_clkgen	*clkgen;
 	/* Trigger conversion PWM generator descriptor */

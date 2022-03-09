@@ -103,7 +103,7 @@ int32_t ad5758_spi_reg_read(struct ad5758_dev *dev,
 	else
 		buf[3] = 0x00;
 
-	ret = spi_write_and_read(dev->spi_desc, buf, 4);
+	ret = no_os_spi_write_and_read(dev->spi_desc, buf, 4);
 	if (ret < 0)
 		goto spi_err;
 
@@ -116,7 +116,7 @@ int32_t ad5758_spi_reg_read(struct ad5758_dev *dev,
 	else
 		buf[3] = 0x00;
 
-	ret = spi_write_and_read(dev->spi_desc, buf, 4);
+	ret = no_os_spi_write_and_read(dev->spi_desc, buf, 4);
 	if (ret < 0)
 		goto spi_err;
 
@@ -155,7 +155,7 @@ int32_t ad5758_spi_reg_write(struct ad5758_dev *dev,
 	buf[2] = (reg_data & 0xFF);
 	buf[3] = ad5758_compute_crc8(buf, 3);
 
-	return spi_write_and_read(dev->spi_desc, buf, 4);
+	return no_os_spi_write_and_read(dev->spi_desc, buf, 4);
 }
 
 /**
@@ -783,7 +783,7 @@ int32_t ad5758_init(struct ad5758_dev **device,
 	dev->crc_en = true;
 
 	/* Initialize the SPI communication */
-	ret = spi_init(&dev->spi_desc, &init_param->spi_init);
+	ret = no_os_spi_init(&dev->spi_desc, &init_param->spi_init);
 	if(ret)
 		goto error_init;
 

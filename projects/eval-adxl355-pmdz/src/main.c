@@ -17,25 +17,24 @@
 #define SPI_CS			15
 #define SPI_CS_PORT		GPIOA
 
-extern UART_HandleTypeDef huart5;
-
 int main ()
 {
 	struct uart_desc *uart;
 	struct adxl355_dev *adxl355;
 
 	int ret;
-	stm32_init();
+	HAL_Init();
+	SystemClock_Config();
 
 	struct stm32_spi_init_param xsip  = {
 		.chip_select_port = SPI_CS_PORT,
 		.get_input_clock = HAL_RCC_GetPCLK1Freq,
 	};
 
-	struct spi_init_param sip = {
+	struct no_os_spi_init_param sip = {
 		.device_id = SPI_DEVICE_ID,
 		.max_speed_hz = 4000000,
-		.bit_order = SPI_BIT_ORDER_MSB_FIRST,
+		.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
 		.mode = NO_OS_SPI_MODE_0,
 		.extra = &xsip,
 		.platform_ops = &stm32_spi_ops,

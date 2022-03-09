@@ -67,7 +67,7 @@ int32_t ad5766_spi_cmd_write(struct ad5766_dev *dev,
 	buf[1] = (data & 0xFF00) >> 8;
 	buf[2] = (data & 0x00FF) >> 0;
 
-	ret = spi_write_and_read(dev->spi_desc, buf, 3);
+	ret = no_os_spi_write_and_read(dev->spi_desc, buf, 3);
 
 	return ret;
 }
@@ -94,7 +94,7 @@ int32_t ad5766_spi_readback_reg(struct ad5766_dev *dev,
 
 	ad5766_spi_cmd_write(dev, AD5766_CMD_READBACK_REG(dac), 0x0000);
 
-	ret = spi_write_and_read(dev->spi_desc, buf, 3);
+	ret = no_os_spi_write_and_read(dev->spi_desc, buf, 3);
 
 	*data = (buf[0] << 16) | ((buf[1] << 8)) | (buf[2] << 0);
 
@@ -300,7 +300,7 @@ int32_t ad5766_init(struct ad5766_dev **device,
 	}
 
 	/* SPI */
-	ret = spi_init(&dev->spi_desc, &init_param.spi_init);
+	ret = no_os_spi_init(&dev->spi_desc, &init_param.spi_init);
 
 	/* GPIO */
 	ret |= no_os_gpio_get(&dev->gpio_reset, &init_param.gpio_reset);
@@ -340,7 +340,7 @@ int32_t ad5766_remove(struct ad5766_dev *dev)
 {
 	int32_t ret;
 
-	ret = spi_remove(dev->spi_desc);
+	ret = no_os_spi_remove(dev->spi_desc);
 
 	ret |= no_os_gpio_remove(dev->gpio_reset);
 

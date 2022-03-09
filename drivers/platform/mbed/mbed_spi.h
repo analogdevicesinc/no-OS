@@ -86,7 +86,7 @@ struct mbed_spi_desc {
 /**
 * @brief Mbed platform specific SPI platform ops structure
 */
-extern const struct spi_platform_ops mbed_spi_ops;
+extern const struct no_os_spi_platform_ops mbed_spi_ops;
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/

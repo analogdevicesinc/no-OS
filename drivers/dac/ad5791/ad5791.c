@@ -100,7 +100,7 @@ int32_t ad5791_init(struct ad5791_dev **device,
 	AD5791_CLR_OUT;
 	AD5791_CLR_HIGH;
 
-	status |= spi_init(&dev->spi_desc, &init_param.spi_init);
+	status |= no_os_spi_init(&dev->spi_desc, &init_param.spi_init);
 
 	*device = dev;
 
@@ -118,7 +118,7 @@ int32_t ad5791_remove(struct ad5791_dev *dev)
 {
 	int32_t ret;
 
-	ret = spi_remove(dev->spi_desc);
+	ret = no_os_spi_remove(dev->spi_desc);
 
 	ret |= no_os_gpio_remove(dev->gpio_reset);
 	ret |= no_os_gpio_remove(dev->gpio_clr);
@@ -157,9 +157,9 @@ int32_t ad5791_set_register_value(struct ad5791_dev *dev,
 	write_command[0] = (spi_word >> 16) & 0x0000FF;
 	write_command[1] = (spi_word >>  8) & 0x0000FF;
 	write_command[2] = (spi_word >>  0) & 0x0000FF;
-	status = spi_write_and_read(dev->spi_desc,
-				    write_command,
-				    3);
+	status = no_os_spi_write_and_read(dev->spi_desc,
+					  write_command,
+					  3);
 	if(status != 0) {
 		return -1;
 	}
@@ -189,18 +189,18 @@ int32_t ad5791_get_register_value(struct ad5791_dev *dev,
 	int8_t status = 0;
 
 	register_word[0] = (AD5791_READ | AD5791_ADDR_REG(register_address)) >> 16;
-	status = spi_write_and_read(dev->spi_desc,
-				    register_word,
-				    3);
+	status = no_os_spi_write_and_read(dev->spi_desc,
+					  register_word,
+					  3);
 	if(status != 0) {
 		return -1;
 	}
 	register_word[0] = 0x00;
 	register_word[1] = 0x00;
 	register_word[2] = 0x00;
-	status = spi_write_and_read(dev->spi_desc,
-				    register_word,
-				    3);
+	status = no_os_spi_write_and_read(dev->spi_desc,
+					  register_word,
+					  3);
 	if(status != 0) {
 		return -1;
 	}

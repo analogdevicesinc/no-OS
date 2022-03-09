@@ -107,7 +107,7 @@ typedef enum {
 
 typedef struct {
 	/* SPI */
-	spi_desc	*spi_desc;
+	no_os_spi_desc	*spi_desc;
 	/* Device Settings */
 	adgs5412_state	crc_en;
 	adgs5412_state	burst_mode_en;
@@ -116,7 +116,7 @@ typedef struct {
 
 typedef struct {
 	/* SPI */
-	spi_init_param	spi_init;
+	no_os_spi_init_param	spi_init;
 	/* Device Settings */
 	adgs5412_state	crc_en;
 	adgs5412_state	burst_mode_en;

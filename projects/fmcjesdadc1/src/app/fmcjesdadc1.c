@@ -76,14 +76,14 @@ int main(void)
 	uint32_t reg_value;
 
 	// SPI configuration
-	struct spi_init_param demux_spi_param = {
+	struct no_os_spi_init_param demux_spi_param = {
 		.max_speed_hz = 2000000u,
 		.chip_select = 0,
 		.mode = NO_OS_SPI_MODE_0,
 		.platform_ops = &xil_spi_ops
 	};
 
-	struct spi_init_param ad9250_0_spi_param = {
+	struct no_os_spi_init_param ad9250_0_spi_param = {
 		.device_id = SPI_DEVICE_ID,
 		.max_speed_hz = demux_spi_param.max_speed_hz,
 		.chip_select = 0,
@@ -91,7 +91,7 @@ int main(void)
 		.platform_ops = &demux_spi_platform_ops
 	};
 
-	struct spi_init_param ad9250_1_spi_param = {
+	struct no_os_spi_init_param ad9250_1_spi_param = {
 		.device_id = SPI_DEVICE_ID,
 		.max_speed_hz = demux_spi_param.max_speed_hz,
 		.chip_select = 1,
@@ -99,7 +99,7 @@ int main(void)
 		.platform_ops = &demux_spi_platform_ops
 	};
 
-	struct spi_init_param ad9517_spi_param = {
+	struct no_os_spi_init_param ad9517_spi_param = {
 		.device_id = SPI_DEVICE_ID,
 		.max_speed_hz = demux_spi_param.max_speed_hz,
 		.chip_select = 4,

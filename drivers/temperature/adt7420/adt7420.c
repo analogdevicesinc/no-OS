@@ -116,7 +116,7 @@ int32_t set_register_value(struct adt7420_dev *dev,
 		/*Form the SPI register read command byte. Bits [5:3] of command byte
 		 holds the register address.*/
 		data_buffer[0] = (register_address << 3) & ADT7320_WRITE_MASK_CMD;
-		if (spi_write_and_read(dev->spi_desc, data_buffer, num_data_bytes) != SUCCESS)
+		if (no_os_spi_write_and_read(dev->spi_desc, data_buffer, num_data_bytes) != 0)
 			return FAILURE;
 	} else {
 		data_buffer[0] = register_address;
@@ -124,7 +124,7 @@ int32_t set_register_value(struct adt7420_dev *dev,
 		if (no_os_i2c_write(dev->i2c_desc,
 				    data_buffer,
 				    num_data_bytes,
-			      1) != SUCCESS)
+				    1) != SUCCESS)
 			//no repeat start
 			return FAILURE;
 	}
@@ -159,7 +159,7 @@ int32_t adt7420_init(struct adt7420_dev **device,
 	dev->active_device = init_param.active_device;
 
 	if (adt7420_is_spi(dev))
-		status = spi_init(&dev->spi_desc, &init_param.interface_init.spi_init);
+		status = no_os_spi_init(&dev->spi_desc, &init_param.interface_init.spi_init);
 	else
 		status = no_os_i2c_init(&dev->i2c_desc, &init_param.interface_init.i2c_init);
 
@@ -212,7 +212,7 @@ int32_t adt7420_remove(struct adt7420_dev *dev)
 	if (!(adt7420_is_spi(dev)))
 		ret = no_os_i2c_remove(dev->i2c_desc);
 	else
-		ret = spi_remove(dev->spi_desc);
+		ret = no_os_spi_remove(dev->spi_desc);
 	free(dev);
 
 	return ret;
@@ -289,16 +289,16 @@ int32_t adt7420_reset(struct adt7420_dev *dev)
 	uint8_t data_buffer[] = { 0xFF, 0xFF, 0xFF, 0xFF };
 
 	if (adt7420_is_spi(dev)) {
-		if (spi_write_and_read(dev->spi_desc,
-				       data_buffer,
-				       sizeof(data_buffer)) != SUCCESS)
+		if (no_os_spi_write_and_read(dev->spi_desc,
+					     data_buffer,
+					     sizeof(data_buffer)) != 0)
 			return FAILURE;
 	} else {
 		uint8_t register_address = ADT7420_REG_RESET;
 		if (no_os_i2c_write(dev->i2c_desc,
 				    &register_address,
 				    1,
-			      1) != SUCCESS) {
+				    1) != SUCCESS) {
 			//no repeat start
 			return FAILURE;
 		}
@@ -378,7 +378,7 @@ uint16_t set_shift_reg(struct adt7420_dev *dev,
 
 	data_buffer[0] = data[0];
 	data_buffer[1] = data[1];
-	spi_write_and_read(dev->spi_desc, data_buffer, num_bytes);
+	no_os_spi_write_and_read(dev->spi_desc, data_buffer, num_bytes);
 
 	if (num_bytes == 2)
 		read_back_data = data_buffer[1];

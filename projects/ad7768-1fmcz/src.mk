@@ -13,7 +13,7 @@
 SRC_DIRS += $(DRIVERS)/axi_core/clk_axi_clkgen
 
 SRCS += $(PROJECT)/src/ad77681evb.c
-SRCS += $(DRIVERS)/api/spi.c \
+SRCS += $(DRIVERS)/api/no_os_spi.c \
 	$(DRIVERS)/adc/ad7768-1/ad77681.c \
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.c \
 	$(DRIVERS)/axi_core/spi_engine/spi_engine.c \

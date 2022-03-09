@@ -75,7 +75,7 @@ struct spi_engine_init_param spi_eng_init_param  = {
 	.data_width = 8,
 };
 
-struct spi_init_param ad7616_spi_init = {
+struct no_os_spi_init_param ad7616_spi_init = {
 	.chip_select = SPI_AD7616_CS,
 	.max_speed_hz = 50000000,
 	.mode = NO_OS_SPI_MODE_2,

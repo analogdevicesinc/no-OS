@@ -76,8 +76,8 @@ int32_t adpd188_init(struct adpd188_dev **device,
 		dev->phy_opt = init_param->phy_opt;
 
 	if(dev->phy_opt == ADPD188_SPI)
-		ret = spi_init((struct spi_desc **)&dev->phy_desc,
-			       (const struct spi_init_param *)&init_param->phy_init);
+		ret = no_os_spi_init((struct no_os_spi_desc **)&dev->phy_desc,
+				     (const struct no_os_spi_init_param *)&init_param->phy_init);
 	else if(dev->phy_opt == ADPD188_I2C)
 		ret = no_os_i2c_init((struct no_os_i2c_desc **)&dev->phy_desc,
 				     (const struct no_os_i2c_init_param *)&init_param->phy_init);
@@ -123,7 +123,7 @@ error_gpio0:
 	no_os_gpio_remove(dev->gpio0);
 error_phy:
 	if(dev->phy_opt == ADPD188_SPI)
-		spi_remove(dev->phy_desc);
+		no_os_spi_remove(dev->phy_desc);
 	else if(dev->phy_opt == ADPD188_I2C)
 		no_os_i2c_remove(dev->phy_desc);
 error_dev:
@@ -142,7 +142,7 @@ int32_t adpd188_remove(struct adpd188_dev *dev)
 	int32_t ret;
 
 	if(dev->phy_opt == ADPD188_SPI)
-		ret = spi_remove(dev->phy_desc);
+		ret = no_os_spi_remove(dev->phy_desc);
 	else if(dev->phy_opt == ADPD188_I2C)
 		ret = no_os_i2c_remove(dev->phy_desc);
 	else
@@ -177,7 +177,7 @@ int32_t adpd188_reg_read(struct adpd188_dev *dev, uint8_t reg_addr,
 
 	if(dev->phy_opt == ADPD188_SPI) {
 		buff[0] = (reg_addr << 1) & 0xFE;
-		ret = spi_write_and_read(dev->phy_desc, buff, 3);
+		ret = no_os_spi_write_and_read(dev->phy_desc, buff, 3);
 	} else if(dev->phy_opt == ADPD188_I2C) {
 		ret = no_os_i2c_write(dev->phy_desc, &reg_addr, 1, 0);
 		if(ret != SUCCESS)
@@ -218,7 +218,7 @@ int32_t adpd188_reg_write(struct adpd188_dev *dev, uint8_t reg_addr,
 
 	if(dev->phy_opt == ADPD188_SPI) {
 		buff[0] = (reg_addr << 1) | 1;
-		ret = spi_write_and_read(dev->phy_desc, buff, 3);
+		ret = no_os_spi_write_and_read(dev->phy_desc, buff, 3);
 	} else if(dev->phy_opt == ADPD188_I2C) {
 		buff[0] = reg_addr;
 		ret = no_os_i2c_write(dev->phy_desc, buff, 3, 1);

@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   spi.c
+ *   @file   no_os_spi.c
  *   @brief  Implementation of the SPI Interface
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
@@ -48,8 +48,8 @@
  * @param param - The structure that contains the SPI parameters.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t spi_init(struct spi_desc **desc,
-		 const struct spi_init_param *param)
+int32_t no_os_spi_init(struct no_os_spi_desc **desc,
+		       const struct no_os_spi_init_param *param)
 {
 	if (!param)
 		return FAILURE;
@@ -63,11 +63,11 @@ int32_t spi_init(struct spi_desc **desc,
 }
 
 /**
- * @brief Free the resources allocated by spi_init().
+ * @brief Free the resources allocated by no_os_spi_init().
  * @param desc - The SPI descriptor.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t spi_remove(struct spi_desc *desc)
+int32_t no_os_spi_remove(struct no_os_spi_desc *desc)
 {
 	return desc->platform_ops->remove(desc);
 }
@@ -79,9 +79,9 @@ int32_t spi_remove(struct spi_desc *desc)
  * @param bytes_number - Number of bytes to write/read.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t spi_write_and_read(struct spi_desc *desc,
-			   uint8_t *data,
-			   uint16_t bytes_number)
+int32_t no_os_spi_write_and_read(struct no_os_spi_desc *desc,
+				 uint8_t *data,
+				 uint16_t bytes_number)
 {
 	return desc->platform_ops->write_and_read(desc, data, bytes_number);
 }
@@ -93,7 +93,9 @@ int32_t spi_write_and_read(struct spi_desc *desc,
  * @param len - Number of messages in the array.
  * @return SUCCESS in case of success, negativ error code otherwise.
  */
-int32_t spi_transfer(struct spi_desc *desc, struct spi_msg *msgs, uint32_t len)
+int32_t no_os_spi_transfer(struct no_os_spi_desc *desc,
+			   struct no_os_spi_msg *msgs,
+			   uint32_t len)
 {
 	int32_t  ret;
 	uint32_t i;
@@ -107,8 +109,8 @@ int32_t spi_transfer(struct spi_desc *desc, struct spi_msg *msgs, uint32_t len)
 	for (i = 0; i < len; i++) {
 		if (msgs[i].rx_buff != msgs[i].tx_buff || !msgs[i].tx_buff)
 			return -EINVAL;
-		ret = spi_write_and_read(desc, msgs[i].rx_buff,
-					 msgs[i].bytes_number);
+		ret = no_os_spi_write_and_read(desc, msgs[i].rx_buff,
+					       msgs[i].bytes_number);
 		if (IS_ERR_VALUE(ret))
 			return ret;
 	}

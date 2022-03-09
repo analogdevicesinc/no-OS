@@ -66,7 +66,7 @@ struct ad5791_chip_info {
 
 struct ad5791_dev {
 	/* SPI */
-	spi_desc		*spi_desc;
+	no_os_spi_desc		*spi_desc;
 	/* GPIO */
 	struct no_os_gpio_desc	*gpio_reset;
 	struct no_os_gpio_desc	*gpio_clr;
@@ -77,7 +77,7 @@ struct ad5791_dev {
 
 struct ad5791_init_param {
 	/* SPI */
-	spi_init_param	spi_init;
+	no_os_spi_init_param	spi_init;
 	/* GPIO */
 	struct no_os_gpio_init_param		gpio_reset;
 	struct no_os_gpio_init_param		gpio_clr;

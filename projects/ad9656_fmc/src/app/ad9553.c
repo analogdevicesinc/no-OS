@@ -69,7 +69,7 @@ int32_t ad9553_reg_read(struct ad9553_dev *dev,
 	buf[1] = reg_addr & 0xFF;
 	buf[2] = 0x00;
 
-	ret = spi_write_and_read(dev->spi_desc, buf, 3);
+	ret = no_os_spi_write_and_read(dev->spi_desc, buf, 3);
 	if (ret < 0)
 		return ret;
 
@@ -99,7 +99,7 @@ int32_t ad9553_reg_write(struct ad9553_dev *dev,
 	buf[1] = reg_addr & 0xFF;
 	buf[2] = reg_data;
 
-	return spi_write_and_read(dev->spi_desc, buf, 3);
+	return no_os_spi_write_and_read(dev->spi_desc, buf, 3);
 }
 
 /**
@@ -120,7 +120,7 @@ int32_t ad9553_setup(struct ad9553_dev **device,
 		return FAILURE;
 
 	/* SPI */
-	ret = spi_init(&dev->spi_desc, &init_param->spi_init);
+	ret = no_os_spi_init(&dev->spi_desc, &init_param->spi_init);
 	if (ret != SUCCESS)
 		return ret;
 
@@ -234,7 +234,7 @@ int32_t ad9553_remove(struct ad9553_dev *dev)
 {
 	int32_t ret;
 
-	ret = spi_remove(dev->spi_desc);
+	ret = no_os_spi_remove(dev->spi_desc);
 	if (ret != SUCCESS)
 		return ret;
 

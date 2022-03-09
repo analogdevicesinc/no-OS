@@ -81,7 +81,7 @@ int main(void)
 		.master_mode = MASTER
 	};
 
-	struct spi_init_param init_param = {
+	struct no_os_spi_init_param init_param = {
 		.device_id = 1,
 		.chip_select = 0,
 		.extra = &spi_param,

@@ -431,7 +431,7 @@ struct slope {
 
 struct adf5902_init_param {
 	/* SPI Initialization parameters */
-	struct spi_init_param	*spi_init;
+	struct no_os_spi_init_param	*spi_init;
 	/* GPIO Chip Enable */
 	struct no_os_gpio_init_param	*gpio_ce_param;
 	/* Reference input frequency */
@@ -484,7 +484,7 @@ struct adf5902_init_param {
 
 struct adf5902_dev {
 	/* SPI Descriptor */
-	struct spi_desc		*spi_desc;
+	struct no_os_spi_desc		*spi_desc;
 	/* GPIO Chip Enable */
 	struct no_os_gpio_desc	*gpio_ce;
 	/* Reference input frequency*/

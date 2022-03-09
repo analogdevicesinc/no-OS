@@ -64,7 +64,7 @@ struct adf4371_chan_spec {
 };
 
 struct adf4371_dev {
-	spi_desc	*spi_desc;
+	no_os_spi_desc	*spi_desc;
 	bool		spi_3wire_en;
 	uint32_t	num_channels;
 	struct adf4371_channel_config	channel_cfg[4];
@@ -87,7 +87,7 @@ struct adf4371_dev {
 };
 
 struct adf4371_init_param {
-	spi_init_param	*spi_init;
+	no_os_spi_init_param	*spi_init;
 	bool		spi_3wire_enable;
 	uint32_t	clkin_frequency;
 	bool		differential_ref_clock;

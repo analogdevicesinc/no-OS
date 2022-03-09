@@ -74,7 +74,7 @@ int32_t ltc2312_setup(struct ltc2312_dev **device,
 	if(!dev)
 		return -1;
 
-	ret = spi_init(&dev->spi_desc, &init_param->spi_init);
+	ret = no_os_spi_init(&dev->spi_desc, &init_param->spi_init);
 	if(ret != 0)
 		goto error;
 
@@ -103,7 +103,7 @@ int32_t ltc2312_remove(struct ltc2312_dev *dev)
 	if(!dev)
 		return -1;
 
-	ret = spi_remove(dev->spi_desc);
+	ret = no_os_spi_remove(dev->spi_desc);
 	if(ret != 0)
 		return ret;
 
@@ -161,7 +161,7 @@ int32_t ltc2312_read(struct ltc2312_dev *dev, uint16_t *ptr_adc_code)
 	bytes_no = LTC2312_READ_BYTES_NUMBER;
 
 	/* Dummy read to update  */
-	ret = spi_write_and_read(dev->spi_desc, adc_array, bytes_no);
+	ret = no_os_spi_write_and_read(dev->spi_desc, adc_array, bytes_no);
 	if(ret != 0)
 		return ret;
 
@@ -170,7 +170,7 @@ int32_t ltc2312_read(struct ltc2312_dev *dev, uint16_t *ptr_adc_code)
 		mdelay(1);
 
 		/* Read the value of the ADC */
-		ret = spi_write_and_read(dev->spi_desc, adc_array, bytes_no);
+		ret = no_os_spi_write_and_read(dev->spi_desc, adc_array, bytes_no);
 		if(ret != 0) {
 			return ret;
 		}

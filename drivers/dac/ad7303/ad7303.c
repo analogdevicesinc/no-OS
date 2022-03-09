@@ -64,7 +64,7 @@ int8_t ad7303_init(struct ad7303_dev **device,
 	if (!dev)
 		return -1;
 
-	status = spi_init(&dev->spi_desc, &init_param.spi_init);
+	status = no_os_spi_init(&dev->spi_desc, &init_param.spi_init);
 
 	*device = dev;
 
@@ -82,7 +82,7 @@ int32_t ad7303_remove(struct ad7303_dev *dev)
 {
 	int32_t ret;
 
-	ret = spi_remove(dev->spi_desc);
+	ret = no_os_spi_remove(dev->spi_desc);
 
 	free(dev);
 
@@ -110,7 +110,7 @@ void ad7303_write(struct ad7303_dev *dev,
 
 	write_data[0] = control_reg;
 	write_data[1] = data_reg;
-	spi_write_and_read(dev->spi_desc,
-			   write_data,
-			   2);
+	no_os_spi_write_and_read(dev->spi_desc,
+				 write_data,
+				 2);
 }

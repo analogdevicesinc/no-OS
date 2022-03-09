@@ -96,7 +96,7 @@ static int32_t _ad7689_rac(struct ad7689_dev *dev,
 		buf[1] = cfg;
 	}
 	sz = c->rb && config_out ? 4 : 2;
-	ret = spi_write_and_read(dev->spi_desc, buf, sz);
+	ret = no_os_spi_write_and_read(dev->spi_desc, buf, sz);
 	if (ret < 0)
 		return ret;
 
@@ -159,7 +159,7 @@ int32_t ad7689_init(struct ad7689_dev **dev,
 	d->id = init_param->id;
 	d->name = ad7689_device_name[d->id];
 
-	ret = spi_init(&d->spi_desc, &init_param->spi_init);
+	ret = no_os_spi_init(&d->spi_desc, &init_param->spi_init);
 	if (ret < 0)
 		goto error_spi;
 
@@ -176,7 +176,7 @@ int32_t ad7689_init(struct ad7689_dev **dev,
 
 	return SUCCESS;
 error_init:
-	spi_remove(d->spi_desc);
+	no_os_spi_remove(d->spi_desc);
 error_spi:
 	free(d);
 	pr_err("%s initialization failed with status %d\n", d->name,
@@ -286,7 +286,7 @@ int32_t ad7689_remove(struct ad7689_dev *dev)
 	if (!dev)
 		return -EINVAL;
 
-	spi_remove(dev->spi_desc);
+	no_os_spi_remove(dev->spi_desc);
 	free(dev);
 
 	return SUCCESS;

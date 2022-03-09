@@ -75,11 +75,11 @@ struct linux_spi_desc {
  * @param param - The structure that contains the SPI parameters.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t linux_spi_init(struct spi_desc **desc,
-		       const struct spi_init_param *param)
+int32_t linux_spi_init(struct no_os_spi_desc **desc,
+		       const struct no_os_spi_init_param *param)
 {
 	struct linux_spi_desc *linux_desc;
-	struct spi_desc *descriptor;
+	struct no_os_spi_desc *descriptor;
 	uint8_t bits = 8;
 	char path[64];
 	int ret;
@@ -142,7 +142,7 @@ free_desc:
  * @param bytes_number - Number of bytes to write/read.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t linux_spi_write_and_read(struct spi_desc *desc,
+int32_t linux_spi_write_and_read(struct no_os_spi_desc *desc,
 				 uint8_t *data,
 				 uint16_t bytes_number)
 {
@@ -170,7 +170,7 @@ int32_t linux_spi_write_and_read(struct spi_desc *desc,
  * @param desc - The SPI descriptor.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t linux_spi_remove(struct spi_desc *desc)
+int32_t linux_spi_remove(struct no_os_spi_desc *desc)
 {
 	struct linux_spi_desc *linux_desc;
 	int32_t ret;
@@ -189,8 +189,8 @@ int32_t linux_spi_remove(struct spi_desc *desc)
 	return SUCCESS;
 }
 
-static int32_t linux_spi_transfer(struct spi_desc *desc,
-				  struct spi_msg *msgs,
+static int32_t linux_spi_transfer(struct no_os_spi_desc *desc,
+				  struct no_os_spi_msg *msgs,
 				  uint32_t len)
 
 {
@@ -223,7 +223,7 @@ static int32_t linux_spi_transfer(struct spi_desc *desc,
 /**
  * @brief Linux platform specific SPI platform ops structure
  */
-const struct spi_platform_ops linux_spi_ops = {
+const struct no_os_spi_platform_ops linux_spi_ops = {
 	.init = &linux_spi_init,
 	.write_and_read = &linux_spi_write_and_read,
 	.remove = &linux_spi_remove,

@@ -11,7 +11,7 @@
 
 SRCS := $(PROJECT)/src/ad7616_sdz.c
 SRCS += $(DRIVERS)/adc/ad7616/ad7616.c \
-	$(DRIVERS)/api/spi.c \
+	$(DRIVERS)/api/no_os_spi.c \
 	$(DRIVERS)/api/no_os_gpio.c \
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.c \
 	$(DRIVERS)/axi_core/spi_engine/spi_engine.c \

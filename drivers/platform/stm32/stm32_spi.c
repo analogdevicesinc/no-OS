@@ -50,8 +50,8 @@
  * @param param - The structure that contains the SPI parameters.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t stm32_spi_init(struct spi_desc **desc,
-		       const struct spi_init_param *param)
+int32_t stm32_spi_init(struct no_os_spi_desc **desc,
+		       const struct no_os_spi_init_param *param)
 {
 	int32_t ret;
 	uint32_t input_clock;
@@ -59,13 +59,13 @@ int32_t stm32_spi_init(struct spi_desc **desc,
 	const uint32_t prescaler_min = SPI_BAUDRATEPRESCALER_2;
 	const uint32_t prescaler_max = SPI_BAUDRATEPRESCALER_256;
 	uint32_t prescaler_reg = 0u;
-	struct spi_desc	*spi_desc;
+	struct no_os_spi_desc	*spi_desc;
 	SPI_TypeDef *base = NULL;
 
 	if (!desc || !param)
 		return -EINVAL;
 
-	spi_desc = (struct spi_desc *)calloc(1, sizeof(*spi_desc));
+	spi_desc = (struct no_os_spi_desc *)calloc(1, sizeof(*spi_desc));
 	if (!spi_desc)
 		return -ENOMEM;
 
@@ -169,12 +169,13 @@ int32_t stm32_spi_init(struct spi_desc **desc,
 		goto error;
 	};
 	sdesc->hspi.Instance = base;
-	sdesc->hspi.Init.Mode = SPI_MODE_MASTER;
+	sdesc->hspi.Init.Mode = NO_OS_SPI_MODE_MASTER;
 	sdesc->hspi.Init.Direction = SPI_DIRECTION_2LINES;
 	sdesc->hspi.Init.DataSize = SPI_DATASIZE_8BIT;
-	sdesc->hspi.Init.CLKPolarity = param->mode & SPI_CPOL ? SPI_POLARITY_HIGH :
+	sdesc->hspi.Init.CLKPolarity = param->mode & NO_OS_SPI_CPOL ?
+				       SPI_POLARITY_HIGH :
 				       SPI_POLARITY_LOW;
-	sdesc->hspi.Init.CLKPhase = param->mode & SPI_CPHA ? SPI_PHASE_2EDGE :
+	sdesc->hspi.Init.CLKPhase = param->mode & NO_OS_SPI_CPHA ? SPI_PHASE_2EDGE :
 				    SPI_PHASE_1EDGE;
 	sdesc->hspi.Init.NSS = SPI_NSS_SOFT;
 	sdesc->hspi.Init.BaudRatePrescaler = prescaler_reg << SPI_CR1_BR_Pos;
@@ -204,11 +205,11 @@ error:
 }
 
 /**
- * @brief Free the resources allocated by spi_init().
+ * @brief Free the resources allocated by no_os_spi_init().
  * @param desc - The SPI descriptor.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t stm32_spi_remove(struct spi_desc *desc)
+int32_t stm32_spi_remove(struct no_os_spi_desc *desc)
 {
 	struct stm32_spi_desc *sdesc;
 
@@ -230,7 +231,7 @@ int32_t stm32_spi_remove(struct spi_desc *desc)
  * @param bytes_number - Number of bytes to write/read.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t stm32_spi_write_and_read(struct spi_desc *desc,
+int32_t stm32_spi_write_and_read(struct no_os_spi_desc *desc,
 				 uint8_t *data,
 				 uint16_t bytes_number)
 {
@@ -268,7 +269,7 @@ int32_t stm32_spi_write_and_read(struct spi_desc *desc,
 /**
  * @brief stm32 platform specific SPI platform ops structure
  */
-const struct spi_platform_ops stm32_spi_ops = {
+const struct no_os_spi_platform_ops stm32_spi_ops = {
 	.init = &stm32_spi_init,
 	.write_and_read = &stm32_spi_write_and_read,
 	.remove = &stm32_spi_remove

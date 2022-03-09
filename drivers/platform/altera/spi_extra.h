@@ -80,6 +80,6 @@ struct altera_spi_desc {
 /**
  * @brief Altera specific SPI platform ops structure
  */
-extern const struct spi_platform_ops altera_spi_ops;
+extern const struct no_os_spi_platform_ops altera_spi_ops;
 
 #endif /* SPI_EXTRA_H_ */

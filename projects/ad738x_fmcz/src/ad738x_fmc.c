@@ -78,7 +78,7 @@ int main()
 		.data_width = 16,
 	};
 
-	struct spi_init_param ad738x_spi_init = {
+	struct no_os_spi_init_param ad738x_spi_init = {
 		.chip_select = AD738X_SPI_CS,
 		.max_speed_hz = 10000000,
 		.mode = NO_OS_SPI_MODE_1,

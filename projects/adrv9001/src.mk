@@ -29,7 +29,7 @@ INCS += $(PROJECT)/src/hal/parameters.h \
 # no-OS drivers
 SRCS += $(PLATFORM_DRIVERS)/xilinx_gpio.c \
 	$(DRIVERS)/api/no_os_gpio.c \
-	$(DRIVERS)/api/spi.c \
+	$(DRIVERS)/api/no_os_spi.c \
 	$(PLATFORM_DRIVERS)/xilinx_spi.c \
 	$(PLATFORM_DRIVERS)/delay.c \
 	$(NO-OS)/util/util.c \

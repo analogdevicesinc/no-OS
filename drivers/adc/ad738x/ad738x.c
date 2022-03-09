@@ -69,7 +69,7 @@ int32_t ad738x_spi_reg_read(struct ad738x_dev *dev,
 	buf[0] = AD738X_REG_READ(reg_addr);
 	buf[1] = 0x00;
 
-	ret = spi_write_and_read(dev->spi_desc, buf, 2);
+	ret = no_os_spi_write_and_read(dev->spi_desc, buf, 2);
 	*reg_data = (buf[0] << 8) | buf[1];
 
 	return ret;
@@ -91,7 +91,7 @@ int32_t ad738x_spi_reg_write(struct ad738x_dev *dev,
 	buf[0] = AD738X_REG_WRITE(reg_addr) | ((reg_data & 0xF00) >> 8);
 	buf[1] = reg_data & 0xFFF;
 
-	return spi_write_and_read(dev->spi_desc, buf, 2);
+	return no_os_spi_write_and_read(dev->spi_desc, buf, 2);
 }
 
 /**
@@ -138,7 +138,7 @@ int32_t ad738x_spi_single_conversion(struct ad738x_dev *dev,
 
 	/* Conversion data is 2 bytes long */
 	rx_buf_len = 2 * dev->conv_mode + 2;
-	ret = spi_write_and_read(dev->spi_desc, buf, rx_buf_len);
+	ret = no_os_spi_write_and_read(dev->spi_desc, buf, rx_buf_len);
 
 	/*
 	 *  Conversion data is 16 bits long in 1-wire mode and
@@ -330,7 +330,7 @@ int32_t ad738x_init(struct ad738x_dev **device,
 	dev->conv_mode = init_param->conv_mode;
 	dev->ref_sel = init_param->ref_sel;
 
-	ret = spi_init(&dev->spi_desc, init_param->spi_param);
+	ret = no_os_spi_init(&dev->spi_desc, init_param->spi_param);
 
 	ret |= ad738x_reset(dev, HARD_RESET);
 	mdelay(1000);
@@ -356,7 +356,7 @@ int32_t ad738x_remove(struct ad738x_dev *dev)
 {
 	int32_t ret;
 
-	ret = spi_remove(dev->spi_desc);
+	ret = no_os_spi_remove(dev->spi_desc);
 
 	free(dev);
 

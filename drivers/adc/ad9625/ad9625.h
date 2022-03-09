@@ -83,7 +83,7 @@
 
 struct ad9625_init_param {
 	/* SPI */
-	spi_init_param	spi_init;
+	no_os_spi_init_param	spi_init;
 	/* Device Settings */
 	uint32_t	lane_rate_kbps;
 	uint32_t	test_samples[4];
@@ -91,7 +91,7 @@ struct ad9625_init_param {
 
 struct ad9625_dev {
 	/* SPI */
-	spi_desc		*spi_desc;
+	no_os_spi_desc		*spi_desc;
 };
 
 /******************************************************************************/

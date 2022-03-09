@@ -61,10 +61,11 @@
  * @param param - The structure that contains the SPI parameters.
  * @return 0 in case of success, errno codes otherwise.
  */
-int32_t max_spi_init(struct spi_desc **desc, const struct spi_init_param *param)
+int32_t max_spi_init(struct no_os_spi_desc **desc,
+		     const struct no_os_spi_init_param *param)
 {
 	int32_t ret;
-	struct spi_desc *descriptor;
+	struct no_os_spi_desc *descriptor;
 	struct max_spi_init_param *eparam;
 
 	if (!param || !param->extra)
@@ -126,11 +127,11 @@ err:
 }
 
 /**
- * @brief Free the resources allocated by spi_init().
+ * @brief Free the resources allocated by no_os_spi_init().
  * @param desc - The SPI descriptor.
  * @return 0 in case of success, errno codes otherwise.
  */
-int32_t max_spi_remove(struct spi_desc *desc)
+int32_t max_spi_remove(struct no_os_spi_desc *desc)
 {
 	if (!desc)
 		return -EINVAL;
@@ -148,7 +149,7 @@ int32_t max_spi_remove(struct spi_desc *desc)
  * @param bytes_number - Number of bytes to write/read.
  * @return 0 in case of success, errno codes otherwise.
  */
-int32_t max_spi_write_and_read(struct spi_desc *desc,
+int32_t max_spi_write_and_read(struct no_os_spi_desc *desc,
 			       uint8_t *data,
 			       uint16_t bytes_number)
 {
@@ -190,7 +191,8 @@ int32_t max_spi_write_and_read(struct spi_desc *desc,
  * @param len - Number of messages.
  * @return 0 in case of success, errno codes otherwise.
  */
-int32_t max_spi_transfer(struct spi_desc *desc, struct spi_msg *msgs,
+int32_t max_spi_transfer(struct no_os_spi_desc *desc,
+			 struct no_os_spi_msg *msgs,
 			 uint32_t len)
 {
 	mxc_spi_req_t req;
@@ -223,7 +225,7 @@ int32_t max_spi_transfer(struct spi_desc *desc, struct spi_msg *msgs,
 /**
  * @brief maxim platform specific SPI platform ops structure
  */
-const struct spi_platform_ops max_spi_ops = {
+const struct no_os_spi_platform_ops max_spi_ops = {
 	.init = &max_spi_init,
 	.write_and_read = &max_spi_write_and_read,
 	.transfer = &max_spi_transfer,

@@ -81,12 +81,12 @@
 /******************************************************************************/
 struct ad9656_dev {
 	/* SPI */
-	struct spi_desc	*spi_desc;
+	struct no_os_spi_desc	*spi_desc;
 };
 
 struct ad9656_init_param {
 	/* SPI */
-	struct spi_init_param	spi_init;
+	struct no_os_spi_init_param	spi_init;
 	/* Device Settings */
 	uint32_t	lane_rate_kbps;
 };

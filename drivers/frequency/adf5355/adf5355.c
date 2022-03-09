@@ -75,7 +75,7 @@ static int32_t adf5355_write(struct adf5355_dev *dev,
 	buf[2] = data >> 8;
 	buf[3] = data;
 
-	return spi_write_and_read(dev->spi_desc, buf, ARRAY_SIZE(buf));
+	return no_os_spi_write_and_read(dev->spi_desc, buf, ARRAY_SIZE(buf));
 }
 
 /**
@@ -447,7 +447,7 @@ int32_t adf5355_init(struct adf5355_dev **device,
 		return -ENOMEM;
 
 	/* SPI */
-	ret = spi_init(&dev->spi_desc, init_param->spi_init);
+	ret = no_os_spi_init(&dev->spi_desc, init_param->spi_init);
 	if (ret != SUCCESS)
 		goto error_dev;
 
@@ -504,7 +504,7 @@ int32_t adf5355_init(struct adf5355_dev **device,
 	return ret;
 
 error_spi:
-	spi_remove(dev->spi_desc);
+	no_os_spi_remove(dev->spi_desc);
 error_dev:
 	free(dev);
 
@@ -521,7 +521,7 @@ int32_t adf5355_remove(struct adf5355_dev *device)
 	int32_t ret = SUCCESS;
 
 	if (device->spi_desc)
-		ret = spi_remove(device->spi_desc);
+		ret = no_os_spi_remove(device->spi_desc);
 
 	free(device);
 

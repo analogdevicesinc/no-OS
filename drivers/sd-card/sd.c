@@ -105,7 +105,7 @@ static int32_t wait_for_response(struct sd_desc *sd_desc, uint8_t *data_out)
 	ret = FAILURE;
 	not_timeout = WAIT_RESP_TIMEOUT;
 	do {
-		if (SUCCESS != spi_write_and_read(sd_desc->spi_desc,
+		if (0 != no_os_spi_write_and_read(sd_desc->spi_desc,
 						  data_out, 1))
 			break;
 		if (*data_out != 0xFF) {
@@ -133,7 +133,7 @@ static int32_t wait_until_not_busy(struct sd_desc *sd_desc)
 	not_timeout = WAIT_RESP_TIMEOUT;
 	do {
 		data = 0xFF;
-		if (SUCCESS != spi_write_and_read(sd_desc->spi_desc, &data, 1))
+		if (0 != no_os_spi_write_and_read(sd_desc->spi_desc, &data, 1))
 			break;
 		if (data != 0x00) {
 			ret = SUCCESS;
@@ -194,7 +194,7 @@ static int32_t send_command(struct sd_desc *sd_desc, struct cmd_desc *cmd_desc)
 		sd_desc->buff[6] = 0x87;
 
 	/* Send command */
-	if (SUCCESS != spi_write_and_read(sd_desc->spi_desc, sd_desc->buff, CMD_LEN))
+	if (0 != no_os_spi_write_and_read(sd_desc->spi_desc, sd_desc->buff, CMD_LEN))
 		return FAILURE;
 
 	/* Read response */
@@ -202,7 +202,7 @@ static int32_t send_command(struct sd_desc *sd_desc, struct cmd_desc *cmd_desc)
 		return FAILURE;
 	if (cmd_desc->response_len - 1 > 0) {
 		memset(cmd_desc->response + 1, 0xFF, cmd_desc->response_len - 1);
-		if (SUCCESS != spi_write_and_read(sd_desc->spi_desc, cmd_desc->response + 1,
+		if (0 != no_os_spi_write_and_read(sd_desc->spi_desc, cmd_desc->response + 1,
 						  cmd_desc->response_len - 1))
 			return FAILURE;
 	}
@@ -224,14 +224,14 @@ static int32_t write_block(struct sd_desc *sd_desc, uint8_t *data,
 	sd_desc->buff[0] = START_N_BLOCK_TOKEN;
 	if (nb_of_blocks == 1)
 		sd_desc->buff[0] = START_1_BLOCK_TOKEN;
-	if (SUCCESS != spi_write_and_read(sd_desc->spi_desc, sd_desc->buff, 1))
+	if (0 != no_os_spi_write_and_read(sd_desc->spi_desc, sd_desc->buff, 1))
 		return FAILURE;
 
 	/* Send data with CRC */
-	if (SUCCESS != spi_write_and_read(sd_desc->spi_desc, data, DATA_BLOCK_LEN))
+	if (0 != no_os_spi_write_and_read(sd_desc->spi_desc, data, DATA_BLOCK_LEN))
 		return FAILURE;
 	*((uint16_t *)sd_desc->buff) = 0xFFFF;
-	if (SUCCESS != spi_write_and_read(sd_desc->spi_desc, sd_desc->buff, CRC_LEN))
+	if (0 != no_os_spi_write_and_read(sd_desc->spi_desc, sd_desc->buff, CRC_LEN))
 		return FAILURE;
 
 	/* Read response and check if write was ok */
@@ -297,12 +297,12 @@ static int32_t read_block(struct sd_desc *sd_desc, uint8_t *data)
 
 	/* Read data block */
 	memset(data, 0xff, DATA_BLOCK_LEN);
-	if (SUCCESS != spi_write_and_read(sd_desc->spi_desc, data, DATA_BLOCK_LEN))
+	if (0 != no_os_spi_write_and_read(sd_desc->spi_desc, data, DATA_BLOCK_LEN))
 		return FAILURE;
 
 	/* Read crc*/
 	*((uint16_t *)sd_desc->buff) = 0xFFFF;
-	if (SUCCESS != spi_write_and_read(sd_desc->spi_desc, sd_desc->buff, CRC_LEN))
+	if (0 != no_os_spi_write_and_read(sd_desc->spi_desc, sd_desc->buff, CRC_LEN))
 		return FAILURE;
 
 	return SUCCESS;
@@ -510,7 +510,7 @@ int32_t sd_write(struct sd_desc *sd_desc, uint8_t *data, uint64_t address,
 	if (get_nb_of_blocks(address, len) != 1) {
 		sd_desc->buff[0] = STOP_TRANSMISSION_TOKEN;
 		sd_desc->buff[1] = 0xFF;
-		if (SUCCESS != spi_write_and_read(sd_desc->spi_desc, sd_desc->buff, 2))
+		if (0 != no_os_spi_write_and_read(sd_desc->spi_desc, sd_desc->buff, 2))
 			return FAILURE;
 		if (SUCCESS != wait_until_not_busy(sd_desc))
 			return FAILURE;
@@ -542,7 +542,7 @@ int32_t sd_init(struct sd_desc **sd_desc, const struct sd_init_param *param)
 
 	/* Synchronize SD card frequency: Send 10 dummy bytes*/
 	memset(local_desc->buff, 0xFF, 10);
-	if (SUCCESS != spi_write_and_read(local_desc->spi_desc, local_desc->buff, 10))
+	if (0 != no_os_spi_write_and_read(local_desc->spi_desc, local_desc->buff, 10))
 		goto failure;
 
 	/* Change from SD mode to SPI mode */
@@ -612,7 +612,7 @@ int32_t sd_init(struct sd_desc **sd_desc, const struct sd_init_param *param)
 		goto failure;
 	}
 	memset(local_desc->buff, 0xFF, CSD_LEN);
-	if (SUCCESS != spi_write_and_read(local_desc->spi_desc,
+	if (0 != no_os_spi_write_and_read(local_desc->spi_desc,
 					  local_desc->buff, CSD_LEN))
 		goto failure;
 

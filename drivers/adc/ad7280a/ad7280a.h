@@ -170,7 +170,7 @@
 /******************************************************************************/
 struct ad7280a_dev {
 	/* SPI */
-	spi_desc		*spi_desc;
+	no_os_spi_desc		*spi_desc;
 	/* GPIO */
 	struct no_os_gpio_desc	*gpio_pd;
 	struct no_os_gpio_desc	*gpio_cnvst;
@@ -183,7 +183,7 @@ struct ad7280a_dev {
 
 struct ad7280a_init_param {
 	/* SPI */
-	spi_init_param	spi_init;
+	no_os_spi_init_param	spi_init;
 	/* GPIO */
 	struct no_os_gpio_init_param	gpio_pd;
 	struct no_os_gpio_init_param	gpio_cnvst;

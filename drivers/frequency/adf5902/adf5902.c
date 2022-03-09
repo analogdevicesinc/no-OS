@@ -68,7 +68,7 @@ int32_t adf5902_write(struct adf5902_dev *dev, uint8_t reg_addr, uint32_t data)
 	buff[2] = data >> 8;
 	buff[3] = data;
 
-	return spi_write_and_read(dev->spi_desc, buff, ADF5902_BUFF_SIZE_BYTES);
+	return no_os_spi_write_and_read(dev->spi_desc, buff, ADF5902_BUFF_SIZE_BYTES);
 }
 
 /**
@@ -91,7 +91,7 @@ int32_t adf5902_readback(struct adf5902_dev *dev, uint8_t reg_addr,
 	buff[3] =  ADF5902_REG3 | (reg_addr << 5);
 
 	/* Write command */
-	ret = spi_write_and_read(dev->spi_desc, buff, ADF5902_BUFF_SIZE_BYTES);
+	ret = no_os_spi_write_and_read(dev->spi_desc, buff, ADF5902_BUFF_SIZE_BYTES);
 	if (ret != SUCCESS)
 		return ret;
 
@@ -101,7 +101,7 @@ int32_t adf5902_readback(struct adf5902_dev *dev, uint8_t reg_addr,
 	buff[2] = ADF5902_SPI_DUMMY_DATA;
 	buff[3] = ADF5902_SPI_DUMMY_DATA;
 
-	ret = spi_write_and_read(dev->spi_desc, buff, ADF5902_BUFF_SIZE_BYTES);
+	ret = no_os_spi_write_and_read(dev->spi_desc, buff, ADF5902_BUFF_SIZE_BYTES);
 	if (ret != SUCCESS)
 		return ret;
 
@@ -498,7 +498,7 @@ int32_t adf5902_init(struct adf5902_dev **device,
 		goto error_dev;
 
 	/* SPI */
-	ret = spi_init(&dev->spi_desc, init_param->spi_init);
+	ret = no_os_spi_init(&dev->spi_desc, init_param->spi_init);
 	if (ret != SUCCESS)
 		goto error_gpio;
 
@@ -662,7 +662,7 @@ int32_t adf5902_init(struct adf5902_dev **device,
 	return ret;
 
 error_spi:
-	spi_remove(dev->spi_desc);
+	no_os_spi_remove(dev->spi_desc);
 
 error_gpio:
 	no_os_gpio_remove(dev->gpio_ce);
@@ -910,7 +910,7 @@ int32_t adf5902_remove(struct adf5902_dev *dev)
 {
 	int32_t ret;
 
-	ret = spi_remove(dev->spi_desc);
+	ret = no_os_spi_remove(dev->spi_desc);
 	if (ret != SUCCESS)
 		return ret;
 

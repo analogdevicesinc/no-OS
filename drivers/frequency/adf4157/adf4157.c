@@ -79,7 +79,7 @@ int8_t adf4157_init(struct adf4157_dev **device,
 	//ADF4157_CE2_OUT;
 
 	/* Setup SPI Interface */
-	status |= spi_init(&dev->spi_desc, &init_param.spi_init);
+	status |= no_os_spi_init(&dev->spi_desc, &init_param.spi_init);
 
 	/* R4 */
 	cfg_value = adf4157_pdata_lpc.r4_user_settings |
@@ -138,7 +138,7 @@ int32_t adf4157_remove(struct adf4157_dev *dev)
 {
 	int32_t ret;
 
-	ret = spi_remove(dev->spi_desc);
+	ret = no_os_spi_remove(dev->spi_desc);
 
 	ret |= no_os_gpio_remove(dev->gpio_le);
 	ret |= no_os_gpio_remove(dev->gpio_ce);
@@ -169,9 +169,9 @@ int8_t adf4157_set(struct adf4157_dev *dev,
 	tx_buffer[3] = (uint8_t)((value & 0x000000FF) >> 0);
 
 	ADF4157_LE_LOW;
-	validation = spi_write_and_read(dev->spi_desc,
-					tx_buffer,
-					4);
+	validation = no_os_spi_write_and_read(dev->spi_desc,
+					      tx_buffer,
+					      4);
 	if (validation != 4) {
 		status = -1;
 	}

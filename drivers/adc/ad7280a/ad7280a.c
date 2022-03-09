@@ -85,7 +85,7 @@ int8_t ad7280a_init(struct ad7280a_dev **device,
 	/* Wait 250us */
 	mdelay(250);
 
-	status |= spi_init(&dev->spi_desc, &init_param.spi_init);
+	status |= no_os_spi_init(&dev->spi_desc, &init_param.spi_init);
 
 	/* Example 1 from the datasheet */
 	/* Configure the Control LB register for all devices */
@@ -127,7 +127,7 @@ int32_t ad7280a_remove(struct ad7280a_dev *dev)
 {
 	int32_t ret;
 
-	ret = spi_remove(dev->spi_desc);
+	ret = no_os_spi_remove(dev->spi_desc);
 
 	ret |= no_os_gpio_remove(dev->gpio_pd);
 	ret |= no_os_gpio_remove(dev->gpio_cnvst);
@@ -158,9 +158,9 @@ uint32_t ad7280a_transfer_32bits(struct ad7280a_dev *dev,
 	data_buf[2] = (data >> 8)  & 0xff;
 	data_buf[3] = (data >> 0)  & 0xff;
 
-	spi_write_and_read(dev->spi_desc,
-			   (uint8_t*)data_buf,
-			   4);
+	no_os_spi_write_and_read(dev->spi_desc,
+				 (uint8_t*)data_buf,
+				 4);
 
 	received_data = ((uint32_t)data_buf[0] << 24) +
 			((uint32_t)data_buf[1] << 16) +

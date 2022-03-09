@@ -96,10 +96,10 @@ int32_t ad7124_no_check_read_register(struct ad7124_dev *dev,
 	}
 
 	/* Read data from the device */
-	ret = spi_write_and_read(dev->spi_desc,
-				 buffer,
-				 ((dev->use_crc != AD7124_DISABLE_CRC) ? p_reg->size + 1
-				  : p_reg->size) + 1 + add_status_length);
+	ret = no_os_spi_write_and_read(dev->spi_desc,
+				       buffer,
+				       ((dev->use_crc != AD7124_DISABLE_CRC) ? p_reg->size + 1
+					: p_reg->size) + 1 + add_status_length);
 	if(ret < 0)
 		return ret;
 
@@ -175,10 +175,10 @@ int32_t ad7124_no_check_write_register(struct ad7124_dev *dev,
 	}
 
 	/* Write data to the device */
-	ret = spi_write_and_read(dev->spi_desc,
-				 wr_buf,
-				 (dev->use_crc != AD7124_DISABLE_CRC) ? reg.size + 2
-				 : reg.size + 1);
+	ret = no_os_spi_write_and_read(dev->spi_desc,
+				       wr_buf,
+				       (dev->use_crc != AD7124_DISABLE_CRC) ? reg.size + 2
+				       : reg.size + 1);
 
 	return ret;
 }
@@ -292,9 +292,9 @@ int32_t ad7124_reset(struct ad7124_dev *dev)
 	if(!dev)
 		return INVALID_VAL;
 
-	ret = spi_write_and_read(dev->spi_desc,
-				 wr_buf,
-				 8);
+	ret = no_os_spi_write_and_read(dev->spi_desc,
+				       wr_buf,
+				       8);
 
 	/* CRC is disabled after reset */
 	dev->use_crc = AD7124_DISABLE_CRC;
@@ -563,7 +563,7 @@ int32_t ad7124_setup(struct ad7124_dev **device,
 	dev->spi_rdy_poll_cnt = init_param->spi_rdy_poll_cnt;
 
 	/* Initialize the SPI communication. */
-	ret = spi_init(&dev->spi_desc, init_param->spi_init);
+	ret = no_os_spi_init(&dev->spi_desc, init_param->spi_init);
 	if (ret < 0)
 		return ret;
 
@@ -786,7 +786,7 @@ int32_t ad7124_remove(struct ad7124_dev *dev)
 {
 	int32_t ret;
 
-	ret = spi_remove(dev->spi_desc);
+	ret = no_os_spi_remove(dev->spi_desc);
 
 	free(dev);
 

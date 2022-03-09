@@ -63,7 +63,7 @@ int32_t adf4350_write(adf4350_dev *dev,
 	txData[2] = (data & 0x0000FF00) >> 8;
 	txData[3] = (data & 0x000000FF) >> 0;
 
-	return spi_write_and_read(dev->spi_desc, txData, 4);
+	return no_os_spi_write_and_read(dev->spi_desc, txData, 4);
 }
 
 /***************************************************************************//**
@@ -287,7 +287,7 @@ int32_t adf4350_setup(adf4350_dev **device,
 	}
 
 	/* SPI */
-	ret = spi_init(&dev->spi_desc, &init_param.spi_init);
+	ret = no_os_spi_init(&dev->spi_desc, &init_param.spi_init);
 
 	dev->pdata = (struct adf4350_platform_data *)malloc(sizeof(*dev->pdata));
 	if (!dev->pdata)

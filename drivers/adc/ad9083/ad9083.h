@@ -56,7 +56,7 @@
  */
 struct ad9083_init_param {
 	/* SPI */
-	spi_init_param	*spi_init;
+	no_os_spi_init_param	*spi_init;
 	/* GPIO reset */
 	no_os_gpio_init_param	*gpio_reset;
 	/* GPIO power down */
@@ -73,7 +73,7 @@ struct ad9083_init_param {
  */
 struct ad9083_phy {
 	/* SPI */
-	spi_desc 	*spi_desc;
+	no_os_spi_desc 	*spi_desc;
 	/* GPIO */
 	no_os_gpio_desc	*gpio_reset;
 	/* GPIO power down */

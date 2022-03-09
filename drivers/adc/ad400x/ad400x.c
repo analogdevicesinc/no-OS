@@ -79,7 +79,7 @@ int32_t ad400x_spi_reg_read(struct ad400x_dev *dev,
 	// register access runs at a lower clock rate (~2MHz)
 	spi_engine_set_speed(dev->spi_desc, dev->reg_access_speed);
 
-	ret = spi_write_and_read(dev->spi_desc, buf, 2);
+	ret = no_os_spi_write_and_read(dev->spi_desc, buf, 2);
 	*reg_data = buf[1];
 
 	spi_engine_set_speed(dev->spi_desc, dev->spi_desc->max_speed_hz);
@@ -105,7 +105,7 @@ int32_t ad400x_spi_reg_write(struct ad400x_dev *dev,
 	buf[0] = AD400X_WRITE_COMMAND;
 	buf[1] = reg_data | AD400X_RESERVED_MSK;
 
-	ret = spi_write_and_read(dev->spi_desc, buf, 2);
+	ret = no_os_spi_write_and_read(dev->spi_desc, buf, 2);
 
 	spi_engine_set_speed(dev->spi_desc, dev->spi_desc->max_speed_hz);
 
@@ -124,7 +124,7 @@ int32_t ad400x_spi_single_conversion(struct ad400x_dev *dev,
 	uint32_t buf = 0;
 	int32_t ret;
 
-	ret = spi_write_and_read(dev->spi_desc, (uint8_t *)&buf, 4);
+	ret = no_os_spi_write_and_read(dev->spi_desc, (uint8_t *)&buf, 4);
 
 	*adc_data = buf & 0xFFFFF;
 
@@ -155,7 +155,7 @@ int32_t ad400x_init(struct ad400x_dev **device,
 	if (!dev)
 		return -1;
 
-	ret = spi_init(&dev->spi_desc, &init_param->spi_init);
+	ret = no_os_spi_init(&dev->spi_desc, &init_param->spi_init);
 	if (ret < 0)
 		goto error;
 
@@ -193,7 +193,7 @@ int32_t ad400x_remove(struct ad400x_dev *dev)
 {
 	int32_t ret;
 
-	ret = spi_remove(dev->spi_desc);
+	ret = no_os_spi_remove(dev->spi_desc);
 
 	free(dev);
 

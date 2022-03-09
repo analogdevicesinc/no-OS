@@ -23,7 +23,7 @@ SRCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c \
 	$(DRIVERS)/frequency/ad9523/ad9523.c \
 	$(DRIVERS)/adc/ad9680/ad9680.c \
 	$(DRIVERS)/dac/ad9144/ad9144.c \
-	$(DRIVERS)/api/spi.c \
+	$(DRIVERS)/api/no_os_spi.c \
 	$(DRIVERS)/api/no_os_gpio.c \
 	$(NO-OS)/util/util.c
 SRCS +=	$(PLATFORM_DRIVERS)/axi_io.c \

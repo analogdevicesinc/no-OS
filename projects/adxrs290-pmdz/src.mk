@@ -29,4 +29,4 @@ SRCS +=	$(DRIVERS)/api/no_os_irq.c \
 	$(NO-OS)/util/no_os_list.c \
 	$(NO-OS)/util/fifo.c \
 	$(NO-OS)/util/util.c \
-	$(DRIVERS)/api/spi.c
+	$(DRIVERS)/api/no_os_spi.c

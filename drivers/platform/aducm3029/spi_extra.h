@@ -78,7 +78,7 @@ struct aducm_device_desc {
 	/** Chipselect */
 	uint8_t			cs;
 	/** SPI mode */
-	enum spi_mode		mode;
+	enum no_os_spi_mode		mode;
 	/** Select the operation mode */
 	enum master_mode	master_mode;
 	/** Enable or disable continuous mode */
@@ -88,7 +88,7 @@ struct aducm_device_desc {
 /**
  * @struct aducm_spi_init_param
  * @brief Configuration structure sent in the extra parameter from
- * spi_init_param.
+ * no_os_spi_init_param.
  */
 struct aducm_spi_init_param {
 	/** Select the operation mode */
@@ -107,7 +107,7 @@ struct aducm_spi_init_param {
 /**
  * @brief ADuCM3029 specific SPI platform ops structure
  */
-extern const struct spi_platform_ops aducm_spi_ops;
+extern const struct no_os_spi_platform_ops aducm_spi_ops;
 
 /**
  * @struct aducm_spi_desc

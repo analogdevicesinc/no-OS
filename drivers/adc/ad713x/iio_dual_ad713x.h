@@ -64,7 +64,7 @@ struct iio_ad713x_init_par {
 	/* Device instance */
 	struct ad713x_dev *dev;
 	/** Spi engine descriptor */
-	struct spi_desc *spi_eng_desc;
+	struct no_os_spi_desc *spi_eng_desc;
 	/** Spi engine message descriptor */
 	struct spi_engine_offload_message *spi_engine_offload_message;
 	/** Invalidate the Data cache for the given address range */
@@ -77,7 +77,7 @@ struct iio_ad713x {
 	/** iio device descriptor */
 	struct iio_device iio_dev_desc;
 	/** Spi engine descriptor */
-	struct spi_desc *spi_eng_desc;
+	struct no_os_spi_desc *spi_eng_desc;
 	/** Spi engine message descriptor */
 	struct spi_engine_offload_message *spi_engine_offload_message;
 	/** Invalidate the Data cache for the given address range */

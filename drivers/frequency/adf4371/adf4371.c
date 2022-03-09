@@ -246,7 +246,7 @@ static int32_t adf4371_write(struct adf4371_dev *dev,
 	buf[1] = cmd & 0xFF;
 	buf[2] = val;
 
-	return spi_write_and_read(dev->spi_desc, buf, ARRAY_SIZE(buf));
+	return no_os_spi_write_and_read(dev->spi_desc, buf, ARRAY_SIZE(buf));
 }
 
 /**
@@ -272,7 +272,7 @@ static int32_t adf4371_write_bulk(struct adf4371_dev *dev,
 	for (i = 0; i < size; i++)
 		buf[2 + i] = val[i];
 
-	return spi_write_and_read(dev->spi_desc, buf, 2 + size);
+	return no_os_spi_write_and_read(dev->spi_desc, buf, 2 + size);
 }
 
 /**
@@ -295,7 +295,7 @@ static int32_t adf4371_read(struct adf4371_dev *dev,
 	buf[1] = cmd & 0xFF;
 	buf[2] = 0;
 
-	ret = spi_write_and_read(dev->spi_desc, buf, ARRAY_SIZE(buf));
+	ret = no_os_spi_write_and_read(dev->spi_desc, buf, ARRAY_SIZE(buf));
 	if (ret < 0)
 		return ret;
 
@@ -754,7 +754,7 @@ int32_t adf4371_init(struct adf4371_dev **device,
 	if (!dev)
 		return FAILURE;
 
-	ret = spi_init(&dev->spi_desc, init_param->spi_init);
+	ret = no_os_spi_init(&dev->spi_desc, init_param->spi_init);
 	if (ret < 0)
 		return ret;
 
@@ -810,7 +810,7 @@ int32_t adf4371_init(struct adf4371_dev **device,
 	return SUCCESS;
 
 error:
-	spi_remove(dev->spi_desc);
+	no_os_spi_remove(dev->spi_desc);
 	free(dev);
 
 	return ret;
@@ -826,7 +826,7 @@ int32_t adf4371_remove(struct adf4371_dev *device)
 	int32_t ret = SUCCESS;
 
 	if (device->spi_desc)
-		ret = spi_remove(device->spi_desc);
+		ret = no_os_spi_remove(device->spi_desc);
 
 	free(device);
 

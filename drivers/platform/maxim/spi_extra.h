@@ -43,7 +43,7 @@
 /**
  * @brief maxim specific SPI platform ops structure
  */
-extern const struct spi_platform_ops max_spi_ops;
+extern const struct no_os_spi_platform_ops max_spi_ops;
 
 enum spi_ss_polarity {
 	SPI_SS_POL_LOW,

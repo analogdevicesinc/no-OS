@@ -519,7 +519,7 @@ union adpd188_phy_init {
 	/** I2C initialization structure. */
 	struct no_os_i2c_init_param i2c_phy;
 	/** SPI initialization structure. */
-	struct spi_init_param spi_phy;
+	struct no_os_spi_init_param spi_phy;
 };
 
 /**

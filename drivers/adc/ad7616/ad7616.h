@@ -141,7 +141,7 @@ enum ad7616_osr {
 
 struct ad7616_dev {
 	/* SPI */
-	struct spi_desc		*spi_desc;
+	struct no_os_spi_desc		*spi_desc;
 	struct spi_engine_offload_init_param *offload_init_param;
 	uint32_t reg_access_speed;
 	/* GPIO */
@@ -164,7 +164,7 @@ struct ad7616_dev {
 
 struct ad7616_init_param {
 	/* SPI */
-	struct spi_init_param		*spi_param;
+	struct no_os_spi_init_param		*spi_param;
 	struct spi_engine_offload_init_param *offload_init_param;
 	uint32_t reg_access_speed;
 	/* GPIO */

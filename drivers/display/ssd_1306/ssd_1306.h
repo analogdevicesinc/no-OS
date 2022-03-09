@@ -65,9 +65,9 @@ typedef struct ssd_1306_extra {
 	/** RESET pin gpio desc*/
 	struct no_os_gpio_desc     	   *reset_pin;
 	/* SPI initial param */
-	struct spi_init_param      *spi_ip;
+	struct no_os_spi_init_param      *spi_ip;
 	/* SPI descriptor*/
-	struct spi_desc	           *spi_desc;
+	struct no_os_spi_desc	           *spi_desc;
 } ssd_1306_extra;
 
 extern const struct display_controller_ops ssd1306_ops;

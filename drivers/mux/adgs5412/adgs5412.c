@@ -102,7 +102,7 @@ int32_t adgs5412_spi_reg_read(adgs5412_dev *dev,
 	buf[2] = 0x00;
 	if (dev->crc_en == ADGS5412_ENABLE)
 		buf_size = 3;
-	ret = spi_write_and_read(dev->spi_desc, buf, buf_size);
+	ret = no_os_spi_write_and_read(dev->spi_desc, buf, buf_size);
 	if (buf[0] != ADGS5412_ALIGNMENT) {
 		printf("%s: Alignment Error: 0x%x.\n", __func__, buf[0]);
 		ret = FAILURE;
@@ -147,7 +147,7 @@ int32_t adgs5412_spi_reg_write(adgs5412_dev *dev,
 		buf[2] = adgs5412_compute_crc8(&buf[0], 2);
 		buf_size = 3;
 	}
-	ret = spi_write_and_read(dev->spi_desc, buf, buf_size);
+	ret = no_os_spi_write_and_read(dev->spi_desc, buf, buf_size);
 	if (buf[0] != ADGS5412_ALIGNMENT) {
 		printf("%s: Alignment Error: 0x%x.\n", __func__, buf[0]);
 		ret = FAILURE;
@@ -262,7 +262,7 @@ int32_t adgs5412_clear_err_flags(adgs5412_dev *dev)
 		buf[2] = adgs5412_compute_crc8(&buf[0], 2);
 		buf_size = 3;
 	}
-	ret = spi_write_and_read(dev->spi_desc, buf, buf_size);
+	ret = no_os_spi_write_and_read(dev->spi_desc, buf, buf_size);
 
 	return ret;
 }
@@ -285,7 +285,7 @@ int32_t adgs5412_enter_daisy_chain(adgs5412_dev *dev)
 
 	buf[0] = ADGS5412_DAISY_CHAIN_1;
 	buf[1] = ADGS5412_DAISY_CHAIN_2;
-	ret = spi_write_and_read(dev->spi_desc, buf, 2);
+	ret = no_os_spi_write_and_read(dev->spi_desc, buf, 2);
 
 	return ret;
 }
@@ -309,7 +309,7 @@ int32_t adgs5412_send_daisy_chain_cmds(adgs5412_dev *dev,
 		return FAILURE;
 	}
 
-	ret = spi_write_and_read(dev->spi_desc, cmds, cmds_size);
+	ret = no_os_spi_write_and_read(dev->spi_desc, cmds, cmds_size);
 
 	return ret;
 }
@@ -332,7 +332,7 @@ int32_t adgs5412_init(adgs5412_dev **device,
 		return -1;
 
 	/* SPI */
-	ret = spi_init(&dev->spi_desc, &init_param.spi_init);
+	ret = no_os_spi_init(&dev->spi_desc, &init_param.spi_init);
 
 	/* Device Settings */
 	dev->crc_en = ADGS5412_DISABLE;
@@ -378,7 +378,7 @@ int32_t adgs5412_remove(adgs5412_dev *dev)
 {
 	int32_t ret;
 
-	ret = spi_remove(dev->spi_desc);
+	ret = no_os_spi_remove(dev->spi_desc);
 
 	free(dev);
 

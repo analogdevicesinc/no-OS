@@ -115,7 +115,7 @@ int8_t adf4106_init(struct adf4106_dev **device,
 	dev->i_latch = 0;
 
 	/* CPHA = 1; CPOL = 0; */
-	status = spi_init(&dev->spi_desc, &init_param.spi_init);
+	status = no_os_spi_init(&dev->spi_desc, &init_param.spi_init);
 
 	/* GPIO */
 	status |= no_os_gpio_get(&dev->gpio_le, &init_param.gpio_le);
@@ -163,7 +163,7 @@ int32_t adf4106_remove(struct adf4106_dev *dev)
 {
 	int32_t ret;
 
-	ret = spi_remove(dev->spi_desc);
+	ret = no_os_spi_remove(dev->spi_desc);
 
 	ret |= no_os_gpio_remove(dev->gpio_le);
 	ret |= no_os_gpio_remove(dev->gpio_ce);
@@ -211,9 +211,9 @@ void adf4106_update_latch(struct adf4106_dev *dev,
 	data_buffer[1] = (latch_data & DATA_MASK_MID8) >> DATA_OFFSET_MID8;
 	data_buffer[2] = (latch_data & DATA_MASK_LSB8) >> DATA_OFFSET_LSB8;
 
-	spi_write_and_read(dev->spi_desc,
-			   data_buffer,
-			   3);
+	no_os_spi_write_and_read(dev->spi_desc,
+				 data_buffer,
+				 3);
 
 	/* Generate a load pulse */
 	ADF4106_LE_HIGH;

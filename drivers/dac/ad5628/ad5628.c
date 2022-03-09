@@ -68,7 +68,7 @@ int32_t ad5628_init(struct ad5628_dev **device,
 		return -1;
 
 	/* Initializes communication. */
-	status = spi_init(&dev->spi_desc, &init_param.spi_init);
+	status = no_os_spi_init(&dev->spi_desc, &init_param.spi_init);
 
 	/* Behaves as a power-on reset. */
 	ad5628_reset(dev);
@@ -96,7 +96,7 @@ int32_t ad5628_remove(struct ad5628_dev *dev)
 {
 	int32_t status;
 
-	status = spi_remove(dev->spi_desc);
+	status = no_os_spi_remove(dev->spi_desc);
 
 	free(dev);
 
@@ -171,5 +171,5 @@ void ad5628_set_input_register(struct ad5628_dev *dev,
 	register_word[1] = (uint8_t)((register_value & 0x00FF0000) >> 16);
 	register_word[2] = (uint8_t)((register_value & 0x0000FF00) >> 8);
 	register_word[3] = (uint8_t)((register_value & 0x000000FF) >> 0);
-	spi_write_and_read(dev->spi_desc, register_word, 4);
+	no_os_spi_write_and_read(dev->spi_desc, register_word, 4);
 }

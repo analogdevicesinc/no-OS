@@ -76,7 +76,7 @@ int32_t ad9517_setup(struct ad9517_dev **device,
 	dev->ad9517_type = init_param.ad9517_type;
 
 	/* Initializes the SPI peripheral */
-	ret = spi_init(&dev->spi_desc, &init_param.spi_init);
+	ret = no_os_spi_init(&dev->spi_desc, &init_param.spi_init);
 
 	/* Configure serial port for long instructions and reset the serial
 	 * interface. */
@@ -213,7 +213,7 @@ int32_t ad9517_remove(struct ad9517_dev *dev)
 {
 	int32_t ret;
 
-	ret = spi_remove(dev->spi_desc);
+	ret = no_os_spi_remove(dev->spi_desc);
 
 	free(dev);
 
@@ -247,7 +247,7 @@ int32_t ad9517_write(struct ad9517_dev *dev,
 		tx_buffer[1] = reg_address & 0x00FF;
 		tx_buffer[2] = reg_value;
 
-		ret = spi_write_and_read(dev->spi_desc, tx_buffer, 3);
+		ret = no_os_spi_write_and_read(dev->spi_desc, tx_buffer, 3);
 
 		if(ret < 0)
 			return ret;
@@ -281,7 +281,7 @@ int32_t ad9517_read(struct ad9517_dev *dev,
 		tx_buffer[1] = reg_address & 0x00FF;
 		tx_buffer[2] = 0;
 
-		ret = spi_write_and_read(dev->spi_desc, tx_buffer, 3);
+		ret = no_os_spi_write_and_read(dev->spi_desc, tx_buffer, 3);
 
 		reg_address--;
 

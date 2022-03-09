@@ -146,7 +146,7 @@ struct adf4350_platform_data {
 
 typedef struct {
 	/* SPI */
-	spi_init_param	spi_init;
+	no_os_spi_init_param	spi_init;
 
 	/* Device settings */
 	uint32_t	clkin;
@@ -181,7 +181,7 @@ typedef struct {
 } adf4350_init_param;
 
 typedef struct {
-	spi_desc	*spi_desc;
+	no_os_spi_desc	*spi_desc;
 	struct adf4350_platform_data *pdata;
 	uint32_t	clkin;
 	uint32_t	chspc;	/* Channel Spacing */

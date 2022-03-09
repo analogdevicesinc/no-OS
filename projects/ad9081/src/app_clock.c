@@ -84,7 +84,7 @@ int32_t app_clock_init(struct clk dev_refclk[MULTIDEVICE_INSTANCE_COUNT])
 #endif
 	};
 
-	struct spi_init_param clkchip_spi_init_param = {
+	struct no_os_spi_init_param clkchip_spi_init_param = {
 #ifdef QUAD_MXFE
 		.device_id = SPI_2_DEVICE_ID,
 #else

@@ -273,11 +273,11 @@ static int32_t ad9172_spi_xfer(void *user_data, uint8_t *wbuf,
 			       uint8_t *rbuf, int32_t len)
 {
 	int32_t ret;
-	struct spi_desc *spi = user_data;
+	struct no_os_spi_desc *spi = user_data;
 	uint8_t * buffer = (uint8_t *) malloc(len);
 
 	memcpy(buffer, wbuf, 3);
-	ret = spi_write_and_read(spi, buffer, len);
+	ret = no_os_spi_write_and_read(spi, buffer, len);
 	if (ret < 0) {
 		printf("Read Error %"PRId32, ret);
 	} else {
@@ -314,7 +314,7 @@ int32_t ad9172_init(ad9172_dev **device,
 	dev->st = st;
 
 	/* SPI */
-	ret = spi_init(&dev->spi_desc, init_param->spi_init);
+	ret = no_os_spi_init(&dev->spi_desc, init_param->spi_init);
 	if (ret < 0)
 		goto error_2;
 
@@ -365,7 +365,7 @@ int32_t ad9172_init(ad9172_dev **device,
 	return 0;
 
 error_3:
-	spi_remove(dev->spi_desc);
+	no_os_spi_remove(dev->spi_desc);
 error_2:
 	free(st);
 error_1:
@@ -383,7 +383,7 @@ int32_t ad9172_remove(ad9172_dev *device)
 {
 	int32_t ret;
 
-	ret = spi_remove(device->spi_desc);
+	ret = no_os_spi_remove(device->spi_desc);
 	ret += no_os_gpio_remove(device->gpio_reset);
 	ret += no_os_gpio_remove(device->gpio_txen0);
 	ret += no_os_gpio_remove(device->gpio_txen1);

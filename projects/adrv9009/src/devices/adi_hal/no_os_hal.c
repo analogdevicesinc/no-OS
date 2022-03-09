@@ -62,7 +62,7 @@ adiHalErr_t ADIHAL_setTimeout(void *devHalInfo, uint32_t halTimeout_ms)
 adiHalErr_t ADIHAL_openHw(void *devHalInfo, uint32_t halTimeout_ms)
 {
 	struct adi_hal *dev_hal_data = (struct adi_hal *)devHalInfo;
-	struct spi_init_param spi_param;
+	struct no_os_spi_init_param spi_param;
 	struct no_os_gpio_init_param gpio_adrv_resetb_param;
 	struct no_os_gpio_init_param gpio_adrv_sysref_req_param;
 	int32_t status = 0;
@@ -100,7 +100,7 @@ adiHalErr_t ADIHAL_openHw(void *devHalInfo, uint32_t halTimeout_ms)
 	if (dev_hal_data->extra_spi)
 		spi_param.extra = dev_hal_data->extra_spi;
 
-	status |= spi_init(&dev_hal_data->spi_adrv_desc, &spi_param);
+	status |= no_os_spi_init(&dev_hal_data->spi_adrv_desc, &spi_param);
 
 	status |= no_os_gpio_get(&dev_hal_data->gpio_adrv_sysref_req,
 				 &gpio_adrv_sysref_req_param);
@@ -120,7 +120,7 @@ adiHalErr_t ADIHAL_closeHw(void *devHalInfo)
 
 	status |= no_os_gpio_remove(dev_hal_data->gpio_adrv_sysref_req);
 
-	status |= spi_remove(dev_hal_data->spi_adrv_desc);
+	status |= no_os_spi_remove(dev_hal_data->spi_adrv_desc);
 
 	if (status != SUCCESS)
 		return ADIHAL_ERR;
@@ -171,7 +171,7 @@ adiHalErr_t ADIHAL_spiWriteByte(void *devHalInfo,
 	buf[0] = (addr >> 8) & 0x7F;
 	buf[1] = addr & 0xFF;
 	buf[2] = data;
-	status = spi_write_and_read(devHalData->spi_adrv_desc, buf, 3);
+	status = no_os_spi_write_and_read(devHalData->spi_adrv_desc, buf, 3);
 
 	if (status != SUCCESS)
 		return ADIHAL_SPI_FAIL;
@@ -206,7 +206,7 @@ adiHalErr_t ADIHAL_spiReadByte(void *devHalInfo,
 	buf[0] = 0x80 | ((addr >> 8) & 0x7F);
 	buf[1] = addr & 0xFF;
 	buf[2] = 0x00;
-	status = spi_write_and_read(devHalData->spi_adrv_desc, buf, 3);
+	status = no_os_spi_write_and_read(devHalData->spi_adrv_desc, buf, 3);
 	*readdata = buf[2];
 
 	if (status != SUCCESS)

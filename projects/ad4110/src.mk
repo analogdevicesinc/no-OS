@@ -10,7 +10,7 @@
 ################################################################################
 
 SRC_DIRS += $(PROJECT)/src
-SRCS += $(DRIVERS)/api/spi.c \
+SRCS += $(DRIVERS)/api/no_os_spi.c \
 	$(DRIVERS)/api/no_os_irq.c \
 	$(DRIVERS)/api/no_os_gpio.c \
 	$(DRIVERS)/afe/ad4110/ad4110.c
