@@ -43,26 +43,26 @@
 #include <stdbool.h>
 
 /**
- * @struct tdm_platform_ops
+ * @struct no_os_tdm_platform_ops
  * @brief Structure holding TDM function pointers that point to the platform
  * specific function
  */
-struct tdm_platform_ops;
+struct no_os_tdm_platform_ops;
 
-enum tdm_mode {
-	TDM_MASTER_TX,
-	TDM_MASTER_RX,
-	TDM_SLAVE_TX,
-	TDM_SLAVE_RX
+enum no_os_tdm_mode {
+	NO_OS_TDM_MASTER_TX,
+	NO_OS_TDM_MASTER_RX,
+	NO_OS_TDM_SLAVE_TX,
+	NO_OS_TDM_SLAVE_RX
 };
 
 /**
- * @struct tdm_init_param
+ * @struct no_os_tdm_init_param
  * @brief Structure holding the parameters for TDM initialization
  */
-struct tdm_init_param {
+struct no_os_tdm_init_param {
 	/** TDM operating mode: master/slave, tx/rx */
-	enum tdm_mode mode;
+	enum no_os_tdm_mode mode;
 	/** Useful data size in a slot, specified in number of bits */
 	uint8_t data_size;
 	/** Data offset in a slot, specified in number of bits as offset from MSbit */
@@ -80,53 +80,54 @@ struct tdm_init_param {
 	/** Specify whether data sampling occurs on SCK rising edge (default: on SCK falling edge) */
 	bool rising_edge_sampling;
 	/** Platform operation function pointers */
-	const struct tdm_platform_ops *platform_ops;
+	const struct no_os_tdm_platform_ops *platform_ops;
 	/**  TDM extra parameters (platform specific) */
 	void *extra;
 };
 
 /**
- * @struct tdm_desc
+ * @struct no_os_tdm_desc
  * @brief Structure holding TDM descriptor.
  */
-struct tdm_desc {
+struct no_os_tdm_desc {
 	/** Platform operation function pointers */
-	const struct tdm_platform_ops *platform_ops;
+	const struct no_os_tdm_platform_ops *platform_ops;
 	/**  TDM extra parameters (device specific) */
 	void *extra;
 };
 
 /**
- * @struct tdm_platform_ops
+ * @struct no_os_tdm_platform_ops
  * @brief Structure holding TDM function pointers that point to the platform
- * specific function
+ * specific function.
  */
-struct tdm_platform_ops {
+struct no_os_tdm_platform_ops {
 	/** TDM initialization operation function pointer */
-	int32_t (*tdm_ops_init)(struct tdm_desc **, const struct tdm_init_param *);
+	int32_t (*tdm_ops_init)(struct no_os_tdm_desc **,
+				const struct no_os_tdm_init_param *);
 	/** TDM read operation function pointer */
-	int32_t (*tdm_ops_read)(struct tdm_desc *, void *, uint16_t);
+	int32_t (*tdm_ops_read)(struct no_os_tdm_desc *, void *, uint16_t);
 	/** TDM write operation function pointer */
-	int32_t (*tdm_ops_write)(struct tdm_desc *, void *, uint16_t);
+	int32_t (*tdm_ops_write)(struct no_os_tdm_desc *, void *, uint16_t);
 	/** TDM remove operation function pointer */
-	int32_t (*tdm_ops_remove)(struct tdm_desc *);
+	int32_t (*tdm_ops_remove)(struct no_os_tdm_desc *);
 };
 
 /* Initialize the TDM communication peripheral. */
-int32_t tdm_init(struct tdm_desc **desc,
-		 const struct tdm_init_param *param);
+int32_t  no_os_tdm_init(struct no_os_tdm_desc **desc,
+			const struct no_os_tdm_init_param *param);
 
-/* Free the resources allocated by tdm_init(). */
-int32_t tdm_remove(struct tdm_desc *desc);
+/* Free the resources allocated by  no_os_tdm_init(). */
+int32_t  no_os_tdm_remove(struct no_os_tdm_desc *desc);
 
 /* Read data. */
-int32_t tdm_read(struct tdm_desc *desc,
-		 void *data,
-		 uint16_t bytes_number);
+int32_t  no_os_tdm_read(struct no_os_tdm_desc *desc,
+			void *data,
+			uint16_t bytes_number);
 
 /* Write data. */
-int32_t tdm_write(struct tdm_desc *desc,
-		  void *data,
-		  uint16_t bytes_number);
+int32_t  no_os_tdm_write(struct no_os_tdm_desc *desc,
+			 void *data,
+			 uint16_t bytes_number);
 
 #endif // _NO_OS_TDM_H_

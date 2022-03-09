@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   tdm.c
+ *   @file   no_os_tdm.c
  *   @brief  Implementation of the TDM interface
  *   @author Darius Berghe (darius.berghe@analog.com)
 ********************************************************************************
@@ -48,8 +48,8 @@
  * @param param - The structure that contains the TDM parameters.
  * @return SUCCESS in case of success, negative error code otherwise.
  */
-int32_t tdm_init(struct tdm_desc **desc,
-		 const struct tdm_init_param *param)
+int32_t  no_os_tdm_init(struct no_os_tdm_desc **desc,
+			const struct no_os_tdm_init_param *param)
 {
 	if (!param)
 		return FAILURE;
@@ -63,11 +63,11 @@ int32_t tdm_init(struct tdm_desc **desc,
 }
 
 /**
- * @brief Free the resources allocated by tdm_init().
+ * @brief Free the resources allocated by no_os_tdm_init().
  * @param desc - The TDM descriptor.
  * @return SUCCESS in case of success, negative error code otherwise.
  */
-int32_t tdm_remove(struct tdm_desc *desc)
+int32_t  no_os_tdm_remove(struct no_os_tdm_desc *desc)
 {
 	return desc->platform_ops->tdm_ops_remove(desc);
 }
@@ -79,9 +79,9 @@ int32_t tdm_remove(struct tdm_desc *desc)
  * @param nb_samples - Number of samples to read.
  * @return SUCCESS in case of success, negative error code otherwise.
  */
-int32_t tdm_read(struct tdm_desc *desc,
-		 void *data,
-		 uint16_t nb_samples)
+int32_t  no_os_tdm_read(struct no_os_tdm_desc *desc,
+			void *data,
+			uint16_t nb_samples)
 {
 	return desc->platform_ops->tdm_ops_read(desc, data, nb_samples);
 }
@@ -93,9 +93,9 @@ int32_t tdm_read(struct tdm_desc *desc,
  * @param nb_samples - Number of samples to write.
  * @return SUCCESS in case of success, negative error code otherwise.
  */
-int32_t tdm_write(struct tdm_desc *desc,
-		  void *data,
-		  uint16_t nb_samples)
+int32_t  no_os_tdm_write(struct no_os_tdm_desc *desc,
+			 void *data,
+			 uint16_t nb_samples)
 {
 	return desc->platform_ops->tdm_ops_write(desc, data, nb_samples);
 }
