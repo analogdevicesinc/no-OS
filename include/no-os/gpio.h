@@ -65,12 +65,28 @@
 struct gpio_platform_ops ;
 
 /**
+ * @enum gpio_pull_up
+ * @brief Enum that holds the possible pull up/ pull down resistor configuration.
+ */
+enum gpio_pull_up {
+	NO_OS_PULL_NONE,
+	/** Strong pull up */
+	NO_OS_PULL_UP,
+	/** Strong pull down */
+	NO_OS_PULL_DOWN,
+	NO_OS_PULL_UP_WEAK,
+	NO_OS_PULL_DOWN_WEAK
+};
+
+/**
  * @struct gpio_init_param
  * @brief Structure holding the parameters for GPIO initialization.
  */
 typedef struct gpio_init_param {
 	/** GPIO number */
 	int32_t		number;
+	/** Pull up/down resistor configuration */
+	enum gpio_pull_up pull;
 	/** GPIO platform specific functions */
 	const struct gpio_platform_ops *platform_ops;
 	/** GPIO extra parameters (device specific) */
@@ -84,6 +100,8 @@ typedef struct gpio_init_param {
 typedef struct gpio_desc {
 	/** GPIO number */
 	int32_t		number;
+	/** Pull up/down resistor configuration */
+	enum gpio_pull_up pull;
 	/** GPIO platform specific functions */
 	const struct gpio_platform_ops *platform_ops;
 	/** GPIO extra parameters (device specific) */
