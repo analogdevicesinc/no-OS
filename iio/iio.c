@@ -57,6 +57,13 @@
 #include <inttypes.h>
 #include <stdio.h>
 #include <string.h>
+#if defined LINUX_PLATFORM
+#include <arpa/inet.h>
+#else
+#include <machine/endian.h>
+#define	htonl(_x) __htonl(_x)
+#define	ntohl(_x) __ntohl(_x)
+#endif
 
 #ifdef ENABLE_IIO_NETWORK
 #include "no-os/delay.h"
@@ -300,45 +307,52 @@ static struct iio_dev_priv *get_iio_device(struct iio_desc *desc,
 static int iio_read_all_attr(struct attr_fun_params *params,
 			     struct iio_attribute *attributes)
 {
-	/* TODO Not sure if working corectly */
-	return -EINVAL;
+	uint32_t written = 0;
 
-#if 0
-	int16_t i = 0, j = 0;
-	char local_buf[256];
-	int attr_length;
-	uint32_t *pattr_length;
-
-	while (attributes[i].name) {
-		attr_length = attributes[i].show(params->dev_instance,
-						 local_buf, params->len,
-						 params->ch_info,
-						 attributes[i].priv);
-		if (IS_ERR_VALUE(attr_length))
-			attr_length = snprintf(local_buf, params->len, "%d",
-					       attr_length);
-
-		attr_length += 1;//Add '\0' to the count
-		pattr_length = (uint32_t *)(params->buf + j);
-		if (j + 4 > params->len)
-			return -EINVAL;
-		*pattr_length = bswap_constant_32(attr_length);
-		j += 4;
-		if (attr_length >= 0) {
-			if (attr_length + j > params->len)
-				return -EINVAL;
-			sprintf(params->buf + j, "%s", local_buf);
-			if (attr_length & 0x3) /* multiple of 4 */
-				attr_length = ((attr_length >> 2) + 1) << 2;
-			j += attr_length;
-		}
-		i++;
-	}
-	if (j == 0)
+	/*
+	 * Not all devices have all types of attributes
+	 */
+	if (!attributes)
 		return -ENOENT;
 
-	return j;
-#endif
+	for (struct iio_attribute *attr = attributes; attr->name; attr++) {
+		int attr_len;
+		uint32_t attr_len_be;
+		char *pattr_len;
+
+		// Allign to next multiple of 4
+		while (written & 0x3) {
+			params->buf[written++] = '\0';
+			if (written >= params->len)
+				return -ENOBUFS;
+		}
+
+		pattr_len = params->buf + written;
+
+		// reserve space for next attribute length
+		written += sizeof(attr_len_be);
+		if (written >= params->len)
+			return -ENOBUFS;
+
+		attr_len = attr->show(params->dev_instance,
+				      params->buf+written, params->len-written,
+				      params->ch_info, attr->priv);
+
+		if (attr_len < 0)
+			return -EINVAL;
+
+		attr_len += 1; // Add '\0' to the count
+
+		attr_len_be = htonl(attr_len);
+		memcpy(pattr_len, &attr_len_be, sizeof(attr_len_be));
+
+		written += attr_len;
+	}
+
+	if (written == 0)
+		return -ENOENT;
+
+	return written;
 }
 
 /**
@@ -353,30 +367,41 @@ static int iio_read_all_attr(struct attr_fun_params *params,
 static int iio_write_all_attr(struct attr_fun_params *params,
 			      struct iio_attribute *attributes)
 {
-	/* TODO Not sure if working corectly */
-	return -EINVAL;
+	uint32_t read = 0;
 
-#if 0
-	int16_t i = 0, j = 0;
-	int16_t attr_length;
-
-	while (attributes[i].name) {
-		attr_length = bswap_constant_32((uint32_t)(params->buf + j));
-		j += 4;
-		attributes[i].store(params->dev_instance, (params->buf + j),
-				    attr_length, params->ch_info,
-				    attributes[i].priv);
-		j += attr_length;
-		if (j & 0x3)
-			j = ((j >> 2) + 1) << 2;
-		i++;
-	}
-
-	if (params->len == 0)
+	/*
+	 * Not all devices have all types of attributes
+	 */
+	if (!attributes)
 		return -ENOENT;
 
+	for (struct iio_attribute *attr = attributes; attr->name; attr++) {
+		uint32_t attr_len;
+
+		// Allign to next multiple of 4
+		while (read & 0x3)
+			read++;
+
+		if (read + 4 >= params->len)
+			return -EINVAL;
+
+		memcpy(&attr_len, params->buf+read, sizeof(attr_len));
+		attr_len = ntohl(attr_len);
+		read += 4;
+
+		if (read + attr_len > params->len)
+			return -EINVAL;
+
+		if (!attr_len || attr_len != strlen(params->buf+read) + 1)
+			return -EINVAL;
+
+		attr->store(params->dev_instance, params->buf+read, attr_len,
+			    params->ch_info, attr->priv);
+
+		read += attr_len;
+	}
+
 	return params->len;
-#endif
 }
 
 /**
