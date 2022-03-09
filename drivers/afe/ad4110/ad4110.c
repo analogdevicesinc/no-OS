@@ -710,6 +710,171 @@ static void irq_adc_read(struct ad4110_callback_ctx *ctx)
 }
 
 /***************************************************************************//**
+ * @brief Enable/Disable channel
+ * @param dev - The device structure.
+ * @param chan_id - Channel ID (number)
+ * @param status - Channel Status (True for Enable and False for Disable)
+ * @return SUCCESS in case of success, negative error code otherwise.
+*******************************************************************************/
+int ad4110_set_channel_status(struct ad4110_dev *dev, uint8_t chan_id,
+			      bool status)
+{
+	if (status) {
+		return ad4110_spi_int_reg_write_msk(dev, A4110_ADC,
+						    AD4110_REG_ADC_CONFIG,
+						    (1 << chan_id), (1 << chan_id));
+	} else {
+		return ad4110_spi_int_reg_write_msk(dev, A4110_ADC,
+						    AD4110_REG_ADC_CONFIG,
+						    0, (1 << chan_id));
+	}
+}
+
+/***************************************************************************//**
+ * @brief Assign analog input buffer
+ * @param dev - The device structure.
+ * @param buffer - Choice of analog input buffer to be set
+ * @return SUCCESS in case of success, negative error code otherwise.
+*******************************************************************************/
+int ad4110_set_analog_input_buffer(struct ad4110_dev *dev,
+				   enum ad4110_ain_buffer buffer)
+{
+	int ret;
+
+	ret = ad4110_spi_int_reg_write_msk(dev,
+					   A4110_ADC,
+					   AD4110_REG_ADC_CONFIG,
+					   AD4110_REG_ADC_CONFIG_AIN_BUFF(buffer),
+					   AD4110_REG_ADC_CONFIG_AIN_BUFF(0x3));
+	if (ret)
+		return ret;
+	dev->analog_input_buff = buffer;
+
+	return SUCCESS;
+}
+
+/***************************************************************************//**
+ * @brief Set polarity
+ * @param dev - The device structure.
+ * @param bipolar - True in case of Bipolar/ False in case of Unipolar
+ * @return SUCCESS in case of success, negative error code otherwise.
+*******************************************************************************/
+int ad4110_set_bipolar(struct ad4110_dev *dev, bool bipolar)
+{
+	int ret;
+
+	if (bipolar) {
+		ret = ad4110_spi_int_reg_write_msk(dev,
+						   A4110_ADC,
+						   AD4110_REG_ADC_CONFIG,
+						   AD4110_REG_ADC_CONFIG_BI_UNIPOLAR,
+						   AD4110_REG_ADC_CONFIG_BI_UNIPOLAR);
+	} else {
+		ret = ad4110_spi_int_reg_write_msk(dev,
+						   A4110_ADC,
+						   AD4110_REG_ADC_CONFIG,
+						   0,
+						   AD4110_REG_ADC_CONFIG_BI_UNIPOLAR);
+	}
+	if (ret)
+		return ret;
+	dev->bipolar = bipolar;
+
+	return SUCCESS;
+}
+
+/***************************************************************************//**
+ * @brief Set Output Data Rate
+ * @param dev - The device structure.
+ * @param odr - Choice of ODR to be set
+ * @return SUCCESS in case of success, negative error code otherwise.
+*******************************************************************************/
+int ad4110_set_odr(struct ad4110_dev *dev, enum ad4110_odr odr)
+{
+	int ret;
+
+	ret = ad4110_spi_int_reg_write_msk(dev,
+					   A4110_ADC,
+					   AD4110_REG_FILTER,
+					   AD4110_REG_ADC_FILTER_ODR(odr),
+					   AD4110_REG_ADC_FILTER_ODR(0x1F));
+	if (ret)
+		return ret;
+	dev->odr = odr;
+
+	return SUCCESS;
+}
+
+/***************************************************************************//**
+ * @brief Set Order of Filter
+ * @param dev - The device structure.
+ * @param order - Choice of order to be set
+ * @return SUCCESS in case of success, negative error code otherwise.
+*******************************************************************************/
+int ad4110_set_order(struct ad4110_dev *dev, enum ad4110_order order)
+{
+	int ret;
+
+	ret = ad4110_spi_int_reg_write_msk(dev,
+					   A4110_ADC,
+					   AD4110_REG_FILTER,
+					   AD4110_REG_ADC_FILTER_ORDER(order),
+					   AD4110_REG_ADC_FILTER_ORDER(0x3));
+	if (ret)
+		return ret;
+	dev->order = order;
+
+	return SUCCESS;
+}
+
+/***************************************************************************//**
+ * @brief Wait for RDY bit to go low indicating conversion completion
+ * @param dev - The device structure.
+ * @param timeout - ADC conversion timeout
+ * @return SUCCESS in case of success, negative error code otherwise.
+*******************************************************************************/
+int ad4110_wait_for_rdy_low(struct ad4110_dev *dev, uint32_t timeout)
+{
+	uint8_t ready = 0;
+	uint32_t read_data;
+	int ret;
+
+	while (!ready && --timeout) {
+		ret = ad4110_spi_int_reg_read(dev, A4110_ADC, AD4110_REG_ADC_STATUS,
+					      &read_data);
+		if (ret)
+			return ret;
+		ready = (read_data & AD4110_REG_ADC_STATUS_RDY) == 0;
+	}
+
+	return timeout ? 0 : -ETIMEDOUT;
+}
+
+/***************************************************************************//**
+ * @brief ADC data read in single conversion mode
+ * @param dev - The device structure.
+ * @param buffer - The data buffer.
+ * @return SUCCESS in case of success, negative error code otherwise.
+*******************************************************************************/
+int ad4110_do_single_read(struct ad4110_dev *dev, uint32_t *buffer)
+{
+	int ret;
+
+	/* Set ADC to single conversion mode */
+	ret = ad4110_set_adc_mode(dev, AD4110_SINGLE_CONV_MODE);
+	if (ret)
+		return ret;
+
+	/* Wait for RDY bit to go low */
+	ret = ad4110_wait_for_rdy_low(dev, AD4110_ADC_CONV_TIMEOUT);
+	if (ret)
+		return ret;
+
+	/* Read the ADC data register */
+	return ad4110_spi_int_data_reg_read(dev, buffer);
+}
+
+/***************************************************************************//**
  * Initialize the device.
  *
  * @param device     - The device structure.
@@ -827,6 +992,22 @@ int32_t ad4110_setup(struct ad4110_dev **device,
 	}
 
 	ret = ad4110_set_afe_clk(dev, dev->afe_clk);
+	if (ret)
+		goto err_spi;
+
+	ret = ad4110_set_bipolar(dev, init_param.bipolar);
+	if (ret)
+		goto err_spi;
+
+	ret = ad4110_set_analog_input_buffer(dev, init_param.analog_input_buff);
+	if (ret)
+		goto err_spi;
+
+	ret = ad4110_set_odr(dev, init_param.odr);
+	if (ret)
+		goto err_spi;
+
+	ret = ad4110_set_order(dev, init_param.order);
 	if (ret)
 		goto err_spi;
 
