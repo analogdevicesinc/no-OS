@@ -47,7 +47,7 @@
 /**
  * @brief stm32 platform specific TDM platform ops structure
  */
-const struct tdm_platform_ops stm32_tdm_platform_ops = {
+const struct no_os_tdm_platform_ops stm32_tdm_platform_ops = {
 	.tdm_ops_init = &stm32_tdm_init,
 	.tdm_ops_read = &stm32_tdm_read,
 	.tdm_ops_remove = &stm32_tdm_remove
@@ -59,20 +59,20 @@ const struct tdm_platform_ops stm32_tdm_platform_ops = {
  * @param param - The structure that contains the TDM parameters.
  * @return SUCCESS in case of success, negative error code otherwise.
  */
-int32_t stm32_tdm_init(struct tdm_desc **desc,
-		       const struct tdm_init_param *param)
+int32_t stm32_tdm_init(struct no_os_tdm_desc **desc,
+		       const struct no_os_tdm_init_param *param)
 {
 	int32_t ret;
 	uint32_t tmp;
-	struct tdm_desc	*tdm_desc;
+	struct no_os_tdm_desc	*tdm_desc;
 
 	if (!desc || !param)
 		return -EINVAL;
 
-	if (param->mode > TDM_SLAVE_RX)
+	if (param->mode > NO_OS_TDM_SLAVE_RX)
 		return -EINVAL;
 
-	tdm_desc = (struct tdm_desc *)calloc(1, sizeof(*tdm_desc));
+	tdm_desc = (struct no_os_tdm_desc *)calloc(1, sizeof(*tdm_desc));
 	if (!tdm_desc)
 		return -ENOMEM;
 
@@ -91,13 +91,13 @@ int32_t stm32_tdm_init(struct tdm_desc **desc,
 	tdesc->hsai.Instance = tinit->base;
 	tdesc->hsai.Init.Protocol = SAI_FREE_PROTOCOL;
 	switch(param->mode) {
-	case TDM_MASTER_TX:
-	case TDM_MASTER_RX:
-	case TDM_SLAVE_TX:
+	case NO_OS_TDM_MASTER_TX:
+	case NO_OS_TDM_MASTER_RX:
+	case NO_OS_TDM_SLAVE_TX:
 		// TODO: implement master tx/rx and slave tx
 		ret = -ENOTSUP;
 		goto error;
-	case TDM_SLAVE_RX:
+	case NO_OS_TDM_SLAVE_RX:
 		tmp = SAI_MODESLAVE_RX;
 		break;
 	default:
@@ -168,11 +168,11 @@ error:
 }
 
 /**
- * @brief Free the resources allocated by tdm_init().
+ * @brief Free the resources allocated by stm32_tdm_init().
  * @param desc - The TDM descriptor.
  * @return SUCCESS in case of success, negative error code otherwise.
  */
-int32_t stm32_tdm_remove(struct tdm_desc *desc)
+int32_t stm32_tdm_remove(struct no_os_tdm_desc *desc)
 {
 	struct stm32_tdm_desc *tdesc;
 
@@ -194,7 +194,7 @@ int32_t stm32_tdm_remove(struct tdm_desc *desc)
  * @param nb_samples - Number of samples to read.
  * @return SUCCESS in case of success, negative error code otherwise.
  */
-int32_t stm32_tdm_read(struct tdm_desc *desc,
+int32_t stm32_tdm_read(struct no_os_tdm_desc *desc,
 		       void *data,
 		       uint16_t nb_samples)
 {

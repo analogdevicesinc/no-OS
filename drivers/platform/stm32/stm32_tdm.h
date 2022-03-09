@@ -65,18 +65,18 @@ typedef struct stm32_tdm_desc {
 /**
  * @brief stm32 specific TDM platform ops structure
  */
-extern const struct tdm_platform_ops stm32_tdm_platform_ops;
+extern const struct no_os_tdm_platform_ops stm32_tdm_platform_ops;
 
 
 /* Initialize the TDM communication peripheral. */
-int32_t stm32_tdm_init(struct tdm_desc **desc,
-		       const struct tdm_init_param *param);
+int32_t stm32_tdm_init(struct no_os_tdm_desc **desc,
+		       const struct no_os_tdm_init_param *param);
 
-/* Free the resources allocated by tdm_init(). */
-int32_t stm32_tdm_remove(struct tdm_desc *desc);
+/* Free the resources allocated by stm32_tdm_init(). */
+int32_t stm32_tdm_remove(struct no_os_tdm_desc *desc);
 
 /* Write and read data to/from TDM. */
-int32_t stm32_tdm_read(struct tdm_desc *desc, void *data,
+int32_t stm32_tdm_read(struct no_os_tdm_desc *desc, void *data,
 		       uint16_t bytes_number);
 
 #endif // STM32_TDM_H_
