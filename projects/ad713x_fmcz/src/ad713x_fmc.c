@@ -169,14 +169,14 @@ int main()
 		.extra = (void*)&spi_eng_init_param,
 	};
 
-	struct pwm_desc *axi_pwm;
+	struct no_os_pwm_desc *axi_pwm;
 	struct axi_pwm_init_param axi_zed_pwm_init = {
 		.base_addr = XPAR_ODR_GENERATOR_BASEADDR,
 		.ref_clock_Hz = 100000000,
 		.channel = 0
 	};
 
-	struct pwm_init_param axi_pwm_init = {
+	struct no_os_pwm_init_param axi_pwm_init = {
 		.period_ns = 3333,
 		.duty_cycle_ns = 600,
 		.phase_ns = 0,
@@ -243,7 +243,7 @@ int main()
 	if (ret != SUCCESS)
 		return FAILURE;
 
-	ret = pwm_init(&axi_pwm, &axi_pwm_init);
+	ret = no_os_pwm_init(&axi_pwm, &axi_pwm_init);
 	if (ret != SUCCESS)
 		return ret;
 

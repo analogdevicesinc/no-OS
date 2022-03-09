@@ -49,21 +49,21 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 /**
- * @enum pwm_polarity
+ * @enum no_os_pwm_polarity
  * @brief Possible polarities of the PWM signal
  */
-enum pwm_polarity {
+enum no_os_pwm_polarity {
 	/** PWM duty cycle is high, idle low */
-	PWM_POLARITY_HIGH,
+	NO_OS_PWM_POLARITY_HIGH,
 	/** PWM duty cycle is low, idle high */
-	PWM_POLARITY_LOW,
+	NO_OS_PWM_POLARITY_LOW,
 };
 
 /**
- * @struct pwm_init_param
+ * @struct no_os_pwm_init_param
  * @brief  Structure containing the init parameters needed by the PWM generator
  */
-struct pwm_init_param {
+struct no_os_pwm_init_param {
 	/** Pwm id (Ex. Pin number, timer_id) */
 	uint32_t id;
 	/** PWM generator period */
@@ -73,16 +73,16 @@ struct pwm_init_param {
 	/** PWM generator phase */
 	uint32_t phase_ns;
 	/** PWM generator polarity */
-	enum pwm_polarity polarity;
+	enum no_os_pwm_polarity polarity;
 	/** PWM extra parameters (device specific) */
 	void *extra;
 };
 
 /**
- * @struct pwm_desc
+ * @struct no_os_pwm_desc
  * @brief  Structure representing an PWM generator device
  */
-struct pwm_desc {
+struct no_os_pwm_desc {
 	/** Pwm id */
 	uint32_t id;
 	/** PWM generator period */
@@ -92,7 +92,7 @@ struct pwm_desc {
 	/** PWM generator phase */
 	uint32_t phase_ns;
 	/** PWM generator polarity */
-	enum pwm_polarity polarity;
+	enum no_os_pwm_polarity polarity;
 	/** PWM generator enabled */
 	bool enabled;
 	/** PWM extra parameters (device specific) */
@@ -103,48 +103,48 @@ struct pwm_desc {
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 /* Initialize the PWM generator device */
-int32_t pwm_init(struct pwm_desc **desc,
-		 const struct pwm_init_param *param);
+int32_t no_os_pwm_init(struct no_os_pwm_desc **desc,
+		       const struct no_os_pwm_init_param *param);
 
 /* Free the resources used by the PWM generator device */
-int32_t pwm_remove(struct pwm_desc *desc);
+int32_t no_os_pwm_remove(struct no_os_pwm_desc *desc);
 
 /* Enable PWM generator device */
-int32_t pwm_enable(struct pwm_desc *desc);
+int32_t no_os_pwm_enable(struct no_os_pwm_desc *desc);
 
 /* Disable PWM generator device */
-int32_t pwm_disable(struct pwm_desc *desc);
+int32_t no_os_pwm_disable(struct no_os_pwm_desc *desc);
 
 /* Set period of PWM generator device */
-int32_t pwm_set_period(struct pwm_desc *desc,
-		       uint32_t period_ns);
+int32_t no_os_pwm_set_period(struct no_os_pwm_desc *desc,
+			     uint32_t period_ns);
 
 /* Get period of PWM generator device */
-int32_t pwm_get_period(struct pwm_desc *desc,
-		       uint32_t *period_ns);
+int32_t no_os_pwm_get_period(struct no_os_pwm_desc *desc,
+			     uint32_t *period_ns);
 
 /* Set duty cycle of PWM generator device */
-int32_t pwm_set_duty_cycle(struct pwm_desc *desc,
-			   uint32_t duty_cycle_ns);
+int32_t no_os_pwm_set_duty_cycle(struct no_os_pwm_desc *desc,
+				 uint32_t duty_cycle_ns);
 
 /* Get period of PWM generator device */
-int32_t pwm_get_duty_cycle(struct pwm_desc *desc,
-			   uint32_t *duty_cycle_ns);
+int32_t no_os_pwm_get_duty_cycle(struct no_os_pwm_desc *desc,
+				 uint32_t *duty_cycle_ns);
 
 /* Set the phase of PWM generator channel */
-int32_t pwm_set_phase(struct pwm_desc *desc,
-		      uint32_t phase_ns);
+int32_t no_os_pwm_set_phase(struct no_os_pwm_desc *desc,
+			    uint32_t phase_ns);
 
 /* Get the phase of PWM generator channel */
-int32_t pwm_get_phase(struct pwm_desc *desc,
-		      uint32_t *phase_ns);
+int32_t no_os_pwm_get_phase(struct no_os_pwm_desc *desc,
+			    uint32_t *phase_ns);
 
 /* Set polarity of PWM generator device */
-int32_t pwm_set_polarity(struct pwm_desc *desc,
-			 enum pwm_polarity polarity);
+int32_t no_os_pwm_set_polarity(struct no_os_pwm_desc *desc,
+			       enum no_os_pwm_polarity polarity);
 
 /* Set polarity of PWM generator device */
-int32_t pwm_get_polarity(struct pwm_desc *desc,
-			 enum pwm_polarity *polarity);
+int32_t no_os_pwm_get_polarity(struct no_os_pwm_desc *desc,
+			       enum no_os_pwm_polarity *polarity);
 
 #endif // _NO_OS_PWM_H_

@@ -202,7 +202,7 @@ struct ad469x_init_param {
 	/* SPI module offload init */
 	struct spi_engine_offload_init_param *offload_init_param;
 	/* PWM generator init structure */
-	struct pwm_init_param	*trigger_pwm_init;
+	struct no_os_pwm_init_param	*trigger_pwm_init;
 	/** RESET GPIO initialization structure. */
 	struct no_os_gpio_init_param	*gpio_resetn;
 	/* Clock gen for hdl design init structure */
@@ -231,7 +231,7 @@ struct ad469x_dev {
 	/* Clock gen for hdl design structure */
 	struct axi_clkgen	*clkgen;
 	/* Trigger conversion PWM generator descriptor */
-	struct pwm_desc		*trigger_pwm_desc;
+	struct no_os_pwm_desc		*trigger_pwm_desc;
 	/* SPI module offload init */
 	struct spi_engine_offload_init_param *offload_init_param;
 	/* Register access speed */

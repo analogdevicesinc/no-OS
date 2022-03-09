@@ -59,11 +59,11 @@ volatile uint32_t *pinmux_addrs[] = {
 };
 
 static struct adc_init_param default_adc_init_param = {0};
-static struct pwm_init_param default_pwm_init_par = {
+static struct no_os_pwm_init_param default_pwm_init_par = {
 	.id = 0,
 	.duty_cycle_ns = 5000000,
 	.period_ns = 10000000,
-	.polarity = PWM_POLARITY_HIGH,
+	.polarity = NO_OS_PWM_POLARITY_HIGH,
 	.extra = NULL
 };
 static struct no_os_gpio_init_param default_gpio_init_par = {
@@ -200,7 +200,7 @@ int get_pwm_attr(void *device, char *buf, uint32_t len,
 	int32_t ret;
 	uint32_t val;
 	uint32_t idx;
-	enum pwm_polarity pol;
+	enum no_os_pwm_polarity pol;
 	struct iio_aducm3029_desc *desc = device;
 
 	idx = channel->ch_num - ADUCM3029_ADC_NUM_CH;
@@ -210,13 +210,13 @@ int get_pwm_attr(void *device, char *buf, uint32_t len,
 		val = !!desc->pwm[idx];
 		break;
 	case PWM_PERIOD:
-		ret = pwm_get_period(desc->pwm[idx], &val);
+		ret = no_os_pwm_get_period(desc->pwm[idx], &val);
 		break;
 	case PWM_DUTY_CYCLE:
-		ret = pwm_get_duty_cycle(desc->pwm[idx], &val);
+		ret = no_os_pwm_get_duty_cycle(desc->pwm[idx], &val);
 		break;
 	case PWM_POLARITY_IS_HIGH:
-		ret = pwm_get_polarity(desc->pwm[idx], &pol);
+		ret = no_os_pwm_get_polarity(desc->pwm[idx], &pol);
 		val = !!pol;
 		break;
 	}
@@ -237,7 +237,7 @@ int set_pwm_attr(void *device, char *buf, uint32_t len,
 
 	idx = channel->ch_num - ADUCM3029_ADC_NUM_CH;
 	if (desc->pwm[idx]) {
-		ret = pwm_disable(desc->pwm[idx]);
+		ret = no_os_pwm_disable(desc->pwm[idx]);
 		if (IS_ERR_VALUE(ret))
 			return ret;
 	}
@@ -249,29 +249,29 @@ int set_pwm_attr(void *device, char *buf, uint32_t len,
 			} else {
 				set_pin(idx, PIN_TYPE_TIMER);
 				default_pwm_init_par.id = idx;
-				ret = pwm_init(&desc->pwm[idx],
-					       &default_pwm_init_par);
+				ret = no_os_pwm_init(&desc->pwm[idx],
+						     &default_pwm_init_par);
 			}
 		} else {
-			ret = pwm_remove(desc->pwm[idx]);
+			ret = no_os_pwm_remove(desc->pwm[idx]);
 			desc->pwm[idx] = NULL;
 		}
 		break;
 	case PWM_PERIOD:
-		ret = pwm_set_period(desc->pwm[idx], val);
+		ret = no_os_pwm_set_period(desc->pwm[idx], val);
 		break;
 	case PWM_DUTY_CYCLE:
-		ret = pwm_set_duty_cycle(desc->pwm[idx], val);
+		ret = no_os_pwm_set_duty_cycle(desc->pwm[idx], val);
 		break;
 	case PWM_POLARITY_IS_HIGH:
-		ret = pwm_set_polarity(desc->pwm[idx], !!val);
+		ret = no_os_pwm_set_polarity(desc->pwm[idx], !!val);
 		break;
 	}
 	if (IS_ERR_VALUE(ret))
 		return ret;
 
 	if (desc->pwm[idx]) {
-		ret = pwm_enable(desc->pwm[idx]);
+		ret = no_os_pwm_enable(desc->pwm[idx]);
 		if (IS_ERR_VALUE(ret))
 			return ret;
 	}

@@ -116,11 +116,11 @@ int32_t adaq7980_setup(struct adaq7980_dev **device,
 
 		mdelay(10);
 	}
-	ret = pwm_init(&dev->trigger_pwm_desc, init_param->trigger_pwm_init);
+	ret = no_os_pwm_init(&dev->trigger_pwm_desc, init_param->trigger_pwm_init);
 	if (ret != SUCCESS)
 		goto error_spi;
 
-	pwm_enable(dev->trigger_pwm_desc);
+	no_os_pwm_enable(dev->trigger_pwm_desc);
 
 	dev->offload_init_param = init_param->offload_init_param;
 

@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   aducm3029/rtc.c
+ *   @file   aducm3029/no_os_rtc.c
  *   @brief  Implementation of RTC driver for ADuCM302x
  *   @author Andrei Drimbarean (andrei.drimbarean@analog.com)
 ********************************************************************************
@@ -57,7 +57,8 @@
  * @param init_param - The structure that contains the RTC initialization.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t rtc_init(struct rtc_desc **device, struct rtc_init_param *init_param)
+int32_t no_os_rtc_init(struct rtc_desc **device,
+		       struct rtc_init_param *init_param)
 {
 	int32_t ret;
 	struct rtc_desc *dev;
@@ -114,11 +115,11 @@ error_dev:
 }
 
 /**
- * @brief Free the resources allocated by rtc_init().
+ * @brief Free the resources allocated by no_os_rtc_init().
  * @param dev - The RTC descriptor.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t rtc_remove(struct rtc_desc *dev)
+int32_t no_os_rtc_remove(struct rtc_desc *dev)
 {
 	int32_t ret;
 	struct aducm_rtc_desc *adev = dev->extra;
@@ -139,7 +140,7 @@ int32_t rtc_remove(struct rtc_desc *dev)
  * @param dev - The RTC descriptor.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t rtc_start(struct rtc_desc *dev)
+int32_t no_os_rtc_start(struct rtc_desc *dev)
 {
 	struct aducm_rtc_desc *adev;
 
@@ -155,7 +156,7 @@ int32_t rtc_start(struct rtc_desc *dev)
  * @param dev - The RTC descriptor.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t rtc_stop(struct rtc_desc *dev)
+int32_t no_os_rtc_stop(struct rtc_desc *dev)
 {
 	struct aducm_rtc_desc *adev;
 
@@ -172,7 +173,7 @@ int32_t rtc_stop(struct rtc_desc *dev)
  * @param tmr_cnt - Pointer where the read counter will be stored.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t rtc_get_cnt(struct rtc_desc *dev, uint32_t *tmr_cnt)
+int32_t no_os_rtc_get_cnt(struct rtc_desc *dev, uint32_t *tmr_cnt)
 {
 	struct aducm_rtc_desc *adev = dev->extra;
 
@@ -185,7 +186,7 @@ int32_t rtc_get_cnt(struct rtc_desc *dev, uint32_t *tmr_cnt)
  * @param tmr_cnt - New value of the timer counter.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t rtc_set_cnt(struct rtc_desc *dev, uint32_t tmr_cnt)
+int32_t no_os_rtc_set_cnt(struct rtc_desc *dev, uint32_t tmr_cnt)
 {
 	struct aducm_rtc_desc *adev = dev->extra;
 

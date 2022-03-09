@@ -80,25 +80,25 @@ static int32_t initialize_uart(struct uart_desc **uart)
 	return uart_init(uart, &uart_init_par);
 }
 
-static int32_t init_pwms(struct pwm_desc **pwms)
+static int32_t init_pwms(struct no_os_pwm_desc **pwms)
 {
 	uint32_t i;
 	int32_t ret;
 	uint32_t duty = 100000000;
-	struct pwm_init_param		pwm_init_par = {
+	struct no_os_pwm_init_param		pwm_init_par = {
 		.period_ns = 400000000,
-		.polarity = PWM_POLARITY_HIGH,
+		.polarity = NO_OS_PWM_POLARITY_HIGH,
 		.extra = NULL
 	};
-	struct pwm_desc *pwm;
+	struct no_os_pwm_desc *pwm;
 	for (i = 0; i < 3; i++) {
 		pwm_init_par.id = i;
 		pwm_init_par.duty_cycle_ns = (i + 1) * duty;
-		ret = pwm_init(&pwm, &pwm_init_par);
+		ret = no_os_pwm_init(&pwm, &pwm_init_par);
 		if (IS_ERR_VALUE(ret))
 			return -ret;
 		pwms[i] = pwm;
-		ret = pwm_enable(pwms[i]);
+		ret = no_os_pwm_enable(pwms[i]);
 		if (IS_ERR_VALUE(ret))
 			return -ret;
 	}
@@ -141,7 +141,7 @@ int main(void)
 	struct adc_init_param	adc_init_param = {0};
 	struct adc_desc		*adc;
 	struct uart_desc	*uart;
-	struct pwm_desc		*pwms[3];
+	struct no_os_pwm_desc		*pwms[3];
 
 	status = aducm3029_adc_init(&adc, &adc_init_param);
 	if (IS_ERR_VALUE(status))

@@ -95,10 +95,10 @@ int main()
 		.ref_clock_Hz = 100000000,
 	};
 
-	struct pwm_init_param trigger_pwm_init = {
+	struct no_os_pwm_init_param trigger_pwm_init = {
 		.period_ns = 500,	/* 2Mhz */
 		.duty_cycle_ns = AD463X_TRIGGER_PULSE_WIDTH_NS,
-		.polarity = PWM_POLARITY_HIGH,
+		.polarity = NO_OS_PWM_POLARITY_HIGH,
 		.extra = &axi_pwm_init,
 	};
 

@@ -605,7 +605,7 @@ int32_t ad469x_exit_conversion_mode(struct ad469x_dev *dev)
 	};
 	int32_t ret;
 
-	pwm_enable(dev->trigger_pwm_desc);
+	no_os_pwm_enable(dev->trigger_pwm_desc);
 
 	commands_data[0] = AD469x_CMD_REG_CONFIG_MODE << 8;
 
@@ -622,7 +622,7 @@ int32_t ad469x_exit_conversion_mode(struct ad469x_dev *dev)
 	if (ret != SUCCESS)
 		return ret;
 
-	pwm_disable(dev->trigger_pwm_desc);
+	no_os_pwm_disable(dev->trigger_pwm_desc);
 	if (ret != SUCCESS)
 		return ret;
 
@@ -719,7 +719,7 @@ int32_t ad469x_read_data(struct ad469x_dev *dev,
 	else
 		return FAILURE;
 
-	pwm_enable(dev->trigger_pwm_desc);
+	no_os_pwm_enable(dev->trigger_pwm_desc);
 
 	ret = spi_engine_offload_init(dev->spi_desc, dev->offload_init_param);
 	if (ret != SUCCESS)
@@ -815,7 +815,7 @@ int32_t ad469x_init(struct ad469x_dev **device,
 	if (ret != SUCCESS)
 		goto error_spi;
 
-	ret = pwm_init(&dev->trigger_pwm_desc, init_param->trigger_pwm_init);
+	ret = no_os_pwm_init(&dev->trigger_pwm_desc, init_param->trigger_pwm_init);
 	if (ret != SUCCESS)
 		goto error_spi;
 
@@ -847,7 +847,7 @@ int32_t ad469x_remove(struct ad469x_dev *dev)
 	if (!dev)
 		return FAILURE;
 
-	ret = pwm_remove(dev->trigger_pwm_desc);
+	ret = no_os_pwm_remove(dev->trigger_pwm_desc);
 	if (ret != SUCCESS)
 		return ret;
 
