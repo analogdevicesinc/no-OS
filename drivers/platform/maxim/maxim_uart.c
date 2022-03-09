@@ -43,7 +43,6 @@
 
 #include <errno.h>
 #include <stdlib.h>
-#include "maxim_stdio.h"
 #include "mxc_sys.h"
 #include "uart.h"
 #include "maxim_uart.h"
