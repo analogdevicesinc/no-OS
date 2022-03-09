@@ -83,7 +83,7 @@ $(PROJECT_TARGET):
 $(PROJECT_TARGET)_configure:
 	$(call print,Configuring project)
 	$(MUTE) sed -i 's/ main(/ stm32_init(/' $(PROJECT_BUILD)/Src/main.c $(HIDE)
-	$(MUTE) sed -i 's/while (1)/return 0;/' $(PROJECT_BUILD)/Src/main.c $(HIDE)
+	$(MUTE) sed -i '0,/while (1)/s//return 0;/' $(PROJECT_BUILD)/Src/main.c $(HIDE)
 	$(MUTE) sed -i 's/HAL_GPIO_EXTI_IRQHandler/HAL_GPIO_EXTI_Callback/' $(ITC) $(HIDE)
 	$(MUTE) $(call copy_file, $(PROJECT_BUILD)/Src/main.c, $(PROJECT_BUILD)/Src/generated_main.c) $(HIDE)
 	$(MUTE) $(call remove_file, $(PROJECT_BUILD)/Src/main.c) $(HIDE)
