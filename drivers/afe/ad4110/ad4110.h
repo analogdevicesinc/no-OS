@@ -46,6 +46,7 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include <stdint.h>
+#include <stdbool.h>
 #include "no-os/delay.h"
 #include "no-os/gpio.h"
 #include "no-os/spi.h"
@@ -138,6 +139,9 @@
 /* NO_PWR_DEFAULT_SEL Register */
 #define AD4110_REG_NO_PWR_DEFAULT_SEL_MSK	0xFF
 
+/* ADC status register */
+#define AD4110_REG_ADC_STATUS_RDY			(1 << 7)
+
 /* ADC_MODE Register */
 #define AD4110_REG_ADC_MODE_MSK			0x70
 #define AD4110_ADC_MODE(x)			(((x) & 0x7) << 4)
@@ -160,7 +164,7 @@
 #define AD4110_REG_ADC_CONFIG_CHAN_EN_3		(1 << 3)
 #define AD4110_REG_ADC_CONFIG_REF_SEL(x)	(((x) & 0x3) << 4)
 #define AD4110_REG_ADC_CONFIG_BIT_6		(1 << 6)
-#define AD4110_REG_ADC_CONFIG_AIN_BUFF(x)	((((x) & 0x3) << 10)
+#define AD4110_REG_ADC_CONFIG_AIN_BUFF(x)	((((x) & 0x3) << 8))
 #define AD4110_REG_ADC_CONFIG_BI_UNIPOLAR	(1 << 12)
 
 /* ADC_FILTER Register */
@@ -175,6 +179,9 @@
 
 /* 8-bits wide checksum generated using the polynomial */
 #define AD4110_CRC8_POLY	0x07 // x^8 + x^2 + x^1 + x^0
+
+/* ADC conversion timeout */
+#define AD4110_ADC_CONV_TIMEOUT	10000
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -262,6 +269,42 @@ enum ad4110_gain {
 	AD4110_GAIN_24
 };
 
+enum ad4110_ain_buffer {
+	DISABLE_AIN_BUFFER,
+	ENABLE_NEG_BUFFER,
+	ENABLE_POS_BUFFER,
+	ENABLE_FULL_BUFFER
+};
+
+enum ad4110_odr {
+	KSPS_125_A,
+	KSPS_125_B,
+	KSPS_62P5_A,
+	KSPS_62P5_B,
+	KSPS_31P25,
+	KSPS_25,
+	KSPS_15P625,
+	KSPS_10P417,
+	KSPS_5,
+	KSPS_2P5,
+	KSPS_1,
+	SPS_500,
+	SPS_400P6,
+	SPS_200,
+	SPS_100P2,
+	SPS_60,
+	SPS_50,
+	SPS_20,
+	SPS_16P7,
+	SPS_10,
+	SPS_5
+};
+
+enum ad4110_order {
+	sinc5_sinc1 = 0x0,
+	sinc3 = 0x3
+};
+
 struct ad4110_dev {
 	/* SPI */
 	struct spi_desc			*spi_dev;
@@ -277,6 +320,10 @@ struct ad4110_dev {
 	enum ad4110_afe_clk_cfg		afe_clk;
 	enum ad4110_adc_clk_sel		adc_clk;
 	uint8_t				addr;
+	bool				bipolar;
+	enum ad4110_ain_buffer		analog_input_buff;
+	enum ad4110_odr			odr;
+	enum ad4110_order		order;
 	/* GPIO - used only for continuous mode */
 	struct irq_ctrl_desc *irq_desc;
 	uint32_t nready_pin;
@@ -297,6 +344,10 @@ struct ad4110_init_param {
 	enum ad4110_afe_clk_cfg		afe_clk;
 	enum ad4110_adc_clk_sel		adc_clk;
 	uint8_t				addr;
+	bool				bipolar;
+	enum ad4110_ain_buffer		analog_input_buff;
+	enum ad4110_odr			odr;
+	enum ad4110_order		order;
 	/* GPIO - used only for continuous mode */
 	struct irq_ctrl_desc *irq_desc;
 	uint32_t nready_pin;
@@ -374,5 +425,28 @@ int32_t ad4110_spi_int_data_reg_read(struct ad4110_dev *dev,
 /* Initialize the device. */
 int32_t ad4110_setup(struct ad4110_dev **device,
 		     struct ad4110_init_param init_param);
+
+/* Enable/Disable channel */
+int ad4110_set_channel_status(struct ad4110_dev *dev, uint8_t chan_id,
+			      bool status);
+
+/* Set analog input buffer */
+int ad4110_set_analog_input_buffer(struct ad4110_dev *dev,
+				   enum ad4110_ain_buffer buffer);
+
+/* Set polarity */
+int ad4110_set_bipolar(struct ad4110_dev *dev, bool bipolar);
+
+/* Set ODR */
+int ad4110_set_odr(struct ad4110_dev *dev, enum ad4110_odr odr);
+
+/* Set filter order */
+int ad4110_set_order(struct ad4110_dev *dev, enum ad4110_order order);
+
+/* Fills the buffer with a single sample */
+int ad4110_do_single_read(struct ad4110_dev *dev, uint32_t *buffer);
+
+/* Wait for conversion completion  */
+int ad4110_wait_for_rdy_low(struct ad4110_dev *dev, uint32_t timeout);
 
 #endif // AD4110_H_
