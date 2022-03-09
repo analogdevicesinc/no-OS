@@ -63,10 +63,10 @@ extern "C"
  * @param	param[in] - The structure that contains the PWM init parameters.
  * @return	SUCCESS in case of success, negative error code otherwise.
  */
-int32_t pwm_init(struct pwm_desc **desc,
-		 const struct pwm_init_param *param)
+int32_t no_os_pwm_init(struct no_os_pwm_desc **desc,
+		 const struct no_os_pwm_init_param *param)
 {
-	struct pwm_desc *pwm_desc;
+	struct no_os_pwm_desc *pwm_desc;
 	mbed::PwmOut *pwm;
 	struct mbed_pwm_desc *mbed_pwm_desc;
 
@@ -74,7 +74,7 @@ int32_t pwm_init(struct pwm_desc **desc,
 		return -EINVAL;
 
 	/* Allocate memory for general PWM descriptor */
-	pwm_desc = (struct pwm_desc *)calloc(1, sizeof(*pwm_desc));
+	pwm_desc = (struct no_os_pwm_desc *)calloc(1, sizeof(*pwm_desc));
 	if (!pwm_desc)
 		return -ENOMEM;
 
@@ -117,7 +117,7 @@ err_pwm:
  * @param	desc[in] - Pointer where the configured instance is stored.
  * @return	SUCCESS in case of success, negative error code otherwise.
  */
-int32_t pwm_enable(struct pwm_desc *desc)
+int32_t no_os_pwm_enable(struct no_os_pwm_desc *desc)
 {
 	mbed::PwmOut *pwm;
 
@@ -138,7 +138,7 @@ int32_t pwm_enable(struct pwm_desc *desc)
  * @param	desc[in] - Pointer where the configured instance is stored.
  * @return	SUCCESS in case of success, negative error code otherwise.
  */
-int32_t pwm_disable(struct pwm_desc *desc)
+int32_t no_os_pwm_disable(struct no_os_pwm_desc *desc)
 {
 	mbed::PwmOut *pwm;
 
@@ -160,7 +160,7 @@ int32_t pwm_disable(struct pwm_desc *desc)
  * @param	period_ns[in] - PWM period.
  * @return	SUCCESS in case of success, negative error code otherwise.
  */
-int32_t pwm_set_period(struct pwm_desc *desc,
+int32_t no_os_pwm_set_period(struct no_os_pwm_desc *desc,
 		       uint32_t period_ns)
 {
 	mbed::PwmOut *pwm;
@@ -183,7 +183,7 @@ int32_t pwm_set_period(struct pwm_desc *desc,
  * @param	period_ns[in] - PWM period.
  * @return	SUCCESS in case of success, negative error code otherwise.
  */
-int32_t pwm_get_period(struct pwm_desc *desc,
+int32_t no_os_pwm_get_period(struct no_os_pwm_desc *desc,
 		       uint32_t *period_ns)
 {
 	mbed::PwmOut *pwm;
@@ -206,7 +206,7 @@ int32_t pwm_get_period(struct pwm_desc *desc,
  * @param	duty_cycle_ns[in] - PWM duty cycle.
  * @return	SUCCESS in case of success, negative error code otherwise.
  */
-int32_t pwm_set_duty_cycle(struct pwm_desc *desc,
+int32_t no_os_pwm_set_duty_cycle(struct no_os_pwm_desc *desc,
 			   uint32_t duty_cycle_ns)
 {
 	mbed::PwmOut *pwm;
@@ -229,7 +229,7 @@ int32_t pwm_set_duty_cycle(struct pwm_desc *desc,
  * @param	duty_cycle_ns[in] - PWM duty cycle.
  * @return	SUCCESS in case of success, negative error code otherwise.
  */
-int32_t pwm_get_duty_cycle(struct pwm_desc *desc,
+int32_t no_os_pwm_get_duty_cycle(struct no_os_pwm_desc *desc,
 			   uint32_t *duty_cycle_ns)
 {
 	mbed::PwmOut *pwm;
@@ -251,7 +251,7 @@ int32_t pwm_get_duty_cycle(struct pwm_desc *desc,
  * @param	desc[in, out] - Pointer where the configured instance is stored
  * @return	SUCCESS in case of success, negative error code otherwise.
  */
-int32_t pwm_remove(struct pwm_desc *desc)
+int32_t no_os_pwm_remove(struct no_os_pwm_desc *desc)
 {
 	if (!desc || !desc->extra)
 		return -EINVAL;

@@ -51,7 +51,7 @@
 struct iio_aducm3029_desc {
 	struct adc_desc		*adc;
 	struct timer_desc	*timer[ADUCM3029_TIMERS_NUMS];
-	struct pwm_desc		*pwm[ADUCM3029_TIMERS_NUMS];
+	struct no_os_pwm_desc		*pwm[ADUCM3029_TIMERS_NUMS];
 	struct no_os_gpio_desc	*gpio[ADUCM3029_GPIOS_NUMS];
 	uint32_t		current_gpio;
 };

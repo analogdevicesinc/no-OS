@@ -85,21 +85,22 @@ struct rtc_init_param {
 /******************************************************************************/
 
 /** Initialize the RTC peripheral. */
-int32_t rtc_init(struct rtc_desc **device, struct rtc_init_param *init_param);
+int32_t no_os_rtc_init(struct rtc_desc **device,
+		       struct rtc_init_param *init_param);
 
-/** Free the resources allocated by rtc_init(). */
-int32_t rtc_remove(struct rtc_desc *dev);
+/** Free the resources allocated by no_os_rtc_init(). */
+int32_t no_os_rtc_remove(struct rtc_desc *dev);
 
 /** Start the real time clock. */
-int32_t rtc_start(struct rtc_desc *dev);
+int32_t no_os_rtc_start(struct rtc_desc *dev);
 
 /** Stop the real time clock. */
-int32_t rtc_stop(struct rtc_desc *dev);
+int32_t no_os_rtc_stop(struct rtc_desc *dev);
 
 /** Get the current count for the real time clock. */
-int32_t rtc_get_cnt(struct rtc_desc *dev, uint32_t *tmr_cnt);
+int32_t no_os_rtc_get_cnt(struct rtc_desc *dev, uint32_t *tmr_cnt);
 
 /** Set the current count for the real time clock. */
-int32_t rtc_set_cnt(struct rtc_desc *dev, uint32_t tmr_cnt);
+int32_t no_os_rtc_set_cnt(struct rtc_desc *dev, uint32_t tmr_cnt);
 
 #endif // _NO_OS_RTC_H_

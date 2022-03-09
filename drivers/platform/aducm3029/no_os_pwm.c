@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   aducm3029/pwm.c
- *   @brief  Implementation of pwm.c
+ *   @file   aducm3029/no_os_pwm.c
+ *   @brief  Implementation of no_os_pwm.c
  *   @author Mihail Chindris (mihail.chindris@analog.com)
 ********************************************************************************
  * Copyright 2020(c) Analog Devices, Inc.
@@ -43,14 +43,14 @@
 #include <drivers/tmr/adi_tmr.h>
 #include <drivers/pwr/adi_pwr.h>
 
-#define NS_PER_SEC 1000000000
+#define NO_OS_NS_PER_SEC 1000000000
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
-static int32_t config_clock_init(ADI_TMR_CONFIG *cfg, uint32_t period,
-				 uint32_t duty, uint32_t *match)
+static int32_t no_os_config_clock_init(ADI_TMR_CONFIG *cfg, uint32_t period,
+				       uint32_t duty, uint32_t *match)
 {
 	float		base_time;
 	float		aux;
@@ -83,7 +83,7 @@ static int32_t config_clock_init(ADI_TMR_CONFIG *cfg, uint32_t period,
 		return -ret;
 
 	/* Select prescaler */
-	aux = (float)UINT16_MAX / clk_freq * NS_PER_SEC;
+	aux = (float)UINT16_MAX / clk_freq * NO_OS_NS_PER_SEC;
 	if (period > 256 * aux)
 		return -EINVAL;
 	if (period > 64 * aux) {
@@ -102,7 +102,7 @@ static int32_t config_clock_init(ADI_TMR_CONFIG *cfg, uint32_t period,
 		else
 			base_time = 0;
 	}
-	base_time = base_time * NS_PER_SEC / clk_freq;
+	base_time = base_time * NO_OS_NS_PER_SEC / clk_freq;
 	cfg->nLoad = period / base_time;
 	cfg->nAsyncLoad = cfg->nLoad;
 	*match = cfg->nLoad - duty / base_time;
@@ -110,7 +110,7 @@ static int32_t config_clock_init(ADI_TMR_CONFIG *cfg, uint32_t period,
 	return SUCCESS;
 }
 
-static int32_t update_pwm_config(struct pwm_desc *desc)
+static int32_t no_os_update_pwm_config(struct no_os_pwm_desc *desc)
 {
 	ADI_TMR_CONFIG		cfg;
 	ADI_TMR_PWM_CONFIG	pwm_cfg;
@@ -126,8 +126,8 @@ static int32_t update_pwm_config(struct pwm_desc *desc)
 		.bReloading = true,
 		.bSyncBypass = true
 	};
-	ret = config_clock_init(&cfg, desc->period_ns, desc->duty_cycle_ns,
-				&match_val);
+	ret = no_os_config_clock_init(&cfg, desc->period_ns, desc->duty_cycle_ns,
+				      &match_val);
 	if (IS_ERR_VALUE(ret))
 		return ret;
 	do {
@@ -138,7 +138,7 @@ static int32_t update_pwm_config(struct pwm_desc *desc)
 
 	pwm_cfg.eOutput = ADI_TMR_PWM_OUTPUT_0;
 	pwm_cfg.bMatch = true;
-	pwm_cfg.bIdleHigh = (desc->polarity == PWM_POLARITY_HIGH);
+	pwm_cfg.bIdleHigh = (desc->polarity == NO_OS_PWM_POLARITY_HIGH);
 	pwm_cfg.nMatchValue = match_val;
 	ret = adi_tmr_ConfigPwm(desc->id, &pwm_cfg);
 	if (ret != ADI_TMR_SUCCESS)
@@ -148,11 +148,11 @@ static int32_t update_pwm_config(struct pwm_desc *desc)
 }
 
 /* Initialize the PWM generator device */
-int32_t pwm_init(struct pwm_desc **desc,
-		 const struct pwm_init_param *param)
+int32_t no_os_pwm_init(struct no_os_pwm_desc **desc,
+		       const struct no_os_pwm_init_param *param)
 {
 	ADI_TMR_RESULT	ret;
-	struct pwm_desc	*ldesc;
+	struct no_os_pwm_desc	*ldesc;
 
 	if (!desc || !param)
 		return -EINVAL;
@@ -160,7 +160,7 @@ int32_t pwm_init(struct pwm_desc **desc,
 	if (param->id < ADI_TMR_DEVICE_GP0  || param->id > ADI_TMR_DEVICE_GP2)
 		return -EINVAL;
 
-	ldesc = (struct pwm_desc *)calloc(1, sizeof(*ldesc));
+	ldesc = (struct no_os_pwm_desc *)calloc(1, sizeof(*ldesc));
 	if (!ldesc)
 		return -ENOMEM;
 
@@ -173,7 +173,7 @@ int32_t pwm_init(struct pwm_desc **desc,
 	if (ret != ADI_TMR_SUCCESS)
 		goto error;
 
-	ret = update_pwm_config(ldesc);
+	ret = no_os_update_pwm_config(ldesc);
 	if (IS_ERR_VALUE(ret))
 		goto error;
 
@@ -188,7 +188,7 @@ error:
 }
 
 /* Free the resources used by the PWM generator device */
-int32_t pwm_remove(struct pwm_desc *desc)
+int32_t no_os_pwm_remove(struct no_os_pwm_desc *desc)
 {
 	if (!desc || !desc->extra)
 		return -EINVAL;
@@ -200,7 +200,7 @@ int32_t pwm_remove(struct pwm_desc *desc)
 }
 
 /* Enable PWM generator device */
-int32_t pwm_enable(struct pwm_desc *desc)
+int32_t no_os_pwm_enable(struct no_os_pwm_desc *desc)
 {
 	ADI_TMR_RESULT		ret;
 
@@ -215,7 +215,7 @@ int32_t pwm_enable(struct pwm_desc *desc)
 }
 
 /* Disable PWM generator device */
-int32_t pwm_disable(struct pwm_desc *desc)
+int32_t no_os_pwm_disable(struct no_os_pwm_desc *desc)
 {
 	ADI_TMR_RESULT		ret;
 
@@ -230,20 +230,20 @@ int32_t pwm_disable(struct pwm_desc *desc)
 }
 
 /* Set period of PWM generator device */
-int32_t pwm_set_period(struct pwm_desc *desc,
-		       uint32_t period_ns)
+int32_t no_os_pwm_set_period(struct no_os_pwm_desc *desc,
+			     uint32_t period_ns)
 {
 	if (!desc)
 		return -EINVAL;
 
 	desc->period_ns = period_ns;
 
-	return update_pwm_config(desc);
+	return no_os_update_pwm_config(desc);
 }
 
 /* Get period of PWM generator device */
-int32_t pwm_get_period(struct pwm_desc *desc,
-		       uint32_t *period_ns)
+int32_t no_os_pwm_get_period(struct no_os_pwm_desc *desc,
+			     uint32_t *period_ns)
 {
 	if (!desc || !period_ns)
 		return -EINVAL;
@@ -254,20 +254,20 @@ int32_t pwm_get_period(struct pwm_desc *desc,
 }
 
 /* Set duty cycle of PWM generator device */
-int32_t pwm_set_duty_cycle(struct pwm_desc *desc,
-			   uint32_t duty_cycle_ns)
+int32_t no_os_pwm_set_duty_cycle(struct no_os_pwm_desc *desc,
+				 uint32_t duty_cycle_ns)
 {
 	if (!desc)
 		return -EINVAL;
 
 	desc->duty_cycle_ns = duty_cycle_ns;
 
-	return update_pwm_config(desc);
+	return no_os_update_pwm_config(desc);
 }
 
 /* Get period of PWM generator device */
-int32_t pwm_get_duty_cycle(struct pwm_desc *desc,
-			   uint32_t *duty_cycle_ns)
+int32_t no_os_pwm_get_duty_cycle(struct no_os_pwm_desc *desc,
+				 uint32_t *duty_cycle_ns)
 {
 	if (!desc || !duty_cycle_ns)
 		return -EINVAL;
@@ -278,20 +278,20 @@ int32_t pwm_get_duty_cycle(struct pwm_desc *desc,
 }
 
 /* Set polarity of PWM generator device */
-int32_t pwm_set_polarity(struct pwm_desc *desc,
-			 enum pwm_polarity polarity)
+int32_t no_os_pwm_set_polarity(struct no_os_pwm_desc *desc,
+			       enum no_os_pwm_polarity polarity)
 {
 	if (!desc)
 		return -EINVAL;
 
 	desc->polarity = polarity;
 
-	return update_pwm_config(desc);
+	return no_os_update_pwm_config(desc);
 }
 
 /* Set polarity of PWM generator device */
-int32_t pwm_get_polarity(struct pwm_desc *desc,
-			 enum pwm_polarity *polarity)
+int32_t no_os_pwm_get_polarity(struct no_os_pwm_desc *desc,
+			       enum no_os_pwm_polarity *polarity)
 {
 	if (!desc || !polarity)
 		return -EINVAL;

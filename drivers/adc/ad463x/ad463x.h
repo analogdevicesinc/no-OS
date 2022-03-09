@@ -183,7 +183,7 @@ struct ad463x_init_param {
 	/** GPIO */
 	struct no_os_gpio_init_param *gpio_resetn;
 	/** PWM */
-	struct pwm_init_param *trigger_pwm_init;
+	struct no_os_pwm_init_param *trigger_pwm_init;
 	/** SPI module offload init */
 	struct spi_engine_offload_init_param *offload_init_param;
 	/** Clock gen for hdl design init structure */
@@ -218,7 +218,7 @@ struct ad463x_dev {
 	/** GPIO */
 	struct no_os_gpio_desc *gpio_resetn;
 	/** PWM */
-	struct pwm_desc *trigger_pwm_desc;
+	struct no_os_pwm_desc *trigger_pwm_desc;
 	/** SPI module offload init */
 	struct spi_engine_offload_init_param *offload_init_param;
 	/** Clock gen for hdl design structure */

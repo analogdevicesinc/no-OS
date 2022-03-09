@@ -331,7 +331,7 @@ int32_t ad463x_read_data(struct ad463x_dev *dev,
 		CS_HIGH
 	};
 
-	ret = pwm_enable(dev->trigger_pwm_desc);
+	ret = no_os_pwm_enable(dev->trigger_pwm_desc);
 	if (ret != SUCCESS)
 		return ret;
 
@@ -489,7 +489,7 @@ int32_t ad463x_init(struct ad463x_dev **device,
 	if (ret != SUCCESS)
 		return ret;
 
-	ret = pwm_init(&dev->trigger_pwm_desc, init_param->trigger_pwm_init);
+	ret = no_os_pwm_init(&dev->trigger_pwm_desc, init_param->trigger_pwm_init);
 	if (ret != SUCCESS)
 		goto error_spi;
 
@@ -521,7 +521,7 @@ int32_t ad463x_remove(struct ad463x_dev *dev)
 	if (!dev)
 		return FAILURE;
 
-	ret = pwm_remove(dev->trigger_pwm_desc);
+	ret = no_os_pwm_remove(dev->trigger_pwm_desc);
 	if (ret != SUCCESS)
 		return ret;
 

@@ -81,10 +81,10 @@ int main()
 		.channel = 0,
 	};
 
-	struct pwm_init_param trigger_pwm_init = {
+	struct no_os_pwm_init_param trigger_pwm_init = {
 		.period_ns = 10000,		/* 100Khz */
 		.duty_cycle_ns = 10,
-		.polarity = PWM_POLARITY_HIGH,
+		.polarity = NO_OS_PWM_POLARITY_HIGH,
 		.extra = &axi_pwm_init,
 	};
 
