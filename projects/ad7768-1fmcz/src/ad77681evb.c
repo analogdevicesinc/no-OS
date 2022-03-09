@@ -141,7 +141,7 @@ int main()
 			ad77681_spi_read_adc_data(adc_dev, adc_data,
 						  AD77681_CONTINUOUS_DATA_READ);
 			printf("[ADC DATA]: 0x");
-			for(i = 0; i < sizeof(adc_data) / sizeof(uint8_t); i++) {
+			for(i = 0; i < sizeof(adc_data); i++) {
 				printf("%x", adc_data[i]);
 			}
 			printf("\r\n");

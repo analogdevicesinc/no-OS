@@ -275,8 +275,7 @@ static int get_rf_port_select_available(void *device, char *buf, uint32_t len,
 				     ad9361_rf_tx_port[1]);
 	} else {
 		bytes_no = 0;
-		for (i = 0; i < sizeof(ad9361_rf_rx_port) / sizeof(ad9361_rf_rx_port[0]);
-		     i++) {
+		for (i = 0; i < ARRAY_SIZE(ad9361_rf_rx_port); i++) {
 			if (i > 0)
 				bytes_no += sprintf(buf + bytes_no, " ");
 			ret = sprintf(buf + bytes_no, "%s", ad9361_rf_rx_port[i]);
@@ -769,20 +768,20 @@ static int set_rf_port_select(void *device, char *buf, uint32_t len,
 	uint32_t i = 0;
 
 	if (channel->ch_out) {
-		for (i = 0; i < sizeof(ad9361_rf_tx_port) / sizeof(ad9361_rf_tx_port[0]); i++) {
+		for (i = 0; i < ARRAY_SIZE(ad9361_rf_tx_port); i++) {
 			if (!strcmp(ad9361_rf_tx_port[i], buf))
 				break;
 		}
-		if (i >= sizeof(ad9361_rf_tx_port) / sizeof(ad9361_rf_tx_port[0]))
+		if (i >= ARRAY_SIZE(ad9361_rf_tx_port))
 			return -EINVAL;
 		ret = ad9361_set_tx_rf_port_output(ad9361_phy, i);
 		return (ret < 0) ? ret : (int)len;
 	} else {
-		for (i = 0; i < sizeof(ad9361_rf_rx_port) / sizeof(ad9361_rf_rx_port[0]); i++) {
+		for (i = 0; i < ARRAY_SIZE(ad9361_rf_rx_port); i++) {
 			if (!strcmp(ad9361_rf_rx_port[i], buf))
 				break;
 		}
-		if (i >= sizeof(ad9361_rf_tx_port) / sizeof(ad9361_rf_tx_port[0]))
+		if (i >= ARRAY_SIZE(ad9361_rf_tx_port))
 			return -EINVAL;
 
 		ret = ad9361_set_rx_rf_port_input(ad9361_phy, i);
@@ -811,11 +810,11 @@ static int set_gain_control_mode(void *device, char *buf, uint32_t len,
 	uint32_t i;
 	int ret;
 
-	for (i = 0; i < sizeof(ad9361_agc_modes) / sizeof(ad9361_agc_modes[0]); i++) {
+	for (i = 0; i < ARRAY_SIZE(ad9361_agc_modes); i++) {
 		if (!strcmp(ad9361_agc_modes[i], buf))
 			break;
 	}
-	if (i >= sizeof(ad9361_agc_modes) / sizeof(ad9361_agc_modes[0]))
+	if (i >= ARRAY_SIZE(ad9361_agc_modes))
 		return -EINVAL;
 
 	mode = i;
@@ -1000,11 +999,11 @@ static int set_gain_control_mode_available(void *device, char *buf,
 	int ret;
 	uint16_t i;
 
-	for (i = 0; i < sizeof(ad9361_agc_modes) / sizeof(ad9361_agc_modes[0]); i++) {
+	for (i = 0; i < ARRAY_SIZE(ad9361_agc_modes); i++) {
 		if (!strcmp(ad9361_agc_modes[i], buf))
 			break;
 	}
-	if (i >= sizeof(ad9361_agc_modes) / sizeof(ad9361_agc_modes[0]))
+	if (i >= ARRAY_SIZE(ad9361_agc_modes))
 		return -EINVAL;
 
 	mode = i;
@@ -2259,8 +2258,7 @@ int32_t iio_ad9361_init(struct iio_ad9361_desc **desc,
 	if (!iio_ad9361_inst)
 		return FAILURE;
 
-	iio_ad9361_inst->dev_descriptor.num_ch = sizeof(iio_ad9361_channels) / sizeof(
-				iio_ad9361_channels[0]);
+	iio_ad9361_inst->dev_descriptor.num_ch = ARRAY_SIZE(iio_ad9361_channels);
 	iio_ad9361_inst->dev_descriptor.channels = iio_ad9361_channels;
 	iio_ad9361_inst->dev_descriptor.attributes = global_attributes;
 	iio_ad9361_inst->dev_descriptor.debug_attributes = NULL;
