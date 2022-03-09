@@ -189,7 +189,7 @@ struct ad5686_dev {
 	/* I2C */
 	no_os_i2c_desc	*i2c_desc;
 	/* SPI */
-	spi_desc	*spi_desc;
+	no_os_spi_desc	*spi_desc;
 	/* GPIO */
 	struct no_os_gpio_desc	*gpio_reset;
 	struct no_os_gpio_desc	*gpio_ldac;
@@ -204,7 +204,7 @@ struct ad5686_init_param {
 	/* I2C */
 	no_os_i2c_init_param	i2c_init;
 	/* SPI */
-	spi_init_param	spi_init;
+	no_os_spi_init_param	spi_init;
 	/* GPIO */
 	struct no_os_gpio_init_param	gpio_reset;
 	struct no_os_gpio_init_param	gpio_ldac;

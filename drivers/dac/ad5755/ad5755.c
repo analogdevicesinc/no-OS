@@ -91,7 +91,7 @@ int8_t ad5755_init(struct ad5755_dev **device,
 	AD5755_POC_OUT;
 	AD5755_POC_LOW;
 
-	status |= spi_init(&dev->spi_desc, &init_param.spi_init);
+	status |= no_os_spi_init(&dev->spi_desc, &init_param.spi_init);
 	/* Device Setup. */
 	/* Configure the POC bit, STATREAD bit and ShtCcLim bit. */
 	ad5755_set_control_registers(dev,
@@ -164,7 +164,7 @@ int32_t ad5755_remove(struct ad5755_dev *dev)
 {
 	int32_t ret;
 
-	ret = spi_remove(dev->spi_desc);
+	ret = no_os_spi_remove(dev->spi_desc);
 
 	ret |= no_os_gpio_remove(dev->gpio_ldac);
 	ret |= no_os_gpio_remove(dev->gpio_rst);
@@ -213,9 +213,9 @@ int32_t ad5755_get_register_value(struct ad5755_dev *dev,
 	if(dev->p_ad5755_st->enable_packet_error_check) {
 		buffer[3] = ad5755_check_crc(buffer, 3);
 	}
-	spi_write_and_read(dev->spi_desc,
-			   buffer,
-			   3 + dev->p_ad5755_st->enable_packet_error_check);
+	no_os_spi_write_and_read(dev->spi_desc,
+				 buffer,
+				 3 + dev->p_ad5755_st->enable_packet_error_check);
 	command = AD5755_ISR_WRITE |
 		  AD5755_ISR_DUT_AD1(dev->p_ad5755_st->pin_ad1state) |
 		  AD5755_ISR_DUT_AD0(dev->p_ad5755_st->pin_ad0state) |
@@ -226,9 +226,9 @@ int32_t ad5755_get_register_value(struct ad5755_dev *dev,
 	if(dev->p_ad5755_st->enable_packet_error_check) {
 		buffer[3] = ad5755_check_crc(buffer, 3);
 	}
-	spi_write_and_read(dev->spi_desc,
-			   buffer,
-			   3 + dev->p_ad5755_st->enable_packet_error_check);
+	no_os_spi_write_and_read(dev->spi_desc,
+				 buffer,
+				 3 + dev->p_ad5755_st->enable_packet_error_check);
 	reg_value = ((uint16_t)buffer[1] << 8) + buffer[2];
 	/* Check the CRC. */
 	if(dev->p_ad5755_st->enable_packet_error_check) {
@@ -285,13 +285,13 @@ uint16_t ad5755_set_register_value(struct ad5755_dev *dev,
 		buff[3] = ad5755_check_crc(buff, 3);
 	}
 	if(dev->p_ad5755_st->stat_readbit == 0) {
-		spi_write_and_read(dev->spi_desc,
-				   buff,
-				   3 + dev->p_ad5755_st->enable_packet_error_check);
+		no_os_spi_write_and_read(dev->spi_desc,
+					 buff,
+					 3 + dev->p_ad5755_st->enable_packet_error_check);
 	} else {
-		spi_write_and_read(dev->spi_desc,
-				   buff,
-				   3 + dev->p_ad5755_st->enable_packet_error_check);
+		no_os_spi_write_and_read(dev->spi_desc,
+					 buff,
+					 3 + dev->p_ad5755_st->enable_packet_error_check);
 		status_reg = (buff[1] << 8) + buff[2];
 	}
 

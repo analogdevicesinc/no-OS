@@ -63,7 +63,7 @@ int32_t adxrs290_reg_read(struct adxrs290_dev *dev, uint8_t address,
 	int32_t ret = SUCCESS;
 	uint8_t buff[] = {address | 0x80, 0};
 
-	ret = spi_write_and_read(dev->spi_desc, buff, 2);
+	ret = no_os_spi_write_and_read(dev->spi_desc, buff, 2);
 	if (IS_ERR_VALUE(ret))
 		return FAILURE;
 
@@ -84,7 +84,7 @@ int32_t adxrs290_reg_write(struct adxrs290_dev *dev, uint8_t address,
 {
 	uint8_t buff[] = {address & 0x7F, data};
 
-	return spi_write_and_read(dev->spi_desc, buff, 2);
+	return no_os_spi_write_and_read(dev->spi_desc, buff, 2);
 }
 
 /**
@@ -214,7 +214,7 @@ int32_t adxrs290_get_rate_data(struct adxrs290_dev *dev,
 	data[0] = 0x80 | (ADXRS290_REG_DATAX0+ch*2);
 	data[1] = 0x80 | (ADXRS290_REG_DATAX1+ch*2);
 	data[2] = 0;
-	ret = spi_write_and_read(dev->spi_desc, data, 3);
+	ret = no_os_spi_write_and_read(dev->spi_desc, data, 3);
 	if (IS_ERR_VALUE(ret))
 		return ret;
 
@@ -238,7 +238,7 @@ int32_t adxrs290_get_temp_data(struct adxrs290_dev *dev, int16_t *temp)
 	data[1] = 0x80 | ADXRS290_REG_TEMP1;
 	data[2] = 0;
 
-	ret = spi_write_and_read(dev->spi_desc, data, 3);
+	ret = no_os_spi_write_and_read(dev->spi_desc, data, 3);
 	if (IS_ERR_VALUE(ret))
 		return ret;
 
@@ -270,7 +270,7 @@ int32_t adxrs290_get_burst_data(struct adxrs290_dev *dev, int16_t *burst_data,
 
 	data[data_bytes] = 0;
 
-	ret = spi_write_and_read(dev->spi_desc, data, data_bytes + 1);
+	ret = no_os_spi_write_and_read(dev->spi_desc, data, data_bytes + 1);
 	if (IS_ERR_VALUE(ret))
 		return ret;
 
@@ -346,7 +346,7 @@ int32_t adxrs290_init(struct adxrs290_dev **device,
 	if (!dev)
 		return -ENOMEM;
 
-	ret = spi_init(&dev->spi_desc, &init_param->spi_init);
+	ret = no_os_spi_init(&dev->spi_desc, &init_param->spi_init);
 	if (IS_ERR_VALUE(ret))
 		goto error_dev;
 
@@ -401,7 +401,7 @@ error_gpio:
 	no_os_gpio_remove(dev->gpio_sync);
 
 error_spi:
-	spi_remove(dev->spi_desc);
+	no_os_spi_remove(dev->spi_desc);
 
 error_dev:
 	free(dev);
@@ -416,7 +416,7 @@ error_dev:
  */
 int32_t adxrs290_remove(struct adxrs290_dev *dev)
 {
-	spi_remove(dev->spi_desc);
+	no_os_spi_remove(dev->spi_desc);
 	no_os_gpio_remove(dev->gpio_sync);
 	free(dev);
 

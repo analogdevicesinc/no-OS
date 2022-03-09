@@ -74,7 +74,7 @@ int main(void)
 	uint8_t pwr_good;
 
 	// SPI configuration
-	struct spi_init_param ad9625_0_spi_param = {
+	struct no_os_spi_init_param ad9625_0_spi_param = {
 		.device_id = SPI_DEVICE_ID,
 		.max_speed_hz = 2000000u,
 		.chip_select = 0,
@@ -82,7 +82,7 @@ int main(void)
 		.platform_ops = &xil_spi_ops
 	};
 
-	struct spi_init_param ad9625_1_spi_param = {
+	struct no_os_spi_init_param ad9625_1_spi_param = {
 		.device_id = SPI_DEVICE_ID,
 		.max_speed_hz = 2000000u,
 		.chip_select = 1,

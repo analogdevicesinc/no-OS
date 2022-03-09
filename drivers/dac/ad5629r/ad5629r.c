@@ -101,7 +101,7 @@ int8_t ad5629r_init(struct ad5629r_dev **device,
 	dev->act_device = init_param.act_device;
 
 	if (chip_info[dev->act_device].communication == com_spi) {
-		status = spi_init(&dev->spi_desc, &init_param.spi_init);
+		status = no_os_spi_init(&dev->spi_desc, &init_param.spi_init);
 	} else {
 		status = no_os_i2c_init(&dev->i2c_desc, &init_param.i2c_init);
 	}
@@ -131,7 +131,7 @@ int32_t ad5629r_remove(struct ad5629r_dev *dev)
 	int32_t ret;
 
 	if (chip_info[dev->act_device].communication == com_spi)
-		ret = spi_remove(dev->spi_desc);
+		ret = no_os_spi_remove(dev->spi_desc);
 	else
 		ret = no_os_i2c_remove(dev->i2c_desc);
 
@@ -171,9 +171,9 @@ void ad5629r_set_ctrl(struct ad5629r_dev *dev,
 		data_buff[2] = (0xFF00 & data) >> 8;
 		data_buff[3] = (0xFF & data);
 
-		spi_write_and_read(dev->spi_desc,
-				   data_buff,
-				   4);
+		no_os_spi_write_and_read(dev->spi_desc,
+					 data_buff,
+					 4);
 	} else {
 		if (chip_info[dev->act_device].communication == com_i2c) {
 			data_buff[0] = (function << 4) | dac_n;
@@ -216,9 +216,9 @@ void ad5629r_set_input_reg(struct ad5629r_dev *dev,
 		data_buff[2] = (0xFF0 & dac_value) >> 4;
 		data_buff[3] = (0xF & dac_value) << 4;
 
-		spi_write_and_read(dev->spi_desc,
-				   data_buff,
-				   4);
+		no_os_spi_write_and_read(dev->spi_desc,
+					 data_buff,
+					 4);
 	} else {
 		data_buff[0] = (function << 4) | dac_n;
 		data_buff[1] = (dac_value & 0xFF00) >> 8;

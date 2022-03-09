@@ -263,7 +263,7 @@ static int hmc7044_write(struct hmc7044_dev *dev,
 	buf[1] = cmd & 0xFF;
 	buf[2] = val;
 
-	return spi_write_and_read(dev->spi_desc, buf, ARRAY_SIZE(buf));
+	return no_os_spi_write_and_read(dev->spi_desc, buf, ARRAY_SIZE(buf));
 }
 
 /**
@@ -285,7 +285,7 @@ int32_t hmc7044_read(struct hmc7044_dev *dev, uint16_t reg, uint8_t *val)
 	buf[1] = cmd & 0xFF;
 	buf[2] = 0;
 
-	ret = spi_write_and_read(dev->spi_desc, buf, ARRAY_SIZE(buf));
+	ret = no_os_spi_write_and_read(dev->spi_desc, buf, ARRAY_SIZE(buf));
 	if (ret < 0)
 		return ret;
 
@@ -796,7 +796,7 @@ int32_t hmc7044_init(struct hmc7044_dev **device,
 	if (!dev)
 		return FAILURE;
 
-	ret = spi_init(&dev->spi_desc, init_param->spi_init);
+	ret = no_os_spi_init(&dev->spi_desc, init_param->spi_init);
 	if (ret < 0)
 		return ret;
 
@@ -890,7 +890,7 @@ int32_t hmc7044_remove(struct hmc7044_dev *device)
 {
 	int32_t ret;
 
-	ret = spi_remove(device->spi_desc);
+	ret = no_os_spi_remove(device->spi_desc);
 	free(device->channels);
 	free(device);
 

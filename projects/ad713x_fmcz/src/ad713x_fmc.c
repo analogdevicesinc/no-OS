@@ -153,7 +153,7 @@ int main()
 		.platform_ops = &xil_gpio_ops,
 		.extra = &gpio_extra_param
 	};
-	struct spi_desc *spi_eng_desc;
+	struct no_os_spi_desc *spi_eng_desc;
 	struct spi_engine_init_param spi_eng_init_param  = {
 		.type = SPI_ENGINE,
 		.spi_engine_baseaddr = AD7134_SPI_ENGINE_BASEADDR,
@@ -161,7 +161,7 @@ int main()
 		.data_width = 32,
 		.ref_clk_hz = AD713x_SPI_ENG_REF_CLK_FREQ_HZ
 	};
-	const struct spi_init_param spi_eng_init_prm  = {
+	const struct no_os_spi_init_param spi_eng_init_prm  = {
 		.chip_select = AD7134_1_SPI_CS,
 		.max_speed_hz = 48000000,
 		.mode = NO_OS_SPI_MODE_1,
@@ -262,7 +262,7 @@ int main()
 	spi_engine_offload_init_param.offload_config = OFFLOAD_RX_EN;
 	spi_engine_offload_init_param.dma_flags = &spi_eng_dma_flg;
 
-	ret = spi_init(&spi_eng_desc, &spi_eng_init_prm);
+	ret = no_os_spi_init(&spi_eng_desc, &spi_eng_init_prm);
 	if (ret != SUCCESS)
 		return FAILURE;
 

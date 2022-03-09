@@ -60,12 +60,12 @@ const struct xil_spi_init_param spi_extra = {
 	.type = SPI_PS,
 	.flags = NULL
 };
-const struct spi_init_param spi_ip = {
+const struct no_os_spi_init_param spi_ip = {
 	.device_id = SPI_DEVICE_ID,
 	.max_speed_hz = 10000,
 	.chip_select = AD5758_SPI_CS,
 	.mode = NO_OS_SPI_MODE_1,
-	.bit_order = SPI_BIT_ORDER_MSB_FIRST,
+	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
 	.platform_ops = &xil_spi_ops,
 	.extra = &spi_extra
 };

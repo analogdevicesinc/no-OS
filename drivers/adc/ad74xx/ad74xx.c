@@ -72,7 +72,7 @@ int8_t ad74xx_init(struct ad74xx_dev **device,
 		return -1;
 
 	/* SPI */
-	status = spi_init(&dev->spi_desc, &init_param.spi_init);
+	status = no_os_spi_init(&dev->spi_desc, &init_param.spi_init);
 
 	/* GPIO */
 	status |= no_os_gpio_get(&dev->gpio_cs, &init_param.gpio_cs);
@@ -100,7 +100,7 @@ int32_t ad74xx_remove(struct ad74xx_dev *dev)
 {
 	int32_t status;
 
-	status = spi_remove(dev->spi_desc);
+	status = no_os_spi_remove(dev->spi_desc);
 
 	status = no_os_gpio_remove(dev->gpio_cs);
 
@@ -123,10 +123,10 @@ void ad74xx_power_down(struct ad74xx_dev *dev)
 	uint8_t dummy_value = 0;
 
 	AD74XX_CS_LOW;
-	spi_write_and_read(dev->spi_desc, &dummy_value, 1);
+	no_os_spi_write_and_read(dev->spi_desc, &dummy_value, 1);
 	AD74XX_CS_HIGH;     // CS is brought "High" between 2nd falling edge of SCLK
 	// and 10th falling edge of SCLK(8th falling edge, here)
-	spi_write_and_read(dev->spi_desc, &dummy_value, 1);
+	no_os_spi_write_and_read(dev->spi_desc, &dummy_value, 1);
 }
 
 /***************************************************************************//**
@@ -142,7 +142,7 @@ void ad74xx_power_up(struct ad74xx_dev *dev)
 {
 	uint8_t dummy_value[2] = {0, 0};
 
-	spi_write_and_read(dev->spi_desc, dummy_value, 2);
+	no_os_spi_write_and_read(dev->spi_desc, dummy_value, 2);
 }
 
 /***************************************************************************//**
@@ -157,7 +157,7 @@ uint16_t ad74xx_get_register_value(struct ad74xx_dev *dev)
 	uint8_t data_word[2] = {0, 0};
 	uint16_t conv_result = 0;
 
-	spi_write_and_read(dev->spi_desc, data_word, 2);
+	no_os_spi_write_and_read(dev->spi_desc, data_word, 2);
 	switch(dev->device_bits_number) {
 	case 8:
 		conv_result = (((uint16_t)(data_word[0] & 0x1F)) << 8) +

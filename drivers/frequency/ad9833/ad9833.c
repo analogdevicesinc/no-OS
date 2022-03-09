@@ -120,8 +120,8 @@ int8_t ad9833_init(struct ad9833_dev **device,
 	dev->test_opbiten = 0;
 
 	/* Setup SPI interface. */
-	status = spi_init(&dev->spi_desc,
-			  &init_param.spi_init);
+	status = no_os_spi_init(&dev->spi_desc,
+				&init_param.spi_init);
 	/* Initialize board. */
 	spi_data |= AD9833_CTRLRESET;
 	ad9833_tx_spi(dev,
@@ -152,7 +152,7 @@ int32_t ad9833_remove(struct ad9833_dev *dev)
 {
 	int32_t ret;
 
-	ret = spi_remove(dev->spi_desc);
+	ret = no_os_spi_remove(dev->spi_desc);
 
 	ret |= no_os_gpio_remove(dev->gpio_psel);
 	ret |= no_os_gpio_remove(dev->gpio_fsel);
@@ -180,7 +180,7 @@ void ad9833_tx_spi(struct ad9833_dev *dev,
 
 	tx_buffer[0] = (uint8_t) ((value & 0x00ff00) >> 8); // data to be sent
 	tx_buffer[1] = (uint8_t) (value & 0x0000ff);        // in 8 bit packets
-	if (spi_write_and_read(dev->spi_desc, tx_buffer, 2) != SUCCESS) {
+	if (no_os_spi_write_and_read(dev->spi_desc, tx_buffer, 2) != 0) {
 		/* Initialize board. */
 		spi_data |= AD9833_CTRLRESET;
 		ad9833_tx_spi(dev,

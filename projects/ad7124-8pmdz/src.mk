@@ -6,7 +6,7 @@ SRC_DIRS += $(NO-OS)/iio/iio_app
 # Add to SRCS source files to be build in the project
 SRCS += $(NO-OS)/drivers/adc/ad7124/ad7124.c \
 	$(NO-OS)/drivers/adc/ad7124/iio_ad7124.c \
-	$(DRIVERS)/api/spi.c \
+	$(DRIVERS)/api/no_os_spi.c \
 	$(DRIVERS)/api/no_os_irq.c
 
 # Add to INCS inlcude files to be build in the porject

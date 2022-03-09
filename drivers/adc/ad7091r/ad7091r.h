@@ -52,12 +52,12 @@
 
 struct ad7091r_dev {
 	/* SPI */
-	spi_desc	*spi_desc;
+	no_os_spi_desc	*spi_desc;
 };
 
 struct ad7091r_init_param {
 	/* SPI */
-	spi_init_param	spi_init;
+	no_os_spi_init_param	spi_init;
 };
 
 /******************************************************************************/

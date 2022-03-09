@@ -8,13 +8,13 @@ SRC_DIRS += $(INCLUDE)
 
 SRCS += $(NO-OS)/util/util.c \
 	$(NO-OS)/util/no_os_list.c \
-	$(DRIVERS)/api/spi.c \
+	$(DRIVERS)/api/no_os_spi.c \
 	$(DRIVERS)/api/no_os_irq.c \
 	$(DRIVERS)/api/no_os_gpio.c \
 	$(DRIVERS)/platform/$(PLATFORM)/$(PLATFORM)_spi.c \
 	$(DRIVERS)/platform/$(PLATFORM)/$(PLATFORM)_irq.c \
 	$(DRIVERS)/platform/$(PLATFORM)/$(PLATFORM)_gpio.c \
-	$(DRIVERS)/platform/$(PLATFORM)/rtc.c \
+	$(DRIVERS)/platform/$(PLATFORM)/no_os_rtc.c \
 	$(DRIVERS)/platform/$(PLATFORM)/delay.c \
 	$(DRIVERS)/platform/$(PLATFORM)/timer.c \
 	$(DRIVERS)/platform/$(PLATFORM)/uart.c

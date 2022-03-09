@@ -681,7 +681,7 @@ enum ad717x_mpc_clkdel {
  */
 struct ad713x_dev {
 	/** SPI layer handler. */
-	struct spi_desc        	*spi_desc;
+	struct no_os_spi_desc        	*spi_desc;
 	/** MODE GPIO handler. */
 	struct no_os_gpio_desc		*gpio_mode;
 	/** DCLKMODE GPIO handler. */
@@ -706,7 +706,7 @@ struct ad713x_dev {
  */
 struct ad713x_init_param {
 	/** SPI layer initialization structure. */
-	struct spi_init_param spi_init_prm;
+	struct no_os_spi_init_param spi_init_prm;
 	/** MODE GPIO initialization structure. */
 	struct no_os_gpio_init_param *gpio_mode;
 	/** DCLKMODE GPIO initialization structure. */
@@ -736,7 +736,7 @@ struct ad713x_init_param {
 	bool 			clk_delay_en;
 	/** SPI layer handler if the SPI bus is shared with another device. In this
 	 *  case the SPI should not be initialized again. */
-	struct spi_desc *spi_common_dev;
+	struct no_os_spi_desc *spi_common_dev;
 };
 
 /******************************************************************************/

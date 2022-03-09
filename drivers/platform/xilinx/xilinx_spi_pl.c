@@ -66,7 +66,7 @@
  * Used to store current spi device configuration in order to not update it for
  * each spi transaction if not needed.
  */
-static struct spi_desc g_spi_desc[XPAR_XSPI_NUM_INSTANCES];
+static struct no_os_spi_desc g_spi_desc[XPAR_XSPI_NUM_INSTANCES];
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -82,7 +82,7 @@ struct xspi_desc {
 
 /* Structure used to iterate over SPI messages */
 struct msg_iter {
-	struct spi_msg	*msgs;
+	struct no_os_spi_msg	*msgs;
 	uint32_t	len;
 	uint32_t	i;
 	uint32_t	buff_i;
@@ -118,7 +118,7 @@ static inline void _wr_mask(struct xspi_desc *xdesc, uint32_t reg,
 }
 
 /* Update spi device configuration if needed */
-static void _update_mode(struct spi_desc *desc)
+static void _update_mode(struct no_os_spi_desc *desc)
 {
 	uint32_t		val;
 	uint32_t		mask;
@@ -128,11 +128,11 @@ static void _update_mode(struct spi_desc *desc)
 		return ;
 
 	/* Update mode */
-	val = desc->mode | SPI_CPOL ? XSP_CR_CLK_POLARITY_MASK : 0;
-	val |= desc->mode | SPI_CPHA ? XSP_CR_CLK_PHASE_MASK : 0;
+	val = desc->mode | NO_OS_SPI_CPOL ? XSP_CR_CLK_POLARITY_MASK : 0;
+	val |= desc->mode | NO_OS_SPI_CPHA ? XSP_CR_CLK_PHASE_MASK : 0;
 	mask = XSP_CR_CLK_POLARITY_MASK | XSP_CR_CLK_PHASE_MASK;
 
-	val |= desc->bit_order == SPI_BIT_ORDER_LSB_FIRST ?
+	val |= desc->bit_order == NO_OS_SPI_BIT_ORDER_LSB_FIRST ?
 	       XSP_CR_LSB_MSB_FIRST_MASK : 0;
 	mask |= XSP_CR_LSB_MSB_FIRST_MASK;
 
@@ -179,10 +179,10 @@ static int32_t _xil_spi_init_dev(struct xspi_desc *xdesc)
 }
 
 /* Initialize spi_desc structure and device */
-static int32_t xil_spi_init_pl(struct spi_desc **desc,
-			       const struct spi_init_param *param)
+static int32_t xil_spi_init_pl(struct no_os_spi_desc **desc,
+			       const struct no_os_spi_init_param *param)
 {
-	struct spi_desc		*ldesc;
+	struct no_os_spi_desc		*ldesc;
 	struct xspi_desc	*xdesc;
 	int32_t			err;
 	XSpi_Config		*cfg;
@@ -197,7 +197,7 @@ static int32_t xil_spi_init_pl(struct spi_desc **desc,
 	if (param->chip_select > cfg->NumSlaveBits)
 		return -EINVAL;
 
-	ldesc = (struct spi_desc *)calloc(1, sizeof(*ldesc));
+	ldesc = (struct no_os_spi_desc *)calloc(1, sizeof(*ldesc));
 	if (!ldesc)
 		return -ENOMEM;
 
@@ -231,7 +231,7 @@ error:
 }
 
 /* Remove allocated resources */
-static int32_t xil_spi_remove_pl(struct spi_desc *desc)
+static int32_t xil_spi_remove_pl(struct no_os_spi_desc *desc)
 {
 	if (!desc)
 		return -EINVAL;
@@ -294,7 +294,7 @@ static uint32_t _rd_fifo(struct xspi_desc *xdesc, uint8_t *data,
 /* If start is 0 stop transfer, else start it.
  * CS will be asserted if needed. If different CS othere than the one needed
  * is asserted. Deassert it and assert correct one */
-static void _xil_spi_start_transfer(struct spi_desc *desc, uint8_t start)
+static void _xil_spi_start_transfer(struct no_os_spi_desc *desc, uint8_t start)
 {
 	struct xspi_desc	*xdesc;
 
@@ -320,7 +320,8 @@ static void _xil_spi_start_transfer(struct spi_desc *desc, uint8_t start)
 
 
 /* SPI polled transfer */
-static int32_t xil_spi_write_and_read_pl(struct spi_desc *desc, uint8_t *data,
+static int32_t xil_spi_write_and_read_pl(struct no_os_spi_desc *desc,
+		uint8_t *data,
 		uint16_t bytes_number)
 {
 	struct xspi_desc	*xdesc;
@@ -347,7 +348,7 @@ static int32_t xil_spi_write_and_read_pl(struct spi_desc *desc, uint8_t *data,
 }
 
 /* Get type of message. It can be READ, WRITE or both */
-static uint32_t _get_msg_type(struct spi_msg *msg)
+static uint32_t _get_msg_type(struct no_os_spi_msg *msg)
 {
 	uint32_t	type;
 
@@ -364,7 +365,7 @@ static uint32_t _get_msg_type(struct spi_msg *msg)
 static void _get_data(struct msg_iter *it, uint8_t **buff, uint32_t *len,
 		      uint32_t *type)
 {
-	struct spi_msg *msg;
+	struct no_os_spi_msg *msg;
 
 	if (it->i == it->len) {
 		*len = 0;
@@ -393,7 +394,7 @@ static void _get_data(struct msg_iter *it, uint8_t **buff, uint32_t *len,
 static void _increment_iter(struct msg_iter *it, uint32_t len,
 			    uint8_t *cs_change, uint8_t *new_type)
 {
-	struct spi_msg	*msg;
+	struct no_os_spi_msg	*msg;
 	uint32_t	type;
 	uint32_t	extra_len;
 
@@ -427,7 +428,8 @@ static void _increment_iter(struct msg_iter *it, uint32_t len,
 /*
  * SPI polling transfer of multiple messages.
  */
-static int32_t xil_spi_transfer_pl(struct spi_desc *desc, struct spi_msg *msgs,
+static int32_t xil_spi_transfer_pl(struct no_os_spi_desc *desc,
+				   struct no_os_spi_msg *msgs,
 				   uint32_t len)
 
 {
@@ -520,7 +522,7 @@ static int32_t xil_spi_transfer_pl(struct spi_desc *desc, struct spi_msg *msgs,
 	return SUCCESS;
 }
 
-const struct spi_platform_ops xil_spi_reg_ops_pl = {
+const struct no_os_spi_platform_ops xil_spi_reg_ops_pl = {
 	.init = xil_spi_init_pl,
 	.remove = xil_spi_remove_pl,
 	.write_and_read = xil_spi_write_and_read_pl,

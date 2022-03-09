@@ -65,20 +65,20 @@ extern "C"
  * @param param[in] - The structure that contains the SPI parameters.
  * @return SUCCESS in case of success, negative error code otherwise.
  */
-int32_t mbed_spi_init(struct spi_desc **desc,
-		      const struct spi_init_param *param)
+int32_t mbed_spi_init(struct no_os_spi_desc **desc,
+		      const struct no_os_spi_init_param *param)
 {
 	mbed::SPI *spi;					// Pointer to new spi instance
 	DigitalOut *csb;  				// pointer to new CSB gpio instance
 	struct mbed_spi_desc *mbed_spi_desc;	// Pointer to mbed spi descriptor
 	use_gpio_ssel_t use_gpio_ssel;	// For CSB hardware (implicit) control
-	struct spi_desc *spi_desc;
+	struct no_os_spi_desc *spi_desc;
 
 	if (!desc || !param)
 		return -EINVAL;
 
 	/* Allocate memory for spi_desc structure */
-	spi_desc = (struct spi_desc *)calloc(1, sizeof(*spi_desc));
+	spi_desc = (struct no_os_spi_desc *)calloc(1, sizeof(*spi_desc));
 	if (!spi_desc)
 		return -ENOMEM;
 
@@ -155,11 +155,11 @@ err_mbed_spi_desc:
 }
 
 /**
- * @brief Free the resources allocated by spi_init().
+ * @brief Free the resources allocated by no_os_spi_init().
  * @param desc[in, out] - The SPI descriptor.
  * @return SUCCESS in case of success, negative error code otherwise.
  */
-int32_t mbed_spi_remove(struct spi_desc *desc)
+int32_t mbed_spi_remove(struct no_os_spi_desc *desc)
 {
 	if (!desc || !desc->extra)
 		return -EINVAL;
@@ -188,7 +188,7 @@ int32_t mbed_spi_remove(struct spi_desc *desc)
  * @param bytes_number[in] - Number of bytes to write/read.
  * @return SUCCESS in case of success, negative error code otherwise.
  */
-int32_t mbed_spi_write_and_read(struct spi_desc *desc,
+int32_t mbed_spi_write_and_read(struct no_os_spi_desc *desc,
 				uint8_t *data,
 				uint16_t bytes_number)
 {
@@ -222,7 +222,7 @@ int32_t mbed_spi_write_and_read(struct spi_desc *desc,
  * @return SUCCESS in case of success, negative error code otherwise.
  * @note Use of this function requires CSB pin to be software controlled.
  */
-int32_t mbed_spi_transfer(struct spi_desc *desc, struct spi_msg *msgs,
+int32_t mbed_spi_transfer(struct no_os_spi_desc *desc, struct no_os_spi_msg *msgs,
 			  uint32_t num_of_msgs)
 {
 	mbed::SPI *spi; 			// pointer to new spi instance
@@ -261,7 +261,7 @@ int32_t mbed_spi_transfer(struct spi_desc *desc, struct spi_msg *msgs,
 /**
 * @brief Mbed platform specific SPI platform ops structure
 */
-const struct spi_platform_ops mbed_spi_ops = {
+const struct no_os_spi_platform_ops mbed_spi_ops = {
 	.init = &mbed_spi_init,
 	.write_and_read = &mbed_spi_write_and_read,
 	.transfer = &mbed_spi_transfer,

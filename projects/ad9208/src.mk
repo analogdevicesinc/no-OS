@@ -31,7 +31,7 @@ INCS	+= $(INCLUDE)/no_os_uart.h \
 		
 endif
 
-SRCS += $(DRIVERS)/api/spi.c \
+SRCS += $(DRIVERS)/api/no_os_spi.c \
 	$(DRIVERS)/api/no_os_gpio.c \
 	$(DRIVERS)/frequency/hmc7044/hmc7044.c
 SRCS += $(DRIVERS)/axi_core/jesd204/axi_adxcvr.c \

@@ -657,7 +657,7 @@ static int32_t ad9081_setup(struct ad9081_phy *phy)
 		return ret;
 
 
-	/* setup txfe jtx converter mapping */
+	/* Setup txfe jtx converter mapping */
 	for (i = 0; i < ARRAY_SIZE(phy->jtx_link_rx[0].link_converter_select);
 	     i++) {
 		ret = adi_ad9081_jesd_tx_conv_sel_set(
@@ -902,7 +902,7 @@ static int32_t ad9081_spi_xfer(void *user_data, uint8_t *in_data,
 			data[i] =  in_data[bytes_number - i + 1];
 	}
 
-	ret = spi_write_and_read(phy->spi_desc, data, bytes_number);
+	ret = no_os_spi_write_and_read(phy->spi_desc, data, bytes_number);
 	if (ret != SUCCESS)
 		return FAILURE;
 
@@ -1066,7 +1066,7 @@ int32_t ad9081_init(struct ad9081_phy **dev,
 	if (ret < 0)
 		goto error_1;
 
-	ret = spi_init(&phy->spi_desc, init_param->spi_init);
+	ret = no_os_spi_init(&phy->spi_desc, init_param->spi_init);
 	if (ret < 0)
 		goto error_2;
 
@@ -1081,7 +1081,7 @@ int32_t ad9081_init(struct ad9081_phy **dev,
 	phy->ad9081.hal_info.reset_pin_ctrl = ad9081_reset_pin_ctrl;
 	phy->ad9081.hal_info.sdo = SPI_SDO;
 	phy->ad9081.hal_info.msb = (phy->spi_desc->bit_order ==
-				    SPI_BIT_ORDER_MSB_FIRST) ? SPI_MSB_FIRST : SPI_MSB_LAST;
+				    NO_OS_SPI_BIT_ORDER_MSB_FIRST) ? SPI_MSB_FIRST : SPI_MSB_LAST;
 	phy->ad9081.hal_info.addr_inc = SPI_ADDR_INC_AUTO;
 	phy->ad9081.hal_info.spi_xfer = ad9081_spi_xfer;
 	phy->ad9081.hal_info.log_write = ad9081_log_write;
@@ -1127,7 +1127,7 @@ int32_t ad9081_init(struct ad9081_phy **dev,
 	return SUCCESS;
 
 error_3:
-	spi_remove(phy->spi_desc);
+	no_os_spi_remove(phy->spi_desc);
 error_2:
 	no_os_gpio_remove(phy->gpio_reset);
 error_1:
@@ -1146,7 +1146,7 @@ int32_t ad9081_remove(struct ad9081_phy *dev)
 	int32_t ret;
 
 	ret = no_os_gpio_remove(dev->gpio_reset);
-	ret += spi_remove(dev->spi_desc);
+	ret += no_os_spi_remove(dev->spi_desc);
 	free(dev);
 
 	return ret;

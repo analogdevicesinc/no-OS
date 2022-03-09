@@ -132,7 +132,7 @@ int main(void)
 		.flags = 0
 	};
 
-	struct spi_init_param hmc7044_spi_param = {
+	struct no_os_spi_init_param hmc7044_spi_param = {
 		.device_id = SPI_DEVICE_ID,
 		.max_speed_hz = 10000000,
 		.mode = NO_OS_SPI_MODE_0,
@@ -207,7 +207,7 @@ int main(void)
 		.channels = chan_spec,
 	};
 
-	struct spi_init_param ad9208_0_spi_param = {
+	struct no_os_spi_init_param ad9208_0_spi_param = {
 		.max_speed_hz = 10000000,
 		.mode = NO_OS_SPI_MODE_3,
 		.chip_select = SPI_AD9208_0_CS,
@@ -215,7 +215,7 @@ int main(void)
 		.extra = &xil_spi_param
 	};
 
-	struct spi_init_param ad9208_1_spi_param = {
+	struct no_os_spi_init_param ad9208_1_spi_param = {
 		.max_speed_hz = 10000000,
 		.mode = NO_OS_SPI_MODE_3,
 		.chip_select = SPI_AD9208_CS,

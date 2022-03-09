@@ -180,7 +180,7 @@ struct ada4250_init_param {
 	/* Device ID */
 	enum ada4250_id device_id;
 	/* SPI Initialization parameters */
-	struct spi_init_param	*spi_init;
+	struct no_os_spi_init_param	*spi_init;
 	/* GPIO Initialization parameters */
 	struct no_os_gpio_init_param	*gpio_g2_param;
 	struct no_os_gpio_init_param	*gpio_g1_param;
@@ -211,7 +211,7 @@ struct ada4250_dev {
 	/* Device ID */
 	enum ada4250_id device_id;
 	/* SPI Initialization parameters */
-	struct spi_desc	*spi_desc;
+	struct no_os_spi_desc	*spi_desc;
 	/* GPIO Descriptors */
 	struct no_os_gpio_desc	*gpio_g2;
 	struct no_os_gpio_desc	*gpio_g1;

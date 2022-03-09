@@ -10,7 +10,7 @@
 ################################################################################
 
 SRCS += $(PROJECT)/src/ad469x_fmcz.c
-SRCS += $(DRIVERS)/api/spi.c \
+SRCS += $(DRIVERS)/api/no_os_spi.c \
 	$(DRIVERS)/api/no_os_gpio.c \
 	$(DRIVERS)/adc/ad469x/ad469x.c \
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.c \

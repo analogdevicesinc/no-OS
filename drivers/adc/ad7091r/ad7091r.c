@@ -72,9 +72,9 @@ int8_t ad7091r_init(struct ad7091r_dev **device,
 	if (!dev)
 		return -1;
 
-	status = spi_init(&dev->spi_desc, &init_param.spi_init);
+	status = no_os_spi_init(&dev->spi_desc, &init_param.spi_init);
 	/* Ensures that last state of SDO is high. */
-	spi_write_and_read(dev->spi_desc, &tmp_val, 1);
+	no_os_spi_write_and_read(dev->spi_desc, &tmp_val, 1);
 	ad7091r_software_reset(dev);
 
 	*device = dev;
@@ -93,7 +93,7 @@ int32_t ad7091r_remove(struct ad7091r_dev *dev)
 {
 	int32_t ret;
 
-	ret = spi_remove(dev->spi_desc);
+	ret = no_os_spi_remove(dev->spi_desc);
 
 	free(dev);
 
@@ -113,13 +113,13 @@ void ad7091r_software_reset(struct ad7091r_dev *dev)
 	uint8_t write_byte = 0xBF;
 
 	/* Initiate a conversion. */
-	spi_write_and_read(dev->spi_desc, &write_byte, 1);
+	no_os_spi_write_and_read(dev->spi_desc, &write_byte, 1);
 	/* Short cycle the read operation. */
 	write_byte = 0xFF;
-	spi_write_and_read(dev->spi_desc, &write_byte, 1);
+	no_os_spi_write_and_read(dev->spi_desc, &write_byte, 1);
 	/* Perform another conversion in order to reset the device. */
 	write_byte = 0xBF;
-	spi_write_and_read(dev->spi_desc, &write_byte, 1);
+	no_os_spi_write_and_read(dev->spi_desc, &write_byte, 1);
 }
 
 /***************************************************************************//**
@@ -138,9 +138,9 @@ uint16_t ad7091r_read_sample(struct ad7091r_dev *dev)
 	uint8_t buffer[2]          = {0xFF, 0xFF};
 
 	/* Initiate a conversion. */
-	spi_write_and_read(dev->spi_desc, &write_byte, 1);
+	no_os_spi_write_and_read(dev->spi_desc, &write_byte, 1);
 	/* Read conversion data. */
-	spi_write_and_read(dev->spi_desc, buffer, 2);
+	no_os_spi_write_and_read(dev->spi_desc, buffer, 2);
 	conversion_result = (buffer[0] << 8) + buffer[1];
 	conversion_result >>= 4;
 
@@ -160,9 +160,9 @@ void ad7091r_power_down(struct ad7091r_dev *dev)
 	uint8_t write_value = 0x00;
 
 	/* Initiate a conversion. */
-	spi_write_and_read(dev->spi_desc, &write_value, 1);
+	no_os_spi_write_and_read(dev->spi_desc, &write_value, 1);
 	/* Perform a dummy read. */
-	spi_write_and_read(dev->spi_desc, buffer, 2);
+	no_os_spi_write_and_read(dev->spi_desc, buffer, 2);
 }
 
 /***************************************************************************//**
@@ -181,7 +181,7 @@ void ad7091r_power_up(struct ad7091r_dev *dev)
 	uint8_t write_value = 0xFF;
 
 	/* Pull CONVST signal high. */
-	spi_write_and_read(dev->spi_desc, &write_value, 1);
+	no_os_spi_write_and_read(dev->spi_desc, &write_value, 1);
 }
 
 

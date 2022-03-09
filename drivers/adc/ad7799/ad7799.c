@@ -98,7 +98,7 @@ int32_t ad7799_read(struct ad7799_dev *device, uint8_t reg_addr,
 
 	memset((buff + 1), 0, buff_size + 1);
 
-	ret = spi_write_and_read(device->spi_desc, buff, buff_size + 1);
+	ret = no_os_spi_write_and_read(device->spi_desc, buff, buff_size + 1);
 	if(ret)
 		return FAILURE;
 
@@ -129,7 +129,7 @@ int32_t ad7799_write(struct ad7799_dev *device, uint8_t reg_addr,
 	for (i = 1; i < buff_size + 1 ; i++)
 		buff[i] = reg_data >> ((buff_size - i) * 8);
 
-	ret = spi_write_and_read(device->spi_desc, buff, buff_size + 1);
+	ret = no_os_spi_write_and_read(device->spi_desc, buff, buff_size + 1);
 	if(ret)
 		return FAILURE;
 
@@ -150,7 +150,7 @@ int32_t ad7799_reset(struct ad7799_dev *device)
 		AD7799_RESET_DATA
 	};
 
-	return spi_write_and_read(device->spi_desc, reset_data, 4);
+	return no_os_spi_write_and_read(device->spi_desc, reset_data, 4);
 }
 
 /**
@@ -428,7 +428,7 @@ int32_t ad7799_init(struct ad7799_dev **device,
 		return FAILURE;
 	}
 
-	ret = spi_init(&dev->spi_desc, &init_param->spi_init);
+	ret = no_os_spi_init(&dev->spi_desc, &init_param->spi_init);
 	if (ret) {
 		free(dev);
 		return FAILURE;
@@ -485,7 +485,7 @@ int32_t ad7799_remove(struct ad7799_dev *device)
 {
 	int32_t ret;
 
-	ret = spi_remove(device->spi_desc);
+	ret = no_os_spi_remove(device->spi_desc);
 	free(device);
 
 	return ret;

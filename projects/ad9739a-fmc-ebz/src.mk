@@ -16,7 +16,7 @@ SRC_DIRS += $(NO-OS)/iio/iio_app
 endif
 SRCS += $(DRIVERS)/dac/ad9739a/ad9739a.c \
 	$(DRIVERS)/frequency/adf4350/adf4350.c \
-	$(DRIVERS)/api/spi.c \
+	$(DRIVERS)/api/no_os_spi.c \
 	$(DRIVERS)/axi_core/axi_dac_core/axi_dac_core.c \
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.c \
 	$(NO-OS)/util/util.c

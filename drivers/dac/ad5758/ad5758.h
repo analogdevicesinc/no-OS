@@ -376,7 +376,7 @@ enum ad5758_adc_mode {
 
 struct ad5758_dev {
 	/* SPI */
-	struct spi_desc *spi_desc;
+	struct no_os_spi_desc *spi_desc;
 	/* GPIO */
 	struct no_os_gpio_desc *reset_n;
 	struct no_os_gpio_desc *ldac_n;
@@ -392,7 +392,7 @@ struct ad5758_dev {
 
 struct ad5758_init_param {
 	/* SPI */
-	struct spi_init_param spi_init;
+	struct no_os_spi_init_param spi_init;
 	/* GPIO */
 	struct no_os_gpio_init_param reset_n;
 	struct no_os_gpio_init_param ldac_n;

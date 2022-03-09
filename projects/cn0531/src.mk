@@ -9,7 +9,7 @@ SRC_DIRS += $(NO-OS)/drivers/dac/ad5791
 SRC_DIRS += $(PLATFORM_DRIVERS)
 SRC_DIRS += $(NO-OS)/util
 SRC_DIRS += $(INCLUDE)
-SRCS += $(DRIVERS)/api/spi.c \
+SRCS += $(DRIVERS)/api/no_os_spi.c \
 	$(DRIVERS)/api/no_os_irq.c \
 	$(DRIVERS)/api/no_os_gpio.c \
 	$(DRIVERS)/platform/$(PLATFORM)/$(PLATFORM)_spi.c

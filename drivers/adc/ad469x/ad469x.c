@@ -92,7 +92,7 @@ int32_t ad469x_spi_reg_read(struct ad469x_dev *dev,
 	buf[1] = 0xFF & reg_addr;
 	buf[2] = 0xFF;
 
-	ret = spi_write_and_read(dev->spi_desc, buf, 3);
+	ret = no_os_spi_write_and_read(dev->spi_desc, buf, 3);
 	*reg_data = buf[2];
 
 	ret = spi_engine_set_transfer_width(dev->spi_desc,
@@ -129,7 +129,7 @@ int32_t ad469x_spi_reg_write(struct ad469x_dev *dev,
 	buf[1] = 0xFF & reg_addr;
 	buf[2] = reg_data;
 
-	ret = spi_write_and_read(dev->spi_desc, buf, 3);
+	ret = no_os_spi_write_and_read(dev->spi_desc, buf, 3);
 
 	ret = spi_engine_set_transfer_width(dev->spi_desc,
 					    dev->capture_data_width);
@@ -776,7 +776,7 @@ int32_t ad469x_init(struct ad469x_dev **device,
 	if (ret != SUCCESS)
 		goto error_clkgen;
 
-	ret = spi_init(&dev->spi_desc, init_param->spi_init);
+	ret = no_os_spi_init(&dev->spi_desc, init_param->spi_init);
 	if (ret != SUCCESS)
 		goto error_gpio;
 
@@ -824,7 +824,7 @@ int32_t ad469x_init(struct ad469x_dev **device,
 	return ret;
 
 error_spi:
-	spi_remove(dev->spi_desc);
+	no_os_spi_remove(dev->spi_desc);
 error_gpio:
 	no_os_gpio_remove(dev->gpio_resetn);
 error_clkgen:
@@ -851,7 +851,7 @@ int32_t ad469x_remove(struct ad469x_dev *dev)
 	if (ret != SUCCESS)
 		return ret;
 
-	ret = spi_remove(dev->spi_desc);
+	ret = no_os_spi_remove(dev->spi_desc);
 	if (ret != SUCCESS)
 		return ret;
 

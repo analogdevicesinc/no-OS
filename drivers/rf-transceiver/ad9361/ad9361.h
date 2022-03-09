@@ -3339,7 +3339,7 @@ enum dev_id {
 
 struct ad9361_rf_phy {
 	enum dev_id		dev_sel;
-	struct spi_desc 	*spi;
+	struct no_os_spi_desc 	*spi;
 	struct no_os_gpio_desc 	*gpio_desc_resetb;
 	struct no_os_gpio_desc 	*gpio_desc_sync;
 	struct no_os_gpio_desc 	*gpio_desc_cal_sw1;
@@ -3418,7 +3418,7 @@ struct ad9361_rf_phy {
 };
 
 struct refclk_scale {
-	struct spi_desc	*spi;
+	struct no_os_spi_desc	*spi;
 	struct ad9361_rf_phy	*phy;
 	uint32_t			mult;
 	uint32_t			div;
@@ -3440,10 +3440,10 @@ enum debugfs_cmd {
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
-int32_t ad9361_spi_readm(struct spi_desc *spi, uint32_t reg,
+int32_t ad9361_spi_readm(struct no_os_spi_desc *spi, uint32_t reg,
 			 uint8_t *rbuf, uint32_t num);
-int32_t ad9361_spi_read(struct spi_desc *spi, uint32_t reg);
-int32_t ad9361_spi_write(struct spi_desc *spi,
+int32_t ad9361_spi_read(struct no_os_spi_desc *spi, uint32_t reg);
+int32_t ad9361_spi_write(struct no_os_spi_desc *spi,
 			 uint32_t reg, uint32_t val);
 int32_t ad9361_reset(struct ad9361_rf_phy *phy);
 int32_t ad9361_register_clocks(struct ad9361_rf_phy *phy);

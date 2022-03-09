@@ -119,7 +119,7 @@ int32_t ad7779_spi_int_reg_read(ad7779_dev *dev,
 	buf[2] = 0x00;
 	if (dev->spi_crc_en == AD7779_ENABLE)
 		buf_size = 3;
-	ret = spi_write_and_read(dev->spi_desc, buf, buf_size);
+	ret = no_os_spi_write_and_read(dev->spi_desc, buf, buf_size);
 
 	*reg_data = buf[1];
 	if (dev->spi_crc_en == AD7779_ENABLE) {
@@ -155,7 +155,7 @@ int32_t ad7779_spi_int_reg_write(ad7779_dev *dev,
 		buf[2] = ad7779_compute_crc8(&buf[0], 2);
 		buf_size = 3;
 	}
-	ret = spi_write_and_read(dev->spi_desc, buf, buf_size);
+	ret = no_os_spi_write_and_read(dev->spi_desc, buf, buf_size);
 	dev->cached_reg_val[reg_addr] = reg_data;
 
 	return ret;
@@ -252,7 +252,7 @@ int32_t ad7779_spi_sar_read_code(ad7779_dev *dev,
 		buf[2] = ad7779_compute_crc8(&buf[0], 2);
 		buf_size = 3;
 	}
-	ret = spi_write_and_read(dev->spi_desc, buf, buf_size);
+	ret = no_os_spi_write_and_read(dev->spi_desc, buf, buf_size);
 	dev->cached_reg_val[AD7779_REG_GLOBAL_MUX_CONFIG] =
 		AD7779_GLOBAL_MUX_CTRL(mux_next_conv);
 	buf[0] = buf[0] & 0x0F;
@@ -1182,7 +1182,7 @@ int32_t ad7779_do_spi_soft_reset(ad7779_dev *dev)
 
 	/* Keeping the SDI pin high during 64 consecutives clocks generates a
 	   software reset */
-	ret = spi_write_and_read(dev->spi_desc, buf, 8);
+	ret = no_os_spi_write_and_read(dev->spi_desc, buf, 8);
 
 	return ret;
 }
@@ -1255,7 +1255,7 @@ int32_t ad7779_init(ad7779_dev **device,
 		return -1;
 
 	/* SPI */
-	ret = spi_init(&dev->spi_desc, &init_param.spi_init);
+	ret = no_os_spi_init(&dev->spi_desc, &init_param.spi_init);
 
 	/* GPIO */
 	ret |= no_os_gpio_get(&dev->gpio_reset,
@@ -1390,7 +1390,7 @@ int32_t ad7779_remove(ad7779_dev *dev)
 {
 	int32_t ret;
 
-	ret = spi_remove(dev->spi_desc);
+	ret = no_os_spi_remove(dev->spi_desc);
 
 	ret |= no_os_gpio_remove(dev->gpio_reset);
 	ret |= no_os_gpio_remove(dev->gpio_mode0);

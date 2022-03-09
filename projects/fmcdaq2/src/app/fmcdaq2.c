@@ -223,19 +223,19 @@ static int fmcdaq2_gpio_init(struct fmcdaq2_dev *dev)
 static int fmcdaq2_spi_init(struct fmcdaq2_init_param *dev_init)
 {
 	/* Initialize SPI structures */
-	struct spi_init_param ad9523_spi_param = {
+	struct no_os_spi_init_param ad9523_spi_param = {
 		.device_id = SPI_DEVICE_ID,
 		.max_speed_hz = 2000000u,
 		.chip_select = 0,
 		.mode = NO_OS_SPI_MODE_0
 	};
-	struct spi_init_param ad9144_spi_param = {
+	struct no_os_spi_init_param ad9144_spi_param = {
 		.device_id = SPI_DEVICE_ID,
 		.max_speed_hz = 2000000u,
 		.chip_select = 1,
 		.mode = NO_OS_SPI_MODE_0
 	};
-	struct spi_init_param ad9680_spi_param = {
+	struct no_os_spi_init_param ad9680_spi_param = {
 		.device_id = SPI_DEVICE_ID,
 		.max_speed_hz = 2000000u,
 		.chip_select = 2,

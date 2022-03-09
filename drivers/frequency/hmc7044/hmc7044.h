@@ -67,7 +67,7 @@ struct hmc7044_chan_spec {
 };
 
 struct hmc7044_dev {
-	spi_desc	*spi_desc;
+	no_os_spi_desc	*spi_desc;
 	bool		is_hmc7043;
 	uint32_t	clkin_freq[4];
 	uint32_t	clkin_freq_ccf[4];
@@ -91,7 +91,7 @@ struct hmc7044_dev {
 };
 
 struct hmc7044_init_param {
-	spi_init_param	*spi_init;
+	no_os_spi_init_param	*spi_init;
 	bool		is_hmc7043;
 	uint32_t	clkin_freq[4];
 	uint32_t	clkin_freq_ccf[4];

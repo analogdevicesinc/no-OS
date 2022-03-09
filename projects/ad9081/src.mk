@@ -28,7 +28,7 @@ SRCS += $(PROJECT)/src/app.c \
 	$(DRIVERS)/axi_core/jesd204/axi_jesd204_tx.c \
 	$(DRIVERS)/axi_core/jesd204/jesd204_clk.c \
 	$(DRIVERS)/axi_core/jesd204/xilinx_transceiver.c \
-	$(DRIVERS)/api/spi.c \
+	$(DRIVERS)/api/no_os_spi.c \
 	$(DRIVERS)/api/no_os_gpio.c \
 	$(PLATFORM_DRIVERS)/axi_io.c \
 	$(PLATFORM_DRIVERS)/delay.c \

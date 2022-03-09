@@ -527,7 +527,7 @@ struct ad77681_status_registers {
 
 struct ad77681_dev {
 	/* SPI */
-	spi_desc			*spi_desc;
+	no_os_spi_desc			*spi_desc;
 	/* Configuration */
 	enum ad77681_power_mode		power_mode;
 	enum ad77681_mclk_div		mclk_div;
@@ -553,7 +553,7 @@ struct ad77681_dev {
 
 struct ad77681_init_param {
 	/* SPI */
-	spi_init_param			spi_eng_dev_init;
+	no_os_spi_init_param			spi_eng_dev_init;
 	/* Configuration */
 	enum ad77681_power_mode		power_mode;
 	enum ad77681_mclk_div		mclk_div;

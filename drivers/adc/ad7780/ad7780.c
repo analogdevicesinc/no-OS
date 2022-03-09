@@ -90,7 +90,7 @@ int8_t ad7780_init(struct ad7780_dev **device,
 	AD7780_FILTER_LOW;   // The update rate is set to 16.7 Hz.
 	AD7780_GAIN_HIGH;    // Gain is set to 1.
 	/* SPI */
-	init_status = spi_init(&dev->spi_desc, &init_param.spi_init);
+	init_status = no_os_spi_init(&dev->spi_desc, &init_param.spi_init);
 
 	if(init_status != 0) {
 		return -1;
@@ -120,7 +120,7 @@ int32_t ad7780_remove(struct ad7780_dev *dev)
 {
 	int32_t ret;
 
-	ret = spi_remove(dev->spi_desc);
+	ret = no_os_spi_remove(dev->spi_desc);
 
 	ret |= no_os_gpio_remove(dev->gpio_pdrst);
 	ret |= no_os_gpio_remove(dev->gpio_miso);
@@ -171,9 +171,9 @@ int32_t ad7780_read_sample(struct ad7780_dev *dev,
 	uint8_t rx_buff[4]  = {0, 0, 0, 0};
 	int32_t conv_sample = 0;
 
-	spi_write_and_read(dev->spi_desc,
-			   rx_buff,
-			   4);
+	no_os_spi_write_and_read(dev->spi_desc,
+				 rx_buff,
+				 4);
 	conv_sample = ((int32_t)rx_buff[0] << 16) +
 		      ((int16_t)rx_buff[1] << 8) +
 		      rx_buff[2];

@@ -66,12 +66,12 @@ int main(void)
 		.flags = 0U
 	};
 
-	struct spi_init_param ssd_1306_spi_init_param = {
+	struct no_os_spi_init_param ssd_1306_spi_init_param = {
 		.device_id = SPI_DEVICE_ID,
 		.max_speed_hz = 10000000,
 		.mode = NO_OS_SPI_MODE_0,
 		.chip_select = 10U,
-		.bit_order = SPI_BIT_ORDER_MSB_FIRST,
+		.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
 		.platform_ops = &xil_spi_ops,
 		.extra = &spi_extra
 	};

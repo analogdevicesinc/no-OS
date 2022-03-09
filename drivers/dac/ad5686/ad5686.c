@@ -325,7 +325,7 @@ int32_t ad5686_init(struct ad5686_dev **device,
 	dev->ldac_mask = 0;
 
 	if (chip_info[dev->act_device].communication == SPI)
-		ret = spi_init(&dev->spi_desc, &init_param.spi_init);
+		ret = no_os_spi_init(&dev->spi_desc, &init_param.spi_init);
 	else
 		ret = no_os_i2c_init(&dev->i2c_desc, &init_param.i2c_init);
 
@@ -360,7 +360,7 @@ int32_t ad5686_remove(struct ad5686_dev *dev)
 	int32_t ret;
 
 	if (chip_info[dev->act_device].communication == SPI)
-		ret = spi_remove(dev->spi_desc);
+		ret = no_os_spi_remove(dev->spi_desc);
 	else
 		ret = no_os_i2c_remove(dev->i2c_desc);
 
@@ -409,7 +409,7 @@ uint16_t ad5686_set_shift_reg(struct ad5686_dev *dev,
 	}
 
 	if(chip_info[dev->act_device].communication == SPI) {
-		spi_write_and_read(dev->spi_desc, data_buff, PKT_LENGTH);
+		no_os_spi_write_and_read(dev->spi_desc, data_buff, PKT_LENGTH);
 		if(chip_info[dev->act_device].register_map == AD5686_REG_MAP)
 			read_back_data = (data_buff[1] << AD5686_MSB_OFFSET) | data_buff[2];
 		else

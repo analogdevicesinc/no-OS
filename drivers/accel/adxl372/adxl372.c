@@ -710,7 +710,7 @@ int32_t adxl372_init(struct adxl372_dev **device,
 	dev->comm_type = init_param.comm_type;
 	if (dev->comm_type == SPI) {
 		/* SPI */
-		ret = spi_init(&dev->spi_desc, &init_param.spi_init);
+		ret = no_os_spi_init(&dev->spi_desc, &init_param.spi_init);
 		if (ret < 0)
 			goto error;
 

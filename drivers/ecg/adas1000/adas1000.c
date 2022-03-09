@@ -110,7 +110,7 @@ int32_t adas1000_init(struct adas1000_dev **device,
 	dev->frame_rate = init_param->frame_rate;
 
 	/** Initialize the SPI controller. */
-	ret = spi_init(&dev->spi_desc, &init_param->spi_init);
+	ret = no_os_spi_init(&dev->spi_desc, &init_param->spi_init);
 	if (ret != SUCCESS) {
 		free(dev);
 		return ret;
@@ -155,7 +155,7 @@ int32_t adas1000_read(struct adas1000_dev *device, uint8_t reg_addr,
 
 	buff[0] = reg_addr;
 
-	ret = spi_write_and_read(device->spi_desc, buff, buff_size);
+	ret = no_os_spi_write_and_read(device->spi_desc, buff, buff_size);
 	if(ret)
 		return FAILURE;
 
@@ -183,7 +183,7 @@ int32_t adas1000_write(struct adas1000_dev *device, uint8_t reg_addr,
 	buff[2] = reg_data >> 8;
 	buff[3] = reg_data;
 
-	return spi_write_and_read(device->spi_desc, buff, buff_size);
+	return no_os_spi_write_and_read(device->spi_desc, buff, buff_size);
 }
 
 /**
@@ -352,16 +352,16 @@ int32_t adas1000_read_data(struct adas1000_dev *device, uint8_t *data_buff,
 				/** if the header is repeated until the READY bit is set
 				read only the header, otherwise read the entire frame. */
 				if(read_data_param->ready_repeat) {
-					ret = spi_write_and_read(device->spi_desc,
-								 data_buff, buff_size);
+					ret = no_os_spi_write_and_read(device->spi_desc,
+								       data_buff, buff_size);
 					if (ret != SUCCESS)
 						return ret;
 
 					ready = *data_buff & ADAS1000_RDY_MASK;
 					if(ready == 0) {
-						ret = spi_write_and_read(device->spi_desc,
-									 data_buff + 4,
-									 device->frame_size - 4);
+						ret = no_os_spi_write_and_read(device->spi_desc,
+									       data_buff + 4,
+									       device->frame_size - 4);
 						if (ret != SUCCESS)
 							return ret;
 
@@ -369,8 +369,8 @@ int32_t adas1000_read_data(struct adas1000_dev *device, uint8_t *data_buff,
 						frame_cnt--;
 					}
 				} else {
-					ret = spi_write_and_read(device->spi_desc,
-								 data_buff, device->frame_size);
+					ret = no_os_spi_write_and_read(device->spi_desc,
+								       data_buff, device->frame_size);
 					if (ret != SUCCESS)
 						return ret;
 
@@ -382,7 +382,7 @@ int32_t adas1000_read_data(struct adas1000_dev *device, uint8_t *data_buff,
 				}
 			}
 		} else {
-			ret = spi_write_and_read(device->spi_desc, data_buff, device->frame_size);
+			ret = no_os_spi_write_and_read(device->spi_desc, data_buff, device->frame_size);
 			if (ret != SUCCESS)
 				return ret;
 

@@ -67,7 +67,7 @@ int32_t ada4250_write(struct ada4250_dev *dev, uint8_t reg_addr,
 	buff[0] = ADA4250_SPI_WRITE_CMD | reg_addr;
 	buff[1] = data;
 
-	return spi_write_and_read(dev->spi_desc, buff, ADA4250_BUFF_SIZE_BYTES);
+	return no_os_spi_write_and_read(dev->spi_desc, buff, ADA4250_BUFF_SIZE_BYTES);
 }
 
 /**
@@ -90,7 +90,7 @@ int32_t ada4250_read(struct ada4250_dev *dev, uint8_t reg_addr,
 	buff[0] = ADA4250_SPI_READ_CMD | reg_addr;
 	buff[1] = ADA4250_SPI_DUMMY_DATA;
 
-	ret = spi_write_and_read(dev->spi_desc, buff, ADA4250_BUFF_SIZE_BYTES);
+	ret = no_os_spi_write_and_read(dev->spi_desc, buff, ADA4250_BUFF_SIZE_BYTES);
 	if(ret != SUCCESS)
 		return ret;
 
@@ -565,7 +565,7 @@ int32_t ada4250_init(struct ada4250_dev **device,
 
 	if(dev->device_id == ADA4250) {
 		/* SPI */
-		ret = spi_init(&dev->spi_desc, init_param->spi_init);
+		ret = no_os_spi_init(&dev->spi_desc, init_param->spi_init);
 		if (ret != SUCCESS)
 			goto error_dev;
 
@@ -640,7 +640,7 @@ int32_t ada4250_init(struct ada4250_dev **device,
 	return ret;
 
 error_spi:
-	spi_remove(dev->spi_desc);
+	no_os_spi_remove(dev->spi_desc);
 	goto error_dev;
 error_bufen:
 	no_os_gpio_remove(dev->gpio_bufen);
@@ -679,7 +679,7 @@ int32_t ada4250_remove(struct ada4250_dev *dev)
 		return ret;
 
 	if (dev->device_id == ADA4250) {
-		ret = spi_remove(dev->spi_desc);
+		ret = no_os_spi_remove(dev->spi_desc);
 		if (ret != SUCCESS)
 			return ret;
 	} else {

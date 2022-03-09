@@ -57,24 +57,24 @@
 /******************************************************************************/
 
 /**
- * @struct spi_desc
+ * @struct no_os_spi_desc
  * @brief Structure initialization with the platform specific SPI functions
  */
-extern const struct spi_platform_ops demux_spi_platform_ops;
+extern const struct no_os_spi_platform_ops demux_spi_platform_ops;
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
 /* Initialize the SPI communication peripheral. */
-int32_t demux_spi_init(struct spi_desc **desc,
-		       const struct spi_init_param *param);
+int32_t demux_spi_init(struct no_os_spi_desc **desc,
+		       const struct no_os_spi_init_param *param);
 
-/* Free the resources allocated by spi_init(). */
-int32_t demux_spi_remove(struct spi_desc *desc);
+/* Free the resources allocated by no_os_spi_init(). */
+int32_t demux_spi_remove(struct no_os_spi_desc *desc);
 
 /* Write and read data to/from SPI. */
-int32_t demux_spi_write_and_read(struct spi_desc *desc, uint8_t *data,
+int32_t demux_spi_write_and_read(struct no_os_spi_desc *desc, uint8_t *data,
 				 uint16_t bytes_number);
 
 #endif /* SRC_DEMUX_SPI_H_ */

@@ -245,7 +245,7 @@ int32_t ad7606_spi_reg_read(struct ad7606_dev *dev,
 		buf[2] = crc;
 		sz += 1;
 	}
-	ret = spi_write_and_read(dev->spi_desc, buf, sz);
+	ret = no_os_spi_write_and_read(dev->spi_desc, buf, sz);
 	if (ret < 0)
 		return ret;
 
@@ -257,7 +257,7 @@ int32_t ad7606_spi_reg_read(struct ad7606_dev *dev,
 		crc = crc8(ad7606_crc8, buf, 2, 0);
 		buf[2] = crc;
 	}
-	ret = spi_write_and_read(dev->spi_desc, buf, sz);
+	ret = no_os_spi_write_and_read(dev->spi_desc, buf, sz);
 	if (ret < 0)
 		return ret;
 
@@ -315,7 +315,7 @@ int32_t ad7606_spi_reg_write(struct ad7606_dev *dev,
 		sz += 1;
 	}
 
-	ret = spi_write_and_read(dev->spi_desc, buf, sz);
+	ret = no_os_spi_write_and_read(dev->spi_desc, buf, sz);
 	if (ret < 0)
 		return ret;
 
@@ -482,7 +482,7 @@ int32_t ad7606_spi_data_read(struct ad7606_dev *dev, uint32_t *data)
 	}
 
 	memset(dev->data, 0, sz);
-	ret = spi_write_and_read(dev->spi_desc, dev->data, sz);
+	ret = no_os_spi_write_and_read(dev->spi_desc, dev->data, sz);
 	if (ret < 0)
 		return ret;
 
@@ -1150,7 +1150,7 @@ int32_t ad7606_init(struct ad7606_dev **device,
 	/* wait DEVICE_SETUP time */
 	udelay(253);
 
-	ret = spi_init(&dev->spi_desc, &init_param->spi_init);
+	ret = no_os_spi_init(&dev->spi_desc, &init_param->spi_init);
 	if (ret < 0)
 		goto error;
 
@@ -1246,7 +1246,7 @@ int32_t ad7606_remove(struct ad7606_dev *dev)
 	no_os_gpio_remove(dev->gpio_os2);
 	no_os_gpio_remove(dev->gpio_par_ser);
 
-	ret = spi_remove(dev->spi_desc);
+	ret = no_os_spi_remove(dev->spi_desc);
 
 	free(dev);
 

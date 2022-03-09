@@ -102,8 +102,8 @@ int32_t ad6673_setup(struct ad6673_dev **device,
 		return -1;
 
 	/* Initializes the SPI peripheral */
-	ret = spi_init(&dev->spi_desc, &init_param.spi_init);
-	if(ret != SUCCESS) {
+	ret = no_os_spi_init(&dev->spi_desc, &init_param.spi_init);
+	if(ret != 0) {
 		return ret;
 	}
 
@@ -194,7 +194,7 @@ int32_t ad6673_remove(struct ad6673_dev *dev)
 {
 	int32_t ret;
 
-	ret = spi_remove(dev->spi_desc);
+	ret = no_os_spi_remove(dev->spi_desc);
 
 	free(dev);
 
@@ -223,10 +223,10 @@ int32_t ad6673_read(struct ad6673_dev *dev,
 		buffer[0] = (reg_address & 0xFF00) >> 8;
 		buffer[1] = reg_address & 0x00FF;
 		buffer[2] = 0;
-		ret = spi_write_and_read(dev->spi_desc,
-					 buffer,
-					 3);
-		if(ret != SUCCESS) {
+		ret = no_os_spi_write_and_read(dev->spi_desc,
+					       buffer,
+					       3);
+		if(ret != 0) {
 			return ret;
 		}
 		reg_address--;
@@ -269,10 +269,10 @@ int32_t ad6673_write(struct ad6673_dev *dev,
 		tx_buffer[0] = (reg_address & 0xFF00) >> 8;
 		tx_buffer[1] = reg_address & 0x00FF;
 		tx_buffer[2] = reg_value;
-		ret = spi_write_and_read(dev->spi_desc,
-					 tx_buffer,
-					 3);
-		if(ret != SUCCESS) {
+		ret = no_os_spi_write_and_read(dev->spi_desc,
+					       tx_buffer,
+					       3);
+		if(ret != 0) {
 			return ret;
 		}
 		reg_address--;

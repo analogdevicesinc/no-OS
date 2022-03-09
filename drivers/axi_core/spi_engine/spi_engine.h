@@ -177,7 +177,7 @@ struct spi_engine_offload_message {
 /**
  * @brief Spi engine platform specific SPI platform ops structure
  */
-extern const struct spi_platform_ops xil_spi_ops;
+extern const struct no_os_spi_platform_ops xil_spi_ops;
 
 /* Write SPI Engine's axi registers */
 int32_t spi_engine_write(struct spi_engine_desc *desc,
@@ -189,32 +189,32 @@ int32_t spi_engine_read(struct spi_engine_desc *desc,
 			uint32_t reg_addr,
 			uint32_t *reg_data);
 /* Initialize the SPI engine device */
-int32_t spi_engine_init(struct spi_desc **desc,
-			const struct spi_init_param *param);
+int32_t spi_engine_init(struct no_os_spi_desc **desc,
+			const struct no_os_spi_init_param *param);
 
 /* Write and read data over SPI using the SPI engine */
-int32_t spi_engine_write_and_read(struct spi_desc *desc,
+int32_t spi_engine_write_and_read(struct no_os_spi_desc *desc,
 				  uint8_t *data,
 				  uint16_t bytes_number);
 
 /* Free the resources used by the SPI engine device */
-int32_t spi_engine_remove(struct spi_desc *desc);
+int32_t spi_engine_remove(struct no_os_spi_desc *desc);
 
 /* Initialize the SPI engine offload module */
-int32_t spi_engine_offload_init(struct spi_desc *desc,
+int32_t spi_engine_offload_init(struct no_os_spi_desc *desc,
 				const struct spi_engine_offload_init_param *param);
 
 /* Write and read data over SPI using the offload module */
-int32_t spi_engine_offload_transfer(struct spi_desc *desc,
+int32_t spi_engine_offload_transfer(struct no_os_spi_desc *desc,
 				    struct spi_engine_offload_message msg,
 				    uint32_t no_samples);
 
 /* Set SPI transfer width */
-int32_t spi_engine_set_transfer_width(struct spi_desc *desc,
+int32_t spi_engine_set_transfer_width(struct no_os_spi_desc *desc,
 				      uint8_t data_wdith);
 
 /* Set SPI transfer speed */
-void spi_engine_set_speed(struct spi_desc *desc,
+void spi_engine_set_speed(struct no_os_spi_desc *desc,
 			  uint32_t speed_hz);
 
 #endif // SPI_ENGINE_H

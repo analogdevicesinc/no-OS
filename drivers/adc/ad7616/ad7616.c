@@ -157,11 +157,11 @@ int32_t ad7616_spi_read(struct ad7616_dev *dev,
 
 	buf[0] = 0x00 | ((reg_addr & 0x3F) << 1);
 	buf[1] = 0x00;
-	ret = spi_write_and_read(dev->spi_desc, buf, 2);
+	ret = no_os_spi_write_and_read(dev->spi_desc, buf, 2);
 
 	buf[0] = 0x00 | ((reg_addr & 0x3F) << 1);
 	buf[1] = 0x00;
-	ret = spi_write_and_read(dev->spi_desc, buf, 2);
+	ret = no_os_spi_write_and_read(dev->spi_desc, buf, 2);
 	*reg_data = ((buf[0] & 0x01) << 8) | buf[1];
 
 	return ret;
@@ -183,7 +183,7 @@ int32_t ad7616_spi_write(struct ad7616_dev *dev,
 
 	buf[0] = 0x80 | ((reg_addr & 0x3F) << 1) | ((reg_data & 0x100) >> 8);
 	buf[1] = (reg_data & 0xFF);
-	ret = spi_write_and_read(dev->spi_desc, buf, 2);
+	ret = no_os_spi_write_and_read(dev->spi_desc, buf, 2);
 
 	return ret;
 }
@@ -516,7 +516,7 @@ int32_t ad7616_setup(struct ad7616_dev **device,
 	ad7616_core_setup(dev);
 
 	if (dev->interface == AD7616_SERIAL)
-		ret = spi_init(&dev->spi_desc, init_param->spi_param);
+		ret = no_os_spi_init(&dev->spi_desc, init_param->spi_param);
 
 	if (ret != SUCCESS) {
 		free(dev);

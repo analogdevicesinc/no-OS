@@ -169,7 +169,7 @@ enum ad7799_precision {
  */
 struct ad7799_dev {
 	/** SPI Descriptor */
-	struct spi_desc *spi_desc;
+	struct no_os_spi_desc *spi_desc;
 	/** Chip type (AD7798/AD7799) */
 	uint8_t chip_type;
 	/** Register size */
@@ -190,7 +190,7 @@ struct ad7799_dev {
  */
 struct ad7799_init_param {
 	/** SPI Initialization parameters */
-	struct spi_init_param spi_init;
+	struct no_os_spi_init_param spi_init;
 	/** Chip type (AD7798/AD7799) */
 	enum ad7799_type chip_type;
 	/** Gain */

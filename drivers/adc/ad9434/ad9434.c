@@ -61,7 +61,7 @@ int32_t ad9434_spi_read(struct ad9434_dev *dev,
 	buf[1] = reg_addr & 0xFF;
 	buf[2] = 0x00;
 
-	ret = spi_write_and_read(dev->spi_desc, buf, 3);
+	ret = no_os_spi_write_and_read(dev->spi_desc, buf, 3);
 	*reg_data = buf[2];
 
 	return ret;
@@ -82,7 +82,7 @@ int32_t ad9434_spi_write(struct ad9434_dev *dev,
 	buf[1] = reg_addr & 0xFF;
 	buf[2] = reg_data;
 
-	ret = spi_write_and_read(dev->spi_desc, buf, 3);
+	ret = no_os_spi_write_and_read(dev->spi_desc, buf, 3);
 
 	return ret;
 }
@@ -151,7 +151,7 @@ int32_t ad9434_setup(struct ad9434_dev **device,
 		return -1;
 
 	/* SPI */
-	ret = spi_init(&dev->spi_desc, &init_param.spi_init);
+	ret = no_os_spi_init(&dev->spi_desc, &init_param.spi_init);
 
 	ret |= ad9434_spi_read(dev, AD9434_REG_CHIP_ID, &chip_id);
 	if(chip_id != AD9434_CHIP_ID) {
@@ -175,7 +175,7 @@ int32_t ad9434_remove(struct ad9434_dev *dev)
 {
 	int32_t ret;
 
-	ret = spi_remove(dev->spi_desc);
+	ret = no_os_spi_remove(dev->spi_desc);
 
 	free(dev);
 

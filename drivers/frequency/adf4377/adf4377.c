@@ -71,7 +71,7 @@ int32_t adf4377_spi_write(struct adf4377_dev *dev, uint8_t reg_addr,
 		buff[2] = data;
 	}
 
-	return spi_write_and_read(dev->spi_desc, buff, ADF4377_BUFF_SIZE_BYTES);
+	return no_os_spi_write_and_read(dev->spi_desc, buff, ADF4377_BUFF_SIZE_BYTES);
 }
 
 /**
@@ -121,7 +121,7 @@ int32_t adf4377_spi_read(struct adf4377_dev *dev, uint8_t reg_addr,
 		buff[2] = ADF4377_SPI_DUMMY_DATA;
 	}
 
-	ret = spi_write_and_read(dev->spi_desc, buff, ADF4377_BUFF_SIZE_BYTES);
+	ret = no_os_spi_write_and_read(dev->spi_desc, buff, ADF4377_BUFF_SIZE_BYTES);
 	if(ret < 0)
 		return ret;
 
@@ -548,7 +548,7 @@ int32_t adf4377_init(struct adf4377_dev **device,
 	}
 
 	/* SPI */
-	ret = spi_init(&dev->spi_desc, init_param->spi_init);
+	ret = no_os_spi_init(&dev->spi_desc, init_param->spi_init);
 	if (ret < 0)
 		goto error_gpio_ce;
 
@@ -630,7 +630,7 @@ error_gpio_enclk1:
 	no_os_gpio_remove(dev->gpio_enclk1);
 
 error_spi:
-	spi_remove(dev->spi_desc);
+	no_os_spi_remove(dev->spi_desc);
 
 error_gpio_ce:
 	no_os_gpio_remove(dev->gpio_ce);
@@ -650,7 +650,7 @@ int32_t adf4377_remove(struct adf4377_dev *dev)
 {
 	int32_t ret;
 
-	ret = spi_remove(dev->spi_desc);
+	ret = no_os_spi_remove(dev->spi_desc);
 	if (ret < 0)
 		return ret;
 

@@ -149,7 +149,7 @@ int8_t ad5446_init(struct ad5446_dev **device,
 
 	dev->act_device = init_param.act_device;
 
-	status = spi_init(&dev->spi_desc, &init_param.spi_init);
+	status = no_os_spi_init(&dev->spi_desc, &init_param.spi_init);
 
 	/* GPIO */
 	status |= no_os_gpio_get(&dev->gpio_ladc, &init_param.gpio_ladc);
@@ -187,7 +187,7 @@ int32_t ad5446_remove(struct ad5446_dev *dev)
 {
 	int32_t ret;
 
-	ret = spi_remove(dev->spi_desc);
+	ret = no_os_spi_remove(dev->spi_desc);
 
 	ret |= no_os_gpio_remove(dev->gpio_ladc);
 	ret |= no_os_gpio_remove(dev->gpio_clrout);
@@ -224,9 +224,9 @@ void ad5446_set_register(struct ad5446_dev *dev,
 		spi_data[0] = (input_shift_reg & MSB_MASK) >> MSB_OFFSET;
 		spi_data[1] = (input_shift_reg & LSB_MASK);
 	}
-	spi_write_and_read(dev->spi_desc,
-			   spi_data,
-			   PKT_LENGTH);
+	no_os_spi_write_and_read(dev->spi_desc,
+				 spi_data,
+				 PKT_LENGTH);
 }
 /***************************************************************************//**
  * @brief Sets the output voltage.

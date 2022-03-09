@@ -96,7 +96,7 @@ int32_t adpd410x_reg_read_bytes(struct adpd410x_dev *dev, uint16_t address,
 		buff[0] = field_get(ADPD410X_UPPDER_BYTE_SPI_MASK, address);
 		buff[1] = (address << 1) & ADPD410X_LOWER_BYTE_SPI_MASK;
 
-		ret = spi_write_and_read(dev->dev_ops.spi_phy_dev, buff, num_bytes + 2);
+		ret = no_os_spi_write_and_read(dev->dev_ops.spi_phy_dev, buff, num_bytes + 2);
 		if(ret != SUCCESS) {
 			free(buff);
 			return ret;
@@ -152,7 +152,7 @@ int32_t adpd410x_reg_write(struct adpd410x_dev *dev, uint16_t address,
 		buff[2] = field_get(0xff00, data);
 		buff[3] = data & 0xff;
 
-		return spi_write_and_read(dev->dev_ops.spi_phy_dev, buff, 4);
+		return no_os_spi_write_and_read(dev->dev_ops.spi_phy_dev, buff, 4);
 	case ADPD4101:
 		buff[0] = field_get(ADPD410X_UPPDER_BYTE_I2C_MASK, address);
 		buff[0] |= 0x80;
@@ -673,8 +673,8 @@ int32_t adpd410x_setup(struct adpd410x_dev **device,
 	dev->ext_lfo_freq = init_param->ext_lfo_freq;
 
 	if(dev->dev_type == ADPD4100)
-		ret = spi_init(&dev->dev_ops.spi_phy_dev,
-			       &init_param->dev_ops_init.spi_phy_init);
+		ret = no_os_spi_init(&dev->dev_ops.spi_phy_dev,
+				     &init_param->dev_ops_init.spi_phy_init);
 	else
 		ret = no_os_i2c_init(&dev->dev_ops.i2c_phy_dev,
 				     &init_param->dev_ops_init.i2c_phy_init);
@@ -755,7 +755,7 @@ error_gpio0:
 	no_os_gpio_remove(dev->gpio0);
 error_phy:
 	if(dev->dev_type == ADPD4100)
-		spi_remove(dev->dev_ops.spi_phy_dev);
+		no_os_spi_remove(dev->dev_ops.spi_phy_dev);
 	else
 		no_os_i2c_remove(dev->dev_ops.i2c_phy_dev);
 error_dev:
@@ -777,7 +777,7 @@ int32_t adpd410x_remove(struct adpd410x_dev *dev)
 		return -EINVAL;
 
 	if(dev->dev_type == ADPD4100)
-		ret = spi_remove(dev->dev_ops.spi_phy_dev);
+		ret = no_os_spi_remove(dev->dev_ops.spi_phy_dev);
 	else
 		ret = no_os_i2c_remove(dev->dev_ops.i2c_phy_dev);
 	if(ret != SUCCESS)

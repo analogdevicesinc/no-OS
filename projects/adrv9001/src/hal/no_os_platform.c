@@ -117,7 +117,7 @@ int32_t no_os_hw_open(void *devHalCfg)
 	if (ret)
 		return ret;
 #endif
-	struct spi_init_param sip = {
+	struct no_os_spi_init_param sip = {
 		.device_id = SPI_DEVICE_ID,
 		.max_speed_hz = 20000000,
 		.mode = NO_OS_SPI_MODE_0,
@@ -125,7 +125,7 @@ int32_t no_os_hw_open(void *devHalCfg)
 		.platform_ops = &xil_spi_ops,
 		.extra = &sip_extra
 	};
-	ret = spi_init(&phal->spi, &sip);
+	ret = no_os_spi_init(&phal->spi, &sip);
 	if (ret)
 		return ret;
 
@@ -153,7 +153,7 @@ int32_t no_os_hw_close(void *devHalCfg)
 	if (ret)
 		return ret;
 
-	ret = spi_remove(phal->spi);
+	ret = no_os_spi_remove(phal->spi);
 	if (ret)
 		return ret;
 
@@ -221,8 +221,8 @@ int32_t no_os_spi_write(void *devHalCfg, const uint8_t txData[],
 
 	do {
 		toWrite = (remaining > MAX_SIZE) ? MAX_SIZE : remaining;
-		result = spi_write_and_read(halCfg->spi, &txData[numTxBytes - remaining],
-					    toWrite);
+		result = no_os_spi_write_and_read(halCfg->spi, &txData[numTxBytes - remaining],
+						  toWrite);
 		if (result < 0)
 			return ADI_COMMON_ERR_API_FAIL;
 
@@ -273,8 +273,9 @@ int32_t no_os_spi_read(void *devHalCfg, const uint8_t txData[],
 
 	do {
 		toWrite = (remaining > MAX_SIZE) ? MAX_SIZE : remaining;
-		result = spi_write_and_read(halCfg->spi, &rxData[numTxRxBytes - remaining],
-					    toWrite);
+		result = no_os_spi_write_and_read(halCfg->spi,
+						  &rxData[numTxRxBytes - remaining],
+						  toWrite);
 		if (result < 0)
 			return ADI_COMMON_ERR_API_FAIL;
 

@@ -84,7 +84,7 @@ int32_t ssd_1306_init(struct display_dev *device)
 	ssd_1306_extra *extra;
 
 	extra = device->extra;
-	ret = spi_init(&extra->spi_desc, extra->spi_ip);
+	ret = no_os_spi_init(&extra->spi_desc, extra->spi_ip);
 	if (ret != SUCCESS)
 		return FAILURE;
 	ret = no_os_gpio_get(&extra->dc_pin, extra->dc_pin_ip);
@@ -103,7 +103,7 @@ int32_t ssd_1306_init(struct display_dev *device)
 		return FAILURE;
 
 	command[0] = 0xAE;
-	ret = spi_write_and_read(extra->spi_desc, command, 1U);
+	ret = no_os_spi_write_and_read(extra->spi_desc, command, 1U);
 	if (ret != SUCCESS)
 		return FAILURE;
 	ret = no_os_gpio_set_value(extra->reset_pin, SSD1306_RST_ON);
@@ -117,45 +117,45 @@ int32_t ssd_1306_init(struct display_dev *device)
 	// charge pump
 	command[0] = 0x8D;
 	command[1] = 0x14;
-	ret = spi_write_and_read(extra->spi_desc, command, 2U);
+	ret = no_os_spi_write_and_read(extra->spi_desc, command, 2U);
 	if (ret != SUCCESS)
 		return FAILURE;
 	// pre-charge
 	command[0] = 0xD9;
 	command[1] = 0xF1;
-	ret = spi_write_and_read(extra->spi_desc, command, 2U);
+	ret = no_os_spi_write_and_read(extra->spi_desc, command, 2U);
 	if (ret != SUCCESS)
 		return FAILURE;
 	// set contrast
 	command[0] = 0x81;
 	command[1] = 0xFF;
-	ret = spi_write_and_read(extra->spi_desc, command, 2U);
+	ret = no_os_spi_write_and_read(extra->spi_desc, command, 2U);
 	if (ret != SUCCESS)
 		return FAILURE;
 	// set segment remap
 	command[0] = 0xA0;
-	ret = spi_write_and_read(extra->spi_desc, command, 1U);
+	ret = no_os_spi_write_and_read(extra->spi_desc, command, 1U);
 	if (ret != SUCCESS)
 		return FAILURE;
 	// set scan direction
 	command[0] = 0xC0;
-	ret = spi_write_and_read(extra->spi_desc, command, 1U);
+	ret = no_os_spi_write_and_read(extra->spi_desc, command, 1U);
 	if (ret != SUCCESS)
 		return FAILURE;
 	// set COM pin
 	command[0] = 0xDA;
 	command[1] = 0x00;
-	ret = spi_write_and_read(extra->spi_desc, command, 2U);
+	ret = no_os_spi_write_and_read(extra->spi_desc, command, 2U);
 	if (ret != SUCCESS)
 		return FAILURE;
 	// show written memory on screen
 	command[0] = 0xA4;
-	ret = spi_write_and_read(extra->spi_desc, command, 1U);
+	ret = no_os_spi_write_and_read(extra->spi_desc, command, 1U);
 	if (ret != SUCCESS)
 		return FAILURE;
 	command[0] = 0x20;	// memory addressing mode
 	command[1] = 0x00;	// horizontal addressing
-	return spi_write_and_read(extra->spi_desc, command, 2U);
+	return no_os_spi_write_and_read(extra->spi_desc, command, 2U);
 }
 
 /***************************************************************************//**
@@ -176,7 +176,7 @@ int32_t ssd_1306_display_on_off(struct display_dev *device, uint8_t on_off)
 	if (ret != SUCCESS)
 		return FAILURE;
 	command = (on_off == true) ? SSD1306_DISP_ON : SSD1306_DISP_OFF;
-	return spi_write_and_read(extra->spi_desc, &command, 1U);
+	return no_os_spi_write_and_read(extra->spi_desc, &command, 1U);
 }
 
 /***************************************************************************//**
@@ -201,13 +201,13 @@ int32_t ssd_1306_move_cursor(struct display_dev *device, uint8_t row,
 	command[0] = 0x21;
 	command[1] = column*8;
 	command[2] = device->cols_nb * 8 - 1U;
-	ret = spi_write_and_read(extra->spi_desc, &command, 3U);
+	ret = no_os_spi_write_and_read(extra->spi_desc, &command, 3U);
 	if (ret != SUCCESS)
 		return FAILURE;
 	command[0] = 0x22;
 	command[1] = row;
 	command[2] = device->rows_nb - 1U;
-	return spi_write_and_read(extra->spi_desc, &command, 3U);;
+	return no_os_spi_write_and_read(extra->spi_desc, &command, 3U);;
 }
 
 /***************************************************************************//**
@@ -234,7 +234,7 @@ int32_t ssd_1306_print_ascii(struct display_dev *device, uint8_t ascii,
 	ret = no_os_gpio_set_value(extra->dc_pin, SSD1306_DC_DATA);
 	if (ret != SUCCESS)
 		return FAILURE;
-	return spi_write_and_read(extra->spi_desc, &ch, SSD1306_CHARSZ);
+	return no_os_spi_write_and_read(extra->spi_desc, &ch, SSD1306_CHARSZ);
 }
 
 /***************************************************************************//**
@@ -255,5 +255,5 @@ int32_t ssd_1306_remove(struct display_dev *device)
 	ret = no_os_gpio_remove(extra->dc_pin);
 	if (ret != SUCCESS)
 		return FAILURE;
-	return spi_remove(extra->spi_desc);
+	return no_os_spi_remove(extra->spi_desc);
 }

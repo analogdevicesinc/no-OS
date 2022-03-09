@@ -283,7 +283,7 @@ typedef struct {
 	struct no_os_gpio_init_param	gpio_cal_sw1;	/* cal-sw1-gpios */
 	struct no_os_gpio_init_param	gpio_cal_sw2;	/* cal-sw2-gpios */
 
-	struct spi_init_param	spi_param;
+	struct no_os_spi_init_param	spi_param;
 
 	/* External LO clocks */
 	uint32_t	(*ad9361_rfpll_ext_recalc_rate)(struct refclk_scale *clk_priv);

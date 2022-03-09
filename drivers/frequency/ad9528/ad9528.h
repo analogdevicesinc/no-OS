@@ -479,7 +479,7 @@ struct ad9528_state {
 
 struct ad9528_dev {
 	/* SPI */
-	spi_desc *spi_desc;
+	no_os_spi_desc *spi_desc;
 	/* GPIO */
 	no_os_gpio_desc *gpio_resetb;
 	/* Device Settings */
@@ -489,7 +489,7 @@ struct ad9528_dev {
 
 struct ad9528_init_param {
 	/* SPI */
-	spi_init_param spi_init;
+	no_os_spi_init_param spi_init;
 	/* GPIO */
 	no_os_gpio_init_param *gpio_resetb;
 	/* Device Settings */

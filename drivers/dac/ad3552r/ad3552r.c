@@ -334,7 +334,7 @@ static int32_t _ad3552r_transfer_with_crc(struct ad3552r_desc *desc,
 		struct ad3552_transfer_data *data,
 		uint8_t instr)
 {
-	struct spi_msg msg;
+	struct no_os_spi_msg msg;
 	uint32_t i;
 	int32_t inc, err;
 	uint8_t out[AD3552R_MAX_REG_SIZE + 2], in[AD3552R_MAX_REG_SIZE + 2];
@@ -383,7 +383,7 @@ static int32_t _ad3552r_transfer_with_crc(struct ad3552r_desc *desc,
 
 		/* Send message */
 		msg.cs_change = !(i + reg_len == data->len);
-		err = spi_transfer(desc->spi, &msg, 1);
+		err = no_os_spi_transfer(desc->spi, &msg, 1);
 		if (IS_ERR_VALUE(err))
 			return err;
 
@@ -412,7 +412,7 @@ static int32_t _ad3552r_transfer_with_crc(struct ad3552r_desc *desc,
 int32_t ad3552r_transfer(struct ad3552r_desc *desc,
 			 struct ad3552_transfer_data *data)
 {
-	struct spi_msg msgs[2] = { 0 };
+	struct no_os_spi_msg msgs[2] = { 0 };
 	uint8_t instr;
 
 	if (!desc || !data)
@@ -435,7 +435,7 @@ int32_t ad3552r_transfer(struct ad3552r_desc *desc,
 	else
 		msgs[1].tx_buff = data->data;
 
-	return spi_transfer(desc->spi, msgs, ARRAY_SIZE(msgs));
+	return no_os_spi_transfer(desc->spi, msgs, ARRAY_SIZE(msgs));
 }
 
 int32_t ad3552r_write_reg(struct ad3552r_desc *desc, uint8_t addr,
@@ -1077,7 +1077,7 @@ int32_t ad3552r_init(struct ad3552r_desc **desc,
 	if (!ldesc)
 		return -ENOMEM;
 
-	err = spi_init(&ldesc->spi, &param->spi_param);
+	err = no_os_spi_init(&ldesc->spi, &param->spi_param);
 	if (IS_ERR_VALUE(err))
 		goto err;
 
@@ -1146,7 +1146,7 @@ int32_t ad3552r_init(struct ad3552r_desc **desc,
 err_reset:
 	no_os_gpio_remove(ldesc->reset);
 err_spi:
-	spi_remove(ldesc->spi);
+	no_os_spi_remove(ldesc->spi);
 err:
 	free(ldesc);
 
@@ -1159,7 +1159,7 @@ int32_t ad3552r_remove(struct ad3552r_desc *desc)
 		no_os_gpio_remove(desc->ldac);
 	if (desc->reset)
 		no_os_gpio_remove(desc->reset);
-	spi_remove(desc->spi);
+	no_os_spi_remove(desc->spi);
 	free(desc);
 
 	return SUCCESS;

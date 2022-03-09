@@ -435,10 +435,10 @@ int32_t AD717X_ReadRegister(ad717x_dev *device,
 		    AD717X_COMM_REG_RA(pReg->addr);
 
 	/* Read data from the device */
-	ret = spi_write_and_read(device->spi_desc,
-				 buffer,
-				 ((device->useCRC != AD717X_DISABLE) ? pReg->size + 1
-				  : pReg->size) + 1);
+	ret = no_os_spi_write_and_read(device->spi_desc,
+				       buffer,
+				       ((device->useCRC != AD717X_DISABLE) ? pReg->size + 1
+					: pReg->size) + 1);
 	if(ret < 0)
 		return ret;
 
@@ -520,10 +520,10 @@ int32_t AD717X_WriteRegister(ad717x_dev *device,
 	}
 
 	/* Write data to the device */
-	ret = spi_write_and_read(device->spi_desc,
-				 wrBuf,
-				 (device->useCRC != AD717X_DISABLE) ?
-				 preg->size + 2 : preg->size + 1);
+	ret = no_os_spi_write_and_read(device->spi_desc,
+				       wrBuf,
+				       (device->useCRC != AD717X_DISABLE) ?
+				       preg->size + 2 : preg->size + 1);
 
 	return ret;
 }
@@ -543,9 +543,9 @@ int32_t AD717X_Reset(ad717x_dev *device)
 	if(!device)
 		return INVALID_VAL;
 
-	ret = spi_write_and_read(device->spi_desc,
-				 wrBuf,
-				 8);
+	ret = no_os_spi_write_and_read(device->spi_desc,
+				       wrBuf,
+				       8);
 
 	return ret;
 }
@@ -764,7 +764,7 @@ int32_t AD717X_Init(ad717x_dev **device,
 	dev->num_regs = init_param.num_regs;
 
 	/* Initialize the SPI communication. */
-	ret = spi_init(&dev->spi_desc, &init_param.spi_init);
+	ret = no_os_spi_init(&dev->spi_desc, &init_param.spi_init);
 	if (ret < 0)
 		return ret;
 
@@ -871,7 +871,7 @@ int32_t AD717X_remove(ad717x_dev *dev)
 {
 	int32_t ret;
 
-	ret = spi_remove(dev->spi_desc);
+	ret = no_os_spi_remove(dev->spi_desc);
 
 	free(dev);
 

@@ -105,7 +105,7 @@ int32_t adgs1408_spi_reg_read(struct adgs1408_dev *dev,
 	buf[2] = 0x00;
 	if (dev->crc_en == ADGS1408_ENABLE)
 		buf_size = 3;
-	ret = spi_write_and_read(dev->spi_desc, buf, buf_size);
+	ret = no_os_spi_write_and_read(dev->spi_desc, buf, buf_size);
 
 	if(ret < 0)
 		return FAILURE;
@@ -156,7 +156,7 @@ int32_t adgs1408_spi_reg_write(struct adgs1408_dev *dev,
 		buf[2] = adgs1408_compute_crc8(&buf[0], 2);
 		buf_size = 3;
 	}
-	spi_write_and_read(dev->spi_desc, buf, buf_size);
+	no_os_spi_write_and_read(dev->spi_desc, buf, buf_size);
 	if (buf[0] != ADGS1408_ALIGNMENT) {
 		printf("%s: Alignment Error: 0x%x.\n", __func__, buf[0]);
 
@@ -247,7 +247,7 @@ int32_t adgs1408_clear_err_flags(struct adgs1408_dev *dev)
 		buf_size = 3;
 	}
 
-	return spi_write_and_read(dev->spi_desc, buf, buf_size);
+	return no_os_spi_write_and_read(dev->spi_desc, buf, buf_size);
 }
 
 /**
@@ -269,7 +269,7 @@ int32_t adgs1408_enter_daisy_chain(struct adgs1408_dev *dev)
 	buf[0] = ADGS1408_DAISY_CHAIN_1;
 	buf[1] = ADGS1408_DAISY_CHAIN_2;
 
-	return spi_write_and_read(dev->spi_desc, buf, 2);
+	return no_os_spi_write_and_read(dev->spi_desc, buf, 2);
 }
 
 /**
@@ -291,7 +291,7 @@ int32_t adgs1408_send_daisy_chain_cmds(struct adgs1408_dev *dev,
 		return FAILURE;
 	}
 
-	return spi_write_and_read(dev->spi_desc, cmds, cmds_size);
+	return no_os_spi_write_and_read(dev->spi_desc, cmds, cmds_size);
 }
 
 /**
@@ -313,7 +313,7 @@ int32_t adgs1408_enter_round_robin(struct adgs1408_dev *dev)
 	buf[0] = ADGS1408_REG_ROUND_ROBIN_EN;
 	buf[1] = ADGS1408_ROUND_ROBIN_EN;
 
-	return spi_write_and_read(dev->spi_desc, buf, 2);
+	return no_os_spi_write_and_read(dev->spi_desc, buf, 2);
 }
 
 /**
@@ -347,12 +347,12 @@ int32_t adgs1408_configure_round_robin(struct adgs1408_dev *dev,
 
 	buf[0] = ADGS1408_REG_RROBIN_CHANNEL_CONFIG;
 	buf[1] = reg_config;
-	ret = spi_write_and_read(dev->spi_desc, buf, 2);
+	ret = no_os_spi_write_and_read(dev->spi_desc, buf, 2);
 
 	if(ret != FAILURE) {
 		buf[0] = ADGS1408_REG_CNV_EDGE_SEL;
 		buf[1] = cnv_polarity;
-		ret |= spi_write_and_read(dev->spi_desc, buf, 2);
+		ret |= no_os_spi_write_and_read(dev->spi_desc, buf, 2);
 	}
 
 	return ret;
@@ -370,12 +370,12 @@ int32_t adgs1408_exit_round_robin(struct adgs1408_dev *dev)
 
 	buf[0] = ADGS1408_RROBIN_EXIT_1;
 	buf[1] = ADGS1408_RROBIN_EXIT_2;
-	ret = spi_write_and_read(dev->spi_desc, buf, 2);
+	ret = no_os_spi_write_and_read(dev->spi_desc, buf, 2);
 
 	if(ret != FAILURE) {
 		buf[0] = ADGS1408_RROBIN_EXIT_3;
 		buf[1] = ADGS1408_RROBIN_EXIT_4;
-		ret |= spi_write_and_read(dev->spi_desc, buf, 2);
+		ret |= no_os_spi_write_and_read(dev->spi_desc, buf, 2);
 	}
 
 	return ret;
@@ -399,7 +399,7 @@ int32_t adgs1408_init(struct adgs1408_dev **device,
 		return -1;
 
 	/* SPI */
-	ret = spi_init(&dev->spi_desc, &init_param.spi_init);
+	ret = no_os_spi_init(&dev->spi_desc, &init_param.spi_init);
 	ret |= adgs1408_do_soft_reset(dev);
 
 	/* Device Settings */
@@ -454,7 +454,7 @@ int32_t adgs1408_remove(struct adgs1408_dev *dev)
 {
 	int32_t ret;
 
-	ret = spi_remove(dev->spi_desc);
+	ret = no_os_spi_remove(dev->spi_desc);
 
 	free(dev);
 

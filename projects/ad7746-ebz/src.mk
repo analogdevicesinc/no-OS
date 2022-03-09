@@ -6,7 +6,7 @@ SRCS += $(NO-OS)/util/util.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c \
 	$(PLATFORM_DRIVERS)/uart.c \
 	$(PLATFORM_DRIVERS)/uart_stdio.c \
-	$(PLATFORM_DRIVERS)/rtc.c \
+	$(PLATFORM_DRIVERS)/no_os_rtc.c \
 	$(PLATFORM_DRIVERS)/platform_init.c \
 	$(DRIVERS)/cdc/ad7746/ad7746.c \
 	$(DRIVERS)/api/no_os_i2c.c \

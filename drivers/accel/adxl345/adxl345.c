@@ -64,9 +64,9 @@ uint8_t adxl345_get_register_value(struct adxl345_dev *dev,
 	if (dev->communication_type == ADXL345_SPI_COMM) {
 		data_buffer[0] = ADXL345_SPI_READ | register_address;
 		data_buffer[1] = 0;
-		spi_write_and_read(dev->spi_desc,
-				   data_buffer,
-				   2);
+		no_os_spi_write_and_read(dev->spi_desc,
+					 data_buffer,
+					 2);
 		register_value = data_buffer[1];
 	} else {
 		no_os_i2c_write(dev->i2c_desc,
@@ -100,9 +100,9 @@ void adxl345_set_register_value(struct adxl345_dev *dev,
 	if (dev->communication_type == ADXL345_SPI_COMM) {
 		data_buffer[0] = ADXL345_SPI_WRITE | register_address;
 		data_buffer[1] = register_value;
-		spi_write_and_read(dev->spi_desc,
-				   data_buffer,
-				   2);
+		no_os_spi_write_and_read(dev->spi_desc,
+					 data_buffer,
+					 2);
 	} else {
 		data_buffer[0] = register_address;
 		data_buffer[1] = register_value;
@@ -140,7 +140,7 @@ int32_t adxl345_init(struct adxl345_dev **device,
 	dev->communication_type = init_param.communication_type;
 
 	if (dev->communication_type == ADXL345_SPI_COMM)
-		status = spi_init(&dev->spi_desc, &init_param.spi_init);
+		status = no_os_spi_init(&dev->spi_desc, &init_param.spi_init);
 	else
 		status = no_os_i2c_init(&dev->i2c_desc, &init_param.i2c_init);
 
@@ -167,7 +167,7 @@ int32_t adxl345_remove(struct adxl345_dev *dev)
 	int32_t ret;
 
 	if (dev->communication_type == ADXL345_SPI_COMM)
-		ret = spi_remove(dev->spi_desc);
+		ret = no_os_spi_remove(dev->spi_desc);
 	else
 		ret = no_os_i2c_remove(dev->i2c_desc);
 
@@ -223,9 +223,9 @@ void adxl345_get_xyz(struct adxl345_dev *dev,
 		read_buffer[0] = ADXL345_SPI_READ |
 				 ADXL345_SPI_MB |
 				 first_reg_address;
-		spi_write_and_read(dev->spi_desc,
-				   read_buffer,
-				   7);
+		no_os_spi_write_and_read(dev->spi_desc,
+					 read_buffer,
+					 7);
 		/* x = ((ADXL345_DATAX1) << 8) + ADXL345_DATAX0 */
 		*x = ((int16_t)read_buffer[2] << 8) + read_buffer[1];
 		/* y = ((ADXL345_DATAY1) << 8) + ADXL345_DATAY0 */

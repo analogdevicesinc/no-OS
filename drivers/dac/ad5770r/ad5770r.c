@@ -69,7 +69,7 @@ int32_t ad5770r_spi_reg_read(struct ad5770r_dev *dev,
 	buf[0] = AD5770R_REG_READ(reg_addr);
 	buf[1] = 0x00;
 
-	ret = spi_write_and_read(dev->spi_desc, buf, sizeof(buf));
+	ret = no_os_spi_write_and_read(dev->spi_desc, buf, sizeof(buf));
 
 	if (ret)
 		return ret;
@@ -103,7 +103,7 @@ int32_t ad5770r_spi_reg_read_multiple(struct ad5770r_dev *dev,
 
 	buf[0] = AD5770R_REG_READ(reg_addr);
 
-	ret = spi_write_and_read(dev->spi_desc, buf, count + 1);
+	ret = no_os_spi_write_and_read(dev->spi_desc, buf, count + 1);
 
 	if (ret) {
 		free(buf);
@@ -134,7 +134,7 @@ int32_t ad5770r_spi_reg_write(struct ad5770r_dev *dev,
 	buf[0] = AD5770R_REG_WRITE(reg_addr);
 	buf[1] = reg_data;
 
-	return spi_write_and_read(dev->spi_desc, buf, sizeof(buf));
+	return no_os_spi_write_and_read(dev->spi_desc, buf, sizeof(buf));
 }
 
 /**
@@ -162,7 +162,7 @@ int32_t ad5770r_spi_reg_write_multiple(struct ad5770r_dev *dev,
 	data[0] = AD5770R_REG_WRITE(reg_addr);
 	memcpy(&data[1], reg_data, count);
 
-	ret = spi_write_and_read(dev->spi_desc, data, count + 1);
+	ret = no_os_spi_write_and_read(dev->spi_desc, data, count + 1);
 	free(data);
 
 	return ret;
@@ -682,7 +682,7 @@ int32_t ad5770r_init(struct ad5770r_dev **device,
 		return FAILURE;
 
 	/* SPI */
-	ret = spi_init(&dev->spi_desc, &init_param->spi_init);
+	ret = no_os_spi_init(&dev->spi_desc, &init_param->spi_init);
 	if (IS_ERR_VALUE(ret))
 		goto error_dev;
 
@@ -774,7 +774,7 @@ int32_t ad5770r_init(struct ad5770r_dev **device,
 error_gpio:
 	ad5770r_remove_gpio(dev);
 error_spi:
-	spi_remove(dev->spi_desc);
+	no_os_spi_remove(dev->spi_desc);
 error_dev:
 	free(dev);
 
@@ -793,7 +793,7 @@ int32_t ad5770r_remove(struct ad5770r_dev *dev)
 	if (!dev)
 		return FAILURE;
 
-	ret = spi_remove(dev->spi_desc);
+	ret = no_os_spi_remove(dev->spi_desc);
 
 	ret = ad5770r_remove_gpio(dev);
 	if (IS_ERR_VALUE(ret))

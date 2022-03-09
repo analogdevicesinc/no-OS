@@ -65,7 +65,7 @@ int32_t ad6676_spi_read(struct ad6676_dev *dev,
 	buf[1] = reg_addr & 0xFF;
 	buf[2] = 0x00;
 
-	ret = spi_write_and_read(dev->spi_desc, buf, 3);
+	ret = no_os_spi_write_and_read(dev->spi_desc, buf, 3);
 	*reg_data = buf[2];
 
 	return ret;
@@ -91,7 +91,7 @@ int32_t ad6676_spi_write(struct ad6676_dev *dev,
 	buf[1] = reg_addr & 0xFF;
 	buf[2] = reg_data;
 
-	ret = spi_write_and_read(dev->spi_desc, buf, 3);
+	ret = no_os_spi_write_and_read(dev->spi_desc, buf, 3);
 
 	return ret;
 }
@@ -649,7 +649,7 @@ int32_t ad6676_setup(struct ad6676_dev **device,
 		return -1;
 
 	/* SPI */
-	ret = spi_init(&dev->spi_desc, &init_param.spi_init);
+	ret = no_os_spi_init(&dev->spi_desc, &init_param.spi_init);
 	if (ret < 0)
 		return ret;
 

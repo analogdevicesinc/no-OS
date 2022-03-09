@@ -81,7 +81,7 @@ int main(void)
 		.extra = &xil_gpio_init
 	};
 
-	struct spi_init_param spi_init = {
+	struct no_os_spi_init_param spi_init = {
 		.device_id = SPI_DEVICE_ID,
 		.max_speed_hz = 2000000,
 		.chip_select = SPI_ADF5902_CS,

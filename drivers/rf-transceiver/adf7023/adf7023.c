@@ -73,9 +73,9 @@ void adf7023_write_read_byte(struct adf7023_dev *dev,
 	uint8_t data = 0;
 
 	data = write_byte;
-	spi_write_and_read(dev->spi_desc,
-			   &data,
-			   1);
+	no_os_spi_write_and_read(dev->spi_desc,
+				 &data,
+				 1);
 	if (read_byte)
 		*read_byte = data;
 }
@@ -105,7 +105,7 @@ int32_t adf7023_init(struct adf7023_dev **device,
 		return -1;
 
 	/* SPI */
-	ret = spi_init(&dev->spi_desc, &init_param.spi_init);
+	ret = no_os_spi_init(&dev->spi_desc, &init_param.spi_init);
 
 	/* GPIO */
 	ret |= no_os_gpio_get(&dev->gpio_cs, &init_param.gpio_cs);
@@ -146,7 +146,7 @@ int32_t adf7023_remove(struct adf7023_dev *dev)
 {
 	int32_t ret;
 
-	ret = spi_remove(dev->spi_desc);
+	ret = no_os_spi_remove(dev->spi_desc);
 
 	ret |= no_os_gpio_remove(dev->gpio_cs);
 	ret |= no_os_gpio_remove(dev->gpio_miso);

@@ -489,7 +489,7 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy,
 
 	no_os_gpio_direction_output(phy->gpio_desc_resetb, 0);
 
-	spi_init(&phy->spi, &init_param->spi_param);
+	no_os_spi_init(&phy->spi, &init_param->spi_param);
 
 	phy->pdata->port_ctrl.digital_io_ctrl = 0;
 	phy->pdata->port_ctrl.lvds_invert[0] = init_param->lvds_invert1_control;
@@ -586,7 +586,7 @@ out:
 int32_t ad9361_remove(struct ad9361_rf_phy *phy)
 {
 	ad9361_unregister_clocks(phy);
-	spi_remove(phy->spi);
+	no_os_spi_remove(phy->spi);
 	no_os_gpio_remove(phy->gpio_desc_resetb);
 	no_os_gpio_remove(phy->gpio_desc_sync);
 	no_os_gpio_remove(phy->gpio_desc_cal_sw1);

@@ -84,7 +84,7 @@
  */
 struct sd_init_param {
 	/** Descriptor of an initialized SPI channel */
-	struct spi_desc *spi_desc;
+	struct no_os_spi_desc *spi_desc;
 };
 
 /**
@@ -93,7 +93,7 @@ struct sd_init_param {
  */
 struct sd_desc {
 	/** Descriptor of an initialized SPI channel */
-	struct spi_desc	*spi_desc;
+	struct no_os_spi_desc	*spi_desc;
 	/** Memory size of the SD card in bytes */
 	uint64_t	memory_size;
 	/** 1 if SD card is HC or XC, 0 otherwise */

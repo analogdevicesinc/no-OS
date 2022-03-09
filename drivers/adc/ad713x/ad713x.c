@@ -107,7 +107,7 @@ int32_t ad713x_spi_reg_read(struct ad713x_dev *dev,
 	buf[0] = AD713X_REG_READ(reg_addr);
 	buf[1] = 0x00;
 
-	ret = spi_write_and_read(dev->spi_desc, buf, 2);
+	ret = no_os_spi_write_and_read(dev->spi_desc, buf, 2);
 	if(IS_ERR_VALUE(ret))
 		return FAILURE;
 	*reg_data = buf[1];
@@ -131,7 +131,7 @@ int32_t ad713x_spi_reg_write(struct ad713x_dev *dev,
 	buf[0] = reg_addr;
 	buf[1] = reg_data;
 
-	return spi_write_and_read(dev->spi_desc, buf, 2);
+	return no_os_spi_write_and_read(dev->spi_desc, buf, 2);
 }
 
 /**
@@ -523,7 +523,7 @@ int32_t ad713x_init(struct ad713x_dev **device,
 		return FAILURE;
 
 	if (!init_param->spi_common_dev) {
-		ret = spi_init(&dev->spi_desc, &init_param->spi_init_prm);
+		ret = no_os_spi_init(&dev->spi_desc, &init_param->spi_init_prm);
 		if (IS_ERR_VALUE(ret))
 			goto error_dev;
 	} else {
@@ -598,7 +598,7 @@ int32_t ad713x_remove(struct ad713x_dev *dev)
 	if(!dev)
 		return FAILURE;
 
-	ret = spi_remove(dev->spi_desc);
+	ret = no_os_spi_remove(dev->spi_desc);
 	if(IS_ERR_VALUE(ret))
 		return FAILURE;
 

@@ -15,7 +15,7 @@ LIBRARIES += iio
 SRC_DIRS += $(NO-OS)/iio/iio_app
 endif
 SRCS += $(DRIVERS)/adc/ad9434/ad9434.c \
-	$(DRIVERS)/api/spi.c \
+	$(DRIVERS)/api/no_os_spi.c \
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.c \
 	$(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c \
 	$(NO-OS)/util/util.c

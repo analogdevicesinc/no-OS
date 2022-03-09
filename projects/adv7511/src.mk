@@ -20,7 +20,7 @@ SRCS += $(DRIVERS)/axi_core/axi_dmac/axi_dmac.c \
 	$(DRIVERS)/axi_core/clk_axi_clkgen/clk_axi_clkgen.c \
 	$(DRIVERS)/api/no_os_i2c.c \
 	$(DRIVERS)/api/no_os_gpio.c \
-	$(DRIVERS)/api/spi.c \
+	$(DRIVERS)/api/no_os_spi.c \
 	$(NO-OS)/util/util.c \
 	$(NO-OS)/util/no_os_list.c
 SRCS +=	$(PLATFORM_DRIVERS)/axi_io.c \

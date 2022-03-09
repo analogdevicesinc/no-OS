@@ -76,8 +76,8 @@
  * @param xinit Platform specific SPI init param
  * @return int32_t FAILURE if the device couldn't be found or configured
  */
-static int32_t spi_init_pl(struct spi_desc *desc,
-			   const struct spi_init_param *param)
+static int32_t spi_init_pl(struct no_os_spi_desc *desc,
+			   const struct no_os_spi_init_param *param)
 {
 #ifdef XSPI_H
 	int32_t				ret;
@@ -116,9 +116,9 @@ static int32_t spi_init_pl(struct spi_desc *desc,
 
 	ret = XSpi_SetOptions(xdesc->instance,
 			      XSP_MASTER_OPTION |
-			      ((desc->mode & SPI_CPOL) ?
+			      ((desc->mode & NO_OS_SPI_CPOL) ?
 			       XSP_CLK_ACTIVE_LOW_OPTION : 0) |
-			      ((desc->mode & SPI_CPHA) ?
+			      ((desc->mode & NO_OS_SPI_CPHA) ?
 			       XSP_CLK_PHASE_1_OPTION : 0));
 	if (ret != SUCCESS)
 		goto pl_error;
@@ -145,8 +145,8 @@ pl_error:
  * @param xinit Platform specific SPI init param
  * @return int32_t FAILURE if the device couldn't be found or configured
  */
-static int32_t spi_init_ps(struct spi_desc *desc,
-			   const struct spi_init_param *param)
+static int32_t spi_init_ps(struct no_os_spi_desc *desc,
+			   const struct no_os_spi_init_param *param)
 {
 #ifdef XSPIPS_H
 	int32_t				ret;
@@ -249,8 +249,8 @@ ps_error:
  * @param param - The structure that contains the SPI parameters.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t xil_spi_init(struct spi_desc **desc,
-		     const struct spi_init_param *param)
+int32_t xil_spi_init(struct no_os_spi_desc **desc,
+		     const struct no_os_spi_init_param *param)
 {
 	int32_t				ret;
 	enum xil_spi_type		*spi_type;
@@ -299,11 +299,11 @@ init_error:
 }
 
 /**
- * @brief Free the resources allocated by spi_init().
+ * @brief Free the resources allocated by no_os_spi_init().
  * @param desc - The SPI descriptor.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t xil_spi_remove(struct spi_desc *desc)
+int32_t xil_spi_remove(struct no_os_spi_desc *desc)
 {
 #ifdef XSPI_H
 	int32_t				ret;
@@ -361,7 +361,7 @@ error:
  * @param bytes_number - Number of bytes to write/read.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t xil_spi_write_and_read(struct spi_desc *desc,
+int32_t xil_spi_write_and_read(struct no_os_spi_desc *desc,
 			       uint8_t *data,
 			       uint16_t bytes_number)
 {
@@ -386,15 +386,15 @@ int32_t xil_spi_write_and_read(struct spi_desc *desc,
 #ifdef XSPI_H
 		ret = XSpi_SetOptions(xdesc->instance,
 				      XSP_MASTER_OPTION |
-				      ((desc->mode & SPI_CPOL) ?
+				      ((desc->mode & NO_OS_SPI_CPOL) ?
 				       XSP_CLK_ACTIVE_LOW_OPTION : 0) |
-				      ((desc->mode & SPI_CPHA) ?
+				      ((desc->mode & NO_OS_SPI_CPHA) ?
 				       XSP_CLK_PHASE_1_OPTION : 0));
 		if (ret != SUCCESS)
 			goto error;
 
 		ctrl_reg = XSpi_GetControlReg(((XSpi*)xdesc->instance));
-		if (desc->bit_order == SPI_BIT_ORDER_LSB_FIRST)
+		if (desc->bit_order == NO_OS_SPI_BIT_ORDER_LSB_FIRST)
 			ctrl_reg |= XSP_CR_LSB_MSB_FIRST_MASK;
 		else
 			ctrl_reg &= ~ XSP_CR_LSB_MSB_FIRST_MASK;
@@ -420,9 +420,9 @@ int32_t xil_spi_write_and_read(struct spi_desc *desc,
 					((xdesc->flags & SPI_CS_DECODE) ?
 					 XSPIPS_DECODE_SSELECT_OPTION : 0) |
 					XSPIPS_FORCE_SSELECT_OPTION |
-					((desc->mode & SPI_CPOL) ?
+					((desc->mode & NO_OS_SPI_CPOL) ?
 					 XSPIPS_CLK_ACTIVE_LOW_OPTION : 0) |
-					((desc->mode & SPI_CPHA) ?
+					((desc->mode & NO_OS_SPI_CPHA) ?
 					 XSPIPS_CLK_PHASE_1_OPTION : 0));
 		if (ret != SUCCESS)
 			goto error;
@@ -453,7 +453,7 @@ error:
 /**
  * @brief Xilinx platform specific SPI platform ops structure
  */
-const struct spi_platform_ops xil_spi_ops = {
+const struct no_os_spi_platform_ops xil_spi_ops = {
 	.init = &xil_spi_init,
 	.write_and_read = &xil_spi_write_and_read,
 	.remove = &xil_spi_remove

@@ -72,9 +72,9 @@ int32_t ad9523_spi_read(struct ad9523_dev *dev,
 		buf[0] = 0x80 | (reg_addr >> 8);
 		buf[1] = reg_addr & 0xFF;
 		buf[2] = 0x00;
-		ret |= spi_write_and_read(dev->spi_desc,
-					  buf,
-					  3);
+		ret |= no_os_spi_write_and_read(dev->spi_desc,
+						buf,
+						3);
 		reg_addr--;
 		*reg_data <<= 8;
 		*reg_data |= buf[2];
@@ -105,9 +105,9 @@ int32_t ad9523_spi_write(struct ad9523_dev *dev,
 		buf[0] = reg_addr >> 8;
 		buf[1] = reg_addr & 0xFF;
 		buf[2] = (reg_data >> ((AD9523_TRANSF_LEN(reg_addr) - index - 1) * 8)) & 0xFF;
-		ret |= spi_write_and_read(dev->spi_desc,
-					  buf,
-					  3);
+		ret |= no_os_spi_write_and_read(dev->spi_desc,
+						buf,
+						3);
 		reg_addr--;
 	}
 
@@ -438,7 +438,7 @@ int32_t ad9523_setup(struct ad9523_dev **device,
 		return -1;
 
 	/* SPI */
-	ret = spi_init(&dev->spi_desc, &init_param->spi_init);
+	ret = no_os_spi_init(&dev->spi_desc, &init_param->spi_init);
 	if (ret < 0)
 		return ret;
 
@@ -729,7 +729,7 @@ int32_t ad9523_remove(struct ad9523_dev *dev)
 {
 	int32_t ret;
 
-	ret = spi_remove(dev->spi_desc);
+	ret = no_os_spi_remove(dev->spi_desc);
 
 	free(dev);
 

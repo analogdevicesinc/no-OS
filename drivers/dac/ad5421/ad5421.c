@@ -81,7 +81,7 @@ int32_t ad5421_init(struct ad5421_dev **device,
 	no_os_gpio_get(&dev->gpio_faultin, &init_param.gpio_faultin);
 
 	/* Setup the SPI interface. */
-	spi_init(&dev->spi_desc, &init_param.spi_init);
+	no_os_spi_init(&dev->spi_desc, &init_param.spi_init);
 	/* Setup AD5421 control register. */
 	/* Write to the control register. */
 	spi_data = AD5421_CMD(AD5421_CMDWRCTRL);
@@ -125,7 +125,7 @@ int32_t ad5421_remove(struct ad5421_dev *dev)
 {
 	int32_t ret;
 
-	ret = spi_remove(dev->spi_desc);
+	ret = no_os_spi_remove(dev->spi_desc);
 
 	ret |= no_os_gpio_remove(dev->gpio_ldac);
 	ret |= no_os_gpio_remove(dev->gpio_faultin);
@@ -380,9 +380,9 @@ int32_t ad5421_set(struct ad5421_dev *dev,
 	tx_buffer[1] = (uint8_t) ((*value & 0x00ff00) >> 8);
 	tx_buffer[2] = (uint8_t) ((*value & 0x0000ff) >> 0);
 	/* Do a write operation via SPI. */
-	status = spi_write_and_read(dev->spi_desc,
-				    tx_buffer,
-				    3);
+	status = no_os_spi_write_and_read(dev->spi_desc,
+					  tx_buffer,
+					  3);
 	if (status != 3) {
 		return -1;
 	} else {
@@ -403,9 +403,9 @@ int32_t ad5421_get(struct ad5421_dev *dev)
 	uint8_t rx_buffer[3] = {0, 0, 0};
 	int8_t status = 0;
 
-	status = spi_write_and_read(dev->spi_desc,
-				    rx_buffer,
-				    3);
+	status = no_os_spi_write_and_read(dev->spi_desc,
+					  rx_buffer,
+					  3);
 	if (status != 3) {
 		return -1;
 	}

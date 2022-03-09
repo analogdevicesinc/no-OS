@@ -20,7 +20,7 @@ SRCS += $(PROJECT)/src/app.c \
 	$(PROJECT)/src/app_clocking.c \
 	$(PROJECT)/src/app_jesd.c \
 	$(PROJECT)/src/uc/uc_settings.c \
-	$(DRIVERS)/api/spi.c \
+	$(DRIVERS)/api/no_os_spi.c \
 	$(DRIVERS)/api/no_os_gpio.c \
 	$(DRIVERS)/frequency/ad9528/ad9528.c
 

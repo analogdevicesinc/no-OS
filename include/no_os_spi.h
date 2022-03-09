@@ -50,44 +50,44 @@
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 
-#define	SPI_CPHA	0x01
-#define	SPI_CPOL	0x02
+#define	NO_OS_SPI_CPHA	0x01
+#define	NO_OS_SPI_CPOL	0x02
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
 /**
- * @enum spi_mode
+ * @enum no_os_spi_mode
  * @brief SPI configuration for clock phase and polarity.
  */
-typedef enum spi_mode {
+typedef enum no_os_spi_mode {
 	/** Data on rising, shift out on falling */
 	NO_OS_SPI_MODE_0 = (0 | 0),
 	/** Data on falling, shift out on rising */
-	NO_OS_SPI_MODE_1 = (0 | SPI_CPHA),
+	NO_OS_SPI_MODE_1 = (0 | NO_OS_SPI_CPHA),
 	/** Data on falling, shift out on rising */
-	NO_OS_SPI_MODE_2 = (SPI_CPOL | 0),
+	NO_OS_SPI_MODE_2 = (NO_OS_SPI_CPOL | 0),
 	/** Data on rising, shift out on falling */
-	NO_OS_SPI_MODE_3 = (SPI_CPOL | SPI_CPHA)
-} spi_mode;
+	NO_OS_SPI_MODE_3 = (NO_OS_SPI_CPOL | NO_OS_SPI_CPHA)
+} no_os_spi_mode;
 
 /**
- * @enum spi_bit_order
+ * @enum no_os_spi_bit_order
  * @brief SPI configuration for bit order (MSB/LSB).
  */
-typedef enum spi_bit_order {
+typedef enum no_os_spi_bit_order {
 	/** Most-significant bit (MSB) first */
-	SPI_BIT_ORDER_MSB_FIRST = 0,
+	NO_OS_SPI_BIT_ORDER_MSB_FIRST = 0,
 	/** Least-significant bit (LSB) first */
-	SPI_BIT_ORDER_LSB_FIRST = 1,
-} spi_bit_order;
+	NO_OS_SPI_BIT_ORDER_LSB_FIRST = 1,
+} no_os_spi_bit_order;
 
 /**
- * @struct spi_msg_list
+ * @struct no_os_spi_msg_list
  * @brief List item describing a SPI transfer
  */
-struct spi_msg {
+struct no_os_spi_msg {
 	/** Buffer with data to send. If NULL, 0x00 will be sent */
 	uint8_t			*tx_buff;
 	/** Buffer where to store data. If NULL, incoming data won't be saved */
@@ -99,17 +99,17 @@ struct spi_msg {
 };
 
 /**
- * @struct spi_platform_ops
+ * @struct no_os_spi_platform_ops
  * @brief Structure holding SPI function pointers that point to the platform
  * specific function
  */
-struct spi_platform_ops ;
+struct no_os_spi_platform_ops ;
 
 /**
- * @struct spi_init_param
+ * @struct no_os_spi_init_param
  * @brief Structure holding the parameters for SPI initialization
  */
-typedef struct spi_init_param {
+typedef struct no_os_spi_init_param {
 	/** Device ID */
 	uint32_t	device_id;
 	/** maximum transfer speed */
@@ -117,19 +117,19 @@ typedef struct spi_init_param {
 	/** SPI chip select */
 	uint8_t		chip_select;
 	/** SPI mode */
-	enum spi_mode	mode;
+	enum no_os_spi_mode	mode;
 	/** SPI bit order */
-	enum spi_bit_order	bit_order;
-	const struct spi_platform_ops *platform_ops;
+	enum no_os_spi_bit_order	bit_order;
+	const struct no_os_spi_platform_ops *platform_ops;
 	/**  SPI extra parameters (device specific) */
 	void		*extra;
-} spi_init_param;
+} no_os_spi_init_param;
 
 /**
- * @struct spi_desc
+ * @struct no_os_spi_desc
  * @brief Structure holding SPI descriptor.
  */
-typedef struct spi_desc {
+typedef struct no_os_spi_desc {
 	/** Device ID */
 	uint32_t	device_id;
 	/** maximum transfer speed */
@@ -137,28 +137,28 @@ typedef struct spi_desc {
 	/** SPI chip select */
 	uint8_t		chip_select;
 	/** SPI mode */
-	enum spi_mode	mode;
+	enum no_os_spi_mode	mode;
 	/** SPI bit order */
-	enum spi_bit_order	bit_order;
-	const struct spi_platform_ops *platform_ops;
+	enum no_os_spi_bit_order	bit_order;
+	const struct no_os_spi_platform_ops *platform_ops;
 	/**  SPI extra parameters (device specific) */
 	void		*extra;
-} spi_desc;
+} no_os_spi_desc;
 
 /**
- * @struct spi_platform_ops
+ * @struct no_os_spi_platform_ops
  * @brief Structure holding SPI function pointers that point to the platform
  * specific function
  */
-struct spi_platform_ops {
+struct no_os_spi_platform_ops {
 	/** SPI initialization function pointer */
-	int32_t (*init)(struct spi_desc **, const struct spi_init_param *);
+	int32_t (*init)(struct no_os_spi_desc **, const struct no_os_spi_init_param *);
 	/** SPI write/read function pointer */
-	int32_t (*write_and_read)(struct spi_desc *, uint8_t *, uint16_t);
+	int32_t (*write_and_read)(struct no_os_spi_desc *, uint8_t *, uint16_t);
 	/** Iterate over the spi_msg array and send all messages at once */
-	int32_t (*transfer)(struct spi_desc *, struct spi_msg *, uint32_t);
+	int32_t (*transfer)(struct no_os_spi_desc *, struct no_os_spi_msg *, uint32_t);
 	/** SPI remove function pointer */
-	int32_t (*remove)(struct spi_desc *);
+	int32_t (*remove)(struct no_os_spi_desc *);
 };
 
 /******************************************************************************/
@@ -166,19 +166,21 @@ struct spi_platform_ops {
 /******************************************************************************/
 
 /* Initialize the SPI communication peripheral. */
-int32_t spi_init(struct spi_desc **desc,
-		 const struct spi_init_param *param);
+int32_t no_os_spi_init(struct no_os_spi_desc **desc,
+		       const struct no_os_spi_init_param *param);
 
-/* Free the resources allocated by spi_init(). */
-int32_t spi_remove(struct spi_desc *desc);
+/* Free the resources allocated by no_os_spi_init(). */
+int32_t no_os_spi_remove(struct no_os_spi_desc *desc);
 
 /* Write and read data to/from SPI. */
-int32_t spi_write_and_read(struct spi_desc *desc,
-			   uint8_t *data,
-			   uint16_t bytes_number);
+int32_t no_os_spi_write_and_read(struct no_os_spi_desc *desc,
+				 uint8_t *data,
+				 uint16_t bytes_number);
 
 /* Iterate over the spi_msg array and send all messages at once */
-int32_t spi_transfer(struct spi_desc *desc, struct spi_msg *msgs, uint32_t len);
+int32_t no_os_spi_transfer(struct no_os_spi_desc *desc,
+			   struct no_os_spi_msg *msgs,
+			   uint32_t len);
 
 
 #endif // _NO_OS_SPI_H_

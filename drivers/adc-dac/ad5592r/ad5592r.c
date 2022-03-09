@@ -61,8 +61,8 @@ static int32_t ad5592r_spi_wnop_r16(struct ad5592r_dev *dev, uint16_t *buf)
 	int32_t ret;
 	uint16_t spi_msg_nop = 0; /* NOP */
 
-	ret = spi_write_and_read(dev->spi, (uint8_t *)&spi_msg_nop,
-				 sizeof(spi_msg_nop));
+	ret = no_os_spi_write_and_read(dev->spi, (uint8_t *)&spi_msg_nop,
+				       sizeof(spi_msg_nop));
 	if (ret < 0)
 		return ret;
 
@@ -87,8 +87,8 @@ int32_t ad5592r_write_dac(struct ad5592r_dev *dev, uint8_t chan,
 
 	dev->spi_msg = swab16( BIT(15) | (uint16_t)(chan << 12) | value);
 
-	return spi_write_and_read(dev->spi, (uint8_t *)&dev->spi_msg,
-				  sizeof(dev->spi_msg));
+	return no_os_spi_write_and_read(dev->spi, (uint8_t *)&dev->spi_msg,
+					sizeof(dev->spi_msg));
 }
 
 /**
@@ -110,8 +110,8 @@ int32_t ad5592r_read_adc(struct ad5592r_dev *dev, uint8_t chan,
 	dev->spi_msg = swab16((uint16_t)(AD5592R_REG_ADC_SEQ << 11) |
 			      BIT(chan));
 
-	ret = spi_write_and_read(dev->spi, (uint8_t *)&dev->spi_msg,
-				 sizeof(dev->spi_msg));
+	ret = no_os_spi_write_and_read(dev->spi, (uint8_t *)&dev->spi_msg,
+				       sizeof(dev->spi_msg));
 	if (ret < 0)
 		return ret;
 
@@ -154,8 +154,8 @@ int32_t ad5592r_multi_read_adc(struct ad5592r_dev *dev, uint16_t chans,
 
 	dev->spi_msg = swab16((uint16_t)(AD5592R_REG_ADC_SEQ << 11) | chans);
 
-	ret = spi_write_and_read(dev->spi, (uint8_t *)&dev->spi_msg,
-				 sizeof(dev->spi_msg));
+	ret = no_os_spi_write_and_read(dev->spi, (uint8_t *)&dev->spi_msg,
+				       sizeof(dev->spi_msg));
 	if (ret < 0)
 		return ret;
 
@@ -192,8 +192,8 @@ int32_t ad5592r_reg_write(struct ad5592r_dev *dev, uint8_t reg, uint16_t value)
 
 	dev->spi_msg = swab16((reg << 11) | value);
 
-	return spi_write_and_read(dev->spi, (uint8_t *)&dev->spi_msg,
-				  sizeof(dev->spi_msg));
+	return no_os_spi_write_and_read(dev->spi, (uint8_t *)&dev->spi_msg,
+					sizeof(dev->spi_msg));
 }
 
 /**
@@ -214,8 +214,8 @@ int32_t ad5592r_reg_read(struct ad5592r_dev *dev, uint8_t reg, uint16_t *value)
 	dev->spi_msg = swab16((AD5592R_REG_LDAC << 11) |
 			      AD5592R_LDAC_READBACK_EN | (reg << 2) | dev->ldac_mode);
 
-	ret = spi_write_and_read(dev->spi, (uint8_t *)&dev->spi_msg,
-				 sizeof(dev->spi_msg));
+	ret = no_os_spi_write_and_read(dev->spi, (uint8_t *)&dev->spi_msg,
+				       sizeof(dev->spi_msg));
 	if (ret < 0)
 		return ret;
 

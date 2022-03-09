@@ -25,7 +25,7 @@ SRCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c \
         $(DRIVERS)/axi_core/jesd204/axi_jesd204_rx.c \
         $(DRIVERS)/axi_core/jesd204/xilinx_transceiver.c \
         $(DRIVERS)/adc/ad9656/ad9656.c \
-        $(DRIVERS)/api/spi.c \
+        $(DRIVERS)/api/no_os_spi.c \
         $(NO-OS)/util/util.c
 ifeq (y,$(strip $(TINYIIOD)))
 SRCS += $(NO-OS)/util/fifo.c \

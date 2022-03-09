@@ -66,7 +66,7 @@ int32_t adxrs453_init(struct adxrs453_dev **device,
 	if (!dev)
 		return -1;
 
-	status = spi_init(&dev->spi_desc, &init_param.spi_init);
+	status = no_os_spi_init(&dev->spi_desc, &init_param.spi_init);
 
 	/* Read the value of the ADXRS453 ID register. */
 	adxrs453_id = adxrs453_get_register_value(dev, ADXRS453_REG_PID);
@@ -89,7 +89,7 @@ int32_t adxrs453_remove(struct adxrs453_dev *dev)
 {
 	int32_t ret;
 
-	ret = spi_remove(dev->spi_desc);
+	ret = no_os_spi_remove(dev->spi_desc);
 
 	free(dev);
 
@@ -129,8 +129,8 @@ uint16_t adxrs453_get_register_value(struct adxrs453_dev *dev,
 	data_buffer[5] = data_buffer[1];
 	data_buffer[6] = data_buffer[2];
 	data_buffer[7] = data_buffer[3];
-	spi_write_and_read(dev->spi_desc, data_buffer, 4);
-	spi_write_and_read(dev->spi_desc, &data_buffer[4], 4);
+	no_os_spi_write_and_read(dev->spi_desc, data_buffer, 4);
+	no_os_spi_write_and_read(dev->spi_desc, &data_buffer[4], 4);
 	register_value = ((uint16_t)data_buffer[1] << 11) |
 			 ((uint16_t)data_buffer[2] << 3) |
 			 (data_buffer[3] >> 5);
@@ -172,7 +172,7 @@ void adxrs453_set_register_value(struct adxrs453_dev *dev,
 	if(!(sum % 2))
 		data_buffer[3] |= 1;
 
-	spi_write_and_read(dev->spi_desc, data_buffer, 4);
+	no_os_spi_write_and_read(dev->spi_desc, data_buffer, 4);
 }
 
 /***************************************************************************//**
@@ -205,8 +205,8 @@ uint32_t adxrs453_get_sensor_data(struct adxrs453_dev *dev)
 	data_buffer[5] = data_buffer[1];
 	data_buffer[6] = data_buffer[2];
 	data_buffer[7] = data_buffer[3];
-	spi_write_and_read(dev->spi_desc, data_buffer, 4);
-	spi_write_and_read(dev->spi_desc, &data_buffer[4], 4);
+	no_os_spi_write_and_read(dev->spi_desc, data_buffer, 4);
+	no_os_spi_write_and_read(dev->spi_desc, &data_buffer[4], 4);
 	register_value = ((uint32_t)data_buffer[0] << 24) |
 			 ((uint32_t)data_buffer[1] << 16) |
 			 ((uint16_t)data_buffer[2] << 8) |

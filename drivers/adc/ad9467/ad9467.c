@@ -63,7 +63,7 @@ int32_t ad9467_setup(struct ad9467_dev **device,
 		return -1;
 
 	/* SPI */
-	ret = spi_init(&dev->spi_desc, &init_param.spi_init);
+	ret = no_os_spi_init(&dev->spi_desc, &init_param.spi_init);
 
 	/* Disable test mode. */
 	ret = ad9467_write(dev, AD9467_REG_TEST_IO, 0x00);
@@ -94,7 +94,7 @@ int32_t ad9467_remove(struct ad9467_dev *dev)
 {
 	int32_t ret;
 
-	ret = spi_remove(dev->spi_desc);
+	ret = no_os_spi_remove(dev->spi_desc);
 
 	free(dev);
 
@@ -123,7 +123,7 @@ int32_t ad9467_write(struct ad9467_dev *dev,
 	write_buffer[1] = (uint8_t)(reg_addr & 0x00FF);
 	write_buffer[2] = reg_val;
 
-	ret = spi_write_and_read(dev->spi_desc, write_buffer, 3);
+	ret = no_os_spi_write_and_read(dev->spi_desc, write_buffer, 3);
 
 	return ret;
 }
@@ -150,7 +150,7 @@ int32_t ad9467_read(struct ad9467_dev *dev,
 	write_buffer[1] = (uint8_t)(reg_addr & 0x00FF);
 	write_buffer[2] = 0;
 
-	ret = spi_write_and_read(dev->spi_desc, write_buffer, 3);
+	ret = no_os_spi_write_and_read(dev->spi_desc, write_buffer, 3);
 
 	*reg_val = write_buffer[2];
 

@@ -179,7 +179,7 @@ enum ad463x_id {
  */
 struct ad463x_init_param {
 	/** SPI */
-	struct spi_init_param *spi_init;
+	struct no_os_spi_init_param *spi_init;
 	/** GPIO */
 	struct no_os_gpio_init_param *gpio_resetn;
 	/** PWM */
@@ -214,7 +214,7 @@ struct ad463x_init_param {
  */
 struct ad463x_dev {
 	/** SPI */
-	struct spi_desc *spi_desc;
+	struct no_os_spi_desc *spi_desc;
 	/** GPIO */
 	struct no_os_gpio_desc *gpio_resetn;
 	/** PWM */

@@ -73,7 +73,7 @@ static struct aducm_device_desc	*devices[NB_SPI_DEVICES];
  * @return
  */
 static int32_t config_device(struct aducm_device_desc *dev,
-			     struct spi_desc *desc,
+			     struct no_os_spi_desc *desc,
 			     bool init)
 {
 	struct aducm_spi_desc *aducm_desc = desc->extra;
@@ -95,9 +95,9 @@ static int32_t config_device(struct aducm_device_desc *dev,
 		dev->cs = desc->chip_select;
 	}
 	if (init || desc->mode != dev->mode) {
-		adi_spi_SetClockPhase(dev->spi_handle, desc->mode & SPI_CPHA);
+		adi_spi_SetClockPhase(dev->spi_handle, desc->mode & NO_OS_SPI_CPHA);
 		adi_spi_SetClockPolarity(dev->spi_handle,
-					 desc->mode & SPI_CPOL);
+					 desc->mode & NO_OS_SPI_CPOL);
 		dev->mode = desc->mode;
 	}
 	if (init || aducm_desc->aducm_conf.master_mode != dev->master_mode) {
@@ -121,10 +121,10 @@ static int32_t config_device(struct aducm_device_desc *dev,
  * @param param - The structure that contains the SPI parameters.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t aducm3029_spi_init(struct spi_desc **desc,
-			   const struct spi_init_param *param)
+int32_t aducm3029_spi_init(struct no_os_spi_desc **desc,
+			   const struct no_os_spi_init_param *param)
 {
-	struct spi_desc			*spi_desc;
+	struct no_os_spi_desc			*spi_desc;
 	struct aducm_spi_desc		*aducm_desc;
 	struct aducm_spi_init_param	*config;
 	struct aducm_device_desc	*dev;
@@ -139,7 +139,7 @@ int32_t aducm3029_spi_init(struct spi_desc **desc,
 		return FAILURE;
 
 	/* Memory allocation */
-	spi_desc = (struct spi_desc *)calloc(1, sizeof(*spi_desc));
+	spi_desc = (struct no_os_spi_desc *)calloc(1, sizeof(*spi_desc));
 	if (!spi_desc)
 		return FAILURE;
 	aducm_desc = (struct aducm_spi_desc *)calloc(1, sizeof(*aducm_desc));
@@ -187,11 +187,11 @@ failure:
 }
 
 /**
- * @brief Free the resources allocated by spi_init().
+ * @brief Free the resources allocated by no_os_spi_init().
  * @param desc - The SPI descriptor.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t aducm3029_spi_remove(struct spi_desc *desc)
+int32_t aducm3029_spi_remove(struct no_os_spi_desc *desc)
 {
 	struct aducm_spi_desc *aducm_desc;
 
@@ -222,7 +222,7 @@ int32_t aducm3029_spi_remove(struct spi_desc *desc)
  * @param bytes_number - Number of bytes to write/read.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t aducm3029_spi_write_and_read(struct spi_desc *desc,
+int32_t aducm3029_spi_write_and_read(struct no_os_spi_desc *desc,
 				     uint8_t *data,
 				     uint16_t bytes_number)
 {
@@ -282,7 +282,7 @@ int32_t aducm3029_spi_write_and_read(struct spi_desc *desc,
 /**
  * @brief ADuCM3029 platform specific SPI platform ops structure
  */
-const struct spi_platform_ops aducm_spi_ops = {
+const struct no_os_spi_platform_ops aducm_spi_ops = {
 	.init = &aducm3029_spi_init,
 	.write_and_read = &aducm3029_spi_write_and_read,
 	.remove = &aducm3029_spi_remove

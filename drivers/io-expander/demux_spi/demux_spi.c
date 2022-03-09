@@ -53,7 +53,7 @@
 /**
  * @brief Demux specific SPI platform ops structure
  */
-const struct spi_platform_ops demux_spi_platform_ops = {
+const struct no_os_spi_platform_ops demux_spi_platform_ops = {
 	.init = demux_spi_init,
 	.remove = demux_spi_remove,
 	.write_and_read = demux_spi_write_and_read
@@ -65,19 +65,19 @@ const struct spi_platform_ops demux_spi_platform_ops = {
  * @param param - The structure that contains the SPI parameters.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t demux_spi_init(struct spi_desc **desc,
-		       const struct spi_init_param *param)
+int32_t demux_spi_init(struct no_os_spi_desc **desc,
+		       const struct no_os_spi_init_param *param)
 {
 	int32_t ret;
 
-	struct spi_desc *descriptor;
-	struct spi_desc *spi_dev_desc;
-	struct spi_init_param *spi_dev_param;
+	struct no_os_spi_desc *descriptor;
+	struct no_os_spi_desc *spi_dev_desc;
+	struct no_os_spi_init_param *spi_dev_param;
 
 	if (!param)
 		return FAILURE;
 
-	descriptor = (struct spi_desc *)calloc(1, sizeof(*descriptor));
+	descriptor = (struct no_os_spi_desc *)calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return FAILURE;
 
@@ -87,7 +87,7 @@ int32_t demux_spi_init(struct spi_desc **desc,
 
 	spi_dev_param = param->extra;
 
-	ret = spi_init(&spi_dev_desc, spi_dev_param);
+	ret = no_os_spi_init(&spi_dev_desc, spi_dev_param);
 	if (ret != SUCCESS) {
 		free(descriptor);
 		return FAILURE;
@@ -105,12 +105,12 @@ int32_t demux_spi_init(struct spi_desc **desc,
  * @param desc - The SPI descriptor.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t demux_spi_remove(struct spi_desc *desc)
+int32_t demux_spi_remove(struct no_os_spi_desc *desc)
 {
 	if (!desc)
 		return FAILURE;
 
-	if (spi_remove(desc->extra))
+	if (no_os_spi_remove(desc->extra))
 		return FAILURE;
 
 	free(desc);
@@ -125,14 +125,14 @@ int32_t demux_spi_remove(struct spi_desc *desc)
  * @param bytes_number - Number of bytes to write/read.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t demux_spi_write_and_read(struct spi_desc *desc, uint8_t *data,
+int32_t demux_spi_write_and_read(struct no_os_spi_desc *desc, uint8_t *data,
 				 uint16_t bytes_number)
 {
 	int32_t ret;
 	uint8_t cs;
 	uint8_t *buff;
 
-	struct spi_desc *spi_dev;
+	struct no_os_spi_desc *spi_dev;
 
 	if (!desc)
 		return FAILURE;
@@ -147,7 +147,7 @@ int32_t demux_spi_write_and_read(struct spi_desc *desc, uint8_t *data,
 	buff[0] = cs;
 	memcpy((buff+1), data, bytes_number);
 
-	ret = spi_write_and_read(spi_dev, buff, bytes_number+1);
+	ret = no_os_spi_write_and_read(spi_dev, buff, bytes_number+1);
 
 	memcpy(data, buff+1, bytes_number);
 

@@ -53,8 +53,8 @@
  * @param param - The structure that contains the SPI parameters.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t generic_spi_init(struct spi_desc **desc,
-			 const struct spi_init_param *param)
+int32_t generic_spi_init(struct no_os_spi_desc **desc,
+			 const struct no_os_spi_init_param *param)
 {
 	if (desc) {
 		// Unused variable - fix compiler warning
@@ -68,11 +68,11 @@ int32_t generic_spi_init(struct spi_desc **desc,
 }
 
 /**
- * @brief Free the resources allocated by spi_init().
+ * @brief Free the resources allocated by no_os_spi_init().
  * @param desc - The SPI descriptor.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t generic_spi_remove(struct spi_desc *desc)
+int32_t generic_spi_remove(struct no_os_spi_desc *desc)
 {
 	if (desc) {
 		// Unused variable - fix compiler warning
@@ -88,7 +88,7 @@ int32_t generic_spi_remove(struct spi_desc *desc)
  * @param bytes_number - Number of bytes to write/read.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t generic_spi_write_and_read(struct spi_desc *desc,
+int32_t generic_spi_write_and_read(struct no_os_spi_desc *desc,
 				   uint8_t *data,
 				   uint16_t bytes_number)
 {
@@ -110,7 +110,7 @@ int32_t generic_spi_write_and_read(struct spi_desc *desc,
 /**
  * @brief Generic platform SPI ops
  */
-const struct spi_platform_ops generic_spi_ops = {
+const struct no_os_spi_platform_ops generic_spi_ops = {
 	.init = &generic_spi_init,
 	.write_and_read = &generic_spi_write_and_read,
 	.remove = &generic_spi_remove

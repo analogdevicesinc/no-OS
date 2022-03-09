@@ -93,7 +93,7 @@ int32_t ad9083_reg_get(struct ad9083_phy *device, uint32_t reg,
 	if (reg < MAX_REG_ADDR) {
 		data[0] = (reg >> 8) | SPI_READ;
 		data[1] = reg;
-		ret = spi_write_and_read(device->spi_desc, data, SPI_IN_OUT_BUFF_SZ);
+		ret = no_os_spi_write_and_read(device->spi_desc, data, SPI_IN_OUT_BUFF_SZ);
 		if (ret != SUCCESS)
 			return ret;
 
@@ -119,7 +119,7 @@ int32_t ad9083_reg_set(struct ad9083_phy *device, uint32_t reg,
 		data[0] = reg >> 8;
 		data[1] = reg;
 		data[2] = writeval;
-		ret = spi_write_and_read(device->spi_desc, data, SPI_IN_OUT_BUFF_SZ);
+		ret = no_os_spi_write_and_read(device->spi_desc, data, SPI_IN_OUT_BUFF_SZ);
 		if (ret != SUCCESS)
 			return ret;
 	}
@@ -151,7 +151,7 @@ static int32_t ad9083_spi_xfer(void *user_data, uint8_t *in_data,
 	for (i = 0; i < bytes_number; i++)
 		data[i] = in_data[i];
 
-	ret = spi_write_and_read(phy->spi_desc, data, bytes_number);
+	ret = no_os_spi_write_and_read(phy->spi_desc, data, bytes_number);
 	if (ret != SUCCESS)
 		return FAILURE;
 
@@ -360,7 +360,7 @@ int32_t ad9083_init(struct ad9083_phy **device,
 
 	no_os_gpio_direction_output(phy->gpio_reset, NO_OS_GPIO_HIGH);
 
-	ret = spi_init(&phy->spi_desc, init_param->spi_init);
+	ret = no_os_spi_init(&phy->spi_desc, init_param->spi_init);
 	if (ret != SUCCESS)
 		goto error_3;
 
@@ -419,7 +419,7 @@ int32_t ad9083_init(struct ad9083_phy **device,
 	return SUCCESS;
 
 error_4:
-	spi_remove(phy->spi_desc);
+	no_os_spi_remove(phy->spi_desc);
 error_3:
 	no_os_gpio_remove(phy->gpio_pd);
 error_2:
@@ -443,7 +443,7 @@ int32_t ad9083_remove(struct ad9083_phy *dev)
 	if (!dev)
 		return FAILURE;
 
-	ret = spi_remove(dev->spi_desc);
+	ret = no_os_spi_remove(dev->spi_desc);
 	if (ret != SUCCESS)
 		return ret;
 

@@ -78,7 +78,7 @@ int32_t ad5761r_write(struct ad5761r_dev *dev,
 	data[0] = reg_addr_cmd;
 	data[1] = (reg_data & 0xFF00) >> 8;
 	data[2] = (reg_data & 0x00FF) >> 0;
-	ret = spi_write_and_read(dev->spi_desc, data, 3);
+	ret = no_os_spi_write_and_read(dev->spi_desc, data, 3);
 
 	return ret;
 }
@@ -112,7 +112,7 @@ int32_t ad5761r_read(struct ad5761r_dev *dev,
 	data[0] = reg_addr_cmd;
 	data[1] = 0;
 	data[2] = 0;
-	ret = spi_write_and_read(dev->spi_desc, data, 3);
+	ret = no_os_spi_write_and_read(dev->spi_desc, data, 3);
 	*reg_data = (data[1] << 8) | data[2];
 
 	return ret;
@@ -668,7 +668,7 @@ int32_t ad5761r_init(struct ad5761r_dev **device,
 	}
 
 	/* SPI */
-	ret = spi_init(&dev->spi_desc, &init_param.spi_init);
+	ret = no_os_spi_init(&dev->spi_desc, &init_param.spi_init);
 
 	/* GPIO */
 	ret |= no_os_gpio_get(&dev->gpio_reset, &init_param.gpio_reset);
@@ -717,7 +717,7 @@ int32_t ad5761r_remove(struct ad5761r_dev *dev)
 {
 	int32_t ret;
 
-	ret = spi_remove(dev->spi_desc);
+	ret = no_os_spi_remove(dev->spi_desc);
 
 	if (dev->gpio_reset)
 		ret |= no_os_gpio_remove(dev->gpio_reset);

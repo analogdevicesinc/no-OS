@@ -121,7 +121,7 @@ int32_t ad77681_spi_reg_read(struct ad77681_dev *dev,
 	buf[0] = AD77681_REG_READ(reg_addr);
 	buf[1] = 0x00;
 
-	ret = spi_write_and_read(dev->spi_desc, buf, buf_len);
+	ret = no_os_spi_write_and_read(dev->spi_desc, buf, buf_len);
 	if (ret < 0)
 		return ret;
 
@@ -174,7 +174,7 @@ int32_t ad77681_spi_reg_write(struct ad77681_dev *dev,
 	if (dev->crc_sel != AD77681_NO_CRC)
 		buf[2] = ad77681_compute_crc8(buf, 2, INITIAL_CRC);
 
-	return spi_write_and_read(dev->spi_desc, buf, buf_len);
+	return no_os_spi_write_and_read(dev->spi_desc, buf, buf_len);
 }
 
 /**
@@ -297,7 +297,8 @@ int32_t ad77681_spi_read_adc_data(struct ad77681_dev *dev,
 	buf[5] = 0x00; /* 3 bytes of data (24bit format) + Status bit + CRC */
 
 
-	ret = spi_write_and_read(dev->spi_desc, buf, dev->data_frame_byte + add_buff);
+	ret = no_os_spi_write_and_read(dev->spi_desc, buf,
+				       dev->data_frame_byte + add_buff);
 	if (ret < 0)
 		return ret;
 
@@ -853,7 +854,7 @@ int32_t ad77681_set_continuos_read(struct ad77681_dev *dev,
 		/* To exit the continuous read mode, a key 0x6C must be
 		written into the device over the SPI*/
 		uint8_t end_key = EXIT_CONT_READ;
-		ret = spi_write_and_read(dev->spi_desc, &end_key, 1);
+		ret = no_os_spi_write_and_read(dev->spi_desc, &end_key, 1);
 	}
 
 	return ret;
@@ -881,7 +882,7 @@ int32_t ad77681_power_down(struct ad77681_dev *dev,
 		uint8_t wake_sequence[8] = { 0 };
 		/* Insert '1' to the beginning of the wake_sequence*/
 		wake_sequence[0] = 0x80;
-		ret = spi_write_and_read(dev->spi_desc, wake_sequence,
+		ret = no_os_spi_write_and_read(dev->spi_desc, wake_sequence,
 					 sizeof(wake_sequence));
 	}
 
@@ -1238,7 +1239,7 @@ int32_t ad77681_programmable_filter(struct ad77681_dev *dev,
 			coeffs_buf[3] = (twos_complement & 0x0000FF);
 		}
 
-		ret = spi_write_and_read(dev->spi_desc, coeffs_buf, 4);
+		ret = no_os_spi_write_and_read(dev->spi_desc, coeffs_buf, 4);
 
 		/* Check return value before proceeding */
 		if (ret < 0)
@@ -1279,7 +1280,7 @@ int32_t ad77681_programmable_filter(struct ad77681_dev *dev,
 	coeffs_buf[2] = 0x00;
 	coeffs_buf[3] = 0x00;
 
-	ret = spi_write_and_read(dev->spi_desc, coeffs_buf, 4);
+	ret = no_os_spi_write_and_read(dev->spi_desc, coeffs_buf, 4);
 
 	/* Check return value before proceeding */
 	if (ret < 0)
@@ -1788,7 +1789,7 @@ int32_t ad77681_setup(struct ad77681_dev **device,
 	dev->sample_rate = init_param.sample_rate;
 	dev->data_frame_byte = init_param.data_frame_byte;
 
-	ret = spi_init(&dev->spi_desc, &init_param.spi_eng_dev_init);
+	ret = no_os_spi_init(&dev->spi_desc, &init_param.spi_eng_dev_init);
 	if (ret < 0) {
 		free(dev);
 		free(stat);

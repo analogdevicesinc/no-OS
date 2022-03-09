@@ -78,14 +78,14 @@ struct ltc2312_dev {
 	/* Device characteristics */
 	enum device_type type;
 	/* SPI */
-	struct spi_desc *spi_desc;
+	struct no_os_spi_desc *spi_desc;
 };
 
 struct ltc2312_init_param {
 	/* Device characteristics */
 	enum device_type type;
 	/* SPI */
-	struct spi_init_param spi_init;
+	struct no_os_spi_init_param spi_init;
 };
 
 /******************************************************************************/

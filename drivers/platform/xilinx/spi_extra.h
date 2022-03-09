@@ -100,16 +100,16 @@ typedef struct xil_spi_desc {
 /**
  * @brief SPI engine platform ops structure
  */
-extern const struct spi_platform_ops spi_eng_platform_ops;
+extern const struct no_os_spi_platform_ops spi_eng_platform_ops;
 
 /**
  * @brief Xilinx specific SPI platform ops structure
  */
-extern const struct spi_platform_ops xil_spi_ops;
+extern const struct no_os_spi_platform_ops xil_spi_ops;
 
 /**
  * @brief Xilinx SPI PS register functions. No extra param needed
  */
-extern const struct spi_platform_ops xil_spi_reg_ops_pl;
+extern const struct no_os_spi_platform_ops xil_spi_reg_ops_pl;
 
 #endif // SPI_EXTRA_H_

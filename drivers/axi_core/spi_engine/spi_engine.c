@@ -60,7 +60,7 @@ significant delays */
 /**
  * @brief Spi engine platform specific SPI platform ops structure
  */
-const struct spi_platform_ops spi_eng_platform_ops = {
+const struct no_os_spi_platform_ops spi_eng_platform_ops = {
 	.init = &spi_engine_init,
 	.write_and_read = &spi_engine_write_and_read,
 	.remove = &spi_engine_remove
@@ -126,7 +126,7 @@ int32_t spi_engine_read(struct spi_engine_desc *desc,
  * 		- 24
  * 		- 32
  */
-int32_t spi_engine_set_transfer_width(struct spi_desc *desc,
+int32_t spi_engine_set_transfer_width(struct no_os_spi_desc *desc,
 				      uint8_t data_wdith)
 {
 	struct spi_engine_desc	*desc_extra;
@@ -147,7 +147,7 @@ int32_t spi_engine_set_transfer_width(struct spi_desc *desc,
  * @param desc Decriptor containing SPI Engine's parameters
  * @param speed_hz SPI engine transfer speed
  */
-void spi_engine_set_speed(struct spi_desc *desc,
+void spi_engine_set_speed(struct no_os_spi_desc *desc,
 			  uint32_t speed_hz)
 {
 	struct spi_engine_desc	*desc_extra;
@@ -203,7 +203,7 @@ static uint8_t spi_get_word_lenght(struct spi_engine_desc *desc)
  * @param sleep_div Clock prescaler
  * @return int32_t This function allways returns SUCCESS
  */
-static int32_t spi_get_sleep_div(struct spi_desc *desc,
+static int32_t spi_get_sleep_div(struct no_os_spi_desc *desc,
 				 uint32_t sleep_time_ns,
 				 uint32_t *sleep_div)
 {
@@ -407,7 +407,7 @@ static int32_t spi_engine_transfer(struct spi_engine_desc *desc,
  * 			-true (HIGH)
  * 			-false (LOW)
  */
-static void spi_engine_set_cs(struct spi_desc *desc,
+static void spi_engine_set_cs(struct no_os_spi_desc *desc,
 			      bool assert)
 {
 	uint8_t			mask;
@@ -431,7 +431,7 @@ static void spi_engine_set_cs(struct spi_desc *desc,
  * @param desc Decriptor containing SPI interface parameters
  * @param sleep_time_ns Number of nanoseconds to sleep between commands
  */
-static void spi_gen_sleep_ns(struct spi_desc *desc,
+static void spi_gen_sleep_ns(struct no_os_spi_desc *desc,
 			     uint32_t sleep_time_ns)
 {
 	uint32_t 		sleep_div;
@@ -452,7 +452,7 @@ static void spi_gen_sleep_ns(struct spi_desc *desc,
  * @return int32_t - SUCCESS if the command is transfered
  *		   - FAILURE if the command format is invalid
  */
-static int32_t spi_engine_write_cmd(struct spi_desc *desc,
+static int32_t spi_engine_write_cmd(struct no_os_spi_desc *desc,
 				    uint32_t cmd)
 {
 	uint8_t				engine_command;
@@ -511,7 +511,7 @@ static int32_t spi_engine_write_cmd(struct spi_desc *desc,
  * @param msg Structure used to store the transfer messages
  * @return int32_t This function allways returns SUCCESS
  */
-static int32_t spi_engine_compile_message(struct spi_desc *desc,
+static int32_t spi_engine_compile_message(struct no_os_spi_desc *desc,
 		struct spi_engine_msg *msg)
 {
 	struct spi_engine_desc	*desc_extra;
@@ -554,7 +554,7 @@ static int32_t spi_engine_compile_message(struct spi_desc *desc,
  * @return int32_t - SUCCESS if the transfer finished
  *		   - FAILURE if the memory allocation failed
  */
-static int32_t spi_engine_transfer_message(struct spi_desc *desc,
+static int32_t spi_engine_transfer_message(struct no_os_spi_desc *desc,
 		struct spi_engine_msg *msg)
 {
 	uint32_t		i;
@@ -619,8 +619,8 @@ static int32_t spi_engine_transfer_message(struct spi_desc *desc,
  * @return int32_t - SUCCESS if the transfer finished
  *		   - FAILURE if the memory allocation failed
  */
-int32_t spi_engine_init(struct spi_desc **desc,
-			const struct spi_init_param *param)
+int32_t spi_engine_init(struct no_os_spi_desc **desc,
+			const struct no_os_spi_init_param *param)
 {
 	uint32_t			data_width;
 	uint32_t			spi_engine_version;
@@ -688,7 +688,7 @@ int32_t spi_engine_init(struct spi_desc **desc,
  * @return int32_t - SUCCESS if the transfer finished
  *		   - FAILURE if the memory allocation or transfer failed
  */
-int32_t spi_engine_write_and_read(struct spi_desc *desc,
+int32_t spi_engine_write_and_read(struct no_os_spi_desc *desc,
 				  uint8_t *data,
 				  uint16_t bytes_number)
 {
@@ -754,7 +754,7 @@ int32_t spi_engine_write_and_read(struct spi_desc *desc,
  * @param param Structure containing the offload init parameters
  * @return int32_t This function allways returns SUCCESS
  */
-int32_t spi_engine_offload_init(struct spi_desc *desc,
+int32_t spi_engine_offload_init(struct no_os_spi_desc *desc,
 				const struct spi_engine_offload_init_param *param)
 {
 	struct spi_engine_desc	*eng_desc;
@@ -800,7 +800,7 @@ int32_t spi_engine_offload_init(struct spi_desc *desc,
  * @param no_samples Number of time the messages will be transferred
  * @return int32_t This function allways returns SUCCESS
  */
-int32_t spi_engine_offload_transfer(struct spi_desc *desc,
+int32_t spi_engine_offload_transfer(struct no_os_spi_desc *desc,
 				    struct spi_engine_offload_message msg,
 				    uint32_t no_samples)
 {
@@ -866,12 +866,12 @@ int32_t spi_engine_offload_transfer(struct spi_desc *desc,
 }
 
 /**
- * @brief Free the resources allocated by spi_init().
+ * @brief Free the resources allocated by no_os_spi_init().
  *
  * @param desc Decriptor containing SPI interface parameters
  * @return int32_t This function allways returns SUCCESS
  */
-int32_t spi_engine_remove(struct spi_desc *desc)
+int32_t spi_engine_remove(struct no_os_spi_desc *desc)
 {
 	struct spi_engine_desc	*eng_desc;
 

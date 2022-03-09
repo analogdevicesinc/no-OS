@@ -135,7 +135,7 @@ enum  ltc2688_clk_input {
 };
 
 struct ltc2688_dev {
-	spi_desc			*spi_desc;
+	no_os_spi_desc			*spi_desc;
 	uint16_t			pwd_dac_setting;
 	uint16_t			dither_toggle_en;
 	bool				dither_mode[16];
@@ -148,7 +148,7 @@ struct ltc2688_dev {
 
 struct ltc2688_init_param {
 	/* SPI */
-	spi_init_param 			spi_init;
+	no_os_spi_init_param 			spi_init;
 	uint16_t			pwd_dac_setting;
 	uint16_t			dither_toggle_en;
 	bool				dither_mode[16];

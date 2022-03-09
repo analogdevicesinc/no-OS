@@ -97,7 +97,7 @@ int main(void)
 		.half_duplex = false,
 		.master_mode = MASTER
 	};
-	struct spi_init_param spi_initial = {
+	struct no_os_spi_init_param spi_initial = {
 		.chip_select = 0x00,
 		.max_speed_hz = 10000000,
 		.mode = NO_OS_SPI_MODE_3,
