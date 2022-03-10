@@ -6,7 +6,7 @@ SRCS += $(PROJECT)/src/app/main.c \
         $(DRIVERS)/api/no_os_spi.c \
         $(DRIVERS)/platform/xilinx/xilinx_spi.c \
         $(DRIVERS)/platform/xilinx/xilinx_gpio.c \
-	$(NO-OS)/util/font_8x8.c
+	$(NO-OS)/util/no_os_font_8x8.c
 
 INCS += $(INCLUDE)/no_os_gpio.h \
 	$(INCLUDE)/no_os_spi.h \
