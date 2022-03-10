@@ -318,7 +318,7 @@ static int32_t ad9081_multichip_sync(struct ad9081_phy *phy, int step)
 			return ret;
 
 		if (phy->jesd_rx_clk)
-			clk_disable(phy->jesd_rx_clk);
+			no_os_clk_disable(phy->jesd_rx_clk);
 
 		break;
 	case 1:
@@ -330,7 +330,7 @@ static int32_t ad9081_multichip_sync(struct ad9081_phy *phy, int step)
 			return ret;
 
 		if (phy->jesd_rx_clk) {
-			ret = clk_enable(phy->jesd_rx_clk);
+			ret = no_os_clk_enable(phy->jesd_rx_clk);
 			if (ret < 0) {
 				printf("Failed to enable JESD204 link: %d\n",
 				       ret);
@@ -348,13 +348,13 @@ static int32_t ad9081_multichip_sync(struct ad9081_phy *phy, int step)
 			return ret;
 
 		if (phy->jesd_tx_clk)
-			clk_disable(phy->jesd_tx_clk);
+			no_os_clk_disable(phy->jesd_tx_clk);
 
 		break;
 	case 3:
 		/* enable txfe TX (JRX) link */
 		if (phy->jesd_tx_clk) {
-			ret = clk_enable(phy->jesd_tx_clk);
+			ret = no_os_clk_enable(phy->jesd_tx_clk);
 			if (ret < 0) {
 				printf("Failed to enable JESD204 link: %d\n",
 				       ret);
@@ -462,13 +462,13 @@ void ad9081_work_func(struct ad9081_phy *phy)
 							   AD9081_LINK_ALL : AD9081_LINK_0, 0);
 
 			if (phy->jesd_tx_clk)
-				clk_disable(phy->jesd_tx_clk);
+				no_os_clk_disable(phy->jesd_tx_clk);
 
 			mdelay(20);
 
 			/* enable txfe TX (JRX) link */
 			if (phy->jesd_tx_clk)
-				clk_enable(phy->jesd_tx_clk);
+				no_os_clk_enable(phy->jesd_tx_clk);
 
 			adi_ad9081_jesd_rx_link_enable_set(&phy->ad9081,
 							   (phy->jrx_link_tx.jesd_param.jesd_duallink > 0) ?
@@ -498,7 +498,7 @@ static int32_t ad9081_setup(struct ad9081_phy *phy)
 	uint64_t rx_lane_rate_kbps;
 	uint32_t timeout;
 
-	clk_recalc_rate(phy->dev_clk, &dev_frequency_hz);
+	no_os_clk_recalc_rate(phy->dev_clk, &dev_frequency_hz);
 
 	tx_lane_rate_kbps = ad9081_calc_lanerate(&phy->jrx_link_tx,
 			    phy->dac_frequency_hz,
@@ -506,13 +506,13 @@ static int32_t ad9081_setup(struct ad9081_phy *phy)
 
 	/* The 204c calibration routine requires the link to be up */
 	if (phy->jesd_tx_clk) {
-		ret = clk_set_rate(phy->jesd_tx_clk, tx_lane_rate_kbps);
+		ret = no_os_clk_set_rate(phy->jesd_tx_clk, tx_lane_rate_kbps);
 		if (ret < 0) {
 			printf("Failed to set lane rate to %llu kHz: %"PRId32"\n",
 			       tx_lane_rate_kbps, ret);
 		}
 		if (phy->jrx_link_tx.jesd_param.jesd_jesdv == 2) {
-			ret = clk_enable(phy->jesd_tx_clk);
+			ret = no_os_clk_enable(phy->jesd_tx_clk);
 			if (ret < 0) {
 				printf("Failed to enable JESD204 link: %"PRId32"\n", ret);
 				return ret;
@@ -703,7 +703,7 @@ static int32_t ad9081_setup(struct ad9081_phy *phy)
 				    phy->adc_frequency_hz,
 				    dcm);
 
-		ret = clk_set_rate(phy->jesd_rx_clk, rx_lane_rate_kbps);
+		ret = no_os_clk_set_rate(phy->jesd_rx_clk, rx_lane_rate_kbps);
 		if (ret < 0) {
 			printf("Failed to set lane rate to %llu kHz: %"PRId32"\n",
 			       rx_lane_rate_kbps, ret);
@@ -743,7 +743,7 @@ static int32_t ad9081_setup(struct ad9081_phy *phy)
 	if (phy->jesd_rx_clk) {
 		timeout = 2000;
 		while(timeout) {
-			ret = clk_enable(phy->jesd_rx_clk);
+			ret = no_os_clk_enable(phy->jesd_rx_clk);
 			if (ret) {
 				mdelay(100);
 				timeout -= 100;
@@ -762,7 +762,7 @@ static int32_t ad9081_setup(struct ad9081_phy *phy)
 	    (phy->jrx_link_tx.jesd_param.jesd_jesdv == 1)) {
 		timeout = 2000;
 		while(timeout) {
-			ret = clk_enable(phy->jesd_tx_clk);
+			ret = no_os_clk_enable(phy->jesd_tx_clk);
 			if (ret) {
 				mdelay(100);
 				timeout -= 100;
@@ -797,11 +797,11 @@ static int32_t ad9081_setup(struct ad9081_phy *phy)
 					return ret;
 
 				if (phy->jesd_tx_clk) {
-					clk_disable(phy->jesd_tx_clk);
+					no_os_clk_disable(phy->jesd_tx_clk);
 
 					mdelay(100);
 
-					ret = clk_enable(phy->jesd_tx_clk);
+					ret = no_os_clk_enable(phy->jesd_tx_clk);
 					if (ret < 0) {
 						printf("Failed to enable JESD204 link: %"PRId32"\n",
 						       ret);
@@ -831,12 +831,12 @@ static int32_t ad9081_setup(struct ad9081_phy *phy)
 	sample_rate = phy->adc_frequency_hz;
 	no_os_do_div(&sample_rate, dcm);
 
-	//clk_set_rate(phy->clks[RX_SAMPL_CLK], sample_rate); // TODO
+	//no_os_clk_set_rate(phy->clks[RX_SAMPL_CLK], sample_rate); // TODO
 
 	sample_rate = phy->dac_frequency_hz;
 	no_os_do_div(&sample_rate, phy->tx_main_interp * phy->tx_chan_interp);
 
-	//clk_set_rate(phy->clks[TX_SAMPL_CLK], sample_rate); // TODO
+	//no_os_clk_set_rate(phy->clks[TX_SAMPL_CLK], sample_rate); // TODO
 
 	for_each_cddc(i, phy->rx_cddc_select) {
 		ret = adi_ad9081_adc_nyquist_zone_set(&phy->ad9081, NO_OS_BIT(i),

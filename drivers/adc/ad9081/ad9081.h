@@ -71,9 +71,9 @@ struct dac_settings_cache {
 struct ad9081_phy {
 	no_os_spi_desc		*spi_desc;
 	no_os_gpio_desc		*gpio_reset;
-	struct clk		*jesd_rx_clk;
-	struct clk		*jesd_tx_clk;
-	struct clk		*dev_clk;
+	struct no_os_clk		*jesd_rx_clk;
+	struct no_os_clk		*jesd_tx_clk;
+	struct no_os_clk		*dev_clk;
 	bool		sysref_coupling_ac_en;
 	adi_ad9081_device_t	ad9081;
 	struct ad9081_jesd_link	jrx_link_tx;
@@ -134,9 +134,9 @@ struct link_init_param {
 struct ad9081_init_param {
 	no_os_spi_init_param	*spi_init;
 	no_os_gpio_init_param	*gpio_reset;
-	struct clk	*dev_clk;
-	struct clk	*jesd_rx_clk;
-	struct clk	*jesd_tx_clk;
+	struct no_os_clk	*dev_clk;
+	struct no_os_clk	*jesd_rx_clk;
+	struct no_os_clk	*jesd_tx_clk;
 	bool		sysref_coupling_ac_en;
 	uint32_t	multidevice_instance_count;
 	bool		jesd_sync_pins_01_swap_enable;

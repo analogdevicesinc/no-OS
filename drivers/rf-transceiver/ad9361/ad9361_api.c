@@ -91,7 +91,7 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy,
 		return -ENOMEM;
 	}
 
-	phy->clk_refin = (struct clk *)zmalloc(sizeof(*phy->clk_refin));
+	phy->clk_refin = (struct no_os_clk *)zmalloc(sizeof(*phy->clk_refin));
 	if (!phy->clk_refin) {
 		return -ENOMEM;
 	}
@@ -869,8 +869,8 @@ int32_t ad9361_set_rx_lo_freq (struct ad9361_rf_phy *phy,
 {
 	int32_t ret;
 
-	ret = clk_set_rate(phy, phy->ref_clk_scale[RX_RFPLL],
-			   ad9361_to_clk(lo_freq_hz));
+	ret = no_os_clk_set_rate(phy, phy->ref_clk_scale[RX_RFPLL],
+				 ad9361_to_clk(lo_freq_hz));
 
 	return ret;
 }
@@ -1509,8 +1509,8 @@ int32_t ad9361_set_tx_lo_freq (struct ad9361_rf_phy *phy,
 {
 	int32_t ret;
 
-	ret = clk_set_rate(phy, phy->ref_clk_scale[TX_RFPLL],
-			   ad9361_to_clk(lo_freq_hz));
+	ret = no_os_clk_set_rate(phy, phy->ref_clk_scale[TX_RFPLL],
+				 ad9361_to_clk(lo_freq_hz));
 
 	return ret;
 }

@@ -70,9 +70,9 @@ struct app_jesd {
 	/* rx_jesd_clk */
 	struct jesd204_clk rx_jesd_clk;
 	/* jesd_rx_hw */
-	struct clk_hw jesd_rx_hw;
+	struct no_os_clk_hw jesd_rx_hw;
 	/* jesd_rx_clk */
-	struct clk jesd_rx_clk;
+	struct no_os_clk jesd_rx_clk;
 };
 
 /******************************************************************************/

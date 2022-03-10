@@ -34,7 +34,7 @@ SRCS += $(PROJECT)/src/app.c \
 	$(PLATFORM_DRIVERS)/delay.c \
 	$(PLATFORM_DRIVERS)/xilinx_gpio.c \
 	$(PLATFORM_DRIVERS)/xilinx_spi.c \
-	$(NO-OS)/util/clk.c \
+	$(NO-OS)/util/no_os_clk.c \
 	$(NO-OS)/util/no_os_util.c
 ifeq (y,$(strip $(QUAD_MXFE)))
 SRCS += $(DRIVERS)/frequency/adf4371/adf4371.c

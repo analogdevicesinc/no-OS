@@ -57,12 +57,12 @@
 /******************************************************************************/
 struct hmc7044_dev* hmc7044_dev;
 
-struct clk_hw hmc7044_hw;
+struct no_os_clk_hw hmc7044_hw;
 
 #ifdef QUAD_MXFE
 struct adf4371_dev* adf4371_dev[MULTIDEVICE_INSTANCE_COUNT];
 
-struct clk_hw adf4371_hw[MULTIDEVICE_INSTANCE_COUNT];
+struct no_os_clk_hw adf4371_hw[MULTIDEVICE_INSTANCE_COUNT];
 #endif
 
 /******************************************************************************/
@@ -72,7 +72,7 @@ struct clk_hw adf4371_hw[MULTIDEVICE_INSTANCE_COUNT];
  * @brief Application clock setup.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t app_clock_init(struct clk dev_refclk[MULTIDEVICE_INSTANCE_COUNT])
+int32_t app_clock_init(struct no_os_clk dev_refclk[MULTIDEVICE_INSTANCE_COUNT])
 {
 	int32_t ret;
 

@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   clk.c
+ *   @file   no_os_clk.c
  *   @brief  Implementation of Clock Driver.
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
@@ -52,7 +52,7 @@
  * @param clk - The clock structure.
  * @return SUCCESS in case of success, negative error code otherwise.
  */
-int32_t clk_enable(struct clk * clk)
+int32_t no_os_clk_enable(struct no_os_clk * clk)
 {
 	if (clk->hw->dev_clk_enable)
 		return clk->hw->dev_clk_enable(clk->hw->dev);
@@ -65,7 +65,7 @@ int32_t clk_enable(struct clk * clk)
  * @param clk - The clock structure.
  * @return SUCCESS in case of success, negative error code otherwise.
  */
-int32_t clk_disable(struct clk * clk)
+int32_t no_os_clk_disable(struct no_os_clk * clk)
 {
 	if (clk->hw->dev_clk_disable)
 		return clk->hw->dev_clk_disable(clk->hw->dev);
@@ -79,8 +79,8 @@ int32_t clk_disable(struct clk * clk)
  * @param rate - The current frequency.
  * @return SUCCESS in case of success, negative error code otherwise.
  */
-int32_t clk_recalc_rate(struct clk *clk,
-			uint64_t *rate)
+int32_t no_os_clk_recalc_rate(struct no_os_clk *clk,
+			      uint64_t *rate)
 {
 	if (clk->hw->dev_clk_recalc_rate)
 		return clk->hw->dev_clk_recalc_rate(clk->hw->dev,
@@ -97,9 +97,9 @@ int32_t clk_recalc_rate(struct clk *clk,
  * @param rounded_rate - The rounded frequency.
  * @return SUCCESS in case of success, negative error code otherwise.
  */
-int32_t clk_round_rate(struct clk *clk,
-		       uint64_t rate,
-		       uint64_t *rounded_rate)
+int32_t no_os_clk_round_rate(struct no_os_clk *clk,
+			     uint64_t rate,
+			     uint64_t *rounded_rate)
 {
 	if (clk->hw->dev_clk_round_rate)
 		return clk->hw->dev_clk_round_rate(clk->hw->dev,
@@ -116,8 +116,8 @@ int32_t clk_round_rate(struct clk *clk,
  * @param rate - The desired frequency.
  * @return SUCCESS in case of success, negative error code otherwise.
  */
-int32_t clk_set_rate(struct clk *clk,
-		     uint64_t rate)
+int32_t no_os_clk_set_rate(struct no_os_clk *clk,
+			   uint64_t rate)
 {
 	if (clk->hw->dev_clk_set_rate)
 		return clk->hw->dev_clk_set_rate(clk->hw->dev,

@@ -62,8 +62,8 @@ struct adxcvr *tx_adxcvr;
 struct jesd204_clk rx_jesd_clk;
 struct jesd204_clk tx_jesd_clk;
 
-struct clk_hw jesd_rx_hw;
-struct clk_hw jesd_tx_hw;
+struct no_os_clk_hw jesd_rx_hw;
+struct no_os_clk_hw jesd_tx_hw;
 
 /******************************************************************************/
 /************************** Functions Implementation **************************/
@@ -73,7 +73,7 @@ struct clk_hw jesd_tx_hw;
  * @brief Application JESD setup.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t app_jesd_init(struct clk clk[2],
+int32_t app_jesd_init(struct no_os_clk clk[2],
 		      uint32_t reference_clk_khz,
 		      uint32_t rx_device_clk_khz,
 		      uint32_t tx_device_clk_khz,

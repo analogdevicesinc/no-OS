@@ -77,8 +77,8 @@ extern struct axi_jesd204_tx *tx_jesd;
 
 int main(void)
 {
-	struct clk app_clk[MULTIDEVICE_INSTANCE_COUNT];
-	struct clk jesd_clk[2];
+	struct no_os_clk app_clk[MULTIDEVICE_INSTANCE_COUNT];
+	struct no_os_clk jesd_clk[2];
 	struct xil_gpio_init_param  xil_gpio_param = {
 #ifdef PLATFORM_MB
 		.type = GPIO_PL,

@@ -54,13 +54,13 @@
 typedef enum { false, true } bool;
 #endif
 
-struct clk {
+struct no_os_clk {
 	const char	*name;
 	uint32_t	rate;
 };
 
-struct clk_hw {
-	struct clk *clk;
+struct no_os_clk_hw {
+	struct no_os_clk *clk;
 };
 
 #endif
