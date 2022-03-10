@@ -42,7 +42,7 @@ ifeq (y,$(strip $(ENABLE_IIO_NETWORK)))
 DISABLE_SECURE_SOCKET ?= y
 SRC_DIRS += $(NO-OS)/network
 SRCS	 += $(NO-OS)/util/circular_buffer.c
-SRCS	 += $(PLATFORM_DRIVERS)/timer.c
+SRCS	 += $(PLATFORM_DRIVERS)/no_os_timer.c
 INCS	 += $(INCLUDE)/no_os_timer.h \
 		$(INCLUDE)/no_os_circular_buffer.h \
 		$(PLATFORM_DRIVERS)/timer_extra.h \
@@ -97,6 +97,6 @@ INCS += $(NO-OS)/iio/iio_app/iio_app.h
 INCS += $(INCLUDE)/no_os_gpio.h \
 		$(INCLUDE)/no_os_delay.h \
 		$(INCLUDE)/no_os_irq.h \
-		$(INCLUDE)/no_os_trng.h
+		$(INCLUDE)/trng.h
 
 endif

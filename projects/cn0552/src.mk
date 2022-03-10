@@ -1,7 +1,7 @@
 SRCS += $(NO-OS)/util/util.c \
 	$(NO-OS)/util/no_os_list.c \
 	$(PLATFORM_DRIVERS)/delay.c \
-	$(PLATFORM_DRIVERS)/timer.c \
+	$(PLATFORM_DRIVERS)/no_os_timer.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_i2c.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c \
 	$(PLATFORM_DRIVERS)/uart.c \

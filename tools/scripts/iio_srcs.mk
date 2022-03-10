@@ -12,6 +12,6 @@ ifeq (y,$(strip $(ENABLE_IIO_NETWORK)))
 DISABLE_SECURE_SOCKET ?= y
 SRC_DIRS += $(NO-OS)/network
 ifeq (aducm3029,$(strip $(PLATFORM)))
-SRCS	 += $(PLATFORM_DRIVERS)/timer.c
+SRCS	 += $(PLATFORM_DRIVERS)/no_os_timer.c
 endif
 endif

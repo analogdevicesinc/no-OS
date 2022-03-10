@@ -50,16 +50,16 @@
 /******************************************************************************/
 
 /** Used for counting microseconds */
-static struct timer_desc *us_timer;
+static struct no_os_timer_desc *us_timer;
 
 /**
  *  Used to keep the hardware timer enabled to avoid delay given by its
  * initialization
  */
-static struct timer_desc *dummy_timer;
+static struct no_os_timer_desc *dummy_timer;
 
 /** Used for counting milliseconds */
-static struct timer_desc *ms_timer;
+static struct no_os_timer_desc *ms_timer;
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -73,21 +73,22 @@ static struct timer_desc *ms_timer;
  * microseconds
  * @return 1 on success, 0 otherwise
  */
-static uint32_t initialize_timer(struct timer_desc **timer, uint32_t is_us)
+static uint32_t initialize_timer(struct no_os_timer_desc **timer,
+				 uint32_t is_us)
 {
-	struct timer_init_param param;
+	struct no_os_timer_init_param param;
 
 	param.id = 0;
 	param.freq_hz = is_us ? 1000000u : 1000u;
 	param.load_value = 0;
 
 	if (is_us) {
-		if (SUCCESS != timer_init(&dummy_timer, &param))
+		if (0 != no_os_timer_init(&dummy_timer, &param))
 			return 0;
-		timer_start(dummy_timer);
+		no_os_timer_start(dummy_timer);
 	}
 
-	if (SUCCESS != timer_init(timer, &param))
+	if (0 != no_os_timer_init(timer, &param))
 		return 0;
 	return 1;
 }
@@ -98,16 +99,16 @@ static uint32_t initialize_timer(struct timer_desc **timer, uint32_t is_us)
  * @param timer - Descriptor of the timer instance.
  * @param value - Value the timer have to count to.
  */
-static void start_and_wait(struct timer_desc *timer, uint32_t value)
+static void start_and_wait(struct no_os_timer_desc *timer, uint32_t value)
 {
 	uint32_t count;
 
-	timer_counter_set(timer, 0);
-	timer_start(timer);
+	no_os_timer_counter_set(timer, 0);
+	no_os_timer_start(timer);
 	do {
-		timer_counter_get(timer, &count);
+		no_os_timer_counter_get(timer, &count);
 	} while (count < value);
-	timer_stop(timer);
+	no_os_timer_stop(timer);
 }
 
 /**

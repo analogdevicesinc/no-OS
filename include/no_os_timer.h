@@ -51,10 +51,10 @@
 /******************************************************************************/
 
 /**
- * @struct timer_desc
+ * @struct no_os_timer_desc
  * @brief Structure holding timer descriptor
  */
-struct timer_desc {
+struct no_os_timer_desc {
 	/** timer ID */
 	uint16_t id;
 	/** timer count frequency (Hz) */
@@ -66,10 +66,10 @@ struct timer_desc {
 };
 
 /**
- * @struct timer_init_param
+ * @struct no_os_timer_init_param
  * @brief  Structure holding the parameters for timer initialization
  */
-struct timer_init_param {
+struct no_os_timer_init_param {
 	/** timer ID */
 	uint16_t id;
 	/** timer count frequency (Hz) */
@@ -85,33 +85,37 @@ struct timer_init_param {
 /******************************************************************************/
 
 /* Initialize hardware timer and the handler structure associated with it. */
-int32_t timer_init(struct timer_desc **desc,
-		   struct timer_init_param *param);
+int32_t no_os_timer_init(struct no_os_timer_desc **desc,
+			 struct no_os_timer_init_param *param);
 
 /* Free the memory allocated by timer_setup(). */
-int32_t timer_remove(struct timer_desc *desc);
+int32_t no_os_timer_remove(struct no_os_timer_desc *desc);
 
 /* Start a timer. */
-int32_t timer_start(struct timer_desc *desc);
+int32_t no_os_timer_start(struct no_os_timer_desc *desc);
 
 /* Stop a timer from counting. */
-int32_t timer_stop(struct timer_desc *desc);
+int32_t no_os_timer_stop(struct no_os_timer_desc *desc);
 
 /* Get the value of the counter register for the timer. */
-int32_t timer_counter_get(struct timer_desc *desc, uint32_t *counter);
+int32_t no_os_timer_counter_get(struct no_os_timer_desc *desc,
+				uint32_t *counter);
 
 /* Set the timer counter register value. */
-int32_t timer_counter_set(struct timer_desc *desc, uint32_t new_val);
+int32_t no_os_timer_counter_set(struct no_os_timer_desc *desc,
+				uint32_t new_val);
 
 /* Get the timer clock frequency. */
-int32_t timer_count_clk_get(struct timer_desc *desc, uint32_t *freq_hz);
+int32_t no_os_timer_count_clk_get(struct no_os_timer_desc *desc,
+				  uint32_t *freq_hz);
 
 /* Set the timer clock frequency. */
-int32_t timer_count_clk_set(struct timer_desc *desc, uint32_t freq_hz);
+int32_t no_os_timer_count_clk_set(struct no_os_timer_desc *desc,
+				  uint32_t freq_hz);
 
 /* Get the elapsed time in nsec for the timer. */
-int32_t timer_get_elapsed_time_nsec(struct timer_desc *desc,
-				    uint64_t *elapsed_time);
+int32_t no_os_timer_get_elapsed_time_nsec(struct no_os_timer_desc *desc,
+		uint64_t *elapsed_time);
 
 #endif // _NO_OS_SRC_TIMER_H_
 

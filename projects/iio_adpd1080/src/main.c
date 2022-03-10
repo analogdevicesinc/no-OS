@@ -71,8 +71,8 @@ static int32_t adpd1080pmod_32k_calib(struct adpd188_dev *adpd1080_dev)
 	uint16_t temp_reg;
 	uint32_t t_start, t_stop = 0;
 	int32_t sync_gpio_pulse_no, min_diff = 0x7fffffff;
-	struct timer_desc *cal_timer;
-	struct timer_init_param cal_timer_init = {
+	struct no_os_timer_desc *cal_timer;
+	struct no_os_timer_init_param cal_timer_init = {
 		.id = 0,
 		.load_value = 0,
 		.freq_hz = 1,
@@ -91,10 +91,10 @@ static int32_t adpd1080pmod_32k_calib(struct adpd188_dev *adpd1080_dev)
 		.extra = NULL
 	};
 
-	status = timer_init(&cal_timer, &cal_timer_init);
+	status = no_os_timer_init(&cal_timer, &cal_timer_init);
 	if(status != SUCCESS)
 		return FAILURE;
-	status = timer_start(cal_timer);
+	status = no_os_timer_start(cal_timer);
 	if(status != SUCCESS)
 		goto timer_finish;
 
@@ -148,12 +148,12 @@ static int32_t adpd1080pmod_32k_calib(struct adpd188_dev *adpd1080_dev)
 		status = adpd188_reg_read(adpd1080_dev, ADPD188_REG_SAMPLE_CLK, &temp_reg);
 		if(status != SUCCESS)
 			goto finish;
-		status = timer_counter_get(cal_timer, &t_start);
+		status = no_os_timer_counter_get(cal_timer, &t_start);
 		if(status != SUCCESS)
 			goto finish;
 		sync_gpio_pulse_no = 0;
 		while (t_start >= t_stop) {
-			status = timer_counter_get(cal_timer, &t_stop);
+			status = no_os_timer_counter_get(cal_timer, &t_stop);
 			if(status != SUCCESS)
 				goto finish;
 		}
@@ -199,7 +199,7 @@ finish:
 gpio_finish:
 	no_os_gpio_remove(sync_gpio);
 timer_finish:
-	timer_remove(cal_timer);
+	no_os_timer_remove(cal_timer);
 
 	return status;
 }
