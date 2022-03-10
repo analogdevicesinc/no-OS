@@ -56,7 +56,7 @@
 
 #define for_each_cddc(bit, mask) \
 	for ((bit) = 0; (bit) < MAX_NUM_MAIN_DATAPATHS; (bit)++) \
-		if ((mask) & BIT(bit))
+		if ((mask) & NO_OS_BIT(bit))
 
 static int32_t ad9081_nco_sync_master_slave(struct ad9081_phy *phy,
 		bool master)
@@ -134,8 +134,8 @@ static uint64_t ad9081_calc_lanerate(struct ad9081_jesd_link *link,
 
 	rate = link->jesd_param.jesd_m * link->jesd_param.jesd_np *
 	       encoding_n * converter_rate;
-	do_div(&rate, link->jesd_param.jesd_l * encoding_d *
-	       intp_decim * 1000);
+	no_os_do_div(&rate, link->jesd_param.jesd_l * encoding_d *
+		     intp_decim * 1000);
 
 	return rate;
 }
@@ -281,17 +281,17 @@ static int32_t ad9081_jesd_tx_link_status_print(struct ad9081_phy *phy)
 		if (phy->jtx_link_rx[l - 1].jesd_param.jesd_jesdv == 2)
 			printf("%s: JESD RX (JTX) Link%" PRId32 " PLL %s, PHASE %s, MODE %s\n",
 			       __func__, l,
-			       (stat & BIT(5)) ? "locked" : "unlocked",
-			       (stat & BIT(6)) ? "established" : "lost",
-			       (stat & BIT(7)) ? "invalid" : "valid");
+			       (stat & NO_OS_BIT(5)) ? "locked" : "unlocked",
+			       (stat & NO_OS_BIT(6)) ? "established" : "lost",
+			       (stat & NO_OS_BIT(7)) ? "invalid" : "valid");
 		else
 			printf("%s: JESD RX (JTX) Link%" PRId32
 			       " in %s, SYNC %s, PLL %s, PHASE %s, MODE %s\n",
 			       __func__, l, ad9081_jtx_qbf_states[stat & 0xF],
-			       (stat & BIT(4)) ? "deasserted" : "asserted",
-			       (stat & BIT(5)) ? "locked" : "unlocked",
-			       (stat & BIT(6)) ? "established" : "lost",
-			       (stat & BIT(7)) ? "invalid" : "valid");
+			       (stat & NO_OS_BIT(4)) ? "deasserted" : "asserted",
+			       (stat & NO_OS_BIT(5)) ? "locked" : "unlocked",
+			       (stat & NO_OS_BIT(6)) ? "established" : "lost",
+			       (stat & NO_OS_BIT(7)) ? "invalid" : "valid");
 
 
 		if (!phy->jtx_link_rx[l - 1].jesd_param.jesd_duallink)
@@ -446,7 +446,7 @@ void ad9081_work_func(struct ad9081_phy *phy)
 	adi_ad9081_hal_reg_get(&phy->ad9081, REG_IRQ_STATUS0_ADDR,
 			       &status);
 
-	if (!(status & BIT(6))) {
+	if (!(status & NO_OS_BIT(6))) {
 		printf("IRQ_STATUS0: 0x%X\n", status);
 		if (phy->jrx_link_tx.jesd_param.jesd_jesdv == 2) {
 			ad9081_multichip_sync(phy, 7);
@@ -571,14 +571,14 @@ static int32_t ad9081_setup(struct ad9081_phy *phy)
 	if (ret != 0)
 		return ret;
 
-	for (i = 0; i < ARRAY_SIZE(phy->adc_main_decimation); i++) {
+	for (i = 0; i < NO_OS_ARRAY_SIZE(phy->adc_main_decimation); i++) {
 		ret = ad9081_main_decimation_to_val(
 			      phy->adc_main_decimation[i]);
 		if (ret >= 0)
 			phy->rx_cddc_dcm[i] = ret;
 	}
 
-	for (i = 0; i < ARRAY_SIZE(phy->adc_chan_decimation); i++) {
+	for (i = 0; i < NO_OS_ARRAY_SIZE(phy->adc_chan_decimation); i++) {
 		ret = ad9081_chan_decimation_to_val(
 			      phy->adc_chan_decimation[i]);
 		if (ret >= 0)
@@ -658,7 +658,7 @@ static int32_t ad9081_setup(struct ad9081_phy *phy)
 
 
 	/* Setup txfe jtx converter mapping */
-	for (i = 0; i < ARRAY_SIZE(phy->jtx_link_rx[0].link_converter_select);
+	for (i = 0; i < NO_OS_ARRAY_SIZE(phy->jtx_link_rx[0].link_converter_select);
 	     i++) {
 		ret = adi_ad9081_jesd_tx_conv_sel_set(
 			      &phy->ad9081, AD9081_LINK_0, i,
@@ -668,7 +668,7 @@ static int32_t ad9081_setup(struct ad9081_phy *phy)
 	}
 	if (phy->jtx_link_rx[0].jesd_param.jesd_duallink > 0) {
 		for (i = 0;
-		     i < ARRAY_SIZE(phy->jtx_link_rx[1].link_converter_select);
+		     i < NO_OS_ARRAY_SIZE(phy->jtx_link_rx[1].link_converter_select);
 		     i++) {
 			ret = adi_ad9081_jesd_tx_conv_sel_set(
 				      &phy->ad9081, AD9081_LINK_1, i,
@@ -829,17 +829,17 @@ static int32_t ad9081_setup(struct ad9081_phy *phy)
 	printf("DAC IRQ status 0x%"PRIx64"\n", status64);
 
 	sample_rate = phy->adc_frequency_hz;
-	do_div(&sample_rate, dcm);
+	no_os_do_div(&sample_rate, dcm);
 
 	//clk_set_rate(phy->clks[RX_SAMPL_CLK], sample_rate); // TODO
 
 	sample_rate = phy->dac_frequency_hz;
-	do_div(&sample_rate, phy->tx_main_interp * phy->tx_chan_interp);
+	no_os_do_div(&sample_rate, phy->tx_main_interp * phy->tx_chan_interp);
 
 	//clk_set_rate(phy->clks[TX_SAMPL_CLK], sample_rate); // TODO
 
 	for_each_cddc(i, phy->rx_cddc_select) {
-		ret = adi_ad9081_adc_nyquist_zone_set(&phy->ad9081, BIT(i),
+		ret = adi_ad9081_adc_nyquist_zone_set(&phy->ad9081, NO_OS_BIT(i),
 						      phy->rx_nyquist_zone[i]);
 		if (ret != 0)
 			return ret;
@@ -967,11 +967,11 @@ int32_t ad9081_parse_jesd_link_init_param(struct ad9081_jesd_link *link,
 	link->jesd_param.jesd_mode_id = init_param->link_mode;
 	link->jesd_param.jesd_duallink = init_param->dual_link;
 	link->jesd_param.jesd_jesdv = init_param->version;
-	for (i = 0; i < ARRAY_SIZE(link->logiclane_mapping); i++)
+	for (i = 0; i < NO_OS_ARRAY_SIZE(link->logiclane_mapping); i++)
 		link->logiclane_mapping[i] =
 			init_param->logical_lane_mapping[i];
 	if (jtx) /* JTX - for RX ADC path */
-		for (i = 0; i < ARRAY_SIZE(link->link_converter_select); i++)
+		for (i = 0; i < NO_OS_ARRAY_SIZE(link->link_converter_select); i++)
 			link->link_converter_select[i] =
 				init_param->link_converter_select[i];
 	else /* JRX */
@@ -1021,7 +1021,7 @@ int32_t ad9081_parse_init_param(struct ad9081_phy *phy,
 		phy->adc_main_decimation[i] = init_param->rx_main_decimation[i];
 		phy->rx_cddc_c2r[i] = init_param->rx_main_complex_to_real_enable[i];
 		if (init_param->rx_main_enable[i])
-			phy->rx_cddc_select |= BIT(i);
+			phy->rx_cddc_select |= NO_OS_BIT(i);
 	}
 	/* The 8 ADC Channelizers */
 	for (i = 0; i < MAX_NUM_CHANNELIZER; i++) {
@@ -1029,7 +1029,7 @@ int32_t ad9081_parse_init_param(struct ad9081_phy *phy,
 		phy->adc_chan_decimation[i] = init_param->rx_channel_decimation[i];
 		phy->rx_fddc_c2r[i] = init_param->rx_channel_complex_to_real_enable[i];
 		if (init_param->rx_channel_enable[i])
-			phy->rx_fddc_select |= BIT(i);
+			phy->rx_fddc_select |= NO_OS_BIT(i);
 	}
 	/* RX JESD Link */
 	if (init_param->jtx_link_rx[0])

@@ -22,9 +22,9 @@
 #define LANE_MIN 1
 #define LANE_INDEX_MAX (AD917X_JESD_NOF_LANES -1)
 #define LINK_INDEX_MAX (AD917X_JESD_NOF_LINKS -1)
-#define LINK_INDEX(x)  ( ((x) == 0xFF) ? (x) : BIT(x))
+#define LINK_INDEX(x)  ( ((x) == 0xFF) ? (x) : NO_OS_BIT(x))
 #define SYNCOUTB_INDEX_MAX (AD917X_JESD_NOF_SYNCOUTB-1)
-#define SYNCOUTB_INDEX(x)  (((x)==0xFF) ? (x) : BIT(x))
+#define SYNCOUTB_INDEX(x)  (((x)==0xFF) ? (x) : NO_OS_BIT(x))
 #define K_MAX 32
 #define M_DEFAULT 2
 #define N_DEFAULT 16
@@ -362,7 +362,7 @@ int32_t ad917x_jesd_enable_datapath(ad917x_handle_t *h,
 			/*Calibrate SERDES PHY Termination Block*/
 			/*Initialise Equaliser*/
 			ad917x_register_write_tbl(h, &ADI_REC_EQ_INIT_TBL[0],
-						  ARRAY_SIZE(ADI_REC_EQ_INIT_TBL));
+						  NO_OS_ARRAY_SIZE(ADI_REC_EQ_INIT_TBL));
 		}
 		/*Power Down Any unused Lanes*/
 		tmp_reg = ~lanes_msk;
@@ -375,7 +375,7 @@ int32_t ad917x_jesd_enable_datapath(ad917x_handle_t *h,
 		/*Engineering Sample Silicon Configuration*/
 		/*Config SERDES PLL with ADI RECOMMENDED Settings*/
 		err = ad917x_register_write_tbl(h, &ADI_REC_ES_SERDES_INIT_TBL_1[0],
-						ARRAY_SIZE(ADI_REC_ES_SERDES_INIT_TBL_1));
+						NO_OS_ARRAY_SIZE(ADI_REC_ES_SERDES_INIT_TBL_1));
 		if (err != API_ERROR_OK)
 			return err;
 		err = h->delay_us(h->user_data, SERDES_PWRUP_DELAY);
@@ -389,7 +389,7 @@ int32_t ad917x_jesd_enable_datapath(ad917x_handle_t *h,
 
 		/*Config SERDES PLL with ADI RECOMMENDED Settings*/
 		err = ad917x_register_write_tbl(h, &ADI_REC_ES_SERDES_INIT_TBL_2[0],
-						ARRAY_SIZE(ADI_REC_ES_SERDES_INIT_TBL_2));
+						NO_OS_ARRAY_SIZE(ADI_REC_ES_SERDES_INIT_TBL_2));
 		if (err != API_ERROR_OK)
 			return err;
 

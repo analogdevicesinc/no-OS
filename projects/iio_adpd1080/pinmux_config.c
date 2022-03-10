@@ -23,10 +23,10 @@
 #include <stdint.h>
 #include "no_os_util.h"
 
-#define I2C0_SCL0_PORTP0_MUX  BIT(8)
-#define I2C0_SDA0_PORTP0_MUX  BIT(10)
-#define UART0_TX_PORTP0_MUX  BIT(20)
-#define UART0_RX_PORTP0_MUX  BIT(22)
+#define I2C0_SCL0_PORTP0_MUX  NO_OS_BIT(8)
+#define I2C0_SDA0_PORTP0_MUX  NO_OS_BIT(10)
+#define UART0_TX_PORTP0_MUX  NO_OS_BIT(20)
+#define UART0_RX_PORTP0_MUX  NO_OS_BIT(22)
 
 int32_t adi_initpinmux(void);
 

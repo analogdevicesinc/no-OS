@@ -135,7 +135,7 @@ int main(void)
 	ch.ch_num = 8;
 	set_pwm_attr(&g_aducm3029_desc, "1", 1, &ch, PWM_ENABLE);
 
-	return iio_app_run(devices, ARRAY_SIZE(devices));
+	return iio_app_run(devices, NO_OS_ARRAY_SIZE(devices));
 #endif
 
 	struct adc_init_param	adc_init_param = {0};
@@ -165,7 +165,7 @@ int main(void)
 		ADUCM3029_CH(5) |
 		0;
 	char buff[100];
-	uint32_t active_ch = hweight8(ch_mask);
+	uint32_t active_ch = no_os_hweight8(ch_mask);
 	uint32_t nb_samples = 10;
 	uint32_t i,j,k;
 

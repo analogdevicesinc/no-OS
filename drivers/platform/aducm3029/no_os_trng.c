@@ -117,7 +117,7 @@ static void no_os_gdesc_remove()
 int32_t no_os_trng_init(struct no_os_trng_desc **desc,
 			struct no_os_trng_init_param *param)
 {
-	UNUSED_PARAM(param);
+	NO_OS_UNUSED_PARAM(param);
 
 	if (!desc)
 		return FAILURE;

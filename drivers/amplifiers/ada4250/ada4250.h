@@ -65,39 +65,39 @@
 #define ADA4250_REG_CHIP_ID2        0x1a
 
 /* ADA4250_REG_GAIN_MUX Map */
-#define ADA4250_GAIN_MUX_MSK        GENMASK(2, 0)
-#define ADA4250_GAIN_MUX(x)         field_prep(ADA4250_GAIN_MUX_MSK, x)
+#define ADA4250_GAIN_MUX_MSK        NO_OS_GENMASK(2, 0)
+#define ADA4250_GAIN_MUX(x)         no_os_field_prep(ADA4250_GAIN_MUX_MSK, x)
 
 /* ADA4250_REG_REFBUF Map */
-#define ADA4250_REFBUF_MSK          BIT(0)
-#define ADA4250_REFBUF(x)           field_prep(ADA4250_REFBUF_MSK, x)
+#define ADA4250_REFBUF_MSK          NO_OS_BIT(0)
+#define ADA4250_REFBUF(x)           no_os_field_prep(ADA4250_REFBUF_MSK, x)
 
 /* ADA4250_REG_REFBUFF_EN Bit Definition */
 #define ADA4250_BUF_ENABLE          0x01
 #define ADA4250_BUF_DISABLE         0x00
 
 /* ADA4250_REG_RESET Map */
-#define ADA4250_RESET_MSK           BIT(0)
-#define ADA4250_RESET(x)            field_prep(ADA4250_RESET_MSK, x)
+#define ADA4250_RESET_MSK           NO_OS_BIT(0)
+#define ADA4250_RESET(x)            no_os_field_prep(ADA4250_RESET_MSK, x)
 
 /* ADA4250_REG_RESET Bit Definition */
 #define ADA4250_RESET_ENABLE        0x01
 #define ADA4250_RESET_DISABLE       0x00
 
 /* ADA4250_REG_SNSR_CAL_VAL Map */
-#define ADA4250_SNSR_CAL_VAL_MSK    GENMASK(7, 0)
-#define ADA4250_SNSR_CAL_VAL(x)     field_prep(ADA4250_SNSR_CAL_VAL_MSK, x)
+#define ADA4250_SNSR_CAL_VAL_MSK    NO_OS_GENMASK(7, 0)
+#define ADA4250_SNSR_CAL_VAL(x)     no_os_field_prep(ADA4250_SNSR_CAL_VAL_MSK, x)
 
 /* ADA4250_REG_SNSR_CAL_CNFG Bit Definition */
-#define ADA4250_BIAS_SET_MSK        GENMASK(3, 2)
-#define ADA4250_BIAS_SET(x)         field_prep(ADA4250_BIAS_SET_MSK, x)
-#define ADA4250_RANGE_SET_MSK       GENMASK(1, 0)
-#define ADA4250_RANGE_SET(x)        field_prep(ADA4250_RANGE_SET_MSK, x)
+#define ADA4250_BIAS_SET_MSK        NO_OS_GENMASK(3, 2)
+#define ADA4250_BIAS_SET(x)         no_os_field_prep(ADA4250_BIAS_SET_MSK, x)
+#define ADA4250_RANGE_SET_MSK       NO_OS_GENMASK(1, 0)
+#define ADA4250_RANGE_SET(x)        no_os_field_prep(ADA4250_RANGE_SET_MSK, x)
 
 /* Specifications */
 #define ADA4250_SPI_WRITE_CMD		0x0
 #define ADA4250_BUFF_SIZE_BYTES     2
-#define ADA4250_SPI_READ_CMD		BIT(7)
+#define ADA4250_SPI_READ_CMD		NO_OS_BIT(7)
 #define ADA4250_DIE_REV             0x0
 #define ADA4250_CHIP_ID             0x4250
 

@@ -85,7 +85,7 @@ int32_t ad5592r_write_dac(struct ad5592r_dev *dev, uint8_t chan,
 	if (!dev)
 		return FAILURE;
 
-	dev->spi_msg = swab16( BIT(15) | (uint16_t)(chan << 12) | value);
+	dev->spi_msg = swab16( NO_OS_BIT(15) | (uint16_t)(chan << 12) | value);
 
 	return no_os_spi_write_and_read(dev->spi, (uint8_t *)&dev->spi_msg,
 					sizeof(dev->spi_msg));
@@ -108,7 +108,7 @@ int32_t ad5592r_read_adc(struct ad5592r_dev *dev, uint8_t chan,
 		return FAILURE;
 
 	dev->spi_msg = swab16((uint16_t)(AD5592R_REG_ADC_SEQ << 11) |
-			      BIT(chan));
+			      NO_OS_BIT(chan));
 
 	ret = no_os_spi_write_and_read(dev->spi, (uint8_t *)&dev->spi_msg,
 				       sizeof(dev->spi_msg));
@@ -150,7 +150,7 @@ int32_t ad5592r_multi_read_adc(struct ad5592r_dev *dev, uint16_t chans,
 	if (!dev)
 		return FAILURE;
 
-	samples = hweight8(chans);
+	samples = no_os_hweight8(chans);
 
 	dev->spi_msg = swab16((uint16_t)(AD5592R_REG_ADC_SEQ << 11) | chans);
 

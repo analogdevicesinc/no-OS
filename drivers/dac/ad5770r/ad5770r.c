@@ -565,7 +565,7 @@ int32_t ad5770r_set_sw_ldac(struct ad5770r_dev *dev,
 	dev->sw_ldac = *sw_ldac;
 
 	for (i = 0; i <= AD5770R_CH5; i++) {
-		if ((sw_ldac_value >> i) & BIT(0)) {
+		if ((sw_ldac_value >> i) & NO_OS_BIT(0)) {
 			dev->dac_value[i] = dev->input_value[i];
 		}
 	}

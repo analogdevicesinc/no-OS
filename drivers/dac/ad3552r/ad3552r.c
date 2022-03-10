@@ -78,9 +78,9 @@ enum ad3552r_spi_attributes {
 #define AD3552R_MAX_REG_SIZE				3
 #define AD3552R_READ_BIT				(1 << 7)
 #define AD3552R_ADDR_MASK				(~AD3552R_READ_BIT)
-#define AD3552R_CRC_ENABLE_VALUE			(BIT(6) | BIT(1))
-#define AD3552R_CRC_DISABLE_VALUE			(BIT(1) | BIT(0))
-#define AD3552R_EXTERNAL_VREF_MASK			BIT(1)
+#define AD3552R_CRC_ENABLE_VALUE			(NO_OS_BIT(6) | NO_OS_BIT(1))
+#define AD3552R_CRC_DISABLE_VALUE			(NO_OS_BIT(1) | NO_OS_BIT(0))
+#define AD3552R_EXTERNAL_VREF_MASK			NO_OS_BIT(1)
 #define AD3552R_CRC_POLY				0x07
 #define AD3552R_CRC_SEED				0xA5
 #define AD3552R_SECONDARY_REGION_ADDR			0x28
@@ -246,7 +246,7 @@ static inline int32_t _ad3552r_get_reg_attr(struct ad3552r_desc *desc,
 	int32_t err;
 
 	err = ad3552r_read_reg(desc, AD3552R_ATTR_REG(attr), val);
-	*val = field_get(AD3552R_ATTR_MASK(attr), *val);
+	*val = no_os_field_get(AD3552R_ATTR_MASK(attr), *val);
 
 	return err;
 }
@@ -262,7 +262,7 @@ static int32_t _ad3552r_update_reg_field(struct ad3552r_desc *desc,
 	if (IS_ERR_VALUE(err))
 		return err;
 
-	reg = (reg & ~mask) | field_prep(mask, val);
+	reg = (reg & ~mask) | no_os_field_prep(mask, val);
 
 	return ad3552r_write_reg(desc, addr, reg);
 }
@@ -435,7 +435,7 @@ int32_t ad3552r_transfer(struct ad3552r_desc *desc,
 	else
 		msgs[1].tx_buff = data->data;
 
-	return no_os_spi_transfer(desc->spi, msgs, ARRAY_SIZE(msgs));
+	return no_os_spi_transfer(desc->spi, msgs, NO_OS_ARRAY_SIZE(msgs));
 }
 
 int32_t ad3552r_write_reg(struct ad3552r_desc *desc, uint8_t addr,
@@ -463,7 +463,7 @@ int32_t ad3552r_write_reg(struct ad3552r_desc *desc, uint8_t addr,
 		buf[0] = val & 0xFF;
 	else
 		/* reg_len can be 2 or 3, but 3rd bytes needs to be set to 0 */
-		put_unaligned_be16(val, buf);
+		no_os_put_unaligned_be16(val, buf);
 
 	return ad3552r_transfer(desc, &msg);
 }
@@ -494,7 +494,7 @@ int32_t ad3552r_read_reg(struct ad3552r_desc *desc, uint8_t addr, uint16_t *val)
 	if (reg_len == 1)
 		*val = buf[0];
 	else
-		*val = get_unaligned_be16(buf);
+		*val = no_os_get_unaligned_be16(buf);
 
 	return SUCCESS;
 }
@@ -693,7 +693,7 @@ static void ad3552r_calc_gain_and_offset(struct ad3552r_desc *dac, uint8_t ch)
 	rem = span % 65536;
 	dac->ch_data[ch].scale_int = span / 65536;
 	/* Do operations in microvolts */
-	dac->ch_data[ch].scale_dec = DIV_ROUND_CLOSEST(rem * 1000000, 65536);
+	dac->ch_data[ch].scale_dec = NO_OS_DIV_ROUND_CLOSEST(rem * 1000000, 65536);
 
 	tmp = v_min * 65536;
 	rem = tmp % span;
@@ -746,7 +746,7 @@ static int32_t _ad3552r_set_gain_value(struct ad3552r_desc *desc,
 	default:
 		return -EINVAL;
 	}
-	reg = (reg & ~reg_mask) | field_prep(reg_mask, val);
+	reg = (reg & ~reg_mask) | no_os_field_prep(reg_mask, val);
 
 	err = ad3552r_write_reg(desc, AD3552R_REG_ADDR_CH_GAIN(ch), reg);
 	if (IS_ERR_VALUE(err))
@@ -794,7 +794,7 @@ static int32_t _ad3552r_get_gain_value(struct ad3552r_desc *desc,
 	default:
 		return -EINVAL;
 	}
-	*val = field_get(reg_mask, reg);
+	*val = no_os_field_get(reg_mask, reg);
 
 	return SUCCESS;
 }
@@ -841,7 +841,7 @@ int32_t ad3552r_get_ch_value(struct ad3552r_desc *desc,
 	if (IS_ERR_VALUE(err))
 		return err;
 
-	*val = field_get(AD3552R_CH_ATTR_MASK(ch, attr), reg);
+	*val = no_os_field_get(AD3552R_CH_ATTR_MASK(ch, attr), reg);
 
 	return SUCCESS;
 }
@@ -1231,14 +1231,14 @@ static int32_t ad3552r_write_all_channels(struct ad3552r_desc *desc,
 	uint8_t len, is_fast;
 
 	is_fast = desc->ch_data[0].fast_en;
-	put_unaligned_be16(data[0], buff);
+	no_os_put_unaligned_be16(data[0], buff);
 	len = 2;
 	if (is_fast)
 		buff[1] &= 0xF0;
 	else
 		++len;
 
-	put_unaligned_be16(data[1], buff + len);
+	no_os_put_unaligned_be16(data[1], buff + len);
 	len += 2;
 	if (is_fast)
 		buff[len + 1] &= 0xF0;
@@ -1292,7 +1292,7 @@ int32_t ad3552r_write_samples(struct ad3552r_desc *desc, uint16_t *data,
 		return SUCCESS;
 	}
 
-	ch = find_first_set_bit(ch_mask);
+	ch = no_os_find_first_set_bit(ch_mask);
 	is_input = (mode == AD3552R_WRITE_DAC_REGS);
 	addr = _get_code_reg_addr(ch, is_input, desc->ch_data[ch].fast_en);
 	for (i = 0; i < samples; ++i) {

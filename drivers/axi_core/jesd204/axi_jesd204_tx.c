@@ -58,15 +58,15 @@
 #define JESD204_TX_REG_CONF_DATA_PATH_WIDTH	0x14
 
 #define JESD204_TX_REG_SYNTH_REG_1		0x18
-#define JESD204_TX_ENCODER_MASK			GENMASK(9, 8)
-#define JESD204_TX_ENCODER_GET(x)	field_get(JESD204_TX_ENCODER_MASK, x)
+#define JESD204_TX_ENCODER_MASK			NO_OS_GENMASK(9, 8)
+#define JESD204_TX_ENCODER_GET(x)	no_os_field_get(JESD204_TX_ENCODER_MASK, x)
 
 #define JESD204_TX_REG_LINK_DISABLE		0xc0
 #define JESD204_TX_REG_LINK_STATE		0xc4
 #define JESD204_TX_REG_LINK_CLK_RATIO	0xc8
 
 #define JESD204_TX_REG_SYSREF_CONF		0x100
-#define JESD204_TX_REG_SYSREF_CONF_SYSREF_DISABLE	BIT(0)
+#define JESD204_TX_REG_SYSREF_CONF_SYSREF_DISABLE	NO_OS_BIT(0)
 
 #define JESD204_TX_REG_SYSREF_STATUS	0x108
 
@@ -82,10 +82,10 @@
 #define JESD204_TX_MAGIC				\
 	(('2' << 24) | ('0' << 16) | ('4' << 8) | ('T'))
 
-#define JESD204_SYNTH_DATA_PATH_WIDTH_MASK	GENMASK(7, 0)
-#define JESD204_SYNTH_DATA_PATH_WIDTH_GET(x)	field_get(JESD204_SYNTH_DATA_PATH_WIDTH_MASK, x)
-#define JESD204_TPL_DATA_PATH_WIDTH_MASK	GENMASK(15, 8)
-#define JESD204_TPL_DATA_PATH_WIDTH_GET(x)	field_get(JESD204_TPL_DATA_PATH_WIDTH_MASK, x)
+#define JESD204_SYNTH_DATA_PATH_WIDTH_MASK	NO_OS_GENMASK(7, 0)
+#define JESD204_SYNTH_DATA_PATH_WIDTH_GET(x)	no_os_field_get(JESD204_SYNTH_DATA_PATH_WIDTH_MASK, x)
+#define JESD204_TPL_DATA_PATH_WIDTH_MASK	NO_OS_GENMASK(15, 8)
+#define JESD204_TPL_DATA_PATH_WIDTH_GET(x)	no_os_field_get(JESD204_TPL_DATA_PATH_WIDTH_MASK, x)
 #define ADI_AXI_PCORE_VER(major, minor, patch)	\
 	(((major) << 16) | ((minor) << 8) | (patch))
 
@@ -175,8 +175,8 @@ uint32_t axi_jesd204_tx_status_read(struct axi_jesd204_tx *jesd)
 	if (clock_ratio == 0) {
 		printf("\tMeasured Link Clock: off\n");
 	} else {
-		clock_rate = DIV_ROUND_CLOSEST_ULL(100000ULL * clock_ratio,
-						   1ULL << 16);
+		clock_rate = NO_OS_DIV_ROUND_CLOSEST_ULL(100000ULL * clock_ratio,
+				1ULL << 16);
 		printf("\tMeasured Link Clock: %"PRIu32".%.3"PRIu32" MHz\n",\
 		       clock_rate / 1000, clock_rate % 1000);
 	}
@@ -191,11 +191,11 @@ uint32_t axi_jesd204_tx_status_read(struct axi_jesd204_tx *jesd)
 
 		clock_rate = jesd->lane_clk_khz;
 		if (jesd->encoder == JESD204_TX_ENCODER_64B66B) {
-			link_rate = DIV_ROUND_CLOSEST(clock_rate, 66);
+			link_rate = NO_OS_DIV_ROUND_CLOSEST(clock_rate, 66);
 			lmfc_rate = (clock_rate * 8) /
 				    (66 * ((link_config0 & 0xFF) + 1));
 		} else {
-			link_rate = DIV_ROUND_CLOSEST(clock_rate, 40);
+			link_rate = NO_OS_DIV_ROUND_CLOSEST(clock_rate, 40);
 			lmfc_rate = clock_rate /
 				    (10 * ((link_config0 & 0xFF) + 1));
 		}

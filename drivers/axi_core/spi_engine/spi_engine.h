@@ -54,8 +54,8 @@
 /******************************************************************************/
 
 #define OFFLOAD_DISABLED		0x00
-#define OFFLOAD_TX_EN			BIT(0)
-#define OFFLOAD_RX_EN			BIT(1)
+#define OFFLOAD_TX_EN			NO_OS_BIT(0)
+#define OFFLOAD_RX_EN			NO_OS_BIT(1)
 #define OFFLOAD_TX_RX_EN		OFFLOAD_TX_EN | OFFLOAD_RX_EN
 
 #define SPI_ENGINE_MSG_QUEUE_END	0xFFFFFFFF

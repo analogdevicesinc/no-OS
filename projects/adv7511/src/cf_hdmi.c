@@ -58,7 +58,7 @@
 /*****************************************************************************/
 #define MIN(x, y)				(x < y ? x : y)
 #define MAX(x, y) 				(x > y ? x : y)
-#define DIV_ROUND_UP(x,y)		(((x) + (y) - 1) / (y))
+#define NO_OS_DIV_ROUND_UP(x,y)		(((x) + (y) - 1) / (y))
 #define CLAMP(val, min, max)	(val < min ? min : (val > max ? max :val))
 #define ABS(x)					(x < 0 ? -x : x)
 

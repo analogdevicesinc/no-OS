@@ -120,7 +120,7 @@ int32_t start_iiod(struct axi_adc *rx_0_adc, struct axi_adc *rx_1_adc,
 			       &rd_buff1, NULL),
 	};
 
-	return iio_app_run(devices, ARRAY_SIZE(devices));
+	return iio_app_run(devices, NO_OS_ARRAY_SIZE(devices));
 }
 
 #endif /*IIO_SUPPORT */
@@ -352,7 +352,7 @@ int main(void)
 		/* Number of Carrier Frequencies */
 		.fc_ch = AD9208_FULL_BANDWIDTH_MODE,
 		.ddc = ad9208_0_ddc_init,
-		.ddc_cnt = ARRAY_SIZE(ad9208_0_ddc_init),
+		.ddc_cnt = NO_OS_ARRAY_SIZE(ad9208_0_ddc_init),
 		/* ddc complex to real enable */
 		.ddc_output_format_real_en = false,
 		/* ddc mixer real enable */
@@ -396,7 +396,7 @@ int main(void)
 		/* Number of Carrier Frequencies */
 		.fc_ch = AD9208_FULL_BANDWIDTH_MODE,
 		.ddc = ad9208_1_ddc_init,
-		.ddc_cnt = ARRAY_SIZE(ad9208_1_ddc_init),
+		.ddc_cnt = NO_OS_ARRAY_SIZE(ad9208_1_ddc_init),
 		/* ddc complex to real enable */
 		.ddc_output_format_real_en = false,
 		/* ddc mixer real enable */

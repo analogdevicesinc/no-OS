@@ -21,7 +21,7 @@ SRCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c \
 	$(DRIVERS)/adc/ad9467/ad9467.c \
 	$(DRIVERS)/frequency/ad9517/ad9517.c \
 	$(DRIVERS)/api/no_os_spi.c \
-	$(NO-OS)/util/util.c
+	$(NO-OS)/util/no_os_util.c
 SRCS +=	$(PLATFORM_DRIVERS)/axi_io.c \
 	$(PLATFORM_DRIVERS)/xilinx_spi.c \
 	$(PLATFORM_DRIVERS)/delay.c

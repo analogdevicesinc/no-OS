@@ -652,7 +652,7 @@ static int32_t wifi_socket_send(struct wifi_desc *desc, uint32_t sock_id,
 
 	i = 0;
 	do {
-		to_send = min(size - i, MAX_CIPSEND_DATA);
+		to_send = no_os_min(size - i, MAX_CIPSEND_DATA);
 		param.in.send_data.id = sock->conn_id;
 		param.in.send_data.data.buff = ((uint8_t *)data) + i;
 		param.in.send_data.data.len = to_send;
@@ -687,7 +687,7 @@ static int32_t wifi_socket_recv(struct wifi_desc *desc, uint32_t sock_id,
 	if (available_size == 0)
 		return -EAGAIN;
 
-	size = min(available_size, size);
+	size = no_os_min(available_size, size);
 	ret = cb_read(sock->cb, data, size);
 	if (IS_ERR_VALUE(ret))
 		return ret;
@@ -700,11 +700,11 @@ static int32_t wifi_socket_sendto(struct wifi_desc *desc, uint32_t sock_id,
 				  const void *data, uint32_t size,
 				  const struct socket_address to)
 {
-	UNUSED_PARAM(desc);
-	UNUSED_PARAM(sock_id);
-	UNUSED_PARAM(data);
-	UNUSED_PARAM(size);
-	UNUSED_PARAM(to);
+	NO_OS_UNUSED_PARAM(desc);
+	NO_OS_UNUSED_PARAM(sock_id);
+	NO_OS_UNUSED_PARAM(data);
+	NO_OS_UNUSED_PARAM(size);
+	NO_OS_UNUSED_PARAM(to);
 
 	/* TODO: Implement for UDP */
 	return FAILURE;
@@ -715,11 +715,11 @@ static int32_t wifi_socket_recvfrom(struct wifi_desc *desc, uint32_t sock_id,
 				    void *data, uint32_t size,
 				    struct socket_address *from)
 {
-	UNUSED_PARAM(desc);
-	UNUSED_PARAM(sock_id);
-	UNUSED_PARAM(data);
-	UNUSED_PARAM(size);
-	UNUSED_PARAM(from);
+	NO_OS_UNUSED_PARAM(desc);
+	NO_OS_UNUSED_PARAM(sock_id);
+	NO_OS_UNUSED_PARAM(data);
+	NO_OS_UNUSED_PARAM(size);
+	NO_OS_UNUSED_PARAM(from);
 
 	/* TODO: Implement for UDP */
 	return FAILURE;
@@ -770,7 +770,7 @@ static int32_t wifi_socket_listen(struct wifi_desc *desc, uint32_t sock_id,
 	if (back_log == 0)
 		back_log = MAX_CONNECTIONS;
 	else
-		back_log = min(back_log, MAX_CONNECTIONS);
+		back_log = no_os_min(back_log, MAX_CONNECTIONS);
 
 	for (*i = 0; *i < back_log; (*i)++) {
 		ret = wifi_socket_open(desc, &id, server_sock->type,

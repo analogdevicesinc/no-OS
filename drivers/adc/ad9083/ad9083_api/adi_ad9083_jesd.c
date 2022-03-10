@@ -264,7 +264,7 @@ int32_t adi_ad9083_jesd_tx_clk_set(adi_ad9083_device_t *device) {
   /* cal jtx bitrepeat */
   lane_rate = jesd_np * jesd_m * adc_clk * 10;
 #ifdef __KERNEL__
-  lane_rate = div_u64(lane_rate, jesd_l * total_dcm * 8);
+  lane_rate = no_os_div_u64(lane_rate, jesd_l * total_dcm * 8);
 #else
   lane_rate = lane_rate / (jesd_l * total_dcm * 8);
 #endif
@@ -278,7 +278,7 @@ int32_t adi_ad9083_jesd_tx_clk_set(adi_ad9083_device_t *device) {
   }
   /* Calculate JTX PLL loop dividers */
 #ifdef __KERNEL__
-  spi_div = div_u64(lane_rate * 2, adc_clk);
+  spi_div = no_os_div_u64(lane_rate * 2, adc_clk);
 #else
   spi_div = (lane_rate * 2) / (adc_clk);
 #endif
@@ -291,8 +291,8 @@ int32_t adi_ad9083_jesd_tx_clk_set(adi_ad9083_device_t *device) {
 
   refindiv_lcpll = 2;
 #ifdef __KERNEL__
-  fRefClk = div_u64(adc_clk / 2, spi_div);
-  fPfd = div_u64(fRefClk, refindiv_lcpll);
+  fRefClk = no_os_div_u64(adc_clk / 2, spi_div);
+  fPfd = no_os_div_u64(fRefClk, refindiv_lcpll);
 #else
   fRefClk = (adc_clk / 2) / spi_div;
   fPfd = fRefClk / refindiv_lcpll;
@@ -307,7 +307,7 @@ int32_t adi_ad9083_jesd_tx_clk_set(adi_ad9083_device_t *device) {
          (refindiv_lcpll < 15)) {
     refindiv_lcpll = refindiv_lcpll * 2;
 #ifdef __KERNEL__
-    fPfd = div_u64(fRefClk, refindiv_lcpll);
+    fPfd = no_os_div_u64(fRefClk, refindiv_lcpll);
 #else
     fPfd = fRefClk / refindiv_lcpll;
 #endif
@@ -329,7 +329,7 @@ int32_t adi_ad9083_jesd_tx_clk_set(adi_ad9083_device_t *device) {
       &ifx_pclk_div_numerator, &ifx_pclk_div_denominator);
   AD9083_ERROR_RETURN(err);
 #ifdef __KERNEL__
-  async_pclk_ratio = div_u64(clk_divp, lane_rate / 40);
+  async_pclk_ratio = no_os_div_u64(clk_divp, lane_rate / 40);
 #else
   async_pclk_ratio = clk_divp / (lane_rate / 40);
 #endif

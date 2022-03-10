@@ -344,7 +344,7 @@ int main(void)
 		IIO_APP_DEVICE("axi_dac", iio_axi_dac_desc, dac_dev_desc, NULL, &write_buff)
 	};
 
-	iio_app_run(devices, ARRAY_SIZE(devices));
+	iio_app_run(devices, NO_OS_ARRAY_SIZE(devices));
 
 #else // IIO_SUPPORT
 	printf("Bye\n");

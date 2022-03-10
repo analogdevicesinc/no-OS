@@ -90,12 +90,12 @@ int32_t app_ad9083_subclass1_status(struct app_ad9083 *app)
 	if (ret)
 		return -EFAULT;
 
-	if ((stat & 0xF) != (BIT(1) | BIT(3)))
+	if ((stat & 0xF) != (NO_OS_BIT(1) | NO_OS_BIT(3)))
 		pr_err("JTX TPL ERROR CONFIG: %s, SYSREF: %s %s, LMFC PHASE: %s\n",
-		       stat & BIT(0) ? "Invalid" : "Valid",
-		       stat & BIT(1) ? "Received" : "Waiting",
-		       stat & BIT(2) ? "(Unaligned)" : "",
-		       stat & BIT(3) ? "Established" : "Lost");
+		       stat & NO_OS_BIT(0) ? "Invalid" : "Valid",
+		       stat & NO_OS_BIT(1) ? "Received" : "Waiting",
+		       stat & NO_OS_BIT(2) ? "(Unaligned)" : "",
+		       stat & NO_OS_BIT(3) ? "Established" : "Lost");
 
 	return SUCCESS;
 }
@@ -125,10 +125,10 @@ int32_t app_ad9083_status(struct app_ad9083 *app)
 		if (ret == 0 || retry == 0)
 			pr_info("JESD RX (JTX) , state_204b %x, SYNC %s, PLL %s, PHASE %s, MODE %s\n",
 				stat & 0x0f,
-				stat & BIT(4) ? "deasserted" : "asserted",
-				stat & BIT(5) ? "locked" : "unlocked",
-				stat & BIT(6) ? "established" : "lost",
-				stat & BIT(7) ? "invalid" : "valid");
+				stat & NO_OS_BIT(4) ? "deasserted" : "asserted",
+				stat & NO_OS_BIT(5) ? "locked" : "unlocked",
+				stat & NO_OS_BIT(6) ? "established" : "lost",
+				stat & NO_OS_BIT(7) ? "invalid" : "valid");
 		else
 			udelay(20000);
 

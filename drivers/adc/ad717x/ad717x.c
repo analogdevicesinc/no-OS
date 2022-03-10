@@ -812,7 +812,7 @@ int32_t AD717X_Init(ad717x_dev **device,
 	dev->active_device = init_param.active_device;
 	dev->num_channels = init_param.num_channels;
 
-	for (setup_index = 0; setup_index < ARRAY_SIZE(init_param.setups);
+	for (setup_index = 0; setup_index < NO_OS_ARRAY_SIZE(init_param.setups);
 	     setup_index++) {
 		/* Set Polarity */
 		ret = ad717x_set_polarity(dev, init_param.setups[setup_index].bi_unipolar,

@@ -542,12 +542,12 @@ int adxl355_get_xyz(struct adxl355_dev *dev, struct adxl355_frac_repr *x,
 	if (ret)
 		return ret;
 
-	x->integer = div_s64_rem(adxl355_accel_conv(dev, raw_accel_x),
-				 ADXL355_ACC_SCALE_FACTOR_DIV, &(x->fractional));
-	y->integer = div_s64_rem(adxl355_accel_conv(dev, raw_accel_y),
-				 ADXL355_ACC_SCALE_FACTOR_DIV, &(y->fractional));
-	z->integer = div_s64_rem(adxl355_accel_conv(dev, raw_accel_z),
-				 ADXL355_ACC_SCALE_FACTOR_DIV, &(z->fractional));
+	x->integer = no_os_div_s64_rem(adxl355_accel_conv(dev, raw_accel_x),
+				       ADXL355_ACC_SCALE_FACTOR_DIV, &(x->fractional));
+	y->integer = no_os_div_s64_rem(adxl355_accel_conv(dev, raw_accel_y),
+				       ADXL355_ACC_SCALE_FACTOR_DIV, &(y->fractional));
+	z->integer = no_os_div_s64_rem(adxl355_accel_conv(dev, raw_accel_z),
+				       ADXL355_ACC_SCALE_FACTOR_DIV, &(z->fractional));
 
 	return ret;
 }
@@ -571,7 +571,7 @@ int adxl355_get_raw_temp(struct adxl355_dev *dev, uint16_t *raw_temp)
 		// raw_data[0] bits [7-4]: reserved
 		// raw_data[0] bits [3-0]: DATA bits [11: 8]
 		// raw_data[1] bits [7-0]: DATA bits [ 7: 0]
-		*raw_temp = ((raw_data[0] & GENMASK(3, 0)) << 8) | raw_data[1];
+		*raw_temp = ((raw_data[0] & NO_OS_GENMASK(3, 0)) << 8) | raw_data[1];
 
 	return ret;
 }
@@ -591,9 +591,9 @@ int adxl355_get_temp(struct adxl355_dev *dev, struct adxl355_frac_repr *temp)
 
 	ret = adxl355_get_raw_temp(dev, &raw_temp);
 	if (!ret)
-		temp->integer = div_s64_rem(adxl355_temp_conv(raw_temp),
-					    ADXL355_TEMP_OFFSET_DIV*ADXL355_TEMP_SCALE_FACTOR_DIV,
-					    &(temp->fractional));
+		temp->integer = no_os_div_s64_rem(adxl355_temp_conv(raw_temp),
+						  ADXL355_TEMP_OFFSET_DIV*ADXL355_TEMP_SCALE_FACTOR_DIV,
+						  &(temp->fractional));
 
 	return ret;
 }
@@ -728,12 +728,12 @@ int adxl355_get_fifo_data (struct adxl355_dev *dev, uint8_t *fifo_entries,
 
 	if (*fifo_entries > 0) {
 		for (uint8_t idx = 0; idx < *fifo_entries/3; idx++) {
-			x[idx].integer = div_s64_rem(adxl355_accel_conv(dev, raw_x[idx]),
-						     ADXL355_ACC_SCALE_FACTOR_DIV, &(x[idx].fractional));
-			y[idx].integer = div_s64_rem(adxl355_accel_conv(dev, raw_y[idx]),
-						     ADXL355_ACC_SCALE_FACTOR_DIV, &(y[idx].fractional));
-			z[idx].integer = div_s64_rem(adxl355_accel_conv(dev, raw_z[idx]),
-						     ADXL355_ACC_SCALE_FACTOR_DIV, &(z[idx].fractional));
+			x[idx].integer = no_os_div_s64_rem(adxl355_accel_conv(dev, raw_x[idx]),
+							   ADXL355_ACC_SCALE_FACTOR_DIV, &(x[idx].fractional));
+			y[idx].integer = no_os_div_s64_rem(adxl355_accel_conv(dev, raw_y[idx]),
+							   ADXL355_ACC_SCALE_FACTOR_DIV, &(y[idx].fractional));
+			z[idx].integer = no_os_div_s64_rem(adxl355_accel_conv(dev, raw_z[idx]),
+							   ADXL355_ACC_SCALE_FACTOR_DIV, &(z[idx].fractional));
 		}
 	}
 
@@ -863,7 +863,7 @@ static uint32_t adxl355_accel_array_conv(struct adxl355_dev *dev,
 	// raw_array[1] bits [7-0]: DATA bits [11: 4]
 	// raw_array[2] bits [7-4]: DATA bits [ 3: 0]
 	// raw_array[2] bits i[3-0]: reserved
-	raw_accel = get_unaligned_be24(raw_array);
+	raw_accel = no_os_get_unaligned_be24(raw_array);
 
 	return (raw_accel >> 4);
 }
@@ -884,7 +884,7 @@ static int64_t adxl355_accel_conv(struct adxl355_dev *dev,
 	// Raw acceleration is in two's complement
 	// Convert from two's complement to int
 
-	if ((raw_accel & BIT(19)) == BIT(19))
+	if ((raw_accel & NO_OS_BIT(19)) == NO_OS_BIT(19))
 		accel_data = raw_accel | ADXL355_NEG_ACC_MSK;
 	else
 		accel_data = raw_accel;

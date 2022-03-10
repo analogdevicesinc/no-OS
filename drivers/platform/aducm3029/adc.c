@@ -97,9 +97,9 @@ int32_t aducm3029_adc_read(struct adc_desc *desc, uint16_t *buff,
 
 	for (i = 0; i < nb_samples; i++) {
 		adi_buff.nChannels = desc->ch_mask;
-		adi_buff.pDataBuffer = buff + i * hweight8(desc->ch_mask);
+		adi_buff.pDataBuffer = buff + i * no_os_hweight8(desc->ch_mask);
 		adi_buff.nNumConversionPasses = 1;
-		adi_buff.nBuffSize = hweight8(desc->ch_mask) * sizeof(uint16_t);
+		adi_buff.nBuffSize = no_os_hweight8(desc->ch_mask) * sizeof(uint16_t);
 		ret = adi_adc_SubmitBuffer(desc->dev, &adi_buff);
 		if (ret != ADI_ADC_SUCCESS)
 			return -ret;
@@ -125,7 +125,7 @@ int32_t aducm3029_adc_read(struct adc_desc *desc, uint16_t *buff,
  */
 int32_t aducm3029_adc_init(struct adc_desc **desc, struct adc_init_param *param)
 {
-	UNUSED_PARAM(param);
+	NO_OS_UNUSED_PARAM(param);
 
 	ADI_ADC_RESULT	ret;
 	struct adc_desc	*ldesc;

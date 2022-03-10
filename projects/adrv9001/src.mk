@@ -32,7 +32,7 @@ SRCS += $(PLATFORM_DRIVERS)/xilinx_gpio.c \
 	$(DRIVERS)/api/no_os_spi.c \
 	$(PLATFORM_DRIVERS)/xilinx_spi.c \
 	$(PLATFORM_DRIVERS)/delay.c \
-	$(NO-OS)/util/util.c \
+	$(NO-OS)/util/no_os_util.c \
 	$(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c \
 	$(DRIVERS)/axi_core/axi_dac_core/axi_dac_core.c \
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.c \

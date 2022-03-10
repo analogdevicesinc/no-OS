@@ -6,7 +6,7 @@ SRC_DIRS += $(NO-OS)/iio/iio_app
 
 SRC_DIRS += $(INCLUDE)
 
-SRCS += $(NO-OS)/util/util.c \
+SRCS += $(NO-OS)/util/no_os_util.c \
 	$(NO-OS)/util/no_os_list.c \
 	$(DRIVERS)/api/no_os_spi.c \
 	$(DRIVERS)/api/no_os_irq.c \

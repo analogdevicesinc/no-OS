@@ -93,7 +93,7 @@ int32_t adpd410x_reg_read_bytes(struct adpd410x_dev *dev, uint16_t address,
 	switch (dev->dev_type) {
 	case ADPD4100:
 		buff = (uint8_t *) calloc(num_bytes + 2, sizeof(*buff));
-		buff[0] = field_get(ADPD410X_UPPDER_BYTE_SPI_MASK, address);
+		buff[0] = no_os_field_get(ADPD410X_UPPDER_BYTE_SPI_MASK, address);
 		buff[1] = (address << 1) & ADPD410X_LOWER_BYTE_SPI_MASK;
 
 		ret = no_os_spi_write_and_read(dev->dev_ops.spi_phy_dev, buff, num_bytes + 2);
@@ -110,7 +110,7 @@ int32_t adpd410x_reg_read_bytes(struct adpd410x_dev *dev, uint16_t address,
 		if (num_bytes > 255)
 			return FAILURE;
 		buff = (uint8_t *) calloc(2, sizeof(*buff));
-		buff[0] = field_get(ADPD410X_UPPDER_BYTE_I2C_MASK, address);
+		buff[0] = no_os_field_get(ADPD410X_UPPDER_BYTE_I2C_MASK, address);
 		buff[0] |= 0x80;
 		buff[1] = address & ADPD410X_LOWER_BYTE_I2C_MASK;
 
@@ -147,17 +147,17 @@ int32_t adpd410x_reg_write(struct adpd410x_dev *dev, uint16_t address,
 
 	switch (dev->dev_type) {
 	case ADPD4100:
-		buff[0] = field_get(ADPD410X_UPPDER_BYTE_SPI_MASK, address);
+		buff[0] = no_os_field_get(ADPD410X_UPPDER_BYTE_SPI_MASK, address);
 		buff[1] = ((address << 1) & ADPD410X_LOWER_BYTE_SPI_MASK) | 0x1 ;
-		buff[2] = field_get(0xff00, data);
+		buff[2] = no_os_field_get(0xff00, data);
 		buff[3] = data & 0xff;
 
 		return no_os_spi_write_and_read(dev->dev_ops.spi_phy_dev, buff, 4);
 	case ADPD4101:
-		buff[0] = field_get(ADPD410X_UPPDER_BYTE_I2C_MASK, address);
+		buff[0] = no_os_field_get(ADPD410X_UPPDER_BYTE_I2C_MASK, address);
 		buff[0] |= 0x80;
 		buff[1] = address & ADPD410X_LOWER_BYTE_I2C_MASK;
-		buff[2] = field_get(0xff00, data);
+		buff[2] = no_os_field_get(0xff00, data);
 		buff[3] = data & 0xff;
 
 		return no_os_i2c_write(dev->dev_ops.i2c_phy_dev, buff, 4, 1);
@@ -185,7 +185,7 @@ int32_t adpd410x_reg_write_mask(struct adpd410x_dev *dev, uint16_t address,
 	if (ret != SUCCESS)
 		return FAILURE;
 	reg_val &= ~mask;
-	bit_pos = find_first_set_bit((uint32_t)mask);
+	bit_pos = no_os_find_first_set_bit((uint32_t)mask);
 	reg_val |= (data << bit_pos) & mask;
 
 	return adpd410x_reg_write(dev, address, reg_val);

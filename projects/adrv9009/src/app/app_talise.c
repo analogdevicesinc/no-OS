@@ -394,7 +394,7 @@ adiHalErr_t talise_setup(taliseDevice_t * const pd, taliseInit_t * const pi)
 		ADIHAL_spiReadByte(pd->devHalInfo, TALISE_ADDR_DES_PHY_GENERAL_CTL_1,
 				   &phy_ctrl);
 		ADIHAL_spiWriteByte(pd->devHalInfo, TALISE_ADDR_DES_PHY_GENERAL_CTL_1,
-				    phy_ctrl & ~BIT(7));
+				    phy_ctrl & ~NO_OS_BIT(7));
 		ADIHAL_spiWriteByte(pd->devHalInfo, TALISE_ADDR_DES_PHY_GENERAL_CTL_1,
 				    phy_ctrl);
 	}
@@ -669,7 +669,7 @@ int talise_multi_chip_sync(taliseDevice_t * pd, int step)
 		if (ret)
 			break;
 		ret = ADIHAL_spiWriteByte(pd->devHalInfo, TALISE_ADDR_DES_PHY_GENERAL_CTL_1,
-					  phy_ctrl & ~BIT(7));
+					  phy_ctrl & ~NO_OS_BIT(7));
 		if (ret)
 			break;
 		ret = ADIHAL_spiWriteByte(pd->devHalInfo, TALISE_ADDR_DES_PHY_GENERAL_CTL_1,

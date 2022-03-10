@@ -52,7 +52,7 @@
 /******************************************************************************/
 #define AD7091R5_CHANNEL_NO		4
 #define AD7091R5_BITS			12
-#define AD7091R5_CONV_MASK		GENMASK(AD7091R5_BITS - 1, 0)
+#define AD7091R5_CONV_MASK		NO_OS_GENMASK(AD7091R5_BITS - 1, 0)
 
 /* AD7091r5 registers */
 #define AD7091R5_REG_RESULT		0
@@ -68,30 +68,30 @@
 #define REG_RESULT_CONV_DATA(x)		((x) & AD7091R5_CONV_MASK)
 
 /* AD7091R5_REG_CONF */
-#define REG_CONF_SLEEP_MODE_MASK	BIT(0)
+#define REG_CONF_SLEEP_MODE_MASK	NO_OS_BIT(0)
 #define REG_CONF_SLEEP_MODE(x)		((x & 0x03) << 0)
 
-#define REG_CONF_GPO1_MASK		BIT(2)
+#define REG_CONF_GPO1_MASK		NO_OS_BIT(2)
 #define REG_CONF_GPO1(x)		((x & 0x01) << 2)
 
-#define REG_CONF_GPO0_MASK		BIT(3)
+#define REG_CONF_GPO0_MASK		NO_OS_BIT(3)
 #define REG_CONF_GPO0(x)		((x & 0x01) << 3)
 
-#define REG_CONF_GPO0_MODE_MASK		(BIT(15) | BIT(5) | BIT(4))
+#define REG_CONF_GPO0_MODE_MASK		(NO_OS_BIT(15) | NO_OS_BIT(5) | NO_OS_BIT(4))
 #define REG_CONF_GPO0_ALERT(x)		((x & 0x01) << 4)
 #define REG_CONF_GPO0_BUSY(x)		((x & 0x01) << 5)
 #define REG_CONF_GPO0_DRIVE_TYPE(x)	((x & 0x01) << 15)
 
-#define REG_CONF_CYCLE_TIMER_MASK	(BIT(7) | BIT(6))
+#define REG_CONF_CYCLE_TIMER_MASK	(NO_OS_BIT(7) | NO_OS_BIT(6))
 #define REG_CONF_CYCLE_TIMER(x)		((x & 0x03) << 6)
 
-#define REG_CONF_GPO2_MASK		BIT(14)
+#define REG_CONF_GPO2_MASK		NO_OS_BIT(14)
 #define REG_CONF_GPO2(x)		((x & 0x01) << 14)
 
-#define REG_CONF_RESET_MASK		BIT(9)
+#define REG_CONF_RESET_MASK		NO_OS_BIT(9)
 #define REG_CONF_RESET(x)		((x & 0x01) << 9)
 
-#define REG_CONF_MODE_MASK		(BIT(10) | BIT(8))
+#define REG_CONF_MODE_MASK		(NO_OS_BIT(10) | NO_OS_BIT(8))
 #define REG_CONF_AUTO(x)		((x & 0x01) << 8)
 #define REG_CONF_CMD(x)			((x & 0x01) << 10)
 

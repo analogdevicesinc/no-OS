@@ -141,13 +141,13 @@ static int32_t adf5902_vco_freq_param(struct adf5902_dev *dev)
 	dev->frac_lsb = tmp & ADF5902_FRAC_LSB_MSK;
 
 	/* Set frequency calibration divider value */
-	dev->freq_cal_div = DIV_ROUND_UP(dev->f_pfd, ADF5902_FREQ_CAL_DIV_100KHZ);
+	dev->freq_cal_div = NO_OS_DIV_ROUND_UP(dev->f_pfd, ADF5902_FREQ_CAL_DIV_100KHZ);
 
 	if(dev->freq_cal_div > ADF5902_MAX_FREQ_CAL_DIV)
 		return FAILURE;
 
 	/* Set clock divider value */
-	dev->clk1_div = DIV_ROUND_UP(dev->f_pfd, ADF5902_CLK1_DIV_25KHZ);
+	dev->clk1_div = NO_OS_DIV_ROUND_UP(dev->f_pfd, ADF5902_CLK1_DIV_25KHZ);
 
 	if (dev->clk1_div > ADF5902_MAX_CLK_DIVIDER)
 		return FAILURE;

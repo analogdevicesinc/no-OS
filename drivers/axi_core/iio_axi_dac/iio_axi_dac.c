@@ -312,7 +312,7 @@ static int set_altvoltage_phase(void *device, char *buf, uint32_t len,
 				const struct iio_ch_info *channel,
 				intptr_t priv)
 {
-	uint32_t phase = srt_to_uint32(buf);
+	uint32_t phase = no_os_str_to_uint32(buf);
 	struct iio_axi_dac_desc * iio_dac = (struct iio_axi_dac_desc *)device;
 	int ret = axi_dac_dds_set_phase(iio_dac->dac, channel->ch_num, phase);
 	if (ret < 0)
@@ -355,7 +355,7 @@ static int set_altvoltage_frequency(void *device, char *buf, uint32_t len,
 				    const struct iio_ch_info *channel,
 				    intptr_t priv)
 {
-	uint32_t freq = srt_to_uint32(buf);
+	uint32_t freq = no_os_str_to_uint32(buf);
 	struct iio_axi_dac_desc* iio_dac = (struct iio_axi_dac_desc*)device;
 	int ret = axi_dac_dds_set_frequency(iio_dac->dac, channel->ch_num, freq);
 	if (ret < 0)
@@ -376,7 +376,7 @@ static int set_altvoltage_raw(void *device, char *buf, uint32_t len,
 			      const struct iio_ch_info *channel,
 			      intptr_t priv)
 {
-	uint32_t dds_mode = srt_to_uint32(buf);
+	uint32_t dds_mode = no_os_str_to_uint32(buf);
 	struct iio_axi_dac_desc* iio_dac = (struct iio_axi_dac_desc*)device;
 	int ret;
 	ret = axi_dac_set_datasel(iio_dac->dac, -1,
@@ -475,7 +475,7 @@ int32_t iio_axi_dac_prepare_transfer(void *dev, uint32_t mask)
 	iio_dac->mask = mask;
 
 	for (i = 0; i < iio_dac->dev_descriptor.num_ch; i++) {
-		if (BIT(i) & mask)
+		if (NO_OS_BIT(i) & mask)
 			ret = axi_dac_set_datasel(iio_dac->dac, i, AXI_DAC_DATA_SEL_DMA);
 		else
 			ret = axi_dac_set_datasel(iio_dac->dac, i, AXI_DAC_DATA_SEL_DDS);
@@ -504,7 +504,7 @@ int32_t iio_axi_dac_write_data(void *dev, void *buff, uint32_t nb_samples)
 		return FAILURE;
 
 	iio_dac = (struct iio_axi_dac_desc *)dev;
-	bytes = nb_samples * hweight8(iio_dac->mask) * (STORAGE_BITS / 8);
+	bytes = nb_samples * no_os_hweight8(iio_dac->mask) * (STORAGE_BITS / 8);
 
 	if(iio_dac->dcache_flush_range)
 		iio_dac->dcache_flush_range((uintptr_t)buff, bytes);

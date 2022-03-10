@@ -133,7 +133,7 @@ int32_t run_example(struct ad3552r_desc *dac)
 	uint16_t samples[2];
 	int32_t err;
 
-	nb_samples = ARRAY_SIZE(no_os_sine_lut_16);
+	nb_samples = NO_OS_ARRAY_SIZE(no_os_sine_lut_16);
 	i = 0;
 	do {
 		samples[0] = no_os_sine_lut_16[i];
@@ -242,7 +242,7 @@ int main()
 
 	err = 0;
 	while (err >= 0) {
-		err = iio_app_run(devices, ARRAY_SIZE(devices));
+		err = iio_app_run(devices, NO_OS_ARRAY_SIZE(devices));
 	}
 
 	iio_ad3552r_remove(iio_dac);

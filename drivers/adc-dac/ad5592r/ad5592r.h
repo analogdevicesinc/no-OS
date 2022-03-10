@@ -42,8 +42,8 @@
 #include "stdint.h"
 #include "ad5592r-base.h"
 
-#define AD5592R_GPIO_READBACK_EN	BIT(10)
-#define AD5592R_LDAC_READBACK_EN	BIT(6)
+#define AD5592R_GPIO_READBACK_EN	NO_OS_BIT(10)
+#define AD5592R_LDAC_READBACK_EN	NO_OS_BIT(6)
 
 #define swab16(x) \
 	((((x) & 0x00ff) << 8) | \

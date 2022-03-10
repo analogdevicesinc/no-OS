@@ -515,12 +515,12 @@ typedef struct {
 /* Timeout for ADC Conversion */
 #define AD717X_CONV_TIMEOUT			10000
 
-#define AD717x_CHANNEL_INPUT_MASK			GENMASK(9,0)
-#define AD717X_CHMAP_REG_SETUP_SEL_MSK  	GENMASK(14,12)
-#define AD717X_CHMAP_REG_AINPOS_MSK    		GENMASK(9,5)
-#define AD717X_CHMAP_REG_AINNEG_MSK    		GENMASK(4,0)
-#define AD717X_ADCMODE_REG_MODE_MSK   		GENMASK(6,4)
-#define AD717X_SETUP_CONF_REG_REF_SEL_MSK	GENMASK(5,4)
+#define AD717x_CHANNEL_INPUT_MASK			NO_OS_GENMASK(9,0)
+#define AD717X_CHMAP_REG_SETUP_SEL_MSK  	NO_OS_GENMASK(14,12)
+#define AD717X_CHMAP_REG_AINPOS_MSK    		NO_OS_GENMASK(9,5)
+#define AD717X_CHMAP_REG_AINNEG_MSK    		NO_OS_GENMASK(4,0)
+#define AD717X_ADCMODE_REG_MODE_MSK   		NO_OS_GENMASK(6,4)
+#define AD717X_SETUP_CONF_REG_REF_SEL_MSK	NO_OS_GENMASK(5,4)
 
 /*****************************************************************************/
 /************************ Functions Declarations *****************************/

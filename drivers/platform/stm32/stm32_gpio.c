@@ -113,7 +113,7 @@ static int32_t _gpio_init(struct no_os_gpio_desc *desc,
 	extra->speed = pextra->speed;
 
 	/* configure gpio with user configuration */
-	gis.Pin = BIT(param->number);
+	gis.Pin = NO_OS_BIT(param->number);
 	gis.Mode = extra->mode;
 	gis.Pull = extra->pull;
 	gis.Speed = extra->speed;
@@ -215,7 +215,7 @@ int32_t stm32_gpio_direction_input(struct no_os_gpio_desc *desc)
 	extra = desc->extra;
 
 	/* configure gpio with user configuration */
-	gis.Pin = BIT(desc->number);
+	gis.Pin = NO_OS_BIT(desc->number);
 	gis.Mode = GPIO_MODE_INPUT;
 	gis.Pull = extra->pull;
 	gis.Speed = extra->speed;
@@ -250,10 +250,10 @@ int32_t stm32_gpio_direction_output(struct no_os_gpio_desc *desc,
 	extra = desc->extra;
 
 	/* configure gpio output level */
-	HAL_GPIO_WritePin(extra->port, BIT(desc->number), (GPIO_PinState)value);
+	HAL_GPIO_WritePin(extra->port, NO_OS_BIT(desc->number), (GPIO_PinState)value);
 
 	/* configure gpio with user configuration */
-	gis.Pin = BIT(desc->number);
+	gis.Pin = NO_OS_BIT(desc->number);
 	gis.Mode = GPIO_MODE_OUTPUT_PP;
 	gis.Pull = extra->pull;
 	gis.Speed = extra->speed;
@@ -306,7 +306,7 @@ int32_t stm32_gpio_set_value(struct no_os_gpio_desc *desc,
 	extra = desc->extra;
 
 	/* configure gpio output level */
-	HAL_GPIO_WritePin(extra->port, BIT(desc->number), (GPIO_PinState)value);
+	HAL_GPIO_WritePin(extra->port, NO_OS_BIT(desc->number), (GPIO_PinState)value);
 
 	return 0;
 }
@@ -332,7 +332,7 @@ int32_t stm32_gpio_get_value(struct no_os_gpio_desc *desc,
 
 	extra = desc->extra;
 
-	*value = (uint8_t)HAL_GPIO_ReadPin(extra->port, BIT(desc->number));
+	*value = (uint8_t)HAL_GPIO_ReadPin(extra->port, NO_OS_BIT(desc->number));
 
 	return 0;
 }

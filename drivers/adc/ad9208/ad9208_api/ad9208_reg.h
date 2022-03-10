@@ -31,7 +31,7 @@ int ad9208_is_sync_spi_update_enabled(ad9208_handle_t *h, uint8_t *enabled);
 #define AD9208_JESD_NOF_LINKS         2
 #define AD9208_JESD_NOF_SYNCOUTB      2
 #define AD9208_ADC_NOF_CH             2
-#define AD9208_ADC_CH_INDEX(x)          (BIT(x)>>1)
+#define AD9208_ADC_CH_INDEX(x)          (NO_OS_BIT(x)>>1)
 /*REGISTER SUMMARY : (AD9208_REGMAP_V4)*/
 #define AD9208_IF_CFG_A_REG           0x000
 #define AD9208_IF_CFG_B_REG           0x001
@@ -44,20 +44,20 @@ int ad9208_is_sync_spi_update_enabled(ad9208_handle_t *h, uint8_t *enabled);
 #define AD9208_CHIP_GRADE_REG         0x006
 #define AD9208_CH_INDEX_REG           0x008
 #define AD9208_CH_INDEX_SEL(x)        (((x)&0x3)<<0)
-#define AD9208_CHANNEL_PAGE_0         BIT(0)
-#define AD9208_CHANNEL_PAGE_1         BIT(1)
-#define AD9208_CHANNEL_PAGE_2         BIT(2)
-#define AD9208_CHANNEL_PAGE_3         BIT(3)
-#define AD9208_CHANNEL_PAGE_4         BIT(4)
-#define AD9208_CHANNEL_PAGE_5         BIT(5)
-#define AD9208_MAINDAC_PAGE_0         BIT(6)
-#define AD9208_MAINDAC_PAGE_1         BIT(7)
+#define AD9208_CHANNEL_PAGE_0         NO_OS_BIT(0)
+#define AD9208_CHANNEL_PAGE_1         NO_OS_BIT(1)
+#define AD9208_CHANNEL_PAGE_2         NO_OS_BIT(2)
+#define AD9208_CHANNEL_PAGE_3         NO_OS_BIT(3)
+#define AD9208_CHANNEL_PAGE_4         NO_OS_BIT(4)
+#define AD9208_CHANNEL_PAGE_5         NO_OS_BIT(5)
+#define AD9208_MAINDAC_PAGE_0         NO_OS_BIT(6)
+#define AD9208_MAINDAC_PAGE_1         NO_OS_BIT(7)
 
 #define AD9208_CHIP_SPI_XFER_REG     0x000F
-#define AD9208_CHIP_TRIGGER_SPI_XFER  BIT(0)
+#define AD9208_CHIP_TRIGGER_SPI_XFER  NO_OS_BIT(0)
 
 #define AD9208_CHIP_PIN_CTRL0_REG     0x03F
-#define AD9208_CHIP_PDN_PIN_DISABLE   BIT(7)
+#define AD9208_CHIP_PDN_PIN_DISABLE   NO_OS_BIT(7)
 #define AD9208_CHIP_PIN_CTRL1_REG     0x040
 #define AD9208_CHIP_PDN_MODE(x)       (((x)&0xC0)<<6)
 #define AD9208_CHIP_PIN_CTRL_MASK(x)  (0x07 << (3 * (x)))
@@ -93,19 +93,19 @@ int ad9208_is_sync_spi_update_enabled(ad9208_handle_t *h, uint8_t *enabled);
 #define AD9208_BUFF_CTRL_N(x)         (((x)&0x3F)<<0)
 
 #define AD9208_CHIP_SYNC_MODE_REG     0x01FF
-#define AD9208_SYNC_TS_ENABLE	      BIT(0)
+#define AD9208_SYNC_TS_ENABLE	      NO_OS_BIT(0)
 
 #define AD9208_ADC_MODE_REG           0x0200
 #define AD9208_ADC_MODE(x)            (((x)&0x3)<<0)
-#define AD9208_ADC_Q_IGNORE           BIT(5)
+#define AD9208_ADC_Q_IGNORE           NO_OS_BIT(5)
 
 #define AD9208_ADC_DCM_REG            0x0201
 #define AD9208_ADC_DCM_RATE(x)        (((x)&0xF)<<0)
 #define AD9208_DCM_NONE               0x0
-#define AD9208_DCM2_EN                BIT(0)
-#define AD9208_DCM4_EN                BIT(1)
-#define AD9208_DCM16_EN               BIT(2)
-#define AD9208_DCM3_EN                BIT(3)
+#define AD9208_DCM2_EN                NO_OS_BIT(0)
+#define AD9208_DCM4_EN                NO_OS_BIT(1)
+#define AD9208_DCM16_EN               NO_OS_BIT(2)
+#define AD9208_DCM3_EN                NO_OS_BIT(3)
 
 #define AD9208_FD_UT_LSB_REG           0x0247
 #define AD9208_FD_UT_LSB(x)            (((x)&0xFF)<<0)
@@ -122,23 +122,23 @@ int ad9208_is_sync_spi_update_enabled(ad9208_handle_t *h, uint8_t *enabled);
 #define AD9208_FD_DWELL_MSB(x)         (((x>>8)&0xFF)<<0)
 
 #define AD9208_DDC_SYNC_CTRL_REG       0x0300
-#define AD9208_DDC_UPDATE_MODE         BIT(7)
-#define AD9208_NCO_SOFT_RESET          BIT(4)
-#define AD9208_NCO_SYSREF_N_SHOT_MODE  BIT(1)
-#define AD9208_NCO_SYSREF_SYNC_EN      BIT(0)
+#define AD9208_DDC_UPDATE_MODE         NO_OS_BIT(7)
+#define AD9208_NCO_SOFT_RESET          NO_OS_BIT(4)
+#define AD9208_NCO_SYSREF_N_SHOT_MODE  NO_OS_BIT(1)
+#define AD9208_NCO_SYSREF_SYNC_EN      NO_OS_BIT(0)
 
 #define AD9208_DDCX_REG_OFFSET        0x20
 #define AD9208_DDCX_CTRL0_REG         0x0310
-#define AD9208_DDCX_MIXER_SEL         BIT(7)
-#define AD9208_DDCX_GAIN_SEL          BIT(6)
+#define AD9208_DDCX_MIXER_SEL         NO_OS_BIT(7)
+#define AD9208_DDCX_GAIN_SEL          NO_OS_BIT(6)
 #define AD9208_DDCX_NCO_IF_MODE(x)    (((x)&0x3)<<4)
-#define AD9208_DDCX_COMPLEX_TO_REAL   BIT(3)
+#define AD9208_DDCX_COMPLEX_TO_REAL   NO_OS_BIT(3)
 #define AD9208_DDCX_DCM_FILT_SEL_0(x)   (((x)&0x7)<<0)
 
 #define AD9208_DDCX_DATA_SEL_REG      0x0311
 #define AD9208_DDCX_DCM_FILT_SEL_1(x)  (((x)&0xF)<<4)
-#define AD9208_DDCX_Q_IP_CHB_SEL      BIT(2)
-#define AD9208_DDCX_I_IP_CHB_SEL      BIT(0)
+#define AD9208_DDCX_Q_IP_CHB_SEL      NO_OS_BIT(2)
+#define AD9208_DDCX_I_IP_CHB_SEL      NO_OS_BIT(0)
 
 #define AD9208_DDCX_FTW0_REG          0x0316
 #define AD9208_DDCX_FTW1_REG          0x0317
@@ -199,10 +199,10 @@ int ad9208_is_sync_spi_update_enabled(ad9208_handle_t *h, uint8_t *enabled);
 #define AD9208_JESD_SLR_CTRL(x)       (((x)&0xF)<<4)
 
 #define AD9208_JESD_SERDES_PLL_REG    0x056F
-#define AD9208_JESD_PLL_LOCK_STAT     BIT(7)
+#define AD9208_JESD_PLL_LOCK_STAT     NO_OS_BIT(7)
 
 #define AD9208_JESD_LINK_CTRL1_REG    0x0571
-#define AD9208_JESD_LINK_PDN          BIT(0)
+#define AD9208_JESD_LINK_PDN          NO_OS_BIT(0)
 
 #define AD9208_JESD_ID_CFG_REG_OFFSET 0x3
 #define AD9208_JESD_DID_CFG_REG       0x0580
@@ -213,7 +213,7 @@ int ad9208_is_sync_spi_update_enabled(ad9208_handle_t *h, uint8_t *enabled);
 
 #define AD9208_JESD_CFG_REG_OFFSET    0x8
 #define AD9208_JESD_L_SCR_CFG_REG     0x058B
-#define AD9208_JESD_SCR_EN            BIT(7)
+#define AD9208_JESD_SCR_EN            NO_OS_BIT(7)
 #define AD9208_JESD_LANES(x)          (((x)&0x1F)<<0)
 
 #define AD9208_JESD_F_CFG_REG         0x058C
@@ -236,7 +236,7 @@ int ad9208_is_sync_spi_update_enabled(ad9208_handle_t *h, uint8_t *enabled);
 #define AD9208_JESD_S(x)              (((x)&0x1F)<<0)
 
 #define AD9208_JESD_HD_CF_CFG_REG      0x0592
-#define AD9208_JESD_HD                 BIT(7)
+#define AD9208_JESD_HD                 NO_OS_BIT(7)
 #define AD9208_JESD_CF(x)              (((x)&0x1F)<<0)
 
 #define AD9208_JESD_XBAR_CFG_REG_OFFSET 0x5
@@ -245,18 +245,18 @@ int ad9208_is_sync_spi_update_enabled(ad9208_handle_t *h, uint8_t *enabled);
 #define AD9208_JESD_XBAR_LN_ODD(x)     (((x)&0x7) << 4)
 
 #define AD9208_DC_OFFSET_CAL_CTRL      0x0701
-#define AD9208_DC_OFFSET_CAL_EN        BIT(7)
+#define AD9208_DC_OFFSET_CAL_EN        NO_OS_BIT(7)
 
 #define AD9208_VREF_CTRL_REG          0x18A6
-#define AD9208_EXT_VREF_MODE          BIT(0)
+#define AD9208_EXT_VREF_MODE          NO_OS_BIT(0)
 
 #define AD9208_EXT_VCM_CTRL_REG      0x18E3
-#define AD9208_EXT_VCM_BUFF          BIT(6)
+#define AD9208_EXT_VCM_BUFF          NO_OS_BIT(6)
 #define AD9208_EXT_VCM_BUFF_CURR(x)  (((x)&0x3F) << 0)
 
 #define AD9208_TEMP_DIODE_CTRL_REG    0x18E6
-#define AD9208_CENTRAL_DIODE_1X_EN    BIT(0)
-#define AD9208_CENTRAL_DIODE_20X_EN   BIT(1)
+#define AD9208_CENTRAL_DIODE_1X_EN    NO_OS_BIT(0)
+#define AD9208_CENTRAL_DIODE_20X_EN   NO_OS_BIT(1)
 
 #define AD9208_ANALOG_CFG_REG         0x1908
 #define AD9208_DC_COUPLE_EN(x)        (((x)&0x1)<<2)

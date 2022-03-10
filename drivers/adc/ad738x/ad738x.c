@@ -294,7 +294,7 @@ int32_t ad738x_read_data(struct ad738x_dev *dev,
 
 	msg.commands_data = commands_data;
 	msg.commands = spi_eng_msg_cmds;
-	msg.no_commands = ARRAY_SIZE(spi_eng_msg_cmds);
+	msg.no_commands = NO_OS_ARRAY_SIZE(spi_eng_msg_cmds);
 	msg.rx_addr = (uint32_t)buf;
 
 	ret = spi_engine_offload_transfer(dev->spi_desc, msg, samples);

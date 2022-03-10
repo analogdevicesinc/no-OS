@@ -61,7 +61,7 @@ SRCS += $(NO-OS)/util/fifo.c \
 	$(PLATFORM_DRIVERS)/no_os_uart.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c
 endif
-SRCS +=	$(NO-OS)/util/util.c
+SRCS +=	$(NO-OS)/util/no_os_util.c
 ifeq (xilinx,$(strip $(PLATFORM)))
 SRCS += $(DRIVERS)/axi_core/jesd204/xilinx_transceiver.c \
 	$(DRIVERS)/axi_core/jesd204/axi_adxcvr.c \

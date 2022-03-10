@@ -59,63 +59,63 @@
 #define ADF4371_REG(x)			(x)
 
 /* ADF4371_REG0 */
-#define ADF4371_ADDR_ASC_MSK		BIT(2)
-#define ADF4371_ADDR_ASC(x)		field_prep(ADF4371_ADDR_ASC_MSK, x)
-#define ADF4371_ADDR_ASC_R_MSK		BIT(5)
-#define ADF4371_ADDR_ASC_R(x)		field_prep(ADF4371_ADDR_ASC_R_MSK, x)
-#define ADF4371_SDO_ACT_MSK		BIT(3)
-#define ADF4371_SDO_ACT(x)		field_prep(ADF4371_SDO_ACT_MSK, x)
-#define ADF4371_SDO_ACT_R_MSK		BIT(4)
-#define ADF4371_SDO_ACT_R(x)		field_prep(ADF4371_SDO_ACT_R_MSK, x)
+#define ADF4371_ADDR_ASC_MSK		NO_OS_BIT(2)
+#define ADF4371_ADDR_ASC(x)		no_os_field_prep(ADF4371_ADDR_ASC_MSK, x)
+#define ADF4371_ADDR_ASC_R_MSK		NO_OS_BIT(5)
+#define ADF4371_ADDR_ASC_R(x)		no_os_field_prep(ADF4371_ADDR_ASC_R_MSK, x)
+#define ADF4371_SDO_ACT_MSK		NO_OS_BIT(3)
+#define ADF4371_SDO_ACT(x)		no_os_field_prep(ADF4371_SDO_ACT_MSK, x)
+#define ADF4371_SDO_ACT_R_MSK		NO_OS_BIT(4)
+#define ADF4371_SDO_ACT_R(x)		no_os_field_prep(ADF4371_SDO_ACT_R_MSK, x)
 #define ADF4371_RESET_CMD		0x81
 
 /* ADF4371_REG17 */
-#define ADF4371_FRAC2WORD_L_MSK		GENMASK(7, 1)
-#define ADF4371_FRAC2WORD_L(x)		field_prep(ADF4371_FRAC2WORD_L_MSK, x)
-#define ADF4371_FRAC1WORD_MSK		BIT(0)
-#define ADF4371_FRAC1WORD(x)		field_prep(ADF4371_FRAC1WORD_MSK, x)
+#define ADF4371_FRAC2WORD_L_MSK		NO_OS_GENMASK(7, 1)
+#define ADF4371_FRAC2WORD_L(x)		no_os_field_prep(ADF4371_FRAC2WORD_L_MSK, x)
+#define ADF4371_FRAC1WORD_MSK		NO_OS_BIT(0)
+#define ADF4371_FRAC1WORD(x)		no_os_field_prep(ADF4371_FRAC1WORD_MSK, x)
 
 /* ADF4371_REG18 */
-#define ADF4371_FRAC2WORD_H_MSK		GENMASK(6, 0)
-#define ADF4371_FRAC2WORD_H(x)		field_prep(ADF4371_FRAC2WORD_H_MSK, x)
+#define ADF4371_FRAC2WORD_H_MSK		NO_OS_GENMASK(6, 0)
+#define ADF4371_FRAC2WORD_H(x)		no_os_field_prep(ADF4371_FRAC2WORD_H_MSK, x)
 
 /* ADF4371_REG1A */
-#define ADF4371_MOD2WORD_MSK		GENMASK(5, 0)
-#define ADF4371_MOD2WORD(x)		field_prep(ADF4371_MOD2WORD_MSK, x)
+#define ADF4371_MOD2WORD_MSK		NO_OS_GENMASK(5, 0)
+#define ADF4371_MOD2WORD(x)		no_os_field_prep(ADF4371_MOD2WORD_MSK, x)
 
 /* ADF4371_REG1E */
-#define ADF4371_CP_CURRENT_MSK		GENMASK(7, 4)
-#define ADF4371_CP_CURRENT(x)		field_prep(ADF4371_CP_CURRENT_MSK, x)
-#define ADF4371_PD_POL_MSK		BIT(3)
-#define ADF4371_PD_POL(x)		field_prep(ADF4371_PD_POL_MSK, x)
+#define ADF4371_CP_CURRENT_MSK		NO_OS_GENMASK(7, 4)
+#define ADF4371_CP_CURRENT(x)		no_os_field_prep(ADF4371_CP_CURRENT_MSK, x)
+#define ADF4371_PD_POL_MSK		NO_OS_BIT(3)
+#define ADF4371_PD_POL(x)		no_os_field_prep(ADF4371_PD_POL_MSK, x)
 
 /* ADF4371_REG20 */
-#define ADF4371_MUXOUT_MSK		GENMASK(7, 4)
-#define ADF4371_MUXOUT(x)		field_prep(ADF4371_MUXOUT_MSK, x)
-#define ADF4371_MUXOUT_LVL_MSK		BIT(2)
-#define ADF4371_MUXOUT_LVL(x)		field_prep(ADF4371_MUXOUT_LVL_MSK, x)
-#define ADF4371_MUXOUT_EN_MSK		BIT(3)
-#define ADF4371_MUXOUT_EN(x)		field_prep(ADF4371_MUXOUT_EN_MSK, x)
+#define ADF4371_MUXOUT_MSK		NO_OS_GENMASK(7, 4)
+#define ADF4371_MUXOUT(x)		no_os_field_prep(ADF4371_MUXOUT_MSK, x)
+#define ADF4371_MUXOUT_LVL_MSK		NO_OS_BIT(2)
+#define ADF4371_MUXOUT_LVL(x)		no_os_field_prep(ADF4371_MUXOUT_LVL_MSK, x)
+#define ADF4371_MUXOUT_EN_MSK		NO_OS_BIT(3)
+#define ADF4371_MUXOUT_EN(x)		no_os_field_prep(ADF4371_MUXOUT_EN_MSK, x)
 
 /* ADF4371_REG22 */
-#define ADF4371_REFIN_MODE_MASK		BIT(6)
-#define ADF4371_REFIN_MODE(x)		field_prep(ADF4371_REFIN_MODE_MASK, x)
+#define ADF4371_REFIN_MODE_MASK		NO_OS_BIT(6)
+#define ADF4371_REFIN_MODE(x)		no_os_field_prep(ADF4371_REFIN_MODE_MASK, x)
 
 /* ADF4371_REG24 */
-#define ADF4371_RF_DIV_SEL_MSK		GENMASK(6, 4)
-#define ADF4371_RF_DIV_SEL(x)		field_prep(ADF4371_RF_DIV_SEL_MSK, x)
+#define ADF4371_RF_DIV_SEL_MSK		NO_OS_GENMASK(6, 4)
+#define ADF4371_RF_DIV_SEL(x)		no_os_field_prep(ADF4371_RF_DIV_SEL_MSK, x)
 
 /* ADF4371_REG25 */
-#define ADF4371_MUTE_LD_MSK		BIT(7)
-#define ADF4371_MUTE_LD(x)		field_prep(ADF4371_MUTE_LD_MSK, x)
+#define ADF4371_MUTE_LD_MSK		NO_OS_BIT(7)
+#define ADF4371_MUTE_LD(x)		no_os_field_prep(ADF4371_MUTE_LD_MSK, x)
 
 /* ADF4371_REG32 */
-#define ADF4371_TIMEOUT_MSK		GENMASK(1, 0)
-#define ADF4371_TIMEOUT(x)		field_prep(ADF4371_TIMEOUT_MSK, x)
+#define ADF4371_TIMEOUT_MSK		NO_OS_GENMASK(1, 0)
+#define ADF4371_TIMEOUT(x)		no_os_field_prep(ADF4371_TIMEOUT_MSK, x)
 
 /* ADF4371_REG34 */
-#define ADF4371_VCO_ALC_TOUT_MSK	GENMASK(4, 0)
-#define ADF4371_VCO_ALC_TOUT(x)		field_prep(ADF4371_VCO_ALC_TOUT_MSK, x)
+#define ADF4371_VCO_ALC_TOUT_MSK	NO_OS_GENMASK(4, 0)
+#define ADF4371_VCO_ALC_TOUT(x)		no_os_field_prep(ADF4371_VCO_ALC_TOUT_MSK, x)
 
 /* Specifications */
 #define ADF4371_MIN_VCO_FREQ		4000000000ULL /* 4000 MHz */
@@ -133,7 +133,7 @@
 /* MOD1 is a 24-bit primary modulus with fixed value of 2^25 */
 #define ADF4371_MODULUS1		33554432ULL
 /* MOD2 is the programmable, 14-bit auxiliary fractional modulus */
-#define ADF4371_MAX_MODULUS2		BIT(14)
+#define ADF4371_MAX_MODULUS2		NO_OS_BIT(14)
 
 #define ADF4371_CHECK_RANGE(freq, range) \
 	((freq > ADF4371_MAX_ ## range) || (freq < ADF4371_MIN_ ## range))
@@ -246,7 +246,7 @@ static int32_t adf4371_write(struct adf4371_dev *dev,
 	buf[1] = cmd & 0xFF;
 	buf[2] = val;
 
-	return no_os_spi_write_and_read(dev->spi_desc, buf, ARRAY_SIZE(buf));
+	return no_os_spi_write_and_read(dev->spi_desc, buf, NO_OS_ARRAY_SIZE(buf));
 }
 
 /**
@@ -295,7 +295,7 @@ static int32_t adf4371_read(struct adf4371_dev *dev,
 	buf[1] = cmd & 0xFF;
 	buf[2] = 0;
 
-	ret = no_os_spi_write_and_read(dev->spi_desc, buf, ARRAY_SIZE(buf));
+	ret = no_os_spi_write_and_read(dev->spi_desc, buf, NO_OS_ARRAY_SIZE(buf));
 	if (ret < 0)
 		return ret;
 
@@ -345,7 +345,7 @@ static uint64_t adf4371_pll_fract_n_get_rate(struct adf4371_dev *dev,
 
 	val = (((uint64_t)dev->integer * ADF4371_MODULUS1) + dev->fract1) * dev->fpfd;
 	tmp = (uint64_t)dev->fract2 * dev->fpfd;
-	do_div(&tmp, dev->mod2);
+	no_os_do_div(&tmp, dev->mod2);
 	val += tmp + ADF4371_MODULUS1 / 2;
 
 	if (channel == ADF4371_CH_RF8 || channel == ADF4371_CH_RFAUX8)
@@ -353,7 +353,7 @@ static uint64_t adf4371_pll_fract_n_get_rate(struct adf4371_dev *dev,
 	else
 		ref_div_sel = 0;
 
-	do_div(&val, ADF4371_MODULUS1 * (1 << ref_div_sel));
+	no_os_do_div(&val, ADF4371_MODULUS1 * (1 << ref_div_sel));
 
 	if (channel == ADF4371_CH_RF16)
 		val <<= 1;
@@ -383,9 +383,9 @@ static void adf4371_pll_fract_n_compute(uint64_t vco,
 	uint64_t tmp;
 	uint32_t gcd_div;
 
-	tmp = do_div(&vco, pfd);
+	tmp = no_os_do_div(&vco, pfd);
 	tmp = tmp * ADF4371_MODULUS1;
-	*fract2 = do_div(&tmp, pfd);
+	*fract2 = no_os_do_div(&tmp, pfd);
 
 	*integer = vco;
 	*fract1 = tmp;
@@ -397,7 +397,7 @@ static void adf4371_pll_fract_n_compute(uint64_t vco,
 		*fract2 >>= 1;
 	}
 
-	gcd_div = greatest_common_divisor(*fract2, *mod2);
+	gcd_div = no_os_greatest_common_divisor(*fract2, *mod2);
 	*mod2 /= gcd_div;
 	*fract2 /= gcd_div;
 }
@@ -484,8 +484,8 @@ static int32_t adf4371_set_freq(struct adf4371_dev *dev,
 	 * The optimum bleed current is set by ((4/N) × ICP)/3.75,
 	 * where ICP is the charge pump current in μA
 	 */
-	cp_bleed = DIV_ROUND_UP(400 * dev->cp_settings.icp, dev->integer * 375);
-	cp_bleed = clamp(cp_bleed, 1U, 255U);
+	cp_bleed = NO_OS_DIV_ROUND_UP(400 * dev->cp_settings.icp, dev->integer * 375);
+	cp_bleed = no_os_clamp(cp_bleed, 1U, 255U);
 	ret = adf4371_write(dev, ADF4371_REG(0x26), cp_bleed);
 	if (ret < 0)
 		return ret;
@@ -524,7 +524,7 @@ static int32_t adf4371_channel_power_down(struct adf4371_dev *dev,
 	if (ret < 0)
 		return ret;
 
-	readval &= ~BIT(bit);
+	readval &= ~NO_OS_BIT(bit);
 	readval |= (!power_down << bit);
 
 	return adf4371_write(dev, reg, readval);
@@ -595,7 +595,7 @@ static int32_t adf4371_setup(struct adf4371_dev *dev)
 	if (ret < 0)
 		return ret;
 
-	for (i = 0; i < ARRAY_SIZE(adf4371_reg_defaults); i++) {
+	for (i = 0; i < NO_OS_ARRAY_SIZE(adf4371_reg_defaults); i++) {
 		ret = adf4371_write(dev,
 				    adf4371_reg_defaults[i].reg,
 				    adf4371_reg_defaults[i].val);
@@ -659,9 +659,9 @@ static int32_t adf4371_setup(struct adf4371_dev *dev)
 	} while (dev->fpfd > ADF4371_MAX_FREQ_PFD);
 
 	/* Calculate Timeouts */
-	vco_band_div = DIV_ROUND_UP(dev->fpfd, 2400000U);
+	vco_band_div = NO_OS_DIV_ROUND_UP(dev->fpfd, 2400000U);
 
-	tmp = DIV_ROUND_CLOSEST(dev->fpfd, 1000000U);
+	tmp = NO_OS_DIV_ROUND_CLOSEST(dev->fpfd, 1000000U);
 	do {
 		timeout++;
 		if (timeout > 1023) {
@@ -774,9 +774,9 @@ int32_t adf4371_init(struct adf4371_dev **device,
 		dev->cp_settings.icp = 1750;
 		dev->cp_settings.regval = 0x04;
 	} else {
-		i = find_closest(init_param->charge_pump_microamp,
-				 adf4371_cp_current_microamp,
-				 ARRAY_SIZE(adf4371_cp_current_microamp));
+		i = no_os_find_closest(init_param->charge_pump_microamp,
+				       adf4371_cp_current_microamp,
+				       NO_OS_ARRAY_SIZE(adf4371_cp_current_microamp));
 		dev->cp_settings.regval = i;
 		dev->cp_settings.icp = adf4371_cp_current_microamp[i];
 	}

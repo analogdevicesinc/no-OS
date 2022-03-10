@@ -269,7 +269,7 @@ static int ad5791_iio_set_pd_mode(void *device, char *buf, uint32_t len,
 	struct ad5791_iio_desc *iio_drv = (struct ad5791_iio_desc *)device;
 	int8_t i;
 
-	for (i = 0; i < ARRAY_SIZE(ad5791_iio_pwd_modes); i++)
+	for (i = 0; i < NO_OS_ARRAY_SIZE(ad5791_iio_pwd_modes); i++)
 		if (!strncmp(buf, ad5791_iio_pwd_modes[i], len))
 			break;
 
@@ -294,7 +294,7 @@ static int ad5791_iio_get_pd_mode_avail(void *device, char *buf, uint32_t len,
 	int8_t i;
 
 	strcpy(buf, "");
-	for (i = 0; i < ARRAY_SIZE(ad5791_iio_pwd_modes); i++) {
+	for (i = 0; i < NO_OS_ARRAY_SIZE(ad5791_iio_pwd_modes); i++) {
 		strcat(buf, ad5791_iio_pwd_modes[i]);
 		strcat(buf, " ");
 	}

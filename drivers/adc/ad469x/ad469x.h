@@ -128,7 +128,7 @@
 #define AD469x_REG_CONFIG_IN_TD_EN_MASK		(0x01 << 7)
 #define AD469x_REG_CONFIG_IN_TD_EN(x)		((x & 0x01) << 7)
 
-#define AD469x_CHANNEL(x)			(BIT(x) & 0xFFFF)
+#define AD469x_CHANNEL(x)			(NO_OS_BIT(x) & 0xFFFF)
 #define AD469x_CHANNEL_NO			16
 #define AD469x_SLOTS_NO				0x80
 #define AD469x_CHANNEL_TEMP			16

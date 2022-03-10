@@ -154,15 +154,15 @@ int main(void)
 #endif
 	uint32_t rx_lane_rate_khz = mykDevice.rx->rxProfile->iqRate_kHz *
 				    mykDevice.rx->framer->M * (20 /
-						    hweight8(mykDevice.rx->framer->serializerLanesEnabled));
+						    no_os_hweight8(mykDevice.rx->framer->serializerLanesEnabled));
 	uint32_t rx_div40_rate_hz = rx_lane_rate_khz * (1000 / 40);
 	uint32_t tx_lane_rate_khz = mykDevice.tx->txProfile->iqRate_kHz *
 				    mykDevice.tx->deframer->M * (20 /
-						    hweight8(mykDevice.tx->deframer->deserializerLanesEnabled));
+						    no_os_hweight8(mykDevice.tx->deframer->deserializerLanesEnabled));
 	uint32_t tx_div40_rate_hz = tx_lane_rate_khz * (1000 / 40);
 	uint32_t rx_os_lane_rate_khz = mykDevice.obsRx->orxProfile->iqRate_kHz *
 				       mykDevice.obsRx->framer->M * (20 /
-						       hweight8(mykDevice.obsRx->framer->serializerLanesEnabled));
+						       no_os_hweight8(mykDevice.obsRx->framer->serializerLanesEnabled));
 	uint32_t rx_os_div40_rate_hz = rx_os_lane_rate_khz * (1000 / 40);
 	struct jesd204_rx_init rx_jesd_init = {
 		"rx_jesd",
@@ -916,7 +916,7 @@ int main(void)
 
 #ifdef DAC_DMA_EXAMPLE
 	axi_dac_load_custom_data(tx_dac, sine_lut_iq,
-				 ARRAY_SIZE(sine_lut_iq),
+				 NO_OS_ARRAY_SIZE(sine_lut_iq),
 				 (uintptr_t)dac_buffer);
 #ifndef ALTERA_PLATFORM
 	Xil_DCacheFlush();
@@ -939,7 +939,7 @@ int main(void)
 #endif
 
 	printf("DAC_DMA_EXAMPLE: address=%#lx samples=%lu channels=%u bits=%lu\n",
-	       (uintptr_t)adc_buffer, ARRAY_SIZE(adc_buffer), rx_adc_init.num_channels,
+	       (uintptr_t)adc_buffer, NO_OS_ARRAY_SIZE(adc_buffer), rx_adc_init.num_channels,
 	       8 * sizeof(adc_buffer[0]));
 #endif
 
@@ -1065,7 +1065,7 @@ int main(void)
 		IIO_APP_DEVICE("cf-ad9371-dds-core-lpc", iio_axi_dac_desc, dac_dev_desc, NULL, &write_buff)
 	};
 
-	iio_app_run(devices, ARRAY_SIZE(devices));
+	iio_app_run(devices, NO_OS_ARRAY_SIZE(devices));
 
 #endif // IIO_SUPPORT
 

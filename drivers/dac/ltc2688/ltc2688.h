@@ -74,18 +74,18 @@
 #define LTC2688_READ_OPERATION			0x80
 
 /* Channel Settings */
-#define LTC2688_CH_SPAN_MSK			GENMASK(3, 0)
-#define LTC2688_CH_SPAN(x)			field_prep(LTC2688_CH_SPAN_MSK, x)
-#define LTC2688_CH_TD_SEL_MSK			GENMASK(5, 4)
-#define LTC2688_CH_TD_SEL(x)			field_prep(LTC2688_CH_TD_SEL_MSK, x)
-#define LTC2688_CH_DIT_PER_MSK			GENMASK(8, 6)
-#define LTC2688_CH_DIT_PER(x)			field_prep(LTC2688_CH_DIT_PER_MSK, x)
-#define LTC2688_CH_DIT_PH_MSK			GENMASK(10, 9)
-#define LTC2688_CH_DIT_PH(x)			field_prep(LTC2688_CH_DIT_PH_MSK, x)
-#define LTC2688_CH_MODE				BIT(11)
+#define LTC2688_CH_SPAN_MSK			NO_OS_GENMASK(3, 0)
+#define LTC2688_CH_SPAN(x)			no_os_field_prep(LTC2688_CH_SPAN_MSK, x)
+#define LTC2688_CH_TD_SEL_MSK			NO_OS_GENMASK(5, 4)
+#define LTC2688_CH_TD_SEL(x)			no_os_field_prep(LTC2688_CH_TD_SEL_MSK, x)
+#define LTC2688_CH_DIT_PER_MSK			NO_OS_GENMASK(8, 6)
+#define LTC2688_CH_DIT_PER(x)			no_os_field_prep(LTC2688_CH_DIT_PER_MSK, x)
+#define LTC2688_CH_DIT_PH_MSK			NO_OS_GENMASK(10, 9)
+#define LTC2688_CH_DIT_PH(x)			no_os_field_prep(LTC2688_CH_DIT_PH_MSK, x)
+#define LTC2688_CH_MODE				NO_OS_BIT(11)
 
 /* Configuration register */
-#define LTC2688_CONFIG_RST			BIT(15)
+#define LTC2688_CONFIG_RST			NO_OS_BIT(15)
 
 #define LTC2688_PWDN(x)				(1 << ((x) & 0xF))
 #define LTC2688_DITH_EN(x)			(1 << ((x) & 0xF))

@@ -190,7 +190,7 @@ int32_t dac_write_samples(void* dev, uint16_t* buff, uint32_t samples)
 int32_t dac_demo_reg_read(struct dac_demo_desc *desc, uint8_t reg_index,
 			  uint8_t *readval)
 {
-	if(!desc || reg_index >= ARRAY_SIZE(desc->reg))
+	if(!desc || reg_index >= NO_OS_ARRAY_SIZE(desc->reg))
 		return -EINVAL;
 
 	*readval = desc->reg[reg_index];
@@ -208,7 +208,7 @@ int32_t dac_demo_reg_read(struct dac_demo_desc *desc, uint8_t reg_index,
 int32_t dac_demo_reg_write(struct dac_demo_desc *desc, uint8_t reg_index,
 			   uint8_t writeval)
 {
-	if(!desc || reg_index >= ARRAY_SIZE(desc->reg))
+	if(!desc || reg_index >= NO_OS_ARRAY_SIZE(desc->reg))
 		return -EINVAL;
 
 	desc->reg[reg_index] = writeval;

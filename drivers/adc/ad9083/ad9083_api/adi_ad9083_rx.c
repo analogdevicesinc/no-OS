@@ -719,7 +719,7 @@ int32_t adi_ad9083_rx_adc_kvti_factor_fixed_get(adi_ad9083_device_t *device,
   AD9083_LOG_FUNC();
   AD9083_NULL_POINTER_RETURN(kvti_factor);
 
-  /* kvti_factor=44 * min(max(min(10**(-backoff/20), max(orc1mode,
+  /* kvti_factor=44 * no_os_min(no_os_max(no_os_min(10**(-backoff/20), no_os_max(orc1mode,
    * (clkfreq/2e3)*(100e6/finmax))), 0.333),1) */
   adc_clk_hz = device->dev_info.adc_freq_hz;
   finmax = (finmax < adc_clk_hz / 20) ? 100000000ul : finmax;
@@ -790,10 +790,10 @@ int32_t adi_ad9083_rx_adc_vti_set(adi_ad9083_device_t *device, uint32_t fc,
   AD9083_LOG_FUNC();
 
   /* fscale = 0.3*(adc_clk_hz/1100.0) + 0.1*(adc_clk_hz/1100.0)**2.0 */
-  /* Kvti=min(47,(floor(fscale*(1 + en_hp)*kvti_factor)/vmax)) */
+  /* Kvti=no_os_min(47,(floor(fscale*(1 + en_hp)*kvti_factor)/vmax)) */
   /* c_unit=11.5f */
   /* c_fix=70f */
-  /* Kcap=max(min(63,round((1/(2*pi*lpf_freq*2000*c_unit)-(c_fix/c_unit)))),0)
+  /* Kcap=no_os_max(no_os_min(63,round((1/(2*pi*lpf_freq*2000*c_unit)-(c_fix/c_unit)))),0)
    */
   /* kgain = (fscale*1.4)*(2^25) / (vmax * Kvti / (1 + en_hp)) */
 
@@ -825,7 +825,7 @@ int32_t adi_ad9083_rx_adc_vti_set(adi_ad9083_device_t *device, uint32_t fc,
   temp = 2 * 314 * 2 * temp;
   kcap_temp = (uint64_t)1000000000000000ul - temp * 700;
 #ifdef __KERNEL__
-  kcap_temp = div_u64(kcap_temp + (temp / 2) * 115, temp * 115);
+  kcap_temp = no_os_div_u64(kcap_temp + (temp / 2) * 115, temp * 115);
 #else
   kcap_temp = (kcap_temp + (temp / 2) * 115) / (temp * 115);
 #endif

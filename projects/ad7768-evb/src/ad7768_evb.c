@@ -314,7 +314,7 @@ int main(void)
 			       &read_buff, NULL),
 	};
 
-	return iio_app_run(devs, ARRAY_SIZE(devs));
+	return iio_app_run(devs, NO_OS_ARRAY_SIZE(devs));
 #endif
 
 	return 0;

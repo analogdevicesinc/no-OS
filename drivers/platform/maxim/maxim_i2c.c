@@ -132,7 +132,7 @@ static int32_t max32660_i2c_init(struct no_os_i2c_desc **desc,
 		}
 	}
 	freq = MXC_I2C_GetFrequency(i2c_regs);
-	freq = min(freq, (*desc)->max_speed_hz);
+	freq = no_os_min(freq, (*desc)->max_speed_hz);
 	ret = MXC_I2C_SetFrequency(i2c_regs, freq);
 	if (ret < 0)
 		return -EINVAL;

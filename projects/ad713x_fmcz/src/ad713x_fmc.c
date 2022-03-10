@@ -271,7 +271,7 @@ int main()
 		return FAILURE;
 
 	spi_engine_offload_message.commands = spi_eng_msg_cmds;
-	spi_engine_offload_message.no_commands = ARRAY_SIZE(spi_eng_msg_cmds);
+	spi_engine_offload_message.no_commands = NO_OS_ARRAY_SIZE(spi_eng_msg_cmds);
 	spi_engine_offload_message.commands_data = NULL;
 	spi_engine_offload_message.rx_addr = (uint32_t)adc_buffer;
 	spi_engine_offload_message.tx_addr = 0xA000000;
@@ -312,7 +312,7 @@ int main()
 
 	};
 
-	return iio_app_run(devices, ARRAY_SIZE(devices));
+	return iio_app_run(devices, NO_OS_ARRAY_SIZE(devices));
 
 #endif /* IIO_SUPPORT */
 

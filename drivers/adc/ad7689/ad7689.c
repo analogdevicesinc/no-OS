@@ -84,13 +84,13 @@ static int32_t _ad7689_rac(struct ad7689_dev *dev,
 	c = _ad7689_config_get(dev);
 
 	if (config_in) {
-		cfg |= field_prep(AD7689_CFG_CFG_MSK, 1);
-		cfg |= field_prep(AD7689_CFG_INCC_MSK, config_in->incc);
-		cfg |= field_prep(AD7689_CFG_INX_MSK, config_in->inx);
-		cfg |= field_prep(AD7689_CFG_BW_MSK, config_in->bw);
-		cfg |= field_prep(AD7689_CFG_REF_MSK, config_in->ref);
-		cfg |= field_prep(AD7689_CFG_SEQ_MSK, config_in->seq);
-		cfg |= field_prep(AD7689_CFG_RB_MSK, !config_in->rb);
+		cfg |= no_os_field_prep(AD7689_CFG_CFG_MSK, 1);
+		cfg |= no_os_field_prep(AD7689_CFG_INCC_MSK, config_in->incc);
+		cfg |= no_os_field_prep(AD7689_CFG_INX_MSK, config_in->inx);
+		cfg |= no_os_field_prep(AD7689_CFG_BW_MSK, config_in->bw);
+		cfg |= no_os_field_prep(AD7689_CFG_REF_MSK, config_in->ref);
+		cfg |= no_os_field_prep(AD7689_CFG_SEQ_MSK, config_in->seq);
+		cfg |= no_os_field_prep(AD7689_CFG_RB_MSK, !config_in->rb);
 		cfg <<= 2;
 		buf[0] = cfg >> 8;
 		buf[1] = cfg;
@@ -121,12 +121,12 @@ static int32_t _ad7689_rac(struct ad7689_dev *dev,
 		else
 			cfg = ((uint16_t)buf[2] << 8) | buf[3];
 		cfg >>= 2;
-		config_out->incc = field_get(AD7689_CFG_INCC_MSK, cfg);
-		config_out->inx = field_get(AD7689_CFG_INX_MSK, cfg);
-		config_out->bw = field_get(AD7689_CFG_BW_MSK, cfg);
-		config_out->ref = field_get(AD7689_CFG_REF_MSK, cfg);
-		config_out->seq = field_get(AD7689_CFG_SEQ_MSK, cfg);
-		config_out->rb = !(bool)field_get(AD7689_CFG_RB_MSK, cfg);
+		config_out->incc = no_os_field_get(AD7689_CFG_INCC_MSK, cfg);
+		config_out->inx = no_os_field_get(AD7689_CFG_INX_MSK, cfg);
+		config_out->bw = no_os_field_get(AD7689_CFG_BW_MSK, cfg);
+		config_out->ref = no_os_field_get(AD7689_CFG_REF_MSK, cfg);
+		config_out->seq = no_os_field_get(AD7689_CFG_SEQ_MSK, cfg);
+		config_out->rb = !(bool)no_os_field_get(AD7689_CFG_RB_MSK, cfg);
 	}
 
 	return SUCCESS;

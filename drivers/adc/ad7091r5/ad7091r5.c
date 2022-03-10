@@ -102,7 +102,7 @@ int32_t ad7091r5_i2c_reg_write(struct ad7091r5_dev *dev,
 	buf[1] = (reg_data & 0xFF00) >> 8;
 	buf[2] = reg_data & 0xFF;
 
-	return no_os_i2c_write(dev->i2c_desc, buf, ARRAY_SIZE(buf), 1);
+	return no_os_i2c_write(dev->i2c_desc, buf, NO_OS_ARRAY_SIZE(buf), 1);
 }
 
 /**
@@ -420,7 +420,8 @@ int32_t ad7091r5_set_channel(struct ad7091r5_dev *dev, uint8_t channel)
 		return -EINVAL;
 
 	/* AD7091R5_REG_CHANNEL is a 8-bit register */
-	ret = ad7091r5_i2c_reg_write(dev, AD7091R5_REG_CHANNEL, (BIT(channel) << 8));
+	ret = ad7091r5_i2c_reg_write(dev, AD7091R5_REG_CHANNEL,
+				     (NO_OS_BIT(channel) << 8));
 	if (ret)
 		return ret;
 

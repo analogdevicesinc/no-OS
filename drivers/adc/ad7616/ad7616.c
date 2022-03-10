@@ -405,7 +405,7 @@ int32_t ad7616_read_data_serial(struct ad7616_dev *dev,
 
 	msg.commands_data = commands_data;
 	msg.commands = spi_eng_msg_cmds;
-	msg.no_commands = ARRAY_SIZE(spi_eng_msg_cmds);
+	msg.no_commands = NO_OS_ARRAY_SIZE(spi_eng_msg_cmds);
 	msg.rx_addr = (uint32_t)buf;
 
 	axi_io_write(dev->core_baseaddr, AD7616_REG_UP_CTRL,

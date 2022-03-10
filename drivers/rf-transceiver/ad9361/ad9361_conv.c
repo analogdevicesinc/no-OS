@@ -139,9 +139,9 @@ int32_t ad9361_hdl_loopback(struct ad9361_rf_phy *phy, bool enable)
 		} else {
 			/* DAC_LB_ENB If set enables loopback of receive data */
 			if (enable)
-				reg |= BIT(1);
+				reg |= NO_OS_BIT(1);
 			else
-				reg &= ~BIT(1);
+				reg &= ~NO_OS_BIT(1);
 		}
 		axi_adc_write(rx_adc, addr + (chan) * 0x40, reg);
 	}
@@ -371,7 +371,7 @@ static int32_t ad9361_dig_tune_delay(struct ad9361_rf_phy *phy,
 		half_data_rate = true;
 
 	memset(field, 0, 32);
-	for (r = 0; r < (max_freq ? ARRAY_SIZE(rates) : 1); r++) {
+	for (r = 0; r < (max_freq ? NO_OS_ARRAY_SIZE(rates) : 1); r++) {
 		if (max_freq)
 			ad9361_set_trx_clock_chain_freq(phy,
 							half_data_rate ? rates[r] / 2 : rates[r]);
@@ -616,11 +616,11 @@ int32_t ad9361_post_setup(struct ad9361_rf_phy *phy)
 	axi_adc_read(rx_adc, 0x4048, &tmp);
 
 	if (!rx2tx2) {
-		axi_adc_write(rx_adc, 0x4048, tmp | BIT(5)); /* R1_MODE */
+		axi_adc_write(rx_adc, 0x4048, tmp | NO_OS_BIT(5)); /* R1_MODE */
 		axi_adc_write(rx_adc, 0x404c,
 			      (phy->pdata->port_ctrl.pp_conf[2] & LVDS_MODE) ? 1 : 0); /* RATE */
 	} else {
-		tmp &= ~BIT(5);
+		tmp &= ~NO_OS_BIT(5);
 		axi_adc_write(rx_adc, 0x4048, tmp);
 		axi_adc_write(rx_adc, 0x404c,
 			      (phy->pdata->port_ctrl.pp_conf[2] & LVDS_MODE) ? 3 : 1); /* RATE */

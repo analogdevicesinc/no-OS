@@ -251,7 +251,7 @@ int32_t aducm3029_spi_write_and_read(struct no_os_spi_desc *desc,
 	while (bytes_number) {
 		if (aducm_desc->aducm_conf.dma)
 			/* Maximum 2048 bytes over dma */
-			n = max(2048, bytes_number);
+			n = no_os_max(2048, bytes_number);
 		else
 			n = bytes_number;
 

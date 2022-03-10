@@ -127,7 +127,7 @@ static int set_adxrs290_iio_ch_hpf(void *device, char *buf, uint32_t len,
 	int32_t val = (int32_t)hpf;
 	int32_t val2 = (int32_t)(hpf * 1000000) % 1000000;
 	uint8_t i;
-	uint8_t n = ARRAY_SIZE(adxrs290_hpf_3db_freq_hz_table);
+	uint8_t n = NO_OS_ARRAY_SIZE(adxrs290_hpf_3db_freq_hz_table);
 
 	for (i = 0; i < n; i++)
 		if (adxrs290_hpf_3db_freq_hz_table[i][0] == val
@@ -162,7 +162,7 @@ static int set_adxrs290_iio_ch_lpf(void *device, char *buf, uint32_t len,
 	int32_t val = (int32_t)lpf;
 	int32_t val2 = (int32_t)(lpf * 1000000) % 1000000;
 	uint8_t i;
-	uint8_t n = ARRAY_SIZE(adxrs290_lpf_3db_freq_hz_table);
+	uint8_t n = NO_OS_ARRAY_SIZE(adxrs290_lpf_3db_freq_hz_table);
 
 	for (i = 0; i < n; i++)
 		if (adxrs290_lpf_3db_freq_hz_table[i][0] == val

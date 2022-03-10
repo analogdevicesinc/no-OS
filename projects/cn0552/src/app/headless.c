@@ -95,7 +95,7 @@ int32_t main(void)
 		}
 	};
 
-	ret = iio_app_run(iio_devices, ARRAY_SIZE(iio_devices));
+	ret = iio_app_run(iio_devices, NO_OS_ARRAY_SIZE(iio_devices));
 error:
 	ad7746_iio_remove(adciio);
 	return ret;

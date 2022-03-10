@@ -179,7 +179,7 @@ int main(void)
 			       &read_buff, NULL),
 	};
 
-	return iio_app_run(devices, ARRAY_SIZE(devices));
+	return iio_app_run(devices, NO_OS_ARRAY_SIZE(devices));
 #endif
 
 	pr_info("Capture done.\n");

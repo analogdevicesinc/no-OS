@@ -306,8 +306,9 @@ void altera_a10_cdr_calc_params(uint32_t fref,
 	else
 		lpfd_min = 1;
 
-	m_min = max_t(uint32_t, DIV_ROUND_UP(A10_CDR_PLL_VCO_MIN / 2, fref), 8);
-	m_max = min_t(uint32_t, A10_CDR_PLL_VCO_MAX * 8 / lpfd_min / fref, 127);
+	m_min = no_os_max_t(uint32_t, NO_OS_DIV_ROUND_UP(A10_CDR_PLL_VCO_MIN / 2, fref),
+			    8);
+	m_max = no_os_min_t(uint32_t, A10_CDR_PLL_VCO_MAX * 8 / lpfd_min / fref, 127);
 
 	for (n = 1; n <= 8; n *= 2) {
 		pfd = fref / n;
@@ -351,9 +352,9 @@ long altera_a10_cdr_pll_round_rate(struct adxcvr *xcvr,
 		return -1;
 
 	tmp = xcvr->parent_rate_khz * m * lpfd * 2;
-	tmp = DIV_ROUND_CLOSEST_ULL(tmp, n * lpd);
+	tmp = NO_OS_DIV_ROUND_CLOSEST_ULL(tmp, n * lpd);
 
-	return min_t(uint64_t, tmp, LONG_MAX);
+	return no_os_min_t(uint64_t, tmp, LONG_MAX);
 }
 
 /**
@@ -525,11 +526,11 @@ uint32_t altera_a10_cdr_pll_recalc_rate(struct adxcvr *xcvr)
 	n = 1 << ((div1 >> 2) & 0x3);
 
 	tmp = xcvr->parent_rate_khz * m * lpfd * 2;
-	tmp = DIV_ROUND_CLOSEST_ULL(tmp, n * lpd);
+	tmp = NO_OS_DIV_ROUND_CLOSEST_ULL(tmp, n * lpd);
 
 	if (tmp != 0 && xcvr->initial_recalc)
 		altera_a10_cdr_pll_set_rate(xcvr, tmp);
 
-	return min_t(uint64_t, tmp, ULONG_MAX);
+	return no_os_min_t(uint64_t, tmp, ULONG_MAX);
 }
 

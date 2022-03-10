@@ -163,7 +163,7 @@ int set_global_attr(void *device, char *buf, uint32_t len,
 {
 	int32_t ret;
 	uint32_t i;
-	uint32_t val = srt_to_uint32(buf);
+	uint32_t val = no_os_str_to_uint32(buf);
 	struct iio_aducm3029_desc *desc = device;
 
 	switch (priv) {
@@ -231,7 +231,7 @@ int set_pwm_attr(void *device, char *buf, uint32_t len,
 		 const struct iio_ch_info *channel, intptr_t priv)
 {
 	int32_t ret;
-	uint32_t val = srt_to_uint32(buf);
+	uint32_t val = no_os_str_to_uint32(buf);
 	uint32_t idx;
 	struct iio_aducm3029_desc *desc = device;
 
@@ -316,7 +316,7 @@ int set_gpio_attr(void *device, char *buf, uint32_t len,
 		  const struct iio_ch_info *channel, intptr_t priv)
 {
 	int32_t ret;
-	uint32_t val = srt_to_uint32(buf);
+	uint32_t val = no_os_str_to_uint32(buf);
 	uint32_t idx;
 	struct iio_aducm3029_desc *desc = device;
 

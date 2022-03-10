@@ -308,7 +308,7 @@ int32_t adi_ad9083_device_clock_config_set(adi_ad9083_device_t *device,
         vco_freq = (ref_clk_hz * m_div * n_div_buff[n_div]) / ref_div;
         for (pll_div = 0; pll_div < 3; pll_div++) {
 #ifdef __KERNEL__
-          adc_sample_rate = div_u64(vco_freq, pll_div_buff[pll_div]);
+          adc_sample_rate = no_os_div_u64(vco_freq, pll_div_buff[pll_div]);
 #else
           adc_sample_rate = vco_freq / pll_div_buff[pll_div];
 #endif

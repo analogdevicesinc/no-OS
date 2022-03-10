@@ -17,7 +17,7 @@ SRCS +=	$(PLATFORM_DRIVERS)/axi_io.c \
 	$(PLATFORM_DRIVERS)/xilinx_spi.c \
 	$(PLATFORM_DRIVERS)/xilinx_gpio.c \
 	$(PLATFORM_DRIVERS)/delay.c \
-	$(NO-OS)/util/util.c
+	$(NO-OS)/util/no_os_util.c
 ifeq (y,$(strip $(TINYIIOD)))
 LIBRARIES += iio
 SRCS += $(NO-OS)/util/fifo.c \

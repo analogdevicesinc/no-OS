@@ -118,7 +118,7 @@ static const struct ad7606_chip_info ad7606_chip_info_tbl[] = {
 		.max_dout_lines = AD7606_2_DOUT,
 		.has_oversampling = false,
 		.hw_range_table = ad7606_range_table,
-		.hw_range_table_sz = ARRAY_SIZE(ad7606_range_table),
+		.hw_range_table_sz = NO_OS_ARRAY_SIZE(ad7606_range_table),
 	},
 	[ID_AD7606_4] = {
 		.num_channels = 4,
@@ -126,7 +126,7 @@ static const struct ad7606_chip_info ad7606_chip_info_tbl[] = {
 		.max_dout_lines = AD7606_2_DOUT,
 		.has_oversampling = true,
 		.hw_range_table = ad7606_range_table,
-		.hw_range_table_sz = ARRAY_SIZE(ad7606_range_table),
+		.hw_range_table_sz = NO_OS_ARRAY_SIZE(ad7606_range_table),
 	},
 	[ID_AD7606_6] = {
 		.num_channels = 6,
@@ -134,7 +134,7 @@ static const struct ad7606_chip_info ad7606_chip_info_tbl[] = {
 		.max_dout_lines = AD7606_2_DOUT,
 		.has_oversampling = true,
 		.hw_range_table = ad7606_range_table,
-		.hw_range_table_sz = ARRAY_SIZE(ad7606_range_table),
+		.hw_range_table_sz = NO_OS_ARRAY_SIZE(ad7606_range_table),
 	},
 	[ID_AD7606_8] = {
 		.num_channels = 8,
@@ -142,7 +142,7 @@ static const struct ad7606_chip_info ad7606_chip_info_tbl[] = {
 		.max_dout_lines = AD7606_2_DOUT,
 		.has_oversampling = true,
 		.hw_range_table = ad7606_range_table,
-		.hw_range_table_sz = ARRAY_SIZE(ad7606_range_table),
+		.hw_range_table_sz = NO_OS_ARRAY_SIZE(ad7606_range_table),
 	},
 	[ID_AD7606B] = {
 		.num_channels = 8,
@@ -152,9 +152,9 @@ static const struct ad7606_chip_info ad7606_chip_info_tbl[] = {
 		.has_registers = true,
 		.device_id = 0x1,
 		.hw_range_table = ad7606_range_table,
-		.hw_range_table_sz = ARRAY_SIZE(ad7606_range_table),
+		.hw_range_table_sz = NO_OS_ARRAY_SIZE(ad7606_range_table),
 		.sw_range_table = ad7606b_range_table,
-		.sw_range_table_sz = ARRAY_SIZE(ad7606b_range_table),
+		.sw_range_table_sz = NO_OS_ARRAY_SIZE(ad7606b_range_table),
 	},
 	[ID_AD7606C_16] = {
 		.num_channels = 8,
@@ -164,9 +164,9 @@ static const struct ad7606_chip_info ad7606_chip_info_tbl[] = {
 		.has_registers = true,
 		.device_id = 0x3,
 		.hw_range_table = ad7606_range_table,
-		.hw_range_table_sz = ARRAY_SIZE(ad7606_range_table),
+		.hw_range_table_sz = NO_OS_ARRAY_SIZE(ad7606_range_table),
 		.sw_range_table = ad7606c_range_table,
-		.sw_range_table_sz = ARRAY_SIZE(ad7606c_range_table),
+		.sw_range_table_sz = NO_OS_ARRAY_SIZE(ad7606c_range_table),
 	},
 	[ID_AD7606C_18] = {
 		.num_channels = 8,
@@ -176,9 +176,9 @@ static const struct ad7606_chip_info ad7606_chip_info_tbl[] = {
 		.has_registers = true,
 		.device_id = 0x3,
 		.hw_range_table = ad7606_range_table,
-		.hw_range_table_sz = ARRAY_SIZE(ad7606_range_table),
+		.hw_range_table_sz = NO_OS_ARRAY_SIZE(ad7606_range_table),
 		.sw_range_table = ad7606c_range_table,
-		.sw_range_table_sz = ARRAY_SIZE(ad7606c_range_table),
+		.sw_range_table_sz = NO_OS_ARRAY_SIZE(ad7606c_range_table),
 	},
 	[ID_AD7608] = {
 		.num_channels = 8,
@@ -186,7 +186,7 @@ static const struct ad7606_chip_info ad7606_chip_info_tbl[] = {
 		.max_dout_lines = AD7606_2_DOUT,
 		.has_oversampling = true,
 		.hw_range_table = ad7606_range_table,
-		.hw_range_table_sz = ARRAY_SIZE(ad7606_range_table),
+		.hw_range_table_sz = NO_OS_ARRAY_SIZE(ad7606_range_table),
 	},
 	[ID_AD7609] = {
 		.num_channels = 8,
@@ -194,7 +194,7 @@ static const struct ad7606_chip_info ad7606_chip_info_tbl[] = {
 		.max_dout_lines = AD7606_2_DOUT,
 		.has_oversampling = true,
 		.hw_range_table = ad7609_range_table,
-		.hw_range_table_sz = ARRAY_SIZE(ad7609_range_table),
+		.hw_range_table_sz = NO_OS_ARRAY_SIZE(ad7609_range_table),
 	},
 };
 
@@ -762,8 +762,8 @@ int32_t ad7606_set_oversampling(struct ad7606_dev *dev,
 	uint8_t val;
 
 	if (dev->sw_mode) {
-		val = field_prep(AD7606_OS_RATIO_MSK, oversampling.os_ratio);
-		val |= field_prep(AD7606_OS_PAD_MSK, oversampling.os_pad);
+		val = no_os_field_prep(AD7606_OS_RATIO_MSK, oversampling.os_ratio);
+		val |= no_os_field_prep(AD7606_OS_PAD_MSK, oversampling.os_pad);
 		ret = ad7606_spi_reg_write(dev, AD7606_REG_OVERSAMPLING, val);
 		if (ret < 0)
 			return ret;
@@ -967,7 +967,7 @@ int32_t ad7606_set_ch_gain(struct ad7606_dev *dev, uint8_t ch,
 	if (!dev->sw_mode)
 		return -ENOTSUP;
 
-	gain = field_get(AD7606_GAIN_MSK, gain);
+	gain = no_os_field_get(AD7606_GAIN_MSK, gain);
 	ret = ad7606_spi_reg_write(dev, AD7606_REG_GAIN_CH(ch), gain);
 	if (ret < 0)
 		return ret;
@@ -1001,16 +1001,16 @@ int32_t ad7606_set_config(struct ad7606_dev *dev,
 
 	if (dev->sw_mode) {
 
-		val |= field_prep(AD7606_CONFIG_OPERATION_MODE_MSK, config.op_mode);
+		val |= no_os_field_prep(AD7606_CONFIG_OPERATION_MODE_MSK, config.op_mode);
 		/* This driver currently supports only normal SPI with 1 DOUT line.
 		 * TODO: remove this check when implementing multi-line DOUT. */
 		if ((uint8_t)config.dout_format > AD7606_1_DOUT)
 			return -EINVAL;
 		if ((uint8_t)config.dout_format > (uint8_t)dev->max_dout_lines)
 			return -EINVAL;
-		val |= field_prep(AD7606_CONFIG_DOUT_FORMAT_MSK, config.dout_format);
-		val |= field_prep(AD7606_CONFIG_EXT_OS_CLOCK_MSK, config.ext_os_clock);
-		val |= field_prep(AD7606_CONFIG_STATUS_HEADER_MSK, config.status_header);
+		val |= no_os_field_prep(AD7606_CONFIG_DOUT_FORMAT_MSK, config.dout_format);
+		val |= no_os_field_prep(AD7606_CONFIG_EXT_OS_CLOCK_MSK, config.ext_os_clock);
+		val |= no_os_field_prep(AD7606_CONFIG_STATUS_HEADER_MSK, config.status_header);
 
 		ret = ad7606_spi_reg_write(dev, AD7606_REG_CONFIG, val);
 		if (ret)
@@ -1070,15 +1070,16 @@ int32_t ad7606_set_digital_diag(struct ad7606_dev *dev,
 	if (!dev->sw_mode)
 		return -ENOTSUP;
 
-	val |= field_prep(AD7606_ROM_CRC_ERR_EN_MSK, diag.rom_crc_err_en);
-	val |= field_prep(AD7606_MM_CRC_ERR_EN_MSK, diag.mm_crc_err_en);
-	val |= field_prep(AD7606_INT_CRC_ERR_EN_MSK, diag.int_crc_err_en);
-	val |= field_prep(AD7606_SPI_WRITE_ERR_EN_MSK, diag.spi_write_err_en);
-	val |= field_prep(AD7606_SPI_READ_ERR_EN_MSK, diag.spi_read_err_en);
-	val |= field_prep(AD7606_BUSY_STUCK_HIGH_ERR_EN_MSK,
-			  diag.busy_stuck_high_err_en);
-	val |= field_prep(AD7606_CLK_FS_OS_COUNTER_EN_MSK, diag.clk_fs_os_counter_en);
-	val |= field_prep(AD7606_INTERFACE_CHECK_EN_MSK, diag.interface_check_en);
+	val |= no_os_field_prep(AD7606_ROM_CRC_ERR_EN_MSK, diag.rom_crc_err_en);
+	val |= no_os_field_prep(AD7606_MM_CRC_ERR_EN_MSK, diag.mm_crc_err_en);
+	val |= no_os_field_prep(AD7606_INT_CRC_ERR_EN_MSK, diag.int_crc_err_en);
+	val |= no_os_field_prep(AD7606_SPI_WRITE_ERR_EN_MSK, diag.spi_write_err_en);
+	val |= no_os_field_prep(AD7606_SPI_READ_ERR_EN_MSK, diag.spi_read_err_en);
+	val |= no_os_field_prep(AD7606_BUSY_STUCK_HIGH_ERR_EN_MSK,
+				diag.busy_stuck_high_err_en);
+	val |= no_os_field_prep(AD7606_CLK_FS_OS_COUNTER_EN_MSK,
+				diag.clk_fs_os_counter_en);
+	val |= no_os_field_prep(AD7606_INTERFACE_CHECK_EN_MSK, diag.interface_check_en);
 
 	ret = ad7606_spi_reg_write(dev, AD7606_REG_DIGITAL_DIAG_ENABLE, val);
 	if (ret < 0)
@@ -1160,10 +1161,10 @@ int32_t ad7606_init(struct ad7606_dev **device,
 			goto error;
 
 		id = ad7606_chip_info_tbl[dev->device_id].device_id;
-		if (field_get(AD7606_ID_DEVICE_ID_MSK, reg) != id) {
+		if (no_os_field_get(AD7606_ID_DEVICE_ID_MSK, reg) != id) {
 			printf("ad7606: device id mismatch, expected 0x%.2x, got 0x%.2x\n",
 			       id,
-			       (int)field_get(AD7606_ID_DEVICE_ID_MSK, reg));
+			       (int)no_os_field_get(AD7606_ID_DEVICE_ID_MSK, reg));
 			ret = -ENODEV;
 			goto error;
 		}

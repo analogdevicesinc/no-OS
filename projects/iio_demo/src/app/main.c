@@ -65,7 +65,7 @@
 #endif
 
 #include "no_os_error.h"
-#define DEMO_CHANNELS		max(TOTAL_ADC_CHANNELS, TOTAL_DAC_CHANNELS)
+#define DEMO_CHANNELS		no_os_max(TOTAL_ADC_CHANNELS, TOTAL_DAC_CHANNELS)
 #ifdef ENABLE_LOOPBACK
 #define SAMPLES_PER_CHANNEL	200
 static uint16_t loopback_buffs[DEMO_CHANNELS][SAMPLES_PER_CHANNEL];
@@ -165,5 +165,5 @@ int main(void)
 			       &dac_demo_iio_descriptor,NULL, &dac_buff)
 	};
 
-	return iio_app_run(devices, ARRAY_SIZE(devices));
+	return iio_app_run(devices, NO_OS_ARRAY_SIZE(devices));
 }

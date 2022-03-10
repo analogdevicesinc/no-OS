@@ -105,7 +105,7 @@ static int32_t ad9172_setup(struct ad9172_state *st)
 
 	printf("PLL Input rate %"PRIu64"\n", dac_clkin_Hz);
 
-	pll_mult = DIV_ROUND_CLOSEST(st->dac_rate_khz, dac_clkin_Hz / 1000);
+	pll_mult = NO_OS_DIV_ROUND_CLOSEST(st->dac_rate_khz, dac_clkin_Hz / 1000);
 
 	ret = ad917x_set_dac_clk(ad917x_h, (uint64_t)dac_clkin_Hz * pll_mult,
 				 1, dac_clkin_Hz);
@@ -186,8 +186,8 @@ static int32_t ad9172_setup(struct ad9172_state *st)
 	ad917x_get_dac_clk_freq(ad917x_h, &dac_rate_Hz);
 
 	lane_rate_kHz = dac_rate_Hz * 20 * st->appJesdConfig.jesd_M;
-	do_div(&lane_rate_kHz, st->appJesdConfig.jesd_L *
-	       st->interpolation * 1000);
+	no_os_do_div(&lane_rate_kHz, st->appJesdConfig.jesd_L *
+		     st->interpolation * 1000);
 
 	ret = ad917x_jesd_set_sysref_enable(ad917x_h, 0); /* subclass 0 */
 	if (ret != 0) {
@@ -225,7 +225,7 @@ static int32_t ad9172_setup(struct ad9172_state *st)
 		dac_mask = AD917X_DAC0;
 
 	if (st->interpolation > 1) {
-		chan_mask = GENMASK(st->appJesdConfig.jesd_M / 2, 0);
+		chan_mask = NO_OS_GENMASK(st->appJesdConfig.jesd_M / 2, 0);
 		ret = ad917x_set_page_idx(ad917x_h, AD917X_DAC_NONE, chan_mask);
 		if (ret != 0)
 			return -EIO;

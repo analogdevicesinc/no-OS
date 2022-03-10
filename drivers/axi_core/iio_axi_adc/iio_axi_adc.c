@@ -219,7 +219,7 @@ static int set_calibphase(void *device, char *buf, uint32_t len,
 static int set_calibbias(void *device, char *buf, uint32_t len,
 			 const struct iio_ch_info *channel, intptr_t priv)
 {
-	int32_t val = str_to_int32(buf);
+	int32_t val = no_os_str_to_int32(buf);
 	struct iio_axi_adc_desc *iio_adc = (struct iio_axi_adc_desc *)device;
 	int ret;
 
@@ -355,7 +355,7 @@ int32_t	iio_axi_adc_read_dev(void *dev, void *buff, uint32_t nb_samples)
 		return FAILURE;
 
 	iio_adc = (struct iio_axi_adc_desc *)dev;
-	bytes = nb_samples * hweight8(iio_adc->mask) * (STORAGE_BITS / 8);
+	bytes = nb_samples * no_os_hweight8(iio_adc->mask) * (STORAGE_BITS / 8);
 
 	iio_adc->dmac->flags = 0;
 	ret = axi_dmac_transfer(iio_adc->dmac, (uintptr_t)buff, bytes);

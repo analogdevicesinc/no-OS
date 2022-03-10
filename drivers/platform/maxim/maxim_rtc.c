@@ -71,11 +71,11 @@ void RTC_IRQHandler()
 	rtc_regs = MXC_RTC;
 	rtc_ctrl = rtc_regs->ctrl;
 	/** Sub-second alarm flag clear */
-	rtc_regs->ctrl &= ~BIT(7);
+	rtc_regs->ctrl &= ~NO_OS_BIT(7);
 	/** Time-of-day alarm flag clear */
-	rtc_regs->ctrl &= ~BIT(6);
+	rtc_regs->ctrl &= ~NO_OS_BIT(6);
 	/** RTC (read) ready flag */
-	rtc_regs->ctrl &= ~BIT(5);
+	rtc_regs->ctrl &= ~NO_OS_BIT(5);
 
 	if(!cb)
 		return;
@@ -85,8 +85,8 @@ void RTC_IRQHandler()
 	/** Clear the remaining bits */
 	rtc_ctrl &= 0x7UL;
 	while(rtc_ctrl) {
-		n_int = find_first_set_bit(rtc_ctrl);
-		if (rtc_ctrl & (rtc_regs->ctrl & BIT(n_int))) {
+		n_int = no_os_find_first_set_bit(rtc_ctrl);
+		if (rtc_ctrl & (rtc_regs->ctrl & NO_OS_BIT(n_int))) {
 			cb->callback(cb->ctx, n_int, cb->config);
 		}
 		rtc_ctrl >>= n_int + 1;

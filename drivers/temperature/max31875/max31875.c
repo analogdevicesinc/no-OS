@@ -127,8 +127,8 @@ int32_t max31875_reg_write_mask(struct max31875_dev *dev,
 	if (IS_ERR_VALUE(ret))
 		return ret;
 
-	regval &= ~field_prep(mask, 0xffff);
-	regval |= field_prep(mask, val);
+	regval &= ~no_os_field_prep(mask, 0xffff);
+	regval |= no_os_field_prep(mask, val);
 
 	return max31875_reg_write(dev, reg, regval);
 }

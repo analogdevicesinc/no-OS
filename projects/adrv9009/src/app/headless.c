@@ -115,7 +115,7 @@ int32_t start_iiod(struct axi_dmac *rx_dmac, struct axi_dmac *tx_dmac,
 #endif
 	};
 
-	return iio_app_run(devices, ARRAY_SIZE(devices));
+	return iio_app_run(devices, NO_OS_ARRAY_SIZE(devices));
 }
 
 #endif // IIO_SUPPORT
@@ -136,15 +136,15 @@ int main(void)
 	// 		where L and M are explained in taliseJesd204bFramerConfig_t comments
 	uint32_t rx_lane_rate_khz = talInit.rx.rxProfile.rxOutputRate_kHz *
 				    talInit.jesd204Settings.framerA.M * (20 /
-						    hweight8(talInit.jesd204Settings.framerA.serializerLanesEnabled));
+						    no_os_hweight8(talInit.jesd204Settings.framerA.serializerLanesEnabled));
 	uint32_t rx_div40_rate_hz = rx_lane_rate_khz * (1000 / 40);
 	uint32_t tx_lane_rate_khz = talInit.tx.txProfile.txInputRate_kHz *
 				    talInit.jesd204Settings.deframerA.M * (20 /
-						    hweight8(talInit.jesd204Settings.deframerA.deserializerLanesEnabled));
+						    no_os_hweight8(talInit.jesd204Settings.deframerA.deserializerLanesEnabled));
 	uint32_t tx_div40_rate_hz = tx_lane_rate_khz * (1000 / 40);
 	uint32_t rx_os_lane_rate_khz = talInit.obsRx.orxProfile.orxOutputRate_kHz *
 				       talInit.jesd204Settings.framerB.M * (20 /
-						       hweight8(talInit.jesd204Settings.framerB.serializerLanesEnabled));
+						       no_os_hweight8(talInit.jesd204Settings.framerB.serializerLanesEnabled));
 	uint32_t rx_os_div40_rate_hz = rx_os_lane_rate_khz * (1000 / 40);
 
 	// compute the local multiframe clock
@@ -155,12 +155,12 @@ int main(void)
 				(talInit.jesd204Settings.framerA.K * talInit.jesd204Settings.framerA.F);
 	uint32_t tx_lmfc_rate = (tx_lane_rate_khz * 100) /
 				(talInit.jesd204Settings.deframerA.K * 2 * talInit.jesd204Settings.deframerA.M /
-				 hweight8(talInit.jesd204Settings.deframerA.deserializerLanesEnabled));
+				 no_os_hweight8(talInit.jesd204Settings.deframerA.deserializerLanesEnabled));
 	uint32_t rx_os_lmfc_rate = (rx_os_lane_rate_khz * 100) /
 				   (talInit.jesd204Settings.framerB.K * talInit.jesd204Settings.framerB.F);
 
-	uint32_t lmfc_rate = min(rx_lmfc_rate, rx_os_lmfc_rate);
-	lmfc_rate = min(tx_lmfc_rate, lmfc_rate);
+	uint32_t lmfc_rate = no_os_min(rx_lmfc_rate, rx_os_lmfc_rate);
+	lmfc_rate = no_os_min(tx_lmfc_rate, lmfc_rate);
 
 	struct axi_adc_init rx_adc_init = {
 		"rx_adc",
@@ -349,7 +349,7 @@ int main(void)
 
 #ifndef ADRV9008_1
 	axi_dac_load_custom_data(tx_dac, sine_lut_iq,
-				 ARRAY_SIZE(sine_lut_iq),
+				 NO_OS_ARRAY_SIZE(sine_lut_iq),
 				 DAC_DDR_BASEADDR);
 #ifndef ALTERA_PLATFORM
 	Xil_DCacheFlush();
@@ -365,11 +365,11 @@ int main(void)
 	axi_dmac_transfer(rx_dmac,
 			  DDR_MEM_BASEADDR + 0x800000,
 			  16384 * TALISE_NUM_CHANNELS *
-			  DIV_ROUND_UP(talInit.jesd204Settings.framerA.Np, 8));
+			  NO_OS_DIV_ROUND_UP(talInit.jesd204Settings.framerA.Np, 8));
 #ifndef ALTERA_PLATFORM
 	Xil_DCacheInvalidateRange(DDR_MEM_BASEADDR + 0x800000,
 				  16384 * TALISE_NUM_CHANNELS *
-				  DIV_ROUND_UP(talInit.jesd204Settings.framerA.Np, 8));
+				  NO_OS_DIV_ROUND_UP(talInit.jesd204Settings.framerA.Np, 8));
 #endif
 #endif
 #endif

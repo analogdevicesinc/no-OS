@@ -161,7 +161,7 @@ static int32_t ad6676_set_fadc(struct ad6676_dev *dev,
 			       uint32_t val)
 {
 	return ad6676_set_splitreg(dev, AD6676_FADC_0,
-				   clamp_t(uint32_t, val, MIN_FADC, MAX_FADC) / MHz);
+				   no_os_clamp_t(uint32_t, val, MIN_FADC, MAX_FADC) / MHz);
 }
 
 /***************************************************************************//**
@@ -194,7 +194,7 @@ int32_t ad6676_set_fif(struct ad6676_dev *dev,
 		       struct ad6676_init_param *init_param)
 {
 	return ad6676_set_splitreg(dev, AD6676_FIF_0,
-				   clamp_t(uint32_t, init_param->f_if_hz, MIN_FIF, MAX_FIF) / MHz);
+				   no_os_clamp_t(uint32_t, init_param->f_if_hz, MIN_FIF, MAX_FIF) / MHz);
 }
 
 /***************************************************************************//**
@@ -217,8 +217,8 @@ uint64_t ad6676_get_fif(struct ad6676_dev *dev,
 	mix1 = mix1 * init_param->f_adc_hz;
 	mix2 = mix2 * init_param->f_adc_hz;
 
-	do_div(&mix1, 64);
-	do_div(&mix2, init_param->m);
+	no_os_do_div(&mix1, 64);
+	no_os_do_div(&mix2, init_param->m);
 
 	return mix1 + mix2;
 }
@@ -235,7 +235,7 @@ static int32_t ad6676_set_bw(struct ad6676_dev *dev,
 			     uint32_t val)
 {
 	return ad6676_set_splitreg(dev, AD6676_BW_0,
-				   clamp_t(uint32_t, val, MIN_BW, MAX_BW) / MHz);
+				   no_os_clamp_t(uint32_t, val, MIN_BW, MAX_BW) / MHz);
 }
 
 /***************************************************************************//**
@@ -326,7 +326,7 @@ static int32_t ad6676_set_clk_synth(struct ad6676_dev *dev,
 
 	/* Compute N val */
 
-	freq = clamp_t(uint32_t, freq, MIN_FADC_INT_SYNTH, MAX_FADC);
+	freq = no_os_clamp_t(uint32_t, freq, MIN_FADC_INT_SYNTH, MAX_FADC);
 
 	reg_val = freq / (f_pfd / 2);
 	/* 2A0 */
@@ -344,8 +344,8 @@ static int32_t ad6676_set_clk_synth(struct ad6676_dev *dev,
 	} else {
 		reg_val = (f_pfd / MHz) * (freq / MHz) * (freq / MHz);
 		val64 = 13300000000ULL + reg_val / 2;
-		do_div(&val64, reg_val);
-		reg_val = min_t(uint64_t, 64U, val64 - 1);
+		no_os_do_div(&val64, reg_val);
+		reg_val = no_os_min_t(uint64_t, 64U, val64 - 1);
 	}
 	/* I_CP 2AC */
 	ret = ad6676_spi_write(dev, AD6676_CLKSYN_I_CP, reg_val);
@@ -508,7 +508,7 @@ int32_t ad6676_shuffle_setup(struct ad6676_dev *dev,
 	uint32_t val, thresh;
 	int32_t i;
 
-	thresh = clamp_t(uint8_t, init_param->shuffle_thresh, 0, 8U);
+	thresh = no_os_clamp_t(uint8_t, init_param->shuffle_thresh, 0, 8U);
 
 	for (i = 0; i < 4; i++) {
 		if ((i + 1) == init_param->shuffle_ctrl)
@@ -616,7 +616,7 @@ static int32_t ad6676_outputmode_set(struct ad6676_dev *dev,
 int32_t ad6676_set_attenuation(struct ad6676_dev *dev,
 			       struct ad6676_init_param *init_param)
 {
-	init_param->attenuation = clamp(init_param->attenuation, 0, 27);
+	init_param->attenuation = no_os_clamp(init_param->attenuation, 0, 27);
 	ad6676_spi_write(dev, AD6676_ATTEN_VALUE_PIN0,
 			 init_param->attenuation);
 	ad6676_spi_write(dev, AD6676_ATTEN_VALUE_PIN1,
@@ -670,7 +670,7 @@ int32_t ad6676_setup(struct ad6676_dev **device,
 	else
 		ad6676_set_extclk_cntl(dev, init_param.f_adc_hz);
 
-	scale = clamp(init_param.scale, 0, 64);
+	scale = no_os_clamp(init_param.scale, 0, 64);
 
 	ret |= ad6676_jesd_setup(dev, &init_param);
 
@@ -742,16 +742,16 @@ int32_t ad6676_update(struct ad6676_dev *dev,
 	uint8_t scale;
 	int32_t ret = 0;
 
-	scale = clamp(init_param->scale, 0, 64);
+	scale = no_os_clamp(init_param->scale, 0, 64);
 
-	init_param->bw_hz = clamp_t(uint32_t, init_param->bw_hz,
-				    init_param->f_adc_hz / 200,
-				    init_param->f_adc_hz / 20);
+	init_param->bw_hz = no_os_clamp_t(uint32_t, init_param->bw_hz,
+					  init_param->f_adc_hz / 200,
+					  init_param->f_adc_hz / 20);
 
-	init_param->f_if_hz = clamp_t(uint32_t,
-				      init_param->f_if_hz,
-				      MIN_FIF,
-				      MAX_FIF);
+	init_param->f_if_hz = no_os_clamp_t(uint32_t,
+					    init_param->f_if_hz,
+					    MIN_FIF,
+					    MAX_FIF);
 
 	ret = ad6676_set_fif(dev, init_param);
 	ret |= ad6676_set_bw(dev, init_param->bw_hz);

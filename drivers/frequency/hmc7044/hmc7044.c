@@ -56,39 +56,39 @@
 
 /* Global Control */
 #define HMC7044_REG_SOFT_RESET		0x0000
-#define HMC7044_SOFT_RESET		BIT(0)
+#define HMC7044_SOFT_RESET		NO_OS_BIT(0)
 
 #define HMC7044_REG_REQ_MODE_0		0x0001
-#define HMC7044_RESEED_REQ		BIT(7)
-#define HMC7044_HIGH_PERF_DISTRIB_PATH	BIT(6)
-#define HMC7044_HIGH_PERF_PLL_VCO	BIT(5)
-#define HMC7044_FORCE_HOLDOVER		BIT(4)
-#define HMC7044_MUTE_OUT_DIV		BIT(3)
-#define HMC7044_PULSE_GEN_REQ		BIT(2)
-#define HMC7044_RESTART_DIV_FSM		BIT(1)
-#define HMC7044_SLEEP_MODE		BIT(0)
+#define HMC7044_RESEED_REQ		NO_OS_BIT(7)
+#define HMC7044_HIGH_PERF_DISTRIB_PATH	NO_OS_BIT(6)
+#define HMC7044_HIGH_PERF_PLL_VCO	NO_OS_BIT(5)
+#define HMC7044_FORCE_HOLDOVER		NO_OS_BIT(4)
+#define HMC7044_MUTE_OUT_DIV		NO_OS_BIT(3)
+#define HMC7044_PULSE_GEN_REQ		NO_OS_BIT(2)
+#define HMC7044_RESTART_DIV_FSM		NO_OS_BIT(1)
+#define HMC7044_SLEEP_MODE		NO_OS_BIT(0)
 
 #define HMC7044_REG_REQ_MODE_1		0x0002
-#define HMC7044_PLL2_AUTOTUNE_TRIG	BIT(2)
-#define HMC7044_SLIP_REQ		BIT(1)
+#define HMC7044_PLL2_AUTOTUNE_TRIG	NO_OS_BIT(2)
+#define HMC7044_SLIP_REQ		NO_OS_BIT(1)
 
 #define HMC7044_REG_EN_CTRL_0		0x0003
-#define HMC7044_RF_RESEEDER_EN		BIT(5)
+#define HMC7044_RF_RESEEDER_EN		NO_OS_BIT(5)
 #define HMC7044_VCO_SEL(x)		(((x) & 0x3) << 3)
 #define HMC7044_VCO_EXT			0
 #define HMC7044_VCO_HIGH		1
 #define HMC7044_VCO_LOW			2
-#define HMC7044_SYSREF_TIMER_EN		BIT(2)
-#define HMC7044_PLL2_EN			BIT(1)
-#define HMC7044_PLL1_EN			BIT(0)
+#define HMC7044_SYSREF_TIMER_EN		NO_OS_BIT(2)
+#define HMC7044_PLL2_EN			NO_OS_BIT(1)
+#define HMC7044_PLL1_EN			NO_OS_BIT(0)
 
 #define HMC7044_REG_EN_CTRL_1		0x0004
 #define HMC7044_SEVEN_PAIRS(x)		((x) & 0x7f)
 
 #define HMC7044_REG_GLOB_MODE		0x0005
 #define HMC7044_REF_PATH_EN(x)		((x) & 0xf)
-#define HMC7044_RFSYNC_EN		BIT(4)
-#define HMC7044_VCOIN_MODE_EN		BIT(5)
+#define HMC7044_RFSYNC_EN		NO_OS_BIT(4)
+#define HMC7044_VCOIN_MODE_EN		NO_OS_BIT(5)
 #define HMC7044_SYNC_PIN_MODE(x)	(((x) & 0x3) << 6)
 
 /* PLL1 */
@@ -100,11 +100,11 @@
 
 #define HMC7044_REG_PLL1_REF_PRIO_CTRL	0x0014
 
-#define HMC7044_HIGH_Z_EN		BIT(4)
-#define HMC7044_LVPECL_EN		BIT(3)
-#define HMC7044_AC_COUPLING_EN		BIT(2)
-#define HMC7044_100_OHM_EN		BIT(1)
-#define HMC7044_BUF_EN			BIT(0)
+#define HMC7044_HIGH_Z_EN		NO_OS_BIT(4)
+#define HMC7044_LVPECL_EN		NO_OS_BIT(3)
+#define HMC7044_AC_COUPLING_EN		NO_OS_BIT(2)
+#define HMC7044_100_OHM_EN		NO_OS_BIT(1)
+#define HMC7044_BUF_EN			NO_OS_BIT(0)
 
 #define HMC7044_REG_CLKIN_PRESCALER(x)	(0x001C + (x))
 #define HMC7044_REG_OSCIN_PRESCALER	0x0020
@@ -122,12 +122,12 @@
 #define HMC7044_N1_MSB(x)		(((x) & 0xff00) >> 8)
 
 #define HMC7044_REG_PLL1_LOCK_DETECT	0x0028
-#define HMC7044_LOCK_DETECT_SLIP	BIT(5)
+#define HMC7044_LOCK_DETECT_SLIP	NO_OS_BIT(5)
 #define HMC7044_LOCK_DETECT_TIMER(x)	((x) & 0x1f)
 
 /* PLL2 */
 #define HMC7044_REG_PLL2_FREQ_DOUBLER	0x0032
-#define HMC7044_PLL2_FREQ_DOUBLER_DIS	BIT(0)
+#define HMC7044_PLL2_FREQ_DOUBLER_DIS	NO_OS_BIT(0)
 
 #define HMC7044_REG_PLL2_R_LSB		0x0033
 #define HMC7044_R2_LSB(x)		((x) & 0xff)
@@ -151,17 +151,17 @@
 
 #define HMC7044_REG_GPO_CTRL(x)		(0x0050 + (x))
 #define HMC7044_GPO_SEL(x)		(((x) & 0x3f) << 2)
-#define HMC7044_GPO_MODE		BIT(1)
-#define HMC7044_GPO_EN			BIT(0)
+#define HMC7044_GPO_MODE		NO_OS_BIT(1)
+#define HMC7044_GPO_EN			NO_OS_BIT(0)
 
 /* SYSREF/SYNC Control */
 #define HMC7044_REG_PULSE_GEN		0x005A
 #define HMC7044_PULSE_GEN_MODE(x)	((x) & 0x7)
 
 #define HMC7044_REG_SYNC		0x005B
-#define HMC7044_SYNC_RETIME		BIT(2)
-#define HMC7044_SYNC_THROUGH_PLL2	BIT(1)
-#define HMC7044_SYNC_POLARITY		BIT(0)
+#define HMC7044_SYNC_RETIME		NO_OS_BIT(2)
+#define HMC7044_SYNC_THROUGH_PLL2	NO_OS_BIT(1)
+#define HMC7044_SYNC_POLARITY		NO_OS_BIT(0)
 
 #define HMC7044_REG_SYSREF_TIMER_LSB	0x005C
 #define HMC7044_SYSREF_TIMER_LSB(x)	((x) & 0xff)
@@ -170,8 +170,8 @@
 #define HMC7044_SYSREF_TIMER_MSB(x)	(((x) & 0xf00) >> 8)
 
 #define HMC7044_CLK_INPUT_CTRL		0x0064
-#define HMC7044_LOW_FREQ_INPUT_MODE	BIT(0)
-#define HMC7044_DIV_2_INPUT_MODE	BIT(1)
+#define HMC7044_LOW_FREQ_INPUT_MODE	NO_OS_BIT(0)
+#define HMC7044_DIV_2_INPUT_MODE	NO_OS_BIT(1)
 
 /* Status and Alarm readback */
 #define HMC7044_REG_ALARM_READBACK	0x007D
@@ -195,10 +195,10 @@
 
 /* Clock Distribution */
 #define HMC7044_REG_CH_OUT_CRTL_0(ch)	(0x00C8 + 0xA * (ch))
-#define HMC7044_HI_PERF_MODE		BIT(7)
-#define HMC7044_SYNC_EN			BIT(6)
-#define HMC7044_CH_EN			BIT(0)
-#define HMC7044_START_UP_MODE_DYN_EN	(BIT(3) | BIT(2))
+#define HMC7044_HI_PERF_MODE		NO_OS_BIT(7)
+#define HMC7044_SYNC_EN			NO_OS_BIT(6)
+#define HMC7044_CH_EN			NO_OS_BIT(0)
+#define HMC7044_START_UP_MODE_DYN_EN	(NO_OS_BIT(3) | NO_OS_BIT(2))
 
 #define HMC7044_REG_CH_OUT_CRTL_1(ch)	(0x00C9 + 0xA * (ch))
 #define HMC7044_DIV_LSB(x)		((x) & 0xFF)
@@ -215,8 +215,8 @@
 #define HMC7044_REG_CH_OUT_CRTL_8(ch)	(0x00D0 + 0xA * (ch))
 #define HMC7044_DRIVER_MODE(x)		(((x) & 0x3) << 3)
 #define HMC7044_DRIVER_Z_MODE(x)	(((x) & 0x3) << 0)
-#define HMC7044_DYN_DRIVER_EN		BIT(5)
-#define HMC7044_FORCE_MUTE_EN		BIT(7)
+#define HMC7044_DYN_DRIVER_EN		NO_OS_BIT(5)
+#define HMC7044_FORCE_MUTE_EN		NO_OS_BIT(7)
 
 #define HMC7044_NUM_CHAN	14
 
@@ -263,7 +263,7 @@ static int hmc7044_write(struct hmc7044_dev *dev,
 	buf[1] = cmd & 0xFF;
 	buf[2] = val;
 
-	return no_os_spi_write_and_read(dev->spi_desc, buf, ARRAY_SIZE(buf));
+	return no_os_spi_write_and_read(dev->spi_desc, buf, NO_OS_ARRAY_SIZE(buf));
 }
 
 /**
@@ -285,7 +285,7 @@ int32_t hmc7044_read(struct hmc7044_dev *dev, uint16_t reg, uint8_t *val)
 	buf[1] = cmd & 0xFF;
 	buf[2] = 0;
 
-	ret = no_os_spi_write_and_read(dev->spi_desc, buf, ARRAY_SIZE(buf));
+	ret = no_os_spi_write_and_read(dev->spi_desc, buf, NO_OS_ARRAY_SIZE(buf));
 	if (ret < 0)
 		return ret;
 
@@ -305,16 +305,16 @@ uint32_t hmc7044_calc_out_div(uint32_t rate,
 {
 	uint32_t div;
 
-	div = DIV_ROUND_CLOSEST(parent_rate, rate);
+	div = NO_OS_DIV_ROUND_CLOSEST(parent_rate, rate);
 
 	/* Supported odd divide ratios are 1, 3, and 5 */
 	if ((div != 1) && (div != 3) && (div != 5) && (div % 2))
-		div = DIV_ROUND_CLOSEST(parent_rate, rate * 2) * 2;
+		div = NO_OS_DIV_ROUND_CLOSEST(parent_rate, rate * 2) * 2;
 
-	div = clamp_t(unsigned int,
-		      div,
-		      HMC7044_OUT_DIV_MIN,
-		      HMC7044_OUT_DIV_MAX);
+	div = no_os_clamp_t(unsigned int,
+			    div,
+			    HMC7044_OUT_DIV_MIN,
+			    HMC7044_OUT_DIV_MAX);
 
 	return div;
 }
@@ -359,7 +359,7 @@ int32_t hmc7044_clk_round_rate(struct hmc7044_dev *dev, uint32_t rate,
 {
 	uint32_t div = hmc7044_calc_out_div(rate, dev->pll2_freq);
 
-	*rounded_rate = DIV_ROUND_CLOSEST(dev->pll2_freq, div);
+	*rounded_rate = NO_OS_DIV_ROUND_CLOSEST(dev->pll2_freq, div);
 
 	return SUCCESS;
 }
@@ -426,22 +426,22 @@ static int32_t hmc7044_setup(struct hmc7044_dev *dev)
 	pll2_freq = dev->pll2_freq / 1000;
 
 	lcm_freq = vcxo_freq;
-	for (i = 0; i < ARRAY_SIZE(clkin_freq); i++) {
+	for (i = 0; i < NO_OS_ARRAY_SIZE(clkin_freq); i++) {
 		if (dev->clkin_freq_ccf[i])
 			clkin_freq[i] = dev->clkin_freq_ccf[i] / 1000;
 		else
 			clkin_freq[i] = dev->clkin_freq[i] / 1000;
 
 		if (clkin_freq[i]) {
-			lcm_freq = greatest_common_divisor(clkin_freq[i], lcm_freq);
-			ref_en |= BIT(i);
+			lcm_freq = no_os_greatest_common_divisor(clkin_freq[i], lcm_freq);
+			ref_en |= NO_OS_BIT(i);
 		}
 	}
 
 	while (lcm_freq > HMC7044_RECOMM_LCM_MAX)
 		lcm_freq /= 2;
 
-	for (i = 0; i < ARRAY_SIZE(clkin_freq); i++) {
+	for (i = 0; i < NO_OS_ARRAY_SIZE(clkin_freq); i++) {
 		if (clkin_freq[i])
 			in_prescaler[i] = clkin_freq[i] / lcm_freq;
 		else
@@ -449,12 +449,12 @@ static int32_t hmc7044_setup(struct hmc7044_dev *dev)
 	}
 	in_prescaler[4] = vcxo_freq / lcm_freq;
 
-	pll1_lock_detect = log_base_2((lcm_freq * 4000) / dev->pll1_loop_bw);
+	pll1_lock_detect = no_os_log_base_2((lcm_freq * 4000) / dev->pll1_loop_bw);
 
 	/* fVCXO / N1 = fLCM / R1 */
-	rational_best_approximation(vcxo_freq, lcm_freq,
-				    HMC7044_N1_MAX, HMC7044_R1_MAX,
-				    &n1, &r1);
+	no_os_rational_best_approximation(vcxo_freq, lcm_freq,
+					  HMC7044_N1_MAX, HMC7044_R1_MAX,
+					  &n1, &r1);
 
 	pfd1_freq = vcxo_freq / n1;
 	while ((pfd1_freq > HMC7044_RECOMM_FPD1) &&
@@ -479,14 +479,14 @@ static int32_t hmc7044_setup(struct hmc7044_dev *dev)
 
 	/* fVCO / N2 = fVCXO * doubler / R2 */
 	pll2_freq_doubler_en = true;
-	rational_best_approximation(pll2_freq, vcxo_freq * 2,
-				    HMC7044_N2_MAX, HMC7044_R2_MAX,
-				    &n2[0], &r2[0]);
+	no_os_rational_best_approximation(pll2_freq, vcxo_freq * 2,
+					  HMC7044_N2_MAX, HMC7044_R2_MAX,
+					  &n2[0], &r2[0]);
 
 	if (pll2_freq != vcxo_freq * n2[0] / r2[0]) {
-		rational_best_approximation(pll2_freq, vcxo_freq,
-					    HMC7044_N2_MAX, HMC7044_R2_MAX,
-					    &n2[1], &r2[1]);
+		no_os_rational_best_approximation(pll2_freq, vcxo_freq,
+						  HMC7044_N2_MAX, HMC7044_R2_MAX,
+						  &n2[1], &r2[1]);
 
 		if (abs((int)pll2_freq - (int)(vcxo_freq * 2 * n2[0] / r2[0])) >
 		    abs((int)pll2_freq - (int)(vcxo_freq * n2[1] / r2[1]))) {
@@ -558,7 +558,7 @@ static int32_t hmc7044_setup(struct hmc7044_dev *dev)
 		      HMC7044_LOCK_DETECT_TIMER(pll1_lock_detect));
 
 	/* Set the LCM */
-	for (i = 0; i < ARRAY_SIZE(clkin_freq); i++) {
+	for (i = 0; i < NO_OS_ARRAY_SIZE(clkin_freq); i++) {
 		hmc7044_write(dev, HMC7044_REG_CLKIN_PRESCALER(i),
 			      in_prescaler[i]);
 	}
@@ -603,12 +603,12 @@ static int32_t hmc7044_setup(struct hmc7044_dev *dev)
 		      dev->in_buf_mode[4]);
 
 	/* Set GPIOs */
-	for (i = 0; i < ARRAY_SIZE(dev->gpi_ctrl); i++) {
+	for (i = 0; i < NO_OS_ARRAY_SIZE(dev->gpi_ctrl); i++) {
 		hmc7044_write(dev, HMC7044_REG_GPI_CTRL(i),
 			      dev->gpi_ctrl[i]);
 	}
 
-	for (i = 0; i < ARRAY_SIZE(dev->gpo_ctrl); i++) {
+	for (i = 0; i < NO_OS_ARRAY_SIZE(dev->gpo_ctrl); i++) {
 		hmc7044_write(dev, HMC7044_REG_GPO_CTRL(i),
 			      dev->gpo_ctrl[i]);
 	}
@@ -643,7 +643,7 @@ static int32_t hmc7044_setup(struct hmc7044_dev *dev)
 		hmc7044_write(dev, HMC7044_REG_CH_OUT_CRTL_0(chan->num),
 			      (chan->start_up_mode_dynamic_enable ?
 			       HMC7044_START_UP_MODE_DYN_EN : 0) |
-			      (chan->output_control0_rb4_enable ? BIT(4) : 0) |
+			      (chan->output_control0_rb4_enable ? NO_OS_BIT(4) : 0) |
 			      (chan->high_performance_mode_dis ?
 			       0 : HMC7044_HI_PERF_MODE) | HMC7044_SYNC_EN |
 			      HMC7044_CH_EN);
@@ -758,7 +758,7 @@ static int32_t hmc7043_setup(struct hmc7044_dev *dev)
 		hmc7044_write(dev, HMC7044_REG_CH_OUT_CRTL_0(chan->num),
 			      (chan->start_up_mode_dynamic_enable ?
 			       HMC7044_START_UP_MODE_DYN_EN : 0) |
-			      (chan->output_control0_rb4_enable ? BIT(4) : 0) |
+			      (chan->output_control0_rb4_enable ? NO_OS_BIT(4) : 0) |
 			      (chan->high_performance_mode_dis ?
 			       0 : HMC7044_HI_PERF_MODE) | HMC7044_SYNC_EN |
 			      HMC7044_CH_EN);

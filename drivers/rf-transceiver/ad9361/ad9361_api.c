@@ -1683,7 +1683,7 @@ int32_t ad9361_get_tx_rssi (struct ad9361_rf_phy *phy,
 	int32_t ret;
 
 	ret = ad9361_spi_readm(phy->spi, REG_TX_RSSI_LSB,
-			       reg_val_buf, ARRAY_SIZE(reg_val_buf));
+			       reg_val_buf, NO_OS_ARRAY_SIZE(reg_val_buf));
 	if (ret < 0) {
 		return ret;
 	}

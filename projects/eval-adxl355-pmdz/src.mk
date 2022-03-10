@@ -1,6 +1,6 @@
 SRC_DIRS += $(PROJECT)/src
 
-SRCS +=	$(NO-OS)/util/util.c
+SRCS +=	$(NO-OS)/util/no_os_util.c
 
 INCS +=	$(INCLUDE)/no_os_uart.h \
 	$(INCLUDE)/no_os_spi.h \

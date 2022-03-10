@@ -62,9 +62,9 @@ int32_t adf4377_spi_write(struct adf4377_dev *dev, uint8_t reg_addr,
 	uint8_t buff[ADF4377_BUFF_SIZE_BYTES];
 
 	if (dev->spi_desc->bit_order) {
-		buff[0] = bit_swap_constant_8(reg_addr);
-		buff[1] = bit_swap_constant_8(ADF4377_SPI_WRITE_CMD);
-		buff[2] = bit_swap_constant_8(data);
+		buff[0] = no_os_bit_swap_constant_8(reg_addr);
+		buff[1] = no_os_bit_swap_constant_8(ADF4377_SPI_WRITE_CMD);
+		buff[2] = no_os_bit_swap_constant_8(data);
 	} else {
 		buff[0] = ADF4377_SPI_WRITE_CMD;
 		buff[1] = reg_addr;
@@ -112,9 +112,9 @@ int32_t adf4377_spi_read(struct adf4377_dev *dev, uint8_t reg_addr,
 	uint8_t buff[ADF4377_BUFF_SIZE_BYTES];
 
 	if (dev->spi_desc->bit_order) {
-		buff[0] = bit_swap_constant_8(reg_addr);
-		buff[1] = bit_swap_constant_8(ADF4377_SPI_READ_CMD);
-		buff[2] = bit_swap_constant_8(ADF4377_SPI_DUMMY_DATA);
+		buff[0] = no_os_bit_swap_constant_8(reg_addr);
+		buff[1] = no_os_bit_swap_constant_8(ADF4377_SPI_READ_CMD);
+		buff[2] = no_os_bit_swap_constant_8(ADF4377_SPI_DUMMY_DATA);
 	} else {
 		buff[0] = ADF4377_SPI_READ_CMD;
 		buff[1] = reg_addr;
@@ -400,10 +400,11 @@ static int32_t adf4377_setup(struct adf4377_dev *dev)
 		f_div_rclk /= 4;
 	}
 
-	synth_lock_timeout = DIV_ROUND_UP(f_div_rclk, 50000);
-	vco_alc_timeout = DIV_ROUND_UP(f_div_rclk, 20000);
-	vco_band_div = DIV_ROUND_UP(f_div_rclk, 150000 * 16 * (1 << dclk_mode_en));
-	adc_clk_div = DIV_ROUND_UP((f_div_rclk / 400000 - 2), 4);
+	synth_lock_timeout = NO_OS_DIV_ROUND_UP(f_div_rclk, 50000);
+	vco_alc_timeout = NO_OS_DIV_ROUND_UP(f_div_rclk, 20000);
+	vco_band_div = NO_OS_DIV_ROUND_UP(f_div_rclk,
+					  150000 * 16 * (1 << dclk_mode_en));
+	adc_clk_div = NO_OS_DIV_ROUND_UP((f_div_rclk / 400000 - 2), 4);
 
 	ret = adf4377_spi_write_mask(dev, ADF4377_REG(0x1C),
 				     ADF4377_EN_DNCLK_MSK | ADF4377_EN_DRCLK_MSK,

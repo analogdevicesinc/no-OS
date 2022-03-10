@@ -213,10 +213,10 @@ int32_t ad7746_set_cap(struct ad7746_dev *dev, struct ad7746_cap cap)
 	if (!dev)
 		return -EINVAL;
 
-	reg = field_prep(AD7746_CAPSETUP_CAPEN_MSK, cap.capen) |
-	      field_prep(AD7746_CAPSETUP_CIN2_MSK, cap.cin2) |
-	      field_prep(AD7746_CAPSETUP_CAPDIFF_MSK, cap.capdiff) |
-	      field_prep(AD7746_CAPSETUP_CAPCHOP_MSK, cap.capchop);
+	reg = no_os_field_prep(AD7746_CAPSETUP_CAPEN_MSK, cap.capen) |
+	      no_os_field_prep(AD7746_CAPSETUP_CIN2_MSK, cap.cin2) |
+	      no_os_field_prep(AD7746_CAPSETUP_CAPDIFF_MSK, cap.capdiff) |
+	      no_os_field_prep(AD7746_CAPSETUP_CAPCHOP_MSK, cap.capchop);
 
 	ret = ad7746_reg_write(dev, AD7746_REG_CAP_SETUP, &reg, 1);
 	if (ret < 0)
@@ -245,11 +245,11 @@ int32_t ad7746_set_vt(struct ad7746_dev *dev, struct ad7746_vt vt)
 	if (!dev)
 		return -EINVAL;
 
-	reg = field_prep(AD7746_VTSETUP_VTEN_MSK, vt.vten) |
-	      field_prep(AD7746_VTSETUP_VTMD_MSK, vt.vtmd) |
-	      field_prep(AD7746_VTSETUP_EXTREF_MSK, vt.extref) |
-	      field_prep(AD7746_VTSETUP_VTSHORT_MSK, vt.vtshort) |
-	      field_prep(AD7746_VTSETUP_VTCHOP_MSK, vt.vtchop);
+	reg = no_os_field_prep(AD7746_VTSETUP_VTEN_MSK, vt.vten) |
+	      no_os_field_prep(AD7746_VTSETUP_VTMD_MSK, vt.vtmd) |
+	      no_os_field_prep(AD7746_VTSETUP_EXTREF_MSK, vt.extref) |
+	      no_os_field_prep(AD7746_VTSETUP_VTSHORT_MSK, vt.vtshort) |
+	      no_os_field_prep(AD7746_VTSETUP_VTCHOP_MSK, vt.vtchop);
 
 	ret = ad7746_reg_write(dev, AD7746_REG_VT_SETUP, &reg, 1);
 	if (ret < 0)
@@ -278,11 +278,11 @@ int32_t ad7746_set_exc(struct ad7746_dev *dev, struct ad7746_exc exc)
 	if (!dev)
 		return -EINVAL;
 
-	reg = field_prep(AD7746_EXCSETUP_CLKCTRL_MSK, exc.clkctrl) |
-	      field_prep(AD7746_EXCSETUP_EXCON_MSK, exc.excon) |
-	      field_prep(AD7746_EXCSETUP_EXCB_MSK, exc.excb) |
-	      field_prep(AD7746_EXCSETUP_EXCA_MSK, exc.exca) |
-	      field_prep(AD7746_EXCSETUP_EXCLVL_MSK, exc.exclvl);
+	reg = no_os_field_prep(AD7746_EXCSETUP_CLKCTRL_MSK, exc.clkctrl) |
+	      no_os_field_prep(AD7746_EXCSETUP_EXCON_MSK, exc.excon) |
+	      no_os_field_prep(AD7746_EXCSETUP_EXCB_MSK, exc.excb) |
+	      no_os_field_prep(AD7746_EXCSETUP_EXCA_MSK, exc.exca) |
+	      no_os_field_prep(AD7746_EXCSETUP_EXCLVL_MSK, exc.exclvl);
 
 	ret = ad7746_reg_write(dev, AD7746_REG_EXC_SETUP, &reg, 1);
 	if (ret < 0)
@@ -311,9 +311,9 @@ int32_t ad7746_set_config(struct ad7746_dev *dev, struct ad7746_config config)
 	if (!dev)
 		return -EINVAL;
 
-	reg = field_prep(AD7746_CONF_VTF_MSK, config.vtf) |
-	      field_prep(AD7746_CONF_CAPF_MSK, config.capf) |
-	      field_prep(AD7746_CONF_MD_MSK, config.md);
+	reg = no_os_field_prep(AD7746_CONF_VTF_MSK, config.vtf) |
+	      no_os_field_prep(AD7746_CONF_CAPF_MSK, config.capf) |
+	      no_os_field_prep(AD7746_CONF_MD_MSK, config.md);
 
 	ret = ad7746_reg_write(dev, AD7746_REG_CFG, &reg, 1);
 	if (ret < 0)
@@ -342,8 +342,8 @@ int32_t ad7746_set_cap_dac_a(struct ad7746_dev *dev, bool enable, uint8_t code)
 	if (!dev)
 		return -EINVAL;
 
-	reg = field_prep(AD7746_CAPDAC_DACEN_MSK, enable) |
-	      field_prep(AD7746_CAPDAC_DACP_MSK, code);
+	reg = no_os_field_prep(AD7746_CAPDAC_DACEN_MSK, enable) |
+	      no_os_field_prep(AD7746_CAPDAC_DACP_MSK, code);
 
 	return ad7746_reg_write(dev, AD7746_REG_CAPDACA, &reg, 1);
 }
@@ -366,8 +366,8 @@ int32_t ad7746_set_cap_dac_b(struct ad7746_dev *dev, bool enable, uint8_t code)
 	if (!dev)
 		return -EINVAL;
 
-	reg = field_prep(AD7746_CAPDAC_DACEN_MSK, enable) |
-	      field_prep(AD7746_CAPDAC_DACP_MSK, code);
+	reg = no_os_field_prep(AD7746_CAPDAC_DACEN_MSK, enable) |
+	      no_os_field_prep(AD7746_CAPDAC_DACP_MSK, code);
 
 	return ad7746_reg_write(dev, AD7746_REG_CAPDACB, &reg, 1);
 }

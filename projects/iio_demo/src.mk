@@ -4,7 +4,7 @@ SRC_DIRS += $(NO-OS)/iio/iio_app
 
 SRCS +=	$(NO-OS)/util/no_os_list.c \
 	$(NO-OS)/util/fifo.c \
-	$(NO-OS)/util/util.c
+	$(NO-OS)/util/no_os_util.c
 
 #drivers
 SRCS += $(DRIVERS)/adc/adc_demo/adc_demo.c \

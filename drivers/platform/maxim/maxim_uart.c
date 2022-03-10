@@ -92,8 +92,8 @@ static void _uart_irq(uint8_t port)
 	}
 
 	while(reg_int_fl) {
-		n_int = find_first_set_bit(reg_int_fl);
-		if (reg_int_fl & (reg_int_en & BIT(n_int))) {
+		n_int = no_os_find_first_set_bit(reg_int_fl);
+		if (reg_int_fl & (reg_int_en & NO_OS_BIT(n_int))) {
 			void *ctx = cb[port]->ctx;
 			void *config = cb[port]->config;
 			cb[port]->callback(ctx, n_int, config);
