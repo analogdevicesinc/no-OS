@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   font_8x8.c
+ *   @file   no_os_font_8x8.c
  *   @brief  Font style for 8x8 characters.
  *   @author Andrei Porumb (andrei.porumb@analog.com)
 ********************************************************************************
@@ -43,7 +43,7 @@
 #include <stdint.h>
 
 /* ASCII to bitmap */
-const uint8_t chr_8x8[128][8] = {
+const uint8_t no_os_chr_8x8[128][8] = {
 	{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
 	{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
 	{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},

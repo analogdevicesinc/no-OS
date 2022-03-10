@@ -65,7 +65,7 @@ const struct display_controller_ops ssd1306_ops = {
 	.remove = &ssd_1306_remove
 };
 
-extern const uint8_t chr_8x8[128][8];
+extern const uint8_t no_os_chr_8x8[128][8];
 
 /******************************************************************************/
 /************************** Functions Implementation **************************/
@@ -225,7 +225,7 @@ int32_t ssd_1306_print_ascii(struct display_dev *device, uint8_t ascii,
 	int32_t ret;
 	ssd_1306_extra *extra;
 	uint8_t ch[SSD1306_CHARSZ];
-	memcpy(ch, chr_8x8[ascii], SSD1306_CHARSZ);
+	memcpy(ch, no_os_chr_8x8[ascii], SSD1306_CHARSZ);
 
 	extra = device->extra;
 	ret = ssd_1306_move_cursor(device, row, column);

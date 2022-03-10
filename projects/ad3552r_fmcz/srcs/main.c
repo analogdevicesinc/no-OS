@@ -124,7 +124,7 @@ void set_power_up_success_led()
 	no_os_gpio_remove(gpio);
 }
 
-extern const uint16_t sine_lut_16[512];
+extern const uint16_t no_os_sine_lut_16[512];
 
 int32_t run_example(struct ad3552r_desc *dac)
 {
@@ -133,11 +133,11 @@ int32_t run_example(struct ad3552r_desc *dac)
 	uint16_t samples[2];
 	int32_t err;
 
-	nb_samples = ARRAY_SIZE(sine_lut_16);
+	nb_samples = ARRAY_SIZE(no_os_sine_lut_16);
 	i = 0;
 	do {
-		samples[0] = sine_lut_16[i];
-		samples[1] = sine_lut_16[(i + nb_samples / 2) % nb_samples];
+		samples[0] = no_os_sine_lut_16[i];
+		samples[1] = no_os_sine_lut_16[(i + nb_samples / 2) % nb_samples];
 		err = ad3552r_write_samples(dac, samples, 1,
 					    AD3552R_MASK_ALL_CH,
 					    AD3552R_WRITE_INPUT_REGS);
