@@ -115,6 +115,17 @@ enum iio_attribute_shared {
 };
 
 /**
+ * @struct iio_context_attribute
+ * @brief Structure holding the context attribute members
+ */
+struct iio_context_attribute {
+	/** Attribute name */
+	const char *name;
+	/** Attribute value */
+	const char *value;
+};
+
+/**
  * @struct iio_attribute
  * @brief Structure holding pointers to show and store functions.
  */
@@ -223,6 +234,8 @@ struct iio_device {
 	uint16_t num_ch;
 	/** List of channels */
 	struct iio_channel *channels;
+	/* Array of attributes. Last one should have its name set to NULL */
+	struct iio_context_attribute *context_attributes;
 	/** Array of attributes. Last one should have its name set to NULL */
 	struct iio_attribute *attributes;
 	/** Array of attributes. Last one should have its name set to NULL */
