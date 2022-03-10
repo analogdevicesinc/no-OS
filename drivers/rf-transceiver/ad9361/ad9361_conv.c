@@ -88,7 +88,7 @@ static int32_t ad9361_check_pn(struct ad9361_rf_phy *phy, bool tx,
 	for (chan = 0; chan < num_chan; chan++)
 		axi_adc_write(axi_adc, AXI_ADC_REG_CHAN_STATUS(chan),
 			      AXI_ADC_PN_ERR | AXI_ADC_PN_OOS);
-	mdelay(delay);
+	no_os_mdelay(delay);
 
 	axi_adc_read(axi_adc, AXI_ADC_REG_STATUS, &adi_reg_status);
 	if (!tx && !(adi_reg_status & AXI_ADC_STATUS))
@@ -207,7 +207,7 @@ static int32_t ad9361_dig_tune_iodelay(struct ad9361_rf_phy *phy, bool tx)
 	for (i = 0; i < 7; i++) {
 		for (j = 0; j < 32; j++) {
 			ad9361_iodelay_set(st, i, j, tx);
-			mdelay(1);
+			no_os_mdelay(1);
 			field[j] = ad9361_check_pn(phy, tx, 10);
 		}
 

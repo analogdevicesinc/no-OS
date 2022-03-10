@@ -398,7 +398,7 @@ static int32_t ad6676_set_clk_synth(struct ad6676_dev *dev,
 
 	tout = 4;
 	do {
-		mdelay(1);
+		no_os_mdelay(1);
 		ad6676_spi_read(dev, AD6676_CLKSYN_STATUS, (uint8_t *)&reg_val);
 	} while (--tout && (reg_val & SYN_STAT_VCO_CAL_BUSY));
 
@@ -413,7 +413,7 @@ static int32_t ad6676_set_clk_synth(struct ad6676_dev *dev,
 
 	tout = 4;
 	do {
-		mdelay(1);
+		no_os_mdelay(1);
 		ad6676_spi_read(dev, AD6676_CLKSYN_STATUS, (uint8_t *)&reg_val);
 		reg_val &= SYN_STAT_PLL_LCK | SYN_STAT_VCO_CAL_BUSY |
 			   SYN_STAT_CP_CAL_DONE;
@@ -541,7 +541,7 @@ static int32_t ad6676_calibrate(struct ad6676_dev *dev,
 		tout_i = 2;
 
 		do {
-			mdelay(250);
+			no_os_mdelay(250);
 			ad6676_spi_read(dev, AD6676_CAL_DONE, (uint8_t *)&done);
 			done &= CAL_DONE;
 		} while (tout_i-- && !done);
@@ -579,7 +579,7 @@ static int32_t ad6676_reset(struct ad6676_dev *dev,
 	ret = ad6676_spi_write(dev, AD6676_SPI_CONFIG,
 			       SPI_CONF_SW_RESET |
 			       (spi3wire ? 0 : SPI_CONF_SDIO_DIR));
-	mdelay(2);
+	no_os_mdelay(2);
 
 	return ret;
 }

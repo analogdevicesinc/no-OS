@@ -203,10 +203,10 @@ int32_t ad7616_par_read(struct ad7616_dev *dev,
 
 	no_os_axi_io_write(dev->core_baseaddr, AD7616_REG_UP_WRITE_DATA,
 			   0x0000 | ((reg_addr & 0x3F) << 9));
-	udelay(50);
+	no_os_udelay(50);
 	no_os_axi_io_read(dev->core_baseaddr, AD7616_REG_UP_READ_DATA, &read);
 	*reg_data = read & 0xFF;
-	mdelay(1);
+	no_os_mdelay(1);
 
 	return 0;
 }
@@ -224,7 +224,7 @@ int32_t ad7616_par_write(struct ad7616_dev *dev,
 {
 	no_os_axi_io_write(dev->core_baseaddr, AD7616_REG_UP_WRITE_DATA,
 			   0x8000 | ((reg_addr & 0x3F) << 9) | (reg_data & 0xFF));
-	mdelay(1);
+	no_os_mdelay(1);
 
 	return 0;
 }
@@ -240,10 +240,10 @@ int32_t ad7616_reset(struct ad7616_dev *dev)
 
 	ret = no_os_gpio_set_value(dev->gpio_reset, NO_OS_GPIO_LOW);
 	/* Low pulse width for a full reset should be at least 1200 ns */
-	mdelay(20);
+	no_os_mdelay(20);
 	ret |= no_os_gpio_set_value(dev->gpio_reset, NO_OS_GPIO_HIGH);
 	/* 15 ms are required to completely reconfigure the device */
-	mdelay(150);
+	no_os_mdelay(150);
 
 	return ret;
 }
@@ -470,14 +470,14 @@ int32_t ad7616_core_setup(struct ad7616_dev *dev)
 	uint32_t type;
 
 	no_os_axi_io_write(dev->core_baseaddr, AD7616_REG_UP_CTRL, 0x00);
-	mdelay(10);
+	no_os_mdelay(10);
 	no_os_axi_io_write(dev->core_baseaddr, AD7616_REG_UP_CTRL, AD7616_CTRL_RESETN);
 	no_os_axi_io_write(dev->core_baseaddr, AD7616_REG_UP_CONV_RATE, 100);
 	no_os_axi_io_write(dev->core_baseaddr, AD7616_REG_UP_CTRL,
 			   AD7616_CTRL_RESETN | AD7616_CTRL_CNVST_EN);
-	mdelay(10);
+	no_os_mdelay(10);
 	no_os_axi_io_write(dev->core_baseaddr, AD7616_REG_UP_CTRL, AD7616_CTRL_RESETN);
-	mdelay(10);
+	no_os_mdelay(10);
 
 	no_os_axi_io_read(dev->core_baseaddr, AD7616_REG_UP_IF_TYPE, &type);
 

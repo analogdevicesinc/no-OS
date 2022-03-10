@@ -120,7 +120,7 @@ void adxcvr_acquire_arbitration(struct adxcvr *xcvr,
 		val = IORD_32DIRECT(addr, status_reg * 4);
 		if ((val & NO_OS_BIT(2)) == 0)
 			return;
-		udelay(10);
+		no_os_udelay(10);
 	} while (timeout++ < 10000);
 
 	printf("%s: Failed to acquire arbitration\n", xcvr->name);
@@ -257,7 +257,7 @@ int32_t atx_pll_calibration_check(struct adxcvr *xcvr)
 
 	/* Wait max 100ms for cal_busy to de-assert */
 	do {
-		mdelay(10);
+		no_os_mdelay(10);
 
 		/* Read ATX PLL calibration status from capability register */
 		atx_pll_read(xcvr, XCVR_REG_CAPAB_ATX_PLL_STAT, &val);
@@ -295,7 +295,7 @@ int32_t adxcfg_calibration_check(struct adxcvr *xcvr, uint32_t lane,
 
 	/* Wait max 100ms for cal_busy to de-assert */
 	do {
-		udelay(100);
+		no_os_udelay(100);
 
 		/* Read PMA calibration status from capability register */
 		adxcfg_read(xcvr, lane, XCVR_REG_CAPAB_PMA, &val);
@@ -375,7 +375,7 @@ void adxcvr_finalize_lane_rate_change(struct adxcvr *xcvr)
 		adxcvr_read(xcvr, ADXCVR_REG_STATUS, &status);
 		if (status == ADXCVR_STATUS)
 			break;
-		mdelay(1);
+		no_os_mdelay(1);
 	} while (timeout--);
 
 	if (timeout < 0) {

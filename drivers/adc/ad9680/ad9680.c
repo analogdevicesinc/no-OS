@@ -140,7 +140,7 @@ int32_t ad9680_setup(struct ad9680_dev **device,
 	ad9680_spi_write(dev,
 			 AD9680_REG_INTERFACE_CONF_A,
 			 0x81);	// RESET
-	mdelay(250);
+	no_os_mdelay(250);
 
 	ad9680_spi_write(dev,
 			 AD9680_REG_LINK_CONTROL,
@@ -168,7 +168,7 @@ int32_t ad9680_setup(struct ad9680_dev **device,
 	ad9680_spi_write(dev,
 			 AD9680_REG_LINK_CONTROL,
 			 0x14);	// link enable
-	mdelay(250);
+	no_os_mdelay(250);
 
 	ad9680_spi_read(dev,
 			AD9680_REG_JESD204B_PLL_LOCK_STATUS,

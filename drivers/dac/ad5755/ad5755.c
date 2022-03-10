@@ -102,7 +102,7 @@ int8_t ad5755_init(struct ad5755_dev **device,
 				     AD5755_MAIN_SHTCCTLIM(dev->p_ad5755_st->sht_cc_lim_bit));
 
 	ad5755_software_reset(dev);
-	mdelay(100);
+	no_os_mdelay(100);
 	/* DC-to-DC configuration. */
 	ad5755_set_control_registers(dev,
 				     AD5755_CREG_DC_DC,
@@ -134,7 +134,7 @@ int8_t ad5755_init(struct ad5755_dev **device,
 					     dac_control_buff[channel]);
 	}
 	/* Allow at least 200us before enabling the channel output. */
-	mdelay(200);
+	no_os_mdelay(200);
 	/* Enable the channel output. */
 	for(channel = AD5755_DAC_A; channel <= AD5755_DAC_D; channel++) {
 		/* Write to each DAC data register*/

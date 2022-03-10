@@ -178,7 +178,7 @@ static int32_t adf5355_reg_config(struct adf5355_dev *dev, bool sync_all)
 			return ret;
 	}
 
-	udelay(dev->delay_us);
+	no_os_udelay(dev->delay_us);
 
 	return adf5355_write(dev, ADF5355_REG(0), dev->regs[0]);
 }

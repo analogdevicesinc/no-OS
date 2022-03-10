@@ -112,7 +112,7 @@ static int32_t wait_for_response(struct sd_desc *sd_desc, uint8_t *data_out)
 			ret = SUCCESS;
 			break;
 		}
-		mdelay(1);
+		no_os_mdelay(1);
 	} while (not_timeout--);
 
 	return ret;
@@ -139,7 +139,7 @@ static int32_t wait_until_not_busy(struct sd_desc *sd_desc)
 			ret = SUCCESS;
 			break;
 		}
-		mdelay(1);
+		no_os_mdelay(1);
 	} while (not_timeout--);
 
 	return ret;

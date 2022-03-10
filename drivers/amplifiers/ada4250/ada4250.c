@@ -497,7 +497,7 @@ int32_t ada4250_set_normal_mode(struct ada4250_dev *dev, bool reconfig)
 		return ret;
 
 	/* Wait for 200/400 us for the device to wake up from sleep/shutdown mode */
-	udelay(dev->power_mode == ADA4250_POWER_SLEEP ? 200 : 400);
+	no_os_udelay(dev->power_mode == ADA4250_POWER_SLEEP ? 200 : 400);
 
 	if (dev->power_mode == ADA4250_POWER_SHUTDOWN) {
 		if (reconfig) {
@@ -560,7 +560,7 @@ int32_t ada4250_init(struct ada4250_dev **device,
 		goto error_slp;
 
 	/* Wait for the device to wake up*/
-	mdelay(1);
+	no_os_mdelay(1);
 	dev->power_mode = ADA4250_POWER_NORMAL;
 
 	if(dev->device_id == ADA4250) {

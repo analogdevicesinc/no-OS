@@ -299,12 +299,12 @@ static int32_t ad463x_init_gpio(struct ad463x_dev *dev,
 		if (ret != SUCCESS)
 			return ret;
 
-		mdelay(100);
+		no_os_mdelay(100);
 		ret = no_os_gpio_set_value(dev->gpio_resetn, NO_OS_GPIO_HIGH);
 		if (ret != SUCCESS)
 			return ret;
 
-		mdelay(100);
+		no_os_mdelay(100);
 	}
 
 	return SUCCESS;

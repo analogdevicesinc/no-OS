@@ -305,9 +305,9 @@ int32_t ad5766_init(struct ad5766_dev **device,
 	/* GPIO */
 	ret |= no_os_gpio_get(&dev->gpio_reset, &init_param.gpio_reset);
 	ret |= no_os_gpio_direction_output(dev->gpio_reset, NO_OS_GPIO_LOW);
-	mdelay(10);
+	no_os_mdelay(10);
 	ret |= no_os_gpio_set_value(dev->gpio_reset, NO_OS_GPIO_HIGH);
-	mdelay(10);
+	no_os_mdelay(10);
 
 	/* Device Settings */
 	dev->daisy_chain_en = init_param.daisy_chain_en;

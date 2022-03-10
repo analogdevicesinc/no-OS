@@ -410,7 +410,7 @@ int32_t no_os_uart_init(struct no_os_uart_desc **desc, struct no_os_uart_init_pa
 
 		/* Establish connection with the USB CDC communication port */
 		usb_cdc_dev->connect();
-		mdelay(2000);
+		no_os_mdelay(2000);
 	} else {
 		// Create and configure a new instance of BufferedSerial/UART port
 		uart = new BufferedSerial(

@@ -251,12 +251,12 @@ int main()
 	if (ret != SUCCESS)
 		return FAILURE;
 
-	mdelay(1000);
+	no_os_mdelay(1000);
 	ad713x_init_param_2.spi_common_dev = ad713x_dev_1->spi_desc;
 	ret = ad713x_init(&ad713x_dev_2, &ad713x_init_param_2);
 	if (ret != SUCCESS)
 		return FAILURE;
-	mdelay(1000);
+	no_os_mdelay(1000);
 
 	spi_engine_offload_init_param.rx_dma_baseaddr = AD7134_DMA_BASEADDR;
 	spi_engine_offload_init_param.offload_config = OFFLOAD_RX_EN;

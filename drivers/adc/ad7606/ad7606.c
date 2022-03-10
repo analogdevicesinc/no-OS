@@ -431,7 +431,7 @@ int32_t ad7606_convst(struct ad7606_dev *dev)
 		return ret;
 
 	/* wait LP_CNV time */
-	udelay(1);
+	no_os_udelay(1);
 
 	return no_os_gpio_set_value(dev->gpio_convst, 1);
 }
@@ -559,7 +559,7 @@ int32_t ad7606_read(struct ad7606_dev *dev, uint32_t * data)
 			if (busy == 0)
 				break;
 
-			udelay(1);
+			no_os_udelay(1);
 			timeout--;
 		}
 
@@ -567,7 +567,7 @@ int32_t ad7606_read(struct ad7606_dev *dev, uint32_t * data)
 			return -ETIME;
 	} else {
 		/* wait CONV time */
-		udelay(tconv_max[dev->oversampling.os_ratio]);
+		no_os_udelay(tconv_max[dev->oversampling.os_ratio]);
 	}
 
 	return ad7606_spi_data_read(dev, data);
@@ -626,7 +626,7 @@ int32_t ad7606_reset(struct ad7606_dev *dev)
 	if (ret < 0)
 		return ret;
 
-	udelay(3);
+	no_os_udelay(3);
 
 	ret = no_os_gpio_set_value(dev->gpio_reset, 0);
 	if (ret < 0)
@@ -1149,7 +1149,7 @@ int32_t ad7606_init(struct ad7606_dev **device,
 		goto error;
 
 	/* wait DEVICE_SETUP time */
-	udelay(253);
+	no_os_udelay(253);
 
 	ret = no_os_spi_init(&dev->spi_desc, &init_param->spi_init);
 	if (ret < 0)

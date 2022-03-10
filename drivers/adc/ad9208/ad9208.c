@@ -337,7 +337,7 @@ static int32_t ad9208_setup(struct ad9208_state *st)
 	timeout = 10;
 
 	do {
-		mdelay(10);
+		no_os_mdelay(10);
 		ret = ad9208_jesd_get_pll_status(ad9208_h, &pll_stat);
 		if (ret < 0) {
 			printf("Failed to get pll status (%d)\n", ret);
@@ -364,7 +364,7 @@ error:
  */
 static int ad9208_udelay(void *user_data, unsigned int us)
 {
-	udelay(us);
+	no_os_udelay(us);
 
 	return 0;
 }

@@ -2028,7 +2028,7 @@ int32_t ad9361_do_mcs(struct ad9361_rf_phy *phy_master,
 	for (step = 0; step <= 5; step++) {
 		ad9361_mcs(phy_slave, step);
 		ad9361_mcs(phy_master, step);
-		mdelay(100);
+		no_os_mdelay(100);
 	}
 
 	ad9361_set_en_state_machine_mode(phy_master, ensm_mode);

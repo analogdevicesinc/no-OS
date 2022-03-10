@@ -76,7 +76,7 @@ int32_t ad7746_init(struct ad7746_dev **device,
 		goto error_2;
 
 	// the device does not acknowledge for max: 200us after a reset
-	udelay(200);
+	no_os_udelay(200);
 
 	ret = ad7746_set_cap(dev, init_param->setup.cap);
 	if (ret < 0)
@@ -544,7 +544,7 @@ int32_t ad7746_calibrate(struct ad7746_dev *dev, enum ad7746_md md)
 	do {
 		// Wait an arbitrary time to avoid too many reg reads.
 		// This typically results in 1 read only.
-		mdelay(20);
+		no_os_mdelay(20);
 
 		ret = ad7746_reg_read(dev, AD7746_REG_CFG, &reg, 1);
 		if (ret < 0)

@@ -109,12 +109,12 @@ int32_t adaq7980_setup(struct adaq7980_dev **device,
 		if (ret != SUCCESS)
 			goto error_dev;
 
-		mdelay(10);
+		no_os_mdelay(10);
 		ret = no_os_gpio_set_value(dev->gpio_pd_ldo, NO_OS_GPIO_HIGH);
 		if (ret != SUCCESS)
 			goto error_dev;
 
-		mdelay(10);
+		no_os_mdelay(10);
 	}
 	ret = no_os_pwm_init(&dev->trigger_pwm_desc, init_param->trigger_pwm_init);
 	if (ret != SUCCESS)

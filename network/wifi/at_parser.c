@@ -515,7 +515,7 @@ static int32_t wait_for_response(struct at_desc *desc)
 				break;
 			}
 		}
-		mdelay(1);
+		no_os_mdelay(1);
 	} while (--timeout);
 
 end:
@@ -543,7 +543,7 @@ static int32_t send_cmd(struct at_desc *desc, enum at_cmd cmd,
 		while (timeout--) {
 			if (WAITING_SEND != desc->callback_operation)
 				break;
-			mdelay(1);
+			no_os_mdelay(1);
 		}
 		if (timeout == 0)
 			return FAILURE;
@@ -556,7 +556,7 @@ static int32_t send_cmd(struct at_desc *desc, enum at_cmd cmd,
 			do {
 				if (desc->is_wifi_connected == 0)
 					break;
-				mdelay(1);
+				no_os_mdelay(1);
 			} while (timeout--);
 
 			if (timeout == 0)
@@ -800,7 +800,7 @@ static int32_t handle_special(struct at_desc *desc, enum at_cmd cmd)
 			/* Wait for "ready" message */
 			if (desc->callback_operation != RESETTING_MODULE)
 				break;
-			mdelay(1);
+			no_os_mdelay(1);
 		} while (timeout--);
 		if (!timeout)
 			return FAILURE;

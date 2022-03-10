@@ -551,7 +551,7 @@ int32_t adpd188_clk32mhz_cal(struct adpd188_dev *dev)
 	if(ret != SUCCESS)
 		return FAILURE;
 
-	mdelay(1);
+	no_os_mdelay(1);
 	ret = adpd188_reg_read(dev, ADPD188_REG_CLK_RATIO, &reg_data);
 	if(ret != SUCCESS)
 		return FAILURE;

@@ -300,7 +300,7 @@ void adf4106_init_cepin_method(struct adf4106_dev *dev)
 	/* Bring CE high to take the device out of power-down */
 	ADF4106_CE_HIGH;
 	/* Wait for the input buffer bias to reach steady state */
-	mdelay(1);
+	no_os_mdelay(1);
 }
 
 /**************************************************************************//**

@@ -190,7 +190,7 @@ int main(void)
 
 		pr_info("Position: %d mm, Temperature: %d *C\n", capData, temperature);
 
-		mdelay(2000);
+		no_os_mdelay(2000);
 	}
 
 error:

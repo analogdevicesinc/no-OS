@@ -145,7 +145,7 @@ int main()
 				printf("%x", adc_data[i]);
 			}
 			printf("\r\n");
-			mdelay(1000);
+			no_os_mdelay(1000);
 		}
 	} else {
 		ret = spi_engine_offload_init(adc_dev->spi_desc,
@@ -164,7 +164,7 @@ int main()
 		if (ret != SUCCESS)
 			return ret;
 
-		mdelay(1000);
+		no_os_mdelay(1000);
 
 		Xil_DCacheInvalidateRange(spi_engine_offload_message.rx_addr,
 					  AD77681_EVB_SAMPLE_NO * 4);

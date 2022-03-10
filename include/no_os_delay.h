@@ -51,9 +51,9 @@
 /******************************************************************************/
 
 /* Generate microseconds delay. */
-void udelay(uint32_t usecs);
+void no_os_udelay(uint32_t usecs);
 
 /* Generate miliseconds delay. */
-void mdelay(uint32_t msecs);
+void no_os_mdelay(uint32_t msecs);
 
 #endif // _NO_OS_DELAY_H_

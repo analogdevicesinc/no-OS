@@ -169,7 +169,7 @@ int mqtt_noos_read(Network* net, unsigned char* buff, int len, int timeout)
 				return sent;
 		}
 
-		mdelay(1);
+		no_os_mdelay(1);
 	} while (--timeout);
 
 	/* 0 bytes have been read */

@@ -147,7 +147,7 @@ static int32_t _xil_spi_init_dev(struct xspi_desc *xdesc)
 
 	/* Software reset */
 	_write(xdesc, XSP_SRR_OFFSET, XSP_SRR_RESET_MASK);
-	mdelay(1);
+	no_os_mdelay(1);
 
 	/* Check if success reset */
 	val = _read(xdesc, XSP_SR_OFFSET);

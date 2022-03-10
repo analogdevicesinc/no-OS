@@ -129,7 +129,7 @@ int main ()
 		pr_info(" Temp =%d"".%09u millidegress Celsius \n", (int)temp.integer,
 			(abs)(temp.fractional));
 
-		mdelay(1000);
+		no_os_mdelay(1000);
 	}
 
 error:

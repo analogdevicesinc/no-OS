@@ -133,11 +133,11 @@ adiHalErr_t ADIHAL_resetHw(void *devHalInfo)
 	struct adi_hal *devHalData = (struct adi_hal *)devHalInfo;
 
 	no_os_gpio_direction_output(devHalData->gpio_adrv_resetb, 1);
-	mdelay(10);
+	no_os_mdelay(10);
 	no_os_gpio_direction_output(devHalData->gpio_adrv_resetb, 0);
-	mdelay(10);
+	no_os_mdelay(10);
 	no_os_gpio_direction_output(devHalData->gpio_adrv_resetb, 1);
-	mdelay(10);
+	no_os_mdelay(10);
 
 	return ADIHAL_OK;
 }
@@ -152,7 +152,7 @@ adiHalErr_t ADIHAL_sysrefReq(void *devHalInfo, sysrefReqMode_t mode)
 		no_os_gpio_direction_output(devHalData->gpio_adrv_sysref_req, 0);
 	else if (mode == SYSREF_PULSE) {
 		no_os_gpio_direction_output(devHalData->gpio_adrv_sysref_req, 1);
-		mdelay(1);
+		no_os_mdelay(1);
 		no_os_gpio_direction_output(devHalData->gpio_adrv_sysref_req, 0);
 	} else
 		return ADIHAL_ERR;
@@ -262,7 +262,7 @@ adiHalErr_t ADIHAL_spiReadField(void *devHalInfo,
 
 adiHalErr_t  ADIHAL_wait_us(void *devHalInfo, uint32_t time_us)
 {
-	udelay(time_us);
+	no_os_udelay(time_us);
 
 	return ADIHAL_OK;
 }

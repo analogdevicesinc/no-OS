@@ -116,12 +116,12 @@ int32_t ad9152_setup(struct ad9152_dev **device,
 	}
 
 	// power-up and dac initialization
-	mdelay(5);
+	no_os_mdelay(5);
 
 	ad9152_spi_write(dev, REG_SPI_INTFCONFA, SOFTRESET_M | SOFTRESET);	// reset
 	ad9152_spi_write(dev, REG_SPI_INTFCONFA, 0x00);	// reset
 
-	mdelay(4);
+	no_os_mdelay(4);
 
 	ad9152_spi_write(dev, 0x011, 0x00);	// dacs - power up everything
 	ad9152_spi_write(dev, 0x080, 0x00);	// clocks - power up everything
@@ -170,7 +170,7 @@ int32_t ad9152_setup(struct ad9152_dev **device,
 	ad9152_spi_write(dev, 0x289, 0x04);	// data-rate == 10Gbps
 	ad9152_spi_write(dev, 0x280, 0x01);	// enable serdes pll
 	ad9152_spi_write(dev, 0x280, 0x05);	// enable serdes calibration
-	mdelay(20);
+	no_os_mdelay(20);
 
 	ad9152_spi_read(dev, 0x281, &pll_stat);
 	if (pll_stat == 0) {
@@ -241,7 +241,7 @@ int32_t ad9152_short_pattern_test(struct ad9152_dev *dev,
 					 ((sample << 4) | (dac << 2) | 0x03));
 			ad9152_spi_write(dev, 0x32c,
 					 ((sample << 4) | (dac << 2) | 0x01));
-			mdelay(1);
+			no_os_mdelay(1);
 
 			ad9152_spi_read(dev, 0x32f, &status);
 			if ((status & 0x1) == 0x1)
@@ -273,7 +273,7 @@ int32_t ad9152_datapath_prbs_test(struct ad9152_dev *dev,
 
 	ad9152_spi_write(dev, REG_PRBS, ((init_param.prbs_type << 2) | 0x03));
 	ad9152_spi_write(dev, REG_PRBS, ((init_param.prbs_type << 2) | 0x01));
-	mdelay(100);
+	no_os_mdelay(100);
 
 	ad9152_spi_read(dev, REG_PRBS, &status);
 	if ((status & 0xc0) != 0xc0) {

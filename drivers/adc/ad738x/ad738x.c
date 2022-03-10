@@ -333,7 +333,7 @@ int32_t ad738x_init(struct ad738x_dev **device,
 	ret = no_os_spi_init(&dev->spi_desc, init_param->spi_param);
 
 	ret |= ad738x_reset(dev, HARD_RESET);
-	mdelay(1000);
+	no_os_mdelay(1000);
 	/* 1-wire or 2-wire mode */
 	ret |= ad738x_set_conversion_mode(dev, dev->conv_mode);
 	/* Set internal or external reference */
@@ -343,7 +343,7 @@ int32_t ad738x_init(struct ad738x_dev **device,
 
 	if (!ret)
 		printf("ad738x successfully initialized\n");
-	mdelay(1000);
+	no_os_mdelay(1000);
 
 	return ret;
 }

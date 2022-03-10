@@ -257,7 +257,7 @@ adiHalErr_t talise_setup(taliseDevice_t * const pd, taliseInit_t * const pi)
 	}
 
 	/*** < wait 200ms for PLLs to lock - user code here > ***/
-	mdelay(200);
+	no_os_mdelay(200);
 
 	talAction = TALISE_getPllsLockStatus(pd, &pllLockStatus);
 	if ((pllLockStatus & 0x07) != 0x07) {
@@ -401,7 +401,7 @@ adiHalErr_t talise_setup(taliseDevice_t * const pd, taliseInit_t * const pi)
 
 	ADIHAL_sysrefReq(pd->devHalInfo, SYSREF_CONT_OFF);
 
-	mdelay(100);
+	no_os_mdelay(100);
 
 	/*** < Insert User JESD204B Sync Verification Code Here > ***/
 

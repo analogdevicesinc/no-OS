@@ -443,7 +443,7 @@ int main(void)
 		goto error_1;
 	}
 
-	mdelay(100);
+	no_os_mdelay(100);
 
 	status = ad9208_initialize(&ad9208_1_device, &ad9208_1_param);
 	if (status != SUCCESS) {

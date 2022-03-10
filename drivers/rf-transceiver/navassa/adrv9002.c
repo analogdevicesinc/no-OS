@@ -205,7 +205,7 @@ static int adrv9002_chan_to_state_poll(struct adrv9002_rf_phy *phy,
 
 		if (__state == state)
 			break;
-		udelay(1000);
+		no_os_udelay(1000);
 	} while (++try < n_tries);
 
 	if (try == n_tries)

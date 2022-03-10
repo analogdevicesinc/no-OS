@@ -406,7 +406,7 @@ int32_t no_os_timer_wait_us(void *devHalCfg, uint32_t time_us)
 {
 	int32_t halError = (int32_t)ADI_COMMON_ERR_OK;
 
-	udelay(time_us);
+	no_os_udelay(time_us);
 
 	return halError;
 }

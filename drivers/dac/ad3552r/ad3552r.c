@@ -1174,7 +1174,7 @@ int32_t ad3552r_reset(struct ad3552r_desc *desc)
 
 	if (desc->reset) {
 		no_os_gpio_set_value(desc->reset, NO_OS_GPIO_LOW);
-		mdelay(1);
+		no_os_mdelay(1);
 		no_os_gpio_set_value(desc->reset, NO_OS_GPIO_HIGH);
 	} else {
 		err = _ad3552r_update_reg_field(desc,
@@ -1215,7 +1215,7 @@ int32_t ad3552r_ldac_trigger(struct ad3552r_desc *desc, uint16_t mask)
 					 mask);
 
 	no_os_gpio_set_value(desc->ldac, NO_OS_GPIO_LOW);
-	udelay(AD3552R_LDAC_PULSE_US);
+	no_os_udelay(AD3552R_LDAC_PULSE_US);
 	no_os_gpio_set_value(desc->ldac, NO_OS_GPIO_HIGH);
 
 	return SUCCESS;

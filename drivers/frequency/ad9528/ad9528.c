@@ -214,7 +214,7 @@ int32_t ad9528_poll(struct ad9528_dev *dev,
 					&reg_data);
 		if (ret < 0)
 			return ret;
-		mdelay(1);
+		no_os_mdelay(1);
 	} while (((reg_data & mask) != data) && --timeout);
 
 	return timeout ? 0 : -1;
@@ -889,12 +889,12 @@ int32_t ad9528_reset(struct ad9528_dev *dev)
 		if(s < 0)
 			return s;
 
-		mdelay(100);
+		no_os_mdelay(100);
 
 		s = no_os_gpio_direction_output(dev->gpio_resetb, 1);
 		if(s < 0)
 			return s;
-		mdelay(100);
+		no_os_mdelay(100);
 	}
 
 	s = ad9528_spi_write_n(dev,
@@ -905,13 +905,13 @@ int32_t ad9528_reset(struct ad9528_dev *dev)
 	if (s < 0)
 		return s;
 
-	mdelay(100);
+	no_os_mdelay(100);
 
 	s = ad9528_spi_write_n(dev, AD9528_SERIAL_PORT_CONFIG_B, 0x00);
 	if(s < 0)
 		return s;
 
-	mdelay(100);
+	no_os_mdelay(100);
 
 	return 0;
 }

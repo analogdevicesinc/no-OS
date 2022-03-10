@@ -915,7 +915,7 @@ int32_t ad4110_setup(struct ad4110_dev **device,
 	ret = ad4110_spi_do_soft_reset(dev);
 	if (ret)
 		goto err_spi;
-	mdelay(10);
+	no_os_mdelay(10);
 
 	if(init_param.afe_crc_en != AD4110_AFE_CRC_DISABLE) {
 		ret = ad4110_spi_int_reg_write(dev,
@@ -1063,7 +1063,7 @@ int32_t ad4110_continuous_read(struct ad4110_dev *dev, int32_t *buffer,
 	if (ret)
 		return ret;
 	// make sure adc is fully initialized before irq enabling
-	mdelay(2U);
+	no_os_mdelay(2U);
 	ret = no_os_irq_enable(dev->irq_desc, dev->nready_pin);
 	if (ret)
 		return ret;

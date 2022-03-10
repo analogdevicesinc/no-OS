@@ -52,7 +52,7 @@
  * @param usecs - Delay in microseconds.
  * @return None.
  */
-void udelay(uint32_t usecs)
+void no_os_udelay(uint32_t usecs)
 {
 	if (usecs) {
 		// Unused variable - fix compiler warning
@@ -64,7 +64,7 @@ void udelay(uint32_t usecs)
  * @param msecs - Delay in miliseconds.
  * @return None.
  */
-void mdelay(uint32_t msecs)
+void no_os_mdelay(uint32_t msecs)
 {
 	if (msecs) {
 		// Unused variable - fix compiler warning

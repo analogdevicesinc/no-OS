@@ -124,7 +124,7 @@ int32_t adxcvr_drp_wait_idle(struct adxcvr *xcvr,
 		if (!(val & ADXCVR_DRP_STATUS_BUSY))
 			return ADXCVR_DRP_STATUS_RDATA(val);
 
-		mdelay(1);
+		no_os_mdelay(1);
 	} while (timeout--);
 
 	printf("%s: %s: Timeout!", xcvr->name, __func__);
@@ -275,7 +275,7 @@ int32_t adxcvr_status_error(struct adxcvr *xcvr)
 	uint32_t status;
 
 	do {
-		mdelay(1);
+		no_os_mdelay(1);
 		adxcvr_read(xcvr, ADXCVR_REG_STATUS, &status);
 	} while ((timeout--) && (status == 0));
 
@@ -293,7 +293,7 @@ int32_t adxcvr_status_error(struct adxcvr *xcvr)
 int32_t adxcvr_clk_enable(struct adxcvr *xcvr)
 {
 	adxcvr_write(xcvr, ADXCVR_REG_RESETN, ADXCVR_RESETN);
-	mdelay(100);
+	no_os_mdelay(100);
 
 	return adxcvr_status_error(xcvr);
 }

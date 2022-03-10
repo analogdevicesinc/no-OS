@@ -208,7 +208,7 @@ int32_t ad9083_log_write(void *user_data, int32_t log_type, const char *message,
  */
 static int ad9083_udelay(void *user_data, unsigned int us)
 {
-	udelay(us);
+	no_os_udelay(us);
 
 	return SUCCESS;
 }
@@ -249,12 +249,12 @@ static int32_t ad9083_link_reset(struct ad9083_phy *device, uint8_t uc)
 	if (ret != SUCCESS)
 		return ret;
 
-	mdelay(1);
+	no_os_mdelay(1);
 	ret = adi_ad9083_jesd_tx_link_digital_reset(&device->adi_ad9083, 0);
 	if (ret != SUCCESS)
 		return ret;
 
-	mdelay(1);
+	no_os_mdelay(1);
 
 	return SUCCESS;
 }

@@ -303,7 +303,7 @@ int32_t ad7124_reset(struct ad7124_dev *dev)
 	ret = ad7124_wait_to_power_on(dev,
 				      dev->spi_rdy_poll_cnt);
 
-	mdelay(AD7124_POST_RESET_DELAY);
+	no_os_mdelay(AD7124_POST_RESET_DELAY);
 
 	return ret;
 }

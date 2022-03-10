@@ -505,9 +505,9 @@ static int32_t hmc7044_setup(struct hmc7044_dev *dev)
 
 	/* Resets all registers to default values */
 	hmc7044_write(dev, HMC7044_REG_SOFT_RESET, HMC7044_SOFT_RESET);
-	mdelay(10);
+	no_os_mdelay(10);
 	hmc7044_write(dev, HMC7044_REG_SOFT_RESET, 0);
-	mdelay(10);
+	no_os_mdelay(10);
 
 	/* Disable all channels */
 	for (i = 0; i < HMC7044_NUM_CHAN; i++)
@@ -613,7 +613,7 @@ static int32_t hmc7044_setup(struct hmc7044_dev *dev)
 			      dev->gpo_ctrl[i]);
 	}
 
-	mdelay(10);
+	no_os_mdelay(10);
 
 	/* Program the output channels */
 	for (i = 0; i < dev->num_channels; i++) {
@@ -648,16 +648,16 @@ static int32_t hmc7044_setup(struct hmc7044_dev *dev)
 			       0 : HMC7044_HI_PERF_MODE) | HMC7044_SYNC_EN |
 			      HMC7044_CH_EN);
 	}
-	mdelay(10);
+	no_os_mdelay(10);
 
 	/* Do a restart to reset the system and initiate calibration */
 	hmc7044_write(dev, HMC7044_REG_REQ_MODE_0,
 		      HMC7044_RESTART_DIV_FSM);
-	mdelay(1);
+	no_os_mdelay(1);
 	hmc7044_write(dev, HMC7044_REG_REQ_MODE_0,
 		      (dev->high_performance_mode_clock_dist_en ?
 		       HMC7044_HIGH_PERF_DISTRIB_PATH : 0));
-	mdelay(1);
+	no_os_mdelay(1);
 
 	return SUCCESS;
 }
@@ -684,9 +684,9 @@ static int32_t hmc7043_setup(struct hmc7044_dev *dev)
 
 	/* Resets all registers to default values */
 	hmc7044_write(dev, HMC7044_REG_SOFT_RESET, HMC7044_SOFT_RESET);
-	mdelay(10);
+	no_os_mdelay(10);
 	hmc7044_write(dev, HMC7044_REG_SOFT_RESET, 0);
-	mdelay(10);
+	no_os_mdelay(10);
 
 	/* Load the configuration updates (provided by Analog Devices) */
 	hmc7044_write(dev, HMC7044_REG_CLK_OUT_DRV_LOW_PW, 0x4d);
@@ -763,17 +763,17 @@ static int32_t hmc7043_setup(struct hmc7044_dev *dev)
 			       0 : HMC7044_HI_PERF_MODE) | HMC7044_SYNC_EN |
 			      HMC7044_CH_EN);
 	}
-	mdelay(10);
+	no_os_mdelay(10);
 
 
 	/* Do a restart to reset the system and initiate calibration */
 	hmc7044_write(dev, HMC7044_REG_REQ_MODE_0,
 		      HMC7044_RESTART_DIV_FSM);
-	mdelay(1);
+	no_os_mdelay(1);
 	hmc7044_write(dev, HMC7044_REG_REQ_MODE_0,
 		      (dev->high_performance_mode_clock_dist_en ?
 		       HMC7044_HIGH_PERF_DISTRIB_PATH : 0));
-	mdelay(1);
+	no_os_mdelay(1);
 
 	return SUCCESS;
 }
