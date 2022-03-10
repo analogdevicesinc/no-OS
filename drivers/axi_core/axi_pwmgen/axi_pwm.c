@@ -91,11 +91,11 @@ static int32_t axi_pwmgen_write_mask(uint32_t base, uint32_t offset,
 	int32_t ret;
 	uint32_t temp;
 
-	ret = axi_io_read(base, offset, &temp);
+	ret = no_os_axi_io_read(base, offset, &temp);
 	if (ret != 0)
 		return ret;
 
-	return axi_io_write(base, offset, (temp & ~mask) | (data & mask));
+	return no_os_axi_io_write(base, offset, (temp & ~mask) | (data & mask));
 }
 
 /**
@@ -109,14 +109,14 @@ int32_t no_os_pwm_enable(struct no_os_pwm_desc *desc)
 	struct axi_pwm_desc *axi_desc = desc->extra;
 	int ret;
 
-	ret = axi_io_write(axi_desc->base_addr,
-			   AXI_PWMGEN_CHX_PERIOD(axi_desc->channel),
-			   axi_desc->ch_period);
+	ret = no_os_axi_io_write(axi_desc->base_addr,
+				 AXI_PWMGEN_CHX_PERIOD(axi_desc->channel),
+				 axi_desc->ch_period);
 	if (ret != SUCCESS)
 		return ret;
 
-	return axi_io_write(axi_desc->base_addr, AXI_PWMGEN_REG_CONFIG,
-			    AXI_PWMGEN_LOAD_CONIG);
+	return no_os_axi_io_write(axi_desc->base_addr, AXI_PWMGEN_REG_CONFIG,
+				  AXI_PWMGEN_LOAD_CONIG);
 }
 
 /**
@@ -130,14 +130,14 @@ int32_t no_os_pwm_disable(struct no_os_pwm_desc *desc)
 	struct axi_pwm_desc *axi_desc = desc->extra;
 	int ret;
 
-	ret = axi_io_write(axi_desc->base_addr,
-			   AXI_PWMGEN_CHX_PERIOD(axi_desc->channel),
-			   AXI_PWMGEN_CHANNEL_DISABLE);
+	ret = no_os_axi_io_write(axi_desc->base_addr,
+				 AXI_PWMGEN_CHX_PERIOD(axi_desc->channel),
+				 AXI_PWMGEN_CHANNEL_DISABLE);
 	if (ret != SUCCESS)
 		return ret;
 
-	return axi_io_write(axi_desc->base_addr, AXI_PWMGEN_REG_CONFIG,
-			    AXI_PWMGEN_LOAD_CONIG);
+	return no_os_axi_io_write(axi_desc->base_addr, AXI_PWMGEN_REG_CONFIG,
+				  AXI_PWMGEN_LOAD_CONIG);
 }
 
 /**
@@ -157,9 +157,9 @@ int32_t no_os_pwm_set_period(struct no_os_pwm_desc *desc, uint32_t period_ns)
 	tmp = (axi_desc->ref_clock_Hz / NSEC_PER_USEC) * period_ns;
 	period_cnt = NO_OS_DIV_ROUND_UP(tmp, USEC_PER_SEC);
 	axi_desc->ch_period = period_cnt;
-	ret = axi_io_write(axi_desc->base_addr,
-			   AXI_PWMGEN_CHX_PERIOD(axi_desc->channel),
-			   desc->enabled ? period_cnt : 0);
+	ret = no_os_axi_io_write(axi_desc->base_addr,
+				 AXI_PWMGEN_CHX_PERIOD(axi_desc->channel),
+				 desc->enabled ? period_cnt : 0);
 	if (ret != SUCCESS)
 		return ret;
 
@@ -203,9 +203,9 @@ int32_t no_os_pwm_set_duty_cycle(struct no_os_pwm_desc *desc,
 	/* Downscale by 1000 */
 	tmp = (axi_desc->ref_clock_Hz / NSEC_PER_USEC) * duty_cycle_ns;
 	duty_cnt = NO_OS_DIV_ROUND_UP(tmp, USEC_PER_SEC);
-	ret = axi_io_write(axi_desc->base_addr,
-			   AXI_PWMGEN_CHX_DUTY(axi_desc->channel),
-			   duty_cnt);
+	ret = no_os_axi_io_write(axi_desc->base_addr,
+				 AXI_PWMGEN_CHX_DUTY(axi_desc->channel),
+				 duty_cnt);
 	if (ret != SUCCESS)
 		return ret;
 
@@ -245,9 +245,9 @@ int32_t no_os_pwm_set_phase(struct no_os_pwm_desc *desc, uint32_t phase_ns)
 	/* Downscale by 1000 */
 	tmp = (axi_desc->ref_clock_Hz / NSEC_PER_USEC) * phase_ns;
 	phase_cnt = NO_OS_DIV_ROUND_UP(tmp, USEC_PER_SEC);
-	ret = axi_io_write(axi_desc->base_addr,
-			   AXI_PWMGEN_CHX_PHASE(axi_desc->channel),
-			   phase_cnt);
+	ret = no_os_axi_io_write(axi_desc->base_addr,
+				 AXI_PWMGEN_CHX_PHASE(axi_desc->channel),
+				 phase_cnt);
 	if (ret != SUCCESS)
 		return ret;
 
@@ -307,9 +307,9 @@ int32_t no_os_pwm_init(struct no_os_pwm_desc **desc,
 	pwm_desc->period_ns = param->period_ns;
 	pwm_desc->polarity = param->polarity;
 
-	ret = axi_io_read(axi_desc->base_addr,
-			  AXI_PWMGEN_REG_NPWM,
-			  &data);
+	ret = no_os_axi_io_read(axi_desc->base_addr,
+				AXI_PWMGEN_REG_NPWM,
+				&data);
 	if (ret != SUCCESS)
 		goto error_xdesc;
 
@@ -322,14 +322,14 @@ int32_t no_os_pwm_init(struct no_os_pwm_desc **desc,
 	if (ret != SUCCESS)
 		goto error_xdesc;
 
-	ret = axi_io_write(axi_desc->base_addr, AXI_PWMGEN_REG_SCRATCHPAD,
-			   AXI_PWMGEN_TEST_DATA);
+	ret = no_os_axi_io_write(axi_desc->base_addr, AXI_PWMGEN_REG_SCRATCHPAD,
+				 AXI_PWMGEN_TEST_DATA);
 	if (ret != SUCCESS)
 		goto error_xdesc;
 
-	ret = axi_io_read(axi_desc->base_addr,
-			  AXI_PWMGEN_REG_SCRATCHPAD,
-			  &data);
+	ret = no_os_axi_io_read(axi_desc->base_addr,
+				AXI_PWMGEN_REG_SCRATCHPAD,
+				&data);
 	if (ret != SUCCESS)
 		goto error_xdesc;
 
@@ -377,9 +377,9 @@ int32_t no_os_pwm_remove(struct no_os_pwm_desc *desc)
 	if (!desc)
 		return FAILURE;
 
-	ret = axi_io_write(axi_desc->base_addr,
-			   AXI_PWMGEN_REG_CONFIG,
-			   AXI_PWMGEN_RESET);
+	ret = no_os_axi_io_write(axi_desc->base_addr,
+				 AXI_PWMGEN_REG_CONFIG,
+				 AXI_PWMGEN_RESET);
 	if (ret != SUCCESS)
 		return FAILURE;
 

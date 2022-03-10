@@ -166,7 +166,7 @@ close:
  * @param data - Location where read data will be stored.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t axi_io_read(uint32_t base, uint32_t offset, uint32_t *data)
+int32_t no_os_axi_io_read(uint32_t base, uint32_t offset, uint32_t *data)
 {
 #ifdef DEVMEM
 	return devmem_read_write(base, offset, data, NULL);
@@ -182,7 +182,7 @@ int32_t axi_io_read(uint32_t base, uint32_t offset, uint32_t *data)
  * @param data - Data to be written.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t axi_io_write(uint32_t base, uint32_t offset, uint32_t data)
+int32_t no_os_axi_io_write(uint32_t base, uint32_t offset, uint32_t data)
 {
 #ifdef DEVMEM
 	return devmem_read_write(base, offset, NULL, &data);

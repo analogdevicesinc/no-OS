@@ -110,7 +110,7 @@ const char *axi_jesd204_tx_link_status_label[] = {
 int32_t axi_jesd204_tx_write(struct axi_jesd204_tx *jesd,
 			     uint32_t reg_addr, uint32_t reg_val)
 {
-	axi_io_write(jesd->base, reg_addr, reg_val);
+	no_os_axi_io_write(jesd->base, reg_addr, reg_val);
 
 	return SUCCESS;
 }
@@ -121,7 +121,7 @@ int32_t axi_jesd204_tx_write(struct axi_jesd204_tx *jesd,
 int32_t axi_jesd204_tx_read(struct axi_jesd204_tx *jesd,
 			    uint32_t reg_addr, uint32_t *reg_val)
 {
-	axi_io_read(jesd->base, reg_addr, reg_val);
+	no_os_axi_io_read(jesd->base, reg_addr, reg_val);
 
 	return SUCCESS;
 }

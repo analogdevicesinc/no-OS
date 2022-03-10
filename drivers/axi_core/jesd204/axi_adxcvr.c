@@ -93,7 +93,7 @@ int32_t adxcvr_write(struct adxcvr *xcvr,
 		     uint32_t reg_addr,
 		     uint32_t reg_val)
 {
-	axi_io_write(xcvr->base, reg_addr, reg_val);
+	no_os_axi_io_write(xcvr->base, reg_addr, reg_val);
 
 	return SUCCESS;
 }
@@ -105,7 +105,7 @@ int32_t adxcvr_read(struct adxcvr *xcvr,
 		    uint32_t reg_addr,
 		    uint32_t *reg_val)
 {
-	axi_io_read(xcvr->base, reg_addr, reg_val);
+	no_os_axi_io_read(xcvr->base, reg_addr, reg_val);
 
 	return SUCCESS;
 }
