@@ -354,7 +354,7 @@ void adc_test(struct axi_adc *adc,
 	}
 
 	for (n = 0; n < 32; n++) {
-		axi_io_read(ADC_DDR_BASEADDR, n*4, &rdata);
+		no_os_axi_io_read(ADC_DDR_BASEADDR, n*4, &rdata);
 		if ((mode == MIDSCALE) && (format == OFFSET_BINARY))
 			edata = 0x80008000;
 		if ((mode == POS_FULLSCALE) && (format == OFFSET_BINARY))

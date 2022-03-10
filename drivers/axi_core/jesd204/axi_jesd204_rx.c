@@ -154,7 +154,7 @@ const char *axi_jesd204_rx_emb_state_label[] = {
 int32_t axi_jesd204_rx_write(struct axi_jesd204_rx *jesd,
 			     uint32_t reg_addr, uint32_t reg_val)
 {
-	axi_io_write(jesd->base, reg_addr, reg_val);
+	no_os_axi_io_write(jesd->base, reg_addr, reg_val);
 
 	return SUCCESS;
 }
@@ -165,7 +165,7 @@ int32_t axi_jesd204_rx_write(struct axi_jesd204_rx *jesd,
 int32_t axi_jesd204_rx_read(struct axi_jesd204_rx *jesd,
 			    uint32_t reg_addr, uint32_t *reg_val)
 {
-	axi_io_read(jesd->base, reg_addr, reg_val);
+	no_os_axi_io_read(jesd->base, reg_addr, reg_val);
 
 	return SUCCESS;
 }

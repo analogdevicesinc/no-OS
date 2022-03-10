@@ -201,10 +201,10 @@ int32_t ad7616_par_read(struct ad7616_dev *dev,
 {
 	uint32_t read;
 
-	axi_io_write(dev->core_baseaddr, AD7616_REG_UP_WRITE_DATA,
-		     0x0000 | ((reg_addr & 0x3F) << 9));
+	no_os_axi_io_write(dev->core_baseaddr, AD7616_REG_UP_WRITE_DATA,
+			   0x0000 | ((reg_addr & 0x3F) << 9));
 	udelay(50);
-	axi_io_read(dev->core_baseaddr, AD7616_REG_UP_READ_DATA, &read);
+	no_os_axi_io_read(dev->core_baseaddr, AD7616_REG_UP_READ_DATA, &read);
 	*reg_data = read & 0xFF;
 	mdelay(1);
 
@@ -222,8 +222,8 @@ int32_t ad7616_par_write(struct ad7616_dev *dev,
 			 uint8_t reg_addr,
 			 uint16_t reg_data)
 {
-	axi_io_write(dev->core_baseaddr, AD7616_REG_UP_WRITE_DATA,
-		     0x8000 | ((reg_addr & 0x3F) << 9) | (reg_data & 0xFF));
+	no_os_axi_io_write(dev->core_baseaddr, AD7616_REG_UP_WRITE_DATA,
+			   0x8000 | ((reg_addr & 0x3F) << 9) | (reg_data & 0xFF));
 	mdelay(1);
 
 	return 0;
@@ -408,14 +408,14 @@ int32_t ad7616_read_data_serial(struct ad7616_dev *dev,
 	msg.no_commands = NO_OS_ARRAY_SIZE(spi_eng_msg_cmds);
 	msg.rx_addr = (uint32_t)buf;
 
-	axi_io_write(dev->core_baseaddr, AD7616_REG_UP_CTRL,
-		     AD7616_CTRL_RESETN | AD7616_CTRL_CNVST_EN);
+	no_os_axi_io_write(dev->core_baseaddr, AD7616_REG_UP_CTRL,
+			   AD7616_CTRL_RESETN | AD7616_CTRL_CNVST_EN);
 
 	ret = spi_engine_offload_transfer(dev->spi_desc, msg, samples);
 	if (ret != SUCCESS)
 		return ret;
 
-	axi_io_write(dev->core_baseaddr, AD7616_REG_UP_CTRL, AD7616_CTRL_RESETN);
+	no_os_axi_io_write(dev->core_baseaddr, AD7616_REG_UP_CTRL, AD7616_CTRL_RESETN);
 
 	if (dev->dcache_invalidate_range)
 		dev->dcache_invalidate_range(msg.rx_addr, samples * 2);
@@ -448,14 +448,14 @@ int32_t ad7616_read_data_parallel(struct ad7616_dev *dev,
 	if(!dmac)
 		return FAILURE;
 
-	axi_io_write(dev->core_baseaddr, AD7616_REG_UP_CTRL,
-		     AD7616_CTRL_RESETN | AD7616_CTRL_CNVST_EN);
+	no_os_axi_io_write(dev->core_baseaddr, AD7616_REG_UP_CTRL,
+			   AD7616_CTRL_RESETN | AD7616_CTRL_CNVST_EN);
 
 	ret = axi_dmac_transfer(dmac, (uint32_t)&buf, samples);
 	if (ret != SUCCESS)
 		return ret;
 
-	axi_io_write(dev->core_baseaddr, AD7616_REG_UP_CTRL, AD7616_CTRL_RESETN);
+	no_os_axi_io_write(dev->core_baseaddr, AD7616_REG_UP_CTRL, AD7616_CTRL_RESETN);
 
 	return SUCCESS;
 }
@@ -469,17 +469,17 @@ int32_t ad7616_core_setup(struct ad7616_dev *dev)
 {
 	uint32_t type;
 
-	axi_io_write(dev->core_baseaddr, AD7616_REG_UP_CTRL, 0x00);
+	no_os_axi_io_write(dev->core_baseaddr, AD7616_REG_UP_CTRL, 0x00);
 	mdelay(10);
-	axi_io_write(dev->core_baseaddr, AD7616_REG_UP_CTRL, AD7616_CTRL_RESETN);
-	axi_io_write(dev->core_baseaddr, AD7616_REG_UP_CONV_RATE, 100);
-	axi_io_write(dev->core_baseaddr, AD7616_REG_UP_CTRL,
-		     AD7616_CTRL_RESETN | AD7616_CTRL_CNVST_EN);
+	no_os_axi_io_write(dev->core_baseaddr, AD7616_REG_UP_CTRL, AD7616_CTRL_RESETN);
+	no_os_axi_io_write(dev->core_baseaddr, AD7616_REG_UP_CONV_RATE, 100);
+	no_os_axi_io_write(dev->core_baseaddr, AD7616_REG_UP_CTRL,
+			   AD7616_CTRL_RESETN | AD7616_CTRL_CNVST_EN);
 	mdelay(10);
-	axi_io_write(dev->core_baseaddr, AD7616_REG_UP_CTRL, AD7616_CTRL_RESETN);
+	no_os_axi_io_write(dev->core_baseaddr, AD7616_REG_UP_CTRL, AD7616_CTRL_RESETN);
 	mdelay(10);
 
-	axi_io_read(dev->core_baseaddr, AD7616_REG_UP_IF_TYPE, &type);
+	no_os_axi_io_read(dev->core_baseaddr, AD7616_REG_UP_IF_TYPE, &type);
 
 	if (type)
 		dev->interface = AD7616_PARALLEL;

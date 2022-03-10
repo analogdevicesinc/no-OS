@@ -343,7 +343,7 @@ int32_t axi_dac_read(struct axi_dac *dac,
 		     uint32_t reg_addr,
 		     uint32_t *reg_data)
 {
-	axi_io_read(dac->base, reg_addr, reg_data);
+	no_os_axi_io_read(dac->base, reg_addr, reg_data);
 
 	return SUCCESS;
 }
@@ -355,7 +355,7 @@ int32_t axi_dac_write(struct axi_dac *dac,
 		      uint32_t reg_addr,
 		      uint32_t reg_data)
 {
-	axi_io_write(dac->base, reg_addr, reg_data);
+	no_os_axi_io_write(dac->base, reg_addr, reg_data);
 
 	return SUCCESS;
 }
@@ -712,7 +712,7 @@ uint32_t axi_dac_set_sine_lut(struct axi_dac *dac,
 			data_i1 = (sine_lut[index_i1 / 2] << 20);
 			data_q1 = (sine_lut[index_q1 / 2] << 4);
 
-			axi_io_write(address, index_mem * 4, data_i1 | data_q1);
+			no_os_axi_io_write(address, index_mem * 4, data_i1 | data_q1);
 
 			index_i2 = index_i1;
 			index_q2 = index_q1;
@@ -723,7 +723,7 @@ uint32_t axi_dac_set_sine_lut(struct axi_dac *dac,
 			data_i2 = (sine_lut[index_i2 / 2] << 20);
 			data_q2 = (sine_lut[index_q2 / 2] << 4);
 
-			axi_io_write(address, (index_mem + 1) * 4, data_i2 | data_q2);
+			no_os_axi_io_write(address, (index_mem + 1) * 4, data_i2 | data_q2);
 
 		}
 	} else {
@@ -735,7 +735,7 @@ uint32_t axi_dac_set_sine_lut(struct axi_dac *dac,
 			data_i1 = (sine_lut[index_i1] << 20);
 			data_q1 = (sine_lut[index_q1] << 4);
 
-			axi_io_write(address, index * 4, data_i1 | data_q1);
+			no_os_axi_io_write(address, index * 4, data_i1 | data_q1);
 		}
 	}
 
@@ -759,7 +759,7 @@ int32_t axi_dac_set_buff(struct axi_dac *dac,
 		data_i = (buff[index]);
 		data_q = (buff[index + 1] << 16);
 
-		axi_io_write(address, index * 2, data_i | data_q);
+		no_os_axi_io_write(address, index * 2, data_i | data_q);
 	}
 
 	return SUCCESS;
@@ -781,8 +781,8 @@ int32_t axi_dac_load_custom_data(struct axi_dac *dac,
 		/* Send the same data on all the channels */
 		for (chan = 0; chan < num_tx_channels; chan++) {
 
-			axi_io_write(address, index_mem * sizeof(uint32_t),
-				     custom_data_iq[index]);
+			no_os_axi_io_write(address, index_mem * sizeof(uint32_t),
+					   custom_data_iq[index]);
 
 			index_mem++;
 		}

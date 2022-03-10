@@ -56,7 +56,7 @@
  * @param data - variable where returned data is stored
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t axi_io_read(uint32_t base, uint32_t offset, uint32_t *data)
+int32_t no_os_axi_io_read(uint32_t base, uint32_t offset, uint32_t *data)
 {
 	*data = Xil_In32(base + offset);
 
@@ -70,7 +70,7 @@ int32_t axi_io_read(uint32_t base, uint32_t offset, uint32_t *data)
  * @param data - data to be written.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t axi_io_write(uint32_t base, uint32_t offset, uint32_t data)
+int32_t no_os_axi_io_write(uint32_t base, uint32_t offset, uint32_t data)
 {
 	Xil_Out32(base + offset, data);
 

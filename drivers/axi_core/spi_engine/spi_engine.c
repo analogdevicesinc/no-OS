@@ -93,7 +93,7 @@ int32_t spi_engine_write(struct spi_engine_desc *desc,
 			 uint32_t reg_addr,
 			 uint32_t reg_data)
 {
-	axi_io_write(desc->spi_engine_baseaddr, reg_addr, reg_data);
+	no_os_axi_io_write(desc->spi_engine_baseaddr, reg_addr, reg_data);
 
 	return SUCCESS;
 }
@@ -111,7 +111,7 @@ int32_t spi_engine_read(struct spi_engine_desc *desc,
 			uint32_t reg_addr,
 			uint32_t *reg_data)
 {
-	axi_io_read(desc->spi_engine_baseaddr, reg_addr, reg_data);
+	no_os_axi_io_read(desc->spi_engine_baseaddr, reg_addr, reg_data);
 	return SUCCESS;
 }
 

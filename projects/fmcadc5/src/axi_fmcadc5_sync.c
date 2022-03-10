@@ -9,7 +9,7 @@ static inline int i5g_read(struct s_i5g *st, int reg)
 {
 	uint32_t data;
 
-	axi_io_read(st->regs, reg, &data);
+	no_os_axi_io_read(st->regs, reg, &data);
 
 	return data;
 }
@@ -17,7 +17,7 @@ static inline int i5g_read(struct s_i5g *st, int reg)
 /* Simple write */
 static inline void i5g_write(struct s_i5g *st, int reg, int val)
 {
-	axi_io_write(st->regs, reg, val);
+	no_os_axi_io_write(st->regs, reg, val);
 	return;
 }
 

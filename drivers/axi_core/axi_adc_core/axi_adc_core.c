@@ -56,7 +56,7 @@ int32_t axi_adc_read(struct axi_adc *adc,
 		     uint32_t reg_addr,
 		     uint32_t *reg_data)
 {
-	axi_io_read(adc->base, reg_addr, reg_data);
+	no_os_axi_io_read(adc->base, reg_addr, reg_data);
 
 	return SUCCESS;
 }
@@ -68,7 +68,7 @@ int32_t axi_adc_write(struct axi_adc *adc,
 		      uint32_t reg_addr,
 		      uint32_t reg_data)
 {
-	axi_io_write(adc->base, reg_addr, reg_data);
+	no_os_axi_io_write(adc->base, reg_addr, reg_data);
 
 	return SUCCESS;
 }

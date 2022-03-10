@@ -161,7 +161,7 @@ int32_t axi_clkgen_write(struct axi_clkgen *clkgen,
 			 uint32_t reg_addr,
 			 uint32_t reg_val)
 {
-	axi_io_write(clkgen->base, reg_addr, reg_val);
+	no_os_axi_io_write(clkgen->base, reg_addr, reg_val);
 
 	return 0;
 }
@@ -173,7 +173,7 @@ int32_t axi_clkgen_read(struct axi_clkgen *clkgen,
 			uint32_t reg_addr,
 			uint32_t *reg_val)
 {
-	axi_io_read(clkgen->base, reg_addr, reg_val);
+	no_os_axi_io_read(clkgen->base, reg_addr, reg_val);
 
 	return 0;
 }
