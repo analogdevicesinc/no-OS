@@ -42,13 +42,14 @@
 #include <stdint.h>
 #include <stddef.h>
 
-#define CRC24_TABLE_SIZE 256
+#define NO_OS_CRC24_TABLE_SIZE 256
 
-#define DECLARE_CRC24_TABLE(_table) \
-	static uint32_t _table[CRC24_TABLE_SIZE]
+#define NO_OS_DECLARE_CRC24_TABLE(_table) \
+	static uint32_t _table[NO_OS_CRC24_TABLE_SIZE]
 
-void crc24_populate_msb(uint32_t * table, const uint32_t polynomial);
-uint32_t crc24(const uint32_t * table, const uint8_t *pdata, size_t nbytes,
-	       uint32_t crc);
+void no_os_crc24_populate_msb(uint32_t * table, const uint32_t polynomial);
+uint32_t no_os_crc24(const uint32_t * table, const uint8_t *pdata,
+		     size_t nbytes,
+		     uint32_t crc);
 
 #endif // _NO_OS_CRC24_H_

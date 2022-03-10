@@ -383,7 +383,7 @@ struct ad3552r_desc {
 	struct no_os_gpio_desc *ldac;
 	struct no_os_gpio_desc *reset;
 	struct ad3552r_ch_data ch_data[AD3552R_NUM_CH];
-	uint8_t crc_table[CRC8_TABLE_SIZE];
+	uint8_t crc_table[NO_OS_CRC8_TABLE_SIZE];
 	uint8_t chip_id;
 	uint8_t crc_en : 1;
 };

@@ -410,12 +410,12 @@ uint32_t adas1000_compute_frame_crc(struct adas1000_dev * device, uint8_t *buff)
 
 	/** Select the CRC poly and word size based on the frame rate. */
 	if(device->frame_rate == ADAS1000_128KHZ_FRAME_RATE) {
-		DECLARE_CRC16_TABLE(adas1000_crc16);
-		crc16_populate_msb(adas1000_crc16, CRC_POLY_128KHZ);
-		return crc16(adas1000_crc16, buff, device->frame_size, (uint16_t)crc);
+		NO_OS_DECLARE_CRC16_TABLE(adas1000_crc16);
+		no_os_crc16_populate_msb(adas1000_crc16, CRC_POLY_128KHZ);
+		return no_os_crc16(adas1000_crc16, buff, device->frame_size, (uint16_t)crc);
 	} else {
-		DECLARE_CRC24_TABLE(adas1000_crc24);
-		crc24_populate_msb(adas1000_crc24, CRC_POLY_2KHZ_16KHZ);
-		return crc24(adas1000_crc24, buff, device->frame_size, crc);
+		NO_OS_DECLARE_CRC24_TABLE(adas1000_crc24);
+		no_os_crc24_populate_msb(adas1000_crc24, CRC_POLY_2KHZ_16KHZ);
+		return no_os_crc24(adas1000_crc24, buff, device->frame_size, crc);
 	}
 }

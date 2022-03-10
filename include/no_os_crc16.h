@@ -42,13 +42,14 @@
 #include <stdint.h>
 #include <stddef.h>
 
-#define CRC16_TABLE_SIZE 256
+#define NO_OS_CRC16_TABLE_SIZE 256
 
-#define DECLARE_CRC16_TABLE(_table) \
-	static uint16_t _table[CRC16_TABLE_SIZE]
+#define NO_OS_DECLARE_CRC16_TABLE(_table) \
+	static uint16_t _table[NO_OS_CRC16_TABLE_SIZE]
 
-void crc16_populate_msb(uint16_t * table, const uint16_t polynomial);
-uint16_t crc16(const uint16_t * table, const uint8_t *pdata, size_t nbytes,
-	       uint16_t crc);
+void no_os_crc16_populate_msb(uint16_t * table, const uint16_t polynomial);
+uint16_t no_os_crc16(const uint16_t * table, const uint8_t *pdata,
+		     size_t nbytes,
+		     uint16_t crc);
 
 #endif // _NO_OS_CRC16_H_
