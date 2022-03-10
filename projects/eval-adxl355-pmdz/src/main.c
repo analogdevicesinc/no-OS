@@ -19,7 +19,7 @@
 
 int main ()
 {
-	struct uart_desc *uart;
+	struct no_os_uart_desc *uart;
 	struct adxl355_dev *adxl355;
 
 	int ret;
@@ -49,16 +49,16 @@ int main ()
 	struct stm32_uart_init_param xuip = {
 		.huart = &huart5,
 	};
-	struct uart_init_param uip = {
+	struct no_os_uart_init_param uip = {
 		.device_id = 5,
 		.baud_rate = 115200,
-		.size = UART_CS_8,
-		.parity = UART_PAR_NO,
-		.stop = UART_STOP_1_BIT,
+		.size = NO_OS_UART_CS_8,
+		.parity = NO_OS_UART_PAR_NO,
+		.stop = NO_OS_UART_STOP_1_BIT,
 		.extra = &xuip,
 	};
 
-	ret = uart_init(&uart, &uip);
+	ret = no_os_uart_init(&uart, &uip);
 	if (ret < 0)
 		goto error;
 

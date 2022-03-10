@@ -84,39 +84,39 @@ static inline uint32_t _calc_uart_xfer_time(uint32_t len, uint32_t baudrate)
 }
 
 #if !defined(LINUX_PLATFORM) && !defined(USE_TCP_SOCKET)
-static int32_t iio_print_uart_info_message(struct uart_desc **uart_desc,
-		struct uart_init_param *uart_init_par,
+static int32_t iio_print_uart_info_message(struct no_os_uart_desc **uart_desc,
+		struct no_os_uart_init_param *uart_init_par,
 		char *message, int32_t msglen)
 {
 	int32_t status;
 	uint32_t delay_ms;
 
 	if (UART_BAUDRATE_DEFAULT != UART_BAUDRATE) {
-		uart_remove(*uart_desc);
+		no_os_uart_remove(*uart_desc);
 
 		uart_init_par->baud_rate = UART_BAUDRATE_DEFAULT;
-		status = uart_init(uart_desc, uart_init_par);
+		status = no_os_uart_init(uart_desc, uart_init_par);
 		if (status < 0)
 			return status;
 	}
-	status = uart_write(*uart_desc, (uint8_t *)message, msglen);
+	status = no_os_uart_write(*uart_desc, (uint8_t *)message, msglen);
 	if (status < 0)
 		return status;
 
 	delay_ms = _calc_uart_xfer_time(msglen, UART_BAUDRATE_DEFAULT);
 	mdelay(delay_ms);
 	if (UART_BAUDRATE_DEFAULT != UART_BAUDRATE) {
-		uart_remove(*uart_desc);
+		no_os_uart_remove(*uart_desc);
 		uart_init_par->baud_rate = UART_BAUDRATE;
-		return uart_init(uart_desc, uart_init_par);
+		return no_os_uart_init(uart_desc, uart_init_par);
 	}
 
 	return 0;
 }
 #endif
 
-static int32_t print_uart_hello_message(struct uart_desc **uart_desc,
-					struct uart_init_param *uart_init_par)
+static int32_t print_uart_hello_message(struct no_os_uart_desc **uart_desc,
+					struct no_os_uart_init_param *uart_init_par)
 {
 #if defined(LINUX_PLATFORM) || defined(USE_TCP_SOCKET)
 	return 0;
@@ -145,8 +145,8 @@ static int32_t print_uart_hello_message(struct uart_desc **uart_desc,
 #endif
 }
 
-static int32_t print_uart_error_message(struct uart_desc **uart_desc,
-					struct uart_init_param *uart_init_par,
+static int32_t print_uart_error_message(struct no_os_uart_desc **uart_desc,
+					struct no_os_uart_init_param *uart_init_par,
 					int32_t status)
 {
 	char message[512];
@@ -165,7 +165,7 @@ static int32_t print_uart_error_message(struct uart_desc **uart_desc,
 
 #if defined(USE_TCP_SOCKET) || defined(LINUX_PLATFORM)
 static int32_t network_setup(struct iio_init_param *iio_init_param,
-			     struct uart_desc *uart_desc,
+			     struct no_os_uart_desc *uart_desc,
 			     void *irq_desc)
 {
 	static struct tcp_socket_init_param socket_param;
@@ -204,8 +204,8 @@ static int32_t network_setup(struct iio_init_param *iio_init_param,
 }
 #endif
 
-static int32_t uart_setup(struct uart_desc **uart_desc,
-			  struct uart_init_param **uart_init_par,
+static int32_t uart_setup(struct no_os_uart_desc **uart_desc,
+			  struct no_os_uart_init_param **uart_init_par,
 			  void *irq_desc)
 {
 #ifdef LINUX_PLATFORM
@@ -234,17 +234,17 @@ static int32_t uart_setup(struct uart_desc **uart_desc,
 		.huart = IIO_APP_HUART,
 	};
 #endif
-	static struct uart_init_param luart_par = {
+	static struct no_os_uart_init_param luart_par = {
 		.device_id = UART_DEVICE_ID,
 		.baud_rate = UART_BAUDRATE_DEFAULT,
-		.size = UART_CS_8,
-		.parity = UART_PAR_NO,
-		.stop = UART_STOP_1_BIT,
+		.size = NO_OS_UART_CS_8,
+		.parity = NO_OS_UART_PAR_NO,
+		.stop = NO_OS_UART_STOP_1_BIT,
 		.extra = &platform_uart_init_par
 	};
 	*uart_init_par = &luart_par;
 
-	return uart_init(uart_desc, &luart_par);
+	return no_os_uart_init(uart_desc, &luart_par);
 #endif
 }
 
@@ -282,8 +282,8 @@ int32_t iio_app_run(struct iio_app_device *devices, uint32_t len)
 	int32_t			status;
 	struct iio_desc		*iio_desc;
 	struct iio_init_param	iio_init_param;
-	struct uart_desc	*uart_desc;
-	struct uart_init_param	*uart_init_par;
+	struct no_os_uart_desc	*uart_desc;
+	struct no_os_uart_init_param	*uart_init_par;
 	void			*irq_desc = NULL;
 	struct iio_device_init	*iio_init_devs;
 	uint32_t		i;

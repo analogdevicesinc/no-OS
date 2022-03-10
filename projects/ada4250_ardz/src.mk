@@ -17,7 +17,7 @@ SRCS += $(NO-OS)/util/util.c \
 	$(DRIVERS)/platform/$(PLATFORM)/no_os_rtc.c \
 	$(DRIVERS)/platform/$(PLATFORM)/delay.c \
 	$(DRIVERS)/platform/$(PLATFORM)/no_os_timer.c \
-	$(DRIVERS)/platform/$(PLATFORM)/uart.c
+	$(DRIVERS)/platform/$(PLATFORM)/no_os_uart.c
 
 INCS += $(INCLUDE)/no_os_spi.h \
 	$(INCLUDE)/no_os_irq.h \

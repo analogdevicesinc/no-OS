@@ -40,7 +40,7 @@ SRCS += $(NO-OS)/util/fifo.c \
 	$(DRIVERS)/adc/ad9680/iio_ad9680.c \
 	$(DRIVERS)/dac/ad9152/iio_ad9152.c \
 	$(DRIVERS)/api/no_os_irq.c \
-	$(PLATFORM_DRIVERS)/uart.c \
+	$(PLATFORM_DRIVERS)/no_os_uart.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c
 endif
 INCS +=	$(PROJECT)/src/app/app_config.h \

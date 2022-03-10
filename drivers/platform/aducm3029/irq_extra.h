@@ -143,7 +143,7 @@ struct gpio_irq_config {
  */
 union irq_config {
 	/** UART descriptor */
-	struct uart_desc	*uart_conf;
+	struct no_os_uart_desc	*uart_conf;
 	/** Trigger condition for the external interrupt */
 	enum irq_mode		xint_conf;
 	/** RTC interrupt config */

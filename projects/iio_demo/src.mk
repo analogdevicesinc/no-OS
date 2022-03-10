@@ -49,7 +49,7 @@ INCS	 += $(INCLUDE)/no_os_timer.h \
 		$(PLATFORM_DRIVERS)/rtc_extra.h
 endif
 
-SRCS += $(PLATFORM_DRIVERS)/uart.c \
+SRCS += $(PLATFORM_DRIVERS)/no_os_uart.c \
 		$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c
 
 INCS += $(INCLUDE)/no_os_irq.h \
@@ -80,7 +80,7 @@ SRCS += $(PROJECT)/src/app/main.c
 SRCS += $(NO-OS)/iio/iio_app/iio_app.c
 SRCS += $(NO-OS)/util/circular_buffer.c
 
-SRCS += $(DRIVERS)/platform/generic/uart.c \
+SRCS += $(DRIVERS)/platform/generic/no_os_uart.c \
 		$(DRIVERS)/platform/generic/delay.c
 
 INCS += $(NO-OS)/network/tcp_socket.h \

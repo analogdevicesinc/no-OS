@@ -122,7 +122,7 @@ struct connection_desc {
 struct at_desc {
 	/* - Uart related fields */
 	/* Uart descriptor */
-	struct uart_desc	*uart_desc;
+	struct no_os_uart_desc	*uart_desc;
 	/* Irq descriptor */
 	struct no_os_irq_ctrl_desc	*irq_desc;
 	/* Uart irq id */
@@ -390,7 +390,7 @@ static inline void start_conn_read(struct at_desc *desc, bool is_new_message)
 		 * Else, a AT_STOP_CONNECTION command should be sent to the
 		 * esp8266 module. (Application rejects the connection)
 		 * This could be done only if implement at_run_cmd with
-		 * uart_write_nonblocking
+		 * no_os_uart_write_nonblocking
 		 */
 	}
 
@@ -404,7 +404,7 @@ static inline void start_conn_read(struct at_desc *desc, bool is_new_message)
 	if (IS_ERR_VALUE(ret))
 		goto dummy_read;
 
-	uart_read_nonblocking(desc->uart_desc, buff, available_len);
+	no_os_uart_read_nonblocking(desc->uart_desc, buff, available_len);
 	conn->to_read -= available_len;
 
 	return ;
@@ -412,7 +412,7 @@ dummy_read:
 	/* Data from uart is discarded because an error occured or
 	 * there is no buffer available
 	 */
-	uart_read_nonblocking(desc->uart_desc, &desc->read_ch, 1);
+	no_os_uart_read_nonblocking(desc->uart_desc, &desc->read_ch, 1);
 	conn->to_read -= 1;
 }
 
@@ -473,7 +473,7 @@ static void at_callback(struct at_desc *desc, uint32_t event, uint8_t *data)
 		break;
 	}
 	/* Submit buffer to read the next char */
-	uart_read_nonblocking(desc->uart_desc, &desc->read_ch, 1);
+	no_os_uart_read_nonblocking(desc->uart_desc, &desc->read_ch, 1);
 }
 
 /* Wait the response for the last command for MODULE_TIMEOUT milliseconds */
@@ -533,7 +533,7 @@ static int32_t send_cmd(struct at_desc *desc, enum at_cmd cmd,
 {
 	uint32_t timeout = MODULE_TIMEOUT;
 
-	uart_write(desc->uart_desc, desc->cmd.buff, desc->cmd.len);
+	no_os_uart_write(desc->uart_desc, desc->cmd.buff, desc->cmd.len);
 	if (cmd == AT_SEND) {
 		desc->callback_operation = WAITING_SEND;
 		/* Waiting for ok */
@@ -548,8 +548,8 @@ static int32_t send_cmd(struct at_desc *desc, enum at_cmd cmd,
 		if (timeout == 0)
 			return FAILURE;
 		/* Write payload */
-		uart_write(desc->uart_desc, in_param->send_data.data.buff,
-			   in_param->send_data.data.len);
+		no_os_uart_write(desc->uart_desc, in_param->send_data.data.buff,
+				 in_param->send_data.data.len);
 	} else if (cmd == AT_DISCONNECT_NETWORK) {
 		if (desc->is_wifi_connected) {
 			/* Wait for WIFI_DISCONNECT */
@@ -777,7 +777,7 @@ static void build_cmd(struct at_desc *desc, enum at_cmd cmd,
 /* Send ATE0 command to stop echo */
 static int32_t stop_echo(struct at_desc *desc)
 {
-	uart_write(desc->uart_desc, (uint8_t *)"ATE0\r\n", 6);
+	no_os_uart_write(desc->uart_desc, (uint8_t *)"ATE0\r\n", 6);
 
 	if (SUCCESS != wait_for_response(desc))
 		return FAILURE;
@@ -794,7 +794,7 @@ static int32_t handle_special(struct at_desc *desc, enum at_cmd cmd)
 	switch (cmd) {
 	case AT_RESET:
 		desc->callback_operation = RESETTING_MODULE;
-		uart_write(desc->uart_desc, desc->cmd.buff, desc->cmd.len);
+		no_os_uart_write(desc->uart_desc, desc->cmd.buff, desc->cmd.len);
 		timeout = MODULE_TIMEOUT;
 		do {
 			/* Wait for "ready" message */
@@ -938,7 +938,7 @@ int32_t at_init(struct at_desc **desc, const struct at_init_param *param)
 		goto free_irq;
 
 	/* The read will be handled by the callback */
-	uart_read_nonblocking(ldesc->uart_desc, &ldesc->read_ch, 1);
+	no_os_uart_read_nonblocking(ldesc->uart_desc, &ldesc->read_ch, 1);
 
 	/* Link buffer structure with static buffers */
 	ldesc->result.buff = ldesc->buffers.result_buff;

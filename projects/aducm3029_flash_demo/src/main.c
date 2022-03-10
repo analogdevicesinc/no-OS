@@ -70,18 +70,18 @@ int main(int argc, char *argv[])
 	struct flash_init_param flash_init_par = {
 		.id = 0
 	};
-	struct uart_desc *uart_dut;
+	struct no_os_uart_desc *uart_dut;
 	struct aducm_uart_init_param aducm_uart_init = {
 		.parity = UART_NO_PARITY,
 		.stop_bits = UART_ONE_STOPBIT,
 		.word_length = UART_WORDLEN_8BITS
 	};
-	struct uart_init_param uart_init_par = {
+	struct no_os_uart_init_param uart_init_par = {
 		.baud_rate = BD_115200,
 		.device_id = 0,
-		.parity = UART_PAR_NO,
-		.size = UART_CS_8,
-		.stop = UART_STOP_1_BIT,
+		.parity = NO_OS_UART_PAR_NO,
+		.size = NO_OS_UART_CS_8,
+		.stop = NO_OS_UART_STOP_1_BIT,
 		.extra = &aducm_uart_init
 	};
 	struct no_os_irq_ctrl_desc *irq_dut;
@@ -103,7 +103,7 @@ int main(int argc, char *argv[])
 	if (ret < 0)
 		return ret;
 
-	ret = uart_init(&uart_dut, &uart_init_par);
+	ret = no_os_uart_init(&uart_dut, &uart_init_par);
 	if (ret < 0)
 		return ret;
 	init_uart_stdio(uart_dut);
@@ -149,7 +149,7 @@ int main(int argc, char *argv[])
 	ret = no_os_irq_ctrl_remove(irq_dut);
 	if (ret < 0)
 		return ret;
-	ret = uart_remove(uart_dut);
+	ret = no_os_uart_remove(uart_dut);
 	if (ret < 0)
 		return ret;
 	ret = flash_remove(flash_dut);

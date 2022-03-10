@@ -57,9 +57,9 @@
 #define STDOUT_FILENO 1
 #define STDERR_FILENO 2
 
-static struct uart_desc *guart = NULL;
+static struct no_os_uart_desc *guart = NULL;
 
-void stm32_uart_stdio(struct uart_desc *desc)
+void stm32_uart_stdio(struct no_os_uart_desc *desc)
 {
 	if(!desc || !desc->extra)
 		return;
@@ -85,7 +85,7 @@ int _write(int fd, char* ptr, int len)
 	int ret;
 
 	if (fd == STDOUT_FILENO || fd == STDERR_FILENO) {
-		ret = uart_write(guart, (uint8_t *)ptr, len);
+		ret = no_os_uart_write(guart, (uint8_t *)ptr, len);
 		if (ret < 0) {
 			errno = -ret;
 			return -1;
@@ -121,7 +121,7 @@ int _read(int fd, char* ptr, int len)
 	int ret;
 
 	if (fd == STDIN_FILENO) {
-		ret = uart_read(guart, (uint8_t *)ptr, 1);
+		ret = no_os_uart_read(guart, (uint8_t *)ptr, 1);
 		if (ret < 0) {
 			errno = -ret;
 			return -1;

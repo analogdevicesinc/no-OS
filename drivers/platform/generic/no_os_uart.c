@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   generic/uart.c
+ *   @file   generic/no_os_uart.c
  *   @author Cristian Pop (cristian.pop@analog.com)
 ********************************************************************************
  * Copyright 2019(c) Analog Devices, Inc.
@@ -55,7 +55,8 @@
  * @param bytes_number - Number of bytes to read.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t uart_read(struct uart_desc *desc, uint8_t *data, uint32_t bytes_number)
+int32_t no_os_uart_read(struct no_os_uart_desc *desc, uint8_t *data,
+			uint32_t bytes_number)
 {
 	if (desc) {
 		// Unused variable - fix compiler warning
@@ -79,8 +80,8 @@ int32_t uart_read(struct uart_desc *desc, uint8_t *data, uint32_t bytes_number)
  * @param bytes_number - Number of bytes to read.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t uart_write(struct uart_desc *desc, const uint8_t *data,
-		   uint32_t bytes_number)
+int32_t no_os_uart_write(struct no_os_uart_desc *desc, const uint8_t *data,
+			 uint32_t bytes_number)
 {
 	if (desc) {
 		// Unused variable - fix compiler warning
@@ -106,8 +107,8 @@ int32_t uart_write(struct uart_desc *desc, const uint8_t *data,
  * @param bytes_number:	Number of bytes to be read.
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
  */
-int32_t uart_read_nonblocking(struct uart_desc *desc, uint8_t *data,
-			      uint32_t bytes_number)
+int32_t no_os_uart_read_nonblocking(struct no_os_uart_desc *desc, uint8_t *data,
+				    uint32_t bytes_number)
 {
 	if (desc) {
 		// Unused variable - fix compiler warning
@@ -133,8 +134,9 @@ int32_t uart_read_nonblocking(struct uart_desc *desc, uint8_t *data,
  * @param bytes_number:	Number of bytes to be written.
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
  */
-int32_t uart_write_nonblocking(struct uart_desc *desc, const uint8_t *data,
-			       uint32_t bytes_number)
+int32_t no_os_uart_write_nonblocking(struct no_os_uart_desc *desc,
+				     const uint8_t *data,
+				     uint32_t bytes_number)
 {
 	if (desc) {
 		// Unused variable - fix compiler warning
@@ -157,7 +159,8 @@ int32_t uart_write_nonblocking(struct uart_desc *desc, const uint8_t *data,
  * @param param - The structure that contains the UART parameters.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t uart_init(struct uart_desc **desc, struct uart_init_param *param)
+int32_t no_os_uart_init(struct no_os_uart_desc **desc,
+			struct no_os_uart_init_param *param)
 {
 	if (desc) {
 		// Unused variable - fix compiler warning
@@ -171,11 +174,11 @@ int32_t uart_init(struct uart_desc **desc, struct uart_init_param *param)
 }
 
 /**
- * @brief Free the resources allocated by uart_init().
+ * @brief Free the resources allocated by no_os_uart_init().
  * @param desc - The UART descriptor.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t uart_remove(struct uart_desc *desc)
+int32_t no_os_uart_remove(struct no_os_uart_desc *desc)
 {
 	if (desc) {
 		// Unused variable - fix compiler warning
@@ -189,7 +192,7 @@ int32_t uart_remove(struct uart_desc *desc)
  * @param desc - The UART descriptor.
  * @return number of errors.
  */
-uint32_t uart_get_errors(struct uart_desc *desc)
+uint32_t no_os_uart_get_errors(struct no_os_uart_desc *desc)
 {
 	if (desc) {
 		// Unused variable - fix compiler warning

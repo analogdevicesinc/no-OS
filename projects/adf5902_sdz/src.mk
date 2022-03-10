@@ -21,7 +21,7 @@ ifeq (y,$(strip $(TINYIIOD)))
 LIBRARIES += iio
 SRCS += $(NO-OS)/util/fifo.c \
 	$(NO-OS)/util/no_os_list.c \
-	$(PLATFORM_DRIVERS)/uart.c \
+	$(PLATFORM_DRIVERS)/no_os_uart.c \
 	$(PLATFORM_DRIVERS)/irq.c \
 	$(NO-OS)/iio/iio_app/iio_app.c \
 	$(DRIVERS)/frequency/adf5902/iio_adf5902.c

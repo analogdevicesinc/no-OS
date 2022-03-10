@@ -76,11 +76,12 @@ struct linux_uart_desc {
  * @param param - The structure that contains the UART parameters.
  * @return SUCCESS in case of success, error code otherwise.
  */
-int32_t uart_init(struct uart_desc **desc, struct uart_init_param *param)
+int32_t no_os_uart_init(struct no_os_uart_desc **desc,
+			struct no_os_uart_init_param *param)
 {
 	struct linux_uart_init_param *linux_init;
 	struct linux_uart_desc *linux_desc;
-	struct uart_desc *descriptor;
+	struct no_os_uart_desc *descriptor;
 	speed_t speed;
 	char path[64];
 	int ret;
@@ -176,16 +177,16 @@ int32_t uart_init(struct uart_desc **desc, struct uart_init_param *param)
 
 	linux_desc->terminal->c_cflag &= ~CSIZE;
 	switch(param->size) {
-	case UART_CS_5:
+	case NO_OS_UART_CS_5:
 		linux_desc->terminal->c_cflag |= CS5;
 		break;
-	case UART_CS_6:
+	case NO_OS_UART_CS_6:
 		linux_desc->terminal->c_cflag |= CS6;
 		break;
-	case UART_CS_7:
+	case NO_OS_UART_CS_7:
 		linux_desc->terminal->c_cflag |= CS7;
 		break;
-	case UART_CS_8:
+	case NO_OS_UART_CS_8:
 		linux_desc->terminal->c_cflag |= CS8;
 		break;
 	default:
@@ -196,12 +197,12 @@ int32_t uart_init(struct uart_desc **desc, struct uart_init_param *param)
 	linux_desc->terminal->c_cflag &= ~PARENB;
 	linux_desc->terminal->c_cflag &= ~PARODD;
 	switch(param->parity) {
-	case UART_PAR_NO:
+	case NO_OS_UART_PAR_NO:
 		break;
-	case UART_PAR_ODD:
+	case NO_OS_UART_PAR_ODD:
 		linux_desc->terminal->c_cflag |= PARODD;
 		break;
-	case UART_PAR_EVEN:
+	case NO_OS_UART_PAR_EVEN:
 		linux_desc->terminal->c_cflag |= PARENB;
 		break;
 	default:
@@ -209,7 +210,7 @@ int32_t uart_init(struct uart_desc **desc, struct uart_init_param *param)
 		goto free;
 	}
 
-	if (param->stop == UART_STOP_1_BIT)
+	if (param->stop == NO_OS_UART_STOP_1_BIT)
 		linux_desc->terminal->c_cflag &= ~CSTOPB;
 	else
 		linux_desc->terminal->c_cflag |= CSTOPB;
@@ -237,11 +238,11 @@ free_desc:
 };
 
 /**
- * @brief Free the resources allocated by uart_init().
+ * @brief Free the resources allocated by no_os_uart_init().
  * @param desc - The UART descriptor.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t uart_remove(struct uart_desc *desc)
+int32_t no_os_uart_remove(struct no_os_uart_desc *desc)
 {
 	struct linux_uart_desc *linux_desc;
 	int32_t ret;
@@ -265,8 +266,8 @@ int32_t uart_remove(struct uart_desc *desc)
  * @param bytes_number - Number of bytes to read.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t uart_write(struct uart_desc *desc, const uint8_t *data,
-		   uint32_t bytes_number)
+int32_t no_os_uart_write(struct no_os_uart_desc *desc, const uint8_t *data,
+			 uint32_t bytes_number)
 {
 	struct linux_uart_desc *linux_desc;
 	uint32_t count = 0;
@@ -290,8 +291,8 @@ int32_t uart_write(struct uart_desc *desc, const uint8_t *data,
  * @param bytes_number - Number of bytes to read.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t uart_read(struct uart_desc *desc, uint8_t *data,
-		  uint32_t bytes_number)
+int32_t no_os_uart_read(struct no_os_uart_desc *desc, uint8_t *data,
+			uint32_t bytes_number)
 {
 	struct linux_uart_desc *linux_desc;
 	uint32_t count = 0;
