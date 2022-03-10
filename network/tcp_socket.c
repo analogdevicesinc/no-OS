@@ -82,7 +82,7 @@
  */
 struct secure_socket_desc {
 	/** True random number generator reference */
-	struct trng_desc	*trng;
+	struct no_os_trng_desc	*trng;
 	/* Mbed structures */
 	/** CA certificate */
 	mbedtls_x509_crt	cacert;
@@ -142,7 +142,7 @@ static void stcp_socket_remove(struct secure_socket_desc *desc)
 	mbedtls_x509_crt_free(&desc->cacert);
 	mbedtls_ssl_config_free(&desc->conf);
 	if (desc->trng)
-		trng_remove(desc->trng);
+		no_os_trng_remove(desc->trng);
 
 	free(desc);
 }
@@ -168,7 +168,7 @@ static int32_t stcp_socket_init(struct secure_socket_desc **desc,
 	mbedtls_x509_crt_init(&ldesc->clicert);
 	mbedtls_pk_init(&ldesc->pkey);
 
-	ret = trng_init(&ldesc->trng, param->trng_init_param);
+	ret = no_os_trng_init(&ldesc->trng, param->trng_init_param);
 	if (IS_ERR_VALUE(ret)) {
 		ldesc->trng = NULL;
 		goto exit;

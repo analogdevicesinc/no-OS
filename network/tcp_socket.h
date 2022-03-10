@@ -71,7 +71,7 @@ struct tcp_socket_desc;
  */
 struct secure_init_param {
 	/** Init param for true random number generator */
-	struct trng_init_param	*trng_init_param;
+	struct no_os_trng_init_param	*trng_init_param;
 	/**
 	  * Certificate authority certificate.
 	  * If set, server identity will be verified, otherwise not.

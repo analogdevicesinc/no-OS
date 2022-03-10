@@ -97,6 +97,6 @@ INCS += $(NO-OS)/iio/iio_app/iio_app.h
 INCS += $(INCLUDE)/no_os_gpio.h \
 		$(INCLUDE)/no_os_delay.h \
 		$(INCLUDE)/no_os_irq.h \
-		$(INCLUDE)/trng.h
+		$(INCLUDE)/no_os_trng.h
 
 endif
