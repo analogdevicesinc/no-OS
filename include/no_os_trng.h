@@ -52,16 +52,16 @@
 /******************************************************************************/
 
 /**
- * @struct trng_desc
+ * @struct no_os_trng_desc
  * @brief TRNG Descriptor
  */
-struct trng_desc;
+struct no_os_trng_desc;
 
 /**
- * @struct trng_init_param
+ * @struct no_os_trng_init_param
  * @brief Init parameter for TRNG
  */
-struct trng_init_param {
+struct no_os_trng_init_param {
 	/** Device id */
 	uint32_t	dev_id;
 	/** Platform specific parameter */
@@ -73,12 +73,14 @@ struct trng_init_param {
 /******************************************************************************/
 
 /* Initialize descriptor */
-int32_t trng_init(struct trng_desc **desc, struct trng_init_param *param);
+int32_t no_os_trng_init(struct no_os_trng_desc **desc,
+			struct no_os_trng_init_param *param);
 
 /* Free resources allocated in descriptor */
-void trng_remove(struct trng_desc *desc);
+void no_os_trng_remove(struct no_os_trng_desc *desc);
 
 /* Fill buffer with random numbers */
-int32_t trng_fill_buffer(struct trng_desc *desc, uint8_t *buff, uint32_t len);
+int32_t no_os_trng_fill_buffer(struct no_os_trng_desc *desc, uint8_t *buff,
+			       uint32_t len);
 
 #endif // _NO_OS_TRNG_H_

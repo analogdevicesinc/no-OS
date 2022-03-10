@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   trng.c
- *   @brief  Implementation of true random number generator
+ *   @file   no_os_trng.c
+ *   @brief  Generic implementation of true random number generator
  *   @author Mihail Chindris (mihail.chindris@analog.com)
 ********************************************************************************
  *   @copyright
@@ -42,134 +42,48 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 
-#include <stdlib.h>
-#include <drivers/rng/adi_rng.h>
 #include "no_os_trng.h"
 #include "no_os_util.h"
 #include "no_os_error.h"
 
 /******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
-
-/* LenReload: 0 - 4095 */
-#define TRNG_CNT_VAL		4095
-/* Prescaler: 0 - 10 */
-#define TRNG_PRESCALER		2
-/* Aducm device ID */
-#define ADUCM_TRNG_DEVICE_ID	0
-
-/******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
-/* Stucture holding the TRNG descriptor. */
-struct trng_desc {
-	/*
-	 * Memory used by the DFP
-	 * At least ADI_RNG_MEMORY_SIZE bytes of 4 bytes aligned memory are
-	 * needed by the DFP driver. The formula is to align memory only.
-	 */
-	uint32_t	dev_mem[(ADI_RNG_MEMORY_SIZE + 3)/4];
-	/* DFP Hanler */
-	ADI_RNG_HANDLE	dev;
+/* Hold trng device information */
+struct no_os_trng_desc {
+	/* Add here fields needed by implementation */
 };
-
-/******************************************************************************/
-/**************************** Global Variables ********************************/
-/******************************************************************************/
-
-/** Number of references to the descriptor */
-static uint32_t		nb_references;
-/** TRNG Descriptor */
-static struct trng_desc	g_desc;
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
 
-/* Initialize the TRNG device and the global descriptor */
-static void gdesc_init()
+/* Initialize descriptor */
+int32_t no_os_trng_init(struct no_os_trng_desc **desc,
+			struct no_os_trng_init_param *param)
 {
-	adi_rng_Open(ADUCM_TRNG_DEVICE_ID, g_desc.dev_mem, ADI_RNG_MEMORY_SIZE,
-		     &g_desc.dev);
-
-	adi_rng_SetSampleLen(g_desc.dev, TRNG_PRESCALER, TRNG_CNT_VAL);
-
-	adi_rng_EnableBuffering(g_desc.dev, false);
-
-	adi_rng_Enable(g_desc.dev, true);
-}
-
-/* Remove the TRNG device and the global descriptor */
-static void gdesc_remove()
-{
-	adi_rng_Enable(g_desc.dev, false);
-	adi_rng_Close(g_desc.dev);
-}
-
-/**
- * @brief Initialize descriptor
- * @param desc - Where to store the TRNG Descriptor
- * @param param - Unused
- * @return \ref SUCCESS or \ref FAILURE if desc is null
- */
-int32_t trng_init(struct trng_desc **desc, struct trng_init_param *param)
-{
+	UNUSED_PARAM(desc);
 	UNUSED_PARAM(param);
 
-	if (!desc)
-		return FAILURE;
-
-	if (!nb_references)
-		gdesc_init();
-
-	nb_references++;
-	*desc = &g_desc;
-
-	return SUCCESS;
+	return FAILURE;
 }
 
-/**
- * @brief Free resources allocated in descriptor
- * @param desc - TRNG Descriptor
- */
-void trng_remove(struct trng_desc *desc)
+/* Free resources allocated in descriptor */
+void no_os_trng_remove(struct no_os_trng_desc *desc)
 {
-	nb_references--;
-	if (nb_references == 0)
-		gdesc_remove();
+	UNUSED_PARAM(desc);
+
+	return FAILURE;
 }
 
-/**
- * @brief Fill buffer with random numbers
- * @param desc - TRNG descriptor
- * @param buff - Buffer to be filled
- * @param len - Size of the buffer
- * @return \ref SUCCESS if no errors, \ref FAILURE is an error occurs and the
- * data in the buffer is not useful.
- */
-int32_t trng_fill_buffer(struct trng_desc *desc, uint8_t *buff, uint32_t len)
+/* Fill buffer with random numbers */
+int32_t no_os_trng_fill_buffer(struct no_os_trng_desc *desc, uint8_t *buff,
+			       uint32_t len)
 {
-	uint32_t	data;
-	uint32_t	i;
-	bool		ready;
-	bool		stuck;
+	UNUSED_PARAM(desc);
+	UNUSED_PARAM(buff);
+	UNUSED_PARAM(len);
 
-	for (i = 0; i < len; i++) {
-		ready = 0;
-		while (!ready)
-			adi_rng_GetRdyStatus(desc->dev, &ready);
-		adi_rng_GetStuckStatus(desc->dev, &stuck);
-		if (stuck) {
-			/* This is needed in order to clear the stuck bit */
-			gdesc_remove();
-			gdesc_init();
-			return FAILURE;
-		}
-		adi_rng_GetRngData(desc->dev, &data);
-		buff[i] = data & 0xFF;
-	}
-
-	return SUCCESS;
+	return FAILURE;
 }
