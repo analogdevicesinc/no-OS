@@ -389,7 +389,7 @@ int32_t ad7779_do_update_mode_pins(ad7779_dev *dev)
 	/* All the pins that define the AD7779 configuration mode are re-evaluated
 	 * every time SYNC_IN pin is pulsed. */
 	ret |= no_os_gpio_set_value(dev->gpio_sync_in, NO_OS_GPIO_LOW);
-	mdelay(10);
+	no_os_mdelay(10);
 	ret |= no_os_gpio_set_value(dev->gpio_sync_in, NO_OS_GPIO_HIGH);
 
 	return ret;
@@ -1160,9 +1160,9 @@ int32_t ad7779_do_single_sar_conv(ad7779_dev *dev,
 	ret = ad7779_set_sar_cfg(dev, AD7779_ENABLE, mux);
 	ret |= ad7779_set_spi_op_mode(dev, AD7779_SAR_CONV);
 	ret |= no_os_gpio_set_value(dev->gpio_convst_sar, NO_OS_GPIO_LOW);
-	mdelay(10);	// Acquisition Time = min 500 ns
+	no_os_mdelay(10);	// Acquisition Time = min 500 ns
 	ret |= no_os_gpio_set_value(dev->gpio_convst_sar, NO_OS_GPIO_HIGH);
-	mdelay(10);	// Conversion Time = max 3.4 us
+	no_os_mdelay(10);	// Conversion Time = max 3.4 us
 	ad7779_spi_sar_read_code(dev, mux, sar_code);
 	ret |= ad7779_set_sar_cfg(dev, restore_sar_state, mux);
 	ret |= ad7779_set_spi_op_mode(dev, restore_spi_op_mode);
@@ -1281,9 +1281,9 @@ int32_t ad7779_init(ad7779_dev **device,
 
 	ret |= no_os_gpio_direction_output(dev->gpio_reset,
 					   NO_OS_GPIO_LOW);
-	mdelay(10);	// RESET Hold Time = min 2 x MCLK
+	no_os_mdelay(10);	// RESET Hold Time = min 2 x MCLK
 	ret |= no_os_gpio_set_value(dev->gpio_reset, NO_OS_GPIO_HIGH);
-	mdelay(10);	// RESET Rising Edge to First DRDY = min 225 us
+	no_os_mdelay(10);	// RESET Rising Edge to First DRDY = min 225 us
 	ret |= no_os_gpio_direction_output(dev->gpio_mode0,
 					   NO_OS_GPIO_LOW);
 	ret |= no_os_gpio_direction_output(dev->gpio_mode1,

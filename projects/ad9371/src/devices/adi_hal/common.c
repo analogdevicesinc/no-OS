@@ -284,14 +284,14 @@ commonErr_t CMB_flushLog(void)
 
 commonErr_t CMB_wait_ms(uint32_t time_ms)
 {
-	mdelay(time_ms);
+	no_os_mdelay(time_ms);
 
 	return(COMMONERR_OK);
 }
 
 commonErr_t CMB_wait_us(uint32_t time_us)
 {
-	udelay(time_us);
+	no_os_udelay(time_us);
 
 	return(COMMONERR_OK);
 }
@@ -316,7 +316,7 @@ commonErr_t CMB_setTimeout_us(uint32_t timeOut_us)
 
 commonErr_t CMB_hasTimeoutExpired()
 {
-	udelay(1);
+	no_os_udelay(1);
 
 	_desired_time_to_elapse_us--;
 	if (_desired_time_to_elapse_us > 0)

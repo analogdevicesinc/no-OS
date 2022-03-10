@@ -456,7 +456,7 @@ int32_t ad7091r5_reset(struct ad7091r5_dev *dev, bool is_software)
 			return ret;
 
 		/* reset pulse width, at least 10 ns*/
-		udelay(1);
+		no_os_udelay(1);
 		return no_os_gpio_set_value(dev->gpio_resetn, NO_OS_GPIO_HIGH);
 	}
 }

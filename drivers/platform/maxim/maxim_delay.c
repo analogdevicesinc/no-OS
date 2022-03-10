@@ -44,7 +44,7 @@
  * @param usecs - Delay in microseconds.
  * @return None.
  */
-void udelay(uint32_t usecs)
+void no_os_udelay(uint32_t usecs)
 {
 	MXC_Delay(MXC_DELAY_USEC(usecs));
 }
@@ -54,7 +54,7 @@ void udelay(uint32_t usecs)
  * @param msecs - Delay in miliseconds.
  * @return None.
  */
-void mdelay(uint32_t msecs)
+void no_os_mdelay(uint32_t msecs)
 {
 	MXC_Delay(MXC_DELAY_MSEC(msecs));
 }

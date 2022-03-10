@@ -225,7 +225,7 @@ int main()
 	axi_adc_write(ad9467_core, AXI_ADC_REG_DELAY_CNTRL, 0x0);
 	axi_adc_write(ad9467_core, AXI_ADC_REG_DELAY_CNTRL, 0x20F1F);
 
-	mdelay(10);
+	no_os_mdelay(10);
 	if (axi_adc_delay_calibrate(ad9467_core, 8, 1)) {
 		ad9467_read(ad9467_device, 0x16, &ret_val);
 		printf("AD9467[0x016]: %02x\n\r", ret_val);
@@ -234,7 +234,7 @@ int main()
 		ad9467_write(ad9467_device, AD9467_REG_DEVICE_UPDATE, 0x00);
 		ad9467_read(ad9467_device, 0x16, &ret_val);
 		printf("AD9467[0x016]: %02x\n\r", ret_val);
-		mdelay(10);
+		no_os_mdelay(10);
 		if (axi_adc_delay_calibrate(ad9467_core, 16, 1)) {
 			printf("adc_setup: can not set a zero error delay!\n\r");
 		}
@@ -334,13 +334,13 @@ void adc_test(struct axi_adc *adc,
 
 		axi_adc_set_pnsel(adc, 0,
 				  ((mode == PN_23_SEQUENCE) ? AXI_ADC_PN23A : AXI_ADC_PN9));
-		mdelay(10);
+		no_os_mdelay(10);
 		axi_adc_write(adc,
 			      CF_REG_DATA_MONITOR,
 			      CF_DATA_MONITOR_PN_ERR |
 			      CF_DATA_MONITOR_PN_SYNC |
 			      CF_DATA_MONITOR_PN_OVER_RNG); // write ones to clear bits
-		mdelay(100);
+		no_os_mdelay(100);
 		axi_adc_read(adc, CF_REG_DATA_MONITOR, &rdata);
 		if ((rdata & (CF_DATA_MONITOR_PN_ERR |
 			      CF_DATA_MONITOR_PN_SYNC |

@@ -129,7 +129,7 @@ int32_t ad9553_setup(struct ad9553_dev **device,
 	if (ret != SUCCESS)
 		return ret;
 
-	mdelay(250);
+	no_os_mdelay(250);
 
 	// enable SPI control of charge pump
 	ret = ad9553_reg_write(dev, AD9553_PLL_CHARGE_PUMP_PFD_CTRL, 0xB0);
@@ -180,7 +180,7 @@ int32_t ad9553_setup(struct ad9553_dev **device,
 	if (ret != SUCCESS)
 		return ret;
 
-	mdelay(250);
+	no_os_mdelay(250);
 
 	// RefA = 10
 	// RefA[13:6] divider

@@ -524,7 +524,7 @@ int32_t ad5758_dac_output_en(struct ad5758_dev *dev, uint8_t enable)
 		pr_err("%s: Failed with code: %"PRIi32".\n", __func__, ret);
 		return FAILURE;
 	}
-	mdelay(1);
+	no_os_mdelay(1);
 
 	return SUCCESS;
 }
@@ -862,7 +862,7 @@ int32_t ad5758_init(struct ad5758_dev **device,
 
 	*device = dev;
 	pr_info("ad5758 successfully initialized\n");
-	mdelay(1000);
+	no_os_mdelay(1000);
 
 	return SUCCESS;
 

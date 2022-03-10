@@ -707,7 +707,7 @@ int main(void)
 #else
 	axi_dmac_transfer_nonblocking(tx_dmac, (uintptr_t)dac_buffer,
 				      sizeof(sine_lut_iq));
-	mdelay(1000);
+	no_os_mdelay(1000);
 #endif
 #endif
 #ifdef FMCOMMS5
@@ -860,83 +860,83 @@ int main(void)
 				return status;
 			}
 			no_os_gpio_direction_output(gpio_txnrx_pin, 0);
-			udelay(10);
+			no_os_udelay(10);
 			ad9361_get_en_state_machine_mode(ad9361_phy, &ensm_mode);
 			printf("TXNRX control - Alert: %s\n",
 			       ensm_mode == ENSM_MODE_ALERT ? "OK" : "Error");
-			mdelay(1000);
+			no_os_mdelay(1000);
 
 			if (ad9361_phy->pdata->ensm_pin_pulse_mode) {
 				while(1) {
 					no_os_gpio_set_value(gpio_txnrx_pin, 0);
-					udelay(10);
+					no_os_udelay(10);
 					no_os_gpio_set_value(gpio_enable_pin, 1);
-					udelay(10);
+					no_os_udelay(10);
 					no_os_gpio_set_value(gpio_enable_pin, 0);
 					ad9361_get_en_state_machine_mode(ad9361_phy, &ensm_mode);
 					printf("TXNRX Pulse control - RX: %s\n",
 					       ensm_mode == ENSM_MODE_RX ? "OK" : "Error");
-					mdelay(1000);
+					no_os_mdelay(1000);
 
 					no_os_gpio_set_value(gpio_enable_pin, 1);
-					udelay(10);
+					no_os_udelay(10);
 					no_os_gpio_set_value(gpio_enable_pin, 0);
 					ad9361_get_en_state_machine_mode(ad9361_phy, &ensm_mode);
 					printf("TXNRX Pulse control - Alert: %s\n",
 					       ensm_mode == ENSM_MODE_ALERT ? "OK" : "Error");
-					mdelay(1000);
+					no_os_mdelay(1000);
 
 					no_os_gpio_set_value(gpio_txnrx_pin, 1);
-					udelay(10);
+					no_os_udelay(10);
 					no_os_gpio_set_value(gpio_enable_pin, 1);
-					udelay(10);
+					no_os_udelay(10);
 					no_os_gpio_set_value(gpio_enable_pin, 0);
 					ad9361_get_en_state_machine_mode(ad9361_phy, &ensm_mode);
 					printf("TXNRX Pulse control - TX: %s\n",
 					       ensm_mode == ENSM_MODE_TX ? "OK" : "Error");
-					mdelay(1000);
+					no_os_mdelay(1000);
 
 					no_os_gpio_set_value(gpio_enable_pin, 1);
-					udelay(10);
+					no_os_udelay(10);
 					no_os_gpio_set_value(gpio_enable_pin, 0);
 					ad9361_get_en_state_machine_mode(ad9361_phy, &ensm_mode);
 					printf("TXNRX Pulse control - Alert: %s\n",
 					       ensm_mode == ENSM_MODE_ALERT ? "OK" : "Error");
-					mdelay(1000);
+					no_os_mdelay(1000);
 				}
 			} else {
 				while(1) {
 					no_os_gpio_set_value(gpio_txnrx_pin, 0);
-					udelay(10);
+					no_os_udelay(10);
 					no_os_gpio_set_value(gpio_enable_pin, 1);
-					udelay(10);
+					no_os_udelay(10);
 					ad9361_get_en_state_machine_mode(ad9361_phy, &ensm_mode);
 					printf("TXNRX control - RX: %s\n",
 					       ensm_mode == ENSM_MODE_RX ? "OK" : "Error");
-					mdelay(1000);
+					no_os_mdelay(1000);
 
 					no_os_gpio_set_value(gpio_enable_pin, 0);
-					udelay(10);
+					no_os_udelay(10);
 					ad9361_get_en_state_machine_mode(ad9361_phy, &ensm_mode);
 					printf("TXNRX control - Alert: %s\n",
 					       ensm_mode == ENSM_MODE_ALERT ? "OK" : "Error");
-					mdelay(1000);
+					no_os_mdelay(1000);
 
 					no_os_gpio_set_value(gpio_txnrx_pin, 1);
-					udelay(10);
+					no_os_udelay(10);
 					no_os_gpio_set_value(gpio_enable_pin, 1);
-					udelay(10);
+					no_os_udelay(10);
 					ad9361_get_en_state_machine_mode(ad9361_phy, &ensm_mode);
 					printf("TXNRX control - TX: %s\n",
 					       ensm_mode == ENSM_MODE_TX ? "OK" : "Error");
-					mdelay(1000);
+					no_os_mdelay(1000);
 
 					no_os_gpio_set_value(gpio_enable_pin, 0);
-					udelay(10);
+					no_os_udelay(10);
 					ad9361_get_en_state_machine_mode(ad9361_phy, &ensm_mode);
 					printf("TXNRX control - Alert: %s\n",
 					       ensm_mode == ENSM_MODE_ALERT ? "OK" : "Error");
-					mdelay(1000);
+					no_os_mdelay(1000);
 				}
 			}
 		} else {
@@ -945,25 +945,25 @@ int main(void)
 				ad9361_get_en_state_machine_mode(ad9361_phy, &ensm_mode);
 				printf("SPI control - RX: %s\n",
 				       ensm_mode == ENSM_MODE_RX ? "OK" : "Error");
-				mdelay(1000);
+				no_os_mdelay(1000);
 
 				ad9361_set_en_state_machine_mode(ad9361_phy, ENSM_MODE_ALERT);
 				ad9361_get_en_state_machine_mode(ad9361_phy, &ensm_mode);
 				printf("SPI control - Alert: %s\n",
 				       ensm_mode == ENSM_MODE_ALERT ? "OK" : "Error");
-				mdelay(1000);
+				no_os_mdelay(1000);
 
 				ad9361_set_en_state_machine_mode(ad9361_phy, ENSM_MODE_TX);
 				ad9361_get_en_state_machine_mode(ad9361_phy, &ensm_mode);
 				printf("SPI control - TX: %s\n",
 				       ensm_mode == ENSM_MODE_TX ? "OK" : "Error");
-				mdelay(1000);
+				no_os_mdelay(1000);
 
 				ad9361_set_en_state_machine_mode(ad9361_phy, ENSM_MODE_ALERT);
 				ad9361_get_en_state_machine_mode(ad9361_phy, &ensm_mode);
 				printf("SPI control - Alert: %s\n",
 				       ensm_mode == ENSM_MODE_ALERT ? "OK" : "Error");
-				mdelay(1000);
+				no_os_mdelay(1000);
 			}
 		}
 	}

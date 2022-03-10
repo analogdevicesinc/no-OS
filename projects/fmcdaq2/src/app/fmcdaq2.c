@@ -203,7 +203,7 @@ static int fmcdaq2_gpio_init(struct fmcdaq2_dev *dev)
 	if (status < 0)
 		return status;
 
-	mdelay(5);
+	no_os_mdelay(5);
 
 	status = no_os_gpio_set_value(dev->gpio_clkd_sync, NO_OS_GPIO_HIGH);
 	if (status < 0)

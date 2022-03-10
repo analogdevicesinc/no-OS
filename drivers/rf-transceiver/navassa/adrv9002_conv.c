@@ -349,7 +349,7 @@ static int adrv9002_axi_pn_check(struct adrv9002_rf_phy *phy,
 		axi_adc_write(axi_dev, AIM_AXI_REG(off, AXI_ADC_REG_CHAN_STATUS(chan)),
 			      AXI_ADC_PN_ERR | AXI_ADC_PN_OOS);
 
-	udelay(5000);
+	no_os_udelay(5000);
 
 	/* check for errors in any channel */
 	for (chan = 0; chan < n_chan; chan++) {

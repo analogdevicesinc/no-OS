@@ -65,9 +65,9 @@ int main(int argc, char *argv[])
 	while (1) {
 		toggle(blue);
 		toggle(green);
-		mdelay(1000);
+		no_os_mdelay(1000);
 		toggle(green);
-		mdelay(1000);
+		no_os_mdelay(1000);
 
 	}
 

@@ -294,7 +294,7 @@ int32_t ad5791_soft_instruction(struct ad5791_dev *dev,
 	if(status < 0) {
 		return status;
 	}
-	mdelay(1);    // Wait for the instruction to take effect.
+	no_os_mdelay(1);    // Wait for the instruction to take effect.
 
 	return status;
 }

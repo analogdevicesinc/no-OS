@@ -126,7 +126,7 @@ int8_t ad9833_init(struct ad9833_dev **device,
 	spi_data |= AD9833_CTRLRESET;
 	ad9833_tx_spi(dev,
 		      spi_data);
-	mdelay(10);
+	no_os_mdelay(10);
 	spi_data &= ~AD9833_CTRLRESET;
 	ad9833_tx_spi(dev,
 		      spi_data);
@@ -185,7 +185,7 @@ void ad9833_tx_spi(struct ad9833_dev *dev,
 		spi_data |= AD9833_CTRLRESET;
 		ad9833_tx_spi(dev,
 			      spi_data);
-		mdelay(10);
+		no_os_mdelay(10);
 		spi_data &=~ AD9833_CTRLRESET;
 		ad9833_tx_spi(dev,
 			      spi_data);

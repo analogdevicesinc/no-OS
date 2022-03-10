@@ -1015,9 +1015,9 @@ int32_t ad9361_reset(struct ad9361_rf_phy *phy)
 {
 	if (phy->gpio_desc_resetb) {
 		no_os_gpio_set_value(phy->gpio_desc_resetb, 0);
-		mdelay(1);
+		no_os_mdelay(1);
 		no_os_gpio_set_value(phy->gpio_desc_resetb, 1);
-		mdelay(1);
+		no_os_mdelay(1);
 		dev_dbg(&phy->spi->dev, "%s: by GPIO", __func__);
 		return 0;
 	}
@@ -1287,9 +1287,9 @@ static int32_t ad9361_check_cal_done(struct ad9361_rf_phy *phy, uint32_t reg,
 			return 0;
 
 		if (reg == REG_CALIBRATION_CTRL)
-			udelay(1200);
+			no_os_udelay(1200);
 		else
-			udelay(120);
+			no_os_udelay(120);
 	} while (timeout--);
 
 	dev_err(&phy->spi->dev, "Calibration TIMEOUT (0x%"PRIX32", 0x%"PRIX32")", reg,
@@ -2021,7 +2021,7 @@ void ad9361_ensm_force_state(struct ad9361_rf_phy *phy, uint8_t ensm_state)
 	}
 
 	while (ad9361_ensm_get_state(phy) != ensm_state && --timeout) {
-		mdelay(1);
+		no_os_mdelay(1);
 	}
 
 	if (timeout == 0)
@@ -4419,7 +4419,7 @@ int32_t ad9361_ensm_set_state(struct ad9361_rf_phy *phy, uint8_t ensm_state,
 		ad9361_spi_write(spi, REG_CLOCK_ENABLE,
 				 DIGITAL_POWER_UP | CLOCK_ENABLE_DFLT | BBPLL_ENABLE |
 				 (phy->pdata->use_extclk ? XO_BYPASS : 0)); /* Enable Clocks */
-		udelay(20);
+		no_os_udelay(20);
 		ad9361_spi_write(spi, REG_ENSM_CONFIG_1, TO_ALERT | FORCE_ALERT_STATE);
 		ad9361_trx_vco_cal_control(phy, false, true); /* Enable VCO Cal */
 		ad9361_trx_vco_cal_control(phy, true, true);
@@ -4463,9 +4463,9 @@ int32_t ad9361_ensm_set_state(struct ad9361_rf_phy *phy, uint8_t ensm_state,
 		ad9361_spi_write(spi, REG_ENSM_CONFIG_1,
 				 phy->pdata->fdd ? FORCE_TX_ON : FORCE_RX_ON);
 		/* Delay Flush Time 384 ADC clock cycles */
-		udelay(384000000UL / clk_get_rate(phy, phy->ref_clk_scale[ADC_CLK]));
+		no_os_udelay(384000000UL / clk_get_rate(phy, phy->ref_clk_scale[ADC_CLK]));
 		ad9361_spi_write(spi, REG_ENSM_CONFIG_1, 0); /* Move to Wait*/
-		udelay(1); /* Wait for ENSM settle */
+		no_os_udelay(1); /* Wait for ENSM settle */
 		ad9361_spi_write(spi, REG_CLOCK_ENABLE,
 				 (phy->pdata->use_extclk ? XO_BYPASS : 0)); /* Turn off all clocks */
 		phy->curr_ensm_state = ensm_state;
@@ -7435,7 +7435,7 @@ int32_t ad9361_rssi_gain_step_calib(struct ad9361_rf_phy *phy)
 				 gain_step_calib_reg_val[lo_index][i+1]);
 		ad9361_spi_write(phy->spi, REG_CONFIG,
 				 CALIB_TABLE_SELECT(0x3) | WRITE_LNA_GAIN_DIFF | START_CALIB_TABLE_CLOCK);
-		udelay(3);	//Wait for data to fully write to internal table
+		no_os_udelay(3);	//Wait for data to fully write to internal table
 	}
 
 	ad9361_spi_write(phy->spi, REG_CONFIG, START_CALIB_TABLE_CLOCK);

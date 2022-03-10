@@ -47,7 +47,7 @@
 #if defined(DWT)
 #pragma GCC push_options
 #pragma GCC optimize ("O3")
-void udelay(uint32_t usecs)
+void no_os_udelay(uint32_t usecs)
 {
 	static bool firstrun = true;
 	volatile uint32_t cycles = (SystemCoreClock / 1000000L) * usecs;
@@ -61,7 +61,7 @@ void udelay(uint32_t usecs)
 }
 #pragma GCC pop_options
 #else
-void udelay(uint32_t usecs)
+void no_os_udelay(uint32_t usecs)
 {
 	/* Fallback to lowest possible HAL delay of 1ms. */
 	HAL_Delay(1);
@@ -73,7 +73,7 @@ void udelay(uint32_t usecs)
  * @param msecs - Delay in miliseconds.
  * @return None.
  */
-void mdelay(uint32_t msecs)
+void no_os_mdelay(uint32_t msecs)
 {
 	HAL_Delay(msecs);
 }

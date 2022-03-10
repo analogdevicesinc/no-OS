@@ -324,7 +324,7 @@ void *zmalloc(size_t size)
 	void *ptr = malloc(size);
 	if (ptr)
 		memset(ptr, 0, size);
-	mdelay(1);
+	no_os_mdelay(1);
 
 	return ptr;
 }

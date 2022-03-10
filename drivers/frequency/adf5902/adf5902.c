@@ -338,7 +338,7 @@ static int32_t adf5902_vco_freq_calib(struct adf5902_dev *dev)
 		return ret;
 
 	/* Required 1200us delay */
-	udelay(1200);
+	no_os_udelay(1200);
 
 	/* Tx1 on, Tx2 off, LO on */
 	ret = adf5902_write(dev, ADF5902_REG0, ADF5902_REG0_RESERVED |
@@ -367,7 +367,7 @@ static int32_t adf5902_vco_freq_calib(struct adf5902_dev *dev)
 		return ret;
 
 	/* Required 500us delay */
-	udelay(500);
+	no_os_udelay(500);
 
 	/* Tx1 off, Tx2 on, LO on */
 	ret = adf5902_write(dev, ADF5902_REG0, ADF5902_REG0_RESERVED |
@@ -396,7 +396,7 @@ static int32_t adf5902_vco_freq_calib(struct adf5902_dev *dev)
 		return ret;
 
 	/* Required 500us delay */
-	udelay(500);
+	no_os_udelay(500);
 
 	return ret;
 }
@@ -456,7 +456,7 @@ static int32_t adf5902_vco_normal_op(struct adf5902_dev *dev)
 	if (ret != SUCCESS)
 		return ret;
 
-	udelay(100);
+	no_os_udelay(100);
 
 	/* Set Ramp Mode */
 	ret = adf5902_write(dev, ADF5902_REG11, ADF5902_REG11_RESERVED |
@@ -589,7 +589,7 @@ int32_t adf5902_init(struct adf5902_dev **device,
 		goto error_spi;
 
 	/* Required delay */
-	udelay(10);
+	no_os_udelay(10);
 
 	/* Start VCO Frequency Calibration */
 	ret = adf5902_vco_freq_calib(dev);
@@ -760,7 +760,7 @@ int32_t adf5902_read_temp(struct adf5902_dev *dev, float *temp)
 		return ret;
 
 	/* Make sure ADC conversion is finished */
-	udelay(1200);
+	no_os_udelay(1200);
 
 	/* Read ADC Data */
 	reg_data = ADF5902_REG3_IO_LVL(ADF5902_IO_LVL_3V3) |
@@ -858,7 +858,7 @@ int32_t adf5902f_compute_frequency(struct adf5902_dev *dev, uint64_t *freq)
 	}
 
 	/* Add minumum required delay */
-	udelay(delay);
+	no_os_udelay(delay);
 
 	/* Read Frequency Data 2 */
 	freq2 = ADF5902_REG3_IO_LVL(ADF5902_IO_LVL_3V3) |

@@ -424,7 +424,7 @@ static int32_t ad9081_multichip_sync(struct ad9081_phy *phy, int step)
 				AD9081_LINK_ALL : AD9081_LINK_0, 0);
 		if (ret != 0)
 			return ret;
-		mdelay(1);
+		no_os_mdelay(1);
 		ret = adi_ad9081_jesd_rx_link_enable_set(&phy->ad9081,
 				(phy->jrx_link_tx.jesd_param.jesd_duallink > 0) ?
 				AD9081_LINK_ALL : AD9081_LINK_0, 1);
@@ -452,7 +452,7 @@ void ad9081_work_func(struct ad9081_phy *phy)
 			ad9081_multichip_sync(phy, 7);
 		} else {
 			ad9081_multichip_sync(phy, 2);
-			mdelay(20);
+			no_os_mdelay(20);
 			ad9081_multichip_sync(phy, 3);
 
 
@@ -464,7 +464,7 @@ void ad9081_work_func(struct ad9081_phy *phy)
 			if (phy->jesd_tx_clk)
 				no_os_clk_disable(phy->jesd_tx_clk);
 
-			mdelay(20);
+			no_os_mdelay(20);
 
 			/* enable txfe TX (JRX) link */
 			if (phy->jesd_tx_clk)
@@ -738,14 +738,14 @@ static int32_t ad9081_setup(struct ad9081_phy *phy)
 	if (ret != 0)
 		return ret;
 
-	mdelay(10);
+	no_os_mdelay(10);
 
 	if (phy->jesd_rx_clk) {
 		timeout = 2000;
 		while(timeout) {
 			ret = no_os_clk_enable(phy->jesd_rx_clk);
 			if (ret) {
-				mdelay(100);
+				no_os_mdelay(100);
 				timeout -= 100;
 				continue;
 			}
@@ -764,7 +764,7 @@ static int32_t ad9081_setup(struct ad9081_phy *phy)
 		while(timeout) {
 			ret = no_os_clk_enable(phy->jesd_tx_clk);
 			if (ret) {
-				mdelay(100);
+				no_os_mdelay(100);
 				timeout -= 100;
 				continue;
 			}
@@ -786,7 +786,7 @@ static int32_t ad9081_setup(struct ad9081_phy *phy)
 	if (phy->jrx_link_tx.jesd_param.jesd_jesdv == 2 ||
 	    phy->jesd_tx_clk) {
 		do {	/* temp workaround until API is fixed */
-			mdelay(10);
+			no_os_mdelay(10);
 			stat = ad9081_jesd_rx_link_status_print(phy);
 			if (stat <= 0) {
 				ret = adi_ad9081_jesd_rx_link_enable_set(
@@ -799,7 +799,7 @@ static int32_t ad9081_setup(struct ad9081_phy *phy)
 				if (phy->jesd_tx_clk) {
 					no_os_clk_disable(phy->jesd_tx_clk);
 
-					mdelay(100);
+					no_os_mdelay(100);
 
 					ret = no_os_clk_enable(phy->jesd_tx_clk);
 					if (ret < 0) {
@@ -808,7 +808,7 @@ static int32_t ad9081_setup(struct ad9081_phy *phy)
 						return ret;
 					}
 				} else {
-					mdelay(100);
+					no_os_mdelay(100);
 				}
 
 				ret = adi_ad9081_jesd_rx_link_enable_set(
@@ -818,7 +818,7 @@ static int32_t ad9081_setup(struct ad9081_phy *phy)
 				if (ret != 0)
 					return ret;
 
-				mdelay(100);
+				no_os_mdelay(100);
 			}
 		} while (stat <= 0 && retry--);
 	}
@@ -869,7 +869,7 @@ static int32_t ad9081_setup(struct ad9081_phy *phy)
 
 static int32_t ad9081_udelay(void *user_data, uint32_t us)
 {
-	udelay(us);
+	no_os_udelay(us);
 
 	return SUCCESS;
 }

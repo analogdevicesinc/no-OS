@@ -283,7 +283,7 @@ static inline void adrv9002_sync_gpio_toogle(const struct adrv9002_rf_phy *phy)
 	if (phy->rx2tx2) {
 		/* toogle ssi sync gpio */
 		no_os_gpio_set_value(phy->ssi_sync, 1);
-		udelay(5000);
+		no_os_udelay(5000);
 		no_os_gpio_set_value(phy->ssi_sync, 0);
 	}
 }

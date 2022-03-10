@@ -114,7 +114,7 @@ static int32_t ad9172_setup(struct ad9172_state *st)
 		return ret;
 	}
 
-	mdelay(100); /* Wait 100 ms for PLL to lock */
+	no_os_mdelay(100); /* Wait 100 ms for PLL to lock */
 
 	ret = ad917x_get_dac_clk_status(ad917x_h,
 					&pll_lock_status, &dll_lock_stat);
@@ -171,7 +171,7 @@ static int32_t ad9172_setup(struct ad9172_state *st)
 		return ret;
 	}
 
-	mdelay(100);
+	no_os_mdelay(100);
 
 	ret = ad917x_jesd_get_pll_status(ad917x_h, &pll_lock_status);
 	if (ret != 0) {
@@ -202,7 +202,7 @@ static int32_t ad9172_setup(struct ad9172_state *st)
 		return -EIO;
 	}
 
-	mdelay(100);
+	no_os_mdelay(100);
 
 	ret = ad917x_jesd_get_link_status(ad917x_h, JESD_LINK_0, &link_status);
 	if (ret != 0) {
@@ -256,7 +256,7 @@ static int32_t ad9172_setup(struct ad9172_state *st)
  */
 static int32_t ad9172_delay_us(void *user_data, uint32_t us)
 {
-	udelay(us);
+	no_os_udelay(us);
 
 	return 0;
 }

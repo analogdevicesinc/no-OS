@@ -191,7 +191,7 @@ static int ad7746_iio_read_raw(void *device, char *buf, uint32_t len,
 			return ret;
 	}
 
-	mdelay(delay);
+	no_os_mdelay(delay);
 
 	switch (channel->type) {
 	case IIO_TEMP:

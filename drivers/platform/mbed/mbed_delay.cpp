@@ -58,11 +58,11 @@ extern "C"
  * @param usecs[in] - Delay in microseconds.
  * @return None.
  */
-void udelay(uint32_t usecs)
+void no_os_udelay(uint32_t usecs)
 {
 	/* wait_ns is more time efficient function compared to wait_us
 	 * Note: For higher values of delay (more than few msec), it is better to use
-	 * mdelay() function as no error/limit checking is done in this function */
+	 * no_os_mdelay() function as no error/limit checking is done in this function */
 	wait_ns(usecs * 1000);
 }
 
@@ -71,7 +71,7 @@ void udelay(uint32_t usecs)
  * @param msecs[in] - Delay in miliseconds.
  * @return None.
  */
-void mdelay(uint32_t msecs)
+void no_os_mdelay(uint32_t msecs)
 {
 	if (msecs)
 		thread_sleep_for(msecs);

@@ -174,7 +174,7 @@ int32_t ad9265_calibrate(struct ad9265_dev *dev,
 
 			axi_adc_write(&core, AXI_ADC_REG_CHAN_STATUS(0), ~0);
 
-			mdelay(1);
+			no_os_mdelay(1);
 
 			axi_adc_read(&core, AXI_ADC_REG_CHAN_STATUS(0), &stat);
 

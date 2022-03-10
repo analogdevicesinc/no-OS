@@ -241,7 +241,7 @@ int main(void)
 	no_os_gpio_direction_output(gpio_rst_1,  0);
 	no_os_gpio_direction_output(gpio_pwdn_0,  0);
 	no_os_gpio_direction_output(gpio_pwdn_1,  0);
-	mdelay(10);
+	no_os_mdelay(10);
 
 	no_os_gpio_get_value(gpio_pwr_good, &pwr_good);
 	if (!pwr_good) {
@@ -252,7 +252,7 @@ int main(void)
 	no_os_gpio_direction_output(gpio_rst_0,  1);
 	no_os_gpio_direction_output(gpio_rst_1,  1);
 	no_os_gpio_direction_output(gpio_sysref,  1);
-	mdelay(100);
+	no_os_mdelay(100);
 
 	// set up the device
 	status = ad9625_setup(&ad9625_0_device, ad9625_0_param);

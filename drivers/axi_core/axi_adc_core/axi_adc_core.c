@@ -105,12 +105,12 @@ int32_t axi_adc_pn_mon(struct axi_adc *adc,
 		axi_adc_write(adc, AXI_ADC_REG_CHAN_CNTRL(ch), reg_data);
 		axi_adc_set_pnsel(adc, ch, sel);
 	}
-	mdelay(1);
+	no_os_mdelay(1);
 
 	for (ch = 0; ch < adc->num_channels; ch++) {
 		axi_adc_write(adc, AXI_ADC_REG_CHAN_STATUS(ch), 0xff);
 	}
-	mdelay(delay_ms);
+	no_os_mdelay(delay_ms);
 
 	for (ch = 0; ch < adc->num_channels; ch++) {
 		axi_adc_read(adc, AXI_ADC_REG_CHAN_STATUS(ch), &reg_data);
@@ -204,7 +204,7 @@ int32_t axi_adc_delay_calibrate(struct axi_adc *adc,
 
 	for (delay = 0; delay < 32; delay++) {
 		axi_adc_delay_set(adc, no_of_lanes, delay);
-		mdelay(20);
+		no_os_mdelay(20);
 		if (axi_adc_pn_mon(adc, sel, 100) == 0) {
 			err_field[delay] = 0;
 			start_valid_delay = start_valid_delay == 32 ?
@@ -531,7 +531,7 @@ int32_t axi_adc_init(struct axi_adc **adc_core,
 			      AXI_ADC_FORMAT_SIGNEXT | AXI_ADC_FORMAT_ENABLE |
 			      AXI_ADC_ENABLE);
 
-	mdelay(100);
+	no_os_mdelay(100);
 
 	ret = axi_adc_init_finish(adc);
 	if (ret)

@@ -419,7 +419,7 @@ int32_t ltc2688_init(struct ltc2688_dev **device,
 	if (ret < 0)
 		goto error;
 
-	mdelay(100);
+	no_os_mdelay(100);
 
 	/* Powerdown/up channels */
 	ret = ltc2688_set_pwr_dac(dev, init_param.pwd_dac_setting);

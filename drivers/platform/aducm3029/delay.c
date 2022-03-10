@@ -115,7 +115,7 @@ static void start_and_wait(struct no_os_timer_desc *timer, uint32_t value)
  * @brief Wait until usecs microseconds passed.
  * @param usecs - Number of microseconds to wait
  */
-void udelay(uint32_t usecs)
+void no_os_udelay(uint32_t usecs)
 {
 	if (!us_timer)
 		if (!initialize_timer(&us_timer, 1))
@@ -127,7 +127,7 @@ void udelay(uint32_t usecs)
  * @brief Wait until msecs milliseconds passed.
  * @param msecs - Number of milliseconds to wait
  */
-void mdelay(uint32_t msecs)
+void no_os_mdelay(uint32_t msecs)
 {
 	if (!ms_timer)
 		if (!initialize_timer(&ms_timer, 0))

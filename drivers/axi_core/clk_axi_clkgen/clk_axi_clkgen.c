@@ -472,7 +472,7 @@ int32_t axi_clkgen_set_rate(struct axi_clkgen *clkgen,
 
 	axi_clkgen_mmcm_enable(clkgen, 1);
 
-	mdelay(10);
+	no_os_mdelay(10);
 
 	axi_clkgen_read(clkgen, AXI_CLKGEN_REG_STATUS, &reg_val);
 	if ((reg_val & AXI_CLKGEN_STATUS) == 0x0) {

@@ -130,7 +130,7 @@ int32_t app_ad9083_status(struct app_ad9083 *app)
 				stat & NO_OS_BIT(6) ? "established" : "lost",
 				stat & NO_OS_BIT(7) ? "invalid" : "valid");
 		else
-			udelay(20000);
+			no_os_udelay(20000);
 
 	} while (ret && retry--);
 

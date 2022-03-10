@@ -505,13 +505,13 @@ int main(void)
 	/* Minimum 3 SYSREF pulses from Clock Device has to be produced for MulticChip Sync */
 
 	AD9528_requestSysref(clockAD9528_device, 1);
-	mdelay(1);
+	no_os_mdelay(1);
 	AD9528_requestSysref(clockAD9528_device, 1);
-	mdelay(1);
+	no_os_mdelay(1);
 	AD9528_requestSysref(clockAD9528_device, 1);
-	mdelay(1);
+	no_os_mdelay(1);
 	AD9528_requestSysref(clockAD9528_device, 1);
-	mdelay(1);
+	no_os_mdelay(1);
 
 	/*************************************************************************/
 	/*****                Mykonos Verify MultiChip Sync                 *****/
@@ -578,7 +578,7 @@ int main(void)
 	}
 
 	/* Wait 200ms for PLLs to lock */
-	mdelay(200);
+	no_os_mdelay(200);
 
 	if ((mykError = MYKONOS_checkPllsLockStatus(&mykDevice,
 			&pllLockStatus)) != MYKONOS_ERR_OK) {
@@ -796,7 +796,7 @@ int main(void)
 
 	/* Request a SYSREF from the AD9528 */
 	AD9528_requestSysref(clockAD9528_device, 1);
-	mdelay(1);
+	no_os_mdelay(1);
 
 	/*** < Info: Mykonos is actively transmitting CGS from the RxFramer> ***/
 
@@ -821,9 +821,9 @@ int main(void)
 
 	/* Request two SYSREFs from the AD9528 */
 	AD9528_requestSysref(clockAD9528_device, 1);
-	mdelay(1);
+	no_os_mdelay(1);
 	AD9528_requestSysref(clockAD9528_device, 1);
-	mdelay(5);
+	no_os_mdelay(5);
 
 	/*************************************************************************/
 	/*****               Check Mykonos Framer Status                     *****/
@@ -889,7 +889,7 @@ int main(void)
 	axi_jesd204_rx_watchdog(rx_jesd);
 	axi_jesd204_rx_watchdog(rx_os_jesd);
 
-	mdelay(1000);
+	no_os_mdelay(1000);
 
 	/* Print JESD status */
 	axi_jesd204_rx_status_read(rx_jesd);
@@ -925,7 +925,7 @@ int main(void)
 	axi_dmac_transfer(tx_dmac, (uintptr_t)dac_buffer,
 			  sizeof(sine_lut_iq));
 
-	mdelay(1000);
+	no_os_mdelay(1000);
 
 	/* Initialize the DMAC and transfer 16384 samples from ADC to MEM */
 	axi_dmac_init(&rx_dmac, &rx_dmac_init);

@@ -83,7 +83,7 @@ int8_t ad7280a_init(struct ad7280a_dev **device,
 	AD7280A_ALERT_IN;
 
 	/* Wait 250us */
-	mdelay(250);
+	no_os_mdelay(250);
 
 	status |= no_os_spi_init(&dev->spi_desc, &init_param.spi_init);
 
@@ -314,14 +314,14 @@ int8_t ad7280a_convert_read_all(struct ad7280a_dev *dev)
 	ad7280a_transfer_32bits(dev,
 				value);
 	/* Wait 100us */
-	mdelay(100);
+	no_os_mdelay(100);
 	/* Toggle CNVST pin */
 	AD7280A_CNVST_LOW;
 	/* Wait 50us */
-	mdelay(50);
+	no_os_mdelay(50);
 	AD7280A_CNVST_HIGH;
 	/* Wait 300us */
-	mdelay(300);
+	no_os_mdelay(300);
 	/* Read data from both devices */
 	for(i = 0; i < 24; i++) {
 		dev->read_data[i] = ad7280a_transfer_32bits(dev,
@@ -407,7 +407,7 @@ int16_t ad7280a_read_register(struct ad7280a_dev *dev,
 	ad7280a_transfer_32bits(dev,
 				value);
 	/* Wait 100us */
-	mdelay(100);
+	no_os_mdelay(100);
 	/* Configure the Read register */
 	value = ad7280a_crc_write((uint32_t) (dev_addr << 31) |
 				  (AD7280A_READ << 21) |
@@ -465,7 +465,7 @@ int16_t ad7280a_read_conversion(struct ad7280a_dev *dev,
 	ad7280a_transfer_32bits(dev,
 				value);
 	/* Wait 100us */
-	mdelay(100);
+	no_os_mdelay(100);
 	/*  */
 	value = ad7280a_crc_write((uint32_t)(dev_addr << 31) |
 				  (AD7280A_CONTROL_HB << 21) |
@@ -474,7 +474,7 @@ int16_t ad7280a_read_conversion(struct ad7280a_dev *dev,
 	ad7280a_transfer_32bits(dev,
 				value);
 	/* Wait 100us */
-	mdelay(100);
+	no_os_mdelay(100);
 	/* Allow conversions to be initiated using CNVST pin on selected part */
 	value=ad7280a_crc_write((uint32_t)(dev_addr << 31) |
 				(AD7280A_CNVST_N_CONTROL << 21) |
@@ -486,10 +486,10 @@ int16_t ad7280a_read_conversion(struct ad7280a_dev *dev,
 	AD7280A_CNVST_LOW;
 	/* Allow sufficient time for all conversions to be completed */
 	/* Wait 50us */
-	mdelay(50);
+	no_os_mdelay(50);
 	AD7280A_CNVST_HIGH;
 	/* Wait 300us */
-	mdelay(300);
+	no_os_mdelay(300);
 	/* Perform the read */
 	value = ad7280a_transfer_32bits(dev,
 					AD7280A_READ_TXVAL);
@@ -701,7 +701,7 @@ void ad7280a_selftest_all(struct ad7280a_dev *dev,
 	ad7280a_transfer_32bits(dev,
 				value);
 	/* Wait 100us */
-	mdelay(100);
+	no_os_mdelay(100);
 	value = ad7280a_crc_write((uint32_t) (AD7280A_READ << 21) |
 				  (AD7280A_SELF_TEST << 15)            |
 				  (1 << 12));
@@ -716,10 +716,10 @@ void ad7280a_selftest_all(struct ad7280a_dev *dev,
 				value);
 	AD7280A_CNVST_LOW;
 	/* wait 100us */
-	mdelay(100);
+	no_os_mdelay(100);
 	AD7280A_CNVST_HIGH;
 	/* wait 300us */
-	mdelay(300);
+	no_os_mdelay(300);
 	value = ad7280a_crc_write((uint32_t) (AD7280A_CNVST_N_CONTROL << 21) |
 				  (1 << 13)                       |
 				  (1 << 12));

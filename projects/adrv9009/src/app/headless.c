@@ -357,7 +357,7 @@ int main(void)
 
 	axi_dmac_transfer(tx_dmac, DAC_DDR_BASEADDR, sizeof(sine_lut_iq));
 
-	mdelay(1000);
+	no_os_mdelay(1000);
 #endif
 
 	/* Transfer 16384 samples from ADC to MEM */

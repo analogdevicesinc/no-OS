@@ -321,7 +321,7 @@ int ad719x_reset(struct ad719x_dev *dev)
 		return ret;
 
 	// user must allow a period of 500 us
-	udelay(500);
+	no_os_udelay(500);
 
 	return ret;
 }

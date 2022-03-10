@@ -133,7 +133,7 @@ int32_t ad9508_setup(struct ad9508_dev **device,
 	if (ret != SUCCESS)
 		return ret;
 
-	mdelay(250);
+	no_os_mdelay(250);
 
 	/*
 	 * read family part id: 0x0C contains the least significant byte,

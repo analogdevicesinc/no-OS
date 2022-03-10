@@ -457,7 +457,7 @@ int32_t axi_jesd204_rx_watchdog(struct axi_jesd204_rx *jesd)
 
 		if (restart) {
 			axi_jesd204_rx_write(jesd, JESD204_RX_REG_LINK_DISABLE, 0x1);
-			mdelay(100);
+			no_os_mdelay(100);
 			axi_jesd204_rx_write(jesd, JESD204_RX_REG_LINK_DISABLE, 0x0);
 		}
 	}

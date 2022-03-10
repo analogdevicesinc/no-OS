@@ -118,7 +118,7 @@ uint32_t altera_a10_acquire_arbitration(struct altera_a10_fpll *fpll)
 		status = altera_a10_fpll_read(fpll, 0x280);
 		if ((status & NO_OS_BIT(2)) == 0)
 			return 0;
-		udelay(10);
+		no_os_udelay(10);
 	} while (timeout++ < 10000);
 
 	printf("%s: Failed to acquire arbitration\n", fpll->name);
@@ -323,7 +323,7 @@ int32_t altera_a10_fpll_pll_calibration_check(struct altera_a10_fpll *fpll)
 
 	/* Wait max 100ms for cal_busy to de-assert */
 	do {
-		udelay(200);
+		no_os_udelay(200);
 
 		/* Read FPLL calibration status from capability register */
 		val = altera_a10_fpll_read(fpll, 0x280);

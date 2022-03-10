@@ -867,7 +867,7 @@ int32_t axi_dac_init(struct axi_dac **dac_core,
 	axi_dac_data_setup(dac);
 	axi_dac_write(dac, AXI_DAC_REG_SYNC_CONTROL, AXI_DAC_SYNC);
 
-	mdelay(100);
+	no_os_mdelay(100);
 
 	ret = axi_dac_init_finish(dac);
 	if (ret)

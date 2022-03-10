@@ -217,7 +217,7 @@ static int i5g_intlv(struct s_i5g *st)
 	for (delay = 0; delay < 32; delay++) {
 		/* Change the delay */
 		i5g_write(st, I5G_DELAY_ADDR, delay);
-		mdelay(100);
+		no_os_mdelay(100);
 		data = i5g_read(st, I5G_DELAY_VERIFY_ADDR);
 		if (data != delay) {
 			printf("delay data mismatch(%d, %d)!\n", delay, data);
@@ -261,7 +261,7 @@ static int i5g_intlv(struct s_i5g *st)
 	i5g_write(st, I5G_SYSREF_CONTROL_ADDR, I5G_SYSREF_RELEASE);
 
 	/* Give it some time */
-	mdelay(1);
+	no_os_mdelay(1);
 
 	/* Is anything wrong? */
 	data = i5g_read(st, I5G_SYNC_STATUS_ADDR);

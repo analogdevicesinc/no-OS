@@ -96,7 +96,7 @@ int main()
 		if (ret != SUCCESS)
 			return ret;
 
-		mdelay(2000);
+		no_os_mdelay(2000);
 		Xil_DCacheInvalidateRange(0x800000, AD400x_EVB_SAMPLE_NO * 4);
 		offload_data = (uint32_t *)msg.rx_addr;
 

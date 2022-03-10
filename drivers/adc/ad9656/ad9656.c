@@ -201,7 +201,7 @@ int32_t ad9656_setup(struct ad9656_dev **device,
 	if (ret != SUCCESS)
 		return ret;
 
-	mdelay(250);
+	no_os_mdelay(250);
 
 	ret = ad9656_reg_read(dev, AD9656_REG_CHIP_ID, &chip_id);
 	if (ret != SUCCESS)
@@ -262,7 +262,7 @@ int32_t ad9656_setup(struct ad9656_dev **device,
 	if (ret != SUCCESS)
 		return ret;
 
-	mdelay(250);
+	no_os_mdelay(250);
 
 	ret = ad9656_reg_read(dev, AD9656_REG_JESD204B_PLL_LOCK_STATUS, &pll_stat);
 	if (ret != SUCCESS)

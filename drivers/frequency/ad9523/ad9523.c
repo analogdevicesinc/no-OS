@@ -223,7 +223,7 @@ int32_t ad9523_calibrate(struct ad9523_dev *dev)
 
 	timeout = 0;
 	while (timeout < 100) {
-		mdelay(1);
+		no_os_mdelay(1);
 		timeout = timeout + 1;
 		ad9523_spi_read(dev,
 				AD9523_READBACK_1,
@@ -278,7 +278,7 @@ int32_t ad9523_status(struct ad9523_dev *dev)
 
 	timeout = 0;
 	while (timeout < 100) {
-		mdelay(1);
+		no_os_mdelay(1);
 		timeout = timeout + 1;
 		ad9523_spi_read(dev,
 				AD9523_READBACK_0,
@@ -451,7 +451,7 @@ int32_t ad9523_setup(struct ad9523_dev **device,
 				AD9523_SER_CONF_SDO_ACTIVE));
 	if (ret < 0)
 		return ret;
-	mdelay(1);
+	no_os_mdelay(1);
 
 	ret = ad9523_spi_write(dev,
 			       AD9523_READBACK_CTRL,

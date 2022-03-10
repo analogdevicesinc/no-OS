@@ -436,11 +436,11 @@ static int32_t ad713x_init_gpio(struct ad713x_dev *dev,
 		ret = no_os_gpio_direction_output(dev->gpio_resetn, false);
 		if (IS_ERR_VALUE(ret))
 			return FAILURE;
-		mdelay(100);
+		no_os_mdelay(100);
 		ret = no_os_gpio_set_value(dev->gpio_resetn, true);
 		if (IS_ERR_VALUE(ret))
 			return FAILURE;
-		mdelay(100);
+		no_os_mdelay(100);
 	}
 
 	return SUCCESS;

@@ -127,7 +127,7 @@ int32_t linux_gpio_get(struct no_os_gpio_desc **desc,
 		linux_desc->direction_fd = open(path, O_WRONLY);
 		if (linux_desc->direction_fd >= 0)
 			break;
-		mdelay(1);
+		no_os_mdelay(1);
 	}
 	if (linux_desc->direction_fd < 0) {
 		printf("%s: Can't open %s\n\r", __func__, path);
@@ -140,7 +140,7 @@ int32_t linux_gpio_get(struct no_os_gpio_desc **desc,
 		linux_desc->value_fd = open(path, O_WRONLY);
 		if (linux_desc->value_fd >= 0)
 			break;
-		mdelay(1);
+		no_os_mdelay(1);
 	}
 	if (linux_desc->value_fd < 0) {
 		printf("%s: Can't open %s\n\r", __func__, path);

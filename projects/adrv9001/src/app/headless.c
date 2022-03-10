@@ -463,7 +463,7 @@ int main(void)
 	axi_dmac_transfer(phy.tx2_dmac, (uintptr_t)dac_buffers[1], sizeof(sine_lut_iq));
 #endif
 
-	mdelay(1000);
+	no_os_mdelay(1000);
 
 	/* Transfer 16384 samples from ADC to MEM */
 	axi_dmac_transfer(phy.rx1_dmac,

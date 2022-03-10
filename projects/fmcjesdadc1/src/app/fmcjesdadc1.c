@@ -355,7 +355,7 @@ int main(void)
 	// setup GPIOs
 	no_os_gpio_get(&gpio_sysref,  &gpio_sysref_param);
 	no_os_gpio_direction_output(gpio_sysref,  1);
-	mdelay(10);
+	no_os_mdelay(10);
 
 	// set up clock generator
 	status = ad9517_setup(&ad9517_device, ad9517_param);

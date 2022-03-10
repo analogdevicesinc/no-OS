@@ -467,7 +467,7 @@ int32_t adxl372_reset(struct adxl372_dev *dev)
 	if (ret < 0)
 		return ret;
 
-	mdelay(1);
+	no_os_mdelay(1);
 
 	return ret;
 }
@@ -807,12 +807,12 @@ int32_t adxl372_init(struct adxl372_dev **device,
 	if (!ret) {
 		*device = dev;
 		printf("adxl372 successfully initialized\n");
-		mdelay(1000);
+		no_os_mdelay(1000);
 		return ret;
 	}
 error:
 	printf("adxl372 initialization error (%d)\n", ret);
 	free(dev);
-	mdelay(1000);
+	no_os_mdelay(1000);
 	return ret;
 }

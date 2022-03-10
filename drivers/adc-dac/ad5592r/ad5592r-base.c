@@ -195,7 +195,7 @@ int32_t ad5592r_software_reset(struct ad5592r_dev *dev)
 	/* Writing this magic value resets the device */
 	ret = ad5592r_base_reg_write(dev, AD5592R_REG_RESET, 0xdac);
 
-	mdelay(10);
+	no_os_mdelay(10);
 
 	return ret;
 }

@@ -104,7 +104,7 @@ static int32_t iio_print_uart_info_message(struct no_os_uart_desc **uart_desc,
 		return status;
 
 	delay_ms = _calc_uart_xfer_time(msglen, UART_BAUDRATE_DEFAULT);
-	mdelay(delay_ms);
+	no_os_mdelay(delay_ms);
 	if (UART_BAUDRATE_DEFAULT != UART_BAUDRATE) {
 		no_os_uart_remove(*uart_desc);
 		uart_init_par->baud_rate = UART_BAUDRATE;
