@@ -1339,7 +1339,22 @@ static uint32_t iio_generate_device_xml(struct iio_device *device, char *name,
 		buff = ch_id;
 
 	i = 0;
-	i += snprintf(buff, no_os_max(n - i, 0),
+
+	/* Write context attributes */
+	if (device->context_attributes)
+		for (j = 0; device->context_attributes[j].name; j++) {
+			i += snprintf(buff + i,
+				      no_os_max(n - i, 0),
+				      "<context-attribute name=\"%s\" ",
+				      device->context_attributes[j].name);
+
+			i += snprintf(buff + i,
+				      no_os_max(n - i, 0),
+				      "value=\"%s\" />",
+				      device->context_attributes[j].value);
+		}
+
+	i += snprintf(buff + i, no_os_max(n - i, 0),
 		      "<device id=\"%s\" name=\"%s\">", id, name);
 
 	/* Write channels */
