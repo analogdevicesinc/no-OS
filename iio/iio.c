@@ -169,7 +169,7 @@ struct iio_desc {
 	uint32_t		xml_size;
 	struct iio_dev_priv	*devs;
 	uint32_t		nb_devs;
-	struct uart_desc	*uart_desc;
+	struct no_os_uart_desc	*uart_desc;
 	int (*recv)(void *conn, uint8_t *buf, uint32_t len);
 	int (*send)(void *conn, uint8_t *buf, uint32_t len);
 	/* FIFO for socket descriptors */
@@ -1414,8 +1414,8 @@ int iio_init(struct iio_desc **desc, struct iio_init_param *init_param)
 		goto free_iiod;
 
 	if (init_param->phy_type == USE_UART) {
-		ldesc->send = (int (*)())uart_write;
-		ldesc->recv = (int (*)())uart_read;
+		ldesc->send = (int (*)())no_os_uart_write;
+		ldesc->recv = (int (*)())no_os_uart_read;
 		ldesc->uart_desc = init_param->uart_desc;
 
 		struct iiod_conn_data data = {

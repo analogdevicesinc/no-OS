@@ -166,7 +166,7 @@ int32_t aducm3029_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 					struct no_os_callback_desc *callback_desc)
 {
 	struct aducm_irq_ctrl_desc	*aducm_desc;
-	struct uart_desc		*uart_desc;
+	struct no_os_uart_desc		*uart_desc;
 	struct rtc_desc			*rtc_desc;
 	struct aducm_rtc_desc		*rtc_extra;
 	struct no_os_gpio_desc		*gpio_desc;
@@ -194,7 +194,7 @@ int32_t aducm3029_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 		break;
 	case ADUCM_UART_INT_ID:
 		aducm_desc->conf[irq_id].uart_conf =
-			(struct uart_desc *)callback_desc->config;
+			(struct no_os_uart_desc *)callback_desc->config;
 		uart_desc = aducm_desc->conf[irq_id].uart_conf;
 		if (!uart_desc)
 			return FAILURE;
@@ -257,7 +257,7 @@ int32_t aducm3029_irq_unregister(struct no_os_irq_ctrl_desc *desc,
 				 uint32_t irq_id)
 {
 	struct aducm_irq_ctrl_desc	*aducm_desc;
-	struct uart_desc		*uart_desc;
+	struct no_os_uart_desc		*uart_desc;
 	struct rtc_desc			*rtc_desc;
 	struct aducm_rtc_desc		*rtc_extra;
 	struct no_os_gpio_desc		*gpio_desc;

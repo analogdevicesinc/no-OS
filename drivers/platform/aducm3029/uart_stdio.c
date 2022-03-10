@@ -43,13 +43,13 @@
 #include <sys/stat.h>
 #include "no_os_uart.h"
 
-static struct uart_desc *g_uart;
+static struct no_os_uart_desc *g_uart;
 
 #define STDIN_FILENO  0
 #define STDOUT_FILENO 1
 #define STDERR_FILENO 2
 
-void init_uart_stdio(struct uart_desc *desc)
+void init_uart_stdio(struct no_os_uart_desc *desc)
 {
 	g_uart = desc;
 }
@@ -71,7 +71,7 @@ int _write(int fd, char* ptr, int len)
 		return EIO;
 
 	if (fd == STDOUT_FILENO || fd == STDERR_FILENO) {
-		ret = uart_write(g_uart, (uint8_t *) ptr, len);
+		ret = no_os_uart_write(g_uart, (uint8_t *) ptr, len);
 		if (ret < 0) {
 			errno = ret;
 			return EIO;
@@ -110,7 +110,7 @@ int _read(int fd, char* ptr, int len)
 		return EIO;
 
 	if (fd == STDIN_FILENO) {
-		ret = uart_read(g_uart, (uint8_t *) ptr, len);
+		ret = no_os_uart_read(g_uart, (uint8_t *) ptr, len);
 		if (ret < 0)
 			return EIO;
 

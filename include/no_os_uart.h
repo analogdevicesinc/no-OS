@@ -50,74 +50,74 @@
 /******************************************************************************/
 
 /**
- * @enum uart_size
+ * @enum no_os_uart_size
  * @brief UART character size (number of data bits) options.
  */
-enum uart_size {
+enum no_os_uart_size {
 	/** 5 data bits */
-	UART_CS_5,
+	NO_OS_UART_CS_5,
 	/** 6 data bits */
-	UART_CS_6,
+	NO_OS_UART_CS_6,
 	/** 7 data bits */
-	UART_CS_7,
+	NO_OS_UART_CS_7,
 	/** 8 data bits */
-	UART_CS_8,
+	NO_OS_UART_CS_8,
 	/** 9 data bits */
-	UART_CS_9,
+	NO_OS_UART_CS_9,
 };
 
 /**
- * @enum uart_parity
+ * @enum no_os_uart_parity
  * @brief UART parity options.
  */
-enum uart_parity {
+enum no_os_uart_parity {
 	/** no parity */
-	UART_PAR_NO,
+	NO_OS_UART_PAR_NO,
 	/** mark parity */
-	UART_PAR_MARK,
+	NO_OS_UART_PAR_MARK,
 	/** space parity */
-	UART_PAR_SPACE,
+	NO_OS_UART_PAR_SPACE,
 	/** odd parity */
-	UART_PAR_ODD,
+	NO_OS_UART_PAR_ODD,
 	/** even parity */
-	UART_PAR_EVEN
+	NO_OS_UART_PAR_EVEN
 };
 
 /**
- * @enum uart_stop
+ * @enum no_os_uart_stop
  * @brief UART number of stop bits options.
  */
-enum uart_stop {
+enum no_os_uart_stop {
 	/** one stop bit */
-	UART_STOP_1_BIT,
+	NO_OS_UART_STOP_1_BIT,
 	/** two stop bits */
-	UART_STOP_2_BIT
+	NO_OS_UART_STOP_2_BIT
 };
 
 /**
- * @struct uart_init_param
+ * @struct no_os_uart_init_param
  * @brief Structure holding the parameters for UART initialization
  */
-struct uart_init_param {
+struct no_os_uart_init_param {
 	/** UART Device ID */
 	uint8_t	device_id;
 	/** UART Baud Rate */
 	uint32_t        baud_rate;
 	/** UART number of data bits */
-	enum uart_size		size;
+	enum no_os_uart_size		size;
 	/** UART parity */
-	enum uart_parity	parity;
+	enum no_os_uart_parity	parity;
 	/** UART number of stop bits */
-	enum uart_stop		stop;
+	enum no_os_uart_stop		stop;
 	/** UART extra parameters (device specific) */
 	void		*extra;
 };
 
 /**
- * @struct uart_desc
+ * @struct no_os_uart_desc
  * @brief Stucture holding the UART descriptor.
  */
-struct uart_desc {
+struct no_os_uart_desc {
 	/** UART Device ID */
 	uint8_t 	device_id;
 	/** UART Baud Rate */
@@ -136,27 +136,30 @@ struct uart_desc {
 /******************************************************************************/
 
 /* Read data from UART. Blocking function */
-int32_t uart_read(struct uart_desc *desc, uint8_t *data, uint32_t bytes_number);
+int32_t no_os_uart_read(struct no_os_uart_desc *desc, uint8_t *data,
+			uint32_t bytes_number);
 
 /* Write data to UART. Blocking function */
-int32_t uart_write(struct uart_desc *desc, const uint8_t *data,
-		   uint32_t bytes_number);
+int32_t no_os_uart_write(struct no_os_uart_desc *desc, const uint8_t *data,
+			 uint32_t bytes_number);
 
 /* Read data from UART. Non blocking function */
-int32_t uart_read_nonblocking(struct uart_desc *desc, uint8_t *data,
-			      uint32_t bytes_number);
+int32_t no_os_uart_read_nonblocking(struct no_os_uart_desc *desc, uint8_t *data,
+				    uint32_t bytes_number);
 
 /* Write data to UART. Non blocking function*/
-int32_t uart_write_nonblocking(struct uart_desc *desc, const uint8_t *data,
-			       uint32_t bytes_number);
+int32_t no_os_uart_write_nonblocking(struct no_os_uart_desc *desc,
+				     const uint8_t *data,
+				     uint32_t bytes_number);
 
 /* Initialize the UART communication peripheral. */
-int32_t uart_init(struct uart_desc **desc, struct uart_init_param *param);
+int32_t no_os_uart_init(struct no_os_uart_desc **desc,
+			struct no_os_uart_init_param *param);
 
-/* Free the resources allocated by uart_init(). */
-int32_t uart_remove(struct uart_desc *desc);
+/* Free the resources allocated by no_os_uart_init(). */
+int32_t no_os_uart_remove(struct no_os_uart_desc *desc);
 
 /* Check if UART errors occurred. */
-uint32_t uart_get_errors(struct uart_desc *desc);
+uint32_t no_os_uart_get_errors(struct no_os_uart_desc *desc);
 
 #endif // _NO_OS_UART_H_

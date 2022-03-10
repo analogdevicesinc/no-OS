@@ -54,14 +54,14 @@
 
 /**
  * @enum UART_ERROR
- * @brief Values returned by \ref uart_get_errors. Multiple values can be set
+ * @brief Values returned by \ref no_os_uart_get_errors. Multiple values can be set
  */
 enum UART_ERROR {
 	/** No errors */
 	NO_ERR				= 0x00,
 	/**
 	 * Bytes number for read/write was set 0 or greater than
-	 * \ref MAX_BYTES
+	 * \ref NO_OS_MAX_BYTES
 	 */
 	BAD_INPUT_PARAMETERS		= 0x01,
 	/** New call was made before a callback call ended */
@@ -136,7 +136,7 @@ enum UART_STOPBITS {
 
 /**
  * @enum UART_BAUD
- * @brief Values for baud_rate in \ref uart_init_param
+ * @brief Values for baud_rate in \ref aducm_uart_init_param
  * The values are only valid if the ADuCM3029 runs at 26MHz.
  * If other values for the baud rate are needed, the user must add a new set of
  * parameters in \ref baud_rates_26MHz calculated by the given formula.

@@ -122,7 +122,8 @@ void UART1_IRQHandler()
  * @param bytes_number - Number of bytes to read.
  * @return positive number of received bytes in case of success, negative error code otherwise.
  */
-int32_t uart_read(struct uart_desc *desc, uint8_t *data, uint32_t bytes_number)
+int32_t no_os_uart_read(struct no_os_uart_desc *desc, uint8_t *data,
+			uint32_t bytes_number)
 {
 	int32_t ret;
 	uint32_t total_read = 0;
@@ -148,8 +149,8 @@ int32_t uart_read(struct uart_desc *desc, uint8_t *data, uint32_t bytes_number)
  * @param bytes_number - Number of bytes to read.
  * @return 0 in case of success, errno codes otherwise.
  */
-int32_t uart_write(struct uart_desc *desc, const uint8_t *data,
-		   uint32_t bytes_number)
+int32_t no_os_uart_write(struct no_os_uart_desc *desc, const uint8_t *data,
+			 uint32_t bytes_number)
 {
 	uint32_t ret;
 	uint32_t written = 0;
@@ -177,8 +178,8 @@ int32_t uart_write(struct uart_desc *desc, const uint8_t *data,
  * @param bytes_number - Number of bytes to read.
  * @return positive number of received bytes in case of success, negative error code otherwise.
  */
-int32_t uart_read_nonblocking(struct uart_desc *desc, uint8_t *data,
-			      uint32_t bytes_number)
+int32_t no_os_uart_read_nonblocking(struct no_os_uart_desc *desc, uint8_t *data,
+				    uint32_t bytes_number)
 {
 	int32_t ret;
 	uint32_t id;
@@ -210,8 +211,9 @@ int32_t uart_read_nonblocking(struct uart_desc *desc, uint8_t *data,
  * @return 0 in case of success, errno codes otherwise.
  */
 
-int32_t uart_write_nonblocking(struct uart_desc *desc, const uint8_t *data,
-			       uint32_t bytes_number)
+int32_t no_os_uart_write_nonblocking(struct no_os_uart_desc *desc,
+				     const uint8_t *data,
+				     uint32_t bytes_number)
 {
 	int32_t ret;
 	uint32_t id;
@@ -241,13 +243,14 @@ int32_t uart_write_nonblocking(struct uart_desc *desc, const uint8_t *data,
  * @param param - The structure that contains the UART parameters.
  * @return 0 in case of success, errno codes otherwise.
  */
-int32_t uart_init(struct uart_desc **desc, struct uart_init_param *param)
+int32_t no_os_uart_init(struct no_os_uart_desc **desc,
+			struct no_os_uart_init_param *param)
 {
 	int32_t ret;
 	int32_t stop, size, flow, parity;
 	mxc_uart_regs_t *uart_regs;
 	struct max_uart_init_param *eparam;
-	struct uart_desc *descriptor;
+	struct no_os_uart_desc *descriptor;
 	sys_map_t map;
 
 	if (!param || !param->extra)
@@ -265,19 +268,19 @@ int32_t uart_init(struct uart_desc **desc, struct uart_init_param *param)
 	descriptor->baud_rate = param->baud_rate;
 
 	switch(param->parity) {
-	case UART_PAR_NO:
+	case NO_OS_UART_PAR_NO:
 		parity = MXC_UART_PARITY_DISABLE;
 		break;
-	case UART_PAR_MARK:
+	case NO_OS_UART_PAR_MARK:
 		parity = MXC_UART_PARITY_MARK;
 		break;
-	case UART_PAR_SPACE:
+	case NO_OS_UART_PAR_SPACE:
 		parity = MXC_UART_PARITY_SPACE;
 		break;
-	case UART_PAR_ODD:
+	case NO_OS_UART_PAR_ODD:
 		parity = MXC_UART_PARITY_ODD;
 		break;
-	case UART_PAR_EVEN:
+	case NO_OS_UART_PAR_EVEN:
 		parity = MXC_UART_PARITY_EVEN;
 		break;
 	default:
@@ -286,16 +289,16 @@ int32_t uart_init(struct uart_desc **desc, struct uart_init_param *param)
 	}
 
 	switch(param->size) {
-	case UART_CS_5:
+	case NO_OS_UART_CS_5:
 		size = 5;
 		break;
-	case UART_CS_6:
+	case NO_OS_UART_CS_6:
 		size = 6;
 		break;
-	case UART_CS_7:
+	case NO_OS_UART_CS_7:
 		size = 7;
 		break;
-	case UART_CS_8:
+	case NO_OS_UART_CS_8:
 		size = 8;
 		break;
 	default:
@@ -304,10 +307,10 @@ int32_t uart_init(struct uart_desc **desc, struct uart_init_param *param)
 	}
 
 	switch(param->stop) {
-	case UART_STOP_1_BIT:
+	case NO_OS_UART_STOP_1_BIT:
 		stop = MXC_UART_STOP_1;
 		break;
-	case UART_STOP_2_BIT:
+	case NO_OS_UART_STOP_2_BIT:
 		stop = MXC_UART_STOP_2;
 		break;
 	default:
@@ -372,11 +375,11 @@ error:
 }
 
 /**
- * @brief Free the resources allocated by uart_init().
+ * @brief Free the resources allocated by no_os_uart_init().
  * @param desc - The UART descriptor.
  * @return 0 in case of success, errno codes otherwise.
  */
-int32_t uart_remove(struct uart_desc *desc)
+int32_t no_os_uart_remove(struct no_os_uart_desc *desc)
 {
 	if (!desc)
 		return -EINVAL;
@@ -392,7 +395,7 @@ int32_t uart_remove(struct uart_desc *desc)
  * @param desc - The UART descriptor.
  * @return -ENOSYS
  */
-uint32_t uart_get_errors(struct uart_desc *desc)
+uint32_t no_os_uart_get_errors(struct no_os_uart_desc *desc)
 {
 	return -ENOSYS;
 }

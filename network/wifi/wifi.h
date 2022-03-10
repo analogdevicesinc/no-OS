@@ -66,7 +66,7 @@ struct wifi_desc;
  */
 struct wifi_init_param {
 	/** Uart descriptor where ESP8266 is connected */
-	struct uart_desc	*uart_desc;
+	struct no_os_uart_desc	*uart_desc;
 	/** Irq controler descriptor */
 	struct no_os_irq_ctrl_desc	*irq_desc;
 	/** Id of the UART interrupt */

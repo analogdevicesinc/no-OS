@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   aducm3029/uart.c
+ *   @file   aducm3029/no_os_uart.c
  *   @brief  Implementation of UART driver for ADuCM302x.
  *   @author Mihail Chindris (mihail.chindris@analog.com)
 ********************************************************************************
@@ -53,12 +53,12 @@
 /******************************************************************************/
 
 /**
- * @struct baud_desc
+ * @struct no_os_baud_desc
  * @brief Structure of an element from \ref baud_rates_26MHz.
  * The baud rate is calculated with the formula:
- * Baudrate = (CLK_FREQ / (div_m + div_n/2048) * pow(2,osr+2) * div_c)).
+ * Baudrate = (NO_OS_CLK_FREQ / (div_m + div_n/2048) * pow(2,osr+2) * div_c)).
  */
-struct baud_desc {
+struct no_os_baud_desc {
 	/** Calculated baud rate from the following parameters */
 	uint32_t	baud_rate;
 	/** From 0 to 2047 */
@@ -72,10 +72,10 @@ struct baud_desc {
 };
 
 /**
- * @struct op_desc
+ * @struct no_os_op_desc
  * @brief It stores the state of a operation
  */
-struct op_desc {
+struct no_os_op_desc {
 	/** Is set when an write nonblocking operation is executing */
 	bool		is_nonblocking;
 	/** Current buffer*/
@@ -85,11 +85,11 @@ struct op_desc {
 };
 
 /**
- * @struct aducm_uart_desc
+ * @struct no_os_aducm_uart_desc
  * @brief Stores specific parameter needed by the UART driver for internal
  * operations
  */
-struct aducm_uart_desc {
+struct no_os_aducm_uart_desc {
 	/** Handle needed by low level functions */
 	ADI_UART_HANDLE	uart_handler;
 	/** Stores the error occurred */
@@ -107,28 +107,28 @@ struct aducm_uart_desc {
 	 */
 	uint32_t	adi_uart_buffer_offset;
 	/** Status of a write operation */
-	struct op_desc	write_desc;
+	struct no_os_op_desc	write_desc;
 	/** Status of a read operation */
-	struct op_desc	read_desc;
+	struct no_os_op_desc	read_desc;
 };
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 
-#define MAX_BYTES	1024u
-#define CLK_FREQ	26000000u
-#define BAUDS_NB	10u
+#define NO_OS_MAX_BYTES	1024u
+#define NO_OS_CLK_FREQ	26000000u
+#define NO_OS_BAUDS_NB	10u
 #if defined (__ADUCM4x50__)
 /** In ADuCM302x UART0 and UART1 are available */
-# define NUM_UART_DEVICES 2
+# define NO_OS_NUM_UART_DEVICES 2
 #else
 /** In ADuCM302x UART0 is available */
-# define NUM_UART_DEVICES 1
+# define NO_OS_NUM_UART_DEVICES 1
 #endif
 
 /** Stores calculated baud rates and parameters */
-const struct baud_desc baud_rates_26MHz[BAUDS_NB] = {
+const struct no_os_baud_desc baud_rates_26MHz[NO_OS_BAUDS_NB] = {
 	{9600, 1078, 3, 24, 3},
 	{19200, 1078, 3, 12, 3},
 	{38400, 1321, 3, 8, 2},
@@ -144,20 +144,20 @@ const struct baud_desc baud_rates_26MHz[BAUDS_NB] = {
 /**
  * Used to check if device already initialized
  */
-static uint32_t initialized[NUM_UART_DEVICES];
+static uint32_t initialized[NO_OS_NUM_UART_DEVICES];
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
 
 /**
- * @brief Allocates the memory needed for the UART descriptor
- * @return Address to the allocated memory, NULL if the allocation fails.
+ * @brief Allocates the memory needed for the UART descriptor.
+ * @return Address to the allocated memory, NULL if the allocation fails
  */
-static struct uart_desc *alloc_desc_mem(void)
+static struct no_os_uart_desc *alloc_desc_mem(void)
 {
-	struct uart_desc	*desc;
-	struct aducm_uart_desc	*aducm_desc;
+	struct no_os_uart_desc	*desc;
+	struct no_os_aducm_uart_desc	*aducm_desc;
 	uint32_t		mem;
 
 	desc = calloc(1, sizeof(*desc));
@@ -187,12 +187,12 @@ static struct uart_desc *alloc_desc_mem(void)
 }
 
 /**
- * @brief Deallocates the memory needed for the UART descriptor
+ * @brief Deallocates the memory needed for the UART descriptor.
  * @param desc - Descriptor to be deallocated
  */
-static void free_desc_mem(struct uart_desc *desc)
+static void free_desc_mem(struct no_os_uart_desc *desc)
 {
-	struct aducm_uart_desc	*aducm_desc = desc->extra;
+	struct no_os_aducm_uart_desc	*aducm_desc = desc->extra;
 
 	free((void *)((uint32_t)aducm_desc->adi_uart_buffer -
 		      aducm_desc->adi_uart_buffer_offset));
@@ -203,22 +203,22 @@ static void free_desc_mem(struct uart_desc *desc)
 }
 
 /**
- * @brief Call the user defined callback when a read/write operation completed
+ * @brief Call the user defined callback when a read/write operation completed.
  * @param desc:		Descriptor of the UART device
  * @param event:	Event ID from ADI_UART_EVENT
  * @param buff:		Pointer to the handled buffer or to an error code
  */
-static void uart_callback(void *ctx, uint32_t event, void *buff)
+static void no_os_uart_callback(void *ctx, uint32_t event, void *buff)
 {
-	struct uart_desc	*desc = ctx;
-	struct aducm_uart_desc	*extra = desc->extra;
+	struct no_os_uart_desc	*desc = ctx;
+	struct no_os_aducm_uart_desc	*extra = desc->extra;
 	uint32_t		len;
 
 	switch(event) {
 	/* Read done */
 	case ADI_UART_EVENT_RX_BUFFER_PROCESSED:
 		if (extra->read_desc.pending) {
-			len = min(extra->read_desc.pending, MAX_BYTES);
+			len = min(extra->read_desc.pending, NO_OS_MAX_BYTES);
 			extra->read_desc.pending -= len;
 			adi_uart_SubmitRxBuffer(
 				(ADI_UART_HANDLE const)extra->uart_handler,
@@ -236,7 +236,7 @@ static void uart_callback(void *ctx, uint32_t event, void *buff)
 	/* Write done */
 	case ADI_UART_EVENT_TX_BUFFER_PROCESSED:
 		if (extra->write_desc.pending) {
-			len = min(extra->write_desc.pending, MAX_BYTES);
+			len = min(extra->write_desc.pending, NO_OS_MAX_BYTES);
 			extra->write_desc.pending -= len;
 			adi_uart_SubmitTxBuffer(
 				(ADI_UART_HANDLE const)extra->uart_handler,
@@ -262,16 +262,16 @@ static void uart_callback(void *ctx, uint32_t event, void *buff)
 }
 
 /**
- * @brief Read data from UART. Blocking function
+ * @brief Read data from UART. Blocking function.
  * @param desc:	Descriptor of the UART device
  * @param data:	Buffer where data will be read
  * @param bytes_number:	Number of bytes to be read. Between 1 and 1024
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
  */
-int32_t uart_read(struct uart_desc *desc, uint8_t *data,
-		  uint32_t bytes_number)
+int32_t no_os_uart_read(struct no_os_uart_desc *desc, uint8_t *data,
+			uint32_t bytes_number)
 {
-	struct aducm_uart_desc	*extra;
+	struct no_os_aducm_uart_desc	*extra;
 	uint32_t		errors;
 	uint32_t		to_read;
 	uint32_t		idx;
@@ -285,13 +285,13 @@ int32_t uart_read(struct uart_desc *desc, uint8_t *data,
 		goto failure;
 	}
 
-	/* Wait until a previously uart_read_nonblocking ends */
+	/* Wait until a previously no_os_uart_read_nonblocking ends */
 	while (extra->read_desc.is_nonblocking)
 		;
 
 	idx = 0;
 	while (bytes_number) {
-		to_read = min(bytes_number, MAX_BYTES);
+		to_read = min(bytes_number, NO_OS_MAX_BYTES);
 		if (ADI_UART_SUCCESS != adi_uart_Read(
 			    (ADI_UART_HANDLE const)extra->uart_handler,
 			    (void *const)(data + idx),
@@ -309,16 +309,16 @@ failure:
 }
 
 /**
- * @brief Write data to UART. Blocking function
+ * @brief Write data to UART. Blocking function.
  * @param desc:	Descriptor of the UART device
  * @param data:	Buffer with the data to be written
  * @param bytes_number:	Number of bytes to be written. Between 1 and 1024
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
  */
-int32_t uart_write(struct uart_desc *desc, const uint8_t *data,
-		   uint32_t bytes_number)
+int32_t no_os_uart_write(struct no_os_uart_desc *desc, const uint8_t *data,
+			 uint32_t bytes_number)
 {
-	struct aducm_uart_desc	*extra;
+	struct no_os_aducm_uart_desc	*extra;
 	uint32_t		errors;
 	uint32_t		to_write;
 	uint32_t		idx;
@@ -329,13 +329,13 @@ int32_t uart_write(struct uart_desc *desc, const uint8_t *data,
 	/* TODO: Add support for more than 1024 bytes */
 
 	extra = desc->extra;
-	/* Wait until a previously uart_write_nonblocking ends */
+	/* Wait until a previously no_os_uart_write_nonblocking ends */
 	while (extra->write_desc.is_nonblocking)
 		;
 
 	idx = 0;
 	while (bytes_number) {
-		to_write = min(bytes_number, MAX_BYTES);
+		to_write = min(bytes_number, NO_OS_MAX_BYTES);
 		if (ADI_UART_SUCCESS != adi_uart_Write(
 			    (ADI_UART_HANDLE const)extra->uart_handler,
 			    (void *const)(data + idx),
@@ -359,13 +359,13 @@ failure:
  * Buffer is used until bytes_number bytes are read.
  * @param desc:	Descriptor of the UART device
  * @param data:	Buffer where data will be read
- * @param bytes_number:	Number of bytes to be read.
+ * @param bytes_number:	Number of bytes to be read
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
  */
-int32_t uart_read_nonblocking(struct uart_desc *desc, uint8_t *data,
-			      uint32_t bytes_number)
+int32_t no_os_uart_read_nonblocking(struct no_os_uart_desc *desc, uint8_t *data,
+				    uint32_t bytes_number)
 {
-	struct aducm_uart_desc	*extra;
+	struct no_os_aducm_uart_desc	*extra;
 	uint32_t		to_read;
 
 	if (!desc || !data || !bytes_number)
@@ -377,7 +377,7 @@ int32_t uart_read_nonblocking(struct uart_desc *desc, uint8_t *data,
 		return FAILURE;
 	extra->read_desc.is_nonblocking = true;
 
-	to_read = min(bytes_number, MAX_BYTES);
+	to_read = min(bytes_number, NO_OS_MAX_BYTES);
 	extra->read_desc.pending = bytes_number - to_read;
 	extra->read_desc.buff = data + to_read;
 	/* The following submits until bytes_number are don in the interrupt. */
@@ -396,13 +396,14 @@ int32_t uart_read_nonblocking(struct uart_desc *desc, uint8_t *data,
  * Data from the buffer is sent over the UART, the function returns immediately.
  * @param desc:	Descriptor of the UART device
  * @param data:	Buffer where data will be written
- * @param bytes_number:	Number of bytes to be written.
+ * @param bytes_number:	Number of bytes to be written
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
  */
-int32_t uart_write_nonblocking(struct uart_desc *desc, const uint8_t *data,
-			       uint32_t bytes_number)
+int32_t no_os_uart_write_nonblocking(struct no_os_uart_desc *desc,
+				     const uint8_t *data,
+				     uint32_t bytes_number)
 {
-	struct aducm_uart_desc	*extra;
+	struct no_os_aducm_uart_desc	*extra;
 	uint32_t		to_write;
 
 	if (!desc || !data || !bytes_number)
@@ -414,7 +415,7 @@ int32_t uart_write_nonblocking(struct uart_desc *desc, const uint8_t *data,
 		return FAILURE;
 	extra->write_desc.is_nonblocking = true;
 
-	to_write = min(bytes_number, MAX_BYTES);
+	to_write = min(bytes_number, NO_OS_MAX_BYTES);
 	extra->write_desc.pending = bytes_number - to_write;
 	extra->write_desc.buff = (uint8_t *)data + to_write;
 	/* The following submits until bytes_number are don in the interrupt. */
@@ -431,21 +432,22 @@ int32_t uart_write_nonblocking(struct uart_desc *desc, const uint8_t *data,
  * @brief Initialize the UART communication peripheral.
  *
  * To configure the UART, the user must set the extra parameter from param with
- * a pointer to the configured platform specific structure
+ * a pointer to the configured platform specific structure.
  * \ref aducm_uart_init_param .\n
  * @param desc:  Descriptor of the UART device used in the call of the drivers
  * functions
  * @param param: Descriptor used to configure the UART device
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
  */
-int32_t uart_init(struct uart_desc **desc, struct uart_init_param *param)
+int32_t no_os_uart_init(struct no_os_uart_desc **desc,
+			struct no_os_uart_init_param *param)
 {
 	ADI_UART_RESULT			uart_ret;
-	struct aducm_uart_desc		*aducm_desc;
+	struct no_os_aducm_uart_desc		*aducm_desc;
 	struct aducm_uart_init_param	*aducm_init_param;
 
 	if (!desc || !param || !(param->extra) ||
-	    param->device_id >= NUM_UART_DEVICES || //
+	    param->device_id >= NO_OS_NUM_UART_DEVICES || //
 	    initialized[param->device_id] != 0) //Already initialized
 		return FAILURE;
 
@@ -477,11 +479,11 @@ int32_t uart_init(struct uart_desc **desc, struct uart_init_param *param)
 
 	/* Configure baud rate */
 	uint32_t i, freq;
-	for (i = 0; i < BAUDS_NB; i++)
+	for (i = 0; i < NO_OS_BAUDS_NB; i++)
 		if (baud_rates_26MHz[i].baud_rate == param->baud_rate)
 			break;
 	adi_pwr_GetClockFrequency(ADI_CLOCK_PCLK, &freq);
-	if (i == BAUDS_NB || freq != CLK_FREQ)
+	if (i == NO_OS_BAUDS_NB || freq != NO_OS_CLK_FREQ)
 		goto failure;
 	uart_ret = adi_uart_ConfigBaudRate(aducm_desc->uart_handler,
 					   baud_rates_26MHz[i].div_c,
@@ -491,7 +493,7 @@ int32_t uart_init(struct uart_desc **desc, struct uart_init_param *param)
 	if (uart_ret != ADI_UART_SUCCESS)
 		goto failure;
 
-	adi_uart_RegisterCallback(aducm_desc->uart_handler, uart_callback,
+	adi_uart_RegisterCallback(aducm_desc->uart_handler, no_os_uart_callback,
 				  *desc);
 
 	return SUCCESS;
@@ -502,13 +504,13 @@ failure:
 }
 
 /**
- * @brief Free the resources allocated by \ref uart_init()
+ * @brief Free the resources allocated by \ref no_os_uart_init().
  * @param desc: Descriptor of the UART device
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
  */
-int32_t uart_remove(struct uart_desc *desc)
+int32_t no_os_uart_remove(struct no_os_uart_desc *desc)
 {
-	struct aducm_uart_desc *aducm_desc;
+	struct no_os_aducm_uart_desc *aducm_desc;
 
 	if (desc == NULL || desc->extra == NULL)
 		return FAILURE;
@@ -523,13 +525,13 @@ int32_t uart_remove(struct uart_desc *desc)
 }
 
 /**
- * @brief Free the resources allocated by \ref uart_init()
+ * @brief Free the resources allocated by \ref no_os_uart_init().
  * @param desc: Descriptor of the UART device
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
  */
-uint32_t uart_get_errors(struct uart_desc *desc)
+uint32_t no_os_uart_get_errors(struct no_os_uart_desc *desc)
 {
-	struct aducm_uart_desc *extra;
+	struct no_os_aducm_uart_desc *extra;
 
 	if (!desc)
 		return FAILURE;

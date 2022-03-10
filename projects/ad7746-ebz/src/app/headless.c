@@ -71,18 +71,18 @@ int main(void)
 	struct ad7746_init_param adcip;
 	struct ad7746_dev *adc = NULL;
 
-	struct uart_desc *uart;
+	struct no_os_uart_desc *uart;
 	struct aducm_uart_init_param xuip = {
 		.parity = UART_NO_PARITY,
 		.stop_bits = UART_ONE_STOPBIT,
 		.word_length = UART_WORDLEN_8BITS
 	};
-	struct uart_init_param uip = {
+	struct no_os_uart_init_param uip = {
 		.device_id = UART_DEVICE_ID,
 		.baud_rate = UART_BAUDRATE,
-		.size = UART_CS_8,
-		.parity = UART_PAR_NO,
-		.stop = UART_STOP_1_BIT,
+		.size = NO_OS_UART_CS_8,
+		.parity = NO_OS_UART_PAR_NO,
+		.stop = NO_OS_UART_STOP_1_BIT,
 		.extra = &xuip,
 	};
 #ifdef IIO_SUPPORT
@@ -128,7 +128,7 @@ int main(void)
 	};
 	adcip.id = ID_AD7746;
 #ifndef IIO_SUPPORT
-	ret = uart_init(&uart, &uip);
+	ret = no_os_uart_init(&uart, &uip);
 	if (ret < 0)
 		goto error;
 

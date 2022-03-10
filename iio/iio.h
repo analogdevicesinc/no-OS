@@ -81,7 +81,7 @@ struct iio_device_init {
 struct iio_init_param {
 	enum pysical_link_type	phy_type;
 	union {
-		struct uart_desc *uart_desc;
+		struct no_os_uart_desc *uart_desc;
 #ifdef ENABLE_IIO_NETWORK
 		struct tcp_socket_init_param *tcp_socket_init_param;
 #endif

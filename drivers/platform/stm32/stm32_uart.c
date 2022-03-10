@@ -48,17 +48,18 @@
  * @param param - The structure that contains the UART parameters.
  * @return SUCCESS in case of success, error code otherwise.
  */
-int32_t uart_init(struct uart_desc **desc, struct uart_init_param *param)
+int32_t no_os_uart_init(struct no_os_uart_desc **desc,
+			struct no_os_uart_init_param *param)
 {
 	struct stm32_uart_init_param *suip;
 	struct stm32_uart_desc *sud;
-	struct uart_desc *descriptor;
+	struct no_os_uart_desc *descriptor;
 	int ret;
 
 	if (!desc || !param)
 		return -EINVAL;
 
-	descriptor = (struct uart_desc *) calloc(1, sizeof(*descriptor));
+	descriptor = (struct no_os_uart_desc *) calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
@@ -74,10 +75,10 @@ int32_t uart_init(struct uart_desc **desc, struct uart_init_param *param)
 	sud->huart = suip->huart;
 	sud->huart->Init.BaudRate = param->baud_rate;
 	switch (param->size) {
-	case UART_CS_8:
+	case NO_OS_UART_CS_8:
 		sud->huart->Init.WordLength = UART_WORDLENGTH_8B;
 		break;
-	case UART_CS_9:
+	case NO_OS_UART_CS_9:
 		sud->huart->Init.WordLength = UART_WORDLENGTH_9B;
 		break;
 	default:
@@ -85,22 +86,26 @@ int32_t uart_init(struct uart_desc **desc, struct uart_init_param *param)
 		goto error;
 	};
 	switch (param->parity) {
-	case UART_PAR_NO:
+	case NO_OS_UART_PAR_NO:
 		sud->huart->Init.Parity = UART_PARITY_NONE;
 		break;
-	case UART_PAR_ODD:
+	case NO_OS_UART_PAR_ODD:
 		sud->huart->Init.Parity = UART_PARITY_ODD;
 		break;
-	case UART_PAR_EVEN:
+	case NO_OS_UART_PAR_EVEN:
 		sud->huart->Init.Parity = UART_PARITY_EVEN;
 		break;
 	default:
 		ret = -EINVAL;
 		goto error;
 	};
-	sud->huart->Init.StopBits = param->stop == UART_STOP_1_BIT ? UART_STOPBITS_1 :
-				    UART_STOPBITS_2;
-	ret = HAL_UART_Init(sud->huart);
+	sud->huart.Init.StopBits = param->stop == NO_OS_UART_STOP_1_BIT ?
+				   UART_STOPBITS_1 :
+				   UART_STOPBITS_2;
+	sud->huart.Init.Mode = suip->mode;
+	sud->huart.Init.HwFlowCtl = suip->hw_flow_ctl;
+	sud->huart.Init.OverSampling = suip->over_sampling;
+	ret = HAL_UART_Init(&sud->huart);
 	if (ret != HAL_OK) {
 		ret = -EIO;
 		goto error;
@@ -119,11 +124,11 @@ error:
 }
 
 /**
- * @brief Free the resources allocated by uart_init().
+ * @brief Free the resources allocated by no_os_uart_init().
  * @param desc - The UART descriptor.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t uart_remove(struct uart_desc *desc)
+int32_t no_os_uart_remove(struct no_os_uart_desc *desc)
 {
 	struct stm32_uart_desc *sud;
 
@@ -145,8 +150,8 @@ int32_t uart_remove(struct uart_desc *desc)
  * @param bytes_number - Number of bytes to read.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t uart_write(struct uart_desc *desc, const uint8_t *data,
-		   uint32_t bytes_number)
+int32_t no_os_uart_write(struct no_os_uart_desc *desc, const uint8_t *data,
+			 uint32_t bytes_number)
 {
 	struct stm32_uart_desc *sud;
 	int32_t ret;
@@ -182,8 +187,8 @@ int32_t uart_write(struct uart_desc *desc, const uint8_t *data,
  * @param bytes_number - Number of bytes to read.
  * @return positive number of received bytes in case of success, negative error code otherwise.
  */
-int32_t uart_read(struct uart_desc *desc, uint8_t *data,
-		  uint32_t bytes_number)
+int32_t no_os_uart_read(struct no_os_uart_desc *desc, uint8_t *data,
+			uint32_t bytes_number)
 {
 	struct stm32_uart_desc *sud;
 	int32_t ret;

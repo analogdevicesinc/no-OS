@@ -64,20 +64,20 @@ static struct iio_data_buffer adc_read_buff = {
 };
 #endif
 
-static int32_t initialize_uart(struct uart_desc **uart)
+static int32_t initialize_uart(struct no_os_uart_desc **uart)
 {
 	struct aducm_uart_init_param platform_uart_init_par = {
 		.parity = UART_NO_PARITY,
 		.stop_bits = UART_ONE_STOPBIT,
 		.word_length = UART_WORDLEN_8BITS
 	};
-	struct uart_init_param uart_init_par = {
+	struct no_os_uart_init_param uart_init_par = {
 		.device_id = UART_DEVICE_ID,
 		.baud_rate = UART_BAUDRATE,
 		.extra = &platform_uart_init_par
 	};
 
-	return uart_init(uart, &uart_init_par);
+	return no_os_uart_init(uart, &uart_init_par);
 }
 
 static int32_t init_pwms(struct no_os_pwm_desc **pwms)
@@ -140,7 +140,7 @@ int main(void)
 
 	struct adc_init_param	adc_init_param = {0};
 	struct adc_desc		*adc;
-	struct uart_desc	*uart;
+	struct no_os_uart_desc	*uart;
 	struct no_os_pwm_desc		*pwms[3];
 
 	status = aducm3029_adc_init(&adc, &adc_init_param);
@@ -186,7 +186,7 @@ int main(void)
 				else
 					n += sprintf(buff + n, ",");
 			}
-			status = uart_write(uart, buff, strlen(buff));
+			status = no_os_uart_write(uart, buff, strlen(buff));
 			if (IS_ERR_VALUE(status))
 				return status;
 		}

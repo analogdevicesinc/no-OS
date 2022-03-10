@@ -78,7 +78,7 @@ int main(void)
 	struct iio_init_param iio_inital;
 
 	/* Initialization for UART. */
-	struct uart_init_param uart_init_par;
+	struct no_os_uart_init_param uart_init_par;
 
 	/* IRQ initial configuration. */
 	struct no_os_irq_init_param irq_init_param;
