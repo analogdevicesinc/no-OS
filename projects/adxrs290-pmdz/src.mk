@@ -16,7 +16,7 @@ endif
 ifeq (y,$(strip $(ENABLE_IIO_NETWORK)))
 DISABLE_SECURE_SOCKET ?= y
 SRC_DIRS += $(NO-OS)/network
-SRCS	 += $(NO-OS)/util/circular_buffer.c
+SRCS	 += $(NO-OS)/util/no_os_circular_buffer.c
 INCS	 += $(INCLUDE)/no_os_circular_buffer.h
 endif
 

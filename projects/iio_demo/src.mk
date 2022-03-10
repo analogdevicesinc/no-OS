@@ -41,7 +41,7 @@ endif
 ifeq (y,$(strip $(ENABLE_IIO_NETWORK)))
 DISABLE_SECURE_SOCKET ?= y
 SRC_DIRS += $(NO-OS)/network
-SRCS	 += $(NO-OS)/util/circular_buffer.c
+SRCS	 += $(NO-OS)/util/no_os_circular_buffer.c
 SRCS	 += $(PLATFORM_DRIVERS)/no_os_timer.c
 INCS	 += $(INCLUDE)/no_os_timer.h \
 		$(INCLUDE)/no_os_circular_buffer.h \
@@ -78,7 +78,7 @@ SRCS += $(NO-OS)/network/linux_socket/linux_socket.c
 SRCS +=	$(NO-OS)/network/tcp_socket.c
 SRCS += $(PROJECT)/src/app/main.c
 SRCS += $(NO-OS)/iio/iio_app/iio_app.c
-SRCS += $(NO-OS)/util/circular_buffer.c
+SRCS += $(NO-OS)/util/no_os_circular_buffer.c
 
 SRCS += $(DRIVERS)/platform/generic/no_os_uart.c \
 		$(DRIVERS)/platform/generic/delay.c

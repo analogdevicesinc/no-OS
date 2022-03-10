@@ -64,7 +64,7 @@
 /* Structure storing data used by a socket */
 struct socket_desc {
 	/* Buffer given to at_parser */
-	struct circular_buffer	*cb;
+	struct no_os_circular_buffer	*cb;
 	/* Circular buffer size */
 	uint32_t		cb_size;
 	/* Socket type */
@@ -259,7 +259,7 @@ static inline int32_t _get_initialized_client_id(struct wifi_desc *desc)
 connection is created or closed */
 static void _wifi_connection_callback(void *ctx, enum at_event event,
 				      uint32_t conn_id,
-				      struct circular_buffer **cb)
+				      struct no_os_circular_buffer **cb)
 {
 	struct wifi_desc	*desc = ctx;
 	struct socket_desc	*sock;
@@ -480,7 +480,7 @@ static int32_t wifi_socket_open(struct wifi_desc *desc, uint32_t *sock_id,
 	if (IS_ERR_VALUE(ret))
 		return ret;
 
-	ret = cb_init(&desc->sockets[id].cb, buff_size);
+	ret = no_os_cb_init(&desc->sockets[id].cb, buff_size);
 	if (IS_ERR_VALUE(ret)) {
 		_wifi_release_socket(desc, id);
 		return ret;
@@ -526,12 +526,12 @@ static int32_t wifi_socket_close(struct wifi_desc *desc, uint32_t sock_id)
 	/* Server socket circular buffer will be released only when server
 	 * is removed */
 	if (!_is_server_socket(desc, sock_id)) {
-		cb_remove(sock->cb);
+		no_os_cb_remove(sock->cb);
 		sock->cb = NULL;
 	} else if (sock_id == desc->server.id) {
 		for (i = 0; i < desc->server.back_log_clients; i++) {
 			sock = &desc->sockets[desc->server.client_ids[i]];
-			cb_remove(sock->cb);
+			no_os_cb_remove(sock->cb);
 			_wifi_release_socket(desc, desc->server.client_ids[i]);
 		}
 	}
@@ -586,7 +586,7 @@ static void _remove_server_back_log(struct wifi_desc *desc)
 
 	for (i = 0; i < desc->server.back_log_clients; i++) {
 		id = desc->server.client_ids[i];
-		cb_remove(desc->sockets[id].cb);
+		no_os_cb_remove(desc->sockets[id].cb);
 		wifi_socket_close(desc, id);
 	}
 }
@@ -683,12 +683,12 @@ static int32_t wifi_socket_recv(struct wifi_desc *desc, uint32_t sock_id,
 	if (sock->state != SOCKET_CONNECTED)
 		return -ENOTCONN;
 
-	cb_size(sock->cb, &available_size);
+	no_os_cb_size(sock->cb, &available_size);
 	if (available_size == 0)
 		return -EAGAIN;
 
 	size = no_os_min(available_size, size);
-	ret = cb_read(sock->cb, data, size);
+	ret = no_os_cb_read(sock->cb, data, size);
 	if (IS_ERR_VALUE(ret))
 		return ret;
 
@@ -783,7 +783,7 @@ static int32_t wifi_socket_listen(struct wifi_desc *desc, uint32_t sock_id,
 			cli_sock->cb = server_sock->cb;
 			server_sock->cb = NULL;
 		} else {
-			ret = cb_init(&cli_sock->cb, server_sock->cb_size);
+			ret = no_os_cb_init(&cli_sock->cb, server_sock->cb_size);
 			if (IS_ERR_VALUE(ret)) {
 				wifi_socket_close(desc, id);
 				break;

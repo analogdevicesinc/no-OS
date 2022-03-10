@@ -202,7 +202,7 @@ struct iio_buffer {
 	/* Buffer direction */
 	enum iio_buffer_direction dir;
 	/* Buffer where data is stored */
-	struct circular_buffer *buf;
+	struct no_os_circular_buffer *buf;
 };
 
 struct iio_device_data {

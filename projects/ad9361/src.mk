@@ -47,7 +47,7 @@ SRCS += $(NO-OS)/util/fifo.c \
 	$(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.c \
 	$(DRIVERS)/axi_core/iio_axi_dac/iio_axi_dac.c \
 	$(NO-OS)/iio/iio_app/iio_app.c \
-	$(NO-OS)/util/circular_buffer.c
+	$(NO-OS)/util/no_os_circular_buffer.c
 endif
 INCS += $(DRIVERS)/rf-transceiver/ad9361/common.h \
 	$(PROJECT)/src/app_config.h
