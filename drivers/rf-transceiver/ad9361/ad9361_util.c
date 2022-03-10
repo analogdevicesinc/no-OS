@@ -52,7 +52,7 @@
 /***************************************************************************//**
  * @brief clk_prepare_enable
 *******************************************************************************/
-int32_t clk_prepare_enable(struct clk *clk)
+int32_t clk_prepare_enable(struct no_os_clk *clk)
 {
 	if (clk) {
 		// Unused variable - fix compiler warning
@@ -119,9 +119,9 @@ uint32_t clk_get_rate(struct ad9361_rf_phy *phy,
 /***************************************************************************//**
  * @brief clk_set_rate
 *******************************************************************************/
-int32_t clk_set_rate(struct ad9361_rf_phy *phy,
-		     struct refclk_scale *clk_priv,
-		     uint32_t rate)
+int32_t no_os_clk_set_rate(struct ad9361_rf_phy *phy,
+			   struct refclk_scale *clk_priv,
+			   uint32_t rate)
 {
 	uint32_t source;
 	int32_t i;

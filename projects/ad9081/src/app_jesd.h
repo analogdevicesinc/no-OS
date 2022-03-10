@@ -56,7 +56,7 @@ enum jesd_clocks {
 /******************************************************************************/
 
 /* @brief Application JESD initialization. */
-int32_t app_jesd_init(struct clk clk[2],
+int32_t app_jesd_init(struct no_os_clk clk[2],
 		      uint32_t reference_clk_khz,
 		      uint32_t rx_device_clk_khz,
 		      uint32_t tx_device_clk_khz,

@@ -106,12 +106,12 @@ typedef SSIZE_T ssize_t;
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
-int32_t clk_prepare_enable(struct clk *clk);
+int32_t clk_prepare_enable(struct no_os_clk *clk);
 uint32_t clk_get_rate(struct ad9361_rf_phy *phy,
 		      struct refclk_scale *clk_priv);
-int32_t clk_set_rate(struct ad9361_rf_phy *phy,
-		     struct refclk_scale *clk_priv,
-		     uint32_t rate);
+int32_t no_os_clk_set_rate(struct ad9361_rf_phy *phy,
+			   struct refclk_scale *clk_priv,
+			   uint32_t rate);
 uint32_t int_sqrt(uint32_t x);
 int32_t ilog2(int32_t x);
 uint32_t find_first_bit(uint32_t word);

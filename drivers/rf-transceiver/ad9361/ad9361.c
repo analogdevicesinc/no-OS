@@ -4636,8 +4636,8 @@ int32_t ad9361_set_trx_clock_chain(struct ad9361_rf_phy *phy,
 	if (ret < 0)
 		return ret;
 
-	ret = clk_set_rate(phy, phy->ref_clk_scale[BBPLL_CLK],
-			   rx_path_clks[BBPLL_FREQ]);
+	ret = no_os_clk_set_rate(phy, phy->ref_clk_scale[BBPLL_CLK],
+				 rx_path_clks[BBPLL_FREQ]);
 	if (ret < 0)
 		return ret;
 
@@ -4645,14 +4645,14 @@ int32_t ad9361_set_trx_clock_chain(struct ad9361_rf_phy *phy,
 
 	for (i = ADC_CLK, j = DAC_CLK, n = ADC_FREQ;
 	     i <= RX_SAMPL_CLK; i++, j++, n++) {
-		ret = clk_set_rate(phy, phy->ref_clk_scale[i], rx_path_clks[n]);
+		ret = no_os_clk_set_rate(phy, phy->ref_clk_scale[i], rx_path_clks[n]);
 		if (ret < 0) {
 			dev_err(dev, "Failed to set BB ref clock rate (%"PRId32")",
 				ret);
 			return ret;
 		}
 		phy->current_rx_path_clks[n] = rx_path_clks[n];
-		ret = clk_set_rate(phy, phy->ref_clk_scale[j], tx_path_clks[n]);
+		ret = no_os_clk_set_rate(phy, phy->ref_clk_scale[j], tx_path_clks[n]);
 		if (ret < 0) {
 			dev_err(dev, "Failed to set BB ref clock rate (%"PRId32")",
 				ret);
@@ -5394,7 +5394,7 @@ int32_t ad9361_setup(struct ad9361_rf_phy *phy)
 			 DIGITAL_POWER_UP | CLOCK_ENABLE_DFLT | BBPLL_ENABLE |
 			 (pd->use_extclk ? XO_BYPASS : 0)); /* Enable Clocks */
 
-	ret = clk_set_rate(phy, phy->ref_clk_scale[BB_REFCLK], ref_freq);
+	ret = no_os_clk_set_rate(phy, phy->ref_clk_scale[BB_REFCLK], ref_freq);
 	if (ret < 0) {
 		dev_err(dev, "Failed to set BB ref clock rate (%"PRId32")",
 			ret);
@@ -5466,13 +5466,13 @@ int32_t ad9361_setup(struct ad9361_rf_phy *phy)
 	if (!ref_freq)
 		return -EINVAL;
 
-	ret = clk_set_rate(phy, phy->ref_clk_scale[RX_REFCLK], ref_freq);
+	ret = no_os_clk_set_rate(phy, phy->ref_clk_scale[RX_REFCLK], ref_freq);
 	if (ret < 0) {
 		dev_err(dev, "Failed to set RX Synth ref clock rate (%"PRId32")", ret);
 		return ret;
 	}
 
-	ret = clk_set_rate(phy, phy->ref_clk_scale[TX_REFCLK], ref_freq);
+	ret = no_os_clk_set_rate(phy, phy->ref_clk_scale[TX_REFCLK], ref_freq);
 	if (ret < 0) {
 		dev_err(dev, "Failed to set TX Synth ref clock rate (%"PRId32")", ret);
 		return ret;
@@ -5489,8 +5489,8 @@ int32_t ad9361_setup(struct ad9361_rf_phy *phy)
 	phy->pdata->use_ext_rx_lo = 0;
 	phy->pdata->use_ext_tx_lo = 0;
 
-	ret = clk_set_rate(phy, phy->ref_clk_scale[RX_RFPLL],
-			   ad9361_to_clk(pd->rx_synth_freq));
+	ret = no_os_clk_set_rate(phy, phy->ref_clk_scale[RX_RFPLL],
+				 ad9361_to_clk(pd->rx_synth_freq));
 	if (ret < 0) {
 		dev_err(dev, "Failed to set RX Synth rate (%"PRId32")",
 			ret);
@@ -5509,8 +5509,8 @@ int32_t ad9361_setup(struct ad9361_rf_phy *phy)
 
 	/* Skip quad cal here we do it later again */
 	phy->last_tx_quad_cal_freq = pd->tx_synth_freq;
-	ret = clk_set_rate(phy, phy->ref_clk_scale[TX_RFPLL],
-			   ad9361_to_clk(pd->tx_synth_freq));
+	ret = no_os_clk_set_rate(phy, phy->ref_clk_scale[TX_RFPLL],
+				 ad9361_to_clk(pd->tx_synth_freq));
 	if (ret < 0) {
 		dev_err(dev, "Failed to set TX Synth rate (%"PRId32")",
 			ret);
@@ -7144,15 +7144,15 @@ int32_t ad9361_clk_mux_set_parent(struct refclk_scale *clk_priv, uint8_t index)
  * @param flags The flags.
  * @param source The source of the new clock.
  * @param parent_source The source of the parent clock.
- * @return A struct clk for the new clock or a negative error code.
+ * @return A struct no_os_clk for the new clock or a negative error code.
  */
-static struct clk *ad9361_clk_register(struct ad9361_rf_phy *phy,
-				       const char *name,
-				       const char *parent_name, uint32_t flags,
-				       uint32_t source, uint32_t parent_source)
+static struct no_os_clk *ad9361_clk_register(struct ad9361_rf_phy *phy,
+		const char *name,
+		const char *parent_name, uint32_t flags,
+		uint32_t source, uint32_t parent_source)
 {
 	struct refclk_scale *clk_priv;
-	struct clk *clk;
+	struct no_os_clk *clk;
 
 	if (name) {
 		// Unused variable - fix compiler warning
@@ -7168,7 +7168,7 @@ static struct clk *ad9361_clk_register(struct ad9361_rf_phy *phy,
 	if (!clk_priv) {
 		dev_err(&phy->spi->dev,
 			"ad9361_clk_register: could not allocate fixed factor clk");
-		return (struct clk *)ERR_PTR(-ENOMEM);
+		return (struct no_os_clk *)ERR_PTR(-ENOMEM);
 	}
 
 	/* struct refclk_scale assignments */
@@ -7179,10 +7179,10 @@ static struct clk *ad9361_clk_register(struct ad9361_rf_phy *phy,
 
 	phy->ref_clk_scale[source] = clk_priv;
 
-	clk = (struct clk *)malloc(sizeof(*clk));
+	clk = (struct no_os_clk *)malloc(sizeof(*clk));
 	if (!clk) {
 		free(clk_priv);
-		return (struct clk *)ERR_PTR(-ENOMEM);
+		return (struct no_os_clk *)ERR_PTR(-ENOMEM);
 	}
 
 	switch (source) {

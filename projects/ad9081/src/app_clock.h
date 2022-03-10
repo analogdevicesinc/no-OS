@@ -51,7 +51,7 @@
 /******************************************************************************/
 
 /* Application clocks initialization. */
-int32_t app_clock_init(struct clk dev_refclk[MULTIDEVICE_INSTANCE_COUNT]);
+int32_t app_clock_init(struct no_os_clk dev_refclk[MULTIDEVICE_INSTANCE_COUNT]);
 
 /* Application clocks remove. */
 int32_t app_clock_remove(void);

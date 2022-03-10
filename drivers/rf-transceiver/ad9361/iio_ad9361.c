@@ -1239,12 +1239,12 @@ static int set_frequency(void *device, char *buf, uint32_t len,
 
 	switch (channel->ch_num) {
 	case 0:
-		ret = clk_set_rate(ad9361_phy, ad9361_phy->ref_clk_scale[RX_RFPLL],
-				   ad9361_to_clk(lo_freq_hz));
+		ret = no_os_clk_set_rate(ad9361_phy, ad9361_phy->ref_clk_scale[RX_RFPLL],
+					 ad9361_to_clk(lo_freq_hz));
 		break;
 	case 1:
-		ret = clk_set_rate(ad9361_phy, ad9361_phy->ref_clk_scale[TX_RFPLL],
-				   ad9361_to_clk(lo_freq_hz));
+		ret = no_os_clk_set_rate(ad9361_phy, ad9361_phy->ref_clk_scale[TX_RFPLL],
+					 ad9361_to_clk(lo_freq_hz));
 		break;
 	default:
 		ret = -EINVAL;
