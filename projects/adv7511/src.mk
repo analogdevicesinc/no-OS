@@ -29,7 +29,7 @@ SRCS +=	$(PLATFORM_DRIVERS)/axi_io.c \
 	$(PLATFORM_DRIVERS)/delay.c \
 	$(PLATFORM_DRIVERS)/xilinx_i2c.c \
 	$(PLATFORM_DRIVERS)/irq.c \
-	$(PLATFORM_DRIVERS)/timer.c
+	$(PLATFORM_DRIVERS)/no_os_timer.c
 SRCS +=$(PROJECT)/TX/HAL/COMMON/tx_hal.c \
 	$(PROJECT)/TX/HAL/WIRED/wrd_hal.c \
 	$(PROJECT)/TX/HAL/WIRED/ADV7511/7511_hal.c \

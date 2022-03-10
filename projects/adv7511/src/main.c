@@ -251,8 +251,8 @@ static int32_t app_set_i2c_mux(struct no_os_i2c_desc *adv7511_i2c)
  */
 static int32_t hal_platform_init(struct no_os_i2c_desc **adv7511_i2c,
 				 struct no_os_i2c_init_param *adv7511_i2c_init,
-				 struct timer_desc **timer_inst_ptr,
-				 struct timer_init_param *timer_inits,
+				 struct no_os_timer_desc **timer_inst_ptr,
+				 struct no_os_timer_init_param *timer_inits,
 				 struct no_os_irq_ctrl_desc **gic_inst_ptr,
 				 struct no_os_irq_init_param *gic_init)
 {
@@ -268,7 +268,7 @@ static int32_t hal_platform_init(struct no_os_i2c_desc **adv7511_i2c,
 #endif
 	struct no_os_callback_desc cb_desc_temp;
 
-	ret = timer_init(timer_inst_ptr, timer_inits);
+	ret = no_os_timer_init(timer_inst_ptr, timer_inits);
 	if(ret != 0)
 		return ret;
 	xil_tmr = (*timer_inst_ptr)->extra;
@@ -308,7 +308,7 @@ static int32_t hal_platform_init(struct no_os_i2c_desc **adv7511_i2c,
 	if(ret != 0)
 		return ret;
 
-	timer_start(*timer_inst_ptr);
+	no_os_timer_start(*timer_inst_ptr);
 
 	i2c_handler = *adv7511_i2c;
 
@@ -330,8 +330,8 @@ int main()
 	struct no_os_i2c_desc *adv7511_i2c;
 	struct no_os_i2c_init_param adv7511_i2c_init;
 	struct xil_i2c_init_param adv7511_extra_i2c_init;
-	struct timer_desc *timer_inst_ptr;
-	struct timer_init_param timer_init;
+	struct no_os_timer_desc *timer_inst_ptr;
+	struct no_os_timer_init_param timer_init;
 	struct xil_timer_init_param xil_timer_init;
 	struct no_os_irq_ctrl_desc *gic_inst_ptr;
 	struct no_os_irq_init_param gic_init;

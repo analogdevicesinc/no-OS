@@ -64,17 +64,17 @@ using namespace std::chrono;
  * @param init_param[in] - Structure that contains Timer Initialization Parameters.
  * @return SUCCESS in case of success, negative error code otherwise.
  */
-int32_t timer_init(struct timer_desc **desc,
-		   struct timer_init_param *param)
+int32_t no_os_timer_init(struct no_os_timer_desc **desc,
+		   struct no_os_timer_init_param *param)
 {
-	struct timer_desc *timer_desc; 		// Pointer to timer descriptor
+	struct no_os_timer_desc *timer_desc; 		// Pointer to timer descriptor
 	struct mbed_timer_desc *mbed_timer_desc;	// Pointer to mbed timer descriptor
 	mbed::Timer *timer;					// Pointer to new Timer instance
 
 	if (!desc || !param)
 		return -EINVAL;
 
-	timer_desc = (struct timer_desc *)calloc(1, sizeof(*timer_desc));
+	timer_desc = (struct no_os_timer_desc *)calloc(1, sizeof(*timer_desc));
 	if (!timer_desc)
 		return -ENOMEM;
 
@@ -105,7 +105,7 @@ err_mbed_timer_desc:
 * @param desc[in] - The Timer Descriptor.
 * @return SUCCESS in case of success, negative error code otherwise.
 */
-int32_t timer_start(struct timer_desc *desc)
+int32_t no_os_timer_start(struct no_os_timer_desc *desc)
 {
 	mbed::Timer *timer;
 
@@ -126,7 +126,7 @@ int32_t timer_start(struct timer_desc *desc)
 * @param desc[in] - The Timer Descriptor.
 * @return SUCCESS in case of success, negative error code otherwise.
 */
-int32_t timer_stop(struct timer_desc *desc)
+int32_t no_os_timer_stop(struct no_os_timer_desc *desc)
 {
 	mbed::Timer *timer;
 
@@ -147,7 +147,7 @@ int32_t timer_stop(struct timer_desc *desc)
 * @param desc[in] - The Timer Descriptor.
 * @return SUCCESS in case of success, negative error code otherwise.
 */
-int32_t timer_remove(struct timer_desc *desc)
+int32_t no_os_timer_remove(struct no_os_timer_desc *desc)
 {
 	if (!desc || !desc->extra)
 		return -EINVAL;
@@ -169,7 +169,7 @@ int32_t timer_remove(struct timer_desc *desc)
 * @param elapsed_time[in, out] - Pointer where the elapsed time value is stored.
 * @return SUCCESS in case of success, negative error code otherwise.
 */
-int32_t timer_get_elapsed_time_nsec(struct timer_desc *desc,
+int32_t no_os_timer_get_elapsed_time_nsec(struct no_os_timer_desc *desc,
 				    uint64_t *elapsed_time)
 {
 	mbed::Timer *timer;

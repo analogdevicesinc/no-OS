@@ -1,5 +1,5 @@
 /***************************************************************************//**
-*   @file   generic/timer.c
+*   @file   generic/no_os_timer.c
 *   @brief  Timer control module source.
 *   @author Andrei Drimbarean (andrei.drimbarean@analog.com)
 ********************************************************************************
@@ -55,8 +55,8 @@
  * @param [in] param - Initialization structure.
  * @return 0 in case of success, negative error code otherwise
  */
-int32_t timer_init(struct timer_desc **desc,
-		   struct timer_init_param *param)
+int32_t no_os_timer_init(struct no_os_timer_desc **desc,
+			 struct no_os_timer_init_param *param)
 {
 	if (desc) {
 		// Unused variable - fix compiler warning
@@ -73,7 +73,7 @@ int32_t timer_init(struct timer_desc **desc,
  * @param [in] desc - Pointer to the device handler.
  * @return 0 in case of success, negative error code otherwise
  */
-int32_t timer_remove(struct timer_desc *desc)
+int32_t no_os_timer_remove(struct no_os_timer_desc *desc)
 {
 	if (desc) {
 		// Unused variable - fix compiler warning
@@ -87,7 +87,7 @@ int32_t timer_remove(struct timer_desc *desc)
  * @param [in] desc - Pointer to the device handler.
  * @return 0 in case of success, negative error code otherwise
  */
-int32_t timer_start(struct timer_desc *desc)
+int32_t no_os_timer_start(struct no_os_timer_desc *desc)
 {
 	if (desc) {
 		// Unused variable - fix compiler warning
@@ -99,7 +99,7 @@ int32_t timer_start(struct timer_desc *desc)
  * @param [in] desc - Pointer to the device handler.
  * @return 0 in case of success, negative error code otherwise
  */
-int32_t timer_stop(struct timer_desc *desc)
+int32_t no_os_timer_stop(struct no_os_timer_desc *desc)
 {
 	if (desc) {
 		// Unused variable - fix compiler warning
@@ -112,7 +112,8 @@ int32_t timer_stop(struct timer_desc *desc)
  * @param [out] counter - Pointer to the counter value.
  * @return 0 in case of success, error code otherwise.
  */
-int32_t timer_counter_get(struct timer_desc *desc, uint32_t *counter)
+int32_t no_os_timer_counter_get(struct no_os_timer_desc *desc,
+				uint32_t *counter)
 {
 	if (desc) {
 		// Unused variable - fix compiler warning
@@ -131,7 +132,7 @@ int32_t timer_counter_get(struct timer_desc *desc, uint32_t *counter)
  * @param [in] new_val - The new value of the counter register.
  * @return 0 in case of success, error code otherwise.
  */
-int32_t timer_counter_set(struct timer_desc *desc, uint32_t new_val)
+int32_t no_os_timer_counter_set(struct no_os_timer_desc *desc, uint32_t new_val)
 {
 	if (desc) {
 		// Unused variable - fix compiler warning
@@ -150,7 +151,8 @@ int32_t timer_counter_set(struct timer_desc *desc, uint32_t new_val)
  * @param [out] freq_hz - The value in Hz of the timer clock.
  * @return 0 in case of success, error code otherwise.
  */
-int32_t timer_count_clk_get(struct timer_desc *desc, uint32_t *freq_hz)
+int32_t no_os_timer_count_clk_get(struct no_os_timer_desc *desc,
+				  uint32_t *freq_hz)
 {
 	if (desc) {
 		// Unused variable - fix compiler warning
@@ -169,7 +171,8 @@ int32_t timer_count_clk_get(struct timer_desc *desc, uint32_t *freq_hz)
  * @param [in] freq_hz - The value in Hz of the new timer clock.
  * @return 0 in case of success, error code otherwise.
  */
-int32_t timer_count_clk_set(struct timer_desc *desc, uint32_t freq_hz)
+int32_t no_os_timer_count_clk_set(struct no_os_timer_desc *desc,
+				  uint32_t freq_hz)
 {
 	if (desc) {
 		// Unused variable - fix compiler warning

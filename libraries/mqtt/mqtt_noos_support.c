@@ -54,7 +54,7 @@
 /******************************************************************************/
 
 /* Timer reference used by the functions */
-static struct timer_desc	*timer;
+static struct no_os_timer_desc	*timer;
 
 /* Number of timer references */
 static uint32_t			nb_references;
@@ -66,7 +66,7 @@ static uint32_t			nb_references;
 /* Allcoate resources for timer. Must be called from mqqt_init */
 int32_t mqtt_timer_init(uint32_t timer_id, void *extra_init_param)
 {
-	struct timer_init_param init_param = {
+	struct no_os_timer_init_param init_param = {
 		.id = timer_id,
 		.freq_hz = 1000,
 		.load_value = 0,
@@ -74,15 +74,15 @@ int32_t mqtt_timer_init(uint32_t timer_id, void *extra_init_param)
 	};
 	int32_t			ret;
 
-	ret = timer_init(&timer, &init_param);
+	ret = no_os_timer_init(&timer, &init_param);
 	if (IS_ERR_VALUE(ret)) {
 		timer = NULL;
 		return FAILURE;
 	}
 
-	ret = timer_start(timer);
+	ret = no_os_timer_start(timer);
 	if (IS_ERR_VALUE(ret)) {
-		timer_remove(timer);
+		no_os_timer_remove(timer);
 		timer = NULL;
 		return FAILURE;
 	}
@@ -98,7 +98,7 @@ void mqtt_timer_remove()
 {
 	nb_references--;
 	if (!nb_references) {
-		timer_remove(timer);
+		no_os_timer_remove(timer);
 		timer = NULL;
 	}
 }
@@ -113,14 +113,14 @@ void TimerInit(Timer* t)
 /* Implementation of TimerCountdownMS used by MQTTClient.c */
 void TimerCountdownMS(Timer* t, unsigned int ms)
 {
-	timer_counter_get(timer, &t->start_time);
+	no_os_timer_counter_get(timer, &t->start_time);
 	t->ms = ms;
 }
 
 /* Implementation of TimerCountdown used by MQTTClient.c */
 void TimerCountdown(Timer* t, unsigned int seconds)
 {
-	timer_counter_get(timer, &t->start_time);
+	no_os_timer_counter_get(timer, &t->start_time);
 	t->ms = seconds * 1000;
 }
 
@@ -129,7 +129,7 @@ int TimerLeftMS(Timer* t)
 {
 	uint32_t ms;
 
-	timer_counter_get(timer, &ms);
+	no_os_timer_counter_get(timer, &ms);
 	ms -= t->start_time;
 
 	if (ms > t->ms)

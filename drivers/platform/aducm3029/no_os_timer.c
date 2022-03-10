@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   aducm3029/timer.c
+ *   @file   aducm3029/no_os_timer.c
  *   @brief  Implementation of TIMER driver for ADuCM302x.
  *
  *   This driver enables the user to create multiple instance of a
@@ -56,19 +56,19 @@
 /******************************************************************************/
 
 /** With this load we get an interrupt each millisecond */
-#define HFOSC_LOAD	26000u
+#define NO_OS_HFOSC_LOAD	26000u
 /** 1 KHz value */
-#define FREQ_1KHZ	1000u
+#define NO_OS_FREQ_1KHZ	1000u
 /** 1 MHz value */
-#define FREQ_1MHZ	1000000u
+#define NO_OS_FREQ_1MHZ	1000000u
 /** Converts the timer value into microseconds */
-#define MHZ26_TO_US(count)	((HFOSC_LOAD - count) / (HFOSC_LOAD / 1000u))
+#define NO_OS_MHZ26_TO_US(count)	((NO_OS_HFOSC_LOAD - count) / (NO_OS_HFOSC_LOAD / 1000u))
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
-/** Incremented each millisecond by \ref tmr_callback() */
+/** Incremented each millisecond by \ref no_os_tmr_callback() */
 static volatile uint64_t	g_count;
 /** Counts the number of instances created */
 static uint32_t			nb_instances;
@@ -87,7 +87,7 @@ static uint32_t			timer_id;
  * @param tmr_event - Unused
  * @param arg - Unused
  */
-static void tmr_callback(void *param, uint32_t tmr_event, void *arg)
+static void no_os_tmr_callback(void *param, uint32_t tmr_event, void *arg)
 {
 	g_count++;
 }
@@ -99,7 +99,7 @@ static void tmr_callback(void *param, uint32_t tmr_event, void *arg)
  * timer instance.\n
  * The user can create multiple instances but only one hardware timer will be
  * used.\n
- * The timer used is defined by the \ref timer_init_param.id .\n
+ * The timer used is defined by the \ref no_os_timer_init_param.id .\n
  * The driver will use the timer selected for the first instance for all the new
  * ones. If it is needed to change the hardware timer, the user must remove all
  * the instances and initialize a new one for the desired hardware timer.
@@ -108,13 +108,14 @@ static void tmr_callback(void *param, uint32_t tmr_event, void *arg)
  * is unused and should be NULL.
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
  */
-int32_t timer_init(struct timer_desc **desc, struct timer_init_param *param)
+int32_t no_os_timer_init(struct no_os_timer_desc **desc,
+			 struct no_os_timer_init_param *param)
 {
-	struct timer_desc *ldesc;
+	struct no_os_timer_desc *ldesc;
 	struct aducm_timer_desc *aducm_desc;
 	ADI_TMR_CONFIG		tmr_conf;
 
-	if (!desc || !param || param->freq_hz > FREQ_1MHZ)
+	if (!desc || !param || param->freq_hz > NO_OS_FREQ_1MHZ)
 		return FAILURE;
 
 	if (!(ldesc = calloc(1, sizeof(*ldesc))))
@@ -128,14 +129,14 @@ int32_t timer_init(struct timer_desc **desc, struct timer_init_param *param)
 
 	if (nb_instances == 0) {
 		timer_id = param->id;
-		adi_tmr_Init(timer_id, tmr_callback, NULL, true);
+		adi_tmr_Init(timer_id, no_os_tmr_callback, NULL, true);
 		/* Set the timer configuration */
 		tmr_conf.bCountingUp = false;
 		tmr_conf.bPeriodic = true;
 		tmr_conf.ePrescaler = ADI_TMR_PRESCALER_1;
 		tmr_conf.eClockSource = ADI_TMR_CLOCK_HFOSC;
-		tmr_conf.nLoad = HFOSC_LOAD;
-		tmr_conf.nAsyncLoad = HFOSC_LOAD;
+		tmr_conf.nLoad = NO_OS_HFOSC_LOAD;
+		tmr_conf.nAsyncLoad = NO_OS_HFOSC_LOAD;
 		tmr_conf.bReloading = true;
 		tmr_conf.bSyncBypass = true;
 		while (ADI_TMR_DEVICE_BUSY == adi_tmr_ConfigTimer(timer_id,
@@ -160,7 +161,7 @@ int32_t timer_init(struct timer_desc **desc, struct timer_init_param *param)
  * @param desc - Descriptor of the timer instance.
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
  */
-int32_t timer_remove(struct timer_desc *desc)
+int32_t no_os_timer_remove(struct no_os_timer_desc *desc)
 {
 	if (!desc)
 		return FAILURE;
@@ -177,13 +178,13 @@ int32_t timer_remove(struct timer_desc *desc)
 	return SUCCESS;
 }
 
-static inline uint64_t get_current_time(struct timer_desc *desc)
+static inline uint64_t no_os_get_current_time(struct no_os_timer_desc *desc)
 {
 	uint16_t		count_us = 0;
 
-	if (desc->freq_hz > FREQ_1KHZ) {
+	if (desc->freq_hz > NO_OS_FREQ_1KHZ) {
 		adi_tmr_GetCurrentCount(timer_id, &count_us);
-		return g_count * 1000u + MHZ26_TO_US(count_us);
+		return g_count * 1000u + NO_OS_MHZ26_TO_US(count_us);
 	} else {
 		return g_count;
 	}
@@ -192,12 +193,12 @@ static inline uint64_t get_current_time(struct timer_desc *desc)
 /**
  * @brief Enable counting in the timer instance.
  *
- * The timer starts counting from the load value used in \ref timer_init(), set
- * by \ref timer_counter_set() or from the value the timer stopped at.
+ * The timer starts counting from the load value used in \ref no_os_timer_init(), set
+ * by \ref no_os_timer_counter_set() or from the value the timer stopped at.
  * @param desc - Descriptor of the timer instance.
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
  */
-int32_t timer_start(struct timer_desc *desc)
+int32_t no_os_timer_start(struct no_os_timer_desc *desc)
 {
 	struct aducm_timer_desc *tmr_desc;
 
@@ -209,7 +210,7 @@ int32_t timer_start(struct timer_desc *desc)
 		return FAILURE;
 	if (nb_enables == 0)
 		while (ADI_TMR_DEVICE_BUSY == adi_tmr_Enable(timer_id, true));
-	tmr_desc->old_time = get_current_time(desc);
+	tmr_desc->old_time = no_os_get_current_time(desc);
 	tmr_desc->started = true;
 	nb_enables++;
 
@@ -223,7 +224,7 @@ int32_t timer_start(struct timer_desc *desc)
  * @param desc - Descriptor of the timer instance.
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
  */
-int32_t timer_stop(struct timer_desc *desc)
+int32_t no_os_timer_stop(struct no_os_timer_desc *desc)
 {
 	uint32_t		counter;
 	struct aducm_timer_desc *tmr_desc;
@@ -235,7 +236,7 @@ int32_t timer_stop(struct timer_desc *desc)
 	if (!tmr_desc->started)
 		return FAILURE;
 
-	timer_counter_get(desc, &counter);
+	no_os_timer_counter_get(desc, &counter);
 	desc->load_value = counter;
 	if (nb_enables == 1)
 		while (ADI_TMR_DEVICE_BUSY == adi_tmr_Enable(timer_id, false));
@@ -251,7 +252,8 @@ int32_t timer_stop(struct timer_desc *desc)
  * @param counter - Pointer were the timer counter is stored.
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
  */
-int32_t timer_counter_get(struct timer_desc *desc, uint32_t *counter)
+int32_t no_os_timer_counter_get(struct no_os_timer_desc *desc,
+				uint32_t *counter)
 {
 	struct aducm_timer_desc	*tmr_desc;
 	uint16_t		count_us;
@@ -272,9 +274,9 @@ int32_t timer_counter_get(struct timer_desc *desc, uint32_t *counter)
 	 * modifications during calculations.
 	 */
 	local_count = g_count;
-	if (desc->freq_hz > FREQ_1KHZ) {
+	if (desc->freq_hz > NO_OS_FREQ_1KHZ) {
 		adi_tmr_GetCurrentCount(timer_id, &count_us);
-		count_us = MHZ26_TO_US(count_us);
+		count_us = NO_OS_MHZ26_TO_US(count_us);
 		new_time = local_count * 1000u + count_us;
 		if (new_time < tmr_desc->old_time)
 			new_time += 1000;
@@ -283,14 +285,14 @@ int32_t timer_counter_get(struct timer_desc *desc, uint32_t *counter)
 		 * Transform from the base counting frequency (1MHz) to the
 		 * frequency requested by the application
 		 */
-		*counter = (big_counter * desc->freq_hz) / FREQ_1MHZ;
+		*counter = (big_counter * desc->freq_hz) / NO_OS_FREQ_1MHZ;
 	} else {
 		big_counter = local_count - tmr_desc->old_time;
 		/*
 		 * Transform from the base counting frequency (1KHz) to the
 		 * frequency requested by the application
 		 */
-		*counter = (big_counter * desc->freq_hz) / FREQ_1KHZ;
+		*counter = (big_counter * desc->freq_hz) / NO_OS_FREQ_1KHZ;
 	}
 	*counter += desc->load_value;
 
@@ -304,7 +306,7 @@ int32_t timer_counter_get(struct timer_desc *desc, uint32_t *counter)
  * @param new_val - Value of the new counter to be set
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
  */
-int32_t timer_counter_set(struct timer_desc *desc, uint32_t new_val)
+int32_t no_os_timer_counter_set(struct no_os_timer_desc *desc, uint32_t new_val)
 {
 	struct aducm_timer_desc	*tmr_desc;
 
@@ -312,7 +314,7 @@ int32_t timer_counter_set(struct timer_desc *desc, uint32_t new_val)
 		return FAILURE;
 
 	tmr_desc = (struct aducm_timer_desc *)desc->extra;
-	tmr_desc->old_time = get_current_time(desc);
+	tmr_desc->old_time = no_os_get_current_time(desc);
 	desc->load_value = new_val;
 
 	return SUCCESS;
@@ -324,7 +326,8 @@ int32_t timer_counter_set(struct timer_desc *desc, uint32_t new_val)
  * @param freq_hz - Pointer where the frequency value will be stored
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
  */
-int32_t timer_count_clk_get(struct timer_desc *desc, uint32_t *freq_hz)
+int32_t no_os_timer_count_clk_get(struct no_os_timer_desc *desc,
+				  uint32_t *freq_hz)
 {
 	if (!desc || !freq_hz)
 		return FAILURE;
@@ -341,7 +344,8 @@ int32_t timer_count_clk_get(struct timer_desc *desc, uint32_t *freq_hz)
  * @param freq_hz - Value of the new frequency to be set
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
  */
-int32_t timer_count_clk_set(struct timer_desc *desc, uint32_t freq_hz)
+int32_t no_os_timer_count_clk_set(struct no_os_timer_desc *desc,
+				  uint32_t freq_hz)
 {
 	if (!desc || ((struct aducm_timer_desc*)desc->extra)->started)
 		return FAILURE;

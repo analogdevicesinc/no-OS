@@ -1,5 +1,5 @@
 /***************************************************************************//**
-*   @file   xilinx/timer.c
+*   @file   xilinx/no_os_timer.c
 *   @brief  Timer and GIC control module source.
 *   @author Andrei Drimbarean (andrei.drimbarean@analog.com)
 ********************************************************************************
@@ -66,11 +66,11 @@
  * @param [in] param - Initialization structure.
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise
  */
-int32_t timer_init(struct timer_desc **desc,
-		   struct timer_init_param *param)
+int32_t no_os_timer_init(struct no_os_timer_desc **desc,
+			 struct no_os_timer_init_param *param)
 {
 	int32_t ret;
-	struct timer_desc *dev;
+	struct no_os_timer_desc *dev;
 	struct xil_timer_desc *xdesc;
 	struct xil_timer_init_param *xinit;
 
@@ -79,7 +79,7 @@ int32_t timer_init(struct timer_desc **desc,
 
 	xinit = param->extra;
 
-	dev = (struct timer_desc *)calloc(1, sizeof(*dev));
+	dev = (struct no_os_timer_desc *)calloc(1, sizeof(*dev));
 	if(!dev)
 		return FAILURE;
 	xdesc = (struct xil_timer_desc *)calloc(1, sizeof(*xdesc));
@@ -106,11 +106,11 @@ int32_t timer_init(struct timer_desc **desc,
 			free(xdesc->instance);
 			goto error_xdesc;
 		}
-		ret = timer_count_clk_set(dev, param->freq_hz);
+		ret = no_os_timer_count_clk_set(dev, param->freq_hz);
 		if (IS_ERR_VALUE(ret))
 			goto error_xdesc;
 
-		ret = timer_counter_set(dev, dev->load_value);
+		ret = no_os_timer_counter_set(dev, dev->load_value);
 		if (IS_ERR_VALUE(ret))
 			goto error_xdesc;
 
@@ -171,7 +171,7 @@ error_desc:
  * @param [in] desc - Pointer to the device handler.
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise
  */
-int32_t timer_remove(struct timer_desc *desc)
+int32_t no_os_timer_remove(struct no_os_timer_desc *desc)
 {
 	struct xil_timer_desc *xdesc;
 
@@ -209,7 +209,7 @@ int32_t timer_remove(struct timer_desc *desc)
  * @param [in] desc - Pointer to the device handler.
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise
  */
-int32_t timer_start(struct timer_desc *desc)
+int32_t no_os_timer_start(struct no_os_timer_desc *desc)
 {
 	struct xil_timer_desc *xdesc;
 
@@ -241,7 +241,7 @@ int32_t timer_start(struct timer_desc *desc)
  * @param [in] desc - Pointer to the device handler.
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise
  */
-int32_t timer_stop(struct timer_desc *desc)
+int32_t no_os_timer_stop(struct no_os_timer_desc *desc)
 {
 	struct xil_timer_desc *xdesc;
 
@@ -276,7 +276,8 @@ int32_t timer_stop(struct timer_desc *desc)
  * @param [out] counter - Pointer to the current counter value.
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise
  */
-int32_t timer_counter_get(struct timer_desc *desc, uint32_t *counter)
+int32_t no_os_timer_counter_get(struct no_os_timer_desc *desc,
+				uint32_t *counter)
 {
 	struct xil_timer_desc *xdesc;
 
@@ -314,7 +315,7 @@ int32_t timer_counter_get(struct timer_desc *desc, uint32_t *counter)
  * @param [in] new_val - New value for the timer counter.
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise
  */
-int32_t timer_counter_set(struct timer_desc *desc, uint32_t new_val)
+int32_t no_os_timer_counter_set(struct no_os_timer_desc *desc, uint32_t new_val)
 {
 	struct xil_timer_desc *xdesc;
 
@@ -350,7 +351,8 @@ int32_t timer_counter_set(struct timer_desc *desc, uint32_t new_val)
  * @param [out] freq_hz - Pointer to the returned frequency.
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise
  */
-int32_t timer_count_clk_get(struct timer_desc *desc, uint32_t *freq_hz)
+int32_t no_os_timer_count_clk_get(struct no_os_timer_desc *desc,
+				  uint32_t *freq_hz)
 {
 	struct xil_timer_desc *xdesc;
 
@@ -387,7 +389,8 @@ int32_t timer_count_clk_get(struct timer_desc *desc, uint32_t *freq_hz)
  * @param [in] freq_hz - New timer frequency in hertz.
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise
  */
-int32_t timer_count_clk_set(struct timer_desc *desc, uint32_t freq_hz)
+int32_t no_os_timer_count_clk_set(struct no_os_timer_desc *desc,
+				  uint32_t freq_hz)
 {
 	struct xil_timer_desc *xdesc;
 
