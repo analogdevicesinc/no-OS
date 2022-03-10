@@ -64,8 +64,8 @@ struct ad7606_chip_info {
 	uint32_t sw_range_table_sz;
 };
 
-DECLARE_CRC8_TABLE(ad7606_crc8);
-DECLARE_CRC16_TABLE(ad7606_crc16);
+NO_OS_DECLARE_CRC8_TABLE(ad7606_crc8);
+NO_OS_DECLARE_CRC16_TABLE(ad7606_crc16);
 
 static const struct ad7606_range ad7606_range_table[] = {
 	{-5000, 5000, false},	/* RANGE pin LOW */
@@ -241,7 +241,7 @@ int32_t ad7606_spi_reg_read(struct ad7606_dev *dev,
 	buf[0] = AD7606_RD_FLAG_MSK(reg_addr);
 	buf[1] = 0x00;
 	if (dev->digital_diag_enable.int_crc_err_en) {
-		crc = crc8(ad7606_crc8, buf, 2, 0);
+		crc = no_os_crc8(ad7606_crc8, buf, 2, 0);
 		buf[2] = crc;
 		sz += 1;
 	}
@@ -254,7 +254,7 @@ int32_t ad7606_spi_reg_read(struct ad7606_dev *dev,
 	buf[0] = AD7606_RD_FLAG_MSK(reg_addr);
 	buf[1] = 0x00;
 	if (dev->digital_diag_enable.int_crc_err_en) {
-		crc = crc8(ad7606_crc8, buf, 2, 0);
+		crc = no_os_crc8(ad7606_crc8, buf, 2, 0);
 		buf[2] = crc;
 	}
 	ret = no_os_spi_write_and_read(dev->spi_desc, buf, sz);
@@ -262,7 +262,7 @@ int32_t ad7606_spi_reg_read(struct ad7606_dev *dev,
 		return ret;
 
 	if (dev->digital_diag_enable.int_crc_err_en) {
-		crc = crc8(ad7606_crc8, buf, 2, 0);
+		crc = no_os_crc8(ad7606_crc8, buf, 2, 0);
 		if (crc != buf[2])
 			return -EBADMSG;
 	}
@@ -310,7 +310,7 @@ int32_t ad7606_spi_reg_write(struct ad7606_dev *dev,
 	buf[0] = AD7606_WR_FLAG_MSK(reg_addr);
 	buf[1] = reg_data;
 	if (dev->digital_diag_enable.int_crc_err_en) {
-		crc = crc8(ad7606_crc8, buf, 2, 0);
+		crc = no_os_crc8(ad7606_crc8, buf, 2, 0);
 		buf[2] = crc;
 		sz += 1;
 	}
@@ -488,7 +488,7 @@ int32_t ad7606_spi_data_read(struct ad7606_dev *dev, uint32_t *data)
 
 	if (dev->digital_diag_enable.int_crc_err_en) {
 		sz -= 2;
-		crc = crc16(ad7606_crc16, dev->data, sz, 0);
+		crc = no_os_crc16(ad7606_crc16, dev->data, sz, 0);
 		icrc = ((uint16_t)dev->data[sz] << 8) |
 		       dev->data[sz+1];
 		if (icrc != crc)
@@ -1113,8 +1113,8 @@ int32_t ad7606_init(struct ad7606_dev **device,
 	uint8_t reg, id;
 	int32_t i, ret;
 
-	crc8_populate_msb(ad7606_crc8, 0x7);
-	crc16_populate_msb(ad7606_crc16, 0x755b);
+	no_os_crc8_populate_msb(ad7606_crc8, 0x7);
+	no_os_crc16_populate_msb(ad7606_crc16, 0x755b);
 
 	dev = (struct ad7606_dev *)calloc(1, sizeof(*dev));
 	if (!dev)

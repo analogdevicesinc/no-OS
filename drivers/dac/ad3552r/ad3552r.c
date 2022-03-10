@@ -362,8 +362,8 @@ static int32_t _ad3552r_transfer_with_crc(struct ad3552r_desc *desc,
 		if (i > 0)
 			crc_init = addr;
 		else
-			crc_init = crc8(desc->crc_table, &instr, 1,
-					AD3552R_CRC_SEED);
+			crc_init = no_os_crc8(desc->crc_table, &instr, 1,
+					      AD3552R_CRC_SEED);
 
 		if (data->is_read && i > 0) {
 			/* CRC is not needed for continuous read transaction */
@@ -377,8 +377,8 @@ static int32_t _ad3552r_transfer_with_crc(struct ad3552r_desc *desc,
 				++msg.bytes_number;
 			}
 			memcpy(pbuf, data->data + i, reg_len);
-			pbuf[reg_len] = crc8(desc->crc_table, pbuf, reg_len,
-					     crc_init);
+			pbuf[reg_len] = no_os_crc8(desc->crc_table, pbuf, reg_len,
+						   crc_init);
 		}
 
 		/* Send message */
@@ -395,7 +395,7 @@ static int32_t _ad3552r_transfer_with_crc(struct ad3552r_desc *desc,
 			/* Save received data */
 			memcpy(data->data + i, pbuf, reg_len);
 			if (pbuf[reg_len] !=
-			    crc8(desc->crc_table, pbuf, reg_len, crc_init))
+			    no_os_crc8(desc->crc_table, pbuf, reg_len, crc_init))
 				return -EBADMSG;
 		} else {
 			if (in[reg_len + (i == 0)] != out[reg_len + (i == 0)])
@@ -1081,7 +1081,7 @@ int32_t ad3552r_init(struct ad3552r_desc **desc,
 	if (IS_ERR_VALUE(err))
 		goto err;
 
-	crc8_populate_msb(ldesc->crc_table, AD3552R_CRC_POLY);
+	no_os_crc8_populate_msb(ldesc->crc_table, AD3552R_CRC_POLY);
 
 	err = no_os_gpio_get_optional(&ldesc->reset,
 				      param->reset_gpio_param_optional);
