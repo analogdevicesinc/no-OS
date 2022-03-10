@@ -525,9 +525,9 @@ int32_t ad9528_setup(struct ad9528_dev **device,
 	if (ret < 0)
 		return ret;
 
-	vco_freq = div_u64((uint64_t)dev->pdata->vcxo_freq *
-			   (dev->pdata->pll2_freq_doubler_en ? 2 : 1) * pll2_ndiv,
-			   dev->pdata->pll2_r1_div);
+	vco_freq = no_os_div_u64((uint64_t)dev->pdata->vcxo_freq *
+				 (dev->pdata->pll2_freq_doubler_en ? 2 : 1) * pll2_ndiv,
+				 dev->pdata->pll2_r1_div);
 
 	vco_ctrl = AD_IF(pll2_freq_doubler_en || dev->pdata->pll2_r1_div != 1,
 			 AD9528_PLL2_DOUBLER_R1_EN);
@@ -733,12 +733,12 @@ uint32_t ad9528_calc_out_div(uint32_t rate,
 {
 	uint32_t div;
 
-	div = DIV_ROUND_CLOSEST(parent_rate, rate);
+	div = NO_OS_DIV_ROUND_CLOSEST(parent_rate, rate);
 
-	div = clamp_t(unsigned int,
-		      div,
-		      AD9528_CLK_DIST_DIV_MIN,
-		      AD9528_CLK_DIST_DIV_MAX);
+	div = no_os_clamp_t(unsigned int,
+			    div,
+			    AD9528_CLK_DIST_DIV_MIN,
+			    AD9528_CLK_DIST_DIV_MAX);
 
 	return div;
 }
@@ -769,17 +769,17 @@ uint32_t ad9528_clk_round_rate(struct ad9528_dev *dev, uint32_t chan,
 		div = ad9528_calc_out_div(rate, freq);
 	} else if (signal_source == AD9528_SYSREF) {
 		freq = dev->ad9528_st.vco_out_freq[AD9528_VCXO] / 2;
-		div = DIV_ROUND_CLOSEST(freq, rate);
-		div = clamp_t(unsigned int,
-			      div,
-			      AD9528_SYSREF_K_DIV_MIN,
-			      AD9528_SYSREF_K_DIV_MAX);
+		div = NO_OS_DIV_ROUND_CLOSEST(freq, rate);
+		div = no_os_clamp_t(unsigned int,
+				    div,
+				    AD9528_SYSREF_K_DIV_MIN,
+				    AD9528_SYSREF_K_DIV_MAX);
 	} else {
 		// oops, it seems channels were misconfigured.
 		return 0;
 	}
 
-	return DIV_ROUND_CLOSEST(freq, div);
+	return NO_OS_DIV_ROUND_CLOSEST(freq, div);
 }
 
 /***************************************************************************//**
@@ -837,12 +837,13 @@ int32_t ad9528_clk_set_rate(struct ad9528_dev *dev, uint32_t chan,
 	// note that this affects all other SYSREF sourced channels
 	else if (signal_source == AD9528_SYSREF) {
 		// SYSREF Generator is sourced from VCXO with a fixed divider of 2 and a K divider
-		div = DIV_ROUND_CLOSEST(dev->ad9528_st.vco_out_freq[AD9528_VCXO] / 2, rate);
+		div = NO_OS_DIV_ROUND_CLOSEST(dev->ad9528_st.vco_out_freq[AD9528_VCXO] / 2,
+					      rate);
 
-		div = clamp_t(unsigned int,
-			      div,
-			      AD9528_SYSREF_K_DIV_MIN,
-			      AD9528_SYSREF_K_DIV_MAX);
+		div = no_os_clamp_t(unsigned int,
+				    div,
+				    AD9528_SYSREF_K_DIV_MIN,
+				    AD9528_SYSREF_K_DIV_MAX);
 
 		// apply the new K divider to hardware.
 		reg = div;

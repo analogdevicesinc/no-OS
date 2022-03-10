@@ -63,12 +63,12 @@ static int32_t ad7746_store_cap_filter_rate_setup(struct ad7746_dev *chip,
 	uint32_t i;
 	struct ad7746_config c = chip->setup.config;
 
-	for (i = 0; i < ARRAY_SIZE(ad7746_cap_filter_rate_table); i++)
+	for (i = 0; i < NO_OS_ARRAY_SIZE(ad7746_cap_filter_rate_table); i++)
 		if (val >= ad7746_cap_filter_rate_table[i][0])
 			break;
 
-	if (i >= ARRAY_SIZE(ad7746_cap_filter_rate_table))
-		i = ARRAY_SIZE(ad7746_cap_filter_rate_table) - 1;
+	if (i >= NO_OS_ARRAY_SIZE(ad7746_cap_filter_rate_table))
+		i = NO_OS_ARRAY_SIZE(ad7746_cap_filter_rate_table) - 1;
 
 	c.capf = i;
 	return ad7746_set_config(chip, c);
@@ -80,12 +80,12 @@ static int32_t ad7746_store_vt_filter_rate_setup(struct ad7746_dev *chip,
 	uint32_t i;
 	struct ad7746_config c = chip->setup.config;
 
-	for (i = 0; i < ARRAY_SIZE(ad7746_vt_filter_rate_table); i++)
+	for (i = 0; i < NO_OS_ARRAY_SIZE(ad7746_vt_filter_rate_table); i++)
 		if (val >= ad7746_vt_filter_rate_table[i][0])
 			break;
 
-	if (i >= ARRAY_SIZE(ad7746_vt_filter_rate_table))
-		i = ARRAY_SIZE(ad7746_vt_filter_rate_table) - 1;
+	if (i >= NO_OS_ARRAY_SIZE(ad7746_vt_filter_rate_table))
+		i = NO_OS_ARRAY_SIZE(ad7746_vt_filter_rate_table) - 1;
 
 	c.vtf = i;
 	return ad7746_set_config(chip, c);
@@ -724,7 +724,7 @@ static struct iio_channel ad7746_channels[] = {
 };
 
 static struct iio_device ad7746_iio_device = {
-	.num_ch = ARRAY_SIZE(ad7746_channels),
+	.num_ch = NO_OS_ARRAY_SIZE(ad7746_channels),
 	.channels = ad7746_channels,
 	.attributes = NULL,
 	.debug_attributes = NULL,

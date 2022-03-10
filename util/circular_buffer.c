@@ -192,13 +192,13 @@ static int32_t cb_prepare_async_operation(struct circular_buffer *desc,
 		}
 
 		/* We can only read available data */
-		requested_size = min(requested_size, available_size);
+		requested_size = no_os_min(requested_size, available_size);
 		if (!requested_size)
 			return -EAGAIN;
 	}
 
 	/* Size to end of buffer */
-	ptr->async_size = min(requested_size, desc->size - ptr->idx);
+	ptr->async_size = no_os_min(requested_size, desc->size - ptr->idx);
 
 	*raw_size_available = ptr->async_size;
 
@@ -297,7 +297,7 @@ static int32_t cb_operation(struct circular_buffer *desc,
  * @param desc - Circular buffer reference
  * @param size_to_write - Number of bytes needed to write to the buffer.
  * @param write_buff - Address where to store the buffer where to write to.
- * @param size_avilable - min(size_to_write, size until end of allocated buffer)
+ * @param size_avilable - no_os_min(size_to_write, size until end of allocated buffer)
  * @return
  *  - \ref SUCCESS   - No errors
  *  - -EINVAL   - Wrong parameters used
@@ -320,7 +320,7 @@ int32_t cb_prepare_async_write(struct circular_buffer *desc,
  * @param desc - Circular buffer reference
  * @param size_to_read - Number of bytes needed to write to the buffer.
  * @param read_buff - Address where to store the buffer where data will be read.
- * @param size_avilable - min(size_to_read, size until end of allocated buffer)
+ * @param size_avilable - no_os_min(size_to_read, size until end of allocated buffer)
  * @return
  *  - \ref SUCCESS   - No errors
  *  - -EAGAIN   - No data available at this moment

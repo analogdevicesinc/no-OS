@@ -340,7 +340,7 @@ int32_t ad463x_read_data(struct ad463x_dev *dev,
 		return ret;
 
 	msg.commands = spi_eng_msg_cmds;
-	msg.no_commands = ARRAY_SIZE(spi_eng_msg_cmds);
+	msg.no_commands = NO_OS_ARRAY_SIZE(spi_eng_msg_cmds);
 	msg.rx_addr = (uint32_t)buf;
 	msg.commands_data = commands_data;
 

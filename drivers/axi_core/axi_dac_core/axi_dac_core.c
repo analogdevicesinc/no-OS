@@ -53,11 +53,11 @@
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 #define AXI_DAC_REG_RSTN				0x40
-#define AXI_DAC_MMCM_RSTN				BIT(1)
-#define AXI_DAC_RSTN					BIT(0)
+#define AXI_DAC_MMCM_RSTN				NO_OS_BIT(1)
+#define AXI_DAC_RSTN					NO_OS_BIT(0)
 
 #define AXI_DAC_REG_SYNC_CONTROL		0x44
-#define AXI_DAC_SYNC					BIT(0)
+#define AXI_DAC_SYNC					NO_OS_BIT(0)
 
 #define AXI_DAC_REG_RATECNTRL			0x4C
 #define AXI_DAC_RATE(x)					(((x) & 0xFF) << 0)
@@ -72,10 +72,10 @@
 #define AXI_DAC_TO_CLK_RATIO(x)			(((x) >> 0) & 0xFFFFFFFF)
 
 #define AXI_DAC_REG_STATUS				0x005C
-#define AXI_DAC_MUX_PN_ERR				BIT(3)
-#define AXI_DAC_MUX_PN_OOS				BIT(2)
-#define AXI_DAC_MUX_OVER_RANGE			BIT(1)
-#define AXI_DAC_STATUS					BIT(0)
+#define AXI_DAC_MUX_PN_ERR				NO_OS_BIT(3)
+#define AXI_DAC_MUX_PN_OOS				NO_OS_BIT(2)
+#define AXI_DAC_MUX_OVER_RANGE			NO_OS_BIT(1)
+#define AXI_DAC_STATUS					NO_OS_BIT(0)
 
 #define AXI_DAC_REG_DDS_SCALE(x)		(0x400 + ((x) >> 1) * 0x40 + ((x) & 1) * 0x8)
 #define AXI_DAC_DDS_SCALE(x)			(((x) & 0xFFFF) << 0)
@@ -418,7 +418,7 @@ int32_t axi_dac_dds_get_frequency(struct axi_dac *dac,
 	axi_dac_write(dac, AXI_DAC_REG_SYNC_CONTROL, AXI_DAC_SYNC);
 	reg = (reg & AXI_DAC_DDS_INCR(~0));
 	val64 = (uint64_t) reg * dac->clock_hz;
-	do_div(&val64, 0xFFFF);
+	no_os_do_div(&val64, 0xFFFF);
 	*freq = val64;
 
 	return SUCCESS;
@@ -463,7 +463,7 @@ int32_t axi_dac_dds_get_phase(struct axi_dac *dac,
 	reg = (reg & AXI_DAC_DDS_INIT(~0));
 	reg = AXI_DAC_TO_DDS_INIT(reg);
 	val64 = reg * 360000ULL + (0x10000 / 2);
-	do_div(&val64, 0x10000);
+	no_os_do_div(&val64, 0x10000);
 	*phase = val64;
 
 	return SUCCESS;
@@ -550,7 +550,7 @@ uint32_t axi_dac_dds_to_signed_mag_fmt(int32_t val,
 	}
 
 	val64 = (uint64_t)val2 * 0x4000UL + (1000000UL / 2);
-	do_div(&val64, 1000000UL);
+	no_os_do_div(&val64, 1000000UL);
 
 	return i | val64;
 }
@@ -578,7 +578,7 @@ void axi_dac_dds_from_signed_mag_fmt(uint32_t val,
 	val &= ~0xC000;
 
 	val64 = val * 1000000ULL + (0x4000 / 2);
-	do_div(&val64, 0x4000);
+	no_os_do_div(&val64, 0x4000);
 
 	if (*r_val == 0)
 		*r_val2 = val64 * sign;

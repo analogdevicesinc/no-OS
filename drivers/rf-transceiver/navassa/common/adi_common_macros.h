@@ -17,8 +17,8 @@
 #ifdef __KERNEL__
 #include <linux/math64.h>
 #else
-#define DIV_ROUND_UP(x, y)		  (((x) + (y) - 1) / (y))
-#define DIV_ROUND_CLOSEST(x, y)	  (((x) + (y) / 2) / (y))
+#define NO_OS_DIV_ROUND_UP(x, y)		  (((x) + (y) - 1) / (y))
+#define NO_OS_DIV_ROUND_CLOSEST(x, y)	  (((x) + (y) / 2) / (y))
 #endif
 
 #ifdef __cplusplus

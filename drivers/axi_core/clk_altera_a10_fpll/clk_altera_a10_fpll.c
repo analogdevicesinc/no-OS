@@ -116,7 +116,7 @@ uint32_t altera_a10_acquire_arbitration(struct altera_a10_fpll *fpll)
 
 	do {
 		status = altera_a10_fpll_read(fpll, 0x280);
-		if ((status & BIT(2)) == 0)
+		if ((status & NO_OS_BIT(2)) == 0)
 			return 0;
 		udelay(10);
 	} while (timeout++ < 10000);
@@ -256,22 +256,25 @@ int32_t altera_a10_fpll_calc_params(uint32_t fref,
 
 	best_f = ULONG_MAX;
 
-	n_min = max_t(uint32_t, DIV_ROUND_UP(fref, A10_FPLL_PFD_MAX), 1);
-	n_max = min_t(uint32_t, fref / A10_FPLL_PFD_MIN, 31);
+	n_min = no_os_max_t(uint32_t, NO_OS_DIV_ROUND_UP(fref, A10_FPLL_PFD_MAX), 1);
+	n_max = no_os_min_t(uint32_t, fref / A10_FPLL_PFD_MIN, 31);
 
-	m_min = max_t(uint32_t, DIV_ROUND_UP(A10_FPLL_VCO_MIN / 2, fref) * n_min, 8);
-	m_max = min_t(uint32_t, A10_FPLL_VCO_MAX / 2 * n_max / fref, 127);
-	m_min = round_up(m_min, 2);
+	m_min = no_os_max_t(uint32_t, NO_OS_DIV_ROUND_UP(A10_FPLL_VCO_MIN / 2,
+			    fref) * n_min,
+			    8);
+	m_max = no_os_min_t(uint32_t, A10_FPLL_VCO_MAX / 2 * n_max / fref, 127);
+	m_min = no_os_round_up(m_min, 2);
 
 	for (m = m_min; m <= m_max; m += 2) {
-		_n_min = max_t(uint32_t, n_min, DIV_ROUND_UP(fref * m, A10_FPLL_VCO_MAX / 2));
-		_n_max = min_t(uint32_t, n_max, fref * m / (A10_FPLL_VCO_MIN / 2));
+		_n_min = no_os_max_t(uint32_t, n_min, NO_OS_DIV_ROUND_UP(fref * m,
+				     A10_FPLL_VCO_MAX / 2));
+		_n_max = no_os_min_t(uint32_t, n_max, fref * m / (A10_FPLL_VCO_MIN / 2));
 
 		for (n = _n_min; n <= _n_max; n++) {
 			fvco = fref * m * 2 / n;
 
-			c0 = DIV_ROUND_CLOSEST(fvco, fout * 4);
-			c0 = clamp_t(uint32_t, c0, 1, 512);
+			c0 = NO_OS_DIV_ROUND_CLOSEST(fvco, fout * 4);
+			c0 = no_os_clamp_t(uint32_t, c0, 1, 512);
 			f = fvco / (c0 * 4);
 
 			if (abs(f - fout) < abs(best_f - fout)) {
@@ -305,9 +308,9 @@ int32_t altera_a10_fpll_round_rate(struct altera_a10_fpll *fpll,
 		return FAILURE;
 
 	tmp = (uint64_t)fpll->parent_rate * m;
-	tmp = DIV_ROUND_CLOSEST_ULL(tmp, c0 * n * 2);
+	tmp = NO_OS_DIV_ROUND_CLOSEST_ULL(tmp, c0 * n * 2);
 
-	return min_t(uint64_t, tmp, LONG_MAX);
+	return no_os_min_t(uint64_t, tmp, LONG_MAX);
 }
 
 /**
@@ -424,7 +427,7 @@ uint32_t altera_a10_fpll_recalc_rate(struct altera_a10_fpll *fpll)
 		return 0;
 
 	tmp = (uint64_t)fpll->parent_rate * m;
-	tmp = DIV_ROUND_CLOSEST_ULL(tmp, c0 * n * 2);
+	tmp = NO_OS_DIV_ROUND_CLOSEST_ULL(tmp, c0 * n * 2);
 
 	/*
 	 * Recalc configuration in case ref clock is not the same as in the FPGA
@@ -433,7 +436,7 @@ uint32_t altera_a10_fpll_recalc_rate(struct altera_a10_fpll *fpll)
 	if (tmp != 0 && fpll->initial_recalc)
 		altera_a10_fpll_set_rate(fpll, tmp);
 
-	return min_t(uint64_t, tmp, ULONG_MAX);
+	return no_os_min_t(uint64_t, tmp, ULONG_MAX);
 }
 
 /**

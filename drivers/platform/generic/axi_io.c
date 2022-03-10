@@ -58,9 +58,9 @@
  */
 int32_t axi_io_read(uint32_t base, uint32_t offset, uint32_t *data)
 {
-	UNUSED_PARAM(base);
-	UNUSED_PARAM(offset);
-	UNUSED_PARAM(data);
+	NO_OS_UNUSED_PARAM(base);
+	NO_OS_UNUSED_PARAM(offset);
+	NO_OS_UNUSED_PARAM(data);
 
 	return SUCCESS;
 }
@@ -74,9 +74,9 @@ int32_t axi_io_read(uint32_t base, uint32_t offset, uint32_t *data)
  */
 int32_t axi_io_write(uint32_t base, uint32_t offset, uint32_t data)
 {
-	UNUSED_PARAM(base);
-	UNUSED_PARAM(offset);
-	UNUSED_PARAM(data);
+	NO_OS_UNUSED_PARAM(base);
+	NO_OS_UNUSED_PARAM(offset);
+	NO_OS_UNUSED_PARAM(data);
 
 	return SUCCESS;
 }

@@ -88,7 +88,7 @@ int set_dac_demo_attr(void *device, char *buf, uint32_t len,
 		      const struct iio_ch_info *channel, intptr_t attr_id)
 {
 	struct dac_demo_desc *desc;
-	uint32_t value = srt_to_uint32(buf);
+	uint32_t value = no_os_str_to_uint32(buf);
 
 	if(!device)
 		return -ENODEV;

@@ -913,9 +913,9 @@ uint32_t ad9361_validate_rf_bw(struct ad9361_rf_phy *phy, uint32_t bw)
 {
 	switch (phy->dev_sel) {
 	case ID_AD9363A:
-		return clamp_t(uint32_t, bw, 200000UL, 20000000UL);
+		return no_os_clamp_t(uint32_t, bw, 200000UL, 20000000UL);
 	default:
-		return clamp_t(uint32_t, bw, 200000UL, 56000000UL);
+		return no_os_clamp_t(uint32_t, bw, 200000UL, 56000000UL);
 	}
 }
 
@@ -1234,7 +1234,7 @@ int32_t ad9361_bist_tone(struct ad9361_rf_phy *phy,
 		reg |= TONE_FREQ(freq_Hz);
 	} else {
 		if (clk)
-			reg |= TONE_FREQ(DIV_ROUND_CLOSEST(freq_Hz * 32, clk) - 1);
+			reg |= TONE_FREQ(NO_OS_DIV_ROUND_CLOSEST(freq_Hz * 32, clk) - 1);
 	}
 
 	reg_mask = BIST_MASK_CHANNEL_1_I_DATA | BIST_MASK_CHANNEL_1_Q_DATA |
@@ -1577,7 +1577,8 @@ static int32_t ad9361_load_mixer_gm_subtable(struct ad9361_rf_phy *phy)
 	ad9361_spi_write(phy->spi, REG_GM_SUB_TABLE_CONFIG,
 			 START_GM_SUB_TABLE_CLOCK); /* Start Clock */
 
-	for (i = 0, addr = ARRAY_SIZE(gm_st_ctrl); i < (int64_t)ARRAY_SIZE(gm_st_ctrl);
+	for (i = 0, addr = NO_OS_ARRAY_SIZE(gm_st_ctrl);
+	     i < (int64_t)NO_OS_ARRAY_SIZE(gm_st_ctrl);
 	     i++) {
 		ad9361_spi_write(phy->spi, REG_GM_SUB_TABLE_ADDRESS,
 				 --addr); /* Gain Table Index */
@@ -1736,7 +1737,7 @@ static int32_t ad9361_rfpll_vco_init(struct ad9361_rf_phy *phy,
 		"%s : vco_freq %"PRIu64" : ref_clk %"PRIu32" : range %"PRIu32,
 		__func__, vco_freq, ref_clk, range);
 
-	do_div(&vco_freq, 1000000UL); /* vco_freq in MHz */
+	no_os_do_div(&vco_freq, 1000000UL); /* vco_freq in MHz */
 
 	if ((phy->pdata->fdd && !phy->pdata->fdd_independent_mode)
 	    && (phy->current_tx_lo_freq != phy->current_rx_lo_freq)) {
@@ -2261,9 +2262,9 @@ static int32_t ad9361_gc_update(struct ad9361_rf_phy *phy)
 	 */
 
 	reg = (200 + delay_lna) / 2 + (14000000UL / (clkrf / 500U));
-	reg = DIV_ROUND_UP(reg, 1000UL) +
+	reg = NO_OS_DIV_ROUND_UP(reg, 1000UL) +
 	      phy->pdata->gain_ctrl.agc_attack_delay_extra_margin_us;
-	reg = clamp_t(uint8_t, reg, 0U, 31U);
+	reg = no_os_clamp_t(uint8_t, reg, 0U, 31U);
 	ret = ad9361_spi_writef(spi, REG_AGC_ATTACK_DELAY,
 				AGC_ATTACK_DELAY(~0), reg);
 
@@ -2272,8 +2273,8 @@ static int32_t ad9361_gc_update(struct ad9361_rf_phy *phy)
 	 */
 
 	reg = (delay_lna + 100UL) * (clkrf / 1000UL);
-	reg = DIV_ROUND_UP(reg, 1000000UL) + 1;
-	reg = clamp_t(uint8_t, reg, 0U, 31U);
+	reg = NO_OS_DIV_ROUND_UP(reg, 1000000UL) + 1;
+	reg = no_os_clamp_t(uint8_t, reg, 0U, 31U);
 	ret |= ad9361_spi_writef(spi, REG_PEAK_WAIT_TIME,
 				 PEAK_OVERLOAD_WAIT_TIME(~0), reg);
 
@@ -2283,8 +2284,8 @@ static int32_t ad9361_gc_update(struct ad9361_rf_phy *phy)
 	 */
 
 	reg = (delay_lna + 200UL) * (clkrf / 2000UL);
-	reg = DIV_ROUND_UP(reg, 1000000UL) + 7;
-	reg = settling_delay = clamp_t(uint8_t, reg, 0U, 31U);
+	reg = NO_OS_DIV_ROUND_UP(reg, 1000000UL) + 7;
+	reg = settling_delay = no_os_clamp_t(uint8_t, reg, 0U, 31U);
 	ret |= ad9361_spi_writef(spi, REG_FAST_CONFIG_2_SETTLING_DELAY,
 				 SETTLING_DELAY(~0), reg);
 
@@ -2294,16 +2295,16 @@ static int32_t ad9361_gc_update(struct ad9361_rf_phy *phy)
 	reg = phy->pdata->gain_ctrl.gain_update_interval_us * (clkrf / 1000UL) -
 	      settling_delay * 2000UL - 2000UL;
 
-	reg = DIV_ROUND_CLOSEST(reg, 2000UL);
-	reg = clamp_t(uint32_t, reg, 0U, 131071UL);
+	reg = NO_OS_DIV_ROUND_CLOSEST(reg, 2000UL);
+	reg = no_os_clamp_t(uint32_t, reg, 0U, 131071UL);
 
 	if (phy->agc_mode[0] == RF_GAIN_FASTATTACK_AGC ||
 	    phy->agc_mode[1] == RF_GAIN_FASTATTACK_AGC) {
 		dec_pow_meas_dur =
 			phy->pdata->gain_ctrl.f_agc_dec_pow_measuremnt_duration;
 	} else {
-		fir_div = DIV_ROUND_CLOSEST(clkrf,
-					    clk_get_rate(phy, phy->ref_clk_scale[RX_SAMPL_CLK]));
+		fir_div = NO_OS_DIV_ROUND_CLOSEST(clkrf,
+						  clk_get_rate(phy, phy->ref_clk_scale[RX_SAMPL_CLK]));
 		dec_pow_meas_dur = phy->pdata->gain_ctrl.dec_pow_measuremnt_duration;
 
 		if (((reg * 2 / fir_div) / dec_pow_meas_dur) < 2) {
@@ -2330,9 +2331,9 @@ static int32_t ad9361_gc_update(struct ad9361_rf_phy *phy)
 	 * Fast AGC State Wait Time - Energy Detect Count
 	 */
 
-	reg = DIV_ROUND_CLOSEST(phy->pdata->gain_ctrl.f_agc_state_wait_time_ns *
-				(clkrf / 1000UL), 1000000UL);
-	reg = clamp_t(uint32_t, reg, 0U, 31U);
+	reg = NO_OS_DIV_ROUND_CLOSEST(phy->pdata->gain_ctrl.f_agc_state_wait_time_ns *
+				      (clkrf / 1000UL), 1000000UL);
+	reg = no_os_clamp_t(uint32_t, reg, 0U, 31U);
 	ret |= ad9361_spi_writef(spi, REG_FAST_ENERGY_DETECT_COUNT,
 				 ENERGY_DETECT_COUNT(~0),  reg);
 
@@ -2428,7 +2429,7 @@ int32_t ad9361_read_rssi(struct ad9361_rf_phy *phy, struct rf_rssi *rssi)
 	int32_t rc;
 
 	rc = ad9361_spi_readm(spi, REG_PREAMBLE_LSB,
-			      reg_val_buf, ARRAY_SIZE(reg_val_buf));
+			      reg_val_buf, NO_OS_ARRAY_SIZE(reg_val_buf));
 	if (rssi->ant == 1) {
 		rssi->symbol = RSSI_RESOLUTION *
 			       ((reg_val_buf[5] << RSSI_LSB_SHIFT) +
@@ -2481,7 +2482,7 @@ static int32_t ad9361_rx_adc_setup(struct ad9361_rf_phy *phy,
 	*/
 
 	tmp = bbpll_freq * 10000ULL;
-	do_div(&tmp, 126906UL * phy->rxbbf_div);
+	no_os_do_div(&tmp, 126906UL * phy->rxbbf_div);
 	bb_bw_Hz = tmp;
 
 	dev_dbg(&phy->spi->dev, "%s : BBBW %"PRIu32" : ADCfreq %"PRIu32,
@@ -2490,7 +2491,7 @@ static int32_t ad9361_rx_adc_setup(struct ad9361_rf_phy *phy,
 	dev_dbg(&phy->spi->dev, "c3_msb 0x%X : c3_lsb 0x%X : r2346 0x%X : ",
 		c3_msb, c3_lsb, r2346);
 
-	bb_bw_Hz = clamp(bb_bw_Hz, 200000UL, 28000000UL);
+	bb_bw_Hz = no_os_clamp(bb_bw_Hz, 200000UL, 28000000UL);
 
 	if (adc_sampl_freq_Hz < 80000000)
 		scale_snr_1e3 = 1000;
@@ -2502,7 +2503,7 @@ static int32_t ad9361_rx_adc_setup(struct ad9361_rf_phy *phy,
 				    (160 * c3_msb + 10 * c3_lsb + 140) *
 				    (bb_bw_Hz)* (1000 + (10 * (bb_bw_Hz - 18000000) / 1000000)));
 
-		do_div(&invrc_tconst_1e6, 1000UL);
+		no_os_do_div(&invrc_tconst_1e6, 1000UL);
 
 	} else {
 		invrc_tconst_1e6 = (160975ULL * r2346 *
@@ -2510,21 +2511,21 @@ static int32_t ad9361_rx_adc_setup(struct ad9361_rf_phy *phy,
 				    (bb_bw_Hz));
 	}
 
-	do_div(&invrc_tconst_1e6, 1000000000UL);
+	no_os_do_div(&invrc_tconst_1e6, 1000000000UL);
 
 	if (invrc_tconst_1e6 > ULONG_MAX)
 		dev_err(&phy->spi->dev, "invrc_tconst_1e6 > ULONG_MAX");
 
 	sqrt_inv_rc_tconst_1e3 = int_sqrt((uint32_t)invrc_tconst_1e6);
 	maxsnr = 640 / 160;
-	scaled_adc_clk_1e6 = DIV_ROUND_CLOSEST(adc_sampl_freq_Hz, 640);
-	inv_scaled_adc_clk_1e3 = DIV_ROUND_CLOSEST(640000000,
-				 DIV_ROUND_CLOSEST(adc_sampl_freq_Hz, 1000));
-	tmp_1e3 = DIV_ROUND_CLOSEST(980000 + 20 * max_t(uint32_t, 1000U,
-				    DIV_ROUND_CLOSEST(inv_scaled_adc_clk_1e3, maxsnr)), 1000);
+	scaled_adc_clk_1e6 = NO_OS_DIV_ROUND_CLOSEST(adc_sampl_freq_Hz, 640);
+	inv_scaled_adc_clk_1e3 = NO_OS_DIV_ROUND_CLOSEST(640000000,
+				 NO_OS_DIV_ROUND_CLOSEST(adc_sampl_freq_Hz, 1000));
+	tmp_1e3 = NO_OS_DIV_ROUND_CLOSEST(980000 + 20 * no_os_max_t(uint32_t, 1000U,
+					  NO_OS_DIV_ROUND_CLOSEST(inv_scaled_adc_clk_1e3, maxsnr)), 1000);
 	sqrt_term_1e3 = int_sqrt(scaled_adc_clk_1e6);
-	min_sqrt_term_1e3 = min_t(uint32_t, 1000U,
-				  int_sqrt(maxsnr * scaled_adc_clk_1e6));
+	min_sqrt_term_1e3 = no_os_min_t(uint32_t, 1000U,
+					int_sqrt(maxsnr * scaled_adc_clk_1e6));
 
 	dev_dbg(&phy->spi->dev,
 		"invrc_tconst_1e6 %"PRIu64", sqrt_inv_rc_tconst_1e3 %"PRIu32,
@@ -2546,54 +2547,54 @@ static int32_t ad9361_rx_adc_setup(struct ad9361_rf_phy *phy,
 
 	tmp = -50000000 + 8ULL * scale_snr_1e3 * sqrt_inv_rc_tconst_1e3 *
 	      min_sqrt_term_1e3;
-	do_div(&tmp, 100000000UL);
-	data[7] = min_t(uint64_t, 124U, tmp);
+	no_os_do_div(&tmp, 100000000UL);
+	data[7] = no_os_min_t(uint64_t, 124U, tmp);
 
 	tmp = (invrc_tconst_1e6 >> 1) + 20 * inv_scaled_adc_clk_1e3 *
 	      data[7] / 80 * 1000ULL;
-	do_div(&tmp, invrc_tconst_1e6);
-	data[8] = min_t(uint64_t, 255U, tmp);
+	no_os_do_div(&tmp, invrc_tconst_1e6);
+	data[8] = no_os_min_t(uint64_t, 255U, tmp);
 
 	tmp = (-500000 + 77ULL * sqrt_inv_rc_tconst_1e3 * min_sqrt_term_1e3);
-	do_div(&tmp, 1000000UL);
-	data[10] = min_t(uint64_t, 127U, tmp);
+	no_os_do_div(&tmp, 1000000UL);
+	data[10] = no_os_min_t(uint64_t, 127U, tmp);
 
-	data[9] = min_t(uint32_t, 127U, ((800 * data[10]) / 1000));
+	data[9] = no_os_min_t(uint32_t, 127U, ((800 * data[10]) / 1000));
 	tmp = ((invrc_tconst_1e6 >> 1) + (20 * inv_scaled_adc_clk_1e3 *
 					  data[10] * 1000ULL));
-	do_div(&tmp, invrc_tconst_1e6 * 77);
-	data[11] = min_t(uint64_t, 255U, tmp);
-	data[12] = min_t(uint32_t, 127U, (-500000 + 80 * sqrt_inv_rc_tconst_1e3 *
-					  min_sqrt_term_1e3) / 1000000UL);
+	no_os_do_div(&tmp, invrc_tconst_1e6 * 77);
+	data[11] = no_os_min_t(uint64_t, 255U, tmp);
+	data[12] = no_os_min_t(uint32_t, 127U, (-500000 + 80 * sqrt_inv_rc_tconst_1e3 *
+						min_sqrt_term_1e3) / 1000000UL);
 
 	tmp = -3 * (long)(invrc_tconst_1e6 >> 1) + inv_scaled_adc_clk_1e3 *
 	      data[12] * (1000ULL * 20 / 80);
-	do_div(&tmp, invrc_tconst_1e6);
-	data[13] = min_t(uint64_t, 255, tmp);
+	no_os_do_div(&tmp, invrc_tconst_1e6);
+	data[13] = no_os_min_t(uint64_t, 255, tmp);
 
 	data[14] = 21 * (inv_scaled_adc_clk_1e3 / 10000);
-	data[15] = min_t(uint32_t, 127U, (500 + 1025 * data[7]) / 1000);
-	data[16] = min_t(uint32_t, 127U, (data[15] * tmp_1e3) / 1000);
+	data[15] = no_os_min_t(uint32_t, 127U, (500 + 1025 * data[7]) / 1000);
+	data[16] = no_os_min_t(uint32_t, 127U, (data[15] * tmp_1e3) / 1000);
 	data[17] = data[15];
-	data[18] = min_t(uint32_t, 127U, (500 + 975 * data[10]) / 1000);
-	data[19] = min_t(uint32_t, 127U, (data[18] * tmp_1e3) / 1000);
+	data[18] = no_os_min_t(uint32_t, 127U, (500 + 975 * data[10]) / 1000);
+	data[19] = no_os_min_t(uint32_t, 127U, (data[18] * tmp_1e3) / 1000);
 	data[20] = data[18];
-	data[21] = min_t(uint32_t, 127U, (500 + 975 * data[12]) / 1000);
-	data[22] = min_t(uint32_t, 127, (data[21] * tmp_1e3) / 1000);
+	data[21] = no_os_min_t(uint32_t, 127U, (500 + 975 * data[12]) / 1000);
+	data[22] = no_os_min_t(uint32_t, 127, (data[21] * tmp_1e3) / 1000);
 	data[23] = data[21];
 	data[24] = 0x2E;
-	data[25] = (128 + min_t(uint32_t, 63000U, DIV_ROUND_CLOSEST(63 *
-				scaled_adc_clk_1e6, 1000)) / 1000);
-	data[26] = min_t(uint32_t, 63U, 63 * scaled_adc_clk_1e6 / 1000000 *
-			 (920 + 80 * inv_scaled_adc_clk_1e3 / 1000) / 1000);
-	data[27] = min_t(uint32_t, 63, (32 * sqrt_term_1e3) / 1000);
+	data[25] = (128 + no_os_min_t(uint32_t, 63000U, NO_OS_DIV_ROUND_CLOSEST(63 *
+				      scaled_adc_clk_1e6, 1000)) / 1000);
+	data[26] = no_os_min_t(uint32_t, 63U, 63 * scaled_adc_clk_1e6 / 1000000 *
+			       (920 + 80 * inv_scaled_adc_clk_1e3 / 1000) / 1000);
+	data[27] = no_os_min_t(uint32_t, 63, (32 * sqrt_term_1e3) / 1000);
 	data[28] = data[25];
 	data[29] = data[26];
 	data[30] = data[27];
 	data[31] = data[25];
 	data[32] = data[26];
-	data[33] = min_t(uint32_t, 63U, 63 * sqrt_term_1e3 / 1000);
-	data[34] = min_t(uint32_t, 127U, 64 * sqrt_term_1e3 / 1000);
+	data[33] = no_os_min_t(uint32_t, 63U, 63 * sqrt_term_1e3 / 1000);
+	data[34] = no_os_min_t(uint32_t, 127U, 64 * sqrt_term_1e3 / 1000);
 	data[35] = 0x40;
 	data[36] = 0x40;
 	data[37] = 0x2C;
@@ -2628,13 +2629,13 @@ static int32_t ad9361_rx_tia_calib(struct ad9361_rf_phy *phy, uint32_t bb_bw_Hz)
 	dev_dbg(&phy->spi->dev, "%s : bb_bw_Hz %"PRIu32,
 		__func__, bb_bw_Hz);
 
-	bb_bw_Hz = clamp(bb_bw_Hz, 200000UL, 20000000UL);
+	bb_bw_Hz = no_os_clamp(bb_bw_Hz, 200000UL, 20000000UL);
 
 	Cbbf = (reg1EB * 160) + (reg1EC * 10) + 140; /* fF */
 	R2346 = 18300 * RX_BBF_R2346(reg1E6);
 
 	CTIA_fF = Cbbf * R2346 * 560ULL;
-	do_div(&CTIA_fF, 3500000UL);
+	no_os_do_div(&CTIA_fF, 3500000UL);
 
 	if (bb_bw_Hz <= 3000000UL)
 		reg1DB = 0xE0;
@@ -2646,11 +2647,11 @@ static int32_t ad9361_rx_tia_calib(struct ad9361_rf_phy *phy, uint32_t bb_bw_Hz)
 	if (CTIA_fF > 2920ULL) {
 		reg1DC = 0x40;
 		reg1DE = 0x40;
-		temp = min(127U, DIV_ROUND_CLOSEST((uint32_t)CTIA_fF - 400, 320U));
+		temp = no_os_min(127U, NO_OS_DIV_ROUND_CLOSEST((uint32_t)CTIA_fF - 400, 320U));
 		reg1DD = temp;
 		reg1DF = temp;
 	} else {
-		temp = DIV_ROUND_CLOSEST((uint32_t)CTIA_fF - 400, 40U) + 0x40;
+		temp = NO_OS_DIV_ROUND_CLOSEST((uint32_t)CTIA_fF - 400, 40U) + 0x40;
 		reg1DC = temp;
 		reg1DE = temp;
 		reg1DD = 0;
@@ -2684,22 +2685,23 @@ static int32_t ad9361_rx_bb_analog_filter_calib(struct ad9361_rf_phy *phy,
 	dev_dbg(&phy->spi->dev, "%s : rx_bb_bw %"PRIu32" bbpll_freq %"PRIu32,
 		__func__, rx_bb_bw, bbpll_freq);
 
-	rx_bb_bw = clamp(rx_bb_bw, 200000UL, 28000000UL);
+	rx_bb_bw = no_os_clamp(rx_bb_bw, 200000UL, 28000000UL);
 
 	/* 1.4 * BBBW * 2PI / ln(2) */
 	target = 126906UL * (rx_bb_bw / 10000UL);
-	phy->rxbbf_div = min_t(uint32_t, 511UL, DIV_ROUND_UP(bbpll_freq, target));
+	phy->rxbbf_div = no_os_min_t(uint32_t, 511UL, NO_OS_DIV_ROUND_UP(bbpll_freq,
+				     target));
 
 	/* Set RX baseband filter divide value */
 	ad9361_spi_write(phy->spi, REG_RX_BBF_TUNE_DIVIDE, phy->rxbbf_div);
-	ad9361_spi_writef(phy->spi, REG_RX_BBF_TUNE_CONFIG, BIT(0),
+	ad9361_spi_writef(phy->spi, REG_RX_BBF_TUNE_CONFIG, NO_OS_BIT(0),
 			  phy->rxbbf_div >> 8);
 
 	/* Write the BBBW into registers 0x1FB and 0x1FC */
 	ad9361_spi_write(phy->spi, REG_RX_BBBW_MHZ, rx_bb_bw / 1000000UL);
 
-	tmp = DIV_ROUND_CLOSEST((rx_bb_bw % 1000000UL) * 128, 1000000UL);
-	ad9361_spi_write(phy->spi, REG_RX_BBBW_KHZ, min_t(uint8_t, 127, tmp));
+	tmp = NO_OS_DIV_ROUND_CLOSEST((rx_bb_bw % 1000000UL) * 128, 1000000UL);
+	ad9361_spi_write(phy->spi, REG_RX_BBBW_KHZ, no_os_min_t(uint8_t, 127, tmp));
 
 	ad9361_spi_write(phy->spi, REG_RX_MIX_LO_CM,
 			 RX_MIX_LO_CM(0x3F)); /* Set Rx Mix LO CM */
@@ -2740,11 +2742,12 @@ static int32_t ad9361_tx_bb_analog_filter_calib(struct ad9361_rf_phy *phy,
 	dev_dbg(&phy->spi->dev, "%s : tx_bb_bw %"PRIu32" bbpll_freq %"PRIu32,
 		__func__, tx_bb_bw, bbpll_freq);
 
-	tx_bb_bw = clamp(tx_bb_bw, 625000UL, 20000000UL);
+	tx_bb_bw = no_os_clamp(tx_bb_bw, 625000UL, 20000000UL);
 
 	/* 1.6 * BBBW * 2PI / ln(2) */
 	target = 145036 * (tx_bb_bw / 10000UL);
-	txbbf_div = min_t(uint32_t, 511UL, DIV_ROUND_UP(bbpll_freq, target));
+	txbbf_div = no_os_min_t(uint32_t, 511UL, NO_OS_DIV_ROUND_UP(bbpll_freq,
+				target));
 
 	/* Set TX baseband filter divide value */
 	ad9361_spi_write(phy->spi, REG_TX_BBF_TUNE_DIVIDER, txbbf_div);
@@ -2782,7 +2785,7 @@ static int32_t ad9361_tx_bb_second_filter_calib(struct ad9361_rf_phy *phy,
 	dev_dbg(&phy->spi->dev, "%s : tx_bb_bw %"PRIu32,
 		__func__, tx_bb_bw);
 
-	tx_bb_bw = clamp(tx_bb_bw, 530000UL, 20000000UL);
+	tx_bb_bw = no_os_clamp(tx_bb_bw, 530000UL, 20000000UL);
 
 	/* BBBW * 5PI */
 	corner = 15708 * (tx_bb_bw / 10000UL);
@@ -2790,7 +2793,7 @@ static int32_t ad9361_tx_bb_second_filter_calib(struct ad9361_rf_phy *phy,
 	for (i = 0, res = 1; i < 4; i++) {
 		div = corner * res;
 		cap = (500000000ULL) + (div >> 1);
-		do_div(&cap, div);
+		no_os_do_div(&cap, div);
 		cap -= 12ULL;
 		if (cap < 64ULL)
 			break;
@@ -3063,7 +3066,7 @@ static int32_t ad9361_tx_quad_phase_search(struct ad9361_rf_phy *phy,
 
 	dev_dbg(&phy->spi->dev, "%s", __func__);
 
-	for (i = 0; i < (int64_t)(ARRAY_SIZE(field) / 2); i++) {
+	for (i = 0; i < (int64_t)(NO_OS_ARRAY_SIZE(field) / 2); i++) {
 		ret =  __ad9361_tx_quad_calib(phy, i, rxnco_word, decim, &val);
 		if (ret < 0)
 			return ret;
@@ -3072,7 +3075,7 @@ static int32_t ad9361_tx_quad_phase_search(struct ad9361_rf_phy *phy,
 		field[i] = field[i + 32] = !((val & TX1_LO_CONV) && (val & TX1_SSB_CONV));
 	}
 
-	ret = ad9361_find_opt(field, ARRAY_SIZE(field), &start);
+	ret = ad9361_find_opt(field, NO_OS_ARRAY_SIZE(field), &start);
 
 	phy->last_tx_quad_cal_phase = (start + ret / 2) & 0x1F;
 
@@ -3141,8 +3144,8 @@ static int ad9361_tx_quad_calib(struct ad9361_rf_phy *phy,
 	dev_dbg(&phy->spi->dev, "%s : bw_tx %"PRIu32" clkrf %"PRIu32" clktf %"PRIu32,
 		__func__, bw_tx, clkrf, clktf);
 
-	txnco_word = DIV_ROUND_CLOSEST(bw_tx * 8, clktf) - 1;
-	txnco_word = clamp_t(int, txnco_word, 0, 3);
+	txnco_word = NO_OS_DIV_ROUND_CLOSEST(bw_tx * 8, clktf) - 1;
+	txnco_word = no_os_clamp_t(int, txnco_word, 0, 3);
 	rxnco_word = txnco_word;
 
 	dev_dbg(dev, "Tx NCO frequency: %"PRIu32" (BW/4: %"PRIu32") txnco_word %"PRId32,
@@ -3718,7 +3721,8 @@ static int32_t ad9361_gc_setup(struct ad9361_rf_phy *phy,
 	ad9361_spi_writef(spi, REG_AGC_CONFIG_2, DIG_GAIN_EN,
 			  ctrl->dig_gain_en);
 
-	ctrl->adc_ovr_sample_size = clamp_t(uint8_t, ctrl->adc_ovr_sample_size, 1U, 8U);
+	ctrl->adc_ovr_sample_size = no_os_clamp_t(uint8_t, ctrl->adc_ovr_sample_size,
+				    1U, 8U);
 	reg = ADC_OVERRANGE_SAMPLE_SIZE(ctrl->adc_ovr_sample_size - 1);
 
 	if (has_split_gt && phy->pdata->split_gt &&
@@ -3737,12 +3741,14 @@ static int32_t ad9361_gc_setup(struct ad9361_rf_phy *phy,
 		}
 	}
 
-	ctrl->mgc_inc_gain_step = clamp_t(uint8_t, ctrl->mgc_inc_gain_step, 1U, 8U);
+	ctrl->mgc_inc_gain_step = no_os_clamp_t(uint8_t, ctrl->mgc_inc_gain_step, 1U,
+						8U);
 	reg |= MANUAL_INCR_STEP_SIZE(ctrl->mgc_inc_gain_step - 1);
 	ad9361_spi_write(spi, REG_AGC_CONFIG_3,
 			 reg); // Incr Step Size, ADC Overrange Size
 
-	ctrl->mgc_dec_gain_step = clamp_t(uint8_t, ctrl->mgc_dec_gain_step, 1U, 8U);
+	ctrl->mgc_dec_gain_step = no_os_clamp_t(uint8_t, ctrl->mgc_dec_gain_step, 1U,
+						8U);
 	reg = MANUAL_CTRL_IN_DECR_GAIN_STP_SIZE(ctrl->mgc_dec_gain_step - 1);
 	ad9361_spi_write(spi, REG_PEAK_WAIT_TIME,
 			 reg); // Decr Step Size, Peak Overload Time
@@ -3765,10 +3771,10 @@ static int32_t ad9361_gc_setup(struct ad9361_rf_phy *phy,
 	}
 
 	reg = (ctrl->lmt_overload_high_thresh / 16) - 1;
-	reg = clamp(reg, 0U, 63U);
+	reg = no_os_clamp(reg, 0U, 63U);
 	ad9361_spi_write(spi, REG_LARGE_LMT_OVERLOAD_THRESH, reg);
 	reg = (ctrl->lmt_overload_low_thresh / 16) - 1;
-	reg = clamp(reg, 0U, 63U);
+	reg = no_os_clamp(reg, 0U, 63U);
 	ad9361_spi_writef(spi, REG_SMALL_LMT_OVERLOAD_THRESH,
 			  SMALL_LMT_OVERLOAD_THRESH(~0), reg);
 
@@ -3785,7 +3791,7 @@ static int32_t ad9361_gc_setup(struct ad9361_rf_phy *phy,
 	ad9361_spi_write(spi, REG_RX2_MANUAL_DIGITALFORCED_GAIN,
 			 0x00); // Rx2 Digital Gain Index
 
-	reg = clamp_t(uint8_t, ctrl->low_power_thresh, 0U, 64U) * 2;
+	reg = no_os_clamp_t(uint8_t, ctrl->low_power_thresh, 0U, 64U) * 2;
 	ad9361_spi_write(spi, REG_FAST_LOW_POWER_THRESH, reg); // Low Power Threshold
 	ad9361_spi_write(spi, REG_TX_SYMBOL_ATTEN_CONFIG,
 			 0x00); // Tx Symbol Gain Control
@@ -3808,12 +3814,12 @@ static int32_t ad9361_gc_setup(struct ad9361_rf_phy *phy,
 
 	/* AGC */
 
-	tmp1 = reg = clamp_t(uint8_t, ctrl->agc_inner_thresh_high, 0U, 127U);
+	tmp1 = reg = no_os_clamp_t(uint8_t, ctrl->agc_inner_thresh_high, 0U, 127U);
 	ad9361_spi_writef(spi, REG_AGC_LOCK_LEVEL,
 			  AGC_LOCK_LEVEL_FAST_AGC_INNER_HIGH_THRESH_SLOW(~0),
 			  reg);
 
-	tmp2 = reg = clamp_t(uint8_t, ctrl->agc_inner_thresh_low, 0U, 127U);
+	tmp2 = reg = no_os_clamp_t(uint8_t, ctrl->agc_inner_thresh_low, 0U, 127U);
 	reg |= (ctrl->adc_lmt_small_overload_prevent_gain_inc ?
 		PREVENT_GAIN_INC : 0);
 	ad9361_spi_write(spi, REG_AGC_INNER_LOW_THRESH, reg);
@@ -3870,7 +3876,7 @@ static int32_t ad9361_gc_setup(struct ad9361_rf_phy *phy,
 			 ctrl->f_agc_lp_thresh_increment_time);
 
 	reg = ctrl->f_agc_lp_thresh_increment_steps - 1;
-	reg = clamp_t(uint32_t, reg, 0U, 7U);
+	reg = no_os_clamp_t(uint32_t, reg, 0U, 7U);
 	ad9361_spi_writef(spi, REG_FAST_ENERGY_DETECT_COUNT,
 			  INCREMENT_GAIN_STP_LPFLMT(~0), reg);
 
@@ -3881,24 +3887,24 @@ static int32_t ad9361_gc_setup(struct ad9361_rf_phy *phy,
 			  ctrl->f_agc_lock_level_lmt_gain_increase_en);
 
 	reg = ctrl->f_agc_lock_level_gain_increase_upper_limit;
-	reg = clamp_t(uint32_t, reg, 0U, 63U);
+	reg = no_os_clamp_t(uint32_t, reg, 0U, 63U);
 	ad9361_spi_writef(spi, REG_FAST_AGCLL_UPPER_LIMIT,
 			  AGCLL_MAX_INCREASE(~0), reg);
 
 	/* Fast AGC - Peak Detectors and Final Settling */
 	reg = ctrl->f_agc_lpf_final_settling_steps;
-	reg = clamp_t(uint32_t, reg, 0U, 3U);
+	reg = no_os_clamp_t(uint32_t, reg, 0U, 3U);
 	ad9361_spi_writef(spi, REG_FAST_ENERGY_LOST_THRESH,
 			  POST_LOCK_LEVEL_STP_SIZE_FOR_LPF_TABLE_FULL_TABLE(~0),
 			  reg);
 
 	reg = ctrl->f_agc_lmt_final_settling_steps;
-	reg = clamp_t(uint32_t, reg, 0U, 3U);
+	reg = no_os_clamp_t(uint32_t, reg, 0U, 3U);
 	ad9361_spi_writef(spi, REG_FAST_STRONGER_SIGNAL_THRESH,
 			  POST_LOCK_LEVEL_STP_FOR_LMT_TABLE(~0), reg);
 
 	reg = ctrl->f_agc_final_overrange_count;
-	reg = clamp_t(uint32_t, reg, 0U, 7U);
+	reg = no_os_clamp_t(uint32_t, reg, 0U, 7U);
 	ad9361_spi_writef(spi, REG_FAST_FINAL_OVER_RANGE_AND_OPT_GAIN,
 			  FINAL_OVER_RANGE_COUNT(~0), reg);
 
@@ -3922,7 +3928,7 @@ static int32_t ad9361_gc_setup(struct ad9361_rf_phy *phy,
 			  ctrl->f_agc_use_last_lock_level_for_set_gain_en);
 
 	reg = ctrl->f_agc_optimized_gain_offset;
-	reg = clamp_t(uint32_t, reg, 0U, 15U);
+	reg = no_os_clamp_t(uint32_t, reg, 0U, 15U);
 	ad9361_spi_writef(spi, REG_FAST_FINAL_OVER_RANGE_AND_OPT_GAIN,
 			  OPTIMIZE_GAIN_OFFSET(~0), reg);
 
@@ -3940,12 +3946,12 @@ static int32_t ad9361_gc_setup(struct ad9361_rf_phy *phy,
 			  DONT_UNLOCK_GAIN_IF_STRONGER_SIGNAL, reg);
 
 	reg = ctrl->f_agc_rst_gla_stronger_sig_thresh_above_ll;
-	reg = clamp_t(uint32_t, reg, 0U, 63U);
+	reg = no_os_clamp_t(uint32_t, reg, 0U, 63U);
 	ad9361_spi_writef(spi, REG_FAST_STRONGER_SIGNAL_THRESH,
 			  STRONGER_SIGNAL_THRESH(~0), reg);
 
 	reg = ctrl->f_agc_rst_gla_engergy_lost_sig_thresh_below_ll;
-	reg = clamp_t(uint32_t, reg, 0U, 63U);
+	reg = no_os_clamp_t(uint32_t, reg, 0U, 63U);
 	ad9361_spi_writef(spi, REG_FAST_ENERGY_LOST_THRESH,
 			  ENERGY_LOST_THRESH(~0),  reg);
 
@@ -3958,7 +3964,7 @@ static int32_t ad9361_gc_setup(struct ad9361_rf_phy *phy,
 			  DONT_UNLOCK_GAIN_IF_ENERGY_LOST, reg);
 
 	reg = ctrl->f_agc_energy_lost_stronger_sig_gain_lock_exit_cnt;
-	reg = clamp_t(uint32_t, reg, 0U, 63U);
+	reg = no_os_clamp_t(uint32_t, reg, 0U, 63U);
 	ad9361_spi_writef(spi, REG_FAST_GAIN_LOCK_EXIT_COUNT,
 			  GAIN_LOCK_EXIT_COUNT(~0), reg);
 
@@ -4017,7 +4023,7 @@ static int32_t ad9361_gc_setup(struct ad9361_rf_phy *phy,
 	}
 
 	reg = ilog2(ctrl->f_agc_power_measurement_duration_in_state5 / 16);
-	reg = clamp_t(uint32_t, reg, 0U, 15U);
+	reg = no_os_clamp_t(uint32_t, reg, 0U, 15U);
 	ad9361_spi_writef(spi, REG_RX1_MANUAL_LPF_GAIN,
 			  POWER_MEAS_IN_STATE_5(~0), reg);
 	ad9361_spi_writef(spi, REG_RX1_MANUAL_LMT_FULL_GAIN,
@@ -4057,7 +4063,7 @@ static int32_t ad9361_auxdac_set(struct ad9361_rf_phy *phy, int32_t dac,
 		tmp = AUXDAC_1_VREF(3);
 	}
 
-	val = clamp_t(uint32_t, val, 0, 1023);
+	val = no_os_clamp_t(uint32_t, val, 0, 1023);
 
 	switch (dac) {
 	case 1:
@@ -4151,8 +4157,8 @@ static int32_t ad9361_auxadc_setup(struct ad9361_rf_phy *phy,
 
 	dev_dbg(&phy->spi->dev, "%s", __func__);
 
-	val = DIV_ROUND_CLOSEST(ctrl->temp_time_inteval_ms *
-				(bbpll_freq / 1000UL), (1 << 29));
+	val = NO_OS_DIV_ROUND_CLOSEST(ctrl->temp_time_inteval_ms *
+				      (bbpll_freq / 1000UL), (1 << 29));
 
 	ad9361_spi_write(spi, REG_TEMP_OFFSET, ctrl->offset);
 	ad9361_spi_write(spi, REG_START_TEMP_READING, 0x00);
@@ -4185,7 +4191,7 @@ int32_t ad9361_get_temp(struct ad9361_rf_phy *phy)
 	val = ad9361_spi_read(phy->spi, REG_TEMPERATURE);
 	ad9361_spi_writef(phy->spi, REG_AUXADC_CONFIG, AUXADC_POWER_DOWN, 0);
 
-	return DIV_ROUND_CLOSEST(val * 1000000, 1140);
+	return NO_OS_DIV_ROUND_CLOSEST(val * 1000000, 1140);
 }
 
 /**
@@ -4300,20 +4306,20 @@ static int32_t ad9361_rssi_setup(struct ad9361_rf_phy *phy,
 		rssi_duration = ctrl->rssi_duration;
 	} else {
 		/* update sample based on RX rate */
-		rate = DIV_ROUND_CLOSEST(
+		rate = NO_OS_DIV_ROUND_CLOSEST(
 			       clk_get_rate(phy, phy->ref_clk_scale[RX_SAMPL_CLK]), 1000);
 		/* units are in us */
-		rssi_delay = DIV_ROUND_CLOSEST(ctrl->rssi_delay * rate, 1000);
-		rssi_wait = DIV_ROUND_CLOSEST(ctrl->rssi_wait * rate, 1000);
-		rssi_duration = DIV_ROUND_CLOSEST(
+		rssi_delay = NO_OS_DIV_ROUND_CLOSEST(ctrl->rssi_delay * rate, 1000);
+		rssi_wait = NO_OS_DIV_ROUND_CLOSEST(ctrl->rssi_wait * rate, 1000);
+		rssi_duration = NO_OS_DIV_ROUND_CLOSEST(
 					ctrl->rssi_duration * rate, 1000);
 	}
 
 	if (ctrl->restart_mode == EN_AGC_PIN_IS_PULLED_HIGH)
 		rssi_delay = 0;
 
-	rssi_delay = clamp(rssi_delay / 8, 0U, 255U);
-	rssi_wait = clamp(rssi_wait / 4, 0U, 255U);
+	rssi_delay = no_os_clamp(rssi_delay / 8, 0U, 255U);
+	rssi_wait = no_os_clamp(rssi_wait / 4, 0U, 255U);
 
 	do {
 		for (i = 14; rssi_duration > 0 && i >= 0; i--) {
@@ -4331,7 +4337,7 @@ static int32_t ad9361_rssi_setup(struct ad9361_rf_phy *phy,
 	for (i = 0, total_weight = 0; i < 4; i++) {
 		if (i < j)
 			total_weight += weight[i] =
-						DIV_ROUND_CLOSEST(RSSI_MAX_WEIGHT *
+						NO_OS_DIV_ROUND_CLOSEST(RSSI_MAX_WEIGHT *
 								(1 << dur_buf[i]), total_dur);
 		else
 			total_weight += weight[i] = 0;
@@ -4563,7 +4569,7 @@ static int32_t ad9361_validate_trx_clock_chain(struct ad9361_rf_phy *phy,
 	}
 
 	/* Validate MAX PLL, ADC, DAC and HB filter rates */
-	for (i = 0; i < ARRAY_SIZE(max_rx_rates); i++) {
+	for (i = 0; i < NO_OS_ARRAY_SIZE(max_rx_rates); i++) {
 		if (rx_path_clks[i] > max_rx_rates[i]) {
 			dev_err(&phy->spi->dev,
 				"%s: Failed RX max rate check (%"PRIu32" > %"PRIu32")",
@@ -5412,9 +5418,9 @@ int32_t ad9361_setup(struct ad9361_rf_phy *phy)
 
 	if (!pd->rx2tx2) {
 		pd->rx1tx1_mode_use_tx_num =
-			clamp_t(uint32_t, pd->rx1tx1_mode_use_tx_num, TX_1, TX_2);
+			no_os_clamp_t(uint32_t, pd->rx1tx1_mode_use_tx_num, TX_1, TX_2);
 		pd->rx1tx1_mode_use_rx_num =
-			clamp_t(uint32_t, pd->rx1tx1_mode_use_rx_num, RX_1, RX_2);
+			no_os_clamp_t(uint32_t, pd->rx1tx1_mode_use_rx_num, RX_1, RX_2);
 
 		ad9361_en_dis_tx(phy, TX_1 | TX_2, pd->rx1tx1_mode_use_tx_num);
 		ad9361_en_dis_rx(phy, TX_1 | TX_2, pd->rx1tx1_mode_use_rx_num);
@@ -5453,8 +5459,8 @@ int32_t ad9361_setup(struct ad9361_rf_phy *phy)
 	 * This allows forcing a lower F_REF window
 	 * (worse phase noise, better fractional spurs)
 	 */
-	pd->trx_synth_max_fref = clamp_t(uint32_t, pd->trx_synth_max_fref,
-					 MIN_SYNTH_FREF, MAX_SYNTH_FREF);
+	pd->trx_synth_max_fref = no_os_clamp_t(uint32_t, pd->trx_synth_max_fref,
+					       MIN_SYNTH_FREF, MAX_SYNTH_FREF);
 
 	ref_freq = ad9361_ref_div_sel(refin_Hz, pd->trx_synth_max_fref);
 	if (!ref_freq)
@@ -6235,7 +6241,7 @@ static int32_t ad9361_get_clk_scaler(struct refclk_scale *clk_priv)
 
 		return ad9361_set_muldiv(clk_priv, 1, tmp);
 	case DAC_CLK:
-		tmp = ad9361_spi_readf(spi, REG_BBPLL, BIT(3));
+		tmp = ad9361_spi_readf(spi, REG_BBPLL, NO_OS_BIT(3));
 		return ad9361_set_muldiv(clk_priv, 1, tmp + 1);
 	case T2_CLK:
 		tmp = ad9361_spi_readf(spi, REG_TX_ENABLE_FILTER_CTRL,
@@ -6399,7 +6405,7 @@ static int32_t ad9361_set_clk_scaler(struct refclk_scale *clk_priv, bool set)
 			return -EINVAL;
 		if (set)
 			return ad9361_spi_writef(spi, REG_BBPLL,
-						 BIT(3), clk_priv->div - 1);
+						 NO_OS_BIT(3), clk_priv->div - 1);
 		break;
 	case T2_CLK:
 		if (clk_priv->mult != 1 || clk_priv->div > 3 || clk_priv->div < 1)
@@ -6475,11 +6481,11 @@ int32_t ad9361_clk_factor_round_rate(struct refclk_scale *clk_priv,
 	int32_t ret;
 
 	if (rate >= *prate) {
-		clk_priv->mult = DIV_ROUND_CLOSEST(rate, *prate);
+		clk_priv->mult = NO_OS_DIV_ROUND_CLOSEST(rate, *prate);
 		clk_priv->div = 1;
 
 	} else {
-		clk_priv->div = DIV_ROUND_CLOSEST(*prate, rate);
+		clk_priv->div = NO_OS_DIV_ROUND_CLOSEST(*prate, rate);
 		clk_priv->mult = 1;
 		if (!clk_priv->div) {
 			dev_err(&clk_priv->spi->dev, "%s: divide by zero",
@@ -6509,10 +6515,10 @@ int32_t ad9361_clk_factor_set_rate(struct refclk_scale *clk_priv, uint32_t rate,
 		__func__, rate, parent_rate);
 
 	if (rate >= parent_rate) {
-		clk_priv->mult = DIV_ROUND_CLOSEST(rate, parent_rate);
+		clk_priv->mult = NO_OS_DIV_ROUND_CLOSEST(rate, parent_rate);
 		clk_priv->div = 1;
 	} else {
-		clk_priv->div = DIV_ROUND_CLOSEST(parent_rate, rate);
+		clk_priv->div = NO_OS_DIV_ROUND_CLOSEST(parent_rate, rate);
 		clk_priv->mult = 1;
 		if (!clk_priv->div) {
 			dev_err(&clk_priv->spi->dev, "%s: divide by zero",
@@ -6547,7 +6553,7 @@ uint32_t ad9361_bbpll_recalc_rate(struct refclk_scale *clk_priv,
 	integer = buf[0];
 
 	rate = ((uint64_t)parent_rate * fract);
-	do_div(&rate, BBPLL_MODULUS);
+	no_os_do_div(&rate, BBPLL_MODULUS);
 	rate += (uint64_t)parent_rate * integer;
 
 	return (uint32_t)rate;
@@ -6578,16 +6584,16 @@ int32_t ad9361_bbpll_round_rate(struct refclk_scale *clk_priv, uint32_t rate,
 		return MIN_BBPLL_FREQ;
 
 	temp = rate;
-	tmp = do_div(&temp, *prate);
+	tmp = no_os_do_div(&temp, *prate);
 	rate = temp;
 	tmp = tmp * BBPLL_MODULUS + (*prate >> 1);
-	do_div(&tmp, *prate);
+	no_os_do_div(&tmp, *prate);
 
 	integer = rate;
 	fract = tmp;
 
 	tmp = *prate * (uint64_t)fract;
-	do_div(&tmp, BBPLL_MODULUS);
+	no_os_do_div(&tmp, BBPLL_MODULUS);
 	tmp += *prate * integer;
 
 	return tmp;
@@ -6618,16 +6624,16 @@ int32_t ad9361_bbpll_set_rate(struct refclk_scale *clk_priv, uint32_t rate,
 	* Scale is 150uA @ (1280MHz BBPLL, 40MHz REFCLK)
 	*/
 	tmp = (rate >> 7) * 150ULL;
-	do_div(&tmp, (parent_rate >> 7) * 32UL);
+	no_os_do_div(&tmp, (parent_rate >> 7) * 32UL);
 
 	/* 25uA/LSB, Offset 25uA */
-	icp_val = DIV_ROUND_CLOSEST((uint32_t)tmp, 25U) - 1;
+	icp_val = NO_OS_DIV_ROUND_CLOSEST((uint32_t)tmp, 25U) - 1;
 
-	icp_val = clamp(icp_val, 1, 64);
+	icp_val = no_os_clamp(icp_val, 1, 64);
 
 	ad9361_spi_write(spi, REG_CP_CURRENT, icp_val);
 	ad9361_spi_writem(spi, REG_LOOP_FILTER_3, lf_defaults,
-			  ARRAY_SIZE(lf_defaults));
+			  NO_OS_ARRAY_SIZE(lf_defaults));
 
 	/* Allow calibration to occur and set cal count to 1024 for max accuracy */
 	ad9361_spi_write(spi, REG_VCO_CTRL,
@@ -6637,10 +6643,10 @@ int32_t ad9361_bbpll_set_rate(struct refclk_scale *clk_priv, uint32_t rate,
 
 	/* Calculate and set BBPLL frequency word */
 	temp = rate;
-	tmp = do_div(&temp, parent_rate);
+	tmp = no_os_do_div(&temp, parent_rate);
 	rate = temp;
 	tmp = tmp *(uint64_t)BBPLL_MODULUS + (parent_rate >> 1);
-	do_div(&tmp, parent_rate);
+	no_os_do_div(&tmp, parent_rate);
 
 	integer = rate;
 	fract = tmp;
@@ -6685,7 +6691,7 @@ static uint64_t ad9361_calc_rfpll_int_freq(uint64_t parent_rate,
 	uint64_t rate;
 
 	rate = parent_rate * fract;
-	do_div(&rate, RFPLL_MODULUS);
+	no_os_do_div(&rate, RFPLL_MODULUS);
 	rate += parent_rate * integer;
 
 	return rate >> (vco_div + 1);
@@ -6724,9 +6730,9 @@ static int32_t ad9361_calc_rfpll_int_divder(struct ad9361_rf_phy *phy,
 
 	*vco_div = div;
 	*vco_freq = freq;
-	tmp = do_div(&freq, parent_rate);
+	tmp = no_os_do_div(&freq, parent_rate);
 	tmp = tmp * RFPLL_MODULUS + (parent_rate >> 1);
-	do_div(&tmp, parent_rate);
+	no_os_do_div(&tmp, parent_rate);
 	*integer = freq;
 	*fract = tmp;
 
@@ -6777,7 +6783,7 @@ uint32_t ad9361_rfpll_int_recalc_rate(struct refclk_scale *clk_priv,
 		vco_div = ad9361_fastlock_readval(phy->spi, tx, profile, 12) & 0xF;
 
 	} else {
-		ad9361_spi_readm(clk_priv->spi, reg, &buf[0], ARRAY_SIZE(buf));
+		ad9361_spi_readm(clk_priv->spi, reg, &buf[0], NO_OS_ARRAY_SIZE(buf));
 		vco_div = ad9361_spi_readf(clk_priv->spi, REG_RFPLL_DIVIDERS, div_mask);
 	}
 

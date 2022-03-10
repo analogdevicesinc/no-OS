@@ -556,7 +556,7 @@ int32_t ad5758_clear_dig_diag_flag(struct ad5758_dev *dev,
 	 * current value
 	 */
 	ret = ad5758_spi_write_mask(dev, AD5758_REG_DIGITAL_DIAG_RESULTS,
-				    BIT(flag), BIT(flag));
+				    NO_OS_BIT(flag), NO_OS_BIT(flag));
 
 	if (ret < 0) {
 		pr_err("%s: Failed with code: %"PRIi32".\n", __func__, ret);

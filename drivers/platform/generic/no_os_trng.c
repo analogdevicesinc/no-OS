@@ -63,8 +63,8 @@ struct no_os_trng_desc {
 int32_t no_os_trng_init(struct no_os_trng_desc **desc,
 			struct no_os_trng_init_param *param)
 {
-	UNUSED_PARAM(desc);
-	UNUSED_PARAM(param);
+	NO_OS_UNUSED_PARAM(desc);
+	NO_OS_UNUSED_PARAM(param);
 
 	return FAILURE;
 }
@@ -72,7 +72,7 @@ int32_t no_os_trng_init(struct no_os_trng_desc **desc,
 /* Free resources allocated in descriptor */
 void no_os_trng_remove(struct no_os_trng_desc *desc)
 {
-	UNUSED_PARAM(desc);
+	NO_OS_UNUSED_PARAM(desc);
 
 	return FAILURE;
 }
@@ -81,9 +81,9 @@ void no_os_trng_remove(struct no_os_trng_desc *desc)
 int32_t no_os_trng_fill_buffer(struct no_os_trng_desc *desc, uint8_t *buff,
 			       uint32_t len)
 {
-	UNUSED_PARAM(desc);
-	UNUSED_PARAM(buff);
-	UNUSED_PARAM(len);
+	NO_OS_UNUSED_PARAM(desc);
+	NO_OS_UNUSED_PARAM(buff);
+	NO_OS_UNUSED_PARAM(len);
 
 	return FAILURE;
 }

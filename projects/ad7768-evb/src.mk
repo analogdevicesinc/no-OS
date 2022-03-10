@@ -12,7 +12,7 @@
 # Add to SRCS source files to be build in the project
 SRCS += $(PROJECT)/src/ad7768_evb.c
 SRCS += $(NO-OS)/util/fifo.c
-SRCS += $(NO-OS)/util/util.c
+SRCS += $(NO-OS)/util/no_os_util.c
 SRCS += $(NO-OS)/util/no_os_list.c
 
 # Add to INCS inlcude files to be build in the project

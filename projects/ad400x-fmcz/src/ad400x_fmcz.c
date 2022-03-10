@@ -87,7 +87,7 @@ int main()
 			return FAILURE;
 
 		msg.commands = spi_eng_msg_cmds;
-		msg.no_commands = ARRAY_SIZE(spi_eng_msg_cmds);
+		msg.no_commands = NO_OS_ARRAY_SIZE(spi_eng_msg_cmds);
 		msg.rx_addr = 0x800000;
 		msg.tx_addr = 0xA000000;
 		msg.commands_data = commands_data;
@@ -101,7 +101,7 @@ int main()
 		offload_data = (uint32_t *)msg.rx_addr;
 
 		for(i = 0; i < AD400x_EVB_SAMPLE_NO; i++) {
-			data = *offload_data & GENMASK(ad400x_device_resol[dev_id], 0);
+			data = *offload_data & NO_OS_GENMASK(ad400x_device_resol[dev_id], 0);
 			if (data > 524287)
 				data = data - 1048576;
 			printf("ADC%"PRIi32": %"PRIi32" \n", i, data);

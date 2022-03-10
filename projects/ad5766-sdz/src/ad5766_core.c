@@ -225,7 +225,7 @@ int32_t ad5766_core_setup(struct spi_engine_desc *eng_desc,
 			 SPI_ENGINE_CMD_CONFIG(SPI_ENGINE_CMD_REG_CLK_DIV, clk_div));
 
 	spi_engine_write(eng_desc, SPI_ENGINE_REG_OFFLOAD_CMD_MEM(0),
-			 SPI_ENGINE_CMD_ASSERT(1, (0xff ^ BIT(chip_select))));
+			 SPI_ENGINE_CMD_ASSERT(1, (0xff ^ NO_OS_BIT(chip_select))));
 
 	spi_engine_write(eng_desc, SPI_ENGINE_REG_OFFLOAD_CMD_MEM(0),
 			 SPI_ENGINE_CMD_TRANSFER(1, size -1));

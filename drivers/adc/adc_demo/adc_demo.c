@@ -197,10 +197,10 @@ int32_t adc_read_samples(void* dev, uint16_t* buff, uint32_t samples)
 
 	if(desc->ext_buff == NULL) {
 		//default sine lookup table
-		int offset_per_ch = ARRAY_SIZE(sine_lut) / TOTAL_ADC_CHANNELS;
+		int offset_per_ch = NO_OS_ARRAY_SIZE(sine_lut) / TOTAL_ADC_CHANNELS;
 		for(uint32_t i = 0; i < samples; i++) {
 			while(get_next_ch_idx(desc->active_ch, ch, &ch))
-				buff[k++] = sine_lut[(i + ch * offset_per_ch ) % ARRAY_SIZE(sine_lut)];
+				buff[k++] = sine_lut[(i + ch * offset_per_ch ) % NO_OS_ARRAY_SIZE(sine_lut)];
 		}
 
 		return samples;
@@ -224,7 +224,7 @@ int32_t adc_read_samples(void* dev, uint16_t* buff, uint32_t samples)
 int32_t adc_demo_reg_read(struct adc_demo_desc *desc, uint8_t reg_index,
 			  uint8_t *readval)
 {
-	if(!desc || reg_index >= ARRAY_SIZE(desc->reg))
+	if(!desc || reg_index >= NO_OS_ARRAY_SIZE(desc->reg))
 		return -EINVAL;
 
 	*readval = desc->reg[reg_index];
@@ -243,7 +243,7 @@ int32_t adc_demo_reg_write(struct adc_demo_desc *desc, uint8_t reg_index,
 			   uint8_t writeval)
 {
 
-	if(!desc || reg_index >= ARRAY_SIZE(desc->reg))
+	if(!desc || reg_index >= NO_OS_ARRAY_SIZE(desc->reg))
 		return -EINVAL;
 
 	desc->reg[reg_index] = writeval;

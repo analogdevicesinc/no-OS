@@ -43,13 +43,13 @@
 #include <stdbool.h>
 #include "no_os_spi.h"
 
-#define AD7689_CFG_CFG_MSK      BIT(13)
-#define AD7689_CFG_INCC_MSK     GENMASK(12,10)
-#define AD7689_CFG_INX_MSK      GENMASK(9,7)
-#define AD7689_CFG_BW_MSK       BIT(6)
-#define AD7689_CFG_REF_MSK      GENMASK(5,3)
-#define AD7689_CFG_SEQ_MSK      GENMASK(2,1)
-#define AD7689_CFG_RB_MSK       BIT(0)
+#define AD7689_CFG_CFG_MSK      NO_OS_BIT(13)
+#define AD7689_CFG_INCC_MSK     NO_OS_GENMASK(12,10)
+#define AD7689_CFG_INX_MSK      NO_OS_GENMASK(9,7)
+#define AD7689_CFG_BW_MSK       NO_OS_BIT(6)
+#define AD7689_CFG_REF_MSK      NO_OS_GENMASK(5,3)
+#define AD7689_CFG_SEQ_MSK      NO_OS_GENMASK(2,1)
+#define AD7689_CFG_RB_MSK       NO_OS_BIT(0)
 
 /**
  * @enum ad7689_device_id

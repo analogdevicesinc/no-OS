@@ -601,7 +601,7 @@ int main(void)
 	extern const uint32_t sine_lut_iq[1024];
 	axi_dac_set_datasel(ad9361_phy->tx_dac, -1, AXI_DAC_DATA_SEL_DMA);
 	axi_dac_load_custom_data(ad9361_phy->tx_dac, sine_lut_iq,
-				 ARRAY_SIZE(sine_lut_iq),
+				 NO_OS_ARRAY_SIZE(sine_lut_iq),
 				 (uintptr_t)dac_buffer);
 #ifdef XILINX_PLATFORM
 	Xil_DCacheFlush();
@@ -727,7 +727,7 @@ int main(void)
 	Xil_DCacheInvalidateRange((uintptr_t)adc_buffer, sizeof(adc_buffer));
 #endif
 	printf("DAC_DMA_EXAMPLE: address=%#lx samples=%lu channels=%u bits=%lu\n",
-	       (uintptr_t)adc_buffer, ARRAY_SIZE(adc_buffer), rx_adc_init.num_channels,
+	       (uintptr_t)adc_buffer, NO_OS_ARRAY_SIZE(adc_buffer), rx_adc_init.num_channels,
 	       8 * sizeof(adc_buffer[0]));
 #endif
 #endif
@@ -830,7 +830,7 @@ int main(void)
 		IIO_APP_DEVICE("ad9361-phy", ad9361_phy, ad9361_dev_desc, NULL, NULL)
 	};
 
-	iio_app_run(devices, ARRAY_SIZE(devices));
+	iio_app_run(devices, NO_OS_ARRAY_SIZE(devices));
 
 #endif // IIO_SUPPORT
 

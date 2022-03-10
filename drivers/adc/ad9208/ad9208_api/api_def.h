@@ -26,11 +26,11 @@
 #define ADI_GET_BYTE(w, p) (uint8_t)(((w) >> (p)) & 0xFF)
 #define ALL -1
 
-#define DIV_U64_REM(x, y, r) div64_u64_rem(x, y, r)
+#define DIV_U64_REM(x, y, r) no_os_div64_u64_rem(x, y, r)
 #ifndef DIV_U64
-#define DIV_U64(x, y) div_u64(x, y)
+#define NO_OS_DIV_U64(x, y) no_os_div_u64(x, y)
 #endif
-#define DIV_S64(x, y) div_s64(x, y)
+#define DIV_S64(x, y) no_os_div_s64(x, y)
 
 /**
  * \brief Platform dependent SPI access functions.

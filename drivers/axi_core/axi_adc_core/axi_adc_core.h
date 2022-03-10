@@ -49,13 +49,13 @@
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 #define AXI_ADC_REG_RSTN		0x0040
-#define AXI_ADC_MMCM_RSTN		BIT(1)
-#define AXI_ADC_RSTN			BIT(0)
+#define AXI_ADC_MMCM_RSTN		NO_OS_BIT(1)
+#define AXI_ADC_RSTN			NO_OS_BIT(0)
 
 #define AXI_ADC_REG_CNTRL		0x0044
-#define AXI_ADC_R1_MODE			BIT(2)
-#define AXI_ADC_DDR_EDGESEL		BIT(1)
-#define AXI_ADC_PIN_MODE		BIT(0)
+#define AXI_ADC_R1_MODE			NO_OS_BIT(2)
+#define AXI_ADC_DDR_EDGESEL		NO_OS_BIT(1)
+#define AXI_ADC_PIN_MODE		NO_OS_BIT(0)
 
 #define AXI_ADC_REG_CLK_FREQ		0x0054
 #define AXI_ADC_CLK_FREQ(x)		(((x) & 0xFFFFFFFF) << 0)
@@ -66,33 +66,33 @@
 #define AXI_ADC_TO_CLK_RATIO(x)		(((x) >> 0) & 0xFFFFFFFF)
 
 #define AXI_ADC_REG_STATUS		0x005C
-#define AXI_ADC_MUX_PN_ERR		BIT(3)
-#define AXI_ADC_MUX_PN_OOS		BIT(2)
-#define AXI_ADC_MUX_OVER_RANGE		BIT(1)
-#define AXI_ADC_STATUS			BIT(0)
+#define AXI_ADC_MUX_PN_ERR		NO_OS_BIT(3)
+#define AXI_ADC_MUX_PN_OOS		NO_OS_BIT(2)
+#define AXI_ADC_MUX_OVER_RANGE		NO_OS_BIT(1)
+#define AXI_ADC_STATUS			NO_OS_BIT(0)
 
 #define AXI_ADC_REG_DELAY_CNTRL	0x0060
-#define ADC_DELAY_SEL			BIT(17)
-#define ADC_DELAY_RWN			BIT(16)
+#define ADC_DELAY_SEL			NO_OS_BIT(17)
+#define ADC_DELAY_RWN			NO_OS_BIT(16)
 #define ADC_DELAY_ADDRESS(x) 		(((x) & 0xFF) << 8)
 #define ADC_TO_DELAY_ADDRESS(x) 	(((x) >> 8) & 0xFF)
 #define ADC_DELAY_WDATA(x)		(((x) & 0x1F) << 0)
 #define ADC_TO_DELAY_WDATA(x)		(((x) >> 0) & 0x1F)
 
 #define AXI_ADC_REG_CHAN_CNTRL(c)	(0x0400 + (c) * 0x40)
-#define AXI_ADC_PN_SEL			BIT(10)
-#define AXI_ADC_IQCOR_ENB		BIT(9)
-#define AXI_ADC_DCFILT_ENB		BIT(8)
-#define AXI_ADC_FORMAT_SIGNEXT		BIT(6)
-#define AXI_ADC_FORMAT_TYPE		BIT(5)
-#define AXI_ADC_FORMAT_ENABLE		BIT(4)
-#define AXI_ADC_PN23_TYPE		BIT(1)
-#define AXI_ADC_ENABLE			BIT(0)
+#define AXI_ADC_PN_SEL			NO_OS_BIT(10)
+#define AXI_ADC_IQCOR_ENB		NO_OS_BIT(9)
+#define AXI_ADC_DCFILT_ENB		NO_OS_BIT(8)
+#define AXI_ADC_FORMAT_SIGNEXT		NO_OS_BIT(6)
+#define AXI_ADC_FORMAT_TYPE		NO_OS_BIT(5)
+#define AXI_ADC_FORMAT_ENABLE		NO_OS_BIT(4)
+#define AXI_ADC_PN23_TYPE		NO_OS_BIT(1)
+#define AXI_ADC_ENABLE			NO_OS_BIT(0)
 
 #define AXI_ADC_REG_CHAN_STATUS(c)	(0x0404 + (c) * 0x40)
-#define AXI_ADC_PN_ERR			BIT(2)
-#define AXI_ADC_PN_OOS			BIT(1)
-#define AXI_ADC_OVER_RANGE		BIT(0)
+#define AXI_ADC_PN_ERR			NO_OS_BIT(2)
+#define AXI_ADC_PN_OOS			NO_OS_BIT(1)
+#define AXI_ADC_OVER_RANGE		NO_OS_BIT(0)
 
 #define AXI_ADC_REG_CHAN_CNTRL_1(c)	(0x0410 + (c) * 0x40)
 #define AXI_ADC_DCFILT_OFFSET(x)	(((x) & 0xFFFF) << 16)

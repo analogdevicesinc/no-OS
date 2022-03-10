@@ -1299,7 +1299,7 @@ int32_t adi_adrv9001_Tx_PaRamp_Configure(adi_adrv9001_Device_t *device,
     //clkDivRatio = device->devStateInfo.clkDivideRatios.anaRefClockRatio;
     refClk_Hz = KILO_TO_BASE_UNIT(device->devStateInfo.deviceClock_kHz) >> clkDivRatio;
 
-    paRampDpClkDiv = DIV_ROUND_CLOSEST(refClk_Hz, KILO_TO_BASE_UNIT(paRampCfg->rampClock_kHz));
+    paRampDpClkDiv = NO_OS_DIV_ROUND_CLOSEST(refClk_Hz, KILO_TO_BASE_UNIT(paRampCfg->rampClock_kHz));
     
     ADI_EXPECT(adi_adrv9001_AuxDac_Configure, device, paRampCfg->auxDacChannelSelect, paRampCfg->enable);
     

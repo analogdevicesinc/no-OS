@@ -81,15 +81,15 @@
 #define ADI_TX_REG_CTRL_2		0x48
 #define ADI_TX_REG_CHAN_CTRL_7(c)	(0x0418 + (c) * 0x40)
 #define ADI_TX_REG_CTRL_1		0x44
-#define R1_MODE				BIT(2)
-#define TX_R1_MODE			BIT(5)
+#define R1_MODE				NO_OS_BIT(2)
+#define TX_R1_MODE			NO_OS_BIT(5)
 
 #define AIM_AXI_REG(off, addr)		((off) + (addr))
-#define	NUM_LANES_MASK			GENMASK(12, 8)
-#define NUM_LANES(x)			field_prep(NUM_LANES_MASK, x)
-#define SDR_DDR_MASK			BIT(16)
-#define SDR_DDR(x)			field_prep(SDR_DDR_MASK, x)
-#define TX_ONLY_MASK			BIT(10)
+#define	NUM_LANES_MASK			NO_OS_GENMASK(12, 8)
+#define NUM_LANES(x)			no_os_field_prep(NUM_LANES_MASK, x)
+#define SDR_DDR_MASK			NO_OS_BIT(16)
+#define SDR_DDR(x)			no_os_field_prep(SDR_DDR_MASK, x)
+#define TX_ONLY_MASK			NO_OS_BIT(10)
 #define TX_ONLY(x)			FIELD_GET(TX_ONLY_MASK, x)
 
 #define IS_CMOS(cfg)			((cfg) & (ADI_CMOS_OR_LVDS_N))
@@ -207,7 +207,7 @@ static int adrv9002_ssi_configure(struct adrv9002_rf_phy *phy)
 	int ret;
 	unsigned int c;
 
-	for (c = 0; c < ARRAY_SIZE(phy->channels); c++) {
+	for (c = 0; c < NO_OS_ARRAY_SIZE(phy->channels); c++) {
 		struct adrv9002_chan *chann = phy->channels[c];
 
 		/* RX2/TX2 can only be enabled if RX1/TX1 are also enabled */
@@ -603,7 +603,7 @@ int adrv9002_axi_intf_tune(struct adrv9002_rf_phy *phy, const bool tx,
 			return ret;
 	}
 
-	for (clk = 0; clk < ARRAY_SIZE(field); clk++) {
+	for (clk = 0; clk < NO_OS_ARRAY_SIZE(field); clk++) {
 		for (data = 0; data < sizeof(*field); data++) {
 			ret = adrv9002_intf_change_delay(phy, chann, clk, data, tx);
 			if (ret < 0)
@@ -639,7 +639,7 @@ int adrv9002_axi_intf_tune(struct adrv9002_rf_phy *phy, const bool tx,
 	if (tx)
 		adrv9002_axi_tx_test_pattern_restore(phy->rx1_adc, off, n_chan, saved_ctrl_7);
 
-	for (clk = 0; clk < ARRAY_SIZE(field); clk++) {
+	for (clk = 0; clk < NO_OS_ARRAY_SIZE(field); clk++) {
 		cnt = adrv9002_axi_find_point(&field[clk][0], sizeof(*field), &data);
 		if (cnt < 0)
 			continue;
@@ -661,7 +661,7 @@ static int adrv9002_intf_tuning(struct adrv9002_rf_phy *phy)
 	uint8_t clk_delay, data_delay;
 	unsigned int i;
 
-	for (i = 0; i < ARRAY_SIZE(phy->channels); i++) {
+	for (i = 0; i < NO_OS_ARRAY_SIZE(phy->channels); i++) {
 		struct adrv9002_chan *c = phy->channels[i];
 
 		if (!c->enabled) {
@@ -753,7 +753,7 @@ int adrv9002_post_setup(struct adrv9002_rf_phy *phy)
 		return ret;
 
 	/* re-enable the cores */
-	for (c = 0; c < ARRAY_SIZE(phy->channels); c++) {
+	for (c = 0; c < NO_OS_ARRAY_SIZE(phy->channels); c++) {
 		chan = phy->channels[c];
 
 		if (phy->rx2tx2 && chan->idx > ADRV9002_CHANN_1)

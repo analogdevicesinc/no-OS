@@ -73,18 +73,18 @@
 #define AXI_INFO_FPGA_VOLTAGE(val)      ((val) & 0xffff)
 
 #define AXI_CLKGEN_REG_RESETN		0x40
-#define AXI_CLKGEN_MMCM_RESETN		BIT(1)
-#define AXI_CLKGEN_RESETN			BIT(0)
+#define AXI_CLKGEN_MMCM_RESETN		NO_OS_BIT(1)
+#define AXI_CLKGEN_RESETN			NO_OS_BIT(0)
 
 #define AXI_CLKGEN_REG_STATUS		0x5c
-#define AXI_CLKGEN_STATUS			BIT(0)
+#define AXI_CLKGEN_STATUS			NO_OS_BIT(0)
 
 #define AXI_CLKGEN_REG_DRP_CNTRL	0x70
-#define AXI_CLKGEN_DRP_CNTRL_SEL	BIT(29)
-#define AXI_CLKGEN_DRP_CNTRL_READ	BIT(28)
+#define AXI_CLKGEN_DRP_CNTRL_SEL	NO_OS_BIT(29)
+#define AXI_CLKGEN_DRP_CNTRL_READ	NO_OS_BIT(28)
 
 #define AXI_CLKGEN_REG_DRP_STATUS	0x74
-#define AXI_CLKGEN_DRP_STATUS_BUSY	BIT(16)
+#define AXI_CLKGEN_DRP_STATUS_BUSY	NO_OS_BIT(16)
 
 #define MMCM_REG_CLKOUT0_1			0x08
 #define MMCM_REG_CLKOUT0_2			0x09
@@ -353,20 +353,20 @@ void axi_clkgen_calc_params(struct axi_clkgen *axi_clkgen,
 	*best_m = 0;
 	*best_dout = 0;
 
-	d_min = max(DIV_ROUND_UP(fin, fpfd_max), 1);
-	d_max = min(fin / fpfd_min, 80);
+	d_min = no_os_max(NO_OS_DIV_ROUND_UP(fin, fpfd_max), 1);
+	d_max = no_os_min(fin / fpfd_min, 80);
 
-	m_min = max(DIV_ROUND_UP(fvco_min, fin) * d_min, 1);
-	m_max = min(fvco_max * d_max / fin, 64);
+	m_min = no_os_max(NO_OS_DIV_ROUND_UP(fvco_min, fin) * d_min, 1);
+	m_max = no_os_min(fvco_max * d_max / fin, 64);
 
 	for(m = m_min; m <= m_max; m++) {
-		_d_min = max(d_min, DIV_ROUND_UP(fin * m, fvco_max));
-		_d_max = min(d_max, fin * m / fvco_min);
+		_d_min = no_os_max(d_min, NO_OS_DIV_ROUND_UP(fin * m, fvco_max));
+		_d_max = no_os_min(d_max, fin * m / fvco_min);
 
 		for (d = _d_min; d <= _d_max; d++) {
 			fvco = fin * m / d;
-			dout = DIV_ROUND_CLOSEST(fvco, fout);
-			dout = clamp(dout, 1, 128);
+			dout = NO_OS_DIV_ROUND_CLOSEST(fvco, fout);
+			dout = no_os_clamp(dout, 1, 128);
 			f = fvco / dout;
 			if (abs(f - (int32_t)fout) < abs(best_f - (int32_t)fout)) {
 				best_f = f;

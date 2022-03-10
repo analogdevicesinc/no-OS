@@ -19,7 +19,7 @@ SRCS += $(DRIVERS)/dac/ad9739a/ad9739a.c \
 	$(DRIVERS)/api/no_os_spi.c \
 	$(DRIVERS)/axi_core/axi_dac_core/axi_dac_core.c \
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.c \
-	$(NO-OS)/util/util.c
+	$(NO-OS)/util/no_os_util.c
 ifeq (y,$(strip $(TINYIIOD)))
 SRCS += $(NO-OS)/util/fifo.c \
 	$(DRIVERS)/axi_core/iio_axi_dac/iio_axi_dac.c \

@@ -133,7 +133,7 @@ static int32_t _iio_ad713x_read_dev(struct iio_ad713x *desc, uint32_t *buff,
 	rx = (uint32_t *)desc->spi_engine_offload_message->rx_addr;
 	for (i = 0, j = 0; i < nb_samples; i++)
 		for (ch = 0; ch < desc->iio_dev_desc.num_ch; ch++)
-			if (desc->mask & BIT(ch)) {
+			if (desc->mask & NO_OS_BIT(ch)) {
 				data = rx[i * desc->iio_dev_desc.num_ch + ch];
 				data <<= 1;
 				data &= 0xffffff00;

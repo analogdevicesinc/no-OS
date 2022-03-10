@@ -1,4 +1,4 @@
-SRCS += $(NO-OS)/util/util.c \
+SRCS += $(NO-OS)/util/no_os_util.c \
 	$(NO-OS)/util/no_os_list.c \
 	$(PLATFORM_DRIVERS)/delay.c \
 	$(PLATFORM_DRIVERS)/no_os_timer.c \

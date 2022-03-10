@@ -7145,9 +7145,9 @@ const char* getMykonosErrorMessage(mykonosErr_t errorCode)
         case MYKONOS_ERR_INITSER_INV_VCODIV_PARM:
             return "Found invalid VCO divider value during setupSerializers()\n";
         case MYKONOS_ERR_INITSER_INV_VCODIV1_HSCLK_PARM:
-            return "CLKPLL VCO frequency exceeded max(8Ghz) in VCO divider /1 case ()\n";
+            return "CLKPLL VCO frequency exceeded no_os_max(8Ghz) in VCO divider /1 case ()\n";
         case MYKONOS_ERR_INITSER_INV_VCODIV1P5_HSCLK_PARM:
-            return "CLKPLL VCO frequency exceeded max(9.216Ghz) in VCO divider /1.5 case ()\n";
+            return "CLKPLL VCO frequency exceeded no_os_max(9.216Ghz) in VCO divider /1.5 case ()\n";
         case MYKONOS_ERR_INITDES_INV_VCODIV_PARM:
             return "Found invalid VCO divider value during setupDeserializers()\n";
         case MYKONOS_ERR_SER_INV_M_PARM:

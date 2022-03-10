@@ -706,7 +706,7 @@ static int32_t iio_ad7124_read_samples(void *dev, int32_t *buff,
 }
 
 struct iio_device iio_ad7124_device = {
-	.num_ch = ARRAY_SIZE(ad7124_channels),
+	.num_ch = NO_OS_ARRAY_SIZE(ad7124_channels),
 	.channels = ad7124_channels,
 	.attributes = NULL,
 	.debug_attributes = NULL,

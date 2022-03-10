@@ -146,7 +146,7 @@ static ssize_t iio_ad3552r_attr_set(void *device, char *buf, size_t len,
 	uint32_t val;
 	int32_t err;
 
-	val = srt_to_uint32(buf);
+	val = no_os_str_to_uint32(buf);
 	switch (priv) {
 	case AD3552R_IIO_ATTR_EN:
 		err = ad3552r_set_ch_value(iio_dac->dac,
@@ -221,8 +221,8 @@ static int32_t iio_ad3552r_wr_dev(struct iio_ad3552r_desc *iio_dac,
 	static int c = 0;
 	c++;
 
-	for (i = 0; i < nb_samples * hweight8(iio_dac->mask); ++i)
-		buff[i] = get_unaligned_be16((uint8_t *)&buff[i]);
+	for (i = 0; i < nb_samples * no_os_hweight8(iio_dac->mask); ++i)
+		buff[i] = no_os_get_unaligned_be16((uint8_t *)&buff[i]);
 
 	return ad3552r_write_samples(iio_dac->dac, buff, nb_samples,
 				     iio_dac->mask,

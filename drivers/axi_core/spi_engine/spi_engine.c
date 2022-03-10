@@ -418,7 +418,7 @@ static void spi_engine_set_cs(struct no_os_spi_desc *desc,
 	mask = 0xFF;
 	/* Switch the state only of the selected chip select */
 	if (!assert)
-		mask ^= BIT(desc->chip_select);
+		mask ^= NO_OS_BIT(desc->chip_select);
 
 	spi_engine_write_cmd_reg(eng_desc,
 				 SPI_ENGINE_CMD_ASSERT(eng_desc->cs_delay,

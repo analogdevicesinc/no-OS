@@ -73,7 +73,7 @@
 #define ADXCVR_STATUS				(1 << 0)
 
 #define ADXCVR_REG_STATUS2			0x0018
-#define ADXCVR_STATUS2_XCVR(x)		BIT(x)
+#define ADXCVR_STATUS2_XCVR(x)		NO_OS_BIT(x)
 
 #define ADXCVR_REG_SYNTH_CONF		0x0024
 
@@ -118,7 +118,7 @@ void adxcvr_acquire_arbitration(struct adxcvr *xcvr,
 
 	do {
 		val = IORD_32DIRECT(addr, status_reg * 4);
-		if ((val & BIT(2)) == 0)
+		if ((val & NO_OS_BIT(2)) == 0)
 			return;
 		udelay(10);
 	} while (timeout++ < 10000);

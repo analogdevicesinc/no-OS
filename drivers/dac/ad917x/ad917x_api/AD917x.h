@@ -48,17 +48,17 @@ typedef enum {
 	/** No Channel */
 	AD917X_CH_NONE = 0,
 	/** Channel 0 */
-	AD917X_CH_0 = BIT(0),
+	AD917X_CH_0 = NO_OS_BIT(0),
 	/** Channel 1 */
-	AD917X_CH_1 = BIT(1),
+	AD917X_CH_1 = NO_OS_BIT(1),
 	/** Channel 2 */
-	AD917X_CH_2 = BIT(2),
+	AD917X_CH_2 = NO_OS_BIT(2),
 	/** Channel 3 */
-	AD917X_CH_3 = BIT(3),
+	AD917X_CH_3 = NO_OS_BIT(3),
 	/** Channel 4 */
-	AD917X_CH_4 = BIT(4),
+	AD917X_CH_4 = NO_OS_BIT(4),
 	/** Channel 5 */
-	AD917X_CH_5 = BIT(5)
+	AD917X_CH_5 = NO_OS_BIT(5)
 } ad917x_channel_select_t;
 
 /** JESD Interface Link Status */

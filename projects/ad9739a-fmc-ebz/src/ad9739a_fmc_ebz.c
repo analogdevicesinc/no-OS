@@ -179,10 +179,10 @@ int main(void)
 	axi_dac_data_setup(ad9739a_core);
 	axi_dmac_init(&ad9739a_dmac_desc, &ad9739a_dmac_init_param);
 	axi_dac_set_buff(ad9739a_core, DAC_DDR_BASEADDR, sine_lut,
-			 ARRAY_SIZE(sine_lut));
+			 NO_OS_ARRAY_SIZE(sine_lut));
 	Xil_DCacheFlush();
 	axi_dmac_transfer(ad9739a_dmac_desc, DAC_DDR_BASEADDR,
-			  ARRAY_SIZE(sine_lut) * sizeof(uint16_t));
+			  NO_OS_ARRAY_SIZE(sine_lut) * sizeof(uint16_t));
 #else
 	ad9739a_channels[0].dds_dual_tone = 0;
 	ad9739a_channels[0].dds_frequency_0 = 33*1000*1000;
@@ -227,7 +227,7 @@ int main(void)
 			       &read_buff, NULL),
 	};
 
-	return iio_app_run(devices, ARRAY_SIZE(devices));
+	return iio_app_run(devices, NO_OS_ARRAY_SIZE(devices));
 #endif
 	pr_info("Done.\n");
 

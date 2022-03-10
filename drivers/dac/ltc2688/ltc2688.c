@@ -285,7 +285,7 @@ int32_t ltc2688_select_reg(struct ltc2688_dev *dev,
 		return -ENOENT;
 
 	ret = _ltc2688_spi_update_bits(dev, LTC2688_CMD_A_B_SELECT_REG,
-				       BIT(channel), sel_reg << channel);
+				       NO_OS_BIT(channel), sel_reg << channel);
 	if (ret < 0)
 		return ret;
 
@@ -337,7 +337,7 @@ int32_t ltc2688_software_toggle(struct ltc2688_dev *dev, uint8_t channel)
 	if (ret < 0)
 		return ret;
 
-	regval ^= BIT(channel);
+	regval ^= NO_OS_BIT(channel);
 
 	return _ltc2688_spi_write(dev, LTC2688_CMD_SW_TOGGLE_REG, regval);
 }

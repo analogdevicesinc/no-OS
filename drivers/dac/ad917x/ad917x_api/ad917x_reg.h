@@ -38,47 +38,47 @@ int32_t ad917x_register_read_block(ad917x_handle_t *h,
 #define AD917X_PROD_ID_MSB_REG        0x005
 #define AD917X_CHIP_GRADE_REG         0x006
 #define AD917X_SPI_PAGEINDX_REG       0x008
-#define AD917X_CHANNEL_PAGE_0         BIT(0)
-#define AD917X_CHANNEL_PAGE_1         BIT(1)
-#define AD917X_CHANNEL_PAGE_2         BIT(2)
-#define AD917X_CHANNEL_PAGE_3         BIT(3)
-#define AD917X_CHANNEL_PAGE_4         BIT(4)
-#define AD917X_CHANNEL_PAGE_5         BIT(5)
-#define AD917X_MAINDAC_PAGE_0         BIT(6)
-#define AD917X_MAINDAC_PAGE_1         BIT(7)
+#define AD917X_CHANNEL_PAGE_0         NO_OS_BIT(0)
+#define AD917X_CHANNEL_PAGE_1         NO_OS_BIT(1)
+#define AD917X_CHANNEL_PAGE_2         NO_OS_BIT(2)
+#define AD917X_CHANNEL_PAGE_3         NO_OS_BIT(3)
+#define AD917X_CHANNEL_PAGE_4         NO_OS_BIT(4)
+#define AD917X_CHANNEL_PAGE_5         NO_OS_BIT(5)
+#define AD917X_MAINDAC_PAGE_0         NO_OS_BIT(6)
+#define AD917X_MAINDAC_PAGE_1         NO_OS_BIT(7)
 
 #define AD917X_SYSREF_ROTATION_REG    0x03B
-#define AD917X_SYNC_LOGIC_EN          BIT(7)
-#define AD917X_SYNC_RSV_EN            BIT(6)
-#define AD917X_PERIODIC_RST_EN        BIT(5)
-#define AD917X_NCORST_AFTER_ROTATION  BIT(4)
+#define AD917X_SYNC_LOGIC_EN          NO_OS_BIT(7)
+#define AD917X_SYNC_RSV_EN            NO_OS_BIT(6)
+#define AD917X_PERIODIC_RST_EN        NO_OS_BIT(5)
+#define AD917X_NCORST_AFTER_ROTATION  NO_OS_BIT(4)
 #define AD917X_ROTATION_MODE(x)       (((x) & 0x3) << 0)
 
 
 
 #define AD917X_SYSREF_CTRL_REG         0x084
-#define AD917X_SYSREF_PD               BIT(0)
-#define AD917X_SYSREF_DC_COUPLED       BIT(6)
+#define AD917X_SYSREF_PD               NO_OS_BIT(0)
+#define AD917X_SYSREF_DC_COUPLED       NO_OS_BIT(6)
 
 #define AD917X_PLL_VCO_CTRL_REG        0x094
 #define AD917X_PLL_VCO_DIV_EN(x)       (((x) & 0x3) << 0)
 
 #define AD917X_PLL_BYPASS_REG         0x095
-#define AD917X_PLL_BYPASS(x)          ((x) ? BIT(0) : 0)
+#define AD917X_PLL_BYPASS(x)          ((x) ? NO_OS_BIT(0) : 0)
 
 #define AD917X_DLL_CTRL0_REG          0x0C1
-#define AD917X_DLL_CFG                BIT(6) | BIT(3)
-#define AD917X_DLL_HF                 BIT(5)
-#define AD917X_DLL_RST                BIT(0)
+#define AD917X_DLL_CFG                NO_OS_BIT(6) | NO_OS_BIT(3)
+#define AD917X_DLL_HF                 NO_OS_BIT(5)
+#define AD917X_DLL_RST                NO_OS_BIT(0)
 #define AD917X_DLL_STATUS_REG         0x0C3
-#define AD917X_DLL_LOCK               BIT(0)
+#define AD917X_DLL_LOCK               NO_OS_BIT(0)
 
 #define AD917X_DIG_RESET_REG          0x100
-#define AD917X_DIG_PATH_PDN(x)        ((x) ? BIT(0) : 0)
+#define AD917X_DIG_PATH_PDN(x)        ((x) ? NO_OS_BIT(0) : 0)
 
 #define AD917X_JESD_MODE_REG          0x110
-#define AD917X_JESD_MODE_INVALID      BIT(7)
-#define AD917X_LINK_MODE              BIT(5)
+#define AD917X_JESD_MODE_INVALID      NO_OS_BIT(7)
+#define AD917X_LINK_MODE              NO_OS_BIT(5)
 #define AD917X_JESD_MODE(x)           (((x) & 0x1F) << 0)
 
 #define AD917X_INTERP_MODE_REG        0x111
@@ -87,15 +87,15 @@ int32_t ad917x_register_read_block(ad917x_handle_t *h,
 
 #define AD917X_DDSM_DATAPATH_CFG_REG  0x112
 #define AD917X_DDSM_MODE(x)           (((x) & 0x3) << 4)
-#define AD917X_DDSM_NCO_EN            BIT(3)
-#define AD917X_DDSM_MODULUS_EN        BIT(2)
-#define AD917X_DDSM_SEL_SIDEBAND      BIT(1)
-#define AD917X_DDSM_EN_SYNC_ALL_CHNL_NCO_RESETS BIT(0)
+#define AD917X_DDSM_NCO_EN            NO_OS_BIT(3)
+#define AD917X_DDSM_MODULUS_EN        NO_OS_BIT(2)
+#define AD917X_DDSM_SEL_SIDEBAND      NO_OS_BIT(1)
+#define AD917X_DDSM_EN_SYNC_ALL_CHNL_NCO_RESETS NO_OS_BIT(0)
 
 #define AD917X_DDSM_FTW_UPDATE_REG    0x113
-#define AD917X_DDSM_FTW_LOAD_SYSREF   BIT(2)
-#define AD917X_DDSM_FTW_LOAD_ACK      BIT(1)
-#define AD917X_DDSM_FTW_LOAD_REQ      BIT(0)
+#define AD917X_DDSM_FTW_LOAD_SYSREF   NO_OS_BIT(2)
+#define AD917X_DDSM_FTW_LOAD_ACK      NO_OS_BIT(1)
+#define AD917X_DDSM_FTW_LOAD_REQ      NO_OS_BIT(0)
 
 #define AD917X_DDSM_FTW0_REG          0x114
 #define AD917X_DDSM_FTW1_REG          0x115
@@ -122,15 +122,15 @@ int32_t ad917x_register_read_block(ad917x_handle_t *h,
 #define AD917X_DDSM_ACC_DELTA5_REG    0x12F
 
 #define AD917X_DDSC_DATAPATH_CFG_REG  0x130
-#define AD917X_DDSC_NCO_EN            BIT(6)
-#define AD917X_DDSC_MODULUS_EN        BIT(2)
-#define AD917X_DDSC_SEL_SIDEBAND      BIT(1)
-#define AD917X_DDSC_TEST_TONE_EN      BIT(0)
+#define AD917X_DDSC_NCO_EN            NO_OS_BIT(6)
+#define AD917X_DDSC_MODULUS_EN        NO_OS_BIT(2)
+#define AD917X_DDSC_SEL_SIDEBAND      NO_OS_BIT(1)
+#define AD917X_DDSC_TEST_TONE_EN      NO_OS_BIT(0)
 
 #define AD917X_DDSC_FTW_UPDATE_REG    0x131
-#define AD917X_DDSC_FTW_LOAD_SYSREF   BIT(2)
-#define AD917X_DDSC_FTW_LOAD_ACK      BIT(1)
-#define AD917X_DDSC_FTW_LOAD_REQ      BIT(0)
+#define AD917X_DDSC_FTW_LOAD_SYSREF   NO_OS_BIT(2)
+#define AD917X_DDSC_FTW_LOAD_ACK      NO_OS_BIT(1)
+#define AD917X_DDSC_FTW_LOAD_REQ      NO_OS_BIT(0)
 
 #define AD917X_DDSC_FTW0_REG          0x132
 #define AD917X_DDSC_FTW1_REG          0x133
@@ -192,34 +192,34 @@ int32_t ad917x_register_read_block(ad917x_handle_t *h,
 #define AD917X_DC_CAL_TONE1_REG          0x149
 
 #define AD917X_DDSM_CAL_MODE_DEF_REG     0x1E6
-#define AD917X_DDSM_EN_CAL_ACC           BIT(2)
-#define AD917X_DDSM_EN_CAL_DC_INPUT      BIT(1)
-#define AD917X_DDSM_EN_CAL_FREQ_TUNE     BIT(0)
+#define AD917X_DDSM_EN_CAL_ACC           NO_OS_BIT(2)
+#define AD917X_DDSM_EN_CAL_DC_INPUT      NO_OS_BIT(1)
+#define AD917X_DDSM_EN_CAL_FREQ_TUNE     NO_OS_BIT(0)
 
 
 #define AD917X_MASTER_PD_REG           0x200
-#define AD917X_SERDES_PDN(x)           ((x) ? BIT(0) : 0)
+#define AD917X_SERDES_PDN(x)           ((x) ? NO_OS_BIT(0) : 0)
 #define AD917X_PHY_PD_REG              0x201
 #define AD917X_PLL_EN_CTRL_REG         0x280
-#define AD917X_SERDES_PLL_STARTUP      BIT(0)
+#define AD917X_SERDES_PLL_STARTUP      NO_OS_BIT(0)
 
 #define AD917X_GEN_PD_REG              0x203
-#define AD917X_SYNCOUTB_0_PD           BIT(1)
-#define AD917X_SYNCOUTB_1_PD           BIT(0)
+#define AD917X_SYNCOUTB_0_PD           NO_OS_BIT(1)
+#define AD917X_SYNCOUTB_1_PD           NO_OS_BIT(0)
 #define AD917X_SYNCOUTB_PD(x)          (((x) & 0x3) << 0)
 
 #define AD917X_SYNCOUTB_CTRL_0_REG     0x253
 #define AD917X_SYNCOUTB_CTRL_1_REG     0x254
-#define AD917X_SYNCOUTB_MODE(x)        ((x) ? BIT(0) : 0)
+#define AD917X_SYNCOUTB_MODE(x)        ((x) ? NO_OS_BIT(0) : 0)
 
 #define AD917X_PLL_STATUS_REG          0x281
 
 #define AD917X_JESD_RX_CTL_REG         0x300
-#define AD917X_DUAL_MODE               BIT(3)
-#define AD917X_LINK_PAGE(x)            ((x) ? BIT(2) : 0)
+#define AD917X_DUAL_MODE               NO_OS_BIT(3)
+#define AD917X_LINK_PAGE(x)            ((x) ? NO_OS_BIT(2) : 0)
 #define AD917X_LINK_EN(x)              (((x) & 0x3) << 0)
-#define AD917X_LINK_0_EN               BIT(0)
-#define AD917X_LINK_1_EN               BIT(1)
+#define AD917X_LINK_0_EN               NO_OS_BIT(0)
+#define AD917X_LINK_1_EN               NO_OS_BIT(1)
 
 #define AD917X_JESD_LMFC_DELAY0_REG    0x304
 #define AD917X_JESD_LMFC_DELAY1_REG    0x305
@@ -237,7 +237,7 @@ int32_t ad917x_register_read_block(ad917x_handle_t *h,
 #define AD917X_XBAR_LANE_ODD(x)        (((x) & 0x7) << 3)
 
 #define AD917X_JESD_INVERT_LANE_REG    0x334
-#define AD917X_JESD_INVERT_LANE(x)     BIT(x)
+#define AD917X_JESD_INVERT_LANE(x)     NO_OS_BIT(x)
 
 #define AD917X_JESD_PARAM_REG_BASE     0x450
 #define AD917X_JESD_PARAM_REG_LEN      0xB
@@ -257,9 +257,9 @@ int32_t ad917x_register_read_block(ad917x_handle_t *h,
 #define AD917X_JESD_NP(x)              (((x) & 0xF) << 0)
 
 #define AD917X_JESD_ILS_SCR_L_REG      0x453
-#define AD917X_JESD_SCR                BIT(7)
+#define AD917X_JESD_SCR                NO_OS_BIT(7)
 #define AD917X_JESD_ILS_NP_REG         0x458
-#define AD917X_JESD_JESDV              BIT(5)
+#define AD917X_JESD_JESDV              NO_OS_BIT(5)
 
 #define AD917X_JESD_CODE_GRP_SYNC_REG   0x470
 #define AD917X_JESD_FRAME_SYNC_REG      0x471
@@ -267,18 +267,18 @@ int32_t ad917x_register_read_block(ad917x_handle_t *h,
 #define AD917X_JESD_INIT_LANE_SYNC_REG  0x473
 
 #define AD917X_JESD_CTRL0_REG           0x475
-#define AD917X_JESD_QBD_SOFT_RST        BIT(3)
+#define AD917X_JESD_QBD_SOFT_RST        NO_OS_BIT(3)
 
 
 
 #define AD917X_NVM_LOADER_REG          0x705
-#define AD917X_NVM_BLR_DONE            BIT(1)
+#define AD917X_NVM_BLR_DONE            NO_OS_BIT(1)
 
 
 #define AD917X_DACPLL_CTRLX_REG        0x790
 #define AD917X_DACPLL_CTRLY_REG        0x791
 #define AD917X_DACPLL_CTRL0_REG        0x792
-#define AD917X_RESET_VCO_DIV           BIT(1)
+#define AD917X_RESET_VCO_DIV           NO_OS_BIT(1)
 
 #define AD917X_DACPLL_CTRL1_REG        0x793
 #define AD917X_M_DIV(x)                (((x) & 0x3) << 0)
@@ -289,6 +289,6 @@ int32_t ad917x_register_read_block(ad917x_handle_t *h,
 
 
 #define AD917X_DACPLL_STATUS_REG       0x7B5
-#define AD917X_DACPLL_LOCK             BIT(0)
+#define AD917X_DACPLL_LOCK             NO_OS_BIT(0)
 
 #endif /*__AD917X_REG_H__*/

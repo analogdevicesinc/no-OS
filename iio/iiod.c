@@ -97,7 +97,7 @@ static const uint32_t priority_array[] = {
 	IIOD_CMD_SET
 };
 
-static_assert(ARRAY_SIZE(cmds) == ARRAY_SIZE(priority_array),
+static_assert(NO_OS_ARRAY_SIZE(cmds) == NO_OS_ARRAY_SIZE(priority_array),
 	      "Arrays must have the same size");
 
 /* Set res->cmd to corresponding cmd and return the processed length of buf */
@@ -109,7 +109,7 @@ static int32_t parse_cmd(const char *token, struct comand_desc *res)
 	if (!token)
 		return -EINVAL;
 
-	for (i = 0; i < ARRAY_SIZE(cmds); ++i) {
+	for (i = 0; i < NO_OS_ARRAY_SIZE(cmds); ++i) {
 		cmd = &cmds[priority_array[i]];
 		if (strcmp(token, cmd->str) == 0) {
 			res->cmd = priority_array[i];
@@ -514,8 +514,8 @@ static int32_t do_read_buff(struct iiod_desc *desc, struct iiod_conn_priv *conn)
 
 	if (conn->nb_buf.len == 0) {
 		conn->nb_buf.buf = conn->payload_buf;
-		len = min(conn->payload_buf_len,
-			  conn->cmd_data.bytes_count);
+		len = no_os_min(conn->payload_buf_len,
+				conn->cmd_data.bytes_count);
 		/* Read from dev */
 		ret = desc->ops.read_buffer(&ctx, conn->cmd_data.device,
 					    conn->nb_buf.buf, len);
@@ -548,8 +548,8 @@ static int32_t do_write_buff(struct iiod_desc *desc,
 
 	if (conn->nb_buf.len == 0) {
 		conn->nb_buf.buf = conn->payload_buf;
-		len = min(conn->payload_buf_len,
-			  conn->cmd_data.bytes_count);
+		len = no_os_min(conn->payload_buf_len,
+				conn->cmd_data.bytes_count);
 		conn->nb_buf.len = len;
 		conn->nb_buf.idx = 0;
 	}

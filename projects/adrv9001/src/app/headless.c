@@ -225,7 +225,7 @@ static int32_t iio_run(struct iio_axi_adc_init_param *adc_pars,
 		app_devices[a].write_buff = &iio_dac_buffers[i];
 	}
 
-	return iio_app_run(app_devices, ARRAY_SIZE(app_devices));
+	return iio_app_run(app_devices, NO_OS_ARRAY_SIZE(app_devices));
 }
 #endif
 
@@ -447,11 +447,11 @@ int main(void)
 
 #ifdef DAC_DMA_EXAMPLE
 	axi_dac_load_custom_data(phy.tx1_dac, sine_lut_iq,
-				 ARRAY_SIZE(sine_lut_iq),
+				 NO_OS_ARRAY_SIZE(sine_lut_iq),
 				 (uintptr_t)dac_buffers[0]);
 #ifndef ADRV9002_RX2TX2
 	axi_dac_load_custom_data(phy.tx2_dac, sine_lut_iq,
-				 ARRAY_SIZE(sine_lut_iq),
+				 NO_OS_ARRAY_SIZE(sine_lut_iq),
 				 (uintptr_t)dac_buffers[1]);
 #endif
 #ifdef XILINX_PLATFORM

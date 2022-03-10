@@ -106,7 +106,7 @@ void mqtt_timer_remove()
 /* Implementation of TimerInit used by MQTTClient.c */
 void TimerInit(Timer* t)
 {
-	UNUSED_PARAM(t);
+	NO_OS_UNUSED_PARAM(t);
 	/* Do nothing */
 }
 
@@ -180,7 +180,7 @@ int mqtt_noos_read(Network* net, unsigned char* buff, int len, int timeout)
 int mqtt_noos_write(Network* net, unsigned char* buff, int len, int timeout)
 {
 	/* non blocking read is not implemented */
-	UNUSED_PARAM(timeout);
+	NO_OS_UNUSED_PARAM(timeout);
 
 	return socket_send(net->sock, (const void *)buff, (uint32_t)len);
 }

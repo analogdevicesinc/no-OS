@@ -75,7 +75,7 @@ static int32_t adf5355_write(struct adf5355_dev *dev,
 	buf[2] = data >> 8;
 	buf[3] = data;
 
-	return no_os_spi_write_and_read(dev->spi_desc, buf, ARRAY_SIZE(buf));
+	return no_os_spi_write_and_read(dev->spi_desc, buf, NO_OS_ARRAY_SIZE(buf));
 }
 
 /**
@@ -99,9 +99,9 @@ static void adf5355_pll_fract_n_compute(uint64_t vco,
 	uint64_t tmp;
 	uint32_t gcd_div;
 
-	tmp = do_div(&vco, pfd);
+	tmp = no_os_do_div(&vco, pfd);
 	tmp = tmp * ADF5355_MODULUS1;
-	*fract2 = do_div(&tmp, pfd);
+	*fract2 = no_os_do_div(&tmp, pfd);
 
 	*integer = vco;
 	*fract1 = tmp;
@@ -113,7 +113,7 @@ static void adf5355_pll_fract_n_compute(uint64_t vco,
 		*fract2 >>= 1;
 	}
 
-	gcd_div = greatest_common_divisor(*fract2, *mod2);
+	gcd_div = no_os_greatest_common_divisor(*fract2, *mod2);
 	*mod2 /= gcd_div;
 	*fract2 /= gcd_div;
 }
@@ -238,10 +238,10 @@ static int32_t adf5355_set_freq(struct adf5355_dev *dev,
 	if (dev->dev_id == ADF5356) {
 		cp_bleed = (24U * (dev->fpfd / 1000) * dev->cp_ua) / (61440 * 900);
 	} else {
-		cp_bleed = DIV_ROUND_UP(400 * dev->cp_ua, dev->integer * 375);
+		cp_bleed = NO_OS_DIV_ROUND_UP(400 * dev->cp_ua, dev->integer * 375);
 	}
 
-	cp_bleed = clamp(cp_bleed, 1U, 255U);
+	cp_bleed = no_os_clamp(cp_bleed, 1U, 255U);
 
 	dev->regs[ADF5355_REG(0)] = ADF5355_REG0_INT(dev->integer) |
 				    ADF5355_REG0_PRESCALER(prescaler) |
@@ -289,11 +289,11 @@ static uint64_t adf5355_pll_fract_n_get_rate(struct adf5355_dev *dev,
 
 	val = (((uint64_t)dev->integer * ADF5355_MODULUS1) + dev->fract1) * dev->fpfd;
 	tmp = (uint64_t)dev->fract2 * dev->fpfd;
-	do_div(&tmp, dev->mod2);
+	no_os_do_div(&tmp, dev->mod2);
 	val += tmp + ADF5355_MODULUS1 / 2;
 
-	do_div(&val, ADF5355_MODULUS1 *
-	       (1 << (channel == 1 ? 0 : dev->rf_div_sel)));
+	no_os_do_div(&val, ADF5355_MODULUS1 *
+		     (1 << (channel == 1 ? 0 : dev->rf_div_sel)));
 
 	if (channel == 1)
 		val <<= 1;
@@ -368,8 +368,8 @@ static int32_t adf5355_setup(struct adf5355_dev *dev)
 			    (dev->ref_div_factor * (dev->ref_div2_en ? 2 : 1));
 	} while (dev->fpfd > ADF5355_MAX_FREQ_PFD);
 
-	tmp = DIV_ROUND_CLOSEST(dev->cp_ua - 315, 315U);
-	tmp = clamp(tmp, 0U, 15U);
+	tmp = NO_OS_DIV_ROUND_CLOSEST(dev->cp_ua - 315, 315U);
+	tmp = no_os_clamp(tmp, 0U, 15U);
 
 	dev->regs[ADF5355_REG(4)] = ADF5355_REG4_COUNTER_RESET_EN(0) |
 				    ADF5355_REG4_CP_THREESTATE_EN(0) |
@@ -398,20 +398,21 @@ static int32_t adf5355_setup(struct adf5355_dev *dev)
 				    ADF5355_REG8_DEFAULT;
 
 	/* Calculate Timeouts */
-	tmp = DIV_ROUND_UP(dev->fpfd, 20000U * 30U);
-	tmp = clamp(tmp, 1U, 1023U);
+	tmp = NO_OS_DIV_ROUND_UP(dev->fpfd, 20000U * 30U);
+	tmp = no_os_clamp(tmp, 1U, 1023U);
 
 	dev->regs[ADF5355_REG(9)] = ADF5355_REG9_TIMEOUT(tmp) |
-				    ADF5355_REG9_SYNTH_LOCK_TIMEOUT(DIV_ROUND_UP(dev->fpfd * 2U, 100000U * tmp)) |
-				    ADF5355_REG9_ALC_TIMEOUT(DIV_ROUND_UP(dev->fpfd * 5U, 100000U * tmp)) |
-				    ADF5355_REG9_VCO_BAND_DIV(DIV_ROUND_UP(dev->fpfd,
+				    ADF5355_REG9_SYNTH_LOCK_TIMEOUT(NO_OS_DIV_ROUND_UP(dev->fpfd * 2U,
+						    100000U * tmp)) |
+				    ADF5355_REG9_ALC_TIMEOUT(NO_OS_DIV_ROUND_UP(dev->fpfd * 5U, 100000U * tmp)) |
+				    ADF5355_REG9_VCO_BAND_DIV(NO_OS_DIV_ROUND_UP(dev->fpfd,
 						    (dev->dev_id == ADF5356) ? 1600000U : 2400000U));
 
-	tmp = DIV_ROUND_UP(dev->fpfd / 100000U - 2, 4);
-	tmp = clamp(tmp, 1U, 255U);
+	tmp = NO_OS_DIV_ROUND_UP(dev->fpfd / 100000U - 2, 4);
+	tmp = no_os_clamp(tmp, 1U, 255U);
 
 	/* Delay > 16 ADC_CLK cycles */
-	dev->delay_us = DIV_ROUND_UP(16000000UL, dev->fpfd / (4 * tmp + 2));
+	dev->delay_us = NO_OS_DIV_ROUND_UP(16000000UL, dev->fpfd / (4 * tmp + 2));
 
 	dev->regs[ADF5355_REG(10)] = ADF5355_REG10_ADC_EN(1) |
 				     ADF5355_REG10_ADC_CONV_EN(1) |

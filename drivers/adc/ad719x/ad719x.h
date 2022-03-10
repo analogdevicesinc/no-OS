@@ -113,7 +113,7 @@
 #define AD719X_CONF_GAIN(x)     ((x) & 0x7)                         // Gain Select.
 
 /* Channel Mask */
-#define AD719X_CH_MASK(channel)		BIT(channel)
+#define AD719X_CH_MASK(channel)		NO_OS_BIT(channel)
 
 /* Configuration Register: AD719X_CONF_CHAN(x) options */
 #define AD719X_CH_0      0

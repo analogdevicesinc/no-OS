@@ -70,7 +70,7 @@ static uint32_t altera_a10_atx_lookup_band(uint32_t fvco)
 {
 	uint32_t i;
 
-	for (i = 0; i < ARRAY_SIZE(altera_a10_atx_bands); i++) {
+	for (i = 0; i < NO_OS_ARRAY_SIZE(altera_a10_atx_bands); i++) {
 		if (fvco > altera_a10_atx_bands[i]) {
 			i = i % 8;
 			if (i != 7)
@@ -154,8 +154,9 @@ static void altera_a10_atx_calc_params(uint32_t fref,
 	*best_n = *best_m = *best_l = *best_fvco = 0;
 	best_f = ULONG_MAX;
 
-	m_min = max_t(uint32_t, DIV_ROUND_UP(A10_ATX_PLL_VCO_MIN / 2, fref), 8);
-	m_max = min_t(uint32_t, A10_ATX_PLL_VCO_MAX / 2 * 8 / fref, 127);
+	m_min = no_os_max_t(uint32_t, NO_OS_DIV_ROUND_UP(A10_ATX_PLL_VCO_MIN / 2, fref),
+			    8);
+	m_max = no_os_min_t(uint32_t, A10_ATX_PLL_VCO_MAX / 2 * 8 / fref, 127);
 
 	for (n = 1; n <= 8; n *= 2) {
 		pfd = fref / n;
@@ -200,9 +201,9 @@ int32_t altera_a10_atx_pll_round_rate(struct adxcvr *xcvr,
 		return -1;
 
 	tmp = xcvr->parent_rate_khz * m * 4;
-	tmp = DIV_ROUND_CLOSEST_ULL(tmp, l * n);
+	tmp = NO_OS_DIV_ROUND_CLOSEST_ULL(tmp, l * n);
 
-	return min_t(uint64_t, tmp, LONG_MAX);
+	return no_os_min_t(uint64_t, tmp, LONG_MAX);
 }
 
 /**
@@ -303,11 +304,11 @@ uint32_t altera_a10_atx_pll_recalc_rate(struct adxcvr *xcvr)
 	l = 1 << (div1 & 0x7);
 
 	tmp = xcvr->parent_rate_khz * m;
-	tmp = DIV_ROUND_CLOSEST_ULL(tmp, l * n / 4);
+	tmp = NO_OS_DIV_ROUND_CLOSEST_ULL(tmp, l * n / 4);
 
 	if (tmp != 0 && xcvr->initial_recalc)
 		altera_a10_atx_pll_set_rate(xcvr, tmp);
 
-	return min_t(uint64_t, tmp, ULONG_MAX);
+	return no_os_min_t(uint64_t, tmp, ULONG_MAX);
 }
 

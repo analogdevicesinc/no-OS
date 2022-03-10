@@ -357,7 +357,7 @@ int32_t xilinx_xcvr_check_lane_rate(struct xilinx_xcvr *xcvr,
 			/* FB/SB package is limited to 6.6 Gbps. NB FBG484 can go higher in some speed grades but we don't
 			 * have the full package name. */
 			if (package == AXI_FPGA_DEV_FB || package == AXI_FPGA_DEV_SB )
-				lane_rate_max_khz = min(lane_rate_max_khz, 6600000);
+				lane_rate_max_khz = no_os_min(lane_rate_max_khz, 6600000);
 
 			break;
 
@@ -381,7 +381,7 @@ int32_t xilinx_xcvr_check_lane_rate(struct xilinx_xcvr *xcvr,
 
 			/* SF package is limited to 12.5 Gbps. */
 			if (package == AXI_FPGA_DEV_SF)
-				lane_rate_max_khz = min(lane_rate_max_khz, 12500000);
+				lane_rate_max_khz = no_os_min(lane_rate_max_khz, 12500000);
 
 			break;
 
@@ -847,9 +847,9 @@ int32_t xilinx_xcvr_cpll_calc_lane_rate(struct xilinx_xcvr *xcvr,
 	if (conf->refclk_div == 0 || out_div == 0)
 		return SUCCESS;
 
-	return DIV_ROUND_CLOSEST_ULL((uint64_t)refclk_khz *
-				     conf->fb_div_N1 * conf->fb_div_N2 * 2,
-				     conf->refclk_div * out_div * 1000);
+	return NO_OS_DIV_ROUND_CLOSEST_ULL((uint64_t)refclk_khz *
+					   conf->fb_div_N1 * conf->fb_div_N2 * 2,
+					   conf->refclk_div * out_div * 1000);
 }
 
 /**
@@ -1152,8 +1152,8 @@ int32_t xilinx_xcvr_qpll_calc_lane_rate(struct xilinx_xcvr *xcvr,
 	if (conf->refclk_div == 0 || out_div == 0)
 		return SUCCESS;
 
-	return DIV_ROUND_CLOSEST_ULL((uint64_t)refclk_khz * conf->fb_div,
-				     conf->refclk_div * out_div * 1000);
+	return NO_OS_DIV_ROUND_CLOSEST_ULL((uint64_t)refclk_khz * conf->fb_div,
+					   conf->refclk_div * out_div * 1000);
 }
 
 /**

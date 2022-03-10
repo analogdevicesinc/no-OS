@@ -53,8 +53,8 @@
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-#define CLK_IGNORE_UNUSED						BIT(3)
-#define CLK_GET_RATE_NOCACHE					BIT(6)
+#define CLK_IGNORE_UNUSED						NO_OS_BIT(3)
+#define CLK_GET_RATE_NOCACHE					NO_OS_BIT(6)
 
 #if defined(HAVE_VERBOSE_MESSAGES)
 #define dev_err(dev, format, ...)		({printf(format, ## __VA_ARGS__);printf("\n"); })
@@ -108,10 +108,10 @@ typedef SSIZE_T ssize_t;
 /******************************************************************************/
 int32_t clk_prepare_enable(struct clk *clk);
 uint32_t clk_get_rate(struct ad9361_rf_phy *phy,
-					  struct refclk_scale *clk_priv);
+		      struct refclk_scale *clk_priv);
 int32_t clk_set_rate(struct ad9361_rf_phy *phy,
-					 struct refclk_scale *clk_priv,
-					 uint32_t rate);
+		     struct refclk_scale *clk_priv,
+		     uint32_t rate);
 uint32_t int_sqrt(uint32_t x);
 int32_t ilog2(int32_t x);
 uint32_t find_first_bit(uint32_t word);

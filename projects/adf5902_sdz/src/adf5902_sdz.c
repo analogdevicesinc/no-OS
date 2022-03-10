@@ -226,7 +226,7 @@ int main(void)
 		IIO_APP_DEVICE("adf5902_dev", dev, &adf5902_iio_descriptor,
 			       NULL, NULL),
 	};
-	return iio_app_run(devices, ARRAY_SIZE(devices));
+	return iio_app_run(devices, NO_OS_ARRAY_SIZE(devices));
 #endif
 
 	ret = adf5902_remove(dev);

@@ -198,7 +198,7 @@ int32_t ad9144_setup_jesd204_link(struct ad9144_dev *dev,
 	unsigned int val;
 	unsigned int i;
 
-	for (i = 0; i < ARRAY_SIZE(ad9144_jesd204_link_modes); i++) {
+	for (i = 0; i < NO_OS_ARRAY_SIZE(ad9144_jesd204_link_modes); i++) {
 		if (ad9144_jesd204_link_modes[i].id == init_param->jesd204_mode) {
 			link_mode = &ad9144_jesd204_link_modes[i];
 			break;
@@ -346,7 +346,7 @@ static int32_t ad9144_pll_setup(struct ad9144_dev *dev,
 	}
 
 	ad9144_spi_write_seq(dev, ad9144_pll_fixed_writes,
-			     ARRAY_SIZE(ad9144_pll_fixed_writes));
+			     NO_OS_ARRAY_SIZE(ad9144_pll_fixed_writes));
 
 	ad9144_spi_write(dev, REG_DACLOGENCNTRL, lo_div_mode);
 	ad9144_spi_write(dev, REG_DACLDOCNTRL1, ref_div_mode);
@@ -483,9 +483,9 @@ int32_t ad9144_setup(struct ad9144_dev **device,
 
 	// required device configurations
 	ad9144_spi_write_seq(dev, ad9144_required_device_config,
-			     ARRAY_SIZE(ad9144_required_device_config));
+			     NO_OS_ARRAY_SIZE(ad9144_required_device_config));
 	ad9144_spi_write_seq(dev, ad9144_optimal_serdes_settings,
-			     ARRAY_SIZE(ad9144_optimal_serdes_settings));
+			     NO_OS_ARRAY_SIZE(ad9144_optimal_serdes_settings));
 
 	if (init_param->pll_enable)
 		ad9144_pll_setup(dev, init_param);
@@ -609,7 +609,7 @@ int32_t ad9144_dac_calibrate(struct ad9144_dev *dev)
 	mdelay(10);
 
 	for (i = 0; i < dev->num_converters; i++) {
-		ad9144_spi_write(dev, REG_CAL_INDX, BIT(i));	// read dac-i
+		ad9144_spi_write(dev, REG_CAL_INDX, NO_OS_BIT(i));	// read dac-i
 
 		ret = ad9144_spi_check_status(dev, REG_CAL_CTRL, 0xc0, 0x80);
 		if (ret == -1)

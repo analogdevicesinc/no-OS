@@ -565,7 +565,7 @@ int32_t adpd188_iio_remove(struct adpd188_iio_desc *dev)
 }
 
 struct iio_device iio_adpd188_device = {
-	.num_ch = ARRAY_SIZE(adpd188_channels),
+	.num_ch = NO_OS_ARRAY_SIZE(adpd188_channels),
 	.channels = adpd188_channels,
 	.attributes = adpd188_device_attributes,
 	.debug_attributes = NULL,

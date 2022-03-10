@@ -246,7 +246,7 @@ int main(void)
 #ifdef DAC_DMA_EXAMPLE
 	extern const uint32_t sine_lut_iq[1024];
 	axi_dac_load_custom_data(tx_dac, sine_lut_iq,
-				 ARRAY_SIZE(sine_lut_iq),
+				 NO_OS_ARRAY_SIZE(sine_lut_iq),
 				 DDR_MEM_BASEADDR);
 #ifndef ALTERA_PLATFORM
 	Xil_DCacheFlush();
@@ -328,7 +328,7 @@ int main(void)
 			       &write_buff, NULL),
 	};
 
-	return iio_app_run(devices, ARRAY_SIZE(devices));
+	return iio_app_run(devices, NO_OS_ARRAY_SIZE(devices));
 
 #endif
 

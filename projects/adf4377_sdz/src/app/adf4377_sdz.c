@@ -138,7 +138,7 @@ int main(void)
 		IIO_APP_DEVICE("adf4377_dev", dev, &adf4377_iio_descriptor,
 			       NULL, NULL),
 	};
-	return iio_app_run(devices, ARRAY_SIZE(devices));
+	return iio_app_run(devices, NO_OS_ARRAY_SIZE(devices));
 #endif
 
 	return adf4377_remove(dev);

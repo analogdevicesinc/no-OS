@@ -50,12 +50,12 @@
 /******************************************************************************/
 #define AXI_DMAC_REG_IRQ_MASK		0x80
 #define AXI_DMAC_REG_IRQ_PENDING	0x84
-#define AXI_DMAC_IRQ_SOT			BIT(0)
-#define AXI_DMAC_IRQ_EOT			BIT(1)
+#define AXI_DMAC_IRQ_SOT			NO_OS_BIT(0)
+#define AXI_DMAC_IRQ_EOT			NO_OS_BIT(1)
 
 #define AXI_DMAC_REG_CTRL			0x400
-#define AXI_DMAC_CTRL_ENABLE		BIT(0)
-#define AXI_DMAC_CTRL_PAUSE			BIT(1)
+#define AXI_DMAC_CTRL_ENABLE		NO_OS_BIT(0)
+#define AXI_DMAC_CTRL_PAUSE			NO_OS_BIT(1)
 
 #define AXI_DMAC_REG_TRANSFER_ID	0x404
 #define AXI_DMAC_REG_START_TRANSFER	0x408

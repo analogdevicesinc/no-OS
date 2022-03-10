@@ -675,7 +675,7 @@ int main(void)
 			       &ad9152_iio_descriptor, NULL, NULL),
 	};
 
-	return iio_app_run(devices, ARRAY_SIZE(devices));
+	return iio_app_run(devices, NO_OS_ARRAY_SIZE(devices));
 
 #endif
 

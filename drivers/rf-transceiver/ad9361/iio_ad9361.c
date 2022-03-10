@@ -861,7 +861,7 @@ static int set_rf_bandwidth(void *device, char *buf, uint32_t len,
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 	int ret = -ENOENT;
-	uint32_t rf_bandwidth = srt_to_uint32(buf);
+	uint32_t rf_bandwidth = no_os_str_to_uint32(buf);
 
 	rf_bandwidth = ad9361_validate_rf_bw(ad9361_phy, rf_bandwidth);
 	if (channel->ch_out) {
@@ -892,7 +892,7 @@ static int set_rf_dc_offset_tracking_en(void *device, char *buf, uint32_t len,
 					intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
-	int8_t en_dis = str_to_int32(buf);
+	int8_t en_dis = no_os_str_to_int32(buf);
 	int32_t ret;
 
 	if (en_dis < 0)
@@ -941,7 +941,7 @@ static int set_quadrature_tracking_en(void *device, char *buf, uint32_t len,
 				      intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
-	int8_t en_dis = str_to_int32(buf);
+	int8_t en_dis = no_os_str_to_int32(buf);
 	int32_t ret;
 
 	if (en_dis < 0)
@@ -971,7 +971,7 @@ static int set_sampling_frequency(void *device, char *buf, uint32_t len,
 				  intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
-	uint32_t sampling_freq_hz = srt_to_uint32(buf);
+	uint32_t sampling_freq_hz = no_os_str_to_uint32(buf);
 	int ret = ad9361_set_rx_sampling_freq (ad9361_phy, sampling_freq_hz);
 
 	if (ret < 0)
@@ -1031,7 +1031,7 @@ static int set_filter_fir_en(void *device, char *buf, uint32_t len,
 			     const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
-	int8_t en_dis = str_to_int32(buf);
+	int8_t en_dis = no_os_str_to_int32(buf);
 	int ret;
 
 	if (en_dis < 0)
@@ -1079,7 +1079,7 @@ static int set_bb_dc_offset_tracking_en(void *device, char *buf, uint32_t len,
 					intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
-	int8_t en_dis = str_to_int32(buf);
+	int8_t en_dis = no_os_str_to_int32(buf);
 	int32_t ret;
 
 	if (en_dis < 0)
@@ -1126,7 +1126,7 @@ static int set_fastlock_save(void *device, char *buf, uint32_t len,
 			     const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
-	uint32_t readin = srt_to_uint32(buf);
+	uint32_t readin = no_os_str_to_uint32(buf);
 
 	ad9361_phy->fastlock.save_profile = readin;
 
@@ -1146,7 +1146,7 @@ static int set_powerdown(void *device, char *buf, uint32_t len,
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 	int ret = -ENOENT;
-	bool res = str_to_int32(buf) ? 1 : 0;
+	bool res = no_os_str_to_int32(buf) ? 1 : 0;
 
 	if (channel->ch_num == 0)
 		ret = ad9361_synth_lo_powerdown(ad9361_phy, res ? LO_OFF : LO_ON, LO_DONTCARE);
@@ -1212,7 +1212,7 @@ static int set_fastlock_store(void *device, char *buf, uint32_t len,
 			      const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
-	uint32_t profile = srt_to_uint32(buf);
+	uint32_t profile = no_os_str_to_uint32(buf);
 	int32_t ret;
 
 	ret = ad9361_fastlock_store(ad9361_phy, channel->ch_num == 1, profile);
@@ -1234,7 +1234,7 @@ static int set_frequency(void *device, char *buf, uint32_t len,
 			 const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
-	uint64_t lo_freq_hz = srt_to_uint32(buf);
+	uint64_t lo_freq_hz = no_os_str_to_uint32(buf);
 	int ret = 0;
 
 	switch (channel->ch_num) {
@@ -1267,7 +1267,7 @@ static int set_external(void *device, char *buf, uint32_t len,
 			const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
-	bool select = str_to_int32(buf) ? 1 : 0;
+	bool select = no_os_str_to_int32(buf) ? 1 : 0;
 	int ret = 0;
 
 	if (channel->ch_num == 0)
@@ -1293,7 +1293,7 @@ static int set_fastlock_recall(void *device, char *buf, uint32_t len,
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 	int ret = 0;
-	uint32_t profile = srt_to_uint32(buf);
+	uint32_t profile = no_os_str_to_uint32(buf);
 
 	ret = ad9361_fastlock_recall(ad9361_phy, channel->ch_num == 1, profile);
 	if (ret < 0)
@@ -1315,7 +1315,7 @@ static int set_voltage_filter_fir_en(void *device, char *buf, uint32_t len,
 				     intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
-	int8_t en_dis = str_to_int32(buf) ? 1 : 0;
+	int8_t en_dis = no_os_str_to_int32(buf) ? 1 : 0;
 	int ret;
 
 	ret = ad9361_set_tx_fir_en_dis (ad9361_phy, en_dis);
@@ -1614,7 +1614,7 @@ static int get_ensm_mode(void *device, char *buf, uint32_t len,
 
 	if (ret < 0)
 		return ret;
-	if ((uint32_t)ret >= ARRAY_SIZE(ad9361_ensm_states) ||
+	if ((uint32_t)ret >= NO_OS_ARRAY_SIZE(ad9361_ensm_states) ||
 	    ad9361_ensm_states[ret] == NULL)
 		return -EIO;
 
@@ -1699,10 +1699,10 @@ static int set_dcxo_tune_coarse(void *device, char *buf, uint32_t len,
 				intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
-	uint32_t dcxo_coarse = srt_to_uint32(buf);
+	uint32_t dcxo_coarse = no_os_str_to_uint32(buf);
 	int32_t ret;
 
-	dcxo_coarse = clamp_t(uint32_t, dcxo_coarse, 0, 63U);
+	dcxo_coarse = no_os_clamp_t(uint32_t, dcxo_coarse, 0, 63U);
 	ad9361_phy->pdata->dcxo_coarse = dcxo_coarse;
 
 	ret = ad9361_set_dcxo_tune(ad9361_phy, ad9361_phy->pdata->dcxo_coarse,
@@ -1725,10 +1725,10 @@ static int set_dcxo_tune_fine(void *device, char *buf, uint32_t len,
 			      const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
-	uint32_t dcxo_fine = srt_to_uint32(buf);
+	uint32_t dcxo_fine = no_os_str_to_uint32(buf);
 	int32_t ret;
 
-	dcxo_fine = clamp_t(uint32_t, dcxo_fine, 0, 8191U);
+	dcxo_fine = no_os_clamp_t(uint32_t, dcxo_fine, 0, 8191U);
 	ad9361_phy->pdata->dcxo_fine = dcxo_fine;
 
 	ret = ad9361_set_dcxo_tune(ad9361_phy, ad9361_phy->pdata->dcxo_coarse,
@@ -1845,7 +1845,7 @@ static int set_multichip_sync(void *device, char *buf, uint32_t len,
 			      const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
-	uint32_t readin = srt_to_uint32(buf);
+	uint32_t readin = no_os_str_to_uint32(buf);
 	int32_t ret;
 
 	ret = ad9361_mcs(ad9361_phy, readin);

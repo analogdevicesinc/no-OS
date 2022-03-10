@@ -232,11 +232,11 @@ int32_t aducm3029_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 						  callback_desc->ctx);
 		gpio_port = (gpio_desc->number >> 4) & 0xF;
 		adi_gpio_GetGroupInterruptPins(gpio_port, id, &gpio_pin);
-		gpio_pin |= BIT((gpio_desc->number & 0xF));
+		gpio_pin |= NO_OS_BIT((gpio_desc->number & 0xF));
 		adi_gpio_SetGroupInterruptPins(gpio_port, id, gpio_pin);
 		adi_gpio_GetGroupInterruptPolarity(gpio_port, &gpio_pin);
-		gpio_pin &= ~BIT((gpio_desc->number & 0xF));
-		gpio_pin |= BIT(aducm_desc->conf[irq_id].gpio_conf->mode);
+		gpio_pin &= ~NO_OS_BIT((gpio_desc->number & 0xF));
+		gpio_pin |= NO_OS_BIT(aducm_desc->conf[irq_id].gpio_conf->mode);
 		adi_gpio_SetGroupInterruptPolarity(gpio_port, gpio_pin);
 		break;
 	default:

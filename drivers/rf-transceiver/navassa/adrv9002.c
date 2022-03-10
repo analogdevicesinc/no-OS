@@ -89,8 +89,8 @@
 #define ALL_RX_CHANNEL_MASK	(ADI_ADRV9001_RX1 | ADI_ADRV9001_RX2 | \
 				 ADI_ADRV9001_ORX1 | ADI_ADRV9001_ORX2)
 
-#define ADRV9002_RX_EN(nr)	BIT(((nr) * 2) & 0x3)
-#define ADRV9002_TX_EN(nr)	BIT(((nr) * 2 + 1) & 0x3)
+#define ADRV9002_RX_EN(nr)	NO_OS_BIT(((nr) * 2) & 0x3)
+#define ADRV9002_TX_EN(nr)	NO_OS_BIT(((nr) * 2 + 1) & 0x3)
 
 #define ADRV9002_RX_MAX_GAIN_mdB	\
 	((ADI_ADRV9001_RX_GAIN_INDEX_MAX - ADI_ADRV9001_RX_GAIN_INDEX_MIN) * ADRV9002_RX_GAIN_STEP_mDB)
@@ -316,7 +316,7 @@ static int adrv9001_rx_path_config(struct adrv9002_rf_phy *phy,
 	int ret;
 	unsigned int i;
 
-	for (i = 0; i < ARRAY_SIZE(phy->rx_channels); i++) {
+	for (i = 0; i < NO_OS_ARRAY_SIZE(phy->rx_channels); i++) {
 		struct adrv9002_rx_chan *rx = &phy->rx_channels[i];
 
 		/* For each rx channel enabled */
@@ -353,7 +353,7 @@ static int adrv9002_tx_set_dac_full_scale(struct adrv9002_rf_phy *phy)
 	int ret = 0;
 	unsigned int i;
 
-	for (i = 0; i < ARRAY_SIZE(phy->tx_channels); i++) {
+	for (i = 0; i < NO_OS_ARRAY_SIZE(phy->tx_channels); i++) {
 		struct adrv9002_tx_chan *tx = &phy->tx_channels[i];
 
 		if (!tx->channel.enabled || !tx->dac_boost_en)
@@ -375,7 +375,7 @@ static int adrv9002_tx_path_config(struct adrv9002_rf_phy *phy,
 	int ret;
 	unsigned int i;
 
-	for (i = 0; i < ARRAY_SIZE(phy->tx_channels); i++) {
+	for (i = 0; i < NO_OS_ARRAY_SIZE(phy->tx_channels); i++) {
 		struct adrv9002_tx_chan *tx = &phy->tx_channels[i];
 
 		/* For each tx channel enabled */
@@ -444,7 +444,7 @@ static void adrv9002_compute_init_cals(struct adrv9002_rf_phy *phy)
 	phy->init_cals.sysInitCalMask = 0;
 	phy->init_cals.calMode = ADI_ADRV9001_INIT_CAL_MODE_ALL;
 
-	for (i = 0; i < ARRAY_SIZE(phy->channels); i++) {
+	for (i = 0; i < NO_OS_ARRAY_SIZE(phy->channels); i++) {
 		struct adrv9002_chan *c = phy->channels[i];
 
 		if (!c->enabled)
@@ -732,7 +732,7 @@ static uint32_t adrv9002_get_arm_clk(const struct adrv9002_rf_phy *phy)
 	else
 		sys_clk = clks->clkPllVcoFreq_daHz / 24 * 10;
 
-	return DIV_ROUND_CLOSEST(sys_clk, clks->armPowerSavingClkDiv);
+	return NO_OS_DIV_ROUND_CLOSEST(sys_clk, clks->armPowerSavingClkDiv);
 }
 
 void adrv9002_en_delays_ns_to_arm(const struct adrv9002_rf_phy *phy,
@@ -741,16 +741,17 @@ void adrv9002_en_delays_ns_to_arm(const struct adrv9002_rf_phy *phy,
 {
 	uint32_t arm_clk = adrv9002_get_arm_clk(phy);
 
-	d->fallToOffDelay = DIV_ROUND_CLOSEST_ULL((uint64_t)arm_clk *
+	d->fallToOffDelay = NO_OS_DIV_ROUND_CLOSEST_ULL((uint64_t)arm_clk *
 			    d_ns->fallToOffDelay, 1000000000);
-	d->guardDelay = DIV_ROUND_CLOSEST_ULL((uint64_t)arm_clk * d_ns->guardDelay,
-					      1000000000);
-	d->holdDelay = DIV_ROUND_CLOSEST_ULL((uint64_t)arm_clk * d_ns->holdDelay,
-					     1000000000);
-	d->riseToAnalogOnDelay = DIV_ROUND_CLOSEST_ULL((uint64_t)arm_clk *
+	d->guardDelay = NO_OS_DIV_ROUND_CLOSEST_ULL((uint64_t)arm_clk *
+			d_ns->guardDelay,
+			1000000000);
+	d->holdDelay = NO_OS_DIV_ROUND_CLOSEST_ULL((uint64_t)arm_clk * d_ns->holdDelay,
+			1000000000);
+	d->riseToAnalogOnDelay = NO_OS_DIV_ROUND_CLOSEST_ULL((uint64_t)arm_clk *
 				 d_ns->riseToAnalogOnDelay,
 				 1000000000);
-	d->riseToOnDelay = DIV_ROUND_CLOSEST_ULL((uint64_t)arm_clk *
+	d->riseToOnDelay = NO_OS_DIV_ROUND_CLOSEST_ULL((uint64_t)arm_clk *
 			   d_ns->riseToOnDelay, 1000000000);
 }
 
@@ -760,15 +761,18 @@ void adrv9002_en_delays_arm_to_ns(const struct adrv9002_rf_phy *phy,
 {
 	uint32_t arm_clk = adrv9002_get_arm_clk(phy);
 
-	d_ns->fallToOffDelay = DIV_ROUND_CLOSEST_ULL(d->fallToOffDelay * 1000000000ULL,
+	d_ns->fallToOffDelay = NO_OS_DIV_ROUND_CLOSEST_ULL(d->fallToOffDelay *
+			       1000000000ULL,
 			       arm_clk);
-	d_ns->guardDelay = DIV_ROUND_CLOSEST_ULL(d->guardDelay * 1000000000ULL,
+	d_ns->guardDelay = NO_OS_DIV_ROUND_CLOSEST_ULL(d->guardDelay * 1000000000ULL,
 			   arm_clk);
-	d_ns->holdDelay = DIV_ROUND_CLOSEST_ULL(d->holdDelay * 1000000000ULL, arm_clk);
-	d_ns->riseToAnalogOnDelay = DIV_ROUND_CLOSEST_ULL(d->riseToAnalogOnDelay *
+	d_ns->holdDelay = NO_OS_DIV_ROUND_CLOSEST_ULL(d->holdDelay * 1000000000ULL,
+			  arm_clk);
+	d_ns->riseToAnalogOnDelay = NO_OS_DIV_ROUND_CLOSEST_ULL(d->riseToAnalogOnDelay *
 				    1000000000ULL,
 				    arm_clk);
-	d_ns->riseToOnDelay = DIV_ROUND_CLOSEST_ULL(d->riseToOnDelay * 1000000000ULL,
+	d_ns->riseToOnDelay = NO_OS_DIV_ROUND_CLOSEST_ULL(d->riseToOnDelay *
+			      1000000000ULL,
 			      arm_clk);
 }
 
@@ -805,7 +809,7 @@ static int adrv9002_radio_init(struct adrv9002_rf_phy *phy)
 	if (ret)
 		return adrv9002_dev_err(phy);
 
-	for (chan = 0; chan < ARRAY_SIZE(phy->channels); chan++) {
+	for (chan = 0; chan < NO_OS_ARRAY_SIZE(phy->channels); chan++) {
 		const struct adrv9002_chan *c = phy->channels[chan];
 		struct adi_adrv9001_ChannelEnablementDelays en_delays;
 
@@ -871,7 +875,7 @@ int adrv9002_setup(struct adrv9002_rf_phy *phy)
 	/*
 	 * Disable all the cores as it might interfere with init calibrations.
 	 */
-	for (c = 0; c < ARRAY_SIZE(phy->channels); c++) {
+	for (c = 0; c < NO_OS_ARRAY_SIZE(phy->channels); c++) {
 		chan = phy->channels[c];
 
 		if (phy->rx2tx2 && chan->idx > ADRV9002_CHANN_1)

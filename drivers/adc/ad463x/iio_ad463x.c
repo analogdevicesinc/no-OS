@@ -105,7 +105,7 @@ static int32_t _iio_ad463x_read_dev(struct iio_ad463x *desc, uint32_t *buff,
 
 	for(i = 0, j = 0; i < nb_samples; i++)
 		for (ch = 0; ch < desc->iio_dev_desc.num_ch; ch++)
-			if (desc->mask & BIT(ch)) {
+			if (desc->mask & NO_OS_BIT(ch)) {
 				buff[j++] = data[i];
 			}
 

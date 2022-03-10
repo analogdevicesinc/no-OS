@@ -254,7 +254,7 @@ static uint32_t _wr_fifo(struct xspi_desc *xdesc, uint8_t *data,
 	uint32_t tx_available;
 
 	tx_available = xdesc->fifo_depth - _read(xdesc, XSP_TFO_OFFSET);
-	to_write = min(tx_available, len);
+	to_write = no_os_min(tx_available, len);
 	for (i = 0; i < to_write; ++i)
 		if (data)
 			_write(xdesc, XSP_DTR_OFFSET, data[i]);
@@ -281,7 +281,7 @@ static uint32_t _rd_fifo(struct xspi_desc *xdesc, uint8_t *data,
 		return 0;
 
 	rx_available = _read(xdesc, XSP_RFO_OFFSET) + 1;
-	to_read = min(rx_available, len);
+	to_read = no_os_min(rx_available, len);
 	for (i = 0; i < to_read; ++i) {
 		tmp = _read(xdesc, XSP_DRR_OFFSET);
 		if (data)
@@ -472,8 +472,8 @@ static int32_t xil_spi_transfer_pl(struct no_os_spi_desc *desc,
 				 * Do not write more bytes than fifo_depth if
 				 * they haven't been read.
 				 */
-				bytes = min(bytes,
-					    xdesc->fifo_depth - tx_advance);
+				bytes = no_os_min(bytes,
+						  xdesc->fifo_depth - tx_advance);
 			bytes = _wr_fifo(xdesc, buff, bytes);
 			tx_sent += bytes;
 			_increment_iter(&tx, bytes, &cs_change, &new_type);

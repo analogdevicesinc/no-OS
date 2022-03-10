@@ -275,7 +275,7 @@ int ad9208_set_input_clk_cfg(ad9208_handle_t *h, uint64_t clk_freq_hz,
 	if ((div != 1) && (div != 2) && (div != 4))
 		return API_ERROR_INVALID_PARAM;
 
-	fs_hz = DIV_U64(clk_freq_hz, div);
+	fs_hz = NO_OS_DIV_U64(clk_freq_hz, div);
 
 	if ((fs_hz > AD9208_ADC_CLK_MAX_HZ) || (fs_hz < AD9208_ADC_CLK_MIN_HZ))
 		return API_ERROR_INVALID_PARAM;

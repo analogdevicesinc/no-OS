@@ -100,7 +100,7 @@ static int ad9208_testmode_set(struct ad9208_state *st,
 	ad9208_handle_t *ad9208_h = st->adc_h;
 	int ret;
 
-	ret = ad9208_adc_set_channel_select(ad9208_h, BIT(chan & 1));
+	ret = ad9208_adc_set_channel_select(ad9208_h, NO_OS_BIT(chan & 1));
 	if (ret < 0)
 		return ret;
 
@@ -212,7 +212,7 @@ static int32_t ad9208_setup(struct ad9208_state *st)
 	} else {
 		dcm = st->ddc[0].decimation;
 		for (i = 1; i < st->ddc_cnt; i++)
-			dcm = min_t(uint8_t, dcm, st->ddc[i].decimation);
+			dcm = no_os_min_t(uint8_t, dcm, st->ddc[i].decimation);
 	}
 
 	ret = ad9208_adc_set_dcm_mode(ad9208_h, dcm);

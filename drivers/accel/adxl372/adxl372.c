@@ -438,7 +438,7 @@ int32_t adxl372_get_status(struct adxl372_dev *dev,
 	int32_t ret;
 
 	ret = adxl372_read_reg_multiple(dev, ADXL372_STATUS_1, buf,
-					ARRAY_SIZE(buf));
+					NO_OS_ARRAY_SIZE(buf));
 	if (ret < 0)
 		return ret;
 
@@ -643,7 +643,7 @@ int32_t adxl372_get_highest_peak_data(struct adxl372_dev *dev,
 	} while(!(ADXL372_STATUS_1_DATA_RDY(status1)));
 
 	ret = adxl372_read_reg_multiple(dev, ADXL372_X_MAXPEAK_H, buf,
-					ARRAY_SIZE(buf));
+					NO_OS_ARRAY_SIZE(buf));
 	if (ret)
 		return ret;
 
@@ -678,7 +678,7 @@ int32_t adxl372_get_accel_data(struct adxl372_dev *dev,
 
 	ret = adxl372_read_reg_multiple(dev,
 					ADXL372_X_DATA_H,
-					buf, ARRAY_SIZE(buf));
+					buf, NO_OS_ARRAY_SIZE(buf));
 	if (ret)
 		return ret;
 

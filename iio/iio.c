@@ -322,7 +322,7 @@ static int iio_read_all_attr(struct attr_fun_params *params,
 		pattr_length = (uint32_t *)(params->buf + j);
 		if (j + 4 > params->len)
 			return -EINVAL;
-		*pattr_length = bswap_constant_32(attr_length);
+		*pattr_length = no_os_bswap_constant_32(attr_length);
 		j += 4;
 		if (attr_length >= 0) {
 			if (attr_length + j > params->len)
@@ -361,7 +361,7 @@ static int iio_write_all_attr(struct attr_fun_params *params,
 	int16_t attr_length;
 
 	while (attributes[i].name) {
-		attr_length = bswap_constant_32((uint32_t)(params->buf + j));
+		attr_length = no_os_bswap_constant_32((uint32_t)(params->buf + j));
 		j += 4;
 		attributes[i].store(params->dev_instance, (params->buf + j),
 				    attr_length, params->ch_info,
@@ -577,14 +577,14 @@ int iio_format_value(char *buf, uint32_t len, enum iio_val fmt,
 		return snprintf(buf, len, "%"PRIi32".%09"PRIu32"", vals[0],
 				(uint32_t)vals[1]);
 	case IIO_VAL_FRACTIONAL:
-		tmp = div_s64((int64_t)vals[0] * 1000000000LL, vals[1]);
+		tmp = no_os_div_s64((int64_t)vals[0] * 1000000000LL, vals[1]);
 		fractional = vals[1];
-		integer = (int32_t)div_s64_rem(tmp, 1000000000, &fractional);
+		integer = (int32_t)no_os_div_s64_rem(tmp, 1000000000, &fractional);
 		return snprintf(buf, len, "%"PRIi32".%09u", integer,
 				abs(fractional));
 	case IIO_VAL_FRACTIONAL_LOG2:
-		tmp = shift_right((int64_t)vals[0] * 1000000000LL, vals[1]);
-		integer = (int32_t)div_s64_rem(tmp, 1000000000LL, &fractional);
+		tmp = no_os_shift_right((int64_t)vals[0] * 1000000000LL, vals[1]);
+		integer = (int32_t)no_os_div_s64_rem(tmp, 1000000000LL, &fractional);
 		return snprintf(buf, len, "%"PRIi32".%09u", integer,
 				abs(fractional));
 	case IIO_VAL_INT_MULTIPLE: {
@@ -934,7 +934,7 @@ static int iio_read_buffer(struct iiod_ctx *ctx, const char *device, char *buf,
 	if (IS_ERR_VALUE(ret))
 		return ret;
 
-	bytes = min(size, bytes);
+	bytes = no_os_min(size, bytes);
 	if (!bytes)
 		return -EAGAIN;
 
@@ -975,7 +975,7 @@ static int iio_write_buffer(struct iiod_ctx *ctx, const char *device,
 		return ret;
 
 	available = dev->buffer.public.size - size;
-	bytes = min(available, bytes);
+	bytes = no_os_min(available, bytes);
 	ret = cb_write(&dev->buffer.cb, buf, bytes);
 	if (IS_ERR_VALUE(ret))
 		return ret;
@@ -1141,7 +1141,7 @@ static uint32_t iio_generate_device_xml(struct iio_device *device, char *name,
 		buff = ch_id;
 
 	i = 0;
-	i += snprintf(buff, max(n - i, 0),
+	i += snprintf(buff, no_os_max(n - i, 0),
 		      "<device id=\"%s\" name=\"%s\">", id, name);
 
 	/* Write channels */
@@ -1149,19 +1149,19 @@ static uint32_t iio_generate_device_xml(struct iio_device *device, char *name,
 		for (j = 0; j < device->num_ch; j++) {
 			ch = &device->channels[j];
 			_print_ch_id(ch_id, ch);
-			i += snprintf(buff + i, max(n - i, 0),
+			i += snprintf(buff + i, no_os_max(n - i, 0),
 				      "<channel id=\"%s\"",
 				      ch_id);
 			if(ch->name)
-				i += snprintf(buff + i, max(n - i, 0),
+				i += snprintf(buff + i, no_os_max(n - i, 0),
 					      " name=\"%s\"",
 					      ch->name);
-			i += snprintf(buff + i, max(n - i, 0),
+			i += snprintf(buff + i, no_os_max(n - i, 0),
 				      " type=\"%s\" >",
 				      ch->ch_out ? "output" : "input");
 
 			if (ch->scan_type)
-				i += snprintf(buff + i, max(n - i, 0),
+				i += snprintf(buff + i, no_os_max(n - i, 0),
 					      "<scan-element index=\"%d\""
 					      " format=\"%s:%c%d/%d>>%d\" />",
 					      ch->scan_index,
@@ -1175,22 +1175,23 @@ static uint32_t iio_generate_device_xml(struct iio_device *device, char *name,
 			if (ch->attributes)
 				for (k = 0; ch->attributes[k].name; k++) {
 					attr = &ch->attributes[k];
-					i += snprintf(buff + i, max(n - i, 0), "<attribute name=\"%s\" ", attr->name);
+					i += snprintf(buff + i, no_os_max(n - i, 0), "<attribute name=\"%s\" ",
+						      attr->name);
 					if (ch->diferential) {
 						switch (attr->shared) {
 						case IIO_SHARED_BY_ALL:
-							i += snprintf(buff + i, max(n - i, 0),
+							i += snprintf(buff + i, no_os_max(n - i, 0),
 								      "filename=\"%s\"",
 								      attr->name);
 							break;
 						case IIO_SHARED_BY_DIR:
-							i += snprintf(buff + i, max(n - i, 0),
+							i += snprintf(buff + i, no_os_max(n - i, 0),
 								      "filename=\"%s_%s\"",
 								      ch->ch_out ? "out" : "in",
 								      attr->name);
 							break;
 						case IIO_SHARED_BY_TYPE:
-							i += snprintf(buff + i, max(n - i, 0),
+							i += snprintf(buff + i, no_os_max(n - i, 0),
 								      "filename=\"%s_%s-%s_%s\"",
 								      ch->ch_out ? "out" : "in",
 								      iio_chan_type_string[ch->ch_type],
@@ -1202,7 +1203,7 @@ static uint32_t iio_generate_device_xml(struct iio_device *device, char *name,
 								// Differential channels must be indexed!
 								return -EINVAL;
 							}
-							i += snprintf(buff + i, max(n - i, 0),
+							i += snprintf(buff + i, no_os_max(n - i, 0),
 								      "filename=\"%s_%s%d-%s%d_%s\"",
 								      ch->ch_out ? "out" : "in",
 								      iio_chan_type_string[ch->ch_type],
@@ -1215,18 +1216,18 @@ static uint32_t iio_generate_device_xml(struct iio_device *device, char *name,
 					} else {
 						switch (attr->shared) {
 						case IIO_SHARED_BY_ALL:
-							i += snprintf(buff + i, max(n - i, 0),
+							i += snprintf(buff + i, no_os_max(n - i, 0),
 								      "filename=\"%s\"",
 								      attr->name);
 							break;
 						case IIO_SHARED_BY_DIR:
-							i += snprintf(buff + i, max(n - i, 0),
+							i += snprintf(buff + i, no_os_max(n - i, 0),
 								      "filename=\"%s_%s\"",
 								      ch->ch_out ? "out" : "in",
 								      attr->name);
 							break;
 						case IIO_SHARED_BY_TYPE:
-							i += snprintf(buff + i, max(n - i, 0),
+							i += snprintf(buff + i, no_os_max(n - i, 0),
 								      "filename=\"%s_%s_%s\"",
 								      ch->ch_out ? "out" : "in",
 								      iio_chan_type_string[ch->ch_type],
@@ -1234,14 +1235,14 @@ static uint32_t iio_generate_device_xml(struct iio_device *device, char *name,
 							break;
 						case IIO_SEPARATE:
 							if (ch->indexed)
-								i += snprintf(buff + i, max(n - i, 0),
+								i += snprintf(buff + i, no_os_max(n - i, 0),
 									      "filename=\"%s_%s%d_%s\"",
 									      ch->ch_out ? "out" : "in",
 									      iio_chan_type_string[ch->ch_type],
 									      ch->channel,
 									      attr->name);
 							else
-								i += snprintf(buff + i, max(n - i, 0),
+								i += snprintf(buff + i, no_os_max(n - i, 0),
 									      "filename=\"%s_%s_%s\"",
 									      ch->ch_out ? "out" : "in",
 									      iio_chan_type_string[ch->ch_type],
@@ -1249,37 +1250,37 @@ static uint32_t iio_generate_device_xml(struct iio_device *device, char *name,
 							break;
 						}
 					}
-					i += snprintf(buff + i, max(n - i, 0), " />");
+					i += snprintf(buff + i, no_os_max(n - i, 0), " />");
 				}
 
-			i += snprintf(buff + i, max(n - i, 0), "</channel>");
+			i += snprintf(buff + i, no_os_max(n - i, 0), "</channel>");
 		}
 
 	/* Write device attributes */
 	if (device->attributes)
 		for (j = 0; device->attributes[j].name; j++)
-			i += snprintf(buff + i, max(n - i, 0),
+			i += snprintf(buff + i, no_os_max(n - i, 0),
 				      "<attribute name=\"%s\" />",
 				      device->attributes[j].name);
 
 	/* Write debug attributes */
 	if (device->debug_attributes)
 		for (j = 0; device->debug_attributes[j].name; j++)
-			i += snprintf(buff + i, max(n - i, 0),
+			i += snprintf(buff + i, no_os_max(n - i, 0),
 				      "<debug-attribute name=\"%s\" />",
 				      device->debug_attributes[j].name);
 	if (device->debug_reg_read || device->debug_reg_write)
-		i += snprintf(buff + i, max(n - i, 0),
+		i += snprintf(buff + i, no_os_max(n - i, 0),
 			      "<debug-attribute name=\""REG_ACCESS_ATTRIBUTE"\" />");
 
 	/* Write buffer attributes */
 	if (device->buffer_attributes)
 		for (j = 0; device->buffer_attributes[j].name; j++)
-			i += snprintf(buff + i, max(n - i, 0),
+			i += snprintf(buff + i, no_os_max(n - i, 0),
 				      "<buffer-attribute name=\"%s\" />",
 				      device->buffer_attributes[j].name);
 
-	i += snprintf(buff + i, max(n - i, 0), "</device>");
+	i += snprintf(buff + i, no_os_max(n - i, 0), "</device>");
 
 	return i;
 }

@@ -294,7 +294,7 @@ int32_t axi_adc_set_calib_phase_scale(struct axi_adc *adc,
 	}
 
 	llval = (uint64_t)val2 * 0x4000UL + (1000000UL / 2);
-	do_div(&llval, 1000000UL);
+	no_os_do_div(&llval, 1000000UL);
 	fract |= llval;
 
 	axi_adc_read(adc, AXI_ADC_REG_CHAN_CNTRL_2(chan), &tmp);
@@ -346,7 +346,7 @@ int32_t axi_adc_get_calib_phase_scale(struct axi_adc *adc,
 	tmp &= ~0xC000;
 
 	llval = tmp * 1000000ULL + (0x4000 / 2);
-	do_div(&llval, 0x4000);
+	no_os_do_div(&llval, 0x4000);
 	if (*val == 0)
 		*val2 = llval * sign;
 	else

@@ -250,7 +250,7 @@ int32_t stm32_spi_write_and_read(struct no_os_spi_desc *desc,
 	gdesc = sdesc->chip_select->extra;
 	SPIx = sdesc->hspi.Instance;
 
-	gdesc->port->BSRR = BIT(sdesc->chip_select->number) << 16;
+	gdesc->port->BSRR = NO_OS_BIT(sdesc->chip_select->number) << 16;
 	__HAL_SPI_ENABLE(&sdesc->hspi);
 	while(bytes_number--) {
 		while(!(SPIx->SR & SPI_SR_TXE))
@@ -261,7 +261,7 @@ int32_t stm32_spi_write_and_read(struct no_os_spi_desc *desc,
 		*rx++ = *(volatile uint8_t *)&SPIx->DR;
 	}
 	__HAL_SPI_DISABLE(&sdesc->hspi);
-	gdesc->port->BSRR = BIT(sdesc->chip_select->number);
+	gdesc->port->BSRR = NO_OS_BIT(sdesc->chip_select->number);
 
 	return SUCCESS;
 }

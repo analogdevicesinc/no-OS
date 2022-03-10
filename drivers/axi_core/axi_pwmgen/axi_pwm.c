@@ -64,8 +64,8 @@
 #define AXI_PWMGEN_CHX_DUTY(ch)		(AXI_PWMGEN_CH_DUTY_BASE + (12 * (ch)))
 #define AXI_PWMGEN_CHX_PHASE(ch)	(AXI_PWMGEN_CH_PHASE_BASE + (12 * (ch)))
 #define AXI_PWMGEN_TEST_DATA		0x5A0F0081
-#define AXI_PWMGEN_LOAD_CONIG		BIT(1)
-#define AXI_PWMGEN_RESET		BIT(0)
+#define AXI_PWMGEN_LOAD_CONIG		NO_OS_BIT(1)
+#define AXI_PWMGEN_RESET		NO_OS_BIT(0)
 #define AXI_PWMGEN_CHANNEL_DISABLE	0
 #define AXI_PWMGEN_MAX_CHANNELS		4
 #define NSEC_PER_USEC			1000L
@@ -155,7 +155,7 @@ int32_t no_os_pwm_set_period(struct no_os_pwm_desc *desc, uint32_t period_ns)
 
 	/* Downscale by 1000 in order to avoid overflow when multiplying */
 	tmp = (axi_desc->ref_clock_Hz / NSEC_PER_USEC) * period_ns;
-	period_cnt = DIV_ROUND_UP(tmp, USEC_PER_SEC);
+	period_cnt = NO_OS_DIV_ROUND_UP(tmp, USEC_PER_SEC);
 	axi_desc->ch_period = period_cnt;
 	ret = axi_io_write(axi_desc->base_addr,
 			   AXI_PWMGEN_CHX_PERIOD(axi_desc->channel),
@@ -202,7 +202,7 @@ int32_t no_os_pwm_set_duty_cycle(struct no_os_pwm_desc *desc,
 
 	/* Downscale by 1000 */
 	tmp = (axi_desc->ref_clock_Hz / NSEC_PER_USEC) * duty_cycle_ns;
-	duty_cnt = DIV_ROUND_UP(tmp, USEC_PER_SEC);
+	duty_cnt = NO_OS_DIV_ROUND_UP(tmp, USEC_PER_SEC);
 	ret = axi_io_write(axi_desc->base_addr,
 			   AXI_PWMGEN_CHX_DUTY(axi_desc->channel),
 			   duty_cnt);
@@ -244,7 +244,7 @@ int32_t no_os_pwm_set_phase(struct no_os_pwm_desc *desc, uint32_t phase_ns)
 
 	/* Downscale by 1000 */
 	tmp = (axi_desc->ref_clock_Hz / NSEC_PER_USEC) * phase_ns;
-	phase_cnt = DIV_ROUND_UP(tmp, USEC_PER_SEC);
+	phase_cnt = NO_OS_DIV_ROUND_UP(tmp, USEC_PER_SEC);
 	ret = axi_io_write(axi_desc->base_addr,
 			   AXI_PWMGEN_CHX_PHASE(axi_desc->channel),
 			   phase_cnt);

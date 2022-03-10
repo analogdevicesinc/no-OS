@@ -494,7 +494,7 @@ int32_t ad469x_std_sequence_ch(struct ad469x_dev *dev, uint16_t ch_mask)
 	if (ret != SUCCESS)
 		return ret;
 
-	dev->num_slots = hweight8(ch_mask);
+	dev->num_slots = no_os_hweight8(ch_mask);
 
 	return ret;
 }
@@ -614,7 +614,7 @@ int32_t ad469x_exit_conversion_mode(struct ad469x_dev *dev)
 		return ret;
 
 	msg.commands = spi_eng_msg_cmds;
-	msg.no_commands = ARRAY_SIZE(spi_eng_msg_cmds);
+	msg.no_commands = NO_OS_ARRAY_SIZE(spi_eng_msg_cmds);
 	msg.rx_addr = (uint32_t)&buf;
 	msg.commands_data = commands_data;
 
@@ -726,7 +726,7 @@ int32_t ad469x_read_data(struct ad469x_dev *dev,
 		return ret;
 
 	msg.commands = spi_eng_msg_cmds;
-	msg.no_commands = ARRAY_SIZE(spi_eng_msg_cmds);
+	msg.no_commands = NO_OS_ARRAY_SIZE(spi_eng_msg_cmds);
 	msg.rx_addr = (uint32_t)buf;
 	msg.commands_data = commands_data;
 

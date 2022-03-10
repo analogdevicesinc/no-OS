@@ -120,11 +120,11 @@
 #define ADXL355_TEMP_SCALE_FACTOR     -110497238
 #define ADXL355_TEMP_SCALE_FACTOR_DIV    1000000
 
-#define ADXL355_NEG_ACC_MSK        GENMASK(31, 20)
-#define ADXL355_RANGE_FIELD_MSK    GENMASK( 1,  0)
-#define ADXL355_ODR_LPF_FIELD_MSK  GENMASK( 3,  0)
-#define ADXL355_HPF_FIELD_MSK      GENMASK( 6,  4)
-#define ADXL355_INT_POL_FIELD_MSK  BIT(6)
+#define ADXL355_NEG_ACC_MSK        NO_OS_GENMASK(31, 20)
+#define ADXL355_RANGE_FIELD_MSK    NO_OS_GENMASK( 1,  0)
+#define ADXL355_ODR_LPF_FIELD_MSK  NO_OS_GENMASK( 3,  0)
+#define ADXL355_HPF_FIELD_MSK      NO_OS_GENMASK( 6,  4)
+#define ADXL355_INT_POL_FIELD_MSK  NO_OS_BIT(6)
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/

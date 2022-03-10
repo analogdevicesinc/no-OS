@@ -82,7 +82,7 @@ int32_t ad5592r_gpio_get(struct ad5592r_dev *dev, uint8_t offset)
 	if (!dev)
 		return FAILURE;
 
-	if (dev->gpio_out & BIT(offset))
+	if (dev->gpio_out & NO_OS_BIT(offset))
 		val = dev->gpio_val;
 	else
 		ret = dev->ops->gpio_read(dev, &val);
@@ -90,7 +90,7 @@ int32_t ad5592r_gpio_get(struct ad5592r_dev *dev, uint8_t offset)
 	if (ret < 0)
 		return ret;
 
-	return !!(val & BIT(offset));
+	return !!(val & NO_OS_BIT(offset));
 }
 
 /**
@@ -106,9 +106,9 @@ int32_t ad5592r_gpio_set(struct ad5592r_dev *dev, uint8_t offset, int32_t value)
 		return FAILURE;
 
 	if (value)
-		dev->gpio_val |= BIT(offset);
+		dev->gpio_val |= NO_OS_BIT(offset);
 	else
-		dev->gpio_val &= ~BIT(offset);
+		dev->gpio_val &= ~NO_OS_BIT(offset);
 
 	return ad5592r_base_reg_write(dev, AD5592R_REG_GPIO_SET,
 				      dev->gpio_val);
@@ -128,8 +128,8 @@ int32_t ad5592r_gpio_direction_input(struct ad5592r_dev *dev, uint8_t offset)
 	if (!dev)
 		return FAILURE;
 
-	dev->gpio_out &= ~BIT(offset);
-	dev->gpio_in |= BIT(offset);
+	dev->gpio_out &= ~NO_OS_BIT(offset);
+	dev->gpio_in |= NO_OS_BIT(offset);
 
 	ret = ad5592r_base_reg_write(dev, AD5592R_REG_GPIO_OUT_EN,
 				     dev->gpio_out);
@@ -157,12 +157,12 @@ int32_t ad5592r_gpio_direction_output(struct ad5592r_dev *dev,
 		return FAILURE;
 
 	if (value)
-		dev->gpio_val |= BIT(offset);
+		dev->gpio_val |= NO_OS_BIT(offset);
 	else
-		dev->gpio_val &= ~BIT(offset);
+		dev->gpio_val &= ~NO_OS_BIT(offset);
 
-	dev->gpio_in &= ~BIT(offset);
-	dev->gpio_out |= BIT(offset);
+	dev->gpio_in &= ~NO_OS_BIT(offset);
+	dev->gpio_out |= NO_OS_BIT(offset);
 
 	ret = ad5592r_base_reg_write(dev, AD5592R_REG_GPIO_SET, dev->gpio_val);
 	if (ret < 0)
@@ -222,24 +222,24 @@ int32_t ad5592r_set_channel_modes(struct ad5592r_dev *dev)
 	for (i = 0; i < dev->num_channels; i++) {
 		switch (dev->channel_modes[i]) {
 		case CH_MODE_DAC:
-			dac |= BIT(i);
+			dac |= NO_OS_BIT(i);
 			break;
 
 		case CH_MODE_ADC:
-			adc |= BIT(i);
+			adc |= NO_OS_BIT(i);
 			break;
 
 		case CH_MODE_DAC_AND_ADC:
-			dac |= BIT(i);
-			adc |= BIT(i);
+			dac |= NO_OS_BIT(i);
+			adc |= NO_OS_BIT(i);
 			break;
 
 		case CH_MODE_GPI:
-			dev->gpio_in |= BIT(i);
+			dev->gpio_in |= NO_OS_BIT(i);
 			break;
 
 		case CH_MODE_GPO:
-			dev->gpio_out |= BIT(i);
+			dev->gpio_out |= NO_OS_BIT(i);
 			break;
 
 		case CH_MODE_UNUSED:
@@ -247,22 +247,22 @@ int32_t ad5592r_set_channel_modes(struct ad5592r_dev *dev)
 		default:
 			switch (dev->channel_offstate[i]) {
 			case CH_OFFSTATE_OUT_TRISTATE:
-				tristate |= BIT(i);
+				tristate |= NO_OS_BIT(i);
 				break;
 
 			case CH_OFFSTATE_OUT_LOW:
-				dev->gpio_out |= BIT(i);
+				dev->gpio_out |= NO_OS_BIT(i);
 				break;
 
 			case CH_OFFSTATE_OUT_HIGH:
-				dev->gpio_out |= BIT(i);
-				dev->gpio_val |= BIT(i);
+				dev->gpio_out |= NO_OS_BIT(i);
+				dev->gpio_val |= NO_OS_BIT(i);
 				break;
 
 			case CH_OFFSTATE_PULLDOWN:
 			/* fall-through */
 			default:
-				pulldown |= BIT(i);
+				pulldown |= NO_OS_BIT(i);
 				break;
 			}
 		}

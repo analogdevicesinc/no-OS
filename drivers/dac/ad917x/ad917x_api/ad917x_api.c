@@ -148,7 +148,7 @@ static int32_t dac_init_sequence(ad917x_handle_t *h)
 		return API_ERROR_INVALID_HANDLE_PTR;
 	/*Boot from NVRAM & Check Boot Status*/
 	err = ad917x_register_write_tbl(h, &ADI_RECOMMENDED_BOOT_TBL[0],
-					ARRAY_SIZE(ADI_RECOMMENDED_BOOT_TBL));
+					NO_OS_ARRAY_SIZE(ADI_RECOMMENDED_BOOT_TBL));
 	if (err != API_ERROR_OK)
 		return err;
 
@@ -366,7 +366,7 @@ int32_t ad917x_set_dac_pll_config(ad917x_handle_t *h, uint8_t dac_pll_en,
 	/*Initialise PLL*/
 	/*Call PLL Recommended Init Sequence*/
 	err = ad917x_register_write_tbl(h, &ADI_RECOMMENDED_PLL_TBL_1[0],
-					ARRAY_SIZE(ADI_RECOMMENDED_PLL_TBL_1));
+					NO_OS_ARRAY_SIZE(ADI_RECOMMENDED_PLL_TBL_1));
 	if (err != API_ERROR_OK)
 		return err;
 	if (h->delay_us != NULL)
@@ -433,7 +433,7 @@ int32_t ad917x_set_dac_clk_freq(ad917x_handle_t *h,
 	h->dac_freq_hz = (uint64_t)(dac_clk_freq_hz);
 	/*Call DLL Recommended Init Sequence*/
 	err = ad917x_register_write_tbl(h, &ADI_RECOMMENDED_DLL_TBL[0],
-					ARRAY_SIZE(ADI_RECOMMENDED_DLL_TBL));
+					NO_OS_ARRAY_SIZE(ADI_RECOMMENDED_DLL_TBL));
 	if (err != API_ERROR_OK)
 		return err;
 
@@ -452,7 +452,7 @@ int32_t ad917x_set_dac_clk_freq(ad917x_handle_t *h,
 
 	/*Call DAC Calibration Recommended Init Sequence*/
 	err = ad917x_register_write_tbl(h, &ADI_RECOMMENDED_DAC_CAL_TBL[0],
-					ARRAY_SIZE(ADI_RECOMMENDED_DAC_CAL_TBL));
+					NO_OS_ARRAY_SIZE(ADI_RECOMMENDED_DAC_CAL_TBL));
 	if (err != API_ERROR_OK)
 		return err;
 	return API_ERROR_OK;
@@ -538,11 +538,11 @@ int32_t ad917x_set_dac_clk(ad917x_handle_t *h,
 				    AD917X_PLL_BYPASS_REG, AD917X_PLL_BYPASS(!dac_pll_en));
 	if (err != API_ERROR_OK)
 		return err;
-	dac_clk_freq_mhz = DIV_U64(dac_clk_freq_hz, 1000000);
+	dac_clk_freq_mhz = NO_OS_DIV_U64(dac_clk_freq_hz, 1000000);
 	if (dac_pll_en) {
 		/*Generate On chip PLL Configuration*/
 		/*Check REF CLK within 30MHz to 2GHz Range*/
-		ref_clk_freq_mhz = DIV_U64(ref_clk_freq_hz, 1000000);
+		ref_clk_freq_mhz = NO_OS_DIV_U64(ref_clk_freq_hz, 1000000);
 		if ((ref_clk_freq_mhz < REF_CLK_FREQ_MHZ_MIN) ||
 		    (ref_clk_freq_mhz > REF_CLK_FREQ_MHZ_MAX))
 			return API_ERROR_INVALID_PARAM;
@@ -581,14 +581,14 @@ int32_t ad917x_set_dac_clk(ad917x_handle_t *h,
 
 		/*Calculate N Divider using FVCO Frequency*/
 		n_div_tmp = (fvco_freq_mhz * (m_div));
-		n_div_tmp = DIV_ROUND_CLOSEST(n_div_tmp * 1000,
-					      (uint32_t) DIV_U64(ref_clk_freq_hz, 1000));
-		n_div = DIV_ROUND_CLOSEST(n_div_tmp, 8);
+		n_div_tmp = NO_OS_DIV_ROUND_CLOSEST(n_div_tmp * 1000,
+						    (uint32_t) NO_OS_DIV_U64(ref_clk_freq_hz, 1000));
+		n_div = NO_OS_DIV_ROUND_CLOSEST(n_div_tmp, 8);
 
 		/*Initialise PLL*/
 		/*Call PLL Recommended Init Sequence*/
 		err = ad917x_register_write_tbl(h, &ADI_RECOMMENDED_PLL_TBL_1[0],
-						ARRAY_SIZE(ADI_RECOMMENDED_PLL_TBL_1));
+						NO_OS_ARRAY_SIZE(ADI_RECOMMENDED_PLL_TBL_1));
 		if (err != API_ERROR_OK)
 			return err;
 		if (h->delay_us != NULL)

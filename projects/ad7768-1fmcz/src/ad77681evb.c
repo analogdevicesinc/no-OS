@@ -154,7 +154,7 @@ int main()
 			return FAILURE;
 
 		spi_engine_offload_message.commands = spi_msg_cmds;
-		spi_engine_offload_message.no_commands = ARRAY_SIZE(spi_msg_cmds);
+		spi_engine_offload_message.no_commands = NO_OS_ARRAY_SIZE(spi_msg_cmds);
 		spi_engine_offload_message.commands_data = commands_data;
 		spi_engine_offload_message.rx_addr = 0x800000;
 		spi_engine_offload_message.tx_addr = 0xA000000;

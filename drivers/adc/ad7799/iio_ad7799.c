@@ -104,7 +104,7 @@ static int ad7799_iio_gain_write(void *device, char *buf, uint32_t len,
 	struct ad7799_dev *dev = (struct ad7799_dev *)device;
 	int32_t ret;
 
-	uint32_t gain = srt_to_uint32(buf);
+	uint32_t gain = no_os_str_to_uint32(buf);
 
 	ret = ad7799_set_gain(dev, (uint8_t)gain);
 	if (ret != SUCCESS)

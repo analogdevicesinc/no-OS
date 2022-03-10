@@ -584,7 +584,7 @@ static int fmcdaq2_dac_init(struct fmcdaq2_dev *dev,
 	};
 
 	for(uint32_t n=0;
-	    n < ARRAY_SIZE(dev_init->ad9144_param.jesd204_lane_xbar);
+	    n < NO_OS_ARRAY_SIZE(dev_init->ad9144_param.jesd204_lane_xbar);
 	    n++)
 		dev_init->ad9144_param.jesd204_lane_xbar[n] = n;
 
@@ -682,7 +682,7 @@ static int fmcdaq2_iio_init(struct fmcdaq2_dev *dev,
 			       &ad9144_iio_descriptor, NULL, NULL)
 	};
 
-	return iio_app_run(devices, ARRAY_SIZE(devices));
+	return iio_app_run(devices, NO_OS_ARRAY_SIZE(devices));
 #endif
 
 	return SUCCESS;
@@ -1023,12 +1023,12 @@ int main(void)
 	axi_dmac_init(&fmcdaq2.ad9144_dmac, &fmcdaq2_init.ad9144_dmac_param);
 	axi_dac_data_setup(fmcdaq2.ad9144_core);
 	axi_dac_load_custom_data(fmcdaq2.ad9144_core, sine_lut_iq,
-				 ARRAY_SIZE(sine_lut_iq), DAC_DDR_BASEADDR);
+				 NO_OS_ARRAY_SIZE(sine_lut_iq), DAC_DDR_BASEADDR);
 #ifndef ALTERA_PLATFORM
 	Xil_DCacheFlush();
 #endif
 	axi_dmac_transfer(fmcdaq2.ad9144_dmac, DAC_DDR_BASEADDR,
-			  ARRAY_SIZE(sine_lut_iq) * sizeof(uint32_t));
+			  NO_OS_ARRAY_SIZE(sine_lut_iq) * sizeof(uint32_t));
 #else
 	fmcdaq2.ad9144_channels[0].dds_dual_tone = 0;
 	fmcdaq2.ad9144_channels[0].dds_frequency_0 = 33*1000*1000;

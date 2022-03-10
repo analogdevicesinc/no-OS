@@ -67,7 +67,7 @@ static int get_jesd_serdes_vco_cfg(uint64_t slr_mbps, uint8_t *vco_cfg)
 	/*Transport layer Parameter Ranges Table 22 */
 	int i = 0x0;
 
-	for (i = 0; i < ARRAY_SIZE(ADI_REC_SERDES_PLL_CFG); i++) {
+	for (i = 0; i < NO_OS_ARRAY_SIZE(ADI_REC_SERDES_PLL_CFG); i++) {
 		if ((slr_mbps >= ADI_REC_SERDES_PLL_CFG[i].slr_lwr_thres) &&
 		    (slr_mbps < ADI_REC_SERDES_PLL_CFG[i].slr_upr_thres)) {
 			*vco_cfg = ADI_REC_SERDES_PLL_CFG[i].vco_cfg;
@@ -146,7 +146,7 @@ int ad9208_jesd_enable_link(ad9208_handle_t *h, uint8_t en)
 	if (en) {
 		err = ad9208_register_write_tbl(h,
 						&ADI_REC_SERDES_INIT_TBL[0],
-						ARRAY_SIZE
+						NO_OS_ARRAY_SIZE
 						(ADI_REC_SERDES_INIT_TBL));
 		if (err != API_ERROR_OK)
 			return err;
@@ -181,15 +181,15 @@ int ad9208_jesd_set_if_config(ad9208_handle_t *h,
 		return err;
 
 	if (h->adc_clk_freq_hz != 0)
-		fout = DIV_U64(h->adc_clk_freq_hz, dcm);
+		fout = NO_OS_DIV_U64(h->adc_clk_freq_hz, dcm);
 	else {
 		/*printf("API:AD9208: JESD :INVALID: CLK FREQ \r\n"); */
 		return API_ERROR_INVALID_PARAM;
 	}
 	/*Calculate Lane Rate */
 	slr = (((jesd_param.jesd_M * jesd_param.jesd_N) * (10)) * fout);
-	slr = DIV_U64(DIV_U64(slr, 8), jesd_param.jesd_L);
-	slr_mbps = DIV_U64(slr, 1000000);
+	slr = NO_OS_DIV_U64(NO_OS_DIV_U64(slr, 8), jesd_param.jesd_L);
+	slr_mbps = NO_OS_DIV_U64(slr, 1000000);
 
 	if ((slr_mbps > LANE_RATE_MAX_MBPS) || (slr_mbps < LANE_RATE_MIN_MBPS)) {
 		/*printf("API:AD9208: JESD :INVALID: SLR :%lld \r\n", slr_mbps); */
@@ -255,7 +255,7 @@ int ad9208_jesd_set_if_config(ad9208_handle_t *h,
 		return err;
 
 	if (lane_rate_kbps != NULL)
-		*lane_rate_kbps = DIV_U64(slr, 1000);
+		*lane_rate_kbps = NO_OS_DIV_U64(slr, 1000);
 
 	return API_ERROR_OK;
 }

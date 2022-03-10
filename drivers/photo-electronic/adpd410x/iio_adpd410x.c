@@ -140,7 +140,7 @@ static int adpd410x_iio_set_sampling_freq(void *device, char *buf,
 	struct adpd410x_dev *dev = (struct adpd410x_dev *)device;
 	int32_t ret;
 
-	uint32_t freq = srt_to_uint32(buf);
+	uint32_t freq = no_os_str_to_uint32(buf);
 
 	ret = adpd410x_set_sampling_freq(dev, freq);
 	if (ret != SUCCESS)
@@ -192,7 +192,7 @@ static int adpd410x_iio_set_last_timeslot(void *device, char *buf,
 	int32_t ret;
 	int8_t i;
 
-	for (i = 0; i < ARRAY_SIZE(adpd410x_iio_timeslots); i++)
+	for (i = 0; i < NO_OS_ARRAY_SIZE(adpd410x_iio_timeslots); i++)
 		if (!strncmp(buf, adpd410x_iio_timeslots[i], len))
 			break;
 
@@ -239,7 +239,7 @@ static int adpd410x_iio_get_last_timeslot_available(void *device, char *buf,
 		const struct iio_ch_info *channel, intptr_t priv)
 {
 	strcpy(buf, "");
-	for (int8_t i = 0; i < ARRAY_SIZE(adpd410x_iio_timeslots); i++) {
+	for (int8_t i = 0; i < NO_OS_ARRAY_SIZE(adpd410x_iio_timeslots); i++) {
 		strcat(buf, adpd410x_iio_timeslots[i]);
 		strcat(buf, " ");
 	}
@@ -268,7 +268,7 @@ static int adpd410x_iio_set_opmode(void *device, char *buf, uint32_t len,
 	int32_t ret;
 	int8_t i;
 
-	for (i = 0; i < ARRAY_SIZE(adpd410x_iio_opmode); i++)
+	for (i = 0; i < NO_OS_ARRAY_SIZE(adpd410x_iio_opmode); i++)
 		if (!strncmp(buf, adpd410x_iio_opmode[i], len))
 			break;
 
@@ -315,7 +315,7 @@ static int adpd410x_iio_get_opmode_available(void *device, char *buf,
 		const struct iio_ch_info *channel, intptr_t priv)
 {
 	strcpy(buf, "");
-	for (int8_t i = 0; i < ARRAY_SIZE(adpd410x_iio_opmode); i++) {
+	for (int8_t i = 0; i < NO_OS_ARRAY_SIZE(adpd410x_iio_opmode); i++) {
 		strcat(buf, adpd410x_iio_opmode[i]);
 		strcat(buf, " ");
 	}

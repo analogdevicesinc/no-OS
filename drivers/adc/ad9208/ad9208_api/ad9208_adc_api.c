@@ -69,7 +69,7 @@ static int ad9208_get_decimation_cfg(uint8_t dcm, uint8_t *cfg)
 {
 	int i;
 
-	for (i = 0; i < ARRAY_SIZE(ad9208_dcm_table); i++) {
+	for (i = 0; i < NO_OS_ARRAY_SIZE(ad9208_dcm_table); i++) {
 		if (dcm == ad9208_dcm_table[i].dcm) {
 			*cfg = ad9208_dcm_table[i].dcm_cfg;
 			return API_ERROR_OK;
@@ -93,7 +93,7 @@ int ad9208_get_decimation(ad9208_handle_t *h, uint8_t *dcm)
 
 	cfg = AD9208_ADC_DCM_RATE(tmp_reg);
 
-	for (i = 0; i < ARRAY_SIZE(ad9208_dcm_table); i++) {
+	for (i = 0; i < NO_OS_ARRAY_SIZE(ad9208_dcm_table); i++) {
 		if (cfg == ad9208_dcm_table[i].dcm_cfg) {
 			*dcm = ad9208_dcm_table[i].dcm;
 			return API_ERROR_OK;
@@ -190,7 +190,7 @@ static int ad9208_get_dec_filter_cfg(ad9208_adc_data_frmt_t op_data_format,
 	uint8_t i = 0;
 
 	if (op_data_format == AD9208_DATA_FRMT_COMPLEX) {
-		for (i = 0; i < ARRAY_SIZE(ADI_DEC_FILTER_COMPLEX_TBL); i++) {
+		for (i = 0; i < NO_OS_ARRAY_SIZE(ADI_DEC_FILTER_COMPLEX_TBL); i++) {
 			if (ADI_DEC_FILTER_COMPLEX_TBL[i].dec_complex ==
 			    dcm_rate) {
 				*filt_sel_val_0 =
@@ -203,7 +203,7 @@ static int ad9208_get_dec_filter_cfg(ad9208_adc_data_frmt_t op_data_format,
 	}
 
 	if (op_data_format == AD9208_DATA_FRMT_REAL) {
-		for (i = 0; i < ARRAY_SIZE(ADI_DEC_FILTER_COMPLEX_TBL); i++) {
+		for (i = 0; i < NO_OS_ARRAY_SIZE(ADI_DEC_FILTER_COMPLEX_TBL); i++) {
 			if (ADI_DEC_FILTER_COMPLEX_TBL[i].dec_real == dcm_rate) {
 				*filt_sel_val_0 =
 					ADI_DEC_FILTER_COMPLEX_TBL[i].ctrl_reg_val;
@@ -812,8 +812,8 @@ int ad9208_adc_set_ddc_nco(ad9208_handle_t *h, uint8_t ddc_ch,
 		 * As we are in Integer NCO mode it guranteed the
 		 *  value is integer power of 2
 		 */
-		tmp_freq = DIV_U64(h->adc_clk_freq_hz, carrier_freq_hz);
-		tmp_freq = DIV_U64(ADI_POW2_48, tmp_freq);
+		tmp_freq = NO_OS_DIV_U64(h->adc_clk_freq_hz, carrier_freq_hz);
+		tmp_freq = NO_OS_DIV_U64(ADI_POW2_48, tmp_freq);
 
 		/* Write FTW */
 		err = ad9208_adc_set_ddc_nco_ftw(h, ddc_ch, tmp_freq, 0, 0);
@@ -829,10 +829,10 @@ int ad9208_adc_set_ddc_nco(ad9208_handle_t *h, uint8_t ddc_ch,
 		uint64_t tmp_ah, tmp_al, /*tmp_bh, tmp_bl, tmp_fh, */ tmp_fl;
 
 		gcd = adi_api_utils_gcd(carrier_freq_hz, h->adc_clk_freq_hz);
-		M = DIV_U64(carrier_freq_hz, gcd);
-		N = DIV_U64(h->adc_clk_freq_hz, gcd);
+		M = NO_OS_DIV_U64(carrier_freq_hz, gcd);
+		N = NO_OS_DIV_U64(h->adc_clk_freq_hz, gcd);
 
-		if (M > S16_MAX) {
+		if (M > NO_OS_S16_MAX) {
 			uint64_t mask = U64MSB;
 			int i = 0;
 
@@ -840,10 +840,10 @@ int ad9208_adc_set_ddc_nco(ad9208_handle_t *h, uint8_t ddc_ch,
 				mask >>= 1;
 				i++;
 			}
-			ftw = DIV_U64(M * ((uint64_t) 1u << i), N);
+			ftw = NO_OS_DIV_U64(M * ((uint64_t) 1u << i), N);
 			ftw *= ((uint64_t) 1u << (48 - i));
 		} else
-			ftw = DIV_U64(M * (ADI_POW2_48), N);
+			ftw = NO_OS_DIV_U64(M * (ADI_POW2_48), N);
 
 		adi_api_utils_mult_128(M, ADI_POW2_48, &tmp_ah, &tmp_al);
 		adi_api_utils_mod_128(tmp_ah, tmp_al, N, &tmp_fl);
@@ -852,8 +852,8 @@ int ad9208_adc_set_ddc_nco(ad9208_handle_t *h, uint8_t ddc_ch,
 		mbw = N;
 
 		gcd = adi_api_utils_gcd(maw, mbw);
-		maw = DIV_U64(maw, gcd);
-		mbw = DIV_U64(mbw, gcd);
+		maw = NO_OS_DIV_U64(maw, gcd);
+		mbw = NO_OS_DIV_U64(mbw, gcd);
 
 		if ((maw > ADI_MAXUINT48) || (mbw > ADI_MAXUINT48))
 			return API_ERROR_INVALID_PARAM;	/*out of Range */
