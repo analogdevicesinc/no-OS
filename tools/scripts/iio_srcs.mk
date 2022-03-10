@@ -1,6 +1,6 @@
 SRCS += $(NO-OS)/iio/iio.c
 SRCS += $(NO-OS)/iio/iiod.c
-SRCS += $(NO-OS)/util/circular_buffer.c
+SRCS += $(NO-OS)/util/no_os_circular_buffer.c
 
 INCS += $(NO-OS)/iio/iio.h
 INCS += $(NO-OS)/iio/iio_types.h

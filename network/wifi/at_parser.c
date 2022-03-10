@@ -109,7 +109,7 @@ static const struct cmd_desc g_map[] = {
 /* Structure storing a connection status */
 struct connection_desc {
 	/* Connection buffer */
-	struct circular_buffer	*cbuff;
+	struct no_os_circular_buffer	*cbuff;
 	/* Pending bytes for reading */
 	uint32_t		to_read;
 	/* True if connection established */
@@ -186,7 +186,7 @@ struct at_desc {
 	uint32_t		ipd_len;
 	/* Will be called when a new connection is created or closed */
 	void			(*connection_callback)(void *ctx, enum at_event,
-			uint32_t conn_id, struct circular_buffer **cb);
+			uint32_t conn_id, struct no_os_circular_buffer **cb);
 	/* Context that will be passed to the callback */
 	void			*callback_ctx;
 };
@@ -362,7 +362,7 @@ static inline void end_conn_read(struct at_desc *desc)
 
 	conn = &desc->conn[desc->current_conn];
 
-	cb_end_async_write(conn->cbuff);
+	no_os_cb_end_async_write(conn->cbuff);
 }
 
 /* Start new read operation */
@@ -399,8 +399,8 @@ static inline void start_conn_read(struct at_desc *desc, bool is_new_message)
 		goto dummy_read;
 
 	/* Get buffer where data from uart can be written using DMA */
-	ret = cb_prepare_async_write(conn->cbuff, conn->to_read,
-				     (void **)&buff, &available_len);
+	ret = no_os_cb_prepare_async_write(conn->cbuff, conn->to_read,
+					   (void **)&buff, &available_len);
 	if (IS_ERR_VALUE(ret))
 		goto dummy_read;
 

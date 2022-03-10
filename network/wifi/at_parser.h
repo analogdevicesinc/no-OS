@@ -66,8 +66,8 @@
  *
  *	   //Get Firmware version
  *	   at_run_cmd(desc->at, AT_GET_VERSION, AT_EXECUTE_OP, &param);
- *	   cb_size(g_param.out.result, &len);
- *	   cb_read(g_param.out.result, buff, len);
+ *	   no_os_cb_size(g_param.out.result, &len);
+ *	   no_os_cb_read(g_param.out.result, buff, len);
  *	   buff[len] = '\0';
  *	   printf("Result: %s\n", buff);
  *
@@ -328,7 +328,7 @@ struct at_init_param {
 	void			(*connection_callback)(void *ctx,
 			enum at_event event,
 			uint32_t conn_id,
-			struct circular_buffer **cb);
+			struct no_os_circular_buffer **cb);
 };
 
 /**
