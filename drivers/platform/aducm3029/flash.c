@@ -80,14 +80,14 @@ struct adicup_flash_dev {
  *
  * @return 0 in case of success, error code otherwise.
  */
-int32_t flash_init(struct flash_dev **device,
-		   struct flash_init_param *init_param)
+int32_t no_os_flash_init(struct no_os_flash_dev **device,
+			 struct no_os_flash_init_param *init_param)
 {
 	int32_t ret;
-	struct flash_dev *dev;
+	struct no_os_flash_dev *dev;
 	struct adicup_flash_dev *adicup_extra;
 
-	dev = (struct flash_dev *)calloc(1, sizeof(*dev));
+	dev = (struct no_os_flash_dev *)calloc(1, sizeof(*dev));
 	if (!dev)
 		return FAILURE;
 
@@ -121,13 +121,13 @@ error_dev:
 }
 
 /**
- * Free memory allocated by flash_init().
+ * Free memory allocated by no_os_flash_init().
  *
  * @param [in] dev - Pointer to the driver handler.
  *
  * @return 0 in case of success, error code otherwise.
  */
-int32_t flash_remove(struct flash_dev *dev)
+int32_t no_os_flash_remove(struct no_os_flash_dev *dev)
 {
 	int32_t ret;
 	struct adicup_flash_dev *adicup_extra;
@@ -155,7 +155,7 @@ int32_t flash_remove(struct flash_dev *dev)
  *
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t flash_clear_page(struct flash_dev *dev, int32_t page_no)
+int32_t no_os_flash_clear_page(struct no_os_flash_dev *dev, int32_t page_no)
 {
 	struct adicup_flash_dev *adicup_extra = dev->extra;
 	uint32_t fee_hw_error;
@@ -182,7 +182,8 @@ int32_t flash_clear_page(struct flash_dev *dev, int32_t page_no)
  *
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t flash_write_page(struct flash_dev *dev, int32_t page_no, uint32_t *data)
+int32_t no_os_flash_write_page(struct no_os_flash_dev *dev, int32_t page_no,
+			       uint32_t *data)
 {
 	ADI_FEE_TRANSACTION transaction;
 	struct adicup_flash_dev *adicup_extra = dev->extra;
@@ -206,11 +207,12 @@ int32_t flash_write_page(struct flash_dev *dev, int32_t page_no, uint32_t *data)
 }
 
 /**
- * Read-modify-write helper function for flash_write(). Since the smallest write
+ * Read-modify-write helper function for no_os_flash_write(). Since the smallest write
  * unit for the ADuCM3029 is the page this function helps access data smaller than
  * a page or accross multiple pages.
  */
-static int32_t flash_read_then_write(struct flash_dev *dev, uint32_t flash_addr,
+static int32_t flash_read_then_write(struct no_os_flash_dev *dev,
+				     uint32_t flash_addr,
 				     uint32_t *array, uint32_t array_size)
 {
 	struct adicup_flash_dev *adicup_extra = dev->extra;
@@ -223,8 +225,9 @@ static int32_t flash_read_then_write(struct flash_dev *dev, uint32_t flash_addr,
 	    FLASH_PAGE_SIZE_WORDS)
 		return FAILURE;
 
-	flash_read(dev, FLASH_ADDRESS_PAGE_START(flash_addr), adicup_extra->temp_ptr,
-		   FLASH_PAGE_SIZE_WORDS);
+	no_os_flash_read(dev, FLASH_ADDRESS_PAGE_START(flash_addr),
+			 adicup_extra->temp_ptr,
+			 FLASH_PAGE_SIZE_WORDS);
 
 	memcpy(adicup_extra->temp_ptr + FLASH_OFFSET_IN_PAGE(flash_addr), array,
 	       array_size * sizeof(uint32_t));
@@ -241,7 +244,7 @@ static int32_t flash_read_then_write(struct flash_dev *dev, uint32_t flash_addr,
 	if(ret != ADI_FEE_SUCCESS)
 		return FAILURE;
 
-	return flash_write_page(dev, page_nr, adicup_extra->temp_ptr);
+	return no_os_flash_write_page(dev, page_nr, adicup_extra->temp_ptr);
 }
 
 /**
@@ -254,8 +257,8 @@ static int32_t flash_read_then_write(struct flash_dev *dev, uint32_t flash_addr,
  *
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t flash_write(struct flash_dev *dev, uint32_t flash_addr,
-		    uint32_t *array, uint32_t array_size)
+int32_t no_os_flash_write(struct no_os_flash_dev *dev, uint32_t flash_addr,
+			  uint32_t *array, uint32_t array_size)
 {
 	int32_t ret;
 	uint32_t i, len;
@@ -284,8 +287,9 @@ int32_t flash_write(struct flash_dev *dev, uint32_t flash_addr,
  *
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t flash_read(struct flash_dev *dev, uint32_t flash_addr, uint32_t *array,
-		   uint32_t size)
+int32_t no_os_flash_read(struct no_os_flash_dev *dev, uint32_t flash_addr,
+			 uint32_t *array,
+			 uint32_t size)
 {
 	memcpy(array, (uint32_t *)flash_addr, size * sizeof(uint32_t));
 
