@@ -75,8 +75,8 @@ static int32_t uart_fifo_insert(struct no_os_uart_desc *desc)
 		ret = no_os_irq_disable(irq_desc, xil_uart_desc->irq_id);
 		if (ret < 0)
 			return ret;
-		ret = fifo_insert(&xil_uart_desc->fifo, xil_uart_desc->buff,
-				  xil_uart_desc->bytes_received);
+		ret = no_os_fifo_insert(&xil_uart_desc->fifo, xil_uart_desc->buff,
+					xil_uart_desc->bytes_received);
 		if (ret < 0)
 			return ret;
 		xil_uart_desc->bytes_received = 0;
@@ -132,7 +132,7 @@ static int32_t no_os_uart_read_byte(struct no_os_uart_desc *desc, uint8_t *data)
 
 		if (xil_uart_desc->fifo->len - xil_uart_desc->fifo_read_offset <= 0) {
 			xil_uart_desc->fifo_read_offset = 0;
-			xil_uart_desc->fifo = fifo_remove(xil_uart_desc->fifo);
+			xil_uart_desc->fifo = no_os_fifo_remove(xil_uart_desc->fifo);
 		}
 #endif // XUARTPS_H
 		break;

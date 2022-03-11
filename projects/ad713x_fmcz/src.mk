@@ -29,7 +29,7 @@ SRC_DIRS += $(NO-OS)/iio/iio_app
 SRCS += $(PLATFORM_DRIVERS)/no_os_uart.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c \
 	$(DRIVERS)/api/no_os_irq.c \
-	$(NO-OS)/util/fifo.c \
+	$(NO-OS)/util/no_os_fifo.c \
 	$(NO-OS)/util/no_os_list.c	
 endif
 INCS += $(DRIVERS)/axi_core/axi_dmac/axi_dmac.h \

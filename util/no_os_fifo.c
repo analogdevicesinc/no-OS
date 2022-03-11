@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   fifo.c
+ *   @file   no_os_fifo.c
  *   @brief  Implementation of fifo.
  *   @author Cristian Pop (cristian.pop@analog.com)
 ********************************************************************************
@@ -56,9 +56,9 @@
  * @param len - Length of the data.
  * @return fifo element in case of success, NULL otherwise
  */
-static struct fifo_element * fifo_new_element(char *buff, uint32_t len)
+static struct no_os_fifo_element * fifo_new_element(char *buff, uint32_t len)
 {
-	struct fifo_element *q = calloc(1, sizeof(struct fifo_element));
+	struct no_os_fifo_element *q = calloc(1, sizeof(struct no_os_fifo_element));
 	if (!q)
 		return NULL;
 
@@ -78,7 +78,8 @@ static struct fifo_element * fifo_new_element(char *buff, uint32_t len)
  * @param p_fifo - pointer to fifo
  * @return fifo last element if exists, NULL otherwise
  */
-static struct fifo_element *fifo_get_last(struct fifo_element *p_fifo)
+static struct no_os_fifo_element *no_os_fifo_get_last(struct no_os_fifo_element
+		*p_fifo)
 {
 	if(p_fifo == NULL)
 		return NULL;
@@ -96,9 +97,10 @@ static struct fifo_element *fifo_get_last(struct fifo_element *p_fifo)
  * @param len - Length of the data.
  * @return SUCCESS in case of success, FAILURE otherwise
  */
-int32_t fifo_insert(struct fifo_element **p_fifo, char *buff, uint32_t len)
+int32_t no_os_fifo_insert(struct no_os_fifo_element **p_fifo, char *buff,
+			  uint32_t len)
 {
-	struct fifo_element *p, *q;
+	struct no_os_fifo_element *p, *q;
 
 	if (len <= 0)
 		return FAILURE;
@@ -110,7 +112,7 @@ int32_t fifo_insert(struct fifo_element **p_fifo, char *buff, uint32_t len)
 	if (!(*p_fifo)) {
 		*p_fifo = q;
 	} else {
-		p = fifo_get_last(*p_fifo);
+		p = no_os_fifo_get_last(*p_fifo);
 		p->next = q;
 	}
 
@@ -122,9 +124,9 @@ int32_t fifo_insert(struct fifo_element **p_fifo, char *buff, uint32_t len)
  * @param p_fifo - Pointer to fifo.
  * @return next element in fifo if exists, NULL otherwise.
  */
-struct fifo_element * fifo_remove(struct fifo_element *p_fifo)
+struct no_os_fifo_element * no_os_fifo_remove(struct no_os_fifo_element *p_fifo)
 {
-	struct fifo_element *p = p_fifo;
+	struct no_os_fifo_element *p = p_fifo;
 
 	if (p_fifo != NULL) {
 		p_fifo = p_fifo->next;

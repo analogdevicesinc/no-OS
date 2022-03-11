@@ -41,7 +41,7 @@ else
 SRCS += $(PLATFORM_DRIVERS)/no_os_uart.c
 endif
 
-SRCS += $(NO-OS)/util/fifo.c \
+SRCS += $(NO-OS)/util/no_os_fifo.c \
 	$(NO-OS)/util/no_os_list.c \
 	$(DRIVERS)/rf-transceiver/ad9361/iio_ad9361.c \
 	$(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.c \

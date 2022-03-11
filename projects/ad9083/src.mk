@@ -65,7 +65,7 @@ INCS +=	$(INCLUDE)/no_os_axi_io.h \
 	$(INCLUDE)/no_os_print_log.h \
 	$(INCLUDE)/no_os_util.h
 ifeq (y,$(strip $(TINYIIOD)))
-SRCS += $(NO-OS)/util/fifo.c \
+SRCS += $(NO-OS)/util/no_os_fifo.c \
 	$(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.c \
 	$(NO-OS)/iio/iio_app/iio_app.c \
 	$(NO-OS)/util/no_os_list.c \

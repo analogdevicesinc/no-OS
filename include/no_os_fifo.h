@@ -50,12 +50,12 @@
 /******************************************************************************/
 
 /**
- * @struct fifo_element
+ * @struct no_os_fifo_element
  * @brief Structure holding the fifo element parameters.
  */
-struct fifo_element {
+struct no_os_fifo_element {
 	/** next FIFO element */
-	struct fifo_element *next;
+	struct no_os_fifo_element *next;
 	/** FIFO data pointer */
 	char *data;
 	/** FIFO length */
@@ -67,9 +67,10 @@ struct fifo_element {
 /******************************************************************************/
 
 /* Insert element to fifo tail. */
-int32_t fifo_insert(struct fifo_element **p_fifo, char *buff, uint32_t len);
+int32_t no_os_fifo_insert(struct no_os_fifo_element **p_fifo, char *buff,
+			  uint32_t len);
 
 /* Remove fifo head. */
-struct fifo_element *fifo_remove(struct fifo_element *p_fifo);
+struct no_os_fifo_element *no_os_fifo_remove(struct no_os_fifo_element *p_fifo);
 
 #endif // _NO_OS_FIFO_H_
