@@ -53,6 +53,7 @@
 /**
  * @enum irq_uart_event_e
  * @brief Possible events for uart interrupt
+ * @todo remove this! events should be platform specific.
  */
 enum irq_uart_event_e {
 	/** Write operation finalized */
@@ -123,6 +124,19 @@ struct callback_desc {
 	void *config;
 };
 
+enum irq_peripheral {
+	NO_OS_INVALID_IRQ,
+	NO_OS_GPIO_IRQ,
+	NO_OS_UART_IRQ,
+};
+
+struct irq_callback {
+	uint32_t event;
+	void (*callback)(void *context);
+	void *context;
+	enum irq_peripheral peripheral;
+};
+
 /**
  * @struct irq_platform_ops
  * @brief Structure holding IRQ function pointers that point to the platform
@@ -134,10 +148,10 @@ struct irq_platform_ops {
 			const struct irq_init_param *param);
 	/** Register a callback to handle the irq events */
 	int32_t (*register_callback)(struct irq_ctrl_desc *desc, uint32_t irq_id,
-				     void *callback);
+					struct irq_callback *callback);
 	/** Unregisters a generic IRQ handling function */
 	int32_t (*unregister_callback)(struct irq_ctrl_desc *desc, uint32_t irq_id,
-				       void *callback);
+					struct irq_callback *callback);
 	/** Global interrupt enable */
 	int32_t (*global_enable)(struct irq_ctrl_desc *desc);
 	/** Global interrupt disable */
@@ -166,11 +180,11 @@ int32_t irq_ctrl_remove(struct irq_ctrl_desc *desc);
 
 /* Register a callback to handle the irq events */
 int32_t irq_register_callback(struct irq_ctrl_desc *desc, uint32_t irq_id,
-			      void *callback_desc);
+		struct irq_callback *callback_desc);
 
 /* Unregisters a generic IRQ handling function */
 int32_t irq_unregister_callback(struct irq_ctrl_desc *desc, uint32_t irq_id,
-				void *callback_desc);
+		struct irq_callback *callback_desc);
 
 /* Global interrupt enable */
 int32_t irq_global_enable(struct irq_ctrl_desc *desc);

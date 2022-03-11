@@ -80,7 +80,7 @@ int32_t irq_ctrl_remove(struct irq_ctrl_desc *desc)
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
 int32_t irq_register_callback(struct irq_ctrl_desc *desc, uint32_t irq_id,
-			      void *callback)
+		struct irq_callback *callback)
 {
 	return desc->platform_ops->register_callback(desc, irq_id, callback);
 }
@@ -93,7 +93,7 @@ int32_t irq_register_callback(struct irq_ctrl_desc *desc, uint32_t irq_id,
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
 int32_t irq_unregister_callback(struct irq_ctrl_desc *desc, uint32_t irq_id,
-				void *callback)
+		struct irq_callback *callback)
 {
 	return desc->platform_ops->unregister_callback(desc, irq_id, callback);
 }

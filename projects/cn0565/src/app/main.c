@@ -35,11 +35,11 @@ extern UART_HandleTypeDef huart5;
 volatile int tx = 0;
 volatile int rx = 0;
 
-void uart_tx_callback(UART_HandleTypeDef *huart) {
+void uart_tx_callback(void *context) {
 	tx++;
 }
 
-void uart_rx_callback(UART_HandleTypeDef *huart) {
+void uart_rx_callback(void *context) {
 	rx++;
 }
 
@@ -69,17 +69,19 @@ int main(void)
 	stm32_uart_stdio(uart);
 	printf("Hello!\n");
 
-//#define UART_IRQ
+#define UART_IRQ
 #ifdef UART_IRQ
-	struct stm32_callback uart_tx_cb = {
-			.callback.uart = uart_tx_callback,
+	struct irq_callback uart_tx_cb = {
 			.event = HAL_UART_TX_COMPLETE_CB_ID,
-			.source = STM32_UART_IRQ,
+			.callback = uart_tx_callback,
+			.context = (void *)1,
+			.peripheral = NO_OS_UART_IRQ,
 	};
-	struct stm32_callback uart_rx_cb = {
-			.callback.uart = uart_rx_callback,
+	struct irq_callback uart_rx_cb = {
 			.event = HAL_UART_RX_COMPLETE_CB_ID,
-			.source = STM32_UART_IRQ,
+			.callback = uart_rx_callback,
+			.context = (void *)2,
+			.peripheral = NO_OS_UART_IRQ,
 	};
 	UART_HandleTypeDef *huart = ((struct stm32_uart_desc *)uart->extra)->huart;
 	struct irq_init_param uart_int_ip = {

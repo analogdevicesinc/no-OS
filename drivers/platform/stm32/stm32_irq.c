@@ -55,6 +55,38 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 	HAL_EXTI_IRQHandler(hexti[find_first_set_bit(GPIO_Pin)]);
 }
 
+struct ecc {
+	uint32_t event;
+	void (*callback)(void *context);
+	void *context;
+	void *handle;
+};
+
+static struct ecc uart_callbacks[] = {
+		{.event = HAL_UART_TX_HALFCOMPLETE_CB_ID},
+		{.event = HAL_UART_TX_COMPLETE_CB_ID},
+		{.event = HAL_UART_RX_HALFCOMPLETE_CB_ID},
+		{.event = HAL_UART_RX_COMPLETE_CB_ID},
+};
+
+void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart) {
+	struct ecc *c = &uart_callbacks[HAL_UART_TX_COMPLETE_CB_ID];
+	if(c->handle != huart)
+		return;
+
+	if(c->callback)
+		c->callback(c->context);
+}
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
+	struct ecc *c = &uart_callbacks[HAL_UART_RX_COMPLETE_CB_ID];
+	if(c->handle != huart)
+		return;
+
+	if(c->callback)
+		c->callback(c->context);
+}
+
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
@@ -146,25 +178,31 @@ int32_t stm32_trigger_level_set(struct irq_ctrl_desc *desc,
  * @return -ENOSYS
  */
 int32_t stm32_irq_register_callback(struct irq_ctrl_desc *desc, uint32_t irq_id,
-				    void *callback)
+				    struct irq_callback *cb)
 {
 	int ret;
-	struct stm32_callback *cb = callback;
 
-	switch (cb->source) {
-	case STM32_EXTI_IRQ:
-		ret = HAL_EXTI_RegisterCallback(desc->extra, cb->event, cb->callback.exti);
+	switch (cb->peripheral) {
+	case NO_OS_GPIO_IRQ:
+		ret = HAL_EXTI_RegisterCallback(desc->extra, cb->event, cb->callback);
 		if (ret != HAL_OK) {
 			ret = -EFAULT;
 			break;
 		}
 		hexti[((EXTI_HandleTypeDef *)desc->extra)->Line & 0xff] = desc->extra;
 		break;
-	case STM32_UART_IRQ:
-		ret = HAL_UART_RegisterCallback(desc->extra, cb->event, cb->callback.uart);
-		if (ret != HAL_OK)
-			ret = -EFAULT;
+	case NO_OS_UART_IRQ:
+		if (cb->event > HAL_UART_WAKEUP_CB_ID) {
+			ret = -EINVAL;
+			break;
+		}
+
+		uart_callbacks[cb->event].callback = cb->callback;
+		uart_callbacks[cb->event].context = cb->context;
+		uart_callbacks[cb->event].handle = desc->extra;
 		break;
+
+
 	default:
 		ret = -EINVAL;
 		break;
@@ -181,16 +219,15 @@ int32_t stm32_irq_register_callback(struct irq_ctrl_desc *desc, uint32_t irq_id,
  * @return -ENOSYS
  */
 int32_t stm32_irq_unregister_callback(struct irq_ctrl_desc *desc,
-				      uint32_t irq_id, void *callback)
+				      uint32_t irq_id, struct irq_callback *cb)
 {
 	int ret;
-	struct stm32_callback *cb = callback;
 
-	switch (cb->source) {
-	case STM32_EXTI_IRQ:
+	switch (cb->peripheral) {
+	case NO_OS_GPIO_IRQ:
 		hexti[((EXTI_HandleTypeDef *)desc->extra)->Line & 0xff] = NULL;
 		break;
-	case STM32_UART_IRQ:
+	case NO_OS_UART_IRQ:
 		ret = HAL_UART_UnRegisterCallback(desc->extra, cb->event);
 		if (ret != HAL_OK)
 			ret = -EFAULT;
