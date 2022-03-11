@@ -51,10 +51,10 @@
 /******************************************************************************/
 
 /**
- * @struct flash_dev
+ * @struct no_os_flash_dev
  * @brief Flash controller device structure
  */
-struct flash_dev {
+struct no_os_flash_dev {
 	/** Flash Device ID */
 	uint8_t id;
 	/** Size of flash memory in bytes */
@@ -66,10 +66,10 @@ struct flash_dev {
 };
 
 /**
- * @struct flash_init_param
+ * @struct no_os_flash_init_param
  * @brief Flash controller initialization structure
  */
-struct flash_init_param {
+struct no_os_flash_init_param {
 	/** Flash Device ID */
 	uint8_t id;
 	/** Size of flash memory in bytes */
@@ -85,28 +85,30 @@ struct flash_init_param {
 /******************************************************************************/
 
 /** Initialize flash controller. */
-int32_t flash_init(struct flash_dev **device,
-		   struct flash_init_param *init_param);
+int32_t no_os_flash_init(struct no_os_flash_dev **device,
+			 struct no_os_flash_init_param *init_param);
 
-/** Free memory allocated by flash_init(). */
-int32_t flash_remove(struct flash_dev *dev);
+/** Free memory allocated by no_os_flash_init(). */
+int32_t no_os_flash_remove(struct no_os_flash_dev *dev);
 
 /** Erase a flash page. */
-int32_t flash_clear_page(struct flash_dev *dev, int32_t page_no);
+int32_t no_os_flash_clear_page(struct no_os_flash_dev *dev, int32_t page_no);
 
 /** Write a flash page. */
-int32_t flash_write_page(struct flash_dev *dev, int32_t page_no,
-			 uint32_t *data);
+int32_t no_os_flash_write_page(struct no_os_flash_dev *dev, int32_t page_no,
+			       uint32_t *data);
 
 /** Read a flash page. */
-int32_t flash_read_page(struct flash_dev *dev, int32_t page_no, uint32_t *data);
+int32_t flash_read_page(struct no_os_flash_dev *dev, int32_t page_no,
+			uint32_t *data);
 
 /** Write data in flash memory. */
-int32_t flash_write(struct flash_dev *dev, uint32_t flash_addr,
-		    uint32_t *array, uint32_t array_size);
+int32_t no_os_flash_write(struct no_os_flash_dev *dev, uint32_t flash_addr,
+			  uint32_t *array, uint32_t array_size);
 
 /** Read data from the flash memory. */
-int32_t flash_read(struct flash_dev *dev, uint32_t flash_addr, uint32_t *array,
-		   uint32_t size);
+int32_t no_os_flash_read(struct no_os_flash_dev *dev, uint32_t flash_addr,
+			 uint32_t *array,
+			 uint32_t size);
 
 #endif // _NO_OS_FLASH_H_

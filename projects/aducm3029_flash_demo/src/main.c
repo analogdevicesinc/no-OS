@@ -66,8 +66,8 @@ int main(int argc, char *argv[])
 
 	int32_t ret;
 	uint32_t flash_val = 0;
-	struct flash_dev *flash_dut;
-	struct flash_init_param flash_init_par = {
+	struct no_os_flash_dev *flash_dut;
+	struct no_os_flash_init_param flash_init_par = {
 		.id = 0
 	};
 	struct no_os_uart_desc *uart_dut;
@@ -108,39 +108,39 @@ int main(int argc, char *argv[])
 		return ret;
 	init_uart_stdio(uart_dut);
 
-	ret = flash_init(&flash_dut, &flash_init_par);
+	ret = no_os_flash_init(&flash_dut, &flash_init_par);
 	if (ret < 0)
 		return ret;
 
 	printf("UART online.\n");
 
-	flash_read(flash_dut, 0x3E000, &flash_val, 4);
+	no_os_flash_read(flash_dut, 0x3E000, &flash_val, 4);
 	printf("Address 0x3E000: %lX\n", flash_val);
-	flash_read(flash_dut, 0x3E004, &flash_val, 4);
+	no_os_flash_read(flash_dut, 0x3E004, &flash_val, 4);
 	printf("Address 0x3E004: %lX\n", flash_val);
 
 	flash_val = 0xAABBCCDD;
 
 	printf("Write 0xAABBCCDD to 0x3E000\n");
-	ret = flash_write(flash_dut, 0x3E000, &flash_val, 1);
+	ret = no_os_flash_write(flash_dut, 0x3E000, &flash_val, 1);
 	if (ret < 0)
 		return ret;
 
-	flash_read(flash_dut, 0x3E000, &flash_val, 1);
+	no_os_flash_read(flash_dut, 0x3E000, &flash_val, 1);
 	printf("Address 0x3E000: %lX\n", flash_val);
-	flash_read(flash_dut, 0x3E004, &flash_val, 1);
+	no_os_flash_read(flash_dut, 0x3E004, &flash_val, 1);
 	printf("Address 0x3E004: %lX\n", flash_val);
 
 	flash_val = 0xCCDDAABB;
 
 	printf("Write 0xCCDDAABB to 0x3E004\n");
-	ret = flash_write(flash_dut, 0x3E004, &flash_val, 1);
+	ret = no_os_flash_write(flash_dut, 0x3E004, &flash_val, 1);
 	if (ret < 0)
 		return ret;
 
-	flash_read(flash_dut, 0x3E000, &flash_val, 1);
+	no_os_flash_read(flash_dut, 0x3E000, &flash_val, 1);
 	printf("Address 0x3E000: %lX\n", flash_val);
-	flash_read(flash_dut, 0x3E004, &flash_val, 1);
+	no_os_flash_read(flash_dut, 0x3E004, &flash_val, 1);
 	printf("Address 0x3E004: %lX\n", flash_val);
 
 	ret = no_os_irq_global_disable(irq_dut);
@@ -152,7 +152,7 @@ int main(int argc, char *argv[])
 	ret = no_os_uart_remove(uart_dut);
 	if (ret < 0)
 		return ret;
-	ret = flash_remove(flash_dut);
+	ret = no_os_flash_remove(flash_dut);
 	if (ret < 0)
 		return ret;
 
