@@ -27,6 +27,6 @@ SRC_DIRS += $(INCLUDE)
 SRCS +=	$(DRIVERS)/api/no_os_irq.c \
 	$(DRIVERS)/api/no_os_gpio.c \
 	$(NO-OS)/util/no_os_list.c \
-	$(NO-OS)/util/fifo.c \
+	$(NO-OS)/util/no_os_fifo.c \
 	$(NO-OS)/util/no_os_util.c \
 	$(DRIVERS)/api/no_os_spi.c

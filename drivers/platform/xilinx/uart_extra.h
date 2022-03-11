@@ -91,7 +91,7 @@ struct xil_uart_desc {
 	/** Interrupt Request Descriptor */
 	struct no_os_irq_ctrl_desc *irq_desc;
 	/** FIFO */
-	struct fifo_element	*fifo;
+	struct no_os_fifo_element	*fifo;
 	/** FIFO read offset */
 	uint32_t 			fifo_read_offset;
 	/** UART Buffer */
