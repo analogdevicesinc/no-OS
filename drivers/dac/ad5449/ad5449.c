@@ -158,7 +158,7 @@ int8_t ad5449_init(struct ad5449_dev **device,
  *
  * @param dev - The device structure.
  *
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
 *******************************************************************************/
 int32_t ad5449_remove(struct ad5449_dev *dev)
 {

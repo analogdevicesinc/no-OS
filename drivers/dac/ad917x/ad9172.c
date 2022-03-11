@@ -51,7 +51,7 @@
 /**
  * Setup the device.
  * @param st - The device structure.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 static int32_t ad9172_setup(struct ad9172_state *st)
 {
@@ -252,7 +252,7 @@ static int32_t ad9172_setup(struct ad9172_state *st)
  * Performs a blocking or sleep delay for the specified time in microseconds
  * @param user_data
  * @param us - time to delay/sleep in microseconds.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 static int32_t ad9172_delay_us(void *user_data, uint32_t us)
 {
@@ -293,7 +293,7 @@ static int32_t ad9172_spi_xfer(void *user_data, uint8_t *wbuf,
  * @param device - The device structure.
  * @param init_param - The structure that contains the device initial
  * 		       parameters.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad9172_init(ad9172_dev **device,
 		    ad9172_init_param * init_param)
@@ -377,7 +377,7 @@ error_1:
 /**
  * Remove the device - release resources.
  * @param device - The device structure.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad9172_remove(ad9172_dev *device)
 {

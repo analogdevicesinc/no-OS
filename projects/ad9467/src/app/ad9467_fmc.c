@@ -107,7 +107,7 @@ void display_test_mode(uint32_t mode, uint32_t format);
 /***************************************************************************//**
  * @brief Main function.
  *
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
 *******************************************************************************/
 int main()
 {
@@ -198,15 +198,15 @@ int main()
 	printf("\n\r*****************************************************\r\n");
 
 	status = axi_adc_init(&ad9467_core,  &ad9467_core_param);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("axi_adc_init() error: %s\n", ad9467_core->name);
-		return FAILURE;
+		return -1;
 	}
 
 	status = axi_dmac_init(&ad9467_dmac, &ad9467_dmac_param);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("axi_dmac_init() error: %s\n", ad9467_dmac->name);
-		return FAILURE;
+		return -1;
 	}
 
 	// setup device
@@ -279,7 +279,7 @@ int main()
 #endif
 	};
 	status = iio_axi_adc_init(&iio_axi_adc_desc, &iio_axi_adc_init_par);
-	if (IS_ERR_VALUE(status))
+	if (NO_OS_IS_ERR_VALUE(status))
 		return status;
 
 	iio_axi_adc_get_dev_descriptor(iio_axi_adc_desc, &dev_desc);
@@ -304,7 +304,7 @@ int main()
 	Xil_DCacheEnable();
 	Xil_ICacheEnable();
 
-	return SUCCESS;
+	return 0;
 }
 
 void adc_test(struct axi_adc *adc,

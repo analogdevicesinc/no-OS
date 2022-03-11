@@ -186,45 +186,45 @@ int main(void)
 	ad9656_param.lane_rate_kbps = 2500000;
 
 	// setup clocks
-	if (ad9508_setup(&ad9508_device, &ad9508_param) != SUCCESS)
+	if (ad9508_setup(&ad9508_device, &ad9508_param) != 0)
 		printf("The ad9508 chip could not be setup correctly!\n");
 	else
 		printf("The ad9508 chip successfully configured\n");
 
-	if (ad9553_setup(&ad9553_device, &ad9553_param) != SUCCESS)
+	if (ad9553_setup(&ad9553_device, &ad9553_param) != 0)
 		printf("The ad9553 chip could not be setup!\n");
 	else
 		printf("The ad9553 chip successfully configured\n");
 
 	// ADC
-	if (ad9656_setup(&ad9656_device, &ad9656_param) != SUCCESS)
+	if (ad9656_setup(&ad9656_device, &ad9656_param) != 0)
 		printf("The ad9656 chip could not be setup correctly!\n");
 	else
 		printf("The ad9656 chip successfully configured\n");
 
-	if (adxcvr_init(&ad9656_xcvr, &ad9656_xcvr_param) != SUCCESS) {
+	if (adxcvr_init(&ad9656_xcvr, &ad9656_xcvr_param) != 0) {
 		printf("error: %s: adxcvr_init() failed\n", ad9656_xcvr->name);
 	}
 
-	if (adxcvr_clk_enable(ad9656_xcvr) != SUCCESS) {
+	if (adxcvr_clk_enable(ad9656_xcvr) != 0) {
 		printf("error: %s: adxcvr_clk_enable() failed\n", ad9656_xcvr->name);
 	}
 
-	if (axi_jesd204_rx_init(&ad9656_jesd, &ad9656_jesd_param) != SUCCESS) {
+	if (axi_jesd204_rx_init(&ad9656_jesd, &ad9656_jesd_param) != 0) {
 		printf("error: %s: axi_jesd204_rx_init() failed\n", ad9656_jesd->name);
 	}
 
-	if (axi_jesd204_rx_lane_clk_enable(ad9656_jesd) != SUCCESS) {
+	if (axi_jesd204_rx_lane_clk_enable(ad9656_jesd) != 0) {
 		printf("error: %s: axi_jesd204_tx_lane_clk_enable() failed\n",
 		       ad9656_jesd->name);
 	}
 
 	status = axi_jesd204_rx_status_read(ad9656_jesd);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("axi_jesd204_rx_status_read() error: %d\n", status);
 	}
 
-	if (axi_adc_init(&ad9656_core,  &ad9656_core_param) != SUCCESS) {
+	if (axi_adc_init(&ad9656_core,  &ad9656_core_param) != 0) {
 		printf("axi_adc_init() error: %s\n", ad9656_core->name);
 	}
 

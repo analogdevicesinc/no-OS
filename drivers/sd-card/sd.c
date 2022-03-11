@@ -95,21 +95,21 @@
  * Read SD card bytes until one is different from 0xFF
  * @param sd_desc	- Instance of the SD card
  * @param data_out	- The read bytes is wrote here
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 static int32_t wait_for_response(struct sd_desc *sd_desc, uint8_t *data_out)
 {
 	uint32_t	not_timeout;
 	int32_t		ret;
 
-	ret = FAILURE;
+	ret = -1;
 	not_timeout = WAIT_RESP_TIMEOUT;
 	do {
 		if (0 != no_os_spi_write_and_read(sd_desc->spi_desc,
 						  data_out, 1))
 			break;
 		if (*data_out != 0xFF) {
-			ret = SUCCESS;
+			ret = 0;
 			break;
 		}
 		no_os_mdelay(1);
@@ -121,7 +121,7 @@ static int32_t wait_for_response(struct sd_desc *sd_desc, uint8_t *data_out)
 /**
  * Read SD card bytes until one is different from 0x00
  * @param sd_desc - Instance of the SD card
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 static int32_t wait_until_not_busy(struct sd_desc *sd_desc)
 {
@@ -129,14 +129,14 @@ static int32_t wait_until_not_busy(struct sd_desc *sd_desc)
 	int32_t		ret;
 	uint8_t		data;
 
-	ret = FAILURE;
+	ret = -1;
 	not_timeout = WAIT_RESP_TIMEOUT;
 	do {
 		data = 0xFF;
 		if (0 != no_os_spi_write_and_read(sd_desc->spi_desc, &data, 1))
 			break;
 		if (data != 0x00) {
-			ret = SUCCESS;
+			ret = 0;
 			break;
 		}
 		no_os_mdelay(1);
@@ -163,7 +163,7 @@ static inline uint32_t get_nb_of_blocks(uint64_t address, uint64_t len)
  * response in the response field of cmd_desc
  * @param sd_desc	- Instance of the SD card
  * @param cmd_desc	- Structure with needed fields to build the command
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 static int32_t send_command(struct sd_desc *sd_desc, struct cmd_desc *cmd_desc)
 {
@@ -173,11 +173,11 @@ static int32_t send_command(struct sd_desc *sd_desc, struct cmd_desc *cmd_desc)
 		cmd_desc_local.cmd = CMD(55);
 		cmd_desc_local.arg = STUFF_ARG;
 		cmd_desc_local.response_len = R1_LEN;
-		if (SUCCESS != send_command(sd_desc, &cmd_desc_local))
-			return FAILURE;
+		if (0 != send_command(sd_desc, &cmd_desc_local))
+			return -1;
 		if (cmd_desc_local.response[0] != R1_IDLE_STATE) {
 			DEBUG_MSG("Not the expected response for CMD55\n");
-			return FAILURE;
+			return -1;
 		}
 	}
 
@@ -195,19 +195,19 @@ static int32_t send_command(struct sd_desc *sd_desc, struct cmd_desc *cmd_desc)
 
 	/* Send command */
 	if (0 != no_os_spi_write_and_read(sd_desc->spi_desc, sd_desc->buff, CMD_LEN))
-		return FAILURE;
+		return -1;
 
 	/* Read response */
-	if (SUCCESS != wait_for_response(sd_desc, cmd_desc->response))
-		return FAILURE;
+	if (0 != wait_for_response(sd_desc, cmd_desc->response))
+		return -1;
 	if (cmd_desc->response_len - 1 > 0) {
 		memset(cmd_desc->response + 1, 0xFF, cmd_desc->response_len - 1);
 		if (0 != no_os_spi_write_and_read(sd_desc->spi_desc, cmd_desc->response + 1,
 						  cmd_desc->response_len - 1))
-			return FAILURE;
+			return -1;
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -215,7 +215,7 @@ static int32_t send_command(struct sd_desc *sd_desc, struct cmd_desc *cmd_desc)
  * @param sd_desc	- Instance of the SD card
  * @param data		- Data to be written
  * @param nb_of_blocks	- Number of blocks written in the executing command
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 static int32_t write_block(struct sd_desc *sd_desc, uint8_t *data,
 			   uint32_t nb_of_blocks)
@@ -225,50 +225,50 @@ static int32_t write_block(struct sd_desc *sd_desc, uint8_t *data,
 	if (nb_of_blocks == 1)
 		sd_desc->buff[0] = START_1_BLOCK_TOKEN;
 	if (0 != no_os_spi_write_and_read(sd_desc->spi_desc, sd_desc->buff, 1))
-		return FAILURE;
+		return -1;
 
 	/* Send data with CRC */
 	if (0 != no_os_spi_write_and_read(sd_desc->spi_desc, data, DATA_BLOCK_LEN))
-		return FAILURE;
+		return -1;
 	*((uint16_t *)sd_desc->buff) = 0xFFFF;
 	if (0 != no_os_spi_write_and_read(sd_desc->spi_desc, sd_desc->buff, CRC_LEN))
-		return FAILURE;
+		return -1;
 
 	/* Read response and check if write was ok */
 	uint8_t		response;
-	if (SUCCESS != wait_for_response(sd_desc, &response))
-		return FAILURE;
+	if (0 != wait_for_response(sd_desc, &response))
+		return -1;
 	switch (response & MASK_RESPONSE_TOKEN) {
 	case 0x4:
 		break;
 	case 0xA:
 		DEBUG_MSG("CRC error\n");
-		return FAILURE;
+		return -1;
 	case 0xC:
 		DEBUG_MSG("Write error\n");
-		return FAILURE;
+		return -1;
 	default:
 		DEBUG_MSG("Other problem\n");
-		return FAILURE;
+		return -1;
 	}
-	if (SUCCESS != wait_until_not_busy(sd_desc))
-		return FAILURE;
+	if (0 != wait_until_not_busy(sd_desc))
+		return -1;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * Read one block of data to the SD card
  * @param sd_desc	- Instance of the SD card
  * @param data		- Buffer were data will be read
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 static int32_t read_block(struct sd_desc *sd_desc, uint8_t *data)
 {
 	/* Reading Start block token */
 	uint8_t	response;
-	if (SUCCESS != wait_for_response(sd_desc, &response))
-		return FAILURE;
+	if (0 != wait_for_response(sd_desc, &response))
+		return -1;
 	if ((response & MASK_ERROR_TOKEN) == 0) {
 		DEBUG_MSG("Received data error token on read\n");
 		switch (response) {
@@ -288,24 +288,24 @@ static int32_t read_block(struct sd_desc *sd_desc, uint8_t *data)
 			DEBUG_MSG("Multiple errors\n");
 			break;
 		}
-		return FAILURE;
+		return -1;
 	}
 	if (response != START_1_BLOCK_TOKEN) {
 		DEBUG_MSG("Not expected response. Expecting start block token\n");
-		return FAILURE;
+		return -1;
 	}
 
 	/* Read data block */
 	memset(data, 0xff, DATA_BLOCK_LEN);
 	if (0 != no_os_spi_write_and_read(sd_desc->spi_desc, data, DATA_BLOCK_LEN))
-		return FAILURE;
+		return -1;
 
 	/* Read crc*/
 	*((uint16_t *)sd_desc->buff) = 0xFFFF;
 	if (0 != no_os_spi_write_and_read(sd_desc->spi_desc, sd_desc->buff, CRC_LEN))
-		return FAILURE;
+		return -1;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -319,7 +319,7 @@ static int32_t read_block(struct sd_desc *sd_desc, uint8_t *data)
  * 						  data
  * @param last_block	- Last block where data will be written with unmodified
  * 						  data
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 static int32_t write_multiple_blocks(struct sd_desc *sd_desc,
 				     uint8_t *data, uint64_t addr, uint64_t len,
@@ -342,24 +342,24 @@ static int32_t write_multiple_blocks(struct sd_desc *sd_desc,
 			buff_copy_len = ((addr + len - 1) & MASK_ADDR_IN_BLOCK) - buff_first_idx + 1;
 		if (buff_first_idx == 0x0000u && buff_copy_len == DATA_BLOCK_LEN) {
 			/* Write every block beside the first and last if the write is not the entire block */
-			if (SUCCESS != write_block(sd_desc, data + data_idx, nb_of_blocks))
-				return FAILURE;
+			if (0 != write_block(sd_desc, data + data_idx, nb_of_blocks))
+				return -1;
 		} else {			/* If we are not writing a full block */
 			if (i == 0) {		/* If is the first block */
 				memcpy(first_block + buff_first_idx, data + data_idx, buff_copy_len);
-				if (SUCCESS != write_block(sd_desc, first_block, nb_of_blocks))
-					return FAILURE;
+				if (0 != write_block(sd_desc, first_block, nb_of_blocks))
+					return -1;
 			} else {		/* Is the last block */
 				memcpy(last_block, data + data_idx, buff_copy_len);
-				if (SUCCESS != write_block(sd_desc, last_block, nb_of_blocks))
-					return FAILURE;
+				if (0 != write_block(sd_desc, last_block, nb_of_blocks))
+					return -1;
 			}
 		}
 		data_idx += buff_copy_len;
 		i++;
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -369,7 +369,7 @@ static int32_t write_multiple_blocks(struct sd_desc *sd_desc,
  * @param addr		- Address in memory from where data will be read
  * @param len		- Length of data to be read
  * @param nb_of_blocks	- Number of block to be read
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 static int32_t read_multiple_blocks(struct sd_desc *sd_desc,
 				    uint8_t *data, uint64_t addr, uint64_t len)
@@ -391,18 +391,18 @@ static int32_t read_multiple_blocks(struct sd_desc *sd_desc,
 		if (i == get_nb_of_blocks(addr, len) - 1)
 			buff_copy_len = ((addr + len - 1) & MASK_ADDR_IN_BLOCK) - buff_first_idx + 1;
 		if (buff_first_idx == 0x0000u && buff_copy_len == DATA_BLOCK_LEN) {
-			if (SUCCESS != read_block(sd_desc, data + data_idx))
-				return FAILURE;
+			if (0 != read_block(sd_desc, data + data_idx))
+				return -1;
 		} else {
-			if (SUCCESS != read_block(sd_desc, buff))
-				return FAILURE;
+			if (0 != read_block(sd_desc, buff))
+				return -1;
 			memcpy(data + data_idx, buff + buff_first_idx, buff_copy_len);
 		}
 		data_idx += buff_copy_len;
 		i++;
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -412,7 +412,7 @@ static int32_t read_multiple_blocks(struct sd_desc *sd_desc,
  * @param data		- Where data will be read
  * @param address	- Address in memory from where data will be read
  * @param len		- Length in bytes of data to be read
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t sd_read(struct sd_desc *sd_desc,
 		uint8_t *data, uint64_t address, uint64_t len)
@@ -423,37 +423,37 @@ int32_t sd_read(struct sd_desc *sd_desc,
 	if (data == NULL || address > sd_desc->memory_size ||
 	    len > sd_desc->memory_size ||
 	    address + len > sd_desc->memory_size)
-		return FAILURE;
+		return -1;
 
 	/* Send read command */
 	cmd_desc.cmd = (get_nb_of_blocks(address, len) == 1) ? CMD(17): CMD(18);
 	cmd_desc.arg = address >> DATA_BLOCK_BITS;;
 	cmd_desc.response_len = R1_LEN;
-	if (SUCCESS != send_command(sd_desc, &cmd_desc))
-		return FAILURE;
+	if (0 != send_command(sd_desc, &cmd_desc))
+		return -1;
 	if (cmd_desc.response[0] != R1_READY_STATE) {
 		DEBUG_MSG("Failed to write Data command\n");
-		return FAILURE;
+		return -1;
 	}
 
 	/* Read blocks */
-	if (SUCCESS != read_multiple_blocks(sd_desc, data, address, len))
-		return FAILURE;
+	if (0 != read_multiple_blocks(sd_desc, data, address, len))
+		return -1;
 
 	/* Send stop transmission command */
 	if (get_nb_of_blocks(address, len) != 1) {
 		cmd_desc.cmd = CMD(12);
 		cmd_desc.arg = STUFF_ARG;
 		cmd_desc.response_len = R1_LEN;
-		if (SUCCESS != send_command(sd_desc, &cmd_desc))
-			return FAILURE;
+		if (0 != send_command(sd_desc, &cmd_desc))
+			return -1;
 		if(cmd_desc.response[0] != R1_READY_STATE) {
 			DEBUG_MSG("Failed to send stop transmission command\n");
-			return FAILURE;
+			return -1;
 		}
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -463,7 +463,7 @@ int32_t sd_read(struct sd_desc *sd_desc,
  * @param data		- Data to write
  * @param address	- Address in memory where data will be written
  * @param len		- Length of data in bytes
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t sd_write(struct sd_desc *sd_desc, uint8_t *data, uint64_t address,
 		 uint64_t len)
@@ -475,7 +475,7 @@ int32_t sd_write(struct sd_desc *sd_desc, uint8_t *data, uint64_t address,
 	/* Initial checks */
 	if (data == NULL || address > sd_desc->memory_size ||
 	    len > sd_desc->memory_size || address + len > sd_desc->memory_size)
-		return FAILURE;
+		return -1;
 
 	/* Read first and last block in memory if needed to be updated with user data and then written back                                                                        */
 	/* If not writing from the beginning of a block or */
@@ -494,36 +494,36 @@ int32_t sd_write(struct sd_desc *sd_desc, uint8_t *data, uint64_t address,
 	cmd_desc.cmd = (get_nb_of_blocks(address, len) == 1) ? CMD(24): CMD(25);
 	cmd_desc.arg = address >> DATA_BLOCK_BITS; //Address of first block
 	cmd_desc.response_len = R1_LEN;
-	if (SUCCESS != send_command(sd_desc, &cmd_desc))
-		return FAILURE;
+	if (0 != send_command(sd_desc, &cmd_desc))
+		return -1;
 	if (cmd_desc.response[0] != R1_READY_STATE) {
 		DEBUG_MSG("Failed to write Data command\n");
-		return FAILURE;
+		return -1;
 	}
 
 	/* Write blocks */
-	if (SUCCESS != write_multiple_blocks(sd_desc, data, address, len,
-					     first_block, last_block))
-		return FAILURE;
+	if (0 != write_multiple_blocks(sd_desc, data, address, len,
+				       first_block, last_block))
+		return -1;
 
 	/* Send stop transmission token */
 	if (get_nb_of_blocks(address, len) != 1) {
 		sd_desc->buff[0] = STOP_TRANSMISSION_TOKEN;
 		sd_desc->buff[1] = 0xFF;
 		if (0 != no_os_spi_write_and_read(sd_desc->spi_desc, sd_desc->buff, 2))
-			return FAILURE;
-		if (SUCCESS != wait_until_not_busy(sd_desc))
-			return FAILURE;
+			return -1;
+		if (0 != wait_until_not_busy(sd_desc))
+			return -1;
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * Initialize an instance of SD card and stores it to the parameter desc
  * @param sd_desc	- Pointer where to store the instance of the SD
  * @param param		- Contains an initialized SPI descriptor
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t sd_init(struct sd_desc **sd_desc, const struct sd_init_param *param)
 {
@@ -533,11 +533,11 @@ int32_t sd_init(struct sd_desc **sd_desc, const struct sd_init_param *param)
 
 	/* Allocate data and initialize sd_desc with param */
 	if (!sd_desc || !param)
-		return FAILURE;
+		return -1;
 
 	local_desc = calloc(1, sizeof(*local_desc));
 	if (!local_desc)
-		return FAILURE;
+		return -1;
 	local_desc->spi_desc = param->spi_desc;
 
 	/* Synchronize SD card frequency: Send 10 dummy bytes*/
@@ -551,8 +551,8 @@ int32_t sd_init(struct sd_desc **sd_desc, const struct sd_init_param *param)
 	cmd_desc.response_len = R1_LEN;
 	i = 0;
 	while (true) {
-		if (SUCCESS != send_command(local_desc, &cmd_desc))
-			return FAILURE;
+		if (0 != send_command(local_desc, &cmd_desc))
+			return -1;
 		if (cmd_desc.response[0] == R1_IDLE_STATE)
 			break;
 		if (++i == CMD0_RETRY_NUMBER) {
@@ -565,7 +565,7 @@ int32_t sd_init(struct sd_desc **sd_desc, const struct sd_init_param *param)
 	cmd_desc.cmd = CMD(8);
 	cmd_desc.arg = CMD8_ARG;
 	cmd_desc.response_len = R3_LEN;
-	if (SUCCESS != send_command(local_desc, &cmd_desc))
+	if (0 != send_command(local_desc, &cmd_desc))
 		goto failure;
 	if (!(cmd_desc.response[0] == R1_IDLE_STATE &&
 	      cmd_desc.response[3] == 0x1u && cmd_desc.response[4] == 0xAAu)) {
@@ -580,8 +580,8 @@ int32_t sd_init(struct sd_desc **sd_desc, const struct sd_init_param *param)
 	cmd_desc.arg = ACMD41_ARG;
 	cmd_desc.response_len = R1_LEN;
 	while (true) {
-		if (SUCCESS != send_command(local_desc, &cmd_desc))
-			return FAILURE;
+		if (0 != send_command(local_desc, &cmd_desc))
+			return -1;
 		if (cmd_desc.response[0] == R1_READY_STATE)
 			break;
 		cmd_desc.arg = 0x00000000u;
@@ -591,7 +591,7 @@ int32_t sd_init(struct sd_desc **sd_desc, const struct sd_init_param *param)
 	cmd_desc.cmd = CMD(58);
 	cmd_desc.arg = STUFF_ARG;
 	cmd_desc.response_len = R3_LEN;
-	if (SUCCESS != send_command(local_desc, &cmd_desc))
+	if (0 != send_command(local_desc, &cmd_desc))
 		goto failure;
 	if (!(cmd_desc.response[0] == R1_READY_STATE
 	      && (cmd_desc.response[1] & (BIT_CCS >> 24)))) {
@@ -603,9 +603,9 @@ int32_t sd_init(struct sd_desc **sd_desc, const struct sd_init_param *param)
 	cmd_desc.cmd = CMD(9);
 	cmd_desc.arg = STUFF_ARG;
 	cmd_desc.response_len = R1_LEN;
-	if (SUCCESS != send_command(local_desc, &cmd_desc))
+	if (0 != send_command(local_desc, &cmd_desc))
 		goto failure;
-	if (SUCCESS != wait_for_response(local_desc, cmd_desc.response))
+	if (0 != wait_for_response(local_desc, cmd_desc.response))
 		goto failure;
 	if (cmd_desc.response[0] != START_1_BLOCK_TOKEN) {
 		DEBUG_MSG("Failed to read CSD register\n");
@@ -625,22 +625,22 @@ int32_t sd_init(struct sd_desc **sd_desc, const struct sd_init_param *param)
 
 	*sd_desc = local_desc;
 
-	return SUCCESS;
+	return 0;
 failure:
 	free(local_desc);
-	return FAILURE;
+	return -1;
 }
 
 /**
  * Remove the initialize instance of SD card.
  * @param desc	- Instance of the SD card
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t sd_remove(struct sd_desc *desc)
 {
 	if (desc == NULL)
-		return FAILURE;
+		return -1;
 
 	free(desc);
-	return SUCCESS;
+	return 0;
 }

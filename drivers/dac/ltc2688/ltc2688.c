@@ -61,7 +61,7 @@ static const struct ltc2688_span_tbl ltc2688_span_tbl[] = {
  * @param dev - The device structure.
  * @param cmd - The command.
  * @param data - The data.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 static int32_t _ltc2688_spi_write(struct ltc2688_dev *dev, uint8_t reg,
 				  uint16_t data)
@@ -86,7 +86,7 @@ static int32_t _ltc2688_spi_write(struct ltc2688_dev *dev, uint8_t reg,
  * @param dev - The device structure.
  * @param reg - The register address.
  * @param data - The register data.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 static int32_t _ltc2688_spi_read(struct ltc2688_dev *dev, uint8_t reg,
 				 uint16_t *data)
@@ -113,7 +113,7 @@ static int32_t _ltc2688_spi_read(struct ltc2688_dev *dev, uint8_t reg,
  * @param reg - The register address.
  * @param mask - The register mask.
  * @param val - The updated value.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 static int32_t _ltc2688_spi_update_bits(struct ltc2688_dev *dev, uint8_t reg,
 					uint16_t mask, uint16_t val)
@@ -136,7 +136,7 @@ static int32_t _ltc2688_spi_update_bits(struct ltc2688_dev *dev, uint8_t reg,
  * @param dev - The device structure.
  * @param setting - The setting.
  *		    Accepted values: LTC2688_PWDN(x) | LTC2688_PWDN(y) | ...
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ltc2688_set_pwr_dac(struct ltc2688_dev *dev, uint16_t setting)
 {
@@ -149,7 +149,7 @@ int32_t ltc2688_set_pwr_dac(struct ltc2688_dev *dev, uint16_t setting)
  * @param dev - The device structure.
  * @param setting - The setting.
  *		    Accepted values: LTC2688_DITH_EN(x) | LTC2688_DITH_EN(y) | ...
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ltc2688_set_dither_toggle(struct ltc2688_dev *dev, uint16_t setting)
 {
@@ -170,7 +170,7 @@ int32_t ltc2688_set_dither_toggle(struct ltc2688_dev *dev, uint16_t setting)
  * @param dev - The device structure.
  * @param channel - The channel for which to change the mode.
  * @param en - enable or disable dither mode
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ltc2688_set_dither_mode(struct ltc2688_dev *dev, uint8_t channel,
 				bool en)
@@ -199,7 +199,7 @@ int32_t ltc2688_set_dither_mode(struct ltc2688_dev *dev, uint8_t channel,
  * @param dev - The device structure.
  * @param channel - The channel for which to change the mode.
  * @param range - Voltage range.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ltc2688_set_span(struct ltc2688_dev *dev,
 			 uint8_t channel, enum ltc2688_voltage_range range)
@@ -224,7 +224,7 @@ int32_t ltc2688_set_span(struct ltc2688_dev *dev,
  * @param dev - The device structure.
  * @param channel - The channel for which to change the mode.
  * @param phase - Dither phase.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ltc2688_set_dither_phase(struct ltc2688_dev *dev,
 				 uint8_t channel, enum  ltc2688_dither_phase phase)
@@ -249,7 +249,7 @@ int32_t ltc2688_set_dither_phase(struct ltc2688_dev *dev,
  * @param dev - The device structure.
  * @param channel - The channel for which to change the mode.
  * @param period - Dither period.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ltc2688_set_dither_period(struct ltc2688_dev *dev,
 				  uint8_t channel, enum  ltc2688_dither_period period)
@@ -274,7 +274,7 @@ int32_t ltc2688_set_dither_period(struct ltc2688_dev *dev,
  * @param dev - The device structure.
  * @param channel - The channel for which to change the mode.
  * @param sel_reg - Select register A or B to store DAC output value.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ltc2688_select_reg(struct ltc2688_dev *dev,
 			   uint8_t channel, enum  ltc2688_a_b_register sel_reg)
@@ -299,7 +299,7 @@ int32_t ltc2688_select_reg(struct ltc2688_dev *dev,
  * @param dev - The device structure.
  * @param channel - The channel for which to change the mode.
  * @param clk_input - Select the source for the clock input.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ltc2688_select_tg_dith_clk(struct ltc2688_dev *dev, uint8_t channel,
 				   enum  ltc2688_clk_input clk_input)
@@ -323,7 +323,7 @@ int32_t ltc2688_select_tg_dith_clk(struct ltc2688_dev *dev, uint8_t channel,
  * Toggle the software source for dither/toggle.
  * @param dev - The device structure.
  * @param channel - The channel for which to change the mode.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ltc2688_software_toggle(struct ltc2688_dev *dev, uint8_t channel)
 {
@@ -345,7 +345,7 @@ int32_t ltc2688_software_toggle(struct ltc2688_dev *dev, uint8_t channel)
 /**
  * Software reset the device.
  * @param dev - The device structure.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ltc2688_software_reset(struct ltc2688_dev *dev)
 {
@@ -396,7 +396,7 @@ int32_t ltc2688_set_voltage(struct ltc2688_dev *dev, uint8_t channel,
  * @param device - The device structure.
  * @param init_param - The structure that contains the device initial
  *		       parameters.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ltc2688_init(struct ltc2688_dev **device,
 		     struct ltc2688_init_param init_param)
@@ -477,7 +477,7 @@ error:
 /**
  * @brief Free the resources allocated by ltc2688_init().
  * @param dev - The device structure.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ltc2688_remove(struct ltc2688_dev *dev)
 {

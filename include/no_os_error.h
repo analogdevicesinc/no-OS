@@ -46,22 +46,13 @@
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 
-#ifdef SUCCESS
-#undef SUCCESS
-#endif
-#define SUCCESS		0
-#ifdef FAILURE
-#undef FAILURE
-#endif
-#define FAILURE		-1
-
-#ifndef __ELASTERROR
-#define __ELASTERROR 2000
+#ifndef __NO_OS_ELASTERROR
+#define __NO_OS_ELASTERROR 2000
 #endif
 
-#define EOVERRUN	(__ELASTERROR + 1) /* Circular buffer overrun */
+#define NO_OS_EOVERRUN	(__NO_OS_ELASTERROR + 1) /* Circular buffer overrun */
 
 
-#define IS_ERR_VALUE(x)	((x) < 0)
+#define NO_OS_IS_ERR_VALUE(x)	((x) < 0)
 
 #endif // _NO_OS_ERROR_H_

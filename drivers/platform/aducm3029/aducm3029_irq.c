@@ -96,7 +96,7 @@ static uint32_t		initialized;
  *
  * @param desc - Pointer where the configured instance is stored
  * @param param - Configuration information for the instance
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t aducm3029_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
 				const struct no_os_irq_init_param *param)
@@ -104,17 +104,17 @@ int32_t aducm3029_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
 	struct aducm_irq_ctrl_desc *aducm_desc;
 
 	if (!desc || !param || initialized)
-		return FAILURE;
+		return -1;
 
 	*desc = (struct no_os_irq_ctrl_desc *)calloc(1, sizeof(**desc));
 	if (!*desc)
-		return FAILURE;
+		return -1;
 	aducm_desc = (struct aducm_irq_ctrl_desc *)
 		     calloc(1, sizeof(*aducm_desc));
 	if (!aducm_desc) {
 		free(*desc);
 		*desc = NULL;
-		return FAILURE;
+		return -1;
 	}
 
 	(*desc)->extra = aducm_desc;
@@ -123,20 +123,20 @@ int32_t aducm3029_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
 	adi_xint_Init(aducm_desc->irq_memory, ADI_XINT_MEMORY_SIZE);
 
 	initialized = 1;
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Free the resources allocated by \ref no_os_irq_ctrl_init()
  * @param desc - Interrupt controller descriptor.
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t aducm3029_irq_ctrl_remove(struct no_os_irq_ctrl_desc *desc)
 {
 	uint32_t i;
 
 	if (!desc || !desc->extra || !initialized)
-		return FAILURE;
+		return -1;
 
 	/* Free external interrupts */
 	for (i = 0; i < NB_EXT_INTERRUPTS; i++)
@@ -150,7 +150,7 @@ int32_t aducm3029_irq_ctrl_remove(struct no_os_irq_ctrl_desc *desc)
 	free(desc);
 	initialized = 0;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -159,7 +159,7 @@ int32_t aducm3029_irq_ctrl_remove(struct no_os_irq_ctrl_desc *desc)
  * @param irq_id - Interrupt identifier.
  * @param callback_desc - Descriptor of the callback. If it is NULL, the
  * callback will be unregistered
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t aducm3029_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 					uint32_t irq_id,
@@ -174,7 +174,7 @@ int32_t aducm3029_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 	uint8_t				gpio_port;
 
 	if (!desc || !desc->extra || !initialized ||  irq_id >= NB_INTERRUPTS)
-		return FAILURE;
+		return -1;
 
 	if (!callback_desc)
 		return no_os_irq_unregister(desc, irq_id);
@@ -197,7 +197,7 @@ int32_t aducm3029_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 			(struct no_os_uart_desc *)callback_desc->config;
 		uart_desc = aducm_desc->conf[irq_id].uart_conf;
 		if (!uart_desc)
-			return FAILURE;
+			return -1;
 		uart_desc->callback = callback_desc->callback;
 		uart_desc->callback_ctx = callback_desc->ctx;
 		break;
@@ -206,7 +206,7 @@ int32_t aducm3029_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 			(struct rtc_irq_config *)callback_desc->config;
 		rtc_desc = aducm_desc->conf[irq_id].rtc_conf->rtc_handler;
 		if (!rtc_desc)
-			return FAILURE;
+			return -1;
 		rtc_extra = rtc_desc->extra;
 		adi_rtc_RegisterCallback(rtc_extra->instance,
 					 callback_desc->callback,
@@ -223,7 +223,7 @@ int32_t aducm3029_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 			(struct gpio_irq_config *)callback_desc->config;
 		gpio_desc = aducm_desc->conf[irq_id].gpio_conf->gpio_handler;
 		if (!gpio_desc)
-			return FAILURE;
+			return -1;
 		/** Either register a new callback and add the GPIO to the
 		 *  interrupt group, or just add the GPIO to the interrupt group
 		 *  if no new callback is mentioned. */
@@ -240,18 +240,18 @@ int32_t aducm3029_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 		adi_gpio_SetGroupInterruptPolarity(gpio_port, gpio_pin);
 		break;
 	default:
-		return FAILURE;
+		return -1;
 	}
 
 	aducm_desc->callback_configured[irq_id] = true;
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Unregister IRQ handling function for the specified <em>irq_id</em>.
  * @param desc - Interrupt controller descriptor.
  * @param irq_id - Id of the interrupt
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t aducm3029_irq_unregister(struct no_os_irq_ctrl_desc *desc,
 				 uint32_t irq_id)
@@ -265,7 +265,7 @@ int32_t aducm3029_irq_unregister(struct no_os_irq_ctrl_desc *desc,
 
 	if (!desc || !desc->extra || !initialized ||
 	    irq_id >= NB_INTERRUPTS)
-		return FAILURE;
+		return -1;
 
 	aducm_desc = desc->extra;
 
@@ -287,7 +287,7 @@ int32_t aducm3029_irq_unregister(struct no_os_irq_ctrl_desc *desc,
 		if (aducm_desc->conf[irq_id].rtc_conf) {
 			rtc_desc = aducm_desc->conf[irq_id].rtc_conf->rtc_handler;
 			if (!rtc_desc)
-				return FAILURE;
+				return -1;
 			rtc_extra = rtc_desc->extra;
 			adi_rtc_RegisterCallback(rtc_extra->instance, NULL,
 						 NULL);
@@ -303,14 +303,14 @@ int32_t aducm3029_irq_unregister(struct no_os_irq_ctrl_desc *desc,
 		if (aducm_desc->conf[irq_id].gpio_conf) {
 			gpio_desc = aducm_desc->conf[irq_id].gpio_conf->gpio_handler;
 			if (!gpio_desc)
-				return FAILURE;
+				return -1;
 			adi_gpio_RegisterCallback(id, NULL, NULL);
 			for (i = ADI_GPIO_PORT0; i < ADI_GPIO_NUM_PORTS; i++)
 				adi_gpio_SetGroupInterruptPins(i, id, 0);
 		}
 		break;
 	default:
-		return FAILURE;
+		return -1;
 	}
 
 	aducm_desc->conf[irq_id].uart_conf = 0;
@@ -323,13 +323,13 @@ int32_t aducm3029_irq_unregister(struct no_os_irq_ctrl_desc *desc,
 /**
  * @brief Enable all previously enabled interrupts by \ref no_os_irq_enable().
  * @param desc - Interrupt controller descriptor.
- * @return \ref SUCCESS
+ * @return 0
  */
 int32_t aducm3029_irq_global_enable(struct no_os_irq_ctrl_desc *desc)
 {
 	struct aducm_irq_ctrl_desc *aducm_desc;
 	if (!desc || !desc->extra || !initialized)
-		return FAILURE;
+		return -1;
 
 	aducm_desc = desc->extra;
 	for (uint32_t i = 0; i < NB_EXT_INTERRUPTS; i++)
@@ -344,19 +344,19 @@ int32_t aducm3029_irq_global_enable(struct no_os_irq_ctrl_desc *desc)
 	if (aducm_desc->enabled & (1u << ADUCM_GPIO_B_INT_ID))
 		no_os_irq_enable(desc, ADUCM_GPIO_B_INT_ID);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Disable all external interrupts
  * @param desc - Interrupt controller descriptor.
- * @return \ref SUCCESS
+ * @return 0
  */
 int32_t aducm3029_irq_global_disable(struct no_os_irq_ctrl_desc *desc)
 {
 	struct aducm_irq_ctrl_desc *aducm_desc;
 	if (!desc || !desc->extra || !initialized)
-		return FAILURE;
+		return -1;
 
 	aducm_desc = desc->extra;
 	for (uint32_t i = 0; i < NB_EXT_INTERRUPTS; i++)
@@ -371,7 +371,7 @@ int32_t aducm3029_irq_global_disable(struct no_os_irq_ctrl_desc *desc)
 	if (aducm_desc->enabled & (1u << ADUCM_GPIO_B_INT_ID))
 		no_os_irq_disable(desc, ADUCM_GPIO_B_INT_ID);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -387,7 +387,7 @@ int32_t aducm3029_irq_global_disable(struct no_os_irq_ctrl_desc *desc)
  *
  * @param desc - Interrupt controller descriptor.
  * @param irq_id - Id of the interrupt
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t aducm3029_irq_enable(struct no_os_irq_ctrl_desc *desc,
 			     uint32_t irq_id)
@@ -398,11 +398,11 @@ int32_t aducm3029_irq_enable(struct no_os_irq_ctrl_desc *desc,
 
 	if (!desc || !desc->extra || !initialized ||
 	    irq_id >= NB_INTERRUPTS)
-		return FAILURE;
+		return -1;
 	aducm_desc = desc->extra;
 
 	if (!aducm_desc->callback_configured[irq_id])
-		return FAILURE;
+		return -1;
 
 	if (irq_id < NB_EXT_INTERRUPTS) {
 		adi_xint_EnableIRQ(id_map_event[irq_id],
@@ -423,14 +423,14 @@ int32_t aducm3029_irq_enable(struct no_os_irq_ctrl_desc *desc,
 	}
 	aducm_desc->enabled |= (1u << irq_id);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Disable the interrupt
  * @param desc - Interrupt controller descriptor.
  * @param irq_id - Id of the interrupt
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t aducm3029_irq_disable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
 {
@@ -440,7 +440,7 @@ int32_t aducm3029_irq_disable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
 
 	if (!desc || !desc->extra || !initialized ||
 	    irq_id >= NB_INTERRUPTS)
-		return FAILURE;
+		return -1;
 
 	aducm_desc = desc->extra;
 	if (irq_id < NB_EXT_INTERRUPTS) {
@@ -461,7 +461,7 @@ int32_t aducm3029_irq_disable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
 	}
 	aducm_desc->enabled &= ~(1u << irq_id);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**

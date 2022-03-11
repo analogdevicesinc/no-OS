@@ -50,34 +50,34 @@
 /**
  * Start the clock.
  * @param clk - The clock structure.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t no_os_clk_enable(struct no_os_clk * clk)
 {
 	if (clk->hw->dev_clk_enable)
 		return clk->hw->dev_clk_enable(clk->hw->dev);
 	else
-		return FAILURE;
+		return -1;
 }
 
 /**
  * Stop the clock.
  * @param clk - The clock structure.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t no_os_clk_disable(struct no_os_clk * clk)
 {
 	if (clk->hw->dev_clk_disable)
 		return clk->hw->dev_clk_disable(clk->hw->dev);
 	else
-		return FAILURE;
+		return -1;
 }
 
 /**
  * Get the current frequency of the clock.
  * @param clk - The clock structure.
  * @param rate - The current frequency.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t no_os_clk_recalc_rate(struct no_os_clk *clk,
 			      uint64_t *rate)
@@ -87,7 +87,7 @@ int32_t no_os_clk_recalc_rate(struct no_os_clk *clk,
 						    clk->hw_ch_num,
 						    rate);
 	else
-		return FAILURE;
+		return -1;
 }
 
 /**
@@ -95,7 +95,7 @@ int32_t no_os_clk_recalc_rate(struct no_os_clk *clk,
  * @param clk - The clock structure.
  * @param rate - The desired frequency.
  * @param rounded_rate - The rounded frequency.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t no_os_clk_round_rate(struct no_os_clk *clk,
 			     uint64_t rate,
@@ -107,14 +107,14 @@ int32_t no_os_clk_round_rate(struct no_os_clk *clk,
 						   rate,
 						   rounded_rate);
 	else
-		return FAILURE;
+		return -1;
 }
 
 /**
  * Change the frequency of the clock.
  * @param clk - The clock structure.
  * @param rate - The desired frequency.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t no_os_clk_set_rate(struct no_os_clk *clk,
 			   uint64_t rate)
@@ -124,5 +124,5 @@ int32_t no_os_clk_set_rate(struct no_os_clk *clk,
 						 clk->hw_ch_num,
 						 rate);
 	else
-		return FAILURE;
+		return -1;
 }

@@ -52,7 +52,7 @@
  * @param dev - The ad9553 device handler
  * @param reg_addr - The address of the internal register of the ad9553 chip
  * @param reg_data - The value read from the internal register
- * @return SUCCESS if the value was successfully read, FAILURE otherwise
+ * @return 0 if the value was successfully read, -1 otherwise
  */
 int32_t ad9553_reg_read(struct ad9553_dev *dev,
 			uint16_t reg_addr,
@@ -83,7 +83,7 @@ int32_t ad9553_reg_read(struct ad9553_dev *dev,
  * @param dev - The device handler for the ad9553 chip
  * @param reg_addr - Address of the internal register of the ad9553 chip
  * @param reg_data - Value to be written to the register
- * @return SUCCESS if the value was written successfully, FAILURE otherwise
+ * @return 0 if the value was written successfully, -1 otherwise
  */
 int32_t ad9553_reg_write(struct ad9553_dev *dev,
 			 uint16_t reg_addr,
@@ -106,7 +106,7 @@ int32_t ad9553_reg_write(struct ad9553_dev *dev,
  * @brief Setup the working parameters of the ad9553 chip
  * @param device - The device handler of the ad9553 chip
  * @param init_param - Values for the working parameters of ad9553
- * @return SUCCESS if device is ready for use, FAILURE otherwise
+ * @return 0 if device is ready for use, -1 otherwise
  */
 int32_t ad9553_setup(struct ad9553_dev **device,
 		     const struct ad9553_init_param *init_param)
@@ -117,67 +117,67 @@ int32_t ad9553_setup(struct ad9553_dev **device,
 
 	dev = (struct ad9553_dev *)malloc(sizeof(*dev));
 	if (!dev)
-		return FAILURE;
+		return -1;
 
 	/* SPI */
 	ret = no_os_spi_init(&dev->spi_desc, &init_param->spi_init);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	// reset
 	ret = ad9553_reg_write(dev, AD9553_SPI_CONFIG, 0x3C);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	no_os_mdelay(250);
 
 	// enable SPI control of charge pump
 	ret = ad9553_reg_write(dev, AD9553_PLL_CHARGE_PUMP_PFD_CTRL, 0xB0);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	// lock detector activated
 	ret = ad9553_reg_write(dev, AD9553_PLL_CTRL, 0x00);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	// P1 = 4
 	// P1[9:2]
 	ret = ad9553_reg_write(dev, AD9553_P1_DIV_HIGH, 0x01);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	// P1[1:0], P2[9:4]
 	ret = ad9553_reg_write(dev, AD9553_P1_DIV_LOW_P2_DIV_HIGH, 0x00);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	// P2[3:0]
 	ret = ad9553_reg_write(dev, AD9553_P2_DIV_LOW, 0x00);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	// P0 = 7
 	ret = ad9553_reg_write(dev, AD9553_P0_DIV, 0x60);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	// N = 700
 	// N[19:12]
 	ret = ad9553_reg_write(dev, AD9553_N_DIV_HIGH, 0x00);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	// N[11:4]
 	ret = ad9553_reg_write(dev, AD9553_N_DIV_MEDIUM, 0x2B);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	// N[3:0], take the N value from the feedback divide register,
 	// take the output divider values from the registers, reset
 	// counters and logic of the PLL
 	ret = ad9553_reg_write(dev, AD9553_N_DIV_LOW, 0xCC);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	no_os_mdelay(250);
@@ -185,57 +185,57 @@ int32_t ad9553_setup(struct ad9553_dev **device,
 	// RefA = 10
 	// RefA[13:6] divider
 	ret = ad9553_reg_write(dev, AD9553_REFA_DIV_HIGH, 0x00);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	// RefA[5:0], use the value stored in RefA register for RefA divider value
 	ret = ad9553_reg_write(dev, AD9553_REFA_DIV_LOW, 0x2A);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	// k = 2/5
 	// enable SPI control for x2 for RefA, select x2 for RefA,
 	// enable SPI control for :5 for RefA, select :5 for RefA
 	ret = ad9553_reg_write(dev, AD9553_K_VALUE, 0xF0);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	// RefA is configured as a differential input so RefDiff = 1
 	ret = ad9553_reg_write(dev, AD9553_REFA_DIFF, 0xA0);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	// Out1 drive strength diven by SPI configuration, Out1 driver mode
 	// selection LVDS , the rest of the settings for this register
 	// remain default
 	ret = ad9553_reg_write(dev, AD9553_OUT1_DRIVER_CTRL, 0xA1);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	// Out2 powered down
 	ret = ad9553_reg_write(dev, AD9553_OUT2_DRIVER_CTRL, 0xE8);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	// update contents of the registers with the new values
 	ret = ad9553_reg_write(dev, AD9553_IO_UPDATE, 0x01);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Free the resources allocated by ad9553_setup().
  * @param dev - The device structure.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad9553_remove(struct ad9553_dev *dev)
 {
 	int32_t ret;
 
 	ret = no_os_spi_remove(dev->spi_desc);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	free(dev);

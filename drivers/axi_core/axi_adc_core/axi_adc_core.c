@@ -58,7 +58,7 @@ int32_t axi_adc_read(struct axi_adc *adc,
 {
 	no_os_axi_io_read(adc->base, reg_addr, reg_data);
 
-	return SUCCESS;
+	return 0;
 }
 
 /***************************************************************************//**
@@ -70,7 +70,7 @@ int32_t axi_adc_write(struct axi_adc *adc,
 {
 	no_os_axi_io_write(adc->base, reg_addr, reg_data);
 
-	return SUCCESS;
+	return 0;
 }
 
 /***************************************************************************//**
@@ -87,7 +87,7 @@ int32_t axi_adc_set_pnsel(struct axi_adc *adc,
 	reg_data |= AXI_ADC_ADC_PN_SEL(sel);
 	axi_adc_write(adc, AXI_ADC_REG_CHAN_CNTRL_3(chan), reg_data);
 
-	return SUCCESS;
+	return 0;
 }
 
 /***************************************************************************//**
@@ -115,10 +115,10 @@ int32_t axi_adc_pn_mon(struct axi_adc *adc,
 	for (ch = 0; ch < adc->num_channels; ch++) {
 		axi_adc_read(adc, AXI_ADC_REG_CHAN_STATUS(ch), &reg_data);
 		if (reg_data != 0)
-			return FAILURE;
+			return -1;
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /***************************************************************************//**
@@ -136,7 +136,7 @@ int32_t axi_adc_get_sampling_freq(struct axi_adc *adc,
 	*sampling_freq = freq * ratio;
 	*sampling_freq = ((*sampling_freq) * 390625) >> 8;
 
-	return SUCCESS;
+	return 0;
 }
 
 /***************************************************************************//**
@@ -166,7 +166,7 @@ int32_t axi_adc_delay_set(struct axi_adc *adc,
 	if (pcore_version < 9) {
 		printf(" pcore_version is : %d\n\r", (int)pcore_version);
 		printf(" DRIVER DOES NOT SUPPORT PCORE VERSIONS OLDER THAN 10 !");
-		return FAILURE;
+		return -1;
 	} else {
 		for (i = 0; i < no_of_lanes; i++) {
 			axi_adc_idelay_set(adc, i, delay);
@@ -178,7 +178,7 @@ int32_t axi_adc_delay_set(struct axi_adc *adc,
 		}
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /***************************************************************************//**
@@ -216,7 +216,7 @@ int32_t axi_adc_delay_calibrate(struct axi_adc *adc,
 	if (start_valid_delay > 31) {
 		printf("%s FAILED.\n", __func__);
 		axi_adc_delay_set(adc, no_of_lanes, 0);
-		return FAILURE;
+		return -1;
 	}
 
 	start_valid_delay = 32;
@@ -259,7 +259,7 @@ int32_t axi_adc_delay_calibrate(struct axi_adc *adc,
 	printf("adc_delay: setting zero error delay (%d)\n\r", delay);
 	axi_adc_delay_set(adc, no_of_lanes, delay);
 
-	return SUCCESS;
+	return 0;
 }
 
 /***************************************************************************//**
@@ -290,7 +290,7 @@ int32_t axi_adc_set_calib_phase_scale(struct axi_adc *adc,
 		}
 		break;
 	default:
-		return FAILURE;
+		return -1;
 	}
 
 	llval = (uint64_t)val2 * 0x4000UL + (1000000UL / 2);
@@ -309,7 +309,7 @@ int32_t axi_adc_set_calib_phase_scale(struct axi_adc *adc,
 
 	axi_adc_write(adc, AXI_ADC_REG_CHAN_CNTRL_2(chan), tmp);
 
-	return SUCCESS;
+	return 0;
 }
 
 /***************************************************************************//**
@@ -352,7 +352,7 @@ int32_t axi_adc_get_calib_phase_scale(struct axi_adc *adc,
 	else
 		*val2 = llval;
 
-	return SUCCESS;
+	return 0;
 }
 
 /***************************************************************************//**
@@ -415,7 +415,7 @@ int32_t axi_adc_set_calib_bias(struct axi_adc *adc,
 
 	axi_adc_write(adc, AXI_ADC_REG_CHAN_CNTRL_1(chan), tmp);
 
-	return SUCCESS;
+	return 0;
 }
 
 /***************************************************************************//**
@@ -431,7 +431,7 @@ int32_t axi_adc_get_calib_bias(struct axi_adc *adc,
 	axi_adc_read(adc, AXI_ADC_REG_CHAN_CNTRL_1(chan), &tmp);
 	*val = (uint16_t)AXI_ADC_TO_DCFILT_OFFSET(tmp);
 
-	return SUCCESS;
+	return 0;
 }
 
 /***************************************************************************//**
@@ -444,7 +444,7 @@ int32_t axi_adc_update_active_channels(struct axi_adc *adc, uint32_t mask)
 	uint32_t new_val;
 
 	if (mask == adc->mask)
-		return SUCCESS;
+		return 0;
 
 	adc->mask = mask;
 	for (ch = 0; ch < adc->num_channels; ch++) {
@@ -457,7 +457,7 @@ int32_t axi_adc_update_active_channels(struct axi_adc *adc, uint32_t mask)
 		mask >>= 1;
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /***************************************************************************//**
@@ -470,7 +470,7 @@ int32_t axi_adc_init_begin(struct axi_adc **adc_core,
 
 	adc = (struct axi_adc *)malloc(sizeof(*adc));
 	if (!adc)
-		return FAILURE;
+		return -1;
 
 	adc->name = init->name;
 	adc->base = init->base;
@@ -478,7 +478,7 @@ int32_t axi_adc_init_begin(struct axi_adc **adc_core,
 
 	*adc_core = adc;
 
-	return SUCCESS;
+	return 0;
 };
 
 /***************************************************************************//**
@@ -494,7 +494,7 @@ int32_t axi_adc_init_finish(struct axi_adc *adc)
 	axi_adc_read(adc, AXI_ADC_REG_STATUS, &reg_data);
 	if(reg_data == 0x0) {
 		printf("%s: Status errors\n", adc->name);
-		return FAILURE;
+		return -1;
 	}
 
 	axi_adc_read(adc, AXI_ADC_REG_CLK_FREQ, &freq);
@@ -505,7 +505,7 @@ int32_t axi_adc_init_finish(struct axi_adc *adc)
 	printf("%s: Successfully initialized (%"PRIu64" Hz)\n",
 	       adc->name, adc->clock_hz);
 
-	return SUCCESS;
+	return 0;
 }
 
 /***************************************************************************//**
@@ -539,11 +539,11 @@ int32_t axi_adc_init(struct axi_adc **adc_core,
 
 	*adc_core = adc;
 
-	return SUCCESS;
+	return 0;
 error:
 	free(adc);
 
-	return FAILURE;
+	return -1;
 }
 
 /***************************************************************************//**
@@ -553,5 +553,5 @@ int32_t axi_adc_remove(struct axi_adc *adc)
 {
 	free(adc);
 
-	return SUCCESS;
+	return 0;
 }

@@ -161,39 +161,39 @@ int main(void)
 
 	// set up the device
 	status = ad9625_setup(&ad9625_device, ad9625_param);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("error: ad9625_setup() failed\n");
 	}
 
 	// set up the XCVRs
 	status = adxcvr_init(&ad9625_xcvr, &ad9625_xcvr_param);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("error: %s: adxcvr_init() failed\n", ad9625_xcvr->name);
 	}
 	status = adxcvr_clk_enable(ad9625_xcvr);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("error: %s: adxcvr_clk_enable() failed\n", ad9625_xcvr->name);
 	}
 
 	// setup JESD core
 	status = axi_jesd204_rx_init(&ad9625_jesd, &ad9625_jesd_param);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("error: %s: axi_jesd204_rx_init() failed\n", ad9625_jesd->name);
 	}
 	status = axi_jesd204_rx_lane_clk_enable(ad9625_jesd);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("error: %s: axi_jesd204_tx_lane_clk_enable() failed\n",
 		       ad9625_jesd->name);
 	}
 
 	// JESD core status
 	status = axi_jesd204_rx_status_read(ad9625_jesd);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("axi_jesd204_rx_status_read() error: %"PRIi32"\n", status);
 	}
 	// interface core setup
 	status = axi_adc_init(&ad9625_core,  &ad9625_core_param);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("axi_adc_init() error: %s\n", ad9625_core->name);
 	}
 

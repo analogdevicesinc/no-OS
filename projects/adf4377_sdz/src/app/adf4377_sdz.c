@@ -116,15 +116,15 @@ int main(void)
 	};
 
 	ret = adf4377_init(&dev, &adf4377_param);
-	if (ret != SUCCESS) {
+	if (ret != 0) {
 		pr_err("ADF4377 Initialization failed!\n");
-		return FAILURE;
+		return -1;
 	}
 
 	pr_info("ADF4377 Successfully initialized!");
 
 	ret = adf4377_spi_read(dev, ADF4377_REG(0x49), &f_lock);
-	if (ret != SUCCESS) {
+	if (ret != 0) {
 		pr_err("SPI Read Failed!");
 	}
 

@@ -103,7 +103,7 @@ uint8_t ad7779_compute_crc8(uint8_t *data,
  * @param dev - The device structure.
  * @param reg_addr - The register address.
  * @param reg_data - The register data.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7779_spi_int_reg_read(ad7779_dev *dev,
 				uint8_t reg_addr,
@@ -127,7 +127,7 @@ int32_t ad7779_spi_int_reg_read(ad7779_dev *dev,
 		crc = ad7779_compute_crc8(&buf[0], 2);
 		if (crc != buf[2]) {
 			printf("%s: CRC Error.\n", __func__);
-			ret = FAILURE;
+			ret = -1;
 		}
 	}
 
@@ -139,7 +139,7 @@ int32_t ad7779_spi_int_reg_read(ad7779_dev *dev,
  * @param dev - The device structure.
  * @param reg_addr - The register address.
  * @param reg_data - The register data.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7779_spi_int_reg_write(ad7779_dev *dev,
 				 uint8_t reg_addr,
@@ -167,7 +167,7 @@ int32_t ad7779_spi_int_reg_write(ad7779_dev *dev,
  * @param reg_addr - The register address.
  * @param mask - The mask.
  * @param data - The register data.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7779_spi_int_reg_read_mask(ad7779_dev *dev,
 				     uint8_t reg_addr,
@@ -189,7 +189,7 @@ int32_t ad7779_spi_int_reg_read_mask(ad7779_dev *dev,
  * @param reg_addr - The register address.
  * @param mask - The mask.
  * @param data - The register data.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7779_spi_int_reg_write_mask(ad7779_dev *dev,
 				      uint8_t reg_addr,
@@ -235,7 +235,7 @@ int32_t ad7779_spi_int_reg_write_mask(ad7779_dev *dev,
  *					   AD7779_REF2P_AVSSX
  *					   AD7779_AVSSX_AVDD4_ATT
  * @param sar_code - SAR conversion code.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7779_spi_sar_read_code(ad7779_dev *dev,
 				 ad7779_sar_mux mux_next_conv,
@@ -261,7 +261,7 @@ int32_t ad7779_spi_sar_read_code(ad7779_dev *dev,
 		crc = ad7779_compute_crc8(&buf[0], 2);
 		if (crc != buf[2]) {
 			printf("%s: CRC Error.\n", __func__);
-			ret = FAILURE;
+			ret = -1;
 		}
 	}
 
@@ -275,7 +275,7 @@ int32_t ad7779_spi_sar_read_code(ad7779_dev *dev,
  *		 Accepted values: AD7779_INT_REG
  *				  AD7779_SD_CONV
  *				  AD7779_SAR_CONV
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7779_set_spi_op_mode(ad7779_dev *dev,
 			       ad7779_spi_op_mode mode)
@@ -314,21 +314,21 @@ int32_t ad7779_set_spi_op_mode(ad7779_dev *dev,
  * Get SPI operation mode.
  * @param dev - The device structure.
  * @param mode - The SPI operation mode.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7779_get_spi_op_mode(ad7779_dev *dev,
 			       ad7779_spi_op_mode *mode)
 {
 	*mode = dev->spi_op_mode;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * Update the state of the MODEx pins according to the settings specified in
  * the device structure.
  * @param dev - The device structure.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7779_do_update_mode_pins(ad7779_dev *dev)
 {
@@ -397,7 +397,7 @@ int32_t ad7779_do_update_mode_pins(ad7779_dev *dev)
 error:
 	printf("%s: This setting can't be set in PIN control mode.\n",
 	       __func__);
-	return FAILURE;
+	return -1;
 }
 
 /**
@@ -415,7 +415,7 @@ error:
  * @param state - The channel state.
  *		  Accepted values: AD7779_ENABLE
  *				   AD7779_DISABLE
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7779_set_state(ad7779_dev *dev,
 			 ad7779_ch ch,
@@ -445,7 +445,7 @@ int32_t ad7779_set_state(ad7779_dev *dev,
  *				AD7779_CH6
  *				AD7779_CH7
  * @param state - The channel state.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7779_get_state(ad7779_dev *dev,
 			 ad7779_ch ch,
@@ -453,7 +453,7 @@ int32_t ad7779_get_state(ad7779_dev *dev,
 {
 	*state = dev->state[ch];
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -473,7 +473,7 @@ int32_t ad7779_get_state(ad7779_dev *dev,
  *				  AD7779_GAIN_2
  *				  AD7779_GAIN_4
  *				  AD7779_GAIN_8
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7779_set_gain(ad7779_dev *dev,
 			ad7779_ch ch,
@@ -518,7 +518,7 @@ int32_t ad7779_set_gain(ad7779_dev *dev,
  *				AD7779_CH6
  *				AD7779_CH7
  * @param gain - The gain value.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7779_get_gain(ad7779_dev *dev,
 			ad7779_ch ch,
@@ -526,7 +526,7 @@ int32_t ad7779_get_gain(ad7779_dev *dev,
 {
 	*gain = dev->gain[ch];
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -534,7 +534,7 @@ int32_t ad7779_get_gain(ad7779_dev *dev,
  * @param dev - The device structure.
  * @param int_val - The integer value.
  * @param dec_val - The decimal value.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7779_set_dec_rate(ad7779_dev *dev,
 			    uint16_t int_val,
@@ -557,7 +557,7 @@ int32_t ad7779_set_dec_rate(ad7779_dev *dev,
 		default:
 			printf("%s: This setting can't be set in PIN control mode.\n",
 			       __func__);
-			return FAILURE;
+			return -1;
 		}
 		dev->dec_rate_int = int_val;
 		dev->dec_rate_int = dec_val;
@@ -592,7 +592,7 @@ int32_t ad7779_set_dec_rate(ad7779_dev *dev,
  * @param dev - The device structure.
  * @param int_val - The integer value.
  * @param dec_val - The decimal value.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7779_get_dec_rate(ad7779_dev *dev,
 			    uint16_t *int_val,
@@ -601,7 +601,7 @@ int32_t ad7779_get_dec_rate(ad7779_dev *dev,
 	*int_val = dev->dec_rate_int;
 	*dec_val = dev->dec_rate_int;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -610,7 +610,7 @@ int32_t ad7779_get_dec_rate(ad7779_dev *dev,
  * @param pwr_mode - The power mode.
  *		     Accepted values: AD7779_HIGH_RES
  *				      AD7779_LOW_PWR
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7779_set_power_mode(ad7779_dev *dev,
 			      ad7779_pwr_mode pwr_mode)
@@ -630,14 +630,14 @@ int32_t ad7779_set_power_mode(ad7779_dev *dev,
  * Get the power mode.
  * @param dev - The device structure.
  * @param pwr_mode - The power mode.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7779_get_power_mode(ad7779_dev *dev,
 			      ad7779_pwr_mode *pwr_mode)
 {
 	*pwr_mode = dev->pwr_mode;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -646,7 +646,7 @@ int32_t ad7779_get_power_mode(ad7779_dev *dev,
  * @param ref_type - The reference type.
  *		     Accepted values: AD7779_EXT_REF
  *				      AD7779_INT_REF
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7779_set_reference_type(ad7779_dev *dev,
 				  ad7779_ref_type ref_type)
@@ -666,14 +666,14 @@ int32_t ad7779_set_reference_type(ad7779_dev *dev,
  * Get the reference type.
  * @param dev - The device structure.
  * @param ref_type - The reference type.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7779_get_reference_type(ad7779_dev *dev,
 				  ad7779_ref_type *ref_type)
 {
 	*ref_type = dev->ref_type;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -688,7 +688,7 @@ int32_t ad7779_get_reference_type(ad7779_dev *dev,
  *				 AD7779_DCLK_DIV_32
  *				 AD7779_DCLK_DIV_64
  *				 AD7779_DCLK_DIV_128
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7779_set_dclk_div(ad7779_dev *dev,
 			    ad7779_dclk_div div)
@@ -717,14 +717,14 @@ int32_t ad7779_set_dclk_div(ad7779_dev *dev,
  * Get the DCLK divider.
  * @param dev - The device structure.
  * @param div - The DCLK divider.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7779_get_dclk_div(ad7779_dev *dev,
 			    ad7779_dclk_div *div)
 {
 	*div = dev->dclk_div;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -740,7 +740,7 @@ int32_t ad7779_get_dclk_div(ad7779_dev *dev,
  *				AD7779_CH6
  *				AD7779_CH7
  * @param sync_offset - The synchronization offset value.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7779_set_sync_offset(ad7779_dev *dev,
 			       ad7779_ch ch,
@@ -751,7 +751,7 @@ int32_t ad7779_set_sync_offset(ad7779_dev *dev,
 	if (dev->ctrl_mode == AD7779_PIN_CTRL) {
 		printf("%s: This feature is not available in PIN control mode.\n",
 		       __func__);
-		return FAILURE;
+		return -1;
 	}
 
 	ret = ad7779_spi_int_reg_write(dev,
@@ -775,7 +775,7 @@ int32_t ad7779_set_sync_offset(ad7779_dev *dev,
  *				AD7779_CH6
  *				AD7779_CH7
  * @param sync_offset - The synchronization offset value.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7779_get_sync_offset(ad7779_dev *dev,
 			       ad7779_ch ch,
@@ -784,12 +784,12 @@ int32_t ad7779_get_sync_offset(ad7779_dev *dev,
 	if (dev->ctrl_mode == AD7779_PIN_CTRL) {
 		printf("%s: This feature is not available in PIN control mode.\n",
 		       __func__);
-		return FAILURE;
+		return -1;
 	}
 
 	*sync_offset = dev->sync_offset[ch];
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -805,7 +805,7 @@ int32_t ad7779_get_sync_offset(ad7779_dev *dev,
  *				AD7779_CH6
  *				AD7779_CH7
  * @param offset - The offset value.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7779_set_offset_corr(ad7779_dev *dev,
 			       ad7779_ch ch,
@@ -819,7 +819,7 @@ int32_t ad7779_set_offset_corr(ad7779_dev *dev,
 	if (dev->ctrl_mode == AD7779_PIN_CTRL) {
 		printf("%s: This feature is not available in PIN control mode.\n",
 		       __func__);
-		return FAILURE;
+		return -1;
 	}
 
 	upper_byte = (offset & 0xFF0000) >> 16;
@@ -852,7 +852,7 @@ int32_t ad7779_set_offset_corr(ad7779_dev *dev,
  *				AD7779_CH6
  *				AD7779_CH7
  * @param offset - The offset value.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7779_get_offset_corr(ad7779_dev *dev,
 			       ad7779_ch ch,
@@ -861,12 +861,12 @@ int32_t ad7779_get_offset_corr(ad7779_dev *dev,
 	if (dev->ctrl_mode == AD7779_PIN_CTRL) {
 		printf("%s: This feature is not available in PIN control mode.\n",
 		       __func__);
-		return FAILURE;
+		return -1;
 	}
 
 	*offset = dev->offset_corr[ch];
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -882,7 +882,7 @@ int32_t ad7779_get_offset_corr(ad7779_dev *dev,
  *				AD7779_CH6
  *				AD7779_CH7
  * @param gain - The gain value.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7779_set_gain_corr(ad7779_dev *dev,
 			     ad7779_ch ch,
@@ -896,7 +896,7 @@ int32_t ad7779_set_gain_corr(ad7779_dev *dev,
 	if (dev->ctrl_mode == AD7779_PIN_CTRL) {
 		printf("%s: This feature is not available in PIN control mode.\n",
 		       __func__);
-		return FAILURE;
+		return -1;
 	}
 
 	gain &= 0xFFFFFF;
@@ -930,7 +930,7 @@ int32_t ad7779_set_gain_corr(ad7779_dev *dev,
  *				AD7779_CH6
  *				AD7779_CH7
  * @param gain - The gain value.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7779_get_gain_corr(ad7779_dev *dev,
 			     ad7779_ch ch,
@@ -939,12 +939,12 @@ int32_t ad7779_get_gain_corr(ad7779_dev *dev,
 	if (dev->ctrl_mode == AD7779_PIN_CTRL) {
 		printf("%s: This feature is not available in PIN control mode.\n",
 		       __func__);
-		return FAILURE;
+		return -1;
 	}
 
 	*gain = dev->gain_corr[ch];
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -957,7 +957,7 @@ int32_t ad7779_get_gain_corr(ad7779_dev *dev,
  *		 Accepted values: AD7779_REF_BUF_ENABLED
  *				  AD7779_REF_BUF_PRECHARGED
  *				  AD7779_REF_BUF_DISABLED
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7779_set_ref_buf_op_mode(ad7779_dev *dev,
 				   ad7779_refx_pin refx_pin,
@@ -970,7 +970,7 @@ int32_t ad7779_set_ref_buf_op_mode(ad7779_dev *dev,
 	if (dev->ctrl_mode == AD7779_PIN_CTRL) {
 		printf("%s: This feature is not available in PIN control mode.\n",
 		       __func__);
-		return FAILURE;
+		return -1;
 	}
 
 	if (refx_pin == AD7779_REFX_P) {
@@ -1033,7 +1033,7 @@ int32_t ad7779_set_ref_buf_op_mode(ad7779_dev *dev,
  *		 Accepted values: AD7779_REF_BUF_ENABLED
  *				  AD7779_REF_BUF_PRECHARGED
  *				  AD7779_REF_BUF_DISABLED
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7779_get_ref_buf_op_mode(ad7779_dev *dev,
 				   ad7779_refx_pin refx_pin,
@@ -1042,12 +1042,12 @@ int32_t ad7779_get_ref_buf_op_mode(ad7779_dev *dev,
 	if (dev->ctrl_mode == AD7779_PIN_CTRL) {
 		printf("%s: This feature is not available in PIN control mode.\n",
 		       __func__);
-		return FAILURE;
+		return -1;
 	}
 
 	*mode = dev->ref_buf_op_mode[refx_pin];
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -1079,7 +1079,7 @@ int32_t ad7779_get_ref_buf_op_mode(ad7779_dev *dev,
  *				 AD7779_REF1P_AVSSX
  *				 AD7779_REF2P_AVSSX
  *				 AD7779_AVSSX_AVDD4_ATT
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7779_set_sar_cfg(ad7779_dev *dev,
 			   ad7779_state state,
@@ -1106,7 +1106,7 @@ int32_t ad7779_set_sar_cfg(ad7779_dev *dev,
  * @param dev - The device structure.
  * @param state - The SAR ADC state.
  * @param mux - The SAR mux input configuration.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7779_get_sar_cfg(ad7779_dev *dev,
 			   ad7779_state *state,
@@ -1115,7 +1115,7 @@ int32_t ad7779_get_sar_cfg(ad7779_dev *dev,
 	*state = dev->sar_state;
 	*mux = dev->sar_mux;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -1145,7 +1145,7 @@ int32_t ad7779_get_sar_cfg(ad7779_dev *dev,
  *				 AD7779_REF2P_AVSSX
  *				 AD7779_AVSSX_AVDD4_ATT
  * @param sar_code - SAR conversion code.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7779_do_single_sar_conv(ad7779_dev *dev,
 				  ad7779_sar_mux mux,
@@ -1173,7 +1173,7 @@ int32_t ad7779_do_single_sar_conv(ad7779_dev *dev,
 /**
  * Do a SPI software reset.
  * @param dev - The device structure.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7779_do_spi_soft_reset(ad7779_dev *dev)
 {
@@ -1193,7 +1193,7 @@ int32_t ad7779_do_spi_soft_reset(ad7779_dev *dev)
  * @param state - The SINC5 filter state.
  *		  Accepted values: AD7779_ENABLE
  *				   AD7779_DISABLE
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7771_set_sinc5_filter_state(ad7779_dev *dev,
 				      ad7779_state state)
@@ -1203,7 +1203,7 @@ int32_t ad7771_set_sinc5_filter_state(ad7779_dev *dev,
 	if (dev->ctrl_mode == AD7779_PIN_CTRL) {
 		printf("%s: This feature is not available in PIN control mode.\n",
 		       __func__);
-		return FAILURE;
+		return -1;
 	}
 
 	ret = ad7779_spi_int_reg_write_mask(dev,
@@ -1220,7 +1220,7 @@ int32_t ad7771_set_sinc5_filter_state(ad7779_dev *dev,
  * Get the state (enable, disable) of the SINC5 filter.
  * @param dev - The device structure.
  * @param state - The SINC5 filter state.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7771_get_sinc5_filter_state(ad7779_dev *dev,
 				      ad7779_state *state)
@@ -1228,12 +1228,12 @@ int32_t ad7771_get_sinc5_filter_state(ad7779_dev *dev,
 	if (dev->ctrl_mode == AD7779_PIN_CTRL) {
 		printf("%s: This feature is not available in PIN control mode.\n",
 		       __func__);
-		return FAILURE;
+		return -1;
 	}
 
 	*state = dev->sinc5_state;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -1241,7 +1241,7 @@ int32_t ad7771_get_sinc5_filter_state(ad7779_dev *dev,
  * @param device - The device structure.
  * @param init_param - The structure that contains the device initial
  *		       parameters.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7779_init(ad7779_dev **device,
 		    ad7779_init_param init_param)
@@ -1384,7 +1384,7 @@ int32_t ad7779_init(ad7779_dev **device,
 /***************************************************************************//**
  * @brief Free the resources allocated by ad7779_init().
  * @param dev - The device structure.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
 *******************************************************************************/
 int32_t ad7779_remove(ad7779_dev *dev)
 {

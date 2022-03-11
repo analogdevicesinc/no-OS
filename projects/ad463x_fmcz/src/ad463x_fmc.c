@@ -140,7 +140,7 @@ int main()
 	};
 
 	ret = ad463x_init(&dev, &ad463x_init_param);
-	if (ret != SUCCESS) {
+	if (ret != 0) {
 		pr_err("AD463x Initialization failed!");
 		return ret;
 	}
@@ -149,18 +149,18 @@ int main()
 
 	/* Exit register configuration mode */
 	ret = ad463x_exit_reg_cfg_mode(dev);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	/* Test Pattern Mode, 32-bit output data, 2 lanes per channel */
 	ret = ad463x_read_data(dev, buf, AD463x_EVB_SAMPLE_NO);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	for (i = 0; i < (AD463x_EVB_SAMPLE_NO / 2); i++)
 		if (buf[i] != AD463X_OUT_DATA_PAT) {
 			pr_err("AD463x Test Pattern Data read failed!");
-			return FAILURE;
+			return -1;
 		}
 
 	pr_info("AD463x Test Pattern Data successfully read!");
@@ -170,19 +170,19 @@ int main()
 	ad463x_init_param.output_mode = AD463X_24_DIFF;
 
 	ret = ad463x_init(&dev, &ad463x_init_param);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	/* Exit register configuration mode */
 	ret = ad463x_exit_reg_cfg_mode(dev);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 #ifndef IIO_SUPPORT
 	/* Read data */
 	while (true) {
 		ret = ad463x_read_data(dev, buf, AD463x_EVB_SAMPLE_NO);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 		for (i = 0; i < AD463x_EVB_SAMPLE_NO; i+=2)
 			pr_info("ADC sample ch1: %lu : %lu \n", i, buf[i]);
@@ -214,5 +214,5 @@ int main()
 
 	pr_info("Done.\n");
 
-	return SUCCESS;
+	return 0;
 }

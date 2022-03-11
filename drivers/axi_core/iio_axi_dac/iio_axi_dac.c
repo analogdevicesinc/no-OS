@@ -485,7 +485,7 @@ int32_t iio_axi_dac_prepare_transfer(void *dev, uint32_t mask)
 
 	iio_dac->mask = mask;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -493,7 +493,7 @@ int32_t iio_axi_dac_prepare_transfer(void *dev, uint32_t mask)
  * @param dev - Instance of the iio_axi_dac
  * @param buff - Buffer where to read samples
  * @param nb_samples - Number of samples
- * @return SUCCESS in case of success or negative value otherwise.
+ * @return 0 in case of success or negative value otherwise.
  */
 int32_t iio_axi_dac_write_data(void *dev, void *buff, uint32_t nb_samples)
 {
@@ -501,7 +501,7 @@ int32_t iio_axi_dac_write_data(void *dev, void *buff, uint32_t nb_samples)
 	int bytes;
 
 	if (!dev)
-		return FAILURE;
+		return -1;
 
 	iio_dac = (struct iio_axi_dac_desc *)dev;
 	bytes = nb_samples * no_os_hweight8(iio_dac->mask) * (STORAGE_BITS / 8);
@@ -522,13 +522,13 @@ enum ch_type {
 /**
  * @brief Delete iio_device.
  * @param iio_device - Structure describing a device, channels and attributes.
- * @return SUCCESS in case of success or negative value otherwise.
+ * @return 0 in case of success or negative value otherwise.
  */
 static int iio_axi_dac_delete_device_descriptor(
 	struct iio_axi_dac_desc *desc)
 {
 	if (!desc)
-		return FAILURE;
+		return -1;
 
 	if (desc->dev_descriptor.channels)
 		free(desc->dev_descriptor.channels);
@@ -536,7 +536,7 @@ static int iio_axi_dac_delete_device_descriptor(
 	if (desc->ch_names)
 		free(desc->ch_names);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -619,12 +619,12 @@ static int32_t iio_axi_dac_create_device_descriptor(
 	iio_device->pre_enable = iio_axi_dac_prepare_transfer;
 	iio_device->write_dev = iio_axi_dac_write_data;
 
-	return SUCCESS;
+	return 0;
 
 error:
 	iio_axi_dac_delete_device_descriptor(desc);
 
-	return FAILURE;
+	return -1;
 }
 
 /**
@@ -645,7 +645,7 @@ void iio_axi_dac_get_dev_descriptor(struct iio_axi_dac_desc *desc,
  * of axi_dac device.
  * @param desc - Descriptor.
  * @param init - Configuration structure.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t iio_axi_dac_init(struct iio_axi_dac_desc **desc,
 			 struct iio_axi_dac_init_param *init)
@@ -654,15 +654,15 @@ int32_t iio_axi_dac_init(struct iio_axi_dac_desc **desc,
 	int32_t status;
 
 	if (!init)
-		return FAILURE;
+		return -1;
 
 	if (!init->tx_dac || !init->tx_dmac)
-		return FAILURE;
+		return -1;
 
 	iio_axi_dac_inst = (struct iio_axi_dac_desc *)calloc(1,
 			   sizeof(struct iio_axi_dac_desc));
 	if (!iio_axi_dac_inst)
-		return FAILURE;
+		return -1;
 
 	iio_axi_dac_inst->dac = init->tx_dac;
 	iio_axi_dac_inst->dmac = init->tx_dmac;
@@ -670,27 +670,27 @@ int32_t iio_axi_dac_init(struct iio_axi_dac_desc **desc,
 
 	status = iio_axi_dac_create_device_descriptor(iio_axi_dac_inst,
 			&iio_axi_dac_inst->dev_descriptor);
-	if (IS_ERR_VALUE(status)) {
+	if (NO_OS_IS_ERR_VALUE(status)) {
 		free(iio_axi_dac_inst);
 		return status;
 	}
 
 	*desc = iio_axi_dac_inst;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Release resources.
  * @param desc - Descriptor.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t iio_axi_dac_remove(struct iio_axi_dac_desc *desc)
 {
 	int32_t status;
 
 	if (!desc)
-		return FAILURE;
+		return -1;
 
 	status = iio_axi_dac_delete_device_descriptor(desc);
 	if (status < 0)
@@ -698,5 +698,5 @@ int32_t iio_axi_dac_remove(struct iio_axi_dac_desc *desc)
 
 	free(desc);
 
-	return SUCCESS;
+	return 0;
 }

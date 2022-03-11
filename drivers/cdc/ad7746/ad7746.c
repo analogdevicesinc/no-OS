@@ -53,7 +53,7 @@
  * @return ret - return code.
  *         Example: -ENOMEM - Memory allocation error.
  *                  -EIO - I2C communication error.
- *                  SUCCESS - No errors encountered.
+ *                  0 - No errors encountered.
 *******************************************************************************/
 int32_t ad7746_init(struct ad7746_dev **device,
 		    struct ad7746_init_param *init_param)
@@ -96,7 +96,7 @@ int32_t ad7746_init(struct ad7746_dev **device,
 
 	*device = dev;
 
-	return SUCCESS;
+	return 0;
 error_2:
 	no_os_i2c_remove(dev->i2c_dev);
 error_1:
@@ -115,7 +115,7 @@ error_1:
  *
  * @return return code.
  *         Example: -EINVAL - Wrong input values.
- *                  SUCCESS - No errors encountered.
+ *                  0 - No errors encountered.
 *******************************************************************************/
 int32_t ad7746_reg_write(struct ad7746_dev *dev, uint8_t reg,
 			 uint8_t* data, uint16_t bytes_number)
@@ -140,7 +140,7 @@ int32_t ad7746_reg_write(struct ad7746_dev *dev, uint8_t reg,
  *
  * @return return code.
  *         Example: -EINVAL - Wrong input values.
- *                  SUCCESS - No errors encountered.
+ *                  0 - No errors encountered.
 *******************************************************************************/
 int32_t ad7746_reg_read(struct ad7746_dev *dev,
 			uint8_t reg,
@@ -165,7 +165,7 @@ int32_t ad7746_reg_read(struct ad7746_dev *dev,
  * @param dev - Device descriptor pointer.
  * @return return code.
  *         Example: -EINVAL - Wrong input values.
- *                  SUCCESS - No errors encountered.
+ *                  0 - No errors encountered.
 *******************************************************************************/
 int32_t ad7746_reset(struct ad7746_dev *dev)
 {
@@ -181,18 +181,18 @@ int32_t ad7746_reset(struct ad7746_dev *dev)
  * @brief Deinitialize the ad7746 driver and free all allocated resources.
  *
  * @param dev - Device descriptor pointer.
- * @return SUCCESS
+ * @return 0
 *******************************************************************************/
 int32_t ad7746_remove(struct ad7746_dev *dev)
 {
 	if (!dev)
-		return SUCCESS;
+		return 0;
 
 	no_os_i2c_remove(dev->i2c_dev);
 	dev->i2c_dev = NULL;
 	free(dev);
 
-	return SUCCESS;
+	return 0;
 }
 
 /***************************************************************************//**
@@ -203,7 +203,7 @@ int32_t ad7746_remove(struct ad7746_dev *dev)
  *
  * @return return code.
  *         Example: -EINVAL - Wrong input values.
- *                  SUCCESS - No errors encountered.
+ *                  0 - No errors encountered.
 *******************************************************************************/
 int32_t ad7746_set_cap(struct ad7746_dev *dev, struct ad7746_cap cap)
 {
@@ -224,7 +224,7 @@ int32_t ad7746_set_cap(struct ad7746_dev *dev, struct ad7746_cap cap)
 
 	dev->setup.cap = cap;
 
-	return SUCCESS;
+	return 0;
 }
 
 /***************************************************************************//**
@@ -235,7 +235,7 @@ int32_t ad7746_set_cap(struct ad7746_dev *dev, struct ad7746_cap cap)
  *
  * @return return code.
  *         Example: -EINVAL - Wrong input values.
- *                  SUCCESS - No errors encountered.
+ *                  0 - No errors encountered.
 *******************************************************************************/
 int32_t ad7746_set_vt(struct ad7746_dev *dev, struct ad7746_vt vt)
 {
@@ -257,7 +257,7 @@ int32_t ad7746_set_vt(struct ad7746_dev *dev, struct ad7746_vt vt)
 
 	dev->setup.vt = vt;
 
-	return SUCCESS;
+	return 0;
 }
 
 /***************************************************************************//**
@@ -268,7 +268,7 @@ int32_t ad7746_set_vt(struct ad7746_dev *dev, struct ad7746_vt vt)
  *
  * @return return code.
  *         Example: -EINVAL - Wrong input values.
- *                  SUCCESS - No errors encountered.
+ *                  0 - No errors encountered.
 *******************************************************************************/
 int32_t ad7746_set_exc(struct ad7746_dev *dev, struct ad7746_exc exc)
 {
@@ -290,7 +290,7 @@ int32_t ad7746_set_exc(struct ad7746_dev *dev, struct ad7746_exc exc)
 
 	dev->setup.exc = exc;
 
-	return SUCCESS;
+	return 0;
 }
 
 /***************************************************************************//**
@@ -301,7 +301,7 @@ int32_t ad7746_set_exc(struct ad7746_dev *dev, struct ad7746_exc exc)
  *
  * @return return code.
  *         Example: -EINVAL - Wrong input values.
- *                  SUCCESS - No errors encountered.
+ *                  0 - No errors encountered.
 *******************************************************************************/
 int32_t ad7746_set_config(struct ad7746_dev *dev, struct ad7746_config config)
 {
@@ -321,7 +321,7 @@ int32_t ad7746_set_config(struct ad7746_dev *dev, struct ad7746_config config)
 
 	dev->setup.config = config;
 
-	return SUCCESS;
+	return 0;
 }
 
 /***************************************************************************//**
@@ -333,7 +333,7 @@ int32_t ad7746_set_config(struct ad7746_dev *dev, struct ad7746_config config)
  *
  * @return return code.
  *         Example: -EINVAL - Wrong input values.
- *                  SUCCESS - No errors encountered.
+ *                  0 - No errors encountered.
 *******************************************************************************/
 int32_t ad7746_set_cap_dac_a(struct ad7746_dev *dev, bool enable, uint8_t code)
 {
@@ -357,7 +357,7 @@ int32_t ad7746_set_cap_dac_a(struct ad7746_dev *dev, bool enable, uint8_t code)
  *
  * @return return code.
  *         Example: -EINVAL - Wrong input values.
- *                  SUCCESS - No errors encountered.
+ *                  0 - No errors encountered.
 *******************************************************************************/
 int32_t ad7746_set_cap_dac_b(struct ad7746_dev *dev, bool enable, uint8_t code)
 {
@@ -394,7 +394,7 @@ static inline int32_t _ad7746_write_2byte(struct ad7746_dev *dev, uint8_t reg,
  *
  * @return return code.
  *         Example: -EINVAL - Wrong input values.
- *                  SUCCESS - No errors encountered.
+ *                  0 - No errors encountered.
 *******************************************************************************/
 int32_t ad7746_set_cap_offset(struct ad7746_dev *dev, uint16_t offset)
 {
@@ -409,7 +409,7 @@ int32_t ad7746_set_cap_offset(struct ad7746_dev *dev, uint16_t offset)
  *
  * @return return code.
  *         Example: -EINVAL - Wrong input values.
- *                  SUCCESS - No errors encountered.
+ *                  0 - No errors encountered.
 *******************************************************************************/
 int32_t ad7746_set_cap_gain(struct ad7746_dev *dev, uint16_t gain)
 {
@@ -424,7 +424,7 @@ int32_t ad7746_set_cap_gain(struct ad7746_dev *dev, uint16_t gain)
  *
  * @return return code.
  *         Example: -EINVAL - Wrong input values.
- *                  SUCCESS - No errors encountered.
+ *                  0 - No errors encountered.
 *******************************************************************************/
 int32_t ad7746_set_volt_gain(struct ad7746_dev *dev, uint16_t gain)
 {
@@ -441,7 +441,7 @@ int32_t ad7746_set_volt_gain(struct ad7746_dev *dev, uint16_t gain)
  * @return return code.
  *         Example: -EINVAL - Wrong input values.
  *                  -EIO - I2C Communication error.
- *                  SUCCESS - No errors encountered.
+ *                  0 - No errors encountered.
 *******************************************************************************/
 int32_t ad7746_get_vt_data(struct ad7746_dev *dev, uint32_t *vt_data)
 {
@@ -470,7 +470,7 @@ int32_t ad7746_get_vt_data(struct ad7746_dev *dev, uint32_t *vt_data)
 	if (dev->setup.config.md == AD7746_MODE_SINGLE)
 		dev->setup.config.md = AD7746_MODE_IDLE;
 
-	return SUCCESS;
+	return 0;
 }
 
 /***************************************************************************//**
@@ -483,7 +483,7 @@ int32_t ad7746_get_vt_data(struct ad7746_dev *dev, uint32_t *vt_data)
  * @return return code.
  *         Example: -EINVAL - Wrong input values.
  *                  -EIO - I2C Communication error.
- *                  SUCCESS - No errors encountered.
+ *                  0 - No errors encountered.
 *******************************************************************************/
 int32_t ad7746_get_cap_data(struct ad7746_dev *dev, uint32_t *cap_data)
 {
@@ -512,7 +512,7 @@ int32_t ad7746_get_cap_data(struct ad7746_dev *dev, uint32_t *cap_data)
 	if (dev->setup.config.md == AD7746_MODE_SINGLE)
 		dev->setup.config.md = AD7746_MODE_IDLE;
 
-	return SUCCESS;
+	return 0;
 }
 
 /***************************************************************************//**
@@ -524,7 +524,7 @@ int32_t ad7746_get_cap_data(struct ad7746_dev *dev, uint32_t *cap_data)
  * @return return code.
  *         Example: -EINVAL - Wrong input values.
  *                  -EIO - I2C Communication error.
- *                  SUCCESS - No errors encountered.
+ *                  0 - No errors encountered.
 *******************************************************************************/
 int32_t ad7746_calibrate(struct ad7746_dev *dev, enum ad7746_md md)
 {

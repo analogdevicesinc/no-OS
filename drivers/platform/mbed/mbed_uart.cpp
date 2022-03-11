@@ -151,7 +151,7 @@ bool platform_usbcdc::data_transmited(void)
  * @param desc[in, out] - Instance of UART.
  * @param data[out] - Pointer to buffer containing data.
  * @param bytes_number[in] - Number of bytes to read.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t no_os_uart_read(struct no_os_uart_desc *desc, uint8_t *data,
 		  uint32_t bytes_number)
@@ -191,7 +191,7 @@ int32_t no_os_uart_read(struct no_os_uart_desc *desc, uint8_t *data,
  * @param desc[in] - Instance of UART.
  * @param data[in, out] - Pointer to buffer containing data.
  * @param bytes_number[in] - Number of bytes to read.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t no_os_uart_write(struct no_os_uart_desc *desc, const uint8_t *data,
 		   uint32_t bytes_number)
@@ -245,7 +245,7 @@ int32_t no_os_uart_write(struct no_os_uart_desc *desc, const uint8_t *data,
  * @param desc[in]- Descriptor of the UART device
  * @param data[out] - Buffer where data will be read
  * @param bytes_number[in] - Number of bytes to be read.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  * @note Currently implemented only for UART and not for USBCDC (VCOM)
  */
 int32_t no_os_uart_read_nonblocking(struct no_os_uart_desc *desc,
@@ -275,7 +275,7 @@ int32_t no_os_uart_read_nonblocking(struct no_os_uart_desc *desc,
  * @param desc[in] - Descriptor of the UART device
  * @param data[in,out] - Buffer where data will be written
  * @param bytes_number[in] - Number of bytes to be written.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  * @note Currently implemented only for UART and not for USBCDC (VCOM)
  */
 int32_t no_os_uart_write_nonblocking(struct no_os_uart_desc *desc,
@@ -303,7 +303,7 @@ int32_t no_os_uart_write_nonblocking(struct no_os_uart_desc *desc,
  * @brief Set the UART communication data formats
  * @param param[in] - The structure that contains the UART parameters.
  * @param uart[in] - Mbed UART instance
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 static int32_t mbed_uart_set_format(struct no_os_uart_init_param *param,
 				    mbed::BufferedSerial *uart)
@@ -366,14 +366,14 @@ static int32_t mbed_uart_set_format(struct no_os_uart_init_param *param,
 	}
 
 	uart->set_format(data_bits, Parity, stop_bits);
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Initialize the UART communication peripheral.
  * @param desc[in, out] - The UART descriptor.
  * @param param[in] - The structure that contains the UART parameters.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t no_os_uart_init(struct no_os_uart_desc **desc, struct no_os_uart_init_param *param)
 {
@@ -422,7 +422,7 @@ int32_t no_os_uart_init(struct no_os_uart_desc **desc, struct no_os_uart_init_pa
 			goto err_serial_port;
 
 		/* Set the UART format */
-		if (mbed_uart_set_format(param, uart) != SUCCESS)
+		if (mbed_uart_set_format(param, uart) != 0)
 			goto err_uart_set_format;
 
 		mbed_uart_desc->uart_port = (BufferedSerial *)uart;
@@ -433,7 +433,7 @@ int32_t no_os_uart_init(struct no_os_uart_desc **desc, struct no_os_uart_init_pa
 	uart_desc->extra = mbed_uart_desc;
 	*desc = uart_desc;
 
-	return SUCCESS;
+	return 0;
 
 err_uart_set_format:
 	delete(uart);
@@ -448,7 +448,7 @@ err_mbed_uart_desc:
 /**
  * @brief Free the resources allocated by no_os_uart_init().
  * @param desc[in] - The UART descriptor.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t no_os_uart_remove(struct no_os_uart_desc *desc)
 {
@@ -470,7 +470,7 @@ int32_t no_os_uart_remove(struct no_os_uart_desc *desc)
 	free(desc->extra);
 	free(desc);
 
-	return SUCCESS;
+	return 0;
 }
 
 #ifdef __cplusplus  // Closing extern c

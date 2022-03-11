@@ -218,7 +218,7 @@ int32_t ad7124_read_register(struct ad7124_dev *dev,
  * @param [in] dev - Driver handler pointer.
  * @param [in] reg - Address of the register to be read.
  * @param [out] readval - Pointer to the register value.
- * @return SUCCESS in case of success, error code otherwise.
+ * @return 0 in case of success, error code otherwise.
  */
 int32_t ad7124_read_register2(struct ad7124_dev *dev, uint32_t reg,
 			      uint32_t *readval)
@@ -267,7 +267,7 @@ int32_t ad7124_write_register(struct ad7124_dev *dev,
  * @param [in] dev - Driver handler pointer.
  * @param [in] reg - Address of the register to be read.
  * @param [in] writeval - New value for the register.
- * @return SUCCESS in case of success, error code otherwise.
+ * @return 0 in case of success, error code otherwise.
  */
 int32_t ad7124_write_register2(struct ad7124_dev *dev, uint32_t reg,
 			       uint32_t writeval)
@@ -780,7 +780,7 @@ int32_t ad7124_set_odr(struct ad7124_dev *dev, float odr,
  *
  * @param dev - The device structure.
  *
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
 *******************************************************************************/
 int32_t ad7124_remove(struct ad7124_dev *dev)
 {

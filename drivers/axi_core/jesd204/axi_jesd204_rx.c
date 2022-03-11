@@ -156,7 +156,7 @@ int32_t axi_jesd204_rx_write(struct axi_jesd204_rx *jesd,
 {
 	no_os_axi_io_write(jesd->base, reg_addr, reg_val);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -167,7 +167,7 @@ int32_t axi_jesd204_rx_read(struct axi_jesd204_rx *jesd,
 {
 	no_os_axi_io_read(jesd->base, reg_addr, reg_val);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -178,7 +178,7 @@ int32_t axi_jesd204_rx_lane_clk_enable(struct axi_jesd204_rx *jesd)
 	axi_jesd204_rx_write(jesd, JESD204_RX_REG_SYSREF_STATUS, 0x3);
 	axi_jesd204_rx_write(jesd, JESD204_RX_REG_LINK_DISABLE, 0x0);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -267,7 +267,7 @@ uint32_t axi_jesd204_rx_status_read(struct axi_jesd204_rx *jesd)
 		       (link_disabled & 0x2) ? "asserted" : "deasserted");
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -298,7 +298,7 @@ static int32_t axi_jesd204_rx_laneinfo_8b10b_read(struct axi_jesd204_rx *jesd,
 	printf("\tInitial Frame Synchronization: %s\n",
 	       (lane_status & NO_OS_BIT(4)) ? "Yes" : "No");
 	if (!(lane_status & NO_OS_BIT(4)))
-		return FAILURE;
+		return -1;
 
 	axi_jesd204_rx_read(jesd, JESD204_RX_REG_LINK_CONF0, &octets_per_multiframe);
 	octets_per_multiframe &= 0xffff;
@@ -313,7 +313,7 @@ static int32_t axi_jesd204_rx_laneinfo_8b10b_read(struct axi_jesd204_rx *jesd,
 	       (lane_status & NO_OS_BIT(5)) ? "Yes" : "No");
 
 	if (!(lane_status & NO_OS_BIT(5)))
-		return FAILURE;
+		return -1;
 
 	axi_jesd204_rx_read(jesd, JESD204_RX_REG_ILAS(lane, 0), &val[0]);
 	axi_jesd204_rx_read(jesd, JESD204_RX_REG_ILAS(lane, 1), &val[1]);
@@ -357,7 +357,7 @@ static int32_t axi_jesd204_rx_laneinfo_8b10b_read(struct axi_jesd204_rx *jesd,
 
 	printf("\tFC: %"PRIu32" kHz\n", jesd->lane_clk_khz);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -374,7 +374,7 @@ static int32_t axi_jesd204_rx_laneinfo_64b66b_read(struct axi_jesd204_rx *jesd,
 	printf("\tState of Extended multiblock alignment: %s\n",
 	       axi_jesd204_rx_emb_state_label[extend_multiblock]);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -399,7 +399,7 @@ int32_t axi_jesd204_rx_laneinfo_read(struct axi_jesd204_rx *jesd, uint32_t lane)
 	else if (jesd->encoder == JESD204_RX_ENCODER_64B66B)
 		axi_jesd204_rx_laneinfo_64b66b_read(jesd, lane, lane_status);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -448,7 +448,7 @@ int32_t axi_jesd204_rx_watchdog(struct axi_jesd204_rx *jesd)
 
 	axi_jesd204_rx_read(jesd, JESD204_RX_REG_LINK_STATE, &link_disabled);
 	if (link_disabled)
-		return SUCCESS;
+		return 0;
 
 	axi_jesd204_rx_read(jesd, JESD204_RX_REG_LINK_STATUS, &link_status);
 	if (link_status == 3) {
@@ -462,7 +462,7 @@ int32_t axi_jesd204_rx_watchdog(struct axi_jesd204_rx *jesd)
 		}
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -484,13 +484,13 @@ int32_t axi_jesd204_rx_apply_config(struct axi_jesd204_rx *jesd,
 	    (octets_per_multiframe % 256) != 0) {
 		printf("%s: octets_per_frame * frames_per_multiframe must be a multiple of 256",
 		       jesd->name);
-		return FAILURE;
+		return -1;
 	}
 
 	if (octets_per_multiframe % multiframe_align != 0) {
 		printf("%s: octets_per_frame * frames_per_multiframe must be a "
 		       "multiple of %"PRIu32"\n", jesd->name, multiframe_align);
-		return FAILURE;
+		return -1;
 	}
 
 	val = (octets_per_multiframe - 1);
@@ -511,7 +511,7 @@ int32_t axi_jesd204_rx_apply_config(struct axi_jesd204_rx *jesd,
 				     JESD204_RX_LINK_CONF2_BUFFER_EARLY_RELEASE);
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -528,7 +528,7 @@ int32_t axi_jesd204_rx_init(struct axi_jesd204_rx **jesd204,
 
 	jesd = (struct axi_jesd204_rx *)malloc(sizeof(*jesd));
 	if (!jesd)
-		return FAILURE;
+		return -1;
 
 	jesd->name = init->name;
 	jesd->base = init->base;
@@ -574,17 +574,17 @@ int32_t axi_jesd204_rx_init(struct axi_jesd204_rx **jesd204,
 	axi_jesd204_rx_lane_clk_disable(jesd);
 
 	status = axi_jesd204_rx_apply_config(jesd, &jesd->config);
-	if (status != SUCCESS)
+	if (status != 0)
 		goto err;
 
 	*jesd204 = jesd;
 
-	return SUCCESS;
+	return 0;
 
 err:
 	free(jesd);
 
-	return FAILURE;
+	return -1;
 }
 
 /**
@@ -594,5 +594,5 @@ int32_t axi_jesd204_rx_remove(struct axi_jesd204_rx *jesd)
 {
 	free(jesd);
 
-	return SUCCESS;
+	return 0;
 }

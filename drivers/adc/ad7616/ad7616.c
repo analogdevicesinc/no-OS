@@ -381,7 +381,7 @@ int32_t ad7616_set_oversampling_ratio(struct ad7616_dev *dev,
  * @param dev - ad7616_dev device handler.
  * @param buf - data buffer.
  * @param samples - sample number.
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t ad7616_read_data_serial(struct ad7616_dev *dev,
 				uint32_t *buf,
@@ -400,7 +400,7 @@ int32_t ad7616_read_data_serial(struct ad7616_dev *dev,
 	spi_engine_set_speed(dev->spi_desc, dev->spi_desc->max_speed_hz);
 
 	ret = spi_engine_offload_init(dev->spi_desc, dev->offload_init_param);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	msg.commands_data = commands_data;
@@ -412,7 +412,7 @@ int32_t ad7616_read_data_serial(struct ad7616_dev *dev,
 			   AD7616_CTRL_RESETN | AD7616_CTRL_CNVST_EN);
 
 	ret = spi_engine_offload_transfer(dev->spi_desc, msg, samples);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	no_os_axi_io_write(dev->core_baseaddr, AD7616_REG_UP_CTRL, AD7616_CTRL_RESETN);
@@ -429,7 +429,7 @@ int32_t ad7616_read_data_serial(struct ad7616_dev *dev,
  * @param dev - ad7616_dev device handler.
  * @param buf - data buffer.
  * @param samples - sample number.
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t ad7616_read_data_parallel(struct ad7616_dev *dev,
 				  uint32_t *buf,
@@ -446,18 +446,18 @@ int32_t ad7616_read_data_parallel(struct ad7616_dev *dev,
 
 	axi_dmac_init(&dmac, &dmac_init);
 	if(!dmac)
-		return FAILURE;
+		return -1;
 
 	no_os_axi_io_write(dev->core_baseaddr, AD7616_REG_UP_CTRL,
 			   AD7616_CTRL_RESETN | AD7616_CTRL_CNVST_EN);
 
 	ret = axi_dmac_transfer(dmac, (uint32_t)&buf, samples);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	no_os_axi_io_write(dev->core_baseaddr, AD7616_REG_UP_CTRL, AD7616_CTRL_RESETN);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -486,7 +486,7 @@ int32_t ad7616_core_setup(struct ad7616_dev *dev)
 	else
 		dev->interface = AD7616_SERIAL;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -505,7 +505,7 @@ int32_t ad7616_setup(struct ad7616_dev **device,
 
 	dev = (struct ad7616_dev *)malloc(sizeof(*dev));
 	if (!dev) {
-		return FAILURE;
+		return -1;
 	}
 
 	dev->core_baseaddr = init_param->core_baseaddr;
@@ -518,7 +518,7 @@ int32_t ad7616_setup(struct ad7616_dev **device,
 	if (dev->interface == AD7616_SERIAL)
 		ret = no_os_spi_init(&dev->spi_desc, init_param->spi_param);
 
-	if (ret != SUCCESS) {
+	if (ret != 0) {
 		free(dev);
 		return ret;
 	}
@@ -527,37 +527,37 @@ int32_t ad7616_setup(struct ad7616_dev **device,
 
 	ret = no_os_gpio_get_optional(&dev->gpio_hw_rngsel0,
 				      init_param->gpio_hw_rngsel0_param);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = no_os_gpio_get_optional(&dev->gpio_hw_rngsel1,
 				      init_param->gpio_hw_rngsel1_param);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = no_os_gpio_get_optional(&dev->gpio_reset, init_param->gpio_reset_param);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = no_os_gpio_get_optional(&dev->gpio_os0, init_param->gpio_os0_param);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = no_os_gpio_get_optional(&dev->gpio_os1, init_param->gpio_os1_param);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = no_os_gpio_get_optional(&dev->gpio_os2, init_param->gpio_os2_param);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	if (dev->gpio_reset) {
 		ret = no_os_gpio_direction_output(dev->gpio_reset, NO_OS_GPIO_HIGH);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 
 		ret = ad7616_reset(dev);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 	}
 
@@ -567,12 +567,12 @@ int32_t ad7616_setup(struct ad7616_dev **device,
 		dev->vb[i] = init_param->vb[i];
 	}
 	ret = ad7616_set_mode(dev, dev->mode);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	dev->osr = init_param->osr;
 	ret = ad7616_set_oversampling_ratio(dev, dev->osr);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	*device = dev;

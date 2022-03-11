@@ -132,7 +132,7 @@ int8_t adf4157_init(struct adf4157_dev **device,
  *
  * @param dev - The device structure.
  *
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
 *******************************************************************************/
 int32_t adf4157_remove(struct adf4157_dev *dev)
 {

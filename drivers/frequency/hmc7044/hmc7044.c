@@ -249,7 +249,7 @@
  * @param dev - The device structure.
  * @param reg - The register address.
  * @param val - The register data.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 static int hmc7044_write(struct hmc7044_dev *dev,
 			 uint16_t reg,
@@ -271,7 +271,7 @@ static int hmc7044_write(struct hmc7044_dev *dev,
  * @param dev - The device structure.
  * @param reg - The register address.
  * @param val - The register data.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 
 int32_t hmc7044_read(struct hmc7044_dev *dev, uint16_t reg, uint8_t *val)
@@ -291,7 +291,7 @@ int32_t hmc7044_read(struct hmc7044_dev *dev, uint16_t reg, uint8_t *val)
 
 	*val = buf[2];
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -324,7 +324,7 @@ uint32_t hmc7044_calc_out_div(uint32_t rate,
  * @param dev - The device structure.
  * @param chan_num - Channel number.
  * @param rate - Channel rate.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t hmc7044_clk_recalc_rate(struct hmc7044_dev *dev, uint32_t chan_num,
 				uint64_t *rate)
@@ -340,11 +340,11 @@ int32_t hmc7044_clk_recalc_rate(struct hmc7044_dev *dev, uint32_t chan_num,
 		}
 	}
 	if (chan == NULL )
-		return FAILURE;
+		return -1;
 
 	*rate = dev->pll2_freq / chan->divider;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -352,7 +352,7 @@ int32_t hmc7044_clk_recalc_rate(struct hmc7044_dev *dev, uint32_t chan_num,
  * @param dev - The device structure
  * @param rate - The desired rate.
  * @param rounded_rate - The closest possible rate of desired rate.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t hmc7044_clk_round_rate(struct hmc7044_dev *dev, uint32_t rate,
 			       uint64_t *rounded_rate)
@@ -361,7 +361,7 @@ int32_t hmc7044_clk_round_rate(struct hmc7044_dev *dev, uint32_t rate,
 
 	*rounded_rate = NO_OS_DIV_ROUND_CLOSEST(dev->pll2_freq, div);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -369,7 +369,7 @@ int32_t hmc7044_clk_round_rate(struct hmc7044_dev *dev, uint32_t rate,
  * @param dev - The device structure.
  * @param chan_num - Channel number.
  * @param rate - Channel rate.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t hmc7044_clk_set_rate(struct hmc7044_dev *dev, uint32_t chan_num,
 			     uint64_t rate)
@@ -387,7 +387,7 @@ int32_t hmc7044_clk_set_rate(struct hmc7044_dev *dev, uint32_t chan_num,
 		}
 	}
 	if (chan == NULL )
-		return FAILURE;
+		return -1;
 
 	div = hmc7044_calc_out_div(rate, dev->pll2_freq);
 	chan->divider = div;
@@ -404,7 +404,7 @@ int32_t hmc7044_clk_set_rate(struct hmc7044_dev *dev, uint32_t chan_num,
 /**
  * Setup the device.
  * @param dev - The device structure.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 static int32_t hmc7044_setup(struct hmc7044_dev *dev)
 {
@@ -469,7 +469,7 @@ static int32_t hmc7044_setup(struct hmc7044_dev *dev)
 
 	if (pll2_freq < HMC7044_LOW_VCO_MIN  ||
 	    pll2_freq > HMC7044_HIGH_VCO_MAX)
-		return FAILURE;
+		return -1;
 
 	vco_limit = (HMC7044_LOW_VCO_MAX + HMC7044_HIGH_VCO_MIN) / 2;
 	if (pll2_freq >= vco_limit)
@@ -501,7 +501,7 @@ static int32_t hmc7044_setup(struct hmc7044_dev *dev)
 		r2[0] *= 2;
 	}
 	if (n2[0] < HMC7044_N2_MIN)
-		return -FAILURE;
+		return -1;
 
 	/* Resets all registers to default values */
 	hmc7044_write(dev, HMC7044_REG_SOFT_RESET, HMC7044_SOFT_RESET);
@@ -659,13 +659,13 @@ static int32_t hmc7044_setup(struct hmc7044_dev *dev)
 		       HMC7044_HIGH_PERF_DISTRIB_PATH : 0));
 	no_os_mdelay(1);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * Setup the device.
  * @param dev - The device structure.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 static int32_t hmc7043_setup(struct hmc7044_dev *dev)
 {
@@ -679,7 +679,7 @@ static int32_t hmc7043_setup(struct hmc7044_dev *dev)
 
 	if (!dev->pll2_freq) {
 		printf("%s: Failed to get valid parent rate\n", __func__);
-		return FAILURE;
+		return -1;
 	}
 
 	/* Resets all registers to default values */
@@ -775,7 +775,7 @@ static int32_t hmc7043_setup(struct hmc7044_dev *dev)
 		       HMC7044_HIGH_PERF_DISTRIB_PATH : 0));
 	no_os_mdelay(1);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -783,7 +783,7 @@ static int32_t hmc7043_setup(struct hmc7044_dev *dev)
  * @param device - The device structure.
  * @param init_param - The structure that contains the device initial
  * 		       parameters.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t hmc7044_init(struct hmc7044_dev **device,
 		     const struct hmc7044_init_param *init_param)
@@ -794,7 +794,7 @@ int32_t hmc7044_init(struct hmc7044_dev **device,
 
 	dev = (struct hmc7044_dev *)malloc(sizeof(*dev));
 	if (!dev)
-		return FAILURE;
+		return -1;
 
 	ret = no_os_spi_init(&dev->spi_desc, init_param->spi_init);
 	if (ret < 0)
@@ -884,7 +884,7 @@ int32_t hmc7044_init(struct hmc7044_dev **device,
 /**
  * Remove the device - release resources.
  * @param device - The device structure.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t hmc7044_remove(struct hmc7044_dev *device)
 {

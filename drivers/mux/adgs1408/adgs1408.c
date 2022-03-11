@@ -82,7 +82,7 @@ uint8_t adgs1408_compute_crc8(uint8_t *data,
  * @param dev - The device structure.
  * @param reg_addr - The register address.
  * @param reg_data - The register data.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t adgs1408_spi_reg_read(struct adgs1408_dev *dev,
 			      uint8_t reg_addr,
@@ -97,7 +97,7 @@ int32_t adgs1408_spi_reg_read(struct adgs1408_dev *dev,
 		printf("%s: This feature is not available in Daisy-Chain mode.\n",
 		       __func__);
 
-		return FAILURE;
+		return -1;
 	}
 
 	buf[0] = 0x80 | (reg_addr & 0x7F);
@@ -108,12 +108,12 @@ int32_t adgs1408_spi_reg_read(struct adgs1408_dev *dev,
 	ret = no_os_spi_write_and_read(dev->spi_desc, buf, buf_size);
 
 	if(ret < 0)
-		return FAILURE;
+		return -1;
 
 	if (buf[0] != ADGS1408_ALIGNMENT) {
 		printf("%s: Alignment Error: 0x%x.\n", __func__, buf[0]);
 
-		return FAILURE;
+		return -1;
 	}
 	*reg_data = buf[1];
 	if (dev->crc_en == ADGS1408_ENABLE) {
@@ -122,11 +122,11 @@ int32_t adgs1408_spi_reg_read(struct adgs1408_dev *dev,
 		if (crc != buf[2]) {
 			printf("%s: CRC Error.\n", __func__);
 
-			return FAILURE;
+			return -1;
 		}
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -134,7 +134,7 @@ int32_t adgs1408_spi_reg_read(struct adgs1408_dev *dev,
  * @param dev - The device structure.
  * @param reg_addr - The register address.
  * @param reg_data - The register data.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t adgs1408_spi_reg_write(struct adgs1408_dev *dev,
 			       uint8_t reg_addr,
@@ -147,7 +147,7 @@ int32_t adgs1408_spi_reg_write(struct adgs1408_dev *dev,
 		printf("%s: This feature is not available in Daisy-Chain mode.\n",
 		       __func__);
 
-		return FAILURE;
+		return -1;
 	}
 
 	buf[0] = 0x00 | (reg_addr & 0x7F);
@@ -160,10 +160,10 @@ int32_t adgs1408_spi_reg_write(struct adgs1408_dev *dev,
 	if (buf[0] != ADGS1408_ALIGNMENT) {
 		printf("%s: Alignment Error: 0x%x.\n", __func__, buf[0]);
 
-		return FAILURE;
+		return -1;
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -172,7 +172,7 @@ int32_t adgs1408_spi_reg_write(struct adgs1408_dev *dev,
  * @param reg_addr - The register address.
  * @param mask - The mask.
  * @param data - The register data.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t adgs1408_spi_reg_write_mask(struct adgs1408_dev *dev,
 				    uint8_t reg_addr,
@@ -186,7 +186,7 @@ int32_t adgs1408_spi_reg_write_mask(struct adgs1408_dev *dev,
 		printf("%s: This feature is not available in Daisy-Chain mode.\n",
 		       __func__);
 
-		return FAILURE;
+		return -1;
 	}
 
 	ret = adgs1408_spi_reg_read(dev, reg_addr, &reg_data);
@@ -200,7 +200,7 @@ int32_t adgs1408_spi_reg_write_mask(struct adgs1408_dev *dev,
 /**
  * Do a software reset.
  * @param dev - The device structure.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t adgs1408_do_soft_reset(struct adgs1408_dev *dev)
 {
@@ -210,7 +210,7 @@ int32_t adgs1408_do_soft_reset(struct adgs1408_dev *dev)
 		printf("%s: This feature is not available in Daisy-Chain mode.\n",
 		       __func__);
 
-		return FAILURE;
+		return -1;
 	}
 
 	ret = adgs1408_spi_reg_write(dev,
@@ -226,7 +226,7 @@ int32_t adgs1408_do_soft_reset(struct adgs1408_dev *dev)
 /**
  * Clear the Error Flags Register.
  * @param dev - The device structure.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t adgs1408_clear_err_flags(struct adgs1408_dev *dev)
 {
@@ -237,7 +237,7 @@ int32_t adgs1408_clear_err_flags(struct adgs1408_dev *dev)
 		printf("%s: This feature is not available in Daisy-Chain mode.\n",
 		       __func__);
 
-		return FAILURE;
+		return -1;
 	}
 
 	buf[0] = ADGS1408_CLR_1;
@@ -253,7 +253,7 @@ int32_t adgs1408_clear_err_flags(struct adgs1408_dev *dev)
 /**
  * Enter Daisy-Chain Mode.
  * @param dev - The device structure.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t adgs1408_enter_daisy_chain(struct adgs1408_dev *dev)
 {
@@ -263,7 +263,7 @@ int32_t adgs1408_enter_daisy_chain(struct adgs1408_dev *dev)
 		printf("%s: This feature is not available in Daisy-Chain mode.\n",
 		       __func__);
 
-		return FAILURE;
+		return -1;
 	}
 
 	buf[0] = ADGS1408_DAISY_CHAIN_1;
@@ -277,7 +277,7 @@ int32_t adgs1408_enter_daisy_chain(struct adgs1408_dev *dev)
  * @param dev - The device structure.
  * @param cmds - The commands to be sent.
  * @param cmds_size - The number of commands.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t adgs1408_send_daisy_chain_cmds(struct adgs1408_dev *dev,
 				       uint8_t *cmds,
@@ -288,7 +288,7 @@ int32_t adgs1408_send_daisy_chain_cmds(struct adgs1408_dev *dev,
 		printf("%s: This feature is available in Daisy-Chain mode only.\n",
 		       __func__);
 
-		return FAILURE;
+		return -1;
 	}
 
 	return no_os_spi_write_and_read(dev->spi_desc, cmds, cmds_size);
@@ -297,7 +297,7 @@ int32_t adgs1408_send_daisy_chain_cmds(struct adgs1408_dev *dev,
 /**
  * Enter Round Robin Mode.
  * @param dev - The device structure.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t adgs1408_enter_round_robin(struct adgs1408_dev *dev)
 {
@@ -307,7 +307,7 @@ int32_t adgs1408_enter_round_robin(struct adgs1408_dev *dev)
 		printf("%s: This feature is not available in Round Robin mode.\n",
 		       __func__);
 
-		return FAILURE;
+		return -1;
 	}
 
 	buf[0] = ADGS1408_REG_ROUND_ROBIN_EN;
@@ -320,7 +320,7 @@ int32_t adgs1408_enter_round_robin(struct adgs1408_dev *dev)
  * Configure Round Robin Mode.
  * @param dev - The device structure.
  * @param cnv_polarity - The CNV pin polarity.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t adgs1408_configure_round_robin(struct adgs1408_dev *dev,
 				       uint8_t cnv_polarity)
@@ -349,7 +349,7 @@ int32_t adgs1408_configure_round_robin(struct adgs1408_dev *dev,
 	buf[1] = reg_config;
 	ret = no_os_spi_write_and_read(dev->spi_desc, buf, 2);
 
-	if(ret != FAILURE) {
+	if(ret != -1) {
 		buf[0] = ADGS1408_REG_CNV_EDGE_SEL;
 		buf[1] = cnv_polarity;
 		ret |= no_os_spi_write_and_read(dev->spi_desc, buf, 2);
@@ -361,7 +361,7 @@ int32_t adgs1408_configure_round_robin(struct adgs1408_dev *dev,
 /**
  * Exit Round Robin Mode.
  * @param dev - The device structure.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t adgs1408_exit_round_robin(struct adgs1408_dev *dev)
 {
@@ -372,7 +372,7 @@ int32_t adgs1408_exit_round_robin(struct adgs1408_dev *dev)
 	buf[1] = ADGS1408_RROBIN_EXIT_2;
 	ret = no_os_spi_write_and_read(dev->spi_desc, buf, 2);
 
-	if(ret != FAILURE) {
+	if(ret != -1) {
 		buf[0] = ADGS1408_RROBIN_EXIT_3;
 		buf[1] = ADGS1408_RROBIN_EXIT_4;
 		ret |= no_os_spi_write_and_read(dev->spi_desc, buf, 2);
@@ -386,7 +386,7 @@ int32_t adgs1408_exit_round_robin(struct adgs1408_dev *dev)
  * @param device - The device structure.
  * @param init_param - The structure that contains the device initial
  * 		       parameters.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t adgs1408_init(struct adgs1408_dev **device,
 		      struct adgs1408_init_param init_param)
@@ -448,7 +448,7 @@ int32_t adgs1408_init(struct adgs1408_dev **device,
 /***************************************************************************//**
  * @brief Free the resources allocated by adgs1408_init().
  * @param dev - The device structure.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
 *******************************************************************************/
 int32_t adgs1408_remove(struct adgs1408_dev *dev)
 {

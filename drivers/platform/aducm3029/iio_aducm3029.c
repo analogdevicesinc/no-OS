@@ -116,14 +116,14 @@ static int32_t set_pin(uint32_t id, enum pin_type type)
 		break;
 	case PIN_TYPE_ADC:
 		if (id >= ADUCM3029_ADC_NUM_CH)
-			return FAILURE;
+			return -1;
 		port_addr = pinmux_addrs[adc_muxs[id][0]];
 		pin = adc_muxs[id][1];
 		val = adc_muxs[id][2];
 		break;
 	case PIN_TYPE_TIMER:
 		if (id >= ADUCM3029_TIMERS_NUMS)
-			return FAILURE;
+			return -1;
 		port_addr = pinmux_addrs[timers_muxs[id][0]];
 		pin = timers_muxs[id][1];
 		val = timers_muxs[id][2];
@@ -132,7 +132,7 @@ static int32_t set_pin(uint32_t id, enum pin_type type)
 	*port_addr &= ~(0b11 << (pin * 2));
 	*port_addr |= val << (pin * 2);
 
-	return SUCCESS;
+	return 0;
 }
 
 
@@ -175,7 +175,7 @@ int set_global_attr(void *device, char *buf, uint32_t len,
 	case ADC_ENABLE:
 		if (val) {
 			if (desc->adc) {
-				ret = SUCCESS;
+				ret = 0;
 			} else {
 				for (i = 0; i < ADUCM3029_ADC_NUM_CH; i++)
 					set_pin(i, PIN_TYPE_ADC);
@@ -187,7 +187,7 @@ int set_global_attr(void *device, char *buf, uint32_t len,
 			desc->adc = NULL;
 		}
 	}
-	if (IS_ERR_VALUE(ret))
+	if (NO_OS_IS_ERR_VALUE(ret))
 		return ret;
 
 	return len;
@@ -206,7 +206,7 @@ int get_pwm_attr(void *device, char *buf, uint32_t len,
 	idx = channel->ch_num - ADUCM3029_ADC_NUM_CH;
 	switch (priv) {
 	case PWM_ENABLE:
-		ret = SUCCESS;
+		ret = 0;
 		val = !!desc->pwm[idx];
 		break;
 	case PWM_PERIOD:
@@ -220,7 +220,7 @@ int get_pwm_attr(void *device, char *buf, uint32_t len,
 		val = !!pol;
 		break;
 	}
-	if (IS_ERR_VALUE(ret))
+	if (NO_OS_IS_ERR_VALUE(ret))
 		return ret;
 
 	return snprintf(buf, len, "%"PRIu32"", val);
@@ -238,14 +238,14 @@ int set_pwm_attr(void *device, char *buf, uint32_t len,
 	idx = channel->ch_num - ADUCM3029_ADC_NUM_CH;
 	if (desc->pwm[idx]) {
 		ret = no_os_pwm_disable(desc->pwm[idx]);
-		if (IS_ERR_VALUE(ret))
+		if (NO_OS_IS_ERR_VALUE(ret))
 			return ret;
 	}
 	switch (priv) {
 	case PWM_ENABLE:
 		if (val) {
 			if (desc->pwm[idx]) {
-				ret = SUCCESS;
+				ret = 0;
 			} else {
 				set_pin(idx, PIN_TYPE_TIMER);
 				default_pwm_init_par.id = idx;
@@ -267,12 +267,12 @@ int set_pwm_attr(void *device, char *buf, uint32_t len,
 		ret = no_os_pwm_set_polarity(desc->pwm[idx], !!val);
 		break;
 	}
-	if (IS_ERR_VALUE(ret))
+	if (NO_OS_IS_ERR_VALUE(ret))
 		return ret;
 
 	if (desc->pwm[idx]) {
 		ret = no_os_pwm_enable(desc->pwm[idx]);
-		if (IS_ERR_VALUE(ret))
+		if (NO_OS_IS_ERR_VALUE(ret))
 			return ret;
 	}
 
@@ -291,7 +291,7 @@ int get_gpio_attr(void *device, char *buf, uint32_t len,
 	idx = desc->current_gpio;
 	switch (priv) {
 	case GPIO_ENABLE:
-		ret = SUCCESS;
+		ret = 0;
 		val = !!desc->gpio[idx];
 		break;
 	case GPIO_VALUE:
@@ -301,11 +301,11 @@ int get_gpio_attr(void *device, char *buf, uint32_t len,
 		ret = no_os_gpio_get_direction(desc->gpio[idx], &val);
 		break;
 	case GPIO_NUMBER:
-		ret = SUCCESS;
+		ret = 0;
 		val = idx;
 		break;
 	}
-	if (IS_ERR_VALUE(ret))
+	if (NO_OS_IS_ERR_VALUE(ret))
 		return ret;
 
 	return snprintf(buf, len, "%"PRIu8"", val);
@@ -325,7 +325,7 @@ int set_gpio_attr(void *device, char *buf, uint32_t len,
 	case GPIO_ENABLE:
 		if (val) {
 			if (desc->pwm[idx]) {
-				ret = SUCCESS;
+				ret = 0;
 			} else {
 				set_pin(idx, PIN_TYPE_GPIO);
 				default_gpio_init_par.number = idx;
@@ -348,11 +348,11 @@ int set_gpio_attr(void *device, char *buf, uint32_t len,
 
 		break;
 	case GPIO_NUMBER:
-		ret = SUCCESS;
+		ret = 0;
 		desc->current_gpio = val;
 		break;
 	}
-	if (IS_ERR_VALUE(ret))
+	if (NO_OS_IS_ERR_VALUE(ret))
 		return ret;
 
 	return len;
@@ -363,7 +363,7 @@ int32_t iio_aducm3029_adc_set_mask(struct iio_aducm3029_desc *desc,
 				   uint32_t mask)
 {
 	if (!desc)
-		return FAILURE;
+		return -1;
 
 	return aducm3029_adc_update_active_channels(desc->adc, mask);
 }
@@ -373,7 +373,7 @@ int32_t iio_aducm3029_adc_read(struct iio_aducm3029_desc *desc, uint16_t *buff,
 			       uint32_t nb_samples)
 {
 	if (!desc)
-		return FAILURE;
+		return -1;
 
 	return aducm3029_adc_read(desc->adc, buff, nb_samples);
 }
@@ -469,7 +469,7 @@ static struct iio_attribute aducm3029_attributes[] = {
 };
 
 struct iio_device const iio_aducm3029_desc = {
-	.num_ch = ARRAY_SIZE(aducm3029_channels),
+	.num_ch = NO_OS_ARRAY_SIZE(aducm3029_channels),
 	.channels = aducm3029_channels,
 	.attributes = aducm3029_attributes,
 	.pre_enable = (int32_t (*)())iio_aducm3029_adc_set_mask,

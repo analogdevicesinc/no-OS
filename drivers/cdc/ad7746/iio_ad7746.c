@@ -744,13 +744,13 @@ int32_t ad7746_iio_init(struct ad7746_iio_dev **iio_dev,
 
 	desc = (struct ad7746_iio_dev *)calloc(1, sizeof(*desc));
 	if (!desc)
-		return FAILURE;
+		return -1;
 
 	desc->iio_dev = &ad7746_iio_device;
 	desc->capdac_set = -1;
 
 	ret = ad7746_init(&desc->ad7746_dev, init_param->ad7746_initial);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		goto error_desc;
 
 	if (desc->ad7746_dev->id != ID_AD7746)
@@ -758,7 +758,7 @@ int32_t ad7746_iio_init(struct ad7746_iio_dev **iio_dev,
 
 	*iio_dev = desc;
 
-	return SUCCESS;
+	return 0;
 error_desc:
 	free(desc);
 
@@ -770,10 +770,10 @@ int32_t ad7746_iio_remove(struct ad7746_iio_dev *desc)
 	int32_t ret;
 
 	ret = ad7746_remove(desc->ad7746_dev);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	free(desc);
 
-	return SUCCESS;
+	return 0;
 }

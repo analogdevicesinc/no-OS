@@ -848,14 +848,14 @@ int main(void)
 		if (ad9361_phy->pdata->ensm_pin_ctrl) {
 			gpio_init.number = GPIO_ENABLE_PIN;
 			status = no_os_gpio_get(&gpio_enable_pin, &gpio_init);
-			if (status != SUCCESS) {
+			if (status != 0) {
 				printf("no_os_gpio_get() error: %"PRIi32"\n", status);
 				return status;
 			}
 			no_os_gpio_direction_output(gpio_enable_pin, 1);
 			gpio_init.number = GPIO_TXNRX_PIN;
 			status = no_os_gpio_get(&gpio_txnrx_pin, &gpio_init);
-			if (status != SUCCESS) {
+			if (status != 0) {
 				printf("no_os_gpio_get() error: %"PRIi32"\n", status);
 				return status;
 			}

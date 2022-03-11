@@ -214,7 +214,7 @@ DRESULT SD_disk_read(BYTE *buff, LBA_t sector, UINT count)
 {
 	if (!sd_init_var)
 		return RES_NOTRDY;
-	if (SUCCESS != sd_read(sd_desc, buff, (uint64_t)sector * 512, (uint64_t)count * 512))
+	if (0 != sd_read(sd_desc, buff, (uint64_t)sector * 512, (uint64_t)count * 512))
 		return RES_ERROR;
 
 	return RES_OK;
@@ -224,7 +224,7 @@ DRESULT SD_disk_write(BYTE *buff, LBA_t sector, UINT count)
 {
 	if (!sd_init_var)
 		return RES_NOTRDY;
-	if (SUCCESS != sd_write(sd_desc, buff, (uint64_t)sector * 512, (uint64_t)count * 512))
+	if (0 != sd_write(sd_desc, buff, (uint64_t)sector * 512, (uint64_t)count * 512))
 		return RES_ERROR;
 
 	return RES_OK;

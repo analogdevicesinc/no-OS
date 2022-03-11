@@ -78,8 +78,8 @@ int32_t no_os_cb_cfg(struct no_os_circular_buffer *desc, int8_t *buff,
  * @param desc - Where to store the circular buffer reference
  * @param buff_size - Buffer size
  * @return
- *  - \ref SUCCESS : On success
- *  - \ref FAILURE : Otherwise
+ *  - 0 : On success
+ *  - -1 : Otherwise
  */
 int32_t no_os_cb_init(struct no_os_circular_buffer **desc, uint32_t buff_size)
 {
@@ -101,26 +101,26 @@ int32_t no_os_cb_init(struct no_os_circular_buffer **desc, uint32_t buff_size)
 		return -ENOMEM;
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Free the resources allocated for the circular buffer structure.
  * @param desc - Circular buffer reference
  * @return
- *  - \ref SUCCESS : On success
- *  - \ref FAILURE : Otherwise
+ *  - 0 : On success
+ *  - -1 : Otherwise
  */
 int32_t no_os_cb_remove(struct no_os_circular_buffer *desc)
 {
 	if (!desc)
-		return FAILURE;
+		return -1;
 
 	if (desc->buff)
 		free(desc->buff);
 	free(desc);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -128,9 +128,9 @@ int32_t no_os_cb_remove(struct no_os_circular_buffer *desc)
  * @param desc - Circular buffer reference
  * @param size - Where to store size of data available to read
  * @return
- *  - \ref SUCCESS   - No errors
+ *  - 0   - No errors
  *  - -EINVAL   - Wrong parameters used
- *  - -EOVERRUN - A buffer overrun occurred
+ *  - -NO_OS_EOVERRUN - A buffer overrun occurred
  */
 int32_t no_os_cb_size(struct no_os_circular_buffer *desc, uint32_t *size)
 {
@@ -153,10 +153,10 @@ int32_t no_os_cb_size(struct no_os_circular_buffer *desc, uint32_t *size)
 
 	if (*size > desc->size) {
 		*size = desc->size;
-		return -EOVERRUN;
+		return -NO_OS_EOVERRUN;
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /*
@@ -177,7 +177,7 @@ static int32_t no_os_cb_prepare_async_operation(struct no_os_circular_buffer
 	if (!desc || !buff || !raw_size_available)
 		return -EINVAL;
 
-	ret = SUCCESS;
+	ret = 0;
 	/* Select if read or write index will be updated */
 	ptr = is_read ? &desc->read : &desc->write;
 
@@ -187,7 +187,7 @@ static int32_t no_os_cb_prepare_async_operation(struct no_os_circular_buffer
 
 	if (is_read) {
 		ret = no_os_cb_size(desc, &available_size);
-		if (ret == -EOVERRUN) {
+		if (ret == -NO_OS_EOVERRUN) {
 			/* Update read index */
 			desc->read.spin_count = desc->write.spin_count - 1;
 			desc->read.idx = desc->write.idx;
@@ -231,7 +231,7 @@ static int32_t no_os_cb_end_async_operation(struct no_os_circular_buffer *desc,
 
 	/* Transaction not started */
 	if (!ptr->async_started)
-		return FAILURE;
+		return -1;
 
 	/* Update pointer value */
 	new_val = ptr->idx + ptr->async_size;
@@ -243,7 +243,7 @@ static int32_t no_os_cb_end_async_operation(struct no_os_circular_buffer *desc,
 	ptr->async_size = 0;
 	ptr->async_started = false;
 
-	return SUCCESS;
+	return 0;
 }
 
 /*
@@ -272,7 +272,7 @@ static int32_t no_os_cb_operation(struct no_os_circular_buffer *desc,
 							       &available_size,
 							       is_read);
 		} while (ret == -EBUSY || ret == -EAGAIN);
-		if (ret == -EOVERRUN)
+		if (ret == -NO_OS_EOVERRUN)
 			sticky_overrun = true;
 
 		if (is_read)
@@ -286,9 +286,9 @@ static int32_t no_os_cb_operation(struct no_os_circular_buffer *desc,
 	}
 
 	if (sticky_overrun)
-		return -EOVERRUN;
+		return -NO_OS_EOVERRUN;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -301,7 +301,7 @@ static int32_t no_os_cb_operation(struct no_os_circular_buffer *desc,
  * @param write_buff - Address where to store the buffer where to write to.
  * @param size_avilable - no_os_min(size_to_write, size until end of allocated buffer)
  * @return
- *  - \ref SUCCESS   - No errors
+ *  - 0   - No errors
  *  - -EINVAL   - Wrong parameters used
  *  - -EBUSY    - Asynchronous transaction already started
  */
@@ -324,11 +324,11 @@ int32_t no_os_cb_prepare_async_write(struct no_os_circular_buffer *desc,
  * @param read_buff - Address where to store the buffer where data will be read.
  * @param size_avilable - no_os_min(size_to_read, size until end of allocated buffer)
  * @return
- *  - \ref SUCCESS   - No errors
+ *  - 0   - No errors
  *  - -EAGAIN   - No data available at this moment
  *  - -EINVAL   - Wrong parameters used
  *  - -EBUSY    - Asynchronous transaction already started
- *  - -EOVERRUN - An overrun occurred and some data have been overwritten
+ *  - -NO_OS_EOVERRUN - An overrun occurred and some data have been overwritten
  */
 int32_t no_os_cb_prepare_async_read(struct no_os_circular_buffer *desc,
 				    uint32_t size_to_read,
@@ -345,8 +345,8 @@ int32_t no_os_cb_prepare_async_read(struct no_os_circular_buffer *desc,
  *
  * @param desc - Circular buffer reference
  * @return
- *  - \ref SUCCESS   - No errors
- *  - \ref FAILURE   - Asynchronous transaction not started
+ *  - 0   - No errors
+ *  - -1   - Asynchronous transaction not started
  *  - -EINVAL        - Wrong parameters used
  * @{
  */
@@ -368,7 +368,7 @@ int32_t no_os_cb_end_async_read(struct no_os_circular_buffer *desc)
  * @param data - Buffer from where data is copied to the circular buffer
  * @param size - Size to write
  * @return
- *  - \ref SUCCESS - No errors
+ *  - 0 - No errors
  *  - -EINVAL      - Wrong parameters used
  */
 int32_t no_os_cb_write(struct no_os_circular_buffer *desc, const void *data,
@@ -383,9 +383,9 @@ int32_t no_os_cb_write(struct no_os_circular_buffer *desc, const void *data,
  * @param data - Buffer where to data is copied from the circular buffer
  * @param size - Size to read
  * @return
- *  - \ref SUCCESS   - No errors
+ *  - 0   - No errors
  *  - -EINVAL   - Wrong parameters used
- *  - -EOVERRUN - An overrun occurred and some data have been overwritten
+ *  - -NO_OS_EOVERRUN - An overrun occurred and some data have been overwritten
  */
 int32_t no_os_cb_read(struct no_os_circular_buffer *desc, void *data,
 		      uint32_t size)

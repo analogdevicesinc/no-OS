@@ -53,7 +53,7 @@
  * @param [in] dev - Driver handler pointer.
  * @param [in] reg - Address of the register to be read.
  * @param [out] readval - Pointer to the register value.
- * @return SUCCESS in case of success, error code otherwise.
+ * @return 0 in case of success, error code otherwise.
  */
 int32_t max31875_reg_read(struct max31875_dev *dev,
 			  uint32_t reg,
@@ -68,11 +68,11 @@ int32_t max31875_reg_read(struct max31875_dev *dev,
 	data[0] = reg;
 
 	ret = no_os_i2c_write(dev->i2c_desc, data, 1, 0);
-	if (IS_ERR_VALUE(ret))
+	if (NO_OS_IS_ERR_VALUE(ret))
 		return ret;
 
 	ret = no_os_i2c_read(dev->i2c_desc, data, 2, 1);
-	if (IS_ERR_VALUE(ret))
+	if (NO_OS_IS_ERR_VALUE(ret))
 		return ret;
 
 	*readval = (data[0] << 8) | data[1];
@@ -85,7 +85,7 @@ int32_t max31875_reg_read(struct max31875_dev *dev,
  * @param [in] dev - Driver handler pointer.
  * @param [in] reg - Address of the register to be written.
  * @param [in] writeval - New value for the register.
- * @return SUCCESS in case of success, error code otherwise.
+ * @return 0 in case of success, error code otherwise.
  */
 int32_t max31875_reg_write(struct max31875_dev *dev,
 			   uint32_t reg,
@@ -110,7 +110,7 @@ int32_t max31875_reg_write(struct max31875_dev *dev,
  * @param [in] reg - Address of the register.
  * @param [in] val - New value for the bit field.
  * @param [in] mask - Mask of the bit field.
- * @return SUCCESS in case of success, error code otherwise.
+ * @return 0 in case of success, error code otherwise.
  */
 int32_t max31875_reg_write_mask(struct max31875_dev *dev,
 				uint32_t reg,
@@ -124,7 +124,7 @@ int32_t max31875_reg_write_mask(struct max31875_dev *dev,
 		return -EINVAL;
 
 	ret = max31875_reg_read(dev, reg, regval);
-	if (IS_ERR_VALUE(ret))
+	if (NO_OS_IS_ERR_VALUE(ret))
 		return ret;
 
 	regval &= ~no_os_field_prep(mask, 0xffff);
@@ -137,7 +137,7 @@ int32_t max31875_reg_write_mask(struct max31875_dev *dev,
  * @brief Initialize the device driver befre use.
  * @param [out] device - Driver handler pointer.
  * @param [in] init_param - Pointer to the initialization structure.
- * @return SUCCESS in case of success, error code otherwise.
+ * @return 0 in case of success, error code otherwise.
  */
 int32_t max31875_init(struct max31875_dev **device,
 		      struct max31875_init_param *init_param)
@@ -154,7 +154,7 @@ int32_t max31875_init(struct max31875_dev **device,
 		return -ENOMEM;
 
 	ret = no_os_i2c_init(&dev->i2c_desc, &init_param->i2c_init);
-	if (IS_ERR_VALUE(ret))
+	if (NO_OS_IS_ERR_VALUE(ret))
 		goto error;
 
 	*device = dev;
@@ -169,7 +169,7 @@ error:
 /**
  * @brief Free memory allocated by max31875_init().
  * @param [in] dev - Device driver handler.
- * @return SUCCESS in case of success, error code otherwise.
+ * @return 0 in case of success, error code otherwise.
  */
 int32_t max31875_remove(struct max31875_dev *dev)
 {
@@ -179,7 +179,7 @@ int32_t max31875_remove(struct max31875_dev *dev)
 		return -EINVAL;
 
 	ret = no_os_i2c_remove(dev->i2c_desc);
-	if (IS_ERR_VALUE(ret))
+	if (NO_OS_IS_ERR_VALUE(ret))
 		return ret;
 
 	free(dev);

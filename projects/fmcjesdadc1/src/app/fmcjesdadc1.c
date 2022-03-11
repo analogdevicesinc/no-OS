@@ -361,105 +361,105 @@ int main(void)
 	status = ad9517_setup(&ad9517_device, ad9517_param);
 	if(status < 0) {
 		printf("Error ad9517_setup()\n");
-		return FAILURE;
+		return -1;
 	}
 
 	/* Set the channel 0 power mode on */
 	status = ad9517_power_mode(ad9517_device, 0, 0);
 	if(status < 0) {
 		printf("Error channel 0 ad9517_power_mode()\n");
-		return FAILURE;
+		return -1;
 	}
 	/* Set the channel 0 frequency to 250Mhz */
 	status = ad9517_frequency(ad9517_device, 0, 250000000);
 	if(status < 0) {
 		printf("Error channel 0 ad9517_frequency()\n");
-		return FAILURE;
+		return -1;
 	}
 
 	/* Set the channel 1 power mode on */
 	status = ad9517_power_mode(ad9517_device, 1, 0);
 	if(status < 0) {
 		printf("Error channel 1 ad9517_power_mode()\n");
-		return FAILURE;
+		return -1;
 	}
 
 	/* Set the channel 1 frequency to 250Mhz */
 	status = ad9517_frequency(ad9517_device, 1, 250000000);
 	if(status < 0) {
 		printf("Error channel 1 ad9517_frequency()\n");
-		return FAILURE;
+		return -1;
 	}
 
 	/* Set the channel 4 power mode on */
 	status = ad9517_power_mode(ad9517_device, 4, 0);
 	if(status < 0) {
 		printf("Error channel 4 ad9517_power_mode()\n");
-		return FAILURE;
+		return -1;
 	}
 
 	/* Set the channel 4 frequency to 250Mhz */
 	status = ad9517_frequency(ad9517_device, 4, 250000000);
 	if(status < 0) {
 		printf("Error channel 4 ad9517_frequency()\n");
-		return FAILURE;
+		return -1;
 	}
 
 	/* Set the channel 5 power mode on */
 	status = ad9517_power_mode(ad9517_device, 5, 0);
 	if(status < 0) {
 		printf("Error channel 5 ad9517_power_mode()\n");
-		return FAILURE;
+		return -1;
 	}
 
 	/* Set the channel 5 frequency to 250Mhz */
 	status = ad9517_frequency(ad9517_device, 5, 250000000);
 	if(status < 0) {
 		printf("Error channel 5 ad9517_frequency()\n");
-		return FAILURE;
+		return -1;
 	}
 
 	/* Set the channel 6 power mode on */
 	status = ad9517_power_mode(ad9517_device, 6, 0);
 	if(status < 0) {
 		printf("Error channel 6 ad9517_power_mode()\n");
-		return FAILURE;
+		return -1;
 	}
 
 	/* Set the channel 6 frequency to 250Mhz */
 	status = ad9517_frequency(ad9517_device, 6, 250000000);
 	if(status < 0) {
 		printf("Error channel 6 ad9517_frequency()\n");
-		return FAILURE;
+		return -1;
 	}
 
 	/* Set the channel 7 power mode on */
 	status = ad9517_power_mode(ad9517_device, 7, 0);
 	if(status < 0) {
 		printf("Error channel 7 ad9517_power_mode()\n");
-		return FAILURE;
+		return -1;
 	}
 
 	/* Set the channel 7 frequency to 250Mhz */
 	status = ad9517_frequency(ad9517_device, 7, 250000000);
 	if(status < 0) {
 		printf("Error channel 7 ad9517_frequency()\n");
-		return FAILURE;
+		return -1;
 	}
 
 	status = ad9517_update(ad9517_device);
 	if(status < 0) {
 		printf("Error ad9517_update()\n");
-		return FAILURE;
+		return -1;
 	}
 
 	status = ad9517_read(ad9517_device, AD9517_REG_PLL_READBACK, &reg_value);
 	if (status < 0) {
 		printf("Error ad9517_read()!\n");
-		return FAILURE;
+		return -1;
 	} else if (!(reg_value & AD9517_DIGITAL_LOCK_DETECT)) {
 		printf("AD9517 PLL not locked!\n");
-		return FAILURE;
+		return -1;
 	}
 	printf("AD9517 PLL locked.\n");
 
@@ -474,34 +474,34 @@ int main(void)
 
 	// set up the XCVR core
 	status = adxcvr_init(&ad9250_xcvr, &ad9250_xcvr_param);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("error: %s: adxcvr_init() failed\n", ad9250_xcvr->name);
 	}
 	status = adxcvr_clk_enable(ad9250_xcvr);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("error: %s: adxcvr_clk_enable() failed\n", ad9250_xcvr->name);
 	}
 
 	// setup JESD core
 	status = axi_jesd204_rx_init(&ad9250_jesd, &ad9250_jesd_param);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("error: %s: axi_jesd204_rx_init() failed\n", ad9250_jesd->name);
 	}
 	status = axi_jesd204_rx_lane_clk_enable(ad9250_jesd);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("error: %s: axi_jesd204_tx_lane_clk_enable() failed\n",
 		       ad9250_jesd->name);
 	}
 
 	// interface core setup
 	status = axi_adc_init(&ad9250_core,  &ad9250_core_param);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("axi_adc_init() error: %s\n", ad9250_core->name);
 	}
 
 	// JESD core status
 	status = axi_jesd204_rx_status_read(ad9250_jesd);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("axi_jesd204_rx_status_read() error: %"PRIi32"\n", status);
 	}
 
@@ -582,5 +582,5 @@ int main(void)
 	ad9250_remove(ad9250_1_device);
 	no_os_gpio_remove(gpio_sysref);
 
-	return SUCCESS;
+	return 0;
 }

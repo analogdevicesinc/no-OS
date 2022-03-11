@@ -70,7 +70,7 @@ struct no_os_clk_hw adf4371_hw[MULTIDEVICE_INSTANCE_COUNT];
 /******************************************************************************/
 /**
  * @brief Application clock setup.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t app_clock_init(struct no_os_clk dev_refclk[MULTIDEVICE_INSTANCE_COUNT])
 {
@@ -348,12 +348,12 @@ int32_t app_clock_init(struct no_os_clk dev_refclk[MULTIDEVICE_INSTANCE_COUNT])
 	dev_refclk[0].name = "dev_refclk";
 #endif
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Application clocking remove.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t app_clock_remove(void)
 {

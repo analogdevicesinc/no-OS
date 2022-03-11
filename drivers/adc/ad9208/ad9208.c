@@ -114,7 +114,7 @@ static int ad9208_testmode_set(struct ad9208_state *st,
 /**
  * Setup the device.
  * @param st - The device structure.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 static int32_t ad9208_setup(struct ad9208_state *st)
 {
@@ -374,7 +374,7 @@ static int ad9208_udelay(void *user_data, unsigned int us)
  * @param device - The device structure.
  * @param init_param - The structure that contains the device initial
  * 		       parameters.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad9208_initialize(ad9208_dev **device, ad9208_init_param *init_param)
 {

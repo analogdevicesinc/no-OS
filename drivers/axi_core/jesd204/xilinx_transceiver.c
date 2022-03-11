@@ -138,7 +138,7 @@ int32_t xilinx_xcvr_drp_read(struct xilinx_xcvr *xcvr,
 		printf("%s: Failed to read reg %"PRIu32"-0x%"PRIX32": %"PRId32"\n",
 		       __func__, drp_port, reg, ret);
 
-		return FAILURE;
+		return -1;
 	}
 
 	return ret;
@@ -166,7 +166,7 @@ int32_t xilinx_xcvr_drp_write(struct xilinx_xcvr *xcvr,
 		       "val 0x%4"PRIX32", expected val 0x%4"PRIX32"\n",
 		       __func__, reg, val, read_val);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -198,7 +198,7 @@ int32_t xilinx_xcvr_gth3_configure_cdr(struct xilinx_xcvr *xcvr,
 	 *	 generating these settings
 	 */
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -222,7 +222,7 @@ int32_t xilinx_xcvr_gtx2_configure_cdr(struct xilinx_xcvr *xcvr,
 		cfg3 = 0x8000;
 		break;
 	default:
-		return FAILURE;
+		return -1;
 	}
 
 	if (lane_rate > 6600000 && out_div == 1)
@@ -246,7 +246,7 @@ int32_t xilinx_xcvr_gtx2_configure_cdr(struct xilinx_xcvr *xcvr,
 			cfg1 = 0x1008;
 			break;
 		default:
-			return FAILURE;
+			return -1;
 		}
 
 	} else {
@@ -286,7 +286,7 @@ int32_t xilinx_xcvr_gtx2_configure_cdr(struct xilinx_xcvr *xcvr,
 			cfg1 = 0x4008;
 			break;
 		default:
-			return FAILURE;
+			return -1;
 		}
 	}
 
@@ -297,7 +297,7 @@ int32_t xilinx_xcvr_gtx2_configure_cdr(struct xilinx_xcvr *xcvr,
 	xilinx_xcvr_drp_update(xcvr, drp_port, RXCDR_CFG4_ADDR,
 			       RXCDR_CFG4_MASK, cfg4);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -316,7 +316,7 @@ int32_t xilinx_xcvr_configure_cdr(struct xilinx_xcvr *xcvr,
 	case XILINX_XCVR_TYPE_US_GTY4:
 		return xilinx_xcvr_gth3_configure_cdr(xcvr, drp_port, out_div);
 	default:
-		return FAILURE;
+		return -1;
 	}
 }
 
@@ -330,7 +330,7 @@ int32_t xilinx_xcvr_check_lane_rate(struct xilinx_xcvr *xcvr,
 
 	/* The minimum lane rate across families is 0.5 Gbps */
 	if (lane_rate_khz < 500000)
-		return FAILURE;
+		return -1;
 
 	/* If the core includes voltage/speed grade info then use it, otherwise assume best conditions */
 	if (AXI_PCORE_VER_MAJOR(xcvr->version) > 0x10) {
@@ -352,7 +352,7 @@ int32_t xilinx_xcvr_check_lane_rate(struct xilinx_xcvr *xcvr,
 			else if (speed_grade == 1)
 				lane_rate_max_khz =  8000000;
 			else
-				return FAILURE;
+				return -1;
 
 			/* FB/SB package is limited to 6.6 Gbps. NB FBG484 can go higher in some speed grades but we don't
 			 * have the full package name. */
@@ -397,20 +397,20 @@ int32_t xilinx_xcvr_check_lane_rate(struct xilinx_xcvr *xcvr,
 			else if (voltage == 720 && speed_grade == 2)
 				lane_rate_max_khz = 28210000;
 			else
-				return FAILURE;
+				return -1;
 			break;
 
 		default:
-			return FAILURE;
+			return -1;
 		}
 	} else {
 		lane_rate_max_khz = 16375000;
 	}
 
 	if (lane_rate_khz > lane_rate_max_khz)
-		return FAILURE;
+		return -1;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -436,7 +436,7 @@ int32_t xilinx_xcvr_configure_lpm_dfe_mode(struct xilinx_xcvr *xcvr,
 		break;
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -479,7 +479,7 @@ int32_t xilinx_xcvr_calc_cpll_config(struct xilinx_xcvr *xcvr,
 		}
 		break;
 	default:
-		return FAILURE;
+		return -1;
 	}
 
 	for (m = 1; m <= 2; m++) {
@@ -501,14 +501,14 @@ int32_t xilinx_xcvr_calc_cpll_config(struct xilinx_xcvr *xcvr,
 						if (out_div)
 							*out_div = d;
 
-						return SUCCESS;
+						return 0;
 					}
 				}
 			}
 		}
 	}
 
-	return FAILURE;
+	return -1;
 }
 
 /**
@@ -551,7 +551,7 @@ int32_t xilinx_xcvr_calc_qpll_config(struct xilinx_xcvr *xcvr,
 		vco1_max = 13000000;
 		break;
 	default:
-		return FAILURE;
+		return -1;
 	}
 
 	for (m = 1; m <= 4; m++) {
@@ -581,13 +581,13 @@ int32_t xilinx_xcvr_calc_qpll_config(struct xilinx_xcvr *xcvr,
 					if (out_div)
 						*out_div = d;
 
-					return SUCCESS;
+					return 0;
 				}
 			}
 		}
 	}
 
-	return FAILURE;
+	return -1;
 }
 
 /**
@@ -639,7 +639,7 @@ int32_t xilinx_xcvr_gth34_cpll_read_config(struct xilinx_xcvr *xcvr,
 	       " refclk_div=%"PRIu32"\n", __func__, conf->fb_div_N1,
 	       conf->fb_div_N2, conf->refclk_div);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -683,7 +683,7 @@ int32_t xilinx_xcvr_gtx2_cpll_read_config(struct xilinx_xcvr *xcvr,
 	else
 		conf->refclk_div = 2;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -700,7 +700,7 @@ int32_t xilinx_xcvr_cpll_read_config(struct xilinx_xcvr *xcvr,
 	case XILINX_XCVR_TYPE_US_GTY4:
 		return xilinx_xcvr_gth34_cpll_read_config(xcvr, drp_port, conf);
 	default:
-		return FAILURE;
+		return -1;
 	}
 }
 
@@ -730,7 +730,7 @@ int32_t xilinx_xcvr_gth34_cpll_write_config(struct xilinx_xcvr *xcvr,
 		val = 0x3;
 		break;
 	default:
-		return FAILURE;
+		return -1;
 	}
 
 	val <<= 8;
@@ -742,7 +742,7 @@ int32_t xilinx_xcvr_gth34_cpll_write_config(struct xilinx_xcvr *xcvr,
 		val |= CPLL_FB_DIV_45_N1_MASK;
 		break;
 	default:
-		return FAILURE;
+		return -1;
 	}
 
 	ret = xilinx_xcvr_drp_update(xcvr, drp_port, 0x28,
@@ -758,7 +758,7 @@ int32_t xilinx_xcvr_gth34_cpll_write_config(struct xilinx_xcvr *xcvr,
 		val = 0;
 		break;
 	default:
-		return FAILURE;
+		return -1;
 	}
 
 	val <<= 11;
@@ -782,7 +782,7 @@ int32_t xilinx_xcvr_gtx2_cpll_write_config(struct xilinx_xcvr *xcvr,
 		val |= CPLL_FB_DIV_45_N1_MASK;
 		break;
 	default:
-		return FAILURE;
+		return -1;
 	}
 
 	switch (conf->fb_div_N2) {
@@ -801,7 +801,7 @@ int32_t xilinx_xcvr_gtx2_cpll_write_config(struct xilinx_xcvr *xcvr,
 		val |= 0x3;
 		break;
 	default:
-		return FAILURE;
+		return -1;
 	}
 
 	switch (conf->refclk_div) {
@@ -811,7 +811,7 @@ int32_t xilinx_xcvr_gtx2_cpll_write_config(struct xilinx_xcvr *xcvr,
 	case 2:
 		break;
 	default:
-		return FAILURE;
+		return -1;
 	}
 
 	return xilinx_xcvr_drp_update(xcvr, drp_port, CPLL_REFCLK_DIV_M_ADDR,
@@ -833,7 +833,7 @@ int32_t xilinx_xcvr_cpll_write_config(struct xilinx_xcvr *xcvr,
 	case XILINX_XCVR_TYPE_US_GTY4:
 		return xilinx_xcvr_gth34_cpll_write_config(xcvr, drp_port, conf);
 	default:
-		return FAILURE;
+		return -1;
 	}
 }
 
@@ -845,7 +845,7 @@ int32_t xilinx_xcvr_cpll_calc_lane_rate(struct xilinx_xcvr *xcvr,
 					uint32_t out_div)
 {
 	if (conf->refclk_div == 0 || out_div == 0)
-		return SUCCESS;
+		return 0;
 
 	return NO_OS_DIV_ROUND_CLOSEST_ULL((uint64_t)refclk_khz *
 					   conf->fb_div_N1 * conf->fb_div_N2 * 2,
@@ -903,7 +903,7 @@ int32_t xilinx_xcvr_gth34_qpll_read_config(struct xilinx_xcvr *xcvr,
 	printf("%s: qpll: fb_div=%"PRIu32", qpll: refclk_div=%"PRIu32"\n",
 	       __func__, conf->fb_div, conf->refclk_div);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -974,7 +974,7 @@ int32_t xilinx_xcvr_gtx2_qpll_read_config(struct xilinx_xcvr *xcvr,
 	else
 		conf->band = 1;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -991,7 +991,7 @@ int32_t xilinx_xcvr_qpll_read_config(struct xilinx_xcvr *xcvr,
 	case XILINX_XCVR_TYPE_US_GTY4:
 		return xilinx_xcvr_gth34_qpll_read_config(xcvr, drp_port, conf);
 	default:
-		return FAILURE;
+		return -1;
 	}
 }
 
@@ -1022,7 +1022,7 @@ int32_t xilinx_xcvr_gth34_qpll_write_config(struct xilinx_xcvr *xcvr,
 	default:
 		printf("%s: Invalid refclk divider: %"PRIu32"\n",
 		       __func__, conf->refclk_div);
-		return FAILURE;
+		return -1;
 	}
 
 	ret = xilinx_xcvr_drp_update(xcvr, drp_port, QPLL_FBDIV(0),
@@ -1059,7 +1059,7 @@ int32_t xilinx_xcvr_gtx2_qpll_write_config(struct xilinx_xcvr *xcvr,
 	default:
 		printf("%s: Invalid refclk divider: %"PRIu32"\n",
 		       __func__, conf->refclk_div);
-		return FAILURE;
+		return -1;
 	}
 
 	fbdiv_ratio = QPLL_FBDIV_RATIO_MASK;
@@ -1093,7 +1093,7 @@ int32_t xilinx_xcvr_gtx2_qpll_write_config(struct xilinx_xcvr *xcvr,
 	default:
 		printf("%s: Invalid feedback divider: %"PRIu32"\n",
 		       __func__, conf->fb_div);
-		return FAILURE;
+		return -1;
 	}
 
 	if (conf->band)
@@ -1121,7 +1121,7 @@ int32_t xilinx_xcvr_gtx2_qpll_write_config(struct xilinx_xcvr *xcvr,
 	if (ret < 0)
 		return ret;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -1138,7 +1138,7 @@ int32_t xilinx_xcvr_qpll_write_config(struct xilinx_xcvr *xcvr,
 	case XILINX_XCVR_TYPE_US_GTY4:
 		return xilinx_xcvr_gth34_qpll_write_config(xcvr, drp_port, conf);
 	default:
-		return FAILURE;
+		return -1;
 	}
 }
 
@@ -1150,7 +1150,7 @@ int32_t xilinx_xcvr_qpll_calc_lane_rate(struct xilinx_xcvr *xcvr,
 					uint32_t out_div)
 {
 	if (conf->refclk_div == 0 || out_div == 0)
-		return SUCCESS;
+		return 0;
 
 	return NO_OS_DIV_ROUND_CLOSEST_ULL((uint64_t)refclk_khz * conf->fb_div,
 					   conf->refclk_div * out_div * 1000);
@@ -1181,7 +1181,7 @@ int32_t xilinx_xcvr_gth34_read_out_div(struct xilinx_xcvr *xcvr,
 		*tx_out_div = 1 << ((val >> 8) & 7);
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -1202,7 +1202,7 @@ int32_t xilinx_xcvr_gtx2_read_out_div(struct xilinx_xcvr *xcvr,
 	if (tx_out_div)
 		*tx_out_div = 1 << ((ret >> OUT_DIV_TX_OFFSET) & 7);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -1221,7 +1221,7 @@ int32_t xilinx_xcvr_read_out_div(struct xilinx_xcvr *xcvr, uint32_t drp_port,
 		return xilinx_xcvr_gth34_read_out_div(xcvr, drp_port,
 						      rx_out_div, tx_out_div);
 	default:
-		return FAILURE;
+		return -1;
 	}
 }
 
@@ -1265,7 +1265,7 @@ int32_t xilinx_xcvr_gth34_write_out_div(struct xilinx_xcvr *xcvr,
 			return ret;
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -1305,7 +1305,7 @@ int32_t xilinx_xcvr_write_out_div(struct xilinx_xcvr *xcvr, uint32_t drp_port,
 		return xilinx_xcvr_gth34_write_out_div(xcvr, drp_port,
 						       rx_out_div, tx_out_div);
 	default:
-		return FAILURE;
+		return -1;
 	}
 }
 
@@ -1318,7 +1318,7 @@ int32_t xilinx_xcvr_write_rx_clk25_div(struct xilinx_xcvr *xcvr,
 	uint32_t reg, mask;
 
 	if (div == 0 || div > 32)
-		return FAILURE;
+		return -1;
 
 	div--;
 
@@ -1336,7 +1336,7 @@ int32_t xilinx_xcvr_write_rx_clk25_div(struct xilinx_xcvr *xcvr,
 		reg = 0x6d;
 		break;
 	default:
-		return FAILURE;
+		return -1;
 	}
 
 	return xilinx_xcvr_drp_update(xcvr, drp_port, reg, mask, div);
@@ -1351,7 +1351,7 @@ int32_t xilinx_xcvr_write_tx_clk25_div(struct xilinx_xcvr *xcvr,
 	uint32_t reg, mask;
 
 	if (div == 0 || div > 32)
-		return FAILURE;
+		return -1;
 
 	div--;
 
@@ -1368,7 +1368,7 @@ int32_t xilinx_xcvr_write_tx_clk25_div(struct xilinx_xcvr *xcvr,
 		reg = 0x7a;
 		break;
 	default:
-		return FAILURE;
+		return -1;
 	}
 
 	return xilinx_xcvr_drp_update(xcvr, drp_port, reg, mask, div);

@@ -92,21 +92,21 @@ static int32_t adpd1080pmod_32k_calib(struct adpd188_dev *adpd1080_dev)
 	};
 
 	status = no_os_timer_init(&cal_timer, &cal_timer_init);
-	if(status != SUCCESS)
-		return FAILURE;
+	if(status != 0)
+		return -1;
 	status = no_os_timer_start(cal_timer);
-	if(status != SUCCESS)
+	if(status != 0)
 		goto timer_finish;
 
 	status = no_os_gpio_get(&sync_gpio, &sync_gpio_init);
-	if(status != SUCCESS)
+	if(status != 0)
 		goto timer_finish;
 	status = no_os_gpio_direction_input(sync_gpio);
-	if(status != SUCCESS)
+	if(status != 0)
 		goto gpio_finish;
 
 	status = no_os_irq_ctrl_init(&cal_irq, &cal_irq_init);
-	if(status != SUCCESS)
+	if(status != 0)
 		goto gpio_finish;
 
 	struct gpio_irq_config sync_irq_config = {
@@ -120,41 +120,41 @@ static int32_t adpd1080pmod_32k_calib(struct adpd188_dev *adpd1080_dev)
 	};
 	status = no_os_irq_register_callback(cal_irq, ADUCM_GPIO_A_INT_ID,
 					     &sync_gpio_cb);
-	if(status != SUCCESS)
+	if(status != 0)
 		goto gpio_finish;
 
 	status = adpd188_adc_fsample_set(adpd1080_dev, 1000);
-	if(status != SUCCESS)
+	if(status != 0)
 		goto finish;
 
 	status = adpd188_reg_write(adpd1080_dev, ADPD188_REG_GPIO_DRV,
 				   ADPD188_GPIO_DRV_GPIO0_ENA_MASK);
-	if(status != SUCCESS)
+	if(status != 0)
 		goto finish;
 
 	status = adpd188_reg_write(adpd1080_dev, ADPD188_REG_GPIO_CTRL, 2);
-	if(status != SUCCESS)
+	if(status != 0)
 		goto finish;
 
 	status = adpd188_mode_set(adpd1080_dev, ADPD188_NORMAL);
-	if (status != SUCCESS)
+	if (status != 0)
 		goto finish;
 
 	status = no_os_irq_enable(cal_irq, ADUCM_GPIO_A_INT_ID);
-	if(status != SUCCESS)
+	if(status != 0)
 		goto finish;
 
 	while (true) {
 		status = adpd188_reg_read(adpd1080_dev, ADPD188_REG_SAMPLE_CLK, &temp_reg);
-		if(status != SUCCESS)
+		if(status != 0)
 			goto finish;
 		status = no_os_timer_counter_get(cal_timer, &t_start);
-		if(status != SUCCESS)
+		if(status != 0)
 			goto finish;
 		sync_gpio_pulse_no = 0;
 		while (t_start >= t_stop) {
 			status = no_os_timer_counter_get(cal_timer, &t_stop);
-			if(status != SUCCESS)
+			if(status != 0)
 				goto finish;
 		}
 		if (sync_gpio_pulse_no < 1000)
@@ -166,32 +166,32 @@ static int32_t adpd1080pmod_32k_calib(struct adpd188_dev *adpd1080_dev)
 		else
 			min_diff = abs(sync_gpio_pulse_no - 1000);
 		status = adpd188_reg_write(adpd1080_dev, ADPD188_REG_SAMPLE_CLK, temp_reg);
-		if(status != SUCCESS)
+		if(status != 0)
 			goto finish;
 	}
 
 	status = no_os_irq_disable(cal_irq, ADUCM_GPIO_A_INT_ID);
-	if(status != SUCCESS)
+	if(status != 0)
 		goto finish;
 
 	status = no_os_irq_unregister(cal_irq, ADUCM_GPIO_A_INT_ID);
-	if(status != SUCCESS)
+	if(status != 0)
 		goto gpio_finish;
 
 	status = adpd188_mode_set(adpd1080_dev, ADPD188_PROGRAM);
-	if (status != SUCCESS)
+	if (status != 0)
 		goto finish;
 
 	status = adpd188_adc_fsample_set(adpd1080_dev, 16);
-	if(status != SUCCESS)
+	if(status != 0)
 		goto finish;
 
 	status = adpd188_reg_write(adpd1080_dev, ADPD188_REG_GPIO_DRV, 0);
-	if(status != SUCCESS)
+	if(status != 0)
 		goto finish;
 
 	status = adpd188_reg_write(adpd1080_dev, ADPD188_REG_GPIO_CTRL, 0);
-	if(status != SUCCESS)
+	if(status != 0)
 		goto finish;
 
 finish:
@@ -213,7 +213,7 @@ int main(void)
 	uint16_t reg_data;
 
 	status = platform_init();
-	if (IS_ERR_VALUE(status))
+	if (NO_OS_IS_ERR_VALUE(status))
 		return status;
 
 	struct adpd188_iio_desc *adpd1080_iio_device;
@@ -250,46 +250,46 @@ int main(void)
 		return status;
 
 	status = adpd188_adc_fsample_set(adpd1080_iio_device->drv_dev, 16);
-	if(status != SUCCESS)
-		return FAILURE;
+	if(status != 0)
+		return -1;
 
 	status = adpd188_reg_read(adpd1080_iio_device->drv_dev, ADPD188_REG_SLOT_EN,
 				  &reg_data);
-	if(status != SUCCESS)
-		return FAILURE;
+	if(status != 0)
+		return -1;
 	reg_data |= ADPD188_SLOT_EN_RDOUT_MODE_MASK |
 		    ADPD188_SLOT_EN_FIFO_OVRN_PREVENT_MASK;
 	status = adpd188_reg_write(adpd1080_iio_device->drv_dev, ADPD188_REG_SLOT_EN,
 				   reg_data);
-	if(status != SUCCESS)
-		return FAILURE;
+	if(status != 0)
+		return -1;
 
 	/* Slot A chop mode is inverted, non-inverted, non-inverted, inverted */
 	status = adpd188_reg_read(adpd1080_iio_device->drv_dev, ADPD188_REG_INT_SEQ_A,
 				  &reg_data);
-	if(status != SUCCESS)
-		return FAILURE;
+	if(status != 0)
+		return -1;
 	reg_data |= 0x9 & ADPD188_INT_SEQ_A_INTEG_ORDER_A_MASK;
 	status = adpd188_reg_write(adpd1080_iio_device->drv_dev, ADPD188_REG_INT_SEQ_A,
 				   reg_data);
-	if(status != SUCCESS)
-		return FAILURE;
+	if(status != 0)
+		return -1;
 	/* Slot B chop mode is inverted, non-inverted, non-inverted, inverted */
 	status = adpd188_reg_read(adpd1080_iio_device->drv_dev, ADPD188_REG_INT_SEQ_B,
 				  &reg_data);
-	if(status != SUCCESS)
-		return FAILURE;
+	if(status != 0)
+		return -1;
 	reg_data |= 0x9 & ADPD188_INT_SEQ_B_INTEG_ORDER_B_MASK;
 	status = adpd188_reg_write(adpd1080_iio_device->drv_dev, ADPD188_REG_INT_SEQ_B,
 				   reg_data);
-	if(status != SUCCESS)
-		return FAILURE;
+	if(status != 0)
+		return -1;
 
 	/* Set blue LED 1 power */
 	status = adpd188_reg_read(adpd1080_iio_device->drv_dev,
 				  ADPD188_REG_ILED1_COARSE, &reg_data);
-	if(status != SUCCESS)
-		return FAILURE;
+	if(status != 0)
+		return -1;
 	reg_data &= ~ADPD188_ILED1_COARSE_ILED1_COARSE_MASK;
 	reg_data |= (0x6 << ADPD188_ILED1_COARSE_ILED1_COARSE_POS) &
 		    ADPD188_ILED1_COARSE_ILED1_COARSE_MASK;
@@ -299,14 +299,14 @@ int main(void)
 	reg_data |= ADPD188_ILED1_COARSE_ILED1_SCALE_MASK;
 	status = adpd188_reg_write(adpd1080_iio_device->drv_dev,
 				   ADPD188_REG_ILED1_COARSE, reg_data);
-	if(status != SUCCESS)
-		return FAILURE;
+	if(status != 0)
+		return -1;
 
 	/* Slot A 4 LED pulses with 15us period */
 	status = adpd188_reg_read(adpd1080_iio_device->drv_dev,
 				  ADPD188_REG_SLOTA_NUMPULSES, &reg_data);
-	if(status != SUCCESS)
-		return FAILURE;
+	if(status != 0)
+		return -1;
 	reg_data &= ~ADPD188_SLOTA_NUMPULSES_SLOTA_PULSES_MASK;
 	reg_data |= (0x4 << ADPD188_SLOTA_NUMPULSES_SLOTA_PULSES_POS) &
 		    ADPD188_SLOTA_NUMPULSES_SLOTA_PULSES_MASK;
@@ -315,14 +315,14 @@ int main(void)
 		    ADPD188_SLOTA_NUMPULSES_SLOTA_PERIOD_MASK;
 	status = adpd188_reg_write(adpd1080_iio_device->drv_dev,
 				   ADPD188_REG_SLOTA_NUMPULSES, reg_data);
-	if(status != SUCCESS)
-		return FAILURE;
+	if(status != 0)
+		return -1;
 
 	/* Slot B 4 LED pulses with 15us period */
 	status = adpd188_reg_read(adpd1080_iio_device->drv_dev,
 				  ADPD188_REG_SLOTB_NUMPULSES, &reg_data);
-	if(status != SUCCESS)
-		return FAILURE;
+	if(status != 0)
+		return -1;
 	reg_data &= ~ADPD188_SLOTB_NUMPULSES_SLOTB_PULSES_MASK;
 	reg_data |= (0x4 << ADPD188_SLOTB_NUMPULSES_SLOTB_PULSES_POS) &
 		    ADPD188_SLOTB_NUMPULSES_SLOTB_PULSES_MASK;
@@ -331,14 +331,14 @@ int main(void)
 		    ADPD188_SLOTB_NUMPULSES_SLOTB_PERIOD_MASK;
 	status = adpd188_reg_write(adpd1080_iio_device->drv_dev,
 				   ADPD188_REG_SLOTB_NUMPULSES, reg_data);
-	if(status != SUCCESS)
-		return FAILURE;
+	if(status != 0)
+		return -1;
 
 	/* Slot A integrator window */
 	status = adpd188_reg_read(adpd1080_iio_device->drv_dev,
 				  ADPD188_REG_SLOTA_AFE_WINDOW, &reg_data);
-	if(status != SUCCESS)
-		return FAILURE;
+	if(status != 0)
+		return -1;
 	reg_data &= ~ADPD188_SLOTA_AFE_WINDOW_SLOTA_AFE_WIDTH_MASK;
 	reg_data |= (0x4 << ADPD188_SLOTA_AFE_WINDOW_SLOTA_AFE_WIDTH_POS) &
 		    ADPD188_SLOTA_AFE_WINDOW_SLOTA_AFE_WIDTH_MASK;
@@ -347,14 +347,14 @@ int main(void)
 		    ADPD188_SLOTA_AFE_WINDOW_SLOTA_AFE_OFFSET_MASK;
 	status = adpd188_reg_write(adpd1080_iio_device->drv_dev,
 				   ADPD188_REG_SLOTA_AFE_WINDOW, reg_data);
-	if(status != SUCCESS)
-		return FAILURE;
+	if(status != 0)
+		return -1;
 
 	/* Slot B integrator window */
 	status = adpd188_reg_read(adpd1080_iio_device->drv_dev,
 				  ADPD188_REG_SLOTB_AFE_WINDOW, &reg_data);
-	if(status != SUCCESS)
-		return FAILURE;
+	if(status != 0)
+		return -1;
 	reg_data &= ~ADPD188_SLOTB_AFE_WINDOW_SLOTB_AFE_WIDTH_MASK;
 	reg_data |= (0x4 << ADPD188_SLOTB_AFE_WINDOW_SLOTB_AFE_WIDTH_POS) &
 		    ADPD188_SLOTB_AFE_WINDOW_SLOTB_AFE_WIDTH_MASK;
@@ -363,14 +363,14 @@ int main(void)
 		    ADPD188_SLOTB_AFE_WINDOW_SLOTB_AFE_OFFSET_MASK;
 	status = adpd188_reg_write(adpd1080_iio_device->drv_dev,
 				   ADPD188_REG_SLOTB_AFE_WINDOW, reg_data);
-	if(status != SUCCESS)
-		return FAILURE;
+	if(status != 0)
+		return -1;
 
 	/* Math for chop mode is inverted, non-inverted, non-inverted, inverted */
 	status = adpd188_reg_read(adpd1080_iio_device->drv_dev, ADPD188_REG_MATH,
 				  &reg_data);
-	if(status != SUCCESS)
-		return FAILURE;
+	if(status != 0)
+		return -1;
 	reg_data &= ~ADPD188_MATH_FLT_MATH34_B_MASK;
 	reg_data |= (0x01 << ADPD188_MATH_FLT_MATH34_B_POS) &
 		    ADPD188_MATH_FLT_MATH34_B_MASK;
@@ -386,16 +386,16 @@ int main(void)
 
 	status = adpd188_reg_write(adpd1080_iio_device->drv_dev, ADPD188_REG_MATH,
 				   reg_data);
-	if(status != SUCCESS)
-		return FAILURE;
+	if(status != 0)
+		return -1;
 
 	status = adpd1080pmod_32k_calib(adpd1080_iio_device->drv_dev);
 	if (status < 0)
 		return status;
 
 	status = adpd188_clk32mhz_cal(adpd1080_iio_device->drv_dev);
-	if(status != SUCCESS)
-		return FAILURE;
+	if(status != 0)
+		return -1;
 
 	struct iio_app_device devices[] = {
 		IIO_APP_DEVICE("adpd1080", adpd1080_iio_device, &iio_adpd188_device,

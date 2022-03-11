@@ -63,7 +63,7 @@
 
 /**
  * @brief Main application.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int main(void)
 {
@@ -73,7 +73,7 @@ int main(void)
 #else
 	uint8_t uc = 7;
 #endif
-	int32_t status = SUCCESS;
+	int32_t status = 0;
 	struct axi_adc *rx_adc;
 	struct axi_dmac *rx_dmac;
 	struct app_ad9083 *app_ad9083;
@@ -110,58 +110,58 @@ int main(void)
 	pr_info("Hello\n");
 
 	status = app_clocking_init(&app_clocking, &app_clocking_init_param);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		pr_err("error: %"PRId32" app_clock_init() \n", status);
 
-		return FAILURE;
+		return -1;
 	}
 
 	status = app_jesd_init(&app_jesd, &init_jesd_init_param);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		pr_err("error: %"PRId32" app_jesd_init() \n", status);
 
-		return FAILURE;
+		return -1;
 	}
 
 	app_ad9083_init_param.jesd_rx_clk = &app_jesd->jesd_rx_clk,
 
 	status = app_ad9083_init(&app_ad9083, &app_ad9083_init_param);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		pr_err("error: %"PRId32" app_ad9083_init() \n", status);
 
-		return FAILURE;
+		return -1;
 	}
 
 	status = app_jesd_status(app_jesd);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		pr_err("error: %"PRIi32" jesd_status() \n", status);
 
-		return FAILURE;
+		return -1;
 	}
 
 #ifdef SUBCLASS_1
 	status = app_ad9083_subclass1_status(app_ad9083);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		pr_err("error: %"PRIi32" app_ad9083_status()\n", status);
 
-		return FAILURE;
+		return -1;
 	}
 #endif
 
 	status = app_ad9083_status(app_ad9083);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		pr_err("error: %"PRIi32" app_ad9083_status()\n", status);
 
-		return FAILURE;
+		return -1;
 	}
 
 	status = axi_adc_init(&rx_adc, &rx_adc_init);
-	if (status != SUCCESS)
-		return FAILURE;
+	if (status != 0)
+		return -1;
 
 	status = axi_dmac_init(&rx_dmac, &rx_dmac_init);
-	if (status != SUCCESS)
-		return FAILURE;
+	if (status != 0)
+		return -1;
 
 #ifdef IIO_SUPPORT
 	struct iio_data_buffer read_buff = {
@@ -193,33 +193,33 @@ int main(void)
 	};
 
 	status = iio_app_run(devices, 2);
-	if (status != SUCCESS)
+	if (status != 0)
 		pr_err("error: %"PRIi32" iio_app_run()\n", status);
 
 	status = iio_axi_adc_remove(iio_axi_adc_desc);
-	if (status != SUCCESS)
+	if (status != 0)
 		pr_err("error: %"PRIi32" iio_axi_adc_remove()\n", status);
 #else
 	pr_info("Bye\n");
 #endif
 	status = axi_dmac_remove(rx_dmac);
-	if (status != SUCCESS)
+	if (status != 0)
 		pr_err("error: %"PRIi32" axi_dmac_remove()\n", status);
 
 	status = axi_adc_remove(rx_adc);
-	if (status != SUCCESS)
+	if (status != 0)
 		pr_err("error: %"PRIi32" axi_adc_remove()\n", status);
 
 	status = app_ad9083_remove(app_ad9083);
-	if (status != SUCCESS)
+	if (status != 0)
 		pr_err("error: %"PRIi32" app_ad9083_remove()\n", status);
 
 	status = app_jesd_remove(app_jesd);
-	if (status != SUCCESS)
+	if (status != 0)
 		pr_err("error: %"PRIi32" app_jesd_remove()\n", status);
 
 	status = app_clocking_remove(app_clocking);
-	if (status != SUCCESS)
+	if (status != 0)
 		pr_err("error: %"PRIi32" app_clocking_remove()\n", status);
 
 	return status;

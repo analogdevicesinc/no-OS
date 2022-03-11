@@ -83,7 +83,7 @@ int32_t ad5592r_write_dac(struct ad5592r_dev *dev, uint8_t chan,
 			  uint16_t value)
 {
 	if (!dev)
-		return FAILURE;
+		return -1;
 
 	dev->spi_msg = swab16( NO_OS_BIT(15) | (uint16_t)(chan << 12) | value);
 
@@ -105,7 +105,7 @@ int32_t ad5592r_read_adc(struct ad5592r_dev *dev, uint8_t chan,
 	int32_t ret;
 
 	if (!dev)
-		return FAILURE;
+		return -1;
 
 	dev->spi_msg = swab16((uint16_t)(AD5592R_REG_ADC_SEQ << 11) |
 			      NO_OS_BIT(chan));
@@ -148,7 +148,7 @@ int32_t ad5592r_multi_read_adc(struct ad5592r_dev *dev, uint16_t chans,
 	uint8_t i;
 
 	if (!dev)
-		return FAILURE;
+		return -1;
 
 	samples = no_os_hweight8(chans);
 
@@ -188,7 +188,7 @@ int32_t ad5592r_multi_read_adc(struct ad5592r_dev *dev, uint16_t chans,
 int32_t ad5592r_reg_write(struct ad5592r_dev *dev, uint8_t reg, uint16_t value)
 {
 	if (!dev)
-		return FAILURE;
+		return -1;
 
 	dev->spi_msg = swab16((reg << 11) | value);
 
@@ -209,7 +209,7 @@ int32_t ad5592r_reg_read(struct ad5592r_dev *dev, uint8_t reg, uint16_t *value)
 	int32_t ret;
 
 	if (!dev)
-		return FAILURE;
+		return -1;
 
 	dev->spi_msg = swab16((AD5592R_REG_LDAC << 11) |
 			      AD5592R_LDAC_READBACK_EN | (reg << 2) | dev->ldac_mode);
@@ -240,7 +240,7 @@ int32_t ad5592r_gpio_read(struct ad5592r_dev *dev, uint8_t *value)
 	int32_t ret;
 
 	if (!dev)
-		return FAILURE;
+		return -1;
 
 	ret = ad5592r_reg_write(dev, AD5592R_REG_GPIO_IN_EN,
 				AD5592R_GPIO_READBACK_EN | dev->gpio_in);
@@ -270,7 +270,7 @@ int32_t ad5592r_init(struct ad5592r_dev *dev,
 	uint16_t temp_reg_val;
 
 	if (!dev)
-		return FAILURE;
+		return -1;
 
 	dev->ops = &ad5592r_rw_ops;
 

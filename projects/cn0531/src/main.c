@@ -68,7 +68,7 @@ int main(void)
 	int32_t status, val;
 
 	status = platform_init();
-	if (IS_ERR_VALUE(status))
+	if (NO_OS_IS_ERR_VALUE(status))
 		return status;
 
 	struct ad5791_dev *ad5791_device;
@@ -104,21 +104,21 @@ int main(void)
 	};
 
 	status = ad5791_iio_init(&ad5791_iio_handle, &ad5791_iio_ini);
-	if (status != SUCCESS)
+	if (status != 0)
 		return status;
 
 	status = ad5791_set_dac_value(ad5791_iio_handle->ad5791_handle, 0);
-	if (status != SUCCESS)
+	if (status != 0)
 		return status;
 
 	status = ad5791_get_register_value(ad5791_iio_handle->ad5791_handle,
 					   AD5791_REG_CTRL, &val);
-	if (status < SUCCESS)
+	if (status < 0)
 		return status;
 	val &= ~(AD5791_CTRL_OPGND | AD5791_CTRL_RBUF);
 	status = ad5791_set_register_value(ad5791_iio_handle->ad5791_handle,
 					   AD5791_REG_CTRL, (uint32_t)val);
-	if (status != SUCCESS)
+	if (status != 0)
 		return status;
 
 	struct iio_app_device devices[] = {

@@ -266,7 +266,7 @@ static void no_os_uart_callback(void *ctx, uint32_t event, void *buff)
  * @param desc:	Descriptor of the UART device
  * @param data:	Buffer where data will be read
  * @param bytes_number:	Number of bytes to be read. Between 1 and 1024
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t no_os_uart_read(struct no_os_uart_desc *desc, uint8_t *data,
 			uint32_t bytes_number)
@@ -277,7 +277,7 @@ int32_t no_os_uart_read(struct no_os_uart_desc *desc, uint8_t *data,
 	uint32_t		idx;
 
 	if (!desc || !data)
-		return FAILURE;
+		return -1;
 
 	extra = desc->extra;
 	if (bytes_number == 0) {
@@ -305,7 +305,7 @@ int32_t no_os_uart_read(struct no_os_uart_desc *desc, uint8_t *data,
 	return idx;
 failure:
 	extra->errors |= errors;
-	return FAILURE;
+	return -1;
 }
 
 /**
@@ -313,7 +313,7 @@ failure:
  * @param desc:	Descriptor of the UART device
  * @param data:	Buffer with the data to be written
  * @param bytes_number:	Number of bytes to be written. Between 1 and 1024
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t no_os_uart_write(struct no_os_uart_desc *desc, const uint8_t *data,
 			 uint32_t bytes_number)
@@ -324,7 +324,7 @@ int32_t no_os_uart_write(struct no_os_uart_desc *desc, const uint8_t *data,
 	uint32_t		idx;
 
 	if (!desc || !data || !bytes_number)
-		return FAILURE;
+		return -1;
 
 	/* TODO: Add support for more than 1024 bytes */
 
@@ -350,7 +350,7 @@ int32_t no_os_uart_write(struct no_os_uart_desc *desc, const uint8_t *data,
 
 failure:
 	extra->errors |= errors;
-	return FAILURE;
+	return -1;
 }
 
 /**
@@ -360,7 +360,7 @@ failure:
  * @param desc:	Descriptor of the UART device
  * @param data:	Buffer where data will be read
  * @param bytes_number:	Number of bytes to be read
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t no_os_uart_read_nonblocking(struct no_os_uart_desc *desc, uint8_t *data,
 				    uint32_t bytes_number)
@@ -369,12 +369,12 @@ int32_t no_os_uart_read_nonblocking(struct no_os_uart_desc *desc, uint8_t *data,
 	uint32_t		to_read;
 
 	if (!desc || !data || !bytes_number)
-		return FAILURE;
+		return -1;
 	extra = desc->extra;
 
 	/* Driver can not submit an other buffer when there is already one */
 	if (extra->read_desc.is_nonblocking)
-		return FAILURE;
+		return -1;
 	extra->read_desc.is_nonblocking = true;
 
 	to_read = no_os_min(bytes_number, NO_OS_MAX_BYTES);
@@ -387,7 +387,7 @@ int32_t no_os_uart_read_nonblocking(struct no_os_uart_desc *desc, uint8_t *data,
 		(uint32_t const)to_read,
 		to_read > 4 ? true : false);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -397,7 +397,7 @@ int32_t no_os_uart_read_nonblocking(struct no_os_uart_desc *desc, uint8_t *data,
  * @param desc:	Descriptor of the UART device
  * @param data:	Buffer where data will be written
  * @param bytes_number:	Number of bytes to be written
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t no_os_uart_write_nonblocking(struct no_os_uart_desc *desc,
 				     const uint8_t *data,
@@ -407,12 +407,12 @@ int32_t no_os_uart_write_nonblocking(struct no_os_uart_desc *desc,
 	uint32_t		to_write;
 
 	if (!desc || !data || !bytes_number)
-		return FAILURE;
+		return -1;
 	extra = desc->extra;
 
 	/* Driver can not submit an other buffer when there is already one */
 	if (extra->write_desc.is_nonblocking)
-		return FAILURE;
+		return -1;
 	extra->write_desc.is_nonblocking = true;
 
 	to_write = no_os_min(bytes_number, NO_OS_MAX_BYTES);
@@ -425,7 +425,7 @@ int32_t no_os_uart_write_nonblocking(struct no_os_uart_desc *desc,
 		(uint32_t const)to_write,
 		to_write > 4 ? true : false);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -437,7 +437,7 @@ int32_t no_os_uart_write_nonblocking(struct no_os_uart_desc *desc,
  * @param desc:  Descriptor of the UART device used in the call of the drivers
  * functions
  * @param param: Descriptor used to configure the UART device
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t no_os_uart_init(struct no_os_uart_desc **desc,
 			struct no_os_uart_init_param *param)
@@ -449,12 +449,12 @@ int32_t no_os_uart_init(struct no_os_uart_desc **desc,
 	if (!desc || !param || !(param->extra) ||
 	    param->device_id >= NO_OS_NUM_UART_DEVICES || //
 	    initialized[param->device_id] != 0) //Already initialized
-		return FAILURE;
+		return -1;
 
 	initialized[param->device_id] = 1;
 	*desc = alloc_desc_mem();
 	if (!(*desc))
-		return FAILURE;
+		return -1;
 	aducm_desc = (*desc)->extra;
 	aducm_init_param = param->extra;
 
@@ -496,24 +496,24 @@ int32_t no_os_uart_init(struct no_os_uart_desc **desc,
 	adi_uart_RegisterCallback(aducm_desc->uart_handler, no_os_uart_callback,
 				  *desc);
 
-	return SUCCESS;
+	return 0;
 failure:
 	free_desc_mem(*desc);
 	*desc = NULL;
-	return FAILURE;
+	return -1;
 }
 
 /**
  * @brief Free the resources allocated by \ref no_os_uart_init().
  * @param desc: Descriptor of the UART device
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t no_os_uart_remove(struct no_os_uart_desc *desc)
 {
 	struct no_os_aducm_uart_desc *aducm_desc;
 
 	if (desc == NULL || desc->extra == NULL)
-		return FAILURE;
+		return -1;
 
 	initialized[desc->device_id] = 0;
 
@@ -521,20 +521,20 @@ int32_t no_os_uart_remove(struct no_os_uart_desc *desc)
 	adi_uart_Close(aducm_desc->uart_handler);
 	free_desc_mem(desc);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Free the resources allocated by \ref no_os_uart_init().
  * @param desc: Descriptor of the UART device
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 uint32_t no_os_uart_get_errors(struct no_os_uart_desc *desc)
 {
 	struct no_os_aducm_uart_desc *extra;
 
 	if (!desc)
-		return FAILURE;
+		return -1;
 	extra = desc->extra;
 	uint32_t ret = extra->errors;
 	extra->errors = 0;

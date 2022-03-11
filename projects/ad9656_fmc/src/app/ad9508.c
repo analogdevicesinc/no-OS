@@ -52,7 +52,7 @@
  * @param dev - The ad9508 device handler
  * @param reg_addr - The address of the internal register of the ad9508 chip
  * @param reg_data - The value read from the internal register
- * @return SUCCESS if the value was successfully read, FAILURE otherwise
+ * @return 0 if the value was successfully read, -1 otherwise
  */
 int32_t ad9508_reg_read(struct ad9508_dev *dev,
 			uint16_t reg_addr,
@@ -84,7 +84,7 @@ int32_t ad9508_reg_read(struct ad9508_dev *dev,
  * @param dev - The device handler for the ad9508 chip
  * @param reg_addr - Address of the internal register of the ad9508 chip
  * @param reg_data - Value to be written to the register
- * @return SUCCESS if the value was written successfully, FAILURE otherwise
+ * @return 0 if the value was written successfully, -1 otherwise
  */
 int32_t ad9508_reg_write(struct ad9508_dev *dev,
 			 uint16_t reg_addr,
@@ -109,7 +109,7 @@ int32_t ad9508_reg_write(struct ad9508_dev *dev,
  * @brief Setup the working parameters of the ad9508 chip
  * @param device - The device handler of the ad9508 chip
  * @param init_param - Values for the working parameters of ad9508
- * @return SUCCESS if device is ready for use, FAILURE otherwise
+ * @return 0 if device is ready for use, -1 otherwise
  */
 int32_t ad9508_setup(struct ad9508_dev **device,
 		     const struct ad9508_init_param *init_param)
@@ -121,16 +121,16 @@ int32_t ad9508_setup(struct ad9508_dev **device,
 
 	dev = (struct ad9508_dev *)malloc(sizeof(*dev));
 	if (!dev)
-		return FAILURE;
+		return -1;
 
 	/* SPI */
 	ret = no_os_spi_init(&dev->spi_desc, &init_param->spi_init);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	/* reset */
 	ret = ad9508_reg_write(dev, AD9508_SPI_CONFIG, 0x24);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	no_os_mdelay(250);
@@ -140,17 +140,17 @@ int32_t ad9508_setup(struct ad9508_dev **device,
 	 *                      0x0D contains the most significant byte
 	 */
 	ret = ad9508_reg_read(dev, AD9508_PART_ID_LOW, &reg_data);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	if (reg_data != (AD9508_PART_ID_VALUE & 0xFF))
-		return FAILURE;
+		return -1;
 	ret = ad9508_reg_read(dev, AD9508_PART_ID_HIGH, &reg_data);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	if (reg_data != (AD9508_PART_ID_VALUE >> 8))
-		return FAILURE;
+		return -1;
 
 	/*
 	 * configure 9508 to pass the 125MHz input clock unmodified, so divider = 1
@@ -158,38 +158,38 @@ int32_t ad9508_setup(struct ad9508_dev **device,
 	 */
 	ret = ad9508_reg_write(dev, AD9508_OUT1_DIV_RATIO_LOW,
 			       AD9508_DIVIDE_RATIO_ONE); /* divide ratio[7:0] */
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = ad9508_reg_write(dev, AD9508_OUT1_DIV_RATIO_HIGH,
 			       AD9508_DIVIDE_RATIO_ONE); /* divide ratio[9:8] */
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = ad9508_reg_write(dev, AD9508_OUT1_PHASE_LOW,
 			       AD9508_DIVIDE_RATIO_ONE); /* phase offset[7:0] */
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = ad9508_reg_write(dev, AD9508_OUT1_PHASE_HIGH,
 			       AD9508_DIVIDE_RATIO_ONE); /* phase offset[10:8] */
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Free the resources allocated by ad9508_setup().
  * @param dev - The device structure.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad9508_remove(struct ad9508_dev *dev)
 {
 	int32_t ret;
 
 	ret = no_os_spi_remove(dev->spi_desc);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	free(dev);

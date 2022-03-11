@@ -48,7 +48,7 @@
  * @brief Initialize the SPI communication peripheral.
  * @param desc - The SPI descriptor.
  * @param param - The structure that contains the SPI parameters.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t stm32_spi_init(struct no_os_spi_desc **desc,
 		       const struct no_os_spi_init_param *param)
@@ -197,7 +197,7 @@ int32_t stm32_spi_init(struct no_os_spi_desc **desc,
 	spi_desc->chip_select = param->chip_select;
 	*desc = spi_desc;
 
-	return SUCCESS;
+	return 0;
 error:
 	free(spi_desc);
 	free(sdesc);
@@ -207,7 +207,7 @@ error:
 /**
  * @brief Free the resources allocated by no_os_spi_init().
  * @param desc - The SPI descriptor.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t stm32_spi_remove(struct no_os_spi_desc *desc)
 {
@@ -229,7 +229,7 @@ int32_t stm32_spi_remove(struct no_os_spi_desc *desc)
  * @param desc - The SPI descriptor.
  * @param data - The buffer with the transmitted/received data.
  * @param bytes_number - Number of bytes to write/read.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t stm32_spi_write_and_read(struct no_os_spi_desc *desc,
 				 uint8_t *data,
@@ -263,7 +263,7 @@ int32_t stm32_spi_write_and_read(struct no_os_spi_desc *desc,
 	__HAL_SPI_DISABLE(&sdesc->hspi);
 	gdesc->port->BSRR = NO_OS_BIT(sdesc->chip_select->number);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**

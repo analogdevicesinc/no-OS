@@ -273,7 +273,7 @@ int32_t ad738x_reference_sel(struct ad738x_dev *dev,
  * @param dev - ad738x_dev device handler.
  * @param buf - data buffer.
  * @param samples - sample number.
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t ad738x_read_data(struct ad738x_dev *dev,
 			 uint32_t *buf,
@@ -289,7 +289,7 @@ int32_t ad738x_read_data(struct ad738x_dev *dev,
 	};
 
 	ret = spi_engine_offload_init(dev->spi_desc, dev->offload_init_param);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	msg.commands_data = commands_data;
@@ -298,7 +298,7 @@ int32_t ad738x_read_data(struct ad738x_dev *dev,
 	msg.rx_addr = (uint32_t)buf;
 
 	ret = spi_engine_offload_transfer(dev->spi_desc, msg, samples);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	if (dev->dcache_invalidate_range)
@@ -350,7 +350,7 @@ int32_t ad738x_init(struct ad738x_dev **device,
 /**
  * @brief Free the resources allocated by ad738x_init().
  * @param dev - The device structure.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad738x_remove(struct ad738x_dev *dev)
 {

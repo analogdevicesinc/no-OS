@@ -140,103 +140,103 @@ int32_t ad6676_gpio_config(struct ad6676_init_param init_param)
 	struct no_os_gpio_desc *gpio_adc_agc2;
 
 	ret = no_os_gpio_get(&gpio_adc_oen, &gpio_adc_oen_param);
-	if(ret != SUCCESS)
-		return FAILURE;
+	if(ret != 0)
+		return -1;
 
 	ret = no_os_gpio_get(&gpio_adc_s0, &gpio_adc_s0_param);
-	if(ret != SUCCESS)
-		return FAILURE;
+	if(ret != 0)
+		return -1;
 
 	ret = no_os_gpio_get(&gpio_adc_s1, &gpio_adc_s1_param);
-	if(ret != SUCCESS)
-		return FAILURE;
+	if(ret != 0)
+		return -1;
 
 	ret = no_os_gpio_get(&gpio_adc_sela, &gpio_adc_sela_param);
-	if(ret != SUCCESS)
-		return FAILURE;
+	if(ret != 0)
+		return -1;
 
 	ret = no_os_gpio_get(&gpio_adc_selb, &gpio_adc_selb_param);
-	if(ret != SUCCESS)
-		return FAILURE;
+	if(ret != 0)
+		return -1;
 
 	ret = no_os_gpio_get(&gpio_adc_resetb, &gpio_adc_resetb_param);
-	if(ret != SUCCESS)
-		return FAILURE;
+	if(ret != 0)
+		return -1;
 
 	ret = no_os_gpio_get(&gpio_adc_agc1, &gpio_adc_agc1_param);
-	if(ret != SUCCESS)
-		return FAILURE;
+	if(ret != 0)
+		return -1;
 
 	ret = no_os_gpio_get(&gpio_adc_agc2, &gpio_adc_agc2_param);
-	if(ret != SUCCESS)
-		return FAILURE;
+	if(ret != 0)
+		return -1;
 
 	ret = no_os_gpio_direction_output(gpio_adc_oen, 0);
-	if(ret != SUCCESS)
-		return FAILURE;
+	if(ret != 0)
+		return -1;
 
 	switch (init_param.decimation) {
 	case 12:
 		ret = no_os_gpio_direction_output(gpio_adc_s0, 1);
-		if(ret != SUCCESS)
-			return FAILURE;
+		if(ret != 0)
+			return -1;
 		ret = no_os_gpio_direction_output(gpio_adc_s1, 1);
-		if(ret != SUCCESS)
-			return FAILURE;
+		if(ret != 0)
+			return -1;
 		break;
 	case 16:
 		ret = no_os_gpio_direction_output(gpio_adc_s0, 0);
-		if(ret != SUCCESS)
-			return FAILURE;
+		if(ret != 0)
+			return -1;
 		ret = no_os_gpio_direction_output(gpio_adc_s1, 1);
-		if(ret != SUCCESS)
-			return FAILURE;
+		if(ret != 0)
+			return -1;
 		break;
 	case 24:
 		ret = no_os_gpio_direction_output(gpio_adc_s0, 0);
-		if(ret != SUCCESS)
-			return FAILURE;
+		if(ret != 0)
+			return -1;
 		ret = no_os_gpio_direction_output(gpio_adc_s1, 1);
-		if(ret != SUCCESS)
-			return FAILURE;
+		if(ret != 0)
+			return -1;
 		break;
 	case 32:
 		ret = no_os_gpio_direction_output(gpio_adc_s0, 0);
-		if(ret != SUCCESS)
-			return FAILURE;
+		if(ret != 0)
+			return -1;
 		ret = no_os_gpio_direction_output(gpio_adc_s1, 0);
-		if(ret != SUCCESS)
-			return FAILURE;
+		if(ret != 0)
+			return -1;
 		break;
 	default:
-		return FAILURE;
+		return -1;
 	}
 
 	if (init_param.use_extclk) {
 		ret = no_os_gpio_direction_output(gpio_adc_sela, 1);
-		if(ret != SUCCESS)
-			return FAILURE;
+		if(ret != 0)
+			return -1;
 		ret = no_os_gpio_direction_output(gpio_adc_selb, 0);
-		if(ret != SUCCESS)
-			return FAILURE;
+		if(ret != 0)
+			return -1;
 	} else {
 		ret = no_os_gpio_direction_output(gpio_adc_sela, 0);
-		if(ret != SUCCESS)
-			return FAILURE;
+		if(ret != 0)
+			return -1;
 		ret = no_os_gpio_direction_output(gpio_adc_selb, 1);
-		if(ret != SUCCESS)
-			return FAILURE;
+		if(ret != 0)
+			return -1;
 	}
 
 	ret = no_os_gpio_direction_output(gpio_adc_resetb, 1);
-	if(ret != SUCCESS)
-		return FAILURE;
+	if(ret != 0)
+		return -1;
 	ret = no_os_gpio_direction_output(gpio_adc_agc1, 0);
-	if(ret != SUCCESS)
-		return FAILURE;
+	if(ret != 0)
+		return -1;
 	ret = no_os_gpio_direction_output(gpio_adc_agc2, 0);
-	if(ret != SUCCESS)
-		return FAILURE;
+	if(ret != 0)
+		return -1;
 
 	no_os_gpio_remove(gpio_adc_oen);
 	no_os_gpio_remove(gpio_adc_s0);
@@ -247,7 +247,7 @@ int32_t ad6676_gpio_config(struct ad6676_init_param init_param)
 	no_os_gpio_remove(gpio_adc_agc1);
 	no_os_gpio_remove(gpio_adc_agc2);
 
-	return SUCCESS;
+	return 0;
 }
 
 /***************************************************************************//**
@@ -357,54 +357,54 @@ int main(void)
 
 	// receiver DMA configuration
 	ret = no_os_gpio_get(&gpio_sysref, &gpio_sysref_param);
-	if(ret != SUCCESS)
-		return FAILURE;
+	if(ret != 0)
+		return -1;
 
 	ret = no_os_gpio_direction_output(gpio_sysref, 1);
-	if(ret != SUCCESS)
-		return FAILURE;
+	if(ret != 0)
+		return -1;
 
 	// set up clock
 	ret = ad6676_gpio_config(ad6676_param);
-	if(ret != SUCCESS)
-		return FAILURE;
+	if(ret != 0)
+		return -1;
 
 	// set up the device
 	ret = ad6676_setup(&ad6676_device, ad6676_param);
-	if(ret != SUCCESS)
-		return FAILURE;
+	if(ret != 0)
+		return -1;
 
 	// set up the XCVR core
 	ret = adxcvr_init(&ad6676_xcvr, &ad6676_xcvr_param);
-	if (ret != SUCCESS) {
+	if (ret != 0) {
 		pr_err("error: %s: adxcvr_init() failed\n", ad6676_xcvr->name);
 	}
 
 	ret = adxcvr_clk_enable(ad6676_xcvr);
-	if (ret != SUCCESS) {
+	if (ret != 0) {
 		pr_err("error: %s: adxcvr_clk_enable() failed\n", ad6676_xcvr->name);
 	}
 
 	// setup JESD core
 	ret = axi_jesd204_rx_init(&ad6676_jesd, &ad6676_jesd_param);
-	if (ret != SUCCESS) {
+	if (ret != 0) {
 		pr_err("error: %s: axi_jesd204_rx_init() failed\n", ad6676_jesd->name);
 	}
 
 	ret = axi_jesd204_rx_lane_clk_enable(ad6676_jesd);
-	if (ret != SUCCESS) {
+	if (ret != 0) {
 		pr_err("error: %s: axi_jesd204_tx_lane_clk_enable() failed\n",
 		       ad6676_jesd->name);
 	}
 
 	ret = axi_adc_init(&ad6676_core,  &ad6676_core_param);
-	if (ret != SUCCESS) {
+	if (ret != 0) {
 		pr_err("axi_adc_init() error: %s\n", ad6676_core->name);
 	}
 
 	// JESD core status
 	ret = axi_jesd204_rx_status_read(ad6676_jesd);
-	if (ret != SUCCESS) {
+	if (ret != 0) {
 		pr_err("axi_jesd204_rx_status_read() error: %"PRIi32"\n", ret);
 	}
 
@@ -463,5 +463,5 @@ int main(void)
 
 	pr_info("Done.");
 
-	return SUCCESS;
+	return 0;
 }

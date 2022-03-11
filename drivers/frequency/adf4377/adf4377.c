@@ -54,7 +54,7 @@
  * @param dev - The device structure.
  * @param reg_addr - The register address.
  * @param data - Data value to write.
- * @return Returns SUCCESS in case of success or negative error code otherwise.
+ * @return Returns 0 in case of success or negative error code otherwise.
  */
 int32_t adf4377_spi_write(struct adf4377_dev *dev, uint8_t reg_addr,
 			  uint8_t data)
@@ -80,7 +80,7 @@ int32_t adf4377_spi_write(struct adf4377_dev *dev, uint8_t reg_addr,
  * @param reg_addr - The register address.
  * @param mask - Mask for specific register bits to be updated.
  * @param data - Data written to the device (requires prior bit shifting).
- * @return Returns SUCCESS in case of success or negative error code otherwise.
+ * @return Returns 0 in case of success or negative error code otherwise.
  */
 int32_t adf4377_spi_write_mask(struct adf4377_dev *dev, uint8_t reg_addr,
 			       uint8_t mask, uint8_t data)
@@ -103,7 +103,7 @@ int32_t adf4377_spi_write_mask(struct adf4377_dev *dev, uint8_t reg_addr,
  * @param dev - The device structure.
  * @param reg_addr - The register address.
  * @param data - Data read from the device.
- * @return Returns SUCCESS in case of success or negative error code otherwise.
+ * @return Returns 0 in case of success or negative error code otherwise.
  */
 int32_t adf4377_spi_read(struct adf4377_dev *dev, uint8_t reg_addr,
 			 uint8_t *data)
@@ -133,7 +133,7 @@ int32_t adf4377_spi_read(struct adf4377_dev *dev, uint8_t reg_addr,
 /**
  * @brief ADF4377 SPI Scratchpad check.
  * @param dev - The device structure.
- * @return Returns SUCCESS in case of success or negative error code.
+ * @return Returns 0 in case of success or negative error code.
  */
 int32_t adf4377_check_scratchpad(struct adf4377_dev *dev)
 {
@@ -149,7 +149,7 @@ int32_t adf4377_check_scratchpad(struct adf4377_dev *dev)
 		return ret;
 
 	if(scratchpad != ADF4377_SPI_SCRATCHPAD_TEST_A)
-		return FAILURE;
+		return -1;
 
 	ret = adf4377_spi_write(dev, ADF4377_REG(0x0A), ADF4377_SPI_SCRATCHPAD_TEST_B);
 	if (ret < 0)
@@ -160,15 +160,15 @@ int32_t adf4377_check_scratchpad(struct adf4377_dev *dev)
 		return ret;
 
 	if(scratchpad != ADF4377_SPI_SCRATCHPAD_TEST_B)
-		return FAILURE;
+		return -1;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Set default datasheet register values.
  * @param dev - The device structure.
- * @return Returns SUCCESS in case of success or negative error code.
+ * @return Returns 0 in case of success or negative error code.
  */
 static int32_t adf4377_set_default(struct adf4377_dev *dev)
 {
@@ -245,7 +245,7 @@ static int32_t adf4377_set_default(struct adf4377_dev *dev)
 /**
  * @brief Software reset.
  * @param dev - The device structure.
- * @return Returns SUCCESS in case of success or negative error code.
+ * @return Returns 0 in case of success or negative error code.
  */
 int32_t adf4377_soft_reset(struct adf4377_dev *dev)
 {
@@ -268,14 +268,14 @@ int32_t adf4377_soft_reset(struct adf4377_dev *dev)
 			return adf4377_set_default(dev);
 	}
 
-	return FAILURE;
+	return -1;
 }
 
 /**
  * Set the output frequency.
  * @param dev - The device structure.
  * @param freq - The output frequency.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t adf4377_set_freq(struct adf4377_dev *dev, uint64_t freq)
 {
@@ -286,7 +286,7 @@ int32_t adf4377_set_freq(struct adf4377_dev *dev, uint64_t freq)
 	dev->clkout_div_sel = 0;
 
 	if(ADF4377_CHECK_RANGE(dev->f_clk, CLKPN_FREQ))
-		return FAILURE;
+		return -1;
 
 	dev->f_vco = freq;
 
@@ -333,7 +333,7 @@ int32_t adf4377_set_freq(struct adf4377_dev *dev, uint64_t freq)
 /**
  * Setup the device.
  * @param dev - The device structure.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 static int32_t adf4377_setup(struct adf4377_dev *dev)
 {
@@ -366,7 +366,7 @@ static int32_t adf4377_setup(struct adf4377_dev *dev)
 		dev->f_pfd = dev->clkin_freq * (1 + dev->ref_doubler_en);
 
 	if(ADF4377_CHECK_RANGE(dev->f_pfd, FREQ_PFD))
-		return FAILURE;
+		return -1;
 
 	f_div_rclk = dev->f_pfd;
 
@@ -514,7 +514,7 @@ static int32_t adf4377_setup(struct adf4377_dev *dev)
  * @brief Initializes the ADF4377.
  * @param device - The device structure.
  * @param init_param - The structure containing the device initial parameters.
- * @return Returns SUCCESS in case of success or negative error code.
+ * @return Returns 0 in case of success or negative error code.
  */
 int32_t adf4377_init(struct adf4377_dev **device,
 		     struct adf4377_init_param *init_param)
@@ -645,7 +645,7 @@ error_dev:
 /**
  * @brief Free resoulces allocated for ADF4377
  * @param dev - The device structure.
- * @return Returns SUCCESS in case of success or negative error code.
+ * @return Returns 0 in case of success or negative error code.
  */
 int32_t adf4377_remove(struct adf4377_dev *dev)
 {

@@ -91,13 +91,13 @@ int32_t platform_init()
 {
 #if defined(ADUCM_PLATFORM)
 	if (ADI_PWR_SUCCESS != adi_pwr_Init())
-		return FAILURE;
+		return -1;
 
 	if (ADI_PWR_SUCCESS != adi_pwr_SetClockDivider(ADI_CLOCK_HCLK, 1u))
-		return FAILURE;
+		return -1;
 
 	if (ADI_PWR_SUCCESS != adi_pwr_SetClockDivider(ADI_CLOCK_PCLK, 1u))
-		return FAILURE;
+		return -1;
 	adi_initComponents();
 #elif defined(STM32_PLATFORM)
 	stm32_init();
@@ -125,7 +125,7 @@ int main(void)
 	struct dac_demo_desc *dac_desc;
 
 	status = platform_init();
-	if (status != SUCCESS)
+	if (status != 0)
 		return status;
 
 	struct iio_data_buffer adc_buff = {
@@ -145,7 +145,7 @@ int main(void)
 		.dev_ch_attr = {1111,1112,1113,1114,1115,1116,1117,1118,1119,1120,1121,1122,1123,1124,1125,1126}
 	};
 	status = adc_demo_init(&adc_desc, &adc_init_par);
-	if (status != SUCCESS)
+	if (status != 0)
 		return status;
 
 	dac_init_par = (struct dac_demo_init_param) {
@@ -155,7 +155,7 @@ int main(void)
 		.dev_ch_attr = {1111,1112,1113,1114,1115,1116,1117,1118,1119,1120,1121,1122,1123,1124,1125,1126}
 	};
 	status = dac_demo_init(&dac_desc, &dac_init_par);
-	if (status != SUCCESS)
+	if (status != 0)
 		return status;
 
 	struct iio_app_device devices[] = {

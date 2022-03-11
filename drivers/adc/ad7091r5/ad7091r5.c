@@ -57,7 +57,7 @@
  * @param dev - The device structure.
  * @param reg_addr - The register address.
  * @param reg_data - The register data.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7091r5_i2c_reg_read(struct ad7091r5_dev *dev,
 			      uint8_t reg_addr,
@@ -87,7 +87,7 @@ int32_t ad7091r5_i2c_reg_read(struct ad7091r5_dev *dev,
  * @param dev - The device structure.
  * @param reg_addr - The register address.
  * @param reg_data - The register data.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7091r5_i2c_reg_write(struct ad7091r5_dev *dev,
 			       uint8_t reg_addr,
@@ -111,7 +111,7 @@ int32_t ad7091r5_i2c_reg_write(struct ad7091r5_dev *dev,
  * @param reg_addr - The register address.
  * @param mask - The mask.
  * @param data - The register data.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7091r5_i2c_read_mask(struct ad7091r5_dev *dev,
 			       uint8_t reg_addr,
@@ -136,7 +136,7 @@ int32_t ad7091r5_i2c_read_mask(struct ad7091r5_dev *dev,
  * @param reg_addr - The register address.
  * @param mask - The mask.
  * @param data - The register data.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7091r5_i2c_write_mask(struct ad7091r5_dev *dev,
 				uint8_t reg_addr,
@@ -163,7 +163,7 @@ int32_t ad7091r5_i2c_write_mask(struct ad7091r5_dev *dev,
  * Set sleep mode.
  * @param dev - The device structure.
  * @param mode - Sleep mode.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7091r5_sleep_mode(struct ad7091r5_dev *dev,
 			    enum ad7091r5_sleep_mode mode)
@@ -181,7 +181,7 @@ int32_t ad7091r5_sleep_mode(struct ad7091r5_dev *dev,
  * @param dev - The device structure.
  * @param port - Port number.
  * @param value - Value.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7091r5_set_port(struct ad7091r5_dev *dev, enum ad7091r5_port port,
 			  bool value)
@@ -219,7 +219,7 @@ int32_t ad7091r5_set_port(struct ad7091r5_dev *dev, enum ad7091r5_port port,
  * @param mode - GPO0 new mode.
  * @param is_cmos - 0: GPO0 is open drain
  * 		  - 1: GPO0 is CMOS.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7091r5_set_gpo0_mode(struct ad7091r5_dev *dev,
 			       enum ad7091r5_gpo0_mode mode, bool is_cmos)
@@ -253,7 +253,7 @@ int32_t ad7091r5_set_gpo0_mode(struct ad7091r5_dev *dev,
  * Set cycle timer for autocycle mode.
  * @param dev - The device structure.
  * @param timer - Converter sampling period.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7091r5_set_cycle_timer(struct ad7091r5_dev *dev,
 				 enum ad7091r5_cycle_timer timer)
@@ -271,7 +271,7 @@ int32_t ad7091r5_set_cycle_timer(struct ad7091r5_dev *dev,
  * @param dev - The device structure.
  * @param channel - Channel.
  * @param alert - Alert type.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7091r5_get_alert(struct ad7091r5_dev *dev, uint8_t channel,
 			   enum ad7091r5_alert_type *alert)
@@ -291,7 +291,7 @@ int32_t ad7091r5_get_alert(struct ad7091r5_dev *dev, uint8_t channel,
 
 	*alert = REG_ALERT_MASK(data, channel);
 
-	return SUCCESS;
+	return 0;
 }
 
 
@@ -301,7 +301,7 @@ int32_t ad7091r5_get_alert(struct ad7091r5_dev *dev, uint8_t channel,
  * @param limit - Limit.
  * @param channel - Channel.
  * @param value - Value.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7091r5_set_limit(struct ad7091r5_dev *dev,
 			   enum ad7091r5_limit limit,
@@ -336,7 +336,7 @@ int32_t ad7091r5_set_limit(struct ad7091r5_dev *dev,
  * @param limit - Limit.
  * @param channel - Channel.
  * @param value - Value.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7091r5_get_limit(struct ad7091r5_dev *dev,
 			   enum ad7091r5_limit limit,
@@ -369,14 +369,14 @@ int32_t ad7091r5_get_limit(struct ad7091r5_dev *dev,
 
 	*value = REG_RESULT_CONV_DATA(data);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * Set mode.
  * @param dev - The device structure.
  * @param mode - Converter mode.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7091r5_set_mode(struct ad7091r5_dev *dev, enum ad7091r5_mode mode)
 {
@@ -406,7 +406,7 @@ int32_t ad7091r5_set_mode(struct ad7091r5_dev *dev, enum ad7091r5_mode mode)
  * Set device channel.
  * @param dev - The device structure.
  * @param channel - Channel.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7091r5_set_channel(struct ad7091r5_dev *dev, uint8_t channel)
 {
@@ -436,7 +436,7 @@ int32_t ad7091r5_set_channel(struct ad7091r5_dev *dev, uint8_t channel)
  * @param dev - ad7091r5_dev device handler.
  * @param is_software - true: Software reset
  * 		      - false: hardware reset
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7091r5_reset(struct ad7091r5_dev *dev, bool is_software)
 {
@@ -466,7 +466,7 @@ int32_t ad7091r5_reset(struct ad7091r5_dev *dev, bool is_software)
  *        ad7091r5_init() helper function.
  * @param dev - ad7091r5_dev device handler.
  * @param init_param - Pointer to the initialization structure.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 static int32_t ad7091r5_init_gpio(struct ad7091r5_dev *dev,
 				  struct ad7091r5_init_param *init_param)
@@ -493,7 +493,7 @@ static int32_t ad7091r5_init_gpio(struct ad7091r5_dev *dev,
  * @param dev - The device structure.
  * @param channel - Channel.
  * @param read_val - Value.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7091r5_read_one(struct ad7091r5_dev *dev,
 			  uint8_t channel, uint16_t *read_val)
@@ -516,11 +516,11 @@ int32_t ad7091r5_read_one(struct ad7091r5_dev *dev,
 		return ret;
 
 	if (REG_RESULT_CH_ID(val) != channel)
-		return FAILURE;
+		return -1;
 
 	*read_val = REG_RESULT_CONV_DATA(val);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -528,7 +528,7 @@ int32_t ad7091r5_read_one(struct ad7091r5_dev *dev,
  * @param device - The device structure.
  * @param init_param - The structure that contains the device initial
  * 		parameters.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7091r5_init(struct ad7091r5_dev **device,
 		      struct ad7091r5_init_param *init_param)
@@ -559,7 +559,7 @@ int32_t ad7091r5_init(struct ad7091r5_dev **device,
 
 	*device = dev;
 
-	return SUCCESS;
+	return 0;
 
 error_i2c:
 	no_os_i2c_remove(dev->i2c_desc);
@@ -574,7 +574,7 @@ error_dev:
 /**
  * @brief Free the memory allocated by ad7091r5_init().
  * @param dev - Pointer to the device handler.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7091r5_remove(struct ad7091r5_dev *dev)
 {

@@ -96,7 +96,7 @@ int32_t init_gpios_to_defaults()
 	for (i = 0; i < TOTAL_GPIOS; i++) {
 		param.number = GPIO_OFFSET + i;
 		err = no_os_gpio_get(&gpio, &param);
-		if (IS_ERR_VALUE(err))
+		if (NO_OS_IS_ERR_VALUE(err))
 			return err;
 		if (gpios_initial_value[i][0] == NO_OS_GPIO_IN)
 			err = no_os_gpio_direction_input(gpio);
@@ -104,13 +104,13 @@ int32_t init_gpios_to_defaults()
 			err = no_os_gpio_direction_output(gpio,
 							  gpios_initial_value[i][1]);
 
-		if (IS_ERR_VALUE(err))
+		if (NO_OS_IS_ERR_VALUE(err))
 			return err;
 
 		no_os_gpio_remove(gpio);
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 void set_power_up_success_led()
@@ -141,14 +141,14 @@ int32_t run_example(struct ad3552r_desc *dac)
 		err = ad3552r_write_samples(dac, samples, 1,
 					    AD3552R_MASK_ALL_CH,
 					    AD3552R_WRITE_INPUT_REGS);
-		if (IS_ERR_VALUE(err))
+		if (NO_OS_IS_ERR_VALUE(err))
 			return err;
 
 		no_os_udelay(time_between_samples_us);
 
 		i = (i + 1) % nb_samples;
 		err = ad3552r_ldac_trigger(dac, AD3552R_MASK_ALL_CH);
-	} while (!IS_ERR_VALUE(err));
+	} while (!NO_OS_IS_ERR_VALUE(err));
 
 	return err;
 }
@@ -160,7 +160,7 @@ int main()
 	pr_debug("Hey, welcome to ad3552r_fmcz example\n");
 
 	err = init_gpios_to_defaults();
-	if (IS_ERR_VALUE(err)) {
+	if (NO_OS_IS_ERR_VALUE(err)) {
 		pr_err("init_gpios_to_defaults failed: %"PRIi32"\n", err);
 		return err;
 		fmcdaq3.c
@@ -200,7 +200,7 @@ int main()
 	struct ad3552r_desc *dac;
 
 	err = ad3552r_init(&dac, &default_ad3552r_param);
-	if (IS_ERR_VALUE(err)) {
+	if (NO_OS_IS_ERR_VALUE(err)) {
 		pr_err("ad3552r_init failed with code: %"PRIi32"\n", err);
 		return err;
 	}
@@ -208,7 +208,7 @@ int main()
 	set_power_up_success_led();
 
 	err = run_example(dac);
-	if (IS_ERR_VALUE(err)) {
+	if (NO_OS_IS_ERR_VALUE(err)) {
 		pr_debug("Example failed with code: %"PRIi32"\n", err);
 		return err;
 	}
@@ -226,7 +226,7 @@ int main()
 	};
 
 	err = iio_ad3552r_init(&iio_dac, &default_ad3552r_param);
-	if (IS_ERR_VALUE(err)) {
+	if (NO_OS_IS_ERR_VALUE(err)) {
 		pr_err("Error initializing iio_dac. Code: %"PRIi32"\n", err);
 		return err;
 	}

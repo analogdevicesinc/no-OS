@@ -57,7 +57,7 @@
  * @param init_param - The structure that contains the device initial
  * 		       parameters.
  *
- * @return SUCCESS in case of success or negative error code.
+ * @return 0 in case of success or negative error code.
 *******************************************************************************/
 int ad719x_init(struct ad719x_dev **device,
 		struct ad719x_init_param init_param)
@@ -74,33 +74,33 @@ int ad719x_init(struct ad719x_dev **device,
 
 	/* SPI */
 	ret = no_os_spi_init(&dev->spi_desc, init_param.spi_init);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		goto error_dev;
 
 	/* GPIO */
 	ret = no_os_gpio_get(&dev->gpio_miso, init_param.gpio_miso);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		goto error_spi;
 
 	ret = no_os_gpio_direction_input(dev->gpio_miso);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		goto error_miso;
 
 	ret = no_os_gpio_get_optional(&dev->sync_pin, init_param.sync_pin);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		goto error_miso;
 
 	ret = no_os_gpio_direction_output(dev->sync_pin, NO_OS_GPIO_HIGH);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		goto error_sync;
 
 	/* Reset */
 	ret = ad719x_reset(dev);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		goto error_sync;
 
 	ret = ad719x_get_register_value(dev, AD719X_REG_ID, 1, &reg_val);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		goto error_sync;
 
 	switch (dev->chip_id) {
@@ -130,39 +130,39 @@ int ad719x_init(struct ad719x_dev **device,
 		}
 		break;
 	default:
-		return FAILURE;
+		return -1;
 	}
 
 	/* Initialization */
 	ret = ad719x_range_setup(dev, init_param.current_polarity,
 				 init_param.current_gain);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		goto error_sync;
 
 	ret = ad719x_output_rate_select(dev, init_param.data_rate_code);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		goto error_sync;
 
 	ret = ad719x_buffer_select(dev, init_param.buffer);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		goto error_sync;
 
 	if(dev->chip_id == AD7193 || dev->chip_id == AD7194) {
 		ret = ad719x_config_input_mode(dev, init_param.input_mode);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			goto error_sync;
 	}
 
 	ret = ad719x_clock_select(dev, init_param.clock_source);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		goto error_sync;
 
 	ret = ad719x_set_bridge_switch(dev, init_param.bpdsw_mode);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		goto error_sync;
 
 	ret = ad719x_set_operating_mode(dev, init_param.operating_mode);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		goto error_sync;
 
 	*device = dev;
@@ -178,7 +178,7 @@ error_spi:
 error_dev:
 	free(dev);
 
-	return FAILURE;
+	return -1;
 }
 
 /***************************************************************************//**
@@ -186,18 +186,18 @@ error_dev:
  *
  * @param dev - The device structure.
  *
- * @return SUCCESS in case of success or negative error code.
+ * @return 0 in case of success or negative error code.
 *******************************************************************************/
 int ad719x_remove(struct ad719x_dev *dev)
 {
 	int ret;
 
 	ret = no_os_spi_remove(dev->spi_desc);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = no_os_gpio_remove(dev->gpio_miso);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	free(dev);
@@ -213,7 +213,7 @@ int ad719x_remove(struct ad719x_dev *dev)
  * @param reg_val          - Data value to write.
  * @param bytes_number     - Number of bytes to be written.
  *
- * @return SUCCESS in case of success or negative error code.
+ * @return 0 in case of success or negative error code.
 *******************************************************************************/
 int ad719x_set_register_value(struct ad719x_dev *dev,
 			      uint8_t reg_addr,
@@ -233,7 +233,7 @@ int ad719x_set_register_value(struct ad719x_dev *dev,
 	}
 
 	ret = no_os_spi_write_and_read(dev->spi_desc, write_command, bytes_number + 1);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	return ret;
@@ -247,7 +247,7 @@ int ad719x_set_register_value(struct ad719x_dev *dev,
  * @param bytes_number     - Number of bytes that will be read.
  * @param reg_data         - Data read from the register.
  *
- * @return SUCCESS in case of success or negative error code.
+ * @return 0 in case of success or negative error code.
 *******************************************************************************/
 int ad719x_get_register_value(struct ad719x_dev *dev, uint8_t reg_addr,
 			      uint8_t bytes_number, uint32_t *reg_data)
@@ -257,12 +257,12 @@ int ad719x_get_register_value(struct ad719x_dev *dev, uint8_t reg_addr,
 	int ret;
 
 	if (!reg_data)
-		return FAILURE;
+		return -1;
 
 	reg_word[0] = AD719X_COMM_READ | AD719X_COMM_ADDR(reg_addr);
 
 	ret = no_os_spi_write_and_read(dev->spi_desc, reg_word, bytes_number + 1);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	*reg_data = 0; // Clearing the buffer
@@ -282,7 +282,7 @@ int ad719x_get_register_value(struct ad719x_dev *dev, uint8_t reg_addr,
  * @param reg_data         - Register data to be written.
  * @param bytes            - Number of bytes that will be read.
  *
- * @return SUCCESS in case of success or negative error code.
+ * @return 0 in case of success or negative error code.
 *******************************************************************************/
 int ad719x_set_masked_register_value(struct ad719x_dev *dev,
 				     uint8_t reg_addr, uint32_t mask, uint32_t reg_data,
@@ -293,7 +293,7 @@ int ad719x_set_masked_register_value(struct ad719x_dev *dev,
 	int ret;
 
 	ret = ad719x_get_register_value(dev, reg_addr, bytes, &old_reg_data);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	old_reg_data &= ~mask;
@@ -307,7 +307,7 @@ int ad719x_set_masked_register_value(struct ad719x_dev *dev,
  *
  * @param dev - The device structure.
  *
- * @return SUCCESS in case of success or negative error code.
+ * @return 0 in case of success or negative error code.
 *******************************************************************************/
 int ad719x_reset(struct ad719x_dev *dev)
 {
@@ -317,7 +317,7 @@ int ad719x_reset(struct ad719x_dev *dev)
 	memset(register_word, 0xFF, 5);
 
 	ret = no_os_spi_write_and_read(dev->spi_desc, register_word, 5);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	// user must allow a period of 500 us
@@ -339,7 +339,7 @@ int ad719x_reset(struct ad719x_dev *dev)
  *				      AD719X_MODE_CAL_INT_FULL
  *				      AD719X_MODE_CAL_SYS_ZERO
  *				      AD719X_MODE_CAL_SYS_FULL
- * @return SUCCESS in case of success or negative error code.
+ * @return 0 in case of success or negative error code.
 *******************************************************************************/
 int ad719x_set_operating_mode(struct ad719x_dev *dev,
 			      enum ad719x_adc_modes opt_mode)
@@ -350,7 +350,7 @@ int ad719x_set_operating_mode(struct ad719x_dev *dev,
 					       AD719X_MODE_SEL(0x7), AD719X_MODE_SEL(opt_mode),
 					       3);
 
-	if (ret == SUCCESS) {
+	if (ret == 0) {
 		/* Store the last settings regarding operating mode. */
 		dev->operating_mode = opt_mode;
 	}
@@ -361,7 +361,7 @@ int ad719x_set_operating_mode(struct ad719x_dev *dev,
 /***************************************************************************//**
  * @brief Waits for RDY pin to go low.
  *
- * @return SUCCESS in case of success or negative error code.
+ * @return 0 in case of success or negative error code.
 *******************************************************************************/
 int ad719x_wait_rdy_go_low(struct ad719x_dev *dev)
 {
@@ -371,7 +371,7 @@ int ad719x_wait_rdy_go_low(struct ad719x_dev *dev)
 
 	while (wait && (timeout > 0)) {
 		ret = no_os_gpio_get_value(dev->gpio_miso, &wait);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			break;
 		timeout--;
 	}
@@ -389,7 +389,7 @@ int ad719x_wait_rdy_go_low(struct ad719x_dev *dev)
  *                           AD719X_TEMP - Temperature sensor
  *                           AD719X_SHORT - AIN2(+) - AIN2(-); (Pseudo = 0)
  *
- * @return SUCCESS in case of success or negative error code.
+ * @return 0 in case of success or negative error code.
 *******************************************************************************/
 int ad719x_channels_select(struct ad719x_dev *dev,
 			   uint16_t chn_mask)
@@ -423,7 +423,7 @@ int ad719x_channels_select(struct ad719x_dev *dev,
  * @param mode    - Calibration type.
  * @param channel - Channel to be calibrated.
  *
- * @return SUCCESS in case of success or negative error code.
+ * @return 0 in case of success or negative error code.
 *******************************************************************************/
 int ad719x_calibrate(struct ad719x_dev *dev,
 		     uint8_t mode, uint8_t channel)
@@ -431,13 +431,13 @@ int ad719x_calibrate(struct ad719x_dev *dev,
 	int ret;
 
 	ret = ad719x_channels_select(dev, channel);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = ad719x_set_masked_register_value(dev, AD719X_REG_MODE,
 					       AD719X_MODE_SEL(0x7), AD719X_MODE_SEL(mode),
 					       3);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	return ad719x_wait_rdy_go_low(dev);
@@ -451,7 +451,7 @@ int ad719x_calibrate(struct ad719x_dev *dev,
  *				  Example: 0 - Differential Analog Inputs
  *						   1 - Pseudo Differential Analog Inputs
  *
- * @return SUCCESS in case of success or negative error code.
+ * @return 0 in case of success or negative error code.
 *******************************************************************************/
 int ad719x_config_input_mode(struct ad719x_dev *dev, uint8_t mode)
 {
@@ -461,7 +461,7 @@ int ad719x_config_input_mode(struct ad719x_dev *dev, uint8_t mode)
 		ret = ad719x_set_masked_register_value(dev, AD719X_REG_CONF,
 						       AD719X_CONF_PSEUDO, (AD719X_CONF_PSEUDO * mode),
 						       3);
-		if (ret == SUCCESS) {
+		if (ret == 0) {
 			/* Store the last settings regarding input mode. */
 			dev->input_mode = mode;
 		}
@@ -478,7 +478,7 @@ int ad719x_config_input_mode(struct ad719x_dev *dev, uint8_t mode)
  *                   Example: 0 - Buffer disabled
  *                            1 - Buffer Enabled
  *
- * @return SUCCESS in case of success or negative error code.
+ * @return 0 in case of success or negative error code.
 *******************************************************************************/
 int ad719x_buffer_select(struct ad719x_dev *dev, uint8_t buff_en)
 {
@@ -488,7 +488,7 @@ int ad719x_buffer_select(struct ad719x_dev *dev, uint8_t buff_en)
 					       AD719X_CONF_BUF, (AD719X_CONF_BUF * buff_en),
 					       3);
 
-	if (ret == SUCCESS) {
+	if (ret == 0) {
 		/* Store the last settings regarding buffer selection. */
 		dev->buffer = buff_en;
 	}
@@ -502,7 +502,7 @@ int ad719x_buffer_select(struct ad719x_dev *dev, uint8_t buff_en)
  * @param dev			 - The device structure.
  * @param out_rate_code  - Filter output data rate code.
  *
- * @return SUCCESS in case of success or negative error code.
+ * @return 0 in case of success or negative error code.
 *******************************************************************************/
 int ad719x_output_rate_select(struct ad719x_dev *dev,
 			      uint16_t out_rate_code)
@@ -513,7 +513,7 @@ int ad719x_output_rate_select(struct ad719x_dev *dev,
 					       AD719X_MODE_RATE(0x3FF), AD719X_MODE_RATE(out_rate_code),
 					       3);
 
-	if (ret == SUCCESS) {
+	if (ret == 0) {
 		/* Store the last settings regarding filter output data rate. */
 		dev->data_rate_code = out_rate_code;
 	}
@@ -531,7 +531,7 @@ int ad719x_output_rate_select(struct ad719x_dev *dev,
  *				      AD719X_INT_CLK_4_92_MHZ_TRIST
  *				      AD719X_INT_CLK_4_92_MHZ
  *
- * @return SUCCESS in case of success or negative error code.
+ * @return 0 in case of success or negative error code.
 *******************************************************************************/
 int ad719x_clock_select(struct ad719x_dev *dev,
 			enum ad719x_adc_clock clk_select)
@@ -542,7 +542,7 @@ int ad719x_clock_select(struct ad719x_dev *dev,
 					       AD719X_MODE_CLKSRC(0x3), AD719X_MODE_CLKSRC(clk_select),
 					       3);
 
-	if (ret == SUCCESS) {
+	if (ret == 0) {
 		/* Store the last settings regarding clock source. */
 		dev->clock_source = clk_select;
 	}
@@ -558,7 +558,7 @@ int ad719x_clock_select(struct ad719x_dev *dev,
  *						 0 - Switch Opened
  *						 1 - Switch Closed
  *
- * @return SUCCESS in case of success or negative error code.
+ * @return 0 in case of success or negative error code.
 *******************************************************************************/
 int ad719x_set_bridge_switch(struct ad719x_dev *dev, uint8_t bpdsw_select)
 {
@@ -572,7 +572,7 @@ int ad719x_set_bridge_switch(struct ad719x_dev *dev, uint8_t bpdsw_select)
 					       AD719X_GPOCON_BPDSW, (AD719X_GPOCON_BPDSW * bpdsw_select),
 					       1);
 
-	if (ret == SUCCESS) {
+	if (ret == 0) {
 		/* Store the last settings regarding bridge power-down switch */
 		dev->bpdsw_mode = bpdsw_select;
 	}
@@ -590,7 +590,7 @@ int ad719x_set_bridge_switch(struct ad719x_dev *dev, uint8_t bpdsw_select)
  *@param gain      - Gain select bits. These bits are written by the user to select
  *                   the ADC input range.
  *
- * @return SUCCESS in case of success or negative error code.
+ * @return 0 in case of success or negative error code.
 *******************************************************************************/
 int ad719x_range_setup(struct ad719x_dev *dev,
 		       uint8_t polarity, enum ad719x_adc_gain gain)
@@ -602,7 +602,7 @@ int ad719x_range_setup(struct ad719x_dev *dev,
 					       (polarity * AD719X_CONF_UNIPOLAR) | AD719X_CONF_GAIN(gain),
 					       3);
 
-	if (ret == SUCCESS) {
+	if (ret == 0) {
 		/* Store the last settings regarding polarity and gain. */
 		dev->current_polarity = polarity;
 		dev->current_gain     = 1 << gain;
@@ -617,7 +617,7 @@ int ad719x_range_setup(struct ad719x_dev *dev,
  * @param dev - The device structure.
  * @param reg_data - Buffer to store sampled register data
  *
- * @return SUCCESS in case of success or negative error code.
+ * @return 0 in case of success or negative error code.
 *******************************************************************************/
 int ad719x_single_conversion(struct ad719x_dev *dev, uint32_t *reg_data)
 {
@@ -625,17 +625,17 @@ int ad719x_single_conversion(struct ad719x_dev *dev, uint32_t *reg_data)
 	int ret;
 
 	if (!reg_data)
-		return FAILURE;
+		return -1;
 
 	command = AD719X_MODE_SEL(AD719X_MODE_SINGLE) | AD719X_MODE_CLKSRC(
 			  AD719X_INT_CLK_4_92_MHZ_TRIST) | AD719X_MODE_RATE(dev->data_rate_code);
 
 	ret = ad719x_set_register_value(dev, AD719X_REG_MODE, command, 3);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = ad719x_wait_rdy_go_low(dev);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	return ad719x_get_register_value(dev, AD719X_REG_DATA, 3, reg_data);
@@ -648,7 +648,7 @@ int ad719x_single_conversion(struct ad719x_dev *dev, uint32_t *reg_data)
  * @param sample_number - the number of samples
  * @param samples_avg - Average of the samples read
  *
- * @return SUCCESS in case of success or negative error code.
+ * @return 0 in case of success or negative error code.
 *******************************************************************************/
 int ad719x_continuous_read_avg(struct ad719x_dev *dev,
 			       uint8_t sample_number, uint32_t *samples_avg)
@@ -663,16 +663,16 @@ int ad719x_continuous_read_avg(struct ad719x_dev *dev,
 		  AD719X_MODE_RATE(dev->data_rate_code);
 
 	ret = ad719x_set_register_value(dev, AD719X_REG_MODE, command, 3);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	for (count = 0; count < sample_number; count++) {
 		ret = ad719x_wait_rdy_go_low(dev);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 
 		ret = ad719x_get_register_value(dev, AD719X_REG_DATA, 3, &samples);
-		if(ret != SUCCESS)
+		if(ret != 0)
 			return ret;
 
 		*samples_avg += samples;
@@ -680,7 +680,7 @@ int ad719x_continuous_read_avg(struct ad719x_dev *dev,
 
 	*samples_avg = *samples_avg / sample_number;
 
-	return SUCCESS;
+	return 0;
 }
 
 /***************************************************************************//**
@@ -689,7 +689,7 @@ int ad719x_continuous_read_avg(struct ad719x_dev *dev,
  * @param dev - The device structure.
  * @param temp - Stores the temperature result.
  *
- * @return SUCCESS in case of success or negative error code.
+ * @return 0 in case of success or negative error code.
 *******************************************************************************/
 int ad719x_temperature_read(struct ad719x_dev *dev, float *temp)
 {
@@ -698,21 +698,21 @@ int ad719x_temperature_read(struct ad719x_dev *dev, float *temp)
 
 	// Bipolar operation, 1 Gain.
 	ret = ad719x_range_setup(dev, 0, AD719X_ADC_GAIN_1);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	if(dev->chip_id == AD7190 || dev->chip_id == AD7192 || dev->chip_id == AD7195) {
 		ret = ad719x_channels_select(dev, AD719X_CH_MASK(AD719X_CH_2));
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 	} else {
 		ret = ad719x_channels_select(dev, AD719X_CH_MASK(AD719X_CH_TEMP));
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 	}
 
 	ret = ad719x_single_conversion(dev, &data_reg);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	data_reg -= 0x800000;
@@ -755,7 +755,7 @@ float ad719x_convert_to_volts(struct ad719x_dev *dev,
  * 						0 - LOW
  *						1 - HIGH
  *
- * @return SUCCESS in case of success or negative error code.
+ * @return 0 in case of success or negative error code.
 *******************************************************************************/
 int ad719x_sync_control(struct ad719x_dev *dev, uint8_t value)
 {

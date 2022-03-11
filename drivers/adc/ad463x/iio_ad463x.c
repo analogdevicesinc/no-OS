@@ -87,7 +87,7 @@ static int32_t _iio_ad463x_prepare_transfer(struct iio_ad463x *desc,
 
 	desc->mask = mask;
 
-	return SUCCESS;
+	return 0;
 }
 
 static int32_t _iio_ad463x_read_dev(struct iio_ad463x *desc, uint32_t *buff,
@@ -117,7 +117,7 @@ static int32_t _iio_ad463x_read_dev(struct iio_ad463x *desc, uint32_t *buff,
  * ad463x device.
  * @param desc - Descriptor.
  * @param param - Configuration structure.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t iio_ad463x_init(struct iio_ad463x **desc,
 			struct ad463x_dev *dev)
@@ -126,29 +126,29 @@ int32_t iio_ad463x_init(struct iio_ad463x **desc,
 
 	iio_ad463x = (struct iio_ad463x *)calloc(1, sizeof(struct iio_ad463x));
 	if (!iio_ad463x)
-		return FAILURE;
+		return -1;
 
 	iio_ad463x->ad463x_desc = dev;
 	iio_ad463x->iio_dev_desc = ad463x_iio_desc;
 
 	*desc = iio_ad463x;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Release resources.
  * @param desc - Descriptor.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t iio_ad463x_remove(struct iio_ad463x *desc)
 {
 	if (!desc)
-		return FAILURE;
+		return -1;
 
 	free(desc);
 
-	return SUCCESS;
+	return 0;
 }
 
 struct iio_device ad463x_iio_desc = {

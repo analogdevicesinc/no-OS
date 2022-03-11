@@ -55,21 +55,21 @@
  * @param dev - Device handler.
  * @param address - Register address.
  * @param data - Pointer to the register value container.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t adxrs290_reg_read(struct adxrs290_dev *dev, uint8_t address,
 			  uint8_t *data)
 {
-	int32_t ret = SUCCESS;
+	int32_t ret = 0;
 	uint8_t buff[] = {address | 0x80, 0};
 
 	ret = no_os_spi_write_and_read(dev->spi_desc, buff, 2);
-	if (IS_ERR_VALUE(ret))
-		return FAILURE;
+	if (NO_OS_IS_ERR_VALUE(ret))
+		return -1;
 
 	*data = buff[1];
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -77,7 +77,7 @@ int32_t adxrs290_reg_read(struct adxrs290_dev *dev, uint8_t address,
  * @param dev - Device handler.
  * @param address - Register address.
  * @param data - New register value.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t adxrs290_reg_write(struct adxrs290_dev *dev, uint8_t address,
 			   uint8_t data)
@@ -91,15 +91,15 @@ int32_t adxrs290_reg_write(struct adxrs290_dev *dev, uint8_t address,
  * @brief Set device operation mode.
  * @param dev - Device handler.
  * @param mode - mode of operation.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t adxrs290_set_op_mode(struct adxrs290_dev *dev, enum adxrs290_mode mode)
 {
-	int32_t ret = SUCCESS;
+	int32_t ret = 0;
 	uint8_t val = 0;
 
 	ret = adxrs290_reg_read(dev, ADXRS290_REG_POWER_CTL, &val);
-	if (IS_ERR_VALUE(ret))
+	if (NO_OS_IS_ERR_VALUE(ret))
 		return ret;
 
 	switch(mode) {
@@ -110,7 +110,7 @@ int32_t adxrs290_set_op_mode(struct adxrs290_dev *dev, enum adxrs290_mode mode)
 		val |= ADXRS290_MEASUREMENT;
 		break;
 	default:
-		return FAILURE;
+		return -1;
 	}
 
 	return adxrs290_reg_write(dev, ADXRS290_REG_POWER_CTL, val);
@@ -120,15 +120,15 @@ int32_t adxrs290_set_op_mode(struct adxrs290_dev *dev, enum adxrs290_mode mode)
  * @brief Get the low-pass filter pole location.
  * @param dev - Device handler.
  * @param lpf - Pointer to Low-pass pole location container.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t adxrs290_get_lpf(struct adxrs290_dev *dev, enum adxrs290_lpf *lpf)
 {
-	int32_t ret = SUCCESS;
+	int32_t ret = 0;
 	uint8_t data;
 
 	ret = adxrs290_reg_read(dev, ADXRS290_REG_FILTER, &data);
-	if (IS_ERR_VALUE(ret))
+	if (NO_OS_IS_ERR_VALUE(ret))
 		return ret;
 
 	*lpf = ADXRS290_LPF(data);
@@ -140,15 +140,15 @@ int32_t adxrs290_get_lpf(struct adxrs290_dev *dev, enum adxrs290_lpf *lpf)
  * @brief Set the low-pass filter pole location.
  * @param dev - Device handler.
  * @param lpf - Low-pass pole location.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t adxrs290_set_lpf(struct adxrs290_dev *dev, enum adxrs290_lpf lpf)
 {
-	int32_t ret = SUCCESS;
+	int32_t ret = 0;
 	uint8_t reg_val;
 
 	ret = adxrs290_reg_read(dev, ADXRS290_REG_FILTER, &reg_val);
-	if (IS_ERR_VALUE(ret))
+	if (NO_OS_IS_ERR_VALUE(ret))
 		return ret;
 
 	reg_val &= ~ADXRS290_LPF_MASK;
@@ -161,15 +161,15 @@ int32_t adxrs290_set_lpf(struct adxrs290_dev *dev, enum adxrs290_lpf lpf)
  * @brief Get the high-pass filter pole location.
  * @param dev - Device handler.
  * @param hpf - Pointer to high-pass pole location container.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t adxrs290_get_hpf(struct adxrs290_dev *dev, enum adxrs290_hpf *hpf)
 {
-	int32_t ret = SUCCESS;
+	int32_t ret = 0;
 	uint8_t data;
 
 	ret = adxrs290_reg_read(dev, ADXRS290_REG_FILTER, &data);
-	if (IS_ERR_VALUE(ret))
+	if (NO_OS_IS_ERR_VALUE(ret))
 		return ret;
 
 	*hpf = ADXRS290_HPF(data);
@@ -181,15 +181,15 @@ int32_t adxrs290_get_hpf(struct adxrs290_dev *dev, enum adxrs290_hpf *hpf)
  * @brief Set the low-pass filter pole location.
  * @param dev - Device handler.
  * @param hpf - High-pass pole location.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t adxrs290_set_hpf(struct adxrs290_dev *dev, enum adxrs290_hpf hpf)
 {
-	int32_t ret = SUCCESS;
+	int32_t ret = 0;
 	uint8_t reg_val;
 
 	ret = adxrs290_reg_read(dev, ADXRS290_REG_FILTER, &reg_val);
-	if (IS_ERR_VALUE(ret))
+	if (NO_OS_IS_ERR_VALUE(ret))
 		return ret;
 
 	reg_val &= ~ADXRS290_HPF_MASK;
@@ -203,35 +203,35 @@ int32_t adxrs290_set_hpf(struct adxrs290_dev *dev, enum adxrs290_hpf hpf)
  * @param dev - Device handler.
  * @param ch - Channel to read.
  * @param rate - Pointer to rate value.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t adxrs290_get_rate_data(struct adxrs290_dev *dev,
 			       enum adxrs290_channel ch, int16_t *rate)
 {
-	int32_t ret = SUCCESS;
+	int32_t ret = 0;
 	uint8_t data[3];
 
 	data[0] = 0x80 | (ADXRS290_REG_DATAX0+ch*2);
 	data[1] = 0x80 | (ADXRS290_REG_DATAX1+ch*2);
 	data[2] = 0;
 	ret = no_os_spi_write_and_read(dev->spi_desc, data, 3);
-	if (IS_ERR_VALUE(ret))
+	if (NO_OS_IS_ERR_VALUE(ret))
 		return ret;
 
 	*rate = (((int16_t)data[2]) << 8) | data[1];
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Get the temperature data.
  * @param dev - Device handler.
  * @param temp - Pointer to temperature value.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t adxrs290_get_temp_data(struct adxrs290_dev *dev, int16_t *temp)
 {
-	int32_t ret = SUCCESS;
+	int32_t ret = 0;
 	uint8_t data[3];
 
 	data[0] = 0x80 | ADXRS290_REG_TEMP0;
@@ -239,7 +239,7 @@ int32_t adxrs290_get_temp_data(struct adxrs290_dev *dev, int16_t *temp)
 	data[2] = 0;
 
 	ret = no_os_spi_write_and_read(dev->spi_desc, data, 3);
-	if (IS_ERR_VALUE(ret))
+	if (NO_OS_IS_ERR_VALUE(ret))
 		return ret;
 
 	*temp = ((((int16_t)data[2]) << 8) | data[1]) & 0x0FFF;
@@ -253,12 +253,12 @@ int32_t adxrs290_get_temp_data(struct adxrs290_dev *dev, int16_t *temp)
  * @param dev - Device handler.
  * @param burst_data - Pointer to data value.
  * @param ch_cnt - Number of active channels.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t adxrs290_get_burst_data(struct adxrs290_dev *dev, int16_t *burst_data,
 				uint8_t *ch_cnt)
 {
-	int32_t		ret = SUCCESS;
+	int32_t		ret = 0;
 	uint8_t		data_bytes = ADXRS290_CHANNEL_COUNT*2;
 	uint8_t		data[data_bytes + 1];
 	int16_t		result;
@@ -271,7 +271,7 @@ int32_t adxrs290_get_burst_data(struct adxrs290_dev *dev, int16_t *burst_data,
 	data[data_bytes] = 0;
 
 	ret = no_os_spi_write_and_read(dev->spi_desc, data, data_bytes + 1);
-	if (IS_ERR_VALUE(ret))
+	if (NO_OS_IS_ERR_VALUE(ret))
 		return ret;
 
 	i = 1;
@@ -293,31 +293,31 @@ int32_t adxrs290_get_burst_data(struct adxrs290_dev *dev, int16_t *burst_data,
  * @brief Set the ADXRS290 active channels.
  * @param dev - Device handler.
  * @param mask - Mask for active channels.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t adxrs290_set_active_channels(struct adxrs290_dev *dev, uint32_t mask)
 {
 	dev->ch_mask = mask & ADXRS290_CHANNEL_MASK;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Get the state of data ready.
  * @param dev - Device handler.
  * @param rdy - Pointer to state of data.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t adxrs290_get_data_ready(struct adxrs290_dev *dev, bool *rdy)
 {
-	int32_t ret = SUCCESS;
+	int32_t ret = 0;
 	uint8_t value;
 
 	if (!dev->gpio_sync)
-		return FAILURE;
+		return -1;
 
 	ret = no_os_gpio_get_value(dev->gpio_sync, &value);
-	if (IS_ERR_VALUE(ret))
+	if (NO_OS_IS_ERR_VALUE(ret))
 		return ret;
 
 	if (value == NO_OS_GPIO_HIGH)
@@ -333,7 +333,7 @@ int32_t adxrs290_get_data_ready(struct adxrs290_dev *dev, bool *rdy)
  * @param device - The device structure.
  * @param init_param - The structure that contains the device initial
  *		       parameters.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t adxrs290_init(struct adxrs290_dev **device,
 		      const struct adxrs290_init_param *init_param)
@@ -347,11 +347,11 @@ int32_t adxrs290_init(struct adxrs290_dev **device,
 		return -ENOMEM;
 
 	ret = no_os_spi_init(&dev->spi_desc, &init_param->spi_init);
-	if (IS_ERR_VALUE(ret))
+	if (NO_OS_IS_ERR_VALUE(ret))
 		goto error_dev;
 
 	ret = adxrs290_reg_read(dev, ADXRS290_REG_DEV_ID, &val);
-	if (IS_ERR_VALUE(ret) || (val != ADXRS290_DEV_ID)) {
+	if (NO_OS_IS_ERR_VALUE(ret) || (val != ADXRS290_DEV_ID)) {
 		ret = -ENODEV;
 		goto error_spi;
 	}
@@ -360,34 +360,34 @@ int32_t adxrs290_init(struct adxrs290_dev **device,
 	if (init_param->mode == ADXRS290_MODE_MEASUREMENT) {
 		ret = adxrs290_reg_write(dev, ADXRS290_REG_POWER_CTL,
 					 ADXRS290_MEASUREMENT | ADXRS290_TSM);
-		if (IS_ERR_VALUE(ret))
+		if (NO_OS_IS_ERR_VALUE(ret))
 			goto error_spi;
 
 	}
 	// Set initial Band pass filter poles.
 	ret = adxrs290_set_lpf(dev, init_param->lpf);
-	if (IS_ERR_VALUE(ret))
+	if (NO_OS_IS_ERR_VALUE(ret))
 		goto error_spi;
 
 	ret = adxrs290_set_hpf(dev, init_param->hpf);
-	if (IS_ERR_VALUE(ret))
+	if (NO_OS_IS_ERR_VALUE(ret))
 		goto error_spi;
 
 	// Set GPIO sync pin.
 	ret = no_os_gpio_get_optional(&dev->gpio_sync, init_param->gpio_sync);
-	if (IS_ERR_VALUE(ret))
+	if (NO_OS_IS_ERR_VALUE(ret))
 		goto error_spi;
 
 	if (dev->gpio_sync) {
 		ret = no_os_gpio_direction_input(dev->gpio_sync);
-		if (IS_ERR_VALUE(ret))
+		if (NO_OS_IS_ERR_VALUE(ret))
 			goto error_gpio;
 	}
 
 	// Set adxrs290 to output on sync pin.
 	ret = adxrs290_reg_write(dev, ADXRS290_REG_DATA_READY,
 				 ADXRS290_DATA_RDY_OUT);
-	if (IS_ERR_VALUE(ret))
+	if (NO_OS_IS_ERR_VALUE(ret))
 		goto error_gpio;
 
 	// Enable all channels by default
@@ -412,7 +412,7 @@ error_dev:
 /**
  * @brief Free memory allocated by adxrs290_setup().
  * @param dev - Device handler.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t adxrs290_remove(struct adxrs290_dev *dev)
 {
@@ -420,7 +420,7 @@ int32_t adxrs290_remove(struct adxrs290_dev *dev)
 	no_os_gpio_remove(dev->gpio_sync);
 	free(dev);
 
-	return SUCCESS;
+	return 0;
 }
 
 

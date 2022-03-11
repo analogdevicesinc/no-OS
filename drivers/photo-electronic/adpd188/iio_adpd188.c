@@ -140,7 +140,7 @@ static int adpd188_iio_read_offset_chan(void *device, char *buf, uint32_t len,
 
 	ret = adpd188_reg_read(desc, (ADPD188_REG_SLOTA_CH1_OFFSET + ch_offset),
 			       &reg_val);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	return snprintf(buf, len, "%"PRIX16"", reg_val);
@@ -169,16 +169,16 @@ static int adpd188_iio_change_offset_chan(void *device, char *buf,
 	sscanf(buf, "%hx", &reg_val);
 
 	ret = adpd188_mode_set(desc, ADPD188_PROGRAM);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = adpd188_reg_write(desc, (ADPD188_REG_SLOTA_CH1_OFFSET + ch_offset),
 				reg_val);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = adpd188_mode_set(desc, ADPD188_STANDBY);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	return len;
@@ -203,7 +203,7 @@ static int adpd188_iio_read_odr_chan(void *device, char *buf, uint32_t len,
 	uint16_t freq_hz;
 
 	ret = adpd188_adc_fsample_get(desc, &freq_hz);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	return snprintf(buf, len, "%"PRId16"", freq_hz);
@@ -230,15 +230,15 @@ static int adpd188_iio_change_odr_chan(void *device, char *buf, uint32_t len,
 	sscanf(buf, "%hu", &freq_hz);
 
 	ret = adpd188_mode_set(desc, ADPD188_PROGRAM);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = adpd188_adc_fsample_set(desc, freq_hz);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = adpd188_mode_set(desc, ADPD188_STANDBY);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	return len;
@@ -247,14 +247,14 @@ static int adpd188_iio_change_odr_chan(void *device, char *buf, uint32_t len,
 /**
  * @brief Change device into normal mode.
  * @param desc - Pointer to the device driver handler.
- * @return SUCCESS in case of success, error code otherwise.
+ * @return 0 in case of success, error code otherwise.
  */
 static int32_t adpd188_iio_normal_mode(struct adpd188_dev *desc)
 {
 	int32_t ret;
 
 	ret = adpd188_mode_set(desc, ADPD188_PROGRAM);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 	return adpd188_mode_set(desc, ADPD188_NORMAL);
 }
@@ -262,14 +262,14 @@ static int32_t adpd188_iio_normal_mode(struct adpd188_dev *desc)
 /**
  * @brief Change device into standby mode.
  * @param desc - Pointer to the device driver handler.
- * @return SUCCESS in case of success, error code otherwise.
+ * @return 0 in case of success, error code otherwise.
  */
 static int32_t adpd188_iio_standby_mode(struct adpd188_dev *desc)
 {
 	int32_t ret;
 
 	ret = adpd188_mode_set(desc, ADPD188_PROGRAM);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 	return adpd188_mode_set(desc, ADPD188_STANDBY);
 }
@@ -295,17 +295,17 @@ static int adpd188_iio_read_raw_chan(void *device, char *buf, uint32_t len,
 	uint32_t req_sample;
 
 	ret = adpd188_iio_normal_mode(desc);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	do {
 		ret = adpd188_fifo_status_get(desc, &fifo_bytes);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 	} while (fifo_bytes < 32);
 
 	ret = adpd188_iio_standby_mode(desc);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	for (i = 0;
@@ -313,7 +313,7 @@ static int adpd188_iio_read_raw_chan(void *device, char *buf, uint32_t len,
 	     i++) {
 		ret = adpd188_reg_read(desc, ADPD188_REG_FIFO_ACCESS,
 				       (data + i));
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 	}
 
@@ -327,7 +327,7 @@ static int adpd188_iio_read_raw_chan(void *device, char *buf, uint32_t len,
  * @brief Enable channels before buffer read.
  * @param dev - Pointer to the IIO driver structure.
  * @param mask - Mask of the enabled channels.
- * @return SUCCESS in case of success, error code otherwise.
+ * @return 0 in case of success, error code otherwise.
  */
 static int32_t iio_adpd188_prepare_data_read(void *dev, uint32_t mask)
 {
@@ -342,7 +342,7 @@ static int32_t iio_adpd188_prepare_data_read(void *dev, uint32_t mask)
 /**
  * @brief Disable all channels after buffer read.
  * @param dev - Pointer to the IIO driver structure.
- * @return SUCCESS in case of success, error code otherwise.
+ * @return 0 in case of success, error code otherwise.
  */
 static int32_t iio_adpd188_end_data_read(void *dev)
 {
@@ -386,7 +386,7 @@ static bool get_next_ch_idx(uint32_t ch_mask, uint32_t last_idx,
  * @param dev - Pointer to the IIO driver structure.
  * @param buff - Output buffer.
  * @param nb_samples - Number of samples to take.
- * @return SUCCESS in case of success, error code otherwise.
+ * @return 0 in case of success, error code otherwise.
  */
 static int32_t iio_adpd188_read_samples(void *dev, int32_t *buff,
 					uint32_t nb_samples)
@@ -401,15 +401,15 @@ static int32_t iio_adpd188_read_samples(void *dev, int32_t *buff,
 	for (i = 0; i < nb_samples; i++) {
 		do {
 			ret = adpd188_fifo_status_get(desc, &byte_no);
-			if (IS_ERR_VALUE(ret))
-				return FAILURE;
+			if (NO_OS_IS_ERR_VALUE(ret))
+				return -1;
 		} while (byte_no < 32);
 
 		for (k = 0; k < 16; k++) {
 			ret = adpd188_reg_read(desc, ADPD188_REG_FIFO_ACCESS,
 					       (data_buff + k));
-			if (IS_ERR_VALUE(ret))
-				return FAILURE;
+			if (NO_OS_IS_ERR_VALUE(ret))
+				return -1;
 		}
 		last_idx = -1;
 		while (get_next_ch_idx(iio_desc->ch_mask, last_idx,
@@ -420,7 +420,7 @@ static int32_t iio_adpd188_read_samples(void *dev, int32_t *buff,
 		}
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -428,7 +428,7 @@ static int32_t iio_adpd188_read_samples(void *dev, int32_t *buff,
  * @param dev - Pointer to the IIO driver structure.
  * @param reg_addr - Register address.
  * @param reg_val - Pointer to the register value.
- * @return SUCCESS in case of success, error code otherwise.
+ * @return 0 in case of success, error code otherwise.
  */
 static int32_t iio_adpd188_reg_read(struct adpd188_iio_desc *dev,
 				    uint8_t reg_addr,
@@ -444,7 +444,7 @@ static int32_t iio_adpd188_reg_read(struct adpd188_iio_desc *dev,
  * @param dev - Pointer to the IIO driver structure.
  * @param reg_addr - Register address.
  * @param reg_val - New register value.
- * @return SUCCESS in case of success, error code otherwise.
+ * @return 0 in case of success, error code otherwise.
  */
 static int32_t iio_adpd188_reg_write(struct adpd188_iio_desc *dev,
 				     uint8_t reg_addr,
@@ -459,7 +459,7 @@ static int32_t iio_adpd188_reg_write(struct adpd188_iio_desc *dev,
  * @brief Initialize the IIO driver and allocate memory.
  * @param device - Pointer to the IIO driver handler structure.
  * @param init_param - Pointer to the IIO driver initialization structure.
- * @return SUCCESS in case of success, error code otherwise.
+ * @return 0 in case of success, error code otherwise.
  */
 int32_t adpd188_iio_init(struct adpd188_iio_desc **device,
 			 struct adpd188_iio_init_param *init_param)
@@ -480,36 +480,36 @@ int32_t adpd188_iio_init(struct adpd188_iio_desc **device,
 	};
 
 	if (!dev)
-		return FAILURE;
+		return -1;
 
 	dev->ch_mask = 0;
 
 	ret = adpd188_init(&dev->drv_dev, &init_param->drv_init_param);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		goto error_dev;
 
 	/* Enable state machine clock */
 	ret = adpd188_reg_read(dev->drv_dev, ADPD188_REG_SAMPLE_CLK, &reg_data);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		goto error_drv;
 	reg_data |= ADPD188_SAMPLE_CLK_CLK32K_EN_MASK;
 	ret = adpd188_reg_write(dev->drv_dev, ADPD188_REG_SAMPLE_CLK, reg_data);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		goto error_drv;
 
 	ret = adpd188_mode_set(dev->drv_dev, ADPD188_PROGRAM);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		goto error_drv;
 
 	ret = adpd188_slot_setup(dev->drv_dev, slota);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		goto error_drv;
 	ret = adpd188_slot_setup(dev->drv_dev, slotb);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		goto error_drv;
 
 	ret = adpd188_reg_read(dev->drv_dev, ADPD188_REG_PD_LED_SELECT, &reg_data);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		goto error_drv;
 	/* Select LEDx1 for both timeslots */
 	reg_data &= ~(ADPD188_PD_LED_SELECT_SLOTA_LED_SEL_MASK |
@@ -527,41 +527,41 @@ int32_t adpd188_iio_init(struct adpd188_iio_desc **device,
 	reg_data |= (4 << ADPD188_PD_LED_SELECT_SLOTB_PD_SEL_POS) &
 		    ADPD188_PD_LED_SELECT_SLOTB_PD_SEL_MASK;
 	ret = adpd188_reg_write(dev->drv_dev, ADPD188_REG_PD_LED_SELECT, reg_data);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		goto error_drv;
 
 	/* No averaging for any slot */
 	ret = adpd188_reg_write(dev->drv_dev, ADPD188_REG_NUM_AVG, 0);
-	if(ret != SUCCESS)
+	if(ret != 0)
 		goto error_drv;
 
 	*device = dev;
 
-	return SUCCESS;
+	return 0;
 error_drv:
 	adpd188_remove(dev->drv_dev);
 error_dev:
 	free(dev);
 
-	return FAILURE;
+	return -1;
 }
 
 /**
  * @brief Free mmory allocated by adpd188_iio_init().
  * @param dev - Pointer to the IIO driver structure.
- * @return SUCCESS in case of success, error code otherwise.
+ * @return 0 in case of success, error code otherwise.
  */
 int32_t adpd188_iio_remove(struct adpd188_iio_desc *dev)
 {
 	int32_t ret;
 
 	ret = adpd188_remove(dev->drv_dev);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	free(dev);
 
-	return SUCCESS;
+	return 0;
 }
 
 struct iio_device iio_adpd188_device = {

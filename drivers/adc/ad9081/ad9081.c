@@ -871,7 +871,7 @@ static int32_t ad9081_udelay(void *user_data, uint32_t us)
 {
 	no_os_udelay(us);
 
-	return SUCCESS;
+	return 0;
 }
 
 int32_t ad9081_reset_pin_ctrl(void *user_data, uint8_t enable)
@@ -903,8 +903,8 @@ static int32_t ad9081_spi_xfer(void *user_data, uint8_t *in_data,
 	}
 
 	ret = no_os_spi_write_and_read(phy->spi_desc, data, bytes_number);
-	if (ret != SUCCESS)
-		return FAILURE;
+	if (ret != 0)
+		return -1;
 
 	if (phy->ad9081.hal_info.msb == SPI_MSB_FIRST) {
 		for (i = 0; i < bytes_number; i++)
@@ -914,7 +914,7 @@ static int32_t ad9081_spi_xfer(void *user_data, uint8_t *in_data,
 			out_data[i] =  data[bytes_number - i + 1];
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 int32_t ad9081_log_write(void *user_data, int32_t log_type, const char *message,
@@ -977,7 +977,7 @@ int32_t ad9081_parse_jesd_link_init_param(struct ad9081_jesd_link *link,
 	else /* JRX */
 		link->jrx_tpl_phase_adjust = init_param->tpl_phase_adjust;
 
-	return SUCCESS;
+	return 0;
 }
 
 int32_t ad9081_parse_init_param(struct ad9081_phy *phy,
@@ -1040,7 +1040,7 @@ int32_t ad9081_parse_init_param(struct ad9081_phy *phy,
 		ad9081_parse_jesd_link_init_param(&phy->jtx_link_rx[1],
 						  init_param->jtx_link_rx[1], true);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -1048,7 +1048,7 @@ int32_t ad9081_parse_init_param(struct ad9081_phy *phy,
  * @param dev - The device structure.
  * @param init_param - The structure that contains the device initial
  * 		       parameters.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad9081_init(struct ad9081_phy **dev,
 		    const struct ad9081_init_param *init_param)
@@ -1060,7 +1060,7 @@ int32_t ad9081_init(struct ad9081_phy **dev,
 
 	phy = (struct ad9081_phy *)calloc(1, sizeof(*phy));
 	if (!phy)
-		return FAILURE;
+		return -1;
 
 	ret = no_os_gpio_get(&phy->gpio_reset, init_param->gpio_reset);
 	if (ret < 0)
@@ -1105,7 +1105,7 @@ int32_t ad9081_init(struct ad9081_phy **dev,
 	if ((chip_id.prod_id & CHIPID_MASK) != CHIPID_AD9081) {
 		printf("%s: Unrecognized CHIP_ID 0x%X\n", __func__,
 		       chip_id.prod_id);
-		ret = FAILURE;
+		ret = -1;
 		goto error_3;
 	}
 
@@ -1124,7 +1124,7 @@ int32_t ad9081_init(struct ad9081_phy **dev,
 
 	*dev = phy;
 
-	return SUCCESS;
+	return 0;
 
 error_3:
 	no_os_spi_remove(phy->spi_desc);
@@ -1139,7 +1139,7 @@ error_1:
 /**
  * Remove the device - release resources.
  * @param dev - The device structure.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad9081_remove(struct ad9081_phy *dev)
 {

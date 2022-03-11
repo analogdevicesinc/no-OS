@@ -56,7 +56,7 @@
  * @brief Initialize the SPI communication peripheral.
  * @param desc - The SPI descriptor.
  * @param param - The structure that contains the SPI parameters.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t altera_spi_init(struct no_os_spi_desc **desc,
 			const struct no_os_spi_init_param *param)
@@ -67,12 +67,12 @@ int32_t altera_spi_init(struct no_os_spi_desc **desc,
 
 	descriptor = malloc(sizeof(*descriptor));
 	if (!descriptor)
-		return FAILURE;
+		return -1;
 
 	descriptor->extra = calloc(1, sizeof *altera_descriptor);
 	if (!(descriptor->extra)) {
 		free(descriptor);
-		return FAILURE;
+		return -1;
 	}
 
 	altera_descriptor = descriptor->extra;
@@ -87,13 +87,13 @@ int32_t altera_spi_init(struct no_os_spi_desc **desc,
 
 	*desc = descriptor;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Free the resources allocated by no_os_spi_init().
  * @param desc - The SPI descriptor.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t altera_spi_remove(struct no_os_spi_desc *desc)
 {
@@ -101,7 +101,7 @@ int32_t altera_spi_remove(struct no_os_spi_desc *desc)
 		// Unused variable - fix compiler warning
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -109,7 +109,7 @@ int32_t altera_spi_remove(struct no_os_spi_desc *desc)
  * @param desc - The SPI descriptor.
  * @param data - The buffer with the transmitted/received data.
  * @param bytes_number - Number of bytes to write/read.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 
 int32_t altera_spi_write_and_read(struct no_os_spi_desc *desc,
@@ -149,10 +149,10 @@ int32_t altera_spi_write_and_read(struct no_os_spi_desc *desc,
 
 		break;
 	default:
-		return FAILURE;
+		return -1;
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**

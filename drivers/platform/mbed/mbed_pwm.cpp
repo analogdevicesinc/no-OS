@@ -61,7 +61,7 @@ extern "C"
  * @brief	Initialize the PWM interface.
  * @param	desc[in, out] - The PWM descriptor.
  * @param	param[in] - The structure that contains the PWM init parameters.
- * @return	SUCCESS in case of success, negative error code otherwise.
+ * @return	0 in case of success, negative error code otherwise.
  */
 int32_t no_os_pwm_init(struct no_os_pwm_desc **desc,
 		 const struct no_os_pwm_init_param *param)
@@ -102,7 +102,7 @@ int32_t no_os_pwm_init(struct no_os_pwm_desc **desc,
 
 	*desc = pwm_desc;
 
-	return SUCCESS;
+	return 0;
 
 err_new_mbed_pwm_desc:
 	free(pwm);
@@ -115,7 +115,7 @@ err_pwm:
 /**
  * @brief	Enable the PWM interface.
  * @param	desc[in] - Pointer where the configured instance is stored.
- * @return	SUCCESS in case of success, negative error code otherwise.
+ * @return	0 in case of success, negative error code otherwise.
  */
 int32_t no_os_pwm_enable(struct no_os_pwm_desc *desc)
 {
@@ -130,13 +130,13 @@ int32_t no_os_pwm_enable(struct no_os_pwm_desc *desc)
 
 	pwm->resume();
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief	Disable the PWM interface.
  * @param	desc[in] - Pointer where the configured instance is stored.
- * @return	SUCCESS in case of success, negative error code otherwise.
+ * @return	0 in case of success, negative error code otherwise.
  */
 int32_t no_os_pwm_disable(struct no_os_pwm_desc *desc)
 {
@@ -151,14 +151,14 @@ int32_t no_os_pwm_disable(struct no_os_pwm_desc *desc)
 
 	pwm->suspend();
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief	Set the PWM period.
  * @param	desc[in] - Pointer where the configured instance is stored.
  * @param	period_ns[in] - PWM period.
- * @return	SUCCESS in case of success, negative error code otherwise.
+ * @return	0 in case of success, negative error code otherwise.
  */
 int32_t no_os_pwm_set_period(struct no_os_pwm_desc *desc,
 		       uint32_t period_ns)
@@ -174,14 +174,14 @@ int32_t no_os_pwm_set_period(struct no_os_pwm_desc *desc,
 
 	pwm->period_us(period_ns / 1000);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief	Get the PWM period.
  * @param	desc[in] - Pointer where the configured instance is stored.
  * @param	period_ns[in] - PWM period.
- * @return	SUCCESS in case of success, negative error code otherwise.
+ * @return	0 in case of success, negative error code otherwise.
  */
 int32_t no_os_pwm_get_period(struct no_os_pwm_desc *desc,
 		       uint32_t *period_ns)
@@ -197,14 +197,14 @@ int32_t no_os_pwm_get_period(struct no_os_pwm_desc *desc,
 
 	*period_ns = pwm->read_period_us() * 1000;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief	Set the PWM duty cycle.
  * @param	desc[in] - Pointer where the configured instance is stored.
  * @param	duty_cycle_ns[in] - PWM duty cycle.
- * @return	SUCCESS in case of success, negative error code otherwise.
+ * @return	0 in case of success, negative error code otherwise.
  */
 int32_t no_os_pwm_set_duty_cycle(struct no_os_pwm_desc *desc,
 			   uint32_t duty_cycle_ns)
@@ -220,14 +220,14 @@ int32_t no_os_pwm_set_duty_cycle(struct no_os_pwm_desc *desc,
 
 	pwm->pulsewidth_us(duty_cycle_ns / 1000);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief	Get the PWM duty cycle.
  * @param	desc[in] - Pointer where the configured instance is stored.
  * @param	duty_cycle_ns[in] - PWM duty cycle.
- * @return	SUCCESS in case of success, negative error code otherwise.
+ * @return	0 in case of success, negative error code otherwise.
  */
 int32_t no_os_pwm_get_duty_cycle(struct no_os_pwm_desc *desc,
 			   uint32_t *duty_cycle_ns)
@@ -243,13 +243,13 @@ int32_t no_os_pwm_get_duty_cycle(struct no_os_pwm_desc *desc,
 
 	*duty_cycle_ns = pwm->read_pulsewitdth_us() * 1000;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief	Remove the memory allocated for PWM device descriptors
  * @param	desc[in, out] - Pointer where the configured instance is stored
- * @return	SUCCESS in case of success, negative error code otherwise.
+ * @return	0 in case of success, negative error code otherwise.
  */
 int32_t no_os_pwm_remove(struct no_os_pwm_desc *desc)
 {
@@ -262,7 +262,7 @@ int32_t no_os_pwm_remove(struct no_os_pwm_desc *desc)
 	free(desc->extra);
 	free(desc);
 
-	return SUCCESS;
+	return 0;
 }
 
 #ifdef __cplusplus  // Closing extern c

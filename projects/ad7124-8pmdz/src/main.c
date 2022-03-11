@@ -87,7 +87,7 @@ int main(void)
 	struct no_os_irq_ctrl_desc *irq_desc;
 
 	status = platform_init();
-	if (IS_ERR_VALUE(status))
+	if (NO_OS_IS_ERR_VALUE(status))
 		return status;
 
 	struct ad7124_dev *ad7124_device;

@@ -146,7 +146,7 @@ int8_t ad9833_init(struct ad9833_dev **device,
  *
  * @param dev - The device structure.
  *
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
 *******************************************************************************/
 int32_t ad9833_remove(struct ad9833_dev *dev)
 {

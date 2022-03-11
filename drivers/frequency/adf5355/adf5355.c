@@ -61,7 +61,7 @@
  *              predefined register bits masks, a 4 bit shif to the right
  *              is required, since the 4 bits of each register correspond
  *              to the register address.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 static int32_t adf5355_write(struct adf5355_dev *dev,
 			     uint8_t reg_addr,
@@ -122,7 +122,7 @@ static void adf5355_pll_fract_n_compute(uint64_t vco,
  * ADF5355 Register configuration
  * @param dev - The device structure.
  * @param sync_all - Enable/diable full register synchronization.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 static int32_t adf5355_reg_config(struct adf5355_dev *dev, bool sync_all)
 {
@@ -134,7 +134,7 @@ static int32_t adf5355_reg_config(struct adf5355_dev *dev, bool sync_all)
 	if (sync_all || !dev->all_synced) {
 		for (i = max_reg; i >= ADF5355_REG(1); i--) {
 			ret = adf5355_write(dev, ADF5355_REG(i), dev->regs[i]);
-			if (ret != SUCCESS)
+			if (ret != 0)
 				return ret;
 		}
 
@@ -143,38 +143,38 @@ static int32_t adf5355_reg_config(struct adf5355_dev *dev, bool sync_all)
 	} else {
 		if(dev->dev_id == ADF5356) {
 			ret = adf5355_write(dev, ADF5355_REG(13), dev->regs[ADF5355_REG(13)]);
-			if (ret != SUCCESS)
+			if (ret != 0)
 				return ret;
 		}
 
 		ret = adf5355_write(dev, ADF5355_REG(10), dev->regs[ADF5355_REG(10)]);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 
 		ret = adf5355_write(dev, ADF5355_REG(6), dev->regs[ADF5355_REG(6)]);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 
 		ret = adf5355_write(dev, ADF5355_REG(4),
 				    dev->regs[ADF5355_REG(4)] | ADF5355_REG4_COUNTER_RESET_EN(1));
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 
 		ret = adf5355_write(dev, ADF5355_REG(2), dev->regs[ADF5355_REG(2)]);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 
 		ret = adf5355_write(dev, ADF5355_REG(1), dev->regs[ADF5355_REG(1)]);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 
 		ret = adf5355_write(dev, ADF5355_REG(0),
 				    dev->regs[ADF5355_REG(0)] & ~ADF5355_REG0_AUTOCAL(1));
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 
 		ret = adf5355_write(dev, ADF5355_REG(4), dev->regs[ADF5355_REG(4)]);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 	}
 
@@ -188,7 +188,7 @@ static int32_t adf5355_reg_config(struct adf5355_dev *dev, bool sync_all)
  * @param dev - The device structure.
  * @param freq - The output frequency.
  * @param chan - The selected channel.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 static int32_t adf5355_set_freq(struct adf5355_dev *dev,
 				uint64_t freq,
@@ -198,7 +198,7 @@ static int32_t adf5355_set_freq(struct adf5355_dev *dev,
 	bool prescaler, cp_neg_bleed_en;
 
 	if (chan > dev->num_channels)
-		return FAILURE;
+		return -1;
 
 	if (chan == 0) {
 		if ((freq > dev->max_out_freq) || (freq < dev->min_out_freq))
@@ -306,17 +306,17 @@ static uint64_t adf5355_pll_fract_n_get_rate(struct adf5355_dev *dev,
  * @param dev - The device structure.
  * @param chan - Channel number.
  * @param rate - Channel rate.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t adf5355_clk_recalc_rate(struct adf5355_dev *dev, uint32_t chan,
 				uint64_t *rate)
 {
 	if (chan > dev->num_channels)
-		return FAILURE;
+		return -1;
 
 	*rate = adf5355_pll_fract_n_get_rate(dev, chan);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -324,13 +324,13 @@ int32_t adf5355_clk_recalc_rate(struct adf5355_dev *dev, uint32_t chan,
  * @param dev - The device structure.
  * @param chan - Channel number.
  * @param rate - Channel rate.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t adf5355_clk_set_rate(struct adf5355_dev *dev, uint32_t chan,
 			     uint64_t rate)
 {
 	if (chan >= dev->num_channels)
-		return FAILURE;
+		return -1;
 
 	return adf5355_set_freq(dev, rate, chan);
 }
@@ -340,20 +340,20 @@ int32_t adf5355_clk_set_rate(struct adf5355_dev *dev, uint32_t chan,
  * @param dev - The device structure
  * @param rate - The desired rate.
  * @param rounded_rate - The closest possible rate of desired rate.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t adf5355_clk_round_rate(struct adf5355_dev *dev, uint64_t rate,
 			       uint64_t *rounded_rate)
 {
 	*rounded_rate = rate;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * Setup the device.
  * @param dev - The device structure.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 static int32_t adf5355_setup(struct adf5355_dev *dev)
 {
@@ -449,7 +449,7 @@ int32_t adf5355_init(struct adf5355_dev **device,
 
 	/* SPI */
 	ret = no_os_spi_init(&dev->spi_desc, init_param->spi_init);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		goto error_dev;
 
 	dev->dev_id = init_param->dev_id;
@@ -497,7 +497,7 @@ int32_t adf5355_init(struct adf5355_dev **device,
 	}
 
 	ret = adf5355_setup(dev);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		goto error_spi;
 
 	*device = dev;
@@ -515,11 +515,11 @@ error_dev:
 /**
  * Remove the device - release resources.
  * @param device - The device structure.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t adf5355_remove(struct adf5355_dev *device)
 {
-	int32_t ret = SUCCESS;
+	int32_t ret = 0;
 
 	if (device->spi_desc)
 		ret = no_os_spi_remove(device->spi_desc);

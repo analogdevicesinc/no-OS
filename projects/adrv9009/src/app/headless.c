@@ -391,5 +391,5 @@ error_1:
 	clocking_deinit();
 error_0:
 	printf("Bye\n");
-	return SUCCESS;
+	return 0;
 }

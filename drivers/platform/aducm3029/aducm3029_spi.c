@@ -81,12 +81,12 @@ static int32_t config_device(struct aducm_device_desc *dev,
 	if (init || desc->max_speed_hz != dev->bitrate) {
 		if (ADI_SPI_SUCCESS != adi_spi_SetBitrate(dev->spi_handle,
 				desc->max_speed_hz))
-			return FAILURE;
+			return -1;
 		if (init) {
 			if (ADI_SPI_SUCCESS != adi_spi_GetBitrate(
 				    dev->spi_handle,
 				    &dev->bitrate))
-				return FAILURE;
+				return -1;
 			desc->max_speed_hz = dev->bitrate;
 		}
 	}
@@ -112,14 +112,14 @@ static int32_t config_device(struct aducm_device_desc *dev,
 		dev->continuous_mode = aducm_desc->aducm_conf.continuous_mode;
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Initialize the SPI communication peripheral.
  * @param desc - The SPI descriptor.
  * @param param - The structure that contains the SPI parameters.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t aducm3029_spi_init(struct no_os_spi_desc **desc,
 			   const struct no_os_spi_init_param *param)
@@ -131,21 +131,21 @@ int32_t aducm3029_spi_init(struct no_os_spi_desc **desc,
 
 	/* Initial checks */
 	if (!desc || !param || !(param->extra))
-		return FAILURE;
+		return -1;
 
 	config = param->extra;
 	if (param->device_id >= NB_SPI_DEVICES ||
 	    param->chip_select > MAX_CS_NUMBER)
-		return FAILURE;
+		return -1;
 
 	/* Memory allocation */
 	spi_desc = (struct no_os_spi_desc *)calloc(1, sizeof(*spi_desc));
 	if (!spi_desc)
-		return FAILURE;
+		return -1;
 	aducm_desc = (struct aducm_spi_desc *)calloc(1, sizeof(*aducm_desc));
 	if (!aducm_desc) {
 		free(spi_desc);
-		return FAILURE;
+		return -1;
 	}
 
 	/* Initialize descriptor */
@@ -163,14 +163,14 @@ int32_t aducm3029_spi_init(struct no_os_spi_desc **desc,
 		if (!dev) {
 			free(spi_desc);
 			free(aducm_desc);
-			return FAILURE;
+			return -1;
 		}
 		if (ADI_SPI_SUCCESS != adi_spi_Open(param->device_id,
 						    dev->buffer,
 						    ADI_SPI_MEMORY_SIZE,
 						    &dev->spi_handle))
 			goto failure;
-		if (SUCCESS != config_device(dev, spi_desc, true))
+		if (0 != config_device(dev, spi_desc, true))
 			goto failure;
 		devices[param->device_id] = dev;
 	}
@@ -178,41 +178,41 @@ int32_t aducm3029_spi_init(struct no_os_spi_desc **desc,
 	aducm_desc->dev = dev;
 	*desc = spi_desc;
 
-	return SUCCESS;
+	return 0;
 failure:
 	free(dev);
 	free(spi_desc);
 	free(aducm_desc);
-	return FAILURE;
+	return -1;
 }
 
 /**
  * @brief Free the resources allocated by no_os_spi_init().
  * @param desc - The SPI descriptor.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t aducm3029_spi_remove(struct no_os_spi_desc *desc)
 {
 	struct aducm_spi_desc *aducm_desc;
 
 	if (!desc || !desc->extra)
-		return FAILURE;
+		return -1;
 
 	aducm_desc = desc->extra;
 	if (!aducm_desc->dev)
-		return FAILURE;
+		return -1;
 
 	if (aducm_desc->dev->ref_instances == 1) {
 		if (ADI_SPI_SUCCESS != adi_spi_Close(
 			    aducm_desc->dev->spi_handle))
-			return FAILURE;
+			return -1;
 		free(aducm_desc->dev);
 		devices[desc->device_id] = NULL;
 	}
 	free(aducm_desc);
 	free(desc);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -220,7 +220,7 @@ int32_t aducm3029_spi_remove(struct no_os_spi_desc *desc)
  * @param desc - The SPI descriptor.
  * @param data - The buffer with the transmitted/received data.
  * @param bytes_number - Number of bytes to write/read.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t aducm3029_spi_write_and_read(struct no_os_spi_desc *desc,
 				     uint8_t *data,
@@ -231,17 +231,17 @@ int32_t aducm3029_spi_write_and_read(struct no_os_spi_desc *desc,
 	uint16_t			n;
 
 	if (!desc)
-		return FAILURE;
+		return -1;
 
 	aducm_desc = desc->extra;
 	if (!aducm_desc->dev)
-		return FAILURE;
+		return -1;
 
-	if (SUCCESS != config_device(aducm_desc->dev, desc, false))
-		return FAILURE;
+	if (0 != config_device(aducm_desc->dev, desc, false))
+		return -1;
 
 	if (bytes_number == 0)
-		return FAILURE;
+		return -1;
 
 	spi_trans.nTxIncrement = 1;
 	spi_trans.nRxIncrement = 1;
@@ -264,19 +264,19 @@ int32_t aducm3029_spi_write_and_read(struct no_os_spi_desc *desc,
 			if (ADI_SPI_SUCCESS != adi_spi_MasterReadWrite(
 				    aducm_desc->dev->spi_handle,
 				    &spi_trans))
-				return FAILURE;
+				return -1;
 		} else {
 			if (ADI_SPI_SUCCESS != adi_spi_SlaveReadWrite(
 				    aducm_desc->dev->spi_handle,
 				    &spi_trans))
-				return FAILURE;
+				return -1;
 		}
 
 		data += n;
 		bytes_number -= n;
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**

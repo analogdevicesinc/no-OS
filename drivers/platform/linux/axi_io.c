@@ -59,7 +59,7 @@
  * @param offset - Address offset.
  * @param read - Location where read data will be stored.
  * @param write - Data to be written.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 static int32_t uio_read_write(uint32_t base, uint32_t offset, uint32_t *read,
 			      uint32_t *write)
@@ -67,7 +67,7 @@ static int32_t uio_read_write(uint32_t base, uint32_t offset, uint32_t *read,
 	char buf[32];
 	int ret;
 	int uio_fd;
-	int32_t status = SUCCESS;
+	int32_t status = 0;
 	void *uio_addr;
 
 	sprintf(buf, "/dev/uio%"PRIu32"", base);
@@ -75,7 +75,7 @@ static int32_t uio_read_write(uint32_t base, uint32_t offset, uint32_t *read,
 	uio_fd = open(buf, O_RDWR);
 	if (uio_fd < 0) {
 		printf("%s: Can't open %s\n\r", __func__, buf);
-		return FAILURE;
+		return -1;
 	}
 
 	uio_addr = mmap(NULL,
@@ -86,7 +86,7 @@ static int32_t uio_read_write(uint32_t base, uint32_t offset, uint32_t *read,
 			0);
 	if (uio_addr == MAP_FAILED) {
 		printf("%s: mmap() failed\n\r", __func__);
-		status = FAILURE;
+		status = -1;
 		goto close;
 	}
 
@@ -98,14 +98,14 @@ static int32_t uio_read_write(uint32_t base, uint32_t offset, uint32_t *read,
 	ret = munmap(uio_addr, offset + sizeof(*read));
 	if (ret < 0) {
 		printf("%s: munmap() failed\n\r", __func__);
-		status = FAILURE;
+		status = -1;
 	}
 
 close:
 	ret = close(uio_fd);
 	if (ret < 0) {
 		printf("%s: Can't close %s\n\r", __func__, buf);
-		status = FAILURE;
+		status = -1;
 	}
 
 	return status;
@@ -118,7 +118,7 @@ close:
  * @param offset - Address offset.
  * @param read - Location where read data will be stored.
  * @param write - Data to be written.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 static int32_t devmem_read_write(uint32_t base, uint32_t offset, uint32_t *read,
 				 uint32_t *write)
@@ -135,24 +135,24 @@ static int32_t devmem_read_write(uint32_t base, uint32_t offset, uint32_t *read,
 		ret = snprintf(command, sizeof(command),
 			       "busybox devmem 0x%x", base + offset);
 	else
-		return FAILURE;
+		return -1;
 
 	if (ret < 0 || ret >= (int32_t) sizeof(command))
-		return FAILURE;
+		return -1;
 
 	stream = popen(command, "r");
 	if (stream == NULL)
-		return FAILURE;
+		return -1;
 
 	if (!(fgets(answer, sizeof(answer), stream))) {
-		ret = FAILURE;
+		ret = -1;
 		goto close;
 	}
 
 	if (read)
 		*read = strtol(answer, NULL, 0);
 
-	ret = SUCCESS;
+	ret = 0;
 close:
 	pclose(stream);
 
@@ -164,7 +164,7 @@ close:
  * @param base - UIO index (/dev/uioX)/base address.
  * @param offset - Address offset.
  * @param data - Location where read data will be stored.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t no_os_axi_io_read(uint32_t base, uint32_t offset, uint32_t *data)
 {
@@ -180,7 +180,7 @@ int32_t no_os_axi_io_read(uint32_t base, uint32_t offset, uint32_t *data)
  * @param base - UIO index (/dev/uioX).
  * @param offset - Address offset.
  * @param data - Data to be written.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t no_os_axi_io_write(uint32_t base, uint32_t offset, uint32_t data)
 {

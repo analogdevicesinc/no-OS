@@ -243,12 +243,12 @@ int main(void)
 #endif
 
 	status = app_clock_init(app_clk);
-	if (status != SUCCESS)
+	if (status != 0)
 		printf("app_clock_init() error: %" PRId32 "\n", status);
 
 	status = app_jesd_init(jesd_clk,
 			       500000, 250000, 250000, 10000000, 10000000);
-	if (status != SUCCESS)
+	if (status != 0)
 		printf("app_jesd_init() error: %" PRId32 "\n", status);
 
 	rx_adc_init.num_channels = 0;
@@ -261,7 +261,7 @@ int main(void)
 		jtx_link_rx.device_id = i;
 
 		status = ad9081_init(&phy[i], &phy_param);
-		if (status != SUCCESS)
+		if (status != 0)
 			printf("ad9081_init() error: %" PRId32 "\n", status);
 
 		rx_adc_init.num_channels += phy[i]->jtx_link_rx[0].jesd_param.jesd_m +
@@ -349,7 +349,7 @@ int main(void)
 #else // IIO_SUPPORT
 	printf("Bye\n");
 
-	return SUCCESS;
+	return 0;
 #endif
 
 }

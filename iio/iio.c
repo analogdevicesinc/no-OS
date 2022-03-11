@@ -314,7 +314,7 @@ static int iio_read_all_attr(struct attr_fun_params *params,
 						 local_buf, params->len,
 						 params->ch_info,
 						 attributes[i].priv);
-		if (IS_ERR_VALUE(attr_length))
+		if (NO_OS_IS_ERR_VALUE(attr_length))
 			attr_length = snprintf(local_buf, params->len, "%d",
 					       attr_length);
 
@@ -433,7 +433,7 @@ static int32_t debug_reg_read(struct iio_dev_priv *dev, char *buf, uint32_t len)
 	ret = dev->dev_descriptor->debug_reg_read(dev->dev_instance,
 			dev->active_reg_addr,
 			&value);
-	if (IS_ERR_VALUE(ret))
+	if (NO_OS_IS_ERR_VALUE(ret))
 		return ret;
 
 	return snprintf(buf, len, "%"PRIu32"", value);
@@ -463,7 +463,7 @@ static int32_t debug_reg_write(struct iio_dev_priv *dev, const char *buf,
 		/* Write register */
 		ret = dev->dev_descriptor->debug_reg_write(dev->dev_instance,
 				addr, value);
-		if (IS_ERR_VALUE(ret))
+		if (NO_OS_IS_ERR_VALUE(ret))
 			return ret;
 	} else {
 		nb_filled = sscanf(buf, "%"PRIu32, &addr);
@@ -646,7 +646,7 @@ static int iio_read_attr(struct iiod_ctx *ctx, const char *device,
 
 	dev = get_iio_device(ctx->instance, device);
 	if (!dev)
-		return FAILURE;
+		return -1;
 
 	if (attr->type == IIO_ATTR_TYPE_DEBUG &&
 	    strcmp(attr->name, REG_ACCESS_ATTRIBUTE) == 0) {
@@ -762,7 +762,7 @@ static uint32_t bytes_per_scan(struct iio_channel *channels, uint32_t mask)
  * @param device - String containing device name.
  * @param sample_size - Sample size.
  * @param mask - Channels to be opened.
- * @return SUCCESS, negative value in case of failure.
+ * @return 0, negative value in case of failure.
  */
 static int iio_open_dev(struct iiod_ctx *ctx, const char *device,
 			uint32_t samples, uint32_t mask, bool cyclic)
@@ -807,7 +807,7 @@ static int iio_open_dev(struct iiod_ctx *ctx, const char *device,
 	}
 
 	ret = no_os_cb_cfg(&dev->buffer.cb, buf, dev->buffer.public.size);
-	if (IS_ERR_VALUE(ret)) {
+	if (NO_OS_IS_ERR_VALUE(ret)) {
 		if (dev->buffer.allocated) {
 			free(dev->buffer.cb.buff);
 			dev->buffer.allocated = 0;
@@ -818,7 +818,7 @@ static int iio_open_dev(struct iiod_ctx *ctx, const char *device,
 
 	if (dev->dev_descriptor->pre_enable) {
 		ret = dev->dev_descriptor->pre_enable(dev->dev_instance, mask);
-		if (IS_ERR_VALUE(ret) && dev->buffer.allocated) {
+		if (NO_OS_IS_ERR_VALUE(ret) && dev->buffer.allocated) {
 			free(dev->buffer.cb.buff);
 			dev->buffer.allocated = 0;
 		}
@@ -831,7 +831,7 @@ static int iio_open_dev(struct iiod_ctx *ctx, const char *device,
  * @brief Close device.
  * @param ctx - IIO instance and conn instance
  * @param device - String containing device name.
- * @return SUCCESS, negative value in case of failure.
+ * @return 0, negative value in case of failure.
  */
 static int iio_close_dev(struct iiod_ctx *ctx, const char *device)
 {
@@ -839,7 +839,7 @@ static int iio_close_dev(struct iiod_ctx *ctx, const char *device)
 
 	dev = get_iio_device(ctx->instance, device);
 	if (!dev)
-		return FAILURE;
+		return -1;
 
 	if (!dev->buffer.initalized)
 		return -EINVAL;
@@ -854,7 +854,7 @@ static int iio_close_dev(struct iiod_ctx *ctx, const char *device)
 	if (dev->dev_descriptor->post_disable)
 		return dev->dev_descriptor->post_disable(dev->dev_instance);
 
-	return SUCCESS;
+	return 0;
 }
 
 static int iio_call_submit(struct iiod_ctx *ctx, const char *device,
@@ -879,7 +879,7 @@ static int iio_call_submit(struct iiod_ctx *ctx, const char *device,
 		struct iio_buffer *buffer = &dev->buffer.public;
 
 		ret = iio_buffer_get_block(buffer, &buff);
-		if (IS_ERR_VALUE(ret))
+		if (NO_OS_IS_ERR_VALUE(ret))
 			return ret;
 
 		nb_scans = buffer->size / buffer->bytes_per_scan;
@@ -889,13 +889,13 @@ static int iio_call_submit(struct iiod_ctx *ctx, const char *device,
 		else
 			ret = dev->dev_descriptor->write_dev(dev->dev_instance,
 							     buff, nb_scans);
-		if (IS_ERR_VALUE(ret))
+		if (NO_OS_IS_ERR_VALUE(ret))
 			return ret;
 
 		return iio_buffer_block_done(buffer);
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 static int iio_push_buffer(struct iiod_ctx *ctx, const char *device)
@@ -931,7 +931,7 @@ static int iio_read_buffer(struct iiod_ctx *ctx, const char *device, char *buf,
 		return -EINVAL;
 
 	ret = no_os_cb_size(&dev->buffer.cb, &size);
-	if (IS_ERR_VALUE(ret))
+	if (NO_OS_IS_ERR_VALUE(ret))
 		return ret;
 
 	bytes = no_os_min(size, bytes);
@@ -940,7 +940,7 @@ static int iio_read_buffer(struct iiod_ctx *ctx, const char *device, char *buf,
 
 
 	ret = no_os_cb_read(&dev->buffer.cb, buf, bytes);
-	if (IS_ERR_VALUE(ret))
+	if (NO_OS_IS_ERR_VALUE(ret))
 		return ret;
 
 	return bytes;
@@ -971,13 +971,13 @@ static int iio_write_buffer(struct iiod_ctx *ctx, const char *device,
 		return -EINVAL;
 
 	ret = no_os_cb_size(&dev->buffer.cb, &size);
-	if (IS_ERR_VALUE(ret))
+	if (NO_OS_IS_ERR_VALUE(ret))
 		return ret;
 
 	available = dev->buffer.public.size - size;
 	bytes = no_os_min(available, bytes);
 	ret = no_os_cb_write(&dev->buffer.cb, buf, bytes);
-	if (IS_ERR_VALUE(ret))
+	if (NO_OS_IS_ERR_VALUE(ret))
 		return ret;
 
 	return bytes;
@@ -997,7 +997,7 @@ int iio_buffer_get_block(struct iio_buffer *buffer, void **addr)
 	else
 		ret = no_os_cb_prepare_async_read(buffer->buf, buffer->size, addr,
 						  &size);
-	if (IS_ERR_VALUE(ret))
+	if (NO_OS_IS_ERR_VALUE(ret))
 		/* ToDo: Implement async cancel. And cancel transaction here.
 		 * Also cancel may be needed for a posible future abort callback
 		 * If this is not done, after the first error all future calls
@@ -1013,7 +1013,7 @@ int iio_buffer_get_block(struct iio_buffer *buffer, void **addr)
 	if (size != buffer->size)
 		return -ENOMEM;
 
-	return SUCCESS;
+	return 0;
 }
 
 int iio_buffer_block_done(struct iio_buffer *buffer)
@@ -1055,7 +1055,7 @@ static int32_t accept_network_clients(struct iio_desc *desc)
 	do {
 		uint32_t id;
 		ret = socket_accept(desc->server, &sock);
-		if (IS_ERR_VALUE(ret))
+		if (NO_OS_IS_ERR_VALUE(ret))
 			return ret;
 
 		data.conn = sock;
@@ -1063,22 +1063,22 @@ static int32_t accept_network_clients(struct iio_desc *desc)
 		data.len = IIOD_CONN_BUFFER_SIZE;
 
 		ret = iiod_conn_add(desc->iiod, &data, &id);
-		if (IS_ERR_VALUE(ret))
+		if (NO_OS_IS_ERR_VALUE(ret))
 			return ret;
 
 		ret = _push_conn(desc, id);
-		if (IS_ERR_VALUE(ret))
+		if (NO_OS_IS_ERR_VALUE(ret))
 			return ret;
 	} while (true);
 
-	return SUCCESS;
+	return 0;
 }
 #endif
 
 /**
  * @brief Execute an iio step
  * @param desc - IIo descriptor
- * @return SUCCESS in case of success or negative value otherwise.
+ * @return 0 in case of success or negative value otherwise.
  */
 int iio_step(struct iio_desc *desc)
 {
@@ -1089,13 +1089,13 @@ int iio_step(struct iio_desc *desc)
 #ifdef ENABLE_IIO_NETWORK
 	if (desc->server) {
 		ret = accept_network_clients(desc);
-		if (IS_ERR_VALUE(ret) && ret != -EAGAIN)
+		if (NO_OS_IS_ERR_VALUE(ret) && ret != -EAGAIN)
 			return ret;
 	}
 #endif
 
 	ret = _pop_conn(desc, &conn_id);
-	if (IS_ERR_VALUE(ret))
+	if (NO_OS_IS_ERR_VALUE(ret))
 		return ret;
 
 	ret = iiod_conn_step(desc->iiod, conn_id);
@@ -1316,7 +1316,7 @@ static int32_t iio_init_xml(struct iio_desc *desc)
 
 	strcpy(desc->xml_desc + of, header_end);
 
-	return SUCCESS;
+	return 0;
 }
 
 static int32_t iio_init_devs(struct iio_desc *desc,
@@ -1355,7 +1355,7 @@ static int32_t iio_init_devs(struct iio_desc *desc,
 	}
 
 	ret = iio_init_xml(desc);
-	if (IS_ERR_VALUE(ret))
+	if (NO_OS_IS_ERR_VALUE(ret))
 		free(desc->devs);
 
 	return ret;
@@ -1366,7 +1366,7 @@ static int32_t iio_init_devs(struct iio_desc *desc,
  * from "libtinyiiod".
  * @param desc - iio descriptor.
  * @param init_param - appropriate init param.
- * @return SUCCESS in case of success or negative value otherwise.
+ * @return 0 in case of success or negative value otherwise.
  */
 int iio_init(struct iio_desc **desc, struct iio_init_param *init_param)
 {
@@ -1384,7 +1384,7 @@ int iio_init(struct iio_desc **desc, struct iio_init_param *init_param)
 		return -ENOMEM;
 
 	ret = iio_init_devs(ldesc, init_param->devs, init_param->nb_devs);
-	if (IS_ERR_VALUE(ret))
+	if (NO_OS_IS_ERR_VALUE(ret))
 		goto free_desc;
 
 	/* device operations */
@@ -1406,12 +1406,12 @@ int iio_init(struct iio_desc **desc, struct iio_init_param *init_param)
 	iiod_param.xml_len = ldesc->xml_size;
 
 	ret = iiod_init(&ldesc->iiod, &iiod_param);
-	if (IS_ERR_VALUE(ret))
+	if (NO_OS_IS_ERR_VALUE(ret))
 		goto free_devs;
 
 	ret = no_os_cb_init(&ldesc->conns,
 			    sizeof(uint32_t) * (IIOD_MAX_CONNECTIONS + 1));
-	if (IS_ERR_VALUE(ret))
+	if (NO_OS_IS_ERR_VALUE(ret))
 		goto free_iiod;
 
 	if (init_param->phy_type == USE_UART) {
@@ -1425,7 +1425,7 @@ int iio_init(struct iio_desc **desc, struct iio_init_param *init_param)
 			.len = sizeof(uart_buff)
 		};
 		ret = iiod_conn_add(ldesc->iiod, &data, &conn_id);
-		if (IS_ERR_VALUE(ret))
+		if (NO_OS_IS_ERR_VALUE(ret))
 			goto free_conns;
 		_push_conn(ldesc, conn_id);
 	}
@@ -1435,13 +1435,13 @@ int iio_init(struct iio_desc **desc, struct iio_init_param *init_param)
 		ldesc->recv = (int (*)())socket_recv;
 		ret = socket_init(&ldesc->server,
 				  init_param->tcp_socket_init_param);
-		if (IS_ERR_VALUE(ret))
+		if (NO_OS_IS_ERR_VALUE(ret))
 			goto free_conns;
 		ret = socket_bind(ldesc->server, IIOD_PORT);
-		if (IS_ERR_VALUE(ret))
+		if (NO_OS_IS_ERR_VALUE(ret))
 			goto free_pylink;
 		ret = socket_listen(ldesc->server, MAX_BACKLOG);
-		if (IS_ERR_VALUE(ret))
+		if (NO_OS_IS_ERR_VALUE(ret))
 			goto free_pylink;
 	}
 #endif
@@ -1452,7 +1452,7 @@ int iio_init(struct iio_desc **desc, struct iio_init_param *init_param)
 
 	*desc = ldesc;
 
-	return SUCCESS;
+	return 0;
 
 free_pylink:
 #ifdef ENABLE_IIO_NETWORK
@@ -1474,7 +1474,7 @@ free_desc:
 /**
  * @brief Free the resources allocated by "iio_init()".
  * @param desc: iio descriptor.
- * @return SUCCESS in case of success or negative value otherwise.
+ * @return 0 in case of success or negative value otherwise.
  */
 int iio_remove(struct iio_desc *desc)
 {
@@ -1490,5 +1490,5 @@ int iio_remove(struct iio_desc *desc)
 	free(desc->xml_desc);
 	free(desc);
 
-	return SUCCESS;
+	return 0;
 }

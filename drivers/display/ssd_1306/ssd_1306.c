@@ -75,7 +75,7 @@ extern const uint8_t no_os_chr_8x8[128][8];
  * @brief Initializes ssd_1306 for display screening.
  *
  * @param device - The device structure.
- * @return Returns SUCCESS in case of success or negative error code otherwise.
+ * @return Returns 0 in case of success or negative error code otherwise.
 *******************************************************************************/
 int32_t ssd_1306_init(struct display_dev *device)
 {
@@ -85,74 +85,74 @@ int32_t ssd_1306_init(struct display_dev *device)
 
 	extra = device->extra;
 	ret = no_os_spi_init(&extra->spi_desc, extra->spi_ip);
-	if (ret != SUCCESS)
-		return FAILURE;
+	if (ret != 0)
+		return -1;
 	ret = no_os_gpio_get(&extra->dc_pin, extra->dc_pin_ip);
-	if (ret != SUCCESS)
-		return FAILURE;
+	if (ret != 0)
+		return -1;
 	ret = no_os_gpio_get(&extra->reset_pin, extra->reset_pin_ip);
-	if (ret != SUCCESS)
-		return FAILURE;
+	if (ret != 0)
+		return -1;
 
 	// initial pin state
 	ret = no_os_gpio_direction_output(extra->dc_pin, SSD1306_DC_CMD);
-	if (ret != SUCCESS)
-		return FAILURE;
+	if (ret != 0)
+		return -1;
 	ret = no_os_gpio_direction_output(extra->reset_pin, SSD1306_RST_OFF);
-	if (ret != SUCCESS)
-		return FAILURE;
+	if (ret != 0)
+		return -1;
 
 	command[0] = 0xAE;
 	ret = no_os_spi_write_and_read(extra->spi_desc, command, 1U);
-	if (ret != SUCCESS)
-		return FAILURE;
+	if (ret != 0)
+		return -1;
 	ret = no_os_gpio_set_value(extra->reset_pin, SSD1306_RST_ON);
-	if (ret != SUCCESS)
-		return FAILURE;
+	if (ret != 0)
+		return -1;
 	// Post reset delay, Treset=3us (See datasheet -> power on sequence)
 	usleep(3U);
 	ret = no_os_gpio_set_value(extra->reset_pin, SSD1306_RST_OFF);
-	if (ret != SUCCESS)
-		return FAILURE;
+	if (ret != 0)
+		return -1;
 	// charge pump
 	command[0] = 0x8D;
 	command[1] = 0x14;
 	ret = no_os_spi_write_and_read(extra->spi_desc, command, 2U);
-	if (ret != SUCCESS)
-		return FAILURE;
+	if (ret != 0)
+		return -1;
 	// pre-charge
 	command[0] = 0xD9;
 	command[1] = 0xF1;
 	ret = no_os_spi_write_and_read(extra->spi_desc, command, 2U);
-	if (ret != SUCCESS)
-		return FAILURE;
+	if (ret != 0)
+		return -1;
 	// set contrast
 	command[0] = 0x81;
 	command[1] = 0xFF;
 	ret = no_os_spi_write_and_read(extra->spi_desc, command, 2U);
-	if (ret != SUCCESS)
-		return FAILURE;
+	if (ret != 0)
+		return -1;
 	// set segment remap
 	command[0] = 0xA0;
 	ret = no_os_spi_write_and_read(extra->spi_desc, command, 1U);
-	if (ret != SUCCESS)
-		return FAILURE;
+	if (ret != 0)
+		return -1;
 	// set scan direction
 	command[0] = 0xC0;
 	ret = no_os_spi_write_and_read(extra->spi_desc, command, 1U);
-	if (ret != SUCCESS)
-		return FAILURE;
+	if (ret != 0)
+		return -1;
 	// set COM pin
 	command[0] = 0xDA;
 	command[1] = 0x00;
 	ret = no_os_spi_write_and_read(extra->spi_desc, command, 2U);
-	if (ret != SUCCESS)
-		return FAILURE;
+	if (ret != 0)
+		return -1;
 	// show written memory on screen
 	command[0] = 0xA4;
 	ret = no_os_spi_write_and_read(extra->spi_desc, command, 1U);
-	if (ret != SUCCESS)
-		return FAILURE;
+	if (ret != 0)
+		return -1;
 	command[0] = 0x20;	// memory addressing mode
 	command[1] = 0x00;	// horizontal addressing
 	return no_os_spi_write_and_read(extra->spi_desc, command, 2U);
@@ -163,7 +163,7 @@ int32_t ssd_1306_init(struct display_dev *device)
  *
  * @param device - The device structure
  * @param on_off - Display state
- * @return Returns SUCCESS in case of success or negative error code otherwise.
+ * @return Returns 0 in case of success or negative error code otherwise.
 *******************************************************************************/
 int32_t ssd_1306_display_on_off(struct display_dev *device, uint8_t on_off)
 {
@@ -173,8 +173,8 @@ int32_t ssd_1306_display_on_off(struct display_dev *device, uint8_t on_off)
 
 	extra = device->extra;
 	ret = no_os_gpio_set_value(extra->dc_pin, SSD1306_DC_CMD);
-	if (ret != SUCCESS)
-		return FAILURE;
+	if (ret != 0)
+		return -1;
 	command = (on_off == true) ? SSD1306_DISP_ON : SSD1306_DISP_OFF;
 	return no_os_spi_write_and_read(extra->spi_desc, &command, 1U);
 }
@@ -185,7 +185,7 @@ int32_t ssd_1306_display_on_off(struct display_dev *device, uint8_t on_off)
  * @param device - The device structure
  * @param row    - row
  * @param column - column
- * @return Returns SUCCESS in case of success or negative error code otherwise.
+ * @return Returns 0 in case of success or negative error code otherwise.
 *******************************************************************************/
 int32_t ssd_1306_move_cursor(struct display_dev *device, uint8_t row,
 			     uint8_t column)
@@ -196,14 +196,14 @@ int32_t ssd_1306_move_cursor(struct display_dev *device, uint8_t row,
 
 	extra = device->extra;
 	ret = no_os_gpio_set_value(extra->dc_pin, SSD1306_DC_CMD);
-	if (ret != SUCCESS)
-		return FAILURE;
+	if (ret != 0)
+		return -1;
 	command[0] = 0x21;
 	command[1] = column*8;
 	command[2] = device->cols_nb * 8 - 1U;
 	ret = no_os_spi_write_and_read(extra->spi_desc, &command, 3U);
-	if (ret != SUCCESS)
-		return FAILURE;
+	if (ret != 0)
+		return -1;
 	command[0] = 0x22;
 	command[1] = row;
 	command[2] = device->rows_nb - 1U;
@@ -217,7 +217,7 @@ int32_t ssd_1306_move_cursor(struct display_dev *device, uint8_t row,
  * @param ascii  - corresponding number to ascii table
  * @param row    - row
  * @param column - column
- * @return Returns SUCCESS in case of success or negative error code otherwise.
+ * @return Returns 0 in case of success or negative error code otherwise.
 *******************************************************************************/
 int32_t ssd_1306_print_ascii(struct display_dev *device, uint8_t ascii,
 			     uint8_t row, uint8_t column)
@@ -229,11 +229,11 @@ int32_t ssd_1306_print_ascii(struct display_dev *device, uint8_t ascii,
 
 	extra = device->extra;
 	ret = ssd_1306_move_cursor(device, row, column);
-	if (ret != SUCCESS)
-		return FAILURE;
+	if (ret != 0)
+		return -1;
 	ret = no_os_gpio_set_value(extra->dc_pin, SSD1306_DC_DATA);
-	if (ret != SUCCESS)
-		return FAILURE;
+	if (ret != 0)
+		return -1;
 	return no_os_spi_write_and_read(extra->spi_desc, &ch, SSD1306_CHARSZ);
 }
 
@@ -241,7 +241,7 @@ int32_t ssd_1306_print_ascii(struct display_dev *device, uint8_t ascii,
  * @brief Removes resources allocated by device.
  *
  * @param device - The device structure.
- * @return Returns SUCCESS in case of success or negative error code otherwise.
+ * @return Returns 0 in case of success or negative error code otherwise.
 *******************************************************************************/
 int32_t ssd_1306_remove(struct display_dev *device)
 {
@@ -250,10 +250,10 @@ int32_t ssd_1306_remove(struct display_dev *device)
 
 	extra = device->extra;
 	ret = no_os_gpio_remove(extra->reset_pin);
-	if (ret != SUCCESS)
-		return FAILURE;
+	if (ret != 0)
+		return -1;
 	ret = no_os_gpio_remove(extra->dc_pin);
-	if (ret != SUCCESS)
-		return FAILURE;
+	if (ret != 0)
+		return -1;
 	return no_os_spi_remove(extra->spi_desc);
 }

@@ -90,7 +90,7 @@ int32_t adxcvr_write(struct adxcvr *xcvr,
 {
 	IOWR_32DIRECT(xcvr->base, reg_addr, reg_val);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -102,7 +102,7 @@ int32_t adxcvr_read(struct adxcvr *xcvr,
 {
 	*reg_val = IORD_32DIRECT(xcvr->base, reg_addr);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -147,7 +147,7 @@ int32_t atx_pll_write(struct adxcvr *xcvr, uint32_t reg, uint32_t val)
 {
 	IOWR_32DIRECT(xcvr->atx_pll_base, reg * 4, val);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -157,7 +157,7 @@ int32_t atx_pll_read(struct adxcvr *xcvr, uint32_t reg, uint32_t *val)
 {
 	*val = IORD_32DIRECT(xcvr->atx_pll_base, reg * 4);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -200,7 +200,7 @@ int32_t adxcfg_write(struct adxcvr *xcvr, uint32_t lane, uint32_t reg,
 {
 	IOWR_32DIRECT(xcvr->adxcfg_base[lane], reg * 4, val);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -211,7 +211,7 @@ int32_t adxcfg_read(struct adxcvr *xcvr, uint32_t lane,
 {
 	*val = IORD_32DIRECT(xcvr->adxcfg_base[lane], reg * 4);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -449,7 +449,7 @@ int32_t adxcvr_init(struct adxcvr **ad_xcvr,
 
 	xcvr = (struct adxcvr *)malloc(sizeof(*xcvr));
 	if (!xcvr)
-		return FAILURE;
+		return -1;
 
 	xcvr->base = init->base;
 	xcvr->name = init->name;
@@ -480,12 +480,12 @@ int32_t adxcvr_init(struct adxcvr **ad_xcvr,
 
 	*ad_xcvr = xcvr;
 
-	return SUCCESS;
+	return 0;
 
 err:
 	free(xcvr);
 
-	return FAILURE;
+	return -1;
 }
 
 /**
@@ -495,6 +495,6 @@ int32_t adxcvr_remove(struct adxcvr *xcvr)
 {
 	free(xcvr);
 
-	return SUCCESS;
+	return 0;
 }
 

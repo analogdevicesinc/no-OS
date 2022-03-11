@@ -89,7 +89,7 @@ int32_t no_os_flash_init(struct no_os_flash_dev **device,
 
 	dev = (struct no_os_flash_dev *)calloc(1, sizeof(*dev));
 	if (!dev)
-		return FAILURE;
+		return -1;
 
 	dev->id = init_param->id;
 	adicup_extra = (struct adicup_flash_dev *)calloc(1,
@@ -110,14 +110,14 @@ int32_t no_os_flash_init(struct no_os_flash_dev **device,
 
 	*device = dev;
 
-	return SUCCESS;
+	return 0;
 
 error_adicup:
 	free(adicup_extra);
 error_dev:
 	free(dev);
 
-	return FAILURE;
+	return -1;
 }
 
 /**
@@ -133,18 +133,18 @@ int32_t no_os_flash_remove(struct no_os_flash_dev *dev)
 	struct adicup_flash_dev *adicup_extra;
 
 	if (!dev)
-		return FAILURE;
+		return -1;
 
 	adicup_extra = dev->extra;
 
 	ret = adi_fee_Close(adicup_extra->instance);
 	if (ret != ADI_FEE_SUCCESS)
-		return FAILURE;
+		return -1;
 
 	free(adicup_extra);
 	free(dev);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -162,14 +162,14 @@ int32_t no_os_flash_clear_page(struct no_os_flash_dev *dev, int32_t page_no)
 	int32_t ret;
 
 	if (page_no > (dev->flash_size / dev->page_size))
-		return FAILURE;
+		return -1;
 
 	ret = adi_fee_PageErase(adicup_extra->instance, page_no, page_no,
 				&fee_hw_error);
 	if(ret != ADI_FEE_SUCCESS)
-		return FAILURE;
+		return -1;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -191,7 +191,7 @@ int32_t no_os_flash_write_page(struct no_os_flash_dev *dev, int32_t page_no,
 	int32_t ret;
 
 	if (page_no > (dev->flash_size / dev->page_size))
-		return FAILURE;
+		return -1;
 
 	transaction.bUseDma = true;
 	transaction.nSize = FLASH_PAGE_SIZE_BYTES;
@@ -201,9 +201,9 @@ int32_t no_os_flash_write_page(struct no_os_flash_dev *dev, int32_t page_no,
 	ret = adi_fee_Write(adicup_extra->instance, &transaction,
 			    &fee_hw_error);
 	if(ret != ADI_FEE_SUCCESS)
-		return FAILURE;
+		return -1;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -220,10 +220,10 @@ static int32_t flash_read_then_write(struct no_os_flash_dev *dev,
 	int32_t ret;
 
 	if ((flash_addr & 0x3) != 0)
-		return FAILURE;
+		return -1;
 	if ((FLASH_OFFSET_IN_PAGE(flash_addr) + array_size) >
 	    FLASH_PAGE_SIZE_WORDS)
-		return FAILURE;
+		return -1;
 
 	no_os_flash_read(dev, FLASH_ADDRESS_PAGE_START(flash_addr),
 			 adicup_extra->temp_ptr,
@@ -236,13 +236,13 @@ static int32_t flash_read_then_write(struct no_os_flash_dev *dev,
 	ret = adi_fee_GetPageNumber(adicup_extra->instance, flash_addr,
 				    &page_nr);
 	if(ret != ADI_FEE_SUCCESS)
-		return FAILURE;
+		return -1;
 
 	/* First erase page */
 	ret = adi_fee_PageErase(adicup_extra->instance, page_nr, page_nr,
 				&fee_hw_error);
 	if(ret != ADI_FEE_SUCCESS)
-		return FAILURE;
+		return -1;
 
 	return no_os_flash_write_page(dev, page_nr, adicup_extra->temp_ptr);
 }
@@ -269,12 +269,12 @@ int32_t no_os_flash_write(struct no_os_flash_dev *dev, uint32_t flash_addr,
 		if (len > array_size - i)
 			len = array_size - i;
 		ret = flash_read_then_write(dev, flash_addr + i, array + i, len);
-		if (ret != SUCCESS)
-			return FAILURE;
+		if (ret != 0)
+			return -1;
 		i += len;
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -293,5 +293,5 @@ int32_t no_os_flash_read(struct no_os_flash_dev *dev, uint32_t flash_addr,
 {
 	memcpy(array, (uint32_t *)flash_addr, size * sizeof(uint32_t));
 
-	return SUCCESS;
+	return 0;
 }

@@ -118,7 +118,7 @@ static int ad5791_iio_get_raw(void *device, char *buf, uint32_t len,
 	ret = ad5791_get_register_value(dev,
 					AD5791_REG_DAC,
 					&value);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 	value &= 0xFFFFF;
 
@@ -145,11 +145,11 @@ static int ad5791_iio_set_raw(void *device, char *buf, uint32_t len,
 	sscanf(buf, "%"PRIX32"", &value);
 
 	ret = ad5791_set_dac_value(dev, value);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = ad5791_soft_instruction(dev, AD5791_SOFT_CTRL_LDAC);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	return len;
@@ -175,7 +175,7 @@ static int ad5791_iio_get_powerdown(void *device, char *buf, uint32_t len,
 	bool pwrdwn;
 
 	ret = ad5791_get_register_value(dev, AD5791_REG_CTRL, &value);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	if ((value & AD5791_CTRL_OPGND) || (value & AD5791_CTRL_DACTRI)) {
@@ -216,14 +216,14 @@ static int ad5791_iio_set_powerdown(void *device, char *buf, uint32_t len,
 	}
 
 	ret = ad5791_get_register_value(dev, AD5791_REG_CTRL, &value);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 	if (!!value)
 		value |= pwr_dwn_opt;
 	else
 		value &= ~pwr_dwn_opt;
 	ret = ad5791_set_register_value(dev, AD5791_REG_CTRL, value);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	return len;
@@ -381,7 +381,7 @@ struct iio_device const iio_ad5791_device = {
  * @brief Initialize the AD5791 IIO driver.
  * @param iio_dev - Pointer to the IIO driver handler.
  * @param init_param - Pointer to the initialization structure.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad5791_iio_init(struct ad5791_iio_desc **iio_dev,
 			struct ad5791_iio_init_param *init_param)
@@ -391,7 +391,7 @@ int32_t ad5791_iio_init(struct ad5791_iio_desc **iio_dev,
 
 	desc = (struct ad5791_iio_desc *)calloc(1, sizeof(*desc));
 	if (!desc)
-		return FAILURE;
+		return -1;
 
 	desc->vref_mv = init_param->vref_mv;
 	desc->vref_neg_mv = init_param->vref_neg_mv;
@@ -399,12 +399,12 @@ int32_t ad5791_iio_init(struct ad5791_iio_desc **iio_dev,
 	desc->curr_mode = AD5791_THREE_STATE;
 
 	ret = ad5791_init(&desc->ad5791_handle, *init_param->ad5791_initial);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		goto error_desc;
 
 	*iio_dev = desc;
 
-	return SUCCESS;
+	return 0;
 error_desc:
 	free(desc);
 
@@ -414,18 +414,18 @@ error_desc:
 /**
  * @brief Free memory allocated by ad5791_iio_init().
  * @param desc -Pointer to the driver handler.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad5791_iio_remove(struct ad5791_iio_desc *desc)
 {
 	int32_t ret;
 
 	ret = ad5791_remove(desc->ad5791_handle);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	free(desc);
 
-	return SUCCESS;
+	return 0;
 }
 

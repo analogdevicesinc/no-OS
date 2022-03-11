@@ -53,7 +53,7 @@
  * @param dev - The device structure.
  * @param reg_addr - The register address.
  * @param data - Data value to write.
- * @return Returns SUCCESS in case of success or negative error code otherwise.
+ * @return Returns 0 in case of success or negative error code otherwise.
  */
 
 int32_t ada4250_write(struct ada4250_dev *dev, uint8_t reg_addr,
@@ -75,7 +75,7 @@ int32_t ada4250_write(struct ada4250_dev *dev, uint8_t reg_addr,
  * @param dev - The device structure.
  * @param reg_addr - The register address.
  * @param data - Data read from the device.
- * @return Returns SUCCESS in case of success or negative error code otherwise.
+ * @return Returns 0 in case of success or negative error code otherwise.
  */
 
 int32_t ada4250_read(struct ada4250_dev *dev, uint8_t reg_addr,
@@ -91,7 +91,7 @@ int32_t ada4250_read(struct ada4250_dev *dev, uint8_t reg_addr,
 	buff[1] = ADA4250_SPI_DUMMY_DATA;
 
 	ret = no_os_spi_write_and_read(dev->spi_desc, buff, ADA4250_BUFF_SIZE_BYTES);
-	if(ret != SUCCESS)
+	if(ret != 0)
 		return ret;
 
 	*data = buff[1];
@@ -105,7 +105,7 @@ int32_t ada4250_read(struct ada4250_dev *dev, uint8_t reg_addr,
  * @param reg_addr - The register address.
  * @param mask - Mask for specific register bits to be updated.
  * @param data - Data read from the device.
- * @return Returns SUCCESS in case of success or negative error code otherwise.
+ * @return Returns 0 in case of success or negative error code otherwise.
  */
 int32_t ada4250_update(struct ada4250_dev *dev, uint8_t reg_addr,
 		       uint8_t mask, uint8_t data)
@@ -117,7 +117,7 @@ int32_t ada4250_update(struct ada4250_dev *dev, uint8_t reg_addr,
 		return -ENODEV;
 
 	ret = ada4250_read(dev, reg_addr, &read_val);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	read_val &= ~mask;
@@ -131,7 +131,7 @@ int32_t ada4250_update(struct ada4250_dev *dev, uint8_t reg_addr,
 /**
  * @brief Update ADA4250 device descriptor.
  * @param dev - The device structure.
- * @return Returns SUCCESS in case of success or negative error code otherwise.
+ * @return Returns 0 in case of success or negative error code otherwise.
  */
 int32_t ada4250_update_desc(struct ada4250_dev *dev)
 {
@@ -139,22 +139,22 @@ int32_t ada4250_update_desc(struct ada4250_dev *dev)
 	int32_t ret;
 
 	ret = ada4250_read(dev, ADA4250_REG_GAIN_MUX, &reg_data);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 	dev->gain = reg_data & ADA4250_GAIN_MUX_MSK;
 
 	ret = ada4250_read(dev, ADA4250_REG_REFBUF_EN, &reg_data);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 	dev->refbuf_en = reg_data & ADA4250_REFBUF_MSK;
 
 	ret = ada4250_read(dev, ADA4250_REG_SNSR_CAL_VAL, &reg_data);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 	dev->offset_uv = reg_data & ADA4250_SNSR_CAL_VAL_MSK;
 
 	ret = ada4250_read(dev, ADA4250_REG_SNSR_CAL_CNFG, &reg_data);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 	dev->bias = (reg_data & ADA4250_BIAS_SET_MSK) >> 2;
 	dev->offset_range = reg_data & ADA4250_RANGE_SET_MSK;
@@ -165,7 +165,7 @@ int32_t ada4250_update_desc(struct ada4250_dev *dev)
 /**
  * @brief Software reset.
  * @param dev - The device structure.
- * @return Returns SUCCESS in case of success or negative error code.
+ * @return Returns 0 in case of success or negative error code.
  */
 int32_t ada4250_soft_reset(struct ada4250_dev *dev)
 {
@@ -181,12 +181,12 @@ int32_t ada4250_soft_reset(struct ada4250_dev *dev)
 
 	while(timeout--) {
 		ret = ada4250_read(dev, ADA4250_REG_RESET, &data);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 
 		if (!(data & ADA4250_RESET(ADA4250_RESET_ENABLE))) {
 			ret = ada4250_update_desc(dev);
-			if (ret != SUCCESS)
+			if (ret != 0)
 				return ret;
 			else
 				break;
@@ -203,7 +203,7 @@ int32_t ada4250_soft_reset(struct ada4250_dev *dev)
  * @brief Enable/Disable Reference Buffer.
  * @param dev - The device structure.
  * @param refbuf - REFBUF enable/disable.
- * @return Returns SUCCESS in case of success or negative error code.
+ * @return Returns 0 in case of success or negative error code.
  */
 int32_t ada4250_en_refbuf(struct ada4250_dev *dev, bool refbuf)
 {
@@ -225,14 +225,14 @@ int32_t ada4250_en_refbuf(struct ada4250_dev *dev, bool refbuf)
 		return ret;
 
 	dev->refbuf_en = refbuf;
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Set current bias for ADA4250.
  * @param dev - The device structure.
  * @param bias - Current bias option.
- * @return Returns SUCCESS in case of success or negative error code.
+ * @return Returns 0 in case of success or negative error code.
  */
 int32_t ada4250_set_bias(struct ada4250_dev *dev, enum ada4250_bias bias)
 {
@@ -247,14 +247,14 @@ int32_t ada4250_set_bias(struct ada4250_dev *dev, enum ada4250_bias bias)
 		return ret;
 
 	dev->bias = bias;
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Set offset trim range for ADA4250.
  * @param dev - The device structure.
  * @param range - Offset range option.
- * @return Returns SUCCESS in case of success or negative error code.
+ * @return Returns 0 in case of success or negative error code.
  */
 static int32_t ada4250_set_range(struct ada4250_dev *dev,
 				 enum ada4250_offset_range range)
@@ -270,14 +270,14 @@ static int32_t ada4250_set_range(struct ada4250_dev *dev,
 		return ret;
 
 	dev->offset_range = range;
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Set gain for ADA4250.
  * @param dev - The device structure.
  * @param gain - Gain Value.
- * @return Returns SUCCESS in case of success or negative error code.
+ * @return Returns 0 in case of success or negative error code.
  */
 int32_t ada4250_set_gain(struct ada4250_dev *dev, enum ada4250_gain gain)
 {
@@ -288,11 +288,11 @@ int32_t ada4250_set_gain(struct ada4250_dev *dev, enum ada4250_gain gain)
 				     ADA4250_GAIN_MUX(gain));
 	} else {
 		ret = no_os_gpio_set_value(dev->gpio_g2, ((dev->gain >> 2) & 0x1));
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 
 		ret = no_os_gpio_set_value(dev->gpio_g1, ((dev->gain >> 1) & 0x1));
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 
 		ret = no_os_gpio_set_value(dev->gpio_g0, (dev->gain & 0x1));
@@ -302,14 +302,14 @@ int32_t ada4250_set_gain(struct ada4250_dev *dev, enum ada4250_gain gain)
 		return ret;
 
 	dev->gain = gain;
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Set offset value for ADA4250.
  * @param dev - The device structure.
  * @param offset - Offset Value in uV.
- * @return Returns SUCCESS in case of success or negative error code.
+ * @return Returns 0 in case of success or negative error code.
  */
 int32_t ada4250_set_offset(struct ada4250_dev *dev, int32_t offset)
 {
@@ -351,7 +351,7 @@ int32_t ada4250_set_offset(struct ada4250_dev *dev, int32_t offset)
 	offset_raw = abs(offset) / vlsb;
 
 	ret = ada4250_set_range(dev, range);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	if (offset < 0) {
@@ -367,7 +367,7 @@ int32_t ada4250_set_offset(struct ada4250_dev *dev, int32_t offset)
  * @brief Set the bandwidth value for ADA4250.
  * @param dev - The device structure.
  * @param bw - Bandwidth value.
- * @return Returns SUCCESS in case of success or negative error code.
+ * @return Returns 0 in case of success or negative error code.
  */
 int32_t ada4250_set_bandwidth(struct ada4250_dev *dev,
 			      enum ada4250_bandwidth bw)
@@ -394,13 +394,13 @@ int32_t ada4250_set_bandwidth(struct ada4250_dev *dev,
 		return ret;
 
 	dev->bandwidth = bw;
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Set the configurations for ADA4250.
  * @param dev - The device structure.
- * @return Returns SUCCESS in case of success or negative error code.
+ * @return Returns 0 in case of success or negative error code.
  */
 static int32_t ada4250_set_config(struct ada4250_dev *dev)
 {
@@ -410,37 +410,37 @@ static int32_t ada4250_set_config(struct ada4250_dev *dev)
 		return -ENOMEM;
 
 	ret = ada4250_set_bandwidth(dev, dev->bandwidth);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = ada4250_set_gain(dev, dev->gain);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = ada4250_en_refbuf(dev, dev->refbuf_en);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	if (dev->device_id == ADA4250) {
 		ret = ada4250_set_bias(dev, dev->bias);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 
 		if (dev->bias != ADA4250_BIAS_DISABLE) {
 			ret = ada4250_set_offset(dev, dev->offset_uv);
-			if (ret != SUCCESS)
+			if (ret != 0)
 				return ret;
 		}
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Set the ADA4250 into sleep or shutdown mode.
  * @param dev - The device structure.
  * @param pwrmode - Power mode option.
- * @return Returns SUCCESS in case of success or negative error code.
+ * @return Returns 0 in case of success or negative error code.
  */
 int32_t ada4250_set_slp_shtdwn_mode(struct ada4250_dev *dev,
 				    enum ada4250_power_mode pwrmode)
@@ -465,7 +465,7 @@ int32_t ada4250_set_slp_shtdwn_mode(struct ada4250_dev *dev,
 		return ret;
 
 	dev->power_mode = pwrmode;
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -473,7 +473,7 @@ int32_t ada4250_set_slp_shtdwn_mode(struct ada4250_dev *dev,
  *        to the user input.
  * @param dev - The device structure.
  * @param reconfig - Reconfiguration enable/disable.
- * @return Returns SUCCESS in case of success or negative error code.
+ * @return Returns 0 in case of success or negative error code.
  */
 int32_t ada4250_set_normal_mode(struct ada4250_dev *dev, bool reconfig)
 {
@@ -493,7 +493,7 @@ int32_t ada4250_set_normal_mode(struct ada4250_dev *dev, bool reconfig)
 		return -EINVAL;
 	}
 
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	/* Wait for 200/400 us for the device to wake up from sleep/shutdown mode */
@@ -503,24 +503,24 @@ int32_t ada4250_set_normal_mode(struct ada4250_dev *dev, bool reconfig)
 		if (reconfig) {
 			/* Reconfiguring to state prior to shutdown */
 			ret = ada4250_set_config(dev);
-			if (ret != SUCCESS)
+			if (ret != 0)
 				return ret;
 		} else { /* Update driver configurations */
 			ret = ada4250_update_desc(dev);
-			if (ret != SUCCESS)
+			if (ret != 0)
 				return ret;
 		}
 	}
 
 	dev->power_mode = ADA4250_POWER_NORMAL;
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Initialize the ADA4250 device.
  * @param device - The device structure.
  * @param init_param - The structure containing the device initial parameters.
- * @return Returns SUCCESS in case of success or negative error code.
+ * @return Returns 0 in case of success or negative error code.
  */
 int32_t ada4250_init(struct ada4250_dev **device,
 		     struct ada4250_init_param *init_param)
@@ -544,19 +544,19 @@ int32_t ada4250_init(struct ada4250_dev **device,
 
 	/* Initialize gpio sleep/shutdown and pull it to high */
 	ret = no_os_gpio_get_optional(&dev->gpio_shtdwn, init_param->gpio_shtdwn);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		goto error_dev;
 
 	ret = no_os_gpio_direction_output(dev->gpio_shtdwn, NO_OS_GPIO_HIGH);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		goto error_shtdwn;
 
 	ret = no_os_gpio_get_optional(&dev->gpio_slp, init_param->gpio_slp);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		goto error_shtdwn;
 
 	ret = no_os_gpio_direction_output(dev->gpio_slp, NO_OS_GPIO_HIGH);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		goto error_slp;
 
 	/* Wait for the device to wake up*/
@@ -566,17 +566,17 @@ int32_t ada4250_init(struct ada4250_dev **device,
 	if(dev->device_id == ADA4250) {
 		/* SPI */
 		ret = no_os_spi_init(&dev->spi_desc, init_param->spi_init);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			goto error_dev;
 
 		ret = ada4250_read(dev, ADA4250_REG_CHIP_ID2, &data);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			goto error_spi;
 
 		chip_id = data;
 
 		ret = ada4250_read(dev, ADA4250_REG_CHIP_ID1, &data);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			goto error_spi;
 
 		chip_id = (chip_id << 8 | data);
@@ -587,53 +587,53 @@ int32_t ada4250_init(struct ada4250_dev **device,
 		}
 
 		ret = ada4250_soft_reset(dev);
-		if(ret != SUCCESS)
-			return FAILURE;
+		if(ret != 0)
+			return -1;
 	} else {
 		ret = no_os_gpio_get(&dev->gpio_g2, init_param->gpio_g2_param);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			goto error_dev;
 
 		ret = no_os_gpio_direction_output(dev->gpio_g2, NO_OS_GPIO_LOW);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			goto error_g2;
 
 		ret = no_os_gpio_get(&dev->gpio_g1, init_param->gpio_g1_param);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			goto error_g2;
 
 		ret = no_os_gpio_direction_output(dev->gpio_g1, NO_OS_GPIO_LOW);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			goto error_g1;
 
 		ret = no_os_gpio_get(&dev->gpio_g0, init_param->gpio_g0_param);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			goto error_g1;
 
 		ret = no_os_gpio_direction_output(dev->gpio_g0, NO_OS_GPIO_LOW);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			goto error_g0;
 
 		ret = no_os_gpio_get(&dev->gpio_bufen, init_param->gpio_bufen_param);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			goto error_g0;
 		ret = no_os_gpio_direction_output(dev->gpio_bufen, NO_OS_GPIO_LOW);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			goto error_bufen;
 	}
 
 	/* Initialize gpio bandwidth and pull it to high */
 	ret = no_os_gpio_get_optional(&dev->gpio_bw, init_param->gpio_bw_param);
-	if (ret != SUCCESS)
-		return FAILURE;
+	if (ret != 0)
+		return -1;
 
 	ret = no_os_gpio_direction_output(dev->gpio_bw, NO_OS_GPIO_HIGH);
-	if (ret != SUCCESS)
-		return FAILURE;
+	if (ret != 0)
+		return -1;
 
 	ret = ada4250_set_config(dev);
-	if (ret != SUCCESS)
-		return FAILURE;
+	if (ret != 0)
+		return -1;
 
 	*device = dev;
 
@@ -662,38 +662,38 @@ error_dev:
 /**
  * @brief Free resoulces allocated for ADA4250
  * @param dev - The device structure.
- * @return Returns SUCCESS in case of success or negative error code.
+ * @return Returns 0 in case of success or negative error code.
  */
 int32_t ada4250_remove(struct ada4250_dev *dev)
 {
 	int32_t ret;
 
 	ret = no_os_gpio_remove(dev->gpio_slp);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 	ret = no_os_gpio_remove(dev->gpio_shtdwn);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 	ret = no_os_gpio_remove(dev->gpio_bw);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	if (dev->device_id == ADA4250) {
 		ret = no_os_spi_remove(dev->spi_desc);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 	} else {
 		ret = no_os_gpio_remove(dev->gpio_g2);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 		ret = no_os_gpio_remove(dev->gpio_g1);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 		ret = no_os_gpio_remove(dev->gpio_g0);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 		ret = no_os_gpio_remove(dev->gpio_bufen);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 	}
 

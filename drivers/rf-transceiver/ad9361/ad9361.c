@@ -6113,9 +6113,9 @@ int32_t ad9361_validate_enable_fir(struct ad9361_rf_phy *phy)
 		memcpy(tx, phy->filt_tx_path_clks, sizeof(tx));
 #else
 		int32_t i;
-		for (i = 0; i < ARRAY_SIZE(rx); i++)
+		for (i = 0; i < NO_OS_ARRAY_SIZE(rx); i++)
 			rx[i] = phy->filt_rx_path_clks[i];
-		for (i = 0; i < ARRAY_SIZE(tx); i++)
+		for (i = 0; i < NO_OS_ARRAY_SIZE(tx); i++)
 			tx[i] = phy->filt_tx_path_clks[i];
 #endif
 		valid = true;

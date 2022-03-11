@@ -55,7 +55,7 @@
  * @brief Initialize the RTC peripheral.
  * @param device - The RTC descriptor.
  * @param init_param - The structure that contains the RTC initialization.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t no_os_rtc_init(struct rtc_desc **device,
 		       struct rtc_init_param *init_param)
@@ -66,7 +66,7 @@ int32_t no_os_rtc_init(struct rtc_desc **device,
 
 	dev = (struct rtc_desc *)calloc(1, sizeof(*dev));
 	if (!dev)
-		return FAILURE;
+		return -1;
 
 	adev = (struct aducm_rtc_desc *)calloc(1, sizeof(*adev));
 	if (!adev)
@@ -83,24 +83,24 @@ int32_t no_os_rtc_init(struct rtc_desc **device,
 
 	ret = adi_rtc_Open(dev->id, adev->memory, ADI_RTC_MEMORY_SIZE,
 			   &adev->instance);
-	if(ret != SUCCESS)
+	if(ret != 0)
 		goto error_mem;
 
 	if ((dev->freq >= AUDCM_32768HZ) && (dev->freq <= AUDCM_1HZ)) {
 		ret = adi_rtc_SetPreScale(adev->instance, dev->freq);
-		if(ret != SUCCESS)
+		if(ret != 0)
 			goto error_open;
 	} else {
 		goto error_open;
 	}
 
 	ret = adi_rtc_SetCount(adev->instance, dev->load);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		goto error_open;
 
 	*device = dev;
 
-	return SUCCESS;
+	return 0;
 
 error_open:
 	adi_rtc_Close(adev->instance);
@@ -111,13 +111,13 @@ error_extra:
 error_dev:
 	free(dev);
 
-	return FAILURE;
+	return -1;
 }
 
 /**
  * @brief Free the resources allocated by no_os_rtc_init().
  * @param dev - The RTC descriptor.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t no_os_rtc_remove(struct rtc_desc *dev)
 {
@@ -125,27 +125,27 @@ int32_t no_os_rtc_remove(struct rtc_desc *dev)
 	struct aducm_rtc_desc *adev = dev->extra;
 
 	ret = adi_rtc_Close(adev->instance);
-	if(ret != SUCCESS)
-		return FAILURE;
+	if(ret != 0)
+		return -1;
 
 	free(adev->memory);
 	free(adev);
 	free(dev);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Start the real time clock.
  * @param dev - The RTC descriptor.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t no_os_rtc_start(struct rtc_desc *dev)
 {
 	struct aducm_rtc_desc *adev;
 
 	if (!dev)
-		return FAILURE;
+		return -1;
 	adev = dev->extra;
 
 	return adi_rtc_Enable(adev->instance, true);
@@ -154,14 +154,14 @@ int32_t no_os_rtc_start(struct rtc_desc *dev)
 /**
  * @brief Stop the real time clock.
  * @param dev - The RTC descriptor.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t no_os_rtc_stop(struct rtc_desc *dev)
 {
 	struct aducm_rtc_desc *adev;
 
 	if (!dev)
-		return FAILURE;
+		return -1;
 	adev = dev->extra;
 
 	return adi_rtc_Enable(adev->instance, false);
@@ -171,7 +171,7 @@ int32_t no_os_rtc_stop(struct rtc_desc *dev)
  * @brief Get the current count for the real time clock.
  * @param dev - The RTC descriptor.
  * @param tmr_cnt - Pointer where the read counter will be stored.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t no_os_rtc_get_cnt(struct rtc_desc *dev, uint32_t *tmr_cnt)
 {
@@ -184,7 +184,7 @@ int32_t no_os_rtc_get_cnt(struct rtc_desc *dev, uint32_t *tmr_cnt)
  * @brief Set the current count for the real time clock.
  * @param dev - The RTC descriptor.
  * @param tmr_cnt - New value of the timer counter.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t no_os_rtc_set_cnt(struct rtc_desc *dev, uint32_t tmr_cnt)
 {

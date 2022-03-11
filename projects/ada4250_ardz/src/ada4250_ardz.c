@@ -90,7 +90,7 @@ int main()
 	};
 
 	ret = ada4250_init(&ada4250_dev, &ada4250_param);
-	if (IS_ERR_VALUE(ret))
+	if (NO_OS_IS_ERR_VALUE(ret))
 		return ret;
 
 	struct iio_app_device devices[] = {

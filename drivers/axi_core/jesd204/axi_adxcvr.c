@@ -95,7 +95,7 @@ int32_t adxcvr_write(struct adxcvr *xcvr,
 {
 	no_os_axi_io_write(xcvr->base, reg_addr, reg_val);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -107,7 +107,7 @@ int32_t adxcvr_read(struct adxcvr *xcvr,
 {
 	no_os_axi_io_read(xcvr->base, reg_addr, reg_val);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -129,7 +129,7 @@ int32_t adxcvr_drp_wait_idle(struct adxcvr *xcvr,
 
 	printf("%s: %s: Timeout!", xcvr->name, __func__);
 
-	return FAILURE;
+	return -1;
 }
 
 /**
@@ -159,7 +159,7 @@ int32_t adxcvr_drp_read(struct adxcvr *xcvr,
 
 	*val = ret & 0xffff;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -188,7 +188,7 @@ int32_t adxcvr_drp_write(struct adxcvr *xcvr,
 	if (ret < 0)
 		return ret;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -263,7 +263,7 @@ int32_t adxcvr_clk_set_rate(struct adxcvr *xcvr,
 
 	xcvr->lane_rate_khz = rate;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -280,11 +280,11 @@ int32_t adxcvr_status_error(struct adxcvr *xcvr)
 	} while ((timeout--) && (status == 0));
 
 	if (!status)
-		return FAILURE;
+		return -1;
 
 	printf("%s: OK (%"PRId32" kHz)\n", xcvr->name, xcvr->lane_rate_khz);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -305,7 +305,7 @@ int32_t adxcvr_clk_disable(struct adxcvr *xcvr)
 {
 	adxcvr_write(xcvr, ADXCVR_REG_RESETN, 0);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -338,7 +338,7 @@ int32_t adxcvr_init(struct adxcvr **ad_xcvr,
 
 	xcvr = (struct adxcvr *)malloc(sizeof(*xcvr));
 	if (!xcvr)
-		return FAILURE;
+		return -1;
 
 	xcvr->base = init->base;
 	xcvr->name = init->name;
@@ -420,12 +420,12 @@ int32_t adxcvr_init(struct adxcvr **ad_xcvr,
 
 	*ad_xcvr = xcvr;
 
-	return SUCCESS;
+	return 0;
 
 err:
 	free(xcvr);
 
-	return FAILURE;
+	return -1;
 }
 
 /**
@@ -435,5 +435,5 @@ int32_t adxcvr_remove(struct adxcvr *xcvr)
 {
 	free(xcvr);
 
-	return SUCCESS;
+	return 0;
 }

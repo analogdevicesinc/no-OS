@@ -52,7 +52,7 @@
  * @param [in] dev - adaq7980_dev device handler.
  * @param [out] buf - data buffer.
  * @param [in] samples - sample number.
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t ad7980_read_data(struct adaq7980_dev *dev,
 			 uint16_t *buf,
@@ -64,7 +64,7 @@ int32_t ad7980_read_data(struct adaq7980_dev *dev,
 	int32_t ret;
 
 	ret = spi_engine_offload_init(dev->spi_desc, dev->offload_init_param);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	msg.commands = spi_eng_msg_cmds;
@@ -73,10 +73,10 @@ int32_t ad7980_read_data(struct adaq7980_dev *dev,
 	msg.commands_data = commands_data;
 
 	ret = spi_engine_offload_transfer(dev->spi_desc, msg, samples);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -94,30 +94,30 @@ int32_t adaq7980_setup(struct adaq7980_dev **device,
 
 	dev = (struct adaq7980_dev *)malloc(sizeof(*dev));
 	if (!dev)
-		return FAILURE;
+		return -1;
 
 	ret = no_os_gpio_get_optional(&dev->gpio_pd_ldo, init_param->gpio_pd_ldo);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		goto error_dev;
 
 	ret = no_os_spi_init(&dev->spi_desc, init_param->spi_init);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		goto error_dev;
 
 	if (init_param->gpio_pd_ldo) {
 		ret = no_os_gpio_direction_output(dev->gpio_pd_ldo, NO_OS_GPIO_LOW);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			goto error_dev;
 
 		no_os_mdelay(10);
 		ret = no_os_gpio_set_value(dev->gpio_pd_ldo, NO_OS_GPIO_HIGH);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			goto error_dev;
 
 		no_os_mdelay(10);
 	}
 	ret = no_os_pwm_init(&dev->trigger_pwm_desc, init_param->trigger_pwm_init);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		goto error_spi;
 
 	no_os_pwm_enable(dev->trigger_pwm_desc);
@@ -126,12 +126,12 @@ int32_t adaq7980_setup(struct adaq7980_dev **device,
 
 	*device = dev;
 
-	return SUCCESS;
+	return 0;
 
 error_spi:
 	no_os_spi_remove(dev->spi_desc);
 error_dev:
 	free(dev);
 
-	return FAILURE;
+	return -1;
 }

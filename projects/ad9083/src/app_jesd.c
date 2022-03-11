@@ -62,7 +62,7 @@
  * @param app - JESD app descriptor.
  * @param init_param - The structure that contains the JESD app initial
  * 		       parameters.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t app_jesd_init(struct app_jesd **app, struct app_jesd_init *init_param)
 {
@@ -74,7 +74,7 @@ int32_t app_jesd_init(struct app_jesd **app, struct app_jesd_init *init_param)
 
 	app_jesd = (struct app_jesd *)calloc(1, sizeof(*app_jesd));
 	if (!app_jesd)
-		return FAILURE;
+		return -1;
 
 	struct jesd204_rx_init rx_jesd_init = {
 		.name = "rx_jesd",
@@ -98,13 +98,13 @@ int32_t app_jesd_init(struct app_jesd **app, struct app_jesd_init *init_param)
 	};
 
 	status = axi_jesd204_rx_init(&app_jesd->rx_jesd, &rx_jesd_init);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		pr_err("error: %s: axi_jesd204_rx_init() failed\n", rx_jesd_init.name);
 		goto error_0;
 	}
 
 	status = adxcvr_init(&app_jesd->rx_adxcvr, &rx_adxcvr_init);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		pr_err("error: %s: adxcvr_init() failed\n", rx_adxcvr_init.name);
 		goto error_1;
 	}
@@ -120,14 +120,14 @@ int32_t app_jesd_init(struct app_jesd **app, struct app_jesd_init *init_param)
 
 	*app = app_jesd;
 
-	return SUCCESS;
+	return 0;
 
 error_1:
 	axi_jesd204_rx_remove(app_jesd->rx_jesd);
 error_0:
 	free(app_jesd);
 
-	return FAILURE;
+	return -1;
 }
 
 uint32_t app_jesd_status(struct app_jesd *app)
@@ -138,14 +138,14 @@ uint32_t app_jesd_status(struct app_jesd *app)
 /**
  * @brief Free the resources allocated by app_jesd_init().
  * @param app - App descriptor.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t app_jesd_remove(struct app_jesd *app)
 {
 	int32_t ret;
 
 	if (!app)
-		return FAILURE;
+		return -1;
 
 	ret = axi_jesd204_rx_remove(app->rx_jesd);
 	if (ret < 0)
@@ -157,5 +157,5 @@ int32_t app_jesd_remove(struct app_jesd *app)
 
 	free(app);
 
-	return SUCCESS;
+	return 0;
 }

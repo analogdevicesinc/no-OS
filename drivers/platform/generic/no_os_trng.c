@@ -66,7 +66,7 @@ int32_t no_os_trng_init(struct no_os_trng_desc **desc,
 	NO_OS_UNUSED_PARAM(desc);
 	NO_OS_UNUSED_PARAM(param);
 
-	return FAILURE;
+	return -1;
 }
 
 /* Free resources allocated in descriptor */
@@ -74,7 +74,7 @@ void no_os_trng_remove(struct no_os_trng_desc *desc)
 {
 	NO_OS_UNUSED_PARAM(desc);
 
-	return FAILURE;
+	return -1;
 }
 
 /* Fill buffer with random numbers */
@@ -85,5 +85,5 @@ int32_t no_os_trng_fill_buffer(struct no_os_trng_desc *desc, uint8_t *buff,
 	NO_OS_UNUSED_PARAM(buff);
 	NO_OS_UNUSED_PARAM(len);
 
-	return FAILURE;
+	return -1;
 }

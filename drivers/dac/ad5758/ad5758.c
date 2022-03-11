@@ -126,14 +126,14 @@ int32_t ad5758_spi_reg_read(struct ad5758_dev *dev,
 
 	*reg_data = (buf[1] << 8) | buf[2];
 
-	return SUCCESS;
+	return 0;
 
 spi_err:
 	pr_err("%s: Failed spi comm with code: %"PRIi32".\n", __func__, ret);
-	return FAILURE;
+	return -1;
 error:
 	pr_err("%s: Failed CRC with code: %"PRIi32".\n", __func__, ret);
-	return FAILURE;
+	return -1;
 }
 
 /**
@@ -176,7 +176,7 @@ static int32_t ad5758_spi_write_mask(struct ad5758_dev *dev,
 
 	ret = ad5758_spi_reg_read(dev, reg_addr, &reg_data);
 	if (ret < 0)
-		return FAILURE;
+		return -1;
 
 	reg_data &= ~mask;
 	reg_data |= data;
@@ -202,11 +202,11 @@ int32_t ad5758_set_crc(struct ad5758_dev *dev, uint8_t crc_en)
 
 	if (ret < 0) {
 		pr_err("%s: Failed with code: %"PRIi32".\n", __func__, ret);
-		return FAILURE;
+		return -1;
 	}
 	dev->crc_en = crc_en;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -226,7 +226,7 @@ int32_t ad5758_wait_for_refresh_cycle(struct ad5758_dev *dev)
 				    &reg_data);
 	} while (reg_data & AD5758_DIG_DIAG_RESULTS_CAL_MEM_UNREFRESHED_MSK);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -250,11 +250,11 @@ int32_t ad5758_soft_reset(struct ad5758_dev *dev)
 	/* Wait 100 us */
 	usleep(100);
 
-	return SUCCESS;
+	return 0;
 
 error:
 	pr_err("%s: Failed with code: %"PRIi32".\n", __func__, ret);
-	return FAILURE;
+	return -1;
 }
 
 /**
@@ -270,7 +270,7 @@ int32_t ad5758_calib_mem_refresh(struct ad5758_dev *dev)
 				   AD5758_KEY_CODE_CALIB_MEM_REFRESH);
 	if (ret < 0) {
 		pr_err("%s: Failed with code: %"PRIi32".\n", __func__, ret);
-		return FAILURE;
+		return -1;
 	}
 
 	/* Wait to allow time for the internal calibrations to complete */
@@ -320,11 +320,11 @@ int32_t ad5758_set_dc_dc_conv_mode(struct ad5758_dev *dev,
 	} while (reg_data & AD5758_DCDC_CONFIG2_BUSY_3WI_MSK);
 	dev->dc_dc_mode = mode;
 
-	return SUCCESS;
+	return 0;
 
 error:
 	pr_err("%s: Failed with code: %"PRIi32".\n", __func__, ret);
-	return FAILURE;
+	return -1;
 }
 
 /**
@@ -351,7 +351,7 @@ int32_t ad5758_set_dc_dc_ilimit(struct ad5758_dev *dev,
 
 	if (ret < 0) {
 		pr_err("%s: Failed with code: %"PRIi32".\n", __func__, ret);
-		return FAILURE;
+		return -1;
 	}
 
 	/*
@@ -363,7 +363,7 @@ int32_t ad5758_set_dc_dc_ilimit(struct ad5758_dev *dev,
 	} while (reg_data & AD5758_DCDC_CONFIG2_BUSY_3WI_MSK);
 	dev->dc_dc_ilimit = ilimit;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -383,7 +383,7 @@ int32_t ad5758_internal_buffers_en(struct ad5758_dev *dev, uint8_t enable)
 				    AD5758_DAC_CONFIG_INT_EN_MODE(enable));
 	if (ret < 0) {
 		pr_err("%s: Failed with code: %"PRIi32".\n", __func__, ret);
-		return FAILURE;
+		return -1;
 	}
 
 	/* Wait to allow time for the internal calibrations to complete */
@@ -417,7 +417,7 @@ int32_t ad5758_set_out_range(struct ad5758_dev *dev,
 
 	if (ret < 0) {
 		pr_err("%s: Failed with code: %"PRIi32".\n", __func__, ret);
-		return FAILURE;
+		return -1;
 	}
 	dev->output_range = range;
 
@@ -480,7 +480,7 @@ int32_t ad5758_slew_rate_config(struct ad5758_dev *dev,
 
 error:
 	pr_err("%s: Failed with code: %"PRIi32".\n", __func__, ret);
-	return FAILURE;
+	return -1;
 }
 
 /**
@@ -498,10 +498,10 @@ int32_t ad5758_dac_input_write(struct ad5758_dev *dev, uint16_t code)
 
 	if (ret < 0) {
 		pr_err("%s: Failed with code: %"PRIi32".\n", __func__, ret);
-		return FAILURE;
+		return -1;
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -522,11 +522,11 @@ int32_t ad5758_dac_output_en(struct ad5758_dev *dev, uint8_t enable)
 
 	if (ret < 0) {
 		pr_err("%s: Failed with code: %"PRIi32".\n", __func__, ret);
-		return FAILURE;
+		return -1;
 	}
 	no_os_mdelay(1);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -560,10 +560,10 @@ int32_t ad5758_clear_dig_diag_flag(struct ad5758_dev *dev,
 
 	if (ret < 0) {
 		pr_err("%s: Failed with code: %"PRIi32".\n", __func__, ret);
-		return FAILURE;
+		return -1;
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -604,11 +604,11 @@ int32_t ad5758_set_clkout_config(struct ad5758_dev *dev,
 	dev->clkout_config = config;
 	dev->clkout_freq = freq;
 
-	return SUCCESS;
+	return 0;
 
 error:
 	pr_err("%s: Failed with code: %"PRIi32".\n", __func__, ret);
-	return FAILURE;
+	return -1;
 }
 
 /**
@@ -646,10 +646,10 @@ int32_t ad5758_select_adc_ip(struct ad5758_dev *dev,
 
 	if (ret < 0) {
 		pr_err("%s: Failed with code: %"PRIi32".\n", __func__, ret);
-		return FAILURE;
+		return -1;
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -667,7 +667,7 @@ int32_t ad5758_select_adc_depth(struct ad5758_dev *dev,
 	if ((num_of_channels == 0) || (num_of_channels > 8)) {
 		pr_err("%s: Failed with code: %"PRIi32".\n", __func__, ret);
 
-		return FAILURE;
+		return -1;
 	}
 
 	num_of_channels -= 1;
@@ -676,10 +676,10 @@ int32_t ad5758_select_adc_depth(struct ad5758_dev *dev,
 
 	if (ret < 0) {
 		pr_err("%s: Failed with code: %"PRIi32".\n", __func__, ret);
-		return FAILURE;
+		return -1;
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -723,10 +723,10 @@ int32_t ad5758_set_adc_channel_input(struct ad5758_dev *dev,
 
 	if (ret < 0) {
 		pr_err("%s: Failed with code: %"PRIi32".\n", __func__, ret);
-		return FAILURE;
+		return -1;
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -756,10 +756,10 @@ int32_t ad5758_set_adc_mode(struct ad5758_dev *dev,
 
 	if (ret < 0) {
 		pr_err("%s: Failed with code: %"PRIi32".\n", __func__, ret);
-		return FAILURE;
+		return -1;
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -864,7 +864,7 @@ int32_t ad5758_init(struct ad5758_dev **device,
 	pr_info("ad5758 successfully initialized\n");
 	no_os_mdelay(1000);
 
-	return SUCCESS;
+	return 0;
 
 err:
 	no_os_gpio_remove(dev->ldac_n);

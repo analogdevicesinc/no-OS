@@ -224,7 +224,7 @@ static const uint16_t tconv_max[] = {
  *         Example: -EIO - SPI communication error.
  *                  -ENOTSUP - Device not in software mode.
  *                  -EBADMSG - CRC computation mismatch.
- *                  SUCCESS - No errors encountered.
+ *                  0 - No errors encountered.
 *******************************************************************************/
 int32_t ad7606_spi_reg_read(struct ad7606_dev *dev,
 			    uint8_t reg_addr,
@@ -286,7 +286,7 @@ int32_t ad7606_spi_reg_read(struct ad7606_dev *dev,
  *         Example: -EIO - SPI communication error.
  *                  -ENOTSUP - Device not in software mode.
  *                  -EBADMSG - CRC computation mismatch.
- *                  SUCCESS - No errors encountered.
+ *                  0 - No errors encountered.
 *******************************************************************************/
 int32_t ad7606_spi_reg_write(struct ad7606_dev *dev,
 			     uint8_t reg_addr,
@@ -334,7 +334,7 @@ int32_t ad7606_spi_reg_write(struct ad7606_dev *dev,
  *         Example: -EIO - SPI communication error.
  *                  -ENOTSUP - Device not in software mode.
  *                  -EBADMSG - CRC computation mismatch.
- *                  SUCCESS - No errors encountered.
+ *                  0 - No errors encountered.
 *******************************************************************************/
 int32_t ad7606_spi_write_mask(struct ad7606_dev *dev,
 			      uint32_t addr,
@@ -374,7 +374,7 @@ static int32_t cpy18b32b(uint8_t *psrc, uint32_t srcsz, uint32_t *pdst)
 		pdst[j+3] = ((uint32_t)(psrc[i+6] & 0x03) << 16) | ((uint32_t)psrc[i+7] << 8)
 			    | ((uint32_t)psrc[i+8] >> 0);
 	}
-	return SUCCESS;
+	return 0;
 }
 
 /* Internal function to copy the content of a buffer in 26-bit chunks to a 32-bit buffer by
@@ -397,7 +397,7 @@ static int32_t cpy26b32b(uint8_t *psrc, uint32_t srcsz, uint32_t *pdst)
 		pdst[j+3] = ((uint32_t)(psrc[i+9] & 0x03) << 24) | ((uint32_t)psrc[i+10] << 16)
 			    | ((uint32_t)psrc[i+11] << 8) | ((uint32_t)psrc[i+12] >> 0);
 	}
-	return SUCCESS;
+	return 0;
 }
 
 /***************************************************************************//**
@@ -411,7 +411,7 @@ static int32_t cpy26b32b(uint8_t *psrc, uint32_t srcsz, uint32_t *pdst)
  * @return ret - return code.
  *         Example: -EIO - SPI communication error.
  *                  -EIO - CONVST GPIO not available.
- *                  SUCCESS - No errors encountered.
+ *                  0 - No errors encountered.
 *******************************************************************************/
 int32_t ad7606_convst(struct ad7606_dev *dev)
 {
@@ -454,7 +454,7 @@ int32_t ad7606_convst(struct ad7606_dev *dev)
  *         Example: -EIO - SPI communication error.
  *                  -EBADMSG - CRC computation mismatch.
  *                  -ENOTSUP - Device bits per sample not supported.
- *                  SUCCESS - No errors encountered.
+ *                  0 - No errors encountered.
 *******************************************************************************/
 int32_t ad7606_spi_data_read(struct ad7606_dev *dev, uint32_t *data)
 {
@@ -537,7 +537,7 @@ int32_t ad7606_spi_data_read(struct ad7606_dev *dev, uint32_t *data)
  *         Example: -EIO - SPI communication error.
  *                  -ETIME - Timeout while waiting for the BUSY signal.
  *                  -EBADMSG - CRC computation mismatch.
- *                  SUCCESS - No errors encountered.
+ *                  0 - No errors encountered.
 *******************************************************************************/
 int32_t ad7606_read(struct ad7606_dev *dev, uint32_t * data)
 {
@@ -616,7 +616,7 @@ static inline void ad7606_reset_settings(struct ad7606_dev *dev)
  *
  * @return ret - return code.
  *         Example: -EIO - Reset GPIO not available.
- *                  SUCCESS - No errors encountered.
+ *                  0 - No errors encountered.
 *******************************************************************************/
 int32_t ad7606_reset(struct ad7606_dev *dev)
 {
@@ -753,7 +753,7 @@ static int32_t ad7606_request_gpios(struct ad7606_dev *dev,
  * @return ret - return code.
  *         Example: -EIO - SPI communication error.
  *                  -EBADMSG - CRC computation mismatch.
- *                  SUCCESS - No errors encountered.
+ *                  0 - No errors encountered.
 *******************************************************************************/
 int32_t ad7606_set_oversampling(struct ad7606_dev *dev,
 				struct ad7606_oversampling oversampling)
@@ -790,7 +790,7 @@ int32_t ad7606_set_oversampling(struct ad7606_dev *dev,
 
 	dev->oversampling = oversampling;
 
-	return SUCCESS;
+	return 0;
 }
 
 /* Internal function to find the index of a given operation range in the
@@ -833,7 +833,7 @@ static int8_t ad7606_find_range(struct ad7606_dev *dev,
  *         Example: -EIO - SPI communication error.
  *                  -EINVAL - Invalid input.
  *                  -EBADMSG - CRC computation mismatch.
- *                  SUCCESS - No errors encountered.
+ *                  0 - No errors encountered.
 *******************************************************************************/
 int32_t ad7606_set_ch_range(struct ad7606_dev *dev, uint8_t ch,
 			    struct ad7606_range range)
@@ -885,7 +885,7 @@ int32_t ad7606_set_ch_range(struct ad7606_dev *dev, uint8_t ch,
  *                  -EINVAL - Invalid input.
  *                  -ENOTSUP - Device not in software mode.
  *                  -EBADMSG - CRC computation mismatch.
- *                  SUCCESS - No errors encountered.
+ *                  0 - No errors encountered.
 *******************************************************************************/
 int32_t ad7606_set_ch_offset(struct ad7606_dev *dev, uint8_t ch,
 			     int8_t offset)
@@ -920,7 +920,7 @@ int32_t ad7606_set_ch_offset(struct ad7606_dev *dev, uint8_t ch,
  *                  -EINVAL - Invalid input.
  *                  -ENOTSUP - Device not in software mode.
  *                  -EBADMSG - CRC computation mismatch.
- *                  SUCCESS - No errors encountered.
+ *                  0 - No errors encountered.
 *******************************************************************************/
 int32_t ad7606_set_ch_phase(struct ad7606_dev *dev, uint8_t ch,
 			    uint8_t phase)
@@ -954,7 +954,7 @@ int32_t ad7606_set_ch_phase(struct ad7606_dev *dev, uint8_t ch,
  *                  -EINVAL - Invalid input.
  *                  -ENOTSUP - Device not in software mode.
  *                  -EBADMSG - CRC computation mismatch.
- *                  SUCCESS - No errors encountered.
+ *                  0 - No errors encountered.
 *******************************************************************************/
 int32_t ad7606_set_ch_gain(struct ad7606_dev *dev, uint8_t ch,
 			   uint8_t gain)
@@ -990,7 +990,7 @@ int32_t ad7606_set_ch_gain(struct ad7606_dev *dev, uint8_t ch,
  *                  -EIO - GPIO not available.
  *                  -EINVAL - Invalid input.
  *                  -EBADMSG - CRC computation mismatch.
- *                  SUCCESS - No errors encountered.
+ *                  0 - No errors encountered.
 *******************************************************************************/
 int32_t ad7606_set_config(struct ad7606_dev *dev,
 			  struct ad7606_config config)
@@ -1059,7 +1059,7 @@ int32_t ad7606_set_config(struct ad7606_dev *dev,
  *         Example: -EIO - SPI communication error.
  *                  -ENOTSUP - Device not in software mode.
  *                  -EBADMSG - CRC computation mismatch.
- *                  SUCCESS - No errors encountered.
+ *                  0 - No errors encountered.
 *******************************************************************************/
 int32_t ad7606_set_digital_diag(struct ad7606_dev *dev,
 				struct ad7606_digital_diag diag)
@@ -1104,7 +1104,7 @@ int32_t ad7606_set_digital_diag(struct ad7606_dev *dev,
  *                  -EIO - GPIO initialization error.
  *                  -ENODEV - Unexpected device id.
  *                  -EBADMSG - CRC computation mismatch.
- *                  SUCCESS - No errors encountered.
+ *                  0 - No errors encountered.
 *******************************************************************************/
 int32_t ad7606_init(struct ad7606_dev **device,
 		    struct ad7606_init_param *init_param)
@@ -1231,7 +1231,7 @@ error:
  *
  * @return ret - return code.
  *         Example: -EIO - SPI communication error.
- *                  SUCCESS - No errors encountered.
+ *                  0 - No errors encountered.
 *******************************************************************************/
 int32_t ad7606_remove(struct ad7606_dev *dev)
 {

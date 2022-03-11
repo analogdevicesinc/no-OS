@@ -46,26 +46,26 @@
  * @brief Initialize the SPI communication peripheral.
  * @param desc - The SPI descriptor.
  * @param param - The structure that contains the SPI parameters.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t no_os_spi_init(struct no_os_spi_desc **desc,
 		       const struct no_os_spi_init_param *param)
 {
 	if (!param)
-		return FAILURE;
+		return -1;
 
 	if ((param->platform_ops->init(desc, param)))
-		return FAILURE;
+		return -1;
 
 	(*desc)->platform_ops = param->platform_ops;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Free the resources allocated by no_os_spi_init().
  * @param desc - The SPI descriptor.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t no_os_spi_remove(struct no_os_spi_desc *desc)
 {
@@ -77,7 +77,7 @@ int32_t no_os_spi_remove(struct no_os_spi_desc *desc)
  * @param desc - The SPI descriptor.
  * @param data - The buffer with the transmitted/received data.
  * @param bytes_number - Number of bytes to write/read.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t no_os_spi_write_and_read(struct no_os_spi_desc *desc,
 				 uint8_t *data,
@@ -91,7 +91,7 @@ int32_t no_os_spi_write_and_read(struct no_os_spi_desc *desc,
  * @param desc - The SPI descriptor.
  * @param msgs - Array of messages.
  * @param len - Number of messages in the array.
- * @return SUCCESS in case of success, negativ error code otherwise.
+ * @return 0 in case of success, negativ error code otherwise.
  */
 int32_t no_os_spi_transfer(struct no_os_spi_desc *desc,
 			   struct no_os_spi_msg *msgs,
@@ -111,9 +111,9 @@ int32_t no_os_spi_transfer(struct no_os_spi_desc *desc,
 			return -EINVAL;
 		ret = no_os_spi_write_and_read(desc, msgs[i].rx_buff,
 					       msgs[i].bytes_number);
-		if (IS_ERR_VALUE(ret))
+		if (NO_OS_IS_ERR_VALUE(ret))
 			return ret;
 	}
 
-	return SUCCESS;
+	return 0;
 }

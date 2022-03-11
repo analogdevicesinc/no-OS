@@ -54,7 +54,7 @@
  * @param base - Base address
  * @param offset - Address offset
  * @param data - variable where returned data is stored
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t no_os_axi_io_read(uint32_t base, uint32_t offset, uint32_t *data)
 {
@@ -62,7 +62,7 @@ int32_t no_os_axi_io_read(uint32_t base, uint32_t offset, uint32_t *data)
 	NO_OS_UNUSED_PARAM(offset);
 	NO_OS_UNUSED_PARAM(data);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -70,7 +70,7 @@ int32_t no_os_axi_io_read(uint32_t base, uint32_t offset, uint32_t *data)
  * @param base - Base address
  * @param offset - Address offset
  * @param data - data to be written.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t no_os_axi_io_write(uint32_t base, uint32_t offset, uint32_t data)
 {
@@ -78,5 +78,5 @@ int32_t no_os_axi_io_write(uint32_t base, uint32_t offset, uint32_t data)
 	NO_OS_UNUSED_PARAM(offset);
 	NO_OS_UNUSED_PARAM(data);
 
-	return SUCCESS;
+	return 0;
 }

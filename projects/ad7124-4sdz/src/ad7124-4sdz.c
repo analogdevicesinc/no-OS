@@ -72,29 +72,29 @@ int main(void)
 
 	/* Initialize AD7124 device. */
 	ret = ad7124_setup(&dev, &ad7124_init_param);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	/* Read all registers */
 	for (reg_nr = AD7124_Status; (reg_nr < AD7124_REG_NO) && !(ret < 0); reg_nr++) {
 		ret = ad7124_read_register(dev, &ad7124_regs[reg_nr]);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 	}
 
 	while(1) {
 		/* Read data from the ADC */
 		ret = ad7124_wait_for_conv_ready(dev, timeout);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 
 		ret = ad7124_read_data(dev, &sample);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 
 		printf("ADC: %"PRIi32" \n", sample);
 	}
 	printf("Success\n\r");
 
-	return SUCCESS;
+	return 0;
 }

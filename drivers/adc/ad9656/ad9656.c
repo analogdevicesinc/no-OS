@@ -52,7 +52,7 @@
  * @param dev - The ad9656 device handler
  * @param reg_addr - The address of the internal register of the ad9656 chip
  * @param reg_data - The value read from the internal register
- * @return SUCCESS if the value was successfully read, FAILURE otherwise
+ * @return 0 if the value was successfully read, -1 otherwise
  */
 int32_t ad9656_reg_read(struct ad9656_dev *dev,
 			uint16_t reg_addr,
@@ -85,7 +85,7 @@ int32_t ad9656_reg_read(struct ad9656_dev *dev,
  * @param dev - The device handler for the ad9656 chip
  * @param reg_addr - Address of the internal register of the ad9656 chip
  * @param reg_data - Value to be written to the register
- * @return SUCCESS if the value was written successfully, FAILURE otherwise
+ * @return 0 if the value was written successfully, -1 otherwise
  */
 int32_t ad9656_reg_write(struct ad9656_dev *dev,
 			 uint16_t reg_addr,
@@ -111,8 +111,8 @@ int32_t ad9656_reg_write(struct ad9656_dev *dev,
  * @param dev - The device handler for the ad9656 chip
  * @param test_mode - The type of test that is to be performed or OFF if the testing
  * 					  process is to be stopped
- * @return SUCCESS if the ad9656 chip could be successfully set for JESD204 link testing,
- * 		   FAILURE otherwise
+ * @return 0 if the ad9656 chip could be successfully set for JESD204 link testing,
+ * 		   -1 otherwise
  */
 int32_t ad9656_JESD204_test(struct ad9656_dev *dev,
 			    uint32_t test_mode)
@@ -121,7 +121,7 @@ int32_t ad9656_JESD204_test(struct ad9656_dev *dev,
 	int32_t ret;
 
 	ret = ad9656_reg_write(dev, AD9656_REG_ADC_TEST_MODE, test_mode);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	if (test_mode == AD9656_TEST_OFF)
@@ -140,7 +140,7 @@ int32_t ad9656_JESD204_test(struct ad9656_dev *dev,
  * 					  process is to be stopped
  * @param user_input_test_pattern - User input test pattern that is sent on the output instead of
  * 					the ADC	data
- * @return SUCCESS if the ad9656 chip could be successfully set for user input testing, FAILURE
+ * @return 0 if the ad9656 chip could be successfully set for user input testing, FAILURE
  * 		   otherwise
  */
 int32_t ad9656_user_input_test(struct ad9656_dev *dev, uint32_t test_mode,
@@ -151,22 +151,22 @@ int32_t ad9656_user_input_test(struct ad9656_dev *dev, uint32_t test_mode,
 	/* write user input test pattern in the registers */
 	ret = ad9656_reg_write(dev, AD9656_REG_USER_TEST_PATTERN_1_LSB,
 			       user_input_test_pattern.user_test_pattern1 & 0xFF);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = ad9656_reg_write(dev, AD9656_REG_USER_TEST_PATTERN_1_MSB,
 			       user_input_test_pattern.user_test_pattern1 >> 8);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = ad9656_reg_write(dev, AD9656_REG_USER_TEST_PATTERN_2_LSB,
 			       user_input_test_pattern.user_test_pattern2 & 0xFF);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = ad9656_reg_write(dev, AD9656_REG_USER_TEST_PATTERN_2_MSB,
 			       user_input_test_pattern.user_test_pattern2 >> 8);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	/* determine the chip to output the user test pattern */
@@ -177,7 +177,7 @@ int32_t ad9656_user_input_test(struct ad9656_dev *dev, uint32_t test_mode,
  * @brief Setup the working parameters of the ad9656 chip
  * @param device - The device handler of the ad9656 chip
  * @param init_param - Values for the working parameters of ad9656
- * @return SUCCESS if device is ready for use, FAILURE otherwise
+ * @return 0 if device is ready for use, -1 otherwise
  */
 int32_t ad9656_setup(struct ad9656_dev **device,
 		     const struct ad9656_init_param *init_param)
@@ -190,62 +190,62 @@ int32_t ad9656_setup(struct ad9656_dev **device,
 
 	dev = (struct ad9656_dev *)calloc(1, sizeof(*dev));
 	if (!dev)
-		return FAILURE;
+		return -1;
 
 	/* SPI */
 	ret = no_os_spi_init(&dev->spi_desc, &init_param->spi_init);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = ad9656_reg_write(dev, AD9656_SPI_CONFIG, 0x3C);	/* RESET */
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	no_os_mdelay(250);
 
 	ret = ad9656_reg_read(dev, AD9656_REG_CHIP_ID, &chip_id);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	if (chip_id != AD9656_CHIP_ID) {
 		printf("AD9656: Invalid CHIP ID (0x%x).\n", chip_id);
-		return FAILURE;
+		return -1;
 	}
 
 	ret = ad9656_reg_write(dev, AD9656_REG_LINK_CONTROL,
 			       0x15);	/* disable link, ilas enable */
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = ad9656_reg_write(dev, AD9656_REG_JESD204B_MF_CTRL,
 			       0x1f);	/* 32 frames per multiframe */
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = ad9656_reg_write(dev, AD9656_REG_JESD204B_M_CTRL,
 			       0x03);	/* 4 converters */
 
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = ad9656_reg_write(dev, AD9656_REG_JESD204B_CSN_CONFIG,
 			       0x0d);	/* converter resolution of 14-bit */
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = ad9656_reg_write(dev, AD9656_REG_JESD204B_SUBCLASS_CONFIG,
 			       0x2f);	/* subclass-1, N'=16 */
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = ad9656_reg_write(dev, AD9656_REG_JESD204B_QUICK_CONFIG,
 			       0x44);	/* m=4, l=4 */
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = ad9656_reg_write(dev, AD9656_REG_JESD204B_SCR_L,
 			       0x83);	/* enable scrambling, l=4 */
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	if (init_param->lane_rate_kbps < 2000000)
@@ -255,22 +255,22 @@ int32_t ad9656_setup(struct ad9656_dev **device,
 
 	ret = ad9656_reg_write(dev, AD9656_REG_JESD204B_LANE_RATE_CTRL,
 			       tmp);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = ad9656_reg_write(dev, AD9656_REG_LINK_CONTROL, 0x14);	/* link enable */
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	no_os_mdelay(250);
 
 	ret = ad9656_reg_read(dev, AD9656_REG_JESD204B_PLL_LOCK_STATUS, &pll_stat);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	if ((pll_stat & 0x80) != 0x80) {
 		printf("AD9656: PLL is NOT locked!\n");
-		ret = FAILURE;
+		ret = -1;
 	}
 
 	*device = dev;
@@ -281,7 +281,7 @@ int32_t ad9656_setup(struct ad9656_dev **device,
 /**
  * @brief Free the resources allocated by ad9656_setup().
  * @param dev - The device structure.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad9656_remove(struct ad9656_dev *dev)
 {
@@ -289,7 +289,7 @@ int32_t ad9656_remove(struct ad9656_dev *dev)
 
 	ret = no_os_spi_remove(dev->spi_desc);
 
-	if (ret == SUCCESS)
+	if (ret == 0)
 		free(dev);
 
 	return ret;

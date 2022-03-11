@@ -46,7 +46,7 @@
  * @brief Initialize the I2C communication peripheral.
  * @param desc - The I2C descriptor.
  * @param param - The structure that contains the I2C parameters.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t stm32_i2c_init(struct no_os_i2c_desc **desc,
 		       const struct no_os_i2c_init_param *param)
@@ -114,7 +114,7 @@ int32_t stm32_i2c_init(struct no_os_i2c_desc **desc,
 	descriptor->slave_address = param->slave_address;
 	*desc = descriptor;
 
-	return SUCCESS;
+	return 0;
 error_2:
 	free(xdesc);
 error_1:
@@ -125,7 +125,7 @@ error_1:
 /**
  * @brief Free the resources allocated by no_os_i2c_init().
  * @param desc - The I2C descriptor.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t stm32_i2c_remove(struct no_os_i2c_desc *desc)
 {
@@ -147,7 +147,7 @@ int32_t stm32_i2c_remove(struct no_os_i2c_desc *desc)
  * @param data - The buffer with the data to transmit.
  * @param bytes_number - Number of bytes in the buffer.
  * @param stop_bit - Specifis whether to end the transaction with a stop bit.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t stm32_i2c_write(struct no_os_i2c_desc *desc,
 			uint8_t *data,
@@ -180,7 +180,7 @@ int32_t stm32_i2c_write(struct no_os_i2c_desc *desc,
  * @param data - The buffer where received data is to be stored.
  * @param bytes_number - Number of bytes to receive.
  * @param stop_bit - Specifis whether to end the transaction with a stop bit.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 
 int32_t stm32_i2c_read(struct no_os_i2c_desc *desc,

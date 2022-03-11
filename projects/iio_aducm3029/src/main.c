@@ -95,15 +95,15 @@ static int32_t init_pwms(struct no_os_pwm_desc **pwms)
 		pwm_init_par.id = i;
 		pwm_init_par.duty_cycle_ns = (i + 1) * duty;
 		ret = no_os_pwm_init(&pwm, &pwm_init_par);
-		if (IS_ERR_VALUE(ret))
+		if (NO_OS_IS_ERR_VALUE(ret))
 			return -ret;
 		pwms[i] = pwm;
 		ret = no_os_pwm_enable(pwms[i]);
-		if (IS_ERR_VALUE(ret))
+		if (NO_OS_IS_ERR_VALUE(ret))
 			return -ret;
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 int main(void)
@@ -111,7 +111,7 @@ int main(void)
 	int32_t status;
 
 	status = platform_init();
-	if (IS_ERR_VALUE(status))
+	if (NO_OS_IS_ERR_VALUE(status))
 		return status;
 
 #ifdef IIO_SUPPORT
@@ -144,15 +144,15 @@ int main(void)
 	struct no_os_pwm_desc		*pwms[3];
 
 	status = aducm3029_adc_init(&adc, &adc_init_param);
-	if (IS_ERR_VALUE(status))
+	if (NO_OS_IS_ERR_VALUE(status))
 		return status;
 
 	status = init_pwms(pwms);
-	if (IS_ERR_VALUE(status))
+	if (NO_OS_IS_ERR_VALUE(status))
 		return status;
 
 	status = initialize_uart(&uart);
-	if (IS_ERR_VALUE(status))
+	if (NO_OS_IS_ERR_VALUE(status))
 		return status;
 
 	/* Enabled ADC channels */
@@ -170,11 +170,11 @@ int main(void)
 	uint32_t i,j,k;
 
 	status = aducm3029_adc_update_active_channels(adc, ch_mask);
-	if (IS_ERR_VALUE(status))
+	if (NO_OS_IS_ERR_VALUE(status))
 		return status;
 	while (true) {
 		status = aducm3029_adc_read(adc, adc_buffer, nb_samples);
-		if (IS_ERR_VALUE(status))
+		if (NO_OS_IS_ERR_VALUE(status))
 			return status;
 		k = 0;
 		for (i = 0; i < nb_samples; i++) {
@@ -187,7 +187,7 @@ int main(void)
 					n += sprintf(buff + n, ",");
 			}
 			status = no_os_uart_write(uart, buff, strlen(buff));
-			if (IS_ERR_VALUE(status))
+			if (NO_OS_IS_ERR_VALUE(status))
 				return status;
 		}
 	}

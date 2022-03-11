@@ -96,8 +96,8 @@ static void mqtt_default_message_handler(MessageData *msg)
  * @param desc - Address where to store the MQTT client reference
  * @param param - Parameter used to configure the MQTT client
  * @return
- *  - \ref SUCCESS : On success
- *  - \ref FAILURE : Otherwise
+ *  - 0 : On success
+ *  - -1 : Otherwise
  */
 int32_t mqtt_init(struct mqtt_desc **desc,
 		  struct mqtt_init_param *param)
@@ -106,16 +106,16 @@ int32_t mqtt_init(struct mqtt_desc **desc,
 	int32_t			ret;
 
 	if (!desc || !param)
-		return FAILURE;
+		return -1;
 
 	ldesc = (struct mqtt_desc *)calloc(1, sizeof(*ldesc));
 	if (!ldesc)
-		return FAILURE;
+		return -1;
 
 	ret = mqtt_timer_init(param->timer_id, param->extra_timer_init_param);
-	if (IS_ERR_VALUE(ret)) {
+	if (NO_OS_IS_ERR_VALUE(ret)) {
 		free(ldesc);
-		return FAILURE;
+		return -1;
 	}
 
 	ldesc->network.sock = param->sock;
@@ -133,25 +133,25 @@ int32_t mqtt_init(struct mqtt_desc **desc,
 
 	*desc = ldesc;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Remove MQTT client resources
  * @param desc - Reference to MQTT client
  * @return
- *  - \ref SUCCESS : On success
- *  - \ref FAILURE : Otherwise
+ *  - 0 : On success
+ *  - -1 : Otherwise
  */
 int32_t mqtt_remove(struct mqtt_desc *desc)
 {
 	if (!desc)
-		return FAILURE;
+		return -1;
 
 	free(desc);
 	mqtt_timer_remove();
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -161,15 +161,15 @@ int32_t mqtt_remove(struct mqtt_desc *desc)
  * @param result_optional - Address to store the result for the connect command.
  * It can be NULL if result is not needed.
  * @return
- *  - \ref SUCCESS : On success
- *  - \ref FAILURE : Otherwise
+ *  - 0 : On success
+ *  - -1 : Otherwise
  */
 int32_t mqtt_connect(struct mqtt_desc *desc,
 		     const struct mqtt_connect_config *conf,
 		     struct mqtt_connack_data *result_optional)
 {
 	if (!desc || !conf)
-		return FAILURE;
+		return -1;
 
 	int32_t			ret;
 	MQTTConnackData 	res;
@@ -194,13 +194,13 @@ int32_t mqtt_connect(struct mqtt_desc *desc,
  * @brief Send disconnect to MQTT broker
  * @param desc - Reference to MQTT client
  * @return
- *  - \ref SUCCESS : On success
- *  - \ref FAILURE : Otherwise
+ *  - 0 : On success
+ *  - -1 : Otherwise
  */
 int32_t mqtt_disconnect(struct mqtt_desc *desc)
 {
 	if (!desc)
-		return FAILURE;
+		return -1;
 
 	return MQTTDisconnect(desc->mqtt_client);
 }
@@ -211,14 +211,14 @@ int32_t mqtt_disconnect(struct mqtt_desc *desc)
  * @param topic - Topic pattern which can include wildcards
  * @param msg - Message to send
  * @return
- *  - \ref SUCCESS : On success
- *  - \ref FAILURE : Otherwise
+ *  - 0 : On success
+ *  - -1 : Otherwise
  */
 int32_t mqtt_publish(struct mqtt_desc *desc, const int8_t* topic,
 		     const struct mqtt_message* msg)
 {
 	if (!desc || !msg)
-		return FAILURE;
+		return -1;
 
 	MQTTMessage message = { 0 };
 
@@ -238,8 +238,8 @@ int32_t mqtt_publish(struct mqtt_desc *desc, const int8_t* topic,
  * @param granted_qos_optional - Address to store the result for the subscribe
  * command. It can be NULL if result is not needed.
  * @return
- *  - \ref SUCCESS : On success
- *  - \ref FAILURE : Otherwise
+ *  - 0 : On success
+ *  - -1 : Otherwise
  */
 int32_t mqtt_subscribe(struct mqtt_desc *desc, const int8_t *topic,
 		       enum mqtt_qos qos, enum mqtt_qos *granted_qos_optional)
@@ -248,7 +248,7 @@ int32_t mqtt_subscribe(struct mqtt_desc *desc, const int8_t *topic,
 	int32_t		ret;
 
 	if (!desc)
-		return FAILURE;
+		return -1;
 
 	ret = MQTTSubscribeWithResults(desc->mqtt_client, (char *)topic,
 				       (enum QoS)qos,
@@ -265,13 +265,13 @@ int32_t mqtt_subscribe(struct mqtt_desc *desc, const int8_t *topic,
  * @param desc - Reference to MQTT client
  * @param topic - Topic pattern which can include wildcards
  * @return
- *  - \ref SUCCESS : On success
- *  - \ref FAILURE : Otherwise
+ *  - 0 : On success
+ *  - -1 : Otherwise
  */
 int32_t mqtt_unsubscribe(struct mqtt_desc *desc, const int8_t* topic)
 {
 	if (!desc)
-		return FAILURE;
+		return -1;
 
 	return MQTTUnsubscribe(desc->mqtt_client, (char *)topic);
 }
@@ -286,8 +286,8 @@ int32_t mqtt_unsubscribe(struct mqtt_desc *desc, const int8_t* topic)
  * @param desc - Reference to MQTT client
  * @param timeout_ms - Time for yield to be executed
  * @return
- *  - \ref SUCCESS : On success
- *  - \ref FAILURE : Otherwise
+ *  - 0 : On success
+ *  - -1 : Otherwise
  */
 int32_t mqtt_yield(struct mqtt_desc *desc, uint32_t timeout_ms)
 {

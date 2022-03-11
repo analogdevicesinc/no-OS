@@ -74,7 +74,7 @@
  * @param app - Clocking app descriptor.
  * @param init_param - The structure that contains the clocking app initial
  * 		       parameters.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t app_clocking_init(struct app_clocking **app,
 			  struct app_clocking_init *init_param)
@@ -93,7 +93,7 @@ int32_t app_clocking_init(struct app_clocking **app,
 
 	app_clocking = (struct app_clocking *)calloc(1, sizeof(*app_clocking));
 	if (!app_clocking)
-		return FAILURE;
+		return -1;
 
 	// ad9528 defaults
 	ad9528_param.pdata = &ad9528_pdata;
@@ -242,27 +242,27 @@ int32_t app_clocking_init(struct app_clocking **app,
 		goto error_1;
 	*app = app_clocking;
 
-	return SUCCESS;
+	return 0;
 
 error_1:
 	ad9528_remove(app_clocking->clkchip_device);
 error_0:
 	free(app_clocking);
 
-	return FAILURE;
+	return -1;
 }
 
 /**
  * @brief Free the resources allocated by app_clocking_init().
  * @param app - App descriptor.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t app_clocking_remove(struct app_clocking *app)
 {
 	int32_t ret;
 
 	if (!app)
-		return FAILURE;
+		return -1;
 
 	ret = ad9528_remove(app->clkchip_device);
 	if (ret < 0)
@@ -270,5 +270,5 @@ int32_t app_clocking_remove(struct app_clocking *app)
 
 	free(app);
 
-	return SUCCESS;
+	return 0;
 }

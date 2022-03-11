@@ -109,7 +109,7 @@ int32_t adxl372_i2c_reg_read_multiple(struct adxl372_dev *dev,
 	int32_t ret;
 
 	if (count > 512)
-		return FAILURE;
+		return -1;
 
 	buf[0] = reg_addr;
 	memset(&buf[1], 0x00, count - 1);

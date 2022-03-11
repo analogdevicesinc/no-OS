@@ -129,12 +129,12 @@ int main()
 
 	ret = adaq7980_setup(&dev, &adaq7980_init_param);
 	if (ret < 0)
-		return FAILURE;
+		return -1;
 
 	while(1) {
 		ret = ad7980_read_data(dev, buf, ADAQ7980_EVB_SAMPLE_NO);
 		if (ret < 0)
-			return FAILURE;
+			return -1;
 
 		for (i = 0; i < ADAQ7980_EVB_SAMPLE_NO; i++)
 			printf("ADC sample %"PRIu32" %"PRIu16" \n", i, buf[i]);
@@ -142,5 +142,5 @@ int main()
 
 	printf("Success\n\r");
 
-	return SUCCESS;
+	return 0;
 }

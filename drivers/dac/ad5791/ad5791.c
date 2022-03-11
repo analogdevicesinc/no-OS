@@ -112,7 +112,7 @@ int32_t ad5791_init(struct ad5791_dev **device,
  *
  * @param dev - The device structure.
  *
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
 *******************************************************************************/
 int32_t ad5791_remove(struct ad5791_dev *dev)
 {

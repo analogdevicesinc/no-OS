@@ -111,7 +111,7 @@ int main()
 	/* Read data */
 	while (true) {
 		ret = ad738x_read_data(dev, buf, AD738x_EVB_SAMPLE_NO);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 		for (i = 0; i < AD738x_EVB_SAMPLE_NO; i++) {
 			pr_info("ADC0 sample: %lu : %lu \n", i, (uint16_t)buf[i]);
@@ -134,5 +134,5 @@ int main()
 	Xil_DCacheDisable();
 	Xil_ICacheDisable();
 
-	return SUCCESS;
+	return 0;
 }

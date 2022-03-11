@@ -114,7 +114,7 @@ static int32_t parse_cmd(const char *token, struct comand_desc *res)
 		if (strcmp(token, cmd->str) == 0) {
 			res->cmd = priority_array[i];
 
-			return SUCCESS;
+			return 0;
 		}
 	}
 
@@ -129,7 +129,7 @@ static int32_t parse_num(const char *token, uint32_t *res, uint32_t base)
 	if (*res == 0 && *end_ptr != '\0')
 		return -EINVAL;
 
-	return SUCCESS;
+	return 0;
 }
 
 static int32_t iiod_parse_open(const char *token, struct comand_desc *res,
@@ -141,7 +141,7 @@ static int32_t iiod_parse_open(const char *token, struct comand_desc *res,
 		return -EINVAL;
 
 	ret = parse_num(token, &res->sample_count, 10);
-	if (IS_ERR_VALUE(ret))
+	if (NO_OS_IS_ERR_VALUE(ret))
 		return ret;
 
 	token = strtok_r(NULL, delim, ctx);
@@ -149,7 +149,7 @@ static int32_t iiod_parse_open(const char *token, struct comand_desc *res,
 		return -EINVAL;
 
 	ret = parse_num(token, &res->mask, 16);
-	if (IS_ERR_VALUE(ret))
+	if (NO_OS_IS_ERR_VALUE(ret))
 		return ret;
 
 	res->cyclic = 0;
@@ -161,7 +161,7 @@ static int32_t iiod_parse_open(const char *token, struct comand_desc *res,
 			return -EINVAL;
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 static int32_t iiod_parse_set(const char *token, struct comand_desc *res,
@@ -227,7 +227,7 @@ static int32_t iiod_parse_rw_attr(const char *token, struct comand_desc *res,
 	else
 		res->attr = "";
 
-	return SUCCESS;
+	return 0;
 }
 
 int32_t iiod_parse_line(char *buf, struct comand_desc *res, char **ctx)
@@ -237,7 +237,7 @@ int32_t iiod_parse_line(char *buf, struct comand_desc *res, char **ctx)
 
 	token = strtok_r(buf, delim, ctx);
 	ret = parse_cmd(token, res);
-	if (IS_ERR_VALUE(ret))
+	if (NO_OS_IS_ERR_VALUE(ret))
 		return ret;
 
 	token = strtok_r(NULL, delim, ctx);
@@ -247,7 +247,7 @@ int32_t iiod_parse_line(char *buf, struct comand_desc *res, char **ctx)
 	case IIOD_CMD_EXIT:
 	case IIOD_CMD_PRINT:
 	case IIOD_CMD_VERSION:
-		return SUCCESS;
+		return 0;
 	case IIOD_CMD_TIMEOUT:
 		return parse_num(token, &res->timeout, 10);
 	default:
@@ -259,7 +259,7 @@ int32_t iiod_parse_line(char *buf, struct comand_desc *res, char **ctx)
 	switch (res->cmd) {
 	case IIOD_CMD_CLOSE:
 	case IIOD_CMD_GETTRIG:
-		return SUCCESS;
+		return 0;
 	case IIOD_CMD_OPEN:
 		return iiod_parse_open(token, res, ctx);
 	case IIOD_CMD_READ:
@@ -274,7 +274,7 @@ int32_t iiod_parse_line(char *buf, struct comand_desc *res, char **ctx)
 		else
 			res->trigger = "";
 
-		return SUCCESS;
+		return 0;
 	case IIOD_CMD_SET:
 		return iiod_parse_set(buf, res, ctx);
 	default:
@@ -348,7 +348,7 @@ int32_t iiod_copy_ops(struct iiod_ops *ops, struct iiod_ops *new_ops)
 	ops->push_buffer = SET_DUMMY_IF_NULL(new_ops->push_buffer,
 					     dummy_close);
 
-	return SUCCESS;
+	return 0;
 }
 
 int32_t iiod_init(struct iiod_desc **desc, struct iiod_init_param *param)
@@ -364,7 +364,7 @@ int32_t iiod_init(struct iiod_desc **desc, struct iiod_init_param *param)
 		return -ENOMEM;
 
 	ret = iiod_copy_ops(&ldesc->ops, param->ops);
-	if (IS_ERR_VALUE(ret)) {
+	if (NO_OS_IS_ERR_VALUE(ret)) {
 		free(ldesc);
 
 		return ret;
@@ -376,7 +376,7 @@ int32_t iiod_init(struct iiod_desc **desc, struct iiod_init_param *param)
 
 	*desc = ldesc;
 
-	return SUCCESS;
+	return 0;
 }
 
 void iiod_remove(struct iiod_desc *desc)
@@ -420,7 +420,7 @@ int32_t iiod_conn_add(struct iiod_desc *desc, struct iiod_conn_data *data,
 			conn->payload_buf_len = data->len;
 			*new_conn_id = i;
 
-			return SUCCESS;
+			return 0;
 		}
 
 	return -EBUSY;
@@ -439,7 +439,7 @@ int32_t iiod_conn_remove(struct iiod_desc *desc, uint32_t conn_id,
 	data->buf = conn->payload_buf;
 	conn->used = 0;
 
-	return SUCCESS;
+	return 0;
 }
 
 static int32_t call_op(struct iiod_ops *ops, struct comand_desc *data,
@@ -487,7 +487,7 @@ static int32_t rw_iiod_buff(struct iiod_desc *desc, struct iiod_conn_priv *conn,
 			ret = desc->ops.send(&ctx, tmp_buf, len);
 		else
 			ret = desc->ops.recv(&ctx, tmp_buf, len);
-		if (IS_ERR_VALUE(ret))
+		if (NO_OS_IS_ERR_VALUE(ret))
 			return ret;
 
 		buf->idx += ret;
@@ -497,14 +497,14 @@ static int32_t rw_iiod_buff(struct iiod_desc *desc, struct iiod_conn_priv *conn,
 
 	if (flags & IIOD_ENDL) {
 		ret = desc->ops.send(&ctx, (uint8_t *)"\n", 1);
-		if (IS_ERR_VALUE(ret))
+		if (NO_OS_IS_ERR_VALUE(ret))
 			return ret;
 
 		if (ret != 1)
 			return -EAGAIN;
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 static int32_t do_read_buff(struct iiod_desc *desc, struct iiod_conn_priv *conn)
@@ -519,7 +519,7 @@ static int32_t do_read_buff(struct iiod_desc *desc, struct iiod_conn_priv *conn)
 		/* Read from dev */
 		ret = desc->ops.read_buffer(&ctx, conn->cmd_data.device,
 					    conn->nb_buf.buf, len);
-		if (IS_ERR_VALUE(ret))
+		if (NO_OS_IS_ERR_VALUE(ret))
 			return ret;
 		len = ret;
 		conn->nb_buf.len = len;
@@ -528,7 +528,7 @@ static int32_t do_read_buff(struct iiod_desc *desc, struct iiod_conn_priv *conn)
 	if (conn->nb_buf.idx < conn->nb_buf.len) {
 		/* Write on conn */
 		ret = rw_iiod_buff(desc, conn, &conn->nb_buf, IIOD_WR);
-		if (IS_ERR_VALUE(ret))
+		if (NO_OS_IS_ERR_VALUE(ret))
 			return ret;
 
 		conn->cmd_data.bytes_count -= conn->nb_buf.len;
@@ -537,7 +537,7 @@ static int32_t do_read_buff(struct iiod_desc *desc, struct iiod_conn_priv *conn)
 			return -EAGAIN;
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 static int32_t do_write_buff(struct iiod_desc *desc,
@@ -556,13 +556,13 @@ static int32_t do_write_buff(struct iiod_desc *desc,
 	if (conn->nb_buf.idx < conn->nb_buf.len) {
 		/* Read from conn */
 		ret = rw_iiod_buff(desc, conn, &conn->nb_buf, IIOD_RD);
-		if (IS_ERR_VALUE(ret))
+		if (NO_OS_IS_ERR_VALUE(ret))
 			return ret;
 	}
 	/* Write to dev */
 	ret = desc->ops.write_buffer(&ctx, conn->cmd_data.device,
 				     conn->nb_buf.buf, conn->nb_buf.len);
-	if (IS_ERR_VALUE(ret))
+	if (NO_OS_IS_ERR_VALUE(ret))
 		return ret;
 
 	conn->cmd_data.bytes_count -= conn->nb_buf.len;
@@ -570,7 +570,7 @@ static int32_t do_write_buff(struct iiod_desc *desc,
 	if (conn->cmd_data.bytes_count)
 		return -EAGAIN;
 
-	return SUCCESS;
+	return 0;
 }
 
 static int32_t iiod_run_cmd(struct iiod_desc *desc,
@@ -598,7 +598,7 @@ static int32_t iiod_run_cmd(struct iiod_desc *desc,
 		conn->res.write_val = 1;
 		break;
 	case IIOD_CMD_EXIT:
-		conn->res.val = SUCCESS;
+		conn->res.val = 0;
 		conn->res.write_val = 1;
 
 		return -ENOTCONN;
@@ -624,7 +624,7 @@ static int32_t iiod_run_cmd(struct iiod_desc *desc,
 						    conn->payload_buf_len);
 		conn->res.val = ret;
 		conn->res.write_val = 1;
-		if (!IS_ERR_VALUE(ret)) {
+		if (!NO_OS_IS_ERR_VALUE(ret)) {
 			conn->res.buf.buf = conn->payload_buf;
 			conn->res.buf.len = ret;
 		}
@@ -641,7 +641,7 @@ static int32_t iiod_run_cmd(struct iiod_desc *desc,
 	case IIOD_CMD_READBUF:
 		conn->res.write_val = 1;
 		ret = desc->ops.refill_buffer(&ctx, data->device);
-		if (IS_ERR_VALUE(ret)) {
+		if (NO_OS_IS_ERR_VALUE(ret)) {
 			conn->res.val = ret;
 			break;
 		}
@@ -658,7 +658,7 @@ static int32_t iiod_run_cmd(struct iiod_desc *desc,
 		return -EINVAL;
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 static int32_t iiod_read_line(struct iiod_desc *desc,
@@ -677,7 +677,7 @@ static int32_t iiod_read_line(struct iiod_desc *desc,
 		if (ret == -EAGAIN || ret == 0)
 			return -EAGAIN;
 
-		if (IS_ERR_VALUE(ret))
+		if (NO_OS_IS_ERR_VALUE(ret))
 			goto end;
 
 		if (conn->parser_idx == 0 && (*ch == '\n' || *ch == '\r'))
@@ -686,7 +686,7 @@ static int32_t iiod_read_line(struct iiod_desc *desc,
 		++conn->parser_idx;
 		if (*ch == '\n') {
 			conn->parser_buf[conn->parser_idx] = '\0';
-			ret = SUCCESS;
+			ret = 0;
 			goto end;
 		}
 	}
@@ -716,13 +716,13 @@ static int32_t iiod_run_state(struct iiod_desc *desc,
 	case IIOD_READING_LINE:
 		/* Read input data until \n. I/O Calls */
 		ret = iiod_read_line(desc, conn);
-		if (IS_ERR_VALUE(ret))
+		if (NO_OS_IS_ERR_VALUE(ret))
 			return ret;
 
 		/* Fill struct comand_desc with data from line. No I/O */
 		ret = iiod_parse_line(conn->parser_buf, &conn->cmd_data,
 				      &conn->strtok_ctx);
-		if (IS_ERR_VALUE(ret)) {
+		if (NO_OS_IS_ERR_VALUE(ret)) {
 			/* Parsing line failed */
 			conn->res.write_val = 1;
 			conn->res.val = ret;
@@ -737,16 +737,16 @@ static int32_t iiod_run_state(struct iiod_desc *desc,
 			conn->state = IIOD_RUNNING_CMD;
 		}
 
-		return SUCCESS;
+		return 0;
 	case IIOD_RUNNING_CMD:
 		/* Execute or call necessary ops depending on cmd. No I/O */
 		ret = iiod_run_cmd(desc, conn);
-		if (IS_ERR_VALUE(ret))
+		if (NO_OS_IS_ERR_VALUE(ret))
 			return ret;
 
 		conn->state = IIOD_WRITING_CMD_RESULT;
 
-		return SUCCESS;
+		return 0;
 	case IIOD_WRITING_CMD_RESULT:
 		/* Write result or the length of data to be sent*/
 		if (conn->res.write_val) {
@@ -761,7 +761,7 @@ static int32_t iiod_run_state(struct iiod_desc *desc,
 			if (conn->nb_buf.idx < conn->nb_buf.len) {
 				ret = rw_iiod_buff(desc, conn, &conn->nb_buf,
 						   IIOD_WR | IIOD_ENDL);
-				if (IS_ERR_VALUE(ret))
+				if (NO_OS_IS_ERR_VALUE(ret))
 					return ret;
 			}
 		}
@@ -770,7 +770,7 @@ static int32_t iiod_run_state(struct iiod_desc *desc,
 		    conn->res.buf.idx < conn->res.buf.len) {
 			ret = rw_iiod_buff(desc, conn, &conn->res.buf,
 					   IIOD_WR | IIOD_ENDL);
-			if (IS_ERR_VALUE(ret))
+			if (NO_OS_IS_ERR_VALUE(ret))
 				return ret;
 		}
 
@@ -783,7 +783,7 @@ static int32_t iiod_run_state(struct iiod_desc *desc,
 			conn->state = IIOD_RW_BUF;
 		}
 
-		return SUCCESS;
+		return 0;
 	case IIOD_RW_BUF:
 		/* IIOD_CMD_READBUF and IIOD_CMD_WRITEBUF special case */
 		/* Non blocking read/write until all data is processed */
@@ -791,39 +791,39 @@ static int32_t iiod_run_state(struct iiod_desc *desc,
 			ret = do_read_buff(desc, conn);
 		else {
 			ret = do_write_buff(desc, conn);
-			if (ret == SUCCESS) {
+			if (ret == 0) {
 				conn->res.write_val = 1;
 				ret = desc->ops.push_buffer(&ctx,
 							    conn->cmd_data.device);
-				if (IS_ERR_VALUE(ret)) {
+				if (NO_OS_IS_ERR_VALUE(ret)) {
 					conn->res.val = ret;
 					conn->state = IIOD_LINE_DONE;
 
-					return SUCCESS;
+					return 0;
 				}
 				memset(&conn->res.buf, 0, sizeof(conn->res.buf));
 				conn->res.val = conn->cmd_data.bytes_count;
 				conn->cmd_data.cmd = IIOD_CMD_PRINT;
 				conn->state = IIOD_WRITING_CMD_RESULT;
 
-				return SUCCESS;
+				return 0;
 			}
 		}
-		if (IS_ERR_VALUE(ret))
+		if (NO_OS_IS_ERR_VALUE(ret))
 			return ret;
 
 		conn->state = IIOD_LINE_DONE;
 
-		return SUCCESS;
+		return 0;
 	case IIOD_READING_WRITE_DATA:
 		/* Read attribute */
 		ret = rw_iiod_buff(desc, conn, &conn->nb_buf, IIOD_RD);
-		if (IS_ERR_VALUE(ret))
+		if (NO_OS_IS_ERR_VALUE(ret))
 			return ret;
 
 		conn->state = IIOD_RUNNING_CMD;
 
-		return SUCCESS;
+		return 0;
 	default:
 		/* Should never get here */
 		return -EINVAL;
@@ -844,7 +844,7 @@ int32_t iiod_conn_step(struct iiod_desc *desc, uint32_t conn_id)
 		ret = iiod_run_state(desc, conn);
 		if (ret == -EAGAIN)
 			return ret;
-		if (IS_ERR_VALUE(ret) || conn->state == IIOD_LINE_DONE)
+		if (NO_OS_IS_ERR_VALUE(ret) || conn->state == IIOD_LINE_DONE)
 			break;
 		//The loop will continue because the state was changed.
 	} while (true);
