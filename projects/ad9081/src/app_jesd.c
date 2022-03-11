@@ -71,7 +71,7 @@ struct no_os_clk_hw jesd_tx_hw;
 
 /**
  * @brief Application JESD setup.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t app_jesd_init(struct no_os_clk clk[2],
 		      uint32_t reference_clk_khz,
@@ -177,5 +177,5 @@ int32_t app_jesd_init(struct no_os_clk clk[2],
 	clk[1].name = "jesd_tx";
 	clk[1].hw = &jesd_tx_hw;
 
-	return SUCCESS;
+	return 0;
 }

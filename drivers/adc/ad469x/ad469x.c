@@ -73,7 +73,7 @@ const uint8_t ad469x_device_resol[] = {
  * @param dev - The device structure.
  * @param reg_addr - The register address.
  * @param reg_data - The register data.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad469x_spi_reg_read(struct ad469x_dev *dev,
 			    uint16_t reg_addr,
@@ -83,7 +83,7 @@ int32_t ad469x_spi_reg_read(struct ad469x_dev *dev,
 	uint8_t buf[3];
 
 	ret = spi_engine_set_transfer_width(dev->spi_desc, dev->reg_data_width);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	spi_engine_set_speed(dev->spi_desc, dev->reg_access_speed);
@@ -97,7 +97,7 @@ int32_t ad469x_spi_reg_read(struct ad469x_dev *dev,
 
 	ret = spi_engine_set_transfer_width(dev->spi_desc,
 					    dev->capture_data_width);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	spi_engine_set_speed(dev->spi_desc, dev->spi_desc->max_speed_hz);
@@ -110,7 +110,7 @@ int32_t ad469x_spi_reg_read(struct ad469x_dev *dev,
  * @param dev - The device structure.
  * @param reg_addr - The register address.
  * @param reg_data - The register data.
- * @@eturn SUCCESS in case of success, negative error code otherwise.
+ * @@eturn 0 in case of success, negative error code otherwise.
  */
 int32_t ad469x_spi_reg_write(struct ad469x_dev *dev,
 			     uint16_t reg_addr,
@@ -120,7 +120,7 @@ int32_t ad469x_spi_reg_write(struct ad469x_dev *dev,
 	uint8_t buf[3];
 
 	ret = spi_engine_set_transfer_width(dev->spi_desc, dev->reg_data_width);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	spi_engine_set_speed(dev->spi_desc, dev->reg_access_speed);
@@ -133,7 +133,7 @@ int32_t ad469x_spi_reg_write(struct ad469x_dev *dev,
 
 	ret = spi_engine_set_transfer_width(dev->spi_desc,
 					    dev->capture_data_width);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	spi_engine_set_speed(dev->spi_desc, dev->spi_desc->max_speed_hz);
@@ -147,7 +147,7 @@ int32_t ad469x_spi_reg_write(struct ad469x_dev *dev,
  * @param reg_addr - The register address.
  * @param mask - The mask.
  * @param data - The register data.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad469x_spi_read_mask(struct ad469x_dev *dev,
 			     uint16_t reg_addr,
@@ -158,7 +158,7 @@ int32_t ad469x_spi_read_mask(struct ad469x_dev *dev,
 	int32_t ret;
 
 	ret = ad469x_spi_reg_read(dev, reg_addr, reg_data);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	*data = (reg_data[0] & mask);
@@ -172,7 +172,7 @@ int32_t ad469x_spi_read_mask(struct ad469x_dev *dev,
  * @param reg_addr - The register address.
  * @param mask - The mask.
  * @param data - The register data.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad469x_spi_write_mask(struct ad469x_dev *dev,
 			      uint16_t reg_addr,
@@ -183,7 +183,7 @@ int32_t ad469x_spi_write_mask(struct ad469x_dev *dev,
 	int32_t ret;
 
 	ret = ad469x_spi_reg_read(dev, reg_addr, &reg_data);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	reg_data &= ~mask;
@@ -196,7 +196,7 @@ int32_t ad469x_spi_write_mask(struct ad469x_dev *dev,
  * @brief Configure register access mode
  * @param [in] dev - ad469x_dev device handler.
  * @param [in] access - Access mode
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t ad469x_set_reg_access_mode(struct ad469x_dev *dev,
 				   enum ad469x_reg_access access)
@@ -212,7 +212,7 @@ int32_t ad469x_set_reg_access_mode(struct ad469x_dev *dev,
  *        ad469x_init() helper function.
  * @param [out] dev - ad469x_dev device handler.
  * @param [in] init_param - Pointer to the initialization structure.
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 static int32_t ad469x_init_gpio(struct ad469x_dev *dev,
 				struct ad469x_init_param *init_param)
@@ -220,24 +220,24 @@ static int32_t ad469x_init_gpio(struct ad469x_dev *dev,
 	int32_t ret;
 
 	ret = no_os_gpio_get_optional(&dev->gpio_resetn, init_param->gpio_resetn);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	/** Reset to configure pins */
 	if (init_param->gpio_resetn) {
 		ret = no_os_gpio_direction_output(dev->gpio_resetn, NO_OS_GPIO_LOW);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 
 		no_os_mdelay(100);
 		ret = no_os_gpio_set_value(dev->gpio_resetn, NO_OS_GPIO_HIGH);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 
 		no_os_mdelay(100);
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -245,7 +245,7 @@ static int32_t ad469x_init_gpio(struct ad469x_dev *dev,
  * @param [in] dev - ad469x_dev device handler.
  * @param [in] ch - Channel to configure.
  * @param [in] ratio - OSR ratio.
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t ad469x_adv_seq_osr(struct ad469x_dev *dev, uint16_t ch,
 			   enum ad469x_osr_ratios ratio)
@@ -254,29 +254,29 @@ int32_t ad469x_adv_seq_osr(struct ad469x_dev *dev, uint16_t ch,
 
 	if (dev->ch_sequence == AD469x_single_cycle ||
 	    dev->ch_sequence == AD469x_two_cycle)
-		return FAILURE;
+		return -1;
 
 	if (ch >= AD469x_CHANNEL_NO)
-		return FAILURE;
+		return -1;
 
 	ret = ad469x_spi_write_mask(dev,
 				    AD469x_REG_CONFIG_IN(ch),
 				    AD469x_REG_CONFIG_IN_OSR_MASK,
 				    AD469x_REG_CONFIG_IN_OSR(ratio));
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	dev->adv_seq_osr_resol[ch] = ad469x_device_resol[ratio];
 	/* Set storage to maximum data width */
 	dev->capture_data_width = ad469x_device_resol[AD469x_OSR_64];
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Configure over sampling ratio to 1 in single and two cycle modes.
  * @param [in] dev - ad469x_dev device handler.
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 static int32_t ad469x_seq_osr_clear(struct ad469x_dev *dev)
 {
@@ -288,21 +288,21 @@ static int32_t ad469x_seq_osr_clear(struct ad469x_dev *dev)
 					    AD469x_REG_CONFIG_IN(i),
 					    AD469x_REG_CONFIG_IN_OSR_MASK,
 					    AD469x_REG_CONFIG_IN_OSR(AD469x_OSR_1));
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 		dev->adv_seq_osr_resol[i] = ad469x_device_resol[AD469x_OSR_1];
 	}
 	/* Set storage to minimum data width */
 	dev->capture_data_width = ad469x_device_resol[AD469x_OSR_1];
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Configure over sampling ratio in standard sequencer mode
  * @param [in] dev - ad469x_dev device handler.
  * @param [in] ratio - OSR ratio.
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t ad469x_std_seq_osr(struct ad469x_dev *dev, enum ad469x_osr_ratios ratio)
 {
@@ -310,13 +310,13 @@ int32_t ad469x_std_seq_osr(struct ad469x_dev *dev, enum ad469x_osr_ratios ratio)
 
 	if (dev->ch_sequence == AD469x_single_cycle ||
 	    dev->ch_sequence == AD469x_two_cycle)
-		return FAILURE;
+		return -1;
 
 	ret = ad469x_spi_write_mask(dev,
 				    AD469x_REG_CONFIG_IN(0),
 				    AD469x_REG_CONFIG_IN_OSR_MASK,
 				    AD469x_REG_CONFIG_IN_OSR(ratio));
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	dev->capture_data_width = ad469x_device_resol[ratio];
@@ -328,7 +328,7 @@ int32_t ad469x_std_seq_osr(struct ad469x_dev *dev, enum ad469x_osr_ratios ratio)
  * @brief Set channel sequence.
  * @param [in] dev - ad469x_dev device handler.
  * @param [in] seq - Channel sequence.
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t ad469x_set_channel_sequence(struct ad469x_dev *dev,
 				    enum ad469x_channel_sequencing seq)
@@ -341,25 +341,25 @@ int32_t ad469x_set_channel_sequence(struct ad469x_dev *dev,
 					    AD469x_REG_SEQ_CTRL,
 					    AD469x_SEQ_CTRL_STD_SEQ_EN_MASK,
 					    AD469x_SEQ_CTRL_STD_SEQ_EN(0));
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 
 		ret = ad469x_spi_write_mask(dev,
 					    AD469x_REG_SEQ_CTRL,
 					    AD469x_SEQ_CTRL_NUM_SLOTS_AS_MASK,
 					    AD469x_SEQ_CTRL_NUM_SLOTS_AS(0));
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 
 		ret = ad469x_spi_write_mask(dev,
 					    AD469x_REG_SETUP,
 					    AD469x_SETUP_CYC_CTRL_MASK,
 					    AD469x_SETUP_CYC_CTRL_SINGLE(0));
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 
 		ret = ad469x_seq_osr_clear(dev);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 
 		break;
@@ -369,25 +369,25 @@ int32_t ad469x_set_channel_sequence(struct ad469x_dev *dev,
 					    AD469x_REG_SEQ_CTRL,
 					    AD469x_SEQ_CTRL_STD_SEQ_EN_MASK,
 					    AD469x_SEQ_CTRL_STD_SEQ_EN(0));
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 
 		ret = ad469x_spi_write_mask(dev,
 					    AD469x_REG_SEQ_CTRL,
 					    AD469x_SEQ_CTRL_NUM_SLOTS_AS_MASK,
 					    AD469x_SEQ_CTRL_NUM_SLOTS_AS(0));
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 
 		ret = ad469x_spi_write_mask(dev,
 					    AD469x_REG_SETUP,
 					    AD469x_SETUP_CYC_CTRL_MASK,
 					    AD469x_SETUP_CYC_CTRL_SINGLE(1));
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 
 		ret = ad469x_seq_osr_clear(dev);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 
 		break;
@@ -397,7 +397,7 @@ int32_t ad469x_set_channel_sequence(struct ad469x_dev *dev,
 					    AD469x_REG_SEQ_CTRL,
 					    AD469x_SEQ_CTRL_STD_SEQ_EN_MASK,
 					    AD469x_SEQ_CTRL_STD_SEQ_EN(1));
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 
 		break;
@@ -407,13 +407,13 @@ int32_t ad469x_set_channel_sequence(struct ad469x_dev *dev,
 					    AD469x_REG_SEQ_CTRL,
 					    AD469x_SEQ_CTRL_STD_SEQ_EN_MASK,
 					    AD469x_SEQ_CTRL_STD_SEQ_EN(0));
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 
 		break;
 
 	default:
-		return FAILURE;
+		return -1;
 	}
 
 	dev->ch_sequence = seq;
@@ -426,7 +426,7 @@ int32_t ad469x_set_channel_sequence(struct ad469x_dev *dev,
  * included
  * @param [in] dev - ad469x_dev device handler.
  * @param [in] num_slots - Number of slots, max value = 0x7f
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t ad469x_adv_sequence_set_num_slots(struct ad469x_dev *dev,
 		uint8_t num_slots)
@@ -441,12 +441,12 @@ int32_t ad469x_adv_sequence_set_num_slots(struct ad469x_dev *dev,
 				    AD469x_REG_SEQ_CTRL,
 				    AD469x_SEQ_CTRL_NUM_SLOTS_AS_MASK,
 				    AD469x_SEQ_CTRL_NUM_SLOTS_AS(write_num_slots));
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	dev->num_slots = num_slots;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -454,7 +454,7 @@ int32_t ad469x_adv_sequence_set_num_slots(struct ad469x_dev *dev,
  * @param [in] dev - ad469x_dev device handler.
  * @param [in] slot - Slot number [0x00, 0x7f]
  * @param [in] channel - Assigned channel [0x00, 0x0f].
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t ad469x_adv_sequence_set_slot(struct ad469x_dev *dev,
 				     uint8_t slot,
@@ -464,19 +464,19 @@ int32_t ad469x_adv_sequence_set_slot(struct ad469x_dev *dev,
 	ret = ad469x_spi_reg_write(dev,
 				   AD469x_REG_AS_SLOT(slot),
 				   AD469x_REG_AS_SLOT_INX(channel));
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	dev->ch_slots[slot] = channel;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Configure standard sequencer channels
  * @param [in] dev - ad469x_dev device handler.
  * @param [in] ch_mask - Extra channels to activate.
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t ad469x_std_sequence_ch(struct ad469x_dev *dev, uint16_t ch_mask)
 {
@@ -485,13 +485,13 @@ int32_t ad469x_std_sequence_ch(struct ad469x_dev *dev, uint16_t ch_mask)
 	ret = ad469x_spi_reg_write(dev,
 				   AD469x_REG_STD_SEQ_CONFIG,
 				   0x0f & ch_mask);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = ad469x_spi_reg_write(dev,
 				   AD469x_REG_STD_SEQ_CONFIG + 1,
 				   ch_mask >> 8);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	dev->num_slots = no_os_hweight8(ch_mask);
@@ -503,7 +503,7 @@ int32_t ad469x_std_sequence_ch(struct ad469x_dev *dev, uint16_t ch_mask)
  * @brief Enable temperature read at the end of the sequence, for standard and
  * advanced sequencer
  * @param [in] dev - ad469x_dev device handler.
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t ad469x_sequence_enable_temp(struct ad469x_dev *dev)
 {
@@ -513,7 +513,7 @@ int32_t ad469x_sequence_enable_temp(struct ad469x_dev *dev)
 				    AD469x_REG_TEMP_CTRL,
 				    AD469x_REG_TEMP_CTRL_TEMP_EN_MASK,
 				    AD469x_REG_TEMP_CTRL_TEMP_EN(1));
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	dev->temp_enabled = true;
@@ -525,7 +525,7 @@ int32_t ad469x_sequence_enable_temp(struct ad469x_dev *dev)
  * @brief Disable temperature read at the end of the sequence, for standard and
  * advanced sequencer
  * @param [in] dev - ad469x_dev device handler.
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t ad469x_sequence_disable_temp(struct ad469x_dev *dev)
 {
@@ -535,7 +535,7 @@ int32_t ad469x_sequence_disable_temp(struct ad469x_dev *dev)
 				    AD469x_REG_TEMP_CTRL,
 				    AD469x_REG_TEMP_CTRL_TEMP_EN_MASK,
 				    AD469x_REG_TEMP_CTRL_TEMP_EN(0));
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	dev->temp_enabled = false;
@@ -547,7 +547,7 @@ int32_t ad469x_sequence_disable_temp(struct ad469x_dev *dev)
  * @brief Configure converter busy indicator to the output of the specified port
  * @param [in] dev - ad469x_dev device handler.
  * @param [in] gp_sel - Port.
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t ad469x_set_busy(struct ad469x_dev *dev,
 			enum ad469x_busy_gp_sel gp_sel)
@@ -558,7 +558,7 @@ int32_t ad469x_set_busy(struct ad469x_dev *dev,
 				    AD469x_REG_GP_MODE,
 				    AD469x_GP_MODE_BUSY_GP_EN_MASK,
 				    AD469x_GP_MODE_BUSY_GP_EN(1));
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 
@@ -566,7 +566,7 @@ int32_t ad469x_set_busy(struct ad469x_dev *dev,
 				    AD469x_REG_GP_MODE,
 				    AD469x_GP_MODE_BUSY_GP_SEL_MASK,
 				    AD469x_GP_MODE_BUSY_GP_SEL(gp_sel));
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 
@@ -578,7 +578,7 @@ int32_t ad469x_set_busy(struct ad469x_dev *dev,
  *        To exit conversion mode send a 5 bit conversion mode command
  *        AD469x_CMD_REG_CONFIG_MODE
  * @param [in] dev - ad469x_dev device handler.
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t ad469x_enter_conversion_mode(struct ad469x_dev *dev)
 {
@@ -592,7 +592,7 @@ int32_t ad469x_enter_conversion_mode(struct ad469x_dev *dev)
  * @brief Exit conversion mode.
  *        Enter register mode to read/write registers
  * @param [in] dev - ad469x_dev device handler.
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t ad469x_exit_conversion_mode(struct ad469x_dev *dev)
 {
@@ -610,7 +610,7 @@ int32_t ad469x_exit_conversion_mode(struct ad469x_dev *dev)
 	commands_data[0] = AD469x_CMD_REG_CONFIG_MODE << 8;
 
 	ret = spi_engine_offload_init(dev->spi_desc, dev->offload_init_param);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	msg.commands = spi_eng_msg_cmds;
@@ -619,14 +619,14 @@ int32_t ad469x_exit_conversion_mode(struct ad469x_dev *dev)
 	msg.commands_data = commands_data;
 
 	ret = spi_engine_offload_transfer(dev->spi_desc, msg, 1);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	no_os_pwm_disable(dev->trigger_pwm_desc);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -634,7 +634,7 @@ int32_t ad469x_exit_conversion_mode(struct ad469x_dev *dev)
  * @param [in] dev - ad469x_dev device handler.
  * @param [in] cur_sample - Current sample number
  * @param [in] sample - Sample data
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 static int32_t ad469x_adv_seq_osr_get_util_data(struct ad469x_dev *dev,
 		uint16_t cur_sample, uint32_t *sample)
@@ -646,12 +646,12 @@ static int32_t ad469x_adv_seq_osr_get_util_data(struct ad469x_dev *dev,
 
 	/* Temperature channel sample */
 	if (dev->temp_enabled && cur_slot == dev->num_slots)
-		return SUCCESS;
+		return 0;
 
 	*sample = (*sample) >> (dev->capture_data_width -
 				dev->adv_seq_osr_resol[cur_ch]);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -663,7 +663,7 @@ static int32_t ad469x_adv_seq_osr_get_util_data(struct ad469x_dev *dev,
  * ad469x_std_sequence_ch 2 channel where activated, buf will be filled with
  * 10 samples for each of them. If temp is enable, the there will be an other 10
  * samples for temperature
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t ad469x_seq_read_data(struct ad469x_dev *dev,
 			     uint32_t *buf,
@@ -675,19 +675,19 @@ int32_t ad469x_seq_read_data(struct ad469x_dev *dev,
 
 	total_samples = samples * (dev->num_slots + dev->temp_enabled);
 	ret = ad469x_read_data(dev, 0, buf, total_samples);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	if (dev->ch_sequence != AD469x_advanced_seq)
-		return SUCCESS;
+		return 0;
 
 	for (i = 0; i < total_samples; i++) {
 		ret = ad469x_adv_seq_osr_get_util_data(dev, i, &buf[i]);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -697,7 +697,7 @@ int32_t ad469x_seq_read_data(struct ad469x_dev *dev,
  * @param [in] channel - ad469x selected channel.
  * @param [out] buf - data buffer.
  * @param [in] samples - sample number.
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t ad469x_read_data(struct ad469x_dev *dev,
 			 uint8_t channel,
@@ -717,12 +717,12 @@ int32_t ad469x_read_data(struct ad469x_dev *dev,
 	else if (channel == AD469x_CHANNEL_TEMP)
 		commands_data[0] = AD469x_CMD_SEL_TEMP_SNSOR_CH << 8;
 	else
-		return FAILURE;
+		return -1;
 
 	no_os_pwm_enable(dev->trigger_pwm_desc);
 
 	ret = spi_engine_offload_init(dev->spi_desc, dev->offload_init_param);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	msg.commands = spi_eng_msg_cmds;
@@ -731,7 +731,7 @@ int32_t ad469x_read_data(struct ad469x_dev *dev,
 	msg.commands_data = commands_data;
 
 	ret = spi_engine_offload_transfer(dev->spi_desc, msg, samples * 2);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	if (dev->dcache_invalidate_range)
@@ -745,7 +745,7 @@ int32_t ad469x_read_data(struct ad469x_dev *dev,
  * @param [out] device - The device structure.
  * @param [in] init_param - The structure that contains the device initial
  * 		parameters.
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t ad469x_init(struct ad469x_dev **device,
 		    struct ad469x_init_param *init_param)
@@ -756,28 +756,28 @@ int32_t ad469x_init(struct ad469x_dev **device,
 
 	dev = (struct ad469x_dev *)malloc(sizeof(*dev));
 	if (!dev)
-		return FAILURE;
+		return -1;
 
 	ret = axi_clkgen_init(&dev->clkgen, init_param->clkgen_init);
-	if (ret != SUCCESS) {
+	if (ret != 0) {
 		printf("error: %s: axi_clkgen_init() failed\n",
 		       init_param->clkgen_init->name);
 		goto error_dev;
 	}
 
 	ret = axi_clkgen_set_rate(dev->clkgen, init_param->axi_clkgen_rate);
-	if (ret != SUCCESS) {
+	if (ret != 0) {
 		printf("error: %s: axi_clkgen_set_rate() failed\n",
 		       init_param->clkgen_init->name);
 		goto error_clkgen;
 	}
 
 	ret = ad469x_init_gpio(dev, init_param);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		goto error_clkgen;
 
 	ret = no_os_spi_init(&dev->spi_desc, init_param->spi_init);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		goto error_gpio;
 
 	dev->offload_init_param = init_param->offload_init_param;
@@ -793,30 +793,30 @@ int32_t ad469x_init(struct ad469x_dev **device,
 	memset(dev->ch_slots, 0, sizeof(dev->ch_slots));
 
 	ret = ad469x_spi_reg_write(dev, AD469x_REG_SCRATCH_PAD, AD469x_TEST_DATA);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		goto error_spi;
 
 	ret = ad469x_spi_reg_read(dev, AD469x_REG_SCRATCH_PAD, &data);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		goto error_spi;
 
 	if (data != AD469x_TEST_DATA)
 		goto error_spi;
 
 	ret = ad469x_set_reg_access_mode(dev, AD469x_BYTE_ACCESS);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		goto error_spi;
 
 	ret = ad469x_set_busy(dev, AD469x_busy_gp0);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		goto error_spi;
 
 	ret = ad469x_seq_osr_clear(dev);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		goto error_spi;
 
 	ret = no_os_pwm_init(&dev->trigger_pwm_desc, init_param->trigger_pwm_init);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		goto error_spi;
 
 	*device = dev;
@@ -832,35 +832,35 @@ error_clkgen:
 error_dev:
 	free(dev);
 
-	return FAILURE;
+	return -1;
 }
 
 /**
  * @brief Free the memory allocated by ad469x_init().
  * @param [in] dev - Pointer to the device handler.
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise
+ * @return 0 in case of success, -1 otherwise
  */
 int32_t ad469x_remove(struct ad469x_dev *dev)
 {
 	int32_t ret;
 
 	if (!dev)
-		return FAILURE;
+		return -1;
 
 	ret = no_os_pwm_remove(dev->trigger_pwm_desc);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = no_os_spi_remove(dev->spi_desc);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = no_os_gpio_remove(dev->gpio_resetn);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = axi_clkgen_remove(dev->clkgen);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	free(dev);

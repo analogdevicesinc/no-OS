@@ -63,7 +63,7 @@ const struct no_os_spi_platform_ops demux_spi_platform_ops = {
  * @brief Initialize the SPI demux layer.
  * @param desc - The SPI descriptor.
  * @param param - The structure that contains the SPI parameters.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t demux_spi_init(struct no_os_spi_desc **desc,
 		       const struct no_os_spi_init_param *param)
@@ -75,11 +75,11 @@ int32_t demux_spi_init(struct no_os_spi_desc **desc,
 	struct no_os_spi_init_param *spi_dev_param;
 
 	if (!param)
-		return FAILURE;
+		return -1;
 
 	descriptor = (struct no_os_spi_desc *)calloc(1, sizeof(*descriptor));
 	if (!descriptor)
-		return FAILURE;
+		return -1;
 
 	descriptor->chip_select = param->chip_select;
 	descriptor->max_speed_hz = param->max_speed_hz;
@@ -88,9 +88,9 @@ int32_t demux_spi_init(struct no_os_spi_desc **desc,
 	spi_dev_param = param->extra;
 
 	ret = no_os_spi_init(&spi_dev_desc, spi_dev_param);
-	if (ret != SUCCESS) {
+	if (ret != 0) {
 		free(descriptor);
-		return FAILURE;
+		return -1;
 	}
 
 	(descriptor->extra) = spi_dev_desc;
@@ -103,19 +103,19 @@ int32_t demux_spi_init(struct no_os_spi_desc **desc,
 /**
  * @brief Free the resources allocated by demux_spi_init().
  * @param desc - The SPI descriptor.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t demux_spi_remove(struct no_os_spi_desc *desc)
 {
 	if (!desc)
-		return FAILURE;
+		return -1;
 
 	if (no_os_spi_remove(desc->extra))
-		return FAILURE;
+		return -1;
 
 	free(desc);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -123,7 +123,7 @@ int32_t demux_spi_remove(struct no_os_spi_desc *desc)
  * @param desc - The SPI descriptor.
  * @param data - The buffer with the transmitted/received data.
  * @param bytes_number - Number of bytes to write/read.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t demux_spi_write_and_read(struct no_os_spi_desc *desc, uint8_t *data,
 				 uint16_t bytes_number)
@@ -135,11 +135,11 @@ int32_t demux_spi_write_and_read(struct no_os_spi_desc *desc, uint8_t *data,
 	struct no_os_spi_desc *spi_dev;
 
 	if (!desc)
-		return FAILURE;
+		return -1;
 
 	buff = malloc(sizeof(*buff) * (bytes_number+1));
 	if (!buff)
-		return FAILURE;
+		return -1;
 
 	spi_dev = desc->extra;
 	cs = CS_OFFSET | desc->chip_select;

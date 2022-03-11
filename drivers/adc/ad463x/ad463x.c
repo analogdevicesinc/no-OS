@@ -61,7 +61,7 @@
  * @param dev - The device structure.
  * @param reg_addr - The register address.
  * @param reg_data - The data read from the register.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad463x_spi_reg_read(struct ad463x_dev *dev,
 			    uint16_t reg_addr,
@@ -85,7 +85,7 @@ int32_t ad463x_spi_reg_read(struct ad463x_dev *dev,
  * @param dev - The device structure.
  * @param reg_addr - The register address.
  * @param reg_data - The register data.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad463x_spi_reg_write(struct ad463x_dev *dev,
 			     uint16_t reg_addr,
@@ -106,7 +106,7 @@ int32_t ad463x_spi_reg_write(struct ad463x_dev *dev,
  * @param reg_addr - The register address.
  * @param mask - The mask.
  * @param data - The register data.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad463x_spi_reg_write_masked(struct ad463x_dev *dev,
 				    uint16_t reg_addr,
@@ -117,7 +117,7 @@ int32_t ad463x_spi_reg_write_masked(struct ad463x_dev *dev,
 	int32_t ret;
 
 	ret = ad463x_spi_reg_read(dev, reg_addr, &reg_data);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	reg_data &= ~mask;
@@ -130,12 +130,12 @@ int32_t ad463x_spi_reg_write_masked(struct ad463x_dev *dev,
  * @brief Set power mode.
  * @param dev - The device structure.
  * @param mode - The power mode.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad463x_set_pwr_mode(struct ad463x_dev *dev, uint8_t mode)
 {
 	if ((mode != AD463X_NORMAL_MODE) && (mode != AD463X_LOW_POWER_MODE))
-		return FAILURE;
+		return -1;
 
 	return ad463x_spi_reg_write(dev, AD463X_REG_DEVICE_CONFIG, mode);
 }
@@ -144,7 +144,7 @@ int32_t ad463x_set_pwr_mode(struct ad463x_dev *dev, uint8_t mode)
  * @brief Set average frame length.
  * @param dev - The device structure.
  * @param mode - Average filter frame length mode.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad463x_set_avg_frame_len(struct ad463x_dev *dev, uint8_t mode)
 {
@@ -155,7 +155,7 @@ int32_t ad463x_set_avg_frame_len(struct ad463x_dev *dev, uint8_t mode)
 						  AD463X_REG_MODES,
 						  AD463X_OUT_DATA_MODE_MSK,
 						  AD463X_24_DIFF_8_COM);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 		ret = ad463x_spi_reg_write(dev,
 					   AD463X_REG_AVG,
@@ -167,7 +167,7 @@ int32_t ad463x_set_avg_frame_len(struct ad463x_dev *dev, uint8_t mode)
 						  AD463X_REG_MODES,
 						  AD463X_OUT_DATA_MODE_MSK,
 						  AD463X_30_AVERAGED_DIFF);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 		ret = ad463x_spi_reg_write(dev,
 					   AD463X_REG_AVG,
@@ -181,7 +181,7 @@ int32_t ad463x_set_avg_frame_len(struct ad463x_dev *dev, uint8_t mode)
  * @brief Set drive strength.
  * @param dev - The device structure.
  * @param mode - The register data.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad463x_set_drive_strength(struct ad463x_dev *dev, uint8_t mode)
 {
@@ -196,7 +196,7 @@ int32_t ad463x_set_drive_strength(struct ad463x_dev *dev, uint8_t mode)
 /**
  * @brief Exit register configuration mode.
  * @param dev - The device structure.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad463x_exit_reg_cfg_mode(struct ad463x_dev *dev)
 {
@@ -204,12 +204,12 @@ int32_t ad463x_exit_reg_cfg_mode(struct ad463x_dev *dev)
 
 	ret = ad463x_spi_reg_write(dev, AD463X_REG_EXIT_CFG_MODE,
 				   AD463X_EXIT_CFG_MODE);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = spi_engine_set_transfer_width(dev->spi_desc,
 					    dev->capture_data_width);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	spi_engine_set_speed(dev->spi_desc, dev->spi_desc->max_speed_hz);
@@ -223,7 +223,7 @@ int32_t ad463x_exit_reg_cfg_mode(struct ad463x_dev *dev)
  * @param ch_idx - The channel index.
  * @param gain - The gain value scaled by 10000.
  * 			Example: to set gain 1.5, use 150000
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad463x_set_ch_gain(struct ad463x_dev *dev, uint8_t ch_idx,
 			   uint64_t gain)
@@ -239,7 +239,7 @@ int32_t ad463x_set_ch_gain(struct ad463x_dev *dev, uint8_t ch_idx,
 	ret = ad463x_spi_reg_write(dev,
 				   AD463X_REG_CHAN_GAIN(ch_idx, AD463X_GAIN_LSB),
 				   g);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	return ad463x_spi_reg_write(dev,
@@ -252,7 +252,7 @@ int32_t ad463x_set_ch_gain(struct ad463x_dev *dev, uint8_t ch_idx,
  * @param dev - The device structure.
  * @param ch_idx - The channel index.
  * @param offset - The channel offset.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad463x_set_ch_offset(struct ad463x_dev *dev, uint8_t ch_idx,
 			     uint32_t offset)
@@ -282,7 +282,7 @@ int32_t ad463x_set_ch_offset(struct ad463x_dev *dev, uint8_t ch_idx,
  *        ad463x_init() helper function.
  * @param [out] dev - ad463x_dev device handler.
  * @param [in] init_param - Pointer to the initialization structure.
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 static int32_t ad463x_init_gpio(struct ad463x_dev *dev,
 				struct ad463x_init_param *init_param)
@@ -290,24 +290,24 @@ static int32_t ad463x_init_gpio(struct ad463x_dev *dev,
 	int32_t ret;
 
 	ret = no_os_gpio_get_optional(&dev->gpio_resetn, init_param->gpio_resetn);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	/** Reset to configure pins */
 	if (dev->gpio_resetn) {
 		ret = no_os_gpio_direction_output(dev->gpio_resetn, NO_OS_GPIO_LOW);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 
 		no_os_mdelay(100);
 		ret = no_os_gpio_set_value(dev->gpio_resetn, NO_OS_GPIO_HIGH);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 
 		no_os_mdelay(100);
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -316,7 +316,7 @@ static int32_t ad463x_init_gpio(struct ad463x_dev *dev,
  * @param [in] dev - ad469x_dev device handler.
  * @param [out] buf - data buffer.
  * @param [in] samples - sample number.
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t ad463x_read_data(struct ad463x_dev *dev,
 			 uint32_t *buf,
@@ -332,11 +332,11 @@ int32_t ad463x_read_data(struct ad463x_dev *dev,
 	};
 
 	ret = no_os_pwm_enable(dev->trigger_pwm_desc);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = spi_engine_offload_init(dev->spi_desc, dev->offload_init_param);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	msg.commands = spi_eng_msg_cmds;
@@ -345,7 +345,7 @@ int32_t ad463x_read_data(struct ad463x_dev *dev,
 	msg.commands_data = commands_data;
 
 	ret = spi_engine_offload_transfer(dev->spi_desc, msg, samples);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	if (dev->dcache_invalidate_range)
@@ -359,7 +359,7 @@ int32_t ad463x_read_data(struct ad463x_dev *dev,
  * @param [out] device - The device structure.
  * @param [in] init_param - The structure that contains the device initial
  * 		parameters.
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t ad463x_init(struct ad463x_dev **device,
 		    struct ad463x_init_param *init_param)
@@ -370,39 +370,39 @@ int32_t ad463x_init(struct ad463x_dev **device,
 	uint8_t sample_width;
 
 	if (!init_param || !device)
-		return FAILURE;
+		return -1;
 
 	if (init_param->clock_mode == AD463X_SPI_COMPATIBLE_MODE &&
 	    init_param->data_rate == AD463X_DDR_MODE) {
 		pr_err("DDR_MODE not available when clock mode is SPI_COMPATIBLE\n");
-		return FAILURE;
+		return -1;
 	}
 
 	dev = (struct ad463x_dev *)malloc(sizeof(*dev));
 	if (!dev)
-		return FAILURE;
+		return -1;
 
 	/** Perform Hardware Reset */
 	ret = ad463x_init_gpio(dev, init_param);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		goto error_dev;
 
 	ret = axi_clkgen_init(&dev->clkgen, init_param->clkgen_init);
-	if (ret != SUCCESS) {
+	if (ret != 0) {
 		pr_err("error: %s: axi_clkgen_init() failed\n",
 		       init_param->clkgen_init->name);
 		goto error_gpio;
 	}
 
 	ret = axi_clkgen_set_rate(dev->clkgen, init_param->axi_clkgen_rate);
-	if (ret != SUCCESS) {
+	if (ret != 0) {
 		pr_err("error: %s: axi_clkgen_set_rate() failed\n",
 		       init_param->clkgen_init->name);
 		goto error_clkgen;
 	}
 
 	ret = no_os_spi_init(&dev->spi_desc, init_param->spi_init);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		goto error_clkgen;
 
 	dev->offload_init_param = init_param->offload_init_param;
@@ -447,21 +447,21 @@ int32_t ad463x_init(struct ad463x_dev **device,
 	dev->read_bytes_no = dev->capture_data_width / 8;
 
 	ret = spi_engine_set_transfer_width(dev->spi_desc, dev->reg_data_width);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		goto error_spi;
 
 	spi_engine_set_speed(dev->spi_desc, dev->reg_access_speed);
 
 	ret = ad463x_spi_reg_read(dev, AD463X_CONFIG_TIMING, &data);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		goto error_spi;
 
 	ret = ad463x_spi_reg_write(dev, AD463X_REG_SCRATCH_PAD, AD463x_TEST_DATA);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		goto error_spi;
 
 	ret = ad463x_spi_reg_read(dev, AD463X_REG_SCRATCH_PAD, &data);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		goto error_spi;
 
 	if (data != AD463x_TEST_DATA) {
@@ -471,26 +471,26 @@ int32_t ad463x_init(struct ad463x_dev **device,
 
 	ret = ad463x_spi_reg_write_masked(dev, AD463X_REG_MODES, AD463X_LANE_MODE_MSK,
 					  dev->lane_mode);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = ad463x_spi_reg_write_masked(dev, AD463X_REG_MODES, AD463X_CLK_MODE_MSK,
 					  dev->clock_mode);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = ad463x_spi_reg_write_masked(dev, AD463X_REG_MODES, AD463X_DDR_MODE_MSK,
 					  dev->data_rate);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = ad463x_spi_reg_write_masked(dev, AD463X_REG_MODES,
 					  AD463X_OUT_DATA_MODE_MSK, dev->output_mode);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = no_os_pwm_init(&dev->trigger_pwm_desc, init_param->trigger_pwm_init);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		goto error_spi;
 
 	*device = dev;
@@ -506,35 +506,35 @@ error_gpio:
 error_dev:
 	free(dev);
 
-	return FAILURE;
+	return -1;
 }
 
 /**
  * @brief Free the memory allocated by ad463x_init().
  * @param [in] dev - Pointer to the device handler.
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise
+ * @return 0 in case of success, -1 otherwise
  */
 int32_t ad463x_remove(struct ad463x_dev *dev)
 {
 	int32_t ret;
 
 	if (!dev)
-		return FAILURE;
+		return -1;
 
 	ret = no_os_pwm_remove(dev->trigger_pwm_desc);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = no_os_spi_remove(dev->spi_desc);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = no_os_gpio_remove(dev->gpio_resetn);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = axi_clkgen_remove(dev->clkgen);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	free(dev);

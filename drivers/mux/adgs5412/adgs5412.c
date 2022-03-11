@@ -80,7 +80,7 @@ uint8_t adgs5412_compute_crc8(uint8_t *data,
  * @param dev - The device structure.
  * @param reg_addr - The register address.
  * @param reg_data - The register data.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t adgs5412_spi_reg_read(adgs5412_dev *dev,
 			      uint8_t reg_addr,
@@ -94,7 +94,7 @@ int32_t adgs5412_spi_reg_read(adgs5412_dev *dev,
 	if (dev->daisy_chain_en == ADGS5412_ENABLE) {
 		printf("%s: This feature is not available in Daisy-Chain mode.\n",
 		       __func__);
-		return FAILURE;
+		return -1;
 	}
 
 	buf[0] = 0x80 | (reg_addr & 0x7F);
@@ -105,7 +105,7 @@ int32_t adgs5412_spi_reg_read(adgs5412_dev *dev,
 	ret = no_os_spi_write_and_read(dev->spi_desc, buf, buf_size);
 	if (buf[0] != ADGS5412_ALIGNMENT) {
 		printf("%s: Alignment Error: 0x%x.\n", __func__, buf[0]);
-		ret = FAILURE;
+		ret = -1;
 	}
 	*reg_data = buf[1];
 	if (dev->crc_en == ADGS5412_ENABLE) {
@@ -113,7 +113,7 @@ int32_t adgs5412_spi_reg_read(adgs5412_dev *dev,
 		crc = adgs5412_compute_crc8(&buf[0], 2);
 		if (crc != buf[2]) {
 			printf("%s: CRC Error.\n", __func__);
-			ret = FAILURE;
+			ret = -1;
 		}
 	}
 
@@ -125,7 +125,7 @@ int32_t adgs5412_spi_reg_read(adgs5412_dev *dev,
  * @param dev - The device structure.
  * @param reg_addr - The register address.
  * @param reg_data - The register data.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t adgs5412_spi_reg_write(adgs5412_dev *dev,
 			       uint8_t reg_addr,
@@ -138,7 +138,7 @@ int32_t adgs5412_spi_reg_write(adgs5412_dev *dev,
 	if (dev->daisy_chain_en == ADGS5412_ENABLE) {
 		printf("%s: This feature is not available in Daisy-Chain mode.\n",
 		       __func__);
-		return FAILURE;
+		return -1;
 	}
 
 	buf[0] = 0x00 | (reg_addr & 0x7F);
@@ -150,7 +150,7 @@ int32_t adgs5412_spi_reg_write(adgs5412_dev *dev,
 	ret = no_os_spi_write_and_read(dev->spi_desc, buf, buf_size);
 	if (buf[0] != ADGS5412_ALIGNMENT) {
 		printf("%s: Alignment Error: 0x%x.\n", __func__, buf[0]);
-		ret = FAILURE;
+		ret = -1;
 	}
 
 	return ret;
@@ -162,7 +162,7 @@ int32_t adgs5412_spi_reg_write(adgs5412_dev *dev,
  * @param reg_addr - The register address.
  * @param mask - The mask.
  * @param data - The register data.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t adgs5412_spi_reg_read_mask(adgs5412_dev *dev,
 				   uint8_t reg_addr,
@@ -175,7 +175,7 @@ int32_t adgs5412_spi_reg_read_mask(adgs5412_dev *dev,
 	if (dev->daisy_chain_en == ADGS5412_ENABLE) {
 		printf("%s: This feature is not available in Daisy-Chain mode.\n",
 		       __func__);
-		return FAILURE;
+		return -1;
 	}
 
 	ret = adgs5412_spi_reg_read(dev, reg_addr, &reg_data);
@@ -190,7 +190,7 @@ int32_t adgs5412_spi_reg_read_mask(adgs5412_dev *dev,
  * @param reg_addr - The register address.
  * @param mask - The mask.
  * @param data - The register data.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t adgs5412_spi_reg_write_mask(adgs5412_dev *dev,
 				    uint8_t reg_addr,
@@ -203,7 +203,7 @@ int32_t adgs5412_spi_reg_write_mask(adgs5412_dev *dev,
 	if (dev->daisy_chain_en == ADGS5412_ENABLE) {
 		printf("%s: This feature is not available in Daisy-Chain mode.\n",
 		       __func__);
-		return FAILURE;
+		return -1;
 	}
 
 	ret = adgs5412_spi_reg_read(dev, reg_addr, &reg_data);
@@ -217,7 +217,7 @@ int32_t adgs5412_spi_reg_write_mask(adgs5412_dev *dev,
 /**
  * Do a software reset.
  * @param dev - The device structure.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t adgs5412_do_soft_reset(adgs5412_dev *dev)
 {
@@ -226,7 +226,7 @@ int32_t adgs5412_do_soft_reset(adgs5412_dev *dev)
 	if (dev->daisy_chain_en == ADGS5412_ENABLE) {
 		printf("%s: This feature is not available in Daisy-Chain mode.\n",
 		       __func__);
-		return FAILURE;
+		return -1;
 	}
 
 	ret = adgs5412_spi_reg_write(dev,
@@ -242,7 +242,7 @@ int32_t adgs5412_do_soft_reset(adgs5412_dev *dev)
 /**
  * Clear the Error Flags Register.
  * @param dev - The device structure.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t adgs5412_clear_err_flags(adgs5412_dev *dev)
 {
@@ -253,7 +253,7 @@ int32_t adgs5412_clear_err_flags(adgs5412_dev *dev)
 	if (dev->daisy_chain_en == ADGS5412_ENABLE) {
 		printf("%s: This feature is not available in Daisy-Chain mode.\n",
 		       __func__);
-		return FAILURE;
+		return -1;
 	}
 
 	buf[0] = ADGS5412_CLR_1;
@@ -270,7 +270,7 @@ int32_t adgs5412_clear_err_flags(adgs5412_dev *dev)
 /**
  * Enter Daisy-Chain Mode.
  * @param dev - The device structure.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t adgs5412_enter_daisy_chain(adgs5412_dev *dev)
 {
@@ -280,7 +280,7 @@ int32_t adgs5412_enter_daisy_chain(adgs5412_dev *dev)
 	if (dev->daisy_chain_en == ADGS5412_ENABLE) {
 		printf("%s: This feature is not available in Daisy-Chain mode.\n",
 		       __func__);
-		return FAILURE;
+		return -1;
 	}
 
 	buf[0] = ADGS5412_DAISY_CHAIN_1;
@@ -295,7 +295,7 @@ int32_t adgs5412_enter_daisy_chain(adgs5412_dev *dev)
  * @param dev - The device structure.
  * @param cmds - The commands to be sent.
  * @param cmds_size - The number of commands.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t adgs5412_send_daisy_chain_cmds(adgs5412_dev *dev,
 				       uint8_t *cmds,
@@ -306,7 +306,7 @@ int32_t adgs5412_send_daisy_chain_cmds(adgs5412_dev *dev,
 	if (dev->daisy_chain_en == ADGS5412_DISABLE) {
 		printf("%s: This feature is available in Daisy-Chain mode only.\n",
 		       __func__);
-		return FAILURE;
+		return -1;
 	}
 
 	ret = no_os_spi_write_and_read(dev->spi_desc, cmds, cmds_size);
@@ -319,7 +319,7 @@ int32_t adgs5412_send_daisy_chain_cmds(adgs5412_dev *dev,
  * @param device - The device structure.
  * @param init_param - The structure that contains the device initial
  * 		       parameters.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t adgs5412_init(adgs5412_dev **device,
 		      adgs5412_init_param init_param)
@@ -372,7 +372,7 @@ int32_t adgs5412_init(adgs5412_dev **device,
 /***************************************************************************//**
  * @brief Free the resources allocated by adgs5412_init().
  * @param dev - The device structure.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
 *******************************************************************************/
 int32_t adgs5412_remove(adgs5412_dev *dev)
 {

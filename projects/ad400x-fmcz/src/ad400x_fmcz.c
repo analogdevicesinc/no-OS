@@ -83,8 +83,8 @@ int main()
 	/* Offload example */
 	else {
 		ret = spi_engine_offload_init(dev->spi_desc, &spi_engine_offload_init_param);
-		if (ret != SUCCESS)
-			return FAILURE;
+		if (ret != 0)
+			return -1;
 
 		msg.commands = spi_eng_msg_cmds;
 		msg.no_commands = NO_OS_ARRAY_SIZE(spi_eng_msg_cmds);
@@ -93,7 +93,7 @@ int main()
 		msg.commands_data = commands_data;
 
 		ret = spi_engine_offload_transfer(dev->spi_desc, msg, AD400x_EVB_SAMPLE_NO);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 
 		no_os_mdelay(2000);

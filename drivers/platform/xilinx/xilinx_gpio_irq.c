@@ -103,7 +103,7 @@ static void xil_gpio_irq_handler(struct xil_gpio_irq_desc *param)
  * @brief Disable specific GPIO IRQ pin.
  * @param desc - The GPIO IRQ controller descriptor.
  * @param irq_id - Pin number.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t xil_gpio_irq_disable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
 {
@@ -125,7 +125,7 @@ int32_t xil_gpio_irq_disable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
 
 	XGpioPs_IntrDisablePin(&extra->my_Gpio, irq_id);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -133,7 +133,7 @@ int32_t xil_gpio_irq_disable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
  * @param desc - The GPIO IRQ controller descriptor.
  * @param param - The GPIO IRQ controller initial parameters.
  * irq_ctrl_id from irq_init_param is the interrupt id for the parent controller
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t xil_gpio_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
 			       const struct no_os_irq_init_param *param)
@@ -196,7 +196,7 @@ int32_t xil_gpio_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
 
 	*desc = ldesc;
 
-	return SUCCESS;
+	return 0;
 
 error_op:
 	no_os_iterator_remove(xil_desc->it);
@@ -213,7 +213,7 @@ error_desc:
  * @param desc - The GPIO IRQ controller descriptor.
  * @param irq_id - Pin number.
  * @param trig - New trigger level for the GPIO interrupt.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t xil_gpio_irq_trigger_level_set(struct no_os_irq_ctrl_desc *desc,
 				       uint32_t irq_id,
@@ -230,7 +230,7 @@ int32_t xil_gpio_irq_trigger_level_set(struct no_os_irq_ctrl_desc *desc,
 	extra = desc->extra;
 	XGpioPs_SetIntrTypePin(&extra->my_Gpio, irq_id, trig_level[trig]);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -238,7 +238,7 @@ int32_t xil_gpio_irq_trigger_level_set(struct no_os_irq_ctrl_desc *desc,
  * @param desc - The GPIO IRQ controller descriptor.
  * @param irq_id - Pin number.
  * @param callback_desc - Callback.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t xil_gpio_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 				       uint32_t irq_id,
@@ -249,7 +249,7 @@ int32_t xil_gpio_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 
 	dev_callback = (struct xil_callback_desc *)calloc(1, sizeof(*dev_callback));
 	if(!dev_callback)
-		return FAILURE;
+		return -1;
 
 	dev_callback->pin_nb = irq_id;
 	dev_callback->callback.callback = callback_desc->callback;
@@ -260,14 +260,14 @@ int32_t xil_gpio_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 	XGpioPs_SetDirectionPin(&extra->my_Gpio, irq_id, 0);
 	no_os_list_add_last(extra->callback_list, dev_callback);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Unregister pin specific GPIO interrupt.
  * @param desc - The GPIO IRQ controller descriptor.
  * @param irq_id - Pin number.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t xil_gpio_irq_unregister(struct no_os_irq_ctrl_desc *desc,
 				uint32_t irq_id)
@@ -286,14 +286,14 @@ int32_t xil_gpio_irq_unregister(struct no_os_irq_ctrl_desc *desc,
 
 	free(dev_callback);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Enable specific GPIO IRQ pin.
  * @param desc - The GPIO IRQ controller descriptor.
  * @param irq_id - Pin number.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t xil_gpio_irq_enable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
 {
@@ -316,13 +316,13 @@ int32_t xil_gpio_irq_enable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
 
 	XGpioPs_IntrEnablePin(&extra->my_Gpio, irq_id);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Remove the GPIO IRQ controller.
  * @param desc - The GPIO IRQ controller descriptor.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t xil_gpio_irq_ctrl_remove(struct no_os_irq_ctrl_desc *desc)
 {
@@ -341,7 +341,7 @@ int32_t xil_gpio_irq_ctrl_remove(struct no_os_irq_ctrl_desc *desc)
 	free(extra);
 	free(desc);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**

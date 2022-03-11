@@ -94,7 +94,7 @@ int8_t ad799x_init(struct ad799x_dev **device,
  *
  * @param dev - The device structure.
  *
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
 *******************************************************************************/
 int32_t ad799x_remove(struct ad799x_dev *dev)
 {

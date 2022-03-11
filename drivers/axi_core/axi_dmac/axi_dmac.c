@@ -108,7 +108,7 @@ int32_t axi_dmac_read(struct axi_dmac *dmac,
 {
 	no_os_axi_io_read(dmac->base, reg_addr, reg_data);
 
-	return SUCCESS;
+	return 0;
 }
 
 /***************************************************************************//**
@@ -120,7 +120,7 @@ int32_t axi_dmac_write(struct axi_dmac *dmac,
 {
 	no_os_axi_io_write(dmac->base, reg_addr, reg_data);
 
-	return SUCCESS;
+	return 0;
 }
 
 /***************************************************************************//**
@@ -132,7 +132,7 @@ int32_t axi_dmac_transfer_nonblocking(struct axi_dmac *dmac,
 	uint32_t reg_val;
 
 	if (size == 0)
-		return SUCCESS; /* nothing to do */
+		return 0; /* nothing to do */
 
 	axi_dmac_read(dmac, AXI_DMAC_REG_CTRL, &reg_val);
 	if (!(reg_val & AXI_DMAC_CTRL_ENABLE)) {
@@ -153,7 +153,7 @@ int32_t axi_dmac_transfer_nonblocking(struct axi_dmac *dmac,
 			axi_dmac_write(dmac, AXI_DMAC_REG_SRC_STRIDE, 0x0);
 			break;
 		default:
-			return FAILURE; // Other directions are not supported yet
+			return -1; // Other directions are not supported yet
 		}
 		if ((size - 1) > dmac->transfer_max_size) {
 			dmac->big_transfer.address = address;
@@ -177,10 +177,10 @@ int32_t axi_dmac_transfer_nonblocking(struct axi_dmac *dmac,
 			axi_dmac_write(dmac, AXI_DMAC_REG_START_TRANSFER, 0x1);
 		}
 	} else {
-		return FAILURE;
+		return -1;
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /***************************************************************************//**
@@ -190,7 +190,7 @@ int32_t axi_dmac_is_transfer_ready(struct axi_dmac *dmac, bool *rdy)
 {
 	*rdy = dmac->big_transfer.transfer_done;
 
-	return SUCCESS;
+	return 0;
 }
 
 /***************************************************************************//**
@@ -204,7 +204,7 @@ int32_t axi_dmac_transfer(struct axi_dmac *dmac,
 	uint32_t timeout = 0;
 
 	if (size == 0)
-		return SUCCESS; /* nothing to do */
+		return 0; /* nothing to do */
 
 	axi_dmac_write(dmac, AXI_DMAC_REG_CTRL, 0x0);
 	axi_dmac_write(dmac, AXI_DMAC_REG_CTRL, AXI_DMAC_CTRL_ENABLE);
@@ -225,7 +225,7 @@ int32_t axi_dmac_transfer(struct axi_dmac *dmac,
 		axi_dmac_write(dmac, AXI_DMAC_REG_SRC_STRIDE, 0x0);
 		break;
 	default:
-		return FAILURE; // Other directions are not supported yet
+		return -1; // Other directions are not supported yet
 	}
 
 	if ((size - 1) > dmac->transfer_max_size) {
@@ -244,14 +244,14 @@ int32_t axi_dmac_transfer(struct axi_dmac *dmac,
 		while(!dmac->big_transfer.transfer_done) {
 			timeout++;
 			if (timeout == UINT32_MAX)
-				return FAILURE;
+				return -1;
 		}
 
 		dmac->big_transfer.address = 0;
 		dmac->big_transfer.size = 0;
 		dmac->big_transfer.size_done = 0;
 
-		return SUCCESS;
+		return 0;
 	}
 
 	axi_dmac_write(dmac, AXI_DMAC_REG_X_LENGTH, size - 1);
@@ -262,7 +262,7 @@ int32_t axi_dmac_transfer(struct axi_dmac *dmac,
 	axi_dmac_write(dmac, AXI_DMAC_REG_START_TRANSFER, 0x1);
 
 	if (dmac->flags & DMA_CYCLIC)
-		return SUCCESS;
+		return 0;
 
 	/* Wait until the new transfer is queued. */
 	do {
@@ -283,7 +283,7 @@ int32_t axi_dmac_transfer(struct axi_dmac *dmac,
 		axi_dmac_read(dmac, AXI_DMAC_REG_TRANSFER_DONE, &reg_val);
 	} while((reg_val & (1u << transfer_id)) != (1u << transfer_id));
 
-	return SUCCESS;
+	return 0;
 }
 
 /***************************************************************************//**
@@ -296,7 +296,7 @@ int32_t axi_dmac_init(struct axi_dmac **dmac_core,
 
 	dmac = (struct axi_dmac *)calloc(1, sizeof(*dmac));
 	if (!dmac)
-		return FAILURE;
+		return -1;
 
 	dmac->name = init->name;
 	dmac->base = init->base;
@@ -309,7 +309,7 @@ int32_t axi_dmac_init(struct axi_dmac **dmac_core,
 
 	*dmac_core = dmac;
 
-	return SUCCESS;
+	return 0;
 }
 
 /***************************************************************************//**
@@ -318,9 +318,9 @@ int32_t axi_dmac_init(struct axi_dmac **dmac_core,
 int32_t axi_dmac_remove(struct axi_dmac *dmac)
 {
 	if(!dmac)
-		return FAILURE;
+		return -1;
 
 	free(dmac);
 
-	return SUCCESS;
+	return 0;
 }

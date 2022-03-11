@@ -75,11 +75,11 @@ void ad7768_evb_clear_status(struct xil_gpio_init_param *brd_gpio_init)
 	for (i = 0; i < 32; i ++) {
 		temp_init.number = UP_STATUS_OFFSET + i;
 		ret = no_os_gpio_get(&temp_desc, &temp_init);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return;
 		no_os_gpio_direction_output(temp_desc, NO_OS_GPIO_HIGH);
 		ret = no_os_gpio_remove(temp_desc);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return;
 	}
 }
@@ -103,13 +103,13 @@ uint8_t ad7768_evb_verify_status(struct xil_gpio_init_param *brd_gpio_init)
 	for (i = 0; i < 32; i ++) {
 		temp_init.number = UP_STATUS_OFFSET + i;
 		ret = no_os_gpio_get(&temp_desc, &temp_init);
-		if (ret != SUCCESS)
-			return FAILURE;
+		if (ret != 0)
+			return -1;
 		no_os_gpio_direction_input(temp_desc);
 		no_os_gpio_get_value(temp_desc, &value);
 		ret = no_os_gpio_remove(temp_desc);
-		if (ret != SUCCESS)
-			return FAILURE;
+		if (ret != 0)
+			return -1;
 		status += value;
 	}
 
@@ -131,11 +131,11 @@ static int32_t ad7768_if_gpio_setup(uint32_t gpio_no, uint8_t gpio_val)
 	int32_t ret;
 
 	ret = no_os_gpio_get(&temp_desc, &temp_init);
-	if (ret != SUCCESS)
-		return FAILURE;
+	if (ret != 0)
+		return -1;
 	ret = no_os_gpio_direction_output(temp_desc, gpio_val);
-	if (ret != SUCCESS)
-		return FAILURE;
+	if (ret != 0)
+		return -1;
 	return no_os_gpio_remove(temp_desc);
 }
 
@@ -248,8 +248,8 @@ int main(void)
 	ad7768_setup(&dev, default_init_param);
 
 	ret = axi_adc_init(&axi_adc_core_desc, &axi_adc_initial);
-	if (ret != SUCCESS)
-		return FAILURE;
+	if (ret != 0)
+		return -1;
 
 	axi_gpio_init.type = GPIO_PL;
 	axi_gpio_init.device_id = XPAR_AD7768_GPIO_DEVICE_ID;
@@ -261,16 +261,16 @@ int main(void)
 		printf("Interface OK\n");
 
 	ret = axi_dmac_init(&dma_desc, &dma_initial);
-	if (ret != SUCCESS)
-		return FAILURE;
+	if (ret != 0)
+		return -1;
 
 	data_size = (sample_no * chan_no *
 		     ((resolution + AD7768_HEADER_SIZE) / BITS_IN_BYTE));
 
 	printf("Capture samples...\n");
 	ret = axi_dmac_transfer(dma_desc, ADC_DDR_BASEADDR, data_size);
-	if (ret != SUCCESS)
-		return FAILURE;
+	if (ret != 0)
+		return -1;
 	printf("Capture done\n");
 
 	if (ad7768_evb_verify_status(&axi_gpio_init))

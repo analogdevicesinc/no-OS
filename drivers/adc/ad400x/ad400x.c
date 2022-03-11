@@ -147,7 +147,7 @@ int32_t ad400x_init(struct ad400x_dev **device,
 	struct spi_engine_init_param *spi_eng_init_param;
 
 	if (!init_param)
-		return FAILURE;
+		return -1;
 
 	spi_eng_init_param = init_param->spi_init.extra;
 
@@ -187,7 +187,7 @@ error:
 /***************************************************************************//**
  * @brief Free the resources allocated by ad400x_init().
  * @param dev - The device structure.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
 *******************************************************************************/
 int32_t ad400x_remove(struct ad400x_dev *dev)
 {

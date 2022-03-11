@@ -153,7 +153,7 @@ static struct iio_channel ad7124_channels[] = {
  * @param desc - Device driver descriptor.
  * @param ch_no - Channel ID.
  * @param config_opt - Pointer to the configuration opt.
- * @return SUCCESS in case of success, error code otherwise.
+ * @return 0 in case of success, error code otherwise.
  */
 static int32_t ad7124_iio_get_ch_config_opt(struct ad7124_dev *desc,
 		uint8_t ch_no, uint8_t *config_opt)
@@ -163,7 +163,7 @@ static int32_t ad7124_iio_get_ch_config_opt(struct ad7124_dev *desc,
 
 	ret = ad7124_read_register2(desc, (AD7124_CH0_MAP_REG + ch_no),
 				    &value);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 	*config_opt = (value & AD7124_CH_MAP_REG_SETUP(0x7)) >> 12;
 
@@ -188,12 +188,12 @@ static int ad7124_iio_read_offset_chan(void *device, char *buf, uint32_t len,
 	uint8_t config_opt;
 
 	ret = ad7124_iio_get_ch_config_opt(desc, channel->ch_num, &config_opt);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = ad7124_read_register2(desc, (AD7124_OFFS0_REG + config_opt),
 				    &value);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	return snprintf(buf, len, "%"PRIX32"", value);
@@ -216,14 +216,14 @@ static int ad7124_iio_change_offset_chan(void *device, char *buf,
 	uint8_t config_opt;
 
 	ret = ad7124_iio_get_ch_config_opt(desc, channel->ch_num, &config_opt);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	sscanf(buf, "%ld", &reg_val);
 
 	ret = ad7124_write_register2(desc, (AD7124_OFFS0_REG + config_opt),
 				     reg_val);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	return len;
@@ -248,25 +248,25 @@ static int ad7124_iio_read_raw_chan(void *device, char *buf, uint32_t len,
 
 	ret = ad7124_read_register2(desc, (AD7124_CH0_MAP_REG + channel->ch_num),
 				    &reg_temp);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 	reg_temp |= AD7124_CH_MAP_REG_CH_ENABLE;
 	ret = ad7124_write_register2(desc, (AD7124_CH0_MAP_REG + channel->ch_num),
 				     reg_temp);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = ad7124_wait_for_conv_ready(desc, 10000);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 	ret = ad7124_read_data(desc, &value);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	reg_temp &= ~AD7124_CH_MAP_REG_CH_ENABLE;
 	ret = ad7124_write_register2(desc, (AD7124_CH0_MAP_REG + channel->ch_num),
 				     reg_temp);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	return snprintf(buf, len, "%"PRId32"", (uint32_t)value);
@@ -292,14 +292,14 @@ static int ad7124_iio_read_filter_3db(void *device, char *buf, uint32_t len,
 	uint8_t config_opt;
 
 	ret = ad7124_iio_get_ch_config_opt(desc, channel->ch_num, &config_opt);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	odr = (uint32_t)ad7124_get_odr(desc, config_opt);
 	ret = ad7124_read_register2(desc,
 				    (AD7124_FILT0_REG + config_opt),
 				    &reg_temp);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 	value = (reg_temp >> 21) & 0x7;
 	switch (value) {
@@ -338,7 +338,7 @@ static int ad7124_iio_write_filter_3db(void *device, char *buf, uint32_t len,
 	uint8_t config_opt;
 
 	ret = ad7124_iio_get_ch_config_opt(desc, channel->ch_num, &config_opt);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	sscanf(buf, "%ld", &freq);
@@ -357,18 +357,18 @@ static int ad7124_iio_write_filter_3db(void *device, char *buf, uint32_t len,
 	ret = ad7124_read_register2(desc,
 				    (AD7124_FILT0_REG + config_opt),
 				    &reg_temp);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 	reg_temp &= ~AD7124_FILT_REG_FILTER(~0);
 	reg_temp |= AD7124_FILT_REG_FILTER(new_filter);
 	ret = ad7124_write_register2(desc,
 				     (AD7124_FILT0_REG + config_opt),
 				     reg_temp);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = ad7124_set_odr(desc, (float)new_odr, config_opt);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	return len;
@@ -392,7 +392,7 @@ static int ad7124_iio_read_odr_chan(void *device, char *buf, uint32_t len,
 	uint8_t config_opt;
 
 	ret = ad7124_iio_get_ch_config_opt(desc, channel->ch_num, &config_opt);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	odr = (uint32_t)ad7124_get_odr(desc, config_opt);
@@ -418,13 +418,13 @@ static int ad7124_iio_change_odr_chan(void *device, char *buf, uint32_t len,
 	uint8_t config_opt;
 
 	ret = ad7124_iio_get_ch_config_opt(desc, channel->ch_num, &config_opt);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	sscanf(buf, "%ld", &new_odr);
 
 	ret = ad7124_set_odr(desc, (float)new_odr, config_opt);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	return len;
@@ -451,13 +451,13 @@ static int ad7124_iio_read_scale_chan(void *device, char *buf, uint32_t len,
 	uint8_t config_opt;
 
 	ret = ad7124_iio_get_ch_config_opt(desc, channel->ch_num, &config_opt);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = ad7124_read_register2(desc,
 				    (AD7124_CFG0_REG + config_opt),
 				    &reg_temp);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 	pga_bits = reg_temp & 0x7;
 	bipolar = (reg_temp >> 11) & 0x1;
@@ -514,7 +514,7 @@ static int ad7124_iio_change_scale_chan(void *device, char *buf, uint32_t len,
 	uint8_t config_opt;
 
 	ret = ad7124_iio_get_ch_config_opt(desc, channel->ch_num, &config_opt);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	sscanf(buf, "%f", &new_scale);
@@ -522,7 +522,7 @@ static int ad7124_iio_change_scale_chan(void *device, char *buf, uint32_t len,
 	ret = ad7124_read_register2(desc,
 				    (AD7124_CFG0_REG + config_opt),
 				    &reg_temp);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 	bipolar = (reg_temp >> 11) & 0x1;
 	if (bipolar != 0)
@@ -538,7 +538,7 @@ static int ad7124_iio_change_scale_chan(void *device, char *buf, uint32_t len,
 	ret = ad7124_write_register2(desc,
 				     (AD7124_CFG0_REG + config_opt),
 				     reg_temp);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	return len;
@@ -575,7 +575,7 @@ static bool get_next_ch_idx(uint32_t ch_mask, uint32_t last_idx,
  * @brief Update active channels.
  * @param [in] dev - Application descriptor.
  * @param [in] mask - Number of bytes to transfer.
- * @return SUCCESS in case of success, error code otherwise.
+ * @return 0 in case of success, error code otherwise.
  */
 static int32_t iio_ad7124_update_active_channels(void *dev, uint32_t mask)
 {
@@ -588,23 +588,23 @@ static int32_t iio_ad7124_update_active_channels(void *dev, uint32_t mask)
 		ret = ad7124_read_register2(desc,
 					    (AD7124_CH0_MAP_REG + ch_idx),
 					    &reg_temp);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 		reg_temp |= AD7124_CH_MAP_REG_CH_ENABLE;
 		ret = ad7124_write_register2(desc,
 					     (AD7124_CH0_MAP_REG + ch_idx),
 					     reg_temp);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Close active channels.
  * @param [in] dev - Application descriptor.
- * @return SUCCESS in case of success, error code otherwise.
+ * @return 0 in case of success, error code otherwise.
  */
 static int32_t iio_ad7124_close_channels(void *dev)
 {
@@ -617,24 +617,24 @@ static int32_t iio_ad7124_close_channels(void *dev)
 		ret = ad7124_read_register2(desc,
 					    (AD7124_CH0_MAP_REG + ch_idx),
 					    &reg_temp);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 		reg_temp &= ~AD7124_CH_MAP_REG_CH_ENABLE;
 		ret = ad7124_write_register2(desc,
 					     (AD7124_CH0_MAP_REG + ch_idx),
 					     reg_temp);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Get active channels in the form of a mask.
  * @param [in] desc - Device descriptor.
  * @param [out] mask - Resulting mask representing active channels.
- * @return SUCCESS in case of success, error code otherwise.
+ * @return 0 in case of success, error code otherwise.
  */
 static int32_t iio_ad7124_get_active_channels(struct ad7124_dev * desc,
 		uint32_t *mask)
@@ -647,13 +647,13 @@ static int32_t iio_ad7124_get_active_channels(struct ad7124_dev * desc,
 		ret = ad7124_read_register2(desc,
 					    (AD7124_CH0_MAP_REG + i),
 					    &reg_temp);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 		if (reg_temp & AD7124_CH_MAP_REG_CH_ENABLE)
 			*mask |= 1 << i;
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -673,19 +673,19 @@ static int32_t iio_ad7124_read_samples(void *dev, int32_t *buff,
 	uint32_t mask;
 
 	ret = iio_ad7124_get_active_channels(desc, &mask);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	get_next_ch_idx(mask, ch_id, &ch_id);
 	do {
 		ret = ad7124_wait_for_conv_ready(desc, 10000);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 		ret = ad7124_read_data(desc, &value);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 		ret = ad7124_get_read_chan_id(desc, &test);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 	} while (ch_id != test);
 	buff[i++] = value;
@@ -693,10 +693,10 @@ static int32_t iio_ad7124_read_samples(void *dev, int32_t *buff,
 	for (k = 0; k < nb_samples; k++) {
 		while (get_next_ch_idx(mask, ch_id, &ch_id)) {
 			ret = ad7124_wait_for_conv_ready(desc, 10000);
-			if (ret != SUCCESS)
+			if (ret != 0)
 				return ret;
 			ret = ad7124_read_data(desc, &value);
-			if (ret != SUCCESS)
+			if (ret != 0)
 				return ret;
 			buff[i++] = value;
 		}

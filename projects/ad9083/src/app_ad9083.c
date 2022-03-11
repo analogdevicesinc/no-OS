@@ -79,7 +79,7 @@ bool app_ad9083_check_sysref_rate(uint32_t lmfc, uint32_t sysref)
 /**
  * @brief Check AD9083 subclass 1 link status.
  * @param app - AD9083 app descriptor.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t app_ad9083_subclass1_status(struct app_ad9083 *app)
 {
@@ -97,13 +97,13 @@ int32_t app_ad9083_subclass1_status(struct app_ad9083 *app)
 		       stat & NO_OS_BIT(2) ? "(Unaligned)" : "",
 		       stat & NO_OS_BIT(3) ? "Established" : "Lost");
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Check AD9083 link status.
  * @param app - AD9083 app descriptor.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t app_ad9083_status(struct app_ad9083 *app)
 {
@@ -118,7 +118,7 @@ int32_t app_ad9083_status(struct app_ad9083 *app)
 
 
 		if ((stat & 0xFF) == 0x7D)
-			ret = SUCCESS;
+			ret = 0;
 		else
 			ret = -EIO;
 
@@ -134,7 +134,7 @@ int32_t app_ad9083_status(struct app_ad9083 *app)
 
 	} while (ret && retry--);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -142,7 +142,7 @@ int32_t app_ad9083_status(struct app_ad9083 *app)
  * @param app - AD9083 app descriptor.
  * @param init_param - The structure that contains the app initial
  * 		       parameters.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t app_ad9083_init(struct app_ad9083 **app,
 			struct app_ad9083_init *init_param)
@@ -188,32 +188,32 @@ int32_t app_ad9083_init(struct app_ad9083 **app,
 
 	app_ad9083 = (struct app_ad9083 *)calloc(1, sizeof(*app_ad9083));
 	if (!app_ad9083)
-		return FAILURE;
+		return -1;
 
 	status = ad9083_init(&app_ad9083->ad9083_phy, &ad9083_init_param);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		pr_err("error: %"PRId32" ad9083_initialize() \n", status);
 		free(app_ad9083);
 
-		return FAILURE;
+		return -1;
 	}
 
 	*app = app_ad9083;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Free the resources allocated by app_ad9083_init().
  * @param app - App descriptor.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t app_ad9083_remove(struct app_ad9083 *app)
 {
 	if (!app)
-		return FAILURE;
+		return -1;
 
 	free(app);
 
-	return SUCCESS;
+	return 0;
 }

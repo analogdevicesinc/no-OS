@@ -63,7 +63,7 @@ struct adc_desc {
  * @brief Activate adc channels
  * @param desc - Adc descriptor
  * @param mask - Channels to activates. Use ADUCM3029_CH define
- * @return \ref SUCCESS in case of success, negative value otherwise.
+ * @return 0 in case of success, negative value otherwise.
  */
 int32_t aducm3029_adc_update_active_channels(struct adc_desc *desc,
 		uint32_t mask)
@@ -73,7 +73,7 @@ int32_t aducm3029_adc_update_active_channels(struct adc_desc *desc,
 
 	desc->ch_mask = mask;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -83,7 +83,7 @@ int32_t aducm3029_adc_update_active_channels(struct adc_desc *desc,
  * @param buff - Buffer where to store data. The available size should be
  * number of activated channels * nb_samples.
  * @param nb_samples - Number of samples to read for each channel.
- * @return \ref SUCCESS in case of success, negative value otherwise.
+ * @return 0 in case of success, negative value otherwise.
  */
 int32_t aducm3029_adc_read(struct adc_desc *desc, uint16_t *buff,
 			   uint32_t nb_samples)
@@ -114,14 +114,14 @@ int32_t aducm3029_adc_read(struct adc_desc *desc, uint16_t *buff,
 			return -ret;
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Allocate adc_desc and initialize adc
  * @param desc - Adc descriptor
  * @param param - Initialization parameter
- * @return \ref SUCCESS in case of success, negative value otherwise.
+ * @return 0 in case of success, negative value otherwise.
  */
 int32_t aducm3029_adc_init(struct adc_desc **desc, struct adc_init_param *param)
 {
@@ -172,7 +172,7 @@ int32_t aducm3029_adc_init(struct adc_desc **desc, struct adc_init_param *param)
 
 	*desc = ldesc;
 
-	return SUCCESS;
+	return 0;
 close_adc:
 	adi_adc_PowerUp(ldesc->dev, false);
 	adi_adc_Close(ldesc->dev);
@@ -186,7 +186,7 @@ free_desc:
 /**
  * @brief Dealocate resources allocated by aducm3029_adc_init
  * @param desc - Adc descriptor
- * @return \ref SUCCESS
+ * @return 0
  */
 int32_t aducm3029_adc_remove(struct adc_desc *desc)
 {
@@ -196,5 +196,5 @@ int32_t aducm3029_adc_remove(struct adc_desc *desc)
 
 	free(desc);
 
-	return SUCCESS;
+	return 0;
 }

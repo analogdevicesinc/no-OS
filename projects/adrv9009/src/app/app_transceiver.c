@@ -134,19 +134,19 @@ adiHalErr_t fpga_xcvr_init(uint32_t rx_lane_rate_khz,
 	/* Initialize ADXCR */
 #ifndef ADRV9008_2
 	status = adxcvr_init(&rx_adxcvr, &rx_adxcvr_init);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("error: %s: adxcvr_init() failed\n", rx_adxcvr_init.name);
 		goto error_0;
 	}
 #endif
 #ifndef ADRV9008_1
 	status = adxcvr_init(&tx_adxcvr, &tx_adxcvr_init);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("error: %s: adxcvr_init() failed\n", tx_adxcvr_init.name);
 		goto error_8;
 	}
 	status = adxcvr_init(&rx_os_adxcvr, &rx_os_adxcvr_init);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("error: %s: adxcvr_init() failed\n", rx_os_adxcvr_init.name);
 		goto error_9;
 	}
@@ -154,19 +154,19 @@ adiHalErr_t fpga_xcvr_init(uint32_t rx_lane_rate_khz,
 #ifndef ALTERA_PLATFORM
 #ifndef ADRV9008_2
 	status = adxcvr_clk_enable(rx_adxcvr);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("error: %s: adxcvr_clk_enable() failed\n", rx_adxcvr->name);
 		goto error_10;
 	}
 #endif
 #ifndef ADRV9008_1
 	status = adxcvr_clk_enable(tx_adxcvr);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("error: %s: adxcvr_clk_enable() failed\n", tx_adxcvr->name);
 		goto error_10;
 	}
 	status = adxcvr_clk_enable(rx_os_adxcvr);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("error: %s: adxcvr_clk_enable() failed\n", rx_os_adxcvr->name);
 		goto error_10;
 	}

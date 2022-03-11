@@ -88,7 +88,7 @@ int32_t ad9467_setup(struct ad9467_dev **device,
  *
  * @param dev - The device structure.
  *
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
 *******************************************************************************/
 int32_t ad9467_remove(struct ad9467_dev *dev)
 {

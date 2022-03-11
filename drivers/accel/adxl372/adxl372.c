@@ -694,7 +694,7 @@ int32_t adxl372_get_accel_data(struct adxl372_dev *dev,
  * @param device - The device structure.
  * @param init_param - The structure that contains the device initial
  *		       parameters.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t adxl372_init(struct adxl372_dev **device,
 		     struct adxl372_init_param init_param)

@@ -53,7 +53,7 @@
  * @param desc - Instance of UART.
  * @param data - Pointer to buffer containing data.
  * @param bytes_number - Number of bytes to read.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t no_os_uart_read(struct no_os_uart_desc *desc, uint8_t *data,
 			uint32_t bytes_number)
@@ -70,7 +70,7 @@ int32_t no_os_uart_read(struct no_os_uart_desc *desc, uint8_t *data,
 		// Unused variable - fix compiler warning
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -78,7 +78,7 @@ int32_t no_os_uart_read(struct no_os_uart_desc *desc, uint8_t *data,
  * @param desc - Instance of UART.
  * @param data - Pointer to buffer containing data.
  * @param bytes_number - Number of bytes to read.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t no_os_uart_write(struct no_os_uart_desc *desc, const uint8_t *data,
 			 uint32_t bytes_number)
@@ -95,7 +95,7 @@ int32_t no_os_uart_write(struct no_os_uart_desc *desc, const uint8_t *data,
 		// Unused variable - fix compiler warning
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -105,7 +105,7 @@ int32_t no_os_uart_write(struct no_os_uart_desc *desc, const uint8_t *data,
  * @param desc:	Descriptor of the UART device
  * @param data:	Buffer where data will be read
  * @param bytes_number:	Number of bytes to be read.
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t no_os_uart_read_nonblocking(struct no_os_uart_desc *desc, uint8_t *data,
 				    uint32_t bytes_number)
@@ -122,7 +122,7 @@ int32_t no_os_uart_read_nonblocking(struct no_os_uart_desc *desc, uint8_t *data,
 		// Unused variable - fix compiler warning
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -132,7 +132,7 @@ int32_t no_os_uart_read_nonblocking(struct no_os_uart_desc *desc, uint8_t *data,
  * @param desc:	Descriptor of the UART device
  * @param data:	Buffer where data will be written
  * @param bytes_number:	Number of bytes to be written.
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t no_os_uart_write_nonblocking(struct no_os_uart_desc *desc,
 				     const uint8_t *data,
@@ -150,14 +150,14 @@ int32_t no_os_uart_write_nonblocking(struct no_os_uart_desc *desc,
 		// Unused variable - fix compiler warning
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Initialize the UART communication peripheral.
  * @param desc - The UART descriptor.
  * @param param - The structure that contains the UART parameters.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t no_os_uart_init(struct no_os_uart_desc **desc,
 			struct no_os_uart_init_param *param)
@@ -170,13 +170,13 @@ int32_t no_os_uart_init(struct no_os_uart_desc **desc,
 		// Unused variable - fix compiler warning
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Free the resources allocated by no_os_uart_init().
  * @param desc - The UART descriptor.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t no_os_uart_remove(struct no_os_uart_desc *desc)
 {
@@ -184,7 +184,7 @@ int32_t no_os_uart_remove(struct no_os_uart_desc *desc)
 		// Unused variable - fix compiler warning
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -198,5 +198,5 @@ uint32_t no_os_uart_get_errors(struct no_os_uart_desc *desc)
 		// Unused variable - fix compiler warning
 	}
 
-	return SUCCESS;
+	return 0;
 }

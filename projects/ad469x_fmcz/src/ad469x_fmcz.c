@@ -76,22 +76,22 @@ int32_t iio_ad469x_prepare_conversion(struct ad469x_dev *dev, uint32_t mask)
 	int32_t	ret;
 
 	if (mask == g_mask)
-		return SUCCESS;
+		return 0;
 
 	ret = ad469x_exit_conversion_mode(dev);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = ad469x_std_sequence_ch(dev, mask);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = ad469x_set_channel_sequence(dev, AD469x_standard_seq);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = ad469x_enter_conversion_mode(dev);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	g_mask = mask;
@@ -227,40 +227,40 @@ int main()
 
 #ifdef ADVANCED_SEQ
 	ret = ad469x_adv_sequence_set_num_slots(dev, 2);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = ad469x_adv_sequence_set_slot(dev, 0, 0);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = ad469x_adv_sequence_set_slot(dev, 1, 1);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = ad469x_adv_seq_osr(dev, 0, AD469x_OSR_4);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = ad469x_adv_seq_osr(dev, 1, AD469x_OSR_16);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = ad469x_sequence_enable_temp(dev);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = ad469x_set_channel_sequence(dev, AD469x_advanced_seq);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = ad469x_enter_conversion_mode(dev);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	while (1) {
 		ret = ad469x_seq_read_data(dev, buf, AD469x_EVB_SAMPLE_NO);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 
 		for (i = 0; i < AD469x_EVB_SAMPLE_NO * 3; i += 3)
@@ -269,28 +269,28 @@ int main()
 	}
 #elif defined(STANDARD_SEQ)
 	ret = ad469x_std_sequence_ch(dev, AD469x_CHANNEL(1) | AD469x_CHANNEL(0));
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = ad469x_sequence_disable_temp(dev);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = ad469x_set_channel_sequence(dev, AD469x_standard_seq);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = ad469x_std_seq_osr(dev, AD469x_OSR_4);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = ad469x_enter_conversion_mode(dev);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	while (1) {
 		ret = ad469x_seq_read_data(dev, &buf[0], AD469x_EVB_SAMPLE_NO);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 
 		for (i = 0; i < AD469x_EVB_SAMPLE_NO * 2; i += 2)
@@ -299,11 +299,11 @@ int main()
 	}
 #else
 	ret = ad469x_set_channel_sequence(dev, AD469x_single_cycle);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = ad469x_enter_conversion_mode(dev);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	while (1) {
@@ -311,7 +311,7 @@ int main()
 		j++;
 		ret = ad469x_read_data(dev, ch, buf, AD469x_EVB_SAMPLE_NO);
 		printf("ch: %"PRIu32"\n", ch);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 
 		for (i = 0; i < AD469x_EVB_SAMPLE_NO; i++)

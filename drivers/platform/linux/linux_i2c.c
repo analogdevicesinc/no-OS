@@ -73,7 +73,7 @@ struct linux_i2c_desc {
  * @brief Initialize the I2C communication peripheral.
  * @param desc - The I2C descriptor.
  * @param param - The structure that contains the I2C parameters.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t linux_i2c_init(struct no_os_i2c_desc **desc,
 		       const struct no_os_i2c_init_param *param)
@@ -85,7 +85,7 @@ int32_t linux_i2c_init(struct no_os_i2c_desc **desc,
 
 	descriptor = malloc(sizeof(*descriptor));
 	if (!descriptor)
-		return FAILURE;
+		return -1;
 
 	linux_desc = (struct linux_i2c_desc*) malloc(sizeof(struct linux_i2c_desc));
 	if (!linux_desc)
@@ -106,20 +106,20 @@ int32_t linux_i2c_init(struct no_os_i2c_desc **desc,
 
 	*desc = descriptor;
 
-	return SUCCESS;
+	return 0;
 
 free:
 	free(linux_desc);
 free_desc:
 	free(descriptor);
 
-	return FAILURE;
+	return -1;
 }
 
 /**
  * @brief Free the resources allocated by no_os_i2c_init().
  * @param desc - The I2C descriptor.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t linux_i2c_remove(struct no_os_i2c_desc *desc)
 {
@@ -131,13 +131,13 @@ int32_t linux_i2c_remove(struct no_os_i2c_desc *desc)
 	ret = close(linux_desc->fd);
 	if (ret < 0) {
 		printf("%s: Can't close device\n\r", __func__);
-		return FAILURE;
+		return -1;
 	}
 
 	free(desc->extra);
 	free(desc);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -148,7 +148,7 @@ int32_t linux_i2c_remove(struct no_os_i2c_desc *desc)
  * @param stop_bit - Stop condition control.
  *                   Example: 0 - A stop condition will not be generated;
  *                            1 - A stop condition will be generated.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t linux_i2c_write(struct no_os_i2c_desc *desc,
 			uint8_t *data,
@@ -163,20 +163,20 @@ int32_t linux_i2c_write(struct no_os_i2c_desc *desc,
 	ret = ioctl(linux_desc->fd, I2C_SLAVE, desc->slave_address);
 	if (ret < 0) {
 		printf("%s: Can't select device\n\r", __func__);
-		return FAILURE;
+		return -1;
 	}
 
 	ret = write(linux_desc->fd, data, bytes_number);
 	if (ret < 0) {
 		printf("%s: Can't write to file\n\r", __func__);
-		return FAILURE;
+		return -1;
 	}
 
 	if (stop_bit) {
 		// Unused variable - fix compiler warning
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -187,7 +187,7 @@ int32_t linux_i2c_write(struct no_os_i2c_desc *desc,
  * @param stop_bit - Stop condition control.
  *                   Example: 0 - A stop condition will not be generated;
  *                            1 - A stop condition will be generated.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t linux_i2c_read(struct no_os_i2c_desc *desc,
 		       uint8_t *data,
@@ -202,20 +202,20 @@ int32_t linux_i2c_read(struct no_os_i2c_desc *desc,
 	ret = ioctl(linux_desc->fd, I2C_SLAVE, desc->slave_address);
 	if (ret < 0) {
 		printf("%s: Can't select device\n\r", __func__);
-		return FAILURE;
+		return -1;
 	}
 
 	ret = read(linux_desc->fd, data, bytes_number);
 	if (ret < 0) {
 		printf("%s: Can't read from file\n\r", __func__);
-		return FAILURE;
+		return -1;
 	}
 
 	if (stop_bit) {
 		// Unused variable - fix compiler warning
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**

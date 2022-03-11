@@ -76,7 +76,7 @@ int8_t ad7303_init(struct ad7303_dev **device,
  *
  * @param dev - The device structure.
  *
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
 *******************************************************************************/
 int32_t ad7303_remove(struct ad7303_dev *dev)
 {

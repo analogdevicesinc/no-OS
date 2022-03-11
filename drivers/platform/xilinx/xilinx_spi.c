@@ -74,7 +74,7 @@
  *
  * @param xdesc Platform specific SPI descriptor
  * @param xinit Platform specific SPI init param
- * @return int32_t FAILURE if the device couldn't be found or configured
+ * @return int32_t -1 if the device couldn't be found or configured
  */
 static int32_t spi_init_pl(struct no_os_spi_desc *desc,
 			   const struct no_os_spi_init_param *param)
@@ -87,7 +87,7 @@ static int32_t spi_init_pl(struct no_os_spi_desc *desc,
 	xdesc = (xil_spi_desc*)malloc(sizeof(xil_spi_desc));
 	if(!xdesc) {
 		free(xdesc);
-		return FAILURE;
+		return -1;
 	}
 
 	desc->extra = xdesc;
@@ -107,11 +107,11 @@ static int32_t spi_init_pl(struct no_os_spi_desc *desc,
 				 xdesc->config,
 				 ((XSpi_Config*)xdesc->config)
 				 ->BaseAddress);
-	if(ret != SUCCESS)
+	if(ret != 0)
 		goto pl_error;
 
 	ret = XSpi_Initialize(xdesc->instance, param->device_id);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		goto pl_error;
 
 	ret = XSpi_SetOptions(xdesc->instance,
@@ -120,22 +120,22 @@ static int32_t spi_init_pl(struct no_os_spi_desc *desc,
 			       XSP_CLK_ACTIVE_LOW_OPTION : 0) |
 			      ((desc->mode & NO_OS_SPI_CPHA) ?
 			       XSP_CLK_PHASE_1_OPTION : 0));
-	if (ret != SUCCESS)
+	if (ret != 0)
 		goto pl_error;
 
 	ret = XSpi_Start(xdesc->instance);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		goto pl_error;
 
 	XSpi_IntrGlobalDisable((XSpi *)(xdesc->instance));
 
-	return SUCCESS;
+	return 0;
 
 pl_error:
 	free(xdesc->instance);
 	free(xdesc);
 #endif
-	return FAILURE;
+	return -1;
 }
 
 /**
@@ -143,7 +143,7 @@ pl_error:
  *
  * @param xdesc Platform specific SPI descriptor
  * @param xinit Platform specific SPI init param
- * @return int32_t FAILURE if the device couldn't be found or configured
+ * @return int32_t -1 if the device couldn't be found or configured
  */
 static int32_t spi_init_ps(struct no_os_spi_desc *desc,
 			   const struct no_os_spi_init_param *param)
@@ -161,7 +161,7 @@ static int32_t spi_init_ps(struct no_os_spi_desc *desc,
 	xdesc = (xil_spi_desc*)malloc(sizeof(xil_spi_desc));
 	if(!xdesc) {
 		free(xdesc);
-		return FAILURE;
+		return -1;
 	}
 
 	desc->extra = xdesc;
@@ -181,7 +181,7 @@ static int32_t spi_init_ps(struct no_os_spi_desc *desc,
 				   xdesc->config,
 				   ((XSpiPs_Config*)xdesc->config)
 				   ->BaseAddress);
-	if(ret != SUCCESS)
+	if(ret != 0)
 		goto ps_error;
 
 	switch (param->device_id) {
@@ -231,23 +231,23 @@ static int32_t spi_init_ps(struct no_os_spi_desc *desc,
 
 	ret = XSpiPs_SetClkPrescaler(xdesc->instance, prescaler);
 
-	if(ret != SUCCESS)
+	if(ret != 0)
 		goto ps_error;
 
-	return SUCCESS;
+	return 0;
 
 ps_error:
 	free(xdesc->instance);
 	free(xdesc);
 #endif
-	return FAILURE;
+	return -1;
 }
 
 /**
  * @brief Initialize the SPI communication peripheral.
  * @param desc - The SPI descriptor.
  * @param param - The structure that contains the SPI parameters.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t xil_spi_init(struct no_os_spi_desc **desc,
 		     const struct no_os_spi_init_param *param)
@@ -256,13 +256,13 @@ int32_t xil_spi_init(struct no_os_spi_desc **desc,
 	enum xil_spi_type		*spi_type;
 
 	if (!param) {
-		return FAILURE;
+		return -1;
 	}
 
 	*desc = malloc(sizeof(**desc));
 	if(! *desc) {
 		free(*desc);
-		return FAILURE;
+		return -1;
 	}
 
 	spi_type = param->extra;
@@ -288,11 +288,11 @@ int32_t xil_spi_init(struct no_os_spi_desc **desc,
 		break;
 	}
 
-	if (ret != SUCCESS) {
+	if (ret != 0) {
 init_error:
 		free(*desc);
 
-		return FAILURE;
+		return -1;
 	}
 
 	return ret;
@@ -301,7 +301,7 @@ init_error:
 /**
  * @brief Free the resources allocated by no_os_spi_init().
  * @param desc - The SPI descriptor.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t xil_spi_remove(struct no_os_spi_desc *desc)
 {
@@ -314,7 +314,7 @@ int32_t xil_spi_remove(struct no_os_spi_desc *desc)
 	spi_type = desc->extra;
 
 	if(!spi_type)
-		return FAILURE;
+		return -1;
 
 	switch (*spi_type ) {
 	case SPI_PL:
@@ -322,10 +322,10 @@ int32_t xil_spi_remove(struct no_os_spi_desc *desc)
 		xdesc = desc->extra;
 
 		if(!xdesc)
-			return FAILURE;
+			return -1;
 
 		ret = XSpi_Stop((XSpi *)(xdesc->instance));
-		if(ret != SUCCESS)
+		if(ret != 0)
 			goto error;
 #endif
 		break;
@@ -334,7 +334,7 @@ int32_t xil_spi_remove(struct no_os_spi_desc *desc)
 		xdesc = desc->extra;
 
 		if(!xdesc)
-			return FAILURE;
+			return -1;
 #endif
 		break;
 
@@ -343,7 +343,7 @@ int32_t xil_spi_remove(struct no_os_spi_desc *desc)
 error:
 #endif
 	default:
-		return FAILURE;
+		return -1;
 	}
 
 	if(xdesc)
@@ -351,7 +351,7 @@ error:
 	free(desc->extra);
 	free(desc);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -359,7 +359,7 @@ error:
  * @param desc - The SPI descriptor.
  * @param data - The buffer with the transmitted/received data.
  * @param bytes_number - Number of bytes to write/read.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t xil_spi_write_and_read(struct no_os_spi_desc *desc,
 			       uint8_t *data,
@@ -372,12 +372,12 @@ int32_t xil_spi_write_and_read(struct no_os_spi_desc *desc,
 	struct xil_spi_desc	*xdesc;
 	enum xil_spi_type	*spi_type;
 
-	ret = FAILURE;
+	ret = -1;
 
 	spi_type = desc->extra;
 
 	if(!spi_type)
-		return FAILURE;
+		return -1;
 
 	xdesc = desc->extra;
 
@@ -390,7 +390,7 @@ int32_t xil_spi_write_and_read(struct no_os_spi_desc *desc,
 				       XSP_CLK_ACTIVE_LOW_OPTION : 0) |
 				      ((desc->mode & NO_OS_SPI_CPHA) ?
 				       XSP_CLK_PHASE_1_OPTION : 0));
-		if (ret != SUCCESS)
+		if (ret != 0)
 			goto error;
 
 		ctrl_reg = XSpi_GetControlReg(((XSpi*)xdesc->instance));
@@ -402,14 +402,14 @@ int32_t xil_spi_write_and_read(struct no_os_spi_desc *desc,
 
 		ret = XSpi_SetSlaveSelect(xdesc->instance,
 					  0x01 << desc->chip_select);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			goto error;
 
 		ret = XSpi_Transfer(xdesc->instance,
 				    data,
 				    data,
 				    bytes_number);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			goto error;
 #endif
 		break;
@@ -424,27 +424,27 @@ int32_t xil_spi_write_and_read(struct no_os_spi_desc *desc,
 					 XSPIPS_CLK_ACTIVE_LOW_OPTION : 0) |
 					((desc->mode & NO_OS_SPI_CPHA) ?
 					 XSPIPS_CLK_PHASE_1_OPTION : 0));
-		if (ret != SUCCESS)
+		if (ret != 0)
 			goto error;
 
 		ret = XSpiPs_SetSlaveSelect(xdesc->instance,
 					    desc->chip_select);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			goto error;
 		ret = XSpiPs_PolledTransfer(xdesc->instance,
 					    data,
 					    data,
 					    bytes_number);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			goto error;
 		ret = XSpiPs_SetSlaveSelect(xdesc->instance, SPI_DEASSERT_CURRENT_SS);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			goto error;
 #endif
 		break;
 error:
 	default:
-		return FAILURE;
+		return -1;
 	}
 
 	return ret;

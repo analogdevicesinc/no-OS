@@ -77,7 +77,7 @@ struct linux_gpio_desc {
  * @brief Obtain the GPIO decriptor.
  * @param desc - The GPIO descriptor.
  * @param param - GPIO initialization parameters
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t linux_gpio_get(struct no_os_gpio_desc **desc,
 		       const struct no_os_gpio_init_param *param)
@@ -92,7 +92,7 @@ int32_t linux_gpio_get(struct no_os_gpio_desc **desc,
 
 	descriptor = calloc(1, sizeof(*descriptor));
 	if (!descriptor)
-		return FAILURE;
+		return -1;
 
 	linux_desc = calloc(1, sizeof(*linux_desc));
 	if (!linux_desc)
@@ -149,7 +149,7 @@ int32_t linux_gpio_get(struct no_os_gpio_desc **desc,
 
 	*desc = descriptor;
 
-	return SUCCESS;
+	return 0;
 
 close_dir:
 	close(linux_desc->direction_fd);
@@ -158,27 +158,27 @@ free_linux_desc:
 free_desc:
 	free(descriptor);
 
-	return FAILURE;
+	return -1;
 }
 
 /**
  * @brief Get the value of an optional GPIO.
  * @param desc - The GPIO descriptor.
  * @param param - GPIO Initialization parameters.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t linux_gpio_get_optional(struct no_os_gpio_desc **desc,
 				const struct no_os_gpio_init_param *param)
 {
 	linux_gpio_get(desc, param);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Free the resources allocated by no_os_gpio_get().
  * @param desc - The SPI descriptor.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t linux_gpio_remove(struct no_os_gpio_desc *desc)
 {
@@ -193,38 +193,38 @@ int32_t linux_gpio_remove(struct no_os_gpio_desc *desc)
 	ret = close(linux_desc->direction_fd);
 	if (ret < 0) {
 		printf("%s: Can't close device\n\r", __func__);
-		return FAILURE;
+		return -1;
 	}
 
 	ret = close(linux_desc->value_fd);
 	if (ret < 0) {
 		printf("%s: Can't close device\n\r", __func__);
-		return FAILURE;
+		return -1;
 	}
 
 	fd = open("/sys/class/gpio/unexport", O_WRONLY);
 	if (fd < 0) {
 		printf("%s: Can't open device\n\r", __func__);
-		return FAILURE;
+		return -1;
 	}
 
 	len = sprintf(path, "%d", desc->number);
 	ret = write(fd, path, len);
 	if (ret < 0) {
 		printf("%s: Can't write to file\n\r", __func__);
-		return FAILURE;
+		return -1;
 	}
 
 	ret = close(fd);
 	if (ret < 0) {
 		printf("%s: Can't close device\n\r", __func__);
-		return FAILURE;
+		return -1;
 	}
 
 	free(desc->extra);
 	free(desc);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -233,7 +233,7 @@ int32_t linux_gpio_remove(struct no_os_gpio_desc *desc)
  * @param value - The value.
  *                Example: NO_OS_GPIO_HIGH
  *                         NO_OS_GPIO_LOW
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t linux_gpio_set_value(struct no_os_gpio_desc *desc,
 			     uint8_t value)
@@ -249,10 +249,10 @@ int32_t linux_gpio_set_value(struct no_os_gpio_desc *desc,
 		ret = write(linux_desc->value_fd, "0", 2);
 	if (ret < 0) {
 		printf("%s: Can't write to file\n\r", __func__);
-		return FAILURE;
+		return -1;
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -261,7 +261,7 @@ int32_t linux_gpio_set_value(struct no_os_gpio_desc *desc,
  * @param value - The value.
  *                Example: NO_OS_GPIO_HIGH
  *                         NO_OS_GPIO_LOW
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t linux_gpio_get_value(struct no_os_gpio_desc *desc,
 			     uint8_t *value)
@@ -275,7 +275,7 @@ int32_t linux_gpio_get_value(struct no_os_gpio_desc *desc,
 	ret = read(linux_desc->value_fd, &data, 1);
 	if (ret < 0) {
 		printf("%s: Can't read from file\n\r", __func__);
-		return FAILURE;
+		return -1;
 	}
 
 	if(data == '0')
@@ -283,13 +283,13 @@ int32_t linux_gpio_get_value(struct no_os_gpio_desc *desc,
 	else
 		*value = NO_OS_GPIO_HIGH;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Enable the input direction of the specified GPIO.
  * @param desc - The GPIO descriptor.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t linux_gpio_direction_input(struct no_os_gpio_desc *desc)
 {
@@ -301,10 +301,10 @@ int32_t linux_gpio_direction_input(struct no_os_gpio_desc *desc)
 	ret = write(linux_desc->direction_fd, "in", 3);
 	if (ret < 0) {
 		printf("%s: Can't write to file\n\r", __func__);
-		return FAILURE;
+		return -1;
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -313,7 +313,7 @@ int32_t linux_gpio_direction_input(struct no_os_gpio_desc *desc)
  * @param value - The value.
  *                Example: NO_OS_GPIO_HIGH
  *                         NO_OS_GPIO_LOW
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t linux_gpio_direction_output(struct no_os_gpio_desc *desc,
 				    uint8_t value)
@@ -326,16 +326,16 @@ int32_t linux_gpio_direction_output(struct no_os_gpio_desc *desc,
 	ret = write(linux_desc->direction_fd, "out", 4);
 	if (ret < 0) {
 		printf("%s: Can't write to file\n\r", __func__);
-		return FAILURE;
+		return -1;
 	}
 
 	ret = linux_gpio_set_value(desc, value);
-	if (ret != SUCCESS) {
+	if (ret != 0) {
 		printf("%s: Can't set value\n\r", __func__);
-		return FAILURE;
+		return -1;
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -344,7 +344,7 @@ int32_t linux_gpio_direction_output(struct no_os_gpio_desc *desc,
  * @param direction - The direction.
  *                    Example: NO_OS_GPIO_OUT
  *                             NO_OS_GPIO_IN
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t linux_gpio_get_direction(struct no_os_gpio_desc *desc,
 				 uint8_t *direction)
@@ -358,7 +358,7 @@ int32_t linux_gpio_get_direction(struct no_os_gpio_desc *desc,
 	ret = read(linux_desc->direction_fd, &data, 1);
 	if (ret < 0) {
 		printf("%s: Can't read from file\n\r", __func__);
-		return FAILURE;
+		return -1;
 	}
 
 	if (data == 'o')
@@ -366,7 +366,7 @@ int32_t linux_gpio_get_direction(struct no_os_gpio_desc *desc,
 	else
 		*direction = NO_OS_GPIO_IN;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**

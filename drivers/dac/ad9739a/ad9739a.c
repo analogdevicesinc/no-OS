@@ -454,7 +454,7 @@ int32_t ad9739a_setup(struct ad9739a_dev **device,
  *
  * @param dev - The device structure.
  *
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
 *******************************************************************************/
 int32_t ad9739a_remove(struct ad9739a_dev *dev)
 {

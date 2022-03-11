@@ -124,7 +124,7 @@ int ad717x_set_adc_mode(ad717x_dev *device, enum ad717x_mode adc_mode)
  * @param device - AD717x Device Descriptor
  * @param channel_id - Channel whose Analog input is to be configured
  * @param analog_input - Analog Inputs to the Channel
- * @return Returns SUCCESS for success or negative error code in case of failure.
+ * @return Returns 0 for success or negative error code in case of failure.
 *****************************************************************************/
 int ad717x_connect_analog_input(ad717x_dev *device, uint8_t channel_id,
 				union ad717x_analog_inputs analog_input)
@@ -191,7 +191,7 @@ int ad717x_connect_analog_input(ad717x_dev *device, uint8_t channel_id,
  * @param device - AD717x Device Descriptor
  * @param channel_id - Channel ID (number)
  * @param setup - Setup ID (number)
- * @return Returns SUCCESS for success or negative error code in case of failure.
+ * @return Returns 0 for success or negative error code in case of failure.
 ******************************************************************************/
 int ad717x_assign_setup(ad717x_dev *device, uint8_t channel_id, uint8_t setup)
 {
@@ -254,7 +254,7 @@ int ad717x_set_polarity(ad717x_dev* device, bool bipolar, uint8_t setup_id)
  * @param device - AD717x Device Descriptor
  * @param ref_source - Reference source
  * @param setup_id - Setup ID (Number)
- * @return Returns SUCCESS for success or negative error code in case of failure.
+ * @return Returns 0 for success or negative error code in case of failure.
 ******************************************************************************/
 int ad717x_set_reference_source(ad717x_dev* device,
 				enum ad717x_reference_source ref_source, uint8_t setup_id)
@@ -346,7 +346,7 @@ int ad717x_enable_input_buffer(ad717x_dev* device,
  * @param device - AD717x Device Descriptor
  * @param id - Channel ID (number) requested
  * @param adc_raw_data ADC Raw Value
- * @return Returns SUCCESS for success or negative error code in case of failure.
+ * @return Returns 0 for success or negative error code in case of failure.
 ******************************************************************************/
 int ad717x_single_read(ad717x_dev* device,  uint8_t id, int32_t *adc_raw_data)
 {
@@ -865,7 +865,7 @@ int32_t AD717X_Init(ad717x_dev **device,
 /***************************************************************************//**
  * @brief Free the resources allocated by AD717X_Init().
  * @param dev - The device structure.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
 *******************************************************************************/
 int32_t AD717X_remove(ad717x_dev *dev)
 {

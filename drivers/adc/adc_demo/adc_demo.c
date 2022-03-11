@@ -76,7 +76,7 @@ const uint16_t sine_lut[128] = {
  * @brief init function for the adc demo driver
  * @param desc - descriptor for the adc
  * @param param - initialization param for adc
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t adc_demo_init(struct adc_demo_desc **desc,
 		      struct adc_demo_init_param *param)
@@ -94,13 +94,13 @@ int32_t adc_demo_init(struct adc_demo_desc **desc,
 	adesc->adc_global_attr = param->dev_global_attr;
 	*desc = adesc;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief free allocated resources
  * @param desc - descriptor for the adc
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t adc_demo_remove(struct adc_demo_desc *desc)
 {
@@ -109,14 +109,14 @@ int32_t adc_demo_remove(struct adc_demo_desc *desc)
 
 	free(desc);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief active adc channels
  * @param dev - descriptor for the adc
  * @param mask - active channels mask
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t update_adc_channels(void *dev, uint32_t mask)
 {
@@ -130,13 +130,13 @@ int32_t update_adc_channels(void *dev, uint32_t mask)
 	desc->active_ch = mask;
 	/* If a real device. Here needs to be selected the channels to be read*/
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief close all channels
  * @param dev - physical instance of an adc device
- * @return SUCCESS in case of success.
+ * @return 0 in case of success.
  */
 int32_t close_adc_channels(void* dev)
 {
@@ -149,7 +149,7 @@ int32_t close_adc_channels(void* dev)
 
 	desc->active_ch = 0;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -219,7 +219,7 @@ int32_t adc_read_samples(void* dev, uint16_t* buff, uint32_t samples)
  * @param desc - descriptor for the adc
  * @param reg_index - the address at which we want to read
  * @param readval- the value read from register
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t adc_demo_reg_read(struct adc_demo_desc *desc, uint8_t reg_index,
 			  uint8_t *readval)
@@ -229,7 +229,7 @@ int32_t adc_demo_reg_read(struct adc_demo_desc *desc, uint8_t reg_index,
 
 	*readval = desc->reg[reg_index];
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -237,7 +237,7 @@ int32_t adc_demo_reg_read(struct adc_demo_desc *desc, uint8_t reg_index,
  * @param desc - descriptor for the adc
  * @param reg_index - the address at which we want to write
  * @param writeval - the value to be written
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t adc_demo_reg_write(struct adc_demo_desc *desc, uint8_t reg_index,
 			   uint8_t writeval)
@@ -248,5 +248,5 @@ int32_t adc_demo_reg_write(struct adc_demo_desc *desc, uint8_t reg_index,
 
 	desc->reg[reg_index] = writeval;
 
-	return SUCCESS;
+	return 0;
 }

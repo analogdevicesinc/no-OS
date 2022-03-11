@@ -57,7 +57,7 @@ const struct no_os_tdm_platform_ops stm32_tdm_platform_ops = {
  * @brief Initialize the TDM communication peripheral.
  * @param desc - The TDM descriptor.
  * @param param - The structure that contains the TDM parameters.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t stm32_tdm_init(struct no_os_tdm_desc **desc,
 		       const struct no_os_tdm_init_param *param)
@@ -160,7 +160,7 @@ int32_t stm32_tdm_init(struct no_os_tdm_desc **desc,
 
 	*desc = tdm_desc;
 
-	return SUCCESS;
+	return 0;
 error:
 	free(tdm_desc);
 	free(tdesc);
@@ -170,7 +170,7 @@ error:
 /**
  * @brief Free the resources allocated by stm32_tdm_init().
  * @param desc - The TDM descriptor.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t stm32_tdm_remove(struct no_os_tdm_desc *desc)
 {
@@ -184,7 +184,7 @@ int32_t stm32_tdm_remove(struct no_os_tdm_desc *desc)
 	free(desc->extra);
 	free(desc);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -192,7 +192,7 @@ int32_t stm32_tdm_remove(struct no_os_tdm_desc *desc)
  * @param desc - The TDM descriptor.
  * @param data - The buffer to fill with the received data.
  * @param nb_samples - Number of samples to read.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t stm32_tdm_read(struct no_os_tdm_desc *desc,
 		       void *data,
@@ -205,7 +205,7 @@ int32_t stm32_tdm_read(struct no_os_tdm_desc *desc,
 		return -EINVAL;
 
 	if (!nb_samples)
-		return SUCCESS;
+		return 0;
 
 	tdesc = desc->extra;
 

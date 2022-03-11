@@ -101,7 +101,7 @@ static ssize_t iio_ad3552r_attr_get(void *device, char *buf, size_t len,
 		err = ad3552r_get_ch_value(iio_dac->dac,
 					   AD3552R_CH_DAC_POWERDOWN,
 					   channel->ch_num, &val16);
-		if (IS_ERR_VALUE(err))
+		if (NO_OS_IS_ERR_VALUE(err))
 			return err;
 
 		vals[0] = !val16;
@@ -111,7 +111,7 @@ static ssize_t iio_ad3552r_attr_get(void *device, char *buf, size_t len,
 	case AD3552R_IIO_ATTR_RAW:
 		err = ad3552r_get_ch_value(iio_dac->dac, AD3552R_CH_CODE,
 					   channel->ch_num, &val16);
-		if (IS_ERR_VALUE(err))
+		if (NO_OS_IS_ERR_VALUE(err))
 			return err;
 
 		vals[0] = val16;
@@ -121,7 +121,7 @@ static ssize_t iio_ad3552r_attr_get(void *device, char *buf, size_t len,
 	case AD3552R_IIO_ATTR_OFFSET:
 		err = ad3552r_get_offset(iio_dac->dac, channel->ch_num,
 					 &vals[0], &vals[1]);
-		if (IS_ERR_VALUE(err))
+		if (NO_OS_IS_ERR_VALUE(err))
 			return err;
 
 		return iio_format_value(buf, len, IIO_VAL_INT_PLUS_MICRO, 2,
@@ -129,7 +129,7 @@ static ssize_t iio_ad3552r_attr_get(void *device, char *buf, size_t len,
 	case AD3552R_IIO_ATTR_SCALE:
 		err = ad3552r_get_scale(iio_dac->dac, channel->ch_num,
 					&vals[0], &vals[1]);
-		if (IS_ERR_VALUE(err))
+		if (NO_OS_IS_ERR_VALUE(err))
 			return err;
 
 		return iio_format_value(buf, len, IIO_VAL_INT_PLUS_MICRO, 2,
@@ -152,12 +152,12 @@ static ssize_t iio_ad3552r_attr_set(void *device, char *buf, size_t len,
 		err = ad3552r_set_ch_value(iio_dac->dac,
 					   AD3552R_CH_DAC_POWERDOWN,
 					   channel->ch_num, !val);
-		if (IS_ERR_VALUE(err))
+		if (NO_OS_IS_ERR_VALUE(err))
 			return err;
 	case AD3552R_IIO_ATTR_RAW:
 		err = ad3552r_set_ch_value(iio_dac->dac, AD3552R_CH_CODE,
 					   channel->ch_num, val);
-		if (IS_ERR_VALUE(err))
+		if (NO_OS_IS_ERR_VALUE(err))
 			return err;
 	default:
 		return -EINVAL;
@@ -210,7 +210,7 @@ static int32_t iio_ad3552r_prep_wr(struct iio_ad3552r_desc *iio_dac,
 {
 	iio_dac->mask = mask;
 
-	return SUCCESS;
+	return 0;
 }
 
 static int32_t iio_ad3552r_wr_dev(struct iio_ad3552r_desc *iio_dac,
@@ -245,7 +245,7 @@ int32_t iio_ad3552r_init(struct iio_ad3552r_desc **iio_dac,
 		return -ENOMEM;
 
 	err = ad3552r_init(&liio_dac->dac, param);
-	if (IS_ERR_VALUE(err)) {
+	if (NO_OS_IS_ERR_VALUE(err)) {
 		free(liio_dac);
 		return err;
 	}
@@ -264,7 +264,7 @@ int32_t iio_ad3552r_init(struct iio_ad3552r_desc **iio_dac,
 
 	*iio_dac = liio_dac;
 
-	return SUCCESS;
+	return 0;
 }
 
 int32_t iio_ad3552r_remove(struct iio_ad3552r_desc *iio_dac)
@@ -276,7 +276,7 @@ int32_t iio_ad3552r_remove(struct iio_ad3552r_desc *iio_dac)
 
 	free(iio_dac);
 
-	return SUCCESS;
+	return 0;
 }
 
 void iio_ad3552r_get_descriptor(struct iio_ad3552r_desc *iio_dac,

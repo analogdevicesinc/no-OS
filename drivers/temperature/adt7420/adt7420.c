@@ -97,7 +97,7 @@ uint16_t adt7420_get_register_value(struct adt7420_dev *dev,
  * @param mask		   - Bit Mask of the bit to be written
  * @param value		   - Value of the bit
  *
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
 *******************************************************************************/
 int32_t set_register_value(struct adt7420_dev *dev,
 			   uint8_t register_address,
@@ -117,18 +117,18 @@ int32_t set_register_value(struct adt7420_dev *dev,
 		 holds the register address.*/
 		data_buffer[0] = (register_address << 3) & ADT7320_WRITE_MASK_CMD;
 		if (no_os_spi_write_and_read(dev->spi_desc, data_buffer, num_data_bytes) != 0)
-			return FAILURE;
+			return -1;
 	} else {
 		data_buffer[0] = register_address;
 
 		if (no_os_i2c_write(dev->i2c_desc,
 				    data_buffer,
 				    num_data_bytes,
-				    1) != SUCCESS)
+				    1) != 0)
 			//no repeat start
-			return FAILURE;
+			return -1;
 	}
-	return SUCCESS;
+	return 0;
 }
 
 /***************************************************************************//**
@@ -163,7 +163,7 @@ int32_t adt7420_init(struct adt7420_dev **device,
 	else
 		status = no_os_i2c_init(&dev->i2c_desc, &init_param.interface_init.i2c_init);
 
-	if (status != FAILURE) {
+	if (status != -1) {
 		/* Device Settings */
 		dev->resolution_setting = init_param.resolution_setting;
 
@@ -182,9 +182,9 @@ int32_t adt7420_init(struct adt7420_dev **device,
 		device_connected_check >>= 4; // Manufacturer ID
 
 		if(device_connected_check != ADT7xxx_ID) // AD7xxx ID Check
-			status = FAILURE;
+			status = -1;
 		else
-			status = SUCCESS;
+			status = 0;
 
 		*device = dev;
 
@@ -282,7 +282,7 @@ void adt7420_set_resolution(struct adt7420_dev *dev,
  *
  * @param dev        - The device structure.
  *
- * @return SUCCESS in case of Success, FAILURE otherwise.
+ * @return 0 in case of Success, -1 otherwise.
 *******************************************************************************/
 int32_t adt7420_reset(struct adt7420_dev *dev)
 {
@@ -292,19 +292,19 @@ int32_t adt7420_reset(struct adt7420_dev *dev)
 		if (no_os_spi_write_and_read(dev->spi_desc,
 					     data_buffer,
 					     sizeof(data_buffer)) != 0)
-			return FAILURE;
+			return -1;
 	} else {
 		uint8_t register_address = ADT7420_REG_RESET;
 		if (no_os_i2c_write(dev->i2c_desc,
 				    &register_address,
 				    1,
-				    1) != SUCCESS) {
+				    1) != 0) {
 			//no repeat start
-			return FAILURE;
+			return -1;
 		}
 	}
 	dev->resolution_setting = 0;
-	return SUCCESS;
+	return 0;
 }
 
 /***************************************************************************//**

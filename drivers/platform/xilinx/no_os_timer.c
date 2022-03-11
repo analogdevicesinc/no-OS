@@ -64,7 +64,7 @@
  *        it.
  * @param [out] desc - Pointer to the reference of the device handler.
  * @param [in] param - Initialization structure.
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise
+ * @return 0 in case of success, -1 otherwise
  */
 int32_t no_os_timer_init(struct no_os_timer_desc **desc,
 			 struct no_os_timer_init_param *param)
@@ -75,13 +75,13 @@ int32_t no_os_timer_init(struct no_os_timer_desc **desc,
 	struct xil_timer_init_param *xinit;
 
 	if (!desc || !param)
-		return FAILURE;
+		return -1;
 
 	xinit = param->extra;
 
 	dev = (struct no_os_timer_desc *)calloc(1, sizeof(*dev));
 	if(!dev)
-		return FAILURE;
+		return -1;
 	xdesc = (struct xil_timer_desc *)calloc(1, sizeof(*xdesc));
 	if(!xdesc)
 		goto error_desc;
@@ -107,11 +107,11 @@ int32_t no_os_timer_init(struct no_os_timer_desc **desc,
 			goto error_xdesc;
 		}
 		ret = no_os_timer_count_clk_set(dev, param->freq_hz);
-		if (IS_ERR_VALUE(ret))
+		if (NO_OS_IS_ERR_VALUE(ret))
 			goto error_xdesc;
 
 		ret = no_os_timer_counter_set(dev, dev->load_value);
-		if (IS_ERR_VALUE(ret))
+		if (NO_OS_IS_ERR_VALUE(ret))
 			goto error_xdesc;
 
 		XScuTimer_EnableAutoReload((XScuTimer *)xdesc->instance);
@@ -123,7 +123,7 @@ int32_t no_os_timer_init(struct no_os_timer_desc **desc,
 #ifdef XTMRCTR_H
 		xdesc->instance = (XTmrCtr *)calloc(1, sizeof(XTmrCtr));
 		if (!xdesc->instance)
-			return FAILURE;
+			return -1;
 
 		xdesc->config = XTmrCtr_LookupConfig(dev->id);
 		if (!xdesc->config) {
@@ -133,7 +133,7 @@ int32_t no_os_timer_init(struct no_os_timer_desc **desc,
 		XTmrCtr_CfgInitialize(xdesc->instance, xdesc->config,
 				      ((XTmrCtr_Config *)xdesc->config)->BaseAddress);
 		ret = XTmrCtr_InitHw(xdesc->instance);
-		if (ret != SUCCESS) {
+		if (ret != 0) {
 			free(xdesc->instance);
 			goto error_desc;
 		}
@@ -156,27 +156,27 @@ int32_t no_os_timer_init(struct no_os_timer_desc **desc,
 
 	*desc = dev;
 
-	return SUCCESS;
+	return 0;
 
 error_xdesc:
 	free(xdesc);
 error_desc:
 	free(dev);
 
-	return FAILURE;
+	return -1;
 }
 
 /**
  * @brief Free the memory allocated by timer_setup().
  * @param [in] desc - Pointer to the device handler.
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise
+ * @return 0 in case of success, -1 otherwise
  */
 int32_t no_os_timer_remove(struct no_os_timer_desc *desc)
 {
 	struct xil_timer_desc *xdesc;
 
 	if(!desc)
-		return FAILURE;
+		return -1;
 
 	xdesc = desc->extra;
 
@@ -187,34 +187,34 @@ int32_t no_os_timer_remove(struct no_os_timer_desc *desc)
 		free(xdesc->instance);
 		break;
 #endif
-		return FAILURE;
+		return -1;
 	case TIMER_PL:
 #ifdef XTMRCTR_H
 		XTmrCtr_Stop(xdesc->instance, xdesc->active_tmr);
 		break;
 #endif
-		return FAILURE;
+		return -1;
 	default:
-		return FAILURE;
+		return -1;
 	}
 
 	free(xdesc);
 	free(desc);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Start a timer.
  * @param [in] desc - Pointer to the device handler.
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise
+ * @return 0 in case of success, -1 otherwise
  */
 int32_t no_os_timer_start(struct no_os_timer_desc *desc)
 {
 	struct xil_timer_desc *xdesc;
 
 	if (!desc)
-		return FAILURE;
+		return -1;
 
 	xdesc = desc->extra;
 
@@ -224,29 +224,29 @@ int32_t no_os_timer_start(struct no_os_timer_desc *desc)
 		XScuTimer_Start(xdesc->instance);
 		break;
 #endif
-		return FAILURE;
+		return -1;
 	case TIMER_PL:
 #ifdef XTMRCTR_H
 		XTmrCtr_Start(xdesc->instance, xdesc->active_tmr);
 		break;
 #endif
-		return FAILURE;
+		return -1;
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Stop a timer from counting.
  * @param [in] desc - Pointer to the device handler.
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise
+ * @return 0 in case of success, -1 otherwise
  */
 int32_t no_os_timer_stop(struct no_os_timer_desc *desc)
 {
 	struct xil_timer_desc *xdesc;
 
 	if (!desc)
-		return FAILURE;
+		return -1;
 
 	xdesc = desc->extra;
 
@@ -256,25 +256,25 @@ int32_t no_os_timer_stop(struct no_os_timer_desc *desc)
 		XScuTimer_Stop(xdesc->instance);
 		break;
 #endif
-		return FAILURE;
+		return -1;
 	case TIMER_PL:
 #ifdef XTMRCTR_H
 		XTmrCtr_Stop(xdesc->instance, xdesc->active_tmr);
 		break;
 #endif
-		return FAILURE;
+		return -1;
 	default:
-		return FAILURE;
+		return -1;
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Get the current counter value of the timer.
  * @param [in] desc - Pointer to the device handler.
  * @param [out] counter - Pointer to the current counter value.
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise
+ * @return 0 in case of success, -1 otherwise
  */
 int32_t no_os_timer_counter_get(struct no_os_timer_desc *desc,
 				uint32_t *counter)
@@ -282,7 +282,7 @@ int32_t no_os_timer_counter_get(struct no_os_timer_desc *desc,
 	struct xil_timer_desc *xdesc;
 
 	if (!desc || !counter)
-		return FAILURE;
+		return -1;
 
 	xdesc = desc->extra;
 
@@ -293,34 +293,34 @@ int32_t no_os_timer_counter_get(struct no_os_timer_desc *desc,
 		++(*counter);
 		break;
 #endif
-		return FAILURE;
+		return -1;
 	case TIMER_PL:
 #ifdef XTMRCTR_H
 		*counter = XTmrCtr_GetValue(xdesc->instance, xdesc->active_tmr);
 		break;
 #endif
-		return FAILURE;
+		return -1;
 	default:
 		*counter = 0;
 
-		return FAILURE;
+		return -1;
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Set the current counter value of the timer.
  * @param [in] desc - Pointer to the device handler.
  * @param [in] new_val - New value for the timer counter.
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise
+ * @return 0 in case of success, -1 otherwise
  */
 int32_t no_os_timer_counter_set(struct no_os_timer_desc *desc, uint32_t new_val)
 {
 	struct xil_timer_desc *xdesc;
 
 	if (!desc)
-		return FAILURE;
+		return -1;
 
 	xdesc = desc->extra;
 
@@ -330,26 +330,26 @@ int32_t no_os_timer_counter_set(struct no_os_timer_desc *desc, uint32_t new_val)
 		XScuTimer_LoadTimer((XScuTimer *)xdesc->instance, new_val - 1);
 		break;
 #endif
-		return FAILURE;
+		return -1;
 	case TIMER_PL:
 #ifdef XTMRCTR_H
 		XTmrCtr_SetResetValue(xdesc->instance, xdesc->active_tmr, new_val);
 		XTmrCtr_Reset(xdesc->instance, xdesc->active_tmr);
 		break;
 #endif
-		return FAILURE;
+		return -1;
 	default:
-		return FAILURE;
+		return -1;
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Get the timer clock frequency.
  * @param [in] desc - Pointer to the device handler.
  * @param [out] freq_hz - Pointer to the returned frequency.
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise
+ * @return 0 in case of success, -1 otherwise
  */
 int32_t no_os_timer_count_clk_get(struct no_os_timer_desc *desc,
 				  uint32_t *freq_hz)
@@ -357,7 +357,7 @@ int32_t no_os_timer_count_clk_get(struct no_os_timer_desc *desc,
 	struct xil_timer_desc *xdesc;
 
 	if (!desc || !freq_hz)
-		return FAILURE;
+		return -1;
 
 	xdesc = desc->extra;
 
@@ -367,27 +367,27 @@ int32_t no_os_timer_count_clk_get(struct no_os_timer_desc *desc,
 		*freq_hz = desc->freq_hz;
 		break;
 #endif
-		return FAILURE;
+		return -1;
 	case TIMER_PL:
 #ifdef XTMRCTR_H
 		*freq_hz = ((XTmrCtr_Config *)xdesc->config)->SysClockFreqHz;
 		break;
 #endif
-		return FAILURE;
+		return -1;
 	default:
 		*freq_hz = 0;
 
-		return FAILURE;
+		return -1;
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Set the timer clock frequency.
  * @param [in] desc - Pointer to the device handler.
  * @param [in] freq_hz - New timer frequency in hertz.
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise
+ * @return 0 in case of success, -1 otherwise
  */
 int32_t no_os_timer_count_clk_set(struct no_os_timer_desc *desc,
 				  uint32_t freq_hz)
@@ -395,7 +395,7 @@ int32_t no_os_timer_count_clk_set(struct no_os_timer_desc *desc,
 	struct xil_timer_desc *xdesc;
 
 	if (!desc || !freq_hz)
-		return FAILURE;
+		return -1;
 
 	xdesc = desc->extra;
 
@@ -405,21 +405,21 @@ int32_t no_os_timer_count_clk_set(struct no_os_timer_desc *desc,
 		;
 		uint32_t prescaler = CORE_PRIVATE_TIMER_CLOCK / freq_hz;
 		if (prescaler == 0 || prescaler >= 256)
-			return FAILURE;
+			return -1;
 		XScuTimer_SetPrescaler(xdesc->instance, prescaler - 1);
 		desc->freq_hz = CORE_PRIVATE_TIMER_CLOCK / prescaler;
 		break;
 #endif
-		return FAILURE;
+		return -1;
 	case TIMER_PL:
 #ifdef XTMRCTR_H
 		(void *)xdesc;
 		/** Cannot be done. */
 #endif
-		return FAILURE;
+		return -1;
 	default:
-		return FAILURE;
+		return -1;
 	}
 
-	return SUCCESS;
+	return 0;
 }

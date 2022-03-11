@@ -180,7 +180,7 @@ int32_t ad5766_core_setup(struct spi_engine_desc *eng_desc,
 
 	core = (ad5766_core *)malloc(sizeof(*core));
 	if (!core)
-		return FAILURE;
+		return -1;
 
 	core->core_baseaddr = init_param.core_baseaddr;
 	core->dma_baseaddr = init_param.dma_baseaddr;
@@ -191,7 +191,7 @@ int32_t ad5766_core_setup(struct spi_engine_desc *eng_desc,
 	rate_reg = ref_clk_hz / core->rate_hz;
 	if (rate_reg > 0xFFFF) {
 		free(core);
-		return FAILURE;
+		return -1;
 	}
 
 	ad5766_core_write(core, 0x00001100, 0x00020);	// DAC0
@@ -295,5 +295,5 @@ int32_t ad5766_core_setup(struct spi_engine_desc *eng_desc,
 
 	*ad_core = core;
 
-	return SUCCESS;
+	return 0;
 }

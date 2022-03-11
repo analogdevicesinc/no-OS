@@ -112,7 +112,7 @@ static void no_os_gdesc_remove()
  * @brief Initialize descriptor
  * @param desc - Where to store the TRNG Descriptor
  * @param param - Unused
- * @return \ref SUCCESS or \ref FAILURE if desc is null
+ * @return 0 or -1 if desc is null
  */
 int32_t no_os_trng_init(struct no_os_trng_desc **desc,
 			struct no_os_trng_init_param *param)
@@ -120,7 +120,7 @@ int32_t no_os_trng_init(struct no_os_trng_desc **desc,
 	NO_OS_UNUSED_PARAM(param);
 
 	if (!desc)
-		return FAILURE;
+		return -1;
 
 	if (!nb_references)
 		no_os_gdesc_init();
@@ -128,7 +128,7 @@ int32_t no_os_trng_init(struct no_os_trng_desc **desc,
 	nb_references++;
 	*desc = &g_desc;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -147,7 +147,7 @@ void no_os_trng_remove(struct no_os_trng_desc *desc)
  * @param desc - TRNG descriptor
  * @param buff - Buffer to be filled
  * @param len - Size of the buffer
- * @return \ref SUCCESS if no errors, \ref FAILURE is an error occurs and the
+ * @return 0 if no errors, -1 is an error occurs and the
  * data in the buffer is not useful.
  */
 int32_t no_os_trng_fill_buffer(struct no_os_trng_desc *desc, uint8_t *buff,
@@ -167,11 +167,11 @@ int32_t no_os_trng_fill_buffer(struct no_os_trng_desc *desc, uint8_t *buff,
 			/* This is needed in order to clear the stuck bit */
 			no_os_gdesc_remove();
 			no_os_gdesc_init();
-			return FAILURE;
+			return -1;
 		}
 		adi_rng_GetRngData(desc->dev, &data);
 		buff[i] = data & 0xFF;
 	}
 
-	return SUCCESS;
+	return 0;
 }

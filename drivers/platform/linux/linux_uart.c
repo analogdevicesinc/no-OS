@@ -74,7 +74,7 @@ struct linux_uart_desc {
  * @brief Initialize the UART communication peripheral.
  * @param desc - The UART descriptor.
  * @param param - The structure that contains the UART parameters.
- * @return SUCCESS in case of success, error code otherwise.
+ * @return 0 in case of success, error code otherwise.
  */
 int32_t no_os_uart_init(struct no_os_uart_desc **desc,
 			struct no_os_uart_init_param *param)
@@ -223,7 +223,7 @@ int32_t no_os_uart_init(struct no_os_uart_desc **desc,
 
 	*desc = descriptor;
 
-	return SUCCESS;
+	return 0;
 
 free:
 	close(linux_desc->fd);
@@ -240,7 +240,7 @@ free_desc:
 /**
  * @brief Free the resources allocated by no_os_uart_init().
  * @param desc - The UART descriptor.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t no_os_uart_remove(struct no_os_uart_desc *desc)
 {
@@ -256,7 +256,7 @@ int32_t no_os_uart_remove(struct no_os_uart_desc *desc)
 	free(desc->extra);
 	free(desc);
 
-	return SUCCESS;
+	return 0;
 };
 
 /**
@@ -264,7 +264,7 @@ int32_t no_os_uart_remove(struct no_os_uart_desc *desc)
  * @param desc - Instance of UART.
  * @param data - Pointer to buffer containing data.
  * @param bytes_number - Number of bytes to read.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t no_os_uart_write(struct no_os_uart_desc *desc, const uint8_t *data,
 			 uint32_t bytes_number)
@@ -281,7 +281,7 @@ int32_t no_os_uart_write(struct no_os_uart_desc *desc, const uint8_t *data,
 			count += ret;
 	}
 
-	return SUCCESS;
+	return 0;
 };
 
 /**
@@ -289,7 +289,7 @@ int32_t no_os_uart_write(struct no_os_uart_desc *desc, const uint8_t *data,
  * @param desc - Instance of UART.
  * @param data - Pointer to buffer containing data.
  * @param bytes_number - Number of bytes to read.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t no_os_uart_read(struct no_os_uart_desc *desc, uint8_t *data,
 			uint32_t bytes_number)
@@ -306,5 +306,5 @@ int32_t no_os_uart_read(struct no_os_uart_desc *desc, uint8_t *data,
 			count += ret;
 	}
 
-	return SUCCESS;
+	return 0;
 };

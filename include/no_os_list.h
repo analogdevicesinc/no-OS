@@ -151,8 +151,8 @@ typedef int32_t (*f_cmp)(void *data1, void *data2);
  * @param list_desc - Reference to the list. Created by \ref no_os_list_init.
  * @param data - Data to store in a list element
  * @return
- *  - \ref SUCCESS : On success
- *  - \ref FAILURE : Otherwise
+ *  - 0 : On success
+ *  - -1 : Otherwise
  */
 typedef int32_t (*f_add)(struct no_os_list_desc *list_desc, void *data);
 
@@ -161,8 +161,8 @@ typedef int32_t (*f_add)(struct no_os_list_desc *list_desc, void *data);
  * @param list_desc - Reference to the list. Created by \ref no_os_list_init.
  * @param new_data - New data to replace the old one
  * @return
- *  - \ref SUCCESS : On success
- *  - \ref FAILURE : Otherwise
+ *  - 0 : On success
+ *  - -1 : Otherwise
  */
 typedef int32_t (*f_edit)(struct no_os_list_desc *list_desc, void *new_data);
 
@@ -172,8 +172,8 @@ typedef int32_t (*f_edit)(struct no_os_list_desc *list_desc, void *new_data);
  * @param result - If not null, result is filled with:
  * @param data - Content of the list element, NULL if some error occur.
  * @return \n
- *  - \ref SUCCESS : On success
- *  - \ref FAILURE : Otherwise
+ *  - 0 : On success
+ *  - -1 : Otherwise
  * @note If the content of an element can be 0 then the result must be checked
  * to see if the functions has succeded
  */
@@ -185,8 +185,8 @@ typedef int32_t (*f_read)(struct no_os_list_desc *list_desc, void **data);
  * @param result - If not null, result is filled with:
  * @param data - Content of the list element, NULL if some error occur.
  * @return
- *  - \ref SUCCESS : On success
- *  - \ref FAILURE : Otherwise
+ *  - 0 : On success
+ *  - -1 : Otherwise
  */
 typedef int32_t (*f_get)(struct no_os_list_desc *list_desc, void **data);
 

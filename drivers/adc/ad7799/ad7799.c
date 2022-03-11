@@ -80,7 +80,7 @@ static const uint8_t ad7799_reg_size[] = {
  * @param device - The device structure.
  * @param reg_addr - The register address.
  * @param reg_data - The data read from the register.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7799_read(struct ad7799_dev *device, uint8_t reg_addr,
 		    uint32_t *reg_data)
@@ -100,7 +100,7 @@ int32_t ad7799_read(struct ad7799_dev *device, uint8_t reg_addr,
 
 	ret = no_os_spi_write_and_read(device->spi_desc, buff, buff_size + 1);
 	if(ret)
-		return FAILURE;
+		return -1;
 
 	for(i = 1; i < buff_size + 1 ; i++)
 		*reg_data = (*reg_data << 8) | buff[i];
@@ -113,7 +113,7 @@ int32_t ad7799_read(struct ad7799_dev *device, uint8_t reg_addr,
  * @param device - The device structure.
  * @param reg_addr - The register address.
  * @param reg_data - The data to be written.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7799_write(struct ad7799_dev *device, uint8_t reg_addr,
 		     uint32_t reg_data)
@@ -131,7 +131,7 @@ int32_t ad7799_write(struct ad7799_dev *device, uint8_t reg_addr,
 
 	ret = no_os_spi_write_and_read(device->spi_desc, buff, buff_size + 1);
 	if(ret)
-		return FAILURE;
+		return -1;
 
 	return ret;
 }
@@ -139,7 +139,7 @@ int32_t ad7799_write(struct ad7799_dev *device, uint8_t reg_addr,
 /**
  * @brief Software reset of the device.
  * @param device - The device structure.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7799_reset(struct ad7799_dev *device)
 {
@@ -157,7 +157,7 @@ int32_t ad7799_reset(struct ad7799_dev *device)
  * @brief Set the device mode.
  * @param device - The device structure.
  * @param mode - The device mode.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7799_set_mode(struct ad7799_dev *device, uint8_t mode)
 {
@@ -166,27 +166,27 @@ int32_t ad7799_set_mode(struct ad7799_dev *device, uint8_t mode)
 
 	ret = ad7799_read(device, AD7799_REG_MODE, &reg_data);
 	if (ret)
-		return FAILURE;
+		return -1;
 
 	reg_data &= ~AD7799_MODE_SEL(AD7799_REG_MASK);
 	reg_data |= AD7799_MODE_SEL(mode);
 
 	ret = ad7799_write(device, AD7799_REG_MODE, reg_data);
 	if (ret)
-		return FAILURE;
+		return -1;
 
 	ret = ad7799_dev_ready(device);
 	if (ret)
-		return FAILURE;
+		return -1;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Select the ADC channel.
  * @param device - The device structure.
  * @param  ch - The channel number.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7799_set_channel(struct ad7799_dev *device, uint8_t ch)
 {
@@ -195,7 +195,7 @@ int32_t ad7799_set_channel(struct ad7799_dev *device, uint8_t ch)
 
 	ret = ad7799_read(device, AD7799_REG_CONF, &reg_data);
 	if (ret)
-		return FAILURE;
+		return -1;
 
 	reg_data &= ~AD7799_CONF_CHAN(AD7799_REG_MASK);
 	reg_data |= AD7799_CONF_CHAN(ch);
@@ -208,7 +208,7 @@ int32_t ad7799_set_channel(struct ad7799_dev *device, uint8_t ch)
  * @param device - The device structure.
  * @param ch - The ADC channel.
  * @param reg_data - The content of the data register.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7799_get_channel(struct ad7799_dev *device, uint8_t ch,
 			   uint32_t *reg_data)
@@ -217,21 +217,21 @@ int32_t ad7799_get_channel(struct ad7799_dev *device, uint8_t ch,
 
 	ret = ad7799_set_channel(device, ch);
 	if (ret)
-		return FAILURE;
+		return -1;
 
 	ret = ad7799_set_mode(device, AD7799_MODE_SINGLE);
 	if (ret)
-		return FAILURE;
+		return -1;
 
 	ret = ad7799_dev_ready(device);
 	if (ret)
-		return FAILURE;
+		return -1;
 
 	ret = ad7799_read(device, AD7799_REG_DATA, reg_data);
 	if (ret)
-		return FAILURE;
+		return -1;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -239,7 +239,7 @@ int32_t ad7799_get_channel(struct ad7799_dev *device, uint8_t ch,
  * @param device - The device structure.
  * @param ch - The ADC channel.
  * @param data_scaled - The content of the data in mV/uV.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7799_read_channel(struct ad7799_dev *device, uint8_t ch,
 			    int32_t *data_scaled)
@@ -282,7 +282,7 @@ int32_t ad7799_read_channel(struct ad7799_dev *device, uint8_t ch,
  * @brief Set the ADC gain.
  * @param device - The device structure.
  * @param  gain - the channel number.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7799_set_gain(struct ad7799_dev *device, uint8_t gain)
 {
@@ -291,7 +291,7 @@ int32_t ad7799_set_gain(struct ad7799_dev *device, uint8_t gain)
 
 	ret = ad7799_read(device, AD7799_REG_CONF, &reg_data);
 	if (ret)
-		return FAILURE;
+		return -1;
 
 	reg_data &= ~AD7799_CONF_GAIN(AD7799_REG_MASK);
 	reg_data |= AD7799_CONF_GAIN(gain);
@@ -303,7 +303,7 @@ int32_t ad7799_set_gain(struct ad7799_dev *device, uint8_t gain)
  * @brief Get the ADC gain
  * @param device - The device structure.
  * @param  gain - the gain value from the register.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7799_get_gain(struct ad7799_dev *device, uint8_t *gain)
 {
@@ -312,12 +312,12 @@ int32_t ad7799_get_gain(struct ad7799_dev *device, uint8_t *gain)
 
 	ret = ad7799_read(device, AD7799_REG_CONF, &reg_data);
 	if (ret)
-		return FAILURE;
+		return -1;
 
 	reg_data &= AD7799_CONF_GAIN(AD7799_REG_MASK);
 	*gain = reg_data >> 8;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -325,7 +325,7 @@ int32_t ad7799_get_gain(struct ad7799_dev *device, uint8_t *gain)
  * @param device - The device structure.
  * @param  ref_en - 1 reference detect enable.
  * 				  - 0 reference detect disable.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7799_set_refdet(struct ad7799_dev *device, uint8_t ref_en)
 {
@@ -334,7 +334,7 @@ int32_t ad7799_set_refdet(struct ad7799_dev *device, uint8_t ref_en)
 
 	ret = ad7799_read(device, AD7799_REG_CONF, &reg_data);
 	if (ret)
-		return FAILURE;
+		return -1;
 
 	reg_data &= ~AD7799_CONF_REFDET(AD7799_REG_MASK);
 	reg_data |= AD7799_CONF_REFDET(ref_en);
@@ -348,7 +348,7 @@ int32_t ad7799_set_refdet(struct ad7799_dev *device, uint8_t ref_en)
  * @param polarity - set the device polarity:
  * 					0 - Bipolar coding
  * 					1 - Unipolar coding
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7799_set_polarity(struct ad7799_dev *device, uint8_t polarity)
 {
@@ -357,7 +357,7 @@ int32_t ad7799_set_polarity(struct ad7799_dev *device, uint8_t polarity)
 
 	ret = ad7799_read(device, AD7799_REG_CONF, &reg_data);
 	if (ret)
-		return FAILURE;
+		return -1;
 
 	reg_data &= ~AD7799_CONF_POLARITY(AD7799_REG_MASK);
 	reg_data |= AD7799_CONF_POLARITY(polarity);
@@ -369,7 +369,7 @@ int32_t ad7799_set_polarity(struct ad7799_dev *device, uint8_t polarity)
  * @brief Read the /RDY bit of status register and check the status
  * of the device
  * @param device - The device structure.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7799_dev_ready(struct ad7799_dev *device)
 {
@@ -380,15 +380,15 @@ int32_t ad7799_dev_ready(struct ad7799_dev *device)
 	while (timeout > 0) {
 		ret = ad7799_read(device, AD7799_REG_STAT, &data);
 		if (ret)
-			return FAILURE;
+			return -1;
 
 		if (!(data & AD7799_STAT_RDY))
-			return SUCCESS;
+			return 0;
 
 		timeout--;
 	}
 
-	return FAILURE;
+	return -1;
 }
 
 /**
@@ -396,7 +396,7 @@ int32_t ad7799_dev_ready(struct ad7799_dev *device)
  * @param device - The device structure.
  * @param init_param - The structure that contains the device initial
  * 		       parameters.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7799_init(struct ad7799_dev **device,
 		    const struct ad7799_init_param *init_param)
@@ -408,7 +408,7 @@ int32_t ad7799_init(struct ad7799_dev **device,
 
 	dev = (struct ad7799_dev *)calloc(1, sizeof(*dev));
 	if (!dev)
-		return FAILURE;
+		return -1;
 
 	dev->chip_type = init_param->chip_type;
 	dev->polarity = init_param->polarity;
@@ -425,51 +425,51 @@ int32_t ad7799_init(struct ad7799_dev **device,
 		break;
 	default:
 		free(dev);
-		return FAILURE;
+		return -1;
 	}
 
 	ret = no_os_spi_init(&dev->spi_desc, &init_param->spi_init);
 	if (ret) {
 		free(dev);
-		return FAILURE;
+		return -1;
 	}
 
 	ret = ad7799_reset(dev);
 	if (ret)
-		return FAILURE;
+		return -1;
 
 	/* Check Chip ID */
 	ret = ad7799_read(dev, AD7799_REG_ID, &chip_id);
 	if (ret)
-		return FAILURE;
+		return -1;
 
 	switch(dev->chip_type) {
 	case ID_AD7798:
 		if ((chip_id & AD7799_ID_MASK) != ID_AD7798) {
 			printf("Invalid AD7798 Chip ID");
-			return FAILURE;
+			return -1;
 		}
 		break;
 	case ID_AD7799:
 		if ((chip_id & AD7799_ID_MASK) != ID_AD7799) {
 			printf("Invalid AD7799 Chip ID");
-			return FAILURE;
+			return -1;
 		}
 		break;
 	default:
 		printf("Invalid AD7798 Chip ID");
-		return FAILURE;
+		return -1;
 	}
 
 	/* Initially set gain to 1 */
 	ret = ad7799_set_gain(dev, dev->gain);
 	if (ret)
-		return FAILURE;
+		return -1;
 
 	/* Enable unipolar coding */
 	ret = ad7799_set_polarity(dev, dev->polarity);
 	if (ret)
-		return FAILURE;
+		return -1;
 
 	*device = dev;
 
@@ -479,7 +479,7 @@ int32_t ad7799_init(struct ad7799_dev **device,
 /**
  * @brief Remove the device and release resources.
  * @param device - The device structure.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7799_remove(struct ad7799_dev *device)
 {

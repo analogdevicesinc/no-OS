@@ -121,32 +121,32 @@ int main(void)
 
 	/* Turn VBAT and VDD on, Zedboard platform specific */
 	ret = no_os_gpio_get(&vbat, &vbat_pin);
-	if (ret != SUCCESS)
-		return FAILURE;
+	if (ret != 0)
+		return -1;
 
 	ret = no_os_gpio_direction_output(vbat, VBAT_ON);
-	if (ret != SUCCESS)
-		return FAILURE;
+	if (ret != 0)
+		return -1;
 
 	ret = no_os_gpio_get(&vdd, &vdd_pin);
-	if (ret != SUCCESS)
-		return FAILURE;
+	if (ret != 0)
+		return -1;
 
 	ret = no_os_gpio_direction_output(vdd, VDD_ON);
-	if (ret != SUCCESS)
-		return FAILURE;
+	if (ret != 0)
+		return -1;
 
 	ret = display_init(&dev, &display_ip);
-	if (ret != SUCCESS)
-		return FAILURE;
+	if (ret != 0)
+		return -1;
 
 	ret = display_on(dev);
-	if (ret != SUCCESS)
-		return FAILURE;
+	if (ret != 0)
+		return -1;
 
 	ret = display_clear(dev);
-	if (ret != SUCCESS)
-		return FAILURE;
+	if (ret != 0)
+		return -1;
 
 	return display_print_string(dev, msg, 0, 0);
 }

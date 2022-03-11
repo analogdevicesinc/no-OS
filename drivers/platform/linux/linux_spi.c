@@ -73,7 +73,7 @@ struct linux_spi_desc {
  * @brief Initialize the SPI communication peripheral.
  * @param desc - The SPI descriptor.
  * @param param - The structure that contains the SPI parameters.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t linux_spi_init(struct no_os_spi_desc **desc,
 		       const struct no_os_spi_init_param *param)
@@ -86,7 +86,7 @@ int32_t linux_spi_init(struct no_os_spi_desc **desc,
 
 	descriptor = malloc(sizeof(*descriptor));
 	if (!descriptor)
-		return FAILURE;
+		return -1;
 
 	linux_desc = (struct linux_spi_desc*) malloc(sizeof(struct linux_spi_desc));
 	if (!linux_desc)
@@ -126,13 +126,13 @@ int32_t linux_spi_init(struct no_os_spi_desc **desc,
 
 	*desc = descriptor;
 
-	return SUCCESS;
+	return 0;
 free:
 	free(linux_desc);
 free_desc:
 	free(descriptor);
 
-	return FAILURE;
+	return -1;
 }
 
 /**
@@ -140,7 +140,7 @@ free_desc:
  * @param desc - The SPI descriptor.
  * @param data - The buffer with the transmitted/received data.
  * @param bytes_number - Number of bytes to write/read.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t linux_spi_write_and_read(struct no_os_spi_desc *desc,
 				 uint8_t *data,
@@ -159,16 +159,16 @@ int32_t linux_spi_write_and_read(struct no_os_spi_desc *desc,
 	ret = ioctl(linux_desc->spidev_fd, SPI_IOC_MESSAGE(1), &tr);
 	if (ret == 1) {
 		printf("%s: Can't send spi message\n\r", __func__);
-		return FAILURE;
+		return -1;
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Free the resources allocated by linux_spi_init().
  * @param desc - The SPI descriptor.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t linux_spi_remove(struct no_os_spi_desc *desc)
 {
@@ -180,13 +180,13 @@ int32_t linux_spi_remove(struct no_os_spi_desc *desc)
 	ret = close(linux_desc->spidev_fd);
 	if (ret < 0) {
 		printf("%s: Can't close device\n\r", __func__);
-		return FAILURE;
+		return -1;
 	}
 
 	free(desc->extra);
 	free(desc);
 
-	return SUCCESS;
+	return 0;
 }
 
 static int32_t linux_spi_transfer(struct no_os_spi_desc *desc,

@@ -489,7 +489,7 @@ adiHalErr_t talise_setup(taliseDevice_t * const pd, taliseInit_t * const pi)
 error_11:
 	TALISE_closeHw(pd);
 error_0:
-	return FAILURE;
+	return -1;
 }
 
 int talise_multi_chip_sync(taliseDevice_t * pd, int step)
@@ -515,7 +515,7 @@ int talise_multi_chip_sync(taliseDevice_t * pd, int step)
 		ret = TALISE_enableMultichipSync(pd, 1, &mcsStatus);
 		if (ret != TALACT_NO_ACTION) {
 			printf("%s:%d (ret %d)\n", __func__, __LINE__, ret);
-			ret = FAILURE;
+			ret = -1;
 		}
 		break;
 	case 2:
@@ -527,7 +527,7 @@ int talise_multi_chip_sync(taliseDevice_t * pd, int step)
 		if ((mcsStatus & 0x0B) != 0x0B) {
 			printf("%s:%d Unexpected MCS sync status (0x%X)\n",
 			       __func__, __LINE__, mcsStatus);
-			ret = FAILURE;
+			ret = -1;
 		}
 		break;
 	case 4:
@@ -553,21 +553,21 @@ int talise_multi_chip_sync(taliseDevice_t * pd, int step)
 			ret = TALISE_enableSysrefToFramer(pd, TAL_FRAMER_A, 0);
 			if (ret != TALACT_NO_ACTION) {
 				printf("%s:%d (ret %d)\n", __func__, __LINE__, ret);
-				ret = FAILURE;
+				ret = -1;
 				break;
 			}
 
 			ret = TALISE_enableFramerLink(pd, TAL_FRAMER_A, 0);
 			if (ret != TALACT_NO_ACTION) {
 				printf("%s:%d (ret %d)\n", __func__, __LINE__, ret);
-				ret = FAILURE;
+				ret = -1;
 				break;
 			}
 
 			ret = TALISE_enableFramerLink(pd, TAL_FRAMER_A, 1);
 			if (ret != TALACT_NO_ACTION) {
 				printf("%s:%d (ret %d)\n", __func__, __LINE__, ret);
-				ret = FAILURE;
+				ret = -1;
 				break;
 			}
 
@@ -579,7 +579,7 @@ int talise_multi_chip_sync(taliseDevice_t * pd, int step)
 			ret = TALISE_enableSysrefToFramer(pd, TAL_FRAMER_A, 1);
 			if (ret != TALACT_NO_ACTION) {
 				printf("%s:%d (ret %d)\n", __func__, __LINE__, ret);
-				ret = FAILURE;
+				ret = -1;
 				break;
 			}
 		}
@@ -592,21 +592,21 @@ int talise_multi_chip_sync(taliseDevice_t * pd, int step)
 			ret = TALISE_enableSysrefToFramer(pd, TAL_FRAMER_B, 0);
 			if (ret != TALACT_NO_ACTION) {
 				printf("%s:%d (ret %d)\n", __func__, __LINE__, ret);
-				ret = FAILURE;
+				ret = -1;
 				break;
 			}
 
 			ret = TALISE_enableFramerLink(pd, TAL_FRAMER_B, 0);
 			if (ret != TALACT_NO_ACTION) {
 				printf("%s:%d (ret %d)\n", __func__, __LINE__, ret);
-				ret = FAILURE;
+				ret = -1;
 				break;
 			}
 
 			ret = TALISE_enableFramerLink(pd, TAL_FRAMER_B, 1);
 			if (ret != TALACT_NO_ACTION) {
 				printf("%s:%d (ret %d)\n", __func__, __LINE__, ret);
-				ret = FAILURE;
+				ret = -1;
 				break;
 			}
 
@@ -618,7 +618,7 @@ int talise_multi_chip_sync(taliseDevice_t * pd, int step)
 			ret = TALISE_enableSysrefToFramer(pd, TAL_FRAMER_B, 1);
 			if (ret != TALACT_NO_ACTION) {
 				printf("%s:%d (ret %d)\n", __func__, __LINE__, ret);
-				ret = FAILURE;
+				ret = -1;
 				break;
 			}
 		}
@@ -629,21 +629,21 @@ int talise_multi_chip_sync(taliseDevice_t * pd, int step)
 			ret = TALISE_enableSysrefToDeframer(pd, TAL_DEFRAMER_A, 0);
 			if (ret != TALACT_NO_ACTION) {
 				printf("%s:%d (ret %d)\n", __func__, __LINE__, ret);
-				ret = FAILURE;
+				ret = -1;
 				break;
 			}
 
 			ret = TALISE_enableDeframerLink(pd, TAL_DEFRAMER_A, 0);
 			if (ret != TALACT_NO_ACTION) {
 				printf("%s:%d (ret %d)\n", __func__, __LINE__, ret);
-				ret = FAILURE;
+				ret = -1;
 				break;
 			}
 
 			ret |= TALISE_enableDeframerLink(pd, TAL_DEFRAMER_A, 1);
 			if (ret != TALACT_NO_ACTION) {
 				printf("%s:%d (ret %d)\n", __func__, __LINE__, ret);
-				ret = FAILURE;
+				ret = -1;
 				break;
 			}
 
@@ -653,7 +653,7 @@ int talise_multi_chip_sync(taliseDevice_t * pd, int step)
 			ret = TALISE_enableSysrefToDeframer(pd, TAL_DEFRAMER_A, 1);
 			if (ret != TALACT_NO_ACTION) {
 				printf("%s:%d (ret %d)\n", __func__, __LINE__, ret);
-				ret = FAILURE;
+				ret = -1;
 				break;
 			}
 
@@ -694,7 +694,7 @@ int talise_multi_chip_sync(taliseDevice_t * pd, int step)
 							&deframerStatus);
 			if (ret != TALACT_NO_ACTION) {
 				printf("%s:%d (ret %d)\n", __func__, __LINE__, ret);
-				ret = FAILURE;
+				ret = -1;
 				break;
 			}
 
@@ -709,7 +709,7 @@ int talise_multi_chip_sync(taliseDevice_t * pd, int step)
 			ret = TALISE_readFramerStatus(pd, TAL_FRAMER_A, &framerStatus);
 			if (ret != TALACT_NO_ACTION) {
 				printf("%s:%d (ret %d)\n", __func__, __LINE__, ret);
-				ret = FAILURE;
+				ret = -1;
 				break;
 			}
 
@@ -723,7 +723,7 @@ int talise_multi_chip_sync(taliseDevice_t * pd, int step)
 			ret = TALISE_readFramerStatus(pd, TAL_FRAMER_B, &framerStatus);
 			if (ret != TALACT_NO_ACTION) {
 				printf("%s:%d (ret %d)\n", __func__, __LINE__, ret);
-				ret = FAILURE;
+				ret = -1;
 				break;
 			}
 
@@ -734,7 +734,7 @@ int talise_multi_chip_sync(taliseDevice_t * pd, int step)
 		TALISE_radioOn(pd);
 		break;
 	default:
-		ret = FAILURE;
+		ret = -1;
 	};
 
 	return ret;

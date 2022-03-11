@@ -56,7 +56,7 @@
  * @param dev - Device handler.
  * @param address - Register address.
  * @param data - Pointer to the register value container.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t adpd410x_reg_read(struct adpd410x_dev *dev, uint16_t address,
 			  uint16_t *data)
@@ -65,14 +65,14 @@ int32_t adpd410x_reg_read(struct adpd410x_dev *dev, uint16_t address,
 	uint8_t buff[] = {0, 0};
 
 	ret = adpd410x_reg_read_bytes(dev, address, (uint8_t *) buff, 2);
-	if (ret != SUCCESS) {
+	if (ret != 0) {
 		return ret;
 	}
 
 	*data = ((uint16_t)buff[0] << 8) & 0xff00;
 	*data |= buff[1] & 0xff;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -81,7 +81,7 @@ int32_t adpd410x_reg_read(struct adpd410x_dev *dev, uint16_t address,
  * @param address - Register address.
  * @param data - Pointer to the register value container.
  * @param num_bytes - number of bytes to read. Max 255 for ADPD4101 (I2C).
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t adpd410x_reg_read_bytes(struct adpd410x_dev *dev, uint16_t address,
 				uint8_t *data, uint16_t num_bytes)
@@ -97,7 +97,7 @@ int32_t adpd410x_reg_read_bytes(struct adpd410x_dev *dev, uint16_t address,
 		buff[1] = (address << 1) & ADPD410X_LOWER_BYTE_SPI_MASK;
 
 		ret = no_os_spi_write_and_read(dev->dev_ops.spi_phy_dev, buff, num_bytes + 2);
-		if(ret != SUCCESS) {
+		if(ret != 0) {
 			free(buff);
 			return ret;
 		}
@@ -108,7 +108,7 @@ int32_t adpd410x_reg_read_bytes(struct adpd410x_dev *dev, uint16_t address,
 	case ADPD4101:
 		// Number of bytes for an I2C read is an 8-bit number, or at most 255
 		if (num_bytes > 255)
-			return FAILURE;
+			return -1;
 		buff = (uint8_t *) calloc(2, sizeof(*buff));
 		buff[0] = no_os_field_get(ADPD410X_UPPDER_BYTE_I2C_MASK, address);
 		buff[0] |= 0x80;
@@ -116,21 +116,21 @@ int32_t adpd410x_reg_read_bytes(struct adpd410x_dev *dev, uint16_t address,
 
 		/* No stop bit */
 		ret = no_os_i2c_write(dev->dev_ops.i2c_phy_dev, buff, 2, 0);
-		if(ret != SUCCESS) {
+		if(ret != 0) {
 			free(buff);
 			return ret;
 		}
 		ret = no_os_i2c_read(dev->dev_ops.i2c_phy_dev, data, (uint8_t) num_bytes, 1);
-		if(ret != SUCCESS) {
+		if(ret != 0) {
 			free(buff);
 			return ret;
 		}
 		break;
 	default:
-		return FAILURE;
+		return -1;
 	}
 	free(buff);
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -138,7 +138,7 @@ int32_t adpd410x_reg_read_bytes(struct adpd410x_dev *dev, uint16_t address,
  * @param dev - Device handler.
  * @param address - Register address.
  * @param data - New register value.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t adpd410x_reg_write(struct adpd410x_dev *dev, uint16_t address,
 			   uint16_t data)
@@ -172,7 +172,7 @@ int32_t adpd410x_reg_write(struct adpd410x_dev *dev, uint16_t address,
  * @param address - Address of the register.
  * @param data - Value to be written to the device.
  * @param mask - Mask of the bit field to update.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t adpd410x_reg_write_mask(struct adpd410x_dev *dev, uint16_t address,
 				uint16_t data, uint16_t mask)
@@ -182,8 +182,8 @@ int32_t adpd410x_reg_write_mask(struct adpd410x_dev *dev, uint16_t address,
 	uint32_t bit_pos;
 
 	ret = adpd410x_reg_read(dev, address, &reg_val);
-	if (ret != SUCCESS)
-		return FAILURE;
+	if (ret != 0)
+		return -1;
 	reg_val &= ~mask;
 	bit_pos = no_os_find_first_set_bit((uint32_t)mask);
 	reg_val |= (data << bit_pos) & mask;
@@ -194,7 +194,7 @@ int32_t adpd410x_reg_write_mask(struct adpd410x_dev *dev, uint16_t address,
 /**
  * @brief Update the clocking option of the device.
  * @param dev - Device handler.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 static int32_t adpd410x_get_clk_opt(struct adpd410x_dev *dev)
 {
@@ -202,18 +202,18 @@ static int32_t adpd410x_get_clk_opt(struct adpd410x_dev *dev)
 	uint16_t reg_temp;
 
 	ret = adpd410x_reg_read(dev, ADPD410X_REG_SYS_CTL, &reg_temp);
-	if(ret != SUCCESS)
+	if(ret != 0)
 		return ret;
 	dev->clk_opt = (reg_temp & BITM_SYS_CTL_ALT_CLOCKS) >>
 		       BITP_SYS_CTL_ALT_CLOCKS;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Do a software reset.
  * @param dev - Device handler.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t adpd410x_reset(struct adpd410x_dev *dev)
 {
@@ -221,7 +221,7 @@ int32_t adpd410x_reset(struct adpd410x_dev *dev)
 
 	ret = adpd410x_reg_write_mask(dev, ADPD410X_REG_SYS_CTL, 1,
 				      BITM_SYS_CTL_SW_RESET);
-	if(ret != SUCCESS)
+	if(ret != 0)
 		return ret;
 
 	return adpd410x_get_clk_opt(dev);
@@ -231,7 +231,7 @@ int32_t adpd410x_reset(struct adpd410x_dev *dev)
  * @brief Set operation mode.
  * @param dev - Device handler.
  * @param mode - New operation mode.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t adpd410x_set_opmode(struct adpd410x_dev *dev,
 			    enum adpd410x_opmode mode)
@@ -244,7 +244,7 @@ int32_t adpd410x_set_opmode(struct adpd410x_dev *dev,
  * @brief Get operation mode.
  * @param dev - Device handler.
  * @param mode - Operation mode.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t adpd410x_get_opmode(struct adpd410x_dev *dev,
 			    enum adpd410x_opmode *mode)
@@ -253,7 +253,7 @@ int32_t adpd410x_get_opmode(struct adpd410x_dev *dev,
 	uint16_t data;
 
 	ret = adpd410x_reg_read(dev, ADPD410X_REG_OPMODE, &data);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	*mode = data & BITM_OPMODE_OP_MODE;
@@ -265,7 +265,7 @@ int32_t adpd410x_get_opmode(struct adpd410x_dev *dev,
  * @brief Set number of active time slots.
  * @param dev - Device handler.
  * @param timeslot_no - Last time slot to be enabled.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t adpd410x_set_last_timeslot(struct adpd410x_dev *dev,
 				   enum adpd410x_timeslots timeslot_no)
@@ -278,7 +278,7 @@ int32_t adpd410x_set_last_timeslot(struct adpd410x_dev *dev,
  * @brief Get number of active time slots.
  * @param dev - Device handler.
  * @param timeslot_no - Last time slot enabled.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t adpd410x_get_last_timeslot(struct adpd410x_dev *dev,
 				   enum adpd410x_timeslots *timeslot_no)
@@ -287,7 +287,7 @@ int32_t adpd410x_get_last_timeslot(struct adpd410x_dev *dev,
 	uint16_t data;
 
 	ret = adpd410x_reg_read(dev, ADPD410X_REG_OPMODE, &data);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	*timeslot_no = (data & BITM_OPMODE_TIMESLOT_EN) >> 8;
@@ -299,7 +299,7 @@ int32_t adpd410x_get_last_timeslot(struct adpd410x_dev *dev,
  * @brief Set device sampling frequency.
  * @param dev - Device handler.
  * @param sampling_freq - New sampling frequency.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t adpd410x_set_sampling_freq(struct adpd410x_dev *dev,
 				   uint32_t sampling_freq)
@@ -311,7 +311,7 @@ int32_t adpd410x_set_sampling_freq(struct adpd410x_dev *dev,
 	if((dev->clk_opt == ADPD410X_INTLFO_INTHFO) ||
 	    (dev->clk_opt == ADPD410X_INTLFO_EXTHFO)) {
 		ret = adpd410x_reg_read(dev, ADPD410X_REG_SYS_CTL, &reg_temp);
-		if(ret != SUCCESS)
+		if(ret != 0)
 			return ret;
 		if(reg_temp & BITP_SYS_CTL_LFOSC_SEL)
 			reg_load = ADPD410X_LOW_FREQ_OSCILLATOR_FREQ1;
@@ -324,7 +324,7 @@ int32_t adpd410x_set_sampling_freq(struct adpd410x_dev *dev,
 	reg_load /= sampling_freq;
 	ret = adpd410x_reg_write(dev, ADPD410X_REG_TS_FREQ,
 				 (reg_load & 0xFFFF));
-	if(ret != SUCCESS)
+	if(ret != 0)
 		return ret;
 	return adpd410x_reg_write(dev, ADPD410X_REG_TS_FREQH,
 				  ((reg_load & 0x7F0000) >> 16));
@@ -334,7 +334,7 @@ int32_t adpd410x_set_sampling_freq(struct adpd410x_dev *dev,
  * @brief Get device sampling frequency.
  * @param dev - Device handler.
  * @param sampling_freq - New sampling frequency.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t adpd410x_get_sampling_freq(struct adpd410x_dev *dev,
 				   uint32_t *sampling_freq)
@@ -346,7 +346,7 @@ int32_t adpd410x_get_sampling_freq(struct adpd410x_dev *dev,
 	if ((dev->clk_opt == ADPD410X_INTLFO_INTHFO) ||
 	    (dev->clk_opt == ADPD410X_INTLFO_EXTHFO)) {
 		ret = adpd410x_reg_read(dev, ADPD410X_REG_SYS_CTL, &reg_temp);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 
 		if (reg_temp & BITP_SYS_CTL_LFOSC_SEL)
@@ -358,13 +358,13 @@ int32_t adpd410x_get_sampling_freq(struct adpd410x_dev *dev,
 	}
 
 	ret = adpd410x_reg_read(dev, ADPD410X_REG_TS_FREQ, &reg_temp);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	*sampling_freq = reg_temp;
 
 	ret = adpd410x_reg_read(dev, ADPD410X_REG_TS_FREQH, &reg_temp);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	*sampling_freq = reg_load / (*sampling_freq | ((reg_temp & 0x7F) << 16));
@@ -377,7 +377,7 @@ int32_t adpd410x_get_sampling_freq(struct adpd410x_dev *dev,
  * @param dev - Device handler.
  * @param timeslot_no - Time slot ID to setup.
  * @param init - Pointer to the time slot initialization structure.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t adpd410x_timeslot_setup(struct adpd410x_dev *dev,
 				enum adpd410x_timeslots timeslot_no,
@@ -387,7 +387,7 @@ int32_t adpd410x_timeslot_setup(struct adpd410x_dev *dev,
 	uint16_t data;
 
 	ret = adpd410x_reg_read(dev, ADPD410X_REG_OPMODE, &data);
-	if(ret != SUCCESS)
+	if(ret != 0)
 		return ret;
 	if(((data & BITM_OPMODE_TIMESLOT_EN) >> BITP_OPMODE_TIMESLOT_EN) <
 	    timeslot_no)
@@ -395,27 +395,27 @@ int32_t adpd410x_timeslot_setup(struct adpd410x_dev *dev,
 
 	/* Enable channel 2 */
 	ret = adpd410x_reg_read(dev, ADPD410X_REG_TS_CTRL(timeslot_no), &data);
-	if(ret != SUCCESS)
+	if(ret != 0)
 		return ret;
 	if(init->enable_ch2)
 		data |= BITM_TS_CTRL_A_CH2_EN;
 	else
 		data &= ~BITM_TS_CTRL_A_CH2_EN;
 	ret = adpd410x_reg_write(dev, ADPD410X_REG_TS_CTRL(timeslot_no), data);
-	if(ret != SUCCESS)
+	if(ret != 0)
 		return ret;
 
 	/* Setup inputs */
 	data = init->ts_inputs.option << (init->ts_inputs.pair * 4);
 	ret = adpd410x_reg_write(dev, ADPD410X_REG_INPUTS(timeslot_no), data);
-	if(ret != SUCCESS)
+	if(ret != 0)
 		return ret;
 
 	/* Set precondition PD */
 	ret = adpd410x_reg_write_mask(dev, ADPD410X_REG_CATHODE(timeslot_no),
 				      init->precon_option,
 				      BITM_CATHODE_A_PRECON);
-	if(ret != SUCCESS)
+	if(ret != 0)
 		return ret;
 
 	/**
@@ -427,28 +427,28 @@ int32_t adpd410x_timeslot_setup(struct adpd410x_dev *dev,
 	       init->chan2 << BITP_AFE_TRIM_A_TIA_GAIN_CH2 |
 	       init->chan1 << BITP_AFE_TRIM_A_TIA_GAIN_CH1;
 	ret = adpd410x_reg_write(dev, ADPD410X_REG_AFE_TRIM(timeslot_no), data);
-	if(ret != SUCCESS)
+	if(ret != 0)
 		return ret;
 
 	/* Set LED pattern */
 	data = init->pulse4_subtract << BITP_PATTERN_A_SUBTRACT |
 	       init->pulse4_reverse << BITP_PATTERN_A_REVERSE_INTEG;
 	ret = adpd410x_reg_write(dev, ADPD410X_REG_PATTERN(timeslot_no), data);
-	if(ret != SUCCESS)
+	if(ret != 0)
 		return ret;
 
 	/* Set bytes number for time slot */
 	data = (init->byte_no << BITP_DATA1_A_SIGNAL_SIZE) &
 	       BITM_DATA1_A_SIGNAL_SIZE;
 	ret = adpd410x_reg_write(dev, ADPD410X_REG_DATA1(timeslot_no), data);
-	if(ret != SUCCESS)
+	if(ret != 0)
 		return ret;
 
 	/* Set decimate factor */
 	data = (init->dec_factor << BITP_DECIMATE_A_DECIMATE_FACTOR) &
 	       BITM_DECIMATE_A_DECIMATE_FACTOR;
 	ret = adpd410x_reg_write(dev, ADPD410X_REG_DECIMATE(timeslot_no), data);
-	if(ret != SUCCESS)
+	if(ret != 0)
 		return ret;
 
 	/* Set LED power */
@@ -456,13 +456,13 @@ int32_t adpd410x_timeslot_setup(struct adpd410x_dev *dev,
 	       (init->led2.value << BITP_LED_POW12_A_LED_CURRENT2);
 	ret = adpd410x_reg_write(dev, ADPD410X_REG_LED_POW12(timeslot_no),
 				 data);
-	if(ret != SUCCESS)
+	if(ret != 0)
 		return ret;
 	data = init->led3.value |
 	       (init->led4.value << BITP_LED_POW34_A_LED_CURRENT4);
 	ret = adpd410x_reg_write(dev, ADPD410X_REG_LED_POW34(timeslot_no),
 				 data);
-	if(ret != SUCCESS)
+	if(ret != 0)
 		return ret;
 
 	/* Set ADC cycle and repeat */
@@ -479,19 +479,19 @@ int32_t adpd410x_timeslot_setup(struct adpd410x_dev *dev,
  * @brief Get number of bytes in the device FIFO.
  * @param dev - Device handler.
  * @param bytes - Pointer to the byte count container.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t adpd410x_get_fifo_bytecount(struct adpd410x_dev *dev, uint16_t *bytes)
 {
 	int32_t ret;
 
 	ret = adpd410x_reg_read(dev, ADPD410X_REG_FIFO_STATUS, bytes);
-	if(ret != SUCCESS)
+	if(ret != 0)
 		return ret;
 
 	*bytes &= BITM_INT_STATUS_FIFO_FIFO_BYTE_COUNT;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -502,7 +502,7 @@ int32_t adpd410x_get_fifo_bytecount(struct adpd410x_dev *dev, uint16_t *bytes)
  * @param no_slots - Number of active time slots.
  * @param dual_chan - Mask showing which of the active time slots are dual
  *                    channeled and which are single channeled.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 static int32_t adpd410x_get_data_packet(struct adpd410x_dev *dev,
 					uint32_t *data, uint8_t no_slots,
@@ -520,7 +520,7 @@ static int32_t adpd410x_get_data_packet(struct adpd410x_dev *dev,
 		return -ENOMEM;
 	for(i = 0; i < no_slots; i++) {
 		ret = adpd410x_reg_read(dev, ADPD410X_REG_DATA1(i), &temp_data);
-		if(ret != SUCCESS)
+		if(ret != 0)
 			goto error_slot;
 		slot_bytecount_tab[i] = (temp_data & BITM_DATA1_A_SIGNAL_SIZE);
 	}
@@ -529,7 +529,7 @@ static int32_t adpd410x_get_data_packet(struct adpd410x_dev *dev,
 	sample_index = 0;
 	do {
 		ret = adpd410x_read_fifo(dev, data + sample_index, 1, slot_bytecount_tab[i]);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			goto error_slot;
 
 		sample_index++;
@@ -542,7 +542,7 @@ static int32_t adpd410x_get_data_packet(struct adpd410x_dev *dev,
 	} while(i < no_slots);
 
 	free(slot_bytecount_tab);
-	return SUCCESS;
+	return 0;
 
 error_slot:
 	free(slot_bytecount_tab);
@@ -558,18 +558,18 @@ error_slot:
  * @param data - Pointer to the data container.
  * @param num_samples - number of samples to read
  * @param datawidth - number of bytes per sample
- * @return SUCCESS in case of success, FAILURE or an error code otherwise.
+ * @return 0 in case of success, -1 or an error code otherwise.
  */
 int32_t adpd410x_read_fifo(struct adpd410x_dev *dev, uint32_t *data,
 			   uint16_t num_samples,
 			   uint8_t datawidth)
 {
-	int32_t ret = SUCCESS;
+	int32_t ret = 0;
 	uint8_t *data_byte_buff, i, j;
 	uint16_t next_packet_size, bytes_read = 0,
 				   total_bytes = num_samples * datawidth;
 	if (datawidth > 4 || total_bytes > ADPD410X_FIFO_DEPTH || data == NULL)
-		return FAILURE;
+		return -1;
 
 	data_byte_buff = (uint8_t *) calloc(total_bytes, sizeof (*data_byte_buff));
 	if (!data_byte_buff)
@@ -583,7 +583,7 @@ int32_t adpd410x_read_fifo(struct adpd410x_dev *dev, uint32_t *data,
 		ret = adpd410x_reg_read_bytes(dev, ADPD410X_REG_FIFO_DATA,
 					      data_byte_buff + bytes_read,
 					      next_packet_size);
-		if(ret != SUCCESS)
+		if(ret != 0)
 			goto fifo_free_return;
 
 		bytes_read += next_packet_size;
@@ -625,7 +625,7 @@ fifo_free_return:
  *        time slots.
  * @param dev - Device handler.
  * @param data - Pointer to the data container.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t adpd410x_get_data(struct adpd410x_dev *dev, uint32_t *data)
 {
@@ -635,7 +635,7 @@ int32_t adpd410x_get_data(struct adpd410x_dev *dev, uint32_t *data)
 	uint8_t ts_no;
 
 	ret = adpd410x_reg_read(dev, ADPD410X_REG_OPMODE, &temp_data);
-	if(ret != SUCCESS)
+	if(ret != 0)
 		return ret;
 	ts_no = ((temp_data & BITM_OPMODE_TIMESLOT_EN) >>
 		 BITP_OPMODE_TIMESLOT_EN) + 1;
@@ -643,7 +643,7 @@ int32_t adpd410x_get_data(struct adpd410x_dev *dev, uint32_t *data)
 	for(i = 0; i < ts_no; i++) {
 		ret = adpd410x_reg_read(dev, ADPD410X_REG_TS_CTRL(i),
 					&temp_data);
-		if(ret != SUCCESS)
+		if(ret != 0)
 			return ret;
 		if((temp_data & BITM_TS_CTRL_A_CH2_EN) != 0)
 			dual_chan |= (1 << i);
@@ -656,7 +656,7 @@ int32_t adpd410x_get_data(struct adpd410x_dev *dev, uint32_t *data)
  * @brief Setup the device and the driver.
  * @param device - Pointer to the device handler.
  * @param init_param - Pointer to the initialization structure.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t adpd410x_setup(struct adpd410x_dev **device,
 		       struct adpd410x_init_param *init_param)
@@ -678,42 +678,42 @@ int32_t adpd410x_setup(struct adpd410x_dev **device,
 	else
 		ret = no_os_i2c_init(&dev->dev_ops.i2c_phy_dev,
 				     &init_param->dev_ops_init.i2c_phy_init);
-	if(ret != SUCCESS)
+	if(ret != 0)
 		goto error_dev;
 
 	ret = no_os_gpio_get(&dev->gpio0, &init_param->gpio0);
-	if(ret != SUCCESS)
+	if(ret != 0)
 		goto error_phy;
 	ret = no_os_gpio_get(&dev->gpio1, &init_param->gpio1);
-	if(ret != SUCCESS)
+	if(ret != 0)
 		goto error_gpio0;
 	ret = no_os_gpio_get(&dev->gpio2, &init_param->gpio2);
-	if(ret != SUCCESS)
+	if(ret != 0)
 		goto error_gpio1;
 	ret = no_os_gpio_get(&dev->gpio3, &init_param->gpio3);
-	if(ret != SUCCESS)
+	if(ret != 0)
 		goto error_gpio2;
 
 	ret = adpd410x_reset(dev);
-	if(ret != SUCCESS)
+	if(ret != 0)
 		goto error_gpio3;
 
 	/* Do power-up sequence described in errata. */
 	ret = no_os_gpio_direction_output(dev->gpio0, NO_OS_GPIO_HIGH);
-	if(ret != SUCCESS)
+	if(ret != 0)
 		goto error_gpio3;
 	ret = adpd410x_reg_write(dev, 0xB5, 0x04);
-	if(ret != SUCCESS)
+	if(ret != 0)
 		goto error_gpio3;
 	ret = adpd410x_reg_write(dev, 0xB5, 0x00);
-	if(ret != SUCCESS)
+	if(ret != 0)
 		goto error_gpio3;
 	ret = no_os_gpio_set_value(dev->gpio0, NO_OS_GPIO_HIGH_Z);
-	if(ret != SUCCESS)
+	if(ret != 0)
 		goto error_gpio3;
 
 	ret = adpd410x_reg_read(dev, ADPD410X_REG_CHIP_ID, &reg_temp);
-	if(ret != SUCCESS)
+	if(ret != 0)
 		goto error_gpio3;
 	if((reg_temp & BITM_CHIP_ID) != ADPD410X_CHIP_ID)
 		goto error_gpio3;
@@ -723,7 +723,7 @@ int32_t adpd410x_setup(struct adpd410x_dev **device,
 
 	ret = adpd410x_reg_write_mask(dev, ADPD410X_REG_SYS_CTL, dev->clk_opt,
 				      BITM_SYS_CTL_ALT_CLOCKS);
-	if(ret != SUCCESS)
+	if(ret != 0)
 		goto error_gpio3;
 
 	/**
@@ -733,17 +733,17 @@ int32_t adpd410x_setup(struct adpd410x_dev **device,
 	if((dev->clk_opt == ADPD410X_INTLFO_INTHFO) ||
 	    (dev->clk_opt == ADPD410X_INTLFO_EXTHFO)) {
 		ret = adpd410x_reg_read(dev, ADPD410X_REG_SYS_CTL, &reg_temp);
-		if(ret != SUCCESS)
+		if(ret != 0)
 			goto error_gpio3;
 		reg_temp |= (BITM_SYS_CTL_OSC_1M_EN | BITM_SYS_CTL_LFOSC_SEL);
 		ret = adpd410x_reg_write(dev, ADPD410X_REG_SYS_CTL, reg_temp);
-		if(ret != SUCCESS)
+		if(ret != 0)
 			goto error_gpio3;
 	}
 
 	*device = dev;
 
-	return SUCCESS;
+	return 0;
 
 error_gpio3:
 	no_os_gpio_remove(dev->gpio3);
@@ -767,7 +767,7 @@ error_dev:
 /**
  * @brief Free memory allocated by adpd410x_setup().
  * @param dev - Device handler.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t adpd410x_remove(struct adpd410x_dev *dev)
 {
@@ -780,23 +780,23 @@ int32_t adpd410x_remove(struct adpd410x_dev *dev)
 		ret = no_os_spi_remove(dev->dev_ops.spi_phy_dev);
 	else
 		ret = no_os_i2c_remove(dev->dev_ops.i2c_phy_dev);
-	if(ret != SUCCESS)
+	if(ret != 0)
 		return ret;
 
 	ret = no_os_gpio_remove(dev->gpio0);
-	if(ret != SUCCESS)
+	if(ret != 0)
 		return ret;
 	ret = no_os_gpio_remove(dev->gpio1);
-	if(ret != SUCCESS)
+	if(ret != 0)
 		return ret;
 	ret = no_os_gpio_remove(dev->gpio2);
-	if(ret != SUCCESS)
+	if(ret != 0)
 		return ret;
 	ret = no_os_gpio_remove(dev->gpio3);
-	if(ret != SUCCESS)
+	if(ret != 0)
 		return ret;
 
 	free(dev);
 
-	return SUCCESS;
+	return 0;
 }

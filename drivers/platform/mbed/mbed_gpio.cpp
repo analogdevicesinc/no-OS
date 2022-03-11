@@ -61,7 +61,7 @@ extern "C"
  * @brief Obtain the GPIO descriptor.
  * @param desc[in,out] - The GPIO descriptor.
  * @param param[in] - The structure that contains the GPIO init parameters.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t mbed_gpio_get(struct no_os_gpio_desc **desc,
 		      const struct no_os_gpio_init_param *param)
@@ -97,7 +97,7 @@ int32_t mbed_gpio_get(struct no_os_gpio_desc **desc,
 	gpio_desc->extra = mbed_gpio_desc;
 	*desc = gpio_desc;
 
-	return SUCCESS;
+	return 0;
 
 err_mbed_gpio_desc:
 	free(gpio_desc);
@@ -109,14 +109,14 @@ err_mbed_gpio_desc:
  * @brief Get the value of an optional GPIO.
  * @param desc[in,out] - The GPIO descriptor.
  * @param param[in] - GPIO Initialization parameters.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t mbed_gpio_get_optional(struct no_os_gpio_desc **desc,
 			       const struct no_os_gpio_init_param *param)
 {
 	if (param == NULL) {
 		*desc = NULL;
-		return SUCCESS;
+		return 0;
 	}
 
 	return mbed_gpio_get(desc, param);
@@ -125,7 +125,7 @@ int32_t mbed_gpio_get_optional(struct no_os_gpio_desc **desc,
 /**
  * @brief Free the resources allocated by mbed_gpio_get().
  * @param desc[in] - The GPIO descriptor.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t mbed_gpio_remove(struct no_os_gpio_desc *desc)
 {
@@ -144,13 +144,13 @@ int32_t mbed_gpio_remove(struct no_os_gpio_desc *desc)
 	free(desc->extra);
 	free(desc);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Enable the input direction of the specified GPIO.
  * @param desc[in] - The GPIO descriptor.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  * @note does not support reconfiguration of already set pin direction
  */
 int32_t mbed_gpio_direction_input(struct no_os_gpio_desc *desc)
@@ -182,7 +182,7 @@ int32_t mbed_gpio_direction_input(struct no_os_gpio_desc *desc)
 	/* Set the gpio pin mode */
 	gpio_input->mode((PinMode)gpio_desc_extra->pin_mode);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -191,7 +191,7 @@ int32_t mbed_gpio_direction_input(struct no_os_gpio_desc *desc)
  * @param value[in] - The GPIO value.
  *                Example: NO_OS_GPIO_HIGH
  *                         NO_OS_GPIO_LOW
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  * @note does not support reconfiguration of already set pin direction
  */
 int32_t mbed_gpio_direction_output(struct no_os_gpio_desc *desc, uint8_t value)
@@ -223,7 +223,7 @@ int32_t mbed_gpio_direction_output(struct no_os_gpio_desc *desc, uint8_t value)
 	/* Set the GPIO value */
 	gpio_output->write(value);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -232,7 +232,7 @@ int32_t mbed_gpio_direction_output(struct no_os_gpio_desc *desc, uint8_t value)
  * @param direction[in,out] - The GPIO direction.
  *                    Example: NO_OS_GPIO_OUT
  *                             NO_OS_GPIO_IN
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t mbed_gpio_get_direction(struct no_os_gpio_desc *desc, uint8_t *direction)
 {
@@ -247,7 +247,7 @@ int32_t mbed_gpio_get_direction(struct no_os_gpio_desc *desc, uint8_t *direction
 
 	*direction = no_os_gpio_desc_extra->direction;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -256,7 +256,7 @@ int32_t mbed_gpio_get_direction(struct no_os_gpio_desc *desc, uint8_t *direction
  * @param value[in] - The GPIO value.
  *                Example: NO_OS_GPIO_HIGH
  *                         NO_OS_GPIO_LOW
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t mbed_gpio_set_value(struct no_os_gpio_desc *desc, uint8_t value)
 {
@@ -276,7 +276,7 @@ int32_t mbed_gpio_set_value(struct no_os_gpio_desc *desc, uint8_t value)
 
 	gpio_output->write(value);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -285,7 +285,7 @@ int32_t mbed_gpio_set_value(struct no_os_gpio_desc *desc, uint8_t value)
  * @param value[in,out] - The GPIO value.
  *                Example: NO_OS_GPIO_HIGH
  *                         NO_OS_GPIO_LOW
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t mbed_gpio_get_value(struct no_os_gpio_desc *desc, uint8_t *value)
 {
@@ -300,7 +300,7 @@ int32_t mbed_gpio_get_value(struct no_os_gpio_desc *desc, uint8_t *value)
 
 	*value = (uint8_t)gpio_input->read();
 
-	return SUCCESS;
+	return 0;
 }
 
 /**

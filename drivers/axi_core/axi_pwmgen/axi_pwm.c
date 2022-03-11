@@ -82,7 +82,7 @@
  * @param [in] offset - Device register offset
  * @param [in] mask - Bitmask used to write
  * @param [in] data - Data to write in register
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 static int32_t axi_pwmgen_write_mask(uint32_t base, uint32_t offset,
 				     uint32_t mask,
@@ -102,7 +102,7 @@ static int32_t axi_pwmgen_write_mask(uint32_t base, uint32_t offset,
  * @brief Enable PWM generator device.
  *
  * @param [in] desc - Decriptor containing PWM generator parameters.
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t no_os_pwm_enable(struct no_os_pwm_desc *desc)
 {
@@ -112,7 +112,7 @@ int32_t no_os_pwm_enable(struct no_os_pwm_desc *desc)
 	ret = no_os_axi_io_write(axi_desc->base_addr,
 				 AXI_PWMGEN_CHX_PERIOD(axi_desc->channel),
 				 axi_desc->ch_period);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	return no_os_axi_io_write(axi_desc->base_addr, AXI_PWMGEN_REG_CONFIG,
@@ -123,7 +123,7 @@ int32_t no_os_pwm_enable(struct no_os_pwm_desc *desc)
  * @brief Disable PWM generator device.
  *
  * @param [in] desc - Decriptor containing PWM generator parameters.
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t no_os_pwm_disable(struct no_os_pwm_desc *desc)
 {
@@ -133,7 +133,7 @@ int32_t no_os_pwm_disable(struct no_os_pwm_desc *desc)
 	ret = no_os_axi_io_write(axi_desc->base_addr,
 				 AXI_PWMGEN_CHX_PERIOD(axi_desc->channel),
 				 AXI_PWMGEN_CHANNEL_DISABLE);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	return no_os_axi_io_write(axi_desc->base_addr, AXI_PWMGEN_REG_CONFIG,
@@ -145,7 +145,7 @@ int32_t no_os_pwm_disable(struct no_os_pwm_desc *desc)
  *
  * @param [in] desc - Decriptor containing PWM generator parameters.
  * @param [in] period_ns - PWM period.
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t no_os_pwm_set_period(struct no_os_pwm_desc *desc, uint32_t period_ns)
 {
@@ -160,12 +160,12 @@ int32_t no_os_pwm_set_period(struct no_os_pwm_desc *desc, uint32_t period_ns)
 	ret = no_os_axi_io_write(axi_desc->base_addr,
 				 AXI_PWMGEN_CHX_PERIOD(axi_desc->channel),
 				 desc->enabled ? period_cnt : 0);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	desc->period_ns = period_ns;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -173,14 +173,14 @@ int32_t no_os_pwm_set_period(struct no_os_pwm_desc *desc, uint32_t period_ns)
  *
  * @param [in] desc - Decriptor containing PWM generator parameters.
  * @param [out] period_ns - PWM period.
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t no_os_pwm_get_period(struct no_os_pwm_desc *desc, uint32_t *period_ns)
 {
 
 	*period_ns = desc->period_ns;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -188,7 +188,7 @@ int32_t no_os_pwm_get_period(struct no_os_pwm_desc *desc, uint32_t *period_ns)
  *
  * @param [in] desc - Decriptor containing PWM generator parameters.
  * @param [in] duty_cycle_ns - PWM duty cycle.
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t no_os_pwm_set_duty_cycle(struct no_os_pwm_desc *desc,
 				 uint32_t duty_cycle_ns)
@@ -206,12 +206,12 @@ int32_t no_os_pwm_set_duty_cycle(struct no_os_pwm_desc *desc,
 	ret = no_os_axi_io_write(axi_desc->base_addr,
 				 AXI_PWMGEN_CHX_DUTY(axi_desc->channel),
 				 duty_cnt);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	desc->duty_cycle_ns = duty_cycle_ns;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -219,14 +219,14 @@ int32_t no_os_pwm_set_duty_cycle(struct no_os_pwm_desc *desc,
  *
  * @param [in] desc - Decriptor containing PWM generator parameters.
  * @param [out] duty_cycle_ns - PWM duty cycle.
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t no_os_pwm_get_duty_cycle(struct no_os_pwm_desc *desc,
 				 uint32_t *duty_cycle_ns)
 {
 	*duty_cycle_ns = desc->duty_cycle_ns;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -234,7 +234,7 @@ int32_t no_os_pwm_get_duty_cycle(struct no_os_pwm_desc *desc,
  *
  * @param [in] desc - Decriptor containing PWM generator parameters.
  * @param [in] phase_ns - PWM phase.
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t no_os_pwm_set_phase(struct no_os_pwm_desc *desc, uint32_t phase_ns)
 {
@@ -248,12 +248,12 @@ int32_t no_os_pwm_set_phase(struct no_os_pwm_desc *desc, uint32_t phase_ns)
 	ret = no_os_axi_io_write(axi_desc->base_addr,
 				 AXI_PWMGEN_CHX_PHASE(axi_desc->channel),
 				 phase_cnt);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	desc->phase_ns = phase_ns;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -261,13 +261,13 @@ int32_t no_os_pwm_set_phase(struct no_os_pwm_desc *desc, uint32_t phase_ns)
  *
  * @param [in] desc - Decriptor containing PWM generator parameters.
  * @param [out] phase_ns - PWM phase.
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t no_os_pwm_get_phase(struct no_os_pwm_desc *desc, uint32_t *phase_ns)
 {
 	*phase_ns = desc->phase_ns;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -275,7 +275,7 @@ int32_t no_os_pwm_get_phase(struct no_os_pwm_desc *desc, uint32_t *phase_ns)
  *
  * @param [out] desc - Decriptor containing PWM generator parameters.
  * @param [in] param - Structure containing the PWM generator init parameters.
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t no_os_pwm_init(struct no_os_pwm_desc **desc,
 		       const struct no_os_pwm_init_param *param)
@@ -287,13 +287,13 @@ int32_t no_os_pwm_init(struct no_os_pwm_desc **desc,
 	int32_t ret;
 
 	if (!param)
-		return FAILURE;
+		return -1;
 
 	axi_init = param->extra;
 
 	pwm_desc = (struct no_os_pwm_desc *)calloc(1, sizeof(*pwm_desc));
 	if (!pwm_desc)
-		return FAILURE;
+		return -1;
 
 	axi_desc = (struct axi_pwm_desc *)calloc(1, sizeof(*axi_desc));
 	if (!axi_desc)
@@ -310,7 +310,7 @@ int32_t no_os_pwm_init(struct no_os_pwm_desc **desc,
 	ret = no_os_axi_io_read(axi_desc->base_addr,
 				AXI_PWMGEN_REG_NPWM,
 				&data);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		goto error_xdesc;
 
 	if (axi_init->channel > (data - 1))
@@ -319,55 +319,55 @@ int32_t no_os_pwm_init(struct no_os_pwm_desc **desc,
 	/* Enable the core */
 	ret = axi_pwmgen_write_mask(axi_desc->base_addr, AXI_PWMGEN_REG_CONFIG,
 				    AXI_PWMGEN_RESET, 0);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		goto error_xdesc;
 
 	ret = no_os_axi_io_write(axi_desc->base_addr, AXI_PWMGEN_REG_SCRATCHPAD,
 				 AXI_PWMGEN_TEST_DATA);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		goto error_xdesc;
 
 	ret = no_os_axi_io_read(axi_desc->base_addr,
 				AXI_PWMGEN_REG_SCRATCHPAD,
 				&data);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		goto error_xdesc;
 
 	if (data != AXI_PWMGEN_TEST_DATA)
 		goto error_xdesc;
 
 	ret = no_os_pwm_set_period(pwm_desc, pwm_desc->period_ns);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		goto error_xdesc;
 
 	ret = no_os_pwm_set_duty_cycle(pwm_desc, pwm_desc->duty_cycle_ns);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		goto error_xdesc;
 
 	ret = no_os_pwm_set_phase(pwm_desc, pwm_desc->phase_ns);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		goto error_xdesc;
 
 	ret = no_os_pwm_enable(pwm_desc);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		goto error_xdesc;
 
 	*desc = pwm_desc;
 
-	return SUCCESS;
+	return 0;
 
 error_xdesc:
 	free(axi_desc);
 error_desc:
 	free(pwm_desc);
 
-	return FAILURE;
+	return -1;
 }
 
 /**
  * @brief Free the memory allocated by axi_pwmgen_init().
  * @param [in] desc - Pointer to the device handler.
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise
+ * @return 0 in case of success, -1 otherwise
  */
 int32_t no_os_pwm_remove(struct no_os_pwm_desc *desc)
 {
@@ -375,16 +375,16 @@ int32_t no_os_pwm_remove(struct no_os_pwm_desc *desc)
 	int32_t ret;
 
 	if (!desc)
-		return FAILURE;
+		return -1;
 
 	ret = no_os_axi_io_write(axi_desc->base_addr,
 				 AXI_PWMGEN_REG_CONFIG,
 				 AXI_PWMGEN_RESET);
-	if (ret != SUCCESS)
-		return FAILURE;
+	if (ret != 0)
+		return -1;
 
 	free(axi_desc);
 	free(desc);
 
-	return SUCCESS;
+	return 0;
 }

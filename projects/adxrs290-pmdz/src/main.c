@@ -106,11 +106,11 @@ int main(void)
 	};
 
 	status = platform_init();
-	if (IS_ERR_VALUE(status))
+	if (NO_OS_IS_ERR_VALUE(status))
 		return status;
 
 	status = adxrs290_init(&adxrs290_device, &adxrs290_param);
-	if (IS_ERR_VALUE(status))
+	if (NO_OS_IS_ERR_VALUE(status))
 		return status;
 
 	struct iio_data_buffer rd_buf = {

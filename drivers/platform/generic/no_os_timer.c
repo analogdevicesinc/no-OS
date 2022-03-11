@@ -65,7 +65,7 @@ int32_t no_os_timer_init(struct no_os_timer_desc **desc,
 		// Unused variable - fix compiler warning
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -79,7 +79,7 @@ int32_t no_os_timer_remove(struct no_os_timer_desc *desc)
 		// Unused variable - fix compiler warning
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -123,7 +123,7 @@ int32_t no_os_timer_counter_get(struct no_os_timer_desc *desc,
 		// Unused variable - fix compiler warning
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -142,7 +142,7 @@ int32_t no_os_timer_counter_set(struct no_os_timer_desc *desc, uint32_t new_val)
 		// Unused variable - fix compiler warning
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -162,7 +162,7 @@ int32_t no_os_timer_count_clk_get(struct no_os_timer_desc *desc,
 		// Unused variable - fix compiler warning
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -182,6 +182,6 @@ int32_t no_os_timer_count_clk_set(struct no_os_timer_desc *desc,
 		// Unused variable - fix compiler warning
 	}
 
-	return SUCCESS;
+	return 0;
 }
 

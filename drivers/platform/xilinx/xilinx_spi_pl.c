@@ -175,7 +175,7 @@ static int32_t _xil_spi_init_dev(struct xspi_desc *xdesc)
 
 	_write(xdesc, XSP_CR_OFFSET, val);
 
-	return SUCCESS;
+	return 0;
 }
 
 /* Initialize spi_desc structure and device */
@@ -215,13 +215,13 @@ static int32_t xil_spi_init_pl(struct no_os_spi_desc **desc,
 	xdesc->cs_asserted = 0;
 
 	err = _xil_spi_init_dev(xdesc);
-	if (IS_ERR_VALUE(err))
+	if (NO_OS_IS_ERR_VALUE(err))
 		goto error;
 
 	ldesc->extra = xdesc;
 	*desc = ldesc;
 
-	return SUCCESS;
+	return 0;
 
 error:
 	free(xdesc);
@@ -239,7 +239,7 @@ static int32_t xil_spi_remove_pl(struct no_os_spi_desc *desc)
 	free(desc->extra);
 	free(desc);
 
-	return SUCCESS;
+	return 0;
 }
 
 /*
@@ -344,7 +344,7 @@ static int32_t xil_spi_write_and_read_pl(struct no_os_spi_desc *desc,
 	}
 	_xil_spi_start_transfer(desc, 0);
 
-	return SUCCESS;
+	return 0;
 }
 
 /* Get type of message. It can be READ, WRITE or both */
@@ -519,7 +519,7 @@ static int32_t xil_spi_transfer_pl(struct no_os_spi_desc *desc,
 			_xil_spi_start_transfer(desc, 0);
 	} while (rx.i < len);
 
-	return SUCCESS;
+	return 0;
 }
 
 const struct no_os_spi_platform_ops xil_spi_reg_ops_pl = {

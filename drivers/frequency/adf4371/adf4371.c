@@ -232,7 +232,7 @@ static const struct reg_sequence adf4371_reg_defaults[] = {
  * @param dev - The device structure.
  * @param reg - The register address.
  * @param val - The register data.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 static int32_t adf4371_write(struct adf4371_dev *dev,
 			     uint16_t reg,
@@ -255,7 +255,7 @@ static int32_t adf4371_write(struct adf4371_dev *dev,
  * @param reg - The register address.
  * @param val - The buffer of data to be written.
  * @param size - The buffer size.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 static int32_t adf4371_write_bulk(struct adf4371_dev *dev,
 				  uint16_t reg,
@@ -280,7 +280,7 @@ static int32_t adf4371_write_bulk(struct adf4371_dev *dev,
  * @param dev - The device structure.
  * @param reg - The register address.
  * @param val - The register data.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 static int32_t adf4371_read(struct adf4371_dev *dev,
 			    uint16_t reg,
@@ -301,7 +301,7 @@ static int32_t adf4371_read(struct adf4371_dev *dev,
 
 	*val = buf[2];
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -310,7 +310,7 @@ static int32_t adf4371_read(struct adf4371_dev *dev,
  * @param reg - The register address.
  * @param reg - The register address.
  * @param val - The register data.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 static int32_t adf4371_update(struct adf4371_dev *dev,
 			      uint16_t reg,
@@ -407,7 +407,7 @@ static void adf4371_pll_fract_n_compute(uint64_t vco,
  * @param dev - The device structure.
  * @param freq - The output frequency.
  * @param channel - The selected channel.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 static int32_t adf4371_set_freq(struct adf4371_dev *dev,
 				uint64_t freq,
@@ -421,7 +421,7 @@ static int32_t adf4371_set_freq(struct adf4371_dev *dev,
 	case ADF4371_CH_RF8:
 	case ADF4371_CH_RFAUX8:
 		if (ADF4371_CHECK_RANGE(freq, OUT_RF8_FREQ))
-			return FAILURE;
+			return -1;
 
 		dev->rf_div_sel = 0;
 
@@ -433,19 +433,19 @@ static int32_t adf4371_set_freq(struct adf4371_dev *dev,
 	case ADF4371_CH_RF16:
 		/* ADF4371 RF16 8000...16000 MHz */
 		if (ADF4371_CHECK_RANGE(freq, OUT_RF16_FREQ))
-			return FAILURE;
+			return -1;
 
 		freq >>= 1;
 		break;
 	case ADF4371_CH_RF32:
 		/* ADF4371 RF32 16000...32000 MHz */
 		if (ADF4371_CHECK_RANGE(freq, OUT_RF32_FREQ))
-			return FAILURE;
+			return -1;
 
 		freq >>= 2;
 		break;
 	default:
-		return FAILURE;
+		return -1;
 	}
 
 	adf4371_pll_fract_n_compute(freq, dev->fpfd, &dev->integer, &dev->fract1,
@@ -508,7 +508,7 @@ static int32_t adf4371_set_freq(struct adf4371_dev *dev,
  * @param dev - The device structure.
  * @param channel - The selected channel.
  * @param power_down - The power down state.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 static int32_t adf4371_channel_power_down(struct adf4371_dev *dev,
 		uint32_t channel,
@@ -533,7 +533,7 @@ static int32_t adf4371_channel_power_down(struct adf4371_dev *dev,
 /**
  * Configure the channels.
  * @param dev - The device structure.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 static int32_t adf4371_channel_config(struct adf4371_dev *dev)
 {
@@ -551,7 +551,7 @@ static int32_t adf4371_channel_config(struct adf4371_dev *dev)
 				return ret;
 		} else if (rate != dev->channel_cfg[i].freq) {
 			printf("Clock rate for chanel %"PRId32" is not in sync\n", i);
-			return FAILURE;
+			return -1;
 		}
 		/* Powerup channel */
 		if (dev->channel_cfg[i].enable) {
@@ -567,7 +567,7 @@ static int32_t adf4371_channel_config(struct adf4371_dev *dev)
 /**
  * Setup the device.
  * @param dev - The device structure.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 static int32_t adf4371_setup(struct adf4371_dev *dev)
 {
@@ -692,17 +692,17 @@ static int32_t adf4371_setup(struct adf4371_dev *dev)
  * @param dev - The device structure.
  * @param chan - Channel number.
  * @param rate - Channel rate.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t adf4371_clk_recalc_rate(struct adf4371_dev *dev, uint32_t chan,
 				uint64_t *rate)
 {
 	if (chan > dev->num_channels)
-		return FAILURE;
+		return -1;
 
 	*rate = adf4371_pll_fract_n_get_rate(dev, chan);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -710,14 +710,14 @@ int32_t adf4371_clk_recalc_rate(struct adf4371_dev *dev, uint32_t chan,
  * @param dev - The device structure
  * @param rate - The desired rate.
  * @param rounded_rate - The closest possible rate of desired rate.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t adf4371_clk_round_rate(struct adf4371_dev *dev, uint64_t rate,
 			       uint64_t *rounded_rate)
 {
 	*rounded_rate = rate;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -725,13 +725,13 @@ int32_t adf4371_clk_round_rate(struct adf4371_dev *dev, uint64_t rate,
  * @param dev - The device structure.
  * @param chan - Channel number.
  * @param rate - Channel rate.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t adf4371_clk_set_rate(struct adf4371_dev *dev, uint32_t chan,
 			     uint64_t rate)
 {
 	if (chan >= dev->num_channels)
-		return FAILURE;
+		return -1;
 
 	return adf4371_set_freq(dev, rate, chan);
 }
@@ -741,7 +741,7 @@ int32_t adf4371_clk_set_rate(struct adf4371_dev *dev, uint32_t chan,
  * @param device - The device structure.
  * @param init_param - The structure that contains the device initial
  * 		       parameters.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t adf4371_init(struct adf4371_dev **device,
 		     const struct adf4371_init_param *init_param)
@@ -752,7 +752,7 @@ int32_t adf4371_init(struct adf4371_dev **device,
 
 	dev = (struct adf4371_dev *)calloc(1, sizeof(*dev));
 	if (!dev)
-		return FAILURE;
+		return -1;
 
 	ret = no_os_spi_init(&dev->spi_desc, init_param->spi_init);
 	if (ret < 0)
@@ -807,7 +807,7 @@ int32_t adf4371_init(struct adf4371_dev **device,
 
 	*device = dev;
 
-	return SUCCESS;
+	return 0;
 
 error:
 	no_os_spi_remove(dev->spi_desc);
@@ -819,11 +819,11 @@ error:
 /**
  * Remove the device - release resources.
  * @param device - The device structure.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t adf4371_remove(struct adf4371_dev *device)
 {
-	int32_t ret = SUCCESS;
+	int32_t ret = 0;
 
 	if (device->spi_desc)
 		ret = no_os_spi_remove(device->spi_desc);

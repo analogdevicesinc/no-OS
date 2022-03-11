@@ -46,26 +46,26 @@
  * @brief Initialize the I2C communication peripheral.
  * @param desc - The I2C descriptor.
  * @param param - The structure that contains the I2C parameters.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t no_os_i2c_init(struct no_os_i2c_desc **desc,
 		       const struct no_os_i2c_init_param *param)
 {
 	if (!param)
-		return FAILURE;
+		return -1;
 
 	if ((param->platform_ops->i2c_ops_init(desc, param)))
-		return FAILURE;
+		return -1;
 
 	(*desc)->platform_ops = param->platform_ops;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Free the resources allocated by no_os_i2c_init().
  * @param desc - The I2C descriptor.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t no_os_i2c_remove(struct no_os_i2c_desc *desc)
 {
@@ -80,7 +80,7 @@ int32_t no_os_i2c_remove(struct no_os_i2c_desc *desc)
  * @param stop_bit - Stop conditional control.
  *                   Example: 0 - A stop condition will not be generated.
  *                            1 - A stop condition will be generated.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t no_os_i2c_write(struct no_os_i2c_desc *desc,
 			uint8_t *data,
@@ -99,7 +99,7 @@ int32_t no_os_i2c_write(struct no_os_i2c_desc *desc,
  * @param stop_bit - Stop conditional control.
  *                   Example: 0 - A stop condition will not be generated.
  *                            1 - A stop condition will be generated.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t no_os_i2c_read(struct no_os_i2c_desc *desc,
 		       uint8_t *data,

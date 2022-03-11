@@ -79,7 +79,7 @@ static int32_t linux_socket_open(void *desc, uint32_t *sock_id,
 	flags = fcntl(*sock_id, F_GETFL);
 	fcntl(*sock_id, F_SETFL, flags | O_NONBLOCK);
 
-	return SUCCESS;
+	return 0;
 }
 
 /** @brief See \ref network_interface.socket_close */
@@ -128,7 +128,7 @@ static int32_t linux_socket_disconnect(void *desc,
 	if(ret < 0)
 		return -errno;
 
-	return SUCCESS;
+	return 0;
 }
 
 /** @brief See \ref network_interface.socket_send */
@@ -183,10 +183,10 @@ static int32_t linux_socket_sendto(void *desc, uint32_t sock_id,
 
 	ret = sendto(sock_id, data, size, 0, (struct sockaddr*) &saddr_to, len);
 
-	if(ret != SUCCESS)
+	if(ret != 0)
 		return ret;
 
-	return SUCCESS;
+	return 0;
 }
 
 /** @brief See \ref network_interface.socket_recvfrom */
@@ -208,10 +208,10 @@ static int32_t linux_socket_recvfrom(void *desc, uint32_t sock_id,
 	ret = recvfrom(sock_id, data, size, MSG_DONTWAIT,(struct sockaddr*) &saddr_from,
 		       &len);
 
-	if(ret != SUCCESS)
+	if(ret != 0)
 		return ret;
 
-	return SUCCESS;
+	return 0;
 }
 
 /** @brief See \ref network_interface.socket_bind */
@@ -262,7 +262,7 @@ static int32_t linux_socket_accept(void *desc, uint32_t sock_id,
 
 	*client_socket_id = ret;
 
-	return SUCCESS;
+	return 0;
 }
 
 struct network_interface linux_net = {

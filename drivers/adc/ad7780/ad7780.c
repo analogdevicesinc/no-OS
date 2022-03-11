@@ -114,7 +114,7 @@ int8_t ad7780_init(struct ad7780_dev **device,
 /***************************************************************************//**
  * @brief Free the resources allocated by ad7780_init().
  * @param dev - The device structure.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
 *******************************************************************************/
 int32_t ad7780_remove(struct ad7780_dev *dev)
 {

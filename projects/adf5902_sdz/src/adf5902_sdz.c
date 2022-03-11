@@ -192,31 +192,31 @@ int main(void)
 	};
 
 	ret = adf5902_init(&dev, &adf5902_param);
-	if (ret != SUCCESS) {
+	if (ret != 0) {
 		pr_err("ADF5902 Initialization failed!\n");
-		return FAILURE;
+		return -1;
 	}
 
 	ret = adf5902_recalibrate(dev);
-	if (ret != SUCCESS) {
+	if (ret != 0) {
 		pr_err("ADF5902 Recalibration failed!\n");
-		return FAILURE;
+		return -1;
 	}
 
 	pr_info("ADF5902 Successfully initialized!\n");
 
 	ret = adf5902f_compute_frequency(dev, &freq);
-	if (ret != SUCCESS) {
+	if (ret != 0) {
 		pr_err("ADF5902 Output Frequency not locked!\n");
-		return FAILURE;
+		return -1;
 	}
 
 	pr_info("ADF5902 Locked Frequency: %llu Hz\n", freq);
 
 	ret = adf5902_read_temp(dev, &temperature);
-	if (ret != SUCCESS) {
+	if (ret != 0) {
 		pr_err("ADF5902 Temperature read failed!\n");
-		return FAILURE;
+		return -1;
 	}
 
 	pr_info("ADF5902 Temperature value: %.2f degC \n", temperature);

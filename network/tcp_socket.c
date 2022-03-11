@@ -156,11 +156,11 @@ static int32_t stcp_socket_init(struct secure_socket_desc **desc,
 	int32_t				ret;
 
 	if (!desc || !param)
-		return FAILURE;
+		return -1;
 
 	ldesc = (typeof(ldesc))calloc(1, sizeof(*ldesc));
 	if (!ldesc)
-		return FAILURE;
+		return -1;
 
 	/* Initialize structures */
 	mbedtls_ssl_config_init(&ldesc->conf);
@@ -169,7 +169,7 @@ static int32_t stcp_socket_init(struct secure_socket_desc **desc,
 	mbedtls_pk_init(&ldesc->pkey);
 
 	ret = no_os_trng_init(&ldesc->trng, param->trng_init_param);
-	if (IS_ERR_VALUE(ret)) {
+	if (NO_OS_IS_ERR_VALUE(ret)) {
 		ldesc->trng = NULL;
 		goto exit;
 	}
@@ -179,7 +179,7 @@ static int32_t stcp_socket_init(struct secure_socket_desc **desc,
 					  MBEDTLS_SSL_IS_CLIENT,
 					  MBEDTLS_SSL_TRANSPORT_STREAM,
 					  MBEDTLS_SSL_PRESET_DEFAULT);
-	if (IS_ERR_VALUE(ret))
+	if (NO_OS_IS_ERR_VALUE(ret))
 		goto exit;
 
 	if (param->ca_cert) {
@@ -215,17 +215,17 @@ static int32_t stcp_socket_init(struct secure_socket_desc **desc,
 #endif /* ENABLE_PEM_CERT */
 					      (const unsigned char *)param->cli_cert,
 					      (size_t)param->cli_cert_len);
-		if (IS_ERR_VALUE(ret))
+		if (NO_OS_IS_ERR_VALUE(ret))
 			goto exit;
 		ret = mbedtls_pk_parse_key(&ldesc->pkey,
 					   (const unsigned char *)param->cli_pk,
 					   param->cli_pk_len, NULL, 0 );
-		if (IS_ERR_VALUE(ret))
+		if (NO_OS_IS_ERR_VALUE(ret))
 			goto exit;
 
 		ret = mbedtls_ssl_conf_own_cert(&ldesc->conf, &ldesc->clicert,
 						&ldesc->pkey);
-		if (IS_ERR_VALUE(ret))
+		if (NO_OS_IS_ERR_VALUE(ret))
 			goto exit;
 	}
 
@@ -237,7 +237,7 @@ static int32_t stcp_socket_init(struct secure_socket_desc **desc,
 
 	/* Set the resulting protocol configuration */
 	ret = mbedtls_ssl_setup(&ldesc->ssl, &ldesc->conf);
-	if (IS_ERR_VALUE(ret))
+	if (NO_OS_IS_ERR_VALUE(ret))
 		goto exit;
 
 	/* Set socket callbacks */
@@ -247,7 +247,7 @@ static int32_t stcp_socket_init(struct secure_socket_desc **desc,
 
 	*desc = ldesc;
 
-	return SUCCESS;
+	return 0;
 
 exit:
 	stcp_socket_remove(ldesc);
@@ -261,8 +261,8 @@ exit:
  * @param desc - Address where to store the socket descriptor
  * @param param - Initializing data
  * @return
- *  - \ref SUCCESS : On success
- *  - \ref FAILURE : Otherwise
+ *  - 0 : On success
+ *  - -1 : Otherwise
  */
 int32_t socket_init(struct tcp_socket_desc **desc,
 		    struct tcp_socket_init_param *param)
@@ -272,11 +272,11 @@ int32_t socket_init(struct tcp_socket_desc **desc,
 	uint32_t		buff_size;
 
 	if (!desc || !param)
-		return FAILURE;
+		return -1;
 
 	ldesc = (typeof(ldesc))calloc(1, sizeof(*ldesc));
 	if (!ldesc)
-		return FAILURE;
+		return -1;
 
 	ldesc->net = param->net;
 
@@ -287,7 +287,7 @@ int32_t socket_init(struct tcp_socket_desc **desc,
 
 	ret = ldesc->net->socket_open(ldesc->net->net, &ldesc->id, PROTOCOL_TCP,
 				      buff_size);
-	if (IS_ERR_VALUE(ret)) {
+	if (NO_OS_IS_ERR_VALUE(ret)) {
 		free(ldesc);
 		return ret;
 	}
@@ -298,7 +298,7 @@ int32_t socket_init(struct tcp_socket_desc **desc,
 	else
 		ret = stcp_socket_init(&ldesc->secure, ldesc,
 				       param->secure_init_param);
-	if (IS_ERR_VALUE(ret)) {
+	if (NO_OS_IS_ERR_VALUE(ret)) {
 		ldesc->net->socket_close(ldesc->net->net, ldesc->id);
 		free(ldesc);
 		return ret;
@@ -307,22 +307,22 @@ int32_t socket_init(struct tcp_socket_desc **desc,
 
 	*desc = ldesc;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Deallocate resources from the socket descriptor
  * @param desc - Socket descriptor
  * @return
- *  - \ref SUCCESS : On success
- *  - \ref FAILURE : Otherwise
+ *  - 0 : On success
+ *  - -1 : Otherwise
  */
 int32_t socket_remove(struct tcp_socket_desc *desc)
 {
 	int32_t ret;
 
 	if (!desc)
-		return FAILURE;
+		return -1;
 
 #ifndef DISABLE_SECURE_SOCKET
 	if (desc->secure)
@@ -330,11 +330,11 @@ int32_t socket_remove(struct tcp_socket_desc *desc)
 #endif /* DISABLE_SECURE_SOCKET */
 
 	ret = desc->net->socket_close(desc->net->net, desc->id);
-	if (IS_ERR_VALUE(ret))
+	if (NO_OS_IS_ERR_VALUE(ret))
 		return ret;
 	free(desc);
 
-	return SUCCESS;
+	return 0;
 }
 
 /** @brief See \ref network_interface.socket_connect */
@@ -344,11 +344,11 @@ int32_t socket_connect(struct tcp_socket_desc *desc,
 	int32_t ret;
 
 	if (!desc || !addr)
-		return FAILURE;
+		return -1;
 
 	ret = desc->net->socket_connect(desc->net->net,
 					desc->id, addr);
-	if (IS_ERR_VALUE(ret))
+	if (NO_OS_IS_ERR_VALUE(ret))
 		return ret;
 
 #ifndef DISABLE_SECURE_SOCKET
@@ -356,19 +356,19 @@ int32_t socket_connect(struct tcp_socket_desc *desc,
 		do {
 			ret = mbedtls_ssl_handshake(&desc->secure->ssl);
 		} while (ret == MBEDTLS_ERR_SSL_WANT_READ);
-		if (IS_ERR_VALUE(ret))
+		if (NO_OS_IS_ERR_VALUE(ret))
 			return ret;
 	}
 #endif /* DISABLE_SECURE_SOCKET */
 
-	return SUCCESS;
+	return 0;
 }
 
 /** @brief See \ref network_interface.socket_disconnect */
 int32_t socket_disconnect(struct tcp_socket_desc *desc)
 {
 	if (!desc)
-		return FAILURE;
+		return -1;
 
 #ifndef DISABLE_SECURE_SOCKET
 	if (desc->secure)
@@ -384,7 +384,7 @@ int32_t socket_send(struct tcp_socket_desc *desc, const void *data,
 {
 
 	if (!desc)
-		return FAILURE;
+		return -1;
 
 #ifndef DISABLE_SECURE_SOCKET
 	if (desc->secure)
@@ -399,7 +399,7 @@ int32_t socket_send(struct tcp_socket_desc *desc, const void *data,
 int32_t socket_recv(struct tcp_socket_desc *desc, void *data, uint32_t len)
 {
 	if (!desc)
-		return FAILURE;
+		return -1;
 
 #ifndef DISABLE_SECURE_SOCKET
 	int32_t ret;
@@ -452,7 +452,7 @@ int32_t socket_accept(struct tcp_socket_desc *desc,
 #endif
 
 	ret = desc->net->socket_accept(desc->net->net, desc->id, &new_cli_id);
-	if (IS_ERR_VALUE(ret))
+	if (NO_OS_IS_ERR_VALUE(ret))
 		return ret;
 
 	*new_client = (typeof(*new_client))calloc(1, sizeof(**new_client));
@@ -463,6 +463,6 @@ int32_t socket_accept(struct tcp_socket_desc *desc,
 	(*new_client)->net = desc->net;
 	(*new_client)->id = new_cli_id;
 
-	return SUCCESS;
+	return 0;
 }
 

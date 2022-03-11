@@ -90,10 +90,10 @@ int main()
 
 	ret = no_os_irq_ctrl_init(&irq_desc, &irq_ip);
 	if(ret)
-		return FAILURE;
+		return -1;
 	ret = no_os_irq_global_enable(irq_desc);
 	if(ret)
-		return FAILURE;
+		return -1;
 
 	/* GPIO IRQ instance. */
 	struct no_os_irq_ctrl_desc *gpio_irq_desc;
@@ -109,7 +109,7 @@ int main()
 
 	ret = no_os_irq_ctrl_init(&gpio_irq_desc, &gpio_irq_ip);
 	if(ret)
-		return FAILURE;
+		return -1;
 
 	/* Device AD4110 instance. */
 	struct ad4110_dev *ad4110_dev;
@@ -132,14 +132,14 @@ int main()
 
 	ret = ad4110_setup(&ad4110_dev, ad4110_dev_ip);
 	if(ret)
-		return FAILURE;
+		return -1;
 
 	ret = ad4110_continuous_read(ad4110_dev, data_buf, BUF_LENGTH);
 	if(ret)
-		return FAILURE;
+		return -1;
 
 	for(i=0; i<BUF_LENGTH; i++)
 		printf("DATA[%"PRIi32"] = %"PRIi32" \n", i, data_buf[i]);
 
-	return SUCCESS;
+	return 0;
 }

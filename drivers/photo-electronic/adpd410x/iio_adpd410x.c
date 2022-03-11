@@ -76,15 +76,15 @@ static int adpd410x_iio_read_raw_chan(void *device, char *buf, uint32_t len,
 	uint32_t data[ADPD410X_IIO_NUM_CH];
 
 	ret = adpd410x_set_opmode(dev, ADPD410X_GOMODE);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = adpd410x_get_data(dev, data);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = adpd410x_set_opmode(dev, ADPD410X_STANDBY);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	return snprintf(buf, len, "%d", data[channel->ch_num]);
@@ -107,15 +107,15 @@ static int32_t adpd410x_read_samples(void *device, uint32_t *buff,
 
 	for (i = 0; i < nb_samples; i++) {
 		ret = adpd410x_set_opmode(dev, ADPD410X_GOMODE);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 
 		ret = adpd410x_get_data(dev, data);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 
 		ret = adpd410x_set_opmode(dev, ADPD410X_STANDBY);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 
 		memcpy(&buff[offset], data, ADPD410X_IIO_NUM_CH * sizeof(uint32_t));
@@ -143,7 +143,7 @@ static int adpd410x_iio_set_sampling_freq(void *device, char *buf,
 	uint32_t freq = no_os_str_to_uint32(buf);
 
 	ret = adpd410x_set_sampling_freq(dev, freq);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	return len;
@@ -166,7 +166,7 @@ static int adpd410x_iio_get_sampling_freq(void *device, char *buf,
 	uint32_t sampling_freq;
 
 	ret = adpd410x_get_sampling_freq(dev, &sampling_freq);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	return snprintf(buf, len, "%d", sampling_freq);
@@ -197,7 +197,7 @@ static int adpd410x_iio_set_last_timeslot(void *device, char *buf,
 			break;
 
 	ret = adpd410x_set_last_timeslot(dev, i);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	return len;
@@ -220,7 +220,7 @@ static int adpd410x_iio_get_last_timeslot(void *device, char *buf,
 	uint8_t timeslot_no;
 
 	ret = adpd410x_get_last_timeslot(dev, &timeslot_no);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	return snprintf(buf, len, "%d", timeslot_no);
@@ -273,7 +273,7 @@ static int adpd410x_iio_set_opmode(void *device, char *buf, uint32_t len,
 			break;
 
 	ret = adpd410x_set_opmode(dev, i);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	return len;
@@ -296,7 +296,7 @@ static int adpd410x_iio_get_opmode(void *device, char *buf, uint32_t len,
 	enum adpd410x_opmode mode;
 
 	ret = adpd410x_get_opmode(dev, &mode);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	return snprintf(buf, len, "%d", mode);

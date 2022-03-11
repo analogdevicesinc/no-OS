@@ -711,7 +711,7 @@ int32_t ad5761r_init(struct ad5761r_dev **device,
 /***************************************************************************//**
  * @brief Free the resources allocated by ad5761r_init().
  * @param dev - The device structure.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
 *******************************************************************************/
 int32_t ad5761r_remove(struct ad5761r_dev *dev)
 {

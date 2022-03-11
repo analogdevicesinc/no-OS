@@ -62,7 +62,7 @@ using namespace std::chrono;
  * @brief Initialize the timer peripheral.
  * @param desc[in, out] - The Timer descriptor.
  * @param init_param[in] - Structure that contains Timer Initialization Parameters.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t no_os_timer_init(struct no_os_timer_desc **desc,
 		   struct no_os_timer_init_param *param)
@@ -90,7 +90,7 @@ int32_t no_os_timer_init(struct no_os_timer_desc **desc,
 	timer_desc->extra = mbed_timer_desc;
 
 	*desc = timer_desc;
-	return SUCCESS;
+	return 0;
 
 err_timer:
 	free(mbed_timer_desc);
@@ -103,7 +103,7 @@ err_mbed_timer_desc:
 /**
 * @brief Start the Timer.
 * @param desc[in] - The Timer Descriptor.
-* @return SUCCESS in case of success, negative error code otherwise.
+* @return 0 in case of success, negative error code otherwise.
 */
 int32_t no_os_timer_start(struct no_os_timer_desc *desc)
 {
@@ -118,13 +118,13 @@ int32_t no_os_timer_start(struct no_os_timer_desc *desc)
 
 	timer->start();
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
 * @brief Stop the Timer.
 * @param desc[in] - The Timer Descriptor.
-* @return SUCCESS in case of success, negative error code otherwise.
+* @return 0 in case of success, negative error code otherwise.
 */
 int32_t no_os_timer_stop(struct no_os_timer_desc *desc)
 {
@@ -139,13 +139,13 @@ int32_t no_os_timer_stop(struct no_os_timer_desc *desc)
 
 	timer->stop();
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
 * @brief Release all the resources allocated by Timer.
 * @param desc[in] - The Timer Descriptor.
-* @return SUCCESS in case of success, negative error code otherwise.
+* @return 0 in case of success, negative error code otherwise.
 */
 int32_t no_os_timer_remove(struct no_os_timer_desc *desc)
 {
@@ -160,14 +160,14 @@ int32_t no_os_timer_remove(struct no_os_timer_desc *desc)
 	free(desc->extra);
 	free(desc);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
 * @brief Get the elapsed time in nanoseconds.
 * @param desc[in] - The Timer descriptor.
 * @param elapsed_time[in, out] - Pointer where the elapsed time value is stored.
-* @return SUCCESS in case of success, negative error code otherwise.
+* @return 0 in case of success, negative error code otherwise.
 */
 int32_t no_os_timer_get_elapsed_time_nsec(struct no_os_timer_desc *desc,
 				    uint64_t *elapsed_time)
@@ -183,7 +183,7 @@ int32_t no_os_timer_get_elapsed_time_nsec(struct no_os_timer_desc *desc,
 
 	*elapsed_time = duration_cast<nanoseconds>(timer->elapsed_time()).count();
 
-	return SUCCESS;
+	return 0;
 }
 
 #ifdef __cplusplus

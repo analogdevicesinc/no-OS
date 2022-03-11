@@ -477,13 +477,13 @@ int32_t axi_clkgen_set_rate(struct axi_clkgen *clkgen,
 	axi_clkgen_read(clkgen, AXI_CLKGEN_REG_STATUS, &reg_val);
 	if ((reg_val & AXI_CLKGEN_STATUS) == 0x0) {
 		printf("%s: MMCM-PLL NOT locked (%"PRIu32" Hz)\n", clkgen->name, rate);
-		return FAILURE;
+		return -1;
 
 	} else {
 		printf("%s: MMCM-PLL locked (%"PRIu32" Hz)\n", clkgen->name, rate);
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -504,7 +504,7 @@ int32_t axi_clkgen_get_rate(struct axi_clkgen *clkgen, uint32_t *rate)
 
 	if (d == 0 || dout == 0) {
 		*rate = 0;
-		return SUCCESS;
+		return 0;
 	}
 
 	tmp = (uint64_t)(clkgen->parent_rate / d) * m;
@@ -515,7 +515,7 @@ int32_t axi_clkgen_get_rate(struct axi_clkgen *clkgen, uint32_t *rate)
 
 	*rate = (uint32_t)tmp;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -528,7 +528,7 @@ int32_t axi_clkgen_init(struct axi_clkgen **clk,
 
 	clkgen = (struct axi_clkgen *)malloc(sizeof(*clkgen));
 	if (!clkgen)
-		return FAILURE;
+		return -1;
 
 	clkgen->base = init->base;
 	clkgen->name = init->name;
@@ -536,7 +536,7 @@ int32_t axi_clkgen_init(struct axi_clkgen **clk,
 
 	*clk = clkgen;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -546,5 +546,5 @@ int32_t axi_clkgen_remove(struct axi_clkgen *clkgen)
 {
 	free(clkgen);
 
-	return SUCCESS;
+	return 0;
 }

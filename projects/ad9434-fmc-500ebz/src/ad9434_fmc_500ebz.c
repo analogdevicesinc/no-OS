@@ -105,52 +105,52 @@ int main(void)
 	struct ad9434_dev *ad9434_device;
 
 	status = ad9434_setup(&ad9434_device, ad9434_param);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		pr_info("ad9434_setup() failed!\n");
-		return FAILURE;
+		return -1;
 	}
 
 	status = axi_adc_init(&ad9434_core,  &ad9434_core_param);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		pr_info("axi_adc_init() error: %s\n", ad9434_core->name);
-		return FAILURE;
+		return -1;
 	}
 
 	status = axi_dmac_init(&ad9434_dmac, &ad9434_dmac_param);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		pr_info("axi_dmac_init() error: %s\n", ad9434_dmac->name);
-		return FAILURE;
+		return -1;
 	}
 
 	status = ad9434_testmode_set(ad9434_device, TESTMODE_PN9_SEQ);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		pr_info("ad9434_testmode_set() PN9_SEQ failed!");
-		return FAILURE;
+		return -1;
 	}
 
 	status = axi_adc_delay_calibrate(ad9434_core, nr_of_lanes + over_range_signal,
 					 AXI_ADC_PN9);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		pr_info("axi_adc_delay_calibrate() failed!");
-		return FAILURE;
+		return -1;
 	}
 
 	status = ad9434_testmode_set(ad9434_device, TESTMODE_OFF);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		pr_info("ad9434_testmode_set() TESTMODE_OFF failed!");
-		return FAILURE;
+		return -1;
 	}
 
 	status = ad9434_outputmode_set(ad9434_device, OUTPUT_MODE_TWOS_COMPLEMENT);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		pr_info("ad9434_outputmode_set() OUTPUT_MODE_TWOS_COMPLEMENT failed!");
-		return FAILURE;
+		return -1;
 	}
 
 	status = axi_dmac_transfer(ad9434_dmac, ADC_DDR_BASEADDR, 16384 * 2);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		pr_info("axi_dmac_transfer() failed!");
-		return FAILURE;
+		return -1;
 	}
 
 #ifdef IIO_SUPPORT
@@ -184,5 +184,5 @@ int main(void)
 
 	pr_info("Capture done.\n");
 
-	return SUCCESS;
+	return 0;
 }

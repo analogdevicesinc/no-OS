@@ -79,7 +79,7 @@ void I2C1_IRQHandler(void)
  * functions.
  * @param param - Parameter used to configure the I2C device. The extra field
  * it is not used and must be set to NULL.
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 static int32_t max32660_i2c_init(struct no_os_i2c_desc **desc,
 				 const struct no_os_i2c_init_param *param)
@@ -151,7 +151,7 @@ error_desc:
 /**
  * @brief Free the resources allocated by \ref i2c_init
  * @param desc - Descriptor of the I2C device
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 static int32_t max32660_i2c_remove(struct no_os_i2c_desc *desc)
 {
@@ -183,7 +183,7 @@ static int32_t max32660_i2c_remove(struct no_os_i2c_desc *desc)
  * @param stop_bit - Stop condition control.
  *                   Example: 0 - A stop condition will not be generated;
  *                            1 - A stop condition will be generated.
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 static int32_t max32660_i2c_write(struct no_os_i2c_desc *desc,
 				  uint8_t *data,
@@ -237,7 +237,7 @@ static int32_t max32660_i2c_write(struct no_os_i2c_desc *desc,
  * @param stop_bit - Stop condition control. NOTE: not applicable in this case
  *                   Example: 0 - A stop condition will not be generated.
  *                            1 - A stop condition will be generated
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 static int32_t max32660_i2c_read(struct no_os_i2c_desc *desc,
 				 uint8_t *data,

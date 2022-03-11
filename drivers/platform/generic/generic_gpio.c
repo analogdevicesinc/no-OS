@@ -53,7 +53,7 @@
  * @brief Obtain the GPIO decriptor.
  * @param desc - The GPIO descriptor.
  * @param param - GPIO Initialization parameters.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t generic_gpio_get(struct no_os_gpio_desc **desc,
 			 const struct no_os_gpio_init_param *param)
@@ -66,21 +66,21 @@ int32_t generic_gpio_get(struct no_os_gpio_desc **desc,
 		// Unused variable - fix compiler warning
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Get the value of an optional GPIO.
  * @param desc - The GPIO descriptor.
  * @param param - GPIO Initialization parameters.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t generic_gpio_get_optional(struct no_os_gpio_desc **desc,
 				  const struct no_os_gpio_init_param *param)
 {
 	if(param == NULL) {
 		*desc = NULL;
-		return SUCCESS;
+		return 0;
 	}
 
 	return no_os_gpio_get(desc, param);
@@ -89,7 +89,7 @@ int32_t generic_gpio_get_optional(struct no_os_gpio_desc **desc,
 /**
  * @brief Free the resources allocated by no_os_gpio_get().
  * @param desc - The SPI descriptor.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t generic_gpio_remove(struct no_os_gpio_desc *desc)
 {
@@ -97,13 +97,13 @@ int32_t generic_gpio_remove(struct no_os_gpio_desc *desc)
 		// Unused variable - fix compiler warning
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Enable the input direction of the specified GPIO.
  * @param desc - The GPIO descriptor.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t generic_gpio_direction_input(struct no_os_gpio_desc *desc)
 {
@@ -111,7 +111,7 @@ int32_t generic_gpio_direction_input(struct no_os_gpio_desc *desc)
 		// Unused variable - fix compiler warning
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -120,7 +120,7 @@ int32_t generic_gpio_direction_input(struct no_os_gpio_desc *desc)
  * @param value - The value.
  *                Example: NO_OS_GPIO_HIGH
  *                         NO_OS_GPIO_LOW
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t generic_gpio_direction_output(struct no_os_gpio_desc *desc,
 				      uint8_t value)
@@ -133,7 +133,7 @@ int32_t generic_gpio_direction_output(struct no_os_gpio_desc *desc,
 		// Unused variable - fix compiler warning
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -142,7 +142,7 @@ int32_t generic_gpio_direction_output(struct no_os_gpio_desc *desc,
  * @param direction - The direction.
  *                    Example: NO_OS_GPIO_OUT
  *                             NO_OS_GPIO_IN
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t generic_gpio_get_direction(struct no_os_gpio_desc *desc,
 				   uint8_t *direction)
@@ -155,7 +155,7 @@ int32_t generic_gpio_get_direction(struct no_os_gpio_desc *desc,
 		// Unused variable - fix compiler warning
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -165,7 +165,7 @@ int32_t generic_gpio_get_direction(struct no_os_gpio_desc *desc,
  *                Example: NO_OS_GPIO_HIGH
  *                         NO_OS_GPIO_LOW
  *                         NO_OS_GPIO_HIGH_Z
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t generic_gpio_set_value(struct no_os_gpio_desc *desc,
 			       uint8_t value)
@@ -178,7 +178,7 @@ int32_t generic_gpio_set_value(struct no_os_gpio_desc *desc,
 		// Unused variable - fix compiler warning
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -187,7 +187,7 @@ int32_t generic_gpio_set_value(struct no_os_gpio_desc *desc,
  * @param value - The value.
  *                Example: NO_OS_GPIO_HIGH
  *                         NO_OS_GPIO_LOW
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t generic_gpio_get_value(struct no_os_gpio_desc *desc,
 			       uint8_t *value)
@@ -200,7 +200,7 @@ int32_t generic_gpio_get_value(struct no_os_gpio_desc *desc,
 		// Unused variable - fix compiler warning
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**

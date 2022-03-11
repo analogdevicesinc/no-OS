@@ -56,7 +56,7 @@
  * frame rate value passed input parameter.
  * @param init_param - ADAS1000 initialization parameters.
  * @param spi_freq - SPI frequency to be computed.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t adas1000_compute_spi_freq(struct adas1000_init_param *init_param,
 				  uint32_t *spi_freq)
@@ -85,7 +85,7 @@ int32_t adas1000_compute_spi_freq(struct adas1000_init_param *init_param,
 		break;
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -94,7 +94,7 @@ int32_t adas1000_compute_spi_freq(struct adas1000_init_param *init_param,
  *	  frame are activated.
  * @param device - the device structure.
  * @param init_param - the initialization parameters.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t adas1000_init(struct adas1000_dev **device,
 		      const struct adas1000_init_param *init_param)
@@ -104,31 +104,31 @@ int32_t adas1000_init(struct adas1000_dev **device,
 
 	dev = (struct adas1000_dev *)calloc(1, sizeof(*dev));
 	if (!dev)
-		return FAILURE;
+		return -1;
 
 	/** store the selected frame rate */
 	dev->frame_rate = init_param->frame_rate;
 
 	/** Initialize the SPI controller. */
 	ret = no_os_spi_init(&dev->spi_desc, &init_param->spi_init);
-	if (ret != SUCCESS) {
+	if (ret != 0) {
 		free(dev);
 		return ret;
 	}
 
 	/** Reset the ADAS1000. */
 	ret = adas1000_soft_reset(dev);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	/** Activate all the channels */
 	ret = adas1000_set_inactive_framewords(dev, ADAS1000_ALL_CH_MASK);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	/** Set the frame rate */
 	ret = adas1000_set_frame_rate(dev, dev->frame_rate);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	*device = dev;
@@ -141,7 +141,7 @@ int32_t adas1000_init(struct adas1000_dev **device,
  * @param device - The device structure.
  * @param reg_addr - The register address.
  * @param reg_data - The data read from the register.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t adas1000_read(struct adas1000_dev *device, uint8_t reg_addr,
 		      uint32_t *reg_data)
@@ -157,7 +157,7 @@ int32_t adas1000_read(struct adas1000_dev *device, uint8_t reg_addr,
 
 	ret = no_os_spi_write_and_read(device->spi_desc, buff, buff_size);
 	if(ret)
-		return FAILURE;
+		return -1;
 
 	for(i = 1; i < buff_size; i++)
 		*reg_data = (*reg_data << 8) | buff[i];
@@ -170,7 +170,7 @@ int32_t adas1000_read(struct adas1000_dev *device, uint8_t reg_addr,
  * @param device - The device structure.
  * @param reg_addr - The register address.
  * @param reg_data - The data to be written.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t adas1000_write(struct adas1000_dev *device, uint8_t reg_addr,
 		       uint32_t reg_data)
@@ -189,7 +189,7 @@ int32_t adas1000_write(struct adas1000_dev *device, uint8_t reg_addr,
 /**
  * @brief Software reset of the device.
  * @param device - The device structure.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t adas1000_soft_reset(struct adas1000_dev *device)
 {
@@ -197,7 +197,7 @@ int32_t adas1000_soft_reset(struct adas1000_dev *device)
 
 	/** Clear all registers to their reset value. */
 	ret = adas1000_write(device, ADAS1000_ECGCTL, ADAS1000_ECGCTL_SWRST);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 	/** The software reset requires a NOP command to complete the reset. */
 	return adas1000_write(device, ADAS1000_NOP, 0);
@@ -206,7 +206,7 @@ int32_t adas1000_soft_reset(struct adas1000_dev *device)
 /**
  * @brief Compute frame size
  * @param device - The device structure.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t adas1000_compute_frame_size(struct adas1000_dev *device)
 {
@@ -229,7 +229,7 @@ int32_t adas1000_compute_frame_size(struct adas1000_dev *device)
 		break;
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -239,7 +239,7 @@ int32_t adas1000_compute_frame_size(struct adas1000_dev *device)
  * 						 frame using a bitwise or of the corresponding bits
  * 						 from the Frame Control Register.
  *
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t adas1000_set_inactive_framewords(struct adas1000_dev *device,
 		uint32_t words_mask)
@@ -250,7 +250,7 @@ int32_t adas1000_set_inactive_framewords(struct adas1000_dev *device,
 
 	/** Read the current value of the Frame Control Register */
 	ret = adas1000_read(device, ADAS1000_FRMCTL, &frm_ctrl_regval);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 	/** set the inactive channles */
 	frm_ctrl_regval &= ~ADAS1000_FRMCTL_WORD_MASK;
@@ -258,7 +258,7 @@ int32_t adas1000_set_inactive_framewords(struct adas1000_dev *device,
 
 	/** Write the new value to the Frame Control register. */
 	ret = adas1000_write(device, ADAS1000_FRMCTL, frm_ctrl_regval);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 	/** compute the number of inactive words */
 	device->inactive_words_no = 0;
@@ -277,7 +277,7 @@ int32_t adas1000_set_inactive_framewords(struct adas1000_dev *device,
  * @brief Sets the frame rate.
  * @param device - The device structure.
  * @param rate - ADAS1000 frame rate.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t adas1000_set_frame_rate(struct adas1000_dev *device, uint32_t rate)
 {
@@ -289,14 +289,14 @@ int32_t adas1000_set_frame_rate(struct adas1000_dev *device, uint32_t rate)
 
 	/** Read the current value of the Frame Control Register */
 	ret = adas1000_read(device, ADAS1000_FRMCTL, &frm_ctrl_regval);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	frm_ctrl_regval &= ~ADAS1000_FRMCTL_FRMRATE_MASK;
 
 	/** Compute new frame size and update the Frame Control Register value */
 	ret = adas1000_compute_frame_size(device);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	switch(device->frame_rate) {
@@ -325,7 +325,7 @@ int32_t adas1000_set_frame_rate(struct adas1000_dev *device, uint32_t rate)
  * @param frame_cnt - Number of frames to read.
  * @param read_data_param - Structure holding the parameters required for frame
 			    read sequence
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t adas1000_read_data(struct adas1000_dev *device, uint8_t *data_buff,
 			   uint32_t frame_cnt, struct read_param *read_data_param)
@@ -338,7 +338,7 @@ int32_t adas1000_read_data(struct adas1000_dev *device, uint8_t *data_buff,
 	/** If the read sequence must be started send a FRAMES command. */
 	if (read_data_param->start_read) {
 		ret = adas1000_write(device, ADAS1000_FRAMES, data);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 	}
 
@@ -354,7 +354,7 @@ int32_t adas1000_read_data(struct adas1000_dev *device, uint8_t *data_buff,
 				if(read_data_param->ready_repeat) {
 					ret = no_os_spi_write_and_read(device->spi_desc,
 								       data_buff, buff_size);
-					if (ret != SUCCESS)
+					if (ret != 0)
 						return ret;
 
 					ready = *data_buff & ADAS1000_RDY_MASK;
@@ -362,7 +362,7 @@ int32_t adas1000_read_data(struct adas1000_dev *device, uint8_t *data_buff,
 						ret = no_os_spi_write_and_read(device->spi_desc,
 									       data_buff + 4,
 									       device->frame_size - 4);
-						if (ret != SUCCESS)
+						if (ret != 0)
 							return ret;
 
 						data_buff += device->frame_size;
@@ -371,7 +371,7 @@ int32_t adas1000_read_data(struct adas1000_dev *device, uint8_t *data_buff,
 				} else {
 					ret = no_os_spi_write_and_read(device->spi_desc,
 								       data_buff, device->frame_size);
-					if (ret != SUCCESS)
+					if (ret != 0)
 						return ret;
 
 					ready = *data_buff & ADAS1000_RDY_MASK;
@@ -383,7 +383,7 @@ int32_t adas1000_read_data(struct adas1000_dev *device, uint8_t *data_buff,
 			}
 		} else {
 			ret = no_os_spi_write_and_read(device->spi_desc, data_buff, device->frame_size);
-			if (ret != SUCCESS)
+			if (ret != 0)
 				return ret;
 
 			data_buff += device->frame_size;

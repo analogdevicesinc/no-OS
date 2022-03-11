@@ -375,7 +375,7 @@ int32_t ad9144_set_nco(struct ad9144_dev *dev, int32_t f_carrier_khz,
 	int32_t ret;
 
 	if (phase < -180 || phase >= 180)
-		return FAILURE;
+		return -1;
 	if (f_carrier_khz < 0) {
 		f_carrier_khz *= -1;
 		sel_sideband = true;
@@ -395,7 +395,7 @@ int32_t ad9144_set_nco(struct ad9144_dev *dev, int32_t f_carrier_khz,
 		modulation_type = MODULATION_TYPE(1);
 	}
 	ret = ad9144_spi_read(dev, REG_DATAPATH_CTRL, &reg);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 	reg = (reg & ~MODULATION_TYPE_MASK) | modulation_type;
 	if (sel_sideband)
@@ -404,29 +404,29 @@ int32_t ad9144_set_nco(struct ad9144_dev *dev, int32_t f_carrier_khz,
 		reg &= ~SEL_SIDEBAND;
 
 	ret = ad9144_spi_write(dev, REG_DATAPATH_CTRL, reg);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ftw = ((1ULL << 48) / dev->sample_rate_khz * f_carrier_khz);
 	for (i = 0; i < 6; i++) {
 		ret = ad9144_spi_write(dev, REG_FTW0 + i,
 				       (ftw >> (8 * i)) & 0xFF);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 	}
 
 	phase_offset = (phase/180) * (1 << 15);
 	ret = ad9144_spi_write(dev, REG_NCO_PHASE_OFFSET0, phase_offset & 0xFF);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 	ret = ad9144_spi_write(dev, REG_NCO_PHASE_OFFSET1, (phase_offset >> 8) &
 			       0xFF);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	if (modulation_type  == MODULATION_TYPE(1)) {
 		ret = ad9144_spi_write(dev, REG_NCO_FTW_UPDATE, FTW_UPDATE_REQ);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 	}
 
@@ -626,7 +626,7 @@ int32_t ad9144_dac_calibrate(struct ad9144_dev *dev)
  *
  * @param dev - The device structure.
  *
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
 *******************************************************************************/
 int32_t ad9144_remove(struct ad9144_dev *dev)
 {

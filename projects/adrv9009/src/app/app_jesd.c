@@ -106,19 +106,19 @@ adiHalErr_t jesd_init(uint32_t rx_div40_rate_hz,
 	/* Initialize JESD */
 #ifndef ADRV9008_2
 	status = axi_jesd204_rx_init(&rx_jesd, &rx_jesd_init);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("error: %s: axi_jesd204_rx_init() failed\n", rx_jesd_init.name);
 		goto error_5;
 	}
 #endif
 #ifndef ADRV9008_1
 	status = axi_jesd204_tx_init(&tx_jesd, &tx_jesd_init);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("error: %s: axi_jesd204_tx_init() failed\n", tx_jesd_init.name);
 		goto error_6;
 	}
 	status = axi_jesd204_rx_init(&rx_os_jesd, &rx_os_jesd_init);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("error: %s: axi_jesd204_rx_init() failed\n", rx_os_jesd_init.name);
 		goto error_7;
 	}

@@ -124,14 +124,14 @@ int main()
 	Xil_DCacheEnable();
 
 	ret = axi_clkgen_init(&clkgen, &clkgen_init);
-	if (ret != SUCCESS) {
+	if (ret != 0) {
 		printf("error: axi_clkgen_init() failed\n");
-		return FAILURE;
+		return -1;
 	}
 
 	ret = axi_clkgen_set_rate(clkgen, 80000000);
-	if (ret != SUCCESS) {
-		return FAILURE;
+	if (ret != 0) {
+		return -1;
 	}
 
 	ad77681_setup(&adc_dev, ADC_default_init_param, &adc_status);
@@ -150,8 +150,8 @@ int main()
 	} else {
 		ret = spi_engine_offload_init(adc_dev->spi_desc,
 					      &spi_engine_offload_init_param);
-		if (ret != SUCCESS)
-			return FAILURE;
+		if (ret != 0)
+			return -1;
 
 		spi_engine_offload_message.commands = spi_msg_cmds;
 		spi_engine_offload_message.no_commands = NO_OS_ARRAY_SIZE(spi_msg_cmds);
@@ -161,7 +161,7 @@ int main()
 
 		ret = spi_engine_offload_transfer(adc_dev->spi_desc, spi_engine_offload_message,
 						  AD77681_EVB_SAMPLE_NO);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			return ret;
 
 		no_os_mdelay(1000);

@@ -93,7 +93,7 @@ struct aducm_i2c_extra {
 /**
  * @brief Configure slave address and bitrate if needed
  * @param desc - Descriptor of the I2C device
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 static uint32_t set_transmission_configuration(struct no_os_i2c_desc *desc)
 {
@@ -113,7 +113,7 @@ static uint32_t set_transmission_configuration(struct no_os_i2c_desc *desc)
 		last_address = desc->slave_address;
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -125,7 +125,7 @@ static uint32_t set_transmission_configuration(struct no_os_i2c_desc *desc)
  * functions.
  * @param param - Parameter used to configure the I2C device. The extra field
  * it is not used and must be set to NULL.
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 static int32_t aducm3029_i2c_init(struct no_os_i2c_desc **desc,
 				  const struct no_os_i2c_init_param *param)
@@ -165,13 +165,13 @@ static int32_t aducm3029_i2c_init(struct no_os_i2c_desc **desc,
 	(*desc)->extra = aducm_i2c;
 	nb_created_desc++;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Free the resources allocated by \ref i2c_init
  * @param desc - Descriptor of the I2C device
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 static int32_t aducm3029_i2c_remove(struct no_os_i2c_desc *desc)
 {
@@ -191,7 +191,7 @@ static int32_t aducm3029_i2c_remove(struct no_os_i2c_desc *desc)
 	free(aducm_i2c);
 	free(desc);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -202,7 +202,7 @@ static int32_t aducm3029_i2c_remove(struct no_os_i2c_desc *desc)
  * @param stop_bit - Stop condition control.
  *                   Example: 0 - A stop condition will not be generated;
  *                            1 - A stop condition will be generated.
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 static int32_t aducm3029_i2c_write(struct no_os_i2c_desc *desc,
 				   uint8_t *data,
@@ -227,7 +227,7 @@ static int32_t aducm3029_i2c_write(struct no_os_i2c_desc *desc,
 		if (ADI_I2C_SUCCESS != adi_i2c_IssueGeneralCall(i2c_handler,
 				data, bytes_number, &errors))
 			return -EIO;
-		return SUCCESS;
+		return 0;
 	}
 
 	if (stop_bit == 0) {
@@ -236,17 +236,17 @@ static int32_t aducm3029_i2c_write(struct no_os_i2c_desc *desc,
 			temp_ptr = realloc(aducm_i2c->prologue_data, bytes_number);
 			if (!temp_ptr) {
 				free(aducm_i2c->prologue_data);
-				return FAILURE;
+				return -1;
 			}
 			aducm_i2c->prologue_data = temp_ptr;
 		} else {
 			aducm_i2c->prologue_data = malloc(bytes_number);
 			if (!aducm_i2c->prologue_data)
-				return FAILURE;
+				return -1;
 		}
 		memcpy(aducm_i2c->prologue_data, data, bytes_number);
 
-		return SUCCESS;
+		return 0;
 	}
 
 	trans->bRepeatStart = false;
@@ -258,7 +258,7 @@ static int32_t aducm3029_i2c_write(struct no_os_i2c_desc *desc,
 	if (ADI_I2C_SUCCESS != adi_i2c_ReadWrite(i2c_handler, trans, &errors))
 		return -EIO;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -269,7 +269,7 @@ static int32_t aducm3029_i2c_write(struct no_os_i2c_desc *desc,
  * @param stop_bit - Stop condition control. NOTE: not applicable in this case
  *                   Example: 0 - A stop condition will not be generated.
  *                            1 - A stop condition will be generated
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 static int32_t aducm3029_i2c_read(struct no_os_i2c_desc *desc,
 				  uint8_t *data,

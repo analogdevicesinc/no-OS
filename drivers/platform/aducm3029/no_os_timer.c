@@ -106,7 +106,7 @@ static void no_os_tmr_callback(void *param, uint32_t tmr_event, void *arg)
  * @param desc - Pointer to descriptor of the instance that will be created.
  * @param param - Parameter used to configure the new instance. The extra field
  * is unused and should be NULL.
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t no_os_timer_init(struct no_os_timer_desc **desc,
 			 struct no_os_timer_init_param *param)
@@ -116,15 +116,15 @@ int32_t no_os_timer_init(struct no_os_timer_desc **desc,
 	ADI_TMR_CONFIG		tmr_conf;
 
 	if (!desc || !param || param->freq_hz > NO_OS_FREQ_1MHZ)
-		return FAILURE;
+		return -1;
 
 	if (!(ldesc = calloc(1, sizeof(*ldesc))))
-		return FAILURE;
+		return -1;
 
 	if (!(aducm_desc = calloc(1, sizeof(*aducm_desc)))) {
 		free(ldesc);
 		*desc = NULL;
-		return FAILURE;
+		return -1;
 	}
 
 	if (nb_instances == 0) {
@@ -151,7 +151,7 @@ int32_t no_os_timer_init(struct no_os_timer_desc **desc,
 
 	*desc = ldesc;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -159,12 +159,12 @@ int32_t no_os_timer_init(struct no_os_timer_desc **desc,
  *
  * If there are no more instances it stops the hardware timer.
  * @param desc - Descriptor of the timer instance.
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t no_os_timer_remove(struct no_os_timer_desc *desc)
 {
 	if (!desc)
-		return FAILURE;
+		return -1;
 	free(desc->extra);
 	free(desc);
 	nb_instances--;
@@ -175,7 +175,7 @@ int32_t no_os_timer_remove(struct no_os_timer_desc *desc)
 
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 static inline uint64_t no_os_get_current_time(struct no_os_timer_desc *desc)
@@ -196,25 +196,25 @@ static inline uint64_t no_os_get_current_time(struct no_os_timer_desc *desc)
  * The timer starts counting from the load value used in \ref no_os_timer_init(), set
  * by \ref no_os_timer_counter_set() or from the value the timer stopped at.
  * @param desc - Descriptor of the timer instance.
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t no_os_timer_start(struct no_os_timer_desc *desc)
 {
 	struct aducm_timer_desc *tmr_desc;
 
 	if (!desc)
-		return FAILURE;
+		return -1;
 
 	tmr_desc = desc->extra;
 	if (tmr_desc->started)
-		return FAILURE;
+		return -1;
 	if (nb_enables == 0)
 		while (ADI_TMR_DEVICE_BUSY == adi_tmr_Enable(timer_id, true));
 	tmr_desc->old_time = no_os_get_current_time(desc);
 	tmr_desc->started = true;
 	nb_enables++;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -222,7 +222,7 @@ int32_t no_os_timer_start(struct no_os_timer_desc *desc)
  *
  * If there are no more timer instance started it also stops the hardware timer.
  * @param desc - Descriptor of the timer instance.
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t no_os_timer_stop(struct no_os_timer_desc *desc)
 {
@@ -230,11 +230,11 @@ int32_t no_os_timer_stop(struct no_os_timer_desc *desc)
 	struct aducm_timer_desc *tmr_desc;
 
 	if (!desc)
-		return FAILURE;
+		return -1;
 
 	tmr_desc = desc->extra;
 	if (!tmr_desc->started)
-		return FAILURE;
+		return -1;
 
 	no_os_timer_counter_get(desc, &counter);
 	desc->load_value = counter;
@@ -243,14 +243,14 @@ int32_t no_os_timer_stop(struct no_os_timer_desc *desc)
 	nb_enables--;
 	tmr_desc->started = false;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Get the value the timer is at.
  * @param desc - Descriptor of the timer instance.
  * @param counter - Pointer were the timer counter is stored.
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t no_os_timer_counter_get(struct no_os_timer_desc *desc,
 				uint32_t *counter)
@@ -262,12 +262,12 @@ int32_t no_os_timer_counter_get(struct no_os_timer_desc *desc,
 	uint64_t		big_counter;
 
 	if (!desc || !counter)
-		return FAILURE;
+		return -1;
 
 	tmr_desc = desc->extra;
 	if (tmr_desc->started == 0) {
 		*counter = desc->load_value;
-		return SUCCESS;
+		return 0;
 	}
 	/*
 	 * Save the global count to local variable because it can suffer
@@ -296,7 +296,7 @@ int32_t no_os_timer_counter_get(struct no_os_timer_desc *desc,
 	}
 	*counter += desc->load_value;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -304,37 +304,37 @@ int32_t no_os_timer_counter_get(struct no_os_timer_desc *desc,
  * @note  This function can be called only when the timer is stopped.
  * @param desc - Descriptor of the timer instance.
  * @param new_val - Value of the new counter to be set
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t no_os_timer_counter_set(struct no_os_timer_desc *desc, uint32_t new_val)
 {
 	struct aducm_timer_desc	*tmr_desc;
 
 	if (!desc || !desc->extra)
-		return FAILURE;
+		return -1;
 
 	tmr_desc = (struct aducm_timer_desc *)desc->extra;
 	tmr_desc->old_time = no_os_get_current_time(desc);
 	desc->load_value = new_val;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Get the frequency the timer counts with.
  * @param desc - Descriptor of the timer instance.
  * @param freq_hz - Pointer where the frequency value will be stored
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t no_os_timer_count_clk_get(struct no_os_timer_desc *desc,
 				  uint32_t *freq_hz)
 {
 	if (!desc || !freq_hz)
-		return FAILURE;
+		return -1;
 
 	*freq_hz = desc->freq_hz;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -342,15 +342,15 @@ int32_t no_os_timer_count_clk_get(struct no_os_timer_desc *desc,
  * @note This function can be called only when the timer is stopped.
  * @param desc - Descriptor of the timer instance.
  * @param freq_hz - Value of the new frequency to be set
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t no_os_timer_count_clk_set(struct no_os_timer_desc *desc,
 				  uint32_t freq_hz)
 {
 	if (!desc || ((struct aducm_timer_desc*)desc->extra)->started)
-		return FAILURE;
+		return -1;
 
 	desc->freq_hz = freq_hz;
 
-	return SUCCESS;
+	return 0;
 }

@@ -139,7 +139,7 @@ int32_t ad77681_spi_reg_read(struct ad77681_dev *dev,
 
 		/* In buf[2] is CRC from the ADC */
 		if (crc != buf[2])
-			ret = FAILURE;
+			ret = -1;
 #ifdef CRC_DEBUG
 		printf("\n%x\t%x\tCRC/XOR: %s\n", crc,
 		       buf[2], ((crc !=  buf[2]) ? "FAULT" : "OK"));
@@ -312,7 +312,7 @@ int32_t ad77681_spi_read_adc_data(struct ad77681_dev *dev,
 
 		if (crc_xor != buf[dev->data_frame_byte - (1 - add_buff)]) {
 			printf("%s: CRC Error.\n", __func__);
-			ret = FAILURE;
+			ret = -1;
 		}
 #ifdef CRC_DEBUG
 		printf("\n%x\t%x\tCRC/XOR: %s\n", crc_xor,
@@ -386,13 +386,13 @@ int32_t ad77681_CRC_status_handling(struct ad77681_dev *dev,
 			checksum = ad77681_compute_xor(checksum_buf, checksum_length, INITIAL_CRC_XOR);
 
 		if (checksum != checksum_byte)
-			ret = FAILURE;
+			ret = -1;
 
 #ifdef CRC_DEBUG
 
 		char ok[3] = { 'O', 'K' }, fault[6] = { 'F', 'A', 'U', 'L', 'T' };
 		sprintf(print_buf, "\n%x\t%x\t%x\tCRC %s", checksum_byte, checksum, status_byte,
-			((ret == FAILURE) ? (fault) : (ok)));
+			((ret == -1) ? (fault) : (ok)));
 		printf(print_buf);
 
 #endif /* CRC_DEBUG */
@@ -423,7 +423,7 @@ int32_t ad77681_data_to_voltage(struct ad77681_dev *dev,
 	*voltage = (double)(((2.0 * (((double)(dev->vref)) / 1000.0)) /
 			     AD7768_FULL_SCALE) * converted_data);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -451,7 +451,7 @@ int32_t ad77681_update_sample_rate(struct ad77681_dev *dev)
 		mclk_div = 2;
 		break;
 	default:
-		return FAILURE;
+		return -1;
 	}
 
 	/* Finding out decimation ratio */
@@ -478,7 +478,7 @@ int32_t ad77681_update_sample_rate(struct ad77681_dev *dev)
 			osr = 1024;
 			break;
 		default:
-			return FAILURE;
+			return -1;
 			break;
 		}
 		break;
@@ -495,13 +495,13 @@ int32_t ad77681_update_sample_rate(struct ad77681_dev *dev)
 		osr = (dev->sinc3_osr + 1) * 32;
 		break;
 	default:
-		return FAILURE;
+		return -1;
 	}
 
 	/* Sample rate to Hz */
 	dev->sample_rate = (dev->mclk / (osr*mclk_div)) * 1000;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -520,7 +520,7 @@ int32_t ad77681_SINC3_ODR(struct ad77681_dev *dev,
 	float	odr;
 
 	if (sinc3_odr < 0)
-		return FAILURE;
+		return -1;
 
 	switch (dev->mclk_div) {
 	case AD77681_MCLK_DIV_16:
@@ -536,7 +536,7 @@ int32_t ad77681_SINC3_ODR(struct ad77681_dev *dev,
 		mclk_div = 2;
 		break;
 	default:
-		return FAILURE;
+		return -1;
 	}
 
 	odr = ((float)(dev->mclk * 1000.0) / (sinc3_odr * (float)(32 * mclk_div))) - 1;
@@ -545,9 +545,9 @@ int32_t ad77681_SINC3_ODR(struct ad77681_dev *dev,
 	if (odr < 8193)
 		*sinc3_dec_reg = (uint16_t)(odr);
 	else
-		return FAILURE;
+		return -1;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -569,7 +569,7 @@ int32_t ad77681_set_power_mode(struct ad77681_dev *dev,
 				     AD77681_POWER_CLK_PWRMODE_MSK,
 				     AD77681_POWER_CLK_PWRMODE(mode));
 
-	if (ret == SUCCESS)
+	if (ret == 0)
 		dev->power_mode = mode;
 
 	return ret;
@@ -595,7 +595,7 @@ int32_t ad77681_set_mclk_div(struct ad77681_dev *dev,
 				     AD77681_POWER_CLK_MCLK_DIV_MSK,
 				     AD77681_POWER_CLK_MCLK_DIV(clk_div));
 
-	if (ret == SUCCESS)
+	if (ret == 0)
 		dev->mclk_div = clk_div;
 
 	return ret;
@@ -625,7 +625,7 @@ int32_t ad77681_set_VCM_output(struct ad77681_dev *dev,
 				     AD77681_ANALOG2_VCM_MSK,
 				     AD77681_ANALOG2_VCM(VCM_out));
 
-	if (ret == SUCCESS)
+	if (ret == 0)
 		dev->VCM_out = VCM_out;
 
 	return ret;
@@ -649,7 +649,7 @@ int32_t ad77681_set_AINn_buffer(struct ad77681_dev *dev,
 				     AD77681_ANALOG_AIN_BUF_NEG_OFF_MSK,
 				     AD77681_ANALOG_AIN_BUF_NEG_OFF(AINn));
 
-	if (ret == SUCCESS)
+	if (ret == 0)
 		dev->AINn = AINn;
 
 	return ret;
@@ -673,7 +673,7 @@ int32_t ad77681_set_AINp_buffer(struct ad77681_dev *dev,
 				     AD77681_ANALOG_AIN_BUF_POS_OFF_MSK,
 				     AD77681_ANALOG_AIN_BUF_POS_OFF(AINp));
 
-	if (ret == SUCCESS)
+	if (ret == 0)
 		dev->AINp = AINp;
 
 	return ret;
@@ -698,7 +698,7 @@ int32_t ad77681_set_REFn_buffer(struct ad77681_dev *dev,
 				     AD77681_ANALOG_REF_BUF_NEG_MSK,
 				     AD77681_ANALOG_REF_BUF_NEG(REFn));
 
-	if (ret == SUCCESS)
+	if (ret == 0)
 		dev->REFn = REFn;
 
 	return ret;
@@ -723,10 +723,10 @@ int32_t ad77681_set_REFp_buffer(struct ad77681_dev *dev,
 				     AD77681_ANALOG_REF_BUF_POS_MSK,
 				     AD77681_ANALOG_REF_BUF_POS(REFp));
 
-	if (ret == SUCCESS)
+	if (ret == 0)
 		dev->REFp = REFp;
 	else
-		return FAILURE;
+		return -1;
 
 	return ret;
 }
@@ -801,7 +801,7 @@ int32_t ad77681_set_filter_type(struct ad77681_dev *dev,
 					      AD77681_SINC3_DEC_RATE_LSB(sinc3_LSB));
 	}
 
-	if ( ret == SUCCESS) {
+	if ( ret == 0) {
 		dev->decimate = decimate;
 		dev->filter = filter;
 		/* Sync pulse after each filter change */
@@ -883,7 +883,7 @@ int32_t ad77681_power_down(struct ad77681_dev *dev,
 		/* Insert '1' to the beginning of the wake_sequence*/
 		wake_sequence[0] = 0x80;
 		ret = no_os_spi_write_and_read(dev->spi_desc, wake_sequence,
-					 sizeof(wake_sequence));
+					       sizeof(wake_sequence));
 	}
 
 	return ret;
@@ -929,7 +929,7 @@ int32_t ad77681_set_conv_mode(struct ad77681_dev *dev,
 				      AD77681_CONVERSION_DIAG_SEL_MSK,
 				      AD77681_CONVERSION_DIAG_SEL(conv_diag_sel));
 
-	if (ret == SUCCESS) {
+	if (ret == 0) {
 		dev->conv_mode = conv_mode;
 		dev->diag_mux_sel = diag_mux_sel;
 		dev->conv_diag_sel = conv_diag_sel;
@@ -956,7 +956,7 @@ int32_t ad77681_set_convlen(struct ad77681_dev *dev,
 				     AD77681_INTERFACE_CONVLEN_MSK,
 				     AD77681_INTERFACE_CONVLEN(conv_len));
 
-	if (ret == SUCCESS) {
+	if (ret == 0) {
 		dev->conv_len = conv_len;
 		ad77681_get_frame_byte(dev);
 	}
@@ -996,7 +996,7 @@ int32_t ad77681_set_crc_sel(struct ad77681_dev *dev,
 					      AD77681_INTERFACE_CRC_TYPE(crc_sel));
 	}
 
-	if (ret == SUCCESS) {
+	if (ret == 0) {
 		dev->crc_sel = crc_sel;
 		ad77681_get_frame_byte(dev);
 	}
@@ -1023,7 +1023,7 @@ int32_t ad77681_set_status_bit(struct ad77681_dev *dev,
 				       AD77681_INTERFACE_STATUS_EN_MSK,
 				       AD77681_INTERFACE_STATUS_EN(status_bit));
 
-	if (ret == SUCCESS) {
+	if (ret == 0) {
 		dev->status_bit = status_bit;
 		ad77681_get_frame_byte(dev);
 	}
@@ -1195,9 +1195,9 @@ int32_t ad77681_programmable_filter(struct ad77681_dev *dev,
 				    AD77681_ACCESS_KEY_CHECK_MSK,
 				    &check_back);
 
-	/* Checks ret and key bit, return FAILURE in case key bit not equal to 1 */
+	/* Checks ret and key bit, return -1 in case key bit not equal to 1 */
 	if ((ret < 0) || (check_back != 1))
-		return FAILURE;
+		return -1;
 
 	/* Set the initial adress to 0 and enable the  write and coefficient access bits */
 	address = AD77681_COEF_CONTROL_COEFFACCESSEN_MSK
@@ -1352,7 +1352,7 @@ int32_t ad77681_gpio_read(struct ad77681_dev *dev,
 					    value);
 		break;
 	default:
-		return FAILURE;
+		return -1;
 	}
 
 	return ret;
@@ -1411,7 +1411,7 @@ int32_t ad77681_gpio_write(struct ad77681_dev *dev,
 					     AD77681_GPIO_WRITE_ALL(value));
 		break;
 	default:
-		return FAILURE;
+		return -1;
 	}
 
 	return ret;
@@ -1470,7 +1470,7 @@ int32_t ad77681_gpio_inout(struct ad77681_dev *dev,
 					     AD77681_GPIO_CNTRL_ALL_GPIOS_OP_EN(direction));
 		break;
 	default:
-		return FAILURE;
+		return -1;
 	}
 
 	return ret;
@@ -1520,7 +1520,7 @@ int32_t ad77681_scratchpad(struct ad77681_dev *dev,
 				     &ret_sequence);
 
 	if (check != ret_sequence)/* Compare original an returned sequence */
-		return FAILURE;
+		return -1;
 
 	return ret;
 }
@@ -1572,7 +1572,7 @@ int32_t ad77681_gpio_open_drain(struct ad77681_dev *dev,
 					     AD77681_GPIO_CNTRL_ALL_GPIOS_OD_EN(output_type));
 		break;
 	default:
-		return FAILURE;
+		return -1;
 	}
 
 	return ret;
@@ -1801,10 +1801,10 @@ int32_t ad77681_setup(struct ad77681_dev **device,
 	no_os_udelay(200);
 
 	/* Check physical connection using scratchpad*/
-	if (ad77681_scratchpad(dev, &scratchpad_check) == FAILURE) {
+	if (ad77681_scratchpad(dev, &scratchpad_check) == -1) {
 		scratchpad_check = 0xAD;/* If failure, second try */
 		ret |= (ad77681_scratchpad(dev, &scratchpad_check));
-		if(ret == FAILURE) {
+		if(ret == -1) {
 			free(dev);
 			free(stat);
 			return ret;

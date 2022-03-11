@@ -87,7 +87,7 @@ static uint8_t _sync_id = 0x01;
  * @param reg_addr The address of the SPI Engine's axi register where the data
  * 	will be written
  * @param reg_data Data that will be written
- * @return int32_t This function allways returns SUCCESS
+ * @return int32_t This function allways returns 0
  */
 int32_t spi_engine_write(struct spi_engine_desc *desc,
 			 uint32_t reg_addr,
@@ -95,7 +95,7 @@ int32_t spi_engine_write(struct spi_engine_desc *desc,
 {
 	no_os_axi_io_write(desc->spi_engine_baseaddr, reg_addr, reg_data);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -105,14 +105,14 @@ int32_t spi_engine_write(struct spi_engine_desc *desc,
  * @param reg_addr The address of the SPI Engine's axi register from where the
  * 	data where the data will be read
  * @param reg_data Pointer where the read that will be stored
- * @return int32_t This function allways returns SUCCESS
+ * @return int32_t This function allways returns 0
  */
 int32_t spi_engine_read(struct spi_engine_desc *desc,
 			uint32_t reg_addr,
 			uint32_t *reg_data)
 {
 	no_os_axi_io_read(desc->spi_engine_baseaddr, reg_addr, reg_data);
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -138,7 +138,7 @@ int32_t spi_engine_set_transfer_width(struct no_os_spi_desc *desc,
 	else
 		desc_extra->data_width = data_wdith;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -201,7 +201,7 @@ static uint8_t spi_get_word_lenght(struct spi_engine_desc *desc)
  * @param desc Decriptor containing SPI interface parameters
  * @param sleep_time_ns The amount of time where the transfer hangs
  * @param sleep_div Clock prescaler
- * @return int32_t This function allways returns SUCCESS
+ * @return int32_t This function allways returns 0
  */
 static int32_t spi_get_sleep_div(struct no_os_spi_desc *desc,
 				 uint32_t sleep_time_ns,
@@ -222,7 +222,7 @@ static int32_t spi_get_sleep_div(struct no_os_spi_desc *desc,
 	*sleep_div = (desc->max_speed_hz / 1000000 * sleep_time_ns / 1000) /
 		     ((eng_desc->clk_div + 1) * 2) - 1;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -240,13 +240,13 @@ static int32_t spi_engine_queue_new_cmd(struct spi_engine_cmd_queue **fifo,
 	local_fifo = (spi_engine_cmd_queue*)malloc(sizeof(*local_fifo));
 
 	if(!local_fifo)
-		return FAILURE;
+		return -1;
 
 	local_fifo->cmd = cmd;
 	local_fifo->next = NULL;
 	*fifo = local_fifo;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -297,7 +297,7 @@ static void spi_engine_queue_append_cmd(struct spi_engine_cmd_queue **fifo,
  *
  * @param fifo Command buffer, usualy used in fifo mode
  * @param cmd Value of the command that was extracted
- * @return int32_t Return FAILURE if the queue is empty
+ * @return int32_t Return -1 if the queue is empty
  */
 static int32_t spi_engine_queue_get_cmd(struct spi_engine_cmd_queue **fifo,
 					uint32_t *cmd)
@@ -305,7 +305,7 @@ static int32_t spi_engine_queue_get_cmd(struct spi_engine_cmd_queue **fifo,
 	struct spi_engine_cmd_queue *local_fifo;
 
 	if (!*fifo)
-		return FAILURE;
+		return -1;
 
 	local_fifo = *fifo;
 	*cmd = local_fifo->cmd;
@@ -317,14 +317,14 @@ static int32_t spi_engine_queue_get_cmd(struct spi_engine_cmd_queue **fifo,
 		*fifo = NULL;
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Free the memory allocated by a queue
  *
  * @param fifo The queue that needs it's memory freed
- * @return int32_t This function allways return SUCCESS
+ * @return int32_t This function allways returns 0
  */
 static int32_t spi_engine_queue_free(struct spi_engine_cmd_queue **fifo)
 {
@@ -335,7 +335,7 @@ static int32_t spi_engine_queue_free(struct spi_engine_cmd_queue **fifo)
 		*fifo = NULL;
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -343,7 +343,7 @@ static int32_t spi_engine_queue_free(struct spi_engine_cmd_queue **fifo)
  *
  * @param desc Decriptor containing SPI Engine's parameters
  * @param cmd The command that will be written
- * @return int32_t Returns FAILURE if the the axi transfer failed
+ * @return int32_t Returns -1 if the the axi transfer failed
  */
 static int32_t spi_engine_write_cmd_reg(struct spi_engine_desc *desc,
 					uint32_t cmd)
@@ -371,7 +371,7 @@ static int32_t spi_engine_write_cmd_reg(struct spi_engine_desc *desc,
  * @param desc Decriptor containing SPI Engine's parameters
  * @param read_write Read/Write operation flag
  * @param bytes_number Number of bytes to transfer
- * @return int32_t This function allways returns SUCCESS
+ * @return int32_t This function allways returns 0
  */
 static int32_t spi_engine_transfer(struct spi_engine_desc *desc,
 				   uint8_t read_write,
@@ -395,7 +395,7 @@ static int32_t spi_engine_transfer(struct spi_engine_desc *desc,
 				 SPI_ENGINE_CMD_TRANSFER(read_write,
 						 words_number  - 1));
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -449,8 +449,8 @@ static void spi_gen_sleep_ns(struct no_os_spi_desc *desc,
  *
  * @param desc Decriptor containing SPI interface parameters
  * @param cmd Command to send to the engine
- * @return int32_t - SUCCESS if the command is transfered
- *		   - FAILURE if the command format is invalid
+ * @return int32_t - 0 if the command is transfered
+ *		   - -1 if the command format is invalid
  */
 static int32_t spi_engine_write_cmd(struct no_os_spi_desc *desc,
 				    uint32_t cmd)
@@ -498,10 +498,10 @@ static int32_t spi_engine_write_cmd(struct no_os_spi_desc *desc,
 
 	default:
 
-		return FAILURE;
+		return -1;
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -509,7 +509,7 @@ static int32_t spi_engine_write_cmd(struct no_os_spi_desc *desc,
  *
  * @param desc Decriptor containing SPI interface parameters
  * @param msg Structure used to store the transfer messages
- * @return int32_t This function allways returns SUCCESS
+ * @return int32_t This function allways returns 0
  */
 static int32_t spi_engine_compile_message(struct no_os_spi_desc *desc,
 		struct spi_engine_msg *msg)
@@ -543,7 +543,7 @@ static int32_t spi_engine_compile_message(struct no_os_spi_desc *desc,
 	/* Add a sync command to signal that the transfer has finished */
 	spi_engine_queue_add_cmd(&msg->cmds, SPI_ENGINE_CMD_SYNC(_sync_id));
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -551,8 +551,8 @@ static int32_t spi_engine_compile_message(struct no_os_spi_desc *desc,
  *
  * @param desc Decriptor containing SPI interface parameters
  * @param msg Structure used to store the transfer messages
- * @return int32_t - SUCCESS if the transfer finished
- *		   - FAILURE if the memory allocation failed
+ * @return int32_t - 0 if the transfer finished
+ *		   - -1 if the memory allocation failed
  */
 static int32_t spi_engine_transfer_message(struct no_os_spi_desc *desc,
 		struct spi_engine_msg *msg)
@@ -608,7 +608,7 @@ static int32_t spi_engine_transfer_message(struct no_os_spi_desc *desc,
 		}
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -616,8 +616,8 @@ static int32_t spi_engine_transfer_message(struct no_os_spi_desc *desc,
  *
  * @param desc Decriptor containing SPI interface parameters
  * @param param Structure containing the spi init parameters
- * @return int32_t - SUCCESS if the transfer finished
- *		   - FAILURE if the memory allocation failed
+ * @return int32_t - 0 if the transfer finished
+ *		   - -1 if the memory allocation failed
  */
 int32_t spi_engine_init(struct no_os_spi_desc **desc,
 			const struct no_os_spi_init_param *param)
@@ -628,19 +628,19 @@ int32_t spi_engine_init(struct no_os_spi_desc **desc,
 	struct spi_engine_init_param	*spi_engine_init;
 
 	if (!param) {
-		return FAILURE;
+		return -1;
 	}
 
 	*desc = malloc(sizeof(**desc));
 	if(! *desc) {
 		free(*desc);
-		return FAILURE;
+		return -1;
 	}
 
 	eng_desc = (struct spi_engine_desc*)malloc(sizeof(*eng_desc));
 
 	if (!eng_desc)
-		return FAILURE;
+		return -1;
 
 	spi_engine_init = param->extra;
 
@@ -676,7 +676,7 @@ int32_t spi_engine_init(struct no_os_spi_desc **desc,
 	       ((spi_engine_version >> 8) & 0xFF),
 	       (spi_engine_version & 0xFF));
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -685,8 +685,8 @@ int32_t spi_engine_init(struct no_os_spi_desc **desc,
  * @param desc Decriptor containing SPI interface parameters
  * @param data Pointer to data buffer
  * @param bytes_number Number of bytes to transfer
- * @return int32_t - SUCCESS if the transfer finished
- *		   - FAILURE if the memory allocation or transfer failed
+ * @return int32_t - 0 if the transfer finished
+ *		   - -1 if the memory allocation or transfer failed
  */
 int32_t spi_engine_write_and_read(struct no_os_spi_desc *desc,
 				  uint8_t *data,
@@ -712,7 +712,7 @@ int32_t spi_engine_write_and_read(struct no_os_spi_desc *desc,
 
 	msg.cmds = (spi_engine_cmd_queue*)malloc(sizeof(*msg.cmds));
 	if (!msg.cmds)
-		return FAILURE;
+		return -1;
 
 	msg.tx_buf =(uint32_t*)calloc(words_number, sizeof(msg.tx_buf[0]));
 	msg.rx_buf =(uint32_t*)calloc(words_number, sizeof(msg.rx_buf[0]));
@@ -752,7 +752,7 @@ int32_t spi_engine_write_and_read(struct no_os_spi_desc *desc,
  *
  * @param desc Decriptor containing SPI interface parameters
  * @param param Structure containing the offload init parameters
- * @return int32_t This function allways returns SUCCESS
+ * @return int32_t This function allways returns 0
  */
 int32_t spi_engine_offload_init(struct no_os_spi_desc *desc,
 				const struct spi_engine_offload_init_param *param)
@@ -777,7 +777,7 @@ int32_t spi_engine_offload_init(struct no_os_spi_desc *desc,
 		dmac_init.flags = dma_flags;
 		axi_dmac_init(&eng_desc->offload_tx_dma, &dmac_init);
 		if(!eng_desc->offload_tx_dma)
-			return FAILURE;
+			return -1;
 	}
 	if(param->offload_config & OFFLOAD_RX_EN) {
 		dmac_init.name = "ADC DMAC";
@@ -786,10 +786,10 @@ int32_t spi_engine_offload_init(struct no_os_spi_desc *desc,
 		dmac_init.flags = dma_flags;
 		axi_dmac_init(&eng_desc->offload_rx_dma, &dmac_init);
 		if(!eng_desc->offload_rx_dma)
-			return FAILURE;
+			return -1;
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -798,7 +798,7 @@ int32_t spi_engine_offload_init(struct no_os_spi_desc *desc,
  * @param desc Decriptor containing SPI interface parameters
  * @param msg Offload message that get's to be transferred
  * @param no_samples Number of time the messages will be transferred
- * @return int32_t This function allways returns SUCCESS
+ * @return int32_t This function allways returns 0
  */
 int32_t spi_engine_offload_transfer(struct no_os_spi_desc *desc,
 				    struct spi_engine_offload_message msg,
@@ -814,7 +814,7 @@ int32_t spi_engine_offload_transfer(struct no_os_spi_desc *desc,
 	/* Check if offload is disabled */
 	if(!((eng_desc->offload_config & OFFLOAD_TX_EN) |
 	     (eng_desc->offload_config & OFFLOAD_RX_EN)))
-		return FAILURE;
+		return -1;
 
 	spi_engine_write(eng_desc, SPI_ENGINE_REG_OFFLOAD_RESET(0), 1);
 	spi_engine_write(eng_desc, SPI_ENGINE_REG_OFFLOAD_RESET(0), 0);
@@ -825,7 +825,7 @@ int32_t spi_engine_offload_transfer(struct no_os_spi_desc *desc,
 	transfer.cmds = (spi_engine_cmd_queue*)malloc(sizeof(*transfer.cmds));
 
 	if (!transfer.cmds)
-		return FAILURE;
+		return -1;
 
 	transfer.tx_buf = msg.commands_data;
 
@@ -862,14 +862,14 @@ int32_t spi_engine_offload_transfer(struct no_os_spi_desc *desc,
 
 	spi_engine_queue_free(&transfer.cmds);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Free the resources allocated by no_os_spi_init().
  *
  * @param desc Decriptor containing SPI interface parameters
- * @return int32_t This function allways returns SUCCESS
+ * @return int32_t This function allways returns 0
  */
 int32_t spi_engine_remove(struct no_os_spi_desc *desc)
 {
@@ -884,5 +884,5 @@ int32_t spi_engine_remove(struct no_os_spi_desc *desc)
 	free(desc->extra);
 	free(desc);
 
-	return SUCCESS;
+	return 0;
 }

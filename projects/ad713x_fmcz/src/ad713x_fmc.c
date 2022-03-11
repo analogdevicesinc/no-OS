@@ -236,26 +236,26 @@ int main()
 	Xil_DCacheEnable();
 
 	ret = axi_clkgen_init(&clkgen_7134, &clkgen_7134_init);
-	if (ret != SUCCESS)
-		return FAILURE;
+	if (ret != 0)
+		return -1;
 
 	ret = axi_clkgen_set_rate(clkgen_7134, AD713x_SPI_ENG_REF_CLK_FREQ_HZ);
-	if (ret != SUCCESS)
-		return FAILURE;
+	if (ret != 0)
+		return -1;
 
 	ret = no_os_pwm_init(&axi_pwm, &axi_pwm_init);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	ret = ad713x_init(&ad713x_dev_1, &ad713x_init_param_1);
-	if (ret != SUCCESS)
-		return FAILURE;
+	if (ret != 0)
+		return -1;
 
 	no_os_mdelay(1000);
 	ad713x_init_param_2.spi_common_dev = ad713x_dev_1->spi_desc;
 	ret = ad713x_init(&ad713x_dev_2, &ad713x_init_param_2);
-	if (ret != SUCCESS)
-		return FAILURE;
+	if (ret != 0)
+		return -1;
 	no_os_mdelay(1000);
 
 	spi_engine_offload_init_param.rx_dma_baseaddr = AD7134_DMA_BASEADDR;
@@ -263,12 +263,12 @@ int main()
 	spi_engine_offload_init_param.dma_flags = &spi_eng_dma_flg;
 
 	ret = no_os_spi_init(&spi_eng_desc, &spi_eng_init_prm);
-	if (ret != SUCCESS)
-		return FAILURE;
+	if (ret != 0)
+		return -1;
 
 	ret = spi_engine_offload_init(spi_eng_desc, &spi_engine_offload_init_param);
-	if (ret != SUCCESS)
-		return FAILURE;
+	if (ret != 0)
+		return -1;
 
 	spi_engine_offload_message.commands = spi_eng_msg_cmds;
 	spi_engine_offload_message.no_commands = NO_OS_ARRAY_SIZE(spi_eng_msg_cmds);
@@ -318,7 +318,7 @@ int main()
 
 	ret = spi_engine_offload_transfer(spi_eng_desc, spi_engine_offload_message,
 					  (AD7134_FMC_CH_NO * AD7134_FMC_SAMPLE_NO));
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	Xil_DCacheInvalidateRange((INTPTR)adc_buffer,

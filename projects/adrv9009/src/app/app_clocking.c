@@ -447,24 +447,24 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 	**/
 #if defined(ZU11EG) || defined(FMCOMMS8_ZCU102)
 	status = hmc7044_init(&car_clkchip_device, &hmc7044_car_param);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("hmc7044_init() error: %d\n", status);
 		goto error_1;
 	}
 	status = hmc7044_init(&clkchip_device, &hmc7044_param);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("hmc7044_init() error: %d\n", status);
 		goto error_1;
 	}
 	status = hmc7044_clk_round_rate(clkchip_device, device_clock_khz * 1000,
 					&dev_clk);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("hmc7044_clk_round_rate() error: %d\n", status);
 		goto error_1;
 	}
 	status = hmc7044_clk_round_rate(clkchip_device, device_clock_khz * 1000,
 					&fmc_clk);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("hmc7044_clk_round_rate() error: %d\n", status);
 		goto error_1;
 	}
@@ -485,22 +485,22 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 	    (dev_clk / 1000) == device_clock_khz) {
 #if defined(ZU11EG) || defined(FMCOMMS8_ZCU102)
 		ret = hmc7044_clk_set_rate(clkchip_device, DEV_REFCLK_A, dev_clk);
-		if (ret != SUCCESS) {
+		if (ret != 0) {
 			printf("hmc7044_clk_set_rate() error: %d\n", status);
 			goto error_1;
 		}
 		ret = hmc7044_clk_set_rate(clkchip_device, DEV_REFCLK_B, dev_clk);
-		if (ret != SUCCESS) {
+		if (ret != 0) {
 			printf("hmc7044_clk_set_rate() error: %d\n", status);
 			goto error_1;
 		}
 		ret = hmc7044_clk_set_rate(clkchip_device, JESD_REFCLK_TX_OBS_AB, fmc_clk);
-		if (ret != SUCCESS) {
+		if (ret != 0) {
 			printf("hmc7044_clk_set_rate() error: %d\n", status);
 			goto error_1;
 		}
 		ret = hmc7044_clk_set_rate(clkchip_device, JESD_REFCLK_RX_AB, fmc_clk);
-		if (ret != SUCCESS) {
+		if (ret != 0) {
 			printf("hmc7044_clk_set_rate() error: %d\n", status);
 			goto error_1;
 		}
@@ -576,7 +576,7 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 	/* Initialize A10 FPLLs */
 	status = altera_a10_fpll_init(&rx_device_clk_pll,
 				      &rx_device_clk_pll_init);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("error: %s: altera_a10_fpll_init() failed\n",
 		       rx_device_clk_pll_init.name);
 		goto error_1;
@@ -585,14 +585,14 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 #ifndef ADRV9008_1
 	status = altera_a10_fpll_init(&tx_device_clk_pll,
 				      &tx_device_clk_pll_init);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("error: %s: altera_a10_fpll_init() failed\n",
 		       tx_device_clk_pll_init.name);
 		goto error_2;
 	}
 	status = altera_a10_fpll_init(&rx_os_device_clk_pll,
 				      &rx_os_device_clk_pll_init);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("error: %s: altera_a10_fpll_init() failed\n",
 		       rx_os_device_clk_pll_init.name);
 		goto error_3;
@@ -603,7 +603,7 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 	altera_a10_fpll_disable(rx_device_clk_pll);
 	status = altera_a10_fpll_set_rate(rx_device_clk_pll,
 					  rx_div40_rate_hz);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("error: %s: altera_a10_fpll_set_rate() failed\n",
 		       rx_device_clk_pll->name);
 		goto error_4;
@@ -614,7 +614,7 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 	altera_a10_fpll_disable(tx_device_clk_pll);
 	status = altera_a10_fpll_set_rate(tx_device_clk_pll,
 					  tx_div40_rate_hz);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("error: %s: altera_a10_fpll_set_rate() failed\n",
 		       tx_device_clk_pll->name);
 		goto error_4;
@@ -623,7 +623,7 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 	altera_a10_fpll_disable(rx_os_device_clk_pll);
 	status = altera_a10_fpll_set_rate(rx_os_device_clk_pll,
 					  rx_os_div40_rate_hz);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("error: %s: altera_a10_fpll_set_rate() failed\n",
 		       rx_os_device_clk_pll->name);
 		goto error_4;
@@ -635,19 +635,19 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 	/* Initialize CLKGEN */
 #ifndef ADRV9008_2
 	status = axi_clkgen_init(&rx_clkgen, &rx_clkgen_init);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("error: %s: axi_clkgen_init() failed\n", rx_clkgen_init.name);
 		goto error_1;
 	}
 #endif
 #ifndef ADRV9008_1
 	status = axi_clkgen_init(&tx_clkgen, &tx_clkgen_init);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("error: %s: axi_clkgen_init() failed\n", tx_clkgen_init.name);
 		goto error_2;
 	}
 	status = axi_clkgen_init(&rx_os_clkgen, &rx_os_clkgen_init);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("error: %s: axi_clkgen_set_rate() failed\n", rx_os_clkgen_init.name);
 		goto error_3;
 	}
@@ -655,19 +655,19 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 #endif
 #ifndef ADRV9008_2
 	status = axi_clkgen_set_rate(rx_clkgen, rx_div40_rate_hz);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("error: %s: axi_clkgen_set_rate() failed\n", rx_clkgen->name);
 		goto error_4;
 	}
 #endif
 #ifndef ADRV9008_1
 	status = axi_clkgen_set_rate(tx_clkgen, tx_div40_rate_hz);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("error: %s: axi_clkgen_set_rate() failed\n", tx_clkgen->name);
 		goto error_4;
 	}
 	status = axi_clkgen_set_rate(rx_os_clkgen, rx_os_div40_rate_hz);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("error: %s: axi_clkgen_set_rate() failed\n", rx_os_clkgen->name);
 		goto error_4;
 	}

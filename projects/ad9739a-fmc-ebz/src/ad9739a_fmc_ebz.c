@@ -148,21 +148,21 @@ int main(void)
 	struct axi_dac	*ad9739a_core;
 
 	status = adf4350_setup(&adf4350_device, default_adf4350_init_param);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		pr_info("adf4350_setup() failed!");
-		return FAILURE;
+		return -1;
 	}
 
 	status = axi_dac_init(&ad9739a_core, &ad9739a_core_param);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		pr_info("axi_dac_init() error: %s\n", ad9739a_core->name);
-		return FAILURE;
+		return -1;
 	}
 
 	ad9739a_setup(&ad9739a_device, ad9739a_init_param);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		pr_info("ad9739a_setup() error: %s\n", ad9739a_core->name);
-		return FAILURE;
+		return -1;
 	}
 
 #ifdef DAC_DMA_EXAMPLE
@@ -231,5 +231,5 @@ int main(void)
 #endif
 	pr_info("Done.\n");
 
-	return SUCCESS;
+	return 0;
 }

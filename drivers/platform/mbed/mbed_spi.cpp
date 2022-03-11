@@ -63,7 +63,7 @@ extern "C"
  * @brief Initialize the Mbed SPI communication peripheral.
  * @param desc[in,out] - The SPI descriptor.
  * @param param[in] - The structure that contains the SPI parameters.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t mbed_spi_init(struct no_os_spi_desc **desc,
 		      const struct no_os_spi_init_param *param)
@@ -138,7 +138,7 @@ int32_t mbed_spi_init(struct no_os_spi_desc **desc,
 	spi->format(SPI_8_BIT_FRAME, param->mode);   // data write/read format
 	spi->set_default_write_value(0x00);          // code to write when reading back
 
-	return SUCCESS;
+	return 0;
 
 err_spi:
 	if (((struct mbed_spi_init_param *)param->extra)->use_sw_csb) {
@@ -157,7 +157,7 @@ err_mbed_spi_desc:
 /**
  * @brief Free the resources allocated by no_os_spi_init().
  * @param desc[in, out] - The SPI descriptor.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t mbed_spi_remove(struct no_os_spi_desc *desc)
 {
@@ -178,7 +178,7 @@ int32_t mbed_spi_remove(struct no_os_spi_desc *desc)
 	free(desc->extra);
 	free(desc);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -186,7 +186,7 @@ int32_t mbed_spi_remove(struct no_os_spi_desc *desc)
  * @param desc[in] - The SPI descriptor.
  * @param data[in, out] - The buffer with the transmitted/received data.
  * @param bytes_number[in] - Number of bytes to write/read.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t mbed_spi_write_and_read(struct no_os_spi_desc *desc,
 				uint8_t *data,
@@ -211,7 +211,7 @@ int32_t mbed_spi_write_and_read(struct no_os_spi_desc *desc,
 	if (((struct mbed_spi_desc *)desc->extra)->use_sw_csb)
 		csb->write(NO_OS_GPIO_HIGH);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -219,7 +219,7 @@ int32_t mbed_spi_write_and_read(struct no_os_spi_desc *desc,
  * @param desc[in] - The SPI descriptor.
  * @param msgs[in, out] - Pointer to SPI messages.
  * @param num_of_msgs[in] - Number of SPI messages.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  * @note Use of this function requires CSB pin to be software controlled.
  */
 int32_t mbed_spi_transfer(struct no_os_spi_desc *desc, struct no_os_spi_msg *msgs,
@@ -255,7 +255,7 @@ int32_t mbed_spi_transfer(struct no_os_spi_desc *desc, struct no_os_spi_msg *msg
 	}
 
 	csb->write(NO_OS_GPIO_HIGH);
-	return SUCCESS;
+	return 0;
 }
 
 /**

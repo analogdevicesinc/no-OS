@@ -50,7 +50,7 @@
 /**
  * Start the clock.
  * @param clk - The clock structure.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t jesd204_clk_enable(struct jesd204_clk *clk)
 {
@@ -74,13 +74,13 @@ int32_t jesd204_clk_enable(struct jesd204_clk *clk)
 			return ret;
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * Stop the clock.
  * @param clk - The clock structure.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t jesd204_clk_disable(struct jesd204_clk *clk)
 {
@@ -104,7 +104,7 @@ int32_t jesd204_clk_disable(struct jesd204_clk *clk)
 			return ret;
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -112,7 +112,7 @@ int32_t jesd204_clk_disable(struct jesd204_clk *clk)
  * @param clk - The clock structure.
  * @param chan - The clock channel.
  * @param rate - The desired frequency.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t jesd204_clk_set_rate(struct jesd204_clk *clk, uint32_t chan,
 			     uint32_t rate)
@@ -120,5 +120,5 @@ int32_t jesd204_clk_set_rate(struct jesd204_clk *clk, uint32_t chan,
 	if (clk->xcvr)
 		return adxcvr_clk_set_rate(clk->xcvr, rate, clk->xcvr->ref_rate_khz);
 
-	return SUCCESS;
+	return 0;
 }

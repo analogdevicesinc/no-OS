@@ -129,7 +129,7 @@ static int32_t _ad7689_rac(struct ad7689_dev *dev,
 		config_out->rb = !(bool)no_os_field_get(AD7689_CFG_RB_MSK, cfg);
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /***************************************************************************//**
@@ -138,10 +138,10 @@ static int32_t _ad7689_rac(struct ad7689_dev *dev,
  * @param dev - Device descriptor to create.
  * @param init_param - Initialization parameters.
  *
- * @return Returns negative error code or SUCCESS in case of success.
+ * @return Returns negative error code or 0 in case of success.
  *         Example: -EINVAL - Bad input parameters.
  *                  -ENOMEM - Failed to allocate memory.
- *                  SUCCESS - No errors encountered.
+ *                  0 - No errors encountered.
 *******************************************************************************/
 int32_t ad7689_init(struct ad7689_dev **dev,
 		    struct ad7689_init_param *init_param)
@@ -174,7 +174,7 @@ int32_t ad7689_init(struct ad7689_dev **dev,
 
 	*dev = d;
 
-	return SUCCESS;
+	return 0;
 error_init:
 	no_os_spi_remove(d->spi_desc);
 error_spi:
@@ -191,9 +191,9 @@ error_spi:
  * @param dev - Device descriptor.
  * @param config - Configuration to write.
  *
- * @return Returns negative error code or SUCCESS in case of success.
+ * @return Returns negative error code or 0 in case of success.
  *         Example: -EINVAL - Bad input parameters.
- *                  SUCCESS - No errors encountered.
+ *                  0 - No errors encountered.
 *******************************************************************************/
 int32_t ad7689_write_config(struct ad7689_dev *dev,
 			    struct ad7689_config *config)
@@ -214,9 +214,9 @@ int32_t ad7689_write_config(struct ad7689_dev *dev,
  * @param dev - Device descriptor.
  * @param config - pointer to location where the read configuration gets stored.
  *
- * @return Returns negative error code or SUCCESS in case of success.
+ * @return Returns negative error code or 0 in case of success.
  *         Example: -EINVAL - Bad input parameters.
- *                  SUCCESS - No errors encountered.
+ *                  0 - No errors encountered.
 *******************************************************************************/
 int32_t ad7689_read_config(struct ad7689_dev *dev, struct ad7689_config *config)
 {
@@ -248,9 +248,9 @@ int32_t ad7689_read_config(struct ad7689_dev *dev, struct ad7689_config *config)
  * @param data - pointer to a large enough buffer where the data gets stored.
  * @param nb_samples - Number of samples to read.
  *
- * @return Returns negative error code or SUCCESS in case of success.
+ * @return Returns negative error code or 0 in case of success.
  *         Example: -EINVAL - Bad input parameters.
- *                  SUCCESS - No errors encountered.
+ *                  0 - No errors encountered.
 *******************************************************************************/
 int32_t ad7689_read(struct ad7689_dev *dev, uint16_t *data, uint32_t nb_samples)
 {
@@ -260,7 +260,7 @@ int32_t ad7689_read(struct ad7689_dev *dev, uint16_t *data, uint32_t nb_samples)
 	if (!data)
 		return -EINVAL;
 	if (!nb_samples)
-		return SUCCESS;
+		return 0;
 
 	do {
 		ret = _ad7689_rac(dev, NULL, NULL, &data[i]);
@@ -269,7 +269,7 @@ int32_t ad7689_read(struct ad7689_dev *dev, uint16_t *data, uint32_t nb_samples)
 		i++;
 	} while (i < nb_samples);
 
-	return SUCCESS;
+	return 0;
 }
 
 /***************************************************************************//**
@@ -277,9 +277,9 @@ int32_t ad7689_read(struct ad7689_dev *dev, uint16_t *data, uint32_t nb_samples)
  *
  * @param dev - Device descriptor.
  *
- * @return Returns negative error code or SUCCESS in case of success.
+ * @return Returns negative error code or 0 in case of success.
  *         Example: -EINVAL - Bad input parameters.
- *                  SUCCESS - No errors encountered.
+ *                  0 - No errors encountered.
 *******************************************************************************/
 int32_t ad7689_remove(struct ad7689_dev *dev)
 {
@@ -289,5 +289,5 @@ int32_t ad7689_remove(struct ad7689_dev *dev)
 	no_os_spi_remove(dev->spi_desc);
 	free(dev);
 
-	return SUCCESS;
+	return 0;
 }

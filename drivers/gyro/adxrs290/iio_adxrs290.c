@@ -137,7 +137,7 @@ static int set_adxrs290_iio_ch_hpf(void *device, char *buf, uint32_t len,
 			return len;
 		}
 
-	return FAILURE;
+	return -1;
 }
 
 static int get_adxrs290_iio_ch_lpf(void *device, char *buf, uint32_t len,
@@ -171,7 +171,7 @@ static int set_adxrs290_iio_ch_lpf(void *device, char *buf, uint32_t len,
 			return len;
 		}
 
-	return FAILURE;
+	return -1;
 }
 
 static int32_t adxrs290_update_active_channels(void *device, uint32_t mask)
@@ -180,7 +180,7 @@ static int32_t adxrs290_update_active_channels(void *device, uint32_t mask)
 
 	adxrs290_set_active_channels(dev, mask);
 
-	return SUCCESS;
+	return 0;
 }
 
 static int32_t adxrs290_read_samples(void *device, uint16_t *buff,

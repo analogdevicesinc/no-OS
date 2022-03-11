@@ -102,7 +102,7 @@ static int32_t _iio_ad713x_prepare_transfer(struct iio_ad713x *desc,
 
 	desc->mask = mask;
 
-	return SUCCESS;
+	return 0;
 }
 
 static int32_t _iio_ad713x_read_dev(struct iio_ad713x *desc, uint32_t *buff,
@@ -118,7 +118,7 @@ static int32_t _iio_ad713x_read_dev(struct iio_ad713x *desc, uint32_t *buff,
 	uint32_t *rx;
 
 	if (!desc)
-		return FAILURE;
+		return -1;
 
 	bytes = nb_samples * desc->iio_dev_desc.num_ch *
 		(BITS_PER_SAMPLE / 8);
@@ -160,7 +160,7 @@ void iio_dual_ad713x_get_dev_descriptor(struct iio_ad713x *desc,
  * iio_ad713x device.
  * @param desc - Descriptor.
  * @param param - Configuration structure.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t iio_dual_ad713x_init(struct iio_ad713x **desc,
 			     struct iio_ad713x_init_par *param)
@@ -169,7 +169,7 @@ int32_t iio_dual_ad713x_init(struct iio_ad713x **desc,
 
 	iio_ad713x = (struct iio_ad713x *)calloc(1, sizeof(struct iio_ad713x));
 	if (!iio_ad713x)
-		return FAILURE;
+		return -1;
 
 	iio_ad713x->spi_eng_desc = param->spi_eng_desc;
 	iio_ad713x->spi_engine_offload_message = param->spi_engine_offload_message;
@@ -184,22 +184,22 @@ int32_t iio_dual_ad713x_init(struct iio_ad713x **desc,
 
 	*desc = iio_ad713x;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Release resources.
  * @param desc - Descriptor.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t iio_dual_ad713x_remove(struct iio_ad713x *desc)
 {
 	if (!desc)
-		return FAILURE;
+		return -1;
 
 	free(desc);
 
-	return SUCCESS;
+	return 0;
 }
 
 #endif

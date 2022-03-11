@@ -75,21 +75,21 @@ int32_t mqtt_timer_init(uint32_t timer_id, void *extra_init_param)
 	int32_t			ret;
 
 	ret = no_os_timer_init(&timer, &init_param);
-	if (IS_ERR_VALUE(ret)) {
+	if (NO_OS_IS_ERR_VALUE(ret)) {
 		timer = NULL;
-		return FAILURE;
+		return -1;
 	}
 
 	ret = no_os_timer_start(timer);
-	if (IS_ERR_VALUE(ret)) {
+	if (NO_OS_IS_ERR_VALUE(ret)) {
 		no_os_timer_remove(timer);
 		timer = NULL;
-		return FAILURE;
+		return -1;
 	}
 
 	nb_references++;
 
-	return SUCCESS;
+	return 0;
 }
 
 
@@ -161,7 +161,7 @@ int mqtt_noos_read(Network* net, unsigned char* buff, int len, int timeout)
 		rc = socket_recv(net->sock, (void *)(buff + sent),
 				 (uint32_t)(len - sent));
 		if (rc != -EAGAIN) { //If data available or error
-			if (IS_ERR_VALUE(rc))
+			if (NO_OS_IS_ERR_VALUE(rc))
 				return rc;
 
 			sent += rc;

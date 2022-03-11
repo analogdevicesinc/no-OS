@@ -87,8 +87,8 @@ struct network_interface {
 	 * @param sock_id - Address where to store the id for referencing the
 	 * socket.
 	 * @return
-	 *  - \ref SUCCESS : On success
-	 *  - \ref FAILURE : Otherwise
+	 *  - 0 : On success
+	 *  - -1 : Otherwise
 	 */
 	int32_t (*socket_open)(void *net, uint32_t *sock_id,
 			       enum socket_protocol proto, uint32_t buff_size);
@@ -97,8 +97,8 @@ struct network_interface {
 	 * @param net - Network interface
 	 * @param sock_id - Socket id
 	 * @return
-	 *  - \ref SUCCESS : On success
-	 *  - \ref FAILURE : Otherwise
+	 *  - 0 : On success
+	 *  - -1 : Otherwise
 	 */
 	int32_t (*socket_close)(void *net, uint32_t sock_id);
 	/**
@@ -107,8 +107,8 @@ struct network_interface {
 	 * @param sock_id - Socket id
 	 * @param addr - Remote host
 	 * @return
-	 *  - \ref SUCCESS : On success
-	 *  - \ref FAILURE : Otherwise
+	 *  - 0 : On success
+	 *  - -1 : Otherwise
 	 */
 	int32_t (*socket_connect)(void *net, uint32_t sock_id,
 				  struct socket_address *addr);
@@ -117,8 +117,8 @@ struct network_interface {
 	 * @param net - Network interface
 	 * @param sock_id - Socket id
 	 * @return
-	 *  - \ref SUCCESS : On success
-	 *  - \ref FAILURE : Otherwise
+	 *  - 0 : On success
+	 *  - -1 : Otherwise
 	 */
 	int32_t (*socket_disconnect)(void *net, uint32_t sock_id);
 	/**
@@ -129,7 +129,7 @@ struct network_interface {
 	 * @param size - Size of the buffer in bytes
 	 * @return
 	 *  - Number of sent bytes : On success
-	 *  - \ref FAILURE : Otherwise
+	 *  - -1 : Otherwise
 	 */
 	int32_t (*socket_send)(void *net, uint32_t sock_id,
 			       const void *data, uint32_t size);
@@ -144,7 +144,7 @@ struct network_interface {
 	 * @param size - Maximum data to read
 	 * @return
 	 *  - Number of bytes received into the buffer.
-	 *  - \ref FAILURE is something went wrong
+	 *  - -1 is something went wrong
 	 */
 	int32_t (*socket_recv)(void *net, uint32_t sock_id,
 			       void *data, uint32_t size);
@@ -157,7 +157,7 @@ struct network_interface {
 	 * @param to - Address of the remote host
 	 * @return
 	 *  - Number of received bytes : On success
-	 *  - \ref FAILURE : Otherwise
+	 *  - -1 : Otherwise
 	 */
 	int32_t (*socket_sendto)(void *net, uint32_t sock_id,
 				 const void *data, uint32_t size,
@@ -171,7 +171,7 @@ struct network_interface {
 	 * @param from - Destination for the source address or NULL
 	 * @return
 	 *  - Number of sent bytes : On success
-	 *  - \ref FAILURE : Otherwise
+	 *  - -1 : Otherwise
 	 */
 	int32_t (*socket_recvfrom)(void *net, uint32_t sock_id,
 				   void *data, uint32_t size,
@@ -184,7 +184,7 @@ struct network_interface {
 	 * @param sock_id - Socket id
 	 * @param port - Port to bind
 	 * @return
-	 *  - \ref SUCCESS : On success
+	 *  - 0 : On success
 	 *  - \ref Negative error code on failure
 	 */
 	int32_t (*socket_bind)(void *net, uint32_t sock_id, uint16_t port);
@@ -197,7 +197,7 @@ struct network_interface {
 	 * @param sock_id - Socket id
 	 * @param back_log - Number of connections in the socket's listen queue
 	 * @return
-	 *  - \ref SUCCESS : On success
+	 *  - 0 : On success
 	 *  - \ref Negative error code on failure
 	 */
 	int32_t (*socket_listen)(void *net, uint32_t sock_id,
@@ -213,7 +213,7 @@ struct network_interface {
 	 * @param client_socket_id - Address where to store the id of the new
 	 * connection.
 	 * @return
-	 *  - \ref SUCCESS : On success
+	 *  - 0 : On success
 	 *  - \ref Negative error code on failure
 	 */
 	int32_t (*socket_accept)(void *net, uint32_t sock_id,

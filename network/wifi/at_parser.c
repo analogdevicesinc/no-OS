@@ -401,7 +401,7 @@ static inline void start_conn_read(struct at_desc *desc, bool is_new_message)
 	/* Get buffer where data from uart can be written using DMA */
 	ret = no_os_cb_prepare_async_write(conn->cbuff, conn->to_read,
 					   (void **)&buff, &available_len);
-	if (IS_ERR_VALUE(ret))
+	if (NO_OS_IS_ERR_VALUE(ret))
 		goto dummy_read;
 
 	no_os_uart_read_nonblocking(desc->uart_desc, buff, available_len);
@@ -492,7 +492,7 @@ static int32_t wait_for_response(struct at_desc *desc)
 
 	i = 0;
 	timeout = MODULE_TIMEOUT;
-	result = FAILURE;
+	result = -1;
 	do {
 		if (i < desc->result.len) {
 			for (j = 0; j < NB_RESPONSE_MESSAGES; j++)
@@ -505,11 +505,11 @@ static int32_t wait_for_response(struct at_desc *desc)
 			switch (j) {
 			case 0: // \r\nERROR\r\n
 			case 1: // \r\nFAIL\r\n
-				result = FAILURE;
+				result = -1;
 				goto end;
 			case 2: // \r\nOK\r\n
 			case 3: // \r\nSEND OK\r\n
-				result = SUCCESS;
+				result = 0;
 				goto end;
 			default:
 				break;
@@ -537,8 +537,8 @@ static int32_t send_cmd(struct at_desc *desc, enum at_cmd cmd,
 	if (cmd == AT_SEND) {
 		desc->callback_operation = WAITING_SEND;
 		/* Waiting for ok */
-		if (SUCCESS != wait_for_response(desc))
-			return FAILURE;
+		if (0 != wait_for_response(desc))
+			return -1;
 		/* Wait until '>' is received */
 		while (timeout--) {
 			if (WAITING_SEND != desc->callback_operation)
@@ -546,7 +546,7 @@ static int32_t send_cmd(struct at_desc *desc, enum at_cmd cmd,
 			no_os_mdelay(1);
 		}
 		if (timeout == 0)
-			return FAILURE;
+			return -1;
 		/* Write payload */
 		no_os_uart_write(desc->uart_desc, in_param->send_data.data.buff,
 				 in_param->send_data.data.len);
@@ -560,9 +560,9 @@ static int32_t send_cmd(struct at_desc *desc, enum at_cmd cmd,
 			} while (timeout--);
 
 			if (timeout == 0)
-				return FAILURE;
+				return -1;
 
-			return SUCCESS;
+			return 0;
 		}
 	}
 
@@ -779,11 +779,11 @@ static int32_t stop_echo(struct at_desc *desc)
 {
 	no_os_uart_write(desc->uart_desc, (uint8_t *)"ATE0\r\n", 6);
 
-	if (SUCCESS != wait_for_response(desc))
-		return FAILURE;
+	if (0 != wait_for_response(desc))
+		return -1;
 	desc->result.len = 0;
 
-	return SUCCESS;
+	return 0;
 }
 
 /* Handle special cases */
@@ -803,22 +803,22 @@ static int32_t handle_special(struct at_desc *desc, enum at_cmd cmd)
 			no_os_mdelay(1);
 		} while (timeout--);
 		if (!timeout)
-			return FAILURE;
+			return -1;
 
 		desc->callback_operation = READING_PAYLOAD;
 		desc->result.len = 0;
-		if (SUCCESS != stop_echo(desc))
-			return FAILURE;
+		if (0 != stop_echo(desc))
+			return -1;
 		at_run_cmd(desc, AT_DISCONNECT_NETWORK, AT_EXECUTE_OP, NULL);
 
 		break;
 	case AT_DEEP_SLEEP:
 		/* TODO : Implement when needed if possible */
-		return FAILURE;
+		return -1;
 	default:
-		return FAILURE;
+		return -1;
 	}
-	return SUCCESS;
+	return 0;
 
 }
 
@@ -832,7 +832,7 @@ static int32_t parse_result(struct at_desc *desc, enum at_cmd cmd,
 	result->result.len = desc->result.len;
 	desc->result.len = 0;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -843,8 +843,8 @@ static int32_t parse_result(struct at_desc *desc, enum at_cmd cmd,
  * @param param - Input and output param for the command. The data in the output
  * param will be available until a new call is made.
  * @return
- *  - \ref SUCCESS : On success
- *  - \ref FAILURE : Otherwise
+ *  - 0 : On success
+ *  - -1 : Otherwise
  */
 int32_t at_run_cmd(struct at_desc *desc, enum at_cmd cmd, enum cmd_operation op,
 		   union in_out_param *param)
@@ -853,10 +853,10 @@ int32_t at_run_cmd(struct at_desc *desc, enum at_cmd cmd, enum cmd_operation op,
 	int32_t		ret;
 
 	if (!desc || cmd == AT_SET_TRANSPORT_MODE)
-		return FAILURE;
+		return -1;
 
 	if (!(g_map[cmd].type & op))
-		return FAILURE;
+		return -1;
 
 	build_cmd(desc, cmd, op, param);
 
@@ -864,7 +864,7 @@ int32_t at_run_cmd(struct at_desc *desc, enum at_cmd cmd, enum cmd_operation op,
 		return handle_special(desc, cmd);
 
 	ret = send_cmd(desc, cmd, &param->in);
-	if (IS_ERR_VALUE(ret))
+	if (NO_OS_IS_ERR_VALUE(ret))
 		return ret;
 
 	/* Update driver status according with commands */
@@ -880,7 +880,7 @@ int32_t at_run_cmd(struct at_desc *desc, enum at_cmd cmd, enum cmd_operation op,
 		if (op == AT_SET_OP)
 			cmd = AT_GET_VERSION; //Only copy response
 		ret = parse_result(desc, cmd, &param->out);
-		if (IS_ERR_VALUE(ret))
+		if (NO_OS_IS_ERR_VALUE(ret))
 			return ret;
 	} else
 		/* Clear the result*/
@@ -892,7 +892,7 @@ int32_t at_run_cmd(struct at_desc *desc, enum at_cmd cmd, enum cmd_operation op,
 		return -ret;
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -901,8 +901,8 @@ int32_t at_run_cmd(struct at_desc *desc, enum at_cmd cmd, enum cmd_operation op,
  * driver functions.
  * @param param - Initializing data
  * @return
- *  - \ref SUCCESS : On success
- *  - \ref FAILURE : Otherwise
+ *  - 0 : On success
+ *  - -1 : Otherwise
  */
 int32_t at_init(struct at_desc **desc, const struct at_init_param *param)
 {
@@ -913,11 +913,11 @@ int32_t at_init(struct at_desc **desc, const struct at_init_param *param)
 	uint8_t			*str;
 
 	if (!desc || !param || !param->connection_callback)
-		return FAILURE;
+		return -1;
 
 	ldesc = calloc(1, sizeof(*ldesc));
 	if (!ldesc)
-		return FAILURE;
+		return -1;
 
 	ldesc->connection_callback = param->connection_callback;
 	ldesc->callback_ctx = param->callback_ctx;
@@ -949,16 +949,16 @@ int32_t at_init(struct at_desc **desc, const struct at_init_param *param)
 	ldesc->callback_operation = READING_RESPONSES;
 
 	/* Disable echoing response */
-	if (SUCCESS != stop_echo(ldesc))
+	if (0 != stop_echo(ldesc))
 		goto free_irq;
 
 	/* Test AT */
-	if (SUCCESS != at_run_cmd(ldesc, AT_ATTENTION, AT_EXECUTE_OP, NULL))
+	if (0 != at_run_cmd(ldesc, AT_ATTENTION, AT_EXECUTE_OP, NULL))
 		goto free_irq;
 
 	/* Get the connection type */
-	if (SUCCESS == at_run_cmd(ldesc, AT_SET_CONNECTION_TYPE, AT_QUERY_OP,
-				  &result)) {
+	if (0 == at_run_cmd(ldesc, AT_SET_CONNECTION_TYPE, AT_QUERY_OP,
+			    &result)) {
 		/* Convert to null terminated string in order to use sscanf */
 		at_to_str(&str, &result.out.result);
 		sscanf((char *)str, "+CIPMUX:%"PRIu32"\r\n", &conn);
@@ -970,32 +970,32 @@ int32_t at_init(struct at_desc **desc, const struct at_init_param *param)
 	}
 
 	*desc = ldesc;
-	return SUCCESS;
+	return 0;
 
 free_irq:
 	no_os_irq_unregister(ldesc->irq_desc, ldesc->uart_irq_id);
 free_desc:
 	free(ldesc);
 	*desc = NULL;
-	return FAILURE;
+	return -1;
 }
 
 /**
  * @brief Free resources allocated at \ref at_init
  * @param desc - AT parser reference
  * @return
- *  - \ref SUCCESS : On success
- *  - \ref FAILURE : Otherwise
+ *  - 0 : On success
+ *  - -1 : Otherwise
  */
 int32_t at_remove(struct at_desc *desc)
 {
 	if (!desc)
-		return FAILURE;
+		return -1;
 
 	no_os_irq_unregister(desc->irq_desc, desc->uart_irq_id);
 	free(desc);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -1003,18 +1003,18 @@ int32_t at_remove(struct at_desc *desc)
  * @param dest - Destination buffer
  * @param src - Source buffer
  * @return
- *  - \ref SUCCESS : On success
- *  - \ref FAILURE : Otherwise
+ *  - 0 : On success
+ *  - -1 : Otherwise
  */
 int32_t str_to_at(struct at_buff *dest, const uint8_t *src)
 {
 	if (!dest || !src)
-		return FAILURE;
+		return -1;
 
 	dest->buff = (uint8_t *)src;
 	dest->len = strlen((char *)src);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -1022,16 +1022,16 @@ int32_t str_to_at(struct at_buff *dest, const uint8_t *src)
  * @param dest - Destination buffer
  * @param src - Source buffer
  * @return
- *  - \ref SUCCESS : On success
- *  - \ref FAILURE : Otherwise
+ *  - 0 : On success
+ *  - -1 : Otherwise
  */
 int32_t at_to_str(uint8_t **dest, const struct at_buff *src)
 {
 	if (!src || !dest)
-		return FAILURE;
+		return -1;
 
 	src->buff[src->len] = 0;
 	*dest = src->buff;
 
-	return SUCCESS;
+	return 0;
 }

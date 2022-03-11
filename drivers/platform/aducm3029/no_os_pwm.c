@@ -107,7 +107,7 @@ static int32_t no_os_config_clock_init(ADI_TMR_CONFIG *cfg, uint32_t period,
 	cfg->nAsyncLoad = cfg->nLoad;
 	*match = cfg->nLoad - duty / base_time;
 
-	return SUCCESS;
+	return 0;
 }
 
 static int32_t no_os_update_pwm_config(struct no_os_pwm_desc *desc)
@@ -128,7 +128,7 @@ static int32_t no_os_update_pwm_config(struct no_os_pwm_desc *desc)
 	};
 	ret = no_os_config_clock_init(&cfg, desc->period_ns, desc->duty_cycle_ns,
 				      &match_val);
-	if (IS_ERR_VALUE(ret))
+	if (NO_OS_IS_ERR_VALUE(ret))
 		return ret;
 	do {
 		ret = adi_tmr_ConfigTimer(desc->id, &cfg);
@@ -144,7 +144,7 @@ static int32_t no_os_update_pwm_config(struct no_os_pwm_desc *desc)
 	if (ret != ADI_TMR_SUCCESS)
 		return -ret;
 
-	return SUCCESS;
+	return 0;
 }
 
 /* Initialize the PWM generator device */
@@ -174,12 +174,12 @@ int32_t no_os_pwm_init(struct no_os_pwm_desc **desc,
 		goto error;
 
 	ret = no_os_update_pwm_config(ldesc);
-	if (IS_ERR_VALUE(ret))
+	if (NO_OS_IS_ERR_VALUE(ret))
 		goto error;
 
 	*desc = ldesc;
 
-	return SUCCESS;
+	return 0;
 error:
 	*desc = NULL;
 	free(ldesc);
@@ -196,7 +196,7 @@ int32_t no_os_pwm_remove(struct no_os_pwm_desc *desc)
 	free(desc->extra);
 	free(desc);
 
-	return SUCCESS;
+	return 0;
 }
 
 /* Enable PWM generator device */
@@ -211,7 +211,7 @@ int32_t no_os_pwm_enable(struct no_os_pwm_desc *desc)
 	if (ret != ADI_TMR_SUCCESS)
 		return -ret;
 
-	return SUCCESS;
+	return 0;
 }
 
 /* Disable PWM generator device */
@@ -226,7 +226,7 @@ int32_t no_os_pwm_disable(struct no_os_pwm_desc *desc)
 	if (ret != ADI_TMR_SUCCESS)
 		return -ret;
 
-	return SUCCESS;
+	return 0;
 }
 
 /* Set period of PWM generator device */
@@ -250,7 +250,7 @@ int32_t no_os_pwm_get_period(struct no_os_pwm_desc *desc,
 
 	*period_ns = desc->period_ns;
 
-	return SUCCESS;
+	return 0;
 }
 
 /* Set duty cycle of PWM generator device */
@@ -274,7 +274,7 @@ int32_t no_os_pwm_get_duty_cycle(struct no_os_pwm_desc *desc,
 
 	*duty_cycle_ns = desc->duty_cycle_ns;
 
-	return SUCCESS;
+	return 0;
 }
 
 /* Set polarity of PWM generator device */
@@ -298,5 +298,5 @@ int32_t no_os_pwm_get_polarity(struct no_os_pwm_desc *desc,
 
 	*polarity = desc->polarity;
 
-	return SUCCESS;
+	return 0;
 }

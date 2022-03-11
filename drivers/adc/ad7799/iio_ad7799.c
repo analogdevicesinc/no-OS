@@ -60,7 +60,7 @@ static int ad7799_iio_channel_read(void *device, char *buf, uint32_t len,
 	int32_t ret, data;
 
 	ret = ad7799_get_channel(dev, channel->ch_num, &data);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	return snprintf(buf, len, "%d", data);
@@ -83,7 +83,7 @@ static int ad7799_iio_gain_read(void *device, char *buf, uint32_t len,
 	int32_t ret;
 
 	ret = ad7799_get_gain(dev, &gain);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	return snprintf(buf, len, "%d", gain);
@@ -107,7 +107,7 @@ static int ad7799_iio_gain_write(void *device, char *buf, uint32_t len,
 	uint32_t gain = no_os_str_to_uint32(buf);
 
 	ret = ad7799_set_gain(dev, (uint8_t)gain);
-	if (ret != SUCCESS)
+	if (ret != 0)
 		return ret;
 
 	return len;

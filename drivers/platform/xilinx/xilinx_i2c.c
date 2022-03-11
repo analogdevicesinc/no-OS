@@ -117,7 +117,7 @@ static int32_t xil_i2c_cmp(void *el1, void *el2)
 /**
  * @brief Configure slave address and bitrate if needed
  * @param desc - Descriptor of the I2C device
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 static int32_t xil_i2c_set_transmission_config(struct no_os_i2c_desc *desc)
 {
@@ -131,31 +131,31 @@ static int32_t xil_i2c_set_transmission_config(struct no_os_i2c_desc *desc)
 #ifdef XIIC_H
 		break;
 #endif
-		return FAILURE;
+		return -1;
 	case IIC_PS:
 #ifdef XIICPS_H
 		if (desc->max_speed_hz != ps_last_bitrate) {
 			ret = XIicPs_SetSClk(xil_i2c_desc->instance, desc->max_speed_hz);
 			if (ret != XST_SUCCESS)
-				return FAILURE;
+				return -1;
 			ps_last_bitrate = desc->max_speed_hz;
 		}
 		break;
 #endif
-		return FAILURE;
+		return -1;
 	default:
 
-		return FAILURE;
+		return -1;
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Initialize the I2C communication peripheral.
  * @param desc - The I2C descriptor.
  * @param param - The structure that contains the I2C parameters.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t xil_i2c_init(struct no_os_i2c_desc **desc,
 		     const struct no_os_i2c_init_param *param)
@@ -192,8 +192,8 @@ int32_t xil_i2c_init(struct no_os_i2c_desc **desc,
 
 		tab_check_pl.device_id = xdesc->device_id;
 
-		if (!IS_ERR_VALUE(no_os_list_read_find(pl_list, (void **)&temp_el_pl,
-						       &tab_check_pl))) {
+		if (!NO_OS_IS_ERR_VALUE(no_os_list_read_find(pl_list, (void **)&temp_el_pl,
+					&tab_check_pl))) {
 			xdesc->instance = temp_el_pl->instance;
 			temp_el_pl->inst_no++;
 			break;
@@ -211,17 +211,17 @@ int32_t xil_i2c_init(struct no_os_i2c_desc **desc,
 					 xdesc->config,
 					 ((XIic_Config*)xdesc->config)
 					 ->BaseAddress);
-		if(ret != SUCCESS)
+		if(ret != 0)
 			goto pl_error;
 
 		ret = XIic_Start(xdesc->instance);
-		if(ret != SUCCESS)
+		if(ret != 0)
 			goto pl_error;
 
 		ret = XIic_SetAddress(xdesc->instance,
 				      XII_ADDR_TO_SEND_TYPE,
 				      param->slave_address);
-		if(ret != SUCCESS)
+		if(ret != 0)
 			goto pl_error;
 
 		ret = XIic_SelfTest(xdesc->instance);
@@ -256,8 +256,9 @@ pl_error:
 
 		tab_check_ps.device_id = xdesc->device_id;
 
-		if (!NO_OS_IS_ERR_VALUE(no_os_list_read_find(ps_list, (void **)&temp_el_ps,
-					&tab_check_ps))) {
+		if (!NO_OS_NO_OS_IS_ERR_VALUE(no_os_list_read_find(ps_list,
+					      (void **)&temp_el_ps,
+					      &tab_check_ps))) {
 			xdesc->instance = temp_el_ps->instance;
 			temp_el_ps->inst_no++;
 			break;
@@ -275,7 +276,7 @@ pl_error:
 					   xdesc->config,
 					   ((XIicPs_Config*)xdesc->config)
 					   ->BaseAddress);
-		if(ret != SUCCESS)
+		if(ret != 0)
 			goto ps_error;
 
 		XIicPs_SetSClk(xdesc->instance, param->max_speed_hz);
@@ -299,19 +300,19 @@ ps_error:
 
 	*desc = idesc;
 
-	return SUCCESS;
+	return 0;
 
 error:
 	free(idesc);
 	free(xdesc);
 
-	return FAILURE;
+	return -1;
 }
 
 /**
  * @brief Free the resources allocated by no_os_i2c_init().
  * @param desc - The I2C descriptor.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t xil_i2c_remove(struct no_os_i2c_desc *desc)
 {
@@ -328,7 +329,7 @@ int32_t xil_i2c_remove(struct no_os_i2c_desc *desc)
 		struct inst_table_item *temp_el_pl;
 		tab_check_pl.device_id = xdesc->device_id;
 		ret = no_os_iterator_find(pl_it, &tab_check_pl);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			goto error;
 		no_os_iterator_read(pl_it, (void **)&temp_el_pl);
 		temp_el_pl->inst_no--;
@@ -337,7 +338,7 @@ int32_t xil_i2c_remove(struct no_os_i2c_desc *desc)
 
 		ret = XIic_Stop(((XIic *)xdesc->instance));
 
-		if(ret != SUCCESS)
+		if(ret != 0)
 			goto error;
 
 		/** Remove list element */
@@ -353,7 +354,7 @@ int32_t xil_i2c_remove(struct no_os_i2c_desc *desc)
 		struct inst_table_item *temp_el_ps;
 		tab_check_ps.device_id = xdesc->device_id;
 		ret = no_os_iterator_find(ps_it, &tab_check_ps);
-		if (ret != SUCCESS)
+		if (ret != 0)
 			goto error;
 		no_os_iterator_read(ps_it, (void **)&temp_el_ps);
 		temp_el_ps->inst_no--;
@@ -369,13 +370,13 @@ int32_t xil_i2c_remove(struct no_os_i2c_desc *desc)
 error:
 	default:
 
-		return FAILURE;
+		return -1;
 	}
 
 	free(desc->extra);
 	free(desc);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -386,7 +387,7 @@ error:
  * @param stop_bit - Stop condition control.
  *                   Example: 0 - A stop condition will not be generated;
  *                            1 - A stop condition will be generated.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t xil_i2c_write(struct no_os_i2c_desc *desc,
 		      uint8_t *data,
@@ -402,8 +403,8 @@ int32_t xil_i2c_write(struct no_os_i2c_desc *desc,
 	case IIC_PL:
 #ifdef XIIC_H
 		ret = xil_i2c_set_transmission_config(desc);
-		if (ret != SUCCESS)
-			return FAILURE;
+		if (ret != 0)
+			return -1;
 
 		XIic_Send(((XIic*)xdesc->instance)->BaseAddress,
 			  desc->slave_address,
@@ -416,19 +417,19 @@ int32_t xil_i2c_write(struct no_os_i2c_desc *desc,
 	case IIC_PS:
 #ifdef XIICPS_H
 		ret = xil_i2c_set_transmission_config(desc);
-		if (ret != SUCCESS)
-			return FAILURE;
+		if (ret != 0)
+			return -1;
 
 		ret = XIicPs_SetOptions(xdesc->instance,
 					stop_bit ? 0 : XIICPS_REP_START_OPTION);
-		if(ret != SUCCESS)
+		if(ret != 0)
 			goto error;
 
 		XIicPs_MasterSend(xdesc->instance,
 				  data,
 				  bytes_number,
 				  desc->slave_address);
-		if(ret != SUCCESS)
+		if(ret != 0)
 			goto error;
 
 		break;
@@ -437,10 +438,10 @@ int32_t xil_i2c_write(struct no_os_i2c_desc *desc,
 error:
 	default:
 
-		return FAILURE;
+		return -1;
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -451,7 +452,7 @@ error:
  * @param stop_bit - Stop condition control.
  *                   Example: 0 - A stop condition will not be generated;
  *                            1 - A stop condition will be generated.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t xil_i2c_read(struct no_os_i2c_desc *desc,
 		     uint8_t *data,
@@ -467,8 +468,8 @@ int32_t xil_i2c_read(struct no_os_i2c_desc *desc,
 	case IIC_PL:
 #ifdef XIIC_H
 		ret = xil_i2c_set_transmission_config(desc);
-		if (ret != SUCCESS)
-			return FAILURE;
+		if (ret != 0)
+			return -1;
 
 		ret = XIic_Recv(((XIic*)xdesc->instance)->BaseAddress,
 				desc->slave_address,
@@ -484,19 +485,19 @@ int32_t xil_i2c_read(struct no_os_i2c_desc *desc,
 	case IIC_PS:
 #ifdef XIICPS_H
 		ret = xil_i2c_set_transmission_config(desc);
-		if (ret != SUCCESS)
-			return FAILURE;
+		if (ret != 0)
+			return -1;
 
 		ret = XIicPs_SetOptions(xdesc->instance,
 					stop_bit ? 0 : XIICPS_REP_START_OPTION);
-		if(ret != SUCCESS)
+		if(ret != 0)
 			goto error;
 
 		XIicPs_MasterRecv(xdesc->instance,
 				  data,
 				  bytes_number,
 				  desc->slave_address);
-		if(ret != SUCCESS)
+		if(ret != 0)
 			goto error;
 
 		break;
@@ -504,10 +505,10 @@ int32_t xil_i2c_read(struct no_os_i2c_desc *desc,
 		/* Intended fallthrough */
 error:
 	default:
-		return FAILURE;
+		return -1;
 
 		break;
 	}
 
-	return SUCCESS;
+	return 0;
 }

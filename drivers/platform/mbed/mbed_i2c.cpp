@@ -60,7 +60,7 @@ extern "C"
  * @brief Initialize the I2C communication peripheral.
  * @param desc[in,out] - The I2C descriptor.
  * @param param[in] - The structure that contains the I2C parameters.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t mbed_i2c_init(struct no_os_i2c_desc **desc,
 		      const struct no_os_i2c_init_param *param)
@@ -99,7 +99,7 @@ int32_t mbed_i2c_init(struct no_os_i2c_desc **desc,
 
 	*desc = i2c_desc;
 
-	return SUCCESS;
+	return 0;
 
 err_mbed_i2c_desc:
 	free(i2c);
@@ -112,7 +112,7 @@ err_i2c:
 /**
  * @brief Free the resources allocated by mbed_i2c_init().
  * @param desc[in] - The I2C descriptor.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t mbed_i2c_remove(struct no_os_i2c_desc *desc)
 {
@@ -127,7 +127,7 @@ int32_t mbed_i2c_remove(struct no_os_i2c_desc *desc)
 	free(desc->extra);
 	free(desc);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -138,7 +138,7 @@ int32_t mbed_i2c_remove(struct no_os_i2c_desc *desc)
  * @param stop_bit[in] - Stop condition control.
  *                   Example: 0 - A stop condition will not be generated;
  *                            1 - A stop condition will be generated.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t mbed_i2c_write(struct no_os_i2c_desc *desc,
 		       uint8_t *data,
@@ -161,7 +161,7 @@ int32_t mbed_i2c_write(struct no_os_i2c_desc *desc,
 	if (i2c->write(desc->slave_address, (char *)data, bytes_number, !stop_bit))
 		return -EINVAL;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -172,7 +172,7 @@ int32_t mbed_i2c_write(struct no_os_i2c_desc *desc,
  * @param stop_bit[in] - Stop condition control.
  *                   Example: 0 - A stop condition will not be generated;
  *                            1 - A stop condition will be generated.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int32_t mbed_i2c_read(struct no_os_i2c_desc *desc,
 		      uint8_t *data,
@@ -195,7 +195,7 @@ int32_t mbed_i2c_read(struct no_os_i2c_desc *desc,
 	if (i2c->read(desc->slave_address, (char *)data, bytes_number, !stop_bit))
 		return -EINVAL;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**

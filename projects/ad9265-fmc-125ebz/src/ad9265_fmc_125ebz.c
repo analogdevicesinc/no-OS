@@ -103,41 +103,41 @@ int main(void)
 	struct ad9265_dev *ad9265_device;
 
 	status = axi_adc_init(&ad9265_core,  &ad9265_core_param);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		pr_err("axi_adc_init() error: %s\n", ad9265_core->name);
-		return FAILURE;
+		return -1;
 	}
 
 	status = axi_dmac_init(&ad9265_dmac, &ad9265_dmac_param);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		pr_err("axi_dmac_init() error: %s\n", ad9265_dmac->name);
-		return FAILURE;
+		return -1;
 	}
 
 	status = ad9265_setup(&ad9265_device, ad9265_param, *ad9265_core);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		pr_err("ad9265_setup() failed!\n");
-		return FAILURE;
+		return -1;
 	}
 
 	status = ad9265_testmode_set(ad9265_device, TESTMODE_ONE_ZERO_TOGGLE);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		pr_err("ad9265_testmode_set() TESTMODE_ONE_ZERO_TOGGLE failed!\n");
-		return FAILURE;
+		return -1;
 	}
 
 	status = axi_dmac_transfer(ad9265_dmac, ADC_DDR_BASEADDR, 16384 * 2);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		pr_err("axi_dmac_transfer() failed!\n");
-		return FAILURE;
+		return -1;
 	}
 
 	pr_info("Capture done.\n");
 
 	status = ad9265_testmode_set(ad9265_device, TESTMODE_OFF);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		pr_err("ad9265_testmode_set() TESTMODE_OFF failed!\n");
-		return FAILURE;
+		return -1;
 	}
 
 #ifdef IIO_SUPPORT

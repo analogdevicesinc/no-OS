@@ -84,7 +84,7 @@ int get_sampling_frequency(struct axi_adc *dev, uint32_t chan,
 		return -EINVAL;
 
 	*sampling_freq_hz = sampling_freq;
-	return SUCCESS;
+	return 0;
 }
 
 static struct adi_adrv9001_SpiSettings spiSettings = {

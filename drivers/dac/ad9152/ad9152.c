@@ -201,7 +201,7 @@ int32_t ad9152_setup(struct ad9152_dev **device,
 /***************************************************************************//**
  * @brief Free the resources allocated by ad9152_setup().
  * @param dev - The device structure.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
 *******************************************************************************/
 int32_t ad9152_remove(struct ad9152_dev *dev)
 {

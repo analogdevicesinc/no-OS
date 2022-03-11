@@ -277,7 +277,7 @@ static int fmcdaq2_spi_init(struct fmcdaq2_init_param *dev_init)
 	dev_init->ad9144_param.spi_init = ad9144_spi_param;
 	dev_init->ad9680_param.spi_init = ad9680_spi_param;
 
-	return SUCCESS;
+	return 0;
 }
 
 static int fmcdaq2_clk_init(struct fmcdaq2_dev *dev,
@@ -403,7 +403,7 @@ static int fmcdaq2_jesd_init(struct fmcdaq2_init_param *dev_init)
 		.lane_clk_khz = 10000000
 	};
 
-	return SUCCESS;
+	return 0;
 }
 
 static int fmcdaq2_altera_pll_setup()
@@ -426,13 +426,13 @@ static int fmcdaq2_altera_pll_setup()
 	/* Initialize A10 FPLLs */
 	status = altera_a10_fpll_init(&ad9680_device_clk_pll,
 				      &ad9680_device_clk_pll_param);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("error: %s: altera_a10_fpll_init() failed\n",
 		       ad9680_device_clk_pll_param.name);
 	}
 	status = altera_a10_fpll_init(&ad9144_device_clk_pll,
 				      &ad9144_device_clk_pll_param);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("error: %s: altera_a10_fpll_init() failed\n",
 		       ad9144_device_clk_pll_param.name);
 	}
@@ -440,7 +440,7 @@ static int fmcdaq2_altera_pll_setup()
 	altera_a10_fpll_disable(ad9680_device_clk_pll);
 	status = altera_a10_fpll_set_rate(ad9680_device_clk_pll,
 					  ad9680_jesd_param.device_clk_khz * 1000);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("error: %s: altera_a10_fpll_set_rate() failed\n",
 		       ad9680_device_clk_pll->name);
 	}
@@ -448,7 +448,7 @@ static int fmcdaq2_altera_pll_setup()
 	altera_a10_fpll_disable(ad9144_device_clk_pll);
 	status = altera_a10_fpll_set_rate(ad9144_device_clk_pll,
 					  fmcdaq2_init.ad9144_jesd_param.device_clk_khz * 1000);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("error: %s: altera_a10_fpll_set_rate() failed\n",
 		       ad9144_device_clk_pll->name);
 	}
@@ -456,7 +456,7 @@ static int fmcdaq2_altera_pll_setup()
 
 	return status;
 #endif
-	return SUCCESS;
+	return 0;
 }
 
 static int fmcdaq2_trasnceiver_setup(struct fmcdaq2_dev *dev,
@@ -465,43 +465,43 @@ static int fmcdaq2_trasnceiver_setup(struct fmcdaq2_dev *dev,
 	int status;
 
 	status = axi_jesd204_tx_init(&dev->ad9144_jesd, &dev_init->ad9144_jesd_param);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("error: %s: axi_jesd204_tx_init() failed\n", dev->ad9144_jesd->name);
 	}
 
 	status = axi_jesd204_tx_lane_clk_enable(dev->ad9144_jesd);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("error: %s: axi_jesd204_tx_lane_clk_enable() failed\n",
 		       dev->ad9144_jesd->name);
 	}
 
 	status = adxcvr_init(&dev->ad9144_xcvr, &dev_init->ad9144_xcvr_param);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("error: %s: adxcvr_init() failed\n", dev->ad9144_xcvr->name);
 	}
 #ifndef ALTERA_PLATFORM
 	status = adxcvr_clk_enable(dev->ad9144_xcvr);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("error: %s: adxcvr_clk_enable() failed\n", dev->ad9144_xcvr->name);
 	}
 #endif
 	status = adxcvr_init(&dev->ad9680_xcvr, &dev_init->ad9680_xcvr_param);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("error: %s: adxcvr_init() failed\n", dev->ad9680_xcvr->name);
 	}
 #ifndef ALTERA_PLATFORM
 	status = adxcvr_clk_enable(dev->ad9680_xcvr);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("error: %s: adxcvr_clk_enable() failed\n", dev->ad9680_xcvr->name);
 	}
 #endif
 	status = axi_jesd204_rx_init(&dev->ad9680_jesd, &dev_init->ad9680_jesd_param);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("error: %s: axi_jesd204_rx_init() failed\n", dev->ad9680_jesd->name);
 	}
 
 	status = axi_jesd204_rx_lane_clk_enable(dev->ad9680_jesd);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("error: %s: axi_jesd204_rx_lane_clk_enable() failed\n",
 		       dev->ad9680_jesd->name);
 	}
@@ -516,17 +516,17 @@ static int fmcdaq2_test(struct fmcdaq2_dev *dev,
 	int status;
 
 	status = axi_jesd204_rx_status_read(dev->ad9680_jesd);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("axi_jesd204_rx_status_read() error: %"PRIi32"\n", status);
 	}
 
 	status = axi_jesd204_tx_status_read(dev->ad9144_jesd);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("axi_jesd204_tx_status_read() error: %"PRIi32"\n", status);
 	}
 
 	status = ad9144_status(dev->ad9144_device);
-	if (status == FAILURE)
+	if (status == -1)
 		return status;
 
 	/* transport path testing */
@@ -563,7 +563,7 @@ static int fmcdaq2_test(struct fmcdaq2_dev *dev,
 
 	ad9680_test(dev->ad9680_device, AD9680_TEST_OFF);
 
-	return SUCCESS;
+	return 0;
 }
 
 static int fmcdaq2_dac_init(struct fmcdaq2_dev *dev,
@@ -609,7 +609,7 @@ static int fmcdaq2_dac_init(struct fmcdaq2_dev *dev,
 	dev_init->ad9144_jesd_param.lane_clk_khz =
 		dev_init->ad9144_xcvr_param.lane_rate_khz ;
 
-	return SUCCESS;
+	return 0;
 }
 
 static int fmcdaq2_iio_init(struct fmcdaq2_dev *dev,
@@ -652,13 +652,13 @@ static int fmcdaq2_iio_init(struct fmcdaq2_dev *dev,
 	};
 
 	status = iio_axi_adc_init(&iio_axi_adc_desc, &iio_axi_adc_init_par);
-	if (IS_ERR_VALUE(status))
-		return FAILURE;
+	if (NO_OS_IS_ERR_VALUE(status))
+		return -1;
 	iio_axi_adc_get_dev_descriptor(iio_axi_adc_desc, &adc_dev_desc);
 
 	status = iio_axi_dac_init(&iio_axi_dac_desc, &iio_axi_dac_init_par);
-	if (IS_ERR_VALUE(status))
-		return FAILURE;
+	if (NO_OS_IS_ERR_VALUE(status))
+		return -1;
 	iio_axi_dac_get_dev_descriptor(iio_axi_dac_desc, &dac_dev_desc);
 
 	struct iio_data_buffer read_buff = {
@@ -685,7 +685,7 @@ static int fmcdaq2_iio_init(struct fmcdaq2_dev *dev,
 	return iio_app_run(devices, NO_OS_ARRAY_SIZE(devices));
 #endif
 
-	return SUCCESS;
+	return 0;
 }
 
 static void fmcdaq2_remove(struct fmcdaq2_dev *dev)
@@ -948,7 +948,7 @@ static int fmcdaq2_setup(struct fmcdaq2_dev *dev,
 
 	/* setup clocks */
 	status = ad9523_setup(&dev->ad9523_device, &dev_init->ad9523_param);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("error: ad9523_setup() failed\n");
 	}
 	// Recommended DAC JESD204 link startup sequence
@@ -965,30 +965,30 @@ static int fmcdaq2_setup(struct fmcdaq2_dev *dev,
 	// be shared between the DAC and ADC link are enabled at the same time.
 
 	status = fmcdaq2_altera_pll_setup();
-	if (status != SUCCESS)
+	if (status != 0)
 		return status;
 
 	status = ad9680_setup(&dev->ad9680_device, &dev_init->ad9680_param);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("error: ad9680_setup() failed\n");
 	}
 
 	status = fmcdaq2_trasnceiver_setup(&fmcdaq2, &fmcdaq2_init);
-	if (status != SUCCESS)
+	if (status != 0)
 		return status;
 
 	status = ad9144_setup(&dev->ad9144_device, &dev_init->ad9144_param);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("error: ad9144_setup() failed\n");
 	}
 
 	status = axi_adc_init(&dev->ad9680_core,  &dev_init->ad9680_core_param);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("axi_adc_init() error: %s\n", dev->ad9680_core->name);
 	}
 
 	status = axi_dac_init(&dev->ad9144_core, &dev_init->ad9144_core_param);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("axi_dac_init() error: %s\n", dev->ad9144_core->name);
 	}
 
@@ -1051,10 +1051,10 @@ int main(void)
 		       i, (*(data + i) & 0xFFFF), (*(data + i) >> 16));
 
 	status = fmcdaq2_iio_init(&fmcdaq2, &fmcdaq2_init);
-	if (status != SUCCESS)
+	if (status != 0)
 		return status;
 
 	fmcdaq2_remove(&fmcdaq2);
 
-	return SUCCESS;
+	return 0;
 }

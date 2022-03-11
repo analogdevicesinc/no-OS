@@ -95,7 +95,7 @@ static struct no_os_fifo_element *no_os_fifo_get_last(struct no_os_fifo_element
  * @param p_fifo - Pointer to fifo.
  * @param buff - Data to be saved in fifo.
  * @param len - Length of the data.
- * @return SUCCESS in case of success, FAILURE otherwise
+ * @return 0 in case of success, -1 otherwise
  */
 int32_t no_os_fifo_insert(struct no_os_fifo_element **p_fifo, char *buff,
 			  uint32_t len)
@@ -103,11 +103,11 @@ int32_t no_os_fifo_insert(struct no_os_fifo_element **p_fifo, char *buff,
 	struct no_os_fifo_element *p, *q;
 
 	if (len <= 0)
-		return FAILURE;
+		return -1;
 
 	q = fifo_new_element(buff, len);
 	if (!q)
-		return FAILURE;
+		return -1;
 
 	if (!(*p_fifo)) {
 		*p_fifo = q;
@@ -116,7 +116,7 @@ int32_t no_os_fifo_insert(struct no_os_fifo_element **p_fifo, char *buff,
 		p->next = q;
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**

@@ -460,7 +460,7 @@ int main(void)
 	ad9152_jesd_param.device_clk_khz = ad9152_xcvr_param.lane_rate_khz / 40;
 
 	status = ad9528_setup(&ad9528_device, ad9528_param);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("error: ad9523_setup() failed\n");
 	}
 	// Recommended DAC JESD204 link startup sequence
@@ -472,13 +472,13 @@ int main(void)
 	/* Initialize A10 FPLLs */
 	status = altera_a10_fpll_init(&ad9680_device_clk_pll,
 				      &ad9680_device_clk_pll_param);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("error: %s: altera_a10_fpll_init() failed\n",
 		       ad9680_device_clk_pll_param.name);
 	}
 	status = altera_a10_fpll_init(&ad9152_device_clk_pll,
 				      &ad9152_device_clk_pll_param);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("error: %s: altera_a10_fpll_init() failed\n",
 		       ad9152_device_clk_pll_param.name);
 	}
@@ -486,7 +486,7 @@ int main(void)
 	altera_a10_fpll_disable(ad9680_device_clk_pll);
 	status = altera_a10_fpll_set_rate(ad9680_device_clk_pll,
 					  ad9680_jesd_param.device_clk_khz * 1000);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("error: %s: altera_a10_fpll_set_rate() failed\n",
 		       ad9680_device_clk_pll->name);
 	}
@@ -494,74 +494,74 @@ int main(void)
 	altera_a10_fpll_disable(ad9152_device_clk_pll);
 	status = altera_a10_fpll_set_rate(ad9152_device_clk_pll,
 					  ad9152_jesd_param.device_clk_khz * 1000);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("error: %s: altera_a10_fpll_set_rate() failed\n",
 		       ad9152_device_clk_pll->name);
 	}
 	altera_a10_fpll_enable(ad9152_device_clk_pll);
 #endif
 	status = ad9680_setup(&ad9680_device, &ad9680_param);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("error: ad9680_setup() failed\n");
 	}
 	status = axi_jesd204_tx_init(&ad9152_jesd, &ad9152_jesd_param);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("error: %s: axi_jesd204_rx_init() failed\n", ad9152_jesd->name);
 	}
 	status = axi_jesd204_tx_lane_clk_enable(ad9152_jesd);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("error: %s: axi_jesd204_tx_lane_clk_enable() failed\n",
 		       ad9152_jesd->name);
 	}
 	status = adxcvr_init(&ad9152_xcvr, &ad9152_xcvr_param);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("error: %s: adxcvr_init() failed\n", ad9152_xcvr->name);
 	}
 #ifndef ALTERA_PLATFORM
 	status = adxcvr_clk_enable(ad9152_xcvr);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("error: %s: adxcvr_clk_enable() failed\n", ad9152_xcvr->name);
 	}
 #endif
 	status = adxcvr_init(&ad9680_xcvr, &ad9680_xcvr_param);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("error: %s: adxcvr_init() failed\n", ad9680_xcvr->name);
 	}
 #ifndef ALTERA_PLATFORM
 	status = adxcvr_clk_enable(ad9680_xcvr);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("error: %s: adxcvr_clk_enable() failed\n", ad9680_xcvr->name);
 	}
 #endif
 	status = axi_jesd204_rx_init(&ad9680_jesd, &ad9680_jesd_param);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("error: %s: axi_jesd204_rx_init() failed\n", ad9680_jesd->name);
 	}
 	status = axi_jesd204_rx_lane_clk_enable(ad9680_jesd);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("error: %s: axi_jesd204_tx_lane_clk_enable() failed\n",
 		       ad9680_jesd->name);
 	}
 	status = ad9152_setup(&ad9152_device, ad9152_param);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("error: ad9152_setup() failed\n");
 	}
 	status = axi_adc_init(&ad9680_core,  &ad9680_core_param);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("axi_adc_init() error: %s\n", ad9680_core->name);
 	}
 	status = axi_dac_init(&ad9152_core, &ad9152_core_param);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("axi_dac_init() error: %s\n", ad9152_core->name);
 	}
 
 	status = axi_jesd204_rx_status_read(ad9680_jesd);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("axi_jesd204_rx_status_read() error: %"PRIi32"\n", status);
 	}
 
 	status = axi_jesd204_tx_status_read(ad9152_jesd);
-	if (status != SUCCESS) {
+	if (status != 0) {
 		printf("axi_jesd204_tx_status_read() error: %"PRIi32"\n", status);
 	}
 
@@ -645,13 +645,13 @@ int main(void)
 	};
 
 	status = iio_axi_adc_init(&iio_axi_adc_desc, &iio_axi_adc_init_par);
-	if (IS_ERR_VALUE(status))
-		return FAILURE;
+	if (NO_OS_IS_ERR_VALUE(status))
+		return -1;
 	iio_axi_adc_get_dev_descriptor(iio_axi_adc_desc, &adc_dev_desc);
 
 	status = iio_axi_dac_init(&iio_axi_dac_desc, &iio_axi_dac_init_par);
-	if (IS_ERR_VALUE(status))
-		return FAILURE;
+	if (NO_OS_IS_ERR_VALUE(status))
+		return -1;
 	iio_axi_dac_get_dev_descriptor(iio_axi_dac_desc, &dac_dev_desc);
 
 	struct iio_data_buffer read_buff = {

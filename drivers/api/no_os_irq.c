@@ -46,26 +46,26 @@
  * @brief Initialize the IRQ interrupts.
  * @param desc - The IRQ descriptor.
  * @param param - The structure that contains the IRQ parameters.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t no_os_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
 			    const struct no_os_irq_init_param *param)
 {
 	if (!param)
-		return FAILURE;
+		return -1;
 
 	if ((param->platform_ops->init(desc, param)))
-		return FAILURE;
+		return -1;
 
 	(*desc)->platform_ops = param->platform_ops;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Free the resources allocated by no_os_irq_ctrl_init().
  * @param desc - The SPI descriptor.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t no_os_irq_ctrl_remove(struct no_os_irq_ctrl_desc *desc)
 {
@@ -77,7 +77,7 @@ int32_t no_os_irq_ctrl_remove(struct no_os_irq_ctrl_desc *desc)
  * @param desc - The IRQ controller descriptor.
  * @param irq_id - Interrupt identifier.
  * @param callback_desc - Callback descriptor
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t no_os_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 				    uint32_t irq_id,
@@ -90,7 +90,7 @@ int32_t no_os_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
  * @brief Unregisters a generic IRQ handling function.
  * @param desc - The IRQ controller descriptor.
  * @param irq_id - Interrupt identifier.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t no_os_irq_unregister(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
 {
@@ -99,7 +99,7 @@ int32_t no_os_irq_unregister(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
 
 /**
  * @brief Enable global interrupts.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t no_os_irq_global_enable(struct no_os_irq_ctrl_desc *desc)
 {
@@ -108,7 +108,7 @@ int32_t no_os_irq_global_enable(struct no_os_irq_ctrl_desc *desc)
 
 /**
  * @brief Disable global interrupts.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t no_os_irq_global_disable(struct no_os_irq_ctrl_desc *desc)
 {
@@ -120,7 +120,7 @@ int32_t no_os_irq_global_disable(struct no_os_irq_ctrl_desc *desc)
  * @param desc - The IRQ controller descriptor.
  * @param irq_id - Interrupt identifier.
  * @param trig - New trigger level for the interrupt.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t no_os_irq_trigger_level_set(struct no_os_irq_ctrl_desc *desc,
 				    uint32_t irq_id,
@@ -136,7 +136,7 @@ int32_t no_os_irq_trigger_level_set(struct no_os_irq_ctrl_desc *desc,
  * @brief Enable specific interrupt.
  * @param desc - The IRQ controller descriptor.
  * @param irq_id - Interrupt identifier.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t no_os_irq_enable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
 {
@@ -147,7 +147,7 @@ int32_t no_os_irq_enable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
  * @brief Disable specific interrupt.
  * @param desc - The IRQ controller descriptor.
  * @param irq_id - Interrupt identifier.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t no_os_irq_disable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
 {

@@ -275,7 +275,7 @@ static int get_rf_port_select_available(void *device, char *buf, uint32_t len,
 				     ad9361_rf_tx_port[1]);
 	} else {
 		bytes_no = 0;
-		for (i = 0; i < ARRAY_SIZE(ad9361_rf_rx_port); i++) {
+		for (i = 0; i < NO_OS_ARRAY_SIZE(ad9361_rf_rx_port); i++) {
 			if (i > 0)
 				bytes_no += sprintf(buf + bytes_no, " ");
 			ret = sprintf(buf + bytes_no, "%s", ad9361_rf_rx_port[i]);
@@ -768,20 +768,20 @@ static int set_rf_port_select(void *device, char *buf, uint32_t len,
 	uint32_t i = 0;
 
 	if (channel->ch_out) {
-		for (i = 0; i < ARRAY_SIZE(ad9361_rf_tx_port); i++) {
+		for (i = 0; i < NO_OS_ARRAY_SIZE(ad9361_rf_tx_port); i++) {
 			if (!strcmp(ad9361_rf_tx_port[i], buf))
 				break;
 		}
-		if (i >= ARRAY_SIZE(ad9361_rf_tx_port))
+		if (i >= NO_OS_ARRAY_SIZE(ad9361_rf_tx_port))
 			return -EINVAL;
 		ret = ad9361_set_tx_rf_port_output(ad9361_phy, i);
 		return (ret < 0) ? ret : (int)len;
 	} else {
-		for (i = 0; i < ARRAY_SIZE(ad9361_rf_rx_port); i++) {
+		for (i = 0; i < NO_OS_ARRAY_SIZE(ad9361_rf_rx_port); i++) {
 			if (!strcmp(ad9361_rf_rx_port[i], buf))
 				break;
 		}
-		if (i >= ARRAY_SIZE(ad9361_rf_tx_port))
+		if (i >= NO_OS_ARRAY_SIZE(ad9361_rf_tx_port))
 			return -EINVAL;
 
 		ret = ad9361_set_rx_rf_port_input(ad9361_phy, i);
@@ -810,11 +810,11 @@ static int set_gain_control_mode(void *device, char *buf, uint32_t len,
 	uint32_t i;
 	int ret;
 
-	for (i = 0; i < ARRAY_SIZE(ad9361_agc_modes); i++) {
+	for (i = 0; i < NO_OS_ARRAY_SIZE(ad9361_agc_modes); i++) {
 		if (!strcmp(ad9361_agc_modes[i], buf))
 			break;
 	}
-	if (i >= ARRAY_SIZE(ad9361_agc_modes))
+	if (i >= NO_OS_ARRAY_SIZE(ad9361_agc_modes))
 		return -EINVAL;
 
 	mode = i;
@@ -999,11 +999,11 @@ static int set_gain_control_mode_available(void *device, char *buf,
 	int ret;
 	uint16_t i;
 
-	for (i = 0; i < ARRAY_SIZE(ad9361_agc_modes); i++) {
+	for (i = 0; i < NO_OS_ARRAY_SIZE(ad9361_agc_modes); i++) {
 		if (!strcmp(ad9361_agc_modes[i], buf))
 			break;
 	}
-	if (i >= ARRAY_SIZE(ad9361_agc_modes))
+	if (i >= NO_OS_ARRAY_SIZE(ad9361_agc_modes))
 		return -EINVAL;
 
 	mode = i;
@@ -2246,7 +2246,7 @@ void iio_ad9361_get_dev_descriptor(struct iio_ad9361_desc *desc,
  * ad9361 device.
  * @param desc - Descriptor.
  * @param init - Configuration structure.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t iio_ad9361_init(struct iio_ad9361_desc **desc,
 			struct iio_ad9361_init_param *init)
@@ -2256,29 +2256,29 @@ int32_t iio_ad9361_init(struct iio_ad9361_desc **desc,
 	iio_ad9361_inst = (struct iio_ad9361_desc *)calloc(1,
 			  sizeof(struct iio_ad9361_desc));
 	if (!iio_ad9361_inst)
-		return FAILURE;
+		return -1;
 
-	iio_ad9361_inst->dev_descriptor.num_ch = ARRAY_SIZE(iio_ad9361_channels);
+	iio_ad9361_inst->dev_descriptor.num_ch = NO_OS_ARRAY_SIZE(iio_ad9361_channels);
 	iio_ad9361_inst->dev_descriptor.channels = iio_ad9361_channels;
 	iio_ad9361_inst->dev_descriptor.attributes = global_attributes;
 	iio_ad9361_inst->dev_descriptor.debug_attributes = NULL;
 	iio_ad9361_inst->dev_descriptor.buffer_attributes = NULL;
 	*desc = iio_ad9361_inst;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Release resources.
  * @param desc - Descriptor.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return 0 in case of success, -1 otherwise.
  */
 int32_t iio_ad9361_remove(struct iio_ad9361_desc *desc)
 {
 	if (!desc)
-		return FAILURE;
+		return -1;
 
 	free(desc);
 
-	return SUCCESS;
+	return 0;
 }
