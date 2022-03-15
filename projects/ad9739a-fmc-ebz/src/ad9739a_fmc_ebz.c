@@ -98,7 +98,7 @@ int main(void)
 		/* Device settings */
 		.clkin = 25000000,
 		.channel_spacing = 10000,
-		.power_up_frequency = 2500000000ul,
+		.power_up_frequency = UINT32_C(2500000000),
 		.reference_div_factor = 0,
 		.reference_doubler_enable = 0,
 		.reference_div2_enable = 0,

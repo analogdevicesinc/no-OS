@@ -72,7 +72,7 @@ static void adi_api_utils_lshift_128(uint64_t *hi, uint64_t *lo)
 {
 	*hi <<= 1;
 	if (*lo & U64MSB)
-		*hi |= 1ul;
+		*hi |= UINT32_C(1);
 	*lo <<= 1;
 }
 

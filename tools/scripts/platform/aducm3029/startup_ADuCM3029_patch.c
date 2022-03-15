@@ -338,7 +338,7 @@ void Reset_Handler_C(void) {
   pDest = &__bss_start__;
 
   for ( ; pDest < &__bss_end__ ; ) {
-    *pDest++ = 0ul;
+    *pDest++ = UINT32_C(0);
   }
 #endif /* __STARTUP_CLEAR_BSS_MULTIPLE || __STARTUP_CLEAR_BSS */
 

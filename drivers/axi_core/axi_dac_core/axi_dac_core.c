@@ -549,8 +549,8 @@ uint32_t axi_dac_dds_to_signed_mag_fmt(int32_t val,
 		i = 0;
 	}
 
-	val64 = (uint64_t)val2 * 0x4000UL + (1000000UL / 2);
-	no_os_do_div(&val64, 1000000UL);
+	val64 = (uint64_t)val2 * UINT32_C(0x4000) + (UINT32_C(1000000) / 2);
+	no_os_do_div(&val64, UINT32_C(1000000));
 
 	return i | val64;
 }

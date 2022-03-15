@@ -125,8 +125,8 @@ struct ad5791_init_param {
 #define AD5791_CMD_WR_SOFT_CTRL    4  // Software control register(Write only).
 
 /* Input Shift Register bit definition. */
-#define AD5791_READ                (1ul << 23)
-#define AD5791_WRITE               (0ul << 23)
+#define AD5791_READ                (UINT32_C(1) << 23)
+#define AD5791_WRITE               (UINT32_C(0) << 23)
 #define AD5791_ADDR_REG(x)         (((uint32_t)(x) & 0x7) << 20)
 
 /* Control Register bit Definition */

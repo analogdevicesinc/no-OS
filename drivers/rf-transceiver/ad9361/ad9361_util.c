@@ -234,7 +234,7 @@ uint32_t int_sqrt(uint32_t x)
 	if (x <= 1)
 		return x;
 
-	m = 1UL << (NO_OS_BITS_PER_LONG - 2);
+	m = UINT32_C(1) << (NO_OS_BITS_PER_LONG - 2);
 	while (m != 0) {
 		b = y + m;
 		y >>= 1;

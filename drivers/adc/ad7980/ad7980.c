@@ -143,7 +143,7 @@ float ad7980_convert_to_volts(uint16_t raw_sample, float v_ref)
 {
 	float voltage = 0;
 
-	voltage = v_ref * (float)raw_sample / (1ul << 16);
+	voltage = v_ref * (float)raw_sample / (UINT32_C(1) << 16);
 
 	return voltage;
 }

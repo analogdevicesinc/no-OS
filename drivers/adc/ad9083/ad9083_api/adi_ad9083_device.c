@@ -312,8 +312,8 @@ int32_t adi_ad9083_device_clock_config_set(adi_ad9083_device_t *device,
 #else
           adc_sample_rate = vco_freq / pll_div_buff[pll_div];
 #endif
-          if ((vco_freq > 8800000000ul) && (vco_freq < 12400000000ul) &&
-              (adc_sample_rate == adc_clk_hz) && (pfd_clk_hz <= 500000000ul)) {
+          if ((vco_freq > UINT32_C(8800000000)) && (vco_freq < UINT32_C(12400000000)) &&
+              (adc_sample_rate == adc_clk_hz) && (pfd_clk_hz <= UINT32_C(500000000))) {
             valid_cfg = 1;
             break;
           }
@@ -331,8 +331,8 @@ int32_t adi_ad9083_device_clock_config_set(adi_ad9083_device_t *device,
     }
   }
 
-  if ((vco_freq < 8800000000ul) || (vco_freq > 12400000000ul) ||
-      (pfd_clk_hz < 25000000ul) || (pfd_clk_hz > 500000000ul)) {
+  if ((vco_freq < UINT32_C(8800000000)) || (vco_freq > UINT32_C(12400000000)) ||
+      (pfd_clk_hz < UINT32_C(25000000)) || (pfd_clk_hz > UINT32_C(500000000))) {
     return API_CMS_ERROR_INVALID_PARAM;
   }
 

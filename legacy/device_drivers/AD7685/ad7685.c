@@ -110,7 +110,7 @@ float ad7685_ConvertToVolts(unsigned short rawSample, float vRef)
 {
 	float voltage = 0;
 
-	voltage = vRef * (float)rawSample / (1ul << 16);
+	voltage = vRef * (float)rawSample / (UINT32_C(1) << 16);
 
 	return voltage;
 }

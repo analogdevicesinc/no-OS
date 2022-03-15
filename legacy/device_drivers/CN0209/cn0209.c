@@ -279,13 +279,13 @@ float AD7193_ConvertToVolts(unsigned long rawData,
 
     if(polarity == 0)       // Bipolar mode
     {
-        voltage = 1000 * (((float)rawData / (1ul << 23)) - 1) * vRef / gain;
+        voltage = 1000 * (((float)rawData / (UINT32_C(1) << 23)) - 1) * vRef / gain;
     }
     else
     {
         if (polarity == 1)  // Unipolar mode
         {
-            voltage = 1000 * ((float)rawData * vRef) / (1ul << 24) / gain;
+            voltage = 1000 * ((float)rawData * vRef) / (UINT32_C(1) << 24) / gain;
         }
     }
 

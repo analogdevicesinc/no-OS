@@ -168,7 +168,7 @@ AD9361_InitParam default_init_param = {
 	/* Device selection */
 	ID_AD9361,	// dev_sel
 	/* Reference Clock */
-	40000000UL,	//reference_clk_rate
+	UINT32_C(40000000),	//reference_clk_rate
 	/* Base Configuration */
 	1,		//two_rx_two_tx_mode_enable *** adi,2rx-2tx-mode-enable
 	1,		//one_rx_one_tx_mode_use_rx_num *** adi,1rx-1tx-mode-use-rx-num
@@ -195,8 +195,8 @@ AD9361_InitParam default_init_param = {
 	0,		//ensm_enable_pin_pulse_mode_enable *** adi,ensm-enable-pin-pulse-mode-enable
 	0,		//ensm_enable_txnrx_control_enable *** adi,ensm-enable-txnrx-control-enable
 	/* LO Control */
-	2400000000UL,	//rx_synthesizer_frequency_hz *** adi,rx-synthesizer-frequency-hz
-	2400000000UL,	//tx_synthesizer_frequency_hz *** adi,tx-synthesizer-frequency-hz
+	UINT32_C(2400000000),	//rx_synthesizer_frequency_hz *** adi,rx-synthesizer-frequency-hz
+	UINT32_C(2400000000),	//tx_synthesizer_frequency_hz *** adi,tx-synthesizer-frequency-hz
 	1,				//tx_lo_powerdown_managed_enable *** adi,tx-lo-powerdown-managed-enable
 	/* Rate & BW Control */
 	{983040000, 245760000, 122880000, 61440000, 30720000, 30720000},// rx_path_clock_frequencies[6] *** adi,rx-path-clock-frequencies
@@ -295,7 +295,7 @@ AD9361_InitParam default_init_param = {
 	1,		//rssi_wait *** adi,rssi-wait
 	/* Aux ADC Control */
 	256,	//aux_adc_decimation *** adi,aux-adc-decimation
-	40000000UL,	//aux_adc_rate *** adi,aux-adc-rate
+	UINT32_C(40000000),	//aux_adc_rate *** adi,aux-adc-rate
 	/* AuxDAC Control */
 	1,		//aux_dac_manual_mode_enable ***  adi,aux-dac-manual-mode-enable
 	0,		//aux_dac1_default_value_mV ***  adi,aux-dac1-default-value-mV
@@ -568,8 +568,8 @@ int main(void)
 	default_init_param.gpio_sync.number = -1;
 	default_init_param.gpio_cal_sw1.number = -1;
 	default_init_param.gpio_cal_sw2.number = -1;
-	default_init_param.rx_synthesizer_frequency_hz = 2300000000UL;
-	default_init_param.tx_synthesizer_frequency_hz = 2300000000UL;
+	default_init_param.rx_synthesizer_frequency_hz = UINT32_C(2300000000);
+	default_init_param.tx_synthesizer_frequency_hz = UINT32_C(2300000000);
 
 	rx_adc_init.base = AD9361_RX_1_BASEADDR;
 	tx_dac_init.base = AD9361_TX_1_BASEADDR;

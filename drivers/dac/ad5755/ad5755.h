@@ -89,7 +89,7 @@
 			        NO_OS_GPIO_HIGH)
 
 /* Input Shift Register Contents for a Write Operation. */
-#define AD5755_ISR_WRITE            (0ul << 23)           /* R/nW */
+#define AD5755_ISR_WRITE            (UINT32_C(0) << 23)           /* R/nW */
 #define AD5755_ISR_DUT_AD1(x)       (((x) & 0x1) << 22)   /* Device AddrBit1*/
 #define AD5755_ISR_DUT_AD0(x)       (((x) & 0x1) << 21)   /* Device AddrBit0*/
 #define AD5755_ISR_DREG(x)          (((x) & 0x7) << 18)   /* Register AddrBits*/

@@ -197,7 +197,7 @@ float ad7780_convert_to_voltage(uint32_t raw_sample,
 {
 	float voltage = 0;
 
-	voltage = 1000 * ((float)raw_sample / (1ul << 23) - 1) * v_ref / gain;
+	voltage = 1000 * ((float)raw_sample / (UINT32_C(1) << 23) - 1) * v_ref / gain;
 
 	return voltage;
 }

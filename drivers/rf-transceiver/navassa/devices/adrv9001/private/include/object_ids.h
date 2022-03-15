@@ -71,7 +71,7 @@ typedef enum
          so if we get a "0" payload, it's not easy to tell if it's an object or
          it's not set by BBIC.   
     */
-    OBJID_NOT_USED               = 0x0UL,    
+    OBJID_NOT_USED               = UINT32_C(0x0),    
    
     /* initial calibration objects in OBJ_GROUP_ID_IC group
        1-to-1 mapping to IDs defined in initAlgoId_e

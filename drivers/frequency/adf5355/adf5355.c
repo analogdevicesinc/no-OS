@@ -230,7 +230,7 @@ static int32_t adf5355_set_freq(struct adf5355_dev *dev,
 
 	prescaler = (dev->integer >= ADF5355_MIN_INT_PRESCALER_89);
 
-	if (dev->fpfd > 100000000UL || ((dev->fract1 == 0) && (dev->fract2 == 0)))
+	if (dev->fpfd > UINT32_C(100000000) || ((dev->fract1 == 0) && (dev->fract2 == 0)))
 		cp_neg_bleed_en = false;
 	else
 		cp_neg_bleed_en = dev->cp_neg_bleed_en;
@@ -412,7 +412,7 @@ static int32_t adf5355_setup(struct adf5355_dev *dev)
 	tmp = no_os_clamp(tmp, 1U, 255U);
 
 	/* Delay > 16 ADC_CLK cycles */
-	dev->delay_us = NO_OS_DIV_ROUND_UP(16000000UL, dev->fpfd / (4 * tmp + 2));
+	dev->delay_us = NO_OS_DIV_ROUND_UP(UINT32_C(16000000), dev->fpfd / (4 * tmp + 2));
 
 	dev->regs[ADF5355_REG(10)] = ADF5355_REG10_ADC_EN(1) |
 				     ADF5355_REG10_ADC_CONV_EN(1) |

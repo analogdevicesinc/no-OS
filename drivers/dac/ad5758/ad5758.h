@@ -50,8 +50,8 @@
  * position @h.
  */
 #define NO_OS_GENMASK(h, l) \
-		(((~0UL) - (1UL << (l)) + 1) & (~0UL >> (31 - (h))))
-#define NO_OS_BIT(x)	(1UL << (x))
+		(((~UINT32_C(0)) - (UINT32_C(1) << (l)) + 1) & (~UINT32_C(0) >> (31 - (h))))
+#define NO_OS_BIT(x)	(UINT32_C(1) << (x))
 
 /* AD5758 registers definition */
 #define AD5758_REG_NOP						0x00

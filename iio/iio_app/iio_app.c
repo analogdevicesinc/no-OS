@@ -78,7 +78,7 @@
 
 static inline uint32_t _calc_uart_xfer_time(uint32_t len, uint32_t baudrate)
 {
-	uint32_t ms = 1000ul * len * 8 / UART_BAUDRATE_DEFAULT;
+	uint32_t ms = UINT32_C(1000) * len * 8 / UART_BAUDRATE_DEFAULT;
 	ms += ms / 10; // overhead
 	return ms;
 }

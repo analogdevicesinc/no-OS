@@ -332,10 +332,10 @@ int main(void)
 	struct ad6676_init_param 	ad6676_param;
 
 	ad6676_param.spi_init = ad6676_spi_param;
-	ad6676_param.ref_clk = 200000000UL; // reference clk Hz
-	ad6676_param.f_adc_hz = 3200000000UL; // adc frequency Hz
-	ad6676_param.f_if_hz = 250000000UL; // intermediate frequency Hz
-	ad6676_param.bw_hz = 75000000UL; // bandwidth Hz;
+	ad6676_param.ref_clk = UINT32_C(200000000); // reference clk Hz
+	ad6676_param.f_adc_hz = UINT32_C(3200000000); // adc frequency Hz
+	ad6676_param.f_if_hz = UINT32_C(250000000); // intermediate frequency Hz
+	ad6676_param.bw_hz = UINT32_C(75000000); // bandwidth Hz;
 	ad6676_param.bw_margin_low_mhz = 5;
 	ad6676_param.bw_margin_high_mhz = 5;
 	ad6676_param.bw_margin_if_mhz = 0;

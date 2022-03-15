@@ -288,7 +288,7 @@
 /* AD6676_CAL_DONE */
 #define CAL_DONE			(1 << 0)
 
-#define MHz 				1000000UL
+#define MHz 				UINT32_C(1000000)
 #define MIN_FADC			UINT64_C(2000000000) /* SPS */
 #define MIN_FADC_INT_SYNTH		UINT64_C(2925000000) /* SPS REVISIT */
 #define MAX_FADC			UINT64_C(3200000000) /* SPS */

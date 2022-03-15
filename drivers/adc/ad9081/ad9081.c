@@ -711,7 +711,7 @@ static int32_t ad9081_setup(struct ad9081_phy *phy)
 	}
 
 	if ((phy->jrx_link_tx.jesd_param.jesd_jesdv == 2) &&
-	    (tx_lane_rate_kbps > 16230000UL)) {
+	    (tx_lane_rate_kbps > UINT32_C(16230000))) {
 		ret = adi_ad9081_jesd_rx_calibrate_204c(&phy->ad9081, 1, 0, 0);
 		if (ret < 0)
 			return ret;

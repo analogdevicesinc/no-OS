@@ -324,8 +324,8 @@ int64_t ad9517_vco_frequency(struct ad9517_dev *dev,
 	uint32_t pfd_freq = 0;
 	int32_t n_divider = 0;
 	int32_t prescaler_value[5] = {2, 4, 8, 16, 32};
-	int64_t prescaler_limit[5] = {200000000ul, 1000000000ul, 2400000000ul,
-				      3000000000ul, 3000000000ul
+	int64_t prescaler_limit[5] = {UINT32_C(200000000), UINT32_C(1000000000), UINT32_C(2400000000),
+				      UINT32_C(3000000000), UINT32_C(3000000000)
 				     };
 	int32_t index = 0;
 	uint32_t vco_freq = 0;

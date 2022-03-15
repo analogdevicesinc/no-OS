@@ -188,7 +188,7 @@ void ad_platform_close(void);
 
 #ifdef ALTERA
 #define LONG_MAX			(~0L)
-#define ULONG_MAX			(~0UL)
+#define ULONG_MAX			(~UINT32_C(0))
 #define FALSE				0
 #define TRUE				1
 #endif

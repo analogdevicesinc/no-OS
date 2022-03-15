@@ -706,7 +706,7 @@ int32_t adi_adrv9001_Tx_AttenuationTable_Write(adi_adrv9001_Device_t *device,
 
     for (idx = 0; idx < ADI_ADRV9001_MAX_TXCHANNELS; idx++)
     {
-        maskBit = (1UL << idx);
+        maskBit = (UINT32_C(1) << idx);
         if (ADRV9001_BF_EQUAL(channelMask, maskBit))
         {
             baseAddr = Tx_AttenTableAddr_Get(maskBit);

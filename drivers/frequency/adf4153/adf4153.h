@@ -92,12 +92,12 @@
 
 /* 12-bit fractional value */
 #define ADF4153_R0_FRAC_OFFSET              2
-#define ADF4153_R0_FRAC_MASK                0xFFFul
+#define ADF4153_R0_FRAC_MASK                UINT32_C(0xFFF)
 #define ADF4153_R0_FRAC(x)                  ((x) & ADF4153_R0_FRAC_MASK) \
                                               << ADF4153_R0_FRAC_OFFSET
 /* 9-bit integer value */
 #define ADF4153_R0_INT_OFFSET               14
-#define ADF4153_R0_INT_MASK                 0x1FFul
+#define ADF4153_R0_INT_MASK                 UINT32_C(0x1FF)
 #define ADF4153_R0_INT(x)                   ((x) & ADF4153_R0_INT_MASK) \
                                               << ADF4153_R0_INT_OFFSET
 
@@ -111,17 +111,17 @@
 
 /* 12-bit interpolator modulus value */
 #define ADF4153_R1_MOD_OFFSET               2
-#define ADF4153_R1_MOD_MASK                 0xFFFul
+#define ADF4153_R1_MOD_MASK                 UINT32_C(0xFFF)
 #define ADF4153_R1_MOD(x)                   ((x) & ADF4153_R1_MOD_MASK) \
                                               << ADF4153_R1_MOD_OFFSET
 /* 4-bit R Counter */
 #define ADF4153_R1_RCOUNTER_OFFSET          14
-#define ADF4153_R1_RCOUNTER_MASK            0xFul
+#define ADF4153_R1_RCOUNTER_MASK            UINT32_C(0xF)
 #define ADF4153_R1_RCOUNTER(x)              ((x) & ADF4153_R1_RCOUNTER_MASK) \
                                               << ADF4153_R1_RCOUNTER_OFFSET
 /* Prescale */
 #define ADF4153_R1_PRESCALE_OFFSET          18
-#define ADF4153_R1_PRESCALE_MASK            0x1ul
+#define ADF4153_R1_PRESCALE_MASK            UINT32_C(0x1)
 #define ADF4153_R1_PRESCALE(x)              ((x) & ADF4153_R1_PRESCALE_MASK) \
                                               << ADF4153_R1_PRESCALE_OFFSET
 /* MUXOUT */
@@ -139,7 +139,7 @@
 
 /* Counter Reset */
 #define ADF4153_R2_COUNTER_RST_OFFSET       2
-#define ADF4153_R2_COUNTER_RST_MASK         0x1ul
+#define ADF4153_R2_COUNTER_RST_MASK         UINT32_C(0x1)
 #define ADF4153_R2_COUNTER_RST(x)           ((x) & ADF4153_R2_COUNTER_RST_MASK)\
                                                << ADF4153_R2_COUNTER_RST_OFFSET
 /* CP Three-State */

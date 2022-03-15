@@ -126,7 +126,7 @@ float AD7790_ConvertToVoltage(unsigned long rawData,
 {
     float voltage = 0;
 
-    voltage = 1000 * (((float)rawData / (1ul << 15)) - 1) * vRef / gain;
+    voltage = 1000 * (((float)rawData / (UINT32_C(1) << 15)) - 1) * vRef / gain;
 
     return voltage;
 }

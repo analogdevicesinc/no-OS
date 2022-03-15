@@ -81,9 +81,9 @@ void RTC_IRQHandler()
 		return;
 
 	/** Shift right so the interrupt flags will be the first 3 bits */
-	rtc_ctrl >>= 5UL;
+	rtc_ctrl >>= UINT32_C(5);
 	/** Clear the remaining bits */
-	rtc_ctrl &= 0x7UL;
+	rtc_ctrl &= UINT32_C(0x7);
 	while(rtc_ctrl) {
 		n_int = no_os_find_first_set_bit(rtc_ctrl);
 		if (rtc_ctrl & (rtc_regs->ctrl & NO_OS_BIT(n_int))) {

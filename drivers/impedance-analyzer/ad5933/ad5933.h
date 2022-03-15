@@ -113,7 +113,7 @@
 #define AD5933_ADDR_POINTER         0xB0
 
 /* AD5933 Specifications */
-#define AD5933_INTERNAL_SYS_CLK     16000000ul      // 16MHz
+#define AD5933_INTERNAL_SYS_CLK     UINT32_C(16000000)      // 16MHz
 #define AD5933_MAX_INC_NUM          511             // Maximum increment number
 
 /******************************************************************************/

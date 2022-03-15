@@ -270,7 +270,7 @@ int32_t adi_ad9083_jesd_tx_clk_set(adi_ad9083_device_t *device) {
 #endif
   vco_clk = lane_rate * bit_repeat;
 
-  while (((vco_clk < 8000000000ul) || (vco_clk > 16000000000ul)) &&
+  while (((vco_clk < UINT32_C(8000000000)) || (vco_clk > UINT32_C(16000000000))) &&
          (bit_repeat < 33)) {
     bit_repeat = bit_repeat * 2;
     vco_clk = lane_rate * bit_repeat;
@@ -302,7 +302,7 @@ int32_t adi_ad9083_jesd_tx_clk_set(adi_ad9083_device_t *device) {
                                    &b_lcpll_numerator, &b_lcpll_denominator);
   AD9083_ERROR_RETURN(err);
 
-  while (((fPfd < 40000000ul) || (fPfd > 400000000ul) ||
+  while (((fPfd < UINT32_C(40000000)) || (fPfd > UINT32_C(400000000)) ||
           (b_lcpll_numerator > 0)) &&
          (refindiv_lcpll < 15)) {
     refindiv_lcpll = refindiv_lcpll * 2;

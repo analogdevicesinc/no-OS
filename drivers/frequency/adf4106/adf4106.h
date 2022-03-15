@@ -92,7 +92,7 @@
 /* Reference Counter Latch */
 
 #define ADF4106_R_COUNTER_OFFSET            2
-#define ADF4106_R_COUNTER_MASK              0x3FFFul
+#define ADF4106_R_COUNTER_MASK              UINT32_C(0x3FFF)
 #define ADF4106_R_COUNTER(x)                ((x) & ADF4106_R_COUNTER_MASK) \
                                             << ADF4106_R_COUNTER_OFFSET
 /* Anti-backlash Pulse Width options */
@@ -138,7 +138,7 @@
 /********* Function and Initialization register offsets and masks ************/
 /* Counter Reset Bit */
 #define ADF4106_CR_OFFSET                   2
-#define ADF4106_CR_MASK                     0x1ul
+#define ADF4106_CR_MASK                     UINT32_C(0x1)
 #define ADF4106_CR(x)                       ((x) & ADF4106_CR_MASK) \
                                             << ADF4106_CR_OFFSET
 /* Power Down Bit 1 */

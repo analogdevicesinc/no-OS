@@ -309,16 +309,16 @@ static int32_t ad6676_set_clk_synth(struct ad6676_dev *dev,
 	uint64_t val64;
 	int32_t ret;
 
-	if (refin_Hz < 40000000UL) {
+	if (refin_Hz < UINT32_C(40000000)) {
 		f_pfd = 2 * refin_Hz;
 		div_val = R_DIV(3);
-	} else if (refin_Hz < 80000000UL) {
+	} else if (refin_Hz < UINT32_C(80000000)) {
 		f_pfd = refin_Hz;
 		div_val = R_DIV(0);
-	} else if (refin_Hz < 160000000UL) {
+	} else if (refin_Hz < UINT32_C(160000000)) {
 		f_pfd = refin_Hz / 2;
 		div_val = R_DIV(1);
-	} else if (refin_Hz < 320000000UL) {
+	} else if (refin_Hz < UINT32_C(320000000)) {
 		f_pfd = refin_Hz / 4;
 		div_val = R_DIV(2);
 	} else
@@ -353,9 +353,9 @@ static int32_t ad6676_set_clk_synth(struct ad6676_dev *dev,
 		return ret;
 
 	/* VCO Configuration Settings */
-	if (freq <= 2950000000UL)
+	if (freq <= UINT32_C(2950000000))
 		reg_val = 0xF0;
-	else if (freq < 3100000000UL)
+	else if (freq < UINT32_C(3100000000))
 		reg_val = 0xE0;
 	else
 		reg_val = 0xD0;

@@ -406,7 +406,7 @@ int32_t adas1000_read_data(struct adas1000_dev *device, uint8_t *data_buff,
  */
 uint32_t adas1000_compute_frame_crc(struct adas1000_dev * device, uint8_t *buff)
 {
-	uint32_t crc = 0xFFFFFFFFul;
+	uint32_t crc = UINT32_C(0xFFFFFFFF);
 
 	/** Select the CRC poly and word size based on the frame rate. */
 	if(device->frame_rate == ADAS1000_128KHZ_FRAME_RATE) {

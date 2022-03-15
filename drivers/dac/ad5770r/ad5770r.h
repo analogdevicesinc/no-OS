@@ -52,7 +52,7 @@
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 #ifndef BIT
-#define NO_OS_BIT(x)					(1UL << (x))
+#define NO_OS_BIT(x)					(UINT32_C(1) << (x))
 #endif
 /*
  * Create a contiguous bitmask starting at bit position @l and ending at
@@ -60,7 +60,7 @@
  */
 #ifdef GENMASK
 #define NO_OS_GENMASK(h, l) \
-		(((~0UL) - (1UL << (l)) + 1) & (~0UL >> (31 - (h))))
+		(((~UINT32_C(0)) - (UINT32_C(1) << (l)) + 1) & (~UINT32_C(0) >> (31 - (h))))
 #endif
 
 /*SPI configuration registers*/

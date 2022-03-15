@@ -1335,7 +1335,7 @@
 #define CMM_ENABLE                           (1 << 3)
 
 
-#define AD9152_MAX_DAC_RATE 	2000000000UL
+#define AD9152_MAX_DAC_RATE 	UINT32_C(2000000000)
 #define AD9152_CHIP_ID		0x52
 #define AD9152_TEST_PN15        0x01
 #define AD9152_TEST_PN7         0x00

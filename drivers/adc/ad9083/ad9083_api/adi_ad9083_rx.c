@@ -722,7 +722,7 @@ int32_t adi_ad9083_rx_adc_kvti_factor_fixed_get(adi_ad9083_device_t *device,
   /* kvti_factor=44 * no_os_min(no_os_max(no_os_min(10**(-backoff/20), no_os_max(orc1mode,
    * (clkfreq/2e3)*(100e6/finmax))), 0.333),1) */
   adc_clk_hz = device->dev_info.adc_freq_hz;
-  finmax = (finmax < adc_clk_hz / 20) ? 100000000ul : finmax;
+  finmax = (finmax < adc_clk_hz / 20) ? UINT32_C(100000000) : finmax;
 
   /* qresult1 = (clkfreq/2e3)*(100e6/finmax) */
   qorc1mode = AD9083_FIXED_INT2Q(orc1mode, 30);
@@ -732,7 +732,7 @@ int32_t adi_ad9083_rx_adc_kvti_factor_fixed_get(adi_ad9083_device_t *device,
   /* qresult2 = 10**(-backoff/20) */
   qresult2 = qbase;
   if (backoff == 0) {
-    qresult2 = 1073741824ul;
+    qresult2 = UINT32_C(1073741824);
   } else {
     for (backoff -= 1; backoff != 0; backoff--) {
       qresult2 = AD9083_FIXED_QMUL(qresult2, qbase, 30, 30, 30);
@@ -761,7 +761,7 @@ int32_t adi_ad9083_rx_adc_fscale_fixed_get(adi_ad9083_device_t *device,
   AD9083_NULL_POINTER_RETURN(fscale);
 
   adc_clk_hz = device->dev_info.adc_freq_hz;
-  qresult = AD9083_FIXED_QDIV(adc_clk_hz, 1100000000ul, 0, 0, 30);
+  qresult = AD9083_FIXED_QDIV(adc_clk_hz, UINT32_C(1100000000), 0, 0, 30);
   qresult1 = AD9083_FIXED_QDIV(bcenter_os, 112, 0, 0, 30);
   qresult1 = 0x40000000 + qresult1;
   qresult = AD9083_FIXED_QMUL(qresult, qresult1, 30, 30, 30);
@@ -823,7 +823,7 @@ int32_t adi_ad9083_rx_adc_vti_set(adi_ad9083_device_t *device, uint32_t fc,
 
   temp = fc;
   temp = 2 * 314 * 2 * temp;
-  kcap_temp = (uint64_t)1000000000000000ul - temp * 700;
+  kcap_temp = (uint64_t)UINT32_C(1000000000000000) - temp * 700;
 #ifdef __KERNEL__
   kcap_temp = no_os_div_u64(kcap_temp + (temp / 2) * 115, temp * 115);
 #else

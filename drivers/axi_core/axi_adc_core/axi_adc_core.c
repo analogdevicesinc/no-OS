@@ -293,8 +293,8 @@ int32_t axi_adc_set_calib_phase_scale(struct axi_adc *adc,
 		return -1;
 	}
 
-	llval = (uint64_t)val2 * 0x4000UL + (1000000UL / 2);
-	no_os_do_div(&llval, 1000000UL);
+	llval = (uint64_t)val2 * UINT32_C(0x4000) + (UINT32_C(1000000) / 2);
+	no_os_do_div(&llval, UINT32_C(1000000));
 	fract |= llval;
 
 	axi_adc_read(adc, AXI_ADC_REG_CHAN_CNTRL_2(chan), &tmp);
