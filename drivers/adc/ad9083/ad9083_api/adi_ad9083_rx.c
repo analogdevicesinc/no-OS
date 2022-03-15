@@ -823,7 +823,7 @@ int32_t adi_ad9083_rx_adc_vti_set(adi_ad9083_device_t *device, uint32_t fc,
 
   temp = fc;
   temp = 2 * 314 * 2 * temp;
-  kcap_temp = (uint64_t)UINT32_C(1000000000000000) - temp * 700;
+  kcap_temp = (uint64_t)UINT64_C(1000000000000000) - temp * 700;
 #ifdef __KERNEL__
   kcap_temp = no_os_div_u64(kcap_temp + (temp / 2) * 115, temp * 115);
 #else
