@@ -676,15 +676,15 @@ float ad5755_set_voltage(struct ad5755_dev *dev,
 		}
 		}
 		/* Compute the binary code from the users voltage value. */
-		code = (int32_t)(voltage * (1l << resolution) / v_ref) + range_offset;
+		code = (int32_t)(voltage * (INT32_C(1) << resolution) / v_ref) + range_offset;
 		if(code > 0xFFFF) {
 			code = 0xFFFF;
 		}
 		/* Offset and Gain are used to obtain the correct value to be written
 		 to the DAC register in order to output the voltage desired by the user.
 		*/
-		if((int32_t)(code + (1l << 15) - offset) > 0) { // Avoid negative values
-			dac_val = (code + (1l << 15) - offset) * (1l << 16) / (gain + 1);
+		if((int32_t)(code + (INT32_C(1) << 15) - offset) > 0) { // Avoid negative values
+			dac_val = (code + (INT32_C(1) << 15) - offset) * (INT32_C(1) << 16) / (gain + 1);
 		} else {
 			dac_val = 0;
 		}
@@ -695,7 +695,7 @@ float ad5755_set_voltage(struct ad5755_dev *dev,
 					  channel,
 					  dac_val);
 		real_voltage = ((int32_t)(dac_val - range_offset) * v_ref) /
-			       (1l << resolution);
+			       (INT32_C(1) << resolution);
 	}
 	return real_voltage;
 }
@@ -756,14 +756,14 @@ float ad5755_set_current(struct ad5755_dev *dev,
 	}
 	}
 	/* Compute the binary code from the value(mA) provided by user. */
-	code = (int32_t)((m_acurrent - range_offset) * (1l << 16) / i_ref);
+	code = (int32_t)((m_acurrent - range_offset) * (INT32_C(1) << 16) / i_ref);
 	if(code > 0xFFFF) {
 		code = 0xFFFF;
 	}
 	/* Offset and Gain are used to obtain the correct value to be written to the
 	   DAC register in order to output the current desired by the user. */
-	if((code + (1l << 15) - offset) > 0) {  // Avoid negative values
-		dac_val = (code + (1l << 15) - offset) * (1l << 16) / (gain + 1);
+	if((code + (INT32_C(1) << 15) - offset) > 0) {  // Avoid negative values
+		dac_val = (code + (INT32_C(1) << 15) - offset) * (INT32_C(1) << 16) / (gain + 1);
 	} else {
 		dac_val = 0;
 	}
@@ -773,7 +773,7 @@ float ad5755_set_current(struct ad5755_dev *dev,
 				  channel,
 				  dac_val);
 
-	real_current = (code * i_ref / (float)(1l << 16)) + range_offset;
+	real_current = (code * i_ref / (float)(INT32_C(1) << 16)) + range_offset;
 
 	return real_current;
 }

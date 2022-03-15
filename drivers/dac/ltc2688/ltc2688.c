@@ -383,7 +383,7 @@ int32_t ltc2688_set_voltage(struct ltc2688_dev *dev, uint8_t channel,
 		ltc2688_span_tbl[dev->crt_range[channel]].min;
 
 	/* Compute the binary code from the value(mA) provided by user. */
-	code = (uint32_t)((voltage - range_offset) * (1l << 16) / v_ref);
+	code = (uint32_t)((voltage - range_offset) * (INT32_C(1) << 16) / v_ref);
 	if(code > 0xFFFF)
 		code = 0xFFFF;
 

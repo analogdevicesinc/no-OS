@@ -76,5 +76,5 @@ void TIME_DelayUs(unsigned short usUnits)
 *******************************************************************************/
 void TIME_DelayMs(unsigned short msUnits)
 {
-    TIMER0_WAIT(TIMER_BASEADDR, (1000000L * msUnits));
+    TIMER0_WAIT(TIMER_BASEADDR, (INT32_C(1000000) * msUnits));
 }

@@ -68,8 +68,8 @@
 #define AXI_PWMGEN_RESET		NO_OS_BIT(0)
 #define AXI_PWMGEN_CHANNEL_DISABLE	0
 #define AXI_PWMGEN_MAX_CHANNELS		4
-#define NSEC_PER_USEC			1000L
-#define USEC_PER_SEC			1000000L
+#define NSEC_PER_USEC			INT32_C(1000)
+#define USEC_PER_SEC			INT32_C(1000000)
 
 /******************************************************************************/
 /************************** Functions Implementation **************************/
