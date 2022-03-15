@@ -577,14 +577,14 @@ int iio_format_value(char *buf, uint32_t len, enum iio_val fmt,
 		return snprintf(buf, len, "%"PRIi32".%09"PRIu32"", vals[0],
 				(uint32_t)vals[1]);
 	case IIO_VAL_FRACTIONAL:
-		tmp = no_os_div_s64((int64_t)vals[0] * 1000000000LL, vals[1]);
+		tmp = no_os_div_s64((int64_t)vals[0] * INT64_C(1000000000), vals[1]);
 		fractional = vals[1];
 		integer = (int32_t)no_os_div_s64_rem(tmp, 1000000000, &fractional);
 		return snprintf(buf, len, "%"PRIi32".%09u", integer,
 				abs(fractional));
 	case IIO_VAL_FRACTIONAL_LOG2:
-		tmp = no_os_shift_right((int64_t)vals[0] * 1000000000LL, vals[1]);
-		integer = (int32_t)no_os_div_s64_rem(tmp, 1000000000LL, &fractional);
+		tmp = no_os_shift_right((int64_t)vals[0] * INT64_C(1000000000), vals[1]);
+		integer = (int32_t)no_os_div_s64_rem(tmp, INT64_C(1000000000), &fractional);
 		return snprintf(buf, len, "%"PRIi32".%09u", integer,
 				abs(fractional));
 	case IIO_VAL_INT_MULTIPLE: {

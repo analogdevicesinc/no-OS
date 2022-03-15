@@ -43,7 +43,7 @@ static void adi_api_utils_subt_128(uint64_t ah, uint64_t al,
 		rh = ah - bh;
 	} else {
 		rl = bl - al - 1;
-		rl = 0xFFFFFFFFFFFFFFFFll - rl;
+		rl = INT64_C(0xFFFFFFFFFFFFFFFF) - rl;
 		ah--;
 		rh = ah - bh;
 	}
@@ -787,7 +787,7 @@ int32_t ad917x_nco_set(ad917x_handle_t *h,
 	if (h == NULL)
 		return API_ERROR_INVALID_HANDLE_PTR;
 
-	if (!((carrier_freq_hz >= (int64_t)(0ll - h->dac_freq_hz / 2)) &&
+	if (!((carrier_freq_hz >= (int64_t)(INT64_C(0) - h->dac_freq_hz / 2)) &&
 	      (carrier_freq_hz < (int64_t)(h->dac_freq_hz / 2))))
 		return API_ERROR_INVALID_PARAM;
 

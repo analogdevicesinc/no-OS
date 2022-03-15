@@ -66,10 +66,10 @@ static int ad5791_iio_get_scale(void *device, char *buf, uint32_t len,
 	uint64_t vref64;
 	uint8_t dac_bits = 20;
 
-	vref64 = (uint64_t)iio_drv->vref_mv * 1000000000ll;
+	vref64 = (uint64_t)iio_drv->vref_mv * INT64_C(1000000000);
 	vref64 /= 1 << dac_bits;
-	int_part = vref64 / 1000000000ll;
-	fract_part = vref64 - int_part * 1000000000ll;
+	int_part = vref64 / INT64_C(1000000000);
+	fract_part = vref64 - int_part * INT64_C(1000000000);
 
 	return snprintf(buf, len, "%"PRId32".%.9"PRId32"", int_part, fract_part);
 }
