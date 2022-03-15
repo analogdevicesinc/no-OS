@@ -83,6 +83,8 @@ enum no_os_gpio_pull_up {
  * @brief Structure holding the parameters for GPIO initialization.
  */
 typedef struct no_os_gpio_init_param {
+	/** Port number */
+	int32_t		port;
 	/** GPIO number */
 	int32_t		number;
 	/** Pull up/down resistor configuration */
@@ -98,6 +100,8 @@ typedef struct no_os_gpio_init_param {
  * @brief Structure holding the GPIO descriptor.
  */
 typedef struct no_os_gpio_desc {
+	/** Port number */
+	int32_t		port;
 	/** GPIO number */
 	int32_t		number;
 	/** Pull up/down resistor configuration */
