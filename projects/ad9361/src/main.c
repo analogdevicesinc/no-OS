@@ -195,8 +195,8 @@ AD9361_InitParam default_init_param = {
 	0,		//ensm_enable_pin_pulse_mode_enable *** adi,ensm-enable-pin-pulse-mode-enable
 	0,		//ensm_enable_txnrx_control_enable *** adi,ensm-enable-txnrx-control-enable
 	/* LO Control */
-	UINT32_C(2400000000),	//rx_synthesizer_frequency_hz *** adi,rx-synthesizer-frequency-hz
-	UINT32_C(2400000000),	//tx_synthesizer_frequency_hz *** adi,tx-synthesizer-frequency-hz
+	UINT64_C(2400000000),	//rx_synthesizer_frequency_hz *** adi,rx-synthesizer-frequency-hz
+	UINT64_C(2400000000),	//tx_synthesizer_frequency_hz *** adi,tx-synthesizer-frequency-hz
 	1,				//tx_lo_powerdown_managed_enable *** adi,tx-lo-powerdown-managed-enable
 	/* Rate & BW Control */
 	{983040000, 245760000, 122880000, 61440000, 30720000, 30720000},// rx_path_clock_frequencies[6] *** adi,rx-path-clock-frequencies
