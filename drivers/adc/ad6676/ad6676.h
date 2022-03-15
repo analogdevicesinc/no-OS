@@ -289,15 +289,15 @@
 #define CAL_DONE			(1 << 0)
 
 #define MHz 				1000000UL
-#define MIN_FADC			2000000000ULL /* SPS */
-#define MIN_FADC_INT_SYNTH		2925000000ULL /* SPS REVISIT */
-#define MAX_FADC			3200000000ULL /* SPS */
+#define MIN_FADC			UINT64_C(2000000000) /* SPS */
+#define MIN_FADC_INT_SYNTH		UINT64_C(2925000000) /* SPS REVISIT */
+#define MAX_FADC			UINT64_C(3200000000) /* SPS */
 
-#define MIN_FIF				70000000ULL /* Hz */
-#define MAX_FIF				450000000ULL /* Hz */
+#define MIN_FIF				UINT64_C(70000000) /* Hz */
+#define MAX_FIF				UINT64_C(450000000) /* Hz */
 
-#define MIN_BW				20000000ULL /* Hz */
-#define MAX_BW				160000000ULL /* Hz */
+#define MIN_BW				UINT64_C(20000000) /* Hz */
+#define MAX_BW				UINT64_C(160000000) /* Hz */
 
 #define CHIP_ID1_AD6676			0x03
 #define CHIP_ID0_AD6676			0xBB

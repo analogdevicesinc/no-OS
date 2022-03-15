@@ -2306,7 +2306,7 @@ int32_t adi_ad9081_adc_config(adi_ad9081_device_t *device, uint8_t cddcs,
 	if (device->dev_info.dev_rev == 3) { /* r2 */
 		if ((die_id & 0x80) == 0) { /* ad9081 */
 			if (device->dev_info.adc_freq_hz <=
-			    2000000000ULL) { /* 2.0e9 */
+			    UINT64_C(2000000000)) { /* 2.0e9 */
 				err = adi_ad9081_hal_bf_set(
 					device, 0x212c, 0x0103,
 					1); /* spare_uint8_width1_3 */
@@ -2316,7 +2316,7 @@ int32_t adi_ad9081_adc_config(adi_ad9081_device_t *device, uint8_t cddcs,
 					0); /* adc_flash_tskew */
 				AD9081_ERROR_RETURN(err);
 			} else if (device->dev_info.adc_freq_hz <=
-				   3000000000ULL) { /* 3.0e9 */
+				   UINT64_C(3000000000)) { /* 3.0e9 */
 				err = adi_ad9081_hal_bf_set(
 					device, 0x212c, 0x0103,
 					0); /* spare_uint8_width1_3 */
@@ -2326,7 +2326,7 @@ int32_t adi_ad9081_adc_config(adi_ad9081_device_t *device, uint8_t cddcs,
 					3); /* adc_flash_tskew */
 				AD9081_ERROR_RETURN(err);
 			} else if (device->dev_info.adc_freq_hz <=
-				   4000000000ULL) { /* 4.0e9 */
+				   UINT64_C(4000000000)) { /* 4.0e9 */
 				err = adi_ad9081_hal_bf_set(
 					device, 0x212c, 0x0103,
 					0); /* spare_uint8_width1_3 */
@@ -2336,7 +2336,7 @@ int32_t adi_ad9081_adc_config(adi_ad9081_device_t *device, uint8_t cddcs,
 					2); /* adc_flash_tskew */
 				AD9081_ERROR_RETURN(err);
 			} else if (device->dev_info.adc_freq_hz <=
-				   5000000000ULL) { /* 5.0e9 */
+				   UINT64_C(5000000000)) { /* 5.0e9 */
 				err = adi_ad9081_hal_bf_set(
 					device, 0x212c, 0x0103,
 					0); /* spare_uint8_width1_3 */
@@ -2346,7 +2346,7 @@ int32_t adi_ad9081_adc_config(adi_ad9081_device_t *device, uint8_t cddcs,
 					1); /* adc_flash_tskew */
 				AD9081_ERROR_RETURN(err);
 			} else if (device->dev_info.adc_freq_hz <=
-				   6000000000ULL) { /* 6.0e9 */
+				   UINT64_C(6000000000)) { /* 6.0e9 */
 				err = adi_ad9081_hal_bf_set(
 					device, 0x212c, 0x0103,
 					0); /* spare_uint8_width1_3 */
@@ -2367,7 +2367,7 @@ int32_t adi_ad9081_adc_config(adi_ad9081_device_t *device, uint8_t cddcs,
 			}
 		} else { /* mxfe */
 			if (device->dev_info.adc_freq_hz <=
-			    1000000000ULL) { /* 1.0e9 */
+			    UINT64_C(1000000000)) { /* 1.0e9 */
 				err = adi_ad9081_hal_bf_set(
 					device, 0x212c, 0x0103,
 					1); /* spare_uint8_width1_3 */
@@ -2377,7 +2377,7 @@ int32_t adi_ad9081_adc_config(adi_ad9081_device_t *device, uint8_t cddcs,
 					2); /* adc_flash_tskew */
 				AD9081_ERROR_RETURN(err);
 			} else if (device->dev_info.adc_freq_hz <=
-				   1500000000ULL) { /* 1.5e9 */
+				   UINT64_C(1500000000)) { /* 1.5e9 */
 				err = adi_ad9081_hal_bf_set(
 					device, 0x212c, 0x0103,
 					1); /* spare_uint8_width1_3 */
@@ -2387,7 +2387,7 @@ int32_t adi_ad9081_adc_config(adi_ad9081_device_t *device, uint8_t cddcs,
 					1); /* adc_flash_tskew */
 				AD9081_ERROR_RETURN(err);
 			} else if (device->dev_info.adc_freq_hz <=
-				   2000000000ULL) { /* 2.0e9 */
+				   UINT64_C(2000000000)) { /* 2.0e9 */
 				err = adi_ad9081_hal_bf_set(
 					device, 0x212c, 0x0103,
 					1); /* spare_uint8_width1_3 */
@@ -2397,7 +2397,7 @@ int32_t adi_ad9081_adc_config(adi_ad9081_device_t *device, uint8_t cddcs,
 					0); /* adc_flash_tskew */
 				AD9081_ERROR_RETURN(err);
 			} else if (device->dev_info.adc_freq_hz <=
-				   3000000000ULL) { /* 3.0e9 */
+				   UINT64_C(3000000000)) { /* 3.0e9 */
 				err = adi_ad9081_hal_bf_set(
 					device, 0x212c, 0x0103,
 					0); /* spare_uint8_width1_3 */
@@ -2407,7 +2407,7 @@ int32_t adi_ad9081_adc_config(adi_ad9081_device_t *device, uint8_t cddcs,
 					3); /* adc_flash_tskew */
 				AD9081_ERROR_RETURN(err);
 			} else if (device->dev_info.adc_freq_hz <=
-				   4000000000ULL) { /* 4.0e9 */
+				   UINT64_C(4000000000)) { /* 4.0e9 */
 				err = adi_ad9081_hal_bf_set(
 					device, 0x212c, 0x0103,
 					0); /* spare_uint8_width1_3 */

@@ -407,7 +407,7 @@ int32_t ad9144_set_nco(struct ad9144_dev *dev, int32_t f_carrier_khz,
 	if (ret != 0)
 		return ret;
 
-	ftw = ((1ULL << 48) / dev->sample_rate_khz * f_carrier_khz);
+	ftw = ((UINT64_C(1) << 48) / dev->sample_rate_khz * f_carrier_khz);
 	for (i = 0; i < 6; i++) {
 		ret = ad9144_spi_write(dev, REG_FTW0 + i,
 				       (ftw >> (8 * i)) & 0xFF);

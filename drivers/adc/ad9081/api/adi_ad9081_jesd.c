@@ -1090,16 +1090,16 @@ int32_t adi_ad9081_jesd_rx_pll_startup(adi_ad9081_device_t *device,
 	div_p = ((jesd204b_en > 0)) ? 0 : 1;
 	b_lcpll = (((jesd_f == 3) || (jesd_f == 6) || (jesd_f == 12)) ? 3 : 1) *
 		  (jesd204b_en > 0 ? 5 : 11);
-	if (bit_rate <= 2000000000ULL) {
+	if (bit_rate <= UINT64_C(2000000000)) {
 		AD9081_LOG_ERR("jrx bit rate is lower than 2Gbps.");
 		return API_CMS_ERROR_ERROR;
-	} else if (bit_rate > 2000000000ULL && bit_rate <= 4000000000ULL) {
+	} else if (bit_rate > UINT64_C(2000000000) && bit_rate <= UINT64_C(4000000000)) {
 		b_lcpll = b_lcpll * 4;
 		rx_div_rate = 1;
-	} else if (bit_rate > 4000000000ULL && bit_rate <= 8000000000ULL) {
+	} else if (bit_rate > UINT64_C(4000000000) && bit_rate <= UINT64_C(8000000000)) {
 		b_lcpll = b_lcpll * 2;
 		rx_div_rate = 0;
-	} else if (bit_rate > 8000000000ULL) {
+	} else if (bit_rate > UINT64_C(8000000000)) {
 		rx_div_rate = 8;
 	}
 	err = adi_ad9081_hal_3bf_set(device, REG_LCPLL_REF_CLK_DIV1_REG_ADDR,
@@ -1942,15 +1942,15 @@ int32_t adi_ad9081_jesd_tx_pll_startup(adi_ad9081_device_t *device,
 	if (i == 4) {
 		AD9081_LOG_ERR("SDSPLLREFCLK divider not found.");
 	}
-	if (bit_rate > 4000000000ULL && bit_rate <= 8000000000ULL) {
+	if (bit_rate > UINT64_C(4000000000) && bit_rate <= UINT64_C(8000000000)) {
 		b_lcpll = b_lcpll * 2;
-	} else if (bit_rate > 2000000000ULL && bit_rate <= 4000000000ULL) {
+	} else if (bit_rate > UINT64_C(2000000000) && bit_rate <= UINT64_C(4000000000)) {
 		b_lcpll = b_lcpll * 4;
-	} else if (bit_rate > 1000000000ULL && bit_rate <= 2000000000ULL) {
+	} else if (bit_rate > UINT64_C(1000000000) && bit_rate <= UINT64_C(2000000000)) {
 		b_lcpll = b_lcpll * 8;
-	} else if (bit_rate > 500000000ULL && bit_rate <= 1000000000ULL) {
+	} else if (bit_rate > UINT64_C(500000000) && bit_rate <= UINT64_C(1000000000)) {
 		b_lcpll = b_lcpll * 16;
-	} else if (bit_rate > 250000000ULL && bit_rate <= 500000000ULL) {
+	} else if (bit_rate > UINT64_C(250000000) && bit_rate <= UINT64_C(500000000)) {
 		b_lcpll = b_lcpll * 32;
 	}
 
@@ -2172,8 +2172,8 @@ int32_t adi_ad9081_jesd_tx_link_config_set(adi_ad9081_device_t *device,
 	AD9081_NULL_POINTER_RETURN(jesd_param);
 
 	/* calculate bit rate, _calcJtxLinkLaneRate()@ad9081_rx_r1.py */
-	bit_rate[0] = 0ULL;
-	bit_rate[1] = 0ULL;
+	bit_rate[0] = UINT64_C(0);
+	bit_rate[1] = UINT64_C(0);
 	jesd204b_en = jesd_param[0].jesd_jesdv < 2 ? 1 : 0;
 	for (i = 0; i < 2; i++) {
 		link = (uint8_t)(links & (AD9081_LINK_0 << i));
@@ -2400,24 +2400,24 @@ int32_t adi_ad9081_jesd_tx_link_config_set(adi_ad9081_device_t *device,
 			AD9081_ERROR_RETURN(err);
 			/* _calcJtxLinkBitRepeatRatios()@ad9081_rx_r1.py */
 			jesd_bit_repeat_ratio = 0;
-			if (bit_rate[i] > 4000000000ULL &&
-			    bit_rate[i] <= 8000000000ULL) { /* 4Gbps ~ 8Gbps */
+			if (bit_rate[i] > UINT64_C(4000000000) &&
+			    bit_rate[i] <= UINT64_C(8000000000)) { /* 4Gbps ~ 8Gbps */
 				jesd_bit_repeat_ratio = 1;
-			} else if (bit_rate[i] > 2000000000ULL &&
+			} else if (bit_rate[i] > UINT64_C(2000000000) &&
 				   bit_rate[i] <=
-					   4000000000ULL) { /* 2Gbps ~ 4Gbps */
+					   UINT64_C(4000000000)) { /* 2Gbps ~ 4Gbps */
 				jesd_bit_repeat_ratio = 2;
-			} else if (bit_rate[i] > 1000000000ULL &&
+			} else if (bit_rate[i] > UINT64_C(1000000000) &&
 				   bit_rate[i] <=
-					   2000000000ULL) { /* 1Gbps ~ 2Gbps */
+					   UINT64_C(2000000000)) { /* 1Gbps ~ 2Gbps */
 				jesd_bit_repeat_ratio = 3;
-			} else if (bit_rate[i] > 500000000ULL &&
+			} else if (bit_rate[i] > UINT64_C(500000000) &&
 				   bit_rate[i] <=
-					   1000000000ULL) { /* 0.5Gbps ~ 1Gbps */
+					   UINT64_C(1000000000)) { /* 0.5Gbps ~ 1Gbps */
 				jesd_bit_repeat_ratio = 4;
-			} else if (bit_rate[i] > 250000000ULL &&
+			} else if (bit_rate[i] > UINT64_C(250000000) &&
 				   bit_rate[i] <=
-					   500000000ULL) { /* 0.25Gbps ~ 0.5Gbps */
+					   UINT64_C(500000000)) { /* 0.25Gbps ~ 0.5Gbps */
 				jesd_bit_repeat_ratio = 5;
 			}
 			/* _configureJtxLinkBitRepeatLaneStates()@ad9081_rx_r1.py */

@@ -604,40 +604,40 @@ split_gain_table_abs_gain[RXGAIN_TBLS_END][SIZE_SPLIT_TABLE] = {
 struct gain_table_info ad9361_adi_gt_info[] = {
 	{
 		.start = 0,
-		.end = 1300000000ULL,
+		.end = UINT64_C(1300000000),
 		.max_index = SIZE_FULL_TABLE,
 		.abs_gain_tbl = (int8_t *) &full_gain_table_abs_gain[TBL_200_1300_MHZ],
 		.tab = (uint8_t (*)[3]) full_gain_table[TBL_200_1300_MHZ],
 	},{
-		.start = 1300000000ULL,
-		.end = 4000000000ULL,
+		.start = UINT64_C(1300000000),
+		.end = UINT64_C(4000000000),
 		.max_index = SIZE_FULL_TABLE,
 		.abs_gain_tbl = (int8_t *) &full_gain_table_abs_gain[TBL_1300_4000_MHZ],
 		.tab = (uint8_t (*)[3]) full_gain_table[TBL_1300_4000_MHZ],
 	},{
-		.start = 4000000000ULL,
-		.end = 6000000000ULL,
+		.start = UINT64_C(4000000000),
+		.end = UINT64_C(6000000000),
 		.max_index = SIZE_FULL_TABLE,
 		.abs_gain_tbl = (int8_t *) &full_gain_table_abs_gain[TBL_4000_6000_MHZ],
 		.tab = (uint8_t (*)[3]) full_gain_table[TBL_4000_6000_MHZ],
 #if HAVE_SPLIT_GAIN_TABLE
 	},{
 		.start = 0,
-		.end = 1300000000ULL,
+		.end = UINT64_C(1300000000),
 		.max_index = SIZE_SPLIT_TABLE,
 		.split_table = 1,
 		.abs_gain_tbl = (int8_t *) &split_gain_table_abs_gain[TBL_200_1300_MHZ],
 		.tab = (uint8_t (*)[3]) split_gain_table[TBL_200_1300_MHZ],
 	},{
-		.start = 1300000000ULL,
-		.end = 4000000000ULL,
+		.start = UINT64_C(1300000000),
+		.end = UINT64_C(4000000000),
 		.max_index = SIZE_SPLIT_TABLE,
 		.split_table = 1,
 		.abs_gain_tbl = (int8_t *) &split_gain_table_abs_gain[TBL_1300_4000_MHZ],
 		.tab = (uint8_t (*)[3]) split_gain_table[TBL_1300_4000_MHZ],
 	},{
-		.start = 4000000000ULL,
-		.end = 6000000000ULL,
+		.start = UINT64_C(4000000000),
+		.end = UINT64_C(6000000000),
 		.max_index = SIZE_SPLIT_TABLE,
 		.split_table = 1,
 		.abs_gain_tbl = (int8_t *) &split_gain_table_abs_gain[TBL_4000_6000_MHZ],
@@ -2481,7 +2481,7 @@ static int32_t ad9361_rx_adc_setup(struct ad9361_rf_phy *phy,
 	* We assume ad9361_rx_bb_analog_filter_calib() is always run prior
 	*/
 
-	tmp = bbpll_freq * 10000ULL;
+	tmp = bbpll_freq * UINT64_C(10000);
 	no_os_do_div(&tmp, 126906UL * phy->rxbbf_div);
 	bb_bw_Hz = tmp;
 
@@ -2499,14 +2499,14 @@ static int32_t ad9361_rx_adc_setup(struct ad9361_rf_phy *phy,
 		scale_snr_1e3 = 1585; /* pow(10, scale_snr_dB/10); */
 
 	if (bb_bw_Hz >= 18000000) {
-		invrc_tconst_1e6 = (160975ULL * r2346 *
+		invrc_tconst_1e6 = (UINT64_C(160975) * r2346 *
 				    (160 * c3_msb + 10 * c3_lsb + 140) *
 				    (bb_bw_Hz)* (1000 + (10 * (bb_bw_Hz - 18000000) / 1000000)));
 
 		no_os_do_div(&invrc_tconst_1e6, 1000UL);
 
 	} else {
-		invrc_tconst_1e6 = (160975ULL * r2346 *
+		invrc_tconst_1e6 = (UINT64_C(160975) * r2346 *
 				    (160 * c3_msb + 10 * c3_lsb + 140) *
 				    (bb_bw_Hz));
 	}
@@ -2545,30 +2545,30 @@ static int32_t ad9361_rx_adc_setup(struct ad9361_rf_phy *phy,
 	data[5] = 0;
 	data[6] = 0;
 
-	tmp = -50000000 + 8ULL * scale_snr_1e3 * sqrt_inv_rc_tconst_1e3 *
+	tmp = -50000000 + UINT64_C(8) * scale_snr_1e3 * sqrt_inv_rc_tconst_1e3 *
 	      min_sqrt_term_1e3;
 	no_os_do_div(&tmp, 100000000UL);
 	data[7] = no_os_min_t(uint64_t, 124U, tmp);
 
 	tmp = (invrc_tconst_1e6 >> 1) + 20 * inv_scaled_adc_clk_1e3 *
-	      data[7] / 80 * 1000ULL;
+	      data[7] / 80 * UINT64_C(1000);
 	no_os_do_div(&tmp, invrc_tconst_1e6);
 	data[8] = no_os_min_t(uint64_t, 255U, tmp);
 
-	tmp = (-500000 + 77ULL * sqrt_inv_rc_tconst_1e3 * min_sqrt_term_1e3);
+	tmp = (-500000 + UINT64_C(77) * sqrt_inv_rc_tconst_1e3 * min_sqrt_term_1e3);
 	no_os_do_div(&tmp, 1000000UL);
 	data[10] = no_os_min_t(uint64_t, 127U, tmp);
 
 	data[9] = no_os_min_t(uint32_t, 127U, ((800 * data[10]) / 1000));
 	tmp = ((invrc_tconst_1e6 >> 1) + (20 * inv_scaled_adc_clk_1e3 *
-					  data[10] * 1000ULL));
+					  data[10] * UINT64_C(1000)));
 	no_os_do_div(&tmp, invrc_tconst_1e6 * 77);
 	data[11] = no_os_min_t(uint64_t, 255U, tmp);
 	data[12] = no_os_min_t(uint32_t, 127U, (-500000 + 80 * sqrt_inv_rc_tconst_1e3 *
 						min_sqrt_term_1e3) / 1000000UL);
 
 	tmp = -3 * (long)(invrc_tconst_1e6 >> 1) + inv_scaled_adc_clk_1e3 *
-	      data[12] * (1000ULL * 20 / 80);
+	      data[12] * (UINT64_C(1000) * 20 / 80);
 	no_os_do_div(&tmp, invrc_tconst_1e6);
 	data[13] = no_os_min_t(uint64_t, 255, tmp);
 
@@ -2634,7 +2634,7 @@ static int32_t ad9361_rx_tia_calib(struct ad9361_rf_phy *phy, uint32_t bb_bw_Hz)
 	Cbbf = (reg1EB * 160) + (reg1EC * 10) + 140; /* fF */
 	R2346 = 18300 * RX_BBF_R2346(reg1E6);
 
-	CTIA_fF = Cbbf * R2346 * 560ULL;
+	CTIA_fF = Cbbf * R2346 * UINT64_C(560);
 	no_os_do_div(&CTIA_fF, 3500000UL);
 
 	if (bb_bw_Hz <= 3000000UL)
@@ -2644,7 +2644,7 @@ static int32_t ad9361_rx_tia_calib(struct ad9361_rf_phy *phy, uint32_t bb_bw_Hz)
 	else
 		reg1DB = 0x20;
 
-	if (CTIA_fF > 2920ULL) {
+	if (CTIA_fF > UINT64_C(2920)) {
 		reg1DC = 0x40;
 		reg1DE = 0x40;
 		temp = no_os_min(127U, NO_OS_DIV_ROUND_CLOSEST((uint32_t)CTIA_fF - 400, 320U));
@@ -2792,17 +2792,17 @@ static int32_t ad9361_tx_bb_second_filter_calib(struct ad9361_rf_phy *phy,
 
 	for (i = 0, res = 1; i < 4; i++) {
 		div = corner * res;
-		cap = (500000000ULL) + (div >> 1);
+		cap = (UINT64_C(500000000)) + (div >> 1);
 		no_os_do_div(&cap, div);
-		cap -= 12ULL;
-		if (cap < 64ULL)
+		cap -= UINT64_C(12);
+		if (cap < UINT64_C(64))
 			break;
 
 		res <<= 1;
 	}
 
-	if (cap > 63ULL)
-		cap = 63ULL;
+	if (cap > UINT64_C(63))
+		cap = UINT64_C(63);
 
 	if (tx_bb_bw <= 4500000UL)
 		reg_conf = 0x59;
@@ -2927,7 +2927,7 @@ static int32_t ad9361_rf_dc_offset_calib(struct ad9361_rf_phy *phy,
 
 	ad9361_spi_write(spi, REG_WAIT_COUNT, 0x20);
 
-	if (rx_freq <= 4000000000ULL) {
+	if (rx_freq <= UINT64_C(4000000000)) {
 		ad9361_spi_write(spi, REG_RF_DC_OFFSET_COUNT,
 				 phy->pdata->rf_dc_offset_count_low);
 		ad9361_spi_write(spi, REG_RF_DC_OFFSET_CONFIG_1,
@@ -5631,7 +5631,7 @@ int32_t ad9361_setup(struct ad9361_rf_phy *phy)
 			      pd->ensm_pin_ctrl);
 
 	phy->auto_cal_en = true;
-	phy->cal_threshold_freq = 100000000ULL; /* 100 MHz */
+	phy->cal_threshold_freq = UINT64_C(100000000); /* 100 MHz */
 
 	return 0;
 
@@ -6623,7 +6623,7 @@ int32_t ad9361_bbpll_set_rate(struct refclk_scale *clk_priv, uint32_t rate,
 	* Setup Loop Filter and CP Current
 	* Scale is 150uA @ (1280MHz BBPLL, 40MHz REFCLK)
 	*/
-	tmp = (rate >> 7) * 150ULL;
+	tmp = (rate >> 7) * UINT64_C(150);
 	no_os_do_div(&tmp, (parent_rate >> 7) * 32UL);
 
 	/* 25uA/LSB, Offset 25uA */
@@ -7400,11 +7400,11 @@ int32_t ad9361_rssi_gain_step_calib(struct ad9361_rf_phy *phy)
 
 	lo_freq_hz = ad9361_from_clk(clk_get_rate(phy,
 				     phy->ref_clk_scale[RX_RFPLL]));
-	if (lo_freq_hz < 1300000000ULL)
+	if (lo_freq_hz < UINT64_C(1300000000))
 		lo_index = 0;
-	else if (lo_freq_hz < 3300000000ULL)
+	else if (lo_freq_hz < UINT64_C(3300000000))
 		lo_index = 1;
-	else if (lo_freq_hz < 4100000000ULL)
+	else if (lo_freq_hz < UINT64_C(4100000000))
 		lo_index = 2;
 	else
 		lo_index = 3;

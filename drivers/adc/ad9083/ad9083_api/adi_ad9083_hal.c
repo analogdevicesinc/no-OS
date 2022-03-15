@@ -329,7 +329,7 @@ void adi_ad9083_hal_subt_128(uint64_t ah, uint64_t al, uint64_t bh, uint64_t bl,
     rh = ah - bh;
   } else {
     rl = bl - al - 1;
-    rl = 0xffffffffffffffffull - rl;
+    rl = UINT64_C(0xffffffffffffffff) - rl;
     ah--;
     rh = ah - bh;
   }
@@ -352,15 +352,15 @@ void adi_ad9083_hal_mult_128(uint64_t a, uint64_t b, uint64_t *hi,
 
 void adi_ad9083_hal_lshift_128(uint64_t *hi, uint64_t *lo) {
   *hi <<= 1;
-  if (*lo & 0x8000000000000000ull)
-    *hi |= 1ull;
+  if (*lo & UINT64_C(0x8000000000000000))
+    *hi |= UINT64_C(1);
   *lo <<= 1;
 }
 
 void adi_ad9083_hal_rshift_128(uint64_t *hi, uint64_t *lo) {
   *lo >>= 1;
-  if (*hi & 1ull)
-    *lo |= 0x8000000000000000ull;
+  if (*hi & UINT64_C(1))
+    *lo |= UINT64_C(0x8000000000000000);
   *hi >>= 1;
 }
 
@@ -369,7 +369,7 @@ void adi_ad9083_hal_div_128(uint64_t a_hi, uint64_t a_lo, uint64_t b_hi,
   uint64_t remain_lo = a_lo, remain_hi = a_hi, part1_lo = b_lo, part1_hi = b_hi;
   uint64_t result_lo = 0, result_hi = 0, mask_lo = 1, mask_hi = 0;
 
-  while (!(part1_hi & 0x8000000000000000ull)) {
+  while (!(part1_hi & UINT64_C(0x8000000000000000))) {
     adi_ad9083_hal_lshift_128(&part1_hi, &part1_lo);
     adi_ad9083_hal_lshift_128(&mask_hi, &mask_lo);
   }

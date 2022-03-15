@@ -106,10 +106,10 @@
 /*============= D E F I N E S ==============*/
 #define R1
 #define AD9083_ID                     0x9083
-#define AD9083_REF_CLK_FREQ_HZ_MIN    50000000ull     /*!< 50 MHz */
-#define AD9083_REF_CLK_FREQ_HZ_MAX    500000000ull    /*!< 500MHz */
-#define AD9083_ADC_CLK_FREQ_HZ_MIN    1000000000ull   /*!< 1  GHz */
-#define AD9083_ADC_CLK_FREQ_HZ_MAX    2000000000ull   /*!< 2  GHz */
+#define AD9083_REF_CLK_FREQ_HZ_MIN    UINT64_C(50000000)     /*!< 50 MHz */
+#define AD9083_REF_CLK_FREQ_HZ_MAX    UINT64_C(500000000)    /*!< 500MHz */
+#define AD9083_ADC_CLK_FREQ_HZ_MIN    UINT64_C(1000000000)   /*!< 1  GHz */
+#define AD9083_ADC_CLK_FREQ_HZ_MAX    UINT64_C(2000000000)   /*!< 2  GHz */
 
 #define AD9083_JESD_SER_COUNT         4
 

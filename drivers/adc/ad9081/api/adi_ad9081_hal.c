@@ -634,7 +634,7 @@ void adi_ad9081_hal_sub_128(uint64_t ah, uint64_t al, uint64_t bh, uint64_t bl,
 		rh = ah - bh;
 	} else {
 		rl = bl - al - 1;
-		rl = 0xffffffffffffffffull - rl;
+		rl = UINT64_C(0xffffffffffffffff) - rl;
 		ah--;
 		rh = ah - bh;
 	}
@@ -659,16 +659,16 @@ void adi_ad9081_hal_mult_128(uint64_t a, uint64_t b, uint64_t *hi, uint64_t *lo)
 void adi_ad9081_hal_lshift_128(uint64_t *hi, uint64_t *lo)
 {
 	*hi <<= 1;
-	if (*lo & 0x8000000000000000ull)
-		*hi |= 1ull;
+	if (*lo & UINT64_C(0x8000000000000000))
+		*hi |= UINT64_C(1);
 	*lo <<= 1;
 }
 
 void adi_ad9081_hal_rshift_128(uint64_t *hi, uint64_t *lo)
 {
 	*lo >>= 1;
-	if (*hi & 1ull)
-		*lo |= 0x8000000000000000ull;
+	if (*hi & UINT64_C(1))
+		*lo |= UINT64_C(0x8000000000000000);
 	*hi >>= 1;
 }
 
@@ -679,7 +679,7 @@ void adi_ad9081_hal_div_128(uint64_t a_hi, uint64_t a_lo, uint64_t b_hi,
 		 part1_hi = b_hi;
 	uint64_t result_lo = 0, result_hi = 0, mask_lo = 1, mask_hi = 0;
 
-	while (!(part1_hi & 0x8000000000000000ull)) {
+	while (!(part1_hi & UINT64_C(0x8000000000000000))) {
 		adi_ad9081_hal_lshift_128(&part1_hi, &part1_lo);
 		adi_ad9081_hal_lshift_128(&mask_hi, &mask_lo);
 	}
@@ -713,27 +713,27 @@ int32_t adi_ad9081_hal_calc_nco_ftw(adi_ad9081_device_t *device, uint64_t freq,
 	/* --------- = --------- */
 	/*    2^48        freq   */
 	if (nco_shift >= 0) {
-		adi_ad9081_hal_mult_128(281474976710656ull, nco_shift, &hi,
+		adi_ad9081_hal_mult_128(UINT64_C(281474976710656), nco_shift, &hi,
 					&lo);
 		adi_ad9081_hal_div_128(hi, lo, 0, freq, &hi1, ftw);
 		adi_ad9081_hal_mult_128(*ftw, freq, &hi2, &lo2);
 		adi_ad9081_hal_sub_128(hi, lo, hi2, lo2, &hi3, &lo3);
-		adi_ad9081_hal_mult_128(lo3, 281474976710655ull, &hi4, &lo4);
+		adi_ad9081_hal_mult_128(lo3, UINT64_C(281474976710655), &hi4, &lo4);
 		adi_ad9081_hal_div_128(hi4, lo4, 0, freq, &hi1, a);
-		*b = 281474976710655ull;
+		*b = UINT64_C(281474976710655);
 	} else {
-		adi_ad9081_hal_mult_128(281474976710656ull, -nco_shift, &hi,
+		adi_ad9081_hal_mult_128(UINT64_C(281474976710656), -nco_shift, &hi,
 					&lo);
 		adi_ad9081_hal_div_128(hi, lo, 0, freq, &hi, ftw);
 		adi_ad9081_hal_mult_128(*ftw, freq, &hi2, &lo2);
 		adi_ad9081_hal_sub_128(hi, lo, hi2, lo2, &hi3, &lo3);
-		adi_ad9081_hal_mult_128(lo3, 281474976710655ull, &hi4, &lo4);
+		adi_ad9081_hal_mult_128(lo3, UINT64_C(281474976710655), &hi4, &lo4);
 		adi_ad9081_hal_div_128(hi4, lo4, 0, freq, &hi1, a);
-		*b = 281474976710655ull;
+		*b = UINT64_C(281474976710655);
 		*a = (*a > 0) ?
-			     (281474976710656ull - *a) :
+			     (UINT64_C(281474976710656) - *a) :
 			     *a; /* assume register a/b is unsigned 48bit value */
-		*ftw = 281474976710656ull - *ftw - (*a > 0 ? 1 : 0);
+		*ftw = UINT64_C(281474976710656) - *ftw - (*a > 0 ? 1 : 0);
 	}
 
 	return API_CMS_ERROR_OK;
@@ -753,21 +753,21 @@ int32_t adi_ad9081_hal_calc_nco_ftw_f(adi_ad9081_device_t *device, double freq,
 	/* --------- = --------- */
 	/*    2^48        freq   */
 	if (nco_shift >= 0) {
-		*ftw = (uint64_t)(281474976710656ull * nco_shift / freq);
-		set_shift = (*ftw) * freq / 281474976710656ull;
+		*ftw = (uint64_t)(UINT64_C(281474976710656) * nco_shift / freq);
+		set_shift = (*ftw) * freq / UINT64_C(281474976710656);
 		rem_shift = nco_shift - set_shift;
-		*b = 281474976710655ull;
-		*a = (uint64_t)((rem_shift * 281474976710656ull / freq) * (*b));
+		*b = UINT64_C(281474976710655);
+		*a = (uint64_t)((rem_shift * UINT64_C(281474976710656) / freq) * (*b));
 	} else {
-		*ftw = (uint64_t)(281474976710656ull * (-nco_shift) / freq);
-		set_shift = (*ftw) * freq / 281474976710656ull;
+		*ftw = (uint64_t)(UINT64_C(281474976710656) * (-nco_shift) / freq);
+		set_shift = (*ftw) * freq / UINT64_C(281474976710656);
 		rem_shift = -nco_shift - set_shift;
-		*b = 281474976710655ull;
-		*a = (uint64_t)((rem_shift * 281474976710656ull / freq) * (*b));
+		*b = UINT64_C(281474976710655);
+		*a = (uint64_t)((rem_shift * UINT64_C(281474976710656) / freq) * (*b));
 		*a = (*a > 0) ?
-			     (281474976710656ull - *a) :
+			     (UINT64_C(281474976710656) - *a) :
 			     *a; /* assume register a/b is unsigned 48bit value */
-		*ftw = 281474976710656ull - *ftw - (*a > 0 ? 1 : 0);
+		*ftw = UINT64_C(281474976710656) - *ftw - (*a > 0 ? 1 : 0);
 	}
 
 	return API_CMS_ERROR_OK;
@@ -784,14 +784,14 @@ int32_t adi_ad9081_hal_calc_rx_nco_ftw(adi_ad9081_device_t *device,
 	AD9081_INVALID_PARAM_RETURN(adc_freq == 0);
 
 	if (nco_shift >= 0) {
-		adi_ad9081_hal_mult_128(281474976710656ull, nco_shift, &hi,
+		adi_ad9081_hal_mult_128(UINT64_C(281474976710656), nco_shift, &hi,
 					&lo);
 		adi_ad9081_hal_div_128(hi, lo, 0, adc_freq, &hi, ftw);
 	} else {
-		adi_ad9081_hal_mult_128(281474976710656ull, -nco_shift, &hi,
+		adi_ad9081_hal_mult_128(UINT64_C(281474976710656), -nco_shift, &hi,
 					&lo);
 		adi_ad9081_hal_div_128(hi, lo, 0, adc_freq, &hi, ftw);
-		*ftw = 281474976710656ull - *ftw;
+		*ftw = UINT64_C(281474976710656) - *ftw;
 	}
 
 	return API_CMS_ERROR_OK;
@@ -807,12 +807,12 @@ int32_t adi_ad9081_hal_calc_rx_nco_ftw32(adi_ad9081_device_t *device,
 	AD9081_INVALID_PARAM_RETURN(adc_freq == 0);
 
 	if (nco_shift >= 0) {
-		adi_ad9081_hal_mult_128(4294967296ull, nco_shift, &hi, &lo);
+		adi_ad9081_hal_mult_128(UINT64_C(4294967296), nco_shift, &hi, &lo);
 		adi_ad9081_hal_div_128(hi, lo, 0, adc_freq, &hi, ftw);
 	} else {
-		adi_ad9081_hal_mult_128(4294967296ull, -nco_shift, &hi, &lo);
+		adi_ad9081_hal_mult_128(UINT64_C(4294967296), -nco_shift, &hi, &lo);
 		adi_ad9081_hal_div_128(hi, lo, 0, adc_freq, &hi, ftw);
-		*ftw = 4294967296ull - *ftw;
+		*ftw = UINT64_C(4294967296) - *ftw;
 	}
 
 	return API_CMS_ERROR_OK;
@@ -828,14 +828,14 @@ int32_t adi_ad9081_hal_calc_tx_nco_ftw(adi_ad9081_device_t *device,
 	AD9081_INVALID_PARAM_RETURN(dac_freq == 0);
 
 	if (nco_shift >= 0) {
-		adi_ad9081_hal_mult_128(281474976710656ull, nco_shift, &hi,
+		adi_ad9081_hal_mult_128(UINT64_C(281474976710656), nco_shift, &hi,
 					&lo);
 		adi_ad9081_hal_div_128(hi, lo, 0, dac_freq, &hi, ftw);
 	} else {
-		adi_ad9081_hal_mult_128(281474976710656ull, -nco_shift, &hi,
+		adi_ad9081_hal_mult_128(UINT64_C(281474976710656), -nco_shift, &hi,
 					&lo);
 		adi_ad9081_hal_div_128(hi, lo, 0, dac_freq, &hi, ftw);
-		*ftw = 281474976710656ull - *ftw;
+		*ftw = UINT64_C(281474976710656) - *ftw;
 	}
 
 	return API_CMS_ERROR_OK;
@@ -851,12 +851,12 @@ int32_t adi_ad9081_hal_calc_tx_nco_ftw32(adi_ad9081_device_t *device,
 	AD9081_INVALID_PARAM_RETURN(dac_freq == 0);
 
 	if (nco_shift >= 0) {
-		adi_ad9081_hal_mult_128(4294967296ull, nco_shift, &hi, &lo);
+		adi_ad9081_hal_mult_128(UINT64_C(4294967296), nco_shift, &hi, &lo);
 		adi_ad9081_hal_div_128(hi, lo, 0, dac_freq, &hi, ftw);
 	} else {
-		adi_ad9081_hal_mult_128(4294967296ull, -nco_shift, &hi, &lo);
+		adi_ad9081_hal_mult_128(UINT64_C(4294967296), -nco_shift, &hi, &lo);
 		adi_ad9081_hal_div_128(hi, lo, 0, dac_freq, &hi, ftw);
-		*ftw = 4294967296ull - *ftw;
+		*ftw = UINT64_C(4294967296) - *ftw;
 	}
 
 	return API_CMS_ERROR_OK;

@@ -98,7 +98,7 @@ int32_t dds_set_frequency(dac_core *core, uint32_t chan, uint32_t freq)
 
 	dac_write(core, DAC_REG_SYNC_CONTROL, 0);
 	dac_read(core, DAC_REG_DDS_INIT_INCR(chan), &reg);
-	val64 = (uint64_t) freq * 0xFFFFULL;
+	val64 = (uint64_t) freq * UINT64_C(0xFFFF);
 	val64 = val64 / dac_clk;
 	reg = (reg & ~DAC_DDS_INCR(~0)) | DAC_DDS_INCR(val64) | 1;
 	dac_write(core, DAC_REG_DDS_INIT_INCR(chan), reg);
@@ -120,7 +120,7 @@ int32_t dds_set_phase(dac_core *core, uint32_t chan, uint32_t phase)
 
 	dac_write(core, DAC_REG_SYNC_CONTROL, 0);
 	dac_read(core, DAC_REG_DDS_INIT_INCR(chan), &reg);
-	val64 = (uint64_t) phase * 0x10000ULL + (360000 / 2);
+	val64 = (uint64_t) phase * UINT64_C(0x10000) + (360000 / 2);
 	val64 = val64 / 360000;
 	reg = (reg & ~DAC_DDS_INIT(~0)) | DAC_DDS_INIT(val64);
 	dac_write(core, DAC_REG_DDS_INIT_INCR(chan), reg);

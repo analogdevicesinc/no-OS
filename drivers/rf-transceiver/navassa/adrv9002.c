@@ -762,17 +762,17 @@ void adrv9002_en_delays_arm_to_ns(const struct adrv9002_rf_phy *phy,
 	uint32_t arm_clk = adrv9002_get_arm_clk(phy);
 
 	d_ns->fallToOffDelay = NO_OS_DIV_ROUND_CLOSEST_ULL(d->fallToOffDelay *
-			       1000000000ULL,
+			       UINT64_C(1000000000),
 			       arm_clk);
-	d_ns->guardDelay = NO_OS_DIV_ROUND_CLOSEST_ULL(d->guardDelay * 1000000000ULL,
+	d_ns->guardDelay = NO_OS_DIV_ROUND_CLOSEST_ULL(d->guardDelay * UINT64_C(1000000000),
 			   arm_clk);
-	d_ns->holdDelay = NO_OS_DIV_ROUND_CLOSEST_ULL(d->holdDelay * 1000000000ULL,
+	d_ns->holdDelay = NO_OS_DIV_ROUND_CLOSEST_ULL(d->holdDelay * UINT64_C(1000000000),
 			  arm_clk);
 	d_ns->riseToAnalogOnDelay = NO_OS_DIV_ROUND_CLOSEST_ULL(d->riseToAnalogOnDelay *
-				    1000000000ULL,
+				    UINT64_C(1000000000),
 				    arm_clk);
 	d_ns->riseToOnDelay = NO_OS_DIV_ROUND_CLOSEST_ULL(d->riseToOnDelay *
-			      1000000000ULL,
+			      UINT64_C(1000000000),
 			      arm_clk);
 }
 
@@ -827,9 +827,9 @@ static int adrv9002_radio_init(struct adrv9002_rf_phy *phy)
 			return adrv9002_dev_err(phy);
 
 		if (c->port == ADI_RX)
-			carrier.carrierFrequency_Hz = 2400000000ULL;
+			carrier.carrierFrequency_Hz = UINT64_C(2400000000);
 		else
-			carrier.carrierFrequency_Hz = 2450000000ULL;
+			carrier.carrierFrequency_Hz = UINT64_C(2450000000);
 
 		ret = adi_adrv9001_Radio_Carrier_Configure(phy->adrv9001, c->port, c->number,
 				&carrier);

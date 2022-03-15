@@ -118,8 +118,8 @@
 #define ADF4371_VCO_ALC_TOUT(x)		no_os_field_prep(ADF4371_VCO_ALC_TOUT_MSK, x)
 
 /* Specifications */
-#define ADF4371_MIN_VCO_FREQ		4000000000ULL /* 4000 MHz */
-#define ADF4371_MAX_VCO_FREQ		8000000000ULL /* 8000 MHz */
+#define ADF4371_MIN_VCO_FREQ		UINT64_C(4000000000) /* 4000 MHz */
+#define ADF4371_MAX_VCO_FREQ		UINT64_C(8000000000) /* 8000 MHz */
 #define ADF4371_MAX_OUT_RF8_FREQ	ADF4371_MAX_VCO_FREQ /* Hz */
 #define ADF4371_MIN_OUT_RF8_FREQ	(ADF4371_MIN_VCO_FREQ / 64) /* Hz */
 #define ADF4371_MAX_OUT_RF16_FREQ	(ADF4371_MAX_VCO_FREQ * 2) /* Hz */
@@ -131,7 +131,7 @@
 #define ADF4371_MAX_FREQ_REFIN		600000000UL /* Hz */
 
 /* MOD1 is a 24-bit primary modulus with fixed value of 2^25 */
-#define ADF4371_MODULUS1		33554432ULL
+#define ADF4371_MODULUS1		UINT64_C(33554432)
 /* MOD2 is the programmable, 14-bit auxiliary fractional modulus */
 #define ADF4371_MAX_MODULUS2		NO_OS_BIT(14)
 

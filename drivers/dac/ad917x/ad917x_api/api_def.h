@@ -23,7 +23,7 @@
 #define ADI_GET_BYTE(w, p) (uint8_t)(((w) >> (p)) & 0xFF)
 #define ALL -1
 
-#define U64MSB 0x8000000000000000ull
+#define U64MSB UINT64_C(0x8000000000000000)
 
 /**
  * \brief Platform dependent SPI access functions.

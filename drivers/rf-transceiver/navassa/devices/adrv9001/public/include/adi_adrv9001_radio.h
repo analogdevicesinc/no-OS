@@ -27,11 +27,11 @@ extern "C" {
 /**
  * \brief Minimum supported carrier frequency 
  */
-#define ADI_ADRV9001_CARRIER_FREQUENCY_MIN_HZ 25000000llu    /* 25 MHz */
+#define ADI_ADRV9001_CARRIER_FREQUENCY_MIN_HZ UINT64_C(25000000)    /* 25 MHz */
 /**
  * \brief Maximum supported carrier frequency
  */
-#define ADI_ADRV9001_CARRIER_FREQUENCY_MAX_HZ 6000000000llu  /* 6 GHz */
+#define ADI_ADRV9001_CARRIER_FREQUENCY_MAX_HZ UINT64_C(6000000000)  /* 6 GHz */
 /**
  * \brief Maximum supported intermediate frequency
  */

@@ -373,13 +373,13 @@ int32_t adi_ad9081_device_clk_pll_startup(adi_ad9081_device_t *device,
 #else
 		pfd_clk_hz = ref_clk_hz / ref_div;
 #endif
-		if (pfd_clk_hz > 750000000ULL)
+		if (pfd_clk_hz > UINT64_C(750000000))
 			continue; /* 25~750MHz */
 
 		for (pll_div = 1; pll_div <= 4; pll_div++) {
 			vco_clk_hz = dac_clk_hz * pll_div;
-			if ((vco_clk_hz < 5800000000ULL) ||
-			    (vco_clk_hz > 12000000000ULL))
+			if ((vco_clk_hz < UINT64_C(5800000000)) ||
+			    (vco_clk_hz > UINT64_C(12000000000)))
 				continue; /* 5.8~12GHz */
 			for (i = 0; i <= 3; i++) {
 				n_div = n_div_vals[i];
@@ -439,45 +439,45 @@ int32_t adi_ad9081_device_clk_up_div_set(adi_ad9081_device_t *device,
 	AD9081_LOG_FUNC();
 
 	/* setup uP clock div */
-	in_div_spi = (dac_clk_hz > 6000000000ULL) ? 1 : 0;
-	in_clk = dac_clk_hz >> ((dac_clk_hz > 6000000000ULL) ? 3 : 2);
+	in_div_spi = (dac_clk_hz > UINT64_C(6000000000)) ? 1 : 0;
+	in_clk = dac_clk_hz >> ((dac_clk_hz > UINT64_C(6000000000)) ? 3 : 2);
 #ifdef __KERNEL__
-	cdiv = (uint8_t)div64_u64((in_clk + 500000000ULL - 1),
-				  500000000ULL); /* ceil(in_clk / 500e6) */
+	cdiv = (uint8_t)div64_u64((in_clk + UINT64_C(500000000) - 1),
+				  UINT64_C(500000000)); /* ceil(in_clk / 500e6) */
 #else
-	cdiv = (uint8_t)((in_clk + 500000000ULL - 1) /
-			 500000000ULL); /* ceil(in_clk / 500e6) */
+	cdiv = (uint8_t)((in_clk + UINT64_C(500000000) - 1) /
+			 UINT64_C(500000000)); /* ceil(in_clk / 500e6) */
 #endif
 	cdiv = cdiv > 31 ? 31 : cdiv;
 	cdiv = cdiv < 2 ? 2 : cdiv;
 #ifdef __KERNEL__
 	cclk = no_os_div_u64(in_clk, cdiv);
-	sdiv = (uint8_t)div64_u64((cclk + 250000000ULL - 1),
-				  250000000ULL); /* ceil(cclk / 250e6) */
+	sdiv = (uint8_t)div64_u64((cclk + UINT64_C(250000000) - 1),
+				  UINT64_C(250000000)); /* ceil(cclk / 250e6) */
 #else
 	cclk = (in_clk / cdiv);
-	sdiv = (uint8_t)((cclk + 250000000ULL - 1) /
-			 250000000ULL); /* ceil(cclk / 250e6) */
+	sdiv = (uint8_t)((cclk + UINT64_C(250000000) - 1) /
+			 UINT64_C(250000000)); /* ceil(cclk / 250e6) */
 #endif
 	sdiv = sdiv > 4 ? 4 : sdiv;
 	sdiv = sdiv < 2 ? 2 : sdiv;
 #ifdef __KERNEL__
 	sclk = no_os_div_u64(cclk, sdiv);
-	pdiv = (uint8_t)div64_u64((sclk + 125000000ULL - 1),
-				  125000000ULL); /* ceil(sclk / 125e6) */
+	pdiv = (uint8_t)div64_u64((sclk + UINT64_C(125000000) - 1),
+				  UINT64_C(125000000)); /* ceil(sclk / 125e6) */
 #else
 	sclk = (cclk / sdiv);
-	pdiv = (uint8_t)((sclk + 125000000ULL - 1) /
-			 125000000ULL); /* ceil(sclk / 125e6) */
+	pdiv = (uint8_t)((sclk + UINT64_C(125000000) - 1) /
+			 UINT64_C(125000000)); /* ceil(sclk / 125e6) */
 #endif
 	pdiv = pdiv > 4 ? 4 : pdiv;
 	pdiv = pdiv < 2 ? 2 : pdiv;
 #ifdef __KERNEL__
-	mdiv = (uint8_t)div64_u64(((in_clk >> 1) + 50000000ULL - 1),
-				  50000000ULL); /* ceil((in_clk / 2) / 50e6) */
+	mdiv = (uint8_t)div64_u64(((in_clk >> 1) + UINT64_C(50000000) - 1),
+				  UINT64_C(50000000)); /* ceil((in_clk / 2) / 50e6) */
 #else
-	mdiv = (uint8_t)(((in_clk >> 1) + 50000000ULL - 1) /
-			 50000000ULL); /* ceil((in_clk / 2) / 50e6) */
+	mdiv = (uint8_t)(((in_clk >> 1) + UINT64_C(50000000) - 1) /
+			 UINT64_C(50000000)); /* ceil((in_clk / 2) / 50e6) */
 #endif
 	mdiv = mdiv < 1 ? 1 : mdiv;
 	err = adi_ad9081_hal_bf_set(device, REG_SPI_ENABLE_DAC_ADDR,

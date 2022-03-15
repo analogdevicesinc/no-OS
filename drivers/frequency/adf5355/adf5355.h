@@ -132,26 +132,26 @@
 #define ADF5356_REG13_FRAC2_MSB(x)		        (((x) & 0x3FFF) << 18)
 
 /* Specifications */
-#define ADF5355_MIN_VCO_FREQ		            3400000000ULL /* Hz */
-#define ADF5355_MAX_VCO_FREQ		            6800000000ULL /* Hz */
+#define ADF5355_MIN_VCO_FREQ		            UINT64_C(3400000000) /* Hz */
+#define ADF5355_MAX_VCO_FREQ		            UINT64_C(6800000000) /* Hz */
 #define ADF5355_MAX_OUT_FREQ		            ADF5355_MAX_VCO_FREQ /* Hz */
 #define ADF5355_MIN_OUT_FREQ		            (ADF5355_MIN_VCO_FREQ / 64) /* Hz */
 #define ADF5355_MAX_OUTB_FREQ		            (ADF5355_MAX_VCO_FREQ * 2) /* Hz */
 #define ADF5355_MIN_OUTB_FREQ		            (ADF5355_MIN_VCO_FREQ * 2) /* Hz */
 
-#define ADF4355_MIN_VCO_FREQ		            3400000000ULL /* Hz */
-#define ADF4355_MAX_VCO_FREQ		            6800000000ULL /* Hz */
+#define ADF4355_MIN_VCO_FREQ		            UINT64_C(3400000000) /* Hz */
+#define ADF4355_MAX_VCO_FREQ		            UINT64_C(6800000000) /* Hz */
 #define ADF4355_MAX_OUT_FREQ		            ADF4355_MAX_VCO_FREQ /* Hz */
 #define ADF4355_MIN_OUT_FREQ		            (ADF4355_MIN_VCO_FREQ / 64) /* Hz */
 
-#define ADF4355_3_MIN_VCO_FREQ		            3300000000ULL /* Hz */
-#define ADF4355_3_MAX_VCO_FREQ		            6600000000ULL /* Hz */
+#define ADF4355_3_MIN_VCO_FREQ		            UINT64_C(3300000000) /* Hz */
+#define ADF4355_3_MAX_VCO_FREQ		            UINT64_C(6600000000) /* Hz */
 #define ADF4355_3_MAX_OUT_FREQ		            ADF4355_3_MAX_VCO_FREQ /* Hz */
 #define ADF4355_3_MIN_OUT_FREQ		            (ADF4355_3_MIN_VCO_FREQ / 64) /* Hz */
 
-#define ADF4355_2_MIN_VCO_FREQ		            3400000000ULL /* Hz */
-#define ADF4355_2_MAX_VCO_FREQ		            6800000000ULL /* Hz */
-#define ADF4355_2_MAX_OUT_FREQ		            4400000000ULL /* Hz */
+#define ADF4355_2_MIN_VCO_FREQ		            UINT64_C(3400000000) /* Hz */
+#define ADF4355_2_MAX_VCO_FREQ		            UINT64_C(6800000000) /* Hz */
+#define ADF4355_2_MAX_OUT_FREQ		            UINT64_C(4400000000) /* Hz */
 #define ADF4355_2_MIN_OUT_FREQ		            (ADF4355_2_MIN_VCO_FREQ / 64) /* Hz */
 
 #define ADF5355_MAX_FREQ_PFD		            75000000UL /* Hz */
@@ -160,7 +160,7 @@
 #define ADF5356_MAX_MODULUS2		            268435456
 #define ADF5355_MAX_R_CNT		                1023
 
-#define ADF5355_MODULUS1			            16777216ULL
+#define ADF5355_MODULUS1			            UINT64_C(16777216)
 #define ADF5355_MIN_INT_PRESCALER_89	        75
 
 #define ADF5355_REG_NUM                         14

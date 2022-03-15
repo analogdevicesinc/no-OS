@@ -131,8 +131,8 @@ ADI_ERR AD9528_initDeviceDataStruct(ad9528Device_t *device, uint32_t vcxoFrequen
     uint8_t validPll2DivSetting = 0;
     uint64_t chDivU64 = 0;
 
-    static const uint64_t PLL2_MIN_VCO_FREQ_HZ = 3450000000ULL;
-    static const uint64_t PLL2_MAX_VCO_FREQ_HZ = 4025000000ULL;
+    static const uint64_t PLL2_MIN_VCO_FREQ_HZ = UINT64_C(3450000000);
+    static const uint64_t PLL2_MAX_VCO_FREQ_HZ = UINT64_C(4025000000);
     /*******************************************************************
      * PLL1 Settings
      *******************************************************************

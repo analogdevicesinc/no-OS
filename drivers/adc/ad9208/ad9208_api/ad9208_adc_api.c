@@ -51,7 +51,7 @@ static const adi_dec_filt_data ADI_DEC_FILTER_COMPLEX_TBL[] = {
 #define LOWER_32(A) ((A) & (uint32_t) 0xFFFFFFFF)
 #define MHZ_TO_HZ(x) (((uint64_t)x)*1000*1000)
 #define MS_TO_US(x) ((x)*1000)
-#define U64MSB 0x8000000000000000ull
+#define U64MSB UINT64_C(0x8000000000000000)
 
 typedef struct {
 	uint8_t dcm;

@@ -393,7 +393,7 @@ int32_t axi_dac_dds_set_frequency(struct axi_dac *dac,
 
 	axi_dac_write(dac, AXI_DAC_REG_SYNC_CONTROL, 0);
 	axi_dac_read(dac, AXI_DAC_REG_DDS_INIT_INCR(chan), &reg);
-	val64 = (uint64_t) freq_hz * 0xFFFFULL;
+	val64 = (uint64_t) freq_hz * UINT64_C(0xFFFF);
 	val64 = val64 / dac->clock_hz;
 	reg = (reg & ~AXI_DAC_DDS_INCR(~0)) | AXI_DAC_DDS_INCR(val64) | 1;
 	axi_dac_write(dac, AXI_DAC_REG_DDS_INIT_INCR(chan), reg);
@@ -437,7 +437,7 @@ int32_t axi_dac_dds_set_phase(struct axi_dac *dac,
 
 	axi_dac_write(dac, AXI_DAC_REG_SYNC_CONTROL, 0);
 	axi_dac_read(dac, AXI_DAC_REG_DDS_INIT_INCR(chan), &reg);
-	val64 = (uint64_t) phase * 0x10000ULL + (360000 / 2);
+	val64 = (uint64_t) phase * UINT64_C(0x10000) + (360000 / 2);
 	val64 = val64 / 360000;
 	reg = (reg & ~AXI_DAC_DDS_INIT(~0)) | AXI_DAC_DDS_INIT(val64);
 	axi_dac_write(dac, AXI_DAC_REG_DDS_INIT_INCR(chan), reg);
@@ -462,7 +462,7 @@ int32_t axi_dac_dds_get_phase(struct axi_dac *dac,
 	axi_dac_write(dac, AXI_DAC_REG_SYNC_CONTROL, AXI_DAC_SYNC);
 	reg = (reg & AXI_DAC_DDS_INIT(~0));
 	reg = AXI_DAC_TO_DDS_INIT(reg);
-	val64 = reg * 360000ULL + (0x10000 / 2);
+	val64 = reg * UINT64_C(360000) + (0x10000 / 2);
 	no_os_do_div(&val64, 0x10000);
 	*phase = val64;
 
@@ -577,7 +577,7 @@ void axi_dac_dds_from_signed_mag_fmt(uint32_t val,
 
 	val &= ~0xC000;
 
-	val64 = val * 1000000ULL + (0x4000 / 2);
+	val64 = val * UINT64_C(1000000) + (0x4000 / 2);
 	no_os_do_div(&val64, 0x4000);
 
 	if (*r_val == 0)

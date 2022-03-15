@@ -343,7 +343,7 @@ static int32_t ad6676_set_clk_synth(struct ad6676_dev *dev,
 		reg_val = 0x12;
 	} else {
 		reg_val = (f_pfd / MHz) * (freq / MHz) * (freq / MHz);
-		val64 = 13300000000ULL + reg_val / 2;
+		val64 = UINT64_C(13300000000) + reg_val / 2;
 		no_os_do_div(&val64, reg_val);
 		reg_val = no_os_min_t(uint64_t, 64U, val64 - 1);
 	}
