@@ -481,7 +481,7 @@ static int get_frequency_available(void *device, char *buf, uint32_t len,
 				   const struct iio_ch_info *channel,
 				   intptr_t priv)
 {
-	return snprintf(buf, len, "[%llu 1 %llu]",
+	return snprintf(buf, len, "[%"PRIu64" 1 %"PRIu64"]",
 			AD9363A_MIN_CARRIER_FREQ_HZ,
 			AD9363A_MAX_CARRIER_FREQ_HZ);
 }
