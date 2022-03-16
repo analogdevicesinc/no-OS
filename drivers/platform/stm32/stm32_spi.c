@@ -169,7 +169,7 @@ int32_t stm32_spi_init(struct no_os_spi_desc **desc,
 		goto error;
 	};
 	sdesc->hspi.Instance = base;
-	sdesc->hspi.Init.Mode = NO_OS_SPI_MODE_MASTER;
+	sdesc->hspi.Init.Mode = SPI_MODE_MASTER;
 	sdesc->hspi.Init.Direction = SPI_DIRECTION_2LINES;
 	sdesc->hspi.Init.DataSize = SPI_DATASIZE_8BIT;
 	sdesc->hspi.Init.CLKPolarity = param->mode & NO_OS_SPI_CPOL ?
