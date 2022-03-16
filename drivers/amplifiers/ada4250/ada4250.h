@@ -189,7 +189,7 @@ struct ada4250_init_param {
 	struct no_os_gpio_init_param	*gpio_bufen_param;
 	struct no_os_gpio_init_param	*gpio_slp;
 	struct no_os_gpio_init_param	*gpio_shtdwn;
-	/* AVDD value in Volts */
+	/* AVDD value in milliVolts */
 	int32_t avdd_v;
 	/* Reference Buffer Enable */
 	bool refbuf_en;
@@ -200,7 +200,7 @@ struct ada4250_init_param {
 	/* Bandwidth Value */
 	enum ada4250_bandwidth bandwidth;
 	/* Offset Calibration Value */
-	int32_t offset_uv;
+	int32_t offset_nv;
 };
 
 /**
@@ -220,7 +220,7 @@ struct ada4250_dev {
 	struct no_os_gpio_desc	*gpio_bufen;
 	struct no_os_gpio_desc	*gpio_slp;
 	struct no_os_gpio_desc	*gpio_shtdwn;
-	/* AVDD value in Volts */
+	/* AVDD value in milliVolts */
 	int32_t avdd_v;
 	/* Reference Buffer Enable */
 	bool refbuf_en;
@@ -234,8 +234,8 @@ struct ada4250_dev {
 	enum ada4250_bandwidth bandwidth;
 	/* Power Mode */
 	enum ada4250_power_mode power_mode;
-	/* Offset Calibration Value in uV*/
-	int32_t offset_uv;
+	/* Offset Calibration Value in nV*/
+	int32_t offset_nv;
 };
 
 /******************************************************************************/
@@ -270,7 +270,7 @@ int32_t ada4250_set_bias(struct ada4250_dev *dev, enum ada4250_bias bias);
 int32_t ada4250_set_gain(struct ada4250_dev *dev, enum ada4250_gain gain);
 
 /* Set offset value */
-int32_t ada4250_set_offset(struct ada4250_dev *dev, int32_t offset);
+int32_t ada4250_set_offset(struct ada4250_dev *dev, int64_t offset);
 
 /* Set bandwidth mode */
 int32_t ada4250_set_bandwidth(struct ada4250_dev *dev,

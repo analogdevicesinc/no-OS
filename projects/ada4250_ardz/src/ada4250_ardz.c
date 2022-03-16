@@ -85,8 +85,8 @@ int main()
 		.refbuf_en = ADA4250_BUF_DISABLE,
 		.bias = ADA4250_BIAS_DISABLE,
 		.gain = ADA4250_GAIN_8,
-		.avdd_v = 5,
-		.offset_uv = 0,
+		.avdd_v = 5000,
+		.offset_nv = 0,
 	};
 
 	ret = ada4250_init(&ada4250_dev, &ada4250_param);
