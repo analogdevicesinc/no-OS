@@ -99,13 +99,13 @@ int32_t no_os_uart_init(struct no_os_uart_desc **desc,
 		ret = -EINVAL;
 		goto error;
 	};
-	sud->huart.Init.StopBits = param->stop == NO_OS_UART_STOP_1_BIT ?
-				   UART_STOPBITS_1 :
-				   UART_STOPBITS_2;
-	sud->huart.Init.Mode = suip->mode;
-	sud->huart.Init.HwFlowCtl = suip->hw_flow_ctl;
-	sud->huart.Init.OverSampling = suip->over_sampling;
-	ret = HAL_UART_Init(&sud->huart);
+	sud->huart->Init.StopBits = param->stop == NO_OS_UART_STOP_1_BIT ?
+				    UART_STOPBITS_1 :
+				    UART_STOPBITS_2;
+	sud->huart->Init.Mode = suip->huart->Init.Mode;
+	sud->huart->Init.HwFlowCtl = suip->huart->Init.HwFlowCtl;
+	sud->huart->Init.OverSampling = suip->huart->Init.OverSampling;
+	ret = HAL_UART_Init(sud->huart);
 	if (ret != HAL_OK) {
 		ret = -EIO;
 		goto error;
