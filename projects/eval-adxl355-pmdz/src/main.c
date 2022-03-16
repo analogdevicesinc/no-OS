@@ -17,14 +17,15 @@
 #define SPI_CS			15
 #define SPI_CS_PORT		GPIOA
 
+UART_HandleTypeDef huart5;
+
 int main ()
 {
 	struct no_os_uart_desc *uart;
 	struct adxl355_dev *adxl355;
 
 	int ret;
-	HAL_Init();
-	SystemClock_Config();
+	stm32_init();
 
 	struct stm32_spi_init_param xsip  = {
 		.chip_select_port = SPI_CS_PORT,
