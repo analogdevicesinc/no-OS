@@ -131,9 +131,9 @@ uint16_t adxrs453_get_register_value(struct adxrs453_dev *dev,
 	data_buffer[7] = data_buffer[3];
 	no_os_spi_write_and_read(dev->spi_desc, data_buffer, 4);
 	no_os_spi_write_and_read(dev->spi_desc, &data_buffer[4], 4);
-	register_value = ((uint16_t)data_buffer[1] << 11) |
-			 ((uint16_t)data_buffer[2] << 3) |
-			 (data_buffer[3] >> 5);
+	register_value = ((uint16_t)data_buffer[5] << 11) |
+			 ((uint16_t)data_buffer[6] << 3) |
+			 (data_buffer[7] >> 5);
 
 	return register_value;
 }
