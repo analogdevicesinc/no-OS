@@ -139,6 +139,11 @@ int main()
 		(void (*)(uint32_t, uint32_t))Xil_DCacheInvalidateRange,
 	};
 
+	/* Enable the instruction cache. */
+	Xil_ICacheEnable();
+	/* Enable the data cache. */
+	Xil_DCacheEnable();
+
 	ret = ad463x_init(&dev, &ad463x_init_param);
 	if (ret != 0) {
 		pr_err("AD463x Initialization failed!");
@@ -213,6 +218,11 @@ int main()
 	ad463x_remove(dev);
 
 	pr_info("Done.\n");
+
+	/* Disable the instruction cache. */
+	Xil_DCacheDisable();
+	/* Disable the data cache. */
+	Xil_ICacheDisable();
 
 	return 0;
 }

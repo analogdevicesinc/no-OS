@@ -247,6 +247,13 @@ int main(void)
 	hal[TALISE_B].spi_adrv_csn = ADRV_B_CS;
 #endif
 
+#ifndef ALTERA_PLATFORM
+	/* Enable the instruction cache. */
+	Xil_ICacheEnable();
+	/* Enable the data cache. */
+	Xil_DCacheEnable();
+#endif
+
 	printf("Hello\n");
 
 	/**********************************************************/
@@ -391,5 +398,13 @@ error_1:
 	clocking_deinit();
 error_0:
 	printf("Bye\n");
+
+#ifndef ALTERA_PLATFORM
+	/* Disable the instruction cache. */
+	Xil_ICacheDisable();
+	/* Disable the data cache. */
+	Xil_DCacheDisable();
+#endif
+
 	return 0;
 }

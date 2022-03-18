@@ -355,6 +355,11 @@ int main(void)
 	ad6676_param.n_lanes = 2;
 	ad6676_param.frames_per_multiframe = 16;
 
+	/* Enable the instruction cache. */
+	Xil_ICacheEnable();
+	/* Enable the data cache. */
+	Xil_DCacheEnable();
+
 	// receiver DMA configuration
 	ret = no_os_gpio_get(&gpio_sysref, &gpio_sysref_param);
 	if(ret != 0)
@@ -462,6 +467,11 @@ int main(void)
 #endif
 
 	pr_info("Done.");
+
+	/* Disable the instruction cache. */
+	Xil_DCacheDisable();
+	/* Disable the data cache. */
+	Xil_ICacheDisable();
 
 	return 0;
 }

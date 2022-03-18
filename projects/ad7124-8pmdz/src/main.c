@@ -56,6 +56,9 @@
 #include <sys/platform.h>
 #include "adi_initialize.h"
 #include <drivers/pwr/adi_pwr.h>
+#ifdef XILINX_PLATFORM
+#include <xil_cache.h>
+#endif
 
 #define MAX_SIZE_BASE_ADDR		1024
 
@@ -85,6 +88,13 @@ int main(void)
 
 	/* IRQ instance. */
 	struct no_os_irq_ctrl_desc *irq_desc;
+
+#ifdef XILINX_PLATFORM
+	/* Enable the instruction cache. */
+	Xil_ICacheEnable();
+	/* Enable the data cache. */
+	Xil_DCacheEnable();
+#endif //XILINX_PLATFORM
 
 	status = platform_init();
 	if (NO_OS_IS_ERR_VALUE(status))

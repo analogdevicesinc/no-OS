@@ -196,6 +196,11 @@ int main()
 		}
 	};
 
+	/* Enable the instruction cache. */
+	Xil_ICacheEnable();
+	/* Enable the data cache. */
+	Xil_DCacheEnable();
+
 #ifndef IIO_SUPPORT
 	struct ad3552r_desc *dac;
 
@@ -249,6 +254,11 @@ int main()
 #endif
 
 	pr_debug("Bye\n");
+
+	/* Disable the instruction cache. */
+	Xil_DCacheDisable();
+	/* Disable the data cache. */
+	Xil_ICacheDisable();
 
 	return 0;
 }

@@ -619,7 +619,7 @@ static int fmcdaq2_iio_init(struct fmcdaq2_dev *dev,
 
 #ifndef ALTERA_PLATFORM
 	Xil_DCacheDisable();
-	Xil_ICacheDisable();
+	Xil_ICacheEnable();
 #endif
 	dev_init->ad9144_dmac_param = (struct axi_dmac_init ) {
 		.name = "ad9144_dmac",

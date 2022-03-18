@@ -102,6 +102,13 @@ int main(void)
 	};
 	struct ad9265_dev *ad9265_device;
 
+#ifdef XILINX_PLATFORM
+	/* Enable the instruction cache. */
+	Xil_ICacheEnable();
+	/* Enable the data cache. */
+	Xil_DCacheEnable();
+#endif /* XILINX_PLATFORM */
+
 	status = axi_adc_init(&ad9265_core,  &ad9265_core_param);
 	if (status != 0) {
 		pr_err("axi_adc_init() error: %s\n", ad9265_core->name);
@@ -171,6 +178,13 @@ int main(void)
 #endif
 
 	pr_info("Done\n");
+
+#ifdef XILINX_PLATFORM
+	/* Disable the instruction cache. */
+	Xil_ICacheDisable();
+	/* Disable the data cache. */
+	Xil_DCacheDisable();
+#endif /* XILINX_PLATFORM */
 
 	return 0;
 }

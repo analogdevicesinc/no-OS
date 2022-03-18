@@ -195,6 +195,13 @@ int main(void)
 	struct axi_dac *tx_dac;
 	int32_t status;
 
+#ifdef XILINX_PLATFORM
+	/* Enable the instruction cache. */
+	Xil_ICacheEnable();
+	/* Enable the data cache. */
+	Xil_DCacheEnable();
+#endif /* XILINX_PLATFORM */
+
 	status = hmc7044_init(&hmc7044_device, &hmc7044_param);
 	if (status != 0) {
 		printf("hmc7044_init() error: %"PRIi32"\n", status);
@@ -344,6 +351,13 @@ error_2:
 	axi_jesd204_tx_remove(tx_jesd);
 error_1:
 	hmc7044_remove(hmc7044_device);
+
+#ifdef XILINX_PLATFORM
+	/* Disable the instruction cache. */
+	Xil_ICacheDisable();
+	/* Disable the data cache. */
+	Xil_DCacheDisable();
+#endif /* XILINX_PLATFORM */
 
 	return 0;
 }

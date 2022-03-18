@@ -119,7 +119,7 @@ int main()
 	uint8_t i;
 
 	Xil_DCacheDisable();
-	Xil_ICacheDisable();
+	Xil_ICacheEnable();
 
 	// SPI configuration
 	struct no_os_spi_init_param ad9467_spi_param = {
@@ -302,7 +302,7 @@ int main()
 	ad9517_remove(ad9517_device);
 
 	Xil_DCacheEnable();
-	Xil_ICacheEnable();
+	Xil_ICacheDisable();
 
 	return 0;
 }

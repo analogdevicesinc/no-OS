@@ -440,6 +440,13 @@ int main(void)
 	// adc settings
 	ad9680_param.lane_rate_kbps = 12330000;
 
+#ifndef ALTERA_PLATFORM
+	/* Enable the instruction cache. */
+	Xil_ICacheEnable();
+	/* Enable the data cache. */
+	Xil_DCacheEnable();
+#endif
+
 	/* set GPIOs */
 	no_os_gpio_get(&dac_txen,  &dac_txen_param);
 	no_os_gpio_get(&adc_pd,    &adc_pd_param);
@@ -686,6 +693,13 @@ int main(void)
 	ad9680_remove(ad9680_device);
 	no_os_gpio_remove(dac_txen);
 	no_os_gpio_remove(adc_pd);
+
+#ifndef ALTERA_PLATFORM
+	/* Disable the instruction cache. */
+	Xil_ICacheDisable();
+	/* Disable the data cache. */
+	Xil_DCacheDisable();
+#endif
 
 	return(0);
 }

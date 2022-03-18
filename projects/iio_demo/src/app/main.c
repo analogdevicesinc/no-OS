@@ -51,7 +51,6 @@
 #ifdef XILINX_PLATFORM
 #include <xparameters.h>
 #include <xil_cache.h>
-#include <xil_cache.h>
 #endif // XILINX_PLATFORM
 
 #ifdef ADUCM_PLATFORM
@@ -144,6 +143,14 @@ int main(void)
 		.dev_global_attr = 3333,
 		.dev_ch_attr = {1111,1112,1113,1114,1115,1116,1117,1118,1119,1120,1121,1122,1123,1124,1125,1126}
 	};
+
+#ifdef XILINX_PLATFORM
+	/* Enable the instruction cache. */
+	Xil_ICacheEnable();
+	/* Enable the data cache. */
+	Xil_DCacheEnable();
+#endif //XILINX_PLATFORM
+
 	status = adc_demo_init(&adc_desc, &adc_init_par);
 	if (status != 0)
 		return status;

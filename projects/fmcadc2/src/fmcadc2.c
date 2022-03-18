@@ -154,6 +154,11 @@ int main(void)
 	ad9625_param.test_samples[2] = 0x777;
 	ad9625_param.test_samples[3] = 0x444;
 
+	/* Enable the instruction cache. */
+	Xil_ICacheEnable();
+	/* Enable the data cache. */
+	Xil_DCacheEnable();
+
 	// setup GPIOs
 	no_os_gpio_get(&gpio_sysref,  &gpio_sysref_param);
 	no_os_gpio_direction_output(gpio_sysref,  1);
@@ -249,6 +254,11 @@ int main(void)
 
 	ad9625_remove(ad9625_device);
 	no_os_gpio_remove(gpio_sysref);
+
+	/* Disable the instruction cache. */
+	Xil_ICacheDisable();
+	/* Disable the data cache. */
+	Xil_DCacheDisable();
 
 	return(0);
 }

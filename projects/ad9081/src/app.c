@@ -57,12 +57,12 @@
 #include "axi_dmac.h"
 #include "parameters.h"
 #include "app_config.h"
+#include "xil_cache.h"
 
 #ifdef IIO_SUPPORT
 #include "iio_app.h"
 #include "iio_axi_adc.h"
 #include "iio_axi_dac.h"
-#include "xil_cache.h"
 #endif
 
 #ifdef IIO_SUPPORT
@@ -217,6 +217,11 @@ int main(void)
 
 	printf("Hello\n");
 
+	/* Enable the instruction cache. */
+	Xil_ICacheEnable();
+	/* Enable the data cache. */
+	Xil_DCacheEnable();
+
 #ifdef QUAD_MXFE
 	struct xil_gpio_init_param  xil_gpio_param_2 = {
 #ifdef PLATFORM_MB
@@ -346,8 +351,18 @@ int main(void)
 
 	iio_app_run(devices, NO_OS_ARRAY_SIZE(devices));
 
+	/* Disable the instruction cache. */
+	Xil_DCacheDisable();
+	/* Disable the data cache. */
+	Xil_ICacheDisable();
+
 #else // IIO_SUPPORT
 	printf("Bye\n");
+
+	/* Disable the instruction cache. */
+	Xil_DCacheDisable();
+	/* Disable the data cache. */
+	Xil_ICacheDisable();
 
 	return 0;
 #endif

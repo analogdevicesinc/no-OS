@@ -52,6 +52,7 @@
 #include "no_os_print_log.h"
 #include <stdint.h>
 #include <inttypes.h>
+#include <xil_cache.h>
 
 static int32_t data_buf[BUF_LENGTH];
 
@@ -76,6 +77,11 @@ int main()
 		.platform_ops = &xil_spi_ops,
 		.extra = &spi_extra
 	};
+
+	/* Enable the instruction cache. */
+	Xil_ICacheEnable();
+	/* Enable the data cache. */
+	Xil_DCacheEnable();
 
 	/* IRQ instance. */
 	struct no_os_irq_ctrl_desc *irq_desc;
@@ -140,6 +146,11 @@ int main()
 
 	for(i=0; i<BUF_LENGTH; i++)
 		printf("DATA[%"PRIi32"] = %"PRIi32" \n", i, data_buf[i]);
+
+	/* Disable the instruction cache. */
+	Xil_DCacheDisable();
+	/* Disable the data cache. */
+	Xil_ICacheDisable();
 
 	return 0;
 }
