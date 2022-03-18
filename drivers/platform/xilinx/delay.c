@@ -58,7 +58,7 @@ void no_os_udelay(uint32_t usecs)
 #ifdef _XPARAMETERS_PS_H_
 	usleep(usecs);
 #else
-	usleep(usecs / 20);	// FIXME
+	usleep_MB(usecs);
 #endif
 }
 
@@ -72,6 +72,6 @@ void no_os_mdelay(uint32_t msecs)
 #ifdef _XPARAMETERS_PS_H_
 	usleep(msecs * 1000);
 #else
-	usleep(msecs * 50);	// FIXME
+	usleep_MB(msecs * 1000);
 #endif
 }
