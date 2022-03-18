@@ -130,7 +130,7 @@ struct iio_attribute adc_channel_attributes[] = {
 };
 
 struct iio_attribute iio_adc_global_attributes[] = {
-	ADC_DEMO_ATTR("adc_global_attr", ADC_GLOBAL_ATTR),
+	ADC_DEMO_ATTR("adc_global_attr_even_longer_name_extremely_long", ADC_GLOBAL_ATTR),
 	END_ATTRIBUTES_ARRAY,
 };
 

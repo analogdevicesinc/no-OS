@@ -73,7 +73,7 @@ struct iio_device_init {
 	 * If raw_buf is NULL and iio_device has buffer callback function set,
 	 * it will allocate memory for it when needed.
 	 */
-	int8_t *raw_buf;
+	char *raw_buf;
 	/* Length of raw_buf */
 	uint32_t raw_buf_len;
 };

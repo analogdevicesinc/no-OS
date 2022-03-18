@@ -46,6 +46,7 @@
 /******************************************************************************/
 
 #include <stdint.h>
+#include <stdbool.h>
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -74,7 +75,7 @@ struct no_os_circular_buffer {
 	/** Size of the buffer in bytes */
 	uint32_t	size;
 	/** Address of the buffer */
-	int8_t		*buff;
+	char		*buff;
 	/** Write pointer */
 	struct no_os_cb_ptr	write;
 	/** Read pointer */
@@ -87,8 +88,7 @@ struct no_os_circular_buffer {
 
 int32_t no_os_cb_init(struct no_os_circular_buffer **desc, uint32_t size);
 /* Configure cb structure with given parameters without memory allocation */
-int32_t no_os_cb_cfg(struct no_os_circular_buffer *desc, int8_t *buf,
-		     uint32_t size);
+int32_t no_os_cb_cfg(struct no_os_circular_buffer *desc, char *buf, uint32_t size);
 int32_t no_os_cb_remove(struct no_os_circular_buffer *desc);
 int32_t no_os_cb_size(struct no_os_circular_buffer *desc, uint32_t *size);
 

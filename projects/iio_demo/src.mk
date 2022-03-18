@@ -63,10 +63,18 @@ endif
 ifeq (stm32, $(PLATFORM))
 SRCS += $(PLATFORM_DRIVERS)/stm32_delay.c \
 	$(PLATFORM_DRIVERS)/stm32_uart.c \
-	$(PLATFORM_DRIVERS)/stm32_uart_stdio.c
+	$(PLATFORM_DRIVERS)/stm32_irq.c \
+	$(NO-OS)/util/circular_buffer.c \
+	$(NO-OS)/util/no_os_lf256fifo.c \
+	$(PLATFORM_DRIVERS)/stm32_uart_stdio.c \
+	$(DRIVERS)/api/no_os_irq.c
 INCS += $(PLATFORM_DRIVERS)/stm32_uart_stdio.h \
 	$(PLATFORM_DRIVERS)/stm32_uart.h \
-	$(PLATFORM_DRIVERS)/stm32_hal.h
+	$(PLATFORM_DRIVERS)/stm32_hal.h \
+	$(PLATFORM_DRIVERS)/stm32_irq.h \
+	$(INCLUDE)/no_os_irq.h \
+	$(INCLUDE)/no_os_circular_buffer.h \
+	$(INCLUDE)/no_os_lf256fifo.h
 endif
 
 ifeq (linux,$(PLATFORM))

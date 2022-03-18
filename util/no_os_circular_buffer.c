@@ -53,8 +53,7 @@
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
 
-int32_t no_os_cb_cfg(struct no_os_circular_buffer *desc, int8_t *buff,
-		     uint32_t size)
+int32_t no_os_cb_cfg(struct no_os_circular_buffer *desc, char *buff, uint32_t size)
 {
 	if (!desc)
 		return -EINVAL;

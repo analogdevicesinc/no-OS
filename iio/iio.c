@@ -132,7 +132,7 @@ struct iio_buffer_priv {
 	/** Buffer to read or write data. A reference will be found in buffer */
 	struct no_os_circular_buffer	cb;
 	/* Buffer provide by user. */
-	int8_t			*raw_buf;
+	char			*raw_buf;
 	/* Length of raw_buf */
 	uint32_t		raw_buf_len;
 	/* Set when this devices has buffer */
@@ -644,7 +644,7 @@ static int iio_read_attr(struct iiod_ctx *ctx, const char *device,
 	struct iio_channel *ch = NULL;
 	struct attr_fun_params params;
 	struct iio_attribute *attributes;
-	int8_t ch_out;
+	char ch_out;
 
 	dev = get_iio_device(ctx->instance, device);
 	if (!dev)
@@ -701,7 +701,7 @@ static int iio_write_attr(struct iiod_ctx *ctx, const char *device,
 	struct iio_attribute	*attributes;
 	struct iio_ch_info ch_info;
 	struct iio_channel *ch = NULL;
-	int8_t ch_out;
+	char ch_out;
 
 	dev = get_iio_device(ctx->instance, device);
 	if (!dev)
@@ -772,7 +772,7 @@ static int iio_open_dev(struct iiod_ctx *ctx, const char *device,
 	struct iio_dev_priv *dev;
 	uint32_t ch_mask;
 	int32_t ret;
-	int8_t *buf;
+	char *buf;
 
 	dev = get_iio_device(ctx->instance, device);
 	if (!dev)
@@ -802,7 +802,7 @@ static int iio_open_dev(struct iiod_ctx *ctx, const char *device,
 			free(dev->buffer.cb.buff);
 			dev->buffer.allocated = 0;
 		}
-		buf = (int8_t *)calloc(dev->buffer.public.size, sizeof(*buf));
+		buf = (char *)calloc(dev->buffer.public.size, sizeof(*buf));
 		if (!buf)
 			return -ENOMEM;
 		dev->buffer.allocated = 1;
