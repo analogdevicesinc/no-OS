@@ -147,6 +147,11 @@ int main(void)
 	};
 	struct axi_dac	*ad9739a_core;
 
+	/* Enable the instruction cache. */
+	Xil_ICacheEnable();
+	/* Enable the data cache. */
+	Xil_DCacheEnable();
+
 	status = adf4350_setup(&adf4350_device, default_adf4350_init_param);
 	if (status != 0) {
 		pr_info("adf4350_setup() failed!");
@@ -230,6 +235,11 @@ int main(void)
 	return iio_app_run(devices, NO_OS_ARRAY_SIZE(devices));
 #endif
 	pr_info("Done.\n");
+
+	/* Disable the instruction cache. */
+	Xil_ICacheDisable();
+	/* Disable the data cache. */
+	Xil_DCacheDisable();
 
 	return 0;
 }

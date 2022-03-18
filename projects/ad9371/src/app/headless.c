@@ -314,6 +314,13 @@ int main(void)
 
 	printf("Please wait...\n");
 
+#ifdef XILINX_PLATFORM
+	/* Enable the instruction cache. */
+	Xil_ICacheEnable();
+	/* Enable the instruction cache. */
+	Xil_DCacheEnable();
+#endif //XILINX_PLATFORM
+
 	ret = platform_init();
 	if (ret != 0) {
 		printf("error: platform_init() failed\n");
@@ -1071,6 +1078,13 @@ int main(void)
 
 	printf("Done\n");
 
+#ifdef XILINX_PLATFORM
+	/* Disable the instruction cache. */
+	Xil_ICacheDisable();
+	/* Disable the data cache. */
+	Xil_DCacheDisable();
+#endif //XILINX_PLATFORM
+
 	return 0;
 
 error_11:
@@ -1110,5 +1124,13 @@ error_2:
 error_1:
 	platform_remove();
 error_0:
+
+#ifdef XILINX_PLATFORM
+	/* Disable the instruction cache. */
+	Xil_ICacheDisable();
+	/* Disable the data cache. */
+	Xil_DCacheDisable();
+#endif //XILINX_PLATFORM
+
 	return -1;
 }

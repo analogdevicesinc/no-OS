@@ -60,6 +60,7 @@
 #include "spi_extra.h"
 #include "no_os_gpio.h"
 #include "gpio_extra.h"
+#include <xil_cache.h>
 
 #ifdef IIO_SUPPORT
 #include "iio_app.h"
@@ -425,6 +426,11 @@ int main(void)
 	int32_t status;
 	uint32_t size;
 
+	/* Enable the instruction cache. */
+	Xil_ICacheEnable();
+	/* Enable the data cache. */
+	Xil_DCacheEnable();
+
 	status = hmc7044_init(&hmc7044_device, &hmc7044_param);
 	if (status != 0) {
 		xil_printf("hmc7044_init() error: %"PRIi32"\n", status);
@@ -582,6 +588,11 @@ error_1:
 	hmc7044_remove(hmc7044_device);
 
 	xil_printf("Bye\n");
+
+	/* Disable the instruction cache. */
+	Xil_ICacheDisable();
+	/* Disable the data cache. */
+	Xil_DCacheDisable();
 
 	return 0;
 }

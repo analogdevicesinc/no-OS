@@ -185,6 +185,11 @@ int main(void)
 
 	ad9656_param.lane_rate_kbps = 2500000;
 
+	/* Enable the instruction cache. */
+	Xil_ICacheEnable();
+	/* Enable the data cache. */
+	Xil_DCacheEnable();
+
 	// setup clocks
 	if (ad9508_setup(&ad9508_device, &ad9508_param) != 0)
 		printf("The ad9508 chip could not be setup correctly!\n");
@@ -303,6 +308,11 @@ int main(void)
 	ad9508_remove(ad9508_device);
 	ad9553_remove(ad9553_device);
 	ad9656_remove(ad9656_device);
+
+	/* Disable the instruction cache. */
+	Xil_ICacheDisable();
+	/* Disable the data cache. */
+	Xil_DCacheDisable();
 
 	return(0);
 }

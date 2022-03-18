@@ -56,10 +56,11 @@
 #include "iio_ad9083.h"
 #include "iio_axi_adc.h"
 #include "iio_app.h"
+#endif /* IIO_SUPPORT */
+
 #ifdef XILINX_PLATFORM
 #include <xil_cache.h>
 #endif /* XILINX_PLATFORM */
-#endif /* IIO_SUPPORT */
 
 /**
  * @brief Main application.
@@ -108,6 +109,13 @@ int main(void)
 	};
 
 	pr_info("Hello\n");
+
+#ifdef XILINX_PLATFORM
+	/* Enable the instruction cache. */
+	Xil_ICacheEnable();
+	/* Enable the data cache. */
+	Xil_DCacheEnable();
+#endif /* XILINX_PLATFORM */
 
 	status = app_clocking_init(&app_clocking, &app_clocking_init_param);
 	if (status != 0) {
@@ -221,6 +229,13 @@ int main(void)
 	status = app_clocking_remove(app_clocking);
 	if (status != 0)
 		pr_err("error: %"PRIi32" app_clocking_remove()\n", status);
+
+#ifdef XILINX_PLATFORM
+	/* Disable the instruction cache. */
+	Xil_ICacheDisable();
+	/* Disable the data cache. */
+	Xil_DCacheDisable();
+#endif /* XILINX_PLATFORM */
 
 	return status;
 }

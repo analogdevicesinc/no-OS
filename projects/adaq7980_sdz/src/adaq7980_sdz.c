@@ -125,7 +125,7 @@ int main()
 	};
 
 	Xil_DCacheDisable();
-	Xil_ICacheDisable();
+	Xil_ICacheEnable();
 
 	ret = adaq7980_setup(&dev, &adaq7980_init_param);
 	if (ret < 0)
@@ -141,6 +141,8 @@ int main()
 	}
 
 	printf("Success\n\r");
+
+	Xil_ICacheDisable();
 
 	return 0;
 }

@@ -106,6 +106,11 @@ int main()
 	int32_t ret;
 	struct ad5758_dev *dev;
 
+	/* Enable the instruction cache. */
+	Xil_ICacheEnable();
+	/* Enable the data cache. */
+	Xil_DCacheEnable();
+
 	ret = ad5758_init(&dev, &ad5758_default_init_param);
 	if(ret)
 		return -1;
@@ -117,5 +122,11 @@ int main()
 		return -1;
 
 	printf("Success\n");
+
+	/* Disable the instruction cache. */
+	Xil_DCacheDisable();
+	/* Disable the data cache. */
+	Xil_ICacheDisable();
+
 	return 0;
 }

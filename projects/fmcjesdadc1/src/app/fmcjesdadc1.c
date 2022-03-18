@@ -352,6 +352,11 @@ int main(void)
 	ad9250_0_param.spi_init = ad9250_0_spi_param;
 	ad9250_1_param.spi_init = ad9250_1_spi_param;
 
+	/* Enable the instruction cache. */
+	Xil_ICacheEnable();
+	/* Enable the data cache. */
+	Xil_DCacheEnable();
+
 	// setup GPIOs
 	no_os_gpio_get(&gpio_sysref,  &gpio_sysref_param);
 	no_os_gpio_direction_output(gpio_sysref,  1);
@@ -581,6 +586,11 @@ int main(void)
 	ad9250_remove(ad9250_0_device);
 	ad9250_remove(ad9250_1_device);
 	no_os_gpio_remove(gpio_sysref);
+
+	/* Disable the instruction cache. */
+	Xil_ICacheDisable();
+	/* Disable the data cache. */
+	Xil_DCacheDisable();
 
 	return 0;
 }

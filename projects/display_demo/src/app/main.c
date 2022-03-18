@@ -119,6 +119,11 @@ int main(void)
 		.extra = &ssd1306_extra
 	};
 
+	/* Enable the instruction cache. */
+	Xil_ICacheEnable();
+	/* Enable the data cache. */
+	Xil_DCacheEnable();
+
 	/* Turn VBAT and VDD on, Zedboard platform specific */
 	ret = no_os_gpio_get(&vbat, &vbat_pin);
 	if (ret != 0)
@@ -147,6 +152,11 @@ int main(void)
 	ret = display_clear(dev);
 	if (ret != 0)
 		return -1;
+
+	/* Disable the instruction cache. */
+	Xil_ICacheDisable();
+	/* Disable the data cache. */
+	Xil_DCacheDisable();
 
 	return display_print_string(dev, msg, 0, 0);
 }

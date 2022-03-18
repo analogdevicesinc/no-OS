@@ -104,6 +104,12 @@ int main(void)
 	};
 	struct ad9434_dev *ad9434_device;
 
+	/* Instruction cache should be enabled for usleep functions to work. */
+	/* Enable the instruction cache. */
+	Xil_ICacheEnable();
+	/* Enable the data cache. */
+	Xil_DCacheEnable();
+
 	status = ad9434_setup(&ad9434_device, ad9434_param);
 	if (status != 0) {
 		pr_info("ad9434_setup() failed!\n");
@@ -183,6 +189,11 @@ int main(void)
 #endif
 
 	pr_info("Capture done.\n");
+
+	/* Disable the instruction cache. */
+	Xil_ICacheDisable();
+	/* Disable the data cache. */
+	Xil_DCacheDisable();
 
 	return 0;
 }

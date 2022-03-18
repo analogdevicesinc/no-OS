@@ -41,6 +41,7 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include <xparameters.h>
+#include <xil_cache.h>
 #include "no_os_spi.h"
 #include "spi_extra.h"
 #include "no_os_gpio.h"
@@ -115,6 +116,11 @@ int main(void)
 		.clkout_op = ADF4377_CLKOUT_420MV
 	};
 
+	/* Enable the instruction cache. */
+	Xil_ICacheEnable();
+	/* Enable the data cache. */
+	Xil_DCacheEnable();
+
 	ret = adf4377_init(&dev, &adf4377_param);
 	if (ret != 0) {
 		pr_err("ADF4377 Initialization failed!\n");
@@ -140,6 +146,11 @@ int main(void)
 	};
 	return iio_app_run(devices, NO_OS_ARRAY_SIZE(devices));
 #endif
+
+	/* Disable the instruction cache. */
+	Xil_ICacheDisable();
+	/* Disable the data cache. */
+	Xil_DCacheDisable();
 
 	return adf4377_remove(dev);
 }

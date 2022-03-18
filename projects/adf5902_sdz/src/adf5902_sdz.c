@@ -41,6 +41,7 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include <xparameters.h>
+#include <xil_cache.h>
 #include "no_os_spi.h"
 #include "spi_extra.h"
 #include "no_os_gpio.h"
@@ -191,6 +192,11 @@ int main(void)
 		.ramp_mode = ADF5902_CONTINUOUS_TRIANGULAR
 	};
 
+	/* Enable the instruction cache. */
+	Xil_ICacheEnable();
+	/* Enable the data cache. */
+	Xil_DCacheEnable();
+
 	ret = adf5902_init(&dev, &adf5902_param);
 	if (ret != 0) {
 		pr_err("ADF5902 Initialization failed!\n");
@@ -228,6 +234,11 @@ int main(void)
 	};
 	return iio_app_run(devices, NO_OS_ARRAY_SIZE(devices));
 #endif
+
+	/* Disable the instruction cache. */
+	Xil_ICacheDisable();
+	/* Disable the data cache. */
+	Xil_DCacheDisable();
 
 	ret = adf5902_remove(dev);
 
