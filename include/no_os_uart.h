@@ -44,6 +44,8 @@
 /******************************************************************************/
 
 #include <stdint.h>
+#include <stdbool.h>
+#include "no_os_lf256fifo.h"
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -101,6 +103,10 @@ enum no_os_uart_stop {
 struct no_os_uart_init_param {
 	/** UART Device ID */
 	uint8_t	device_id;
+	/** UART Interrupt ID */
+	uint32_t irq_id;
+	/** If set, the reception is interrupt driven. */
+	bool asynchronous_rx;
 	/** UART Baud Rate */
 	uint32_t        baud_rate;
 	/** UART number of data bits */
@@ -120,6 +126,10 @@ struct no_os_uart_init_param {
 struct no_os_uart_desc {
 	/** UART Device ID */
 	uint8_t 	device_id;
+	/** UART Interrupt ID */
+	uint32_t	irq_id;
+	/** Software FIFO. */
+	struct lf256fifo *rx_fifo;
 	/** UART Baud Rate */
 	uint32_t 	baud_rate;
 	/** Callback to be called when an operation is done (optional) */
