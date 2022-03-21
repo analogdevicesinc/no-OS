@@ -39,8 +39,21 @@
 #include <errno.h>
 #include <stdlib.h>
 #include "no_os_uart.h"
+#include "no_os_irq.h"
+#include "no_os_lf256fifo.h"
+#include "stm32_irq.h"
 #include "stm32_uart.h"
 #include "stm32_hal.h"
+
+static uint8_t c;
+uint32_t errors = 0;
+
+void uart_rx_callback(void *context)
+{
+	struct no_os_uart_desc *d = context;
+	lf256fifo_write(d->rx_fifo, c);
+	HAL_UART_Receive_IT(((struct stm32_uart_desc *)d->extra)->huart, &c, 1);
+}
 
 /**
  * @brief Initialize the UART communication peripheral.
@@ -54,6 +67,7 @@ int32_t no_os_uart_init(struct no_os_uart_desc **desc,
 	struct stm32_uart_init_param *suip;
 	struct stm32_uart_desc *sud;
 	struct no_os_uart_desc *descriptor;
+	struct no_os_irq_ctrl_desc *nvic;
 	int ret;
 
 	if (!desc || !param)
@@ -69,6 +83,7 @@ int32_t no_os_uart_init(struct no_os_uart_desc **desc,
 		goto error;
 	}
 
+	descriptor->irq_id = param->irq_id;
 	descriptor->extra = sud;
 	suip = param->extra;
 
@@ -115,7 +130,44 @@ int32_t no_os_uart_init(struct no_os_uart_desc **desc,
 
 	*desc = descriptor;
 
+	// nonblocking uart_read
+	if(param->asynchronous_rx) {
+		ret = lf256fifo_init(&descriptor->rx_fifo);
+		if (ret < 0)
+			goto error;
+
+		struct no_os_irq_init_param nvic_ip = {
+			.platform_ops = &stm32_irq_ops,
+			.extra = sud->huart,
+		};
+		ret = no_os_irq_ctrl_init(&nvic, &nvic_ip);
+		if (ret < 0)
+			goto error;
+
+		struct no_os_callback_desc uart_rx_cb = {
+			.callback = uart_rx_callback,
+			.ctx = descriptor,
+			.event = NO_OS_EVT_UART_RX_COMPLETE,
+			.peripheral = NO_OS_UART_IRQ,
+		};
+		ret = no_os_irq_register_callback(nvic, descriptor->irq_id, &uart_rx_cb);
+		if (ret < 0)
+			goto error_nvic;
+
+		ret = no_os_irq_enable(nvic, descriptor->irq_id);
+		if (ret < 0)
+			goto error_nvic;
+
+		HAL_UART_Receive_IT(sud->huart, (uint8_t *)&c, 1);
+		if (ret != HAL_OK) {
+			ret = -EIO;
+			goto error_nvic;
+		}
+	}
+
 	return 0;
+error_nvic:
+	no_os_irq_ctrl_remove(nvic);
 error:
 	free(descriptor);
 	free(sud);
@@ -191,6 +243,7 @@ int32_t no_os_uart_read(struct no_os_uart_desc *desc, uint8_t *data,
 			uint32_t bytes_number)
 {
 	struct stm32_uart_desc *sud;
+	uint32_t i = 0;
 	int32_t ret;
 
 	if (!desc || !desc->extra || !data)
@@ -201,19 +254,29 @@ int32_t no_os_uart_read(struct no_os_uart_desc *desc, uint8_t *data,
 
 	sud = desc->extra;
 
-	ret = HAL_UART_Receive(sud->huart, (uint8_t *)data, bytes_number,
-			       sud->timeout);
+	if (desc->rx_fifo) {
+		while(i < bytes_number) {
+			ret = lf256fifo_read(desc->rx_fifo, &data[i]);
+			if (ret < 0)
+				break;
+			i++;
+		}
+		return i;
+	} else {
+		ret = HAL_UART_Receive(sud->huart, (uint8_t *)data, bytes_number,
+				       sud->timeout);
 
-	switch (ret) {
-	case HAL_OK:
-		break;
-	case HAL_BUSY:
-		return -EBUSY;
-	case HAL_TIMEOUT:
-		return -ETIMEDOUT;
-	default:
-		return -EIO;
-	};
+		switch (ret) {
+		case HAL_OK:
+			break;
+		case HAL_BUSY:
+			return -EBUSY;
+		case HAL_TIMEOUT:
+			return -ETIMEDOUT;
+		default:
+			return -EIO;
+		};
+	}
 
 	return bytes_number;
 }
