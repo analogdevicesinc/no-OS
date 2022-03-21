@@ -42,6 +42,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "no_os_uart.h"
+#include "no_os_irq.h"
 #include "stm32_hal.h"
 
 /**
@@ -64,6 +65,8 @@ struct stm32_uart_desc {
 	UART_HandleTypeDef *huart;
 	/** UART transaction timeout (HAL_IncTick() units) */
 	uint32_t timeout;
+	/** Interrupt controller descriptor */
+	struct no_os_irq_ctrl_desc *nvic;
 };
 
 #endif
