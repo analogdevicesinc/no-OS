@@ -51,6 +51,9 @@ ASM_SRCS += $(call rwildcard, $(PROJECT_BUILD)/Startup,*.s)
 # Get the path of the interrupts file
 ITC = $(call rwildcard, $(PROJECT_BUILD)/Src,*_it.c)
 
+# Get the path of the hal config file
+HALCONF = $(call rwildcard, $(PROJECT_BUILD)/Inc,*_hal_conf.h)
+
 ifneq (,$(wildcard $(PROJECT_BUILD)))
 TARGET = $(shell sed -rn 's|^.*(STM32[A-Z][0-9][0-9][0-9]x+)"/>$$|\1|p' $(PROJECT_BUILDROOT)/.cproject | head -n 1)
 CFLAGS += -D$(TARGET)
@@ -85,6 +88,7 @@ $(PROJECT_TARGET)_configure:
 	$(MUTE) sed -i 's/ main(/ stm32_init(/' $(PROJECT_BUILD)/Src/main.c $(HIDE)
 	$(MUTE) sed -i '0,/while (1)/s//return 0;/' $(PROJECT_BUILD)/Src/main.c $(HIDE)
 	$(MUTE) sed -i 's/HAL_GPIO_EXTI_IRQHandler/HAL_GPIO_EXTI_Callback/' $(ITC) $(HIDE)
+	$(MUTE) sed -i 's/USE_HAL_UART_REGISTER_CALLBACKS\s*0U/USE_HAL_UART_REGISTER_CALLBACKS\t1U/g' $(HALCONF) $(HIDE)
 	$(MUTE) $(call copy_file, $(PROJECT_BUILD)/Src/main.c, $(PROJECT_BUILD)/Src/generated_main.c) $(HIDE)
 	$(MUTE) $(call remove_file, $(PROJECT_BUILD)/Src/main.c) $(HIDE)
 
