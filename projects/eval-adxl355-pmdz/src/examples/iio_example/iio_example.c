@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   app_config.h
- *   @brief  Config file of IIO ADXL355 project.
+ *   @file   iio_example.c
+ *   @brief  Implementation of IIO example for eval-adxl355-pmdz project.
  *   @author RBolboac (ramona.bolboaca@analog.com)
 ********************************************************************************
  * Copyright 2022(c) Analog Devices, Inc.
@@ -36,17 +36,56 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef CONFIG_H_
-#define CONFIG_H_
 
-//#define XILINX_PLATFORM
-//#define ALTERA_PLATFORM
-//#define ADUCM_PLATFORM
+/******************************************************************************/
+/***************************** Include Files **********************************/
+/******************************************************************************/
+#include "iio_example.h"
+#include "iio_adxl355.h"
+#include "common_data.h"
 
-#ifdef ENABLE_IIO_NETWORK
-//#define USE_TCP_SOCKET
-#endif
+/******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
+#define DATA_BUFFER_SIZE 400
 
-//#define ENABLE_LOOPBACK
+/******************************************************************************/
+/************************ Variable Declarations ******************************/
+/******************************************************************************/
+uint8_t iio_data_buffer[DATA_BUFFER_SIZE*4*sizeof(int)];
 
-#endif
+/******************************************************************************/
+/************************ Functions Definitions *******************************/
+/******************************************************************************/
+/***************************************************************************//**
+ * @brief IIO example main execution.
+ *
+ * @return ret - Result of the example execution. If working correctly, will
+ *               execute continuously function iio_app_run and will not return.
+*******************************************************************************/
+int iio_example_main ()
+{
+	int ret;
+	struct adxl355_iio_dev *adxl355_iio_desc;
+	struct adxl355_iio_init_param adxl355_init_par;
+	struct iio_data_buffer accel_buff = {
+		.buff = (void *)iio_data_buffer,
+		.size = DATA_BUFFER_SIZE*4*sizeof(int)
+	};
+
+	adxl355_init_par.adxl355_initial = &init_data_adxl355;
+	ret = adxl355_iio_init(&adxl355_iio_desc, &adxl355_init_par);
+	if (ret)
+		return ret;
+
+	struct iio_app_device iio_devices[] = {
+		{
+			.name = "adxl355",
+			.dev = adxl355_iio_desc,
+			.dev_descriptor = adxl355_iio_desc->iio_dev,
+			.read_buff = &accel_buff,
+		}
+	};
+
+	return iio_app_run(iio_devices, NO_OS_ARRAY_SIZE(iio_devices));
+}
