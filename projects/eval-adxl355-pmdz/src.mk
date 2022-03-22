@@ -1,56 +1,30 @@
-SRC_DIRS += $(PROJECT)/src
+include $(PROJECT)/src/platform/$(PLATFORM)/platform_src.mk
+include $(PROJECT)/src/examples/examples_src.mk
 
-ifeq (y,$(strip $(TINYIIOD)))
-SRC_DIRS += $(NO-OS)/iio/iio_app
-endif
+SRCS += $(PROJECT)/src/platform/$(PLATFORM)/main.c
 
-INCS +=	$(INCLUDE)/no_os_uart.h \
-	$(INCLUDE)/no_os_spi.h \
-	$(INCLUDE)/no_os_i2c.h \
-	$(INCLUDE)/no_os_util.h \
-	$(INCLUDE)/no_os_error.h \
-	$(INCLUDE)/no_os_delay.h \
-	$(INCLUDE)/no_os_timer.h \
-	$(INCLUDE)/no_os_irq.h \
-	$(INCLUDE)/no_os_rtc.h \
-    $(INCLUDE)/no_os_util.h \
-    $(INCLUDE)/no_os_print_log.h \
-	$(INCLUDE)/no_os_gpio.h
+INCS += $(PROJECT)/src/common/common_data.h
+SRCS += $(PROJECT)/src/common/common_data.c
+	
+INCS += $(PROJECT)/src/platform/platform_includes.h
 
-INCS += $(PLATFORM_DRIVERS)/stm32_uart_stdio.h \
-	$(PLATFORM_DRIVERS)/stm32_uart.h \
-	$(PLATFORM_DRIVERS)/stm32_delay.h \
-	$(PLATFORM_DRIVERS)/stm32_spi.h \
-	$(PLATFORM_DRIVERS)/stm32_gpio.h \
-	$(PLATFORM_DRIVERS)/stm32_hal.h
+INCS += $(PROJECT)/src/platform/$(PLATFORM)/parameters.h
+SRCS += $(PROJECT)/src/platform/$(PLATFORM)/parameters.c 
+
+INCS += $(INCLUDE)/no_os_delay.h     \
+		$(INCLUDE)/no_os_error.h     \
+		$(INCLUDE)/no_os_gpio.h      \
+		$(INCLUDE)/no_os_i2c.h       \
+		$(INCLUDE)/no_os_print_log.h \
+		$(INCLUDE)/no_os_spi.h       \
+		$(INCLUDE)/no_os_uart.h      \
+		$(INCLUDE)/no_os_util.h 
+
+SRCS += $(DRIVERS)/api/no_os_gpio.c \
+		$(DRIVERS)/api/no_os_i2c.c  \
+		$(DRIVERS)/api/no_os_spi.c  \
+		$(NO-OS)/util/no_os_util.c
 
 INCS += $(DRIVERS)/accel/adxl355/adxl355.h
-
-ifeq (y,$(strip $(TINYIIOD)))
-INCS += $(DRIVERS)/accel/adxl355/iio_adxl355.h
-
-INCS += $(INCLUDE)/no-os/fifo.h \
-	$(INCLUDE)/no_os_list.h \
-	$(PLATFORM_DRIVERS)/uart_extra.h
-
-INCS += $(PROJECT)/src/app_config.h \
-	$(PROJECT)/src/parameters.h
-endif
-
-SRCS += $(NO-OS)/util/no_os_util.c \
-	$(DRIVERS)/api/no_os_spi.c \
-	$(DRIVERS)/api/no_os_i2c.c \
-	$(DRIVERS)/api/no_os_gpio.c
-
-SRCS += $(PLATFORM_DRIVERS)/stm32_delay.c \
-	$(PLATFORM_DRIVERS)/stm32_gpio.c \
-	$(PLATFORM_DRIVERS)/stm32_spi.c \
-	$(PLATFORM_DRIVERS)/stm32_uart.c \
-	$(PLATFORM_DRIVERS)/stm32_uart_stdio.c
-
 SRCS += $(DRIVERS)/accel/adxl355/adxl355.c
 
-ifeq (y,$(strip $(TINYIIOD)))
-SRCS += $(DRIVERS)/accel/adxl355/iio_adxl355.c
-
-endif
