@@ -144,8 +144,8 @@ int32_t aducm3029_irq_ctrl_remove(struct no_os_irq_ctrl_desc *desc)
 	adi_xint_UnInit();
 
 	/* Free UART */
-	no_os_irq_unregister(desc, ADUCM_UART_INT_ID);
-	no_os_irq_unregister(desc, ADUCM_RTC_INT_ID);
+	no_os_irq_unregister_callback(desc, ADUCM_UART_INT_ID, NULL);
+	no_os_irq_unregister_callback(desc, ADUCM_RTC_INT_ID, NULL);
 	free(desc->extra);
 	free(desc);
 	initialized = 0;
@@ -177,7 +177,7 @@ int32_t aducm3029_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 		return -1;
 
 	if (!callback_desc)
-		return no_os_irq_unregister(desc, irq_id);
+		return no_os_irq_unregister_callback(desc, irq_id, NULL);
 
 	aducm_desc = desc->extra;
 
@@ -187,29 +187,29 @@ int32_t aducm3029_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 	case ADUCM_EXTERNAL_INT2_ID:
 	case ADUCM_EXTERNAL_INT3_ID:
 		aducm_desc->conf[irq_id].xint_conf =
-			(enum irq_mode)callback_desc->config;
+			(enum irq_mode)callback_desc->legacy_config;
 		adi_xint_RegisterCallback(id_map_event[irq_id],
-					  callback_desc->callback,
+					  callback_desc->legacy_callback,
 					  callback_desc->ctx);
 		break;
 	case ADUCM_UART_INT_ID:
 		aducm_desc->conf[irq_id].uart_conf =
-			(struct no_os_uart_desc *)callback_desc->config;
+			(struct no_os_uart_desc *)callback_desc->legacy_config;
 		uart_desc = aducm_desc->conf[irq_id].uart_conf;
 		if (!uart_desc)
 			return -1;
-		uart_desc->callback = callback_desc->callback;
+		uart_desc->callback = callback_desc->legacy_callback;
 		uart_desc->callback_ctx = callback_desc->ctx;
 		break;
 	case ADUCM_RTC_INT_ID:
 		aducm_desc->conf[irq_id].rtc_conf =
-			(struct rtc_irq_config *)callback_desc->config;
+			(struct rtc_irq_config *)callback_desc->legacy_config;
 		rtc_desc = aducm_desc->conf[irq_id].rtc_conf->rtc_handler;
 		if (!rtc_desc)
 			return -1;
 		rtc_extra = rtc_desc->extra;
 		adi_rtc_RegisterCallback(rtc_extra->instance,
-					 callback_desc->callback,
+					 callback_desc->legacy_callback,
 					 callback_desc->ctx);
 		break;
 	case ADUCM_GPIO_A_INT_ID:
@@ -220,7 +220,7 @@ int32_t aducm3029_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 			    ADI_GPIO_INTA_IRQ :
 			    ADI_GPIO_INTB_IRQ;
 		aducm_desc->conf[irq_id].gpio_conf =
-			(struct gpio_irq_config *)callback_desc->config;
+			(struct gpio_irq_config *)callback_desc->legacy_config;
 		gpio_desc = aducm_desc->conf[irq_id].gpio_conf->gpio_handler;
 		if (!gpio_desc)
 			return -1;
@@ -251,10 +251,11 @@ int32_t aducm3029_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
  * @brief Unregister IRQ handling function for the specified <em>irq_id</em>.
  * @param desc - Interrupt controller descriptor.
  * @param irq_id - Id of the interrupt
+ * @param cb - Callback descriptor.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t aducm3029_irq_unregister(struct no_os_irq_ctrl_desc *desc,
-				 uint32_t irq_id)
+int32_t aducm3029_irq_unregister_callback(struct no_os_irq_ctrl_desc *desc,
+				 uint32_t irq_id, struct callback_desc *cb)
 {
 	struct aducm_irq_ctrl_desc	*aducm_desc;
 	struct no_os_uart_desc		*uart_desc;
@@ -470,7 +471,7 @@ int32_t aducm3029_irq_disable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
 const struct no_os_irq_platform_ops aducm_irq_ops = {
 	.init = &aducm3029_irq_ctrl_init,
 	.register_callback = &aducm3029_irq_register_callback,
-	.unregister = &aducm3029_irq_unregister,
+	.unregister_callback = &aducm3029_irq_unregister_callback,
 	.global_enable = &aducm3029_irq_global_enable,
 	.global_disable = &aducm3029_irq_global_disable,
 	.enable = &aducm3029_irq_enable,

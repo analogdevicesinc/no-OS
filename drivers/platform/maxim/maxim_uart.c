@@ -464,8 +464,8 @@ static int32_t max_uart_register_callback(struct no_os_irq_ctrl_desc *desc,
 	}
 
 	cb[irq_id]->ctx = callback_desc->ctx;
-	cb[irq_id]->callback = callback_desc->callback;
-	cb[irq_id]->config = callback_desc->config;
+	cb[irq_id]->legacy_callback = callback_desc->legacy_callback;
+	cb[irq_id]->legacy_config = callback_desc->legacy_config;
 
 	return 0;
 }
@@ -474,10 +474,11 @@ static int32_t max_uart_register_callback(struct no_os_irq_ctrl_desc *desc,
  * @brief Unregister a callback function.
  * @param desc - The UART irq descriptor.
  * @param irq_id - The UART port.
+ * @pacam cb - Callback descriptor.
  * @return 0 in case of success, errno codes otherwise.
  */
 static int32_t max_uart_unregister_callback(struct no_os_irq_ctrl_desc *desc,
-		uint32_t irq_id)
+		uint32_t irq_id, struct callback_desc *cb)
 {
 	if (irq_id >= N_PORTS || !cb[irq_id])
 		return -EINVAL;
@@ -492,5 +493,5 @@ const struct no_os_irq_platform_ops max_uart_irq_ops = {
 	.init = &max_uart_irq_ctrl_init,
 	.remove = &max_uart_irq_ctrl_remove,
 	.register_callback = &max_uart_register_callback,
-	.unregister = &max_uart_unregister_callback
+	.unregister_callback = &max_uart_unregister_callback
 };
