@@ -282,13 +282,13 @@ static int32_t hal_platform_init(struct no_os_i2c_desc **adv7511_i2c,
 		return ret;
 	no_os_irq_global_enable(*gic_inst_ptr);
 #if defined(_XPARAMETERS_PS_H_)
-	cb_desc_temp.callback = timer_isr;
-	cb_desc_temp.config = NULL;
+	cb_desc_temp.legacy_callback = timer_isr;
+	cb_desc_temp.legacy_config = NULL;
 	cb_desc_temp.ctx = xil_tmr->instance;
 	ret = no_os_irq_register_callback(*gic_inst_ptr, timer_int_nr, &cb_desc_temp);
 #else
-	cb_desc_temp.callback = XTmrCtr_InterruptHandler;
-	cb_desc_temp.config = NULL;
+	cb_desc_temp.legacy_callback = XTmrCtr_InterruptHandler;
+	cb_desc_temp.legacy_config = NULL;
 	cb_desc_temp.ctx = xil_tmr->instance;
 	ret = no_os_irq_register_callback(*gic_inst_ptr, timer_int_nr, &cb_desc_temp);
 	XTmrCtr_SetHandler(xil_tmr->instance, timer_isr, xil_tmr->instance);
@@ -298,8 +298,8 @@ static int32_t hal_platform_init(struct no_os_i2c_desc **adv7511_i2c,
 	ret = no_os_irq_enable(*gic_inst_ptr, timer_int_nr);
 	if(ret != 0)
 		return ret;
-	cb_desc_temp.callback = XIic_InterruptHandler;
-	cb_desc_temp.config = NULL;
+	cb_desc_temp.legacy_callback = XIic_InterruptHandler;
+	cb_desc_temp.legacy_config = NULL;
 	cb_desc_temp.ctx = &ps_i2c_extra->instance;
 	ret = no_os_irq_register_callback(*gic_inst_ptr, i2c_int_nr, &cb_desc_temp);
 	if(ret != 0)

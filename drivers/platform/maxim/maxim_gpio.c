@@ -473,7 +473,7 @@ static int32_t max_gpio_register_callback(struct no_os_irq_ctrl_desc *desc,
 	if (!desc || !desc->extra || !callback_desc || irq_id >= N_PINS)
 		return -EINVAL;
 
-	g_irq = callback_desc->config;
+	g_irq = callback_desc->legacy_config;
 	g_desc = desc->extra;
 	max_gpio_cfg = g_desc->extra;
 	port_id = MXC_GPIO_GET_IDX(max_gpio_cfg->port);
@@ -489,8 +489,8 @@ static int32_t max_gpio_register_callback(struct no_os_irq_ctrl_desc *desc,
 	}
 
 	descriptor->ctx = callback_desc->ctx;
-	descriptor->callback = callback_desc->callback;
-	descriptor->config = callback_desc->config;
+	descriptor->legacy_callback = callback_desc->legacy_callback;
+	descriptor->legacy_config = callback_desc->legacy_config;
 
 	gpio_callback[port_id][irq_id] = descriptor;
 
@@ -501,10 +501,11 @@ static int32_t max_gpio_register_callback(struct no_os_irq_ctrl_desc *desc,
  * @brief Unregister a callback function.
  * @param desc - The IRQ descriptor
  * @param irq_id - The pin number
+ * @param cb - Callback descriptor.
  * @return 0 in case of success, errno error codes otherwise.
  */
 static int32_t max_gpio_unregister_callback(struct no_os_irq_ctrl_desc *desc,
-		uint32_t irq_id)
+		uint32_t irq_id, struct callback_desc *cb)
 {
 	uint32_t port_id;
 	struct no_os_gpio_desc *g_desc;
@@ -592,7 +593,7 @@ const struct no_os_gpio_platform_ops max_gpio_ops = {
 const struct no_os_irq_platform_ops max_gpio_irq_ops = {
 	.init = &max_gpio_irq_ctrl_init,
 	.register_callback = &max_gpio_register_callback,
-	.unregister = &max_gpio_unregister_callback,
+	.unregister_callback = &max_gpio_unregister_callback,
 	.trigger_level_set = &max_gpio_irq_set_trigger_level,
 	.enable = &max_gpio_enable_irq,
 	.disable = &max_gpio_disable_irq,

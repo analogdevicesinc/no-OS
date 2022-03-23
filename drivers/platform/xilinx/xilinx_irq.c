@@ -251,7 +251,7 @@ int32_t xil_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 	case IRQ_PS:
 #ifdef XSCUGIC_H
 		return XScuGic_Connect(xil_dev->instance, irq_id,
-				       (Xil_InterruptHandler) callback_desc->callback,
+				       (Xil_InterruptHandler) callback_desc->legacy_callback,
 				       callback_desc->ctx);
 #endif
 		break;
@@ -261,17 +261,17 @@ int32_t xil_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 			int32_t ret;
 
 			ret = XIntc_Connect(xil_dev->instance, irq_id,
-					    XTmrCtr_InterruptHandler, callback_desc->config);
+					    XTmrCtr_InterruptHandler, callback_desc->legacy_config);
 			if (NO_OS_IS_ERR_VALUE(ret))
 				return -1;
-			XTmrCtr_SetHandler(callback_desc->config,
-					   (XTmrCtr_Handler)callback_desc->callback,
+			XTmrCtr_SetHandler(callback_desc->legacy_config,
+					   (XTmrCtr_Handler)callback_desc->legacy_callback,
 					   callback_desc->ctx);
 
 			return 0;
 		}
 		return XIntc_Connect(xil_dev->instance, irq_id,
-				     (XInterruptHandler) callback_desc->callback,
+				     (XInterruptHandler) callback_desc->legacy_callback,
 				     callback_desc->ctx);
 #endif
 		break;
@@ -330,9 +330,11 @@ int32_t xil_irq_trigger_level_set(struct no_os_irq_ctrl_desc *desc,
  * @brief Unregisters a generic IRQ handling function.
  * @param desc - The IRQ controller descriptor.
  * @param irq_id - Interrupt identifier.
+ * @param cb - Callback descriptor.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t xil_irq_unregister(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
+int32_t xil_irq_unregister_callback(struct no_os_irq_ctrl_desc *desc,
+				    uint32_t irq_id, struct callback_desc *cb)
 {
 	struct xil_irq_desc *xil_dev = desc->extra;
 
@@ -376,7 +378,7 @@ int32_t xil_irq_ctrl_remove(struct no_os_irq_ctrl_desc *desc)
 const struct no_os_irq_platform_ops xil_irq_ops = {
 	.init = &xil_irq_ctrl_init,
 	.register_callback = &xil_irq_register_callback,
-	.unregister = &xil_irq_unregister,
+	.unregister_callback = &xil_irq_unregister_callback,
 	.global_enable = &xil_irq_global_enable,
 	.global_disable = &xil_irq_global_disable,
 	.trigger_level_set = &xil_irq_trigger_level_set,
