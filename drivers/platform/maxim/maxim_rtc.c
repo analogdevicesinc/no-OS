@@ -291,8 +291,8 @@ static int32_t max_rtc_register_callback(struct no_os_irq_ctrl_desc *desc,
 	}
 
 	cb->ctx = callback_desc->ctx;
-	cb->callback = callback_desc->callback;
-	cb->config = callback_desc->config;
+	cb->legacy_callback = callback_desc->legacy_callback;
+	cb->legacy_config = callback_desc->legacy_config;
 
 	return 0;
 }
@@ -302,7 +302,7 @@ static int32_t max_rtc_register_callback(struct no_os_irq_ctrl_desc *desc,
  * @return 0 in case of success, errno codes otherwise.
  */
 static int32_t max_rtc_unregister_callback(struct no_os_irq_ctrl_desc *desc,
-		uint32_t irq_id)
+		uint32_t irq_id, struct callback_desc *cb)
 {
 	if (!cb)
 		return -EINVAL;
@@ -354,7 +354,7 @@ const struct no_os_irq_platform_ops max_rtc_irq_ops = {
 	.init = &max_rtc_irq_ctrl_init,
 	.remove = &max_rtc_irq_ctrl_remove,
 	.register_callback = &max_rtc_register_callback,
-	.unregister = &max_rtc_unregister_callback,
+	.unregister_calback = &max_rtc_unregister_callback,
 	.enable = &max_rtc_enable_irq,
 	.disable = &max_rtc_disable_irq
 };

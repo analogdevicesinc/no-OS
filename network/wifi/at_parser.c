@@ -925,10 +925,10 @@ int32_t at_init(struct at_desc **desc, const struct at_init_param *param)
 	ldesc->uart_desc = param->uart_desc;
 	ldesc->irq_desc = param->irq_desc;
 	ldesc->uart_irq_id = param->uart_irq_id;
-	callback_desc.callback =
+	callback_desc.legacy_callback =
 		(void (*)(void*, uint32_t, void*))at_callback;
 	callback_desc.ctx = ldesc;
-	callback_desc.config = param->uart_irq_conf;
+	callback_desc.legacy_config = param->uart_irq_conf;
 	if (0 != no_os_irq_register_callback(ldesc->irq_desc,
 					     ldesc->uart_irq_id,
 					     &callback_desc))
@@ -973,7 +973,7 @@ int32_t at_init(struct at_desc **desc, const struct at_init_param *param)
 	return 0;
 
 free_irq:
-	no_os_irq_unregister(ldesc->irq_desc, ldesc->uart_irq_id);
+	no_os_irq_unregister_callback(ldesc->irq_desc, ldesc->uart_irq_id, NULL);
 free_desc:
 	free(ldesc);
 	*desc = NULL;
@@ -992,7 +992,7 @@ int32_t at_remove(struct at_desc *desc)
 	if (!desc)
 		return -1;
 
-	no_os_irq_unregister(desc->irq_desc, desc->uart_irq_id);
+	no_os_irq_unregister_callback(desc->irq_desc, desc->uart_irq_id, NULL);
 	free(desc);
 
 	return 0;
