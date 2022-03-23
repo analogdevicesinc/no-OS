@@ -137,6 +137,9 @@ int main(void)
 
 	ad7616_setup(&dev, &init_param);
 
+	/* Clear the cache. */
+	Xil_DCacheInvalidateRange((uintptr_t)buf, to_read);
+
 	if(dev->interface == AD7616_PARALLEL)
 		ad7616_read_data_parallel(dev, buf, AD7616_SDZ_SAMPLE_NO);
 	else
