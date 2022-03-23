@@ -20,6 +20,7 @@ INCS +=	$(INCLUDE)/no_os_uart.h \
 
 INCS += $(PLATFORM_DRIVERS)/stm32_uart_stdio.h \
 	$(PLATFORM_DRIVERS)/stm32_uart.h \
+	$(PLATFORM_DRIVERS)/stm32_irq.h \
 	$(PLATFORM_DRIVERS)/stm32_delay.h \
 	$(PLATFORM_DRIVERS)/stm32_spi.h \
 	$(PLATFORM_DRIVERS)/stm32_gpio.h \
@@ -39,13 +40,16 @@ INCS += $(PROJECT)/src/app_config.h \
 endif
 
 SRCS += $(NO-OS)/util/no_os_util.c \
+	$(NO-OS)/util/no_os_list.c \
 	$(DRIVERS)/api/no_os_spi.c \
 	$(DRIVERS)/api/no_os_i2c.c \
+	$(DRIVERS)/api/no_os_irq.c \
 	$(DRIVERS)/api/no_os_gpio.c
 
 SRCS += $(PLATFORM_DRIVERS)/stm32_delay.c \
 	$(PLATFORM_DRIVERS)/stm32_gpio.c \
 	$(PLATFORM_DRIVERS)/stm32_spi.c \
+	$(PLATFORM_DRIVERS)/stm32_irq.c \
 	$(PLATFORM_DRIVERS)/stm32_uart.c \
 	$(NO-OS)/util/no_os_lf256fifo.c \
 	$(PLATFORM_DRIVERS)/stm32_uart_stdio.c

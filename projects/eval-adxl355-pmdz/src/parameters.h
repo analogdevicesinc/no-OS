@@ -110,6 +110,7 @@
 extern UART_HandleTypeDef huart5;
 #define IIO_APP_HUART	(&huart5)
 #define UART_BAUDRATE	115200
+#define UART_IRQ_ID	0
 
 #endif // STM32_PLATFORM
 
