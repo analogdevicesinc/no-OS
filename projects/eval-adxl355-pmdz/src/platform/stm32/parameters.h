@@ -56,8 +56,8 @@ extern UART_HandleTypeDef huart5;
 
 #ifdef IIO_SUPPORT
 #define IIO_APP_HUART	(&huart5)
+#define UART_IRQ_ID	0
 #endif
-
 #define UART_DEVICE_ID      5
 #define UART_BAUDRATE  115200
 
