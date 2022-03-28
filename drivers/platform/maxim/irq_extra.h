@@ -43,18 +43,6 @@
 #include "no_os_irq.h"
 
 /**
- * @enum irq_id
- * @brief maxim specific interrupt ids
- */
-enum irq_id {
-	MAX_GPIO_INT_ID = GPIO0_IRQn,
-	MAX_UART0_INT_ID = UART0_IRQn,
-	MAX_UART1_INT_ID = UART1_IRQn,
-	MAX_RTC_INT_ID = RTC_IRQn,
-	MAX_IRQ_DESC_COUNT
-};
-
-/**
  * @brief maxim platform specific irq platform ops structure
  */
 extern const struct no_os_irq_platform_ops max_irq_ops;
