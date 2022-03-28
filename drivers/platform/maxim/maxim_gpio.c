@@ -250,7 +250,7 @@ int32_t max_gpio_direction_output(struct no_os_gpio_desc *desc, uint8_t value)
 	mxc_gpio_regs_t *gpio_regs;
 	mxc_gpio_cfg_t *maxim_extra;
 
-	if (!desc || desc->number >= N_PINS || value > NO_OS_GPIO_HIGH_Z)
+	if (!desc || desc->number >= N_PINS || value >= NO_OS_GPIO_HIGH_Z)
 		return -EINVAL;
 
 	maxim_extra = desc->extra;
@@ -353,9 +353,9 @@ int32_t max_gpio_get_value(struct no_os_gpio_desc *desc, uint8_t *value)
 
 	gpio_regs->en0 |= NO_OS_BIT(desc->number);
 	if (max_gpio_cfg->func == MXC_GPIO_FUNC_IN)
-		*value = MXC_GPIO_InGet(gpio_regs, BIT(desc->number)) >> desc->number;
+		*value = MXC_GPIO_InGet(gpio_regs, NO_OS_BIT(desc->number)) >> desc->number;
 	else
-		*value = MXC_GPIO_OutGet(gpio_regs, NO_OS_BIT(desc->number));
+		*value = MXC_GPIO_OutGet(gpio_regs, NO_OS_BIT(desc->number)) >> desc->number;
 
 	return 0;
 }
