@@ -40,6 +40,8 @@
 #ifndef SPI_EXTRA_H_
 #define SPI_EXTRA_H_
 
+#include <stdint.h>
+
 /**
  * @brief maxim specific SPI platform ops structure
  */
