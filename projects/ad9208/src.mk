@@ -21,9 +21,11 @@ SRC_DIRS += $(DRIVERS)/axi_core/iio_axi_adc \
 		$(NO-OS)/iio/iio_app
 
 SRCS	+= $(PLATFORM_DRIVERS)/no_os_uart.c \
+		$(NO-OS)/util/no_os_lf256fifo.c \
 		$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c \
 		$(NO-OS)/util/no_os_list.c 
 INCS	+= $(INCLUDE)/no_os_uart.h \
+		$(INCLUDE)/no_os_lf256fifo.h \
 		$(INCLUDE)/no_os_list.h \
 		$(INCLUDE)/no_os_irq.h \
 		$(PLATFORM_DRIVERS)/irq_extra.h \

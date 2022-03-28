@@ -14,6 +14,7 @@ SRCS += $(DRIVERS)/adc/adc_demo/adc_demo.c \
 
 INCS += $(INCLUDE)/no_os_fifo.h \
 	$(INCLUDE)/no_os_uart.h \
+	$(INCLUDE)/no_os_lf256fifo.h \
 	$(INCLUDE)/no_os_list.h \
 	$(INCLUDE)/no_os_util.h \
 	$(INCLUDE)/no_os_error.h
@@ -50,6 +51,7 @@ INCS	 += $(INCLUDE)/no_os_timer.h \
 endif
 
 SRCS += $(PLATFORM_DRIVERS)/no_os_uart.c \
+	$(NO-OS)/util/no_os_lf256fifo.c \
 		$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c
 
 INCS += $(INCLUDE)/no_os_irq.h \
