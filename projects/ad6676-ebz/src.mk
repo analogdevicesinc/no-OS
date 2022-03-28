@@ -35,6 +35,7 @@ SRCS += $(NO-OS)/util/no_os_fifo.c \
 	$(NO-OS)/util/no_os_list.c \
 	$(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.c \
 	$(PLATFORM_DRIVERS)/no_os_uart.c \
+	$(NO-OS)/util/no_os_lf256fifo.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c \
 	$(DRIVERS)/api/no_os_irq.c
 endif
@@ -61,6 +62,7 @@ ifeq (y,$(strip $(TINYIIOD)))
 INCS += $(INCLUDE)/no_os_fifo.h \
 	$(INCLUDE)/no_os_irq.h \
 	$(INCLUDE)/no_os_uart.h \
+	$(INCLUDE)/no_os_lf256fifo.h \
 	$(INCLUDE)/no_os_list.h \
 	$(PLATFORM_DRIVERS)/irq_extra.h \
 	$(PLATFORM_DRIVERS)/uart_extra.h \

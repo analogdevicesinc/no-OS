@@ -27,6 +27,7 @@ ifeq (y,$(strip $(TINYIIOD)))
 LIBRARIES += iio
 SRC_DIRS += $(NO-OS)/iio/iio_app
 SRCS += $(PLATFORM_DRIVERS)/no_os_uart.c \
+	$(NO-OS)/util/no_os_lf256fifo.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c \
 	$(DRIVERS)/api/no_os_irq.c \
 	$(NO-OS)/util/no_os_fifo.c \
@@ -48,6 +49,7 @@ INCS +=	$(INCLUDE)/no_os_axi_io.h \
 	$(INCLUDE)/no_os_delay.h \
 	$(INCLUDE)/no_os_irq.h \
 	$(INCLUDE)/no_os_uart.h \
+	$(INCLUDE)/no_os_lf256fifo.h \
 	$(INCLUDE)/no_os_pwm.h \
 	$(INCLUDE)/no_os_util.h
 ifeq (y,$(strip $(TINYIIOD)))

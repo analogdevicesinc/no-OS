@@ -18,10 +18,12 @@ INCS += $(INCLUDE)/no_os_delay.h     \
 		$(INCLUDE)/no_os_print_log.h \
 		$(INCLUDE)/no_os_spi.h       \
 		$(INCLUDE)/no_os_uart.h      \
+		$(INCLUDE)/no_os_lf256fifo.h \
 		$(INCLUDE)/no_os_util.h 
 
 SRCS += $(DRIVERS)/api/no_os_gpio.c \
 		$(DRIVERS)/api/no_os_i2c.c  \
+		$(NO-OS)/util/no_os_lf256fifo.c \
 		$(DRIVERS)/api/no_os_spi.c  \
 		$(NO-OS)/util/no_os_util.c
 

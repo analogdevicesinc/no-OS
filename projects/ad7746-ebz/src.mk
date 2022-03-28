@@ -5,6 +5,7 @@ SRCS += $(NO-OS)/util/no_os_util.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_i2c.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c \
 	$(PLATFORM_DRIVERS)/no_os_uart.c \
+	$(NO-OS)/util/no_os_lf256fifo.c \
 	$(PLATFORM_DRIVERS)/uart_stdio.c \
 	$(PLATFORM_DRIVERS)/no_os_rtc.c \
 	$(PLATFORM_DRIVERS)/platform_init.c \
@@ -14,6 +15,7 @@ SRCS += $(NO-OS)/util/no_os_util.c \
 	$(PROJECT)/src/app/headless.c
 
 INCS +=	$(INCLUDE)/no_os_uart.h \
+	$(INCLUDE)/no_os_lf256fifo.h \
 	$(INCLUDE)/no_os_util.h \
 	$(INCLUDE)/no_os_delay.h \
 	$(INCLUDE)/no_os_timer.h \
