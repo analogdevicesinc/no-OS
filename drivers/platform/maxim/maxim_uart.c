@@ -44,6 +44,7 @@
 #include <errno.h>
 #include <stdlib.h>
 #include "mxc_sys.h"
+#include "mxc_errors.h"
 #include "uart.h"
 #include "maxim_uart.h"
 #include "no_os_uart.h"
@@ -54,14 +55,14 @@
 * @brief Callback descriptor that contains a function to be called when an
 * interrupt occurs.
 */
-static struct no_os_callback_desc *cb[2];
+static struct no_os_callback_desc *cb[MXC_UART_INSTANCES];
 
 /**
 * @brief Descriptors to hold the state of nonblocking read and writes
 * on each port
 */
-static mxc_uart_req_t rx_state[2];
-static mxc_uart_req_t tx_state[2];
+static mxc_uart_req_t rx_state[MXC_UART_INSTANCES];
+static mxc_uart_req_t tx_state[MXC_UART_INSTANCES];
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -74,7 +75,7 @@ static void _uart_irq(uint8_t port)
 	uint32_t reg_int_fl;
 	uint32_t reg_int_en;
 
-	uart_regs = (port == 0) ? MXC_UART0 : MXC_UART1;
+	uart_regs = MXC_UART_GET_UART(port);
 	reg_int_fl = uart_regs->int_fl;
 	reg_int_en = uart_regs->int_en;
 
@@ -101,10 +102,26 @@ void UART0_IRQHandler()
 	_uart_irq(0);
 }
 
+#ifdef MXC_UART1
 void UART1_IRQHandler()
 {
 	_uart_irq(1);
 }
+#endif
+
+#ifdef MXC_UART2
+void UART2_IRQHandler()
+{
+	_uart_irq(2);
+}
+#endif
+
+#ifdef MXC_UART3
+void UART3_IRQHandler()
+{
+	_uart_irq(3);
+}
+#endif
 
 /**
  * @brief Read data from UART device. Blocking function.
@@ -242,7 +259,6 @@ int32_t no_os_uart_init(struct no_os_uart_desc **desc,
 	mxc_uart_regs_t *uart_regs;
 	struct max_uart_init_param *eparam;
 	struct no_os_uart_desc *descriptor;
-	sys_map_t map;
 
 	if (!param || !param->extra)
 		return -EINVAL;
@@ -251,7 +267,6 @@ int32_t no_os_uart_init(struct no_os_uart_desc **desc,
 	if (!descriptor)
 		return -ENOMEM;
 
-	map = MAP_A;
 	uart_regs = MXC_UART_GET_UART(param->device_id);
 	eparam = param->extra;
 
@@ -263,16 +278,34 @@ int32_t no_os_uart_init(struct no_os_uart_desc **desc,
 		parity = MXC_UART_PARITY_DISABLE;
 		break;
 	case NO_OS_UART_PAR_MARK:
+#if TARGET_NUM == 32660 || TARGET_NUM == 32650
 		parity = MXC_UART_PARITY_MARK;
 		break;
+#else
+		ret = -EINVAL;
+		goto error;
+#endif
 	case NO_OS_UART_PAR_SPACE:
+#if TARGET_NUM == 32660 || TARGET_NUM == 32650
 		parity = MXC_UART_PARITY_SPACE;
 		break;
+#else
+		ret = -EINVAL;
+		goto error;
+#endif
 	case NO_OS_UART_PAR_ODD:
+#if TARGET_NUM == 32660 || TARGET_NUM == 32650
 		parity = MXC_UART_PARITY_ODD;
+#elif TARGET_NUM == 32655
+		parity = MXC_UART_PARITY_ODD_1;
+#endif
 		break;
 	case NO_OS_UART_PAR_EVEN:
+#if TARGET_NUM == 32660 || TARGET_NUM == 32650
 		parity = MXC_UART_PARITY_EVEN;
+#elif TARGET_NUM == 32655
+		parity = MXC_UART_PARITY_EVEN_1;
+#endif
 		break;
 	default:
 		ret = -EINVAL;
@@ -314,18 +347,31 @@ int32_t no_os_uart_init(struct no_os_uart_desc **desc,
 		flow = MXC_UART_FLOW_DIS;
 		break;
 	case UART_FLOW_LOW:
+#if TARGET_NUM == 32660
 		flow = MXC_UART_FLOW_EN_LOW;
+#elif TARGET_NUM == 32655
+		flow = MXC_UART_FLOW_EN;
+#endif
 		break;
 	case UART_FLOW_HIGH:
+#if TARGET_NUM == 32660
 		flow = MXC_UART_FLOW_EN_HIGH;
+#elif TARGET_NUM == 32655
+		flow = MXC_UART_FLOW_EN;
+#endif
 		break;
 	default:
 		ret = -EINVAL;
 		goto error;
 	}
 
-	ret = MXC_UART_Init(uart_regs, descriptor->baud_rate, map);
-
+#if TARGET_NUM == 32660
+	ret = MXC_UART_Init(uart_regs, descriptor->baud_rate, MAP_A);
+#elif TARGET_NUM == 32655
+	ret = MXC_UART_Init(uart_regs, descriptor->baud_rate, MXC_UART_APB_CLK);
+#else
+	ret = MXC_UART_Init(uart_regs, descriptor->baud_rate);
+#endif
 	if (ret != E_NO_ERROR) {
 		ret = -EINVAL;
 		goto error;
@@ -349,7 +395,11 @@ int32_t no_os_uart_init(struct no_os_uart_desc **desc,
 		goto error;
 	}
 
+#if TARGET_NUM != 32665
 	ret = MXC_UART_SetFlowCtrl(uart_regs, flow, 8);
+#else
+	ret = MXC_UART_SetFlowCtrl(uart_regs, flow, 8, MAP_A);
+#endif
 	if (ret != E_NO_ERROR) {
 		ret = -EINVAL;
 		goto error;
