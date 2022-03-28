@@ -42,7 +42,7 @@
 
 #include "uart.h"
 #include "no_os_irq.h"
-#include "max32660.h"
+#include "maxim_hal.h"
 
 #define N_PORTS	MXC_UART_INSTANCES
 
