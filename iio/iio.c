@@ -506,6 +506,22 @@ static int32_t __iio_str_parse(char *buf, int32_t *integer, int32_t *_fract,
 	return 0;
 }
 
+static int32_t _iio_fract_interpret(int32_t fract, int32_t subunits)
+{
+	int32_t temp = fract;
+
+	while ((subunits != 0) || (temp != 0)) {
+		temp /= 10;
+		subunits /= 10;
+		if (!temp)
+			break;
+		if (subunits <= 1)
+			fract /= 10;
+	}
+
+	return fract * subunits;
+}
+
 int32_t iio_parse_value(char *buf, enum iio_val fmt, int32_t *val,
 			int32_t *val2)
 {
@@ -521,19 +537,19 @@ int32_t iio_parse_value(char *buf, enum iio_val fmt, int32_t *val,
 		ret = __iio_str_parse(buf, &integer, &_fract, true);
 		if (ret < 0)
 			return ret;
-		_fract *= 100000;
+		_fract = _iio_fract_interpret(_fract, 1000000);
 		break;
 	case IIO_VAL_INT_PLUS_MICRO:
 		ret = __iio_str_parse(buf, &integer, &_fract, false);
 		if (ret < 0)
 			return ret;
-		_fract *= 100000;
+		_fract = _iio_fract_interpret(_fract, 1000000);
 		break;
 	case IIO_VAL_INT_PLUS_NANO:
 		ret = __iio_str_parse(buf, &integer, &_fract, false);
 		if (ret < 0)
 			return ret;
-		_fract *= 100000000;
+		_fract = _iio_fract_interpret(_fract, 1000000000);
 		break;
 	case IIO_VAL_FRACTIONAL:
 		ret = __iio_str_parse(buf, &integer, &_fract, false);
