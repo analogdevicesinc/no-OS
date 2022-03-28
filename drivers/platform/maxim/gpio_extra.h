@@ -43,7 +43,7 @@
 #include <stdint.h>
 #include "no_os_irq.h"
 #include "no_os_gpio.h"
-#include "max32660.h"
+#include "maxim_hal.h"
 
 #define N_PINS	MXC_CFG_GPIO_PINS_PORT
 #define N_PORTS	MXC_CFG_GPIO_INSTANCES
