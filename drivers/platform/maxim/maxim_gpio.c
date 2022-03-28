@@ -47,7 +47,7 @@
 #include "gpio_regs.h"
 #include "gpio_extra.h"
 #include "irq_extra.h"
-#include "max32660.h"
+#include "maxim_hal.h"
 #include "mxc_errors.h"
 
 static struct no_os_callback_desc *gpio_callback[N_PORTS][N_PINS];
@@ -55,6 +55,21 @@ static struct no_os_callback_desc *gpio_callback[N_PORTS][N_PINS];
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
+
+static void set_enable(mxc_gpio_regs_t *regs, uint32_t mask, uint8_t is_enabled)
+{
+#if TARGET_NUM == 32650 || TARGET_NUM == 32665
+	if (is_enabled)
+		regs->en |= mask;
+	else
+		regs->en &= ~mask;
+#else
+	if (is_enabled)
+		regs->en0 |= mask;
+	else
+		regs->en0 &= ~mask;
+#endif
+}
 
 static void _gpio_irq(uint8_t port)
 {
@@ -138,10 +153,18 @@ int32_t max_gpio_get(struct no_os_gpio_desc **desc,
 		m_pad = MXC_GPIO_PAD_NONE;
 		break;
 	case NO_OS_PULL_UP:
+#if TARGET_NUM == 32650
+		m_pad = MXC_GPIO_PAD_WEAK_PULL_UP;
+#else
 		m_pad = MXC_GPIO_PAD_PULL_UP;
+#endif
 		break;
 	case NO_OS_PULL_DOWN:
+#if TARGET_NUM == 32650
+		m_pad = MXC_GPIO_PAD_WEAK_PULL_DOWN;
+#else
 		m_pad = MXC_GPIO_PAD_PULL_DOWN;
+#endif
 		break;
 	default:
 		ret = -EINVAL;
@@ -258,7 +281,7 @@ int32_t max_gpio_direction_output(struct no_os_gpio_desc *desc, uint8_t value)
 	maxim_extra->func = MXC_GPIO_FUNC_OUT;
 	MXC_GPIO_Config(maxim_extra);
 
-	gpio_regs->en0 |= NO_OS_BIT(desc->number);
+	set_enable(gpio_regs, NO_OS_BIT(desc->number), true);
 	switch(value) {
 	case NO_OS_GPIO_LOW:
 		MXC_GPIO_OutClr(gpio_regs, NO_OS_BIT(desc->number));
@@ -315,6 +338,8 @@ int32_t max_gpio_set_value(struct no_os_gpio_desc *desc, uint8_t value)
 
 	max_gpio_cfg = desc->extra;
 	gpio_regs = max_gpio_cfg->port;
+
+	set_enable(gpio_regs, NO_OS_BIT(desc->number), true);
 	switch(value) {
 	case NO_OS_GPIO_LOW:
 		MXC_GPIO_OutClr(gpio_regs, NO_OS_BIT(desc->number));
@@ -323,7 +348,7 @@ int32_t max_gpio_set_value(struct no_os_gpio_desc *desc, uint8_t value)
 		MXC_GPIO_OutSet(gpio_regs, NO_OS_BIT(desc->number));
 		break;
 	case NO_OS_GPIO_HIGH_Z:
-		gpio_regs->en0 &= ~NO_OS_BIT(desc->number);
+		set_enable(gpio_regs, NO_OS_BIT(desc->number), false);
 		break;
 	default:
 		return -EINVAL;
@@ -351,7 +376,7 @@ int32_t max_gpio_get_value(struct no_os_gpio_desc *desc, uint8_t *value)
 	max_gpio_cfg = desc->extra;
 	gpio_regs = max_gpio_cfg->port;
 
-	gpio_regs->en0 |= NO_OS_BIT(desc->number);
+	set_enable(gpio_regs, NO_OS_BIT(desc->number), true);
 	if (max_gpio_cfg->func == MXC_GPIO_FUNC_IN)
 		*value = MXC_GPIO_InGet(gpio_regs, NO_OS_BIT(desc->number)) >> desc->number;
 	else
