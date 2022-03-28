@@ -17,11 +17,13 @@ SRCS += $(NO-OS)/util/no_os_util.c \
 	$(DRIVERS)/platform/$(PLATFORM)/no_os_rtc.c \
 	$(DRIVERS)/platform/$(PLATFORM)/delay.c \
 	$(DRIVERS)/platform/$(PLATFORM)/no_os_timer.c \
+	$(NO-OS)/util/no_os_lf256fifo.c \
 	$(DRIVERS)/platform/$(PLATFORM)/no_os_uart.c
 
 INCS += $(INCLUDE)/no_os_spi.h \
 	$(INCLUDE)/no_os_irq.h \
 	$(INCLUDE)/no_os_uart.h \
+	$(INCLUDE)/no_os_lf256fifo.h \
 	$(INCLUDE)/no_os_timer.h \
 	$(DRIVERS)/platform/$(PLATFORM)/spi_extra.h \
 	$(DRIVERS)/platform/$(PLATFORM)/irq_extra.h \

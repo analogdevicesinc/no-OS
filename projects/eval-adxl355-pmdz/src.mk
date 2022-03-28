@@ -5,6 +5,7 @@ SRC_DIRS += $(NO-OS)/iio/iio_app
 endif
 
 INCS +=	$(INCLUDE)/no_os_uart.h \
+	$(INCLUDE)/no_os_lf256fifo.h \
 	$(INCLUDE)/no_os_spi.h \
 	$(INCLUDE)/no_os_i2c.h \
 	$(INCLUDE)/no_os_util.h \
@@ -46,6 +47,7 @@ SRCS += $(PLATFORM_DRIVERS)/stm32_delay.c \
 	$(PLATFORM_DRIVERS)/stm32_gpio.c \
 	$(PLATFORM_DRIVERS)/stm32_spi.c \
 	$(PLATFORM_DRIVERS)/stm32_uart.c \
+	$(NO-OS)/util/no_os_lf256fifo.c \
 	$(PLATFORM_DRIVERS)/stm32_uart_stdio.c
 
 SRCS += $(DRIVERS)/accel/adxl355/adxl355.c
