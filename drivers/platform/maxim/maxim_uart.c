@@ -81,13 +81,7 @@ static void _uart_irq(uint8_t port)
 	/** Handle nonblocking write and read, also clears the interrupt flags */
 	MXC_UART_AsyncHandler(uart_regs);
 
-	/** Disable all interrupts */
-	uart_regs->int_en = 0x0;
-
 	if (!cb[port])	{
-		/** Enable the interrupts back */
-		uart_regs->int_en = reg_int_en;
-
 		return;
 	}
 
@@ -100,9 +94,6 @@ static void _uart_irq(uint8_t port)
 		}
 		reg_int_fl >>= n_int + 1;
 	}
-
-	/** Enable the interrupts back */
-	uart_regs->int_en = reg_int_en;
 }
 
 void UART0_IRQHandler()
