@@ -44,6 +44,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include "spi.h"
+#include "mxc_errors.h"
 #include "spi_extra.h"
 #include "no_os_spi.h"
 #include "no_os_util.h"
@@ -84,44 +85,61 @@ int32_t max_spi_init(struct no_os_spi_desc **desc,
 	descriptor->bit_order = param->bit_order;
 	descriptor->platform_ops = &max_spi_ops;
 
-	if (descriptor->device_id == 0)
-		ret = MXC_SPI_Init(MXC_SPI0, SPI_MASTER_MODE, SPI_SINGLE_MODE,
-				   eparam->numSlaves, eparam->polarity, param->max_speed_hz);
-#ifdef MXC_SPI1
-	else if (descriptor->device_id == 1)
-		ret = MXC_SPI_Init(MXC_SPI1, SPI_MASTER_MODE, SPI_SINGLE_MODE,
-				   eparam->numSlaves, eparam->polarity, param->max_speed_hz);
-#endif
-	else {
+	if (descriptor->device_id >= MXC_SPI_INSTANCES) {
 		ret = -EINVAL;
 		goto err;
 	}
 
+#if TARGET_NUM == 32655
+	mxc_spi_pins_t spi_pins_config = {
+		.clock = true,
+		.ss0 = (descriptor->chip_select == 0) ? true : false,
+		.ss1 = (descriptor->chip_select == 1) ? true : false,
+		.ss2 = (descriptor->chip_select == 2) ? true : false,
+		.miso = true,
+		.mosi = true,
+		.sdio2 = false,
+		.sdio3 = false,
+		.vddioh = false
+	};
+#endif
+
+#if TARGET_NUM == 32655
+	ret = MXC_SPI_Init(MXC_SPI_GET_SPI(descriptor->device_id), SPI_MASTER_MODE,
+			   SPI_SINGLE_MODE,
+			   eparam->numSlaves, eparam->polarity, param->max_speed_hz, spi_pins_config);
+#else
+	ret = MXC_SPI_Init(MXC_SPI_GET_SPI(descriptor->device_id), SPI_MASTER_MODE,
+			   SPI_SINGLE_MODE,
+			   eparam->numSlaves, eparam->polarity, param->max_speed_hz);
+#endif
+
 	ret = MXC_SPI_SetMode(MXC_SPI_GET_SPI(descriptor->device_id), descriptor->mode);
 	if (ret) {
 		ret = -EINVAL;
-		goto err;
+		goto err_init;
 	}
 
 	ret = MXC_SPI_SetWidth(MXC_SPI_GET_SPI(descriptor->device_id),
 			       SPI_WIDTH_STANDARD);
 	if (ret) {
 		ret = -EINVAL;
-		goto err;
+		goto err_init;
 	}
 
 	ret = MXC_SPI_SetDataSize(MXC_SPI_GET_SPI(descriptor->device_id), 8);
 	if (ret) {
 		ret = -EINVAL;
-		goto err;
+		goto err_init;
 	}
 
 	*desc = descriptor;
 
 	return 0;
+err_init:
+	MXC_SPI_Shutdown(MXC_SPI_GET_SPI(descriptor->device_id));
 err:
 	free(descriptor);
-	MXC_SPI_Shutdown(MXC_SPI_GET_SPI(descriptor->device_id));
 
 	return ret;
 }
