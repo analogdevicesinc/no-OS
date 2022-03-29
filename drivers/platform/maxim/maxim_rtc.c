@@ -48,7 +48,8 @@
 #include "no_os_util.h"
 #include "rtc.h"
 #include "rtc_extra.h"
-#include "rtc_regs.h"
+#include "rtc_reva_regs.h"
+#include "mxc_errors.h"
 
 #define MS_TO_RSSA(x) (0 - ((x * 256) / 1000))
 
@@ -213,7 +214,7 @@ int32_t no_os_rtc_set_cnt(struct rtc_desc *dev, uint32_t tmr_cnt)
 	if (MXC_RTC_CheckBusy())
 		return -EBUSY;
 
-	rtc_regs->ctrl |= MXC_F_RTC_CTRL_WE;
+	rtc_regs->ctrl |= MXC_F_RTC_REVA_CTRL_WR_EN;
 	no_os_rtc_stop(dev);
 
 	if (MXC_RTC_CheckBusy())
@@ -225,7 +226,7 @@ int32_t no_os_rtc_set_cnt(struct rtc_desc *dev, uint32_t tmr_cnt)
 	if (MXC_RTC_CheckBusy())
 		return -EBUSY;
 
-	rtc_regs->ctrl &= ~MXC_F_RTC_CTRL_WE;
+	rtc_regs->ctrl &= ~MXC_F_RTC_REVA_CTRL_WR_EN;
 
 	return 0;
 }
