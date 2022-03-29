@@ -419,9 +419,27 @@ int adxl355_set_hpf_corner(struct adxl355_dev *dev,
 {
 	int ret;
 	uint8_t reg_value;
+	enum adxl355_op_mode current_op_mode;
 
-	// The hpf settings can be changed when the device is in measurement mode.
-	// There is no need to modify the device's operation mode to Standby.
+	// Even though the hpf settings can be changed when the device is in
+	// measurement mode, it has been observed that the measurements are not
+	// correct when doing so. Because of this, the device will be set in standby
+	// mode also when changing the hpf value.
+
+	current_op_mode = dev->op_mode;
+
+	switch(current_op_mode) {
+	case ADXL355_MEAS_TEMP_ON_DRDY_ON:
+	case ADXL355_MEAS_TEMP_OFF_DRDY_ON:
+	case ADXL355_MEAS_TEMP_ON_DRDY_OFF:
+	case ADXL355_MEAS_TEMP_OFF_DRDY_OFF:
+		ret = adxl355_set_op_mode(dev, ADXL355_STDBY_TEMP_ON_DRDY_ON);
+		if (ret)
+			return ret;
+		break;
+	default:
+		break;
+	}
 
 	ret = adxl355_read_device_data(dev, ADXL355_ADDR(ADXL355_FILTER),
 				       GET_ADXL355_TRANSF_LEN(ADXL355_FILTER), &reg_value);
@@ -435,7 +453,7 @@ int adxl355_set_hpf_corner(struct adxl355_dev *dev,
 	if (!ret)
 		dev->hpf_corner = hpf_corner_val;
 
-	return ret;
+	return adxl355_set_op_mode(dev, current_op_mode);
 }
 
 /***************************************************************************//**
