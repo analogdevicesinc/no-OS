@@ -39,7 +39,7 @@
 #ifndef IRQ_MAXIM_EXTRA_H
 #define IRQ_MAXIM_EXTRA_H
 
-#include "max32660.h"
+#include "maxim_hal.h"
 #include "no_os_irq.h"
 
 /**
