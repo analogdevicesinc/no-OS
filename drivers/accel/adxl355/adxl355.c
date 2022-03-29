@@ -428,7 +428,7 @@ int adxl355_set_hpf_corner(struct adxl355_dev *dev,
 	if (ret)
 		return ret;
 	reg_value &= ~(ADXL355_HPF_FIELD_MSK);
-	reg_value |= hpf_corner_val & ADXL355_HPF_FIELD_MSK;
+	reg_value |= (hpf_corner_val << 4) & ADXL355_HPF_FIELD_MSK;
 
 	ret = adxl355_write_device_data(dev, ADXL355_ADDR(ADXL355_FILTER),
 					GET_ADXL355_TRANSF_LEN(ADXL355_FILTER), &reg_value);
