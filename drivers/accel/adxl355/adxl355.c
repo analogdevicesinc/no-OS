@@ -380,13 +380,17 @@ int adxl355_set_odr_lpf(struct adxl355_dev *dev,
 
 	current_op_mode = dev->op_mode;
 
-	if ((current_op_mode != ADXL355_STDBY_TEMP_ON_DRDY_ON)
-	    && (current_op_mode != ADXL355_STDBY_TEMP_OFF_DRDY_ON)
-	    && (current_op_mode != ADXL355_STDBY_TEMP_ON_DRDY_OFF)
-	    && (current_op_mode != ADXL355_STDBY_TEMP_OFF_DRDY_OFF)) {
+	switch(current_op_mode) {
+	case ADXL355_MEAS_TEMP_ON_DRDY_ON:
+	case ADXL355_MEAS_TEMP_OFF_DRDY_ON:
+	case ADXL355_MEAS_TEMP_ON_DRDY_OFF:
+	case ADXL355_MEAS_TEMP_OFF_DRDY_OFF:
 		ret = adxl355_set_op_mode(dev, ADXL355_STDBY_TEMP_ON_DRDY_ON);
 		if (ret)
 			return ret;
+		break;
+	default:
+		break;
 	}
 
 	ret = adxl355_read_device_data(dev, ADXL355_ADDR(ADXL355_FILTER),
