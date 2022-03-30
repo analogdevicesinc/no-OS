@@ -200,15 +200,13 @@ int main(void)
 	struct axi_dmac_init rx_dmac_init = {
 		"rx_dmac",
 		RX_DMA_BASEADDR,
-		DMA_DEV_TO_MEM,
-		0
+		IRQ_DISABLED
 	};
 	struct axi_dmac *rx_dmac;
 	struct axi_dmac_init tx_dmac_init = {
 		"tx_dmac",
 		TX_DMA_BASEADDR,
-		DMA_MEM_TO_DEV,
-		DMA_CYCLIC
+		IRQ_DISABLED
 	};
 	struct axi_dmac *tx_dmac;
 	struct ad9081_phy* phy[MULTIDEVICE_INSTANCE_COUNT];

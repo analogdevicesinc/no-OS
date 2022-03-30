@@ -323,8 +323,7 @@ int main(void)
 	struct axi_dmac_init ad6676_dmac_param = {
 		.name = "ad6676_dmac",
 		.base = RX_DMA_BASEADDR,
-		.direction = DMA_DEV_TO_MEM,
-		.flags = 0
+		.irq_option = IRQ_DISABLED
 	};
 	struct axi_dmac *ad6676_dmac;
 
@@ -428,11 +427,49 @@ int main(void)
 
 	// test the captured data
 	axi_dmac_init(&ad6676_dmac, &ad6676_dmac_param);
-	axi_dmac_transfer(ad6676_dmac, ADC_DDR_BASEADDR, 16384 * 2);
+
+	struct axi_dma_transfer transfer_test = {
+		// Number of bytes to writen/read
+		.size = 16384 * 2,
+		// Transfer done flag
+		.transfer_done = 0,
+		// Signal transfer mode
+		.cyclic = NO,
+		// Address of data source
+		.src_addr = 0,
+		// Address of data destination
+		.dest_addr = (uintptr_t)ADC_DDR_BASEADDR
+	};
+	axi_dmac_transfer_start(ad6676_dmac, &transfer_test);
+	/* Wait until transfer finishes */
+	int32_t status = axi_dmac_transfer_wait_completion(ad6676_dmac, 500);
+	if(status)
+		return status;
+	/* Flush cache data. */
+	Xil_DCacheInvalidateRange((uintptr_t)ADC_DDR_BASEADDR,16384 * 2);
 
 	// capture data with DMA
 	ad6676_test(ad6676_device, TESTGENMODE_OFF);
-	axi_dmac_transfer(ad6676_dmac, ADC_DDR_BASEADDR, 16384 * 2);
+
+	struct axi_dma_transfer transfer_capture = {
+		// Number of bytes to writen/read
+		.size = 16384 * 2,
+		// Transfer done flag
+		.transfer_done = 0,
+		// Signal transfer mode
+		.cyclic = NO,
+		// Address of data source
+		.src_addr = 0,
+		// Address of data destination
+		.dest_addr = (uintptr_t)ADC_DDR_BASEADDR
+	};
+	axi_dmac_transfer_start(ad6676_dmac, &transfer_capture);
+	/* Wait until transfer finishes */
+	status = axi_dmac_transfer_wait_completion(ad6676_dmac, 500);
+	if(status)
+		return status;
+	/* Flush cache data. */
+	Xil_DCacheInvalidateRange((uintptr_t)ADC_DDR_BASEADDR,16384 * 2);
 
 #ifdef IIO_SUPPORT
 

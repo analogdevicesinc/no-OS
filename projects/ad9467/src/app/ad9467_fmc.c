@@ -168,8 +168,7 @@ int main()
 	struct axi_dmac_init ad9467_dmac_param = {
 		.name = "ad9625_dmac",
 		.base = RX_DMA_BASEADDR,
-		.direction = DMA_DEV_TO_MEM,
-		.flags = 0
+		.irq_option = IRQ_DISABLED
 	};
 	struct axi_dmac *ad9467_dmac;
 
@@ -262,8 +261,24 @@ int main()
 
 	printf("Start capturing data...\n\r");
 
-	axi_dmac_transfer(ad9467_dmac, ADC_DDR_BASEADDR,
-			  16384 * 2);
+	struct axi_dma_transfer read_transfer = {
+		// Number of bytes to write/read
+		.size = 16384 * 2,
+		// Transfer done flag
+		.transfer_done = 0,
+		// Signal transfer mode
+		.cyclic = NO,
+		// Address of data source
+		.src_addr = 0,
+		// Address of data destination
+		.dest_addr = (uintptr_t)ADC_DDR_BASEADDR
+	};
+	axi_dmac_transfer_start(ad9467_dmac, &read_transfer);
+	/* Wait until transfer finishes */
+	status = axi_dmac_transfer_wait_completion(ad9467_dmac, 500);
+	if(status)
+		return status;
+	Xil_DCacheInvalidateRange((uintptr_t)ADC_DDR_BASEADDR, 16384 * 2);
 
 #ifdef IIO_SUPPORT
 
@@ -318,12 +333,29 @@ void adc_test(struct axi_adc *adc,
 	uint32_t edata = 0;
 	uint32_t error = 0;
 	int32_t read;
+	int32_t status = -1;
 
 	ad9467_output_format(dev, format, &read);
 	ad9467_test_mode(dev, mode, &read);
 	ad9467_transfer(dev);
-	axi_dmac_transfer(dmac, ADC_DDR_BASEADDR,
-			  16384);
+	struct axi_dma_transfer read_transfer = {
+		// Number of bytes to write/read
+		.size = 16384,
+		// Transfer done flag
+		.transfer_done = 0,
+		// Signal transfer mode
+		.cyclic = NO,
+		// Address of data source
+		.src_addr = 0,
+		// Address of data destination
+		.dest_addr = (uintptr_t)ADC_DDR_BASEADDR
+	};
+	axi_dmac_transfer_start(dmac, &read_transfer);
+	/* Wait until transfer finishes */
+	status = axi_dmac_transfer_wait_completion(dmac, 500);
+	if(status)
+		return status;
+	Xil_DCacheInvalidateRange((uintptr_t)ADC_DDR_BASEADDR, 16384);
 
 	display_test_mode(mode, format);
 	if ((mode == PN_23_SEQUENCE) || (mode == PN_9_SEQUENCE)) {

@@ -175,8 +175,7 @@ int main(void)
 	struct axi_dmac_init ad9739a_dmac_init_param = {
 		.name = "ad9739a_dmac",
 		.base = TX_DMA_BASEADDR,
-		.direction = DMA_MEM_TO_DEV,
-		.flags = DMA_CYCLIC
+		.irq_option = IRQ_DISABLED
 	};
 	struct axi_dmac *ad9739a_dmac_desc;
 
@@ -186,8 +185,22 @@ int main(void)
 	axi_dac_set_buff(ad9739a_core, DAC_DDR_BASEADDR, sine_lut,
 			 NO_OS_ARRAY_SIZE(sine_lut));
 	Xil_DCacheFlush();
-	axi_dmac_transfer(ad9739a_dmac_desc, DAC_DDR_BASEADDR,
-			  NO_OS_ARRAY_SIZE(sine_lut) * sizeof(uint16_t));
+	struct axi_dma_transfer transfer = {
+		// Number of bytes to write/read
+		.size = NO_OS_ARRAY_SIZE(sine_lut) * sizeof(uint16_t),
+		// Transfer done flag
+		.transfer_done = 0,
+		// Signal transfer mode
+		.cyclic = CYCLIC,
+		// Address of data source
+		.src_addr = (uintptr_t)DAC_DDR_BASEADDR,
+		// Address of data destination
+		.dest_addr = 0
+	};
+	axi_dmac_transfer_start(ad9739a_dmac_desc, &transfer);
+	/* Flush cache data. */
+	Xil_DCacheInvalidateRange((uintptr_t)DAC_DDR_BASEADDR,
+				  NO_OS_ARRAY_SIZE(sine_lut) * sizeof(uint16_t));
 #else
 	ad9739a_channels[0].dds_dual_tone = 0;
 	ad9739a_channels[0].dds_frequency_0 = 33*1000*1000;
@@ -203,8 +216,7 @@ int main(void)
 	struct axi_dmac_init ad9739a_dmac_param = {
 		.name = "ad9739a_dmac",
 		.base = TX_DMA_BASEADDR,
-		.direction = DMA_MEM_TO_DEV,
-		.flags = DMA_CYCLIC
+		.irq_option = IRQ_DISABLED
 	};
 	struct axi_dmac *ad9739a_dmac;
 

@@ -182,8 +182,7 @@ int main(void)
 	struct axi_dmac_init tx_dmac_init = {
 		"tx_dmac",
 		TX_DMA_BASEADDR,
-		DMA_MEM_TO_DEV,
-		DMA_LAST,
+		IRQ_DISABLED
 	};
 	struct axi_dmac *tx_dmac;
 #endif /* DAC_DMA_EXAMPLE */
@@ -259,8 +258,26 @@ int main(void)
 	Xil_DCacheFlush();
 #endif
 	axi_dmac_init(&tx_dmac, &tx_dmac_init);
-	axi_dmac_transfer(tx_dmac, DDR_MEM_BASEADDR,
-			  sizeof(sine_lut_iq) * (tx_dac->num_channels / 2));
+	struct axi_dma_transfer transfer = {
+		// Number of bytes to write/read
+		.size = sizeof(sine_lut_iq) * (tx_dac->num_channels / 2),
+		// Transfer done flag
+		.transfer_done = 0,
+		// Signal transfer mode
+		.cyclic = NO,
+		// Address of data source
+		.src_addr = (uintptr_t)DDR_MEM_BASEADDR,
+		// Address of data destination
+		.dest_addr = 0
+	};
+	axi_dmac_transfer_start(tx_dmac, &transfer);
+	/* Wait until transfer finishes */
+	status = axi_dmac_transfer_wait_completion(tx_dmac, 500);
+	if(status)
+		return status;
+	/* Flush cache data. */
+	Xil_DCacheInvalidateRange((uintptr_t)DDR_MEM_BASEADDR,
+				  sizeof(sine_lut_iq) * (tx_dac->num_channels / 2));
 #else /* DAC_DMA_EXAMPLE */
 	printf("Set dds frequency at 40MHz\n");
 
@@ -307,8 +324,7 @@ int main(void)
 	struct axi_dmac_init tx_dmac_init = {
 		"tx_dmac",
 		TX_DMA_BASEADDR,
-		DMA_MEM_TO_DEV,
-		DMA_LAST,
+		IRQ_DISABLED
 	};
 	struct axi_dmac *tx_dmac;
 

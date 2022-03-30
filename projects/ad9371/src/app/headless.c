@@ -284,16 +284,14 @@ int main(void)
 	struct axi_dmac_init rx_dmac_init = {
 		"rx_dmac",
 		RX_DMA_BASEADDR,
-		DMA_DEV_TO_MEM,
-		0
+		IRQ_DISABLED
 	};
 	struct axi_dmac *rx_dmac;
 
 	struct axi_dmac_init rx_obs_dmac_init = {
 		"rx_obs_dmac",
 		RX_OBS_DMA_BASEADDR,
-		DMA_DEV_TO_MEM,
-		0
+		IRQ_DISABLED
 	};
 	struct axi_dmac *rx_obs_dmac;
 
@@ -301,8 +299,7 @@ int main(void)
 	struct axi_dmac_init tx_dmac_init = {
 		"tx_dmac",
 		TX_DMA_BASEADDR,
-		DMA_MEM_TO_DEV,
-		DMA_LAST,
+		IRQ_DISABLED
 	};
 	struct axi_dmac *tx_dmac;
 	extern const uint32_t sine_lut_iq[1024];
@@ -929,8 +926,21 @@ int main(void)
 	Xil_DCacheFlush();
 #endif
 	axi_dmac_init(&tx_dmac, &tx_dmac_init);
-	axi_dmac_transfer(tx_dmac, (uintptr_t)dac_buffer,
-			  sizeof(sine_lut_iq));
+	struct axi_dma_transfer transfer = {
+		// Number of bytes to write/read
+		.size = sizeof(sine_lut_iq),
+		// Transfer done flag
+		.transfer_done = 0,
+		// Signal transfer mode
+		.cyclic = NO,
+		// Address of data source
+		.src_addr = (uintptr_t)dac_buffer,
+		// Address of data destination
+		.dest_addr = 0
+	};
+	axi_dmac_transfer_start(tx_dmac, &transfer);
+	/* Flush cache data. */
+	Xil_DCacheInvalidateRange((uintptr_t)dac_buffer, sizeof(sine_lut_iq));
 
 	no_os_mdelay(1000);
 
@@ -938,9 +948,23 @@ int main(void)
 	axi_dmac_init(&rx_dmac, &rx_dmac_init);
 	axi_dmac_init(&rx_obs_dmac, &rx_obs_dmac_init);
 
-	axi_dmac_transfer(rx_dmac,
-			  (uintptr_t)adc_buffer,
-			  sizeof(adc_buffer));
+	struct axi_dma_transfer read_transfer = {
+		// Number of bytes to write/read
+		.size = sizeof(adc_buffer),
+		// Transfer done flag
+		.transfer_done = 0,
+		// Signal transfer mode
+		.cyclic = NO,
+		// Address of data source
+		.src_addr = 0,
+		// Address of data destination
+		.dest_addr = (uintptr_t)adc_buffer
+	};
+	axi_dmac_transfer_start(rx_dmac, &read_transfer);
+	/* Wait until transfer finishes */
+	status = axi_dmac_transfer_wait_completion(rx_dmac, 500);
+	if(status)
+		return status;
 #ifndef ALTERA_PLATFORM
 	Xil_DCacheInvalidateRange((uintptr_t)adc_buffer, sizeof(adc_buffer));
 #endif
@@ -958,8 +982,7 @@ int main(void)
 	struct axi_dmac_init tx_dmac_init = {
 		"tx_dmac",
 		TX_DMA_BASEADDR,
-		DMA_MEM_TO_DEV,
-		DMA_CYCLIC,
+		IRQ_DISABLED
 	};
 
 	/**

@@ -91,8 +91,7 @@ int main(void)
 	struct axi_dmac_init ad9265_dmac_param = {
 		.name = "ad9265_dmac",
 		.base = RX_DMA_BASEADDR,
-		.direction = DMA_DEV_TO_MEM,
-		.flags = 0
+		.irq_option = IRQ_DISABLED
 	};
 	struct axi_dmac *ad9265_dmac;
 
@@ -133,11 +132,28 @@ int main(void)
 		return -1;
 	}
 
-	status = axi_dmac_transfer(ad9265_dmac, ADC_DDR_BASEADDR, 16384 * 2);
+	struct axi_dma_transfer read_transfer = {
+		// Number of bytes to write/read
+		.size = 16384 * 2,
+		// Transfer done flag
+		.transfer_done = 0,
+		// Signal transfer mode
+		.cyclic = NO,
+		// Address of data source
+		.src_addr = 0,
+		// Address of data destination
+		.dest_addr = (uintptr_t)ADC_DDR_BASEADDR
+	};
+	status = axi_dmac_transfer_start(ad9265_dmac, &read_transfer);
 	if (status != 0) {
-		pr_err("axi_dmac_transfer() failed!\n");
+		pr_err("axi_dmac_transfer_start() failed!\n");
 		return -1;
 	}
+	/* Wait until transfer finishes */
+	status = axi_dmac_transfer_wait_completion(ad9265_dmac, 500);
+	if(status < 0)
+		return status;
+	Xil_DCacheInvalidateRange((uintptr_t)ADC_DDR_BASEADDR, 16384 * 2);
 
 	pr_info("Capture done.\n");
 

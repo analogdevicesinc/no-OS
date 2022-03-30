@@ -320,8 +320,7 @@ int main(void)
 	struct axi_dmac_init rx_dmac_init = {
 		.name = "rx_dmac",
 		.base = RX_DMA_BASEADDR,
-		.direction = DMA_DEV_TO_MEM,
-		.flags = 0,
+		.irq_option = IRQ_DISABLED
 	};
 
 	struct xil_gpio_init_param xilinx_gpio_init_param = {
@@ -555,10 +554,26 @@ int main(void)
 	}
 
 	size = (rx_1_adc->num_channels + rx_0_adc->num_channels) * sizeof(uint16_t);
-	status = axi_dmac_transfer(rx_dmac,
-				   ADC_DDR_BASEADDR, 16384 * size);
+	struct axi_dma_transfer read_transfer = {
+		// Number of bytes to write/read
+		.size = 16384 * size,
+		// Transfer done flag
+		.transfer_done = 0,
+		// Signal transfer mode
+		.cyclic = NO,
+		// Address of data source
+		.src_addr = 0,
+		// Address of data destination
+		.dest_addr = (uintptr_t)ADC_DDR_BASEADDR
+	};
+	status = axi_dmac_transfer_start(rx_dmac, &read_transfer);
 	if (status != 0)
-		xil_printf("axi_dmac_transfer() error: %"PRIi32"\n", status);
+		xil_printf("axi_dmac_transfer_start() error: %"PRIi32"\n", status);
+	/* Wait until transfer finishes */
+	status = axi_dmac_transfer_wait_completion(rx_dmac, 500);
+	if(status)
+		return status;
+	Xil_DCacheInvalidateRange((uintptr_t)ADC_DDR_BASEADDR, 16384 * size);
 
 #ifdef IIO_SUPPORT
 	status = start_iiod(rx_0_adc, rx_1_adc, rx_dmac);

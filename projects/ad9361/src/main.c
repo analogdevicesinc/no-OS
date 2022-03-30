@@ -86,6 +86,10 @@ static uint8_t out_buff[MAX_SIZE_BASE_ADDR];
 
 #endif // IIO_SUPPORT
 
+#ifdef DAC_DMA_EXAMPLE
+#include <string.h>
+#endif
+
 /******************************************************************************/
 /************************ Variables Definitions *******************************/
 /******************************************************************************/
@@ -152,15 +156,21 @@ struct axi_dac_init tx_dac_init = {
 struct axi_dmac_init rx_dmac_init = {
 	"rx_dmac",
 	CF_AD9361_RX_DMA_BASEADDR,
-	DMA_DEV_TO_MEM,
-	0
+#ifdef ADC_DMA_IRQ_EXAMPLE
+	IRQ_ENABLED
+#else
+	IRQ_DISABLED
+#endif
 };
 struct axi_dmac *rx_dmac;
 struct axi_dmac_init tx_dmac_init = {
 	"tx_dmac",
 	CF_AD9361_TX_DMA_BASEADDR,
-	DMA_MEM_TO_DEV,
-	DMA_CYCLIC
+#ifdef ADC_DMA_IRQ_EXAMPLE
+	IRQ_ENABLED
+#else
+	IRQ_DISABLED
+#endif
 };
 struct axi_dmac *tx_dmac;
 
@@ -677,8 +687,8 @@ int main(void)
 	samples = 2097150;
 #endif
 	// NOTE: To prevent unwanted data loss, it's recommended to invalidate
-	// cache after each axi_dmac_transfer() call, keeping in mind that the
-	// size of the capture and the start address must be alinged to the size
+	// cache after each axi_dmac_transfer_start() call, keeping in mind that the
+	// size of the capture and the start address must be aligned to the size
 	// of the cache line.
 
 #ifdef DAC_DMA_EXAMPLE
@@ -699,21 +709,96 @@ int main(void)
 #endif
 
 #ifdef FMCOMMS5
-	axi_dmac_transfer_nonblocking(tx_dmac, DAC_DDR_BASEADDR,
-				      samples * AD9361_ADC_DAC_BYTES_PER_SAMPLE *
-				      (ad9361_phy_b->tx_dac->num_channels + ad9361_phy->tx_dac->num_channels));
+	struct axi_dma_transfer transfer = {
+		// Number of bytes to write/read
+		.size = samples * AD9361_ADC_DAC_BYTES_PER_SAMPLE *
+		(ad9361_phy_b->tx_dac->num_channels + ad9361_phy->tx_dac->num_channels),
+		// Transfer done flag
+		.transfer_done = 0,
+		// Signal transfer mode
+		.cyclic = CYCLIC,
+		// Address of data source
+		.src_addr = (uintptr_t)DAC_DDR_BASEADDR,
+		// Address of data destination
+		.dest_addr = 0
+	};
+
+	/* Transfer the data. */
+	axi_dmac_transfer_start(tx_dmac, &transfer);
+
+	/* Flush cache data. */
+	Xil_DCacheInvalidateRange((uintptr_t)DAC_DDR_BASEADDR,
+				  samples * AD9361_ADC_DAC_BYTES_PER_SAMPLE *
+				  (ad9361_phy_b->tx_dac->num_channels + ad9361_phy->tx_dac->num_channels));
+
+	no_os_mdelay(1000);
+
 #else
-	axi_dmac_transfer_nonblocking(tx_dmac, (uintptr_t)dac_buffer,
-				      sizeof(sine_lut_iq));
+	struct axi_dma_transfer transfer = {
+		// Number of bytes to write/read
+		.size = sizeof(sine_lut_iq),
+		// Transfer done flag
+		.transfer_done = 0,
+		// Signal transfer mode
+		.cyclic = CYCLIC,
+		// Address of data source
+		.src_addr = (uintptr_t)dac_buffer,
+		// Address of data destination
+		.dest_addr = 0
+	};
+
+	/* Transfer the data. */
+	axi_dmac_transfer_start(tx_dmac, &transfer);
+
+	/* Flush cache data. */
+	Xil_DCacheInvalidateRange((uintptr_t)dac_buffer,sizeof(sine_lut_iq));
+
 	no_os_mdelay(1000);
 #endif
 #endif
 #ifdef FMCOMMS5
-	axi_dmac_transfer(rx_dmac, ADC_DDR_BASEADDR,
-			  samples * AD9361_ADC_DAC_BYTES_PER_SAMPLE *
-			  (ad9361_phy_b->rx_adc->num_channels + ad9361_phy->rx_adc->num_channels));
+	struct axi_dma_transfer read_transfer = {
+		// Number of bytes to write/read
+		.size = samples * AD9361_ADC_DAC_BYTES_PER_SAMPLE *
+		(ad9361_phy_b->rx_adc->num_channels + ad9361_phy->rx_adc->num_channels),
+		// Transfer done flag
+		.transfer_done = 0,
+		// Signal transfer mode
+		.cyclic = NO,
+		// Address of data source
+		.src_addr = 0,
+		// Address of data destination
+		.dest_addr = (uintptr_t)ADC_DDR_BASEADDR
+	};
+
+	/* Read the data from the ADC DMA. */
+	axi_dmac_transfer_start(rx_dmac, &read_transfer);
+
+	/* Wait until transfer finishes */
+	status = axi_dmac_transfer_wait_completion(rx_dmac, 500);
+	if(status < 0)
+		return status;
 #else
-	axi_dmac_transfer(rx_dmac, (uintptr_t)adc_buffer, sizeof(adc_buffer));
+	struct axi_dma_transfer read_transfer = {
+		// Number of bytes to write/read
+		.size = sizeof(adc_buffer),
+		// Transfer done flag
+		.transfer_done = 0,
+		// Signal transfer mode
+		.cyclic = NO,
+		// Address of data source
+		.src_addr = 0,
+		// Address of data destination
+		.dest_addr = (uintptr_t)adc_buffer
+	};
+
+	/* Read the data from the ADC DMA. */
+	axi_dmac_transfer_start(rx_dmac, &read_transfer);
+
+	/* Wait until transfer finishes */
+	status = axi_dmac_transfer_wait_completion(rx_dmac, 500);
+	if(status < 0)
+		return status;
 #endif
 #ifdef XILINX_PLATFORM
 #ifdef FMCOMMS5

@@ -276,30 +276,26 @@ int main(void)
 	struct axi_dmac_init rx1_dmac_init = {
 		"rx_dmac",
 		RX1_DMA_BASEADDR,
-		DMA_DEV_TO_MEM,
-		0
+		IRQ_DISABLED
 	};
 
 	struct axi_dmac_init tx1_dmac_init = {
 		"tx_dmac",
 		TX1_DMA_BASEADDR,
-		DMA_MEM_TO_DEV,
-		DMA_CYCLIC,
+		IRQ_DISABLED
 	};
 
 #ifndef ADRV9002_RX2TX2
 	struct axi_dmac_init rx2_dmac_init = {
 		"rx_dmac",
 		RX2_DMA_BASEADDR,
-		DMA_DEV_TO_MEM,
-		0
+		IRQ_DISABLED
 	};
 
 	struct axi_dmac_init tx2_dmac_init = {
 		"tx_dmac",
 		TX2_DMA_BASEADDR,
-		DMA_MEM_TO_DEV,
-		DMA_CYCLIC,
+		IRQ_DISABLED
 	};
 #endif
 
@@ -458,19 +454,61 @@ int main(void)
 	Xil_DCacheFlush();
 #endif /* XILINX_PLATFORM */
 
-	axi_dmac_transfer(phy.tx1_dmac, (uintptr_t)dac_buffers[0], sizeof(sine_lut_iq));
+	struct axi_dma_transfer transfer1 = {
+		// Number of bytes to write/read
+		.size = sizeof(sine_lut_iq),
+		// Transfer done flag
+		.transfer_done = 0,
+		// Signal transfer mode
+		.cyclic = CYCLIC,
+		// Address of data source
+		.src_addr = (uintptr_t)dac_buffers[0],
+		// Address of data destination
+		.dest_addr = 0
+	};
+	axi_dmac_transfer_start(phy.tx1_dmac, &transfer1);
 #ifndef ADRV9002_RX2TX2
-	axi_dmac_transfer(phy.tx2_dmac, (uintptr_t)dac_buffers[1], sizeof(sine_lut_iq));
+	struct axi_dma_transfer transfer2 = {
+		// Number of bytes to write/read
+		.size = sizeof(sine_lut_iq),
+		// Transfer done flag
+		.transfer_done = 0,
+		// Signal transfer mode
+		.cyclic = CYCLIC,
+		// Address of data source
+		.src_addr = (uintptr_t)dac_buffers[1],
+		// Address of data destination
+		.dest_addr = 0
+	};
+	axi_dmac_transfer_start(phy.tx2_dmac, &transfer2);
 #endif
+
+#ifdef XILINX_PLATFORM
+	Xil_DCacheInvalidateRange((uintptr_t)adc_buffers[0], sizeof(sine_lut_iq));
+#ifndef ADRV9002_RX2TX2
+	Xil_DCacheInvalidateRange((uintptr_t)adc_buffers[1], sizeof(sine_lut_iq));
+#endif
+#endif /* XILINX_PLATFORM */
 
 	no_os_mdelay(1000);
 
+	struct axi_dma_transfer read_transfer1 = {
+		// Number of bytes to write/read
+		.size = 16384 * ADRV9001_I_Q_CHANNELS * 2, /* nr of samples * rx1 i/q, rx2 i/q * bytes per sample */
+		// Transfer done flag
+		.transfer_done = 0,
+		// Signal transfer mode
+		.cyclic = NO,
+		// Address of data source
+		.src_addr = 0,
+		// Address of data destination
+		.dest_addr = (uintptr_t)adc_buffers[0]
+	};
 	/* Transfer 16384 samples from ADC to MEM */
-	axi_dmac_transfer(phy.rx1_dmac,
-			  (uintptr_t)adc_buffers[0],
-			  16384 * /* nr of samples */
-			  ADRV9001_I_Q_CHANNELS * /* rx1 i/q, rx2 i/q*/
-			  2 /* bytes per sample */);
+	axi_dmac_transfer_start(phy.rx1_dmac, &read_transfer1);
+	ret = axi_dmac_transfer_wait_completion(phy.rx1_dmac, 500);
+	if(ret)
+		return ret;
 #ifdef XILINX_PLATFORM
 	Xil_DCacheInvalidateRange((uintptr_t)adc_buffers[0],
 				  16384 * /* nr of samples */
@@ -478,11 +516,22 @@ int main(void)
 				  2 /* bytes per sample */);
 #endif /* XILINX_PLATFORM */
 #ifndef ADRV9002_RX2TX2
-	axi_dmac_transfer(phy.rx2_dmac,
-			  (uintptr_t)adc_buffers[1],
-			  16384 * /* nr of samples */
-			  ADRV9001_I_Q_CHANNELS * /* nr of channels */
-			  2 /* bytes per sample */);
+	struct axi_dma_transfer read_transfer2 = {
+		// Number of bytes to write/read
+		.size = 16384 * ADRV9001_I_Q_CHANNELS * 2, /* nr of samples * rx1 i/q, rx2 i/q * bytes per sample */
+		// Transfer done flag
+		.transfer_done = 0,
+		// Signal transfer mode
+		.cyclic = NO,
+		// Address of data source
+		.src_addr = 0,
+		// Address of data destination
+		.dest_addr = (uintptr_t)adc_buffers[1]
+	};
+	axi_dmac_transfer_start(phy.rx2_dmac,&read_transfer2);
+	ret = axi_dmac_transfer_wait_completion(phy.rx2_dmac, 500);
+	if(ret)
+		return ret;
 #ifdef XILINX_PLATFORM
 	Xil_DCacheInvalidateRange((uintptr_t)adc_buffers[1],
 				  16384 * /* nr of samples */

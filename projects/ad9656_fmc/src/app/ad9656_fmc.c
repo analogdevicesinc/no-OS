@@ -174,8 +174,7 @@ int main(void)
 	struct axi_dmac_init ad9656_dmac_param = {
 		.name = "ad9656_dmac",
 		.base = RX_DMA_BASEADDR,
-		.direction = DMA_DEV_TO_MEM,
-		.flags = 0
+		.irq_option = IRQ_DISABLED
 	};
 	struct axi_dmac *ad9656_dmac;
 
@@ -267,7 +266,24 @@ int main(void)
 
 	/* Initialize the DMAC and transfer 16384 samples from ADC to MEM */
 	axi_dmac_init(&ad9656_dmac, &ad9656_dmac_param);
-	axi_dmac_transfer(ad9656_dmac, ADC_DDR_BASEADDR, 16384 * 4);
+	struct axi_dma_transfer read_transfer = {
+		// Number of bytes to write/read
+		.size = 16384 * 4,
+		// Transfer done flag
+		.transfer_done = 0,
+		// Signal transfer mode
+		.cyclic = NO,
+		// Address of data source
+		.src_addr = 0,
+		// Address of data destination
+		.dest_addr = (uintptr_t)ADC_DDR_BASEADDR
+	};
+	axi_dmac_transfer_start(ad9656_dmac, &read_transfer);
+	/* Wait until transfer finishes */
+	status = axi_dmac_transfer_wait_completion(ad9656_dmac, 500);
+	if(status)
+		return status;
+	Xil_DCacheInvalidateRange((uintptr_t)ADC_DDR_BASEADDR, 16384 * 4);
 
 	ad9656_user_input_test(ad9656_device, AD9656_TEST_OFF, user_input_test_pattern);
 

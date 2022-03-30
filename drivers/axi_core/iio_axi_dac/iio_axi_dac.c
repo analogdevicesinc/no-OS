@@ -509,9 +509,20 @@ int32_t iio_axi_dac_write_data(void *dev, void *buff, uint32_t nb_samples)
 	if(iio_dac->dcache_flush_range)
 		iio_dac->dcache_flush_range((uintptr_t)buff, bytes);
 
-	iio_dac->dmac->flags = DMA_CYCLIC;
+	struct axi_dma_transfer transfer = {
+		// Number of bytes to writen/read
+		.size = bytes,
+		// Transfer done flag
+		.transfer_done = 0,
+		// Signal transfer mode
+		.cyclic = CYCLIC,
+		// Address of data source
+		.src_addr = (uintptr_t)buff,
+		// Address of data destination
+		.dest_addr = 0
+	};
 
-	return axi_dmac_transfer(iio_dac->dmac, (uintptr_t)buff, bytes);
+	return axi_dmac_transfer_start(iio_dac->dmac, &transfer);
 }
 
 enum ch_type {

@@ -48,6 +48,7 @@
 
 #include "spi_extra.h"
 #include "spi_engine_private.h"
+#include "axi_dmac.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -112,6 +113,8 @@ struct spi_engine_desc {
 	struct axi_dmac		*offload_tx_dma;
 	/** Pointer to a DMAC used in reception */
 	struct axi_dmac		*offload_rx_dma;
+	/** Transfer mode for Tx DMAC */
+	enum cyclic_transfer cyclic;
 	/** Offload's module transfer direction : TX, RX or both */
 	uint8_t			offload_config;
 	/** Number of words that the module has to send */

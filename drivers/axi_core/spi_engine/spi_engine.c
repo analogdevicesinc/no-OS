@@ -759,22 +759,24 @@ int32_t spi_engine_offload_init(struct no_os_spi_desc *desc,
 {
 	struct spi_engine_desc	*eng_desc;
 	struct axi_dmac_init	dmac_init;
-	uint32_t dma_flags;
 
 	eng_desc = desc->extra;
 
 	eng_desc->offload_config = param->offload_config;
 
-	if(!(param->dma_flags))
-		dma_flags = DMA_CYCLIC;
-	else
-		dma_flags = *(param->dma_flags);
+	if(!(param->dma_flags)) {
+		eng_desc->cyclic = CYCLIC;
+	} else {
+		if((*(param->dma_flags)) & DMA_CYCLIC)
+			eng_desc->cyclic = CYCLIC;
+		else
+			eng_desc->cyclic = NO;
+	}
+
 
 	if(param->offload_config & OFFLOAD_TX_EN) {
 		dmac_init.name = "DAC DMAC";
 		dmac_init.base = param->tx_dma_baseaddr;
-		dmac_init.direction = DMA_MEM_TO_DEV;
-		dmac_init.flags = dma_flags;
 		axi_dmac_init(&eng_desc->offload_tx_dma, &dmac_init);
 		if(!eng_desc->offload_tx_dma)
 			return -1;
@@ -782,8 +784,6 @@ int32_t spi_engine_offload_init(struct no_os_spi_desc *desc,
 	if(param->offload_config & OFFLOAD_RX_EN) {
 		dmac_init.name = "ADC DMAC";
 		dmac_init.base = param->rx_dma_baseaddr;
-		dmac_init.direction = DMA_DEV_TO_MEM;
-		dmac_init.flags = dma_flags;
 		axi_dmac_init(&eng_desc->offload_rx_dma, &dmac_init);
 		if(!eng_desc->offload_rx_dma)
 			return -1;
@@ -845,17 +845,36 @@ int32_t spi_engine_offload_transfer(struct no_os_spi_desc *desc,
 
 	word_length = spi_get_word_lenght(eng_desc);
 	if(eng_desc->offload_config & OFFLOAD_TX_EN) {
-		axi_dmac_transfer(eng_desc->offload_tx_dma,
-				  msg.tx_addr,
-				  word_length * eng_desc->offload_tx_len *
-				  no_samples);
+		struct axi_dma_transfer tx_transfer = {
+			// Number of bytes to write/read
+			.size = word_length * eng_desc->offload_tx_len * no_samples,
+			// Transfer done flag
+			.transfer_done = 0,
+			// Signal transfer mode
+			.cyclic = eng_desc->cyclic,
+			// Address of data source
+			.src_addr = (uintptr_t)msg.tx_addr,
+			// Address of data destination
+			.dest_addr = 0
+		};
+		axi_dmac_transfer_start(eng_desc->offload_tx_dma, &tx_transfer);
 	}
 
 	if(eng_desc->offload_config & OFFLOAD_RX_EN) {
-		axi_dmac_transfer(eng_desc->offload_rx_dma,
-				  msg.rx_addr,
-				  word_length * eng_desc->offload_tx_len *
-				  no_samples);
+		struct axi_dma_transfer rx_transfer = {
+			// Number of bytes to write/read
+			.size = word_length * eng_desc->offload_tx_len * no_samples,
+			// Transfer done flag
+			.transfer_done = 0,
+			// Signal transfer mode
+			.cyclic = NO,
+			// Address of data source
+			.src_addr = 0,
+			// Address of data destination
+			.dest_addr = (uintptr_t)msg.rx_addr
+		};
+		axi_dmac_transfer_start(eng_desc->offload_rx_dma, &rx_transfer);
+		axi_dmac_transfer_wait_completion(eng_desc->offload_rx_dma, 500);
 	}
 
 	usleep(1000);

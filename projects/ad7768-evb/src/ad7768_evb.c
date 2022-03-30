@@ -147,10 +147,9 @@ int main(void)
 	ad7768_dev	*dev;
 	struct xil_gpio_init_param axi_gpio_init;
 	struct axi_dmac_init dma_initial = {
+		.name = "ad7768_dma",
 		.base = AD7768_DMA_BASEADDR,
-		.direction = DMA_DEV_TO_MEM,
-		.flags = 0,
-		.name = "ad7768_dma"
+		.irq_option = IRQ_DISABLED
 	};
 	struct axi_dmac *dma_desc;
 	int32_t ret;
@@ -221,6 +220,11 @@ int main(void)
 	};
 	int32_t *data_ptr, i;
 
+	/* Enable the instruction cache. */
+	Xil_ICacheEnable();
+	/* Enable the data cache. */
+	Xil_DCacheEnable();
+
 	ret = ad7768_if_gpio_setup(GPIO_UP_SSHOT, NO_OS_GPIO_LOW);
 	if (ret != 0)
 		return ret;
@@ -268,9 +272,25 @@ int main(void)
 		     ((resolution + AD7768_HEADER_SIZE) / BITS_IN_BYTE));
 
 	printf("Capture samples...\n");
-	ret = axi_dmac_transfer(dma_desc, ADC_DDR_BASEADDR, data_size);
+	struct axi_dma_transfer read_transfer = {
+		// Number of bytes to write/read
+		.size = data_size,
+		// Transfer done flag
+		.transfer_done = 0,
+		// Signal transfer mode
+		.cyclic = NO,
+		// Address of data source
+		.src_addr = 0,
+		// Address of data destination
+		.dest_addr = (uintptr_t)ADC_DDR_BASEADDR
+	};
+	ret = axi_dmac_transfer_start(dma_desc, &read_transfer);
 	if (ret != 0)
 		return -1;
+	ret = axi_dmac_transfer_wait_completion(dma_desc, 500);
+	if (ret)
+		return ret;
+	Xil_DCacheInvalidateRange((uintptr_t)ADC_DDR_BASEADDR,data_size);
 	printf("Capture done\n");
 
 	if (ad7768_evb_verify_status(&axi_gpio_init))
@@ -316,6 +336,11 @@ int main(void)
 
 	return iio_app_run(devs, NO_OS_ARRAY_SIZE(devs));
 #endif
+
+	/* Disable the instruction cache. */
+	Xil_DCacheDisable();
+	/* Disable the data cache. */
+	Xil_ICacheDisable();
 
 	return 0;
 }

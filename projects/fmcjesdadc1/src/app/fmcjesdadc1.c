@@ -170,8 +170,7 @@ int main(void)
 	struct axi_dmac_init ad9250_dmac_param = {
 		.name = "ad9250_dmac",
 		.base = RX_DMA_BASEADDR,
-		.direction = DMA_DEV_TO_MEM,
-		.flags = 0
+		.irq_option = IRQ_DISABLED
 	};
 	struct axi_dmac *ad9250_dmac;
 
@@ -532,7 +531,23 @@ int main(void)
 
 	// test the captured data
 	axi_dmac_init(&ad9250_dmac, &ad9250_dmac_param);
-	axi_dmac_transfer(ad9250_dmac, ADC_DDR_BASEADDR, 16384 * 4);
+	struct axi_dma_transfer read_transfer = {
+		// Number of bytes to write/read
+		.size = 16384 * 4,
+		// Transfer done flag
+		.transfer_done = 0,
+		// Signal transfer mode
+		.cyclic = NO,
+		// Address of data source
+		.src_addr = 0,
+		// Address of data destination
+		.dest_addr = (uintptr_t)ADC_DDR_BASEADDR
+	};
+	axi_dmac_transfer_start(ad9250_dmac, &read_transfer);
+	status = axi_dmac_transfer_wait_completion(ad9250_dmac, 500);
+	if(status)
+		return status;
+	Xil_DCacheInvalidateRange((uintptr_t)ADC_DDR_BASEADDR,16384 * 4);
 	Xil_DCacheFlush();
 
 	// set up normal output
@@ -542,7 +557,23 @@ int main(void)
 	ad9250_transfer(ad9250_1_device);
 
 	// capture data with DMA
-	axi_dmac_transfer(ad9250_dmac, ADC_DDR_BASEADDR, 16384 * 4);
+	struct axi_dma_transfer read_transfer_capture = {
+		// Number of bytes to write/read
+		.size = 16384 * 4,
+		// Transfer done flag
+		.transfer_done = 0,
+		// Signal transfer mode
+		.cyclic = NO,
+		// Address of data source
+		.src_addr = 0,
+		// Address of data destination
+		.dest_addr = (uintptr_t)ADC_DDR_BASEADDR
+	};
+	axi_dmac_transfer_start(ad9250_dmac, &read_transfer_capture);
+	status = axi_dmac_transfer_wait_completion(ad9250_dmac, 500);
+	if(status)
+		return status;
+	Xil_DCacheInvalidateRange((uintptr_t)ADC_DDR_BASEADDR,16384 * 4);
 	Xil_DCacheFlush();
 
 #ifdef IIO_SUPPORT
