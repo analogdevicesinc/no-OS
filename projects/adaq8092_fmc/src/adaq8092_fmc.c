@@ -45,14 +45,14 @@
 #include "axi_adc_core.h"
 #include "axi_dmac.h"
 #include "adaq8092.h"
-#include "no-os/spi.h"
-#include "no-os/gpio.h"
+#include "no_os_spi.h"
+#include "no_os_gpio.h"
 #include "spi_extra.h"
 #include "parameters.h"
-#include "no-os/error.h"
+#include "no_os_error.h"
 #include "gpio_extra.h"
 
-#include "no-os/print_log.h"
+#include "no_os_print_log.h"
 
 #ifdef IIO_SUPPORT
 #include "iio_app.h"
@@ -80,7 +80,7 @@ int main(void)
 	};
 
 	/* SPI */
-	struct spi_init_param adaq8092_spi_param = {
+	struct no_os_spi_init_param adaq8092_spi_param = {
 		.device_id = SPI_DEVICE_ID,
 		.max_speed_hz =  1000000u,
 		.chip_select = 0,
@@ -95,25 +95,25 @@ int main(void)
 		.type = GPIO_PS
 	};
 
-	struct gpio_init_param gpio_par_ser_init_param = {
+	struct no_os_gpio_init_param gpio_par_ser_init_param = {
 		.number = GPIO_PAR_SER_NR,
 		.platform_ops = &xil_gpio_ops,
 		.extra = &xil_gpio_init
 	};
 
-	struct gpio_init_param gpio_adc_pd1_param = {
+	struct no_os_gpio_init_param gpio_adc_pd1_param = {
 		.number = GPIO_PD1_NR,
 		.platform_ops = &xil_gpio_ops,
 		.extra = &xil_gpio_init
 	};
 
-	struct gpio_init_param gpio_adc_pd2_param = {
+	struct no_os_gpio_init_param gpio_adc_pd2_param = {
 		.number = GPIO_PD2_NR,
 		.platform_ops = &xil_gpio_ops,
 		.extra = &xil_gpio_init
 	};
 
-	struct gpio_init_param gpio_en_1v8_param = {
+	struct no_os_gpio_init_param gpio_en_1v8_param = {
 		.number = GPIO_1V8_NR,
 		.platform_ops = &xil_gpio_ops,
 		.extra = &xil_gpio_init
@@ -219,7 +219,7 @@ int main(void)
 			       &read_buff, NULL),
 	};
 
-	return iio_app_run(devices, ARRAY_SIZE(devices));
+	return iio_app_run(devices, NO_OS_ARRAY_SIZE(devices));
 #endif
 
 	return 0;
