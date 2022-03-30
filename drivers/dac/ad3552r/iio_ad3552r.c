@@ -221,7 +221,7 @@ static int32_t iio_ad3552r_wr_dev(struct iio_ad3552r_desc *iio_dac,
 	static int c = 0;
 	c++;
 
-	for (i = 0; i < nb_samples * no_os_hweight8(iio_dac->mask); ++i)
+	for (i = 0; i < nb_samples * no_os_hweight32(iio_dac->mask); ++i)
 		buff[i] = no_os_get_unaligned_be16((uint8_t *)&buff[i]);
 
 	return ad3552r_write_samples(iio_dac->dac, buff, nb_samples,

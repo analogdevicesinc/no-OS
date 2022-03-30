@@ -172,9 +172,9 @@ void no_os_rational_best_approximation(uint32_t given_numerator,
 }
 
 /**
- * Calculate the number of set bits.
+ * Calculate the number of set bits (8-bit size).
  */
-uint32_t no_os_hweight8(uint32_t word)
+unsigned int no_os_hweight8(uint8_t word)
 {
 	uint32_t count = 0;
 
@@ -185,6 +185,24 @@ uint32_t no_os_hweight8(uint32_t word)
 	}
 
 	return count;
+}
+
+/**
+ * Calculate the number of set bits (16-bit size).
+ */
+unsigned int no_os_hweight16(uint16_t word)
+{
+	return no_os_hweight8(word >> 8) +
+	       no_os_hweight8(word);
+}
+
+/**
+ * Calculate the number of set bits (32-bit size).
+ */
+unsigned int no_os_hweight32(uint32_t word)
+{
+	return no_os_hweight16(word >> 16) +
+	       no_os_hweight16(word);
 }
 
 /**
