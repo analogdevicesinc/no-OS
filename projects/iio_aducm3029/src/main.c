@@ -165,7 +165,7 @@ int main(void)
 		ADUCM3029_CH(5) |
 		0;
 	char buff[100];
-	uint32_t active_ch = no_os_hweight8(ch_mask);
+	uint32_t active_ch = no_os_hweight32(ch_mask);
 	uint32_t nb_samples = 10;
 	uint32_t i,j,k;
 

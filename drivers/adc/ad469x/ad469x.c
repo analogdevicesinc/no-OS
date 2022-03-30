@@ -494,7 +494,7 @@ int32_t ad469x_std_sequence_ch(struct ad469x_dev *dev, uint16_t ch_mask)
 	if (ret != 0)
 		return ret;
 
-	dev->num_slots = no_os_hweight8(ch_mask);
+	dev->num_slots = no_os_hweight16(ch_mask);
 
 	return ret;
 }

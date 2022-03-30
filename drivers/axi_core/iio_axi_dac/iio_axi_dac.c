@@ -504,7 +504,7 @@ int32_t iio_axi_dac_write_data(void *dev, void *buff, uint32_t nb_samples)
 		return -1;
 
 	iio_dac = (struct iio_axi_dac_desc *)dev;
-	bytes = nb_samples * no_os_hweight8(iio_dac->mask) * (STORAGE_BITS / 8);
+	bytes = nb_samples * no_os_hweight32(iio_dac->mask) * (STORAGE_BITS / 8);
 
 	if(iio_dac->dcache_flush_range)
 		iio_dac->dcache_flush_range((uintptr_t)buff, bytes);

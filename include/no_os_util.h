@@ -143,8 +143,12 @@ void no_os_rational_best_approximation(uint32_t given_numerator,
 				       uint32_t max_denominator,
 				       uint32_t *best_numerator,
 				       uint32_t *best_denominator);
-/* Calculate the number of set bits. */
-uint32_t no_os_hweight8(uint32_t word);
+/* Calculate the number of set bits (8-bit size). */
+unsigned int no_os_hweight8(uint8_t word);
+/* Calculate the number of set bits (16-bit size). */
+unsigned int no_os_hweight16(uint16_t word);
+/* Calculate the number of set bits (32-bit size). */
+unsigned int no_os_hweight32(uint32_t word);
 /* Calculate the quotient and the remainder of an integer division. */
 uint64_t no_os_do_div(uint64_t* n,
 		      uint64_t base);

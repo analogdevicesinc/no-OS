@@ -355,7 +355,7 @@ int32_t	iio_axi_adc_read_dev(void *dev, void *buff, uint32_t nb_samples)
 		return -1;
 
 	iio_adc = (struct iio_axi_adc_desc *)dev;
-	bytes = nb_samples * no_os_hweight8(iio_adc->mask) * (STORAGE_BITS / 8);
+	bytes = nb_samples * no_os_hweight32(iio_adc->mask) * (STORAGE_BITS / 8);
 
 	iio_adc->dmac->flags = 0;
 	ret = axi_dmac_transfer(iio_adc->dmac, (uintptr_t)buff, bytes);
