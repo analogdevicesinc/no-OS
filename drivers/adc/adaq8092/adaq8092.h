@@ -44,15 +44,15 @@
 /******************************************************************************/
 #include <stdint.h>
 #include <string.h>
-#include "no-os/util.h"
-#include "no-os/spi.h"
-#include "no-os/gpio.h"
+#include "no_os_util.h"
+#include "no_os_spi.h"
+#include "no_os_gpio.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 /* SPI commands */
-#define ADAQ8092_SPI_READ          	BIT(7)
+#define ADAQ8092_SPI_READ          	NO_OS_BIT(7)
 #define ADAQ8092_ADDR(x)		((x) & 0xFF)
 
 /* ADAQ8092 Register Map */
@@ -63,27 +63,27 @@
 #define ADAQ8092_REG_DATA_FORMAT	0x04
 
 /* ADAQ8092_REG_RESET Bit Definition */
-#define ADAQ8092_RESET			BIT(7)
+#define ADAQ8092_RESET			NO_OS_BIT(7)
 
 /* ADAQ8092_REG_POWERDOWN Bit Definition */
-#define ADAQ8092_POWERDOWN_MODE		GENMASK(1, 0)
+#define ADAQ8092_POWERDOWN_MODE		NO_OS_GENMASK(1, 0)
 
 /* ADAQ8092_REG_TIMING Bit Definition */
-#define ADAQ8092_CLK_INVERT		BIT(3)
-#define ADAQ8092_CLK_PHASE		GENMASK(2, 1)
-#define ADAQ8092_CLK_DUTYCYCLE		BIT(0)
+#define ADAQ8092_CLK_INVERT		NO_OS_BIT(3)
+#define ADAQ8092_CLK_PHASE		NO_OS_GENMASK(2, 1)
+#define ADAQ8092_CLK_DUTYCYCLE		NO_OS_BIT(0)
 
 /* ADAQ8092_REG_OUTPUT_MODE Bit Definition */
-#define ADAQ8092_ILVDS			GENMASK(6, 4)
-#define ADAQ8092_TERMON			BIT(3)
-#define ADAQ8092_OUTOFF			BIT(2)
-#define ADAQ8092_OUTMODE		GENMASK(1, 0)
+#define ADAQ8092_ILVDS			NO_OS_GENMASK(6, 4)
+#define ADAQ8092_TERMON			NO_OS_BIT(3)
+#define ADAQ8092_OUTOFF			NO_OS_BIT(2)
+#define ADAQ8092_OUTMODE		NO_OS_GENMASK(1, 0)
 
 /* ADAQ8092_REG_DATA_FORMAT Bit Definition */
-#define ADAQ8092_OUTTEST		GENMASK(5, 3)
-#define ADAQ8092_ABP			BIT(2)
-#define ADAQ8092_RAND			BIT(1)
-#define ADAQ8092_TWOSCOMP		BIT(0)
+#define ADAQ8092_OUTTEST		NO_OS_GENMASK(5, 3)
+#define ADAQ8092_ABP			NO_OS_BIT(2)
+#define ADAQ8092_RAND			NO_OS_BIT(1)
+#define ADAQ8092_TWOSCOMP		NO_OS_BIT(0)
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -179,11 +179,11 @@ enum adaq8092_twoscomp {
  */
 struct adaq8092_init_param {
 	/** Device communication descriptor */
-	struct spi_init_param 		*spi_init;
-	struct gpio_init_param		*gpio_adc_pd1_param;
-	struct gpio_init_param		*gpio_adc_pd2_param;
-	struct gpio_init_param		*gpio_en_1p8_param;
-	struct gpio_init_param		*gpio_par_ser_param;
+	struct no_os_spi_init_param 	*spi_init;
+	struct no_os_gpio_init_param	*gpio_adc_pd1_param;
+	struct no_os_gpio_init_param	*gpio_adc_pd2_param;
+	struct no_os_gpio_init_param	*gpio_en_1p8_param;
+	struct no_os_gpio_init_param	*gpio_par_ser_param;
 	enum adaq8092_powerdown_modes	pd_mode;
 	enum adaq8092_clk_invert	clk_pol_mode;
 	enum adaq8092_clk_phase_delay	clk_phase_mode;
@@ -204,11 +204,11 @@ struct adaq8092_init_param {
  */
 struct adaq8092_dev {
 	/** Device communication descriptor */
-	struct spi_desc			*spi_desc;
-	struct gpio_desc		*gpio_adc_pd1;
-	struct gpio_desc		*gpio_adc_pd2;
-	struct gpio_desc		*gpio_en_1p8;
-	struct gpio_desc		*gpio_par_ser;
+	struct no_os_spi_desc		*spi_desc;
+	struct no_os_gpio_desc		*gpio_adc_pd1;
+	struct no_os_gpio_desc		*gpio_adc_pd2;
+	struct no_os_gpio_desc		*gpio_en_1p8;
+	struct no_os_gpio_desc		*gpio_par_ser;
 	enum adaq8092_powerdown_modes	pd_mode;
 	enum adaq8092_clk_invert	clk_pol_mode;
 	enum adaq8092_clk_phase_delay	clk_phase_mode;

@@ -43,7 +43,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include "adaq8092.h"
-#include "no-os/delay.h"
+#include "no_os_delay.h"
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -64,7 +64,7 @@ int adaq8092_read(struct adaq8092_dev *dev, uint8_t reg_addr, uint8_t *reg_data)
 
 	buff[0] = ADAQ8092_SPI_READ | reg_addr;
 
-	ret = spi_write_and_read(dev->spi_desc, buff, 2);
+	ret = no_os_spi_write_and_read(dev->spi_desc, buff, 2);
 	if (ret)
 		return ret;
 
@@ -87,7 +87,7 @@ int adaq8092_write(struct adaq8092_dev *dev, uint8_t reg_addr, uint8_t reg_data)
 	buff[0] = reg_addr;
 	buff[1] = reg_data;
 
-	return spi_write_and_read(dev->spi_desc, buff, 2);
+	return no_os_spi_write_and_read(dev->spi_desc, buff, 2);
 }
 
 /**
@@ -132,68 +132,69 @@ int adaq8092_init(struct adaq8092_dev **device,
 		return -ENOMEM;
 
 	/* SPI Initialization*/
-	ret = spi_init(&dev->spi_desc, init_param.spi_init);
+	ret = no_os_spi_init(&dev->spi_desc, init_param.spi_init);
 	if (ret)
 		goto error_dev;
 
 	/* GPIO Initialization */
-	ret = gpio_get(&dev->gpio_adc_pd1, init_param.gpio_adc_pd1_param);
+	ret = no_os_gpio_get(&dev->gpio_adc_pd1, init_param.gpio_adc_pd1_param);
 	if (ret)
 		goto error_spi;
 
-	ret = gpio_get(&dev->gpio_adc_pd2, init_param.gpio_adc_pd2_param);
+	ret = no_os_gpio_get(&dev->gpio_adc_pd2, init_param.gpio_adc_pd2_param);
 	if (ret)
 		goto error_adc_pd1;
 
-	ret = gpio_get(&dev->gpio_en_1p8, init_param.gpio_en_1p8_param);
+	ret = no_os_gpio_get(&dev->gpio_en_1p8, init_param.gpio_en_1p8_param);
 	if (ret)
 		goto error_adc_pd2;
 
-	ret = gpio_get(&dev->gpio_par_ser, init_param.gpio_par_ser_param);
+	ret = no_os_gpio_get(&dev->gpio_par_ser, init_param.gpio_par_ser_param);
 	if (ret)
 		goto error_en_1p8;
 
 	/* Powerup Sequence */
-	ret = gpio_direction_output(dev->gpio_adc_pd1, GPIO_LOW);
+	ret = no_os_gpio_direction_output(dev->gpio_adc_pd1, NO_OS_GPIO_LOW);
 	if (ret)
 		goto error_par_ser;
 
-	ret = gpio_direction_output(dev->gpio_adc_pd2, GPIO_LOW);
+	ret = no_os_gpio_direction_output(dev->gpio_adc_pd2, NO_OS_GPIO_LOW);
 	if (ret)
 		goto error_par_ser;
 
-	ret = gpio_direction_output(dev->gpio_en_1p8, GPIO_LOW);
+	ret = no_os_gpio_direction_output(dev->gpio_en_1p8, NO_OS_GPIO_LOW);
 	if (ret)
 		goto error_par_ser;
 
-	ret = gpio_direction_output(dev->gpio_par_ser, GPIO_LOW);
+	ret = no_os_gpio_direction_output(dev->gpio_par_ser, NO_OS_GPIO_LOW);
 	if (ret)
 		goto error_par_ser;
 
-	mdelay(1000);
+	no_os_mdelay(1000);
 
-	ret = gpio_set_value(dev->gpio_en_1p8, GPIO_HIGH);
+	ret = no_os_gpio_set_value(dev->gpio_en_1p8, NO_OS_GPIO_HIGH);
 	if (ret)
 		goto error_par_ser;
 
-	mdelay(500);
+	no_os_mdelay(500);
 
-	ret = gpio_set_value(dev->gpio_adc_pd1, GPIO_HIGH);
+	ret = no_os_gpio_set_value(dev->gpio_adc_pd1, NO_OS_GPIO_HIGH);
 	if (ret)
 		goto error_par_ser;
 
-	mdelay(1);
+	no_os_mdelay(1);
 
-	ret = gpio_set_value(dev->gpio_adc_pd2, GPIO_HIGH);
+	ret = no_os_gpio_set_value(dev->gpio_adc_pd2, NO_OS_GPIO_HIGH);
 	if (ret)
 		goto error_par_ser;
 
 	/* Software Reset */
-	ret = adaq8092_write(dev,  ADAQ8092_REG_RESET, field_prep(ADAQ8092_RESET, 1));
+	ret = adaq8092_write(dev,  ADAQ8092_REG_RESET, no_os_field_prep(ADAQ8092_RESET,
+			     1));
 	if (ret)
 		goto error_par_ser;
 
-	mdelay(100);
+	no_os_mdelay(100);
 
 	/* Device Initialization */
 	ret = adaq8092_set_pd_mode(dev, init_param.pd_mode);
@@ -249,15 +250,15 @@ int adaq8092_init(struct adaq8092_dev **device,
 	return 0;
 
 error_par_ser:
-	gpio_remove(dev->gpio_par_ser);
+	no_os_gpio_remove(dev->gpio_par_ser);
 error_en_1p8:
-	gpio_remove(dev->gpio_en_1p8);
+	no_os_gpio_remove(dev->gpio_en_1p8);
 error_adc_pd2:
-	gpio_remove(dev->gpio_adc_pd2);
+	no_os_gpio_remove(dev->gpio_adc_pd2);
 error_adc_pd1:
-	gpio_remove(dev->gpio_adc_pd1);
+	no_os_gpio_remove(dev->gpio_adc_pd1);
 error_spi:
-	spi_remove(dev->spi_desc);
+	no_os_spi_remove(dev->spi_desc);
 error_dev:
 	free(dev);
 
@@ -273,23 +274,23 @@ int adaq8092_remove(struct adaq8092_dev *dev)
 {
 	int ret;
 
-	ret = spi_remove(dev->spi_desc);
+	ret = no_os_spi_remove(dev->spi_desc);
 	if (ret)
 		return ret;
 
-	ret = gpio_remove(dev->gpio_adc_pd1);
+	ret = no_os_gpio_remove(dev->gpio_adc_pd1);
 	if (ret)
 		return ret;
 
-	ret = gpio_remove(dev->gpio_adc_pd2);
+	ret = no_os_gpio_remove(dev->gpio_adc_pd2);
 	if (ret)
 		return ret;
 
-	ret = gpio_remove(dev->gpio_en_1p8);
+	ret = no_os_gpio_remove(dev->gpio_en_1p8);
 	if (ret)
 		return ret;
 
-	ret = gpio_remove(dev->gpio_par_ser);
+	ret = no_os_gpio_remove(dev->gpio_par_ser);
 	if (ret)
 		return ret;
 
@@ -311,7 +312,7 @@ int adaq8092_set_pd_mode(struct adaq8092_dev *dev,
 
 	ret = adaq8092_update_bits(dev, ADAQ8092_REG_POWERDOWN,
 				   ADAQ8092_POWERDOWN_MODE,
-				   field_prep(ADAQ8092_POWERDOWN_MODE, mode));
+				   no_os_field_prep(ADAQ8092_POWERDOWN_MODE, mode));
 	if (ret)
 		return ret;
 
@@ -343,7 +344,7 @@ int adaq8092_set_clk_pol_mode(struct adaq8092_dev *dev,
 
 	ret = adaq8092_update_bits(dev, ADAQ8092_REG_TIMING,
 				   ADAQ8092_CLK_INVERT,
-				   field_prep(ADAQ8092_CLK_INVERT, mode));
+				   no_os_field_prep(ADAQ8092_CLK_INVERT, mode));
 	if (ret)
 		return ret;
 
@@ -375,7 +376,7 @@ int adaq8092_set_clk_phase_mode(struct adaq8092_dev *dev,
 
 	ret = adaq8092_update_bits(dev, ADAQ8092_REG_TIMING,
 				   ADAQ8092_CLK_PHASE,
-				   field_prep(ADAQ8092_CLK_PHASE, mode));
+				   no_os_field_prep(ADAQ8092_CLK_PHASE, mode));
 	if (ret)
 		return ret;
 
@@ -408,7 +409,7 @@ int adaq8092_set_clk_dc_mode(struct adaq8092_dev *dev,
 
 	ret = adaq8092_update_bits(dev, ADAQ8092_REG_TIMING,
 				   ADAQ8092_CLK_DUTYCYCLE,
-				   field_prep(ADAQ8092_CLK_DUTYCYCLE, mode));
+				   no_os_field_prep(ADAQ8092_CLK_DUTYCYCLE, mode));
 	if (ret)
 		return ret;
 
@@ -440,7 +441,7 @@ int adaq8092_set_lvds_cur_mode(struct adaq8092_dev *dev,
 
 	ret = adaq8092_update_bits(dev, ADAQ8092_REG_OUTPUT_MODE,
 				   ADAQ8092_ILVDS,
-				   field_prep(ADAQ8092_ILVDS, mode));
+				   no_os_field_prep(ADAQ8092_ILVDS, mode));
 	if (ret)
 		return ret;
 
@@ -473,7 +474,7 @@ int adaq8092_set_lvds_term_mode(struct adaq8092_dev *dev,
 
 	ret = adaq8092_update_bits(dev, ADAQ8092_REG_OUTPUT_MODE,
 				   ADAQ8092_TERMON,
-				   field_prep(ADAQ8092_TERMON, mode));
+				   no_os_field_prep(ADAQ8092_TERMON, mode));
 	if (ret)
 		return ret;
 
@@ -506,7 +507,7 @@ int adaq8092_set_dout_en(struct adaq8092_dev *dev,
 
 	ret = adaq8092_update_bits(dev, ADAQ8092_REG_OUTPUT_MODE,
 				   ADAQ8092_OUTOFF,
-				   field_prep(ADAQ8092_OUTOFF, mode));
+				   no_os_field_prep(ADAQ8092_OUTOFF, mode));
 	if (ret)
 		return ret;
 
@@ -538,7 +539,7 @@ int adaq8092_set_dout_mode(struct adaq8092_dev *dev,
 
 	ret = adaq8092_update_bits(dev, ADAQ8092_REG_OUTPUT_MODE,
 				   ADAQ8092_OUTMODE,
-				   field_prep(ADAQ8092_OUTMODE, mode));
+				   no_os_field_prep(ADAQ8092_OUTMODE, mode));
 	if (ret)
 		return ret;
 
@@ -570,7 +571,7 @@ int adaq8092_set_test_mode(struct adaq8092_dev *dev,
 
 	ret = adaq8092_update_bits(dev, ADAQ8092_REG_DATA_FORMAT,
 				   ADAQ8092_OUTTEST,
-				   field_prep(ADAQ8092_OUTTEST, mode));
+				   no_os_field_prep(ADAQ8092_OUTTEST, mode));
 	if (ret)
 		return ret;
 
@@ -602,7 +603,7 @@ int adaq8092_set_alt_pol_en(struct adaq8092_dev *dev,
 
 	ret = adaq8092_update_bits(dev, ADAQ8092_REG_DATA_FORMAT,
 				   ADAQ8092_ABP,
-				   field_prep(ADAQ8092_ABP, mode));
+				   no_os_field_prep(ADAQ8092_ABP, mode));
 	if (ret)
 		return ret;
 
@@ -634,7 +635,7 @@ int adaq8092_set_data_rand_en(struct adaq8092_dev *dev,
 
 	ret = adaq8092_update_bits(dev, ADAQ8092_REG_DATA_FORMAT,
 				   ADAQ8092_RAND,
-				   field_prep(ADAQ8092_RAND, mode));
+				   no_os_field_prep(ADAQ8092_RAND, mode));
 	if (ret)
 		return ret;
 
@@ -666,7 +667,7 @@ int adaq8092_set_twos_comp(struct adaq8092_dev *dev,
 
 	ret = adaq8092_update_bits(dev, ADAQ8092_REG_DATA_FORMAT,
 				   ADAQ8092_TWOSCOMP,
-				   field_prep(ADAQ8092_TWOSCOMP, mode));
+				   no_os_field_prep(ADAQ8092_TWOSCOMP, mode));
 	if (ret)
 		return ret;
 
