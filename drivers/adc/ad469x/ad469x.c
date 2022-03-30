@@ -484,7 +484,7 @@ int32_t ad469x_std_sequence_ch(struct ad469x_dev *dev, uint16_t ch_mask)
 
 	ret = ad469x_spi_reg_write(dev,
 				   AD469x_REG_STD_SEQ_CONFIG,
-				   0x0f & ch_mask);
+				   0xff & ch_mask);
 	if (ret != 0)
 		return ret;
 
