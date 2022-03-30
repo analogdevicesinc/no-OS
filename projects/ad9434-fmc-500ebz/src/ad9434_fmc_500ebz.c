@@ -93,8 +93,7 @@ int main(void)
 	struct axi_dmac_init ad9434_dmac_param = {
 		.name = "ad9434_dmac",
 		.base = RX_DMA_BASEADDR,
-		.direction = DMA_DEV_TO_MEM,
-		.flags = 0
+		.irq_option = IRQ_DISABLED
 	};
 	struct axi_dmac *ad9434_dmac;
 
@@ -153,11 +152,28 @@ int main(void)
 		return -1;
 	}
 
-	status = axi_dmac_transfer(ad9434_dmac, ADC_DDR_BASEADDR, 16384 * 2);
+	struct axi_dma_transfer transfer = {
+		// Number of bytes to writen/read
+		.size = 16384 * 2,
+		// Transfer done flag
+		.transfer_done = 0,
+		// Signal transfer mode
+		.cyclic = NO,
+		// Address of data source
+		.src_addr = 0,
+		// Address of data destination
+		.dest_addr = (uintptr_t)ADC_DDR_BASEADDR
+	};
+	status = axi_dmac_transfer_start(ad9434_dmac, &transfer);
 	if (status != 0) {
-		pr_info("axi_dmac_transfer() failed!");
+		pr_info("axi_dmac_transfer_start() failed!");
 		return -1;
 	}
+	status = axi_dmac_transfer_wait_completion(ad9434_dmac, 500);
+	if(status)
+		return status;
+	/* Flush cache data. */
+	Xil_DCacheInvalidateRange((uintptr_t)ADC_DDR_BASEADDR,16384 * 2);
 
 #ifdef IIO_SUPPORT
 

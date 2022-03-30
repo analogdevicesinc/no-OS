@@ -1,4 +1,4 @@
-/***************************************************************************//**
+/*******************************************************************************
  *   @file   axi_dmac.c
  *   @brief  Driver for the Analog Devices AXI-DMAC core.
  *   @author DBogdan (dragos.bogdan@analog.com)
@@ -49,59 +49,185 @@
 #include "no_os_delay.h"
 #include "axi_dmac.h"
 
-/***************************************************************************//**
- * @brief dma_isr
+/*******************************************************************************
+ * @brief ISR for dev to mem DMA transfer. It computes the next transfer params,
+ *			if any, and sets the transfer structure fields accordingly.
+ *
+ * @param instance - the instance that triggered the ISR.
+ *
+ * @return None.
 *******************************************************************************/
-void axi_dmac_default_isr(void *instance)
+void axi_dmac_dev_to_mem_isr(void *instance)
 {
 	struct axi_dmac *dmac = (struct axi_dmac *)instance;
-	uint32_t remaining_size, burst_size;
+	uint32_t burst_size;
 	uint32_t reg_val;
 
 	/* Get interrupt sources and clear interrupts. */
 	axi_dmac_read(dmac, AXI_DMAC_REG_IRQ_PENDING, &reg_val);
 	axi_dmac_write(dmac, AXI_DMAC_REG_IRQ_PENDING, reg_val);
 
-	if ((reg_val & AXI_DMAC_IRQ_SOT) && (dmac->big_transfer.size != 0)) {
-		remaining_size = dmac->big_transfer.size -
-				 dmac->big_transfer.size_done;
-		burst_size = (remaining_size <= dmac->transfer_max_size) ?
-			     remaining_size : dmac->transfer_max_size;
+	if (reg_val & AXI_DMAC_IRQ_SOT) {
+		if (dmac->remaining_size) {
+			/* See if remaining size is bigger than max transfer size and
+			 * set burst size. */
+			if (dmac->remaining_size > dmac->max_length) {
+				burst_size = dmac->max_length;
+			} else {
+				burst_size = dmac->remaining_size - 1;
+			}
 
-		dmac->big_transfer.size_done += burst_size;
-		dmac->big_transfer.address += burst_size;
-		switch (dmac->direction) {
-		case DMA_DEV_TO_MEM:
-			axi_dmac_write(dmac, AXI_DMAC_REG_DEST_ADDRESS,
-				       dmac->big_transfer.address);
+			/* The current transfer was started; set up the new one. */
+			axi_dmac_write(dmac, AXI_DMAC_REG_DEST_ADDRESS, dmac->next_dest_addr);
 			axi_dmac_write(dmac, AXI_DMAC_REG_DEST_STRIDE, 0x0);
-			break;
-		case DMA_MEM_TO_DEV:
-			axi_dmac_write(dmac, AXI_DMAC_REG_SRC_ADDRESS,
-				       dmac->big_transfer.address);
-			axi_dmac_write(dmac, AXI_DMAC_REG_SRC_STRIDE, 0x0);
-			break;
-		default:
-			return; // Other directions are not supported yet
-		}
-		/* The current transfer was started and a new one is queued. */
-		axi_dmac_write(dmac, AXI_DMAC_REG_X_LENGTH,
-			       burst_size);
-		axi_dmac_write(dmac, AXI_DMAC_REG_Y_LENGTH, 0x0);
+			axi_dmac_write(dmac, AXI_DMAC_REG_X_LENGTH, burst_size);
+			axi_dmac_write(dmac, AXI_DMAC_REG_Y_LENGTH, 0x0);
 
-		axi_dmac_write(dmac, AXI_DMAC_REG_START_TRANSFER, 0x1);
+			/* Compute size of the next transfer. */
+			dmac->remaining_size = dmac->remaining_size - (burst_size + 1);
+			/* Address must advance with +1 since the DMAC writes X_LENGTH+1. */
+			dmac->next_dest_addr = dmac->next_dest_addr + (burst_size + 1);
+
+			/* Trigger the next transfer. */
+			axi_dmac_write(dmac, AXI_DMAC_REG_TRANSFER_SUBMIT, AXI_DMAC_TRANSFER_SUBMIT);
+		}
 	}
 	if (reg_val & AXI_DMAC_IRQ_EOT) {
-		dmac->big_transfer.transfer_done = true;
-		dmac->big_transfer.address = 0;
-		dmac->big_transfer.size = 0;
-		dmac->big_transfer.size_done = 0;
+		if (!dmac->remaining_size) {
+			dmac->transfer.transfer_done = true;
+			dmac->next_dest_addr = 0;
+		}
 	}
 }
 
-/***************************************************************************//**
- * @brief axi_dmac_read
- *******************************************************************************/
+/*******************************************************************************
+ * @brief ISR for mem DMA to dev transfer. It computes the next transfer params,
+ *			if any, and sets the transfer structure fields accordingly.
+ *
+ * @param instance - the instance that triggered the ISR.
+ *
+ * @return None.
+*******************************************************************************/
+void axi_dmac_mem_to_dev_isr(void *instance)
+{
+	struct axi_dmac *dmac = (struct axi_dmac *)instance;
+	uint32_t burst_size;
+	uint32_t reg_val;
+
+	/* Get interrupt sources and clear interrupts. */
+	axi_dmac_read(dmac, AXI_DMAC_REG_IRQ_PENDING, &reg_val);
+	axi_dmac_write(dmac, AXI_DMAC_REG_IRQ_PENDING, reg_val);
+
+	if (reg_val & AXI_DMAC_IRQ_SOT) {
+		if ((dmac->transfer.cyclic == CYCLIC) &&
+		    (dmac->next_src_addr >= (dmac->init_addr + dmac->transfer.size - 1))) {
+			dmac->remaining_size = dmac->transfer.size;
+			dmac->next_src_addr = dmac->init_addr;
+		}
+
+		if (dmac->remaining_size) {
+			/** See if remaining size is bigger than max transfer size and
+			 * set burst size. */
+			if (dmac->remaining_size > dmac->max_length) {
+				burst_size = dmac->max_length;
+			} else {
+				burst_size = dmac->remaining_size - 1;
+			}
+
+			/* The current transfer was started; set up the new one. */
+			axi_dmac_write(dmac, AXI_DMAC_REG_SRC_ADDRESS, dmac->next_src_addr);
+			axi_dmac_write(dmac, AXI_DMAC_REG_SRC_STRIDE, 0x0);
+			axi_dmac_write(dmac, AXI_DMAC_REG_X_LENGTH, burst_size);
+			axi_dmac_write(dmac, AXI_DMAC_REG_Y_LENGTH, 0x0);
+
+			/* Compute parameters for the next transfer. */
+			dmac->remaining_size = dmac->remaining_size - (burst_size + 1);
+			/* Address must advance with +1 since the DMAC writes X_LENGTH+1. */
+			dmac->next_src_addr = dmac->next_src_addr + (burst_size + 1);
+
+			/* Trigger the current transfer */
+			axi_dmac_write(dmac, AXI_DMAC_REG_TRANSFER_SUBMIT, AXI_DMAC_TRANSFER_SUBMIT);
+		}
+	}
+	if (reg_val & AXI_DMAC_IRQ_EOT) {
+		if ((!dmac->remaining_size) && (dmac->transfer.cyclic != CYCLIC)) {
+			dmac->transfer.transfer_done = true;
+			dmac->next_src_addr = 0;
+		}
+	}
+}
+
+/*******************************************************************************
+ * @brief ISR for mem DMA to mem DMA transfer. It computes the next transfer
+ *			params, if any, and sets the transfer structure fields accordingly.
+ *
+ * @param instance - the instance that triggered the ISR.
+ *
+ * @return None.
+*******************************************************************************/
+void axi_dmac_mem_to_mem_isr(void *instance)
+{
+	struct axi_dmac *dmac = (struct axi_dmac *)instance;
+	uint32_t burst_size;
+	uint32_t reg_val;
+
+	/* Get interrupt sources and clear interrupts. */
+	axi_dmac_read(dmac, AXI_DMAC_REG_IRQ_PENDING, &reg_val);
+	axi_dmac_write(dmac, AXI_DMAC_REG_IRQ_PENDING, reg_val);
+
+	if (reg_val & AXI_DMAC_IRQ_SOT) {
+		if (dmac->remaining_size) {
+			/** See if remaining size is bigger than max transfer size and
+			 * set burst size. */
+			if (dmac->remaining_size > dmac->max_length) {
+				burst_size = dmac->max_length;
+			} else {
+				burst_size = dmac->remaining_size - 1;
+			}
+
+			/* The current transfer was started; set up the new one. */
+			axi_dmac_write(dmac, AXI_DMAC_REG_SRC_ADDRESS, dmac->next_src_addr);
+			axi_dmac_write(dmac, AXI_DMAC_REG_SRC_STRIDE, 0x0);
+			axi_dmac_write(dmac, AXI_DMAC_REG_DEST_ADDRESS, dmac->next_dest_addr);
+			axi_dmac_write(dmac, AXI_DMAC_REG_DEST_STRIDE, 0x0);
+			axi_dmac_write(dmac, AXI_DMAC_REG_X_LENGTH, burst_size);
+			axi_dmac_write(dmac, AXI_DMAC_REG_Y_LENGTH, 0x0);
+
+			/* Compute parameters for the next transfer. */
+			dmac->remaining_size = dmac->remaining_size - (burst_size + 1);
+			/* Address must advance with +1 since the DMAC writes X_LENGTH+1. */
+			dmac->next_src_addr = dmac->next_src_addr + (burst_size + 1);
+			dmac->next_dest_addr = dmac->next_dest_addr + (burst_size + 1);
+
+			/* If transfer finished advance src address so that transfer_done can be set*/
+			if (!dmac->remaining_size) {
+				dmac->next_src_addr = dmac->next_src_addr + (burst_size + 1);
+			}
+
+			/* Trigger the current transfer */
+			axi_dmac_write(dmac, AXI_DMAC_REG_TRANSFER_SUBMIT, AXI_DMAC_TRANSFER_SUBMIT);
+		}
+	}
+	if (reg_val & AXI_DMAC_IRQ_EOT) {
+		if (!dmac->remaining_size) {
+			if(dmac->next_src_addr > (dmac->init_addr + dmac->transfer.size)) {
+				dmac->transfer.transfer_done = true;
+				dmac->next_src_addr = 0;
+				dmac->next_dest_addr = 0;
+			}
+		}
+	}
+}
+
+/*******************************************************************************
+ * @brief Wrapper for AXI IO through UIO/devmem read function.
+ *
+ * @param dmac - DMAC istance containing UIO index (/dev/uioX)/base address.
+ * @param reg_addr - Address to read from.
+ * @param reg_data - Location where read data will be stored.
+ *
+ * @return 0 - success.
+*******************************************************************************/
 int32_t axi_dmac_read(struct axi_dmac *dmac,
 		      uint32_t reg_addr,
 		      uint32_t *reg_data)
@@ -111,9 +237,15 @@ int32_t axi_dmac_read(struct axi_dmac *dmac,
 	return 0;
 }
 
-/***************************************************************************//**
- * @brief axi_dmac_write
- *******************************************************************************/
+/*******************************************************************************
+ * @brief Wrapper for AXI IO through UIO/devmem wrrite function.
+ *
+ * @param dmac - DMAC istance containing UIO index (/dev/uioX)/base address.
+ * @param reg_addr - Address to write to.
+ * @param reg_data - Data to be written.
+ *
+ * @return 0 - success.
+*******************************************************************************/
 int32_t axi_dmac_write(struct axi_dmac *dmac,
 		       uint32_t reg_addr,
 		       uint32_t reg_data)
@@ -123,172 +255,79 @@ int32_t axi_dmac_write(struct axi_dmac *dmac,
 	return 0;
 }
 
-/***************************************************************************//**
- * @brief axi_dmac_transfer_nonblock
- *******************************************************************************/
-int32_t axi_dmac_transfer_nonblocking(struct axi_dmac *dmac,
-				      uint32_t address, uint32_t size)
-{
-	uint32_t reg_val;
-
-	if (size == 0)
-		return 0; /* nothing to do */
-
-	axi_dmac_read(dmac, AXI_DMAC_REG_CTRL, &reg_val);
-	if (!(reg_val & AXI_DMAC_CTRL_ENABLE)) {
-		axi_dmac_write(dmac, AXI_DMAC_REG_CTRL, 0x0);
-		axi_dmac_write(dmac, AXI_DMAC_REG_CTRL, AXI_DMAC_CTRL_ENABLE);
-		axi_dmac_write(dmac, AXI_DMAC_REG_IRQ_MASK, 0x0);
-	}
-
-	axi_dmac_read(dmac, AXI_DMAC_REG_START_TRANSFER, &reg_val);
-	if (!(reg_val & 1)) {
-		switch (dmac->direction) {
-		case DMA_DEV_TO_MEM:
-			axi_dmac_write(dmac, AXI_DMAC_REG_DEST_ADDRESS, address);
-			axi_dmac_write(dmac, AXI_DMAC_REG_DEST_STRIDE, 0x0);
-			break;
-		case DMA_MEM_TO_DEV:
-			axi_dmac_write(dmac, AXI_DMAC_REG_SRC_ADDRESS, address);
-			axi_dmac_write(dmac, AXI_DMAC_REG_SRC_STRIDE, 0x0);
-			break;
-		default:
-			return -1; // Other directions are not supported yet
-		}
-		if ((size - 1) > dmac->transfer_max_size) {
-			dmac->big_transfer.address = address;
-			dmac->big_transfer.size = size - 1;
-			dmac->big_transfer.size_done = dmac->transfer_max_size;
-
-			axi_dmac_write(dmac, AXI_DMAC_REG_X_LENGTH,
-				       dmac->transfer_max_size);
-			axi_dmac_write(dmac, AXI_DMAC_REG_Y_LENGTH, 0x0);
-
-			axi_dmac_write(dmac, AXI_DMAC_REG_FLAGS, dmac->flags);
-
-			axi_dmac_write(dmac, AXI_DMAC_REG_START_TRANSFER, 0x1);
-		} else {
-			axi_dmac_write(dmac, AXI_DMAC_REG_X_LENGTH,
-				       size - 1);
-			axi_dmac_write(dmac, AXI_DMAC_REG_Y_LENGTH, 0x0);
-
-			axi_dmac_write(dmac, AXI_DMAC_REG_FLAGS, dmac->flags);
-
-			axi_dmac_write(dmac, AXI_DMAC_REG_START_TRANSFER, 0x1);
-		}
-	} else {
-		return -1;
-	}
-
-	return 0;
-}
-
-/***************************************************************************//**
- * @brief axi_dmac_is_transfer_ready
- *******************************************************************************/
+/*******************************************************************************
+ * @brief Get transfer status (value of dmac->transfer.transfer_done flag).
+ *
+ * @note This function should not be used if DMA IRQ is not used.
+ *
+ * @param dmac - DMAC istance.
+ * @param rdy - Transfer status (0 - not ready, 1 - ready).
+ *
+ * @return 0 - success.
+*******************************************************************************/
 int32_t axi_dmac_is_transfer_ready(struct axi_dmac *dmac, bool *rdy)
 {
-	*rdy = dmac->big_transfer.transfer_done;
+	*rdy = dmac->transfer.transfer_done;
 
 	return 0;
 }
 
-/***************************************************************************//**
- * @brief axi_dmac_transfer
- *******************************************************************************/
-int32_t axi_dmac_transfer(struct axi_dmac *dmac,
-			  uint32_t address, uint32_t size)
+/*******************************************************************************
+ * @brief Get DMAC capabilities.
+ *
+ * @param dmac - DMAC istance.
+ *
+ * @return 0 for success, -1 in case of failure.
+*******************************************************************************/
+static int32_t axi_dmac_detect_caps(struct axi_dmac *dmac)
 {
-	uint32_t transfer_id;
-	uint32_t reg_val;
-	uint32_t timeout = 0;
+	uint32_t reg_val, initial_reg_val = 0;
+	uint32_t src_mem_mapped = 0;
+	uint32_t dest_mem_mapped = 0;
 
-	if (size == 0)
-		return 0; /* nothing to do */
+	dmac->max_length = -1;
+	dmac->direction = INVALID_DIR;
 
-	axi_dmac_write(dmac, AXI_DMAC_REG_CTRL, 0x0);
-	axi_dmac_write(dmac, AXI_DMAC_REG_CTRL, AXI_DMAC_CTRL_ENABLE);
+	/* Check if HW cyclic possible */
+	axi_dmac_read(dmac, AXI_DMAC_REG_FLAGS, &initial_reg_val);
+	axi_dmac_write(dmac, AXI_DMAC_REG_FLAGS, DMA_CYCLIC);
+	axi_dmac_read(dmac, AXI_DMAC_REG_FLAGS, &reg_val);
+	if (reg_val == DMA_CYCLIC)
+		dmac->hw_cyclic = true;
+	/* Restore initial value for AXI_DMAC_REG_FLAGS register */
+	axi_dmac_write(dmac, AXI_DMAC_REG_FLAGS, initial_reg_val);
 
-	axi_dmac_write(dmac, AXI_DMAC_REG_IRQ_MASK, 0x0);
+	/* Get maximum burst size and set value. */
+	axi_dmac_write(dmac, AXI_DMAC_REG_X_LENGTH, dmac->max_length);
+	axi_dmac_read(dmac, AXI_DMAC_REG_X_LENGTH, &dmac->max_length);
 
-	axi_dmac_read(dmac, AXI_DMAC_REG_TRANSFER_ID, &transfer_id);
-	axi_dmac_read(dmac, AXI_DMAC_REG_IRQ_PENDING, &reg_val);
-	axi_dmac_write(dmac, AXI_DMAC_REG_IRQ_PENDING, reg_val);
+	/* Get transfer direction and set value. */
+	axi_dmac_write(dmac, AXI_DMAC_REG_DEST_ADDRESS, 0xffffffff);
+	axi_dmac_read(dmac, AXI_DMAC_REG_DEST_ADDRESS, &dest_mem_mapped);
+	axi_dmac_write(dmac, AXI_DMAC_REG_SRC_ADDRESS, 0xffffffff);
+	axi_dmac_read(dmac, AXI_DMAC_REG_SRC_ADDRESS, &src_mem_mapped);
 
-	switch (dmac->direction) {
-	case DMA_DEV_TO_MEM:
-		axi_dmac_write(dmac, AXI_DMAC_REG_DEST_ADDRESS, address);
-		axi_dmac_write(dmac, AXI_DMAC_REG_DEST_STRIDE, 0x0);
-		break;
-	case DMA_MEM_TO_DEV:
-		axi_dmac_write(dmac, AXI_DMAC_REG_SRC_ADDRESS, address);
-		axi_dmac_write(dmac, AXI_DMAC_REG_SRC_STRIDE, 0x0);
-		break;
-	default:
-		return -1; // Other directions are not supported yet
+	if (dest_mem_mapped && !src_mem_mapped) {
+		dmac->direction = DMA_DEV_TO_MEM;
+	} else if (!dest_mem_mapped && src_mem_mapped) {
+		dmac->direction = DMA_MEM_TO_DEV;
+	} else if (dest_mem_mapped && src_mem_mapped) {
+		dmac->direction = DMA_MEM_TO_MEM;
+	} else {
+		printf("Destination and source memory-mapped interfaces not supported.\n");
+		return -1;
 	}
-
-	if ((size - 1) > dmac->transfer_max_size) {
-		dmac->big_transfer.address = address;
-		dmac->big_transfer.size = size - 1;
-		dmac->big_transfer.size_done = dmac->transfer_max_size;
-
-		axi_dmac_write(dmac, AXI_DMAC_REG_X_LENGTH,
-			       dmac->transfer_max_size);
-		axi_dmac_write(dmac, AXI_DMAC_REG_Y_LENGTH, 0x0);
-
-		axi_dmac_write(dmac, AXI_DMAC_REG_FLAGS, dmac->flags);
-
-		axi_dmac_write(dmac, AXI_DMAC_REG_START_TRANSFER, 0x1);
-
-		while(!dmac->big_transfer.transfer_done) {
-			timeout++;
-			if (timeout == UINT32_MAX)
-				return -1;
-		}
-
-		dmac->big_transfer.address = 0;
-		dmac->big_transfer.size = 0;
-		dmac->big_transfer.size_done = 0;
-
-		return 0;
-	}
-
-	axi_dmac_write(dmac, AXI_DMAC_REG_X_LENGTH, size - 1);
-	axi_dmac_write(dmac, AXI_DMAC_REG_Y_LENGTH, 0x0);
-
-	axi_dmac_write(dmac, AXI_DMAC_REG_FLAGS, dmac->flags);
-
-	axi_dmac_write(dmac, AXI_DMAC_REG_START_TRANSFER, 0x1);
-
-	if (dmac->flags & DMA_CYCLIC)
-		return 0;
-
-	/* Wait until the new transfer is queued. */
-	do {
-		axi_dmac_read(dmac, AXI_DMAC_REG_START_TRANSFER, &reg_val);
-	} while(reg_val == 1);
-
-	/* Wait until the current transfer is completed. */
-	do {
-		axi_dmac_read(dmac, AXI_DMAC_REG_IRQ_PENDING, &reg_val);
-		if (reg_val == (AXI_DMAC_IRQ_SOT | AXI_DMAC_IRQ_EOT))
-			break;
-	} while(!dmac->big_transfer.transfer_done);
-	if (reg_val != (AXI_DMAC_IRQ_SOT | AXI_DMAC_IRQ_EOT))
-		axi_dmac_write(dmac, AXI_DMAC_REG_IRQ_PENDING, reg_val);
-
-	/* Wait until the transfer with the ID transfer_id is completed. */
-	do {
-		axi_dmac_read(dmac, AXI_DMAC_REG_TRANSFER_DONE, &reg_val);
-	} while((reg_val & (1u << transfer_id)) != (1u << transfer_id));
-
 	return 0;
 }
 
-/***************************************************************************//**
- * @brief axi_dmac_init
- *******************************************************************************/
+/*******************************************************************************
+ * @brief Get transfer status (value of dmac->transfer.transfer_done flag).
+ *
+ * @param dmac_core - DMAC istance.
+ * @param init - Structure containing initializing data.
+ *
+ * @return 0 for success, -1 in case of failure.
+*******************************************************************************/
 int32_t axi_dmac_init(struct axi_dmac **dmac_core,
 		      const struct axi_dmac_init *init)
 {
@@ -300,27 +339,209 @@ int32_t axi_dmac_init(struct axi_dmac **dmac_core,
 
 	dmac->name = init->name;
 	dmac->base = init->base;
-	dmac->direction = init->direction;
-	dmac->flags = init->flags;
-	dmac->transfer_max_size = -1;
-
-	axi_dmac_write(dmac, AXI_DMAC_REG_X_LENGTH, dmac->transfer_max_size);
-	axi_dmac_read(dmac, AXI_DMAC_REG_X_LENGTH, &dmac->transfer_max_size);
+	dmac->irq_option = init->irq_option;
 
 	*dmac_core = dmac;
+
+	int32_t status = axi_dmac_detect_caps(*dmac_core);
+	if (status < 0)
+		return -1;
 
 	return 0;
 }
 
-/***************************************************************************//**
- * @brief axi_dmac_remove
- *******************************************************************************/
+/*******************************************************************************
+ * @brief Remove the DMAC instance.
+ *
+ * @param dmac - DMAC istance.
+ *
+ * @return 0 for success, -1 in case of failure.
+*******************************************************************************/
 int32_t axi_dmac_remove(struct axi_dmac *dmac)
 {
-	if(!dmac)
+	if (!dmac)
 		return -1;
 
 	free(dmac);
 
 	return 0;
+}
+
+/*******************************************************************************
+ * @brief Start a DMA transfer.
+ *
+ * @param dmac - DMAC istance.
+ * @param dma_transfer - Structure containing transfer details.
+ *
+ * @return 0 for success, -1 in case of failure.
+*******************************************************************************/
+int32_t axi_dmac_transfer_start(struct axi_dmac *dmac,
+				struct axi_dma_transfer *dma_transfer)
+{
+	uint32_t reg_val, burst_size;
+
+	if (dma_transfer->size == 0)
+		return 0; /* Nothing to do. */
+
+	/* Set current transfer parameters. */
+	dmac->transfer.size = dma_transfer->size;
+	dmac->transfer.cyclic = dma_transfer->cyclic;
+	dmac->transfer.dest_addr = dma_transfer->dest_addr;
+	dmac->transfer.src_addr = dma_transfer->src_addr;
+
+	dmac->remaining_size = dma_transfer->size;
+	dmac->next_dest_addr = dma_transfer->dest_addr;
+	dmac->next_src_addr = dma_transfer->src_addr;
+
+	/* If HW cyclic transfer selected and not available, show error */
+	/* HW cyclic transfer available only for MEM to DEV transfers. */
+	if ((!dmac->hw_cyclic) && (dma_transfer->cyclic == CYCLIC)) {
+		printf("Transfer mode not supported!\n");
+		return -1;
+	}
+
+	/* Cyclic transfers not possible for DEV_TO_MEM and MEM_TO_MEM transmissions. */
+	if ((dmac->direction == DMA_DEV_TO_MEM)
+	    || (dmac->direction == DMA_MEM_TO_MEM)) {
+		if (dma_transfer->cyclic == CYCLIC) {
+			printf("Transfer mode not supported!\n");
+			return -1;
+		}
+	}
+
+	/* Cyclic transfers set to HW or SW depending on size for MEM to DEV. */
+	if ((dmac->direction == DMA_MEM_TO_DEV) && (dmac->transfer.cyclic == CYCLIC)) {
+		if ((dmac->remaining_size - 1) <= dmac->max_length) {
+			if (dmac->hw_cyclic) {
+				axi_dmac_read(dmac, AXI_DMAC_REG_FLAGS, &reg_val);
+				reg_val = reg_val | DMA_CYCLIC;
+				axi_dmac_write(dmac, AXI_DMAC_REG_FLAGS, reg_val);
+			}
+		} else {
+			axi_dmac_read(dmac, AXI_DMAC_REG_FLAGS, &reg_val);
+			reg_val = reg_val & ~DMA_CYCLIC;
+			axi_dmac_write(dmac, AXI_DMAC_REG_FLAGS, reg_val);
+		}
+	}
+
+	/* Enable DMA if not already enabled. */
+	axi_dmac_read(dmac, AXI_DMAC_REG_CTRL, &reg_val);
+	if (!(reg_val & AXI_DMAC_CTRL_ENABLE)) {
+		axi_dmac_write(dmac, AXI_DMAC_REG_CTRL, 0x0);
+		axi_dmac_write(dmac, AXI_DMAC_REG_CTRL, AXI_DMAC_CTRL_ENABLE);
+		axi_dmac_write(dmac, AXI_DMAC_REG_IRQ_MASK, 0x0);
+	}
+
+	axi_dmac_read(dmac, AXI_DMAC_REG_TRANSFER_SUBMIT, &reg_val);
+	/* If we don't have a start of transfer then start compute
+	 * values and trigger next transfer. */
+	if (!(reg_val & AXI_DMAC_QUEUE_FULL)) {
+		switch (dmac->direction) {
+		case DMA_DEV_TO_MEM:
+			dmac->init_addr = dmac->next_dest_addr;
+			axi_dmac_write(dmac, AXI_DMAC_REG_DEST_ADDRESS, dmac->next_dest_addr);
+			axi_dmac_write(dmac, AXI_DMAC_REG_DEST_STRIDE, 0x0);
+			break;
+		case DMA_MEM_TO_DEV:
+			dmac->init_addr = dmac->next_src_addr;
+			axi_dmac_write(dmac, AXI_DMAC_REG_SRC_ADDRESS, dmac->next_src_addr);
+			axi_dmac_write(dmac, AXI_DMAC_REG_SRC_STRIDE, 0x0);
+			break;
+		case DMA_MEM_TO_MEM:
+			dmac->init_addr = dmac->next_src_addr;
+			axi_dmac_write(dmac, AXI_DMAC_REG_DEST_ADDRESS, dmac->next_dest_addr);
+			axi_dmac_write(dmac, AXI_DMAC_REG_DEST_STRIDE, 0x0);
+			axi_dmac_write(dmac, AXI_DMAC_REG_SRC_ADDRESS, dmac->next_src_addr);
+			axi_dmac_write(dmac, AXI_DMAC_REG_SRC_STRIDE, 0x0);
+			break;
+		default:
+			return -1; /* Other directions are not supported yet. */
+		}
+
+		/* Compute the burst size. */
+		if (dmac->remaining_size > dmac->max_length) {
+			burst_size = dmac->max_length;
+		} else {
+			burst_size = dmac->remaining_size - 1;
+		}
+
+		/* Compute next address (src or dest, or both, depending on type of transfer). */
+		switch (dmac->direction) {
+		case DMA_DEV_TO_MEM:
+			dmac->next_dest_addr = dmac->next_dest_addr + (burst_size + 1);
+			break;
+		case DMA_MEM_TO_DEV:
+			dmac->next_src_addr = dmac->next_src_addr + (burst_size + 1);
+			break;
+		case DMA_MEM_TO_MEM:
+			dmac->next_dest_addr = dmac->next_dest_addr + (burst_size + 1);
+			dmac->next_src_addr = dmac->next_src_addr + (burst_size + 1);
+			break;
+		default:
+			return -1;
+		}
+
+		/* Compute remaining size. */
+		dmac->remaining_size = dmac->remaining_size - (burst_size + 1);
+
+		/* Specify the length of the transfer and trigger transfer. */
+		axi_dmac_write(dmac, AXI_DMAC_REG_X_LENGTH, burst_size);
+		axi_dmac_write(dmac, AXI_DMAC_REG_Y_LENGTH, 0x0);
+		axi_dmac_write(dmac, AXI_DMAC_REG_TRANSFER_SUBMIT, AXI_DMAC_TRANSFER_SUBMIT);
+	} else {
+		return -1;
+	}
+
+	return 0;
+}
+
+/*******************************************************************************
+ * @brief Wait for DMA transfer to be completed.
+ *
+ * @param dmac - DMAC istance.
+ * @param timeout_ms - Number of ms to wait for completion of transfer.
+ *
+ * @return 0 for success, -1 in case trasnfer not completed in specified time.
+*******************************************************************************/
+int32_t axi_dmac_transfer_wait_completion(struct axi_dmac *dmac,
+		uint32_t timeout_ms)
+{
+	uint32_t timeout = 0;
+	uint32_t reg_val = 0;
+
+	if (dmac->irq_option == IRQ_ENABLED) {
+		while (!dmac->transfer.transfer_done) {
+			timeout++;
+			no_os_mdelay(1);
+			if (timeout == timeout_ms) {
+				printf("Error transferring data using DMA.\n");
+				return -1;
+			}
+		}
+	} else if (dmac->irq_option == IRQ_DISABLED) {
+		axi_dmac_read(dmac, AXI_DMAC_REG_IRQ_PENDING, &reg_val);
+		while (reg_val != (AXI_DMAC_IRQ_SOT | AXI_DMAC_IRQ_EOT)) {
+			timeout++;
+			no_os_mdelay(1);
+			if (timeout == timeout_ms) {
+				printf("Error transferring data using DMA.\n");
+				return -1;
+			}
+			axi_dmac_read(dmac, AXI_DMAC_REG_IRQ_PENDING, &reg_val);
+		}
+	}
+
+	return 0;
+}
+
+/*******************************************************************************
+ * @brief Stop a DMA transfer.
+ *
+ * @param dmac - DMAC istance.
+ *
+ * @return None
+*******************************************************************************/
+void axi_dmac_transfer_stop(struct axi_dmac *dmac)
+{
+	axi_dmac_write(dmac, AXI_DMAC_REG_CTRL, AXI_DMAC_CTRL_DISABLE);
 }

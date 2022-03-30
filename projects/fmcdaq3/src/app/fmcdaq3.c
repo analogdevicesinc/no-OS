@@ -354,8 +354,7 @@ int main(void)
 	struct axi_dmac_init ad9680_dmac_param = {
 		.name = "ad9680_dmac",
 		.base = RX_DMA_BASEADDR,
-		.direction = DMA_DEV_TO_MEM,
-		.flags = 0
+		.irq_option = IRQ_DISABLED
 	};
 	struct axi_dmac *ad9680_dmac;
 
@@ -615,15 +614,32 @@ int main(void)
 	/* Initialize the DMAC and transfer 16384 samples from ADC to MEM */
 	axi_dmac_init(&ad9680_dmac, &ad9680_dmac_param);
 
-	axi_dmac_transfer(ad9680_dmac, ADC_DDR_BASEADDR,
-			  16384 * 2);
+	struct axi_dma_transfer transfer_rx = {
+		// Number of bytes to write/read
+		.size = 16384 * 2,
+		// Transfer done flag
+		.transfer_done = 0,
+		// Signal transfer mode
+		.cyclic = NO,
+		// Address of data source
+		.src_addr = 0,
+		// Address of data destination
+		.dest_addr = (uintptr_t)ADC_DDR_BASEADDR
+	};
+	axi_dmac_transfer_start(ad9680_dmac, &transfer_rx);
+	status = axi_dmac_transfer_wait_completion(ad9680_dmac, 500);
+	if(status)
+		return status;
+#ifdef XILINX_PLATFORM
+	Xil_DCacheInvalidateRange((uintptr_t)ADC_DDR_BASEADDR,
+				  16384 * 2);
+#endif
 
 #ifdef IIO_SUPPORT
 	struct axi_dmac_init ad9152_dmac_param = {
 		.name = "ad9152_dmac",
 		.base = TX_DMA_BASEADDR,
-		.direction = DMA_MEM_TO_DEV,
-		.flags = DMA_CYCLIC
+		.irq_option = IRQ_DISABLED
 	};
 
 	struct axi_dmac *ad9152_dmac;

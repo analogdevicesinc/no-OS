@@ -131,8 +131,7 @@ int main(void)
 	struct axi_dmac_init adaq8092_dmac_param = {
 		.name = "adaq8092_dmac",
 		.base = RX_DMA_BASEADDR,
-		.direction = DMA_DEV_TO_MEM,
-		.flags = 0
+		.irq_option = IRQ_DISABLED
 	};
 	struct axi_dmac *adaq8092_dmac;
 
@@ -177,12 +176,28 @@ int main(void)
 
 	pr_info("Start Caputre with Test pattern - Checkerboard \n");
 
-	ret = axi_dmac_transfer(adaq8092_dmac, (uintptr_t)adc_buffer,
-				sizeof(adc_buffer));
+	struct axi_dma_transfer read_transfer = {
+		// Number of bytes to write/read
+		.size = sizeof(adc_buffer),
+		// Transfer done flag
+		.transfer_done = 0,
+		// Signal transfer mode
+		.cyclic = NO,
+		// Address of data source
+		.src_addr = 0,
+		// Address of data destination
+		.dest_addr = (uintptr_t)adc_buffer
+	};
+	ret = axi_dmac_transfer_start(adaq8092_dmac, &read_transfer);
 	if (ret) {
-		pr_err("axi_dmac_transfer() failed!\n");
+		pr_err("axi_dmac_transfer_start() failed!\n");
 		return ret;
 	}
+	/* Wait until transfer finishes */
+	ret = axi_dmac_transfer_wait_completion(adaq8092_dmac, 500);
+	if(ret)
+		return ret;
+	Xil_DCacheInvalidateRange((uintptr_t)adc_buffer, sizeof(adc_buffer));
 
 	for (int i = 0; i < ADAQ8092_SAMPLES_PER_CH; i+=2)
 		pr_info("CH1: %d CH2: %d \n",adc_buffer[i], adc_buffer[i+1]);

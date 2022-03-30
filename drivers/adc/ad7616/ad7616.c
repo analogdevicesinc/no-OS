@@ -441,8 +441,7 @@ int32_t ad7616_read_data_parallel(struct ad7616_dev *dev,
 
 	dmac_init.name = "ADC DMAC";
 	dmac_init.base = dev->offload_init_param->rx_dma_baseaddr;
-	dmac_init.flags = 0;
-	dmac_init.direction = DMA_DEV_TO_MEM;
+	dmac_init.irq_option = IRQ_DISABLED;
 
 	axi_dmac_init(&dmac, &dmac_init);
 	if(!dmac)
@@ -451,9 +450,27 @@ int32_t ad7616_read_data_parallel(struct ad7616_dev *dev,
 	no_os_axi_io_write(dev->core_baseaddr, AD7616_REG_UP_CTRL,
 			   AD7616_CTRL_RESETN | AD7616_CTRL_CNVST_EN);
 
-	ret = axi_dmac_transfer(dmac, (uint32_t)&buf, samples);
+	struct axi_dma_transfer transfer = {
+		// Number of bytes to writen/read
+		.size = samples,
+		// Transfer done flag
+		.transfer_done = 0,
+		// Signal transfer mode (CYCLIC?)
+		.cyclic = NO,
+		// Address of data source
+		.src_addr = 0,
+		// Address of data destination
+		.dest_addr = (uintptr_t)buf
+	};
+	ret = axi_dmac_transfer_start(dmac, &transfer);
 	if (ret != 0)
 		return ret;
+	/* Wait until transfer finishes */
+	ret = axi_dmac_transfer_wait_completion(dmac, 500);
+	if(ret)
+		return ret;
+	if (dev->dcache_invalidate_range)
+		dev->dcache_invalidate_range((uintptr_t)buf, samples);
 
 	no_os_axi_io_write(dev->core_baseaddr, AD7616_REG_UP_CTRL, AD7616_CTRL_RESETN);
 

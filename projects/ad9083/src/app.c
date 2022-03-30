@@ -89,8 +89,7 @@ int main(void)
 	struct axi_dmac_init rx_dmac_init = {
 		"rx_dmac",
 		RX_DMA_BASEADDR,
-		DMA_DEV_TO_MEM,
-		0
+		IRQ_DISABLED
 	};
 
 	struct app_clocking_init app_clocking_init_param = {

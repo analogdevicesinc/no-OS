@@ -357,9 +357,24 @@ int32_t	iio_axi_adc_read_dev(void *dev, void *buff, uint32_t nb_samples)
 	iio_adc = (struct iio_axi_adc_desc *)dev;
 	bytes = nb_samples * no_os_hweight32(iio_adc->mask) * (STORAGE_BITS / 8);
 
-	iio_adc->dmac->flags = 0;
-	ret = axi_dmac_transfer(iio_adc->dmac, (uintptr_t)buff, bytes);
+	struct axi_dma_transfer transfer = {
+		// Number of bytes to writen/read
+		.size = bytes,
+		// Transfer done flag
+		.transfer_done = 0,
+		// Signal transfer mode
+		.cyclic = NO,
+		// Address of data source
+		.src_addr = 0,
+		// Address of data destination
+		.dest_addr = (uintptr_t)buff
+	};
+	ret = axi_dmac_transfer_start(iio_adc->dmac, &transfer);
 	if (ret < 0)
+		return ret;
+	/* Wait until transfer finishes */
+	ret = axi_dmac_transfer_wait_completion(iio_adc->dmac, 500);
+	if(ret)
 		return ret;
 
 	if (iio_adc->dcache_invalidate_range)

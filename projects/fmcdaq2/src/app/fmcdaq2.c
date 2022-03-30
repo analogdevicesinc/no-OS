@@ -624,8 +624,7 @@ static int fmcdaq2_iio_init(struct fmcdaq2_dev *dev,
 	dev_init->ad9144_dmac_param = (struct axi_dmac_init ) {
 		.name = "ad9144_dmac",
 		.base = TX_DMA_BASEADDR,
-		.direction = DMA_MEM_TO_DEV,
-		.flags = DMA_LAST
+		.irq_option = IRQ_DISABLED
 	};
 	axi_dmac_init(&dev->ad9144_dmac, &dev_init->ad9144_dmac_param);
 
@@ -915,7 +914,7 @@ static int fmcdaq2_setup(struct fmcdaq2_dev *dev,
 	dev_init->ad9680_dmac_param = (struct axi_dmac_init) {
 		.name = "ad9680_dmac",
 		.base = RX_DMA_BASEADDR,
-		.direction = DMA_DEV_TO_MEM,
+		.irq_option = IRQ_DISABLED
 	};
 
 	dev_init->ad9680_param.lane_rate_kbps = 10000000;
@@ -1012,8 +1011,7 @@ int main(void)
 	fmcdaq2_init.ad9144_dmac_param = (struct axi_dmac_init) {
 		.name = "tx_dmac",
 		.base = TX_DMA_BASEADDR,
-		.direction = DMA_MEM_TO_DEV,
-		.flags = DMA_LAST
+		.irq_option = IRQ_DISABLED
 	};
 	fmcdaq2.ad9144_channels[0].sel = AXI_DAC_DATA_SEL_DMA;
 	fmcdaq2.ad9144_channels[1].sel = AXI_DAC_DATA_SEL_DMA;
@@ -1027,8 +1025,23 @@ int main(void)
 #ifndef ALTERA_PLATFORM
 	Xil_DCacheFlush();
 #endif
-	axi_dmac_transfer(fmcdaq2.ad9144_dmac, DAC_DDR_BASEADDR,
-			  NO_OS_ARRAY_SIZE(sine_lut_iq) * sizeof(uint32_t));
+	struct axi_dma_transfer transfer_tx = {
+		// Number of bytes to write/read
+		.size = NO_OS_ARRAY_SIZE(sine_lut_iq) * sizeof(uint32_t),
+		// Transfer done flag
+		.transfer_done = 0,
+		// Signal transfer mode
+		.cyclic = NO,
+		// Address of data source
+		.src_addr = (uintptr_t)DAC_DDR_BASEADDR,
+		// Address of data destination
+		.dest_addr = 0
+	};
+	axi_dmac_transfer_start(fmcdaq2.ad9144_dmac, &transfer_tx);
+#ifndef ALTERA_PLATFORM
+	Xil_DCacheInvalidateRange((uintptr_t)DAC_DDR_BASEADDR,
+				  NO_OS_ARRAY_SIZE(sine_lut_iq) * sizeof(uint32_t));
+#endif
 #else
 	fmcdaq2.ad9144_channels[0].dds_dual_tone = 0;
 	fmcdaq2.ad9144_channels[0].dds_frequency_0 = 33*1000*1000;
@@ -1042,8 +1055,26 @@ int main(void)
 	fmcdaq2.ad9144_channels[1].sel = AXI_DAC_DATA_SEL_DDS;
 	axi_dac_data_setup(fmcdaq2.ad9144_core);
 #endif
-	axi_dmac_transfer(fmcdaq2.ad9680_dmac, ADC_DDR_BASEADDR,
-			  1024 * sizeof(uint32_t));
+	struct axi_dma_transfer transfer_rx = {
+		// Number of bytes to write/read
+		.size = 1024 * sizeof(uint32_t),
+		// Transfer done flag
+		.transfer_done = 0,
+		// Signal transfer mode
+		.cyclic = NO,
+		// Address of data source
+		.src_addr = 0,
+		// Address of data destination
+		.dest_addr = (uintptr_t)ADC_DDR_BASEADDR
+	};
+	axi_dmac_transfer_start(fmcdaq2.ad9680_dmac, &transfer_rx);
+	status = axi_dmac_transfer_wait_completion(fmcdaq2.ad9680_dmac, 500);
+	if(status)
+		return status;
+#ifndef ALTERA_PLATFORM
+	Xil_DCacheInvalidateRange((uintptr_t)ADC_DDR_BASEADDR,
+				  1024 * sizeof(uint32_t));
+#endif
 	printf("\ndaq2: setup and configuration is done\n");
 	printf("\n SAMPLE NO. |     CH1     |     CH 2     |");
 	for (unsigned int i = 0; i < 1024; i++)

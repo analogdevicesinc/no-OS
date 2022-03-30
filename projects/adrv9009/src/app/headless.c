@@ -180,20 +180,14 @@ int main(void)
 	struct axi_dmac_init rx_dmac_init = {
 		"rx_dmac",
 		RX_DMA_BASEADDR,
-		DMA_DEV_TO_MEM,
-		0
+		IRQ_DISABLED
 	};
 	struct axi_dmac *rx_dmac;
 
 	struct axi_dmac_init tx_dmac_init = {
 		"tx_dmac",
 		TX_DMA_BASEADDR,
-		DMA_MEM_TO_DEV,
-#ifdef IIO_SUPPORT
-		DMA_CYCLIC,
-#else
-		0,
-#endif
+		IRQ_DISABLED
 	};
 	struct axi_dmac *tx_dmac;
 
@@ -362,17 +356,47 @@ int main(void)
 	Xil_DCacheFlush();
 #endif
 
-	axi_dmac_transfer(tx_dmac, DAC_DDR_BASEADDR, sizeof(sine_lut_iq));
+	struct axi_dma_transfer transfer_tx = {
+		// Number of bytes to write/read
+		.size = sizeof(sine_lut_iq),
+		// Transfer done flag
+		.transfer_done = 0,
+		// Signal transfer mode
+#ifdef IIO_SUPPORT
+		.cyclic = CYCLIC,
+#else
+		.cyclic = NO,
+#endif
+		// Address of data source
+		.src_addr = (uintptr_t)DAC_DDR_BASEADDR,
+		// Address of data destination
+		.dest_addr = 0
+	};
+	axi_dmac_transfer_start(tx_dmac, &transfer_tx);
+	Xil_DCacheInvalidateRange((uintptr_t)DAC_DDR_BASEADDR, sizeof(sine_lut_iq));
 
 	no_os_mdelay(1000);
 #endif
 
 	/* Transfer 16384 samples from ADC to MEM */
 #ifndef ADRV9008_2
-	axi_dmac_transfer(rx_dmac,
-			  DDR_MEM_BASEADDR + 0x800000,
-			  16384 * TALISE_NUM_CHANNELS *
-			  NO_OS_DIV_ROUND_UP(talInit.jesd204Settings.framerA.Np, 8));
+	struct axi_dma_transfer transfer_rx = {
+		// Number of bytes to write/read
+		.size = 16384 * TALISE_NUM_CHANNELS *
+		NO_OS_DIV_ROUND_UP(talInit.jesd204Settings.framerA.Np, 8),
+		// Transfer done flag
+		.transfer_done = 0,
+		// Signal transfer mode
+		.cyclic = NO,
+		// Address of data source
+		.src_addr = 0,
+		// Address of data destination
+		.dest_addr = (uintptr_t)(DDR_MEM_BASEADDR + 0x800000)
+	};
+	axi_dmac_transfer_start(rx_dmac, &transfer_rx);
+	status = axi_dmac_transfer_wait_completion(rx_dmac, 500);
+	if(status)
+		return status;
 #ifndef ALTERA_PLATFORM
 	Xil_DCacheInvalidateRange(DDR_MEM_BASEADDR + 0x800000,
 				  16384 * TALISE_NUM_CHANNELS *

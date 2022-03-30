@@ -138,8 +138,7 @@ int main(void)
 	struct axi_dmac_init ad9625_dmac_param = {
 		.name = "ad9625_dmac",
 		.base = RX_DMA_BASEADDR,
-		.direction = DMA_DEV_TO_MEM,
-		.flags = 0
+		.irq_option = IRQ_DISABLED
 	};
 	struct axi_dmac *ad9625_dmac;
 
@@ -213,7 +212,23 @@ int main(void)
 
 	axi_dmac_init(&ad9625_dmac, &ad9625_dmac_param);
 
-	axi_dmac_transfer(ad9625_dmac, adc_buff, sizeof(adc_buff));
+	struct axi_dma_transfer read_transfer = {
+		// Number of bytes to write/read
+		.size = sizeof(adc_buff),
+		// Transfer done flag
+		.transfer_done = 0,
+		// Signal transfer mode
+		.cyclic = NO,
+		// Address of data source
+		.src_addr = 0,
+		// Address of data destination
+		.dest_addr = (uintptr_t)adc_buff
+	};
+	axi_dmac_transfer_start(ad9625_dmac, &read_transfer);
+	status = axi_dmac_transfer_wait_completion(ad9625_dmac, 500);
+	if(status)
+		return status;
+	Xil_DCacheInvalidateRange((uintptr_t)adc_buff, sizeof(adc_buff));
 
 #ifdef IIO_SUPPORT
 
