@@ -81,6 +81,12 @@ and will be used inside the function call */
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
+enum number_of_miso {
+	SPI_CLASIC = 0,
+	SPI_DUAL = 2,
+	SPI_QUAD = 4
+};
+
 /**
  * @struct spi_engine_init_param
  * @brief  Structure containing the init parameters needed by the SPI engine
@@ -96,6 +102,8 @@ struct spi_engine_init_param {
 	uint32_t		cs_delay;
 	/** Data with of one SPI transfer ( in bits ) */
 	uint8_t			data_width;
+	/** Number of Data lines */
+	enum number_of_miso	number_of_lines;
 };
 
 
@@ -132,6 +140,8 @@ struct spi_engine_desc {
 	uint8_t			data_width;
 	/** The maximum data width supported by the engine */
 	uint8_t 		max_data_width;
+	/** Number of Data lines */
+	enum number_of_miso	number_of_lines;
 };
 
 

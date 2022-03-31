@@ -656,6 +656,7 @@ int32_t spi_engine_init(struct spi_desc **desc,
 	eng_desc->ref_clk_hz = spi_engine_init->ref_clk_hz;
 	eng_desc->clk_div =  eng_desc->ref_clk_hz /
 			     (2 * param->max_speed_hz) - 1;
+	eng_desc->number_of_lines = spi_engine_init->number_of_lines;
 
 	/* Perform a reset */
 	spi_engine_write(eng_desc, SPI_ENGINE_REG_RESET, 0x01);
@@ -696,6 +697,8 @@ int32_t spi_engine_write_and_read(struct spi_desc *desc,
 	uint8_t 		word_len;
 	uint8_t 		words_number;
 	int32_t 		ret;
+	uint8_t			data_p[bytes_number+1];
+	uint8_t			tmp;
 	struct spi_engine_msg	msg;
 	struct spi_engine_desc	*desc_extra;
 
@@ -721,24 +724,67 @@ int32_t spi_engine_write_and_read(struct spi_desc *desc,
 	/* Get the length of transfered word */
 	word_len = spi_get_word_lenght(desc_extra);
 
-	/* Make sure the CS is HIGH before starting a transaction */
-	msg.cmds->next = NULL;
-	msg.cmds->cmd = CS_HIGH;
-	spi_engine_queue_add_cmd(&msg.cmds, CS_LOW);
-	spi_engine_queue_add_cmd(&msg.cmds, WRITE_READ(bytes_number));
-	spi_engine_queue_add_cmd(&msg.cmds, CS_HIGH);
+	switch(desc_extra->number_of_lines) {
+	case SPI_DUAL:
+		msg.cmds->next = NULL;
+		msg.cmds->cmd = CS_HIGH;
+		spi_engine_queue_add_cmd(&msg.cmds, CS_LOW);
+		if(data[0] & 0x80) {
+			spi_engine_queue_add_cmd(&msg.cmds, WRITE(2));
+			spi_engine_queue_add_cmd(&msg.cmds, READ(bytes_number-1));
+		}
+		else {
+			spi_engine_queue_add_cmd(&msg.cmds, WRITE(bytes_number));
+		}
+		spi_engine_queue_add_cmd(&msg.cmds, CS_HIGH);
 
-	/* Pack the bytes into engine WORDS */
-	for (i = 0; i < bytes_number; i++)
-		msg.tx_buf[i / word_len] |= data[i] << (desc_extra->data_width-
-							(i % word_len + 1) * 8);
+		tmp = data[0];
+		tmp = 0;
+		for(i = 0; i<8; i++) {
+			tmp = tmp << 2;
+			tmp |= (data[0] & 0x80) >> 7;
+			if (i == 3)
+				data_p[0] = tmp;
+			data[0] = data[0] << 1;
+		}
+		data_p[1] = tmp;
 
-	ret = spi_engine_transfer_message(desc, &msg);
+		for(i = 1; i < bytes_number; i++)
+			data_p[i+1] = data[i];
 
-	for (i = 0; i < bytes_number; i++)
-		data[i] = msg.rx_buf[(i) / word_len] >>
-			  (desc_extra->data_width -
-			   ((i) % word_len + 1) * 8);
+		/* Pack the bytes into engine WORDS */
+		for (i = 0; i < bytes_number; i++)
+			msg.tx_buf[i / word_len] |= data_p[i] << (desc_extra->data_width-
+								(i % word_len + 1) * 8);
+
+		ret = spi_engine_transfer_message(desc, &msg);
+
+		for (i = 0; i < bytes_number; i++)
+			data[i] = msg.rx_buf[(i) / word_len] >>
+				  (desc_extra->data_width -
+				   ((i) % word_len + 1) * 8);
+		break;
+	case SPI_CLASIC:
+	default:
+		/* Make sure the CS is HIGH before starting a transaction */
+		msg.cmds->next = NULL;
+		msg.cmds->cmd = CS_HIGH;
+		spi_engine_queue_add_cmd(&msg.cmds, CS_LOW);
+		spi_engine_queue_add_cmd(&msg.cmds, WRITE_READ(bytes_number));
+		spi_engine_queue_add_cmd(&msg.cmds, CS_HIGH);
+
+		/* Pack the bytes into engine WORDS */
+		for (i = 0; i < bytes_number; i++)
+			msg.tx_buf[i / word_len] |= data[i] << (desc_extra->data_width-
+								(i % word_len + 1) * 8);
+
+		ret = spi_engine_transfer_message(desc, &msg);
+
+		for (i = 0; i < bytes_number; i++)
+			data[i] = msg.rx_buf[(i) / word_len] >>
+				  (desc_extra->data_width -
+				   ((i) % word_len + 1) * 8);
+	}
 
 	spi_engine_queue_free(&msg.cmds);
 	free(msg.tx_buf);
