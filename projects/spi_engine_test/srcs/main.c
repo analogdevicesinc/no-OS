@@ -50,7 +50,9 @@
 #include "no-os/gpio.h"
 #include "no-os/util.h"
 #include "no-os/delay.h"
+#include "spi_engine.h"
 #include "spi_extra.h"
+#include "clk_axi_clkgen.h"
 #include "gpio_extra.h"
 #include "ad3552r.h"
 
@@ -65,7 +67,42 @@ static uint8_t data_buffer[MAX_BUFF_SAMPLES];
 
 #endif
 
-/* Default structures */
+/******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
+
+#define AD3552R_SPI_ENGINE_BASEADDR		XPAR_SPI_AD3552R_DAC_AXI_REGMAP_BASEADDR
+#define AD3552R_SPI_CS					0
+#define AD3552R_SPI_ENG_REF_CLK_FREQ_HZ	120000000
+#define AD3552R_SPI_MAX_FREQ_HZ			1200000
+#define AD3552R_CLKGEN_BASEADDR			XPAR_SPI_CLKGEN_BASEADDR
+#define AD3552R_CLKGEN_CLK_FREQ_HZ		100000000
+
+#define AD3552R_REG_READ(x)				((1 << 7) | (x & 0x7F))
+
+struct test_init_param {
+	/** SPI */
+	struct spi_init_param *spi_init;
+	/** GPIO */
+	struct gpio_init_param *gpio_resetn;
+	/** Clock gen for hdl design init structure */
+	struct axi_clkgen_init *clkgen_init;
+	/** Clock generator rate */
+	uint32_t spi_clkgen_rate;
+	/** Register access speed */
+	uint32_t reg_access_speed;
+	/** Device id */
+	enum ad3552r_id device_id;
+};
+
+
+struct test_desc {
+	struct spi_desc *spi;
+	struct gpio_desc *reset;
+	struct axi_clkgen *test_clkgen;
+	uint8_t chip_id;
+};
+
 static struct xil_gpio_init_param xil_gpio_param = {
 	.device_id = GPIO_DEVICE_ID,
 	.type = GPIO_PS
@@ -113,142 +150,175 @@ int32_t init_gpios_to_defaults()
 	return SUCCESS;
 }
 
-void set_power_up_success_led()
+int32_t test_spi_reg_read(struct test_desc *dev, uint8_t addr, uint8_t *val)
 {
-	struct gpio_desc *gpio;
-	struct gpio_init_param param = default_gpio_param;
+	int32_t ret;
+	uint8_t buf[3];
 
-	param.number = GPIO_OFFSET + GPIO_GREEN;
-	gpio_get(&gpio, &param);
-	gpio_direction_output(gpio, GPIO_LOW);
-	gpio_remove(gpio);
+	buf[0] = AD3552R_REG_READ(addr);
+	buf[1] = 0xFF;
+	buf[2] = 0xFF;
+
+	ret = spi_write_and_read(dev->spi, buf, 2);
+	*val = buf[1];
+
+	return ret;
 }
 
-extern const uint16_t sine_lut_16[512];
-
-int32_t run_example(struct ad3552r_desc *dac)
+int32_t test_spi_set_dual(struct test_desc *dev)
 {
-	const uint32_t time_between_samples_us = 100;
-	uint32_t nb_samples, i;
-	uint16_t samples[2];
-	int32_t err;
+	int32_t ret;
+	uint8_t buf[3];
 
-	nb_samples = ARRAY_SIZE(sine_lut_16);
-	i = 0;
-	do {
-		samples[0] = sine_lut_16[i];
-		samples[1] = sine_lut_16[(i + nb_samples / 2) % nb_samples];
-		err = ad3552r_write_samples(dac, samples, 1,
-					    AD3552R_MASK_ALL_CH,
-					    AD3552R_WRITE_INPUT_REGS);
-		if (IS_ERR_VALUE(err))
-			return err;
+	buf[0] = 0x0f;
+	buf[1] = 0x04;
+	buf[2] = 0x00;
 
-		udelay(time_between_samples_us);
+	ret = spi_write_and_read(dev->spi, buf, 4);
 
-		i = (i + 1) % nb_samples;
-		err = ad3552r_ldac_trigger(dac, AD3552R_MASK_ALL_CH);
-	} while (!IS_ERR_VALUE(err));
+	return ret;
+}
 
-	return err;
+int32_t test_spi_set_single_inst(struct test_desc *dev)
+{
+	int32_t ret;
+	uint8_t buf[3];
+
+	buf[0] = 0x01;
+	buf[1] = 0x40;
+	buf[2] = 0x40;
+
+	ret = spi_write_and_read(dev->spi, buf, 4);
+
+	return ret;
+}
+
+int32_t test_init(struct test_desc **desc,
+				struct test_init_param *init_param)
+{
+	struct test_desc *dev;
+	uint8_t val;
+	int32_t ret;
+
+	if (!desc || !init_param)
+		return -EINVAL;
+
+	dev = (struct test_desc *)malloc(sizeof(*dev));
+	if (!dev)
+		return -ENOMEM;
+
+	ret = axi_clkgen_init(&dev->test_clkgen, init_param->clkgen_init);
+	if (ret != SUCCESS) {
+		pr_err("error: %s: axi_clkgen_init() failed\n",
+		       init_param->clkgen_init->name);
+		goto error_dev;
+	}
+
+	ret = axi_clkgen_set_rate(dev->test_clkgen, init_param->spi_clkgen_rate);
+	if (ret != SUCCESS) {
+		pr_err("error: %s: axi_clkgen_set_rate() failed\n",
+		       init_param->clkgen_init->name);
+		goto error_dev;
+	}
+
+	ret = spi_init(&dev->spi, init_param->spi_init);
+	if (ret != SUCCESS)
+		goto err_spi;
+
+	ret = gpio_get_optional(&dev->reset, init_param->gpio_resetn);
+	if (ret != SUCCESS)
+		goto err_reset;
+
+	ret = gpio_direction_output(dev->reset, GPIO_HIGH);
+	if (ret != SUCCESS)
+		goto err_reset;
+
+	gpio_set_value(dev->reset, GPIO_LOW);
+	mdelay(1);
+	gpio_set_value(dev->reset, GPIO_HIGH);
+
+	spi_engine_set_transfer_width(dev->spi, 8);
+
+//	ret = test_spi_set_single_inst(dev);
+//	if (ret != SUCCESS) {
+//		pr_err("Fail to set to single instruction: %"PRIi32"\n", ret);
+//		goto err_reset;
+//	};
+
+//	ret = test_spi_set_dual(dev);
+//	if (ret != SUCCESS) {
+//		pr_err("Fail to set IC to Dual: %"PRIi32"\n", ret);
+//		goto err_reset;
+//	};
+
+	ret = test_spi_reg_read(dev, 0x05, &val);
+	if (ret != SUCCESS) {
+		pr_err("Fail read PRODUCT_ID_L: %"PRIi32"\n", ret);
+		goto err_reset;
+	};
+
+	return SUCCESS;
+err_reset:
+	gpio_remove(dev->reset);
+err_spi:
+	spi_remove(dev->spi);
+error_dev:
+	free(dev);
+
+	return FAILURE;
 }
 
 int main()
 {
-	int32_t err;
+	struct test_desc *dev;
+	int32_t ret;
 
-	pr_debug("Hey, welcome to ad3552r_fmcz example\n");
+	pr_debug("Hey, welcome to spi_engine test\n");
 
-	err = init_gpios_to_defaults();
-	if (IS_ERR_VALUE(err)) {
-		pr_err("init_gpios_to_defaults failed: %"PRIi32"\n", err);
-		return err;
-	}
-
-	struct gpio_init_param ldac_param = default_gpio_param;
-	struct gpio_init_param reset_param = default_gpio_param;
-
-	ldac_param.number = GPIO_OFFSET + GPIO_LDAC_N;
-	reset_param.number = GPIO_OFFSET + GPIO_RESET_N;
-
-	struct ad3552r_init_param default_ad3552r_param = {
-		.chip_id = AD3542R_ID,
-		.spi_param = {
-			.device_id = SPI_DEVICE_ID,
-			.chip_select = 0,
-			.mode = SPI_MODE_0,
-			.bit_order = SPI_BIT_ORDER_MSB_FIRST,
-			.platform_ops = &xil_spi_reg_ops_pl,
-			.extra = NULL
-		},
-		.ldac_gpio_param_optional = &ldac_param,
-		.reset_gpio_param_optional = &reset_param,
-		.channels = {
-			[0] = {
-				.en = 1,
-				.range = AD3542R_CH_OUTPUT_RANGE_0__2P5V
-			},
-			[1] = {
-				.en = 1,
-				.range = AD3542R_CH_OUTPUT_RANGE_0__2P5V
-			}
-		}
+	struct spi_engine_init_param spi_engine_init  = {
+		.ref_clk_hz = AD3552R_SPI_ENG_REF_CLK_FREQ_HZ,
+		.type = SPI_ENGINE,
+		.spi_engine_baseaddr = AD3552R_SPI_ENGINE_BASEADDR,
+		.cs_delay = 0,
+		.data_width = 32,
+		.number_of_lines = SPI_CLASIC,
 	};
 
-#ifndef IIO_SUPPORT
-	struct ad3552r_desc *dac;
-
-	err = ad3552r_init(&dac, &default_ad3552r_param);
-	if (IS_ERR_VALUE(err)) {
-		pr_err("ad3552r_init failed with code: %"PRIi32"\n", err);
-		return err;
-	}
-
-	set_power_up_success_led();
-
-	err = run_example(dac);
-	if (IS_ERR_VALUE(err)) {
-		pr_debug("Example failed with code: %"PRIi32"\n", err);
-		return err;
-	}
-
-	ad3552r_remove(dac);
-
-#else //IIO_SUPPORT
-
-	struct iio_ad3552r_desc *iio_dac;
-	struct iio_device *iio_dac_descriptor;
-
-	struct iio_data_buffer wr_buff = {
-		.buff = data_buffer,
-		.size = sizeof(data_buffer)
+	struct spi_init_param spi_init = {
+		.chip_select = AD3552R_SPI_CS,
+		.max_speed_hz = AD3552R_SPI_MAX_FREQ_HZ,
+		.mode = SPI_MODE_0,
+		.platform_ops = &spi_eng_platform_ops,
+		.extra = (void*)&spi_engine_init,
 	};
 
-	err = iio_ad3552r_init(&iio_dac, &default_ad3552r_param);
-	if (IS_ERR_VALUE(err)) {
-		pr_err("Error initializing iio_dac. Code: %"PRIi32"\n", err);
-		return err;
-	}
-
-	set_power_up_success_led();
-
-	iio_ad3552r_get_descriptor(iio_dac, &iio_dac_descriptor);
-
-	struct iio_app_device devices[] = {
-		IIO_APP_DEVICE("ad3552r", iio_dac, iio_dac_descriptor, NULL,
-			       &wr_buff)
+	struct axi_clkgen_init clkgen_test_init = {
+		.base = AD3552R_CLKGEN_BASEADDR,
+		.name = "test_clkgen",
+		.parent_rate = AD3552R_CLKGEN_CLK_FREQ_HZ
 	};
 
-	err = 0;
-	while (err >= 0) {
-		err = iio_app_run(devices, ARRAY_SIZE(devices));
-	}
+	struct gpio_init_param reset_param = {
+		.number = GPIO_OFFSET + GPIO_RESET_N,
+		.platform_ops = &xil_gpio_ops,
+		.extra = &xil_gpio_param
+	};
 
-	iio_ad3552r_remove(iio_dac);
-#endif
+	struct test_init_param test_init_param = {
+		.device_id = 1,
+		.spi_init = &spi_init,
+		.gpio_resetn = &reset_param,
+		.clkgen_init = &clkgen_test_init,
+		.spi_clkgen_rate = AD3552R_SPI_ENG_REF_CLK_FREQ_HZ
+	};
+
+	ret = test_init(&dev, &test_init_param);
+	if (ret != SUCCESS) {
+		pr_err("ad3552r_init failed with code: %"PRIi32"\n", ret);
+		return ret;
+	}
 
 	pr_debug("Bye\n");
 
 	return 0;
 }
-
