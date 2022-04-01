@@ -540,6 +540,7 @@ int32_t ad713x_init(struct ad713x_dev **device,
 		goto error_gpio;
 
 	dev->dev_id = init_param->dev_id;
+	dev->mode_master_nslave = init_param->mode_master_nslave;
 
 	ret = ad713x_spi_reg_read(dev, AD713X_REG_CHIP_TYPE, &data);
 	if (NO_OS_IS_ERR_VALUE(ret))
