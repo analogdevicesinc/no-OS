@@ -46,12 +46,41 @@
 /******************************************************************************/
 
 #include "iio_types.h"
+#include "no_os_spi.h"
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
+struct ad713x_iio;
+
+/**
+ * @struct ad713x_iio_init_param
+ * @brief AD713x IIO initialization structure
+ */
+struct ad713x_iio_init_param {
+	/** AD713x driver handler */
+	struct ad713x_dev *drv_dev;
+	/** Generic IIO device handler */
+	struct iio_device *iio_dev;
+	/** Integer part of the VREF */
+	uint32_t vref_int;
+	/** Decimal part of the VREF */
+	uint32_t vref_micro;
+	/** SPI Engine driver handler */
+	struct no_os_spi_desc *spi_eng_desc;
+	/** Invalidate the Data cache for the given address range */
+	void (*dcache_invalidate_range)(uint32_t address, uint32_t bytes_count);
+};
+
 extern struct iio_device ad713x_iio_desc;
+
+/** Allocate memory for AD713x IIO handler. */
+int iio_ad713x_init(struct ad713x_iio **desc,
+		    struct ad713x_iio_init_param *param);
+
+/** Free memory allocated by iio_ad713x_init(). */
+int iio_ad713x_remove(struct ad713x_iio *desc);
 
 #endif /* IIO_SUPPORT */
 

@@ -661,7 +661,9 @@ enum ad713x_channels {
 	/** Channel 2 */
 	CH2,
 	/** Channel 3 */
-	CH3
+	CH3,
+	/** Max number of channels */
+	AD713X_CH_MAX
 };
 
 /**
@@ -700,6 +702,8 @@ struct ad713x_dev {
 	enum ad713x_adc_data_len	adc_data_len;
 	/** CRC option. */
 	enum ad713x_crc_header	crc_header;
+	/** MODE GPIO starting value */
+	bool mode_master_nslave;
 };
 
 /**
