@@ -127,7 +127,7 @@ static int adxl355_iio_read_samp_freq_avail(void *dev, char *buf,
 		uint32_t len, const struct iio_ch_info *channel, intptr_t priv);
 static int adxl355_iio_read_samples(void* dev, int* buff, uint32_t samples);
 static int adxl355_iio_update_channels(void* dev, uint32_t mask);
-
+static int32_t adxl355_trigger_handler(struct iio_device_data *dev_data);
 /******************************************************************************/
 /************************ Variable Declarations ******************************/
 /******************************************************************************/
@@ -195,14 +195,6 @@ static struct scan_type adxl355_iio_accel_scan_type = {
 	.is_big_endian = false
 };
 
-static struct scan_type adxl355_iio_temp_scan_type = {
-	.sign = 's',
-	.realbits = 12,
-	.storagebits = 32,
-	.shift = 0,
-	.is_big_endian = false
-};
-
 #define ADXL355_ACCEL_CHANNEL(index, reg, axis) { \
 	.ch_type = IIO_ACCEL,                         \
 	.channel = index,                             \
@@ -222,8 +214,6 @@ static struct iio_channel adxl355_channels[] = {
 	{
 		.ch_type = IIO_TEMP,
 		.channel = 3,
-		.scan_type = &adxl355_iio_temp_scan_type,
-		.scan_index = 3,
 		.attributes = adxl355_iio_temp_attrs,
 		.ch_out = false,
 	},
@@ -233,6 +223,7 @@ static struct iio_device adxl355_iio_dev = {
 	.num_ch = NO_OS_ARRAY_SIZE(adxl355_channels),
 	.channels = adxl355_channels,
 	.pre_enable = (int32_t (*)())adxl355_iio_update_channels,
+	.trigger_handler = (int32_t (*)())adxl355_trigger_handler,
 	.read_dev = (int32_t (*)())adxl355_iio_read_samples,
 	.debug_reg_read = (int32_t (*)())adxl355_iio_read_reg,
 	.debug_reg_write = (int32_t (*)())adxl355_iio_write_reg
@@ -949,6 +940,51 @@ static int adxl355_iio_update_channels(void* dev, uint32_t mask)
 }
 
 /***************************************************************************//**
+ * @brief Handles trigger: reads one data-set and writes it to the buffer.
+ *
+ * @param dev_data  - The iio device data structure.
+ *
+ * @return ret - Result of the handling procedure. In case of success, the size
+ * 				 of the written data is returned.
+*******************************************************************************/
+static int32_t adxl355_trigger_handler(struct iio_device_data *dev_data)
+{
+	int32_t data_buff[3];
+	uint32_t x,y,z;
+	uint8_t i = 0;
+
+	struct adxl355_iio_dev *iio_adxl355;
+	struct adxl355_dev *adxl355;
+
+	if (!dev_data)
+		return -EINVAL;
+
+	iio_adxl355 = (struct adxl355_iio_dev *)dev_data->dev;
+
+	if (!iio_adxl355->adxl355_dev)
+		return -EINVAL;
+
+	adxl355 = iio_adxl355->adxl355_dev;
+
+	adxl355_get_raw_xyz(adxl355, &x, &y, &z);
+
+	if (dev_data->buffer->active_mask & NO_OS_BIT(0)) {
+		data_buff[0] = no_os_sign_extend32(x, 19);
+		i++;
+	}
+	if (dev_data->buffer->active_mask & NO_OS_BIT(1)) {
+		data_buff[i] = no_os_sign_extend32(y, 19);
+		i++;
+	}
+	if (dev_data->buffer->active_mask & NO_OS_BIT(2)) {
+		data_buff[i] = no_os_sign_extend32(z, 19);
+		i++;
+	}
+
+	return iio_buffer_push_scan(dev_data->buffer, &data_buff[0]);
+}
+
+/***************************************************************************//**
  * @brief Initializes the ADXL355 IIO driver
  *
  * @param iio_dev    - The iio device structure.
@@ -958,7 +994,7 @@ static int adxl355_iio_update_channels(void* dev, uint32_t mask)
  * @return ret       - Result of the initialization procedure.
 *******************************************************************************/
 int adxl355_iio_init(struct adxl355_iio_dev **iio_dev,
-		     struct adxl355_iio_init_param *init_param)
+		     struct adxl355_iio_dev_init_param *init_param)
 {
 	int ret;
 	struct adxl355_iio_dev *desc;
@@ -970,7 +1006,7 @@ int adxl355_iio_init(struct adxl355_iio_dev **iio_dev,
 	desc->iio_dev = &adxl355_iio_dev;
 
 	// Initialize ADXL355 driver
-	ret = adxl355_init(&desc->adxl355_dev, *(init_param->adxl355_initial));
+	ret = adxl355_init(&desc->adxl355_dev, *(init_param->adxl355_dev_init));
 	if (ret)
 		goto error_adxl355_init;
 
@@ -982,7 +1018,7 @@ int adxl355_iio_init(struct adxl355_iio_dev **iio_dev,
 		goto error_config;
 
 	// Set operation mode
-	ret = adxl355_set_op_mode(desc->adxl355_dev, ADXL355_MEAS_TEMP_ON_DRDY_OFF);
+	ret = adxl355_set_op_mode(desc->adxl355_dev, ADXL355_MEAS_TEMP_ON_DRDY_ON);
 	if (ret)
 		goto error_config;
 
