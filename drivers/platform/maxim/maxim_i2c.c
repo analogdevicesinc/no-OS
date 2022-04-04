@@ -81,11 +81,11 @@ void I2C1_IRQHandler(void)
  * it is not used and must be set to NULL.
  * @return 0 in case of success, -1 otherwise.
  */
-static int32_t max32660_i2c_init(struct no_os_i2c_desc **desc,
-				 const struct no_os_i2c_init_param *param)
+static int32_t max_i2c_init(struct no_os_i2c_desc **desc,
+			    const struct no_os_i2c_init_param *param)
 {
 	int32_t ret;
-	struct max32660_i2c_extra *max32660_i2c;
+	struct max_i2c_extra *max_i2c;
 	mxc_i2c_regs_t *i2c_regs;
 	uint32_t current_freq = 0;
 	uint32_t freq;
@@ -99,14 +99,14 @@ static int32_t max32660_i2c_init(struct no_os_i2c_desc **desc,
 	if (!(*desc))
 		return -ENOMEM;
 
-	max32660_i2c = calloc(1, sizeof(*max32660_i2c));
-	if (!max32660_i2c) {
+	max_i2c = calloc(1, sizeof(*max_i2c));
+	if (!max_i2c) {
 		ret = -ENOMEM;
 		goto error_desc;
 	}
 
 	i2c_regs = MXC_I2C_GET_I2C(param->device_id);
-	max32660_i2c->handler = i2c_regs;
+	max_i2c->handler = i2c_regs;
 	(*desc)->device_id = param->device_id;
 	if (param->max_speed_hz <= MAX_I2C_STD_MODE) {
 		(*desc)->max_speed_hz = MAX_I2C_STD_MODE;
@@ -121,10 +121,10 @@ static int32_t max32660_i2c_init(struct no_os_i2c_desc **desc,
 		goto error_extra;
 	}
 	(*desc)->slave_address = param->slave_address;
-	(*desc)->extra = max32660_i2c;
+	(*desc)->extra = max_i2c;
 
 	if (nb_created_desc[param->device_id] == 0) {
-		MXC_I2C_Shutdown(max32660_i2c->handler);
+		MXC_I2C_Shutdown(max_i2c->handler);
 		/** The last parameter (slave address) is ignored in master mode */
 		if((MXC_I2C_Init(i2c_regs, I2C_MASTER_MODE, 0)) != E_NO_ERROR) {
 			ret = -1;
@@ -141,7 +141,7 @@ static int32_t max32660_i2c_init(struct no_os_i2c_desc **desc,
 
 	return 0;
 error_extra:
-	free(max32660_i2c);
+	free(max_i2c);
 error_desc:
 	free(*desc);
 
@@ -153,9 +153,9 @@ error_desc:
  * @param desc - Descriptor of the I2C device
  * @return 0 in case of success, -1 otherwise.
  */
-static int32_t max32660_i2c_remove(struct no_os_i2c_desc *desc)
+static int32_t max_i2c_remove(struct no_os_i2c_desc *desc)
 {
-	struct max32660_i2c_extra *max32660_i2c = desc->extra;
+	struct max_i2c_extra *max_i2c = desc->extra;
 	int32_t ret;
 
 	if (!desc)
@@ -163,13 +163,13 @@ static int32_t max32660_i2c_remove(struct no_os_i2c_desc *desc)
 	nb_created_desc[desc->device_id]--;
 
 	if(nb_created_desc[desc->device_id] == 0) {
-		ret = MXC_I2C_Shutdown(max32660_i2c->handler);
+		ret = MXC_I2C_Shutdown(max_i2c->handler);
 		if (ret != E_NO_ERROR)
 			return ret;
 		NVIC_DisableIRQ(desc->device_id == 0 ? I2C0_IRQn : I2C1_IRQn);
 	}
 
-	free(max32660_i2c);
+	free(max_i2c);
 	free(desc);
 
 	return 0;
@@ -185,14 +185,14 @@ static int32_t max32660_i2c_remove(struct no_os_i2c_desc *desc)
  *                            1 - A stop condition will be generated.
  * @return 0 in case of success, -1 otherwise.
  */
-static int32_t max32660_i2c_write(struct no_os_i2c_desc *desc,
-				  uint8_t *data,
-				  uint8_t bytes_number,
-				  uint8_t stop_bit)
+static int32_t max_i2c_write(struct no_os_i2c_desc *desc,
+			     uint8_t *data,
+			     uint8_t bytes_number,
+			     uint8_t stop_bit)
 {
 	mxc_i2c_regs_t *i2c_regs;
 	mxc_i2c_req_t req;
-	struct max32660_i2c_extra *max_i2c_desc;
+	struct max_i2c_extra *max_i2c_desc;
 	void *ptr;
 	int32_t ret;
 
@@ -239,15 +239,15 @@ static int32_t max32660_i2c_write(struct no_os_i2c_desc *desc,
  *                            1 - A stop condition will be generated
  * @return 0 in case of success, -1 otherwise.
  */
-static int32_t max32660_i2c_read(struct no_os_i2c_desc *desc,
-				 uint8_t *data,
-				 uint8_t bytes_number,
-				 uint8_t stop_bit)
+static int32_t max_i2c_read(struct no_os_i2c_desc *desc,
+			    uint8_t *data,
+			    uint8_t bytes_number,
+			    uint8_t stop_bit)
 {
 	mxc_i2c_regs_t *i2c_regs;
 	mxc_i2c_req_t req;
 	int32_t ret;
-	struct max32660_i2c_extra *max_i2c_desc;
+	struct max_i2c_extra *max_i2c_desc;
 
 	if (!desc || !desc->extra)
 		return -EINVAL;
@@ -281,11 +281,11 @@ static int32_t max32660_i2c_read(struct no_os_i2c_desc *desc,
 }
 
 /**
- * @brief MAX32660 platform specific I2C platform ops structure
+ * @brief MAXIM platform specific I2C platform ops structure
  */
-const struct no_os_i2c_platform_ops max32660_i2c_ops = {
-	.i2c_ops_init = &max32660_i2c_init,
-	.i2c_ops_write = &max32660_i2c_write,
-	.i2c_ops_read = &max32660_i2c_read,
-	.i2c_ops_remove = &max32660_i2c_remove
+const struct no_os_i2c_platform_ops max_i2c_ops = {
+	.i2c_ops_init = &max_i2c_init,
+	.i2c_ops_write = &max_i2c_write,
+	.i2c_ops_read = &max_i2c_read,
+	.i2c_ops_remove = &max_i2c_remove
 };

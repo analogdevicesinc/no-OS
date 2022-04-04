@@ -44,10 +44,10 @@
 #include "i2c_regs.h"
 
 /**
- * @struct max332660_i2c_extra
- * @brief MAX32660 specific I2C handler structure
+ * @struct max_i2c_extra
+ * @brief MAXIM specific I2C handler structure
  */
-struct max32660_i2c_extra {
+struct max_i2c_extra {
 	/** Pointer to the abstracted register structure */
 	mxc_i2c_regs_t *handler;
 	/** Pointer to the write data in case of
@@ -59,10 +59,10 @@ struct max32660_i2c_extra {
 };
 
 /**
- * @enum max32660_i2c_speed
- * @brief MAX32660 I2C SCL frequency options
+ * @enum max_i2c_speed
+ * @brief MAXIM I2C SCL frequency options
  */
-enum max32660_i2c_speed {
+enum max_i2c_speed {
 	MAX_I2C_STD_MODE = 100000,
 	MAX_I2C_FAST_MODE = 400000,
 	MAX_I2C_FAST_PLUS_MODE = 1000000,
@@ -70,8 +70,8 @@ enum max32660_i2c_speed {
 };
 
 /**
- * @brief MAX32660 specific I2C platform ops structure
+ * @brief MAXIM specific I2C platform ops structure
  */
-extern const struct no_os_i2c_platform_ops max32660_i2c_ops;
+extern const struct no_os_i2c_platform_ops max_i2c_ops;
 
 #endif /* I2C_EXTRA_H_ */
