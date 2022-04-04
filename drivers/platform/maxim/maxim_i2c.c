@@ -72,6 +72,13 @@ void I2C1_IRQHandler(void)
 	MXC_I2C_AsyncHandler(MXC_I2C1);
 }
 
+#ifdef MXC_I2C2
+void I2C2_IRQHandler(void)
+{
+	MXC_I2C_AsyncHandler(MXC_I2C2);
+}
+#endif
+
 /**
  * @brief Initialize the I2C communication peripheral.
  * Supported bitrates are between 100kHz and 400 kHz.
@@ -168,7 +175,7 @@ static int32_t max_i2c_remove(struct no_os_i2c_desc *desc)
 		ret = MXC_I2C_Shutdown(max_i2c->handler);
 		if (ret != E_NO_ERROR)
 			return ret;
-		NVIC_DisableIRQ(desc->device_id == 0 ? I2C0_IRQn : I2C1_IRQn);
+		NVIC_DisableIRQ(MXC_I2C_GET_IRQ(desc->device_id));
 	}
 
 	free(max_i2c);
