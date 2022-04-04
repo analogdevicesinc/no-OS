@@ -76,6 +76,14 @@ struct iio_device_init {
 	int8_t *raw_buf;
 	/* Length of raw_buf */
 	uint32_t raw_buf_len;
+	/* If set, trigger will be linked to this device */
+	char *trigger_name;
+};
+
+struct iio_trigger_init {
+	char *name;
+	void *trig;
+	struct iio_trigger *descriptor;
 };
 
 struct iio_init_param {
@@ -88,6 +96,8 @@ struct iio_init_param {
 	};
 	struct iio_device_init *devs;
 	uint32_t nb_devs;
+	struct iio_trigger_init *trigs;
+	uint32_t nb_trigs;
 };
 
 /******************************************************************************/
@@ -101,6 +111,12 @@ int iio_init(struct iio_desc **desc, struct iio_init_param *init_param);
 int iio_remove(struct iio_desc *desc);
 /* Execut an iio step. */
 int iio_step(struct iio_desc *desc);
+/* Signal iio that a trigger has been triggered.
+ * This will be called in interrupt context. An application callback will be
+   called in interrupt context if trigger is synchronous with the interrupt
+   (is_synchronous = true) or will be called from iio_step if trigger is
+   asynchronous (is_synchronous = false) */
+void iio_process_trigger_type(struct iio_desc *desc, char *trigger_name);
 
 int32_t iio_parse_value(char *buf, enum iio_val fmt,
 			int32_t *val, int32_t *val2);

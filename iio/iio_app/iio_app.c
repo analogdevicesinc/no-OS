@@ -58,6 +58,9 @@
 #if defined(STM32_PLATFORM)
 #include <errno.h>
 #include "stm32_uart.h"
+#include "stm32_irq.h"
+#include "no_os_irq.h"
+#include "no_os_error.h"
 #endif
 
 #ifdef USE_TCP_SOCKET
@@ -252,7 +255,7 @@ static int32_t uart_setup(struct no_os_uart_desc **uart_desc,
 #endif
 }
 
-#if defined(ADUCM_PLATFORM) || (defined(XILINX_PLATFORM) && !defined(PLATFORM_MB))
+#if defined(ADUCM_PLATFORM) || (defined(XILINX_PLATFORM) && !defined(PLATFORM_MB)) || (defined(STM32_PLATFORM))
 static int32_t irq_setup(struct no_os_irq_ctrl_desc **irq_desc)
 {
 	int32_t status;
@@ -265,6 +268,9 @@ static int32_t irq_setup(struct no_os_irq_ctrl_desc **irq_desc)
 #elif defined(ADUCM_PLATFORM)
 	void *platform_irq_init_par = NULL;
 	const struct no_os_irq_platform_ops *platform_irq_ops = &aducm_irq_ops;
+#elif defined(STM32_PLATFORM)
+	void *platform_irq_init_par = NULL;
+	const struct no_os_irq_platform_ops *platform_irq_ops = &stm32_irq_ops;
 #endif
 
 	struct no_os_irq_init_param irq_init_param = {
@@ -281,22 +287,33 @@ static int32_t irq_setup(struct no_os_irq_ctrl_desc **irq_desc)
 }
 #endif
 
-int32_t iio_app_run(struct iio_app_device *devices, uint32_t len)
+
+/**
+ * @brief IIO Application API with trigger initialization.
+ * @param devices  - IIO devices to be used.
+ * @param nb_devs  - Number of devices to be used.
+ * @param trigs    - IIO triggers to be used.
+ * @param nb_trigs - Number of triggers to be used.
+ * @param irq_desc - IRQ descriptor to be used
+ * @param iio_desc - IIO descriptor to be returned.
+ * @return 0 in case of success or negative value otherwise.
+ */
+int32_t iio_app_run_with_trigs(struct iio_app_device *devices, uint32_t nb_devs,
+			       struct iio_trigger_init *trigs, int32_t nb_trigs,
+			       void *irq_desc, struct iio_desc **iio_desc)
 {
 	int32_t			status;
-	struct iio_desc		*iio_desc;
 	struct iio_init_param	iio_init_param;
 	struct no_os_uart_desc	*uart_desc;
 	struct no_os_uart_init_param	*uart_init_par;
-	void			*irq_desc = NULL;
 	struct iio_device_init	*iio_init_devs;
 	uint32_t		i;
 	struct iio_data_buffer *buff;
 
-#if defined(ADUCM_PLATFORM) || (defined(XILINX_PLATFORM) && !defined(PLATFORM_MB))
+#if defined(ADUCM_PLATFORM) || (defined(XILINX_PLATFORM) && !defined(PLATFORM_MB)) || defined(STM32_PLATFORM)
 	/* Only one irq controller can exist and be initialized in
 	 * any of the iio_devices. */
-	for (i = 0; i < len; i++) {
+	for (i = 0; i < nb_devs; i++) {
 		if (devices[i].dev_descriptor->irq_desc) {
 			irq_desc = (struct no_os_irq_ctrl_desc *)devices[i].dev_descriptor->irq_desc;
 			break;
@@ -327,11 +344,11 @@ int32_t iio_app_run(struct iio_app_device *devices, uint32_t len)
 	iio_init_param.uart_desc = uart_desc;
 #endif
 
-	iio_init_devs = calloc(len, sizeof(*iio_init_devs));
+	iio_init_devs = calloc(nb_devs, sizeof(*iio_init_devs));
 	if (!iio_init_devs)
 		return -ENOMEM;
 
-	for (i = 0; i < len; ++i) {
+	for (i = 0; i < nb_devs; ++i) {
 		/*
 		 * iio_app_device is from iio_app.h and we don't want to include
 		 * this in iio.h.
@@ -357,19 +374,29 @@ int32_t iio_app_run(struct iio_app_device *devices, uint32_t len)
 	}
 
 	iio_init_param.devs = iio_init_devs;
-	iio_init_param.nb_devs = len;
-	status = iio_init(&iio_desc, &iio_init_param);
+	iio_init_param.nb_devs = nb_devs;
+	iio_init_param.trigs = trigs;
+	iio_init_param.nb_trigs = nb_trigs;
+	status = iio_init(iio_desc, &iio_init_param);
 	if(status < 0)
 		goto error;
 
 	free(iio_init_devs);
 
 	do {
-		status = iio_step(iio_desc);
+		status = iio_step(*iio_desc);
 	} while (true);
 error:
 	status = print_uart_error_message(&uart_desc, uart_init_par, status);
 	return status;
+}
+
+int32_t iio_app_run(struct iio_app_device *devices, uint32_t len)
+{
+	struct iio_desc	*iio_desc;
+	void *irq_desc = NULL;
+
+	return iio_app_run_with_trigs(devices, len, NULL, 0, irq_desc, &iio_desc);
 }
 
 #endif
