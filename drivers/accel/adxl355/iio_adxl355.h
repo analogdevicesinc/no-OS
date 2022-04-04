@@ -43,6 +43,14 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include "iio.h"
+#include "no_os_irq.h"
+
+/******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
+#define TRIG_MAX_NAME_SIZE 20
+
+extern struct iio_trigger adxl355_iio_trigger_desc;
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -55,16 +63,35 @@ struct adxl355_iio_dev {
 	uint8_t no_of_active_channels;
 };
 
-struct adxl355_iio_init_param {
-	struct adxl355_init_param *adxl355_initial;
+struct adxl355_iio_dev_init_param {
+	struct adxl355_init_param *adxl355_dev_init;
+};
+
+struct adxl355_iio_trig {
+	struct iio_desc             **iio_desc;
+	struct no_os_irq_ctrl_desc	*irq_ctrl;
+	struct no_os_irq_init_param *irq_init_param;
+	char		                name[TRIG_MAX_NAME_SIZE + 1];
+};
+
+struct adxl355_iio_trig_init_param {
+	struct iio_desc		        **iio_desc;
+	struct no_os_irq_ctrl_desc	*irq_ctrl;
+	struct no_os_irq_init_param *irq_init_param;
+	const char                  *name;
 };
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 int adxl355_iio_init(struct adxl355_iio_dev **iio_dev,
-		     struct adxl355_iio_init_param *init_param);
+		     struct adxl355_iio_dev_init_param *init_param);
 
 int adxl355_iio_remove(struct adxl355_iio_dev *desc);
 
-#endif /** IIO_AD7746_H */
+int iio_adxl355_trigger_init(struct adxl355_iio_trig **iio_trig,
+			     struct adxl355_iio_trig_init_param *init_param);
+
+void iio_adxl355_trigger_remove(struct adxl355_iio_trig *trig);
+
+#endif /** IIO_ADXL355_H */
