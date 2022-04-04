@@ -41,6 +41,7 @@
 #ifndef I2C_EXTRA_H_
 #define I2C_EXTRA_H_
 
+#include <stdint.h>
 #include "i2c_regs.h"
 
 /**
