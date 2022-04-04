@@ -211,6 +211,16 @@ struct iio_device_data {
 	struct iio_buffer *buffer;
 };
 
+struct iio_trigger {
+	bool is_synchronous;
+	/** Array of attributes. Last one should have its name set to NULL */
+	struct iio_attribute *attributes;
+	/** Called when needs to be enabled */
+	void (*enable)(void *trig);
+	/** Called when needs to be disabled */
+	void (*disable)(void *trig);
+};
+
 /**
  * @struct iio_device
  * @brief Structure holding channels and attributes of a device.
@@ -247,6 +257,8 @@ struct iio_device {
 	int32_t (*post_disable)(void *dev);
 	/** Called when buffer ready to transfer. Write/read to/from dev */
 	int32_t	(*submit)(struct iio_device_data *dev);
+	/** Called after a trigger signal has been received by iio */
+	int32_t (*trigger_handler)(struct iio_device_data *dev);
 
 	/* Read device register */
 	int32_t (*debug_reg_read)(void *dev, uint32_t reg, uint32_t *readval);
