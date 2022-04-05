@@ -91,12 +91,6 @@ int32_t adi_ad9081_jesd_oneshot_sync(adi_ad9081_device_t *device,
 	AD9081_NULL_POINTER_RETURN(device);
 	AD9081_LOG_FUNC();
 
-	if (subclass == JESD_SUBCLASS_0) {
-		adi_ad9081_jesd_tx_force_digital_reset_set(
-			device, AD9081_LINK_ALL,
-			1); /* FORCE_LINK_RESET if subclass 0 */
-	}
-
 	err = adi_ad9081_hal_bf_get(device, REG_CLK_CTRL1_ADDR, 0x00000102,
 				    &pd_fdacby4, 1); /* not paged */
 	AD9081_ERROR_RETURN(err);
@@ -107,9 +101,11 @@ int32_t adi_ad9081_jesd_oneshot_sync(adi_ad9081_device_t *device,
 				    BF_ROTATION_MODE_INFO, 1); /* not paged */
 	AD9081_ERROR_RETURN(err);
 
-	//d2a0, d2a1, anacenter
-	err = adi_ad9081_dac_d2a_dual_spi_enable_set(device, AD9081_LINK_ALL,
-						     1);
+	err = adi_ad9081_hal_bf_set(device, REG_SPI_ENABLE_DAC_ADDR,
+				    BF_SPI_EN_D2A0_INFO, 1);
+	AD9081_ERROR_RETURN(err);
+	err = adi_ad9081_hal_bf_set(device, REG_SPI_ENABLE_DAC_ADDR,
+				    BF_SPI_EN_D2A1_INFO, 1);
 	AD9081_ERROR_RETURN(err);
 	err = adi_ad9081_hal_bf_set(device, REG_SPI_ENABLE_DAC_ADDR,
 				    BF_SPI_EN_ANACENTER_INFO, 1);
@@ -156,17 +152,13 @@ int32_t adi_ad9081_jesd_oneshot_sync(adi_ad9081_device_t *device,
 					    0); /* not paged */
 		AD9081_ERROR_RETURN(err);
 	}
+
 	err = adi_ad9081_hal_bf_set(device, REG_CLK_CTRL1_ADDR, 0x00000102,
 				    pd_fdacby4); /* not paged */
 	AD9081_ERROR_RETURN(err);
 
-	if (subclass == JESD_SUBCLASS_0) {
-		adi_ad9081_jesd_tx_force_digital_reset_set(
-			device, AD9081_LINK_ALL,
-			0); /* FORCE_LINK_RESET if subclass 0 */
-		if (sync_done != 1) {
-			return API_CMS_ERROR_JESD_SYNC_NOT_DONE;
-		}
+	if (sync_done != 1) {
+		return API_CMS_ERROR_JESD_SYNC_NOT_DONE;
 	}
 
 	return API_CMS_ERROR_OK;

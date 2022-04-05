@@ -39,7 +39,7 @@
 #define __FUNCTION_NAME__ __FUNCTION__
 #endif
 
-#define AD9081_API_REV 0x00010200
+#define AD9081_API_REV 0x00010202
 #define AD9081_API_HW_RESET_LOW 600000
 #define AD9081_API_RESET_WAIT 500000
 #define AD9081_PLL_LOCK_TRY 75
@@ -362,6 +362,20 @@ adi_ad9081_device_nco_sync_reset_via_sysref_set(adi_ad9081_device_t *device,
 int32_t adi_ad9081_device_nco_sync_trigger_set(adi_ad9081_device_t *device);
 
 /**
+ * \brief Enables digital logic.
+ *
+ * This includes JESD digital, digital clock gen., digital data path.
+ *
+ *
+ * \param[in]  device	         Pointer to device handler structure.
+ * \param[in]  enable            1: enable digital logic.
+ *
+ * \returns API_CMS_ERROR_OK is returned upon success. Otherwise, a failure code.
+ */
+int32_t adi_ad9081_device_digital_logic_enable_set(adi_ad9081_device_t *device,
+						   uint8_t enable);
+
+/**
  * \brief  Enable dual SPI mode
  *
  * Selecting dual0 will enable access to control registers in ranges 0x180-0x194, 0x60-0x7E, and 0x140-0x178.
@@ -394,20 +408,6 @@ int32_t adi_ad9081_dac_d2a_dual_spi_enable_set(adi_ad9081_device_t *device,
  * \returns API_CMS_ERROR_OK is returned upon success. Otherwise, a failure code.
  */
 int32_t adi_ad9081_dac_dll_startup(adi_ad9081_device_t *device, uint8_t dacs);
-
-/**
- * \brief Enables digital logic.
- *
- * This includes JESD digital, digital clock gen., digital data path.
- *
- *
- * \param[in]  device	         Pointer to device handler structure.
- * \param[in]  enable            1: enable digital logic.
- *
- * \returns API_CMS_ERROR_OK is returned upon success. Otherwise, a failure code.
- */
-int32_t adi_ad9081_dac_digital_logic_enable_set(adi_ad9081_device_t *device,
-						uint8_t enable);
 
 /**
  * \brief Sets frequency tuning word for specified DACs and channels.

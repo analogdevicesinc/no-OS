@@ -220,6 +220,21 @@ int32_t adi_ad9081_device_boot_post_clock(adi_ad9081_device_t *device)
 	return API_CMS_ERROR_OK;
 }
 
+int32_t adi_ad9081_device_digital_logic_enable_set(adi_ad9081_device_t *device,
+						   uint8_t enable)
+{
+	int32_t err;
+	AD9081_NULL_POINTER_RETURN(device);
+	AD9081_LOG_FUNC();
+
+	/* enable digital logic, digital clock gen., digital data path */
+	err = adi_ad9081_hal_bf_set(device, REG_DIG_RESET_ADDR,
+				    BF_DIG_RESET_INFO, !enable); /* not paged */
+	AD9081_ERROR_RETURN(err);
+
+	return API_CMS_ERROR_OK;
+}
+
 int32_t adi_ad9081_device_clk_pll_lock_status_get(adi_ad9081_device_t *device,
 						  uint8_t *status)
 {
@@ -555,8 +570,8 @@ int32_t adi_ad9081_device_clk_config_set(adi_ad9081_device_t *device,
 	err = adi_ad9081_device_boot_pre_clock(device);
 	AD9081_ERROR_RETURN(err);
 
-	/* enable dac digital logic */
-	err = adi_ad9081_dac_digital_logic_enable_set(device, 1);
+	/* enable digital logic */
+	err = adi_ad9081_device_digital_logic_enable_set(device, 1);
 	AD9081_ERROR_RETURN(err);
 
 	/* enable dac spi regs access */
@@ -840,7 +855,7 @@ int32_t adi_ad9081_device_init(adi_ad9081_device_t *device)
 				       "api v%d.%d.%d commit %s for ad%x ",
 				       (AD9081_API_REV & 0xff0000) >> 16,
 				       (AD9081_API_REV & 0xff00) >> 8,
-				       (AD9081_API_REV & 0xff), "e1ac8d2",
+				       (AD9081_API_REV & 0xff), "5b813df",
 				       AD9081_ID);
 	AD9081_ERROR_RETURN(err);
 
