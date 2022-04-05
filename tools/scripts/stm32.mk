@@ -99,6 +99,7 @@ $(PROJECT_TARGET)_configure:
 	$(MUTE) $(STM32CUBEIDE)/$(IDE) -nosplash -application org.eclipse.cdt.managedbuilder.core.headlessbuild \
 		-import $(PROJECT_BUILDROOT) -data $(BUILD_DIR) \
 		$(HIDE)
+	$(MUTE) sed -i  's/HAL_NVIC_EnableIRQ(\EXTI/\/\/ HAL_NVIC_EnableIRQ\(EXTI/' $(PROJECT_BUILD)/Src/generated_main.c $(HIDE)
 
 $(PLATFORM)_sdkopen:
 	$(STM32CUBEIDE)/$(IDE) -nosplash -import $(PROJECT_BUILDROOT) -data $(BUILD_DIR) &
