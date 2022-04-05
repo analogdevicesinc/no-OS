@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   maxim/irq_extra.h
- *   @brief  Header file for maxim irq specifics.
+ *   @file   gpio_irq_extra.h
+ *   @brief  Header file of GPIO IRQ interface for Maxim platform.
  *   @author Ciprian Regus (ciprian.regus@analog.com)
 ********************************************************************************
  * Copyright 2022(c) Analog Devices, Inc.
@@ -36,44 +36,26 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef IRQ_MAXIM_EXTRA_H
-#define IRQ_MAXIM_EXTRA_H
 
-#include "maxim_hal.h"
+#ifndef GPIO_IRQ_EXTRA_H_
+#define GPIO_IRQ_EXTRA_H
+
+/******************************************************************************/
+/***************************** Include Files **********************************/
+/******************************************************************************/
+
 #include "no_os_irq.h"
-#include "uart.h"
 
 /**
- * @brief Struct used to store a (peripheral, callback) pair
+ * @brief Maxim platform specific GPIO irq extra param (optional for now)
  */
-struct irq_action {
-	uint32_t irq_id;
-	void *handle;
-	void (*callback)(void *context);
-	void *ctx;
+struct max_gpio_irq_param {
+	struct no_os_irq_ctrl_desc *parent;
 };
 
 /**
- * @brief Struct that stores all the actions for a specific event
+ * @brief maxim platform specific gpio irq platform ops structure
  */
-struct event_list {
-	enum no_os_irq_event event;
-	struct no_os_list_desc *actions;
-};
-
-/**
- * @brief maxim platform specific irq platform ops structure
- */
-extern const struct no_os_irq_platform_ops max_irq_ops;
-
-/**
- * @brief Platform specific uart callback function
- */
-void max_uart_callback(mxc_uart_req_t *, int);
-
-/**
- * @brief irq_action compare function
- */
-int32_t irq_action_cmp(void *data1, void *data2);
+extern const struct no_os_irq_platform_ops max_gpio_irq_ops;
 
 #endif

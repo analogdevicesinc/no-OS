@@ -62,9 +62,4 @@ struct max_uart_init_param {
 	enum max_uart_flow_ctrl flow;
 };
 
-/**
- * @brief maxim specific UART IRQ platform ops structure
- */
-extern const struct no_os_irq_platform_ops max_uart_irq_ops;
-
 #endif

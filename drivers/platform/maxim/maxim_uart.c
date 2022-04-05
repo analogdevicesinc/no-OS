@@ -50,78 +50,17 @@
 #include "no_os_uart.h"
 #include "no_os_irq.h"
 #include "no_os_util.h"
-
-/**
-* @brief Callback descriptor that contains a function to be called when an
-* interrupt occurs.
-*/
-static struct no_os_callback_desc *cb[MXC_UART_INSTANCES];
+#include "irq_extra.h"
 
 /**
 * @brief Descriptors to hold the state of nonblocking read and writes
 * on each port
 */
-static mxc_uart_req_t rx_state[MXC_UART_INSTANCES];
-static mxc_uart_req_t tx_state[MXC_UART_INSTANCES];
-
+mxc_uart_req_t uart_irq_state[MXC_UART_INSTANCES];
+bool is_callback;
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
-
-static void _uart_irq(uint8_t port)
-{
-	mxc_uart_regs_t *uart_regs;
-	uint8_t	n_int;
-	uint32_t reg_int_fl;
-	uint32_t reg_int_en;
-
-	uart_regs = MXC_UART_GET_UART(port);
-	reg_int_fl = uart_regs->int_fl;
-	reg_int_en = uart_regs->int_en;
-
-	/** Handle nonblocking write and read, also clears the interrupt flags */
-	MXC_UART_AsyncHandler(uart_regs);
-
-	if (!cb[port])	{
-		return;
-	}
-
-	while(reg_int_fl) {
-		n_int = no_os_find_first_set_bit(reg_int_fl);
-		if (reg_int_fl & (reg_int_en & NO_OS_BIT(n_int))) {
-			void *ctx = cb[port]->ctx;
-			void *config = cb[port]->config;
-			cb[port]->callback(ctx, n_int, config);
-		}
-		reg_int_fl >>= n_int + 1;
-	}
-}
-
-void UART0_IRQHandler()
-{
-	_uart_irq(0);
-}
-
-#ifdef MXC_UART1
-void UART1_IRQHandler()
-{
-	_uart_irq(1);
-}
-#endif
-
-#ifdef MXC_UART2
-void UART2_IRQHandler()
-{
-	_uart_irq(2);
-}
-#endif
-
-#ifdef MXC_UART3
-void UART3_IRQHandler()
-{
-	_uart_irq(3);
-}
-#endif
 
 /**
  * @brief Read data from UART device. Blocking function.
@@ -176,7 +115,7 @@ int32_t no_os_uart_write(struct no_os_uart_desc *desc, const uint8_t *data,
 		bytes_number -= written;
 	}
 
-	while(MXC_UART_GetTXFIFOAvailable(uart_regs) - MXC_UART_FIFO_DEPTH);
+	while (MXC_UART_GetTXFIFOAvailable(uart_regs) - MXC_UART_FIFO_DEPTH);
 
 	return total_written;
 }
@@ -198,17 +137,19 @@ int32_t no_os_uart_read_nonblocking(struct no_os_uart_desc *desc, uint8_t *data,
 		return -EINVAL;
 
 	id = desc->device_id;
-	rx_state[id].uart = MXC_UART_GET_UART(id);
-	rx_state[id].rxData = data;
-	rx_state[id].rxLen = bytes_number;
-	rx_state[id].txData = NULL;
-	rx_state[id].txLen = 0;
-	rx_state[id].callback = NULL;
+	uart_irq_state[id].uart = MXC_UART_GET_UART(id);
+	uart_irq_state[id].rxData = data;
+	uart_irq_state[id].rxLen = bytes_number;
+	uart_irq_state[id].txData = NULL;
+	uart_irq_state[id].txLen = 0;
+	uart_irq_state[id].rxCnt = 0;
+	uart_irq_state[id].callback = max_uart_callback;
 
-	ret = MXC_UART_TransactionAsync(&rx_state[id]);
-
-	if (ret == E_BUSY)
-		return -EBUSY;
+	if (!is_callback) {
+		ret = MXC_UART_TransactionAsync(&uart_irq_state[id]);
+		if (ret == E_BUSY)
+			return -EBUSY;
+	}
 
 	return 0;
 }
@@ -232,17 +173,19 @@ int32_t no_os_uart_write_nonblocking(struct no_os_uart_desc *desc,
 		return -EINVAL;
 
 	id = desc->device_id;
-	tx_state[id].uart = MXC_UART_GET_UART(id);
-	tx_state[id].txData = data;
-	tx_state[id].txLen = bytes_number;
-	tx_state[id].rxData = NULL;
-	tx_state[id].rxLen = 0;
-	tx_state[id].callback = NULL;
+	uart_irq_state[id].uart = MXC_UART_GET_UART(id);
+	uart_irq_state[id].txData = data;
+	uart_irq_state[id].txLen = bytes_number;
+	uart_irq_state[id].rxData = NULL;
+	uart_irq_state[id].rxLen = 0;
+	uart_irq_state[id].txCnt = 0;
+	uart_irq_state[id].callback = max_uart_callback;
 
-	ret = MXC_UART_TransactionAsync(&tx_state[id]);
-
-	if (ret == E_BUSY)
-		return -EBUSY;
+	if (!is_callback) {
+		ret = MXC_UART_TransactionAsync(&uart_irq_state[id]);
+		if (ret == E_BUSY)
+			return -EBUSY;
+	}
 
 	return 0;
 }
@@ -410,6 +353,7 @@ int32_t no_os_uart_init(struct no_os_uart_desc **desc,
 	*desc = descriptor;
 
 	return 0;
+
 error:
 	free(descriptor);
 	MXC_UART_Shutdown(uart_regs);
@@ -442,99 +386,3 @@ uint32_t no_os_uart_get_errors(struct no_os_uart_desc *desc)
 {
 	return -ENOSYS;
 }
-
-/**
- * @brief Initialize the UART irq descriptor
- * @param desc - The UART irq descriptor.
- * @param desc - The init parameter.
- * @return 0 in case of success, errno codes otherwise.
- */
-static int32_t max_uart_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
-				      const struct no_os_irq_init_param *param)
-{
-	struct no_os_irq_ctrl_desc *descriptor;
-
-	if (!param)
-		return -EINVAL;
-
-	descriptor = calloc(1, sizeof(*descriptor));
-
-	if (!descriptor)
-		return -EINVAL;
-
-	descriptor->irq_ctrl_id = param->irq_ctrl_id;
-	descriptor->platform_ops = param->platform_ops;
-	descriptor->extra = param->extra;
-
-	*desc = descriptor;
-
-	return 0;
-}
-
-/**
- * @brief Free the UART irq descriptor
- * @param desc - The UART descriptor.
- * @return 0 in case of success, errno codes otherwise.
- */
-static int32_t max_uart_irq_ctrl_remove(struct no_os_irq_ctrl_desc *desc)
-{
-	if (!desc)
-		return -EINVAL;
-
-	free(desc);
-
-	return 0;
-}
-
-/**
- * @brief Register a function to be called when an interrupt occurs.
- * @param desc - The UART irq descriptor.
- * @param irq_id - The port on which the callback is registered.
- * @param callback_desc - The callback_descriptor.
- * @return 0 in case of success, errno codes otherwise.
- */
-static int32_t max_uart_register_callback(struct no_os_irq_ctrl_desc *desc,
-		uint32_t irq_id,
-		struct no_os_callback_desc *callback_desc)
-{
-	if (!desc || !callback_desc || irq_id >= N_PORTS)
-		return -EINVAL;
-
-	if (!cb[irq_id]) {
-		cb[irq_id] = calloc(1, sizeof(*cb[irq_id]));
-		if (!cb[irq_id])
-			return -ENOMEM;
-	}
-
-	cb[irq_id]->ctx = callback_desc->ctx;
-	cb[irq_id]->legacy_callback = callback_desc->legacy_callback;
-	cb[irq_id]->legacy_config = callback_desc->legacy_config;
-
-	return 0;
-}
-
-/**
- * @brief Unregister a callback function.
- * @param desc - The UART irq descriptor.
- * @param irq_id - The UART port.
- * @pacam cb - Callback descriptor.
- * @return 0 in case of success, errno codes otherwise.
- */
-static int32_t max_uart_unregister_callback(struct no_os_irq_ctrl_desc *desc,
-		uint32_t irq_id, struct callback_desc *cb)
-{
-	if (irq_id >= N_PORTS || !cb[irq_id])
-		return -EINVAL;
-
-	free(cb[irq_id]);
-	cb[irq_id] = NULL;
-
-	return 0;
-}
-
-const struct no_os_irq_platform_ops max_uart_irq_ops = {
-	.init = &max_uart_irq_ctrl_init,
-	.remove = &max_uart_irq_ctrl_remove,
-	.register_callback = &max_uart_register_callback,
-	.unregister_callback = &max_uart_unregister_callback
-};
