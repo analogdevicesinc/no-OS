@@ -44,6 +44,7 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include "stm32_hal.h"
+#include "stm32_irq.h"
 #include "stm32_spi.h"
 #include "stm32_gpio.h"
 #include "stm32_uart.h"
@@ -55,6 +56,7 @@
 extern UART_HandleTypeDef huart5;
 
 #ifdef IIO_SUPPORT
+#define INTC_DEVICE_ID 0
 #define IIO_APP_HUART	(&huart5)
 #define UART_IRQ_ID     UART5_IRQn
 #endif
@@ -68,5 +70,13 @@ extern UART_HandleTypeDef huart5;
 
 extern struct stm32_uart_init_param xuip;
 extern struct stm32_spi_init_param xsip;
+
+#ifdef IIO_TRIGGER_EXAMPLE
+#define IRQ_OPS &stm32_irq_ops
+#define ADXL355_TRIGGER_INTR_ID EXTI2_IRQn
+
+extern EXTI_HandleTypeDef xiip;
+extern EXTI_ConfigTypeDef adxl355_int_exticonfig;
+#endif
 
 #endif /* __PARAMETERS_H__ */

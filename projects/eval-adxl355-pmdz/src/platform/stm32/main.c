@@ -47,6 +47,10 @@
 #include "iio_example.h"
 #endif
 
+#ifdef IIO_TRIGGER_EXAMPLE
+#include "iio_trigger_example.h"
+#endif
+
 #ifdef DUMMY_EXAMPLE
 #include "dummy_example.h"
 #endif
@@ -61,12 +65,21 @@ int main ()
 	int ret;
 
 	xsip.get_input_clock = HAL_RCC_GetPCLK1Freq;
-	init_data_adxl355.comm_init.spi_init = sip;
+	adxl355_user_init.comm_init.spi_init = sip;
 
 	stm32_init();
 
 #ifdef IIO_EXAMPLE
 	ret = iio_example_main ();
+	if (ret < 0)
+		goto error;
+#endif
+
+#ifdef IIO_TRIGGER_EXAMPLE
+	ret = HAL_EXTI_SetConfigLine(&xiip, &adxl355_int_exticonfig);
+	if (ret != HAL_OK)
+		return ret;
+	ret = iio_trigger_example_main ();
 	if (ret < 0)
 		goto error;
 #endif
@@ -84,8 +97,8 @@ int main ()
 		goto error;
 #endif
 
-#if defined(IIO_EXAMPLE) && defined(DUMMY_EXAMPLE)
-#error IIO_EXAMPLE and DUMMY_EXAMPLE cannot be enabled at the same time. \
+#if (IIO_EXAMPLE+IIO_TRIGGER_EXAMPLE+DUMMY_EXAMPLE != 1)
+#error Selected example projects cannot be enabled at the same time. \
 Please enable only one example and re-build the project.
 #endif
 

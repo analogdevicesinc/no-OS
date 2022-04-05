@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   parameters.c
- *   @brief  Definition of STM32 platform data used by eval-adxl355-pmdz project.
+ *   @file   iio_trigger_example.h
+ *   @brief  IIO trigger example header for eval-adxl355-pmdz project
  *   @author RBolboac (ramona.bolboaca@analog.com)
 ********************************************************************************
  * Copyright 2022(c) Analog Devices, Inc.
@@ -36,32 +36,16 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
+#ifndef __IIO_TRIGGER_EXAMPLE_H__
+#define __IIO_TRIGGER_EXAMPLE_H__
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "parameters.h"
 
 /******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
+/************************ Functions Declarations ******************************/
 /******************************************************************************/
-#ifdef DUMMY_EXAMPLE
-struct stm32_uart_init_param xuip = {
-	.huart = &huart5,
-};
-#endif
+int iio_trigger_example_main ();
 
-struct stm32_spi_init_param xsip  = {
-	.chip_select_port = SPI_CS_PORT,
-};
-
-#ifdef IIO_TRIGGER_EXAMPLE
-EXTI_ConfigTypeDef adxl355_int_exticonfig = {
-	.Line = EXTI_LINE_2,
-	.Trigger = EXTI_TRIGGER_RISING,
-	.GPIOSel = EXTI_GPIOA,
-	.Mode = EXTI_MODE_INTERRUPT,
-};
-EXTI_HandleTypeDef xiip;
-#endif
-
+#endif /* __IIO_EXAMPLE_H__ */
