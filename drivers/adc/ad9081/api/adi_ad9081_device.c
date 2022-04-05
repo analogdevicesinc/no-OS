@@ -369,7 +369,7 @@ int32_t adi_ad9081_device_clk_pll_startup(adi_ad9081_device_t *device,
 	/* find divider */
 	for (ref_div = 1; ref_div <= 4; ref_div++) {
 #ifdef __KERNEL__
-		pfd_clk_hz = no_os_div_u64(ref_clk_hz, ref_div);
+		pfd_clk_hz = div_u64(ref_clk_hz, ref_div);
 #else
 		pfd_clk_hz = ref_clk_hz / ref_div;
 #endif
@@ -385,7 +385,7 @@ int32_t adi_ad9081_device_clk_pll_startup(adi_ad9081_device_t *device,
 				n_div = n_div_vals[i];
 #ifdef __KERNEL__
 				total_feedback =
-					no_os_div_u64(vco_clk_hz, pfd_clk_hz);
+					div_u64(vco_clk_hz, pfd_clk_hz);
 #else
 				total_feedback = vco_clk_hz / pfd_clk_hz;
 #endif
@@ -451,7 +451,7 @@ int32_t adi_ad9081_device_clk_up_div_set(adi_ad9081_device_t *device,
 	cdiv = cdiv > 31 ? 31 : cdiv;
 	cdiv = cdiv < 2 ? 2 : cdiv;
 #ifdef __KERNEL__
-	cclk = no_os_div_u64(in_clk, cdiv);
+	cclk = div_u64(in_clk, cdiv);
 	sdiv = (uint8_t)div64_u64((cclk + 250000000ULL - 1),
 				  250000000ULL); /* ceil(cclk / 250e6) */
 #else
@@ -462,7 +462,7 @@ int32_t adi_ad9081_device_clk_up_div_set(adi_ad9081_device_t *device,
 	sdiv = sdiv > 4 ? 4 : sdiv;
 	sdiv = sdiv < 2 ? 2 : sdiv;
 #ifdef __KERNEL__
-	sclk = no_os_div_u64(cclk, sdiv);
+	sclk = div_u64(cclk, sdiv);
 	pdiv = (uint8_t)div64_u64((sclk + 125000000ULL - 1),
 				  125000000ULL); /* ceil(sclk / 125e6) */
 #else

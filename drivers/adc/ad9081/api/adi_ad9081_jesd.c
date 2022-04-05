@@ -992,7 +992,7 @@ int32_t adi_ad9081_jesd_rx_bit_rate_get(adi_ad9081_device_t *device,
 	bit_rate = (jesd_m * jesd_np * (jesd204b_en > 0 ? 10 : 66) *
 		    device->dev_info.dac_freq_hz);
 #ifdef __KERNEL__
-	bit_rate = no_os_div_u64(bit_rate, jesd_l * (jesd204b_en > 0 ? 8 : 64) *
+	bit_rate = div_u64(bit_rate, jesd_l * (jesd204b_en > 0 ? 8 : 64) *
 					     main_interp * ch_interp);
 #else
 	bit_rate = bit_rate / (jesd_l * (jesd204b_en > 0 ? 8 : 64) *
@@ -1827,7 +1827,7 @@ uint64_t adi_ad9081_jesd_tx_calc_bit_rate(adi_ad9081_device_t *device,
 	bit_rate = np * m * device->dev_info.adc_freq_hz *
 		   (jesd204b_en > 0 ? 10 : 66);
 #ifdef __KERNEL__
-	bit_rate = no_os_div_u64(bit_rate, l * dcm * (jesd204b_en > 0 ? 8 : 64));
+	bit_rate = div_u64(bit_rate, l * dcm * (jesd204b_en > 0 ? 8 : 64));
 #else
 	bit_rate = bit_rate / (l * dcm * (jesd204b_en > 0 ? 8 : 64));
 #endif
