@@ -60,7 +60,6 @@ extern const struct no_os_irq_platform_ops max_gpio_irq_ops;
 struct max_gpio_init_param {
 	/** Input/Output */
 	uint32_t direction;
-	uint32_t port;
 };
 
 #endif
