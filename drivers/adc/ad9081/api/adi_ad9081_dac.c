@@ -938,21 +938,6 @@ int32_t adi_ad9081_dac_spi_enable_set(adi_ad9081_device_t *device,
 	return API_CMS_ERROR_OK;
 }
 
-int32_t adi_ad9081_dac_digital_logic_enable_set(adi_ad9081_device_t *device,
-						uint8_t enable)
-{
-	int32_t err;
-	AD9081_NULL_POINTER_RETURN(device);
-	AD9081_LOG_FUNC();
-
-	/* enable digital logic, including jrx digital, digital clock gen., digital data path */
-	err = adi_ad9081_hal_bf_set(device, REG_DIG_RESET_ADDR,
-				    BF_DIG_RESET_INFO, !enable); /* not paged */
-	AD9081_ERROR_RETURN(err);
-
-	return API_CMS_ERROR_OK;
-}
-
 int32_t adi_ad9081_dac_dll_startup(adi_ad9081_device_t *device, uint8_t dacs)
 {
 	int32_t err;
