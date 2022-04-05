@@ -385,7 +385,10 @@ int32_t stm32_irq_global_disable(struct no_os_irq_ctrl_desc *desc)
 int32_t stm32_irq_enable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
 {
 	// TODO: add a proper priority setting function in irq.h instead of this default
-	HAL_NVIC_SetPriority(irq_id, 0, 0);
+	if (irq_id == EXTI2_IRQn)
+		HAL_NVIC_SetPriority(irq_id, 1, 0);
+	else
+		HAL_NVIC_SetPriority(irq_id, 0, 0);
 
 	NVIC_EnableIRQ(irq_id);
 
