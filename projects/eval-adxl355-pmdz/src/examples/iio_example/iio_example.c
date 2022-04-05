@@ -52,7 +52,7 @@
 /******************************************************************************/
 /************************ Variable Declarations ******************************/
 /******************************************************************************/
-uint8_t iio_data_buffer[DATA_BUFFER_SIZE*4*sizeof(int)];
+uint8_t iio_data_buffer[DATA_BUFFER_SIZE*3*sizeof(int)];
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -67,13 +67,13 @@ int iio_example_main ()
 {
 	int ret;
 	struct adxl355_iio_dev *adxl355_iio_desc;
-	struct adxl355_iio_init_param adxl355_init_par;
+	struct adxl355_iio_dev_init_param adxl355_init_par;
 	struct iio_data_buffer accel_buff = {
 		.buff = (void *)iio_data_buffer,
-		.size = DATA_BUFFER_SIZE*4*sizeof(int)
+		.size = DATA_BUFFER_SIZE*3*sizeof(int)
 	};
 
-	adxl355_init_par.adxl355_initial = &init_data_adxl355;
+	adxl355_init_par.adxl355_dev_init = &adxl355_user_init;
 	ret = adxl355_iio_init(&adxl355_iio_desc, &adxl355_init_par);
 	if (ret)
 		return ret;

@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   parameters.c
- *   @brief  Definition of STM32 platform data used by eval-adxl355-pmdz project.
+ *   @file   iio_trigger_example.c
+ *   @brief  Implementation of IIO trigger example for eval-adxl355-pmdz project.
  *   @author RBolboac (ramona.bolboaca@analog.com)
 ********************************************************************************
  * Copyright 2022(c) Analog Devices, Inc.
@@ -40,28 +40,73 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "parameters.h"
+#include "iio_trigger_example.h"
+#include "iio_adxl355.h"
+#include "common_data.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-#ifdef DUMMY_EXAMPLE
-struct stm32_uart_init_param xuip = {
-	.huart = &huart5,
-};
-#endif
+#define DATA_BUFFER_SIZE 400
 
-struct stm32_spi_init_param xsip  = {
-	.chip_select_port = SPI_CS_PORT,
-};
+/******************************************************************************/
+/************************ Variable Declarations ******************************/
+/******************************************************************************/
+uint8_t iio_data_buffer[DATA_BUFFER_SIZE*3*sizeof(int)];
 
-#ifdef IIO_TRIGGER_EXAMPLE
-EXTI_ConfigTypeDef adxl355_int_exticonfig = {
-	.Line = EXTI_LINE_2,
-	.Trigger = EXTI_TRIGGER_RISING,
-	.GPIOSel = EXTI_GPIOA,
-	.Mode = EXTI_MODE_INTERRUPT,
-};
-EXTI_HandleTypeDef xiip;
-#endif
+/******************************************************************************/
+/************************ Functions Definitions *******************************/
+/******************************************************************************/
+/***************************************************************************//**
+ * @brief IIO trigger example main execution.
+ *
+ * @return ret - Result of the example execution. If working correctly, will
+ *               execute continuously function iio_app_run_with_trigs and will
+ * 				 not return.
+*******************************************************************************/
+int iio_trigger_example_main ()
+{
+	int ret;
 
+	struct adxl355_iio_trig *adxl355_iio_trig;
+	struct adxl355_iio_dev *adxl355_iio_desc;
+	struct adxl355_iio_dev_init_param adxl355_iio_init_par;
+	struct no_os_irq_ctrl_desc *adxl355_irq_ctrl;
+	struct iio_desc *iio_desc;
+
+	struct iio_data_buffer accel_buff = {
+		.buff = (void *)iio_data_buffer,
+		.size = DATA_BUFFER_SIZE*3*sizeof(int)
+	};
+
+	adxl355_iio_init_par.adxl355_dev_init = &adxl355_user_init;
+	ret = adxl355_iio_init(&adxl355_iio_desc, &adxl355_iio_init_par);
+	if (ret)
+		return ret;
+
+	ret = no_os_irq_ctrl_init(&adxl355_irq_ctrl,
+				  adxl355_iio_trig_user_init.irq_init_param);
+	if (ret)
+		return ret;
+	adxl355_iio_trig_user_init.irq_ctrl = adxl355_irq_ctrl;
+
+	adxl355_iio_trig_user_init.iio_desc = &iio_desc,
+	iio_adxl355_trigger_init(&adxl355_iio_trig, &adxl355_iio_trig_user_init);
+
+	struct iio_app_device iio_devices[] = {
+		{
+			.name = "adxl355",
+			.dev = adxl355_iio_desc,
+			.dev_descriptor = adxl355_iio_desc->iio_dev,
+			.read_buff = &accel_buff,
+		}
+	};
+
+	struct iio_trigger_init trigs[] = {
+		IIO_APP_TRIGGER(IIO_ADXL355_TRIGGER_NAME, adxl355_iio_trig,
+				&adxl355_iio_trigger_desc)
+	};
+
+	return iio_app_run_with_trigs(iio_devices, NO_OS_ARRAY_SIZE(iio_devices),
+				      trigs, NO_OS_ARRAY_SIZE(trigs), adxl355_irq_ctrl, &iio_desc);
+}

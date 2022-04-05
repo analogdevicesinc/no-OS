@@ -60,7 +60,7 @@ int dummy_example_main ()
 	struct adxl355_dev *adxl355;
 	int ret;
 
-	ret = adxl355_init(&adxl355, init_data_adxl355);
+	ret = adxl355_init(&adxl355, adxl355_user_init);
 	if (ret)
 		goto error;
 	ret = adxl355_soft_reset(adxl355);

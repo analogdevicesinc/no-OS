@@ -56,6 +56,19 @@ struct no_os_uart_init_param uip = {
 };
 #endif
 
+#ifdef IIO_TRIGGER_EXAMPLE
+struct no_os_irq_init_param adxl355_int_ip = {
+	.irq_ctrl_id = ADXL355_TRIGGER_INTR_ID,
+	.platform_ops = IRQ_OPS,
+	.extra = &xiip,
+};
+
+struct adxl355_iio_trig_init_param adxl355_iio_trig_user_init = {
+	.irq_init_param = &adxl355_int_ip,
+	.name = IIO_ADXL355_TRIGGER_NAME,
+};
+#endif
+
 struct no_os_spi_init_param sip = {
 	.device_id = SPI_DEVICE_ID,
 	.max_speed_hz = 4000000,
@@ -66,7 +79,7 @@ struct no_os_spi_init_param sip = {
 	.chip_select = SPI_CS,
 };
 
-struct adxl355_init_param init_data_adxl355 = {
+struct adxl355_init_param adxl355_user_init = {
 	.comm_type = ADXL355_SPI_COMM,
 };
 

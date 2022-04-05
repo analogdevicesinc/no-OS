@@ -44,6 +44,9 @@
 /******************************************************************************/
 #include "platform_includes.h"
 #include "adxl355.h"
+#ifdef IIO_SUPPORT
+#include "iio_adxl355.h"
+#endif
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -52,7 +55,12 @@
 extern struct no_os_uart_init_param uip;
 #endif
 
+#ifdef IIO_TRIGGER_EXAMPLE
+#define IIO_ADXL355_TRIGGER_NAME "adxl355-dev0"
+extern struct adxl355_iio_trig_init_param adxl355_iio_trig_user_init;
+#endif
+
 extern struct no_os_spi_init_param sip;
-extern struct adxl355_init_param init_data_adxl355;
+extern struct adxl355_init_param adxl355_user_init;
 
 #endif /* __COMMON_DATA_H__ */
