@@ -3,6 +3,7 @@
 import argparse
 import json
 import os
+import subprocess
 import multiprocessing
 import sys
 import filecmp
@@ -55,6 +56,25 @@ def log_success(msg):
 
 DEFAULT_LOG_FILE = 'log.txt'
 log_file = DEFAULT_LOG_FILE
+
+def shell_source(script):
+	"""
+	Sometime you want to emulate the action of "source" in bash,
+	settings some environment variables. Here is a way to do it.
+	"""
+
+	pipe = subprocess.Popen(". %s && env -0" % script, stdout=subprocess.PIPE, shell=True, executable="/bin/bash")
+	output = pipe.communicate()[0].decode('utf-8')
+	output = output[:-1] # fix for index out for range in 'env[ line[0] ] = line[1]'
+
+	env = {}
+	# split using null char
+	for line in output.split('\x00'):
+		line = line.split( '=', 1)
+		#print(line)
+		env[ line[0] ] = line[1]
+
+	os.environ.update(env)
 
 def run_cmd(cmd):
 	global ERR
@@ -157,7 +177,7 @@ class BuildConfig:
 		self.build_dir = os.path.join(self.builds_dir, short_build_dir)
 		self.binary = os.path.join(self.build_dir, self._binary)
 		self.export_file = os.path.join(self.build_dir, self.binary)
-		if (platform == 'aducm3029'):
+		if (platform == 'aducm3029' or platform == 'stm32'):
 			self.export_file = self.export_file.replace('.elf', '.hex')
 
 	def build(self):
@@ -259,6 +279,9 @@ def main():
 					if _hw is not None:
 						if _hw != hardware:
 							continue
+					env = dict(os.environ)
+					shell_source("~/." + platform + "_environment.sh")
+
 					new_build = BuildConfig(project_dir,
 								platform,
 								flags,
@@ -267,6 +290,8 @@ def main():
 								_builds_dir, 
 								log_dir)
 					err = new_build.build()
+					os.environ.clear()
+					os.environ.update(env)
 					if err != 0:
 						ok = 0
 						if err == 2:
