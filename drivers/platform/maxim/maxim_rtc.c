@@ -63,37 +63,6 @@ static struct no_os_callback_desc *cb;
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
 
-void RTC_IRQHandler()
-{
-	mxc_rtc_regs_t *rtc_regs;
-	volatile uint32_t rtc_ctrl;
-	uint8_t n_int;
-
-	rtc_regs = MXC_RTC;
-	rtc_ctrl = rtc_regs->ctrl;
-	/** Sub-second alarm flag clear */
-	rtc_regs->ctrl &= ~NO_OS_BIT(7);
-	/** Time-of-day alarm flag clear */
-	rtc_regs->ctrl &= ~NO_OS_BIT(6);
-	/** RTC (read) ready flag */
-	rtc_regs->ctrl &= ~NO_OS_BIT(5);
-
-	if(!cb)
-		return;
-
-	/** Shift right so the interrupt flags will be the first 3 bits */
-	rtc_ctrl >>= 5UL;
-	/** Clear the remaining bits */
-	rtc_ctrl &= 0x7UL;
-	while(rtc_ctrl) {
-		n_int = no_os_find_first_set_bit(rtc_ctrl);
-		if (rtc_ctrl & (rtc_regs->ctrl & NO_OS_BIT(n_int))) {
-			cb->callback(cb->ctx, n_int, cb->config);
-		}
-		rtc_ctrl >>= n_int + 1;
-	}
-}
-
 /**
  * @brief Initialize the RTC peripheral.
  * @param device - The RTC descriptor.
