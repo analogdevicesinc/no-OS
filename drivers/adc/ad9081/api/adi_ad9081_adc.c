@@ -1922,7 +1922,7 @@ int32_t adi_ad9081_adc_ddc_fine_nco_set(adi_ad9081_device_t *device,
 				adi_ad9081_adc_ddc_coarse_dcm_decode(cddc_dcm);
 			adc_freq_hz = device->dev_info.adc_freq_hz;
 #ifdef __KERNEL__
-			adc_freq_hz = no_os_div_u64(adc_freq_hz, cddc_dcm);
+			adc_freq_hz = div_u64(adc_freq_hz, cddc_dcm);
 #else
 			adc_freq_hz = adc_freq_hz / cddc_dcm;
 #endif
@@ -2514,7 +2514,7 @@ int32_t adi_ad9081_adc_config(adi_ad9081_device_t *device, uint8_t cddcs,
 				cddc_dcm[j]);
 			adc_freq_hz = device->dev_info.adc_freq_hz;
 #ifdef __KERNEL__
-			adc_freq_hz = no_os_div_u64(adc_freq_hz, cddc_dcm_value);
+			adc_freq_hz = div_u64(adc_freq_hz, cddc_dcm_value);
 #else
 			adc_freq_hz = adc_freq_hz / cddc_dcm_value;
 #endif
