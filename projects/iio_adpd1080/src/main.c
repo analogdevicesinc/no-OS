@@ -397,6 +397,10 @@ int main(void)
 	if(status != 0)
 		return -1;
 
+	status = adpd188_adc_fsample_set(adpd1080_iio_device->drv_dev, 512.0);
+	if(status != 0)
+		return -1;
+
 	struct iio_app_device devices[] = {
 		IIO_APP_DEVICE("adpd1080", adpd1080_iio_device, &iio_adpd188_device,
 			       &iio_adpd1080_read_buff, NULL)
