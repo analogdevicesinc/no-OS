@@ -1,0 +1,7 @@
+{
+  "stm32": {
+    "iiod_sdp_ck1z": {
+      "flags" : "TINYIIOD=y"
+    }
+  }
+}
