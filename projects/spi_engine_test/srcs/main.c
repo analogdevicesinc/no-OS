@@ -150,6 +150,20 @@ int32_t init_gpios_to_defaults()
 	return SUCCESS;
 }
 
+int32_t test_spi_reg_write(struct test_desc *dev, uint8_t addr, uint8_t *val)
+{
+	int32_t ret;
+	uint8_t buf[3];
+
+	buf[0] = addr;
+	buf[1] = *val;
+	buf[2] = 0x00;
+
+	ret = spi_write_and_read(dev->spi, buf, 3);
+
+	return ret;
+}
+
 int32_t test_spi_reg_read(struct test_desc *dev, uint8_t addr, uint8_t *val)
 {
 	int32_t ret;
@@ -171,7 +185,7 @@ int32_t test_spi_set_dual(struct test_desc *dev)
 	uint8_t buf[3];
 
 	buf[0] = 0x0f;
-	buf[1] = 0x04;
+	buf[1] = 0x10;
 	buf[2] = 0x00;
 
 	ret = spi_write_and_read(dev->spi, buf, 4);
@@ -245,13 +259,20 @@ int32_t test_init(struct test_desc **desc,
 //		goto err_reset;
 //	};
 
-//	ret = test_spi_set_dual(dev);
-//	if (ret != SUCCESS) {
-//		pr_err("Fail to set IC to Dual: %"PRIi32"\n", ret);
-//		goto err_reset;
-//	};
+	ret = test_spi_set_dual(dev);
+	if (ret != SUCCESS) {
+		pr_err("Fail to set IC to Dual: %"PRIi32"\n", ret);
+		goto err_reset;
+	};
 
-	ret = test_spi_reg_read(dev, 0x05, &val);
+	val = 0xa5;
+	ret = test_spi_reg_write(dev, 0x29, &val);
+	if (ret != SUCCESS) {
+		pr_err("Fail read PRODUCT_ID_L: %"PRIi32"\n", ret);
+		goto err_reset;
+	};
+
+	ret = test_spi_reg_read(dev, 0x29, &val);
 	if (ret != SUCCESS) {
 		pr_err("Fail read PRODUCT_ID_L: %"PRIi32"\n", ret);
 		goto err_reset;
@@ -281,7 +302,7 @@ int main()
 		.spi_engine_baseaddr = AD3552R_SPI_ENGINE_BASEADDR,
 		.cs_delay = 0,
 		.data_width = 32,
-		.number_of_lines = SPI_CLASIC,
+		.number_of_lines = SPI_DUAL,
 	};
 
 	struct spi_init_param spi_init = {
