@@ -105,7 +105,7 @@
 #endif // ADUCM_PLATFORM
 
 #ifdef STM32_PLATFORM
-
+#define INTC_DEVICE_ID	0
 #define UART_DEVICE_ID	5
 extern UART_HandleTypeDef huart5;
 #define IIO_APP_HUART	(&huart5)
