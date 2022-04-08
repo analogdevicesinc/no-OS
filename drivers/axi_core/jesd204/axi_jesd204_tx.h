@@ -75,6 +75,10 @@ enum jesd204_tx_encoder {
 	JESD204_TX_ENCODER_MAX,
 };
 
+/**
+ * @struct jesd204_tx
+ * @brief JESD204B/C Transmit Peripheral Device Structure.
+ */
 struct axi_jesd204_tx {
 	/** Device Name */
 	const char *name;
@@ -96,6 +100,10 @@ struct axi_jesd204_tx {
 	enum jesd204_tx_encoder encoder;
 };
 
+/**
+ * @struct jesd204_tx_init
+ * @brief JESD204B/C Transmit Peripheral Initialization Structure.
+ */
 struct jesd204_tx_init {
 	/** Device Name */
 	const char *name;
