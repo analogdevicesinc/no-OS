@@ -62,26 +62,51 @@ enum jesd204_rx_encoder {
 	JESD204_RX_ENCODER_MAX,
 };
 
+/**
+ * @struct jesd204_rx
+ * @brief JESD204B/C Receive Peripheral Device Structure.
+ */
 struct axi_jesd204_rx {
+	/** Device Name */
 	const char *name;
+	/** Base address */
 	uint32_t base;
+	/** Version of the Peripheral */
 	uint32_t version;
+	/* Number of lanes of the peripheral */
 	uint32_t num_lanes;
+	/** Data path width */
 	uint32_t data_path_width;
+	/** TPL data path width */
 	uint32_t tpl_data_path_width;
+	/** Rx coniguration */
 	struct jesd204_rx_config config;
+	/** Device Clock in KHz */
 	uint32_t device_clk_khz;
+	/** Lane Clock in KHz */
 	uint32_t lane_clk_khz;
+	/** Selected Encoder */
 	enum jesd204_rx_encoder encoder;
 };
 
+/**
+ * @struct jesd204_rx_init
+ * @brief JESD204B/C Receive Peripheral Initialization Structure.
+ */
 struct jesd204_rx_init {
+	/** Device Name */
 	const char *name;
+	/** Base address */
 	uint32_t base;
+	/** Number of octets per frame (F) */
 	uint8_t octets_per_frame;
+	/** Number of frames per multi-frame (K) */
 	uint16_t frames_per_multiframe;
+	/** The JESD204B subclass */
 	uint8_t subclass;
+	/** Device Clock in KHz for the JESD204 interface */
 	uint32_t device_clk_khz;
+	/** Lane Clock in KHz */
 	uint32_t lane_clk_khz;
 };
 
