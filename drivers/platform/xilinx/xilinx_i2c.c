@@ -256,9 +256,9 @@ pl_error:
 
 		tab_check_ps.device_id = xdesc->device_id;
 
-		if (!NO_OS_NO_OS_IS_ERR_VALUE(no_os_list_read_find(ps_list,
-					      (void **)&temp_el_ps,
-					      &tab_check_ps))) {
+		if (!NO_OS_IS_ERR_VALUE(no_os_list_read_find(ps_list,
+					(void **)&temp_el_ps,
+					&tab_check_ps))) {
 			xdesc->instance = temp_el_ps->instance;
 			temp_el_ps->inst_no++;
 			break;
