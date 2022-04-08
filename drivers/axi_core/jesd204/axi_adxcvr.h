@@ -49,28 +49,64 @@
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
+/**
+ * @struct adxcvr
+ * @brief ADI JESD204B/C AXI_ADXCVR Highspeed Transceiver Device structure.
+ */
 struct adxcvr {
+	/** Device Name */
 	const char *name;
+	/** Base address */
 	uint32_t base;
+	/** Enable CPLL for the transceiver */
 	bool cpll_enable;
+	/** TX Enable */
 	bool tx_enable;
+	/** Enable LPM mode for the transceiver. Otherwise use DFE. */
 	bool lpm_enable;
+	/** Number of lanes */
 	uint32_t num_lanes;
+	/** Lane rate in KHz */
 	uint32_t lane_rate_khz;
+	/** Reference Clock rate */
 	uint32_t ref_rate_khz;
+	/** Select the PLL reference clock source to be forwarded to the OUTCLK
+	 * MUX: 0-CPLL, 3-QPLL0.
+	 */
 	uint32_t sys_clk_sel;
+	/** Controls the OUTCLKSEL multiplexer, controlling what will be
+	 * forwarded to OUTCLK pin.
+	 */
 	uint32_t out_clk_sel;
+	/** Structure holding the configuration of the Xilinx Transceiver. */
 	struct xilinx_xcvr xlx_xcvr;
 };
 
+/**
+ * @struct adxcvr
+ * @brief ADI JESD204B/C AXI_ADXCVR Highspeed Transceiver Initialization
+ *        structure.
+ */
 struct adxcvr_init {
+	/** Device Name */
 	const char *name;
+	/** Base address */
 	uint32_t base;
+	/** Select the PLL reference clock source to be forwarded to the OUTCLK
+	 * MUX: 0-CPLL, 3-QPLL0.
+	 */
 	uint32_t sys_clk_sel;
+	/** Controls the OUTCLKSEL multiplexer, controlling what will be
+	 * forwarded to OUTCLK pin.
+	 */
 	uint32_t out_clk_sel;
+	/** Enable CPLL for the transceiver */
 	bool cpll_enable;
+	/** Enable LPM mode for the transceiver. Otherwise use DFE. */
 	bool lpm_enable;
+	/** Lane rate in KHz */
 	uint32_t lane_rate_khz;
+	/** Reference Clock rate */
 	uint32_t ref_rate_khz;
 };
 
