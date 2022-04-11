@@ -87,7 +87,11 @@
 #define ADXCVR_BROADCAST				0xff
 
 /**
- * @brief adxcvr_write
+ * @brief AXI ADXCVR Write
+ * @param xcvr - Device Structure.
+ * @param reg_addr - The register address.
+ * @param reg_val - Data value to write.
+ * @return Returns 0 in case of success or negative error code otherwise.
  */
 int32_t adxcvr_write(struct adxcvr *xcvr,
 		     uint32_t reg_addr,
@@ -99,7 +103,11 @@ int32_t adxcvr_write(struct adxcvr *xcvr,
 }
 
 /**
- * @brief adxcvr_read
+ * @brief AXI ADXCVR Read
+ * @param xcvr - Device Structure.
+ * @param reg_addr - The register address.
+ * @param reg_val - Data read from the device.
+ * @return Returns 0 in case of success or negative error code otherwise.
  */
 int32_t adxcvr_read(struct adxcvr *xcvr,
 		    uint32_t reg_addr,
@@ -111,7 +119,10 @@ int32_t adxcvr_read(struct adxcvr *xcvr,
 }
 
 /**
- * @brief adxcvr_drp_wait_idle
+ * @brief Read AXI ADXCVR DRP status
+ * @param xcvr - Device Structure.
+ * @param drp_addr - DRP Port address.
+ * @return Returns status in case of success or negative error code otherwise.
  */
 int32_t adxcvr_drp_wait_idle(struct adxcvr *xcvr,
 			     uint32_t drp_addr)
@@ -133,7 +144,12 @@ int32_t adxcvr_drp_wait_idle(struct adxcvr *xcvr,
 }
 
 /**
- * @brief adxcvr_drp_read
+ * @brief AXI ADXCVR DPR Port Read
+ * @param xcvr - The device structure.
+ * @param drp_port - The DRP Port.
+ * @param reg - DRP Register address.
+ * @param val - Data read.
+ * @return Returns 0 in case of success or negative error code otherwise.
  */
 int32_t adxcvr_drp_read(struct adxcvr *xcvr,
 			uint32_t drp_port,
@@ -163,7 +179,12 @@ int32_t adxcvr_drp_read(struct adxcvr *xcvr,
 }
 
 /**
- * @brief adxcvr_drp_write
+ * @brief AXI ADXCVR DPR Port Write
+ * @param xcvr - The device structure.
+ * @param drp_port - The DRP Port.
+ * @param reg - DRP Register address.
+ * @param val - Data to be written.
+ * @return Returns 0 in case of success or negative error code otherwise.
  */
 int32_t adxcvr_drp_write(struct adxcvr *xcvr,
 			 uint32_t drp_port,
@@ -192,7 +213,11 @@ int32_t adxcvr_drp_write(struct adxcvr *xcvr,
 }
 
 /**
- * @brief adxcvr_clk_set_rate
+ * @brief AXI ADXCVR Clock Set Rate
+ * @param xcvr - The device structure.
+ * @param rate - The output rate.
+ * @param parent_rate - The parent rate.
+ * @return Returns 0 in case of success or negative error code otherwise.
  */
 int32_t adxcvr_clk_set_rate(struct adxcvr *xcvr,
 			    uint32_t rate,
@@ -267,7 +292,9 @@ int32_t adxcvr_clk_set_rate(struct adxcvr *xcvr,
 }
 
 /**
- * @brief adxcvr_status_error
+ * @brief AXI ADXCVR Status Read
+ * @param xcvr - The device structure.
+ * @return Returns 0 in case of success or negative error code otherwise.
  */
 int32_t adxcvr_status_error(struct adxcvr *xcvr)
 {
@@ -288,7 +315,9 @@ int32_t adxcvr_status_error(struct adxcvr *xcvr)
 }
 
 /**
- * @brief adxcvr_clk_enable
+ * @brief AXI ADXCVR Clock Enable
+ * @param xcvr - The device structure.
+ * @return Returns 0 in case of success or negative error code otherwise.
  */
 int32_t adxcvr_clk_enable(struct adxcvr *xcvr)
 {
@@ -299,7 +328,9 @@ int32_t adxcvr_clk_enable(struct adxcvr *xcvr)
 }
 
 /**
- * @brief adxcvr_clk_disable
+ * @brief AXI ADXCVR Clock Disable
+ * @param xcvr - The device structure.
+ * @return Returns 0 in case of success or negative error code otherwise.
  */
 int32_t adxcvr_clk_disable(struct adxcvr *xcvr)
 {
@@ -309,7 +340,8 @@ int32_t adxcvr_clk_disable(struct adxcvr *xcvr)
 }
 
 /**
- * @brief adxcvr_get_info
+ * @brief AXI ADXCVR Get Information
+ * @param xcvr - The device structure.
  */
 static void adxcvr_get_info(struct adxcvr *xcvr)
 {
@@ -326,7 +358,10 @@ static void adxcvr_get_info(struct adxcvr *xcvr)
 }
 
 /**
- * @brief adxcvr_init
+ * @brief AXI ADXCVR Device Initialization
+ * @param ad_xcvr - The device structure.
+ * @param init - The structure containing the device initial parameters.
+ * @return Returns 0 in case of success or negative error code otherwise.
  */
 int32_t adxcvr_init(struct adxcvr **ad_xcvr,
 		    const struct adxcvr_init *init)
@@ -429,7 +464,9 @@ err:
 }
 
 /**
- * @brief adxcvr_remove
+ * @brief Free resoulces allocated for AXI_ADXCVR
+ * @param xcvr - The device structure.
+ * @return Returns 0 in case of success or negative error code.
  */
 int32_t adxcvr_remove(struct adxcvr *xcvr)
 {
