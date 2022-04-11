@@ -113,13 +113,20 @@ struct jesd204_rx_init {
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
+/** JESD204 RX Lane Clock Enable */
 int32_t axi_jesd204_rx_lane_clk_enable(struct axi_jesd204_rx *jesd);
+/** JESD204 RX Lane Clock Disable */
 int32_t axi_jesd204_rx_lane_clk_disable(struct axi_jesd204_rx *jesd);
+/** JESD204 RX Status Read */
 uint32_t axi_jesd204_rx_status_read(struct axi_jesd204_rx *jesd);
+/** JESD204 RX Lane Info read */
 int32_t axi_jesd204_rx_laneinfo_read(struct axi_jesd204_rx *jesd,
 				     uint32_t lane);
+/** JESD204 RX Watchdog */
 int32_t axi_jesd204_rx_watchdog(struct axi_jesd204_rx *jesd);
+/** Device initialization */
 int32_t axi_jesd204_rx_init(struct axi_jesd204_rx **jesd204,
 			    const struct jesd204_rx_init *init);
+/** Resources Deallocation */
 int32_t axi_jesd204_rx_remove(struct axi_jesd204_rx *jesd);
 #endif
