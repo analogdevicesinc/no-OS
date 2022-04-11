@@ -147,9 +147,12 @@ const char *axi_jesd204_rx_emb_state_label[] = {
 /******************************************************************************/
 /************************** Functions Implementation **************************/
 /******************************************************************************/
-
 /**
- * @brief axi_jesd204_rx_write
+ * @brief JESD204 RX AXI Data Write.
+ * @param jesd - The device structure.
+ * @param reg_addr - The register address.
+ * @param reg_val - Data value to write.
+ * @return Returns 0 in case of success or negative error code otherwise.
  */
 int32_t axi_jesd204_rx_write(struct axi_jesd204_rx *jesd,
 			     uint32_t reg_addr, uint32_t reg_val)
@@ -160,7 +163,11 @@ int32_t axi_jesd204_rx_write(struct axi_jesd204_rx *jesd,
 }
 
 /**
- * @brief axi_jesd204_rx_read
+ * @brief JESD204 RX AXI Data Read.
+ * @param jesd - The device structure.
+ * @param reg_addr - The register address.
+ * @param reg_val - Data read from the device.
+ * @return Returns 0 in case of success or negative error code otherwise.
  */
 int32_t axi_jesd204_rx_read(struct axi_jesd204_rx *jesd,
 			    uint32_t reg_addr, uint32_t *reg_val)
@@ -171,7 +178,9 @@ int32_t axi_jesd204_rx_read(struct axi_jesd204_rx *jesd,
 }
 
 /**
- * @brief axi_jesd204_rx_lane_clk_enable
+ * @brief JESD204 RX Lane Clock Enable.
+ * @param jesd - The device structure.
+ * @return Returns 0 in case of success or negative error code otherwise.
  */
 int32_t axi_jesd204_rx_lane_clk_enable(struct axi_jesd204_rx *jesd)
 {
@@ -182,7 +191,9 @@ int32_t axi_jesd204_rx_lane_clk_enable(struct axi_jesd204_rx *jesd)
 }
 
 /**
- * @brief axi_jesd204_rx_lane_clk_disable
+ * @brief JESD204 RX Lane Clock Disable.
+ * @param jesd - The device structure.
+ * @return Returns 0 in case of success or negative error code otherwise.
  */
 int32_t axi_jesd204_rx_lane_clk_disable(struct axi_jesd204_rx *jesd)
 {
@@ -190,7 +201,9 @@ int32_t axi_jesd204_rx_lane_clk_disable(struct axi_jesd204_rx *jesd)
 }
 
 /**
- * @brief axi_jesd204_rx_status_read
+ * @brief Read status of the JESD204 Receive Peripherial
+ * @param jesd - The device structure.
+ * @return Returns 0 in case of success or negative error code otherwise.
  */
 uint32_t axi_jesd204_rx_status_read(struct axi_jesd204_rx *jesd)
 {
@@ -271,7 +284,11 @@ uint32_t axi_jesd204_rx_status_read(struct axi_jesd204_rx *jesd)
 }
 
 /**
- * @brief axi_jesd204_rx_get_lane_errors
+ * @brief Read the JESD204 RX Lane Errors.
+ * @param jesd - The JESD204 RX Device Structure.
+ * @param lane - The lane ID.
+ * @param errors - The errors read from the device.
+ * @return Returns 0 in case of success or negative error code otherwise.
  */
 int32_t axi_jesd204_rx_get_lane_errors(struct axi_jesd204_rx *jesd,
 				       uint32_t lane, uint32_t *errors)
@@ -280,7 +297,11 @@ int32_t axi_jesd204_rx_get_lane_errors(struct axi_jesd204_rx *jesd,
 }
 
 /**
- * @brief axi_jesd204_rx_laneinfo_8b10b_read
+ * @brief Read JESD204 RX Lane Info for 8b10b enconding
+ * @param jesd - The device structure.
+ * @param lane - Lane ID.
+ * @param lane_status - Lane status.
+ * @return Returns 0 in case of success or negative error code otherwise.
  */
 static int32_t axi_jesd204_rx_laneinfo_8b10b_read(struct axi_jesd204_rx *jesd,
 		uint32_t lane,
@@ -361,7 +382,11 @@ static int32_t axi_jesd204_rx_laneinfo_8b10b_read(struct axi_jesd204_rx *jesd,
 }
 
 /**
- * @brief axi_jesd204_rx_laneinfo_64b66b_read
+ * @brief Read JESD204 RX Lane Info for 64b66b enconding
+ * @param jesd - The device structure.
+ * @param lane - Lane ID.
+ * @param lane_status - Lane status.
+ * @return Returns 0 in case of success or negative error code otherwise.
  */
 static int32_t axi_jesd204_rx_laneinfo_64b66b_read(struct axi_jesd204_rx *jesd,
 		uint32_t lane,
@@ -378,7 +403,10 @@ static int32_t axi_jesd204_rx_laneinfo_64b66b_read(struct axi_jesd204_rx *jesd,
 }
 
 /**
- * @brief axi_jesd204_rx_laneinfo_read
+ * @brief Read JESD204 RX Lane Info
+ * @param jesd - The device structure.
+ * @param lane - Lane ID.
+ * @return Returns 0 in case of success or negative error code otherwise.
  */
 int32_t axi_jesd204_rx_laneinfo_read(struct axi_jesd204_rx *jesd, uint32_t lane)
 {
@@ -403,7 +431,10 @@ int32_t axi_jesd204_rx_laneinfo_read(struct axi_jesd204_rx *jesd, uint32_t lane)
 }
 
 /**
- * @brief axi_jesd204_rx_check_lane_status
+ * @brief Check JESD204 RX Lane Status.
+ * @param jesd - The device structure.
+ * @param lane - Lane ID.
+ * @return Returns 0 in case of success or positive value otherwise.
  */
 bool axi_jesd204_rx_check_lane_status(struct axi_jesd204_rx *jesd,
 				      uint32_t lane)
@@ -437,7 +468,9 @@ bool axi_jesd204_rx_check_lane_status(struct axi_jesd204_rx *jesd,
 }
 
 /**
- * @brief axi_jesd204_rx_watchdog
+ * @brief JESD204 RX Watchdog
+ * @param jesd - The device structure.
+ * @return Returns 0 in case of success or positive value otherwise.
  */
 int32_t axi_jesd204_rx_watchdog(struct axi_jesd204_rx *jesd)
 {
@@ -466,7 +499,10 @@ int32_t axi_jesd204_rx_watchdog(struct axi_jesd204_rx *jesd)
 }
 
 /**
- * @brief axi_jesd204_rx_apply_config
+ * @brief Apply the JESD204 RX configuration.
+ * @param jesd - The device structure.
+ * @param config - The JESD RX configuration.
+ * @return Returns 0 in case of success or negative error code otherwise.
  */
 int32_t axi_jesd204_rx_apply_config(struct axi_jesd204_rx *jesd,
 				    struct jesd204_rx_config *config)
@@ -515,7 +551,10 @@ int32_t axi_jesd204_rx_apply_config(struct axi_jesd204_rx *jesd,
 }
 
 /**
- * @brief axi_jesd204_rx_init
+ * @brief Device initialization.
+ * @param jesd204 - The device structure.
+ * @param init - The structure containing the device initial parameters.
+ * @return Returns 0 in case of success or negative error code otherwise.
  */
 int32_t axi_jesd204_rx_init(struct axi_jesd204_rx **jesd204,
 			    const struct jesd204_rx_init *init)
@@ -588,7 +627,9 @@ err:
 }
 
 /**
- * @brief axi_jesd204_rx_remove
+ * @brief Free resoulces allocated for JESD204 RX peripheral.
+ * @param jesd - The device structure.
+ * @return Returns 0 in case of success or negative error code.
  */
 int32_t axi_jesd204_rx_remove(struct axi_jesd204_rx *jesd)
 {
