@@ -77,7 +77,7 @@ struct iio_device_init {
 	/* Length of raw_buf */
 	uint32_t raw_buf_len;
 	/* If set, trigger will be linked to this device */
-	char *trigger_name;
+	char *trigger_id;
 };
 
 struct iio_trigger_init {
