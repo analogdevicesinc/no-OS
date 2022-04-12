@@ -55,7 +55,7 @@ ITC = $(call rwildcard, $(PROJECT_BUILD)/Src,*_it.c)
 HALCONF = $(call rwildcard, $(PROJECT_BUILD)/Inc,*_hal_conf.h)
 
 ifneq (,$(wildcard $(PROJECT_BUILD)))
-TARGET = $(shell sed -rn 's|^.*(STM32[A-Z][0-9][0-9][0-9]x+)"/>$$|\1|p' $(PROJECT_BUILDROOT)/.cproject | head -n 1)
+TARGET = $(shell sed -rn 's|^.*(STM32[A-Z][0-9][0-9][0-9]x.)"/>$$|\1|p' $(PROJECT_BUILDROOT)/.cproject | head -n 1)
 CFLAGS += -D$(TARGET)
 CHIPNAME = $(shell sed -rn 's|^.*(STM32[A-Z][0-9][0-9][0-9][A-Z][A-Z][A-Z]x+)" .*$$|\1|p' $(PROJECT_BUILDROOT)/.cproject | head -n 1)
 TARGETCFG = $(shell sed -rn "s|^.*(STM32[A-Z][0-9]).*$$|target/\L\1x.cfg|p" $(PROJECT_BUILDROOT)/.cproject | head -n 1)
