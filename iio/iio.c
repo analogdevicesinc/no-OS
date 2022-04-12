@@ -782,12 +782,33 @@ static int iio_write_attr(struct iiod_ctx *ctx, const char *device,
 }
 
 /**
+ * @brief Searches for trigger id and returns trigger index.
+ * @param desc - IIO descriptor.
+ * @param id   - Trigger id (trigger0, trigger1, etc.).
+ * @return Trigger index. NO_TRIGGER in case trigger is not found.
+ */
+static uint32_t iio_get_trig_idx_by_id(struct iio_desc *desc, const char *id)
+{
+	uint32_t i;
+
+	if (!id)
+		return NO_TRIGGER;
+
+	for (i = 0; i < desc->nb_trigs; i++)
+		if (strcmp(desc->trigs[i].id, id) == 0)
+			return i;
+
+	return NO_TRIGGER;
+}
+
+/**
  * @brief Searches for trigger name and returns trigger index.
  * @param desc - IIO descriptor.
  * @param name - Trigger name.
  * @return Trigger index. NO_TRIGGER in case trigger is not found.
  */
-static uint32_t iio_get_trig_idx(struct iio_desc *desc, const char *name)
+static uint32_t iio_get_trig_idx_by_name(struct iio_desc *desc,
+		const char *name)
 {
 	uint32_t i;
 
@@ -829,11 +850,11 @@ static int iio_get_trigger(struct iiod_ctx *ctx, const char *device,
 }
 
 /**
- * @brief Searches for given trigger name for the given device and if found, it
+ * @brief Searches for given trigger id for the given device and if found, it
  * sets the trigger.
  * @param ctx     - IIO instance and conn instance.
  * @param device  - String containing device name.
- * @param trigger - Trigger name to be set.
+ * @param trigger - Trigger id to be set.
  * @param len     - Maximum length of value to be returned.
  * @return Positive if index was set, negative if not.
  */
@@ -852,7 +873,7 @@ static int iio_set_trigger(struct iiod_ctx *ctx, const char *device,
 		return 0;
 	}
 
-	i = iio_get_trig_idx(ctx->instance, trigger);
+	i = iio_get_trig_idx_by_id(ctx->instance, trigger);
 	if (i == NO_TRIGGER)
 		return -EINVAL;
 
@@ -897,7 +918,7 @@ void iio_process_trigger_type(struct iio_desc *desc, char *trigger_name)
 	uint32_t trig_id;
 	struct iio_trig_priv *trig;
 
-	trig_id = iio_get_trig_idx(desc, trigger_name);
+	trig_id = iio_get_trig_idx_by_name(desc, trigger_name);
 
 	if (trig_id == NO_TRIGGER)
 		return;
@@ -1564,7 +1585,7 @@ static int32_t iio_init_devs(struct iio_desc *desc,
 		ldev = desc->devs + i;
 		ldev->dev_descriptor = ndev->dev_descriptor;
 		sprintf(ldev->dev_id, "iio:device%"PRIu32"", i);
-		ldev->trig_idx = iio_get_trig_idx(desc, ndev->trigger_name);
+		ldev->trig_idx = iio_get_trig_idx_by_id(desc, ndev->trigger_id);
 		ldev->dev_instance = ndev->dev;
 		ldev->dev_data.dev = ndev->dev;
 		ldev->dev_data.buffer = &ldev->buffer.public;
