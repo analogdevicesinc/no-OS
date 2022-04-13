@@ -110,7 +110,7 @@ enum irq_mode {
  */
 struct rtc_irq_config {
 	/** RTC driver handler */
-	struct rtc_desc *rtc_handler;
+	struct no_os_rtc_desc *rtc_handler;
 	/** Active interrupts OR'ed together */
 	uint32_t active_interrupts;
 };

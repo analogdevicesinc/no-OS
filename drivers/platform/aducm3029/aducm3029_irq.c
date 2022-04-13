@@ -167,7 +167,7 @@ int32_t aducm3029_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 {
 	struct aducm_irq_ctrl_desc	*aducm_desc;
 	struct no_os_uart_desc		*uart_desc;
-	struct rtc_desc			*rtc_desc;
+	struct no_os_rtc_desc			*rtc_desc;
 	struct aducm_rtc_desc		*rtc_extra;
 	struct no_os_gpio_desc		*gpio_desc;
 	uint16_t			gpio_pin;
@@ -259,7 +259,7 @@ int32_t aducm3029_irq_unregister_callback(struct no_os_irq_ctrl_desc *desc,
 {
 	struct aducm_irq_ctrl_desc	*aducm_desc;
 	struct no_os_uart_desc		*uart_desc;
-	struct rtc_desc			*rtc_desc;
+	struct no_os_rtc_desc			*rtc_desc;
 	struct aducm_rtc_desc		*rtc_extra;
 	struct no_os_gpio_desc		*gpio_desc;
 	uint8_t i;
