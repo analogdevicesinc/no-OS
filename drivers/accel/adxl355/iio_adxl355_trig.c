@@ -52,6 +52,9 @@
 static void adxl355_irq_trig_handler(void *trig);
 static void iio_adxl355_trigger_enable(void *trig);
 static void iio_adxl355_trigger_disable(void *trig);
+static int iio_attr_trigger_now(void *device, char *buf, uint32_t len,
+				const struct iio_ch_info *channel,
+				intptr_t priv);
 
 /******************************************************************************/
 /************************ Variable Declarations *******************************/
@@ -60,6 +63,19 @@ struct iio_trigger adxl355_iio_trigger_desc = {
 	.is_synchronous = false,
 	.enable = iio_adxl355_trigger_enable,
 	.disable = iio_adxl355_trigger_disable
+};
+
+static struct iio_attribute iio_attr_trig_attributes[] = {
+	{
+		.name = "trigger_now",
+		.store = iio_attr_trigger_now
+	},
+	END_ATTRIBUTES_ARRAY
+};
+
+struct iio_trigger adxl355_iio_software_trigger_desc = {
+	.is_synchronous = false,
+	.attributes = iio_attr_trig_attributes,
 };
 
 /******************************************************************************/
@@ -98,6 +114,27 @@ static void iio_adxl355_trigger_disable(void *trig)
 	struct adxl355_iio_trig *desc = trig;
 
 	no_os_irq_disable(desc->irq_ctrl, desc->irq_ctrl->irq_ctrl_id);
+}
+
+/***************************************************************************//**
+ * @brief Handles the write request for trigger_now attribute.
+ *
+ * @param trig    - The iio trigger structure.
+ * @param buf     - Command buffer to be filled with the data to be written.
+ * @param len     - Length of the received command buffer in bytes.
+ * @param channel - Command channel info (is NULL).
+ * @param priv    - Command attribute id.
+ *
+ * @return ret    - Result of the writing procedure.
+*******************************************************************************/
+static int iio_attr_trigger_now(void *trig, char *buf, uint32_t len,
+				const struct iio_ch_info *channel,
+				intptr_t priv)
+{
+	struct adxl355_iio_trig *desc = trig;
+	iio_process_trigger_type(*desc->iio_desc, desc->name);
+
+	return 0;
 }
 
 /***************************************************************************//**
@@ -147,6 +184,33 @@ int iio_adxl355_trigger_init(struct adxl355_iio_trig **iio_trig,
 error:
 	free(trig_desc);
 	return ret;
+}
+
+/***************************************************************************//**
+ * @brief Initialize ADXL355 software trigger.
+ *
+ * @param iio_trig   - The iio trigger structure.
+ * @param init_param - The structure that contains the sw trigger initial params.
+ *
+ * @return ret       - Result of the initialization procedure.
+*******************************************************************************/
+int iio_adxl355_software_trigger_init(struct adxl355_iio_trig **iio_trig,
+				      struct adxl355_iio_sw_trig_init_param *init_param)
+{
+	struct adxl355_iio_trig *trig_desc;
+
+	if (!init_param->iio_desc || !init_param->name)
+		return  -EINVAL;
+
+	trig_desc = (struct adxl355_iio_trig*)calloc(1, sizeof(*trig_desc));
+
+	trig_desc->iio_desc = init_param->iio_desc;
+
+	strncpy(trig_desc->name, init_param->name, TRIG_MAX_NAME_SIZE);
+
+	*iio_trig = trig_desc;
+
+	return 0;
 }
 
 /***************************************************************************//**
