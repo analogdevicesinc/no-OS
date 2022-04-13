@@ -46,23 +46,6 @@
 #define MAX_RTC_MAX_VALUE	(0xFFFFF)
 
 /**
- * @enum rtc_interrupt_id
- * @brief maxim specific interrupts
- */
-enum rtc_interrupt_id {
-	RTC_TIMEOFDAY_INT,
-	RTC_SUBSEC_INT
-};
-
-/**
- * @struct maxim_rtc_alarm_desc
- * @brief maxim specific interrupt descriptor
- */
-struct max_rtc_alarm_desc {
-	uint32_t irq_time;
-};
-
-/**
  * @brief maxim specific RTC IRQ platform ops structure
  */
 extern const struct no_os_irq_platform_ops max_rtc_irq_ops;
