@@ -51,7 +51,7 @@
 #define TRIG_MAX_NAME_SIZE 20
 
 extern struct iio_trigger adxl355_iio_trigger_desc;
-
+extern struct iio_trigger adxl355_iio_software_trigger_desc;
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
@@ -81,6 +81,11 @@ struct adxl355_iio_trig_init_param {
 	const char                  *name;
 };
 
+struct adxl355_iio_sw_trig_init_param {
+	struct iio_desc	**iio_desc;
+	const char      *name;
+};
+
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
@@ -91,6 +96,8 @@ int adxl355_iio_remove(struct adxl355_iio_dev *desc);
 
 int iio_adxl355_trigger_init(struct adxl355_iio_trig **iio_trig,
 			     struct adxl355_iio_trig_init_param *init_param);
+int iio_adxl355_software_trigger_init(struct adxl355_iio_trig **iio_trig,
+				      struct adxl355_iio_sw_trig_init_param *init_param);
 
 void iio_adxl355_trigger_remove(struct adxl355_iio_trig *trig);
 
