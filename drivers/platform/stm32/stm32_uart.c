@@ -257,7 +257,7 @@ int32_t no_os_uart_read(struct no_os_uart_desc *desc, uint8_t *data,
 		while(i < bytes_number) {
 			ret = lf256fifo_read(desc->rx_fifo, &data[i]);
 			if (ret < 0)
-				break;
+				return i ? i : -EAGAIN;
 			i++;
 		}
 		return i;
