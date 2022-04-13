@@ -201,7 +201,7 @@ error_com:
 	else
 		no_os_i2c_remove(dev->com_desc.i2c_desc);
 	free(dev);
-	return ret;
+	return -1;
 error_dev:
 	free(dev);
 	return ret;
