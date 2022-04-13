@@ -223,6 +223,8 @@ struct iio_device_data {
 };
 
 struct iio_trigger {
+	/** If true the trigger handler will be called in interrupt context
+	 *  If false the handler will be called from iio_step */
 	bool is_synchronous;
 	/** Array of attributes. Last one should have its name set to NULL */
 	struct iio_attribute *attributes;
