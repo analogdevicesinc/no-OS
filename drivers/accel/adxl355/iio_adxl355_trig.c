@@ -151,14 +151,18 @@ int iio_adxl355_trigger_init(struct adxl355_iio_trig **iio_trig,
 	struct adxl355_iio_trig *trig_desc;
 	int ret;
 
+	if (!init_param->iio_desc || !init_param->name)
+		return  -EINVAL;
+
 	trig_desc = (struct adxl355_iio_trig*)calloc(1, sizeof(*trig_desc));
 	if (!trig_desc)
 		return -ENOMEM;
 
 	trig_desc->iio_desc = init_param->iio_desc;
-	trig_desc->irq_init_param = init_param->irq_init_param;
+
 	strncpy(trig_desc->name, init_param->name, TRIG_MAX_NAME_SIZE);
 
+	trig_desc->irq_init_param = init_param->irq_init_param;
 	trig_desc->irq_ctrl = init_param->irq_ctrl;
 
 	struct no_os_callback_desc adxl355_int_cb = {
