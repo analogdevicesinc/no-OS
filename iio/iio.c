@@ -314,6 +314,25 @@ static struct iio_dev_priv *get_iio_device(struct iio_desc *desc,
 }
 
 /**
+ * @brief Find interface with "trigger_id".
+ * @param trigger_id - Trigger id (trigger0, trigger1, etc.).
+ * @param iio_trig_privs - List of interfaces.
+ * @return Interface pointer if interface is found, NULL otherwise.
+ */
+static struct iio_trig_priv *get_iio_trig_device(struct iio_desc *desc,
+		const char *trigger_id)
+{
+	uint32_t i;
+
+	for (i = 0; i < desc->nb_trigs; i++) {
+		if (strcmp(desc->trigs[i].id, trigger_id) == 0)
+			return &desc->trigs[i];
+	}
+
+	return NULL;
+}
+
+/**
  * @brief Read all attributes from an attribute list.
  * @param device - Physical instance of a device.
  * @param buf - Buffer where values are read.
@@ -667,6 +686,27 @@ static struct iio_attribute *get_attributes(enum iio_attr_type type,
 }
 
 /**
+ * @brief Returns trigger attributes.
+ * @param type - Attribute type.
+ * @param trig - Trigger instance.
+ * @return Attributes pointer if attributes exist, NULL otherwise.
+ */
+static struct iio_attribute *get_trig_attributes(enum iio_attr_type type,
+		struct iio_trig_priv *trig)
+{
+	switch (type) {
+	/* Only device type attributes allowed for triggers */
+	case IIO_ATTR_TYPE_DEVICE:
+		return trig->descriptor->attributes;
+		break;
+	default:
+		break;
+	}
+
+	return NULL;
+}
+
+/**
  * @brief Read global attribute of a device.
  * @param ctx - IIO instance and conn instance
  * @param device - String containing device name.
@@ -679,6 +719,7 @@ static int iio_read_attr(struct iiod_ctx *ctx, const char *device,
 			 struct iiod_attr *attr, char *buf, uint32_t len)
 {
 	struct iio_dev_priv *dev;
+	struct iio_trig_priv *trig_dev;
 	struct iio_ch_info ch_info;
 	struct iio_channel *ch = NULL;
 	struct attr_fun_params params;
@@ -686,41 +727,58 @@ static int iio_read_attr(struct iiod_ctx *ctx, const char *device,
 	int8_t ch_out;
 
 	dev = get_iio_device(ctx->instance, device);
-	if (!dev)
-		return -1;
 
-	if (attr->type == IIO_ATTR_TYPE_DEBUG &&
-	    strcmp(attr->name, REG_ACCESS_ATTRIBUTE) == 0) {
-		if (dev->dev_descriptor->debug_reg_read)
-			return debug_reg_read(dev, buf, len);
-		else
+	/* If IIO device with given name is found, handle reading of attributes */
+	if (dev) {
+		if (attr->type == IIO_ATTR_TYPE_DEBUG &&
+		    strcmp(attr->name, REG_ACCESS_ATTRIBUTE) == 0) {
+			if (dev->dev_descriptor->debug_reg_read)
+				return debug_reg_read(dev, buf, len);
 			return -ENOENT;
-	}
+		}
 
-	if (attr->channel) {
-		ch_out = attr->type == IIO_ATTR_TYPE_CH_OUT ? 1 : 0;
-		ch = iio_get_channel(attr->channel, dev->dev_descriptor,
-				     ch_out);
-		if (!ch)
-			return -ENOENT;
-		ch_info.ch_out = ch_out;
-		ch_info.ch_num = ch->channel;
-		ch_info.type = ch->ch_type;
-		ch_info.differential = ch->diferential;
-		ch_info.address = ch->address;
-		params.ch_info = &ch_info;
-	} else {
-		params.ch_info = NULL;
-	}
+		if (attr->channel) {
+			ch_out = attr->type == IIO_ATTR_TYPE_CH_OUT ? 1 : 0;
+			ch = iio_get_channel(attr->channel, dev->dev_descriptor,
+					     ch_out);
+			if (!ch)
+				return -ENOENT;
+			ch_info.ch_out = ch_out;
+			ch_info.ch_num = ch->channel;
+			ch_info.type = ch->ch_type;
+			ch_info.differential = ch->diferential;
+			ch_info.address = ch->address;
+			params.ch_info = &ch_info;
+		} else {
+			params.ch_info = NULL;
+		}
 
-	params.buf = buf;
-	params.len = len;
-	params.dev_instance = dev->dev_instance;
-	attributes = get_attributes(attr->type, dev, ch);
-	if (!strcmp(attr->name, ""))
-		return iio_read_all_attr(&params, attributes);
-	else
+		params.buf = buf;
+		params.len = len;
+		params.dev_instance = dev->dev_instance;
+		attributes = get_attributes(attr->type, dev, ch);
+		if (!strcmp(attr->name, ""))
+			return iio_read_all_attr(&params, attributes);
 		return iio_rd_wr_attribute(&params, attributes, attr->name, 0);
+	}
+
+	/* IIO device with given name is not found, verify if it corresponds to a trigger */
+	trig_dev = get_iio_trig_device(ctx->instance, device);
+
+	/* If IIO trigger with given name is found, handle reading of attributes */
+	if(trig_dev) {
+		params.ch_info = NULL; /* Triggers cannot have channels */
+		params.buf = buf;
+		params.len = len;
+		params.dev_instance = trig_dev->instance;
+		attributes = get_trig_attributes(attr->type, trig_dev);
+		if (!strcmp(attr->name, ""))
+			return iio_read_all_attr(&params, attributes);
+		return iio_rd_wr_attribute(&params, attributes, attr->name, 0);
+	}
+
+	/* No device and no trigger with given name were found */
+	return -ENODEV;
 }
 
 /**
@@ -736,6 +794,7 @@ static int iio_write_attr(struct iiod_ctx *ctx, const char *device,
 			  struct iiod_attr *attr, char *buf, uint32_t len)
 {
 	struct iio_dev_priv	*dev;
+	struct iio_trig_priv *trig_dev;
 	struct attr_fun_params	params;
 	struct iio_attribute	*attributes;
 	struct iio_ch_info ch_info;
@@ -743,42 +802,60 @@ static int iio_write_attr(struct iiod_ctx *ctx, const char *device,
 	int8_t ch_out;
 
 	dev = get_iio_device(ctx->instance, device);
-	if (!dev)
-		return -ENODEV;
 
-	if (attr->type == IIO_ATTR_TYPE_DEBUG &&
-	    strcmp(attr->name, REG_ACCESS_ATTRIBUTE) == 0) {
-		if (dev->dev_descriptor->debug_reg_write)
-			return debug_reg_write(dev, buf, len);
-		else
+	/* If IIO device with given name is found, handle writing of attributes */
+	if (dev) {
+
+		if (attr->type == IIO_ATTR_TYPE_DEBUG &&
+		    strcmp(attr->name, REG_ACCESS_ATTRIBUTE) == 0) {
+			if (dev->dev_descriptor->debug_reg_write)
+				return debug_reg_write(dev, buf, len);
 			return -ENOENT;
-	}
+		}
 
-	if (attr->channel) {
-		ch_out = attr->type == IIO_ATTR_TYPE_CH_OUT ? 1 : 0;
-		ch = iio_get_channel(attr->channel, dev->dev_descriptor,
-				     ch_out);
-		if (!ch)
-			return -ENOENT;
+		if (attr->channel) {
+			ch_out = attr->type == IIO_ATTR_TYPE_CH_OUT ? 1 : 0;
+			ch = iio_get_channel(attr->channel, dev->dev_descriptor,
+					     ch_out);
+			if (!ch)
+				return -ENOENT;
 
-		ch_info.ch_out = ch_out;
-		ch_info.ch_num = ch->channel;
-		ch_info.type = ch->ch_type;
-		ch_info.differential = ch->diferential;
-		ch_info.address = ch->address;
-		params.ch_info = &ch_info;
-	} else {
-		params.ch_info = NULL;
-	}
+			ch_info.ch_out = ch_out;
+			ch_info.ch_num = ch->channel;
+			ch_info.type = ch->ch_type;
+			ch_info.differential = ch->diferential;
+			ch_info.address = ch->address;
+			params.ch_info = &ch_info;
+		} else {
+			params.ch_info = NULL;
+		}
 
-	params.buf = (char *)buf;
-	params.len = len;
-	params.dev_instance = dev->dev_instance;
-	attributes = get_attributes(attr->type, dev, ch);
-	if (!strcmp(attr->name, ""))
-		return iio_write_all_attr(&params, attributes);
-	else
+		params.buf = (char *)buf;
+		params.len = len;
+		params.dev_instance = dev->dev_instance;
+		attributes = get_attributes(attr->type, dev, ch);
+		if (!strcmp(attr->name, ""))
+			return iio_write_all_attr(&params, attributes);
 		return iio_rd_wr_attribute(&params, attributes, attr->name, 1);
+	}
+
+	/* IIO device with given name is not found, verify if it corresponds to a trigger */
+	trig_dev = get_iio_trig_device(ctx->instance, device);
+
+	/* If IIO trigger with given name is found, handle writing of attributes */
+	if(trig_dev) {
+		params.ch_info = NULL; /* Triggers cannot have channels */
+		params.buf = (char *)buf;
+		params.len = len;
+		params.dev_instance = trig_dev->instance;
+		attributes = get_trig_attributes(attr->type, trig_dev);
+		if (!strcmp(attr->name, ""))
+			return iio_read_all_attr(&params, attributes);
+		return iio_rd_wr_attribute(&params, attributes, attr->name, 1);
+	}
+
+	/* No device and no trigger with given name were found */
+	return -ENODEV;
 }
 
 /**
