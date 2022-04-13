@@ -69,6 +69,7 @@ int iio_trigger_example_main ()
 	int ret;
 
 	struct adxl355_iio_trig *adxl355_iio_trig;
+	struct adxl355_iio_trig *adxl355_iio_sw_trig;
 	struct adxl355_iio_dev *adxl355_iio_desc;
 	struct adxl355_iio_dev_init_param adxl355_iio_init_par;
 	struct no_os_irq_ctrl_desc *adxl355_irq_ctrl;
@@ -90,9 +91,16 @@ int iio_trigger_example_main ()
 		return ret;
 	adxl355_iio_trig_user_init.irq_ctrl = adxl355_irq_ctrl;
 
+	/* Initialize hardware trigger */
 	adxl355_iio_trig_user_init.iio_desc = &iio_desc,
 	iio_adxl355_trigger_init(&adxl355_iio_trig, &adxl355_iio_trig_user_init);
 
+	/* Initialize software trigger */
+	adxl355_iio_sw_trig_user_init.iio_desc = &iio_desc;
+	iio_adxl355_software_trigger_init(&adxl355_iio_sw_trig,
+					  &adxl355_iio_sw_trig_user_init);
+
+	/* List of devices */
 	struct iio_app_device iio_devices[] = {
 		{
 			.name = "adxl355",
@@ -102,9 +110,12 @@ int iio_trigger_example_main ()
 		}
 	};
 
+	/* List of triggers */
 	struct iio_trigger_init trigs[] = {
 		IIO_APP_TRIGGER(IIO_ADXL355_TRIGGER_NAME, adxl355_iio_trig,
-				&adxl355_iio_trigger_desc)
+				&adxl355_iio_trigger_desc),
+		IIO_APP_TRIGGER(IIO_ADXL355_SW_TRIGGER_NAME, adxl355_iio_sw_trig,
+				&adxl355_iio_software_trigger_desc)
 	};
 
 	return iio_app_run_with_trigs(iio_devices, NO_OS_ARRAY_SIZE(iio_devices),
