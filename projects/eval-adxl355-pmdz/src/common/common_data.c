@@ -67,6 +67,10 @@ struct adxl355_iio_trig_init_param adxl355_iio_trig_user_init = {
 	.irq_init_param = &adxl355_int_ip,
 	.name = IIO_ADXL355_TRIGGER_NAME,
 };
+
+struct adxl355_iio_sw_trig_init_param adxl355_iio_sw_trig_user_init = {
+	.name = IIO_ADXL355_SW_TRIGGER_NAME,
+};
 #endif
 
 struct no_os_spi_init_param sip = {

@@ -207,6 +207,8 @@ int iio_adxl355_software_trigger_init(struct adxl355_iio_trig **iio_trig,
 		return  -EINVAL;
 
 	trig_desc = (struct adxl355_iio_trig*)calloc(1, sizeof(*trig_desc));
+	if (!trig_desc)
+		return -ENOMEM;
 
 	trig_desc->iio_desc = init_param->iio_desc;
 

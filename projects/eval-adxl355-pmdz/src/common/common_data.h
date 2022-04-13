@@ -57,7 +57,9 @@ extern struct no_os_uart_init_param uip;
 
 #ifdef IIO_TRIGGER_EXAMPLE
 #define IIO_ADXL355_TRIGGER_NAME "adxl355-dev0"
+#define IIO_ADXL355_SW_TRIGGER_NAME "adxl355-sw-trig"
 extern struct adxl355_iio_trig_init_param adxl355_iio_trig_user_init;
+extern struct adxl355_iio_sw_trig_init_param adxl355_iio_sw_trig_user_init;
 #endif
 
 extern struct no_os_spi_init_param sip;
