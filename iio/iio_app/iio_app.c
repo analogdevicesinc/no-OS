@@ -63,6 +63,13 @@
 #include "no_os_error.h"
 #endif
 
+#if defined(MAXIM_PLATFORM)
+#include "irq_extra.h"
+#include "maxim_uart.h"
+#include "no_os_irq.h"
+#include "no_os_error.h"
+#endif
+
 #ifdef USE_TCP_SOCKET
 /* Fix: Use static buffers instead of calloc for new connections */
 #warning "iio may not work with WIFI on aducm3029."
@@ -236,10 +243,15 @@ static int32_t uart_setup(struct no_os_uart_desc **uart_desc,
 	static struct stm32_uart_init_param platform_uart_init_par = {
 		.huart = IIO_APP_HUART,
 	};
+#elif defined(MAXIM_PLATFORM)
+	static struct max_uart_init_param platform_uart_init_par = {
+		.flow = UART_FLOW_DIS
+	};
 #endif
 	static struct no_os_uart_init_param luart_par = {
 		.device_id = UART_DEVICE_ID,
-#if defined(STM32_PLATFORM) /* TODO: remove this ifdef when asynchrounous rx is implemented on every platform. */
+		/* TODO: remove this ifdef when asynchrounous rx is implemented on every platform. */
+#if defined(STM32_PLATFORM) || defined(MAXIM_PLATFORM)
 		.irq_id = UART_IRQ_ID,
 		.asynchronous_rx = true,
 #endif
@@ -255,7 +267,7 @@ static int32_t uart_setup(struct no_os_uart_desc **uart_desc,
 #endif
 }
 
-#if defined(ADUCM_PLATFORM) || (defined(XILINX_PLATFORM) && !defined(PLATFORM_MB)) || (defined(STM32_PLATFORM))
+#if defined(ADUCM_PLATFORM) || (defined(XILINX_PLATFORM) && !defined(PLATFORM_MB)) || (defined(STM32_PLATFORM)) || defined(MAXIM_PLATFORM)
 static int32_t irq_setup(struct no_os_irq_ctrl_desc **irq_desc)
 {
 	int32_t status;
@@ -271,6 +283,9 @@ static int32_t irq_setup(struct no_os_irq_ctrl_desc **irq_desc)
 #elif defined(STM32_PLATFORM)
 	void *platform_irq_init_par = NULL;
 	const struct no_os_irq_platform_ops *platform_irq_ops = &stm32_irq_ops;
+#elif defined(MAXIM_PLATFORM)
+	void *platform_irq_init_par = NULL;
+	const struct no_os_irq_platform_ops *platform_irq_ops = &max_irq_ops;
 #endif
 
 	struct no_os_irq_init_param irq_init_param = {
