@@ -36,10 +36,11 @@ proc _replace_heap {} {
 	set temp [open [lindex $temp_name] w+]
 
 	while {[gets $file line] >= 0} {
-		if {[string first _HEAP_SIZE $line ] != -1} {
-			puts $temp "_HEAP_SIZE = 0x100000;"
+		if {[string first "_HEAP_SIZE = DEFINED(_HEAP_SIZE)" $line ] != -1} {
+			puts $temp "_HEAP_SIZE = DEFINED(_HEAP_SIZE) ? _HEAP_SIZE : 0x100000;"
+		} else {
+			puts $temp $line
 		}
-		puts $temp $line
 	}
 
 	close $file
