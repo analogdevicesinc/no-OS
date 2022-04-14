@@ -336,9 +336,13 @@ const uint32_t sine_lut_iq[1024] = {
 	0xFA5E25FB, 0xFC3D2636, 0xFE1E265A
 };
 
-/***************************************************************************//**
- * @brief axi_dac_read
- *******************************************************************************/
+/**
+ * @brief AXI DAC Data Read.
+ * @param dac - The device structure.
+ * @param reg_addr - The register address.
+ * @param reg_data - Data value to be written.
+ * @return Returns 0 in case of success or negative error code otherwise.
+ */
 int32_t axi_dac_read(struct axi_dac *dac,
 		     uint32_t reg_addr,
 		     uint32_t *reg_data)
@@ -348,9 +352,13 @@ int32_t axi_dac_read(struct axi_dac *dac,
 	return 0;
 }
 
-/***************************************************************************//**
- * @brief axi_dac_write
- *******************************************************************************/
+/**
+ * @brief AXI DAC Data Write.
+ * @param dac - The device structure.
+ * @param reg_addr - The register address.
+ * @param reg_data - Data value to be written.
+ * @return Returns 0 in case of success or negative error code otherwise.
+ */
 int32_t axi_dac_write(struct axi_dac *dac,
 		      uint32_t reg_addr,
 		      uint32_t reg_data)
@@ -360,9 +368,13 @@ int32_t axi_dac_write(struct axi_dac *dac,
 	return 0;
 }
 
-/***************************************************************************//**
- * @brief axi_dac_set_datasel
-*******************************************************************************/
+/**
+ * @brief AXI DAC Set Data type for specific channel
+ * @param dac - The device structure.
+ * @param chan - The DAC channel.
+ * @param sel - Data type.
+ * @return Returns 0 in case of success or negative error code otherwise.
+ */
 int32_t axi_dac_set_datasel(struct axi_dac *dac,
 			    int32_t chan,
 			    enum axi_dac_data_sel sel)
@@ -380,11 +392,13 @@ int32_t axi_dac_set_datasel(struct axi_dac *dac,
 	return 0;
 }
 
-/***************************************************************************//**
- * @brief dds_set_frequency
- *
- * freq is in Hz (i.e. set to 1*1000*1000 for 1 MHz)
- *******************************************************************************/
+/**
+ * @brief AXI DAC Set DDS frequency for specific channel
+ * @param dac - The device structure.
+ * @param chan - The DAC channel.
+ * @param freq_hz - The frequency to be set in Hz.
+ * @return Returns 0 in case of success or negative error code otherwise.
+ */
 int32_t axi_dac_dds_set_frequency(struct axi_dac *dac,
 				  uint32_t chan, uint32_t freq_hz)
 {
@@ -402,11 +416,13 @@ int32_t axi_dac_dds_set_frequency(struct axi_dac *dac,
 	return 0;
 }
 
-/***************************************************************************//**
- * @brief axi_dac_dds_get_frequency
- *
- * freq is in Hz (i.e. set to 1*1000*1000 for 1 MHz)
- *******************************************************************************/
+/**
+ * @brief AXI DAC Get DDS frequency for specific channel
+ * @param dac - The device structure.
+ * @param chan - The DAC channel.
+ * @param freq - The frequency read in Hz.
+ * @return Returns 0 in case of success or negative error code otherwise.
+ */
 int32_t axi_dac_dds_get_frequency(struct axi_dac *dac,
 				  uint32_t chan, uint32_t *freq)
 {
@@ -424,11 +440,14 @@ int32_t axi_dac_dds_get_frequency(struct axi_dac *dac,
 	return 0;
 }
 
-/***************************************************************************//**
- * @brief axi_dac_dds_set_phase
- *
- * phase is in milli angles scaled to 1000 (i.e. 90*1000 is 90 degrees (pi/2))
- *******************************************************************************/
+/**
+ * @brief AXI DAC Set DDS phase for specific channel
+ * @param dac - The device structure.
+ * @param chan - The DAC channel.
+ * @param phase - The phase to be set. Phase is in milli angles scaled to 1000
+ * 		  (i.e. 90*1000 is 90 degrees (pi/2))
+ * @return Returns 0 in case of success or negative error code otherwise.
+ */
 int32_t axi_dac_dds_set_phase(struct axi_dac *dac,
 			      uint32_t chan, uint32_t phase)
 {
@@ -446,11 +465,14 @@ int32_t axi_dac_dds_set_phase(struct axi_dac *dac,
 	return 0;
 }
 
-/***************************************************************************//**
- * @brief axi_dac_dds_get_phase
- *
- * phase is in milli angles scaled to 1000 (i.e. 90*1000 is 90 degrees (pi/2))
- *******************************************************************************/
+/**
+ * @brief AXI DAC Get DDS phase for specific channel
+ * @param dac - The device structure.
+ * @param chan - The DAC channel.
+ * @param phase - The phase read. Phase is in milli angles scaled to 1000
+ * 		  (i.e. 90*1000 is 90 degrees (pi/2))
+ * @return Returns 0 in case of success or negative error code otherwise.
+ */
 int32_t axi_dac_dds_get_phase(struct axi_dac *dac,
 			      uint32_t chan, uint32_t *phase)
 {
@@ -469,11 +491,14 @@ int32_t axi_dac_dds_get_phase(struct axi_dac *dac,
 	return 0;
 }
 
-/***************************************************************************//**
- * @brief axi_dac_dds_set_scale
- *
- * scale is in micro units (i.e. 1*1000*1000 is 1.0)
- *******************************************************************************/
+/**
+ * @brief AXI DAC Set DDS scale for specific channel
+ * @param dac - The device structure.
+ * @param chan - The DAC channel.
+ * @param scale_micro_units - The scale to be set. Scale is in micro units
+ * 			      (i.e. 1*1000*1000 is 1.0)
+ * @return Returns 0 in case of success or negative error code otherwise.
+ */
 int32_t axi_dac_dds_set_scale(struct axi_dac *dac,
 			      uint32_t chan,
 			      int32_t scale_micro_units)
@@ -497,11 +522,14 @@ int32_t axi_dac_dds_set_scale(struct axi_dac *dac,
 	return 0;
 }
 
-/***************************************************************************//**
- * @brief axi_dac_dds_get_scale
- *
- * scale is in micro units (i.e. 1*1000*1000 is 1.0)
- *******************************************************************************/
+/**
+ * @brief AXI DAC Get DDS scale for specific channel
+ * @param dac - The device structure.
+ * @param chan - The DAC channel.
+ * @param scale_micro_units - The scale read. Scale is in micro units
+ * 			      (i.e. 1*1000*1000 is 1.0)
+ * @return Returns 0 in case of success or negative error code otherwise.
+ */
 int32_t axi_dac_dds_get_scale(struct axi_dac *dac,
 			      uint32_t chan,
 			      int32_t *scale_micro_units)
@@ -522,9 +550,13 @@ int32_t axi_dac_dds_get_scale(struct axi_dac *dac,
 	return 0;
 }
 
-/***************************************************************************//**
- * @brief dds_to_signed_mag_fmt
-*******************************************************************************/
+/**
+ * @brief AXI DAC Convert to signed magnitude format.
+ * @param val - integer part
+ * @param val2 - fractional part
+ * @return Returns converted value in case of success or negative error code
+ * 	   otherwise.
+ */
 uint32_t axi_dac_dds_to_signed_mag_fmt(int32_t val,
 				       int32_t val2)
 {
@@ -555,9 +587,12 @@ uint32_t axi_dac_dds_to_signed_mag_fmt(int32_t val,
 	return i | val64;
 }
 
-/***************************************************************************//**
- * @brief dds_from_signed_mag_fmt
-*******************************************************************************/
+/**
+ * @brief AXI DAC Convert from signed magnitude format.
+ * @param val - input value
+ * @param r_val - integer part
+ * @param r_val2 - fractional part
+ */
 void axi_dac_dds_from_signed_mag_fmt(uint32_t val,
 				     int32_t *r_val,
 				     int32_t *r_val2)
@@ -586,9 +621,15 @@ void axi_dac_dds_from_signed_mag_fmt(uint32_t val,
 		*r_val2 = val64;
 }
 
-/***************************************************************************//**
- * @brief dds_set_calib_scale_phase
-*******************************************************************************/
+/**
+ * @brief Calibrate phase scale for specific AXI DAC channel
+ * @param dac - The device structure.
+ * @param phase - Phase value.
+ * @param chan - The DAC channel.
+ * @param val - the integer part.
+ * @param val2 - the fractional part.
+ * @return Returns 0 in case of success or negative error code otherwise.
+ */
 int32_t axi_dac_dds_set_calib_phase_scale(struct axi_dac *dac,
 		uint32_t phase,
 		uint32_t chan,
@@ -615,9 +656,15 @@ int32_t axi_dac_dds_set_calib_phase_scale(struct axi_dac *dac,
 	return 0;
 }
 
-/***************************************************************************//**
- * @brief dds_get_calib_scale_phase
-*******************************************************************************/
+/**
+ * @brief Get the phase scale calibration values for AXI DAC channel
+ * @param dac - The device structure.
+ * @param phase - Phase value.
+ * @param chan - The DAC channel.
+ * @param val - the integer part.
+ * @param val2 - the fractional part.
+ * @return Returns 0 in case of success or negative error code otherwise.
+ */
 int32_t axi_dac_dds_get_calib_phase_scale(struct axi_dac *dac,
 		uint32_t phase,
 		uint32_t chan,
@@ -639,9 +686,14 @@ int32_t axi_dac_dds_get_calib_phase_scale(struct axi_dac *dac,
 	return 0;
 }
 
-/***************************************************************************//**
- * @brief dds_set_calib_scale
-*******************************************************************************/
+/**
+ * @brief Calibrate scale for specific AXI DAC channel
+ * @param dac - The device structure.
+ * @param chan - The DAC channel.
+ * @param val - the integer part.
+ * @param val2 - the fractional part.
+ * @return Returns 0 in case of success or negative error code otherwise.
+ */
 int32_t axi_dac_dds_set_calib_scale(struct axi_dac *dac,
 				    uint32_t chan,
 				    int32_t val,
@@ -650,9 +702,14 @@ int32_t axi_dac_dds_set_calib_scale(struct axi_dac *dac,
 	return axi_dac_dds_set_calib_phase_scale(dac, 0, chan, val, val2);
 }
 
-/***************************************************************************//**
- * @brief dds_get_calib_scale
-*******************************************************************************/
+/**
+ * @brief Get the scale calibration values for AXI DAC channel
+ * @param dac - The device structure.
+ * @param chan - The DAC channel.
+ * @param val - the integer part.
+ * @param val2 - the fractional part.
+ * @return Returns 0 in case of success or negative error code otherwise.
+ */
 int32_t axi_dac_dds_get_calib_scale(struct axi_dac *dac,
 				    uint32_t chan,
 				    int32_t *val,
@@ -661,9 +718,14 @@ int32_t axi_dac_dds_get_calib_scale(struct axi_dac *dac,
 	return axi_dac_dds_get_calib_phase_scale(dac, 0, chan, val, val2);
 }
 
-/***************************************************************************//**
- * @brief dds_set_calib_phase
-*******************************************************************************/
+/**
+ * @brief Calibrate phase for specific AXI DAC channel
+ * @param dac - The device structure.
+ * @param chan - The DAC channel.
+ * @param val - the integer part.
+ * @param val2 - the fractional part.
+ * @return Returns 0 in case of success or negative error code otherwise.
+ */
 int32_t axi_dac_dds_set_calib_phase(struct axi_dac *dac,
 				    uint32_t chan,
 				    int32_t val,
@@ -672,9 +734,14 @@ int32_t axi_dac_dds_set_calib_phase(struct axi_dac *dac,
 	return axi_dac_dds_set_calib_phase_scale(dac, 1, chan, val, val2);
 }
 
-/***************************************************************************//**
- * @brief dds_get_calib_phase
-*******************************************************************************/
+/**
+ * @brief Get the phase calibration values for AXI DAC channel
+ * @param dac - The device structure.
+ * @param chan - The DAC channel.
+ * @param val - the integer part.
+ * @param val2 - the fractional part.
+ * @return Returns 0 in case of success or negative error code otherwise.
+ */
 int32_t axi_dac_dds_get_calib_phase(struct axi_dac *dac,
 				    uint32_t chan,
 				    int32_t *val,
@@ -683,9 +750,12 @@ int32_t axi_dac_dds_get_calib_phase(struct axi_dac *dac,
 	return axi_dac_dds_get_calib_phase_scale(dac, 1, chan, val, val2);
 }
 
-/***************************************************************************//**
- * @brief axi_dac_set_sine_lut
-*******************************************************************************/
+/**
+ * @brief AXI DAC Set data based on a Sine Lookup Table
+ * @param dac - The device structure.
+ * @param address - Address of the sine lut.
+ * @return Returns 0 in case of success or negative error code otherwise.
+ */
 uint32_t axi_dac_set_sine_lut(struct axi_dac *dac,
 			      uint32_t address)
 {
@@ -743,9 +813,14 @@ uint32_t axi_dac_set_sine_lut(struct axi_dac *dac,
 	return length;
 }
 
-/***************************************************************************//**
- * @brief axi_dac_set_buff
-*******************************************************************************/
+/**
+ * @brief AXI DAC Set data buffer.
+ * @param dac - The device structure.
+ * @param address - Base Address.
+ * @param buff - The buffer to be set.
+ * @param buff_size - The buffer size.
+ * @return Returns 0 in case of success or negative error code otherwise.
+ */
 int32_t axi_dac_set_buff(struct axi_dac *dac,
 			 uint32_t address,
 			 uint16_t *buff,
@@ -765,9 +840,14 @@ int32_t axi_dac_set_buff(struct axi_dac *dac,
 	return 0;
 }
 
-/***************************************************************************//**
- * @brief axi_dac_load_custom_data
- *******************************************************************************/
+/**
+ * @brief AXI DAC Load custom data.
+ * @param dac - The device structure.
+ * @param custom_data_iq - The custom data array in I/Q format.
+ * @param custom_tx_count - The custom data array size.
+ * @param address - The address where the data is loaded.
+ * @return Returns 0 in case of success or negative error code otherwise.
+ */
 int32_t axi_dac_load_custom_data(struct axi_dac *dac,
 				 const uint32_t *custom_data_iq,
 				 uint32_t custom_tx_count,
@@ -797,9 +877,12 @@ int32_t axi_dac_load_custom_data(struct axi_dac *dac,
 	return 0;
 }
 
-/***************************************************************************//**
- * @brief axi_dac_init_begin - Allocate an axi_dac instance and populate its fields.
- *******************************************************************************/
+/**
+ * @brief Begin AXI DAC Initialization.
+ * @param dac_core - The device structure.
+ * @param init - Initialization parameters.
+ * @return Returns 0 in case of success or negative error code otherwise.
+ */
 int32_t axi_dac_init_begin(struct axi_dac **dac_core,
 			   const struct axi_dac_init *init)
 {
@@ -819,10 +902,11 @@ int32_t axi_dac_init_begin(struct axi_dac **dac_core,
 	return 0;
 }
 
-/***************************************************************************//**
- * @brief axi_dac_init_finish - To be called once the interface clock is
- *        available.
- *******************************************************************************/
+/**
+ * @brief Begin AXI DAC Initialization.
+ * @param dac - The device structure.
+ * @return Returns 0 in case of success or negative error code otherwise.
+ */
 int32_t axi_dac_init_finish(struct axi_dac *dac)
 {
 	uint32_t reg_data;
@@ -846,9 +930,12 @@ int32_t axi_dac_init_finish(struct axi_dac *dac)
 	return 0;
 }
 
-/***************************************************************************//**
- * @brief axi_dac_init
- *******************************************************************************/
+/**
+ * @brief AXI DAC Main Initialization.
+ * @param dac_core - The device structure.
+ * @param init - Initialization parameters.
+ * @return Returns 0 in case of success or negative error code otherwise.
+ */
 int32_t axi_dac_init(struct axi_dac **dac_core,
 		     const struct axi_dac_init *init)
 {
@@ -882,6 +969,11 @@ error:
 	return -1;
 }
 
+/**
+ * @brief AXI DAC Data Setup.
+ * @param dac - The device structure.
+ * @return Returns 0 in case of success or negative error code otherwise.
+ */
 int32_t axi_dac_data_setup(struct axi_dac *dac)
 {
 	struct axi_dac_channel *chan;
@@ -922,9 +1014,11 @@ int32_t axi_dac_data_setup(struct axi_dac *dac)
 	return 0;
 }
 
-/***************************************************************************//**
- * @brief axi_dac_remove
- *******************************************************************************/
+/**
+ * @brief AXI DAC Resources deallocation.
+ * @param dac - The device structure.
+ * @return Returns 0 in case of success or negative error code otherwise.
+ */
 int32_t axi_dac_remove(struct axi_dac *dac)
 {
 	free(dac);
