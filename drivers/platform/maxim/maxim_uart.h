@@ -62,4 +62,12 @@ struct max_uart_init_param {
 	enum max_uart_flow_ctrl flow;
 };
 
+/**
+ * @brief Platform specific UART state
+ */
+struct max_uart_desc {
+	/** Controller that handles UART interrupts */
+	struct no_os_irq_ctrl_desc *nvic;
+};
+
 #endif

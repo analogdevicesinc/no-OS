@@ -43,14 +43,15 @@
 
 #include <errno.h>
 #include <stdlib.h>
+#include "irq_extra.h"
+#include "maxim_uart.h"
 #include "mxc_sys.h"
 #include "mxc_errors.h"
-#include "uart.h"
-#include "maxim_uart.h"
 #include "no_os_uart.h"
 #include "no_os_irq.h"
 #include "no_os_util.h"
-#include "irq_extra.h"
+#include "no_os_lf256fifo.h"
+#include "uart.h"
 
 /**
 * @brief Descriptors to hold the state of nonblocking read and writes
@@ -58,9 +59,18 @@
 */
 mxc_uart_req_t uart_irq_state[MXC_UART_INSTANCES];
 bool is_callback;
+
+static uint8_t c;
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
+
+void uart_rx_callback(void *context)
+{
+	struct no_os_uart_desc *d = context;
+	lf256fifo_write(d->rx_fifo, c);
+	no_os_uart_read_nonblocking(d, &c, 1);
+}
 
 /**
  * @brief Read data from UART device. Blocking function.
@@ -75,9 +85,19 @@ int32_t no_os_uart_read(struct no_os_uart_desc *desc, uint8_t *data,
 	int32_t ret;
 	uint32_t total_read = 0;
 	uint32_t read;
+	uint32_t i = 0;
 
 	if (!desc || !data || !bytes_number)
 		return -EINVAL;
+
+	if (desc->rx_fifo) {
+		for (i = 0; i < bytes_number; i++) {
+			ret = lf256fifo_read(desc->rx_fifo, &data[i]);
+			if (ret)
+				return i ? i : -EAGAIN;
+		}
+		return i;
+	}
 
 	while (bytes_number) {
 		read = MXC_UART_ReadRXFIFO(MXC_UART_GET_UART(desc->device_id),
@@ -204,6 +224,7 @@ int32_t no_os_uart_init(struct no_os_uart_desc **desc,
 	mxc_uart_regs_t *uart_regs;
 	struct max_uart_init_param *eparam;
 	struct no_os_uart_desc *descriptor;
+	struct max_uart_desc *max_uart;
 
 	if (!param || !param->extra)
 		return -EINVAL;
@@ -212,6 +233,11 @@ int32_t no_os_uart_init(struct no_os_uart_desc **desc,
 	if (!descriptor)
 		return -ENOMEM;
 
+	max_uart = calloc(1, sizeof(*max_uart));
+	if (!descriptor) {
+		ret = -ENOMEM;
+		goto error;
+	}
 	uart_regs = MXC_UART_GET_UART(param->device_id);
 	eparam = param->extra;
 
@@ -352,9 +378,47 @@ int32_t no_os_uart_init(struct no_os_uart_desc **desc,
 
 	*desc = descriptor;
 
-	return 0;
+	if (param->asynchronous_rx) {
+		ret = lf256fifo_init(&descriptor->rx_fifo);
+		if (ret)
+			goto error;
 
+		struct no_os_irq_init_param nvic_ip = {
+			.platform_ops = &max_irq_ops,
+		};
+
+		ret = no_os_irq_ctrl_init(&max_uart->nvic, &nvic_ip);
+		if (ret)
+			goto error;
+
+		struct no_os_callback_desc uart_rx_cb = {
+			.callback = uart_rx_callback,
+			.ctx = descriptor,
+			.event = NO_OS_EVT_UART_RX_COMPLETE,
+			.peripheral = NO_OS_UART_IRQ,
+			.handle = MXC_UART_GET_UART(descriptor->device_id)
+		};
+
+		ret = no_os_irq_register_callback(max_uart->nvic,
+						  MXC_UART_GET_IRQ(descriptor->device_id),
+						  &uart_rx_cb);
+		if (ret)
+			goto error_nvic;
+
+		ret = no_os_irq_enable(max_uart->nvic, MXC_UART_GET_IRQ(descriptor->device_id));
+		if (ret)
+			goto error_nvic;
+
+		ret = no_os_uart_read_nonblocking(descriptor, &c, 1);
+		if (ret)
+			goto error_nvic;
+	}
+
+	return 0;
+error_nvic:
+	no_os_irq_ctrl_remove(max_uart->nvic);
 error:
+	free(max_uart);
 	free(descriptor);
 	MXC_UART_Shutdown(uart_regs);
 
@@ -368,6 +432,8 @@ error:
  */
 int32_t no_os_uart_remove(struct no_os_uart_desc *desc)
 {
+	struct max_uart_desc *max_uart;
+
 	if (!desc)
 		return -EINVAL;
 
