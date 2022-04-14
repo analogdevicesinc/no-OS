@@ -66,7 +66,7 @@ int32_t axi_adc_read(struct axi_adc *adc,
 }
 
 /**
- * @brief AXI ADCC Data Read.
+ * @brief AXI ADC Data Write.
  * @param adc - The device structure.
  * @param reg_addr - The register address.
  * @param reg_data - Data value to be written.
