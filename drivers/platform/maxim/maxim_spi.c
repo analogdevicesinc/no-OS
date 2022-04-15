@@ -100,7 +100,7 @@ int32_t max_spi_init(struct no_os_spi_desc **desc,
 		.mosi = true,
 		.sdio2 = false,
 		.sdio3 = false,
-		.vddioh = false
+		.vddioh = true
 	};
 #endif
 
