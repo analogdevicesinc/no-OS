@@ -56,7 +56,7 @@ LDFLAGS = -mcpu=cortex-m4 	\
 	-mfpu=fpv4-sp-d16 	\
 	--entry=Reset_Handler		
 	
-CFLAGS=-mthumb                                                                 \
+CFLAGS += -mthumb                                                                 \
         -mcpu=cortex-m4                                                         \
         -mfloat-abi=hard                                                        \
         -mfpu=fpv4-sp-d16                                                       \
