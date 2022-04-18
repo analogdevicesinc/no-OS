@@ -140,7 +140,7 @@ struct mbed_irq_desc {
 /**
  * @brief Mbed specific IRQ platform ops structure
  */
-extern const struct irq_platform_ops mbed_irq_ops;
+extern const struct no_os_irq_platform_ops mbed_irq_ops;
 
 #ifdef __cplusplus // Closing extern c
 }

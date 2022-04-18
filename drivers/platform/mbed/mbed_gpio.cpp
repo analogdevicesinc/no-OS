@@ -49,8 +49,8 @@ extern "C"
 {
 #endif //  _cplusplus
 
-#include "no-os/error.h"
-#include "no-os/gpio.h"
+#include "no_os_error.h"
+#include "no_os_gpio.h"
 #include "mbed_gpio.h"
 
 /******************************************************************************/
@@ -245,7 +245,7 @@ int32_t mbed_gpio_get_direction(struct no_os_gpio_desc *desc, uint8_t *direction
 	if (!gpio_desc_extra->gpio_pin)
 		return -EINVAL;
 
-	*direction = no_os_gpio_desc_extra->direction;
+	*direction = gpio_desc_extra->direction;
 
 	return 0;
 }

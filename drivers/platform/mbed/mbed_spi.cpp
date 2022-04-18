@@ -48,9 +48,9 @@ extern "C"
 {
 #endif //  _cplusplus
 
-#include "no-os/error.h"
-#include "no-os/spi.h"
-#include "no-os/gpio.h"
+#include "no_os_error.h"
+#include "no_os_spi.h"
+#include "no_os_gpio.h"
 #include "mbed_spi.h"
 
 #define		SPI_8_BIT_FRAME			8		// SPI 8-bit frame size
