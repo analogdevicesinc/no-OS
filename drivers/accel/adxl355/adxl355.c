@@ -724,7 +724,7 @@ int adxl355_get_raw_fifo_data (struct adxl355_dev *dev, uint8_t *fifo_entries,
 }
 
 /***************************************************************************//**
- * @brief Reads fifo data and returns the values converted in g.
+ * @brief Reads fifo data and returns the values converted in m/s^2.
  *
  * @param dev          - The device structure.
  * @param fifo_entries - The number of fifo entries.
@@ -891,7 +891,7 @@ static uint32_t adxl355_accel_array_conv(struct adxl355_dev *dev,
 }
 
 /***************************************************************************//**
- * @brief Converts raw acceleration value to g value.
+ * @brief Converts raw acceleration value to m/s^2 value.
  *
  * @param dev       - The device structure.
  * @param raw_accel - Raw acceleration value.
