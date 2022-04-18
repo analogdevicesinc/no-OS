@@ -49,8 +49,8 @@ extern "C"
 {
 #endif //  _cplusplus
 
-#include "no-os/error.h"
-#include "no-os/gpio.h"
+#include "no_os_error.h"
+#include "no_os_gpio.h"
 #include "mbed_gpio.h"
 
 /******************************************************************************/

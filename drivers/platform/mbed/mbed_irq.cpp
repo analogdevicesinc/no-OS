@@ -48,8 +48,8 @@ extern "C"
 {
 #endif
 
-#include "no-os/error.h"
-#include "no-os/irq.h"
+#include "no_os_error.h"
+#include "no_os_irq.h"
 #include "mbed_irq.h"
 #include "mbed_uart.h"
 
@@ -65,7 +65,7 @@ using namespace std::chrono;
 * mbed layer expects void argument and void return type.
 */
 struct mbed_irq_callback_desc {
-	struct callback_desc desc;
+	struct no_os_callback_desc desc;
 	void (*mbed_callback)(void);
 };
 
@@ -193,19 +193,19 @@ static void store_mbed_callbacks(void)
  * @brief	Initialized the controller for the peripheral interrupts.
  * @param	desc[in, out] - Pointer where the configured instance is stored.
  * @param	param[in] - Configuration information for the instance.
- * @return	SUCCESS in case of success, negative error code otherwise.
+ * @return	0 in case of success, negative error code otherwise.
  * @note	Supports only External, Ticker and Unbuffered UART Rx IRQs.
  */
-int32_t mbed_irq_ctrl_init(struct irq_ctrl_desc **desc,
-			   const struct irq_init_param *param)
+int32_t mbed_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
+			   const struct no_os_irq_init_param *param)
 {
-	struct irq_ctrl_desc *irq_desc;
+	struct no_os_irq_ctrl_desc *irq_desc;
 	struct mbed_irq_desc *mbed_irq_desc;
 
 	if (!desc || !param)
 		return -EINVAL;
 
-	irq_desc = (struct irq_ctrl_desc *)calloc(1, sizeof(*irq_desc));
+	irq_desc = (struct no_os_irq_ctrl_desc *)calloc(1, sizeof(*irq_desc));
 	if (!irq_desc)
 		return -ENOMEM;
 
@@ -228,7 +228,7 @@ int32_t mbed_irq_ctrl_init(struct irq_ctrl_desc **desc,
 	irq_desc->extra = mbed_irq_desc;
 	*desc = irq_desc;
 
-	return SUCCESS;
+	return 0;
 
 err_mbed_irq_desc:
 	free(irq_desc);
@@ -240,9 +240,9 @@ err_mbed_irq_desc:
  * @brief	Enable specific interrupt.
  * @param	desc[in] - The IRQ controller descriptor.
  * @param	irq_id[in] - Interrupt identifier.
- * @return	SUCCESS in case of success, negative error code otherwise.
+ * @return	0 in case of success, negative error code otherwise.
  */
-int32_t mbed_irq_enable(struct irq_ctrl_desc *desc, uint32_t irq_id)
+int32_t mbed_irq_enable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
 {
 	InterruptIn *ext_interrupt;
 	mbed::UnbufferedSerial *uart_rx_port;
@@ -286,16 +286,16 @@ int32_t mbed_irq_enable(struct irq_ctrl_desc *desc, uint32_t irq_id)
 		return -EINVAL;
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief	Disable specific interrupt.
  * @param	desc[in] - The IRQ controller descriptor.
  * @param	irq_id[in] - Interrupt identifier.
- * @return	SUCCESS in case of success, negative error code otherwise.
+ * @return	0 in case of success, negative error code otherwise.
  */
-int32_t mbed_irq_disable(struct irq_ctrl_desc *desc, uint32_t irq_id)
+int32_t mbed_irq_disable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
 {
 	InterruptIn *ext_interrupt;
 	mbed::UnbufferedSerial *uart_rx_port;
@@ -337,7 +337,7 @@ int32_t mbed_irq_disable(struct irq_ctrl_desc *desc, uint32_t irq_id)
 		return -EINVAL;
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
@@ -346,11 +346,11 @@ int32_t mbed_irq_disable(struct irq_ctrl_desc *desc, uint32_t irq_id)
 * @param	irq_id[in] - Interrupt identifier.
 * @param	callback_desc - Descriptor of the callback. If it is NULL, the
 *			callback will be unregistered
-* @return	SUCCESS in case of success, negative error code otherwise.
+* @return	0 in case of success, negative error code otherwise.
 */
-int32_t mbed_irq_register_callback(struct irq_ctrl_desc *desc,
+int32_t mbed_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 				   uint32_t irq_id,
-				   struct callback_desc *callback_desc)
+				   struct no_os_callback_desc *callback_desc)
 {
 	mbed::Ticker *ticker;
 	InterruptIn *ext_interrupt;
@@ -412,20 +412,21 @@ int32_t mbed_irq_register_callback(struct irq_ctrl_desc *desc,
 		return -EINVAL;
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief	Unregister a IRQ callback function.
  * @param	desc[in] - The IRQ controller descriptor.
  * @param	irq_id[in] - Interrupt identifier.
- * @return	SUCCESS in case of success, negative error code otherwise.
+ * @param   callback_desc[in] - Descriptor of the callback.
+ * @return	0 in case of success, negative error code otherwise.
  */
-int32_t mbed_irq_unregister(struct irq_ctrl_desc *desc, uint32_t irq_id)
+int32_t mbed_irq_unregister(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id, struct no_os_callback_desc *callback_desc)
 {
 	int32_t ret;
 
-	if (!desc || !desc->extra)
+	if (!desc || !desc->extra || !callback_desc)
 		return -EINVAL;
 
 	if (irq_id >= NB_INTERRUPTS)
@@ -437,15 +438,15 @@ int32_t mbed_irq_unregister(struct irq_ctrl_desc *desc, uint32_t irq_id)
 
 	mbed_irq_callback[irq_id].desc.callback = NULL;
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief	Free the resources allocated by mbed_irq_ctrl_init()
  * @param	desc[in, out] - Interrupt controller descriptor.
- * @return	SUCCESS in case of success, negative error code otherwise.
+ * @return	0 in case of success, negative error code otherwise.
  */
-int32_t mbed_irq_ctrl_remove(struct irq_ctrl_desc *desc)
+int32_t mbed_irq_ctrl_remove(struct no_os_irq_ctrl_desc *desc)
 {
 	uint8_t irq_id;
 
@@ -457,7 +458,7 @@ int32_t mbed_irq_ctrl_remove(struct irq_ctrl_desc *desc)
 
 	/* Unregister all callbacks */
 	for (irq_id = 0; irq_id < (uint8_t)NB_INTERRUPTS; irq_id++) {
-		if (mbed_irq_unregister(desc, irq_id) != SUCCESS)
+		if (mbed_irq_unregister(desc, irq_id, &mbed_irq_callback[irq_id].desc) != 0)
 			return -EIO;
 	}
 
@@ -488,13 +489,13 @@ int32_t mbed_irq_ctrl_remove(struct irq_ctrl_desc *desc)
 	free(desc->extra);
 	free(desc);
 
-	return SUCCESS;
+	return 0;
 }
 
 /**
  * @brief Mbed platform specific IRQ platform ops structure
  */
-const struct irq_platform_ops mbed_irq_ops = {
+const struct no_os_irq_platform_ops mbed_irq_ops = {
 	.init = &mbed_irq_ctrl_init,
 	.register_callback = &mbed_irq_register_callback,
 	.unregister = &mbed_irq_unregister,

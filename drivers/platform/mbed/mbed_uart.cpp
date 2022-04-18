@@ -48,9 +48,9 @@ extern "C"
 {
 #endif //  _cplusplus
 
-#include "no-os/error.h"
-#include "no-os/delay.h"
-#include "no-os/uart.h"
+#include "no_os_error.h"
+#include "no_os_delay.h"
+#include "no_os_uart.h"
 #include "mbed_uart.h"
 
 /* Max size for USB CDC packet during transmit/receive */
