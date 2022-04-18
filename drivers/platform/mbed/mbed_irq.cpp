@@ -87,7 +87,7 @@ static void mbed_ext_int_id1_callback(void)
 	if (mbed_irq_callback[EXTERNAL_INT_ID1].desc.callback)
 		/* Invoke the application registered callback function */
 		mbed_irq_callback[EXTERNAL_INT_ID1].desc.callback(
-			mbed_irq_callback[EXTERNAL_INT_ID1].desc.ctx, EXTERNAL_INT_ID1, NULL);
+			mbed_irq_callback[EXTERNAL_INT_ID1].desc.ctx);
 }
 
 /**
@@ -101,7 +101,7 @@ static void mbed_ext_int_id2_callback(void)
 	if (mbed_irq_callback[EXTERNAL_INT_ID2].desc.callback)
 		/* Invoke the application registered callback function */
 		mbed_irq_callback[EXTERNAL_INT_ID2].desc.callback(
-			mbed_irq_callback[EXTERNAL_INT_ID2].desc.ctx, EXTERNAL_INT_ID2, NULL);
+			mbed_irq_callback[EXTERNAL_INT_ID2].desc.ctx);
 }
 
 /**
@@ -115,7 +115,7 @@ static void mbed_ext_int_id3_callback(void)
 	if (mbed_irq_callback[EXTERNAL_INT_ID3].desc.callback)
 		/* Invoke the application registered callback function */
 		mbed_irq_callback[EXTERNAL_INT_ID3].desc.callback(
-			mbed_irq_callback[EXTERNAL_INT_ID3].desc.ctx, EXTERNAL_INT_ID3, NULL);
+			mbed_irq_callback[EXTERNAL_INT_ID3].desc.ctx);
 }
 
 /**
@@ -129,7 +129,7 @@ static void mbed_ext_int_id4_callback(void)
 	if (mbed_irq_callback[EXTERNAL_INT_ID4].desc.callback)
 		/* Invoke the application registered callback function */
 		mbed_irq_callback[EXTERNAL_INT_ID4].desc.callback(
-			mbed_irq_callback[EXTERNAL_INT_ID4].desc.ctx, EXTERNAL_INT_ID4, NULL);
+			mbed_irq_callback[EXTERNAL_INT_ID4].desc.ctx);
 }
 
 /**
@@ -143,7 +143,7 @@ static void mbed_ext_int_id5_callback(void)
 	if (mbed_irq_callback[EXTERNAL_INT_ID5].desc.callback)
 		/* Invoke the application registered callback function */
 		mbed_irq_callback[EXTERNAL_INT_ID5].desc.callback(
-			mbed_irq_callback[EXTERNAL_INT_ID5].desc.ctx, EXTERNAL_INT_ID5, NULL);
+			mbed_irq_callback[EXTERNAL_INT_ID5].desc.ctx);
 }
 
 /**
@@ -157,7 +157,7 @@ static void mbed_uart_rx_id1_callback(void)
 	if (mbed_irq_callback[UART_RX_INT_ID1].desc.callback)
 		/* Invoke the application registered callback function */
 		mbed_irq_callback[UART_RX_INT_ID1].desc.callback(
-			mbed_irq_callback[UART_RX_INT_ID1].desc.ctx, UART_RX_INT_ID1, NULL);
+			mbed_irq_callback[UART_RX_INT_ID1].desc.ctx);
 }
 
 /**
@@ -171,7 +171,7 @@ static void mbed_ticker_id_callback(void)
 	if (mbed_irq_callback[TICKER_INT_ID].desc.callback)
 		/* Invoke the application registered callback function */
 		mbed_irq_callback[TICKER_INT_ID].desc.callback(
-			mbed_irq_callback[TICKER_INT_ID].desc.ctx, TICKER_INT_ID, NULL);
+			mbed_irq_callback[TICKER_INT_ID].desc.ctx);
 }
 
 /**
@@ -498,7 +498,7 @@ int32_t mbed_irq_ctrl_remove(struct no_os_irq_ctrl_desc *desc)
 const struct no_os_irq_platform_ops mbed_irq_ops = {
 	.init = &mbed_irq_ctrl_init,
 	.register_callback = &mbed_irq_register_callback,
-	.unregister = &mbed_irq_unregister,
+	.unregister_callback = &mbed_irq_unregister,
 	.enable = &mbed_irq_enable,
 	.disable = &mbed_irq_disable,
 	.remove = &mbed_irq_ctrl_remove

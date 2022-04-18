@@ -245,7 +245,7 @@ int32_t mbed_gpio_get_direction(struct no_os_gpio_desc *desc, uint8_t *direction
 	if (!gpio_desc_extra->gpio_pin)
 		return -EINVAL;
 
-	*direction = no_os_gpio_desc_extra->direction;
+	*direction = gpio_desc_extra->direction;
 
 	return 0;
 }
