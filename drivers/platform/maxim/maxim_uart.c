@@ -176,6 +176,8 @@ int32_t no_os_uart_write(struct no_os_uart_desc *desc, const uint8_t *data,
 		bytes_number -= written;
 	}
 
+	while(MXC_UART_GetTXFIFOAvailable(uart_regs) - MXC_UART_FIFO_DEPTH);
+
 	return total_written;
 }
 
