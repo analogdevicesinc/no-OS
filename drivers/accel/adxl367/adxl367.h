@@ -204,7 +204,7 @@
 #define ADXL367_INTMAP2_DATA_RDY_INT2		NO_OS_BIT(0)
 
 /* ADXL367_REG_FILTER_CTL definitions */
-#define ADXL367_FILTER_CTL_RANGE_MSK	NO_OS_GENMASK(6, 3)
+#define ADXL367_FILTER_CTL_RANGE_MSK	NO_OS_GENMASK(7, 6)
 #define ADXL367_FILTER_I2C_HS		NO_OS_BIT(5)
 #define ADXL367_FILTER_CTL_RES		NO_OS_BIT(4)
 #define ADXL367_FILTER_CTL_EXT_SAMPLE   NO_OS_BIT(3)
@@ -445,6 +445,9 @@ struct adxl367_dev {
 	enum adxl367_fifo_read_mode 	fifo_read_mode;
 	/** FIFO Buffer 513 * 2 + 1 cmd byte */
 	uint8_t 			fifo_buffer[1027];
+	uint16_t 			x_offset;
+	uint16_t 			y_offset;
+	uint16_t 			z_offset;
 };
 
 /**

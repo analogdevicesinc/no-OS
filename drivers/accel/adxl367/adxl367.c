@@ -394,6 +394,10 @@ int adxl367_software_reset(struct adxl367_dev *dev)
 	dev->fifo_format = ADXL367_FIFO_FORMAT_XYZ;
 	// FIFO Read Mode : 14 bits + CH ID (reset default).
 	dev->fifo_read_mode = ADXL367_14B_CHID;
+	//Axis offset = 0 (reset default)
+	dev->x_offset = 0;
+	dev->y_offset = 0;
+	dev->z_offset = 0;
 
 	//initialization delay
 	no_os_mdelay(20);
@@ -511,14 +515,23 @@ int adxl367_set_offset(struct adxl367_dev *dev, uint16_t x_offset,
 				    ADXL367_XYZ_AXIS_OFFSET_MASK);
 	if (ret)
 		return ret;
+	dev->x_offset = x_offset;
+
 	ret = adxl367_reg_write_msk(dev, ADXL367_REG_Y_OFFSET,
 				    y_offset & ADXL367_XYZ_AXIS_OFFSET_MASK,
 				    ADXL367_XYZ_AXIS_OFFSET_MASK);
 	if (ret)
 		return ret;
-	return adxl367_reg_write_msk(dev, ADXL367_REG_Z_OFFSET,
-				     z_offset & ADXL367_XYZ_AXIS_OFFSET_MASK,
-				     ADXL367_XYZ_AXIS_OFFSET_MASK);
+	dev->y_offset = y_offset;
+
+	ret = adxl367_reg_write_msk(dev, ADXL367_REG_Z_OFFSET,
+				    z_offset & ADXL367_XYZ_AXIS_OFFSET_MASK,
+				    ADXL367_XYZ_AXIS_OFFSET_MASK);
+	if (ret)
+		return ret;
+	dev->z_offset = z_offset;
+
+	return 0;
 }
 
 /***************************************************************************//**
