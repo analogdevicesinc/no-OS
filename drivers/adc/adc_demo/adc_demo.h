@@ -46,6 +46,7 @@
 
 #include <stdint.h>
 #include "iio_types.h"
+#include "no_os_irq.h"
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -56,6 +57,8 @@
 #ifndef TOTAL_ADC_CHANNELS
 #define TOTAL_ADC_CHANNELS 2
 #endif
+
+#define TRIG_MAX_NAME_SIZE 20
 
 /**
  * @struct iio_demo_adc_desc
@@ -96,6 +99,25 @@ enum iio_adc_demo_attributes {
 	ADC_GLOBAL_ATTR,
 };
 
+struct adc_demo_trig {
+	struct iio_desc             **iio_desc;
+	struct no_os_irq_ctrl_desc  *irq_ctrl;
+	struct no_os_irq_init_param *irq_init_param;
+	char                         name[TRIG_MAX_NAME_SIZE + 1];
+};
+
+struct adc_demo_trig_init_param {
+	struct iio_desc             **iio_desc;
+	struct no_os_irq_ctrl_desc  *irq_ctrl;
+	struct no_os_irq_init_param *irq_init_param;
+	const char                  *name;
+};
+
+struct adc_demo_sw_trig_init_param {
+	struct iio_desc	**iio_desc;
+	const char      *name;
+};
+
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
@@ -116,5 +138,12 @@ int32_t adc_demo_reg_read(struct adc_demo_desc *desc, uint8_t reg_index,
 
 int32_t adc_demo_reg_write(struct adc_demo_desc *desc, uint8_t reg_index,
 			   uint8_t writeval);
+
+int32_t adc_demo_software_trigger_init(struct adc_demo_trig **iio_trig,
+				       struct adc_demo_sw_trig_init_param *init_param);
+
+void adc_demo_trigger_remove(struct adc_demo_trig *trig);
+
+int32_t adc_demo_trigger_handler(struct iio_device_data *dev_data);
 
 #endif /*IIO_DEMO_ADC_*/

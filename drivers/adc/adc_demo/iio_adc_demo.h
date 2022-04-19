@@ -45,5 +45,6 @@
 #include "adc_demo.h"
 
 extern struct iio_device adc_demo_iio_descriptor;
+extern struct iio_trigger adc_demo_iio_software_trigger_desc;
 
 #endif /* IIO_DEMO_ADC */
