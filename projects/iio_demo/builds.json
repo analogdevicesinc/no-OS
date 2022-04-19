@@ -1,21 +1,34 @@
 {
   "aducm3029": {
     "iio_uart": {
-      "flags" : "TINYIIOD=y"
+      "flags" : "IIO_EXAMPLE=y IIO_TRIGGER_EXAMPLE=n"
+    },
+    "iio_uart_with_sw_trig": {
+      "flags" : "IIO_EXAMPLE=n IIO_TRIGGER_EXAMPLE=y"
     },
     "iio_wifi": {
-      "flags" : "TINYIIOD=y USE_TCP_SOCKET=y"
+      "flags" : "IIO_EXAMPLE=y IIO_TRIGGER_EXAMPLE=n USE_TCP_SOCKET=y"
+    },
+    "iio_wifi_with_sw_trig": {
+      "flags" : "IIO_EXAMPLE=n IIO_TRIGGER_EXAMPLE=y USE_TCP_SOCKET=y"
     }
   },
   "xilinx": {
     "iio_zed": {
-      "flags" : "TINYIIOD=y",
+      "flags" : "IIO_EXAMPLE=y IIO_TRIGGER_EXAMPLE=n",
+      "hardware" : ["ad40xx_fmc_zed"]
+    },
+    "iio_zed_sw_trig": {
+      "flags" : "IIO_EXAMPLE=n IIO_TRIGGER_EXAMPLE=y",
       "hardware" : ["ad40xx_fmc_zed"]
     }
   },
   "stm32": {
-    "iiod_sdp_ck1z": {
-      "flags" : "TINYIIOD=y"
+    "iio": {
+      "flags" : "IIO_EXAMPLE=y IIO_TRIGGER_EXAMPLE=n"
+    },
+    "iio_sw_trig": {
+      "flags" : "IIO_EXAMPLE=n IIO_TRIGGER_EXAMPLE=y"
     }
   }
 }

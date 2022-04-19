@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   app_config.h
- *   @brief  Config file of IIO Demo project.
- *   @author DBogdan (dragos.bogdan@analog.com)
+ *   @file   parameters.c
+ *   @brief  Definition of stm32 platform data used by iio_demo project.
+ *   @author RBolboac (ramona.bolboaca@analog.com)
 ********************************************************************************
- * Copyright 2015(c) Analog Devices, Inc.
+ * Copyright 2022(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -36,17 +36,12 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef CONFIG_H_
-#define CONFIG_H_
 
-//#define XILINX_PLATFORM
-//#define ALTERA_PLATFORM
-//#define ADUCM_PLATFORM
+/******************************************************************************/
+/***************************** Include Files **********************************/
+/******************************************************************************/
+#include "parameters.h"
 
-#ifdef ENABLE_IIO_NETWORK
-//#define USE_TCP_SOCKET
-#endif
-
-//#define ENABLE_LOOPBACK
-
-#endif
+/******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
