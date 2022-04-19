@@ -61,7 +61,7 @@ int dummy_example_main()
 {
 	int32_t ret;
 
-	/* Device AD4110 instance. */
+	/* Device ADXL367 instance. */
 	struct adxl367_dev *dev;
 
 	ret = adxl367_init(&dev, init_param);

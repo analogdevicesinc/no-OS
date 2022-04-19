@@ -44,12 +44,20 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include "spi_extra.h"
+#include <xparameters.h>
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 #define SPI_DEVICE_ID 	0U
 #define SPI_OPS 	&xil_spi_ops
+
+#ifdef IIO_SUPPORT
+#define INTC_DEVICE_ID 	XPAR_SCUGIC_SINGLE_DEVICE_ID
+#define UART_IRQ_ID     XPAR_XUARTPS_1_INTR
+#define UART_DEVICE_ID      XPAR_XUARTPS_0_DEVICE_ID
+#define UART_BAUDRATE  115200
+#endif
 
 extern struct xil_spi_init_param spi_extra;
 

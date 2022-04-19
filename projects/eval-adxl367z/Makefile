@@ -1,4 +1,5 @@
 # Select the example you want to enable by chossing y for enabling and n for disabling
+IIO_EXAMPLE = n
 DUMMY_EXAMPLE = y
 
 # Uncomment to use the desired platform
