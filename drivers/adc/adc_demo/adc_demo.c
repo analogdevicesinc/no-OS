@@ -47,6 +47,7 @@
 #include "adc_demo.h"
 #include "no_os_error.h"
 #include "no_os_util.h"
+#include "iio.h"
 
 /* default sine lookup table to be used if ext_buff is not available */
 const uint16_t sine_lut[128] = {
@@ -175,6 +176,49 @@ static bool get_next_ch_idx(uint32_t ch_mask, uint32_t last_idx,
 	*new_idx = last_idx;
 
 	return 1;
+}
+
+/***************************************************************************//**
+ * @brief Handles trigger: reads one data-set and writes it to the buffer.
+ *
+ * @param dev_data  - The iio device data structure.
+ *
+ * @return ret - Result of the handling procedure. In case of success, the size
+ * 				 of the written data is returned.
+*******************************************************************************/
+int32_t adc_demo_trigger_handler(struct iio_device_data *dev_data)
+{
+	struct adc_demo_desc *desc;
+	uint32_t k = 0;
+	uint32_t ch = -1;
+	uint16_t buff[TOTAL_ADC_CHANNELS];
+	static uint16_t i = 0;
+
+	if (!dev_data)
+		return -EINVAL;
+
+	desc = (struct adc_demo_desc *)dev_data->dev;
+
+	if(desc->ext_buff == NULL) {
+		int offset_per_ch = NO_OS_ARRAY_SIZE(sine_lut) / TOTAL_ADC_CHANNELS;
+		while(get_next_ch_idx(desc->active_ch, ch, &ch))
+			buff[k++] = sine_lut[(i + ch * offset_per_ch ) % NO_OS_ARRAY_SIZE(sine_lut)];
+		if (i == NO_OS_ARRAY_SIZE(sine_lut))
+			i = 0;
+		else
+			i++;
+
+		return iio_buffer_push_scan(dev_data->buffer, buff);
+	}
+
+	while(get_next_ch_idx(desc->active_ch, ch, &ch))
+		buff[k++] = ((uint16_t (*)[desc->ext_buff_len])(desc->ext_buff))[ch][i];
+	if (i == (desc->ext_buff_len))
+		i = 0;
+	else
+		i++;
+
+	return iio_buffer_push_scan(dev_data->buffer, buff);
 }
 
 /**

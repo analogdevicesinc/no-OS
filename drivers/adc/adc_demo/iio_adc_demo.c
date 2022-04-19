@@ -172,6 +172,7 @@ struct iio_device adc_demo_iio_descriptor = {
 	.buffer_attributes = NULL,
 	.pre_enable = update_adc_channels,
 	.post_disable = close_adc_channels,
+	.trigger_handler = (int32_t (*)())adc_demo_trigger_handler,
 	.read_dev = (int32_t (*)())adc_read_samples,
 	.debug_reg_read = (int32_t (*)()) adc_demo_reg_read,
 	.debug_reg_write = (int32_t (*)()) adc_demo_reg_write
