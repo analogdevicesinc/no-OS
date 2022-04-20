@@ -67,6 +67,8 @@ int32_t dac_demo_init(struct dac_demo_desc **desc,
 		return -ENOMEM;
 
 	adesc->loopback_buffers = param->loopback_buffers;
+	adesc->loopback_buffer_len = param->loopback_buffer_len;
+
 	for(int i = 0; i < TOTAL_DAC_CHANNELS; i++)
 		adesc->dac_ch_attr[i] = param->dev_ch_attr[i];
 	adesc->dac_global_attr = param->dev_global_attr;
@@ -173,9 +175,12 @@ int32_t dac_write_samples(void* dev, uint16_t* buff, uint32_t samples)
 		return -EINVAL;
 
 	for(uint32_t i = 0; i < samples; i++)
-		while (get_next_ch_idx(desc->active_ch, ch, &ch))
-			desc->loopback_buffers[ch]
-			[i % desc->loopback_buffer_len] = buff[k++];
+		while (get_next_ch_idx(desc->active_ch, ch, &ch)) {
+			uint16_t* ch_buffer = (uint16_t*)(desc->loopback_buffers +
+							  (ch * desc->loopback_buffer_len *
+							   sizeof(uint16_t) / sizeof(ch_buffer)));
+			ch_buffer[i % desc->loopback_buffer_len] = buff[k++];
+		}
 
 	return samples;
 }
