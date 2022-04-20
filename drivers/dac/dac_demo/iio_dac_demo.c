@@ -172,7 +172,7 @@ struct iio_device dac_demo_iio_descriptor = {
 	.buffer_attributes = NULL,
 	.pre_enable = (int32_t (*)())update_dac_channels,
 	.post_disable = close_dac_channels,
-	.read_dev = (int32_t (*)())dac_write_samples,
+	.write_dev = (int32_t (*)())dac_write_samples,
 	.debug_reg_read = (int32_t (*)()) dac_demo_reg_read,
 	.debug_reg_write = (int32_t (*)()) dac_demo_reg_write
 };
