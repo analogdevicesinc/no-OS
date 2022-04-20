@@ -1103,7 +1103,7 @@ static int iio_open_dev(struct iiod_ctx *ctx, const char *device,
 	}
 
 	desc = ctx->instance;
-	if (desc->nb_trigs) {
+	if (dev->trig_idx != NO_TRIGGER) {
 		trig = &desc->trigs[dev->trig_idx];
 		if (trig->descriptor->enable)
 			trig->descriptor->enable(trig->instance);
