@@ -359,7 +359,7 @@ int32_t adi_ad9081_jesd_sysref_irq_jitter_mux_set(adi_ad9081_device_t *device,
 	AD9081_NULL_POINTER_RETURN(device);
 	AD9081_LOG_FUNC();
 
-	if (pin != 0 || pin != 1) {
+	if (pin != 0 && pin != 1) {
 		return API_CMS_ERROR_INVALID_PARAM;
 	}
 
