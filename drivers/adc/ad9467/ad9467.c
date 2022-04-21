@@ -633,7 +633,7 @@ int32_t ad9467_output_current_adj(struct ad9467_dev *dev,
 	int32_t ret = 0;
 	uint8_t read;
 
-	if((adj > 0) || (adj <= 7)) {
+	if((adj > 0) && (adj <= 7)) {
 		ret = ad9467_set_bits_to_reg(dev,
 					     AD9467_REG_OUT_ADJ,
 					     AD9467_OUT_ADJ_OUT_CURRENT(adj),
