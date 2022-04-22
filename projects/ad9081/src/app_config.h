@@ -79,6 +79,8 @@
 #define AD9081_TX_CHAN_NCO_SHIFT	{0, 0, 0, 0, 0, 0, 0, 0}
 #define AD9081_TX_CHAN_GAIN		{2048, 2048, 2048, 2048, 0, 0, 0, 0}
 
+#define AD9081_TX_FSC	{0, 0, 0, 0}
+
 #define AD9081_TX_DAC_CHAN_CROSSBAR	{0x1, 0x2, 0x4, 0x8}
 
 /* RX path */
