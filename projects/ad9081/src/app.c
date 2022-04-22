@@ -167,6 +167,7 @@ int main(void)
 		.tx_main_interpolation = AD9081_TX_MAIN_INTERPOLATION,
 		.tx_main_nco_frequency_shift_hz = AD9081_TX_MAIN_NCO_SHIFT,
 		.tx_dac_channel_crossbar_select = AD9081_TX_DAC_CHAN_CROSSBAR,
+		.tx_full_scale_current_ua = AD9081_TX_FSC,
 		/* The 8 DAC Channelizers */
 		.tx_channel_interpolation = AD9081_TX_CHAN_INTERPOLATION,
 		.tx_channel_nco_frequency_shift_hz = AD9081_TX_CHAN_NCO_SHIFT,

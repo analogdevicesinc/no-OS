@@ -879,6 +879,14 @@ static int32_t ad9081_setup(struct ad9081_phy *phy)
 
 	//no_os_clk_set_rate(phy->clks[TX_SAMPL_CLK], sample_rate); // TODO
 
+	for (i = 0; i < NO_OS_ARRAY_SIZE(phy->tx_dac_fsc); i++) {
+		if (phy->tx_dac_fsc[i]) {
+			ret = adi_ad9081_dac_fsc_set(&phy->ad9081, NO_OS_BIT(i), phy->tx_dac_fsc[i], 1);
+			if (ret != 0)
+				return ret;
+		}
+	}
+
 	for_each_cddc(i, phy->rx_cddc_select) {
 		ret = adi_ad9081_adc_nyquist_zone_set(&phy->ad9081, NO_OS_BIT(i),
 						      phy->rx_nyquist_zone[i]);
@@ -1058,6 +1066,7 @@ int32_t ad9081_parse_init_param(struct ad9081_phy *phy,
 	for (i = 0; i < MAX_NUM_MAIN_DATAPATHS; i++) {
 		phy->tx_main_shift[i] = init_param->tx_main_nco_frequency_shift_hz[i];
 		phy->tx_dac_chan_xbar[i] = init_param->tx_dac_channel_crossbar_select[i];
+		phy->tx_dac_fsc[i] = init_param->tx_full_scale_current_ua[i];
 	}
 	/* The 8 DAC Channelizers */
 	phy->tx_chan_interp = init_param->tx_channel_interpolation;
