@@ -48,6 +48,7 @@
 #include "no_os_spi.h"
 #include "no_os_gpio.h"
 #include "adi_ad9081.h"
+#include "jesd204.h"
 
 /******************************************************************************/
 /********************** Macros and Types Declarations *************************/
@@ -58,10 +59,13 @@
 struct ad9081_jesd_link {
 	bool is_jrx;
 	adi_cms_jesd_param_t jesd_param;
+	struct jesd204_link jesd204_link;
 	uint32_t jrx_tpl_phase_adjust;
 	uint8_t logiclane_mapping[8];
 	uint8_t link_converter_select[16];
 	uint64_t lane_rate;
+	unsigned long lane_rate_kbps;
+	unsigned long lane_cal_rate_kbps;
 };
 
 struct dac_settings_cache {
@@ -74,6 +78,7 @@ struct ad9081_phy {
 	struct no_os_clk		*jesd_rx_clk;
 	struct no_os_clk		*jesd_tx_clk;
 	struct no_os_clk		*dev_clk;
+	struct jesd204_dev		*jdev;
 	bool		sysref_coupling_ac_en;
 	adi_ad9081_device_t	ad9081;
 	struct ad9081_jesd_link	jrx_link_tx;
@@ -85,6 +90,7 @@ struct ad9081_phy {
 	bool		nco_sync_direct_sysref_mode_en;
 	uint32_t	sysref_average_cnt_exp;
 	bool		sysref_continuous_dis;
+	bool		is_initialized;
 	/* TX */
 	uint64_t	dac_frequency_hz;
 	/* The 4 DAC Main Datapaths */
@@ -96,6 +102,7 @@ struct ad9081_phy {
 	int64_t		tx_chan_shift[MAX_NUM_CHANNELIZER];
 	struct dac_settings_cache	dac_cache;
 	/* RX */
+	uint32_t	adc_dcm;
 	uint64_t 	adc_frequency_hz;
 	uint32_t	rx_nyquist_zone[MAX_NUM_MAIN_DATAPATHS];
 	/* The 4 ADC Main Datapaths */
@@ -174,6 +181,14 @@ struct ad9081_init_param {
 	uint8_t		rx_channel_enable[MAX_NUM_CHANNELIZER];
 	struct link_init_param	*jtx_link_rx[2];
 };
+
+/*
+ * JESD204-FSM defines
+ */
+#define DEFRAMER_LINK0_TX 0
+#define DEFRAMER_LINK1_TX 1
+#define FRAMER_LINK0_RX 2
+#define FRAMER_LINK1_RX 3
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
