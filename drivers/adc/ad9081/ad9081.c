@@ -58,54 +58,90 @@
 	for ((bit) = 0; (bit) < MAX_NUM_MAIN_DATAPATHS; (bit)++) \
 		if ((mask) & NO_OS_BIT(bit))
 
-static int32_t ad9081_nco_sync_master_slave(struct ad9081_phy *phy,
-		bool master)
+static int adi_ad9081_adc_nco_sync(adi_ad9081_device_t *device,
+				   uint8_t trigger_src,
+				   uint8_t extra_lmfc_num)
 {
-	int32_t ret;
+	int err;
 
-	/* avoid the glitch before nco reset */
-	ret = adi_ad9081_hal_bf_set(&phy->ad9081,
-				    REG_MAIN_AUTO_CLK_GATING_ADDR, 0x00000400, 7);
+	AD9081_NULL_POINTER_RETURN(device);
+	AD9081_LOG_FUNC();
+
+	err = adi_ad9081_hal_bf_set(device, REG_MAIN_AUTO_CLK_GATING_ADDR,
+				    0x00000400, 7);
+	AD9081_ERROR_RETURN(err);
+
+	err = adi_ad9081_adc_ddc_coarse_sync_enable_set(device,
+							AD9081_ADC_CDDC_ALL, 1);
+	AD9081_ERROR_RETURN(err);
+	err = adi_ad9081_adc_ddc_coarse_sync_next_set(device,
+						      AD9081_ADC_CDDC_ALL, 1);
+	AD9081_ERROR_RETURN(err);
+	err = adi_ad9081_adc_ddc_coarse_trig_nco_reset_enable_set(
+		device, AD9081_ADC_CDDC_ALL, 0);
+	AD9081_ERROR_RETURN(err);
+
+	err = adi_ad9081_adc_ddc_fine_sync_enable_set(device,
+						      AD9081_ADC_FDDC_ALL, 1);
+	AD9081_ERROR_RETURN(err);
+	err = adi_ad9081_adc_ddc_fine_sync_next_set(device, AD9081_ADC_FDDC_ALL,
+						    1);
+	AD9081_ERROR_RETURN(err);
+	err = adi_ad9081_adc_ddc_fine_trig_nco_reset_enable_set(
+		device, AD9081_ADC_FDDC_ALL, 0);
+	AD9081_ERROR_RETURN(err);
+
+	err = adi_ad9081_device_nco_sync_mode_set(device, 0);
+	AD9081_ERROR_RETURN(err);
+
+	err = adi_ad9081_device_nco_sync_sysref_mode_set(device, trigger_src);
+	AD9081_ERROR_RETURN(err);
+
+	AD9081_ERROR_RETURN(err);
+	err = adi_ad9081_device_nco_sync_extra_lmfc_num_set(device,
+							    extra_lmfc_num);
+	AD9081_ERROR_RETURN(err);
+
+	err = adi_ad9081_adc_ddc_coarse_sync_next_set(device,
+						      AD9081_ADC_CDDC_ALL, 0);
+	AD9081_ERROR_RETURN(err);
+	err = adi_ad9081_adc_ddc_fine_sync_next_set(device, AD9081_ADC_FDDC_ALL,
+						    0);
+	AD9081_ERROR_RETURN(err);
+	err = adi_ad9081_adc_ddc_coarse_sync_next_set(device,
+						      AD9081_ADC_CDDC_ALL, 1);
+	AD9081_ERROR_RETURN(err);
+	err = adi_ad9081_adc_ddc_fine_sync_next_set(device, AD9081_ADC_FDDC_ALL,
+						    1);
+	AD9081_ERROR_RETURN(err);
+
+	err = adi_ad9081_device_nco_sync_reset_via_sysref_set(device, 0);
+	AD9081_ERROR_RETURN(err);
+	err = adi_ad9081_device_nco_sync_reset_via_sysref_set(device, 1);
+	AD9081_ERROR_RETURN(err);
+
+	return API_CMS_ERROR_OK;
+}
+
+static int ad9081_nco_sync(struct ad9081_phy *phy, bool master)
+{
+	int ret;
+
+	ret = adi_ad9081_device_nco_sync_pre(&phy->ad9081);
 	if (ret != 0)
 		return ret;
 
-	ret = adi_ad9081_hal_bf_set(&phy->ad9081,
-				    REG_NCOSYNC_MS_MODE_ADDR,
-				    BF_NCO_SYNC_MS_EXTRA_LMFC_NUM_INFO,
-				    phy->nco_sync_ms_extra_lmfc_num);
-	if (ret != 0)
-		return ret;
+	/* trigger_src  0: sysref, 1: lmfc rising edge, 2: lmfc falling edge */
 
-	ret = adi_ad9081_dac_nco_master_slave_gpio_set(&phy->ad9081, 0, master);
-	if (ret < 0)
-		return ret;
-	/* source  0: sysref, 1: lmfc rising edge, 2: lmfc falling edge */
-	ret = adi_ad9081_dac_nco_master_slave_trigger_source_set(
-		      &phy->ad9081, 1); /* REG 0xCC */
-	if (ret < 0)
-		return ret;
-
-	ret = adi_ad9081_dac_nco_master_slave_mode_set(&phy->ad9081,
-			master ? 1 : 2); /* REG 0xCC */
-
-	adi_ad9081_dac_nco_sync_reset_via_sysref_set(&phy->ad9081, 0);
-	adi_ad9081_dac_nco_sync_reset_via_sysref_set(&phy->ad9081, 1);
-
-	adi_ad9081_adc_ddc_coarse_sync_enable_set(&phy->ad9081,
-			AD9081_ADC_CDDC_ALL, 0);
-	adi_ad9081_adc_ddc_coarse_sync_enable_set(&phy->ad9081,
-			AD9081_ADC_CDDC_ALL, 1);
-
-	adi_ad9081_adc_ddc_fine_sync_enable_set(&phy->ad9081,
-						AD9081_ADC_FDDC_ALL, 0);
-	adi_ad9081_adc_ddc_fine_sync_enable_set(&phy->ad9081,
-						AD9081_ADC_FDDC_ALL, 1);
-
-	if (master)
-		return adi_ad9081_dac_nco_master_slave_trigger_set(
-			       &phy->ad9081); /* REG 0xBC */
-
-	return ret;
+	if (phy->nco_sync_direct_sysref_mode_en)
+		return adi_ad9081_adc_nco_sync(&phy->ad9081,
+			0, phy->nco_sync_ms_extra_lmfc_num);
+	else
+		return adi_ad9081_adc_nco_master_slave_sync(&phy->ad9081,
+					     master,
+					     1, /* trigger_src */
+					     0, /* gpio_index */
+					     phy->nco_sync_ms_extra_lmfc_num);
 }
 
 static uint64_t ad9081_calc_lanerate(struct ad9081_jesd_link *link,
@@ -408,7 +444,7 @@ static int32_t ad9081_multichip_sync(struct ad9081_phy *phy, int step)
 		break;
 	case 5:
 		/* Master Slave NCO Sync */
-		ret = ad9081_nco_sync_master_slave(phy,
+		ret = ad9081_nco_sync(phy,
 						   phy->jesd_rx_clk ? true : false);
 		if (ret != 0)
 			return ret;
@@ -845,7 +881,7 @@ static int32_t ad9081_setup(struct ad9081_phy *phy)
 			return ret;
 	}
 
-	ret = ad9081_nco_sync_master_slave(phy,
+	ret = ad9081_nco_sync(phy,
 					   phy->jesd_rx_clk ? true : false);
 	if (ret != 0)
 		return ret;
@@ -990,6 +1026,9 @@ int32_t ad9081_parse_init_param(struct ad9081_phy *phy,
 	phy->config_sync_01_swapped = init_param->jesd_sync_pins_01_swap_enable;
 	phy->lmfc_delay = init_param->lmfc_delay_dac_clk_cycles;
 	phy->nco_sync_ms_extra_lmfc_num = init_param->nco_sync_ms_extra_lmfc_num;
+	phy->nco_sync_direct_sysref_mode_en = init_param->nco_sync_direct_sysref_mode_enable;
+	phy->sysref_average_cnt_exp = init_param->sysref_average_cnt_exp;
+	phy->sysref_continuous_dis = init_param->continuous_sysref_mode_disable;
 	/* TX */
 	phy->dac_frequency_hz = init_param->dac_frequency_hz;
 

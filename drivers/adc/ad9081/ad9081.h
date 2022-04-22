@@ -82,6 +82,9 @@ struct ad9081_phy {
 	bool		config_sync_01_swapped;
 	uint32_t	lmfc_delay;
 	uint32_t	nco_sync_ms_extra_lmfc_num;
+	bool		nco_sync_direct_sysref_mode_en;
+	uint32_t	sysref_average_cnt_exp;
+	bool		sysref_continuous_dis;
 	/* TX */
 	uint64_t	dac_frequency_hz;
 	/* The 4 DAC Main Datapaths */
@@ -142,6 +145,9 @@ struct ad9081_init_param {
 	bool		jesd_sync_pins_01_swap_enable;
 	uint32_t	lmfc_delay_dac_clk_cycles;
 	uint32_t	nco_sync_ms_extra_lmfc_num;
+	bool		nco_sync_direct_sysref_mode_enable;
+	uint32_t	sysref_average_cnt_exp;
+	bool		continuous_sysref_mode_disable;
 	/* TX */
 	uint64_t	dac_frequency_hz;
 	/* The 4 DAC Main Datapaths */
