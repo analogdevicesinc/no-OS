@@ -35,7 +35,9 @@ SRCS += $(PROJECT)/src/app.c \
 	$(PLATFORM_DRIVERS)/xilinx_gpio.c \
 	$(PLATFORM_DRIVERS)/xilinx_spi.c \
 	$(NO-OS)/util/no_os_clk.c \
-	$(NO-OS)/util/no_os_util.c
+	$(NO-OS)/util/no_os_util.c \
+	$(NO-OS)/jesd204/jesd204-core.c \
+	$(NO-OS)/jesd204/jesd204-fsm.c
 ifeq (y,$(strip $(QUAD_MXFE)))
 SRCS += $(DRIVERS)/frequency/adf4371/adf4371.c
 endif
@@ -91,7 +93,10 @@ INCS +=	$(PROJECT)/src/app_clock.h \
 	$(INCLUDE)/no_os_error.h \
 	$(INCLUDE)/no_os_gpio.h \
 	$(INCLUDE)/no_os_spi.h \
-	$(INCLUDE)/no_os_util.h
+	$(INCLUDE)/no_os_util.h \
+	$(INCLUDE)/no_os_print_log.h \
+	$(INCLUDE)/jesd204.h \
+	$(NO-OS)/jesd204/jesd204-priv.h
 ifeq (y,$(strip $(QUAD_MXFE)))
 INCS += $(DRIVERS)/frequency/adf4371/adf4371.h
 endif
