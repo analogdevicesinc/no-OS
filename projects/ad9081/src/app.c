@@ -158,6 +158,9 @@ int main(void)
 #endif
 		.lmfc_delay_dac_clk_cycles = 0,
 		.nco_sync_ms_extra_lmfc_num = 0,
+		.nco_sync_direct_sysref_mode_enable = 0,
+		.sysref_average_cnt_exp = 7,
+		.continuous_sysref_mode_disable = 0,
 		/* TX */
 		.dac_frequency_hz = AD9081_DAC_FREQUENCY,
 		/* The 4 DAC Main Datapaths */
