@@ -45,6 +45,7 @@
 #include "adi_cms_api_common.h"
 #include "no_os_util.h"
 #include "no_os_delay.h"
+#include "no_os_print_log.h"
 #include "adi_ad9081_hal.h"
 #include "ad9081.h"
 
@@ -58,6 +59,10 @@
 #define for_each_cddc(bit, mask) \
 	for ((bit) = 0; (bit) < MAX_NUM_MAIN_DATAPATHS; (bit)++) \
 		if ((mask) & NO_OS_BIT(bit))
+
+struct ad9081_jesd204_priv {
+	struct ad9081_phy *phy;
+};
 
 static int adi_ad9081_adc_nco_sync(adi_ad9081_device_t *device,
 				   uint8_t trigger_src,
@@ -263,7 +268,63 @@ static const char *const ad9081_jrx_204c_states[] = {
 	"Undef", "Link is good", "Undef",
 };
 
-static int32_t ad9081_jesd_rx_link_status_print(struct ad9081_phy *phy)
+static int ad9081_jesd_rx_link_status_print(struct ad9081_phy *phy,
+				     struct jesd204_link *lnk, int retry)
+{
+	int ret, l;
+	uint16_t stat, mask;
+
+	switch (lnk->link_id) {
+	case DEFRAMER_LINK0_TX:
+		l = AD9081_LINK_0;
+		break;
+	case DEFRAMER_LINK1_TX:
+		l = AD9081_LINK_1;
+		break;
+	default:
+		return -EINVAL;
+	}
+
+	do {
+		ret = adi_ad9081_jesd_rx_link_status_get(&phy->ad9081, l, &stat);
+		if (ret)
+			return -EFAULT;
+
+		if (lnk->jesd_version == JESD204_VERSION_C) {
+			stat >>= 8;
+			if (stat == 6)
+				ret = 0;
+			else
+				ret = -EIO;
+
+			if (ret == 0 || retry == 0)
+				pr_info("JESD TX (JRX) Link%"PRIu32" 204C status: %s (%d)\n",
+					lnk->link_id, ad9081_jrx_204c_states[stat & 0x7],
+					stat);
+			else
+				no_os_mdelay(20);
+		} else {
+			mask = (1 << lnk->num_lanes) - 1;
+
+			stat = mask & stat;
+
+			if (stat == mask)
+				ret = 0;
+			else
+				ret = -EIO;
+
+			if (ret == 0 || retry == 0)
+				pr_info("JESD TX (JRX) Link%"PRIu32" 0x%X lanes in DATA\n",
+					lnk->link_id, stat);
+			else
+				no_os_mdelay(20);
+		}
+	} while (ret && retry--);
+
+	return ret;
+}
+
+static int32_t ad9081_jesd_rx_link_status_print_prev(struct ad9081_phy *phy)
 {
 	int32_t ret, l;
 	uint16_t stat;
@@ -302,7 +363,65 @@ static const char *const ad9081_jtx_qbf_states[] = {
 	"ILA_BP", "DATA"
 };
 
-static int32_t ad9081_jesd_tx_link_status_print(struct ad9081_phy *phy)
+static int ad9081_jesd_tx_link_status_print(struct ad9081_phy *phy,
+				     struct jesd204_link *lnk, int retry)
+{
+	int ret, l;
+	uint16_t stat;
+
+	switch (lnk->link_id) {
+	case FRAMER_LINK0_RX:
+		l = AD9081_LINK_0;
+		break;
+	case FRAMER_LINK1_RX:
+		l = AD9081_LINK_1;
+		break;
+	default:
+		return -EINVAL;
+	}
+
+	do {
+		ret = adi_ad9081_jesd_tx_link_status_get(
+			&phy->ad9081, l, &stat);
+		if (ret)
+			return -EFAULT;
+
+		if (lnk->jesd_version == JESD204_VERSION_C) {
+			if ((stat & 0x60) == 0x60)
+				ret = 0;
+			else
+				ret = -EIO;
+
+			if (ret == 0 || retry == 0)
+				pr_info("JESD RX (JTX) Link%"PRIu32" PLL %s, PHASE %s, MODE %s\n",
+					lnk->link_id,
+					stat & NO_OS_BIT(5) ? "locked" : "unlocked",
+					stat & NO_OS_BIT(6) ? "established" : "lost",
+					stat & NO_OS_BIT(7) ? "invalid" : "valid");
+			else
+				no_os_mdelay(20);
+		} else {
+			if ((stat & 0xFF) == 0x7D)
+				ret = 0;
+			else
+				ret = -EIO;
+
+			if (ret == 0 || retry == 0)
+				pr_info("JESD RX (JTX) Link%"PRIu32" in %s, SYNC %s, PLL %s, PHASE %s, MODE %s\n",
+					lnk->link_id, ad9081_jtx_qbf_states[stat & 0xF],
+					stat & NO_OS_BIT(4) ? "deasserted" : "asserted",
+					stat & NO_OS_BIT(5) ? "locked" : "unlocked",
+					stat & NO_OS_BIT(6) ? "established" : "lost",
+					stat & NO_OS_BIT(7) ? "invalid" : "valid");
+			else
+				no_os_mdelay(20);
+		}
+	} while (ret && retry--);
+
+	return ret;
+}
+
+static int32_t ad9081_jesd_tx_link_status_print_prev(struct ad9081_phy *phy)
 {
 	int32_t ret, l;
 	uint16_t stat;
@@ -374,7 +493,7 @@ static int32_t ad9081_multichip_sync(struct ad9081_phy *phy, int step)
 				return ret;
 			}
 		}
-		ad9081_jesd_tx_link_status_print(phy);
+		ad9081_jesd_tx_link_status_print_prev(phy);
 		break;
 	case 2:
 		/* disable txfe TX (JRX) link */
@@ -405,7 +524,7 @@ static int32_t ad9081_multichip_sync(struct ad9081_phy *phy, int step)
 		if (ret != 0)
 			return ret;
 
-		ret = ad9081_jesd_rx_link_status_print(phy);
+		ret = ad9081_jesd_rx_link_status_print_prev(phy);
 		if (ret < 0)
 			ad9081_work_func(phy);
 		//schedule_delayed_work(&phy->dwork, msecs_to_jiffies(1000));	TODO
@@ -465,7 +584,7 @@ static int32_t ad9081_multichip_sync(struct ad9081_phy *phy, int step)
 		ret = adi_ad9081_jesd_rx_link_enable_set(&phy->ad9081,
 				(phy->jrx_link_tx.jesd_param.jesd_duallink > 0) ?
 				AD9081_LINK_ALL : AD9081_LINK_0, 1);
-		ad9081_jesd_rx_link_status_print(phy);
+		ad9081_jesd_rx_link_status_print_prev(phy);
 		if (ret != 0)
 			return ret;
 		break;
@@ -511,7 +630,7 @@ void ad9081_work_func(struct ad9081_phy *phy)
 							   (phy->jrx_link_tx.jesd_param.jesd_duallink > 0) ?
 							   AD9081_LINK_ALL : AD9081_LINK_0, 1);
 
-			ad9081_jesd_rx_link_status_print(phy);
+			ad9081_jesd_rx_link_status_print_prev(phy);
 		}
 	}
 	//schedule_delayed_work(&phy->dwork, msecs_to_jiffies(1000));	// TODO
@@ -829,7 +948,7 @@ static int32_t ad9081_setup(struct ad9081_phy *phy)
 	    phy->jesd_tx_clk) {
 		do {	/* temp workaround until API is fixed */
 			no_os_mdelay(10);
-			stat = ad9081_jesd_rx_link_status_print(phy);
+			stat = ad9081_jesd_rx_link_status_print_prev(phy);
 			if (stat <= 0) {
 				ret = adi_ad9081_jesd_rx_link_enable_set(
 					      &phy->ad9081,
@@ -865,7 +984,7 @@ static int32_t ad9081_setup(struct ad9081_phy *phy)
 		} while (stat <= 0 && retry--);
 	}
 
-	ad9081_jesd_tx_link_status_print(phy);
+	ad9081_jesd_tx_link_status_print_prev(phy);
 
 	adi_ad9081_dac_irqs_status_get(&phy->ad9081, &status64);
 	printf("DAC IRQ status 0x%"PRIx64"\n", status64);
@@ -1017,6 +1136,22 @@ int32_t ad9081_parse_jesd_link_init_param(struct ad9081_jesd_link *link,
 	link->jesd_param.jesd_mode_id = init_param->link_mode;
 	link->jesd_param.jesd_duallink = init_param->dual_link;
 	link->jesd_param.jesd_jesdv = init_param->version;
+
+	link->jesd204_link.is_transmit = !jtx;
+	link->jesd204_link.scrambling = link->jesd_param.jesd_scr;
+	link->jesd204_link.device_id = link->jesd_param.jesd_did;
+	link->jesd204_link.octets_per_frame = link->jesd_param.jesd_f;
+	link->jesd204_link.frames_per_multiframe = link->jesd_param.jesd_k;
+	link->jesd204_link.samples_per_conv_frame = link->jesd_param.jesd_s;
+	link->jesd204_link.high_density = link->jesd_param.jesd_hd;
+	link->jesd204_link.converter_resolution = link->jesd_param.jesd_n;
+	link->jesd204_link.bits_per_sample = link->jesd_param.jesd_np;
+	link->jesd204_link.num_converters = link->jesd_param.jesd_m;
+	link->jesd204_link.ctrl_bits_per_sample = link->jesd_param.jesd_cs;
+	link->jesd204_link.num_lanes = link->jesd_param.jesd_l;
+	link->jesd204_link.jesd_version = link->jesd_param.jesd_jesdv;
+	link->jesd204_link.subclass = link->jesd_param.jesd_subclass;
+
 	for (i = 0; i < NO_OS_ARRAY_SIZE(link->logiclane_mapping); i++)
 		link->logiclane_mapping[i] =
 			init_param->logical_lane_mapping[i];
@@ -1097,6 +1232,367 @@ int32_t ad9081_parse_init_param(struct ad9081_phy *phy,
 
 	return 0;
 }
+
+static int ad9081_jesd_tx_link_dig_reset(adi_ad9081_device_t *device,
+				      uint8_t reset)
+{
+	int err;
+
+	AD9081_NULL_POINTER_RETURN(device);
+	AD9081_INVALID_PARAM_RETURN(reset > 1);
+
+	err = adi_ad9081_hal_bf_set(device, REG_FORCE_LINK_RESET_REG_ADDR,
+				    BF_FORCE_LINK_DIGITAL_RESET_INFO,
+				    reset); /* not paged */
+	AD9081_ERROR_RETURN(err);
+
+	return API_CMS_ERROR_OK;
+}
+
+static int ad9081_sysref_ctrl(struct ad9081_phy *phy, uint8_t enable)
+{
+	if (phy->jdev && enable)
+		return jesd204_sysref_async_force(phy->jdev);
+
+	return 0;
+}
+
+static int ad9081_jesd204_link_init(struct jesd204_dev *jdev,
+		enum jesd204_state_op_reason reason,
+		struct jesd204_link *lnk)
+{
+	struct ad9081_jesd204_priv *priv = jesd204_dev_priv(jdev);
+	struct ad9081_phy *phy = priv->phy;
+	struct ad9081_jesd_link *link;
+	int ret;
+
+	switch (reason) {
+	case JESD204_STATE_OP_REASON_INIT:
+		break;
+	default:
+		return JESD204_STATE_CHANGE_DONE;
+	}
+
+	pr_debug("%s:%d link_num %u reason %s\n", __func__, __LINE__, lnk->link_id, jesd204_state_op_reason_str(reason));
+
+	switch (lnk->link_id) {
+	case DEFRAMER_LINK0_TX:
+	case DEFRAMER_LINK1_TX:
+		link = &phy->jrx_link_tx;
+		lnk->sample_rate = phy->dac_frequency_hz;
+		lnk->sample_rate_div = phy->tx_main_interp * phy->tx_chan_interp;
+		break;
+	case FRAMER_LINK0_RX:
+	case FRAMER_LINK1_RX:
+		link = &phy->jtx_link_rx[lnk->link_id - FRAMER_LINK0_RX];
+		lnk->sample_rate = phy->adc_frequency_hz;
+		lnk->sample_rate_div = phy->adc_dcm;
+		break;
+	default:
+		return -EINVAL;
+	}
+
+	jesd204_copy_link_params(lnk, &link->jesd204_link);
+
+	if (lnk->jesd_version == JESD204_VERSION_C)
+		lnk->jesd_encoder = JESD204_ENCODER_64B66B;
+	else
+		lnk->jesd_encoder = JESD204_ENCODER_8B10B;
+
+	ret = jesd204_link_get_rate_khz(lnk, &link->lane_rate_kbps);
+	if (ret)
+		return ret;
+
+	if (phy->sysref_continuous_dis)
+		lnk->sysref.mode = JESD204_SYSREF_ONESHOT;
+	else
+		lnk->sysref.mode = JESD204_SYSREF_CONTINUOUS;
+
+	return JESD204_STATE_CHANGE_DONE;
+}
+
+static int ad9081_jesd204_clks_enable(struct jesd204_dev *jdev,
+		enum jesd204_state_op_reason reason,
+		struct jesd204_link *lnk)
+{
+	struct ad9081_jesd204_priv *priv = jesd204_dev_priv(jdev);
+	struct ad9081_phy *phy = priv->phy;
+	uint8_t jesd_pll_status;
+	int ret;
+
+	pr_debug("%s:%d link_num %u reason %s\n", __func__, __LINE__,
+		lnk->link_id, jesd204_state_op_reason_str(reason));
+
+
+	if (reason == JESD204_STATE_OP_REASON_INIT) {
+		ret = adi_ad9081_jesd_pll_lock_status_get(&phy->ad9081,
+			&jesd_pll_status);
+		if (ret != 0)
+			return ret;
+
+		if (!jesd_pll_status) {
+			pr_err("JESD PLL Not Locked!\n");
+			return -EFAULT;
+		}
+	}
+
+	if (lnk->is_transmit && (reason == JESD204_STATE_OP_REASON_INIT) &&
+		(lnk->jesd_version == JESD204_VERSION_C)) {
+
+		if ((phy->jrx_link_tx.lane_rate_kbps >
+			(AD9081_JESDRX_204C_CAL_THRESH / 1000)) &&
+			phy->jrx_link_tx.lane_cal_rate_kbps !=
+			phy->jrx_link_tx.lane_rate_kbps) {
+
+			ret = adi_ad9081_jesd_rx_link_enable_set(&phy->ad9081,
+					AD9081_LINK_0, 1);
+			if (ret != 0)
+				return ret;
+
+			pr_info("running jesd_rx_calibrate_204c, LR %lu kbps",
+				phy->jrx_link_tx.lane_rate_kbps);
+
+			ret = adi_ad9081_jesd_rx_calibrate_204c(&phy->ad9081, 1, 0, 1);
+			if (ret < 0)
+				return ret;
+
+			ret = adi_ad9081_jesd_rx_link_enable_set(&phy->ad9081,
+					AD9081_LINK_0, 0);
+			if (ret != 0)
+				return ret;
+		}
+
+		phy->jrx_link_tx.lane_cal_rate_kbps = phy->jrx_link_tx.lane_rate_kbps;
+	}
+
+	if (!lnk->is_transmit) {
+		/* txfe RX (JTX) link digital reset */
+		ret = ad9081_jesd_tx_link_dig_reset(&phy->ad9081,
+			reason != JESD204_STATE_OP_REASON_INIT);
+		if (ret != 0)
+			return ret;
+
+		no_os_mdelay(4);
+	}
+
+	return JESD204_STATE_CHANGE_DONE;
+}
+
+static int ad9081_jesd204_link_enable(struct jesd204_dev *jdev,
+		enum jesd204_state_op_reason reason,
+		struct jesd204_link *lnk)
+{
+	struct ad9081_jesd204_priv *priv = jesd204_dev_priv(jdev);
+	struct ad9081_phy *phy = priv->phy;
+	int ret;
+
+	pr_debug("%s:%d link_num %u reason %s\n", __func__, __LINE__, lnk->link_id, jesd204_state_op_reason_str(reason));
+
+	if (lnk->is_transmit) {
+		/* txfe TX (JRX) link */
+		ret = adi_ad9081_jesd_rx_link_enable_set(&phy->ad9081,
+			AD9081_LINK_0,
+			reason == JESD204_STATE_OP_REASON_INIT);
+		if (ret != 0)
+			return ret;
+	}
+
+	return JESD204_STATE_CHANGE_DONE;
+}
+
+static int ad9081_jesd204_link_running(struct jesd204_dev *jdev,
+		enum jesd204_state_op_reason reason,
+		struct jesd204_link *lnk)
+{
+	struct ad9081_jesd204_priv *priv = jesd204_dev_priv(jdev);
+	struct ad9081_phy *phy = priv->phy;
+	int ret;
+
+	pr_debug("%s:%d link_num %u reason %s\n", __func__, __LINE__,
+		lnk->link_id, jesd204_state_op_reason_str(reason));
+
+	if (reason != JESD204_STATE_OP_REASON_INIT) {
+		//if (lnk->is_transmit && phy->jrx_link_watchdog_en)
+		//	cancel_delayed_work(&phy->dwork);	TODO
+
+		phy->is_initialized = false;
+
+		return JESD204_STATE_CHANGE_DONE;
+	}
+
+	if (lnk->is_transmit) {
+		ret = ad9081_jesd_rx_link_status_print(phy, lnk, 3);
+		if (ret < 0)
+			return JESD204_STATE_CHANGE_ERROR;
+	} else {
+		ret = ad9081_jesd_tx_link_status_print(phy, lnk, 3);
+		if (ret < 0)
+			return JESD204_STATE_CHANGE_ERROR;
+	}
+
+	//if (lnk->is_transmit && phy->jrx_link_watchdog_en)
+	//	schedule_delayed_work(&phy->dwork, msecs_to_jiffies(1000));	// TODO
+
+	phy->is_initialized = true;
+
+	return JESD204_STATE_CHANGE_DONE;
+}
+
+int ad9081_jesd204_uninit(struct jesd204_dev *jdev,
+			    enum jesd204_state_op_reason reason)
+{
+	if (reason != JESD204_STATE_OP_REASON_UNINIT)
+		return JESD204_STATE_CHANGE_DONE;
+
+	pr_debug("%s:%d reason %s\n", __func__, __LINE__, jesd204_state_op_reason_str(reason));
+
+	return JESD204_STATE_CHANGE_DONE;
+}
+
+static int ad9081_jesd204_setup_stage1(struct jesd204_dev *jdev,
+					 enum jesd204_state_op_reason reason)
+{
+	struct ad9081_jesd204_priv *priv = jesd204_dev_priv(jdev);
+	struct ad9081_phy *phy = priv->phy;
+	adi_cms_jesd_subclass_e subclass = JESD_SUBCLASS_0;
+	int ret;
+
+	if (reason != JESD204_STATE_OP_REASON_INIT)
+		return JESD204_STATE_CHANGE_DONE;
+
+	pr_debug("%s:%d reason %s\n", __func__, __LINE__, jesd204_state_op_reason_str(reason));
+
+	ret = ad9081_jesd_tx_link_dig_reset(&phy->ad9081, 0);
+	if (ret != 0)
+		return ret;
+
+	no_os_mdelay(4);
+
+	/* JESD OneShot Sync */
+	ret = adi_ad9081_hal_bf_set(&phy->ad9081, REG_SYNC_DEBUG0_ADDR,
+		BF_AVRG_FLOW_EN_INFO, 1);
+	if (ret != 0)
+		return ret;
+
+	ret = adi_ad9081_hal_bf_set(&phy->ad9081, REG_SYSREF_AVERAGE_ADDR,
+		BF_SYSREF_AVERAGE_INFO,
+		BF_SYSREF_AVERAGE(phy->sysref_average_cnt_exp));
+	if (ret != 0)
+		return ret;
+
+	if (phy->jrx_link_tx.jesd_param.jesd_subclass ||
+		phy->jtx_link_rx[0].jesd_param.jesd_subclass)
+		subclass = JESD_SUBCLASS_1;
+
+	ret = adi_ad9081_jesd_oneshot_sync(&phy->ad9081, subclass);
+	if (ret != 0)
+		return ret;
+
+	if (phy->sysref_continuous_dis) {
+		uint8_t sync_done;
+
+		ad9081_sysref_ctrl(phy, 1);
+
+		ret = adi_ad9081_jesd_sysref_oneshot_sync_done_get(&phy->ad9081,
+			&sync_done);
+		if (ret != 0)
+			return ret;
+
+		if (sync_done != 1)
+			return JESD204_STATE_CHANGE_ERROR;
+	}
+
+	ret = adi_ad9081_hal_bf_set(&phy->ad9081, REG_SYNC_DEBUG0_ADDR,
+		BF_AVRG_FLOW_EN_INFO, 0);
+	if (ret != 0)
+		return ret;
+
+	ret = adi_ad9081_hal_bf_set(&phy->ad9081, REG_SYSREF_AVERAGE_ADDR,
+		BF_SYSREF_AVERAGE_INFO,
+		BF_SYSREF_AVERAGE(0));
+	if (ret != 0)
+		return ret;
+
+	return JESD204_STATE_CHANGE_DONE;
+}
+
+static int ad9081_jesd204_setup_stage2(struct jesd204_dev *jdev,
+					 enum jesd204_state_op_reason reason)
+{
+	struct ad9081_jesd204_priv *priv = jesd204_dev_priv(jdev);
+	struct ad9081_phy *phy = priv->phy;
+	int ret;
+
+	if (reason != JESD204_STATE_OP_REASON_INIT)
+		return JESD204_STATE_CHANGE_DONE;
+
+	pr_debug("%s:%d reason %s\n", __func__, __LINE__, jesd204_state_op_reason_str(reason));
+
+	/* NCO Sync */
+
+	ret = ad9081_nco_sync(phy, jesd204_dev_is_top(jdev));
+	if (ret != 0)
+		return ret;
+
+	return JESD204_STATE_CHANGE_DONE;
+}
+
+static int ad9081_jesd204_setup_stage3(struct jesd204_dev *jdev,
+					 enum jesd204_state_op_reason reason)
+{
+	struct ad9081_jesd204_priv *priv = jesd204_dev_priv(jdev);
+	struct ad9081_phy *phy = priv->phy;
+	int ret;
+
+	if (reason != JESD204_STATE_OP_REASON_INIT)
+		return JESD204_STATE_CHANGE_DONE;
+
+	pr_debug("%s:%d reason %s\n", __func__, __LINE__, jesd204_state_op_reason_str(reason));
+
+	ret = adi_ad9081_device_nco_sync_post(&phy->ad9081);
+	if (ret != 0)
+		return ret;
+
+	return JESD204_STATE_CHANGE_DONE;
+}
+
+static const struct jesd204_dev_data jesd204_ad9081_init = {
+	.state_ops = {
+		[JESD204_OP_DEVICE_INIT] = {
+			.per_device = ad9081_jesd204_uninit,
+		},
+		[JESD204_OP_LINK_INIT] = {
+			.per_link = ad9081_jesd204_link_init,
+		},
+		[JESD204_OP_OPT_SETUP_STAGE1] = {
+			.per_device = ad9081_jesd204_setup_stage1,
+			.mode = JESD204_STATE_OP_MODE_PER_DEVICE,
+		},
+		[JESD204_OP_OPT_SETUP_STAGE2] = {
+			.per_device = ad9081_jesd204_setup_stage2,
+			.mode = JESD204_STATE_OP_MODE_PER_DEVICE,
+			.post_state_sysref = true,
+		},
+		[JESD204_OP_OPT_SETUP_STAGE3] = {
+			.per_device = ad9081_jesd204_setup_stage3,
+			.mode = JESD204_STATE_OP_MODE_PER_DEVICE,
+		},
+		[JESD204_OP_CLOCKS_ENABLE] = {
+			.per_link = ad9081_jesd204_clks_enable,
+		},
+		[JESD204_OP_LINK_ENABLE] = {
+			.per_link = ad9081_jesd204_link_enable,
+			.post_state_sysref = true,
+		},
+		[JESD204_OP_LINK_RUNNING] = {
+			.per_link = ad9081_jesd204_link_running,
+		},
+	},
+
+	.max_num_links = 4,
+	.num_retries = 3,
+	.sizeof_priv = sizeof(struct ad9081_jesd204_priv),
+};
 
 /**
  * Initialize the device.
