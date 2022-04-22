@@ -91,6 +91,7 @@ struct ad9081_phy {
 	uint32_t	tx_main_interp;
 	uint8_t		tx_dac_chan_xbar[MAX_NUM_MAIN_DATAPATHS];
 	int64_t		tx_main_shift[MAX_NUM_MAIN_DATAPATHS];
+	uint32_t	tx_dac_fsc[MAX_NUM_MAIN_DATAPATHS];
 	/* The 8 DAC Channelizers */
 	uint32_t	tx_chan_interp;
 	int64_t		tx_chan_shift[MAX_NUM_CHANNELIZER];
@@ -154,6 +155,7 @@ struct ad9081_init_param {
 	uint32_t	tx_main_interpolation;
 	int64_t		tx_main_nco_frequency_shift_hz[MAX_NUM_MAIN_DATAPATHS];
 	uint8_t		tx_dac_channel_crossbar_select[MAX_NUM_MAIN_DATAPATHS];
+	uint32_t	tx_full_scale_current_ua[MAX_NUM_MAIN_DATAPATHS];
 	/* The 8 DAC Channelizers */
 	uint32_t	tx_channel_interpolation;
 	int64_t		tx_channel_nco_frequency_shift_hz[MAX_NUM_CHANNELIZER];
