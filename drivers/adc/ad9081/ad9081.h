@@ -118,6 +118,7 @@ struct ad9081_phy {
 	uint32_t	adc_chan_decimation[MAX_NUM_CHANNELIZER];
 	uint8_t		rx_fddc_dcm[MAX_NUM_CHANNELIZER];
 	uint8_t 	rx_fddc_c2r[MAX_NUM_CHANNELIZER];
+	uint8_t 	rx_fddc_mxr_if[MAX_NUM_CHANNELIZER];
 	uint8_t 	rx_fddc_select;
 };
 
@@ -182,6 +183,7 @@ struct ad9081_init_param {
 	int64_t		rx_channel_nco_frequency_shift_hz[MAX_NUM_CHANNELIZER];
 	uint32_t	rx_channel_decimation[MAX_NUM_CHANNELIZER];
 	uint8_t		rx_channel_complex_to_real_enable[MAX_NUM_CHANNELIZER];
+	uint8_t		rx_channel_nco_mixer_mode[MAX_NUM_CHANNELIZER];
 	uint8_t		rx_channel_enable[MAX_NUM_CHANNELIZER];
 	struct link_init_param	*jtx_link_rx[2];
 };
