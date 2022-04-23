@@ -735,6 +735,11 @@ static int32_t ad9081_setup(struct ad9081_phy *phy)
 				      BF_PD_SYNCB_RX_RC_INFO, 0);
 	}
 
+	if (phy->config_sync_0a_cmos_en) {
+		adi_ad9081_jesd_rx_synca_mode_set(&phy->ad9081, 0);
+		adi_ad9081_hal_reg_set(&phy->ad9081, REG_SYNCA_CTRL_ADDR, 0x0);
+	}
+
 	if (phy->jesd_rx_clk) {
 		rx_lane_rate_kbps = ad9081_calc_lanerate(&phy->jtx_link_rx[0],
 				    phy->adc_frequency_hz,
@@ -1033,6 +1038,7 @@ int32_t ad9081_parse_init_param(struct ad9081_phy *phy,
 	phy->sysref_coupling_ac_en = init_param->sysref_coupling_ac_en;
 	phy->multidevice_instance_count = init_param->multidevice_instance_count;
 	phy->config_sync_01_swapped = init_param->jesd_sync_pins_01_swap_enable;
+	phy->config_sync_0a_cmos_en = init_param->jesd_sync_pin_0a_cmos_enable;
 	phy->lmfc_delay = init_param->lmfc_delay_dac_clk_cycles;
 	phy->nco_sync_ms_extra_lmfc_num = init_param->nco_sync_ms_extra_lmfc_num;
 	phy->nco_sync_direct_sysref_mode_en = init_param->nco_sync_direct_sysref_mode_enable;
