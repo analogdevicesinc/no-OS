@@ -59,6 +59,11 @@
 	for ((bit) = 0; (bit) < MAX_NUM_MAIN_DATAPATHS; (bit)++) \
 		if ((mask) & NO_OS_BIT(bit))
 
+
+#define for_each_fddc(bit, mask) \
+	for ((bit) = 0; (bit) < MAX_NUM_CHANNELIZER; (bit)++) \
+		if ((mask) & NO_OS_BIT(bit))
+
 struct ad9081_jesd204_priv {
 	struct ad9081_phy *phy;
 };
@@ -697,6 +702,12 @@ static int32_t ad9081_setup(struct ad9081_phy *phy)
 	if (ret != 0)
 		return ret;
 
+	for_each_fddc(i, phy->rx_fddc_select) {
+		ret = adi_ad9081_adc_ddc_fine_nco_mode_set(
+				&phy->ad9081, NO_OS_BIT(i), phy->rx_fddc_mxr_if[i]);
+		if (ret != 0)
+			return ret;
+	}
 
 	/* Setup txfe jtx converter mapping */
 	for (i = 0; i < NO_OS_ARRAY_SIZE(phy->jtx_link_rx[0].link_converter_select);
@@ -1097,6 +1108,7 @@ int32_t ad9081_parse_init_param(struct ad9081_phy *phy,
 		phy->rx_fddc_shift[i] = init_param->rx_channel_nco_frequency_shift_hz[i];
 		phy->adc_chan_decimation[i] = init_param->rx_channel_decimation[i];
 		phy->rx_fddc_c2r[i] = init_param->rx_channel_complex_to_real_enable[i];
+		phy->rx_fddc_mxr_if[i] = init_param->rx_channel_nco_mixer_mode[i];
 		if (init_param->rx_channel_enable[i])
 			phy->rx_fddc_select |= NO_OS_BIT(i);
 	}
