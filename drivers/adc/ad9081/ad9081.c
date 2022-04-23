@@ -817,9 +817,21 @@ static int32_t ad9081_setup(struct ad9081_phy *phy)
 	if (ret != 0)
 		return ret;
 
+	for_each_cddc(i, phy->rx_cddc_select) {
+		ret = adi_ad9081_adc_ddc_coarse_gain_set(
+			&phy->ad9081, NO_OS_BIT(i), phy->rx_cddc_gain_6db_en[i]);
+		if (ret != 0)
+			return ret;
+	}
+
 	for_each_fddc(i, phy->rx_fddc_select) {
 		ret = adi_ad9081_adc_ddc_fine_nco_mode_set(
 				&phy->ad9081, NO_OS_BIT(i), phy->rx_fddc_mxr_if[i]);
+		if (ret != 0)
+			return ret;
+
+		ret = adi_ad9081_adc_ddc_fine_gain_set(
+			&phy->ad9081, NO_OS_BIT(i), phy->rx_fddc_gain_6db_en[i]);
 		if (ret != 0)
 			return ret;
 	}
@@ -1221,6 +1233,7 @@ int32_t ad9081_parse_init_param(struct ad9081_phy *phy,
 		phy->rx_cddc_shift[i] = init_param->rx_main_nco_frequency_shift_hz[i];
 		phy->adc_main_decimation[i] = init_param->rx_main_decimation[i];
 		phy->rx_cddc_c2r[i] = init_param->rx_main_complex_to_real_enable[i];
+		phy->rx_cddc_gain_6db_en[i] = init_param->rx_main_digital_gain_6db_enable[i];
 		if (init_param->rx_main_enable[i])
 			phy->rx_cddc_select |= NO_OS_BIT(i);
 	}
@@ -1230,6 +1243,7 @@ int32_t ad9081_parse_init_param(struct ad9081_phy *phy,
 		phy->adc_chan_decimation[i] = init_param->rx_channel_decimation[i];
 		phy->rx_fddc_c2r[i] = init_param->rx_channel_complex_to_real_enable[i];
 		phy->rx_fddc_mxr_if[i] = init_param->rx_channel_nco_mixer_mode[i];
+		phy->rx_fddc_gain_6db_en[i] = init_param->rx_channel_digital_gain_6db_enable[i];
 		if (init_param->rx_channel_enable[i])
 			phy->rx_fddc_select |= NO_OS_BIT(i);
 	}
