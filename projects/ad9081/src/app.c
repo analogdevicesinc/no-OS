@@ -156,6 +156,7 @@ int main(void)
 #else
 		.jesd_sync_pins_01_swap_enable = false,
 #endif
+		.jesd_sync_pin_0a_cmos_enable = false,
 		.lmfc_delay_dac_clk_cycles = 0,
 		.nco_sync_ms_extra_lmfc_num = 0,
 		.nco_sync_direct_sysref_mode_enable = 0,
