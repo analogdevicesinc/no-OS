@@ -114,6 +114,7 @@ struct ad9081_phy {
 	uint32_t	adc_main_decimation[MAX_NUM_MAIN_DATAPATHS];
 	uint8_t 	rx_cddc_dcm[MAX_NUM_MAIN_DATAPATHS];
 	uint8_t 	rx_cddc_c2r[MAX_NUM_MAIN_DATAPATHS];
+	uint8_t		rx_cddc_gain_6db_en[MAX_NUM_MAIN_DATAPATHS];
 	uint8_t		rx_cddc_select;
 	/* The 8 ADC Channelizers */
 	int64_t		rx_fddc_shift[MAX_NUM_CHANNELIZER];
@@ -121,6 +122,7 @@ struct ad9081_phy {
 	uint8_t		rx_fddc_dcm[MAX_NUM_CHANNELIZER];
 	uint8_t 	rx_fddc_c2r[MAX_NUM_CHANNELIZER];
 	uint8_t 	rx_fddc_mxr_if[MAX_NUM_CHANNELIZER];
+	uint8_t		rx_fddc_gain_6db_en[MAX_NUM_CHANNELIZER];
 	uint8_t 	rx_fddc_select;
 };
 
@@ -182,12 +184,14 @@ struct ad9081_init_param {
 	int64_t		rx_main_nco_frequency_shift_hz[MAX_NUM_MAIN_DATAPATHS];
 	uint32_t	rx_main_decimation[MAX_NUM_MAIN_DATAPATHS];
 	uint8_t		rx_main_complex_to_real_enable[MAX_NUM_MAIN_DATAPATHS];
+	uint8_t		rx_main_digital_gain_6db_enable[MAX_NUM_MAIN_DATAPATHS];
 	uint8_t		rx_main_enable[MAX_NUM_MAIN_DATAPATHS];
 	/* The 8 ADC Channelizers */
 	int64_t		rx_channel_nco_frequency_shift_hz[MAX_NUM_CHANNELIZER];
 	uint32_t	rx_channel_decimation[MAX_NUM_CHANNELIZER];
 	uint8_t		rx_channel_complex_to_real_enable[MAX_NUM_CHANNELIZER];
 	uint8_t		rx_channel_nco_mixer_mode[MAX_NUM_CHANNELIZER];
+	uint8_t		rx_channel_digital_gain_6db_enable[MAX_NUM_CHANNELIZER];
 	uint8_t		rx_channel_enable[MAX_NUM_CHANNELIZER];
 	struct link_init_param	*jtx_link_rx[2];
 };
