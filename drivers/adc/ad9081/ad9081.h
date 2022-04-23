@@ -80,6 +80,7 @@ struct ad9081_phy {
 	struct ad9081_jesd_link	jtx_link_rx[2];
 	uint32_t	multidevice_instance_count;
 	bool		config_sync_01_swapped;
+	bool		config_sync_0a_cmos_en;
 	uint32_t	lmfc_delay;
 	uint32_t	nco_sync_ms_extra_lmfc_num;
 	bool		nco_sync_direct_sysref_mode_en;
@@ -144,6 +145,7 @@ struct ad9081_init_param {
 	bool		sysref_coupling_ac_en;
 	uint32_t	multidevice_instance_count;
 	bool		jesd_sync_pins_01_swap_enable;
+	bool		jesd_sync_pin_0a_cmos_enable;
 	uint32_t	lmfc_delay_dac_clk_cycles;
 	uint32_t	nco_sync_ms_extra_lmfc_num;
 	bool		nco_sync_direct_sysref_mode_enable;
