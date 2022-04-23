@@ -180,6 +180,7 @@ int main(void)
 		.rx_main_nco_frequency_shift_hz = AD9081_RX_MAIN_NCO_SHIFT,
 		.rx_main_decimation = AD9081_RX_MAIN_DECIMATION,
 		.rx_main_complex_to_real_enable = {0, 0, 0, 0},
+		.rx_main_digital_gain_6db_enable = {0, 0, 0, 0},
 		.rx_main_enable = AD9081_RX_MAIN_ENABLE,
 		/* The 8 ADC Channelizers */
 		.rx_channel_nco_frequency_shift_hz = AD9081_RX_CHAN_NCO_SHIFT,
@@ -188,6 +189,7 @@ int main(void)
 		.rx_channel_nco_mixer_mode = {AD9081_ADC_NCO_VIF, AD9081_ADC_NCO_VIF,
 				AD9081_ADC_NCO_VIF, AD9081_ADC_NCO_VIF, AD9081_ADC_NCO_VIF,
 				AD9081_ADC_NCO_VIF, AD9081_ADC_NCO_VIF, AD9081_ADC_NCO_VIF},
+		.rx_channel_digital_gain_6db_enable = {0, 0, 0, 0, 0, 0, 0, 0},
 		.rx_channel_enable = AD9081_RX_CHAN_ENABLE,
 		.jtx_link_rx[0] = &jtx_link_rx,
 		.jtx_link_rx[1] = NULL,
