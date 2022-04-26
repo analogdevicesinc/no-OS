@@ -543,6 +543,9 @@ static int ad9081_setup_tx(struct ad9081_phy *phy)
 	uint64_t sample_rate, status64;
 	int ret, i;
 
+	if (phy->tx_disable)
+		return 0;
+
 	memcpy(phy->ad9081.serdes_info.des_settings.lane_mapping[0],
 		phy->jrx_link_tx[0].logiclane_mapping,
 		sizeof(phy->jrx_link_tx[0].logiclane_mapping));
@@ -614,6 +617,12 @@ static int ad9081_setup_rx(struct ad9081_phy *phy)
 	adi_ad9081_jtx_conv_sel_t jesd_conv_sel[2];
 	uint8_t dcm;
 	int ret, i;
+
+	if (phy->rx_disable) {
+		adi_ad9081_adc_clk_enable_set(&phy->ad9081, 0);
+
+		return 0;
+	}
 
 	memcpy(phy->ad9081.serdes_info.ser_settings.lane_mapping[0],
 		phy->jtx_link_rx[0].logiclane_mapping,
@@ -1003,6 +1012,9 @@ int32_t ad9081_parse_init_param(struct ad9081_phy *phy,
 	phy->nco_sync_direct_sysref_mode_en = init_param->nco_sync_direct_sysref_mode_enable;
 	phy->sysref_average_cnt_exp = init_param->sysref_average_cnt_exp;
 	phy->sysref_continuous_dis = init_param->continuous_sysref_mode_disable;
+	phy->tx_disable = init_param->tx_disable;
+	phy->rx_disable = init_param->rx_disable;
+
 	/* TX */
 	phy->dac_frequency_hz = init_param->dac_frequency_hz;
 
@@ -1116,12 +1128,16 @@ static int ad9081_jesd204_link_init(struct jesd204_dev *jdev,
 	switch (lnk->link_id) {
 	case DEFRAMER_LINK0_TX:
 	case DEFRAMER_LINK1_TX:
+		if (phy->tx_disable)
+			return -ENODEV;
 		link = &phy->jrx_link_tx[0];
 		lnk->sample_rate = phy->dac_frequency_hz;
 		lnk->sample_rate_div = phy->tx_main_interp * phy->tx_chan_interp;
 		break;
 	case FRAMER_LINK0_RX:
 	case FRAMER_LINK1_RX:
+		if (phy->rx_disable)
+			return -ENODEV;
 		link = &phy->jtx_link_rx[lnk->link_id - FRAMER_LINK0_RX];
 		lnk->sample_rate = phy->adc_frequency_hz;
 		lnk->sample_rate_div = phy->adc_dcm[lnk->link_id - FRAMER_LINK0_RX];

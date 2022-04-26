@@ -162,6 +162,8 @@ int main(void)
 		.nco_sync_direct_sysref_mode_enable = 0,
 		.sysref_average_cnt_exp = 7,
 		.continuous_sysref_mode_disable = 0,
+		.tx_disable = false,
+		.rx_disable = false,
 		/* TX */
 		.dac_frequency_hz = AD9081_DAC_FREQUENCY,
 		/* The 4 DAC Main Datapaths */
