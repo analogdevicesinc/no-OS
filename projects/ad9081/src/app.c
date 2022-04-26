@@ -319,6 +319,43 @@ int main(void)
 					    (phy[i]->jrx_link_tx.jesd_param.jesd_duallink > 0 ? 2 : 1);
 	}
 
+	struct jesd204_topology *topology;
+	struct jesd204_topology_dev devs[] = {
+#if MULTIDEVICE_INSTANCE_COUNT == 4
+		{
+			.jdev = phy[3]->jdev,
+			.link_ids = {FRAMER_LINK0_RX, DEFRAMER_LINK0_TX},
+			.links_number = 2,
+		},
+		{
+			.jdev = phy[2]->jdev,
+			.link_ids = {FRAMER_LINK0_RX, DEFRAMER_LINK0_TX},
+			.links_number = 2,
+		},
+		{
+			.jdev = phy[1]->jdev,
+			.link_ids = {FRAMER_LINK0_RX, DEFRAMER_LINK0_TX},
+			.links_number = 2,
+		},
+		{
+			.jdev = phy[1]->jdev,
+			.link_ids = {FRAMER_LINK0_RX, DEFRAMER_LINK0_TX},
+			.links_number = 2,
+		},
+#endif
+		{
+			.jdev = phy[0]->jdev,
+			.link_ids = {FRAMER_LINK0_RX, DEFRAMER_LINK0_TX},
+			.links_number = 2,
+			.is_top_device = true,
+		},
+	};
+
+	jesd204_init_topology(&topology, devs,
+		sizeof(devs)/sizeof(*devs));
+
+	jesd204_fsm_start(topology, JESD204_LINKS_ALL);
+
 	axi_jesd204_rx_watchdog(rx_jesd);
 
 	axi_jesd204_tx_status_read(tx_jesd);

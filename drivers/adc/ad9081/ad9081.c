@@ -41,6 +41,7 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include <stdlib.h>
+#include <string.h>
 #include "no_os_error.h"
 #include "adi_cms_api_common.h"
 #include "no_os_util.h"
@@ -641,116 +642,103 @@ void ad9081_work_func(struct ad9081_phy *phy)
 	//schedule_delayed_work(&phy->dwork, msecs_to_jiffies(1000));	// TODO
 }
 
-static int32_t ad9081_setup(struct ad9081_phy *phy)
+static bool ad9081_link_is_dual(struct ad9081_jesd_link *link)
 {
-	adi_cms_jesd_subclass_e subclass = JESD_SUBCLASS_0;
-	uint64_t tx_lane_rate_kbps;
-	uint64_t dev_frequency_hz;
-	uint8_t txfe_pll_stat;
-	int32_t i;
-	int32_t ret;
-	adi_ad9081_jtx_conv_sel_t jesd_conv_sel[2];
-	adi_cms_jesd_param_t jesd_param[2];
-	uint8_t dcm;
-	int32_t stat;
-	int32_t retry = 5;
-	uint64_t status64;
-	uint64_t sample_rate;
-	uint64_t rx_lane_rate_kbps;
-	uint32_t timeout;
+	return !!link[0].jesd_param.jesd_duallink;
+}
 
-	no_os_clk_recalc_rate(phy->dev_clk, &dev_frequency_hz);
+static int ad9081_setup_tx(struct ad9081_phy *phy)
+{
+	uint64_t sample_rate, status64;
+	int ret, i;
 
-	tx_lane_rate_kbps = ad9081_calc_lanerate(&phy->jrx_link_tx,
-			    phy->dac_frequency_hz,
-			    phy->tx_main_interp * phy->tx_chan_interp);
-
-	/* The 204c calibration routine requires the link to be up */
-	if (phy->jesd_tx_clk) {
-		ret = no_os_clk_set_rate(phy->jesd_tx_clk, tx_lane_rate_kbps);
-		if (ret < 0) {
-			printf("Failed to set lane rate to %llu kHz: %"PRId32"\n",
-			       tx_lane_rate_kbps, ret);
-		}
-		if (phy->jrx_link_tx.jesd_param.jesd_jesdv == 2) {
-			ret = no_os_clk_enable(phy->jesd_tx_clk);
-			if (ret < 0) {
-				printf("Failed to enable JESD204 link: %"PRId32"\n", ret);
-				return ret;
-			}
-		}
-	}
-
-	ret = adi_ad9081_hal_bf_set(&phy->ad9081, REG_SYNC_LMFC_DELAY_ADDR,
-				    BF_SYNC_LMFC_DELAY_SET_INFO,
-				    BF_SYNC_LMFC_DELAY_SET(phy->lmfc_delay));
-	if (ret != 0)
-		return ret;
-
-	/* DC couple SYSREF default */
-	ret = adi_ad9081_jesd_sysref_input_mode_set(&phy->ad9081, 1, 1,
-			phy->sysref_coupling_ac_en ? COUPLING_AC : COUPLING_DC);
-	if (ret != 0)
-		return ret;
-
-	ret = adi_ad9081_hal_bf_set(&phy->ad9081, REG_SYNC_DEBUG0_ADDR,
-				    BF_AVRG_FLOW_EN_INFO, 1);
-	if (ret != 0)
-		return ret;
-
-	ret = adi_ad9081_hal_bf_set(&phy->ad9081, REG_SYSREF_AVERAGE_ADDR,
-				    BF_SYSREF_AVERAGE_INFO,
-				    BF_SYSREF_AVERAGE(7));
-	if (ret != 0)
-		return ret;
-
-	ret = adi_ad9081_device_clk_config_set(
-		      &phy->ad9081, phy->dac_frequency_hz, phy->adc_frequency_hz,
-		      dev_frequency_hz);
-	if (ret != 0)
-		return ret;
-
-	if (dev_frequency_hz != phy->dac_frequency_hz) {
-		ret = adi_ad9081_device_clk_pll_lock_status_get(&phy->ad9081,
-				&txfe_pll_stat);
-		if (ret != 0)
-			return ret;
-
-		if (txfe_pll_stat != 3) {
-			printf("CLK PLL Failed to Lock (Status: %d)",
-			       txfe_pll_stat);
-			return -1;
-		}
-	}
+	memcpy(phy->ad9081.serdes_info.des_settings.lane_mapping[0],
+		phy->jrx_link_tx.logiclane_mapping,
+		sizeof(phy->jrx_link_tx.logiclane_mapping));
 
 	/* start txfe tx */
 	ret = adi_ad9081_device_startup_tx(
-		      &phy->ad9081, phy->tx_main_interp, phy->tx_chan_interp,
-		      phy->tx_dac_chan_xbar, phy->tx_main_shift, phy->tx_chan_shift,
-		      &phy->jrx_link_tx.jesd_param);
+		&phy->ad9081, phy->tx_main_interp, phy->tx_chan_interp,
+		phy->tx_dac_chan_xbar,
+		phy->tx_main_shift, phy->tx_chan_shift,
+		&phy->jrx_link_tx.jesd_param);
 
 	if (ret != 0)
 		return ret;
 
+	/* setup txfe dac channel gain */
+	ret = adi_ad9081_dac_duc_nco_gains_set(&phy->ad9081,
+					       phy->dac_cache.chan_gain);
+	if (ret != 0)
+		return ret;
+
+	adi_ad9081_jesd_rx_lmfc_delay_set(&phy->ad9081, AD9081_LINK_0,
+		phy->jrx_link_tx.jrx_tpl_phase_adjust);
+
+	if (phy->jrx_link_tx.jesd_param.jesd_jesdv == 2  &&
+		phy->ad9081.dev_info.dev_rev < 3) {
+		ret = adi_ad9081_hal_bf_set(&phy->ad9081, REG_JRX_TPL_1_ADDR,
+			BF_JRX_TPL_BUF_PROTECT_EN_INFO,
+			0);
+		if (ret != 0)
+			return ret;
+	}
+
+	adi_ad9081_dac_irqs_status_get(&phy->ad9081, &status64);
+	pr_debug("DAC IRQ status 0x%llX\n", status64);
+
+	sample_rate = NO_OS_DIV_ROUND_CLOSEST_ULL(phy->dac_frequency_hz,
+			phy->tx_main_interp * phy->tx_chan_interp);
+	//clk_set_rate_scaled(phy->clks[TX_SAMPL_CLK], sample_rate,
+	//	&phy->clkscale[TX_SAMPL_CLK]);	// TODO
+
+	for (i = 0; i < NO_OS_ARRAY_SIZE(phy->tx_dac_fsc); i++) {
+		if (phy->tx_dac_fsc[i]) {
+			ret = adi_ad9081_dac_fsc_set(&phy->ad9081, NO_OS_BIT(i), phy->tx_dac_fsc[i], 1);
+			if (ret != 0)
+				return ret;
+		}
+	}
+
+	return 0;
+}
+
+static int ad9081_setup_rx(struct ad9081_phy *phy)
+{
+	uint64_t sample_rate;
+	adi_cms_jesd_param_t jesd_param[2];
+	adi_ad9081_jtx_conv_sel_t jesd_conv_sel[2];
+	uint8_t dcm;
+	int ret, i;
+
+	memcpy(phy->ad9081.serdes_info.ser_settings.lane_mapping[0],
+		phy->jtx_link_rx[0].logiclane_mapping,
+		sizeof(phy->jtx_link_rx[0].logiclane_mapping));
+
+	if (ad9081_link_is_dual(phy->jtx_link_rx))
+		memcpy(phy->ad9081.serdes_info.ser_settings.lane_mapping[1],
+			phy->jtx_link_rx[1].logiclane_mapping,
+			sizeof(phy->jtx_link_rx[1].logiclane_mapping));
+
 	for (i = 0; i < NO_OS_ARRAY_SIZE(phy->adc_main_decimation); i++) {
 		ret = ad9081_main_decimation_to_val(
-			      phy->adc_main_decimation[i]);
+			phy->adc_main_decimation[i]);
 		if (ret >= 0)
 			phy->rx_cddc_dcm[i] = ret;
 	}
 
 	for (i = 0; i < NO_OS_ARRAY_SIZE(phy->adc_chan_decimation); i++) {
 		ret = ad9081_chan_decimation_to_val(
-			      phy->adc_chan_decimation[i]);
+			phy->adc_chan_decimation[i]);
 		if (ret >= 0)
 			phy->rx_fddc_dcm[i] = ret;
 	}
 
 	/* FIXME - the API should change here */
 	ad9081_convert_link_converter_select(&jesd_conv_sel[0],
-					     phy->jtx_link_rx[0].link_converter_select);
+		phy->jtx_link_rx[0].link_converter_select);
 	ad9081_convert_link_converter_select(&jesd_conv_sel[1],
-					     phy->jtx_link_rx[1].link_converter_select);
+		phy->jtx_link_rx[1].link_converter_select);
 
 	jesd_param[0] = phy->jtx_link_rx[0].jesd_param;
 	jesd_param[1] = phy->jtx_link_rx[1].jesd_param;
@@ -767,59 +755,25 @@ static int32_t ad9081_setup(struct ad9081_phy *phy)
 	if (ret != 0)
 		return ret;
 
-	if (phy->jrx_link_tx.jesd_param.jesd_subclass ||
-	    phy->jtx_link_rx[0].jesd_param.jesd_subclass)
-		subclass = JESD_SUBCLASS_1;
-
-	ret = adi_ad9081_jesd_oneshot_sync(&phy->ad9081, subclass);
-	if (ret != 0)
-		return ret;
-
 	/* Fix: 4x4 Crossbar Mux0 Mappings for AD9081 */
 	ret  = adi_ad9081_adc_pfir_din_select_set(&phy->ad9081,
-			AD9081_ADC_PFIR_ADC_PAIR0, 0, 1);
+		AD9081_ADC_PFIR_ADC_PAIR0, 0, 1);
 	if (ret != 0)
 		return ret;
 
 	ret  = adi_ad9081_adc_pfir_din_select_set(&phy->ad9081,
-			AD9081_ADC_PFIR_ADC_PAIR1, 3, 0);
-	if (ret != 0)
-		return ret;
-
-	/* setup txfe dac channel gain */
-	ret = adi_ad9081_dac_duc_nco_gains_set(&phy->ad9081,
-					       phy->dac_cache.chan_gain);
-	if (ret != 0)
-		return ret;
-
-	adi_ad9081_jesd_rx_lmfc_delay_set(&phy->ad9081, AD9081_LINK_0,
-					  phy->jrx_link_tx.jrx_tpl_phase_adjust);
-
-	ret = adi_ad9081_jesd_rx_lanes_xbar_set(&phy->ad9081, AD9081_LINK_0,
-						phy->jrx_link_tx.logiclane_mapping);
-	if (ret != 0)
-		return ret;
-
-	if (phy->jrx_link_tx.jesd_param.jesd_duallink > 0) {
-		ret = adi_ad9081_jesd_rx_lanes_xbar_set(
-			      &phy->ad9081, AD9081_LINK_1,
-			      phy->jrx_link_tx.logiclane_mapping);
-		if (ret != 0)
-			return ret;
-	}
-
-	ret = adi_ad9081_jesd_tx_lanes_xbar_set(&phy->ad9081, AD9081_LINK_0,
-						phy->jtx_link_rx[0].logiclane_mapping);
-	if (ret != 0)
-		return ret;
-	ret = adi_ad9081_jesd_tx_lids_cfg_set(&phy->ad9081, AD9081_LINK_0,
-					      phy->jtx_link_rx[0].logiclane_mapping);
+		AD9081_ADC_PFIR_ADC_PAIR1, 3, 0);
 	if (ret != 0)
 		return ret;
 
 	for_each_cddc(i, phy->rx_cddc_select) {
 		ret = adi_ad9081_adc_ddc_coarse_gain_set(
 			&phy->ad9081, NO_OS_BIT(i), phy->rx_cddc_gain_6db_en[i]);
+		if (ret != 0)
+			return ret;
+
+		ret = adi_ad9081_adc_nyquist_zone_set(&phy->ad9081, NO_OS_BIT(i),
+			phy->rx_nyquist_zone[i]);
 		if (ret != 0)
 			return ret;
 	}
@@ -836,22 +790,21 @@ static int32_t ad9081_setup(struct ad9081_phy *phy)
 			return ret;
 	}
 
-	/* Setup txfe jtx converter mapping */
+	/* setup txfe jtx converter mapping */
 	for (i = 0; i < NO_OS_ARRAY_SIZE(phy->jtx_link_rx[0].link_converter_select);
 	     i++) {
-		ret = adi_ad9081_jesd_tx_conv_sel_set(
-			      &phy->ad9081, AD9081_LINK_0, i,
-			      phy->jtx_link_rx[0].link_converter_select[i]);
+		ret = adi_ad9081_jesd_tx_conv_sel_set(&phy->ad9081,
+			AD9081_LINK_0, i, phy->jtx_link_rx[0].link_converter_select[i]);
 		if (ret != 0)
 			return ret;
 	}
-	if (phy->jtx_link_rx[0].jesd_param.jesd_duallink > 0) {
+	if (ad9081_link_is_dual(phy->jtx_link_rx)) {
 		for (i = 0;
 		     i < NO_OS_ARRAY_SIZE(phy->jtx_link_rx[1].link_converter_select);
 		     i++) {
 			ret = adi_ad9081_jesd_tx_conv_sel_set(
-				      &phy->ad9081, AD9081_LINK_1, i,
-				      phy->jtx_link_rx[1].link_converter_select[i]);
+				&phy->ad9081, AD9081_LINK_1, i,
+				phy->jtx_link_rx[1].link_converter_select[i]);
 			if (ret != 0)
 				return ret;
 		}
@@ -860,201 +813,117 @@ static int32_t ad9081_setup(struct ad9081_phy *phy)
 	ret = adi_ad9081_adc_chip_dcm_ratio_get(&phy->ad9081,
 						AD9081_LINK_0, &dcm);
 	if (ret != 0 || !dcm)
+		return -EINVAL;
+
+	phy->adc_dcm = dcm;
+
+	sample_rate = NO_OS_DIV_ROUND_CLOSEST_ULL(phy->adc_frequency_hz, phy->adc_dcm);
+	//clk_set_rate_scaled(phy->clks[RX_SAMPL_CLK], sample_rate,
+	//	&phy->clkscale[RX_SAMPL_CLK]);	// TODO
+
+	return 0;
+}
+
+static int ad9081_setup(struct ad9081_phy *phy)
+{
+	uint64_t tx_lane_rate_kbps;
+	uint64_t dev_frequency_hz;
+	uint8_t txfe_pll_stat;
+	int ret;
+
+	no_os_clk_recalc_rate(phy->dev_clk, &dev_frequency_hz);
+
+	tx_lane_rate_kbps = ad9081_calc_lanerate(&phy->jrx_link_tx,
+			    phy->dac_frequency_hz,
+			    phy->tx_main_interp * phy->tx_chan_interp);
+
+	/* The 204c calibration routine requires the link to be up */
+	if (phy->jesd_tx_clk) {
+		ret = no_os_clk_set_rate(phy->jesd_tx_clk, tx_lane_rate_kbps);
+		if (ret < 0) {
+			printf("Failed to set lane rate to %"PRIu64" kHz: %d\n",
+			       tx_lane_rate_kbps, ret);
+		}
+		if (phy->jrx_link_tx.jesd_param.jesd_jesdv == 2) {
+			ret = no_os_clk_enable(phy->jesd_tx_clk);
+			if (ret < 0) {
+				printf("Failed to enable JESD204 link: %d\n", ret);
+				return ret;
+			}
+		}
+	}
+
+	ret = adi_ad9081_hal_bf_set(&phy->ad9081, REG_SYNC_LMFC_DELAY_ADDR,
+		BF_SYNC_LMFC_DELAY_SET_INFO,
+		BF_SYNC_LMFC_DELAY_SET(phy->lmfc_delay));
+	if (ret != 0)
 		return ret;
 
-	if (phy->config_sync_01_swapped &&
-	    phy->jrx_link_tx.jesd_param.jesd_jesdv != 2) {
-		adi_ad9081_hal_bf_set(&phy->ad9081, REG_SYNCB_CTRL_ADDR,
-				      BF_SYNCB_RX_MODE_RC_INFO, 1); /* not paged */
-		adi_ad9081_jesd_rx_syncb_driver_powerdown_set(&phy->ad9081, 0);
-		adi_ad9081_hal_reg_set(&phy->ad9081,
-				       REG_GENERAL_JRX_CTRL_ADDR, 0x80);
-		/* Differential mode */
-		adi_ad9081_dac_gpio_as_sync1_out_set(&phy->ad9081, 1);
-		adi_ad9081_jesd_tx_sync_mode_set(&phy->ad9081,
-						 AD9081_LINK_0, 1);
-		adi_ad9081_hal_bf_set(&phy->ad9081, REG_SYNCB_CTRL_ADDR,
-				      BF_PD_SYNCB_RX_RC_INFO, 0);
+	/* DC couple SYSREF */
+	ret = adi_ad9081_jesd_sysref_input_mode_set(&phy->ad9081, 1, 1,
+		phy->sysref_coupling_ac_en ? COUPLING_AC : COUPLING_DC);
+	if (ret != 0)
+		return ret;
+
+	ret = adi_ad9081_hal_bf_set(&phy->ad9081, REG_SYNC_DEBUG0_ADDR,
+		BF_AVRG_FLOW_EN_INFO, 1);
+	if (ret != 0)
+		return ret;
+
+	ret = adi_ad9081_hal_bf_set(&phy->ad9081, REG_SYSREF_AVERAGE_ADDR,
+		BF_SYSREF_AVERAGE_INFO,
+		BF_SYSREF_AVERAGE(phy->sysref_average_cnt_exp));
+	if (ret != 0)
+		return ret;
+
+	ret = adi_ad9081_device_clk_config_set(&phy->ad9081,
+		phy->dac_frequency_hz, phy->adc_frequency_hz, dev_frequency_hz);
+	if (ret != 0)
+		return ret;
+
+	if (dev_frequency_hz != phy->dac_frequency_hz) {
+		ret = adi_ad9081_device_clk_pll_lock_status_get(&phy->ad9081,
+								&txfe_pll_stat);
+		if (ret != 0)
+			return ret;
+
+		if (txfe_pll_stat != 3) {
+			pr_err("CLK PLL Failed to Lock (Status: %d)",
+				txfe_pll_stat);
+			return -EFAULT;
+		}
 	}
+
+	ret = ad9081_setup_tx(phy);
+	if (ret)
+		return ret;
+
+	ret = ad9081_setup_rx(phy);
+	if (ret)
+		return ret;
 
 	if (phy->config_sync_0a_cmos_en) {
 		adi_ad9081_jesd_rx_synca_mode_set(&phy->ad9081, 0);
 		adi_ad9081_hal_reg_set(&phy->ad9081, REG_SYNCA_CTRL_ADDR, 0x0);
 	}
 
-	if (phy->jesd_rx_clk) {
-		rx_lane_rate_kbps = ad9081_calc_lanerate(&phy->jtx_link_rx[0],
-				    phy->adc_frequency_hz,
-				    dcm);
+	if (phy->config_sync_01_swapped) {
+		adi_ad9081_jesd_rx_syncb_driver_powerdown_set(&phy->ad9081, 0);
+		adi_ad9081_hal_reg_set(&phy->ad9081,
+			REG_GENERAL_JRX_CTRL_ADDR, 0x80);
+		/* Differential mode */
+		adi_ad9081_dac_gpio_as_sync1_out_set(&phy->ad9081, 1);
+		adi_ad9081_jesd_tx_sync_mode_set(&phy->ad9081,
+			AD9081_LINK_0, 1);
 
-		ret = no_os_clk_set_rate(phy->jesd_rx_clk, rx_lane_rate_kbps);
-		if (ret < 0) {
-			printf("Failed to set lane rate to %llu kHz: %"PRId32"\n",
-			       rx_lane_rate_kbps, ret);
-		}
+		adi_ad9081_hal_2bf_set(&phy->ad9081, REG_SYNCA_CTRL_ADDR,
+					BF_PD_SYNCB_RX_RC_INFO, 1,
+					BF_SYNCB_RX_MODE_RC_INFO, 1);
+
+		adi_ad9081_hal_2bf_set(&phy->ad9081, REG_SYNCB_CTRL_ADDR,
+					BF_PD_SYNCB_RX_RC_INFO, 0,
+					BF_SYNCB_RX_MODE_RC_INFO, 1);
 	}
-
-	if ((phy->jrx_link_tx.jesd_param.jesd_jesdv == 2) &&
-	    (tx_lane_rate_kbps > 16230000UL)) {
-		ret = adi_ad9081_jesd_rx_calibrate_204c(&phy->ad9081, 1, 0, 0);
-		if (ret < 0)
-			return ret;
-	}
-
-	if (phy->jrx_link_tx.jesd_param.jesd_jesdv == 2) {
-		/* FIXME */
-		ret = adi_ad9081_hal_bf_set(&phy->ad9081, REG_JRX_TPL_1_ADDR,
-					    BF_JRX_TPL_BUF_PROTECT_EN_INFO,
-					    0);
-		if (ret != 0)
-			return ret;
-	}
-
-	ret = adi_ad9081_jesd_rx_link_enable_set(&phy->ad9081,
-			(phy->jrx_link_tx.jesd_param.jesd_duallink > 0) ?
-			AD9081_LINK_ALL : AD9081_LINK_0, 1);
-	if (ret != 0)
-		return ret;
-
-	ret = adi_ad9081_jesd_tx_link_enable_set(&phy->ad9081,
-			(phy->jtx_link_rx[0].jesd_param.jesd_duallink > 0) ?
-			AD9081_LINK_ALL : AD9081_LINK_0, 1);
-	if (ret != 0)
-		return ret;
-
-	no_os_mdelay(10);
-
-	if (phy->jesd_rx_clk) {
-		timeout = 2000;
-		while(timeout) {
-			ret = no_os_clk_enable(phy->jesd_rx_clk);
-			if (ret) {
-				no_os_mdelay(100);
-				timeout -= 100;
-				continue;
-			}
-			break;
-		}
-
-		if (ret || !timeout) {
-			printf("Failed to enable JESD204 link: %"PRId32"\n", ret);
-			return ret;
-		}
-	}
-
-	if (phy->jesd_tx_clk &&
-	    (phy->jrx_link_tx.jesd_param.jesd_jesdv == 1)) {
-		timeout = 2000;
-		while(timeout) {
-			ret = no_os_clk_enable(phy->jesd_tx_clk);
-			if (ret) {
-				no_os_mdelay(100);
-				timeout -= 100;
-				continue;
-			}
-			break;
-		}
-
-		if (ret || !timeout) {
-			printf("Failed to enable JESD204 link: %"PRId32"\n", ret);
-			return ret;
-		}
-	}
-
-	/*
-	 * 204c doesn't have a SYNC, so the link should come up.
-	 * This needs to be revisited once we move this driver to the
-	 * new JESD framework ...
-	 */
-
-	if (phy->jrx_link_tx.jesd_param.jesd_jesdv == 2 ||
-	    phy->jesd_tx_clk) {
-		do {	/* temp workaround until API is fixed */
-			no_os_mdelay(10);
-			stat = ad9081_jesd_rx_link_status_print_prev(phy);
-			if (stat <= 0) {
-				ret = adi_ad9081_jesd_rx_link_enable_set(
-					      &phy->ad9081,
-					      (phy->jrx_link_tx.jesd_param.jesd_duallink > 0) ?
-					      AD9081_LINK_ALL : AD9081_LINK_0, 0);
-				if (ret != 0)
-					return ret;
-
-				if (phy->jesd_tx_clk) {
-					no_os_clk_disable(phy->jesd_tx_clk);
-
-					no_os_mdelay(100);
-
-					ret = no_os_clk_enable(phy->jesd_tx_clk);
-					if (ret < 0) {
-						printf("Failed to enable JESD204 link: %"PRId32"\n",
-						       ret);
-						return ret;
-					}
-				} else {
-					no_os_mdelay(100);
-				}
-
-				ret = adi_ad9081_jesd_rx_link_enable_set(
-					      &phy->ad9081,
-					      (phy->jrx_link_tx.jesd_param.jesd_duallink > 0) ?
-					      AD9081_LINK_ALL : AD9081_LINK_0, 1);
-				if (ret != 0)
-					return ret;
-
-				no_os_mdelay(100);
-			}
-		} while (stat <= 0 && retry--);
-	}
-
-	ad9081_jesd_tx_link_status_print_prev(phy);
-
-	adi_ad9081_dac_irqs_status_get(&phy->ad9081, &status64);
-	printf("DAC IRQ status 0x%"PRIx64"\n", status64);
-
-	sample_rate = phy->adc_frequency_hz;
-	no_os_do_div(&sample_rate, dcm);
-
-	//no_os_clk_set_rate(phy->clks[RX_SAMPL_CLK], sample_rate); // TODO
-
-	sample_rate = phy->dac_frequency_hz;
-	no_os_do_div(&sample_rate, phy->tx_main_interp * phy->tx_chan_interp);
-
-	//no_os_clk_set_rate(phy->clks[TX_SAMPL_CLK], sample_rate); // TODO
-
-	for (i = 0; i < NO_OS_ARRAY_SIZE(phy->tx_dac_fsc); i++) {
-		if (phy->tx_dac_fsc[i]) {
-			ret = adi_ad9081_dac_fsc_set(&phy->ad9081, NO_OS_BIT(i), phy->tx_dac_fsc[i], 1);
-			if (ret != 0)
-				return ret;
-		}
-	}
-
-	for_each_cddc(i, phy->rx_cddc_select) {
-		ret = adi_ad9081_adc_nyquist_zone_set(&phy->ad9081, NO_OS_BIT(i),
-						      phy->rx_nyquist_zone[i]);
-		if (ret != 0)
-			return ret;
-	}
-
-	ret = ad9081_nco_sync(phy,
-					   phy->jesd_rx_clk ? true : false);
-	if (ret != 0)
-		return ret;
-
-	ret = adi_ad9081_hal_bf_set(&phy->ad9081, REG_SYNC_DEBUG0_ADDR,
-				    BF_AVRG_FLOW_EN_INFO, 0);
-	if (ret != 0)
-		return ret;
-
-	ret = adi_ad9081_hal_bf_set(&phy->ad9081, REG_SYSREF_AVERAGE_ADDR,
-				    BF_SYSREF_AVERAGE_INFO,
-				    BF_SYSREF_AVERAGE(0));
-	if (ret != 0)
-		return ret;
-
-	// schedule_delayed_work(&phy->dwork, msecs_to_jiffies(1000)); // TODO
-	ad9081_work_func(phy);
 
 	return 0;
 }
@@ -1343,14 +1212,68 @@ static int ad9081_jesd204_clks_enable(struct jesd204_dev *jdev,
 {
 	struct ad9081_jesd204_priv *priv = jesd204_dev_priv(jdev);
 	struct ad9081_phy *phy = priv->phy;
+	uint64_t rx_lane_rate_kbps;
 	uint8_t jesd_pll_status;
+	uint32_t timeout;
+	uint8_t dcm;
 	int ret;
 
 	pr_debug("%s:%d link_num %u reason %s\n", __func__, __LINE__,
 		lnk->link_id, jesd204_state_op_reason_str(reason));
 
-
 	if (reason == JESD204_STATE_OP_REASON_INIT) {
+		if (!lnk->is_transmit && phy->jesd_rx_clk) {
+			ret = adi_ad9081_adc_chip_dcm_ratio_get(&phy->ad9081,
+								AD9081_LINK_0, &dcm);
+			if (ret != 0 || !dcm)
+				return ret;
+
+			rx_lane_rate_kbps = ad9081_calc_lanerate(&phy->jtx_link_rx[0],
+					    phy->adc_frequency_hz,
+					    dcm);
+
+			ret = no_os_clk_set_rate(phy->jesd_rx_clk, rx_lane_rate_kbps);
+			if (ret < 0) {
+				printf("Failed to set lane rate to %"PRIu64" kHz: %d\n",
+				       rx_lane_rate_kbps, ret);
+			}
+
+			timeout = 2000;
+			while(timeout) {
+				ret = no_os_clk_enable(phy->jesd_rx_clk);
+				if (ret) {
+					no_os_mdelay(100);
+					timeout -= 100;
+					continue;
+				}
+				break;
+			}
+
+			if (ret || !timeout) {
+				printf("Failed to enable JESD204 link: %d\n", ret);
+				return ret;
+			}
+		}
+
+		if (lnk->is_transmit && phy->jesd_tx_clk &&
+		    (phy->jrx_link_tx.jesd_param.jesd_jesdv == 1)) {
+			timeout = 2000;
+			while(timeout) {
+				ret = no_os_clk_enable(phy->jesd_tx_clk);
+				if (ret) {
+					no_os_mdelay(100);
+					timeout -= 100;
+					continue;
+				}
+				break;
+			}
+
+			if (ret || !timeout) {
+				printf("Failed to enable JESD204 link: %d\n", ret);
+				return ret;
+			}
+		}
+
 		ret = adi_ad9081_jesd_pll_lock_status_get(&phy->ad9081,
 			&jesd_pll_status);
 		if (ret != 0)
@@ -1597,7 +1520,7 @@ static const struct jesd204_dev_data jesd204_ad9081_init = {
 		[JESD204_OP_OPT_SETUP_STAGE2] = {
 			.per_device = ad9081_jesd204_setup_stage2,
 			.mode = JESD204_STATE_OP_MODE_PER_DEVICE,
-			.post_state_sysref = true,
+			//.post_state_sysref = true,
 		},
 		[JESD204_OP_OPT_SETUP_STAGE3] = {
 			.per_device = ad9081_jesd204_setup_stage3,
@@ -1608,7 +1531,7 @@ static const struct jesd204_dev_data jesd204_ad9081_init = {
 		},
 		[JESD204_OP_LINK_ENABLE] = {
 			.per_link = ad9081_jesd204_link_enable,
-			.post_state_sysref = true,
+			//.post_state_sysref = true,
 		},
 		[JESD204_OP_LINK_RUNNING] = {
 			.per_link = ad9081_jesd204_link_running,
@@ -1630,6 +1553,7 @@ static const struct jesd204_dev_data jesd204_ad9081_init = {
 int32_t ad9081_init(struct ad9081_phy **dev,
 		    const struct ad9081_init_param *init_param)
 {
+	struct ad9081_jesd204_priv *priv;
 	adi_cms_chip_id_t chip_id;
 	struct ad9081_phy *phy;
 	uint8_t api_rev[3];
@@ -1692,6 +1616,12 @@ int32_t ad9081_init(struct ad9081_phy **dev,
 		printf("%s: ad9081_setup failed (%"PRId32")\n", __func__, ret);
 		goto error_3;
 	}
+
+	ret = jesd204_dev_register(&phy->jdev, &jesd204_ad9081_init);
+	if (ret < 0)
+		goto error_3;
+	priv = jesd204_dev_priv(phy->jdev);;
+	priv->phy = phy;
 
 	adi_ad9081_device_api_revision_get(&phy->ad9081, &api_rev[0],
 					   &api_rev[1], &api_rev[2]);
