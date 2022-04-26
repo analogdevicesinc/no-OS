@@ -114,6 +114,7 @@ int32_t app_clock_init(struct no_os_clk dev_refclk[MULTIDEVICE_INSTANCE_COUNT])
 			.coarse_delay = 0,
 			.fine_delay = 0,
 			.out_mux_mode = 0,
+			.is_sysref = true,
 		}, {
 			.num = 2,	// RX_CORE_LINK_CLK
 			.divider = HMC7043_FPGA_LINK_CLKDIV_RX,
@@ -129,6 +130,7 @@ int32_t app_clock_init(struct no_os_clk dev_refclk[MULTIDEVICE_INSTANCE_COUNT])
 			.coarse_delay = 0,
 			.fine_delay = 0,
 			.out_mux_mode = 0,
+			.is_sysref = true,
 		}, {
 			.num = 9,	// SYSREF_MXFE1
 			.divider = HMC7043_SYSREF_CLKDIV,
@@ -136,6 +138,7 @@ int32_t app_clock_init(struct no_os_clk dev_refclk[MULTIDEVICE_INSTANCE_COUNT])
 			.coarse_delay = 0,
 			.fine_delay = 0,
 			.out_mux_mode = 0,
+			.is_sysref = true,
 		}, {
 			.num = 11,	// SYSREF_MXFE2
 			.divider = HMC7043_SYSREF_CLKDIV,
@@ -143,6 +146,7 @@ int32_t app_clock_init(struct no_os_clk dev_refclk[MULTIDEVICE_INSTANCE_COUNT])
 			.coarse_delay = 0,
 			.fine_delay = 0,
 			.out_mux_mode = 0,
+			.is_sysref = true,
 		}, {
 			.num = 13,	// SYSREF_MXFE3
 			.divider = HMC7043_SYSREF_CLKDIV,
@@ -150,16 +154,19 @@ int32_t app_clock_init(struct no_os_clk dev_refclk[MULTIDEVICE_INSTANCE_COUNT])
 			.coarse_delay = 0,
 			.fine_delay = 0,
 			.out_mux_mode = 0,
+			.is_sysref = true,
 		}
 	};
 
 	struct hmc7044_init_param hmc7044_param = {
 		.spi_init = &clkchip_spi_init_param,
 		.is_hmc7043 = true,
-		.clkin_freq = {500000000, 0, 0, 0},
+		.clkin_freq = {CLKIN_J41_FREQ_HZ, 0, 0, 0},
 		.sysref_timer_div = 1024,
-		.pulse_gen_mode = 7,
+		.pulse_gen_mode = HMC7044_PULSE_GEN_CONT_PULSE,
 		.rf_reseeder_disable = true,
+		.jesd204_sysref_provider = true,
+		.jesd204_max_sysref_frequency_hz = 2000000,
 		.in_buf_mode = {0x07, 0x07, 0x00, 0x00, 0x00},
 		.gpi_ctrl = {0x00, 0x00, 0x00, 0x00},
 		.gpo_ctrl = {0x37, 0x00, 0x00, 0x00},

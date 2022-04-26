@@ -48,6 +48,7 @@
 #include "no_os_spi.h"
 #include "spi_extra.h"
 #include "ad9081.h"
+#include "hmc7044.h"
 #include "app_clock.h"
 #include "app_jesd.h"
 #include "axi_jesd204_rx.h"
@@ -74,6 +75,7 @@ static int16_t adc_buffer[MAX_ADC_BUF_SAMPLES] __attribute__ ((aligned));
 
 extern struct axi_jesd204_rx *rx_jesd;
 extern struct axi_jesd204_tx *tx_jesd;
+extern struct hmc7044_dev* hmc7044_dev;
 
 void dcache_invalidate_range(uint32_t address, uint32_t bytes_count)
 {
@@ -133,7 +135,7 @@ int main(void)
 		.dual_link = 0,
 		.version = AD9081_TX_JESD_VERSION,
 		.logical_lane_mapping = AD9081_TX_LOGICAL_LANE_MAPPING,
-		.tpl_phase_adjust = 12
+		.tpl_phase_adjust = AD9081_JRX_TPL_PHASE_ADJUST
 	};
 	struct link_init_param jtx_link_rx = {
 		.device_id = 0,
@@ -178,12 +180,14 @@ int main(void)
 		.tx_main_interpolation = AD9081_TX_MAIN_INTERPOLATION,
 		.tx_main_nco_frequency_shift_hz = AD9081_TX_MAIN_NCO_SHIFT,
 		.tx_dac_channel_crossbar_select = AD9081_TX_DAC_CHAN_CROSSBAR,
+		.tx_maindp_dac_1x_non1x_crossbar_select = AD9081_TX_DAC_1X_NON1X_CROSSBAR,
 		.tx_full_scale_current_ua = AD9081_TX_FSC,
 		/* The 8 DAC Channelizers */
 		.tx_channel_interpolation = AD9081_TX_CHAN_INTERPOLATION,
 		.tx_channel_nco_frequency_shift_hz = AD9081_TX_CHAN_NCO_SHIFT,
 		.tx_channel_gain = AD9081_TX_CHAN_GAIN,
-		.jrx_link_tx = &jrx_link_tx,
+		.jrx_link_tx[0] = &jrx_link_tx,
+		.jrx_link_tx[1] = NULL,
 		/* RX */
 		.adc_frequency_hz = AD9081_ADC_FREQUENCY,
 		.nyquist_zone = AD9081_ADC_NYQUIST_ZONE,
@@ -249,20 +253,11 @@ int main(void)
 #endif
 		.device_id = GPIO_2_DEVICE_ID
 	};
-	struct no_os_gpio_init_param	ad9081_gpio0_mux_init = {
-		.number = AD9081_GPIO_0_MUX,
+	struct no_os_gpio_init_param	ms_sync_en_gpio_init = {
+		.number = MS_SYNC_ENABLE_GPIO,
 		.platform_ops = &xil_gpio_ops,
 		.extra = &xil_gpio_param_2
 	};
-	no_os_gpio_desc *ad9081_gpio0_mux;
-
-	status = no_os_gpio_get(&ad9081_gpio0_mux, &ad9081_gpio0_mux_init);
-	if (status)
-		return status;
-
-	status = no_os_gpio_set_value(ad9081_gpio0_mux, 1);
-	if (status)
-		return status;
 
 	struct no_os_gpio_init_param	hmc540_gpio_init = {
 		.platform_ops = &xil_gpio_ops,
@@ -308,6 +303,11 @@ int main(void)
 		phy_param.dev_clk = &app_clk[i];
 		jtx_link_rx.device_id = i;
 
+#ifdef QUAD_MXFE
+		if (i == (MULTIDEVICE_INSTANCE_COUNT - 1))
+			phy_param.ms_sync_enable = &ms_sync_en_gpio_init;
+#endif
+
 		status = ad9081_init(&phy[i], &phy_param);
 		if (status != 0)
 			printf("ad9081_init() error: %" PRId32 "\n", status);
@@ -315,9 +315,64 @@ int main(void)
 		rx_adc_init.num_channels += phy[i]->jtx_link_rx[0].jesd_param.jesd_m +
 					    phy[i]->jtx_link_rx[1].jesd_param.jesd_m;
 
-		tx_dac_init.num_channels += phy[i]->jrx_link_tx.jesd_param.jesd_m *
-					    (phy[i]->jrx_link_tx.jesd_param.jesd_duallink > 0 ? 2 : 1);
+		tx_dac_init.num_channels += phy[i]->jrx_link_tx[0].jesd_param.jesd_m *
+					    (phy[i]->jrx_link_tx[0].jesd_param.jesd_duallink > 0 ? 2 : 1);
 	}
+
+	struct jesd204_topology *topology;
+	struct jesd204_topology_dev devs[] = {
+		{
+			.jdev = hmc7044_dev->jdev,
+			.link_ids = {FRAMER_LINK0_RX, DEFRAMER_LINK0_TX},
+			.links_number = 2,
+			.is_sysref_provider = true,
+		},
+		{
+			.jdev = rx_jesd->jdev,
+			.link_ids = {FRAMER_LINK0_RX},
+			.links_number = 1,
+		},
+		{
+			.jdev = tx_jesd->jdev,
+			.link_ids = {DEFRAMER_LINK0_TX},
+			.links_number = 1,
+		},
+#if MULTIDEVICE_INSTANCE_COUNT == 4
+		{
+			.jdev = phy[0]->jdev,
+			.link_ids = {FRAMER_LINK0_RX, DEFRAMER_LINK0_TX},
+			.links_number = 2,
+		},
+		{
+			.jdev = phy[1]->jdev,
+			.link_ids = {FRAMER_LINK0_RX, DEFRAMER_LINK0_TX},
+			.links_number = 2,
+		},
+		{
+			.jdev = phy[2]->jdev,
+			.link_ids = {FRAMER_LINK0_RX, DEFRAMER_LINK0_TX},
+			.links_number = 2,
+		},
+		{
+			.jdev = phy[3]->jdev,
+			.link_ids = {FRAMER_LINK0_RX, DEFRAMER_LINK0_TX},
+			.links_number = 2,
+			.is_top_device = true,
+		},
+#else
+		{
+			.jdev = phy[0]->jdev,
+			.link_ids = {FRAMER_LINK0_RX, DEFRAMER_LINK0_TX},
+			.links_number = 2,
+			.is_top_device = true,
+		},
+#endif
+	};
+
+	jesd204_init_topology(&topology, devs,
+		sizeof(devs)/sizeof(*devs));
+
+	jesd204_fsm_start(topology, JESD204_LINKS_ALL);
 
 	axi_jesd204_rx_watchdog(rx_jesd);
 

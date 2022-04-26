@@ -145,10 +145,10 @@ int32_t app_jesd_init(struct no_os_clk clk[2],
 		return ret;
 #endif
 
-	ret = axi_jesd204_tx_init(&tx_jesd, &tx_jesd_init);
+	ret = axi_jesd204_rx_init(&rx_jesd, &rx_jesd_init);
 	if (ret)
 		return ret;
-	ret = axi_jesd204_rx_init(&rx_jesd, &rx_jesd_init);
+	ret = axi_jesd204_tx_init(&tx_jesd, &tx_jesd_init);
 	if (ret)
 		return ret;
 

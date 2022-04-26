@@ -83,9 +83,10 @@ struct ad9081_phy {
 	uint8_t		sync_ms_gpio_num;
 	bool		sysref_coupling_ac_en;
 	adi_ad9081_device_t	ad9081;
-	struct ad9081_jesd_link	jrx_link_tx;
+	struct ad9081_jesd_link	jrx_link_tx[2];
 	struct ad9081_jesd_link	jtx_link_rx[2];
 	uint32_t	multidevice_instance_count;
+	bool		dual_link_use_own_tpl_en;
 	bool		config_sync_01_swapped;
 	bool		config_sync_0a_cmos_en;
 	uint32_t	lmfc_delay;
@@ -99,6 +100,7 @@ struct ad9081_phy {
 	/* The 4 DAC Main Datapaths */
 	uint32_t	tx_main_interp;
 	uint8_t		tx_dac_chan_xbar[MAX_NUM_MAIN_DATAPATHS];
+	uint8_t		tx_dac_chan_xbar_1x_non1x[MAX_NUM_MAIN_DATAPATHS];
 	int64_t		tx_main_shift[MAX_NUM_MAIN_DATAPATHS];
 	uint32_t	tx_dac_fsc[MAX_NUM_MAIN_DATAPATHS];
 	/* The 8 DAC Channelizers */
@@ -106,7 +108,7 @@ struct ad9081_phy {
 	int64_t		tx_chan_shift[MAX_NUM_CHANNELIZER];
 	struct dac_settings_cache	dac_cache;
 	/* RX */
-	uint32_t	adc_dcm;
+	uint32_t	adc_dcm[2];
 	uint64_t 	adc_frequency_hz;
 	uint32_t	rx_nyquist_zone[MAX_NUM_MAIN_DATAPATHS];
 	/* The 4 ADC Main Datapaths */
@@ -158,6 +160,7 @@ struct ad9081_init_param {
 	uint8_t		master_slave_sync_gpio_num;
 	bool		sysref_coupling_ac_en;
 	uint32_t	multidevice_instance_count;
+	bool		dual_link_use_separate_tpl_enable;
 	bool		jesd_sync_pins_01_swap_enable;
 	bool		jesd_sync_pin_0a_cmos_enable;
 	uint32_t	lmfc_delay_dac_clk_cycles;
@@ -171,12 +174,13 @@ struct ad9081_init_param {
 	uint32_t	tx_main_interpolation;
 	int64_t		tx_main_nco_frequency_shift_hz[MAX_NUM_MAIN_DATAPATHS];
 	uint8_t		tx_dac_channel_crossbar_select[MAX_NUM_MAIN_DATAPATHS];
+	uint8_t		tx_maindp_dac_1x_non1x_crossbar_select[MAX_NUM_MAIN_DATAPATHS];
 	uint32_t	tx_full_scale_current_ua[MAX_NUM_MAIN_DATAPATHS];
 	/* The 8 DAC Channelizers */
 	uint32_t	tx_channel_interpolation;
 	int64_t		tx_channel_nco_frequency_shift_hz[MAX_NUM_CHANNELIZER];
 	uint16_t	tx_channel_gain[MAX_NUM_CHANNELIZER];
-	struct link_init_param	*jrx_link_tx;
+	struct link_init_param	*jrx_link_tx[2];
 	/* RX */
 	uint64_t 	adc_frequency_hz;
 	uint32_t	nyquist_zone[MAX_NUM_MAIN_DATAPATHS];
