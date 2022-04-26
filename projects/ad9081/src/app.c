@@ -178,12 +178,14 @@ int main(void)
 		.tx_main_interpolation = AD9081_TX_MAIN_INTERPOLATION,
 		.tx_main_nco_frequency_shift_hz = AD9081_TX_MAIN_NCO_SHIFT,
 		.tx_dac_channel_crossbar_select = AD9081_TX_DAC_CHAN_CROSSBAR,
+		.tx_maindp_dac_1x_non1x_crossbar_select = AD9081_TX_DAC_1X_NON1X_CROSSBAR,
 		.tx_full_scale_current_ua = AD9081_TX_FSC,
 		/* The 8 DAC Channelizers */
 		.tx_channel_interpolation = AD9081_TX_CHAN_INTERPOLATION,
 		.tx_channel_nco_frequency_shift_hz = AD9081_TX_CHAN_NCO_SHIFT,
 		.tx_channel_gain = AD9081_TX_CHAN_GAIN,
-		.jrx_link_tx = &jrx_link_tx,
+		.jrx_link_tx[0] = &jrx_link_tx,
+		.jrx_link_tx[1] = NULL,
 		/* RX */
 		.adc_frequency_hz = AD9081_ADC_FREQUENCY,
 		.nyquist_zone = AD9081_ADC_NYQUIST_ZONE,
@@ -315,8 +317,8 @@ int main(void)
 		rx_adc_init.num_channels += phy[i]->jtx_link_rx[0].jesd_param.jesd_m +
 					    phy[i]->jtx_link_rx[1].jesd_param.jesd_m;
 
-		tx_dac_init.num_channels += phy[i]->jrx_link_tx.jesd_param.jesd_m *
-					    (phy[i]->jrx_link_tx.jesd_param.jesd_duallink > 0 ? 2 : 1);
+		tx_dac_init.num_channels += phy[i]->jrx_link_tx[0].jesd_param.jesd_m *
+					    (phy[i]->jrx_link_tx[0].jesd_param.jesd_duallink > 0 ? 2 : 1);
 	}
 
 	struct jesd204_topology *topology;
