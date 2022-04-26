@@ -55,6 +55,8 @@
 /******************************************************************************/
 #define MAX_NUM_MAIN_DATAPATHS	4
 #define MAX_NUM_CHANNELIZER	8
+#define MAX_NUM_RX_NCO_CHAN_REGS 16
+#define MAX_NUM_TX_NCO_CHAN_REGS 31
 
 struct ad9081_jesd_link {
 	bool is_jrx;
@@ -101,6 +103,13 @@ struct ad9081_phy {
 	uint8_t		tx_dac_chan_xbar_1x_non1x[MAX_NUM_MAIN_DATAPATHS];
 	int64_t		tx_main_shift[MAX_NUM_MAIN_DATAPATHS];
 	uint32_t	tx_dac_fsc[MAX_NUM_MAIN_DATAPATHS];
+
+	uint8_t		tx_main_ffh_select[MAX_NUM_MAIN_DATAPATHS];
+	uint8_t		tx_ffh_hopf_index[MAX_NUM_MAIN_DATAPATHS];
+	uint8_t		tx_ffh_hopf_mode[MAX_NUM_MAIN_DATAPATHS];
+	int64_t		tx_ffh_hopf_vals[MAX_NUM_TX_NCO_CHAN_REGS][MAX_NUM_MAIN_DATAPATHS];
+	bool		tx_ffh_hopf_via_gpio_en;
+
 	/* The 8 DAC Channelizers */
 	uint32_t	tx_chan_interp;
 	int64_t		tx_chan_shift[MAX_NUM_CHANNELIZER];
@@ -110,12 +119,19 @@ struct ad9081_phy {
 	uint64_t 	adc_frequency_hz;
 	uint32_t	rx_nyquist_zone[MAX_NUM_MAIN_DATAPATHS];
 	/* The 4 ADC Main Datapaths */
-	int64_t		rx_cddc_shift[MAX_NUM_MAIN_DATAPATHS];
+	int64_t		rx_cddc_shift[MAX_NUM_RX_NCO_CHAN_REGS][MAX_NUM_MAIN_DATAPATHS];
+	int32_t		rx_cddc_phase[MAX_NUM_RX_NCO_CHAN_REGS][MAX_NUM_MAIN_DATAPATHS];
 	uint32_t	adc_main_decimation[MAX_NUM_MAIN_DATAPATHS];
 	uint8_t 	rx_cddc_dcm[MAX_NUM_MAIN_DATAPATHS];
 	uint8_t 	rx_cddc_c2r[MAX_NUM_MAIN_DATAPATHS];
 	uint8_t		rx_cddc_gain_6db_en[MAX_NUM_MAIN_DATAPATHS];
 	uint8_t		rx_cddc_select;
+	uint8_t		rx_main_ffh_select[MAX_NUM_MAIN_DATAPATHS];
+	uint8_t		rx_main_ffh_index[MAX_NUM_MAIN_DATAPATHS];
+	uint8_t		rx_main_ffh_mode[MAX_NUM_MAIN_DATAPATHS];
+	uint8_t		rx_cddc_nco_channel_select_mode[MAX_NUM_MAIN_DATAPATHS];
+	bool		rx_main_ffh_trig_en[MAX_NUM_MAIN_DATAPATHS];
+	bool		rx_main_ffh_gpio_en[MAX_NUM_MAIN_DATAPATHS];
 	/* The 8 ADC Channelizers */
 	int64_t		rx_fddc_shift[MAX_NUM_CHANNELIZER];
 	uint32_t	adc_chan_decimation[MAX_NUM_CHANNELIZER];
@@ -124,6 +140,7 @@ struct ad9081_phy {
 	uint8_t 	rx_fddc_mxr_if[MAX_NUM_CHANNELIZER];
 	uint8_t		rx_fddc_gain_6db_en[MAX_NUM_CHANNELIZER];
 	uint8_t 	rx_fddc_select;
+	uint8_t		rx_ffh_gpio_mux_sel[6];
 };
 
 struct link_init_param {
@@ -172,6 +189,7 @@ struct ad9081_init_param {
 	uint8_t		tx_dac_channel_crossbar_select[MAX_NUM_MAIN_DATAPATHS];
 	uint8_t		tx_maindp_dac_1x_non1x_crossbar_select[MAX_NUM_MAIN_DATAPATHS];
 	uint32_t	tx_full_scale_current_ua[MAX_NUM_MAIN_DATAPATHS];
+	bool		tx_ffh_hopf_via_gpio_enable;
 	/* The 8 DAC Channelizers */
 	uint32_t	tx_channel_interpolation;
 	int64_t		tx_channel_nco_frequency_shift_hz[MAX_NUM_CHANNELIZER];
@@ -186,6 +204,7 @@ struct ad9081_init_param {
 	uint8_t		rx_main_complex_to_real_enable[MAX_NUM_MAIN_DATAPATHS];
 	uint8_t		rx_main_digital_gain_6db_enable[MAX_NUM_MAIN_DATAPATHS];
 	uint8_t		rx_main_enable[MAX_NUM_MAIN_DATAPATHS];
+	uint8_t		rx_nco_channel_select_mode[MAX_NUM_MAIN_DATAPATHS];
 	/* The 8 ADC Channelizers */
 	int64_t		rx_channel_nco_frequency_shift_hz[MAX_NUM_CHANNELIZER];
 	uint32_t	rx_channel_decimation[MAX_NUM_CHANNELIZER];
@@ -193,8 +212,30 @@ struct ad9081_init_param {
 	uint8_t		rx_channel_nco_mixer_mode[MAX_NUM_CHANNELIZER];
 	uint8_t		rx_channel_digital_gain_6db_enable[MAX_NUM_CHANNELIZER];
 	uint8_t		rx_channel_enable[MAX_NUM_CHANNELIZER];
+	uint8_t		rx_ffh_gpio_mux_sel[6];
 	struct link_init_param	*jtx_link_rx[2];
 };
+
+/* ffh: 2 - gpio6, 3 - gpio7, 4 - gpio8, 5 - gpio9, 6 - gpio10, 7 - syncinb1_p, 8 - syncinb1_n */
+
+#define AD9081_PERI_SEL_GPIO6		2
+#define AD9081_PERI_SEL_GPIO7		3
+#define AD9081_PERI_SEL_GPIO8		4
+#define AD9081_PERI_SEL_GPIO9		5
+#define AD9081_PERI_SEL_GPIO10		6
+#define AD9081_PERI_SEL_SYNCINB1_P	7
+#define AD9081_PERI_SEL_SYNCINB1_N	8
+
+#define AD9081_FFH_CHAN_SEL_REG_MODE		0 /* 0:  Register Map control (Use ddc_nco_regmap_chan_sel) */
+#define AD9081_FFH_CHAN_SEL_1GPIO_MODE		1 /* 1:  profile_pins[0]     is used. Pin level control {3'b0, profile_pins[0]} */
+#define AD9081_FFH_CHAN_SEL_2GPIO_MODE		2 /* 2:  profile_pins[1 :0] are used. Pin level control {2'b0, profile_pins[1:0]} */
+#define AD9081_FFH_CHAN_SEL_3GPIO_MODE		3 /* 3:  profile_pins[2 :0] are used. Pin level control {1'b0, profile_pins[2:0]} */
+#define AD9081_FFH_CHAN_SEL_4GPIO_MODE		4 /* 4:  profile_pins[3 :0] are used. Pin level control { profile_pins[3:0]} */
+#define AD9081_FFH_CHAN_SEL_GPIO0_EDGE_MODE	8 /* 8:  profile_pins[0] Pin edge control- increment internal counter when rising edge of profile_pins[0] Pin. */
+#define AD9081_FFH_CHAN_SEL_GPIO1_EDGE_MODE	9 /* 9:  profile_pins[1] Pin edge control- increment internal counter when rising edge of profile_pins[1] Pin. */
+#define AD9081_FFH_CHAN_SEL_GPIO2_EDGE_MODE	10 /* 10: profile_pins[2] Pin edge control- increment internal counter when rising edge of profile_pins[2] Pin. */
+#define AD9081_FFH_CHAN_SEL_GPIO3_EDGE_MODE	11 /* 11: profile_pins[3] Pin edge control- increment internal counter when rising edge of profile_pins[3] Pin. */
+#define AD9081_FFH_CHAN_SEL_FHT_EXP_MODE	12 /* 12: FHT expire based control - increment internal counter when FHT is expired. */
 
 /*
  * JESD204-FSM defines
@@ -214,4 +255,31 @@ int32_t ad9081_init(struct ad9081_phy **device,
 int32_t ad9081_remove(struct ad9081_phy *device);
 /* Work function. */
 void ad9081_work_func(struct ad9081_phy *phy);
+/* Transmit Main Path FFH NCO Mode */
+int ad9081_out_main_nco_ffh_frequency(struct ad9081_phy *phy,
+		uint8_t chan, int64_t value);
+int ad9081_out_main_nco_ffh_index(struct ad9081_phy *phy,
+		uint8_t chan, uint8_t value);
+int ad9081_out_main_nco_ffh_select(struct ad9081_phy *phy,
+		uint8_t chan, uint8_t value);
+int ad9081_out_main_ffh_mode(struct ad9081_phy *phy,
+		uint8_t chan, uint8_t value);
+int ad9081_out_main_ffh_gpio_mode_en(struct ad9081_phy *phy,
+		uint8_t chan, uint8_t value);
+/* Receive Main Path FFH NCO Mode */
+int ad9081_in_main_nco_frequency(struct ad9081_phy *phy,
+		uint8_t chan, int64_t value);
+int ad9081_in_main_nco_phase(struct ad9081_phy *phy,
+		uint8_t chan, int64_t value);
+int ad9081_in_main_nco_ffh_index(struct ad9081_phy *phy,
+		uint8_t chan, uint8_t index);
+int ad9081_in_main_nco_ffh_select(struct ad9081_phy *phy,
+		uint8_t chan, uint8_t value);
+int ad9081_in_main_ffh_mode(struct ad9081_phy *phy,
+		uint8_t chan, uint8_t value);
+int ad9081_in_main_ffh_gpio_mode_en(struct ad9081_phy *phy,
+		uint8_t chan, uint8_t value);
+int ad9081_in_main_ffh_trig_hop_en(struct ad9081_phy *phy,
+		uint8_t chan, uint8_t value);
+
 #endif

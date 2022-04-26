@@ -195,6 +195,12 @@ int main(void)
 		.rx_channel_enable = AD9081_RX_CHAN_ENABLE,
 		.jtx_link_rx[0] = &jtx_link_rx,
 		.jtx_link_rx[1] = NULL,
+		.rx_ffh_gpio_mux_sel = {AD9081_PERI_SEL_SYNCINB1_N, AD9081_PERI_SEL_SYNCINB1_P,
+				AD9081_PERI_SEL_GPIO6, AD9081_PERI_SEL_GPIO7,
+				AD9081_PERI_SEL_GPIO8, AD9081_PERI_SEL_GPIO9},
+		.rx_nco_channel_select_mode = {AD9081_FFH_CHAN_SEL_4GPIO_MODE,
+				AD9081_FFH_CHAN_SEL_4GPIO_MODE, AD9081_FFH_CHAN_SEL_4GPIO_MODE,
+				AD9081_FFH_CHAN_SEL_4GPIO_MODE},
 	};
 
 	struct axi_adc_init rx_adc_init = {

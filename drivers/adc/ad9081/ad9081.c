@@ -598,6 +598,12 @@ static int ad9081_setup_tx(struct ad9081_phy *phy)
 		}
 	}
 
+	if (phy->tx_ffh_hopf_via_gpio_en) {
+		adi_ad9081_jesd_rx_syncb_mode_set(&phy->ad9081, 0);
+		adi_ad9081_dac_duc_main_nco_hopf_gpio_as_hop_en_set(&phy->ad9081, 1);
+		adi_ad9081_jesd_rx_syncb_driver_powerdown_set(&phy->ad9081, 0);
+	}
+
 	return 0;
 }
 
@@ -645,7 +651,7 @@ static int ad9081_setup_rx(struct ad9081_phy *phy)
 	/* start txfe rx */
 	ret = adi_ad9081_device_startup_rx(&phy->ad9081, phy->rx_cddc_select,
 					   phy->rx_fddc_select,
-					   phy->rx_cddc_shift,
+					   phy->rx_cddc_shift[0],
 					   phy->rx_fddc_shift, phy->rx_cddc_dcm,
 					   phy->rx_fddc_dcm, phy->rx_cddc_c2r,
 					   phy->rx_fddc_c2r, jesd_param,
@@ -672,6 +678,11 @@ static int ad9081_setup_rx(struct ad9081_phy *phy)
 
 		ret = adi_ad9081_adc_nyquist_zone_set(&phy->ad9081, NO_OS_BIT(i),
 			phy->rx_nyquist_zone[i]);
+		if (ret != 0)
+			return ret;
+
+		ret = adi_ad9081_adc_ddc_coarse_nco_channel_select_via_gpio_set(&phy->ad9081,
+			NO_OS_BIT(i), phy->rx_cddc_nco_channel_select_mode[i]);
 		if (ret != 0)
 			return ret;
 	}
@@ -734,7 +745,14 @@ static int ad9081_setup_rx(struct ad9081_phy *phy)
 		//	&phy->clkscale[RX_SAMPL_CLK_LINK2]);	// TODO
 	}
 
-	return 0;
+	for (i = 0; i < NO_OS_ARRAY_SIZE(phy->rx_ffh_gpio_mux_sel); i++)
+		if (phy->rx_ffh_gpio_mux_sel[i] == AD9081_PERI_SEL_SYNCINB1_N ||
+			phy->rx_ffh_gpio_mux_sel[i] == AD9081_PERI_SEL_SYNCINB1_P)
+			adi_ad9081_hal_bf_set(&phy->ad9081, REG_SYNCB_CTRL_ADDR,
+				BF_PD_SYNCB_RX_RC_INFO, 0);
+
+	return adi_ad9081_adc_ddc_ffh_sel_to_gpio_mapping_set(&phy->ad9081,
+		phy->rx_ffh_gpio_mux_sel);
 }
 
 static int ad9081_setup(struct ad9081_phy *phy)
@@ -996,6 +1014,7 @@ int32_t ad9081_parse_init_param(struct ad9081_phy *phy,
 		phy->tx_dac_chan_xbar_1x_non1x[i] = init_param->tx_maindp_dac_1x_non1x_crossbar_select[i];
 		phy->tx_dac_fsc[i] = init_param->tx_full_scale_current_ua[i];
 	}
+	phy->tx_ffh_hopf_via_gpio_en = init_param->tx_ffh_hopf_via_gpio_enable;
 	/* The 8 DAC Channelizers */
 	phy->tx_chan_interp = init_param->tx_channel_interpolation;
 	for (i = 0; i < MAX_NUM_CHANNELIZER; i++) {
@@ -1019,12 +1038,13 @@ int32_t ad9081_parse_init_param(struct ad9081_phy *phy,
 	/* The 4 ADC Main Datapaths */
 
 	for (i = 0; i < MAX_NUM_MAIN_DATAPATHS; i++) {
-		phy->rx_cddc_shift[i] = init_param->rx_main_nco_frequency_shift_hz[i];
+		phy->rx_cddc_shift[0][i] = init_param->rx_main_nco_frequency_shift_hz[i];
 		phy->adc_main_decimation[i] = init_param->rx_main_decimation[i];
 		phy->rx_cddc_c2r[i] = init_param->rx_main_complex_to_real_enable[i];
 		phy->rx_cddc_gain_6db_en[i] = init_param->rx_main_digital_gain_6db_enable[i];
 		if (init_param->rx_main_enable[i])
 			phy->rx_cddc_select |= NO_OS_BIT(i);
+		phy->rx_cddc_nco_channel_select_mode[i] = init_param->rx_nco_channel_select_mode[i];
 	}
 	/* The 8 ADC Channelizers */
 	for (i = 0; i < MAX_NUM_CHANNELIZER; i++) {
@@ -1036,6 +1056,9 @@ int32_t ad9081_parse_init_param(struct ad9081_phy *phy,
 		if (init_param->rx_channel_enable[i])
 			phy->rx_fddc_select |= NO_OS_BIT(i);
 	}
+	for (i = 0; i < 6; i++)
+		phy->rx_ffh_gpio_mux_sel[i] = init_param->rx_ffh_gpio_mux_sel[i];
+
 	/* RX JESD Link */
 	if (init_param->jtx_link_rx[0])
 		ad9081_parse_jesd_link_init_param(&phy->jtx_link_rx[0],
@@ -1303,6 +1326,10 @@ static int ad9081_jesd204_link_running(struct jesd204_dev *jdev,
 	//	schedule_delayed_work(&phy->dwork, msecs_to_jiffies(1000));	// TODO
 
 	phy->is_initialized = true;
+
+	/* Need to redo this since GPIOx might have been clobbered by master/slave sync */
+	adi_ad9081_dac_duc_main_nco_hopf_gpio_as_hop_en_set(&phy->ad9081,
+		phy->tx_ffh_hopf_via_gpio_en);
 
 	return JESD204_STATE_CHANGE_DONE;
 }
@@ -1580,6 +1607,309 @@ int32_t ad9081_remove(struct ad9081_phy *dev)
 	ret = no_os_gpio_remove(dev->gpio_reset);
 	ret += no_os_spi_remove(dev->spi_desc);
 	free(dev);
+
+	return ret;
+}
+
+static void ad9081_chan_to_fddc_cddc(struct ad9081_phy *phy,
+	bool output, uint8_t chan, uint8_t *fddc_num, uint8_t *fddc_mask,
+	uint8_t *cddc_num, uint8_t *cddc_mask)
+{
+	unsigned int l = 0, m = 0, c;
+
+	if (output) {
+		uint8_t mask = 0;
+		int i;
+
+		c = chan;
+
+		if (ad9081_link_is_dual(phy->jrx_link_tx)) {
+			m = phy->jrx_link_tx[0].jesd_param.jesd_m;
+
+			if (c >= (m / 2))
+				c = c - (m / 2) + 4;
+		}
+
+		*fddc_num = c;
+		*fddc_mask = NO_OS_BIT(c) & AD9081_DAC_CH_ALL;
+
+		for (i = 0; i < NO_OS_ARRAY_SIZE(phy->tx_dac_chan_xbar); i++)
+			if (phy->tx_dac_chan_xbar[i] & NO_OS_BIT(c)) {
+				mask |= NO_OS_BIT(i);
+				*cddc_num = i;
+
+			}
+
+		*cddc_mask = mask;
+	} else {
+		if (ad9081_link_is_dual(phy->jtx_link_rx)) {
+			m = phy->jtx_link_rx[0].jesd_param.jesd_m;
+
+			if (chan >= m)
+				l = 1;
+			else
+				m = 0;
+		}
+
+		*fddc_num = phy->jtx_link_rx[l].link_converter_select[chan - m] / 2;
+		*fddc_mask = NO_OS_BIT(*fddc_num) & AD9081_ADC_FDDC_ALL;
+
+		adi_ad9081_adc_xbar_find_cddc(&phy->ad9081, *fddc_mask , cddc_mask);
+		*cddc_num = no_os_log_base_2(*cddc_mask & AD9081_ADC_CDDC_ALL);
+	}
+
+	pr_debug("%s_voltage%d: link=%d fddc_num=%d fddc_mask=%X cddc_num=%d cddc_mask=%X",
+		output ? "out" : "in", chan, l,
+		*fddc_num, *fddc_mask, *cddc_num, *cddc_mask);
+}
+
+int ad9081_out_main_nco_ffh_frequency(struct ad9081_phy *phy,
+		uint8_t chan, int64_t value)
+{
+	uint8_t cddc_num, cddc_mask, fddc_num, fddc_mask;
+	uint64_t ftw;
+	int i, ret;
+
+	ad9081_chan_to_fddc_cddc(phy, true, chan, &fddc_num,
+		&fddc_mask, &cddc_num, &cddc_mask);
+
+	ret = adi_ad9081_hal_calc_tx_nco_ftw32(&phy->ad9081,
+			phy->ad9081.dev_info.dac_freq_hz, value,
+			&ftw);
+	if (ret)
+		return ret;
+
+	ret = adi_ad9081_dac_duc_main_nco_hopf_ftw_set(&phy->ad9081,
+					 cddc_mask,
+					 phy->tx_ffh_hopf_index[cddc_num] + 1,
+					 ftw);
+	if (ret)
+		return ret;
+
+	for_each_cddc(i, cddc_mask)
+		phy->tx_ffh_hopf_vals[phy->tx_ffh_hopf_index[cddc_num]][i] = value;
+
+	return 0;
+}
+
+int ad9081_out_main_nco_ffh_index(struct ad9081_phy *phy,
+		uint8_t chan, uint8_t value)
+{
+	uint8_t cddc_num, cddc_mask, fddc_num, fddc_mask;
+	int i;
+
+	ad9081_chan_to_fddc_cddc(phy, true, chan, &fddc_num,
+		&fddc_mask, &cddc_num, &cddc_mask);
+
+	value = no_os_clamp_t(long long, value, 0, 30);
+	if (value < 0 || value >= MAX_NUM_TX_NCO_CHAN_REGS)
+		return -EINVAL;
+
+	for_each_cddc(i, cddc_mask)
+		phy->tx_ffh_hopf_index[i] = value;
+
+	return 0;
+}
+
+int ad9081_out_main_nco_ffh_select(struct ad9081_phy *phy,
+		uint8_t chan, uint8_t value)
+{
+	uint8_t cddc_num, cddc_mask, fddc_num, fddc_mask;
+	int i, ret;
+
+	ad9081_chan_to_fddc_cddc(phy, true, chan, &fddc_num,
+		&fddc_mask, &cddc_num, &cddc_mask);
+
+	if (value < 0 || value >= MAX_NUM_TX_NCO_CHAN_REGS)
+		return -EINVAL;
+
+	/* set main nco */
+	for_each_cddc(i, cddc_mask) {
+		ret = adi_ad9081_dac_duc_main_nco_hopf_select_set(&phy->ad9081,
+			NO_OS_BIT(i), value + 1);
+		if (!ret)
+			phy->tx_main_ffh_select[i] = value;
+		else
+			return -EFAULT;
+	}
+
+	return ret;
+}
+
+int ad9081_out_main_ffh_mode(struct ad9081_phy *phy,
+		uint8_t chan, uint8_t value)
+{
+	uint8_t cddc_num, cddc_mask, fddc_num, fddc_mask;
+	int ret, i;
+
+	ad9081_chan_to_fddc_cddc(phy, true, chan, &fddc_num,
+		&fddc_mask, &cddc_num, &cddc_mask);
+
+	ret = adi_ad9081_dac_duc_main_nco_hopf_mode_set(&phy->ad9081,
+					  cddc_mask, value);
+	if (!ret)
+		for_each_cddc(i, cddc_mask)
+			phy->tx_ffh_hopf_mode[i] = value;
+
+	return ret;
+}
+
+int ad9081_out_main_ffh_gpio_mode_en(struct ad9081_phy *phy,
+		uint8_t chan, uint8_t value)
+{
+	int ret;
+
+	ret = adi_ad9081_dac_duc_main_nco_hopf_gpio_as_hop_en_set(&phy->ad9081,
+		value);
+	if (!ret)
+		phy->tx_ffh_hopf_via_gpio_en = value;
+
+	adi_ad9081_jesd_rx_syncb_mode_set(&phy->ad9081, 0);
+	adi_ad9081_jesd_rx_syncb_driver_powerdown_set(&phy->ad9081,
+		!value);
+
+	return ret;
+}
+
+int ad9081_in_main_nco_frequency(struct ad9081_phy *phy,
+		uint8_t chan, int64_t value)
+{
+	uint8_t cddc_num, cddc_mask, fddc_num, fddc_mask;
+	int ret;
+
+	ad9081_chan_to_fddc_cddc(phy, false, chan, &fddc_num,
+		&fddc_mask, &cddc_num, &cddc_mask);
+
+	ret = adi_ad9081_adc_ddc_coarse_nco_set(&phy->ad9081,
+						cddc_mask, value);
+	if (!ret)
+		phy->rx_cddc_shift[phy->rx_main_ffh_index[cddc_num]][cddc_num] = value;
+	else
+		return -EFAULT;
+
+	return 0;
+}
+
+int ad9081_in_main_nco_phase(struct ad9081_phy *phy,
+		uint8_t chan, int64_t value)
+{
+	uint8_t cddc_num, cddc_mask, fddc_num, fddc_mask;
+	uint64_t val64;
+	int ret;
+
+	ad9081_chan_to_fddc_cddc(phy, false, chan, &fddc_num,
+		&fddc_mask, &cddc_num, &cddc_mask);
+
+	value = no_os_clamp_t(long long, value, -180000, 180000);
+
+	val64 = no_os_div_s64(value * 14073748835533, 18000LL);
+
+	ret =  adi_ad9081_adc_ddc_coarse_nco_phase_offset_set(
+		&phy->ad9081, cddc_mask, val64);
+	if (!ret)
+		phy->rx_cddc_phase[phy->rx_main_ffh_index[cddc_num]][cddc_num] = value;
+	else
+		return -EFAULT;
+
+	return 0;
+}
+
+int ad9081_in_main_nco_ffh_index(struct ad9081_phy *phy,
+		uint8_t chan, uint8_t index)
+{
+	uint8_t cddc_num, cddc_mask, fddc_num, fddc_mask;
+	int ret;
+
+	ad9081_chan_to_fddc_cddc(phy, false, chan, &fddc_num,
+		&fddc_mask, &cddc_num, &cddc_mask);
+
+	if (index < 0 || index >= MAX_NUM_RX_NCO_CHAN_REGS)
+		return -EINVAL;
+
+	ret = adi_ad9081_adc_ddc_coarse_nco_channel_update_index_set(&phy->ad9081,
+		cddc_mask, index);
+	if (!ret)
+		phy->rx_main_ffh_index[cddc_num] = index;
+	else
+		return -EFAULT;
+
+	return 0;
+}
+
+int ad9081_in_main_nco_ffh_select(struct ad9081_phy *phy,
+		uint8_t chan, uint8_t value)
+{
+	uint8_t cddc_num, cddc_mask, fddc_num, fddc_mask;
+	int ret;
+
+	ad9081_chan_to_fddc_cddc(phy, false, chan, &fddc_num,
+		&fddc_mask, &cddc_num, &cddc_mask);
+
+	if (value < 0 || value >= MAX_NUM_RX_NCO_CHAN_REGS)
+		return -EINVAL;
+
+	ret = adi_ad9081_adc_ddc_coarse_nco_channel_selection_set(&phy->ad9081,
+		cddc_mask, value);
+	if (!ret)
+		phy->rx_main_ffh_select[cddc_num] = value;
+	else
+		return -EFAULT;
+
+	return 0;
+}
+
+int ad9081_in_main_ffh_mode(struct ad9081_phy *phy,
+		uint8_t chan, uint8_t value)
+{
+	uint8_t cddc_num, cddc_mask, fddc_num, fddc_mask;
+	int ret;
+
+	ad9081_chan_to_fddc_cddc(phy, false, chan, &fddc_num,
+		&fddc_mask, &cddc_num, &cddc_mask);
+
+	ret = adi_ad9081_adc_ddc_coarse_nco_channel_update_mode_set(&phy->ad9081,
+		cddc_mask, value > 0);
+
+	if (value > 0)
+		ret = adi_ad9081_adc_ddc_coarse_gpio_chip_xfer_mode_set(&phy->ad9081,
+			cddc_mask, value - 1);
+
+	if (!ret)
+		phy->rx_main_ffh_mode[cddc_num] = value;
+
+	return ret;
+}
+
+int ad9081_in_main_ffh_gpio_mode_en(struct ad9081_phy *phy,
+		uint8_t chan, uint8_t value)
+{
+	uint8_t cddc_num, cddc_mask, fddc_num, fddc_mask;
+	int ret;
+
+	ad9081_chan_to_fddc_cddc(phy, false, chan, &fddc_num,
+		&fddc_mask, &cddc_num, &cddc_mask);
+
+	ret = adi_ad9081_adc_ddc_coarse_nco_channel_select_via_gpio_set(&phy->ad9081,
+		cddc_mask, value ? phy->rx_cddc_nco_channel_select_mode[cddc_num] : 0);
+	if (!ret)
+		phy->rx_main_ffh_gpio_en[cddc_num] = value;
+
+	return ret;
+}
+
+int ad9081_in_main_ffh_trig_hop_en(struct ad9081_phy *phy,
+		uint8_t chan, uint8_t value)
+{
+	uint8_t cddc_num, cddc_mask, fddc_num, fddc_mask;
+	int ret;
+
+	ad9081_chan_to_fddc_cddc(phy, false, chan, &fddc_num,
+		&fddc_mask, &cddc_num, &cddc_mask);
+
+	ret = adi_ad9081_adc_ddc_coarse_trig_hop_en_set(&phy->ad9081,
+		cddc_mask, value);
+	if (!ret)
+		phy->rx_main_ffh_trig_en[cddc_num] = value;
 
 	return ret;
 }
