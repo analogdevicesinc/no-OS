@@ -27,6 +27,7 @@ jobs:
                -builds_dir $(BUILDS_DIR)'
     displayName: 'Run project build'
   - task: PublishPipelineArtifact@1
+    timeoutInMinutes: 10
     condition: eq(variables.isMaster, true)
     inputs:
       targetPath: '$(Build.Repository.LocalPath)/$(RELEASE_DIR)'
