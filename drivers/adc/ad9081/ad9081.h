@@ -95,6 +95,8 @@ struct ad9081_phy {
 	uint32_t	sysref_average_cnt_exp;
 	bool		sysref_continuous_dis;
 	bool		is_initialized;
+	bool		tx_disable;
+	bool		rx_disable;
 	/* TX */
 	uint64_t	dac_frequency_hz;
 	/* The 4 DAC Main Datapaths */
@@ -168,6 +170,8 @@ struct ad9081_init_param {
 	bool		nco_sync_direct_sysref_mode_enable;
 	uint32_t	sysref_average_cnt_exp;
 	bool		continuous_sysref_mode_disable;
+	bool		tx_disable;
+	bool		rx_disable;
 	/* TX */
 	uint64_t	dac_frequency_hz;
 	/* The 4 DAC Main Datapaths */
