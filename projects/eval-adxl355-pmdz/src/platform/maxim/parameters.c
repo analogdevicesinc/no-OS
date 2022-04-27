@@ -1,7 +1,7 @@
 /***************************************************************************//**
- *   @file   platform_includes.h
- *   @brief  Includes for used platforms used by eval-adxl355-pmdz project.
- *   @author RBolboac (ramona.bolboaca@analog.com)
+ *   @file   parameters.c
+ *   @brief  Definition of Maxim platform data used by eval-adxl355-pmdz project.
+ *   @author Ciprian Regus (ciprian.regus@analog.com)
 ********************************************************************************
  * Copyright 2022(c) Analog Devices, Inc.
  *
@@ -36,22 +36,22 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __PLATFORM_INCLUDES_H__
-#define __PLATFORM_INCLUDES_H__
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#ifdef STM32_PLATFORM
-#include "stm32/parameters.h"
+#include "parameters.h"
+
+/******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
+#ifdef DUMMY_EXAMPLE
+struct max_uart_init_param xuip = {
+	.flow = UART_FLOW_DIS
+};
 #endif
 
-#ifdef MAXIM_PLATFORM
-#include "maxim/parameters.h"
-#endif
-
-#ifdef IIO_SUPPORT
-#include "iio_app.h"
-#endif
-
-#endif /* __PLATFORM_INCLUDES_H__ */
+struct max_spi_init_param xsip  = {
+	.numSlaves = 1,
+	.polarity = SPI_SS_POL_LOW
+};

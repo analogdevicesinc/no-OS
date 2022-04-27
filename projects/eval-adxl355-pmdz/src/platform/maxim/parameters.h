@@ -1,7 +1,8 @@
 /***************************************************************************//**
- *   @file   platform_includes.h
- *   @brief  Includes for used platforms used by eval-adxl355-pmdz project.
- *   @author RBolboac (ramona.bolboaca@analog.com)
+ *   @file   parameters.h
+ *   @brief  Definitions specific to Maxim platform used by eval-adxl355-pmdz
+ *           project.
+ *   @author Ciprian Regus (ciprian.regus@analog.com)
 ********************************************************************************
  * Copyright 2022(c) Analog Devices, Inc.
  *
@@ -36,22 +37,35 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __PLATFORM_INCLUDES_H__
-#define __PLATFORM_INCLUDES_H__
+#ifndef __PARAMETERS_H__
+#define __PARAMETERS_H__
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#ifdef STM32_PLATFORM
-#include "stm32/parameters.h"
-#endif
+#include "maxim_hal.h"
+#include "irq_extra.h"
+#include "spi_extra.h"
+#include "gpio_extra.h"
+#include "maxim_uart.h"
+#include "maxim_stdio.h"
 
-#ifdef MAXIM_PLATFORM
-#include "maxim/parameters.h"
-#endif
+/******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
 
 #ifdef IIO_SUPPORT
-#include "iio_app.h"
+#define INTC_DEVICE_ID 0
+#define UART_IRQ_ID     UART0_IRQn
 #endif
+#define UART_DEVICE_ID      0
+#define UART_BAUDRATE   57600
 
-#endif /* __PLATFORM_INCLUDES_H__ */
+#define SPI_DEVICE_ID    0
+#define SPI_CS          0
+#define SPI_OPS         &max_spi_ops
+
+extern struct max_uart_init_param xuip;
+extern struct max_spi_init_param xsip;
+
+#endif /* __PARAMETERS_H__ */
