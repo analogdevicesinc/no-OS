@@ -145,6 +145,7 @@ int main(void)
 	};
 	struct ad9081_init_param phy_param = {
 		.gpio_reset = &gpio_phy_resetb,
+		.ms_sync_en_gpio = NULL,
 		.spi_init = &phy_spi_init_param,
 		.dev_clk = &app_clk[0],
 		.jesd_tx_clk = &jesd_clk[1],

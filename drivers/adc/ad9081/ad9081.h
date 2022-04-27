@@ -77,6 +77,7 @@ struct dac_settings_cache {
 struct ad9081_phy {
 	no_os_spi_desc		*spi_desc;
 	no_os_gpio_desc		*gpio_reset;
+	no_os_gpio_desc		*ms_sync_en_gpio;
 	struct no_os_clk		*jesd_rx_clk;
 	struct no_os_clk		*jesd_tx_clk;
 	struct no_os_clk		*dev_clk;
@@ -171,6 +172,7 @@ struct link_init_param {
 struct ad9081_init_param {
 	no_os_spi_init_param	*spi_init;
 	no_os_gpio_init_param	*gpio_reset;
+	no_os_gpio_init_param	*ms_sync_en_gpio;
 	struct no_os_clk	*dev_clk;
 	struct no_os_clk	*jesd_rx_clk;
 	struct no_os_clk	*jesd_tx_clk;

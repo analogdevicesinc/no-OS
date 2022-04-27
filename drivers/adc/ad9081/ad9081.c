@@ -134,6 +134,27 @@ static int adi_ad9081_adc_nco_sync(adi_ad9081_device_t *device,
 	return API_CMS_ERROR_OK;
 }
 
+int adi_ad9081_device_gpio_set_highz(adi_ad9081_device_t *device, uint8_t gpio_index)
+{
+	int err;
+
+	AD9081_NULL_POINTER_RETURN(device);
+	AD9081_LOG_FUNC();
+	AD9081_INVALID_PARAM_RETURN(gpio_index > 5);
+
+	if ((gpio_index & 1) == 0) {
+		err = adi_ad9081_hal_bf_set(device,
+			REG_GPIO_CFG0_ADDR + (gpio_index >> 1), 0x0400, 0);
+		AD9081_ERROR_RETURN(err);
+	} else {
+		err = adi_ad9081_hal_bf_set(device,
+			REG_GPIO_CFG0_ADDR + (gpio_index >> 1), 0x0404, 0);
+		AD9081_ERROR_RETURN(err);
+	}
+
+	return API_CMS_ERROR_OK;
+}
+
 static int ad9081_nco_sync(struct ad9081_phy *phy, bool master)
 {
 	int ret;
@@ -1349,6 +1370,9 @@ static int ad9081_jesd204_link_running(struct jesd204_dev *jdev,
 	adi_ad9081_dac_duc_main_nco_hopf_gpio_as_hop_en_set(&phy->ad9081,
 		phy->tx_ffh_hopf_via_gpio_en);
 
+	if (phy->ms_sync_en_gpio)
+		no_os_gpio_set_value(phy->ms_sync_en_gpio, 0);
+
 	return JESD204_STATE_CHANGE_DONE;
 }
 
@@ -1371,8 +1395,12 @@ static int ad9081_jesd204_setup_stage1(struct jesd204_dev *jdev,
 	adi_cms_jesd_subclass_e subclass = JESD_SUBCLASS_0;
 	int ret;
 
-	if (reason != JESD204_STATE_OP_REASON_INIT)
+	if (reason != JESD204_STATE_OP_REASON_INIT) {
+		if (phy->ms_sync_en_gpio)
+			no_os_gpio_set_value(phy->ms_sync_en_gpio, 0);
+
 		return JESD204_STATE_CHANGE_DONE;
+	}
 
 	pr_debug("%s:%d reason %s\n", __func__, __LINE__, jesd204_state_op_reason_str(reason));
 
@@ -1427,6 +1455,16 @@ static int ad9081_jesd204_setup_stage1(struct jesd204_dev *jdev,
 	if (ret != 0)
 		return ret;
 
+	if (phy->ms_sync_en_gpio)
+		no_os_gpio_set_value(phy->ms_sync_en_gpio, 1);
+
+	if (jesd204_dev_is_top(jdev)) {
+		/* We need to make sure the master-slave master GPIO is enabled before we move on */
+		ret = adi_ad9081_device_nco_sync_gpio_set(&phy->ad9081, phy->sync_ms_gpio_num, 1);
+		if (ret != 0)
+			return ret;
+	}
+
 	return JESD204_STATE_CHANGE_DONE;
 }
 
@@ -1464,6 +1502,10 @@ static int ad9081_jesd204_setup_stage3(struct jesd204_dev *jdev,
 	pr_debug("%s:%d reason %s\n", __func__, __LINE__, jesd204_state_op_reason_str(reason));
 
 	ret = adi_ad9081_device_nco_sync_post(&phy->ad9081);
+	if (ret != 0)
+		return ret;
+
+	ret = adi_ad9081_device_gpio_set_highz(&phy->ad9081, phy->sync_ms_gpio_num);
 	if (ret != 0)
 		return ret;
 
@@ -1533,9 +1575,19 @@ int32_t ad9081_init(struct ad9081_phy **dev,
 	if (ret < 0)
 		goto error_1;
 
-	ret = no_os_spi_init(&phy->spi_desc, init_param->spi_init);
+	ret = no_os_gpio_get_optional(&phy->ms_sync_en_gpio, init_param->ms_sync_en_gpio);
 	if (ret < 0)
 		goto error_2;
+	if (phy->ms_sync_en_gpio)
+		no_os_gpio_set_value(phy->ms_sync_en_gpio, 0);
+
+	ret = no_os_gpio_set_value(phy->ms_sync_en_gpio, NO_OS_GPIO_LOW);
+	if (ret < 0)
+		goto error_3;
+
+	ret = no_os_spi_init(&phy->spi_desc, init_param->spi_init);
+	if (ret < 0)
+		goto error_3;
 
 	phy->dev_clk = init_param->dev_clk;
 	phy->jesd_rx_clk = init_param->jesd_rx_clk;
@@ -1555,42 +1607,42 @@ int32_t ad9081_init(struct ad9081_phy **dev,
 
 	ret = no_os_gpio_direction_output(phy->gpio_reset, 1);
 	if (ret < 0)
-		goto error_3;
+		goto error_4;
 
 	ret = adi_ad9081_device_reset(&phy->ad9081, AD9081_HARD_RESET_AND_INIT);
 	if (ret < 0) {
 		printf("%s: reset/init failed (%"PRId32")\n", __func__, ret);
-		goto error_3;
+		goto error_4;
 	}
 
 	ret = adi_ad9081_device_chip_id_get(&phy->ad9081, &chip_id);
 	if (ret < 0) {
 		printf("%s: chip_id failed (%"PRId32")\n", __func__, ret);
-		goto error_3;
+		goto error_4;
 	}
 
 	if ((chip_id.prod_id & CHIPID_MASK) != CHIPID_AD9081) {
 		printf("%s: Unrecognized CHIP_ID 0x%X\n", __func__,
 		       chip_id.prod_id);
 		ret = -1;
-		goto error_3;
+		goto error_4;
 	}
 
 	ret = ad9081_setup(phy);
 	if (ret < 0) {
 		printf("%s: ad9081_setup failed (%"PRId32")\n", __func__, ret);
-		goto error_3;
+		goto error_4;
 	}
 
 	ret = jesd204_dev_register(&jdev, &jesd204_ad9081_init);
 	if (ret < 0)
-		goto error_3;
+		goto error_4;
 	phy->jdev = jdev;
 	priv = jesd204_dev_priv(jdev);
 	priv->phy = phy;
 	ret = jesd204_fsm_start(jdev, JESD204_LINKS_ALL);
 	if (ret < 0)
-		goto error_3;
+		goto error_4;
 
 	adi_ad9081_device_api_revision_get(&phy->ad9081, &api_rev[0],
 					   &api_rev[1], &api_rev[2]);
@@ -1603,8 +1655,10 @@ int32_t ad9081_init(struct ad9081_phy **dev,
 
 	return 0;
 
-error_3:
+error_4:
 	no_os_spi_remove(phy->spi_desc);
+error_3:
+	no_os_gpio_remove(phy->ms_sync_en_gpio);
 error_2:
 	no_os_gpio_remove(phy->gpio_reset);
 error_1:
