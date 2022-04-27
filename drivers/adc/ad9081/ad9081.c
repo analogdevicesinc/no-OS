@@ -151,7 +151,7 @@ static int ad9081_nco_sync(struct ad9081_phy *phy, bool master)
 		return adi_ad9081_adc_nco_master_slave_sync(&phy->ad9081,
 					     master,
 					     1, /* trigger_src */
-					     0, /* gpio_index */
+					     phy->sync_ms_gpio_num, /* gpio_index */
 					     phy->nco_sync_ms_extra_lmfc_num);
 }
 
@@ -1070,6 +1070,8 @@ int32_t ad9081_parse_init_param(struct ad9081_phy *phy,
 	}
 	for (i = 0; i < 6; i++)
 		phy->rx_ffh_gpio_mux_sel[i] = init_param->rx_ffh_gpio_mux_sel[i];
+
+	phy->sync_ms_gpio_num = init_param->master_slave_sync_gpio_num;
 
 	/* RX JESD Link */
 	if (init_param->jtx_link_rx[0])

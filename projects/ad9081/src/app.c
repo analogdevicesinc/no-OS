@@ -203,6 +203,7 @@ int main(void)
 		.rx_nco_channel_select_mode = {AD9081_FFH_CHAN_SEL_4GPIO_MODE,
 				AD9081_FFH_CHAN_SEL_4GPIO_MODE, AD9081_FFH_CHAN_SEL_4GPIO_MODE,
 				AD9081_FFH_CHAN_SEL_4GPIO_MODE},
+		.master_slave_sync_gpio_num = 0,
 	};
 
 	struct axi_adc_init rx_adc_init = {
