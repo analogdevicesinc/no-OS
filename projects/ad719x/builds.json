@@ -1,0 +1,10 @@
+{
+      "xilinx": {
+            "dummy_example": {
+                  "flags": "DUMMY_EXAMPLE=y",
+                  "hardware": [
+                        "adv7511_zed"
+                  ]
+            }
+      }
+}
