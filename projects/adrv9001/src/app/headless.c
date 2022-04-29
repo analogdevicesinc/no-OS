@@ -68,7 +68,7 @@
 #include "Navassa_CMOS_profile.h"
 
 /* ADC/DAC Buffers */
-#if defined(DAC_DMA_EXAMPLE) || defined(IIO_SUPPORT)
+#if defined(DMA_EXAMPLE) || defined(IIO_SUPPORT)
 static uint32_t dac_buffers[IIO_DEV_COUNT][DAC_BUFFER_SAMPLES]
 __attribute__((aligned));
 static uint16_t adc_buffers[IIO_DEV_COUNT][ADC_BUFFER_SAMPLES]
@@ -441,7 +441,7 @@ int main(void)
 	}
 #endif
 
-#ifdef DAC_DMA_EXAMPLE
+#ifdef DMA_EXAMPLE
 	axi_dac_load_custom_data(phy.tx1_dac, sine_lut_iq,
 				 NO_OS_ARRAY_SIZE(sine_lut_iq),
 				 (uintptr_t)dac_buffers[0]);
@@ -544,11 +544,11 @@ int main(void)
 				  ADRV9001_I_Q_CHANNELS * /* nr of channels */
 				  2 /* bytes per sample */);
 #endif /* XILINX_PLATFORM */
-	printf("DAC_DMA_EXAMPLE: address=%#lx samples=%lu channels=%u bits=%lu\n",
+	printf("DMA_EXAMPLE: address=%#lx samples=%lu channels=%u bits=%lu\n",
 	       (uintptr_t)adc_buffers[1], 16384 * rx2_adc_init.num_channels,
 	       rx2_adc_init.num_channels, 8 * sizeof(adc_buffers[1][0]));
 #endif
-	printf("DAC_DMA_EXAMPLE: address=%#lx samples=%lu channels=%u bits=%lu\n",
+	printf("DMA_EXAMPLE: address=%#lx samples=%lu channels=%u bits=%lu\n",
 	       (uintptr_t)adc_buffers[0], 16384 * rx1_adc_init.num_channels,
 	       rx1_adc_init.num_channels, 8 * sizeof(adc_buffers[0][0]));
 #endif
