@@ -505,6 +505,11 @@ int main(void)
 		.dest_addr = (uintptr_t)adc_buffers[0]
 	};
 	/* Transfer 16384 samples from ADC to MEM */
+#ifdef ADRV9002_RX2TX2
+	axi_adc_update_active_channels(phy.rx1_adc, 0xf);
+#else
+	axi_adc_update_active_channels(phy.rx1_adc, 0x3);
+#endif
 	axi_dmac_transfer_start(phy.rx1_dmac, &read_transfer1);
 	ret = axi_dmac_transfer_wait_completion(phy.rx1_dmac, 500);
 	if(ret)
@@ -528,6 +533,7 @@ int main(void)
 		// Address of data destination
 		.dest_addr = (uintptr_t)adc_buffers[1]
 	};
+	axi_adc_update_active_channels(phy.rx2_adc, 0x3);
 	axi_dmac_transfer_start(phy.rx2_dmac,&read_transfer2);
 	ret = axi_dmac_transfer_wait_completion(phy.rx2_dmac, 500);
 	if(ret)
