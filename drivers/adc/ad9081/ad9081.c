@@ -52,6 +52,7 @@
 #include <inttypes.h>
 
 #define CHIPID_AD9081	0x9081
+#define CHIPID_AD9082	0x9082
 #define CHIPID_MASK	0xFFFF
 
 #define for_each_cddc(bit, mask) \
@@ -1150,7 +1151,8 @@ int32_t ad9081_init(struct ad9081_phy **dev,
 		goto error_3;
 	}
 
-	if ((chip_id.prod_id & CHIPID_MASK) != CHIPID_AD9081) {
+	if (((chip_id.prod_id & CHIPID_MASK) != CHIPID_AD9081) &&
+		((chip_id.prod_id & CHIPID_MASK) != CHIPID_AD9082)) {
 		printf("%s: Unrecognized CHIP_ID 0x%X\n", __func__,
 		       chip_id.prod_id);
 		ret = -1;
