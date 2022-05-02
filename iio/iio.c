@@ -117,6 +117,7 @@ static const char * const iio_modifier_names[] = {
 	[IIO_MOD_X] = "x",
 	[IIO_MOD_Y] = "y",
 	[IIO_MOD_Z] = "z",
+	[IIO_MOD_TEMP_AMBIENT] = "ambient"
 };
 
 /* Parameters used in show and store functions */
