@@ -86,6 +86,7 @@ enum iio_modifier {
 	IIO_MOD_X,
 	IIO_MOD_Y,
 	IIO_MOD_Z,
+	IIO_MOD_TEMP_AMBIENT
 };
 
 /**
