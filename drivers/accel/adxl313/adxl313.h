@@ -210,8 +210,12 @@
 #define ADXL313_SELF_TEST_SAMPLES				10
 
 /* Self-test multiplication factor */
+<<<<<<< HEAD
 #define ADXL312_SELF_TEST_MULT					2900
 #define ADXL313_SELF_TEST_MULT					976
+=======
+#define ADXL313_SELF_TEST_MULT					956
+>>>>>>> 2de0ab7c... drivers:accel:adxl313: ADXL313 driver implementation
 #define ADXL313_SELF_TEST_DIV					1000
 #define ADXL314_SELF_TEST_MULT					50
 

@@ -233,6 +233,7 @@ int adxl313_init(struct adxl313_dev **device,
 		if (dev->dev_type == ID_ADXL312) {
 			/* ADXL312 */
 			dev->range = (reg_value & ADXL313_REG_DATA_FORMAT_RANGE) + ADXL313_RANGE_FACTOR;
+<<<<<<< HEAD
 			/* Compute resolution for ADXL312 part depending on FULL_RES bit
 			 * and range. */
 			if (reg_value & ADXL313_REG_DATA_FORMAT_FULL_RES) {
@@ -251,6 +252,18 @@ int adxl313_init(struct adxl313_dev **device,
 			} else {
 				dev->resolution = ADXL313_10_BIT_RES;
 			}
+=======
+		} else {
+			/* ADXL313 */
+			dev->range = reg_value & ADXL313_REG_DATA_FORMAT_RANGE;
+		}
+		/* Compute resolution for ADXL313 part depending on FULL_RES bit
+		 * and range. */
+		if (reg_value & ADXL313_REG_DATA_FORMAT_FULL_RES) {
+			dev->resolution = dev->range;
+		} else {
+			dev->resolution = ADXL313_10_BIT_RES;
+>>>>>>> 2de0ab7c... drivers:accel:adxl313: ADXL313 driver implementation
 		}
 	}
 
@@ -1901,14 +1914,22 @@ int adxl313_set_range(struct adxl313_dev *dev, enum adxl313_range range)
 				    no_os_field_prep(mask, range_val),
 				    mask);
 	if (!ret) {
+<<<<<<< HEAD
 		dev->range = range;
+=======
+		dev->range = range_val;
+>>>>>>> 2de0ab7c... drivers:accel:adxl313: ADXL313 driver implementation
 
 		ret = adxl313_get_full_res_setting(dev, &full_res);
 		if (ret)
 			return ret;
 
 		if (full_res)
+<<<<<<< HEAD
 			dev->resolution = range_val;
+=======
+			dev->resolution = dev->range;
+>>>>>>> 2de0ab7c... drivers:accel:adxl313: ADXL313 driver implementation
 		else
 			dev->resolution = ADXL313_10_BIT_RES;
 	}
@@ -1981,6 +2002,7 @@ int adxl313_self_test(struct adxl313_dev *dev)
 	if (ret)
 		return ret;
 
+<<<<<<< HEAD
 	/* If ADXL312, ADXL313, set device to full resolution, +/- 12g, 4g range, respectively. */
 	if (dev->dev_type == ID_ADXL312 || dev->dev_type == ID_ADXL313) {
 		ret = adxl313_enable_full_res(dev);
@@ -1995,6 +2017,18 @@ int adxl313_self_test(struct adxl313_dev *dev)
 	}
 	if (ret)
 		return ret;
+=======
+	/* If ADXL313, set device to full resolution, +/- 4g range. */
+	if (dev->dev_type == ID_ADXL313) {
+		ret = adxl313_enable_full_res(dev);
+		if (ret)
+			return ret;
+
+		ret = adxl313_set_range(dev, ADXL313_4G_RANGE);
+		if (ret)
+			return ret;
+	}
+>>>>>>> 2de0ab7c... drivers:accel:adxl313: ADXL313 driver implementation
 
 	/* 2. Clear the LOW_POWER bit (Bit D4) in the BW_RATE register. */
 	ret = adxl313_set_low_power_mode(dev, DISABLE_E);
@@ -2093,13 +2127,18 @@ int adxl313_self_test(struct adxl313_dev *dev)
 			pr_info("Self-test passed.\n");
 		else
 			pr_info("Self-test failed.\n");
+<<<<<<< HEAD
 	} else if (dev->dev_type == ID_ADXL313) {
+=======
+	} else {
+>>>>>>> 2de0ab7c... drivers:accel:adxl313: ADXL313 driver implementation
 		zst = (zst * ADXL313_SELF_TEST_MULT) / ADXL313_SELF_TEST_DIV;
 		if ((zst < ADXL313_SELF_TEST_MAX_DEVIATION) &&
 		    (zst > ADXL313_SELF_TEST_MIN_DEVIATION))
 			pr_info("Self-test passed.\n");
 		else
 			pr_info("Self-test failed.\n");
+<<<<<<< HEAD
 	} else {
 		zst = (zst * ADXL312_SELF_TEST_MULT) / ADXL313_SELF_TEST_DIV;
 		if ((zst < ADXL312_SELF_TEST_MAX_DEVIATION) &&
@@ -2107,6 +2146,8 @@ int adxl313_self_test(struct adxl313_dev *dev)
 			pr_info("Self-test passed.\n");
 		else
 			pr_info("Self-test failed.\n");
+=======
+>>>>>>> 2de0ab7c... drivers:accel:adxl313: ADXL313 driver implementation
 	}
 
 	return ret;
@@ -2141,7 +2182,11 @@ static void adxl313_compute_multiplier(struct adxl313_dev *dev)
 			/* We have 10-bit resolution, 2.9 for +/-1.5 g, 5.8 for +/-3 g, 11.6  for +/-6 g
 			 * and 23.2 for +/-12 g (mg/LSB). */
 			dev->scale_factor_mult = (ADXL312_ACC_SCALE_FACTOR_MUL_FULL_RES <<
+<<<<<<< HEAD
 						  (dev->range - ADXL313_RANGE_FACTOR));
+=======
+						  (dev->range));
+>>>>>>> 2de0ab7c... drivers:accel:adxl313: ADXL313 driver implementation
 		else
 			/* We have full resolution for each one of the ranges. */
 			dev->scale_factor_mult = ADXL312_ACC_SCALE_FACTOR_MUL_FULL_RES;
