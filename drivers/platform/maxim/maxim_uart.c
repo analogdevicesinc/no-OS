@@ -65,6 +65,16 @@ static uint8_t c;
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
 
+/**
+ * @brief Empty function used to discard a callback
+ * @param req - UART request struct
+ * @param result - status of the request (error code)
+ */
+static void _discard_callback(mxc_uart_req_t *req, int result)
+{
+
+}
+
 void uart_rx_callback(void *context)
 {
 	struct no_os_uart_desc *d = context;
@@ -437,6 +447,16 @@ int32_t no_os_uart_remove(struct no_os_uart_desc *desc)
 	if (!desc)
 		return -EINVAL;
 
+	/**
+	 * Unregistering the callback is necessary only for this target
+	 * because this operation is not done by the driver on init.
+	 */
+#if TARGET_NUM == 32655
+	uint32_t id = desc->device_id;
+	uart_irq_state[id].uart = MXC_UART_GET_UART(id);
+	uart_irq_state[id].callback = _discard_callback;
+	MXC_UART_AbortAsync(MXC_UART_GET_UART(id));
+#endif
 	MXC_UART_Shutdown(MXC_UART_GET_UART(desc->device_id));
 	free(desc);
 
