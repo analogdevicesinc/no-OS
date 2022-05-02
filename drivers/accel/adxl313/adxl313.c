@@ -281,6 +281,7 @@ int adxl313_init(struct adxl313_dev **device,
 	ret = adxl313_read(dev, ADXL313_REG_BW_RATE, 1, &reg_value);
 	if (ret)
 		goto error_com;
+
 	dev->odr = (reg_value & ADXL313_RATE_MSK) - ADXL313_ODR_OFFSET_VAL;
 
 	/* Get offsets. */
