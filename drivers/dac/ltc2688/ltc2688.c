@@ -140,8 +140,16 @@ static int32_t _ltc2688_spi_update_bits(struct ltc2688_dev *dev, uint8_t reg,
  */
 int32_t ltc2688_set_pwr_dac(struct ltc2688_dev *dev, uint16_t setting)
 {
-	return _ltc2688_spi_write(dev, LTC2688_CMD_POWERDOWN_REG,
-				  setting);
+	int32_t ret;
+
+	ret = _ltc2688_spi_write(dev, LTC2688_CMD_POWERDOWN_REG,
+				 setting);
+	if (ret < 0)
+		return ret;
+
+	dev->pwd_dac_setting = setting;
+
+	return 0;
 }
 
 /**
