@@ -299,6 +299,8 @@ typedef struct {
 	bool ref_en;
 	/* Number of Channels */
 	uint8_t num_channels;
+	/* Number of Setups */
+	uint8_t num_setups;
 	/* Channel Mapping */
 	struct ad717x_channel_map chan_map[AD717x_MAX_CHANNELS];
 	/* Setups */
@@ -521,6 +523,7 @@ typedef struct {
 #define AD717X_CHMAP_REG_AINNEG_MSK    		NO_OS_GENMASK(4,0)
 #define AD717X_ADCMODE_REG_MODE_MSK   		NO_OS_GENMASK(6,4)
 #define AD717X_SETUP_CONF_REG_REF_SEL_MSK	NO_OS_GENMASK(5,4)
+#define AD717x_ODR_MSK				NO_OS_GENMASK(4,0)
 
 /*****************************************************************************/
 /************************ Functions Declarations *****************************/
