@@ -13,6 +13,7 @@ binary = sys.argv[2]
 project = sys.argv[3]
 maxim_libraries = sys.argv[4]
 target = sys.argv[5]
+arm_toolchain_path = sys.argv[6]
 
 run_conf = run_file.read()
 debug_conf = debug_file.read()
@@ -24,7 +25,7 @@ run_config = json.loads(run_conf)
 
 debug_config['cwd'] = os.path.join(maxim_libraries, "..", "Tools", "OpenOCD", "scripts")
 debug_config['serverpath'] = os.path.join(maxim_libraries, "..", "Tools", "OpenOCD", "openocd")
-debug_config['armToolchainPath'] = os.path.join(maxim_libraries, "..", "Tools", "GNUTools", "bin")
+debug_config['armToolchainPath'] = os.path.join(arm_toolchain_path)
 debug_config['configFiles'].append(os.path.join("interface", "cmsis-dap.cfg"))
 debug_config['configFiles'].append(os.path.join("target", target + ".cfg"))
 debug_config['svdFile'] = os.path.join(maxim_libraries, "CMSIS", "Device", "Maxim", target.upper(), "Include", target + ".svd")
