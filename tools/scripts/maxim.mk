@@ -3,7 +3,7 @@ $(error MAXIM_LIBRARIES not defined.$(ENDL))
 endif
 
 UNIX_TOOLS_PATH := $(MAXIM_LIBRARIES)/../Tools/MinGW/msys/1.0/bin
-ARM_COMPILER_PATH := $(MAXIM_LIBRARIES)/../Tools/GNUTools/bin
+ARM_COMPILER_PATH := $(realpath $(dir $(call rwildcard, $(MAXIM_LIBRARIES)/../Tools/GNUTools/, *bin/arm-none-eabi-gcc)))
 
 export PATH := $(ARM_COMPILER_PATH):$(PATH)
 ifeq ($(OS),Windows_NT)
