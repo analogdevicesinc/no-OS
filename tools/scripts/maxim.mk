@@ -105,7 +105,7 @@ $(PROJECT_TARGET):
 	$(MUTE) $(call set_one_time_rule,$@)
 
 $(PLATFORM)_sdkopen:
-	$(shell python3 $(PLATFORM_TOOLS)/run_config.py $(NO-OS) $(BINARY) $(PROJECT) $(MAXIM_LIBRARIES) $(TARGET_LC))
+	$(shell python3 $(PLATFORM_TOOLS)/run_config.py $(NO-OS) $(BINARY) $(PROJECT) $(MAXIM_LIBRARIES) $(TARGET_LC) $(ARM_COMPILER_PATH))
 	$(MUTE) code $(PROJECT)
 
 $(PLATFORM)_sdkclean: clean
