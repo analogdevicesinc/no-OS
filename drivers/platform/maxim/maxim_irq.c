@@ -65,7 +65,7 @@ static struct event_list _events[] = {
 };
 
 extern mxc_uart_req_t uart_irq_state[MXC_UART_INSTANCES];
-extern is_callback;
+extern bool is_callback;
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
