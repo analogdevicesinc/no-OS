@@ -604,4 +604,8 @@ int ad717x_enable_buffers(ad717x_dev* device, bool inbuf_en,
 int ad717x_single_read(ad717x_dev* device, uint8_t id,
 		       int32_t *adc_raw_data);
 
+/* Configure device ODR */
+int32_t ad717x_configure_device_odr(ad717x_dev *dev, uint8_t filtcon_id,
+				    uint8_t odr_sel);
+
 #endif /* __AD717X_H__ */
