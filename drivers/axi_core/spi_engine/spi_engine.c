@@ -725,12 +725,12 @@ int32_t spi_engine_write_and_read(struct spi_desc *desc,
 	word_len = spi_get_word_lenght(desc_extra);
 
 	switch(desc_extra->number_of_lines) {
-	case SPI_DUAL:
+	case SPI_QUAD:
 		msg.cmds->next = NULL;
 		msg.cmds->cmd = CS_HIGH;
 		spi_engine_queue_add_cmd(&msg.cmds, CS_LOW);
 		if(data[0] & 0x80) {
-			spi_engine_queue_add_cmd(&msg.cmds, WRITE(2));
+			spi_engine_queue_add_cmd(&msg.cmds, WRITE(1));
 			spi_engine_queue_add_cmd(&msg.cmds, READ(bytes_number-1));
 		}
 		else {
@@ -738,23 +738,9 @@ int32_t spi_engine_write_and_read(struct spi_desc *desc,
 		}
 		spi_engine_queue_add_cmd(&msg.cmds, CS_HIGH);
 
-		tmp = data[0];
-		tmp = 0;
-		for(i = 0; i<8; i++) {
-			tmp = tmp << 2;
-			tmp |= (data[0] & 0x80) >> 7;
-			if (i == 3)
-				data_p[0] = tmp;
-			data[0] = data[0] << 1;
-		}
-		data_p[1] = tmp;
-
-		for(i = 1; i < bytes_number; i++)
-			data_p[i+1] = data[i];
-
 		/* Pack the bytes into engine WORDS */
 		for (i = 0; i < bytes_number; i++)
-			msg.tx_buf[i / word_len] |= data_p[i] << (desc_extra->data_width-
+			msg.tx_buf[i / word_len] |= data[i] << (desc_extra->data_width-
 								(i % word_len + 1) * 8);
 
 		ret = spi_engine_transfer_message(desc, &msg);

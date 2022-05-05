@@ -83,7 +83,6 @@ and will be used inside the function call */
 
 enum number_of_miso {
 	SPI_CLASIC = 0,
-	SPI_DUAL = 2,
 	SPI_QUAD = 4
 };
 

@@ -74,7 +74,7 @@ static uint8_t data_buffer[MAX_BUFF_SAMPLES];
 #define AD3552R_SPI_ENGINE_BASEADDR		XPAR_SPI_AD3552R_DAC_AXI_REGMAP_BASEADDR
 #define AD3552R_SPI_CS					0
 #define AD3552R_SPI_ENG_REF_CLK_FREQ_HZ	120000000
-#define AD3552R_SPI_MAX_FREQ_HZ			1200000
+#define AD3552R_SPI_MAX_FREQ_HZ			12000000
 #define AD3552R_CLKGEN_BASEADDR			XPAR_SPI_CLKGEN_BASEADDR
 #define AD3552R_CLKGEN_CLK_FREQ_HZ		100000000
 
@@ -85,6 +85,7 @@ struct test_init_param {
 	struct spi_init_param *spi_init;
 	/** GPIO */
 	struct gpio_init_param *gpio_resetn;
+	struct gpio_init_param *gpio_qspi;
 	/** Clock gen for hdl design init structure */
 	struct axi_clkgen_init *clkgen_init;
 	/** Clock generator rate */
@@ -99,6 +100,7 @@ struct test_init_param {
 struct test_desc {
 	struct spi_desc *spi;
 	struct gpio_desc *reset;
+	struct gpio_desc *qspi;
 	struct axi_clkgen *test_clkgen;
 	uint8_t chip_id;
 };
@@ -118,7 +120,7 @@ int32_t init_gpios_to_defaults()
 	const uint8_t gpios_initial_value[][2] = {
 		[GPIO_RESET_N] = {GPIO_OUT, GPIO_HIGH},
 		[GPIO_LDAC_N] = {GPIO_OUT, GPIO_HIGH},
-		[GPIO_SPI_QPI] = {GPIO_OUT, GPIO_LOW},
+		[GPIO_SPI_QPI] = {GPIO_OUT, GPIO_HIGH},
 		[GPIO_ALERT_N] = {GPIO_IN, 0},
 		[GPIO_SYNC_EVENTS] = {GPIO_OUT, GPIO_HIGH},
 		[GPIO_RED] = {GPIO_OUT, GPIO_HIGH},
@@ -159,7 +161,7 @@ int32_t test_spi_reg_write(struct test_desc *dev, uint8_t addr, uint8_t *val)
 	buf[1] = *val;
 	buf[2] = 0x00;
 
-	ret = spi_write_and_read(dev->spi, buf, 3);
+	ret = spi_write_and_read(dev->spi, buf, 2);
 
 	return ret;
 }
@@ -175,20 +177,6 @@ int32_t test_spi_reg_read(struct test_desc *dev, uint8_t addr, uint8_t *val)
 
 	ret = spi_write_and_read(dev->spi, buf, 2);
 	*val = buf[1];
-
-	return ret;
-}
-
-int32_t test_spi_set_dual(struct test_desc *dev)
-{
-	int32_t ret;
-	uint8_t buf[3];
-
-	buf[0] = 0x0f;
-	buf[1] = 0x10;
-	buf[2] = 0x00;
-
-	ret = spi_write_and_read(dev->spi, buf, 4);
 
 	return ret;
 }
@@ -239,11 +227,20 @@ int32_t test_init(struct test_desc **desc,
 	if (ret != SUCCESS)
 		goto err_spi;
 
+	ret = gpio_get_optional(&dev->qspi, init_param->gpio_qspi);
+	if (ret != SUCCESS)
+		goto err_qspi;
+
+	ret = gpio_direction_output(dev->qspi, GPIO_OUT);
+	if (ret != SUCCESS)
+		goto err_qspi;
+	gpio_set_value(dev->qspi, GPIO_HIGH);
+
 	ret = gpio_get_optional(&dev->reset, init_param->gpio_resetn);
 	if (ret != SUCCESS)
 		goto err_reset;
 
-	ret = gpio_direction_output(dev->reset, GPIO_HIGH);
+	ret = gpio_direction_output(dev->reset, GPIO_OUT);
 	if (ret != SUCCESS)
 		goto err_reset;
 
@@ -253,32 +250,22 @@ int32_t test_init(struct test_desc **desc,
 
 	spi_engine_set_transfer_width(dev->spi, 8);
 
-//	ret = test_spi_set_single_inst(dev);
-//	if (ret != SUCCESS) {
-//		pr_err("Fail to set to single instruction: %"PRIi32"\n", ret);
-//		goto err_reset;
-//	};
-
-	ret = test_spi_set_dual(dev);
-	if (ret != SUCCESS) {
-		pr_err("Fail to set IC to Dual: %"PRIi32"\n", ret);
-		goto err_reset;
-	};
-
-	val = 0xa5;
-	ret = test_spi_reg_write(dev, 0x29, &val);
+	val = 0x15;
+	ret = test_spi_reg_write(dev, AD3552R_REG_ADDR_SCRATCH_PAD, &val);
 	if (ret != SUCCESS) {
 		pr_err("Fail read PRODUCT_ID_L: %"PRIi32"\n", ret);
 		goto err_reset;
 	};
 
-	ret = test_spi_reg_read(dev, 0x29, &val);
+	ret = test_spi_reg_read(dev, AD3552R_REG_ADDR_SCRATCH_PAD, &val);
 	if (ret != SUCCESS) {
 		pr_err("Fail read PRODUCT_ID_L: %"PRIi32"\n", ret);
 		goto err_reset;
 	};
 
 	return SUCCESS;
+err_qspi:
+	gpio_remove(dev->qspi);
 err_reset:
 	gpio_remove(dev->reset);
 err_spi:
@@ -302,7 +289,7 @@ int main()
 		.spi_engine_baseaddr = AD3552R_SPI_ENGINE_BASEADDR,
 		.cs_delay = 0,
 		.data_width = 32,
-		.number_of_lines = SPI_DUAL,
+		.number_of_lines = SPI_QUAD,
 	};
 
 	struct spi_init_param spi_init = {
@@ -325,10 +312,17 @@ int main()
 		.extra = &xil_gpio_param
 	};
 
+	struct gpio_init_param qspi_param = {
+		.number = GPIO_OFFSET + GPIO_SPI_QPI,
+		.platform_ops = &xil_gpio_ops,
+		.extra = &xil_gpio_param
+	};
+
 	struct test_init_param test_init_param = {
 		.device_id = 1,
 		.spi_init = &spi_init,
 		.gpio_resetn = &reset_param,
+		.gpio_qspi = &qspi_param,
 		.clkgen_init = &clkgen_test_init,
 		.spi_clkgen_rate = AD3552R_SPI_ENG_REF_CLK_FREQ_HZ
 	};
