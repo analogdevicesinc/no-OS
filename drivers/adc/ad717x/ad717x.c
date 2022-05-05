@@ -738,6 +738,39 @@ int32_t AD717X_UpdateCRCSetting(ad717x_dev *device)
 	return 0;
 }
 
+/**
+ * @brief Configure ODR for the device
+ * @param dev - The AD717x Device descriptor
+ * @param filtcon_id - Filter Configuration Register ID (Number)
+ * @param odr_sel - ODR[4:0] bitfield value as a decimal
+ * @return 0 in case of success, negative error code otherwise
+ */
+int32_t ad717x_configure_device_odr(ad717x_dev *dev,
+				    uint8_t filtcon_id,
+				    uint8_t odr_sel)
+{
+	ad717x_st_reg *filtcon_reg;
+	int32_t ret;
+
+	/* Retrieve the FILTCON register */
+	filtcon_reg = AD717X_GetReg(dev,
+				    AD717X_FILTCON0_REG + filtcon_id);
+	if (!filtcon_reg) {
+		return -EINVAL;
+	}
+
+	/* Clear the ODR bits, configure the requested ODR */
+	filtcon_reg->value &= ~(AD717x_ODR_MSK);
+	filtcon_reg->value |= AD717X_FILT_CONF_REG_ODR(odr_sel);
+
+	ret = AD717X_WriteRegister(dev, AD717X_FILTCON0_REG + filtcon_id);
+	if (ret) {
+		return ret;
+	}
+
+	return 0;
+}
+
 /***************************************************************************//**
 * @brief Initializes the AD717X.
 *
@@ -830,6 +863,11 @@ int32_t AD717X_Init(ad717x_dev **device,
 						 init_param.setups[setup_index].input_buff,
 						 init_param.setups[setup_index].ref_buff,
 						 setup_index);
+		if (ret < 0)
+			return ret;
+
+		ret = ad717x_configure_device_odr(dev, setup_index,
+						  init_param.filter_configuration[setup_index].odr);
 		if (ret < 0)
 			return ret;
 	}
