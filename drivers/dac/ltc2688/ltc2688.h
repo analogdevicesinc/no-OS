@@ -139,6 +139,7 @@ struct ltc2688_dev {
 	uint16_t			pwd_dac_setting;
 	uint16_t			dither_toggle_en;
 	bool				dither_mode[16];
+	uint16_t			dac_code[16];
 	enum ltc2688_voltage_range 	crt_range[16];
 	enum ltc2688_dither_phase	dither_phase[16];
 	enum ltc2688_dither_period	dither_period[16];

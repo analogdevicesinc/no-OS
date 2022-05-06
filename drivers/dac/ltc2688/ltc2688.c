@@ -395,6 +395,8 @@ int32_t ltc2688_set_voltage(struct ltc2688_dev *dev, uint8_t channel,
 	if(code > 0xFFFF)
 		code = 0xFFFF;
 
+	dev->dac_code[channel] = code;
+
 	/* Write to the Data Register of the DAC. */
 	return _ltc2688_spi_write(dev, LTC2688_CMD_CH_CODE_UPDATE(channel), code);
 }
