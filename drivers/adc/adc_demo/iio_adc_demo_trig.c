@@ -44,89 +44,21 @@
 #include <string.h>
 #include "no_os_error.h"
 #include "iio.h"
+#include "iio_trigger.h"
 #include "iio_adc_demo.h"
-
-/******************************************************************************/
-/************************ Functions Declarations ******************************/
-/******************************************************************************/
-static int iio_attr_trigger_now(void *device, char *buf, uint32_t len,
-				const struct iio_ch_info *channel,
-				intptr_t priv);
 
 /******************************************************************************/
 /************************ Variable Declarations *******************************/
 /******************************************************************************/
-static struct iio_attribute iio_attr_trig_attributes[] = {
+static struct iio_attribute trig_attr[] = {
 	{
 		.name = "trigger_now",
-		.store = iio_attr_trigger_now
+		.store = iio_sw_trig_handler
 	},
 	END_ATTRIBUTES_ARRAY
 };
 
-struct iio_trigger adc_demo_iio_software_trigger_desc = {
+struct iio_trigger adc_iio_trig_desc = {
 	.is_synchronous = false,
-	.attributes = iio_attr_trig_attributes,
+	.attributes = trig_attr,
 };
-
-/******************************************************************************/
-/************************ Functions Definitions *******************************/
-/******************************************************************************/
-/***************************************************************************//**
- * @brief Handles the write request for trigger_now attribute.
- *
- * @param trig    - The iio trigger structure.
- * @param buf     - Command buffer to be filled with the data to be written.
- * @param len     - Length of the received command buffer in bytes.
- * @param channel - Command channel info (is NULL).
- * @param priv    - Command attribute id.
- *
- * @return ret    - Result of the writing procedure.
-*******************************************************************************/
-static int iio_attr_trigger_now(void *trig, char *buf, uint32_t len,
-				const struct iio_ch_info *channel,
-				intptr_t priv)
-{
-	struct adc_demo_trig *desc = trig;
-	iio_process_trigger_type(*desc->iio_desc, desc->name);
-
-	return 0;
-}
-
-/***************************************************************************//**
- * @brief Initialize adc_demo software trigger.
- *
- * @param iio_trig   - The iio trigger structure.
- * @param init_param - The structure that contains the sw trigger initial params.
- *
- * @return ret       - Result of the initialization procedure.
-*******************************************************************************/
-int32_t adc_demo_software_trigger_init(struct adc_demo_trig **iio_trig,
-				       struct adc_demo_sw_trig_init_param *init_param)
-{
-	struct adc_demo_trig *trig_desc;
-
-	if (!init_param->iio_desc || !init_param->name)
-		return -EINVAL;
-	trig_desc = (struct adc_demo_trig*)calloc(1, sizeof(*trig_desc));
-	if (!trig_desc)
-		return -ENOMEM;
-
-	trig_desc->iio_desc = init_param->iio_desc;
-
-	strncpy(trig_desc->name, init_param->name, TRIG_MAX_NAME_SIZE);
-
-	*iio_trig = trig_desc;
-
-	return 0;
-}
-
-/***************************************************************************//**
- * @brief Free the resources allocated by adc_demo_trigger_init().
- *
- * @param trig - The trigger structure.
-*******************************************************************************/
-void adc_demo_trigger_remove(struct adc_demo_trig *trig)
-{
-	free(trig);
-}

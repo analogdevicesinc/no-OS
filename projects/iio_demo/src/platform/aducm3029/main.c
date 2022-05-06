@@ -77,9 +77,13 @@ int main()
 #endif
 
 #ifdef IIO_TRIGGER_EXAMPLE
+#ifndef USE_TCP_SOCKET
+#error Software trigger is not supported over UART.
+#else
 	ret = iio_trigger_example_main();
 	if (ret)
 		goto error;
+#endif
 #endif
 
 #if (IIO_EXAMPLE + IIO_TRIGGER_EXAMPLE == 0)

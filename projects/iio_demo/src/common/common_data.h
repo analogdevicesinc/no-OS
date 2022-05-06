@@ -47,6 +47,9 @@
 #include "no_os_util.h"
 #include "adc_demo.h"
 #include "dac_demo.h"
+#ifdef IIO_TRIGGER_EXAMPLE
+#include "iio_trigger.h"
+#endif
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -70,8 +73,8 @@ extern struct adc_demo_init_param adc_init_par;
 extern struct dac_demo_init_param dac_init_par;
 
 #ifdef IIO_TRIGGER_EXAMPLE
-#define SW_TRIGGER_NAME "adc-demo-sw-trig"
-extern struct adc_demo_sw_trig_init_param adc_trig_init_par;
+#define ADC_DEMO_TRIG_NAME "adc-demo-sw-trig"
+extern struct iio_sw_trig_init_param adc_trig_ip;
 #endif
 
 #endif /* __COMMON_DATA_H__ */
