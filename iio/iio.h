@@ -116,7 +116,7 @@ int iio_step(struct iio_desc *desc);
    called in interrupt context if trigger is synchronous with the interrupt
    (is_synchronous = true) or will be called from iio_step if trigger is
    asynchronous (is_synchronous = false) */
-void iio_process_trigger_type(struct iio_desc *desc, char *trigger_name);
+int iio_process_trigger_type(struct iio_desc *desc, char *trigger_name);
 
 int32_t iio_parse_value(char *buf, enum iio_val fmt,
 			int32_t *val, int32_t *val2);

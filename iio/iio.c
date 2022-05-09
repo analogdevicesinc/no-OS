@@ -988,8 +988,10 @@ static void iio_process_async_triggers(struct iio_desc *desc)
  * type (sync or async with the interrupt).
  * @param desc         - IIO descriptor.
  * @param trigger_name - Trigger name.
+ *
+ * @return ret - Result of the processing procedure.
  */
-void iio_process_trigger_type(struct iio_desc *desc, char *trigger_name)
+int iio_process_trigger_type(struct iio_desc *desc, char *trigger_name)
 {
 	uint32_t i;
 	uint32_t trig_id;
@@ -998,7 +1000,7 @@ void iio_process_trigger_type(struct iio_desc *desc, char *trigger_name)
 	trig_id = iio_get_trig_idx_by_name(desc, trigger_name);
 
 	if (trig_id == NO_TRIGGER)
-		return;
+		return -EINVAL;
 
 	struct iio_dev_priv *dev;
 
@@ -1014,6 +1016,8 @@ void iio_process_trigger_type(struct iio_desc *desc, char *trigger_name)
 			}
 		}
 	}
+
+	return 0;
 }
 
 static uint32_t bytes_per_scan(struct iio_channel *channels, uint32_t mask)
