@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   iio_adxrs290.h
- *   @brief  Implementation of ADXRS290 iio.
- *   @author Kister Genesis Jimenez (kister.jimenez@analog.com)
+ *   @file   common_data.c
+ *   @brief  Defines common data to be used by eval-adxrs290-pmdz examples.
+ *   @author RBolboac (ramona.bolboaca@analog.com)
 ********************************************************************************
- * Copyright 2020(c) Analog Devices, Inc.
+ * Copyright 2022(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -37,13 +37,57 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef IIO_ADXRS290_H
-#define IIO_ADXRS290_H
+/******************************************************************************/
+/***************************** Include Files **********************************/
+/******************************************************************************/
+#include "common_data.h"
 
-#include "iio_types.h"
-#include "iio_trigger.h"
+/******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
+struct no_os_spi_init_param adxrs290_spi_ip = {
+	.device_id = SPI_DEVICE_ID,
+	.max_speed_hz = SPI_BAUDRATE,
+	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
+	.mode = NO_OS_SPI_MODE_3,
+	.platform_ops = SPI_OPS,
+	.chip_select = SPI_CS,
+	.extra = SPI_EXTRA,
+};
 
-extern struct iio_device adxrs290_iio_descriptor;
-extern struct iio_trigger adxrs290_iio_trig_desc;
+/* Initialization for Sync pin */
+struct no_os_gpio_init_param adxrs290_gpio_sync_ip = {
+	.port = GPIO_SYNC_PORT_NUM,
+	.number = GPIO_SYNC_PIN_NUM,
+	.pull = NO_OS_PULL_NONE,
+	.platform_ops = GPIO_OPS,
+	.extra = GPIO_EXTRA
+};
 
+struct adxrs290_init_param adxrs290_ip = {
+	.mode = ADXRS290_MODE_MEASUREMENT,
+	.gpio_sync = &adxrs290_gpio_sync_ip,
+	.lpf = ADXRS290_LPF_480HZ,
+	.hpf = ADXRS290_HPF_ALL_PASS
+};
+
+#ifdef IIO_TRIGGER_EXAMPLE
+struct no_os_irq_init_param adxrs290_irq_ip = {
+	.irq_ctrl_id = GPIO_IRQ_ID,
+	.platform_ops = GPIO_IRQ_OPS,
+	.extra = GPIO_IRQ_EXTRA,
+};
+
+const struct iio_hw_trig_cb_info callback_info = {
+	.event = NO_OS_EVT_GPIO,
+	.peripheral = NO_OS_GPIO_IRQ,
+	.handle = ADXRS290_CB_HANDLE,
+};
+
+struct iio_hw_trig_init_param adxrs290_trig_ip = {
+	.irq_id = ADXRS290_TRIG_IRQ_ID,
+	.irq_trig_lvl = NO_OS_IRQ_LEVEL_HIGH,
+	.cb_info = callback_info,
+	.name = IIO_ADXRS290_TRIG_NAME,
+};
 #endif

@@ -44,6 +44,7 @@
 #include "adxrs290.h"
 #include "no_os_util.h"
 #include "no_os_error.h"
+#include "iio.h"
 
 /*
  * Available cut-off frequencies of the low pass filter in Hz.
@@ -211,6 +212,17 @@ static int32_t adxrs290_read_samples(void *device, uint16_t *buff,
 	return nb_samples;
 }
 
+static int32_t adxrs290_trigger_handler(struct iio_device_data *device)
+{
+	struct adxrs290_dev	*dev = device->dev;
+	int16_t			data[ADXRS290_CHANNEL_COUNT];
+	uint8_t			ch_cnt;
+
+	adxrs290_get_burst_data(dev, data, &ch_cnt);
+
+	return iio_buffer_push_scan(device->buffer, data);
+}
+
 static struct iio_attribute adxrs290_iio_vel_attrs[] = {
 	{
 		.name = "filter_high_pass_3db_frequency",
@@ -268,6 +280,7 @@ static struct scan_type scan_type_temp = {
 static struct iio_channel adxrs290_iio_channels[] = {
 	{
 		.ch_type = IIO_ANGL_VEL,
+		.channel = 0,
 		.modified=1,
 		.channel2=IIO_MOD_X,
 		.scan_index = 0,
@@ -277,6 +290,7 @@ static struct iio_channel adxrs290_iio_channels[] = {
 	},
 	{
 		.ch_type = IIO_ANGL_VEL,
+		.channel = 1,
 		.modified=1,
 		.channel2=IIO_MOD_Y,
 		.scan_index = 1,
@@ -286,6 +300,7 @@ static struct iio_channel adxrs290_iio_channels[] = {
 	},
 	{
 		.ch_type = IIO_TEMP,
+		.channel = 2,
 		.scan_index = 2,
 		.scan_type = &scan_type_temp,
 		.attributes = adxrs290_iio_temp_attrs,
@@ -302,6 +317,7 @@ struct iio_device adxrs290_iio_descriptor = {
 	.pre_enable = adxrs290_update_active_channels,
 	.post_disable = NULL,
 	.read_dev = (int32_t (*)())adxrs290_read_samples,
+	.trigger_handler = (int32_t (*)())adxrs290_trigger_handler,
 	.debug_reg_read = (int32_t (*)())adxrs290_reg_read,
 	.debug_reg_write = (int32_t (*)())adxrs290_reg_write
 };

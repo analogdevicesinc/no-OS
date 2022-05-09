@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   iio_adxrs290.h
- *   @brief  Implementation of ADXRS290 iio.
- *   @author Kister Genesis Jimenez (kister.jimenez@analog.com)
+ *   @file   iio_trigger_example.h
+ *   @brief  IIO trigger example header for eval-adxrs290-pmdz project
+ *   @author RBolboac (ramona.bolboaca@analog.com)
 ********************************************************************************
- * Copyright 2020(c) Analog Devices, Inc.
+ * Copyright 2022(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -36,14 +36,16 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
+#ifndef __IIO_TRIGGER_EXAMPLE_H__
+#define __IIO_TRIGGER_EXAMPLE_H__
 
-#ifndef IIO_ADXRS290_H
-#define IIO_ADXRS290_H
+/******************************************************************************/
+/***************************** Include Files **********************************/
+/******************************************************************************/
 
-#include "iio_types.h"
-#include "iio_trigger.h"
+/******************************************************************************/
+/************************ Functions Declarations ******************************/
+/******************************************************************************/
+int iio_trigger_example_main();
 
-extern struct iio_device adxrs290_iio_descriptor;
-extern struct iio_trigger adxrs290_iio_trig_desc;
-
-#endif
+#endif /* __IIO_EXAMPLE_H__ */

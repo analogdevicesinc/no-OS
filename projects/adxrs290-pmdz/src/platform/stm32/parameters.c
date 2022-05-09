@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   iio_adxrs290.h
- *   @brief  Implementation of ADXRS290 iio.
- *   @author Kister Genesis Jimenez (kister.jimenez@analog.com)
+ *   @file   parameters.c
+ *   @brief  Definition of STM32 platform data used by eval-adxrs290-pmdz project.
+ *   @author RBolboac (ramona.bolboaca@analog.com)
 ********************************************************************************
- * Copyright 2020(c) Analog Devices, Inc.
+ * Copyright 2022(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -37,13 +37,21 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef IIO_ADXRS290_H
-#define IIO_ADXRS290_H
+/******************************************************************************/
+/***************************** Include Files **********************************/
+/******************************************************************************/
+#include "parameters.h"
 
-#include "iio_types.h"
-#include "iio_trigger.h"
+/******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
+struct stm32_spi_init_param adxrs290_spi_extra_ip  = {
+	.chip_select_port = SPI_CS_PORT,
+};
 
-extern struct iio_device adxrs290_iio_descriptor;
-extern struct iio_trigger adxrs290_iio_trig_desc;
-
-#endif
+struct stm32_gpio_desc adxrs290_gpio_extra_ip = {
+	.mode = GPIO_MODE_IT_RISING,
+	.port = GPIOA,
+	.pull = GPIO_NOPULL,
+	.speed = GPIO_SPEED_FREQ_VERY_HIGH,
+};

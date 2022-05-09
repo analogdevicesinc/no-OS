@@ -1,9 +1,10 @@
 /***************************************************************************//**
- *   @file   iio_adxrs290.h
- *   @brief  Implementation of ADXRS290 iio.
- *   @author Kister Genesis Jimenez (kister.jimenez@analog.com)
+ *   @file   parameters.h
+ *   @brief  Definitions specific to Maxim platform used by eval-adxrs290-pmdz
+ *           project.
+ *   @author Ciprian Regus (ciprian.regus@analog.com)
 ********************************************************************************
- * Copyright 2020(c) Analog Devices, Inc.
+ * Copyright 2022(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -36,14 +37,56 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
+#ifndef __PARAMETERS_H__
+#define __PARAMETERS_H__
 
-#ifndef IIO_ADXRS290_H
-#define IIO_ADXRS290_H
+/******************************************************************************/
+/***************************** Include Files **********************************/
+/******************************************************************************/
+#include "maxim_hal.h"
+#include "irq_extra.h"
+#include "spi_extra.h"
+#include "gpio_extra.h"
+#include "maxim_uart.h"
+#include "maxim_stdio.h"
 
-#include "iio_types.h"
-#include "iio_trigger.h"
+/******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
 
-extern struct iio_device adxrs290_iio_descriptor;
-extern struct iio_trigger adxrs290_iio_trig_desc;
-
+#ifdef IIO_SUPPORT
+#define INTC_DEVICE_ID  0
+#define UART_IRQ_ID     UART0_IRQn
+#define UART_DEVICE_ID  0
+#define UART_BAUDRATE   57600
 #endif
+
+#define SPI_DEVICE_ID   0
+#define SPI_BAUDRATE    1000000
+#define SPI_CS          0
+#define SPI_OPS         &max_spi_ops
+#define SPI_EXTRA       &adxrs290_spi_extra_ip
+
+#define GPIO_OPS            &max_gpio_ops
+#define GPIO_EXTRA          &adxrs290_gpio_extra_ip
+#define GPIO_SYNC_PIN_NUM   9
+#define GPIO_SYNC_PORT_NUM  1
+
+extern struct max_gpio_init_param adxrs290_gpio_extra_ip;
+extern struct max_spi_init_param adxrs290_spi_extra_ip;
+
+
+#ifdef IIO_TRIGGER_EXAMPLE
+/* Setting for Port1 Pin9 used for Sync pin.
+   Has to be adapted accordingly if another pin is used.
+ */
+#define NVIC_GPIO_IRQ   GPIO1_IRQn
+#define GPIO_IRQ_ID     1
+#define GPIO_IRQ_OPS    &max_gpio_irq_ops
+#define GPIO_IRQ_EXTRA  &adxrs290_gpio_extra_ip
+
+#define ADXRS290_TRIG_IRQ_ID    GPIO_SYNC_PIN_NUM
+#define ADXRS290_CB_HANDLE      MXC_GPIO_GET_GPIO(GPIO_SYNC_PORT_NUM)
+#endif
+
+#endif /* __PARAMETERS_H__ */

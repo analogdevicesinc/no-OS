@@ -1,9 +1,10 @@
 /***************************************************************************//**
- *   @file   adxrs290-pmdz/src/main.c
- *   @brief  Implementation of Main Function.
- *   @author Kister Genesis Jimenez  (kister.jimenez@analog.com)
+ *   @file   parameters.h
+ *   @brief  Definitions specific to STM32 platform used by eval-adxrs290-pmdz
+ *           project.
+ *   @author RBolboac (ramona.bolboaca@analog.com)
 ********************************************************************************
- * Copyright 2020(c) Analog Devices, Inc.
+ * Copyright 2022(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -36,92 +37,45 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
+#ifndef __PARAMETERS_H__
+#define __PARAMETERS_H__
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-
-#include "no_os_spi.h"
-#include "spi_extra.h"
-#include "adxrs290.h"
-#include "iio_adxrs290.h"
-#include "app_config.h"
-#include "parameters.h"
-#include "no_os_error.h"
-#include "iio_app.h"
+#include "stdio.h"
 #include "platform_init.h"
 #include "aducm3029_gpio.h"
+#include "spi_extra.h"
 
+/******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
+#define UART_DEVICE_ID	0
+#define INTC_DEVICE_ID	0
+#define UART_IRQ_ID		ADUCM_UART_INT_ID
+#define UART_BAUDRATE	115200
 
-#ifdef ADUCM_PLATFORM
+#define SPI_DEVICE_ID   1
+#define SPI_BAUDRATE    1000000
+#define SPI_CS          0
+#define SPI_OPS         &aducm_spi_ops
+#define SPI_EXTRA       &adxrs290_spi_extra_ip
 
-#define MAX_SIZE_BASE_ADDR		3000
+#define GPIO_SYNC_PIN_NUM       0x10
+#define GPIO_SYNC_PORT_NUM      0
+#define GPIO_OPS                &aducm_gpio_ops
+#define GPIO_EXTRA              NULL
 
-static uint8_t in_buff[MAX_SIZE_BASE_ADDR];
-
-#define GYRO_DDR_BASEADDR		((uint32_t)in_buff)
-#define GPIO_SYNC_PIN_NUM		0x10
-
+#ifdef IIO_TRIGGER_EXAMPLE
+/* Not used */
+#define GPIO_IRQ_ID             0
+#define GPIO_IRQ_OPS            0
+#define GPIO_IRQ_EXTRA          0
+#define ADXRS290_TRIG_IRQ_ID    0
+#define ADXRS290_CB_HANDLE      NULL
 #endif
 
-/***************************************************************************//**
- * @brief main
-*******************************************************************************/
-int main(void)
-{
-	int32_t status;
+extern struct aducm_spi_init_param adxrs290_spi_extra_ip;
 
-	struct adxrs290_dev *adxrs290_device;
-
-	/* Aducm platform dependent initialization for SPI. */
-	struct aducm_spi_init_param spi_param = {
-		.continuous_mode = true,
-		.dma = false,
-		.half_duplex = false,
-		.master_mode = MASTER
-	};
-
-	struct no_os_spi_init_param init_param = {
-		.device_id = 1,
-		.chip_select = 0,
-		.extra = &spi_param,
-		.max_speed_hz = 900000,
-		.mode = NO_OS_SPI_MODE_3,
-		.platform_ops = &aducm_spi_ops
-	};
-
-	/* Initialization for Sync pin GPIO. */
-	struct no_os_gpio_init_param gpio_sync_init_param = {
-		.number = GPIO_SYNC_PIN_NUM,
-		.platform_ops = &aducm_gpio_ops,
-		.extra = NULL
-	};
-
-	struct adxrs290_init_param adxrs290_param = {
-		.spi_init = init_param,
-		.mode = ADXRS290_MODE_MEASUREMENT,
-		.gpio_sync = &gpio_sync_init_param,
-		.lpf = ADXRS290_LPF_480HZ,
-		.hpf = ADXRS290_HPF_ALL_PASS
-	};
-
-	status = platform_init();
-	if (NO_OS_IS_ERR_VALUE(status))
-		return status;
-
-	status = adxrs290_init(&adxrs290_device, &adxrs290_param);
-	if (NO_OS_IS_ERR_VALUE(status))
-		return status;
-
-	struct iio_data_buffer rd_buf = {
-		.buff = (void *)GYRO_DDR_BASEADDR,
-		.size = MAX_SIZE_BASE_ADDR
-	};
-
-	struct iio_app_device devices[] = {
-		IIO_APP_DEVICE("adxrs290", adxrs290_device,
-			       &adxrs290_iio_descriptor, &rd_buf, NULL)
-	};
-
-	return iio_app_run(devices, NO_OS_ARRAY_SIZE(devices));
-}
+#endif /* __PARAMETERS_H__ */

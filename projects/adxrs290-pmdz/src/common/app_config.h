@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   iio_adxrs290.h
- *   @brief  Implementation of ADXRS290 iio.
- *   @author Kister Genesis Jimenez (kister.jimenez@analog.com)
+ *   @file   adxrs290-pmdz/src/common/app_config.h
+ *   @brief  Config file of ADXRS290/API Driver.
+ *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
- * Copyright 2020(c) Analog Devices, Inc.
+ * Copyright 2015(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -36,14 +36,11 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
+#ifndef CONFIG_H_
+#define CONFIG_H_
 
-#ifndef IIO_ADXRS290_H
-#define IIO_ADXRS290_H
-
-#include "iio_types.h"
-#include "iio_trigger.h"
-
-extern struct iio_device adxrs290_iio_descriptor;
-extern struct iio_trigger adxrs290_iio_trig_desc;
+#ifdef ENABLE_IIO_NETWORK
+#define USE_TCP_SOCKET
+#endif
 
 #endif

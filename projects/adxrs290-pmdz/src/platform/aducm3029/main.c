@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   iio_adxrs290.h
- *   @brief  Implementation of ADXRS290 iio.
- *   @author Kister Genesis Jimenez (kister.jimenez@analog.com)
+ *   @file   main.c
+ *   @brief  Main file for STM32 platform of eval-adxrs290-pmdz project.
+ *   @author RBolboac (ramona.bolboaca@analog.com)
 ********************************************************************************
- * Copyright 2020(c) Analog Devices, Inc.
+ * Copyright 2022(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -37,13 +37,50 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef IIO_ADXRS290_H
-#define IIO_ADXRS290_H
+/******************************************************************************/
+/***************************** Include Files **********************************/
+/******************************************************************************/
+#include "platform_includes.h"
+#include "common_data.h"
 
-#include "iio_types.h"
-#include "iio_trigger.h"
-
-extern struct iio_device adxrs290_iio_descriptor;
-extern struct iio_trigger adxrs290_iio_trig_desc;
-
+#ifdef IIO_EXAMPLE
+#include "iio_example.h"
 #endif
+
+#ifdef IIO_TRIGGER_EXAMPLE
+#include "iio_trigger_example.h"
+#endif
+
+/***************************************************************************//**
+ * @brief Main function execution for STM32 platform.
+ *
+ * @return ret - Result of the enabled examples execution.
+*******************************************************************************/
+int main()
+{
+	int ret;
+	adxrs290_ip.spi_init = adxrs290_spi_ip;
+
+	ret = platform_init();
+	if (ret)
+		goto error;
+
+#ifdef IIO_EXAMPLE
+	ret = iio_example_main();
+	if (ret)
+		goto error;
+#endif
+
+#ifdef IIO_TRIGGER_EXAMPLE
+#error IIO_TRIGGER_EXAMPLE is not supported on STM32 platform.
+#endif
+
+#if (IIO_EXAMPLE + IIO_TRIGGER_EXAMPLE != 1)
+#error Selected example projects cannot be enabled at the same time. \
+Please enable only one example and re-build the project.
+#endif
+
+error:
+	return 0;
+}
+

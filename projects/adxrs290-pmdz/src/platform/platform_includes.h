@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   iio_adxrs290.h
- *   @brief  Implementation of ADXRS290 iio.
- *   @author Kister Genesis Jimenez (kister.jimenez@analog.com)
+ *   @file   platform_includes.h
+ *   @brief  Includes for used platforms used by eval-adxrs290-pmdz project.
+ *   @author RBolboac (ramona.bolboaca@analog.com)
 ********************************************************************************
- * Copyright 2020(c) Analog Devices, Inc.
+ * Copyright 2022(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -36,14 +36,26 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
+#ifndef __PLATFORM_INCLUDES_H__
+#define __PLATFORM_INCLUDES_H__
 
-#ifndef IIO_ADXRS290_H
-#define IIO_ADXRS290_H
-
-#include "iio_types.h"
-#include "iio_trigger.h"
-
-extern struct iio_device adxrs290_iio_descriptor;
-extern struct iio_trigger adxrs290_iio_trig_desc;
-
+/******************************************************************************/
+/***************************** Include Files **********************************/
+/******************************************************************************/
+#ifdef ADUCM_PLATFORM
+#include "aducm3029/parameters.h"
 #endif
+
+#ifdef STM32_PLATFORM
+#include "stm32/parameters.h"
+#endif
+
+#ifdef MAXIM_PLATFORM
+#include "maxim/parameters.h"
+#endif
+
+#ifdef IIO_SUPPORT
+#include "iio_app.h"
+#endif
+
+#endif /* __PLATFORM_INCLUDES_H__ */

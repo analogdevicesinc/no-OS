@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   adxrs290-pmdz/src/parameters.h
- *   @brief  Parameters Definitions.
- *   @author DBogdan (dragos.bogdan@analog.com)
+ *   @file   parameters.c
+ *   @brief  Definition of STM32 platform data used by eval-adxrs290-pmdz project.
+ *   @author RBolboac (ramona.bolboaca@analog.com)
 ********************************************************************************
- * Copyright 2013(c) Analog Devices, Inc.
+ * Copyright 2022(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -36,33 +36,18 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __PARAMETERS_H__
-#define __PARAMETERS_H__
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-
-#ifdef ADUCM_PLATFORM
-#include "irq_extra.h"
-#endif
+#include "parameters.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-
-#ifdef ADUCM_PLATFORM
-
-#define UART_DEVICE_ID	0
-#define INTC_DEVICE_ID	0
-#define UART_IRQ_ID		ADUCM_UART_INT_ID
-#define UART_BAUDRATE	115200
-
-#endif //ADUCM_PLATFORM
-
-#ifdef USE_TCP_SOCKET
-#define WIFI_SSID	"RouterSSID"
-#define WIFI_PWD	"******"
-#endif /* USE_TCP_SOCKET */
-
-#endif // __PARAMETERS_H__
+struct aducm_spi_init_param adxrs290_spi_extra_ip = {
+	.continuous_mode = true,
+	.dma = false,
+	.half_duplex = false,
+	.master_mode = MASTER
+};
