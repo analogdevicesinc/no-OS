@@ -444,7 +444,13 @@ int32_t max_irq_enable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
 	if (irq_id >= MXC_IRQ_EXT_COUNT)
 		return -EINVAL;
 
+	if (irq_id == GPIO1_IRQn)
+		NVIC_SetPriority(irq_id, 1);
+	else
+		NVIC_SetPriority(irq_id, 0);
+
 	NVIC_EnableIRQ(irq_id);
+
 
 	return 0;
 }
