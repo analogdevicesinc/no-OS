@@ -64,7 +64,7 @@ int main()
 {
 	int ret;
 
-	adxl355_user_init.comm_init.spi_init = sip;
+	adxl355_ip.comm_init.spi_init = adxl355_spi_ip;
 
 #ifdef IIO_EXAMPLE
 	ret = iio_example_main();
@@ -73,25 +73,51 @@ int main()
 #endif
 
 #ifdef IIO_TRIGGER_EXAMPLE
-#error Selected example is not supported.
-#endif
+	struct no_os_gpio_desc *adxl355_gpio_desc;
+	struct no_os_irq_ctrl_desc *nvic_desc;
+	struct no_os_irq_init_param nvic_ip = {
+		.platform_ops = &max_irq_ops,
+	};
 
-#ifdef DUMMY_EXAMPLE
-	struct no_os_uart_desc *uart;
-
-	ret = no_os_uart_init(&uart, &uip);
+	/* Initialize DATA READY pin */
+	ret = no_os_gpio_get_optional(&adxl355_gpio_desc, &adxl355_gpio_drdy_ip);
 	if (ret)
 		goto error;
 
-	maxim_uart_stdio(uart);
+	ret = no_os_gpio_direction_input(adxl355_gpio_desc);
+	if (ret)
+		goto error;
+
+	/* Initialize GPIO IRQ controller */
+	ret = no_os_irq_ctrl_init(&nvic_desc, &nvic_ip);
+	if (ret)
+		goto error;
+
+	ret = no_os_irq_enable(nvic_desc, NVIC_GPIO_IRQ);
+	if (ret)
+		goto error;
+
+	ret = iio_trigger_example_main();
+	if (ret)
+		goto error;
+#endif
+
+#ifdef DUMMY_EXAMPLE
+	struct no_os_uart_desc *uart_desc;
+
+	ret = no_os_uart_init(&uart_desc, &adxl355_uart_ip);
+	if (ret)
+		goto error;
+
+	maxim_uart_stdio(uart_desc);
 	ret = dummy_example_main();
 	if (ret)
 		goto error;
 #endif
 
-#if (IIO_EXAMPLE+DUMMY_EXAMPLE == 0)
+#if (DUMMY_EXAMPLE + IIO_EXAMPLE + IIO_TRIGGER_EXAMPLE == 0)
 #error At least one example has to be selected using y value in Makefile.
-#elif (IIO_EXAMPLE+DUMMY_EXAMPLE> 1)
+#elif (DUMMY_EXAMPLE + IIO_EXAMPLE + IIO_TRIGGER_EXAMPLE > 1)
 #error Selected example projects cannot be enabled at the same time. \
 Please enable only one example and re-build the project.
 #endif

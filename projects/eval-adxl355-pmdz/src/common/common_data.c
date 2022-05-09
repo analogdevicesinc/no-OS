@@ -46,44 +46,48 @@
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 #ifdef DUMMY_EXAMPLE
-struct no_os_uart_init_param uip = {
+struct no_os_uart_init_param adxl355_uart_ip = {
 	.device_id = UART_DEVICE_ID,
-	.baud_rate = 115200,
+	.baud_rate = UART_BAUDRATE,
 	.size = NO_OS_UART_CS_8,
 	.parity = NO_OS_UART_PAR_NO,
 	.stop = NO_OS_UART_STOP_1_BIT,
-	.extra = &xuip,
+	.extra = UART_EXTRA,
 };
 #endif
 
-#ifdef IIO_TRIGGER_EXAMPLE
-struct no_os_irq_init_param adxl355_int_ip = {
-	.irq_ctrl_id = ADXL355_TRIGGER_INTR_ID,
-	.platform_ops = IRQ_OPS,
-	.extra = &xiip,
-};
-
-struct adxl355_iio_trig_init_param adxl355_iio_trig_user_init = {
-	.irq_init_param = &adxl355_int_ip,
-	.name = IIO_ADXL355_TRIGGER_NAME,
-};
-
-struct adxl355_iio_sw_trig_init_param adxl355_iio_sw_trig_user_init = {
-	.name = IIO_ADXL355_SW_TRIGGER_NAME,
-};
-#endif
-
-struct no_os_spi_init_param sip = {
+struct no_os_spi_init_param adxl355_spi_ip = {
 	.device_id = SPI_DEVICE_ID,
-	.max_speed_hz = 4000000,
+	.max_speed_hz = SPI_BAUDRATE,
 	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
 	.mode = NO_OS_SPI_MODE_0,
-	.extra = &xsip,
 	.platform_ops = SPI_OPS,
 	.chip_select = SPI_CS,
+	.extra = SPI_EXTRA,
 };
 
-struct adxl355_init_param adxl355_user_init = {
+struct adxl355_init_param adxl355_ip = {
 	.comm_type = ADXL355_SPI_COMM,
 };
 
+#ifdef IIO_TRIGGER_EXAMPLE
+/* GPIO trigger */
+struct no_os_irq_init_param adxl355_irq_ip = {
+	.irq_ctrl_id = GPIO_IRQ_ID,
+	.platform_ops = GPIO_IRQ_OPS,
+	.extra = GPIO_IRQ_EXTRA,
+};
+
+const struct iio_hw_trig_cb_info callback_info = {
+	.event = NO_OS_EVT_GPIO,
+	.peripheral = NO_OS_GPIO_IRQ,
+	.handle = ADXL355_CB_HANDLE,
+};
+
+struct iio_hw_trig_init_param adxl355_trig_ip = {
+	.irq_id = ADXL355_TRIG_IRQ_ID,
+	.irq_trig_lvl = NO_OS_IRQ_EDGE_RISING,
+	.cb_info = callback_info,
+	.name = ADXL355_TRIG_NAME,
+};
+#endif

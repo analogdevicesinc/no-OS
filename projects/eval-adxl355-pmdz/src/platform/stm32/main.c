@@ -60,44 +60,45 @@
  *
  * @return ret - Result of the enabled examples execution.
 *******************************************************************************/
-int main ()
+int main()
 {
 	int ret;
-
-	xsip.get_input_clock = HAL_RCC_GetPCLK1Freq;
-	adxl355_user_init.comm_init.spi_init = sip;
+	adxl355_spi_extra_ip.get_input_clock = HAL_RCC_GetPCLK1Freq;
+	adxl355_ip.comm_init.spi_init = adxl355_spi_ip;
 
 	stm32_init();
 
 #ifdef IIO_EXAMPLE
-	ret = iio_example_main ();
-	if (ret < 0)
+	ret = iio_example_main();
+	if (ret)
 		goto error;
 #endif
 
 #ifdef IIO_TRIGGER_EXAMPLE
-	ret = HAL_EXTI_SetConfigLine(&xiip, &adxl355_int_exticonfig);
-	if (ret != HAL_OK)
-		return ret;
-	ret = iio_trigger_example_main ();
-	if (ret < 0)
+	ret = HAL_EXTI_SetConfigLine(GPIO_IRQ_EXTRA, &adxl355_exti_ip);
+	if (ret)
+		goto error;
+	ret = iio_trigger_example_main();
+	if (ret)
 		goto error;
 #endif
 
 #ifdef DUMMY_EXAMPLE
-	struct no_os_uart_desc *uart;
+	struct no_os_uart_desc *uart_desc;
 
-	ret = no_os_uart_init(&uart, &uip);
-	if (ret < 0)
+	ret = no_os_uart_init(&uart_desc, &adxl355_uart_ip);
+	if (ret)
 		goto error;
 
-	stm32_uart_stdio(uart);
-	ret = dummy_example_main ();
-	if (ret < 0)
+	stm32_uart_stdio(uart_desc);
+	ret = dummy_example_main();
+	if (ret)
 		goto error;
 #endif
 
-#if (IIO_EXAMPLE+IIO_TRIGGER_EXAMPLE+DUMMY_EXAMPLE != 1)
+#if (DUMMY_EXAMPLE + IIO_EXAMPLE + IIO_TRIGGER_EXAMPLE == 0)
+#error At least one example has to be selected using y value in Makefile.
+#elif (DUMMY_EXAMPLE + IIO_EXAMPLE + IIO_TRIGGER_EXAMPLE > 1)
 #error Selected example projects cannot be enabled at the same time. \
 Please enable only one example and re-build the project.
 #endif
@@ -105,4 +106,3 @@ Please enable only one example and re-build the project.
 error:
 	return 0;
 }
-

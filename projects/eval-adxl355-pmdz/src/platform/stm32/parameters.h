@@ -56,27 +56,38 @@
 extern UART_HandleTypeDef huart5;
 
 #ifdef IIO_SUPPORT
-#define INTC_DEVICE_ID 0
-#define IIO_APP_HUART	(&huart5)
+#define INTC_DEVICE_ID  0
+#define IIO_APP_HUART   (&huart5)
 #define UART_IRQ_ID     UART5_IRQn
 #endif
-#define UART_DEVICE_ID      5
-#define UART_BAUDRATE  115200
 
-#define SPI_DEVICE_ID    1
+#define UART_DEVICE_ID  5
+#define UART_BAUDRATE   115200
+#define UART_EXTRA      &adxl355_uart_extra_ip
+
+#define SPI_DEVICE_ID   1
+#define SPI_BAUDRATE    4000000
 #define SPI_CS          15
 #define SPI_CS_PORT     GPIOA
 #define SPI_OPS         &stm32_spi_ops
+#define SPI_EXTRA       &adxl355_spi_extra_ip
 
-extern struct stm32_uart_init_param xuip;
-extern struct stm32_spi_init_param xsip;
+extern struct stm32_uart_init_param adxl355_uart_extra_ip;
+extern struct stm32_spi_init_param adxl355_spi_extra_ip;
 
 #ifdef IIO_TRIGGER_EXAMPLE
-#define IRQ_OPS &stm32_irq_ops
-#define ADXL355_TRIGGER_INTR_ID EXTI2_IRQn
+/* Setting for PortA Pin2 used for DATA_READY.
+   Has to be adapted accordingly if another pin is used.
+ */
+#define ADXL355_TRIG_IRQ_ID     EXTI2_IRQn
+#define ADXL355_CB_HANDLE       NULL
 
-extern EXTI_HandleTypeDef xiip;
-extern EXTI_ConfigTypeDef adxl355_int_exticonfig;
+#define GPIO_IRQ_ID             EXTI2_IRQn
+#define GPIO_IRQ_OPS            &stm32_irq_ops
+#define GPIO_IRQ_EXTRA          &adxl355_gpio_irq_extra
+
+extern EXTI_HandleTypeDef adxl355_gpio_irq_extra;
+extern EXTI_ConfigTypeDef adxl355_exti_ip;
 #endif
 
 #endif /* __PARAMETERS_H__ */

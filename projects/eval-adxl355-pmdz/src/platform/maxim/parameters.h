@@ -55,17 +55,43 @@
 /******************************************************************************/
 
 #ifdef IIO_SUPPORT
-#define INTC_DEVICE_ID 0
+#define INTC_DEVICE_ID  0
 #define UART_IRQ_ID     UART0_IRQn
 #endif
-#define UART_DEVICE_ID      0
+
+#define UART_DEVICE_ID  0
 #define UART_BAUDRATE   57600
 
-#define SPI_DEVICE_ID    0
+#define SPI_DEVICE_ID   0
+#define SPI_BAUDRATE    1000000
 #define SPI_CS          0
 #define SPI_OPS         &max_spi_ops
+#define SPI_EXTRA       &adxl355_spi_extra_ip
 
-extern struct max_uart_init_param xuip;
-extern struct max_spi_init_param xsip;
+extern struct max_uart_init_param adxl355_uart_extra_ip;
+extern struct max_spi_init_param adxl355_spi_extra_ip;
+
+#ifdef IIO_TRIGGER_EXAMPLE
+#define GPIO_OPS            &max_gpio_ops
+#define GPIO_DRDY_PIN_NUM   9
+#define GPIO_DRDY_PORT_NUM  1
+#define GPIO_EXTRA          &adxl355_gpio_extra_ip
+
+extern struct no_os_gpio_init_param adxl355_gpio_drdy_ip;
+
+#define ADXL355_TRIG_IRQ_ID GPIO_DRDY_PIN_NUM
+#define ADXL355_CB_HANDLE   MXC_GPIO_GET_GPIO(GPIO_DRDY_PORT_NUM)
+
+/* Setting for Port1 Pin9 used for DATA_READY.
+   Has to be adapted accordingly if another pin is used.
+ */
+#define NVIC_GPIO_IRQ   GPIO1_IRQn
+#define GPIO_IRQ_ID     1
+#define GPIO_IRQ_OPS    &max_gpio_irq_ops
+#define GPIO_IRQ_EXTRA  &adxl355_gpio_extra_ip
+
+extern struct max_gpio_init_param adxl355_gpio_extra_ip;
+
+#endif
 
 #endif /* __PARAMETERS_H__ */
