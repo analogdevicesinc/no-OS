@@ -73,7 +73,7 @@ uint8_t in_buff[MAX_SIZE_BASE_ADDR];
 uint8_t out_buff[MAX_SIZE_BASE_ADDR];
 
 #ifdef IIO_TRIGGER_EXAMPLE
-struct adc_demo_sw_trig_init_param adc_trig_init_par = {
-	.name = SW_TRIGGER_NAME
+struct iio_sw_trig_init_param adc_trig_ip = {
+	.name = ADC_DEMO_TRIG_NAME
 };
 #endif
