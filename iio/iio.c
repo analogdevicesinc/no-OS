@@ -1225,7 +1225,7 @@ static int iio_read_buffer(struct iiod_ctx *ctx, const char *device, char *buf,
 		return -EINVAL;
 
 	ret = no_os_cb_size(&dev->buffer.cb, &size);
-	if (NO_OS_IS_ERR_VALUE(ret))
+	if (NO_OS_IS_ERR_VALUE(ret) && ret!=-NO_OS_EOVERRUN)
 		return ret;
 
 	bytes = no_os_min(size, bytes);

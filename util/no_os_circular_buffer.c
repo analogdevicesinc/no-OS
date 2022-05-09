@@ -189,6 +189,7 @@ static int32_t no_os_cb_prepare_async_operation(struct no_os_circular_buffer
 		ret = no_os_cb_size(desc, &available_size);
 		if (ret == -NO_OS_EOVERRUN) {
 			/* Update read index */
+			ret = 0;
 			desc->read.spin_count = desc->write.spin_count - 1;
 			desc->read.idx = desc->write.idx;
 		}
