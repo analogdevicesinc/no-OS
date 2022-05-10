@@ -54,7 +54,7 @@
 /******************************************************************************/
 
 /** Number of available interrupts */
-#define NB_INTERRUPTS		8u
+#define NB_INTERRUPTS		2u
 
 /** RTC interrupt defines */
 #define RTC_COUNT_INT		ADI_RTC_COUNT_INT
@@ -69,22 +69,10 @@
  * @brief Interrupts IDs supported by the irq driver
  */
 enum irq_id {
-	/** External interrupt 0, on GPIO 15 */
-	ADUCM_EXTERNAL_INT0_ID,
-	/** External interrupt 0, on GPIO 16 */
-	ADUCM_EXTERNAL_INT1_ID,
-	/** External interrupt 0, on GPIO 13 */
-	ADUCM_EXTERNAL_INT2_ID,
-	/** External interrupt 0, on GPIO 33 */
-	ADUCM_EXTERNAL_INT3_ID,
 	/** UART interrupt ID*/
 	ADUCM_UART_INT_ID,
 	/** RTC interrupt ID*/
 	ADUCM_RTC_INT_ID,
-	/** GPIO group A interrupt ID*/
-	ADUCM_GPIO_A_INT_ID,
-	/** GPIO group B interrupt ID*/
-	ADUCM_GPIO_B_INT_ID
 };
 
 /**
@@ -105,17 +93,6 @@ enum irq_mode {
 };
 
 /**
- * @struct rtc_irq_config
- * @brief RTC interrupt configuration routine.
- */
-struct rtc_irq_config {
-	/** RTC driver handler */
-	struct no_os_rtc_desc *rtc_handler;
-	/** Active interrupts OR'ed together */
-	uint32_t active_interrupts;
-};
-
-/**
  * @enum gpio_irq_mode
  * @brief Interrupt conditions for GPIO group interrupts
  */
@@ -127,49 +104,36 @@ enum gpio_irq_mode {
 };
 
 /**
- * @struct gpio_irq_config
- * @brief GPIO group interrupt configuration routine.
- */
-struct gpio_irq_config {
-	/** GPIO driver handler */
-	struct no_os_gpio_desc	*gpio_handler;
-	/** Interrupt condition */
-	enum gpio_irq_mode	mode;
-};
-
-/**
- * @union irq_config
- * @brief Configuration for the callback
- */
-union irq_config {
-	/** UART descriptor */
-	struct no_os_uart_desc	*uart_conf;
-	/** Trigger condition for the external interrupt */
-	enum irq_mode		xint_conf;
-	/** RTC interrupt config */
-	struct rtc_irq_config	*rtc_conf;
-	/** GPIO interrupt config */
-	struct gpio_irq_config	*gpio_conf;
-};
-
-/**
  * @struct aducm_irq_ctrl_desc
  * @brief Stores specific platform parameters
  */
 struct aducm_irq_ctrl_desc {
-	/** Configuration for each interrupt */
-	union irq_config	conf[NB_INTERRUPTS];
-	/** Store if a callback has been configured */
-	bool			callback_configured[NB_INTERRUPTS];
-	/** Memory needed by the ADI IRQ driver */
-	uint8_t			irq_memory[ADI_XINT_MEMORY_SIZE];
-	/** Stores the enabled interrupts */
-	uint32_t		enabled;
+
 };
 
 /**
  * @brief ADuCM3029 specific IRQ platform ops structure
  */
 extern const struct no_os_irq_platform_ops aducm_irq_ops;
+
+/**
+ * @brief Struct used to store a (peripheral, callback) pair
+ */
+struct irq_action {
+	/** Interrupt event */
+	uint32_t irq_id;
+	/** Peripheral handler */
+	void *handle;
+	/** Pointer to callback routine */
+	void (*callback)(void *context);
+	/** Pointer to user defined context */
+	void *ctx;
+	/** Trigger level for interrupts;
+	 *  Currently only in use for XINT interrupts */
+	enum no_os_irq_trig_level trig_lv;
+};
+
+/** Action comparator function */
+int32_t irq_action_cmp(void *data1, void *data2);
 
 #endif // IRQ_EXTRA_H_

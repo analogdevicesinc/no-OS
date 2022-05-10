@@ -44,9 +44,13 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 
+#include <drivers/uart/adi_uart.h>
 #include <stdbool.h>
 #include <stdint.h>
 #include "no_os_error.h"
+
+/** Maximum number of bytes that can be transmitted on UART in one transfer */
+#define NO_OS_UART_MAX_BYTES	1024u
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -61,7 +65,7 @@ enum UART_ERROR {
 	NO_ERR				= 0x00,
 	/**
 	 * Bytes number for read/write was set 0 or greater than
-	 * \ref NO_OS_MAX_BYTES
+	 * \ref NO_OS_UART_MAX_BYTES
 	 */
 	BAD_INPUT_PARAMETERS		= 0x01,
 	/** New call was made before a callback call ended */
@@ -176,6 +180,66 @@ struct aducm_uart_init_param {
 	enum UART_STOPBITS	stop_bits;
 	/** Set the word length */
 	enum UART_WORDLEN	word_length;
+};
+
+/**
+ * @struct no_os_baud_desc
+ * @brief Structure of an element from \ref baud_rates_26MHz.
+ * The baud rate is calculated with the formula:
+ * Baudrate = (NO_OS_CLK_FREQ / (div_m + div_n/2048) * pow(2,osr+2) * div_c)).
+ */
+struct no_os_baud_desc {
+	/** Calculated baud rate from the following parameters */
+	uint32_t	baud_rate;
+	/** From 0 to 2047 */
+	uint16_t	div_n;
+	/** From 1 to 3 */
+	uint8_t		div_m;
+	/** From 1 to 65535 */
+	uint16_t	div_c;
+	/** From 0 to 3 */
+	uint8_t		osr;
+};
+
+/**
+ * @struct no_os_op_desc
+ * @brief It stores the state of a operation
+ */
+struct no_os_op_desc {
+	/** Is set when an write nonblocking operation is executing */
+	bool		is_nonblocking;
+	/** Current buffer*/
+	uint8_t		*buff;
+	/** Number of bytes pending to process */
+	uint32_t	pending;
+};
+
+/**
+ * @struct no_os_aducm_uart_desc
+ * @brief Stores specific parameter needed by the UART driver for internal
+ * operations
+ */
+struct no_os_aducm_uart_desc {
+	/** Handle needed by low level functions */
+	ADI_UART_HANDLE	uart_handler;
+	/** Stores the error occurred */
+	enum UART_ERROR	errors;
+	/** Set if callback is enabled */
+	bool		callback_enabled;
+	/**
+	 * Buffer needed by the ADI UART driver to operate.
+	 * This buffer allocated and aligned at runtime to 32 bits
+	 */
+	uint8_t		*adi_uart_buffer;
+	/**
+	 * Stores the offset used to align adi_uart_buffer.
+	 * Needed to deallocate \ref adi_uart_buffer
+	 */
+	uint32_t	adi_uart_buffer_offset;
+	/** Status of a write operation */
+	struct no_os_op_desc	write_desc;
+	/** Status of a read operation */
+	struct no_os_op_desc	read_desc;
 };
 
 #endif /* UART_H_ */

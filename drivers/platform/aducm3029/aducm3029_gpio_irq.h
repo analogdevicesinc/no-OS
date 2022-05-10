@@ -1,9 +1,9 @@
-/*******************************************************************************
- *   @file   aducm3029/aducm3029_gpio.h
- *   @brief  Header containing no_os_gpio_platform_ops used by the GPIO driver.
- *   @author Andrei Porumb (andrei.porumb@analog.com)
+/***************************************************************************//**
+ *   @file   aducm3029_gpio_irq.h
+ *   @brief  Header file of GPIO IRQ interface for ADuCM3029 platform.
+ *   @author Drimbarean Andrei (andrei.drimbarean@analog.com)
 ********************************************************************************
- * Copyright 2021(c) Analog Devices, Inc.
+ * Copyright 2022(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -36,18 +36,39 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef ADUCM3029_GPIO_H_
-#define ADUCM3029_GPIO_H_
 
+#ifndef GPIO_IRQ_EXTRA_H_
+#define GPIO_IRQ_EXTRA_H
 
-/** Get GPIO pin from GPIO number */
-#define PIN(nb)		(1u << ((nb) & 0x0F))
-/** Get GPIO port from GPIO number */
-#define PORT(nb)	(((nb) & 0xF0) >> 4)
+#include <drivers/xint/adi_xint.h>
+
+/******************************************************************************/
+/***************************** Include Files **********************************/
+/******************************************************************************/
+/**
+ * @enum irq_ctrl_id
+ * @brief Interrupt controllers ID
+ */
+enum irq_ctrl_id {
+	ADUCM_XINT_SOFT_CTRL,
+	ADUCM_GPIO_A_GROUP_SOFT_CTRL,
+	ADUCM_GPIO_B_GROUP_SOFT_CTRL
+};
 
 /**
- * @brief ADuCM3029 specific GPIO platform ops structure
+ * @struct aducm_gpio_irq_ctrl_desc
+ * @brief Stores specific platform parameters
  */
-extern const struct no_os_gpio_platform_ops aducm_gpio_ops;
+struct aducm_gpio_irq_ctrl_desc {
+	/** Memory needed by the ADI IRQ driver */
+	uint8_t irq_memory[ADI_XINT_MEMORY_SIZE];
+	/** List of user callbacks */
+	struct no_os_list_desc *actions;
+};
 
-#endif // ADUCM3029_GPIO_H_
+/**
+ * @brief maxim platform specific gpio irq platform ops structure
+ */
+extern const struct no_os_irq_platform_ops aducm_gpio_irq_ops;
+
+#endif

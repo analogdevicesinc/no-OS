@@ -69,7 +69,8 @@ enum no_os_irq_event {
 	NO_OS_EVT_UART_TX_COMPLETE,
 	NO_OS_EVT_UART_RX_COMPLETE,
 	NO_OS_EVT_UART_ERROR,
-	NO_OS_EVT_RTC
+	NO_OS_EVT_RTC,
+	NO_OS_EVT_XINT
 };
 
 enum no_os_irq_trig_level {
