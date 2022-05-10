@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   iio_adxrs290.h
- *   @brief  Implementation of ADXRS290 iio.
- *   @author Kister Genesis Jimenez (kister.jimenez@analog.com)
+ *   @file   iio_adxrs290_trig.c
+ *   @brief  Implementation of adxrs290 iio trigger.
+ *   @author RBolboac (ramona.bolboaca@analog.com)
 ********************************************************************************
- * Copyright 2020(c) Analog Devices, Inc.
+ * Copyright 2022(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -37,13 +37,21 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef IIO_ADXRS290_H
-#define IIO_ADXRS290_H
-
-#include "iio_types.h"
+/******************************************************************************/
+/***************************** Include Files **********************************/
+/******************************************************************************/
+#include "iio.h"
 #include "iio_trigger.h"
 
-extern struct iio_device adxrs290_iio_descriptor;
-extern struct iio_trigger adxrs290_iio_trig_desc;
+/******************************************************************************/
+/************************ Functions Declarations ******************************/
+/******************************************************************************/
 
-#endif
+/******************************************************************************/
+/************************ Variable Declarations *******************************/
+/******************************************************************************/
+struct iio_trigger adxrs290_iio_trig_desc = {
+	.is_synchronous = true,
+	.enable = iio_trig_enable,
+	.disable = iio_trig_disable
+};
