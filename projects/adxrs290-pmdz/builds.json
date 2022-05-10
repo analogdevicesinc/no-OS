@@ -1,10 +1,15 @@
 {
   "aducm3029": {
-    "iio_uart":  {
-      "flags" : "TINYIIOD=y"
+    "iio_example":  {
+      "flags" : "IIO_EXAMPLE=y IIO_TRIGGER_EXAMPLE=n"
     },
-    "iio_wifi":  {
-      "flags" : "TINYIIOD=y USE_TCP_SOCKET=y"
+    "iio_example_wifi":  {
+      "flags" : "IIO_EXAMPLE=y IIO_TRIGGER_EXAMPLE=n USE_TCP_SOCKET=y"
+    }
+  },
+  "stm32": {
+	"iio_example": {
+      "flags" : "IIO_EXAMPLE=y IIO_TRIGGER_EXAMPLE=n"
     }
   }
 }

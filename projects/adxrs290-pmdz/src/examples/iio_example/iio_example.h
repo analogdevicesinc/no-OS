@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   adxrs290-pmdz/src/app_config.h
- *   @brief  Config file of ADXRS290/API Driver.
- *   @author DBogdan (dragos.bogdan@analog.com)
+ *   @file   iio_example.h
+ *   @brief  IIO example header for eval-adxrs290-pmdz project
+ *   @author RBolboac (ramona.bolboaca@analog.com)
 ********************************************************************************
- * Copyright 2015(c) Analog Devices, Inc.
+ * Copyright 2022(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -36,15 +36,16 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef CONFIG_H_
-#define CONFIG_H_
+#ifndef __IIO_EXAMPLE_H__
+#define __IIO_EXAMPLE_H__
 
-//#define XILINX_PLATFORM
-//#define ALTERA_PLATFORM
-//#define ADUCM_PLATFORM
+/******************************************************************************/
+/***************************** Include Files **********************************/
+/******************************************************************************/
 
-#ifdef ENABLE_IIO_NETWORK
-#define USE_TCP_SOCKET
-#endif
+/******************************************************************************/
+/************************ Functions Declarations ******************************/
+/******************************************************************************/
+int iio_example_main();
 
-#endif
+#endif /* __IIO_EXAMPLE_H__ */

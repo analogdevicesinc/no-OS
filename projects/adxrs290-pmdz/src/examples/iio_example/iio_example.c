@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   adxrs290-pmdz/src/main.c
- *   @brief  Implementation of Main Function.
- *   @author Kister Genesis Jimenez  (kister.jimenez@analog.com)
+ *   @file   iio_example.c
+ *   @brief  Implementation of IIO example for eval-adxrs290-pmdz project.
+ *   @author RBolboac (ramona.bolboaca@analog.com)
 ********************************************************************************
- * Copyright 2020(c) Analog Devices, Inc.
+ * Copyright 2022(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -40,88 +40,47 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-
-#include "no_os_spi.h"
-#include "spi_extra.h"
-#include "adxrs290.h"
+#include "iio_example.h"
 #include "iio_adxrs290.h"
-#include "app_config.h"
-#include "parameters.h"
-#include "no_os_error.h"
-#include "iio_app.h"
-#include "platform_init.h"
-#include "aducm3029_gpio.h"
+#include "common_data.h"
 
-
-#ifdef ADUCM_PLATFORM
-
+/******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
 #define MAX_SIZE_BASE_ADDR		3000
-
 static uint8_t in_buff[MAX_SIZE_BASE_ADDR];
-
 #define GYRO_DDR_BASEADDR		((uint32_t)in_buff)
-#define GPIO_SYNC_PIN_NUM		0x10
 
-#endif
-
+/******************************************************************************/
+/************************ Functions Definitions *******************************/
+/******************************************************************************/
 /***************************************************************************//**
- * @brief main
+ * @brief IIO example main execution.
+ *
+ * @return ret - Result of the example execution. If working correctly, will
+ *               execute continuously function iio_app_run and will not return.
 *******************************************************************************/
-int main(void)
+int iio_example_main()
 {
-	int32_t status;
-
-	struct adxrs290_dev *adxrs290_device;
-
-	/* Aducm platform dependent initialization for SPI. */
-	struct aducm_spi_init_param spi_param = {
-		.continuous_mode = true,
-		.dma = false,
-		.half_duplex = false,
-		.master_mode = MASTER
-	};
-
-	struct no_os_spi_init_param init_param = {
-		.device_id = 1,
-		.chip_select = 0,
-		.extra = &spi_param,
-		.max_speed_hz = 900000,
-		.mode = NO_OS_SPI_MODE_3,
-		.platform_ops = &aducm_spi_ops
-	};
-
-	/* Initialization for Sync pin GPIO. */
-	struct no_os_gpio_init_param gpio_sync_init_param = {
-		.number = GPIO_SYNC_PIN_NUM,
-		.platform_ops = &aducm_gpio_ops,
-		.extra = NULL
-	};
-
-	struct adxrs290_init_param adxrs290_param = {
-		.spi_init = init_param,
-		.mode = ADXRS290_MODE_MEASUREMENT,
-		.gpio_sync = &gpio_sync_init_param,
-		.lpf = ADXRS290_LPF_480HZ,
-		.hpf = ADXRS290_HPF_ALL_PASS
-	};
-
-	status = platform_init();
-	if (NO_OS_IS_ERR_VALUE(status))
-		return status;
-
-	status = adxrs290_init(&adxrs290_device, &adxrs290_param);
-	if (NO_OS_IS_ERR_VALUE(status))
-		return status;
-
+	int ret;
+	struct adxrs290_dev *adxrs290_desc;
 	struct iio_data_buffer rd_buf = {
 		.buff = (void *)GYRO_DDR_BASEADDR,
 		.size = MAX_SIZE_BASE_ADDR
 	};
 
-	struct iio_app_device devices[] = {
-		IIO_APP_DEVICE("adxrs290", adxrs290_device,
-			       &adxrs290_iio_descriptor, &rd_buf, NULL)
+	ret = adxrs290_init(&adxrs290_desc, &adxrs290_ip);
+	if (ret)
+		return ret;
+
+	struct iio_app_device iio_devices[] = {
+		{
+			.name = "adxrs290",
+			.dev = adxrs290_desc,
+			.dev_descriptor = &adxrs290_iio_descriptor,
+			.read_buff = &rd_buf,
+		}
 	};
 
-	return iio_app_run(devices, NO_OS_ARRAY_SIZE(devices));
+	return iio_app_run(iio_devices, NO_OS_ARRAY_SIZE(iio_devices));
 }

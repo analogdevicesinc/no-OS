@@ -1,32 +1,33 @@
-#See No-OS/tool/scripts/src_model.mk for variable description
+include $(PROJECT)/src/platform/$(PLATFORM)/platform_src.mk
+include $(PROJECT)/src/examples/examples_src.mk
 
-SRC_DIRS += $(PROJECT)/src
-SRC_DIRS += $(DRIVERS)/gyro/adxrs290 
+SRCS += $(PROJECT)/src/platform/$(PLATFORM)/main.c
 
-# For the moment there is support only for aducm for iio with network backend
-ifeq (aducm3029,$(strip $(PLATFORM)))
-ifeq '$(USE_TCP_SOCKET)' 'y'
-ENABLE_IIO_NETWORK ?= y
-CFLAGS += -DUSE_TCP_SOCKET
-else
-ENABLE_IIO_NETWORK ?= n
-endif
-endif
+INCS += $(PROJECT)/src/common/common_data.h
+SRCS += $(PROJECT)/src/common/common_data.c
 
-ifeq (y,$(strip $(ENABLE_IIO_NETWORK)))
-DISABLE_SECURE_SOCKET ?= y
-SRC_DIRS += $(NO-OS)/network
-SRCS	 += $(NO-OS)/util/no_os_circular_buffer.c
-INCS	 += $(INCLUDE)/no_os_circular_buffer.h
-endif
+INCS += $(PROJECT)/src/platform/platform_includes.h
 
-SRC_DIRS += $(PLATFORM_DRIVERS)
-SRC_DIRS += $(NO-OS)/iio/iio_app
-SRC_DIRS += $(INCLUDE)
+INCS += $(PROJECT)/src/platform/$(PLATFORM)/parameters.h
+SRCS += $(PROJECT)/src/platform/$(PLATFORM)/parameters.c
 
-SRCS +=	$(DRIVERS)/api/no_os_irq.c \
-	$(DRIVERS)/api/no_os_gpio.c \
-	$(NO-OS)/util/no_os_list.c \
-	$(NO-OS)/util/no_os_fifo.c \
-	$(NO-OS)/util/no_os_util.c \
-	$(DRIVERS)/api/no_os_spi.c
+INCS += $(DRIVERS)/gyro/adxrs290/adxrs290.h
+SRCS += $(DRIVERS)/gyro/adxrs290/adxrs290.c
+
+INCS += $(INCLUDE)/no_os_delay.h        \
+        $(INCLUDE)/no_os_error.h        \
+        $(INCLUDE)/no_os_gpio.h         \
+        $(INCLUDE)/no_os_print_log.h    \
+        $(INCLUDE)/no_os_spi.h          \
+        $(INCLUDE)/no_os_irq.h          \
+        $(INCLUDE)/no_os_list.h         \
+        $(INCLUDE)/no_os_uart.h         \
+        $(INCLUDE)/no_os_lf256fifo.h    \
+        $(INCLUDE)/no_os_util.h
+
+SRCS += $(DRIVERS)/api/no_os_gpio.c     \
+        $(NO-OS)/util/no_os_lf256fifo.c \
+        $(DRIVERS)/api/no_os_irq.c      \
+        $(DRIVERS)/api/no_os_spi.c      \
+        $(NO-OS)/util/no_os_list.c      \
+        $(NO-OS)/util/no_os_util.c
