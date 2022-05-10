@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   adxrs290-pmdz/src/parameters.h
- *   @brief  Parameters Definitions.
- *   @author DBogdan (dragos.bogdan@analog.com)
+ *   @file   common_data.c
+ *   @brief  Defines common data to be used by eval-adxrs290-pmdz examples.
+ *   @author RBolboac (ramona.bolboaca@analog.com)
 ********************************************************************************
- * Copyright 2013(c) Analog Devices, Inc.
+ * Copyright 2022(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -36,33 +36,58 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __PARAMETERS_H__
-#define __PARAMETERS_H__
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-
-#ifdef ADUCM_PLATFORM
-#include "irq_extra.h"
-#endif
+#include "common_data.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
+struct no_os_spi_init_param adxrs290_spi_ip = {
+	.device_id = SPI_DEVICE_ID,
+	.max_speed_hz = SPI_BAUDRATE,
+	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
+	.mode = NO_OS_SPI_MODE_3,
+	.platform_ops = SPI_OPS,
+	.chip_select = SPI_CS,
+	.extra = SPI_EXTRA,
+};
 
-#ifdef ADUCM_PLATFORM
+/* Initialization for Sync pin */
+struct no_os_gpio_init_param adxrs290_gpio_sync_ip = {
+	.port = GPIO_SYNC_PORT_NUM,
+	.number = GPIO_SYNC_PIN_NUM,
+	.pull = NO_OS_PULL_NONE,
+	.platform_ops = GPIO_OPS,
+	.extra = GPIO_EXTRA
+};
 
-#define UART_DEVICE_ID	0
-#define INTC_DEVICE_ID	0
-#define UART_IRQ_ID		ADUCM_UART_INT_ID
-#define UART_BAUDRATE	115200
+struct adxrs290_init_param adxrs290_ip = {
+	.mode = ADXRS290_MODE_MEASUREMENT,
+	.gpio_sync = &adxrs290_gpio_sync_ip,
+	.lpf = ADXRS290_LPF_480HZ,
+	.hpf = ADXRS290_HPF_ALL_PASS
+};
 
-#endif //ADUCM_PLATFORM
+#ifdef IIO_TRIGGER_EXAMPLE
+struct no_os_irq_init_param adxrs290_gpio_irq_ip = {
+	.irq_ctrl_id = GPIO_IRQ_ID,
+	.platform_ops = GPIO_IRQ_OPS,
+	.extra = GPIO_IRQ_EXTRA,
+};
 
-#ifdef USE_TCP_SOCKET
-#define WIFI_SSID	"RouterSSID"
-#define WIFI_PWD	"******"
-#endif /* USE_TCP_SOCKET */
+const struct iio_hw_trig_cb_info gpio_cb_info = {
+	.event = NO_OS_EVT_GPIO,
+	.peripheral = NO_OS_GPIO_IRQ,
+	.handle = ADXRS290_GPIO_CB_HANDLE,
+};
 
-#endif // __PARAMETERS_H__
+struct iio_hw_trig_init_param adxrs290_gpio_trig_ip = {
+	.irq_id = ADXRS290_GPIO_TRIG_IRQ_ID,
+	.irq_trig_lvl = NO_OS_IRQ_LEVEL_HIGH,
+	.cb_info = gpio_cb_info,
+	.name = ADXRS290_GPIO_TRIG_NAME,
+};
+#endif
