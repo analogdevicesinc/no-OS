@@ -47,6 +47,9 @@
 #ifdef IIO_SUPPORT
 #include "iio_adxl355.h"
 #endif
+#ifdef IIO_TRIGGER_EXAMPLE
+#include "iio_trigger.h"
+#endif
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -56,10 +59,9 @@ extern struct no_os_uart_init_param uip;
 #endif
 
 #ifdef IIO_TRIGGER_EXAMPLE
-#define IIO_ADXL355_TRIGGER_NAME "adxl355-dev0"
-#define IIO_ADXL355_SW_TRIGGER_NAME "adxl355-sw-trig"
-extern struct adxl355_iio_trig_init_param adxl355_iio_trig_user_init;
-extern struct adxl355_iio_sw_trig_init_param adxl355_iio_sw_trig_user_init;
+#define ADXL355_GPIO_TRIG_NAME "adxl355-dev0"
+extern struct iio_hw_trig_init_param adxl355_gpio_trig_ip;
+extern struct no_os_irq_init_param adxl355_gpio_irq_ip;
 #endif
 
 extern struct no_os_spi_init_param sip;
