@@ -20,8 +20,8 @@ endif
 
 ifeq (y,$(strip $(TINYIIOD)))
 SRC_DIRS += $(NO-OS)/iio/iio_app
-INCS += $(DRIVERS)/accel/adxl355/iio_adxl355.h
 
+INCS += $(DRIVERS)/accel/adxl355/iio_adxl355.h
 SRCS += $(DRIVERS)/accel/adxl355/iio_adxl355.c
 
 ifeq (y,$(strip $(IIO_TRIGGER_EXAMPLE)))

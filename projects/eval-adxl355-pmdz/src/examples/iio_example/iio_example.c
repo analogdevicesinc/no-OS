@@ -63,18 +63,18 @@ uint8_t iio_data_buffer[DATA_BUFFER_SIZE*3*sizeof(int)];
  * @return ret - Result of the example execution. If working correctly, will
  *               execute continuously function iio_app_run and will not return.
 *******************************************************************************/
-int iio_example_main ()
+int iio_example_main()
 {
 	int ret;
 	struct adxl355_iio_dev *adxl355_iio_desc;
-	struct adxl355_iio_dev_init_param adxl355_init_par;
+	struct adxl355_iio_dev_init_param adxl355_iio_ip;
 	struct iio_data_buffer accel_buff = {
 		.buff = (void *)iio_data_buffer,
 		.size = DATA_BUFFER_SIZE*3*sizeof(int)
 	};
 
-	adxl355_init_par.adxl355_dev_init = &adxl355_user_init;
-	ret = adxl355_iio_init(&adxl355_iio_desc, &adxl355_init_par);
+	adxl355_iio_ip.adxl355_dev_init = &adxl355_ip;
+	ret = adxl355_iio_init(&adxl355_iio_desc, &adxl355_iio_ip);
 	if (ret)
 		return ret;
 

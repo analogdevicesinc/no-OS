@@ -46,13 +46,13 @@
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 #ifdef DUMMY_EXAMPLE
-struct no_os_uart_init_param uip = {
+struct no_os_uart_init_param adxl355_uart_ip = {
 	.device_id = UART_DEVICE_ID,
-	.baud_rate = 115200,
+	.baud_rate = UART_BAUDRATE,
 	.size = NO_OS_UART_CS_8,
 	.parity = NO_OS_UART_PAR_NO,
 	.stop = NO_OS_UART_STOP_1_BIT,
-	.extra = &xuip,
+	.extra = UART_EXTRA,
 };
 #endif
 
@@ -78,17 +78,16 @@ struct iio_hw_trig_init_param adxl355_gpio_trig_ip = {
 };
 #endif
 
-struct no_os_spi_init_param sip = {
+struct no_os_spi_init_param adxl355_spi_ip = {
 	.device_id = SPI_DEVICE_ID,
-	.max_speed_hz = 4000000,
+	.max_speed_hz = SPI_BAUDRATE,
 	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
 	.mode = NO_OS_SPI_MODE_0,
-	.extra = &xsip,
 	.platform_ops = SPI_OPS,
 	.chip_select = SPI_CS,
+	.extra = SPI_EXTRA,
 };
 
-struct adxl355_init_param adxl355_user_init = {
+struct adxl355_init_param adxl355_ip = {
 	.comm_type = ADXL355_SPI_COMM,
 };
-

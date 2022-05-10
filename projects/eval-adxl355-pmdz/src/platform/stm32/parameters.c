@@ -46,22 +46,22 @@
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 #ifdef DUMMY_EXAMPLE
-struct stm32_uart_init_param xuip = {
+struct stm32_uart_init_param adxl355_uart_extra_ip = {
 	.huart = &huart5,
 };
 #endif
 
-struct stm32_spi_init_param xsip  = {
+struct stm32_spi_init_param adxl355_spi_extra_ip  = {
 	.chip_select_port = SPI_CS_PORT,
 };
 
 #ifdef IIO_TRIGGER_EXAMPLE
-EXTI_ConfigTypeDef adxl355_int_exticonfig = {
+EXTI_ConfigTypeDef adxl355_exti_ip = {
 	.Line = EXTI_LINE_2,
 	.Trigger = EXTI_TRIGGER_RISING,
 	.GPIOSel = EXTI_GPIOA,
 	.Mode = EXTI_MODE_INTERRUPT,
 };
-EXTI_HandleTypeDef xiip;
-#endif
 
+EXTI_HandleTypeDef adxl355_gpio_irq_extra;
+#endif
