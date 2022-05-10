@@ -57,19 +57,24 @@ struct no_os_uart_init_param uip = {
 #endif
 
 #ifdef IIO_TRIGGER_EXAMPLE
-struct no_os_irq_init_param adxl355_int_ip = {
-	.irq_ctrl_id = ADXL355_TRIGGER_INTR_ID,
-	.platform_ops = IRQ_OPS,
-	.extra = &xiip,
+/* GPIO trigger */
+struct no_os_irq_init_param adxl355_gpio_irq_ip = {
+	.irq_ctrl_id = GPIO_IRQ_ID,
+	.platform_ops = GPIO_IRQ_OPS,
+	.extra = GPIO_IRQ_EXTRA,
 };
 
-struct adxl355_iio_trig_init_param adxl355_iio_trig_user_init = {
-	.irq_init_param = &adxl355_int_ip,
-	.name = IIO_ADXL355_TRIGGER_NAME,
+const struct iio_hw_trig_cb_info gpio_cb_info = {
+	.event = NO_OS_EVT_GPIO,
+	.peripheral = NO_OS_GPIO_IRQ,
+	.handle = ADXL355_GPIO_CB_HANDLE,
 };
 
-struct adxl355_iio_sw_trig_init_param adxl355_iio_sw_trig_user_init = {
-	.name = IIO_ADXL355_SW_TRIGGER_NAME,
+struct iio_hw_trig_init_param adxl355_gpio_trig_ip = {
+	.irq_id = ADXL355_GPIO_TRIG_IRQ_ID,
+	.irq_trig_lvl = NO_OS_IRQ_EDGE_RISING,
+	.cb_info = gpio_cb_info,
+	.name = ADXL355_GPIO_TRIG_NAME,
 };
 #endif
 

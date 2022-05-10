@@ -72,8 +72,15 @@ extern struct stm32_uart_init_param xuip;
 extern struct stm32_spi_init_param xsip;
 
 #ifdef IIO_TRIGGER_EXAMPLE
-#define IRQ_OPS &stm32_irq_ops
-#define ADXL355_TRIGGER_INTR_ID EXTI2_IRQn
+/* Setting for PortA Pin2 used for DATA_READY.
+   Has to be adapted accordingly if another pin is used.
+ */
+#define ADXL355_GPIO_TRIG_IRQ_ID     EXTI2_IRQn
+#define ADXL355_GPIO_CB_HANDLE       NULL
+
+#define GPIO_IRQ_ID             EXTI2_IRQn
+#define GPIO_IRQ_OPS            &stm32_irq_ops
+#define GPIO_IRQ_EXTRA          &xiip
 
 extern EXTI_HandleTypeDef xiip;
 extern EXTI_ConfigTypeDef adxl355_int_exticonfig;
