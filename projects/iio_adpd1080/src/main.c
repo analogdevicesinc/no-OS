@@ -51,6 +51,7 @@
 #include "no_os_timer.h"
 #include "irq_extra.h"
 #include "i2c_extra.h"
+#include "aducm3029_gpio_irq.h"
 
 #define MAX_SIZE_BASE_ADDR		1024
 
@@ -58,7 +59,7 @@ static uint8_t in_buff[MAX_SIZE_BASE_ADDR];
 
 #define ADC_DDR_BASEADDR	((uint32_t)in_buff)
 
-static void adpd1080_sync_gpio_cb(void *ctx, uint32_t event, void *config)
+static void adpd1080_sync_gpio_cb(void *ctx)
 {
 	int32_t *cnt = ctx;
 
@@ -70,7 +71,8 @@ static int32_t adpd1080pmod_32k_calib(struct adpd188_dev *adpd1080_dev)
 	int32_t status;
 	uint16_t temp_reg;
 	uint32_t t_start, t_stop = 0;
-	int32_t sync_gpio_pulse_no, min_diff = 0x7fffffff;
+	volatile int32_t sync_gpio_pulse_no;
+	int32_t min_diff = 0x7fffffff;
 	struct no_os_timer_desc *cal_timer;
 	struct no_os_timer_init_param cal_timer_init = {
 		.id = 0,
@@ -86,8 +88,8 @@ static int32_t adpd1080pmod_32k_calib(struct adpd188_dev *adpd1080_dev)
 	};
 	struct no_os_irq_ctrl_desc *cal_irq;
 	struct no_os_irq_init_param cal_irq_init = {
-		.irq_ctrl_id = 0,
-		.platform_ops = &aducm_irq_ops,
+		.irq_ctrl_id = ADUCM_GPIO_B_GROUP_SOFT_CTRL,
+		.platform_ops = &aducm_gpio_irq_ops,
 		.extra = NULL
 	};
 
@@ -109,17 +111,14 @@ static int32_t adpd1080pmod_32k_calib(struct adpd188_dev *adpd1080_dev)
 	if(status != 0)
 		goto gpio_finish;
 
-	struct gpio_irq_config sync_irq_config = {
-		.gpio_handler = sync_gpio,
-		.mode = GPIO_GROUP_POSITIVE_EDGE
-	};
 	struct no_os_callback_desc sync_gpio_cb = {
-		.legacy_callback = adpd1080_sync_gpio_cb,
+		.callback = adpd1080_sync_gpio_cb,
 		.ctx = &sync_gpio_pulse_no,
-		.legacy_config = &sync_irq_config
+		.event = NO_OS_EVT_GPIO,
+		.handle = cal_irq->extra,
+		.peripheral = NO_OS_GPIO_IRQ
 	};
-	status = no_os_irq_register_callback(cal_irq, ADUCM_GPIO_A_INT_ID,
-					     &sync_gpio_cb);
+	status = no_os_irq_register_callback(cal_irq, 0x0D, &sync_gpio_cb);
 	if(status != 0)
 		goto gpio_finish;
 
@@ -140,7 +139,7 @@ static int32_t adpd1080pmod_32k_calib(struct adpd188_dev *adpd1080_dev)
 	if (status != 0)
 		goto finish;
 
-	status = no_os_irq_enable(cal_irq, ADUCM_GPIO_A_INT_ID);
+	status = no_os_irq_enable(cal_irq, 0x0D);
 	if(status != 0)
 		goto finish;
 
@@ -170,11 +169,11 @@ static int32_t adpd1080pmod_32k_calib(struct adpd188_dev *adpd1080_dev)
 			goto finish;
 	}
 
-	status = no_os_irq_disable(cal_irq, ADUCM_GPIO_A_INT_ID);
+	status = no_os_irq_disable(cal_irq, 0x0D);
 	if(status != 0)
 		goto finish;
 
-	status = no_os_irq_unregister_callback(cal_irq, ADUCM_GPIO_A_INT_ID, NULL);
+	status = no_os_irq_unregister_callback(cal_irq, 0x0D, &sync_gpio_cb);
 	if(status != 0)
 		goto gpio_finish;
 
