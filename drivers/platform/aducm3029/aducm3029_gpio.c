@@ -51,11 +51,6 @@
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 
-/** Get GPIO pin from GPIO number */
-#define PIN(nb)		(1u << ((nb) & 0x0F))
-/** Get GPIO port from GPIO number */
-#define PORT(nb)	(((nb) & 0xF0) >> 4)
-
 /** Memory for GPIO device */
 static uint8_t mem_gpio_handler[ADI_GPIO_MEMORY_SIZE];
 /* Number of initialized devices */
@@ -83,13 +78,17 @@ int32_t aducm3029_gpio_get(struct no_os_gpio_desc **desc,
 
 	(*desc)->number = param->number;
 	/* If this is the first GPIO initialize GPIO controller */
-	if (nb_gpio == 0)
+	if (nb_gpio == 0) {
+		/** Deinitialize GPIO driver in case it was initialized by the
+		 *  GPIO IRQ driver */
+		adi_gpio_UnInit();
 		if (0 != adi_gpio_Init(mem_gpio_handler,
 				       ADI_GPIO_MEMORY_SIZE)) {
 			free(*desc);
 			*desc = NULL;
 			return -1;
 		}
+	}
 
 	/* Increment number of GPIOs */
 	nb_gpio++;

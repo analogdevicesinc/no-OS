@@ -41,7 +41,6 @@
 /************************* Include Files **************************************/
 /******************************************************************************/
 
-#include <drivers/uart/adi_uart.h>
 #include <stdlib.h>
 #include "no_os_uart.h"
 #include "no_os_irq.h"
@@ -49,74 +48,9 @@
 #include "no_os_util.h"
 
 /******************************************************************************/
-/*************************** Types Declarations *******************************/
-/******************************************************************************/
-
-/**
- * @struct no_os_baud_desc
- * @brief Structure of an element from \ref baud_rates_26MHz.
- * The baud rate is calculated with the formula:
- * Baudrate = (NO_OS_CLK_FREQ / (div_m + div_n/2048) * pow(2,osr+2) * div_c)).
- */
-struct no_os_baud_desc {
-	/** Calculated baud rate from the following parameters */
-	uint32_t	baud_rate;
-	/** From 0 to 2047 */
-	uint16_t	div_n;
-	/** From 1 to 3 */
-	uint8_t		div_m;
-	/** From 1 to 65535 */
-	uint16_t	div_c;
-	/** From 0 to 3 */
-	uint8_t		osr;
-};
-
-/**
- * @struct no_os_op_desc
- * @brief It stores the state of a operation
- */
-struct no_os_op_desc {
-	/** Is set when an write nonblocking operation is executing */
-	bool		is_nonblocking;
-	/** Current buffer*/
-	uint8_t		*buff;
-	/** Number of bytes pending to process */
-	uint32_t	pending;
-};
-
-/**
- * @struct no_os_aducm_uart_desc
- * @brief Stores specific parameter needed by the UART driver for internal
- * operations
- */
-struct no_os_aducm_uart_desc {
-	/** Handle needed by low level functions */
-	ADI_UART_HANDLE	uart_handler;
-	/** Stores the error occurred */
-	enum UART_ERROR	errors;
-	/** Set if callback is enabled */
-	bool		callback_enabled;
-	/**
-	 * Buffer needed by the ADI UART driver to operate.
-	 * This buffer allocated and aligned at runtime to 32 bits
-	 */
-	uint8_t		*adi_uart_buffer;
-	/**
-	 * Stores the offset used to align adi_uart_buffer.
-	 * Needed to deallocate \ref adi_uart_buffer
-	 */
-	uint32_t	adi_uart_buffer_offset;
-	/** Status of a write operation */
-	struct no_os_op_desc	write_desc;
-	/** Status of a read operation */
-	struct no_os_op_desc	read_desc;
-};
-
-/******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 
-#define NO_OS_MAX_BYTES	1024u
 #define NO_OS_CLK_FREQ	26000000u
 #define NO_OS_BAUDS_NB	10u
 #if defined (__ADUCM4x50__)
@@ -203,65 +137,6 @@ static void free_desc_mem(struct no_os_uart_desc *desc)
 }
 
 /**
- * @brief Call the user defined callback when a read/write operation completed.
- * @param desc:		Descriptor of the UART device
- * @param event:	Event ID from ADI_UART_EVENT
- * @param buff:		Pointer to the handled buffer or to an error code
- */
-static void no_os_uart_callback(void *ctx, uint32_t event, void *buff)
-{
-	struct no_os_uart_desc	*desc = ctx;
-	struct no_os_aducm_uart_desc	*extra = desc->extra;
-	uint32_t		len;
-
-	switch(event) {
-	/* Read done */
-	case ADI_UART_EVENT_RX_BUFFER_PROCESSED:
-		if (extra->read_desc.pending) {
-			len = no_os_min(extra->read_desc.pending, NO_OS_MAX_BYTES);
-			extra->read_desc.pending -= len;
-			adi_uart_SubmitRxBuffer(
-				(ADI_UART_HANDLE const)extra->uart_handler,
-				(void *const)extra->read_desc.buff,
-				(uint32_t const)len,
-				len > 4 ? true : false);
-			extra->read_desc.buff += len;
-		} else {
-			extra->read_desc.is_nonblocking = false;
-			if (desc->callback)
-				desc->callback(desc->callback_ctx, NO_OS_IRQ_READ_DONE,
-					       NULL);
-		}
-		break;
-	/* Write done */
-	case ADI_UART_EVENT_TX_BUFFER_PROCESSED:
-		if (extra->write_desc.pending) {
-			len = no_os_min(extra->write_desc.pending, NO_OS_MAX_BYTES);
-			extra->write_desc.pending -= len;
-			adi_uart_SubmitTxBuffer(
-				(ADI_UART_HANDLE const)extra->uart_handler,
-				(void *const)extra->write_desc.buff,
-				(uint32_t const)len,
-				len > 4 ? true : false);
-			extra->write_desc.buff += len;
-		} else {
-			extra->write_desc.is_nonblocking = false;
-			if (desc->callback)
-				desc->callback(desc->callback_ctx, NO_OS_IRQ_WRITE_DONE,
-					       NULL);
-		}
-		break;
-	default:
-		extra->errors |= (uint32_t)buff;
-		extra->read_desc.is_nonblocking = false;
-		extra->write_desc.is_nonblocking = false;
-		if (desc->callback)
-			desc->callback(desc->callback_ctx, NO_OS_IRQ_ERROR, buff);
-		break;
-	}
-}
-
-/**
  * @brief Read data from UART. Blocking function.
  * @param desc:	Descriptor of the UART device
  * @param data:	Buffer where data will be read
@@ -291,7 +166,7 @@ int32_t no_os_uart_read(struct no_os_uart_desc *desc, uint8_t *data,
 
 	idx = 0;
 	while (bytes_number) {
-		to_read = no_os_min(bytes_number, NO_OS_MAX_BYTES);
+		to_read = no_os_min(bytes_number, NO_OS_UART_MAX_BYTES);
 		if (ADI_UART_SUCCESS != adi_uart_Read(
 			    (ADI_UART_HANDLE const)extra->uart_handler,
 			    (void *const)(data + idx),
@@ -335,7 +210,7 @@ int32_t no_os_uart_write(struct no_os_uart_desc *desc, const uint8_t *data,
 
 	idx = 0;
 	while (bytes_number) {
-		to_write = no_os_min(bytes_number, NO_OS_MAX_BYTES);
+		to_write = no_os_min(bytes_number, NO_OS_UART_MAX_BYTES);
 		if (ADI_UART_SUCCESS != adi_uart_Write(
 			    (ADI_UART_HANDLE const)extra->uart_handler,
 			    (void *const)(data + idx),
@@ -377,7 +252,7 @@ int32_t no_os_uart_read_nonblocking(struct no_os_uart_desc *desc, uint8_t *data,
 		return -1;
 	extra->read_desc.is_nonblocking = true;
 
-	to_read = no_os_min(bytes_number, NO_OS_MAX_BYTES);
+	to_read = no_os_min(bytes_number, NO_OS_UART_MAX_BYTES);
 	extra->read_desc.pending = bytes_number - to_read;
 	extra->read_desc.buff = data + to_read;
 	/* The following submits until bytes_number are don in the interrupt. */
@@ -415,7 +290,7 @@ int32_t no_os_uart_write_nonblocking(struct no_os_uart_desc *desc,
 		return -1;
 	extra->write_desc.is_nonblocking = true;
 
-	to_write = no_os_min(bytes_number, NO_OS_MAX_BYTES);
+	to_write = no_os_min(bytes_number, NO_OS_UART_MAX_BYTES);
 	extra->write_desc.pending = bytes_number - to_write;
 	extra->write_desc.buff = (uint8_t *)data + to_write;
 	/* The following submits until bytes_number are don in the interrupt. */
@@ -492,9 +367,6 @@ int32_t no_os_uart_init(struct no_os_uart_desc **desc,
 					   baud_rates_26MHz[i].osr);
 	if (uart_ret != ADI_UART_SUCCESS)
 		goto failure;
-
-	adi_uart_RegisterCallback(aducm_desc->uart_handler, no_os_uart_callback,
-				  *desc);
 
 	return 0;
 failure:
