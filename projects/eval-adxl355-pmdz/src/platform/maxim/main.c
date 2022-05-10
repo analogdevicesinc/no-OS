@@ -42,6 +42,7 @@
 /******************************************************************************/
 #include "platform_includes.h"
 #include "common_data.h"
+#include "no_os_error.h"
 
 #ifdef IIO_EXAMPLE
 #include "iio_example.h"
@@ -62,41 +63,64 @@
 *******************************************************************************/
 int main()
 {
-	int ret;
+	int ret = -EINVAL;
 
-	adxl355_user_init.comm_init.spi_init = sip;
+	adxl355_ip.comm_init.spi_init = adxl355_spi_ip;
 
 #ifdef IIO_EXAMPLE
 	ret = iio_example_main();
-	if (ret)
-		goto error;
 #endif
 
 #ifdef IIO_TRIGGER_EXAMPLE
-#error Selected example is not supported.
+#if (TARGET_NUM != 32655)
+#error IIO_TRIGGER_EXAMPLE is currently supported only on max32655 targets.
+#else
+	struct no_os_gpio_desc *adxl355_gpio_desc;
+	struct no_os_irq_ctrl_desc *nvic_desc;
+	struct no_os_irq_init_param nvic_ip = {
+		.platform_ops = &max_irq_ops,
+	};
+
+	/* Initialize DATA READY pin */
+	ret = no_os_gpio_get_optional(&adxl355_gpio_desc, &adxl355_gpio_drdy_ip);
+	if (ret)
+		return ret;
+
+	ret = no_os_gpio_direction_input(adxl355_gpio_desc);
+	if (ret)
+		return ret;
+
+	/* Initialize GPIO IRQ controller */
+	ret = no_os_irq_ctrl_init(&nvic_desc, &nvic_ip);
+	if (ret)
+		return ret;
+
+	ret = no_os_irq_enable(nvic_desc, NVIC_GPIO_IRQ);
+	if (ret)
+		return ret;
+
+	ret = iio_trigger_example_main();
+#endif
 #endif
 
 #ifdef DUMMY_EXAMPLE
-	struct no_os_uart_desc *uart;
+	struct no_os_uart_desc *uart_desc;
 
-	ret = no_os_uart_init(&uart, &uip);
+	ret = no_os_uart_init(&uart_desc, &adxl355_uart_ip);
 	if (ret)
-		goto error;
+		return ret;
 
-	maxim_uart_stdio(uart);
+	maxim_uart_stdio(uart_desc);
 	ret = dummy_example_main();
-	if (ret)
-		goto error;
 #endif
 
-#if (IIO_EXAMPLE+DUMMY_EXAMPLE == 0)
+#if (DUMMY_EXAMPLE + IIO_EXAMPLE + IIO_TRIGGER_EXAMPLE == 0)
 #error At least one example has to be selected using y value in Makefile.
-#elif (IIO_EXAMPLE+DUMMY_EXAMPLE> 1)
+#elif (DUMMY_EXAMPLE + IIO_EXAMPLE + IIO_TRIGGER_EXAMPLE > 1)
 #error Selected example projects cannot be enabled at the same time. \
 Please enable only one example and re-build the project.
 #endif
 
-error:
-	return 0;
+	return ret;
 }
 
