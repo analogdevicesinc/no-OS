@@ -182,6 +182,9 @@ set ps_dict [dict create					\
 	"sys_mb" "*MicroBlaze #*"]
 
 proc _cpu_reset {cpu} {
+	if {$cpu == "sys_mb"} {
+		return
+	}
 	targets -set -filter {name =~ "APU*" && jtag_cable_name =~ "*$::jtagtarget*"}
 	stop
 	if {$cpu == "ps7_cortexa9_0"} {
@@ -228,8 +231,8 @@ proc _init_ps {cpu} {
 			targets -set -filter {name =~ "Cortex-R5 #0" && jtag_cable_name =~ "*$::jtagtarget*"}
 		}
 		"sys_mb" {
-			targets -set -filter {[dict get $::pl_dict $cpu]}
-
+			set name [dict get $::pl_dict $cpu]
+			targets -set -filter {name =~ "$name" && jtag_cable_name =~ "*$::jtagtarget*"}
 		}
 	}
 }
@@ -237,7 +240,9 @@ proc _init_ps {cpu} {
 proc _write_ps {cpu} {
 	set name [dict get $::ps_dict $cpu]
 	targets -set -filter {name =~  "$name" && jtag_cable_name =~ "*$::jtagtarget*"}
+	after 2000
 	dow "[file normalize $::binary]"
+	after 2000
 	con
 	disconnect
 }
