@@ -65,8 +65,10 @@
 #define UART_IRQ_ID		XPAR_AXI_INTC_AXI_UART_INTERRUPT_INTR
 #endif // _XPARAMETERS_PS_H_
 
-/* 400 * 8 * 2 = 6400 Default number of samples requested on a capture */
-#define MAX_SIZE_BASE_ADDR	10000
-#define UART_BAUDRATE	115200
+/* This value can be modified based on the number
+of samples needed to be stored in the device buffer
+and based on the available RAM memory of the platform */
+#define SAMPLES_PER_CHANNEL_PLATFORM    2000
+#define UART_BAUDRATE	                115200
 
 #endif /* __PARAMETERS_H__ */

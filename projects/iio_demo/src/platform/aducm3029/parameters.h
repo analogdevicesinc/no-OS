@@ -59,7 +59,9 @@
 #define UART_IRQ_ID		ADUCM_UART_INT_ID
 #define UART_BAUDRATE	115200
 
-#define MAX_SIZE_BASE_ADDR	(SAMPLES_PER_CHANNEL * DEMO_CHANNELS * \
-					sizeof(uint16_t))
+/* This value can be modified based on the number
+of samples needed to be stored in the device buffer
+and based on the available RAM memory of the platform */
+#define SAMPLES_PER_CHANNEL_PLATFORM 200
 
 #endif /* __PARAMETERS_H__ */
