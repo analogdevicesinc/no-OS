@@ -53,8 +53,10 @@
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-#define MAX_SIZE_BASE_ADDR	(SAMPLES_PER_CHANNEL * DEMO_CHANNELS * \
-					sizeof(uint16_t))
+/* This value can be modified based on the number
+of samples needed to be stored in the device buffer
+and based on the available RAM memory of the platform */
+#define SAMPLES_PER_CHANNEL_PLATFORM 2000
 
 extern UART_HandleTypeDef huart5;
 #define INTC_DEVICE_ID 0

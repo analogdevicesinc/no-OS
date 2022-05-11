@@ -54,7 +54,7 @@
 #define DEMO_CHANNELS no_os_max(TOTAL_ADC_CHANNELS, TOTAL_DAC_CHANNELS)
 
 #ifdef ENABLE_LOOPBACK
-#define SAMPLES_PER_CHANNEL	200
+#define SAMPLES_PER_CHANNEL	SAMPLES_PER_CHANNEL_PLATFORM
 #else //ENABLE_LOOPBACK
 #define SAMPLES_PER_CHANNEL	0
 #define loopback_buffs		NULL
@@ -62,6 +62,9 @@
 
 extern uint8_t in_buff[];
 extern uint8_t out_buff[];
+
+#define MAX_SIZE_BASE_ADDR	(SAMPLES_PER_CHANNEL * DEMO_CHANNELS * \
+					sizeof(uint16_t))
 
 #define DAC_DDR_BASEADDR	out_buff
 #define ADC_DDR_BASEADDR	in_buff
