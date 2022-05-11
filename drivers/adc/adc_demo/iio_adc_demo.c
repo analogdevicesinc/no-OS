@@ -118,7 +118,7 @@ int set_adc_demo_attr(void *device, char *buf, uint32_t len,
 
 struct scan_type adc_scan_type = {
 	.sign = 's',
-	.realbits = 12,
+	.realbits = 16,
 	.storagebits = 16,
 	.shift = 0,
 	.is_big_endian = false
