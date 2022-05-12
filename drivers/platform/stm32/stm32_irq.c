@@ -105,9 +105,9 @@ void HAL_GPIO_EXTI_Callback(uint16_t pin)
 }
 
 static inline void _common_uart_callback(UART_HandleTypeDef *huart,
-		uint32_t hal_event)
+		uint32_t no_os_event)
 {
-	struct event_list *ue = &_events[hal_event];
+	struct event_list *ue = &_events[no_os_event];
 	struct irq_action *a;
 	struct irq_action key = {.handle = huart};
 	int ret;
@@ -122,19 +122,19 @@ static inline void _common_uart_callback(UART_HandleTypeDef *huart,
 // equivalent of HAL_UART_TxCpltCallback
 void _TxCpltCallback(UART_HandleTypeDef *huart)
 {
-	_common_uart_callback(huart, HAL_UART_TX_COMPLETE_CB_ID);
+	_common_uart_callback(huart, NO_OS_EVT_UART_TX_COMPLETE);
 }
 
 // equivalent of HAL_UART_RxCpltCallback
 void _RxCpltCallback(UART_HandleTypeDef *huart)
 {
-	_common_uart_callback(huart, HAL_UART_RX_COMPLETE_CB_ID);
+	_common_uart_callback(huart, NO_OS_EVT_UART_RX_COMPLETE);
 }
 
 // equivalent of HAL_UART_ErrorCallback
 void _ErrorCallback(UART_HandleTypeDef *huart)
 {
-	_common_uart_callback(huart, HAL_UART_ERROR_CB_ID);
+	_common_uart_callback(huart, NO_OS_EVT_UART_ERROR);
 }
 
 /******************************************************************************/
@@ -243,8 +243,8 @@ int32_t stm32_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 			break;
 		}
 
-		if (_events[hal_event].actions == NULL) {
-			ret = no_os_list_init(&_events[hal_event].actions, NO_OS_LIST_PRIORITY_LIST,
+		if (_events[cb->event].actions == NULL) {
+			ret = no_os_list_init(&_events[cb->event].actions, NO_OS_LIST_PRIORITY_LIST,
 					      irq_action_cmp2);
 			if (ret < 0)
 				return ret;
@@ -257,7 +257,7 @@ int32_t stm32_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 		li->handle = desc->extra;
 		li->callback = cb->callback;
 		li->ctx = cb->ctx;
-		ret = no_os_list_add_last(_events[hal_event].actions, li);
+		ret = no_os_list_add_last(_events[cb->event].actions, li);
 		if (ret < 0) {
 			free(li);
 			return ret;
@@ -284,8 +284,8 @@ int32_t stm32_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 			break;
 		}
 
-		if (_events[hal_event].actions == NULL) {
-			ret = no_os_list_init(&_events[hal_event].actions, NO_OS_LIST_PRIORITY_LIST,
+		if (_events[cb->event].actions == NULL) {
+			ret = no_os_list_init(&_events[cb->event].actions, NO_OS_LIST_PRIORITY_LIST,
 					      irq_action_cmp);
 			if (ret < 0)
 				return ret;
@@ -298,7 +298,7 @@ int32_t stm32_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 		li->handle = desc->extra;
 		li->callback = cb->callback;
 		li->ctx = cb->ctx;
-		ret = no_os_list_add_last(_events[hal_event].actions, li);
+		ret = no_os_list_add_last(_events[cb->event].actions, li);
 		if (ret < 0) {
 			free(li);
 			return ret;
@@ -331,11 +331,11 @@ int32_t stm32_irq_unregister_callback(struct no_os_irq_ctrl_desc *desc,
 	switch (cb->peripheral) {
 	case NO_OS_GPIO_IRQ:
 		key.handle = desc->extra;
-		ret = no_os_list_get_find(_events[hal_event].actions, &discard, &key);
+		ret = no_os_list_get_find(_events[cb->event].actions, &discard, &key);
 		break;
 	case NO_OS_UART_IRQ:
 		key.handle = desc->extra;
-		ret = no_os_list_get_find(_events[hal_event].actions, &discard, &key);
+		ret = no_os_list_get_find(_events[cb->event].actions, &discard, &key);
 		if (ret < 0)
 			break;
 		ret = HAL_UART_UnRegisterCallback(desc->extra, hal_event);
