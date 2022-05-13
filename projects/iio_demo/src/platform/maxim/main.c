@@ -1,7 +1,7 @@
 /***************************************************************************//**
- *   @file   platform_includes.h
- *   @brief  Includes for used platforms used by iio_demo project.
- *   @author RBolboac (ramona.bolboaca@analog.com)
+ *   @file   main.c
+ *   @brief  Main file for Maxim platform of iio_demo project.
+ *   @author Ciprian Regus (ciprian.regus@analog.com)
 ********************************************************************************
  * Copyright 2022(c) Analog Devices, Inc.
  *
@@ -36,26 +36,48 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __PLATFORM_INCLUDES_H__
-#define __PLATFORM_INCLUDES_H__
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#ifdef STM32_PLATFORM
-#include "stm32/parameters.h"
-#elif defined MAXIM_PLATFORM
-#include "maxim/parameters.h"
-#elif defined XILINX_PLATFORM
-#include "xilinx/parameters.h"
-#elif defined ADUCM_PLATFORM
-#include "aducm3029/parameters.h"
-#elif defined LINUX_PLATFORM
-#include "linux/parameters.h"
+#include "platform_includes.h"
+#include "common_data.h"
+
+#ifdef IIO_EXAMPLE
+#include "iio_example.h"
 #endif
 
-#ifdef IIO_SUPPORT
-#include "iio_app.h"
+#ifdef IIO_TRIGGER_EXAMPLE
+#include "iio_trigger_example.h"
 #endif
 
-#endif /* __PLATFORM_INCLUDES_H__ */
+/***************************************************************************//**
+ * @brief Main function execution for Maxim platform.
+ *
+ * @return ret - Result of the enabled examples execution.
+*******************************************************************************/
+int main()
+{
+	int ret = -1;
+
+#if TARGET_NUM==32660
+#error TARGET MAX32660 not supported
+#endif
+
+#ifdef IIO_EXAMPLE
+	ret = iio_example_main();
+#endif
+
+#ifdef IIO_TRIGGER_EXAMPLE
+#error Software trigger is not supported over UART.
+#endif
+
+#if (IIO_EXAMPLE + IIO_TRIGGER_EXAMPLE == 0)
+#error At least one example has to be selected using y value in Makefile.
+#elif (IIO_EXAMPLE + IIO_TRIGGER_EXAMPLE > 1)
+#error Selected example projects cannot be enabled at the same time. \
+Please enable only one example and re-build the project.
+#endif
+
+	return ret;
+}

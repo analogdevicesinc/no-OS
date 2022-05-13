@@ -1,7 +1,8 @@
 /***************************************************************************//**
- *   @file   platform_includes.h
- *   @brief  Includes for used platforms used by iio_demo project.
- *   @author RBolboac (ramona.bolboaca@analog.com)
+ *   @file   parameters.h
+ *   @brief  Definitions specific to Maxim platform used by iio_demo
+ *           project.
+ *   @author Ciprian Regus (ciprian.regus@analog.com)
 ********************************************************************************
  * Copyright 2022(c) Analog Devices, Inc.
  *
@@ -36,26 +37,29 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __PLATFORM_INCLUDES_H__
-#define __PLATFORM_INCLUDES_H__
+#ifndef __PARAMETERS_H__
+#define __PARAMETERS_H__
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#ifdef STM32_PLATFORM
-#include "stm32/parameters.h"
-#elif defined MAXIM_PLATFORM
-#include "maxim/parameters.h"
-#elif defined XILINX_PLATFORM
-#include "xilinx/parameters.h"
-#elif defined ADUCM_PLATFORM
-#include "aducm3029/parameters.h"
-#elif defined LINUX_PLATFORM
-#include "linux/parameters.h"
-#endif
+#include "irq_extra.h"
+#include "maxim_uart.h"
+#include "maxim_stdio.h"
+#include "common_data.h"
+#include "no_os_util.h"
 
-#ifdef IIO_SUPPORT
-#include "iio_app.h"
-#endif
+/******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
+#define MAX_SIZE_BASE_ADDR	(SAMPLES_PER_CHANNEL * DEMO_CHANNELS * \
+					sizeof(uint16_t))
 
-#endif /* __PLATFORM_INCLUDES_H__ */
+#define SAMPLES_PER_CHANNEL_PLATFORM 2000
+
+#define INTC_DEVICE_ID	0
+#define UART_IRQ_ID    	UART0_IRQn
+#define UART_DEVICE_ID	0
+#define UART_BAUDRATE	57600
+
+#endif /* __PARAMETERS_H__ */
