@@ -68,12 +68,13 @@ extern "C"
  */
 struct mbed_uart_init_param {
 	bool virtual_com_enable;	/* To enable the selection between
-								 * Virtual COM Port Or standard UART link */
+	                             * Virtual COM Port Or standard UART link */
 	uint16_t uart_tx_pin;		/* UART Transmit Pin (only for UART comm) */
-	uint16_t uart_rx_pin;  		/* UART Receive Pin (only for UART comm) */
+	uint16_t uart_rx_pin;		/* UART Receive Pin (only for UART comm) */
 	uint16_t vendor_id;			/* USB VCOM Vendor ID (only for USB Virtual comm) */
 	uint16_t product_id;		/* USB VCOM Product ID (only for USB Virtual comm) */
 	char *serial_number;		/* USB VCOM serial number (only for USB Virtual comm) */
+	bool is_console_stdio_port; /* Set the UART/USB port for console stdio operation */
 };
 
 /**
@@ -82,8 +83,9 @@ struct mbed_uart_init_param {
  */
 struct mbed_uart_desc {
 	void *uart_port; 			/* UART port instance */
-	bool virtual_com_enable;	/* To enable the selection between
-								 * Virtual COM Port Or standard UART link */
+	bool virtual_com_enable;	/* To enable the selection between  Virtual COM Port
+                                 * Or standard UART link */
+	bool is_console_stdio_port; /* Set the UART/USB port for console stdio operation */
 };
 
 /******************************************************************************/

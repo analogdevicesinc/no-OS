@@ -40,7 +40,28 @@
 /******************************************************************************/
 #include <stdio.h>
 #include <mbed.h>
-#include <USBCDC.h>
+#include <USBSerial.h>
+#include "mbed_uart.h"
+
+/* Stores the UART or USB virtual com object
+ * instance for console stdio operation */
+static mbed_uart_desc *console_stdio_port = NULL;
+
+/* Defining this function overrides the default stdio implementation and
+ * allows the application to specify a custom FileHandle for the console stdio.
+ * */
+mbed::FileHandle *mbed::mbed_override_console(int)
+{
+	if (!console_stdio_port) {
+		return NULL;
+	}
+
+	if (console_stdio_port->virtual_com_enable) {
+		return (USBSerial *)console_stdio_port->uart_port;
+	} else {
+		return (BufferedSerial *)console_stdio_port->uart_port;
+	}
+}
 
 // Platform drivers needs to be C-compatible to work with other drivers
 #ifdef __cplusplus
@@ -59,17 +80,17 @@ extern "C"
 /* Max allowed length of USB serial number in characters */
 #define USB_SERIAL_NUM_MAX_LENGTH	100
 
-/* Derived USBCDC class to access protected members of USBCDC class */
-class platform_usbcdc :public USBCDC
+/* Derived USBSerial class to access protected members of USBSerial class */
+class platform_usbcdc :public USBSerial
 {
 private:
 	uint8_t usb_iserial_descriptor[(USB_SERIAL_NUM_MAX_LENGTH * 2) + 2];
 
 public :
-	/* Call parent class (USBCDC) constructor explicitly */
+	/* Call parent class (USBSerial) constructor explicitly */
 	platform_usbcdc(bool connect_blocking, uint16_t vendor_id, uint16_t product_id,
 			const char *serial_number)
-		: USBCDC(connect_blocking, vendor_id, product_id)
+		: USBSerial(connect_blocking, vendor_id, product_id)
 	{
 		uint8_t usb_iserial_len;	// USB serial number length
 		uint8_t i, j = 0;
@@ -110,10 +131,10 @@ public :
  * @param connect_status- new connection status
  * @note  This functions is used to change the terminal connection status of USB client
  *        interface which is different than the 'console terminal'. The console terminals acknowledge
- *        back to USB host when USB connection is opened on the console terminal and Mbed USBCDC
+ *        back to USB host when USB connection is opened on the console terminal and Mbed USBSerial
  *        class automatically changes the '_terminal_connected' status accordingly. However, for
  *        custom PC applications (non terminal), the terminal connection status needs to be changed
- *        manually. The '_terminal_connected' is protected member of USBCDC parent class and thus can
+ *        manually. The '_terminal_connected' is protected member of USBSerial parent class and thus can
  *        be accessed through 'platform_usbcdc' derived class using below function.
  */
 void platform_usbcdc::change_terminal_connection(bool connect_status)
@@ -154,7 +175,7 @@ bool platform_usbcdc::data_transmited(void)
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t no_os_uart_read(struct no_os_uart_desc *desc, uint8_t *data,
-		  uint32_t bytes_number)
+			uint32_t bytes_number)
 {
 	mbed::BufferedSerial *uart;	// pointer to BufferedSerial/UART instance
 	platform_usbcdc *usb_cdc_dev;	// Pointer to usb cdc device class instance
@@ -194,7 +215,7 @@ int32_t no_os_uart_read(struct no_os_uart_desc *desc, uint8_t *data,
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t no_os_uart_write(struct no_os_uart_desc *desc, const uint8_t *data,
-		   uint32_t bytes_number)
+			 uint32_t bytes_number)
 {
 	mbed::BufferedSerial *uart;	// pointer to BufferedSerial/UART instance
 	platform_usbcdc *usb_cdc_dev;	// Pointer to usb cdc device class instance
@@ -246,11 +267,11 @@ int32_t no_os_uart_write(struct no_os_uart_desc *desc, const uint8_t *data,
  * @param data[out] - Buffer where data will be read
  * @param bytes_number[in] - Number of bytes to be read.
  * @return 0 in case of success, negative error code otherwise.
- * @note Currently implemented only for UART and not for USBCDC (VCOM)
+ * @note Currently implemented only for UART and not for USBSerial (VCOM)
  */
 int32_t no_os_uart_read_nonblocking(struct no_os_uart_desc *desc,
-			      uint8_t *data,
-			      uint32_t bytes_number)
+				    uint8_t *data,
+				    uint32_t bytes_number)
 {
 	mbed::BufferedSerial *uart;	// pointer to BufferedSerial/UART instance
 
@@ -276,11 +297,11 @@ int32_t no_os_uart_read_nonblocking(struct no_os_uart_desc *desc,
  * @param data[in,out] - Buffer where data will be written
  * @param bytes_number[in] - Number of bytes to be written.
  * @return 0 in case of success, negative error code otherwise.
- * @note Currently implemented only for UART and not for USBCDC (VCOM)
+ * @note Currently implemented only for UART and not for USBSerial (VCOM)
  */
 int32_t no_os_uart_write_nonblocking(struct no_os_uart_desc *desc,
-			       const uint8_t *data,
-			       uint32_t bytes_number)
+				     const uint8_t *data,
+				     uint32_t bytes_number)
 {
 	mbed::BufferedSerial *uart;		// pointer to BufferedSerial/UART instance
 
@@ -375,7 +396,8 @@ static int32_t mbed_uart_set_format(struct no_os_uart_init_param *param,
  * @param param[in] - The structure that contains the UART parameters.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t no_os_uart_init(struct no_os_uart_desc **desc, struct no_os_uart_init_param *param)
+int32_t no_os_uart_init(struct no_os_uart_desc **desc,
+			struct no_os_uart_init_param *param)
 {
 	mbed::BufferedSerial *uart;	// Pointer to new BufferedSerial/UART instance
 	platform_usbcdc *usb_cdc_dev;	// Pointer to usb cdc device class instance
@@ -426,6 +448,14 @@ int32_t no_os_uart_init(struct no_os_uart_desc **desc, struct no_os_uart_init_pa
 			goto err_uart_set_format;
 
 		mbed_uart_desc->uart_port = (BufferedSerial *)uart;
+	}
+
+	/* Stores the address of the object instance in a global variable to be
+	 * later used by console stdio operations */
+	mbed_uart_desc->is_console_stdio_port = ((struct mbed_uart_init_param *)
+						param->extra)->is_console_stdio_port;
+	if (mbed_uart_desc->is_console_stdio_port) {
+		console_stdio_port = mbed_uart_desc;
 	}
 
 	mbed_uart_desc->virtual_com_enable = ((struct mbed_uart_init_param *)
