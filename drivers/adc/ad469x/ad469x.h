@@ -50,6 +50,8 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
+#include <stdbool.h>
+
 #if !defined(USE_STANDARD_SPI)
 #include "spi_engine.h"
 #include "clk_axi_clkgen.h"
@@ -57,6 +59,8 @@
 #else
 #include "no_os_spi.h"
 #endif
+
+#include "no_os_gpio.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -90,12 +94,19 @@
 #define AD469x_REG_GPIO_STATE		0x028
 #define AD469x_REG_TEMP_CTRL		0x029
 #define AD469x_REG_CONFIG_IN(x)		((x & 0x0F) | 0x30)
+#define AD469x_REG_THRESHOLD_UB(x)  ((x << 1) | 0x40)
+#define AD469x_REG_THRESHOLD_LB(x)  ((x << 1) | 0x60)
+#define AD469x_REG_HYST_IN(x)		((x << 1) | 0x80)
+#define AD469x_REG_GAIN_IN(x)       ((x << 1) | 0x0C0)
 #define AD469x_REG_AS_SLOT(x)		((x & 0x7F) | 0x100)
 
 /* 5-bit SDI Conversion Mode Commands */
 #define AD469x_CMD_REG_CONFIG_MODE		(0x0A << 3)
 #define AD469x_CMD_SEL_TEMP_SNSOR_CH		(0x0F << 3)
 #define AD469x_CMD_CONFIG_CH_SEL(x)		((0x10 | (0x0F & x)) << 3)
+
+/* Status Register Mask */
+#define AD469x_REG_STATUS_RESET_MASK     (0x01 << 5)
 
 /* AD469x_REG_SETUP */
 #define AD469x_SETUP_IF_MODE_MASK		(0x01 << 2)
@@ -203,6 +214,16 @@ enum ad469x_osr_ratios {
 };
 
 /**
+ * @enum ad469x_pin_pairing
+ * @brief Channel pin pairing options
+ */
+enum ad469x_pin_pairing {
+	AD469x_INx_REF_GND,
+	AD469x_INx_COM,
+	AD469x_INx_EVEN_ODD
+};
+
+/**
  * @struct ad469x_init_param
  * @brief  Structure containing the init parameters needed by the ad469x device
  */
@@ -221,6 +242,10 @@ struct ad469x_init_param {
 #endif
 	/** RESET GPIO initialization structure. */
 	struct no_os_gpio_init_param	*gpio_resetn;
+	/** CONVST GPIO initialization parameters */
+	struct no_os_gpio_init_param *gpio_convst;
+	/** BUSY GPIO initialization parameters */
+	struct no_os_gpio_init_param *gpio_busy;
 	/* Register access speed */
 	uint32_t		reg_access_speed;
 	/* Register data width */
@@ -229,6 +254,16 @@ struct ad469x_init_param {
 	uint8_t		capture_data_width;
 	/* Device Settings */
 	enum ad469x_supported_dev_ids dev_id;
+	/* Pin Pairing option in standard sequencer mode */
+	enum ad469x_pin_pairing std_seq_pin_pairing;
+	/* Channel sequencing mode */
+	enum ad469x_channel_sequencing ch_sequence;
+	/** OSR resolution corresponding to all channels, when standard
+	 * sequencer is selected. */
+	enum ad469x_osr_ratios std_seq_osr;
+	/** OSR resolution corresponding to each channel, when advanced
+	 * sequencer is selected. */
+	enum ad469x_osr_ratios adv_seq_osr_resol[AD469x_CHANNEL_NO];
 	/** Invalidate the Data cache for the given address range */
 	void (*dcache_invalidate_range)(uint32_t address, uint32_t bytes_count);
 };
@@ -258,10 +293,19 @@ struct ad469x_dev {
 	enum ad469x_supported_dev_ids dev_id;
 	/** RESET GPIO handler. */
 	struct no_os_gpio_desc	*gpio_resetn;
+	/** CONVST GPIO descriptor */
+	struct no_os_gpio_desc *gpio_convst;
+	/** BUSY GPIO descriptor */
+	struct no_os_gpio_desc *gpio_busy;
 	/** Invalidate the Data cache for the given address range */
 	void (*dcache_invalidate_range)(uint32_t address, uint32_t bytes_count);
 	/** Current channel sequence */
 	enum ad469x_channel_sequencing ch_sequence;
+	/* Pin Pairing option in standard sequencer mode */
+	enum ad469x_pin_pairing std_seq_pin_pairing;
+	/** OSR resolution corresponding to all channels, when standard
+	 * sequencer is selected. */
+	enum ad469x_osr_ratios std_seq_osr;
 	/** OSR resolution corresponding to each channel, when advanced
 	 * sequencer is selected. */
 	enum ad469x_osr_ratios adv_seq_osr_resol[AD469x_CHANNEL_NO];
@@ -340,11 +384,22 @@ int32_t ad469x_adv_seq_osr(struct ad469x_dev *dev, uint16_t ch,
 int32_t ad469x_std_seq_osr(struct ad469x_dev *dev,
 			   enum ad469x_osr_ratios ratio);
 
+/* Configure the pairing option in standard sequencer mode */
+int32_t ad469x_std_pin_pairing(struct ad469x_dev *dev,
+			       enum ad469x_pin_pairing pin_pair);
+
 /* Enter conversion mode */
 int32_t ad469x_enter_conversion_mode(struct ad469x_dev *dev);
 
 /* Exit conversion mode */
 int32_t ad469x_exit_conversion_mode(struct ad469x_dev *dev);
+
+/* Reset with AD469x device */
+int32_t ad469x_reset_dev(struct ad469x_dev *dev);
+
+/* Configures the AD469x device */
+int32_t ad469x_config(struct ad469x_dev *dev,
+		      struct ad469x_init_param *config_desc);
 
 /* Initialize the device. */
 int32_t ad469x_init(struct ad469x_dev **device,

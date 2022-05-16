@@ -233,19 +233,25 @@ static int32_t ad469x_init_gpio(struct ad469x_dev *dev,
 	if (ret != 0)
 		return ret;
 
-	/** Reset to configure pins */
-	if (init_param->gpio_resetn) {
-		ret = no_os_gpio_direction_output(dev->gpio_resetn, NO_OS_GPIO_LOW);
-		if (ret != 0)
-			return ret;
+	ret = no_os_gpio_direction_output(dev->gpio_resetn, NO_OS_GPIO_HIGH);
+	if (ret != 0)
+		return ret;
 
-		no_os_mdelay(100);
-		ret = no_os_gpio_set_value(dev->gpio_resetn, NO_OS_GPIO_HIGH);
-		if (ret != 0)
-			return ret;
+	ret = no_os_gpio_get_optional(&dev->gpio_busy, init_param->gpio_busy);
+	if (ret != 0)
+		return ret;
 
-		no_os_mdelay(100);
-	}
+	ret = no_os_gpio_direction_input(dev->gpio_busy);
+	if (ret != 0)
+		return ret;
+
+	ret = no_os_gpio_get_optional(&dev->gpio_convst, init_param->gpio_convst);
+	if (ret != 0)
+		return ret;
+
+	ret = no_os_gpio_direction_output(dev->gpio_convst,  NO_OS_GPIO_LOW);
+	if (ret != 0)
+		return ret;
 
 	return 0;
 }
@@ -329,9 +335,27 @@ int32_t ad469x_std_seq_osr(struct ad469x_dev *dev, enum ad469x_osr_ratios ratio)
 	if (ret != 0)
 		return ret;
 
+	dev->std_seq_osr = ratio;
 	dev->capture_data_width = ad469x_device_resol[ratio];
 
 	return ret;
+}
+
+/**
+ * @brief Configure the pin pairing option in standard sequencer mode.
+ * @param [in] dev - ad469x_dev device handler.
+ * @param [in] pin_pair - Pin pairing selection.
+ * @return 0 in case of success, negative error code otherwise.
+ * @note In standard sequencer the pin pair option is common for all channels.
+ */
+int32_t ad469x_std_pin_pairing(struct ad469x_dev *dev,
+			       enum ad469x_pin_pairing pin_pair)
+{
+	dev->std_seq_pin_pairing = pin_pair;
+
+	return ad469x_spi_reg_write(dev,
+				    AD469x_REG_CONFIG_IN(0),
+				    AD469x_REG_CONFIG_IN_MODE(pin_pair));
 }
 
 /**
@@ -364,7 +388,7 @@ int32_t ad469x_set_channel_sequence(struct ad469x_dev *dev,
 		ret = ad469x_spi_write_mask(dev,
 					    AD469x_REG_SETUP,
 					    AD469x_SETUP_CYC_CTRL_MASK,
-					    AD469x_SETUP_CYC_CTRL_SINGLE(0));
+					    AD469x_SETUP_CYC_CTRL_SINGLE(1));
 		if (ret != 0)
 			return ret;
 
@@ -392,7 +416,7 @@ int32_t ad469x_set_channel_sequence(struct ad469x_dev *dev,
 		ret = ad469x_spi_write_mask(dev,
 					    AD469x_REG_SETUP,
 					    AD469x_SETUP_CYC_CTRL_MASK,
-					    AD469x_SETUP_CYC_CTRL_SINGLE(1));
+					    AD469x_SETUP_CYC_CTRL_SINGLE(0));
 		if (ret != 0)
 			return ret;
 
@@ -403,6 +427,13 @@ int32_t ad469x_set_channel_sequence(struct ad469x_dev *dev,
 		break;
 
 	case AD469x_standard_seq:
+		ret = ad469x_spi_write_mask(dev,
+					    AD469x_REG_SETUP,
+					    AD469x_SETUP_CYC_CTRL_MASK,
+					    AD469x_SETUP_CYC_CTRL_SINGLE(0));
+		if (ret != 0)
+			return ret;
+
 		ret = ad469x_spi_write_mask(dev,
 					    AD469x_REG_SEQ_CTRL,
 					    AD469x_SEQ_CTRL_STD_SEQ_EN_MASK,
@@ -767,6 +798,73 @@ int32_t ad469x_read_data(struct ad469x_dev *dev,
 }
 
 /**
+ * @brief Resets the ad469x device
+ * @param [in] dev - ad469x_dev device handler.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad469x_reset_dev(struct ad469x_dev *dev)
+{
+	int32_t ret;
+	uint8_t reset_status = 0;
+
+	ret = no_os_gpio_set_value(dev->gpio_resetn, NO_OS_GPIO_LOW);
+	if (ret != 0)
+		return ret;
+
+	no_os_mdelay(10);
+
+	ret = no_os_gpio_set_value(dev->gpio_resetn, NO_OS_GPIO_HIGH);
+	if (ret != 0)
+		return ret;
+
+	no_os_mdelay(10);
+
+	ret = ad469x_spi_reg_read(dev, AD469x_REG_STATUS, &reset_status);
+	if (ret != 0)
+		return ret;
+
+	if(!((reset_status & AD469x_REG_STATUS_RESET_MASK) >> 5))
+		return -1;
+
+	return 0;
+}
+
+/**
+ * Configure the device with initial parameters.
+ * @param [in, out] dev - The device structure.
+ * @param [in] config_desc - Pointer to structure containing configuration
+ *                           parameters.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad469x_config(struct ad469x_dev *dev, struct
+		      ad469x_init_param *config_desc)
+{
+	int32_t ret;
+
+	ret = ad469x_set_reg_access_mode(dev, AD469x_BYTE_ACCESS);
+	if (ret != 0)
+		return ret;
+
+	ret = ad469x_set_busy(dev, AD469x_busy_gp0);
+	if (ret != 0)
+		return ret;
+
+	ret = ad469x_std_seq_osr(dev, config_desc->std_seq_osr);
+	if (ret != 0)
+		return ret;
+
+	ret = ad469x_std_pin_pairing(dev, config_desc->std_seq_pin_pairing);
+	if (ret != 0)
+		return ret;
+
+	ret = ad469x_set_channel_sequence(dev, config_desc->ch_sequence);
+	if (ret != 0)
+		return ret;
+
+	return 0;
+}
+
+/**
  * Initialize the device.
  * @param [out] device - The device structure.
  * @param [in] init_param - The structure that contains the device initial
@@ -808,6 +906,10 @@ int32_t ad469x_init(struct ad469x_dev **device,
 	if (ret != 0)
 		goto error_gpio;
 
+	ret = ad469x_reset_dev(dev);
+	if (ret != 0)
+		goto error_spi;
+
 #if !defined(USE_STANDARD_SPI)
 	dev->offload_init_param = init_param->offload_init_param;
 	dev->reg_access_speed = init_param->reg_access_speed;
@@ -816,7 +918,9 @@ int32_t ad469x_init(struct ad469x_dev **device,
 #endif
 	dev->dev_id = init_param->dev_id;
 	dev->dcache_invalidate_range = init_param->dcache_invalidate_range;
-	dev->ch_sequence = AD469x_standard_seq;
+	dev->std_seq_osr = init_param->std_seq_osr;
+	dev->std_seq_pin_pairing = init_param->std_seq_pin_pairing;
+	dev->ch_sequence = init_param->ch_sequence;
 	dev->num_slots = 0;
 	dev->temp_enabled = false;
 	memset(dev->ch_slots, 0, sizeof(dev->ch_slots));
@@ -832,15 +936,7 @@ int32_t ad469x_init(struct ad469x_dev **device,
 	if (data != AD469x_TEST_DATA)
 		goto error_spi;
 
-	ret = ad469x_set_reg_access_mode(dev, AD469x_BYTE_ACCESS);
-	if (ret != 0)
-		goto error_spi;
-
-	ret = ad469x_set_busy(dev, AD469x_busy_gp0);
-	if (ret != 0)
-		goto error_spi;
-
-	ret = ad469x_seq_osr_clear(dev);
+	ret = ad469x_config(dev, init_param);
 	if (ret != 0)
 		goto error_spi;
 
@@ -858,6 +954,8 @@ error_spi:
 	no_os_spi_remove(dev->spi_desc);
 error_gpio:
 	no_os_gpio_remove(dev->gpio_resetn);
+	no_os_gpio_remove(dev->gpio_busy);
+	no_os_gpio_remove(dev->gpio_convst);
 error_clkgen:
 #if !defined(USE_STANDARD_SPI)
 	axi_clkgen_remove(dev->clkgen);
@@ -891,6 +989,14 @@ int32_t ad469x_remove(struct ad469x_dev *dev)
 		return ret;
 
 	ret = no_os_gpio_remove(dev->gpio_resetn);
+	if (ret != 0)
+		return ret;
+
+	no_os_gpio_remove(dev->gpio_busy);
+	if (ret != 0)
+		return ret;
+
+	no_os_gpio_remove(dev->gpio_convst);
 	if (ret != 0)
 		return ret;
 
