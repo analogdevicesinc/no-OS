@@ -3,7 +3,7 @@
  *   @brief  Header file for ad469x Driver.
  *   @author Cristian Pop (cristian.pop@analog.com)
 ********************************************************************************
- * Copyright 2020(c) Analog Devices, Inc.
+ * Copyright 2020-22(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -40,13 +40,23 @@
 #ifndef SRC_AD469X_H_
 #define SRC_AD469X_H_
 
+// **** Note for User: SPI Standard/Engine selection **** //
+/* By default the SPI Engine Framework is used for communicating with eval board.
+ * Uncomment the "USE_STANDARD_SPI" macro to enable the standard SPI.
+ * framework.
+ * */
+//#define USE_STANDARD_SPI
+
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
+#if !defined(USE_STANDARD_SPI)
 #include "spi_engine.h"
 #include "clk_axi_clkgen.h"
 #include "no_os_pwm.h"
-#include "no_os_gpio.h"
+#else
+#include "no_os_spi.h"
+#endif
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -199,16 +209,18 @@ enum ad469x_osr_ratios {
 struct ad469x_init_param {
 	/* SPI */
 	no_os_spi_init_param		*spi_init;
+#if !defined(USE_STANDARD_SPI)
 	/* SPI module offload init */
 	struct spi_engine_offload_init_param *offload_init_param;
 	/* PWM generator init structure */
 	struct no_os_pwm_init_param	*trigger_pwm_init;
-	/** RESET GPIO initialization structure. */
-	struct no_os_gpio_init_param	*gpio_resetn;
 	/* Clock gen for hdl design init structure */
 	struct axi_clkgen_init	*clkgen_init;
 	/* Clock generator rate */
 	uint32_t		axi_clkgen_rate;
+#endif
+	/** RESET GPIO initialization structure. */
+	struct no_os_gpio_init_param	*gpio_resetn;
 	/* Register access speed */
 	uint32_t		reg_access_speed;
 	/* Register data width */
@@ -228,12 +240,14 @@ struct ad469x_init_param {
 struct ad469x_dev {
 	/* SPI descriptor */
 	no_os_spi_desc		*spi_desc;
+#if !defined(USE_STANDARD_SPI)
 	/* Clock gen for hdl design structure */
 	struct axi_clkgen	*clkgen;
 	/* Trigger conversion PWM generator descriptor */
 	struct no_os_pwm_desc		*trigger_pwm_desc;
 	/* SPI module offload init */
 	struct spi_engine_offload_init_param *offload_init_param;
+#endif
 	/* Register access speed */
 	uint32_t		reg_access_speed;
 	/* Register data width */

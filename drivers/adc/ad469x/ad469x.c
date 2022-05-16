@@ -3,7 +3,7 @@
  *   @brief  Implementation of ad69x Driver.
  *   @author Cristian Pop (cristian.pop@analog.com)
 ********************************************************************************
- * Copyright 2020(c) Analog Devices, Inc.
+ * Copyright 2020-22(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -44,7 +44,9 @@
 #include "stdio.h"
 #include "stdlib.h"
 #include "ad469x.h"
+#if !defined(USE_STANDARD_SPI)
 #include "spi_engine.h"
+#endif
 #include "no_os_delay.h"
 #include "no_os_error.h"
 #include "no_os_util.h"
@@ -82,11 +84,13 @@ int32_t ad469x_spi_reg_read(struct ad469x_dev *dev,
 	int32_t ret;
 	uint8_t buf[3];
 
+#if !defined(USE_STANDARD_SPI)
 	ret = spi_engine_set_transfer_width(dev->spi_desc, dev->reg_data_width);
 	if (ret != 0)
 		return ret;
 
 	spi_engine_set_speed(dev->spi_desc, dev->reg_access_speed);
+#endif
 
 	buf[0] = (1 << 7) | ((reg_addr >> 8) & 0x7F);
 	buf[1] = 0xFF & reg_addr;
@@ -95,12 +99,14 @@ int32_t ad469x_spi_reg_read(struct ad469x_dev *dev,
 	ret = no_os_spi_write_and_read(dev->spi_desc, buf, 3);
 	*reg_data = buf[2];
 
+#if !defined(USE_STANDARD_SPI)
 	ret = spi_engine_set_transfer_width(dev->spi_desc,
 					    dev->capture_data_width);
 	if (ret != 0)
 		return ret;
 
 	spi_engine_set_speed(dev->spi_desc, dev->spi_desc->max_speed_hz);
+#endif
 
 	return ret;
 }
@@ -119,11 +125,13 @@ int32_t ad469x_spi_reg_write(struct ad469x_dev *dev,
 	int32_t ret;
 	uint8_t buf[3];
 
+#if !defined(USE_STANDARD_SPI)
 	ret = spi_engine_set_transfer_width(dev->spi_desc, dev->reg_data_width);
 	if (ret != 0)
 		return ret;
 
 	spi_engine_set_speed(dev->spi_desc, dev->reg_access_speed);
+#endif
 
 	buf[0] = ((reg_addr >> 8) & 0x7F);
 	buf[1] = 0xFF & reg_addr;
@@ -131,12 +139,14 @@ int32_t ad469x_spi_reg_write(struct ad469x_dev *dev,
 
 	ret = no_os_spi_write_and_read(dev->spi_desc, buf, 3);
 
+#if !defined(USE_STANDARD_SPI)
 	ret = spi_engine_set_transfer_width(dev->spi_desc,
 					    dev->capture_data_width);
 	if (ret != 0)
 		return ret;
 
 	spi_engine_set_speed(dev->spi_desc, dev->spi_desc->max_speed_hz);
+#endif
 
 	return ret;
 }
@@ -596,6 +606,9 @@ int32_t ad469x_enter_conversion_mode(struct ad469x_dev *dev)
  */
 int32_t ad469x_exit_conversion_mode(struct ad469x_dev *dev)
 {
+	int32_t ret;
+
+#if !defined(USE_STANDARD_SPI)
 	uint32_t commands_data[1], buf;
 	struct spi_engine_offload_message msg;
 	uint32_t spi_eng_msg_cmds[3] = {
@@ -603,7 +616,6 @@ int32_t ad469x_exit_conversion_mode(struct ad469x_dev *dev)
 		WRITE_READ(1),
 		CS_HIGH
 	};
-	int32_t ret;
 
 	no_os_pwm_enable(dev->trigger_pwm_desc);
 
@@ -625,6 +637,13 @@ int32_t ad469x_exit_conversion_mode(struct ad469x_dev *dev)
 	no_os_pwm_disable(dev->trigger_pwm_desc);
 	if (ret != 0)
 		return ret;
+#else
+	uint8_t cmd = AD469x_CMD_REG_CONFIG_MODE;
+
+	ret = no_os_spi_write_and_read(dev->spi_desc, &cmd, 1);
+	if (ret != 0)
+		return ret;
+#endif
 
 	return 0;
 }
@@ -705,6 +724,8 @@ int32_t ad469x_read_data(struct ad469x_dev *dev,
 			 uint16_t samples)
 {
 	int32_t ret;
+
+#if !defined(USE_STANDARD_SPI)
 	uint32_t commands_data[1];
 	struct spi_engine_offload_message msg;
 	uint32_t spi_eng_msg_cmds[3] = {
@@ -736,6 +757,11 @@ int32_t ad469x_read_data(struct ad469x_dev *dev,
 
 	if (dev->dcache_invalidate_range)
 		dev->dcache_invalidate_range(msg.rx_addr, samples * 4);
+#else
+	ret = no_os_spi_write_and_read(dev->spi_desc, buf, (samples * 2));
+	if (ret != 0)
+		return ret;
+#endif
 
 	return ret;
 }
@@ -758,6 +784,7 @@ int32_t ad469x_init(struct ad469x_dev **device,
 	if (!dev)
 		return -1;
 
+#if !defined(USE_STANDARD_SPI)
 	ret = axi_clkgen_init(&dev->clkgen, init_param->clkgen_init);
 	if (ret != 0) {
 		printf("error: %s: axi_clkgen_init() failed\n",
@@ -771,6 +798,7 @@ int32_t ad469x_init(struct ad469x_dev **device,
 		       init_param->clkgen_init->name);
 		goto error_clkgen;
 	}
+#endif
 
 	ret = ad469x_init_gpio(dev, init_param);
 	if (ret != 0)
@@ -780,11 +808,12 @@ int32_t ad469x_init(struct ad469x_dev **device,
 	if (ret != 0)
 		goto error_gpio;
 
+#if !defined(USE_STANDARD_SPI)
 	dev->offload_init_param = init_param->offload_init_param;
-
 	dev->reg_access_speed = init_param->reg_access_speed;
 	dev->reg_data_width = init_param->reg_data_width;
 	dev->capture_data_width = init_param->capture_data_width;
+#endif
 	dev->dev_id = init_param->dev_id;
 	dev->dcache_invalidate_range = init_param->dcache_invalidate_range;
 	dev->ch_sequence = AD469x_standard_seq;
@@ -815,9 +844,11 @@ int32_t ad469x_init(struct ad469x_dev **device,
 	if (ret != 0)
 		goto error_spi;
 
+#if !defined(USE_STANDARD_SPI)
 	ret = no_os_pwm_init(&dev->trigger_pwm_desc, init_param->trigger_pwm_init);
 	if (ret != 0)
 		goto error_spi;
+#endif
 
 	*device = dev;
 
@@ -828,7 +859,9 @@ error_spi:
 error_gpio:
 	no_os_gpio_remove(dev->gpio_resetn);
 error_clkgen:
+#if !defined(USE_STANDARD_SPI)
 	axi_clkgen_remove(dev->clkgen);
+#endif
 error_dev:
 	free(dev);
 
@@ -847,9 +880,11 @@ int32_t ad469x_remove(struct ad469x_dev *dev)
 	if (!dev)
 		return -1;
 
+#if !defined(USE_STANDARD_SPI)
 	ret = no_os_pwm_remove(dev->trigger_pwm_desc);
 	if (ret != 0)
 		return ret;
+#endif
 
 	ret = no_os_spi_remove(dev->spi_desc);
 	if (ret != 0)
@@ -859,9 +894,11 @@ int32_t ad469x_remove(struct ad469x_dev *dev)
 	if (ret != 0)
 		return ret;
 
+#if !defined(USE_STANDARD_SPI)
 	ret = axi_clkgen_remove(dev->clkgen);
 	if (ret != 0)
 		return ret;
+#endif
 
 	free(dev);
 
