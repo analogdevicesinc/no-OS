@@ -266,8 +266,6 @@ static int max_gpio_irq_trigger_level_set(struct no_os_irq_ctrl_desc *desc,
 {
 	int ret;
 	mxc_gpio_cfg_t cfg;
-	struct irq_action *action;
-	struct irq_action action_key = {.irq_id = irq_id};
 
 	const int32_t trig_level[5] = {
 		/** This is intentional, the levels are inverted in the SDK */
@@ -281,12 +279,8 @@ static int max_gpio_irq_trigger_level_set(struct no_os_irq_ctrl_desc *desc,
 	if (!desc || irq_id >= MXC_CFG_GPIO_PINS_PORT)
 		return -EINVAL;
 
-	ret = no_os_list_read_find(actions, (void **)&action, &action_key);
-	if (ret)
-		return -ENODEV;
-
 	cfg = (mxc_gpio_cfg_t) {
-		.port = action->handle,
+		.port = MXC_GPIO_GET_GPIO(desc->irq_ctrl_id),
 		.mask = NO_OS_BIT(irq_id)
 	};
 	MXC_GPIO_IntConfig(&cfg, trig_level[trig]);
