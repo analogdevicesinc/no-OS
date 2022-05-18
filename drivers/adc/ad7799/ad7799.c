@@ -256,21 +256,16 @@ int32_t ad7799_read_channel(struct ad7799_dev *device, uint8_t ch,
 	if(ret)
 		return ret;
 
-	switch(device->polarity) {
-	case AD7799_BIPOLAR:
+	if (device->polarity) { // AD7799_UNIPOLAR
+		temp = (1 << (device->reg_size[AD7799_REG_DATA] * 8));
+		data = data * vref_scaled / temp;
+	} else { // AD7799_BIPOLAR
 		temp = 1 << ((device->reg_size[AD7799_REG_DATA] * 8) - 1);
 
 		if(data >= temp)
 			data = ((data - temp) * vref_scaled) / (temp - 1);
 		else
 			data = -(((temp - data) * vref_scaled) / (temp - 1));
-		break;
-	case AD7799_UNIPOLAR:
-		temp = (1 << (device->reg_size[AD7799_REG_DATA] * 8));
-		data = data * vref_scaled / temp;
-		break;
-	default:
-		return -EINVAL;
 	}
 
 	*data_scaled = data;
