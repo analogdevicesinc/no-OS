@@ -44,6 +44,7 @@
 #include "ssd_1306.h"
 #include "no_os_error.h"
 #include "no_os_spi.h"
+#include <string.h>
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/

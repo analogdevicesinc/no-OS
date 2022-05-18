@@ -44,6 +44,7 @@
 #include "ad719x.h"    // AD719X definitions.
 #include "no_os_error.h"
 #include "no_os_delay.h"
+#include <string.h>
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
