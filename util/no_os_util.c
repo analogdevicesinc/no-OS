@@ -375,6 +375,12 @@ uint32_t no_os_get_unaligned_le32(uint8_t *buf)
 	       | ((uint32_t)buf[3] << 24);
 }
 
+int16_t no_os_sign_extend16(uint16_t value, int index)
+{
+	uint8_t shift = 15 - index;
+	return (int16_t)(value << shift) >> shift;
+}
+
 int32_t no_os_sign_extend32(uint32_t value, int index)
 {
 	uint8_t shift = 31 - index;
