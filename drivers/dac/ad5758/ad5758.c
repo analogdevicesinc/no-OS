@@ -661,12 +661,12 @@ int32_t ad5758_select_adc_ip(struct ad5758_dev *dev,
 int32_t ad5758_select_adc_depth(struct ad5758_dev *dev,
 				uint8_t num_of_channels)
 {
-	int32_t ret;
+	int32_t ret = -1;
 
 	if ((num_of_channels == 0) || (num_of_channels > 8)) {
 		pr_err("%s: Failed with code: %"PRIi32".\n", __func__, ret);
 
-		return -1;
+		return ret;
 	}
 
 	num_of_channels -= 1;
@@ -675,7 +675,7 @@ int32_t ad5758_select_adc_depth(struct ad5758_dev *dev,
 
 	if (ret < 0) {
 		pr_err("%s: Failed with code: %"PRIi32".\n", __func__, ret);
-		return -1;
+		return ret;
 	}
 
 	return 0;
