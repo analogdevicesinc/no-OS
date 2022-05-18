@@ -533,7 +533,6 @@ static int adxl367_iio_store_scale(void *dev, char *buf,
 				   uint32_t len, const struct iio_ch_info *channel, intptr_t priv)
 {
 	int32_t vals[2];
-	int odr_idx;
 	int ret;
 	struct adxl367_iio_dev *iio_adxl367;
 	struct adxl367_dev *adxl367;
