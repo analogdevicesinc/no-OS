@@ -63,10 +63,13 @@ struct event_list {
 
 
 static struct event_list _events[] = {
-	{.event = NO_OS_EVT_GPIO, .hal_event = HAL_EXTI_COMMON_CB_ID},
-	{.event = NO_OS_EVT_UART_TX_COMPLETE, .hal_event = HAL_UART_TX_COMPLETE_CB_ID},
-	{.event = NO_OS_EVT_UART_RX_COMPLETE, .hal_event = HAL_UART_RX_COMPLETE_CB_ID},
-	{.event = NO_OS_EVT_UART_ERROR, .hal_event = HAL_UART_ERROR_CB_ID},
+	[NO_OS_EVT_GPIO] = {.event = NO_OS_EVT_GPIO, .hal_event = HAL_EXTI_COMMON_CB_ID},
+	[NO_OS_EVT_UART_TX_COMPLETE] = {.event = NO_OS_EVT_UART_TX_COMPLETE, .hal_event = HAL_UART_TX_COMPLETE_CB_ID},
+	[NO_OS_EVT_UART_RX_COMPLETE] = {.event = NO_OS_EVT_UART_RX_COMPLETE, .hal_event = HAL_UART_RX_COMPLETE_CB_ID},
+	[NO_OS_EVT_UART_ERROR] = {.event = NO_OS_EVT_UART_ERROR, .hal_event = HAL_UART_ERROR_CB_ID},
+#ifdef HAL_TIM_MODULE_ENABLED
+	[NO_OS_EVT_TIM_ELAPSED] = {.event = NO_OS_EVT_TIM_ELAPSED, .hal_event = HAL_TIM_PERIOD_ELAPSED_CB_ID}
+#endif
 };
 
 int32_t irq_action_cmp(void *data1, void *data2)
@@ -103,6 +106,24 @@ void HAL_GPIO_EXTI_Callback(uint16_t pin)
 			a->callback(a->ctx);
 	}
 }
+
+#ifdef HAL_TIM_MODULE_ENABLED
+void HAL_TIM_PeriodElapsedCallback (TIM_HandleTypeDef *htim)
+{
+	struct event_list *ee = &_events[NO_OS_EVT_TIM_ELAPSED];
+	struct irq_action *a;
+	struct irq_action key = {.handle = htim};
+	int ret;
+
+	/* Find & call callback */
+	ret = no_os_list_read_find(ee->actions, (void **)&a, &key);
+	if (ret < 0)
+		return;
+
+	if(a->callback)
+		a->callback(a->ctx);
+}
+#endif
 
 static inline void _common_uart_callback(UART_HandleTypeDef *huart,
 		uint32_t no_os_event)
@@ -233,6 +254,10 @@ int32_t stm32_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 {
 	int ret;
 	pUART_CallbackTypeDef pUartCallback;
+#ifdef HAL_TIM_MODULE_ENABLED
+	pTIM_CallbackTypeDef pTimCallback;
+	struct irq_action action_key = {.handle = desc->extra};
+#endif
 	struct irq_action *li;
 	uint32_t hal_event = _events[cb->event].hal_event;
 
@@ -304,7 +329,55 @@ int32_t stm32_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 			return ret;
 		}
 		break;
+#ifdef HAL_TIM_MODULE_ENABLED
+	case NO_OS_TIM_IRQ:
+		switch(hal_event) {
+		case HAL_TIM_PERIOD_ELAPSED_CB_ID:
+			pTimCallback = HAL_TIM_PeriodElapsedCallback;
+			break;
+		default:
+			return -EINVAL;
+		};
 
+		ret = HAL_TIM_RegisterCallback(desc->extra, hal_event, pTimCallback);
+		if (ret != HAL_OK) {
+			ret = -EFAULT;
+			break;
+		}
+		if (_events[cb->event].actions == NULL) {
+			ret = no_os_list_init(&_events[cb->event].actions, NO_OS_LIST_PRIORITY_LIST,
+					      irq_action_cmp);
+			if (ret < 0)
+				return ret;
+		}
+
+		ret = no_os_list_read_find(_events[cb->event].actions,
+					   (void**)&li,
+					   &action_key);
+		/*
+		 * If an action with the same handle as the function parameter does not exists, insert a new one,
+		 * otherwise update
+		 */
+		if (ret) {
+			li = calloc(1, sizeof(struct irq_action));
+			if(!li)
+				return -ENOMEM;
+
+			li->handle = desc->extra;
+			li->callback = cb->callback;
+			li->ctx = cb->ctx;
+			ret = no_os_list_add_last(_events[cb->event].actions, li);
+			if (ret < 0) {
+				free(li);
+				return ret;
+			}
+		} else {
+			li->handle = desc->extra;
+			li->callback = cb->callback;
+			li->ctx = cb->ctx;
+		}
+		break;
+#endif
 	default:
 		ret = -EINVAL;
 		break;
@@ -342,6 +415,17 @@ int32_t stm32_irq_unregister_callback(struct no_os_irq_ctrl_desc *desc,
 		if (ret != HAL_OK)
 			ret = -EFAULT;
 		break;
+#ifdef HAL_TIM_MODULE_ENABLED
+	case NO_OS_TIM_IRQ:
+		key.handle = desc->extra;
+		ret = no_os_list_get_find(_events[cb->event].actions, &discard, &key);
+		if (ret < 0)
+			break;
+		ret = HAL_TIM_UnRegisterCallback(desc->extra, hal_event);
+		if (ret != HAL_OK)
+			ret = -EFAULT;
+		break;
+#endif
 	default:
 		ret = -EINVAL;
 		break;
@@ -385,10 +469,17 @@ int32_t stm32_irq_global_disable(struct no_os_irq_ctrl_desc *desc)
 int32_t stm32_irq_enable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
 {
 	// TODO: add a proper priority setting function in irq.h instead of this default
-	if (irq_id == EXTI2_IRQn)
+	switch(irq_id) {
+	case EXTI2_IRQn:
+#ifdef HAL_TIM_MODULE_ENABLED
+	case TIM8_UP_TIM13_IRQn:
+	case TIM8_TRG_COM_TIM14_IRQn:
+#endif
 		HAL_NVIC_SetPriority(irq_id, 1, 0);
-	else
+		break;
+	default:
 		HAL_NVIC_SetPriority(irq_id, 0, 0);
+	}
 
 	NVIC_EnableIRQ(irq_id);
 
