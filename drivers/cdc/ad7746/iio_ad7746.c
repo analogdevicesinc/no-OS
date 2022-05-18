@@ -8,6 +8,7 @@
 #include "iio_ad7746.h"
 #include "no_os_util.h"
 #include "ad7746.h"
+#include <string.h>
 
 static int32_t _ad7746_read_register2(struct ad7746_iio_dev *dev, uint32_t reg,
 				      uint32_t *readval)

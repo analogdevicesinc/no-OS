@@ -44,6 +44,7 @@
 #include <stdbool.h>
 #include "display.h"
 #include "no_os_error.h"
+#include <string.h>
 
 /******************************************************************************/
 /************************** Functions Implementation **************************/

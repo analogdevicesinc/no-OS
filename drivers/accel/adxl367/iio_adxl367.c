@@ -46,6 +46,7 @@
 #include "no_os_util.h"
 #include "iio_adxl367.h"
 #include "adxl367.h"
+#include <string.h>
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/

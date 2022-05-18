@@ -48,6 +48,7 @@
 #include "no_os_error.h"
 #include "no_os_irq.h"
 #include "no_os_print_log.h"
+#include <string.h>
 
 /******************************************************************************/
 /************************** Functions Implementation **************************/
