@@ -247,7 +247,7 @@ int32_t ad5758_soft_reset(struct ad5758_dev *dev)
 	if (ret < 0)
 		goto error;
 	/* Wait 100 us */
-	usleep(100);
+	no_os_udelay(100);
 
 	return 0;
 
