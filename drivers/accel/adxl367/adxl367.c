@@ -757,7 +757,6 @@ int adxl367_read_temperature(struct adxl367_dev *dev,
 {
 	int16_t raw_temp;
 	int ret;
-	int64_t dividend;
 
 	ret = adxl367_read_raw_temp(dev, &raw_temp);
 	if (ret)

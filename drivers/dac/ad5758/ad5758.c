@@ -147,7 +147,6 @@ int32_t ad5758_spi_reg_write(struct ad5758_dev *dev,
 			     uint8_t reg_addr,
 			     uint16_t reg_data)
 {
-	int32_t ret;
 	uint8_t buf[4];
 
 	buf[0] = AD5758_REG_WRITE(reg_addr);

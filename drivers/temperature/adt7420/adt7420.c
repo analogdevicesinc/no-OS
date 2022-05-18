@@ -419,8 +419,6 @@ uint16_t adt7420_i2c_get_register_value(struct adt7420_dev *dev,
 					uint8_t register_address)
 {
 	uint8_t register_value = 0;
-	uint8_t data[2] = { 0, 0xFF };
-	data[0] = register_address;
 
 	no_os_i2c_write(dev->i2c_desc,
 			&register_address,

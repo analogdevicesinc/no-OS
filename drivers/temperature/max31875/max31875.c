@@ -91,7 +91,6 @@ int32_t max31875_reg_write(struct max31875_dev *dev,
 			   uint32_t reg,
 			   uint32_t writeval)
 {
-	int32_t ret;
 	uint8_t data[3];
 
 	if (!dev)

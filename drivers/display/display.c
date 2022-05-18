@@ -188,7 +188,7 @@ int32_t display_print_string(struct display_dev *device, char *msg,
 {
 	int32_t ret;
 	int32_t len;
-	int32_t i, j;
+	int32_t i;
 	int32_t r = row;
 	int32_t c = column;
 
