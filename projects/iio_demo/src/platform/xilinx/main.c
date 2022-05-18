@@ -42,6 +42,7 @@
 /******************************************************************************/
 #include "platform_includes.h"
 #include "common_data.h"
+#include "no_os_error.h"
 
 #ifdef IIO_EXAMPLE
 #include "iio_example.h"
@@ -58,7 +59,7 @@
 *******************************************************************************/
 int main()
 {
-	int ret;
+	int ret = -EINVAL;
 
 	/* Enable the instruction cache. */
 	Xil_ICacheEnable();
@@ -67,8 +68,6 @@ int main()
 
 #ifdef IIO_EXAMPLE
 	ret = iio_example_main();
-	if (ret)
-		goto error;
 #endif
 
 #ifdef IIO_TRIGGER_EXAMPLE
@@ -82,6 +81,5 @@ int main()
 Please enable only one example and re-build the project.
 #endif
 
-error:
-	return 0;
+	return ret;
 }
