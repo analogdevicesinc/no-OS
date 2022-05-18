@@ -44,6 +44,7 @@
 #include "ssd_1306.h"
 #include "no_os_error.h"
 #include "no_os_spi.h"
+#include "no_os_delay.h"
 #include <string.h>
 
 /******************************************************************************/
@@ -111,7 +112,7 @@ int32_t ssd_1306_init(struct display_dev *device)
 	if (ret != 0)
 		return -1;
 	// Post reset delay, Treset=3us (See datasheet -> power on sequence)
-	usleep(3U);
+	no_os_udelay(3U);
 	ret = no_os_gpio_set_value(extra->reset_pin, SSD1306_RST_OFF);
 	if (ret != 0)
 		return -1;
