@@ -338,13 +338,13 @@ int adxl355_get_nb_of_fifo_entries(struct adxl355_dev *dev, uint8_t *reg_value);
 int adxl355_set_fifo_samples(struct adxl355_dev *dev, uint8_t reg_value);
 
 /*! Reads fifo data and returns the raw values. */
-int adxl355_get_raw_fifo_data (struct adxl355_dev *dev, uint8_t *fifo_entries,
-			       uint32_t *raw_x, uint32_t *raw_y, uint32_t *raw_z);
+int adxl355_get_raw_fifo_data(struct adxl355_dev *dev, uint8_t *fifo_entries,
+			      uint32_t *raw_x, uint32_t *raw_y, uint32_t *raw_z);
 
 /*! Reads fifo data and returns the values converted in g. */
-int adxl355_get_fifo_data (struct adxl355_dev *dev, uint8_t *fifo_entries,
-			   struct adxl355_frac_repr *x, struct adxl355_frac_repr *y,
-			   struct adxl355_frac_repr *z);
+int adxl355_get_fifo_data(struct adxl355_dev *dev, uint8_t *fifo_entries,
+			  struct adxl355_frac_repr *x, struct adxl355_frac_repr *y,
+			  struct adxl355_frac_repr *z);
 
 /*! Configures the activity enable register. */
 int adxl355_conf_act_en(struct adxl355_dev *dev,
