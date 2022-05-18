@@ -15,6 +15,8 @@ ifeq (y,$(strip $(TINYIIOD)))
 SRC_DIRS += $(NO-OS)/iio/iio_app
 INCS += $(DRIVERS)/accel/adxl313/iio_adxl313.h
 
+SRCS += $(DRIVERS)/accel/adxl313/iio_adxl313.c
+
 INCS += $(INCLUDE)/no_os_list.h \
 		$(PLATFORM_DRIVERS)/uart_extra.h
 endif

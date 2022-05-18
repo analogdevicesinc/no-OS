@@ -1,7 +1,7 @@
-/*******************************************************************************
- *   @file   main.c
- *   @brief  Main file for STM32 platform of eval-adxl313z project.
- *   @author RBolboac (ramona.bolboaca@analog.com)
+/***************************************************************************//**
+ *   @file   iio_example.c
+ *   @brief  Implementation of IIO example for eval-adxl313z project.
+ *   @author GMois (george.mois@analog.com)
 ********************************************************************************
  * Copyright 2022(c) Analog Devices, Inc.
  *
@@ -41,57 +41,60 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include <errno.h>
-#include "platform_includes.h"
+#include "iio_example.h"
+#include "iio_adxl313.h"
 #include "common_data.h"
 
-#ifdef IIO_EXAMPLE
-#include "iio_example.h"
-#endif
+/******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
 
-#ifdef BASIC_EXAMPLE
-#include "basic_example.h"
-#endif
+/******************************************************************************/
+/************************ Variable Declarations ******************************/
+/******************************************************************************/
 
-/*******************************************************************************
- * @brief Main function execution for STM32 platform.
+/******************************************************************************/
+/************************ Functions Definitions *******************************/
+/******************************************************************************/
+/***************************************************************************//**
+ * @brief IIO example main execution.
  *
- * @return ret - Result of the enabled examples execution.
+ * @return ret - Result of the example execution. If working correctly, will
+ *               execute continuously function iio_app_run and will not return.
 *******************************************************************************/
-int main()
+int iio_example_main ()
 {
-	int ret = -ENODEV;
+	int ret;
+	char *dev_name = "ADXL312";
+	struct adxl313_iio_dev *adxl313_iio_desc;
+	struct adxl313_iio_dev_init_param adxl313_init_par;
 
-	xsip.get_input_clock = HAL_RCC_GetPCLK1Freq;
-	adxl313_user_init.comm_init.spi_init = sip;
-
-	stm32_init();
-
-#ifdef IIO_EXAMPLE
-	ret = iio_example_main();
-	if (ret < 0)
-		goto error;
-#endif
-
-#ifdef BASIC_EXAMPLE
-	struct no_os_uart_desc *uart;
-
-	ret = no_os_uart_init(&uart, &uip);
+	adxl313_init_par.adxl313_dev_init = &adxl313_user_init;
+	ret = adxl313_iio_init(&adxl313_iio_desc, &adxl313_init_par);
 	if (ret)
-		goto error;
+		return ret;
 
-	stm32_uart_stdio(uart);
-	ret = basic_example_main();
-	if (ret)
-		goto error;
-#endif
+	switch(adxl313_iio_desc->adxl313_dev->dev_type) {
+	case ID_ADXL312:
+		dev_name = "ADXL312";
+		break;
+	case ID_ADXL313:
+		dev_name = "ADXL313";
+		break;
+	case ID_ADXL314:
+		dev_name = "ADXL314";
+		break;
+	default:
+		return -ENODEV;
+	}
 
-#if (IIO_EXAMPLE+DUMMY_EXAMPLE != 1)
-#error Selected example projects cannot be enabled at the same time. \
-Please enable only one example and re-build the project.
-#endif
+	struct iio_app_device iio_devices[] = {
+		{
+			.name = dev_name,
+			.dev = adxl313_iio_desc,
+			.dev_descriptor = adxl313_iio_desc->iio_dev,
+		}
+	};
 
-
-error:
-	return ret;
+	return iio_app_run(iio_devices, NO_OS_ARRAY_SIZE(iio_devices));
 }
-
