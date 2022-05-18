@@ -27,7 +27,7 @@
 #define ALL -1
 
 #define DIV_U64_REM(x, y, r) no_os_div64_u64_rem(x, y, r)
-#ifndef DIV_U64
+#ifndef NO_OS_DIV_U64
 #define NO_OS_DIV_U64(x, y) no_os_div_u64(x, y)
 #endif
 #define DIV_S64(x, y) no_os_div_s64(x, y)
