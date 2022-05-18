@@ -692,8 +692,8 @@ int adxl355_set_fifo_samples(struct adxl355_dev *dev, uint8_t reg_value)
  *
  * @return ret         - Result of the configuration procedure.
 *******************************************************************************/
-int adxl355_get_raw_fifo_data (struct adxl355_dev *dev, uint8_t *fifo_entries,
-			       uint32_t *raw_x, uint32_t *raw_y, uint32_t *raw_z)
+int adxl355_get_raw_fifo_data(struct adxl355_dev *dev, uint8_t *fifo_entries,
+			      uint32_t *raw_x, uint32_t *raw_y, uint32_t *raw_z)
 {
 	int ret;
 
@@ -734,10 +734,10 @@ int adxl355_get_raw_fifo_data (struct adxl355_dev *dev, uint8_t *fifo_entries,
  *
  * @return ret         - Result of the configuration procedure.
 *******************************************************************************/
-int adxl355_get_fifo_data (struct adxl355_dev *dev, uint8_t *fifo_entries,
-			   struct adxl355_frac_repr *x,
-			   struct adxl355_frac_repr *y,
-			   struct adxl355_frac_repr *z)
+int adxl355_get_fifo_data(struct adxl355_dev *dev, uint8_t *fifo_entries,
+			  struct adxl355_frac_repr *x,
+			  struct adxl355_frac_repr *y,
+			  struct adxl355_frac_repr *z)
 {
 	int ret;
 	uint32_t raw_x[32];
@@ -770,8 +770,8 @@ int adxl355_get_fifo_data (struct adxl355_dev *dev, uint8_t *fifo_entries,
  *
  * @return ret         - Result of the configuration procedure.
 *******************************************************************************/
-int adxl355_conf_act_en (struct adxl355_dev *dev,
-			 union adxl355_act_en_flags act_config)
+int adxl355_conf_act_en(struct adxl355_dev *dev,
+			union adxl355_act_en_flags act_config)
 {
 	int ret;
 	uint8_t reg_val = act_config.value;
@@ -793,7 +793,7 @@ int adxl355_conf_act_en (struct adxl355_dev *dev,
  *
  * @return ret    - Result of the configuration procedure.
 *******************************************************************************/
-int adxl355_conf_act_thr (struct adxl355_dev *dev, uint16_t act_thr)
+int adxl355_conf_act_thr(struct adxl355_dev *dev, uint16_t act_thr)
 {
 	int ret;
 	uint8_t data[2] = {act_thr >> 8, (uint8_t)act_thr};
@@ -834,8 +834,8 @@ int adxl355_set_act_cnt_reg(struct adxl355_dev *dev, uint8_t act_cnt)
  *
  * @return ret     - Result of the configuration procedure.
 *******************************************************************************/
-int adxl355_config_int_pins (struct adxl355_dev *dev,
-			     union adxl355_int_mask int_conf)
+int adxl355_config_int_pins(struct adxl355_dev *dev,
+			    union adxl355_int_mask int_conf)
 {
 	uint8_t reg_val = int_conf.value;
 
