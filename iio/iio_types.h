@@ -229,9 +229,9 @@ struct iio_trigger {
 	/** Array of attributes. Last one should have its name set to NULL */
 	struct iio_attribute *attributes;
 	/** Called when needs to be enabled */
-	void (*enable)(void *trig);
+	int (*enable)(void *trig);
 	/** Called when needs to be disabled */
-	void (*disable)(void *trig);
+	int (*disable)(void *trig);
 };
 
 /**
