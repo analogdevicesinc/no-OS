@@ -123,7 +123,7 @@ int32_t max31875_reg_write_mask(struct max31875_dev *dev,
 	if (!dev)
 		return -EINVAL;
 
-	ret = max31875_reg_read(dev, reg, regval);
+	ret = max31875_reg_read(dev, reg, &regval);
 	if (NO_OS_IS_ERR_VALUE(ret))
 		return ret;
 
