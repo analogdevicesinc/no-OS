@@ -805,7 +805,8 @@ static int adxl355_iio_read_hpf_available(void *dev, char *buf, uint32_t len,
 			vals[1] = iio_adxl355->adxl355_hpf_3db_table[i][1];
 			iio_format_value(buffer, len, IIO_VAL_INT_PLUS_MICRO, 2, vals);
 			strcat(buf, buffer);
-			strcat(buf, " ");
+			if (i < NO_OS_ARRAY_SIZE(iio_adxl355->adxl355_hpf_3db_table) - 1)
+				strcat(buf, " ");
 		}
 		return strlen(buf);
 	default:
@@ -842,7 +843,8 @@ static int adxl355_iio_read_samp_freq_avail(void *dev, char *buf,
 			vals[1] = adxl355_iio_odr_table[i][1];
 			iio_format_value(buffer, sizeof(buffer), IIO_VAL_INT_PLUS_MICRO, 2, vals);
 			strcat(buf, buffer);
-			strcat(buf, " ");
+			if (i < NO_OS_ARRAY_SIZE(adxl355_iio_odr_table) - 1)
+				strcat(buf, " ");
 		}
 		return strlen(buf);
 	default:
