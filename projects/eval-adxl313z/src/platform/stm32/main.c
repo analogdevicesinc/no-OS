@@ -44,6 +44,10 @@
 #include "platform_includes.h"
 #include "common_data.h"
 
+#ifdef IIO_EXAMPLE
+#include "iio_example.h"
+#endif
+
 #ifdef BASIC_EXAMPLE
 #include "basic_example.h"
 #endif
@@ -62,6 +66,12 @@ int main()
 
 	stm32_init();
 
+#ifdef IIO_EXAMPLE
+	ret = iio_example_main();
+	if (ret)
+		goto error;
+#endif
+
 #ifdef BASIC_EXAMPLE
 	struct no_os_uart_desc *uart;
 
@@ -75,7 +85,11 @@ int main()
 		goto error;
 #endif
 
+#if (IIO_EXAMPLE + BASIC_EXAMPLE > 1)
+#error Selected example projects cannot be enabled at the same time. \
+Please enable only one example and re-build the project.
+#endif
+
 error:
 	return ret;
 }
-

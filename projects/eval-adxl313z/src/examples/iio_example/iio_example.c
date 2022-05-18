@@ -1,7 +1,6 @@
-/*******************************************************************************
- *   @file   parameters.h
- *   @brief  Definitions specific to STM32 platform used by eval-adxl313z
- *           project.
+/***************************************************************************//**
+ *   @file   iio_example.c
+ *   @brief  Implementation of IIO example for eval-adxl313z project.
  *   @author GMois (george.mois@analog.com)
 ********************************************************************************
  * Copyright 2022(c) Analog Devices, Inc.
@@ -37,38 +36,72 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __PARAMETERS_H__
-#define __PARAMETERS_H__
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "stm32_hal.h"
-#include "stm32_irq.h"
-#include "stm32_spi.h"
-#include "stm32_gpio.h"
-#include "stm32_uart.h"
-#include "stm32_uart_stdio.h"
+#include <errno.h>
+#include "iio_example.h"
+#include "iio_adxl313.h"
+#include "common_data.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-extern UART_HandleTypeDef huart2;
+#define DATA_BUFFER_SIZE 400
 
-#ifdef IIO_SUPPORT
-#define INTC_DEVICE_ID 0
-#define IIO_APP_HUART	(&huart2)
-#define UART_IRQ_ID     USART2_IRQn
-#endif
-#define UART_DEVICE_ID      2
-#define UART_BAUDRATE  115200
+/******************************************************************************/
+/************************ Variable Declarations ******************************/
+/******************************************************************************/
+uint8_t iio_data_buffer[DATA_BUFFER_SIZE*3*sizeof(int)];
 
-#define SPI_DEVICE_ID    1
-#define SPI_CS          4
-#define SPI_CS_PORT     GPIOA
-#define SPI_OPS         &stm32_spi_ops
+/******************************************************************************/
+/************************ Functions Definitions *******************************/
+/******************************************************************************/
+/***************************************************************************//**
+ * @brief IIO example main execution.
+ *
+ * @return ret - Result of the example execution. If working correctly, will
+ *               execute continuously function iio_app_run and will not return.
+*******************************************************************************/
+int iio_example_main()
+{
+	int ret;
+	char *dev_name = "ADXL312";
+	struct adxl313_iio_dev *adxl313_iio_desc;
+	struct adxl313_iio_dev_init_param adxl313_init_par;
+	struct iio_data_buffer accel_buff = {
+		.buff = (void *)iio_data_buffer,
+		.size = DATA_BUFFER_SIZE*3*sizeof(int)
+	};
 
-extern struct stm32_uart_init_param xuip;
-extern struct stm32_spi_init_param xsip;
+	adxl313_init_par.adxl313_dev_init = &adxl313_user_init;
+	ret = adxl313_iio_init(&adxl313_iio_desc, &adxl313_init_par);
+	if (ret)
+		return ret;
 
-#endif /* __PARAMETERS_H__ */
+	switch(adxl313_iio_desc->adxl313_dev->dev_type) {
+	case ID_ADXL312:
+		dev_name = "ADXL312";
+		break;
+	case ID_ADXL313:
+		dev_name = "ADXL313";
+		break;
+	case ID_ADXL314:
+		dev_name = "ADXL314";
+		break;
+	default:
+		return -ENODEV;
+	}
+
+	struct iio_app_device iio_devices[] = {
+		{
+			.name = dev_name,
+			.dev = adxl313_iio_desc,
+			.dev_descriptor = adxl313_iio_desc->iio_dev,
+			.read_buff = &accel_buff
+		}
+	};
+
+	return iio_app_run(iio_devices, NO_OS_ARRAY_SIZE(iio_devices));
+}

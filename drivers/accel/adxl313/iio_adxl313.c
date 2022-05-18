@@ -314,13 +314,13 @@ static int adxl313_iio_read_raw(void *dev, char *buf, uint32_t len,
 
 		switch (channel->address) {
 		case CHAN_X:
-			ret = no_os_sign_extend32(accel_x, MIN_SHIFT + adxl313->resolution);
+			ret = no_os_sign_extend16(accel_x, MIN_SHIFT + adxl313->resolution);
 			break;
 		case CHAN_Y:
-			ret = no_os_sign_extend32(accel_y, MIN_SHIFT + adxl313->resolution);
+			ret = no_os_sign_extend16(accel_y, MIN_SHIFT + adxl313->resolution);
 			break;
 		case CHAN_Z:
-			ret = no_os_sign_extend32(accel_z, MIN_SHIFT + adxl313->resolution);
+			ret = no_os_sign_extend16(accel_z, MIN_SHIFT + adxl313->resolution);
 			break;
 		default:
 			return -EINVAL;
@@ -1009,15 +1009,15 @@ static int adxl313_iio_read_samples(void* dev, int16_t* buff, uint32_t samples)
 			return ret;
 
 		if (iio_adxl313->active_channels & NO_OS_BIT(0)) {
-			buff[i] = no_os_sign_extend32(data_x, MIN_SHIFT + adxl313->resolution);
+			buff[i] = no_os_sign_extend16(data_x, MIN_SHIFT + adxl313->resolution);
 			i++;
 		}
 		if (iio_adxl313->active_channels & NO_OS_BIT(1)) {
-			buff[i] = no_os_sign_extend32(data_y, MIN_SHIFT + adxl313->resolution);
+			buff[i] = no_os_sign_extend16(data_y, MIN_SHIFT + adxl313->resolution);
 			i++;
 		}
 		if (iio_adxl313->active_channels & NO_OS_BIT(2)) {
-			buff[i] = no_os_sign_extend32(data_z, MIN_SHIFT + adxl313->resolution);
+			buff[i] = no_os_sign_extend16(data_z, MIN_SHIFT + adxl313->resolution);
 			i++;
 		}
 	}
