@@ -1103,6 +1103,7 @@ static int iio_open_dev(struct iiod_ctx *ctx, const char *device,
 		if (NO_OS_IS_ERR_VALUE(ret) && dev->buffer.allocated) {
 			free(dev->buffer.cb.buff);
 			dev->buffer.allocated = 0;
+			return ret;
 		}
 	}
 
@@ -1110,7 +1111,7 @@ static int iio_open_dev(struct iiod_ctx *ctx, const char *device,
 	if (dev->trig_idx != NO_TRIGGER) {
 		trig = &desc->trigs[dev->trig_idx];
 		if (trig->descriptor->enable)
-			trig->descriptor->enable(trig->instance);
+			ret = trig->descriptor->enable(trig->instance);
 	}
 
 	return ret;
@@ -1127,6 +1128,7 @@ static int iio_close_dev(struct iiod_ctx *ctx, const char *device)
 	struct iio_desc *desc;
 	struct iio_dev_priv *dev;
 	struct iio_trig_priv *trig;
+	int ret = 0;
 
 	dev = get_iio_device(ctx->instance, device);
 	if (!dev)
@@ -1142,16 +1144,20 @@ static int iio_close_dev(struct iiod_ctx *ctx, const char *device)
 	}
 
 	dev->buffer.public.active_mask = 0;
-	if (dev->dev_descriptor->post_disable)
-		return dev->dev_descriptor->post_disable(dev->dev_instance);
+	if (dev->dev_descriptor->post_disable) {
+		ret = dev->dev_descriptor->post_disable(dev->dev_instance);
+		if (ret)
+			return ret;
+	}
 
 	desc = ctx->instance;
 	if (desc->nb_trigs) {
 		trig = &desc->trigs[dev->trig_idx];
 		if (trig->descriptor->disable)
-			trig->descriptor->disable(trig->instance);
+			ret = trig->descriptor->disable(trig->instance);
 	}
-	return 0;
+
+	return ret;
 }
 
 static int iio_call_submit(struct iiod_ctx *ctx, const char *device,
