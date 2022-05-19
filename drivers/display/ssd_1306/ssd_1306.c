@@ -203,13 +203,13 @@ int32_t ssd_1306_move_cursor(struct display_dev *device, uint8_t row,
 	command[0] = 0x21;
 	command[1] = column*8;
 	command[2] = device->cols_nb * 8 - 1U;
-	ret = no_os_spi_write_and_read(extra->spi_desc, &command, 3U);
+	ret = no_os_spi_write_and_read(extra->spi_desc, command, 3U);
 	if (ret != 0)
 		return -1;
 	command[0] = 0x22;
 	command[1] = row;
 	command[2] = device->rows_nb - 1U;
-	return no_os_spi_write_and_read(extra->spi_desc, &command, 3U);;
+	return no_os_spi_write_and_read(extra->spi_desc, command, 3U);;
 }
 
 /***************************************************************************//**
@@ -236,7 +236,7 @@ int32_t ssd_1306_print_ascii(struct display_dev *device, uint8_t ascii,
 	ret = no_os_gpio_set_value(extra->dc_pin, SSD1306_DC_DATA);
 	if (ret != 0)
 		return -1;
-	return no_os_spi_write_and_read(extra->spi_desc, &ch, SSD1306_CHARSZ);
+	return no_os_spi_write_and_read(extra->spi_desc, ch, SSD1306_CHARSZ);
 }
 
 /***************************************************************************//**
