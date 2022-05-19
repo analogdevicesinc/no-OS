@@ -54,7 +54,7 @@
 #include <inttypes.h>
 #include <xil_cache.h>
 
-static int32_t data_buf[BUF_LENGTH];
+static uint32_t data_buf[BUF_LENGTH];
 
 /***************************************************************************//**
  * @brief main

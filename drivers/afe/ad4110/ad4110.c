@@ -1034,8 +1034,8 @@ err_dev:
  *
  * @return 0 in case of success, negative error code otherwise.
 *******************************************************************************/
-int32_t ad4110_continuous_read(struct ad4110_dev *dev, int32_t *buffer,
-			       int32_t buffer_size)
+int32_t ad4110_continuous_read(struct ad4110_dev *dev, uint32_t *buffer,
+			       uint32_t buffer_size)
 {
 	int32_t ret;
 

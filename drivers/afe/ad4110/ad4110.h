@@ -355,8 +355,8 @@ struct ad4110_init_param {
 
 struct ad4110_callback_ctx {
 	struct ad4110_dev *dev;
-	int32_t *buffer;
-	int32_t buffer_size;
+	uint32_t *buffer;
+	uint32_t buffer_size;
 };
 
 /******************************************************************************/
@@ -415,8 +415,8 @@ int32_t ad4110_spi_int_reg_read(struct ad4110_dev *dev,
 				uint32_t *reg_data);
 
 /* Fills buffer with buffer_size number of samples using irq */
-int32_t ad4110_continuous_read(struct ad4110_dev *dev, int32_t *buffer,
-			       int32_t buffer_size);
+int32_t ad4110_continuous_read(struct ad4110_dev *dev, uint32_t *buffer,
+			       uint32_t buffer_size);
 
 /* SPI internal DATA register read from device. */
 int32_t ad4110_spi_int_data_reg_read(struct ad4110_dev *dev,
