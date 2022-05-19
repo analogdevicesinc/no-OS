@@ -420,7 +420,7 @@ struct adxl367_int_map {
  */
 struct adxl367_fractional_val {
 	int64_t integer;
-	int fractional;
+	int32_t fractional;
 };
 
 /**
