@@ -142,17 +142,15 @@ int iio_trig_disable(void *trig)
  * interrupt is asserted for the configured trigger.
  *
  * @param trig - Trigger structure which is linked to this handler.
- *
- * @return ret - Result of the hw trigger handler procedure.
 */
-int iio_hw_trig_handler(void *trig)
+void iio_hw_trig_handler(void *trig)
 {
 	if(!trig)
-		return -EINVAL;
+		return;
 
 	struct iio_hw_trig *desc = trig;
 
-	return iio_process_trigger_type(*desc->iio_desc, desc->name);
+	iio_process_trigger_type(*desc->iio_desc, desc->name);
 }
 
 /**
