@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   iio_dac_demo.h
- *   @brief  Header file of DAC Demo iio.
- *   @author RNechita (ramona.nechita@analog.com)
+ *   @file   iio_dac_demo_trig.c
+ *   @brief  Implementation of iio_dac_demo_trig.c
+ *   @author RBolboac (ramona.bolboaca@analog.com)
 ********************************************************************************
- * Copyright 2021(c) Analog Devices, Inc.
+ * Copyright 2022(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -37,14 +37,21 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef IIO_DEMO_DAC
-#define IIO_DEMO_DAC
-
+/******************************************************************************/
+/***************************** Include Files **********************************/
+/******************************************************************************/
 #include <stdlib.h>
-#include "iio_types.h"
-#include "dac_demo.h"
+#include <string.h>
+#include "no_os_error.h"
+#include "iio.h"
+#include "iio_trigger.h"
+#include "iio_dac_demo.h"
 
-extern struct iio_device dac_demo_iio_descriptor;
-extern struct iio_trigger dac_iio_timer_trig_desc;
-
-#endif /* IIO_DEMO_DAC */
+/******************************************************************************/
+/************************ Variable Declarations *******************************/
+/******************************************************************************/
+struct iio_trigger dac_iio_timer_trig_desc = {
+	.is_synchronous = true,
+	.enable = iio_trig_enable,
+	.disable = iio_trig_disable,
+};

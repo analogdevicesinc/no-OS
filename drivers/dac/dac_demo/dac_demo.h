@@ -123,4 +123,6 @@ int32_t dac_demo_reg_read(struct dac_demo_desc *desc, uint8_t reg_index,
 int32_t dac_demo_reg_write(struct dac_demo_desc *desc, uint8_t reg_index,
 			   uint8_t writeval);
 
+int32_t dac_demo_trigger_handler(struct iio_device_data *dev_data);
+
 #endif /*IIO_DEMO_DAC_*/
