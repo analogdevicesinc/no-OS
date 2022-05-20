@@ -90,10 +90,12 @@ int iio_hw_trig_init(struct iio_hw_trig **iio_trig,
 	if (ret)
 		goto error;
 
-	ret = no_os_irq_trigger_level_set(trig_desc->irq_ctrl,
-					  trig_desc->irq_id, trig_desc->irq_trig_lvl);
-	if (ret)
-		goto error;
+	if (init_param->cb_info.event == NO_OS_EVT_GPIO) {
+		ret = no_os_irq_trigger_level_set(trig_desc->irq_ctrl,
+						  trig_desc->irq_id, trig_desc->irq_trig_lvl);
+		if (ret)
+			goto error;
+	}
 
 	*iio_trig = trig_desc;
 
