@@ -46,5 +46,6 @@
 
 extern struct iio_device adc_demo_iio_descriptor;
 extern struct iio_trigger adc_iio_trig_desc;
+extern struct iio_trigger adc_iio_timer_trig_desc;
 
 #endif /* IIO_DEMO_ADC */

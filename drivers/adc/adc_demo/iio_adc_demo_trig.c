@@ -62,3 +62,9 @@ struct iio_trigger adc_iio_trig_desc = {
 	.is_synchronous = true,
 	.attributes = trig_attr,
 };
+
+struct iio_trigger adc_iio_timer_trig_desc = {
+	.is_synchronous = true,
+	.enable = iio_trig_enable,
+	.disable = iio_trig_disable,
+};
