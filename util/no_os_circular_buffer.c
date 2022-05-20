@@ -192,6 +192,9 @@ static int32_t no_os_cb_prepare_async_operation(struct no_os_circular_buffer
 			desc->read.spin_count = desc->write.spin_count - 1;
 			desc->read.idx = desc->write.idx;
 		}
+		if (!available_size)
+			/* No data to read */
+			return 0;
 
 		/* We can only read available data */
 		requested_size = no_os_min(requested_size, available_size);
@@ -274,6 +277,10 @@ static int32_t no_os_cb_operation(struct no_os_circular_buffer *desc,
 		} while (ret == -EBUSY || ret == -EAGAIN);
 		if (ret == -NO_OS_EOVERRUN)
 			sticky_overrun = true;
+
+		/* If no data is available return error */
+		if(!available_size)
+			return -1;
 
 		if (is_read)
 			memcpy((uint8_t *)data + i, buff, available_size);
