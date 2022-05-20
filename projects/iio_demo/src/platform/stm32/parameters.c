@@ -41,3 +41,15 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include "parameters.h"
+
+#ifdef IIO_TIMER_TRIGGER_EXAMPLE
+extern TIM_HandleTypeDef htim13;
+struct stm32_timer_init_param adc_demo_xtip = {
+	.htimer = &htim13,
+};
+
+extern TIM_HandleTypeDef htim14;
+struct stm32_timer_init_param dac_demo_xtip = {
+	.htimer = &htim14,
+};
+#endif

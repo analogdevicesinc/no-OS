@@ -69,11 +69,73 @@ struct dac_demo_init_param dac_init_par = {
 	}
 };
 
-uint8_t in_buff[MAX_SIZE_BASE_ADDR];
-uint8_t out_buff[MAX_SIZE_BASE_ADDR];
+uint8_t in_buff[MAX_SIZE_BASE_ADDR] = {0};
+uint8_t out_buff[MAX_SIZE_BASE_ADDR] = {0};
 
-#ifdef IIO_TRIGGER_EXAMPLE
+#ifdef IIO_SW_TRIGGER_EXAMPLE
 struct iio_sw_trig_init_param adc_trig_ip = {
 	.name = ADC_DEMO_TRIG_NAME
+};
+#endif
+
+#ifdef IIO_TIMER_TRIGGER_EXAMPLE
+/* Adc Demo timer init parameter */
+struct no_os_timer_init_param adc_demo_tip = {
+	.id = ADC_DEMO_TIMER_DEVICE_ID,
+	.freq_hz = ADC_DEMO_TIMER_FREQ_HZ,
+	.load_value = ADC_DEMO_TIMER_LOAD_VAL,
+	.platform_ops = TIMER_OPS,
+	.extra = ADC_DEMO_TIMER_EXTRA,
+};
+
+/* Adc Demo timer irq init parameter */
+struct no_os_irq_init_param adc_demo_timer_irq_ip = {
+	.irq_ctrl_id = ADC_DEMO_TIMER_IRQ_ID,
+	.platform_ops = TIMER_IRQ_OPS,
+	.extra = ADC_DEMO_TIMER_IRQ_EXTRA,
+};
+
+/* Adc Demo timer trigger callback info */
+const struct iio_hw_trig_cb_info adc_demo_timer_cb_info = {
+	.event = NO_OS_EVT_TIM_ELAPSED,
+	.peripheral = NO_OS_TIM_IRQ,
+	.handle = ADC_DEMO_TIMER_CB_HANDLE,
+};
+
+/* Adc Demo timer trigger init parameter */
+struct iio_hw_trig_init_param adc_demo_timer_trig_ip = {
+	.irq_id = ADC_DEMO_TIMER_TRIG_IRQ_ID,
+	.cb_info = adc_demo_timer_cb_info,
+	.name = ADC_DEMO_TIMER_TRIG_NAME,
+};
+
+/* Dac Demo timer init parameter */
+struct no_os_timer_init_param dac_demo_tip = {
+	.id = DAC_DEMO_TIMER_DEVICE_ID,
+	.freq_hz = DAC_DEMO_TIMER_FREQ_HZ,
+	.load_value = DAC_DEMO_TIMER_LOAD_VAL,
+	.platform_ops = TIMER_OPS,
+	.extra = DAC_DEMO_TIMER_EXTRA,
+};
+
+/* Dac Demo timer irq init parameter */
+struct no_os_irq_init_param dac_demo_timer_irq_ip = {
+	.irq_ctrl_id = DAC_DEMO_TIMER_IRQ_ID,
+	.platform_ops = TIMER_IRQ_OPS,
+	.extra = DAC_DEMO_TIMER_IRQ_EXTRA,
+};
+
+/* Dac Demo timer trigger callback info */
+const struct iio_hw_trig_cb_info dac_demo_timer_cb_info = {
+	.event = NO_OS_EVT_TIM_ELAPSED,
+	.peripheral = NO_OS_TIM_IRQ,
+	.handle = DAC_DEMO_TIMER_CB_HANDLE,
+};
+
+/* Adc Demo timer trigger init parameter */
+struct iio_hw_trig_init_param dac_demo_timer_trig_ip = {
+	.irq_id = DAC_DEMO_TIMER_TRIG_IRQ_ID,
+	.cb_info = dac_demo_timer_cb_info,
+	.name = DAC_DEMO_TIMER_TRIG_NAME,
 };
 #endif

@@ -48,8 +48,8 @@
 #include "iio_example.h"
 #endif
 
-#ifdef IIO_TRIGGER_EXAMPLE
-#include "iio_trigger_example.h"
+#ifdef IIO_SW_TRIGGER_EXAMPLE
+#include "iio_sw_triggger_example.h"
 #endif
 
 /***************************************************************************//**
@@ -70,15 +70,16 @@ int main()
 	ret = iio_example_main();
 #endif
 
-#ifdef IIO_TRIGGER_EXAMPLE
+#ifdef IIO_SW_TRIGGER_EXAMPLE
 #error Software trigger is not supported over UART.
 #endif
 
-#if (IIO_EXAMPLE + IIO_TRIGGER_EXAMPLE == 0)
+#ifdef IIO_TIMER_TRIGGER_EXAMPLE
+#error Timer trigger example is not supported on xilinx platform.
+#endif
+
+#if (IIO_EXAMPLE == 0)
 #error At least one example has to be selected using y value in Makefile.
-#elif (IIO_EXAMPLE + IIO_TRIGGER_EXAMPLE > 1)
-#error Selected example projects cannot be enabled at the same time. \
-Please enable only one example and re-build the project.
 #endif
 
 	return ret;
