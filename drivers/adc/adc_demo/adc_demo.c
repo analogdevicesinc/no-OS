@@ -192,7 +192,7 @@ int32_t adc_demo_trigger_handler(struct iio_device_data *dev_data)
 	uint32_t k = 0;
 	uint32_t ch = -1;
 	uint16_t buff[TOTAL_ADC_CHANNELS];
-	static uint16_t i = 0;
+	static uint32_t i = 0;
 
 	if (!dev_data)
 		return -EINVAL;
@@ -213,7 +213,7 @@ int32_t adc_demo_trigger_handler(struct iio_device_data *dev_data)
 
 	while(get_next_ch_idx(desc->active_ch, ch, &ch))
 		buff[k++] = ((uint16_t (*)[desc->ext_buff_len])(desc->ext_buff))[ch][i];
-	if (i == (desc->ext_buff_len))
+	if (i == (desc->ext_buff_len - 1))
 		i = 0;
 	else
 		i++;
