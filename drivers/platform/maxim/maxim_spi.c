@@ -90,7 +90,7 @@ int32_t max_spi_init(struct no_os_spi_desc **desc,
 		goto err;
 	}
 
-#if TARGET_NUM == 32655
+#if TARGET_NUM == 32655 || TARGET_NUM == 78000
 	mxc_spi_pins_t spi_pins_config = {
 		.clock = true,
 		.ss0 = (descriptor->chip_select == 0) ? true : false,
@@ -104,7 +104,7 @@ int32_t max_spi_init(struct no_os_spi_desc **desc,
 	};
 #endif
 
-#if TARGET_NUM == 32655
+#if TARGET_NUM == 32655 || TARGET_NUM == 78000
 	ret = MXC_SPI_Init(MXC_SPI_GET_SPI(descriptor->device_id), SPI_MASTER_MODE,
 			   SPI_SINGLE_MODE,
 			   eparam->numSlaves, eparam->polarity, param->max_speed_hz, spi_pins_config);
