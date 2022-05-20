@@ -135,7 +135,7 @@ int iio_trig_enable(void *trig);
 /** API to disable a hardware trigger */
 int iio_trig_disable(void *trig);
 /** API for hardware trigger handler */
-int iio_hw_trig_handler(void *trig);
+void iio_hw_trig_handler(void *trig);
 /** API to remove a hardware trigger */
 int iio_hw_trig_remove(struct iio_hw_trig *trig);
 #endif
