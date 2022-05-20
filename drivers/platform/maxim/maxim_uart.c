@@ -61,6 +61,12 @@ mxc_uart_req_t uart_irq_state[MXC_UART_INSTANCES];
 bool is_callback;
 
 static uint8_t c;
+
+#if TARGET_NUM == 78000
+const mxc_gpio_cfg_t gpio_cfg_uart2_flow         =   { MXC_GPIO0, (MXC_GPIO_PIN_14 | MXC_GPIO_PIN_15), MXC_GPIO_FUNC_ALT2, MXC_GPIO_PAD_NONE };
+const mxc_gpio_cfg_t gpio_cfg_uart2_flow_disable =   { MXC_GPIO0, (MXC_GPIO_PIN_14 | MXC_GPIO_PIN_15), MXC_GPIO_FUNC_IN, MXC_GPIO_PAD_NONE };
+#endif
+
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
@@ -277,14 +283,14 @@ int32_t no_os_uart_init(struct no_os_uart_desc **desc,
 	case NO_OS_UART_PAR_ODD:
 #if TARGET_NUM == 32660 || TARGET_NUM == 32650
 		parity = MXC_UART_PARITY_ODD;
-#elif TARGET_NUM == 32655
+#elif TARGET_NUM == 32655 || TARGET_NUM == 78000
 		parity = MXC_UART_PARITY_ODD_1;
 #endif
 		break;
 	case NO_OS_UART_PAR_EVEN:
 #if TARGET_NUM == 32660 || TARGET_NUM == 32650
 		parity = MXC_UART_PARITY_EVEN;
-#elif TARGET_NUM == 32655
+#elif TARGET_NUM == 32655 || TARGET_NUM == 78000
 		parity = MXC_UART_PARITY_EVEN_1;
 #endif
 		break;
@@ -330,14 +336,14 @@ int32_t no_os_uart_init(struct no_os_uart_desc **desc,
 	case UART_FLOW_LOW:
 #if TARGET_NUM == 32660
 		flow = MXC_UART_FLOW_EN_LOW;
-#elif TARGET_NUM == 32655
+#elif TARGET_NUM == 32655 || TARGET_NUM == 78000
 		flow = MXC_UART_FLOW_EN;
 #endif
 		break;
 	case UART_FLOW_HIGH:
 #if TARGET_NUM == 32660
 		flow = MXC_UART_FLOW_EN_HIGH;
-#elif TARGET_NUM == 32655
+#elif TARGET_NUM == 32655 || TARGET_NUM == 78000
 		flow = MXC_UART_FLOW_EN;
 #endif
 		break;
@@ -348,7 +354,7 @@ int32_t no_os_uart_init(struct no_os_uart_desc **desc,
 
 #if TARGET_NUM == 32660
 	ret = MXC_UART_Init(uart_regs, descriptor->baud_rate, MAP_A);
-#elif TARGET_NUM == 32655
+#elif TARGET_NUM == 32655 || TARGET_NUM == 78000
 	ret = MXC_UART_Init(uart_regs, descriptor->baud_rate, MXC_UART_APB_CLK);
 #else
 	ret = MXC_UART_Init(uart_regs, descriptor->baud_rate);
@@ -451,7 +457,7 @@ int32_t no_os_uart_remove(struct no_os_uart_desc *desc)
 	 * Unregistering the callback is necessary only for this target
 	 * because this operation is not done by the driver on init.
 	 */
-#if TARGET_NUM == 32655
+#if TARGET_NUM == 32655 || TARGET_NUM == 78000
 	uint32_t id = desc->device_id;
 	uart_irq_state[id].uart = MXC_UART_GET_UART(id);
 	uart_irq_state[id].callback = _discard_callback;
