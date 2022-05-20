@@ -45,6 +45,7 @@
 /******************************************************************************/
 #include "stm32_hal.h"
 #include "stm32_irq.h"
+#include "stm32_timer.h"
 #include "stm32_uart.h"
 #include "stm32_uart_stdio.h"
 #include "common_data.h"
@@ -64,5 +65,44 @@ extern UART_HandleTypeDef huart5;
 #define UART_IRQ_ID     UART5_IRQn
 #define UART_DEVICE_ID      5
 #define UART_BAUDRATE  115200
+
+#ifdef IIO_TIMER_TRIGGER_EXAMPLE
+/* Adc Demo Timer settings */
+extern stm32_timer_init_param adc_demo_xtip;
+#define ADC_DEMO_TIMER_DEVICE_ID    13
+#define ADC_DEMO_TIMER_FREQ_HZ      1000000
+#define ADC_DEMO_TIMER_LOAD_VAL     2000
+#define ADC_DEMO_TIMER_EXTRA        &adc_demo_xtip
+#define TIMER_OPS                   &stm32_timer_ops
+
+/* Adc Demo Timer trigger settings */
+TIM_HandleTypeDef htim13;
+#define ADC_DEMO_TIMER_IRQ_ID       TIM8_UP_TIM13_IRQn
+#define TIMER_IRQ_OPS               &stm32_irq_ops
+#define ADC_DEMO_TIMER_IRQ_EXTRA    &htim13
+
+/* Adc Demo timer trigger settings */
+#define ADC_DEMO_TIMER_CB_HANDLE    &htim13
+#define ADC_DEMO_TIMER_TRIG_IRQ_ID  TIM8_UP_TIM13_IRQn
+
+/* Dac Demo Timer settings */
+extern stm32_timer_init_param dac_demo_xtip;
+#define DAC_DEMO_TIMER_DEVICE_ID    14
+#define DAC_DEMO_TIMER_FREQ_HZ      1000000
+#define DAC_DEMO_TIMER_LOAD_VAL     2000
+#define DAC_DEMO_TIMER_EXTRA        &dac_demo_xtip
+#define TIMER_OPS                   &stm32_timer_ops
+
+/* Dac Demo Timer trigger settings */
+TIM_HandleTypeDef htim14;
+#define DAC_DEMO_TIMER_IRQ_ID       TIM8_TRG_COM_TIM14_IRQn
+#define TIMER_IRQ_OPS               &stm32_irq_ops
+#define DAC_DEMO_TIMER_IRQ_EXTRA    &htim14
+
+/* Dac Demo timer trigger settings */
+#define DAC_DEMO_TIMER_CB_HANDLE    &htim14
+#define DAC_DEMO_TIMER_TRIG_IRQ_ID  TIM8_TRG_COM_TIM14_IRQn
+
+#endif
 
 #endif /* __PARAMETERS_H__ */

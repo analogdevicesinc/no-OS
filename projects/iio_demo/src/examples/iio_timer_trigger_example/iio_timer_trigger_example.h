@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   iio_trigger_example.h
- *   @brief  IIO trigger example header for iio_demo project
+ *   @file   IIO_SW_TRIGGER_EXAMPLE.h
+ *   @brief  IIO timer trigger example header for iio_demo project
  *   @author RBolboac (ramona.bolboaca@analog.com)
 ********************************************************************************
  * Copyright 2022(c) Analog Devices, Inc.
@@ -36,8 +36,8 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __IIO_TRIGGER_EXAMPLE_H__
-#define __IIO_TRIGGER_EXAMPLE_H__
+#ifndef __IIO_TIMER_TRIGGER_EXAMPLE_H__
+#define __IIO_TIMER_TRIGGER_EXAMPLE_H__
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
@@ -46,6 +46,6 @@
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
-int iio_trigger_example_main();
+int iio_timer_trigger_example_main();
 
-#endif /* __IIO_EXAMPLE_H__ */
+#endif /* __IIO_TIMER_TRIGGER_EXAMPLE_H__ */
