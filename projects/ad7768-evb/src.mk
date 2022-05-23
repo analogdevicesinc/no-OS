@@ -37,13 +37,17 @@ SRC_DIRS += $(PLATFORM_DRIVERS)
 SRC_DIRS += $(DRIVERS)/adc/ad7768
 SRC_DIRS += $(DRIVERS)/axi_core/axi_dmac
 SRC_DIRS += $(DRIVERS)/axi_core/axi_adc_core
-SRC_DIRS += $(DRIVERS)/api
 
 # Add to LIBRARIES the libraries that need to be linked in the build
 # LIBRARIES += mqtt
 # LIBRARIES += fatfs
 # LIBRARIES += mbedtls
 # LIBRARIES += iio
+
+SRCS += $(DRIVERS)/api/no_os_gpio.c \
+        $(DRIVERS)/api/no_os_i2c.c  \
+        $(DRIVERS)/api/no_os_irq.c  \
+        $(DRIVERS)/api/no_os_spi.c
 
 ifeq (y,$(strip $(TINYIIOD)))
 LIBRARIES += iio
