@@ -140,3 +140,14 @@ void lf256fifo_flush(struct lf256fifo *fifo)
 	fifo->ffilled = fifo->fempty;
 }
 
+/**
+* @brief Remove the fifo
+* @param fifo - pointer to fifo descriptor.
+* @return void
+*/
+void lf256fifo_remove(struct lf256fifo *fifo)
+{
+	if (fifo && fifo->data)
+		free(fifo->data);
+}
+
