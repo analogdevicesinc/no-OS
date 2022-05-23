@@ -53,6 +53,7 @@ bool lf256fifo_is_empty(struct lf256fifo *);
 int lf256fifo_read(struct lf256fifo *, uint8_t *);
 int lf256fifo_write(struct lf256fifo *, uint8_t);
 void lf256fifo_flush(struct lf256fifo *);
+void lf256fifo_remove(struct lf256fifo *fifo);
 
 #endif
 
