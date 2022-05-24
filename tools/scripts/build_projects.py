@@ -143,8 +143,12 @@ def get_hardware(hardware, platform, builds_dir):
 	if os.path.isfile(filename):
 		#If equal
 		if filecmp.cmp(filename, tmp_filename):
-			log("Same hardware from last build, use existing bsp")
-			return (filename, 0, 0)
+			if platform == 'stm32':
+				log("For stm32 platform always regenerate bsp")
+				return (filename, 1, 0)
+			else:
+				log("Same hardware from last build, use existing bsp")
+				return (filename, 0, 0)
 	
 	err = run_cmd('cp %s %s' % (tmp_filename, filename))
 	if err != 0:
