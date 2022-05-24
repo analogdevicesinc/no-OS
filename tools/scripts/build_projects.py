@@ -143,12 +143,8 @@ def get_hardware(hardware, platform, builds_dir):
 	if os.path.isfile(filename):
 		#If equal
 		if filecmp.cmp(filename, tmp_filename):
-			if platform == 'stm32':
-				log("For stm32 platform always regenerate bsp")
-				return (filename, 1, 0)
-			else:
-				log("Same hardware from last build, use existing bsp")
-				return (filename, 0, 0)
+			log("Same hardware from last build, use existing bsp")
+			return (filename, 0, 0)
 	
 	err = run_cmd('cp %s %s' % (tmp_filename, filename))
 	if err != 0:
@@ -214,21 +210,28 @@ class BuildConfig:
 				new_hdf = False
 			else:
 				new_hdf = True
-		
-		if new_hdf:
+		if self.platform == 'stm32':
 			err = run_cmd(cmd + ' reset')
 			if err != 0:
 				return err
+			err = run_cmd(cmd + ' -j%d all' % (multiprocessing.cpu_count() - 1))
+			if err != 0:
+				return err
+		else:
+			if new_hdf:
+				err = run_cmd(cmd + ' reset')
+				if err != 0:
+					return err
 
-		err = run_cmd(cmd + ' update')
-		if err != 0:
-			return err
-		err = run_cmd(cmd + ' clean')
-		if err != 0:
-			return err
-		err = run_cmd(cmd + ' -j%d all' % (multiprocessing.cpu_count() - 1))
-		if err != 0:
-			return err
+			err = run_cmd(cmd + ' update')
+			if err != 0:
+				return err
+			err = run_cmd(cmd + ' clean')
+			if err != 0:
+				return err
+			err = run_cmd(cmd + ' -j%d all' % (multiprocessing.cpu_count() - 1))
+			if err != 0:
+				return err
 		
 		log_success("DONE")
 		log_file = DEFAULT_LOG_FILE
