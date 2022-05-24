@@ -132,11 +132,6 @@ struct no_os_uart_desc {
 	struct lf256fifo *rx_fifo;
 	/** UART Baud Rate */
 	uint32_t 	baud_rate;
-	/** Callback to be called when an operation is done (optional) */
-	void		(*callback)(void *callback_ctx, uint32_t event,
-				    void *extra);
-	/** Parameter to be passed to the callback as app_param */
-	void		*callback_ctx;
 	/** UART extra parameters (device specific) */
 	void 		*extra;
 };
