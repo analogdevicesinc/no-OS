@@ -67,6 +67,8 @@ struct stm32_uart_desc {
 	uint32_t timeout;
 	/** Interrupt controller descriptor */
 	struct no_os_irq_ctrl_desc *nvic;
+	/** RX complete callback */
+	struct no_os_callback_desc rx_callback;
 };
 
 #endif

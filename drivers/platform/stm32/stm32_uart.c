@@ -126,8 +126,6 @@ int32_t no_os_uart_init(struct no_os_uart_desc **desc,
 
 	sud->timeout = suip->timeout ? suip->timeout : HAL_MAX_DELAY;
 
-	*desc = descriptor;
-
 	// nonblocking uart_read
 	if(param->asynchronous_rx) {
 		ret = lf256fifo_init(&descriptor->rx_fifo);
@@ -142,28 +140,34 @@ int32_t no_os_uart_init(struct no_os_uart_desc **desc,
 		if (ret < 0)
 			goto error;
 
-		struct no_os_callback_desc uart_rx_cb = {
-			.callback = uart_rx_callback,
-			.ctx = descriptor,
-			.event = NO_OS_EVT_UART_RX_COMPLETE,
-			.peripheral = NO_OS_UART_IRQ,
-		};
-		ret = no_os_irq_register_callback(sud->nvic, descriptor->irq_id, &uart_rx_cb);
+		sud->rx_callback.callback = uart_rx_callback;
+		sud->rx_callback.ctx = descriptor;
+		sud->rx_callback.event = NO_OS_EVT_UART_RX_COMPLETE;
+		sud->rx_callback.peripheral = NO_OS_UART_IRQ;
+
+		ret = no_os_irq_register_callback(sud->nvic, descriptor->irq_id,
+						  &sud->rx_callback);
 		if (ret < 0)
 			goto error_nvic;
 
 		ret = no_os_irq_enable(sud->nvic, descriptor->irq_id);
 		if (ret < 0)
-			goto error_nvic;
+			goto error_register;
 
 		HAL_UART_Receive_IT(sud->huart, (uint8_t *)&c, 1);
 		if (ret != HAL_OK) {
 			ret = -EIO;
-			goto error_nvic;
+			goto error_enable;
 		}
 	}
 
+	*desc = descriptor;
+
 	return 0;
+error_enable:
+	no_os_irq_disable(sud->nvic, descriptor->irq_id);
+error_register:
+	no_os_irq_unregister_callback(sud->nvic, descriptor->irq_id, &sud->rx_callback);
 error_nvic:
 	no_os_irq_ctrl_remove(sud->nvic);
 error:
@@ -187,7 +191,13 @@ int32_t no_os_uart_remove(struct no_os_uart_desc *desc)
 
 	sud = desc->extra;
 	HAL_UART_DeInit(sud->huart);
-	no_os_irq_ctrl_remove(sud->nvic);
+	if (desc->rx_fifo) {
+		no_os_irq_disable(sud->nvic, desc->irq_id);
+		lf256fifo_remove(desc->rx_fifo);
+		desc->rx_fifo = NULL;
+		no_os_irq_unregister_callback(sud->nvic, desc->irq_id, &sud->rx_callback);
+		no_os_irq_ctrl_remove(sud->nvic);
+	}
 	free(desc->extra);
 	free(desc);
 
