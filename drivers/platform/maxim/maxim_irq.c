@@ -47,6 +47,7 @@
 #include <errno.h>
 #include "rtc.h"
 #include "uart.h"
+#include "tmr.h"
 #include "irq_extra.h"
 #include "rtc_extra.h"
 #include "maxim_hal.h"
@@ -62,6 +63,7 @@ static struct event_list _events[] = {
 	[NO_OS_EVT_UART_RX_COMPLETE] = {.event = NO_OS_EVT_UART_RX_COMPLETE},
 	[NO_OS_EVT_UART_ERROR] = {.event = NO_OS_EVT_UART_ERROR},
 	[NO_OS_EVT_RTC] = {.event = NO_OS_EVT_RTC},
+	[NO_OS_EVT_TIM_ELAPSED] = {.event = NO_OS_EVT_TIM_ELAPSED},
 };
 
 extern mxc_uart_req_t uart_irq_state[MXC_UART_INSTANCES];
@@ -70,6 +72,18 @@ extern bool is_callback;
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
+
+/**
+ * @brief Action comparator function
+ * @param data1 - List element
+ * @param data2 - Key
+ * @return 0 if the two are equal, any other integer otherwise
+ */
+int32_t irq_action_cmp(void *data1, void *data2)
+{
+	return ((struct irq_action *)data1)->irq_id -
+	       ((struct irq_action *)data2)->irq_id;
+}
 
 /**
  * @brief Check if the irq_id is for a GPIO interrupt
@@ -87,15 +101,25 @@ static bool is_gpio_irq_id(uint32_t irq_id)
 }
 
 /**
- * @brief Action comparator function
- * @param data1 - List element
- * @param data2 - Key
- * @return 0 if the two are equal, any other integer otherwise
+ * @brief Timer interrupt routine that further calls a registed callback
+ * function
+ * @param tmr - timer registers struct (HAL defined)
  */
-int32_t irq_action_cmp(void *data1, void *data2)
+static void _timer_common_callback(mxc_tmr_regs_t *tmr)
 {
-	return ((struct irq_action *)data1)->irq_id -
-	       ((struct irq_action *)data2)->irq_id;
+	int ret;
+	struct irq_action key = {.irq_id = MXC_TMR_GET_IRQ(MXC_TMR_GET_IDX(tmr))};
+	struct irq_action *action;
+	struct event_list *evt_list = &_events[NO_OS_EVT_TIM_ELAPSED];
+
+	ret = no_os_list_read_find(evt_list->actions, &action, &key);
+	if (ret)
+		return;
+
+	if (action->callback)
+		action->callback(action->ctx);
+
+	MXC_TMR_ClearFlags(tmr);
 }
 
 /**
@@ -139,6 +163,27 @@ void UART2_IRQHandler()
 void UART3_IRQHandler()
 {
 	_uart_common_handler(MXC_UART3);
+}
+#endif
+
+#ifdef MXC_TMR0
+void TMR0_IRQHandler()
+{
+	_timer_common_callback(MXC_TMR0);
+}
+#endif
+
+#ifdef MXC_TMR1
+void TMR1_IRQHandler()
+{
+	_timer_common_callback(MXC_TMR1);
+}
+#endif
+
+#ifdef MXC_TMR2
+void TMR2_IRQHandler()
+{
+	_timer_common_callback(MXC_TMR2);
 }
 #endif
 
@@ -342,6 +387,41 @@ int32_t max_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 
 		break;
 
+	case NO_OS_TIM_IRQ:
+		if (_events[NO_OS_EVT_RTC].actions == NULL) {
+			ret = no_os_list_init(&_events[NO_OS_EVT_TIM_ELAPSED].actions,
+					      NO_OS_LIST_PRIORITY_LIST,
+					      irq_action_cmp);
+			if (ret)
+				return ret;
+		}
+
+		ret = no_os_list_read_first(_events[NO_OS_EVT_TIM_ELAPSED].actions,
+					    (void **)&action);
+		if (ret) {
+			action = calloc(1, sizeof(*action));
+			if (!action)
+				return -ENOMEM;
+
+			action->irq_id = irq_id;
+			action->handle = callback_desc->handle;
+			action->callback = callback_desc->callback;
+			action->ctx = callback_desc->ctx;
+
+			ret = no_os_list_add_first(_events[NO_OS_EVT_TIM_ELAPSED].actions, action);
+			if (ret)
+				goto free_action;
+
+		} else {
+			action->irq_id = irq_id;
+			action->handle = callback_desc->handle;
+			action->callback = callback_desc->callback;
+			action->ctx = callback_desc->ctx;
+		}
+		MXC_TMR_EnableInt(callback_desc->handle);
+
+		break;
+
 	default:
 		return -EINVAL;
 	}
@@ -380,6 +460,9 @@ int32_t max_irq_unregister_callback(struct no_os_irq_ctrl_desc *desc,
 	case NO_OS_RTC_IRQ:
 		action_key.handle = MXC_RTC;
 		MXC_RTC_DisableInt(MXC_RTC_INT_EN_LONG);
+		break;
+	case NO_OS_TIM_IRQ:
+		MXC_TMR_DisableInt(cb->handle);
 		break;
 	default:
 		break;
