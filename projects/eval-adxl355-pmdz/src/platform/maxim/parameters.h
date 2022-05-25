@@ -61,6 +61,7 @@
 
 #define UART_DEVICE_ID  0
 #define UART_BAUDRATE   57600
+#define UART_EXTRA      &adxl355_uart_extra_ip
 
 #define SPI_DEVICE_ID   0
 #define SPI_BAUDRATE    1000000
