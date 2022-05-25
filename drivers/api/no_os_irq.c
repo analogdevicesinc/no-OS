@@ -156,3 +156,20 @@ int32_t no_os_irq_disable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
 {
 	return desc->platform_ops->disable(desc, irq_id);
 }
+
+/**
+ * @brief Set the priority for an interrupt.
+ * @param desc - The IRQ controller descriptor.
+ * @param irq_id - Interrupt identifier.
+ * @param priority_level - The priority level of the interrupt.
+ * @return 0 in case of success, negative errno error codes.
+ */
+int32_t no_os_irq_set_priority(struct no_os_irq_ctrl_desc *desc,
+			       uint32_t irq_id,
+			       uint32_t priority_level)
+{
+	if (desc && desc->platform_ops)
+		return desc->platform_ops->set_priority(desc, irq_id, priority_level);
+
+	return -EINVAL;
+}
