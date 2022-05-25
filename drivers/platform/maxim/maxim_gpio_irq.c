@@ -349,6 +349,23 @@ static int max_gpio_irq_global_disable(struct no_os_irq_ctrl_desc *desc)
 }
 
 /**
+ * @brief Set the interrupt priority for the current GPIO port.
+ * @param desc - GPIO interrupt controller descriptor.
+ * @param irq_id - Unused
+ * @param priority_level - The interrupt priority level.
+ * @return 0
+ */
+static int max_gpio_irq_set_priority(struct no_os_irq_ctrl_desc *desc,
+				uint32_t irq_id,
+				uint32_t priority_level)
+{
+	uint32_t id = MXC_GPIO_GET_IRQ(desc->irq_ctrl_id);
+	NVIC_SetPriority(id, priority_level);
+
+	return 0;
+}
+
+/**
  * @brief maxim specific GPIO IRQ platform ops structure
  */
 const struct no_os_irq_platform_ops max_gpio_irq_ops = {
@@ -360,5 +377,6 @@ const struct no_os_irq_platform_ops max_gpio_irq_ops = {
 	.trigger_level_set = (int32_t (*)())max_gpio_irq_trigger_level_set,
 	.global_enable = (int32_t (*)())max_gpio_irq_global_enable,
 	.global_disable = (int32_t (*)())max_gpio_irq_global_disable,
+	.set_priority = (int32_t (*)())(max_gpio_irq_set_priority),
 	.remove = (int32_t (*)())max_gpio_irq_ctrl_remove
 };
