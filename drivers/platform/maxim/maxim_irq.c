@@ -527,14 +527,6 @@ int32_t max_irq_enable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
 	if (irq_id >= MXC_IRQ_EXT_COUNT)
 		return -EINVAL;
 
-	// TODO: add a proper priority setting function in irq.h instead of this default
-#if (TARGET_NUM == 32655)
-	if (irq_id == GPIO1_IRQn)
-		NVIC_SetPriority(irq_id, 1);
-	else
-		NVIC_SetPriority(irq_id, 0);
-#endif
-
 	NVIC_EnableIRQ(irq_id);
 
 	return 0;
@@ -558,6 +550,25 @@ int32_t max_irq_disable(struct no_os_irq_ctrl_desc *desc,
 }
 
 /**
+ * @brief Set a priority level for an interrupt
+ * @param desc - Interrupt controller descriptor.
+ * @param irq_id - The interrupt vector entry id of the peripheral.
+ * @param priority_level - The interrupt priority level
+ * @return 0 in case of success, -EINVAL otherwise.
+ */
+static int32_t max_irq_set_priority(struct no_os_irq_ctrl_desc *desc,
+				    uint32_t irq_id,
+				    uint32_t priority_level)
+{
+	if (irq_id >= MXC_IRQ_EXT_COUNT)
+		return -EINVAL;
+
+	NVIC_SetPriority(irq_id, priority_level);
+
+	return 0;
+}
+
+/**
  * @brief maxim specific IRQ platform ops structure
  */
 const struct no_os_irq_platform_ops max_irq_ops = {
@@ -569,5 +580,6 @@ const struct no_os_irq_platform_ops max_irq_ops = {
 	.global_disable = &max_irq_global_disable,
 	.enable = &max_irq_enable,
 	.disable = &max_irq_disable,
+	.set_priority = &max_irq_set_priority,
 	.remove = &max_irq_ctrl_remove
 };
