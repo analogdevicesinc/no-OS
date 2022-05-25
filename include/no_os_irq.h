@@ -183,6 +183,9 @@ struct no_os_irq_platform_ops {
 	int32_t (*enable)(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id);
 	/** Disable specific interrupt */
 	int32_t (*disable)(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id);
+	/** Set the priority level for a specific interrupt */
+	int32_t (*set_priority)(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id,
+				uint32_t priority_level);
 	/** IRQ remove function pointer */
 	int32_t (*remove)(struct no_os_irq_ctrl_desc *desc);
 };
@@ -225,4 +228,8 @@ int32_t no_os_irq_enable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id);
 /* Disable specific interrupt */
 int32_t no_os_irq_disable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id);
 
+/** Set the priority level for a specific interrupt */
+int32_t no_os_irq_set_priority(struct no_os_irq_ctrl_desc *desc,
+			       uint32_t irq_id,
+			       uint32_t priority_level);
 #endif // _NO_OS_IRQ_H_
