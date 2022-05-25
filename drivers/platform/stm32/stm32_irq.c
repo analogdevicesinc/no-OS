@@ -468,19 +468,6 @@ int32_t stm32_irq_global_disable(struct no_os_irq_ctrl_desc *desc)
  */
 int32_t stm32_irq_enable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
 {
-	// TODO: add a proper priority setting function in irq.h instead of this default
-	switch(irq_id) {
-	case EXTI2_IRQn:
-#ifdef HAL_TIM_MODULE_ENABLED
-	case TIM8_UP_TIM13_IRQn:
-	case TIM8_TRG_COM_TIM14_IRQn:
-#endif
-		HAL_NVIC_SetPriority(irq_id, 1, 0);
-		break;
-	default:
-		HAL_NVIC_SetPriority(irq_id, 0, 0);
-	}
-
 	NVIC_EnableIRQ(irq_id);
 
 	return 0;
@@ -500,6 +487,22 @@ int32_t stm32_irq_disable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
 }
 
 /**
+ * @brief Set a priority level for an interrupt
+ * @param desc - Interrupt controller descriptor.
+ * @param irq_id - The interrupt vector entry id of the peripheral.
+ * @param priority_level - The interrupt priority level
+ * @return 0
+ */
+static int32_t stm32_irq_set_priority(struct no_os_irq_ctrl_desc *desc,
+				      uint32_t irq_id,
+				      uint32_t priority_level)
+{
+	HAL_NVIC_SetPriority(irq_id, priority_level, 0);
+
+	return 0;
+}
+
+/**
  * @brief stm32 specific IRQ platform ops structure
  */
 const struct no_os_irq_platform_ops stm32_irq_ops = {
@@ -511,5 +514,6 @@ const struct no_os_irq_platform_ops stm32_irq_ops = {
 	.global_disable = &stm32_irq_global_disable,
 	.enable = &stm32_irq_enable,
 	.disable = &stm32_irq_disable,
+	.set_priority = &stm32_irq_set_priority,
 	.remove = &stm32_irq_ctrl_remove
 };
