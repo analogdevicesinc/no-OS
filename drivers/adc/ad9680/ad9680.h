@@ -58,6 +58,7 @@
 #define AD9680_REG_ADC_TEST_MODE				0x550
 #define AD9680_REG_OUTPUT_MODE					0x561
 #define AD9680_REG_LINK_CONTROL					0x571
+#define AD9680_REG_LINK_MODE					0x573
 #define AD9680_REG_JESD204B_LANE_RATE_CTRL			0x56e
 #define AD9680_REG_JESD204B_PLL_LOCK_STATUS			0x56f
 #define AD9680_REG_JESD204B_QUICK_CONFIG			0x570
@@ -74,6 +75,9 @@
 #define AD9680_TEST_PN9						0x006
 #define AD9680_TEST_PN23					0x005
 #define AD9680_TEST_RAMP					0x00f
+#define AD9680_LINK_OFF						0x000
+#define AD9680_LINK_PN9						0x006
+#define AD9680_LINK_PN23					0x004
 #define AD9680_FORMAT_2S_COMPLEMENT				0x001
 #define AD9680_FORMAT_OFFSET_BINARY				0x000
 
@@ -110,6 +114,6 @@ int32_t ad9680_setup(struct ad9680_dev **device,
 int32_t ad9680_remove(struct ad9680_dev *dev);
 
 int32_t ad9680_test(struct ad9680_dev *dev,
-		    uint32_t test_mode);
+		    uint32_t test_mode, uint32_t link_mode);
 
 #endif

@@ -552,16 +552,16 @@ static int fmcdaq2_test(struct fmcdaq2_dev *dev,
 	ad9144_datapath_prbs_test(dev->ad9144_device, &dev_init->ad9144_param);
 
 	/* receive path testing */
-	ad9680_test(dev->ad9680_device, AD9680_TEST_PN9);
+	ad9680_test(dev->ad9680_device, AD9680_TEST_PN9, AD9680_LINK_PN9);
 	if(axi_adc_pn_mon(dev->ad9680_core, AXI_ADC_PN9, 10) == -1) {
 		printf("%s ad9680 - PN9 sequence mismatch!\n", __func__);
 	};
-	ad9680_test(dev->ad9680_device, AD9680_TEST_PN23);
+	ad9680_test(dev->ad9680_device, AD9680_TEST_PN23, AD9680_LINK_PN23);
 	if(axi_adc_pn_mon(dev->ad9680_core, AXI_ADC_PN23A, 10) == -1) {
 		printf("%s ad9680 - PN23 sequence mismatch!\n", __func__);
 	};
 
-	ad9680_test(dev->ad9680_device, AD9680_TEST_OFF);
+	ad9680_test(dev->ad9680_device, AD9680_TEST_OFF, AD9680_LINK_OFF);
 
 	return 0;
 }
@@ -991,7 +991,21 @@ static int fmcdaq2_setup(struct fmcdaq2_dev *dev,
 		printf("axi_dac_init() error: %s\n", dev->ad9144_core->name);
 	}
 
-	return fmcdaq2_test(&fmcdaq2, &fmcdaq2_init);
+	status = fmcdaq2_test(&fmcdaq2, &fmcdaq2_init);
+	if (status != 0) {
+		printf("fmcdaq2_test error: %s\n", dev->ad9680_core->name);
+		}
+
+	status = ad9680_setup(&dev->ad9680_device, &dev_init->ad9680_param);
+	if (status != 0) {
+		printf("error: ad9680_setup() failed\n");
+		}
+
+	status = fmcdaq2_trasnceiver_setup(&fmcdaq2, &fmcdaq2_init);
+	if (status != 0)
+		return status;
+
+	return 0;
 }
 
 int main(void)

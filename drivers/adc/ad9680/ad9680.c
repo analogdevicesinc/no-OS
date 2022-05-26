@@ -93,11 +93,14 @@ int32_t ad9680_spi_write(struct ad9680_dev *dev,
  * @brief ad9680_setup
  *******************************************************************************/
 int32_t ad9680_test(struct ad9680_dev *dev,
-		    uint32_t test_mode)
+		    uint32_t test_mode, uint32_t link_mode)
 {
 	ad9680_spi_write(dev,
 			 AD9680_REG_ADC_TEST_MODE,
 			 test_mode);
+	ad9680_spi_write(dev,
+			  AD9680_REG_LINK_MODE,
+			  link_mode);
 	if (test_mode == AD9680_TEST_OFF)
 		ad9680_spi_write(dev,
 				 AD9680_REG_OUTPUT_MODE,
