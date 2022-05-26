@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   LTC2688.c
- *   @brief  Implementation of LTC2688 Driver.
+ *   @file   LTC268X.c
+ *   @brief  Implementation of LTC2686/8 Driver.
  *   @author Mircea Caprioru (mircea.caprioru@analog.com)
  ********************************************************************************
  * Copyright 2021(c) Analog Devices, Inc.
@@ -44,14 +44,14 @@
 #include <stdio.h>
 #include "no_os_error.h"
 
-#include "ltc2688.h" /* LTC2688 definitions. */
+#include "ltc268x.h" /* LTC268X definitions. */
 
-static const struct ltc2688_span_tbl ltc2688_span_tbl[] = {
-	[LTC2688_VOLTAGE_RANGE_0V_5V] = {0, 5},
-	[LTC2688_VOLTAGE_RANGE_0V_10V] = {0, 10},
-	[LTC2688_VOLTAGE_RANGE_M5V_5V] = {-5, 5},
-	[LTC2688_VOLTAGE_RANGE_M10V_10V] = {-10, 10},
-	[LTC2688_VOLTAGE_RANGE_M15V_15V] = {-15, 15}
+static const struct ltc268x_span_tbl ltc268x_span_tbl[] = {
+	[LTC268X_VOLTAGE_RANGE_0V_5V] = {0, 5},
+	[LTC268X_VOLTAGE_RANGE_0V_10V] = {0, 10},
+	[LTC268X_VOLTAGE_RANGE_M5V_5V] = {-5, 5},
+	[LTC268X_VOLTAGE_RANGE_M10V_10V] = {-10, 10},
+	[LTC268X_VOLTAGE_RANGE_M15V_15V] = {-15, 15}
 };
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -63,7 +63,7 @@ static const struct ltc2688_span_tbl ltc2688_span_tbl[] = {
  * @param data - The data.
  * @return 0 in case of success, negative error code otherwise.
  */
-static int32_t _ltc2688_spi_write(struct ltc2688_dev *dev, uint8_t reg,
+static int32_t _ltc268x_spi_write(struct ltc268x_dev *dev, uint8_t reg,
 				  uint16_t data)
 {
 	uint8_t buf[3];
@@ -88,7 +88,7 @@ static int32_t _ltc2688_spi_write(struct ltc2688_dev *dev, uint8_t reg,
  * @param data - The register data.
  * @return 0 in case of success, negative error code otherwise.
  */
-static int32_t _ltc2688_spi_read(struct ltc2688_dev *dev, uint8_t reg,
+static int32_t _ltc268x_spi_read(struct ltc268x_dev *dev, uint8_t reg,
 				 uint16_t *data)
 {
 	uint8_t buf[3] = {0, 0, 0};
@@ -97,9 +97,9 @@ static int32_t _ltc2688_spi_read(struct ltc2688_dev *dev, uint8_t reg,
 	if (!dev)
 		return -ENODEV;
 
-	_ltc2688_spi_write(dev, reg | LTC2688_READ_OPERATION, 0x0000);
+	_ltc268x_spi_write(dev, reg | LTC268X_READ_OPERATION, 0x0000);
 
-	buf[0] = LTC2688_CMD_NOOP;
+	buf[0] = LTC268X_CMD_NOOP;
 	ret = no_os_spi_write_and_read(dev->spi_desc, buf, 3);
 
 	*data = (buf[1] << 8) | buf[2];
@@ -115,34 +115,34 @@ static int32_t _ltc2688_spi_read(struct ltc2688_dev *dev, uint8_t reg,
  * @param val - The updated value.
  * @return 0 in case of success, negative error code otherwise.
  */
-static int32_t _ltc2688_spi_update_bits(struct ltc2688_dev *dev, uint8_t reg,
+static int32_t _ltc268x_spi_update_bits(struct ltc268x_dev *dev, uint8_t reg,
 					uint16_t mask, uint16_t val)
 {
 	uint16_t regval;
 	int32_t ret;
 
-	ret = _ltc2688_spi_read(dev, reg, &regval);
+	ret = _ltc268x_spi_read(dev, reg, &regval);
 	if (ret < 0)
 		return ret;
 
 	regval &= ~mask;
 	regval |= val;
 
-	return _ltc2688_spi_write(dev, reg, regval);
+	return _ltc268x_spi_write(dev, reg, regval);
 }
 
 /**
  * Power down the selected channels.
  * @param dev - The device structure.
  * @param setting - The setting.
- *		    Accepted values: LTC2688_PWDN(x) | LTC2688_PWDN(y) | ...
+ *		    Accepted values: LTC268X_PWDN(x) | LTC268X_PWDN(y) | ...
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ltc2688_set_pwr_dac(struct ltc2688_dev *dev, uint16_t setting)
+int32_t ltc268x_set_pwr_dac(struct ltc268x_dev *dev, uint16_t setting)
 {
 	int32_t ret;
 
-	ret = _ltc2688_spi_write(dev, LTC2688_CMD_POWERDOWN_REG,
+	ret = _ltc268x_spi_write(dev, LTC268X_CMD_POWERDOWN_REG,
 				 setting);
 	if (ret < 0)
 		return ret;
@@ -156,14 +156,14 @@ int32_t ltc2688_set_pwr_dac(struct ltc2688_dev *dev, uint16_t setting)
  * Enable dither/toggle for selected channels.
  * @param dev - The device structure.
  * @param setting - The setting.
- *		    Accepted values: LTC2688_DITH_EN(x) | LTC2688_DITH_EN(y) | ...
+ *		    Accepted values: LTC268X_DITH_EN(x) | LTC268X_DITH_EN(y) | ...
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ltc2688_set_dither_toggle(struct ltc2688_dev *dev, uint16_t setting)
+int32_t ltc268x_set_dither_toggle(struct ltc268x_dev *dev, uint16_t setting)
 {
 	int32_t ret;
 
-	ret = _ltc2688_spi_write(dev, LTC2688_CMD_TOGGLE_DITHER_EN_REG,
+	ret = _ltc268x_spi_write(dev, LTC268X_CMD_TOGGLE_DITHER_EN_REG,
 				 setting);
 	if (ret < 0)
 		return ret;
@@ -180,20 +180,20 @@ int32_t ltc2688_set_dither_toggle(struct ltc2688_dev *dev, uint16_t setting)
  * @param en - enable or disable dither mode
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ltc2688_set_dither_mode(struct ltc2688_dev *dev, uint8_t channel,
+int32_t ltc268x_set_dither_mode(struct ltc268x_dev *dev, uint8_t channel,
 				bool en)
 {
 	uint16_t val = 0;
 	int32_t ret;
 
-	if (channel >= LTC2688_DAC_CHANNELS)
+	if (channel >= LTC268X_DAC_CHANNELS)
 		return -ENOENT;
 
 	if (en)
-		val = LTC2688_CH_MODE;
+		val = LTC268X_CH_MODE;
 
-	ret = _ltc2688_spi_update_bits(dev, LTC2688_CMD_CH_SETTING(channel),
-				       LTC2688_CH_MODE, val);
+	ret = _ltc268x_spi_update_bits(dev, LTC268X_CMD_CH_SETTING(channel),
+				       LTC268X_CH_MODE, val);
 	if (ret < 0)
 		return ret;
 
@@ -209,16 +209,16 @@ int32_t ltc2688_set_dither_mode(struct ltc2688_dev *dev, uint8_t channel,
  * @param range - Voltage range.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ltc2688_set_span(struct ltc2688_dev *dev,
-			 uint8_t channel, enum ltc2688_voltage_range range)
+int32_t ltc268x_set_span(struct ltc268x_dev *dev,
+			 uint8_t channel, enum ltc268x_voltage_range range)
 {
 	int32_t ret;
 
-	if (channel >= LTC2688_DAC_CHANNELS)
+	if (channel >= LTC268X_DAC_CHANNELS)
 		return -ENOENT;
 
-	ret = _ltc2688_spi_update_bits(dev, LTC2688_CMD_CH_SETTING(channel),
-				       LTC2688_CH_SPAN_MSK, LTC2688_CH_SPAN(range));
+	ret = _ltc268x_spi_update_bits(dev, LTC268X_CMD_CH_SETTING(channel),
+				       LTC268X_CH_SPAN_MSK, LTC268X_CH_SPAN(range));
 	if (ret < 0)
 		return ret;
 
@@ -234,16 +234,16 @@ int32_t ltc2688_set_span(struct ltc2688_dev *dev,
  * @param phase - Dither phase.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ltc2688_set_dither_phase(struct ltc2688_dev *dev,
-				 uint8_t channel, enum  ltc2688_dither_phase phase)
+int32_t ltc268x_set_dither_phase(struct ltc268x_dev *dev,
+				 uint8_t channel, enum  ltc268x_dither_phase phase)
 {
 	int32_t ret;
 
-	if (channel >= LTC2688_DAC_CHANNELS)
+	if (channel >= LTC268X_DAC_CHANNELS)
 		return -ENOENT;
 
-	ret = _ltc2688_spi_update_bits(dev, LTC2688_CMD_CH_SETTING(channel),
-				       LTC2688_CH_DIT_PH_MSK, LTC2688_CH_DIT_PH(phase));
+	ret = _ltc268x_spi_update_bits(dev, LTC268X_CMD_CH_SETTING(channel),
+				       LTC268X_CH_DIT_PH_MSK, LTC268X_CH_DIT_PH(phase));
 	if (ret < 0)
 		return ret;
 
@@ -259,16 +259,16 @@ int32_t ltc2688_set_dither_phase(struct ltc2688_dev *dev,
  * @param period - Dither period.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ltc2688_set_dither_period(struct ltc2688_dev *dev,
-				  uint8_t channel, enum  ltc2688_dither_period period)
+int32_t ltc268x_set_dither_period(struct ltc268x_dev *dev,
+				  uint8_t channel, enum  ltc268x_dither_period period)
 {
 	int32_t ret;
 
-	if (channel >= LTC2688_DAC_CHANNELS)
+	if (channel >= LTC268X_DAC_CHANNELS)
 		return -ENOENT;
 
-	ret = _ltc2688_spi_update_bits(dev, LTC2688_CMD_CH_SETTING(channel),
-				       LTC2688_CH_DIT_PER_MSK, LTC2688_CH_DIT_PER(period));
+	ret = _ltc268x_spi_update_bits(dev, LTC268X_CMD_CH_SETTING(channel),
+				       LTC268X_CH_DIT_PER_MSK, LTC268X_CH_DIT_PER(period));
 	if (ret < 0)
 		return ret;
 
@@ -284,15 +284,15 @@ int32_t ltc2688_set_dither_period(struct ltc2688_dev *dev,
  * @param sel_reg - Select register A or B to store DAC output value.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ltc2688_select_reg(struct ltc2688_dev *dev,
-			   uint8_t channel, enum  ltc2688_a_b_register sel_reg)
+int32_t ltc268x_select_reg(struct ltc268x_dev *dev,
+			   uint8_t channel, enum  ltc268x_a_b_register sel_reg)
 {
 	int32_t ret;
 
-	if (channel >= LTC2688_DAC_CHANNELS)
+	if (channel >= LTC268X_DAC_CHANNELS)
 		return -ENOENT;
 
-	ret = _ltc2688_spi_update_bits(dev, LTC2688_CMD_A_B_SELECT_REG,
+	ret = _ltc268x_spi_update_bits(dev, LTC268X_CMD_A_B_SELECT_REG,
 				       NO_OS_BIT(channel), sel_reg << channel);
 	if (ret < 0)
 		return ret;
@@ -309,16 +309,16 @@ int32_t ltc2688_select_reg(struct ltc2688_dev *dev,
  * @param clk_input - Select the source for the clock input.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ltc2688_select_tg_dith_clk(struct ltc2688_dev *dev, uint8_t channel,
-				   enum  ltc2688_clk_input clk_input)
+int32_t ltc268x_select_tg_dith_clk(struct ltc268x_dev *dev, uint8_t channel,
+				   enum  ltc268x_clk_input clk_input)
 {
 	int32_t ret;
 
-	if (channel >= LTC2688_DAC_CHANNELS)
+	if (channel >= LTC268X_DAC_CHANNELS)
 		return -ENOENT;
 
-	ret = _ltc2688_spi_update_bits(dev, LTC2688_CMD_CH_SETTING(channel),
-				       LTC2688_CH_TD_SEL_MSK, LTC2688_CH_TD_SEL(clk_input));
+	ret = _ltc268x_spi_update_bits(dev, LTC268X_CMD_CH_SETTING(channel),
+				       LTC268X_CH_TD_SEL_MSK, LTC268X_CH_TD_SEL(clk_input));
 	if (ret < 0)
 		return ret;
 
@@ -333,21 +333,21 @@ int32_t ltc2688_select_tg_dith_clk(struct ltc2688_dev *dev, uint8_t channel,
  * @param channel - The channel for which to change the mode.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ltc2688_software_toggle(struct ltc2688_dev *dev, uint8_t channel)
+int32_t ltc268x_software_toggle(struct ltc268x_dev *dev, uint8_t channel)
 {
 	int32_t ret;
 	uint16_t regval;
 
-	if (channel >= LTC2688_DAC_CHANNELS)
+	if (channel >= LTC268X_DAC_CHANNELS)
 		return -ENOENT;
 
-	ret = _ltc2688_spi_read(dev, LTC2688_CMD_SW_TOGGLE_REG, &regval);
+	ret = _ltc268x_spi_read(dev, LTC268X_CMD_SW_TOGGLE_REG, &regval);
 	if (ret < 0)
 		return ret;
 
 	regval ^= NO_OS_BIT(channel);
 
-	return _ltc2688_spi_write(dev, LTC2688_CMD_SW_TOGGLE_REG, regval);
+	return _ltc268x_spi_write(dev, LTC268X_CMD_SW_TOGGLE_REG, regval);
 }
 
 /**
@@ -355,10 +355,10 @@ int32_t ltc2688_software_toggle(struct ltc2688_dev *dev, uint8_t channel)
  * @param dev - The device structure.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ltc2688_software_reset(struct ltc2688_dev *dev)
+int32_t ltc268x_software_reset(struct ltc268x_dev *dev)
 {
-	return _ltc2688_spi_update_bits(dev, LTC2688_CMD_CONFIG_REG,
-					LTC2688_CONFIG_RST, LTC2688_CONFIG_RST);
+	return _ltc268x_spi_update_bits(dev, LTC268X_CMD_CONFIG_REG,
+					LTC268X_CONFIG_RST, LTC268X_CONFIG_RST);
 }
 
 /**
@@ -371,24 +371,24 @@ int32_t ltc2688_software_reset(struct ltc2688_dev *dev)
  *
  * @return The actual voltage value that can be outputted by the channel.
  */
-int32_t ltc2688_set_voltage(struct ltc2688_dev *dev, uint8_t channel,
+int32_t ltc268x_set_voltage(struct ltc268x_dev *dev, uint8_t channel,
 			    float voltage)
 {
 	uint16_t offset, gain, code;
 	int32_t range_offset, v_ref, ret;
 
 	/* Get the offset, gain and range of the selected channel. */
-	ret = _ltc2688_spi_read(dev, LTC2688_CMD_CH_OFFSET(channel), &offset);
+	ret = _ltc268x_spi_read(dev, LTC268X_CMD_CH_OFFSET(channel), &offset);
 	if (ret < 0)
 		return ret;
 
-	ret = _ltc2688_spi_read(dev, LTC2688_CMD_CH_GAIN(channel), &gain);
+	ret = _ltc268x_spi_read(dev, LTC268X_CMD_CH_GAIN(channel), &gain);
 	if (ret < 0)
 		return ret;
 
-	range_offset = ltc2688_span_tbl[dev->crt_range[channel]].min;
-	v_ref = ltc2688_span_tbl[dev->crt_range[channel]].max -
-		ltc2688_span_tbl[dev->crt_range[channel]].min;
+	range_offset = ltc268x_span_tbl[dev->crt_range[channel]].min;
+	v_ref = ltc268x_span_tbl[dev->crt_range[channel]].max -
+		ltc268x_span_tbl[dev->crt_range[channel]].min;
 
 	/* Compute the binary code from the value(mA) provided by user. */
 	code = (uint32_t)((voltage - range_offset) * (1l << 16) / v_ref);
@@ -398,7 +398,7 @@ int32_t ltc2688_set_voltage(struct ltc2688_dev *dev, uint8_t channel,
 	dev->dac_code[channel] = code;
 
 	/* Write to the Data Register of the DAC. */
-	return _ltc2688_spi_write(dev, LTC2688_CMD_CH_CODE_UPDATE(channel), code);
+	return _ltc268x_spi_write(dev, LTC268X_CMD_CH_CODE_UPDATE(channel), code);
 }
 
 /**
@@ -408,14 +408,14 @@ int32_t ltc2688_set_voltage(struct ltc2688_dev *dev, uint8_t channel,
  *		       parameters.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ltc2688_init(struct ltc2688_dev **device,
-		     struct ltc2688_init_param init_param)
+int32_t ltc268x_init(struct ltc268x_dev **device,
+		     struct ltc268x_init_param init_param)
 {
-	struct ltc2688_dev *dev;
+	struct ltc268x_dev *dev;
 	uint8_t channel = 0;
 	int ret;
 
-	dev = (struct ltc2688_dev*)calloc(1, sizeof(*dev));
+	dev = (struct ltc268x_dev*)calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -425,71 +425,71 @@ int32_t ltc2688_init(struct ltc2688_dev **device,
 		goto error;
 
 	/* Device Settings */
-	ret = ltc2688_software_reset(dev);
+	ret = ltc268x_software_reset(dev);
 	if (ret < 0)
 		goto error;
 
 	no_os_mdelay(100);
 
 	/* Powerdown/up channels */
-	ret = ltc2688_set_pwr_dac(dev, init_param.pwd_dac_setting);
+	ret = ltc268x_set_pwr_dac(dev, init_param.pwd_dac_setting);
 	if (ret < 0)
 		goto error;
 
 	/* Enable dither/toggle */
-	ret = ltc2688_set_dither_toggle(dev, init_param.dither_toggle_en);
+	ret = ltc268x_set_dither_toggle(dev, init_param.dither_toggle_en);
 	if (ret < 0)
 		goto error;
 
-	for (channel = 0; channel < LTC2688_DAC_CHANNELS; channel++) {
+	for (channel = 0; channel < LTC268X_DAC_CHANNELS; channel++) {
 		/* Setup channel span */
-		ret = ltc2688_set_span(dev, channel, init_param.crt_range[channel]);
+		ret = ltc268x_set_span(dev, channel, init_param.crt_range[channel]);
 		if (ret < 0)
 			goto error;
 
 		/* Set dither phase */
-		ret = ltc2688_set_dither_phase(dev, channel, init_param.dither_phase[channel]);
+		ret = ltc268x_set_dither_phase(dev, channel, init_param.dither_phase[channel]);
 		if (ret < 0)
 			goto error;
 
 		/* Set dither period */
-		ret = ltc2688_set_dither_period(dev, channel,
+		ret = ltc268x_set_dither_period(dev, channel,
 						init_param.dither_period[channel]);
 		if (ret < 0)
 			goto error;
 
-		ret = ltc2688_set_dither_mode(dev, channel, init_param.dither_mode[channel]);
+		ret = ltc268x_set_dither_mode(dev, channel, init_param.dither_mode[channel]);
 		if (ret < 0)
 			goto error;
 
 		/* Set toggle/dither clock */
-		ret = ltc2688_select_tg_dith_clk(dev, channel, init_param.clk_input[channel]);
+		ret = ltc268x_select_tg_dith_clk(dev, channel, init_param.clk_input[channel]);
 		if (ret < 0)
 			goto error;
 	}
 
 	/* Update all dac channels */
-	ret = _ltc2688_spi_write(dev, LTC2688_CMD_UPDATE_ALL, 0);
+	ret = _ltc268x_spi_write(dev, LTC268X_CMD_UPDATE_ALL, 0);
 	if (ret < 0)
 		goto error;
 
 	*device = dev;
-	printf("LTC2688 successfully initialized\n");
+	printf("LTC268X successfully initialized\n");
 
 	return ret;
 
 error:
-	printf("LTC2688 initialization error (%d)\n", ret);
+	printf("LTC268X initialization error (%d)\n", ret);
 	free(dev);
 	return ret;
 }
 
 /**
- * @brief Free the resources allocated by ltc2688_init().
+ * @brief Free the resources allocated by ltc268x_init().
  * @param dev - The device structure.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ltc2688_remove(struct ltc2688_dev *dev)
+int32_t ltc268x_remove(struct ltc268x_dev *dev)
 {
 	int32_t ret;
 
