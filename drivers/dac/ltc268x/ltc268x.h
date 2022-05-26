@@ -47,15 +47,15 @@
 /******************************************************************************/
 /******************* Macros and Constants Definitions *************************/
 /******************************************************************************/
-#define LTC268X_DAC_CHANNELS	16
+#define LTC268X_CHANNEL_SEL(x, id)			(id ? x : (x << 1))
 
-#define LTC268X_CMD_CH_CODE(x)			(0x00 + x)
-#define LTC268X_CMD_CH_SETTING(x)		(0x10 + x)
-#define LTC268X_CMD_CH_OFFSET(x)		(0X20 + x)
-#define LTC268X_CMD_CH_GAIN(x)			(0x30 + x)
-#define LTC268X_CMD_CH_CODE_UPDATE(x)		(0x40 + x)
-#define LTC268X_CMD_CH_CODE_UPDATE_ALL(x)	(0x50 + x)
-#define LTC268X_CMD_CH_UPDATE(x)		(0x60 + x)
+#define LTC268X_CMD_CH_CODE(x, id)			(0x00 + LTC268X_CHANNEL_SEL(x, id))
+#define LTC268X_CMD_CH_SETTING(x, id)		(0x10 + LTC268X_CHANNEL_SEL(x, id))
+#define LTC268X_CMD_CH_OFFSET(x, id)		(0X20 + LTC268X_CHANNEL_SEL(x, id))
+#define LTC268X_CMD_CH_GAIN(x, id)			(0x30 + LTC268X_CHANNEL_SEL(x, id))
+#define LTC268X_CMD_CH_CODE_UPDATE(x, id)		(0x40 + LTC268X_CHANNEL_SEL(x, id))
+#define LTC268X_CMD_CH_CODE_UPDATE_ALL(x, id)	(0x50 + LTC268X_CHANNEL_SEL(x, id))
+#define LTC268X_CMD_CH_UPDATE(x, id)		(0x60 + LTC268X_CHANNEL_SEL(x, id))
 
 #define LTC268X_CMD_CONFIG_REG			0x70
 #define LTC268X_CMD_POWERDOWN_REG		0x71
@@ -90,6 +90,8 @@
 #define LTC268X_PWDN(x)				(1 << ((x) & 0xF))
 #define LTC268X_DITH_EN(x)			(1 << ((x) & 0xF))
 
+/* Number of channels corresponding to device */
+const uint8_t ltc268x_channels[] = { 8, 16};
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -134,8 +136,14 @@ enum  ltc268x_clk_input {
 	LTC268X_TGP2
 };
 
+enum ltc268x_device_id {
+	LTC2686 = 0,
+	LTC2688 = 1
+};
+
 struct ltc268x_dev {
 	no_os_spi_desc			*spi_desc;
+	enum ltc268x_device_id   dev_id;
 	uint16_t			pwd_dac_setting;
 	uint16_t			dither_toggle_en;
 	bool				dither_mode[16];
@@ -150,6 +158,7 @@ struct ltc268x_dev {
 struct ltc268x_init_param {
 	/* SPI */
 	no_os_spi_init_param 			spi_init;
+	enum ltc268x_device_id          dev_id;
 	uint16_t			pwd_dac_setting;
 	uint16_t			dither_toggle_en;
 	bool				dither_mode[16];
