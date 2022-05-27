@@ -991,7 +991,32 @@ static int fmcdaq2_setup(struct fmcdaq2_dev *dev,
 		printf("axi_dac_init() error: %s\n", dev->ad9144_core->name);
 	}
 
-	return fmcdaq2_test(&fmcdaq2, &fmcdaq2_init);
+	status = fmcdaq2_test(&fmcdaq2, &fmcdaq2_init);
+	if (status != 0) {
+		printf("fmcdaq2_test error: %s\n", dev->ad9680_core->name);
+	}
+
+	status = ad9680_setup(&dev->ad9680_device, &dev_init->ad9680_param);
+	if (status != 0) {
+		printf("error: ad9680_setup() failed\n");
+	}
+
+	status = adxcvr_init(&dev->ad9680_xcvr, &dev_init->ad9680_xcvr_param);
+	if (status != 0) {
+		printf("error: %s: adxcvr_init() failed\n", dev->ad9680_xcvr->name);
+	}
+#ifndef ALTERA_PLATFORM
+	status = adxcvr_clk_enable(dev->ad9680_xcvr);
+	if (status != 0) {
+		printf("error: %s: adxcvr_clk_enable() failed\n", dev->ad9680_xcvr->name);
+	}
+#endif
+	status = axi_jesd204_rx_init(&dev->ad9680_jesd, &dev_init->ad9680_jesd_param);
+	if (status != 0) {
+		printf("error: %s: axi_jesd204_rx_init() failed\n", dev->ad9680_jesd->name);
+	}
+
+	return axi_jesd204_rx_lane_clk_enable(dev->ad9680_jesd);
 }
 
 int main(void)

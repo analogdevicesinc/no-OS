@@ -98,6 +98,24 @@ int32_t ad9680_test(struct ad9680_dev *dev,
 	ad9680_spi_write(dev,
 			 AD9680_REG_ADC_TEST_MODE,
 			 test_mode);
+
+	switch (test_mode) {
+	case AD9680_TEST_PN9:
+		ad9680_spi_write(dev, AD9680_REG_LINK_MODE_CTRL3,
+				 AD9680_LINK_PN9);
+		break;
+	case AD9680_TEST_PN23:
+		ad9680_spi_write(dev, AD9680_REG_LINK_MODE_CTRL3,
+				 AD9680_LINK_PN23);
+		break;
+	case AD9680_TEST_OFF:
+		ad9680_spi_write(dev, AD9680_REG_LINK_MODE_CTRL3,
+				 AD9680_LINK_OFF);
+		break;
+	default:
+		break;
+	}
+
 	if (test_mode == AD9680_TEST_OFF)
 		ad9680_spi_write(dev,
 				 AD9680_REG_OUTPUT_MODE,

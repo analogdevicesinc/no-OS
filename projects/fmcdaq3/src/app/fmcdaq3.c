@@ -580,6 +580,31 @@ int main(void)
 		printf("%s ad9680 - PN23 sequence mismatch!\n", __func__);
 	};
 
+	status = ad9680_setup(&ad9680_device, &ad9680_param);
+	if (status != 0) {
+		printf("error: ad9680_setup() failed\n");
+	}
+
+	status = adxcvr_init(&ad9680_xcvr, &ad9680_xcvr_param);
+	if (status != 0) {
+		printf("error: %s: adxcvr_init() failed\n", ad9680_xcvr->name);
+	}
+#ifndef ALTERA_PLATFORM
+	status = adxcvr_clk_enable(ad9680_xcvr);
+	if (status != 0) {
+		printf("error: %s: adxcvr_clk_enable() failed\n", ad9680_xcvr->name);
+	}
+#endif
+	status = axi_jesd204_rx_init(&ad9680_jesd, &ad9680_jesd_param);
+	if (status != 0) {
+		printf("error: %s: axi_jesd204_rx_init() failed\n", ad9680_jesd->name);
+	}
+	status = axi_jesd204_rx_lane_clk_enable(ad9680_jesd);
+	if (status != 0) {
+		printf("error: %s: axi_jesd204_tx_lane_clk_enable() failed\n",
+		       ad9680_jesd->name);
+	}
+
 	ad9152_status(ad9152_device);
 
 	// ad9152-x1 do not support data path prbs (use short-tpl)
