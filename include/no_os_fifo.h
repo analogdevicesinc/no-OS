@@ -1,6 +1,6 @@
 /***************************************************************************//**
  *   @file   no_os_fifo.h
- *   @brief  Implementation of fifo
+ *   @brief  Header file of fifo
  *   @author Cristian Pop (cristian.pop@analog.com)
 ********************************************************************************
  * Copyright 2019(c) Analog Devices, Inc.
