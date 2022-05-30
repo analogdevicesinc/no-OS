@@ -1,6 +1,6 @@
 /***************************************************************************//**
  *   @file   no_os_util.h
- *   @brief  Implementation of utility functions.
+ *   @brief  Header file of utility functions.
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
  * Copyright 2018(c) Analog Devices, Inc.
