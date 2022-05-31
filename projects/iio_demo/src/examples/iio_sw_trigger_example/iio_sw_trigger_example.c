@@ -69,6 +69,9 @@ int iio_sw_trigger_example_main()
 	/* adc trigger instance descriptor. */
 	struct iio_sw_trig *adc_trig_desc;
 
+	/* dac trigger instance descriptor. */
+	struct iio_sw_trig *dac_trig_desc;
+
 	/* iio desc */
 	struct iio_desc *iio_desc;
 
@@ -95,6 +98,11 @@ int iio_sw_trigger_example_main()
 	if (status)
 		return status;
 
+	dac_trig_ip.iio_desc = &iio_desc;
+	status = iio_sw_trig_init(&dac_trig_desc, &dac_trig_ip);
+	if (status)
+		return status;
+
 	struct iio_app_device devices[] = {
 		IIO_APP_DEVICE("adc_demo", adc_desc,
 			       &adc_demo_iio_descriptor,&adc_buff, NULL),
@@ -104,7 +112,9 @@ int iio_sw_trigger_example_main()
 
 	struct iio_trigger_init trigs[] = {
 		IIO_APP_TRIGGER(ADC_DEMO_TRIG_NAME, adc_trig_desc,
-				&adc_iio_sw_trig_desc)
+				&adc_iio_sw_trig_desc),
+		IIO_APP_TRIGGER(DAC_DEMO_TRIG_NAME, dac_trig_desc,
+				&dac_iio_sw_trig_desc),
 	};
 
 	return iio_app_run_with_trigs(devices, NO_OS_ARRAY_SIZE(devices),
