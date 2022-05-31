@@ -50,8 +50,23 @@
 /******************************************************************************/
 /************************ Variable Declarations *******************************/
 /******************************************************************************/
+static struct iio_attribute trig_attr[] = {
+	{
+		.name = "trigger_now",
+		.store = iio_sw_trig_handler
+	},
+	END_ATTRIBUTES_ARRAY
+};
+
+struct iio_trigger dac_iio_sw_trig_desc = {
+	.is_synchronous = true,
+	.attributes = trig_attr,
+};
+
+#ifndef LINUX_PLATFORM
 struct iio_trigger dac_iio_timer_trig_desc = {
 	.is_synchronous = true,
 	.enable = iio_trig_enable,
 	.disable = iio_trig_disable,
 };
+#endif
