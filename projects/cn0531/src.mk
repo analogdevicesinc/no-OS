@@ -12,6 +12,7 @@ SRC_DIRS += $(INCLUDE)
 SRCS += $(DRIVERS)/api/no_os_spi.c \
 	$(DRIVERS)/api/no_os_irq.c \
 	$(DRIVERS)/api/no_os_gpio.c \
+	$(DRIVERS)/api/no_os_timer.c \
 	$(DRIVERS)/platform/$(PLATFORM)/$(PLATFORM)_spi.c
 INCS += $(INCLUDE)/no_os_spi.h \
 	$(DRIVERS)/platform/$(PLATFORM)/spi_extra.h

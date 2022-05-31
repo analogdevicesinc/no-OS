@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   timer_extra.h
+ *   @file   aducm3029_timer.h
  *   @brief  Header file of TIMER driver for ADuCM302x
  *   @author Mihail Chindris (mihail.chindris@analog.com)
 ********************************************************************************
@@ -37,8 +37,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef TIMER_EXTRA_H
-#define TIMER_EXTRA_H
+#ifndef ADUCM3029_TIMER_H
+#define ADUCM3029_TIMER_H
+
+/******************************************************************************/
+/***************************** Include Files **********************************/
+/******************************************************************************/
+#include <stdint.h>
+#include "no_os_util.h"
+#include "no_os_timer.h"
 
 /******************************************************************************/
 /************************** Types Declarations *******************************/
@@ -55,4 +62,9 @@ struct aducm_timer_desc {
 	bool		started;
 };
 
-#endif /* TIMER_EXTRA_H */
+/**
+ * @brief aducm3029 specific timer platform ops structure
+ */
+extern const struct no_os_timer_platform_ops aducm3029_timer_ops;
+
+#endif /* ADUCM3029_TIMER_H */
