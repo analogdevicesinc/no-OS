@@ -45,6 +45,7 @@
 #include "dac_demo.h"
 
 extern struct iio_device dac_demo_iio_descriptor;
+extern struct iio_trigger dac_iio_sw_trig_desc;
 extern struct iio_trigger dac_iio_timer_trig_desc;
 
 #endif /* IIO_DEMO_DAC */
