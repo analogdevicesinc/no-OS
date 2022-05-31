@@ -30,7 +30,8 @@ rwildcard = $(wildcard $1$2) $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2
 SRCS += $(DRIVERS)/api/no_os_gpio.c \
         $(DRIVERS)/api/no_os_i2c.c  \
         $(DRIVERS)/api/no_os_irq.c  \
-        $(DRIVERS)/api/no_os_spi.c
+        $(DRIVERS)/api/no_os_spi.c  \
+		$(DRIVERS)/api/no_os_timer.c
 
 SRCS += $(foreach dir, $(REMAINING_DIRECORIES), $(call rwildcard, $(dir),*.c))
 INCS += $(foreach dir, $(REMAINING_DIRECORIES), $(call rwildcard, $(dir),*.h))

@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   aducm3029/no_os_timer.c
+ *   @file   aducm3029/aducm3029_timer.c
  *   @brief  Implementation of TIMER driver for ADuCM302x.
  *
  *   This driver enables the user to create multiple instance of a
@@ -47,7 +47,7 @@
 
 #include <stdlib.h>
 #include <drivers/tmr/adi_tmr.h>
-#include "timer_extra.h"
+#include "aducm3029_timer.h"
 #include "no_os_timer.h"
 #include "no_os_error.h"
 
@@ -68,7 +68,7 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
-/** Incremented each millisecond by \ref no_os_tmr_callback() */
+/** Incremented each millisecond by \ref aducm3029_tmr_callback() */
 static volatile uint64_t	g_count;
 /** Counts the number of instances created */
 static uint32_t			nb_instances;
@@ -87,7 +87,7 @@ static uint32_t			timer_id;
  * @param tmr_event - Unused
  * @param arg - Unused
  */
-static void no_os_tmr_callback(void *param, uint32_t tmr_event, void *arg)
+static void aducm3029_tmr_callback(void *param, uint32_t tmr_event, void *arg)
 {
 	g_count++;
 }
@@ -108,8 +108,8 @@ static void no_os_tmr_callback(void *param, uint32_t tmr_event, void *arg)
  * is unused and should be NULL.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t no_os_timer_init(struct no_os_timer_desc **desc,
-			 struct no_os_timer_init_param *param)
+int32_t aducm3029_timer_init(struct no_os_timer_desc **desc,
+			     struct no_os_timer_init_param *param)
 {
 	struct no_os_timer_desc *ldesc;
 	struct aducm_timer_desc *aducm_desc;
@@ -129,7 +129,7 @@ int32_t no_os_timer_init(struct no_os_timer_desc **desc,
 
 	if (nb_instances == 0) {
 		timer_id = param->id;
-		adi_tmr_Init(timer_id, no_os_tmr_callback, NULL, true);
+		adi_tmr_Init(timer_id, aducm3029_tmr_callback, NULL, true);
 		/* Set the timer configuration */
 		tmr_conf.bCountingUp = false;
 		tmr_conf.bPeriodic = true;
@@ -161,7 +161,7 @@ int32_t no_os_timer_init(struct no_os_timer_desc **desc,
  * @param desc - Descriptor of the timer instance.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t no_os_timer_remove(struct no_os_timer_desc *desc)
+int32_t aducm3029_timer_remove(struct no_os_timer_desc *desc)
 {
 	if (!desc)
 		return -1;
@@ -178,7 +178,7 @@ int32_t no_os_timer_remove(struct no_os_timer_desc *desc)
 	return 0;
 }
 
-static inline uint64_t no_os_get_current_time(struct no_os_timer_desc *desc)
+static inline uint64_t aducm3029_get_current_time(struct no_os_timer_desc *desc)
 {
 	uint16_t		count_us = 0;
 
@@ -198,7 +198,7 @@ static inline uint64_t no_os_get_current_time(struct no_os_timer_desc *desc)
  * @param desc - Descriptor of the timer instance.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t no_os_timer_start(struct no_os_timer_desc *desc)
+int32_t aducm3029_timer_start(struct no_os_timer_desc *desc)
 {
 	struct aducm_timer_desc *tmr_desc;
 
@@ -210,7 +210,7 @@ int32_t no_os_timer_start(struct no_os_timer_desc *desc)
 		return -1;
 	if (nb_enables == 0)
 		while (ADI_TMR_DEVICE_BUSY == adi_tmr_Enable(timer_id, true));
-	tmr_desc->old_time = no_os_get_current_time(desc);
+	tmr_desc->old_time = aducm3029_get_current_time(desc);
 	tmr_desc->started = true;
 	nb_enables++;
 
@@ -224,7 +224,7 @@ int32_t no_os_timer_start(struct no_os_timer_desc *desc)
  * @param desc - Descriptor of the timer instance.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t no_os_timer_stop(struct no_os_timer_desc *desc)
+int32_t aducm3029_timer_stop(struct no_os_timer_desc *desc)
 {
 	uint32_t		counter;
 	struct aducm_timer_desc *tmr_desc;
@@ -252,8 +252,8 @@ int32_t no_os_timer_stop(struct no_os_timer_desc *desc)
  * @param counter - Pointer were the timer counter is stored.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t no_os_timer_counter_get(struct no_os_timer_desc *desc,
-				uint32_t *counter)
+int32_t aducm3029_timer_counter_get(struct no_os_timer_desc *desc,
+				    uint32_t *counter)
 {
 	struct aducm_timer_desc	*tmr_desc;
 	uint16_t		count_us;
@@ -306,7 +306,8 @@ int32_t no_os_timer_counter_get(struct no_os_timer_desc *desc,
  * @param new_val - Value of the new counter to be set
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t no_os_timer_counter_set(struct no_os_timer_desc *desc, uint32_t new_val)
+int32_t aducm3029_timer_counter_set(struct no_os_timer_desc *desc,
+				    uint32_t new_val)
 {
 	struct aducm_timer_desc	*tmr_desc;
 
@@ -314,7 +315,7 @@ int32_t no_os_timer_counter_set(struct no_os_timer_desc *desc, uint32_t new_val)
 		return -1;
 
 	tmr_desc = (struct aducm_timer_desc *)desc->extra;
-	tmr_desc->old_time = no_os_get_current_time(desc);
+	tmr_desc->old_time = aducm3029_get_current_time(desc);
 	desc->load_value = new_val;
 
 	return 0;
@@ -326,8 +327,8 @@ int32_t no_os_timer_counter_set(struct no_os_timer_desc *desc, uint32_t new_val)
  * @param freq_hz - Pointer where the frequency value will be stored
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t no_os_timer_count_clk_get(struct no_os_timer_desc *desc,
-				  uint32_t *freq_hz)
+int32_t aducm3029_timer_count_clk_get(struct no_os_timer_desc *desc,
+				      uint32_t *freq_hz)
 {
 	if (!desc || !freq_hz)
 		return -1;
@@ -344,8 +345,8 @@ int32_t no_os_timer_count_clk_get(struct no_os_timer_desc *desc,
  * @param freq_hz - Value of the new frequency to be set
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t no_os_timer_count_clk_set(struct no_os_timer_desc *desc,
-				  uint32_t freq_hz)
+int32_t aducm3029_timer_count_clk_set(struct no_os_timer_desc *desc,
+				      uint32_t freq_hz)
 {
 	if (!desc || ((struct aducm_timer_desc*)desc->extra)->started)
 		return -1;
@@ -354,3 +355,31 @@ int32_t no_os_timer_count_clk_set(struct no_os_timer_desc *desc,
 
 	return 0;
 }
+
+/**
+ * @brief Get the elapsed time in nsec for the timer.
+ * @param [in] desc         - Pointer to the device handler.
+ * @param [in] elapsed_time - The elapsed time in nsec.
+ * @return 0 in case of success, error code otherwise.
+ */
+int32_t aducm3029_timer_get_elapsed_time_nsec(struct no_os_timer_desc *desc,
+		uint64_t *elapsed_time)
+{
+	/* Function not implemented because it is not needed at the moment */
+	return -ENOSYS;
+}
+
+/**
+ * @brief aducm3029 platform specific timer platform ops structure
+ */
+const struct no_os_timer_platform_ops aducm3029_timer_ops = {
+	.init = &aducm3029_timer_init,
+	.start = &aducm3029_timer_start,
+	.stop = &aducm3029_timer_stop,
+	.counter_get = &aducm3029_timer_counter_get,
+	.counter_set = &aducm3029_timer_counter_set,
+	.count_clk_get = &aducm3029_timer_count_clk_get,
+	.count_clk_set = &aducm3029_timer_count_clk_set,
+	.get_elapsed_time_nsec = &aducm3029_timer_get_elapsed_time_nsec,
+	.remove = &aducm3029_timer_remove
+};

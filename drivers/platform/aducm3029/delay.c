@@ -44,6 +44,7 @@
 #include "no_os_delay.h"
 #include "no_os_timer.h"
 #include "no_os_error.h"
+#include "aducm3029_timer.h"
 
 /******************************************************************************/
 /****************************** Global Variables*******************************/
@@ -81,6 +82,7 @@ static uint32_t initialize_timer(struct no_os_timer_desc **timer,
 	param.id = 0;
 	param.freq_hz = is_us ? 1000000u : 1000u;
 	param.load_value = 0;
+	param.platform_ops = &aducm3029_timer_ops;
 
 	if (is_us) {
 		if (0 != no_os_timer_init(&dummy_timer, &param))
