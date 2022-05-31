@@ -26,6 +26,7 @@ SRCS += $(NO-OS)/iio/iio_trigger.c
 INCS += $(NO-OS)/iio/iio_trigger.h
 
 SRCS += $(DRIVERS)/adc/adc_demo/iio_adc_demo_trig.c
+SRCS += $(DRIVERS)/dac/dac_demo/iio_dac_demo_trig.c
 endif
 
 TINYIIOD=y

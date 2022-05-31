@@ -78,6 +78,9 @@ extern struct dac_demo_init_param dac_init_par;
 #ifdef IIO_SW_TRIGGER_EXAMPLE
 #define ADC_DEMO_TRIG_NAME "adc-demo-sw-trig"
 extern struct iio_sw_trig_init_param adc_trig_ip;
+
+#define DAC_DEMO_TRIG_NAME "dac-demo-sw-trig"
+extern struct iio_sw_trig_init_param dac_trig_ip;
 #endif
 
 #ifdef IIO_TIMER_TRIGGER_EXAMPLE

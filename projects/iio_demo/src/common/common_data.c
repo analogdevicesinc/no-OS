@@ -76,6 +76,10 @@ uint8_t out_buff[MAX_SIZE_BASE_ADDR] = {0};
 struct iio_sw_trig_init_param adc_trig_ip = {
 	.name = ADC_DEMO_TRIG_NAME
 };
+
+struct iio_sw_trig_init_param dac_trig_ip = {
+	.name = DAC_DEMO_TRIG_NAME
+};
 #endif
 
 #ifdef IIO_TIMER_TRIGGER_EXAMPLE
