@@ -168,9 +168,9 @@
 /*
  * ADXL314
  * At +/-200g with 13-bit resolution, scale factor is given in datasheet as
- * 50 mg/LSB = 0.0500000 * 9.80665 = 0.4903325000 m/s^2.
+ * 48.83 mg/LSB = 0.0488300 * 9.80665 = 0.4788587195 m/s^2.
  */
-#define ADXL314_ACC_SCALE_FACTOR_MUL				((int64_t)490332500ULL)
+#define ADXL314_ACC_SCALE_FACTOR_MUL				((int64_t)478858719ULL)
 #define ADXL313_ACC_SCALE_FACTOR_DIV				((int32_t)1000000000)
 
 /* ADXL312
@@ -183,7 +183,7 @@
 
 /* ADXL314
  * The scale factor of the offset adjustment, in g / 1000 000 (ug) */
-#define ADXL314_OFFSET_SCALE_FACTOR				196000
+#define ADXL314_OFFSET_SCALE_FACTOR				195000
 
 /* ADXL312
  * The scale factor of the activity/inactivity thresholds, in g / 1000 000 (ug) */
@@ -195,7 +195,7 @@
 
 /* ADXL314
  * The scale factor of the activity/inactivity thresholds, in g / 1000 000 (ug) */
-#define ADXL314_THRESH_SCALE_FACTOR				780000
+#define ADXL314_THRESH_SCALE_FACTOR				784000
 
 /* Offset added to the ODR enum for obtaining corresponding register setting */
 #define ADXL313_ODR_OFFSET_VAL					6
@@ -212,8 +212,8 @@
 /* Self-test multiplication factor */
 #define ADXL312_SELF_TEST_MULT					2900
 #define ADXL313_SELF_TEST_MULT					976
+#define ADXL314_SELF_TEST_MULT					4883
 #define ADXL313_SELF_TEST_DIV					1000
-#define ADXL314_SELF_TEST_MULT					50
 
 /* Self-test minimum deviation for ADXL312, mg */
 #define ADXL312_SELF_TEST_MIN_DEVIATION				300
@@ -225,8 +225,10 @@
 /* Self-test maximum deviation for ADXL313, mg */
 #define ADXL313_SELF_TEST_MAX_DEVIATION				3700
 
-/* Self-test typical deviation for ADXL314, mg */
-#define ADXL314_SELF_TEST_TYP_DEVIATION				6400
+/* Self-test minimum deviation for ADXL314, mg */
+#define ADXL314_SELF_TEST_MIN_DEVIATION				100
+/* Self-test maximum deviation for ADXL314, mg */
+#define ADXL314_SELF_TEST_MAX_DEVIATION				8000
 
 /* Factor used for distinguishing between ADXL312 and ADXL313 ranges */
 #define ADXL313_RANGE_FACTOR					4
