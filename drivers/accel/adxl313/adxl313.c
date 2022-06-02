@@ -2089,7 +2089,9 @@ int adxl313_self_test(struct adxl313_dev *dev)
 	zst = zst_on - zst_off;
 
 	if (dev->dev_type == ID_ADXL314) {
-		if ((zst * ADXL314_SELF_TEST_MULT) < ADXL314_SELF_TEST_TYP_DEVIATION)
+		zst = (zst * ADXL314_SELF_TEST_MULT) / ADXL313_SELF_TEST_DIV;
+		if ((zst < ADXL314_SELF_TEST_MAX_DEVIATION) &&
+		    (zst > ADXL314_SELF_TEST_MIN_DEVIATION))
 			pr_info("Self-test passed.\n");
 		else
 			pr_info("Self-test failed.\n");
