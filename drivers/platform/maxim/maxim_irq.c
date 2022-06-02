@@ -57,11 +57,11 @@
 #include "no_os_util.h"
 
 static struct event_list _events[] = {
-	{.event = NO_OS_EVT_GPIO},
-	{.event = NO_OS_EVT_UART_TX_COMPLETE},
-	{.event = NO_OS_EVT_UART_RX_COMPLETE},
-	{.event = NO_OS_EVT_UART_ERROR},
-	{.event = NO_OS_EVT_RTC},
+	[NO_OS_EVT_GPIO] = {.event = NO_OS_EVT_GPIO},
+	[NO_OS_EVT_UART_TX_COMPLETE] = {.event = NO_OS_EVT_UART_TX_COMPLETE},
+	[NO_OS_EVT_UART_RX_COMPLETE] = {.event = NO_OS_EVT_UART_RX_COMPLETE},
+	[NO_OS_EVT_UART_ERROR] = {.event = NO_OS_EVT_UART_ERROR},
+	[NO_OS_EVT_RTC] = {.event = NO_OS_EVT_RTC},
 };
 
 extern mxc_uart_req_t uart_irq_state[MXC_UART_INSTANCES];
