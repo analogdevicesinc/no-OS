@@ -102,4 +102,8 @@ int32_t ad9083_reg_get(struct ad9083_phy *device, uint32_t reg,
 int32_t ad9083_reg_set(struct ad9083_phy *device, uint32_t reg,
 		       uint8_t writeval);
 
+/* Test PN MISMATCH. */
+int32_t adi_ad9083_jesd_tx_tpl_prbs_test(adi_ad9083_device_t *device,
+			   adi_cms_jesd_prbs_pattern_e prbs_pattern);
+
 #endif // __AD9083_H__

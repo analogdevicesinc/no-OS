@@ -432,6 +432,44 @@ error_1:
 }
 
 /**
+ * @brief PN mismatch type.
+ * @param device - Device descriptor.
+ * @param prbs_pattern - PN pattern.
+ * @return 0 in case of success, -1 otherwise.
+ */
+int32_t adi_ad9083_jesd_tx_tpl_prbs_test(adi_ad9083_device_t *device,
+                                 adi_cms_jesd_prbs_pattern_e prbs_pattern) {
+  int32_t err;
+  uint8_t pattern;
+  AD9083_NULL_POINTER_RETURN(device);
+  AD9083_LOG_FUNC();
+
+  /* decode prbs pattern */
+  switch (prbs_pattern) {
+  case PRBS7:
+    pattern = AD9083_JESD_TX_TEST_MODE_PN7;
+    break;
+  case PRBS15:
+    pattern = AD9083_JESD_TX_TEST_MODE_PN15;
+    break;
+  case PRBS31:
+    pattern = AD9083_JESD_TX_TEST_MODE_PN31;
+    break;
+  case PRBS_NONE:
+    pattern = AD9083_JESD_TX_TEST_MODE_DISABLED;
+    break;
+  default:
+    return API_CMS_ERROR_INVALID_PARAM;
+  }
+
+  err = adi_ad9083_jesd_tx_gen_test(device, AD9083_JESD_TX_TEST_DATA_SAMPLE,
+                                    pattern);
+  AD9083_ERROR_RETURN(err);
+
+  return API_CMS_ERROR_OK;
+}
+
+/**
  * @brief Free the resources allocated by ad9083_init().
  * @param dev - Device descriptor.
  * @return 0 in case of success, -1 otherwise.

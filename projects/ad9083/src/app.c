@@ -170,6 +170,48 @@ int main(void)
 	if (status != 0)
 		return -1;
 
+   // PN MONITOR TEST 
+
+   status = adi_ad9083_jesd_tx_tpl_prbs_test(&app_ad9083->ad9083_phy->adi_ad9083,PRBS7);
+	if (status != 0) {
+		pr_err("error: %"PRIi32" adi_ad9083_jesd_tx_phy_prbs_test()\n", status);
+
+		return -1;
+	}
+
+	if(axi_adc_pn_mon(rx_adc, AXI_ADC_PN7, 10) == -1) {
+		printf("%s ad9083 - PN7 sequence mismatch!\n", __func__);
+	};
+
+	status = adi_ad9083_jesd_tx_tpl_prbs_test(&app_ad9083->ad9083_phy->adi_ad9083,PRBS15);
+	if (status != 0) {
+		pr_err("error: %"PRIi32" adi_ad9083_jesd_tx_phy_prbs_test()\n", status);
+
+		return -1;
+	}
+
+	if(axi_adc_pn_mon(rx_adc, AXI_ADC_PN15, 10) == -1) {
+		printf("%s ad9083 - PN15 sequence mismatch!\n", __func__);
+	};
+
+	status = adi_ad9083_jesd_tx_tpl_prbs_test(&app_ad9083->ad9083_phy->adi_ad9083,PRBS31);
+	if (status != 0) {
+		pr_err("error: %"PRIi32" adi_ad9083_jesd_tx_phy_prbs_test()\n", status);
+
+		return -1;
+	}
+
+	if(axi_adc_pn_mon(rx_adc, AXI_ADC_PN31, 10) == -1) {
+		printf("%s ad9083 - PN31 sequence mismatch!\n", __func__);
+	};
+
+	 status = adi_ad9083_jesd_tx_tpl_prbs_test(&app_ad9083->ad9083_phy->adi_ad9083,PRBS_NONE);
+	if (status != 0) {
+		pr_err("error: %"PRIi32" adi_ad9083_jesd_tx_phy_prbs_test()\n", status);
+
+		return -1;
+	}
+
 #ifdef IIO_SUPPORT
 	struct iio_data_buffer read_buff = {
 		.buff = (void *)ADC_DDR_BASEADDR,
