@@ -45,6 +45,7 @@
 #include <errno.h>
 #include "spi.h"
 #include "mxc_errors.h"
+#include "mxc_pins.h"
 #include "spi_extra.h"
 #include "no_os_spi.h"
 #include "no_os_util.h"
@@ -55,6 +56,118 @@
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
+
+/**
+ * @brief Enable the chip select gpio on MAX32665 or MAX32650
+ * @param spi - The SPI port registers
+ * @param chip_select - cs index
+ * @return 0 in case of success, -EINVAL otherwise
+ */
+static int32_t _max_spi_enable_ss(uint32_t id, uint32_t chip_select)
+{
+	mxc_gpio_cfg_t cs;
+
+	/** This function will be a no-op for other chips, because this step is
+	 * done in the SDK in those cases.
+	*/
+#if TARGET_NUM != 32650 && TARGET_NUM != 32665
+	return 0;
+#endif
+
+	switch(id) {
+	case 0:
+		switch(chip_select) {
+		case 0:
+#if TARGET_NUM == 32665
+			cs = gpio_cfg_spi0_ss0a;
+#else
+			cs = gpio_cfg_spi0_0;
+#endif
+			break;
+			/** The SPI port 0 of the MAX32650 only has 1 chip select */
+#if TARGET_NUM == 32665
+		case 1:
+			cs = gpio_cfg_spi0_ss1;
+			break;
+		case 2:
+			cs = gpio_cfg_spi0_ss2;
+			break;
+#endif
+		default:
+			return -EINVAL;
+		}
+		break;
+	case 1:
+		switch(chip_select) {
+		case 0:
+			cs = gpio_cfg_spi1_ss0;
+			break;
+		case 1:
+			cs = gpio_cfg_spi1_ss1;
+			break;
+		case 2:
+			cs = gpio_cfg_spi1_ss2;
+			break;
+#if TARGET_NUM == 32650
+		case 3:
+			cs = gpio_cfg_spi1_ss3;
+			break;
+#endif
+		default:
+			return -EINVAL;
+		}
+		break;
+
+	case 2:
+		switch(chip_select) {
+		case 0:
+			cs = gpio_cfg_spi2_ss0;
+			break;
+		case 1:
+			cs = gpio_cfg_spi2_ss1;
+			break;
+		case 2:
+			cs = gpio_cfg_spi2_ss2;
+			break;
+#if TARGET_NUM == 32650
+		case 3:
+			cs = gpio_cfg_spi2_ss3;
+			break;
+#endif
+		default:
+			return -EINVAL;
+		}
+		break;
+#ifdef MXC_SPI3
+	case 3:
+		switch(chip_select) {
+		case 0:
+			cs = gpio_cfg_spi2_ss0;
+			break;
+		case 1:
+			cs = gpio_cfg_spi2_ss1;
+			break;
+		case 2:
+			cs = gpio_cfg_spi2_ss2;
+			break;
+#if TARGET_NUM == 32650
+		case 3:
+			cs = gpio_cfg_spi3_ss3;
+			break;
+#endif
+		default:
+			return -EINVAL;
+		}
+		break;
+#endif
+	default:
+		return -EINVAL;
+	}
+
+	MXC_GPIO_Config(&cs);
+
+	return 0;
+}
 
 /**
  * @brief Initialize the SPI communication peripheral.
