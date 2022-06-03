@@ -46,6 +46,7 @@
 #include "no_os_util.h"
 #include "iio_adxl355.h"
 #include "adxl355.h"
+#include "no_os_units.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -53,8 +54,6 @@
 #define ACCEL_AXIS_X (uint32_t) 0
 #define ACCEL_AXIS_Y (uint32_t) 1
 #define ACCEL_AXIS_Z (uint32_t) 2
-#define MEGA 1000000UL
-#define TERA 1000000000000ULL
 
 static const int adxl355_iio_odr_table[11][2] = {
 	{4000, 0},
