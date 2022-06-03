@@ -352,7 +352,7 @@ int32_t no_os_uart_init(struct no_os_uart_desc **desc,
 		goto error;
 	}
 
-#if TARGET_NUM == 32660
+#if TARGET_NUM == 32660 || TARGET_NUM == 32665
 	ret = MXC_UART_Init(uart_regs, descriptor->baud_rate, MAP_A);
 #elif TARGET_NUM == 32655 || TARGET_NUM == 78000
 	ret = MXC_UART_Init(uart_regs, descriptor->baud_rate, MXC_UART_APB_CLK);
@@ -457,7 +457,7 @@ int32_t no_os_uart_remove(struct no_os_uart_desc *desc)
 	 * Unregistering the callback is necessary only for this target
 	 * because this operation is not done by the driver on init.
 	 */
-#if TARGET_NUM == 32655 || TARGET_NUM == 78000
+#if TARGET_NUM == 32655 || TARGET_NUM == 78000 || TARGET_NUM == 32665
 	uint32_t id = desc->device_id;
 	uart_irq_state[id].uart = MXC_UART_GET_UART(id);
 	uart_irq_state[id].callback = _discard_callback;
