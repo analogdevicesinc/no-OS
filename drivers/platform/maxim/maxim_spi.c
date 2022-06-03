@@ -221,11 +221,25 @@ int32_t max_spi_init(struct no_os_spi_desc **desc,
 	ret = MXC_SPI_Init(MXC_SPI_GET_SPI(descriptor->device_id), SPI_MASTER_MODE,
 			   SPI_SINGLE_MODE,
 			   eparam->numSlaves, eparam->polarity, param->max_speed_hz, spi_pins_config);
+#elif TARGET_NUM == 32665
+	ret = MXC_SPI_Init(MXC_SPI_GET_SPI(descriptor->device_id), SPI_MASTER_MODE,
+			   SPI_SINGLE_MODE,
+			   eparam->numSlaves, eparam->polarity, param->max_speed_hz, MAP_A);
 #else
 	ret = MXC_SPI_Init(MXC_SPI_GET_SPI(descriptor->device_id), SPI_MASTER_MODE,
 			   SPI_SINGLE_MODE,
 			   eparam->numSlaves, eparam->polarity, param->max_speed_hz);
 #endif
+	if (ret) {
+		ret = -EINVAL;
+		goto err_init;
+	}
+
+	ret = _max_spi_enable_ss(descriptor->device_id, descriptor->chip_select);
+	if (ret) {
+		ret = -EINVAL;
+		goto err_init;
+	}
 
 	ret = MXC_SPI_SetMode(MXC_SPI_GET_SPI(descriptor->device_id), descriptor->mode);
 	if (ret) {
