@@ -90,9 +90,6 @@
 #define LTC268X_PWDN(x)				(1 << ((x) & 0xF))
 #define LTC268X_DITH_EN(x)			(1 << ((x) & 0xF))
 
-/* Number of channels corresponding to device */
-const uint8_t ltc268x_channels[] = { 8, 16};
-
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
@@ -148,6 +145,7 @@ struct ltc268x_dev {
 	uint16_t			dither_toggle_en;
 	bool				dither_mode[16];
 	uint16_t			dac_code[16];
+	uint8_t				num_channels;
 	enum ltc268x_voltage_range 	crt_range[16];
 	enum ltc268x_dither_phase	dither_phase[16];
 	enum ltc268x_dither_period	dither_period[16];
