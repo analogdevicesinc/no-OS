@@ -186,7 +186,7 @@ int32_t ltc268x_set_dither_mode(struct ltc268x_dev *dev, uint8_t channel,
 	uint16_t val = 0;
 	int32_t ret;
 
-	if (channel >= ltc268x_channels[dev->dev_id])
+	if (channel >= dev->num_channels)
 		return -ENOENT;
 
 	if (en)
@@ -215,7 +215,7 @@ int32_t ltc268x_set_span(struct ltc268x_dev *dev,
 {
 	int32_t ret;
 
-	if (channel >= ltc268x_channels[dev->dev_id])
+	if (channel >= dev->num_channels)
 		return -ENOENT;
 
 	ret = _ltc268x_spi_update_bits(dev, LTC268X_CMD_CH_SETTING(channel,
@@ -241,7 +241,7 @@ int32_t ltc268x_set_dither_phase(struct ltc268x_dev *dev,
 {
 	int32_t ret;
 
-	if (channel >= ltc268x_channels[dev->dev_id])
+	if (channel >= dev->num_channels)
 		return -ENOENT;
 
 	ret = _ltc268x_spi_update_bits(dev, LTC268X_CMD_CH_SETTING(channel,
@@ -267,7 +267,7 @@ int32_t ltc268x_set_dither_period(struct ltc268x_dev *dev,
 {
 	int32_t ret;
 
-	if (channel >= ltc268x_channels[dev->dev_id])
+	if (channel >= dev->num_channels)
 		return -ENOENT;
 
 	ret = _ltc268x_spi_update_bits(dev, LTC268X_CMD_CH_SETTING(channel,
@@ -293,7 +293,7 @@ int32_t ltc268x_select_reg(struct ltc268x_dev *dev,
 {
 	int32_t ret;
 
-	if (channel >= ltc268x_channels[dev->dev_id])
+	if (channel >= dev->num_channels)
 		return -ENOENT;
 
 	ret = _ltc268x_spi_update_bits(dev, LTC268X_CMD_A_B_SELECT_REG,
@@ -318,7 +318,7 @@ int32_t ltc268x_select_tg_dith_clk(struct ltc268x_dev *dev, uint8_t channel,
 {
 	int32_t ret;
 
-	if (channel >= ltc268x_channels[dev->dev_id])
+	if (channel >= dev->num_channels)
 		return -ENOENT;
 
 	ret = _ltc268x_spi_update_bits(dev, LTC268X_CMD_CH_SETTING(channel,
@@ -343,7 +343,7 @@ int32_t ltc268x_software_toggle(struct ltc268x_dev *dev, uint8_t channel)
 	int32_t ret;
 	uint16_t regval;
 
-	if (channel >= ltc268x_channels[dev->dev_id])
+	if (channel >= dev->num_channels)
 		return -ENOENT;
 
 	ret = _ltc268x_spi_read(dev, LTC268X_CMD_SW_TOGGLE_REG, &regval);
@@ -439,6 +439,11 @@ int32_t ltc268x_init(struct ltc268x_dev **device,
 	no_os_mdelay(100);
 
 	dev->dev_id = init_param.dev_id;
+	if (init_param.dev_id == LTC2686) {
+		dev->num_channels = 8;
+	} else if (init_param.dev_id == LTC2688) {
+		dev->num_channels = 16;
+	}
 
 	/* Powerdown/up channels */
 	ret = ltc268x_set_pwr_dac(dev, init_param.pwd_dac_setting);
@@ -450,7 +455,7 @@ int32_t ltc268x_init(struct ltc268x_dev **device,
 	if (ret < 0)
 		goto error;
 
-	for (channel = 0; channel < ltc268x_channels[dev->dev_id]; channel++) {
+	for (channel = 0; channel < dev->num_channels; channel++) {
 		/* Setup channel span */
 		ret = ltc268x_set_span(dev, channel, init_param.crt_range[channel]);
 		if (ret < 0)
