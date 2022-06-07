@@ -51,6 +51,9 @@
 #include "rtc_extra.h"
 #include "no_os_gpio.h"
 #include <drivers/gpio/adi_gpio.h>
+#include <drivers/tmr/adi_tmr.h>
+#include "no_os_timer.h"
+#include "aducm3029_timer.h"
 #include "no_os_util.h"
 #include "no_os_list.h"
 
@@ -89,11 +92,12 @@ struct event_list {
 };
 
 static struct event_list _events[] = {
-	{.event = NO_OS_EVT_GPIO},
-	{.event = NO_OS_EVT_UART_TX_COMPLETE, .hal_event = UART_EVT_IRQn},
-	{.event = NO_OS_EVT_UART_RX_COMPLETE, .hal_event = UART_EVT_IRQn},
-	{.event = NO_OS_EVT_UART_ERROR, .hal_event = UART_EVT_IRQn},
-	{.event = NO_OS_EVT_RTC},
+	[NO_OS_EVT_GPIO] = {.event = NO_OS_EVT_GPIO},
+	[NO_OS_EVT_UART_TX_COMPLETE] = {.event = NO_OS_EVT_UART_TX_COMPLETE, .hal_event = UART_EVT_IRQn},
+	[NO_OS_EVT_UART_RX_COMPLETE] = {.event = NO_OS_EVT_UART_RX_COMPLETE, .hal_event = UART_EVT_IRQn},
+	[NO_OS_EVT_UART_ERROR] = {.event = NO_OS_EVT_UART_ERROR, .hal_event = UART_EVT_IRQn},
+	[NO_OS_EVT_RTC] {.event = NO_OS_EVT_RTC},
+	[NO_OS_EVT_TIM_ELAPSED] = {.event = NO_OS_EVT_TIM_ELAPSED, .hal_event = TMR1_EVT_IRQn},
 };
 
 /**
@@ -175,6 +179,23 @@ static void aducm_rtc_callback(void *ctx, uint32_t event, void *buff)
 		action->callback(action->ctx);
 }
 
+/**
+ * @brief Call the user defined callback when the timer has elapsed.
+ * @param ctx:		Not used here. Present to keep function signature.
+ * @param event:	Not used here. Present to keep function signature.
+ * @param buff:		Not used here. Present to keep function signature.
+ */
+static void aducm_timer_callback(void *ctx, uint32_t event, void *buff)
+{
+	struct irq_action *action;
+	if (event == ADI_TMR_EVENT_TIMEOUT) {
+		no_os_list_read_last(_events[NO_OS_EVT_TIM_ELAPSED].actions,
+				     (void **)&action);
+		if (action)
+			action->callback(action->ctx);
+	}
+}
+
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
@@ -223,6 +244,7 @@ int32_t aducm3029_irq_ctrl_remove(struct no_os_irq_ctrl_desc *desc)
 
 	no_os_irq_unregister_callback(desc, ADUCM_UART_INT_ID, NULL);
 	no_os_irq_unregister_callback(desc, ADUCM_RTC_INT_ID, NULL);
+	no_os_irq_unregister_callback(desc, ADUCM_TIMER1_INT_ID, NULL);
 	free(desc->extra);
 	free(desc);
 
@@ -244,6 +266,8 @@ int32_t aducm3029_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 	struct no_os_aducm_uart_desc	*aducm_uart;
 	struct no_os_rtc_desc			*rtc_desc;
 	struct aducm_rtc_desc		*rtc_extra;
+	struct no_os_timer_desc			*timer_desc;
+	struct aducm_timer_desc		*timer_extra;
 	int32_t				ret;
 	struct irq_action	*action;
 	int32_t i;
@@ -285,6 +309,26 @@ int32_t aducm3029_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 				return ret;
 			adi_rtc_RegisterCallback(rtc_extra->instance, aducm_rtc_callback,
 						 callback_desc->handle);
+		}
+
+		break;
+	case ADUCM_TIMER1_INT_ID:
+		timer_desc = callback_desc->handle;
+		timer_extra = timer_desc->extra;
+		if (_events[callback_desc->event].actions == NULL) {
+			ret = no_os_list_init(&_events[callback_desc->event].actions,
+					      NO_OS_LIST_PRIORITY_LIST,
+					      irq_action_cmp);
+			if (ret)
+				return ret;
+			/* Init function is called again to register the needed callback.
+			   This implementation can be changed in the future if adi_tmr_RegisterCallback will be available. */
+			adi_tmr_Init(timer_desc->id, aducm_timer_callback, callback_desc->handle,
+				     false);
+
+			while (ADI_TMR_DEVICE_BUSY == adi_tmr_ConfigTimer(timer_desc->id,
+					&timer_extra->tmr_conf));
+
 		}
 
 		break;
@@ -373,6 +417,7 @@ int32_t aducm3029_irq_global_enable(struct no_os_irq_ctrl_desc *desc)
 
 	no_os_irq_enable(desc, ADUCM_UART_INT_ID);
 	no_os_irq_enable(desc, ADUCM_RTC_INT_ID);
+	no_os_irq_enable(desc, ADUCM_TIMER1_INT_ID);
 
 	return 0;
 }
@@ -389,6 +434,7 @@ int32_t aducm3029_irq_global_disable(struct no_os_irq_ctrl_desc *desc)
 
 	no_os_irq_disable(desc, ADUCM_UART_INT_ID);
 	no_os_irq_disable(desc, ADUCM_RTC_INT_ID);
+	no_os_irq_disable(desc, ADUCM_TIMER1_INT_ID);
 
 	return 0;
 }
@@ -419,9 +465,11 @@ int32_t aducm3029_irq_enable(struct no_os_irq_ctrl_desc *desc,
 	if (!desc || !desc->extra || irq_id >= NB_INTERRUPTS)
 		return -1;
 
-	if (irq_id == ADUCM_UART_INT_ID) {
+	switch (irq_id) {
+	case ADUCM_UART_INT_ID:
 		NVIC_EnableIRQ(UART_EVT_IRQn);
-	} else if (irq_id == ADUCM_RTC_INT_ID) {
+		break;
+	case ADUCM_RTC_INT_ID:
 		ret = no_os_list_read_last(_events[NO_OS_EVT_RTC].actions,
 					   (void **)&action);
 		if (ret)
@@ -430,6 +478,14 @@ int32_t aducm3029_irq_enable(struct no_os_irq_ctrl_desc *desc,
 		rtc_desc = action->handle;
 		aducm_rtc = rtc_desc->extra;
 		adi_rtc_EnableInterrupts(aducm_rtc->instance, RTC_COUNT_ROLLOVER_INT, true);
+		break;
+
+	case ADUCM_TIMER1_INT_ID:
+		NVIC_SetPriority(TMR1_EVT_IRQn, 2);
+		NVIC_EnableIRQ(TMR1_EVT_IRQn);
+		break;
+	default:
+		return -EINVAL;
 	}
 
 	return 0;
@@ -441,7 +497,8 @@ int32_t aducm3029_irq_enable(struct no_os_irq_ctrl_desc *desc,
  * @param irq_id - Id of the interrupt
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t aducm3029_irq_disable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
+int32_t aducm3029_irq_disable(struct no_os_irq_ctrl_desc *desc,
+			      uint32_t irq_id)
 {
 	struct no_os_rtc_desc		*rtc_desc;
 	struct aducm_rtc_desc		*aducm_rtc;
@@ -451,9 +508,11 @@ int32_t aducm3029_irq_disable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
 	if (!desc || !desc->extra || irq_id >= NB_INTERRUPTS)
 		return -1;
 
-	if (irq_id == ADUCM_UART_INT_ID) {
+	switch (irq_id) {
+	case ADUCM_UART_INT_ID:
 		NVIC_DisableIRQ(UART_EVT_IRQn);
-	} else if (irq_id == ADUCM_RTC_INT_ID) {
+		break;
+	case ADUCM_RTC_INT_ID:
 		ret = no_os_list_read_last(_events[NO_OS_EVT_RTC].actions,
 					   (void **)&action);
 		if (ret)
@@ -462,6 +521,12 @@ int32_t aducm3029_irq_disable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
 		rtc_desc = action->handle;
 		aducm_rtc = rtc_desc->extra;
 		adi_rtc_EnableInterrupts(aducm_rtc->instance, RTC_COUNT_INT, false);
+		break;
+	case ADUCM_TIMER1_INT_ID:
+		NVIC_DisableIRQ(TMR1_EVT_IRQn);
+		break;
+	default:
+		return -EINVAL;
 	}
 
 	return 0;
