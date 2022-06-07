@@ -43,8 +43,8 @@
 
 #include <stdlib.h>
 #include "no_os_uart.h"
-#include "no_os_irq.h"
 #include "uart_extra.h"
+#include "irq_extra.h"
 #include "no_os_util.h"
 
 /******************************************************************************/
@@ -80,9 +80,17 @@ const struct no_os_baud_desc baud_rates_26MHz[NO_OS_BAUDS_NB] = {
  */
 static uint32_t initialized[NO_OS_NUM_UART_DEVICES];
 
+static uint8_t c;
+
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
+void uart_rx_callback(void *context)
+{
+	struct no_os_uart_desc *d = context;
+	lf256fifo_write(d->rx_fifo, c);
+	no_os_uart_read_nonblocking(d, &c, 1);
+}
 
 /**
  * @brief Allocates the memory needed for the UART descriptor.
@@ -149,7 +157,8 @@ int32_t no_os_uart_read(struct no_os_uart_desc *desc, uint8_t *data,
 	struct no_os_aducm_uart_desc	*extra;
 	uint32_t		errors;
 	uint32_t		to_read;
-	uint32_t		idx;
+	uint32_t		idx = 0;
+	int ret;
 
 	if (!desc || !data)
 		return -1;
@@ -160,11 +169,19 @@ int32_t no_os_uart_read(struct no_os_uart_desc *desc, uint8_t *data,
 		goto failure;
 	}
 
+	if (desc->rx_fifo) {
+		for (idx = 0; idx < bytes_number; idx++) {
+			ret = lf256fifo_read(desc->rx_fifo, &data[idx]);
+			if (ret)
+				return idx ? idx : -EAGAIN;
+		}
+		return idx;
+	}
+
 	/* Wait until a previously no_os_uart_read_nonblocking ends */
 	while (extra->read_desc.is_nonblocking)
 		;
 
-	idx = 0;
 	while (bytes_number) {
 		to_read = no_os_min(bytes_number, NO_OS_UART_MAX_BYTES);
 		if (ADI_UART_SUCCESS != adi_uart_Read(
@@ -317,9 +334,11 @@ int32_t no_os_uart_write_nonblocking(struct no_os_uart_desc *desc,
 int32_t no_os_uart_init(struct no_os_uart_desc **desc,
 			struct no_os_uart_init_param *param)
 {
+	int ret;
 	ADI_UART_RESULT			uart_ret;
 	struct no_os_aducm_uart_desc		*aducm_desc;
 	struct aducm_uart_init_param	*aducm_init_param;
+	struct no_os_uart_desc *descriptor;
 
 	if (!desc || !param || !(param->extra) ||
 	    param->device_id >= NO_OS_NUM_UART_DEVICES || //
@@ -327,14 +346,14 @@ int32_t no_os_uart_init(struct no_os_uart_desc **desc,
 		return -1;
 
 	initialized[param->device_id] = 1;
-	*desc = alloc_desc_mem();
-	if (!(*desc))
+	descriptor = alloc_desc_mem();
+	if (!descriptor)
 		return -1;
-	aducm_desc = (*desc)->extra;
+	aducm_desc = descriptor->extra;
 	aducm_init_param = param->extra;
 
-	(*desc)->baud_rate = param->baud_rate;
-	(*desc)->device_id = param->device_id;
+	descriptor->baud_rate = param->baud_rate;
+	descriptor->device_id = param->device_id;
 	/* aducm_desc->read_desc and aducm_desc->write_desc are 0 already */
 
 	uart_ret = adi_uart_Open(param->device_id, ADI_UART_DIR_BIDIRECTION,
@@ -368,11 +387,55 @@ int32_t no_os_uart_init(struct no_os_uart_desc **desc,
 	if (uart_ret != ADI_UART_SUCCESS)
 		goto failure;
 
+	// nonblocking uart_read
+	if(param->asynchronous_rx) {
+		ret = lf256fifo_init(&descriptor->rx_fifo);
+		if (ret < 0)
+			goto failure;
+
+		struct no_os_irq_init_param nvic_ip = {
+			.platform_ops = &aducm_irq_ops,
+			.extra = aducm_desc->uart_handler,
+		};
+		ret = no_os_irq_ctrl_init(&aducm_desc->nvic, &nvic_ip);
+		if (ret < 0)
+			goto error_fifo;
+
+		aducm_desc->rx_callback.callback = uart_rx_callback;
+		aducm_desc->rx_callback.ctx = descriptor;
+		aducm_desc->rx_callback.event = NO_OS_EVT_UART_RX_COMPLETE;
+		aducm_desc->rx_callback.peripheral = NO_OS_UART_IRQ;
+		aducm_desc->rx_callback.handle = aducm_desc;
+
+		ret = no_os_irq_register_callback(aducm_desc->nvic, descriptor->irq_id,
+						  &aducm_desc->rx_callback);
+		if (ret < 0)
+			goto error_nvic;
+
+		ret = no_os_irq_enable(aducm_desc->nvic, descriptor->irq_id);
+		if (ret < 0)
+			goto error_register;
+
+		ret = no_os_uart_read_nonblocking(descriptor, &c, 1);
+		if (ret < 0)
+			goto error_enable;
+	}
+
+	*desc = descriptor;
 	return 0;
+error_enable:
+	no_os_irq_disable(aducm_desc->nvic, descriptor->irq_id);
+error_register:
+	no_os_irq_unregister_callback(aducm_desc->nvic, descriptor->irq_id,
+				      &aducm_desc->rx_callback);
+error_nvic:
+	no_os_irq_ctrl_remove(aducm_desc->nvic);
+error_fifo:
+	lf256fifo_remove(descriptor->rx_fifo);
 failure:
-	free_desc_mem(*desc);
+	free_desc_mem(descriptor);
 	*desc = NULL;
-	return -1;
+	return ret;
 }
 
 /**
@@ -390,6 +453,14 @@ int32_t no_os_uart_remove(struct no_os_uart_desc *desc)
 	initialized[desc->device_id] = 0;
 
 	aducm_desc = desc->extra;
+	if (desc->rx_fifo) {
+		no_os_irq_disable(aducm_desc->nvic, desc->irq_id);
+		lf256fifo_remove(desc->rx_fifo);
+		desc->rx_fifo = NULL;
+		no_os_irq_unregister_callback(aducm_desc->nvic, desc->irq_id,
+					      &aducm_desc->rx_callback);
+		no_os_irq_ctrl_remove(aducm_desc->nvic);
+	}
 	adi_uart_Close(aducm_desc->uart_handler);
 	free_desc_mem(desc);
 
