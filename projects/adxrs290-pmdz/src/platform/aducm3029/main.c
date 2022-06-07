@@ -47,8 +47,8 @@
 #include "iio_example.h"
 #endif
 
-#ifdef IIO_TRIGGER_EXAMPLE
-#include "iio_trigger_example.h"
+#ifdef IIO_TIMER_TRIGGER_EXAMPLE
+#include "iio_timer_trigger_example.h"
 #endif
 
 /***************************************************************************//**
@@ -75,7 +75,13 @@ int main()
 #error IIO_TRIGGER_EXAMPLE is not supported on ADUCM3029 platform for adxrs290-pmdz project.
 #endif
 
-#if (IIO_EXAMPLE + IIO_TRIGGER_EXAMPLE != 1)
+#ifdef IIO_TIMER_TRIGGER_EXAMPLE
+	ret = iio_timer_trigger_example_main();
+	if (ret)
+		goto error;
+#endif
+
+#if (IIO_EXAMPLE + IIO_TIMER_TRIGGER_EXAMPLE != 1)
 #error Selected example projects cannot be enabled at the same time. \
 Please enable only one example and re-build the project.
 #endif

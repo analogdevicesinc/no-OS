@@ -91,3 +91,33 @@ struct iio_hw_trig_init_param adxrs290_gpio_trig_ip = {
 	.name = ADXRS290_GPIO_TRIG_NAME,
 };
 #endif
+
+#ifdef IIO_TIMER_TRIGGER_EXAMPLE
+/* ADXRS290 timer init parameter */
+struct no_os_timer_init_param adxrs290_tip = {
+	.id = ADXRS290_TIMER_DEVICE_ID,
+	.freq_hz = ADXRS290_TIMER_FREQ_HZ,
+	.load_value = ADXRS290_TIMER_LOAD_VAL,
+	.platform_ops = TIMER_OPS,
+	.extra = ADXRS290_TIMER_EXTRA,
+};
+
+/* ADXRS290 timer irq init parameter */
+struct no_os_irq_init_param adxrs290_timer_irq_ip = {
+	.irq_ctrl_id = ADXRS290_TIMER_IRQ_ID,
+	.platform_ops = TIMER_IRQ_OPS,
+	.extra = ADADXRS290_TIMER_IRQ_EXTRA,
+};
+
+/* ADXRS290 timer trigger init parameter */
+struct iio_hw_trig_init_param adxrs290_timer_trig_ip = {
+	.irq_id = ADXRS290_TIMER_TRIG_IRQ_ID,
+	.cb_info = {
+		.event = NO_OS_EVT_TIM_ELAPSED,
+		.peripheral = NO_OS_TIM_IRQ,
+		.handle = ADXRS290_TIMER_CB_HANDLE,
+	},
+	.name = ADXRS290_TIMER_TRIG_NAME,
+};
+
+#endif

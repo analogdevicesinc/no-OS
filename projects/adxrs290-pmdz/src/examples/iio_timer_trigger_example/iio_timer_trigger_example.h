@@ -1,7 +1,6 @@
 /***************************************************************************//**
- *   @file   parameters.h
- *   @brief  Definitions specific to STM32 platform used by eval-adxrs290-pmdz
- *           project.
+ *   @file   iio_timer_trigger_example.h
+ *   @brief  IIO timer trigger example header for iio_demo project
  *   @author RBolboac (ramona.bolboaca@analog.com)
 ********************************************************************************
  * Copyright 2022(c) Analog Devices, Inc.
@@ -37,62 +36,16 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __PARAMETERS_H__
-#define __PARAMETERS_H__
+#ifndef __IIO_TIMER_TRIGGER_EXAMPLE_H__
+#define __IIO_TIMER_TRIGGER_EXAMPLE_H__
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "stdio.h"
-#include "platform_init.h"
-#include "aducm3029_gpio.h"
-#include "spi_extra.h"
-#include "irq_extra.h"
-#include "aducm3029_timer.h"
-#include "no_os_timer.h"
 
 /******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
+/************************ Functions Declarations ******************************/
 /******************************************************************************/
-#define UART_DEVICE_ID	0
-#define INTC_DEVICE_ID	0
-#define UART_IRQ_ID		ADUCM_UART_INT_ID
-#define UART_BAUDRATE	115200
+int iio_timer_trigger_example_main();
 
-#define SPI_DEVICE_ID   1
-#define SPI_BAUDRATE    1000000
-#define SPI_CS          0
-#define SPI_OPS         &aducm_spi_ops
-#define SPI_EXTRA       &adxrs290_spi_extra_ip
-
-#define GPIO_SYNC_PIN_NUM       0x10
-#define GPIO_SYNC_PORT_NUM      0
-#define GPIO_OPS                &aducm_gpio_ops
-#define GPIO_EXTRA              NULL
-
-#ifdef IIO_TRIGGER_EXAMPLE
-#error IIO_TRIGGER_EXAMPLE is not supported on ADUCM3029 platform for adxrs290-pmdz project.
-#endif
-
-#ifdef IIO_TIMER_TRIGGER_EXAMPLE
-/* ADXRS290 Timer settings */
-extern struct aducm_timer_init_param adxrs290_xtip;
-#define ADXRS290_TIMER_DEVICE_ID    1
-#define ADXRS290_TIMER_FREQ_HZ      200 /* Not used - Used clock source frequency is the one specified in adxrs290_xtip */
-#define ADXRS290_TIMER_LOAD_VAL     0xffff
-#define ADXRS290_TIMER_EXTRA        &adxrs290_xtip
-#define TIMER_OPS                   &aducm3029_timer_ops
-
-/* ADXRS290 Timer trigger settings */
-#define ADXRS290_TIMER_IRQ_ID       0 /* Not used */
-#define TIMER_IRQ_OPS               &aducm_irq_ops
-#define ADADXRS290_TIMER_IRQ_EXTRA  NULL /* Not used */
-
-/* ADXRS290 timer trigger settings */
-#define ADXRS290_TIMER_CB_HANDLE    0 /* Device descriptor is being used as a handle in this case */
-#define ADXRS290_TIMER_TRIG_IRQ_ID  ADUCM_TIMER1_INT_ID
-#endif
-
-extern struct aducm_spi_init_param adxrs290_spi_extra_ip;
-
-#endif /* __PARAMETERS_H__ */
+#endif /* __IIO_TIMER_TRIGGER_EXAMPLE_H__ */

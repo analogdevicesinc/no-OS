@@ -12,6 +12,13 @@ SRCS += $(PROJECT)/src/examples/iio_trigger_example/iio_trigger_example.c
 INCS += $(PROJECT)/src/examples/iio_trigger_example/iio_trigger_example.h
 endif
 
+ifeq (y,$(strip $(IIO_TIMER_TRIGGER_EXAMPLE)))
+TINYIIOD=y
+CFLAGS += -DIIO_TIMER_TRIGGER_EXAMPLE=1
+SRCS += $(PROJECT)/src/examples/iio_timer_trigger_example/iio_timer_trigger_example.c
+INCS += $(PROJECT)/src/examples/iio_timer_trigger_example/iio_timer_trigger_example.h
+endif
+
 ifeq (y,$(strip $(TINYIIOD)))
 SRC_DIRS += $(NO-OS)/iio/iio_app
 SRCS += $(NO-OS)/iio/iio_trigger.c
