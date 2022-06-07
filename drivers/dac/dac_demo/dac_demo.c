@@ -46,7 +46,6 @@
 #include "dac_demo.h"
 #include "no_os_error.h"
 #include "no_os_util.h"
-#include "iio.h"
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -125,109 +124,6 @@ int32_t close_dac_channels(void* dev)
 	desc = dev;
 
 	desc->active_ch = 0;
-
-	return 0;
-}
-
-/*********************************************************************//**
- * @brief utility function for computing next upcoming channel
- * @param ch_mask - active channels .
- * @param last_idx -  previous index.
- * @param new_idx - upcoming channel index, return param.
- * @return 1 if there are more channels, 0 if done.
-**************************************************************************/
-static bool get_next_ch_idx(uint32_t ch_mask, uint32_t last_idx,
-			    uint32_t *new_idx)
-{
-	last_idx++;
-	ch_mask >>= last_idx;
-	if (!ch_mask) {
-		*new_idx = -1;
-		return 0;
-	}
-	while (!(ch_mask & 1)) {
-		last_idx++;
-		ch_mask >>= 1;
-	}
-	*new_idx = last_idx;
-
-	return 1;
-}
-
-/**********************************************************************//**
- * @brief function for reading samples
- * @param dev - physical instance of adc device
- * @param buff - buffer for reading samples
- * @param samples - number of samples to receive
- * @return the number of samples.
-**************************************************************************/
-int32_t dac_write_samples(void* dev, uint16_t* buff, uint32_t samples)
-{
-	struct dac_demo_desc *desc;
-	uint32_t k = 0;
-	uint32_t ch = -1;
-
-	if(!dev)
-		return -ENODEV;
-
-	desc = dev;
-
-	if (!desc->loopback_buffers)
-		return -EINVAL;
-
-	for(uint32_t i = 0; i < samples; i++)
-		while (get_next_ch_idx(desc->active_ch, ch, &ch)) {
-			uint16_t* ch_buffer = (uint16_t*)(desc->loopback_buffers +
-							  (ch * desc->loopback_buffer_len *
-							   sizeof(uint16_t) / sizeof(ch_buffer)));
-			ch_buffer[i % desc->loopback_buffer_len] = buff[k++];
-		}
-
-	return samples;
-}
-
-/***************************************************************************//**
- * @brief Handles trigger: reads one data-set from iio buffer and writes it to
- * the dac buffer.
- *
- * @param dev_data  - The iio device data structure.
- *
- * @return ret - Result of the handling procedure. Returns 0 in case of success
- * and a negative code otherwise.
-*******************************************************************************/
-int32_t dac_demo_trigger_handler(struct iio_device_data *dev_data)
-{
-	struct dac_demo_desc *desc;
-	uint32_t k = 0;
-	uint32_t ch = -1;
-	uint16_t data[TOTAL_DAC_CHANNELS] = {0};
-	static uint32_t i = 0;
-	int ret;
-
-	if(!dev_data)
-		return -ENODEV;
-
-	desc = (struct dac_demo_desc *)dev_data->dev;
-
-	if (!desc->loopback_buffers)
-		return -EINVAL;
-
-	ret = iio_buffer_pop_scan(dev_data->buffer, data);
-	if (ret)
-		/* No data to be processed, simply return 0 */
-		return 0;
-
-	/* Write data to the device one sample/channel at a time */
-	while (get_next_ch_idx(desc->active_ch, ch, &ch)) {
-		uint16_t* ch_buffer = (uint16_t*)(desc->loopback_buffers +
-						  (ch * desc->loopback_buffer_len *
-						   sizeof(uint16_t) / sizeof(ch_buffer)));
-		ch_buffer[i] = data[k++];
-	}
-	if (i == (desc->loopback_buffer_len - 1))
-		i = 0;
-	else
-		i++;
 
 	return 0;
 }

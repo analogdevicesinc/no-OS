@@ -109,7 +109,7 @@ int32_t update_dac_channels(void *dev, int32_t mask);
 
 int32_t close_dac_channels(void* dev);
 
-int32_t dac_write_samples(void* dev, uint16_t* buff, uint32_t samples);
+int32_t dac_submit_samples(struct iio_device_data *dev_data);
 
 int get_dac_demo_attr(void *device, char *buf, uint32_t len,
 		      const struct iio_ch_info *channel, intptr_t priv);
