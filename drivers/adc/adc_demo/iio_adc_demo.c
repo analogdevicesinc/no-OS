@@ -43,6 +43,32 @@
 #include "no_os_error.h"
 #include "no_os_util.h"
 #include "iio_adc_demo.h"
+#include "iio.h"
+
+/**
+ * @brief utility function for computing next upcoming channel
+ * @param ch_mask - active channels .
+ * @param last_idx -  previous index.
+ * @param new_idx - upcoming channel index, return param.
+ * @return 1 if there are more channels, 0 if done.
+ */
+static bool get_next_ch_idx(uint32_t ch_mask, uint32_t last_idx,
+			    uint32_t *new_idx)
+{
+	last_idx++;
+	ch_mask >>= last_idx;
+	if (!ch_mask) {
+		*new_idx = -1;
+		return 0;
+	}
+	while (!(ch_mask & 1)) {
+		last_idx++;
+		ch_mask >>= 1;
+	}
+	*new_idx = last_idx;
+
+	return 1;
+}
 
 /**
  * @brief get attributes for adc.
@@ -109,6 +135,89 @@ int set_adc_demo_attr(void *device, char *buf, uint32_t len,
 	return -EINVAL;
 }
 
+/**
+ * @brief function for reading samples from the device.
+ * @param dev_data  - The iio device data structure.
+ * @return the number of read samples.
+ */
+int32_t adc_submit_samples(struct iio_device_data *dev_data)
+{
+	struct adc_demo_desc *desc;
+	uint32_t k = 0;
+	uint32_t ch = -1;
+	uint16_t buff[TOTAL_ADC_CHANNELS];
+	uint32_t i;
+
+	if(!dev_data)
+		return -ENODEV;
+
+	desc = dev_data->dev;
+
+	if(desc->ext_buff == NULL) {
+		int offset_per_ch = NO_OS_ARRAY_SIZE(sine_lut) / TOTAL_ADC_CHANNELS;
+		for(i = 0; i < dev_data->buffer->size / dev_data->buffer->bytes_per_scan; i++) {
+			while(get_next_ch_idx(desc->active_ch, ch, &ch))
+				buff[k++] = sine_lut[(i + ch * offset_per_ch ) % NO_OS_ARRAY_SIZE(sine_lut)];
+			k = 0;
+			iio_buffer_push_scan(dev_data->buffer, buff);
+		}
+		return dev_data->buffer->size / dev_data->buffer->bytes_per_scan;
+	}
+
+	for(i = 0; i < dev_data->buffer->size / dev_data->buffer->bytes_per_scan; i++) {
+		while(get_next_ch_idx(desc->active_ch, ch, &ch))
+			buff[k++] = ((uint16_t (*)[desc->ext_buff_len])(desc->ext_buff))[ch]
+				    [i % desc->ext_buff_len];
+		k = 0;
+		iio_buffer_push_scan(dev_data->buffer, buff);
+	}
+	return dev_data->buffer->size / dev_data->buffer->bytes_per_scan;
+}
+
+
+/**
+ * @brief Handles trigger: reads one data-set and writes it to the buffer.
+ *
+ * @param dev_data  - The iio device data structure.
+ *
+ * @return ret - Result of the handling procedure. In case of success, the size
+ * 				 of the written data is returned.
+ */
+int32_t adc_demo_trigger_handler(struct iio_device_data *dev_data)
+{
+	struct adc_demo_desc *desc;
+	uint32_t k = 0;
+	uint32_t ch = -1;
+	uint16_t buff[TOTAL_ADC_CHANNELS];
+	static uint32_t i = 0;
+
+	if (!dev_data)
+		return -EINVAL;
+
+	desc = (struct adc_demo_desc *)dev_data->dev;
+
+	if(desc->ext_buff == NULL) {
+		int offset_per_ch = NO_OS_ARRAY_SIZE(sine_lut) / TOTAL_ADC_CHANNELS;
+		while(get_next_ch_idx(desc->active_ch, ch, &ch))
+			buff[k++] = sine_lut[(i + ch * offset_per_ch ) % NO_OS_ARRAY_SIZE(sine_lut)];
+		if (i == NO_OS_ARRAY_SIZE(sine_lut))
+			i = 0;
+		else
+			i++;
+
+		return iio_buffer_push_scan(dev_data->buffer, buff);
+	}
+
+	while(get_next_ch_idx(desc->active_ch, ch, &ch))
+		buff[k++] = ((uint16_t (*)[desc->ext_buff_len])(desc->ext_buff))[ch][i];
+	if (i == (desc->ext_buff_len - 1))
+		i = 0;
+	else
+		i++;
+
+	return iio_buffer_push_scan(dev_data->buffer, buff);
+}
+
 #define ADC_DEMO_ATTR(_name, _priv) {\
 	.name = _name,\
 	.priv = _priv,\
@@ -173,7 +282,7 @@ struct iio_device adc_demo_iio_descriptor = {
 	.pre_enable = update_adc_channels,
 	.post_disable = close_adc_channels,
 	.trigger_handler = (int32_t (*)())adc_demo_trigger_handler,
-	.read_dev = (int32_t (*)())adc_read_samples,
+	.submit = (int32_t (*)())adc_submit_samples,
 	.debug_reg_read = (int32_t (*)()) adc_demo_reg_read,
 	.debug_reg_write = (int32_t (*)()) adc_demo_reg_write
 };

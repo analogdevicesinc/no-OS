@@ -97,6 +97,8 @@ enum iio_adc_demo_attributes {
 	ADC_GLOBAL_ATTR,
 };
 
+extern const uint16_t sine_lut[128];
+
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
@@ -110,7 +112,7 @@ int32_t update_adc_channels(void *dev, uint32_t mask);
 
 int32_t close_adc_channels(void* dev);
 
-int32_t adc_read_samples(void* dev, uint16_t* buff, uint32_t samples);
+int32_t adc_submit_samples(struct iio_device_data *dev_data);
 
 int32_t adc_demo_reg_read(struct adc_demo_desc *desc, uint8_t reg_index,
 			  uint8_t *readval);
