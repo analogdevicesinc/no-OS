@@ -53,9 +53,6 @@
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 
-/** Number of available interrupts */
-#define NB_INTERRUPTS		2u
-
 /** RTC interrupt defines */
 #define RTC_COUNT_INT		ADI_RTC_COUNT_INT
 #define RTC_COUNT_ROLLOVER_INT	ADI_RTC_COUNT_ROLLOVER_INT
@@ -73,6 +70,10 @@ enum irq_id {
 	ADUCM_UART_INT_ID,
 	/** RTC interrupt ID*/
 	ADUCM_RTC_INT_ID,
+	/** TIMER1 interrupt ID */
+	ADUCM_TIMER1_INT_ID,
+	/** Number of available interrupts */
+	NB_INTERRUPTS,
 };
 
 /**
