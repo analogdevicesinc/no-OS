@@ -101,14 +101,6 @@ static int32_t iio_print_uart_info_message(struct no_os_uart_desc **uart_desc,
 	int32_t status;
 	uint32_t delay_ms;
 
-	if (UART_BAUDRATE_DEFAULT != UART_BAUDRATE) {
-		no_os_uart_remove(*uart_desc);
-
-		uart_init_par->baud_rate = UART_BAUDRATE_DEFAULT;
-		status = no_os_uart_init(uart_desc, uart_init_par);
-		if (status < 0)
-			return status;
-	}
 	status = no_os_uart_write(*uart_desc, (uint8_t *)message, msglen);
 	if (status < 0)
 		return status;
