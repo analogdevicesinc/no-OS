@@ -176,16 +176,6 @@ static void aducm_rtc_callback(void *ctx, uint32_t event, void *buff)
 }
 
 /******************************************************************************/
-/***************************** Global Variables *******************************/
-/******************************************************************************/
-
-/**
- * Used to store the status of the driver. 1 if the driver is initialized, 0
- * otherwise
- */
-static uint32_t		initialized;
-
-/******************************************************************************/
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
 
@@ -201,7 +191,7 @@ int32_t aducm3029_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
 {
 	struct aducm_irq_ctrl_desc *aducm_desc;
 
-	if (!desc || !param || initialized)
+	if (!desc || !param)
 		return -1;
 
 	*desc = (struct no_os_irq_ctrl_desc *)calloc(1, sizeof(**desc));
@@ -218,7 +208,6 @@ int32_t aducm3029_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
 	(*desc)->extra = aducm_desc;
 	(*desc)->irq_ctrl_id = param->irq_ctrl_id;
 
-	initialized = 1;
 	return 0;
 }
 
@@ -229,14 +218,13 @@ int32_t aducm3029_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
  */
 int32_t aducm3029_irq_ctrl_remove(struct no_os_irq_ctrl_desc *desc)
 {
-	if (!desc || !desc->extra || !initialized)
+	if (!desc || !desc->extra)
 		return -1;
 
 	no_os_irq_unregister_callback(desc, ADUCM_UART_INT_ID, NULL);
 	no_os_irq_unregister_callback(desc, ADUCM_RTC_INT_ID, NULL);
 	free(desc->extra);
 	free(desc);
-	initialized = 0;
 
 	return 0;
 }
@@ -261,7 +249,7 @@ int32_t aducm3029_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 	struct irq_action	*action;
 	int32_t i;
 
-	if (!desc || !desc->extra || !initialized ||  irq_id >= NB_INTERRUPTS)
+	if (!desc || !desc->extra ||  irq_id >= NB_INTERRUPTS)
 		return -1;
 
 	if (!callback_desc)
@@ -348,8 +336,7 @@ int32_t aducm3029_irq_unregister_callback(struct no_os_irq_ctrl_desc *desc,
 	struct irq_action			*action;
 	uint32_t					ret;
 
-	if (!desc || !desc->extra || !initialized ||
-	    irq_id >= NB_INTERRUPTS)
+	if (!desc || !desc->extra || irq_id >= NB_INTERRUPTS)
 		return -1;
 
 	ret = no_os_list_read_last(_events[cb->event].actions, (void **)&action);
@@ -374,7 +361,7 @@ int32_t aducm3029_irq_unregister_callback(struct no_os_irq_ctrl_desc *desc,
  */
 int32_t aducm3029_irq_global_enable(struct no_os_irq_ctrl_desc *desc)
 {
-	if (!desc || !desc->extra || !initialized)
+	if (!desc || !desc->extra)
 		return -1;
 
 	no_os_irq_enable(desc, ADUCM_UART_INT_ID);
@@ -390,7 +377,7 @@ int32_t aducm3029_irq_global_enable(struct no_os_irq_ctrl_desc *desc)
  */
 int32_t aducm3029_irq_global_disable(struct no_os_irq_ctrl_desc *desc)
 {
-	if (!desc || !desc->extra || !initialized)
+	if (!desc || !desc->extra)
 		return -1;
 
 	no_os_irq_disable(desc, ADUCM_UART_INT_ID);
@@ -422,8 +409,7 @@ int32_t aducm3029_irq_enable(struct no_os_irq_ctrl_desc *desc,
 	struct irq_action			*action;
 	int32_t						ret;
 
-	if (!desc || !desc->extra || !initialized ||
-	    irq_id >= NB_INTERRUPTS)
+	if (!desc || !desc->extra || irq_id >= NB_INTERRUPTS)
 		return -1;
 
 	if (irq_id == ADUCM_UART_INT_ID) {
@@ -455,8 +441,7 @@ int32_t aducm3029_irq_disable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
 	struct irq_action			*action;
 	int32_t						ret;
 
-	if (!desc || !desc->extra || !initialized ||
-	    irq_id >= NB_INTERRUPTS)
+	if (!desc || !desc->extra || irq_id >= NB_INTERRUPTS)
 		return -1;
 
 	if (irq_id == ADUCM_UART_INT_ID) {
