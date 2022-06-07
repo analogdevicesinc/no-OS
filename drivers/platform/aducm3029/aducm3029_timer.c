@@ -46,7 +46,7 @@
 /******************************************************************************/
 
 #include <stdlib.h>
-#include <drivers/tmr/adi_tmr.h>
+#include <drivers/pwr/adi_pwr.h>
 #include "aducm3029_timer.h"
 #include "no_os_timer.h"
 #include "no_os_error.h"
@@ -74,8 +74,6 @@ static volatile uint64_t	g_count;
 static uint32_t			nb_instances;
 /** Counts the number of started timers */
 static uint32_t			nb_enables;
-/** Current hardware timer used */
-static uint32_t			timer_id;
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -113,7 +111,10 @@ int32_t aducm3029_timer_init(struct no_os_timer_desc **desc,
 {
 	struct no_os_timer_desc *ldesc;
 	struct aducm_timer_desc *aducm_desc;
+	struct aducm_timer_init_param *aducm_timer_ip;
 	ADI_TMR_CONFIG		tmr_conf;
+	uint32_t freq;
+	uint32_t prescaler;
 
 	if (!desc || !param || param->freq_hz > NO_OS_FREQ_1MHZ)
 		return -1;
@@ -126,28 +127,79 @@ int32_t aducm3029_timer_init(struct no_os_timer_desc **desc,
 		*desc = NULL;
 		return -1;
 	}
+	aducm_timer_ip = param->extra;
 
-	if (nb_instances == 0) {
-		timer_id = param->id;
-		adi_tmr_Init(timer_id, aducm3029_tmr_callback, NULL, true);
+	ldesc->extra = aducm_desc;
+	ldesc->load_value = param->load_value;
+	ldesc->freq_hz = param->freq_hz;
+
+	if (param->id == 0) {
+		/* Timer id 0 will be used for delays.
+		   It can be instantiated multiple times */
+		ldesc->id = 0;
+		if (nb_instances == 0) {
+			adi_tmr_Init(ldesc->id, aducm3029_tmr_callback, NULL, true);
+			/* Set the timer configuration */
+			tmr_conf.bCountingUp = false;
+			tmr_conf.bPeriodic = true;
+			tmr_conf.ePrescaler = ADI_TMR_PRESCALER_1;
+			tmr_conf.eClockSource = ADI_TMR_CLOCK_HFOSC;
+			tmr_conf.nLoad = NO_OS_HFOSC_LOAD;
+			tmr_conf.nAsyncLoad = NO_OS_HFOSC_LOAD;
+			tmr_conf.bReloading = true;
+			tmr_conf.bSyncBypass = true;
+			while (ADI_TMR_DEVICE_BUSY == adi_tmr_ConfigTimer(ldesc->id,
+					&tmr_conf));
+		}
+
+		nb_instances++;
+	} else {
+		/* Timer id 1 will be used for time triggered interrupts.
+			Every time this function is called the timer will be re-initialized */
+		ldesc->id = 1;
+		adi_tmr_Init(ldesc->id, NULL, NULL, false);
 		/* Set the timer configuration */
 		tmr_conf.bCountingUp = false;
 		tmr_conf.bPeriodic = true;
-		tmr_conf.ePrescaler = ADI_TMR_PRESCALER_1;
-		tmr_conf.eClockSource = ADI_TMR_CLOCK_HFOSC;
-		tmr_conf.nLoad = NO_OS_HFOSC_LOAD;
-		tmr_conf.nAsyncLoad = NO_OS_HFOSC_LOAD;
+		tmr_conf.ePrescaler = aducm_timer_ip->source_freq % 4;
+		tmr_conf.eClockSource = aducm_timer_ip->source_freq / 4;
+
+		if (aducm_timer_ip->source_freq < HFOSC_DIV1)
+			adi_pwr_GetClockFrequency(ADI_CLOCK_PCLK, &freq);
+		else if (aducm_timer_ip->source_freq < LFOSC_DIV1)
+			adi_pwr_GetClockFrequency(ADI_CLOCK_HCLK, &freq);
+		else
+			/* 32 KHz clock frequency */
+			freq = 32000;
+
+		switch (tmr_conf.ePrescaler) {
+		case ADI_TMR_PRESCALER_1:
+			prescaler = 1;
+			break;
+		case ADI_TMR_PRESCALER_16:
+			prescaler = 16;
+			break;
+		case ADI_TMR_PRESCALER_64:
+			prescaler = 64;
+			break;
+		case ADI_TMR_PRESCALER_256:
+			prescaler = 256;
+			break;
+		default:
+			free(aducm_desc);
+			free(ldesc);
+			return -EINVAL;
+			break;
+		}
+
+		freq /= prescaler;
+		tmr_conf.nLoad = param->load_value;
+		tmr_conf.nAsyncLoad = param->load_value;
 		tmr_conf.bReloading = true;
 		tmr_conf.bSyncBypass = true;
-		while (ADI_TMR_DEVICE_BUSY == adi_tmr_ConfigTimer(timer_id,
-				&tmr_conf));
+		aducm_desc->tmr_conf = tmr_conf;
+		ldesc->freq_hz = freq;
 	}
-
-	nb_instances++;
-	ldesc->id = timer_id;
-	ldesc->extra = aducm_desc;
-	ldesc->freq_hz = param->freq_hz;
-	ldesc->load_value = param->load_value;
 
 	*desc = ldesc;
 
@@ -167,12 +219,15 @@ int32_t aducm3029_timer_remove(struct no_os_timer_desc *desc)
 		return -1;
 	free(desc->extra);
 	free(desc);
-	nb_instances--;
-	if (nb_instances == 0) {
-		while (ADI_TMR_DEVICE_BUSY == adi_tmr_Enable(timer_id, false));
-		g_count = 0;
-		nb_enables = 0;
-
+	if (desc->id == 0) {
+		nb_instances--;
+		if (nb_instances == 0) {
+			while (ADI_TMR_DEVICE_BUSY == adi_tmr_Enable(0, false));
+			g_count = 0;
+			nb_enables = 0;
+		}
+	} else {
+		while (ADI_TMR_DEVICE_BUSY == adi_tmr_Enable(desc->id, false));
 	}
 
 	return 0;
@@ -183,7 +238,7 @@ static inline uint64_t aducm3029_get_current_time(struct no_os_timer_desc *desc)
 	uint16_t		count_us = 0;
 
 	if (desc->freq_hz > NO_OS_FREQ_1KHZ) {
-		adi_tmr_GetCurrentCount(timer_id, &count_us);
+		adi_tmr_GetCurrentCount(desc->id, &count_us);
 		return g_count * 1000u + NO_OS_MHZ26_TO_US(count_us);
 	} else {
 		return g_count;
@@ -208,11 +263,16 @@ int32_t aducm3029_timer_start(struct no_os_timer_desc *desc)
 	tmr_desc = desc->extra;
 	if (tmr_desc->started)
 		return -1;
-	if (nb_enables == 0)
-		while (ADI_TMR_DEVICE_BUSY == adi_tmr_Enable(timer_id, true));
-	tmr_desc->old_time = aducm3029_get_current_time(desc);
-	tmr_desc->started = true;
-	nb_enables++;
+	if (desc->id == 0) {
+		if (nb_enables == 0)
+			while (ADI_TMR_DEVICE_BUSY == adi_tmr_Enable(0, true));
+		tmr_desc->old_time = aducm3029_get_current_time(desc);
+		tmr_desc->started = true;
+		nb_enables++;
+	} else {
+		while (ADI_TMR_DEVICE_BUSY == adi_tmr_Enable(desc->id, true));
+		tmr_desc->started = true;
+	}
 
 	return 0;
 }
@@ -235,13 +295,17 @@ int32_t aducm3029_timer_stop(struct no_os_timer_desc *desc)
 	tmr_desc = desc->extra;
 	if (!tmr_desc->started)
 		return -1;
-
-	no_os_timer_counter_get(desc, &counter);
-	desc->load_value = counter;
-	if (nb_enables == 1)
-		while (ADI_TMR_DEVICE_BUSY == adi_tmr_Enable(timer_id, false));
-	nb_enables--;
-	tmr_desc->started = false;
+	if (desc->id == 0) {
+		no_os_timer_counter_get(desc, &counter);
+		desc->load_value = counter;
+		if (nb_enables == 1)
+			while (ADI_TMR_DEVICE_BUSY == adi_tmr_Enable(0, false));
+		nb_enables--;
+		tmr_desc->started = false;
+	} else {
+		while (ADI_TMR_DEVICE_BUSY == adi_tmr_Enable(desc->id, false));
+		tmr_desc->started = false;
+	}
 
 	return 0;
 }
@@ -275,7 +339,7 @@ int32_t aducm3029_timer_counter_get(struct no_os_timer_desc *desc,
 	 */
 	local_count = g_count;
 	if (desc->freq_hz > NO_OS_FREQ_1KHZ) {
-		adi_tmr_GetCurrentCount(timer_id, &count_us);
+		adi_tmr_GetCurrentCount(desc->id, &count_us);
 		count_us = NO_OS_MHZ26_TO_US(count_us);
 		new_time = local_count * 1000u + count_us;
 		if (new_time < tmr_desc->old_time)
