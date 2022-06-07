@@ -93,6 +93,10 @@ int main()
 		goto error;
 #endif
 
+#ifdef IIO_TIMER_TRIGGER_EXAMPLE
+#error IIO_TIMER_TRIGGER_EXAMPLE is not supported on maxim platform.
+#endif
+
 #if (IIO_EXAMPLE + IIO_TRIGGER_EXAMPLE == 0)
 #error At least one example has to be selected using y value in Makefile.
 #elif (IIO_EXAMPLE + IIO_TRIGGER_EXAMPLE > 1)

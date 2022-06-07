@@ -1,7 +1,6 @@
 /***************************************************************************//**
- *   @file   parameters.h
- *   @brief  Definitions specific to STM32 platform used by eval-adxrs290-pmdz
- *           project.
+ *   @file   iio_timer_trigger_example.c
+ *   @brief  Implementation of IIO trigger example for iio_demo project.
  *   @author RBolboac (ramona.bolboaca@analog.com)
 ********************************************************************************
  * Copyright 2022(c) Analog Devices, Inc.
@@ -37,62 +36,90 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __PARAMETERS_H__
-#define __PARAMETERS_H__
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "stdio.h"
-#include "platform_init.h"
-#include "aducm3029_gpio.h"
-#include "spi_extra.h"
-#include "irq_extra.h"
-#include "aducm3029_timer.h"
-#include "no_os_timer.h"
+#include "iio_timer_trigger_example.h"
+#include "iio_adxrs290.h"
+#include "iio_trigger.h"
+#include "common_data.h"
+#include "no_os_util.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-#define UART_DEVICE_ID	0
-#define INTC_DEVICE_ID	0
-#define UART_IRQ_ID		ADUCM_UART_INT_ID
-#define UART_BAUDRATE	115200
+#define MAX_SIZE_BASE_ADDR		3000
+static uint8_t in_buff[MAX_SIZE_BASE_ADDR];
+#define GYRO_DDR_BASEADDR		((uint32_t)in_buff)
 
-#define SPI_DEVICE_ID   1
-#define SPI_BAUDRATE    1000000
-#define SPI_CS          0
-#define SPI_OPS         &aducm_spi_ops
-#define SPI_EXTRA       &adxrs290_spi_extra_ip
+/******************************************************************************/
+/************************ Functions Definitions *******************************/
+/******************************************************************************/
+/***************************************************************************//**
+ * @brief IIO trigger example main execution.
+ *
+ * @return ret - Result of the example execution. If working correctly, will
+ *               execute continuously function iio_app_run_with_trigs and will
+ * 				 not return.
+*******************************************************************************/
+int iio_timer_trigger_example_main()
+{
+	int ret;
+	struct adxrs290_dev *adxrs290_desc;
+	struct iio_data_buffer rd_buf = {
+		.buff = (void *)GYRO_DDR_BASEADDR,
+		.size = MAX_SIZE_BASE_ADDR
+	};
+	struct iio_hw_trig *adxrs290_trig_desc;
+	struct no_os_timer_desc *adxrs290_timer_desc;
+	struct no_os_irq_ctrl_desc *adxrs290_timer_irq_desc;
+	struct iio_desc *iio_desc;
 
-#define GPIO_SYNC_PIN_NUM       0x10
-#define GPIO_SYNC_PORT_NUM      0
-#define GPIO_OPS                &aducm_gpio_ops
-#define GPIO_EXTRA              NULL
+	ret = adxrs290_init(&adxrs290_desc, &adxrs290_ip);
+	if (ret)
+		return ret;
 
-#ifdef IIO_TRIGGER_EXAMPLE
-#error IIO_TRIGGER_EXAMPLE is not supported on ADUCM3029 platform for adxrs290-pmdz project.
-#endif
+	ret = no_os_timer_init(&adxrs290_timer_desc, &adxrs290_tip);
+	if (ret)
+		return ret;
 
-#ifdef IIO_TIMER_TRIGGER_EXAMPLE
-/* ADXRS290 Timer settings */
-extern struct aducm_timer_init_param adxrs290_xtip;
-#define ADXRS290_TIMER_DEVICE_ID    1
-#define ADXRS290_TIMER_FREQ_HZ      200 /* Not used - Used clock source frequency is the one specified in adxrs290_xtip */
-#define ADXRS290_TIMER_LOAD_VAL     0xffff
-#define ADXRS290_TIMER_EXTRA        &adxrs290_xtip
-#define TIMER_OPS                   &aducm3029_timer_ops
+	ret = no_os_irq_ctrl_init(&adxrs290_timer_irq_desc, &adxrs290_timer_irq_ip);
+	if (ret)
+		return ret;
 
-/* ADXRS290 Timer trigger settings */
-#define ADXRS290_TIMER_IRQ_ID       0 /* Not used */
-#define TIMER_IRQ_OPS               &aducm_irq_ops
-#define ADADXRS290_TIMER_IRQ_EXTRA  NULL /* Not used */
+	adxrs290_timer_irq_ip.extra = adxrs290_timer_desc->extra;
+	adxrs290_timer_trig_ip.irq_ctrl = adxrs290_timer_irq_desc;
 
-/* ADXRS290 timer trigger settings */
-#define ADXRS290_TIMER_CB_HANDLE    0 /* Device descriptor is being used as a handle in this case */
-#define ADXRS290_TIMER_TRIG_IRQ_ID  ADUCM_TIMER1_INT_ID
-#endif
+	/* TODO */
+	adxrs290_timer_trig_ip.cb_info.handle = adxrs290_timer_desc;
 
-extern struct aducm_spi_init_param adxrs290_spi_extra_ip;
+	/* Initialize hardware trigger */
+	adxrs290_timer_trig_ip.iio_desc = &iio_desc,
+	ret = iio_hw_trig_init(&adxrs290_trig_desc, &adxrs290_timer_trig_ip);
+	if (ret)
+		return ret;
 
-#endif /* __PARAMETERS_H__ */
+	ret = no_os_timer_start(adxrs290_timer_desc);
+	if (ret)
+		return ret;
+
+	/* List of devices */
+	struct iio_app_device iio_devices[] = {
+		{
+			.name = "adxrs290",
+			.dev = adxrs290_desc,
+			.dev_descriptor = &adxrs290_iio_descriptor,
+			.read_buff = &rd_buf,
+		}
+	};
+
+	/* List of triggers */
+	struct iio_trigger_init trigs[] = {
+		IIO_APP_TRIGGER(ADXRS290_TIMER_TRIG_NAME, adxrs290_trig_desc,
+				&adxrs290_iio_trig_desc)
+	};
+
+	return iio_app_run_with_trigs(iio_devices, NO_OS_ARRAY_SIZE(iio_devices),
+				      trigs, NO_OS_ARRAY_SIZE(trigs), adxrs290_timer_irq_desc, &iio_desc);
+}

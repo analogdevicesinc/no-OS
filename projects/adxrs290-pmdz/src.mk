@@ -3,6 +3,7 @@ include $(PROJECT)/src/examples/examples_src.mk
 
 SRCS += $(PROJECT)/src/platform/$(PLATFORM)/main.c
 
+INCS += $(PROJECT)/src/common/app_config.h
 INCS += $(PROJECT)/src/common/common_data.h
 SRCS += $(PROJECT)/src/common/common_data.c
 

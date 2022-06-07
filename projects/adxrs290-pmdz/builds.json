@@ -1,15 +1,15 @@
 {
   "aducm3029": {
     "iio_example":  {
-      "flags" : "IIO_EXAMPLE=y IIO_TRIGGER_EXAMPLE=n"
+      "flags" : "IIO_EXAMPLE=y IIO_TRIGGER_EXAMPLE=n IIO_TIMER_TRIGGER_EXAMPLE=n"
     },
-    "iio_example_wifi":  {
-      "flags" : "IIO_EXAMPLE=y IIO_TRIGGER_EXAMPLE=n USE_TCP_SOCKET=y"
+    "iio_timer_trigger": {
+      "flags": "IIO_EXAMPLE=n IIO_SW_TRIGGER_EXAMPLE=n IIO_TIMER_TRIGGER_EXAMPLE=y"
     }
   },
   "stm32": {
 	"iio_example": {
-      "flags" : "IIO_EXAMPLE=y IIO_TRIGGER_EXAMPLE=n"
+      "flags" : "IIO_EXAMPLE=y IIO_TRIGGER_EXAMPLE=n IIO_TIMER_TRIGGER_EXAMPLE=n"
     }
   }
 }

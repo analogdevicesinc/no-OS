@@ -51,3 +51,7 @@ struct aducm_spi_init_param adxrs290_spi_extra_ip = {
 	.half_duplex = false,
 	.master_mode = MASTER
 };
+
+struct aducm_timer_init_param adxrs290_xtip = {
+	.source_freq = PCLK_DIV256,
+};

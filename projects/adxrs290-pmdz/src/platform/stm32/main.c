@@ -74,6 +74,10 @@ int main()
 #error IIO_TRIGGER_EXAMPLE is not supported on STM32 platform.
 #endif
 
+#ifdef IIO_TIMER_TRIGGER_EXAMPLE
+#error IIO_TIMER_TRIGGER_EXAMPLE is not supported on STM32 platform.
+#endif
+
 #if (IIO_EXAMPLE + IIO_TRIGGER_EXAMPLE != 1)
 #error Selected example projects cannot be enabled at the same time. \
 Please enable only one example and re-build the project.
