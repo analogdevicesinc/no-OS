@@ -46,6 +46,9 @@
 
 #define N_PORTS	MXC_UART_INSTANCES
 
+#define MAX_UART_REVA	(TARGET_NUM == 32650 || TARGET_NUM == 32660)
+#define MAX_UART_REVB	(TARGET_NUM == 32655 || TARGET_NUM == 78000)
+
 /**
  * @brief UART flow control
  */
