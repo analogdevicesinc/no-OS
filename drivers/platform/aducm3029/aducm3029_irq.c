@@ -241,7 +241,6 @@ int32_t aducm3029_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 					uint32_t irq_id,
 					struct no_os_callback_desc *callback_desc)
 {
-	struct no_os_uart_desc		*uart_desc;
 	struct no_os_aducm_uart_desc	*aducm_uart;
 	struct no_os_rtc_desc			*rtc_desc;
 	struct aducm_rtc_desc		*rtc_extra;
@@ -257,10 +256,10 @@ int32_t aducm3029_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 
 	switch (irq_id) {
 	case ADUCM_UART_INT_ID:
-		uart_desc = callback_desc->handle;
-		aducm_uart = uart_desc->extra;
+		aducm_uart = callback_desc->handle;
 		for (i = NO_OS_EVT_UART_TX_COMPLETE; i <= NO_OS_EVT_UART_ERROR; i++)
-			if (_events[i].actions != NULL)
+			if (!no_os_list_get_last(_events[callback_desc->event].actions,
+						 (void **)&action))
 				break;
 		if (i > NO_OS_EVT_UART_ERROR)
 			adi_uart_RegisterCallback(aducm_uart->uart_handler,
@@ -335,21 +334,29 @@ int32_t aducm3029_irq_unregister_callback(struct no_os_irq_ctrl_desc *desc,
 {
 	struct irq_action			*action;
 	uint32_t					ret;
+	int i;
+	struct no_os_aducm_uart_desc	*aducm_uart;
 
 	if (!desc || !desc->extra || irq_id >= NB_INTERRUPTS)
 		return -1;
 
-	ret = no_os_list_read_last(_events[cb->event].actions, (void **)&action);
-	if (ret)
-		return ret;
-	ret = no_os_irq_disable(desc, irq_id);
+	aducm_uart = cb->handle;
+
+	ret = no_os_list_get_last(_events[cb->event].actions, (void **)&action);
 	if (ret)
 		return ret;
 
-	action->irq_id = 0;
-	action->handle = NULL;
-	action->callback = NULL;
-	action->ctx = NULL;
+	ret = no_os_list_remove(_events[cb->event].actions);
+	if (ret)
+		return ret;
+
+	_events[cb->event].actions = NULL;
+
+	for (i = NO_OS_EVT_UART_TX_COMPLETE; i <= NO_OS_EVT_UART_ERROR; i++)
+		if (!no_os_list_get_last(_events[cb->event].actions, (void **)&action))
+			break;
+	if (i > NO_OS_EVT_UART_ERROR)
+		adi_uart_RegisterCallback(aducm_uart->uart_handler, NULL, NULL);
 
 	return 0;
 }

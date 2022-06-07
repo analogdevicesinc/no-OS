@@ -48,6 +48,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include "no_os_error.h"
+#include "no_os_irq.h"
 
 /** Maximum number of bytes that can be transmitted on UART in one transfer */
 #define NO_OS_UART_MAX_BYTES	1024u
@@ -240,6 +241,10 @@ struct no_os_aducm_uart_desc {
 	struct no_os_op_desc	write_desc;
 	/** Status of a read operation */
 	struct no_os_op_desc	read_desc;
+	/** Interrupt controller descriptor */
+	struct no_os_irq_ctrl_desc *nvic;
+	/** RX complete callback */
+	struct no_os_callback_desc rx_callback;
 };
 
 #endif /* UART_H_ */
