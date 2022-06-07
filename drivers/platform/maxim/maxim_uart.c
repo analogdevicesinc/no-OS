@@ -265,7 +265,7 @@ int32_t no_os_uart_init(struct no_os_uart_desc **desc,
 		parity = MXC_UART_PARITY_DISABLE;
 		break;
 	case NO_OS_UART_PAR_MARK:
-#if TARGET_NUM == 32660 || TARGET_NUM == 32650
+#if MAX_UART_REVA
 		parity = MXC_UART_PARITY_MARK;
 		break;
 #else
@@ -273,7 +273,7 @@ int32_t no_os_uart_init(struct no_os_uart_desc **desc,
 		goto error;
 #endif
 	case NO_OS_UART_PAR_SPACE:
-#if TARGET_NUM == 32660 || TARGET_NUM == 32650
+#if MAX_UART_REVA
 		parity = MXC_UART_PARITY_SPACE;
 		break;
 #else
@@ -281,16 +281,16 @@ int32_t no_os_uart_init(struct no_os_uart_desc **desc,
 		goto error;
 #endif
 	case NO_OS_UART_PAR_ODD:
-#if TARGET_NUM == 32660 || TARGET_NUM == 32650
+#if MAX_UART_REVA
 		parity = MXC_UART_PARITY_ODD;
-#elif TARGET_NUM == 32655 || TARGET_NUM == 78000
+#elif MAX_UART_REVB
 		parity = MXC_UART_PARITY_ODD_1;
 #endif
 		break;
 	case NO_OS_UART_PAR_EVEN:
-#if TARGET_NUM == 32660 || TARGET_NUM == 32650
+#if MAX_UART_REVA
 		parity = MXC_UART_PARITY_EVEN;
-#elif TARGET_NUM == 32655 || TARGET_NUM == 78000
+#elif MAX_UART_REVB
 		parity = MXC_UART_PARITY_EVEN_1;
 #endif
 		break;
@@ -334,16 +334,16 @@ int32_t no_os_uart_init(struct no_os_uart_desc **desc,
 		flow = MXC_UART_FLOW_DIS;
 		break;
 	case UART_FLOW_LOW:
-#if TARGET_NUM == 32660
+#if MAX_UART_REVA
 		flow = MXC_UART_FLOW_EN_LOW;
-#elif TARGET_NUM == 32655 || TARGET_NUM == 78000
+#elif MAX_UART_REVB
 		flow = MXC_UART_FLOW_EN;
 #endif
 		break;
 	case UART_FLOW_HIGH:
-#if TARGET_NUM == 32660
+#if MAX_UART_REVA
 		flow = MXC_UART_FLOW_EN_HIGH;
-#elif TARGET_NUM == 32655 || TARGET_NUM == 78000
+#elif MAX_UART_REVB
 		flow = MXC_UART_FLOW_EN;
 #endif
 		break;
