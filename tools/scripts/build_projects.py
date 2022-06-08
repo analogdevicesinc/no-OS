@@ -214,7 +214,7 @@ class BuildConfig:
 			err = run_cmd(cmd + ' reset')
 			if err != 0:
 				return err
-			err = run_cmd(cmd + ' -j%d all' % (multiprocessing.cpu_count() - 1))
+			err = run_cmd("timeout 200s " + cmd + ' VERBOSE=y -j%d all' % (multiprocessing.cpu_count() - 1))
 			if err != 0:
 				return err
 		else:
@@ -305,9 +305,10 @@ def main():
 							#Keyboard interrupt
 							exit()
 						continue
-					run_cmd("cp %s %s" % 
-						(new_build.export_file, project_export))
-					binary_created = True
+					else:
+						run_cmd("cp %s %s" % 
+							(new_build.export_file, project_export))
+						binary_created = True
 			
 		fp.close()
 
