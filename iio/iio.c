@@ -1171,7 +1171,7 @@ static int iio_call_submit(struct iiod_ctx *ctx, const char *device,
 		return -EINVAL;
 
 	dev->buffer.public.dir = dir;
-	if (dev->dev_descriptor->submit)
+	if (dev->dev_descriptor->submit && dev->trig_idx==NO_TRIGGER)
 		return dev->dev_descriptor->submit(&dev->dev_data);
 	else if ((dir == IIO_DIRECTION_INPUT && dev->dev_descriptor->read_dev
 		  && dev->trig_idx==NO_TRIGGER)
