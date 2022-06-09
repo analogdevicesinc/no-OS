@@ -1,5 +1,8 @@
 #!/bin/bash
 
+#List of excluded driver folders for the documentation generation.
+EXCLUDE_DRV="talise navassa ad9083_api"
+
 #Generate drivers_page.dox and projects_page.dox
 
 #Append string to specific *.dox file
@@ -51,8 +54,19 @@ The following sections contain code documentation for ADI no-OS drivers.
 			do
 				if [[ -d "${part}" ]]
 				then
-					#exclude drivers that don't have homogenous directories and files structure
-					if [[ ${part} != *"talise"* && ${part} != *"navassa"* && ${part} != *"ad9083_api"* ]]
+					EXCLUDE_PART=0
+
+					for value in $EXCLUDE_DRV
+					do
+						#exclude drivers that don't have homogenous directories and files structure
+						if [[ ${part} == *"$value"* ]]
+						then
+							EXCLUDE_PART=1
+							break
+						fi
+					done
+
+					if [ -z "$EXCLUDE_PART" ]
 					then
 						#add link to driver
 						append_to_dox "- \link_to_subdir{/drivers/$(basename -- ${drv_type})/$(basename -- ${part}) \"$(basename -- ${part^^})\"}" drivers_page.dox
