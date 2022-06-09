@@ -1,0 +1,18 @@
+{
+  "aducm3029": {
+    "fw_eit_ad5940": {
+      "flags": ""
+    },
+    "fw_eit_ad5940_iio": {
+      "flags": "TINYIIOD=y"
+    }
+  },
+  "stm32": {
+    "fw_eit_ad5940": {
+      "flags": ""
+    },
+    "fw_eit_ad5940_iio": {
+      "flags": "TINYIIOD=y"
+    }
+  }
+}
