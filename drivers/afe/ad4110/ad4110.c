@@ -45,6 +45,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "ad4110.h"
+#include "no_os_util.h"
 #include "no_os_error.h"
 #include "no_os_irq.h"
 #include "no_os_print_log.h"
@@ -308,14 +309,14 @@ int32_t ad4110_set_op_mode(struct ad4110_dev *dev, enum ad4110_op_mode mode)
 		return ad4110_spi_int_reg_write_msk(dev,
 						    A4110_AFE,
 						    AD4110_REG_AFE_CNTRL2,
-						    AD4110_ENABLE,
+						    no_os_field_prep(AD4110_REG_AFE_CNTRL2_IMODE_MSK, AD4110_ENABLE),
 						    AD4110_REG_AFE_CNTRL2_IMODE_MSK);
 	case AD4110_CURRENT_MODE_EXT_R_SEL:
 		// set IMODE bit
 		ret = ad4110_spi_int_reg_write_msk(dev,
 						   A4110_AFE,
 						   AD4110_REG_AFE_CNTRL2,
-						   AD4110_ENABLE,
+						   no_os_field_prep(AD4110_REG_AFE_CNTRL2_IMODE_MSK, AD4110_ENABLE),
 						   AD4110_REG_AFE_CNTRL2_IMODE_MSK);
 		if (ret)
 			return ret;
@@ -324,7 +325,7 @@ int32_t ad4110_set_op_mode(struct ad4110_dev *dev, enum ad4110_op_mode mode)
 		return ad4110_spi_int_reg_write_msk(dev,
 						    A4110_AFE,
 						    AD4110_REG_AFE_CNTRL2,
-						    AD4110_ENABLE,
+						    no_os_field_prep(AD4110_REG_AFE_CNTRL2_EXT_R_SEL_MSK, AD4110_ENABLE),
 						    AD4110_REG_AFE_CNTRL2_EXT_R_SEL_MSK);
 	case AD4110_THERMOCOUPLE:
 		// clear IMODE bit
@@ -347,7 +348,7 @@ int32_t ad4110_set_op_mode(struct ad4110_dev *dev, enum ad4110_op_mode mode)
 		ret = ad4110_spi_int_reg_write_msk(dev,
 						   A4110_AFE,
 						   AD4110_REG_AFE_CNTRL2,
-						   AD4110_ENABLE,
+						   no_os_field_prep(AD4110_REG_AFE_CNTRL2_IMODE_MSK, AD4110_ENABLE),
 						   AD4110_REG_AFE_CNTRL2_IMODE_MSK);
 		if (ret)
 			return ret;
@@ -356,7 +357,7 @@ int32_t ad4110_set_op_mode(struct ad4110_dev *dev, enum ad4110_op_mode mode)
 		return ad4110_spi_int_reg_write_msk(dev,
 						    A4110_AFE,
 						    AD4110_REG_AFE_CNTRL2,
-						    AD4110_ENABLE,
+						    no_os_field_prep(AD4110_REG_AFE_CNTRL2_EN_FLD_PWR_MSK, AD4110_ENABLE),
 						    AD4110_REG_AFE_CNTRL2_EN_FLD_PWR_MSK);
 
 	case AD4110_RTD_4W_MODE:
@@ -389,7 +390,7 @@ int32_t ad4110_set_op_mode(struct ad4110_dev *dev, enum ad4110_op_mode mode)
 		return ad4110_spi_int_reg_write_msk(dev,
 						    A4110_AFE,
 						    AD4110_REG_PGA_RTD_CTRL,
-						    AD4110_ENABLE,
+						    no_os_field_prep(AD4110_REG_PGA_RTD_CTRL_23W_EN_MSK, AD4110_ENABLE),
 						    AD4110_REG_PGA_RTD_CTRL_23W_EN_MSK);
 	case AD4110_RTD_2W_MODE:
 		// clear IMODE bit
@@ -405,7 +406,7 @@ int32_t ad4110_set_op_mode(struct ad4110_dev *dev, enum ad4110_op_mode mode)
 		ret = ad4110_spi_int_reg_write_msk(dev,
 						   A4110_AFE,
 						   AD4110_REG_PGA_RTD_CTRL,
-						   AD4110_ENABLE,
+						   no_os_field_prep(AD4110_REG_PGA_RTD_CTRL_23W_EN_MSK, AD4110_ENABLE),
 						   AD4110_REG_PGA_RTD_CTRL_23W_EN_MSK);
 		if (ret)
 			return ret;
@@ -420,11 +421,18 @@ int32_t ad4110_set_op_mode(struct ad4110_dev *dev, enum ad4110_op_mode mode)
 			return ret;
 
 		// enable the 100 �A pull-down current source on AIN(-)
+		ad4110_spi_int_reg_write_msk(dev,
+					     A4110_AFE,
+					     AD4110_REG_AFE_CNTRL2,
+					     no_os_field_prep(AD4110_REG_AFE_CNTRL2_AINN_DN100, AD4110_ENABLE),
+					     AD4110_REG_AFE_CNTRL2_AINN_DN100);
+
+		// Set I_EXEC_SEL too 100uA
 		return ad4110_spi_int_reg_write_msk(dev,
 						    A4110_AFE,
-						    AD4110_REG_AFE_CNTRL2,
-						    AD4110_REG_AFE_CNTRL2_AINN_DN100,
-						    AD4110_REG_AFE_CNTRL2_AINN_DN100);
+						    AD4110_REG_PGA_RTD_CTRL,
+						    AD4110_REG_PGA_RTD_CTRL_I_EXC_SEL(0x1),
+						    AD4110_REG_PGA_RTD_CTRL_I_EXC_SEL(0x7));
 	default:
 		return -1;
 	}
