@@ -65,7 +65,6 @@ int32_t adi_adrv9001_HwClose(adi_adrv9001_Device_t *device)
     int32_t recoveryAction = ADI_COMMON_ACT_NO_ACTION;
     ADI_ENTRY_EXPECT(device);
 
-    adi_adrv9001_hal_close(device->common.devHalInfo);
     recoveryAction = adi_adrv9001_hal_close(device->common.devHalInfo);
     ADI_ERROR_REPORT(&device->common,
                      ADI_COMMON_ERRSRC_ADI_HAL,
