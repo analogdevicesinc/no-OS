@@ -400,6 +400,32 @@ static int32_t stm32_gpio_irq_disable(struct no_os_irq_ctrl_desc *desc,
 	return 0;
 }
 
+/*
+ * @brief Set the interrupt priority for the current GPIO pin.
+ * @param desc           - GPIO interrupt controller descriptor.
+ * @param irq_id         - Not used, pin id is already present in desc.
+ * @param priority_level - The interrupt priority level.
+ * @return 0
+ */
+static int32_t stm32_gpio_irq_set_priority(struct no_os_irq_ctrl_desc *desc,
+		uint32_t irq_id,
+		uint32_t priority_level)
+{
+	IRQn_Type nvic_irq_id;
+	int ret;
+
+	if (!desc || !desc->extra || !IS_EXTI_GPIO_PIN(desc->irq_ctrl_id))
+		return -EINVAL;
+
+	ret = stm32_get_exti_irq_id_from_pin(desc->irq_ctrl_id, &nvic_irq_id);
+	if (ret)
+		return ret;
+
+	NVIC_SetPriority(nvic_irq_id, priority_level);
+
+	return 0;
+}
+
 /**
  * @brief stm32 specific IRQ platform ops structure
  */
@@ -412,5 +438,6 @@ const struct no_os_irq_platform_ops stm32_gpio_irq_ops = {
 	.global_disable = &stm32_gpio_irq_global_disable,
 	.enable = &stm32_gpio_irq_enable,
 	.disable = &stm32_gpio_irq_disable,
+	.set_priority = &stm32_gpio_irq_set_priority,
 	.remove = &stm32_gpio_irq_ctrl_remove
 };
