@@ -416,62 +416,62 @@ dummy_read:
 	conn->to_read -= 1;
 }
 
-/* Handle the uart events */
-static void at_callback(struct at_desc *desc, uint32_t event, uint8_t *data)
+/* Handle the uart read done */
+static void at_callback_rd_done(struct at_desc *desc)
 {
 	static const struct at_buff ready_msg = {PUI8("ready\r\n"), 7};
 
-	switch (event) {
-	case NO_OS_IRQ_READ_DONE:
-		switch (desc->callback_operation) {
-		case RESETTING_MODULE:
-			if (match_message(&ready_msg, &desc->ready_idx,
-					  desc->read_ch))
-				desc->callback_operation = READING_RESPONSES;
-			break;
-		case WAITING_SEND:
-		case READING_RESPONSES:
-			if (is_payload_message(desc, desc->read_ch)) {
-				/* New payload received */
-				desc->callback_operation = READING_PAYLOAD;
-				start_conn_read(desc, true);
-				return ;
-			}
+	switch (desc->callback_operation) {
+	case RESETTING_MODULE:
+		if (match_message(&ready_msg, &desc->ready_idx,
+				  desc->read_ch))
+			desc->callback_operation = READING_RESPONSES;
+		break;
+	case WAITING_SEND:
+	case READING_RESPONSES:
+		if (is_payload_message(desc, desc->read_ch)) {
+			/* New payload received */
+			desc->callback_operation = READING_PAYLOAD;
+			start_conn_read(desc, true);
+			return ;
+		}
 
-			if (desc->read_ch == '>' && desc->callback_operation ==
-			    WAITING_SEND) {
-				desc->callback_operation = READING_RESPONSES;
-			} else if (desc->result.len >= RESULT_BUFF_LEN) {
-				desc->errors |=
-					AT_ERROR_INTERNAL_BUFFER_OVERFLOW;
-				desc->result.len = 0;
-			} else if (!is_async_messages(desc, desc->read_ch))
-				/* Add received character to result buffer */
-				desc->result.buff[desc->result.len++] =
-					desc->read_ch;
+		if (desc->read_ch == '>' && desc->callback_operation ==
+		    WAITING_SEND) {
+			desc->callback_operation = READING_RESPONSES;
+		} else if (desc->result.len >= RESULT_BUFF_LEN) {
+			desc->errors |=
+				AT_ERROR_INTERNAL_BUFFER_OVERFLOW;
+			desc->result.len = 0;
+		} else if (!is_async_messages(desc, desc->read_ch))
+			/* Add received character to result buffer */
+			desc->result.buff[desc->result.len++] =
+				desc->read_ch;
+		break;
+	case READING_PAYLOAD:
+		/* Receiving payload from connection */
+		end_conn_read(desc);
+		if (!desc->conn[desc->current_conn].to_read) {
+			desc->callback_operation = READING_RESPONSES;
+			desc->current_conn = -1;
 			break;
-		case READING_PAYLOAD:
-			/* Receiving payload from connection */
-			end_conn_read(desc);
-			if (!desc->conn[desc->current_conn].to_read) {
-				desc->callback_operation = READING_RESPONSES;
-				desc->current_conn = -1;
-				break;
-			} else {
-				start_conn_read(desc, false);
-				return ;
-			}
-			break;
+		} else {
+			start_conn_read(desc, false);
+			return ;
 		}
 		break;
-	case NO_OS_IRQ_ERROR:
-		if (desc->callback_operation != RESETTING_MODULE)
-			desc->errors |= AT_ERROR_UART;
-		break;
-	default:
-		/* We never have to get here */
-		break;
 	}
+
+	/* Submit buffer to read the next char */
+	no_os_uart_read_nonblocking(desc->uart_desc, &desc->read_ch, 1);
+}
+
+/* Handle the uart error */
+static void at_callback_error(struct at_desc *desc)
+{
+	if (desc->callback_operation != RESETTING_MODULE)
+		desc->errors |= AT_ERROR_UART;
+
 	/* Submit buffer to read the next char */
 	no_os_uart_read_nonblocking(desc->uart_desc, &desc->read_ch, 1);
 }
@@ -908,7 +908,8 @@ int32_t at_init(struct at_desc **desc, const struct at_init_param *param)
 {
 	struct at_desc		*ldesc;
 	union in_out_param	result;
-	struct no_os_callback_desc	callback_desc;
+	struct no_os_callback_desc	callback_desc_rd;
+	struct no_os_callback_desc	callback_desc_err;
 	uint32_t		conn;
 	uint8_t			*str;
 
@@ -925,20 +926,28 @@ int32_t at_init(struct at_desc **desc, const struct at_init_param *param)
 	ldesc->uart_desc = param->uart_desc;
 	ldesc->irq_desc = param->irq_desc;
 	ldesc->uart_irq_id = param->uart_irq_id;
-	callback_desc.legacy_callback =
-		(void (*)(void*, uint32_t, void*))at_callback;
-	callback_desc.ctx = ldesc;
-	callback_desc.legacy_config = param->uart_irq_conf;
+
+	callback_desc_rd.ctx = ldesc;
+	callback_desc_rd.event = NO_OS_EVT_UART_RX_COMPLETE;
+	callback_desc_rd.handle = ldesc->uart_desc->extra;
+	callback_desc_rd.peripheral = NO_OS_UART_IRQ;
+	callback_desc_rd.callback = (void (*)(void *))at_callback_rd_done;
 	if (0 != no_os_irq_register_callback(ldesc->irq_desc,
 					     ldesc->uart_irq_id,
-					     &callback_desc))
+					     &callback_desc_rd))
+		goto free_desc;
+	callback_desc_err.ctx = ldesc;
+	callback_desc_err.event = NO_OS_EVT_UART_ERROR;
+	callback_desc_err.handle = ldesc->uart_desc->extra;
+	callback_desc_err.peripheral = NO_OS_UART_IRQ;
+	callback_desc_err.callback = (void (*)(void *))at_callback_error;
+	if (0 != no_os_irq_register_callback(ldesc->irq_desc,
+					     ldesc->uart_irq_id,
+					     &callback_desc_err))
 		goto free_desc;
 
 	if (0 != no_os_irq_enable(ldesc->irq_desc, ldesc->uart_irq_id))
 		goto free_irq;
-
-	/* The read will be handled by the callback */
-	no_os_uart_read_nonblocking(ldesc->uart_desc, &ldesc->read_ch, 1);
 
 	/* Link buffer structure with static buffers */
 	ldesc->result.buff = ldesc->buffers.result_buff;
@@ -947,6 +956,9 @@ int32_t at_init(struct at_desc **desc, const struct at_init_param *param)
 	ldesc->cmd.len = CMD_BUFF_LEN;
 
 	ldesc->callback_operation = READING_RESPONSES;
+
+	/* The read will be handled by the callback */
+	no_os_uart_read_nonblocking(ldesc->uart_desc, &ldesc->read_ch, 1);
 
 	/* Disable echoing response */
 	if (0 != stop_echo(ldesc))
