@@ -61,8 +61,8 @@
 #endif //ADUCM_PLATFORM
 
 #ifdef USE_TCP_SOCKET
-#define WIFI_SSID	"RouterSSID"
-#define WIFI_PWD	"******"
+#define WIFI_SSID	"AnalogDevices"
+#define WIFI_PWD	"Analog123!"
 #endif /* USE_TCP_SOCKET */
 
 #endif // __PARAMETERS_H__

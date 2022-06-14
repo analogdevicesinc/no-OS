@@ -21,5 +21,24 @@ INCS += $(DRIVERS)/platform/$(PLATFORM)/i2c_extra.h
 
 SRCS += $(DRIVERS)/api/no_os_spi.c
 
+ifeq '$(USE_TCP_SOCKET)' 'y'
+CFLAGS += -DUSE_TCP_SOCKET
+endif
+ENABLE_IIO_NETWORK = y
+
+ifeq (y,$(strip $(ENABLE_IIO_NETWORK)))
+DISABLE_SECURE_SOCKET ?= y
+
+SRC_DIRS += $(NO-OS)/network
+
+#SRCS += $(NO-OS)/util/no_os_circular_buffer.c \
+#	$(PLATFORM_DRIVERS)/no_os_timer.c
+#	
+#INCS += $(INCLUDE)/no_os_circular_buffer.h \
+#	$(INCLUDE)/no_os_timer.h           \
+#	$(PLATFORM_DRIVERS)/timer_extra.h  \
+#	$(PLATFORM_DRIVERS)/rtc_extra.h
+endif
+
 TINYIIOD=y
 
