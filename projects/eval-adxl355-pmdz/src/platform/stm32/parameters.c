@@ -56,12 +56,7 @@ struct stm32_spi_init_param adxl355_spi_extra_ip  = {
 };
 
 #ifdef IIO_TRIGGER_EXAMPLE
-EXTI_ConfigTypeDef adxl355_exti_ip = {
-	.Line = EXTI_LINE_2,
-	.Trigger = EXTI_TRIGGER_RISING,
-	.GPIOSel = EXTI_GPIOA,
-	.Mode = EXTI_MODE_INTERRUPT,
+struct stm32_gpio_irq_init_param adxl355_gpio_irq_extra_ip = {
+	.port_nb = 0, /* Port A */
 };
-
-EXTI_HandleTypeDef adxl355_gpio_irq_extra;
 #endif

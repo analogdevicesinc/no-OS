@@ -61,6 +61,7 @@ struct event_list {
 	struct no_os_list_desc *actions;
 };
 
+static bool initialized =  false;
 
 static struct event_list _events[] = {
 	[NO_OS_EVT_GPIO] = {.event = NO_OS_EVT_GPIO, .hal_event = HAL_EXTI_COMMON_CB_ID},
@@ -72,39 +73,10 @@ static struct event_list _events[] = {
 #endif
 };
 
-int32_t irq_action_cmp(void *data1, void *data2)
+static int32_t irq_action_cmp(void *data1, void *data2)
 {
 	return (int32_t)((struct irq_action *)data1)->handle -
 	       (int32_t)((struct irq_action *)data2)->handle;
-}
-
-int32_t irq_action_cmp2(void *data1, void *data2)
-{
-	return (((EXTI_HandleTypeDef *)((struct irq_action *)data1)->handle)->Line &
-		EXTI_PIN_MASK) -
-	       (((EXTI_HandleTypeDef *)((struct irq_action *)data2)->handle)->Line &
-		EXTI_PIN_MASK);
-}
-
-void HAL_GPIO_EXTI_Callback(uint16_t pin)
-{
-	struct event_list *ee = &_events[NO_OS_EVT_GPIO];
-	struct irq_action *a;
-	EXTI_HandleTypeDef hexti = {.Line = no_os_find_first_set_bit(pin)};
-	struct irq_action key = {.handle = &hexti};
-	int ret;
-	if (EXTI->PR & pin) {
-		/* Clear pending bit */
-		EXTI->PR = pin;
-
-		/* Find & call callback */
-		ret = no_os_list_read_find(ee->actions, (void **)&a, &key);
-		if (ret < 0)
-			return;
-
-		if(a->callback)
-			a->callback(a->ctx);
-	}
 }
 
 #ifdef HAL_TIM_MODULE_ENABLED
@@ -171,14 +143,15 @@ void _ErrorCallback(UART_HandleTypeDef *huart)
 int32_t stm32_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
 			    const struct no_os_irq_init_param *param)
 {
-	struct no_os_irq_ctrl_desc *descriptor;
-
+	static struct no_os_irq_ctrl_desc *descriptor;
 	if (!param)
 		return -EINVAL;
 
-	descriptor = calloc(1, sizeof(*descriptor));
-	if (!descriptor)
-		return -ENOMEM;
+	if (!initialized) {
+		descriptor = calloc(1, sizeof(*descriptor));
+		if (!descriptor)
+			return -ENOMEM;
+	}
 
 	// unused, there is only 1 interrupt controller and that is NVIC
 	descriptor->irq_ctrl_id = param->irq_ctrl_id;
@@ -197,6 +170,8 @@ int32_t stm32_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
  */
 int32_t stm32_irq_ctrl_remove(struct no_os_irq_ctrl_desc *desc)
 {
+	initialized = false;
+
 	if (desc)
 		free(desc);
 
@@ -204,9 +179,9 @@ int32_t stm32_irq_ctrl_remove(struct no_os_irq_ctrl_desc *desc)
 }
 
 /**
- * @brief Set the EXTI line trigger level.
- * @param desc - gpio irq descriptor.
- * @param irq_id - the pin number
+ * @brief Unused.
+ * @param desc -irq descriptor.
+ * @param irq_id - The interrupt vector entry id of the peripheral.
  * @param level - the trigger condition.
  * @return -ENOSYS
  */
@@ -214,31 +189,7 @@ int32_t stm32_trigger_level_set(struct no_os_irq_ctrl_desc *desc,
 				uint32_t irq_id,
 				enum no_os_irq_trig_level level)
 {
-	int ret;
-	EXTI_ConfigTypeDef config;
-	ret = HAL_EXTI_GetConfigLine(desc->extra, &config);
-	if (ret != HAL_OK)
-		return -EFAULT;
-
-	switch (level) {
-	case NO_OS_IRQ_EDGE_FALLING:
-		config.Trigger = EXTI_TRIGGER_FALLING;
-		break;
-	case NO_OS_IRQ_EDGE_RISING:
-		config.Trigger = EXTI_TRIGGER_RISING;
-		break;
-	case NO_OS_IRQ_EDGE_BOTH:
-		config.Trigger = EXTI_TRIGGER_RISING_FALLING;
-		break;
-	default:
-		return -EINVAL;
-	}
-
-	ret = HAL_EXTI_SetConfigLine(desc->extra, &config);
-	if (ret != HAL_OK)
-		return -EFAULT;
-
-	return 0;
+	return -ENOSYS;
 }
 
 /**
@@ -256,38 +207,12 @@ int32_t stm32_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 	pUART_CallbackTypeDef pUartCallback;
 #ifdef HAL_TIM_MODULE_ENABLED
 	pTIM_CallbackTypeDef pTimCallback;
-	struct irq_action action_key = {.handle = desc->extra};
+	struct irq_action action_key = {.handle = cb->handle};
 #endif
 	struct irq_action *li;
 	uint32_t hal_event = _events[cb->event].hal_event;
 
 	switch (cb->peripheral) {
-	case NO_OS_GPIO_IRQ:
-		if (hal_event != HAL_EXTI_COMMON_CB_ID) {
-			ret = -EINVAL;
-			break;
-		}
-
-		if (_events[cb->event].actions == NULL) {
-			ret = no_os_list_init(&_events[cb->event].actions, NO_OS_LIST_PRIORITY_LIST,
-					      irq_action_cmp2);
-			if (ret < 0)
-				return ret;
-		}
-
-		li = calloc(1, sizeof(struct irq_action));
-		if(!li)
-			return -ENOMEM;
-
-		li->handle = desc->extra;
-		li->callback = cb->callback;
-		li->ctx = cb->ctx;
-		ret = no_os_list_add_last(_events[cb->event].actions, li);
-		if (ret < 0) {
-			free(li);
-			return ret;
-		}
-		break;
 	case NO_OS_UART_IRQ:
 		switch(hal_event) {
 		case HAL_UART_TX_COMPLETE_CB_ID:
@@ -303,7 +228,7 @@ int32_t stm32_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 			return -EINVAL;
 		};
 
-		ret = HAL_UART_RegisterCallback(desc->extra, hal_event, pUartCallback);
+		ret = HAL_UART_RegisterCallback(cb->handle, hal_event, pUartCallback);
 		if (ret != HAL_OK) {
 			ret = -EFAULT;
 			break;
@@ -320,7 +245,7 @@ int32_t stm32_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 		if(!li)
 			return -ENOMEM;
 
-		li->handle = desc->extra;
+		li->handle = cb->handle;
 		li->callback = cb->callback;
 		li->ctx = cb->ctx;
 		ret = no_os_list_add_last(_events[cb->event].actions, li);
@@ -339,7 +264,7 @@ int32_t stm32_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 			return -EINVAL;
 		};
 
-		ret = HAL_TIM_RegisterCallback(desc->extra, hal_event, pTimCallback);
+		ret = HAL_TIM_RegisterCallback(cb->handle, hal_event, pTimCallback);
 		if (ret != HAL_OK) {
 			ret = -EFAULT;
 			break;
@@ -363,7 +288,7 @@ int32_t stm32_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 			if(!li)
 				return -ENOMEM;
 
-			li->handle = desc->extra;
+			li->handle = cb->handle;
 			li->callback = cb->callback;
 			li->ctx = cb->ctx;
 			ret = no_os_list_add_last(_events[cb->event].actions, li);
@@ -372,7 +297,7 @@ int32_t stm32_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 				return ret;
 			}
 		} else {
-			li->handle = desc->extra;
+			li->handle = cb->handle;
 			li->callback = cb->callback;
 			li->ctx = cb->ctx;
 		}
@@ -402,26 +327,22 @@ int32_t stm32_irq_unregister_callback(struct no_os_irq_ctrl_desc *desc,
 	uint32_t hal_event = _events[cb->event].hal_event;
 
 	switch (cb->peripheral) {
-	case NO_OS_GPIO_IRQ:
-		key.handle = desc->extra;
-		ret = no_os_list_get_find(_events[cb->event].actions, &discard, &key);
-		break;
 	case NO_OS_UART_IRQ:
-		key.handle = desc->extra;
+		key.handle = cb->handle;
 		ret = no_os_list_get_find(_events[cb->event].actions, &discard, &key);
 		if (ret < 0)
 			break;
-		ret = HAL_UART_UnRegisterCallback(desc->extra, hal_event);
+		ret = HAL_UART_UnRegisterCallback(cb->handle, hal_event);
 		if (ret != HAL_OK)
 			ret = -EFAULT;
 		break;
 #ifdef HAL_TIM_MODULE_ENABLED
 	case NO_OS_TIM_IRQ:
-		key.handle = desc->extra;
+		key.handle = cb->handle;
 		ret = no_os_list_get_find(_events[cb->event].actions, &discard, &key);
 		if (ret < 0)
 			break;
-		ret = HAL_TIM_UnRegisterCallback(desc->extra, hal_event);
+		ret = HAL_TIM_UnRegisterCallback(cb->handle, hal_event);
 		if (ret != HAL_OK)
 			ret = -EFAULT;
 		break;
