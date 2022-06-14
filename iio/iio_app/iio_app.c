@@ -39,8 +39,6 @@
 
 #ifdef IIO_SUPPORT
 
-#undef USE_TCP_SOCKET
-
 #include <stdlib.h>
 #include <stdio.h>
 #include "iio.h"
