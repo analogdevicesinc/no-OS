@@ -45,6 +45,7 @@
 /******************************************************************************/
 #include "stm32_hal.h"
 #include "stm32_irq.h"
+#include "stm32_gpio_irq.h"
 #include "stm32_spi.h"
 #include "stm32_gpio.h"
 #include "stm32_uart.h"
@@ -76,18 +77,16 @@ extern struct stm32_uart_init_param adxl355_uart_extra_ip;
 extern struct stm32_spi_init_param adxl355_spi_extra_ip;
 
 #ifdef IIO_TRIGGER_EXAMPLE
+extern struct stm32_gpio_irq_init_param adxl355_gpio_irq_extra_ip;
 /* Setting for PortA Pin2 used for DATA_READY.
    Has to be adapted accordingly if another pin is used.
  */
-#define ADXL355_GPIO_TRIG_IRQ_ID     EXTI2_IRQn
-#define ADXL355_GPIO_CB_HANDLE       NULL
+#define ADXL355_GPIO_TRIG_IRQ_ID     0    /* Not used in stm32 platform */
+#define ADXL355_GPIO_CB_HANDLE       NULL /* Not used in stm32 platform */
 
-#define GPIO_IRQ_ID             EXTI2_IRQn
-#define GPIO_IRQ_OPS            &stm32_irq_ops
-#define GPIO_IRQ_EXTRA          &adxl355_gpio_irq_extra
-
-extern EXTI_HandleTypeDef adxl355_gpio_irq_extra;
-extern EXTI_ConfigTypeDef adxl355_exti_ip;
+#define GPIO_IRQ_ID             2 /* Pin 2 */
+#define GPIO_IRQ_OPS            &stm32_gpio_irq_ops
+#define GPIO_IRQ_EXTRA          &adxl355_gpio_irq_extra_ip
 #endif
 
 #endif /* __PARAMETERS_H__ */

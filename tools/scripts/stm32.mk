@@ -35,6 +35,7 @@ PROJECT_BUILDROOT = $(BUILD_DIR)/app
 PROJECT_BUILD = $(PROJECT_BUILDROOT)/Core
 RELEASE_DIR = $(PROJECT_BUILDROOT)/Release
 DEBUG_DIR = $(PROJECT_BUILDROOT)/Debug
+EXTI_GEN_FILE = $(NO-OS)/drivers/platform/stm32/stm32_gpio_irq_generated.c
 
 # Add all .c files related to stm32 to PLATFORM_SRCS in full path
 PLATFORM_SRCS += $(call rwildcard, $(PROJECT_BUILDROOT)/Drivers, *.c)
@@ -101,6 +102,8 @@ $(PROJECT_TARGET)_configure:
 		-import $(PROJECT_BUILDROOT) -data $(BUILD_DIR) \
 		$(HIDE)
 	$(MUTE) sed -i  's/HAL_NVIC_EnableIRQ(\EXTI/\/\/ HAL_NVIC_EnableIRQ\(EXTI/' $(PROJECT_BUILD)/Src/generated_main.c $(HIDE)
+	$(shell python3 $(PLATFORM_TOOLS)/exti_script.py $(ASM_SRCS) $(EXTI_GEN_FILE))
+	$(MUTE) $(call copy_file, $(EXTI_GEN_FILE), $(PROJECT_BUILD)/Src/stm32_gpio_irq_generated.c) $(HIDE)
 
 $(PLATFORM)_sdkopen:
 	$(STM32CUBEIDE)/$(IDE) -nosplash -import $(PROJECT_BUILDROOT) -data $(BUILD_DIR) &

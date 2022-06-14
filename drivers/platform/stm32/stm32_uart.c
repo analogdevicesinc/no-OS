@@ -144,6 +144,7 @@ int32_t no_os_uart_init(struct no_os_uart_desc **desc,
 		sud->rx_callback.ctx = descriptor;
 		sud->rx_callback.event = NO_OS_EVT_UART_RX_COMPLETE;
 		sud->rx_callback.peripheral = NO_OS_UART_IRQ;
+		sud->rx_callback.handle = sud->huart;
 
 		ret = no_os_irq_register_callback(sud->nvic, descriptor->irq_id,
 						  &sud->rx_callback);
