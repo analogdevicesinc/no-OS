@@ -193,7 +193,7 @@ static int max_gpio_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 			return -ENOMEM;
 
 		action->irq_id = irq_id;
-		action->handle = callback_desc->handle;
+		action->handle = MXC_GPIO_GET_GPIO(desc->irq_ctrl_id);
 		action->ctx = callback_desc->ctx;
 		action->callback = callback_desc->callback;
 
@@ -202,14 +202,14 @@ static int max_gpio_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 			goto free_action;
 	} else {
 		action->irq_id = irq_id;
-		action->handle = callback_desc->handle;
+		action->handle = MXC_GPIO_GET_GPIO(desc->irq_ctrl_id);
 		action->ctx = callback_desc->ctx;
 		action->callback = callback_desc->callback;
 	}
 
 	cfg = (mxc_gpio_cfg_t) {
 		.mask = NO_OS_BIT(irq_id),
-		.port = callback_desc->handle
+		.port = MXC_GPIO_GET_GPIO(desc->irq_ctrl_id)
 	};
 	MXC_GPIO_RegisterCallback(&cfg, gpio_irq_callback, action);
 
@@ -244,7 +244,7 @@ static int max_gpio_irq_unregister_callback(struct no_os_irq_ctrl_desc *desc,
 		return -ENODEV;
 
 	cfg = (mxc_gpio_cfg_t) {
-		.port = discard_action->handle,
+		.port = MXC_GPIO_GET_GPIO(desc->irq_ctrl_id),
 		.mask = NO_OS_BIT(irq_id)
 	};
 	MXC_GPIO_RegisterCallback(&cfg, NULL, NULL);
@@ -356,8 +356,8 @@ static int max_gpio_irq_global_disable(struct no_os_irq_ctrl_desc *desc)
  * @return 0
  */
 static int max_gpio_irq_set_priority(struct no_os_irq_ctrl_desc *desc,
-				uint32_t irq_id,
-				uint32_t priority_level)
+				     uint32_t irq_id,
+				     uint32_t priority_level)
 {
 	uint32_t id = MXC_GPIO_GET_IRQ(desc->irq_ctrl_id);
 	NVIC_SetPriority(id, priority_level);
