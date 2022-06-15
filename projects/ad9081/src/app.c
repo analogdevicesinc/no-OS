@@ -75,6 +75,16 @@ static int16_t adc_buffer[MAX_ADC_BUF_SAMPLES] __attribute__ ((aligned));
 extern struct axi_jesd204_rx *rx_jesd;
 extern struct axi_jesd204_tx *tx_jesd;
 
+void dcache_invalidate_range(uint32_t address, uint32_t bytes_count)
+{
+	Xil_DCacheInvalidateRange(address, bytes_count);
+}
+
+void dcache_flush_range(uint32_t address, uint32_t bytes_count)
+{
+	Xil_DCacheFlushRange(address, bytes_count);
+}
+
 int main(void)
 {
 	struct no_os_clk app_clk[MULTIDEVICE_INSTANCE_COUNT];
@@ -309,10 +319,7 @@ int main(void)
 	iio_axi_adc_init_par = (struct iio_axi_adc_init_param) {
 		.rx_adc = rx_adc,
 		.rx_dmac = rx_dmac,
-#ifndef PLATFORM_MB
-		.dcache_invalidate_range = (void (*)(uint32_t,
-						     uint32_t))Xil_DCacheInvalidateRange
-#endif
+		.dcache_invalidate_range = dcache_invalidate_range,
 	};
 
 	status = iio_axi_adc_init(&iio_axi_adc_desc, &iio_axi_adc_init_par);
@@ -327,9 +334,7 @@ int main(void)
 	iio_axi_dac_init_par = (struct iio_axi_dac_init_param) {
 		.tx_dac = tx_dac,
 		.tx_dmac = tx_dmac,
-#ifndef PLATFORM_MB
-		.dcache_flush_range = (void (*)(uint32_t, uint32_t))Xil_DCacheFlushRange,
-#endif
+		.dcache_flush_range = dcache_flush_range,
 	};
 
 	status = iio_axi_dac_init(&iio_axi_dac_desc, &iio_axi_dac_init_par);
