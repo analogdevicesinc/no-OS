@@ -353,9 +353,10 @@ int32_t ad469x_std_pin_pairing(struct ad469x_dev *dev,
 {
 	dev->std_seq_pin_pairing = pin_pair;
 
-	return ad469x_spi_reg_write(dev,
-				    AD469x_REG_CONFIG_IN(0),
-				    AD469x_REG_CONFIG_IN_MODE(pin_pair));
+	return ad469x_spi_write_mask(dev,
+				     AD469x_REG_CONFIG_IN(0),
+				     AD469x_REG_CONFIG_IN_MODE_MASK,
+				     AD469x_REG_CONFIG_IN_MODE(pin_pair));
 }
 
 /**
