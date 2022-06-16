@@ -121,6 +121,14 @@ int iio_timer_trigger_example_main()
 	if (ret)
 		return ret;
 
+	ret = no_os_irq_set_priority(adc_demo_irq_desc, ADC_DEMO_TIMER_IRQ_ID, 1);
+	if (ret)
+		return ret;
+
+	ret = no_os_irq_set_priority(dac_demo_irq_desc, DAC_DEMO_TIMER_IRQ_ID, 1);
+	if (ret)
+		return ret;
+
 	adc_demo_timer_irq_ip.extra = adc_demo_tim_desc->extra;
 	dac_demo_timer_irq_ip.extra = dac_demo_tim_desc->extra;
 
