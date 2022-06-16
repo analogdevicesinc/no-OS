@@ -95,10 +95,6 @@ int main()
 	if (ret)
 		return ret;
 
-	ret = no_os_irq_set_priority(nvic_desc, NVIC_GPIO_IRQ, 1);
-	if (ret)
-		return ret;
-
 	ret = no_os_irq_enable(nvic_desc, NVIC_GPIO_IRQ);
 	if (ret)
 		return ret;
