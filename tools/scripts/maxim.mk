@@ -36,6 +36,8 @@ TARGET_NUMBER:=$(word 2,$(subst x, ,$(TARGET)))
 TARGET_UCASE=$(addprefix MAX,$(TARGET_NUMBER))
 TARGET_LCASE=$(addprefix max,$(TARGET_NUMBER))
 
+PLATFORM_DRIVERS := $(NO-OS)/drivers/platform/maxim/$(TARGET)
+
 ifeq ($(TARGET), max32655)
 include $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/$(TARGET_UCASE)/Source/GCC/$(TARGET)_memory.mk
 endif
