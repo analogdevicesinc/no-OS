@@ -114,6 +114,14 @@
 #define AD469x_SETUP_CYC_CTRL_MASK		(0x01 << 1)
 #define AD469x_SETUP_CYC_CTRL_SINGLE(x)		((x & 0x01) << 1)
 
+/* AD469x_REG_REF_CTRL */
+#define AD469x_REG_REF_VREF_SET_MASK		(0x07 << 2)
+#define AD469x_REG_REF_VREF_SET(x)          ((x & 0x07) << 2)
+#define AD469x_REG_REF_VREF_REFHIZ_MASK		(0x07 << 1)
+#define AD469x_REG_REF_VREF_REFHIZ(x)		((x & 0x01) << 1)
+#define AD469x_REG_REF_VREF_REFBUF_MASK		0x01
+#define AD469x_REG_REF_VREF_REFBUF(x)		(x & 0x01)
+
 /* AD469x_REG_GP_MODE */
 #define AD469x_GP_MODE_BUSY_GP_EN_MASK		(0x01 << 1)
 #define AD469x_GP_MODE_BUSY_GP_EN(x)		((x & 0x01) << 1)
