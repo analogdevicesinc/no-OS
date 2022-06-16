@@ -86,6 +86,11 @@ int iio_trigger_example_main()
 	ret = no_os_irq_ctrl_init(&adxl355_irq_desc, &adxl355_gpio_irq_ip);
 	if (ret)
 		return ret;
+
+	ret = no_os_irq_set_priority(adxl355_irq_desc, adxl355_gpio_trig_ip.irq_id, 1);
+	if (ret)
+		return ret;
+
 	adxl355_gpio_trig_ip.irq_ctrl = adxl355_irq_desc;
 
 	/* Initialize hardware trigger */
