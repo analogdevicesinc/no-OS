@@ -76,7 +76,7 @@ extern stm32_timer_init_param adc_demo_xtip;
 #define TIMER_OPS                   &stm32_timer_ops
 
 /* Adc Demo Timer trigger settings */
-TIM_HandleTypeDef htim13;
+extern TIM_HandleTypeDef htim13;
 #define ADC_DEMO_TIMER_IRQ_ID       TIM8_UP_TIM13_IRQn
 #define TIMER_IRQ_OPS               &stm32_irq_ops
 #define ADC_DEMO_TIMER_IRQ_EXTRA    &htim13
@@ -94,7 +94,7 @@ extern stm32_timer_init_param dac_demo_xtip;
 #define TIMER_OPS                   &stm32_timer_ops
 
 /* Dac Demo Timer trigger settings */
-TIM_HandleTypeDef htim14;
+extern TIM_HandleTypeDef htim14;
 #define DAC_DEMO_TIMER_IRQ_ID       TIM8_TRG_COM_TIM14_IRQn
 #define TIMER_IRQ_OPS               &stm32_irq_ops
 #define DAC_DEMO_TIMER_IRQ_EXTRA    &htim14
