@@ -161,12 +161,12 @@ int main(void)
 		.jesd_rx_clk = &jesd_clk[0],
 		.sysref_coupling_ac_en = 0,
 		.multidevice_instance_count = 1,
-#ifdef QUAD_MXFE
-		.jesd_sync_pins_01_swap_enable = true,
-#else
 		.jesd_sync_pins_01_swap_enable = false,
-#endif
+#ifdef QUAD_MXFE
+		.jesd_sync_pin_0a_cmos_enable = true,
+#else
 		.jesd_sync_pin_0a_cmos_enable = false,
+#endif
 		.lmfc_delay_dac_clk_cycles = 0,
 		.nco_sync_ms_extra_lmfc_num = 0,
 		.nco_sync_direct_sysref_mode_enable = 0,
@@ -258,14 +258,39 @@ int main(void)
 	status = no_os_gpio_set_value(ad9081_gpio0_mux, 1);
 	if (status)
 		return status;
+
+	struct no_os_gpio_init_param	hmc540_gpio_init = {
+		.platform_ops = &xil_gpio_ops,
+		.extra = &xil_gpio_param
+	};
+	hmc540_gpio_init.number = 35;
+	no_os_gpio_desc *hmc540_gpio_v1;
+	no_os_gpio_get(&hmc540_gpio_v1, &hmc540_gpio_init);
+	no_os_gpio_set_value(hmc540_gpio_v1, 0);
+
+	hmc540_gpio_init.number = 36;
+	no_os_gpio_desc *hmc540_gpio_v2;
+	no_os_gpio_get(&hmc540_gpio_v2, &hmc540_gpio_init);
+	no_os_gpio_set_value(hmc540_gpio_v2, 0);
+
+	hmc540_gpio_init.number = 37;
+	no_os_gpio_desc *hmc540_gpio_v3;
+	no_os_gpio_get(&hmc540_gpio_v3, &hmc540_gpio_init);
+	no_os_gpio_set_value(hmc540_gpio_v3, 0);
+
+	hmc540_gpio_init.number = 38;
+	no_os_gpio_desc *hmc540_gpio_v4;
+	no_os_gpio_get(&hmc540_gpio_v4, &hmc540_gpio_init);
+	no_os_gpio_set_value(hmc540_gpio_v4, 0);
 #endif
 
 	status = app_clock_init(app_clk);
 	if (status != 0)
 		printf("app_clock_init() error: %" PRId32 "\n", status);
 
-	status = app_jesd_init(jesd_clk,
-			       500000, 250000, 250000, 10000000, 10000000);
+	status = app_jesd_init(jesd_clk, ADXCVR_REF_CLK_KHZ,
+				ADXCVR_RX_DEV_CLK_KHZ, ADXCVR_TX_DEV_CLK_KHZ,
+				ADXCVR_RX_LANE_CLK_KHZ, ADXCVR_TX_LANE_CLK_KHZ);
 	if (status != 0)
 		printf("app_jesd_init() error: %" PRId32 "\n", status);
 
