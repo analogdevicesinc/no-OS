@@ -114,6 +114,11 @@ struct hmc7044_init_param {
 	struct hmc7044_chan_spec	*channels;
 };
 
+#define HMC7044_DRIVER_MODE_CML		0
+#define HMC7044_DRIVER_MODE_LVPECL	1
+#define HMC7044_DRIVER_MODE_LVDS	2
+#define HMC7044_DRIVER_MODE_CMOS	3
+
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
