@@ -251,11 +251,11 @@ uint32_t axi_jesd204_rx_status_read(struct axi_jesd204_rx *jesd)
 		if (jesd->encoder == JESD204_RX_ENCODER_64B66B) {
 			link_rate = NO_OS_DIV_ROUND_CLOSEST(clock_rate, 66);
 			lmfc_rate = (clock_rate * 8) /
-				    (66 * ((link_config0 & 0xFF) + 1));
+				    (66 * ((link_config0 & 0x3FF) + 1));
 		} else {
 			link_rate = NO_OS_DIV_ROUND_CLOSEST(clock_rate, 40);
 			lmfc_rate = clock_rate /
-				    (10 * ((link_config0 & 0xFF) + 1));
+				    (10 * ((link_config0 & 0x3FF) + 1));
 		}
 		printf("\tLane rate: %"PRIu32".%.3"PRIu32" MHz\n"
 		       "\tLane rate / %d: %"PRIu32".%.3"PRIu32" MHz\n"
