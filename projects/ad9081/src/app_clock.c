@@ -104,55 +104,49 @@ int32_t app_clock_init(struct no_os_clk dev_refclk[MULTIDEVICE_INSTANCE_COUNT])
 #ifdef QUAD_MXFE
 	struct hmc7044_chan_spec chan_spec[] = {
 		{
-			.num = 0,				// FPGA_REFCLK
-			.divider = 1,				// 500 MHz
-			.driver_mode = 2,			// LVDS
+			.num = 0,	// FPGA_REFCLK
+			.divider = HMC7043_FPGA_XCVR_CLKDIV,
+			.driver_mode = HMC7044_DRIVER_MODE_LVDS,
 		}, {
-			.num = 1,				// SYSREF_MXFE0
-			.divider = 256,				// 1.953125 MHz
-			.driver_mode = 2,			// LVDS
-			.start_up_mode_dynamic_enable = true,
-			.high_performance_mode_dis = true,
-			.coarse_delay = 0,
-			.fine_delay = 24,
-			.out_mux_mode = 1,
-		}, {
-			.num = 3,				// SYSREF_MXFE1
-			.divider = 256,				// 1.953125 MHz
-			.driver_mode = 2,			// LVDS
-			.start_up_mode_dynamic_enable = true,
-			.high_performance_mode_dis = true,
-			.coarse_delay = 1,
-			.fine_delay = 0,
-			.out_mux_mode = 0,
-		}, {
-			.num = 5,				// SYSREF_MXFE2
-			.divider = 256,				// 1.953125 MHz
-			.driver_mode = 2,			// LVDS
-			.start_up_mode_dynamic_enable = true,
-			.high_performance_mode_dis = true,
-			.coarse_delay = 0,
-			.fine_delay = 16,
-			.out_mux_mode = 1,
-		}, {
-			.num = 7,				// SYSREF_MXFE3
-			.divider = 256,				// 1.953125 MHz
-			.driver_mode = 2,			// LVDS
-			.start_up_mode_dynamic_enable = true,
-			.high_performance_mode_dis = true,
+			.num = 1,	// SYSREF_FPGA
+			.divider = HMC7043_SYSREF_CLKDIV,
+			.driver_mode = HMC7044_DRIVER_MODE_LVPECL,
 			.coarse_delay = 0,
 			.fine_delay = 0,
 			.out_mux_mode = 0,
 		}, {
-			.num = 8,				// CORE_LINK_CLK
-			.divider = 2,				// 250 MHz
-			.driver_mode = 2,			// LVDS
+			.num = 2,	// RX_CORE_LINK_CLK
+			.divider = HMC7043_FPGA_LINK_CLKDIV_RX,
+			.driver_mode = HMC7044_DRIVER_MODE_LVDS,
 		}, {
-			.num = 9,				// SYSREF_FPGA
-			.divider = 256,				// 1.953125 MHz
-			.driver_mode = 2,			// LVDS
-			.start_up_mode_dynamic_enable = true,
-			.high_performance_mode_dis = true,
+			.num = 4,	// TX_CORE_LINK_CLK
+			.divider = HMC7043_FPGA_LINK_CLKDIV_TX,
+			.driver_mode = HMC7044_DRIVER_MODE_LVDS,
+		}, {
+			.num = 7,	// SYSREF_MXFE0
+			.divider = HMC7043_SYSREF_CLKDIV,
+			.driver_mode = HMC7044_DRIVER_MODE_LVPECL,
+			.coarse_delay = 0,
+			.fine_delay = 0,
+			.out_mux_mode = 0,
+		}, {
+			.num = 9,	// SYSREF_MXFE1
+			.divider = HMC7043_SYSREF_CLKDIV,
+			.driver_mode = HMC7044_DRIVER_MODE_LVPECL,
+			.coarse_delay = 0,
+			.fine_delay = 0,
+			.out_mux_mode = 0,
+		}, {
+			.num = 11,	// SYSREF_MXFE2
+			.divider = HMC7043_SYSREF_CLKDIV,
+			.driver_mode = HMC7044_DRIVER_MODE_LVPECL,
+			.coarse_delay = 0,
+			.fine_delay = 0,
+			.out_mux_mode = 0,
+		}, {
+			.num = 13,	// SYSREF_MXFE3
+			.divider = HMC7043_SYSREF_CLKDIV,
+			.driver_mode = HMC7044_DRIVER_MODE_LVPECL,
 			.coarse_delay = 0,
 			.fine_delay = 0,
 			.out_mux_mode = 0,
@@ -194,7 +188,13 @@ int32_t app_clock_init(struct no_os_clk dev_refclk[MULTIDEVICE_INSTANCE_COUNT])
 	if (ret)
 		return ret;
 
-	ret = no_os_gpio_set_value(adrf5020_ctrl, 1);
+#if ADRF4360_RFx_FREQUENCY_HZ < 8000000000
+#define ADF4371_OUTPUT	1
+		ret = no_os_gpio_set_value(adrf5020_ctrl, 0); /* output-low for the RF2 <-> clk-rfaux8 output */
+#else
+#define ADF4371_OUTPUT	2
+		ret = no_os_gpio_set_value(adrf5020_ctrl, 1); /* output-high for the RF2 <-> clk-rf16 output */
+#endif
 	if (ret)
 		return ret;
 
@@ -308,15 +308,15 @@ int32_t app_clock_init(struct no_os_clk dev_refclk[MULTIDEVICE_INSTANCE_COUNT])
 #ifdef QUAD_MXFE
 	struct adf4371_chan_spec adf_chan_spec[1] = {
 		{
-			.num = 2,
-			.power_up_frequency = 12000000000,
+			.num = ADF4371_OUTPUT,
+			.power_up_frequency = ADRF4360_RFx_FREQUENCY_HZ,
 		}
 	};
 
 	struct adf4371_init_param adf4371_param = {
 		.spi_init = &clkchip_spi_init_param,
 		.spi_3wire_enable = true,
-		.clkin_frequency = 500000000,
+		.clkin_frequency = CLKIN_J41_FREQ_HZ,
 		.muxout_select = 1,
 		.num_channels = 1,
 		.channels = adf_chan_spec
