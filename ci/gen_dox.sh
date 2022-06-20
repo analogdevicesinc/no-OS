@@ -66,7 +66,7 @@ The following sections contain code documentation for ADI no-OS drivers.
 						fi
 					done
 
-					if [ -z "$EXCLUDE_PART" ]
+					if [[ "$EXCLUDE_PART" -eq 0 ]]
 					then
 						#add link to driver
 						append_to_dox "- \link_to_subdir{/drivers/$(basename -- ${drv_type})/$(basename -- ${part}) \"$(basename -- ${part^^})\"}" drivers_page.dox
