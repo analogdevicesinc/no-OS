@@ -1134,7 +1134,8 @@ static int hmc7044_jesd204_link_pre_setup(struct jesd204_dev *jdev,
 				__func__, __LINE__, hmc->channels[i].num, hmc->jdev_lmfc_lemc_gcd);
 
 			hmc7044_clk_round_rate(hmc, hmc->jdev_lmfc_lemc_gcd, &rate);
-			if (rate == (uint64_t)hmc->jdev_lmfc_lemc_gcd)
+			if ((uint64_t)hmc->jdev_lmfc_lemc_gcd - 10 <= rate &&
+					rate <= (uint64_t)hmc->jdev_lmfc_lemc_gcd + 10)
 
 				ret = hmc7044_clk_set_rate(hmc, hmc->channels[i].num, hmc->jdev_lmfc_lemc_gcd);
 			else
