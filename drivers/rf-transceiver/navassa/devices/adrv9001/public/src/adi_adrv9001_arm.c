@@ -1156,6 +1156,7 @@ int32_t adi_adrv9001_arm_System_Program(adi_adrv9001_Device_t *device, uint8_t c
 	int elbFlgShift = 5;   //ELB flag shift from FW bit position, lsb bit 3, to API bit position ADRV9001_ELB1
 	int txFlgShiftUp = 3;   // TX enable flag, lsb bit 5
 	int adcPortBFlg = 64;   // ADC port B enable flag, lsb bit 6
+    adi_adrv9001_RxPortSwitchCfg_t portSwitchCfg = { 0 };
 
     /* Check device pointer is not null */
     ADI_ENTRY_EXPECT(device);
@@ -1184,7 +1185,6 @@ int32_t adi_adrv9001_arm_System_Program(adi_adrv9001_Device_t *device, uint8_t c
         }
     }
 
-	adi_adrv9001_RxPortSwitchCfg_t portSwitchCfg = { 0 };
 	ADI_EXPECT(adi_adrv9001_Rx_PortSwitch_Inspect, device, &portSwitchCfg);
 
 	/*Mask for Channel 1 */

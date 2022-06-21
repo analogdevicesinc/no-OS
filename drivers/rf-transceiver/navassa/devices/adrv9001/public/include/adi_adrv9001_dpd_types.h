@@ -137,6 +137,8 @@ typedef struct adi_adrv9001_DpdCfg
 	uint32_t clgcFilterAlpha;               /*!< filter coefficient for the filtered  gain values. */
 	int32_t clgcLastGain_HundredthdB;       /*!< last gain.  Only valid during Get. */
 	int32_t clgcFilteredGain_HundredthdB;   /*!< filtered gain.  Only valid during Get. */
+	
+	uint32_t captureDelay_us;               /*!< Amount of time that capture will be delayed (beyond normal) relative to the start of the frame.  This parameter applies to both DPD and CLGC. */
 } adi_adrv9001_DpdCfg_t;
 
 typedef struct adi_adrv9001_DpdCoefficients

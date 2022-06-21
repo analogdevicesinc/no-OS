@@ -279,7 +279,25 @@ int32_t adi_adrv9001_cals_Dynamic_profiles_calibrate(adi_adrv9001_Device_t *adrv
                                                      uint32_t length);
 
  /**
- * \brief Read the InitCal coefficients needed for Warmboot
+ * \brief Return the unique initCals enabled for this device configuration
+ * 
+ * \note Message type: \ref timing_mailbox "Mailbox command"
+ * 
+ * \pre Channel state is CALIBRATED
+ * 
+ * \param[in]  device                   Context variable - Pointer to the ADRV9001 device settings data structure
+ * \param[out] calNumbers               Number of unique initCals enabled and array containing calNumber for each for this device configuration
+ * \param[in]  maskChannel1             Calibration bit mask for channel 1
+ * \param[in]  maskChannel2             Calibration bit mask for channel 2
+ * 
+ * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
+ */
+	int32_t adi_adrv9001_cals_InitCals_WarmBoot_UniqueEnabledCals_Get(adi_adrv9001_Device_t *device,
+		                                                        adi_adrv9001_Warmboot_CalNumbers_t *calNumbers,
+																uint32_t maskChannel1,
+																uint32_t maskChannel2);
+/**
+ * \brief Read the InitCal coefficients needed for Warmboot, savedCals has size ADI_ADRV9001_WB_MAX_NUM_UNIQUE_CALS x ADI_ADRV9001_WB_MAX_NUM_COEFF
  * 
  * \note Message type: \ref timing_mailbox "Mailbox command"
  * 
@@ -292,13 +310,32 @@ int32_t adi_adrv9001_cals_Dynamic_profiles_calibrate(adi_adrv9001_Device_t *adrv
  * 
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
  */
- int32_t adi_adrv9001_cals_InitCals_WarmBoot_Coefficients_Get(adi_adrv9001_Device_t *device,
-																adi_adrv9001_Warmboot_Coeff_t *savedCals,
-																uint32_t maskChannel1,
-																uint32_t maskChannel2);
+ int32_t adi_adrv9001_cals_InitCals_WarmBoot_Coefficients_MaxArray_Get(adi_adrv9001_Device_t *device,
+		adi_adrv9001_Warmboot_Coeff_t *savedCals,
+		uint32_t maskChannel1,
+		uint32_t maskChannel2);
+	
+/**
+ * \brief Read the InitCal coefficients needed for Warmboot and place in allocated memory
+ * 
+ * \note Message type: \ref timing_mailbox "Mailbox command"
+ * 
+ * \pre Channel state is CALIBRATED
+ * 
+ * \param[in]  device           Context variable - Pointer to the ADRV9001 device settings data structure
+ * \param[in]  memStartAddress  Pointer to start address of memory block that has been allocated to hold warmbootMemoryNumBytes
+ * \param[in]  maskChannel1     Calibration bit mask for channel 1
+ * \param[in]  maskChannel2     Calibration bit mask for channel 2
+ * 
+ * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
+ */
+	int32_t adi_adrv9001_cals_InitCals_WarmBoot_Coefficients_UniqueArray_Get(adi_adrv9001_Device_t *device,
+		char *memStartAddress,
+		uint32_t maskChannel1,
+		uint32_t maskChannel2);
 
  /**
- * \brief Store the InitCal coefficients needed for Warmboot
+ * \brief Write the InitCal coefficients needed for Warmboot, savedCals has size ADI_ADRV9001_WB_MAX_NUM_UNIQUE_CALS x ADI_ADRV9001_WB_MAX_NUM_COEFF
  * 
  * \note Message type: \ref timing_mailbox "Mailbox command"
  * 
@@ -311,10 +348,28 @@ int32_t adi_adrv9001_cals_Dynamic_profiles_calibrate(adi_adrv9001_Device_t *adrv
  * 
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
  */
- int32_t adi_adrv9001_cals_InitCals_WarmBoot_Coefficients_Set(adi_adrv9001_Device_t *device,
+	int32_t adi_adrv9001_cals_InitCals_WarmBoot_Coefficients_MaxArray_Set(adi_adrv9001_Device_t *device,
 																adi_adrv9001_Warmboot_Coeff_t *savedCals,
 																uint32_t maskChannel1,
 																uint32_t maskChannel2);
+/**
+* \brief Write the InitCal coefficients needed for Warmboot from allocated memory
+* 
+* \note Message type: \ref timing_mailbox "Mailbox command"
+* 
+* \pre Channel state is STANDBY
+* 
+* \param[in]  device            Context variable - Pointer to the ADRV9001 device settings data structure
+* \param[in]  memStartAddress   Pointer to start address of memory block that has been allocated and contains warmbootMemoryNumBytes
+* \param[in]  maskChannel1      Calibration bit mask for channel 1
+* \param[in]  maskChannel2      Calibration bit mask for channel 2
+* 
+* \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
+*/
+	int32_t adi_adrv9001_cals_InitCals_WarmBoot_Coefficients_UniqueArray_Set(adi_adrv9001_Device_t *device,
+		char *memStartAddress,
+		uint32_t maskChannel1,
+		uint32_t maskChannel2);
 #ifdef __cplusplus
 }
 #endif

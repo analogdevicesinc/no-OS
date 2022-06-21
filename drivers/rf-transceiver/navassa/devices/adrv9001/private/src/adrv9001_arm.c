@@ -36,6 +36,9 @@
 #include "adrv9001_reg_addr_macros.h"
 #include "adrv9001_bf.h"
 #include "adi_adrv9001_hal.h"
+#ifdef __KERNEL__
+#include <linux/string.h>
+#endif
 
 /* Header files related to libraries */
 
@@ -2176,12 +2179,22 @@ int32_t adrv9001_DmaMemWriteFH(adi_adrv9001_Device_t *device, adi_adrv9001_FhHop
 	uint32_t    dataIndex = 0;
 	uint32_t    spiBufferSize = ((HAL_SPIWRITEARRAY_BUFFERSIZE / 3) - 1);
 	uint8_t     spiWriteArrray[HAL_SPIWRITEARRAY_BUFFERSIZE] = { 0 };
+	uint32_t    ADDR_ARM_DMA_DATA[4] = { ADRV9001_ADDR_ARM_DMA_DATA3, ADRV9001_ADDR_ARM_DMA_DATA2, ADRV9001_ADDR_ARM_DMA_DATA1, ADRV9001_ADDR_ARM_DMA_DATA0 };
+	uint32_t    index = 0;
+#ifndef __KERNEL__
 	uint8_t     addrMsbArray[ADRV9001_FREQ_HOPPING_MAX_NUM_BYTES] = { 0 };
 	uint8_t     addrLsbArray[ADRV9001_FREQ_HOPPING_MAX_NUM_BYTES] = { 0 };
 	uint8_t     dataArray[ADRV9001_FREQ_HOPPING_MAX_NUM_BYTES] = { 0 };
-	uint32_t    ADDR_ARM_DMA_DATA[4] = { ADRV9001_ADDR_ARM_DMA_DATA3, ADRV9001_ADDR_ARM_DMA_DATA2, ADRV9001_ADDR_ARM_DMA_DATA1, ADRV9001_ADDR_ARM_DMA_DATA0 };
-	uint32_t    index = 0;
-    
+#else
+        static uint8_t     addrMsbArray[ADRV9001_FREQ_HOPPING_MAX_NUM_BYTES];
+        static uint8_t     addrLsbArray[ADRV9001_FREQ_HOPPING_MAX_NUM_BYTES];
+        static uint8_t     dataArray[ADRV9001_FREQ_HOPPING_MAX_NUM_BYTES];
+
+        memset(addrMsbArray, 0, sizeof(addrMsbArray));
+        memset(addrLsbArray, 0, sizeof(addrLsbArray));
+        memset(dataArray, 0, sizeof(dataArray));
+#endif
+
 	ADI_ENTRY_PTR_ARRAY_EXPECT(device, numHopTableEntries, numHopTableEntriesByteCount);
 	ADI_ENTRY_PTR_ARRAY_EXPECT(device, hopTableBufferData, hopTableBufferDataByteCount);
 	

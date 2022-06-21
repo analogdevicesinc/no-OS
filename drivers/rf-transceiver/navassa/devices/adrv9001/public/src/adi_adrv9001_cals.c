@@ -27,6 +27,12 @@
 #include "adrv9001_reg_addr_macros.h"
 #include "object_ids.h"
 
+#ifdef __KERNEL__
+#include <linux/string.h>
+#else
+#include <string.h>
+#endif
+
 int32_t adi_adrv9001_cals_InitCals_Run(adi_adrv9001_Device_t *adrv9001,
                                        adi_adrv9001_InitCals_t *initCals,
                                        uint32_t timeout_ms,
@@ -76,7 +82,7 @@ int32_t adi_adrv9001_cals_InitCals_Run(adi_adrv9001_Device_t *adrv9001,
 
     /* Mode to select the Init calibration algorithms to run */
     payload[1] = (uint8_t)(initCals->calMode);
-    
+
     /* A value of true will force all enabled calibrations to re-run */
     payload[2] = (uint8_t)(initCals->force);
 
@@ -586,7 +592,7 @@ int32_t adi_adrv9001_cals_InternalPathDelay_Get_Validate(adi_adrv9001_Device_t *
 {
     static uint8_t MAX_NUM_PROFILE = 6;
     adi_adrv9001_ChannelState_e state = ADI_ADRV9001_CHANNEL_STANDBY;
-    
+
     ADI_RANGE_CHECK(adrv9001, port, ADI_RX, ADI_TX);
     ADI_RANGE_CHECK(adrv9001, channel, ADI_CHANNEL_1, ADI_CHANNEL_2);
     ADI_NULL_PTR_RETURN(&adrv9001->common, internalPathDelays_ns);
@@ -594,7 +600,7 @@ int32_t adi_adrv9001_cals_InternalPathDelay_Get_Validate(adi_adrv9001_Device_t *
     ADI_EXPECT(adi_adrv9001_Radio_Channel_State_Get, adrv9001, port, channel, &state);
     if (ADI_ADRV9001_CHANNEL_STANDBY == state)
     {
-        ADI_ERROR_REPORT(&adrv9001->common, 
+        ADI_ERROR_REPORT(&adrv9001->common,
             ADI_COMMON_ERRSRC_API,
             ADI_COMMON_ERR_INV_PARAM,
             ADI_COMMON_ACT_ERR_CHECK_PARAM,
@@ -726,7 +732,7 @@ int32_t adi_adrv9001_cals_Dynamic_profiles_calibrate_Validate(adi_adrv9001_Devic
     ADI_ENTRY_PTR_EXPECT(adrv9001, initCals);
     ADI_NULL_PTR_RETURN(&adrv9001->common, errorFlag);
 
-    ADI_NULL_PTR_RETURN(&adrv9001->common, dynamicProfile); 
+    ADI_NULL_PTR_RETURN(&adrv9001->common, dynamicProfile);
     ADI_RANGE_CHECK(adrv9001, length, 1, MAX_NUM_PROFILE);
 
     for (port = ADI_RX; port <= ADI_TX; port++)
@@ -764,7 +770,7 @@ int32_t adi_adrv9001_cals_Dynamic_profiles_calibrate(adi_adrv9001_Device_t *adrv
 {
     int8_t i = 0;
     ADI_EXPECT(adi_adrv9001_cals_Dynamic_profiles_calibrate_Validate, adrv9001, initCals, errorFlag, dynamicProfile, length);
-    
+
     for (i = 0; i <= (length - 1); i++)
     {
         ADI_EXPECT(adi_adrv9001_arm_NextDynamicProfile_Set, adrv9001, &dynamicProfile[i]);
@@ -775,18 +781,111 @@ int32_t adi_adrv9001_cals_Dynamic_profiles_calibrate(adi_adrv9001_Device_t *adrv
     ADI_API_RETURN(adrv9001);
 }
 
-int32_t adi_adrv9001_cals_InitCals_WarmBoot_Coefficients_Get(adi_adrv9001_Device_t *device,
+int32_t adi_adrv9001_cals_InitCals_WarmBoot_UniqueEnabledCals_Get(adi_adrv9001_Device_t *device,
+	adi_adrv9001_Warmboot_CalNumbers_t *calNumbers,
+	uint32_t maskChannel1,
+	uint32_t maskChannel2)
+{
+#ifndef __KERNEL__
+	uint32_t tblSize[4];
+	uint32_t vecTbl[ADI_ADRV9001_WB_MAX_NUM_VECTOR_TABLE_WORDS] = { 0 };
+#else
+	static uint32_t tblSize[4];
+	static uint32_t vecTbl[ADI_ADRV9001_WB_MAX_NUM_VECTOR_TABLE_WORDS];
+#endif
+	int calNo;
+	int arrayIndex = 0;
+	calNumbers->numberUniqueEnabledCals = 0;
+
+	ADI_EXPECT(adi_adrv9001_arm_Memory_Read32, device, 0x20020000, tblSize, sizeof(tblSize), 0);
+	ADI_EXPECT(adi_adrv9001_arm_Memory_Read32, device, 0x20020004, vecTbl, tblSize[0] * 16, 1);
+
+	for (calNo = 0; calNo < tblSize[0]; calNo++)
+	{
+		uint32_t initMask = vecTbl[(4*calNo) + 2];
+		uint32_t profMask = vecTbl[(4*calNo) + 3];
+		adi_common_ChannelNumber_e channel;
+		for (channel = ADI_CHANNEL_1; channel <= ADI_CHANNEL_2; channel++)
+		{
+			uint32_t chInitMask = maskChannel1;
+			profMask = profMask >> (8 * (channel - 1));
+			if (profMask == 0)
+				continue;
+			if (((initMask & chInitMask) != 0) && ((profMask & device->devStateInfo.chProfEnMask[channel - 1]) != 0))
+			{
+				calNumbers->calNumbersEnabled[arrayIndex] = (uint8_t)calNo;
+				arrayIndex++;
+				calNumbers->numberUniqueEnabledCals++;
+			}
+		}
+		calNumbers->warmbootMemoryNumBytes = (uint32_t)(calNumbers->numberUniqueEnabledCals * ADI_ADRV9001_WB_MAX_NUM_COEFF);
+	}
+	ADI_API_RETURN(device);
+}
+
+int32_t adi_adrv9001_cals_InitCals_WarmBoot_Coefficients_MaxArray_Get(adi_adrv9001_Device_t *device,
 																adi_adrv9001_Warmboot_Coeff_t *savedCals,
 																uint32_t maskChannel1,
 																uint32_t maskChannel2)
 {
+#ifndef __KERNEL__
 	uint32_t tblSize[4];
-	uint32_t vecTbl[ADI_ADRV9001_WB_MAX_NUM_ENTRY] = { 0 };
+	uint32_t vecTbl[ADI_ADRV9001_WB_MAX_NUM_VECTOR_TABLE_BYTES] = { 0 };
 	uint8_t calVal[ADI_ADRV9001_WB_MAX_NUM_COEFF];
+#else
+	static uint32_t tblSize[4];
+	static uint32_t vecTbl[ADI_ADRV9001_WB_MAX_NUM_ENTRY];
+	static uint8_t calVal[ADI_ADRV9001_WB_MAX_NUM_COEFF];
+#endif
 	int calNo;
 
 	ADI_EXPECT(adi_adrv9001_arm_Memory_Read32, device, 0x20020000, tblSize, sizeof(tblSize), 0);
-	ADI_EXPECT(adi_adrv9001_arm_Memory_Read32, device, 0x20020004, vecTbl, tblSize[0]*16, 1);
+	ADI_EXPECT(adi_adrv9001_arm_Memory_Read32, device, 0x20020004, vecTbl, tblSize[0] * 16, 1);
+
+	for (calNo = 0; calNo < tblSize[0]; calNo++)
+	{
+		uint32_t addr = vecTbl[4*calNo];
+		uint32_t size = vecTbl[(4*calNo) + 1];
+		uint32_t initMask = vecTbl[(4*calNo) + 2];
+		uint32_t profMask = vecTbl[(4*calNo) + 3];
+		adi_common_ChannelNumber_e channel;
+		for (channel = ADI_CHANNEL_1; channel <= ADI_CHANNEL_2; channel++)
+		{
+			uint32_t chInitMask = maskChannel1;
+			profMask = profMask >> (8 * (channel - 1));
+			if (profMask == 0)
+				continue;
+			if (((initMask & chInitMask) != 0) && ((profMask & device->devStateInfo.chProfEnMask[channel - 1]) != 0))
+			{
+				int calSize;
+				ADI_EXPECT(adi_adrv9001_arm_Memory_Read, device, addr, calVal, size, 0);
+				for (calSize = 0; calSize < size; calSize++)
+				{
+					savedCals->calValue[calNo][calSize] = calVal[calSize];
+				}
+			}
+		}
+	}
+	ADI_API_RETURN(device);
+}
+
+int32_t adi_adrv9001_cals_InitCals_WarmBoot_Coefficients_UniqueArray_Get(adi_adrv9001_Device_t *device,
+	char *memStartAddress,
+	uint32_t maskChannel1,
+	uint32_t maskChannel2)
+{
+#ifndef __KERNEL__
+	uint32_t tblSize[4];
+	uint32_t vecTbl[ADI_ADRV9001_WB_MAX_NUM_VECTOR_TABLE_BYTES] = { 0 };
+	uint8_t calVal[ADI_ADRV9001_WB_MAX_NUM_COEFF];
+#else
+	static uint32_t tblSize[4];
+	static uint32_t vecTbl[ADI_ADRV9001_WB_MAX_NUM_ENTRY];
+	static uint8_t calVal[ADI_ADRV9001_WB_MAX_NUM_COEFF];
+#endif
+	int calNo;
+	ADI_EXPECT(adi_adrv9001_arm_Memory_Read32, device, 0x20020000, tblSize, sizeof(tblSize), 0);
+	ADI_EXPECT(adi_adrv9001_arm_Memory_Read32, device, 0x20020004, vecTbl, tblSize[0] * 16, 1);
 
 	for (calNo = 0; calNo < tblSize[0]; calNo++)
 	{
@@ -804,26 +903,28 @@ int32_t adi_adrv9001_cals_InitCals_WarmBoot_Coefficients_Get(adi_adrv9001_Device
 			if (((initMask & chInitMask) != 0) && ((profMask & device->devStateInfo.chProfEnMask[channel - 1]) != 0))
 			{
 				ADI_EXPECT(adi_adrv9001_arm_Memory_Read, device, addr, calVal, size, 0);
-				int calSize;
-				for (calSize = 0; calSize < size; calSize++)
-				{
-					savedCals->calValue[calNo][calSize] = calVal[calSize];
-				}
+				memcpy(calVal, memStartAddress, ADI_ADRV9001_WB_MAX_NUM_COEFF);
+				memStartAddress+= ADI_ADRV9001_WB_MAX_NUM_COEFF;
 			}
 		}
 	}
-
 	ADI_API_RETURN(device);
 }
 
-int32_t adi_adrv9001_cals_InitCals_WarmBoot_Coefficients_Set(adi_adrv9001_Device_t *device,
+int32_t adi_adrv9001_cals_InitCals_WarmBoot_Coefficients_MaxArray_Set(adi_adrv9001_Device_t *device,
 																adi_adrv9001_Warmboot_Coeff_t *savedCals,
 																uint32_t maskChannel1,
 																uint32_t maskChannel2)
 {
+#ifndef __KERNEL__
 	uint32_t tblSize[4];
-	uint32_t vecTbl[ADI_ADRV9001_WB_MAX_NUM_ENTRY] = { 0 };
+	uint32_t vecTbl[ADI_ADRV9001_WB_MAX_NUM_VECTOR_TABLE_BYTES] = { 0 };
 	uint8_t calVal[ADI_ADRV9001_WB_MAX_NUM_COEFF];
+#else
+	static uint32_t tblSize[4];
+	static uint32_t vecTbl[ADI_ADRV9001_WB_MAX_NUM_ENTRY];
+	static uint8_t calVal[ADI_ADRV9001_WB_MAX_NUM_COEFF];
+#endif
 	int calNo;
 
 	ADI_EXPECT(adi_adrv9001_arm_Memory_Read32, device, 0x20020000, tblSize, sizeof(tblSize), 0);
@@ -850,6 +951,49 @@ int32_t adi_adrv9001_cals_InitCals_WarmBoot_Coefficients_Set(adi_adrv9001_Device
 					calVal[calSize] = savedCals->calValue[calNo][calSize];
 				}
 				ADI_EXPECT(adi_adrv9001_arm_Memory_Write, device, addr, calVal, size, 0);
+			}
+		}
+	}
+
+	ADI_API_RETURN(device);
+}
+int32_t adi_adrv9001_cals_InitCals_WarmBoot_Coefficients_UniqueArray_Set(adi_adrv9001_Device_t *device,
+	char *memStartAddress,
+	uint32_t maskChannel1,
+	uint32_t maskChannel2)
+{
+#ifndef __KERNEL__
+	uint32_t tblSize[4];
+	uint32_t vecTbl[ADI_ADRV9001_WB_MAX_NUM_VECTOR_TABLE_BYTES] = { 0 };
+	uint8_t calVal[ADI_ADRV9001_WB_MAX_NUM_COEFF];
+#else
+	static uint32_t tblSize[4];
+	static uint32_t vecTbl[ADI_ADRV9001_WB_MAX_NUM_ENTRY];
+	static uint8_t calVal[ADI_ADRV9001_WB_MAX_NUM_COEFF];
+#endif
+	int calNo;
+
+	ADI_EXPECT(adi_adrv9001_arm_Memory_Read32, device, 0x20020000, tblSize, sizeof(tblSize), 0);
+	ADI_EXPECT(adi_adrv9001_arm_Memory_Read32, device, 0x20020004, vecTbl, tblSize[0] * 16, 1);
+
+	for (calNo = 0; calNo < tblSize[0]; calNo++)
+	{
+		uint32_t addr = vecTbl[4*calNo];
+		uint32_t size = vecTbl[(4*calNo) + 1];
+		uint32_t initMask = vecTbl[(4*calNo) + 2];
+		uint32_t profMask = vecTbl[(4*calNo) + 3];
+		adi_common_ChannelNumber_e channel;
+		for (channel = ADI_CHANNEL_1; channel <= ADI_CHANNEL_2; channel++)
+		{
+			uint32_t chInitMask = maskChannel1;
+			profMask = profMask >> (8 * (channel - 1));
+			if (profMask == 0)
+				continue;
+			if (((initMask & chInitMask) != 0) && ((profMask & device->devStateInfo.chProfEnMask[channel - 1]) != 0))
+			{
+				memcpy(memStartAddress, calVal, ADI_ADRV9001_WB_MAX_NUM_COEFF);
+				ADI_EXPECT(adi_adrv9001_arm_Memory_Write, device, addr, calVal, size, 0);
+				memStartAddress += ADI_ADRV9001_WB_MAX_NUM_COEFF;
 			}
 		}
 	}

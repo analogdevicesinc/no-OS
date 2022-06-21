@@ -29,6 +29,10 @@ extern "C" {
 
 #define ADI_ADRV9001_RX_GAIN_INDEX_MIN 187
 #define ADI_ADRV9001_RX_GAIN_INDEX_MAX 255
+#define RX1_INTERFACE_GAIN_SEED_ADDR            0x2001FFD0
+#define RX2_INTERFACE_GAIN_SEED_ADDR            0x2001FFD4
+#define RX1_INTERFACE_GAIN_END_OF_FRAME_ADDR    0x2001FFD8
+#define RX2_INTERFACE_GAIN_END_OF_FRAME_ADDR    0x2001FFDC
 
 /**
 *  \brief Rx gain table SRAM base addresses
@@ -132,8 +136,9 @@ typedef struct adi_adrv9001_RxInterfaceGainCtrl
     adi_adrv9001_RxInterfaceGain_e              gain;
     uint8_t rssiDuration;                                           /* Duration of RSSI measurement (unit = 1ms/255 ) */
     uint8_t rssiMovingAverageDuration;                              /* Number of measurements in RSSI Moving-Average window */
-    uint8_t reserved1;
-    uint8_t reserved2;
+    int8_t gainControlAutomaticThreshold_dBFS;                      /* Max signal level target in dBFS */
+	uint8_t signalPAR;                                              /* Peak to Average Ratio of applied signal */
+	bool enableFastAttack;                                          /* false: fastAttack and tracking use same configuration of MovingAveragefilter, true: No MovingAveragefilter in fastAttack region */
 
 } adi_adrv9001_RxInterfaceGainCtrl_t;
 

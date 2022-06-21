@@ -37,6 +37,9 @@
 /* TODO: Determine a reasonable value */
 #define ADI_ADRV9001_READY_FOR_MCS_DELAY_US 100U
 
+#define ADI_ADRV9001_WB_MAX_NUM_UNIQUE_CALS 156
+#define ADI_ADRV9001_WB_MAX_NUM_VECTOR_TABLE_WORDS 624
+#define ADI_ADRV9001_WB_MAX_NUM_VECTOR_TABLE_BYTES 2496
 #define ADI_ADRV9001_WB_MAX_NUM_ENTRY 16384
 #define ADI_ADRV9001_WB_MAX_NUM_COEFF 6000
 
@@ -185,8 +188,17 @@ typedef struct adi_adrv9001_SiliconVersion
  */
 typedef struct adi_adrv9001_Warmboot_Coeff
 {
-	uint8_t calValue[ADI_ADRV9001_WB_MAX_NUM_ENTRY][ADI_ADRV9001_WB_MAX_NUM_COEFF];
+	uint8_t calValue[ADI_ADRV9001_WB_MAX_NUM_UNIQUE_CALS][ADI_ADRV9001_WB_MAX_NUM_COEFF];
 } adi_adrv9001_Warmboot_Coeff_t;
+
+/**
+ * \brief WarmBoot calNumbers Information 
+ */
+typedef struct adi_adrv9001_Warmboot_CalNumbers {
+	uint8_t numberUniqueEnabledCals;                                    /*!< The Number of unique initCals enabled for this device configuration */   
+	uint8_t calNumbersEnabled[ADI_ADRV9001_WB_MAX_NUM_UNIQUE_CALS];     /*!< Array indicating the calNumber of each enabled unique initCal */   
+	uint32_t warmbootMemoryNumBytes;                                    /*!< Memory allocation required to store/retrieve the Warmboot coefficients */   
+} adi_adrv9001_Warmboot_CalNumbers_t;
 
 #ifndef CLIENT_IGNORE
 /**

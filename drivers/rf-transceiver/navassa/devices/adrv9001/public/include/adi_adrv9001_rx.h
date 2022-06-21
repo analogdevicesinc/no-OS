@@ -186,7 +186,7 @@ int32_t adi_adrv9001_Rx_Rssi_Read(adi_adrv9001_Device_t *adrv9001,
  * The location of the power measurement is given by agcCfg->power->powerInputSelect
  * The number of samples used by power measurement is given by 8*2^(agcCfg->power->powerMeasurementDuration) at the IQ rate,
  * if measured at RFIR output. This number of samples must be less than the agcCfg->gainUpdateCounter.
- * If the receiver is disabled during the power measurement, this function returns a '0' for rxDecPower_mdBFS
+ * If the receiver is disabled (all zero samples) during the power measurement, this function returns a '200000' for rxDecPower_mdBFS
  *
  * The resolution of this function is 250mdB.
  * The dynamic range of this function is 60dB. Signals lower than -60dBFS may not be measured accurately.
@@ -195,7 +195,7 @@ int32_t adi_adrv9001_Rx_Rssi_Read(adi_adrv9001_Device_t *adrv9001,
  *
  * \param[in]  adrv9001          Context variable - Pointer to the ADRV9001 device data structure
  * \param[in]  channel           An enum ( of type adi_common_ChannelNumber_e) to select Rx Channel.
- * \param[out] rxDecPower_mdBFS  Pointer to store the ADRV9001 Dec Power return. Value returned is in mdBFS.
+ * \param[out] rxDecPower_mdBFS  Pointer to store the ADRV9001 Dec Power return. Value returned is in mdBFS. If all samples are zero, a '200000' is returned
  *
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
  */
@@ -276,7 +276,59 @@ int32_t adi_adrv9001_Rx_InterfaceGain_Inspect(adi_adrv9001_Device_t *adrv9001,
 int32_t adi_adrv9001_Rx_InterfaceGain_Get(adi_adrv9001_Device_t *adrv9001,
                                           adi_common_ChannelNumber_e channel,
                                           adi_adrv9001_RxInterfaceGain_e *gain);
+/**
+* \brief Set the Seed for Rx interface gain for the next frame, seedGain is applied by rising edge on associated GPIO
+*
+* \note Message type: \ref timing_direct "Direct register access"
+*
+* \pre Channel state is any of CALIBRATED, PRIMED, RF_ENABLED
+*
+* \pre Seeding of interfaceGain is only enabled when controlMode = ADI_ADRV9001_RX_INTERFACE_GAIN_CONTROL_AUTOMATIC
+*
+* \param[in] adrv9001   Context variable - Pointer to the ADRV9001 device data structure
+* \param[in] channel    The Rx channel for which the interface gain has to be configured
+* \param[in] seedGain   The gain value to be seeded for next frame by rising edge on associated GPIO
+*
+* \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
+*/
+int32_t adi_adrv9001_Rx_InterfaceGain_SeedGain_Set(adi_adrv9001_Device_t *adrv9001,
+	                                                adi_common_ChannelNumber_e channel,
+	                                                adi_adrv9001_RxInterfaceGain_e seedGain);
 
+/**
+* \brief Get the Seed for Rx interface gain for the next frame, seedGain is applied by rising edge on associated GPIO
+*
+* \note Message type: \ref timing_direct "Direct register access"
+*
+* \pre Channel state any of CALIBRATED, PRIMED, RF_ENABLED
+*
+* \param[in]  adrv9001  Context variable - Pointer to the ADRV9001 device data structure
+* \param[in]  channel   The Rx channel from which to read the interface gain
+* \param[out] seedGain  The gain value to be seeded for next frame by rising edge on associated GPIO
+*
+* \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
+*/
+int32_t adi_adrv9001_Rx_InterfaceGain_SeedGain_Get( adi_adrv9001_Device_t *adrv9001,
+                                                    adi_common_ChannelNumber_e channel,
+                                                    adi_adrv9001_RxInterfaceGain_e *seedGain);
+
+/**
+* \brief Get the EndOfFrameGain for Rx interface gain, EndOfFrameGain is updated by falling edge on associated GPIO
+*
+* \note Message type: \ref timing_direct "Direct register access"
+*
+* \pre Channel state any of CALIBRATED, PRIMED, RF_ENABLED
+*
+* \param[in]  adrv9001          Context variable - Pointer to the ADRV9001 device data structure
+* \param[in]  channel           The Rx channel from which to read the interface gain
+* \param[out] endOfFrameGain    The gain value at end of previous frame, latched by falling edge on associated GPIO
+*
+* \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
+*/
+int32_t adi_adrv9001_Rx_InterfaceGain_EndOfFrameGain_Get(   adi_adrv9001_Device_t *adrv9001,
+	                                                        adi_common_ChannelNumber_e channel,
+	                                                        adi_adrv9001_RxInterfaceGain_e *endOfFrameGain);
+	
 /**
  * \brief Set the NCO frequency to correct for small deviations in Rx LO frequency
  *
