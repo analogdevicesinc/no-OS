@@ -224,6 +224,38 @@ static __maybe_unused int32_t __maybe_unused adi_adrv9001_gpio_ManualAnalogInput
     ADI_API_RETURN(device);
 }
 
+static __maybe_unused int32_t adi_adrv9001_gpio_PinDirection_Get_Validate(adi_adrv9001_Device_t *device,
+                                                                         adi_adrv9001_GpioPin_e pin)
+{
+    ADI_API_RETURN(device);
+    ADI_RANGE_CHECK(device, pin, ADI_ADRV9001_GPIO_DIGITAL_00, ADI_ADRV9001_GPIO_ANALOG_11);
+}
+
+int32_t adi_adrv9001_gpio_PinDirection_Get(adi_adrv9001_Device_t *device,
+                                          adi_adrv9001_GpioPin_e pin,
+                                          adi_adrv9001_GpioPinDirection_e *direction)
+{
+    uint16_t gpioOutEn = 0;
+
+    ADI_PERFORM_VALIDATION(adi_adrv9001_gpio_PinDirection_Get_Validate, device, pin);
+    if (ADI_ADRV9001_GPIO_DIGITAL_00 <= pin && pin <= ADI_ADRV9001_GPIO_DIGITAL_15)
+    {
+        ADI_EXPECT(adrv9001_NvsRegmapCore_NvsGpioDirectionControlOe_Get, device, &gpioOutEn);
+       *direction = (gpioOutEn & (1 << (pin - 1))) >> (pin - 1);
+    }
+    else if (ADI_ADRV9001_GPIO_ANALOG_00 <= pin && pin <= ADI_ADRV9001_GPIO_ANALOG_11)
+    {
+        ADI_EXPECT(adrv9001_NvsRegmapCore1_NvsGpioAnalogDirectionControlOe_Get, device, &gpioOutEn);
+       *direction = (gpioOutEn & (1 << (pin - ADI_ADRV9001_GPIO_ANALOG_00))) >> (pin - ADI_ADRV9001_GPIO_ANALOG_00);
+    }
+    else
+    {
+        ADI_SHOULD_NOT_EXECUTE(device);
+    }
+
+    ADI_API_RETURN(device);
+}
+
 int32_t adi_adrv9001_gpio_ManualAnalogInput_Configure(adi_adrv9001_Device_t *device,
                                                       adi_adrv9001_GpioPin_e pin)
 {
@@ -337,6 +369,14 @@ int32_t adi_adrv9001_gpio_ControlInit_Configure(adi_adrv9001_Device_t *adrv9001,
 	{
 		ADI_EXPECT(adi_adrv9001_gpio_Configure, adrv9001, ADI_ADRV9001_GPIO_SIGNAL_FH_HOP2_NCO_ASYNC_CHANGE, &initCfg->fh_update_rx_nco[1]);
 	}
+    if (ADI_ADRV9001_GPIO_UNASSIGNED != initCfg->rx_interfaceGain_seed_save[0].pin)
+    {
+        ADI_EXPECT(adi_adrv9001_gpio_Configure, adrv9001, ADI_ADRV9001_GPIO_SIGNAL_RX1_INTERFACEGAIN_SEED_SAVE, &initCfg->rx_interfaceGain_seed_save[0]);
+    }
+    if (ADI_ADRV9001_GPIO_UNASSIGNED != initCfg->rx_interfaceGain_seed_save[1].pin)
+    {
+        ADI_EXPECT(adi_adrv9001_gpio_Configure, adrv9001, ADI_ADRV9001_GPIO_SIGNAL_RX2_INTERFACEGAIN_SEED_SAVE, &initCfg->rx_interfaceGain_seed_save[1]);
+    }
 
     ADI_API_RETURN(adrv9001);
 }

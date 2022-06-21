@@ -200,8 +200,10 @@ typedef enum adi_adrv9001_GpioSignal
     ADI_ADRV9001_GPIO_SIGNAL_FH_HOP_2_TABLE_SELECT,         /*!< Frequency hopping table select for HOP 2 */
     ADI_ADRV9001_GPIO_SIGNAL_FH_HOP1_NCO_ASYNC_CHANGE,      /*!< Asynchronously change NCO for Hop1 */
     ADI_ADRV9001_GPIO_SIGNAL_FH_HOP2_NCO_ASYNC_CHANGE,      /*!< Asynchronously change NCO for Hop2 */
+    ADI_ADRV9001_GPIO_SIGNAL_RX1_INTERFACEGAIN_SEED_SAVE = 52,   /*!< Seed (rising edge) or save (falling edge) the RX1 InterfaceGain */
+    ADI_ADRV9001_GPIO_SIGNAL_RX2_INTERFACEGAIN_SEED_SAVE = 53,   /*!< Seed (rising edge) or save (falling edge) the RX2 InterfaceGain  */
 	
-    ADI_ADRV9001_GPIO_NUM_SIGNALS = 46,                     /*!< Total Number of signals from BBIC*/
+    ADI_ADRV9001_GPIO_NUM_SIGNALS = 54,                     /*!< Total Number of signals from BBIC*/
 } adi_adrv9001_GpioSignal_e;
 
 /**
@@ -246,15 +248,16 @@ typedef struct adi_adrv9001_GpioCfg
  */
 typedef struct adi_adrv9001_GpioCtrlInitCfg
 {
-    adi_adrv9001_GpioCfg_t tx_ext_frontend_ctrl[ADI_ADRV9001_NUM_PORTS];    /*!< (AGPIO) Tx FrontEnd controls */
-    adi_adrv9001_GpioCfg_t rx_ext_frontend_ctrl[ADI_ADRV9001_NUM_PORTS];    /*!< (AGPIO) Rx FrontEnd controls */
-    adi_adrv9001_GpioCfg_t ext_pll_chip_enable[ADI_ADRV9001_NUM_PORTS];     /*!< (AGPIO) External PLL Chip Enables */
-    adi_adrv9001_GpioCfg_t vco_chip_enable[ADI_ADRV9001_NUM_PORTS];         /*!< (AGPIO) Rx VCO Chip Enables */
-    adi_adrv9001_GpioCfg_t ext_pll_lock[ADI_ADRV9001_NUM_PORTS];            /*!< (AGPIO) External PLL locks */
-    adi_adrv9001_GpioCfg_t channelPowerSaving[ADI_ADRV9001_NUM_CHANNELS];   /*!< (DGPIO) Channel Power Saving Enables */
-    adi_adrv9001_GpioCfg_t systemPowerSavingAndMonitorEnable;               /*!< (DGPIO) System Power Saving and Monitor Enable */
-    adi_adrv9001_GpioCfg_t systemPowerSavingAndMonitorWakeUp;               /*!< (DGPIO) Monitor WakeUp */
-	adi_adrv9001_GpioCfg_t fh_update_rx_nco[ADI_ADRV9001_NUM_CHANNELS];     /*!< (DGPIO) Trigger Update of Rx NCO in Frequency Hop Frame */
+    adi_adrv9001_GpioCfg_t tx_ext_frontend_ctrl[ADI_ADRV9001_NUM_PORTS];            /*!< (AGPIO) Tx FrontEnd controls */
+    adi_adrv9001_GpioCfg_t rx_ext_frontend_ctrl[ADI_ADRV9001_NUM_PORTS];            /*!< (AGPIO) Rx FrontEnd controls */
+    adi_adrv9001_GpioCfg_t ext_pll_chip_enable[ADI_ADRV9001_NUM_PORTS];             /*!< (AGPIO) External PLL Chip Enables */
+    adi_adrv9001_GpioCfg_t vco_chip_enable[ADI_ADRV9001_NUM_PORTS];                 /*!< (AGPIO) Rx VCO Chip Enables */
+    adi_adrv9001_GpioCfg_t ext_pll_lock[ADI_ADRV9001_NUM_PORTS];                    /*!< (AGPIO) External PLL locks */
+    adi_adrv9001_GpioCfg_t channelPowerSaving[ADI_ADRV9001_NUM_CHANNELS];           /*!< (DGPIO) Channel Power Saving Enables */
+    adi_adrv9001_GpioCfg_t systemPowerSavingAndMonitorEnable;                       /*!< (DGPIO) System Power Saving and Monitor Enable */
+    adi_adrv9001_GpioCfg_t systemPowerSavingAndMonitorWakeUp;                       /*!< (DGPIO) Monitor WakeUp */
+	adi_adrv9001_GpioCfg_t fh_update_rx_nco[ADI_ADRV9001_NUM_CHANNELS];             /*!< (DGPIO) Trigger Update of Rx NCO in Frequency Hop Frame */
+    adi_adrv9001_GpioCfg_t rx_interfaceGain_seed_save[ADI_ADRV9001_NUM_CHANNELS];   /*!< (DGPIO) Trigger Seed (RisingEdge) or Save (FallingEdge) of interfaceGain */
 
 } adi_adrv9001_GpioCtrlInitCfg_t;
 

@@ -22,7 +22,7 @@
 #include "adi_adrv9001_radio.h"
 #include "adrv9001_validators.h"
 #ifdef __KERNEL__
-/* for NO_OS_DIV_ROUND_CLOSEST() */
+/* for DIV_ROUND_CLOSEST() */
 #include <linux/kernel.h>
 #endif
 
@@ -138,7 +138,7 @@ static __maybe_unused int32_t adi_adrv9001_Mcs_RfPllPhaseDifference_Get(adi_adrv
 
     *phaseDifference_degrees = readData > TWOS_COMP_MID ? readData - TWOS_COMP_MAX : readData;
 #ifdef __KERNEL__
-    *phaseDifference_degrees = NO_OS_DIV_ROUND_CLOSEST(*phaseDifference_degrees, ADRV9001_CLK_PLL_MODULUS) * 360;
+    *phaseDifference_degrees = DIV_ROUND_CLOSEST(*phaseDifference_degrees, ADRV9001_CLK_PLL_MODULUS) * 360;
 #else
     *phaseDifference_degrees = *phaseDifference_degrees / (float)ADRV9001_CLK_PLL_MODULUS * 360.0f;
 #endif

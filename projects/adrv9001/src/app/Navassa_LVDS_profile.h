@@ -1,6 +1,3 @@
-#ifndef NAVASSA_LVDS_PROFILE_H
-#define NAVASSA_LVDS_PROFILE_H
-
 const char *json_profile = "{ \
   \"clocks\": { \
     \"deviceClock_kHz\": 38400, \
@@ -102,10 +99,10 @@ const char *json_profile = "{ \
                 \"dpInFifoTestDataSel\": 0 \
               }, \
               \"rxNbNco\": { \
-                \"rxNbNcoEn\": 0, \
+                \"rxNbNcoEn\": 1, \
                 \"rxNbNcoConfig\": { \
                   \"freq\": 0, \
-                  \"sampleFreq\": 0, \
+                  \"sampleFreq\": 15360000, \
                   \"phase\": 0, \
                   \"realOut\": 0 \
                 } \
@@ -219,10 +216,10 @@ const char *json_profile = "{ \
                 \"dpInFifoTestDataSel\": 0 \
               }, \
               \"rxNbNco\": { \
-                \"rxNbNcoEn\": 0, \
+                \"rxNbNcoEn\": 1, \
                 \"rxNbNcoConfig\": { \
                   \"freq\": 0, \
-                  \"sampleFreq\": 0, \
+                  \"sampleFreq\": 15360000, \
                   \"phase\": 0, \
                   \"realOut\": 0 \
                 } \
@@ -1042,7 +1039,7 @@ const char *json_profile = "{ \
             \"txRoundEn\": 1 \
           }, \
           \"txIqdmDuc\": { \
-            \"iqdmDucMode\": 0, \
+            \"iqdmDucMode\": 2, \
             \"iqdmDev\": 0, \
             \"iqdmDevOffset\": 0, \
             \"iqdmScalar\": 0, \
@@ -1137,7 +1134,7 @@ const char *json_profile = "{ \
             \"txRoundEn\": 1 \
           }, \
           \"txIqdmDuc\": { \
-            \"iqdmDucMode\": 0, \
+            \"iqdmDucMode\": 2, \
             \"iqdmDev\": 0, \
             \"iqdmDevOffset\": 0, \
             \"iqdmScalar\": 0, \
@@ -1182,7 +1179,8 @@ const char *json_profile = "{ \
     \"pllModulus\": { \
       \"modulus\": [ 8388593, 8388593, 8388593, 8388593, 8388593 ], \
       \"dmModulus\": [ 8388593, 8388593 ] \
-    } \
+    }, \
+    \"warmBootEnable\": false \
   }, \
   \"pfirBuffer\": { \
     \"pfirRxWbNbChFilterCoeff_A\": { \
@@ -1320,5 +1318,3 @@ const char *json_profile = "{ \
       } ] \
   } \
 }";
-
-#endif

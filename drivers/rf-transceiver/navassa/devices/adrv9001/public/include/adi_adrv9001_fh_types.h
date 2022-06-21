@@ -194,6 +194,9 @@ typedef struct {
     
     bool                               gainSetupByPin;            /*!< Use GPIO Pins to provide a Tx/Rx gain index for next hop frame. If false, gain information is provided in hop table*/
 	adi_adrv9001_FhGainSetupByPinCfg_t gainSetupByPinConfig[ADI_ADRV9001_NUM_CHANNELS];    /*!< Configuration information for gain setup by pin. This structure is ignored if gainSetupByPin is false */
+	bool                               enableAGCGainIndexSeeding;       /*!< Enable seeding of the hardware value of adi_adrv9001_GainControlCfg_t->resetOnRxonGainIndex with rxGainIndex from FHTable,
+                                                                             if mode is ADI_ADRV9001_RX_GAIN_CONTROL_MODE_AUTO then 
+                                                                             gainIndex will begin tracking from this seeded gainIndex at the beginning of the frame */
 } adi_adrv9001_FhCfg_t;
 
 #ifdef __cplusplus

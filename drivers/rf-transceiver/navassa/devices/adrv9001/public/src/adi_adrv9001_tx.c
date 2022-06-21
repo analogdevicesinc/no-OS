@@ -221,9 +221,10 @@ int32_t adi_adrv9001_Tx_AttenuationMode_Get(adi_adrv9001_Device_t *device,
                                             adi_common_ChannelNumber_e channel,
                                             adi_adrv9001_TxAttenuationControlMode_e *mode)
 {
+	adi_adrv9001_ChannelState_e state = ADI_ADRV9001_CHANNEL_STANDBY;
+
 	ADI_PERFORM_VALIDATION(adi_adrv9001_Tx_AttenuationMode_Get_Validate, device, channel, mode);
 	
-	adi_adrv9001_ChannelState_e state = ADI_ADRV9001_CHANNEL_STANDBY;
 	ADI_EXPECT(adi_adrv9001_Radio_Channel_State_Get, device, ADI_TX, channel, &state);
 	if (state == ADI_ADRV9001_CHANNEL_PRIMED)
 	{
@@ -1299,7 +1300,7 @@ int32_t adi_adrv9001_Tx_PaRamp_Configure(adi_adrv9001_Device_t *device,
     //clkDivRatio = device->devStateInfo.clkDivideRatios.anaRefClockRatio;
     refClk_Hz = KILO_TO_BASE_UNIT(device->devStateInfo.deviceClock_kHz) >> clkDivRatio;
 
-    paRampDpClkDiv = NO_OS_DIV_ROUND_CLOSEST(refClk_Hz, KILO_TO_BASE_UNIT(paRampCfg->rampClock_kHz));
+    paRampDpClkDiv = DIV_ROUND_CLOSEST(refClk_Hz, KILO_TO_BASE_UNIT(paRampCfg->rampClock_kHz));
     
     ADI_EXPECT(adi_adrv9001_AuxDac_Configure, device, paRampCfg->auxDacChannelSelect, paRampCfg->enable);
     

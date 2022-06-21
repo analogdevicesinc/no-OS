@@ -368,7 +368,7 @@ int32_t adi_adrv9001_Rx_GainControl_Configure(adi_adrv9001_Device_t *device,
        20*log10((hbHighThresh + 1)/2^15) - 20*log10((secondary_upper_threshold + 1)/2^15) = 2.5
     */
     threshCalc = (agcCfg->peak.hbHighThresh * APD_LOW_FREQ_THRESH_MULTIPLICATION_FACTOR) - APD_LOW_FREQ_THRESH_SUBTRACTION_FACTOR;
-    threshCalc = NO_OS_DIV_ROUND_CLOSEST(threshCalc, APD_LOW_FREQ_THRESH_DIVISION_FACTOR);
+    threshCalc = DIV_ROUND_CLOSEST(threshCalc, APD_LOW_FREQ_THRESH_DIVISION_FACTOR);
     ADI_EXPECT(adrv9001_NvsRegmapRxb_DecimatedDataOverloadSecondaryUpperThreshold_Set, device, rxbAddr, threshCalc);
 
     ADI_EXPECT(adrv9001_NvsRegmapRxb_Adcovrg2ndHighCounter_Set,            device, rxbAddr, APD_LOW_FREQ_ADCOVRG_2ND_HIGH_COUNTER);

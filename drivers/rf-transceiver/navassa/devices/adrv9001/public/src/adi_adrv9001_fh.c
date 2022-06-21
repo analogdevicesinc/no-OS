@@ -309,8 +309,11 @@ static __maybe_unused int32_t adi_adrv9001_fh_HopTable_Static_Configure_Validate
                                                                                  adi_adrv9001_FhHopFrame_t hopTable[],
                                                                                  uint32_t tableSize)
 {
-    uint32_t frequencyIndex = 0;
+	uint32_t frequencyIndex = 0;
 	uint32_t tempAddress = 0;
+	uint8_t maxNumHopFrequencies = (mode != ADI_ADRV9001_FHMODE_LO_RETUNE_REALTIME_PROCESS_DUAL_HOP) ? ADI_ADRV9001_FH_MAX_HOP_TABLE_SIZE :
+                                                                                                      (ADI_ADRV9001_FH_MAX_HOP_TABLE_SIZE) / 2;
+
 	if (tableId == ADI_ADRV9001_FHHOPTABLE_A)
 	{
 		if (hopSignal == ADI_ADRV9001_FH_HOP_SIGNAL_1)
@@ -333,8 +336,7 @@ static __maybe_unused int32_t adi_adrv9001_fh_HopTable_Static_Configure_Validate
 			tempAddress = adrv9001->devStateInfo.fhHopTableB2Addr;
 		}
 	}
-    uint8_t maxNumHopFrequencies = (mode != ADI_ADRV9001_FHMODE_LO_RETUNE_REALTIME_PROCESS_DUAL_HOP) ? ADI_ADRV9001_FH_MAX_HOP_TABLE_SIZE :
-                                                                                                      (ADI_ADRV9001_FH_MAX_HOP_TABLE_SIZE) / 2;                                                                          
+
     /* Check if FH is enabled in device profile */
     ADI_FH_CHECK_FH_ENABLED(adrv9001);
     /* Check for NULL pointer */
@@ -491,7 +493,8 @@ int32_t adi_adrv9001_fh_Configure(adi_adrv9001_Device_t *adrv9001,
     adrv9001_LoadFourBytes(&offset, armData, fhConfig->minFrameDuration_us);
     armData[offset++] = fhConfig->txAnalogPowerOnFrameDelay;
     armData[offset++] = fhConfig->rxZeroIfEnable;
-    offset += 2u; /* padding */
+	armData[offset++] = fhConfig->enableAGCGainIndexSeeding;
+    offset += 1u; /* padding */
     /* If in gain select by pin mode, load Rx gain and Tx attenuation tables */
     if (fhConfig->gainSetupByPin == true) 
     {
@@ -652,7 +655,8 @@ int32_t adi_adrv9001_fh_Configuration_Inspect(adi_adrv9001_Device_t *adrv9001, a
     adrv9001_ParseFourBytes(&offset,  armData, &fhConfig->minFrameDuration_us);
     fhConfig->txAnalogPowerOnFrameDelay = armData[offset++];
     fhConfig->rxZeroIfEnable = armData[offset++];
-    offset += 2u;
+	fhConfig->enableAGCGainIndexSeeding = armData[offset++];
+    offset += 1u;
     /* Get gain setup by pin information */
     if (fhConfig->gainSetupByPin)
     {
@@ -1305,8 +1309,8 @@ int32_t adi_adrv9001_fh_HopTable_Dynamic_Configure(adi_adrv9001_Device_t *adrv90
             adrv9001_LoadFourBytes(&offset, fhTable_A, hopTable[i + j].rx2OffsetFrequencyHz);
             fhTable_A[offset++] = hopTable[i + j].rx1GainIndex;
 	        fhTable_A[offset++] = hopTable[i + j].rx2GainIndex;
-            adrv9001_LoadTwoBytes(&offset, fhTable_A, hopTable[i + j].tx1Attenuation_fifthdB);
-	        adrv9001_LoadTwoBytes(&offset, fhTable_A, hopTable[i + j].tx2Attenuation_fifthdB);
+	        fhTable_A[offset++] = hopTable[i + j].tx1Attenuation_fifthdB;
+	        fhTable_A[offset++] = hopTable[i + j].tx2Attenuation_fifthdB;
         }
         ADI_EXPECT(adrv9001_HopTable_Spi_Pack, adrv9001, addrArray_A, fhTable_A, numberOfHops, &numWrBytes, bitmSwInt_A, spiPackedFhTable);
     
@@ -1319,8 +1323,8 @@ int32_t adi_adrv9001_fh_HopTable_Dynamic_Configure(adi_adrv9001_Device_t *adrv90
             adrv9001_LoadFourBytes(&offset, fhTable_B, hopTable[i + j].rx2OffsetFrequencyHz);
             fhTable_B[offset++] = hopTable[i + j].rx1GainIndex;
 	        fhTable_B[offset++] = hopTable[i + j].rx2GainIndex;
-            adrv9001_LoadTwoBytes(&offset, fhTable_B, hopTable[i + j].tx1Attenuation_fifthdB);
-	        adrv9001_LoadTwoBytes(&offset, fhTable_B, hopTable[i + j].tx2Attenuation_fifthdB);
+	        fhTable_B[offset++] = hopTable[i + j].tx1Attenuation_fifthdB;
+	        fhTable_B[offset++] = hopTable[i + j].tx2Attenuation_fifthdB;
         }
         ADI_EXPECT(adrv9001_HopTable_Spi_Pack, adrv9001, addrArray_B, fhTable_B, numberOfHops, &numWrBytes, bitmSwInt_B, spiPackedFhTable);
     }
