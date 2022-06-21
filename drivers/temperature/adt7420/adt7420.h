@@ -56,16 +56,18 @@
 #define ADT7420_A0_PIN(x)		(((x) & 0x1) << 0) // I2C Serial Bus Address Selection Pin
 #define ADT7420_A1_PIN(x)		(((x) & 0x1) << 1) // I2C Serial Bus Address Selection Pin
 #define ADT7420_ADDRESS(x,y)		(0x48 + ADT7420_A1_PIN(x) + ADT7420_A0_PIN(y))
+#define ADT7320_L16				NO_OS_BIT(8)	//indicator that register is 16-bit
+#define ADT7320_ADDR_MSK		NO_OS_GENMASK(7,0)
 
 /* ADT7320  (SPI) registers */
 #define ADT7320_REG_STATUS		0x00 // Status
 #define ADT7320_REG_CONFIG		0x01 // Configuration
-#define ADT7320_REG_TEMP    		0x02 // Temperature value
+#define ADT7320_REG_TEMP    	(ADT7320_L16 | 0x02) // Temperature value
 #define ADT7320_REG_ID			0x03 // ID
-#define ADT7320_REG_T_CRIT		0x04 // Temperature CRIT setpoint (147'C)
+#define ADT7320_REG_T_CRIT		(ADT7320_L16 | 0x04) // Temperature CRIT setpoint (147'C)
 #define ADT7320_REG_HIST		0x05 // Temperature HYST setpoint (5'C)
-#define ADT7320_REG_T_HIGH    		0x06 // Temperature HIGH setpoint (64'C)
-#define ADT7320_REG_T_LOW    		0x07 // Temperature LOW setpoint (10'C)
+#define ADT7320_REG_T_HIGH    		(ADT7320_L16 | 0x06) // Temperature HIGH setpoint (64'C)
+#define ADT7320_REG_T_LOW    		(ADT7320_L16 | 0x07) // Temperature LOW setpoint (10'C)
 
 /* ADT7320 SPI command byte */
 #define ADT7320_WRITE_MASK_CMD		0b00111000 // SPI write command
@@ -162,18 +164,17 @@ extern const struct adt7420_chip_info chip_info[];
 /******************************************************************************/
 
 /*! Reads the value of a register */
-uint16_t adt7420_get_register_value(struct adt7420_dev *dev,
-				    uint8_t register_address);
-/*! Write to input shift register SPI interface. */
-uint16_t set_shift_reg(struct adt7420_dev *dev,
-		       uint8_t register_address,
-		       uint8_t *data) ;
+int adt7420_reg_read(struct adt7420_dev *dev,
+		     uint8_t register_address, uint16_t *data);
 
-/*! Sets the value of a register.*/
-int32_t set_register_value(struct adt7420_dev *dev,
-			   uint8_t register_address,
-			   uint8_t num_data_bytes,
-			   uint8_t *data, uint8_t mask, uint8_t value);
+/* Read-modify-write operation*/
+int adt7420_reg_update_bits(struct adt7420_dev *dev,
+			    uint8_t register_address, uint8_t mask, uint8_t value);
+
+/*Sets register value*/
+int adt7420_reg_write(struct adt7420_dev *dev,
+		      uint8_t register_address,
+		      uint32_t data);
 
 /*! Initializes the comm. peripheral and checks if the device is present. */
 int32_t adt7420_init(struct adt7420_dev **device,
@@ -183,12 +184,12 @@ int32_t adt7420_init(struct adt7420_dev **device,
 int32_t adt7420_remove(struct adt7420_dev *dev);
 
 /*! Sets the operational mode for ADT7420. */
-void adt7420_set_operation_mode(struct adt7420_dev *dev,
-				uint8_t mode);
+int adt7420_set_operation_mode(struct adt7420_dev *dev,
+			       uint8_t mode);
 
 /*! Sets the resolution for ADT7420. */
-void adt7420_set_resolution(struct adt7420_dev *dev,
-			    uint8_t resolution);
+int adt7420_set_resolution(struct adt7420_dev *dev,
+			   uint8_t resolution);
 
 /*! Resets the SPI or I2C inteface for the ADT7420/ADT7320*/
 int32_t adt7420_reset(struct adt7420_dev *dev);
@@ -197,12 +198,12 @@ int32_t adt7420_reset(struct adt7420_dev *dev);
 float adt7420_get_temperature(struct adt7420_dev *dev);
 
 /*! Read the register value for I2C interface devices */
-uint16_t adt7420_i2c_get_register_value(struct adt7420_dev *dev,
-					uint8_t register_address);
+int adt7420_i2c_reg_read(struct adt7420_dev *dev,
+			 uint8_t register_address, uint8_t *data);
 
 /*! Read the register value for SPI interface devices */
-uint16_t adt7420_spi_get_register_value(struct adt7420_dev *dev,
-					uint8_t register_address);
+int adt7420_spi_reg_read(struct adt7420_dev *dev,
+			 uint8_t register_address, uint16_t *data);
 
 /*! Check if the interface of the selected device is SPI */
 bool adt7420_is_spi(struct adt7420_dev *dev);
