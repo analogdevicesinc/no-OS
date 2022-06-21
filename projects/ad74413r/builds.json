@@ -1,0 +1,15 @@
+{
+  "stm32": {
+    "dummy_example": {
+      "flags" : "DUMMY_EXAMPLE=y"
+    }
+  },
+  "maxim": {
+    "dummy_example": {
+      "flags" : "DUMMY_EXAMPLE=y TARGET=max78000"
+    },
+    "dummy_example": {
+      "flags" : "DUMMY_EXAMPLE=y TARGET=max32655"
+    }
+  }
+}
