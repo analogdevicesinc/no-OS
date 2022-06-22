@@ -1,8 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0
 /**
  * \file talise_arm_macros.h
  * \brief Contains Talise API miscellaneous macro definitions for ARM
  *
- * Talise API version: 3.6.0.5
+ * Talise API version: 3.6.2.1
  *
  * Copyright 2015-2017 Analog Devices Inc.
  * Released under the AD9378-AD9379 API license, for more information see the "LICENSE.txt" file in this zip file.

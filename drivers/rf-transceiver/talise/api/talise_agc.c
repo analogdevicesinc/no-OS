@@ -1,8 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0
 /**
  * \file talise_agc.c
  * \brief Contains Talise API AGC function calls
  *
- * Talise API version: 3.6.0.5
+ * Talise API version: 3.6.2.1
  *
  * Copyright 2015-2017 Analog Devices Inc.
  * Released under the AD9378-AD9379 API license, for more information see the "LICENSE.txt" file in this zip file.
@@ -194,8 +195,8 @@ uint32_t TALISE_setupRxAgc(taliseDevice_t *device, taliseAgcCfg_t *rxAgcCtrl)
 
 	minAgcSlowLoopSettlingDelay = (uint8_t)(65 / (adcClock_Hz / agcClock_Hz));
 
-	agcGainUpdateCounter = (uint32_t)(((uint64_t)rxAgcCtrl->agcGainUpdateCounter_us
-					   * (uint64_t)agcClock_Hz) / 1000000);
+	agcGainUpdateCounter = (uint32_t)DIV_U64(((uint64_t)
+			       rxAgcCtrl->agcGainUpdateCounter_us * (uint64_t)agcClock_Hz), 1000000);
 
 	/* performing range check for gain update time */
 	if (agcGainUpdateCounter & ~agcGainUpdateCounterBitMask) {
@@ -348,9 +349,9 @@ uint32_t TALISE_setupRxAgc(taliseDevice_t *device, taliseAgcCfg_t *rxAgcCtrl)
 		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_INVALID_PARAM,
 						  TAL_ERR_INV_AGC_PKK_STRUCT_INIT, retVal, TALACT_ERR_CHECK_PARAM);
 	} else {
-		agcUnderRangeLowInterval = (uint32_t)(((uint64_t)
-						       rxAgcCtrl->agcPeak.agcUnderRangeLowInterval_ns * (uint64_t)agcClock_Hz) /
-						      1000000000);
+		agcUnderRangeLowInterval = (uint32_t)DIV_U64(((uint64_t)
+					   rxAgcCtrl->agcPeak.agcUnderRangeLowInterval_ns * (uint64_t)agcClock_Hz),
+					   1000000000);
 
 		/* performing range check for gain update time */
 		if (agcUnderRangeLowInterval & ~agcUnderRangeLowIntervalMask) {
@@ -997,8 +998,8 @@ uint32_t TALISE_getAgcCtrlRegisters(taliseDevice_t *device,
 	}
 
 	/*Calculation of Gain Update Time in uS*/
-	agcCtrl->agcGainUpdateCounter_us = (uint32_t)(((uint64_t)agcGainUpdateCounter *
-					   1000000) / agcClock_Hz);
+	agcCtrl->agcGainUpdateCounter_us = (uint32_t)DIV_U64(((uint64_t)
+					   agcGainUpdateCounter * 1000000), agcClock_Hz);
 
 	halError = talSpiReadField(device->devHalInfo, TALISE_ADDR_AGC_ATTACK_DELAY_RX1,
 				   &agcCtrl->agcRx1AttackDelay, agcRx1AttackDelayBitMask, 0);
@@ -1151,8 +1152,8 @@ uint32_t TALISE_getAgcPeakRegisters(taliseDevice_t *device,
 	}
 
 	/*Calculation of Gain Update Time in ns*/
-	agcPeak->agcUnderRangeLowInterval_ns = (uint32_t)(((uint64_t)
-					       agcUnderRangeLowInterval * 1000000000) / agcClock_Hz);
+	agcPeak->agcUnderRangeLowInterval_ns = (uint32_t)DIV_U64(((
+			uint64_t)agcUnderRangeLowInterval * 1000000000), agcClock_Hz);
 
 	halError = talSpiReadField(device->devHalInfo, TALISE_ADDR_AGC_UNDERRANGE1,
 				   &agcPeak->agcUnderRangeMidInterval, agcUnderRangeMidIntervalMask, 0);

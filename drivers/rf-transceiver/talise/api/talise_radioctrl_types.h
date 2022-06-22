@@ -1,8 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0
 /**
  * \file talise_radioctrl_types.h
  * \brief Contains Talise API Radio Control data types
  *
- * Talise API version: 3.6.0.5
+ * Talise API version: 3.6.2.1
  *
  * Copyright 2015-2017 Analog Devices Inc.
  * Released under the AD9378-AD9379 API license, for more information see the "LICENSE.txt" file in this zip file.
@@ -118,7 +119,7 @@ typedef enum {
 	TAL_RX1RX2_EN   = 0x03,  /*!< Rx1 + Rx2 channels enabled */
 	TAL_ORX1_EN     = 0x04,  /*!< ORx1 channel enabled */
 	TAL_ORX2_EN     = 0x08,  /*!< ORx2 channel enabled */
-	TAL_ORX1ORX2_EN = 0x0C 	 /*!< ORx1 and ORx2 channels enabled - only allowed if ADC stitching is not enabled */
+	TAL_ORX1ORX2_EN = 0x0C	 /*!< ORx1 and ORx2 channels enabled - only allowed if ADC stitching is not enabled */
 
 } taliseRxORxChannels_t;
 

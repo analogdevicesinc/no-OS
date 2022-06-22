@@ -1,10 +1,11 @@
+// SPDX-License-Identifier: GPL-2.0
 /**
  * \file talise_error.c
  * \brief Contains Talise API error information functions
  *        These functions are public to the customer for getting more details on
  *        errors and debugging.
  *
- * Talise API version: 3.6.0.5
+ * Talise API version: 3.6.2.1
  *
  * Copyright 2015-2017 Analog Devices Inc.
  * Released under the AD9378-AD9379 API license, for more information see the "LICENSE.txt" file in this zip file.
@@ -1090,8 +1091,27 @@ const char* TALISE_getErrorMessage(uint32_t errSrc, uint32_t errCode)
 			return "TALISE_setDigDcOffsetEn(): Invalid enable mask parameter\n";
 		case TAL_ERR_DIG_DC_OFFSET_NULL_ENABLE_MASK:
 			return "TALISE_getDigDcOffsetEn(): NULL enable mask parameter\n";
+		case TAL_ERR_SETTCAL_BATCH_SIZE_PARAM:
+			return "TALISE_setTrackingCalsBatchSize(): Invalid batch size parameter\n";
+		case TAL_ERR_SETTCAL_BATCH_SIZE_ARMSTATE_ERROR:
+			return "TALISE_setTrackingCalsBatchSize: Talise ARM can not be in radioOn state when the function is called.\n";
+		case TAL_ERR_GETTCAL_BATCH_SIZE_ARMSTATE_ERROR:
+			return "TALISE_getTrackingCalsBatchSize: Talise ARM can not be in radioOn state when the function is called.\n";
+		case TAL_ERR_GETTCAL_BATCHSIZE_NULL_PARAM:
+			return "TALISE_getTrackingCalsBatchSize(): NULL pointer passed to function\n";
+		case TAL_ERR_GETTCAL_BATCHSIZE_INV_VALUE:
+			return "TALISE_getTrackingCalsBatchSize(): Invalid batch size stored in ARM \n";
+		case TAL_ERR_TXNCOSHIFTER_INV_PROFILE:
+			return "TALISE_txNcoShifterSet(): Invalid Tx profile";
+		case TAL_ERR_TXNCOSHIFTER_NULL_PARM:
+			return "TALISE_txNcoShifterSet(): Error txNcoShiftCfg is NULL";
+		case TAL_ERR_TXNCOSHIFTER_INV_TX1_FREQ:
+			return "TALISE_txNcoShifterSet(): tx1 tone frequency > divider rate KHZ or < negative divider rate KHZ";
+		case TAL_ERR_TXNCOSHIFTER_INV_TX2_FREQ:
+			return "TALISE_txNcoShifterSet(): tx2 tone frequency > divider rate KHZ or < negative divider rate KHZ";
 		case TAL_ERR_NUMBER_OF_ERRORS:
 			return "Invalid API error passed, last in error list\n"; /*Use for TestApiErrorStrings */
+
 		default:
 			return "Invalid API error passed, not in error list\n";
 		}
@@ -1218,4 +1238,3 @@ talRecoveryActions_t talApiErrHandler(taliseDevice_t *device,
 		return retVal;
 	}
 }
-

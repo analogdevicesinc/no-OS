@@ -1,8 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0
 /**
  * \file talise_user.h
  * \brief Contains Talise API macro definitions and global structure declarations for talise_user.c
  *
- * Talise API version: 3.6.0.5
+ * Talise API version: 3.6.2.1
  *
  * Copyright 2015-2017 Analog Devices Inc.
  * Released under the AD9378-AD9379 API license, for more information see the "LICENSE.txt" file in this zip file.
@@ -88,8 +89,8 @@ extern "C" {
 /* 3 Bytes per SPI transaction * 341 transactions = ~1024 byte buffer size */
 /* Minimum MYK_SPIWRITEARRAY_BUFFERSIZE = 18 */
 
-#define TALISE_VERBOSE 1
-#define TALISE_LOGGING 0xF      /*LogLevel Set to All*/
+#define TALISE_VERBOSE 0
+#define TALISE_LOGGING 0x7      /*LogLevel Set to All*/
 #define TALISE_RESET_ON_ERR  1   /*API Reset on Severe Errors*/
 
 /*
