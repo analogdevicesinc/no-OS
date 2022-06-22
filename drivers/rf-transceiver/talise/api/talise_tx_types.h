@@ -1,8 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0
 /**
  * \file talise_tx_types.h
  * \brief Contains Talise API Tx datapath data types
  *
- * Talise API version: 3.6.0.5
+ * Talise API version: 3.6.2.1
  *
  * Copyright 2015-2017 Analog Devices Inc.
  * Released under the AD9378-AD9379 API license, for more information see the "LICENSE.txt" file in this zip file.
@@ -29,7 +30,7 @@ typedef enum {
  *  \brief Enum of possible Tx DAC FS boost options
  */
 typedef enum {
-	TAL_DACFS_0DB 	= 0x0,	/*!< No Full Scale Boost */
+	TAL_DACFS_0DB	= 0x0,	/*!< No Full Scale Boost */
 	TAL_DACFS_3DB	= 0x1F  /*!< Full scale boost = 3dB */
 } taliseDacFullScale_t;
 
@@ -51,6 +52,29 @@ typedef struct {
 	int32_t tx1ToneFreq_kHz;        /*!< Signed frequency in kHz of the desired Tx1 tone */
 	int32_t tx2ToneFreq_kHz;        /*!< Signed frequency in kHz of the desired Tx2 tone */
 } taliseTxNcoTestToneCfg_t;
+
+/**
+ *  \brief Enum to set the Tx Atenuation step size
+ */
+typedef enum {
+	TAL_TXNCO_DISABLE = 0,        /*!< TX NCO Disable */
+	TAL_TXNCO_TX1_ENABLE = 1,     /*!< TX NCO Tx1 Enable */
+	TAL_TXNCO_TX2_ENABLE = 2,     /*!< TX NCO Tx2 Enable */
+	TAL_TXNCO_ENABLE_ALL = 3      /*!< TX NCO Tx1 & Tx2 Enable */
+} taliseTxNCOSelect_t;
+
+/**
+ *  \brief Data structure to hold Talise Tx NCO Configuration (tone configuration, enable/disable and tone phase configuration)
+ */
+typedef struct {
+	taliseTxNCOSelect_t
+	enableNCO; /* < 0 = Disable NCO, 1 = Enable Tx1 NCO, 2 = Enable Tx2 NCO, */
+	int32_t tx1ToneFreq_kHz; /*!< Signed frequency in kHz of the desired Tx1 tone */
+	int32_t tx2ToneFreq_kHz; /*!< Signed frequency in kHz of the desired Tx2 tone */
+	int32_t tx1TonePhaseDeg;                         /*!< Tx1 Tone Phase degree */
+	int32_t tx2TonePhaseDeg;                         /*!< Tx2 Tone Phase degree */
+} taliseTxNcoShifterCfg_t;
+
 
 /**
  *  \brief Data structure to hold Talise Tx Attenuation Control Pin Configuration

@@ -1,9 +1,10 @@
+// SPDX-License-Identifier: GPL-2.0
 /**
  * \file talise_rx.c
  * \brief Contains functions to support Talise Rx and Observation Rx data path
  *        control
  *
- * Talise API version: 3.6.0.5
+ * Talise API version: 3.6.2.1
  *
  * Copyright 2015-2017 Analog Devices Inc.
  * Released under the AD9378-AD9379 API license, for more information see the "LICENSE.txt" file in this zip file.
@@ -1958,14 +1959,14 @@ talRecoveryActions_t talSetDualBandSettings(taliseDevice_t *device,
 					upperBandNco2Freq_kHz : (outFs_kHz + upperBandNco2Freq_kHz);
 
 	/* Convert positive frequencies to their FTW equivalents */
-	lowerBandNco1Ftw = ((((uint64_t)lowerBandNco1FreqUnsigned_kHz * POW_2_32) << 1)
-			    + pfirFs_kHz) / (pfirFs_kHz << 1); /* integer rounding */
-	upperBandNco1Ftw = ((((uint64_t)upperBandNco1FreqUnsigned_kHz * POW_2_32) << 1)
-			    + pfirFs_kHz) / (pfirFs_kHz << 1); /* integer rounding */
-	lowerBandNco2Ftw = ((((uint64_t)lowerBandNco2FreqUnsigned_kHz * POW_2_32) << 1)
-			    + outFs_kHz) / (outFs_kHz << 1); /* integer rounding */
-	upperBandNco2Ftw = ((((uint64_t)upperBandNco2FreqUnsigned_kHz * POW_2_32) << 1)
-			    + outFs_kHz) / (outFs_kHz << 1); /* integer rounding */
+	lowerBandNco1Ftw = DIV_U64((((uint64_t)lowerBandNco1FreqUnsigned_kHz * POW_2_32)
+				    << 1) + pfirFs_kHz, pfirFs_kHz << 1); /* integer rounding */
+	upperBandNco1Ftw = DIV_U64((((uint64_t)upperBandNco1FreqUnsigned_kHz * POW_2_32)
+				    << 1) + pfirFs_kHz, pfirFs_kHz << 1); /* integer rounding */
+	lowerBandNco2Ftw = DIV_U64((((uint64_t)lowerBandNco2FreqUnsigned_kHz * POW_2_32)
+				    << 1) + outFs_kHz, outFs_kHz << 1); /* integer rounding */
+	upperBandNco2Ftw = DIV_U64((((uint64_t)upperBandNco2FreqUnsigned_kHz * POW_2_32)
+				    << 1) + outFs_kHz, outFs_kHz << 1); /* integer rounding */
 
 	/* Check FTW is not more than 32 bits */
 	if ((lowerBandNco1Ftw >= POW_2_32) || (upperBandNco1Ftw >= POW_2_32) ||
@@ -2354,8 +2355,8 @@ talRecoveryActions_t talSetupNcoShifter(taliseDevice_t *device,
 				       : (pfirFs_kHz + init->rx.rxProfile.rxNcoShifterCfg.bandANco1Freq_kHz) ;
 
 		/* Convert positive frequencies to their FTW equivalents */
-		nco1Ftw = ((((uint64_t)nco1FreqUnsigned_kHz * POW_2_32) << 1) + pfirFs_kHz) /
-			  (pfirFs_kHz << 1); /* integer rounding */
+		nco1Ftw = DIV_U64((((uint64_t)nco1FreqUnsigned_kHz * POW_2_32) << 1) +
+				  pfirFs_kHz, pfirFs_kHz << 1); /* integer rounding */
 
 		/* Check FTW is not more than 32 bits */
 		if (nco1Ftw >= POW_2_32) {
@@ -2383,8 +2384,8 @@ talRecoveryActions_t talSetupNcoShifter(taliseDevice_t *device,
 				       : (outFs_kHz + init->rx.rxProfile.rxNcoShifterCfg.bandANco2Freq_kHz);
 
 		/* Convert positive frequencies to their FTW equivalents */
-		nco2Ftw = ((((uint64_t)nco2FreqUnsigned_kHz * POW_2_32) << 1) + outFs_kHz) /
-			  (outFs_kHz << 1); /* integer rounding */
+		nco2Ftw = DIV_U64((((uint64_t)nco2FreqUnsigned_kHz * POW_2_32) << 1) +
+				  outFs_kHz, outFs_kHz << 1); /* integer rounding */
 
 		/* Check FTW is not more than 32 bits */
 		if (nco2Ftw >= POW_2_32) {

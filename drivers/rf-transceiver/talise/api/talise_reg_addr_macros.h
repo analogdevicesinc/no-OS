@@ -1,8 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0
 /**
  * \file talise_reg_addr_macros.h
  * \brief Contains Talise API address macro definitions
  *
- * Talise API version: 3.6.0.5
+ * Talise API version: 3.6.2.1
  *
  * Copyright 2015-2017 Analog Devices Inc.
  * Released under the AD9378-AD9379 API license, for more information see the "LICENSE.txt" file in this zip file.
@@ -276,6 +277,21 @@ extern "C" {
 #define TALISE_ADDR_TX_ABBF_FREQCAL_NCO_Q_UPPER_NIBBLE             0x0F1E
 #define TALISE_ADDR_TX_ABBF_FREQCAL_NCO_Q_MSBS                     0x0F1F
 #define TALISE_ADDR_TX_ABBF_FREQCAL_NCO_Q_LSBS                     0x0F20
+#define TALISE_ADDR_TX_NCO_CH1_CTRL                                0x1020
+#define TALISE_ADDR_TX_NCO_CH1_FREQ_TUNE_BYTE_4                    0x1021
+#define TALISE_ADDR_TX_NCO_CH1_FREQ_TUNE_BYTE_3                    0x1022
+#define TALISE_ADDR_TX_NCO_CH1_FREQ_TUNE_BYTE_2                    0x1023
+#define TALISE_ADDR_TX_NCO_CH1_FREQ_TUNE_BYTE_1                    0x1024
+#define TALISE_ADDR_TX_NCO_CH1_PHASE_OFFSET_BYTE_2                 0x1025
+#define TALISE_ADDR_TX_NCO_CH1_PHASE_OFFSET_BYTE_1                 0x1026
+#define TALISE_ADDR_TX_NCO_CH2_CTRL                                0x1027
+#define TALISE_ADDR_TX_NCO_CH2_FREQ_TUNE_BYTE_4                    0x1028
+#define TALISE_ADDR_TX_NCO_CH2_FREQ_TUNE_BYTE_3                    0x1029
+#define TALISE_ADDR_TX_NCO_CH2_FREQ_TUNE_BYTE_2                    0x102A
+#define TALISE_ADDR_TX_NCO_CH2_FREQ_TUNE_BYTE_1                    0x102B
+#define TALISE_ADDR_TX_NCO_CH2_PHASE_OFFSET_BYTE_2                 0x102C
+#define TALISE_ADDR_TX_NCO_CH2_PHASE_OFFSET_BYTE_1                 0x102D
+#define TALISE_ADDR_TX_NCO_FREQ_UPDATE                             0x102E
 #define TALISE_ADDR_GPIO_3P3V_DIRECTION_CONTROL_0                  0x1080
 #define TALISE_ADDR_GPIO_3P3V_DIRECTION_CONTROL_1                  0x1081
 #define TALISE_ADDR_GPIO_3P3V_SPI_SOURCE_0                         0x1082

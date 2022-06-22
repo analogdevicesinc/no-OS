@@ -12,6 +12,13 @@
 /* include standard types and definitions */
 #include <stdint.h>
 #include <stddef.h>
+#include "no_os_util.h"
+
+#define u16 			uint16_t
+#define DIV_U64(x, y) no_os_div_u64(x, y)
+#define DIV_S64(x, y) no_os_div_s64(x, y)
+#define DIV_ROUND_CLOSEST	NO_OS_DIV_ROUND_CLOSEST
+#define DIV_ROUND_CLOSEST_ULL	NO_OS_DIV_ROUND_CLOSEST_ULL
 
 /*========================================
  * Enums and structures

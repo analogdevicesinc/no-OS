@@ -1,8 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0
 /**
  * \file talise_cals_types.h
  * \brief Contains Talise API Calibration data types
  *
- * Talise API version: 3.6.0.5
+ * Talise API version: 3.6.2.1
  *
  * Copyright 2015-2017 Analog Devices Inc.
  * Released under the AD9378-AD9379 API license, for more information see the "LICENSE.txt" file in this zip file.
@@ -86,6 +87,14 @@ typedef enum {
 	TAL_DC_OFFSET_ORX2 = 0x08,                   /*!< Enables ORx2  */
 	TAL_DC_OFFSET_ALL_ON = 0x0F              /*!< Enables all the channels  */
 } taliseRxDcOffsettEn_t;
+
+/**
+ *  \brief Enum of Tracking Calibration Batch Size in Micro Seconds
+ */
+typedef enum {
+	TAL_TRACK_BATCH_SIZE_500_US = 0,
+	TAL_TRACK_BATCH_SIZE_200_US = 1
+} taliseTrackingCalBatchSize_t;
 
 /**
  * \brief Data structure to hold Tx LOL Status

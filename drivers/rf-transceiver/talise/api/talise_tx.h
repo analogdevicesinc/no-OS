@@ -1,9 +1,10 @@
+// SPDX-License-Identifier: GPL-2.0
 /**
  * \file talise_tx.h
  * \brief Contains Talise transmit related function prototypes for
  *        talise_tx.c
  *
- * Talise API version: 3.6.0.5
+ * Talise API version: 3.6.2.1
  *
  * Copyright 2015-2017 Analog Devices Inc.
  * Released under the AD9378-AD9379 API license, for more information see the "LICENSE.txt" file in this zip file.
@@ -132,6 +133,36 @@ uint32_t TALISE_setDacFullScale(taliseDevice_t *device,
  */
 uint32_t TALISE_enableTxNco(taliseDevice_t *device,
 			    taliseTxNcoTestToneCfg_t *txNcoTestToneCfg);
+
+/**
+ * \brief Enables/Disables the Tx NCO
+ *
+ *  This function enables/disables a digital numerically controlled oscillator
+ *  in the Talise Digital to create a test CW tone on Tx1 and Tx2 RF outputs.
+ *
+ *  The TxAttenuation is forced in this function to max analog output power,
+ *  but the digital attenuation is backed off 6dB to make sure the digital
+ *  filter does not clip and cause spurs in the tx spectrum. Ensure no other
+ *  API's are called that change the Tx attenuation mode when using this
+ *  function
+ *
+ * This api is similar in functionality to TALISE_enableTxNco but it has a few
+ * additional uses, in addition to configuring the NCO it can also configure
+ * Each nco independantly and it can also modify the signal of each by altering
+ * the phase of each.
+ *
+ * \param device Pointer to the Talise device's data structure
+ * \param txNcoTestToneCfg Pointer to taliseTxNcoShifterCfg_t structure that
+ * contains the configuration for the Tx NCO test tone and additional parameters
+ * related to phase of the signals for each tx.
+ *
+ * \retval TALACT_WARN_RESET_LOG Recovery action for log reset
+ * \retval TALACT_ERR_CHECK_PARAM Recovery action for bad parameter check
+ * \retval TALACT_ERR_RESET_SPI Recovery action for SPI reset required
+ * \retval TALACT_NO_ACTION Function completed successfully, no action required
+ */
+uint32_t TALISE_txNcoShifterSet(taliseDevice_t *device,
+				taliseTxNcoShifterCfg_t *txNcoTestToneCfg);
 
 /**
  * \brief Configures Gain steps and the GPIO inputs for Tx attenuation control

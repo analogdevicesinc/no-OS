@@ -1,9 +1,10 @@
+// SPDX-License-Identifier: GPL-2.0
 /**
  * \file talise.c
  * \brief Contains top level functions to support initialization and ctrol of
  *         the Talise transceiver device.
  *
- * Talise API version: 3.6.0.5
+ * Talise API version: 3.6.2.1
  *
  * Copyright 2015-2017 Analog Devices Inc.
  * Released under the AD9378-AD9379 API license, for more information see the "LICENSE.txt" file in this zip file.
@@ -383,10 +384,63 @@ uint32_t TALISE_initialize(taliseDevice_t *device, taliseInit_t *init)
 	uint8_t orxFirDecBitField = 0;
 	uint8_t digDeviceClockDiv = 0;
 	uint32_t digRefClock_MHz = 0;
-	taliseInfo_t clearInfo = {(taliseStates_t)0,0,0,0,0,{0,0,(taliseHsDiv_t)0,0,0},
-				  (taliseGainMode_t)0,{0,0,0,0,0,0,0,0},(taliseTxAttenStepSize_t)0,
-				  0,0,0,0,0,0,0,(taliseRxDdc_t)0,0,0,0
-				 };
+	taliseInfo_t clearInfo = {
+		.devState = TAL_STATE_POWERONRESET,
+		.initializedChannels = 0,
+		.profilesValid = 0,
+		.errSource = 0,
+		.errCode = 0,
+		.clocks =
+		{
+			.deviceClock_kHz = 0,
+			.clkPllVcoFreq_kHz = 0,
+			.clkPllHsDiv = TAL_HSDIV_2,
+			.hsDigClkDiv2_Hz = 0,
+			.hsDigClkDiv4or5_Hz = 0,
+			.rfPllUseExternalLo = 0
+		},
+		.gainMode = TAL_MGC,
+		.gainIndexes =
+		{
+			.rx1MinGainIndex = 0,
+			.rx1MaxGainIndex = 0,
+			.rx2MinGainIndex = 0,
+			.rx2MaxGainIndex = 0,
+			.orx1MinGainIndex = 0,
+			.orx1MaxGainIndex = 0,
+			.orx2MinGainIndex = 0,
+			.orx2MaxGainIndex = 0
+		},
+		.txAttenStepSize = TAL_TXATTEN_0P05_DB,
+		.orxAdcStitchingEnabled = 0,
+		.usedGpiopins = 0,
+		.usedGpio3p3pins = 0,
+		.rxFramerNp = 0,
+		.orxFramerNp = 0,
+		.rxOutputRate_kHz = 0,
+		.txInputRate_kHz = 0,
+		.rxDdcMode = TAL_RXDDC_BYPASS,
+		.rxDualBandEnabled = 0,
+		.rxTotalM = 0,
+		.rxBandwidth_Hz = 0,
+		.txBandwidth_Hz = 0,
+		.orxBandwidth_Hz = 0,
+		.swTest = 0,
+		.deviceSiRev = 0,
+		.talErrFunctionTable =
+		{
+			.talErrorFunctionTable = {}
+		},
+		.talFhmFreqRange =
+		{
+			.fhmMinFreq_MHz = 0,
+			.fhmMaxFreq_MHz = 0
+		},
+		.talFhmTriggerMode = TAL_FHM_GPIO_MODE,
+		.talFhmInitHopFreq_Hz = 0,
+		.talFhmMcsSync = 0
+	};
+
 	uint32_t agcClock_Hz = 0;
 	uint32_t gainUpdateCount = 0;
 	taliseAdcSampleXbar_t adcXbar = {(taliseAdcSampleXbarSelect_t)0,(taliseAdcSampleXbarSelect_t)0,(taliseAdcSampleXbarSelect_t)0,(taliseAdcSampleXbarSelect_t)0,(taliseAdcSampleXbarSelect_t)0,(taliseAdcSampleXbarSelect_t)0,(taliseAdcSampleXbarSelect_t)0,(taliseAdcSampleXbarSelect_t)0};
@@ -1871,13 +1925,14 @@ uint32_t TALISE_calculateDigitalClocks(taliseDevice_t *device,
 				       taliseDigClocks_t *digClocks)
 {
 	talRecoveryActions_t retVal = TALACT_NO_ACTION;
-	adiHalErr_t halError = ADIHAL_OK;
+
 	uint8_t hsDivTimes10 = 25;
 	uint8_t hsClkDivHsDigClk4or5 = 20;
 	uint32_t localHsDigClkDiv2_Hz = 0;
 	uint32_t localHsDigClk4or5_Hz = 0;
 
 #if TALISE_VERBOSE
+	adiHalErr_t halError = ADIHAL_OK;
 	halError = talWriteToLog(device->devHalInfo, ADIHAL_LOG_MSG, TAL_ERR_OK,
 				 "TALISE_calculateDigitalClocks()\n");
 	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_LOG, halError, retVal,
@@ -1914,13 +1969,13 @@ uint32_t TALISE_calculateDigitalClocks(taliseDevice_t *device,
 						  TAL_ERR_CLKPLL_INV_HSDIV, retVal, TALACT_ERR_CHECK_PARAM );
 	}
 
-	localHsDigClkDiv2_Hz = (uint32_t)((((((uint64_t)(digClocks->clkPllVcoFreq_kHz) *
-					      1000) >> 1) / hsDivTimes10) * 10) >> 1);
+	localHsDigClkDiv2_Hz = (uint32_t)((DIV_U64((((uint64_t)(
+			digClocks->clkPllVcoFreq_kHz) * 1000) >> 1), hsDivTimes10) * 10) >> 1);
 
 	device->devStateInfo.clocks.hsDigClkDiv2_Hz = localHsDigClkDiv2_Hz;
 
-	localHsDigClk4or5_Hz = (uint32_t)((((uint64_t)(digClocks->clkPllVcoFreq_kHz) *
-					    1000) >> 1) / hsClkDivHsDigClk4or5);
+	localHsDigClk4or5_Hz = (uint32_t)DIV_U64((((uint64_t)(
+				       digClocks->clkPllVcoFreq_kHz) * 1000) >> 1), hsClkDivHsDigClk4or5);
 
 	device->devStateInfo.clocks.hsDigClkDiv4or5_Hz = localHsDigClk4or5_Hz;
 
@@ -2766,8 +2821,7 @@ uint32_t TALISE_initDigitalClocks(taliseDevice_t *device,
 		vcoCalOffset   = (vcoIndex == 11 || (vcoIndex > 35 && vcoIndex <= 37)
 				  || (vcoIndex > 29 && vcoIndex <= 34)|| vcoIndex == 40 || vcoIndex == 44) ?
 				 14 :(vcoIndex <= 10 || vcoIndex > 44) ?
-				 15 : ((vcoIndex > 12 && vcoIndex <= 22) || (vcoIndex > 23 && vcoIndex <= 23)
-				       || (vcoIndex > 26 && vcoIndex <= 29) || (vcoIndex > 23 && vcoIndex <= 25)
+				 15 : ((vcoIndex > 12 && vcoIndex <= 25) || (vcoIndex > 26 && vcoIndex <= 29)
 				       || vcoIndex == 35) ?
 				 12 : 13;
 
@@ -2798,8 +2852,7 @@ uint32_t TALISE_initDigitalClocks(taliseDevice_t *device,
 		vcoCalOffset   = (vcoIndex == 11 || (vcoIndex > 35 && vcoIndex <= 37)
 				  || (vcoIndex > 29 && vcoIndex <= 34)|| vcoIndex == 40 || vcoIndex == 44) ?
 				 14 :(vcoIndex <= 10 || vcoIndex > 44) ?
-				 15 : ((vcoIndex > 12 && vcoIndex <= 22) || (vcoIndex > 23 && vcoIndex <= 23)
-				       || (vcoIndex > 26 && vcoIndex <= 29) || (vcoIndex > 23 && vcoIndex <= 25)
+				 15 : ((vcoIndex > 12 && vcoIndex <= 25) || (vcoIndex > 26 && vcoIndex <= 29)
 				       || vcoIndex == 35) ?
 				 12 : 13;
 
@@ -2916,14 +2969,14 @@ uint32_t TALISE_initDigitalClocks(taliseDevice_t *device,
 
 	/* Calculate PLL integer and fractional words with integer math */
 	scaledRefClk_Hz = scaledRefClk_kHz * 1000;
-	hsDigClk_Hz_div2 = (uint32_t)((((((uint64_t)(clockSettings->clkPllVcoFreq_kHz) *
-					  1000) >> 1) / hsDivTimes10) * 10) >> 1);
+	hsDigClk_Hz_div2 = (uint32_t)((DIV_U64((((uint64_t)(
+			clockSettings->clkPllVcoFreq_kHz) * 1000) >> 1), hsDivTimes10) * 10) >> 1);
 	integerWord = (uint16_t)(hsDigClk_Hz_div2 / scaledRefClk_Hz);
 	fractionalRemainder = hsDigClk_Hz_div2 % scaledRefClk_Hz;
 
 	/* +1 >>1 is rounding (add .5) */
-	fractionalWord = (uint32_t)(((uint64_t)fractionalRemainder * 4177920 /
-				     (uint64_t)scaledRefClk_Hz) + 1 ) >> 1;
+	fractionalWord = (uint32_t)(DIV_U64((uint64_t)fractionalRemainder * 4177920,
+					    (uint64_t)scaledRefClk_Hz) + 1 ) >> 1;
 
 	/* if fractionalWord rounded up and == PLL modulus, fix it */
 	if (fractionalWord == 2088960) {
@@ -3305,9 +3358,9 @@ uint32_t TALISE_getApiVersion (taliseDevice_t *device, uint32_t *siVer,
 			       uint32_t *majorVer, uint32_t *minorVer, uint32_t *buildVer)
 {
 	talRecoveryActions_t retVal = TALACT_NO_ACTION;
-	adiHalErr_t halError = ADIHAL_OK;
 
 #if TALISE_VERBOSE
+	adiHalErr_t halError = ADIHAL_OK;
 	halError = talWriteToLog(device->devHalInfo, ADIHAL_LOG_MSG, TAL_ERR_OK,
 				 "TALISE_getApiVersion()\n");
 	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_LOG, halError, retVal,

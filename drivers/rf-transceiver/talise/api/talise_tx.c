@@ -1,8 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0
 /**
  * \file talise_tx.c
  * \brief Contains functions to support Talise Tx data path control
  *
- * Talise API version: 3.6.0.5
+ * Talise API version: 3.6.2.1
  *
  * Copyright 2015-2017 Analog Devices Inc.
  * Released under the AD9378-AD9379 API license, for more information see the "LICENSE.txt" file in this zip file.
@@ -241,6 +242,291 @@ uint32_t TALISE_setDacFullScale(taliseDevice_t *device,
 	return (uint32_t)retVal;
 }
 
+uint32_t TALISE_txNcoShifterSet(taliseDevice_t *device,
+				taliseTxNcoShifterCfg_t *txNcoShiftCfg)
+{
+	long long exponent32bit = 2147483648UL;
+	int32_t exponent16bit = 65535;
+
+	talRecoveryActions_t retVal = TALACT_NO_ACTION;
+	adiHalErr_t halError = ADIHAL_OK;
+	uint32_t txInputRateDiv2_kHz = 0;
+	uint16_t tx1PhaseWord = 0;
+	uint16_t tx2PhaseWord = 0;
+	uint16_t tx1NcoTuneWord = 0;
+	uint16_t tx2NcoTuneWord = 0;
+	int32_t ch1TuneFrequency = 0;
+	int32_t ch2TuneFrequency = 0;
+	int32_t absValTx1Freq = 0;
+	int32_t absValTx2Freq = 0;
+	uint8_t ncoEnableMask =  (uint8_t )txNcoShiftCfg->enableNCO;
+
+
+#if TALISE_VERBOSE
+	halError = talWriteToLog(device->devHalInfo, ADIHAL_LOG_MSG, TAL_ERR_OK,
+				 "TALISE_txNcoShifterSet()\n");
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_LOG, halError, retVal,
+				  TALACT_WARN_RESET_LOG);
+#endif
+
+	/* Check valid Tx profile */
+	if ((device->devStateInfo.profilesValid & TX_PROFILE_VALID) == 0) {
+		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_INVALID_PARAM,
+						  TAL_ERR_ENABLETXNCO_INV_PROFILE, retVal, TALACT_ERR_CHECK_PARAM);
+	}
+
+	/* Check for NULL pointer */
+	if (txNcoShiftCfg == NULL) {
+		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_INVALID_PARAM,
+						  TAL_ERR_TXNCOSHIFTER_NULL_PARM, retVal, TALACT_ERR_CHECK_PARAM);
+	}
+
+	txInputRateDiv2_kHz = device->devStateInfo.txInputRate_kHz >> 1;
+	if ((txNcoShiftCfg->tx1ToneFreq_kHz > (int32_t)txInputRateDiv2_kHz) ||
+	    (txNcoShiftCfg->tx1ToneFreq_kHz < -((int32_t)txInputRateDiv2_kHz))) {
+		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_INVALID_PARAM,
+						  TAL_ERR_TXNCOSHIFTER_INV_TX1_FREQ, retVal, TALACT_ERR_CHECK_PARAM);
+	}
+
+	/* Check Tx2 NCO freq range between Fs/2 and -Fs/2 */
+	if ((txNcoShiftCfg->tx2ToneFreq_kHz > (int32_t)txInputRateDiv2_kHz) ||
+	    (txNcoShiftCfg->tx2ToneFreq_kHz < -((int32_t)txInputRateDiv2_kHz))) {
+		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_INVALID_PARAM,
+						  TAL_ERR_TXNCOSHIFTER_INV_TX2_FREQ, retVal, TALACT_ERR_CHECK_PARAM);
+	}
+
+	/* Force Tx output power to max analog output power, but 6dB digital
+	    * back off to prevent the NCO from clipping the Tx PFIR filter */
+	/* Tx1 */
+	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_TX1_GAIN_0, 0x78 );
+	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+				  TALACT_ERR_RESET_SPI);
+	IF_ERR_RETURN_U32(retVal);
+
+	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_TX1_GAIN_1, 0x00 );
+	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+				  TALACT_ERR_RESET_SPI);
+	IF_ERR_RETURN_U32(retVal);
+
+	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_TX1_GAIN_2, 0x00 );
+	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+				  TALACT_ERR_RESET_SPI);
+	IF_ERR_RETURN_U32(retVal);
+
+	/* Tx2 */
+	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_TX2_GAIN_0, 0x78 );
+	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+				  TALACT_ERR_RESET_SPI);
+	IF_ERR_RETURN_U32(retVal);
+
+	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_TX2_GAIN_1, 0x00 );
+	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+				  TALACT_ERR_RESET_SPI);
+	IF_ERR_RETURN_U32(retVal);
+
+	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_TX2_GAIN_2, 0x00 );
+	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+				  TALACT_ERR_RESET_SPI);
+	IF_ERR_RETURN_U32(retVal);
+
+	/* Enable TPC for Tx1 and Tx2 to Direct mode */
+	halError = talSpiWriteField(device->devHalInfo, TALISE_ADDR_TX_TPC_CONFIG, 0x0A,
+				    0x0F, 0);
+	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+				  TALACT_ERR_RESET_SPI);
+	IF_ERR_RETURN_U32(retVal);
+
+	/* Calculate Tx NCO tuning words. Round the result */
+	tx1NcoTuneWord = (int32_t)((DIV_S64(((int64_t)txNcoShiftCfg->tx1ToneFreq_kHz <<
+					     20), txInputRateDiv2_kHz) + 1) >> 1);
+	tx2NcoTuneWord = (int32_t)((DIV_S64(((int64_t)txNcoShiftCfg->tx2ToneFreq_kHz <<
+					     20), txInputRateDiv2_kHz) + 1) >> 1);
+
+	/* Write NCO tuning words - Tx1 */
+	halError = talSpiWriteByte(device->devHalInfo,
+				   TALISE_ADDR_TX_ABBF_FREQCAL_NCO_I_UPPER_NIBBLE,
+				   (uint8_t)((tx1NcoTuneWord >> 16) & 0x0F));
+	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+				  TALACT_ERR_RESET_SPI);
+	IF_ERR_RETURN_U32(retVal);
+
+	halError = talSpiWriteByte(device->devHalInfo,
+				   TALISE_ADDR_TX_ABBF_FREQCAL_NCO_I_MSBS,
+				   (uint8_t)((tx1NcoTuneWord >> 8) & 0xFF));
+	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+				  TALACT_ERR_RESET_SPI);
+	IF_ERR_RETURN_U32(retVal);
+
+	halError = talSpiWriteByte(device->devHalInfo,
+				   TALISE_ADDR_TX_ABBF_FREQCAL_NCO_I_LSBS, (uint8_t)(tx1NcoTuneWord & 0xFF));
+	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+				  TALACT_ERR_RESET_SPI);
+	IF_ERR_RETURN_U32(retVal);
+
+	/* Write NCO tuning words - Tx2 */
+	halError = talSpiWriteByte(device->devHalInfo,
+				   TALISE_ADDR_TX_ABBF_FREQCAL_NCO_Q_UPPER_NIBBLE,
+				   (uint8_t)((tx2NcoTuneWord >> 16) & 0x0F));
+	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+				  TALACT_ERR_RESET_SPI);
+	IF_ERR_RETURN_U32(retVal);
+
+	halError = talSpiWriteByte(device->devHalInfo,
+				   TALISE_ADDR_TX_ABBF_FREQCAL_NCO_Q_MSBS,
+				   (uint8_t)((tx2NcoTuneWord >> 8) & 0xFF));
+	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+				  TALACT_ERR_RESET_SPI);
+	IF_ERR_RETURN_U32(retVal);
+
+	halError = talSpiWriteByte(device->devHalInfo,
+				   TALISE_ADDR_TX_ABBF_FREQCAL_NCO_Q_LSBS, (uint8_t)(tx2NcoTuneWord & 0xFF));
+	retVal = talApiErrHandler(device,TAL_ERRHDL_HAL_SPI, halError, retVal,
+				  TALACT_ERR_RESET_SPI);
+	IF_ERR_RETURN_U32(retVal);
+
+	/* Calculate the phase values to be wrote to registers based on formula */
+	/* value = round(desiredPhaseShift*(2^16-1)/360) */
+	tx1PhaseWord = (u16) DIV_ROUND_CLOSEST(txNcoShiftCfg->tx1TonePhaseDeg * ((
+			exponent16bit) - 1), 360);
+	tx2PhaseWord = (u16) DIV_ROUND_CLOSEST(txNcoShiftCfg->tx2TonePhaseDeg * ((
+			exponent16bit) - 1), 360);
+
+	/* write nco phase words */
+	halError = talSpiWriteByte(device->devHalInfo,
+				   TALISE_ADDR_TX_NCO_CH1_PHASE_OFFSET_BYTE_1, ((uint8_t)((tx1PhaseWord) & 0xFF)));
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
+				  TALACT_ERR_RESET_SPI);
+	IF_ERR_RETURN_U32(retVal);
+
+	halError = talSpiWriteByte(device->devHalInfo,
+				   TALISE_ADDR_TX_NCO_CH1_PHASE_OFFSET_BYTE_2,
+				   ((uint8_t)((tx1PhaseWord >> 8) & 0xFF)));
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
+				  TALACT_ERR_RESET_SPI);
+	IF_ERR_RETURN_U32(retVal);
+
+	halError = talSpiWriteByte(device->devHalInfo,
+				   TALISE_ADDR_TX_NCO_CH2_PHASE_OFFSET_BYTE_1, ((uint8_t)((tx2PhaseWord) & 0xFF)));
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
+				  TALACT_ERR_RESET_SPI);
+	IF_ERR_RETURN_U32(retVal);
+
+	halError = talSpiWriteByte(device->devHalInfo,
+				   TALISE_ADDR_TX_NCO_CH2_PHASE_OFFSET_BYTE_2,
+				   ((uint8_t)((tx2PhaseWord >> 8) & 0xFF)));
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
+				  TALACT_ERR_RESET_SPI);
+	IF_ERR_RETURN_U32(retVal);
+
+	/* Calculate absolute value of frequencies manually */
+	absValTx1Freq = txNcoShiftCfg->tx1ToneFreq_kHz * ((
+				txNcoShiftCfg->tx1ToneFreq_kHz > 0) - (txNcoShiftCfg->tx1ToneFreq_kHz < 0));
+	absValTx2Freq = txNcoShiftCfg->tx2ToneFreq_kHz * ((
+				txNcoShiftCfg->tx2ToneFreq_kHz > 0) - (txNcoShiftCfg->tx2ToneFreq_kHz < 0));
+
+	/* Calculate the frequency tuning values to be wrote to registers based on formula */
+	/* value = round(2^31*(abs(desiredNCOFreq / 2)/(TxSampleRate/2))); if (desiredNCOFreq<0) then add 2^31  */
+	ch1TuneFrequency = (uint32_t)DIV_ROUND_CLOSEST_ULL(exponent32bit *
+			   absValTx1Freq, txInputRateDiv2_kHz / 2);
+	ch2TuneFrequency = (uint32_t)DIV_ROUND_CLOSEST_ULL(exponent32bit *
+			   absValTx2Freq, txInputRateDiv2_kHz / 2);
+
+	/* 2's complement to handle negative frequencies */
+	if (txNcoShiftCfg->tx1ToneFreq_kHz > 0) {
+		ch1TuneFrequency = ~ch1TuneFrequency + 1;
+	}
+
+	if (txNcoShiftCfg->tx2ToneFreq_kHz > 0) {
+		ch2TuneFrequency = ~ch2TuneFrequency + 1;
+	}
+
+	/* check for enabled/disabled and if so zero'ing out data so it resets to default signal */
+	if (txNcoShiftCfg->enableNCO == TAL_TXNCO_DISABLE) {
+		ch1TuneFrequency = 0x0;
+		ch2TuneFrequency = 0x0;
+		/* set the mask to update all channels back to 0 value */
+		ncoEnableMask = (uint8_t)TAL_TXNCO_ENABLE_ALL;
+	}
+
+	/* write nco frequency tuning values */
+	halError = talSpiWriteByte(device->devHalInfo,
+				   TALISE_ADDR_TX_NCO_CH1_FREQ_TUNE_BYTE_1,
+				   ((uint8_t)((ch1TuneFrequency) & 0xFF)));
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
+				  TALACT_ERR_RESET_SPI);
+	IF_ERR_RETURN_U32(retVal);
+
+	halError = talSpiWriteByte(device->devHalInfo,
+				   TALISE_ADDR_TX_NCO_CH1_FREQ_TUNE_BYTE_2,
+				   ((uint8_t)((ch1TuneFrequency >> 8) & 0xFF)));
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
+				  TALACT_ERR_RESET_SPI);
+	IF_ERR_RETURN_U32(retVal);
+
+	halError = talSpiWriteByte(device->devHalInfo,
+				   TALISE_ADDR_TX_NCO_CH1_FREQ_TUNE_BYTE_3,
+				   ((uint8_t)((ch1TuneFrequency >> 16) & 0xFF)));
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
+				  TALACT_ERR_RESET_SPI);
+	IF_ERR_RETURN_U32(retVal);
+
+	halError = talSpiWriteByte(device->devHalInfo,
+				   TALISE_ADDR_TX_NCO_CH1_FREQ_TUNE_BYTE_4,
+				   ((uint8_t)((ch1TuneFrequency >> 24) & 0xFF)));
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
+				  TALACT_ERR_RESET_SPI);
+	IF_ERR_RETURN_U32(retVal);
+
+	halError = talSpiWriteByte(device->devHalInfo,
+				   TALISE_ADDR_TX_NCO_CH2_FREQ_TUNE_BYTE_1,
+				   ((uint8_t)((ch2TuneFrequency) & 0xFF)));
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
+				  TALACT_ERR_RESET_SPI);
+	IF_ERR_RETURN_U32(retVal);
+
+	halError = talSpiWriteByte(device->devHalInfo,
+				   TALISE_ADDR_TX_NCO_CH2_FREQ_TUNE_BYTE_2,
+				   ((uint8_t)((ch2TuneFrequency >> 8) & 0xFF)));
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
+				  TALACT_ERR_RESET_SPI);
+	IF_ERR_RETURN_U32(retVal);
+
+	halError = talSpiWriteByte(device->devHalInfo,
+				   TALISE_ADDR_TX_NCO_CH2_FREQ_TUNE_BYTE_3,
+				   ((uint8_t)((ch2TuneFrequency >> 16) & 0xFF)));
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
+				  TALACT_ERR_RESET_SPI);
+	IF_ERR_RETURN_U32(retVal);
+
+	halError = talSpiWriteByte(device->devHalInfo,
+				   TALISE_ADDR_TX_NCO_CH2_FREQ_TUNE_BYTE_4,
+				   ((uint8_t)((ch2TuneFrequency >> 24) & 0xFF)));
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
+				  TALACT_ERR_RESET_SPI);
+	IF_ERR_RETURN_U32(retVal);
+
+	/* Set nco frequency update ch2 */
+	halError = talSpiWriteByte(device->devHalInfo, TALISE_ADDR_TX_NCO_FREQ_UPDATE,
+				   ncoEnableMask);
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
+				  TALACT_ERR_RESET_SPI);
+	IF_ERR_RETURN_U32(retVal);
+
+	halError = talSpiWriteField(device->devHalInfo, TALISE_ADDR_TX_NCO_CH1_CTRL,
+				    0x1, 0x01, 0);
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
+				  TALACT_ERR_RESET_SPI);
+	IF_ERR_RETURN_U32(retVal);
+
+	halError = talSpiWriteField(device->devHalInfo, TALISE_ADDR_TX_NCO_CH2_CTRL,
+				    0x1, 0x01, 0);
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
+				  TALACT_ERR_RESET_SPI);
+	IF_ERR_RETURN_U32(retVal);
+
+	return (uint32_t)retVal;
+}
+
 uint32_t TALISE_enableTxNco(taliseDevice_t *device,
 			    taliseTxNcoTestToneCfg_t *txNcoTestToneCfg)
 {
@@ -327,10 +613,10 @@ uint32_t TALISE_enableTxNco(taliseDevice_t *device,
 		IF_ERR_RETURN_U32(retVal);
 
 		/* Calculate Tx NCO tuning words. Round the result */
-		tx1NcoTuneWord = (int32_t)(((((int64_t)txNcoTestToneCfg->tx1ToneFreq_kHz <<
-					      20) / txInputRateDiv2_kHz) + 1) >> 1);
-		tx2NcoTuneWord = (int32_t)(((((int64_t)txNcoTestToneCfg->tx2ToneFreq_kHz <<
-					      20) / txInputRateDiv2_kHz) + 1) >> 1);
+		tx1NcoTuneWord = (int32_t)((DIV_S64(((int64_t)txNcoTestToneCfg->tx1ToneFreq_kHz
+						     << 20), txInputRateDiv2_kHz) + 1) >> 1);
+		tx2NcoTuneWord = (int32_t)((DIV_S64(((int64_t)txNcoTestToneCfg->tx2ToneFreq_kHz
+						     << 20), txInputRateDiv2_kHz) + 1) >> 1);
 
 		/* Write NCO tuning words - Tx1 */
 		halError = talSpiWriteByte(device->devHalInfo,

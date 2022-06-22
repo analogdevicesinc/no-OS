@@ -1,8 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0
 /*!
  * \file talise_types.h
  * \brief Contains Talise API configuration and run-time type definitions
  *
- * Talise API version: 3.6.0.5
+ * Talise API version: 3.6.2.1
  *
  * Copyright 2015-2017 Analog Devices Inc.
  * Released under the AD9378-AD9379 API license, for more information see the "LICENSE.txt" file in this zip file.
@@ -17,6 +18,7 @@ extern "C" {
 
 #include <stdint.h>
 #include <stddef.h>
+
 #include "talise_rx_types.h"
 #include "talise_jesd204_types.h"
 #include "talise_tx_types.h"
@@ -392,17 +394,17 @@ typedef struct {
  */
 typedef struct {
 	taliseStates_t
-	devState;          			/*!< Current device state of the part, i.e., radio on, radio off, arm loaded, etc., defined by deviceState enum */
+	devState;				/*!< Current device state of the part, i.e., radio on, radio off, arm loaded, etc., defined by deviceState enum */
 	uint8_t initializedChannels;                /*!< Holds Rx/ORx/Tx channels that were initialized and calibrated for the current device */
-	uint8_t profilesValid;            			/*!< Current device profilesValid bit field for use notification, i.e., Tx = 0x01, Rx = 0x02, Orx = 0x04 */
-	uint32_t errSource;               			/*!< Current source of error returned */
-	uint32_t errCode;                 			/*!< Current error code returned */
+	uint8_t profilesValid;				/*!< Current device profilesValid bit field for use notification, i.e., Tx = 0x01, Rx = 0x02, Orx = 0x04 */
+	uint32_t errSource;					/*!< Current source of error returned */
+	uint32_t errCode;					/*!< Current error code returned */
 	taliseClocks_t
-	clocks;            			/*!< Currently calculated Talise digital clocks for the selected init profiles */
+	clocks;				/*!< Currently calculated Talise digital clocks for the selected init profiles */
 	taliseGainMode_t
-	gainMode;        			/*!< Current device gain mode, which can be MGC, AGCFAST, AGCSLOW, or HYBRID */
-	taliseGainIndex_t gainIndexes;    			/*!< Current device gain index values */
-	taliseTxAttenStepSize_t txAttenStepSize; 	/*!< Current tx Atten step size */
+	gainMode;				/*!< Current device gain mode, which can be MGC, AGCFAST, AGCSLOW, or HYBRID */
+	taliseGainIndex_t gainIndexes;			/*!< Current device gain index values */
+	taliseTxAttenStepSize_t txAttenStepSize;	/*!< Current tx Atten step size */
 	uint8_t orxAdcStitchingEnabled;             /*!< TALISE_initialize sets to 1 if ORx ADC stitching enabled, 0 if not required */
 	uint32_t usedGpiopins;                      /*!< Each bit position 'N' indicates whether the GPIO 'N' is assigned to some function (if 1) or not (if 0) */
 	uint16_t usedGpio3p3pins;                   /*!< Each bit position 'N' indicates whether the GPIO3.3 'N' is assigned to some function (if 1) or not (if 0) */
