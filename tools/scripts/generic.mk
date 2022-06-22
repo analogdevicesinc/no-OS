@@ -11,6 +11,7 @@ export EXTRA_INC_PATHS
 export FLAGS_WITHOUT_D
 export PROJECT_BUILD
 export JTAG_CABLE_ID
+export BOOTOBJ
 #------------------------------------------------------------------------------
 #                              UTIL FUNCTIONS
 #------------------------------------------------------------------------------
@@ -197,6 +198,10 @@ ifeq 'maxim' '$(PLATFORM)'
 include $(NO-OS)/tools/scripts/maxim.mk
 endif
 
+ifeq 'pico' '$(PLATFORM)'
+include $(NO-OS)/tools/scripts/pico.mk
+endif
+
 #------------------------------------------------------------------------------
 #                            COMMON COMPILER FLAGS                             
 #------------------------------------------------------------------------------
@@ -264,7 +269,7 @@ INCS := $(sort $(INCS))
 CREATED_DIRECTORIES += noos root $(PROJECT_NAME)
 SRCS_IN_BUILD = $(call relative_to_project, $(SRCS))
 INCS_IN_BUILD = $(call relative_to_project, $(INCS))
-DIRS_TO_CREATE = $(sort $(dir $(call relative_to_project, $(FILES_OUT_OF_DIRS) $(SRC_DIRS))))
+DIRS_TO_CREATE = $(sort $(dir $(call relative_to_project, $(FILES_OUT_OF_DIRS) $(SRC_DIRS) $(PLATFORM_DIRS))))
 # Prefixes from get_relative_path
 DIRS_TO_REMOVE = $(addprefix $(PROJECT_BUILD)/,$(CREATED_DIRECTORIES))
 
@@ -328,9 +333,9 @@ ifneq ($(strip $(LSCRIPT)),)
 LSCRIPT_FLAG = -T$(LSCRIPT)
 endif
 
-$(BINARY): $(LIB_TARGETS) $(OBJS) $(ASM_OBJS) $(LSCRIPT)
+$(BINARY): $(LIB_TARGETS) $(OBJS) $(ASM_OBJS) $(LSCRIPT) $(BOOTOBJ)
 	@$(call print,[LD] $(notdir $(OBJS)))
-	$(MUTE) $(CC) $(LSCRIPT_FLAG) $(LDFLAGS) $(LIB_PATHS) -o $(BINARY) $(OBJS) \
+	$(MUTE) $(CC) $(LSCRIPT_FLAG) $(LDFLAGS) $(LIB_PATHS) -o $(BINARY) $(OBJS) $(BOOTOBJ)\
 			 $(ASM_OBJS) $(LIB_FLAGS)
 	$(MUTE) $(MAKE) --no-print-directory post_build
 

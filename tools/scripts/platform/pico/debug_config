@@ -1,0 +1,16 @@
+{
+    "showDevDebugOutput": true,
+    "name": "Pico Debug",
+    "type": "cortex-debug",
+    "request": "launch",
+    "servertype": "jlink",
+    "serverpath": "",
+    "interface": "swd",
+    "cwd": "${workspaceFolder}",
+    "device": "RP2040_M0_0",
+    "executable": "BINARY",
+    "preLaunchTask": "Pico Build",
+    "configFiles": [],
+    "runToEntryPoint": "main",
+    "svdFile": ""
+}
