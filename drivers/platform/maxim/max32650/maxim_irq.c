@@ -418,7 +418,6 @@ int32_t max_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 			action->callback = callback_desc->callback;
 			action->ctx = callback_desc->ctx;
 		}
-		MXC_TMR_EnableInt(callback_desc->handle);
 
 		break;
 
@@ -460,9 +459,6 @@ int32_t max_irq_unregister_callback(struct no_os_irq_ctrl_desc *desc,
 	case NO_OS_RTC_IRQ:
 		action_key.handle = MXC_RTC;
 		MXC_RTC_DisableInt(MXC_RTC_INT_EN_LONG);
-		break;
-	case NO_OS_TIM_IRQ:
-		MXC_TMR_DisableInt(cb->handle);
 		break;
 	default:
 		break;
