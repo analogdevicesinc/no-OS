@@ -1,0 +1,14 @@
+{
+	"tasks": [
+		{
+			"label": "Pico Run",
+			"type": "shell",
+			"command": "make run -C PROJECT PLATFORM=pico"
+		},
+		{
+			"label": "Pico Build",
+			"type": "shell",
+			"command": "make -C PROJECT PLATFORM=pico"
+		}
+	]
+}

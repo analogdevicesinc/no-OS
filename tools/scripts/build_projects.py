@@ -179,6 +179,8 @@ class BuildConfig:
 		self.export_file = os.path.join(self.build_dir, self.binary)
 		if (platform == 'aducm3029' or platform == 'stm32' or platform == 'maxim'):
 			self.export_file = self.export_file.replace('.elf', '.hex')
+		if (platform == 'pico'):
+			self.export_file = self.export_file.replace('.elf', '.uf2')
 
 	def build(self):
 		global log_file
