@@ -1,6 +1,7 @@
 /***************************************************************************//**
- *   @file   platform_includes.h
- *   @brief  Includes for used platforms used by iio_demo project.
+ *   @file   parameters.h
+ *   @brief  Definitions specific to pico platform used by iio_demo
+ *           project.
  *   @author RBolboac (ramona.bolboaca@analog.com)
 ********************************************************************************
  * Copyright 2022(c) Analog Devices, Inc.
@@ -36,28 +37,29 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __PLATFORM_INCLUDES_H__
-#define __PLATFORM_INCLUDES_H__
+#ifndef __PARAMETERS_H__
+#define __PARAMETERS_H__
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#ifdef STM32_PLATFORM
-#include "stm32/parameters.h"
-#elif defined MAXIM_PLATFORM
-#include "maxim/parameters.h"
-#elif defined XILINX_PLATFORM
-#include "xilinx/parameters.h"
-#elif defined ADUCM_PLATFORM
-#include "aducm3029/parameters.h"
-#elif defined LINUX_PLATFORM
-#include "linux/parameters.h"
-#elif defined PICO_PLATFORM
-#include "pico/parameters.h"
-#endif
+#include "common_data.h"
+#include "no_os_util.h"
+#include "pico_uart.h"
 
-#ifdef IIO_SUPPORT
-#include "iio_app.h"
-#endif
+/******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
+/* This value can be modified based on the number
+of samples needed to be stored in the device buffer
+and based on the available RAM memory of the platform */
+#define SAMPLES_PER_CHANNEL_PLATFORM 2000
 
-#endif /* __PLATFORM_INCLUDES_H__ */
+#define UART_DEVICE_ID      0
+#define UART_BAUDRATE  115200
+#define UART_IRQ_ID        20
+
+#define UART_TX_PIN     UART0_TX_GP0
+#define UART_RX_PIN     UART0_RX_GP1
+
+#endif /* __PARAMETERS_H__ */

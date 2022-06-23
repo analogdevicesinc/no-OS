@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   platform_includes.h
- *   @brief  Includes for used platforms used by iio_demo project.
+ *   @file   parameters.c
+ *   @brief  Definition of pico platform data used by iio_demo project.
  *   @author RBolboac (ramona.bolboaca@analog.com)
 ********************************************************************************
  * Copyright 2022(c) Analog Devices, Inc.
@@ -36,28 +36,8 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __PLATFORM_INCLUDES_H__
-#define __PLATFORM_INCLUDES_H__
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#ifdef STM32_PLATFORM
-#include "stm32/parameters.h"
-#elif defined MAXIM_PLATFORM
-#include "maxim/parameters.h"
-#elif defined XILINX_PLATFORM
-#include "xilinx/parameters.h"
-#elif defined ADUCM_PLATFORM
-#include "aducm3029/parameters.h"
-#elif defined LINUX_PLATFORM
-#include "linux/parameters.h"
-#elif defined PICO_PLATFORM
-#include "pico/parameters.h"
-#endif
-
-#ifdef IIO_SUPPORT
-#include "iio_app.h"
-#endif
-
-#endif /* __PLATFORM_INCLUDES_H__ */
+#include "parameters.h"

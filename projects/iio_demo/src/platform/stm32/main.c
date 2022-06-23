@@ -48,10 +48,6 @@
 #include "iio_example.h"
 #endif
 
-#ifdef IIO_SW_TRIGGER_EXAMPLE
-#include "iio_sw_trigger_exaple.h"
-#endif
-
 #ifdef IIO_TIMER_TRIGGER_EXAMPLE
 #include "iio_timer_trigger_example.h"
 #endif
