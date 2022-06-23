@@ -39,5 +39,10 @@
     "iio_max78000": {
       "flags": "IIO_EXAMPLE=y IIO_SW_TRIGGER_EXAMPLE=n IIO_TIMER_TRIGGER_EXAMPLE=n TARGET=max78000"
     }
+  },
+  "pico": {
+    "iio_example": {
+      "flags": "IIO_EXAMPLE=y IIO_SW_TRIGGER_EXAMPLE=n IIO_TIMER_TRIGGER_EXAMPLE=n"
+    }
   }
 }
