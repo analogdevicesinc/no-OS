@@ -252,7 +252,7 @@ static int32_t uart_setup(struct no_os_uart_desc **uart_desc,
 	static struct no_os_uart_init_param luart_par = {
 		.device_id = UART_DEVICE_ID,
 		/* TODO: remove this ifdef when asynchrounous rx is implemented on every platform. */
-#if defined(STM32_PLATFORM) || defined(MAXIM_PLATFORM) || defined(ADUCM_PLATFORM)
+#if defined(STM32_PLATFORM) || defined(MAXIM_PLATFORM) || defined(ADUCM_PLATFORM) || defined(PICO_PLATFORM)
 		.irq_id = UART_IRQ_ID,
 		.asynchronous_rx = true,
 #endif

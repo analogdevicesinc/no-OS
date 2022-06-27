@@ -41,12 +41,30 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 
-#include "pico_uart.h"
 #include "no_os_error.h"
+#include "no_os_uart.h"
+#include "no_os_lf256fifo.h"
+#include "pico_uart.h"
+#include "pico_irq.h"
+#include "pico/stdlib.h"
+#include "hardware/irq.h"
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
+
+/**
+ * @brief UART RX callback handler
+ * @param context  - Callback context, cntains uart descriptor.
+ */
+void uart_rx_callback(void *context)
+{
+	struct no_os_uart_desc *d = context;
+	struct pico_uart_desc *pico_uart = d->extra;
+
+	uint8_t ch = uart_getc(pico_uart->uart_instance);
+	lf256fifo_write(d->rx_fifo, ch);
+}
 
 /**
  * @brief Initialize the UART communication peripheral.
@@ -88,7 +106,6 @@ int32_t no_os_uart_init(struct no_os_uart_desc **desc,
 	default:
 		ret = -EINVAL;
 		goto error;
-		break;
 	}
 
 	descriptor->device_id = param->device_id;
@@ -144,8 +161,47 @@ int32_t no_os_uart_init(struct no_os_uart_desc **desc,
 
 	*desc = descriptor;
 
+	if(param->asynchronous_rx) {
+		ret = lf256fifo_init(&descriptor->rx_fifo);
+		if (ret)
+			goto error;
+
+		struct no_os_irq_init_param nvic_ip = {
+			.platform_ops = &pico_irq_ops,
+		};
+
+		ret = no_os_irq_ctrl_init(&pico_uart->nvic, &nvic_ip);
+		if (ret)
+			goto error;
+
+		struct no_os_callback_desc uart_rx_cb = {
+			.callback = uart_rx_callback,
+			.ctx = descriptor,
+			.event = NO_OS_EVT_UART_RX_COMPLETE,
+			.peripheral = NO_OS_UART_IRQ,
+			.handle = pico_uart->uart_instance,
+		};
+
+		pico_uart->rx_callback = uart_rx_cb;
+
+		uint8_t uart_irq_id = pico_uart->uart_instance == uart0 ? UART0_IRQ : UART1_IRQ;
+
+		ret = no_os_irq_register_callback(pico_uart->nvic,
+						  uart_irq_id,
+						  &pico_uart->rx_callback);
+		if (ret)
+			goto error_nvic;
+
+		/* Now enable the UART to send interrupts - RX only */
+		uart_set_irq_enables(pico_uart->uart_instance, true, false);
+
+		no_os_irq_enable(pico_uart->nvic, uart_irq_id);
+	}
+
 	return 0;
 
+error_nvic:
+	no_os_irq_ctrl_remove(pico_uart->nvic);
 error:
 	free(descriptor);
 	free(pico_uart);
@@ -167,6 +223,15 @@ int32_t no_os_uart_remove(struct no_os_uart_desc *desc)
 
 	pico_uart = desc->extra;
 	uart_deinit(pico_uart->uart_instance);
+
+	if (desc->rx_fifo) {
+		no_os_irq_disable(pico_uart->nvic, desc->irq_id);
+		lf256fifo_remove(desc->rx_fifo);
+		desc->rx_fifo = NULL;
+		no_os_irq_unregister_callback(pico_uart->nvic, desc->irq_id,
+					      &pico_uart->rx_callback);
+		no_os_irq_ctrl_remove(pico_uart->nvic);
+	}
 
 	free(desc->extra);
 	free(desc);
@@ -210,6 +275,8 @@ int32_t no_os_uart_read(struct no_os_uart_desc *desc, uint8_t *data,
 			uint32_t bytes_number)
 {
 	struct pico_uart_desc *pico_uart;
+	int ret;
+	uint32_t i;
 
 	if (!desc || !desc->extra || !data)
 		return -EINVAL;
@@ -218,6 +285,15 @@ int32_t no_os_uart_read(struct no_os_uart_desc *desc, uint8_t *data,
 		return 0;
 
 	pico_uart = desc->extra;
+
+	if (desc->rx_fifo) {
+		for (i = 0; i < bytes_number; i++) {
+			ret = lf256fifo_read(desc->rx_fifo, &data[i]);
+			if (ret)
+				return i ? (int32_t)i : -EAGAIN;
+		}
+		return i;
+	}
 
 	uart_read_blocking(pico_uart->uart_instance, data, bytes_number);
 
