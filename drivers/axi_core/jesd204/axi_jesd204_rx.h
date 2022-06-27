@@ -45,6 +45,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "jesd204.h"
+#include "no_os_clk.h"
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -81,6 +82,8 @@ struct axi_jesd204_rx {
 	/** Selected Encoder */
 	enum jesd204_encoder encoder;
 
+	struct no_os_clk *lane_clk;
+
 	struct jesd204_dev *jdev;
 };
 
@@ -103,6 +106,8 @@ struct jesd204_rx_init {
 	uint32_t device_clk_khz;
 	/** Lane Clock in KHz */
 	uint32_t lane_clk_khz;
+
+	struct no_os_clk *lane_clk;
 };
 
 /******************************************************************************/

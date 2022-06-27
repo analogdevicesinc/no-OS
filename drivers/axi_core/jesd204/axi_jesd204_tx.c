@@ -499,20 +499,18 @@ static int axi_jesd204_tx_jesd204_link_pre_setup(struct jesd204_dev *jdev,
 			}
 		}
 	}
-
-	ret = clk_set_rate(jesd->lane_clk, lane_rate);
+#endif
+	ret = no_os_clk_set_rate(jesd->lane_clk, lane_rate);
 	if (ret) {
 		pr_err("%s: Link%u set lane rate %lu kHz failed (%d)\n",
 			__func__, lnk->link_id, lane_rate, ret);
 		return ret;
-	}
-#else
-	pr_debug("%s: Link%u set lane rate %lu kHz\n",
-		__func__, lnk->link_id, lane_rate);
-#endif
+	} else
+		pr_debug("%s: Link%u set lane rate %lu kHz\n",
+			__func__, lnk->link_id, lane_rate);
+
 	return JESD204_STATE_CHANGE_DONE;
 }
-
 
 static int axi_jesd204_tx_jesd204_link_setup(struct jesd204_dev *jdev,
 		enum jesd204_state_op_reason reason,
@@ -526,9 +524,8 @@ static int axi_jesd204_tx_jesd204_link_setup(struct jesd204_dev *jdev,
 	case JESD204_STATE_OP_REASON_INIT:
 		break;
 	case JESD204_STATE_OP_REASON_UNINIT:
+		no_os_clk_disable(jesd->lane_clk);
 #if 0
-		if (__clk_is_enabled(jesd->lane_clk)) /* REVIST */
-			clk_disable_unprepare(jesd->lane_clk);
 		if (__clk_is_enabled(jesd->device_clk))
 			clk_disable_unprepare(jesd->device_clk);
 		if (!IS_ERR_OR_NULL(jesd->link_clk)) {
@@ -570,15 +567,14 @@ static int axi_jesd204_tx_jesd204_link_setup(struct jesd204_dev *jdev,
 			return ret;
 		}
 	}
-
-	ret = clk_prepare_enable(jesd->lane_clk);
+#endif
+	ret = no_os_clk_enable(jesd->lane_clk);
 	if (ret) {
-		clk_disable_unprepare(jesd->device_clk);
 		pr_err("%s: Link%u enable lane clock failed (%d)\n",
 			__func__, lnk->link_id, ret);
 		return ret;
 	}
-#endif
+
 	return JESD204_STATE_CHANGE_DONE;
 }
 
@@ -750,6 +746,8 @@ int32_t axi_jesd204_tx_init(struct axi_jesd204_tx **jesd204,
 	jesd->config.high_density = init->high_density;
 	jesd->config.control_bits_per_sample = init->control_bits_per_sample;
 	jesd->config.subclass_version = init->subclass;
+
+	jesd->lane_clk = init->lane_clk;
 
 	axi_jesd204_tx_lane_clk_disable(jesd);
 
