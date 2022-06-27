@@ -110,14 +110,14 @@ int32_t app_jesd_init(struct no_os_clk clk[2],
 
 #ifdef TX_XCVR_BASEADDR
 	struct adxcvr_init tx_adxcvr_init = {
-		"tx_adxcvr",
-		TX_XCVR_BASEADDR,
-		3,
-		4,
-		0,
-		0,
-		tx_lane_clk_khz,
-		reference_clk_khz,
+		.name = "tx_adxcvr",
+		.base = TX_XCVR_BASEADDR,
+		.sys_clk_sel = 3,
+		.out_clk_sel = 4,
+		.cpll_enable = 0,
+		.lpm_enable = 0,
+		.lane_rate_khz = tx_lane_clk_khz,
+		.ref_rate_khz = reference_clk_khz,
 	};
 #endif
 
