@@ -83,6 +83,10 @@
 #include "no_os_error.h"
 #endif
 
+#ifdef PICO_PLATFORM
+#include "no_os_error.h"
+#endif
+
 // The default baudrate iio_app will use to print messages to console.
 #define UART_BAUDRATE_DEFAULT	115200
 
@@ -238,6 +242,11 @@ static int32_t uart_setup(struct no_os_uart_desc **uart_desc,
 #elif defined(MAXIM_PLATFORM)
 	static struct max_uart_init_param platform_uart_init_par = {
 		.flow = UART_FLOW_DIS
+	};
+#elif defined(PICO_PLATFORM)
+	static struct pico_uart_init_param platform_uart_init_par = {
+		.uart_tx_pin = UART_TX_PIN,
+		.uart_rx_pin = UART_RX_PIN,
 	};
 #endif
 	static struct no_os_uart_init_param luart_par = {
