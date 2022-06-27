@@ -145,21 +145,13 @@ int32_t app_jesd_init(struct no_os_clk clk[2],
 		return ret;
 #endif
 
-	ret = axi_jesd204_rx_init(&rx_jesd, &rx_jesd_init);
-	if (ret)
-		return ret;
-	ret = axi_jesd204_tx_init(&tx_jesd, &tx_jesd_init);
-	if (ret)
-		return ret;
-
 #ifdef RX_XCVR_BASEADDR
 	rx_jesd_clk.xcvr = rx_adxcvr;
 #endif
-	rx_jesd_clk.jesd_rx = rx_jesd;
+
 #ifdef TX_XCVR_BASEADDR
 	tx_jesd_clk.xcvr = tx_adxcvr;
 #endif
-	tx_jesd_clk.jesd_tx = tx_jesd;
 
 	jesd_rx_hw.dev = &rx_jesd_clk;
 	jesd_rx_hw.dev_clk_enable = jesd204_clk_enable;
@@ -176,6 +168,15 @@ int32_t app_jesd_init(struct no_os_clk clk[2],
 
 	clk[1].name = "jesd_tx";
 	clk[1].hw = &jesd_tx_hw;
+
+	rx_jesd_init.lane_clk = &clk[0];
+	ret = axi_jesd204_rx_init(&rx_jesd, &rx_jesd_init);
+	if (ret)
+		return ret;
+	tx_jesd_init.lane_clk = &clk[1];
+	ret = axi_jesd204_tx_init(&tx_jesd, &tx_jesd_init);
+	if (ret)
+		return ret;
 
 	return 0;
 }
