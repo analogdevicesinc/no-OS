@@ -1236,8 +1236,12 @@ static int iio_read_buffer(struct iiod_ctx *ctx, const char *device, char *buf,
 		return -EINVAL;
 
 	ret = no_os_cb_size(&dev->buffer.cb, &size);
-	if (NO_OS_IS_ERR_VALUE(ret))
-		return ret;
+#ifdef IIO_IGNORE_BUFF_OVERRUN_ERR
+#warning Buffer overrun error checking is disabled.
+	if (ret != -NO_OS_EOVERRUN)
+#endif
+		if (NO_OS_IS_ERR_VALUE(ret))
+			return ret;
 
 	bytes = no_os_min(size, bytes);
 	if (!bytes)
@@ -1245,8 +1249,11 @@ static int iio_read_buffer(struct iiod_ctx *ctx, const char *device, char *buf,
 
 
 	ret = no_os_cb_read(&dev->buffer.cb, buf, bytes);
-	if (NO_OS_IS_ERR_VALUE(ret))
-		return ret;
+#ifdef IIO_IGNORE_BUFF_OVERRUN_ERR
+	if (ret != -NO_OS_EOVERRUN)
+#endif
+		if (NO_OS_IS_ERR_VALUE(ret))
+			return ret;
 
 	return bytes;
 }
