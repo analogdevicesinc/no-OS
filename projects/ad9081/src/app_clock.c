@@ -195,7 +195,7 @@ int32_t app_clock_init(struct no_os_clk dev_refclk[MULTIDEVICE_INSTANCE_COUNT])
 	if (ret)
 		return ret;
 
-#if ADRF4360_RFx_FREQUENCY_HZ < 8000000000
+#if ADF4371_RFx_FREQUENCY_HZ < 8000000000
 #define ADF4371_OUTPUT	1
 		ret = no_os_gpio_set_value(adrf5020_ctrl, 0); /* output-low for the RF2 <-> clk-rfaux8 output */
 #else
@@ -320,7 +320,7 @@ int32_t app_clock_init(struct no_os_clk dev_refclk[MULTIDEVICE_INSTANCE_COUNT])
 	struct adf4371_chan_spec adf_chan_spec[1] = {
 		{
 			.num = ADF4371_OUTPUT,
-			.power_up_frequency = ADRF4360_RFx_FREQUENCY_HZ,
+			.power_up_frequency = ADF4371_RFx_FREQUENCY_HZ,
 		}
 	};
 
