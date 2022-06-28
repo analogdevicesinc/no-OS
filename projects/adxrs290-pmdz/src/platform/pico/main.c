@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   platform_includes.h
- *   @brief  Includes for used platforms used by eval-adxrs290-pmdz project.
+ *   @file   main.c
+ *   @brief  Main file for pico platform of adxrs290 project.
  *   @author RBolboac (ramona.bolboaca@analog.com)
 ********************************************************************************
  * Copyright 2022(c) Analog Devices, Inc.
@@ -36,24 +36,52 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __PLATFORM_INCLUDES_H__
-#define __PLATFORM_INCLUDES_H__
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#ifdef PICO_PLATFORM
-#include "pico/parameters.h"
-#elif defined ADUCM_PLATFORM
-#include "aducm3029/parameters.h"
-#elif defined  STM32_PLATFORM
-#include "stm32/parameters.h"
-#elif defined MAXIM_PLATFORM
-#include "maxim/parameters.h"
+#include "platform_includes.h"
+#include "common_data.h"
+#include "no_os_error.h"
+#include "pico/stdlib.h"
+
+#ifdef IIO_EXAMPLE
+#include "iio_example.h"
 #endif
 
-#ifdef IIO_SUPPORT
-#include "iio_app.h"
+#ifdef IIO_TIMER_TRIGGER_EXAMPLE
+#include "iio_timer_trigger_example.h"
 #endif
 
-#endif /* __PLATFORM_INCLUDES_H__ */
+/***************************************************************************//**
+ * @brief Main function execution for pico platform.
+ *
+ * @return ret - Result of the enabled examples execution.
+*******************************************************************************/
+int main()
+{
+	int ret = -EINVAL;
+
+	adxrs290_ip.spi_init = adxrs290_spi_ip;
+
+#ifdef IIO_EXAMPLE
+	ret = iio_example_main();
+#endif
+
+#ifdef IIO_SW_TRIGGER_EXAMPLE
+#error Software trigger is not supported over UART.
+#endif
+
+#ifdef IIO_TIMER_TRIGGER_EXAMPLE
+#error Timer trigger is not supported on PICO platform.
+#endif
+
+#if (IIO_EXAMPLE + IIO_TIMER_TRIGGER_EXAMPLE == 0)
+#error At least one example has to be selected using y value in Makefile.
+#elif (IIO_EXAMPLE + IIO_SW_TRIGGER_EXAMPLE + IIO_TIMER_TRIGGER_EXAMPLE > 1)
+#error Selected example projects cannot be enabled at the same time. \
+Please enable only one example and re-build the project.
+#endif
+
+	return ret;
+}
