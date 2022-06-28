@@ -111,6 +111,7 @@ static const char * const iio_chan_type_string[] = {
 	[IIO_TEMP] = "temp",
 	[IIO_CAPACITANCE] = "capacitance",
 	[IIO_ACCEL] = "accel",
+	[IIO_RESISTANCE] = "resistance"
 };
 
 static const char * const iio_modifier_names[] = {
