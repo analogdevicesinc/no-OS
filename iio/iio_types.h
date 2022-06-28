@@ -74,7 +74,8 @@ enum iio_chan_type {
 	IIO_ANGL_VEL,
 	IIO_TEMP,
 	IIO_CAPACITANCE,
-	IIO_ACCEL
+	IIO_ACCEL,
+	IIO_RESISTANCE
 };
 
 /**
