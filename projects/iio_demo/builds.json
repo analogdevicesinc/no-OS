@@ -25,5 +25,19 @@
     "iio_timer_trigger": {
       "flags": "IIO_EXAMPLE=n IIO_SW_TRIGGER_EXAMPLE=n IIO_TIMER_TRIGGER_EXAMPLE=y"
     }
+  },
+  "maxim": {
+    "iio_max32650": {
+      "flags": "IIO_EXAMPLE=y IIO_SW_TRIGGER_EXAMPLE=n IIO_TIMER_TRIGGER_EXAMPLE=n TARGET=max32650"
+    },
+    "iio_max32655": {
+      "flags": "IIO_EXAMPLE=y IIO_SW_TRIGGER_EXAMPLE=n IIO_TIMER_TRIGGER_EXAMPLE=n TARGET=max32655"
+    },
+    "iio_max32665": {
+      "flags": "IIO_EXAMPLE=y IIO_SW_TRIGGER_EXAMPLE=n IIO_TIMER_TRIGGER_EXAMPLE=n TARGET=max32665"
+    },
+    "iio_max78000": {
+      "flags": "IIO_EXAMPLE=y IIO_SW_TRIGGER_EXAMPLE=n IIO_TIMER_TRIGGER_EXAMPLE=n TARGET=max78000"
+    }
   }
 }
