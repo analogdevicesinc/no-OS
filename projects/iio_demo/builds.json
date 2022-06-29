@@ -21,9 +21,7 @@
   "stm32": {
     "iio": {
       "flags": "IIO_EXAMPLE=y IIO_SW_TRIGGER_EXAMPLE=n IIO_TIMER_TRIGGER_EXAMPLE=n"
-    }
-  },
-  "stm32": {
+    },
     "iio_timer_trigger": {
       "flags": "IIO_EXAMPLE=n IIO_SW_TRIGGER_EXAMPLE=n IIO_TIMER_TRIGGER_EXAMPLE=y"
     }
