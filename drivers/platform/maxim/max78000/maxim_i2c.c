@@ -47,7 +47,6 @@
 #include "no_os_util.h"
 #include "i2c_extra.h"
 #include "mxc_errors.h"
-#include "maxim_hal.h"
 
 #define I2C_MASTER_MODE	1
 
