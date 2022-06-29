@@ -53,6 +53,9 @@ void no_os_udelay(uint32_t usecs)
 	volatile uint32_t cycles = (SystemCoreClock / 1000000L) * usecs;
 	if (firstrun) {
 		CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
+#ifdef STM32F7
+		DWT->LAR = 0xC5ACCE55;
+#endif
 		DWT->CTRL |= 1;
 		firstrun = false;
 	}
