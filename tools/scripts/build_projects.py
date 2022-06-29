@@ -177,7 +177,7 @@ class BuildConfig:
 		self.build_dir = os.path.join(self.builds_dir, short_build_dir)
 		self.binary = os.path.join(self.build_dir, self._binary)
 		self.export_file = os.path.join(self.build_dir, self.binary)
-		if (platform == 'aducm3029' or platform == 'stm32'):
+		if (platform == 'aducm3029' or platform == 'stm32' or platform == 'maxim'):
 			self.export_file = self.export_file.replace('.elf', '.hex')
 
 	def build(self):
