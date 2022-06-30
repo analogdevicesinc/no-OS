@@ -50,7 +50,7 @@
 /************************ Macros and Types Declarations ***********************/
 /******************************************************************************/
 #define AXI_PCORE_VER(major, minor, letter)	((major << 16) | (minor << 8) | letter)
-#define AXI_PCORE_VER_MAJOR(version)	(version >> 16)
+#define AXI_PCORE_VER_MAJOR(version)	(((version) >> 16) & 0xff)
 #define AXI_PCORE_VER_MINOR(version)	((version >> 8) & 0xff)
 #define AXI_PCORE_VER_LETTER(version)	(version & 0xff)
 
@@ -148,6 +148,12 @@ struct xilinx_xcvr {
 	enum axi_fpga_speed_grade speed_grade;
 	enum axi_fpga_dev_pack dev_package;
 	uint32_t voltage;
+
+	// CPLL / QPLL nominal operating ranges
+	uint32_t vco0_min; // kHz
+	uint32_t vco0_max; // kHz
+	uint32_t vco1_min; // kHz
+	uint32_t vco1_max; // kHz
 };
 
 struct xilinx_xcvr_cpll_config {
@@ -160,6 +166,7 @@ struct xilinx_xcvr_qpll_config {
 	uint32_t refclk_div;
 	uint32_t fb_div;
 	uint32_t band;
+	uint32_t qty4_full_rate;
 };
 
 #define ENC_8B10B		810
@@ -167,39 +174,58 @@ struct xilinx_xcvr_qpll_config {
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
-int32_t xilinx_xcvr_check_lane_rate(struct xilinx_xcvr *xcvr,
-				    uint32_t lane_rate_khz);
-int32_t xilinx_xcvr_configure_cdr(struct xilinx_xcvr *xcvr,
-				  uint32_t drp_port, uint32_t lane_rate, uint32_t out_div,
-				  bool lpm_enable);
-int32_t xilinx_xcvr_configure_lpm_dfe_mode(struct xilinx_xcvr *xcvr,
-		uint32_t drp_port, bool lpm);
-int32_t xilinx_xcvr_calc_cpll_config(struct xilinx_xcvr *xcvr,
-				     uint32_t refclk_hz, uint32_t lane_rate_khz,
-				     struct xilinx_xcvr_cpll_config *conf, uint32_t *out_div);
-int32_t xilinx_xcvr_cpll_read_config(struct xilinx_xcvr *xcvr,
-				     uint32_t drp_port, struct xilinx_xcvr_cpll_config *conf);
-int32_t xilinx_xcvr_cpll_write_config(struct xilinx_xcvr *xcvr,
-				      uint32_t drp_port, const struct xilinx_xcvr_cpll_config *conf);
-int32_t xilinx_xcvr_cpll_calc_lane_rate(struct xilinx_xcvr *xcvr,
-					uint32_t refclk_khz, const struct xilinx_xcvr_cpll_config *conf,
-					uint32_t out_div);
-int32_t xilinx_xcvr_calc_qpll_config(struct xilinx_xcvr *xcvr,
-				     uint32_t refclk_khz, uint32_t lane_rate_khz,
-				     struct xilinx_xcvr_qpll_config *conf, uint32_t *out_div);
-int32_t xilinx_xcvr_qpll_read_config(struct xilinx_xcvr *xcvr,
-				     uint32_t drp_port, struct xilinx_xcvr_qpll_config *conf);
-int32_t xilinx_xcvr_qpll_write_config(struct xilinx_xcvr *xcvr,
-				      uint32_t drp_port, const struct xilinx_xcvr_qpll_config *conf);
-int32_t xilinx_xcvr_qpll_calc_lane_rate(struct xilinx_xcvr *xcvr,
-					uint32_t refclk_hz, const struct xilinx_xcvr_qpll_config *conf,
-					uint32_t out_div);
-int32_t xilinx_xcvr_read_out_div(struct xilinx_xcvr *xcvr, uint32_t drp_port,
-				 uint32_t *rx_out_div, uint32_t *tx_out_div);
-int32_t xilinx_xcvr_write_out_div(struct xilinx_xcvr *xcvr, uint32_t drp_port,
-				  int32_t rx_out_div, int32_t tx_out_div);
-int32_t xilinx_xcvr_write_rx_clk25_div(struct xilinx_xcvr *xcvr,
-				       uint32_t drp_port, uint32_t div);
-int32_t xilinx_xcvr_write_tx_clk25_div(struct xilinx_xcvr *xcvr,
-				       uint32_t drp_port, uint32_t div);
+int xilinx_xcvr_configure_cdr(struct xilinx_xcvr *xcvr,
+			      uint32_t drp_port, uint32_t lane_rate, uint32_t out_div,
+			      bool lpm_enable);
+int xilinx_xcvr_configure_lpm_dfe_mode(struct xilinx_xcvr *xcvr,
+				       uint32_t drp_port, bool lpm);
+
+int xilinx_xcvr_calc_cpll_config(struct xilinx_xcvr *xcvr,
+				 uint32_t refclk_khz, uint32_t lane_rate_khz,
+				 struct xilinx_xcvr_cpll_config *conf, uint32_t *out_div);
+int xilinx_xcvr_cpll_read_config(struct xilinx_xcvr *xcvr,
+				 uint32_t drp_port, struct xilinx_xcvr_cpll_config *conf);
+int xilinx_xcvr_cpll_write_config(struct xilinx_xcvr *xcvr,
+				  uint32_t drp_port, const struct xilinx_xcvr_cpll_config *conf);
+int xilinx_xcvr_cpll_calc_lane_rate(struct xilinx_xcvr *xcvr,
+				    uint32_t refclk_hz, const struct xilinx_xcvr_cpll_config *conf,
+				    uint32_t out_div);
+
+int xilinx_xcvr_calc_qpll_config(struct xilinx_xcvr *xcvr, uint32_t sys_clk_sel,
+				 uint32_t refclk_khz, uint32_t lane_rate_khz,
+				 struct xilinx_xcvr_qpll_config *conf, uint32_t *out_div);
+int xilinx_xcvr_qpll_read_config(struct xilinx_xcvr *xcvr,
+				 uint32_t drp_port, uint32_t sys_clk_sel, struct xilinx_xcvr_qpll_config *conf);
+int xilinx_xcvr_qpll_write_config(struct xilinx_xcvr *xcvr,
+				  uint32_t sys_clk_sel, uint32_t drp_port,
+				  const struct xilinx_xcvr_qpll_config *conf);
+int xilinx_xcvr_qpll_calc_lane_rate(struct xilinx_xcvr *xcvr,
+				    uint32_t refclk_hz, const struct xilinx_xcvr_qpll_config *conf,
+				    uint32_t out_div);
+
+int xilinx_xcvr_read_out_div(struct xilinx_xcvr *xcvr, uint32_t drp_port,
+			     uint32_t *rx_out_div, uint32_t *tx_out_div);
+int xilinx_xcvr_write_out_div(struct xilinx_xcvr *xcvr, uint32_t drp_port,
+			      int32_t rx_out_div, int32_t tx_out_div);
+
+int xilinx_xcvr_write_rx_clk25_div(struct xilinx_xcvr *xcvr,
+				   uint32_t drp_port, uint32_t div);
+int xilinx_xcvr_write_tx_clk25_div(struct xilinx_xcvr *xcvr,
+				   uint32_t drp_port, uint32_t div);
+
+int xilinx_xcvr_prbsel_enc_get(struct xilinx_xcvr *xcvr,
+			       uint32_t prbs, bool reverse_lu);
+
+int xilinx_xcvr_prbs_err_cnt_get(struct xilinx_xcvr *xcvr,
+				 uint32_t drp_port, uint32_t *cnt);
+
+int xilinx_xcvr_write_prog_div_rate(struct xilinx_xcvr *xcvr,
+				    uint32_t drp_port, int32_t rx_rate, int32_t tx_rate);
+
+int xilinx_xcvr_write_prog_div(struct xilinx_xcvr *xcvr,
+			       uint32_t drp_port, int32_t rx_prog_div, int32_t tx_prog_div);
+
+int xilinx_xcvr_write_async_gearbox_en(struct xilinx_xcvr *xcvr,
+				       uint32_t drp_port, bool en);
+
 #endif

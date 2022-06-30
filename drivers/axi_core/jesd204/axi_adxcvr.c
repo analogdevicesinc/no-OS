@@ -229,9 +229,9 @@ int32_t adxcvr_clk_set_rate(struct adxcvr *xcvr,
 	uint32_t i;
 	int32_t ret;
 
-	ret = xilinx_xcvr_check_lane_rate(&xcvr->xlx_xcvr, rate);
-	if (ret < 0)
-		return ret;
+//	ret = xilinx_xcvr_check_lane_rate(&xcvr->xlx_xcvr, rate);
+//	if (ret < 0)
+//		return ret;
 
 	clk25_div = NO_OS_DIV_ROUND_CLOSEST(parent_rate, 25000);
 
@@ -239,7 +239,8 @@ int32_t adxcvr_clk_set_rate(struct adxcvr *xcvr,
 		ret = xilinx_xcvr_calc_cpll_config(&xcvr->xlx_xcvr, parent_rate, rate,
 						   &cpll_conf, &out_div);
 	else
-		ret = xilinx_xcvr_calc_qpll_config(&xcvr->xlx_xcvr, parent_rate, rate,
+		ret = xilinx_xcvr_calc_qpll_config(&xcvr->xlx_xcvr, xcvr->sys_clk_sel,
+						   parent_rate, rate,
 						   &qpll_conf, &out_div);
 	if (ret < 0)
 		return ret;
@@ -252,6 +253,7 @@ int32_t adxcvr_clk_set_rate(struct adxcvr *xcvr,
 							    &cpll_conf);
 		else if (i % 4 == 0)
 			ret = xilinx_xcvr_qpll_write_config(&xcvr->xlx_xcvr,
+							    xcvr->sys_clk_sel,
 							    ADXCVR_DRP_PORT_COMMON(i),
 							    &qpll_conf);
 		if (ret < 0)
