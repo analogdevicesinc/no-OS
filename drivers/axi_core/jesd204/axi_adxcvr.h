@@ -60,6 +60,8 @@ struct adxcvr {
 	uint32_t base;
 	/** Enable CPLL for the transceiver */
 	bool cpll_enable;
+	/** Enable QPLL for the transceiver */
+	bool qpll_enable;
 	/** TX Enable */
 	bool tx_enable;
 	/** Enable LPM mode for the transceiver. Otherwise use DFE. */
@@ -135,9 +137,9 @@ int32_t adxcvr_init(struct adxcvr **ad_xcvr,
 /** AXI ADXCVR Resources Deallocation */
 int32_t adxcvr_remove(struct adxcvr *xcvr);
 /** AXI ADXCVR Clock Set Rate */
-int32_t adxcvr_clk_set_rate(struct adxcvr *xcvr,
-			    uint32_t rate,
-			    uint32_t parent_rate);
+int adxcvr_clk_set_rate(struct adxcvr *xcvr,
+			uint32_t rate,
+			uint32_t parent_rate);
 /** AXI ADXCVR Write */
 int32_t adxcvr_write(struct adxcvr *xcvr, uint32_t reg_addr, uint32_t reg_val);
 /** AXI ADXCVR Read */

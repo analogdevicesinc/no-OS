@@ -86,6 +86,8 @@
 
 #define ADXCVR_BROADCAST				0xff
 
+#define ADXCVR_PROGDIV_CLK                5
+
 /**
  * @brief AXI ADXCVR Write
  * @param xcvr - Device Structure.
@@ -215,23 +217,23 @@ int32_t adxcvr_drp_write(struct adxcvr *xcvr,
 /**
  * @brief AXI ADXCVR Clock Set Rate
  * @param xcvr - The device structure.
- * @param rate - The output rate.
- * @param parent_rate - The parent rate.
+ * @param rate - The output rate (kHz).
+ * @param parent_rate - The parent rate (kHz).
  * @return Returns 0 in case of success or negative error code otherwise.
  */
-int32_t adxcvr_clk_set_rate(struct adxcvr *xcvr,
-			    uint32_t rate,
-			    uint32_t parent_rate)
+int adxcvr_clk_set_rate(struct adxcvr *xcvr,
+			uint32_t rate,
+			uint32_t parent_rate
+		       )
 {
 	struct xilinx_xcvr_cpll_config cpll_conf;
 	struct xilinx_xcvr_qpll_config qpll_conf;
-	uint32_t out_div, clk25_div;
+	uint32_t out_div, clk25_div, prog_div;
 	uint32_t i;
-	int32_t ret;
+	int ret;
 
-//	ret = xilinx_xcvr_check_lane_rate(&xcvr->xlx_xcvr, rate);
-//	if (ret < 0)
-//		return ret;
+//	dev_dbg(st->dev, "%s: Rate %lu Hz Parent Rate %lu Hz",
+//			__func__, rate, parent_rate);
 
 	clk25_div = NO_OS_DIV_ROUND_CLOSEST(parent_rate, 25000);
 
@@ -240,22 +242,20 @@ int32_t adxcvr_clk_set_rate(struct adxcvr *xcvr,
 						   &cpll_conf, &out_div);
 	else
 		ret = xilinx_xcvr_calc_qpll_config(&xcvr->xlx_xcvr, xcvr->sys_clk_sel,
-						   parent_rate, rate,
-						   &qpll_conf, &out_div);
+						   parent_rate, rate, &qpll_conf, &out_div);
 	if (ret < 0)
 		return ret;
+
 
 	for (i = 0; i < xcvr->num_lanes; i++) {
 
 		if (xcvr->cpll_enable)
 			ret = xilinx_xcvr_cpll_write_config(&xcvr->xlx_xcvr,
-							    ADXCVR_DRP_PORT_CHANNEL(i),
-							    &cpll_conf);
-		else if (i % 4 == 0)
+							    ADXCVR_DRP_PORT_CHANNEL(i), &cpll_conf);
+		else if ((i % 4 == 0) && xcvr->qpll_enable)
 			ret = xilinx_xcvr_qpll_write_config(&xcvr->xlx_xcvr,
 							    xcvr->sys_clk_sel,
-							    ADXCVR_DRP_PORT_COMMON(i),
-							    &qpll_conf);
+							    ADXCVR_DRP_PORT_COMMON(i), &qpll_conf);
 		if (ret < 0)
 			return ret;
 
@@ -266,27 +266,76 @@ int32_t adxcvr_clk_set_rate(struct adxcvr *xcvr,
 		if (ret < 0)
 			return ret;
 
+		if (xcvr->out_clk_sel == ADXCVR_PROGDIV_CLK) {
+			unsigned int max_progdiv, div = 1, ratio;
+
+			if (xcvr->xlx_xcvr.encoding == ENC_66B64B)
+				ratio = 66;
+			else
+				ratio = 40;
+
+			/* Set RX|TX_PROGDIV_RATE = 2 on GTY4 */
+			ret = xilinx_xcvr_write_prog_div_rate(&xcvr->xlx_xcvr,
+							      ADXCVR_DRP_PORT_CHANNEL(i),
+							      xcvr->tx_enable ? -1 : 2,
+							      xcvr->tx_enable ? 2 : -1);
+			if (!ret)
+				div = 2;
+
+			switch (xcvr->xlx_xcvr.type) {
+			case XILINX_XCVR_TYPE_US_GTH3:
+				max_progdiv = 100;
+				/* This is done in the FPGA fabric */
+				if (xcvr->xlx_xcvr.encoding == ENC_66B64B)
+					div = 2;
+				break;
+			case XILINX_XCVR_TYPE_US_GTH4:
+				max_progdiv = 132;
+				/* This is done in the FPGA fabric */
+				if (xcvr->xlx_xcvr.encoding == ENC_66B64B)
+					div = 2;
+				break;
+			case XILINX_XCVR_TYPE_US_GTY4:
+				max_progdiv = 100;
+				break;
+			default:
+				return -EINVAL;
+			}
+
+			prog_div = NO_OS_DIV_ROUND_CLOSEST(ratio * out_div, 2 * div);
+
+			if (prog_div > max_progdiv) {
+				prog_div = 0; /* disabled */
+//				dev_warn(st->dev,
+//					"%s: No PROGDIV divider found for OUTDIV=%u, disabling output!",
+//					__func__, out_div); // ToDo - replace with pr_info
+			}
+
+			ret = xilinx_xcvr_write_prog_div(&xcvr->xlx_xcvr,
+							 ADXCVR_DRP_PORT_CHANNEL(i),
+							 xcvr->tx_enable ? -1 : prog_div,
+							 xcvr->tx_enable ? prog_div : -1);
+			if (ret < 0)
+				return ret;
+		}
+
 		if (!xcvr->tx_enable) {
 			ret = xilinx_xcvr_configure_cdr(&xcvr->xlx_xcvr,
-							ADXCVR_DRP_PORT_CHANNEL(i),
-							rate, out_div,
+							ADXCVR_DRP_PORT_CHANNEL(i), rate, out_div,
 							xcvr->lpm_enable);
 			if (ret < 0)
 				return ret;
 
 			ret = xilinx_xcvr_write_rx_clk25_div(&xcvr->xlx_xcvr,
-							     ADXCVR_DRP_PORT_CHANNEL(i),
-							     clk25_div);
+							     ADXCVR_DRP_PORT_CHANNEL(i), clk25_div);
 		} else {
 			ret = xilinx_xcvr_write_tx_clk25_div(&xcvr->xlx_xcvr,
-							     ADXCVR_DRP_PORT_CHANNEL(i),
-							     clk25_div);
+							     ADXCVR_DRP_PORT_CHANNEL(i), clk25_div);
 		}
 
 		if (ret < 0)
 			return ret;
 	}
-
 
 	xcvr->lane_rate_khz = rate;
 
@@ -373,7 +422,7 @@ int32_t adxcvr_init(struct adxcvr **ad_xcvr,
 	uint32_t i;
 	int32_t ret;
 
-	xcvr = (struct adxcvr *)malloc(sizeof(*xcvr));
+	xcvr = (struct adxcvr *)calloc(1, sizeof(*xcvr));
 	if (!xcvr)
 		return -1;
 
@@ -390,6 +439,7 @@ int32_t adxcvr_init(struct adxcvr **ad_xcvr,
 	adxcvr_read(xcvr, ADXCVR_REG_SYNTH, &synth_conf);
 	xcvr->tx_enable = (synth_conf >> 8) & 1;
 	xcvr->num_lanes = synth_conf & 0xff;
+	xcvr->qpll_enable = (synth_conf >> 20) & 1;
 
 	xcvr_type = (synth_conf >> 16) & 0xf;
 
@@ -452,7 +502,7 @@ int32_t adxcvr_init(struct adxcvr **ad_xcvr,
 	if (xcvr->lane_rate_khz && xcvr->ref_rate_khz) {
 		ret = adxcvr_clk_set_rate(xcvr, xcvr->lane_rate_khz, xcvr->ref_rate_khz);
 		if (ret)
-			goto err;
+			goto err;//ToDo If it fails here, then you won't get its name in the caller, because following instr. not executed.
 	}
 
 	*ad_xcvr = xcvr;
@@ -460,6 +510,7 @@ int32_t adxcvr_init(struct adxcvr **ad_xcvr,
 	return 0;
 
 err:
+	pr_err("%s: adxcvr_init() failed\n", xcvr->name);
 	free(xcvr);
 
 	return -1;
