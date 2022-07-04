@@ -49,6 +49,7 @@
 #include "no_os_delay.h"
 #include "xilinx_transceiver.h"
 #include "axi_adxcvr.h"
+#include "no_os_print_log.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -232,8 +233,8 @@ int adxcvr_clk_set_rate(struct adxcvr *xcvr,
 	uint32_t i;
 	int ret;
 
-//	dev_dbg(st->dev, "%s: Rate %lu Hz Parent Rate %lu Hz",
-//			__func__, rate, parent_rate);
+	pr_debug("%s: Rate %lu Hz Parent Rate %lu Hz\n",
+		 __func__, rate, parent_rate);
 
 	clk25_div = NO_OS_DIV_ROUND_CLOSEST(parent_rate, 25000);
 
@@ -305,9 +306,8 @@ int adxcvr_clk_set_rate(struct adxcvr *xcvr,
 
 			if (prog_div > max_progdiv) {
 				prog_div = 0; /* disabled */
-//				dev_warn(st->dev,
-//					"%s: No PROGDIV divider found for OUTDIV=%u, disabling output!",
-//					__func__, out_div); // ToDo - replace with pr_info
+				pr_info("%s: No PROGDIV divider found for OUTDIV=%lu, disabling output!\n",
+					__func__, out_div);
 			}
 
 			ret = xilinx_xcvr_write_prog_div(&xcvr->xlx_xcvr,

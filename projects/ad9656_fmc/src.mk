@@ -55,7 +55,9 @@ INCS +=	$(INCLUDE)/no_os_axi_io.h \
         $(INCLUDE)/no_os_spi.h \
         $(INCLUDE)/no_os_error.h \
         $(INCLUDE)/no_os_delay.h \
-        $(INCLUDE)/no_os_util.h
+        $(INCLUDE)/no_os_util.h \
+        $(INCLUDE)/no_os_units.h \
+        $(INCLUDE)/no_os_print_log.h
 ifeq (y,$(strip $(TINYIIOD)))
 INCS +=	$(INCLUDE)/no_os_fifo.h \
 	$(INCLUDE)/no_os_irq.h \
