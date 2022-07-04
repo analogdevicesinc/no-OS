@@ -48,6 +48,7 @@
 #include "no_os_error.h"
 #include "axi_adxcvr.h"
 #include "xilinx_transceiver.h"
+#include "no_os_print_log.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -129,7 +130,7 @@ static int xilinx_xcvr_drp_read(struct xilinx_xcvr *xcvr,
 
 	ret = adxcvr_drp_read(xcvr->ad_xcvr, drp_port, reg, val);
 	if (ret) {
-		printf("%s: Failed to read reg %"PRIu32"-0x%"PRIX32": %"PRId32"\n",
+		pr_err("%s: Failed to read reg %"PRIu32"-0x%"PRIX32": %"PRId32"\n",
 		       __func__, drp_port, reg, ret);
 
 		return -1;
@@ -147,24 +148,25 @@ static int xilinx_xcvr_drp_write(struct xilinx_xcvr *xcvr,
 	uint32_t read_val;
 	int ret;
 
-//	dev_dbg(xcvr->dev, "%s: drp_port: %d, reg 0x%X, val 0x%X\n",
-//		__func__, drp_port, reg, val);
+	pr_debug("%s: drp_port: %d, reg 0x%X, val 0x%X\n",
+		 __func__, drp_port, reg, val);
 
 	ret = adxcvr_drp_write(xcvr->ad_xcvr, drp_port, reg, val);
 	if (ret) {
-		printf("%s: Failed to write reg %"PRIu32"-0x%"PRIX32": %"PRId32"\n",
+		pr_err("%s: Failed to write reg %"PRIu32"-0x%"PRIX32": %"PRId32"\n",
 		       __func__, drp_port, reg, ret);
 		return ret;
 	}
 
 	ret = xilinx_xcvr_drp_read(xcvr, drp_port, reg, &read_val);
 	if (ret) {
-		// Print err message
+		pr_err("%s: Failed to check reg %"PRIu32"-0x%"PRIX32": %"PRId32"\n",
+				__func__, drp_port, reg, ret);
 		return ret;
 	}
 
 	if (read_val != val)
-		printf("%s: read-write mismatch: reg 0x%"PRIX32","
+		pr_err("%s: read-write mismatch: reg 0x%"PRIX32","
 		       "val 0x%4"PRIX32", expected val 0x%4"PRIX32"\n",
 		       __func__, reg, val, read_val);
 
@@ -489,9 +491,8 @@ int xilinx_xcvr_calc_cpll_config(struct xilinx_xcvr *xcvr,
 		}
 	}
 
-//	dev_dbg(xcvr->dev,
-//		 "CPLL: failed to find setting for lane rate %u kHz with reference clock %u kHz\n",
-//		lane_rate_khz, refclk_khz);
+	pr_debug("CPLL: failed to find setting for lane rate %u kHz with reference clock %u kHz\n",
+		 lane_rate_khz, refclk_khz);
 
 	return -EINVAL;
 }
@@ -663,12 +664,8 @@ int xilinx_xcvr_calc_qpll_config(struct xilinx_xcvr *xcvr, uint32_t sys_clk_sel,
 		}
 	}
 
-	//ToDO - add no_os_print_log.h for using debug messages
-//	pr_debug(xcvr->dev,
-//		 "QPLL: failed to find setting for lane rate %u kHz with reference clock %u kHz\n",
-//		 lane_rate_khz, refclk_khz);
-	printf("%s: QPLL: failed to find setting for lane rate %"PRIu32" kHz with reference clock %"PRIu32" kHz\n",
-	       __func__, lane_rate_khz, refclk_khz);
+	pr_debug("QPLL: failed to find setting for lane rate %u kHz with reference clock %u kHz\n",
+		 lane_rate_khz, refclk_khz);
 
 	return -EINVAL;
 }
@@ -718,9 +715,9 @@ static int xilinx_xcvr_gth34_cpll_read_config(struct xilinx_xcvr *xcvr,
 	else
 		conf->refclk_div = 2;
 
-	printf("%s: cpll: fb_div_N1=%"PRIu32"\ncpll: fb_div_N2=%"PRIu32"\ncpll:"
-	       " refclk_div=%"PRIu32"\n", __func__, conf->fb_div_N1,
-	       conf->fb_div_N2, conf->refclk_div);
+	pr_debug("%s: cpll: fb_div_N1=%"PRIu32"\ncpll: fb_div_N2=%"PRIu32"\ncpll:"
+		 " refclk_div=%"PRIu32"\n", __func__, conf->fb_div_N1,
+		 conf->fb_div_N2, conf->refclk_div);
 
 	return 0;
 }
@@ -728,8 +725,8 @@ static int xilinx_xcvr_gth34_cpll_read_config(struct xilinx_xcvr *xcvr,
 /**
  * @brief xilinx_xcvr_gtx2_cpll_read_config
  */
-int xilinx_xcvr_gtx2_cpll_read_config(struct xilinx_xcvr *xcvr,
-				      uint32_t drp_port, struct xilinx_xcvr_cpll_config *conf)
+static int xilinx_xcvr_gtx2_cpll_read_config(struct xilinx_xcvr *xcvr,
+		uint32_t drp_port, struct xilinx_xcvr_cpll_config *conf)
 {
 	uint32_t val;
 	int ret;
@@ -985,8 +982,8 @@ static int xilinx_xcvr_gth34_qpll_read_config(struct xilinx_xcvr *xcvr,
 
 	conf->band = 0;
 
-	printf("%s: qpll: fb_div=%"PRIu32", qpll: refclk_div=%"PRIu32"\n",
-	       __func__, conf->fb_div, conf->refclk_div);
+	pr_debug("%s: qpll: fb_div=%"PRIu32", qpll: refclk_div=%"PRIu32"\n",
+		 __func__, conf->fb_div, conf->refclk_div);
 
 	return 0;
 }
@@ -1107,8 +1104,8 @@ static int xilinx_xcvr_gth34_qpll_write_config(struct xilinx_xcvr *xcvr,
 		refclk = 2;
 		break;
 	default:
-		printf("%s: Invalid refclk divider: %"PRIu32"\n",
-		       __func__, conf->refclk_div);
+		pr_debug("%s: Invalid refclk divider: %"PRIu32"\n",
+			 __func__, conf->refclk_div);
 		return -EINVAL;
 	}
 
@@ -1153,8 +1150,8 @@ static int xilinx_xcvr_gtx2_qpll_write_config(struct xilinx_xcvr *xcvr,
 		cfg1 = QPLL_REFCLK_DIV_M(2);
 		break;
 	default:
-		printf("%s: Invalid refclk divider: %"PRIu32"\n",
-		       __func__, conf->refclk_div);
+		pr_debug("%s: Invalid refclk divider: %"PRIu32"\n",
+			 __func__, conf->refclk_div);
 		return -EINVAL;
 	}
 
@@ -1187,8 +1184,8 @@ static int xilinx_xcvr_gtx2_qpll_write_config(struct xilinx_xcvr *xcvr,
 		fbdiv = 368;
 		break;
 	default:
-		printf("%s: Invalid feedback divider: %"PRIu32"\n",
-		       __func__, conf->fb_div);
+		pr_debug("%s: Invalid feedback divider: %"PRIu32"\n",
+			 __func__, conf->fb_div);
 		return -EINVAL;
 	}
 
