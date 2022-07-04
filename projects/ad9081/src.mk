@@ -91,7 +91,9 @@ INCS +=	$(PROJECT)/src/app_clock.h \
 	$(INCLUDE)/no_os_error.h \
 	$(INCLUDE)/no_os_gpio.h \
 	$(INCLUDE)/no_os_spi.h \
-	$(INCLUDE)/no_os_util.h
+	$(INCLUDE)/no_os_util.h \
+	$(INCLUDE)/no_os_units.h \
+	$(INCLUDE)/no_os_print_log.h
 ifeq (y,$(strip $(QUAD_MXFE)))
 INCS += $(DRIVERS)/frequency/adf4371/adf4371.h
 endif
