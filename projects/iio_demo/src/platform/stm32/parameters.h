@@ -71,7 +71,7 @@ extern UART_HandleTypeDef huart5;
 extern stm32_timer_init_param adc_demo_xtip;
 #define ADC_DEMO_TIMER_DEVICE_ID    13
 #define ADC_DEMO_TIMER_FREQ_HZ      1000000
-#define ADC_DEMO_TIMER_LOAD_VAL     2000
+#define ADC_DEMO_TIMER_TICKS_COUNT  2000
 #define ADC_DEMO_TIMER_EXTRA        &adc_demo_xtip
 #define TIMER_OPS                   &stm32_timer_ops
 
@@ -89,7 +89,7 @@ extern TIM_HandleTypeDef htim13;
 extern stm32_timer_init_param dac_demo_xtip;
 #define DAC_DEMO_TIMER_DEVICE_ID    14
 #define DAC_DEMO_TIMER_FREQ_HZ      1000000
-#define DAC_DEMO_TIMER_LOAD_VAL     2000
+#define DAC_DEMO_TIMER_TICKS_COUNT  2000
 #define DAC_DEMO_TIMER_EXTRA        &dac_demo_xtip
 #define TIMER_OPS                   &stm32_timer_ops
 

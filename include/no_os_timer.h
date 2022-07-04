@@ -59,8 +59,8 @@ struct no_os_timer_desc {
 	uint16_t id;
 	/** timer count frequency (Hz) */
 	uint32_t freq_hz;
-	/** counter start value */
-	uint32_t load_value;
+	/** the number of ticks the timer counts until it resets */
+	uint32_t ticks_count;
 	/** Timer platform operations */
 	const struct no_os_timer_platform_ops *platform_ops;
 	/** timer extra parameters (device specific) */
@@ -83,8 +83,8 @@ struct no_os_timer_init_param {
 	uint16_t id;
 	/** timer count frequency (Hz) */
 	uint32_t freq_hz;
-	/** counter start value */
-	uint32_t load_value;
+	/** the number of ticks the timer counts until it resets */
+	uint32_t ticks_count;
 	/** Timer platform operations */
 	const struct no_os_timer_platform_ops *platform_ops;
 	/** timer extra parameters (device specific) */

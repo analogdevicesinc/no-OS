@@ -87,7 +87,7 @@ struct iio_sw_trig_init_param dac_trig_ip = {
 struct no_os_timer_init_param adc_demo_tip = {
 	.id = ADC_DEMO_TIMER_DEVICE_ID,
 	.freq_hz = ADC_DEMO_TIMER_FREQ_HZ,
-	.load_value = ADC_DEMO_TIMER_LOAD_VAL,
+	.ticks_count = ADC_DEMO_TIMER_TICKS_COUNT,
 	.platform_ops = TIMER_OPS,
 	.extra = ADC_DEMO_TIMER_EXTRA,
 };
@@ -117,7 +117,7 @@ struct iio_hw_trig_init_param adc_demo_timer_trig_ip = {
 struct no_os_timer_init_param dac_demo_tip = {
 	.id = DAC_DEMO_TIMER_DEVICE_ID,
 	.freq_hz = DAC_DEMO_TIMER_FREQ_HZ,
-	.load_value = DAC_DEMO_TIMER_LOAD_VAL,
+	.ticks_count = DAC_DEMO_TIMER_TICKS_COUNT,
 	.platform_ops = TIMER_OPS,
 	.extra = DAC_DEMO_TIMER_EXTRA,
 };

@@ -171,7 +171,7 @@ int32_t stm32_timer_init(struct no_os_timer_desc **desc,
 
 	/* Overwrite generated values with given values */
 	stm_desc->htimer->Init.Prescaler = src_freq/param->freq_hz;
-	stm_desc->htimer->Init.Period = param->load_value;
+	stm_desc->htimer->Init.Period = param->ticks_count;
 
 	ret = HAL_TIM_Base_Init(stm_desc->htimer);
 	if (ret != HAL_OK) {
@@ -183,7 +183,7 @@ int32_t stm32_timer_init(struct no_os_timer_desc **desc,
 	no_os_desc->extra = stm_desc->htimer;
 	no_os_desc->id = param->id;
 	no_os_desc->freq_hz = param->freq_hz;
-	no_os_desc->load_value = param->load_value;
+	no_os_desc->ticks_count = param->ticks_count;
 	*desc = no_os_desc;
 
 	return 0;
@@ -270,7 +270,7 @@ int32_t stm32_timer_counter_get(struct no_os_timer_desc *desc,
  */
 int32_t stm32_timer_counter_set(struct no_os_timer_desc *desc, uint32_t new_val)
 {
-	if (!desc || (new_val > desc->load_value))
+	if (!desc || (new_val > desc->ticks_count))
 		return -EINVAL;
 
 	__HAL_TIM_SetCounter((TIM_HandleTypeDef*)desc->extra, new_val);
