@@ -97,7 +97,7 @@ struct iio_hw_trig_init_param adxrs290_gpio_trig_ip = {
 struct no_os_timer_init_param adxrs290_tip = {
 	.id = ADXRS290_TIMER_DEVICE_ID,
 	.freq_hz = ADXRS290_TIMER_FREQ_HZ,
-	.load_value = ADXRS290_TIMER_LOAD_VAL,
+	.ticks_count = ADXRS290_TIMER_TICKS_COUNT,
 	.platform_ops = TIMER_OPS,
 	.extra = ADXRS290_TIMER_EXTRA,
 };

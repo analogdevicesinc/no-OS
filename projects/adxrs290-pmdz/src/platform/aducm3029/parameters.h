@@ -79,7 +79,7 @@
 extern struct aducm_timer_init_param adxrs290_xtip;
 #define ADXRS290_TIMER_DEVICE_ID    1
 #define ADXRS290_TIMER_FREQ_HZ      200 /* Not used - Used clock source frequency is the one specified in adxrs290_xtip */
-#define ADXRS290_TIMER_LOAD_VAL     0xffff
+#define ADXRS290_TIMER_TICKS_COUNT  0xffff
 #define ADXRS290_TIMER_EXTRA        &adxrs290_xtip
 #define TIMER_OPS                   &aducm3029_timer_ops
 

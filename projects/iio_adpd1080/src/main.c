@@ -76,7 +76,7 @@ static int32_t adpd1080pmod_32k_calib(struct adpd188_dev *adpd1080_dev)
 	struct no_os_timer_desc *cal_timer;
 	struct no_os_timer_init_param cal_timer_init = {
 		.id = 0,
-		.load_value = 0,
+		.ticks_count = 0,
 		.freq_hz = 1,
 		.extra = NULL
 	};

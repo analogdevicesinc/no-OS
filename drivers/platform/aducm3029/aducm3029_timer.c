@@ -130,7 +130,7 @@ int32_t aducm3029_timer_init(struct no_os_timer_desc **desc,
 	aducm_timer_ip = param->extra;
 
 	ldesc->extra = aducm_desc;
-	ldesc->load_value = param->load_value;
+	ldesc->ticks_count = param->ticks_count;
 	ldesc->freq_hz = param->freq_hz;
 
 	if (param->id == 0) {
@@ -193,8 +193,8 @@ int32_t aducm3029_timer_init(struct no_os_timer_desc **desc,
 		}
 
 		freq /= prescaler;
-		tmr_conf.nLoad = param->load_value;
-		tmr_conf.nAsyncLoad = param->load_value;
+		tmr_conf.nLoad = param->ticks_count;
+		tmr_conf.nAsyncLoad = param->ticks_count;
 		tmr_conf.bReloading = true;
 		tmr_conf.bSyncBypass = true;
 		aducm_desc->tmr_conf = tmr_conf;
@@ -297,7 +297,7 @@ int32_t aducm3029_timer_stop(struct no_os_timer_desc *desc)
 		return -1;
 	if (desc->id == 0) {
 		no_os_timer_counter_get(desc, &counter);
-		desc->load_value = counter;
+		desc->ticks_count = counter;
 		if (nb_enables == 1)
 			while (ADI_TMR_DEVICE_BUSY == adi_tmr_Enable(0, false));
 		nb_enables--;
@@ -330,7 +330,7 @@ int32_t aducm3029_timer_counter_get(struct no_os_timer_desc *desc,
 
 	tmr_desc = desc->extra;
 	if (tmr_desc->started == 0) {
-		*counter = desc->load_value;
+		*counter = desc->ticks_count;
 		return 0;
 	}
 	/*
@@ -358,7 +358,7 @@ int32_t aducm3029_timer_counter_get(struct no_os_timer_desc *desc,
 		 */
 		*counter = (big_counter * desc->freq_hz) / NO_OS_FREQ_1KHZ;
 	}
-	*counter += desc->load_value;
+	*counter += desc->ticks_count;
 
 	return 0;
 }
@@ -380,7 +380,7 @@ int32_t aducm3029_timer_counter_set(struct no_os_timer_desc *desc,
 
 	tmr_desc = (struct aducm_timer_desc *)desc->extra;
 	tmr_desc->old_time = aducm3029_get_current_time(desc);
-	desc->load_value = new_val;
+	desc->ticks_count = new_val;
 
 	return 0;
 }

@@ -359,14 +359,14 @@ int main()
 	xil_timer_init.type = TIMER_PS;
 	timer_init.id = XPAR_XSCUTIMER_0_DEVICE_ID;
 	timer_init.freq_hz = XPAR_CPU_CORTEXA9_CORE_CLOCK_FREQ_HZ / 2;
-	timer_init.load_value = timer_init.freq_hz / 1000;
+	timer_init.ticks_count = timer_init.freq_hz / 1000;
 	timer_init.extra = &xil_timer_init;
 #else
 	xil_timer_init.active_tmr = 0;
 	xil_timer_init.type = TIMER_PL;
 	timer_init.id = XPAR_AXI_TIMER_DEVICE_ID;
 	timer_init.freq_hz = XPAR_AXI_TIMER_CLOCK_FREQ_HZ;
-	timer_init.load_value = timer_init.freq_hz / 1000;
+	timer_init.ticks_count = timer_init.freq_hz / 1000;
 	timer_init.extra = &xil_timer_init;
 #endif
 #if defined(_XPARAMETERS_PS_H_)

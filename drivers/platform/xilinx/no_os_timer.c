@@ -88,7 +88,7 @@ int32_t no_os_timer_init(struct no_os_timer_desc **desc,
 
 	dev->id = param->id;
 	dev->freq_hz = param->freq_hz;
-	dev->load_value = param->load_value;
+	dev->ticks_count = param->ticks_count;
 	dev->extra = xdesc;
 	xdesc->active_tmr = xinit->active_tmr;
 	xdesc->type = xinit->type;
@@ -110,7 +110,7 @@ int32_t no_os_timer_init(struct no_os_timer_desc **desc,
 		if (NO_OS_IS_ERR_VALUE(ret))
 			goto error_xdesc;
 
-		ret = no_os_timer_counter_set(dev, dev->load_value);
+		ret = no_os_timer_counter_set(dev, dev->ticks_count);
 		if (NO_OS_IS_ERR_VALUE(ret))
 			goto error_xdesc;
 
@@ -146,7 +146,7 @@ int32_t no_os_timer_init(struct no_os_timer_desc **desc,
 				   XTC_DOWN_COUNT_OPTION | XTC_INT_MODE_OPTION |
 				   XTC_AUTO_RELOAD_OPTION);
 		XTmrCtr_SetResetValue(xdesc->instance, xdesc->active_tmr,
-				      dev->load_value);
+				      dev->ticks_count);
 		break;
 #endif
 		goto error_xdesc;

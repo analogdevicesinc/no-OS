@@ -121,7 +121,7 @@ int max_timer_init(struct no_os_timer_desc **desc,
 
 	descriptor->id = param->id;
 	descriptor->freq_hz = param->freq_hz;
-	descriptor->load_value = param->load_value;
+	descriptor->ticks_count = param->ticks_count;
 	descriptor->platform_ops = param->platform_ops;
 
 	tmr_regs = MXC_TMR_GET_TMR(param->id);
@@ -134,7 +134,7 @@ int max_timer_init(struct no_os_timer_desc **desc,
 	cfg->bitMode = TMR_BIT_MODE_32;
 	cfg->mode = TMR_MODE_CONTINUOUS;
 	cfg->clock = MXC_TMR_APB_CLK;
-	cfg->cmp_cnt = descriptor->load_value;
+	cfg->cmp_cnt = descriptor->ticks_count;
 	cfg->pol = 1;
 	cfg->pres = prescaler;
 
