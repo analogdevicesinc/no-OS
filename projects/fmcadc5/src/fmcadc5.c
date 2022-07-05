@@ -133,12 +133,12 @@ int main(void)
 	gpio_pwdn_1_param.extra = &xil_gpio_param;
 	gpio_pwr_good_param.extra = &xil_gpio_param;
 
-	no_os_gpio_desc *gpio_sysref;
-	no_os_gpio_desc *gpio_rst_0;
-	no_os_gpio_desc *gpio_rst_1;
-	no_os_gpio_desc *gpio_pwdn_0;
-	no_os_gpio_desc *gpio_pwdn_1;
-	no_os_gpio_desc *gpio_pwr_good;
+	struct no_os_gpio_desc *gpio_sysref;
+	struct no_os_gpio_desc *gpio_rst_0;
+	struct no_os_gpio_desc *gpio_rst_1;
+	struct no_os_gpio_desc *gpio_pwdn_0;
+	struct no_os_gpio_desc *gpio_pwdn_1;
+	struct no_os_gpio_desc *gpio_pwr_good;
 
 	struct adxcvr_init ad9625_0_xcvr_param = {
 		.name = "ad9152_0_xcvr",

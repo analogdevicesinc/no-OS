@@ -56,11 +56,11 @@
  */
 struct ad9083_init_param {
 	/* SPI */
-	no_os_spi_init_param	*spi_init;
+	struct no_os_spi_init_param	*spi_init;
 	/* GPIO reset */
-	no_os_gpio_init_param	*gpio_reset;
+	struct no_os_gpio_init_param	*gpio_reset;
 	/* GPIO power down */
-	no_os_gpio_init_param	*gpio_pd;
+	struct no_os_gpio_init_param	*gpio_pd;
 	/* Settings selection */
 	uint8_t uc;
 	/* jesd receive clock */
@@ -73,13 +73,13 @@ struct ad9083_init_param {
  */
 struct ad9083_phy {
 	/* SPI */
-	no_os_spi_desc 	*spi_desc;
+	struct no_os_spi_desc 	*spi_desc;
 	/* GPIO */
-	no_os_gpio_desc	*gpio_reset;
+	struct no_os_gpio_desc	*gpio_reset;
 	/* GPIO power down */
-	no_os_gpio_desc	*gpio_pd;
+	struct no_os_gpio_desc	*gpio_pd;
 	/* GPIO reference selection */
-	no_os_gpio_desc	*gpio_ref_sel;
+	struct no_os_gpio_desc	*gpio_ref_sel;
 	/* adi ad9083 device*/
 	adi_ad9083_device_t	adi_ad9083;
 };
