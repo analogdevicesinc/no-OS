@@ -103,7 +103,7 @@ int main(void)
 	gpio_sysref_param.platform_ops = &xil_gpio_ops;
 	gpio_sysref_param.extra = &xil_gpio_param;
 
-	no_os_gpio_desc *gpio_sysref;
+	struct no_os_gpio_desc *gpio_sysref;
 
 	struct adxcvr_init ad9625_xcvr_param = {
 		.name = "ad9152_xcvr",

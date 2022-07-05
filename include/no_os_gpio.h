@@ -82,7 +82,7 @@ enum no_os_gpio_pull_up {
  * @struct no_os_gpio_init_param
  * @brief Structure holding the parameters for GPIO initialization.
  */
-typedef struct no_os_gpio_init_param {
+struct no_os_gpio_init_param {
 	/** Port number */
 	int32_t		port;
 	/** GPIO number */
@@ -93,13 +93,13 @@ typedef struct no_os_gpio_init_param {
 	const struct no_os_gpio_platform_ops *platform_ops;
 	/** GPIO extra parameters (device specific) */
 	void		*extra;
-} no_os_gpio_init_param;
+};
 
 /**
  * @struct no_os_gpio_desc
  * @brief Structure holding the GPIO descriptor.
  */
-typedef struct no_os_gpio_desc {
+struct no_os_gpio_desc {
 	/** Port number */
 	int32_t		port;
 	/** GPIO number */
@@ -110,7 +110,7 @@ typedef struct no_os_gpio_desc {
 	const struct no_os_gpio_platform_ops *platform_ops;
 	/** GPIO extra parameters (device specific) */
 	void		*extra;
-} no_os_gpio_desc;
+};
 
 /**
  * @enum no_os_gpio_values

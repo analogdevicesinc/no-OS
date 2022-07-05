@@ -168,12 +168,12 @@ struct ad7616_init_param {
 	struct spi_engine_offload_init_param *offload_init_param;
 	uint32_t reg_access_speed;
 	/* GPIO */
-	no_os_gpio_init_param		*gpio_hw_rngsel0_param;
-	no_os_gpio_init_param		*gpio_hw_rngsel1_param;
-	no_os_gpio_init_param		*gpio_reset_param;
-	no_os_gpio_init_param		*gpio_os0_param;
-	no_os_gpio_init_param		*gpio_os1_param;
-	no_os_gpio_init_param		*gpio_os2_param;
+	struct no_os_gpio_init_param		*gpio_hw_rngsel0_param;
+	struct no_os_gpio_init_param		*gpio_hw_rngsel1_param;
+	struct no_os_gpio_init_param		*gpio_reset_param;
+	struct no_os_gpio_init_param		*gpio_os0_param;
+	struct no_os_gpio_init_param		*gpio_os1_param;
+	struct no_os_gpio_init_param		*gpio_os2_param;
 	/* Core */
 	uint32_t			core_baseaddr;
 	/* Device Settings */

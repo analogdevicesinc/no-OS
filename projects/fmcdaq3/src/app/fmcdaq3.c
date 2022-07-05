@@ -213,8 +213,8 @@ int main(void)
 	adc_pd_param.platform_ops = &altera_gpio_ops;
 #endif
 
-	no_os_gpio_desc *dac_txen;
-	no_os_gpio_desc *adc_pd;
+	struct no_os_gpio_desc *dac_txen;
+	struct no_os_gpio_desc *adc_pd;
 
 	struct ad9528_dev* ad9528_device;
 	struct ad9152_dev* ad9152_device;
