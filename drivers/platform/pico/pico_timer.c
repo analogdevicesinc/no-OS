@@ -55,6 +55,12 @@
 #define PICO_ALARM_MAX_NB 4
 
 /******************************************************************************/
+/************************* Variables Definitions ******************************/
+/******************************************************************************/
+
+struct no_os_timer_desc *pico_alarm_desc[PICO_ALARM_MAX_NB] = {NULL};
+
+/******************************************************************************/
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
 
@@ -114,6 +120,7 @@ int32_t pico_timer_init(struct no_os_timer_desc **desc,
 	no_os_desc->freq_hz = param->freq_hz;
 	no_os_desc->ticks_count = param->ticks_count;
 	*desc = no_os_desc;
+	pico_alarm_desc[param->id] = no_os_desc;
 
 	return 0;
 
@@ -134,6 +141,7 @@ int32_t pico_timer_remove(struct no_os_timer_desc *desc)
 
 	/* Unclaim alarm */
 	hardware_alarm_unclaim(desc->id);
+	pico_alarm_desc[desc->id] = NULL;
 	free(desc);
 
 	return 0;
