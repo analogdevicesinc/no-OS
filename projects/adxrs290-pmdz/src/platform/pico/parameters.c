@@ -48,3 +48,5 @@ struct pico_spi_init_param adxrs290_spi_extra_ip  = {
 	.spi_sck_pin = SPI0_SCK_GP18,
 	.spi_cs_pin = SPI0_CS_GP17
 };
+
+uint8_t adxrs290_timer_extra_ip = 0;

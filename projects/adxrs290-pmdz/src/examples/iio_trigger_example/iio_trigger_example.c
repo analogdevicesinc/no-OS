@@ -84,6 +84,15 @@ int iio_trigger_example_main()
 		return ret;
 	adxrs290_gpio_trig_ip.irq_ctrl = adxrs290_irq_desc;
 
+	/* UART IRQ should have the highest priority (priority level 0) to avoid communication issues
+	with the IIO client.
+	All trigger IRQs should have lower priority than UART IRQ priority (priority level > 0) */
+	ret = no_os_irq_set_priority(adxrs290_irq_desc,
+				     adxrs290_gpio_trig_ip.irq_id,
+				     1);
+	if (ret)
+		return ret;
+
 	/* Initialize hardware trigger */
 	adxrs290_gpio_trig_ip.iio_desc = &iio_desc,
 	ret = iio_hw_trig_init(&adxrs290_trig_desc, &adxrs290_gpio_trig_ip);

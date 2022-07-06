@@ -8,6 +8,7 @@ endif
 ifeq (y,$(strip $(IIO_TRIGGER_EXAMPLE)))
 TINYIIOD=y
 CFLAGS += -DIIO_TRIGGER_EXAMPLE=1
+CFLAGS +=-DIIO_IGNORE_BUFF_OVERRUN_ERR
 SRCS += $(PROJECT)/src/examples/iio_trigger_example/iio_trigger_example.c
 INCS += $(PROJECT)/src/examples/iio_trigger_example/iio_trigger_example.h
 endif
