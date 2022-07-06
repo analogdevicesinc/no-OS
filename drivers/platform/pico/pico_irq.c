@@ -46,8 +46,10 @@
 #include "no_os_uart.h"
 #include "no_os_util.h"
 #include "no_os_error.h"
+#include "no_os_timer.h"
 #include "pico_irq.h"
 #include "pico_uart.h"
+#include "pico_timer.h"
 #include "pico/stdlib.h"
 #include "hardware/irq.h"
 
@@ -82,6 +84,7 @@ static uint32_t irq_enabled_mask = 0;
 
 static struct event_list _events[] = {
 	[NO_OS_EVT_UART_RX_COMPLETE] = {.event = NO_OS_EVT_UART_RX_COMPLETE},
+	[NO_OS_EVT_TIM_ELAPSED] = {.event = NO_OS_EVT_TIM_ELAPSED},
 };
 
 /******************************************************************************/
@@ -107,6 +110,29 @@ static void _uart_common_handler(uart_inst_t *uart)
 
 	if (action->callback)
 		action->callback(action->ctx);
+}
+
+/**
+ * @brief TIMER interrupt handler.
+ * @param uart - TIMER instance.
+ */
+static void _alarm_callback(uint alarm_num)
+{
+	int ret;
+	struct event_list *evt_list = &_events[NO_OS_EVT_TIM_ELAPSED];
+	struct irq_action *action;
+
+	struct irq_action key = {.irq_id = alarm_num};
+
+	ret = no_os_list_read_find(evt_list->actions, (void **)&action, &key);
+	if (ret)
+		return;
+
+	if (action->callback)
+		action->callback(action->ctx);
+
+	/* Trigger alarm again */
+	no_os_timer_start(pico_alarm_desc[alarm_num]);
 }
 
 /**
@@ -229,39 +255,55 @@ int32_t pico_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 				return ret;
 			}
 		}
+		break;
+	case NO_OS_TIM_IRQ:
+		/* Set up the interrupt handler */
+		hardware_alarm_set_callback(irq_id, _alarm_callback);
+		/* By default, disable alarm irq.
+		The user shall enable the interrupt when seen fit. */
+		irq_set_enabled(irq_id, false);
 
-		ret = no_os_list_read_find(_events[cb->event].actions,
-					   (void **)&action,
-					   &action_key);
-		/*
-		 * If an action with the same irq_id as the function parameter does not exists, insert a new one,
-		 * otherwise update
-		 */
-		if (ret) {
-			action = calloc(1, sizeof(*action));
-			if (!action)
-				return -ENOMEM;
-
-			action->irq_id = irq_id;
-			action->handle = cb->handle;
-			action->callback = cb->callback;
-			action->ctx = cb->ctx;
-
-			ret = no_os_list_add_last(_events[cb->event].actions, action);
+		if (_events[cb->event].actions == NULL) {
+			ret = no_os_list_init(&_events[cb->event].actions,
+					      NO_OS_LIST_PRIORITY_LIST,
+					      irq_action_cmp);
 			if (ret) {
-				free(action);
+				hardware_alarm_set_callback(irq_id, NULL);
 				return ret;
 			}
-		} else {
-			action->irq_id = irq_id;
-			action->handle = cb->handle;
-			action->callback = cb->callback;
-			action->ctx = cb->ctx;
 		}
 		break;
-
 	default:
 		return -EINVAL;
+	}
+
+	ret = no_os_list_read_find(_events[cb->event].actions,
+				   (void **)&action,
+				   &action_key);
+	/*
+	 * If an action with the same irq_id as the function parameter does not exists, insert a new one,
+	 * otherwise update
+	 */
+	if (ret) {
+		action = calloc(1, sizeof(*action));
+		if (!action)
+			return -ENOMEM;
+
+		action->irq_id = irq_id;
+		action->handle = cb->handle;
+		action->callback = cb->callback;
+		action->ctx = cb->ctx;
+
+		ret = no_os_list_add_last(_events[cb->event].actions, action);
+		if (ret) {
+			free(action);
+			return ret;
+		}
+	} else {
+		action->irq_id = irq_id;
+		action->handle = cb->handle;
+		action->callback = cb->callback;
+		action->ctx = cb->ctx;
 	}
 
 	return 0;
@@ -289,7 +331,7 @@ int32_t pico_irq_unregister_callback(struct no_os_irq_ctrl_desc *desc,
 	irq_remove_handler(irq_id, NULL);
 	free(discard);
 
-	return ret;
+	return 0;
 }
 
 /**
