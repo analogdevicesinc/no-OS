@@ -84,14 +84,18 @@ int iio_timer_trigger_example_main()
 	if (ret)
 		return ret;
 
+	adxrs290_timer_irq_ip.extra = adxrs290_timer_desc->extra;
+
 	ret = no_os_irq_ctrl_init(&adxrs290_timer_irq_desc, &adxrs290_timer_irq_ip);
 	if (ret)
 		return ret;
 
-	adxrs290_timer_irq_ip.extra = adxrs290_timer_desc->extra;
+	ret = no_os_irq_set_priority(adxrs290_timer_irq_desc, ADXRS290_TIMER_IRQ_ID, 1);
+	if (ret)
+		return ret;
+
 	adxrs290_timer_trig_ip.irq_ctrl = adxrs290_timer_irq_desc;
 
-	/* TODO */
 	adxrs290_timer_trig_ip.cb_info.handle = adxrs290_timer_desc;
 
 	/* Initialize hardware trigger */

@@ -76,11 +76,11 @@
 
 #ifdef IIO_TIMER_TRIGGER_EXAMPLE
 /* ADXRS290 Timer settings */
-extern struct aducm_timer_init_param adxrs290_xtip;
+extern struct aducm_timer_init_param adxrs290_timer_extra_ip;
 #define ADXRS290_TIMER_DEVICE_ID    1
-#define ADXRS290_TIMER_FREQ_HZ      200 /* Not used - Used clock source frequency is the one specified in adxrs290_xtip */
+#define ADXRS290_TIMER_FREQ_HZ      200 /* Not used - Used clock source frequency is the one specified in adxrs290_timer_extra_ip */
 #define ADXRS290_TIMER_TICKS_COUNT  0xffff
-#define ADXRS290_TIMER_EXTRA        &adxrs290_xtip
+#define ADXRS290_TIMER_EXTRA        &adxrs290_timer_extra_ip
 #define TIMER_OPS                   &aducm3029_timer_ops
 
 /* ADXRS290 Timer trigger settings */
