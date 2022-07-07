@@ -28,6 +28,7 @@ set(EXCLUDE_FILES
     ${SOURCES_DIR}/drivers/rf-transceiver/navassa \\
     ${SOURCES_DIR}/drivers/adc/ad9081/api \\
     ${SOURCES_DIR}/drivers/adc/ad9083/ad9083_api \\
+    ${SOURCES_DIR}/drivers/afe/ad5940 \\
 ")
 
 set(EXCLUDE_PATT
