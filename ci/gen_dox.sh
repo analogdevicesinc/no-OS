@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #List of excluded driver folders for the documentation generation.
-EXCLUDE_DRV="talise navassa ad9083_api"
+EXCLUDE_DRV="talise navassa ad9083_api ad5940"
 
 #Generate drivers_page.dox and projects_page.dox
 
