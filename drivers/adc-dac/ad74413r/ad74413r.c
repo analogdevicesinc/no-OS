@@ -491,9 +491,7 @@ int ad74413r_get_adc_rate(struct ad74413r_desc *desc, uint32_t ch,
 	if (ret)
 		return ret;
 
-	*val = ad74413r_rejection_to_rate(rejection, val);
-
-	return 0;
+	return ad74413r_rejection_to_rate(rejection, val);
 }
 
 /**
