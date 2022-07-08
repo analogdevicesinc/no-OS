@@ -58,9 +58,9 @@ using namespace std::chrono;
 /**
 * @struct mbed_irq_callback_desc.
 * @brief Structure holding the callback functions for mbed irqs.
-* @note  The callback functions are directly mapped with 'irq_id' enum.
-* Mbed doesn't provide a single callback function for all external/GPIO
-* IRQ events. A seperate callback function is required to be registered
+* @note  The callback functions are directly mapped with IRQ IDs enum.
+* Mbed doesn't provide a single callback function for all IRQ events.
+* A seperate callback function is required to be registered
 * for every IRQ instance. Also, the 'callback_function' required for
 * mbed layer expects void argument and void return type.
 */
@@ -75,76 +75,6 @@ static struct mbed_irq_callback_desc mbed_irq_callback[NB_INTERRUPTS];
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
-
-/**
- * @brief	Mbed callback function for external interrupt ID1 event.
- * @return	none.
- * @note	This function is called when external IRQ event mapped to
- *			EXTERNAL_INT_ID1 is triggered.
- */
-static void mbed_ext_int_id1_callback(void)
-{
-	if (mbed_irq_callback[EXTERNAL_INT_ID1].desc.callback)
-		/* Invoke the application registered callback function */
-		mbed_irq_callback[EXTERNAL_INT_ID1].desc.callback(
-			mbed_irq_callback[EXTERNAL_INT_ID1].desc.ctx);
-}
-
-/**
- * @brief	Mbed callback function for external interrupt ID2 event.
- * @return	none.
- * @note	This function is called when external IRQ event mapped to
- *			EXTERNAL_INT_ID2 is triggered.
- */
-static void mbed_ext_int_id2_callback(void)
-{
-	if (mbed_irq_callback[EXTERNAL_INT_ID2].desc.callback)
-		/* Invoke the application registered callback function */
-		mbed_irq_callback[EXTERNAL_INT_ID2].desc.callback(
-			mbed_irq_callback[EXTERNAL_INT_ID2].desc.ctx);
-}
-
-/**
- * @brief	Mbed callback function for external interrupt ID3 event.
- * @return	none.
- * @note	This function is called when external IRQ event mapped to
- *			EXTERNAL_INT_ID3 is triggered.
- */
-static void mbed_ext_int_id3_callback(void)
-{
-	if (mbed_irq_callback[EXTERNAL_INT_ID3].desc.callback)
-		/* Invoke the application registered callback function */
-		mbed_irq_callback[EXTERNAL_INT_ID3].desc.callback(
-			mbed_irq_callback[EXTERNAL_INT_ID3].desc.ctx);
-}
-
-/**
- * @brief	Mbed callback function for external interrupt ID4 event.
- * @return	none.
- * @note	This function is called when external IRQ event mapped to
- *			EXTERNAL_INT_ID4 is triggered.
- */
-static void mbed_ext_int_id4_callback(void)
-{
-	if (mbed_irq_callback[EXTERNAL_INT_ID4].desc.callback)
-		/* Invoke the application registered callback function */
-		mbed_irq_callback[EXTERNAL_INT_ID4].desc.callback(
-			mbed_irq_callback[EXTERNAL_INT_ID4].desc.ctx);
-}
-
-/**
- * @brief	Mbed callback function for external interrupt ID5 event.
- * @return	none.
- * @note	This function is called when external IRQ event mapped to
- *			EXTERNAL_INT_ID5 is triggered.
- */
-static void mbed_ext_int_id5_callback(void)
-{
-	if (mbed_irq_callback[EXTERNAL_INT_ID5].desc.callback)
-		/* Invoke the application registered callback function */
-		mbed_irq_callback[EXTERNAL_INT_ID5].desc.callback(
-			mbed_irq_callback[EXTERNAL_INT_ID5].desc.ctx);
-}
 
 /**
  * @brief	Mbed callback function for UART Rx ID1 event.
@@ -180,11 +110,6 @@ static void mbed_ticker_id_callback(void)
  */
 static void store_mbed_callbacks(void)
 {
-	mbed_irq_callback[EXTERNAL_INT_ID1].mbed_callback = mbed_ext_int_id1_callback;
-	mbed_irq_callback[EXTERNAL_INT_ID2].mbed_callback = mbed_ext_int_id2_callback;
-	mbed_irq_callback[EXTERNAL_INT_ID3].mbed_callback = mbed_ext_int_id3_callback;
-	mbed_irq_callback[EXTERNAL_INT_ID4].mbed_callback = mbed_ext_int_id4_callback;
-	mbed_irq_callback[EXTERNAL_INT_ID5].mbed_callback = mbed_ext_int_id5_callback;
 	mbed_irq_callback[UART_RX_INT_ID1].mbed_callback = mbed_uart_rx_id1_callback;
 	mbed_irq_callback[TICKER_INT_ID].mbed_callback = mbed_ticker_id_callback;
 }
@@ -194,7 +119,7 @@ static void store_mbed_callbacks(void)
  * @param	desc[in, out] - Pointer where the configured instance is stored.
  * @param	param[in] - Configuration information for the instance.
  * @return	0 in case of success, negative error code otherwise.
- * @note	Supports only External, Ticker and Unbuffered UART Rx IRQs.
+ * @note	Supports only Ticker and Unbuffered UART Rx IRQs.
  */
 int32_t mbed_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
 			   const struct no_os_irq_init_param *param)
@@ -214,12 +139,9 @@ int32_t mbed_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
 		goto err_mbed_irq_desc;
 
 	irq_desc->irq_ctrl_id = param->irq_ctrl_id;
+	irq_desc->platform_ops = &mbed_irq_ops;
 
 	/* Copy the Mbed IRQ init parameters */
-	mbed_irq_desc->int_mode = ((struct mbed_irq_init_param *)
-				   param->extra)->int_mode;
-	mbed_irq_desc->ext_int_pin = ((struct mbed_irq_init_param *)
-				      param->extra)->ext_int_pin;
 	mbed_irq_desc->ticker_period_usec = ((struct mbed_irq_init_param *)
 					     param->extra)->ticker_period_usec;
 	mbed_irq_desc->int_obj = ((struct mbed_irq_init_param *)
@@ -244,7 +166,6 @@ err_mbed_irq_desc:
  */
 int32_t mbed_irq_enable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
 {
-	InterruptIn *ext_interrupt;
 	mbed::UnbufferedSerial *uart_rx_port;
 	mbed::Ticker *ticker;
 
@@ -252,23 +173,6 @@ int32_t mbed_irq_enable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
 		return -EINVAL;
 
 	switch (irq_id) {
-	case EXTERNAL_INT_ID1:
-	case EXTERNAL_INT_ID2:
-	case EXTERNAL_INT_ID3:
-	case EXTERNAL_INT_ID4:
-	case EXTERNAL_INT_ID5:
-		ext_interrupt = (InterruptIn *)(((struct mbed_irq_desc *)(
-				desc->extra))->int_obj);
-
-		/* Attach (enable) external interrupt based on mode */
-		if (((struct mbed_irq_desc *)(desc->extra))->int_mode == EXT_IRQ_FALL)
-			ext_interrupt->fall(mbed_irq_callback[irq_id].mbed_callback);
-		else if (((struct mbed_irq_desc *)(desc->extra))->int_mode == EXT_IRQ_RISE)
-			ext_interrupt->rise(mbed_irq_callback[irq_id].mbed_callback);
-		else
-			return -EINVAL;
-		break;
-
 	case TICKER_INT_ID:
 		ticker = (mbed::Ticker *)(((struct mbed_irq_desc *)(desc->extra))->int_obj);
 		ticker->attach(mbed_irq_callback[TICKER_INT_ID].mbed_callback,
@@ -297,7 +201,6 @@ int32_t mbed_irq_enable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
  */
 int32_t mbed_irq_disable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
 {
-	InterruptIn *ext_interrupt;
 	mbed::UnbufferedSerial *uart_rx_port;
 	mbed::Ticker *ticker;
 
@@ -305,23 +208,6 @@ int32_t mbed_irq_disable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
 		return -EINVAL;
 
 	switch (irq_id) {
-	case EXTERNAL_INT_ID1:
-	case EXTERNAL_INT_ID2:
-	case EXTERNAL_INT_ID3:
-	case EXTERNAL_INT_ID4:
-	case EXTERNAL_INT_ID5:
-		ext_interrupt = (InterruptIn *)(((struct mbed_irq_desc *)(
-				desc->extra))->int_obj);
-
-		/* Detach (disable) external interrupt */
-		if (((struct mbed_irq_desc *)(desc->extra))->int_mode == EXT_IRQ_FALL)
-			ext_interrupt->fall(NULL);
-		else if (((struct mbed_irq_desc *)(desc->extra))->int_mode == EXT_IRQ_RISE)
-			ext_interrupt->rise(NULL);
-		else
-			return -EINVAL;
-		break;
-
 	case TICKER_INT_ID:
 		ticker = (mbed::Ticker *)(((struct mbed_irq_desc *)(desc->extra))->int_obj);
 		ticker->detach();
@@ -344,7 +230,7 @@ int32_t mbed_irq_disable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
 * @brief	Registers a IRQ callback function to irq controller.
 * @param	desc[in] - The IRQ controller descriptor.
 * @param	irq_id[in] - Interrupt identifier.
-* @param	callback_desc - Descriptor of the callback. If it is NULL, the
+* @param	callback_desc[in] - Descriptor of the callback. If it is NULL, the
 *			callback will be unregistered
 * @return	0 in case of success, negative error code otherwise.
 */
@@ -353,7 +239,6 @@ int32_t mbed_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 				   struct no_os_callback_desc *callback_desc)
 {
 	mbed::Ticker *ticker;
-	InterruptIn *ext_interrupt;
 	struct mbed_irq_desc *mbed_irq_desc;
 
 	if (!desc || !desc->extra || !callback_desc)
@@ -365,24 +250,6 @@ int32_t mbed_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 	store_mbed_callbacks();
 
 	switch (irq_id) {
-	case EXTERNAL_INT_ID1:
-	case EXTERNAL_INT_ID2:
-	case EXTERNAL_INT_ID3:
-	case EXTERNAL_INT_ID4:
-	case EXTERNAL_INT_ID5:
-		/* Create a new external interrupt object */
-		ext_interrupt = new InterruptIn((PinName)(mbed_irq_desc->ext_int_pin));
-		if (!ext_interrupt)
-			return -ENOMEM;
-
-		mbed_irq_desc->int_obj = (mbed::InterruptIn *)ext_interrupt;
-
-		/* Callback is attached from 'mbed_irq_enable' as ext_int attach
-		 * immediately start invoking the interrupt */
-		mbed_irq_callback[irq_id].desc.callback = callback_desc->callback;
-		mbed_irq_callback[irq_id].desc.ctx = callback_desc->ctx;
-		break;
-
 	case TICKER_INT_ID:
 		/* Ticker is a special mbed class used for generating recurring interrupt.
 		* The object of this class is created during interrupt initialization as:
@@ -422,14 +289,12 @@ int32_t mbed_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
  * @param   callback_desc[in] - Descriptor of the callback.
  * @return	0 in case of success, negative error code otherwise.
  */
-int32_t mbed_irq_unregister(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id, struct no_os_callback_desc *callback_desc)
+int32_t mbed_irq_unregister(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id,
+			    struct no_os_callback_desc *callback_desc)
 {
 	int32_t ret;
 
-	if (!desc || !desc->extra || !callback_desc)
-		return -EINVAL;
-
-	if (irq_id >= NB_INTERRUPTS)
+	if (!desc || !desc->extra || !callback_desc || (irq_id >= NB_INTERRUPTS))
 		return -EINVAL;
 
 	ret = mbed_irq_disable(desc, irq_id);
@@ -448,7 +313,7 @@ int32_t mbed_irq_unregister(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id, s
  */
 int32_t mbed_irq_ctrl_remove(struct no_os_irq_ctrl_desc *desc)
 {
-	uint8_t irq_id;
+	uint32_t irq_id;
 
 	if (!desc || !desc->extra)
 		return -EINVAL;
@@ -457,20 +322,12 @@ int32_t mbed_irq_ctrl_remove(struct no_os_irq_ctrl_desc *desc)
 		return -EINVAL;
 
 	/* Unregister all callbacks */
-	for (irq_id = 0; irq_id < (uint8_t)NB_INTERRUPTS; irq_id++) {
+	for (irq_id = 0; irq_id < NB_INTERRUPTS; irq_id++) {
 		if (mbed_irq_unregister(desc, irq_id, &mbed_irq_callback[irq_id].desc) != 0)
 			return -EIO;
 	}
 
 	switch (desc->irq_ctrl_id) {
-	case EXTERNAL_INT_ID1:
-	case EXTERNAL_INT_ID2:
-	case EXTERNAL_INT_ID3:
-	case EXTERNAL_INT_ID4:
-	case EXTERNAL_INT_ID5:
-		delete((InterruptIn *)(((struct mbed_irq_desc *)desc->extra)->int_obj));
-		break;
-
 	case TICKER_INT_ID:
 		/* Ticker doesn't have destructor implementation, so nothing to free.
 		 * Object detach is done from irq_unregister()->irq_disable() functions */
