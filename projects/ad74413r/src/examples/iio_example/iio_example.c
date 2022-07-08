@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   main.c
- *   @brief  Main file for Maxim platform of ad74413r project.
+ *   @file   iio_example.c
+ *   @brief  Implementation of IIO example for AD74413R project.
  *   @author Ciprian Regus (ciprian.regus@analog.com)
 ********************************************************************************
  * Copyright 2022(c) Analog Devices, Inc.
@@ -40,48 +40,74 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "platform_includes.h"
-#include "common_data.h"
-#include "no_os_error.h"
-
-#ifdef DUMMY_EXAMPLE
-#include "dummy_example.h"
-#endif
-
-#ifdef IIO_EXAMPLE
 #include "iio_example.h"
-#endif
+#include "iio_ad74413r.h"
+#include "common_data.h"
+#include "no_os_util.h"
 
+/******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
+#define DATA_BUFFER_SIZE 400
+
+/******************************************************************************/
+/************************ Variable Declarations ******************************/
+/******************************************************************************/
+uint8_t iio_data_buffer[DATA_BUFFER_SIZE * sizeof(uint32_t) * 8];
+
+/******************************************************************************/
+/************************ Functions Definitions *******************************/
+/******************************************************************************/
 /***************************************************************************//**
- * @brief Main function execution for STM32 platform.
+ * @brief IIO example main execution.
  *
- * @return ret - Result of the enabled examples execution.
+ * @return ret - Result of the example execution. If working correctly, will
+ *               execute continuously function iio_app_run and will not return.
 *******************************************************************************/
-int main()
+int iio_example_main()
 {
-	int ret = -EINVAL;
+	int ret;
+	struct ad74413r_iio_desc *ad74413r_iio_desc;
+	struct ad74413r_iio_desc_init_param ad74413r_iio_ip;
+	struct iio_data_buffer buff = {
+		.buff = (void *)iio_data_buffer,
+		.size = DATA_BUFFER_SIZE * sizeof(uint32_t) * 8
+	};
+	struct ad74413r_init_param ad74413r_ip = {
+		.chip_id = AD74412R,
+		.comm_param = ad74413r_spi_ip
+	};
 
-#ifdef DUMMY_EXAMPLE
-	struct no_os_uart_desc *uart_desc;
+	ad74413r_iio_ip.ad74413r_init_param = &ad74413r_ip;
+	ad74413r_iio_ip.channel_configs[0] = (struct ad74413r_channel_config) {
+		.enabled = true,
+		.function = AD74413R_DIGITAL_INPUT
+	};
+	ad74413r_iio_ip.channel_configs[1] = (struct ad74413r_channel_config) {
+		.enabled = true,
+		.function = AD74413R_VOLTAGE_IN
+	};
+	ad74413r_iio_ip.channel_configs[2] = (struct ad74413r_channel_config) {
+		.enabled = true,
+		.function = AD74413R_VOLTAGE_OUT
+	};
+	ad74413r_iio_ip.channel_configs[3] = (struct ad74413r_channel_config) {
+		.enabled = true,
+		.function = AD74413R_CURRENT_IN_EXT
+	};
 
-	ret = no_os_uart_init(&uart_desc, &ad74413r_uart_ip);
+	ret = ad74413r_iio_init(&ad74413r_iio_desc, &ad74413r_iio_ip);
 	if (ret)
 		return ret;
 
-	maxim_uart_stdio(uart_desc);
-	ret = dummy_example_main();
-#endif
+	struct iio_app_device iio_devices[] = {
+		{
+			.name = "ad74413r",
+			.dev = ad74413r_iio_desc,
+			.dev_descriptor = ad74413r_iio_desc->iio_dev,
+			.read_buff = &buff,
+		}
+	};
 
-#ifdef IIO_EXAMPLE
-	ret = iio_example_main();
-#endif
-
-#if (DUMMY_EXAMPLE + IIO_EXAMPLE == 0)
-#error At least one example has to be selected using y value in Makefile.
-#elif (DUMMY_EXAMPLE + IIO_EXAMPLE > 1)
-#error Selected example projects cannot be enabled at the same time. \
-Please enable only one example and re-build the project.
-#endif
-
-	return ret;
+	return iio_app_run(iio_devices, NO_OS_ARRAY_SIZE(iio_devices));
 }

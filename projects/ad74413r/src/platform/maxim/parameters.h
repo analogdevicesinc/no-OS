@@ -53,6 +53,11 @@
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 
+#ifdef IIO_SUPPORT
+#define INTC_DEVICE_ID  0
+#define UART_IRQ_ID     UART0_IRQn
+#endif
+
 #define UART_DEVICE_ID  0
 #define UART_BAUDRATE   57600
 #define UART_EXTRA      &ad74413r_uart_extra_ip

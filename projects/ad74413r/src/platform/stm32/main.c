@@ -50,6 +50,10 @@
 #include "dummy_example.h"
 #endif
 
+#ifdef IIO_EXAMPLE
+#include "iio_example.h"
+#endif
+
 /***************************************************************************//**
  * @brief Main function execution for STM32 platform.
  *
@@ -72,6 +76,17 @@ int main()
 
 	stm32_uart_stdio(uart_desc);
 	ret = dummy_example_main();
+#endif
+
+#ifdef IIO_EXAMPLE
+	ret = iio_example_main();
+#endif
+
+#if (DUMMY_EXAMPLE + IIO_EXAMPLE == 0)
+#error At least one example has to be selected using y value in Makefile.
+#elif (DUMMY_EXAMPLE + IIO_EXAMPLE > 1)
+#error Selected example projects cannot be enabled at the same time. \
+Please enable only one example and re-build the project.
 #endif
 
 	return ret;

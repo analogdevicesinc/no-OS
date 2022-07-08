@@ -55,6 +55,12 @@
 /******************************************************************************/
 extern UART_HandleTypeDef huart3;
 
+#ifdef IIO_SUPPORT
+#define INTC_DEVICE_ID  0
+#define IIO_APP_HUART   (&huart3)
+#define UART_IRQ_ID     USART3_IRQn
+#endif
+
 #define UART_DEVICE_ID  3
 #define UART_BAUDRATE   115200
 #define UART_EXTRA      &ad74413r_uart_extra_ip
