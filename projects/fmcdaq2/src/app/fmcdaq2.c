@@ -722,12 +722,14 @@ int fmcdaq2_reconfig(struct ad9144_init_param *p_ad9144_param,
 	printf ("\t3 - ADC  500 MSPS; DAC  500 MSPS\n");
 	printf ("\t4 - ADC  600 MSPS; DAC  600 MSPS\n");
 	printf ("\t5 - ADC 1000 MSPS; DAC 2000 MSPS (2x interpolation)\n");
-	printf ("choose an option [default 1]:\n");
+	printf ("choose an option [default 1]: ");
 
 	mode = getc(stdin);
+	printf ("%c\n", mode);
 
 	switch (mode) {
 	case '5':
+		printf ("5 - ADC 1000 MSPS; DAC 2000 MSPS (2x interpolation)\n");
 		/* REF clock = 100 MHz */
 		p_ad9523_param->channels[DAC_DEVICE_CLK].channel_divider = 10;
 		p_ad9144_param->pll_ref_frequency_khz = 100000;
@@ -736,6 +738,9 @@ int fmcdaq2_reconfig(struct ad9144_init_param *p_ad9144_param,
 		p_ad9144_param->interpolation = 2;
 		p_ad9144_param->pll_enable = 1;
 		p_ad9144_param->pll_dac_frequency_khz = 2000000;
+
+		/* Disable CPLL for ad9680 */
+		ad9680_xcvr_param->cpll_enable = 0;
 		break;
 	case '4':
 		printf ("4 - ADC  600 MSPS; DAC  600 MSPS\n");
@@ -873,6 +878,8 @@ int fmcdaq2_reconfig(struct ad9144_init_param *p_ad9144_param,
 #ifndef ALTERA_PLATFORM
 		ad9144_xcvr_param->ref_rate_khz = 500000;
 		ad9680_xcvr_param->ref_rate_khz = 500000;
+		/* Disable CPLL for ad9680 */
+		ad9680_xcvr_param->cpll_enable = 0;
 #else
 		ad9144_xcvr_param->parent_rate_khz = 500000;
 		ad9680_xcvr_param->parent_rate_khz = 500000;
@@ -1068,7 +1075,7 @@ int main(void)
 		.dest_addr = (uintptr_t)ADC_DDR_BASEADDR
 	};
 	axi_dmac_transfer_start(fmcdaq2.ad9680_dmac, &transfer_rx);
-	status = axi_dmac_transfer_wait_completion(fmcdaq2.ad9680_dmac, 500);
+	status = axi_dmac_transfer_wait_completion(fmcdaq2.ad9680_dmac, 1000);
 	if(status)
 		return status;
 #ifndef ALTERA_PLATFORM
@@ -1080,6 +1087,9 @@ int main(void)
 	for (unsigned int i = 0; i < 1024; i++)
 		printf("\n %4d       |    0x%04x   |    0x%04x    |",
 		       i, (*(data + i) & 0xFFFF), (*(data + i) >> 16));
+
+	printf("\nEXAMPLE: address=%#lx samples=%lu channels=%u bits=%lu\n",
+	       (uintptr_t)ADC_DDR_BASEADDR, 1024 * sizeof(uint32_t), 2, 16);
 
 	status = fmcdaq2_iio_init(&fmcdaq2, &fmcdaq2_init);
 	if (status != 0)
