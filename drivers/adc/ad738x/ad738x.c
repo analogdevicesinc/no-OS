@@ -44,7 +44,9 @@
 #include "stdio.h"
 #include "stdlib.h"
 #include "stdbool.h"
+#if !defined(USE_STANDARD_SPI)
 #include "spi_engine.h"
+#endif
 #include "ad738x.h"
 #include "no_os_delay.h"
 #include "no_os_error.h"
@@ -141,8 +143,8 @@ int32_t ad738x_spi_single_conversion(struct ad738x_dev *dev,
 	ret = no_os_spi_write_and_read(dev->spi_desc, buf, rx_buf_len);
 
 	/*
-	 *  Conversion data is 16 bits long in 1-wire mode and
-	 *  32 bits in 2-wire mode
+	 *  Conversion data is 32 bits long in 1-wire mode and
+	 *  16 bits in 2-wire mode
 	 */
 	adc_data[0] =  (buf[0] << 8) | buf[1];
 	adc_data[1] =  (buf[2] << 8) | buf[3];
@@ -280,6 +282,8 @@ int32_t ad738x_read_data(struct ad738x_dev *dev,
 			 uint16_t samples)
 {
 	int32_t ret;
+
+#if !defined(USE_STANDARD_SPI)
 	uint32_t commands_data[2] = {0, 0};
 	struct spi_engine_offload_message msg;
 	uint32_t spi_eng_msg_cmds[3] = {
@@ -303,10 +307,14 @@ int32_t ad738x_read_data(struct ad738x_dev *dev,
 
 	if (dev->dcache_invalidate_range)
 		dev->dcache_invalidate_range(msg.rx_addr, samples * 2);
+#else
+	ret = no_os_spi_write_and_read(dev->spi_desc, buf, samples);
+	if (ret != 0)
+		return ret;
+#endif
 
 	return ret;
 }
-
 
 /**
  * Initialize the device.
@@ -325,15 +333,17 @@ int32_t ad738x_init(struct ad738x_dev **device,
 	if (!dev)
 		return -1;
 
+#if !defined(USE_STANDARD_SPI)
 	dev->offload_init_param = init_param->offload_init_param;
 	dev->dcache_invalidate_range = init_param->dcache_invalidate_range;
+#endif
 	dev->conv_mode = init_param->conv_mode;
 	dev->ref_sel = init_param->ref_sel;
 
 	ret = no_os_spi_init(&dev->spi_desc, init_param->spi_param);
-
 	ret |= ad738x_reset(dev, HARD_RESET);
 	no_os_mdelay(1000);
+
 	/* 1-wire or 2-wire mode */
 	ret |= ad738x_set_conversion_mode(dev, dev->conv_mode);
 	/* Set internal or external reference */
@@ -347,6 +357,7 @@ int32_t ad738x_init(struct ad738x_dev **device,
 
 	return ret;
 }
+
 /**
  * @brief Free the resources allocated by ad738x_init().
  * @param dev - The device structure.

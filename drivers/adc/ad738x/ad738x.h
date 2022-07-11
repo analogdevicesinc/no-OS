@@ -45,6 +45,9 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include "no_os_util.h"
+#if defined(USE_STANDARD_SPI)
+#include "no_os_spi.h"
+#endif
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -152,8 +155,10 @@ enum ad738x_ref_sel {
 struct ad738x_dev {
 	/* SPI */
 	no_os_spi_desc		*spi_desc;
+#if !defined(USE_STANDARD_SPI)
 	/** SPI module offload init */
 	struct spi_engine_offload_init_param *offload_init_param;
+#endif
 	/* Device Settings */
 	enum ad738x_conv_mode 	conv_mode;
 	enum ad738x_ref_sel		ref_sel;
@@ -165,8 +170,10 @@ struct ad738x_dev {
 struct ad738x_init_param {
 	/* SPI */
 	no_os_spi_init_param		*spi_param;
+#if !defined(USE_STANDARD_SPI)
 	/** SPI module offload init */
 	struct spi_engine_offload_init_param *offload_init_param;
+#endif
 	/* Device Settings */
 	enum ad738x_conv_mode	conv_mode;
 	enum ad738x_ref_sel		ref_sel;
