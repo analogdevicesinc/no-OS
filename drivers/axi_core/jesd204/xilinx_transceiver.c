@@ -120,9 +120,17 @@
 #define GTY4_QPLL_CLKOUT_RATE(xcvr, x)	\
 	(0x0E + xilinx_xcvr_qpll_sel((xcvr), (x)) * 0x80)
 
-/**
- * @brief xilinx_xcvr_drp_read
- */
+/*******************************************************************************
+ * @brief Read data from a dynamic reconfiguration port (DRP).
+ *
+ * @param xcvr         - The device structure.
+ * @param drp_port     - DRP to read data from.
+ * @param reg          - DRP address.
+ * @param val          - Read.
+ *
+ * @return ret         - Result of the reading operation (0 - success, negative
+ *                       value for failure).
+ *******************************************************************************/
 static int xilinx_xcvr_drp_read(struct xilinx_xcvr *xcvr,
 				uint32_t drp_port, uint32_t reg, uint32_t *val)
 {
@@ -139,9 +147,17 @@ static int xilinx_xcvr_drp_read(struct xilinx_xcvr *xcvr,
 	return ret;
 }
 
-/**
- * @brief xilinx_xcvr_drp_write
- */
+/*******************************************************************************
+ * @brief Write data to a dynamic reconfiguration port (DRP).
+ *
+ * @param xcvr         - The device structure.
+ * @param drp_port     - DRP to write data to.
+ * @param reg          - DRP address.
+ * @param val          - Value to be written.
+ *
+ * @return ret         - Result of the writing operation (0 - success, negative
+ *                       value for failure).
+ *******************************************************************************/
 static int xilinx_xcvr_drp_write(struct xilinx_xcvr *xcvr,
 				 uint32_t drp_port, uint32_t reg, uint32_t val)
 {
@@ -161,7 +177,7 @@ static int xilinx_xcvr_drp_write(struct xilinx_xcvr *xcvr,
 	ret = xilinx_xcvr_drp_read(xcvr, drp_port, reg, &read_val);
 	if (ret) {
 		pr_err("%s: Failed to check reg %"PRIu32"-0x%"PRIX32": %"PRId32"\n",
-				__func__, drp_port, reg, ret);
+		       __func__, drp_port, reg, ret);
 		return ret;
 	}
 
@@ -173,9 +189,18 @@ static int xilinx_xcvr_drp_write(struct xilinx_xcvr *xcvr,
 	return 0;
 }
 
-/**
- * @brief xilinx_xcvr_drp_update
- */
+/*******************************************************************************
+ * @brief Update data of a dynamic reconfiguration port (DRP).
+ *
+ * @param xcvr         - The device structure.
+ * @param drp_port     - DRP where data is updated.
+ * @param reg          - DRP address.
+ * @param mask         - The mask to be applied.
+ * @param val          - Value to be written.
+ *
+ * @return ret         - Result of the writing operation (0 - success, negative
+ *                       value for failure).
+ *******************************************************************************/
 int xilinx_xcvr_drp_update(struct xilinx_xcvr *xcvr, uint32_t drp_port,
 			   uint32_t reg, uint32_t mask, uint32_t val)
 {
@@ -191,9 +216,16 @@ int xilinx_xcvr_drp_update(struct xilinx_xcvr *xcvr, uint32_t drp_port,
 	return xilinx_xcvr_drp_write(xcvr, drp_port, reg, val);
 }
 
-/**
- * @brief xilinx_xcvr_gth3_configure_cdr
- */
+/*******************************************************************************
+ * @brief Configure Clock Data Recovery for GTH3 transceiver type.
+ *
+ * @param xcvr         - The device structure.
+ * @param drp_port     - DRP selection.
+ * @param out_div      - Output clock divider.
+ *
+ * @return ret         - Result of the configuration operation (0 - success,
+ *                       negative value for failure).
+*******************************************************************************/
 static int xilinx_xcvr_gth3_configure_cdr(struct xilinx_xcvr *xcvr,
 		uint32_t drp_port, uint32_t out_div)
 {
@@ -205,9 +237,18 @@ static int xilinx_xcvr_gth3_configure_cdr(struct xilinx_xcvr *xcvr,
 	return 0;
 }
 
-/**
- * @brief xilinx_xcvr_gtx2_configure_cdr
- */
+/*******************************************************************************
+ * @brief Configure Clock Data Recovery for GTX2 transceiver type.
+ *
+ * @param xcvr         - The device structure.
+ * @param drp_port     - DRP selection.
+ * @param lane_rate    - Line rate (kHz).
+ * @param out_div      - Output clock divider.
+ * @param lpm_enable   - LPM enable.
+ *
+ * @return ret         - Result of the cfg. operation (0 - success, negative
+ *                       value for failure).
+*******************************************************************************/
 static int xilinx_xcvr_gtx2_configure_cdr(struct xilinx_xcvr *xcvr,
 		uint32_t drp_port, uint32_t lane_rate, uint32_t out_div,
 		bool lpm_enable)
@@ -304,9 +345,20 @@ static int xilinx_xcvr_gtx2_configure_cdr(struct xilinx_xcvr *xcvr,
 	return 0;
 }
 
-/**
- * @brief xilinx_xcvr_configure_cdr
- */
+/*******************************************************************************
+ * @brief Configure Clock Data Recovery. THe clock data recovery (CDR) circuit in
+ * each transceiver extracts the recovered clock and data from an incoming data
+ * stream.
+ *
+ * @param xcvr         - The device structure.
+ * @param drp_port     - DRP selection.
+ * @param lane_rate    - Line rate (kHz).
+ * @param out_div      - Output clock divider.
+ * @param lpm_enable   - LPM enable.
+ *
+ * @return ret         - Result of the cfrg. operation (0 - success, negative
+ *                       value for failure).
+*******************************************************************************/
 int xilinx_xcvr_configure_cdr(struct xilinx_xcvr *xcvr,
 			      uint32_t drp_port, uint32_t lane_rate, uint32_t out_div,
 			      bool lpm_enable)
@@ -324,9 +376,16 @@ int xilinx_xcvr_configure_cdr(struct xilinx_xcvr *xcvr,
 	}
 }
 
-/**
- * @brief xilinx_xcvr_configure_lpm_dfe_mode
- */
+/*******************************************************************************
+ * @brief Selection of Low-Power mode (LPM) or Decision Feedback Equalization (DFE).
+ *
+ * @param xcvr         - The device structure.
+ * @param drp_port     - DRP selection.
+ * @param lpm          - LPM enable.
+ *
+ * @return ret         - Result of the operation (0 - success, negative value
+ *                       for failure).
+*******************************************************************************/
 int xilinx_xcvr_configure_lpm_dfe_mode(struct xilinx_xcvr *xcvr,
 				       uint32_t drp_port, bool lpm)
 {
@@ -350,9 +409,15 @@ int xilinx_xcvr_configure_lpm_dfe_mode(struct xilinx_xcvr *xcvr,
 	return 0;
 }
 
-/**
- * @brief xilinx_xcvr_qpll_sel
- */
+/*******************************************************************************
+ * @brief Selection of QPLL clock.
+ *
+ * @param xcvr         - The device structure.
+ * @param sys_clk_sel  - QPLL0 (0) / QPLL1 (1) selection.
+ *
+ * @return ret         - Result of the operation (0 - success, negative value
+ *                       for failure).
+*******************************************************************************/
 static unsigned int xilinx_xcvr_qpll_sel(struct xilinx_xcvr *xcvr,
 		uint32_t sys_clk_sel)
 {
@@ -368,9 +433,15 @@ static unsigned int xilinx_xcvr_qpll_sel(struct xilinx_xcvr *xcvr,
 	}
 }
 
-/**
- * @brief xilinx_xcvr_setup_cpll_vco_range
- */
+/*******************************************************************************
+ * @brief Setup of CPLL vco range.
+ *
+ * @param xcvr         - The device structure.
+ * @param vco_max      - Frequency upper limit (kHz).
+ *
+ * @return ret         - Result of the operation (0 - success, negative value
+ *                       for failure).
+*******************************************************************************/
 static void xilinx_xcvr_setup_cpll_vco_range(struct xilinx_xcvr *xcvr,
 		uint32_t *vco_max)
 {
@@ -387,9 +458,18 @@ static void xilinx_xcvr_setup_cpll_vco_range(struct xilinx_xcvr *xcvr,
 			*vco_max = 4250000;
 }
 
-/**
- * @brief xilinx_xcvr_setup_qpll_vco_range
- */
+/*******************************************************************************
+ * @brief Setup QPLL nominal operating ranges.
+ *
+ * @param xcvr         - The device structure.
+ * @param vco0_min     - Frequency lower limit for vco0 (kHz).
+ * @param vco0_max     - Frequency upper limit for vco0 (kHz).
+ * @param vco1_min     - Frequency lower limit for vco1 (kHz).
+ * @param vco1_max     - Frequency upper limit for vco1 (kHz).
+ *
+ * @return ret         - Result of the operation (0 - success, negative value
+ *                       for failure).
+*******************************************************************************/
 static void xilinx_xcvr_setup_qpll_vco_range(struct xilinx_xcvr *xcvr,
 		uint32_t *vco0_min,
 		uint32_t *vco0_max,
@@ -407,21 +487,32 @@ static void xilinx_xcvr_setup_qpll_vco_range(struct xilinx_xcvr *xcvr,
 	}
 }
 
-/**
- * @brief xilinx_xcvr_get_cpll_vco_ranges
- */
+/*******************************************************************************
+ * @brief Get CPLL nominal operating ranges.
+ *
+ * @param xcvr         - The device structure.
+ * @param vco_min      - Frequency lower limit for vco (kHz).
+ * @param vco_max      - Frequency upper limit for vco (kHz).
+ *
+ * @return ret         - Result of the operation (0 - success, negative value
+ *                       for failure).
+*******************************************************************************/
 static int xilinx_xcvr_get_cpll_vco_ranges(struct xilinx_xcvr *xcvr,
 		uint32_t *vco_min,
 		uint32_t *vco_max)
 {
 	switch (xcvr->type) {
 	case XILINX_XCVR_TYPE_S7_GTX2:
+		/* The CPLL in the GTX transceiver has a nominal operating range between 1.6 GHz to
+		 * 3.3 GHz.*/
 		*vco_min = 1600000;
 		*vco_max = 3300000;
 		break;
 	case XILINX_XCVR_TYPE_US_GTH3:
 	case XILINX_XCVR_TYPE_US_GTH4:
 	case XILINX_XCVR_TYPE_US_GTY4:
+		/* The CPLL in the GTY transceiver has a nominal operating range between 2.0 GHz to
+		 * 6.25 GHz.*/
 		*vco_min = 2000000;
 		*vco_max = 6250000;
 		break;
@@ -441,9 +532,18 @@ static int xilinx_xcvr_get_cpll_vco_ranges(struct xilinx_xcvr *xcvr,
 	return 0;
 }
 
-/**
- * @brief xilinx_xcvr_calc_cpll_config
- */
+/*******************************************************************************
+ * @brief Calculate CPLL configuration.
+ *
+ * @param xcvr          - The device structure.
+ * @param refclk_khz    - Reference clock (kHz).
+ * @param lane_rate_khz - Line rate (kHz).
+ * @param conf          - CPLL configuration values.
+ * @param out_div       - Output clock divider.
+ *
+ * @return ret          - Result of the operation (0 - success, negative value
+ *                        for failure).
+*******************************************************************************/
 int xilinx_xcvr_calc_cpll_config(struct xilinx_xcvr *xcvr,
 				 uint32_t refclk_khz,
 				 uint32_t lane_rate_khz,
@@ -497,9 +597,19 @@ int xilinx_xcvr_calc_cpll_config(struct xilinx_xcvr *xcvr,
 	return -EINVAL;
 }
 
-/**
- * @brief xilinx_xcvr_get_qpll_vco_ranges
- */
+/*******************************************************************************
+ * @brief Get QPLL nominal operating ranges.
+ *
+ * @param xcvr         - The device structure.
+ * @param sys_clk_sel  - QPLL0 (0) / QPLL1 (1) selection.
+ * @param vco0_min     - Frequency lower limit for vco0 (kHz).
+ * @param vco0_max     - Frequency upper limit for vco0 (kHz).
+ * @param vco1_min     - Frequency lower limit for vco1 (kHz).
+ * @param vco1_max     - Frequency upper limit for vco1 (kHz).
+ *
+ * @return ret         - Result of the operation (0 - success, negative value
+ *                       for failure).
+*******************************************************************************/
 static int xilinx_xcvr_get_qpll_vco_ranges(struct xilinx_xcvr *xcvr,
 		uint32_t sys_clk_sel,
 		uint32_t *vco0_min, uint32_t *vco0_max,
@@ -549,9 +659,19 @@ static int xilinx_xcvr_get_qpll_vco_ranges(struct xilinx_xcvr *xcvr,
 	return 0;
 }
 
-/**
- * @brief xilinx_xcvr_calc_qpll_config
- */
+/*******************************************************************************
+ * @brief Calculate QPLL configuration.
+ *
+ * @param xcvr          - The device structure.
+ * @param sys_clk_sel   - QPLL0 (0) / QPLL1 (1) selection.
+ * @param refclk_khz    - Reference clock (kHz).
+ * @param lane_rate_khz - Line rate (kHz).
+ * @param conf          - QPLL configuration values.
+ * @param out_div       - Output clock divider.
+ *
+ * @return ret          - Result of the operation (0 - success, negative value
+ *                        for failure).
+*******************************************************************************/
 int xilinx_xcvr_calc_qpll_config(struct xilinx_xcvr *xcvr, uint32_t sys_clk_sel,
 				 uint32_t refclk_khz, uint32_t lane_rate_khz,
 				 struct xilinx_xcvr_qpll_config *conf, uint32_t *out_div)
@@ -670,9 +790,16 @@ int xilinx_xcvr_calc_qpll_config(struct xilinx_xcvr *xcvr, uint32_t sys_clk_sel,
 	return -EINVAL;
 }
 
-/**
- * @brief xilinx_xcvr_gth34_cpll_read_config
- */
+/*******************************************************************************
+ * @brief Read CPLL configuration for GTH transceiver.
+ *
+ * @param xcvr         - The device structure.
+ * @param drp_port     - DRP selection.
+ * @param conf         - CPLL configuration values.
+ *
+ * @return ret         - Result of the operation (0 - success, negative value
+ *                       for failure).
+*******************************************************************************/
 static int xilinx_xcvr_gth34_cpll_read_config(struct xilinx_xcvr *xcvr,
 		uint32_t drp_port, struct xilinx_xcvr_cpll_config *conf)
 {
@@ -722,9 +849,16 @@ static int xilinx_xcvr_gth34_cpll_read_config(struct xilinx_xcvr *xcvr,
 	return 0;
 }
 
-/**
- * @brief xilinx_xcvr_gtx2_cpll_read_config
- */
+/*******************************************************************************
+ * @brief Read CPLL configuration for GTX transceiver.
+ *
+ * @param xcvr         - The device structure.
+ * @param drp_port     - DRP selection.
+ * @param conf         - CPLL configuration values.
+ *
+ * @return ret         - Result of the operation (0 - success, negative value
+ *                       for failure).
+*******************************************************************************/
 static int xilinx_xcvr_gtx2_cpll_read_config(struct xilinx_xcvr *xcvr,
 		uint32_t drp_port, struct xilinx_xcvr_cpll_config *conf)
 {
@@ -766,9 +900,16 @@ static int xilinx_xcvr_gtx2_cpll_read_config(struct xilinx_xcvr *xcvr,
 	return 0;
 }
 
-/**
- * @brief xilinx_xcvr_cpll_read_config
- */
+/*******************************************************************************
+ * @brief Read CPLL configuration.
+ *
+ * @param xcvr         - The device structure.
+ * @param drp_port     - DRP selection.
+ * @param conf         - CPLL configuration values.
+ *
+ * @return ret         - Result of the operation (0 - success, negative value
+ *                       for failure).
+*******************************************************************************/
 int xilinx_xcvr_cpll_read_config(struct xilinx_xcvr *xcvr,
 				 uint32_t drp_port, struct xilinx_xcvr_cpll_config *conf)
 {
@@ -784,9 +925,16 @@ int xilinx_xcvr_cpll_read_config(struct xilinx_xcvr *xcvr,
 	}
 }
 
-/**
- * @brief xilinx_xcvr_gth34_cpll_write_config
- */
+/*******************************************************************************
+ * @brief Write CPLL configuration for GTH transceiver.
+ *
+ * @param xcvr         - The device structure.
+ * @param drp_port     - DRP selection.
+ * @param conf         - CPLL configuration values.
+ *
+ * @return ret         - Result of the operation (0 - success, negative value
+ *                       for failure).
+*******************************************************************************/
 static int xilinx_xcvr_gth34_cpll_write_config(struct xilinx_xcvr *xcvr,
 		uint32_t drp_port, const struct xilinx_xcvr_cpll_config *conf)
 {
@@ -847,9 +995,16 @@ static int xilinx_xcvr_gth34_cpll_write_config(struct xilinx_xcvr *xcvr,
 				      0xf800, val);
 }
 
-/**
- * @brief xilinx_xcvr_gtx2_cpll_write_config
- */
+/*******************************************************************************
+ * @brief Write CPLL configuration for GTX transceiver.
+ *
+ * @param xcvr         - The device structure.
+ * @param drp_port     - DRP selection.
+ * @param conf         - CPLL configuration values.
+ *
+ * @return ret         - Result of the operation (0 - success, negative value
+ *                       for failure).
+*******************************************************************************/
 static int xilinx_xcvr_gtx2_cpll_write_config(struct xilinx_xcvr *xcvr,
 		uint32_t drp_port, const struct xilinx_xcvr_cpll_config *conf)
 {
@@ -900,9 +1055,16 @@ static int xilinx_xcvr_gtx2_cpll_write_config(struct xilinx_xcvr *xcvr,
 				      val);
 }
 
-/**
- * @brief xilinx_xcvr_cpll_write_config
- */
+/*******************************************************************************
+ * @brief Write CPLL configuration.
+ *
+ * @param xcvr         - The device structure.
+ * @param drp_port     - DRP selection.
+ * @param conf         - CPLL configuration values.
+ *
+ * @return ret         - Result of the operation (0 - success, negative value
+ *                       for failure).
+*******************************************************************************/
 int xilinx_xcvr_cpll_write_config(struct xilinx_xcvr *xcvr,
 				  uint32_t drp_port, const struct xilinx_xcvr_cpll_config *conf)
 {
@@ -918,9 +1080,17 @@ int xilinx_xcvr_cpll_write_config(struct xilinx_xcvr *xcvr,
 	}
 }
 
-/**
- * @brief xilinx_xcvr_cpll_calc_lane_rate
- */
+/*******************************************************************************
+ * @brief Calculate line rate for CPLL.
+ *
+ * @param xcvr         - The device structure.
+ * @param refclk_hz    - Reference clock (kHz).
+ * @param conf         - CPLL configuration values.
+ * @param out_div      - Output clock divider.
+ *
+ * @return ret         - Result of the operation (0 - success, negative value
+ *                       for failure).
+*******************************************************************************/
 int xilinx_xcvr_cpll_calc_lane_rate(struct xilinx_xcvr *xcvr,
 				    uint32_t refclk_hz, const struct xilinx_xcvr_cpll_config *conf,
 				    uint32_t out_div)
@@ -933,9 +1103,16 @@ int xilinx_xcvr_cpll_calc_lane_rate(struct xilinx_xcvr *xcvr,
 					   conf->refclk_div * out_div * 1000);
 }
 
-/**
- * @brief xilinx_xcvr_gth34_qpll_read_config
- */
+/*******************************************************************************
+ * @brief Read QPLL configuration for GTH transceiver.
+ *
+ * @param xcvr         - The device structure.
+ * @param drp_port     - DRP selection.
+ * @param conf         - QPLL configuration values.
+ *
+ * @return ret         - Result of the operation (0 - success, negative value
+ *                       for failure).
+*******************************************************************************/
 static int xilinx_xcvr_gth34_qpll_read_config(struct xilinx_xcvr *xcvr,
 		unsigned int sys_clk_sel, uint32_t drp_port,
 		struct xilinx_xcvr_qpll_config *conf)
@@ -988,9 +1165,16 @@ static int xilinx_xcvr_gth34_qpll_read_config(struct xilinx_xcvr *xcvr,
 	return 0;
 }
 
-/**
- * @brief xilinx_xcvr_gtx2_qpll_read_config
- */
+/*******************************************************************************
+ * @brief Read QPLL configuration for GTX transceiver.
+ *
+ * @param xcvr         - The device structure.
+ * @param drp_port     - DRP selection.
+ * @param conf         - QPLL configuration values.
+ *
+ * @return ret         - Result of the operation (0 - success, negative value
+ *                       for failure).
+*******************************************************************************/
 static int xilinx_xcvr_gtx2_qpll_read_config(struct xilinx_xcvr *xcvr,
 		uint32_t drp_port, struct xilinx_xcvr_qpll_config *conf)
 {
@@ -1059,9 +1243,16 @@ static int xilinx_xcvr_gtx2_qpll_read_config(struct xilinx_xcvr *xcvr,
 	return 0;
 }
 
-/**
- * @brief xilinx_xcvr_qpll_read_config
- */
+/*******************************************************************************
+ * @brief Read QPLL configuration.
+ *
+ * @param xcvr         - The device structure.
+ * @param drp_port     - DRP selection.
+ * @param conf         - QPLL configuration values.
+ *
+ * @return ret         - Result of the operation (0 - success, negative value
+ *                       for failure).
+*******************************************************************************/
 int xilinx_xcvr_qpll_read_config(struct xilinx_xcvr *xcvr,
 				 uint32_t drp_port, uint32_t sys_clk_sel,
 				 struct xilinx_xcvr_qpll_config *conf)
@@ -1078,9 +1269,17 @@ int xilinx_xcvr_qpll_read_config(struct xilinx_xcvr *xcvr,
 	}
 }
 
-/**
- * @brief xilinx_xcvr_gth34_qpll_write_config
- */
+/*******************************************************************************
+ * @brief Write QPLL configuration for GTH transceiver.
+ *
+ * @param xcvr         - The device structure.
+ * @param sys_clk_sel  - QPLL0 (0) / QPLL1 (1) selection.
+ * @param drp_port     - DRP selection.
+ * @param conf         - QPLL configuration values.
+ *
+ * @return ret         - Result of the operation (0 - success, negative value
+ *                       for failure).
+*******************************************************************************/
 static int xilinx_xcvr_gth34_qpll_write_config(struct xilinx_xcvr *xcvr,
 		uint32_t sys_clk_sel, uint32_t drp_port,
 		const struct xilinx_xcvr_qpll_config *conf)
@@ -1127,9 +1326,16 @@ static int xilinx_xcvr_gth34_qpll_write_config(struct xilinx_xcvr *xcvr,
 				      0xf80, refclk << 7);
 }
 
-/**
- * @brief xilinx_xcvr_gtx2_qpll_write_config
- */
+/*******************************************************************************
+ * @brief Write QPLL configuration for GTX transceiver.
+ *
+ * @param xcvr         - The device structure.
+ * @param drp_port     - DRP selection.
+ * @param conf         - QPLL configuration values.
+ *
+ * @return ret         - Result of the operation (0 - success, negative value
+ *                       for failure).
+*******************************************************************************/
 static int xilinx_xcvr_gtx2_qpll_write_config(struct xilinx_xcvr *xcvr,
 		uint32_t drp_port, const struct xilinx_xcvr_qpll_config *conf)
 {
@@ -1217,9 +1423,16 @@ static int xilinx_xcvr_gtx2_qpll_write_config(struct xilinx_xcvr *xcvr,
 	return 0;
 }
 
-/**
- * @brief xilinx_xcvr_qpll_write_config
- */
+/*******************************************************************************
+ * @brief Write QPLL configuration.
+ *
+ * @param xcvr         - The device structure.
+ * @param drp_port     - DRP selection.
+ * @param conf         - QPLL configuration values.
+ *
+ * @return ret         - Result of the operation (0 - success, negative value
+ *                       for failure).
+*******************************************************************************/
 int xilinx_xcvr_qpll_write_config(struct xilinx_xcvr *xcvr,
 				  uint32_t sys_clk_sel,
 				  uint32_t drp_port, const struct xilinx_xcvr_qpll_config *conf)
@@ -1237,9 +1450,17 @@ int xilinx_xcvr_qpll_write_config(struct xilinx_xcvr *xcvr,
 	}
 }
 
-/**
- * @brief xilinx_xcvr_qpll_calc_lane_rate
- */
+/*******************************************************************************
+ * @brief Calculate line rate for QPLL.
+ *
+ * @param xcvr         - The device structure.
+ * @param refclk_hz    - Reference clock (kHz).
+ * @param conf         - CPLL configuration values.
+ * @param out_div      - Output clock divider.
+ *
+ * @return ret         - Result of the operation (0 - success, negative value
+ *                       for failure).
+*******************************************************************************/
 int xilinx_xcvr_qpll_calc_lane_rate(struct xilinx_xcvr *xcvr,
 				    uint32_t refclk_hz, const struct xilinx_xcvr_qpll_config *conf,
 				    uint32_t out_div)
@@ -1254,9 +1475,17 @@ int xilinx_xcvr_qpll_calc_lane_rate(struct xilinx_xcvr *xcvr,
 					   conf->refclk_div * out_div * 1000);
 }
 
-/**
- * @brief xilinx_xcvr_gth34_read_out_div
- */
+/*******************************************************************************
+ * @brief Read the Output clock divider for GTH transceiver.
+ *
+ * @param xcvr         - The device structure.
+ * @param drp_port     - DRP selection.
+ * @param rx_out_div   - Rx Output clock divider.
+ * @param rx_out_div   - Tx Output clock divider.
+ *
+ * @return ret         - Result of the operation (0 - success, negative value
+ *                       for failure).
+*******************************************************************************/
 static int xilinx_xcvr_gth34_read_out_div(struct xilinx_xcvr *xcvr,
 		uint32_t drp_port, uint32_t *rx_out_div, uint32_t *tx_out_div)
 {
@@ -1282,9 +1511,17 @@ static int xilinx_xcvr_gth34_read_out_div(struct xilinx_xcvr *xcvr,
 	return 0;
 }
 
-/**
- * @brief xilinx_xcvr_gtx2_read_out_div
- */
+/*******************************************************************************
+ * @brief Read the Output clock divider for GTX transceiver.
+ *
+ * @param xcvr         - The device structure.
+ * @param drp_port     - DRP selection.
+ * @param rx_out_div   - Rx Output clock divider.
+ * @param rx_out_div   - Tx Output clock divider.
+ *
+ * @return ret         - Result of the operation (0 - success, negative value
+ *                       for failure).
+*******************************************************************************/
 static int xilinx_xcvr_gtx2_read_out_div(struct xilinx_xcvr *xcvr,
 		uint32_t drp_port, uint32_t *rx_out_div, uint32_t *tx_out_div)
 {
@@ -1303,9 +1540,17 @@ static int xilinx_xcvr_gtx2_read_out_div(struct xilinx_xcvr *xcvr,
 	return 0;
 }
 
-/**
- * @brief xilinx_xcvr_read_out_div
- */
+/*******************************************************************************
+ * @brief Read the Output clock divider.
+ *
+ * @param xcvr         - The device structure.
+ * @param drp_port     - DRP selection.
+ * @param rx_out_div   - Rx Output clock divider.
+ * @param rx_out_div   - Tx Output clock divider.
+ *
+ * @return ret         - Result of the operation (0 - success, negative value
+ *                       for failure).
+*******************************************************************************/
 int xilinx_xcvr_read_out_div(struct xilinx_xcvr *xcvr, uint32_t drp_port,
 			     uint32_t *rx_out_div, uint32_t *tx_out_div)
 {
@@ -1323,9 +1568,13 @@ int xilinx_xcvr_read_out_div(struct xilinx_xcvr *xcvr, uint32_t drp_port,
 	}
 }
 
-/**
- * @brief xilinx_xcvr_out_div_to_val
- */
+/*******************************************************************************
+ * @brief Convert Output clock divider to value.
+ *
+ * @param out_div   - Output clock divider.
+ *
+ * @return          - Value
+*******************************************************************************/
 static uint32_t xilinx_xcvr_out_div_to_val(uint32_t out_div)
 {
 	switch (out_div) {
@@ -1342,9 +1591,17 @@ static uint32_t xilinx_xcvr_out_div_to_val(uint32_t out_div)
 	}
 }
 
-/**
- * @brief xilinx_xcvr_gth34_write_out_div
- */
+/*******************************************************************************
+ * @brief Write the Output clock divider for GTH transceiver.
+ *
+ * @param xcvr         - The device structure.
+ * @param drp_port     - DRP selection.
+ * @param rx_out_div   - Rx Output clock divider.
+ * @param rx_out_div   - Tx Output clock divider.
+ *
+ * @return ret         - Result of the operation (0 - success, negative value
+ *                       for failure).
+*******************************************************************************/
 static int xilinx_xcvr_gth34_write_out_div(struct xilinx_xcvr *xcvr,
 		uint32_t drp_port, int32_t rx_out_div, int32_t tx_out_div)
 {
@@ -1366,9 +1623,17 @@ static int xilinx_xcvr_gth34_write_out_div(struct xilinx_xcvr *xcvr,
 	return 0;
 }
 
-/**
- * @brief xilinx_xcvr_gtx2_write_out_div
- */
+/*******************************************************************************
+ * @brief Write the Output clock divider for GTX transceiver.
+ *
+ * @param xcvr         - The device structure.
+ * @param drp_port     - DRP selection.
+ * @param rx_out_div   - Rx Output clock divider.
+ * @param rx_out_div   - Tx Output clock divider.
+ *
+ * @return ret         - Result of the operation (0 - success, negative value
+ *                       for failure).
+*******************************************************************************/
 static int xilinx_xcvr_gtx2_write_out_div(struct xilinx_xcvr *xcvr,
 		uint32_t drp_port, int32_t rx_out_div, int32_t tx_out_div)
 {
@@ -1387,9 +1652,17 @@ static int xilinx_xcvr_gtx2_write_out_div(struct xilinx_xcvr *xcvr,
 	return xilinx_xcvr_drp_update(xcvr, drp_port, OUT_DIV_ADDR, mask, val);
 }
 
-/**
- * @brief xilinx_xcvr_write_out_div
- */
+/*******************************************************************************
+ * @brief Write the Output clock divider.
+ *
+ * @param xcvr         - The device structure.
+ * @param drp_port     - DRP selection.
+ * @param rx_out_div   - Rx Output clock divider.
+ * @param rx_out_div   - Tx Output clock divider.
+ *
+ * @return ret         - Result of the operation (0 - success, negative value
+ *                       for failure).
+*******************************************************************************/
 int xilinx_xcvr_write_out_div(struct xilinx_xcvr *xcvr, uint32_t drp_port,
 			      int32_t rx_out_div, int32_t tx_out_div)
 {
@@ -1407,9 +1680,14 @@ int xilinx_xcvr_write_out_div(struct xilinx_xcvr *xcvr, uint32_t drp_port,
 	}
 }
 
-/**
- * @brief xilinx_xcvr_gty4_gth4_prog_div_to_val
- */
+/*******************************************************************************
+ * @brief Convert programmable divider ratio for GTY4 and GTH4 transceivers
+ *        to value.
+ *
+ * @param div          - Programmable divider ratio.
+ *
+ * @return             - Value
+*******************************************************************************/
 static uint32_t xilinx_xcvr_gty4_gth4_prog_div_to_val(uint32_t div)
 {
 	switch (div) {
@@ -1452,9 +1730,14 @@ static uint32_t xilinx_xcvr_gty4_gth4_prog_div_to_val(uint32_t div)
 	}
 }
 
-/**
- * @brief xilinx_xcvr_gty3_gth3_prog_div_to_val
- */
+/*******************************************************************************
+ * @brief Convert programmable divider ratio for GTY3 and GTH3 transceivers
+ *        to value.
+ *
+ * @param div          - Programmable divider ratio.
+ *
+ * @return             - Value
+*******************************************************************************/
 static uint32_t xilinx_xcvr_gty3_gth3_prog_div_to_val(uint32_t div)
 {
 	switch (div) {
@@ -1493,9 +1776,17 @@ static uint32_t xilinx_xcvr_gty3_gth3_prog_div_to_val(uint32_t div)
 	}
 }
 
-/**
- * @brief xilinx_xcvr_gth3_gty3_write_progdiv_div
- */
+/*******************************************************************************
+ * @brief Write RX/TX programmable divider ratio for GTH3 and GTY3 transceivers.
+ *
+ * @param xcvr         - The device structure.
+ * @param drp_port     - DRP selection.
+ * @param rx_prog_div  - RX programmable divider ratio.
+ * @param tx_prog_div  - TX programmable divider ratio.
+ *
+ * @return ret         - Result of the operation (0 - success, negative value
+ *                       for failure).
+*******************************************************************************/
 static int xilinx_xcvr_gth3_gty3_write_progdiv_div(struct xilinx_xcvr *xcvr,
 		uint32_t drp_port, int32_t rx_prog_div, int32_t tx_prog_div)
 {
@@ -1517,9 +1808,17 @@ static int xilinx_xcvr_gth3_gty3_write_progdiv_div(struct xilinx_xcvr *xcvr,
 	return 0;
 }
 
-/**
- * @brief xilinx_xcvr_gth4_gty4_write_progdiv_div
- */
+/*******************************************************************************
+ * @brief Write RX/TX programmable divider ratio for GTH4 and GTY4 transceivers.
+ *
+ * @param xcvr         - The device structure.
+ * @param drp_port     - DRP selection.
+ * @param rx_prog_div  - RX programmable divider ratio.
+ * @param tx_prog_div  - TX programmable divider ratio.
+ *
+ * @return ret         - Result of the operation (0 - success, negative value
+ *                       for failure).
+*******************************************************************************/
 static int xilinx_xcvr_gth4_gty4_write_progdiv_div(struct xilinx_xcvr *xcvr,
 		uint32_t drp_port, int32_t rx_prog_div, int32_t tx_prog_div)
 {
@@ -1543,9 +1842,17 @@ static int xilinx_xcvr_gth4_gty4_write_progdiv_div(struct xilinx_xcvr *xcvr,
 	return 0;
 }
 
-/**
- * @brief xilinx_xcvr_write_prog_div
- */
+/*******************************************************************************
+ * @brief Write RX/TX programmable divider ratio.
+ *
+ * @param xcvr         - The device structure.
+ * @param drp_port     - DRP selection.
+ * @param rx_prog_div  - RX programmable divider ratio.
+ * @param tx_prog_div  - TX programmable divider ratio.
+ *
+ * @return ret         - Result of the operation (0 - success, negative value
+ *                       for failure).
+*******************************************************************************/
 int xilinx_xcvr_write_prog_div(struct xilinx_xcvr *xcvr, uint32_t drp_port,
 			       int32_t rx_prog_div, int32_t tx_prog_div)
 {
@@ -1562,9 +1869,13 @@ int xilinx_xcvr_write_prog_div(struct xilinx_xcvr *xcvr, uint32_t drp_port,
 	}
 }
 
-/**
- * @brief xilinx_xcvr_prog_div_rate_to_val
- */
+/*******************************************************************************
+ * @brief Convert pre-divider to value.
+ *
+ * @param rate         - Pre-divider.
+ *
+ * @return             - Value
+*******************************************************************************/
 static uint32_t xilinx_xcvr_prog_div_rate_to_val(uint32_t rate)
 {
 	switch (rate) {
@@ -1577,9 +1888,17 @@ static uint32_t xilinx_xcvr_prog_div_rate_to_val(uint32_t rate)
 	}
 }
 
-/**
- * @brief xilinx_xcvr_gty4_write_progdiv_div_rate
- */
+/*******************************************************************************
+ * @brief Write pre-divider ratio for GTY4 transceivers.
+ *
+ * @param xcvr         - The device structure.
+ * @param drp_port     - DRP selection.
+ * @param rx_rate      - RX pre-divider.
+ * @param tx_rate      - TX pre-divider.
+ *
+ * @return ret         - Result of the operation (0 - success, negative value
+ *                       for failure).
+*******************************************************************************/
 static int xilinx_xcvr_gty4_write_progdiv_div_rate(struct xilinx_xcvr *xcvr,
 		uint32_t drp_port, int32_t rx_rate, int32_t tx_rate)
 {
@@ -1601,9 +1920,17 @@ static int xilinx_xcvr_gty4_write_progdiv_div_rate(struct xilinx_xcvr *xcvr,
 	return 0;
 }
 
-/**
- * @brief xilinx_xcvr_write_prog_div_rate
- */
+/*******************************************************************************
+ * @brief Write pre-divider ratio.
+ *
+ * @param xcvr         - The device structure.
+ * @param drp_port     - DRP selection.
+ * @param rx_rate      - RX pre-divider.
+ * @param tx_rate      - TX pre-divider.
+ *
+ * @return ret         - Result of the operation (0 - success, negative value
+ *                       for failure).
+*******************************************************************************/
 int xilinx_xcvr_write_prog_div_rate(struct xilinx_xcvr *xcvr,
 				    uint32_t drp_port, int32_t rx_rate, int32_t tx_rate)
 {
@@ -1616,9 +1943,16 @@ int xilinx_xcvr_write_prog_div_rate(struct xilinx_xcvr *xcvr,
 	}
 }
 
-/**
- * @brief xilinx_xcvr_gth34_write_async_gearbox_en
- */
+/*******************************************************************************
+ * @brief Write asynchronous gearbox enable for GTH34 transceivers.
+ *
+ * @param xcvr         - The device structure.
+ * @param drp_port     - DRP selection.
+ * @param en           - Enable
+ *
+ * @return ret         - Result of the operation (0 - success, negative value
+ *                       for failure).
+*******************************************************************************/
 static int xilinx_xcvr_gth34_write_async_gearbox_en(struct xilinx_xcvr *xcvr,
 		uint32_t drp_port, bool en)
 {
@@ -1630,9 +1964,16 @@ static int xilinx_xcvr_gth34_write_async_gearbox_en(struct xilinx_xcvr *xcvr,
 				      0x7c, mask, en ? mask : 0);
 }
 
-/**
- * @brief xilinx_xcvr_write_async_gearbox_en
- */
+/*******************************************************************************
+ * @brief Write asynchronous gearbox enable.
+ *
+ * @param xcvr         - The device structure.
+ * @param drp_port     - DRP selection.
+ * @param en           - Enable
+ *
+ * @return ret         - Result of the operation (0 - success, negative value
+ *                       for failure).
+*******************************************************************************/
 int xilinx_xcvr_write_async_gearbox_en(struct xilinx_xcvr *xcvr,
 				       uint32_t drp_port, bool en)
 {
@@ -1649,9 +1990,18 @@ int xilinx_xcvr_write_async_gearbox_en(struct xilinx_xcvr *xcvr,
 	}
 }
 
-/**
- * @brief xilinx_xcvr_write_rx_clk25_div
- */
+/*******************************************************************************
+ * @brief Write RX_CLK25_DIV value (divider for RXPLLREFCLK_DIV1 to generate
+ *        an internal clock used for some of the logic inside the RX
+ *        transceiver part).
+ *
+ * @param xcvr         - The device structure.
+ * @param drp_port     - DRP selection.
+ * @param div          - Divider value.
+ *
+ * @return ret         - Result of the operation (0 - success, negative value
+ *                       for failure).
+*******************************************************************************/
 int xilinx_xcvr_write_rx_clk25_div(struct xilinx_xcvr *xcvr,
 				   uint32_t drp_port, uint32_t div)
 {
@@ -1682,9 +2032,18 @@ int xilinx_xcvr_write_rx_clk25_div(struct xilinx_xcvr *xcvr,
 	return xilinx_xcvr_drp_update(xcvr, drp_port, reg, mask, div);
 }
 
-/**
- * @brief xilinx_xcvr_write_tx_clk25_div
- */
+/*******************************************************************************
+ * @brief Write TX_CLK25_DIV value (divider for TXPLLREFCLK_DIV1 to generate
+ *        an internal clock used for some of the logic inside the TRX
+ *        transceiver part).
+ *
+ * @param xcvr         - The device structure.
+ * @param drp_port     - DRP selection.
+ * @param div          - Divider value.
+ *
+ * @return ret         - Result of the operation (0 - success, negative value
+ *                       for failure).
+*******************************************************************************/
 int xilinx_xcvr_write_tx_clk25_div(struct xilinx_xcvr *xcvr,
 				   uint32_t drp_port, uint32_t div)
 {
@@ -1714,9 +2073,16 @@ int xilinx_xcvr_write_tx_clk25_div(struct xilinx_xcvr *xcvr,
 	return xilinx_xcvr_drp_update(xcvr, drp_port, reg, mask, div);
 }
 
-/**
- * @brief xilinx_xcvr_prbsel_enc_get
- */
+/*******************************************************************************
+ * @brief Get PRBS generator test pattern control setting.
+ *
+ * @param xcvr         - The device structure.
+ * @param prbs         - Pseudo-random bit sequence.
+ * @param reverse_lu   - Reverse enabled.
+ *
+ * @return ret         - Result of the operation (0 - success, negative value
+ *                       for failure).
+*******************************************************************************/
 int xilinx_xcvr_prbsel_enc_get(struct xilinx_xcvr *xcvr, uint32_t prbs,
 			       bool reverse_lu)
 {
@@ -1750,9 +2116,16 @@ int xilinx_xcvr_prbsel_enc_get(struct xilinx_xcvr *xcvr, uint32_t prbs,
 	return -EINVAL;
 }
 
-/**
- * @brief xilinx_xcvr_prbs_err_cnt_get
- */
+/*******************************************************************************
+ * @brief Get PRBS error counter value.
+ *
+ * @param xcvr         - The device structure.
+ * @param drp_port     - DRP selection.
+ * @param cnt          - Counter value.
+ *
+ * @return ret         - Result of the operation (0 - success, negative value
+ *                       for failure).
+*******************************************************************************/
 int xilinx_xcvr_prbs_err_cnt_get(struct xilinx_xcvr *xcvr,
 				 uint32_t drp_port, uint32_t *cnt)
 {
