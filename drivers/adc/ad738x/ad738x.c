@@ -68,13 +68,23 @@ int32_t ad738x_spi_reg_read(struct ad738x_dev *dev,
 	int32_t ret;
 	uint8_t buf[2];
 
+	/* Load the register (read) address */
 	buf[0] = AD738X_REG_READ(reg_addr);
 	buf[1] = 0x00;
-
 	ret = no_os_spi_write_and_read(dev->spi_desc, buf, 2);
+	if (ret)
+		return ret;
+
+	/* Read the register content */
+	buf[0] = 0x00;
+	buf[1] = 0x00;
+	ret = no_os_spi_write_and_read(dev->spi_desc, buf, 2);
+	if (ret)
+		return ret;
+
 	*reg_data = (buf[0] << 8) | buf[1];
 
-	return ret;
+	return 0;
 }
 
 /**
@@ -309,12 +319,13 @@ int32_t ad738x_read_data(struct ad738x_dev *dev,
 		dev->dcache_invalidate_range(msg.rx_addr, samples * 2);
 #else
 	ret = no_os_spi_write_and_read(dev->spi_desc, buf, samples);
-	if (ret != 0)
+	if (ret)
 		return ret;
 #endif
 
-	return ret;
+	return 0;
 }
+
 
 /**
  * Initialize the device.
@@ -341,9 +352,9 @@ int32_t ad738x_init(struct ad738x_dev **device,
 	dev->ref_sel = init_param->ref_sel;
 
 	ret = no_os_spi_init(&dev->spi_desc, init_param->spi_param);
+
 	ret |= ad738x_reset(dev, HARD_RESET);
 	no_os_mdelay(1000);
-
 	/* 1-wire or 2-wire mode */
 	ret |= ad738x_set_conversion_mode(dev, dev->conv_mode);
 	/* Set internal or external reference */
@@ -357,7 +368,6 @@ int32_t ad738x_init(struct ad738x_dev **device,
 
 	return ret;
 }
-
 /**
  * @brief Free the resources allocated by ad738x_init().
  * @param dev - The device structure.
