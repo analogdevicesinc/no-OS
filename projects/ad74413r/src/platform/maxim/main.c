@@ -76,6 +76,10 @@ int main()
 	ret = iio_example_main();
 #endif
 
+#ifdef IIO_TRIGGER_EXAMPLE
+#error IIO trigger example is not supported on Maxim platform.
+#endif
+
 #if (DUMMY_EXAMPLE + IIO_EXAMPLE == 0)
 #error At least one example has to be selected using y value in Makefile.
 #elif (DUMMY_EXAMPLE + IIO_EXAMPLE > 1)

@@ -66,4 +66,26 @@ struct no_os_spi_init_param ad74413r_spi_ip = {
 	.extra = SPI_EXTRA,
 };
 
+#ifdef IIO_TRIGGER_EXAMPLE
+/* GPIO trigger */
+struct no_os_irq_init_param ad74413r_gpio_irq_ip = {
+	.irq_ctrl_id = GPIO_IRQ_ID,
+	.platform_ops = GPIO_IRQ_OPS,
+	.extra = GPIO_IRQ_EXTRA,
+};
+
+const struct iio_hw_trig_cb_info gpio_cb_info = {
+	.event = NO_OS_EVT_GPIO,
+	.peripheral = NO_OS_GPIO_IRQ,
+	.handle = AD74413R_GPIO_CB_HANDLE,
+};
+
+struct iio_hw_trig_init_param ad74413r_gpio_trig_ip = {
+	.irq_id = AD74413R_GPIO_TRIG_IRQ_ID,
+	.irq_trig_lvl = NO_OS_IRQ_EDGE_RISING,
+	.cb_info = gpio_cb_info,
+	.name = AD74413R_GPIO_TRIG_NAME,
+};
+#endif
+
 struct ad74413r_init_param ad74413r_ip;
