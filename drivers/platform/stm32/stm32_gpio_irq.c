@@ -237,6 +237,7 @@ static int32_t stm32_gpio_irq_trigger_level_set(struct no_os_irq_ctrl_desc
 		return -EINVAL;
 	}
 
+	config.GPIOSel = sdesc->port_nb;
 	ret = HAL_EXTI_SetConfigLine(&sdesc->hexti, &config);
 	if (ret != HAL_OK)
 		return -EFAULT;
