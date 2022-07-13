@@ -59,7 +59,7 @@ enum xil_i2c_type {
 	IIC_PL,
 	/** Processing System */
 	IIC_PS
-} xil_i2c_type;
+};
 
 /**
  * @struct xil_i2c_init
