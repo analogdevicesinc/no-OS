@@ -237,7 +237,7 @@ void InitHdmiVideoPcore(unsigned short horizontalActiveTime,
 		  (horizontalActiveTime*4)); // h offset
 	Xil_Out32(VDMA_BASEADDR + AXI_DMAC_REG_Y_LENGTH,
 		  (verticalActiveTime-1)); // v size
-	Xil_Out32(VDMA_BASEADDR + AXI_DMAC_REG_START_TRANSFER,
+	Xil_Out32(VDMA_BASEADDR + AXI_DMAC_REG_TRANSFER_SUBMIT,
 		  0x1); // submit transfer	Xil_Out32(VDMA_BASEADDR + DMAC_REG_CTRL,
 #else
 	Xil_Out32((VDMA_BASEADDR + AXI_VDMA_REG_DMA_CTRL),
