@@ -53,7 +53,7 @@
 #endif
 
 /***************************************************************************//**
- * @brief Main function execution for STM32 platform.
+ * @brief Main function execution for Maxim platform.
  *
  * @return ret - Result of the enabled examples execution.
 *******************************************************************************/
