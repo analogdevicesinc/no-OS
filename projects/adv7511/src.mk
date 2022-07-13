@@ -21,6 +21,7 @@ SRCS += $(DRIVERS)/axi_core/axi_dmac/axi_dmac.c \
 	$(DRIVERS)/api/no_os_i2c.c \
 	$(DRIVERS)/api/no_os_gpio.c \
 	$(DRIVERS)/api/no_os_spi.c \
+	$(DRIVERS)/api/no_os_irq.c \
 	$(NO-OS)/util/no_os_util.c \
 	$(NO-OS)/util/no_os_list.c
 SRCS +=	$(PLATFORM_DRIVERS)/axi_io.c \
@@ -28,7 +29,7 @@ SRCS +=	$(PLATFORM_DRIVERS)/axi_io.c \
 	$(PLATFORM_DRIVERS)/xilinx_gpio.c \
 	$(PLATFORM_DRIVERS)/delay.c \
 	$(PLATFORM_DRIVERS)/xilinx_i2c.c \
-	$(PLATFORM_DRIVERS)/irq.c \
+	$(PLATFORM_DRIVERS)/xilinx_irq.c \
 	$(PLATFORM_DRIVERS)/no_os_timer.c
 SRCS +=$(PROJECT)/TX/HAL/COMMON/tx_hal.c \
 	$(PROJECT)/TX/HAL/WIRED/wrd_hal.c \
