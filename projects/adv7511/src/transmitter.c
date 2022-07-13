@@ -71,7 +71,7 @@
 /* more i2c access. Recommended 100-200 ms      */
 
 /*****************************************************************************/
-/**************************** Local Variables ********************************/
+/******************************* Variables ***********************************/
 /*****************************************************************************/
 static UINT32					HouseKeepingDelay;
 static TRANSMITTER_OPER_MODE	LastDetMode;
@@ -79,6 +79,8 @@ static UINT32					ModeChngCount;
 static struct axi_clkgen		*clk_gen;
 TRANSMITTER_OPER_PARAMS			TransmitterParm;
 UCHAR							MuteState;
+
+TRANSMITTER_TX_VARS	TransmitterTxVars;
 
 /**
  * @brief Link the transmitter clk_gen handler to the application one.
