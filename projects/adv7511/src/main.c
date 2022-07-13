@@ -377,6 +377,7 @@ int main()
 	gic_init.irq_ctrl_id = XPAR_INTC_0_DEVICE_ID;
 #endif
 	gic_init.extra = &gic_init_extra;
+	gic_init.platform_ops = &xil_irq_ops;
 
 	major_rev     = 1;
 	minor_rev     = 1;
