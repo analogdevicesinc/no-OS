@@ -58,7 +58,7 @@ typedef struct {
 	TX_STATUS_PKT	TxStatus;		/* State of TX hardware */
 } TRANSMITTER_TX_VARS;
 
-TRANSMITTER_TX_VARS	TransmitterTxVars;
+extern TRANSMITTER_TX_VARS	TransmitterTxVars;
 
 #define CurrMuteState			TransmitterTxVars.CurrMuteState
 #define TxStatus				TransmitterTxVars.TxStatus
