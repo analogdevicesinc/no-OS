@@ -13,6 +13,8 @@ TBLUE =  '\033[34m' # Green Text
 TRED =  '\033[31m' # Red Text	
 TWHITE = '\033[39m' #Withe text
 
+TIMEOUT_ERR = 31744
+
 description_help='''Build noos projects
 Examples:\n
 	Build all noos projects
@@ -90,7 +92,10 @@ def run_cmd(cmd):
 		return err
 	err = os.system(cmd + ' >> %s 2>&1' % log_file)
 	if err != 0:
-		log_err("ERROR")
+		if err == TIMEOUT_ERR:
+			log_err("TIMEOUT")
+		else:
+			log_err("ERROR")
 		log("See log %s " \
 		    "-- Use cat (linux) or type (windows) to see colored output"
 		    % log_file)
@@ -184,6 +189,7 @@ class BuildConfig:
 
 	def build(self):
 		global log_file
+		global ERR
 	
 		log_file = self._binary.replace('.elf', '.txt')
 		log_file = os.path.join(self.log_dir, log_file)
@@ -213,10 +219,24 @@ class BuildConfig:
 			else:
 				new_hdf = True
 		if self.platform == 'stm32':
+			err_copy = ERR
+			i = 0
 			err = run_cmd(cmd + ' reset')
 			if err != 0:
 				return err
+
 			err = run_cmd("timeout 200s " + cmd + ' VERBOSE=y -j%d all' % (multiprocessing.cpu_count() - 1))
+			if err != 0:
+				while i < 5:
+					i += 1
+					err = run_cmd(cmd + ' reset')
+					if err != 0:
+						return err
+					err = run_cmd("timeout 200s " + cmd + ' VERBOSE=y -j%d all' % (multiprocessing.cpu_count() - 1))
+					if err == 0:
+						break
+					if err_copy == 0:
+						ERR = 0
 			if err != 0:
 				return err
 		else:
