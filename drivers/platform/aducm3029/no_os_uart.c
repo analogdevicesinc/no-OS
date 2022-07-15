@@ -459,7 +459,6 @@ int32_t no_os_uart_remove(struct no_os_uart_desc *desc)
 		desc->rx_fifo = NULL;
 		no_os_irq_unregister_callback(aducm_desc->nvic, desc->irq_id,
 					      &aducm_desc->rx_callback);
-		no_os_irq_ctrl_remove(aducm_desc->nvic);
 	}
 	adi_uart_Close(aducm_desc->uart_handler);
 	free_desc_mem(desc);
