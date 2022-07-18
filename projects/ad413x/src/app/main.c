@@ -174,13 +174,18 @@ int main()
 	/* IIO device */
 	struct ad413x_iio_dev *adciio = NULL;
 	struct ad413x_iio_init_param adciio_init;
+	struct xil_gpio_irq_init_param *iio_gpio_irq_extra;
 
 	struct iio_data_buffer iio_ad413x_read_buff = {
 		.buff = ADC_DDR_BASEADDR,
 		.size = MAX_SIZE_BASE_ADDR,
 	};
 
+	iio_gpio_irq_extra = (struct xil_gpio_irq_init_param *)
+			     adciio_init.ad413x_ip.irq_desc->extra;
+
 	adciio_init.ad413x_ip = ad413x_dev_ip;
+	adciio_init->irq_desc = iio_gpio_irq_extra->parent_desc;
 	ret = ad413x_iio_init(&adciio, adciio_init);
 	if (ret < 0)
 		goto error;

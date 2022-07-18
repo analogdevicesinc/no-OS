@@ -8,7 +8,6 @@
 #include "iio_ad413x.h"
 #include "no_os_util.h"
 #include "ad413x.h"
-#include "gpio_irq_extra.h"
 
 struct scan_type ad413x_iio_scan_type = {
 	.sign = 'u',
@@ -436,16 +435,13 @@ int32_t ad413x_iio_init(struct ad413x_iio_dev **iio_dev,
 {
 	int32_t ret;
 	struct ad413x_iio_dev *desc;
-	struct xil_gpio_irq_init_param *gpio_irq_extra;
-	gpio_irq_extra = (struct xil_gpio_irq_init_param *)
-			 init_param.ad413x_ip.irq_desc->extra;
 
 	desc = (struct ad413x_iio_dev *)calloc(1, sizeof(*desc));
 	if (!desc)
 		return -1;
 
 	desc->iio_dev = &ad413x_iio_device;
-	desc->iio_dev->irq_desc = gpio_irq_extra->parent_desc;
+	desc->iio_dev->irq_desc = init_param.irq_desc;
 
 	ret = ad413x_init(&desc->ad413x_dev, init_param.ad413x_ip);
 	if (ret != 0)
