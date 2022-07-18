@@ -43,7 +43,7 @@
 
 #include <errno.h>
 #include <stdlib.h>
-#include "irq_extra.h"
+#include "maxim_irq.h"
 #include "maxim_uart.h"
 #include "mxc_sys.h"
 #include "mxc_errors.h"

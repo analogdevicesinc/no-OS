@@ -47,7 +47,7 @@
 #include "no_os_rtc.h"
 #include "no_os_util.h"
 #include "rtc.h"
-#include "rtc_extra.h"
+#include "maxim_rtc.h"
 #include "rtc_reva_regs.h"
 #include "mxc_errors.h"
 

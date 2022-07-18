@@ -41,7 +41,7 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include "tmr.h"
-#include "timer_extra.h"
+#include "maxim_timer.h"
 #include "no_os_error.h"
 #include "no_os_timer.h"
 #include "no_os_util.h"

@@ -45,9 +45,9 @@
 /******************************************************************************/
 #include "maxim_uart.h"
 #include "maxim_stdio.h"
-#include "i2c_extra.h"
-#include "irq_extra.h"
-#include "gpio_extra.h"
+#include "maxim_i2c.h"
+#include "maxim_irq.h"
+#include "maxim_gpio.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/

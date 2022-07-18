@@ -64,7 +64,7 @@
 #endif
 
 #if defined(MAXIM_PLATFORM)
-#include "irq_extra.h"
+#include "maxim_irq.h"
 #include "maxim_uart.h"
 #include "no_os_irq.h"
 #include "no_os_error.h"
