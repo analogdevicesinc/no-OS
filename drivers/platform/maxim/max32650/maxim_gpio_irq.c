@@ -51,8 +51,8 @@
 #include "no_os_irq.h"
 #include "no_os_gpio.h"
 
-#include "gpio_irq_extra.h"
-#include "irq_extra.h"
+#include "maxim_gpio_irq.h"
+#include "maxim_irq.h"
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/

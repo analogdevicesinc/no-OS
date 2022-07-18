@@ -1,11 +1,11 @@
 INCS += $(INCLUDE)/no_os_rtc.h
 
 INCS += $(PLATFORM_DRIVERS)/maxim_delay.h     \
-        $(PLATFORM_DRIVERS)/gpio_extra.h      \
-        $(PLATFORM_DRIVERS)/spi_extra.h       \
-        $(PLATFORM_DRIVERS)/gpio_irq_extra.h  \
-        $(PLATFORM_DRIVERS)/irq_extra.h       \
-        $(PLATFORM_DRIVERS)/rtc_extra.h       \
+        $(PLATFORM_DRIVERS)/maxim_gpio.h      \
+        $(PLATFORM_DRIVERS)/maxim_spi.h       \
+        $(PLATFORM_DRIVERS)/maxim_gpio_irq.h  \
+        $(PLATFORM_DRIVERS)/maxim_irq.h       \
+        $(PLATFORM_DRIVERS)/maxim_rtc.h       \
         $(PLATFORM_DRIVERS)/maxim_uart.h      \
         $(PLATFORM_DRIVERS)/maxim_stdio.h
 

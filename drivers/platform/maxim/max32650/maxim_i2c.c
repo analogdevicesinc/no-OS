@@ -45,7 +45,7 @@
 #include "no_os_error.h"
 #include "no_os_i2c.h"
 #include "no_os_util.h"
-#include "i2c_extra.h"
+#include "maxim_i2c.h"
 #include "mxc_errors.h"
 #include "max32650.h"
 

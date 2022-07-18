@@ -42,9 +42,9 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "irq_extra.h"
-#include "spi_extra.h"
-#include "gpio_extra.h"
+#include "maxim_irq.h"
+#include "maxim_spi.h"
+#include "maxim_gpio.h"
 #include "maxim_uart.h"
 #include "maxim_stdio.h"
 

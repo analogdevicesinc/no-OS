@@ -45,8 +45,8 @@
 #include "no_os_util.h"
 #include "gpio.h"
 #include "gpio_regs.h"
-#include "gpio_extra.h"
-#include "irq_extra.h"
+#include "maxim_gpio.h"
+#include "maxim_irq.h"
 #include "max78000.h"
 #include "mxc_errors.h"
 
