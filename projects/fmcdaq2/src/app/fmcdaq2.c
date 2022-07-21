@@ -1073,7 +1073,7 @@ int main(void)
 		.dest_addr = (uintptr_t)ADC_DDR_BASEADDR
 	};
 	axi_dmac_transfer_start(fmcdaq2.ad9680_dmac, &transfer_rx);
-	status = axi_dmac_transfer_wait_completion(fmcdaq2.ad9680_dmac, 500);
+	status = axi_dmac_transfer_wait_completion(fmcdaq2.ad9680_dmac, 1000);
 	if(status)
 		return status;
 #ifndef ALTERA_PLATFORM
