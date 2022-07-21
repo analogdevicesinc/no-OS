@@ -235,7 +235,7 @@ int32_t ad9523_calibrate(struct ad9523_dev *dev)
 			AD9523_READBACK_1,
 			&reg_data);
 	if ((reg_data & 0x1) != 0x0) {
-		printf("AD9523: VCO calibration failed (%x)!\n", reg_data);
+		printf("AD9523: VCO calibration failed (%#06lx)!\n", reg_data);
 		return(-1);
 	}
 
@@ -289,14 +289,16 @@ int32_t ad9523_status(struct ad9523_dev *dev)
 
 	ret = 0;
 	if ((reg_data & AD9523_READBACK_0_STAT_VCXO) != AD9523_READBACK_0_STAT_VCXO) {
-		printf("AD9523: VCXO status errors (%x)!\n", reg_data);
+		printf("AD9523: VCXO status errors (%#06lx)!\n", reg_data);
 		ret = -1;
 	}
+
 	if ((reg_data & AD9523_READBACK_0_STAT_PLL2_LD) !=
 	    AD9523_READBACK_0_STAT_PLL2_LD) {
-		printf("AD9523: PLL2 NOT locked (%x)!\n", reg_data);
+		printf("AD9523: PLL2 NOT locked (%#06lx)!\n", reg_data);
 		ret = -1;
 	}
+
 	return(ret);
 }
 
@@ -482,7 +484,7 @@ int32_t ad9523_setup(struct ad9523_dev **device,
 		return ret;
 
 	if (reg_data != 0xAD95) {
-		printf("AD9523: SPI write-verify failed (0x%X)!\n\r",
+		printf("AD9523: SPI write-verify failed (%#06lX)!\n\r",
 		       reg_data);
 		return -1;
 	}
