@@ -130,7 +130,7 @@ static int xilinx_xcvr_drp_read(struct xilinx_xcvr *xcvr,
 
 	ret = adxcvr_drp_read(xcvr->ad_xcvr, drp_port, reg, val);
 	if (ret) {
-		pr_err("%s: Failed to read reg %"PRIu32"-0x%"PRIX32": %"PRId32"\n",
+		pr_err("%s: Failed to read reg %"PRIu32"-0x%"PRIX32": %d\n",
 		       __func__, drp_port, reg, ret);
 
 		return -1;
@@ -153,14 +153,14 @@ static int xilinx_xcvr_drp_write(struct xilinx_xcvr *xcvr,
 
 	ret = adxcvr_drp_write(xcvr->ad_xcvr, drp_port, reg, val);
 	if (ret) {
-		pr_err("%s: Failed to write reg %"PRIu32"-0x%"PRIX32": %"PRId32"\n",
+		pr_err("%s: Failed to write reg %"PRIu32"-0x%"PRIX32": %d\n",
 		       __func__, drp_port, reg, ret);
 		return ret;
 	}
 
 	ret = xilinx_xcvr_drp_read(xcvr, drp_port, reg, &read_val);
 	if (ret) {
-		pr_err("%s: Failed to check reg %"PRIu32"-0x%"PRIX32": %"PRId32"\n",
+		pr_err("%s: Failed to check reg %"PRIu32"-0x%"PRIX32": %d\n",
 		       __func__, drp_port, reg, ret);
 		return ret;
 	}
