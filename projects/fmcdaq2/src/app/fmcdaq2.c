@@ -517,12 +517,12 @@ static int fmcdaq2_test(struct fmcdaq2_dev *dev,
 
 	status = axi_jesd204_rx_status_read(dev->ad9680_jesd);
 	if (status != 0) {
-		printf("axi_jesd204_rx_status_read() error: %"PRIi32"\n", status);
+		printf("axi_jesd204_rx_status_read() error: %d\n", status);
 	}
 
 	status = axi_jesd204_tx_status_read(dev->ad9144_jesd);
 	if (status != 0) {
-		printf("axi_jesd204_tx_status_read() error: %"PRIi32"\n", status);
+		printf("axi_jesd204_tx_status_read() error: %d\n", status);
 	}
 
 	status = ad9144_status(dev->ad9144_device);
