@@ -312,8 +312,8 @@ int adxcvr_clk_set_rate(struct adxcvr *xcvr,
 
 			ret = xilinx_xcvr_write_prog_div(&xcvr->xlx_xcvr,
 							 ADXCVR_DRP_PORT_CHANNEL(i),
-							 xcvr->tx_enable ? -1 : prog_div,
-							 xcvr->tx_enable ? prog_div : -1);
+							 xcvr->tx_enable ? -1 : (int32_t)prog_div,
+							 xcvr->tx_enable ? (int32_t)prog_div : -1);
 			if (ret < 0)
 				return ret;
 		}
