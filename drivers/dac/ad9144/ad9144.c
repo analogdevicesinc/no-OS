@@ -687,7 +687,6 @@ int32_t ad9144_short_pattern_test(struct ad9144_dev *dev,
 
 	uint32_t dac = 0;
 	uint32_t sample = 0;
-	uint8_t status = 0;
 	int32_t ret = 0;
 
 	for (dac = 0; dac < dev->num_converters; dac++) {
@@ -709,10 +708,9 @@ int32_t ad9144_short_pattern_test(struct ad9144_dev *dev,
 						      REG_SHORT_TPL_TEST_3,
 						      0x01, 0x00);
 			if (ret == -1)
-				printf("%s : short-pattern-test mismatch (0x%x, 0x%x 0x%x, 0x%x)!.\n",
+				printf("%s : short-pattern-test mismatch (%#06lx, %#06lx, %#06lx)!.\n",
 				       __func__, dac, sample,
-				       init_param->stpl_samples[dac][sample],
-				       status);
+				       init_param->stpl_samples[dac][sample]);
 		}
 	}
 	return 0;
