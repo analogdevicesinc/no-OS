@@ -1722,7 +1722,7 @@ int xilinx_xcvr_prbsel_enc_get(struct xilinx_xcvr *xcvr, uint32_t prbs,
 {
 	const uint8_t gthy_prbs_lut[] = {0, 7, 9, 15, 23, 31};
 	const uint8_t gtx_prbs_lut[] = {0, 7, 15, 23, 31};
-	int i;
+	unsigned int i;
 
 	switch (xcvr->type) {
 	case XILINX_XCVR_TYPE_S7_GTX2:
