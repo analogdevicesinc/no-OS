@@ -68,6 +68,10 @@
 #define AXI_INFO_FPGA_DEV_PACKAGE(info)	((info) & 0xff)
 #define AXI_INFO_FPGA_VOLTAGE(val)      ((val) & 0xffff)
 
+/**
+ * @enum xilinx_xcvr_type
+ * @brief Enum for GT type.
+ */
 enum xilinx_xcvr_type {
 	XILINX_XCVR_TYPE_S7_GTX2 = 2,
 	XILINX_XCVR_TYPE_US_GTH3 = 5,
@@ -75,6 +79,10 @@ enum xilinx_xcvr_type {
 	XILINX_XCVR_TYPE_US_GTY4 = 9,
 };
 
+/**
+ * @enum xilinx_xcvr_legacy_type
+ * @brief Enum for legacy GT type.
+ */
 enum xilinx_xcvr_legacy_type {
 	XILINX_XCVR_LEGACY_TYPE_S7_GTX2,
 	XILINX_XCVR_LEGACY_TYPE_US_GTH3,
@@ -82,12 +90,20 @@ enum xilinx_xcvr_legacy_type {
 	XILINX_XCVR_LEGACY_TYPE_US_GTY4 = 4,
 };
 
+/**
+ * @enum xilinx_xcvr_refclk_ppm
+ * @brief Enum for reference clock ppm.
+ */
 enum xilinx_xcvr_refclk_ppm {
 	PM_200,
 	PM_700,
 	PM_1250,
 };
 
+/**
+ * @enum axi_fgpa_technology
+ * @brief Enum for technology/generation of the FPGA device.
+ */
 enum axi_fgpa_technology {
 	AXI_FPGA_TECH_UNKNOWN = 0,
 	AXI_FPGA_TECH_SERIES7,
@@ -95,6 +111,10 @@ enum axi_fgpa_technology {
 	AXI_FPGA_TECH_ULTRASCALE_PLUS,
 };
 
+/**
+ * @enum axi_fpga_family
+ * @brief Enum for family variant of the FPGA device.
+ */
 enum axi_fpga_family {
 	AXI_FPGA_FAMILY_UNKNOWN = 0,
 	AXI_FPGA_FAMILY_ARTIX,
@@ -103,6 +123,10 @@ enum axi_fpga_family {
 	AXI_FPGA_FAMILY_ZYNQ,
 };
 
+/**
+ * @enum axi_fpga_speed_grade
+ * @brief Enum for FPGA's speed-grade.
+ */
 enum axi_fpga_speed_grade {
 	AXI_FPGA_SPEED_UNKNOWN	= 0,
 	AXI_FPGA_SPEED_1	= 10,
@@ -116,6 +140,10 @@ enum axi_fpga_speed_grade {
 	AXI_FPGA_SPEED_3	= 30,
 };
 
+/**
+ * @enum axi_fpga_dev_pack
+ * @brief Enum for device package.
+ */
 enum axi_fpga_dev_pack {
 	AXI_FPGA_DEV_UNKNOWN = 0,
 	AXI_FPGA_DEV_RF,
@@ -137,6 +165,10 @@ enum axi_fpga_dev_pack {
 	AXI_FPGA_DEV_FA,
 };
 
+/**
+ * @struct xilinx_xcvr
+ * @brief xilinx_xcvr parameters structure.
+ */
 struct xilinx_xcvr {
 	enum xilinx_xcvr_type type;
 	enum xilinx_xcvr_refclk_ppm refclk_ppm;
@@ -156,12 +188,20 @@ struct xilinx_xcvr {
 	uint32_t vco1_max; // kHz
 };
 
+/**
+ * @struct xilinx_xcvr_cpll_config
+ * @brief Structure holding CPLL configuration.
+ */
 struct xilinx_xcvr_cpll_config {
 	uint32_t refclk_div;
 	uint32_t fb_div_N1;
 	uint32_t fb_div_N2;
 };
 
+/**
+ * @struct xilinx_xcvr_qpll_config
+ * @brief Structure holding QPLL configuration.
+ */
 struct xilinx_xcvr_qpll_config {
 	uint32_t refclk_div;
 	uint32_t fb_div;
@@ -169,63 +209,85 @@ struct xilinx_xcvr_qpll_config {
 	uint32_t qty4_full_rate;
 };
 
+/* Encoding */
 #define ENC_8B10B		810
 #define ENC_66B64B		6664
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
+
+/** Configure the Clock Data Recovery circuit. */
 int xilinx_xcvr_configure_cdr(struct xilinx_xcvr *xcvr,
 			      uint32_t drp_port, uint32_t lane_rate, uint32_t out_div,
 			      bool lpm_enable);
+/** Selection of Low-Power mode (LPM) or Decision Feedback Equalization (DFE). */
 int xilinx_xcvr_configure_lpm_dfe_mode(struct xilinx_xcvr *xcvr,
 				       uint32_t drp_port, bool lpm);
 
+
+/** Configure Channel PLL. */
 int xilinx_xcvr_calc_cpll_config(struct xilinx_xcvr *xcvr,
 				 uint32_t refclk_khz, uint32_t lane_rate_khz,
 				 struct xilinx_xcvr_cpll_config *conf, uint32_t *out_div);
+/** Read Channel PLL configuration. */
 int xilinx_xcvr_cpll_read_config(struct xilinx_xcvr *xcvr,
 				 uint32_t drp_port, struct xilinx_xcvr_cpll_config *conf);
+/** Write Channel PLL configuration. */
 int xilinx_xcvr_cpll_write_config(struct xilinx_xcvr *xcvr,
 				  uint32_t drp_port, const struct xilinx_xcvr_cpll_config *conf);
+/** Calculate Channel PLL lane rate. */
 int xilinx_xcvr_cpll_calc_lane_rate(struct xilinx_xcvr *xcvr,
 				    uint32_t refclk_hz, const struct xilinx_xcvr_cpll_config *conf,
 				    uint32_t out_div);
 
+/** Calculate Quad PLL configuration parameters. */
 int xilinx_xcvr_calc_qpll_config(struct xilinx_xcvr *xcvr, uint32_t sys_clk_sel,
 				 uint32_t refclk_khz, uint32_t lane_rate_khz,
 				 struct xilinx_xcvr_qpll_config *conf, uint32_t *out_div);
+/** Read Quad PLL configuration. */
 int xilinx_xcvr_qpll_read_config(struct xilinx_xcvr *xcvr,
 				 uint32_t drp_port, uint32_t sys_clk_sel, struct xilinx_xcvr_qpll_config *conf);
+/** Write Quad PLL configuration. */
 int xilinx_xcvr_qpll_write_config(struct xilinx_xcvr *xcvr,
 				  uint32_t sys_clk_sel, uint32_t drp_port,
 				  const struct xilinx_xcvr_qpll_config *conf);
+/** Calculate Quad PLL lane rate. */
 int xilinx_xcvr_qpll_calc_lane_rate(struct xilinx_xcvr *xcvr,
 				    uint32_t refclk_hz, const struct xilinx_xcvr_qpll_config *conf,
 				    uint32_t out_div);
 
+/** Read TX/RXOUT_DIV value. */
 int xilinx_xcvr_read_out_div(struct xilinx_xcvr *xcvr, uint32_t drp_port,
 			     uint32_t *rx_out_div, uint32_t *tx_out_div);
+/** Write TX/RXOUT_DIV value. */
 int xilinx_xcvr_write_out_div(struct xilinx_xcvr *xcvr, uint32_t drp_port,
 			      int32_t rx_out_div, int32_t tx_out_div);
 
+/** Write RX_CLK25_DIV value. */
 int xilinx_xcvr_write_rx_clk25_div(struct xilinx_xcvr *xcvr,
 				   uint32_t drp_port, uint32_t div);
+/** Write RX_CLK25_DIV value. */
 int xilinx_xcvr_write_tx_clk25_div(struct xilinx_xcvr *xcvr,
 				   uint32_t drp_port, uint32_t div);
 
+/** Get PRBS generator test pattern control setting. */
 int xilinx_xcvr_prbsel_enc_get(struct xilinx_xcvr *xcvr,
 			       uint32_t prbs, bool reverse_lu);
 
+/** Get PRBS error counter value. */
 int xilinx_xcvr_prbs_err_cnt_get(struct xilinx_xcvr *xcvr,
 				 uint32_t drp_port, uint32_t *cnt);
 
+/** Set programmable divider ratio (RX|TX_PROGDIV_RATE), pre-divider value. */
 int xilinx_xcvr_write_prog_div_rate(struct xilinx_xcvr *xcvr,
 				    uint32_t drp_port, int32_t rx_rate, int32_t tx_rate);
 
+/** Write RX/TX programmable divider ratio. */
 int xilinx_xcvr_write_prog_div(struct xilinx_xcvr *xcvr,
 			       uint32_t drp_port, int32_t rx_prog_div, int32_t tx_prog_div);
 
+/** TX Asynchronous Gearbox. */
 int xilinx_xcvr_write_async_gearbox_en(struct xilinx_xcvr *xcvr,
 				       uint32_t drp_port, bool en);
 
