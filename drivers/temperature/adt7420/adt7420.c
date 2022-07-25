@@ -327,6 +327,7 @@ int32_t adt7420_reset(struct adt7420_dev *dev)
 			return -1;
 		}
 	}
+	no_os_mdelay(ADT7420_RESET_DELAY); /* device restart */
 	dev->resolution_setting = 0;
 	return 0;
 }
@@ -353,20 +354,20 @@ float adt7420_get_temperature(struct adt7420_dev *dev)
 	}
 
 	if (dev->resolution_setting) {
-		if (temp & 0x8000)
+		if (temp & ADT7420_16BIT_SIGN)
 			/*! Negative temperature */
-			temp_c = (float)((int32_t)temp - 65536) / 128;
+			temp_c = (float)((int32_t)temp - ADT7420_16BIT_NEG) / ADT7420_16BIT_DIV;
 		else
 			/*! Positive temperature */
-			temp_c = (float)temp / 128;
+			temp_c = (float)temp / ADT7420_16BIT_DIV;
 	} else {
 		temp >>= 3;
-		if (temp & 0x1000)
+		if (temp & ADT7420_13BIT_SIGN)
 			/*! Negative temperature */
-			temp_c = (float)((int32_t)temp - 8192) / 16;
+			temp_c = (float)((int32_t)temp - ADT7420_13BIT_NEG) / ADT7420_13BIT_DIV;
 		else
 			/*! Positive temperature */
-			temp_c = (float)temp / 16;
+			temp_c = (float)temp / ADT7420_13BIT_DIV;
 	}
 
 	return temp_c;

@@ -98,6 +98,14 @@
 #define ADT7420_CONFIG_OP_MODE(x)	((x) << 5) & (NO_OS_GENMASK(6,5))
 #define ADT7420_CONFIG_RESOLUTION	NO_OS_BIT(7)
 
+/* ADT7420 temperature conversion definitions */
+#define ADT7420_16BIT_NEG			NO_OS_BIT(16)
+#define ADT7420_16BIT_SIGN			0x8000
+#define ADT7420_16BIT_DIV			128
+#define ADT7420_13BIT_NEG			NO_OS_BIT(13)
+#define ADT7420_13BIT_SIGN			0x1000
+#define ADT7420_13BIT_DIV			16
+
 /* ADT7420_CONFIG_OP_MODE(x) options */
 #define ADT7420_OP_MODE_CONT_CONV	0
 #define ADT7420_OP_MODE_ONE_SHOT	1
@@ -106,6 +114,8 @@
 
 /* ADT7420 default ID */
 #define ADT7xxx_ID			0xC
+
+#define ADT7420_RESET_DELAY 		1
 
 
 /******************************************************************************/
