@@ -138,7 +138,7 @@ static int xilinx_xcvr_drp_read(struct xilinx_xcvr *xcvr,
 
 	ret = adxcvr_drp_read(xcvr->ad_xcvr, drp_port, reg, val);
 	if (ret) {
-		pr_err("%s: Failed to read reg %"PRIu32"-0x%"PRIX32": %d\n",
+		pr_err("%s: Failed to read reg %ld-%#06lx: %d\n",
 		       __func__, drp_port, reg, ret);
 
 		return -1;
@@ -164,26 +164,26 @@ static int xilinx_xcvr_drp_write(struct xilinx_xcvr *xcvr,
 	uint32_t read_val;
 	int ret;
 
-	pr_debug("%s: drp_port: %d, reg 0x%X, val 0x%X\n",
+	pr_debug("%s: drp_port: %ld, reg %#06lx, val %#06lx. \n",
 		 __func__, drp_port, reg, val);
 
 	ret = adxcvr_drp_write(xcvr->ad_xcvr, drp_port, reg, val);
 	if (ret) {
-		pr_err("%s: Failed to write reg %"PRIu32"-0x%"PRIX32": %d\n",
+		pr_err("%s: Failed to write reg %ld-%#06lx: %d\n",
 		       __func__, drp_port, reg, ret);
 		return ret;
 	}
 
 	ret = xilinx_xcvr_drp_read(xcvr, drp_port, reg, &read_val);
 	if (ret) {
-		pr_err("%s: Failed to check reg %"PRIu32"-0x%"PRIX32": %d\n",
+		pr_err("%s: Failed to check reg %ld-%#06lx: %d\n",
 		       __func__, drp_port, reg, ret);
 		return ret;
 	}
 
 	if (read_val != val)
-		pr_err("%s: read-write mismatch: reg 0x%"PRIX32","
-		       "val 0x%4"PRIX32", expected val 0x%4"PRIX32"\n",
+		pr_err("%s: read-write mismatch: reg %#06lx,"
+		       "val %#06lx, expected val %#06lx.\n",
 		       __func__, reg, read_val, val);
 
 	return 0;
@@ -589,7 +589,7 @@ int xilinx_xcvr_calc_cpll_config(struct xilinx_xcvr *xcvr,
 		}
 	}
 
-	pr_debug("CPLL: failed to find setting for lane rate %u kHz with reference clock %u kHz\n",
+	pr_debug("CPLL: failed to find setting for lane rate %lu kHz with reference clock %lu kHz\n",
 		 lane_rate_khz, refclk_khz);
 
 	return -EINVAL;
@@ -783,7 +783,7 @@ int xilinx_xcvr_calc_qpll_config(struct xilinx_xcvr *xcvr, uint32_t sys_clk_sel,
 		}
 	}
 
-	pr_debug("QPLL: failed to find setting for lane rate %u kHz with reference clock %u kHz\n",
+	pr_debug("QPLL: failed to find setting for lane rate %lu kHz with reference clock %lu kHz\n",
 		 lane_rate_khz, refclk_khz);
 
 	return -EINVAL;
