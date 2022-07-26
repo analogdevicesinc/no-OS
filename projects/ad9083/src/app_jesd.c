@@ -89,9 +89,8 @@ int32_t app_jesd_init(struct app_jesd **app, struct app_jesd_init *init_param)
 	struct adxcvr_init rx_adxcvr_init = {
 		.name = "rx_adxcvr",
 		.base = RX_XCVR_BASEADDR,
-		.sys_clk_sel = 3,
+		.sys_clk_sel = ADXCVR_SYS_CLK_QPLL0,
 		.out_clk_sel = 4,
-		.cpll_enable = 0,
 		.lpm_enable = 1,
 		.lane_rate_khz = init_param->lane_rate_khz,	/* LaneRate = (M/L)*NP*(10/8)*DataRate */
 		.ref_rate_khz = clk_hz[1] / 1000,		/* FPGA_CLK ref */

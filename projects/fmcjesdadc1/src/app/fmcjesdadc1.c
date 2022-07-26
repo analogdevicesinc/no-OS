@@ -140,10 +140,9 @@ int main(void)
 	struct adxcvr_init ad9250_xcvr_param = {
 		.name = "ad9250_xcvr",
 		.base = RX_XCVR_BASEADDR,
-		.sys_clk_sel = 0,
+		.sys_clk_sel = ADXCVR_SYS_CLK_CPLL,
 		.out_clk_sel = 2,
 		.lpm_enable = 0,
-		.cpll_enable = 1,
 		.ref_rate_khz = 245760,
 		.lane_rate_khz = 4915200,
 	};

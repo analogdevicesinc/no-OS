@@ -339,20 +339,18 @@ static int fmcdaq2_jesd_init(struct fmcdaq2_init_param *dev_init)
 	dev_init->ad9144_xcvr_param = (struct adxcvr_init) {
 		.name = "ad9144_xcvr",
 		.base = XPAR_AXI_AD9144_XCVR_BASEADDR,
-		.sys_clk_sel = 3,
+		.sys_clk_sel = ADXCVR_SYS_CLK_QPLL0,
 		.out_clk_sel = 4,
 		.lpm_enable = 1,
-		.cpll_enable = 0,
 		.ref_rate_khz = 500000,
 		.lane_rate_khz = 10000000,
 	};
 	dev_init->ad9680_xcvr_param = (struct adxcvr_init) {
 		.name = "ad9680_xcvr",
 		.base = XPAR_AXI_AD9680_XCVR_BASEADDR,
-		.sys_clk_sel = 0,
+		.sys_clk_sel = ADXCVR_SYS_CLK_CPLL,
 		.out_clk_sel = 4,
 		.lpm_enable = 1,
-		.cpll_enable = 1,
 		.ref_rate_khz = 500000,
 		.lane_rate_khz = 10000000
 	};
@@ -748,8 +746,8 @@ int fmcdaq2_reconfig(struct ad9144_init_param *p_ad9144_param,
 		p_ad9144_param->interpolation = 2;
 		p_ad9144_param->pll_enable = 1;
 		p_ad9144_param->pll_dac_frequency_khz = 2000000;
-		/* Disable CPLL for ad9680 */
-		ad9680_xcvr_param->cpll_enable = 0;
+		/* Set SYSCLK_SEL to QPLL */
+		ad9680_xcvr_param->sys_clk_sel = ADXCVR_SYS_CLK_QPLL0;
 		break;
 	case '4':
 		printf ("4 - ADC  600 MSPS; DAC  600 MSPS\n");
@@ -786,12 +784,11 @@ int fmcdaq2_reconfig(struct ad9144_init_param *p_ad9144_param,
 #endif
 #ifndef ALTERA_PLATFORM
 		ad9144_xcvr_param->lpm_enable = 0;
-		ad9144_xcvr_param->cpll_enable = 1;
-		ad9144_xcvr_param->sys_clk_sel = 0;
+		ad9144_xcvr_param->sys_clk_sel = ADXCVR_SYS_CLK_CPLL;
 		ad9144_xcvr_param->out_clk_sel = 4;
 
 		ad9680_xcvr_param->lpm_enable = 1;
-		ad9680_xcvr_param->cpll_enable = 1;
+		ad9680_xcvr_param->sys_clk_sel = ADXCVR_SYS_CLK_CPLL;
 		ad9680_xcvr_param->out_clk_sel = 4;
 #endif
 		break;
@@ -829,13 +826,12 @@ int fmcdaq2_reconfig(struct ad9144_init_param *p_ad9144_param,
 		ad9680_xcvr_param->parent_rate_khz = 250000;
 #endif
 #ifndef ALTERA_PLATFORM
-		ad9144_xcvr_param->sys_clk_sel = 0;
+		ad9144_xcvr_param->sys_clk_sel = ADXCVR_SYS_CLK_CPLL;
 		ad9144_xcvr_param->lpm_enable = 1;
-		ad9144_xcvr_param->cpll_enable = 1;
 		ad9144_xcvr_param->out_clk_sel = 4;
 
 		ad9680_xcvr_param->lpm_enable = 1;
-		ad9680_xcvr_param->cpll_enable = 1;
+		ad9680_xcvr_param->sys_clk_sel = ADXCVR_SYS_CLK_CPLL;
 		ad9680_xcvr_param->out_clk_sel = 4;
 #endif
 		break;
@@ -874,11 +870,11 @@ int fmcdaq2_reconfig(struct ad9144_init_param *p_ad9144_param,
 #endif
 #ifndef ALTERA_PLATFORM
 		ad9144_xcvr_param->lpm_enable = 0;
-		ad9144_xcvr_param->cpll_enable = 0;
+		ad9144_xcvr_param->sys_clk_sel = ADXCVR_SYS_CLK_QPLL0;
 		ad9144_xcvr_param->out_clk_sel = 4;
 
 		ad9680_xcvr_param->lpm_enable = 1;
-		ad9680_xcvr_param->cpll_enable = 1;
+		ad9680_xcvr_param->sys_clk_sel = ADXCVR_SYS_CLK_CPLL;
 		ad9680_xcvr_param->out_clk_sel = 4;
 #endif
 		break;
@@ -887,8 +883,8 @@ int fmcdaq2_reconfig(struct ad9144_init_param *p_ad9144_param,
 #ifndef ALTERA_PLATFORM
 		ad9144_xcvr_param->ref_rate_khz = 500000;
 		ad9680_xcvr_param->ref_rate_khz = 500000;
-		/* Disable CPLL for ad9680 */
-		ad9680_xcvr_param->cpll_enable = 0;
+		/* Set SYSCLK_SEL to QPLL */
+		ad9680_xcvr_param->sys_clk_sel = ADXCVR_SYS_CLK_QPLL0;
 #else
 		ad9144_xcvr_param->parent_rate_khz = 500000;
 		ad9680_xcvr_param->parent_rate_khz = 500000;
