@@ -133,7 +133,7 @@ int main(void)
 		.name = "ad9656_xcvr",
 		.base = XPAR_AXI_AD9656_RX_XCVR_BASEADDR,
 		.sys_clk_sel = ADXCVR_SYS_CLK_CPLL,
-		.out_clk_sel = 4,
+		.out_clk_sel = ADXCVR_REFCLK_DIV2,
 		.lpm_enable = 1,
 		.ref_rate_khz = 125000,
 		.lane_rate_khz = 2500000

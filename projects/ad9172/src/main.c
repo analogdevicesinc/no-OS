@@ -124,7 +124,7 @@ int main(void)
 		.name = "tx_adxcvr",
 		.base = TX_XCVR_BASEADDR,
 		.sys_clk_sel = ADXCVR_SYS_CLK_QPLL0,
-		.out_clk_sel = 4,
+		.out_clk_sel = ADXCVR_REFCLK_DIV2,
 		.lpm_enable = 1,
 		.lane_rate_khz = 7372800,	/* LaneRate = ( M/L)*NP*(10/8)*DataRate */
 		.ref_rate_khz = 368640,		/* FPGA_CLK, output 12 of HMC 7044 */
