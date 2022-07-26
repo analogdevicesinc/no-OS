@@ -502,7 +502,7 @@ int32_t adxcvr_init(struct adxcvr **ad_xcvr,
 	if (xcvr->lane_rate_khz && xcvr->ref_rate_khz) {
 		ret = adxcvr_clk_set_rate(xcvr, xcvr->lane_rate_khz, xcvr->ref_rate_khz);
 		if (ret)
-			goto err;//ToDo If it fails here, then you won't get its name in the caller, because following instr. not executed.
+			goto err;
 	}
 
 	*ad_xcvr = xcvr;
@@ -510,7 +510,6 @@ int32_t adxcvr_init(struct adxcvr **ad_xcvr,
 	return 0;
 
 err:
-	pr_err("%s: adxcvr_init() failed\n", xcvr->name);
 	free(xcvr);
 
 	return -1;
