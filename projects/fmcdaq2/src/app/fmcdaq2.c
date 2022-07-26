@@ -340,7 +340,7 @@ static int fmcdaq2_jesd_init(struct fmcdaq2_init_param *dev_init)
 		.name = "ad9144_xcvr",
 		.base = XPAR_AXI_AD9144_XCVR_BASEADDR,
 		.sys_clk_sel = ADXCVR_SYS_CLK_QPLL0,
-		.out_clk_sel = 4,
+		.out_clk_sel = ADXCVR_REFCLK_DIV2,
 		.lpm_enable = 1,
 		.ref_rate_khz = 500000,
 		.lane_rate_khz = 10000000,
@@ -349,7 +349,7 @@ static int fmcdaq2_jesd_init(struct fmcdaq2_init_param *dev_init)
 		.name = "ad9680_xcvr",
 		.base = XPAR_AXI_AD9680_XCVR_BASEADDR,
 		.sys_clk_sel = ADXCVR_SYS_CLK_CPLL,
-		.out_clk_sel = 4,
+		.out_clk_sel = ADXCVR_REFCLK_DIV2,
 		.lpm_enable = 1,
 		.ref_rate_khz = 500000,
 		.lane_rate_khz = 10000000
@@ -785,11 +785,11 @@ int fmcdaq2_reconfig(struct ad9144_init_param *p_ad9144_param,
 #ifndef ALTERA_PLATFORM
 		ad9144_xcvr_param->lpm_enable = 0;
 		ad9144_xcvr_param->sys_clk_sel = ADXCVR_SYS_CLK_CPLL;
-		ad9144_xcvr_param->out_clk_sel = 4;
+		ad9144_xcvr_param->out_clk_sel = ADXCVR_REFCLK_DIV2;
 
 		ad9680_xcvr_param->lpm_enable = 1;
 		ad9680_xcvr_param->sys_clk_sel = ADXCVR_SYS_CLK_CPLL;
-		ad9680_xcvr_param->out_clk_sel = 4;
+		ad9680_xcvr_param->out_clk_sel = ADXCVR_REFCLK_DIV2;
 #endif
 		break;
 	case '3':
@@ -828,11 +828,11 @@ int fmcdaq2_reconfig(struct ad9144_init_param *p_ad9144_param,
 #ifndef ALTERA_PLATFORM
 		ad9144_xcvr_param->sys_clk_sel = ADXCVR_SYS_CLK_CPLL;
 		ad9144_xcvr_param->lpm_enable = 1;
-		ad9144_xcvr_param->out_clk_sel = 4;
+		ad9144_xcvr_param->out_clk_sel = ADXCVR_REFCLK_DIV2;
 
 		ad9680_xcvr_param->lpm_enable = 1;
 		ad9680_xcvr_param->sys_clk_sel = ADXCVR_SYS_CLK_CPLL;
-		ad9680_xcvr_param->out_clk_sel = 4;
+		ad9680_xcvr_param->out_clk_sel = ADXCVR_REFCLK_DIV2;
 #endif
 		break;
 	case '2':
@@ -871,11 +871,11 @@ int fmcdaq2_reconfig(struct ad9144_init_param *p_ad9144_param,
 #ifndef ALTERA_PLATFORM
 		ad9144_xcvr_param->lpm_enable = 0;
 		ad9144_xcvr_param->sys_clk_sel = ADXCVR_SYS_CLK_QPLL0;
-		ad9144_xcvr_param->out_clk_sel = 4;
+		ad9144_xcvr_param->out_clk_sel = ADXCVR_REFCLK_DIV2;
 
 		ad9680_xcvr_param->lpm_enable = 1;
 		ad9680_xcvr_param->sys_clk_sel = ADXCVR_SYS_CLK_CPLL;
-		ad9680_xcvr_param->out_clk_sel = 4;
+		ad9680_xcvr_param->out_clk_sel = ADXCVR_REFCLK_DIV2;
 #endif
 		break;
 	default:

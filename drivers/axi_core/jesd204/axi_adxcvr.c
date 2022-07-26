@@ -87,8 +87,6 @@
 
 #define ADXCVR_BROADCAST				0xff
 
-#define ADXCVR_PROGDIV_CLK                5
-
 /**
  * @brief AXI ADXCVR Write
  * @param xcvr - Device Structure.

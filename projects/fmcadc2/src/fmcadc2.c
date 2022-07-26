@@ -109,7 +109,7 @@ int main(void)
 		.name = "ad9152_xcvr",
 		.base = RX_XCVR_BASEADDR,
 		.sys_clk_sel = ADXCVR_SYS_CLK_CPLL,
-		.out_clk_sel = 2,
+		.out_clk_sel = ADXCVR_OUTCLK_PMA,
 		.lpm_enable = 0,
 		.ref_rate_khz = 625000,
 		.lane_rate_khz = 6250000,

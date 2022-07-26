@@ -312,7 +312,7 @@ int main(void)
 		.name = "ad6676_xcvr",
 		.base = RX_XCVR_BASEADDR,
 		.sys_clk_sel = ADXCVR_SYS_CLK_CPLL,
-		.out_clk_sel = 4,
+		.out_clk_sel = ADXCVR_REFCLK_DIV2,
 		.lpm_enable = 0,
 		.ref_rate_khz = 200000,
 		.lane_rate_khz = 4000000,

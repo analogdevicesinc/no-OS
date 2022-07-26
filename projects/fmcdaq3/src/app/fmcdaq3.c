@@ -236,7 +236,7 @@ int main(void)
 		.name = "ad9152_xcvr",
 		.base = XPAR_AXI_AD9152_XCVR_BASEADDR,
 		.sys_clk_sel = ADXCVR_SYS_CLK_QPLL0,
-		.out_clk_sel = 4,
+		.out_clk_sel = ADXCVR_REFCLK_DIV2,
 		.lpm_enable = 1,
 		.ref_rate_khz = 616500,
 		.lane_rate_khz = 12330000,
@@ -246,7 +246,7 @@ int main(void)
 		.name = "ad9680_xcvr",
 		.base = XPAR_AXI_AD9680_XCVR_BASEADDR,
 		.sys_clk_sel = ADXCVR_SYS_CLK_CPLL,
-		.out_clk_sel = 4,
+		.out_clk_sel = ADXCVR_REFCLK_DIV2,
 		.lpm_enable = 1,
 		.ref_rate_khz = 616500,
 		.lane_rate_khz = 12330000

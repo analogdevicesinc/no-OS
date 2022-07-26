@@ -55,6 +55,13 @@
 #define ADXCVR_SYS_CLK_QPLL1		0x02
 #define ADXCVR_SYS_CLK_QPLL0		0x03
 
+// adi,out-clk-select
+#define ADXCVR_OUTCLK_PCS		1
+#define ADXCVR_OUTCLK_PMA		2
+#define ADXCVR_REFCLK		3
+#define ADXCVR_REFCLK_DIV2	4
+#define ADXCVR_PROGDIV_CLK	5 /* GTHE3, GTHE4, GTYE4 only */
+
 /**
  * @struct adxcvr
  * @brief ADI JESD204B/C AXI_ADXCVR Highspeed Transceiver Device structure.
