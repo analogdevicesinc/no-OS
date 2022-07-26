@@ -444,6 +444,9 @@ int32_t adxcvr_init(struct adxcvr **ad_xcvr,
 	xcvr->num_lanes = synth_conf & 0xff;
 	xcvr->qpll_enable = (synth_conf >> 20) & 1;
 
+	if ((!xcvr->qpll_enable) && (init->sys_clk_sel != ADXCVR_SYS_CLK_CPLL))
+		pr_info("%s: Using QPLL with previously defined settings.\n", xcvr->name);
+
 	xcvr_type = (synth_conf >> 16) & 0xf;
 
 	adxcvr_read(xcvr, AXI_REG_VERSION, &xcvr->xlx_xcvr.version);
