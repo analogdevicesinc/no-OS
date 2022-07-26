@@ -184,7 +184,7 @@ static int xilinx_xcvr_drp_write(struct xilinx_xcvr *xcvr,
 	if (read_val != val)
 		pr_err("%s: read-write mismatch: reg 0x%"PRIX32","
 		       "val 0x%4"PRIX32", expected val 0x%4"PRIX32"\n",
-		       __func__, reg, val, read_val);
+		       __func__, reg, read_val, val);
 
 	return 0;
 }
