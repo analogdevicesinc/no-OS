@@ -1,0 +1,10 @@
+{
+    "maxim": {
+      "dummy_example": {
+        "flags" : "DUMMY_EXAMPLE=y IIO_EXAMPLE=n TARGET=max32655"
+      },
+      "iio_example": {
+        "flags" : "DUMMY_EXAMPLE=n IIO_EXAMPLE=y TARGET=max32655"
+      }
+    }
+}
