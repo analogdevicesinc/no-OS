@@ -258,9 +258,8 @@ int main(void)
 	struct adxcvr_init rx_0_adxcvr_init = {
 		.name = "rx_0_adxcvr",
 		.base = RX_0_XCVR_BASEADDR,
-		.sys_clk_sel = 3,
+		.sys_clk_sel = ADXCVR_SYS_CLK_QPLL0,
 		.out_clk_sel = 3,
-		.cpll_enable = 0,
 		.lpm_enable = 1,
 		/* LaneRate = (M/L)*NP*(10/8)*DataRate */
 		.lane_rate_khz = 15000000,
@@ -271,9 +270,8 @@ int main(void)
 	struct adxcvr_init rx_1_adxcvr_init = {
 		.name = "rx_1_adxcvr",
 		.base = RX_1_XCVR_BASEADDR,
-		.sys_clk_sel = 3,
+		.sys_clk_sel = ADXCVR_SYS_CLK_QPLL0,
 		.out_clk_sel = 3,
-		.cpll_enable = 0,
 		.lpm_enable = 1,
 		/* LaneRate = (M/L)*NP*(10/8)*DataRate */
 		.lane_rate_khz = 15000000,

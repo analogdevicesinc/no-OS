@@ -414,7 +414,7 @@ int xilinx_xcvr_configure_lpm_dfe_mode(struct xilinx_xcvr *xcvr,
  * @brief Selection of QPLL clock.
  *
  * @param xcvr - The device structure.
- * @param sys_clk_sel - QPLL0 (0) / QPLL1 (1) selection.
+ * @param sys_clk_sel - QPLL0 (3) / QPLL1 (2) selection.
  *
  * @return ret - Result of the operation (0 - success, negative value
  *               for failure).
@@ -599,7 +599,7 @@ int xilinx_xcvr_calc_cpll_config(struct xilinx_xcvr *xcvr,
  * @brief Get QPLL nominal operating ranges.
  *
  * @param xcvr - The device structure.
- * @param sys_clk_sel - QPLL0 (0) / QPLL1 (1) selection.
+ * @param sys_clk_sel - QPLL0 (3) / QPLL1 (2) selection.
  * @param vco0_min - Frequency lower limit for vco0 (kHz).
  * @param vco0_max - Frequency upper limit for vco0 (kHz).
  * @param vco1_min - Frequency lower limit for vco1 (kHz).
@@ -662,7 +662,7 @@ static int xilinx_xcvr_get_qpll_vco_ranges(struct xilinx_xcvr *xcvr,
  * @brief Calculate QPLL configuration.
  *
  * @param xcvr - The device structure.
- * @param sys_clk_sel - QPLL0 (0) / QPLL1 (1) selection.
+ * @param sys_clk_sel - QPLL0 (3) / QPLL1 (2) selection.
  * @param refclk_khz - Reference clock (kHz).
  * @param lane_rate_khz - Line rate (kHz).
  * @param conf - QPLL configuration values.
@@ -1274,7 +1274,7 @@ int xilinx_xcvr_qpll_read_config(struct xilinx_xcvr *xcvr,
  * @brief Write QPLL configuration for GTH transceiver.
  *
  * @param xcvr - The device structure.
- * @param sys_clk_sel - QPLL0 (0) / QPLL1 (1) selection.
+ * @param sys_clk_sel - QPLL0 (3) / QPLL1 (2) selection.
  * @param drp_port - DRP selection.
  * @param conf - QPLL configuration values.
  *
@@ -1429,6 +1429,7 @@ static int xilinx_xcvr_gtx2_qpll_write_config(struct xilinx_xcvr *xcvr,
  * @brief Write QPLL configuration.
  *
  * @param xcvr - The device structure.
+ * @param sys_clk_sel  - QPLL0 (3) / QPLL1 (2) selection.
  * @param drp_port - DRP selection.
  * @param conf - QPLL configuration values.
  *

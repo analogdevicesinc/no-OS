@@ -235,10 +235,9 @@ int main(void)
 	struct adxcvr_init ad9152_xcvr_param = {
 		.name = "ad9152_xcvr",
 		.base = XPAR_AXI_AD9152_XCVR_BASEADDR,
-		.sys_clk_sel = 3,
+		.sys_clk_sel = ADXCVR_SYS_CLK_QPLL0,
 		.out_clk_sel = 4,
 		.lpm_enable = 1,
-		.cpll_enable = 0,
 		.ref_rate_khz = 616500,
 		.lane_rate_khz = 12330000,
 	};
@@ -246,10 +245,9 @@ int main(void)
 	struct adxcvr_init ad9680_xcvr_param = {
 		.name = "ad9680_xcvr",
 		.base = XPAR_AXI_AD9680_XCVR_BASEADDR,
-		.sys_clk_sel = 0,
+		.sys_clk_sel = ADXCVR_SYS_CLK_CPLL,
 		.out_clk_sel = 4,
 		.lpm_enable = 1,
-		.cpll_enable = 1,
 		.ref_rate_khz = 616500,
 		.lane_rate_khz = 12330000
 	};

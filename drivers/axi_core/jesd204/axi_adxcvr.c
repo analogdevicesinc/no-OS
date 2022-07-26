@@ -430,7 +430,10 @@ int32_t adxcvr_init(struct adxcvr **ad_xcvr,
 	xcvr->name = init->name;
 	xcvr->sys_clk_sel = init->sys_clk_sel;
 	xcvr->out_clk_sel = init->out_clk_sel;
-	xcvr->cpll_enable = init->cpll_enable;
+	if (init->sys_clk_sel == ADXCVR_SYS_CLK_CPLL)
+		xcvr->cpll_enable = 1;
+	else
+		xcvr->cpll_enable = 0;
 	xcvr->lpm_enable = init->lpm_enable;
 
 	xcvr->lane_rate_khz = init->lane_rate_khz;

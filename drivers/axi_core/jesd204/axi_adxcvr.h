@@ -47,8 +47,14 @@
 #include "xilinx_transceiver.h"
 
 /******************************************************************************/
-/*************************** Types Declarations *******************************/
+/********************** Macros and Types Declarations *************************/
 /******************************************************************************/
+
+// Selection of PLL reference clock source to drive the RXOUTCLK
+#define ADXCVR_SYS_CLK_CPLL			0x00
+#define ADXCVR_SYS_CLK_QPLL1		0x02
+#define ADXCVR_SYS_CLK_QPLL0		0x03
+
 /**
  * @struct adxcvr
  * @brief ADI JESD204B/C AXI_ADXCVR Highspeed Transceiver Device structure.
@@ -95,15 +101,13 @@ struct adxcvr_init {
 	/** Base address */
 	uint32_t base;
 	/** Select the PLL reference clock source to be forwarded to the OUTCLK
-	 * MUX: 0-CPLL, 3-QPLL0.
+	 * MUX: 0-CPLL, 2-QPLL1 (GTH and GTY), 3-QPLL0.
 	 */
 	uint32_t sys_clk_sel;
 	/** Controls the OUTCLKSEL multiplexer, controlling what will be
 	 * forwarded to OUTCLK pin.
 	 */
 	uint32_t out_clk_sel;
-	/** Enable CPLL for the transceiver */
-	bool cpll_enable;
 	/** Enable LPM mode for the transceiver. Otherwise use DFE. */
 	bool lpm_enable;
 	/** Lane rate in KHz */
