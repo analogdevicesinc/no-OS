@@ -37,8 +37,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef RTC_EXTRA_H_
-#define RTC_EXTRA_H_
+#ifndef MAXIM_RTC_H_
+#define MAXIM_RTC_H_
 
 #include <stdint.h>
 #include "no_os_rtc.h"

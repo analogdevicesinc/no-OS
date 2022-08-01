@@ -36,8 +36,8 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef _MAXIM_UART_STDIO_H_
-#define _MAXIM_UART_STDIO_H_
+#ifndef MAXIM_STDIO_H_
+#define MAXIM_STDIO_H_
 
 #include <sys/stat.h>
 #include "no_os_uart.h"

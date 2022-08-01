@@ -38,8 +38,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef I2C_EXTRA_H_
-#define I2C_EXTRA_H_
+#ifndef MAXIM_I2C_H_
+#define MAXIM_I2C_H_
 
 #include <stdint.h>
 #include "i2c_regs.h"
@@ -75,4 +75,4 @@ enum max_i2c_speed {
  */
 extern const struct no_os_i2c_platform_ops max_i2c_ops;
 
-#endif /* I2C_EXTRA_H_ */
+#endif /* MAXIM_I2C_H_ */

@@ -37,8 +37,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef GPIO_IRQ_EXTRA_H_
-#define GPIO_IRQ_EXTRA_H
+#ifndef MAXIM_GPIO_IRQ_H_
+#define MAXIM_GPIO_IRQ_H
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
