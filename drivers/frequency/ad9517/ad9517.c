@@ -41,6 +41,7 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include <stdlib.h>
+#include <errno.h>
 #include "no_os_delay.h"
 #include "ad9517.h"
 
@@ -78,6 +79,14 @@ int32_t ad9517_setup(struct ad9517_dev **device,
 
 	/* Initializes the SPI peripheral */
 	ret = no_os_spi_init(&dev->spi_desc, &init_param.spi_init);
+	if (ret)
+		return ret;
+
+	ret = ad9517_read(dev, AD9517_REG_PART_ID, &reg_value);
+	if (ret)
+		return ret;
+	if (reg_value != dev->ad9517_type)
+		return -EFAULT;
 
 	/* Configure serial port for long instructions and reset the serial
 	 * interface. */

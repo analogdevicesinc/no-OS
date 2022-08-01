@@ -344,10 +344,10 @@ struct ad9517_lvpecl_channel_spec {
 };
 
 enum ad9517_type {
-	AD9517_1,
-	AD9517_2,
-	AD9517_3,
-	AD9517_4
+	AD9517_1 = 0x51,
+	AD9517_2 = 0x91,
+	AD9517_3 = 0x53,
+	AD9517_4 = 0xd3
 };
 
 enum out_diff_voltage_options {
