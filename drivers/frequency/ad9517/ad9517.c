@@ -287,6 +287,7 @@ int32_t ad9517_read(struct ad9517_dev *dev,
 	int32_t ret = 0;
 	uint8_t tx_buffer[3] = {0, 0, 0};
 	uint8_t i = 0;
+	*reg_value = 0;
 
 	reg_address = AD9517_READ + AD9517_ADDR(reg_addr);
 	for(i = 0; i < AD9517_TRANSF_LEN(reg_addr); i++) {
