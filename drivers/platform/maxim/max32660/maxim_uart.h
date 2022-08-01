@@ -37,8 +37,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef _MAXIM_UART_H_
-#define _MAXIM_UART_H_
+#ifndef MAXIM_UART_H_
+#define MAXIM_UART_H_
 
 #include "uart.h"
 #include "no_os_irq.h"

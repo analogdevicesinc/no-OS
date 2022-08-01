@@ -37,8 +37,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef _TIMER_EXTRA_H
-#define _TIMER_EXTRA_H
+#ifndef MAXIM_TIMER_H
+#define MAXIM_TIMER_H
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
@@ -60,4 +60,4 @@
  */
 extern const struct no_os_timer_platform_ops max_timer_ops;
 
-#endif //_TIMER_EXTRA_H
+#endif //MAXIM_TIMER_H

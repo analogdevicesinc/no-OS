@@ -36,8 +36,8 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef IRQ_MAXIM_EXTRA_H
-#define IRQ_MAXIM_EXTRA_H
+#ifndef MAXIM_IRQ_H_
+#define MAXIM_IRQ_H_
 
 #include "max32655.h"
 #include "no_os_irq.h"

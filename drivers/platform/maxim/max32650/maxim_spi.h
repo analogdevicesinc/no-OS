@@ -37,8 +37,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef SPI_EXTRA_H_
-#define SPI_EXTRA_H_
+#ifndef MAXIM_SPI_H_
+#define MAXIM_SPI_H_
 
 #include <stdint.h>
 

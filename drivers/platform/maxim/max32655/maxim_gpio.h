@@ -36,8 +36,8 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef GPIO_EXTRA_H_
-#define GPIO_EXTRA_H_
+#ifndef MAXIM_GPIO_H_
+#define MAXIM_GPIO_H_
 
 #include <stdbool.h>
 #include <stdint.h>
