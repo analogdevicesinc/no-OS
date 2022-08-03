@@ -174,8 +174,8 @@ enum adaq8092_twoscomp {
 };
 
 /**
- * @struct adaq8092_init
- * @brief ADAQ8092 Device structure.
+ * @struct adaq8092_init_param
+ * @brief ADAQ8092 Device initialization parameters.
  */
 struct adaq8092_init_param {
 	/** Device communication descriptor */
