@@ -100,7 +100,7 @@ extern struct pico_spi_init_param adxrs290_spi_extra_ip;
 #define TIMER_OPS                   &pico_timer_ops
 
 /* ADXRS290 Timer trigger settings */
-#define ADXRS290_TIMER_IRQ_ID       0 /* For alarm0 */
+#define ADXRS290_TIMER_IRQ_ID       0 /* for TIMER_IRQ_0 */
 #define TIMER_IRQ_OPS               &pico_irq_ops
 #define ADADXRS290_TIMER_IRQ_EXTRA  NULL /* Not used for pico platform */
 

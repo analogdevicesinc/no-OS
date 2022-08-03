@@ -104,7 +104,7 @@ struct no_os_timer_init_param adxrs290_tip = {
 
 /* ADXRS290 timer irq init parameter */
 struct no_os_irq_init_param adxrs290_timer_irq_ip = {
-	.irq_ctrl_id = ADXRS290_TIMER_IRQ_ID,
+	.irq_ctrl_id = 0,
 	.platform_ops = TIMER_IRQ_OPS,
 	.extra = ADADXRS290_TIMER_IRQ_EXTRA,
 };
