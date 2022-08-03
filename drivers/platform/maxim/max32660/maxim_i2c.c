@@ -47,7 +47,7 @@
 #include "no_os_util.h"
 #include "maxim_i2c.h"
 #include "mxc_errors.h"
-#include "max32660l.h"
+#include "max32660.h"
 
 #define I2C_MASTER_MODE	1
 

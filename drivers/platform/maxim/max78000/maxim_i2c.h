@@ -45,7 +45,7 @@
 #include "i2c_regs.h"
 
 #ifndef MXC_I2C_GET_I2C
-#define MXC_I2C_GET_I2C (i)	((i) == 0 ? MXC_I2C0 :		\
+#define MXC_I2C_GET_I2C(i)	((i) == 0 ? MXC_I2C0 :		\
                                 (i) == 1 ? MXC_I2C1 :		\
                                 (i) == 2 ? MXC_I2C2 : 0)
 #endif
