@@ -151,11 +151,11 @@ int32_t ad9467_write(struct ad9467_dev *dev,
 		     uint16_t reg_addr,
 		     uint8_t reg_val);
 /*! Reads data from a register. */
-/*! Sets a bit or a group of bits inside a register without modifying the other
-    bits. */
 int32_t ad9467_read(struct ad9467_dev *dev,
 		    uint16_t reg_addr,
 		    uint8_t *reg_val);
+/*! Sets a bit or a group of bits inside a register without modifying the other
+    bits. */
 uint32_t ad9467_set_bits_to_reg(struct ad9467_dev *dev,
 				uint16_t register_address,
 				uint8_t bits_value,
