@@ -44,7 +44,9 @@
 #include "stdlib.h"
 #include "stdbool.h"
 #include "ad400x.h"
+#if !defined(USE_STANDARD_SPI)
 #include "spi_engine.h"
+#endif
 #include "no_os_error.h"
 
 /**
@@ -76,13 +78,17 @@ int32_t ad400x_spi_reg_read(struct ad400x_dev *dev,
 	buf[0] = AD400X_READ_COMMAND;
 	buf[1] = 0xFF;
 
+#if !defined(USE_STANDARD_SPI)
 	// register access runs at a lower clock rate (~2MHz)
 	spi_engine_set_speed(dev->spi_desc, dev->reg_access_speed);
+#endif
 
 	ret = no_os_spi_write_and_read(dev->spi_desc, buf, 2);
 	*reg_data = buf[1];
 
+#if !defined(USE_STANDARD_SPI)
 	spi_engine_set_speed(dev->spi_desc, dev->spi_desc->max_speed_hz);
+#endif
 
 	return ret;
 }
@@ -99,15 +105,19 @@ int32_t ad400x_spi_reg_write(struct ad400x_dev *dev,
 	int32_t ret;
 	uint8_t buf[2];
 
+#if !defined(USE_STANDARD_SPI)
 	// register access runs at a lower clock rate (~2MHz)
 	spi_engine_set_speed(dev->spi_desc, dev->reg_access_speed);
+#endif
 
 	buf[0] = AD400X_WRITE_COMMAND;
 	buf[1] = reg_data | AD400X_RESERVED_MSK;
 
 	ret = no_os_spi_write_and_read(dev->spi_desc, buf, 2);
 
+#if !defined(USE_STANDARD_SPI)
 	spi_engine_set_speed(dev->spi_desc, dev->spi_desc->max_speed_hz);
+#endif
 
 	return ret;
 }
@@ -144,12 +154,15 @@ int32_t ad400x_init(struct ad400x_dev **device,
 	struct ad400x_dev *dev;
 	int32_t ret;
 	uint8_t data = 0;
+
+#if !defined(USE_STANDARD_SPI)
 	struct spi_engine_init_param *spi_eng_init_param;
 
 	if (!init_param)
 		return -1;
 
 	spi_eng_init_param = init_param->spi_init.extra;
+#endif
 
 	dev = (struct ad400x_dev *)malloc(sizeof(*dev));
 	if (!dev)
@@ -159,10 +172,13 @@ int32_t ad400x_init(struct ad400x_dev **device,
 	if (ret < 0)
 		goto error;
 
+#if !defined(USE_STANDARD_SPI)
 	dev->reg_access_speed = init_param->reg_access_speed;
 	dev->dev_id = init_param->dev_id;
 
 	spi_engine_set_transfer_width(dev->spi_desc, 16);
+#endif
+
 	ad400x_spi_reg_read(dev, &data);
 
 	data |= AD400X_TURBO_MODE(init_param->turbo_mode) |
@@ -173,7 +189,9 @@ int32_t ad400x_init(struct ad400x_dev **device,
 	if (ret < 0)
 		goto error;
 
+#if !defined(USE_STANDARD_SPI)
 	spi_engine_set_transfer_width(dev->spi_desc, spi_eng_init_param->data_width);
+#endif
 
 	*device = dev;
 
