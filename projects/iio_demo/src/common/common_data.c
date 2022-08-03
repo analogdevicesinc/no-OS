@@ -94,7 +94,7 @@ struct no_os_timer_init_param adc_demo_tip = {
 
 /* Adc Demo timer irq init parameter */
 struct no_os_irq_init_param adc_demo_timer_irq_ip = {
-	.irq_ctrl_id = ADC_DEMO_TIMER_IRQ_ID,
+	.irq_ctrl_id = 0,
 	.platform_ops = TIMER_IRQ_OPS,
 	.extra = ADC_DEMO_TIMER_IRQ_EXTRA,
 };
@@ -124,7 +124,7 @@ struct no_os_timer_init_param dac_demo_tip = {
 
 /* Dac Demo timer irq init parameter */
 struct no_os_irq_init_param dac_demo_timer_irq_ip = {
-	.irq_ctrl_id = DAC_DEMO_TIMER_IRQ_ID,
+	.irq_ctrl_id = 0,
 	.platform_ops = TIMER_IRQ_OPS,
 	.extra = DAC_DEMO_TIMER_IRQ_EXTRA,
 };
