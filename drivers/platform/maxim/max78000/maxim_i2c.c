@@ -40,6 +40,7 @@
 
 #include <stdint.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "i2c.h"
 #include "no_os_error.h"
@@ -95,7 +96,6 @@ static int32_t max_i2c_init(struct no_os_i2c_desc **desc,
 	int32_t ret;
 	struct max_i2c_extra *max_i2c;
 	mxc_i2c_regs_t *i2c_regs;
-	uint32_t current_freq = 0;
 	uint32_t freq;
 
 	if (!desc || !param)
@@ -202,7 +202,6 @@ static int32_t max_i2c_write(struct no_os_i2c_desc *desc,
 	mxc_i2c_req_t req;
 	struct max_i2c_extra *max_i2c_desc;
 	void *ptr;
-	int32_t ret;
 
 	if (!desc || !desc->extra)
 		return -EINVAL;

@@ -60,7 +60,7 @@ static uint32_t nb_created_desc[MXC_I2C_INSTANCES];
  */
 void I2C0_IRQHandler(void)
 {
-	MXC_I2C_AsyncHandler(MXC_I2C0);
+	MXC_I2C_AsyncHandler(MXC_I2C0_BUS0);
 }
 
 /**
@@ -69,13 +69,13 @@ void I2C0_IRQHandler(void)
  */
 void I2C1_IRQHandler(void)
 {
-	MXC_I2C_AsyncHandler(MXC_I2C1);
+	MXC_I2C_AsyncHandler(MXC_BASE_I2C1_BUS0);
 }
 
 #ifdef MXC_I2C2
 void I2C2_IRQHandler(void)
 {
-	MXC_I2C_AsyncHandler(MXC_I2C2);
+	MXC_I2C_AsyncHandler(MXC_BASE_I2C2_BUS0);
 }
 #endif
 
