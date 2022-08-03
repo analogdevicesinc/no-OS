@@ -40,7 +40,13 @@
 #ifndef SRC_AD400X_H_
 #define SRC_AD400X_H_
 
+#include <stdbool.h>
+
+#if !defined(USE_STANDARD_SPI)
 #include "spi_engine.h"
+#else
+#include "no_os_spi.h"
+#endif
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
