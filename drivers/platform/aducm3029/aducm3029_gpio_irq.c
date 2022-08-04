@@ -379,7 +379,8 @@ static int aducm_gpio_irq_trigger_level_set(struct no_os_irq_ctrl_desc *desc,
 /**
  * @brief Enable a specific interrupt
  * @param desc - the GPIO irq descriptor.
- * @param irq_id - the pin on which the interrupt signal will be.
+ * @param irq_id - In case of XINT, values ranging from ADI_XINT_EVENT_INT0 to ADI_XINT_EVENT_INT3,
+ *                 otherwise, not used.
  * @return 0 in case of success, errno error codes otherwise.
  */
 static int aducm_gpio_irq_enable(struct no_os_irq_ctrl_desc *desc,
@@ -397,12 +398,28 @@ static int aducm_gpio_irq_enable(struct no_os_irq_ctrl_desc *desc,
 		return -EINVAL;
 
 	if (desc->irq_ctrl_id == ADUCM_XINT_SOFT_CTRL) {
+		if(irq_id > ADI_XINT_EVENT_INT3)
+			return -EINVAL;
+
 		ret = no_os_list_read_find(extra->actions, (void **)&action,
 					   &action_key);
 		if (ret)
 			return -ENODEV;
 
-		return adi_xint_EnableIRQ(irq_id, action->trig_lv);
+		switch(action->trig_lv) {
+		case NO_OS_IRQ_LEVEL_LOW:
+			return adi_xint_EnableIRQ(irq_id, ADI_XINT_IRQ_LOW_LEVEL);
+		case NO_OS_IRQ_LEVEL_HIGH:
+			return adi_xint_EnableIRQ(irq_id, ADI_XINT_IRQ_HIGH_LEVEL);
+		case NO_OS_IRQ_EDGE_FALLING:
+			return adi_xint_EnableIRQ(irq_id, ADI_XINT_IRQ_FALLING_EDGE);
+		case NO_OS_IRQ_EDGE_RISING:
+			return adi_xint_EnableIRQ(irq_id, ADI_XINT_IRQ_RISING_EDGE);
+		case NO_OS_IRQ_EDGE_BOTH:
+			return adi_xint_EnableIRQ(irq_id, ADI_XINT_IRQ_EITHER_EDGE);
+		default:
+			return -EINVAL;
+		}
 	}
 	NVIC_EnableIRQ(id);
 
@@ -413,7 +430,8 @@ static int aducm_gpio_irq_enable(struct no_os_irq_ctrl_desc *desc,
 /**
  * @brief Disable a specific interrupt
  * @param desc - the GPIO irq descriptor.
- * @param irq_id - the pin on which the interrupt signal will be.
+ * @param irq_id - In case of XINT, values ranging from ADI_XINT_EVENT_INT0 to ADI_XINT_EVENT_INT3,
+ *                 otherwise, not used.
  * @return 0 in case of success, errno error codes otherwise.
  */
 static int aducm_gpio_irq_disable(struct no_os_irq_ctrl_desc *desc,
@@ -426,8 +444,12 @@ static int aducm_gpio_irq_disable(struct no_os_irq_ctrl_desc *desc,
 	if (!desc)
 		return -EINVAL;
 
-	if (desc->irq_ctrl_id == ADUCM_XINT_SOFT_CTRL)
+	if (desc->irq_ctrl_id == ADUCM_XINT_SOFT_CTRL) {
+		if(irq_id > ADI_XINT_EVENT_INT3)
+			return -EINVAL;
 		return adi_xint_DisableIRQ(irq_id);
+	}
+
 	NVIC_DisableIRQ(id);
 
 	return 0;
@@ -476,6 +498,51 @@ static int aducm_gpio_irq_global_disable(struct no_os_irq_ctrl_desc *desc)
 }
 
 /**
+ * @brief Set the interrupt priority for the current GPIO port.
+ * @param desc - GPIO interrupt controller descriptor.
+ * @param irq_id - In case of XINT, values ranging from ADI_XINT_EVENT_INT0 to ADI_XINT_EVENT_INT3,
+ *                 otherwise, not used.
+ * @param priority_level - The interrupt priority level.
+ * @return 0
+ */
+static int aducm_gpio_irq_set_priority(struct no_os_irq_ctrl_desc *desc,
+				       uint32_t irq_id,
+				       uint32_t priority_level)
+{
+	switch (desc->irq_ctrl_id) {
+	case ADUCM_XINT_SOFT_CTRL:
+		/* available values for irq-id are 0-3 equivalent to ADI_XINT_EVENT_INT0-ADI_XINT_EVENT_INT3 */
+		switch(irq_id) {
+		case ADI_XINT_EVENT_INT0:
+			NVIC_SetPriority(XINT_EVT0_IRQn, priority_level);
+			break;
+		case ADI_XINT_EVENT_INT1:
+			NVIC_SetPriority(XINT_EVT1_IRQn, priority_level);
+			break;
+		case ADI_XINT_EVENT_INT2:
+			NVIC_SetPriority(XINT_EVT2_IRQn, priority_level);
+			break;
+		case ADI_XINT_EVENT_INT3:
+			NVIC_SetPriority(XINT_EVT3_IRQn, priority_level);
+			break;
+		default:
+			return -EINVAL;
+		}
+		break;
+	case ADUCM_GPIO_A_GROUP_SOFT_CTRL:
+		NVIC_SetPriority(ADI_GPIO_INTA_IRQ, priority_level);
+		break;
+	case ADUCM_GPIO_B_GROUP_SOFT_CTRL:
+		NVIC_SetPriority(ADI_GPIO_INTB_IRQ, priority_level);
+		break;
+	default:
+		return -EINVAL;
+	}
+
+	return 0;
+}
+
+/**
  * @brief maxim specific GPIO IRQ platform ops structure
  */
 const struct no_os_irq_platform_ops aducm_gpio_irq_ops = {
@@ -487,5 +554,6 @@ const struct no_os_irq_platform_ops aducm_gpio_irq_ops = {
 	.trigger_level_set = (int32_t (*)())aducm_gpio_irq_trigger_level_set,
 	.global_enable = (int32_t (*)())aducm_gpio_irq_global_enable,
 	.global_disable = (int32_t (*)())aducm_gpio_irq_global_disable,
+	.set_priority = (int32_t (*)())(aducm_gpio_irq_set_priority),
 	.remove = (int32_t (*)())aducm_gpio_irq_ctrl_remove
 };
