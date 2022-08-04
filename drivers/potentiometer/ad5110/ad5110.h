@@ -72,14 +72,14 @@
 /******************************************************************************/
 struct ad5110_dev {
 	/* I2C */
-	no_os_i2c_desc	*i2c_desc;
+	struct no_os_i2c_desc	*i2c_desc;
 	/* Device Settings */
 	uint8_t ad5110_dev_addr;
 };
 
 struct ad5110_init_param {
 	/* I2C */
-	no_os_i2c_init_param	i2c_init;
+	struct no_os_i2c_init_param	i2c_init;
 	/* Device Settings */
 	uint8_t ad5110_dev_addr;
 };

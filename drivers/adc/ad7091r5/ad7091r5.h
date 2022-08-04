@@ -203,7 +203,7 @@ enum ad7091r5_limit {
  */
 struct ad7091r5_init_param {
 	/* I2C */
-	no_os_i2c_init_param		*i2c_init;
+	struct no_os_i2c_init_param		*i2c_init;
 	/** RESET GPIO initialization structure. */
 	struct no_os_gpio_init_param	*gpio_resetn;
 };

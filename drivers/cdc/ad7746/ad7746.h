@@ -187,7 +187,7 @@ struct ad7746_init_param {
 };
 
 struct ad7746_dev {
-	no_os_i2c_desc *i2c_dev;
+	struct no_os_i2c_desc *i2c_dev;
 	enum ad7746_id id;
 	uint8_t buf[AD7746_NUM_REGISTERS + 1u];
 	struct ad7746_setup setup;

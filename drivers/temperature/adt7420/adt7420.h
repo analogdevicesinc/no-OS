@@ -144,7 +144,7 @@ enum adt7420_type {
 
 struct adt7420_dev {
 	/* I2C */
-	no_os_i2c_desc	*i2c_desc;
+	struct no_os_i2c_desc	*i2c_desc;
 	/* SPI */
 	struct no_os_spi_desc	*spi_desc;
 	/* Device Settings */
@@ -157,7 +157,7 @@ struct adt7420_dev {
 struct adt7420_init_param {
 	union interface_type {
 		/* I2C */
-		no_os_i2c_init_param	i2c_init;
+		struct no_os_i2c_init_param	i2c_init;
 		/* SPI */
 		struct no_os_spi_init_param	spi_init;
 	} interface_init;

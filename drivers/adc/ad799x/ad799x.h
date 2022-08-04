@@ -70,14 +70,14 @@ enum ad799x_type {
 
 struct ad799x_dev {
 	/* I2C */
-	no_os_i2c_desc	*i2c_desc;
+	struct no_os_i2c_desc	*i2c_desc;
 	/* Device Settings */
 	uint8_t         bits_number;
 };
 
 struct ad799x_init_param {
 	/* I2C */
-	no_os_i2c_init_param		i2c_init;
+	struct no_os_i2c_init_param		i2c_init;
 	/* Device Settings */
 	enum ad799x_type	part_number;
 };

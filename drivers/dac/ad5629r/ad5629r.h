@@ -148,7 +148,7 @@ struct ad5629r_chip_info {
 
 struct ad5629r_dev {
 	/* I2C */
-	no_os_i2c_desc		*i2c_desc;
+	struct no_os_i2c_desc		*i2c_desc;
 	/* SPI */
 	struct no_os_spi_desc		*spi_desc;
 	/* GPIO */
@@ -160,7 +160,7 @@ struct ad5629r_dev {
 
 struct ad5629r_init_param {
 	/* I2C */
-	no_os_i2c_init_param	i2c_init;
+	struct no_os_i2c_init_param	i2c_init;
 	/* SPI */
 	struct no_os_spi_init_param	spi_init;
 	/* GPIO */
