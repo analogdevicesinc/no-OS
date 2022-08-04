@@ -78,16 +78,14 @@ struct no_os_irq_init_param adxrs290_gpio_irq_ip = {
 	.extra = GPIO_IRQ_EXTRA,
 };
 
-const struct iio_hw_trig_cb_info gpio_cb_info = {
-	.event = NO_OS_EVT_GPIO,
-	.peripheral = NO_OS_GPIO_IRQ,
-	.handle = ADXRS290_GPIO_CB_HANDLE,
-};
-
 struct iio_hw_trig_init_param adxrs290_gpio_trig_ip = {
 	.irq_id = ADXRS290_GPIO_TRIG_IRQ_ID,
 	.irq_trig_lvl = NO_OS_IRQ_LEVEL_HIGH,
-	.cb_info = gpio_cb_info,
+	.cb_info = {
+		.event = NO_OS_EVT_GPIO,
+		.peripheral = NO_OS_GPIO_IRQ,
+		.handle = ADXRS290_GPIO_CB_HANDLE,
+	},
 	.name = ADXRS290_GPIO_TRIG_NAME,
 };
 #endif
