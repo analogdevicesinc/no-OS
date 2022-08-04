@@ -61,7 +61,7 @@
 int32_t altera_spi_init(struct no_os_spi_desc **desc,
 			const struct no_os_spi_init_param *param)
 {
-	no_os_spi_desc *descriptor;
+	struct no_os_spi_desc *descriptor;
 	struct altera_spi_desc *altera_descriptor;
 	struct altera_spi_init_param *altera_param;
 

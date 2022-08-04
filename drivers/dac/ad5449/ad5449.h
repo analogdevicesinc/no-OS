@@ -75,7 +75,7 @@ struct ad5449_chip_info {
 
 struct ad5449_dev {
 	/* SPI */
-	no_os_spi_desc		*spi_desc;
+	struct no_os_spi_desc	*spi_desc;
 	/* GPIO */
 	struct no_os_gpio_desc	*gpio_ldac;
 	struct no_os_gpio_desc	*gpio_clr;
@@ -86,7 +86,7 @@ struct ad5449_dev {
 
 struct ad5449_init_param {
 	/* SPI */
-	no_os_spi_init_param	spi_init;
+	struct no_os_spi_init_param	spi_init;
 	/* GPIO */
 	struct no_os_gpio_init_param	gpio_ldac;
 	struct no_os_gpio_init_param	gpio_clr;

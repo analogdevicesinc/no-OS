@@ -121,7 +121,7 @@ struct ad5592r_init_param {
 struct ad5592r_dev {
 	const struct ad5592r_rw_ops *ops;
 	no_os_i2c_desc *i2c;
-	no_os_spi_desc *spi;
+	struct no_os_spi_desc *spi;
 	uint16_t spi_msg;
 	uint8_t num_channels;
 	uint16_t cached_dac[8];

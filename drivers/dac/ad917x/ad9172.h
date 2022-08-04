@@ -46,7 +46,7 @@
 
 typedef struct ad9172_dev {
 	/* SPI */
-	no_os_spi_desc		*spi_desc;
+	struct no_os_spi_desc		*spi_desc;
 	/* GPIO */
 	struct no_os_gpio_desc	*gpio_reset;
 	struct no_os_gpio_desc	*gpio_txen0;
@@ -84,7 +84,7 @@ struct ad9172_state {
 
 typedef struct ad9172_init_param {
 	/* SPI */
-	no_os_spi_init_param *spi_init;
+	struct no_os_spi_init_param *spi_init;
 	/* GPIO */
 	struct no_os_gpio_init_param gpio_txen0;
 	struct no_os_gpio_init_param gpio_txen1;

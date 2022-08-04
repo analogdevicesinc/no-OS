@@ -155,7 +155,7 @@ struct ad7689_init_param {
 	/** ADC specific parameters */
 	struct ad7689_config config;
 	/** SPI initialization parameters */
-	no_os_spi_init_param spi_init;
+	struct no_os_spi_init_param spi_init;
 };
 
 struct ad7689_dev {
@@ -166,7 +166,7 @@ struct ad7689_dev {
 	/** AD7689 configs (configs[1] - in use, configs[0] - will be in use during next transaction) */
 	struct ad7689_config configs[2];
 	/** SPI descriptor*/
-	no_os_spi_desc *spi_desc;
+	struct no_os_spi_desc *spi_desc;
 };
 
 int32_t ad7689_init(struct ad7689_dev **dev,

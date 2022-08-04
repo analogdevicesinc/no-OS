@@ -237,7 +237,7 @@ enum ad469x_pin_pairing {
  */
 struct ad469x_init_param {
 	/* SPI */
-	no_os_spi_init_param		*spi_init;
+	struct no_os_spi_init_param		*spi_init;
 #if !defined(USE_STANDARD_SPI)
 	/* SPI module offload init */
 	struct spi_engine_offload_init_param *offload_init_param;
@@ -282,7 +282,7 @@ struct ad469x_init_param {
  */
 struct ad469x_dev {
 	/* SPI descriptor */
-	no_os_spi_desc		*spi_desc;
+	struct no_os_spi_desc		*spi_desc;
 #if !defined(USE_STANDARD_SPI)
 	/* Clock gen for hdl design structure */
 	struct axi_clkgen	*clkgen;

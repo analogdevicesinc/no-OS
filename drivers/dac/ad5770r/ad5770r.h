@@ -297,7 +297,7 @@ struct ad5770r_alarm_cfg {
 
 struct ad5770r_dev {
 	/* SPI */
-	no_os_spi_desc				*spi_desc;
+	struct no_os_spi_desc			*spi_desc;
 	/* GPIO */
 	/** note: the GPIOs are optional */
 	struct no_os_gpio_desc			*gpio_alarm_n;
@@ -323,7 +323,7 @@ struct ad5770r_dev {
 
 struct ad5770r_init_param {
 	/* SPI */
-	no_os_spi_init_param				spi_init;
+	struct no_os_spi_init_param			spi_init;
 	/* GPIO */
 	struct no_os_gpio_init_param			*gpio_alarm_n;
 	struct no_os_gpio_init_param			*gpio_reset_n;

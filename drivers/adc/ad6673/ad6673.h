@@ -522,7 +522,7 @@ enum shadow_registers {
 
 struct ad6673_dev {
 	/* SPI */
-	no_os_spi_desc		*spi_desc;
+	struct no_os_spi_desc		*spi_desc;
 	/* Device Settings */
 	struct ad6673_state ad6673_st;
 	int32_t shadow_regs[SHADOW_REGISTER_COUNT];
@@ -530,7 +530,7 @@ struct ad6673_dev {
 
 struct ad6673_init_param {
 	/* SPI */
-	no_os_spi_init_param	spi_init;
+	struct no_os_spi_init_param	spi_init;
 };
 
 /******************************************************************************/

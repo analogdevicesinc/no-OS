@@ -218,7 +218,7 @@
 
 struct ad9739a_dev {
 	/* SPI */
-	no_os_spi_desc *spi_desc;
+	struct no_os_spi_desc *spi_desc;
 };
 
 /**
@@ -227,7 +227,7 @@ struct ad9739a_dev {
  */
 struct ad9739a_init_param {
 	/** SPI Initialization parameters */
-	no_os_spi_init_param	spi_init;
+	struct no_os_spi_init_param	spi_init;
 	/** magnitude of the offset for the DACCLK_P. */
 	uint8_t		common_mode_voltage_dacclk_p;
 	/** magnitude of the offset for the DACCLK_N. */

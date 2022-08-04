@@ -184,7 +184,7 @@ union adxl355_comm_init_param {
 	/** I2C Initialization structure. */
 	no_os_i2c_init_param i2c_init;
 	/** SPI Initialization structure. */
-	no_os_spi_init_param spi_init;
+	struct no_os_spi_init_param spi_init;
 } ;
 
 /**
@@ -249,7 +249,7 @@ union adxl355_comm_desc {
 	/** I2C Descriptor */
 	no_os_i2c_desc *i2c_desc;
 	/** SPI Descriptor */
-	no_os_spi_desc *spi_desc;
+	struct no_os_spi_desc *spi_desc;
 };
 
 /**

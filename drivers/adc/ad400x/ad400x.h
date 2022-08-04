@@ -71,7 +71,7 @@ extern const uint16_t ad400x_device_resol[];
 
 struct ad400x_dev {
 	/* SPI */
-	no_os_spi_desc *spi_desc;
+	struct no_os_spi_desc *spi_desc;
 	/* Register access speed */
 	uint32_t reg_access_speed;
 	/* Device Settings */
@@ -80,7 +80,7 @@ struct ad400x_dev {
 
 struct ad400x_init_param {
 	/* SPI */
-	no_os_spi_init_param spi_init;
+	struct no_os_spi_init_param spi_init;
 	/* Register access speed */
 	uint32_t reg_access_speed;
 	/* Device Settings */

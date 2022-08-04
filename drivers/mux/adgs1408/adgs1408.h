@@ -154,7 +154,7 @@ struct adgs1408_rrobin_config {
 
 struct adgs1408_dev {
 	/* SPI */
-	no_os_spi_desc	*spi_desc;
+	struct no_os_spi_desc	*spi_desc;
 	/* Device Settings */
 	enum adgs1408_state	crc_en;
 	enum adgs1408_state	burst_mode_en;
@@ -166,7 +166,7 @@ struct adgs1408_dev {
 
 struct adgs1408_init_param {
 	/* SPI */
-	no_os_spi_init_param	spi_init;
+	struct no_os_spi_init_param	spi_init;
 	/* Device Settings */
 	enum adgs1408_state	crc_en;
 	enum adgs1408_state	burst_mode_en;

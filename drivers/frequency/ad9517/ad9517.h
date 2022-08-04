@@ -393,7 +393,7 @@ struct ad9517_state {
 
 struct ad9517_dev {
 	/* SPI */
-	no_os_spi_desc	    *spi_desc;
+	struct no_os_spi_desc	    *spi_desc;
 	/* Device Settings */
 	struct ad9517_state ad9517_st;
 	enum ad9517_type	ad9517_type;
@@ -401,7 +401,7 @@ struct ad9517_dev {
 
 struct ad9517_init_param {
 	/* SPI */
-	no_os_spi_init_param	    spi_init;
+	struct no_os_spi_init_param    spi_init;
 	/* Device Settings */
 	struct ad9517_state ad9517_st;
 	enum ad9517_type	ad9517_type;

@@ -139,7 +139,7 @@ enum ltc268x_device_id {
 };
 
 struct ltc268x_dev {
-	no_os_spi_desc			*spi_desc;
+	struct no_os_spi_desc			*spi_desc;
 	enum ltc268x_device_id   dev_id;
 	uint16_t			pwd_dac_setting;
 	uint16_t			dither_toggle_en;
@@ -155,7 +155,7 @@ struct ltc268x_dev {
 
 struct ltc268x_init_param {
 	/* SPI */
-	no_os_spi_init_param 			spi_init;
+	struct no_os_spi_init_param 			spi_init;
 	enum ltc268x_device_id          dev_id;
 	uint16_t			pwd_dac_setting;
 	uint16_t			dither_toggle_en;

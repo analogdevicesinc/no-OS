@@ -202,7 +202,7 @@
  */
 struct adxl362_dev {
 	/** SPI Descriptor */
-	no_os_spi_desc	*spi_desc;
+	struct no_os_spi_desc	*spi_desc;
 	/** Measurement Range: */
 	uint8_t		selected_range;
 };
@@ -213,7 +213,7 @@ struct adxl362_dev {
  */
 struct adxl362_init_param {
 	/** SPI Initialization structure. */
-	no_os_spi_init_param	spi_init;
+	struct no_os_spi_init_param	spi_init;
 };
 
 /******************************************************************************/
