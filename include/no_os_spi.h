@@ -61,7 +61,7 @@
  * @enum no_os_spi_mode
  * @brief SPI configuration for clock phase and polarity.
  */
-typedef enum no_os_spi_mode {
+enum no_os_spi_mode {
 	/** Data on rising, shift out on falling */
 	NO_OS_SPI_MODE_0 = (0 | 0),
 	/** Data on falling, shift out on rising */
@@ -70,18 +70,18 @@ typedef enum no_os_spi_mode {
 	NO_OS_SPI_MODE_2 = (NO_OS_SPI_CPOL | 0),
 	/** Data on rising, shift out on falling */
 	NO_OS_SPI_MODE_3 = (NO_OS_SPI_CPOL | NO_OS_SPI_CPHA)
-} no_os_spi_mode;
+};
 
 /**
  * @enum no_os_spi_bit_order
  * @brief SPI configuration for bit order (MSB/LSB).
  */
-typedef enum no_os_spi_bit_order {
+enum no_os_spi_bit_order {
 	/** Most-significant bit (MSB) first */
 	NO_OS_SPI_BIT_ORDER_MSB_FIRST = 0,
 	/** Least-significant bit (LSB) first */
 	NO_OS_SPI_BIT_ORDER_LSB_FIRST = 1,
-} no_os_spi_bit_order;
+};
 
 /**
  * @struct no_os_spi_msg_list
@@ -109,7 +109,7 @@ struct no_os_spi_platform_ops ;
  * @struct no_os_spi_init_param
  * @brief Structure holding the parameters for SPI initialization
  */
-typedef struct no_os_spi_init_param {
+struct no_os_spi_init_param {
 	/** Device ID */
 	uint32_t	device_id;
 	/** maximum transfer speed */
@@ -123,13 +123,13 @@ typedef struct no_os_spi_init_param {
 	const struct no_os_spi_platform_ops *platform_ops;
 	/**  SPI extra parameters (device specific) */
 	void		*extra;
-} no_os_spi_init_param;
+};
 
 /**
  * @struct no_os_spi_desc
  * @brief Structure holding SPI descriptor.
  */
-typedef struct no_os_spi_desc {
+struct no_os_spi_desc {
 	/** Device ID */
 	uint32_t	device_id;
 	/** maximum transfer speed */
@@ -143,7 +143,7 @@ typedef struct no_os_spi_desc {
 	const struct no_os_spi_platform_ops *platform_ops;
 	/**  SPI extra parameters (device specific) */
 	void		*extra;
-} no_os_spi_desc;
+};
 
 /**
  * @struct no_os_spi_platform_ops

@@ -348,7 +348,7 @@ struct adf4106_chip_info {
 
 struct adf4106_dev {
 	/* SPI */
-	no_os_spi_desc		*spi_desc;
+	struct no_os_spi_desc		*spi_desc;
 	/* GPIO */
 	struct no_os_gpio_desc	*gpio_le;
 	struct no_os_gpio_desc	*gpio_ce;
@@ -367,7 +367,7 @@ struct adf4106_dev {
 
 struct adf4106_init_param {
 	/* SPI */
-	no_os_spi_init_param	spi_init;
+	struct no_os_spi_init_param	spi_init;
 	/* GPIO */
 	struct no_os_gpio_init_param		gpio_le;
 	struct no_os_gpio_init_param		gpio_ce;

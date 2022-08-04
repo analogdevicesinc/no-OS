@@ -345,7 +345,7 @@ enum ad7124_registers {
  */
 struct ad7124_dev {
 	/* SPI */
-	no_os_spi_desc		*spi_desc;
+	struct no_os_spi_desc		*spi_desc;
 	/* Device Settings */
 	struct ad7124_st_reg	*regs;
 	int16_t use_crc;
@@ -355,7 +355,7 @@ struct ad7124_dev {
 
 struct ad7124_init_param {
 	/* SPI */
-	no_os_spi_init_param		*spi_init;
+	struct no_os_spi_init_param		*spi_init;
 	/* Device Settings */
 	struct ad7124_st_reg	*regs;
 	int16_t spi_rdy_poll_cnt;

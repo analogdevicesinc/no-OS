@@ -100,12 +100,12 @@
 
 struct ad5628_dev {
 	/* SPI */
-	no_os_spi_desc	*spi_desc;
+	struct no_os_spi_desc	*spi_desc;
 };
 
 struct ad5628_init_param {
 	/* SPI */
-	no_os_spi_init_param	spi_init;
+	struct no_os_spi_init_param	spi_init;
 };
 
 /******************************************************************************/

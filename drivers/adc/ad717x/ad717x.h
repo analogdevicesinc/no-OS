@@ -264,7 +264,7 @@ typedef struct {
  */
 typedef struct {
 	/* SPI */
-	no_os_spi_desc		*spi_desc;
+	struct no_os_spi_desc		*spi_desc;
 	/* Device Settings */
 	ad717x_st_reg		*regs;
 	uint8_t			num_regs;
@@ -289,7 +289,7 @@ typedef struct {
 
 typedef struct {
 	/* SPI */
-	no_os_spi_init_param		spi_init;
+	struct no_os_spi_init_param		spi_init;
 	/* Device Settings */
 	ad717x_st_reg		*regs;
 	uint8_t			num_regs;

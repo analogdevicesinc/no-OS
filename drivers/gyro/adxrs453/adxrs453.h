@@ -69,12 +69,12 @@
 
 struct adxrs453_dev {
 	/* SPI */
-	no_os_spi_desc	*spi_desc;
+	struct no_os_spi_desc	*spi_desc;
 };
 
 struct adxrs453_init_param {
 	/* SPI */
-	no_os_spi_init_param	spi_init;
+	struct no_os_spi_init_param	spi_init;
 };
 
 /******************************************************************************/

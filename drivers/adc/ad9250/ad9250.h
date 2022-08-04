@@ -519,7 +519,7 @@ enum shadow_registers {
 
 struct ad9250_dev {
 	/* SPI */
-	no_os_spi_desc		*spi_desc;
+	struct no_os_spi_desc		*spi_desc;
 	/* Device Settings */
 	struct ad9250_state ad9250_st;
 	int32_t shadow_regs[SHADOW_REGISTER_COUNT];
@@ -527,7 +527,7 @@ struct ad9250_dev {
 
 struct ad9250_init_param {
 	/* SPI */
-	no_os_spi_init_param	spi_init;
+	struct no_os_spi_init_param	spi_init;
 	/* Device Settings */
 	struct ad9250_state ad9250_st_init;
 };

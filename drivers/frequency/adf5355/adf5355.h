@@ -208,7 +208,7 @@ enum adf5355_mux_out_sel {
  * @brief  Device descriptor.
  */
 struct adf5355_dev {
-	no_os_spi_desc	*spi_desc;
+	struct no_os_spi_desc	*spi_desc;
 	enum adf5355_device_id      dev_id;
 	bool                        all_synced;
 	uint32_t                    regs[ADF5355_REG_NUM];
@@ -249,7 +249,7 @@ struct adf5355_dev {
  * @brief  Structure containing the initialization parameters.
  */
 struct adf5355_init_param {
-	no_os_spi_init_param	*spi_init;
+	struct no_os_spi_init_param	*spi_init;
 	enum adf5355_device_id      dev_id;
 	uint64_t                    freq_req;
 	uint8_t                     freq_req_chan;

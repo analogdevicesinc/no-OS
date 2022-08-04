@@ -476,7 +476,7 @@ enum ad9523_out_frequencies {
 
 struct ad9523_dev {
 	/* SPI */
-	no_os_spi_desc			*spi_desc;
+	struct no_os_spi_desc		*spi_desc;
 	/* Device Settings */
 	struct ad9523_state		ad9523_st;
 	struct ad9523_platform_data	*pdata;
@@ -484,7 +484,7 @@ struct ad9523_dev {
 
 struct ad9523_init_param {
 	/* SPI */
-	no_os_spi_init_param	spi_init;
+	struct no_os_spi_init_param	spi_init;
 	/* Device Settings */
 	struct ad9523_platform_data	*pdata;
 };

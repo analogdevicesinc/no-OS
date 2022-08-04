@@ -146,7 +146,7 @@ struct adt7420_dev {
 	/* I2C */
 	no_os_i2c_desc	*i2c_desc;
 	/* SPI */
-	no_os_spi_desc	*spi_desc;
+	struct no_os_spi_desc	*spi_desc;
 	/* Device Settings */
 	enum adt7420_type active_device;
 	/* Device Settings */
@@ -159,7 +159,7 @@ struct adt7420_init_param {
 		/* I2C */
 		no_os_i2c_init_param	i2c_init;
 		/* SPI */
-		no_os_spi_init_param	spi_init;
+		struct no_os_spi_init_param	spi_init;
 	} interface_init;
 	/* Device Settings */
 	uint8_t		resolution_setting;

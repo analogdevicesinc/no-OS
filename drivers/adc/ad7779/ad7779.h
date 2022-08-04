@@ -241,7 +241,7 @@ typedef enum {
 
 typedef struct {
 	/* SPI */
-	no_os_spi_desc		*spi_desc;
+	struct no_os_spi_desc		*spi_desc;
 	/* GPIO */
 	struct no_os_gpio_desc	*gpio_reset;
 	struct no_os_gpio_desc	*gpio_mode0;
@@ -276,7 +276,7 @@ typedef struct {
 
 typedef struct {
 	/* SPI */
-	no_os_spi_init_param		spi_init;
+	struct no_os_spi_init_param		spi_init;
 	/* GPIO */
 	struct no_os_gpio_init_param	gpio_reset;
 	struct no_os_gpio_init_param	gpio_mode0;

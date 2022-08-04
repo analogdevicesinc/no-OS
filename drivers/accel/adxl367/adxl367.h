@@ -431,7 +431,7 @@ struct adxl367_dev {
 	/** Communication type - I2C or SPI. */
 	enum adxl367_comm_type		comm_type;
 	/** SPI Descriptor */
-	no_os_spi_desc			*spi_desc;
+	struct no_os_spi_desc		*spi_desc;
 	/** I2C Descriptor */
 	no_os_i2c_desc  		*i2c_desc;
 	/** Depending on ASEL pin, can be 0x53 or 0x1D. Only for I2C Comm. */
@@ -458,7 +458,7 @@ struct adxl367_init_param {
 	/** Communication type - I2C or SPI. */
 	enum adxl367_comm_type 		comm_type;
 	/** SPI Initialization structure. */
-	no_os_spi_init_param		spi_init;
+	struct no_os_spi_init_param	spi_init;
 	/** I2C Initialization structure. */
 	no_os_i2c_init_param    	i2c_init;
 	/** Depending on ASEL pin, can be 0x53 or 0x1D. Only for I2C Comm. */

@@ -1362,7 +1362,7 @@
 /******************************************************************************/
 struct ad9144_dev {
 	/* SPI */
-	no_os_spi_desc *spi_desc;
+	struct no_os_spi_desc *spi_desc;
 
 	uint32_t sample_rate_khz;
 	uint8_t num_converters;
@@ -1371,7 +1371,7 @@ struct ad9144_dev {
 
 struct ad9144_init_param {
 	/* SPI */
-	no_os_spi_init_param	spi_init;
+	struct no_os_spi_init_param	spi_init;
 	/* Device Settings */
 	uint8_t		spi3wire; // set device spi intereface 3/4 wires
 	uint8_t		interpolation; // interpolation factor

@@ -130,12 +130,12 @@
 /******************************************************************************/
 struct ad9467_dev {
 	/* SPI */
-	no_os_spi_desc	*spi_desc;
+	struct no_os_spi_desc	*spi_desc;
 };
 
 struct ad9467_init_param {
 	/* SPI */
-	no_os_spi_init_param	spi_init;
+	struct no_os_spi_init_param	spi_init;
 };
 
 /******************************************************************************/
