@@ -48,6 +48,7 @@
 #include "aducm3029_gpio.h"
 #include "spi_extra.h"
 #include "irq_extra.h"
+#include "aducm3029_gpio_irq.h"
 #include "aducm3029_timer.h"
 #include "no_os_timer.h"
 
@@ -60,7 +61,7 @@
 #define UART_BAUDRATE	115200
 
 #define SPI_DEVICE_ID   1
-#define SPI_BAUDRATE    1000000
+#define SPI_BAUDRATE    4000000
 #define SPI_CS          0
 #define SPI_OPS         &aducm_spi_ops
 #define SPI_EXTRA       &adxrs290_spi_extra_ip
@@ -71,7 +72,12 @@
 #define GPIO_EXTRA              NULL
 
 #ifdef IIO_TRIGGER_EXAMPLE
-#error IIO_TRIGGER_EXAMPLE is not supported on ADUCM3029 platform for adxrs290-pmdz project.
+#define GPIO_IRQ_ID     ADUCM_XINT_SOFT_CTRL /* External interrupt used (to be able to use high level trigger) */
+#define GPIO_IRQ_OPS    &aducm_gpio_irq_ops
+#define GPIO_IRQ_EXTRA  NULL /* Not used for aducm3029 platform */
+
+#define ADXRS290_GPIO_TRIG_IRQ_ID    ADI_XINT_EVENT_INT1 /* for EVAL-ADICUP3029 pin number 16 is connected to XINT1 */
+#define ADXRS290_GPIO_CB_HANDLE      NULL /* Not used for aducm3029 platform */
 #endif
 
 #ifdef IIO_TIMER_TRIGGER_EXAMPLE
@@ -84,7 +90,7 @@ extern struct aducm_timer_init_param adxrs290_timer_extra_ip;
 #define TIMER_OPS                   &aducm3029_timer_ops
 
 /* ADXRS290 Timer trigger settings */
-#define ADXRS290_TIMER_IRQ_ID       0 /* Not used */
+#define ADXRS290_TIMER_IRQ_ID       TMR1_EVT_IRQn /* IRQ id for TMR1 */
 #define TIMER_IRQ_OPS               &aducm_irq_ops
 #define ADADXRS290_TIMER_IRQ_EXTRA  NULL /* Not used */
 
