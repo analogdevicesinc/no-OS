@@ -61,7 +61,7 @@ struct no_os_i2c_platform_ops ;
  * @struct no_os_i2c_init_param
  * @brief Structure holding the parameters for I2C initialization.
  */
-typedef struct no_os_i2c_init_param {
+struct no_os_i2c_init_param {
 	/** Device ID */
 	uint32_t	device_id;
 	/** I2C maximum transfer speed supported */
@@ -72,13 +72,13 @@ typedef struct no_os_i2c_init_param {
 	const struct no_os_i2c_platform_ops *platform_ops;
 	/** I2C extra parameters (device specific parameters) */
 	void		*extra;
-} no_os_i2c_init_param;
+};
 
 /**
  * @struct no_os_i2c_desc
  * @brief Structure holding I2C descriptor
  */
-typedef struct no_os_i2c_desc {
+struct no_os_i2c_desc {
 	/** Device ID */
 	uint32_t	device_id;
 	/** I2C maximum transfer speed supported */
@@ -89,7 +89,7 @@ typedef struct no_os_i2c_desc {
 	const struct no_os_i2c_platform_ops *platform_ops;
 	/** I2C extra parameters (device specific parameters) */
 	void		*extra;
-} no_os_i2c_desc;
+};
 
 /**
  * @struct no_os_i2c_platform_ops

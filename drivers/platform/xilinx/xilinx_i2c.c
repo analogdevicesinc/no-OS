@@ -161,7 +161,7 @@ int32_t xil_i2c_init(struct no_os_i2c_desc **desc,
 		     const struct no_os_i2c_init_param *param)
 {
 	int32_t		ret;
-	no_os_i2c_desc	*idesc;
+	struct no_os_i2c_desc	*idesc;
 	xil_i2c_desc	*xdesc;
 	xil_i2c_init_param	*xinit;
 

@@ -382,7 +382,7 @@ enum bit_action {
  */
 union adxl313_comm_init_param {
 	/** I2C Initialization structure. */
-	no_os_i2c_init_param i2c_init;
+	struct no_os_i2c_init_param i2c_init;
 	/** SPI Initialization structure. */
 	struct no_os_spi_init_param spi_init;
 } ;
@@ -482,7 +482,7 @@ union adxl313_act_inact_ctl_flags {
  */
 union adxl313_comm_desc {
 	/** I2C Descriptor */
-	no_os_i2c_desc *i2c_desc;
+	struct no_os_i2c_desc *i2c_desc;
 	/** SPI Descriptor */
 	struct no_os_spi_desc *spi_desc;
 };
