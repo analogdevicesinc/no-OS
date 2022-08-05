@@ -19,7 +19,7 @@ SRCS += $(NO-OS)/util/no_os_util.c \
 	$(DRIVERS)/platform/$(PLATFORM)/no_os_rtc.c \
 	$(DRIVERS)/platform/$(PLATFORM)/delay.c \
 	$(NO-OS)/util/no_os_lf256fifo.c \
-	$(DRIVERS)/platform/$(PLATFORM)/no_os_uart.c
+	$(DRIVERS)/platform/$(PLATFORM)/$(PLATFORM)_uart.c
 
 INCS += $(INCLUDE)/no_os_spi.h \
 	$(INCLUDE)/no_os_irq.h \
@@ -28,7 +28,7 @@ INCS += $(INCLUDE)/no_os_spi.h \
 	$(DRIVERS)/platform/$(PLATFORM)/spi_extra.h \
 	$(DRIVERS)/platform/$(PLATFORM)/irq_extra.h \
 	$(DRIVERS)/platform/$(PLATFORM)/aducm3029_gpio.h \
-	$(DRIVERS)/platform/$(PLATFORM)/uart_extra.h \
+	$(DRIVERS)/platform/$(PLATFORM)/$(PLATFORM)_uart.h \
 	$(DRIVERS)/platform/$(PLATFORM)/rtc_extra.h \
 	$(DRIVERS)/platform/$(PLATFORM)/$(PLATFORM)_timer.h
 

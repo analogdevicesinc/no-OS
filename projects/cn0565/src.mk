@@ -58,7 +58,7 @@ SRCS += $(PLATFORM_DRIVERS)/delay.c \
 	$(PLATFORM_DRIVERS)/aducm3029_irq.c \
 	$(PLATFORM_DRIVERS)/aducm3029_gpio_irq.c \
 	$(PLATFORM_DRIVERS)/no_os_rtc.c \
-	$(PLATFORM_DRIVERS)/no_os_uart.c \
+	$(PLATFORM_DRIVERS)/aducm3029_uart.c \
 	$(PLATFORM_DRIVERS)/uart_stdio.c \
 	$(PLATFORM_DRIVERS)/platform_init.c
 
@@ -74,7 +74,7 @@ INCS +=	$(INCLUDE)/no_os_delay.h \
 	$(PLATFORM_DRIVERS)/spi_extra.h \
 	$(PLATFORM_DRIVERS)/irq_extra.h \
 	$(PLATFORM_DRIVERS)/timer_extra.h \
-	$(PLATFORM_DRIVERS)/uart_extra.h \
+	$(PLATFORM_DRIVERS)/aducm3029_uart.h \
 	$(PLATFORM_DRIVERS)/aducm3029_gpio.h \
 	$(PLATFORM_DRIVERS)/platform_init.h
 endif

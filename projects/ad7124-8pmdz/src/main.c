@@ -47,7 +47,6 @@
 #include "no_os_irq.h"
 #include "irq_extra.h"
 #include "no_os_uart.h"
-#include "uart_extra.h"
 #include "iio_ad7124.h"
 #include "ad7124_regs.h"
 #include "spi_extra.h"
@@ -58,6 +57,10 @@
 #include <drivers/pwr/adi_pwr.h>
 #ifdef XILINX_PLATFORM
 #include <xil_cache.h>
+#include "uart_extra.h"
+#endif
+#ifdef ADUCM_PLATFORM
+#include "aducm3029_uart.h"
 #endif
 
 #define MAX_SIZE_BASE_ADDR		1024

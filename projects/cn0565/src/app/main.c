@@ -60,7 +60,7 @@
 #include "platform_init.h"
 #include "spi_extra.h"
 #include "aducm3029_gpio.h"
-#include "uart_extra.h"
+#include "aducm3029_uart.h"
 #include "i2c_extra.h"
 #include "irq_extra.h"
 #include "uart_stdio.h"

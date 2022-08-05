@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   aducm3029/uart_extra.h
+ *   @file   aducm3029_uart.h
  *   @brief  Header file of UART driver for ADuCM302x
  *   @author Mihail Chindris (mihail.chindris@analog.com)
 ********************************************************************************
@@ -37,8 +37,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef UART_EXTRA_H_
-#define UART_EXTRA_H_
+#ifndef ADUCM3029_UART_H_
+#define ADUCM3029_UART_H_
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
@@ -157,4 +157,4 @@ struct no_os_aducm_uart_desc {
 	struct no_os_callback_desc rx_callback;
 };
 
-#endif /* UART_H_ */
+#endif /* ADUCM3029_UART_H_ */

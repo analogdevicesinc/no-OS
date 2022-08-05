@@ -46,7 +46,7 @@
 #include "no_os_error.h"
 #include <stdlib.h>
 #include "no_os_uart.h"
-#include "uart_extra.h"
+#include "aducm3029_uart.h"
 #include "no_os_rtc.h"
 #include "rtc_extra.h"
 #include "no_os_gpio.h"

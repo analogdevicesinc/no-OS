@@ -46,7 +46,7 @@
 #include "no_os_error.h"
 #include "adc.h"
 #include "no_os_uart.h"
-#include "uart_extra.h"
+#include "aducm3029_uart.h"
 #include "no_os_pwm.h"
 #include "no_os_util.h"
 #include <stdio.h>

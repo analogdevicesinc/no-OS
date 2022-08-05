@@ -29,6 +29,5 @@ INCS += $(DRIVERS)/gyro/adxrs290/iio_adxrs290.h
 SRCS += $(DRIVERS)/gyro/adxrs290/iio_adxrs290.c \
 	$(DRIVERS)/gyro/adxrs290/iio_adxrs290_trig.c
 
-INCS += $(INCLUDE)/no_os_list.h \
-		$(PLATFORM_DRIVERS)/uart_extra.h
+INCS += $(INCLUDE)/no_os_list.h
 endif
