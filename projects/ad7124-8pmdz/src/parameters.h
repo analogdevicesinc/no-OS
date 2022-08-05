@@ -48,7 +48,7 @@
 #endif
 
 #ifdef ADUCM_PLATFORM
-#include "irq_extra.h"
+#include "aducm3029_irq.h"
 #endif
 
 /******************************************************************************/

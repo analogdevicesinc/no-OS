@@ -42,7 +42,7 @@
 /******************************************************************************/
 
 #include "no_os_irq.h"
-#include "irq_extra.h"
+#include "aducm3029_irq.h"
 #include "no_os_error.h"
 #include <stdlib.h>
 #include "no_os_uart.h"

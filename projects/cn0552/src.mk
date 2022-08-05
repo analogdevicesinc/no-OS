@@ -27,7 +27,7 @@ INCS +=	$(INCLUDE)/no_os_uart.h \
 	$(INCLUDE)/no_os_rtc.h \
 	$(INCLUDE)/no_os_i2c.h \
 	$(INCLUDE)/no_os_print_log.h \
-	$(PLATFORM_DRIVERS)/irq_extra.h \
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.h \
 	$(PLATFORM_DRIVERS)/aducm3029_timer.h \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_uart.h \
 	$(PLATFORM_DRIVERS)/rtc_extra.h \

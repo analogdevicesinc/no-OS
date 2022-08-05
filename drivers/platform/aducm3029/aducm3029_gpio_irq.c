@@ -48,7 +48,7 @@
 
 #include "aducm3029_gpio.h"
 #include "aducm3029_gpio_irq.h"
-#include "irq_extra.h"
+#include "aducm3029_irq.h"
 #include "no_os_error.h"
 #include "no_os_gpio.h"
 #include "no_os_irq.h"

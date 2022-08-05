@@ -45,7 +45,7 @@
 #include "no_os_error.h"
 #include "iio.h"
 #include "no_os_irq.h"
-#include "irq_extra.h"
+#include "aducm3029_irq.h"
 #include "no_os_uart.h"
 #include "aducm3029_uart.h"
 #include "ad5791.h"

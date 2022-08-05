@@ -40,7 +40,7 @@
 #define __PARAMETERS_H__
 
 #if defined(ADUCM_PLATFORM)
-#include "irq_extra.h"
+#include "aducm3029_irq.h"
 #include "aducm3029_gpio_irq.h"
 
 #define SPI_DEVICE_ID		0
