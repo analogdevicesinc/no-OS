@@ -47,7 +47,7 @@
 #include <sys/platform.h>
 #include "adi_initialize.h"
 #include <drivers/pwr/adi_pwr.h>
-#include "irq_extra.h"
+#include "aducm3029_irq.h"
 #include "common_data.h"
 #include "no_os_util.h"
 

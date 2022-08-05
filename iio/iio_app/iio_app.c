@@ -51,14 +51,15 @@
 
 #if defined(ADUCM_PLATFORM)
 #include "aducm3029_uart.h"
+#include "aducm3029_irq.h"
 #endif
 #if defined(ADUCM_PLATFORM) || defined(XILINX_PLATFORM)
 #include "no_os_irq.h"
 #include "no_os_error.h"
-#include "irq_extra.h"
 #endif
 #if defined(XILINX_PLATFORM)
 #include "uart_extra.h"
+#include "irq_extra.h"
 #endif
 #if defined(STM32_PLATFORM)
 #include <errno.h>

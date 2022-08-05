@@ -12,7 +12,7 @@ SRCS += $(DRIVERS)/api/no_os_gpio.c
 SRCS += $(DRIVERS)/api/no_os_irq.c
 SRCS +=	$(DRIVERS)/platform/$(PLATFORM)/$(PLATFORM)_irq.c
 INCS += $(INCLUDE)/no_os_irq.h
-INCS += $(DRIVERS)/platform/$(PLATFORM)/irq_extra.h
+INCS += $(DRIVERS)/platform/$(PLATFORM)/aducm3029_irq.h
 
 SRCS += $(DRIVERS)/api/no_os_i2c.c \
 		$(DRIVERS)/api/no_os_timer.c

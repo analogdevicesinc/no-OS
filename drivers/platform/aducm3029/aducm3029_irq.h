@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   aducm3029/irq_extra.h
+ *   @file   aducm3029_irq.h
  *   @brief  Header file of IRQ driver for ADuCM302x
  *   @author Mihail Chindris (mihail.chindris@analog.com)
 ********************************************************************************
@@ -37,8 +37,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef IRQ_EXTRA_H
-# define IRQ_EXTRA_H
+#ifndef ADUCM3029_IRQ_H
+# define ADUCM3029_IRQ_H
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
@@ -137,4 +137,4 @@ struct irq_action {
 /** Action comparator function */
 int32_t irq_action_cmp(void *data1, void *data2);
 
-#endif // IRQ_EXTRA_H_
+#endif // ADUCM3029_IRQ_H

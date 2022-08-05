@@ -49,7 +49,7 @@
 #include "aducm3029_gpio.h"
 #include "no_os_gpio.h"
 #include "no_os_timer.h"
-#include "irq_extra.h"
+#include "aducm3029_irq.h"
 #include "i2c_extra.h"
 #include "aducm3029_gpio_irq.h"
 

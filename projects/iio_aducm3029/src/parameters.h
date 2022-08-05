@@ -40,7 +40,7 @@
 #define PARAMETERS_H
 
 #include "iio_aducm3029.h"
-#include "irq_extra.h"
+#include "aducm3029_irq.h"
 
 #define MAX_SIZE_BASE_ADDR		3000
 #define UART_DEVICE_ID			0

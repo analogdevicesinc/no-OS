@@ -47,7 +47,7 @@
 #include "platform_init.h"
 #include "aducm3029_gpio.h"
 #include "spi_extra.h"
-#include "irq_extra.h"
+#include "aducm3029_irq.h"
 #include "aducm3029_gpio_irq.h"
 #include "aducm3029_timer.h"
 #include "no_os_timer.h"

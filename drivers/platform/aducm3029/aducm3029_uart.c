@@ -44,7 +44,7 @@
 #include <stdlib.h>
 #include "no_os_uart.h"
 #include "aducm3029_uart.h"
-#include "irq_extra.h"
+#include "aducm3029_irq.h"
 #include "no_os_util.h"
 #include <drivers/uart/adi_uart.h>
 
