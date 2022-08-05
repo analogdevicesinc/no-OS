@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   aducm3029/no_os_uart.c
+ *   @file   aducm3029_uart.c
  *   @brief  Implementation of UART driver for ADuCM302x.
  *   @author Mihail Chindris (mihail.chindris@analog.com)
 ********************************************************************************
@@ -43,7 +43,7 @@
 
 #include <stdlib.h>
 #include "no_os_uart.h"
-#include "uart_extra.h"
+#include "aducm3029_uart.h"
 #include "irq_extra.h"
 #include "no_os_util.h"
 #include <drivers/uart/adi_uart.h>
@@ -337,7 +337,7 @@ int32_t no_os_uart_init(struct no_os_uart_desc **desc,
 	struct no_os_uart_desc *descriptor;
 	ADI_UART_PARITY aducm_uart_parity;
 
-	if (!desc || !param || !(param->extra) ||
+	if (!desc || !param ||
 	    param->device_id >= NO_OS_NUM_UART_DEVICES || //
 	    initialized[param->device_id] != 0) //Already initialized
 		return -1;

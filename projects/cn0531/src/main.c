@@ -47,7 +47,7 @@
 #include "no_os_irq.h"
 #include "irq_extra.h"
 #include "no_os_uart.h"
-#include "uart_extra.h"
+#include "aducm3029_uart.h"
 #include "ad5791.h"
 #include "iio_ad5791.h"
 #include "spi_extra.h"

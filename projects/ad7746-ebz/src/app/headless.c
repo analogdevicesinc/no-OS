@@ -54,7 +54,7 @@
 #include "no_os_delay.h"
 #include "no_os_print_log.h"
 #include "no_os_uart.h"
-#include "uart_extra.h"
+#include "aducm3029_uart.h"
 #include "uart_stdio.h"
 #include "platform_init.h"
 #include "parameters.h"
