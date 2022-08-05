@@ -670,9 +670,15 @@ int32_t ad469x_exit_conversion_mode(struct ad469x_dev *dev)
 	if (ret != 0)
 		return ret;
 #else
-	uint8_t cmd = AD469x_CMD_REG_CONFIG_MODE;
+	/* The subsequent rising edge on CS places the AD4695/AD4696
+	 * in register configuration mode. Hence, the digital host must
+	* provide 19 SCK pulses to elapse between the fifth SCK rising edge
+	* and the CS rising edge.
+	*/
+	uint8_t cmd[3] = { 0 };
+	cmd[0] = AD469x_CMD_REG_CONFIG_MODE;
 
-	ret = no_os_spi_write_and_read(dev->spi_desc, &cmd, 1);
+	ret = no_os_spi_write_and_read(dev->spi_desc, cmd, 3);
 	if (ret != 0)
 		return ret;
 #endif
