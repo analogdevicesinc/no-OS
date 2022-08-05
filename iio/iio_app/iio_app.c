@@ -47,8 +47,6 @@
 #include "no-os/delay.h"
 #include <stdio.h>
 
-#undef USE_TCP_SOCKET
-
 #ifdef USE_TCP_SOCKET
 
 #include "tcp_socket.h"
@@ -184,6 +182,8 @@ static int32_t net_init(struct network_interface **net,
 	IP4_ADDR(&eth_param.netmask, 255,255,255,0);
 	IP4_ADDR(&eth_param.gw,      192,168,0,1);
 #endif
+
+
 
 	ret = xil_eth_init(&eth, &eth_param);
 	if (ret < 0) {

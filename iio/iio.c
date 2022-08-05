@@ -1368,6 +1368,9 @@ ssize_t iio_init(struct iio_desc **desc, struct iio_init_param *init_param)
 			      * MAX_SOCKET_TO_HANDLE);
 		if (IS_ERR_VALUE(ret))
 			goto free_pylink;
+//		ret = cb_write(ldesc->sockets, ldesc->server, 1);
+//		if (IS_ERR_VALUE(ret))
+//			goto free_pylink;
 	}
 #endif
 	else {

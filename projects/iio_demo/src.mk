@@ -16,7 +16,8 @@ INCS += $(INCLUDE)/no-os/fifo.h \
 	$(INCLUDE)/no-os/uart.h \
 	$(INCLUDE)/no-os/list.h \
 	$(INCLUDE)/no-os/util.h \
-	$(INCLUDE)/no-os/error.h
+	$(INCLUDE)/no-os/error.h \
+	$(INCLUDE)/no-os/print_log.h
 
 INCS += $(DRIVERS)/adc/adc_demo/iio_adc_demo.h \
 		$(DRIVERS)/dac/dac_demo/dac_demo.h \

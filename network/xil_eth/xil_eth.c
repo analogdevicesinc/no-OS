@@ -209,6 +209,7 @@ int32_t xil_eth_init(struct xil_eth_desc **desc,
 		netif_set_up(netif);
 
 		/* DHCP Config */
+		dhcp_release(netif);
 
 		/* Create a new DHCP client for this interface.
 		* Note: you must call dhcp_fine_tmr() and dhcp_coarse_tmr() at
