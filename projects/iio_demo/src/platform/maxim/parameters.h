@@ -46,8 +46,10 @@
 #include "maxim_irq.h"
 #include "maxim_uart.h"
 #include "maxim_stdio.h"
+#include "maxim_timer.h"
 #include "common_data.h"
 #include "no_os_util.h"
+#include "no_os_timer.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -61,5 +63,40 @@
 #define UART_IRQ_ID    	UART0_IRQn
 #define UART_DEVICE_ID	0
 #define UART_BAUDRATE	57600
+
+#ifdef IIO_TIMER_TRIGGER_EXAMPLE
+/* Adc Demo Timer settings */
+#define ADC_DEMO_TIMER_DEVICE_ID    0
+#define ADC_DEMO_TIMER_FREQ_HZ      1000000
+#define ADC_DEMO_TIMER_TICKS_COUNT  2000
+#define ADC_DEMO_TIMER_EXTRA        NULL
+#define TIMER_OPS                   &max_timer_ops
+
+/* Adc Demo Timer trigger settings */
+#define ADC_DEMO_TIMER_IRQ_ID       TMR0_IRQn
+#define TIMER_IRQ_OPS               &max_irq_ops
+#define ADC_DEMO_TIMER_IRQ_EXTRA    NULL
+
+/* Adc Demo timer trigger settings */
+#define ADC_DEMO_TIMER_CB_HANDLE    MXC_TMR0
+#define ADC_DEMO_TIMER_TRIG_IRQ_ID  TMR0_IRQn
+
+/* Dac Demo Timer settings */
+#define DAC_DEMO_TIMER_DEVICE_ID    1
+#define DAC_DEMO_TIMER_FREQ_HZ      1000000
+#define DAC_DEMO_TIMER_TICKS_COUNT  2000
+#define DAC_DEMO_TIMER_EXTRA        NULL
+#define TIMER_OPS                   &max_timer_ops
+
+/* Dac Demo Timer trigger settings */
+#define DAC_DEMO_TIMER_IRQ_ID       TMR1_IRQn
+#define TIMER_IRQ_OPS               &max_irq_ops
+#define DAC_DEMO_TIMER_IRQ_EXTRA    NULL
+
+/* Dac Demo timer trigger settings */
+#define DAC_DEMO_TIMER_CB_HANDLE    MXC_TMR1
+#define DAC_DEMO_TIMER_TRIG_IRQ_ID  TMR1_IRQn
+
+#endif
 
 #endif /* __PARAMETERS_H__ */
