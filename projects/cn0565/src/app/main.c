@@ -106,12 +106,6 @@ int main(void)
 		.huart = &huart5,
 		.timeout = 10,
 	};
-#elif defined(ADUCM_PLATFORM)
-	struct aducm_uart_init_param xuip = {
-		.parity = UART_NO_PARITY,
-		.stop_bits = UART_ONE_STOPBIT,
-		.word_length = UART_WORDLEN_8BITS
-	};
 #endif
 	struct no_os_uart_init_param uip = {
 		.device_id = UART_DEVICE_ID,
@@ -119,7 +113,9 @@ int main(void)
 		.size = NO_OS_UART_CS_8,
 		.parity = NO_OS_UART_PAR_NO,
 		.stop = NO_OS_UART_STOP_1_BIT,
+#if defined(STM32_PLATFORM)
 		.extra = &xuip,
+#endif
 		.asynchronous_rx = true,
 		.irq_id = UART_IRQ_ID,
 	};

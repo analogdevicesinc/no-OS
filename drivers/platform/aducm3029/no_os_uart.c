@@ -46,6 +46,7 @@
 #include "uart_extra.h"
 #include "irq_extra.h"
 #include "no_os_util.h"
+#include <drivers/uart/adi_uart.h>
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -322,10 +323,6 @@ int32_t no_os_uart_write_nonblocking(struct no_os_uart_desc *desc,
 
 /**
  * @brief Initialize the UART communication peripheral.
- *
- * To configure the UART, the user must set the extra parameter from param with
- * a pointer to the configured platform specific structure.
- * \ref aducm_uart_init_param .\n
  * @param desc:  Descriptor of the UART device used in the call of the drivers
  * functions
  * @param param: Descriptor used to configure the UART device
@@ -337,20 +334,37 @@ int32_t no_os_uart_init(struct no_os_uart_desc **desc,
 	int ret;
 	ADI_UART_RESULT			uart_ret;
 	struct no_os_aducm_uart_desc		*aducm_desc;
-	struct aducm_uart_init_param	*aducm_init_param;
 	struct no_os_uart_desc *descriptor;
+	ADI_UART_PARITY aducm_uart_parity;
 
 	if (!desc || !param || !(param->extra) ||
 	    param->device_id >= NO_OS_NUM_UART_DEVICES || //
 	    initialized[param->device_id] != 0) //Already initialized
 		return -1;
 
+	/* available values for size are 5-8 */
+	if (param->size > NO_OS_UART_CS_8)
+		return -EINVAL;
+
+	switch(param->parity) {
+	case NO_OS_UART_PAR_NO:
+		aducm_uart_parity = ADI_UART_NO_PARITY;
+		break;
+	case NO_OS_UART_PAR_ODD:
+		aducm_uart_parity = ADI_UART_ODD_PARITY;
+		break;
+	case NO_OS_UART_PAR_EVEN:
+		aducm_uart_parity = ADI_UART_EVEN_PARITY;
+		break;
+	default:
+		return -EINVAL;
+	}
+
 	initialized[param->device_id] = 1;
 	descriptor = alloc_desc_mem();
 	if (!descriptor)
 		return -1;
 	aducm_desc = descriptor->extra;
-	aducm_init_param = param->extra;
 
 	descriptor->baud_rate = param->baud_rate;
 	descriptor->device_id = param->device_id;
@@ -365,9 +379,9 @@ int32_t no_os_uart_init(struct no_os_uart_desc **desc,
 
 	/* Think about the option of implementing default configuration */
 	uart_ret = adi_uart_SetConfiguration(aducm_desc->uart_handler,
-					     aducm_init_param->parity,
-					     aducm_init_param->stop_bits,
-					     aducm_init_param->word_length);
+					     aducm_uart_parity,
+					     param->stop << 2,
+					     param->size);
 	if (uart_ret != ADI_UART_SUCCESS)
 		goto failure;
 

@@ -66,15 +66,12 @@ static struct iio_data_buffer adc_read_buff = {
 
 static int32_t initialize_uart(struct no_os_uart_desc **uart)
 {
-	struct aducm_uart_init_param platform_uart_init_par = {
-		.parity = UART_NO_PARITY,
-		.stop_bits = UART_ONE_STOPBIT,
-		.word_length = UART_WORDLEN_8BITS
-	};
 	struct no_os_uart_init_param uart_init_par = {
+		.parity = NO_OS_UART_PAR_NO,
+		.stop = NO_OS_UART_STOP_1_BIT,
+		.size =  NO_OS_UART_CS_8,
 		.device_id = UART_DEVICE_ID,
 		.baud_rate = UART_BAUDRATE,
-		.extra = &platform_uart_init_par
 	};
 
 	return no_os_uart_init(uart, &uart_init_par);

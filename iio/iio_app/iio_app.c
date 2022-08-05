@@ -228,13 +228,6 @@ static int32_t uart_setup(struct no_os_uart_desc **uart_desc,
 #endif
 	};
 	platform_uart_init_par.irq_desc = irq_desc;
-#elif defined(ADUCM_PLATFORM)
-	static struct aducm_uart_init_param platform_uart_init_par = {
-		/* TODO: cleanup, these can be set using generic uart_init_param.*/
-		.parity = UART_NO_PARITY,
-		.stop_bits = UART_ONE_STOPBIT,
-		.word_length = UART_WORDLEN_8BITS
-	};
 #elif defined(STM32_PLATFORM)
 	static struct stm32_uart_init_param platform_uart_init_par = {
 		.huart = IIO_APP_HUART,
@@ -260,7 +253,9 @@ static int32_t uart_setup(struct no_os_uart_desc **uart_desc,
 		.size = NO_OS_UART_CS_8,
 		.parity = NO_OS_UART_PAR_NO,
 		.stop = NO_OS_UART_STOP_1_BIT,
+#ifndef ADUCM_PLATFORM
 		.extra = &platform_uart_init_par
+#endif
 	};
 	*uart_init_par = &luart_par;
 

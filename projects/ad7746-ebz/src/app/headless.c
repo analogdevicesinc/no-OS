@@ -72,18 +72,12 @@ int main(void)
 	struct ad7746_dev *adc = NULL;
 
 	struct no_os_uart_desc *uart;
-	struct aducm_uart_init_param xuip = {
-		.parity = UART_NO_PARITY,
-		.stop_bits = UART_ONE_STOPBIT,
-		.word_length = UART_WORDLEN_8BITS
-	};
 	struct no_os_uart_init_param uip = {
 		.device_id = UART_DEVICE_ID,
 		.baud_rate = UART_BAUDRATE,
 		.size = NO_OS_UART_CS_8,
 		.parity = NO_OS_UART_PAR_NO,
 		.stop = NO_OS_UART_STOP_1_BIT,
-		.extra = &xuip,
 	};
 #ifdef IIO_SUPPORT
 	struct ad7746_iio_dev *adciio = NULL;

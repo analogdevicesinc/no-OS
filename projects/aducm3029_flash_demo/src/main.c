@@ -71,18 +71,12 @@ int main(int argc, char *argv[])
 		.id = 0
 	};
 	struct no_os_uart_desc *uart_dut;
-	struct aducm_uart_init_param aducm_uart_init = {
-		.parity = UART_NO_PARITY,
-		.stop_bits = UART_ONE_STOPBIT,
-		.word_length = UART_WORDLEN_8BITS
-	};
 	struct no_os_uart_init_param uart_init_par = {
-		.baud_rate = BD_115200,
+		.baud_rate = 115200,
 		.device_id = 0,
 		.parity = NO_OS_UART_PAR_NO,
 		.size = NO_OS_UART_CS_8,
 		.stop = NO_OS_UART_STOP_1_BIT,
-		.extra = &aducm_uart_init
 	};
 	struct no_os_irq_ctrl_desc *irq_dut;
 	int32_t platform_irq_init_par = 0;
