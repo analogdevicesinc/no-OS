@@ -94,8 +94,6 @@ int32_t no_os_uart_read(struct no_os_uart_desc *desc, uint8_t *data,
 			uint32_t bytes_number)
 {
 	int32_t ret;
-	uint32_t total_read = 0;
-	uint32_t read;
 	uint32_t i = 0;
 
 	if (!desc || !data || !bytes_number)
@@ -110,14 +108,12 @@ int32_t no_os_uart_read(struct no_os_uart_desc *desc, uint8_t *data,
 		return i;
 	}
 
-	while (bytes_number) {
-		read = MXC_UART_ReadRXFIFO(MXC_UART_GET_UART(desc->device_id),
-					   data + total_read, bytes_number);
-		total_read += read;
-		bytes_number -= read;
-	}
+	ret = MXC_UART_Read(MXC_UART_GET_UART(desc->device_id), data,
+			    (int *)&bytes_number);
+	if (ret != E_SUCCESS)
+		return -EIO;
 
-	return total_read;
+	return bytes_number;
 }
 
 /**
@@ -130,24 +126,17 @@ int32_t no_os_uart_read(struct no_os_uart_desc *desc, uint8_t *data,
 int32_t no_os_uart_write(struct no_os_uart_desc *desc, const uint8_t *data,
 			 uint32_t bytes_number)
 {
-	uint32_t written = 0;
-	uint32_t total_written = 0;
-	mxc_uart_regs_t *uart_regs;
+	int32_t ret;
 
 	if(!desc || !data || !bytes_number)
 		return -EINVAL;
 
-	uart_regs = MXC_UART_GET_UART(desc->device_id);
-	while (bytes_number) {
-		written = MXC_UART_WriteTXFIFO(MXC_UART_GET_UART(desc->device_id),
-					       data + total_written, bytes_number);
-		total_written += written;
-		bytes_number -= written;
-	}
+	ret = MXC_UART_Write(MXC_UART_GET_UART(desc->device_id), data,
+			     (int *)&bytes_number);
+	if (ret != E_SUCCESS)
+		return -EIO;
 
-	while (MXC_UART_GetTXFIFOAvailable(uart_regs) - MXC_UART_FIFO_DEPTH);
-
-	return total_written;
+	return bytes_number;
 }
 
 /**
