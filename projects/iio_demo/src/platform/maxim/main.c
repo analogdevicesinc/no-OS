@@ -72,9 +72,13 @@ int main()
 #error Software trigger is not supported over UART.
 #endif
 
-#if (IIO_EXAMPLE + IIO_TRIGGER_EXAMPLE == 0)
+#ifdef IIO_TIMER_TRIGGER_EXAMPLE
+	ret = iio_timer_trigger_example_main();
+#endif
+
+#if (IIO_EXAMPLE + IIO_TRIGGER_EXAMPLE + IIO_TIMER_TRIGGER_EXAMPLE == 0)
 #error At least one example has to be selected using y value in Makefile.
-#elif (IIO_EXAMPLE + IIO_TRIGGER_EXAMPLE > 1)
+#elif (IIO_EXAMPLE + IIO_TRIGGER_EXAMPLE + IIO_TIMER_TRIGGER_EXAMPLE > 1)
 #error Selected example projects cannot be enabled at the same time. \
 Please enable only one example and re-build the project.
 #endif
