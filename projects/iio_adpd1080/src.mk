@@ -18,7 +18,7 @@ SRCS += $(DRIVERS)/api/no_os_i2c.c \
 		$(DRIVERS)/api/no_os_timer.c
 SRCS +=	$(DRIVERS)/platform/$(PLATFORM)/$(PLATFORM)_i2c.c
 INCS += $(INCLUDE)/no_os_i2c.h
-INCS += $(DRIVERS)/platform/$(PLATFORM)/i2c_extra.h
+INCS += $(DRIVERS)/platform/$(PLATFORM)/$(PLATFORM)_i2c.h
 
 SRCS += $(DRIVERS)/api/no_os_spi.c
 

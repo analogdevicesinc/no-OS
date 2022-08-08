@@ -1,5 +1,5 @@
 /*******************************************************************************
- *   @file   aducm3029/i2c_extra.h
+ *   @file   aducm3029_i2c.h
  *   @brief  Header containing types used in the i2c driver.
  *   @author Andrei Porumb (andrei.porumb@analog.com)
 ********************************************************************************
@@ -37,8 +37,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef I2C_EXTRA_H_
-#define I2C_EXTRA_H_
+#ifndef ADUCM3029_I2C_H_
+#define ADUCM3029_I2C_H_
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -49,4 +49,4 @@
  */
 extern const struct no_os_i2c_platform_ops aducm_i2c_ops;
 
-#endif // I2C_EXTRA_H_
+#endif // ADUCM3029_I2C_H_

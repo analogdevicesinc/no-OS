@@ -50,7 +50,7 @@
 #include "no_os_gpio.h"
 #include "no_os_timer.h"
 #include "aducm3029_irq.h"
-#include "i2c_extra.h"
+#include "aducm3029_i2c.h"
 #include "aducm3029_gpio_irq.h"
 
 #define MAX_SIZE_BASE_ADDR		1024
