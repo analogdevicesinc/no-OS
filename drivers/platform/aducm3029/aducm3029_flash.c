@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   aducm3029/flash.c
+ *   @file   aducm3029_flash.c
  *   @brief  Implementation of the flash driver for ADuCM302x.
  *   @author Andrei Drimbarean (adnrei.drimbarean@analog.com)
 ********************************************************************************
@@ -47,7 +47,7 @@
 #include <malloc.h>
 #include <string.h>
 #include "no_os_flash.h"
-#include "flash_extra.h"
+#include "aducm3029_flash.h"
 #include "no_os_error.h"
 
 /******************************************************************************/
