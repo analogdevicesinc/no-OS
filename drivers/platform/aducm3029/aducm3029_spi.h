@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   aducm3029/spi_extra.h
+ *   @file   aducm3029_spi.h
  *   @brief  ADuCM302x specific header for SPI driver
  *   @author Mihail Chindris (mihail.chindris@analog.com)
 ********************************************************************************
@@ -37,8 +37,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef SPI_EXTRA_H
-# define SPI_EXTRA_H
+#ifndef ADUCM3029_SPI_H
+# define ADUCM3029_SPI_H
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
@@ -121,4 +121,4 @@ struct aducm_spi_desc {
 	struct aducm_device_desc	*dev;
 };
 
-#endif // SPI_EXTRA_H_
+#endif // ADUCM3029_SPI_H

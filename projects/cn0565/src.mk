@@ -71,7 +71,7 @@ INCS +=	$(INCLUDE)/no_os_delay.h \
 	$(PLATFORM_DRIVERS)/aducm3029_timer.h \
 	$(PLATFORM_DRIVERS)/aducm3029_i2c.h \
 	$(PLATFORM_DRIVERS)/aducm3029_rtc.h \
-	$(PLATFORM_DRIVERS)/spi_extra.h \
+	$(PLATFORM_DRIVERS)/aducm3029_spi.h \
 	$(PLATFORM_DRIVERS)/timer_extra.h \
 	$(PLATFORM_DRIVERS)/aducm3029_uart.h \
 	$(PLATFORM_DRIVERS)/aducm3029_gpio.h \

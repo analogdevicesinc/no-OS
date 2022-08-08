@@ -25,7 +25,7 @@ INCS += $(INCLUDE)/no_os_spi.h \
 	$(INCLUDE)/no_os_irq.h \
 	$(INCLUDE)/no_os_uart.h \
 	$(INCLUDE)/no_os_lf256fifo.h \
-	$(DRIVERS)/platform/$(PLATFORM)/spi_extra.h \
+	$(DRIVERS)/platform/$(PLATFORM)/$(PLATFORM)_spi.h \
 	$(DRIVERS)/platform/$(PLATFORM)/$(PLATFORM)_irq.h \
 	$(DRIVERS)/platform/$(PLATFORM)/aducm3029_gpio.h \
 	$(DRIVERS)/platform/$(PLATFORM)/$(PLATFORM)_uart.h \

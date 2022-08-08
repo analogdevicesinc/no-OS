@@ -49,7 +49,7 @@
 #include "ada4250.h"
 #include "iio_ada4250.h"
 #include "no_os_spi.h"
-#include "spi_extra.h"
+#include "aducm3029_spi.h"
 #include "iio_app.h"
 
 /***************************************************************************//**
