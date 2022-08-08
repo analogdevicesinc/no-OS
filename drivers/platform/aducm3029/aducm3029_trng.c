@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   no_os_trng.c
+ *   @file   aducm3029_trng.c
  *   @brief  Implementation of true random number generator
  *   @author Mihail Chindris (mihail.chindris@analog.com)
 ********************************************************************************
