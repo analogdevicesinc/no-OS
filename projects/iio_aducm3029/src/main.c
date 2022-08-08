@@ -44,7 +44,7 @@
 #include "parameters.h"
 #include "platform_init.h"
 #include "no_os_error.h"
-#include "adc.h"
+#include "aducm3029_adc.h"
 #include "no_os_uart.h"
 #include "aducm3029_uart.h"
 #include "no_os_pwm.h"
