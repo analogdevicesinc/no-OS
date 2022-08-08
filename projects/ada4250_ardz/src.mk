@@ -17,7 +17,7 @@ SRCS += $(NO-OS)/util/no_os_util.c \
 	$(DRIVERS)/platform/$(PLATFORM)/$(PLATFORM)_gpio.c \
 	$(DRIVERS)/platform/$(PLATFORM)/$(PLATFORM)_timer.c \
 	$(DRIVERS)/platform/$(PLATFORM)/$(PLATFORM)_rtc.c \
-	$(DRIVERS)/platform/$(PLATFORM)/delay.c \
+	$(DRIVERS)/platform/$(PLATFORM)/$(PLATFORM)_delay.c \
 	$(NO-OS)/util/no_os_lf256fifo.c \
 	$(DRIVERS)/platform/$(PLATFORM)/$(PLATFORM)_uart.c
 

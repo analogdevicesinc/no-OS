@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   aducm3029/delay.c
+ *   @file   aducm3029_delay.c
  *   @brief  Implementation of DELAY functions for ADuCM302x.
  *   @author Mihail Chindris (mihail.chindris@analog.com)
 ********************************************************************************
