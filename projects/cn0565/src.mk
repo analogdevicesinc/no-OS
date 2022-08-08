@@ -50,7 +50,7 @@ INCS +=	$(INCLUDE)/no_os_delay.h \
 endif
 
 ifeq (aducm3029,$(strip $(PLATFORM)))
-SRCS += $(PLATFORM_DRIVERS)/delay.c \
+SRCS += $(PLATFORM_DRIVERS)/aducm3029_delay.c \
 	$(PLATFORM_DRIVERS)/aducm3029_gpio.c \
 	$(PLATFORM_DRIVERS)/aducm3029_spi.c \
 	$(PLATFORM_DRIVERS)/aducm3029_timer.c \

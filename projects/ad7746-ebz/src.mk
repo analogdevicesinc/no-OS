@@ -1,6 +1,6 @@
 CFLAGS += -DENABLE_UART_STDIO
 SRCS += $(NO-OS)/util/no_os_util.c \
-	$(PLATFORM_DRIVERS)/delay.c \
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_delay.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_i2c.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_uart.c \

@@ -1,4 +1,4 @@
-SRCS += $(PLATFORM_DRIVERS)/delay.c \
+SRCS += $(PLATFORM_DRIVERS)/aducm3029_delay.c \
 	$(DRIVERS)/api/no_os_irq.c
 	
 ifeq '$(USE_TCP_SOCKET)' 'y'
