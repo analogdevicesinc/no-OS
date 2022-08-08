@@ -42,7 +42,7 @@
 /******************************************************************************/
 
 #include "no_os_i2c.h"
-#include "i2c_extra.h"
+#include "aducm3029_i2c.h"
 #include "no_os_error.h"
 #include <stdlib.h>
 #include <drivers/i2c/adi_i2c.h>

@@ -29,7 +29,7 @@ INCS +=	$(INCLUDE)/no_os_uart.h \
 	$(INCLUDE)/no_os_print_log.h \
 	$(INCLUDE)/no_os_list.h \
 	$(PLATFORM_DRIVERS)/aducm3029_irq.h \
-	$(PLATFORM_DRIVERS)/i2c_extra.h \
+	$(PLATFORM_DRIVERS)/aducm3029_i2c.h \
 	$(PLATFORM_DRIVERS)/aducm3029_timer.h \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_uart.h \
 	$(PLATFORM_DRIVERS)/uart_stdio.h \

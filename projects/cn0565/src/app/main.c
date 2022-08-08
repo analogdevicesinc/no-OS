@@ -61,7 +61,7 @@
 #include "spi_extra.h"
 #include "aducm3029_gpio.h"
 #include "aducm3029_uart.h"
-#include "i2c_extra.h"
+#include "aducm3029_i2c.h"
 #include "aducm3029_irq.h"
 #include "uart_stdio.h"
 #endif

@@ -32,7 +32,7 @@ INCS +=	$(INCLUDE)/no_os_uart.h \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_uart.h \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_rtc.h \
 	$(PLATFORM_DRIVERS)/platform_init.h \
-	$(PLATFORM_DRIVERS)/i2c_extra.h \
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_i2c.h \
 	$(DRIVERS)/cdc/ad7746/ad7746.h \
 	$(DRIVERS)/cdc/ad7746/iio_ad7746.h \
 	$(PROJECT)/src/app/parameters.h
