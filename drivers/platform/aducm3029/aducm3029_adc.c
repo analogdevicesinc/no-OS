@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   adc.c
- *   @brief  Implementation of adc.c
+ *   @file   aducm3029_adc.c
+ *   @brief  Implementation of aducm3029_adc.c
  *   @author Mihail Chindris (mihail.chindris@analog.com)
 ********************************************************************************
  * Copyright 2020(c) Analog Devices, Inc.
@@ -38,7 +38,7 @@
 *******************************************************************************/
 
 #include <drivers/adc/adi_adc.h>
-#include "adc.h"
+#include "aducm3029_adc.h"
 #include "no_os_error.h"
 #include <stdio.h>
 #include <stdlib.h>

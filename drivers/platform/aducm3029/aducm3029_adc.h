@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   adc.h
- *   @brief  Interface of adc.c
+ *   @file   aducm3029_adc.h
+ *   @brief  Interface of aducm3029_adc.c
  *   @author Mihail Chindris (mihail.chindris@analog.com)
 ********************************************************************************
  * Copyright 2020(c) Analog Devices, Inc.

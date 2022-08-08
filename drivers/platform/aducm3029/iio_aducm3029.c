@@ -45,7 +45,7 @@
 #include "no_os_pwm.h"
 #include "no_os_gpio.h"
 #include "iio_aducm3029.h"
-#include "adc.h"
+#include "aducm3029_adc.h"
 #include "no_os_error.h"
 #include "no_os_util.h"
 

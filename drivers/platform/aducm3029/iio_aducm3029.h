@@ -43,7 +43,7 @@
 #define IIO_ADCUM3029
 
 #include "iio_types.h"
-#include "adc.h"
+#include "aducm3029_adc.h"
 
 #define ADUCM3029_TIMERS_NUMS	3
 #define ADUCM3029_GPIOS_NUMS	44
