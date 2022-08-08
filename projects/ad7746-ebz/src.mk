@@ -7,7 +7,7 @@ SRCS += $(NO-OS)/util/no_os_util.c \
 	$(NO-OS)/util/no_os_lf256fifo.c \
 	$(NO-OS)/util/no_os_list.c \
 	$(PLATFORM_DRIVERS)/uart_stdio.c \
-	$(PLATFORM_DRIVERS)/no_os_rtc.c \
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_rtc.c \
 	$(PLATFORM_DRIVERS)/platform_init.c \
 	$(PLATFORM_DRIVERS)/aducm3029_timer.c \
 	$(DRIVERS)/cdc/ad7746/ad7746.c \
@@ -33,7 +33,7 @@ INCS +=	$(INCLUDE)/no_os_uart.h \
 	$(PLATFORM_DRIVERS)/aducm3029_timer.h \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_uart.h \
 	$(PLATFORM_DRIVERS)/uart_stdio.h \
-	$(PLATFORM_DRIVERS)/rtc_extra.h \
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_rtc.h \
 	$(PLATFORM_DRIVERS)/platform_init.h \
 	$(DRIVERS)/cdc/ad7746/ad7746.h \
 	$(PROJECT)/src/app/parameters.h
