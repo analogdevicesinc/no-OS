@@ -58,7 +58,7 @@
 #include "stm32_uart_stdio.h"
 #elif defined(ADUCM_PLATFORM)
 #include "platform_init.h"
-#include "spi_extra.h"
+#include "aducm3029_spi.h"
 #include "aducm3029_gpio.h"
 #include "aducm3029_uart.h"
 #include "aducm3029_i2c.h"

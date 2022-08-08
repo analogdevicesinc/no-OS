@@ -41,7 +41,7 @@
 /************************* Include Files **************************************/
 /******************************************************************************/
 
-#include "spi_extra.h"
+#include "aducm3029_spi.h"
 #include "no_os_spi.h"
 #include "no_os_error.h"
 #include <stdlib.h>

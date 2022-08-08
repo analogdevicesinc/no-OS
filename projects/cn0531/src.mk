@@ -15,7 +15,7 @@ SRCS += $(DRIVERS)/api/no_os_spi.c \
 	$(DRIVERS)/api/no_os_timer.c \
 	$(DRIVERS)/platform/$(PLATFORM)/$(PLATFORM)_spi.c
 INCS += $(INCLUDE)/no_os_spi.h \
-	$(DRIVERS)/platform/$(PLATFORM)/spi_extra.h
+	$(DRIVERS)/platform/$(PLATFORM)/$(PLATFORM)_spi.h
 
 TINYIIOD=y
 

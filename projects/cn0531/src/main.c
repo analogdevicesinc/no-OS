@@ -50,7 +50,7 @@
 #include "aducm3029_uart.h"
 #include "ad5791.h"
 #include "iio_ad5791.h"
-#include "spi_extra.h"
+#include "aducm3029_spi.h"
 #include "iio_app.h"
 
 #define MAX_SIZE_BASE_ADDR		1024
