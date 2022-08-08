@@ -17,7 +17,7 @@ SRCS += $(NO-OS)/util/no_os_circular_buffer.c \
 INCS += $(INCLUDE)/no_os_circular_buffer.h \
 	$(INCLUDE)/no_os_timer.h           \
 	$(PLATFORM_DRIVERS)/aducm3029_timer.h  \
-	$(PLATFORM_DRIVERS)/rtc_extra.h
+	$(PLATFORM_DRIVERS)/aducm3029_rtc.h
 endif
 
 SRCS += $(NO-OS)/util/no_os_lf256fifo.c  \

@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   aducm3029/rtc_extra.h
+ *   @file   aducm3029_rtc.h
  *   @brief  Header file of RTC driver for ADuCM302x
  *   @author Andrei Drimbarean (andrei.drimbarean@analog.com)
 ********************************************************************************
@@ -37,8 +37,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef RTC_EXTRA_H_
-#define RTC_EXTRA_H_
+#ifndef ADUCM3029_RTC_H_
+#define ADUCM3029_RTC_H_
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
@@ -84,4 +84,4 @@ struct aducm_rtc_desc {
 	void *memory;
 };
 
-#endif /* RTC_EXTRA_H_ */
+#endif /* ADUCM3029_RTC_H_ */

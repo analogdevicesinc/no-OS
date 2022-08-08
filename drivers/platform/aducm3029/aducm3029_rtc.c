@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   aducm3029/no_os_rtc.c
+ *   @file   aducm3029_rtc.c
  *   @brief  Implementation of RTC driver for ADuCM302x
  *   @author Andrei Drimbarean (andrei.drimbarean@analog.com)
 ********************************************************************************
@@ -44,7 +44,7 @@
 #include <stdlib.h>
 #include "no_os_error.h"
 #include "no_os_rtc.h"
-#include "rtc_extra.h"
+#include "aducm3029_rtc.h"
 #include "no_os_irq.h"
 
 /******************************************************************************/
