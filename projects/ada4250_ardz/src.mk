@@ -32,7 +32,7 @@ INCS += $(INCLUDE)/no_os_spi.h \
 	$(DRIVERS)/platform/$(PLATFORM)/$(PLATFORM)_rtc.h \
 	$(DRIVERS)/platform/$(PLATFORM)/$(PLATFORM)_timer.h
 
-IGNORED_FILES += $(PLATFORM_DRIVERS)/uart_stdio.c
-IGNORED_FILES += $(PLATFORM_DRIVERS)/uart_stdio.h
+IGNORED_FILES += $(PLATFORM_DRIVERS)/aducm3029_uart_stdio.c
+IGNORED_FILES += $(PLATFORM_DRIVERS)/aducm3029_uart_stdio.h
 
 TINYIIOD=y

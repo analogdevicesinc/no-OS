@@ -63,7 +63,7 @@
 #include "aducm3029_uart.h"
 #include "aducm3029_i2c.h"
 #include "aducm3029_irq.h"
-#include "uart_stdio.h"
+#include "aducm3029_uart_stdio.h"
 #endif
 
 #include "app.h"

@@ -55,7 +55,7 @@
 #include "no_os_print_log.h"
 #include "no_os_uart.h"
 #include "aducm3029_uart.h"
-#include "uart_stdio.h"
+#include "aducm3029_uart_stdio.h"
 #include "platform_init.h"
 #include "parameters.h"
 
