@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   aducm3029/no_os_pwm.c
- *   @brief  Implementation of no_os_pwm.c
+ *   @file   aducm3029_pwm.c
+ *   @brief  Implementation of aducm3029_pwm.c
  *   @author Mihail Chindris (mihail.chindris@analog.com)
 ********************************************************************************
  * Copyright 2020(c) Analog Devices, Inc.
