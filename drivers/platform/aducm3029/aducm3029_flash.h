@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   aducm3029/flash_extra.h
+ *   @file   aducm3029_flash.h
  *   @brief  Header file of the flash driver for ADuCM302x
  *   @author Andrei Drimbarean (andrei.drimbarean@analog.com)
 ********************************************************************************
@@ -37,8 +37,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef PLATFORM_INCLUDE_FLASH_EXTRA_H_
-#define PLATFORM_INCLUDE_FLASH_EXTRA_H_
+#ifndef ADUCM3029_FLASH_H_
+#define ADUCM3029_FLASH_H_
 
 #define ADUCM3029_FLASH_SIZE_BYTES (0x40000u)
 
@@ -50,4 +50,4 @@
 #define FLASH_OFFSET_IN_PAGE(x) (((x) & FLASH_PAGE_START_ADDRESS_MASK) / 4)
 #define FLASH_ADDRESS_PAGE_START(x) ((x) & ~FLASH_PAGE_START_ADDRESS_MASK)
 
-#endif /* PLATFORM_INCLUDE_FLASH_EXTRA_H_ */
+#endif /* ADUCM3029_FLASH_H_ */
