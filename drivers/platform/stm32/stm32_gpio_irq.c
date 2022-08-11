@@ -94,9 +94,9 @@ void HAL_GPIO_EXTI_Callback(uint16_t pin)
 
 	key.irq_id = no_os_find_first_set_bit(pin);
 
-	if (EXTI->PR & pin) {
+	if (__HAL_GPIO_EXTI_GET_IT(pin)) {
 		/* Clear pending bit */
-		EXTI->PR = pin;
+		__HAL_GPIO_EXTI_CLEAR_IT(pin);
 
 		ret = no_os_list_read_find(actions, (void **)&action, &key);
 		if (ret)
