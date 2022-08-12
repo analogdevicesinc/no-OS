@@ -65,6 +65,8 @@
 #include "clk_axi_clkgen.h"
 #include "axi_dmac.h"
 
+#define CN0561_ZED_CARRIER
+
 #ifdef IIO_SUPPORT
 #include "no_os_irq.h"
 #include "irq_extra.h"
@@ -121,12 +123,12 @@ int main()
 		.type = SPI_ENGINE,
 		.spi_engine_baseaddr = CN0561_SPI_ENGINE_BASEADDR,
 		.cs_delay = 0,
-		.data_width = 32,
+		.data_width = 24,
 		.ref_clk_hz = CN0561_SPI_ENG_REF_CLK_FREQ_HZ
 	};
 	const struct no_os_spi_init_param spi_eng_init_prm  = {
 		.chip_select = CN0561_SPI_CS,
-		.max_speed_hz = 24000000,
+		.max_speed_hz = 48000000,
 		.mode = NO_OS_SPI_MODE_1,
 		.platform_ops = &spi_eng_platform_ops,
 		.extra = (void*)&spi_eng_init_param,
@@ -140,8 +142,8 @@ int main()
 	};
 
 	struct no_os_pwm_init_param axi_pwm_init = {
-		.period_ns = 3400,
-		.duty_cycle_ns = 600,
+		.period_ns = 780,
+		.duty_cycle_ns = 130,
 		.phase_ns = 0,
 		.extra = &axi_zed_pwm_init
 	};
@@ -152,6 +154,7 @@ int main()
 	cn0561_init_param.adc_data_len = ADC_24_BIT_DATA;
 	cn0561_init_param.clk_delay_en = false;
 	cn0561_init_param.crc_header = CRC_6;
+//	cn0561_init_param.crc_header = NO_CRC;
 	cn0561_init_param.dev_id = ID_AD4134;
 	cn0561_init_param.format = QUAD_CH_PO;
 	cn0561_init_param.gpio_dclkio = NULL;
@@ -176,7 +179,7 @@ int main()
 	cn0561_init_param.spi_init_prm.extra = (void *)&spi_engine_init_params;
 	cn0561_init_param.spi_common_dev = 0;
 
-	spi_eng_msg_cmds[0] = READ(4);
+	spi_eng_msg_cmds[0] = READ(3);
 
 	Xil_ICacheEnable();
 	Xil_DCacheEnable();
