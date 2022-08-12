@@ -42,6 +42,10 @@
 #include "no_os_gpio.h"
 #include "stm32_gpio.h"
 
+#ifndef GPIO_MODE && defined(STM32L5)
+#define GPIO_MODE 0x00000003U
+#endif
+
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
@@ -98,8 +102,16 @@ static int32_t _gpio_init(struct no_os_gpio_desc *desc,
 		return -EINVAL;
 
 	switch (pextra->mode & GPIO_MODE) {
+#if defined(MODE_INPUT)
 	case MODE_INPUT:
+#else
+	case GPIO_MODE_INPUT:
+#endif
+#if defined(MODE_OUTPUT)
 	case MODE_OUTPUT:
+#else
+	case GPIO_MODE_OUTPUT_PP:
+#endif
 		break;
 	default:
 		return -EINVAL;
