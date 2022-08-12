@@ -97,9 +97,12 @@ static int32_t _gpio_init(struct no_os_gpio_desc *desc,
 	else
 		return -EINVAL;
 
-	switch (pextra->mode & GPIO_MODE) {
-	case MODE_INPUT:
-	case MODE_OUTPUT:
+	if (!IS_GPIO_MODE(pextra->mode))
+		return -EINVAL;
+
+	switch (pextra->mode) {
+	case GPIO_MODE_INPUT:
+	case GPIO_MODE_OUTPUT_PP:
 		break;
 	default:
 		return -EINVAL;
@@ -280,7 +283,8 @@ int32_t stm32_gpio_get_direction(struct no_os_gpio_desc *desc,
 		return -EINVAL;
 
 	struct stm32_gpio_desc *extra = desc->extra;
-	*direction = (extra->mode & GPIO_MODE) ? NO_OS_GPIO_OUT : NO_OS_GPIO_IN;
+	*direction = (extra->mode & GPIO_MODE_OUTPUT_PP) ? NO_OS_GPIO_OUT :
+		     NO_OS_GPIO_IN;
 	return 0;
 }
 
