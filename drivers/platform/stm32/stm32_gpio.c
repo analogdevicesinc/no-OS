@@ -110,15 +110,28 @@ static int32_t _gpio_init(struct no_os_gpio_desc *desc,
 
 	/* copy the settings to gpio descriptor */
 	desc->number = param->number;
+	desc->pull = param->pull;
 	extra->port = pextra->port;
 	extra->mode = pextra->mode;
-	extra->pull = pextra->pull;
 	extra->speed = pextra->speed;
+
+	switch (param->pull) {
+	case NO_OS_PULL_NONE:
+		gis.Pull = GPIO_PuPd_NOPULL;
+		break;
+	case NO_OS_PULL_UP:
+		gis.Pull = GPIO_PdPu_UP;
+		break;
+	case NO_OS_PULL_DOWN:
+		gis.Pull = GPIO_PdPu_DOWN;
+		break;
+	default:
+		return -EINVAL;
+	}
 
 	/* configure gpio with user configuration */
 	gis.Pin = NO_OS_BIT(param->number);
 	gis.Mode = extra->mode;
-	gis.Pull = extra->pull;
 	gis.Speed = extra->speed;
 	HAL_GPIO_Init(extra->port, &gis);
 

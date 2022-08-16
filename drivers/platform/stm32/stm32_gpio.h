@@ -52,8 +52,6 @@ typedef struct stm32_gpio_init_param {
 	GPIO_TypeDef *port;
 	/** Output mode */
 	uint32_t mode;
-	/** Pull-up, Pull-down mode */
-	uint32_t pull;
 	/** Speed grade */
 	uint32_t speed;
 } stm32_gpio_init_param;
@@ -67,8 +65,6 @@ typedef struct stm32_gpio_desc {
 	GPIO_TypeDef *port;
 	/** Output mode */
 	uint32_t mode;
-	/** Pull-up, Pull-down mode */
-	uint32_t pull;
 	/** Speed grade */
 	uint32_t speed;
 } stm32_gpio_desc;
