@@ -52,6 +52,5 @@ struct stm32_spi_init_param adxrs290_spi_extra_ip  = {
 struct stm32_gpio_desc adxrs290_gpio_extra_ip = {
 	.mode = GPIO_MODE_IT_RISING,
 	.port = GPIOA,
-	.pull = GPIO_NOPULL,
 	.speed = GPIO_SPEED_FREQ_VERY_HIGH,
 };
