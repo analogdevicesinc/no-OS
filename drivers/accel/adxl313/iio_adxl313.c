@@ -467,7 +467,6 @@ static int adxl313_iio_read_calibbias(void *dev, char *buf, uint32_t len,
 				      const struct iio_ch_info *channel, intptr_t priv)
 {
 	int32_t val;
-	uint32_t multiplier = ADXL312_OFFSET_SCALE_FACTOR;
 	struct adxl313_iio_dev *iio_adxl313;
 	struct adxl313_dev *adxl313;
 
@@ -481,34 +480,8 @@ static int adxl313_iio_read_calibbias(void *dev, char *buf, uint32_t len,
 
 	adxl313 = iio_adxl313->adxl313_dev;
 
-	switch (adxl313->dev_type) {
-	case ID_ADXL312:
-		multiplier = ADXL312_OFFSET_SCALE_FACTOR;
-		break;
-	case ID_ADXL313:
-		multiplier = ADXL313_OFFSET_SCALE_FACTOR;
-		break;
-	case ID_ADXL314:
-		multiplier = ADXL314_OFFSET_SCALE_FACTOR;
-		break;
-	default:
-		return -EINVAL;
-	}
-
 	if (channel->type == IIO_ACCEL) {
-		switch (channel->address) {
-		case CHAN_X:
-			val = adxl313->x_offset_raw * multiplier;
-			break;
-		case CHAN_Y:
-			val = adxl313->y_offset_raw * multiplier;
-			break;
-		case CHAN_Z:
-			val = adxl313->z_offset_raw * multiplier;
-			break;
-		default:
-			return -EINVAL;
-		}
+		adxl313_get_raw_offset(adxl313, &val, channel->address);
 
 		return iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
 	}
@@ -563,13 +536,13 @@ static int adxl313_iio_write_calibbias(void *dev, char *buf, uint32_t len,
 		/* Set the offset on the requested axis */
 		switch (channel->address) {
 		case CHAN_X:
-			ret = adxl313_set_offset(adxl313, val, ADXL313_X_AXIS);
+			ret = adxl313_set_raw_offset(adxl313, val, ADXL313_X_AXIS);
 			break;
 		case CHAN_Y:
-			ret = adxl313_set_offset(adxl313, val, ADXL313_Y_AXIS);
+			ret = adxl313_set_raw_offset(adxl313, val, ADXL313_Y_AXIS);
 			break;
 		case CHAN_Z:
-			ret = adxl313_set_offset(adxl313, val, ADXL313_Z_AXIS);
+			ret = adxl313_set_raw_offset(adxl313, val, ADXL313_Z_AXIS);
 			break;
 		default:
 			ret = -EINVAL;

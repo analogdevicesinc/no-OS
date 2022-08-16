@@ -489,28 +489,184 @@ int adxl313_get_op_mode(struct adxl313_dev *dev,
 int adxl313_set_offset(struct adxl313_dev *dev, int32_t offset_ug,
 		       enum adxl313_axis axis)
 {
-	int ret;
-	uint8_t reg_val = 0x00;
+	int32_t offset_val = 0x00;
 
 	if (axis > ADXL313_Z_AXIS)
 		return -EINVAL;
 
 	switch (dev->dev_type) {
 	case ID_ADXL312:
-		reg_val = (uint8_t)(offset_ug / ADXL312_OFFSET_SCALE_FACTOR);
+		offset_val = offset_ug / ADXL312_OFFSET_SCALE_FACTOR;
 		break;
 	case ID_ADXL313:
-		reg_val = (uint8_t)(offset_ug / ADXL313_OFFSET_SCALE_FACTOR);
+		offset_val = offset_ug / ADXL313_OFFSET_SCALE_FACTOR;
 		break;
 	case ID_ADXL314:
-		reg_val = (uint8_t)(offset_ug / ADXL314_OFFSET_SCALE_FACTOR);
+		offset_val =  offset_ug / ADXL314_OFFSET_SCALE_FACTOR;
 		break;
 	default:
 		return -ENODEV;
 	}
 
+	switch (dev->dev_type) {
+	case ID_ADXL312:
+		if (dev->resolution == ADXL313_10_BIT_RES)
+			offset_val = (offset_val * 4) >> (dev->range - ADXL313_RANGE_FACTOR);
+		else
+			offset_val = offset_val * 4;
+		break;
+	case ID_ADXL313:
+		if (dev->resolution == ADXL313_10_BIT_RES) {
+			offset_val = (offset_val * 4);
+			offset_val = offset_val >> dev->range;
+		} else
+			offset_val = offset_val * 4;
+		break;
+	case ID_ADXL314:
+		offset_val = offset_val * 4;
+		break;
+	default:
+		return -ENODEV;
+	}
+
+	/* Write raw data to register for setting offset. */
+	return adxl313_set_raw_offset(dev, offset_val, axis);
+}
+
+/*******************************************************************************
+ * @brief Get offset for each axis.
+ *
+ * @param dev       - The device structure.
+ * @param offset_ug - Offset read in g / 1000 000 (ug).
+ * @param axis      - Axis to apply offset.
+ *
+ * @return 0 in case of success, negative error code otherwise.
+*******************************************************************************/
+int adxl313_get_offset(struct adxl313_dev *dev, int32_t *offset_ug,
+		       enum adxl313_axis axis)
+{
+	int ret;
+	int32_t raw_offset = 0x00;
+
+	if (axis > ADXL313_Z_AXIS)
+		return -EINVAL;
+
+	/* Read data to register for getting offset register value. */
+	ret = adxl313_get_raw_offset(dev, &raw_offset, axis);
+	if (ret)
+		return ret;
+
+	switch (dev->dev_type) {
+	case ID_ADXL312:
+		if (dev->resolution == ADXL313_10_BIT_RES)
+			raw_offset = (raw_offset * 2) >> (ADXL313_12G_RANGE - dev->range);
+		else
+			raw_offset = raw_offset / 4;
+		break;
+	case ID_ADXL313:
+		if (dev->resolution == ADXL313_10_BIT_RES)
+			raw_offset = (raw_offset * 2) >> (ADXL313_4G_RANGE - dev->range);
+		else
+			raw_offset = raw_offset / 4;
+		break;
+	case ID_ADXL314:
+		raw_offset = raw_offset / 4;
+		break;
+	default:
+		return -ENODEV;
+	}
+
+	switch (dev->dev_type) {
+	case ID_ADXL312:
+		*offset_ug = raw_offset * ADXL312_OFFSET_SCALE_FACTOR;
+		break;
+	case ID_ADXL313:
+		*offset_ug = raw_offset * ADXL313_OFFSET_SCALE_FACTOR;
+		break;
+	case ID_ADXL314:
+		*offset_ug = raw_offset * ADXL314_OFFSET_SCALE_FACTOR;
+		break;
+	default:
+		return -ENODEV;
+	}
+
+	return ret;
+}
+
+/*******************************************************************************
+ * @brief Set offset for each axis as raw value.
+ *
+ * @param dev        - The device structure.
+ * @param offset_raw - Offset (8-bit raw value)
+ * @param axis       - Axis to apply offset.
+ *
+ * @return 0 in case of success, negative error code otherwise.
+*******************************************************************************/
+int adxl313_set_raw_offset(struct adxl313_dev *dev, int32_t offset_raw,
+			   enum adxl313_axis axis)
+{
+	int ret;
+	int8_t reg_val = 0x00;
+	uint8_t reg_val_unsigned;
+	int16_t min_clamp_val, max_clamp_val;
+
+	switch (dev->dev_type) {
+	case ID_ADXL312:
+		if (dev->resolution == ADXL313_10_BIT_RES) {
+			min_clamp_val = (INT8_MIN * 4) >> (dev->range - ADXL313_RANGE_FACTOR);
+			max_clamp_val = (INT8_MAX * 4) >> (dev->range - ADXL313_RANGE_FACTOR);
+		} else {
+			min_clamp_val = INT8_MIN * 4;
+			max_clamp_val = INT8_MAX * 4;
+		}
+		break;
+	case ID_ADXL313:
+		if (dev->resolution == ADXL313_10_BIT_RES) {
+			min_clamp_val = (INT8_MIN * 4) >> dev->range;
+			max_clamp_val = (INT8_MAX * 4) >> dev->range;
+		} else {
+			min_clamp_val = INT8_MIN * 4;
+			max_clamp_val = INT8_MAX * 4;
+		}
+		break;
+	case ID_ADXL314:
+		min_clamp_val = INT8_MIN * 4;
+		max_clamp_val = INT8_MAX * 4;
+		break;
+	default:
+		return -ENODEV;
+	}
+
+	if (no_os_clamp(offset_raw, min_clamp_val, max_clamp_val) != offset_raw)
+		return -EINVAL;
+
+	if (axis > ADXL313_Z_AXIS)
+		return -EINVAL;
+
+	switch (dev->dev_type) {
+	case ID_ADXL312:
+		if (dev->resolution == ADXL313_10_BIT_RES)
+			reg_val = (offset_raw * 2) >> (ADXL313_12G_RANGE - dev->range);
+		else
+			reg_val = offset_raw / 4;
+		break;
+	case ID_ADXL313:
+		if (dev->resolution == ADXL313_10_BIT_RES)
+			reg_val = (offset_raw * 2) >> (ADXL313_4G_RANGE - dev->range);
+		else
+			reg_val = offset_raw / 4;
+		break;
+	case ID_ADXL314:
+		reg_val = offset_raw / 4;
+		break;
+	default:
+		return -ENODEV;
+	}
+
+	reg_val_unsigned = (uint8_t)reg_val;
+
 	/* Write data to register for setting offset. */
-	ret = adxl313_write(dev, ADXL313_REG_OFS_AXIS(axis), 1, &reg_val);
+	ret = adxl313_write(dev, ADXL313_REG_OFS_AXIS(axis), 1, &reg_val_unsigned);
 	if (ret)
 		return ret;
 
@@ -532,19 +688,20 @@ int adxl313_set_offset(struct adxl313_dev *dev, int32_t offset_ug,
 }
 
 /*******************************************************************************
- * @brief Get offset for each axis.
+ * @brief Get raw offset value for each axis, depending on range and resolution.
  *
  * @param dev       - The device structure.
- * @param offset_ug - Offset read in g / 1000 000 (ug).
+ * @param offset_ug - Offset read as raw value.
  * @param axis      - Axis to apply offset.
  *
  * @return 0 in case of success, negative error code otherwise.
 *******************************************************************************/
-int adxl313_get_offset(struct adxl313_dev *dev, int32_t *offset_ug,
-		       enum adxl313_axis axis)
+int adxl313_get_raw_offset(struct adxl313_dev *dev, int32_t *offset_raw,
+			   enum adxl313_axis axis)
 {
 	int ret;
 	uint8_t reg_val = 0x00;
+	int8_t signed_reg_val;
 
 	if (axis > ADXL313_Z_AXIS)
 		return -EINVAL;
@@ -552,15 +709,22 @@ int adxl313_get_offset(struct adxl313_dev *dev, int32_t *offset_ug,
 	/* Read data to register for getting offset register value. */
 	ret = adxl313_read(dev, ADXL313_REG_OFS_AXIS(axis), 1, &reg_val);
 	if (!ret) {
+		signed_reg_val = (int8_t)reg_val;
 		switch (dev->dev_type) {
 		case ID_ADXL312:
-			*offset_ug = (int32_t)reg_val * ADXL312_OFFSET_SCALE_FACTOR;
+			if (dev->resolution == ADXL313_10_BIT_RES)
+				*offset_raw = (signed_reg_val * 4) >> (dev->range - ADXL313_RANGE_FACTOR);
+			else
+				*offset_raw = signed_reg_val * 4;
 			break;
 		case ID_ADXL313:
-			*offset_ug = ((int32_t)reg_val * ADXL313_OFFSET_SCALE_FACTOR);
+			if (dev->resolution == ADXL313_10_BIT_RES)
+				*offset_raw = (signed_reg_val * 4) >> dev->range;
+			else
+				*offset_raw = signed_reg_val * 4;
 			break;
 		case ID_ADXL314:
-			*offset_ug = (int32_t)reg_val * ADXL314_OFFSET_SCALE_FACTOR;
+			*offset_raw = signed_reg_val * 4;
 			break;
 		default:
 			return -ENODEV;

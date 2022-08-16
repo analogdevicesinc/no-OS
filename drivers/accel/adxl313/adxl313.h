@@ -566,6 +566,16 @@ int adxl313_get_offset(struct adxl313_dev *dev,
 		       int32_t *offset_ug,
 		       enum adxl313_axis axis);
 
+/*! Set raw offset for each axis. */
+int adxl313_set_raw_offset(struct adxl313_dev *dev,
+			   int32_t offset_raw,
+			   enum adxl313_axis axis);
+
+/*! Get raw offset for each axis. */
+int adxl313_get_raw_offset(struct adxl313_dev *dev,
+			   int32_t *offset_raw,
+			   enum adxl313_axis axis);
+
 /*! Read the 3-axis raw data from the accelerometer. */
 int adxl313_get_raw_xyz(struct adxl313_dev *dev,
 			int16_t *x_raw,
