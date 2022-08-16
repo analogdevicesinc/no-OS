@@ -1096,6 +1096,11 @@ int adxl313_iio_init(struct adxl313_iio_dev **iio_dev,
 			goto error_config;
 	}
 
+	/* Set FIFO mode to BYPASS */
+	ret = adxl313_set_fifo_mode(desc->adxl313_dev, ADXL313_BYPAS_MODE);
+	if (ret)
+		goto error_config;
+
 	/* Set operation mode */
 	ret = adxl313_set_op_mode(desc->adxl313_dev, ADXL313_MEAS);
 	if (ret)
