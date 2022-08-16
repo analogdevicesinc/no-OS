@@ -43,6 +43,7 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include <stdint.h>
+#include <stdbool.h>
 #include "no_os_delay.h"
 #include "no_os_gpio.h"
 #include "no_os_spi.h"
@@ -119,7 +120,7 @@
 /* AD7779_REG_DOUT_FORMAT */
 #define AD7779_DOUT_FORMAT(x)			(((x) & 0x3) << 6)
 #define AD7779_DOUT_HEADER_FORMAT		(1 << 5)
-#define AD7779_DCLK_CLK_DIV(x)			(((x) & 0x3) << 1)
+#define AD7779_DCLK_CLK_DIV(x)			(((x) & 0x7) << 1)
 
 /* AD7779_REG_GLOBAL_MUX_CONFIG */
 #define AD7779_GLOBAL_MUX_CTRL(x)		(((x) & 0x1F) << 3)
@@ -271,6 +272,7 @@ typedef struct {
 	ad7779_state		sar_state;
 	ad7779_sar_mux		sar_mux;
 	ad7779_state		sinc5_state;	// Can be enabled only for AD7771
+	bool				read_from_cache;
 	uint8_t			cached_reg_val[AD7779_REG_SRC_UPDATE + 1];
 } ad7779_dev;
 
@@ -303,6 +305,7 @@ typedef struct {
 	uint32_t		gain_corr[8];
 	ad7779_ref_buf_op_mode	ref_buf_op_mode[2];
 	ad7779_state		sinc5_state;	// Can be enabled only for AD7771
+	bool			read_from_cache;
 } ad7779_init_param;
 
 /******************************************************************************/

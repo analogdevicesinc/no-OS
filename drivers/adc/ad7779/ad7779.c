@@ -43,6 +43,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "ad7779.h"
+#include "no_os_util.h"
 #include "no_os_error.h"
 
 /******************************************************************************/
@@ -319,7 +320,34 @@ int32_t ad7779_set_spi_op_mode(ad7779_dev *dev,
 int32_t ad7779_get_spi_op_mode(ad7779_dev *dev,
 			       ad7779_spi_op_mode *mode)
 {
-	*mode = dev->spi_op_mode;
+	int32_t ret;
+	uint8_t cfg_2;
+	uint8_t cfg_3;
+	uint8_t reg_data;
+
+	if (!dev->read_from_cache) {
+		ret = ad7779_spi_int_reg_read(dev, AD7779_REG_GENERAL_USER_CONFIG_2, &reg_data);
+		if (ret)
+			return ret;
+
+		cfg_2 = no_os_field_get(AD7779_SAR_DIAG_MODE_EN, reg_data);
+
+		ret = ad7779_spi_int_reg_read(dev, AD7779_REG_GENERAL_USER_CONFIG_3,
+					      &reg_data);
+		if (ret)
+			return ret;
+
+		cfg_3 = no_os_field_get(AD7779_SPI_SLAVE_MODE_EN, reg_data);
+
+		if ((cfg_2 == 0) && (cfg_3 == 1))
+			*mode = AD7779_SD_CONV;
+		else if ((cfg_3 == 0) && (cfg_2 == 1))
+			*mode = AD7779_SAR_CONV;
+		else
+			*mode = AD7779_INT_REG;
+	} else {
+		*mode = dev->spi_op_mode;
+	}
 
 	return 0;
 }
@@ -451,7 +479,18 @@ int32_t ad7779_get_state(ad7779_dev *dev,
 			 ad7779_ch ch,
 			 ad7779_state *state)
 {
-	*state = dev->state[ch];
+	int32_t ret;
+	uint8_t reg_data;
+
+	if (!dev->read_from_cache) {
+		ret = ad7779_spi_int_reg_read(dev, AD7779_REG_CH_DISABLE, &reg_data);
+		if (ret)
+			return ret;
+
+		*state = no_os_field_get(AD7779_CH_DISABLE(ch), reg_data);
+	} else {
+		*state = dev->state[ch];
+	}
 
 	return 0;
 }
@@ -524,7 +563,17 @@ int32_t ad7779_get_gain(ad7779_dev *dev,
 			ad7779_ch ch,
 			ad7779_gain *gain)
 {
-	*gain = dev->gain[ch];
+	int32_t ret;
+	uint8_t reg_data;
+
+	if (!dev->read_from_cache) {
+		ret = ad7779_spi_int_reg_read(dev, AD7779_REG_CH_CONFIG(ch), &reg_data);
+		if (ret)
+			return ret;
+		*gain = no_os_field_get(AD7779_CH_GAIN(0x3), reg_data);
+	} else {
+		*gain = dev->gain[ch];
+	}
 
 	return 0;
 }
@@ -598,8 +647,33 @@ int32_t ad7779_get_dec_rate(ad7779_dev *dev,
 			    uint16_t *int_val,
 			    uint16_t *dec_val)
 {
-	*int_val = dev->dec_rate_int;
-	*dec_val = dev->dec_rate_int;
+	int32_t ret;
+	uint8_t reg_data;
+
+	if (!dev->read_from_cache) {
+
+		ret = ad7779_spi_int_reg_read(dev, AD7779_REG_SRC_IF_LSB, &reg_data);
+		if (ret)
+			return ret;
+		*dec_val = reg_data;
+		ret = ad7779_spi_int_reg_read(dev, AD7779_REG_SRC_IF_MSB, &reg_data);
+		if (ret)
+			return ret;
+		*dec_val |= reg_data << 8;
+
+		ret = ad7779_spi_int_reg_read(dev, AD7779_REG_SRC_N_LSB, &reg_data);
+		if (ret)
+			return ret;
+		*int_val = reg_data;
+		ret = ad7779_spi_int_reg_read(dev, AD7779_REG_SRC_N_MSB, &reg_data);
+		if (ret)
+			return ret;
+		*int_val |= reg_data << 8;
+		*dec_val = *dec_val * 1000 / 65536;
+	} else {
+		*int_val = dev->dec_rate_int;
+		*dec_val = dev->dec_rate_int;
+	}
 
 	return 0;
 }
@@ -635,7 +709,17 @@ int32_t ad7779_set_power_mode(ad7779_dev *dev,
 int32_t ad7779_get_power_mode(ad7779_dev *dev,
 			      ad7779_pwr_mode *pwr_mode)
 {
-	*pwr_mode = dev->pwr_mode;
+	int32_t ret;
+	uint8_t reg_data;
+
+	if (!dev->read_from_cache) {
+		ret = ad7779_spi_int_reg_read(dev, AD7779_REG_GENERAL_USER_CONFIG_1, &reg_data);
+		if (ret)
+			return ret;
+		*pwr_mode = no_os_field_get(AD7779_MOD_POWERMODE, reg_data);
+	} else {
+		*pwr_mode = dev->pwr_mode;
+	}
 
 	return 0;
 }
@@ -671,7 +755,17 @@ int32_t ad7779_set_reference_type(ad7779_dev *dev,
 int32_t ad7779_get_reference_type(ad7779_dev *dev,
 				  ad7779_ref_type *ref_type)
 {
-	*ref_type = dev->ref_type;
+	int32_t ret;
+	uint8_t reg_data;
+
+	if (!dev->read_from_cache) {
+		ret = ad7779_spi_int_reg_read(dev, AD7779_REG_GENERAL_USER_CONFIG_1, &reg_data);
+		if (ret)
+			return ret;
+		*ref_type = no_os_field_get(AD7779_PDB_REFOUT_BUF, reg_data);
+	} else {
+		*ref_type = dev->ref_type;
+	}
 
 	return 0;
 }
@@ -705,7 +799,7 @@ int32_t ad7779_set_dclk_div(ad7779_dev *dev,
 	} else {
 		ret = ad7779_spi_int_reg_write_mask(dev,
 						    AD7779_REG_DOUT_FORMAT,
-						    AD7779_DCLK_CLK_DIV(0x3),
+						    AD7779_DCLK_CLK_DIV(0x7),
 						    AD7779_DCLK_CLK_DIV(div));
 	}
 	dev->dclk_div = div;
@@ -722,7 +816,17 @@ int32_t ad7779_set_dclk_div(ad7779_dev *dev,
 int32_t ad7779_get_dclk_div(ad7779_dev *dev,
 			    ad7779_dclk_div *div)
 {
-	*div = dev->dclk_div;
+	int32_t ret;
+	uint8_t reg_data;
+
+	if (!dev->read_from_cache) {
+		ret = ad7779_spi_int_reg_read(dev, AD7779_REG_DOUT_FORMAT, &reg_data);
+		if (ret)
+			return ret;
+		*div = no_os_field_get(AD7779_DCLK_CLK_DIV(0x7), reg_data);
+	} else {
+		*div = dev->dclk_div;
+	}
 
 	return 0;
 }
@@ -781,13 +885,23 @@ int32_t ad7779_get_sync_offset(ad7779_dev *dev,
 			       ad7779_ch ch,
 			       uint8_t *sync_offset)
 {
+	int32_t ret;
+	uint8_t reg_data;
+
 	if (dev->ctrl_mode == AD7779_PIN_CTRL) {
 		printf("%s: This feature is not available in PIN control mode.\n",
 		       __func__);
 		return -1;
 	}
 
-	*sync_offset = dev->sync_offset[ch];
+	if (!dev->read_from_cache) {
+		ret = ad7779_spi_int_reg_read(dev, AD7779_REG_CH_SYNC_OFFSET(ch), &reg_data);
+		if (ret)
+			return ret;
+		*sync_offset = reg_data;
+	} else {
+		*sync_offset = dev->sync_offset[ch];
+	}
 
 	return 0;
 }
@@ -858,13 +972,36 @@ int32_t ad7779_get_offset_corr(ad7779_dev *dev,
 			       ad7779_ch ch,
 			       uint32_t *offset)
 {
+	int32_t ret;
+	uint8_t reg_data;
+
 	if (dev->ctrl_mode == AD7779_PIN_CTRL) {
 		printf("%s: This feature is not available in PIN control mode.\n",
 		       __func__);
 		return -1;
 	}
 
-	*offset = dev->offset_corr[ch];
+	if (!dev->read_from_cache) {
+		ret = ad7779_spi_int_reg_read(dev, AD7779_REG_CH_OFFSET_LOWER_BYTE(ch),
+					      &reg_data);
+		if (ret)
+			return ret;
+		*offset = reg_data;
+
+		ret = ad7779_spi_int_reg_read(dev, AD7779_REG_CH_OFFSET_MID_BYTE(ch),
+					      &reg_data);
+		if (ret)
+			return ret;
+		*offset |= reg_data << 8;
+
+		ret = ad7779_spi_int_reg_read(dev, AD7779_REG_CH_OFFSET_UPPER_BYTE(ch),
+					      &reg_data);
+		if (ret)
+			return ret;
+		*offset |= reg_data << 16;
+	} else {
+		*offset = dev->offset_corr[ch];
+	}
 
 	return 0;
 }
@@ -936,13 +1073,35 @@ int32_t ad7779_get_gain_corr(ad7779_dev *dev,
 			     ad7779_ch ch,
 			     uint32_t *gain)
 {
+	int32_t ret;
+	uint8_t reg_data;
+
 	if (dev->ctrl_mode == AD7779_PIN_CTRL) {
 		printf("%s: This feature is not available in PIN control mode.\n",
 		       __func__);
 		return -1;
 	}
 
-	*gain = dev->gain_corr[ch];
+	if (!dev->read_from_cache) {
+		ret = ad7779_spi_int_reg_read(dev, AD7779_REG_CH_GAIN_LOWER_BYTE(ch),
+					      &reg_data);
+		if (ret)
+			return ret;
+		*gain  = reg_data;
+
+		ret = ad7779_spi_int_reg_read(dev, AD7779_REG_CH_GAIN_MID_BYTE(ch), &reg_data);
+		if (ret)
+			return ret;
+		*gain |= reg_data << 8;
+
+		ret = ad7779_spi_int_reg_read(dev, AD7779_REG_CH_GAIN_UPPER_BYTE(ch),
+					      &reg_data);
+		if (ret)
+			return ret;
+		*gain |= reg_data << 16;
+	} else {
+		*gain = dev->gain_corr[ch];
+	}
 
 	return 0;
 }
@@ -1039,13 +1198,49 @@ int32_t ad7779_get_ref_buf_op_mode(ad7779_dev *dev,
 				   ad7779_refx_pin refx_pin,
 				   ad7779_ref_buf_op_mode *mode)
 {
+	int32_t ret;
+	uint8_t cfg_1;
+	uint8_t cfg_2;
+	uint8_t reg_data;
+	uint8_t cfg_1_mask;
+	uint8_t cfg_2_mask;
+
 	if (dev->ctrl_mode == AD7779_PIN_CTRL) {
 		printf("%s: This feature is not available in PIN control mode.\n",
 		       __func__);
 		return -1;
 	}
 
-	*mode = dev->ref_buf_op_mode[refx_pin];
+	if (refx_pin == AD7779_REFX_P) {
+		cfg_1_mask = AD7779_REF_BUF_POS_EN;
+		cfg_2_mask = AD7779_REFBUFP_PREQ;
+	} else {
+		cfg_1_mask = AD7779_REF_BUF_NEG_EN;
+		cfg_2_mask = AD7779_REFBUFN_PREQ;
+	}
+
+	if (!dev->read_from_cache) {
+		ret = ad7779_spi_int_reg_read(dev, AD7779_REG_BUFFER_CONFIG_1, &reg_data);
+		if (ret)
+			return ret;
+		cfg_1 = no_os_field_get(cfg_1_mask, reg_data);
+
+		ret = ad7779_spi_int_reg_read(dev, AD7779_REG_BUFFER_CONFIG_2, &reg_data);
+		if (ret)
+			return ret;
+		cfg_2 = no_os_field_get(cfg_2_mask, reg_data);
+
+		if ((cfg_1 == 1) && (cfg_2 == 0))
+			*mode = AD7779_REF_BUF_ENABLED;
+		else if ((cfg_1 == 1) && (cfg_2 == 1))
+			*mode = AD7779_REF_BUF_PRECHARGED;
+		else if (cfg_1 == 0 && cfg_2 == 0)
+			*mode = AD7779_REF_BUF_DISABLED;
+		else
+			return -1;
+	} else {
+		*mode = dev->ref_buf_op_mode[refx_pin];
+	}
 
 	return 0;
 }
@@ -1112,8 +1307,26 @@ int32_t ad7779_get_sar_cfg(ad7779_dev *dev,
 			   ad7779_state *state,
 			   ad7779_sar_mux *mux)
 {
-	*state = dev->sar_state;
-	*mux = dev->sar_mux;
+	int32_t ret;
+	uint8_t reg_data;
+	uint8_t pdb_sar_val;
+
+	if (!dev->read_from_cache) {
+		ret = ad7779_spi_int_reg_read(dev, AD7779_REG_GENERAL_USER_CONFIG_1,
+					      &reg_data);
+		if (ret)
+			return ret;
+		pdb_sar_val = no_os_field_get(AD7779_PDB_SAR, reg_data);
+		*state = (pdb_sar_val == 1 ? AD7779_ENABLE : AD7779_DISABLE);
+
+		ret = ad7779_spi_int_reg_read(dev, AD7779_REG_GLOBAL_MUX_CONFIG, &reg_data);
+		if (ret)
+			return ret;
+		*mux = no_os_field_get(AD7779_GLOBAL_MUX_CTRL(0x1F), reg_data);
+	} else {
+		*state = dev->sar_state;
+		*mux = dev->sar_mux;
+	}
 
 	return 0;
 }
@@ -1225,13 +1438,22 @@ int32_t ad7771_set_sinc5_filter_state(ad7779_dev *dev,
 int32_t ad7771_get_sinc5_filter_state(ad7779_dev *dev,
 				      ad7779_state *state)
 {
+	int32_t ret;
+	uint8_t reg_data;
+
 	if (dev->ctrl_mode == AD7779_PIN_CTRL) {
 		printf("%s: This feature is not available in PIN control mode.\n",
 		       __func__);
 		return -1;
 	}
 
-	*state = dev->sinc5_state;
+	if (!dev->read_from_cache) {
+		ret = ad7779_spi_int_reg_read(dev, AD7779_REG_GENERAL_USER_CONFIG_2, &reg_data);
+		if (ret)
+			return ret;
+		*state = no_os_field_get(AD7771_FILTER_MODE, reg_data);
+	} else
+		*state = dev->sinc5_state;
 
 	return 0;
 }
@@ -1308,6 +1530,7 @@ int32_t ad7779_init(ad7779_dev **device,
 	dev->spi_op_mode = AD7779_INT_REG;
 	dev->sar_state = AD7779_DISABLE;
 	dev->sar_mux = AD7779_AUXAINP_AUXAINN;
+	dev->read_from_cache = init_param.read_from_cache;
 
 	if ((dev->ctrl_mode == AD7779_SPI_CTRL) &&
 	    (init_param.spi_crc_en == AD7779_ENABLE)) {
