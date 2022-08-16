@@ -67,7 +67,7 @@ uint8_t iio_data_buffer[DATA_BUFFER_SIZE*3*sizeof(int)];
 int iio_example_main()
 {
 	int ret;
-	char *dev_name = "ADXL312";
+	char *dev_name = "adxl312";
 	struct adxl313_iio_dev *adxl313_iio_desc;
 	struct adxl313_iio_dev_init_param adxl313_init_par;
 	struct iio_data_buffer accel_buff = {
@@ -82,13 +82,13 @@ int iio_example_main()
 
 	switch(adxl313_iio_desc->adxl313_dev->dev_type) {
 	case ID_ADXL312:
-		dev_name = "ADXL312";
+		dev_name = "adxl312";
 		break;
 	case ID_ADXL313:
-		dev_name = "ADXL313";
+		dev_name = "adxl313";
 		break;
 	case ID_ADXL314:
-		dev_name = "ADXL314";
+		dev_name = "adxl314";
 		break;
 	default:
 		return -ENODEV;
