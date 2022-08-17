@@ -49,18 +49,18 @@
  * @brief Structure holding the initialization parameters for stm32 platform
  * specific timer parameters.
  */
-typedef struct stm32_timer_init_param {
+struct stm32_timer_init_param {
 	TIM_HandleTypeDef *htimer;
-} stm32_timer_init_param;
+};
 
 /**
  * @struct stm32_timer_desc
  * @brief stm32 platform specific timer descriptor
  */
-typedef struct stm32_timer_desc {
+struct stm32_timer_desc {
 	/** timer instance */
 	TIM_HandleTypeDef *htimer;
-} stm32_timer_desc;
+};
 
 /**
  * @brief stm32 specific timer platform ops structure
