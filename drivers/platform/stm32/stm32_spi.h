@@ -48,23 +48,23 @@
  * @brief Structure holding the initialization parameters for stm32 platform
  * specific SPI parameters.
  */
-typedef struct stm32_spi_init_param {
+struct stm32_spi_init_param {
 	/** Chip select port */
 	GPIO_TypeDef *chip_select_port;
 	/** Get perihperal source clock function */
 	uint32_t (*get_input_clock)(void);
-} stm32_spi_init_param;
+};
 
 /**
  * @struct stm32_spi_desc
  * @brief stm32 platform specific SPI descriptor
  */
-typedef struct stm32_spi_desc {
+struct stm32_spi_desc {
 	/** SPI instance */
 	SPI_HandleTypeDef hspi;
 	/** Chip select gpio descriptor */
 	struct no_os_gpio_desc *chip_select;
-} stm32_spi_desc;
+};
 
 /**
  * @brief stm32 specific SPI platform ops structure

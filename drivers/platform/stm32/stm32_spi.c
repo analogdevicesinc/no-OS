@@ -74,7 +74,7 @@ int32_t stm32_spi_init(struct no_os_spi_desc **desc,
 	struct no_os_gpio_init_param csip;
 	struct stm32_gpio_init_param csip_extra;
 
-	sdesc = (stm32_spi_desc*)calloc(1,sizeof(stm32_spi_desc));
+	sdesc = (struct stm32_spi_desc*)calloc(1,sizeof(struct stm32_spi_desc));
 	if (!sdesc) {
 		ret = -ENOMEM;
 		goto error;
