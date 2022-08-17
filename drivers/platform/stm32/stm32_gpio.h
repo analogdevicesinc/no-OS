@@ -47,27 +47,27 @@
  * @struct stm32_gpio_init_param
  * @brief Structure holding the initialization parameters for stm32 platform
  */
-typedef struct stm32_gpio_init_param {
+struct stm32_gpio_init_param {
 	/** Port */
 	GPIO_TypeDef *port;
 	/** Output mode */
 	uint32_t mode;
 	/** Speed grade */
 	uint32_t speed;
-} stm32_gpio_init_param;
+};
 
 /**
  * @struct stm32_gpio_desc
  * @brief stm32 platform specific gpio descriptor
  */
-typedef struct stm32_gpio_desc {
+struct stm32_gpio_desc {
 	/** Port */
 	GPIO_TypeDef *port;
 	/** Output mode */
 	uint32_t mode;
 	/** Speed grade */
 	uint32_t speed;
-} stm32_gpio_desc;
+};
 
 /**
  * @brief stm32 platform specific gpio platform ops structure
