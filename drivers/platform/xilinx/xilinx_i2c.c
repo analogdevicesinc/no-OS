@@ -162,8 +162,8 @@ int32_t xil_i2c_init(struct no_os_i2c_desc **desc,
 {
 	int32_t		ret;
 	struct no_os_i2c_desc	*idesc;
-	xil_i2c_desc	*xdesc;
-	xil_i2c_init_param	*xinit;
+	struct xil_i2c_desc	*xdesc;
+	struct xil_i2c_init_param	*xinit;
 
 	idesc = (struct no_os_i2c_desc *)malloc(sizeof(*idesc));
 	xdesc = (struct xil_i2c_desc *)malloc(sizeof(*xdesc));
@@ -316,7 +316,7 @@ error:
  */
 int32_t xil_i2c_remove(struct no_os_i2c_desc *desc)
 {
-	xil_i2c_desc	*xdesc;
+	struct xil_i2c_desc	*xdesc;
 	int32_t		ret;
 
 	xdesc = desc->extra;
@@ -394,7 +394,7 @@ int32_t xil_i2c_write(struct no_os_i2c_desc *desc,
 		      uint8_t bytes_number,
 		      uint8_t stop_bit)
 {
-	xil_i2c_desc	*xdesc;
+	struct xil_i2c_desc	*xdesc;
 	int32_t		ret;
 
 	xdesc = desc->extra;
@@ -459,7 +459,7 @@ int32_t xil_i2c_read(struct no_os_i2c_desc *desc,
 		     uint8_t bytes_number,
 		     uint8_t stop_bit)
 {
-	xil_i2c_desc	*xdesc;
+	struct xil_i2c_desc	*xdesc;
 	int32_t		ret;
 
 	xdesc = desc->extra;
