@@ -48,19 +48,19 @@
  * @brief Structure holding the initialization parameters for stm32 platform
  * specific TDM parameters.
  */
-typedef struct stm32_tdm_init_param {
+struct stm32_tdm_init_param {
 	/** Device ID */
 	SAI_Block_TypeDef *base;
-} stm32_tdm_init_param;
+};
 
 /**
  * @struct stm32_tdm_desc
  * @brief stm32 platform specific TDM descriptor
  */
-typedef struct stm32_tdm_desc {
+struct stm32_tdm_desc {
 	/** TDM instance */
 	SAI_HandleTypeDef hsai;
-} stm32_tdm_desc;
+};
 
 /**
  * @brief stm32 specific TDM platform ops structure

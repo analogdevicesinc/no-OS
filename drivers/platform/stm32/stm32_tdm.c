@@ -79,7 +79,7 @@ int32_t stm32_tdm_init(struct no_os_tdm_desc **desc,
 	struct stm32_tdm_desc *tdesc;
 	struct stm32_tdm_init_param *tinit;
 
-	tdesc = (stm32_tdm_desc*)calloc(1,sizeof(stm32_tdm_desc));
+	tdesc = (struct stm32_tdm_desc*)calloc(1,sizeof(struct stm32_tdm_desc));
 	if (!tdesc) {
 		ret = -ENOMEM;
 		goto error;
