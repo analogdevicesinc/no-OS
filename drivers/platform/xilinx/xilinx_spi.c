@@ -84,7 +84,7 @@ static int32_t spi_init_pl(struct no_os_spi_desc *desc,
 	struct xil_spi_desc 		*xdesc;
 	struct xil_spi_init_param	*xinit;
 
-	xdesc = (xil_spi_desc*)malloc(sizeof(xil_spi_desc));
+	xdesc = (struct xil_spi_desc*)malloc(sizeof(struct xil_spi_desc));
 	if(!xdesc) {
 		free(xdesc);
 		return -1;
@@ -158,7 +158,7 @@ static int32_t spi_init_ps(struct no_os_spi_desc *desc,
 	uint32_t			prescaler = 0u;
 	uint32_t			input_clock = 0u;
 
-	xdesc = (xil_spi_desc*)malloc(sizeof(xil_spi_desc));
+	xdesc = (struct xil_spi_desc*)malloc(sizeof(struct xil_spi_desc));
 	if(!xdesc) {
 		free(xdesc);
 		return -1;

@@ -197,7 +197,7 @@ int main(void)
 	extern const uint32_t sine_lut_iq[1024];
 #endif
 #ifndef ALTERA_PLATFORM
-	xil_spi_init_param hal_spi_param = {
+	struct xil_spi_init_param hal_spi_param = {
 #ifdef PLATFORM_MB
 		.type = SPI_PL,
 #else

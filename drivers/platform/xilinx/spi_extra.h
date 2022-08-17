@@ -75,18 +75,18 @@ enum xil_spi_type {
  * @brief Structure holding the initialization parameters for Xilinx platform
  * specific SPI parameters when using xil_spi_ops.
  */
-typedef struct xil_spi_init_param {
+struct xil_spi_init_param {
 	/** Xilinx architecture */
 	enum xil_spi_type	type;
 	/** SPI flags */
 	uint32_t		flags;
-} xil_spi_init_param;
+};
 
 /**
  * @struct xil_spi_desc
  * @brief Xilinx platform specific SPI descriptor
  */
-typedef struct xil_spi_desc {
+struct xil_spi_desc {
 	/** Xilinx architecture */
 	enum xil_spi_type	type;
 	/** SPI flags */
@@ -95,7 +95,7 @@ typedef struct xil_spi_desc {
 	void			*config;
 	/** SPI instance */
 	void			*instance;
-} xil_spi_desc;
+};
 
 /**
  * @brief SPI engine platform ops structure
