@@ -191,7 +191,7 @@ int32_t xil_gpio_get_optional(struct no_os_gpio_desc **desc,
 int32_t xil_gpio_remove(struct no_os_gpio_desc *desc)
 {
 	if (desc != NULL) {
-		free(((xil_gpio_desc *)(desc->extra))->instance);
+		free(((struct xil_gpio_desc *)(desc->extra))->instance);
 		free(desc->extra);
 		free(desc);
 	}
