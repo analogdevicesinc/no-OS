@@ -63,10 +63,8 @@ struct stm32_gpio_init_param {
 struct stm32_gpio_desc {
 	/** Port */
 	GPIO_TypeDef *port;
-	/** Output mode */
-	uint32_t mode;
-	/** Speed grade */
-	uint32_t speed;
+	/** GPIO configuration */
+	GPIO_InitTypeDef gpio_config;
 };
 
 /**

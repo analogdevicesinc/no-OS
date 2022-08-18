@@ -57,8 +57,7 @@ static int32_t _gpio_init(struct no_os_gpio_desc *desc,
 {
 	int32_t ret = 0;
 	struct stm32_gpio_desc *extra = desc->extra;
-	struct stm32_gpio_desc *pextra = param->extra;
-	GPIO_InitTypeDef gis;
+	struct stm32_gpio_init_param *pextra = param->extra;
 
 	if (!param)
 		return -EINVAL;
@@ -112,28 +111,29 @@ static int32_t _gpio_init(struct no_os_gpio_desc *desc,
 	desc->number = param->number;
 	desc->pull = param->pull;
 	extra->port = pextra->port;
-	extra->mode = pextra->mode;
-	extra->speed = pextra->speed;
 
 	switch (param->pull) {
 	case NO_OS_PULL_NONE:
-		gis.Pull = GPIO_PuPd_NOPULL;
+		extra->gpio_config.Pull = GPIO_NOPULL;
 		break;
 	case NO_OS_PULL_UP:
-		gis.Pull = GPIO_PdPu_UP;
+	case NO_OS_PULL_UP_WEAK:
+		extra->gpio_config.Pull = GPIO_PULLUP;
 		break;
 	case NO_OS_PULL_DOWN:
-		gis.Pull = GPIO_PdPu_DOWN;
+	case NO_OS_PULL_DOWN_WEAK:
+		extra->gpio_config.Pull = GPIO_PULLDOWN;
 		break;
 	default:
 		return -EINVAL;
 	}
 
 	/* configure gpio with user configuration */
-	gis.Pin = NO_OS_BIT(param->number);
-	gis.Mode = extra->mode;
-	gis.Speed = extra->speed;
-	HAL_GPIO_Init(extra->port, &gis);
+	extra->gpio_config.Pin = NO_OS_BIT(param->number);
+	extra->gpio_config.Mode = pextra->mode;
+	extra->gpio_config.Speed = pextra->speed;
+
+	HAL_GPIO_Init(extra->port, &extra->gpio_config);
 
 	return ret;
 }
@@ -219,7 +219,6 @@ int32_t stm32_gpio_remove(struct no_os_gpio_desc *desc)
  */
 int32_t stm32_gpio_direction_input(struct no_os_gpio_desc *desc)
 {
-	GPIO_InitTypeDef gis = {0};
 	struct stm32_gpio_desc	*extra;
 
 	if (!desc)
@@ -231,14 +230,8 @@ int32_t stm32_gpio_direction_input(struct no_os_gpio_desc *desc)
 	extra = desc->extra;
 
 	/* configure gpio with user configuration */
-	gis.Pin = NO_OS_BIT(desc->number);
-	gis.Mode = GPIO_MODE_INPUT;
-	gis.Pull = extra->pull;
-	gis.Speed = extra->speed;
-	HAL_GPIO_Init(extra->port, &gis);
-
-	/* copy the settings to gpio descriptor */
-	extra->mode = gis.Mode;
+	extra->gpio_config.Mode = GPIO_MODE_INPUT;
+	HAL_GPIO_Init(extra->port, &extra->gpio_config);
 
 	return 0;
 }
@@ -254,7 +247,6 @@ int32_t stm32_gpio_direction_input(struct no_os_gpio_desc *desc)
 int32_t stm32_gpio_direction_output(struct no_os_gpio_desc *desc,
 				    uint8_t value)
 {
-	GPIO_InitTypeDef gis = {0};
 	struct stm32_gpio_desc	*extra;
 
 	if (!desc)
@@ -269,14 +261,8 @@ int32_t stm32_gpio_direction_output(struct no_os_gpio_desc *desc,
 	HAL_GPIO_WritePin(extra->port, NO_OS_BIT(desc->number), (GPIO_PinState)value);
 
 	/* configure gpio with user configuration */
-	gis.Pin = NO_OS_BIT(desc->number);
-	gis.Mode = GPIO_MODE_OUTPUT_PP;
-	gis.Pull = extra->pull;
-	gis.Speed = extra->speed;
-	HAL_GPIO_Init(extra->port, &gis);
-
-	/* copy the settings to gpio descriptor */
-	extra->mode = gis.Mode;
+	extra->gpio_config.Mode = GPIO_MODE_OUTPUT_PP;
+	HAL_GPIO_Init(extra->port, &extra->gpio_config);
 
 	return 0;
 }
@@ -296,7 +282,7 @@ int32_t stm32_gpio_get_direction(struct no_os_gpio_desc *desc,
 		return -EINVAL;
 
 	struct stm32_gpio_desc *extra = desc->extra;
-	*direction = (extra->mode & GPIO_MODE_OUTPUT_PP) ? NO_OS_GPIO_OUT :
+	*direction = (extra->gpio_config.Mode & GPIO_MODE_OUTPUT_PP) ? NO_OS_GPIO_OUT :
 		     NO_OS_GPIO_IN;
 	return 0;
 }

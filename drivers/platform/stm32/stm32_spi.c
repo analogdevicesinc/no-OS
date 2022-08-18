@@ -84,10 +84,10 @@ int32_t stm32_spi_init(struct no_os_spi_desc **desc,
 	sinit = param->extra;
 
 	csip_extra.port = sinit->chip_select_port;
-	csip_extra.pull = GPIO_NOPULL;
 	csip_extra.mode = GPIO_MODE_OUTPUT_PP;
 	csip_extra.speed = GPIO_SPEED_FREQ_LOW;
 	csip.number = param->chip_select;
+	csip.pull = NO_OS_PULL_NONE;
 	csip.extra = &csip_extra;
 	csip.platform_ops = &stm32_gpio_ops;
 	ret = no_os_gpio_get(&sdesc->chip_select, &csip);
