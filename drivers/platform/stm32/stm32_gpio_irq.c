@@ -83,10 +83,10 @@ static bool initialized[STM32_IRQ_CTRL_NB] =  {false};
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
 /**
- * @brief EXTI GPIO Interrupt handler callback
+ * @brief Generic Interrupt handler callback
  * @param pin pin number on which the interrupt occurred (GPIO_PIN_pin)
  */
-void HAL_GPIO_EXTI_Callback(uint16_t pin)
+static inline void stm32_handle_generic_callback(uint16_t pin)
 {
 	int ret;
 	struct irq_action *action;
@@ -94,17 +94,39 @@ void HAL_GPIO_EXTI_Callback(uint16_t pin)
 
 	key.irq_id = no_os_find_first_set_bit(pin);
 
-	if (__HAL_GPIO_EXTI_GET_IT(pin)) {
-		/* Clear pending bit */
-		__HAL_GPIO_EXTI_CLEAR_IT(pin);
+	ret = no_os_list_read_find(actions, (void **)&action, &key);
+	if (ret)
+		return;
 
-		ret = no_os_list_read_find(actions, (void **)&action, &key);
-		if (ret)
-			return;
+	if (action->callback)
+		action->callback(action->ctx);
+}
 
-		if (action->callback)
-			action->callback(action->ctx);
-	}
+/**
+ * @brief EXTI GPIO Interrupt handler callback
+ * @param pin pin number on which the interrupt occurred (GPIO_PIN_pin)
+ */
+void HAL_GPIO_EXTI_Callback(uint16_t pin)
+{
+	stm32_handle_generic_callback(pin);
+}
+
+/**
+ * @brief EXTI GPIO Interrupt handler callback for rising edge detection
+ * @param pin pin number on which the interrupt occurred (GPIO_PIN_pin)
+ */
+void HAL_GPIO_EXTI_Rising_Callback(uint16_t pin)
+{
+	stm32_handle_generic_callback(pin);
+}
+
+/**
+ * @brief EXTI GPIO Interrupt handler callback for falling edge detection
+ * @param pin pin number on which the interrupt occurred (GPIO_PIN_pin)
+ */
+void HAL_GPIO_EXTI_Falling_Callback(uint16_t pin)
+{
+	stm32_handle_generic_callback(pin);
 }
 
 /**
