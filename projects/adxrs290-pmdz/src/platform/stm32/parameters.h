@@ -79,6 +79,6 @@ extern UART_HandleTypeDef huart5;
 #endif
 
 extern struct stm32_spi_init_param adxrs290_spi_extra_ip;
-extern struct stm32_gpio_desc adxrs290_gpio_extra_ip;
+extern struct stm32_gpio_init_param adxrs290_gpio_extra_ip;
 
 #endif /* __PARAMETERS_H__ */
