@@ -176,12 +176,12 @@ int main(void)
 	struct stm32_gpio_init_param reset_xgip = {
 		.port = GPIOD,
 		.mode = GPIO_MODE_OUTPUT_PP,
-		.pull = GPIO_NOPULL,
 		.speed = GPIO_SPEED_FREQ_VERY_HIGH,
 	};
 #endif
 	struct no_os_gpio_init_param reset_gip = {
 		.number = RESET_PIN,
+		.pull = NO_OS_PULL_NONE,
 #if defined(STM32_PLATFORM)
 		.platform_ops = &stm32_gpio_ops,
 		.extra = &reset_xgip,
@@ -194,13 +194,13 @@ int main(void)
 	struct stm32_gpio_init_param gp0_xgip = {
 		.port = GPIOG,
 		.mode = GPIO_MODE_INPUT,
-		.pull = GPIO_NOPULL,
 		.speed = GPIO_SPEED_FREQ_VERY_HIGH,
 	};
 #endif
 
 	struct no_os_gpio_init_param gp0_gip = {
 		.number = GP0_PIN,
+		.pull = NO_OS_PULL_NONE,
 #if defined(STM32_PLATFORM)
 		.platform_ops = &stm32_gpio_ops,
 		.extra = &gp0_xgip,
