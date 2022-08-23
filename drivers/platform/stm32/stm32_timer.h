@@ -41,8 +41,7 @@
 
 #include <stdint.h>
 #include "no_os_timer.h"
-#include "stm32f4xx_hal.h"
-#include "stm32f4xx_hal_tim.h"
+#include "stm32_hal.h"
 
 /**
  * @struct stm32_timer_init_param
