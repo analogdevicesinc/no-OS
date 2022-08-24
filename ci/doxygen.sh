@@ -3,7 +3,7 @@
 ############################################################################
 # Check if the documentation will be generated w/o warnings or errors
 ############################################################################
-pushd ${TOP_DIR}/doc
+pushd ${TOP_DIR}/doc/doxygen
 (cd build && ! make doc 2>&1 | grep -E "warning:|error:") || {
         echo_red "Documentation incomplete or errors in the generation of it have occured!"
         exit 1
@@ -37,9 +37,9 @@ then
 
         git checkout gh-pages
 
-        cp -R ${TOP_DIR}/doc/build/doxygen_doc/html/* ${TOP_DIR}
+        cp -R ${TOP_DIR}/doc/doxygen/build/doxygen_doc/html/* ${TOP_DIR}
 
-        rm -rf ${TOP_DIR}/doc
+        rm -rf ${TOP_DIR}/doc/doxygen
 
         CURRENT_COMMIT=$(git log -1 --pretty=%B)
         if [[ ${CURRENT_COMMIT:(-7)} != ${MASTER_COMMIT:0:7} ]]
