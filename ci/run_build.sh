@@ -46,10 +46,10 @@ build_doxygen() {
     . ${TOP_DIR}/ci/gen_dox.sh
 
     # Build Documentation
-    cd ${TOP_DIR}/doc
+    cd ${TOP_DIR}/doc/doxygen
     mkdir -p build && cd build
     cmake ..
-    cd ../..
+    cd ../../..
 
     . ./ci/doxygen.sh
 }

@@ -7,7 +7,7 @@ EXCLUDE_DRV="talise navassa ad9083_api ad5940"
 
 #Append string to specific *.dox file
 append_to_dox () {
-        echo "$1" >> ${TOP_DIR}/doc/$2
+        echo "$1" >> ${TOP_DIR}/doc/doxygen/$2
 }
 
 #.dox file generic header 
@@ -19,7 +19,7 @@ FOOTER=" */"
 #Generate drivers_page.dox file
 generate_drivers_page () {
 
-	> ${TOP_DIR}/doc/drivers_page.dox
+	> ${TOP_DIR}/doc/doxygen/drivers_page.dox
 
 #Page tag and introduction for drivers
 	INTRO_DRV="
@@ -86,7 +86,7 @@ The following sections contain code documentation for ADI no-OS drivers.
 #Generate projects_page.dox file
 generate_projects_page () {
 
-	> ${TOP_DIR}/doc/projects_page.dox
+	> ${TOP_DIR}/doc/doxygen/projects_page.dox
 
 #Page tag and introduction for projects
 	INTRO_PRJ="
