@@ -44,65 +44,21 @@
 #include "no_os_spi.h"
 #include "stm32_spi.h"
 
-/**
- * @brief Initialize the SPI communication peripheral.
- * @param desc - The SPI descriptor.
- * @param param - The structure that contains the SPI parameters.
- * @return 0 in case of success, -1 otherwise.
- */
-int32_t stm32_spi_init(struct no_os_spi_desc **desc,
-		       const struct no_os_spi_init_param *param)
+static int stm32_spi_config(struct no_os_spi_desc *desc)
 {
-	int32_t ret;
-	uint32_t input_clock;
+	int ret;
+
 	const uint32_t prescaler_default = SPI_BAUDRATEPRESCALER_64;
 	const uint32_t prescaler_min = SPI_BAUDRATEPRESCALER_2;
 	const uint32_t prescaler_max = SPI_BAUDRATEPRESCALER_256;
 	uint32_t prescaler_reg = 0u;
-	struct no_os_spi_desc	*spi_desc;
 	SPI_TypeDef *base = NULL;
-
-	if (!desc || !param)
-		return -EINVAL;
-
-	spi_desc = (struct no_os_spi_desc *)calloc(1, sizeof(*spi_desc));
-	if (!spi_desc)
-		return -ENOMEM;
-
-	struct stm32_spi_desc *sdesc;
-	struct stm32_spi_init_param *sinit;
-	struct no_os_gpio_init_param csip;
-	struct stm32_gpio_init_param csip_extra;
-
-	sdesc = (struct stm32_spi_desc*)calloc(1,sizeof(struct stm32_spi_desc));
-	if (!sdesc) {
-		ret = -ENOMEM;
-		goto error;
-	}
-
-	spi_desc->extra = sdesc;
-	sinit = param->extra;
-
-	csip_extra.port = sinit->chip_select_port;
-	csip_extra.mode = GPIO_MODE_OUTPUT_PP;
-	csip_extra.speed = GPIO_SPEED_FREQ_LOW;
-	csip.number = param->chip_select;
-	csip.pull = NO_OS_PULL_NONE;
-	csip.extra = &csip_extra;
-	csip.platform_ops = &stm32_gpio_ops;
-	ret = no_os_gpio_get(&sdesc->chip_select, &csip);
-	if (ret < 0)
-		goto error;
-
-	ret = no_os_gpio_direction_output(sdesc->chip_select, NO_OS_GPIO_HIGH);
-	if (ret < 0)
-		goto error;
+	struct stm32_spi_desc *sdesc = desc->extra;
 
 	/* automatically select prescaler based on max_speed_hz */
-	if (param->max_speed_hz != 0u && sinit->get_input_clock) {
-		input_clock = sinit->get_input_clock();
-		uint32_t div = input_clock / param->max_speed_hz;
-		uint32_t rem = input_clock % param->max_speed_hz;
+	if (desc->max_speed_hz != 0u) {
+		uint32_t div = sdesc->input_clock / desc->max_speed_hz;
+		uint32_t rem = sdesc->input_clock % desc->max_speed_hz;
 		uint32_t po2 = !(div & (div - 1)) && !rem;
 
 		// find the power of two just higher than div and
@@ -132,7 +88,7 @@ int32_t stm32_spi_init(struct no_os_spi_desc **desc,
 	} else
 		prescaler_reg = prescaler_default;
 
-	switch (param->device_id) {
+	switch (desc->device_id) {
 #if defined(SPI1)
 	case 1:
 		base = SPI1;
@@ -172,14 +128,14 @@ int32_t stm32_spi_init(struct no_os_spi_desc **desc,
 	sdesc->hspi.Init.Mode = SPI_MODE_MASTER;
 	sdesc->hspi.Init.Direction = SPI_DIRECTION_2LINES;
 	sdesc->hspi.Init.DataSize = SPI_DATASIZE_8BIT;
-	sdesc->hspi.Init.CLKPolarity = param->mode & NO_OS_SPI_CPOL ?
+	sdesc->hspi.Init.CLKPolarity = desc->mode & NO_OS_SPI_CPOL ?
 				       SPI_POLARITY_HIGH :
 				       SPI_POLARITY_LOW;
-	sdesc->hspi.Init.CLKPhase = param->mode & NO_OS_SPI_CPHA ? SPI_PHASE_2EDGE :
+	sdesc->hspi.Init.CLKPhase = desc->mode & NO_OS_SPI_CPHA ? SPI_PHASE_2EDGE :
 				    SPI_PHASE_1EDGE;
 	sdesc->hspi.Init.NSS = SPI_NSS_SOFT;
 	sdesc->hspi.Init.BaudRatePrescaler = prescaler_reg << SPI_CR1_BR_Pos;
-	sdesc->hspi.Init.FirstBit = param->bit_order ? SPI_FIRSTBIT_LSB :
+	sdesc->hspi.Init.FirstBit = desc->bit_order ? SPI_FIRSTBIT_LSB :
 				    SPI_FIRSTBIT_MSB;
 	sdesc->hspi.Init.TIMode = SPI_TIMODE_DISABLE;
 	sdesc->hspi.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
@@ -190,11 +146,72 @@ int32_t stm32_spi_init(struct no_os_spi_desc **desc,
 		goto error;
 	}
 
+	return 0;
+error:
+	return ret;
+}
+
+/**
+ * @brief Initialize the SPI communication peripheral.
+ * @param desc - The SPI descriptor.
+ * @param param - The structure that contains the SPI parameters.
+ * @return 0 in case of success, -1 otherwise.
+ */
+int32_t stm32_spi_init(struct no_os_spi_desc **desc,
+		       const struct no_os_spi_init_param *param)
+{
+	int32_t ret;
+	struct no_os_spi_desc	*spi_desc;
+
+	if (!desc || !param)
+		return -EINVAL;
+
+	spi_desc = (struct no_os_spi_desc *)calloc(1, sizeof(*spi_desc));
+	if (!spi_desc)
+		return -ENOMEM;
+
+	struct stm32_spi_desc *sdesc;
+	struct stm32_spi_init_param *sinit;
+	struct no_os_gpio_init_param csip;
+	struct stm32_gpio_init_param csip_extra;
+
+	sdesc = (struct stm32_spi_desc*)calloc(1,sizeof(struct stm32_spi_desc));
+	if (!sdesc) {
+		ret = -ENOMEM;
+		goto error;
+	}
+
+	spi_desc->extra = sdesc;
+	sinit = param->extra;
+
+	csip_extra.port = sinit->chip_select_port;
+	csip_extra.mode = GPIO_MODE_OUTPUT_PP;
+	csip_extra.speed = GPIO_SPEED_FREQ_LOW;
+	csip.number = param->chip_select;
+	csip.pull = NO_OS_PULL_NONE;
+	csip.extra = &csip_extra;
+	csip.platform_ops = &stm32_gpio_ops;
+	ret = no_os_gpio_get(&sdesc->chip_select, &csip);
+	if (ret)
+		goto error;
+
+	ret = no_os_gpio_direction_output(sdesc->chip_select, NO_OS_GPIO_HIGH);
+	if (ret)
+		goto error;
+
 	/* copy settings to device descriptor */
+	spi_desc->device_id = param->device_id;
 	spi_desc->max_speed_hz = param->max_speed_hz;
 	spi_desc->mode = param->mode;
 	spi_desc->bit_order = param->bit_order;
 	spi_desc->chip_select = param->chip_select;
+	if (sinit->get_input_clock)
+		sdesc->input_clock = sinit->get_input_clock();
+
+	ret = stm32_spi_config(spi_desc);
+	if (ret)
+		goto error;
+
 	*desc = spi_desc;
 
 	return 0;
@@ -235,6 +252,9 @@ int32_t stm32_spi_write_and_read(struct no_os_spi_desc *desc,
 				 uint8_t *data,
 				 uint16_t bytes_number)
 {
+	int ret;
+	static uint64_t last_slave_id;
+	uint64_t slave_id;
 	uint8_t *tx = data;
 	uint8_t *rx = data;
 	struct stm32_spi_desc *sdesc;
@@ -249,6 +269,18 @@ int32_t stm32_spi_write_and_read(struct no_os_spi_desc *desc,
 	sdesc = desc->extra;
 	gdesc = sdesc->chip_select->extra;
 	SPIx = sdesc->hspi.Instance;
+
+	// Compute a slave ID based on SPI instance and chip select.
+	// If it did not change since last call to stm32_spi_write_and_read,
+	// no need to reconfigure SPI. Otherwise, reconfigure it.
+	slave_id = ((uint64_t)(uintptr_t)sdesc->hspi.Instance << 32) | sdesc->chip_select->number;
+	if (slave_id != last_slave_id) {
+		ret = stm32_spi_config(desc);
+		if (ret)
+			return ret;
+	}
+
+	last_slave_id = slave_id;
 
 	gdesc->port->BSRR = NO_OS_BIT(sdesc->chip_select->number) << 16;
 	__HAL_SPI_ENABLE(&sdesc->hspi);
