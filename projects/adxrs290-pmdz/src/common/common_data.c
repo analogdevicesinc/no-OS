@@ -55,6 +55,16 @@ struct no_os_spi_init_param adxrs290_spi_ip = {
 	.extra = SPI_EXTRA,
 };
 
+struct no_os_spi_init_param adxrs290_2_spi_ip = {
+	.device_id = SPI_DEVICE_ID,
+	.max_speed_hz = SPI_BAUDRATE_2,
+	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
+	.mode = NO_OS_SPI_MODE_3,
+	.platform_ops = SPI_OPS,
+	.chip_select = SPI_CS_2,
+	.extra = SPI_EXTRA_2,
+};
+
 /* Initialization for Sync pin */
 struct no_os_gpio_init_param adxrs290_gpio_sync_ip = {
 	.port = GPIO_SYNC_PORT_NUM,
@@ -65,6 +75,13 @@ struct no_os_gpio_init_param adxrs290_gpio_sync_ip = {
 };
 
 struct adxrs290_init_param adxrs290_ip = {
+	.mode = ADXRS290_MODE_MEASUREMENT,
+	.gpio_sync = &adxrs290_gpio_sync_ip,
+	.lpf = ADXRS290_LPF_480HZ,
+	.hpf = ADXRS290_HPF_ALL_PASS
+};
+
+struct adxrs290_init_param adxrs290_2_ip = {
 	.mode = ADXRS290_MODE_MEASUREMENT,
 	.gpio_sync = &adxrs290_gpio_sync_ip,
 	.lpf = ADXRS290_LPF_480HZ,

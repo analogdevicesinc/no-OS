@@ -49,8 +49,12 @@ struct stm32_spi_init_param adxrs290_spi_extra_ip  = {
 	.chip_select_port = SPI_CS_PORT,
 };
 
+struct stm32_spi_init_param adxrs290_2_spi_extra_ip  = {
+	.chip_select_port = SPI_CS_2_PORT,
+};
+
 struct stm32_gpio_init_param adxrs290_gpio_extra_ip = {
-	.mode = GPIO_MODE_IT_RISING,
+	.mode = GPIO_MODE_INPUT,
 	.port = GPIOA,
 	.speed = GPIO_SPEED_FREQ_VERY_HIGH,
 };

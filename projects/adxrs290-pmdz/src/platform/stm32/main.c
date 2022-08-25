@@ -60,7 +60,9 @@ int main()
 {
 	int ret;
 	adxrs290_spi_extra_ip.get_input_clock = HAL_RCC_GetPCLK1Freq;
+	adxrs290_2_spi_extra_ip.get_input_clock = HAL_RCC_GetPCLK1Freq;
 	adxrs290_ip.spi_init = adxrs290_spi_ip;
+	adxrs290_2_ip.spi_init = adxrs290_2_spi_ip;
 
 	stm32_init();
 

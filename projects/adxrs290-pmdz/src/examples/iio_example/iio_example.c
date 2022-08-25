@@ -49,7 +49,9 @@
 /******************************************************************************/
 #define MAX_SIZE_BASE_ADDR		3000
 static uint8_t in_buff[MAX_SIZE_BASE_ADDR];
+static uint8_t in_2_buff[MAX_SIZE_BASE_ADDR];
 #define GYRO_DDR_BASEADDR		((uint32_t)in_buff)
+#define GYRO_DDR_2_BASEADDR		((uint32_t)in_2_buff)
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -63,13 +65,21 @@ static uint8_t in_buff[MAX_SIZE_BASE_ADDR];
 int iio_example_main()
 {
 	int ret;
-	struct adxrs290_dev *adxrs290_desc;
+	struct adxrs290_dev *adxrs290_desc, *adxrs290_2_desc;
 	struct iio_data_buffer rd_buf = {
 		.buff = (void *)GYRO_DDR_BASEADDR,
 		.size = MAX_SIZE_BASE_ADDR
 	};
+	struct iio_data_buffer rd_2_buf = {
+		.buff = (void *)GYRO_DDR_2_BASEADDR,
+		.size = MAX_SIZE_BASE_ADDR
+	};
 
 	ret = adxrs290_init(&adxrs290_desc, &adxrs290_ip);
+	if (ret)
+		return ret;
+
+	ret = adxrs290_init(&adxrs290_2_desc, &adxrs290_2_ip);
 	if (ret)
 		return ret;
 
@@ -79,7 +89,13 @@ int iio_example_main()
 			.dev = adxrs290_desc,
 			.dev_descriptor = &adxrs290_iio_descriptor,
 			.read_buff = &rd_buf,
-		}
+		},
+		{
+			.name = "adxrs290-2",
+			.dev = adxrs290_2_desc,
+			.dev_descriptor = &adxrs290_iio_descriptor,
+			.read_buff = &rd_2_buf,
+		},
 	};
 
 	return iio_app_run(iio_devices, NO_OS_ARRAY_SIZE(iio_devices));

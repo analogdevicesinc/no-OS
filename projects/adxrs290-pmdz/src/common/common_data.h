@@ -55,8 +55,10 @@
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 extern struct no_os_spi_init_param adxrs290_spi_ip;
+extern struct no_os_spi_init_param adxrs290_2_spi_ip;
 extern struct no_os_gpio_init_param adxrs290_gpio_sync_ip;
 extern struct adxrs290_init_param adxrs290_ip;
+extern struct adxrs290_init_param adxrs290_2_ip;
 
 #ifdef IIO_TRIGGER_EXAMPLE
 #define ADXRS290_GPIO_TRIG_NAME "adxrs290-dev0"

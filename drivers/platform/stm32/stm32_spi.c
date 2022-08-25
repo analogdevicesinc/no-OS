@@ -195,7 +195,7 @@ int32_t stm32_spi_init(struct no_os_spi_desc **desc,
 	if (ret)
 		goto error;
 
-	ret = no_os_gpio_direction_output(sdesc->chip_select, NO_OS_GPIO_HIGH);
+	ret = no_os_gpio_direction_input(sdesc->chip_select);
 	if (ret)
 		goto error;
 
@@ -282,7 +282,8 @@ int32_t stm32_spi_write_and_read(struct no_os_spi_desc *desc,
 
 	last_slave_id = slave_id;
 
-	gdesc->port->BSRR = NO_OS_BIT(sdesc->chip_select->number) << 16;
+	// gdesc->port->BSRR = NO_OS_BIT(sdesc->chip_select->number) << 16;
+	no_os_gpio_direction_output(sdesc->chip_select, NO_OS_GPIO_LOW);
 	__HAL_SPI_ENABLE(&sdesc->hspi);
 	while(bytes_number--) {
 		while(!(SPIx->SR & SPI_SR_TXE))
@@ -293,7 +294,8 @@ int32_t stm32_spi_write_and_read(struct no_os_spi_desc *desc,
 		*rx++ = *(volatile uint8_t *)&SPIx->DR;
 	}
 	__HAL_SPI_DISABLE(&sdesc->hspi);
-	gdesc->port->BSRR = NO_OS_BIT(sdesc->chip_select->number);
+	//gdesc->port->BSRR = NO_OS_BIT(sdesc->chip_select->number);
+	no_os_gpio_direction_input(sdesc->chip_select);
 
 	return 0;
 }

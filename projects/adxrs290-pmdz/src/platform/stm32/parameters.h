@@ -64,10 +64,14 @@ extern UART_HandleTypeDef huart5;
 
 #define SPI_DEVICE_ID   1
 #define SPI_BAUDRATE    4000000
+#define SPI_BAUDRATE_2  1000000
 #define SPI_CS          15
+#define SPI_CS_2        5
 #define SPI_CS_PORT     GPIOA
+#define SPI_CS_2_PORT   GPIOC
 #define SPI_OPS         &stm32_spi_ops
 #define SPI_EXTRA       &adxrs290_spi_extra_ip
+#define SPI_EXTRA_2     &adxrs290_2_spi_extra_ip
 
 #define GPIO_SYNC_PIN_NUM   2
 #define GPIO_SYNC_PORT_NUM  0
@@ -79,6 +83,7 @@ extern UART_HandleTypeDef huart5;
 #endif
 
 extern struct stm32_spi_init_param adxrs290_spi_extra_ip;
+extern struct stm32_spi_init_param adxrs290_2_spi_extra_ip;
 extern struct stm32_gpio_init_param adxrs290_gpio_extra_ip;
 
 #endif /* __PARAMETERS_H__ */
