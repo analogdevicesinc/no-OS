@@ -216,7 +216,12 @@ class BuildConfig:
 			err = run_cmd(cmd + ' reset')
 			if err != 0:
 				return err
-			err = run_cmd("timeout 200s " + cmd + ' VERBOSE=y -j%d all' % (multiprocessing.cpu_count() - 1))
+			err = run_cmd("timeout 200s " + cmd + ' VERBOSE=y project')
+			if err == 124:
+				print("Reached timeout.")
+			run_cmd("pkill -9 -f STM32CubeMX") # get rid of potential orphan processes
+			err = run_cmd(cmd + ' VERBOSE=y update')
+			err = run_cmd(cmd + ' VERBOSE=y -j%d all' % (multiprocessing.cpu_count() // 2 ))
 			if err != 0:
 				return err
 		else:
