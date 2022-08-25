@@ -62,6 +62,8 @@ struct stm32_spi_init_param {
 struct stm32_spi_desc {
 	/** SPI instance */
 	SPI_HandleTypeDef hspi;
+	/** SPI input clock */
+	uint32_t input_clock;
 	/** Chip select gpio descriptor */
 	struct no_os_gpio_desc *chip_select;
 };
