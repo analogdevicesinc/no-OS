@@ -46,4 +46,8 @@
 #include "maxim/parameters.h"
 #endif
 
+#ifdef IIO_SUPPORT
+#include "iio_app.h"
+#endif
+
 #endif /* __PLATFORM_INCLUDES_H__ */
