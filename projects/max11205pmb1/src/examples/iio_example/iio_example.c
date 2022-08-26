@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   main.c
- *   @brief  Main file for Maxim platform of max11205pmb1 project.
+ *   @file   iio_example.c
+ *   @brief  Implementation of IIO example for max11205pmb1 project.
  *   @author RBolboac (ramona.bolboaca@analog.com)
 ********************************************************************************
  * Copyright 2022(c) Analog Devices, Inc.
@@ -40,67 +40,64 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "platform_includes.h"
-#include "common_data.h"
-
-#ifdef BASIC_EXAMPLE
-#include "basic_example.h"
-#endif
-
-#ifdef IIO_EXAMPLE
 #include "iio_example.h"
-#endif
+#include "iio_max11205.h"
+#include "common_data.h"
+#include "no_os_util.h"
 
+/******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
+#define DATA_BUFFER_SIZE 400
+
+/******************************************************************************/
+/************************ Variable Declarations ******************************/
+/******************************************************************************/
+uint8_t iio_data_buffer[DATA_BUFFER_SIZE * sizeof(int16_t)];
+
+/******************************************************************************/
+/************************ Functions Definitions *******************************/
+/******************************************************************************/
 /***************************************************************************//**
- * @brief Main function execution for STM32 platform.
+ * @brief IIO example main execution.
  *
- * @return ret - Result of the enabled examples execution.
+ * @return ret - Result of the example execution. If working correctly, will
+ *               execute continuously function iio_app_run and will not return.
 *******************************************************************************/
-int main()
+int iio_example_main()
 {
-	int ret = 0;
-
-	max11205_ip.spi_init = max11205_spi_ip;
-
-	struct no_os_irq_ctrl_desc *max11205_nvic_desc;
-	struct no_os_irq_init_param max11205_nvic_ip = {
-		.platform_ops = &max_irq_ops,
+	int ret;
+	struct max11205_iio_dev *max11205_iio_desc;
+	struct max11205_iio_dev_init_param max11205_iio_ip;
+	struct no_os_irq_ctrl_desc *max11205_gpio_irq_desc;
+	struct iio_data_buffer accel_buff = {
+		.buff = (void *)iio_data_buffer,
+		.size = DATA_BUFFER_SIZE * sizeof(int16_t)
 	};
 
-	/* Initialize NVIC IRQ controller in orde to be able to enable GPIO IRQ interrupt */
-	ret = no_os_irq_ctrl_init(&max11205_nvic_desc, &max11205_nvic_ip);
+	/* Initialize GPIO IRQ controller */
+	ret = no_os_irq_ctrl_init(&max11205_gpio_irq_desc, &max11205_gpio_irq_ip);
 	if (ret)
 		return ret;
 
-	ret = no_os_irq_set_priority(max11205_nvic_desc, NVIC_GPIO_IRQ, 1);
+	/* Initialize device */
+	max11205_ip.irq_ctrl = max11205_gpio_irq_desc;
+
+	max11205_iio_ip.max11205_dev_init = &max11205_ip;
+	max11205_iio_ip.dev_id = MAX11205A;
+
+	ret = max11205_iio_init(&max11205_iio_desc, &max11205_iio_ip);
 	if (ret)
 		return ret;
 
-	ret = no_os_irq_enable(max11205_nvic_desc, NVIC_GPIO_IRQ);
-	if (ret)
-		return ret;
+	struct iio_app_device iio_devices[] = {
+		{
+			.name = "max11205a",
+			.dev = max11205_iio_desc,
+			.dev_descriptor = max11205_iio_desc->iio_dev,
+			.read_buff = &accel_buff,
+		}
+	};
 
-#ifdef BASIC_EXAMPLE
-	struct no_os_uart_desc *max11205_uart_desc;
-
-	ret = no_os_uart_init(&max11205_uart_desc, &max11205_uart_ip);
-	if (ret)
-		return ret;
-
-	maxim_uart_stdio(max11205_uart_desc);
-
-	ret = basic_example_main();
-#endif
-
-#ifdef IIO_EXAMPLE
-	ret = iio_example_main();
-#endif
-	return ret;
-
-#if (BASIC_EXAMPLE + IIO_EXAMPLE == 0)
-#error At least one example has to be selected using y value in Makefile.
-#elif (BASIC_EXAMPLE + IIO_EXAMPLE > 1)
-#error Selected example projects cannot be enabled at the same time. \
-Please enable only one example and re-build the project.
-#endif
+	return iio_app_run(iio_devices, NO_OS_ARRAY_SIZE(iio_devices));
 }

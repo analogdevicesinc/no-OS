@@ -1,7 +1,10 @@
 {
 	"maxim": {
 		"basic_example_max32655": {
-			"flags": "BASIC_EXAMPLE=y TARGET=max32655"
+			"flags": "BASIC_EXAMPLE=y IIO_EXAMPLE=n TARGET=max32655"
+		},
+		"iio_example_max32655": {
+			"flags": "BASIC_EXAMPLE=n IIO_EXAMPLE=y TARGET=max32655"
 		}
 	}
 }
