@@ -556,7 +556,7 @@ int32_t adf4377_init(struct adf4377_dev **device,
 	/* Software Reset */
 	ret = adf4377_soft_reset(dev);
 	if (ret < 0)
-		return ret;
+		goto error_spi;
 
 	ret = adf4377_spi_write(dev, ADF4377_REG(0x00),
 				ADF4377_LSB_FIRST_R(dev->spi_desc->bit_order) |
@@ -566,20 +566,20 @@ int32_t adf4377_init(struct adf4377_dev **device,
 				ADF4377_ADDRESS_ASC_R(ADF4377_ADDR_ASC_AUTO_DECR) |
 				ADF4377_ADDRESS_ASC(ADF4377_ADDR_ASC_AUTO_DECR));
 	if (ret < 0)
-		return ret;
+		goto error_spi;
 
 	/* Read Chip Type */
 	ret = adf4377_spi_read(dev, ADF4377_REG(0x03), &chip_type);
 	if (ret < 0)
-		return ret;
+		goto error_spi;
 
 	if (chip_type != ADF4377_CHIP_TYPE)
-		return ret;
+		goto error_spi;
 
 	/* Scratchpad Check */
 	ret = adf4377_check_scratchpad(dev);
 	if (ret < 0)
-		return ret;
+		goto error_spi;
 
 	ret = adf4377_spi_read(dev, ADF4377_REG(0x04), &device_id);
 	if (ret < 0)
