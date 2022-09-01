@@ -324,7 +324,7 @@ int adaq8092_set_pd_mode(struct adaq8092_dev *dev,
 /**
  * @brief Get the device powerdown mode.
  * @param dev - The device structure.
- * @return 0 in case of success, negative error code otherwise.
+ * @return powerdown mode.
  */
 enum adaq8092_powerdown_modes adaq8092_get_pd_mode(struct adaq8092_dev *dev)
 {
@@ -356,7 +356,7 @@ int adaq8092_set_clk_pol_mode(struct adaq8092_dev *dev,
 /**
  * @brief Get the clock polarity mode.
  * @param dev - The device structure.
- * @return 0 in case of success, negative error code otherwise.
+ * @return clock polarity mode.
  */
 enum adaq8092_clk_invert adaq8092_get_clk_pol_mode(struct adaq8092_dev *dev)
 {
@@ -388,7 +388,7 @@ int adaq8092_set_clk_phase_mode(struct adaq8092_dev *dev,
 /**
  * @brief Get the clock phase delay mode.
  * @param dev - The device structure.
- * @return 0 in case of success, negative error code otherwise.
+ * @return clock phase delay mode.
  */
 enum adaq8092_clk_phase_delay adaq8092_get_clk_phase_mode(
 	struct adaq8092_dev *dev)
@@ -421,7 +421,7 @@ int adaq8092_set_clk_dc_mode(struct adaq8092_dev *dev,
 /**
  * @brief Get the clock duty cycle stabilizer mode.
  * @param dev - The device structure.
- * @return 0 in case of success, negative error code otherwise.
+ * @return clock duty cycle stabilizer mode.
  */
 enum adaq8092_clk_dutycycle adaq8092_get_clk_dc_mode(struct adaq8092_dev *dev)
 {
@@ -453,7 +453,7 @@ int adaq8092_set_lvds_cur_mode(struct adaq8092_dev *dev,
 /**
  * @brief Get the LVDS output current mode.
  * @param dev - The device structure.
- * @return 0 in case of success, negative error code otherwise.
+ * @return LVDS output current mode.
  */
 enum adaq8092_lvds_out_current adaq8092_get_lvds_cur_mode(
 	struct adaq8092_dev *dev)
@@ -486,7 +486,7 @@ int adaq8092_set_lvds_term_mode(struct adaq8092_dev *dev,
 /**
  * @brief Get the LVDS internal temination device mode.
  * @param dev - The device structure.
- * @return 0 in case of success, negative error code otherwise.
+ * @return LVDS internal temination device mode.
  */
 enum adaq8092_internal_term adaq8092_get_lvds_term_mode(
 	struct adaq8092_dev *dev)
@@ -519,7 +519,7 @@ int adaq8092_set_dout_en(struct adaq8092_dev *dev,
 /**
  * @brief Get digital outputs.
  * @param dev - The device structure.
- * @return 0 in case of success, negative error code otherwise.
+ * @return digital outputs.
  */
 enum adaq8092_dout_enable adaq8092_get_dout_en(struct adaq8092_dev *dev)
 {
@@ -551,7 +551,7 @@ int adaq8092_set_dout_mode(struct adaq8092_dev *dev,
 /**
  * @brief Get the digital output mode.
  * @param dev - The device structure.
- * @return 0 in case of success, negative error code otherwise.
+ * @return digital output mode.
  */
 enum adaq8092_dout_modes adaq8092_get_dout_mode(struct adaq8092_dev *dev)
 {
@@ -583,7 +583,7 @@ int adaq8092_set_test_mode(struct adaq8092_dev *dev,
 /**
  * @brief Get digital output test pattern mode.
  * @param dev - The device structure.
- * @return 0 in case of success, negative error code otherwise.
+ * @return digital output test pattern mode.
  */
 enum adaq8092_out_test_modes adaq8092_get_test_mode(struct adaq8092_dev *dev)
 {
@@ -615,7 +615,7 @@ int adaq8092_set_alt_pol_en(struct adaq8092_dev *dev,
 /**
  * @brief Get the alternate bit polarity mode.
  * @param dev - The device structure.
- * @return 0 in case of success, negative error code otherwise.
+ * @return alternate bit polarity mode.
  */
 enum adaq8092_alt_bit_pol adaq8092_get_alt_pol_en(struct adaq8092_dev *dev)
 {
@@ -647,7 +647,7 @@ int adaq8092_set_data_rand_en(struct adaq8092_dev *dev,
 /**
  * @brief Get the data output randomizer mode.
  * @param dev - The device structure.
- * @return 0 in case of success, negative error code otherwise.
+ * @return data output randomizer mode.
  */
 enum adaq8092_data_rand adaq8092_get_data_rand_en(struct adaq8092_dev *dev)
 {
@@ -679,7 +679,7 @@ int adaq8092_set_twos_comp(struct adaq8092_dev *dev,
 /**
  * @brief Get the Tows Complement mode.
  * @param dev - The device structure.
- * @return 0 in case of success, negative error code otherwise.
+ * @return Tows Complement mode.
  */
 enum adaq8092_twoscomp adaq8092_get_twos_comp(struct adaq8092_dev *dev)
 {
