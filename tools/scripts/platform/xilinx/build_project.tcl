@@ -5,6 +5,6 @@ if { $argc != 1 } {
 
 sdk setws [lindex $argv 0]
 
-app build -name app
+app build -all
 
 exit
