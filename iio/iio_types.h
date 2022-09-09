@@ -206,6 +206,11 @@ enum iio_buffer_direction {
 	IIO_DIRECTION_OUTPUT
 };
 
+struct iio_cyclic_buffer_info {
+	bool is_cyclic;
+	uint32_t buff_index;
+};
+
 struct iio_buffer {
 	/* Mask with active channels */
 	uint32_t active_mask;
@@ -217,6 +222,8 @@ struct iio_buffer {
 	enum iio_buffer_direction dir;
 	/* Buffer where data is stored */
 	struct no_os_circular_buffer *buf;
+	/* Stores cyclic buffer specific information */
+	struct iio_cyclic_buffer_info cyclic_info;
 };
 
 struct iio_device_data {

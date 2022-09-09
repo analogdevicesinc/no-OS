@@ -137,7 +137,9 @@ struct iiod_conn_priv {
 		/* I/O operations for WRITE cmd */
 		IIOD_READING_WRITE_DATA,
 		/* Set when a operation is finalized */
-		IIOD_LINE_DONE
+		IIOD_LINE_DONE,
+		/* Pushing  cyclic buffer until IIO device is closed  */
+		IIOD_PUSH_CYCLIC_BUFFER,
 	} state;
 
 	/* Buffer to store received line */
@@ -157,6 +159,8 @@ struct iiod_conn_priv {
 	char buf_mask[10];
 	/* Context for strtok_r function */
 	char *strtok_ctx;
+	/* True if the device was open with cyclic buffer flag */
+	bool is_cyclic_buffer;
 };
 
 /* Private iiod information */

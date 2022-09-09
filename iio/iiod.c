@@ -592,8 +592,14 @@ static int32_t iiod_run_cmd(struct iiod_desc *desc,
 	case IIOD_CMD_CLOSE:
 	case IIOD_CMD_SETTRIG:
 	case IIOD_CMD_SET:
-		if (data->cmd == IIOD_CMD_OPEN)
+		if (data->cmd == IIOD_CMD_OPEN) {
 			conn->mask = data->mask;
+			if (data->cyclic)
+				conn->is_cyclic_buffer = true;
+		}
+		if (data->cmd == IIOD_CMD_CLOSE)
+			/* Set is_cyclic_buffer to false every time the device is closed */
+			conn->is_cyclic_buffer = false;
 		conn->res.val = call_op(&desc->ops, data, &ctx);
 		conn->res.write_val = 1;
 		break;
@@ -776,7 +782,10 @@ static int32_t iiod_run_state(struct iiod_desc *desc,
 
 		if (conn->cmd_data.cmd != IIOD_CMD_READBUF &&
 		    conn->cmd_data.cmd != IIOD_CMD_WRITEBUF) {
-			conn->state = IIOD_LINE_DONE;
+			if (conn->is_cyclic_buffer && conn->cmd_data.cmd != IIOD_CMD_OPEN)
+				conn->state = IIOD_PUSH_CYCLIC_BUFFER;
+			else
+				conn->state = IIOD_LINE_DONE;
 		} else {
 			/* Preapre for IIOD_RW_BUF state */
 			memset(&conn->nb_buf, 0, sizeof(conn->nb_buf));
@@ -824,6 +833,37 @@ static int32_t iiod_run_state(struct iiod_desc *desc,
 		conn->state = IIOD_RUNNING_CMD;
 
 		return 0;
+	case IIOD_PUSH_CYCLIC_BUFFER:
+		/* Push puffer to IIO application */
+		ret = desc->ops.push_buffer(&ctx,
+					    conn->cmd_data.device);
+		/* If an error was encountered, close connection */
+		if (NO_OS_IS_ERR_VALUE(ret)) {
+			conn->res.val = ret;
+			desc->ops.close(&ctx, conn->cmd_data.device);
+			conn->state = IIOD_LINE_DONE;
+			conn->is_cyclic_buffer = false;
+			return 0;
+		}
+
+		/* Read data from the client to verify whether a close command has been sent */
+		ret = iiod_read_line(desc, conn);
+		if (NO_OS_IS_ERR_VALUE(ret))
+			return 0;
+
+		/* Fill struct comand_desc with data from line */
+		ret = iiod_parse_line(conn->parser_buf, &conn->cmd_data,
+				      &conn->strtok_ctx);
+		if (!NO_OS_IS_ERR_VALUE(ret) && conn->cmd_data.cmd == IIOD_CMD_CLOSE) {
+			/* Exit this state only if a close command is received
+			   All other commands will be ignored.
+			*/
+			conn->nb_buf.len = 0;
+			conn->state = IIOD_RUNNING_CMD;
+			conn->is_cyclic_buffer = false;
+		}
+		return 0;
+
 	default:
 		/* Should never get here */
 		return -EINVAL;
