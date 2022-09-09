@@ -58,6 +58,7 @@ int32_t no_os_spi_init(struct no_os_spi_desc **desc,
 		return -1;
 
 	(*desc)->platform_ops = param->platform_ops;
+	(*desc)->parent = param->parent;
 
 	return 0;
 }

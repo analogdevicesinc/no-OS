@@ -123,6 +123,8 @@ struct no_os_spi_init_param {
 	const struct no_os_spi_platform_ops *platform_ops;
 	/**  SPI extra parameters (device specific) */
 	void		*extra;
+	/** Parent of the device */
+	struct no_os_spi_desc *parent;
 };
 
 /**
@@ -143,6 +145,8 @@ struct no_os_spi_desc {
 	const struct no_os_spi_platform_ops *platform_ops;
 	/**  SPI extra parameters (device specific) */
 	void		*extra;
+	/** Parent of the device */
+	struct no_os_spi_desc *parent;
 };
 
 /**
