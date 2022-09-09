@@ -100,9 +100,6 @@ proc _vitis_project {} {
 
 	# Configure the project
 	_project_config "app" "config"
-
-	# Build the project
-	app build -name app
 }
 
 proc _xsdk_project {} {
@@ -136,12 +133,6 @@ proc _xsdk_project {} {
 
 	# Configure the project
 	_project_config "sdk" "configapp"
-
-	# Build the project via SDK
-	clean -type all
-	build -type all
-
-	projects -build -name app -type app
 }
 
 proc get_arch {} {
