@@ -1068,6 +1068,9 @@ static int iio_open_dev(struct iiod_ctx *ctx, const char *device,
 	if (!mask)
 		return -ENOENT;
 
+	dev->buffer.public.cyclic_info.is_cyclic = cyclic;
+	dev->buffer.public.cyclic_info.buff_index = 0;
+
 	dev->buffer.public.active_mask = mask;
 	dev->buffer.public.bytes_per_scan =
 		bytes_per_scan(dev->dev_descriptor->channels, mask);
@@ -1356,7 +1359,18 @@ int iio_buffer_pop_scan(struct iio_buffer *buffer, void *data)
 	if (!buffer)
 		return -EINVAL;
 
-	return no_os_cb_read(buffer->buf, data, buffer->bytes_per_scan);
+	if(!buffer->cyclic_info.is_cyclic)
+		return no_os_cb_read(buffer->buf, data, buffer->bytes_per_scan);
+
+	memcpy(data,
+	       &buffer->buf->buff[buffer->cyclic_info.buff_index],
+	       buffer->bytes_per_scan);
+
+	buffer->cyclic_info.buff_index += buffer->bytes_per_scan;
+	if (buffer->size == buffer->cyclic_info.buff_index)
+		buffer->cyclic_info.buff_index = 0;
+
+	return 0;
 }
 
 #ifdef ENABLE_IIO_NETWORK
