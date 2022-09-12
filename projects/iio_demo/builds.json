@@ -4,10 +4,10 @@
       "flags": "IIO_EXAMPLE=y IIO_SW_TRIGGER_EXAMPLE=n"
     },
     "iio_wifi": {
-      "flags": "IIO_EXAMPLE=y IIO_SW_TRIGGER_EXAMPLE=n USE_TCP_SOCKET=y"
+      "flags": "IIO_EXAMPLE=y IIO_SW_TRIGGER_EXAMPLE=n NETWORKING=y"
     },
     "iio_wifi_with_sw_trig": {
-      "flags": "IIO_EXAMPLE=n IIO_SW_TRIGGER_EXAMPLE=y USE_TCP_SOCKET=y"
+      "flags": "IIO_EXAMPLE=n IIO_SW_TRIGGER_EXAMPLE=y NETWORKING=y"
     }
   },
   "xilinx": {

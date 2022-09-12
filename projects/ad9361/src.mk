@@ -32,7 +32,7 @@ ifeq (y,$(strip $(TINYIIOD)))
 LIBRARIES += iio
 
 ifeq (linux,$(strip $(PLATFORM)))
-CFLAGS += -DENABLE_IIO_NETWORK \
+CFLAGS += -DNO_OS_NETWORKING \
 		-DDISABLE_SECURE_SOCKET
 SRCS += $(NO-OS)/network/linux_socket/linux_socket.c \
 		$(NO-OS)/network/tcp_socket.c \

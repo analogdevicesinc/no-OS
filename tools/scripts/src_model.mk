@@ -31,7 +31,7 @@ IGNORED_FILES += $(PLATFORM_DRIVERS)/irq.c
 TINYIIOD = y
 
 # If the variable is set to y then iio network backend will be enabled
-ENABLE_IIO_NETWORK = y
+NETWORKING = y
 
 # If set, link to noos srcs will be created for new project instead of copy them
 # to the project directory. This way modification to the files can be viewed on

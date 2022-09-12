@@ -39,8 +39,6 @@
 
 #ifdef IIO_SUPPORT
 
-#undef USE_TCP_SOCKET
-
 #include <stdlib.h>
 #include <stdio.h>
 #include "iio.h"
@@ -76,7 +74,7 @@
 #include "no_os_error.h"
 #endif
 
-#ifdef USE_TCP_SOCKET
+#ifdef NO_OS_NETWORKING
 /* Fix: Use static buffers instead of calloc for new connections */
 #warning "iio may not work with WIFI on aducm3029."
 #include "wifi.h"
@@ -103,7 +101,7 @@ static inline uint32_t _calc_uart_xfer_time(uint32_t len, uint32_t baudrate)
 	return ms;
 }
 
-#if !defined(LINUX_PLATFORM) && !defined(USE_TCP_SOCKET)
+#if !defined(LINUX_PLATFORM) && !defined(NO_OS_NETWORKING)
 static int32_t iio_print_uart_info_message(struct no_os_uart_desc **uart_desc,
 		struct no_os_uart_init_param *uart_init_par,
 		char *message, int32_t msglen)
@@ -130,7 +128,7 @@ static int32_t iio_print_uart_info_message(struct no_os_uart_desc **uart_desc,
 static int32_t print_uart_hello_message(struct no_os_uart_desc **uart_desc,
 					struct no_os_uart_init_param *uart_init_par)
 {
-#if defined(LINUX_PLATFORM) || defined(USE_TCP_SOCKET)
+#if defined(LINUX_PLATFORM) || defined(NO_OS_NETWORKING)
 	return 0;
 #else
 	const char *uart_data_size[] = { "5", "6", "7", "8", "9" };
@@ -165,7 +163,7 @@ static int32_t print_uart_error_message(struct no_os_uart_desc **uart_desc,
 	uint32_t msglen = sprintf(message,
 				  "TinyIIOD server failed with code %d.\n",
 				  (int)status);
-#if defined(LINUX_PLATFORM) || defined(USE_TCP_SOCKET)
+#if defined(LINUX_PLATFORM) || defined(NO_OS_NETWORKING)
 	(void)msglen;
 	printf("%s", message);
 	return 0;
@@ -175,7 +173,7 @@ static int32_t print_uart_error_message(struct no_os_uart_desc **uart_desc,
 #endif
 }
 
-#if defined(USE_TCP_SOCKET) || defined(LINUX_PLATFORM)
+#if defined(NO_OS_NETWORKING) || defined(LINUX_PLATFORM)
 static int32_t network_setup(struct iio_init_param *iio_init_param,
 			     struct no_os_uart_desc *uart_desc,
 			     void *irq_desc)
@@ -352,7 +350,7 @@ int32_t iio_app_run_with_trigs(struct iio_app_device *devices, uint32_t nb_devs,
 	if (status < 0)
 		return status;
 
-#if defined(USE_TCP_SOCKET) || defined(LINUX_PLATFORM)
+#if defined(NO_OS_NETWORKING) || defined(LINUX_PLATFORM)
 	status = network_setup(&iio_init_param, uart_desc, irq_desc);
 	if(status < 0)
 		goto error;

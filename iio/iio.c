@@ -58,7 +58,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#ifdef ENABLE_IIO_NETWORK
+#ifdef NO_OS_NETWORKING
 #include "no_os_delay.h"
 #include "tcp_socket.h"
 #endif
@@ -201,7 +201,7 @@ struct iio_desc {
 	int (*send)(void *conn, uint8_t *buf, uint32_t len);
 	/* FIFO for socket descriptors */
 	struct no_os_circular_buffer	*conns;
-#ifdef ENABLE_IIO_NETWORK
+#ifdef NO_OS_NETWORKING
 	struct tcp_socket_desc	*current_sock;
 	/* Instance of server socket */
 	struct tcp_socket_desc	*server;
@@ -1358,7 +1358,7 @@ int iio_buffer_pop_scan(struct iio_buffer *buffer, void *data)
 	return no_os_cb_read(buffer->buf, data, buffer->bytes_per_scan);
 }
 
-#ifdef ENABLE_IIO_NETWORK
+#ifdef NO_OS_NETWORKING
 
 static int32_t accept_network_clients(struct iio_desc *desc)
 {
@@ -1401,7 +1401,7 @@ int iio_step(struct iio_desc *desc)
 
 	iio_process_async_triggers(desc);
 
-#ifdef ENABLE_IIO_NETWORK
+#ifdef NO_OS_NETWORKING
 	if (desc->server) {
 		ret = accept_network_clients(desc);
 		if (NO_OS_IS_ERR_VALUE(ret) && ret != -EAGAIN)
@@ -1415,7 +1415,7 @@ int iio_step(struct iio_desc *desc)
 
 	ret = iiod_conn_step(desc->iiod, conn_id);
 	if (ret == -ENOTCONN) {
-#ifdef ENABLE_IIO_NETWORK
+#ifdef NO_OS_NETWORKING
 		if (desc->server) {
 			iiod_conn_remove(desc->iiod, conn_id, &data);
 			socket_remove(data.conn);
@@ -1815,7 +1815,7 @@ int iio_init(struct iio_desc **desc, struct iio_init_param *init_param)
 			goto free_conns;
 		_push_conn(ldesc, conn_id);
 	}
-#ifdef ENABLE_IIO_NETWORK
+#ifdef NO_OS_NETWORKING
 	else if (init_param->phy_type == USE_NETWORK) {
 		ldesc->send = (int (*)())socket_send;
 		ldesc->recv = (int (*)())socket_recv;
@@ -1841,7 +1841,7 @@ int iio_init(struct iio_desc **desc, struct iio_init_param *init_param)
 	return 0;
 
 free_pylink:
-#ifdef ENABLE_IIO_NETWORK
+#ifdef NO_OS_NETWORKING
 	socket_remove(ldesc->server);
 #endif
 free_conns:
@@ -1870,7 +1870,7 @@ int iio_remove(struct iio_desc *desc)
 	if (!desc)
 		return -EINVAL;
 
-#ifdef ENABLE_IIO_NETWORK
+#ifdef NO_OS_NETWORKING
 	socket_remove(desc->server);
 #endif
 	no_os_cb_remove(desc->conns);
