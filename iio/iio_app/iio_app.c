@@ -182,7 +182,8 @@ static int32_t network_setup(struct iio_init_param *iio_init_param,
 
 #ifdef LINUX_PLATFORM
 	socket_param.net = &linux_net;
-#else
+#endif
+#ifdef ADUCM3029_PLATFORM
 	int32_t status;
 	static struct wifi_desc *wifi;
 	struct wifi_init_param wifi_param = {
