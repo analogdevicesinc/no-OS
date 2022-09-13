@@ -91,7 +91,7 @@ proc _vitis_project {} {
 		-hw $::hw						\
 		-proc $cpu						\
 		-os standalone						\
-		-template  {Empty Application(C)}
+		-template  $::template
 
 	closehw $::hw
 
@@ -123,7 +123,7 @@ proc _xsdk_project {} {
 		-proc $cpu						\
 		-os standalone						\
 		-lang C							\
-		-app {Empty Application}				\
+		-app [string trimright $::template (C)]			\
 		-bsp bsp
 	
 	closehw $::hw
@@ -263,7 +263,8 @@ set hw_path	[lindex $argv 2]
 set hw		$::hw_path/[lindex $argv 3]
 set binary      [lindex $argv 4]
 set target	[lindex $argv 5]
-set jtagtarget [lindex $argv 6]
+set template	[lindex $argv 6]
+set jtagtarget	[lindex $argv 7]
 
 if {$target == 0} {set $target ""}
 

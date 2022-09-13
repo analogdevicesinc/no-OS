@@ -219,6 +219,8 @@ CFLAGS += -Wall								\
 #------------------------------------------------------------------------------
 relative_to_project = $(addprefix $(PROJECT_BUILD)/,$(call get_relative_path,$1))
 
+include $(NO-OS)/tools/scripts/libraries.mk
+
 ifeq (y,$(strip $(NETWORKING)))
 CFLAGS += -DNO_OS_NETWORKING
 endif
@@ -226,8 +228,6 @@ endif
 ifeq (y,$(strip $(DISABLE_SECURE_SOCKET)))
 CFLAGS += -DDISABLE_SECURE_SOCKET
 endif
-
-include $(NO-OS)/tools/scripts/libraries.mk
 
 SRC_DIRS := $(patsubst %/,%,$(SRC_DIRS))
 
