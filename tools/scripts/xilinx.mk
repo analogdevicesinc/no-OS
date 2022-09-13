@@ -5,11 +5,17 @@
 TEMP_DIR	= $(BUILD_DIR)/tmp
 BINARY		= $(BUILD_DIR)/$(PROJECT_NAME).elf
 
+ifeq (y,$(strip $(NETWORKING)))
+TEMPLATE	= "lwIP Echo Server"
+else
+TEMPLATE	= "Empty Application(C)"
+endif
+
 define tcl_util
 	xsct $(PLATFORM_TOOLS)/util.tcl					\
 	     $(1)							\
 	     $(WORKSPACE) $(WORKSPACE)/tmp $(notdir $(HARDWARE))	\
-	     $(BINARY) $(TARGET_CPU)
+	     $(BINARY) $(TARGET_CPU) $(TEMPLATE)
 endef
 
 ARCH = $(shell $(call read_file, $(TEMP_DIR)/arch.txt))
@@ -161,6 +167,9 @@ $(PLATFORM)_sdkclean:
 $(PROJECT_TARGET): $(TEMP_DIR)/arch.txt
 	$(call print,Creating and configuring the IDE project)
 	$(MUTE)	$(call tcl_util, create_project)  $(HIDE)
+ifeq (y,$(strip $(NETWORKING)))
+	$(MUTE) $(call remove_file,$(BUILD_DIR)/app/src/main.c $(BUILD_DIR)/app/src/echo.c) $(HIDE)
+endif
 	$(MUTE) $(call set_one_time_rule,$@)
 
 reset: xilinx_clean_all
