@@ -53,11 +53,6 @@
 /******************************************************************************/
 #define MAX_BACKLOG 0xFFFFFFFF
 
-//#define DISABLE_SECURE_SOCKET
-#ifdef DISABLE_SECURE_SOCKET
-#warning "TCP socket communication is not secured"
-#endif
-
 /**
  * @struct tcp_socket_desc
  * @brief TCP Socket descriptor
