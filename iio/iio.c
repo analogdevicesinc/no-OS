@@ -1157,6 +1157,7 @@ static int iio_close_dev(struct iiod_ctx *ctx, const char *device)
 		trig = &desc->trigs[dev->trig_idx];
 		if (trig->descriptor->disable)
 			ret = trig->descriptor->disable(trig->instance);
+		dev->trig_idx = NO_TRIGGER;
 	}
 
 	return ret;
