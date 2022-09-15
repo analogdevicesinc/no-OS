@@ -71,4 +71,7 @@ and based on the available RAM memory of the platform */
 #define SAMPLES_PER_CHANNEL_PLATFORM    2000
 #define UART_BAUDRATE	                115200
 
+#define EMAC_BASEADDR   XPAR_PS7_ETHERNET_0_BASEADDR
+#define ETH_MAC_ADDRESS {0x00, 0x0a, 0x35, 0x02, 0x71, 0x27} // zcu702
+
 #endif /* __PARAMETERS_H__ */

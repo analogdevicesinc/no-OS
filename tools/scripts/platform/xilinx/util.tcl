@@ -63,6 +63,7 @@ proc _project_config {cmd {arg}} {
 				  \${ProjDirPath}] $path]
 		$cmd $arg -$arg2 app include-path $new_path
 	}
+	#$cmd $arg -$arg2 app include-path "${ProjDirPath}/src"
 	foreach symbol $::env(FLAGS_WITHOUT_D) {
 		$cmd $arg -$arg2 app define-compiler-symbols $symbol
 	}

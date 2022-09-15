@@ -24,7 +24,8 @@ INCS += $(INCLUDE)/no_os_delay.h     \
         $(INCLUDE)/no_os_list.h      \
         $(INCLUDE)/no_os_timer.h     \
         $(INCLUDE)/no_os_uart.h      \
-        $(INCLUDE)/no_os_util.h
+        $(INCLUDE)/no_os_util.h      \
+        $(INCLUDE)/no_os_print_log.h
 
 INCS += $(DRIVERS)/adc/adc_demo/adc_demo.h \
         $(DRIVERS)/dac/dac_demo/dac_demo.h

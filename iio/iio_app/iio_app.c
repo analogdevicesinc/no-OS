@@ -46,6 +46,7 @@
 #include "parameters.h"
 #include "no_os_uart.h"
 #include "no_os_delay.h"
+#include "no_os_error.h"
 
 #if defined(ADUCM_PLATFORM)
 #include "aducm3029_uart.h"
@@ -53,7 +54,6 @@
 #endif
 #if defined(ADUCM_PLATFORM) || defined(XILINX_PLATFORM)
 #include "no_os_irq.h"
-#include "no_os_error.h"
 #endif
 #if defined(XILINX_PLATFORM)
 #include "uart_extra.h"
@@ -64,32 +64,33 @@
 #include "stm32_uart.h"
 #include "stm32_irq.h"
 #include "no_os_irq.h"
-#include "no_os_error.h"
 #endif
 
 #if defined(MAXIM_PLATFORM)
 #include "maxim_irq.h"
 #include "maxim_uart.h"
 #include "no_os_irq.h"
-#include "no_os_error.h"
 #endif
 
 #ifdef NO_OS_NETWORKING
+#include "tcp_socket.h"
+
+#ifdef XILINX_PLATFORM
+#include "xil_eth.h"
+#endif
+
+#ifdef ADUCM3029_PLATFORM
 /* Fix: Use static buffers instead of calloc for new connections */
 #warning "iio may not work with WIFI on aducm3029."
 #include "wifi.h"
-#include "tcp_socket.h"
 #endif
 
 #ifdef LINUX_PLATFORM
 #include "linux_socket.h"
 #include "tcp_socket.h"
-#include "no_os_error.h"
 #endif
 
-#ifdef PICO_PLATFORM
-#include "no_os_error.h"
-#endif
+#endif // NO_OS_NETWORKING
 
 // The default baudrate iio_app will use to print messages to console.
 #define UART_BAUDRATE_DEFAULT	115200
@@ -101,7 +102,6 @@ static inline uint32_t _calc_uart_xfer_time(uint32_t len, uint32_t baudrate)
 	return ms;
 }
 
-#if !defined(LINUX_PLATFORM) && !defined(NO_OS_NETWORKING)
 static int32_t iio_print_uart_info_message(struct no_os_uart_desc **uart_desc,
 		struct no_os_uart_init_param *uart_init_par,
 		char *message, int32_t msglen)
@@ -123,14 +123,10 @@ static int32_t iio_print_uart_info_message(struct no_os_uart_desc **uart_desc,
 
 	return 0;
 }
-#endif
 
 static int32_t print_uart_hello_message(struct no_os_uart_desc **uart_desc,
 					struct no_os_uart_init_param *uart_init_par)
 {
-#if defined(LINUX_PLATFORM) || defined(NO_OS_NETWORKING)
-	return 0;
-#else
 	const char *uart_data_size[] = { "5", "6", "7", "8", "9" };
 	const char *uart_parity[] = { "none", "mark", "space", "odd", "even" };
 	const char *uart_stop[] = { "1", "2" };
@@ -152,7 +148,6 @@ static int32_t print_uart_hello_message(struct no_os_uart_desc **uart_desc,
 
 	return iio_print_uart_info_message(uart_desc, uart_init_par, message,
 					   msglen);
-#endif
 }
 
 static int32_t print_uart_error_message(struct no_os_uart_desc **uart_desc,
@@ -163,28 +158,91 @@ static int32_t print_uart_error_message(struct no_os_uart_desc **uart_desc,
 	uint32_t msglen = sprintf(message,
 				  "TinyIIOD server failed with code %d.\n",
 				  (int)status);
-#if defined(LINUX_PLATFORM) || defined(NO_OS_NETWORKING)
-	(void)msglen;
-	printf("%s", message);
-	return 0;
-#else
+
 	return iio_print_uart_info_message(uart_desc, uart_init_par, message,
 					   msglen);
-#endif
 }
 
-#if defined(NO_OS_NETWORKING) || defined(LINUX_PLATFORM)
+
+#if defined(XILINX_PLATFORM)
+static struct xil_eth_desc *eth;
+
+static int32_t net_init(struct network_interface **net,
+			struct no_os_uart_desc *uart_desc,
+			void *irq_desc)
+{
+	struct xil_eth_init_param eth_param = {
+		.emac_baseaddr = EMAC_BASEADDR,
+		.mac_ethernet_address = ETH_MAC_ADDRESS
+	};
+	int32_t ret;
+#ifdef IIO_USE_STATIC_IP
+	eth_param.use_static_ip = 1;
+	IP4_ADDR(&eth_param.ip_addr, 192,168,0,100);
+	IP4_ADDR(&eth_param.netmask, 255,255,255,0);
+	IP4_ADDR(&eth_param.gw,      192,168,0,1);
+#endif
+
+	ret = xil_eth_init(&eth, &eth_param);
+	if (ret < 0) {
+		printf("xil_eth_init failed with code: %"PRIi32"\n", ret);
+		return ret;
+	}
+	char ip_buff[100];
+	xil_eth_get_ip(eth, ip_buff, 100);
+	printf("TinyIIOD IP addr: %s\n", ip_buff);
+
+	xil_eth_get_network_interface(eth, net);
+
+	return 0;
+}
+#elif defined(LINUX_PLATFORM)
+static int32_t net_init(struct network_interface **net,
+			struct uart_desc *uart_desc,
+			void *irq_desc)
+{
+	*net = &linux_net;
+}
+#elif defined(ADUCM_PLATFORM)
+static int32_t net_init(struct network_interface **net,
+			struct uart_desc *uart_desc,
+			void *irq_desc)
+{
+	int32_t status;
+	static struct wifi_desc *wifi;
+	struct wifi_init_param wifi_param = {
+		.irq_desc = irq_desc,
+		.uart_desc = uart_desc,
+		.uart_irq_conf = uart_desc,
+		.uart_irq_id = UART_IRQ_ID
+	};
+	status = wifi_init(&wifi, &wifi_param);
+	if (status < 0)
+		return status;
+
+	status = wifi_connect(wifi, WIFI_SSID, WIFI_PWD);
+	if (status < 0)
+		return status;
+
+	char buff[100];
+	wifi_get_ip(wifi, buff, 100);
+	printf("TinyIIOD ip is: %s\n", buff);
+
+	wifi_get_network_interface(wifi, net);
+}
+#endif //ADUCM_PLATFORM
+
 static int32_t network_setup(struct iio_init_param *iio_init_param,
 			     struct no_os_uart_desc *uart_desc,
 			     void *irq_desc)
 {
+	int32_t status;
 	static struct tcp_socket_init_param socket_param;
 
 #ifdef LINUX_PLATFORM
 	socket_param.net = &linux_net;
 #endif
 #ifdef ADUCM3029_PLATFORM
-	int32_t status;
 	static struct wifi_desc *wifi;
 	struct wifi_init_param wifi_param = {
 		.irq_desc = irq_desc,
@@ -205,6 +263,11 @@ static int32_t network_setup(struct iio_init_param *iio_init_param,
 	printf("Tinyiiod ip is: %s\n", buff);
 
 	wifi_get_network_interface(wifi, &socket_param.net);
+#endif
+#ifdef XILINX_PLATFORM
+	status = net_init(&socket_param.net, uart_desc, irq_desc);
+	if (status < 0)
+		return status;
 #endif
 
 	socket_param.max_buff_size = 0;
@@ -320,7 +383,7 @@ int32_t iio_app_run_with_trigs(struct iio_app_device *devices, uint32_t nb_devs,
 {
 	int32_t			status;
 	struct iio_init_param	iio_init_param;
-	struct no_os_uart_desc	*uart_desc;
+	struct no_os_uart_desc	*uart_desc = NULL;
 	struct no_os_uart_init_param	*uart_init_par;
 	struct iio_device_init	*iio_init_devs;
 	uint32_t		i;
@@ -350,8 +413,8 @@ int32_t iio_app_run_with_trigs(struct iio_app_device *devices, uint32_t nb_devs,
 	status = print_uart_hello_message(&uart_desc, uart_init_par);
 	if (status < 0)
 		return status;
-
-#if defined(NO_OS_NETWORKING) || defined(LINUX_PLATFORM)
+							
+#if defined(NO_OS_NETWORKING)
 	status = network_setup(&iio_init_param, uart_desc, irq_desc);
 	if(status < 0)
 		goto error;
@@ -401,6 +464,9 @@ int32_t iio_app_run_with_trigs(struct iio_app_device *devices, uint32_t nb_devs,
 
 	do {
 		status = iio_step(*iio_desc);
+#if defined(NO_OS_NETWORKING) && defined(XILINX_PLATFORM)
+		xil_eth_step(eth);
+#endif
 	} while (true);
 error:
 	status = print_uart_error_message(&uart_desc, uart_init_par, status);
@@ -414,5 +480,3 @@ int32_t iio_app_run(struct iio_app_device *devices, uint32_t len)
 
 	return iio_app_run_with_trigs(devices, len, NULL, 0, irq_desc, &iio_desc);
 }
-
-#endif

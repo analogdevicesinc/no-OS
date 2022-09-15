@@ -54,9 +54,9 @@
 #include "xil_cache.h"
 #include "xil_eth.h"
 
-#include "no-os/error.h"
-#include "no-os/print_log.h"
-#include "no-os/util.h"
+#include "no_os_error.h"
+#include "no_os_print_log.h"
+#include "no_os_util.h"
 
 /*
  * TODO: I would move this to xil_eth_desc but this implies modify the default
@@ -126,7 +126,7 @@ static int32_t _get_unused_socket(struct xil_eth_desc *desc, uint32_t *id)
 			*id = i;
 			desc->sockets[i].state = SOCKET_DISCONNECTED;
 
-			return SUCCESS;
+			return 0;
 		}
 
 	/* All the available connections are used */
@@ -195,7 +195,7 @@ int32_t xil_eth_init(struct xil_eth_desc **desc,
 	if (!xemac_add(netif, &ipaddr, &netmask, &gw,
 		       param->mac_ethernet_address, param->emac_baseaddr)) {
 		pr_err("Error adding N/W interface\n\r");
-		ret = FAILURE;
+		ret = -EFAULT;
 		goto cleanup;
 	}
 
@@ -223,7 +223,7 @@ int32_t xil_eth_init(struct xil_eth_desc **desc,
 		if (dhcp_timoutcntr <= 0) {
 			if ((netif->ip_addr.addr) == 0) {
 				pr_err("DHCP Timeout\r\n");
-				ret = FAILURE;
+				ret = -ETIMEDOUT;
 				goto cleanup;
 			}
 		}
@@ -237,7 +237,7 @@ int32_t xil_eth_init(struct xil_eth_desc **desc,
 		ldesc->sockets[i].desc = ldesc;
 	}
 
-	return SUCCESS;
+	return 0;
 cleanup:
 	free(ldesc);
 	return ret;
@@ -247,7 +247,7 @@ int32_t xil_eth_remove(struct xil_eth_desc *desc)
 {
 	free(desc);
 
-	return SUCCESS;
+	return 0;
 }
 
 /* They seem to be non static in tcp.c but they aren't in any .h file */
@@ -267,7 +267,7 @@ int32_t xil_eth_step(struct xil_eth_desc *desc)
 	}
 	xemacif_input(&desc->netif);
 
-	return SUCCESS;
+	return 0;
 }
 
 int32_t xil_eth_get_network_interface(struct xil_eth_desc *desc,
@@ -275,7 +275,7 @@ int32_t xil_eth_get_network_interface(struct xil_eth_desc *desc,
 {
 	*net = &desc->noos_net;
 
-	return SUCCESS;
+	return 0;
 }
 
 int32_t xil_eth_get_ip(struct xil_eth_desc *desc, char *ip_buff,
@@ -352,7 +352,7 @@ static int32_t xil_socket_open(struct xil_eth_desc *desc, uint32_t *sock_id,
 	struct tcp_pcb *pcb;
 
 	err = _get_unused_socket(desc, sock_id);
-	if (IS_ERR_VALUE(err))
+	if (NO_OS_IS_ERR_VALUE(err))
 		return err;
 
 	pcb = tcp_new_ip_type(IPADDR_TYPE_ANY);
@@ -364,7 +364,7 @@ static int32_t xil_socket_open(struct xil_eth_desc *desc, uint32_t *sock_id,
 
 	xil_eth_config_sock(&desc->sockets[*sock_id]);
 
-	return SUCCESS;
+	return 0;
 }
 
 /** @brief See \ref network_interface.socket_close */
@@ -390,7 +390,7 @@ static int32_t xil_socket_close(struct xil_eth_desc *desc, uint32_t sock_id)
 	sock->p_idx = 0;
 	_release_socket(desc, sock_id);
 
-	return SUCCESS;
+	return 0;
 }
 
 /** @brief See \ref network_interface.socket_send */
@@ -415,7 +415,7 @@ static int32_t xil_socket_send(struct xil_eth_desc *desc, uint32_t sock_id,
 	if (aval < size)
 		/* Partial write */
 		flags |= TCP_WRITE_FLAG_MORE;
-	size = min(aval, size);
+	size = no_os_min(aval, size);
 	err = tcp_write(sock->pcb, data, size, flags);
 	if (err != ERR_OK) {
 		_err = err;
@@ -457,7 +457,7 @@ static int32_t xil_socket_recv(struct xil_eth_desc *desc, uint32_t sock_id,
 	pdata = data;
 	/* Iterate over payloads until requested data has been read */
 	while (p && i < size) {
-		len = min(size - i, p->len - sock->p_idx);
+		len = no_os_min(size - i, p->len - sock->p_idx);
 		buf = p->payload;
 		buf += sock->p_idx;
 		memcpy(pdata + i, buf, len);
@@ -496,7 +496,7 @@ static int32_t xil_socket_bind(struct xil_eth_desc *desc, uint32_t sock_id,
 		return -EINVAL;
 	}
 
-	return SUCCESS;
+	return 0;
 }
 
 /** @brief See \ref network_interface.socket_listen */
@@ -520,7 +520,7 @@ static int32_t xil_socket_listen(struct xil_eth_desc *desc, uint32_t sock_id,
 
 	xil_eth_config_sock(sock);
 
-	return SUCCESS;
+	return 0;
 }
 
 /* Called when at a new connection request. Prepare structure for new socket */
@@ -530,7 +530,7 @@ static err_t xil_eth_accept_callback(void *arg, struct tcp_pcb *new_pcb,
 	int32_t noos_err;
 	int8_t _err;
 	uint32_t id;
-	struct socket_desc *sock;
+	struct socket_desc *sock, *cli_sock;
 	struct socket_desc *serv_sock = arg;
 	struct xil_eth_desc *desc = serv_sock->desc;
 
@@ -540,8 +540,21 @@ static err_t xil_eth_accept_callback(void *arg, struct tcp_pcb *new_pcb,
 		return ERR_OK;
 	}
 
+	for (id = 0; id < MAX_SOCKETS; id++) {
+		cli_sock = &desc->sockets[id];
+		if (cli_sock->state == SOCKET_ACCEPTING) {
+			if (cli_sock->pcb->local_port == serv_sock->pcb->local_port) {
+				cli_sock->state = SOCKET_CONNECTED;
+				break;
+			}
+		}
+	}
+
+	if (id < MAX_SOCKETS)
+		return ERR_OK;
+
 	noos_err = _get_unused_socket(desc, &id);
-	if (IS_ERR_VALUE(noos_err))
+	if (NO_OS_IS_ERR_VALUE(noos_err))
 		return ERR_MEM;
 
 	sock = _get_sock(desc, id);
@@ -557,34 +570,21 @@ static err_t xil_eth_accept_callback(void *arg, struct tcp_pcb *new_pcb,
 static int32_t xil_socket_accept(struct xil_eth_desc *desc, uint32_t sock_id,
 				 uint32_t *client_socket_id)
 {
-	struct socket_desc *serv_sock, *cli_sock;
-	uint32_t i;
+	int noos_err;
+	struct socket_desc *sock;
 
-	serv_sock = _get_sock(desc, sock_id);
-	if (!serv_sock)
-		return -EINVAL;
+	sock = _get_sock(desc, sock_id);
+	if (!sock)
+		return ERR_ARG;
 
-	if (serv_sock->state != SOCKET_ACCEPTING) {
-		if (serv_sock->state != SOCKET_LISTENING)
-			return -EINVAL;
-		tcp_accept(serv_sock->pcb, xil_eth_accept_callback);
-		serv_sock->state = SOCKET_ACCEPTING;
-	}
+	if (sock->state != SOCKET_LISTENING)
+		return ERR_ARG;
 
-	for (i = 0; i < MAX_SOCKETS; ++i) {
-		cli_sock = &desc->sockets[i];
-		if (cli_sock->state == SOCKET_WAITING_ACCEPT) {
-			if (cli_sock->pcb->local_port ==
-			    serv_sock->pcb->local_port) {
-				/* New client connection for server */
-				*client_socket_id = i;
-				cli_sock->state = SOCKET_CONNECTED;
-				return SUCCESS;
-			}
-		}
-	}
+	tcp_accept(sock->pcb, xil_eth_accept_callback);
+	sock->state = SOCKET_ACCEPTING;
+	*client_socket_id = sock->id;
 
-	return -EAGAIN;
+	return ERR_OK;
 }
 
 /** @brief See \ref network_interface.socket_sendto */

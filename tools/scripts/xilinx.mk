@@ -7,6 +7,8 @@ BINARY		= $(BUILD_DIR)/$(PROJECT_NAME).elf
 
 ifeq (y,$(strip $(NETWORKING)))
 TEMPLATE	= "lwIP Echo Server"
+#PLATFORM_INCS	+= $(BUILD_DIR)/app/src
+INCS     += $(call rwildcard, $(BUILD_DIR)/app/src,*.h)
 else
 TEMPLATE	= "Empty Application(C)"
 endif
