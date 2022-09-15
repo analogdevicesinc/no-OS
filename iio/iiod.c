@@ -200,7 +200,7 @@ static int32_t iiod_parse_rw_attr(const char *token, struct comand_desc *res,
 	    res->type == IIO_ATTR_TYPE_CH_OUT) {
 		if (!token)
 			return -EINVAL;
-		res->channel = token;
+		strncpy(res->channel, token, sizeof(res->channel));
 		token = strtok_r(NULL, delim, ctx);
 	}
 
@@ -209,12 +209,12 @@ static int32_t iiod_parse_rw_attr(const char *token, struct comand_desc *res,
 			return -EINVAL;
 
 		if (*token >= '0' && *token <= '9') {
-			res->attr = "";
+			memset(res->attr, 0, sizeof(res->attr));
 
 			return parse_num(token, &res->bytes_count, 10);
 		}
 
-		res->attr = token;
+		strncpy(res->attr, token, sizeof(res->attr));
 		token = strtok_r(NULL, delim, ctx);
 		if (!token)
 			return -EINVAL;
@@ -223,9 +223,9 @@ static int32_t iiod_parse_rw_attr(const char *token, struct comand_desc *res,
 	}
 
 	if (token)
-		res->attr = token;
+		strncpy(res->attr, token, sizeof(res->attr));
 	else
-		res->attr = "";
+		memset(res->attr, 0, sizeof(res->attr));
 
 	return 0;
 }
@@ -254,7 +254,7 @@ int32_t iiod_parse_line(char *buf, struct comand_desc *res, char **ctx)
 		break;
 	}
 
-	res->device = token;
+	strncpy(res->device, token, sizeof(res->device));
 	token = strtok_r(NULL, delim, ctx);
 	switch (res->cmd) {
 	case IIOD_CMD_CLOSE:
@@ -270,9 +270,9 @@ int32_t iiod_parse_line(char *buf, struct comand_desc *res, char **ctx)
 		return parse_num(token, &res->bytes_count, 10);
 	case IIOD_CMD_SETTRIG:
 		if (token)
-			res->trigger = token;
+			strncpy(res->trigger, token, sizeof(res->trigger));
 		else
-			res->trigger = "";
+			memset(res->trigger, 0, sizeof(res->trigger));
 
 		return 0;
 	case IIOD_CMD_SET:

@@ -151,7 +151,7 @@ struct iio_buffer_priv {
  */
 struct iio_dev_priv {
 	/** Will be: iio:device[0...n] n beeing the count of registerd devices*/
-	char			dev_id[21];
+	char			dev_id[MAX_DEV_ID];
 	/** Device name */
 	const char		*name;
 	/** Physical instance of a device */
@@ -175,7 +175,7 @@ struct iio_dev_priv {
  */
 struct iio_trig_priv {
 	/** Will be: iio:trigger[0...n] */
-	char	id[22];
+	char	id[MAX_TRIG_ID];
 	/** Trigger name */
 	char	*name;
 	/** Physical instance of a trigger */
@@ -283,7 +283,7 @@ static inline struct iio_channel *iio_get_channel(const char *channel,
 		struct iio_device *desc, bool ch_out)
 {
 	int16_t i = 0;
-	char	ch_id[64];
+	char	ch_id[MAX_CHN_ID];
 
 	while (i < desc->num_ch) {
 		_print_ch_id(ch_id, &desc->channels[i]);
@@ -739,7 +739,7 @@ static int iio_read_attr(struct iiod_ctx *ctx, const char *device,
 			return -ENOENT;
 		}
 
-		if (attr->channel) {
+		if (attr->channel[0] != '\0') {
 			ch_out = attr->type == IIO_ATTR_TYPE_CH_OUT ? 1 : 0;
 			ch = iio_get_channel(attr->channel, dev->dev_descriptor,
 					     ch_out);
@@ -815,7 +815,7 @@ static int iio_write_attr(struct iiod_ctx *ctx, const char *device,
 			return -ENOENT;
 		}
 
-		if (attr->channel) {
+		if (attr->channel[0] != '\0') {
 			ch_out = attr->type == IIO_ATTR_TYPE_CH_OUT ? 1 : 0;
 			ch = iio_get_channel(attr->channel, dev->dev_descriptor,
 					     ch_out);

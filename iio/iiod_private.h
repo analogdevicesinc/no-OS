@@ -90,10 +90,10 @@ struct comand_desc {
 	uint32_t bytes_count;
 	uint32_t count;
 	bool cyclic;
-	const char *device;
-	const char *channel;
-	const char *attr;
-	const char *trigger;
+	char device[MAX_DEV_ID];
+	char channel[MAX_CHN_ID];
+	char attr[MAX_ATTR_NAME];
+	char trigger[MAX_TRIG_ID];
 	enum iio_attr_type type;
 };
 
