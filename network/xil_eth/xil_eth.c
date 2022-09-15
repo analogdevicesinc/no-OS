@@ -116,31 +116,6 @@ static struct socket_desc *_get_sock(struct xil_eth_desc *desc, uint32_t id)
 	return &desc->sockets[id];
 }
 
-/* Get first socket with state SOCKET_UNUSED. Then, set id with index */
-static int32_t _get_unused_socket(struct xil_eth_desc *desc, uint32_t *id)
-{
-	uint32_t i;
-
-	for (i = 0; i < MAX_SOCKETS; i++)
-		if (desc->sockets[i].state == SOCKET_UNUSED) {
-			*id = i;
-			desc->sockets[i].state = SOCKET_DISCONNECTED;
-
-			return 0;
-		}
-
-	/* All the available connections are used */
-	return -ENOMEM;
-}
-
-/* Mark socket as SOCKET_UNUSED. */
-static void _release_socket(struct xil_eth_desc *desc, uint32_t id)
-{
-	struct socket_desc *sock = _get_sock(desc, id);
-
-	sock->state = SOCKET_UNUSED;
-}
-
 /*
  * Implement with IPV4 and DHCP enabled by default.
  * For more configs see lwip echo example
@@ -303,7 +278,6 @@ static err_t xil_eth_recv_callback(void *arg, struct tcp_pcb *tpcb,
 	if (!p) {
 		/* Remote has closed connection */
 		tcp_recv(sock->pcb, NULL);
-		sock->state = SOCKET_DISCONNECTED;
 
 		return ERR_OK;
 	} else if (err != ERR_OK) {
@@ -330,9 +304,7 @@ static err_t xil_eth_recv_callback(void *arg, struct tcp_pcb *tpcb,
 
 static void xil_eth_err_callback(void *arg, err_t err)
 {
-	struct socket_desc *sock = arg;
-
-	sock->state = SOCKET_DISCONNECTED;
+	// TODO: fill
 }
 
 /* Set default callbacks for a new socket */
@@ -351,13 +323,13 @@ static int32_t xil_socket_open(struct xil_eth_desc *desc, uint32_t *sock_id,
 	int32_t err;
 	struct tcp_pcb *pcb;
 
-	err = _get_unused_socket(desc, sock_id);
-	if (NO_OS_IS_ERR_VALUE(err))
+	err = _get_sock(desc, sock_id);
+	if (err < 0)
 		return err;
 
 	pcb = tcp_new_ip_type(IPADDR_TYPE_ANY);
 	if (!pcb) {
-		_release_socket(desc, *sock_id);
+		//_release_socket(desc, *sock_id);
 		return -ENOMEM;
 	}
 	desc->sockets[*sock_id].pcb = pcb;
@@ -376,9 +348,6 @@ static int32_t xil_socket_close(struct xil_eth_desc *desc, uint32_t sock_id)
 	if (!sock)
 		return -EINVAL;
 
-	if (sock->state == SOCKET_UNUSED)
-		return -ENOENT;
-
 	tcp_recv(sock->pcb, NULL);
 	tcp_err(sock->pcb, NULL);
 	if (sock->p) {
@@ -388,7 +357,7 @@ static int32_t xil_socket_close(struct xil_eth_desc *desc, uint32_t sock_id)
 
 	tcp_close(sock->pcb);
 	sock->p_idx = 0;
-	_release_socket(desc, sock_id);
+	//_release_socket(desc, sock_id);
 
 	return 0;
 }
@@ -406,9 +375,6 @@ static int32_t xil_socket_send(struct xil_eth_desc *desc, uint32_t sock_id,
 	sock = _get_sock(desc, sock_id);
 	if (!sock)
 		return -EINVAL;
-
-	if (sock->state != SOCKET_CONNECTED)
-		return -ENOTCONN;
 
 	aval = tcp_sndbuf(sock->pcb);
 	flags = TCP_WRITE_FLAG_COPY;
@@ -448,9 +414,6 @@ static int32_t xil_socket_recv(struct xil_eth_desc *desc, uint32_t sock_id,
 	sock = _get_sock(desc, sock_id);
 	if (!sock)
 		return -EINVAL;
-
-	if (sock->state != SOCKET_CONNECTED)
-		return -ENOTCONN;
 
 	i = 0;
 	p = sock->p;
@@ -516,7 +479,6 @@ static int32_t xil_socket_listen(struct xil_eth_desc *desc, uint32_t sock_id,
 		return -ENOMEM;
 	}
 	sock->pcb = pcb;
-	sock->state = SOCKET_LISTENING;
 
 	xil_eth_config_sock(sock);
 
@@ -527,41 +489,15 @@ static int32_t xil_socket_listen(struct xil_eth_desc *desc, uint32_t sock_id,
 static err_t xil_eth_accept_callback(void *arg, struct tcp_pcb *new_pcb,
 				     err_t err)
 {
-	int32_t noos_err;
-	int8_t _err;
-	uint32_t id;
-	struct socket_desc *sock, *cli_sock;
 	struct socket_desc *serv_sock = arg;
-	struct xil_eth_desc *desc = serv_sock->desc;
 
 	if (err != ERR_OK) {
-		_err = err;
-		pr_err("Accept callback err %"PRIi8"\n", _err);
+		pr_err("Accept callback err %d\n", err);
 		return ERR_OK;
 	}
 
-	for (id = 0; id < MAX_SOCKETS; id++) {
-		cli_sock = &desc->sockets[id];
-		if (cli_sock->state == SOCKET_ACCEPTING) {
-			if (cli_sock->pcb->local_port == serv_sock->pcb->local_port) {
-				cli_sock->state = SOCKET_CONNECTED;
-				break;
-			}
-		}
-	}
-
-	if (id < MAX_SOCKETS)
-		return ERR_OK;
-
-	noos_err = _get_unused_socket(desc, &id);
-	if (NO_OS_IS_ERR_VALUE(noos_err))
-		return ERR_MEM;
-
-	sock = _get_sock(desc, id);
-	sock->pcb = new_pcb;
-	sock->state = SOCKET_WAITING_ACCEPT;
-
-	xil_eth_config_sock(sock);
+	serv_sock->pcb = new_pcb;
+	xil_eth_config_sock(serv_sock);
 
 	return ERR_OK;
 }
@@ -577,11 +513,7 @@ static int32_t xil_socket_accept(struct xil_eth_desc *desc, uint32_t sock_id,
 	if (!sock)
 		return ERR_ARG;
 
-	if (sock->state != SOCKET_LISTENING)
-		return ERR_ARG;
-
 	tcp_accept(sock->pcb, xil_eth_accept_callback);
-	sock->state = SOCKET_ACCEPTING;
 	*client_socket_id = sock->id;
 
 	return ERR_OK;
