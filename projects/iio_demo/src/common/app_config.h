@@ -41,13 +41,7 @@
 
 #define ENABLE_LOOPBACK
 
-// Setting available only for aducm3029 platform
-#ifdef ENABLE_IIO_NETWORK
-// #define USE_TCP_SOCKET
-#ifdef USE_TCP_SOCKET
 #define WIFI_SSID	"RouterSSID"
 #define WIFI_PWD	"******"
-#endif /* USE_TCP_SOCKET */
-#endif
 
 #endif

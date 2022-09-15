@@ -4,7 +4,7 @@
       "flags" : "TINYIIOD=y"
     },
     "iio_wifi":  {
-      "flags" : "TINYIIOD=y USE_TCP_SOCKET=y"
+      "flags" : "TINYIIOD=y NETWORKING=y"
     }
   }
 }

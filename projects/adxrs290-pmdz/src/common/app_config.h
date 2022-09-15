@@ -39,8 +39,4 @@
 #ifndef CONFIG_H_
 #define CONFIG_H_
 
-#ifdef ENABLE_IIO_NETWORK
-#define USE_TCP_SOCKET
-#endif
-
 #endif

@@ -219,8 +219,8 @@ CFLAGS += -Wall								\
 #------------------------------------------------------------------------------
 relative_to_project = $(addprefix $(PROJECT_BUILD)/,$(call get_relative_path,$1))
 
-ifeq (y,$(strip $(ENABLE_IIO_NETWORK)))
-CFLAGS += -DENABLE_IIO_NETWORK
+ifeq (y,$(strip $(NETWORKING)))
+CFLAGS += -DNO_OS_NETWORKING
 endif
 
 ifeq (y,$(strip $(DISABLE_SECURE_SOCKET)))

@@ -47,7 +47,7 @@
 
 #include "iio_types.h"
 #include "no_os_uart.h"
-#ifdef ENABLE_IIO_NETWORK
+#ifdef NO_OS_NETWORKING
 #include "tcp_socket.h"
 #endif
 
@@ -57,7 +57,7 @@
 
 enum pysical_link_type {
 	USE_UART,
-#ifdef ENABLE_IIO_NETWORK
+#ifdef NO_OS_NETWORKING
 	USE_NETWORK
 #endif
 };
@@ -90,7 +90,7 @@ struct iio_init_param {
 	enum pysical_link_type	phy_type;
 	union {
 		struct no_os_uart_desc *uart_desc;
-#ifdef ENABLE_IIO_NETWORK
+#ifdef NO_OS_NETWORKING
 		struct tcp_socket_init_param *tcp_socket_init_param;
 #endif
 	};
