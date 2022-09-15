@@ -1,11 +1,4 @@
-ifeq '$(USE_TCP_SOCKET)' 'y'
-ENABLE_IIO_NETWORK ?= y
-CFLAGS += -DUSE_TCP_SOCKET
-else
-ENABLE_IIO_NETWORK ?= n
-endif
-
-ifeq (y,$(strip $(ENABLE_IIO_NETWORK)))
+ifeq (y,$(strip $(NETWORKING)))
 DISABLE_SECURE_SOCKET ?= y
 SRC_DIRS += $(NO-OS)/network
 
