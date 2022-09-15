@@ -48,6 +48,11 @@
 #define IIOD_VERSION		"1.1.0000000"
 #define IIOD_VERSION_LEN	(sizeof(IIOD_VERSION) - 1)
 
+#define MAX_DEV_ID		64
+#define MAX_TRIG_ID		64
+#define MAX_CHN_ID		64
+#define MAX_ATTR_NAME		256
+
 enum iio_attr_type {
 	IIO_ATTR_TYPE_DEBUG,
 	IIO_ATTR_TYPE_BUFFER,
