@@ -133,7 +133,7 @@ int main(void)
 	Xil_ICacheEnable();
 	Xil_DCacheEnable();
 
-	printf("AD7616 Reference Design.\n");
+	pr_info("AD7616 Reference Design.\n");
 
 	ad7616_setup(&dev, &init_param);
 
