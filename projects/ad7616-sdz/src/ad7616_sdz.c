@@ -129,6 +129,7 @@ int main(void)
 {
 	struct ad7616_dev	*dev;
 	uint32_t buf[AD7616_SDZ_SAMPLE_NO] __attribute__ ((aligned));
+	uint32_t i;
 
 	Xil_ICacheEnable();
 	Xil_DCacheEnable();
@@ -141,6 +142,11 @@ int main(void)
 		ad7616_read_data_parallel(dev, buf, AD7616_SDZ_SAMPLE_NO);
 	else
 		ad7616_read_data_serial(dev, buf, AD7616_SDZ_SAMPLE_NO);
+
+	for (i = 0; i < AD7616_SDZ_SAMPLE_NO; i++) {
+		pr_info("ADC sample %lu : %lu \n", i * 2, buf[i] >> 16);
+		pr_info("ADC sample %lu : %lu \n", (i * 2) + 1, buf[i] & 0xFFFF);
+	}
 
 	pr_info("Capture done. \n");
 
