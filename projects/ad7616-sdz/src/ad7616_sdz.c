@@ -128,7 +128,7 @@ struct ad7616_init_param init_param = {
 int main(void)
 {
 	struct ad7616_dev	*dev;
-	uint32_t* buf = XPAR_PS7_DDR_0_S_AXI_BASEADDR;
+	uint32_t buf[AD7616_SDZ_SAMPLE_NO] __attribute__ ((aligned));
 
 	Xil_ICacheEnable();
 	Xil_DCacheEnable();
