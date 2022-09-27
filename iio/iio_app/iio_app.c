@@ -77,7 +77,9 @@
 #ifdef NO_OS_NETWORKING
 /* Fix: Use static buffers instead of calloc for new connections */
 #warning "iio may not work with WIFI on aducm3029."
+#ifdef ADUCM3029_PLATFORM
 #include "wifi.h"
+#endif
 #include "tcp_socket.h"
 #endif
 
