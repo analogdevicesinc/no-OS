@@ -86,6 +86,10 @@ struct iio_trigger_init {
 	struct iio_trigger *descriptor;
 };
 
+struct iio_cntx_attr_init {
+	struct iio_context_attribute *descriptor;
+};
+
 struct iio_init_param {
 	enum pysical_link_type	phy_type;
 	union {
@@ -94,6 +98,8 @@ struct iio_init_param {
 		struct tcp_socket_init_param *tcp_socket_init_param;
 #endif
 	};
+	struct iio_cntx_attr_init *cntx_attrs;
+	uint32_t nb_cntx_attrs;
 	struct iio_device_init *devs;
 	uint32_t nb_devs;
 	struct iio_trigger_init *trigs;

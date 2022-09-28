@@ -145,6 +145,15 @@ struct iio_buffer_priv {
 };
 
 /**
+ * @struct iio_cntx_attr_priv
+ * @brief Context attributes private structure
+ */
+struct iio_cntx_attr_priv {
+	/** Pointer to list of context attributes (name and value) */
+	struct iio_context_attribute *attributes;
+};
+
+/**
  * @struct iio_dev_priv
  * @brief Links a physical device instance "void *dev_instance"
  * with a "iio_device *iio" that describes capabilities of the device.
@@ -192,6 +201,8 @@ struct iio_desc {
 	void			*phy_desc;
 	char			*xml_desc;
 	uint32_t		xml_size;
+	struct iio_cntx_attr_priv *cntx_attributes;
+	uint32_t nb_cntx_attr;
 	struct iio_dev_priv	*devs;
 	uint32_t		nb_devs;
 	struct iio_trig_priv	*trigs;
@@ -1444,6 +1455,50 @@ int iio_step(struct iio_desc *desc)
 	return ret;
 }
 
+/**
+ * @brief Add context attributes into xml string buffer.
+ * @param desc - IIo descriptor.
+ * @param buff - xml buffer.
+ * @param buff_size - size of buffer
+ * @return 0 in case of success or negative value otherwise.
+ */
+static uint32_t iio_add_cntx_attr_in_xml(struct iio_desc *desc, char *buff,
+		uint32_t buff_size)
+{
+	struct iio_cntx_attr_priv *cntx_attr;
+	char dummy_buff[50];
+	int32_t i;
+	int32_t j;
+	int32_t n;
+
+	if ((int32_t)buff_size == -1)
+		n = 0;
+	else
+		n = buff_size;
+
+	if (buff == NULL)
+		/* Set dummy value for buff. It is used only for counting */
+		buff = dummy_buff;
+
+	i = 0;
+
+	cntx_attr =  desc->cntx_attributes;
+	if (cntx_attr)
+		for (j = 0; cntx_attr->attributes[j].name; j++) {
+			i += snprintf(buff + i,
+				      no_os_max(n - i, 0),
+				      "<context-attribute name=\"%s\" ",
+				      cntx_attr->attributes[j].name);
+
+			i += snprintf(buff + i,
+				      no_os_max(n - i, 0),
+				      "value=\"%s\" />",
+				      cntx_attr->attributes[j].value);
+		}
+
+	return i;
+}
+
 /*
  * Generate an xml describing a device and write it to buff.
  * Will return the size of the xml.
@@ -1471,20 +1526,6 @@ static uint32_t iio_generate_device_xml(struct iio_device *device, char *name,
 		buff = ch_id;
 
 	i = 0;
-
-	/* Write context attributes */
-	if (device->context_attributes)
-		for (j = 0; device->context_attributes[j].name; j++) {
-			i += snprintf(buff + i,
-				      no_os_max(n - i, 0),
-				      "<context-attribute name=\"%s\" ",
-				      device->context_attributes[j].name);
-
-			i += snprintf(buff + i,
-				      no_os_max(n - i, 0),
-				      "value=\"%s\" />",
-				      device->context_attributes[j].value);
-		}
 
 	i += snprintf(buff + i, no_os_max(n - i, 0),
 		      "<device id=\"%s\" name=\"%s\">", id, name);
@@ -1639,6 +1680,7 @@ static int32_t iio_init_xml(struct iio_desc *desc)
 
 	/* -2 because of the 0 character */
 	size = sizeof(header) + sizeof(header_end) - 2;
+	size += iio_add_cntx_attr_in_xml(desc, NULL, -1);
 	for (i = 0; i < desc->nb_devs; i++) {
 		dev = desc->devs + i;
 		size += iio_generate_device_xml(dev->dev_descriptor,
@@ -1660,6 +1702,7 @@ static int32_t iio_init_xml(struct iio_desc *desc)
 
 	strcpy(desc->xml_desc, header);
 	of = sizeof(header) - 1;
+	of += iio_add_cntx_attr_in_xml(desc, desc->xml_desc + of, size - of);
 	for (i = 0; i < desc->nb_devs; i++) {
 		dev = desc->devs + i;
 		of += iio_generate_device_xml(dev->dev_descriptor,
@@ -1674,6 +1717,35 @@ static int32_t iio_init_xml(struct iio_desc *desc)
 	}
 
 	strcpy(desc->xml_desc + of, header_end);
+
+	return 0;
+}
+
+/**
+ * @brief Initializes IIO context attributes.
+ * @param desc  - IIO descriptor.
+ * @param cntx_attr - Context attributes.
+ * @param n     - Number of context attributes to be initialized.
+ * @return 0 in case of success or negative value otherwise.
+ */
+static int32_t iio_init_contxt_attrs(struct iio_desc *desc,
+				     struct iio_cntx_attr_init *cntx_attr, uint32_t n)
+{
+	uint32_t i;
+	struct iio_cntx_attr_priv *cntx_attr_priv_iter;
+	struct iio_cntx_attr_init *cntx_attr_init_iter;
+
+	desc->nb_cntx_attr = n;
+	desc->cntx_attributes = (struct iio_cntx_attr_priv *)calloc(desc->nb_cntx_attr,
+				sizeof(*desc->cntx_attributes));
+	if (!desc->cntx_attributes)
+		return -ENOMEM;
+
+	for (i = 0; i < n; i++) {
+		cntx_attr_init_iter = cntx_attr + i;
+		cntx_attr_priv_iter = desc->cntx_attributes + i;
+		cntx_attr_priv_iter->attributes = cntx_attr_init_iter->descriptor;
+	}
 
 	return 0;
 }
@@ -1770,6 +1842,13 @@ int iio_init(struct iio_desc **desc, struct iio_init_param *init_param)
 	ldesc = (struct iio_desc *)calloc(1, sizeof(*ldesc));
 	if (!ldesc)
 		return -ENOMEM;
+
+	if (init_param->cntx_attrs && init_param->cntx_attrs->descriptor) {
+		ret = iio_init_contxt_attrs(ldesc, init_param->cntx_attrs,
+					    init_param->nb_cntx_attrs);
+		if (NO_OS_IS_ERR_VALUE(ret))
+			goto free_devs;
+	}
 
 	ret = iio_init_trigs(ldesc, init_param->trigs, init_param->nb_trigs);
 	if (NO_OS_IS_ERR_VALUE(ret))

@@ -255,8 +255,6 @@ struct iio_device {
 	uint16_t num_ch;
 	/** List of channels */
 	struct iio_channel *channels;
-	/* Array of attributes. Last one should have its name set to NULL */
-	struct iio_context_attribute *context_attributes;
 	/** Array of attributes. Last one should have its name set to NULL */
 	struct iio_attribute *attributes;
 	/** Array of attributes. Last one should have its name set to NULL */
