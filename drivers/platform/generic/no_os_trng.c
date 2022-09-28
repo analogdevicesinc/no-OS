@@ -73,8 +73,6 @@ int32_t no_os_trng_init(struct no_os_trng_desc **desc,
 void no_os_trng_remove(struct no_os_trng_desc *desc)
 {
 	NO_OS_UNUSED_PARAM(desc);
-
-	return -1;
 }
 
 /* Fill buffer with random numbers */
