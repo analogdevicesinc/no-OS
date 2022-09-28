@@ -328,10 +328,9 @@ static int32_t xil_socket_open(struct xil_eth_desc *desc, uint32_t *sock_id,
 		return err;
 
 	pcb = tcp_new_ip_type(IPADDR_TYPE_ANY);
-	if (!pcb) {
-		//_release_socket(desc, *sock_id);
+	if (!pcb)
 		return -ENOMEM;
-	}
+
 	desc->sockets[*sock_id].pcb = pcb;
 
 	xil_eth_config_sock(&desc->sockets[*sock_id]);
@@ -357,7 +356,6 @@ static int32_t xil_socket_close(struct xil_eth_desc *desc, uint32_t sock_id)
 
 	tcp_close(sock->pcb);
 	sock->p_idx = 0;
-	//_release_socket(desc, sock_id);
 
 	return 0;
 }
@@ -366,6 +364,7 @@ static int32_t xil_socket_close(struct xil_eth_desc *desc, uint32_t sock_id)
 static int32_t xil_socket_send(struct xil_eth_desc *desc, uint32_t sock_id,
 			       const void *data, uint32_t size)
 {
+	static uint32_t d_idx = 0;
 	struct socket_desc *sock;
 	err_t err;
 	uint32_t aval;
@@ -376,7 +375,14 @@ static int32_t xil_socket_send(struct xil_eth_desc *desc, uint32_t sock_id,
 	if (!sock)
 		return -EINVAL;
 
+	d_idx++;
+
 	aval = tcp_sndbuf(sock->pcb);
+	pr_info("TCP send(idx: %lu) %lu / %lu\n", d_idx, size, aval);
+	char ip_buff[32];
+	snprintf(ip_buff, sizeof(ip_buff), "%d.%d.%d.%d", ip4_addr1(sock->pcb->local_ip),
+			ip4_addr2(sock->pcb->local_ip), ip4_addr3(sock->pcb->local_ip), ip4_addr4(sock->pcb->local_ip));
+	pr_info("local: %s\n", &ip_buff);
 	flags = TCP_WRITE_FLAG_COPY;
 	if (aval < size)
 		/* Partial write */
@@ -392,6 +398,8 @@ static int32_t xil_socket_send(struct xil_eth_desc *desc, uint32_t sock_id,
 	if (!(flags & TCP_WRITE_FLAG_MORE)) {
 		/* Mark data as ready to be sent */
 		err = tcp_output(sock->pcb);
+		aval = tcp_sndbuf(sock->pcb);
+		pr_info("TCP output(idx: %lu) %lu\n", d_idx, aval);
 		if (err != ERR_OK) {
 			_err = err;
 			pr_err("TCP output err: %"PRIi8"\n", _err);
