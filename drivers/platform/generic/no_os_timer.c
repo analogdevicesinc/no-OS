@@ -92,6 +92,8 @@ int32_t no_os_timer_start(struct no_os_timer_desc *desc)
 	if (desc) {
 		// Unused variable - fix compiler warning
 	}
+
+	return 0;
 }
 
 /**
@@ -104,6 +106,8 @@ int32_t no_os_timer_stop(struct no_os_timer_desc *desc)
 	if (desc) {
 		// Unused variable - fix compiler warning
 	}
+
+	return 0;
 }
 
 /**
