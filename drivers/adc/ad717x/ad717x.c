@@ -2,7 +2,7 @@
 *   @file    AD717X.c
 *   @brief   AD717X implementation file.
 *   	     Devices: AD7172-2, AD7172-4, AD7173-8, AD7175-2, AD7175-8, AD7176-2
-*            AD7177-2, AD4111, AD4112, AD4114, AD4115
+*            AD7177-2, AD4111, AD4112, AD4114, AD4115, AD4116
 *   @author  acozma (andrei.cozma@analog.com)
 *            dnechita (dan.nechita@analog.com)
 *
@@ -144,6 +144,7 @@ int ad717x_connect_analog_input(ad717x_dev *device, uint8_t channel_id,
 	case ID_AD4112 :
 	case ID_AD4114 :
 	case ID_AD4115 :
+	case ID_AD4116 :
 		/* Clear and Set the required analog input pair to channel */
 		channel_reg->value  &= ~AD717x_CHANNEL_INPUT_MASK;
 		channel_reg->value |= AD4111_CHMAP_REG_INPUT(analog_input.analog_input_pairs);
