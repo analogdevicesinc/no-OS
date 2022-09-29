@@ -51,16 +51,6 @@
 /******************************************************************************/
 
 /**
- * @struct pico_spi_desc
- * @brief pico platform specific SPI descriptor
- */
-struct pico_spi_desc {
-	/** SPI instance */
-	spi_inst_t *spi_instance;
-};
-
-
-/**
  * @brief Available GP config for SPI TX
  */
 enum spi_tx_gp {
@@ -110,6 +100,23 @@ enum spi_cs_gp {
 	/* SPI1 available configurations */
 	SPI1_CS_GP9 = 9,
 	SPI1_CS_GP13 = 13,
+};
+
+/**
+ * @struct pico_spi_desc
+ * @brief pico platform specific SPI descriptor
+ */
+struct pico_spi_desc {
+	/** SPI instance */
+	spi_inst_t *spi_instance;
+	/** SPI TX pin configuration */
+	enum spi_tx_gp spi_tx_pin;
+	/** SPI RX pin configuration */
+	enum spi_rx_gp spi_rx_pin;
+	/** SPI SCK pin configuration */
+	enum spi_sck_gp spi_sck_pin;
+	/** SPI CS pin configuration */
+	enum spi_cs_gp spi_cs_pin;
 };
 
 /**

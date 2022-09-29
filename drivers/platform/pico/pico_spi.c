@@ -52,37 +52,16 @@
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
 
-/**
- * @brief Initialize the SPI communication peripheral.
- * @param desc  - The SPI descriptor.
- * @param param - The structure that contains the SPI parameters.
- * @return 0 in case of success, error code otherwise.
- */
-int32_t pico_spi_init(struct no_os_spi_desc **desc,
-		      const struct no_os_spi_init_param *param)
+static int pico_spi_config(struct no_os_spi_desc *desc)
 {
-	int32_t ret;
-	struct no_os_spi_desc *descriptor;
 	struct pico_spi_desc *pico_spi;
-	struct pico_spi_init_param *pico_spi_ip;
 	uint8_t data_bits;
 	spi_cpol_t cpol;
 	spi_cpha_t cpha;
 
-	if (!desc || !param || !param->extra)
-		return -EINVAL;
+	pico_spi = desc->extra;
 
-	descriptor = (struct no_os_spi_desc *)calloc(1, sizeof(*descriptor));
-	if (!descriptor)
-		return -ENOMEM;
-
-	pico_spi = (struct pico_spi_desc *) calloc(1, sizeof(*pico_spi));
-	if (!pico_spi) {
-		ret = -ENOMEM;
-		goto error;
-	}
-
-	switch (param->device_id) {
+	switch (desc->device_id) {
 	case 0:
 		pico_spi->spi_instance = spi0;
 		break;
@@ -90,12 +69,8 @@ int32_t pico_spi_init(struct no_os_spi_desc **desc,
 		pico_spi->spi_instance = spi1;
 		break;
 	default:
-		ret = -EINVAL;
-		goto error;
+		return -EINVAL;
 	};
-
-	descriptor->device_id = param->device_id;
-	descriptor->extra = pico_spi;
 
 	/* SPI reset & unreset */
 	reset_block(pico_spi->spi_instance == spi0 ? RESETS_RESET_SPI0_BITS :
@@ -103,11 +78,11 @@ int32_t pico_spi_init(struct no_os_spi_desc **desc,
 	unreset_block_wait(pico_spi->spi_instance == spi0 ? RESETS_RESET_SPI0_BITS :
 			   RESETS_RESET_SPI1_BITS);
 
-	descriptor->max_speed_hz = spi_set_baudrate(pico_spi->spi_instance,
-				   param->max_speed_hz);
+	desc->max_speed_hz = spi_set_baudrate(pico_spi->spi_instance,
+					      desc->max_speed_hz);
 
 	data_bits = 8;
-	switch (param->mode) {
+	switch (desc->mode) {
 	case NO_OS_SPI_MODE_0:
 		cpol = SPI_CPOL_0;
 		cpha = SPI_CPHA_0;
@@ -125,34 +100,79 @@ int32_t pico_spi_init(struct no_os_spi_desc **desc,
 		cpha = SPI_CPHA_1;
 		break;
 	default:
-		ret = -EINVAL;
-		goto error;
-		break;
+		return -EINVAL;
 	}
 
 	spi_set_format(pico_spi->spi_instance, data_bits, cpol, cpha, SPI_MSB_FIRST);
+
+	/* Set SPI pins */
+	gpio_set_function(pico_spi->spi_rx_pin, GPIO_FUNC_SPI);
+	gpio_set_function(pico_spi->spi_sck_pin, GPIO_FUNC_SPI);
+	gpio_set_function(pico_spi->spi_tx_pin, GPIO_FUNC_SPI);
+	gpio_set_function(pico_spi->spi_cs_pin, GPIO_FUNC_SPI);
+
+	/* Enable SPI */
+	hw_set_bits(&spi_get_hw(pico_spi->spi_instance)->cr1, SPI_SSPCR1_SSE_BITS);
+
+	return 0;
+}
+
+/**
+ * @brief Initialize the SPI communication peripheral.
+ * @param desc  - The SPI descriptor.
+ * @param param - The structure that contains the SPI parameters.
+ * @return 0 in case of success, error code otherwise.
+ */
+int32_t pico_spi_init(struct no_os_spi_desc **desc,
+		      const struct no_os_spi_init_param *param)
+{
+	int32_t ret;
+	struct no_os_spi_desc *descriptor;
+	struct pico_spi_desc *pico_spi;
+	struct pico_spi_init_param *pico_spi_ip;
+
+	if (!desc || !param || !param->extra)
+		return -EINVAL;
+
+	descriptor = (struct no_os_spi_desc *)calloc(1, sizeof(*descriptor));
+	if (!descriptor)
+		return -ENOMEM;
+
+	pico_spi = (struct pico_spi_desc *)calloc(1, sizeof(*pico_spi));
+	if (!pico_spi) {
+		ret = -ENOMEM;
+		goto free_desc;
+	}
+
+	descriptor->device_id = param->device_id;
+	descriptor->extra = pico_spi;
+	descriptor->max_speed_hz = param->max_speed_hz;
+	descriptor->mode = param->mode;
+
 	/* Only MSB is supported */
 	descriptor->bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST;
 	descriptor->platform_ops = &pico_spi_ops;
 
 	pico_spi_ip = param->extra;
-	/* Set SPI pins */
-	gpio_set_function(pico_spi_ip->spi_rx_pin, GPIO_FUNC_SPI);
-	gpio_set_function(pico_spi_ip->spi_sck_pin, GPIO_FUNC_SPI);
-	gpio_set_function(pico_spi_ip->spi_tx_pin, GPIO_FUNC_SPI);
-	gpio_set_function(pico_spi_ip->spi_cs_pin, GPIO_FUNC_SPI);
+	pico_spi->spi_cs_pin = pico_spi_ip->spi_cs_pin;
+	pico_spi->spi_sck_pin = pico_spi_ip->spi_sck_pin;
+	pico_spi->spi_rx_pin = pico_spi_ip->spi_rx_pin;
+	pico_spi->spi_tx_pin = pico_spi_ip->spi_tx_pin;
 
 	descriptor->chip_select = (uint8_t)pico_spi_ip->spi_cs_pin;
 
-	/* Enable SPI */
-	hw_set_bits(&spi_get_hw(pico_spi->spi_instance)->cr1, SPI_SSPCR1_SSE_BITS);
+	ret = pico_spi_config(descriptor);
+	if (ret)
+		goto error;
 
 	*desc = descriptor;
 
 	return 0;
+
 error:
-	free(descriptor);
 	free(pico_spi);
+free_desc:
+	free(descriptor);
 	return ret;
 }
 
@@ -191,6 +211,9 @@ int32_t pico_spi_write_and_read(struct no_os_spi_desc *desc,
 	uint8_t *tx = data;
 	uint8_t *rx = data;
 	struct pico_spi_desc *pico_spi;
+	static uint64_t last_slave_id;
+	uint64_t slave_id;
+	int ret;
 
 	if (!desc || !desc->extra || !data)
 		return -EINVAL;
@@ -199,6 +222,19 @@ int32_t pico_spi_write_and_read(struct no_os_spi_desc *desc,
 		return 0;
 
 	pico_spi = desc->extra;
+
+	/* Compute a slave ID based on SPI instance and chip select.
+	 If it did not change since last call to pico_spi_write_and_read,
+	 no need to reconfigure SPI. Otherwise, reconfigure it.
+	*/
+	slave_id = ((uint64_t)(uintptr_t)pico_spi->spi_instance << 32) |
+		   desc->chip_select;
+	if (slave_id != last_slave_id) {
+		last_slave_id = slave_id;
+		ret = pico_spi_config(desc);
+		if (ret)
+			return ret;
+	}
 
 	spi_write_read_blocking(pico_spi->spi_instance, tx, rx, bytes_number);
 
