@@ -42,6 +42,7 @@
 
 #include "no_os_error.h"
 #include "no_os_i2c.h"
+#include "no_os_util.h"
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -56,13 +57,8 @@
 int32_t no_os_i2c_init(struct no_os_i2c_desc **desc,
 		       const struct no_os_i2c_init_param *param)
 {
-	if (desc) {
-		// Unused variable - fix compiler warning
-	}
-
-	if (param->max_speed_hz) {
-		// Unused variable - fix compiler warning
-	}
+	NO_OS_UNUSED_PARAM(desc);
+	NO_OS_UNUSED_PARAM(param);
 
 	return 0;
 }
@@ -74,9 +70,7 @@ int32_t no_os_i2c_init(struct no_os_i2c_desc **desc,
  */
 int32_t no_os_i2c_remove(struct no_os_i2c_desc *desc)
 {
-	if (desc) {
-		// Unused variable - fix compiler warning
-	}
+	NO_OS_UNUSED_PARAM(desc);
 
 	return 0;
 }
@@ -96,21 +90,10 @@ int32_t no_os_i2c_write(struct no_os_i2c_desc *desc,
 			uint8_t bytes_number,
 			uint8_t stop_bit)
 {
-	if (desc) {
-		// Unused variable - fix compiler warning
-	}
-
-	if (data) {
-		// Unused variable - fix compiler warning
-	}
-
-	if (bytes_number) {
-		// Unused variable - fix compiler warning
-	}
-
-	if (stop_bit) {
-		// Unused variable - fix compiler warning
-	}
+	NO_OS_UNUSED_PARAM(desc);
+	NO_OS_UNUSED_PARAM(data);
+	NO_OS_UNUSED_PARAM(bytes_number);
+	NO_OS_UNUSED_PARAM(stop_bit);
 
 	return 0;
 }
@@ -130,21 +113,10 @@ int32_t no_os_i2c_read(struct no_os_i2c_desc *desc,
 		       uint8_t bytes_number,
 		       uint8_t stop_bit)
 {
-	if (desc) {
-		// Unused variable - fix compiler warning
-	}
-
-	if (data) {
-		// Unused variable - fix compiler warning
-	}
-
-	if (bytes_number) {
-		// Unused variable - fix compiler warning
-	}
-
-	if (stop_bit) {
-		// Unused variable - fix compiler warning
-	}
+	NO_OS_UNUSED_PARAM(desc);
+	NO_OS_UNUSED_PARAM(data);
+	NO_OS_UNUSED_PARAM(bytes_number);
+	NO_OS_UNUSED_PARAM(stop_bit);
 
 	return 0;
 }
