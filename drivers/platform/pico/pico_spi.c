@@ -242,10 +242,53 @@ int32_t pico_spi_write_and_read(struct no_os_spi_desc *desc,
 }
 
 /**
+ * @brief Write/read multiple messages to/from SPI.
+ * @param desc - The SPI descriptor.
+ * @param msgs - The messages array.
+ * @param len - Number of messages.
+ * @return 0 in case of success, errno codes otherwise.
+ */
+int32_t pico_spi_transfer(struct no_os_spi_desc *desc,
+			  struct no_os_spi_msg *msgs,
+			  uint32_t len)
+{
+	struct pico_spi_desc *pico_spi;
+	bool cs_level;
+
+	if (!desc || !desc->extra || !msgs)
+		return -EINVAL;
+
+	pico_spi = desc->extra;
+	cs_level = gpio_get(pico_spi->spi_cs_pin);
+
+	for (uint32_t i = 0; i < len; i++) {
+		gpio_set_function(pico_spi->spi_cs_pin, GPIO_FUNC_NULL);
+		gpio_set_dir(pico_spi->spi_cs_pin, true);
+
+		if (cs_level)
+			gpio_pull_down(pico_spi->spi_cs_pin);
+		else
+			gpio_pull_up(pico_spi->spi_cs_pin);
+
+		spi_write_read_blocking(pico_spi->spi_instance, msgs[i].tx_buff,
+					msgs[i].rx_buff, msgs[i].bytes_number);
+
+		if (msgs[i].cs_change) {
+			gpio_set_function(pico_spi->spi_cs_pin, GPIO_FUNC_SPI);
+		}
+	}
+
+	gpio_set_function(pico_spi->spi_cs_pin, GPIO_FUNC_SPI);
+
+	return 0;
+}
+
+/**
  * @brief pico platform specific SPI platform ops structure
  */
 const struct no_os_spi_platform_ops pico_spi_ops = {
 	.init = &pico_spi_init,
 	.write_and_read = &pico_spi_write_and_read,
+	.transfer = &pico_spi_transfer,
 	.remove = &pico_spi_remove
 };
