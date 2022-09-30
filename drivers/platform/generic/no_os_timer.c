@@ -43,6 +43,7 @@
 
 #include "no_os_error.h"
 #include "no_os_timer.h"
+#include "no_os_util.h"
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -58,12 +59,8 @@
 int32_t no_os_timer_init(struct no_os_timer_desc **desc,
 			 struct no_os_timer_init_param *param)
 {
-	if (desc) {
-		// Unused variable - fix compiler warning
-	}
-	if (param) {
-		// Unused variable - fix compiler warning
-	}
+	NO_OS_UNUSED_PARAM(desc);
+	NO_OS_UNUSED_PARAM(param);
 
 	return 0;
 }
@@ -75,9 +72,7 @@ int32_t no_os_timer_init(struct no_os_timer_desc **desc,
  */
 int32_t no_os_timer_remove(struct no_os_timer_desc *desc)
 {
-	if (desc) {
-		// Unused variable - fix compiler warning
-	}
+	NO_OS_UNUSED_PARAM(desc);
 
 	return 0;
 }
@@ -89,9 +84,7 @@ int32_t no_os_timer_remove(struct no_os_timer_desc *desc)
  */
 int32_t no_os_timer_start(struct no_os_timer_desc *desc)
 {
-	if (desc) {
-		// Unused variable - fix compiler warning
-	}
+	NO_OS_UNUSED_PARAM(desc);
 
 	return 0;
 }
@@ -103,9 +96,7 @@ int32_t no_os_timer_start(struct no_os_timer_desc *desc)
  */
 int32_t no_os_timer_stop(struct no_os_timer_desc *desc)
 {
-	if (desc) {
-		// Unused variable - fix compiler warning
-	}
+	NO_OS_UNUSED_PARAM(desc);
 
 	return 0;
 }
@@ -119,13 +110,8 @@ int32_t no_os_timer_stop(struct no_os_timer_desc *desc)
 int32_t no_os_timer_counter_get(struct no_os_timer_desc *desc,
 				uint32_t *counter)
 {
-	if (desc) {
-		// Unused variable - fix compiler warning
-	}
-
-	if (counter) {
-		// Unused variable - fix compiler warning
-	}
+	NO_OS_UNUSED_PARAM(desc);
+	NO_OS_UNUSED_PARAM(counter);
 
 	return 0;
 }
@@ -138,13 +124,8 @@ int32_t no_os_timer_counter_get(struct no_os_timer_desc *desc,
  */
 int32_t no_os_timer_counter_set(struct no_os_timer_desc *desc, uint32_t new_val)
 {
-	if (desc) {
-		// Unused variable - fix compiler warning
-	}
-
-	if (new_val) {
-		// Unused variable - fix compiler warning
-	}
+	NO_OS_UNUSED_PARAM(desc);
+	NO_OS_UNUSED_PARAM(new_val);
 
 	return 0;
 }
@@ -158,13 +139,8 @@ int32_t no_os_timer_counter_set(struct no_os_timer_desc *desc, uint32_t new_val)
 int32_t no_os_timer_count_clk_get(struct no_os_timer_desc *desc,
 				  uint32_t *freq_hz)
 {
-	if (desc) {
-		// Unused variable - fix compiler warning
-	}
-
-	if (freq_hz) {
-		// Unused variable - fix compiler warning
-	}
+	NO_OS_UNUSED_PARAM(desc);
+	NO_OS_UNUSED_PARAM(freq_hz);
 
 	return 0;
 }
@@ -178,13 +154,8 @@ int32_t no_os_timer_count_clk_get(struct no_os_timer_desc *desc,
 int32_t no_os_timer_count_clk_set(struct no_os_timer_desc *desc,
 				  uint32_t freq_hz)
 {
-	if (desc) {
-		// Unused variable - fix compiler warning
-	}
-
-	if (freq_hz) {
-		// Unused variable - fix compiler warning
-	}
+	NO_OS_UNUSED_PARAM(desc);
+	NO_OS_UNUSED_PARAM(freq_hz);
 
 	return 0;
 }
