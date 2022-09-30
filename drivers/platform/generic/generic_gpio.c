@@ -58,13 +58,8 @@
 int32_t generic_gpio_get(struct no_os_gpio_desc **desc,
 			 const struct no_os_gpio_init_param *param)
 {
-	if (desc) {
-		// Unused variable - fix compiler warning
-	}
-
-	if (param) {
-		// Unused variable - fix compiler warning
-	}
+	NO_OS_UNUSED_PARAM(desc);
+	NO_OS_UNUSED_PARAM(param);
 
 	return 0;
 }
@@ -93,9 +88,7 @@ int32_t generic_gpio_get_optional(struct no_os_gpio_desc **desc,
  */
 int32_t generic_gpio_remove(struct no_os_gpio_desc *desc)
 {
-	if (desc) {
-		// Unused variable - fix compiler warning
-	}
+	NO_OS_UNUSED_PARAM(desc);
 
 	return 0;
 }
@@ -107,9 +100,7 @@ int32_t generic_gpio_remove(struct no_os_gpio_desc *desc)
  */
 int32_t generic_gpio_direction_input(struct no_os_gpio_desc *desc)
 {
-	if (desc) {
-		// Unused variable - fix compiler warning
-	}
+	NO_OS_UNUSED_PARAM(desc);
 
 	return 0;
 }
@@ -125,13 +116,8 @@ int32_t generic_gpio_direction_input(struct no_os_gpio_desc *desc)
 int32_t generic_gpio_direction_output(struct no_os_gpio_desc *desc,
 				      uint8_t value)
 {
-	if (desc) {
-		// Unused variable - fix compiler warning
-	}
-
-	if (value) {
-		// Unused variable - fix compiler warning
-	}
+	NO_OS_UNUSED_PARAM(desc);
+	NO_OS_UNUSED_PARAM(value);
 
 	return 0;
 }
@@ -147,13 +133,8 @@ int32_t generic_gpio_direction_output(struct no_os_gpio_desc *desc,
 int32_t generic_gpio_get_direction(struct no_os_gpio_desc *desc,
 				   uint8_t *direction)
 {
-	if (desc) {
-		// Unused variable - fix compiler warning
-	}
-
-	if (direction) {
-		// Unused variable - fix compiler warning
-	}
+	NO_OS_UNUSED_PARAM(desc);
+	NO_OS_UNUSED_PARAM(direction);
 
 	return 0;
 }
@@ -170,13 +151,8 @@ int32_t generic_gpio_get_direction(struct no_os_gpio_desc *desc,
 int32_t generic_gpio_set_value(struct no_os_gpio_desc *desc,
 			       uint8_t value)
 {
-	if (desc) {
-		// Unused variable - fix compiler warning
-	}
-
-	if (value) {
-		// Unused variable - fix compiler warning
-	}
+	NO_OS_UNUSED_PARAM(desc);
+	NO_OS_UNUSED_PARAM(value);
 
 	return 0;
 }
@@ -192,13 +168,8 @@ int32_t generic_gpio_set_value(struct no_os_gpio_desc *desc,
 int32_t generic_gpio_get_value(struct no_os_gpio_desc *desc,
 			       uint8_t *value)
 {
-	if (desc) {
-		// Unused variable - fix compiler warning
-	}
-
-	if (value) {
-		// Unused variable - fix compiler warning
-	}
+	NO_OS_UNUSED_PARAM(desc);
+	NO_OS_UNUSED_PARAM(value);
 
 	return 0;
 }
