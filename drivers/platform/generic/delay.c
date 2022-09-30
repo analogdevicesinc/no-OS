@@ -42,6 +42,7 @@
 /******************************************************************************/
 
 #include "no_os_delay.h"
+#include "no_os_util.h"
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -54,9 +55,7 @@
  */
 void no_os_udelay(uint32_t usecs)
 {
-	if (usecs) {
-		// Unused variable - fix compiler warning
-	}
+	NO_OS_UNUSED_PARAM(usecs);
 }
 
 /**
@@ -66,7 +65,5 @@ void no_os_udelay(uint32_t usecs)
  */
 void no_os_mdelay(uint32_t msecs)
 {
-	if (msecs) {
-		// Unused variable - fix compiler warning
-	}
+	NO_OS_UNUSED_PARAM(msecs);
 }
