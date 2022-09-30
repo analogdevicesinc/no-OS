@@ -49,6 +49,16 @@
 #include "hardware/resets.h"
 
 /******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
+#define PICO_SPI_MAX_INSTANCES	2U
+
+/******************************************************************************/
+/************************ Variable Declarations ******************************/
+/******************************************************************************/
+static uint64_t last_slave_id[PICO_SPI_MAX_INSTANCES];
+
+/******************************************************************************/
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
 
@@ -211,7 +221,6 @@ int32_t pico_spi_write_and_read(struct no_os_spi_desc *desc,
 	uint8_t *tx = data;
 	uint8_t *rx = data;
 	struct pico_spi_desc *pico_spi;
-	static uint64_t last_slave_id;
 	uint64_t slave_id;
 	int ret;
 
@@ -229,8 +238,8 @@ int32_t pico_spi_write_and_read(struct no_os_spi_desc *desc,
 	*/
 	slave_id = ((uint64_t)(uintptr_t)pico_spi->spi_instance << 32) |
 		   desc->chip_select;
-	if (slave_id != last_slave_id) {
-		last_slave_id = slave_id;
+	if (slave_id != last_slave_id[desc->device_id]) {
+		last_slave_id[desc->device_id] = slave_id;
 		ret = pico_spi_config(desc);
 		if (ret)
 			return ret;
@@ -254,12 +263,23 @@ int32_t pico_spi_transfer(struct no_os_spi_desc *desc,
 {
 	struct pico_spi_desc *pico_spi;
 	bool cs_level;
+	uint64_t slave_id;
+	int ret;
 
 	if (!desc || !desc->extra || !msgs)
 		return -EINVAL;
 
 	pico_spi = desc->extra;
 	cs_level = gpio_get(pico_spi->spi_cs_pin);
+
+	slave_id = ((uint64_t)(uintptr_t)pico_spi->spi_instance << 32) |
+		   desc->chip_select;
+	if (slave_id != last_slave_id[desc->device_id]) {
+		last_slave_id[desc->device_id] = slave_id;
+		ret = pico_spi_config(desc);
+		if (ret)
+			return ret;
+	}
 
 	for (uint32_t i = 0; i < len; i++) {
 		gpio_set_function(pico_spi->spi_cs_pin, GPIO_FUNC_NULL);
@@ -273,9 +293,8 @@ int32_t pico_spi_transfer(struct no_os_spi_desc *desc,
 		spi_write_read_blocking(pico_spi->spi_instance, msgs[i].tx_buff,
 					msgs[i].rx_buff, msgs[i].bytes_number);
 
-		if (msgs[i].cs_change) {
+		if (msgs[i].cs_change)
 			gpio_set_function(pico_spi->spi_cs_pin, GPIO_FUNC_SPI);
-		}
 	}
 
 	gpio_set_function(pico_spi->spi_cs_pin, GPIO_FUNC_SPI);
