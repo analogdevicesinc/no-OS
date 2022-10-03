@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   generic/axi_io.c
+ *   @file   generic/generic_axi_io.c
  *   @brief  Implementation of generic AXI IO
  *   @author Dragos Bogdan (dragos.bogdan@analog.com)
 ********************************************************************************
