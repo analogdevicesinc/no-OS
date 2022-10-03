@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   generic/no_os_uart.c
+ *   @file   generic/generic_uart.c
  *   @author Cristian Pop (cristian.pop@analog.com)
 ********************************************************************************
  * Copyright 2019(c) Analog Devices, Inc.
