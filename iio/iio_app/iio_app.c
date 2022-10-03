@@ -77,7 +77,7 @@
 #ifdef NO_OS_NETWORKING
 /* Fix: Use static buffers instead of calloc for new connections */
 #warning "iio may not work with WIFI on aducm3029."
-#ifdef ADUCM3029_PLATFORM
+#ifdef ADUCM_PLATFORM
 #include "wifi.h"
 #endif
 #include "tcp_socket.h"
@@ -185,7 +185,7 @@ static int32_t network_setup(struct iio_init_param *iio_init_param,
 #ifdef LINUX_PLATFORM
 	socket_param.net = &linux_net;
 #endif
-#ifdef ADUCM3029_PLATFORM
+#ifdef ADUCM_PLATFORM
 	int32_t status;
 	static struct wifi_desc *wifi;
 	struct wifi_init_param wifi_param = {
