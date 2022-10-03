@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   generic/i2c.c
+ *   @file   generic/generic_i2c.c
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
  * Copyright 2019(c) Analog Devices, Inc.
