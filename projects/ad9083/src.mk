@@ -34,7 +34,7 @@ SRCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c \
 	$(DRIVERS)/axi_core/jesd204/xilinx_transceiver.c \
 	$(NO-OS)/util/no_os_clk.c \
 	$(NO-OS)/util/no_os_util.c
-SRCS +=	$(PLATFORM_DRIVERS)/axi_io.c \
+SRCS +=	$(PLATFORM_DRIVERS)/xilinx_axi_io.c \
 	$(PLATFORM_DRIVERS)/xilinx_spi.c \
 	$(PLATFORM_DRIVERS)/xilinx_gpio.c \
 	$(PLATFORM_DRIVERS)/delay.c

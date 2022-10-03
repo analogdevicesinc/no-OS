@@ -20,7 +20,7 @@ SRCS += $(DRIVERS)/api/no_os_spi.c \
 	$(DRIVERS)/axi_core/clk_axi_clkgen/clk_axi_clkgen.c \
 	$(NO-OS)/util/no_os_util.c \
 	$(NO-OS)/util/no_os_lf256fifo.c
-SRCS +=	$(PLATFORM_DRIVERS)/axi_io.c \
+SRCS +=	$(PLATFORM_DRIVERS)/$(PLATFORM)_axi_io.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_gpio.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_spi.c \
 	$(PLATFORM_DRIVERS)/delay.c
