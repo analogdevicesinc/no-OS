@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   generic/delay.c
+ *   @file   generic/generic_delay.c
  *   @brief  Implementation of Generic Platform Drivers.
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
