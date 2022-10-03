@@ -61,7 +61,7 @@
 
 #warning "TCP socket communication is not secured"
 
-#define DEFAULT_CONNECTION_BUFFER_SIZE 500
+#define DEFAULT_CONNECTION_BUFFER_SIZE 256
 
 #else
 
