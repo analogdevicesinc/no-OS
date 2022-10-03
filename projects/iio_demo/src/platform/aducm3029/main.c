@@ -61,13 +61,13 @@ int main()
 {
 	int ret = -EINVAL;
 
-	if (!adi_pwr_Init())
+	if (adi_pwr_Init())
 		return -1;
 
-	if (!adi_pwr_SetClockDivider(ADI_CLOCK_HCLK, 1u))
+	if (adi_pwr_SetClockDivider(ADI_CLOCK_HCLK, 1u))
 		return -1;
 
-	if (!adi_pwr_SetClockDivider(ADI_CLOCK_PCLK, 1u))
+	if (adi_pwr_SetClockDivider(ADI_CLOCK_PCLK, 1u))
 		return -1;
 	adi_initComponents();
 
