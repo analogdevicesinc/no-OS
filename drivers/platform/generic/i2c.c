@@ -54,8 +54,8 @@
  * @param param - The structure that contains the I2C parameters.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t no_os_i2c_init(struct no_os_i2c_desc **desc,
-		       const struct no_os_i2c_init_param *param)
+int32_t generic_i2c_init(struct no_os_i2c_desc **desc,
+			 const struct no_os_i2c_init_param *param)
 {
 	NO_OS_UNUSED_PARAM(desc);
 	NO_OS_UNUSED_PARAM(param);
@@ -68,7 +68,7 @@ int32_t no_os_i2c_init(struct no_os_i2c_desc **desc,
  * @param desc - The I2C descriptor.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t no_os_i2c_remove(struct no_os_i2c_desc *desc)
+int32_t generic_i2c_remove(struct no_os_i2c_desc *desc)
 {
 	NO_OS_UNUSED_PARAM(desc);
 
@@ -85,10 +85,10 @@ int32_t no_os_i2c_remove(struct no_os_i2c_desc *desc)
  *                            1 - A stop condition will be generated.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t no_os_i2c_write(struct no_os_i2c_desc *desc,
-			uint8_t *data,
-			uint8_t bytes_number,
-			uint8_t stop_bit)
+int32_t generic_i2c_write(struct no_os_i2c_desc *desc,
+			  uint8_t *data,
+			  uint8_t bytes_number,
+			  uint8_t stop_bit)
 {
 	NO_OS_UNUSED_PARAM(desc);
 	NO_OS_UNUSED_PARAM(data);
@@ -108,10 +108,10 @@ int32_t no_os_i2c_write(struct no_os_i2c_desc *desc,
  *                            1 - A stop condition will be generated.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t no_os_i2c_read(struct no_os_i2c_desc *desc,
-		       uint8_t *data,
-		       uint8_t bytes_number,
-		       uint8_t stop_bit)
+int32_t generic_i2c_read(struct no_os_i2c_desc *desc,
+			 uint8_t *data,
+			 uint8_t bytes_number,
+			 uint8_t stop_bit)
 {
 	NO_OS_UNUSED_PARAM(desc);
 	NO_OS_UNUSED_PARAM(data);
@@ -120,3 +120,13 @@ int32_t no_os_i2c_read(struct no_os_i2c_desc *desc,
 
 	return 0;
 }
+
+/**
+ * @brief Generic platform I2C ops
+ */
+const struct no_os_i2c_platform_ops generic_i2c_ops = {
+	.i2c_ops_init = &generic_i2c_init,
+	.i2c_ops_write = &generic_i2c_write,
+	.i2c_ops_read = &generic_i2c_read,
+	.i2c_ops_remove = &generic_i2c_remove
+};
