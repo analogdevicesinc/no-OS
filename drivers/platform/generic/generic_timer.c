@@ -1,5 +1,5 @@
 /***************************************************************************//**
-*   @file   generic/no_os_timer.c
+*   @file   generic/generic_timer.c
 *   @brief  Timer control module source.
 *   @author Andrei Drimbarean (andrei.drimbarean@analog.com)
 ********************************************************************************
