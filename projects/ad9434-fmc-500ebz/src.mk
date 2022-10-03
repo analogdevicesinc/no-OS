@@ -28,7 +28,7 @@ SRCS += $(NO-OS)/util/no_os_fifo.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c \
 	$(DRIVERS)/api/no_os_irq.c
 endif
-SRCS +=	$(PLATFORM_DRIVERS)/axi_io.c \
+SRCS +=	$(PLATFORM_DRIVERS)/xilinx_axi_io.c \
 	$(PLATFORM_DRIVERS)/xilinx_spi.c \
 	$(PLATFORM_DRIVERS)/delay.c
 INCS += $(PROJECT)/src/parameters.h \

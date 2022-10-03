@@ -13,7 +13,7 @@ SRCS += $(PROJECT)/src/ad7124-4sdz.c
 SRCS += $(DRIVERS)/api/no_os_spi.c \
 	$(DRIVERS)/adc/ad7124/ad7124.c \
 	$(DRIVERS)/adc/ad7124/ad7124_regs.c				
-SRCS +=	$(PLATFORM_DRIVERS)/axi_io.c \
+SRCS +=	$(PLATFORM_DRIVERS)/xilinx_axi_io.c \
 	$(PLATFORM_DRIVERS)/xilinx_spi.c \
 	$(PLATFORM_DRIVERS)/delay.c
 INCS += $(DRIVERS)/adc/ad7124/ad7124.h \

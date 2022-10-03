@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   linux/axi_io.c
+ *   @file   linux/linux_axi_io.c
  *   @brief  Implementation of AXI IO through UIO/devmem.
  *   @author Dragos Bogdan (dragos.bogdan@analog.com)
 ********************************************************************************
