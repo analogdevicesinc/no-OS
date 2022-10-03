@@ -47,8 +47,30 @@
 #include "pico/stdlib.h"
 
 /******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
+#define PICO_I2C_MAX_INSTANCES	2U
+
+/******************************************************************************/
+/************************ Variable Declarations ******************************/
+/******************************************************************************/
+static uint8_t last_slave_address[PICO_I2C_MAX_INSTANCES];
+
+/******************************************************************************/
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
+
+static int pico_i2c_config_baudrate(struct no_os_i2c_desc *desc)
+{
+	struct pico_i2c_desc *pico_i2c;
+
+	pico_i2c = desc->extra;
+
+	desc->max_speed_hz = i2c_set_baudrate(pico_i2c->i2c_instance,
+					      desc->max_speed_hz);
+
+	return 0;
+}
 
 /**
  * @brief Initialize the I2C communication peripheral.
@@ -152,6 +174,13 @@ int32_t pico_i2c_write(struct no_os_i2c_desc *desc,
 
 	pico_i2c = desc->extra;
 
+	if (desc->slave_address != last_slave_address[desc->device_id]) {
+		last_slave_address[desc->device_id] = desc->slave_address;
+		ret = pico_i2c_config_baudrate(desc);
+		if (ret)
+			return ret;
+	}
+
 	ret = i2c_write_blocking(pico_i2c->i2c_instance, desc->slave_address, data,
 				 bytes_number, !stop_bit);
 
@@ -182,6 +211,13 @@ int32_t pico_i2c_read(struct no_os_i2c_desc *desc,
 		return -EINVAL;
 
 	pico_i2c = desc->extra;
+
+	if (desc->slave_address != last_slave_address[desc->device_id]) {
+		last_slave_address[desc->device_id] = desc->slave_address;
+		ret = pico_i2c_config_baudrate(desc);
+		if (ret)
+			return ret;
+	}
 
 	ret = i2c_read_blocking(pico_i2c->i2c_instance, desc->slave_address, data,
 				bytes_number, !stop_bit);
