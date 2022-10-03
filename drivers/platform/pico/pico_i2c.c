@@ -96,7 +96,7 @@ int32_t pico_i2c_init(struct no_os_i2c_desc **desc,
 	pico_i2c = (struct pico_i2c_desc *)calloc(1,sizeof(*pico_i2c));
 	if (!pico_i2c) {
 		ret = -ENOMEM;
-		goto error;
+		goto free_desc;
 	}
 
 	switch (param->device_id) {
@@ -128,6 +128,7 @@ int32_t pico_i2c_init(struct no_os_i2c_desc **desc,
 	return 0;
 error:
 	free(pico_i2c);
+free_desc:
 	free(descriptor);
 	return ret;
 }
