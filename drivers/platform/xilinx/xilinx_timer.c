@@ -1,5 +1,5 @@
 /***************************************************************************//**
-*   @file   xilinx/no_os_timer.c
+*   @file   xilinx/xilinx_timer.c
 *   @brief  Timer and GIC control module source.
 *   @author Andrei Drimbarean (andrei.drimbarean@analog.com)
 ********************************************************************************
@@ -66,8 +66,8 @@
  * @param [in] param - Initialization structure.
  * @return 0 in case of success, -1 otherwise
  */
-int32_t no_os_timer_init(struct no_os_timer_desc **desc,
-			 struct no_os_timer_init_param *param)
+int32_t xilinx_timer_init(struct no_os_timer_desc **desc,
+			  struct no_os_timer_init_param *param)
 {
 	int32_t ret;
 	struct no_os_timer_desc *dev;
@@ -171,7 +171,7 @@ error_desc:
  * @param [in] desc - Pointer to the device handler.
  * @return 0 in case of success, -1 otherwise
  */
-int32_t no_os_timer_remove(struct no_os_timer_desc *desc)
+int32_t xilinx_timer_remove(struct no_os_timer_desc *desc)
 {
 	struct xil_timer_desc *xdesc;
 
@@ -209,7 +209,7 @@ int32_t no_os_timer_remove(struct no_os_timer_desc *desc)
  * @param [in] desc - Pointer to the device handler.
  * @return 0 in case of success, -1 otherwise
  */
-int32_t no_os_timer_start(struct no_os_timer_desc *desc)
+int32_t xilinx_timer_start(struct no_os_timer_desc *desc)
 {
 	struct xil_timer_desc *xdesc;
 
@@ -241,7 +241,7 @@ int32_t no_os_timer_start(struct no_os_timer_desc *desc)
  * @param [in] desc - Pointer to the device handler.
  * @return 0 in case of success, -1 otherwise
  */
-int32_t no_os_timer_stop(struct no_os_timer_desc *desc)
+int32_t xilinx_timer_stop(struct no_os_timer_desc *desc)
 {
 	struct xil_timer_desc *xdesc;
 
@@ -276,8 +276,8 @@ int32_t no_os_timer_stop(struct no_os_timer_desc *desc)
  * @param [out] counter - Pointer to the current counter value.
  * @return 0 in case of success, -1 otherwise
  */
-int32_t no_os_timer_counter_get(struct no_os_timer_desc *desc,
-				uint32_t *counter)
+int32_t xilinx_timer_counter_get(struct no_os_timer_desc *desc,
+				 uint32_t *counter)
 {
 	struct xil_timer_desc *xdesc;
 
@@ -315,7 +315,8 @@ int32_t no_os_timer_counter_get(struct no_os_timer_desc *desc,
  * @param [in] new_val - New value for the timer counter.
  * @return 0 in case of success, -1 otherwise
  */
-int32_t no_os_timer_counter_set(struct no_os_timer_desc *desc, uint32_t new_val)
+int32_t xilinx_timer_counter_set(struct no_os_timer_desc *desc,
+				 uint32_t new_val)
 {
 	struct xil_timer_desc *xdesc;
 
@@ -351,8 +352,8 @@ int32_t no_os_timer_counter_set(struct no_os_timer_desc *desc, uint32_t new_val)
  * @param [out] freq_hz - Pointer to the returned frequency.
  * @return 0 in case of success, -1 otherwise
  */
-int32_t no_os_timer_count_clk_get(struct no_os_timer_desc *desc,
-				  uint32_t *freq_hz)
+int32_t xilinx_timer_count_clk_get(struct no_os_timer_desc *desc,
+				   uint32_t *freq_hz)
 {
 	struct xil_timer_desc *xdesc;
 
@@ -389,8 +390,8 @@ int32_t no_os_timer_count_clk_get(struct no_os_timer_desc *desc,
  * @param [in] freq_hz - New timer frequency in hertz.
  * @return 0 in case of success, -1 otherwise
  */
-int32_t no_os_timer_count_clk_set(struct no_os_timer_desc *desc,
-				  uint32_t freq_hz)
+int32_t xilinx_timer_count_clk_set(struct no_os_timer_desc *desc,
+				   uint32_t freq_hz)
 {
 	struct xil_timer_desc *xdesc;
 
@@ -423,3 +424,17 @@ int32_t no_os_timer_count_clk_set(struct no_os_timer_desc *desc,
 
 	return 0;
 }
+
+/**
+ * @brief Xilinx platform specific timer platform ops structure
+ */
+const struct no_os_timer_platform_ops xil_timer_ops = {
+	.init = &xilinx_timer_init,
+	.start = &xilinx_timer_start,
+	.stop = &xilinx_timer_stop,
+	.counter_get = &xilinx_timer_counter_get,
+	.counter_set = &xilinx_timer_counter_set,
+	.count_clk_get = &xilinx_timer_count_clk_get,
+	.count_clk_set = &xilinx_timer_count_clk_set,
+	.remove = &xilinx_timer_remove
+};

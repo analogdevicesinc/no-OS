@@ -47,6 +47,7 @@ SRC_DIRS += $(DRIVERS)/axi_core/axi_adc_core
 SRCS += $(DRIVERS)/api/no_os_gpio.c \
         $(DRIVERS)/api/no_os_i2c.c  \
         $(DRIVERS)/api/no_os_irq.c  \
+	$(DRIVERS)/api/no_os_timer.c \
         $(DRIVERS)/api/no_os_spi.c
 
 ifeq (y,$(strip $(TINYIIOD)))

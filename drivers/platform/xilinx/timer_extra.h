@@ -93,4 +93,9 @@ struct xil_timer_init_param {
 	enum xil_timer_type type;
 };
 
+/**
+ * @brief Xilinx platform specific timer platform ops structure
+ */
+extern const struct no_os_timer_platform_ops xil_timer_ops;
+
 #endif /* SRC_TIMER_EXTRA_H_ */
