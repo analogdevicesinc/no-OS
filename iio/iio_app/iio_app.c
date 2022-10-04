@@ -349,9 +349,11 @@ int32_t iio_app_run_with_trigs(struct iio_app_device *devices, uint32_t nb_devs,
 	if (status < 0)
 		return status;
 
+#if !defined(NO_OS_NETWORKING) || (defined(NO_OS_NETWORKING) && defined(XILINX_PLATFORM))
 	status = print_uart_hello_message(&uart_desc, uart_init_par);
 	if (status < 0)
 		return status;
+#endif
 
 #if defined(NO_OS_NETWORKING) || defined(LINUX_PLATFORM)
 	status = network_setup(&iio_init_param, uart_desc, irq_desc);
