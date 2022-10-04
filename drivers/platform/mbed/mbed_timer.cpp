@@ -64,8 +64,8 @@ using namespace std::chrono;
  * @param init_param[in] - Structure that contains Timer Initialization Parameters.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t no_os_timer_init(struct no_os_timer_desc **desc,
-		   struct no_os_timer_init_param *param)
+int32_t mbed_timer_init(struct no_os_timer_desc **desc,
+			const struct no_os_timer_init_param *param)
 {
 	struct no_os_timer_desc *timer_desc; 		// Pointer to timer descriptor
 	struct mbed_timer_desc *mbed_timer_desc;	// Pointer to mbed timer descriptor
@@ -105,7 +105,7 @@ err_mbed_timer_desc:
 * @param desc[in] - The Timer Descriptor.
 * @return 0 in case of success, negative error code otherwise.
 */
-int32_t no_os_timer_start(struct no_os_timer_desc *desc)
+int32_t mbed_timer_start(struct no_os_timer_desc *desc)
 {
 	mbed::Timer *timer;
 
@@ -126,7 +126,7 @@ int32_t no_os_timer_start(struct no_os_timer_desc *desc)
 * @param desc[in] - The Timer Descriptor.
 * @return 0 in case of success, negative error code otherwise.
 */
-int32_t no_os_timer_stop(struct no_os_timer_desc *desc)
+int32_t mbed_timer_stop(struct no_os_timer_desc *desc)
 {
 	mbed::Timer *timer;
 
@@ -147,7 +147,7 @@ int32_t no_os_timer_stop(struct no_os_timer_desc *desc)
 * @param desc[in] - The Timer Descriptor.
 * @return 0 in case of success, negative error code otherwise.
 */
-int32_t no_os_timer_remove(struct no_os_timer_desc *desc)
+int32_t mbed_timer_remove(struct no_os_timer_desc *desc)
 {
 	if (!desc || !desc->extra)
 		return -EINVAL;
@@ -169,8 +169,8 @@ int32_t no_os_timer_remove(struct no_os_timer_desc *desc)
 * @param elapsed_time[in, out] - Pointer where the elapsed time value is stored.
 * @return 0 in case of success, negative error code otherwise.
 */
-int32_t no_os_timer_get_elapsed_time_nsec(struct no_os_timer_desc *desc,
-				    uint64_t *elapsed_time)
+int32_t mbed_timer_get_elapsed_time_nsec(struct no_os_timer_desc *desc,
+		uint64_t *elapsed_time)
 {
 	mbed::Timer *timer;
 
@@ -185,6 +185,17 @@ int32_t no_os_timer_get_elapsed_time_nsec(struct no_os_timer_desc *desc,
 
 	return 0;
 }
+
+/**
+* @brief Mbed platform specific timer platform ops structure
+*/
+const struct no_os_timer_platform_ops mbed_timer_ops = {
+	.init = &mbed_timer_init,
+	.start = &mbed_timer_start,
+	.stop = &mbed_timer_stop,
+	.get_elapsed_time_nsec = &mbed_timer_get_elapsed_time_nsec,
+	.remove = &mbed_timer_remove,
+};
 
 #ifdef __cplusplus
 }
