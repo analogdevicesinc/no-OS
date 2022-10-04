@@ -20,7 +20,7 @@ SRC_DIRS += $(DRIVERS)/axi_core/iio_axi_adc \
 	    $(DRIVERS)/api/no_os_irq.c \
 		$(NO-OS)/iio/iio_app
 
-SRCS	+= $(PLATFORM_DRIVERS)/no_os_uart.c \
+SRCS	+= $(PLATFORM_DRIVERS)/$(PLATFORM)_uart.c \
 		$(NO-OS)/util/no_os_lf256fifo.c \
 		$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c \
 		$(NO-OS)/util/no_os_list.c 

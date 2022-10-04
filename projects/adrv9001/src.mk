@@ -57,7 +57,7 @@ SRC_DIRS += $(DRIVERS)/rf-transceiver/navassa
 ifeq (y,$(strip $(TINYIIOD)))
 LIBRARIES += iio
 SRC_DIRS += $(NO-OS)/iio/iio_app
-SRCS += $(PLATFORM_DRIVERS)/no_os_uart.c \
+SRCS += $(PLATFORM_DRIVERS)/$(PLATFORM)_uart.c \
 	$(NO-OS)/util/no_os_lf256fifo.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c \
 	$(NO-OS)/util/no_os_list.c \

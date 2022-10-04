@@ -43,7 +43,7 @@ INCS += $(INCLUDE)/no_os_spi.h \
 ifeq (y,$(strip $(TINYIIOD)))
 LIBRARIES += iio
 SRCS += $(DRIVERS)/afe/ad413x/iio_ad413x.c \
-	$(PLATFORM_DRIVERS)/no_os_uart.c \
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_uart.c \
 	$(NO-OS)/iio/iio_app/iio_app.c \
 	$(NO-OS)/util/no_os_fifo.c \
 	$(NO-OS)/util/no_os_util.c
