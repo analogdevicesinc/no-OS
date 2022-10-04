@@ -31,7 +31,7 @@ SRCS += $(PROJECT)/src/app.c \
 	$(DRIVERS)/api/no_os_spi.c \
 	$(DRIVERS)/api/no_os_gpio.c \
 	$(PLATFORM_DRIVERS)/xilinx_axi_io.c \
-	$(PLATFORM_DRIVERS)/delay.c \
+	$(PLATFORM_DRIVERS)/xilinx_delay.c \
 	$(PLATFORM_DRIVERS)/xilinx_gpio.c \
 	$(PLATFORM_DRIVERS)/xilinx_spi.c \
 	$(NO-OS)/util/no_os_clk.c \

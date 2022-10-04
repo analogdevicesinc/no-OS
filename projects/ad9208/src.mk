@@ -44,7 +44,7 @@ SRCS += $(DRIVERS)/axi_core/jesd204/axi_adxcvr.c \
 SRCS +=	$(PLATFORM_DRIVERS)/xilinx_axi_io.c \
 	$(PLATFORM_DRIVERS)/xilinx_spi.c \
 	$(PLATFORM_DRIVERS)/xilinx_gpio.c \
-	$(PLATFORM_DRIVERS)/delay.c
+	$(PLATFORM_DRIVERS)/xilinx_delay.c
 
 INCS += $(DRIVERS)/frequency/hmc7044/hmc7044.h \
 	$(DRIVERS)/axi_core/jesd204/axi_adxcvr.h \

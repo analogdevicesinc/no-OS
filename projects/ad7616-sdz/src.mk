@@ -19,7 +19,7 @@ SRCS += $(DRIVERS)/adc/ad7616/ad7616.c \
 SRCS +=	$(PLATFORM_DRIVERS)/xilinx_axi_io.c \
 	$(PLATFORM_DRIVERS)/xilinx_spi.c \
 	$(PLATFORM_DRIVERS)/xilinx_gpio.c \
-	$(PLATFORM_DRIVERS)/delay.c
+	$(PLATFORM_DRIVERS)/xilinx_delay.c
 INCS += $(PROJECT)/src/parameters.h \
 	$(DRIVERS)/adc/ad7616/ad7616.h \
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.h \

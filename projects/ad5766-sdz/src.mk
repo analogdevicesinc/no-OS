@@ -20,7 +20,7 @@ SRCS += $(PROJECT)/src/ad5766_core.c \
 SRCS +=	$(PLATFORM_DRIVERS)/xilinx_axi_io.c \
 	$(PLATFORM_DRIVERS)/xilinx_gpio.c \
 	$(PLATFORM_DRIVERS)/xilinx_spi.c \
-	$(PLATFORM_DRIVERS)/delay.c
+	$(PLATFORM_DRIVERS)/xilinx_delay.c
 INCS += $(PROJECT)/src/parameters.h \
 	$(PROJECT)/src/ad5766_core.h \
 	$(DRIVERS)/dac/ad5766/ad5766.h \

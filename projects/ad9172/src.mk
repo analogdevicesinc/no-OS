@@ -33,7 +33,7 @@ SRCS += $(DRIVERS)/axi_core/axi_dac_core/axi_dac_core.c \
 SRCS +=	$(PLATFORM_DRIVERS)/xilinx_axi_io.c \
 	$(PLATFORM_DRIVERS)/xilinx_spi.c \
 	$(PLATFORM_DRIVERS)/xilinx_gpio.c \
-	$(PLATFORM_DRIVERS)/delay.c
+	$(PLATFORM_DRIVERS)/xilinx_delay.c
 ifeq (y,$(strip $(TINYIIOD)))
 SRCS += $(NO-OS)/util/no_os_fifo.c \
 	$(NO-OS)/util/no_os_list.c \

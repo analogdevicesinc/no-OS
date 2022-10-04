@@ -26,7 +26,7 @@ SRCS +=	$(PLATFORM_DRIVERS)/$(PLATFORM)_spi.c \
 ifeq (linux,$(strip $(PLATFORM)))
 SRCS +=	$(PLATFORM_DRIVERS)/linux_delay.c
 else
-SRCS +=	$(PLATFORM_DRIVERS)/delay.c
+SRCS +=	$(PLATFORM_DRIVERS)/$(PLATFORM)_delay.c
 endif
 ifeq (y,$(strip $(TINYIIOD)))
 LIBRARIES += iio

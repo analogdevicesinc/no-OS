@@ -38,7 +38,7 @@ SRCS += $(NO-OS)/util/no_os_fifo.c \
 endif
 SRCS +=	$(PLATFORM_DRIVERS)/xilinx_axi_io.c \
         $(PLATFORM_DRIVERS)/xilinx_spi.c \
-        $(PLATFORM_DRIVERS)/delay.c
+        $(PLATFORM_DRIVERS)/xilinx_delay.c
 INCS +=	$(PROJECT)/src/app/app_config.h \
         $(PROJECT)/src/devices/adi_hal/parameters.h \
         $(PROJECT)/src/app/ad9508.h \

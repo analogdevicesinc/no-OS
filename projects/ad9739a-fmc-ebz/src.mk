@@ -31,7 +31,7 @@ SRCS += $(NO-OS)/util/no_os_fifo.c \
 endif
 SRCS +=	$(PLATFORM_DRIVERS)/xilinx_axi_io.c \
 	$(PLATFORM_DRIVERS)/xilinx_spi.c \
-	$(PLATFORM_DRIVERS)/delay.c
+	$(PLATFORM_DRIVERS)/xilinx_delay.c
 INCS += $(PROJECT)/src/parameters.h \
 	$(DRIVERS)/frequency/adf4350/adf4350.h \
 	$(DRIVERS)/dac/ad9739a/ad9739a.h \

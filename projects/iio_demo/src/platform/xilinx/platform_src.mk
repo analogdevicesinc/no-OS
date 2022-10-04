@@ -1,4 +1,4 @@
-SRCS += $(PLATFORM_DRIVERS)/delay.c \
+SRCS += $(PLATFORM_DRIVERS)/$(PLATFORM)_delay.c \
 	$(DRIVERS)/api/no_os_irq.c
 	
 ifeq (y,$(strip $(NETWORKING)))

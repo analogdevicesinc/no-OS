@@ -19,7 +19,7 @@ SRCS += $(PLATFORM_DRIVERS)/xilinx_spi.c \
 	$(PLATFORM_DRIVERS)/xilinx_irq.c \
 	$(PLATFORM_DRIVERS)/xilinx_gpio.c \
 	$(PLATFORM_DRIVERS)/xilinx_gpio_irq.c \
-	$(PLATFORM_DRIVERS)/delay.c \
+	$(PLATFORM_DRIVERS)/xilinx_delay.c \
 	$(NO-OS)/util/no_os_list.c \
 	$(NO-OS)/util/no_os_crc8.c
 
