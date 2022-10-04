@@ -62,6 +62,11 @@ struct mbed_timer_desc {
 	void *timer;		// Object to the mbed Timer class
 };
 
+/**
+* @brief Mbed platform specific timer platform ops structure
+*/
+extern const struct no_os_timer_platform_ops mbed_timer_ops;
+
 /******************************************************************************/
 /*****************************Function Declarations****************************/
 /******************************************************************************/
