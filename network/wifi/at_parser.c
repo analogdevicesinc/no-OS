@@ -801,7 +801,7 @@ static int32_t handle_special(struct at_desc *desc, enum at_cmd cmd)
 			if (desc->callback_operation != RESETTING_MODULE)
 				break;
 			no_os_mdelay(1);
-		} while (timeout--);
+		} while (--timeout);
 		if (!timeout)
 			return -1;
 
