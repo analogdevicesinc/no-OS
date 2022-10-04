@@ -56,8 +56,8 @@
  * @param [in] param - Initialization structure.
  * @return 0 in case of success, negative error code otherwise
  */
-int32_t no_os_timer_init(struct no_os_timer_desc **desc,
-			 struct no_os_timer_init_param *param)
+int32_t generic_timer_init(struct no_os_timer_desc **desc,
+			   struct no_os_timer_init_param *param)
 {
 	NO_OS_UNUSED_PARAM(desc);
 	NO_OS_UNUSED_PARAM(param);
@@ -70,7 +70,7 @@ int32_t no_os_timer_init(struct no_os_timer_desc **desc,
  * @param [in] desc - Pointer to the device handler.
  * @return 0 in case of success, negative error code otherwise
  */
-int32_t no_os_timer_remove(struct no_os_timer_desc *desc)
+int32_t generic_timer_remove(struct no_os_timer_desc *desc)
 {
 	NO_OS_UNUSED_PARAM(desc);
 
@@ -82,7 +82,7 @@ int32_t no_os_timer_remove(struct no_os_timer_desc *desc)
  * @param [in] desc - Pointer to the device handler.
  * @return 0 in case of success, negative error code otherwise
  */
-int32_t no_os_timer_start(struct no_os_timer_desc *desc)
+int32_t generic_timer_start(struct no_os_timer_desc *desc)
 {
 	NO_OS_UNUSED_PARAM(desc);
 
@@ -94,7 +94,7 @@ int32_t no_os_timer_start(struct no_os_timer_desc *desc)
  * @param [in] desc - Pointer to the device handler.
  * @return 0 in case of success, negative error code otherwise
  */
-int32_t no_os_timer_stop(struct no_os_timer_desc *desc)
+int32_t generic_timer_stop(struct no_os_timer_desc *desc)
 {
 	NO_OS_UNUSED_PARAM(desc);
 
@@ -107,8 +107,8 @@ int32_t no_os_timer_stop(struct no_os_timer_desc *desc)
  * @param [out] counter - Pointer to the counter value.
  * @return 0 in case of success, error code otherwise.
  */
-int32_t no_os_timer_counter_get(struct no_os_timer_desc *desc,
-				uint32_t *counter)
+int32_t generic_timer_counter_get(struct no_os_timer_desc *desc,
+				  uint32_t *counter)
 {
 	NO_OS_UNUSED_PARAM(desc);
 	NO_OS_UNUSED_PARAM(counter);
@@ -122,7 +122,8 @@ int32_t no_os_timer_counter_get(struct no_os_timer_desc *desc,
  * @param [in] new_val - The new value of the counter register.
  * @return 0 in case of success, error code otherwise.
  */
-int32_t no_os_timer_counter_set(struct no_os_timer_desc *desc, uint32_t new_val)
+int32_t generic_timer_counter_set(struct no_os_timer_desc *desc,
+				  uint32_t new_val)
 {
 	NO_OS_UNUSED_PARAM(desc);
 	NO_OS_UNUSED_PARAM(new_val);
@@ -136,8 +137,8 @@ int32_t no_os_timer_counter_set(struct no_os_timer_desc *desc, uint32_t new_val)
  * @param [out] freq_hz - The value in Hz of the timer clock.
  * @return 0 in case of success, error code otherwise.
  */
-int32_t no_os_timer_count_clk_get(struct no_os_timer_desc *desc,
-				  uint32_t *freq_hz)
+int32_t generic_timer_count_clk_get(struct no_os_timer_desc *desc,
+				    uint32_t *freq_hz)
 {
 	NO_OS_UNUSED_PARAM(desc);
 	NO_OS_UNUSED_PARAM(freq_hz);
@@ -151,8 +152,8 @@ int32_t no_os_timer_count_clk_get(struct no_os_timer_desc *desc,
  * @param [in] freq_hz - The value in Hz of the new timer clock.
  * @return 0 in case of success, error code otherwise.
  */
-int32_t no_os_timer_count_clk_set(struct no_os_timer_desc *desc,
-				  uint32_t freq_hz)
+int32_t generic_timer_count_clk_set(struct no_os_timer_desc *desc,
+				    uint32_t freq_hz)
 {
 	NO_OS_UNUSED_PARAM(desc);
 	NO_OS_UNUSED_PARAM(freq_hz);
@@ -166,11 +167,26 @@ int32_t no_os_timer_count_clk_set(struct no_os_timer_desc *desc,
  * @param [in] elapsed_time - The elapsed time in nsec.
  * @return 0 in case of success, error code otherwise.
  */
-int32_t no_os_timer_get_elapsed_time_nsec(struct no_os_timer_desc *desc,
-					  uint64_t *elapsed_time)
+int32_t generic_timer_get_elapsed_time_nsec(struct no_os_timer_desc *desc,
+		uint64_t *elapsed_time)
 {
 	NO_OS_UNUSED_PARAM(desc);
 	NO_OS_UNUSED_PARAM(elapsed_time);
 
 	return 0;
 }
+
+/**
+ * @brief generic platform specific timer platform ops structure
+ */
+const struct no_os_timer_platform_ops generic_timer_ops = {
+	.init = &generic_timer_init,
+	.start = &generic_timer_start,
+	.stop = &generic_timer_stop,
+	.counter_get = &generic_timer_counter_get,
+	.counter_set = &generic_timer_counter_set,
+	.count_clk_get = &generic_timer_count_clk_get,
+	.count_clk_set = &generic_timer_count_clk_set,
+	.get_elapsed_time_nsec = &generic_timer_get_elapsed_time_nsec,
+	.remove = &generic_timer_remove
+};
