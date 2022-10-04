@@ -160,3 +160,17 @@ int32_t no_os_timer_count_clk_set(struct no_os_timer_desc *desc,
 	return 0;
 }
 
+/**
+ * @brief Get the elapsed time in nsec for the timer.
+ * @param [in] desc         - Pointer to the device handler.
+ * @param [in] elapsed_time - The elapsed time in nsec.
+ * @return 0 in case of success, error code otherwise.
+ */
+int32_t no_os_timer_get_elapsed_time_nsec(struct no_os_timer_desc *desc,
+					  uint64_t *elapsed_time)
+{
+	NO_OS_UNUSED_PARAM(desc);
+	NO_OS_UNUSED_PARAM(elapsed_time);
+
+	return 0;
+}
