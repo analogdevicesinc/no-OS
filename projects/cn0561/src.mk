@@ -27,7 +27,7 @@ SRCS +=	$(PLATFORM_DRIVERS)/$(PLATFORM)_axi_io.c \
 ifeq (y,$(strip $(TINYIIOD)))
 LIBRARIES += iio
 SRC_DIRS += $(NO-OS)/iio/iio_app
-SRCS += $(PLATFORM_DRIVERS)/no_os_uart.c \
+SRCS += $(PLATFORM_DRIVERS)/$(PLATFORM)_uart.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c \
 	$(DRIVERS)/api/no_os_irq.c \
 	$(NO-OS)/util/no_os_fifo.c \

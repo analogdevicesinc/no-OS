@@ -42,7 +42,7 @@ endif
 ifeq (y,$(strip $(TINYIIOD)))
 LIBRARIES += iio
 SRCS += $(NO-OS)/iio/iio_app/iio_app.c \
-	$(PLATFORM_DRIVERS)/no_os_uart.c \
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_uart.c \
 	$(NO-OS)/util/no_os_lf256fifo.c \
 	$(PLATFORM_DRIVERS)/xilinx_irq.c \
 	$(NO-OS)/util/no_os_list.c \

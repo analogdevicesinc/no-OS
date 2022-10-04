@@ -39,7 +39,7 @@ SRCS += $(NO-OS)/network/linux_socket/linux_socket.c \
 	$(NO-OS)/util/no_os_lf256fifo.c \
 	$(PLATFORM_DRIVERS)/linux_uart.c
 else
-SRCS += $(PLATFORM_DRIVERS)/no_os_uart.c \
+SRCS += $(PLATFORM_DRIVERS)/$(PLATFORM)_uart.c \
 	$(NO-OS)/util/no_os_lf256fifo.c
 endif
 

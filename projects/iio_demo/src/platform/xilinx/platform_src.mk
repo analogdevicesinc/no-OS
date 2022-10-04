@@ -15,7 +15,7 @@ INCS += $(INCLUDE)/no_os_circular_buffer.h \
 	$(PLATFORM_DRIVERS)/rtc_extra.h
 
 SRCS += $(NO-OS)/util/no_os_lf256fifo.c  \
-	$(PLATFORM_DRIVERS)/no_os_uart.c \
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_uart.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c
 
 INCS += $(INCLUDE)/no_os_rtc.h          \
