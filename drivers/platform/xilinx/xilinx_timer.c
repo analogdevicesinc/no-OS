@@ -426,6 +426,19 @@ int32_t xilinx_timer_count_clk_set(struct no_os_timer_desc *desc,
 }
 
 /**
+ * @brief Get the elapsed time in nsec for the timer.
+ * @param [in] desc         - Pointer to the device handler.
+ * @param [in] elapsed_time - The elapsed time in nsec.
+ * @return -ENOSYS.
+ */
+int32_t xilinx_timer_get_elapsed_time_nsec(struct no_os_timer_desc *desc,
+		uint64_t *elapsed_time)
+{
+	/* Function not implemented */
+	return -ENOSYS;
+}
+
+/**
  * @brief Xilinx platform specific timer platform ops structure
  */
 const struct no_os_timer_platform_ops xil_timer_ops = {
@@ -436,5 +449,6 @@ const struct no_os_timer_platform_ops xil_timer_ops = {
 	.counter_set = &xilinx_timer_counter_set,
 	.count_clk_get = &xilinx_timer_count_clk_get,
 	.count_clk_set = &xilinx_timer_count_clk_set,
+	.get_elapsed_time_nsec = &xilinx_timer_get_elapsed_time_nsec,
 	.remove = &xilinx_timer_remove
 };
