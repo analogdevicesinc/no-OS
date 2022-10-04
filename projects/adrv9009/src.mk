@@ -68,6 +68,7 @@ SRCS += $(DRIVERS)/axi_core/jesd204/xilinx_transceiver.c \
 	$(DRIVERS)/axi_core/jesd204/axi_adxcvr.c \
 	$(DRIVERS)/axi_core/clk_axi_clkgen/clk_axi_clkgen.c \
 	$(PLATFORM_DRIVERS)/xilinx_axi_io.c \
+	$(PLATFORM_DRIVERS)/xilinx_delay.c \
 	$(PLATFORM_DRIVERS)/xilinx_spi.c \
 	$(PLATFORM_DRIVERS)/xilinx_gpio.c
 else
@@ -77,9 +78,9 @@ SRCS += $(DRIVERS)/axi_core/clk_altera_a10_fpll/clk_altera_a10_fpll.c \
 	$(DRIVERS)/axi_core/jesd204/altera_adxcvr.c \
 	$(PLATFORM_DRIVERS)/altera_axi_io.c \
 	$(PLATFORM_DRIVERS)/altera_spi.c \
-	$(PLATFORM_DRIVERS)/altera_gpio.c
+	$(PLATFORM_DRIVERS)/altera_gpio.c \
+	$(PLATFORM_DRIVERS)/altera_delay.c
 endif
-SRCS +=	$(PLATFORM_DRIVERS)/delay.c
 INCS +=	$(PROJECT)/src/app/app_config.h \
 	$(PROJECT)/src/app/app_clocking.h \
 	$(PROJECT)/src/app/app_jesd.h \

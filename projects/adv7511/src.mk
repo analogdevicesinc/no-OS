@@ -27,7 +27,7 @@ SRCS += $(DRIVERS)/axi_core/axi_dmac/axi_dmac.c \
 SRCS +=	$(PLATFORM_DRIVERS)/xilinx_axi_io.c \
 	$(PLATFORM_DRIVERS)/xilinx_spi.c \
 	$(PLATFORM_DRIVERS)/xilinx_gpio.c \
-	$(PLATFORM_DRIVERS)/delay.c \
+	$(PLATFORM_DRIVERS)/xilinx_delay.c \
 	$(PLATFORM_DRIVERS)/xilinx_i2c.c \
 	$(PLATFORM_DRIVERS)/xilinx_irq.c \
 	$(PLATFORM_DRIVERS)/no_os_timer.c

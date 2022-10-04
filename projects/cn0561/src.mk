@@ -23,7 +23,7 @@ SRCS += $(DRIVERS)/api/no_os_spi.c \
 SRCS +=	$(PLATFORM_DRIVERS)/$(PLATFORM)_axi_io.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_gpio.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_spi.c \
-	$(PLATFORM_DRIVERS)/delay.c
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_delay.c
 ifeq (y,$(strip $(TINYIIOD)))
 LIBRARIES += iio
 SRC_DIRS += $(NO-OS)/iio/iio_app

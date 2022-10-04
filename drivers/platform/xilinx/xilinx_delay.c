@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   altera/delay.c
- *   @brief  Implementation of Altera Delay Functions.
+ *   @file   xilinx/xilinx_delay.c
+ *   @brief  Implementation of Xilinx Delay Functions.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
  * Copyright 2019(c) Analog Devices, Inc.
@@ -42,6 +42,7 @@
 /******************************************************************************/
 
 #include "no_os_delay.h"
+#include <sleep.h>
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -54,7 +55,11 @@
  */
 void no_os_udelay(uint32_t usecs)
 {
+#ifdef _XPARAMETERS_PS_H_
 	usleep(usecs);
+#else
+	usleep_MB(usecs);
+#endif
 }
 
 /**
@@ -64,5 +69,9 @@ void no_os_udelay(uint32_t usecs)
  */
 void no_os_mdelay(uint32_t msecs)
 {
+#ifdef _XPARAMETERS_PS_H_
 	usleep(msecs * 1000);
+#else
+	usleep_MB(msecs * 1000);
+#endif
 }
