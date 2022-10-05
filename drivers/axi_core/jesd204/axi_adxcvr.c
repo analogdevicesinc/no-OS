@@ -353,7 +353,7 @@ int32_t adxcvr_status_error(struct adxcvr *xcvr)
 	do {
 		no_os_mdelay(1);
 		adxcvr_read(xcvr, ADXCVR_REG_STATUS, &status);
-	} while ((timeout--) && (status == 0));
+	} while ((timeout--) && !(status & ADXCVR_STATUS));
 
 	if (!status)
 		return -1;
