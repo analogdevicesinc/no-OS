@@ -132,9 +132,7 @@ int max_timer_init(struct no_os_timer_desc **desc,
 	if (ret)
 		goto free_cfg;
 
-	cfg->bitMode = TMR_BIT_MODE_32;
 	cfg->mode = TMR_MODE_CONTINUOUS;
-	cfg->clock = MXC_TMR_HFIO_CLK;
 	cfg->cmp_cnt = descriptor->ticks_count;
 	cfg->pol = 1;
 	cfg->pres = prescaler;
