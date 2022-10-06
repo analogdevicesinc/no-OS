@@ -53,7 +53,7 @@
 
 #include "no_os_error.h"
 #include "no_os_i2c.h"
-#include "i2c_extra.h"
+#include "xilinx_i2c.h"
 #include "no_os_list.h"
 
 /******************************************************************************/

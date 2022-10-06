@@ -1,7 +1,6 @@
-/*******************************************************************************
- *   @file   xilinx/i2c_extra.h
- *   @brief  Header containing types used in the i2c driver.
- *   @author scuciurean (sergiu.cuciurean@analog.com)
+/***************************************************************************//**
+ *   @file   altera/altera_i2c.h
+ *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
  * Copyright 2019(c) Analog Devices, Inc.
  *
@@ -37,79 +36,67 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef I2C_EXTRA_H_
-#define I2C_EXTRA_H_
-
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-
-#include <stdint.h>
+#ifndef ALTERA_I2C_H_
+#define ALTERA_I2C_H_
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
 /**
- * @enum xil_i2c_type
- * @brief Xilinx platform architecture sections
+ * @enum i2c_type
+ * @brief Altera platform architecture types
  */
-enum xil_i2c_type {
-	/** Programmable Logic */
-	IIC_PL,
-	/** Processing System */
-	IIC_PS
-};
+enum i2c_type {
+	/** Nios II architecture */
+	NIOS_II_I2C
+} i2c_type;
 
 /**
- * @struct xil_i2c_init
- * @brief Structure holding the initialization parameters for Xilinx platform
- * specific I2C parameters.
+ * @struct altera_i2c_init_param
+ * @brief Structure holding the initialization parameters for Altera
+ * platform specific I2C parameters.
  */
-struct xil_i2c_init_param {
-	/** Xilinx architecture */
-	enum xil_i2c_type	type;
+struct altera_i2c_init_param {
+	/** Altera architecture type */
+	enum i2c_type	type;
 	/** Device ID */
-	uint32_t		device_id;
-};
+	uint32_t	id;
+} altera_i2c_init_param;
 
 /**
- * @struct xil_i2c_desc
- * @brief Xilinx platform specific I2C descriptor
+ * @struct altera_i2c_desc
+ * @brief Altera platform specific I2C descriptor
  */
-struct xil_i2c_desc {
-	/** Xilinx architecture */
-	enum xil_i2c_type	type;
+struct altera_i2c_desc {
+	/** Altera architecture type */
+	enum i2c_type	type;
 	/** Device ID */
-	uint32_t		device_id;
-	/** Xilinx I2C configuration */
-	void			*config;
-	/** Xilinx I2C Instance */
-	void			*instance;
-};
+	uint32_t	id;
+} altera_i2c_desc;
 
 /**
- * @brief Xilinx platform specific i2c platform ops structure
+ * @brief Altera platform specific i2c platform ops structure
  */
-extern const struct no_os_i2c_platform_ops xil_i2c_ops;
+extern const struct no_os_i2c_platform_ops altera_i2c_ops;
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
 /* Initialize the I2C communication peripheral. */
-int32_t xil_i2c_init(struct no_os_i2c_desc **desc,
-		     const struct no_os_i2c_init_param *param);
+int32_t altera_i2c_init(struct no_os_i2c_desc **desc,
+			const struct no_os_i2c_init_param *param);
 
 /* Free the resources allocated by no_os_i2c_init(). */
-int32_t xil_i2c_remove(struct no_os_i2c_desc *desc);
+int32_t altera_i2c_remove(struct no_os_i2c_desc *desc);
 
 /* I2C Write data */
-int32_t xil_i2c_write(struct no_os_i2c_desc *desc, uint8_t *data,
-		      uint8_t bytes_number, uint8_t stop_bit);
+int32_t altera_i2c_write(struct no_os_i2c_desc *desc, uint8_t *data,
+			 uint8_t bytes_number, uint8_t stop_bit);
 
 /* I2C Read data. */
-int32_t xil_i2c_read(struct no_os_i2c_desc *desc, uint8_t *data,
-		     uint8_t bytes_number, uint8_t stop_bit);
+int32_t altera_i2c_read(struct no_os_i2c_desc *desc, uint8_t *data,
+			uint8_t bytes_number, uint8_t stop_bit);
 
-#endif // I2C_EXTRA_H_
+#endif /* ALTERA_I2C_H_ */
