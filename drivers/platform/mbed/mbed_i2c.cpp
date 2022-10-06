@@ -94,6 +94,8 @@ int32_t mbed_i2c_init(struct no_os_i2c_desc **desc,
 	if (!mbed_i2c_desc)
 		goto err_mbed_i2c_desc;
 
+	i2c->frequency(param->max_speed_hz);
+
 	mbed_i2c_desc->i2c_port = i2c;
 	i2c_desc->extra = mbed_i2c_desc;
 
