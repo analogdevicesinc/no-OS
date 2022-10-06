@@ -18,5 +18,5 @@ INCS += $(DRIVERS)/temperature/adt7420/iio_adt7420.h
 SRCS += $(DRIVERS)/temperature/adt7420/iio_adt7420.c 
 
 INCS += $(INCLUDE)/no_os_list.h \
-		$(PLATFORM_DRIVERS)/uart_extra.h
+		$(PLATFORM_DRIVERS)/$(PLATFORM)_uart.h
 endif

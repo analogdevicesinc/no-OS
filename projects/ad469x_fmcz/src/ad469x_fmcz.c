@@ -57,7 +57,7 @@
 #include "iio.h"
 #include "iio_app.h"
 #include "iio_types.h"
-#include "uart_extra.h"
+#include "xilinx_uart.h"
 #include "xil_cache.h"
 #endif // IIO_SUPPORT
 

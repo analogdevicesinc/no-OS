@@ -75,7 +75,7 @@
 #include "iio_app.h"
 
 #ifdef XILINX_PLATFORM
-#include "uart_extra.h"
+#include "xilinx_uart.h"
 #include "xil_cache.h"
 #endif //XILINX
 

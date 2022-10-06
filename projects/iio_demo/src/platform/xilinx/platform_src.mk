@@ -22,4 +22,4 @@ SRCS += $(NO-OS)/util/no_os_lf256fifo.c  \
 INCS += $(INCLUDE)/no_os_rtc.h          \
 	$(INCLUDE)/no_os_gpio.h         \
 	$(PLATFORM_DRIVERS)/irq_extra.h \
-	$(PLATFORM_DRIVERS)/uart_extra.h
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_uart.h

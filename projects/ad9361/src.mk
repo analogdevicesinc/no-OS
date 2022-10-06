@@ -100,5 +100,5 @@ SRCS += $(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c \
 INCS += $(PLATFORM_DRIVERS)/irq_extra.h \
 	$(PLATFORM_DRIVERS)/spi_extra.h \
 	$(PLATFORM_DRIVERS)/gpio_extra.h \
-	$(PLATFORM_DRIVERS)/uart_extra.h	
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_uart.h	
 endif

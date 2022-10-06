@@ -69,7 +69,7 @@ INCS += $(INCLUDE)/no_os_uart.h \
 	$(INCLUDE)/no_os_lf256fifo.h \
 	$(INCLUDE)/no_os_irq.h \
 	$(PLATFORM_DRIVERS)/irq_extra.h \
-	$(PLATFORM_DRIVERS)/uart_extra.h \
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_uart.h \
 	$(INCLUDE)/no_os_fifo.h \
 	$(INCLUDE)/no_os_list.h \
 	$(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.h \

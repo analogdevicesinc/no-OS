@@ -59,7 +59,7 @@ INCS +=	$(INCLUDE)/no_os_fifo.h \
 	$(INCLUDE)/no_os_lf256fifo.h \
 	$(INCLUDE)/no_os_list.h \
 	$(PLATFORM_DRIVERS)/irq_extra.h \
-	$(PLATFORM_DRIVERS)/uart_extra.h \
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_uart.h \
 	$(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.h
 SRCS += $(NO-OS)/util/no_os_fifo.c \
 	$(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.c \

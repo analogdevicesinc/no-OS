@@ -48,7 +48,7 @@ SRCS += $(DRIVERS)/afe/ad413x/iio_ad413x.c \
 	$(NO-OS)/util/no_os_fifo.c \
 	$(NO-OS)/util/no_os_util.c
 INCS += $(DRIVERS)/afe/ad413x/iio_ad413x.h \
-	$(PLATFORM_DRIVERS)/uart_extra.h \
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_uart.h \
 	$(NO-OS)/iio/iio_app/iio_app.h \
 	$(INCLUDE)/no_os_fifo.h \
 	$(INCLUDE)/no_os_uart.h
