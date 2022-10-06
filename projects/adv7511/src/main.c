@@ -56,7 +56,7 @@
 #include "no_os_irq.h"
 #include "irq_extra.h"
 #include "no_os_timer.h"
-#include "timer_extra.h"
+#include "xilinx_timer.h"
 #include "clk_axi_clkgen.h"
 #if defined(PLATFORM_ZC702) || defined(PLATFORM_ZC706) || \
 		defined(PLATFORM_ZED)

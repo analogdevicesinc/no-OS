@@ -12,7 +12,7 @@ SRCS += $(NO-OS)/util/no_os_circular_buffer.c \
 
 INCS += $(INCLUDE)/no_os_circular_buffer.h \
 	$(INCLUDE)/no_os_timer.h           \
-	$(PLATFORM_DRIVERS)/timer_extra.h  \
+	$(PLATFORM_DRIVERS)/xilinx_timer.h  \
 	$(PLATFORM_DRIVERS)/rtc_extra.h
 
 SRCS += $(NO-OS)/util/no_os_lf256fifo.c  \
