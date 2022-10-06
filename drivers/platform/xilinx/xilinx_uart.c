@@ -37,7 +37,7 @@
 #include <stdlib.h>
 #include "no_os_error.h"
 #include "no_os_uart.h"
-#include "uart_extra.h"
+#include "xilinx_uart.h"
 #ifdef XPAR_XUARTPS_NUM_INSTANCES
 #include "no_os_irq.h"
 #include "no_os_fifo.h"

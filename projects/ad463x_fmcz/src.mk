@@ -43,7 +43,7 @@ INCS += $(DRIVERS)/adc/ad463x/ad463x.h \
 	$(DRIVERS)/axi_core/spi_engine/spi_engine_private.h
 INCS +=	$(PLATFORM_DRIVERS)/spi_extra.h \
 	$(PLATFORM_DRIVERS)/irq_extra.h \
-	$(PLATFORM_DRIVERS)/uart_extra.h \
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_uart.h \
 	$(PLATFORM_DRIVERS)/gpio_extra.h
 INCS +=	$(INCLUDE)/no_os_axi_io.h \
 	$(INCLUDE)/no_os_spi.h \

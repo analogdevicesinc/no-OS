@@ -49,7 +49,7 @@
 #include "no_os_irq.h"
 #include "platform_init.h"
 #include "no_os_uart.h"
-#include "uart_extra.h"
+#include "xilinx_uart.h"
 #include "uart_stdio.h"
 
 /***************************************************************************//**

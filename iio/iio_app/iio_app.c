@@ -56,7 +56,7 @@
 #include "no_os_error.h"
 #endif
 #if defined(XILINX_PLATFORM)
-#include "uart_extra.h"
+#include "xilinx_uart.h"
 #include "irq_extra.h"
 #endif
 #if defined(STM32_PLATFORM)

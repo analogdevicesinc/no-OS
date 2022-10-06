@@ -70,7 +70,7 @@
 #include "no_os_irq.h"
 #include "irq_extra.h"
 #include "no_os_uart.h"
-#include "uart_extra.h"
+#include "xilinx_uart.h"
 #include "iio_dual_ad713x.h"
 #include "iio_ad713x.h"
 #include "iio.h"

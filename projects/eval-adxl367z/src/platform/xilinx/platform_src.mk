@@ -7,7 +7,7 @@ INCS +=	$(PLATFORM_DRIVERS)/spi_extra.h \
 
 ifeq (y,$(strip $(IIO_EXAMPLE)))
 
-INCS += $(PLATFORM_DRIVERS)/uart_extra.h \
+INCS += $(PLATFORM_DRIVERS)/$(PLATFORM)_uart.h \
 	$(PLATFORM_DRIVERS)/irq_extra.h
 
 SRCS += $(PLATFORM_DRIVERS)/xilinx_irq.c

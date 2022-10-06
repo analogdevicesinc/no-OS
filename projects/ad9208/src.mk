@@ -29,7 +29,7 @@ INCS	+= $(INCLUDE)/no_os_uart.h \
 		$(INCLUDE)/no_os_list.h \
 		$(INCLUDE)/no_os_irq.h \
 		$(PLATFORM_DRIVERS)/irq_extra.h \
-		$(PLATFORM_DRIVERS)/uart_extra.h
+		$(PLATFORM_DRIVERS)/$(PLATFORM)_uart.h
 		
 endif
 

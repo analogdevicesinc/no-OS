@@ -18,5 +18,5 @@ INCS += $(DRIVERS)/accel/adxl313/iio_adxl313.h
 SRCS += $(DRIVERS)/accel/adxl313/iio_adxl313.c
 
 INCS += $(INCLUDE)/no_os_list.h \
-		$(PLATFORM_DRIVERS)/uart_extra.h
+		$(PLATFORM_DRIVERS)/$(PLATFORM)_uart.h
 endif
