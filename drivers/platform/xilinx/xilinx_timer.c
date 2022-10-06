@@ -44,7 +44,7 @@
 #include <stdlib.h>
 #include <xparameters.h>
 #include "no_os_timer.h"
-#include "timer_extra.h"
+#include "xilinx_timer.h"
 #include "no_os_error.h"
 
 /******************************************************************************/

@@ -1,5 +1,5 @@
 /***************************************************************************//**
-*   @file   timer_extra.h
+*   @file   xilinx_timer.h
 *   @brief  Timer control module header.
 *   @author Andrei Drimbarean (andrei.drimbarean@analog.com)
 ********************************************************************************
@@ -37,8 +37,8 @@
 * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef SRC_TIMER_EXTRA_H_
-#define SRC_TIMER_EXTRA_H_
+#ifndef XILINX_TIMER_H_
+#define XILINX_TIMER_H_
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
@@ -98,4 +98,4 @@ struct xil_timer_init_param {
  */
 extern const struct no_os_timer_platform_ops xil_timer_ops;
 
-#endif /* SRC_TIMER_EXTRA_H_ */
+#endif /* XILINX_TIMER_H_ */
