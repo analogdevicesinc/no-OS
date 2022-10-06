@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   gpio_irq_extra.h
+ *   @file   xilinx_gpio_irq.h
  *   @brief  Implementation of Xilinx GPIO IRQ Generic Driver.
  *   @author Porumb Andrei (andrei.porumb@analog.com)
 ********************************************************************************
@@ -37,8 +37,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef GPIO_IRQ_EXTRA_H_
-#define GPIO_IRQ_EXTRA_H_
+#ifndef XILINX_GPIO_IRQ_H_
+#define XILINX_GPIO_IRQ_H_
 
 /******************************************************************************/
 /***************************** Include Files **********************************/

@@ -28,7 +28,7 @@ INCS += $(DRIVERS)/afe/ad413x/ad413x.h
 INCS +=	$(PLATFORM_DRIVERS)/spi_extra.h \
 	$(PLATFORM_DRIVERS)/irq_extra.h \
 	$(PLATFORM_DRIVERS)/gpio_extra.h \
-	$(PLATFORM_DRIVERS)/gpio_irq_extra.h
+	$(PLATFORM_DRIVERS)/xilinx_gpio_irq.h
 
 INCS += $(INCLUDE)/no_os_spi.h \
 	$(INCLUDE)/no_os_gpio.h \

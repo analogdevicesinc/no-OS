@@ -7,4 +7,4 @@ SRCS += $(PLATFORM_DRIVERS)/xilinx_spi.c \
 INCS +=	$(PLATFORM_DRIVERS)/spi_extra.h \
 	$(PLATFORM_DRIVERS)/irq_extra.h \
 	$(PLATFORM_DRIVERS)/gpio_extra.h \
-	$(PLATFORM_DRIVERS)/gpio_irq_extra.h
+	$(PLATFORM_DRIVERS)/xilinx_gpio_irq.h
