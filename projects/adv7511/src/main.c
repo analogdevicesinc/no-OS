@@ -52,7 +52,7 @@
 #include "tx_isr.h"
 #include "app_config.h"
 #include "no_os_i2c.h"
-#include "i2c_extra.h"
+#include "xilinx_i2c.h"
 #include "no_os_irq.h"
 #include "irq_extra.h"
 #include "no_os_timer.h"

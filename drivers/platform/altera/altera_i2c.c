@@ -44,7 +44,7 @@
 #include <stdlib.h>
 #include "no_os_error.h"
 #include "no_os_i2c.h"
-#include "i2c_extra.h"
+#include "altera_i2c.h"
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
