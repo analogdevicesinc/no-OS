@@ -42,7 +42,7 @@
 /******************************************************************************/
 #include "no_os_irq.h"
 #include "irq_extra.h"
-#include "gpio_irq_extra.h"
+#include "xilinx_gpio_irq.h"
 #include "no_os_spi.h"
 #include "spi_extra.h"
 #include "ad4110.h"
