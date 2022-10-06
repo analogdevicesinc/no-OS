@@ -56,9 +56,12 @@
 /******************************************************************************/
 #define ADXCVR_REG_RESETN		0x0010
 #define ADXCVR_RESETN			(1 << 0)
+#define ADXCVR_BUFSTATUS_RST		NO_OS_BIT(1)
 
 #define ADXCVR_REG_STATUS		0x0014
 #define ADXCVR_STATUS			(1 << 0)
+#define ADXCVR_BUFSTATUS_UNDERFLOW		NO_OS_BIT(5)
+#define ADXCVR_BUFSTATUS_OVERFLOW		NO_OS_BIT(6)
 
 #define ADXCVR_REG_CONTROL		0x0020
 #define ADXCVR_LPM_DFE_N		(1 << 12)
@@ -86,6 +89,13 @@
 #define ADXCVR_DRP_PORT_CHANNEL(x)		(0x100 + (x))
 
 #define ADXCVR_BROADCAST				0xff
+
+#define ADI_AXI_PCORE_VER(major, minor, patch)	\
+	(((major) << 16) | ((minor) << 8) | (patch))
+
+static const char *const adxcvr_sys_clock_sel_names[] = {
+	"CPLL", "UNDEF", "QPLL1", "QPLL"
+};
 
 /**
  * @brief AXI ADXCVR Write
@@ -364,16 +374,76 @@ int32_t adxcvr_status_error(struct adxcvr *xcvr)
 }
 
 /**
+ * @brief AXI ADXCVR Reset
+ * @param xcvr - The device structure.
+ * @return Returns 0 in case of success or negative error code otherwise.
+ */
+static int adxcvr_reset(struct adxcvr *xcvr)
+{
+	int ret, retry = 1;
+
+	do {
+		adxcvr_write(xcvr, ADXCVR_REG_RESETN, 0);
+		no_os_udelay(2);
+		adxcvr_write(xcvr, ADXCVR_REG_RESETN, ADXCVR_RESETN);
+		pr_debug("%s: %s %s Reset\n",
+			 __func__,
+			 adxcvr_sys_clock_sel_names[xcvr->sys_clk_sel],
+			 xcvr->tx_enable ? "TX" : "RX");
+		ret = adxcvr_status_error(xcvr);
+	} while (ret < 0 && retry--);
+
+	return ret;
+}
+
+/**
  * @brief AXI ADXCVR Clock Enable
  * @param xcvr - The device structure.
  * @return Returns 0 in case of success or negative error code otherwise.
  */
 int32_t adxcvr_clk_enable(struct adxcvr *xcvr)
 {
-	adxcvr_write(xcvr, ADXCVR_REG_RESETN, ADXCVR_RESETN);
-	no_os_mdelay(100);
+	int ret, retry = 10;
+	unsigned int status;
+	int bufstatus_err;
 
-	return adxcvr_status_error(xcvr);
+	pr_debug("%s: %s\n", __func__, xcvr->tx_enable ? "TX" : "RX");
+
+	ret = adxcvr_reset(xcvr);
+	if (ret < 0)
+		return ret;
+
+	if (xcvr->xlx_xcvr.version >= ADI_AXI_PCORE_VER(17, 5, 'a')) {
+		do {
+			adxcvr_write(xcvr, ADXCVR_REG_RESETN, ADXCVR_BUFSTATUS_RST | ADXCVR_RESETN);
+			adxcvr_write(xcvr, ADXCVR_REG_RESETN, ADXCVR_RESETN);
+			no_os_mdelay(1);
+			adxcvr_read(xcvr, ADXCVR_REG_STATUS, &status);
+			bufstatus_err = ((status & ADXCVR_BUFSTATUS_UNDERFLOW)
+					 || (status & ADXCVR_BUFSTATUS_OVERFLOW));
+			if (bufstatus_err) {
+				ret = adxcvr_reset(xcvr);
+				if (ret < 0)
+					return ret;
+			}
+		} while (bufstatus_err && retry--);
+
+		if (status & ADXCVR_BUFSTATUS_UNDERFLOW)
+			pr_err("%s: %s %s %s error, status: 0x%x\n",
+			       __func__,
+			       adxcvr_sys_clock_sel_names[xcvr->sys_clk_sel],
+			       xcvr->tx_enable ? "TX" : "RX",
+			       "buffer underflow", status);
+
+		if (status & ADXCVR_BUFSTATUS_OVERFLOW)
+			pr_err("%s: %s %s %s error, status: 0x%x\n",
+			       __func__,
+			       adxcvr_sys_clock_sel_names[xcvr->sys_clk_sel],
+			       xcvr->tx_enable ? "TX" : "RX",
+			       "buffer overflow", status);
+	}
+
+	return ret;
 }
 
 /**
@@ -383,6 +453,8 @@ int32_t adxcvr_clk_enable(struct adxcvr *xcvr)
  */
 int32_t adxcvr_clk_disable(struct adxcvr *xcvr)
 {
+	pr_debug("%s: %s", __func__, xcvr->tx_enable ? "TX" : "RX");
+
 	adxcvr_write(xcvr, ADXCVR_REG_RESETN, 0);
 
 	return 0;
