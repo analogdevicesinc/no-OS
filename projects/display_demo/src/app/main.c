@@ -44,7 +44,7 @@
 #include "parameters.h"
 #include "xparameters.h"
 #include "no_os_gpio.h"
-#include "gpio_extra.h"
+#include "xilinx_gpio.h"
 #include "no_os_spi.h"
 #include "xilinx_spi.h"
 #include "ssd_1306.h"

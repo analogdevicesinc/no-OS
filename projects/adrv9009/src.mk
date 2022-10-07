@@ -135,7 +135,7 @@ INCS += $(DRIVERS)/axi_core/clk_altera_a10_fpll/clk_altera_a10_fpll.h \
 	$(DRIVERS)/axi_core/jesd204/altera_adxcvr.h
 endif
 INCS +=	$(PLATFORM_DRIVERS)/$(PLATFORM)_spi.h \
-	$(PLATFORM_DRIVERS)/gpio_extra.h
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_gpio.h
 INCS +=	$(INCLUDE)/no_os_axi_io.h \
 	$(INCLUDE)/no_os_spi.h \
 	$(INCLUDE)/no_os_gpio.h \

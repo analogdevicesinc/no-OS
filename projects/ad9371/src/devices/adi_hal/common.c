@@ -17,7 +17,7 @@
 #include <stdlib.h>
 #include "common.h"
 #include "no_os_spi.h"
-#include "gpio_extra.h"
+#include "xilinx_gpio.h"
 #include "no_os_gpio.h"
 #include "no_os_delay.h"
 

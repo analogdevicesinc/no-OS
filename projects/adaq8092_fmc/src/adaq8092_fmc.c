@@ -50,7 +50,7 @@
 #include "xilinx_spi.h"
 #include "parameters.h"
 #include "no_os_error.h"
-#include "gpio_extra.h"
+#include "xilinx_gpio.h"
 
 #include "no_os_print_log.h"
 

@@ -45,13 +45,14 @@
 #include "parameters.h"
 #include "no_os_spi.h"
 #include "no_os_gpio.h"
-#include "gpio_extra.h"
 #include "no_os_error.h"
 #include "no_os_delay.h"
 #ifndef ALTERA_PLATFORM
 #include "xilinx_spi.h"
+#include "xilinx_gpio.h"
 #else
 #include "altera_spi.h"
+#include "altera_gpio.h"
 #endif
 
 /******************************************************************************/

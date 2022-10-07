@@ -51,10 +51,11 @@
 #include <xparameters.h>
 #include <xil_cache.h>
 #include "xilinx_spi.h"
-#include "gpio_extra.h"
+#include "xilinx_gpio.h"
 #include "no_os_irq.h"
 #ifdef ALTERA_PLATFORM
 #include "altera_spi.h"
+#include "altera_gpio.h"
 #endif
 #endif
 #ifdef LINUX_PLATFORM

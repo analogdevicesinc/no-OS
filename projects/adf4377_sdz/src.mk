@@ -35,7 +35,7 @@ INCS +=	$(DRIVERS)/frequency/adf4377/iio_adf4377.h
 endif
 INCS += $(DRIVERS)/frequency/adf4377/adf4377.h
 INCS +=	$(PLATFORM_DRIVERS)/$(PLATFORM)_spi.h \
-	$(PLATFORM_DRIVERS)/gpio_extra.h
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_gpio.h
 INCS +=	$(INCLUDE)/no_os_axi_io.h \
 	$(INCLUDE)/no_os_spi.h \
 	$(INCLUDE)/no_os_gpio.h \

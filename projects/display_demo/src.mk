@@ -15,5 +15,5 @@ INCS += $(INCLUDE)/no_os_gpio.h \
         $(PROJECT)/src/app/parameters.h \
         $(INCLUDE)/no_os_error.h \
         $(INCLUDE)/no_os_delay.h \
-        $(DRIVERS)/platform/xilinx/gpio_extra.h \
+        $(DRIVERS)/platform/xilinx/$(PLATFORM)_gpio.h \
 	$(DRIVERS)/platform/xilinx/$(PLATFORM)_spi.h

@@ -46,7 +46,7 @@
 #ifdef QUAD_MXFE
 #include "adf4371.h"
 #include "no_os_gpio.h"
-#include "gpio_extra.h"
+#include "xilinx_gpio.h"
 #endif
 #include "no_os_error.h"
 #include "parameters.h"

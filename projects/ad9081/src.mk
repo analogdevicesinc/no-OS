@@ -83,7 +83,7 @@ INCS +=	$(PROJECT)/src/app_clock.h \
 	$(DRIVERS)/axi_core/jesd204/axi_jesd204_tx.h \
 	$(DRIVERS)/axi_core/jesd204/jesd204_clk.h \
 	$(DRIVERS)/axi_core/jesd204/xilinx_transceiver.h \
-	$(PLATFORM_DRIVERS)/gpio_extra.h \
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_gpio.h \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_spi.h \
 	$(INCLUDE)/no_os_axi_io.h \
 	$(INCLUDE)/no_os_clk.h \

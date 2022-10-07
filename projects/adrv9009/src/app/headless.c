@@ -13,7 +13,6 @@
 #include <stdio.h>
 #include "adi_hal.h"
 #include "no_os_spi.h"
-#include "gpio_extra.h"
 #include "no_os_error.h"
 #include "no_os_delay.h"
 #include "parameters.h"
@@ -23,9 +22,11 @@
 #include "axi_dmac.h"
 #ifndef ALTERA_PLATFORM
 #include "xil_cache.h"
+#include "xilinx_gpio.h"
 #include "xilinx_spi.h"
 #else
 #include "altera_spi.h"
+#include "altera_gpio.h"
 #endif
 #include "talise.h"
 #include "talise_config.h"

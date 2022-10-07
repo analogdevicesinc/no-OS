@@ -43,7 +43,7 @@
 #include "adi_platform.h"
 #include "parameters.h"
 #include "no_os_gpio.h"
-#include "gpio_extra.h"
+#include "xilinx_gpio.h"
 #include "no_os_spi.h"
 #include "xilinx_spi.h"
 #include "no_os_error.h"

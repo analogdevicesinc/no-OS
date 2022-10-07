@@ -50,7 +50,7 @@
 #include "xilinx_gpio_irq.h"
 #include "no_os_spi.h"
 #include "no_os_gpio.h"
-#include "gpio_extra.h"
+#include "xilinx_gpio.h"
 #include "xilinx_spi.h"
 #include "ad413x.h"
 #include "no_os_error.h"

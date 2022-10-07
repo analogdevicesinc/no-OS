@@ -46,7 +46,7 @@
 #include "axi_dmac.h"
 #include "no_os_gpio.h"
 #include "xilinx_spi.h"
-#include "gpio_extra.h"
+#include "xilinx_gpio.h"
 #include "no_os_error.h"
 #include "axi_adc_core.h"
 #include <xil_io.h>

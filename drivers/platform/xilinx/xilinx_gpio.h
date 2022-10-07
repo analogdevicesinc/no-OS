@@ -1,6 +1,7 @@
-/***************************************************************************//**
- *   @file   altera/gpio_extra.h
- *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
+/*******************************************************************************
+ *   @file   xilinx/xilinx_gpio.h
+ *   @brief  Header containing extra types used in the gpio driver
+ *   @author scuciurean (sergiu.cuciurean@analog.com)
 ********************************************************************************
  * Copyright 2019(c) Analog Devices, Inc.
  *
@@ -36,54 +37,59 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef GPIO_EXTRA_H_
-#define GPIO_EXTRA_H_
+#ifndef XILINX_GPIO_H_
+#define XILINX_GPIO_H_
 
-#include "no_os_gpio.h"
+/******************************************************************************/
+/***************************** Include Files **********************************/
+/******************************************************************************/
+
+#include <stdint.h>
+#include <stdbool.h>
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
 /**
- * @brief Altera platform specific gpio platform ops structure
+ * @enum xil_gpio_type
+ * @brief Xilinx platform architecture sections
  */
-extern const struct no_os_gpio_platform_ops altera_gpio_ops;
-
-/**
- * @enum gpio_type
- * @brief Altera platform architecture types
- */
-enum gpio_type {
-	/** Nios II architecture */
-	NIOS_II_GPIO
+enum xil_gpio_type {
+	/** Programmable Logic */
+	GPIO_PL,
+	/** Processing System */
+	GPIO_PS
 };
 
 /**
- * @struct altera_gpio_init_param
- * @brief Structure holding the initialization parameters for Altera platform
+ * @struct xil_gpio_init_param
+ * @brief Structure holding the initialization parameters for Xilinx platform
  * specific GPIO parameters.
  */
-struct altera_gpio_init_param {
-	/** Altera architecture type */
-	enum gpio_type	type;
+struct xil_gpio_init_param {
+	/** Xilinx architecture */
+	enum xil_gpio_type	type;
 	/** Device ID */
-	uint32_t	device_id;
-	/** GPIO base address */
-	uint32_t	base_address;
+	uint32_t		device_id;
 };
 
 /**
- * @struct altera_gpio_desc
- * @brief Altera platform specific GPIO descriptor
+ * @struct xil_gpio_desc
+ * @brief Xilinx platform specific GPIO descriptor
  */
-struct altera_gpio_desc {
-	/** Altera architecture type */
-	enum gpio_type	type;
-	/** Device ID */
-	uint32_t		device_id;
-	/** GPIO base address */
-	uint32_t base_address;
+struct xil_gpio_desc {
+	/** Xilinx architecture */
+	enum xil_gpio_type	type;
+	/** Xilinx GPIO configuration */
+	void			*config;
+	/** Xilinx GPIO Instance */
+	void			*instance;
 };
 
-#endif /* GPIO_EXTRA_H_ */
+/**
+ * @brief Xilinx platform specific gpio platform ops structure
+ */
+extern const struct no_os_gpio_platform_ops xil_gpio_ops;
+
+#endif

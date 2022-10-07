@@ -53,7 +53,7 @@
 
 #include "no_os_error.h"
 #include "no_os_gpio.h"
-#include "gpio_extra.h"
+#include "xilinx_gpio.h"
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
