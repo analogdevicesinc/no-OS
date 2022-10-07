@@ -395,6 +395,7 @@ int32_t iio_app_run_with_trigs(struct iio_app_device *devices, uint32_t nb_devs,
 	iio_init_param.nb_devs = nb_devs;
 	iio_init_param.trigs = trigs;
 	iio_init_param.nb_trigs = nb_trigs;
+	iio_init_param.cntx_attrs = NULL;
 	status = iio_init(iio_desc, &iio_init_param);
 	if(status < 0)
 		goto error;
