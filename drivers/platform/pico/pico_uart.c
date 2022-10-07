@@ -111,12 +111,9 @@ int32_t no_os_uart_init(struct no_os_uart_desc **desc,
 	descriptor->device_id = param->device_id;
 	descriptor->irq_id = param->irq_id;
 	descriptor->extra = pico_uart;
-
-	uart_init(pico_uart->uart_instance, param->baud_rate);
-
 	pico_uart_ip = param->extra;
-	gpio_set_function(pico_uart_ip->uart_tx_pin, GPIO_FUNC_UART);
-	gpio_set_function(pico_uart_ip->uart_rx_pin, GPIO_FUNC_UART);
+	stdio_uart_init_full(pico_uart->uart_instance, param->baud_rate,
+			     pico_uart_ip->uart_tx_pin, pico_uart_ip->uart_rx_pin);
 
 	uart_set_hw_flow(pico_uart->uart_instance, false, false);
 
