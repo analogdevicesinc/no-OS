@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   platform_includes.h
- *   @brief  Includes for used platforms used by eval-adxl355-pmdz project.
+ *   @file   main.c
+ *   @brief  Main file for pico platform of eval-adxl355-pmdz project.
  *   @author RBolboac (ramona.bolboaca@analog.com)
 ********************************************************************************
  * Copyright 2022(c) Analog Devices, Inc.
@@ -36,26 +36,60 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __PLATFORM_INCLUDES_H__
-#define __PLATFORM_INCLUDES_H__
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#ifdef STM32_PLATFORM
-#include "stm32/parameters.h"
+#include "platform_includes.h"
+#include "common_data.h"
+#include "no_os_error.h"
+
+#ifdef IIO_EXAMPLE
+#include "iio_example.h"
 #endif
 
-#ifdef MAXIM_PLATFORM
-#include "maxim/parameters.h"
+#ifdef IIO_TRIGGER_EXAMPLE
+#include "iio_trigger_example.h"
 #endif
 
-#ifdef PICO_PLATFORM
-#include "pico/parameters.h"
+#ifdef DUMMY_EXAMPLE
+#include "dummy_example.h"
 #endif
 
-#ifdef IIO_SUPPORT
-#include "iio_app.h"
+/***************************************************************************//**
+ * @brief Main function execution for pico platform.
+ *
+ * @return ret - Result of the enabled examples execution.
+*******************************************************************************/
+int main()
+{
+	int ret = -EINVAL;
+	adxl355_ip.comm_init.spi_init = adxl355_spi_ip;
+
+#ifdef IIO_EXAMPLE
+	ret = iio_example_main();
 #endif
 
-#endif /* __PLATFORM_INCLUDES_H__ */
+#ifdef IIO_TRIGGER_EXAMPLE
+	ret = iio_trigger_example_main();
+#endif
+
+#ifdef DUMMY_EXAMPLE
+	struct no_os_uart_desc *uart_desc;
+
+	ret = no_os_uart_init(&uart_desc, &adxl355_uart_ip);
+	if (ret)
+		return ret;
+
+	ret = dummy_example_main();
+#endif
+
+#if (DUMMY_EXAMPLE + IIO_EXAMPLE + IIO_TRIGGER_EXAMPLE == 0)
+#error At least one example has to be selected using y value in Makefile.
+#elif (DUMMY_EXAMPLE + IIO_EXAMPLE + IIO_TRIGGER_EXAMPLE > 1)
+#error Selected example projects cannot be enabled at the same time. \
+Please enable only one example and re-build the project.
+#endif
+
+	return ret;
+}
