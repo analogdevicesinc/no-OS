@@ -50,7 +50,7 @@
 #include "no_os_error.h"
 #include "clk_axi_clkgen.h"
 #include "no_os_gpio.h"
-#include "gpio_extra.h"
+#include "xilinx_gpio.h"
 #include "parameters.h"
 
 #ifdef IIO_SUPPORT

@@ -40,7 +40,7 @@ SRCS += $(PLATFORM_DRIVERS)/xilinx_gpio.c \
 INCS +=	$(INCLUDE)/no_os_spi.h \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_spi.h \
 	$(INCLUDE)/no_os_gpio.h \
-	$(PLATFORM_DRIVERS)/gpio_extra.h \
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_gpio.h \
 	$(INCLUDE)/no_os_error.h \
 	$(INCLUDE)/no_os_delay.h \
 	$(INCLUDE)/no_os_util.h \

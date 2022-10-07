@@ -51,7 +51,7 @@
 #include "no_os_pwm.h"
 #include "axi_pwm_extra.h"
 #include "no_os_gpio.h"
-#include "gpio_extra.h"
+#include "xilinx_gpio.h"
 #include "no_os_error.h"
 
 #define ADAQ7980_EVB_SAMPLE_NO 1000

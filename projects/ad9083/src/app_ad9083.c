@@ -48,7 +48,7 @@
 #include "parameters.h"
 #include "no_os_spi.h"
 #include "xilinx_spi.h"
-#include "gpio_extra.h"
+#include "xilinx_gpio.h"
 #include "no_os_error.h"
 #include "no_os_util.h"
 #include "no_os_delay.h"

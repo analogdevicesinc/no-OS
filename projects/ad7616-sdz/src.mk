@@ -26,7 +26,7 @@ INCS += $(PROJECT)/src/parameters.h \
 	$(DRIVERS)/axi_core/spi_engine/spi_engine.h \
 	$(DRIVERS)/axi_core/spi_engine/spi_engine_private.h
 INCS +=	$(PLATFORM_DRIVERS)/$(PLATFORM)_spi.h \
-	$(PLATFORM_DRIVERS)/gpio_extra.h
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_gpio.h
 INCS +=	$(INCLUDE)/no_os_axi_io.h \
 	$(INCLUDE)/no_os_spi.h \
 	$(INCLUDE)/no_os_gpio.h \

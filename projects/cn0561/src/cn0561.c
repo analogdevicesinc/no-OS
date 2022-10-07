@@ -56,7 +56,7 @@
 #include "xilinx_spi.h"
 #include "no_os_delay.h"
 #include "no_os_gpio.h"
-#include "gpio_extra.h"
+#include "xilinx_gpio.h"
 #include "no_os_util.h"
 #include "no_os_error.h"
 #include "parameters.h"

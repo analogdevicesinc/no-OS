@@ -56,7 +56,7 @@
 #include "no_os_spi.h"
 #include "xilinx_spi.h"
 #include "no_os_gpio.h"
-#include "gpio_extra.h"
+#include "xilinx_gpio.h"
 
 #ifdef DAC_DMA_EXAMPLE
 #include "axi_dmac.h"
