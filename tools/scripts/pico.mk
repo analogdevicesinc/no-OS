@@ -297,7 +297,6 @@ LDFLAGS += -Wl,--wrap=__popcountdi2
 LDFLAGS += -Wl,--wrap=__clz
 LDFLAGS += -Wl,--wrap=__clzl
 LDFLAGS += -Wl,--wrap=__clzll
-LDFLAGS += -Wl,--wrap=__aeabi_ldivmod
 LDFLAGS += -Wl,--wrap=sqrt
 LDFLAGS += -Wl,--wrap=cos
 LDFLAGS += -Wl,--wrap=sin
