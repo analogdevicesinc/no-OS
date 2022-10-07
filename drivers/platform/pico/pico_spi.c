@@ -119,7 +119,8 @@ static int pico_spi_config(struct no_os_spi_desc *desc)
 	gpio_set_function(pico_spi->spi_rx_pin, GPIO_FUNC_SPI);
 	gpio_set_function(pico_spi->spi_sck_pin, GPIO_FUNC_SPI);
 	gpio_set_function(pico_spi->spi_tx_pin, GPIO_FUNC_SPI);
-	gpio_set_function(pico_spi->spi_cs_pin, GPIO_FUNC_SPI);
+	gpio_set_dir(pico_spi->spi_cs_pin, true);
+	gpio_pull_up(pico_spi->spi_cs_pin);
 
 	/* Enable SPI */
 	hw_set_bits(&spi_get_hw(pico_spi->spi_instance)->cr1, SPI_SSPCR1_SSE_BITS);
@@ -208,49 +209,6 @@ int32_t pico_spi_remove(struct no_os_spi_desc *desc)
 }
 
 /**
- * @brief Write and read data to/from SPI.
- * @param desc - The SPI descriptor.
- * @param data - The buffer with the transmitted/received data.
- * @param bytes_number - Number of bytes to write/read.
- * @return 0 in case of success, error code otherwise.
- */
-int32_t pico_spi_write_and_read(struct no_os_spi_desc *desc,
-				uint8_t *data,
-				uint16_t bytes_number)
-{
-	uint8_t *tx = data;
-	uint8_t *rx = data;
-	struct pico_spi_desc *pico_spi;
-	uint64_t slave_id;
-	int ret;
-
-	if (!desc || !desc->extra || !data)
-		return -EINVAL;
-
-	if (!bytes_number)
-		return 0;
-
-	pico_spi = desc->extra;
-
-	/* Compute a slave ID based on SPI instance and chip select.
-	 If it did not change since last call to pico_spi_write_and_read,
-	 no need to reconfigure SPI. Otherwise, reconfigure it.
-	*/
-	slave_id = ((uint64_t)(uintptr_t)pico_spi->spi_instance << 32) |
-		   desc->chip_select;
-	if (slave_id != last_slave_id[desc->device_id]) {
-		last_slave_id[desc->device_id] = slave_id;
-		ret = pico_spi_config(desc);
-		if (ret)
-			return ret;
-	}
-
-	spi_write_read_blocking(pico_spi->spi_instance, tx, rx, bytes_number);
-
-	return 0;
-}
-
-/**
  * @brief Write/read multiple messages to/from SPI.
  * @param desc - The SPI descriptor.
  * @param msgs - The messages array.
@@ -262,7 +220,6 @@ int32_t pico_spi_transfer(struct no_os_spi_desc *desc,
 			  uint32_t len)
 {
 	struct pico_spi_desc *pico_spi;
-	bool cs_level;
 	uint64_t slave_id;
 	int ret;
 
@@ -270,10 +227,8 @@ int32_t pico_spi_transfer(struct no_os_spi_desc *desc,
 		return -EINVAL;
 
 	pico_spi = desc->extra;
-	cs_level = gpio_get(pico_spi->spi_cs_pin);
 
-	slave_id = ((uint64_t)(uintptr_t)pico_spi->spi_instance << 32) |
-		   desc->chip_select;
+	slave_id = desc->chip_select;
 	if (slave_id != last_slave_id[desc->device_id]) {
 		last_slave_id[desc->device_id] = slave_id;
 		ret = pico_spi_config(desc);
@@ -282,24 +237,45 @@ int32_t pico_spi_transfer(struct no_os_spi_desc *desc,
 	}
 
 	for (uint32_t i = 0; i < len; i++) {
-		gpio_set_function(pico_spi->spi_cs_pin, GPIO_FUNC_NULL);
-		gpio_set_dir(pico_spi->spi_cs_pin, true);
 
-		if (cs_level)
-			gpio_pull_down(pico_spi->spi_cs_pin);
-		else
-			gpio_pull_up(pico_spi->spi_cs_pin);
+		gpio_pull_down(pico_spi->spi_cs_pin);
 
 		spi_write_read_blocking(pico_spi->spi_instance, msgs[i].tx_buff,
 					msgs[i].rx_buff, msgs[i].bytes_number);
 
 		if (msgs[i].cs_change)
-			gpio_set_function(pico_spi->spi_cs_pin, GPIO_FUNC_SPI);
+			gpio_pull_up(pico_spi->spi_cs_pin);
 	}
 
-	gpio_set_function(pico_spi->spi_cs_pin, GPIO_FUNC_SPI);
-
 	return 0;
+}
+
+
+/**
+ * @brief Write and read data to/from SPI.
+ * @param desc - The SPI descriptor.
+ * @param data - The buffer with the transmitted/received data.
+ * @param bytes_number - Number of bytes to write/read.
+ * @return 0 in case of success, error code otherwise.
+ */
+int32_t pico_spi_write_and_read(struct no_os_spi_desc *desc,
+				uint8_t *data,
+				uint16_t bytes_number)
+{
+	struct no_os_spi_msg msg = {
+		.bytes_number = bytes_number,
+		.cs_change = true,
+		.rx_buff = data,
+		.tx_buff = data,
+	};
+
+	if (!desc || !desc->extra || !data)
+		return -EINVAL;
+
+	if (!bytes_number)
+		return 0;
+
+	return pico_spi_transfer(desc, &msg, 1);
 }
 
 /**
