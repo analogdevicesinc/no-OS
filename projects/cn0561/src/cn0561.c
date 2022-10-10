@@ -77,6 +77,11 @@
 #include "iio_app.h"
 #endif // IIO_SUPPORT
 
+// GPIO SUPPORT TESTING
+#include "xgpiops.h"
+#include "xstatus.h"
+#include "xplatform_info.h"
+
 static uint32_t adc_buffer[ADC_BUFFER_SIZE] __attribute__((aligned));
 
 int main()
@@ -123,7 +128,7 @@ int main()
 		.type = SPI_ENGINE,
 		.spi_engine_baseaddr = CN0561_SPI_ENGINE_BASEADDR,
 		.cs_delay = 0,
-		.data_width = 24,
+		.data_width = 32, // HERE MODIFY SPI FRAME SIZE
 		.ref_clk_hz = CN0561_SPI_ENG_REF_CLK_FREQ_HZ
 	};
 	const struct no_os_spi_init_param spi_eng_init_prm  = {
@@ -135,26 +140,39 @@ int main()
 	};
 
 	struct no_os_pwm_desc *axi_pwm;
-	struct axi_pwm_init_param axi_zed_pwm_init = {
+	struct axi_pwm_init_param axi_zed_pwm_init0 = {
 		.base_addr = XPAR_ODR_GENERATOR_BASEADDR,
-		.ref_clock_Hz = 100000000,
-		.channel = 0
+		.ref_clock_Hz = 96000000,
+		.channel = 1
 	};
 
-	struct no_os_pwm_init_param axi_pwm_init = {
-		.period_ns = 780,
+	struct axi_pwm_init_param axi_zed_pwm_init1 = {
+		.base_addr = XPAR_ODR_GENERATOR_BASEADDR,
+		.ref_clock_Hz = 96000000,
+		.channel = 2
+	};
+
+	struct no_os_pwm_init_param axi_pwm_init0 = {
+		.period_ns = 850,
 		.duty_cycle_ns = 130,
 		.phase_ns = 0,
-		.extra = &axi_zed_pwm_init
+		.extra = &axi_zed_pwm_init0
+	};
+
+	struct no_os_pwm_init_param axi_pwm_init1 = {
+		.period_ns = 850,
+		.duty_cycle_ns = 1,
+		.phase_ns = 30,
+		.extra = &axi_zed_pwm_init1
 	};
 
 	gpio_extra_param.device_id = GPIO_DEVICE_ID;
 	gpio_extra_param.type = GPIO_PS;
 
-	cn0561_init_param.adc_data_len = ADC_24_BIT_DATA;
+	cn0561_init_param.adc_data_len = ADC_24_BIT_DATA; // HERE MODIFY DATA SIZE ADC
 	cn0561_init_param.clk_delay_en = false;
-	cn0561_init_param.crc_header = CRC_6;
-//	cn0561_init_param.crc_header = NO_CRC;
+	cn0561_init_param.crc_header = CRC_6;  // HERE MODIFY/ACTIVATE THE CRC HEADER
+//	cn0561_init_param.crc_header = NO_CRC; // HERE MODIFY/ACTIVATE THE CRC HEADER
 	cn0561_init_param.dev_id = ID_AD4134;
 	cn0561_init_param.format = QUAD_CH_PO;
 	cn0561_init_param.gpio_dclkio = NULL;
@@ -179,7 +197,7 @@ int main()
 	cn0561_init_param.spi_init_prm.extra = (void *)&spi_engine_init_params;
 	cn0561_init_param.spi_common_dev = 0;
 
-	spi_eng_msg_cmds[0] = READ(3);
+	spi_eng_msg_cmds[0] = READ(4);
 
 	Xil_ICacheEnable();
 	Xil_DCacheEnable();
@@ -192,14 +210,72 @@ int main()
 	if (ret != 0)
 		return -1;
 
-	ret = no_os_pwm_init(&axi_pwm, &axi_pwm_init);
+//	uint32_t phase_test; // Variable to test phase_shift
+
+	ret = no_os_pwm_init(&axi_pwm, &axi_pwm_init0);
 	if (ret != 0)
 		return ret;
+
+// TEST PHASE SHIFT
+//	ret = no_os_pwm_set_phase(&axi_pwm, 0);
+//	ret = no_os_pwm_get_phase(axi_pwm, &phase_test);
+
+	ret = no_os_pwm_init(&axi_pwm, &axi_pwm_init1);
+	if (ret != 0)
+		return ret;
+
+// TEST PHASE SHIFT
+//	ret = no_os_pwm_set_phase(&axi_pwm, 0);
+//	ret = no_os_pwm_get_phase(axi_pwm, &phase_test);
 
 	ret = ad713x_init(&cn0561_dev, &cn0561_init_param);
 	if (ret != 0)
 		return -1;
 
+	for(int adc_channel = CH0; adc_channel <= CH3; adc_channel++) {
+		ret = ad713x_dig_filter_sel_ch(cn0561_dev, SINC3, adc_channel);
+		if (ret != 0)
+			return -1;
+	}
+
+/*
+ * TESTING PIN CONFIGURATION ADC
+ *
+	u32 Data;
+	XGpioPs Gpio;
+	XGpioPs_Config *ConfigPtr;
+	ConfigPtr = XGpioPs_LookupConfig(GPIO_DEVICE_ID);
+	int Status = XGpioPs_CfgInitialize(&Gpio, ConfigPtr,
+						ConfigPtr->BaseAddr);
+
+	XGpioPs_SetDirectionPin(&Gpio, GPIO_PINBSPI, 1);
+	XGpioPs_SetOutputEnablePin(&Gpio, GPIO_PINBSPI, 1);
+
+	XGpioPs_SetDirectionPin(&Gpio, GPIO_6, 1);
+	XGpioPs_SetOutputEnablePin(&Gpio, GPIO_6, 1);
+	XGpioPs_SetDirectionPin(&Gpio, GPIO_7, 1);
+	XGpioPs_SetOutputEnablePin(&Gpio, GPIO_7, 1);
+
+	XGpioPs_SetDirectionPin(&Gpio, GPIO_5, 1);
+	XGpioPs_SetOutputEnablePin(&Gpio, GPIO_5, 1);
+
+	XGpioPs_SetDirectionPin(&Gpio, GPIO_4, 1);
+	XGpioPs_SetOutputEnablePin(&Gpio, GPIO_4, 1);
+
+
+	XGpioPs_WritePin(&Gpio, GPIO_PINBSPI, 0x0);
+	XGpioPs_WritePin(&Gpio, GPIO_4, 0x0);
+	XGpioPs_WritePin(&Gpio, GPIO_5, 0x0);
+	XGpioPs_WritePin(&Gpio, GPIO_6, 0x0);
+	XGpioPs_WritePin(&Gpio, GPIO_7, 0x0);
+
+	Data = XGpioPs_ReadPin(&Gpio, GPIO_PINBSPI);
+	Data = XGpioPs_ReadPin(&Gpio, GPIO_6);
+	Data = XGpioPs_ReadPin(&Gpio, GPIO_7);
+	Data = XGpioPs_ReadPin(&Gpio, GPIO_5);
+	Data = XGpioPs_ReadPin(&Gpio, GPIO_4);
+ *
+*/
 	no_os_mdelay(1000);
 
 	ret = ad713x_spi_reg_write(cn0561_dev, AD713X_REG_GPIO_DIR_CTRL, 0xE7);
@@ -256,6 +332,35 @@ int main()
 
 #endif /* IIO_SUPPORT */
 
+/*
+ *  TEST READING OFFSET REGs
+*/
+
+/*
+#define REG_PULSE_0_OFFSET 0x48
+#define REG_PULSE_1_OFFSET 0x54
+#define REG_PULSE_2_OFFSET 0x60
+
+u8 buf_gpio6;
+u8 buf_gpio7;
+u32 buf_gpio_id;
+u8 buf;
+
+	//buf = Xil_In32(XPAR_AXI_PWM_GEN_0_BASEADDR);
+	//buf = Xil_In32(XPAR_AXI_PWM_GEN_0_BASEADDR + REG_PULSE_1_OFFSET);
+	//buf = Xil_In32(XPAR_AXI_PWM_GEN_0_BASEADDR + REG_PULSE_2_OFFSET);
+	//Xil_Out32(XPAR_AXI_PWM_GEN_0_BASEADDR + REG_PULSE_0_OFFSET, 0);
+	//buf = Xil_In32(XPAR_AXI_PWM_GEN_0_BASEADDR + REG_PULSE_0_OFFSET);
+
+/*
+ *  TEST READING GPIOs Xil
+
+ *  All gpio reads show 1, if not set prior to reading.
+ *  Writing and reading the gpios all seem to work properly.
+
+	buf_gpio_id = Xil_In32(XPAR_PS7_GPIO_0_BASEADDR + GPIO_DEVICE_ID);
+	buf = Xil_In8(XPAR_PS7_GPIO_0_BASEADDR + GPIO_0);
+*/
 	ret = spi_engine_offload_transfer(spi_eng_desc, spi_engine_offload_message,
 					  (CN0561_FMC_CH_NO * CN0561_FMC_SAMPLE_NO));
 	if (ret != 0)
@@ -274,6 +379,7 @@ int main()
 			data = lsb * (int32_t)adc_buffer[CN0561_FMC_CH_NO*i+j];
 			if(data > 4.095)
 				data = data - 8.192;
+			if(j == 0 || j==3) // READ CH0 CH3 ONLY (those were used on board)
 			printf("CH%lu: 0x%08lx = %+1.5fV ", j,
 			       adc_buffer[CN0561_FMC_CH_NO*i+j], data);
 			if(j == (CN0561_FMC_CH_NO - 1))
@@ -281,6 +387,32 @@ int main()
 			j++;
 		}
 	}
+
+	/*
+	 *  READ ADC REGISTER VALUES
+	*/
+	uint8_t reg_data;
+	uint8_t reg_addr;
+	for(reg_addr = 0x0; reg_addr <= 0x7; reg_addr++) {
+		ret = ad713x_spi_reg_read(cn0561_dev, reg_addr, &reg_data);
+			if (ret != 0)
+				printf("REG%x: error read\n", reg_addr);
+		printf("REG%x: 0x%08x\n", reg_addr, reg_data);
+	}
+
+	for(reg_addr = 0xA; reg_addr <= 0x42; reg_addr++) {
+			ret = ad713x_spi_reg_read(cn0561_dev, reg_addr, &reg_data);
+				if (ret != 0)
+					printf("REG%x: error read\n", reg_addr);
+			printf("REG%x: 0x%08x\n", reg_addr, reg_data);
+		}
+
+	for(reg_addr = 0x47; reg_addr <= 0x48; reg_addr++) {
+			ret = ad713x_spi_reg_read(cn0561_dev, reg_addr, &reg_data);
+				if (ret != 0)
+					printf("REG%x: error read\n", reg_addr);
+			printf("REG%x: 0x%08x\n", reg_addr, reg_data);
+		}
 
 	ad713x_remove(cn0561_dev);
 	print("Bye\n\r");

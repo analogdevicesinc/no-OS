@@ -206,6 +206,10 @@ int32_t ad713x_set_out_data_frame(struct ad713x_dev *dev,
 	while (ad713x_output_data_frame[id][i][0] != INVALID) {
 		if((adc_data_len == ad713x_output_data_frame[id][i][0]) &&
 		    (crc_header == ad713x_output_data_frame[id][i][1])) {
+
+			printf("ADC_DATA_LEN = %d\n", adc_data_len);
+			printf("CRC_HEADER = %d\n", crc_header);
+
 			return ad713x_spi_write_mask(dev,
 						     AD713X_REG_DATA_PACKET_CONFIG,
 						     AD713X_DATA_PACKET_CONFIG_FRAME_MSK,
