@@ -47,7 +47,7 @@
 #include "adaq8092.h"
 #include "no_os_spi.h"
 #include "no_os_gpio.h"
-#include "spi_extra.h"
+#include "xilinx_spi.h"
 #include "parameters.h"
 #include "no_os_error.h"
 #include "gpio_extra.h"

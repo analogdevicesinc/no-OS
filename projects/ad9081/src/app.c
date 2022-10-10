@@ -46,7 +46,7 @@
 #include "no_os_gpio.h"
 #include "gpio_extra.h"
 #include "no_os_spi.h"
-#include "spi_extra.h"
+#include "xilinx_spi.h"
 #include "ad9081.h"
 #include "app_clock.h"
 #include "app_jesd.h"

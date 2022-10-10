@@ -45,7 +45,7 @@
 #include "ad7768.h"
 #include "axi_dmac.h"
 #include "no_os_gpio.h"
-#include "spi_extra.h"
+#include "xilinx_spi.h"
 #include "gpio_extra.h"
 #include "no_os_error.h"
 #include "axi_adc_core.h"

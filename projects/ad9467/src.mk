@@ -40,7 +40,7 @@ INCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.h \
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.h \
 	$(DRIVERS)/adc/ad9467/ad9467.h \
 	$(DRIVERS)/frequency/ad9517/ad9517.h
-INCS +=	$(PLATFORM_DRIVERS)/spi_extra.h
+INCS +=	$(PLATFORM_DRIVERS)/$(PLATFORM)_spi.h
 INCS +=	$(INCLUDE)/no_os_axi_io.h \
 	$(INCLUDE)/no_os_spi.h \
 	$(INCLUDE)/no_os_error.h \

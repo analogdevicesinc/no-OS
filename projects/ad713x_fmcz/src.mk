@@ -38,7 +38,7 @@ INCS += $(DRIVERS)/axi_core/axi_dmac/axi_dmac.h \
 	$(DRIVERS)/axi_core/spi_engine/spi_engine.h \
 	$(DRIVERS)/axi_core/spi_engine/spi_engine_private.h \
 	$(DRIVERS)/axi_core/clk_axi_clkgen/clk_axi_clkgen.h
-INCS +=	$(PLATFORM_DRIVERS)/spi_extra.h \
+INCS +=	$(PLATFORM_DRIVERS)/$(PLATFORM)_spi.h \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.h \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_uart.h \
 	$(PLATFORM_DRIVERS)/gpio_extra.h

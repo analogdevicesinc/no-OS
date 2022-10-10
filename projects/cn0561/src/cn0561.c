@@ -53,7 +53,7 @@
 #include "spi_engine.h"
 #include "ad713x.h"
 #include "no_os_spi.h"
-#include "spi_extra.h"
+#include "xilinx_spi.h"
 #include "no_os_delay.h"
 #include "no_os_gpio.h"
 #include "gpio_extra.h"

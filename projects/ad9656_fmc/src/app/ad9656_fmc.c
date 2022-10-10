@@ -52,7 +52,7 @@
 #include "axi_dmac.h"
 #include "axi_adxcvr.h"
 #include "axi_jesd204_rx.h"
-#include "spi_extra.h"
+#include "xilinx_spi.h"
 #include "parameters.h"
 #include "no_os_error.h"
 #include "no_os_delay.h"

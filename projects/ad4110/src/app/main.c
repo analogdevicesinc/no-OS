@@ -44,7 +44,7 @@
 #include "xilinx_irq.h"
 #include "xilinx_gpio_irq.h"
 #include "no_os_spi.h"
-#include "spi_extra.h"
+#include "xilinx_spi.h"
 #include "ad4110.h"
 #include "no_os_error.h"
 #include "xparameters.h"

@@ -38,7 +38,7 @@ SRCS += $(PLATFORM_DRIVERS)/xilinx_gpio.c \
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.c \
 	$(PLATFORM_DRIVERS)/xilinx_axi_io.c
 INCS +=	$(INCLUDE)/no_os_spi.h \
-	$(PLATFORM_DRIVERS)/spi_extra.h \
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_spi.h \
 	$(INCLUDE)/no_os_gpio.h \
 	$(PLATFORM_DRIVERS)/gpio_extra.h \
 	$(INCLUDE)/no_os_error.h \

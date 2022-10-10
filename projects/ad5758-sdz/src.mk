@@ -13,5 +13,5 @@ INCS += $(INCLUDE)/no_os_gpio.h \
         $(INCLUDE)/no_os_delay.h \
         $(INCLUDE)/no_os_print_log.h \
         $(PLATFORM_DRIVERS)/gpio_extra.h \
-	$(PLATFORM_DRIVERS)/spi_extra.h	\
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_spi.h	\
 	$(DRIVERS)/dac/ad5758/ad5758.h

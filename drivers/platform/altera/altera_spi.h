@@ -1,7 +1,6 @@
-/*******************************************************************************
- *   @file   xilinx/spi_extra.h
- *   @brief  Header containing extra types used in the spi driver.
- *   @author scuciurean (sergiu.cuciurean@analog.com)
+/***************************************************************************//**
+ *   @file   altera/altera_spi.h
+ *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
  * Copyright 2019(c) Analog Devices, Inc.
  *
@@ -36,80 +35,51 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef SPI_EXTRA_H_
-#define SPI_EXTRA_H_
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
+#ifndef ALTERA_SPI_H_
+#define ALTERA_SPI_H_
 
-#include <stdint.h>
 #include "no_os_spi.h"
-
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
-
-#define SPI_CS_DECODE			0x01
-#define SPI_DEASSERT_CURRENT_SS	0x0F
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
 /**
- * @enum xil_spi_type
- * @brief Xilinx platform architecture sections
+ * @enum spi_type
+ * @brief Altera platform architecture types
  */
-enum xil_spi_type {
-	/** Programmable Logic */
-	SPI_PL,
-	/** Processing System */
-	SPI_PS,
-	/** SPI Engine */
-	SPI_ENGINE
+enum spi_type {
+	/** Nios II architecture */
+	NIOS_II_SPI
 };
 
 /**
- * @struct xil_spi_init_param
- * @brief Structure holding the initialization parameters for Xilinx platform
- * specific SPI parameters when using xil_spi_ops.
+ * @struct altera_spi_init_param
+ * @brief Structure holding the initialization parameters for Altera platform
+ * specific SPI parameters.
  */
-struct xil_spi_init_param {
-	/** Xilinx architecture */
-	enum xil_spi_type	type;
-	/** SPI flags */
-	uint32_t		flags;
+struct altera_spi_init_param {
+	/** Altera architecture type */
+	enum spi_type	type;
+	/** SPI base address */
+	uint32_t	base_address;
 };
 
 /**
- * @struct xil_spi_desc
- * @brief Xilinx platform specific SPI descriptor
+ * @struct altera_spi_desc
+ * @brief Altera platform specific SPI descriptor
  */
-struct xil_spi_desc {
-	/** Xilinx architecture */
-	enum xil_spi_type	type;
-	/** SPI flags */
-	uint32_t		flags;
-	/** SPI configuration */
-	void			*config;
-	/** SPI instance */
-	void			*instance;
+struct altera_spi_desc {
+	/** Altera architecture type */
+	enum spi_type	type;
+	/** SPI base address */
+	uint32_t	base_address;
 };
 
 /**
- * @brief SPI engine platform ops structure
+ * @brief Altera specific SPI platform ops structure
  */
-extern const struct no_os_spi_platform_ops spi_eng_platform_ops;
+extern const struct no_os_spi_platform_ops altera_spi_ops;
 
-/**
- * @brief Xilinx specific SPI platform ops structure
- */
-extern const struct no_os_spi_platform_ops xil_spi_ops;
-
-/**
- * @brief Xilinx SPI PS register functions. No extra param needed
- */
-extern const struct no_os_spi_platform_ops xil_spi_reg_ops_pl;
-
-#endif // SPI_EXTRA_H_
+#endif /* ALTERA_SPI_H_ */

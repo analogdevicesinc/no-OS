@@ -47,7 +47,7 @@
 #include "adi_ad9083_bf_jtx_ip.h"
 #include "parameters.h"
 #include "no_os_spi.h"
-#include "spi_extra.h"
+#include "xilinx_spi.h"
 #include "gpio_extra.h"
 #include "no_os_error.h"
 #include "no_os_util.h"

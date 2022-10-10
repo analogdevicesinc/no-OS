@@ -46,7 +46,7 @@
 #include "no_os_gpio.h"
 #include "gpio_extra.h"
 #include "no_os_spi.h"
-#include "spi_extra.h"
+#include "xilinx_spi.h"
 #include "ssd_1306.h"
 #include "display.h"
 #include "no_os_error.h"
