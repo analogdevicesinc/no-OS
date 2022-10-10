@@ -57,7 +57,7 @@
 #endif
 #include "no_os_spi.h"
 #include "no_os_gpio.h"
-#include "spi_extra.h"
+#include "xilinx_spi.h"
 #include "gpio_extra.h"
 #include "no_os_delay.h"
 #include "no_os_error.h"

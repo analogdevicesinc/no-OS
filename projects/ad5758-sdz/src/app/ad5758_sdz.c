@@ -48,7 +48,7 @@
 #include "parameters.h"
 #include "sleep.h"
 #include "no_os_spi.h"
-#include "spi_extra.h"
+#include "xilinx_spi.h"
 #include "stdint.h"
 #include "stdio.h"
 #include "stdlib.h"

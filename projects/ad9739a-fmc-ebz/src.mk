@@ -37,7 +37,7 @@ INCS += $(PROJECT)/src/parameters.h \
 	$(DRIVERS)/dac/ad9739a/ad9739a.h \
 	$(DRIVERS)/axi_core/axi_dac_core/axi_dac_core.h \
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.h
-INCS +=	$(PLATFORM_DRIVERS)/spi_extra.h					
+INCS +=	$(PLATFORM_DRIVERS)/$(PLATFORM)_spi.h					
 INCS +=	$(INCLUDE)/no_os_axi_io.h \
 	$(INCLUDE)/no_os_spi.h \
 	$(INCLUDE)/no_os_error.h \

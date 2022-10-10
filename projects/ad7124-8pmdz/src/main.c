@@ -57,7 +57,7 @@
 #include <xil_cache.h>
 #include "xilinx_irq.h"
 #include "xilinx_uart.h"
-#include "spi_extra.h"
+#include "xilinx_spi.h"
 #endif
 #ifdef ADUCM_PLATFORM
 #include "aducm3029_uart.h"

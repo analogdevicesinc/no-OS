@@ -38,7 +38,7 @@ INCS += $(PROJECT)/src/parameters.h \
 	$(DRIVERS)/adc/adaq8092/adaq8092.h \
 	$(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.h \
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.h
-INCS +=	$(PLATFORM_DRIVERS)/spi_extra.h \
+INCS +=	$(PLATFORM_DRIVERS)/$(PLATFORM)_spi.h \
 	$(PLATFORM_DRIVERS)/gpio_extra.h
 INCS +=	$(INCLUDE)/no_os_axi_io.h \
 	$(INCLUDE)/no_os_spi.h \

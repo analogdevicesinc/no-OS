@@ -47,7 +47,7 @@
 #include "xil_cache.h"
 #include "xparameters.h"
 #include "no_os_spi.h"
-#include "spi_extra.h"
+#include "xilinx_spi.h"
 #include "no_os_delay.h"
 #include "no_os_error.h"
 

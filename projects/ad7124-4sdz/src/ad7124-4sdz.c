@@ -41,7 +41,7 @@
 #include <inttypes.h>
 #include "ad7124.h"
 #include "ad7124_regs.h"
-#include "spi_extra.h"
+#include "xilinx_spi.h"
 #include "no_os_error.h"
 
 int main(void)

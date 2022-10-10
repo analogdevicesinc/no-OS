@@ -53,7 +53,7 @@
 
 #include "no_os_error.h"
 #include "no_os_spi.h"
-#include "spi_extra.h"
+#include "xilinx_spi.h"
 
 #if defined(PLATFORM_ZYNQ)
 #define SPI_CLK_FREQ_HZ(dev)	(XPAR_PS7_SPI_ ## dev ## _SPI_CLK_FREQ_HZ)

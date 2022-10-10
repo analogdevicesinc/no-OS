@@ -46,7 +46,7 @@
 
 #include <stdint.h>
 
-#include "spi_extra.h"
+#include "xilinx_spi.h"
 #include "spi_engine_private.h"
 #include "axi_dmac.h"
 

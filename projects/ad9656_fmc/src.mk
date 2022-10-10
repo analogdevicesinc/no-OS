@@ -50,7 +50,7 @@ INCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.h \
         $(DRIVERS)/axi_core/jesd204/axi_jesd204_rx.h \
         $(DRIVERS)/axi_core/jesd204/xilinx_transceiver.h \
         $(DRIVERS)/adc/ad9656/ad9656.h
-INCS +=	$(PLATFORM_DRIVERS)/spi_extra.h
+INCS +=	$(PLATFORM_DRIVERS)/$(PLATFORM)_spi.h
 INCS +=	$(INCLUDE)/no_os_axi_io.h \
         $(INCLUDE)/no_os_spi.h \
         $(INCLUDE)/no_os_error.h \

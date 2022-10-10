@@ -47,7 +47,7 @@
 #include "axi_dmac.h"
 #include "ad9434.h"
 #include "no_os_spi.h"
-#include "spi_extra.h"
+#include "xilinx_spi.h"
 #include "parameters.h"
 #include "no_os_error.h"
 

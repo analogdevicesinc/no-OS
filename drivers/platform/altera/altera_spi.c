@@ -46,7 +46,7 @@
 #include "parameters.h"
 #include "no_os_error.h"
 #include "no_os_spi.h"
-#include "spi_extra.h"
+#include "altera_spi.h"
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/

@@ -52,7 +52,6 @@
 
 // platform drivers
 #include "no_os_spi.h"
-#include "spi_extra.h"
 #include "no_os_gpio.h"
 #include "gpio_extra.h"
 #include "no_os_error.h"
@@ -62,8 +61,10 @@
 // platform specific
 #ifdef ALTERA_PLATFORM
 #include "clk_altera_a10_fpll.h"
+#include "altera_spi.h"
 #else
 #include "xil_cache.h"
+#include "xilinx_spi.h"
 #if !defined(ZU11EG) && !defined(FMCOMMS8_ZCU102)
 #include "clk_axi_clkgen.h"
 #endif

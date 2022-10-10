@@ -54,7 +54,7 @@
 #include <xil_cache.h>
 #include "app_config.h"
 #include "no_os_spi.h"
-#include "spi_extra.h"
+#include "xilinx_spi.h"
 #include "no_os_gpio.h"
 #include "gpio_extra.h"
 

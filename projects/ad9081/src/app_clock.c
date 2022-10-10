@@ -41,7 +41,7 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include "no_os_spi.h"
-#include "spi_extra.h"
+#include "xilinx_spi.h"
 #include "hmc7044.h"
 #ifdef QUAD_MXFE
 #include "adf4371.h"

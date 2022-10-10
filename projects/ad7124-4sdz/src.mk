@@ -19,7 +19,7 @@ SRCS +=	$(PLATFORM_DRIVERS)/xilinx_axi_io.c \
 INCS += $(DRIVERS)/adc/ad7124/ad7124.h \
 	$(DRIVERS)/adc/ad7124/ad7124_regs.h
 
-INCS +=	$(PLATFORM_DRIVERS)/spi_extra.h \
+INCS +=	$(PLATFORM_DRIVERS)/$(PLATFORM)_spi.h \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.h \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_uart.h \
 	$(PLATFORM_DRIVERS)/gpio_extra.h

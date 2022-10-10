@@ -17,7 +17,6 @@
 #include <stdlib.h>
 #include "common.h"
 #include "no_os_spi.h"
-#include "spi_extra.h"
 #include "gpio_extra.h"
 #include "no_os_gpio.h"
 #include "no_os_delay.h"
@@ -26,6 +25,9 @@
 
 #ifndef ALTERA_PLATFORM
 #include <xparameters.h>
+#include "xilinx_spi.h"
+#else
+#include "altera_spi.h"
 #endif
 
 ADI_LOGLEVEL CMB_LOGLEVEL = ADIHAL_LOG_NONE;

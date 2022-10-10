@@ -50,9 +50,12 @@
 #ifdef XILINX_PLATFORM
 #include <xparameters.h>
 #include <xil_cache.h>
-#include "spi_extra.h"
+#include "xilinx_spi.h"
 #include "gpio_extra.h"
 #include "no_os_irq.h"
+#ifdef ALTERA_PLATFORM
+#include "altera_spi.h"
+#endif
 #endif
 #ifdef LINUX_PLATFORM
 #include "linux_spi.h"

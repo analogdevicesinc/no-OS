@@ -50,7 +50,7 @@ INCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.h \
 	$(DRIVERS)/io-expander/demux_spi/demux_spi.h \
 	$(DRIVERS)/adc/ad9250/ad9250.h \
 	$(DRIVERS)/frequency/ad9517/ad9517.h
-INCS +=	$(PLATFORM_DRIVERS)/spi_extra.h \
+INCS +=	$(PLATFORM_DRIVERS)/$(PLATFORM)_spi.h \
 	$(PLATFORM_DRIVERS)/gpio_extra.h
 INCS +=	$(INCLUDE)/no_os_axi_io.h \
 	$(INCLUDE)/no_os_spi.h \
