@@ -232,7 +232,6 @@ int main(void)
 		0,
 		3,
 		1,
-		1,
 		rx_lane_rate_khz,
 		mykDevice.clocks->deviceClock_kHz,
 	};
@@ -242,7 +241,6 @@ int main(void)
 		3,
 		3,
 		0,
-		0,
 		tx_lane_rate_khz,
 		mykDevice.clocks->deviceClock_kHz,
 	};
@@ -251,7 +249,6 @@ int main(void)
 		RX_OS_XCVR_BASEADDR,
 		0,
 		3,
-		1,
 		1,
 		rx_os_lane_rate_khz,
 		mykDevice.clocks->deviceClock_kHz,
