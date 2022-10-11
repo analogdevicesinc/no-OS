@@ -46,7 +46,7 @@
 #include "iio_app.h"
 #endif
 #include "no_os_irq.h"
-#include "irq_extra.h"
+#include "xilinx_irq.h"
 #include "xilinx_gpio_irq.h"
 #include "no_os_spi.h"
 #include "no_os_gpio.h"

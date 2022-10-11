@@ -97,7 +97,7 @@ ifeq (xilinx,$(strip $(PLATFORM)))
 SRCS += $(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c \
 	$(DRIVERS)/api/no_os_irq.c
 	
-INCS += $(PLATFORM_DRIVERS)/irq_extra.h \
+INCS += $(PLATFORM_DRIVERS)/$(PLATFORM)_irq.h \
 	$(PLATFORM_DRIVERS)/spi_extra.h \
 	$(PLATFORM_DRIVERS)/gpio_extra.h \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_uart.h	

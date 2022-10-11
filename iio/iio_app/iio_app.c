@@ -57,7 +57,7 @@
 #endif
 #if defined(XILINX_PLATFORM)
 #include "xilinx_uart.h"
-#include "irq_extra.h"
+#include "xilinx_irq.h"
 #endif
 #if defined(STM32_PLATFORM)
 #include <errno.h>

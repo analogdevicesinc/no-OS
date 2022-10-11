@@ -54,7 +54,7 @@
 #include "no_os_i2c.h"
 #include "xilinx_i2c.h"
 #include "no_os_irq.h"
-#include "irq_extra.h"
+#include "xilinx_irq.h"
 #include "no_os_timer.h"
 #include "xilinx_timer.h"
 #include "clk_axi_clkgen.h"
