@@ -16,7 +16,7 @@
     "iio_example": {
       "flags": "IIO_EXAMPLE=y IIO_TRIGGER_EXAMPLE=n IIO_TIMER_TRIGGER_EXAMPLE=n"
     },
-    "iio_trigger_example_max32655": {
+    "iio_trigger_example": {
       "flags": "IIO_EXAMPLE=n IIO_TRIGGER_EXAMPLE=y IIO_TIMER_TRIGGER_EXAMPLE=n"
     },
     "iio_timer_trigger": {
