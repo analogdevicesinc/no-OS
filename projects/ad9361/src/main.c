@@ -58,7 +58,7 @@
 #include "linux_spi.h"
 #include "linux_gpio.h"
 #else
-#include "irq_extra.h"
+#include "xilinx_irq.h"
 #endif //LINUX
 
 #include "axi_adc_core.h"

@@ -25,7 +25,7 @@ SRCS += $(PLATFORM_DRIVERS)/xilinx_spi.c \
 INCS += $(DRIVERS)/afe/ad4110/ad4110.h
 
 INCS +=	$(PLATFORM_DRIVERS)/spi_extra.h \
-	$(PLATFORM_DRIVERS)/irq_extra.h \
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.h \
 	$(PLATFORM_DRIVERS)/gpio_extra.h \
 	$(PLATFORM_DRIVERS)/xilinx_gpio_irq.h
 

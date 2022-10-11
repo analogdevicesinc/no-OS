@@ -1,5 +1,5 @@
 /*******************************************************************************
- *   @file   irq_extra.h
+ *   @file   xilinx_irq.h
  *   @brief  Header containing types used in the irq driver.
  *   @author Cristian Pop (cristian.pop@analog.com)
 ********************************************************************************
@@ -37,8 +37,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef IRQ_EXTRA_H_
-#define IRQ_EXTRA_H_
+#ifndef XILINX_IRQ_H_
+#define XILINX_IRQ_H_
 
 /******************************************************************************/
 /***************************** Include Files **********************************/

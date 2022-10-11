@@ -20,7 +20,7 @@ INCS += $(DRIVERS)/adc/ad7124/ad7124.h \
 	$(DRIVERS)/adc/ad7124/ad7124_regs.h
 
 INCS +=	$(PLATFORM_DRIVERS)/spi_extra.h \
-	$(PLATFORM_DRIVERS)/irq_extra.h \
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.h \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_uart.h \
 	$(PLATFORM_DRIVERS)/gpio_extra.h
 INCS +=	$(INCLUDE)/no_os_axi_io.h \

@@ -67,7 +67,7 @@
 
 #ifdef IIO_SUPPORT
 #include "no_os_irq.h"
-#include "irq_extra.h"
+#include "xilinx_irq.h"
 #include "no_os_uart.h"
 #include "xilinx_uart.h"
 #include "iio_ad713x.h"

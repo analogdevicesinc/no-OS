@@ -55,7 +55,7 @@
 #include <drivers/pwr/adi_pwr.h>
 #ifdef XILINX_PLATFORM
 #include <xil_cache.h>
-#include "irq_extra.h"
+#include "xilinx_irq.h"
 #include "xilinx_uart.h"
 #include "spi_extra.h"
 #endif
