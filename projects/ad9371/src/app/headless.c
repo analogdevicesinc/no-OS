@@ -227,31 +227,31 @@ int main(void)
 	};
 #else
 	struct adxcvr_init rx_adxcvr_init = {
-		"rx_adxcvr",
-		RX_XCVR_BASEADDR,
-		0,
-		3,
-		1,
-		rx_lane_rate_khz,
-		mykDevice.clocks->deviceClock_kHz,
+		.name = "rx_adxcvr",
+		.base = RX_XCVR_BASEADDR,
+		.sys_clk_sel = ADXCVR_SYS_CLK_CPLL,
+		.out_clk_sel = ADXCVR_REFCLK,
+		.lpm_enable = 1,
+		.lane_rate_khz = rx_lane_rate_khz,
+		.ref_rate_khz = mykDevice.clocks->deviceClock_kHz,
 	};
 	struct adxcvr_init tx_adxcvr_init = {
-		"tx_adxcvr",
-		TX_XCVR_BASEADDR,
-		3,
-		3,
-		0,
-		tx_lane_rate_khz,
-		mykDevice.clocks->deviceClock_kHz,
+		.name = "tx_adxcvr",
+		.base = TX_XCVR_BASEADDR,
+		.sys_clk_sel = ADXCVR_SYS_CLK_QPLL0,
+		.out_clk_sel = ADXCVR_REFCLK,
+		.lpm_enable = 0,
+		.lane_rate_khz = tx_lane_rate_khz,
+		.ref_rate_khz = mykDevice.clocks->deviceClock_kHz,
 	};
 	struct adxcvr_init rx_os_adxcvr_init = {
-		"rx_os_adxcvr",
-		RX_OS_XCVR_BASEADDR,
-		0,
-		3,
-		1,
-		rx_os_lane_rate_khz,
-		mykDevice.clocks->deviceClock_kHz,
+		.name = "rx_os_adxcvr",
+		.base = RX_OS_XCVR_BASEADDR,
+		.sys_clk_sel = ADXCVR_SYS_CLK_CPLL,
+		.out_clk_sel = ADXCVR_REFCLK,
+		.lpm_enable = 1,
+		.lane_rate_khz = rx_os_lane_rate_khz,
+		.ref_rate_khz = mykDevice.clocks->deviceClock_kHz,
 	};
 #endif
 	struct adxcvr *rx_adxcvr;
