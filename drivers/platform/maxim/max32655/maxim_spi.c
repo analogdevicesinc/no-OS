@@ -203,6 +203,7 @@ int32_t max_spi_transfer(struct no_os_spi_desc *desc,
 	}
 
 	req.spi = MXC_SPI_GET_SPI(desc->device_id);
+	req.ssIdx = desc->chip_select;
 	for (uint32_t i = 0; i < len; i++) {
 		req.txData = msgs[i].tx_buff;
 		req.rxData = msgs[i].rx_buff;
