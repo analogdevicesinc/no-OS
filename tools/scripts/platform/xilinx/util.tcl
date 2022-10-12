@@ -240,7 +240,8 @@ proc _write_ps {cpu} {
 
 proc upload {} {
 	openhw $::hw
-	set bitstream $::hw_path/system_top.bit
+	set bitstream [file rootname $::hw]
+	append bitstream ".bit"
 	set cpu [_get_processor]
 
 	# Connect to the fpga
