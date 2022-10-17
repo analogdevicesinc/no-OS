@@ -1,3 +1,9 @@
+ifeq (y,$(strip $(ADXL355)))
+CFLAGS += -DADXL355_DEV=1
+else
+CFLAGS += -DADXL359_DEV=1
+endif
+
 ifeq (y,$(strip $(IIO_EXAMPLE)))
 TINYIIOD=y
 CFLAGS += -DIIO_EXAMPLE=1

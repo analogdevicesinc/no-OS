@@ -72,9 +72,6 @@ int main()
 #endif
 
 #ifdef IIO_TRIGGER_EXAMPLE
-#if (TARGET_NUM != 32655)
-#error IIO_TRIGGER_EXAMPLE is currently supported only on max32655 targets.
-#else
 	struct no_os_gpio_desc *adxl355_gpio_desc;
 	struct no_os_irq_ctrl_desc *nvic_desc;
 	struct no_os_irq_init_param nvic_ip = {
@@ -100,7 +97,6 @@ int main()
 		return ret;
 
 	ret = iio_trigger_example_main();
-#endif
 #endif
 
 #ifdef DUMMY_EXAMPLE

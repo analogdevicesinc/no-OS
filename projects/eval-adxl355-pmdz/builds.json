@@ -1,59 +1,68 @@
 {
   "stm32": {
     "dummy_example": {
-      "flags" : "DUMMY_EXAMPLE=y IIO_EXAMPLE=n IIO_TRIGGER_EXAMPLE=n"
+      "flags" : "DUMMY_EXAMPLE=y IIO_EXAMPLE=n IIO_TRIGGER_EXAMPLE=n ADXL355=y"
     },
-	"iio_example": {
-      "flags" : "DUMMY_EXAMPLE=n IIO_EXAMPLE=y IIO_TRIGGER_EXAMPLE=n"
+    "iio_example": {
+      "flags" : "DUMMY_EXAMPLE=n IIO_EXAMPLE=y IIO_TRIGGER_EXAMPLE=n ADXL355=y"
     },
-	"iio_trigger_example": {
-      "flags" : "DUMMY_EXAMPLE=n IIO_EXAMPLE=n IIO_TRIGGER_EXAMPLE=y"
+    "iio_trigger_example": {
+      "flags" : "DUMMY_EXAMPLE=n IIO_EXAMPLE=n IIO_TRIGGER_EXAMPLE=y ADXL355=y"
     }
   },
   "maxim": {
-    "dummy_example_max32650": {
-      "flags" : "DUMMY_EXAMPLE=y IIO_EXAMPLE=n IIO_TRIGGER_EXAMPLE=n TARGET=max32650"
+    "dummy_example_max32650_adxl355": {
+      "flags" : "DUMMY_EXAMPLE=y IIO_EXAMPLE=n IIO_TRIGGER_EXAMPLE=n TARGET=max32650 ADXL355=y"
     },
-	  "iio_example_max32650": {
-      "flags" : "DUMMY_EXAMPLE=n IIO_EXAMPLE=y IIO_TRIGGER_EXAMPLE=n TARGET=max32650"
+    "iio_example_max32650_adxl355": {
+      "flags" : "DUMMY_EXAMPLE=n IIO_EXAMPLE=y IIO_TRIGGER_EXAMPLE=n TARGET=max32650 ADXL355=y"
     },
-    "dummy_example_max32655": {
-      "flags" : "DUMMY_EXAMPLE=y IIO_EXAMPLE=n IIO_TRIGGER_EXAMPLE=n TARGET=max32655"
+    "dummy_example_max32655_adxl355": {
+      "flags" : "DUMMY_EXAMPLE=y IIO_EXAMPLE=n IIO_TRIGGER_EXAMPLE=n TARGET=max32655 ADXL355=y"
     },
-	  "iio_example_max32655": {
-      "flags" : "DUMMY_EXAMPLE=n IIO_EXAMPLE=y IIO_TRIGGER_EXAMPLE=n TARGET=max32655"
+    "iio_example_max32655_adxl355": {
+      "flags" : "DUMMY_EXAMPLE=n IIO_EXAMPLE=y IIO_TRIGGER_EXAMPLE=n TARGET=max32655 ADXL355=y"
     },
-	  "iio_trigger_example_max32655": {
-      "flags" : "DUMMY_EXAMPLE=n IIO_EXAMPLE=n IIO_TRIGGER_EXAMPLE=y TARGET=max32655"
+    "iio_trigger_example_max32655_adxl355": {
+      "flags" : "DUMMY_EXAMPLE=n IIO_EXAMPLE=n IIO_TRIGGER_EXAMPLE=y TARGET=max32655 ADXL355=y"
     },
-    "dummy_example_max32660": {
-      "flags" : "DUMMY_EXAMPLE=y IIO_EXAMPLE=n IIO_TRIGGER_EXAMPLE=n TARGET=max32660"
+    "dummy_example_max32660_adxl355": {
+      "flags" : "DUMMY_EXAMPLE=y IIO_EXAMPLE=n IIO_TRIGGER_EXAMPLE=n TARGET=max32660 ADXL355=y"
     },
-	  "iio_example_max32660": {
-      "flags" : "DUMMY_EXAMPLE=n IIO_EXAMPLE=y IIO_TRIGGER_EXAMPLE=n TARGET=max32660"
+    "iio_example_max32660_adxl355": {
+      "flags" : "DUMMY_EXAMPLE=n IIO_EXAMPLE=y IIO_TRIGGER_EXAMPLE=n TARGET=max32660 ADXL355=y"
     },
-    "dummy_example_max32665": {
-      "flags" : "DUMMY_EXAMPLE=y IIO_EXAMPLE=n IIO_TRIGGER_EXAMPLE=n TARGET=max32665"
+    "dummy_example_max32665_adxl355": {
+      "flags" : "DUMMY_EXAMPLE=y IIO_EXAMPLE=n IIO_TRIGGER_EXAMPLE=n TARGET=max32665 ADXL355=y"
     },
-	  "iio_example_max32665": {
-      "flags" : "DUMMY_EXAMPLE=n IIO_EXAMPLE=y IIO_TRIGGER_EXAMPLE=n TARGET=max32665"
+    "iio_example_max32665_adxl355": {
+      "flags" : "DUMMY_EXAMPLE=n IIO_EXAMPLE=y IIO_TRIGGER_EXAMPLE=n TARGET=max32665 ADXL355=y"
     },
-    "dummy_example_max78000": {
-      "flags" : "DUMMY_EXAMPLE=y IIO_EXAMPLE=n IIO_TRIGGER_EXAMPLE=n TARGET=max78000"
+    "dummy_example_max78000_adxl355": {
+      "flags" : "DUMMY_EXAMPLE=y IIO_EXAMPLE=n IIO_TRIGGER_EXAMPLE=n TARGET=max78000 ADXL355=y"
     },
-	  "iio_example_max78000": {
-      "flags" : "DUMMY_EXAMPLE=n IIO_EXAMPLE=y IIO_TRIGGER_EXAMPLE=n TARGET=max78000"
+    "iio_example_max78000_adxl355": {
+      "flags" : "DUMMY_EXAMPLE=n IIO_EXAMPLE=y IIO_TRIGGER_EXAMPLE=n TARGET=max78000 ADXL355=y"
+    },
+    "dummy_example_max78000_adxl359": {
+      "flags" : "DUMMY_EXAMPLE=y IIO_EXAMPLE=n IIO_TRIGGER_EXAMPLE=n TARGET=max78000 ADXL359=y"
+    },
+    "iio_example_max78000_adxl359": {
+      "flags" : "DUMMY_EXAMPLE=n IIO_EXAMPLE=y IIO_TRIGGER_EXAMPLE=n TARGET=max78000 ADXL359=y"
+    },
+    "iio_trigger_example_max78000_adxl359": {
+      "flags" : "DUMMY_EXAMPLE=n IIO_EXAMPLE=n IIO_TRIGGER_EXAMPLE=y TARGET=max32655 ADXL359=y"
     }
   },
   "pico": {
     "iio_example": {
-      "flags" : "DUMMY_EXAMPLE=n IIO_EXAMPLE=y IIO_TRIGGER_EXAMPLE=n"
+      "flags" : "DUMMY_EXAMPLE=n IIO_EXAMPLE=y IIO_TRIGGER_EXAMPLE=n ADXL355=y"
     },
     "iio_trigger_example": {
-      "flags" : "DUMMY_EXAMPLE=n IIO_EXAMPLE=n IIO_TRIGGER_EXAMPLE=y"
+      "flags" : "DUMMY_EXAMPLE=n IIO_EXAMPLE=n IIO_TRIGGER_EXAMPLE=y ADXL355=y"
     },
     "dummy_example": {
-      "flags" : "DUMMY_EXAMPLE=y IIO_EXAMPLE=n IIO_TRIGGER_EXAMPLE=n"
+      "flags" : "DUMMY_EXAMPLE=y IIO_EXAMPLE=n IIO_TRIGGER_EXAMPLE=n ADXL355=y"
     }
   }
 }
