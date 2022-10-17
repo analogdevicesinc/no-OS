@@ -90,4 +90,9 @@ struct no_os_spi_init_param adxl355_spi_ip = {
 
 struct adxl355_init_param adxl355_ip = {
 	.comm_type = ADXL355_SPI_COMM,
+#ifdef ADXL359_DEV
+	.dev_type = ID_ADXL359,
+#else
+	.dev_type = ID_ADXL355,
+#endif
 };
