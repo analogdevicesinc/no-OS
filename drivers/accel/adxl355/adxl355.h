@@ -64,6 +64,7 @@
 #define ADXL355_DEVID_AD     (ADXL355_ADDR(0x00) | SET_ADXL355_TRANSF_LEN(1) | SET_ADXL355_RESET_VAL(0xAD))
 #define ADXL355_DEVID_MST 	 (ADXL355_ADDR(0x01) | SET_ADXL355_TRANSF_LEN(1) | SET_ADXL355_RESET_VAL(0x1D))
 #define ADXL355_PARTID       (ADXL355_ADDR(0x02) | SET_ADXL355_TRANSF_LEN(1) | SET_ADXL355_RESET_VAL(0xED))
+#define ADXL359_PARTID       (ADXL355_ADDR(0x02) | SET_ADXL355_TRANSF_LEN(1) | SET_ADXL355_RESET_VAL(0xE9))
 #define ADXL355_REVID 		 (ADXL355_ADDR(0x03) | SET_ADXL355_TRANSF_LEN(1) | SET_ADXL355_RESET_VAL(0x01))
 #define ADXL355_STATUS       (ADXL355_ADDR(0x04) | SET_ADXL355_TRANSF_LEN(1) | SET_ADXL355_RESET_VAL(0x00))
 #define ADXL355_FIFO_ENTRIES (ADXL355_ADDR(0x05) | SET_ADXL355_TRANSF_LEN(1) | SET_ADXL355_RESET_VAL(0x00))
@@ -102,6 +103,15 @@
 #define ADXL355_ACC_SCALE_FACTOR_DIV  (int32_t)1000000000
 
 /*
+ * At +/- 10g with 20-bit resolution, scale is given in datasheet as
+ * 19.5ug/LSB = 0.0000195 * 9.80665 = 0.00019122967 m/s^2.
+ * For +/- 4g range a multiplier with value 2 is used.
+ * For +/-8g range, a multiplier with value 4 is used.
+ */
+#define ADXL359_ACC_SCALE_FACTOR_MUL  (int64_t)    191229
+#define ADXL359_ACC_SCALE_FACTOR_DIV  (int32_t)1000000000
+
+/*
  * The datasheet defines an intercept of 1885 LSB at 25 degC
  * and a slope of -9.05 LSB/C. The following formula can be used to find the
  * temperature:
@@ -120,6 +130,25 @@
 #define ADXL355_TEMP_SCALE_FACTOR     -110497238
 #define ADXL355_TEMP_SCALE_FACTOR_DIV    1000000
 
+/*
+ * The datasheet defines an intercept of 1852 LSB at 25 degC
+ * and a slope of -9.05 LSB/C. The following formula can be used to find the
+ * temperature:
+ * Temp = ((RAW - 1852)/(-9.05)) + 25 but this doesn't follow the format of
+ * the IIO which is Temp = (RAW + OFFSET) * SCALE. Hence using some rearranging
+ * we get the scale as -0.110497238 and offset as -2078.25
+ */
+/* OFFSET = ADXL359_TEMP_OFFSET / ADXL359_TEMP_OFFSET_DIV */
+#define ADXL359_TEMP_OFFSET     -207825
+#define ADXL359_TEMP_OFFSET_DIV     100
+
+/* SCALE = ADXL359_TEMP_SCALE_FACTOR / ADXL359_TEMP_SCALE_FACTOR_DIV
+   We want to return the temperature in millidegrees Celsius so instead of
+   0.110497238, we are going to use 110.497238 value for scale
+ */
+#define ADXL359_TEMP_SCALE_FACTOR     -110497238
+#define ADXL359_TEMP_SCALE_FACTOR_DIV    1000000
+
 #define ADXL355_NEG_ACC_MSK        NO_OS_GENMASK(31, 20)
 #define ADXL355_RANGE_FIELD_MSK    NO_OS_GENMASK( 1,  0)
 #define ADXL355_ODR_LPF_FIELD_MSK  NO_OS_GENMASK( 3,  0)
@@ -129,6 +158,11 @@
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
+enum adxl355_type {
+	ID_ADXL355,
+	ID_ADXL359,
+};
+
 enum adxl355_op_mode {
 	ADXL355_MEAS_TEMP_ON_DRDY_ON = 0,
 	ADXL355_STDBY_TEMP_ON_DRDY_ON = 1,
@@ -171,8 +205,11 @@ enum adxl355_odr_lpf {
 
 enum adxl355_range {
 	ADXL355_RANGE_2G = 1,
+	ADXL359_RANGE_10G = 1,
 	ADXL355_RANGE_4G = 2,
-	ADXL355_RANGE_8G = 3
+	ADXL359_RANGE_20G = 2,
+	ADXL355_RANGE_8G = 3,
+	ADXL359_RANGE_40G = 3,
 };
 
 enum adxl355_int_pol {
@@ -196,6 +233,8 @@ struct adxl355_init_param {
 	union adxl355_comm_init_param comm_init;
 	/** Device Communication type: ADXL355_SPI_COMM, ADXL355_I2C_COMM */
 	enum adxl355_comm_type comm_type;
+	/** Device type: ADXL355 or 359 */
+	enum adxl355_type dev_type;
 };
 
 struct _adxl355_int_mask {
@@ -257,6 +296,8 @@ union adxl355_comm_desc {
  * @brief ADXL355 Device structure.
  */
 struct adxl355_dev {
+	/** Device type */
+	enum adxl355_type dev_type;
 	/** Device communication descriptor */
 	union adxl355_comm_desc com_desc;
 	/** Device Communication type: ADXL355_SPI_COMM, ADXL355_I2C_COMM */

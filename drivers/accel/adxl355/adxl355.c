@@ -49,6 +49,10 @@
 /******************************************************************************/
 static uint8_t shadow_reg_val[5] = {0, 0, 0, 0, 0};
 static const uint8_t adxl355_scale_mul[4] = {0, 1, 2, 4};
+static const uint8_t adxl355_part_id[2] = {
+	[ID_ADXL355] = GET_ADXL355_RESET_VAL(ADXL355_PARTID),
+	[ID_ADXL359] = GET_ADXL355_RESET_VAL(ADXL359_PARTID),
+};
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
@@ -56,7 +60,7 @@ static const uint8_t adxl355_scale_mul[4] = {0, 1, 2, 4};
 static uint32_t adxl355_accel_array_conv(struct adxl355_dev *dev,
 		uint8_t *raw_array);
 static int64_t adxl355_accel_conv(struct adxl355_dev *dev, uint32_t raw_accel);
-static int64_t adxl355_temp_conv(uint16_t raw_temp);
+static int64_t adxl355_temp_conv(struct adxl355_dev *dev, uint16_t raw_temp);
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -140,6 +144,9 @@ int adxl355_init(struct adxl355_dev **device,
 	int ret;
 	uint8_t reg_value;
 
+	if(init_param.dev_type != ID_ADXL355 && init_param.dev_type != ID_ADXL359)
+		return -EINVAL;
+
 	dev = (struct adxl355_dev *)calloc(1, sizeof(*dev));
 
 	if (!dev)
@@ -157,6 +164,8 @@ int adxl355_init(struct adxl355_dev **device,
 			goto error_dev;
 	}
 
+	dev->dev_type = init_param.dev_type;
+
 	ret = adxl355_read_device_data(dev, ADXL355_ADDR(ADXL355_DEVID_AD),
 				       GET_ADXL355_TRANSF_LEN(ADXL355_DEVID_AD), &reg_value);
 	if (ret || (reg_value != GET_ADXL355_RESET_VAL(ADXL355_DEVID_AD)))
@@ -169,7 +178,8 @@ int adxl355_init(struct adxl355_dev **device,
 
 	ret = adxl355_read_device_data(dev, ADXL355_ADDR(ADXL355_PARTID),
 				       GET_ADXL355_TRANSF_LEN(ADXL355_PARTID),&reg_value);
-	if (ret || (reg_value != GET_ADXL355_RESET_VAL(ADXL355_PARTID)))
+
+	if (ret || reg_value != adxl355_part_id[dev->dev_type])
 		goto error_com;
 
 	// Get shadow register values
@@ -610,14 +620,27 @@ int adxl355_get_temp(struct adxl355_dev *dev, struct adxl355_frac_repr *temp)
 {
 	uint16_t raw_temp;
 	int ret;
+	int32_t divisor;
 
 	ret = adxl355_get_raw_temp(dev, &raw_temp);
-	if (!ret)
-		temp->integer = no_os_div_s64_rem(adxl355_temp_conv(raw_temp),
-						  ADXL355_TEMP_OFFSET_DIV*ADXL355_TEMP_SCALE_FACTOR_DIV,
-						  &(temp->fractional));
+	if(ret)
+		return ret;
 
-	return ret;
+	switch(dev->dev_type) {
+	case ID_ADXL355:
+		divisor = ADXL355_TEMP_OFFSET_DIV*ADXL355_TEMP_SCALE_FACTOR_DIV;
+		break;
+	case ID_ADXL359:
+		divisor = ADXL359_TEMP_OFFSET_DIV*ADXL359_TEMP_SCALE_FACTOR_DIV;
+		break;
+	default:
+		return -EINVAL;
+	}
+
+	temp->integer = no_os_div_s64_rem(adxl355_temp_conv(dev, raw_temp),
+					  divisor,
+					  &(temp->fractional));
+	return 0;
 }
 
 /***************************************************************************//**
@@ -912,8 +935,16 @@ static int64_t adxl355_accel_conv(struct adxl355_dev *dev,
 		accel_data = raw_accel;
 
 	// Apply scale factor based on the selected range
-	return ((int64_t)(accel_data * ADXL355_ACC_SCALE_FACTOR_MUL *
-			  adxl355_scale_mul[dev->range]));
+	switch (dev->dev_type) {
+	case ID_ADXL355:
+		return ((int64_t)(accel_data * ADXL355_ACC_SCALE_FACTOR_MUL *
+				  adxl355_scale_mul[dev->range]));
+	case ID_ADXL359:
+		return ((int64_t)(accel_data * ADXL359_ACC_SCALE_FACTOR_MUL *
+				  adxl355_scale_mul[dev->range]));
+	default:
+		return 0;
+	}
 }
 
 /***************************************************************************//**
@@ -924,8 +955,16 @@ static int64_t adxl355_accel_conv(struct adxl355_dev *dev,
  *
  * @return ret     - Converted data.
 *******************************************************************************/
-static int64_t adxl355_temp_conv(uint16_t raw_temp)
+static int64_t adxl355_temp_conv(struct adxl355_dev *dev, uint16_t raw_temp)
 {
-	return ((raw_temp*ADXL355_TEMP_OFFSET_DIV +  ADXL355_TEMP_OFFSET) *
-		(int64_t)ADXL355_TEMP_SCALE_FACTOR);
+	switch(dev->dev_type) {
+	case ID_ADXL355:
+		return ((raw_temp*ADXL355_TEMP_OFFSET_DIV +  ADXL355_TEMP_OFFSET) *
+			(int64_t)ADXL355_TEMP_SCALE_FACTOR);
+	case ID_ADXL359:
+		return ((raw_temp*ADXL359_TEMP_OFFSET_DIV +  ADXL359_TEMP_OFFSET) *
+			(int64_t)ADXL359_TEMP_SCALE_FACTOR);
+	default:
+		return 0;
+	}
 }
