@@ -414,11 +414,33 @@ static int adxl355_iio_read_offset(void *dev, char *buf, uint32_t len,
 				   const struct iio_ch_info *channel, intptr_t priv)
 {
 	int32_t vals[2];
+	struct adxl355_iio_dev *iio_adxl355;
+	struct adxl355_dev *adxl355;
+
+	if (!dev)
+		return -EINVAL;
+
+	iio_adxl355 = dev;
+
+	if (!iio_adxl355->adxl355_dev)
+		return -EINVAL;
+
+	adxl355 = iio_adxl355->adxl355_dev;
 
 	switch (channel->type) {
 	case IIO_TEMP:
-		vals[0] = -2111;
-		vals[1] = 250000;
+		switch(adxl355->dev_type) {
+		case ID_ADXL355:
+			vals[0] = -2111;
+			vals[1] = 250000;
+			break;
+		case ID_ADXL359:
+			vals[0] = -2078;
+			vals[1] = 250000;
+			break;
+		default:
+			return -EINVAL;
+		}
 		return iio_format_value(buf, len, IIO_VAL_INT_PLUS_MICRO, 2, vals);
 	default:
 		return -EINVAL;
@@ -441,11 +463,33 @@ static int adxl355_iio_read_scale(void *dev, char *buf, uint32_t len,
 				  const struct iio_ch_info *channel, intptr_t priv)
 {
 	int32_t vals[2];
+	struct adxl355_iio_dev *iio_adxl355;
+	struct adxl355_dev *adxl355;
+
+	if (!dev)
+		return -EINVAL;
+
+	iio_adxl355 = dev;
+
+	if (!iio_adxl355->adxl355_dev)
+		return -EINVAL;
+
+	adxl355 = iio_adxl355->adxl355_dev;
 
 	switch (channel->type) {
 	case IIO_ACCEL:
-		vals[0] = 0;
-		vals[1] = 38245;
+		switch(adxl355->dev_type) {
+		case ID_ADXL355:
+			vals[0] = 0;
+			vals[1] = 38245;
+			break;
+		case ID_ADXL359:
+			vals[0] = 0;
+			vals[1] = 191229;
+			break;
+		default:
+			return -EINVAL;
+		}
 		return iio_format_value(buf, len, IIO_VAL_INT_PLUS_NANO, 2, vals);
 	case IIO_TEMP:
 		vals[0] = -110;
