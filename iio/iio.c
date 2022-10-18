@@ -1484,7 +1484,7 @@ static uint32_t iio_add_cntx_attr_in_xml(struct iio_desc *desc, char *buff,
 
 	cntx_attr =  desc->cntx_attributes;
 	if (cntx_attr)
-		for (j = 0; cntx_attr->attributes[j].name; j++) {
+		for (j = 0; j < (int32_t)desc->nb_cntx_attr; j++) {
 			i += snprintf(buff + i,
 				      no_os_max(n - i, 0),
 				      "<context-attribute name=\"%s\" ",
