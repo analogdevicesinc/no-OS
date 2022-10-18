@@ -44,6 +44,7 @@
 /******************************************************************************/
 #include <stdint.h>
 #include <stdbool.h>
+#include "jesd204.h"
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -52,14 +53,6 @@ struct jesd204_rx_config {
 	uint8_t octets_per_frame;
 	uint16_t frames_per_multiframe;
 	uint8_t subclass_version;
-};
-
-/* JESD204 Supported encoding scheme */
-enum jesd204_rx_encoder {
-	JESD204_RX_ENCODER_UNKNOWN,
-	JESD204_RX_ENCODER_8B10B,
-	JESD204_RX_ENCODER_64B66B,
-	JESD204_RX_ENCODER_MAX,
 };
 
 /**
@@ -86,7 +79,9 @@ struct axi_jesd204_rx {
 	/** Lane Clock in KHz */
 	uint32_t lane_clk_khz;
 	/** Selected Encoder */
-	enum jesd204_rx_encoder encoder;
+	enum jesd204_encoder encoder;
+
+	struct jesd204_dev *jdev;
 };
 
 /**
@@ -127,6 +122,9 @@ int32_t axi_jesd204_rx_watchdog(struct axi_jesd204_rx *jesd);
 /** Device initialization */
 int32_t axi_jesd204_rx_init(struct axi_jesd204_rx **jesd204,
 			    const struct jesd204_rx_init *init);
+/** Device initialization, JESD FSM ON */
+int32_t axi_jesd204_rx_init_jesd_fsm(struct axi_jesd204_rx **jesd204,
+				     const struct jesd204_rx_init *init);
 /** Resources Deallocation */
 int32_t axi_jesd204_rx_remove(struct axi_jesd204_rx *jesd);
 #endif
