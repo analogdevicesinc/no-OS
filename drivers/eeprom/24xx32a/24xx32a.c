@@ -130,7 +130,7 @@ int32_t eeprom_24xx32a_read(struct no_os_eeprom_desc *desc, uint32_t address,
 	for (indx = 0; indx < bytes; indx++) {
 		no_os_put_unaligned_be16(curr_address, buff);
 
-		ret = no_os_i2c_write(eeprom_dev->i2c_desc, buff, sizeof(buff), 1);
+		ret = no_os_i2c_write(eeprom_dev->i2c_desc, buff, sizeof(buff), 0);
 		if (ret)
 			return ret;
 
