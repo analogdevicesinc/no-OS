@@ -188,6 +188,66 @@ struct xilinx_xcvr {
 	uint32_t vco1_max; // kHz
 };
 
+struct xilinx_xcvr_drp_ops {
+	int (*write)(struct adxcvr *xcvr, unsigned int drp_port,
+		     unsigned int reg, unsigned int val);
+	int (*read)(struct adxcvr *xcvr, unsigned int drp_port,
+		    unsigned int reg, unsigned int *val);
+};
+
+/**
+ * struct clk_ops -  Callback operations for hardware clocks; these are to
+ * be provided by the clock implementation, and will be called by drivers
+ * through the clk_* api.
+ *
+ * @param enable:	Enable the clock atomically. This must not return until the
+ *		clock is generating a valid clock signal, usable by consumer
+ *		devices. Called with enable_lock held. This function must not
+ *		sleep.
+ *
+ * @param disable:	Disable the clock atomically. Called with enable_lock held.
+ *		This function must not sleep.
+ *
+ * @param recalc_rate	Recalculate the rate of this clock, by querying hardware. The
+ *		parent rate is an input parameter.  It is up to the caller to
+ *		ensure that the prepare_mutex is held across this call.
+ *		Returns the calculated rate.  Optional, but recommended - if
+ *		this op is not set then clock rate will be initialized to 0.
+ *
+ * @param round_rate:	Given a target rate as input, returns the closest rate actually
+ *		supported by the clock. The parent rate is an input/output
+ *		parameter.
+ *
+ * @param set_rate:	Change the rate of this clock. The requested rate is specified
+ *		by the second argument, which should typically be the return
+ *		of .round_rate call.  The third argument gives the parent rate
+ *		which is likely helpful for most .set_rate implementation.
+ *		Returns 0 on success, -EERROR otherwise.
+ *
+ * The clk_enable/clk_disable and clk_prepare/clk_unprepare pairs allow
+ * implementations to split any work between atomic (enable) and sleepable
+ * (prepare) contexts.  If enabling a clock requires code that might sleep,
+ * this must be done in clk_prepare.  Clock enable code that will never be
+ * called in a sleepable context may be implemented in clk_enable.
+ *
+ * Typically, drivers will call clk_prepare when a clock may be needed later
+ * (eg. when a device is opened), and clk_enable when the clock is actually
+ * required (eg. from an interrupt). Note that clk_prepare MUST have been
+ * called before clk_enable.
+ */
+struct clk_ops {
+	int (*enable)(struct adxcvr *xcvr);
+	int (*disable)(struct adxcvr *xcvr);
+	unsigned long (*recalc_rate)(struct adxcvr *xcvr,
+				     unsigned long parent_rate);
+	long (*round_rate)(struct adxcvr *xcvr,
+			   unsigned long parent_rate,
+			   unsigned long *prate);
+	int (*set_rate)(struct adxcvr *xcvr,
+			unsigned long rate,
+			unsigned long parent_rate);
+};
+
 /**
  * @struct xilinx_xcvr_cpll_config
  * @brief Structure holding CPLL configuration.
