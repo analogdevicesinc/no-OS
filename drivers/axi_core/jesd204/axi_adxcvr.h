@@ -127,21 +127,21 @@ struct adxcvr_init {
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 /** AXI ADXCVR DPR Port Read */
-int32_t adxcvr_drp_read(struct adxcvr *xcvr,
-			uint32_t drp_port,
-			uint32_t reg,
-			uint32_t *val);
+int adxcvr_drp_read(struct adxcvr *xcvr,
+		    unsigned int drp_port,
+		    unsigned int reg,
+		    unsigned int *val);
 /** AXI ADXCVR DPR Port Write */
-int32_t adxcvr_drp_write(struct adxcvr *xcvr,
-			 uint32_t drp_port,
-			 uint32_t reg,
-			 uint32_t val);
+int adxcvr_drp_write(struct adxcvr *xcvr,
+		     unsigned int drp_port,
+		     unsigned int reg,
+		     unsigned int val);
 /** AXI ADXCVRS Status Read */
 int32_t adxcvr_status_error(struct adxcvr *xcvr);
 /** AXI ADXCVR Clock Enable */
-int32_t adxcvr_clk_enable(struct adxcvr *xcvr);
+int adxcvr_clk_enable(struct adxcvr *xcvr);
 /** AXI ADXCVR Clock Disable */
-int32_t adxcvr_clk_disable(struct adxcvr *xcvr);
+int adxcvr_clk_disable(struct adxcvr *xcvr);
 /** AXI ADXCVR Device Initialization */
 int32_t adxcvr_init(struct adxcvr **ad_xcvr,
 		    const struct adxcvr_init *init);
