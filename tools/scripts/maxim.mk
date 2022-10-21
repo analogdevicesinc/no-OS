@@ -2,14 +2,15 @@ ifndef MAXIM_LIBRARIES
 $(error MAXIM_LIBRARIES not defined.$(ENDL))
 endif
 
-UNIX_TOOLS_PATH := $(MAXIM_LIBRARIES)/../Tools/MinGW/msys/1.0/bin
-ARM_COMPILER_PATH := $(realpath $(dir $(call rwildcard, $(MAXIM_LIBRARIES)/../Tools/GNUTools/, *bin/arm-none-eabi-gcc)))
-
-export PATH := $(ARM_COMPILER_PATH):$(PATH)
 ifeq ($(OS),Windows_NT)
-export PATH := $(UNIX_TOOLS_PATH):$(PATH)
-# Workaround for an issue related to this one: https://savannah.gnu.org/bugs/?35323
-$(shell tr --version)
+PYTHON = python
+UNIX_TOOLS_PATH = $(MAXIM_LIBRARIES)/../Tools/MSYS2/usr/bin
+ARM_COMPILER_PATH := $(dir $(call rwildcard, $(MAXIM_LIBRARIES)/../Tools/GNUTools, *bin/arm-none-eabi-gcc.exe))
+export PATH := $(PATH):$(ARM_COMPILER_PATH):$(UNIX_TOOLS_PATH)
+else
+PYTHON = python3
+ARM_COMPILER_PATH = $(realpath $(dir $(call rwildcard, $(MAXIM_LIBRARIES)/../Tools/GNUTools, *bin/arm-none-eabi-gcc)))
+export PATH := $(PATH):$(ARM_COMPILER_PATH)
 endif
 
 PLATFORM_RELATIVE_PATH = $1
@@ -81,12 +82,17 @@ CFLAGS += -DTARGET_REV=$(TARGET_REV) \
 	-DMAXIM_PLATFORM		\
 	-DTARGET_NUM=$(TARGET_NUMBER)
 
-SRC_TMP = $(foreach src,$(PERIPH_DRIVER_C_FILES),$(word 2,$(subst PeriphDrivers/, ,$(src))))
-DRIVER_C_FILES = $(foreach src,$(SRC_TMP),$(addprefix $(MAXIM_LIBRARIES)/PeriphDrivers/,$(src)))
+SRC_TMP = $(foreach src,$(PERIPH_DRIVER_C_FILES),$(word 2,$(subst PeriphDrivers, ,$(src))))
+DRIVER_C_FILES = $(foreach src,$(SRC_TMP),$(addprefix $(MAXIM_LIBRARIES)/PeriphDrivers,$(src)))
 
 PLATFORM_SRCS += $(DRIVER_C_FILES)
-INCLUDE_DIR_TMP = $(foreach src,$(PERIPH_DRIVER_INCLUDE_DIR),$(word 2,$(subst PeriphDrivers/, ,$(src))))
-DRIVER_INCLUDE_DIR = $(foreach src,$(INCLUDE_DIR_TMP),$(addprefix $(MAXIM_LIBRARIES)/PeriphDrivers/,$(src)))
+INCLUDE_DIR_TMP = $(foreach src,$(PERIPH_DRIVER_INCLUDE_DIR),$(word 2,$(subst PeriphDrivers, ,$(src))))
+DRIVER_INCLUDE_DIR = $(foreach src,$(INCLUDE_DIR_TMP),$(addprefix $(MAXIM_LIBRARIES)/PeriphDrivers,$(src)))
+
+ifeq ($(OS),Windows_NT)
+INCLUDE_DIR_TMP += /Include/$(TARGET_UCASE)
+endif
+
 INCS += $(foreach dir,$(DRIVER_INCLUDE_DIR), $(wildcard $(dir)/*.h))
 
 LSCRIPT = $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/$(TARGET_UCASE)/Source/GCC/$(TARGET_LCASE).ld
@@ -107,7 +113,7 @@ $(PROJECT_TARGET):
 	$(MUTE) $(call set_one_time_rule,$@)
 
 $(PLATFORM)_sdkopen:
-	$(shell python3 $(PLATFORM_TOOLS)/run_config.py $(NO-OS) $(BINARY) $(PROJECT) $(MAXIM_LIBRARIES) $(TARGET_LC) $(ARM_COMPILER_PATH))
+	$(shell $(PYTHON) $(PLATFORM_TOOLS)/run_config.py $(NO-OS) $(BINARY) $(PROJECT) $(MAXIM_LIBRARIES) $(TARGET_LC) $(ARM_COMPILER_PATH))
 	$(MUTE) code $(PROJECT)
 
 $(PLATFORM)_sdkclean: clean
