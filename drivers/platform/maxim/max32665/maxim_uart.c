@@ -309,7 +309,7 @@ int32_t no_os_uart_init(struct no_os_uart_desc **desc,
 		goto error;
 	}
 
-	ret = MXC_UART_Init(uart_regs, descriptor->baud_rate, MAP_A);
+	ret = MXC_UART_Init(uart_regs, descriptor->baud_rate, MAP_B);
 	if (ret != E_NO_ERROR) {
 		ret = -EINVAL;
 		goto error;
@@ -333,7 +333,7 @@ int32_t no_os_uart_init(struct no_os_uart_desc **desc,
 		goto error;
 	}
 
-	ret = MXC_UART_SetFlowCtrl(uart_regs, flow, 8, MAP_A);
+	ret = MXC_UART_SetFlowCtrl(uart_regs, flow, 8, MAP_B);
 	if (ret != E_NO_ERROR) {
 		ret = -EINVAL;
 		goto error;
