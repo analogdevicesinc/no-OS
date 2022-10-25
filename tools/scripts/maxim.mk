@@ -147,8 +147,11 @@ clean: clean_hex
 
 .PHONY: maxim_run
 $(PLATFORM)_run: all 
+ifneq ($(JTAG_CABLE_ID),)
+	@echo cmsis_dap_serial $(JTAG_CABLE_ID) > $(PLATFORM)_run
+endif
 	$(OPENOCD_BIN)/openocd -s $(OPENOCD_SCRIPTS) 		\
-		-f interface/cmsis-dap.cfg -f target/$(TARGETCFG) \
+		-f interface/cmsis-dap.cfg -f $(PLATFORM)_run -f target/$(TARGETCFG) \
 		-c "program $(BINARY) verify reset exit"
 
 .PHONY: debug
