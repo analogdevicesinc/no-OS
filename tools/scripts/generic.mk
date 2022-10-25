@@ -339,6 +339,13 @@ $(BINARY): $(LIB_TARGETS) $(OBJS) $(ASM_OBJS) $(LSCRIPT) $(BOOTOBJ)
 			 $(ASM_OBJS) $(LIB_FLAGS)
 	$(MUTE) $(MAKE) --no-print-directory post_build
 
+PHONY += $(BINARY).id
+$(BINARY).id:
+	@echo interface cmsis-dap > $(BINARY).id
+ifneq ($(JTAG_CABLE_ID),)
+	@echo cmsis_dap_serial $(JTAG_CABLE_ID) >> $(BINARY).id
+endif
+
 PHONY += run
 run: $(PLATFORM)_run
 	@$(call print,$(notdir $(BINARY)) uploaded to board)
