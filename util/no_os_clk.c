@@ -1,4 +1,4 @@
-/***************************************************************************//**
+/*******************************************************************************
  *   @file   no_os_clk.c
  *   @brief  Implementation of Clock Driver.
  *   @author DBogdan (dragos.bogdan@analog.com)
@@ -46,83 +46,132 @@
 /******************************************************************************/
 /************************** Functions Implementation **************************/
 /******************************************************************************/
+/**
+ * Initialize clock.
+ * @param desc - CLK descriptor.
+ * @param param - The structure that contains CLK parameters.
+ * @return 0 in case of success, -1 otherwise.
+ */
+int32_t no_os_clk_init(struct no_os_clk_desc **desc,
+		       const struct no_os_clk_init_param *param)
+{
+	int ret;
+
+	if (!desc || !param || !param->platform_ops)
+		return -EINVAL;
+
+	if (!param->platform_ops->init)
+		return -ENOSYS;
+
+	ret = param->platform_ops->init(desc, param);
+	if (ret)
+		return -EINVAL;
+
+	(*desc)->platform_ops = param->platform_ops;
+
+	return 0;
+}
+
+/**
+ * @brief Free the resources allocated by no_os_clk_init().
+ * @param desc - The clock descriptor.
+ * @return 0 in case of success, -1 otherwise.
+ */
+int32_t no_os_clk_remove(struct no_os_clk_desc *desc)
+{
+	if (!desc || !desc->platform_ops)
+		return -EINVAL;
+
+	if (!desc->platform_ops->remove)
+		return -ENOSYS;
+
+	return desc->platform_ops->remove(desc);
+}
 
 /**
  * Start the clock.
- * @param clk - The clock structure.
+ * @param clk - The clock descriptor.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t no_os_clk_enable(struct no_os_clk * clk)
+int32_t no_os_clk_enable(struct no_os_clk_desc *desc)
 {
-	if (clk->hw->dev_clk_enable)
-		return clk->hw->dev_clk_enable(clk->hw->dev);
-	else
-		return -1;
+	if (!desc || !desc->platform_ops)
+		return -EINVAL;
+
+	if (!desc->platform_ops->clk_enable)
+		return -ENOSYS;
+
+	return desc->platform_ops->clk_enable(desc);
 }
 
 /**
  * Stop the clock.
- * @param clk - The clock structure.
+ * @param clk - The clock descriptor.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t no_os_clk_disable(struct no_os_clk * clk)
+int32_t no_os_clk_disable(struct no_os_clk_desc *desc)
 {
-	if (clk->hw->dev_clk_disable)
-		return clk->hw->dev_clk_disable(clk->hw->dev);
-	else
-		return -1;
+	if (!desc || !desc->platform_ops)
+		return -EINVAL;
+
+	if (!desc->platform_ops->clk_disable)
+		return -ENOSYS;
+
+	return desc->platform_ops->clk_disable(desc);
 }
 
 /**
  * Get the current frequency of the clock.
- * @param clk - The clock structure.
+ * @param clk - The clock descriptor.
  * @param rate - The current frequency.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t no_os_clk_recalc_rate(struct no_os_clk *clk,
+int32_t no_os_clk_recalc_rate(struct no_os_clk_desc *desc,
 			      uint64_t *rate)
 {
-	if (clk->hw->dev_clk_recalc_rate)
-		return clk->hw->dev_clk_recalc_rate(clk->hw->dev,
-						    clk->hw_ch_num,
-						    rate);
-	else
-		return -1;
+	if (!desc || !desc->platform_ops || !rate)
+		return -EINVAL;
+
+	if (!desc->platform_ops->clk_recalc_rate)
+		return -ENOSYS;
+
+	return desc->platform_ops->clk_recalc_rate(desc, rate);
 }
 
 /**
  * Round the desired frequency to a rate that the clock can actually output.
- * @param clk - The clock structure.
+ * @param clk - The clock descriptor.
  * @param rate - The desired frequency.
  * @param rounded_rate - The rounded frequency.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t no_os_clk_round_rate(struct no_os_clk *clk,
+int32_t no_os_clk_round_rate(struct no_os_clk_desc *desc,
 			     uint64_t rate,
 			     uint64_t *rounded_rate)
 {
-	if (clk->hw->dev_clk_round_rate)
-		return clk->hw->dev_clk_round_rate(clk->hw->dev,
-						   clk->hw_ch_num,
-						   rate,
-						   rounded_rate);
-	else
-		return -1;
+	if (!desc || !desc->platform_ops || !rounded_rate)
+		return -EINVAL;
+
+	if (!desc->platform_ops->clk_round_rate)
+		return -ENOSYS;
+
+	return desc->platform_ops->clk_round_rate(desc, rate, rounded_rate);
 }
 
 /**
  * Change the frequency of the clock.
- * @param clk - The clock structure.
+ * @param clk - The clock descriptor.
  * @param rate - The desired frequency.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t no_os_clk_set_rate(struct no_os_clk *clk,
+int32_t no_os_clk_set_rate(struct no_os_clk_desc *desc,
 			   uint64_t rate)
 {
-	if (clk->hw->dev_clk_set_rate)
-		return clk->hw->dev_clk_set_rate(clk->hw->dev,
-						 clk->hw_ch_num,
-						 rate);
-	else
-		return -1;
+	if (!desc || !desc->platform_ops)
+		return -EINVAL;
+
+	if (!desc->platform_ops->clk_set_rate)
+		return -ENOSYS;
+
+	return desc->platform_ops->clk_set_rate(desc, rate);
 }
