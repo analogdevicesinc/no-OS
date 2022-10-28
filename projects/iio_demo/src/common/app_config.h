@@ -41,7 +41,7 @@
 
 #define ENABLE_LOOPBACK
 
-#define WIFI_SSID	"RouterSSID"
-#define WIFI_PWD	"******"
+#define WIFI_SSID	"AnalogDevices_5GHz"
+#define WIFI_PWD	"Analog123!"
 
 #endif
