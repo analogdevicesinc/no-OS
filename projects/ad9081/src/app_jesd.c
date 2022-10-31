@@ -115,7 +115,6 @@ int32_t app_jesd_init(struct no_os_clk clk[2],
 		3,
 		4,
 		0,
-		0,
 		tx_lane_clk_khz,
 		reference_clk_khz,
 	};
