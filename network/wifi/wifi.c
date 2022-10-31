@@ -44,6 +44,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 #include "wifi.h"
 #include "at_parser.h"
 #include "no_os_error.h"
@@ -138,6 +139,12 @@ static int32_t wifi_socket_listen(struct wifi_desc *desc, uint32_t sock_id,
 static int32_t wifi_socket_accept(struct wifi_desc *desc, uint32_t sock_id,
 				  uint32_t *client_socket_id);
 
+void _wifi_state(struct wifi_desc *desc, int socket, int state)
+{
+	printf("sock[%d] %d->%d\n", socket, desc->sockets[socket].state, state);
+	desc->sockets[socket].state = state;
+}
+
 /* Returns the index of a socket in SOCKET_UNUSED state */
 static inline int32_t _wifi_get_unused_socket(struct wifi_desc *desc,
 		uint32_t *idx)
@@ -146,7 +153,7 @@ static inline int32_t _wifi_get_unused_socket(struct wifi_desc *desc,
 
 	for (i = 0; i < NB_SOCKETS; i++)
 		if (desc->sockets[i].state == SOCKET_UNUSED) {
-			desc->sockets[i].state = SOCKET_DISCONNECTED;
+			_wifi_state(desc, i, SOCKET_DISCONNECTED);
 			*idx = i;
 
 			return 0;
@@ -154,12 +161,6 @@ static inline int32_t _wifi_get_unused_socket(struct wifi_desc *desc,
 
 	/* All the available connections are used */
 	return -EMLINK;
-}
-
-/* Marks the socket at the index id as SOCKET_UNUSED */
-static inline void _wifi_release_socket(struct wifi_desc *desc, uint32_t id)
-{
-	desc->sockets[id].state = SOCKET_UNUSED;
 }
 
 /* Set the socket connection ID with an ID that is not used yet */
@@ -246,7 +247,7 @@ static inline int32_t _get_initialized_client_id(struct wifi_desc *desc)
 	for (i = 0; i < desc->server.back_log_clients; i++) {
 		id = desc->server.client_ids[i];
 		if (desc->sockets[id].state == SOCKET_DISCONNECTED) {
-			desc->sockets[id].state = SOCKET_WAITING_ACCEPT;
+			_wifi_state(desc, i, SOCKET_WAITING_ACCEPT);
 
 			return id;
 		}
@@ -285,7 +286,7 @@ static void _wifi_connection_callback(void *ctx, enum at_event event,
 		}
 	} else if (event == AT_CLOSED_CONNECTION) {
 		if (sock_id != INVALID_ID) {
-			desc->sockets[sock_id].state = SOCKET_DISCONNECTED;
+			_wifi_state(desc, sock_id, SOCKET_DISCONNECTED);
 			_wifi_release_conn(desc, sock_id);
 		}
 	}
@@ -478,7 +479,7 @@ static int32_t wifi_socket_open(struct wifi_desc *desc, uint32_t *sock_id,
 
 	ret = no_os_cb_init(&desc->sockets[id].cb, buff_size);
 	if (NO_OS_IS_ERR_VALUE(ret)) {
-		_wifi_release_socket(desc, id);
+		_wifi_state(desc, id, SOCKET_UNUSED);
 		return ret;
 	}
 
@@ -528,10 +529,11 @@ static int32_t wifi_socket_close(struct wifi_desc *desc, uint32_t sock_id)
 		for (i = 0; i < desc->server.back_log_clients; i++) {
 			sock = &desc->sockets[desc->server.client_ids[i]];
 			no_os_cb_remove(sock->cb);
-			_wifi_release_socket(desc, desc->server.client_ids[i]);
+			_wifi_state(desc, desc->server.client_ids[i], SOCKET_UNUSED);
+
 		}
 	}
-	_wifi_release_socket(desc, sock_id);
+	_wifi_state(desc, sock_id, SOCKET_UNUSED);
 
 	return 0;
 }
@@ -798,7 +800,7 @@ static int32_t wifi_socket_listen(struct wifi_desc *desc, uint32_t sock_id,
 	if (NO_OS_IS_ERR_VALUE(ret))
 		goto free_resources;
 
-	desc->sockets[sock_id].state = SOCKET_LISTENING;
+	_wifi_state(desc, sock_id, SOCKET_LISTENING);
 
 	return 0;
 
@@ -823,7 +825,7 @@ static int32_t wifi_socket_accept(struct wifi_desc *desc, uint32_t sock_id,
 
 	for (i = 0; i < NB_SOCKETS; i++)
 		if (desc->sockets[i].state == SOCKET_WAITING_ACCEPT) {
-			desc->sockets[i].state = SOCKET_CONNECTED;
+			_wifi_state(desc, i, SOCKET_CONNECTED);
 			*client_socket_id = i;
 
 			return 0;
