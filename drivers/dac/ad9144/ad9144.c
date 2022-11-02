@@ -568,18 +568,18 @@ int32_t ad9144_setup(struct ad9144_dev **device,
 	ad9144_spi_write(dev, REG_SYNC_CTRL, 0x01);	// sync-oneshot mode
 	ad9144_spi_write(dev, REG_SYNC_CTRL, 0x81);	// sync-enable
 	ad9144_spi_write(dev, REG_SYNC_CTRL, 0xc1);	// sysref-armed
-	ad9144_spi_write(dev, REG_XBAR_LN_0_1,
-			 SRC_LANE0(init_param->jesd204_lane_xbar[0]) |
-			 SRC_LANE1(init_param->jesd204_lane_xbar[1]));
-	ad9144_spi_write(dev, REG_XBAR_LN_2_3,
-			 SRC_LANE2(init_param->jesd204_lane_xbar[2]) |
-			 SRC_LANE3(init_param->jesd204_lane_xbar[3]));
-	ad9144_spi_write(dev, REG_XBAR_LN_4_5,
-			 SRC_LANE4(init_param->jesd204_lane_xbar[4]) |
-			 SRC_LANE5(init_param->jesd204_lane_xbar[5]));
-	ad9144_spi_write(dev, REG_XBAR_LN_6_7,
-			 SRC_LANE6(init_param->jesd204_lane_xbar[6]) |
-			 SRC_LANE7(init_param->jesd204_lane_xbar[7]));
+	ad9144_spi_write(dev, REG_XBAR(0),
+			 SRC_LANE0(init_param->lane_mux[0]) |
+			 SRC_LANE1(init_param->lane_mux[1]));
+	ad9144_spi_write(dev, REG_XBAR(1),
+			 SRC_LANE2(init_param->lane_mux[2]) |
+			 SRC_LANE3(init_param->lane_mux[3]));
+	ad9144_spi_write(dev, REG_XBAR(2),
+			 SRC_LANE4(init_param->lane_mux[4]) |
+			 SRC_LANE5(init_param->lane_mux[5]));
+	ad9144_spi_write(dev, REG_XBAR(3),
+			 SRC_LANE6(init_param->lane_mux[6]) |
+			 SRC_LANE7(init_param->lane_mux[7]));
 	ad9144_spi_write(dev, REG_GENERAL_JRX_CTRL_0, 0x01);	// enable link
 
 	// dac calibration
