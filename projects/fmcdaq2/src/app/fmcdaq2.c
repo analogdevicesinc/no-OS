@@ -990,9 +990,9 @@ static int fmcdaq2_setup(struct fmcdaq2_dev *dev,
 	if (status != 0)
 		return status;
 
-	status = ad9144_setup(&dev->ad9144_device, &dev_init->ad9144_param);
+	status = ad9144_setup_legacy(&dev->ad9144_device, &dev_init->ad9144_param);
 	if (status != 0) {
-		printf("error: ad9144_setup() failed\n");
+		printf("error: ad9144_setup_legacy() failed\n");
 		return status;
 	}
 
