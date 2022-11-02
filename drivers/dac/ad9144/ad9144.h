@@ -232,10 +232,7 @@
 #define REG_LMFC_DELAY_1			0x305 /* Register 4 description */
 #define REG_LMFC_VAR_0				0x306 /* Register 5 description */
 #define REG_LMFC_VAR_1				0x307 /* Register 6 description */
-#define REG_XBAR_LN_0_1				0x308 /* Register 7 description */
-#define REG_XBAR_LN_2_3				0x309 /* Register 8 description */
-#define REG_XBAR_LN_4_5				0x30A /* Register 9 description */
-#define REG_XBAR_LN_6_7				0x30B /* Register 10 description */
+#define REG_XBAR(x)				(0x308 +(x)) /* Register 7 description */
 #define REG_FIFO_STATUS_REG_0			0x30C /* Register 11 description */
 #define REG_FIFO_STATUS_REG_1			0x30D /* Register 12 description */
 #define REG_FIFO_STATUS_REG_2			0x30E /* Register 13 description */
@@ -1382,7 +1379,7 @@ struct ad9144_init_param {
 	uint8_t		jesd204_mode;
 	uint8_t		jesd204_subclass;
 	uint8_t		jesd204_scrambling;
-	uint8_t		jesd204_lane_xbar[8];
+	uint8_t		lane_mux[8];
 
 	/* Whether to enable the internal DAC PLL (0=disable, 1=enable) */
 	uint8_t		pll_enable;
