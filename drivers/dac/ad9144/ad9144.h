@@ -46,6 +46,7 @@
 #include "no_os_delay.h"
 #include "no_os_spi.h"
 #include "no_os_util.h"
+#include "jesd204.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -1361,9 +1362,24 @@ struct ad9144_dev {
 	/* SPI */
 	struct no_os_spi_desc *spi_desc;
 
+	struct jesd204_dev *jdev;
+	struct jesd204_link link_config;
+
 	uint32_t sample_rate_khz;
 	uint8_t num_converters;
 	uint8_t num_lanes;
+
+	unsigned int interpolation;
+	unsigned int fcenter_shift;
+
+	uint8_t lane_mux[8];
+
+	/* Whether to enable the internal DAC PLL (0=disable, 1=enable) */
+	uint8_t		pll_enable;
+	/* When using the DAC PLL this specifies the external reference clock frequency in kHz. */
+	uint32_t	pll_ref_frequency_khz;
+	/* When using the DAC PLL this specifies the target PLL output frequency in kHz. */
+	uint32_t	pll_dac_frequency_khz;
 };
 
 struct ad9144_init_param {
@@ -1371,7 +1387,10 @@ struct ad9144_init_param {
 	struct no_os_spi_init_param	spi_init;
 	/* Device Settings */
 	uint8_t		spi3wire; // set device spi intereface 3/4 wires
+	uint8_t		num_converters;
+	uint8_t		num_lanes;
 	uint8_t		interpolation; // interpolation factor
+	unsigned int fcenter_shift;
 	uint32_t	stpl_samples[4][4];
 	uint32_t	lane_rate_kbps;
 	uint32_t	prbs_type;
@@ -1392,8 +1411,12 @@ struct ad9144_init_param {
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
-int32_t ad9144_setup(struct ad9144_dev **device,
-		     const struct ad9144_init_param *init_param);
+int32_t ad9144_setup_legacy(struct ad9144_dev **device,
+			    const struct ad9144_init_param *init_param);
+
+/* Initialize ad9144_dev, JESD FSM ON*/
+int32_t ad9144_setup_jesd_fsm(struct ad9144_dev **device,
+			      const struct ad9144_init_param *init_param);
 
 int32_t ad9144_remove(struct ad9144_dev *dev);
 
