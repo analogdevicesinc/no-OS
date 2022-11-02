@@ -593,9 +593,9 @@ static int fmcdaq2_dac_init(struct fmcdaq2_dev *dev,
 	};
 
 	for(uint32_t n=0;
-	    n < NO_OS_ARRAY_SIZE(dev_init->ad9144_param.jesd204_lane_xbar);
+	    n < NO_OS_ARRAY_SIZE(dev_init->ad9144_param.lane_mux);
 	    n++)
-		dev_init->ad9144_param.jesd204_lane_xbar[n] = n;
+		dev_init->ad9144_param.lane_mux[n] = n;
 
 	dev_init->ad9144_param.stpl_samples[0][0] =
 		(dev->ad9144_channels[0].pat_data >> 0)  & 0xffff;
