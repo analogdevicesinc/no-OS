@@ -434,6 +434,13 @@ int32_t ad9523_setup(struct ad9523_dev **device,
 	uint32_t reg_data;
 	uint32_t version_id;
 	struct ad9523_dev *dev;
+	struct no_os_clk_desc **clocks;
+	struct no_os_clk_init_param clk_init;
+	const char *names[AD9523_NUM_CHAN] = {
+				 "clock_0", "clock_1", "clock_2", "clock_3", "clock_4",
+				 "clock_5", "clock_6", "clock_7", "clock_8", "clock_9",
+				 "clock_10", "clock_11", "clock_12", "clock_13"
+				};
 
 	dev = (struct ad9523_dev *)malloc(sizeof(*dev));
 	if (!dev)
@@ -443,6 +450,26 @@ int32_t ad9523_setup(struct ad9523_dev **device,
 	ret = no_os_spi_init(&dev->spi_desc, &init_param->spi_init);
 	if (ret < 0)
 		return ret;
+
+	if (init_param->export_no_os_clk) {
+		clocks = malloc(AD9523_NUM_CHAN * sizeof(struct no_os_clk_desc *));
+		if (!clocks)
+			return -1;
+		for (i = 0; i < AD9523_NUM_CHAN; i++) {
+			clocks[i] = malloc(sizeof(struct no_os_clk_desc));
+			if (!clocks[i])
+				return -1;
+			/* Initialize clk component */
+			clk_init.name = names[i];
+			clk_init.hw_ch_num = i;
+			clk_init.platform_ops = &ad9523_clk_ops;
+			clk_init.dev_desc = dev;
+
+			ret = no_os_clk_init(&dev->clk_desc[i], &clk_init);
+			if (ret)
+				return ret;
+		}
+	}
 
 	dev->pdata = init_param->pdata;
 
@@ -737,3 +764,157 @@ int32_t ad9523_remove(struct ad9523_dev *dev)
 
 	return ret;
 }
+
+/*******************************************************************************
+ * @brief Initialize the CLK structure.
+ *
+ * @param desc - The CLK descriptor.
+ * @param init_param - The structure holding the device initial parameters.
+ *
+ * @return 0 in case of success, negative error code otherwise.
+*******************************************************************************/
+static int ad9523_clk_init(struct no_os_clk_desc **desc,
+			   const struct no_os_clk_init_param *init_param)
+{
+	struct ad9523_dev *ad9523_d;
+
+	/* Exit if we have no init_params */
+	if (!init_param) {
+		return -1;
+	}
+
+	*desc = calloc(1, sizeof(**desc));
+	/* Exit if memory cannot be allocated */
+	if(! *desc) {
+		free(*desc);
+		return -1;
+	}
+
+	ad9523_d = init_param->dev_desc;
+	/* Exit if no hardware device specified in init_param */
+	if(!ad9523_d) {
+		free(*desc);
+		return -1;
+	}
+
+	(*desc)->name = init_param->name;
+	(*desc)->hw_ch_num = init_param->hw_ch_num;
+
+	(*desc)->dev_desc = (void *)calloc(1, sizeof(struct ad9523_dev));
+
+	(*desc)->dev_desc = init_param->dev_desc;
+
+	return 0;
+}
+
+/*******************************************************************************
+ * @brief Remove the CLK structure.
+ *
+ * @param desc - The CLK descriptor.
+ *
+ * @return 0 in case of success, negative error code otherwise.
+*******************************************************************************/
+static int ad9523_clk_remove(struct no_os_clk_desc *desc)
+{
+	struct ad9523_dev *ad9523_dev;
+	int ret;
+
+	ad9523_dev = desc->dev_desc;
+
+	if(!ad9523_dev)
+		return -1;
+
+	free(desc);
+
+	ret = ad9523_remove(desc->dev_desc);
+	if (ret) {
+		free(desc->dev_desc);
+		return ret;
+	}
+
+	return 0;
+}
+
+/*******************************************************************************
+ * @brief Start the clock.
+ *
+ * @param desc - The CLK descriptor.
+ *
+ * @return 0 in case of success, negative error code otherwise.
+*******************************************************************************/
+static int ad9524_clk_enable(struct no_os_clk_desc *desc)
+{
+	int ret;
+	uint32_t data;
+
+	ret = ad9523_spi_read(desc->dev_desc,
+			      AD9523_CHANNEL_CLOCK_DIST(desc->hw_ch_num),
+			      &data);
+	if (ret)
+		return ret;
+
+	data &= ~AD9523_CLK_DIST_PWR_DOWN_EN;
+
+	ret = ad9523_spi_write(desc->dev_desc,
+			       AD9523_CHANNEL_CLOCK_DIST(desc->hw_ch_num),
+			       data);
+	if (ret)
+		return ret;
+
+	ret = ad9523_status(desc->dev_desc);
+	if (ret)
+		return ret;
+
+	ret = ad9523_io_update(desc->dev_desc);
+	if (ret)
+		return ret;
+
+	return ad9523_sync(desc->dev_desc);
+}
+
+/*******************************************************************************
+ * @brief Stop the clock.
+ *
+ * @param desc - The CLK descriptor.
+ *
+ * @return 0 in case of success, negative error code otherwise.
+*******************************************************************************/
+static int ad9524_clk_disable(struct no_os_clk_desc *desc)
+{
+	int ret;
+	uint32_t data;
+
+	ret = ad9523_spi_read(desc->dev_desc,
+			      AD9523_CHANNEL_CLOCK_DIST(desc->hw_ch_num),
+			      &data);
+	if (ret)
+		return ret;
+
+	data |= AD9523_CLK_DIST_PWR_DOWN_EN;
+
+	ret = ad9523_spi_write(desc->dev_desc,
+			       AD9523_CHANNEL_CLOCK_DIST(desc->hw_ch_num),
+			       data);
+	if (ret)
+		return ret;
+
+	ret = ad9523_status(desc->dev_desc);
+	if (ret)
+		return ret;
+
+	ret = ad9523_io_update(desc->dev_desc);
+	if (ret)
+		return ret;
+
+	return ad9523_sync(desc->dev_desc);
+}
+
+/*******************************************************************************
+ * @brief ad9523 platform specific CLK platform ops structure
+*******************************************************************************/
+const struct no_os_clk_platform_ops ad9523_clk_ops = {
+	.init = &ad9523_clk_init,
+	.clk_enable = &ad9524_clk_enable,
+	.clk_disable = &ad9524_clk_disable,
+	.remove = &ad9523_clk_remove
+};

@@ -287,6 +287,7 @@ static int fmcdaq2_clk_init(struct fmcdaq2_dev *dev,
 	int ret;
 
 	/* clock distribution device (AD9523) configuration */
+	dev_init->ad9523_param.export_no_os_clk = true;
 	ad9523_pdata.num_channels = 8;
 	ad9523_pdata.channels = &dev->ad9523_channels[0];
 	dev_init->ad9523_param.pdata = &ad9523_pdata;

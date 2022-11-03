@@ -44,8 +44,10 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include <stdint.h>
+#include <stdbool.h>
 #include "no_os_delay.h"
 #include "no_os_spi.h"
+#include "no_os_clk.h"
 
 /******************************************************************************/
 /****************************** AD9523 ****************************************/
@@ -477,6 +479,8 @@ enum ad9523_out_frequencies {
 struct ad9523_dev {
 	/* SPI */
 	struct no_os_spi_desc		*spi_desc;
+	/* CLK descriptors */
+	struct no_os_clk_desc		**clk_desc;
 	/* Device Settings */
 	struct ad9523_state		ad9523_st;
 	struct ad9523_platform_data	*pdata;
@@ -485,9 +489,16 @@ struct ad9523_dev {
 struct ad9523_init_param {
 	/* SPI */
 	struct no_os_spi_init_param	spi_init;
+	/* Init CLK channel descriptors */
+	bool export_no_os_clk;
 	/* Device Settings */
 	struct ad9523_platform_data	*pdata;
 };
+
+/**
+ * @brief ad9523 specific CLK platform ops structure
+ */
+extern const struct no_os_clk_platform_ops ad9523_clk_ops;
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
