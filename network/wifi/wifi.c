@@ -247,8 +247,7 @@ static inline int32_t _get_initialized_client_id(struct wifi_desc *desc)
 	for (i = 0; i < desc->server.back_log_clients; i++) {
 		id = desc->server.client_ids[i];
 		if (desc->sockets[id].state == SOCKET_DISCONNECTED) {
-			_wifi_state(desc, i, SOCKET_WAITING_ACCEPT);
-
+			//_wifi_state(desc, i, SOCKET_WAITING_ACCEPT);
 			return id;
 		}
 	}
@@ -818,10 +817,6 @@ static int32_t wifi_socket_accept(struct wifi_desc *desc, uint32_t sock_id,
 
 	if (!desc || !client_socket_id || desc->server.id != sock_id)
 		return -EINVAL;
-
-	/* Bind should be called first */
-	if (desc->sockets[desc->server.id].state != SOCKET_LISTENING)
-		return -ENOTCONN;
 
 	for (i = 0; i < NB_SOCKETS; i++)
 		if (desc->sockets[i].state == SOCKET_WAITING_ACCEPT) {
