@@ -98,7 +98,7 @@
 /******************************************************************************/
 
 /** @brief Maximum number of connection the ESP8266 module can handle */
-#define MAX_CONNECTIONS				4
+#define MAX_CONNECTIONS				1
 /** @brief Maximum data to send on a chipsend command */
 #define MAX_CIPSEND_DATA			2048
 

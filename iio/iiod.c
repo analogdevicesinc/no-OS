@@ -405,7 +405,7 @@ int32_t iiod_conn_add(struct iiod_desc *desc, struct iiod_conn_data *data,
 	if (!desc || !new_conn_id)
 		return -EINVAL;
 
-	for (i = 0; i < IIOD_MAX_CONNECTIONS; ++i)
+	for (i = 0; i < IIOD_MAX_CONNECTIONS; i++)
 		if (!desc->conns[i].used) {
 			conn = &desc->conns[i];
 			memset(conn, 0, sizeof(*conn));

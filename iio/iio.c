@@ -68,9 +68,9 @@
 /******************************************************************************/
 
 #define IIOD_PORT		30431
-#define MAX_SOCKET_TO_HANDLE	10
+#define MAX_SOCKET_TO_HANDLE	1
 #define REG_ACCESS_ATTRIBUTE	"direct_reg_access"
-#define IIOD_CONN_BUFFER_SIZE	0x1000
+#define IIOD_CONN_BUFFER_SIZE	3072
 #define NO_TRIGGER				(uint32_t)-1
 
 /******************************************************************************/
@@ -78,6 +78,7 @@
 /******************************************************************************/
 
 static char uart_buff[IIOD_CONN_BUFFER_SIZE];
+static uint8_t iio_socket_buf[MAX_SOCKET_TO_HANDLE][1000];
 
 static char header[] =
 	"<?xml version=\"1.0\" encoding=\"utf-8\"?>"
@@ -213,7 +214,6 @@ struct iio_desc {
 	/* FIFO for socket descriptors */
 	struct no_os_circular_buffer	*conns;
 #ifdef NO_OS_NETWORKING
-	struct tcp_socket_desc	*current_sock;
 	/* Instance of server socket */
 	struct tcp_socket_desc	*server;
 #endif
@@ -1398,7 +1398,7 @@ static int32_t accept_network_clients(struct iio_desc *desc)
 			return ret;
 
 		data.conn = sock;
-		data.buf = calloc(1, IIOD_CONN_BUFFER_SIZE);
+		data.buf = &iio_socket_buf[id]; // calloc(1, IIOD_CONN_BUFFER_SIZE);
 		data.len = IIOD_CONN_BUFFER_SIZE;
 
 		ret = iiod_conn_add(desc->iiod, &data, &id);
@@ -1445,7 +1445,7 @@ int iio_step(struct iio_desc *desc)
 		if (desc->server) {
 			iiod_conn_remove(desc->iiod, conn_id, &data);
 			socket_remove(data.conn);
-			free(data.buf);
+			//free(data.buf);
 		}
 #endif
 	} else {
