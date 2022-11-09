@@ -334,7 +334,7 @@ int32_t xil_irq_trigger_level_set(struct no_os_irq_ctrl_desc *desc,
  * @return 0 in case of success, -1 otherwise.
  */
 int32_t xil_irq_unregister_callback(struct no_os_irq_ctrl_desc *desc,
-				    uint32_t irq_id, struct callback_desc *cb)
+				    uint32_t irq_id, struct no_os_callback_desc *cb)
 {
 	struct xil_irq_desc *xil_dev = desc->extra;
 
