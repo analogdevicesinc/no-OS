@@ -671,7 +671,7 @@ int main(void)
 
 	struct no_os_callback_desc rx_dmac_callback = {
 		.ctx = rx_dmac,
-		.legacy_callback = axi_dmac_default_isr,
+		.callback = axi_dmac_dev_to_mem_isr,
 	};
 
 	status = no_os_irq_register_callback(irq_desc,
@@ -699,7 +699,7 @@ int main(void)
 #ifdef ADC_DMA_IRQ_EXAMPLE
 	struct no_os_callback_desc tx_dmac_callback = {
 		.ctx = tx_dmac,
-		.legacy_callback = axi_dmac_default_isr,
+		.callback = axi_dmac_mem_to_dev_isr,
 	};
 
 	status = no_os_irq_register_callback(irq_desc,
