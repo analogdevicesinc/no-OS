@@ -675,16 +675,16 @@ int main(void)
 	};
 
 	status = no_os_irq_register_callback(irq_desc,
-					     XPAR_FABRIC_AXI_AD9361_ADC_DMA_IRQ_INTR, &rx_dmac_callback);
+					     AD9361_ADC_DMA_IRQ_INTR, &rx_dmac_callback);
 	if(status < 0)
 		return status;
 
 	status = no_os_irq_trigger_level_set(irq_desc,
-					     XPAR_FABRIC_AXI_AD9361_ADC_DMA_IRQ_INTR, NO_OS_IRQ_LEVEL_HIGH);
+					     AD9361_ADC_DMA_IRQ_INTR, NO_OS_IRQ_LEVEL_HIGH);
 	if(status < 0)
 		return status;
 
-	status = no_os_irq_enable(irq_desc, XPAR_FABRIC_AXI_AD9361_ADC_DMA_IRQ_INTR);
+	status = no_os_irq_enable(irq_desc, AD9361_ADC_DMA_IRQ_INTR);
 	if(status < 0)
 		return status;
 
@@ -703,11 +703,11 @@ int main(void)
 	};
 
 	status = no_os_irq_register_callback(irq_desc,
-					     XPAR_FABRIC_AXI_AD9361_DAC_DMA_IRQ_INTR, &tx_dmac_callback);
+					     AD9361_DAC_DMA_IRQ_INTR, &tx_dmac_callback);
 	if(status < 0)
 		return status;
 
-	status = no_os_irq_enable(irq_desc, XPAR_FABRIC_AXI_AD9361_DAC_DMA_IRQ_INTR);
+	status = no_os_irq_enable(irq_desc, AD9361_DAC_DMA_IRQ_INTR);
 	if(status < 0)
 		return status;
 #endif

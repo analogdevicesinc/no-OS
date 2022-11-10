@@ -163,4 +163,14 @@
 #define GPIO_RESET_PIN	1006
 #endif
 
+/* Workaround for correcting the erroneous generation of defines
+ * for DMA IRQs from the *.xsa file. This is a HDL known issue. */
+#ifdef PLATFORM_ZYNQ
+#define AD9361_DAC_DMA_IRQ_INTR		88
+#define AD9361_ADC_DMA_IRQ_INTR		89
+#else
+#define AD9361_DAC_DMA_IRQ_INTR		XPAR_FABRIC_AXI_AD9361_DAC_DMA_IRQ_INTR
+#define AD9361_ADC_DMA_IRQ_INTR		XPAR_FABRIC_AXI_AD9361_ADC_DMA_IRQ_INTR
+#endif
+
 #endif // __PARAMETERS_H__
