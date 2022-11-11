@@ -97,6 +97,7 @@ int32_t mbed_i2c_init(struct no_os_i2c_desc **desc,
 	i2c->frequency(param->max_speed_hz);
 
 	mbed_i2c_desc->i2c_port = i2c;
+	mbed_i2c_desc->i2c_slave_addr = i2c_desc->slave_address;
 	i2c_desc->extra = mbed_i2c_desc;
 
 	*desc = i2c_desc;
@@ -148,11 +149,13 @@ int32_t mbed_i2c_write(struct no_os_i2c_desc *desc,
 		       uint8_t stop_bit)
 {
 	mbed::I2C *i2c;
+	uint8_t slave_address;
 
 	if (!desc  || !desc->extra || !data)
 		return -EINVAL;
 
 	i2c = (I2C *)(((mbed_i2c_desc *)(desc->extra))->i2c_port);
+	slave_address = ((mbed_i2c_desc *)(desc->extra))->i2c_slave_addr;
 
 	/**
 	    The MBED I2C API is reversed for parameter 4
@@ -160,7 +163,7 @@ int32_t mbed_i2c_write(struct no_os_i2c_desc *desc,
 	    @param repeated   - Repeated start, true - don't send stop at end default value is false.
 	    Inverting here to keep the no-OS/platform_drivers API
 	 */
-	if (i2c->write(desc->slave_address, (char *)data, bytes_number, !stop_bit))
+	if (i2c->write(slave_address, (char *)data, bytes_number, !stop_bit))
 		return -EINVAL;
 
 	return 0;
@@ -182,11 +185,13 @@ int32_t mbed_i2c_read(struct no_os_i2c_desc *desc,
 		      uint8_t stop_bit)
 {
 	mbed::I2C *i2c;
+	uint8_t slave_address;
 
 	if (!desc  || !desc->extra || !data)
 		return -EINVAL;
 
 	i2c = (I2C *)(((mbed_i2c_desc *)(desc->extra))->i2c_port);
+	slave_address = ((mbed_i2c_desc *)(desc->extra))->i2c_slave_addr;
 
 	/**
 	    The MBED I2C API is reversed for parameter 4
@@ -194,9 +199,33 @@ int32_t mbed_i2c_read(struct no_os_i2c_desc *desc,
 	    @param repeated   - Repeated start, true - don't send stop at end default value is false.
 	    Inverting here to keep the no-OS/platform_drivers API
 	 */
-	if (i2c->read(desc->slave_address, (char *)data, bytes_number, !stop_bit))
+	if (i2c->read(slave_address, (char *)data, bytes_number, !stop_bit))
 		return -EINVAL;
 
+	return 0;
+}
+
+/**
+ * @brief Store the I2C slave address.
+ * @param desc[in] - The I2C descriptor.
+ * @param slave_addr[in] - I2C slave address.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t store_i2c_slave_address(struct no_os_i2c_desc *desc, uint8_t slave_addr)
+{
+	struct mbed_i2c_desc *mbed_i2c_desc;
+
+	if (!desc)
+		return -EINVAL;
+
+	mbed_i2c_desc = (struct mbed_i2c_desc *)desc->extra;
+
+	/* Address passed in parameter shifted left by 1 to form
+	 * 7-bit i2c slave address (7 MSBs) and the LSB acts as
+	 * r/w bit during i2c read/write operations */
+	mbed_i2c_desc->i2c_slave_addr = (slave_addr << 1);
+
+	desc->extra = mbed_i2c_desc;
 	return 0;
 }
 

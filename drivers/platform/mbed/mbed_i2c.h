@@ -49,6 +49,7 @@ extern "C"
 /******************************************************************************/
 
 #include <stdio.h>
+#include "no_os_i2c.h"
 
 /******************************************************************************/
 /********************** Variables and User defined data types *****************/
@@ -76,6 +77,7 @@ struct mbed_i2c_init_param {
 * @brief I2C specific descriptor for the mbed platform.
 */
 struct mbed_i2c_desc {
+	uint8_t i2c_slave_addr;	// I2C slave address
 	void *i2c_port;  		// I2C port instance (mbed::I2C)
 };
 
@@ -87,6 +89,9 @@ extern const struct no_os_i2c_platform_ops mbed_i2c_ops;
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
+
+int32_t store_i2c_slave_address(struct no_os_i2c_desc *desc,
+				uint8_t slave_addr);
 
 #ifdef __cplusplus // Closing extern c
 }
