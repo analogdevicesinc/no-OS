@@ -101,6 +101,31 @@ int32_t ad463x_spi_reg_write(struct ad463x_dev *dev,
 }
 
 /**
+ * @brief SPI read device register using a mask.
+ * @param dev - The device structure.
+ * @param reg_addr - The register address.
+ * @param mask - The mask.
+ * @param data - The data read from the register.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad463x_spi_reg_read_masked(struct ad463x_dev *dev,
+				   uint16_t reg_addr,
+				   uint8_t mask,
+				   uint8_t *data)
+{
+	uint8_t reg_data;
+	int32_t ret;
+
+	ret = ad463x_spi_reg_read(dev, reg_addr, &reg_data);
+	if (ret != 0)
+		return ret;
+
+	*data = no_os_field_get(mask, reg_data);
+
+	return ret;
+}
+
+/**
  * @brief SPI write device register using a mask.
  * @param dev - The device structure.
  * @param reg_addr - The register address.
