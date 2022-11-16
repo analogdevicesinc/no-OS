@@ -326,7 +326,7 @@ uint16_t no_os_get_unaligned_le16(uint8_t *buf)
 void no_os_put_unaligned_be24(uint32_t val, uint8_t *buf)
 {
 	buf[2] = val & 0xFF;
-	buf[1] = (val >> 8) && 0xFF;
+	buf[1] = (val >> 8) & 0xFF;
 	buf[0] = val >> 16;
 }
 
@@ -338,7 +338,7 @@ uint32_t no_os_get_unaligned_be24(uint8_t *buf)
 void no_os_put_unaligned_le24(uint32_t val, uint8_t *buf)
 {
 	buf[0] = val & 0xFF;
-	buf[1] = (val >> 8) && 0xFF;
+	buf[1] = (val >> 8) & 0xFF;
 	buf[2] = val >> 16;
 }
 
@@ -350,8 +350,8 @@ uint32_t no_os_get_unaligned_le24(uint8_t *buf)
 void no_os_put_unaligned_be32(uint32_t val, uint8_t *buf)
 {
 	buf[3] = val & 0xFF;
-	buf[2] = (val >> 8) && 0xFF;
-	buf[1] = (val >> 16) && 0xFF;
+	buf[2] = (val >> 8) & 0xFF;
+	buf[1] = (val >> 16) & 0xFF;
 	buf[0] = val >> 24;
 }
 
@@ -364,8 +364,8 @@ uint32_t no_os_get_unaligned_be32(uint8_t *buf)
 void no_os_put_unaligned_le32(uint32_t val, uint8_t *buf)
 {
 	buf[0] = val & 0xFF;
-	buf[1] = (val >> 8) && 0xFF;
-	buf[2] = (val >> 16) && 0xFF;
+	buf[1] = (val >> 8) & 0xFF;
+	buf[2] = (val >> 16) & 0xFF;
 	buf[3] = val >> 24;
 }
 
