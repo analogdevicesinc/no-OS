@@ -5,6 +5,7 @@ IIO_TRIGGER_EXAMPLE = y
 
 # Select the device you want to enable by choosing y for enabling and n for disabling
 ADXL355 = y
+ADXL357 = n
 ADXL359 = n
 include ../../tools/scripts/generic_variables.mk
 
