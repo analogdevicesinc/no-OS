@@ -96,6 +96,15 @@ struct no_os_spi_msg {
 	uint32_t		bytes_number;
 	/** If set, CS will be deasserted after the transfer */
 	uint8_t			cs_change;
+	/**
+	 * Minimum delay (in us) between the CS de-assert event of the current message
+	 * and the assert of the next one.
+	 */
+	uint32_t		cs_change_delay;
+	/** Delay (in us) between the CS assert and the first SCLK edge. */
+	uint32_t		cs_delay_first;
+	/** Delay (in us) between the last SCLK edge and the CS deassert */
+	uint32_t		cs_delay_last;
 };
 
 /**
