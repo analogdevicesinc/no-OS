@@ -311,6 +311,9 @@ int adxl355_soft_reset(struct adxl355_dev *dev)
 	if ((!nb_of_retries) || ret)
 		return -EAGAIN;
 
+	// Delay is needed between soft reset command and shadow registers reading
+	no_os_mdelay(1);
+
 	// Read the shadow registers
 	ret = adxl355_read_device_data(dev,
 				       ADXL355_ADDR(ADXL355_SHADOW_REGISTER_BASE_ADDR),
