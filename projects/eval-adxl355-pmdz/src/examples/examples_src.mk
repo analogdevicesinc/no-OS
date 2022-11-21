@@ -1,5 +1,7 @@
 ifeq (y,$(strip $(ADXL355)))
 CFLAGS += -DADXL355_DEV=1
+else ifeq (y,$(strip $(ADXL357)))
+CFLAGS += -DADXL357_DEV=1
 else
 CFLAGS += -DADXL359_DEV=1
 endif
