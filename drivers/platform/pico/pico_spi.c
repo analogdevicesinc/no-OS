@@ -46,6 +46,7 @@
 #include "no_os_spi.h"
 #include "pico_spi.h"
 #include "pico/stdlib.h"
+#include "no_os_delay.h"
 #include "hardware/resets.h"
 
 /******************************************************************************/
@@ -243,12 +244,21 @@ int32_t pico_spi_transfer(struct no_os_spi_desc *desc,
 		/* Assert CS */
 		gpio_put(pico_spi->spi_cs_pin, 0);
 
+		if(msgs[i].cs_delay_first)
+			no_os_udelay(msgs[i].cs_delay_first);
+
 		spi_write_read_blocking(pico_spi->spi_instance, msgs[i].tx_buff,
 					msgs[i].rx_buff, msgs[i].bytes_number);
+
+		if(msgs[i].cs_delay_last)
+			no_os_udelay(msgs[i].cs_delay_last);
 
 		if (msgs[i].cs_change)
 			/* De-assert CS */
 			gpio_put(pico_spi->spi_cs_pin, 1);
+
+		if(msgs[i].cs_change_delay)
+			no_os_udelay(msgs[i].cs_change_delay);
 	}
 
 	return 0;
