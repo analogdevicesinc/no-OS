@@ -49,8 +49,9 @@
 /******************************************************************************/
 static uint8_t shadow_reg_val[5] = {0, 0, 0, 0, 0};
 static const uint8_t adxl355_scale_mul[4] = {0, 1, 2, 4};
-static const uint8_t adxl355_part_id[2] = {
+static const uint8_t adxl355_part_id[] = {
 	[ID_ADXL355] = GET_ADXL355_RESET_VAL(ADXL355_PARTID),
+	[ID_ADXL357] = GET_ADXL355_RESET_VAL(ADXL355_PARTID),
 	[ID_ADXL359] = GET_ADXL355_RESET_VAL(ADXL359_PARTID),
 };
 
@@ -144,8 +145,14 @@ int adxl355_init(struct adxl355_dev **device,
 	int ret;
 	uint8_t reg_value;
 
-	if(init_param.dev_type != ID_ADXL355 && init_param.dev_type != ID_ADXL359)
+	switch (init_param.dev_type) {
+	case ID_ADXL355:
+	case ID_ADXL357:
+	case ID_ADXL359:
+		break;
+	default:
 		return -EINVAL;
+	}
 
 	dev = (struct adxl355_dev *)calloc(1, sizeof(*dev));
 
@@ -631,6 +638,7 @@ int adxl355_get_temp(struct adxl355_dev *dev, struct adxl355_frac_repr *temp)
 
 	switch(dev->dev_type) {
 	case ID_ADXL355:
+	case ID_ADXL357:
 		divisor = ADXL355_TEMP_OFFSET_DIV*ADXL355_TEMP_SCALE_FACTOR_DIV;
 		break;
 	case ID_ADXL359:
@@ -942,6 +950,7 @@ static int64_t adxl355_accel_conv(struct adxl355_dev *dev,
 	case ID_ADXL355:
 		return ((int64_t)(accel_data * ADXL355_ACC_SCALE_FACTOR_MUL *
 				  adxl355_scale_mul[dev->range]));
+	case ID_ADXL357:
 	case ID_ADXL359:
 		return ((int64_t)(accel_data * ADXL359_ACC_SCALE_FACTOR_MUL *
 				  adxl355_scale_mul[dev->range]));
@@ -962,6 +971,7 @@ static int64_t adxl355_temp_conv(struct adxl355_dev *dev, uint16_t raw_temp)
 {
 	switch(dev->dev_type) {
 	case ID_ADXL355:
+	case ID_ADXL357:
 		return ((raw_temp*ADXL355_TEMP_OFFSET_DIV +  ADXL355_TEMP_OFFSET) *
 			(int64_t)ADXL355_TEMP_SCALE_FACTOR);
 	case ID_ADXL359:
