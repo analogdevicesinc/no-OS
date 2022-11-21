@@ -431,6 +431,7 @@ static int adxl355_iio_read_offset(void *dev, char *buf, uint32_t len,
 	case IIO_TEMP:
 		switch(adxl355->dev_type) {
 		case ID_ADXL355:
+		case ID_ADXL357:
 			vals[0] = -2111;
 			vals[1] = 250000;
 			break;
@@ -483,6 +484,7 @@ static int adxl355_iio_read_scale(void *dev, char *buf, uint32_t len,
 			vals[0] = 0;
 			vals[1] = 38245;
 			break;
+		case ID_ADXL357:
 		case ID_ADXL359:
 			vals[0] = 0;
 			vals[1] = 191229;
