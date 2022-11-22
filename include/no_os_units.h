@@ -65,4 +65,18 @@
 #define MICROWATT_PER_MILLIWATT	1000UL
 #define MICROWATT_PER_WATT	1000000UL
 
+
+/* Returns the given value converted from degree to rad */
+#define DEGREE_TO_RAD(deg) (((deg) * 314159ULL + 9000000ULL) / 18000000ULL)
+
+/* Returns the given value converted from rad to degree */
+#define RAD_TO_DEGREE(rad) \
+	(((rad) * 18000000ULL + 314159ULL / 2) / 314159ULL)
+
+/* Returns the given value converted from g to meter / second**2 */
+#define G_TO_M_S_2(g) ((g) * 980665ULL / 100000ULL)
+
+/* Returns the given value converted from meter / second**2 to g */
+#define IIO_M_S_2_TO_G(ms2) (((ms2) * 100000ULL + 980665ULL / 2) / 980665ULL)
+
 #endif // _NO_OS_UNITS_H_
