@@ -179,7 +179,7 @@ int main()
 			.chip_select = 0,
 			.mode = NO_OS_SPI_MODE_0,
 			.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
-			.platform_ops = &xil_spi_reg_ops_pl,
+			.platform_ops = &xil_spi_pl_ops,
 			.extra = NULL
 		},
 		.ldac_gpio_param_optional = &ldac_param,
