@@ -110,6 +110,6 @@ extern const struct no_os_spi_platform_ops xil_spi_ops;
 /**
  * @brief Xilinx SPI PS register functions. No extra param needed
  */
-extern const struct no_os_spi_platform_ops xil_spi_reg_ops_pl;
+extern const struct no_os_spi_platform_ops xil_spi_pl_ops;
 
 #endif // XILINX_SPI_H_
