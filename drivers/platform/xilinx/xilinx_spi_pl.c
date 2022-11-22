@@ -522,7 +522,7 @@ static int32_t xil_spi_transfer_pl(struct no_os_spi_desc *desc,
 	return 0;
 }
 
-const struct no_os_spi_platform_ops xil_spi_reg_ops_pl = {
+const struct no_os_spi_platform_ops xil_spi_pl_ops = {
 	.init = xil_spi_init_pl,
 	.remove = xil_spi_remove_pl,
 	.write_and_read = xil_spi_write_and_read_pl,
