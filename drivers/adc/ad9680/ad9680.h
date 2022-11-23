@@ -45,6 +45,8 @@
 #include <stdint.h>
 #include "no_os_delay.h"
 #include "no_os_spi.h"
+#include "jesd204.h"
+#include "no_os_util.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -61,6 +63,7 @@
 #define AD9680_REG_JESD204B_LANE_RATE_CTRL			0x56e
 #define AD9680_REG_JESD204B_PLL_LOCK_STATUS			0x56f
 #define AD9680_REG_JESD204B_QUICK_CONFIG			0x570
+#define AD9680_REG_JESD_LINK_CTRL1_REG    			0x571
 #define AD9680_REG_JESD204B_MF_CTRL				0x58d
 #define AD9680_REG_JESD204B_CSN_CONFIG				0x58f
 #define AD9680_REG_JESD204B_SUBCLASS_CONFIG			0x590
@@ -76,6 +79,12 @@
 #define AD9680_TEST_RAMP					0x00f
 #define AD9680_FORMAT_2S_COMPLEMENT				0x001
 #define AD9680_FORMAT_OFFSET_BINARY				0x000
+#define AD9680_JESD_LINK_PDN     	     NO_OS_BIT(0)
+
+#define AD9680_SYSREF_NONE 0	/* No SYSREF Support */
+#define AD9680_SYSREF_ONESHOT 2	/* ONE-SHOT SYSREF */
+#define AD9680_SYSREF_CONT 1	/* Continuous Sysref Synchronisation */
+#define AD9680_SYSREF_MON 3	/* SYSREF monitor Mode */
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -83,6 +92,14 @@
 struct ad9680_dev {
 	/* SPI */
 	struct no_os_spi_desc	*spi_desc;
+
+	struct jesd204_dev *jdev;
+	struct jesd204_link jesd204_link;
+
+	unsigned long long sampling_frequency_hz;
+	unsigned long dcm;
+
+	unsigned long sysref_mode;
 };
 
 struct ad9680_init_param {
@@ -90,6 +107,11 @@ struct ad9680_init_param {
 	struct no_os_spi_init_param	spi_init;
 	/* Device Settings */
 	uint32_t	lane_rate_kbps;
+
+	struct jesd204_link jesd204_link;
+	unsigned long long sampling_frequency_hz;
+	unsigned long dcm;
+	unsigned long sysref_mode;
 };
 
 /******************************************************************************/
@@ -106,6 +128,10 @@ int32_t ad9680_spi_write(struct ad9680_dev *dev,
 
 int32_t ad9680_setup(struct ad9680_dev **device,
 		     const struct ad9680_init_param *init_param);
+
+/* Initialize ad9680_dev, JESD FSM ON */
+int32_t ad9680_setup_jesd_fsm(struct ad9680_dev **device,
+			      const struct ad9680_init_param *init_param);
 
 int32_t ad9680_remove(struct ad9680_dev *dev);
 
