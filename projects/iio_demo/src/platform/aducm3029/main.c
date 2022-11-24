@@ -40,27 +40,75 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "platform_includes.h"
-#include "common_data.h"
 #include "no_os_error.h"
 
-#ifdef IIO_EXAMPLE
-#include "iio_example.h"
-#endif
+#include <stdlib.h>
+#include <stdio.h>
+#include "parameters.h"
+#include "no_os_uart.h"
+#include "no_os_delay.h"
+#include "no_os_timer.h"
+#include "mqtt_client.h"
 
-#ifdef IIO_SW_TRIGGER_EXAMPLE
-#include "iio_sw_trigger_example.h"
-#endif
+#include "aducm3029_uart.h"
+#include "aducm3029_irq.h"
+#include "aducm3029_timer.h"
+#include "no_os_irq.h"
+#include "no_os_error.h"
+
+#include "wifi.h"
+#include "tcp_socket.h"
+
+// The default baudrate iio_app will use to print messages to console.
+#define UART_BAUDRATE_DEFAULT	115200
+#define PRINT_ERR_AND_RET(msg, ret) do {\
+	printf("%s - Code: %d (-0x%x) \n", msg, ret, ret);\
+	return ret;\
+} while (0)
+
+
+
+int32_t read_and_send(struct mqtt_desc *mqtt, int i)
+{
+	struct mqtt_message	msg;
+	uint8_t			buff[100];
+	uint32_t		len;
+
+	/* Serialize data */
+	len = sprintf(buff, "Data from device: %d", i);
+	/* Send data to mqtt broker */
+	msg = (struct mqtt_message) {
+		.qos = MQTT_QOS0,
+		.payload = buff,
+		.len = len,
+		.retained = false
+	};
+	return mqtt_publish(mqtt, MQTT_PUBLISH_TOPIC, &msg);
+}
 
 /***************************************************************************//**
  * @brief Main function execution for aducm3029 platform.
  *
  * @return ret - Result of the enabled examples execution.
 *******************************************************************************/
+
+void mqtt_message_handler(struct mqtt_message_data *msg)
+{
+	char	buff[101];
+	int32_t	len;
+
+	/* Message.payload don't have at the end '\0' so we have to add it. */
+	len = msg->message.len > 100 ? 100 : msg->message.len;
+	memcpy(buff, msg->message.payload, len);
+	buff[len] = 0;
+
+	printf("Topic:%s -- Payload: %s\n", msg->topic, buff);
+}
+
 int main()
 {
 	int ret = -EINVAL;
-
+	int i = 0;
 	if (adi_pwr_Init())
 		return -1;
 
@@ -71,28 +119,141 @@ int main()
 		return -1;
 	adi_initComponents();
 
-#ifdef IIO_EXAMPLE
-	ret = iio_example_main();
-#endif
+	int status;
+	const struct no_os_irq_platform_ops *platform_irq_ops = &aducm_irq_ops;
 
-#ifdef IIO_SW_TRIGGER_EXAMPLE
-#ifndef NO_OS_NETWORKING
-#error Software trigger is not supported over UART.
-#else
-	ret = iio_sw_trigger_example_main();
-#endif
-#endif
+	struct no_os_irq_init_param irq_init_param = {
+		.irq_ctrl_id = INTC_DEVICE_ID,
+		.platform_ops = platform_irq_ops,
+		.extra = NULL
+	};
 
-#ifdef IIO_TIMER_TRIGGER_EXAMPLE
-#error Timer trigger example is not supported on adcum3029 platform.
-#endif
+	struct no_os_irq_ctrl_desc *irq_desc;
+	status = no_os_irq_ctrl_init(&irq_desc, &irq_init_param);
+	if (status < 0)
+		return status;
 
-#if (IIO_EXAMPLE + IIO_SW_TRIGGER_EXAMPLE == 0)
-#error At least one example has to be selected using y value in Makefile.
-#elif (IIO_EXAMPLE + IIO_SW_TRIGGER_EXAMPLE > 1)
-#error Selected example projects cannot be enabled at the same time. \
-Please enable only one example and re-build the project.
-#endif
+	status = no_os_irq_global_enable(irq_desc);
+	if (status < 0)
+		return status;
 
-	return ret;
+
+	static struct no_os_uart_init_param luart_par = {
+		.device_id = UART_DEVICE_ID,
+		/* TODO: remove this ifdef when asynchrounous rx is implemented on every platform. */
+		.irq_id = UART_IRQ_ID,
+		.asynchronous_rx = true,
+		.baud_rate = UART_BAUDRATE_DEFAULT,
+		.size = NO_OS_UART_CS_8,
+		.parity = NO_OS_UART_PAR_NO,
+		.stop = NO_OS_UART_STOP_1_BIT,
+	};
+	struct no_os_uart_desc *uart_desc;
+
+	status = no_os_uart_init(&uart_desc, &luart_par);
+	if (status < 0)
+		return status;
+
+	static struct tcp_socket_init_param socket_param;
+
+	static struct wifi_desc *wifi;
+	struct wifi_init_param wifi_param = {
+		.irq_desc = irq_desc,
+		.uart_desc = uart_desc,
+		.uart_irq_conf = uart_desc,
+		.uart_irq_id = UART_IRQ_ID
+	};
+	status = wifi_init(&wifi, &wifi_param);
+	if (status < 0)
+		return status;
+
+	status = wifi_connect(wifi, WIFI_SSID, WIFI_PWD);
+	if (status < 0)
+		return status;
+
+	char buff[100];
+	wifi_get_ip(wifi, buff, 100);
+	printf("Tinyiiod ip is: %s\n", buff);
+
+	wifi_get_network_interface(wifi, &socket_param.net);
+
+	socket_param.max_buff_size = 0;
+
+	static struct tcp_socket_desc	*sock;
+	status = socket_init(&sock, &socket_param);
+		if (NO_OS_IS_ERR_VALUE(status))
+			PRINT_ERR_AND_RET("Error socket_init", status);
+
+	struct socket_address		mqtt_broker_addr;
+	/* Connect socket to mqtt borker server */
+	mqtt_broker_addr = (struct socket_address) {
+		.addr = SERVER_ADDR,
+		.port = SERVER_PORT
+	};
+	status = socket_connect(sock, &mqtt_broker_addr);
+	if (NO_OS_IS_ERR_VALUE(status))
+		PRINT_ERR_AND_RET("Error socket_connect", status);
+
+	printf("Connection with \"%s\" established\n", SERVER_ADDR);
+
+	static uint8_t			send_buff[BUFF_LEN];
+	static uint8_t			read_buff[BUFF_LEN];
+	struct mqtt_init_param		mqtt_init_param;
+	/* Initialize mqtt descriptor */
+	mqtt_init_param = (struct mqtt_init_param) {
+		.timer_id = TIMER_ID,
+		.extra_timer_init_param = &aducm3029_timer_ops,
+		.sock = sock,
+		.command_timeout_ms = MQTT_CONFIG_CMD_TIMEOUT,
+		.send_buff = send_buff,
+		.read_buff = read_buff,
+		.send_buff_size = BUFF_LEN,
+		.read_buff_size = BUFF_LEN,
+		.message_handler = mqtt_message_handler
+	};
+	struct mqtt_desc	*mqtt;
+
+	status = mqtt_init(&mqtt, &mqtt_init_param);
+	if (NO_OS_IS_ERR_VALUE(status))
+		PRINT_ERR_AND_RET("Error mqtt_init", status);
+
+	struct mqtt_connect_config	conn_config;
+	/* Mqtt configuration */
+	/* Connect to mqtt broker */
+	conn_config = (struct mqtt_connect_config) {
+		.version = MQTT_CONFIG_VERSION,
+		.keep_alive_ms = MQTT_CONFIG_KEEP_ALIVE,
+		.client_name = MQTT_CONFIG_CLIENT_NAME,
+		.username = MQTT_CONFIG_CLI_USER,
+		.password = MQTT_CONFIG_CLI_PASS
+	};
+
+
+	status = mqtt_connect(mqtt, &conn_config, NULL);
+	if (NO_OS_IS_ERR_VALUE(status))
+		PRINT_ERR_AND_RET("Error mqtt_connect", status);
+
+	printf("Connected to mqtt broker\n");
+
+	/* Subscribe for a topic */
+	status = mqtt_subscribe(mqtt, MQTT_SUBSCRIBE_TOPIC, MQTT_QOS0, NULL);
+	if (NO_OS_IS_ERR_VALUE(status))
+		PRINT_ERR_AND_RET("Error mqtt_subscribe", status);
+	printf("Subscribed to topic: %s\n", MQTT_SUBSCRIBE_TOPIC);
+
+	while (true) {
+		status = read_and_send(mqtt, i);
+		if (NO_OS_IS_ERR_VALUE(status))
+			PRINT_ERR_AND_RET("Error read_and_send", status);
+		printf("Data sent to broker\n");
+
+		/* Dispatch new mqtt mesages if any during SCAN_SENSOR_TIME */
+		status = mqtt_yield(mqtt, SCAN_SENSOR_TIME);
+		if (NO_OS_IS_ERR_VALUE(status))
+			PRINT_ERR_AND_RET("Error mqtt_yield", status);
+		i++;
+	}
+
+
+	return 0;
 }

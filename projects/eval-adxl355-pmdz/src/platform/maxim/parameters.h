@@ -113,4 +113,29 @@ extern struct no_os_gpio_init_param adxl355_gpio_drdy_ip;
 extern struct max_gpio_init_param adxl355_gpio_extra_ip;
 #endif
 
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
+#define UART_DEVICE_ID	2
+#define INTC_DEVICE_ID	0
+#define UART_IRQ_ID		UART2_IRQn
+#define UART_BAUDRATE	115200
+
+#define WIFI_SSID	"AnalogDevices_5GHz"
+#define WIFI_PWD	"Analog123!"
+#define SERVER_PORT		1883
+#define SERVER_ADDR		"10.76.84.240"
+#define BUFF_LEN		200
+#define TIMER_ID		1
+#define MQTT_CONFIG_CMD_TIMEOUT	20000
+#define MQTT_PUBLISH_TOPIC	"adxl"
+#define MQTT_SUBSCRIBE_TOPIC	"maxim_messages"
+#define MQTT_CONFIG_CMD_TIMEOUT	20000
+#define MQTT_CONFIG_VERSION	MQTT_VERSION_3_1
+#define MQTT_CONFIG_KEEP_ALIVE	7200
+#define MQTT_CONFIG_CLIENT_NAME	"maxim-client"
+#define MQTT_CONFIG_CLI_USER	NULL
+#define MQTT_CONFIG_CLI_PASS	NULL
+#define SCAN_SENSOR_TIME	500
+#define MQTT_PUBLISH_TOPIC	"adxl"
+
 #endif /* __PARAMETERS_H__ */

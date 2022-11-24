@@ -23,7 +23,8 @@ INCS += $(INCLUDE)/no_os_delay.h     \
 		$(INCLUDE)/no_os_uart.h      \
 		$(INCLUDE)/no_os_lf256fifo.h \
 		$(INCLUDE)/no_os_util.h \
-		$(INCLUDE)/no_os_units.h
+		$(INCLUDE)/no_os_units.h \
+		$(INCLUDE)/no_os_circular_buffer.h
 
 SRCS += $(DRIVERS)/api/no_os_gpio.c \
 		$(DRIVERS)/api/no_os_i2c.c  \
@@ -32,8 +33,12 @@ SRCS += $(DRIVERS)/api/no_os_gpio.c \
 		$(DRIVERS)/api/no_os_spi.c  \
 		$(DRIVERS)/api/no_os_timer.c  \
 		$(NO-OS)/util/no_os_list.c \
-		$(NO-OS)/util/no_os_util.c
+		$(NO-OS)/util/no_os_util.c	\
+		$(NO-OS)/util/no_os_circular_buffer.c
 
 INCS += $(DRIVERS)/accel/adxl355/adxl355.h
 SRCS += $(DRIVERS)/accel/adxl355/adxl355.c
+
+LIBRARIES += mqtt
+SRC_DIRS += $(NO-OS)/network
 

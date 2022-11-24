@@ -46,10 +46,12 @@
 #include "parameters.h"
 #include "no_os_uart.h"
 #include "no_os_delay.h"
+#include "mqtt_client.h"
 
 #if defined(ADUCM_PLATFORM)
 #include "aducm3029_uart.h"
 #include "aducm3029_irq.h"
+#include "aducm3029_timer.h"
 #endif
 #if defined(ADUCM_PLATFORM) || defined(XILINX_PLATFORM)
 #include "no_os_irq.h"
@@ -95,6 +97,11 @@
 
 // The default baudrate iio_app will use to print messages to console.
 #define UART_BAUDRATE_DEFAULT	115200
+#define PRINT_ERR_AND_RET(msg, ret) do {\
+	printf("%s - Code: %d (-0x%x) \n", msg, ret, ret);\
+	return ret;\
+} while (0)
+
 
 static inline uint32_t _calc_uart_xfer_time(uint32_t len, uint32_t baudrate)
 {
@@ -102,30 +109,6 @@ static inline uint32_t _calc_uart_xfer_time(uint32_t len, uint32_t baudrate)
 	ms += ms / 10; // overhead
 	return ms;
 }
-
-#if !defined(LINUX_PLATFORM) && !defined(NO_OS_NETWORKING)
-static int32_t iio_print_uart_info_message(struct no_os_uart_desc **uart_desc,
-		struct no_os_uart_init_param *uart_init_par,
-		char *message, int32_t msglen)
-{
-	int32_t status;
-	uint32_t delay_ms;
-
-	status = no_os_uart_write(*uart_desc, (uint8_t *)message, msglen);
-	if (status < 0)
-		return status;
-
-	delay_ms = _calc_uart_xfer_time(msglen, UART_BAUDRATE_DEFAULT);
-	no_os_mdelay(delay_ms);
-	if (UART_BAUDRATE_DEFAULT != UART_BAUDRATE) {
-		no_os_uart_remove(*uart_desc);
-		uart_init_par->baud_rate = UART_BAUDRATE;
-		return no_os_uart_init(uart_desc, uart_init_par);
-	}
-
-	return 0;
-}
-#endif
 
 static int32_t print_uart_hello_message(struct no_os_uart_desc **uart_desc,
 					struct no_os_uart_init_param *uart_init_par)
@@ -175,6 +158,38 @@ static int32_t print_uart_error_message(struct no_os_uart_desc **uart_desc,
 #endif
 }
 
+//void mqtt_message_handler(struct mqtt_message_data *msg)
+//{
+//	char	buff[101];
+//	int32_t	len;
+//
+//	/* Message.payload don't have at the end '\0' so we have to add it. */
+//	len = msg->message.len > 100 ? 100 : msg->message.len;
+//	memcpy(buff, msg->message.payload, len);
+//	buff[len] = 0;
+//
+//	printf("Topic:%s -- Payload: %s\n", msg->topic, buff);
+//}
+
+
+//int32_t read_and_send(struct mqtt_desc *mqtt)
+//{
+//	struct mqtt_message	msg;
+//	uint8_t			buff[100];
+//	uint32_t		len;
+//
+//	/* Serialize data */
+//	len = sprintf(buff, "X:adsd -- Y: dsadsad -- Z: dasdad -- Temp: dasda");
+//	/* Send data to mqtt broker */
+//	msg = (struct mqtt_message) {
+//		.qos = MQTT_QOS0,
+//		.payload = buff,
+//		.len = len,
+//		.retained = false
+//	};
+//	return mqtt_publish(mqtt, MQTT_PUBLISH_TOPIC, &msg);
+//}
+
 #if defined(NO_OS_NETWORKING) || defined(LINUX_PLATFORM)
 static int32_t network_setup(struct iio_init_param *iio_init_param,
 			     struct no_os_uart_desc *uart_desc,
@@ -182,9 +197,6 @@ static int32_t network_setup(struct iio_init_param *iio_init_param,
 {
 	static struct tcp_socket_init_param socket_param;
 
-#ifdef LINUX_PLATFORM
-	socket_param.net = &linux_net;
-#endif
 #ifdef ADUCM_PLATFORM
 	int32_t status;
 	static struct wifi_desc *wifi;
@@ -213,6 +225,82 @@ static int32_t network_setup(struct iio_init_param *iio_init_param,
 	iio_init_param->phy_type = USE_NETWORK;
 	iio_init_param->tcp_socket_init_param = &socket_param;
 
+	static struct tcp_socket_desc	*sock;
+	status = socket_init(&sock, &socket_param);
+		if (NO_OS_IS_ERR_VALUE(status))
+			PRINT_ERR_AND_RET("Error socket_init", status);
+
+	struct socket_address		mqtt_broker_addr;
+	/* Connect socket to mqtt borker server */
+	mqtt_broker_addr = (struct socket_address) {
+		.addr = SERVER_ADDR,
+		.port = SERVER_PORT
+	};
+	status = socket_connect(sock, &mqtt_broker_addr);
+	if (NO_OS_IS_ERR_VALUE(status))
+		PRINT_ERR_AND_RET("Error socket_connect", status);
+
+	printf("Connection with \"%s\" established\n", SERVER_ADDR);
+
+	static uint8_t			send_buff[BUFF_LEN];
+	static uint8_t			read_buff[BUFF_LEN];
+	struct mqtt_init_param		mqtt_init_param;
+	/* Initialize mqtt descriptor */
+	mqtt_init_param = (struct mqtt_init_param) {
+		.timer_id = TIMER_ID,
+		.extra_timer_init_param = &aducm3029_timer_ops,
+		.sock = sock,
+		.command_timeout_ms = MQTT_CONFIG_CMD_TIMEOUT,
+		.send_buff = send_buff,
+		.read_buff = read_buff,
+		.send_buff_size = BUFF_LEN,
+		.read_buff_size = BUFF_LEN,
+//		.message_handler = mqtt_message_handler
+	};
+	struct mqtt_desc	*mqtt;
+
+	status = mqtt_init(&mqtt, &mqtt_init_param);
+	if (NO_OS_IS_ERR_VALUE(status))
+		PRINT_ERR_AND_RET("Error mqtt_init", status);
+
+	struct mqtt_connect_config	conn_config;
+	/* Mqtt configuration */
+	/* Connect to mqtt broker */
+	conn_config = (struct mqtt_connect_config) {
+		.version = MQTT_CONFIG_VERSION,
+		.keep_alive_ms = MQTT_CONFIG_KEEP_ALIVE,
+		.client_name = MQTT_CONFIG_CLIENT_NAME,
+		.username = MQTT_CONFIG_CLI_USER,
+		.password = MQTT_CONFIG_CLI_PASS
+	};
+
+
+	status = mqtt_connect(mqtt, &conn_config, NULL);
+	if (NO_OS_IS_ERR_VALUE(status))
+		PRINT_ERR_AND_RET("Error mqtt_connect", status);
+
+	printf("Connected to mqtt broker\n");
+
+	/* Subscribe for a topic */
+	status = mqtt_subscribe(mqtt, MQTT_SUBSCRIBE_TOPIC, MQTT_QOS0, NULL);
+	if (NO_OS_IS_ERR_VALUE(status))
+		PRINT_ERR_AND_RET("Error mqtt_subscribe", status);
+	printf("Subscribed to topic: %s\n", MQTT_SUBSCRIBE_TOPIC);
+
+	while (true) {
+
+//		status = read_and_send(mqtt);
+//		if (NO_OS_IS_ERR_VALUE(status))
+//			PRINT_ERR_AND_RET("Error read_and_send", status);
+//		printf("Data sent to broker\n");
+
+//		/* Dispatch new mqtt mesages if any during SCAN_SENSOR_TIME */
+//		status = mqtt_yield(mqtt, SCAN_SENSOR_TIME);
+//		if (NO_OS_IS_ERR_VALUE(status))
+//			PRINT_ERR_AND_RET("Error mqtt_yield", status);
+	}
+
+
 	return 0;
 }
 #endif
@@ -221,34 +309,6 @@ static int32_t uart_setup(struct no_os_uart_desc **uart_desc,
 			  struct no_os_uart_init_param **uart_init_par,
 			  void *irq_desc)
 {
-#ifdef LINUX_PLATFORM
-	*uart_desc = NULL;
-	return 0;
-#else
-#ifdef XILINX_PLATFORM
-	static struct xil_uart_init_param platform_uart_init_par = {
-#ifdef XPAR_XUARTLITE_NUM_INSTANCES
-		.type = UART_PL,
-#else
-		.type = UART_PS,
-		.irq_id = UART_IRQ_ID
-#endif
-	};
-	platform_uart_init_par.irq_desc = irq_desc;
-#elif defined(STM32_PLATFORM)
-	static struct stm32_uart_init_param platform_uart_init_par = {
-		.huart = IIO_APP_HUART,
-	};
-#elif defined(MAXIM_PLATFORM)
-	static struct max_uart_init_param platform_uart_init_par = {
-		.flow = UART_FLOW_DIS
-	};
-#elif defined(PICO_PLATFORM)
-	static struct pico_uart_init_param platform_uart_init_par = {
-		.uart_tx_pin = UART_TX_PIN,
-		.uart_rx_pin = UART_RX_PIN,
-	};
-#endif
 	static struct no_os_uart_init_param luart_par = {
 		.device_id = UART_DEVICE_ID,
 		/* TODO: remove this ifdef when asynchrounous rx is implemented on every platform. */
@@ -260,36 +320,19 @@ static int32_t uart_setup(struct no_os_uart_desc **uart_desc,
 		.size = NO_OS_UART_CS_8,
 		.parity = NO_OS_UART_PAR_NO,
 		.stop = NO_OS_UART_STOP_1_BIT,
-#ifndef ADUCM_PLATFORM
-		.extra = &platform_uart_init_par
-#endif
 	};
 	*uart_init_par = &luart_par;
 
 	return no_os_uart_init(uart_desc, &luart_par);
-#endif
 }
 
 #if defined(ADUCM_PLATFORM) || (defined(XILINX_PLATFORM) && !defined(PLATFORM_MB)) || (defined(STM32_PLATFORM)) || defined(MAXIM_PLATFORM)
 static int32_t irq_setup(struct no_os_irq_ctrl_desc **irq_desc)
 {
 	int32_t status;
-#if defined(XILINX_PLATFORM) && !defined(PLATFORM_MB)
-	struct xil_irq_init_param p = {
-		.type = IRQ_PS,
-	};
-	struct xil_irq_init_param *platform_irq_init_par = &p;
-	const struct no_os_irq_platform_ops *platform_irq_ops = &xil_irq_ops;
-#elif defined(ADUCM_PLATFORM)
+
 	void *platform_irq_init_par = NULL;
 	const struct no_os_irq_platform_ops *platform_irq_ops = &aducm_irq_ops;
-#elif defined(STM32_PLATFORM)
-	void *platform_irq_init_par = NULL;
-	const struct no_os_irq_platform_ops *platform_irq_ops = &stm32_irq_ops;
-#elif defined(MAXIM_PLATFORM)
-	void *platform_irq_init_par = NULL;
-	const struct no_os_irq_platform_ops *platform_irq_ops = &max_irq_ops;
-#endif
 
 	struct no_os_irq_init_param irq_init_param = {
 		.irq_ctrl_id = INTC_DEVICE_ID,
@@ -364,49 +407,7 @@ int32_t iio_app_run_with_trigs(struct iio_app_device *devices, uint32_t nb_devs,
 	iio_init_param.uart_desc = uart_desc;
 #endif
 
-	iio_init_devs = calloc(nb_devs, sizeof(*iio_init_devs));
-	if (!iio_init_devs)
-		return -ENOMEM;
 
-	for (i = 0; i < nb_devs; ++i) {
-		/*
-		 * iio_app_device is from iio_app.h and we don't want to include
-		 * this in iio.h.
-		 * At the moment iio_device_init has the same parameters but
-		 * it will change.
-		 * When changes are done in iio. iio_app_device may be removed
-		 * and use iio_device_init instead.
-		 * This way faster changes can be done without changing all
-		 * project for each change.
-		 */
-		iio_init_devs[i].name = devices[i].name;
-		iio_init_devs[i].dev = devices[i].dev;
-		iio_init_devs[i].dev_descriptor = devices[i].dev_descriptor;
-		buff = devices[i].read_buff ? devices[i].read_buff :
-		       devices[i].write_buff;
-		if (buff) {
-			iio_init_devs[i].raw_buf = buff->buff;
-			iio_init_devs[i].raw_buf_len = buff->size;
-		} else {
-			iio_init_devs[i].raw_buf = NULL;
-			iio_init_devs[i].raw_buf_len = 0;
-		}
-	}
-
-	iio_init_param.devs = iio_init_devs;
-	iio_init_param.nb_devs = nb_devs;
-	iio_init_param.trigs = trigs;
-	iio_init_param.nb_trigs = nb_trigs;
-	iio_init_param.cntx_attrs = NULL;
-	status = iio_init(iio_desc, &iio_init_param);
-	if(status < 0)
-		goto error;
-
-	free(iio_init_devs);
-
-	do {
-		status = iio_step(*iio_desc);
-	} while (true);
 error:
 	status = print_uart_error_message(&uart_desc, uart_init_par, status);
 	return status;

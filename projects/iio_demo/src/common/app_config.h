@@ -43,5 +43,20 @@
 
 #define WIFI_SSID	"AnalogDevices_5GHz"
 #define WIFI_PWD	"Analog123!"
+#define SERVER_PORT		1883
+#define SERVER_ADDR		"10.76.84.240"
+#define BUFF_LEN		200
+#define TIMER_ID		1
+#define MQTT_CONFIG_CMD_TIMEOUT	20000
+#define MQTT_PUBLISH_TOPIC	"adxl"
+#define MQTT_SUBSCRIBE_TOPIC	"aducm3029_messages"
+#define MQTT_CONFIG_CMD_TIMEOUT	20000
+#define MQTT_CONFIG_VERSION	MQTT_VERSION_3_1
+#define MQTT_CONFIG_KEEP_ALIVE	7200
+#define MQTT_CONFIG_CLIENT_NAME	"aducm3029-client"
+#define MQTT_CONFIG_CLI_USER	NULL
+#define MQTT_CONFIG_CLI_PASS	NULL
+#define SCAN_SENSOR_TIME	500
+#define MQTT_PUBLISH_TOPIC	"adxl"
 
 #endif

@@ -1,7 +1,7 @@
 /***************************************************************************//**
  *   @file   main.c
- *   @brief  Main file for Maxim platform of eval-adxl355-pmdz project.
- *   @author Ciprian Regus (ciprian.regus@analog.com)
+ *   @brief  Main file for aducm3029 platform of iio_demo project.
+ *   @author RBolboac (ramona.bolboaca@analog.com)
 ********************************************************************************
  * Copyright 2022(c) Analog Devices, Inc.
  *
@@ -40,83 +40,215 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "platform_includes.h"
-#include "common_data.h"
 #include "no_os_error.h"
 
-#ifdef IIO_EXAMPLE
-#include "iio_example.h"
-#endif
+#include <stdlib.h>
+#include <stdio.h>
+#include "parameters.h"
+#include "no_os_uart.h"
+#include "no_os_delay.h"
+#include "no_os_timer.h"
+#include "mqtt_client.h"
 
-#ifdef IIO_TRIGGER_EXAMPLE
-#include "iio_trigger_example.h"
-#endif
+#include "maxim_uart.h"
+#include "maxim_irq.h"
+#include "maxim_timer.h"
+#include "no_os_irq.h"
+#include "no_os_error.h"
 
-#ifdef DUMMY_EXAMPLE
-#include "dummy_example.h"
-#endif
+#include "wifi.h"
+#include "tcp_socket.h"
+
+// The default baudrate iio_app will use to print messages to console.
+#define UART_BAUDRATE_DEFAULT	115200
+#define PRINT_ERR_AND_RET(msg, ret) do {\
+	printf("%s - Code: %d (-0x%x) \n", msg, ret, ret);\
+	return ret;\
+} while (0)
+
+
+
+int32_t read_and_send(struct mqtt_desc *mqtt, int i)
+{
+	struct mqtt_message	msg;
+	uint8_t			buff[100];
+	uint32_t		len;
+
+	/* Serialize data */
+	len = sprintf(buff, "Data from device: %d", i);
+	/* Send data to mqtt broker */
+	msg = (struct mqtt_message) {
+		.qos = MQTT_QOS0,
+		.payload = buff,
+		.len = len,
+		.retained = false
+	};
+	return mqtt_publish(mqtt, MQTT_PUBLISH_TOPIC, &msg);
+}
 
 /***************************************************************************//**
- * @brief Main function execution for STM32 platform.
+ * @brief Main function execution for aducm3029 platform.
  *
  * @return ret - Result of the enabled examples execution.
 *******************************************************************************/
+
+void mqtt_message_handler(struct mqtt_message_data *msg)
+{
+	char	buff[101];
+	int32_t	len;
+
+	/* Message.payload don't have at the end '\0' so we have to add it. */
+	len = msg->message.len > 100 ? 100 : msg->message.len;
+	memcpy(buff, msg->message.payload, len);
+	buff[len] = 0;
+
+	printf("Topic:%s -- Payload: %s\n", msg->topic, buff);
+}
+
 int main()
 {
 	int ret = -EINVAL;
+	int i = 0;
+	int status;
+	const struct no_os_irq_platform_ops *platform_irq_ops = &max_irq_ops;
 
-	adxl355_ip.comm_init.spi_init = adxl355_spi_ip;
-
-#ifdef IIO_EXAMPLE
-	ret = iio_example_main();
-#endif
-
-#ifdef IIO_TRIGGER_EXAMPLE
-	struct no_os_gpio_desc *adxl355_gpio_desc;
-	struct no_os_irq_ctrl_desc *nvic_desc;
-	struct no_os_irq_init_param nvic_ip = {
-		.platform_ops = &max_irq_ops,
+	struct no_os_irq_init_param irq_init_param = {
+		.irq_ctrl_id = INTC_DEVICE_ID,
+		.platform_ops = platform_irq_ops,
+		.extra = NULL
 	};
 
-	/* Initialize DATA READY pin */
-	ret = no_os_gpio_get_optional(&adxl355_gpio_desc, &adxl355_gpio_drdy_ip);
-	if (ret)
-		return ret;
+	struct max_uart_init_param ip = {
+		.flow = UART_FLOW_DIS
+	};
 
-	ret = no_os_gpio_direction_input(adxl355_gpio_desc);
-	if (ret)
-		return ret;
+	struct no_os_irq_ctrl_desc *irq_desc;
+	status = no_os_irq_ctrl_init(&irq_desc, &irq_init_param);
+	if (status < 0)
+		return status;
 
-	/* Initialize GPIO IRQ controller */
-	ret = no_os_irq_ctrl_init(&nvic_desc, &nvic_ip);
-	if (ret)
-		return ret;
+	status = no_os_irq_global_enable(irq_desc);
+	if (status < 0)
+		return status;
 
-	ret = no_os_irq_enable(nvic_desc, NVIC_GPIO_IRQ);
-	if (ret)
-		return ret;
 
-	ret = iio_trigger_example_main();
-#endif
-
-#ifdef DUMMY_EXAMPLE
+	struct no_os_uart_init_param luart_par = {
+		.device_id = UART_DEVICE_ID,
+		/* TODO: remove this ifdef when asynchrounous rx is implemented on every platform. */
+		.irq_id = UART_IRQ_ID,
+		.asynchronous_rx = true,
+		.baud_rate = UART_BAUDRATE_DEFAULT,
+		.size = NO_OS_UART_CS_8,
+		.parity = NO_OS_UART_PAR_NO,
+		.stop = NO_OS_UART_STOP_1_BIT,
+		.extra = &ip
+	};
 	struct no_os_uart_desc *uart_desc;
 
-	ret = no_os_uart_init(&uart_desc, &adxl355_uart_ip);
-	if (ret)
-		return ret;
+	status = no_os_uart_init(&uart_desc, &luart_par);
+	if (status < 0)
+		return status;
 
-	maxim_uart_stdio(uart_desc);
-	ret = dummy_example_main();
-#endif
+	static struct tcp_socket_init_param socket_param;
 
-#if (DUMMY_EXAMPLE + IIO_EXAMPLE + IIO_TRIGGER_EXAMPLE == 0)
-#error At least one example has to be selected using y value in Makefile.
-#elif (DUMMY_EXAMPLE + IIO_EXAMPLE + IIO_TRIGGER_EXAMPLE > 1)
-#error Selected example projects cannot be enabled at the same time. \
-Please enable only one example and re-build the project.
-#endif
+	static struct wifi_desc *wifi;
+	struct wifi_init_param wifi_param = {
+		.irq_desc = irq_desc,
+		.uart_desc = uart_desc,
+		.uart_irq_conf = uart_desc,
+		.uart_irq_id = UART_IRQ_ID
+	};
+	status = wifi_init(&wifi, &wifi_param);
+	if (status < 0)
+		return status;
 
-	return ret;
+	status = wifi_connect(wifi, WIFI_SSID, WIFI_PWD);
+	if (status < 0)
+		return status;
+
+	char buff[100];
+	wifi_get_ip(wifi, buff, 100);
+	printf("Tinyiiod ip is: %s\n", buff);
+
+	wifi_get_network_interface(wifi, &socket_param.net);
+
+	socket_param.max_buff_size = 0;
+
+	static struct tcp_socket_desc	*sock;
+	status = socket_init(&sock, &socket_param);
+		if (NO_OS_IS_ERR_VALUE(status))
+			PRINT_ERR_AND_RET("Error socket_init", status);
+
+	struct socket_address		mqtt_broker_addr;
+	/* Connect socket to mqtt borker server */
+	mqtt_broker_addr = (struct socket_address) {
+		.addr = SERVER_ADDR,
+		.port = SERVER_PORT
+	};
+	status = socket_connect(sock, &mqtt_broker_addr);
+	if (NO_OS_IS_ERR_VALUE(status))
+		PRINT_ERR_AND_RET("Error socket_connect", status);
+
+	printf("Connection with \"%s\" established\n", SERVER_ADDR);
+
+	static uint8_t			send_buff[BUFF_LEN];
+	static uint8_t			read_buff[BUFF_LEN];
+	struct mqtt_init_param		mqtt_init_param;
+	/* Initialize mqtt descriptor */
+	mqtt_init_param = (struct mqtt_init_param) {
+		.timer_id = TIMER_ID,
+		.extra_timer_init_param = &max_timer_ops,
+		.sock = sock,
+		.command_timeout_ms = MQTT_CONFIG_CMD_TIMEOUT,
+		.send_buff = send_buff,
+		.read_buff = read_buff,
+		.send_buff_size = BUFF_LEN,
+		.read_buff_size = BUFF_LEN,
+		.message_handler = mqtt_message_handler
+	};
+	struct mqtt_desc	*mqtt;
+
+	status = mqtt_init(&mqtt, &mqtt_init_param);
+	if (NO_OS_IS_ERR_VALUE(status))
+		PRINT_ERR_AND_RET("Error mqtt_init", status);
+
+	struct mqtt_connect_config	conn_config;
+	/* Mqtt configuration */
+	/* Connect to mqtt broker */
+	conn_config = (struct mqtt_connect_config) {
+		.version = MQTT_CONFIG_VERSION,
+		.keep_alive_ms = MQTT_CONFIG_KEEP_ALIVE,
+		.client_name = MQTT_CONFIG_CLIENT_NAME,
+		.username = MQTT_CONFIG_CLI_USER,
+		.password = MQTT_CONFIG_CLI_PASS
+	};
+
+
+	status = mqtt_connect(mqtt, &conn_config, NULL);
+	if (NO_OS_IS_ERR_VALUE(status))
+		PRINT_ERR_AND_RET("Error mqtt_connect", status);
+
+	printf("Connected to mqtt broker\n");
+
+	/* Subscribe for a topic */
+	status = mqtt_subscribe(mqtt, MQTT_SUBSCRIBE_TOPIC, MQTT_QOS0, NULL);
+	if (NO_OS_IS_ERR_VALUE(status))
+		PRINT_ERR_AND_RET("Error mqtt_subscribe", status);
+	printf("Subscribed to topic: %s\n", MQTT_SUBSCRIBE_TOPIC);
+
+	while (true) {
+		status = read_and_send(mqtt, i);
+		if (NO_OS_IS_ERR_VALUE(status))
+			PRINT_ERR_AND_RET("Error read_and_send", status);
+		printf("Data sent to broker\n");
+
+		/* Dispatch new mqtt mesages if any during SCAN_SENSOR_TIME */
+		status = mqtt_yield(mqtt, SCAN_SENSOR_TIME);
+		if (NO_OS_IS_ERR_VALUE(status))
+			PRINT_ERR_AND_RET("Error mqtt_yield", status);
+		i++;
+	}
+
+
+	return 0;
 }
-
