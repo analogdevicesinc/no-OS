@@ -48,4 +48,6 @@
 //#define DAC_DMA_EXAMPLE
 //#define IIO_SUPPORT
 
+//#define JESD_FSM_ON
+
 #endif /* APP_CONFIG_H_ */
