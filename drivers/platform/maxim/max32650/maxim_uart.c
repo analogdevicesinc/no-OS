@@ -232,6 +232,8 @@ int32_t no_os_uart_init(struct no_os_uart_desc **desc,
 
 	descriptor->device_id = param->device_id;
 	descriptor->baud_rate = param->baud_rate;
+	descriptor->irq_id = param->irq_id;
+	descriptor->extra = param->extra;
 
 	switch(param->parity) {
 	case NO_OS_UART_PAR_NO:

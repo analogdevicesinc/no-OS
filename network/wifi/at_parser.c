@@ -50,6 +50,7 @@
 #include "at_parser.h"
 #include "no_os_error.h"
 #include "no_os_delay.h"
+#include "maxim_uart.h"
 #include "no_os_uart.h"
 #include "no_os_irq.h"
 #include "no_os_util.h"
@@ -912,6 +913,7 @@ int32_t at_init(struct at_desc **desc, const struct at_init_param *param)
 	struct no_os_callback_desc	callback_desc_err;
 	uint32_t		conn;
 	uint8_t			*str;
+	int ret;
 
 	if (!desc || !param || !param->connection_callback)
 		return -1;
@@ -929,24 +931,27 @@ int32_t at_init(struct at_desc **desc, const struct at_init_param *param)
 
 	callback_desc_rd.ctx = ldesc;
 	callback_desc_rd.event = NO_OS_EVT_UART_RX_COMPLETE;
-	callback_desc_rd.handle = ldesc->uart_desc->extra;
+	callback_desc_rd.handle =  MXC_UART_GET_UART(ldesc->uart_desc->device_id);
 	callback_desc_rd.peripheral = NO_OS_UART_IRQ;
 	callback_desc_rd.callback = (void (*)(void *))at_callback_rd_done;
-	if (0 != no_os_irq_register_callback(ldesc->irq_desc,
-					     ldesc->uart_irq_id,
-					     &callback_desc_rd))
+	ret = no_os_irq_register_callback(ldesc->irq_desc,
+					     MXC_UART_GET_IRQ(ldesc->uart_desc->device_id),
+					     &callback_desc_rd);
+	if (ret)
 		goto free_desc;
 	callback_desc_err.ctx = ldesc;
 	callback_desc_err.event = NO_OS_EVT_UART_ERROR;
-	callback_desc_err.handle = ldesc->uart_desc->extra;
+	callback_desc_err.handle = MXC_UART_GET_UART(ldesc->uart_desc->device_id);
 	callback_desc_err.peripheral = NO_OS_UART_IRQ;
 	callback_desc_err.callback = (void (*)(void *))at_callback_error;
-	if (0 != no_os_irq_register_callback(ldesc->irq_desc,
-					     ldesc->uart_irq_id,
-					     &callback_desc_err))
+	ret = no_os_irq_register_callback(ldesc->irq_desc,
+					     MXC_UART_GET_IRQ(ldesc->uart_desc->device_id),
+					     &callback_desc_err);
+	if (ret)
 		goto free_desc;
 
-	if (0 != no_os_irq_enable(ldesc->irq_desc, ldesc->uart_irq_id))
+	ret = no_os_irq_enable(ldesc->irq_desc, ldesc->uart_irq_id);
+	if (ret)
 		goto free_irq;
 
 	/* Link buffer structure with static buffers */

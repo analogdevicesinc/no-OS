@@ -115,9 +115,9 @@ extern struct max_gpio_init_param adxl355_gpio_extra_ip;
 
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-#define UART_DEVICE_ID	2
+#define UART_DEVICE_ID	1
 #define INTC_DEVICE_ID	0
-#define UART_IRQ_ID		UART2_IRQn
+#define UART_IRQ_ID		UART1_IRQn
 #define UART_BAUDRATE	115200
 
 #define WIFI_SSID	"AnalogDevices_5GHz"
