@@ -420,7 +420,7 @@ dummy_read:
 /* Handle the uart read done */
 static void at_callback_rd_done(struct at_desc *desc)
 {
-	static const struct at_buff ready_msg = {PUI8("ready\r\n"), 7};
+	static const struct at_buff ready_msg = {PUI8("csum 0xba"), 9};
 
 	switch (desc->callback_operation) {
 	case RESETTING_MODULE:
