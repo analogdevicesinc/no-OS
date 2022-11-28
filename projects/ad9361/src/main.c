@@ -607,8 +607,11 @@ int main(void)
 #if defined XILINX_PLATFORM || defined LINUX_PLATFORM || defined ALTERA_PLATFORM
 #ifdef DAC_DMA_EXAMPLE
 #ifdef FMCOMMS5
-	axi_dac_init(&ad9361_phy->tx_dac, &tx_dac_init);
+	axi_dac_init(&ad9361_phy_b->tx_dac, &tx_dac_init);
+	axi_adc_init(&ad9361_phy_b->rx_adc, &rx_adc_init);
 	axi_dac_set_datasel(ad9361_phy_b->tx_dac, -1, AXI_DAC_DATA_SEL_DMA);
+	rx_adc_init.base = AD9361_RX_0_BASEADDR;
+	tx_dac_init.base = AD9361_TX_0_BASEADDR;
 #endif
 	axi_dac_init(&ad9361_phy->tx_dac, &tx_dac_init);
 	axi_adc_init(&ad9361_phy->rx_adc, &rx_adc_init);
@@ -688,7 +691,7 @@ int main(void)
 	if(status < 0)
 		return status;
 
-	samples = 2097150;
+	samples = 2048;
 #endif
 	// NOTE: To prevent unwanted data loss, it's recommended to invalidate
 	// cache after each axi_dmac_transfer_start() call, keeping in mind that the
@@ -715,14 +718,13 @@ int main(void)
 #ifdef FMCOMMS5
 	struct axi_dma_transfer transfer = {
 		// Number of bytes to write/read
-		.size = samples * AD9361_ADC_DAC_BYTES_PER_SAMPLE *
-		(ad9361_phy_b->tx_dac->num_channels + ad9361_phy->tx_dac->num_channels),
+		.size = sizeof(sine_lut_iq),
 		// Transfer done flag
 		.transfer_done = 0,
 		// Signal transfer mode
 		.cyclic = CYCLIC,
 		// Address of data source
-		.src_addr = (uintptr_t)DAC_DDR_BASEADDR,
+		.src_addr = (uintptr_t)dac_buffer,
 		// Address of data destination
 		.dest_addr = 0
 	};
@@ -731,9 +733,7 @@ int main(void)
 	axi_dmac_transfer_start(tx_dmac, &transfer);
 
 	/* Flush cache data. */
-	Xil_DCacheInvalidateRange((uintptr_t)DAC_DDR_BASEADDR,
-				  samples * AD9361_ADC_DAC_BYTES_PER_SAMPLE *
-				  (ad9361_phy_b->tx_dac->num_channels + ad9361_phy->tx_dac->num_channels));
+	Xil_DCacheInvalidateRange((uintptr_t)dac_buffer, sizeof(sine_lut_iq));
 
 	no_os_mdelay(1000);
 
@@ -806,16 +806,21 @@ int main(void)
 #endif
 #ifdef XILINX_PLATFORM
 #ifdef FMCOMMS5
-	Xil_DCacheInvalidateRange(ADC_DDR_BASEADDR,
+	Xil_DCacheInvalidateRange((uintptr_t)ADC_DDR_BASEADDR,
 				  samples * AD9361_ADC_DAC_BYTES_PER_SAMPLE * (ad9361_phy_b->rx_adc->num_channels
 						  +
 						  ad9361_phy->rx_adc->num_channels));
+	printf("DAC_DMA_EXAMPLE: address=%#x samples=%lu channels=%u bits=%u\n",
+	       (uintptr_t)ADC_DDR_BASEADDR,
+	       read_transfer.size / AD9361_ADC_DAC_BYTES_PER_SAMPLE,
+	       rx_adc_init.num_channels * 2,
+	       8 * sizeof(adc_buffer[0]));
 #else
 	Xil_DCacheInvalidateRange((uintptr_t)adc_buffer, sizeof(adc_buffer));
-#endif
 	printf("DAC_DMA_EXAMPLE: address=%#lx samples=%lu channels=%u bits=%lu\n",
 	       (uintptr_t)adc_buffer, NO_OS_ARRAY_SIZE(adc_buffer), rx_adc_init.num_channels,
 	       8 * sizeof(adc_buffer[0]));
+#endif
 #endif
 #endif
 #endif
