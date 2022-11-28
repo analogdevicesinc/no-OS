@@ -1066,6 +1066,7 @@ static int iio_open_dev(struct iiod_ctx *ctx, const char *device,
 	uint32_t ch_mask;
 	int32_t ret;
 	int8_t *buf;
+	uint32_t buf_size;
 
 	dev = get_iio_device(ctx->instance, device);
 	if (!dev)
@@ -1091,6 +1092,7 @@ static int iio_open_dev(struct iiod_ctx *ctx, const char *device,
 			/* Need a bigger buffer or to allocate */
 			return -ENOMEM;
 
+		buf_size = dev->buffer.raw_buf_len;
 		buf = dev->buffer.raw_buf;
 	} else {
 		if (dev->buffer.allocated) {
@@ -1098,13 +1100,14 @@ static int iio_open_dev(struct iiod_ctx *ctx, const char *device,
 			free(dev->buffer.cb.buff);
 			dev->buffer.allocated = 0;
 		}
+		buf_size = dev->buffer.public.size;
 		buf = (int8_t *)calloc(dev->buffer.public.size, sizeof(*buf));
 		if (!buf)
 			return -ENOMEM;
 		dev->buffer.allocated = 1;
 	}
 
-	ret = no_os_cb_cfg(&dev->buffer.cb, buf, dev->buffer.public.size);
+	ret = no_os_cb_cfg(&dev->buffer.cb, buf, buf_size);
 	if (NO_OS_IS_ERR_VALUE(ret)) {
 		if (dev->buffer.allocated) {
 			free(dev->buffer.cb.buff);
