@@ -46,10 +46,12 @@
 #include <stdio.h>
 #include "parameters.h"
 #include "no_os_uart.h"
+#include "no_os_gpio.h"
 #include "no_os_delay.h"
 #include "no_os_timer.h"
 #include "mqtt_client.h"
 
+#include "maxim_gpio.h"
 #include "maxim_uart.h"
 #include "maxim_irq.h"
 #include "maxim_timer.h"
@@ -60,7 +62,6 @@
 #include "tcp_socket.h"
 
 // The default baudrate iio_app will use to print messages to console.
-#define UART_BAUDRATE_DEFAULT	115200
 #define PRINT_ERR_AND_RET(msg, ret) do {\
 	printf("%s - Code: %d (-0x%x) \n", msg, ret, ret);\
 	return ret;\
@@ -110,6 +111,37 @@ int main()
 	int ret = -EINVAL;
 	int i = 0;
 	int status;
+
+	struct max_gpio_init_param gpio_extra_ip = {
+		.direction = NO_OS_GPIO_OUT,
+	};
+
+	struct no_os_gpio_init_param gpio_reset_ip = {
+		.port = 2,
+		.number = 17,
+		.pull = NO_OS_PULL_NONE,
+		.platform_ops = &max_gpio_ops,
+		.extra = &gpio_extra_ip
+	};
+
+	struct no_os_gpio_desc *rst_gpio;
+
+	status = no_os_gpio_get(&rst_gpio, &gpio_reset_ip);
+	if (status < 0)
+		return status;
+	
+	status = no_os_gpio_set_value(rst_gpio, NO_OS_GPIO_LOW);
+	if (status < 0)
+		return status;
+	
+	no_os_mdelay(500);
+
+	status = no_os_gpio_set_value(rst_gpio, NO_OS_GPIO_HIGH);
+	if (status < 0)
+		return status;
+	
+	no_os_mdelay(2000);
+
 	const struct no_os_irq_platform_ops *platform_irq_ops = &max_irq_ops;
 
 	struct no_os_irq_init_param irq_init_param = {
@@ -137,7 +169,7 @@ int main()
 		/* TODO: remove this ifdef when asynchrounous rx is implemented on every platform. */
 		.irq_id = UART_IRQ_ID,
 		.asynchronous_rx = true,
-		.baud_rate = UART_BAUDRATE_DEFAULT,
+		.baud_rate = UART_BAUDRATE,
 		.size = NO_OS_UART_CS_8,
 		.parity = NO_OS_UART_PAR_NO,
 		.stop = NO_OS_UART_STOP_1_BIT,

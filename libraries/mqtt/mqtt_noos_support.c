@@ -68,7 +68,7 @@ int32_t mqtt_timer_init(uint32_t timer_id, void *extra_init_param)
 {
 	struct no_os_timer_init_param init_param = {
 		.id = timer_id,
-		.freq_hz = 1000,
+		.freq_hz = 32000,
 		.ticks_count = 0,
 		.platform_ops = extra_init_param,
 		.extra = extra_init_param

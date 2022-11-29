@@ -55,7 +55,7 @@
 #define UART_DEVICE_ID	1
 #define INTC_DEVICE_ID	0
 #define UART_IRQ_ID		UART1_IRQn
-#define UART_BAUDRATE	115200
+#define UART_BAUDRATE	57600
 
 #define WIFI_SSID	        "AnalogDevices_5GHz"
 #define WIFI_PWD	        "Analog123!"

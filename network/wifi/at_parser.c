@@ -420,7 +420,7 @@ dummy_read:
 /* Handle the uart read done */
 static void at_callback_rd_done(struct at_desc *desc)
 {
-	static const struct at_buff ready_msg = {PUI8("csum 0xba"), 9};
+	static const struct at_buff ready_msg = {PUI8("DISCONNECT"), 10};
 
 	switch (desc->callback_operation) {
 	case RESETTING_MODULE:
@@ -778,9 +778,12 @@ static void build_cmd(struct at_desc *desc, enum at_cmd cmd,
 /* Send ATE0 command to stop echo */
 static int32_t stop_echo(struct at_desc *desc)
 {
+	int ret;
+
 	no_os_uart_write(desc->uart_desc, (uint8_t *)"ATE0\r\n", 6);
 
-	if (0 != wait_for_response(desc))
+	ret = wait_for_response(desc);
+	if (ret)
 		return -1;
 	desc->result.len = 0;
 
@@ -791,6 +794,7 @@ static int32_t stop_echo(struct at_desc *desc)
 static int32_t handle_special(struct at_desc *desc, enum at_cmd cmd)
 {
 	uint32_t timeout;
+	int ret;
 
 	switch (cmd) {
 	case AT_RESET:
@@ -808,8 +812,10 @@ static int32_t handle_special(struct at_desc *desc, enum at_cmd cmd)
 
 		desc->callback_operation = READING_PAYLOAD;
 		desc->result.len = 0;
-		if (0 != stop_echo(desc))
+		ret = stop_echo(desc);
+		if (ret)
 			return -1;
+	
 		at_run_cmd(desc, AT_DISCONNECT_NETWORK, AT_EXECUTE_OP, NULL);
 
 		break;
@@ -852,12 +858,39 @@ int32_t at_run_cmd(struct at_desc *desc, enum at_cmd cmd, enum cmd_operation op,
 {
 	uint32_t	id;
 	int32_t		ret;
+	uint32_t	len;
+	uint8_t			buff[100];
 
 	if (!desc || cmd == AT_SET_TRANSPORT_MODE)
 		return -1;
 
 	if (!(g_map[cmd].type & op))
 		return -1;
+	
+	struct max_uart_init_param ip = {
+		.flow = UART_FLOW_DIS
+	};
+	struct no_os_uart_desc *uart_desc;
+
+	struct no_os_uart_init_param luart_par = {
+		.device_id = 0,
+		/* TODO: remove this ifdef when asynchrounous rx is implemented on every platform. */
+		.irq_id = UART0_IRQn,
+		.asynchronous_rx = true,
+		.baud_rate = 57600,
+		.size = NO_OS_UART_CS_8,
+		.parity = NO_OS_UART_PAR_NO,
+		.stop = NO_OS_UART_STOP_1_BIT,
+		.extra = &ip
+	};
+	
+	ret = no_os_uart_init(&uart_desc, &luart_par);
+	if (ret < 0)
+		return ret;
+
+	len = sprintf(buff, "CMD_RUN: %d\n", cmd);
+
+	no_os_uart_write(uart_desc, buff, len);
 
 	build_cmd(desc, cmd, op, param);
 
@@ -867,7 +900,7 @@ int32_t at_run_cmd(struct at_desc *desc, enum at_cmd cmd, enum cmd_operation op,
 	ret = send_cmd(desc, cmd, &param->in);
 	if (NO_OS_IS_ERR_VALUE(ret))
 		return ret;
-
+	
 	/* Update driver status according with commands */
 	if (cmd == AT_SET_CONNECTION_TYPE)
 		desc->multiple_conections = param->in.conn_type;
@@ -950,7 +983,7 @@ int32_t at_init(struct at_desc **desc, const struct at_init_param *param)
 	if (ret)
 		goto free_desc;
 
-	ret = no_os_irq_enable(ldesc->irq_desc, ldesc->uart_irq_id);
+	ret = no_os_irq_enable(ldesc->irq_desc, MXC_UART_GET_IRQ(ldesc->uart_desc->device_id));
 	if (ret)
 		goto free_irq;
 
@@ -965,8 +998,8 @@ int32_t at_init(struct at_desc **desc, const struct at_init_param *param)
 	/* The read will be handled by the callback */
 	no_os_uart_read_nonblocking(ldesc->uart_desc, &ldesc->read_ch, 1);
 
-	if (at_run_cmd(ldesc, AT_RESET, AT_EXECUTE_OP, NULL))
-		goto free_irq;
+	// if (at_run_cmd(ldesc, AT_RESET, AT_EXECUTE_OP, NULL))
+	// 	goto free_irq;
 
 	/* Disable echoing response */
 	if (0 != stop_echo(ldesc))
