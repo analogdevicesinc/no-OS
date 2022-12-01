@@ -190,7 +190,9 @@ static int32_t no_os_cb_prepare_async_operation(struct no_os_circular_buffer
 		if (ret == -NO_OS_EOVERRUN) {
 			/* Update read index */
 			desc->read.spin_count = desc->write.spin_count - 1;
+#ifndef IIO_IGNORE_BUFF_OVERRUN_ERR
 			desc->read.idx = desc->write.idx;
+#endif
 		}
 		if (!available_size)
 			/* No data to read */
