@@ -223,9 +223,9 @@ int32_t no_os_uart_init(struct no_os_uart_desc **desc,
 		return -ENOMEM;
 
 	max_uart = calloc(1, sizeof(*max_uart));
-	if (!descriptor) {
+	if (!max_uart) {
 		ret = -ENOMEM;
-		goto error;
+		goto error_desc;
 	}
 	uart_regs = MXC_UART_GET_UART(param->device_id);
 	eparam = param->extra;
@@ -251,7 +251,7 @@ int32_t no_os_uart_init(struct no_os_uart_desc **desc,
 		break;
 	default:
 		ret = -EINVAL;
-		goto error;
+		goto error_max;
 	}
 
 	switch(param->size) {
@@ -269,7 +269,7 @@ int32_t no_os_uart_init(struct no_os_uart_desc **desc,
 		break;
 	default:
 		ret = -EINVAL;
-		goto error;
+		goto error_max;
 	}
 
 	switch(param->stop) {
@@ -281,7 +281,7 @@ int32_t no_os_uart_init(struct no_os_uart_desc **desc,
 		break;
 	default:
 		ret = -EINVAL;
-		goto error;
+		goto error_max;
 	}
 
 	switch (eparam->flow) {
@@ -296,38 +296,38 @@ int32_t no_os_uart_init(struct no_os_uart_desc **desc,
 		break;
 	default:
 		ret = -EINVAL;
-		goto error;
+		goto error_max;
 	}
 
 	ret = MXC_UART_Init(uart_regs, descriptor->baud_rate);
 	if (ret != E_NO_ERROR) {
 		ret = -EINVAL;
-		goto error;
+		goto error_max;
 	}
 
 	ret = MXC_UART_SetDataSize(uart_regs, size);
 	if (ret != E_NO_ERROR) {
 		ret = -EINVAL;
-		goto error;
+		goto error_uart;
 	}
 
 	ret = MXC_UART_SetParity(uart_regs, parity);
 	if (ret != E_NO_ERROR) {
 		ret = -EINVAL;
-		goto error;
+		goto error_uart;
 	}
 
 	ret = MXC_UART_SetStopBits(uart_regs, stop);
 	if (ret != E_NO_ERROR) {
 		ret = -EINVAL;
-		goto error;
+		goto error_uart;
 	}
 
 	ret = MXC_UART_SetFlowCtrl(uart_regs, flow, 8);
 
 	if (ret != E_NO_ERROR) {
 		ret = -EINVAL;
-		goto error;
+		goto error_uart;
 	}
 
 	*desc = descriptor;
@@ -335,7 +335,7 @@ int32_t no_os_uart_init(struct no_os_uart_desc **desc,
 	if (param->asynchronous_rx) {
 		ret = lf256fifo_init(&descriptor->rx_fifo);
 		if (ret)
-			goto error;
+			goto error_uart;
 
 		struct no_os_irq_init_param nvic_ip = {
 			.platform_ops = &max_irq_ops,
@@ -343,7 +343,7 @@ int32_t no_os_uart_init(struct no_os_uart_desc **desc,
 
 		ret = no_os_irq_ctrl_init(&max_uart->nvic, &nvic_ip);
 		if (ret)
-			goto error;
+			goto error_uart;
 
 		struct no_os_callback_desc uart_rx_cb = {
 			.callback = uart_rx_callback,
@@ -371,10 +371,12 @@ int32_t no_os_uart_init(struct no_os_uart_desc **desc,
 	return 0;
 error_nvic:
 	no_os_irq_ctrl_remove(max_uart->nvic);
-error:
-	free(max_uart);
-	free(descriptor);
+error_uart:
 	MXC_UART_Shutdown(uart_regs);
+error_max:
+	free(max_uart);
+error_desc:
+	free(descriptor);
 
 	return ret;
 }
