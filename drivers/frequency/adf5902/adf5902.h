@@ -80,7 +80,7 @@
 #define ADF5902_REG0_PVCO(x)		(((x) & 0x1) << 10)
 #define ADF5902_REG0_TX1C(x)		(((x) & 0x1) << 11)
 #define ADF5902_REG0_TX2C(x)		(((x) & 0x1) << 12)
-#define ADF5902_REG0_RESERVED		(0x4007F << 13)
+#define ADF5902_REG0_RESERVED		(0x4007FU << 13)
 
 /* Register 0 Bit Definitions */
 #define ADF5902_POWER_DOWN_LO		0x0
@@ -109,7 +109,7 @@
 
 /* Register 1 Map */
 #define ADF5902_REG1_TX_AMP_CAL_REF(x)	(((x) & 0xFF) << 5)
-#define ADF5902_REG1_RESERVED		(0x7FFBF << 13)
+#define ADF5902_REG1_RESERVED		(0x7FFBFU << 13)
 
 /* Register 1 Bit Definitions */
 #define ADF5902_TX_AMP_CAL_MIN_REF_CODE	0x00
