@@ -225,6 +225,8 @@ void max_uart_callback(mxc_uart_req_t *req, int result)
 		ee = &_events[NO_OS_EVT_UART_TX_COMPLETE];
 	else if (req->rxLen == req->rxCnt && req->rxLen != 0)
 		ee = &_events[NO_OS_EVT_UART_RX_COMPLETE];
+	else
+		return;
 
 	ret = no_os_list_read_find(ee->actions, (void **)&a, &key);
 	if (ret)
