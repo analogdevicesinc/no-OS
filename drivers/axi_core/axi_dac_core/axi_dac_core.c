@@ -82,7 +82,7 @@
 #define AXI_DAC_TO_DDS_SCALE(x)			(((x) >> 0) & 0xFFFF)
 
 #define AXI_DAC_REG_DDS_INIT_INCR(x)	(0x404 + ((x) >> 1) * 0x40 + ((x) & 1) * 0x8)
-#define AXI_DAC_DDS_INIT(x)				(((x) & 0xFFFF) << 16)
+#define AXI_DAC_DDS_INIT(x)				(((x) & 0xFFFFU) << 16)
 #define AXI_DAC_TO_DDS_INIT(x)			(((x) >> 16) & 0xFFFF)
 #define AXI_DAC_DDS_INCR(x)				(((x) & 0xFFFF) << 0)
 #define AXI_DAC_TO_DDS_INCR(x)			(((x) >> 0) & 0xFFFF)
@@ -101,7 +101,7 @@
 #define AXI_DAC_TO_DAC_DDS_SEL(x)		(((x) >> 0) & 0xF)
 
 #define AXI_DAC_REG_CHAN_CNTRL_8(c)		(0x041C + (c) * 0x40)
-#define AXI_DAC_IQCOR_COEFF_1(x)		(((x) & 0xFFFF) << 16)
+#define AXI_DAC_IQCOR_COEFF_1(x)		(((x) & 0xFFFFU) << 16)
 #define AXI_DAC_TO_IQCOR_COEFF_1(x)		(((x) >> 16) & 0xFFFF)
 #define AXI_DAC_IQCOR_COEFF_2(x)		(((x) & 0xFFFF) << 0)
 #define AXI_DAC_TO_IQCOR_COEFF_2(x)		(((x) >> 0) & 0xFFFF)
