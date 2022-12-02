@@ -348,7 +348,7 @@ int32_t mbed_gpio_irq_ctrl_remove(struct no_os_irq_ctrl_desc *desc)
 {
 	uint8_t irq_id;
 
-	if (!desc || !desc->extra || (irq_id >= NB_GPIO_IRQS))
+	if (!desc || !desc->extra)
 		return -EINVAL;
 
 	if (!(((struct mbed_gpio_irq_desc *)desc->extra)->int_obj))
