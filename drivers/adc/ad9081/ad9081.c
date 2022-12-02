@@ -229,7 +229,7 @@ static const char *const ad9081_jrx_204c_states[] = {
 static int32_t ad9081_jesd_rx_link_status_print(struct ad9081_phy *phy)
 {
 	int32_t ret, l;
-	uint16_t stat;
+	uint16_t stat = 0;
 
 	for (l = AD9081_LINK_0; l < AD9081_LINK_ALL; l++) {
 
