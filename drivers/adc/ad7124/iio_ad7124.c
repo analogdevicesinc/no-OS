@@ -476,7 +476,7 @@ static int ad7124_iio_read_scale_chan(void *device, char *buf, uint32_t len,
  */
 static uint32_t ad7124_iio_find_closest_gain(uint32_t new_gain)
 {
-	uint32_t new_pga_bits;
+	uint32_t new_pga_bits = 0;
 	uint32_t old_diff = 0xFFFFFFFF, new_diff;
 	uint32_t i;
 
