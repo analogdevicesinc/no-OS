@@ -20,3 +20,4 @@
 *:libraries/fatfs/*
 *:libraries/mbedtls/*
 *:legacy/*
+*:tools/scripts/platform/*
