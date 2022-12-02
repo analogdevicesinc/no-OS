@@ -380,7 +380,7 @@ int32_t adxcvr_status_error(struct adxcvr *xcvr)
  */
 static int adxcvr_reset(struct adxcvr *xcvr)
 {
-	int ret, retry = 1;
+	int ret = -1, retry = 1;
 
 	do {
 		adxcvr_write(xcvr, ADXCVR_REG_RESETN, 0);
