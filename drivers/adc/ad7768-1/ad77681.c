@@ -415,7 +415,7 @@ int32_t ad77681_data_to_voltage(struct ad77681_dev *dev,
 	int32_t converted_data;
 
 	if (*raw_code & 0x800000)
-		converted_data = (int32_t)((0xFF << 24) | *raw_code);
+		converted_data = (int32_t)((0xFFU << 24) | *raw_code);
 	else
 		converted_data = (int32_t)((0x00 << 24) | *raw_code);
 
