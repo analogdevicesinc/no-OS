@@ -19,9 +19,11 @@ INCS += $(INCLUDE)/no_os_delay.h     \
 		$(INCLUDE)/no_os_lf256fifo.h \
 		$(INCLUDE)/no_os_util.h \
 		$(INCLUDE)/no_os_units.h \
-		$(INCLUDE)/no_os_circular_buffer.h
+		$(INCLUDE)/no_os_circular_buffer.h \
+		$(DRIVERS)/power/ade9430/ade9430.h \
 
 SRCS += $(DRIVERS)/api/no_os_gpio.c \
+		$(DRIVERS)/power/ade9430/ade9430.c \
 		$(DRIVERS)/api/no_os_i2c.c  \
 		$(NO-OS)/util/no_os_lf256fifo.c \
 		$(DRIVERS)/api/no_os_irq.c  \

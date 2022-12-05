@@ -136,6 +136,7 @@ static int32_t _max_spi_enable_ss(uint32_t id, uint32_t chip_select)
 		return -EINVAL;
 	}
 
+	cs.vssel = MXC_GPIO_VSSEL_VDDIOH;
 	MXC_GPIO_Config(&cs);
 
 	return 0;

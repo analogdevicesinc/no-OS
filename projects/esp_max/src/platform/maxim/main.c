@@ -50,6 +50,7 @@
 #include "no_os_delay.h"
 #include "no_os_timer.h"
 #include "mqtt_client.h"
+#include "ade9430.h"
 
 #include "maxim_gpio.h"
 #include "maxim_uart.h"
@@ -69,14 +70,23 @@
 
 
 
-int32_t read_and_send(struct mqtt_desc *mqtt, int i)
+int32_t read_and_send(struct mqtt_desc *mqtt, struct ade9430_dev *dev)
 {
 	struct mqtt_message	msg;
 	uint8_t			buff[100];
 	uint32_t		len;
+	int			ret, temp;
+
+	ret = ade9430_read_temp(dev, &temp);
+	if (ret)
+		return ret;
+
+	ret = ade9430_read_watt(dev);
+	if (ret)
+		return ret;
 
 	/* Serialize data */
-	len = sprintf(buff, "Data from device: %d", i);
+	len = sprintf(buff, "ADE9430 Temp: %d, AWATT_ACC: %u, AWATTHR: %llu", temp, dev->awatt_acc, dev->awatthr);
 	/* Send data to mqtt broker */
 	msg = (struct mqtt_message) {
 		.qos = MQTT_QOS0,
@@ -111,6 +121,31 @@ int main()
 	int ret = -EINVAL;
 	int i = 0;
 	int status;
+
+	struct max_spi_init_param spi_extra_ip  = {
+		.numSlaves = 1,
+		.polarity = SPI_SS_POL_LOW
+	};
+
+	struct no_os_spi_init_param spi_ip = {
+		.device_id = 1,
+		.max_speed_hz = 1000000,
+		.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
+		.mode = NO_OS_SPI_MODE_0,
+		.platform_ops = &max_spi_ops,
+		.chip_select = 0,
+		.extra = &spi_extra_ip,
+	};
+
+	struct ade9430_init_param ade9430_ip = {
+		.spi_init = &spi_ip,
+	};
+
+	struct ade9430_dev *ade9430_device;
+
+	ret = ade9430_init(&ade9430_device, ade9430_ip);
+	if (ret)
+		return ret;
 
 	struct max_gpio_init_param gpio_extra_ip = {
 		.direction = NO_OS_GPIO_OUT,
@@ -268,7 +303,7 @@ int main()
 	printf("Subscribed to topic: %s\n", MQTT_SUBSCRIBE_TOPIC);
 
 	while (true) {
-		status = read_and_send(mqtt, i);
+		status = read_and_send(mqtt, ade9430_device);
 		if (NO_OS_IS_ERR_VALUE(status))
 			PRINT_ERR_AND_RET("Error read_and_send", status);
 		printf("Data sent to broker\n");
