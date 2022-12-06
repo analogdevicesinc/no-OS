@@ -96,7 +96,8 @@ fmt, __FILE__, __LINE__, __func__, ##args)
 #endif
 
 #if defined(NO_OS_LOG_LEVEL) && NO_OS_LOG_LEVEL >= NO_OS_LOG_INFO && NO_OS_LOG_LEVEL <= NO_OS_LOG_DEBUG
-#define pr_info(fmt, args...) printf(fmt, ##args)
+#define pr_info(fmt, args...) printf("[%5d.%06d] " \
+fmt, no_os_get_current_time_s(), no_os_get_current_time_us(), ##args)
 #else
 #define pr_info(fmt, args...)
 #endif

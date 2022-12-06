@@ -82,6 +82,9 @@
 #include "no_os_print_log.h"
 #include "jesd204.h"
 #endif
+
+#include "no_os_time.h"
+
 struct fmcdaq2_dev {
 	struct ad9523_dev *ad9523_device;
 	struct ad9144_dev *ad9144_device;
@@ -1336,15 +1339,18 @@ int main(void)
 #endif
 	printf("\ndaq2: setup and configuration is done\n");
 	printf("\n SAMPLE NO. |     CH1     |     CH 2     |");
-	for (unsigned int i = 0; i < 1024; i++)
+	for (unsigned int i = 0; i < 10; i++)
 		printf("\n %4d       |    0x%04x   |    0x%04x    |",
 		       i, (*(data + i) & 0xFFFF), (*(data + i) >> 16));
+	printf("\n");
 
 	status = fmcdaq2_iio_init(&fmcdaq2, &fmcdaq2_init);
 	if (status != 0)
 		return status;
 
 	fmcdaq2_remove(&fmcdaq2);
+
+	pr_info("Done.\n");
 
 	return 0;
 }

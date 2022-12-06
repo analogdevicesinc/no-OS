@@ -21,7 +21,8 @@ INCS += $(INCLUDE)/no_os_delay.h     \
 		$(INCLUDE)/no_os_list.h      \
 		$(INCLUDE)/no_os_uart.h      \
 		$(INCLUDE)/no_os_lf256fifo.h \
-		$(INCLUDE)/no_os_util.h 
+		$(INCLUDE)/no_os_util.h      \
+		$(INCLUDE)/no_os_time.h
 
 SRCS += $(DRIVERS)/api/no_os_gpio.c \
 		$(DRIVERS)/api/no_os_i2c.c  \
@@ -29,7 +30,8 @@ SRCS += $(DRIVERS)/api/no_os_gpio.c \
 		$(DRIVERS)/api/no_os_irq.c  \
 		$(DRIVERS)/api/no_os_spi.c  \
 		$(NO-OS)/util/no_os_list.c \
-		$(NO-OS)/util/no_os_util.c
+		$(NO-OS)/util/no_os_util.c \
+		$(DRIVERS)/api/no_os_time.c
 
 INCS += $(DRIVERS)/accel/adxl313/adxl313.h
 SRCS += $(DRIVERS)/accel/adxl313/adxl313.c

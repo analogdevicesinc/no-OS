@@ -27,7 +27,8 @@ SRCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c \
 	$(DRIVERS)/api/no_os_gpio.c \
 	$(NO-OS)/util/no_os_util.c \
 	$(NO-OS)/jesd204/jesd204-core.c \
-	$(NO-OS)/jesd204/jesd204-fsm.c
+	$(NO-OS)/jesd204/jesd204-fsm.c \
+	$(DRIVERS)/api/no_os_time.c
 SRCS +=	$(PLATFORM_DRIVERS)/xilinx_axi_io.c \
 	$(PLATFORM_DRIVERS)/xilinx_spi.c \
 	$(PLATFORM_DRIVERS)/xilinx_gpio.c \
@@ -73,7 +74,8 @@ INCS +=	$(INCLUDE)/no_os_axi_io.h \
 	$(INCLUDE)/no_os_util.h \
 	$(INCLUDE)/no_os_print_log.h \
 	$(INCLUDE)/jesd204.h \
-	$(NO-OS)/jesd204/jesd204-priv.h
+	$(NO-OS)/jesd204/jesd204-priv.h \
+	$(INCLUDE)/no_os_time.h
 ifeq (y,$(strip $(TINYIIOD)))
 INCS += $(INCLUDE)/no_os_fifo.h \
 	$(INCLUDE)/no_os_irq.h \
