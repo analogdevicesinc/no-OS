@@ -115,7 +115,6 @@ int32_t max_spi_init(struct no_os_spi_desc **desc,
 		return -EINVAL;
 
 	descriptor = calloc(1, sizeof(*descriptor));
-
 	if (!descriptor)
 		return -ENOMEM;
 
@@ -203,7 +202,6 @@ int32_t max_spi_transfer(struct no_os_spi_desc *desc,
 		req.rxLen = req.rxData ? msgs[i].bytes_number : 0;
 
 		ret = MXC_SPI_MasterTransaction(&req);
-
 		if (ret == E_BAD_PARAM)
 			return -EINVAL;
 		if (ret == E_BAD_STATE)
