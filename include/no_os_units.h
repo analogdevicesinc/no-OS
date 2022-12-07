@@ -65,6 +65,7 @@
 #define MICROWATT_PER_MILLIWATT	1000UL
 #define MICROWATT_PER_WATT	1000000UL
 
+#define MILLIDEGREE_PER_DEGREE	1000UL
 
 /* Returns the given value converted from degree to rad */
 #define DEGREE_TO_RAD(deg) (((deg) * 314159ULL + 9000000ULL) / 18000000ULL)
