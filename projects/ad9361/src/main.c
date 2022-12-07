@@ -608,13 +608,11 @@ int main(void)
 #ifdef DAC_DMA_EXAMPLE
 #ifdef FMCOMMS5
 	axi_dac_init(&ad9361_phy_b->tx_dac, &tx_dac_init);
-	axi_adc_init(&ad9361_phy_b->rx_adc, &rx_adc_init);
 	axi_dac_set_datasel(ad9361_phy_b->tx_dac, -1, AXI_DAC_DATA_SEL_DMA);
 	rx_adc_init.base = AD9361_RX_0_BASEADDR;
 	tx_dac_init.base = AD9361_TX_0_BASEADDR;
 #endif
 	axi_dac_init(&ad9361_phy->tx_dac, &tx_dac_init);
-	axi_adc_init(&ad9361_phy->rx_adc, &rx_adc_init);
 	extern const uint32_t sine_lut_iq[1024];
 	axi_dac_set_datasel(ad9361_phy->tx_dac, -1, AXI_DAC_DATA_SEL_DMA);
 	axi_dac_load_custom_data(ad9361_phy->tx_dac, sine_lut_iq,
