@@ -71,6 +71,18 @@ include $(NO-OS)/tools/scripts/mqtt_srcs.mk
 
 endif
 
+include $(NO-OS)/tools/scripts/azure.mk
+
+EXTRA_INC_PATHS_AZURE		+= $(NO-OS)/libraries/azure-sdk-for-c/sdk/inc
+EXTRA_LIBS_PATHS		+= $(NO-OS)/libraries
+EXTRA_LIBS			+= $(NO-OS)/libraries/libaz_iot_hub.a
+EXTRA_LIBS			+= $(NO-OS)/libraries/libaz_iot_provisioning.a
+EXTRA_LIBS			+= $(NO-OS)/libraries/libaz_noplatform.a
+EXTRA_LIBS			+= $(NO-OS)/libraries/libaz_nohttp.a
+EXTRA_LIBS			+= $(NO-OS)/libraries/libaz_iot_adu.a
+EXTRA_LIBS			+= $(NO-OS)/libraries/libaz_iot_common.a
+EXTRA_LIBS			+= $(NO-OS)/libraries/libaz_core.a
+
 LIB_TARGETS			+= $(IIO_LIB) $(MBEDTLS_TARGETS) $(FATFS_LIB) $(MQTT_LIB)
 EXTRA_LIBS_NAMES	= $(subst lib,,$(basename $(notdir $(EXTRA_LIBS))))
 LIB_FLAGS			+= $(addprefix -l,$(EXTRA_LIBS_NAMES))

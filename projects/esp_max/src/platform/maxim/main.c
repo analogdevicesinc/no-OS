@@ -52,6 +52,7 @@
 #include "mqtt_client.h"
 #include "ade9430.h"
 
+#include "az_iot_hub_client.h"
 #include "maxim_gpio.h"
 #include "maxim_uart.h"
 #include "maxim_irq.h"
@@ -68,7 +69,22 @@
 	return ret;\
 } while (0)
 
+az_iot_hub_client my_client;
+static az_span my_iothub_hostname = AZ_SPAN_LITERAL_FROM_STR("iot-hub-pun3bk4utuxzs.azure-devices.net");
+static az_span my_device_id = AZ_SPAN_LITERAL_FROM_STR("EnergyMonitoringDevice1");
 
+// Make sure to size the buffer to fit the client id (16 is an example)
+static char my_mqtt_client_id[16];
+static size_t my_mqtt_client_id_length;
+
+//This assumes an X509 Cert. SAS keys may also be used.
+static const char my_device_cert[]= "-----BEGIN CERTIFICATE-----abcdefg-----END CERTIFICATE-----";
+
+// Make sure to size the buffer to fit the username (128 is an example)
+static char my_mqtt_user_name[128];
+static size_t my_mqtt_user_name_length;
+
+static char telemetry_topic[128];
 
 int32_t read_and_send(struct mqtt_desc *mqtt, struct ade9430_dev *dev)
 {
@@ -87,14 +103,19 @@ int32_t read_and_send(struct mqtt_desc *mqtt, struct ade9430_dev *dev)
 
 	/* Serialize data */
 	len = sprintf(buff, "ADE9430 Temp: %d, AWATT_ACC: %u, AWATTHR: %llu", temp, dev->awatt_acc, dev->awatthr);
+
+	//Get the topic to send a telemetry message
+	az_iot_hub_client_telemetry_get_publish_topic(&my_client, NULL, telemetry_topic, sizeof(telemetry_topic), NULL);
+
+	//Send the telemetry message with the MQTT client
 	/* Send data to mqtt broker */
 	msg = (struct mqtt_message) {
-		.qos = MQTT_QOS0,
+		.qos = AZ_HUB_CLIENT_DEFAULT_MQTT_TELEMETRY_QOS,
 		.payload = buff,
 		.len = len,
 		.retained = false
 	};
-	return mqtt_publish(mqtt, MQTT_PUBLISH_TOPIC, &msg);
+	return mqtt_publish(mqtt, telemetry_topic, &msg);
 }
 
 /***************************************************************************//**
@@ -121,6 +142,22 @@ int main()
 	int ret = -EINVAL;
 	int i = 0;
 	int status;
+
+	az_iot_hub_client_options options = az_iot_hub_client_options_default();
+ 
+	// Initialize the hub client with hostname, device id, and default connection options.
+	az_iot_hub_client_init(&my_client, my_iothub_hostname, my_device_id, &options);
+	
+	// Get the MQTT client id used for the MQTT connection.
+	az_iot_hub_client_get_client_id(
+	&my_client, my_mqtt_client_id, sizeof(my_mqtt_client_id),  &my_mqtt_client_id_length);
+	
+	// Get the MQTT user name to connect.
+	az_iot_hub_client_get_user_name(
+	&my_client, my_mqtt_user_name, sizeof(my_mqtt_user_name), &my_mqtt_user_name_length);
+	
+	// At this point you are free to use my_mqtt_client_id and my_mqtt_user_name to connect using
+	// your MQTT client.
 
 	struct max_spi_init_param spi_extra_ip  = {
 		.numSlaves = 1,
@@ -197,7 +234,6 @@ int main()
 	status = no_os_irq_global_enable(irq_desc);
 	if (status < 0)
 		return status;
-
 
 	struct no_os_uart_init_param luart_par = {
 		.device_id = UART_DEVICE_ID,
@@ -285,8 +321,8 @@ int main()
 	conn_config = (struct mqtt_connect_config) {
 		.version = MQTT_CONFIG_VERSION,
 		.keep_alive_ms = MQTT_CONFIG_KEEP_ALIVE,
-		.client_name = MQTT_CONFIG_CLIENT_NAME,
-		.username = MQTT_CONFIG_CLI_USER,
+		.client_name = my_mqtt_client_id,
+		.username = my_mqtt_user_name,
 		.password = MQTT_CONFIG_CLI_PASS
 	};
 
@@ -296,11 +332,29 @@ int main()
 
 	printf("Connected to mqtt broker\n");
 
-	/* Subscribe for a topic */
-	status = mqtt_subscribe(mqtt, MQTT_SUBSCRIBE_TOPIC, MQTT_QOS0, NULL);
+	//Subscribe to c2d messages
+	status = mqtt_subscribe(mqtt, AZ_IOT_HUB_CLIENT_C2D_SUBSCRIBE_TOPIC, MQTT_QOS0, NULL);
 	if (NO_OS_IS_ERR_VALUE(status))
 		PRINT_ERR_AND_RET("Error mqtt_subscribe", status);
-	printf("Subscribed to topic: %s\n", MQTT_SUBSCRIBE_TOPIC);
+	printf("Subscribed to topic: %s\n", AZ_IOT_HUB_CLIENT_C2D_SUBSCRIBE_TOPIC);
+
+	//Subscribe to device methods
+	status = mqtt_subscribe(mqtt, AZ_IOT_HUB_CLIENT_METHODS_SUBSCRIBE_TOPIC, MQTT_QOS0, NULL);
+	if (NO_OS_IS_ERR_VALUE(status))
+		PRINT_ERR_AND_RET("Error mqtt_subscribe", status);
+	printf("Subscribed to topic: %s\n", AZ_IOT_HUB_CLIENT_METHODS_SUBSCRIBE_TOPIC);
+
+	//Subscribe to twin patch topic
+	status = mqtt_subscribe(mqtt, AZ_IOT_HUB_CLIENT_TWIN_PATCH_SUBSCRIBE_TOPIC, MQTT_QOS0, NULL);
+	if (NO_OS_IS_ERR_VALUE(status))
+		PRINT_ERR_AND_RET("Error mqtt_subscribe", status);
+	printf("Subscribed to topic: %s\n", AZ_IOT_HUB_CLIENT_TWIN_PATCH_SUBSCRIBE_TOPIC);
+
+	//Subscribe to twin response topic
+	status = mqtt_subscribe(mqtt, AZ_IOT_HUB_CLIENT_TWIN_RESPONSE_SUBSCRIBE_TOPIC, MQTT_QOS0, NULL);
+	if (NO_OS_IS_ERR_VALUE(status))
+		PRINT_ERR_AND_RET("Error mqtt_subscribe", status);
+	printf("Subscribed to topic: %s\n", AZ_IOT_HUB_CLIENT_TWIN_RESPONSE_SUBSCRIBE_TOPIC);
 
 	while (true) {
 		status = read_and_send(mqtt, ade9430_device);
