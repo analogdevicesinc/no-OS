@@ -390,8 +390,7 @@ enum ad413x_gain {
  * @brief Chip IDs.
  */
 enum ad413x_chip_id {
-	/* TBD */
-	AD4130_8 = 0x00
+	AD4130_8 = 0x04
 };
 
 /**
