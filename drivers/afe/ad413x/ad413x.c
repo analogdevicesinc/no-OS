@@ -976,7 +976,6 @@ int32_t ad413x_init(struct ad413x_dev **device,
 	if (ret)
 		goto err_spi;
 
-	/* TBD - chip ID is 0x00 for now */
 	ret = ad413x_reg_read(dev, AD413X_REG_ID, &reg_data);
 	if (ret)
 		goto err_spi;
