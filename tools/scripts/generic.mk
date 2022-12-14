@@ -1,7 +1,7 @@
 #------------------------------------------------------------------------------
 #                             EXPORTED VARIABLES                               
 #------------------------------------------------------------------------------
-# Used by nested Makefils (mbedtls, fatfs, iio)
+# Used by nested Makefiles (mbedtls, fatfs, iio)
 export CFLAGS
 export CC
 export AR
