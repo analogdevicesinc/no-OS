@@ -45,7 +45,8 @@
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-struct no_os_uart_init_param ad74413r_uart_ip = {
+#ifdef DUMMY_EXAMPLE
+struct no_os_uart_init_param adin1110_uart_ip = {
 	.device_id = UART_DEVICE_ID,
 	.irq_id = UART_IRQ_ID,
 	.asynchronous_rx = true,
@@ -57,11 +58,11 @@ struct no_os_uart_init_param ad74413r_uart_ip = {
 	.extra = UART_EXTRA,
 };
 
-struct no_os_spi_init_param ad74413r_spi_ip = {
+struct no_os_spi_init_param adin1110_spi_ip = {
 	.device_id = SPI_DEVICE_ID,
 	.max_speed_hz = SPI_BAUDRATE,
 	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
-	.mode = NO_OS_SPI_MODE_1,
+	.mode = NO_OS_SPI_MODE_0,
 	.platform_ops = SPI_OPS,
 	.chip_select = SPI_CS,
 	.extra = SPI_EXTRA,

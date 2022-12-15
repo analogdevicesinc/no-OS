@@ -35,6 +35,9 @@ SRCS += $(DRIVERS)/api/no_os_gpio.c \
 		$(NO-OS)/util/no_os_util.c \
 		$(NO-OS)/util/no_os_alloc.c
 
+INCS += $(DRIVERS)/net/adin1110/adin1110.h
+SRCS += $(DRIVERS)/net/adin1110/adin1110.c
+
 INCS += $(DRIVERS)/adc-dac/ad74413r/ad74413r.h
 SRCS += $(DRIVERS)/adc-dac/ad74413r/ad74413r.c
 

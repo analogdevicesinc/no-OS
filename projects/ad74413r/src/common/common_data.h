@@ -51,9 +51,11 @@
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-extern struct no_os_uart_init_param ad74413r_uart_ip;
+#ifdef DUMMY_EXAMPLE
+extern struct no_os_uart_init_param adin1110_uart_ip;
+#endif
 
-extern struct no_os_spi_init_param ad74413r_spi_ip;
+extern struct no_os_spi_init_param adin1110_spi_ip;
 extern struct ad74413r_init_param ad74413r_ip;
 
 #ifdef IIO_TRIGGER_EXAMPLE
