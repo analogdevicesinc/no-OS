@@ -63,7 +63,6 @@ struct no_os_gpio_init_param adxl355_gpio_drdy_ip = {
 
 struct max_gpio_init_param adxl355_gpio_extra_ip = {
 	.vssel = MXC_GPIO_VSSEL_VDDIOH,
-	.direction = 0,
 };
 #endif
 

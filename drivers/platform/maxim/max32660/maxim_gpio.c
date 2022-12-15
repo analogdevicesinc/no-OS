@@ -74,7 +74,7 @@ int32_t max_gpio_get(struct no_os_gpio_desc **desc,
 	int32_t ret;
 	mxc_gpio_cfg_t *g_cfg;
 	struct max_gpio_init_param *pextra;
-	uint32_t m_pad, m_func;
+	uint32_t m_pad;
 	struct no_os_gpio_desc *descriptor;
 
 	if (!param || !param->extra || param->number >= N_PINS)
@@ -107,8 +107,6 @@ int32_t max_gpio_get(struct no_os_gpio_desc **desc,
 		goto free_g_cfg;
 	}
 
-	m_func = (pextra->direction == 0) ? MXC_GPIO_FUNC_IN : MXC_GPIO_FUNC_OUT;
-
 	if (param->port >= N_PORTS) {
 		ret = -EINVAL;
 		goto free_g_cfg;
@@ -117,7 +115,7 @@ int32_t max_gpio_get(struct no_os_gpio_desc **desc,
 	g_cfg->port = MXC_GPIO_GET_GPIO(param->port);
 	g_cfg->mask = NO_OS_BIT(param->number);
 	g_cfg->pad = m_pad;
-	g_cfg->func = m_func;
+	g_cfg->func = MXC_GPIO_FUNC_IN;
 	g_cfg->vssel = pextra->vssel;
 
 	descriptor->port = param->port;
