@@ -127,6 +127,7 @@ int32_t max_gpio_get(struct no_os_gpio_desc **desc,
 	g_cfg->mask = NO_OS_BIT(param->number);
 	g_cfg->pad = m_pad;
 	g_cfg->func = m_func;
+	g_cfg->vssel = pextra->vssel;
 
 	descriptor->port = param->port;
 	descriptor->number = param->number;
