@@ -59,16 +59,15 @@
 
 #define UART_DEVICE_ID  0
 #define UART_BAUDRATE   57600
-#define UART_OPS        &max_uart_ops
-#define UART_EXTRA      &ad74413r_uart_extra_ip
+#define UART_EXTRA      &adin1110_uart_extra_ip
 
 #define SPI_DEVICE_ID   1
 #define SPI_BAUDRATE    1000000
-#define SPI_CS          1
+#define SPI_CS          0
 #define SPI_OPS         &max_spi_ops
-#define SPI_EXTRA       &ad74413r_spi_extra_ip
+#define SPI_EXTRA       &adin1110_spi_extra_ip
 
-extern struct max_uart_init_param ad74413r_uart_extra_ip;
-extern struct max_spi_init_param ad74413r_spi_extra_ip;
+extern struct max_uart_init_param adin1110_uart_extra_ip;
+extern struct max_spi_init_param adin1110_spi_extra_ip;
 
 #endif /* __PARAMETERS_H__ */

@@ -64,7 +64,7 @@ int main()
 #ifdef DUMMY_EXAMPLE
 	struct no_os_uart_desc *uart_desc;
 
-	ret = no_os_uart_init(&uart_desc, &ad74413r_uart_ip);
+	ret = no_os_uart_init(&uart_desc, &adin1110_uart_ip);
 	if (ret)
 		return ret;
 

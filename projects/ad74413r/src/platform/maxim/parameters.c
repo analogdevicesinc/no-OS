@@ -46,12 +46,12 @@
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 #ifdef DUMMY_EXAMPLE
-struct max_uart_init_param ad74413r_uart_extra_ip = {
+struct max_uart_init_param adin1110_uart_extra_ip = {
 	.flow = UART_FLOW_DIS
 };
 #endif
 
-struct max_spi_init_param ad74413r_spi_extra_ip  = {
+struct max_spi_init_param adin1110_spi_extra_ip  = {
 	.numSlaves = 1,
 	.polarity = SPI_SS_POL_LOW,
 	.vssel = MXC_GPIO_VSSEL_VDDIOH,
