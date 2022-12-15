@@ -76,8 +76,6 @@ extern const struct no_os_irq_platform_ops max_gpio_irq_ops;
 struct max_gpio_init_param {
 	/** GPIO's voltage level */
 	mxc_gpio_vssel_t vssel;
-	/** Input/Output */
-	uint32_t direction;
 };
 
 #endif
