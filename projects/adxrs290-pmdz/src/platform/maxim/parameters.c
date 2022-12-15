@@ -47,7 +47,6 @@
 /******************************************************************************/
 struct max_gpio_init_param adxrs290_gpio_extra_ip = {
 	.vssel = MXC_GPIO_VSSEL_VDDIOH,
-	.direction = 0,
 };
 
 struct max_spi_init_param adxrs290_spi_extra_ip  = {
