@@ -88,6 +88,11 @@ struct mbed_uart_desc {
 	bool is_console_stdio_port; /* Set the UART/USB port for console stdio operation */
 };
 
+/**
+* @brief Mbed platform specific UART platform ops structure
+*/
+extern const struct no_os_uart_platform_ops mbed_uart_ops;
+
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/

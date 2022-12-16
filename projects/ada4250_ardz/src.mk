@@ -12,6 +12,7 @@ SRCS += $(NO-OS)/util/no_os_util.c \
 	$(DRIVERS)/api/no_os_irq.c \
 	$(DRIVERS)/api/no_os_gpio.c \
 	$(DRIVERS)/api/no_os_timer.c \
+	$(DRIVERS)/api/no_os_uart.c \
 	$(DRIVERS)/platform/$(PLATFORM)/$(PLATFORM)_spi.c \
 	$(DRIVERS)/platform/$(PLATFORM)/$(PLATFORM)_irq.c \
 	$(DRIVERS)/platform/$(PLATFORM)/$(PLATFORM)_gpio.c \

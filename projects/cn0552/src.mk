@@ -13,6 +13,7 @@ SRCS += $(NO-OS)/util/no_os_util.c \
 	$(DRIVERS)/api/no_os_irq.c \
 	$(DRIVERS)/api/no_os_i2c.c \
 	$(DRIVERS)/api/no_os_timer.c \
+	$(DRIVERS)/api/no_os_uart.c \
 	$(PROJECT)/src/app/headless.c
 
 INCS +=	$(INCLUDE)/no_os_uart.h \

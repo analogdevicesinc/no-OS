@@ -60,6 +60,7 @@ SRCS += $(PLATFORM_DRIVERS)/$(PLATFORM)_uart.c \
 	$(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.c \
 	$(DRIVERS)/axi_core/iio_axi_dac/iio_axi_dac.c \
 	$(NO-OS)/iio/iio_app/iio_app.c \
+	$(DRIVERS)/api/no_os_uart.c \
 	$(DRIVERS)/api/no_os_irq.c
 endif
 INCS +=	$(PROJECT)/src/app/app_config.h \

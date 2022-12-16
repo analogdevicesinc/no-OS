@@ -41,7 +41,6 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include "no_os_error.h"
-#include "no_os_uart.h"
 #include "linux_uart.h"
 
 #include <fcntl.h>
@@ -76,8 +75,8 @@ struct linux_uart_desc {
  * @param param - The structure that contains the UART parameters.
  * @return 0 in case of success, error code otherwise.
  */
-int32_t no_os_uart_init(struct no_os_uart_desc **desc,
-			struct no_os_uart_init_param *param)
+static int32_t linux_uart_init(struct no_os_uart_desc **desc,
+			       struct no_os_uart_init_param *param)
 {
 	struct linux_uart_init_param *linux_init;
 	struct linux_uart_desc *linux_desc;
@@ -238,11 +237,11 @@ free_desc:
 };
 
 /**
- * @brief Free the resources allocated by no_os_uart_init().
+ * @brief Free the resources allocated by linux_uart_init().
  * @param desc - The UART descriptor.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t no_os_uart_remove(struct no_os_uart_desc *desc)
+static int32_t linux_uart_remove(struct no_os_uart_desc *desc)
 {
 	struct linux_uart_desc *linux_desc;
 	int32_t ret;
@@ -266,8 +265,9 @@ int32_t no_os_uart_remove(struct no_os_uart_desc *desc)
  * @param bytes_number - Number of bytes to read.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t no_os_uart_write(struct no_os_uart_desc *desc, const uint8_t *data,
-			 uint32_t bytes_number)
+static int32_t linux_uart_write(struct no_os_uart_desc *desc,
+				const uint8_t *data,
+				uint32_t bytes_number)
 {
 	struct linux_uart_desc *linux_desc;
 	uint32_t count = 0;
@@ -291,8 +291,8 @@ int32_t no_os_uart_write(struct no_os_uart_desc *desc, const uint8_t *data,
  * @param bytes_number - Number of bytes to read.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t no_os_uart_read(struct no_os_uart_desc *desc, uint8_t *data,
-			uint32_t bytes_number)
+static int32_t linux_uart_read(struct no_os_uart_desc *desc, uint8_t *data,
+			       uint32_t bytes_number)
 {
 	struct linux_uart_desc *linux_desc;
 	uint32_t count = 0;
@@ -307,4 +307,14 @@ int32_t no_os_uart_read(struct no_os_uart_desc *desc, uint8_t *data,
 	}
 
 	return 0;
+};
+
+/**
+ * @brief Linux platform specific UART platform ops structure
+ */
+const struct no_os_uart_platform_ops linux_uart_ops = {
+	.init = &linux_uart_init,
+	.read = &linux_uart_read,
+	.write = &linux_uart_write,
+	.remove = &linux_uart_remove
 };

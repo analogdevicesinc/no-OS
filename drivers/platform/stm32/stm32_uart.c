@@ -60,8 +60,8 @@ void uart_rx_callback(void *context)
  * @param param - The structure that contains the UART parameters.
  * @return 0 in case of success, error code otherwise.
  */
-int32_t no_os_uart_init(struct no_os_uart_desc **desc,
-			struct no_os_uart_init_param *param)
+static int32_t stm32_uart_init(struct no_os_uart_desc **desc,
+			       struct no_os_uart_init_param *param)
 {
 	struct stm32_uart_init_param *suip;
 	struct stm32_uart_desc *sud;
@@ -179,11 +179,11 @@ error:
 }
 
 /**
- * @brief Free the resources allocated by no_os_uart_init().
+ * @brief Free the resources allocated by stm32_uart_init().
  * @param desc - The UART descriptor.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t no_os_uart_remove(struct no_os_uart_desc *desc)
+static int32_t stm32_uart_remove(struct no_os_uart_desc *desc)
 {
 	struct stm32_uart_desc *sud;
 
@@ -212,8 +212,9 @@ int32_t no_os_uart_remove(struct no_os_uart_desc *desc)
  * @param bytes_number - Number of bytes to read.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t no_os_uart_write(struct no_os_uart_desc *desc, const uint8_t *data,
-			 uint32_t bytes_number)
+static int32_t stm32_uart_write(struct no_os_uart_desc *desc,
+				const uint8_t *data,
+				uint32_t bytes_number)
 {
 	struct stm32_uart_desc *sud;
 	int32_t ret;
@@ -249,8 +250,8 @@ int32_t no_os_uart_write(struct no_os_uart_desc *desc, const uint8_t *data,
  * @param bytes_number - Number of bytes to read.
  * @return positive number of received bytes in case of success, negative error code otherwise.
  */
-int32_t no_os_uart_read(struct no_os_uart_desc *desc, uint8_t *data,
-			uint32_t bytes_number)
+static int32_t stm32_uart_read(struct no_os_uart_desc *desc, uint8_t *data,
+			       uint32_t bytes_number)
 {
 	struct stm32_uart_desc *sud;
 	uint32_t i = 0;
@@ -290,3 +291,13 @@ int32_t no_os_uart_read(struct no_os_uart_desc *desc, uint8_t *data,
 
 	return bytes_number;
 }
+
+/**
+ * @brief STM32 platform specific UART platform ops structure
+ */
+const struct no_os_uart_platform_ops stm32_uart_ops = {
+	.init = &stm32_uart_init,
+	.read = &stm32_uart_read,
+	.write = &stm32_uart_write,
+	.remove = &stm32_uart_remove
+};

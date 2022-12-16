@@ -73,6 +73,7 @@ SRCS += $(NO-OS)/util/no_os_fifo.c \
 	$(NO-OS)/util/no_os_lf256fifo.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c \
 	$(DRIVERS)/api/no_os_irq.c \
+	$(DRIVERS)/api/no_os_uart.c
 
 INCS += $(INCLUDE)/no_os_fifo.h \
 	$(INCLUDE)/no_os_irq.h \

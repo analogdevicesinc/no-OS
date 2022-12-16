@@ -49,6 +49,7 @@
 #include <stdint.h>
 #include "no_os_error.h"
 #include "no_os_irq.h"
+#include "no_os_uart.h"
 
 /** Maximum number of bytes that can be transmitted on UART in one transfer */
 #define NO_OS_UART_MAX_BYTES	1024u
@@ -156,5 +157,10 @@ struct no_os_aducm_uart_desc {
 	/** RX complete callback */
 	struct no_os_callback_desc rx_callback;
 };
+
+/**
+* @brief aducm3029 platform specific UART platform ops structure
+*/
+extern const struct no_os_uart_platform_ops aducm_uart_ops;
 
 #endif /* ADUCM3029_UART_H_ */
