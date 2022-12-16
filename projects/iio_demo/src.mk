@@ -12,7 +12,8 @@ INCS += $(PROJECT)/src/platform/platform_includes.h
 INCS += $(PROJECT)/src/platform/$(PLATFORM)/parameters.h
 SRCS += $(PROJECT)/src/platform/$(PLATFORM)/parameters.c 
 
-SRCS += $(NO-OS)/util/no_os_fifo.c      \
+SRCS += $(DRIVERS)/api/no_os_uart.c     \
+        $(NO-OS)/util/no_os_fifo.c      \
         $(NO-OS)/util/no_os_list.c      \
         $(NO-OS)/util/no_os_util.c
 

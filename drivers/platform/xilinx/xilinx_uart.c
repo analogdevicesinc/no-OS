@@ -107,7 +107,7 @@ static int32_t uart_fifo_insert(struct no_os_uart_desc *desc)
  * @param data - read value.
  * @return 0 in case of success, -1 otherwise.
  */
-static int32_t no_os_uart_read_byte(struct no_os_uart_desc *desc, uint8_t *data)
+static int32_t xil_uart_read_byte(struct no_os_uart_desc *desc, uint8_t *data)
 {
 	struct xil_uart_desc *xil_uart_desc = desc->extra;
 #ifdef XUARTLITE_H
@@ -157,12 +157,12 @@ static int32_t no_os_uart_read_byte(struct no_os_uart_desc *desc, uint8_t *data)
  * @param bytes_number - Number of bytes to read.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t no_os_uart_read(struct no_os_uart_desc *desc, uint8_t *data,
-			uint32_t bytes_number)
+static int32_t xil_uart_read(struct no_os_uart_desc *desc, uint8_t *data,
+			     uint32_t bytes_number)
 {
 	int ret;
 	for (uint32_t i = 0; i < bytes_number; i++) {
-		ret = no_os_uart_read_byte(desc, &data[i]);
+		ret = xil_uart_read_byte(desc, &data[i]);
 		if (ret < 0)
 			return ret;
 	}
@@ -177,8 +177,8 @@ int32_t no_os_uart_read(struct no_os_uart_desc *desc, uint8_t *data,
  * @param bytes_number - Number of bytes to read.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t no_os_uart_write(struct no_os_uart_desc *desc, const uint8_t *data,
-			 uint32_t bytes_number)
+static int32_t xil_uart_write(struct no_os_uart_desc *desc, const uint8_t *data,
+			      uint32_t bytes_number)
 {
 	struct xil_uart_desc *xil_uart_desc = desc->extra;
 #ifdef XUARTLITE_H
@@ -330,8 +330,8 @@ static int32_t uart_irq_init(struct no_os_uart_desc *descriptor)
  * @param param - The structure that contains the UART parameters.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t no_os_uart_init(struct no_os_uart_desc **desc,
-			struct no_os_uart_init_param *param)
+static int32_t xil_uart_init(struct no_os_uart_desc **desc,
+			     struct no_os_uart_init_param *param)
 {
 	struct no_os_uart_desc *descriptor;
 	struct xil_uart_init_param *xil_uart_init_param;
@@ -446,11 +446,11 @@ error_free_descriptor:
 }
 
 /**
- * @brief Free the resources allocated by no_os_uart_init().
+ * @brief Free the resources allocated by xil_uart_init().
  * @param desc - The UART descriptor.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t no_os_uart_remove(struct no_os_uart_desc *desc)
+static int32_t xil_uart_remove(struct no_os_uart_desc *desc)
 {
 	struct xil_uart_desc *xil_uart_desc = desc->extra;
 	free(xil_uart_desc->instance);
@@ -465,7 +465,7 @@ int32_t no_os_uart_remove(struct no_os_uart_desc *desc)
  * @param desc - The UART descriptor.
  * @return number of errors.
  */
-uint32_t no_os_uart_get_errors(struct no_os_uart_desc *desc)
+static uint32_t xil_uart_get_errors(struct no_os_uart_desc *desc)
 {
 	struct xil_uart_desc *xil_uart_desc = desc->extra;
 	uint32_t total_error_count = xil_uart_desc->total_error_count;
@@ -474,8 +474,21 @@ uint32_t no_os_uart_get_errors(struct no_os_uart_desc *desc)
 	return total_error_count;
 }
 
-int32_t no_os_uart_read_nonblocking(struct no_os_uart_desc *desc, uint8_t *data,
-				    uint32_t bytes_number)
+static int32_t xil_uart_read_nonblocking(struct no_os_uart_desc *desc,
+		uint8_t *data,
+		uint32_t bytes_number)
 {
 	return -EINVAL;
 }
+
+/**
+ * @brief Xilinx platform specific UART platform ops structure
+ */
+const struct no_os_uart_platform_ops xil_uart_ops = {
+	.init = &xil_uart_init,
+	.read = &xil_uart_read,
+	.write = &xil_uart_write,
+	.read_nonblocking = &xil_uart_read_nonblocking,
+	.get_errors = &xil_uart_get_errors,
+	.remove = &xil_uart_remove
+};

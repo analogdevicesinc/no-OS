@@ -30,6 +30,7 @@ SRCS += $(PLATFORM_DRIVERS)/$(PLATFORM)_uart.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c \
 	$(DRIVERS)/api/no_os_irq.c \
 	$(NO-OS)/util/no_os_fifo.c \
+	$(DRIVERS)/api/no_os_uart.c \
 	$(NO-OS)/util/no_os_list.c						
 endif
 INCS += $(PROJECT)/src/parameters.h

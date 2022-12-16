@@ -25,6 +25,7 @@ SRCS += $(NO-OS)/util/no_os_fifo.c \
 	$(NO-OS)/util/no_os_lf256fifo.c \
 	$(PLATFORM_DRIVERS)/irq.c \
 	$(NO-OS)/iio/iio_app/iio_app.c \
+	$(DRIVERS)/api/no_os_uart.c \
 	$(DRIVERS)/frequency/adf5902/iio_adf5902.c
 endif
 INCS +=	$(PROJECT)/src/app_config.h \

@@ -26,6 +26,7 @@ SRCS += $(NO-OS)/util/no_os_fifo.c \
 	$(NO-OS)/util/no_os_list.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_uart.c \
 	$(NO-OS)/util/no_os_lf256fifo.c \
+	$(DRIVERS)/api/no_os_uart.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c
 endif
 SRCS +=	$(PLATFORM_DRIVERS)/xilinx_axi_io.c \

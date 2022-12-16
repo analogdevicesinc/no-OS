@@ -152,8 +152,8 @@ static void free_desc_mem(struct no_os_uart_desc *desc)
  * @param bytes_number:	Number of bytes to be read. Between 1 and 1024
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t no_os_uart_read(struct no_os_uart_desc *desc, uint8_t *data,
-			uint32_t bytes_number)
+static int32_t aducm3029_uart_read(struct no_os_uart_desc *desc, uint8_t *data,
+				   uint32_t bytes_number)
 {
 	struct no_os_aducm_uart_desc	*extra;
 	uint32_t		errors;
@@ -179,7 +179,7 @@ int32_t no_os_uart_read(struct no_os_uart_desc *desc, uint8_t *data,
 		return idx;
 	}
 
-	/* Wait until a previously no_os_uart_read_nonblocking ends */
+	/* Wait until a previously aducm3029_uart_read_nonblocking ends */
 	while (extra->read_desc.is_nonblocking)
 		;
 
@@ -208,8 +208,9 @@ failure:
  * @param bytes_number:	Number of bytes to be written. Between 1 and 1024
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t no_os_uart_write(struct no_os_uart_desc *desc, const uint8_t *data,
-			 uint32_t bytes_number)
+static int32_t aducm3029_uart_write(struct no_os_uart_desc *desc,
+				    const uint8_t *data,
+				    uint32_t bytes_number)
 {
 	struct no_os_aducm_uart_desc	*extra;
 	uint32_t		errors;
@@ -222,7 +223,7 @@ int32_t no_os_uart_write(struct no_os_uart_desc *desc, const uint8_t *data,
 	/* TODO: Add support for more than 1024 bytes */
 
 	extra = desc->extra;
-	/* Wait until a previously no_os_uart_write_nonblocking ends */
+	/* Wait until a previously aducm3029_uart_write_nonblocking ends */
 	while (extra->write_desc.is_nonblocking)
 		;
 
@@ -255,8 +256,9 @@ failure:
  * @param bytes_number:	Number of bytes to be read
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t no_os_uart_read_nonblocking(struct no_os_uart_desc *desc, uint8_t *data,
-				    uint32_t bytes_number)
+static int32_t aducm3029_uart_read_nonblocking(struct no_os_uart_desc *desc,
+		uint8_t *data,
+		uint32_t bytes_number)
 {
 	struct no_os_aducm_uart_desc	*extra;
 	uint32_t		to_read;
@@ -292,9 +294,9 @@ int32_t no_os_uart_read_nonblocking(struct no_os_uart_desc *desc, uint8_t *data,
  * @param bytes_number:	Number of bytes to be written
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t no_os_uart_write_nonblocking(struct no_os_uart_desc *desc,
-				     const uint8_t *data,
-				     uint32_t bytes_number)
+static int32_t aducm3029_uart_write_nonblocking(struct no_os_uart_desc *desc,
+		const uint8_t *data,
+		uint32_t bytes_number)
 {
 	struct no_os_aducm_uart_desc	*extra;
 	uint32_t		to_write;
@@ -328,8 +330,8 @@ int32_t no_os_uart_write_nonblocking(struct no_os_uart_desc *desc,
  * @param param: Descriptor used to configure the UART device
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t no_os_uart_init(struct no_os_uart_desc **desc,
-			struct no_os_uart_init_param *param)
+static int32_t aducm3029_uart_init(struct no_os_uart_desc **desc,
+				   struct no_os_uart_init_param *param)
 {
 	int ret;
 	ADI_UART_RESULT			uart_ret;
@@ -430,7 +432,7 @@ int32_t no_os_uart_init(struct no_os_uart_desc **desc,
 		if (ret < 0)
 			goto error_register;
 
-		ret = no_os_uart_read_nonblocking(descriptor, &c, 1);
+		ret = aducm3029_uart_read_nonblocking(descriptor, &c, 1);
 		if (ret < 0)
 			goto error_enable;
 	}
@@ -453,11 +455,11 @@ failure:
 }
 
 /**
- * @brief Free the resources allocated by \ref no_os_uart_init().
+ * @brief Free the resources allocated by \ref aducm3029_uart_init().
  * @param desc: Descriptor of the UART device
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t no_os_uart_remove(struct no_os_uart_desc *desc)
+static int32_t aducm3029_uart_remove(struct no_os_uart_desc *desc)
 {
 	struct no_os_aducm_uart_desc *aducm_desc;
 
@@ -485,7 +487,7 @@ int32_t no_os_uart_remove(struct no_os_uart_desc *desc)
  * @param desc: Descriptor of the UART device
  * @return 0 in case of success, -1 otherwise.
  */
-uint32_t no_os_uart_get_errors(struct no_os_uart_desc *desc)
+static uint32_t aducm3029_uart_get_errors(struct no_os_uart_desc *desc)
 {
 	struct no_os_aducm_uart_desc *extra;
 
@@ -497,4 +499,17 @@ uint32_t no_os_uart_get_errors(struct no_os_uart_desc *desc)
 
 	return ret;
 }
+
+/**
+ * @brief aducm3029 platform specific UART platform ops structure
+ */
+const struct no_os_uart_platform_ops aducm_uart_ops = {
+	.init = &aducm3029_uart_init,
+	.read = &aducm3029_uart_read,
+	.write = &aducm3029_uart_write,
+	.read_nonblocking = &aducm3029_uart_read_nonblocking,
+	.write_nonblocking = &aducm3029_uart_write_nonblocking,
+	.get_errors = &aducm3029_uart_get_errors,
+	.remove = &aducm3029_uart_remove
+};
 
