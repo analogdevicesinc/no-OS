@@ -51,11 +51,17 @@
 int32_t no_os_i2c_init(struct no_os_i2c_desc **desc,
 		       const struct no_os_i2c_init_param *param)
 {
-	if (!param)
-		return -1;
+	int32_t ret;
 
-	if ((param->platform_ops->i2c_ops_init(desc, param)))
-		return -1;
+	if (!param || !param->platform_ops)
+		return -EINVAL;
+
+	if (!param->platform_ops->i2c_ops_init)
+		return -ENOSYS;
+
+	ret = param->platform_ops->i2c_ops_init(desc, param);
+	if (ret)
+		return ret;
 
 	(*desc)->platform_ops = param->platform_ops;
 
@@ -69,6 +75,12 @@ int32_t no_os_i2c_init(struct no_os_i2c_desc **desc,
  */
 int32_t no_os_i2c_remove(struct no_os_i2c_desc *desc)
 {
+	if (!desc || !desc->platform_ops)
+		return -EINVAL;
+
+	if (!desc->platform_ops->i2c_ops_remove)
+		return -ENOSYS;
+
 	return desc->platform_ops->i2c_ops_remove(desc);
 }
 
@@ -87,6 +99,12 @@ int32_t no_os_i2c_write(struct no_os_i2c_desc *desc,
 			uint8_t bytes_number,
 			uint8_t stop_bit)
 {
+	if (!desc || !desc->platform_ops)
+		return -EINVAL;
+
+	if (!desc->platform_ops->i2c_ops_write)
+		return -ENOSYS;
+
 	return desc->platform_ops->i2c_ops_write(desc, data, bytes_number,
 			stop_bit);
 }
@@ -106,6 +124,12 @@ int32_t no_os_i2c_read(struct no_os_i2c_desc *desc,
 		       uint8_t bytes_number,
 		       uint8_t stop_bit)
 {
+	if (!desc || !desc->platform_ops)
+		return -EINVAL;
+
+	if (!desc->platform_ops->i2c_ops_read)
+		return -ENOSYS;
+
 	return desc->platform_ops->i2c_ops_read(desc, data, bytes_number,
 						stop_bit);
 }
