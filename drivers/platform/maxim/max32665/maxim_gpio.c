@@ -122,7 +122,6 @@ int32_t max_gpio_get(struct no_os_gpio_desc **desc,
 	descriptor->port = param->port;
 	descriptor->number = param->number;
 	descriptor->pull = param->pull;
-	descriptor->platform_ops = param->platform_ops;
 	descriptor->extra = g_cfg;
 
 	MXC_GPIO_Init(param->port);

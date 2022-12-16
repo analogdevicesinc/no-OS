@@ -134,7 +134,6 @@ static int aducm_gpio_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
 		goto error_dev;
 
 	descriptor->irq_ctrl_id = param->irq_ctrl_id;
-	descriptor->platform_ops = &aducm_gpio_irq_ops;
 	descriptor->extra = extra;
 
 	ret = no_os_list_init(&extra->actions, NO_OS_LIST_PRIORITY_LIST,

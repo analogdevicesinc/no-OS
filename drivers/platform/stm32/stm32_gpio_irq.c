@@ -174,7 +174,6 @@ static int32_t stm32_gpio_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
 
 		gpio_irq_desc->extra = sdesc;
 		gpio_irq_desc->irq_ctrl_id = param->irq_ctrl_id;
-		gpio_irq_desc->platform_ops = param->platform_ops;
 
 		ret = no_os_list_init(&actions, NO_OS_LIST_PRIORITY_LIST, irq_action_cmp);
 		if (ret)
