@@ -135,7 +135,6 @@ int32_t max_spi_init(struct no_os_spi_desc **desc,
 	descriptor->chip_select = param->chip_select;
 	descriptor->mode = param->mode;
 	descriptor->bit_order = param->bit_order;
-	descriptor->platform_ops = &max_spi_ops;
 	descriptor->extra = eparam;
 
 	if (descriptor->device_id >= MXC_SPI_INSTANCES) {

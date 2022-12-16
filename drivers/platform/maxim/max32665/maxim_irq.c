@@ -259,7 +259,6 @@ int32_t max_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
 		return -ENOMEM;
 
 	descriptor->irq_ctrl_id = param->irq_ctrl_id;
-	descriptor->platform_ops = param->platform_ops;
 	descriptor->extra = param->extra;
 
 	*desc = descriptor;
