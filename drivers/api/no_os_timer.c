@@ -56,11 +56,17 @@
 int32_t no_os_timer_init(struct no_os_timer_desc **desc,
 			 struct no_os_timer_init_param *param)
 {
-	if (!param)
+	int32_t ret;
+
+	if (!param || !param->platform_ops)
 		return -EINVAL;
 
-	if ((param->platform_ops->init(desc, param)))
-		return -EINVAL;
+	if (!param->platform_ops->init)
+		return -ENOSYS;
+
+	ret = param->platform_ops->init(desc, param);
+	if (ret)
+		return ret;
 
 	(*desc)->platform_ops = param->platform_ops;
 
@@ -74,8 +80,11 @@ int32_t no_os_timer_init(struct no_os_timer_desc **desc,
  */
 int32_t no_os_timer_remove(struct no_os_timer_desc *desc)
 {
-	if (!desc)
+	if (!desc || !desc->platform_ops)
 		return -EINVAL;
+
+	if (!desc->platform_ops->remove)
+		return -ENOSYS;
 
 	return desc->platform_ops->remove(desc);
 }
@@ -87,8 +96,11 @@ int32_t no_os_timer_remove(struct no_os_timer_desc *desc)
  */
 int32_t no_os_timer_start(struct no_os_timer_desc *desc)
 {
-	if (!desc)
+	if (!desc || !desc->platform_ops)
 		return -EINVAL;
+
+	if (!desc->platform_ops->start)
+		return -ENOSYS;
 
 	return desc->platform_ops->start(desc);
 }
@@ -100,8 +112,11 @@ int32_t no_os_timer_start(struct no_os_timer_desc *desc)
  */
 int32_t no_os_timer_stop(struct no_os_timer_desc *desc)
 {
-	if (!desc)
+	if (!desc || !desc->platform_ops)
 		return -EINVAL;
+
+	if (!desc->platform_ops->stop)
+		return -ENOSYS;
 
 	return desc->platform_ops->stop(desc);
 }
@@ -115,8 +130,11 @@ int32_t no_os_timer_stop(struct no_os_timer_desc *desc)
 int32_t no_os_timer_counter_get(struct no_os_timer_desc *desc,
 				uint32_t *counter)
 {
-	if (!desc || !counter)
+	if (!desc || !desc->platform_ops || !counter)
 		return -EINVAL;
+
+	if (!desc->platform_ops->counter_get)
+		return -ENOSYS;
 
 	return desc->platform_ops->counter_get(desc, counter);
 }
@@ -129,8 +147,11 @@ int32_t no_os_timer_counter_get(struct no_os_timer_desc *desc,
  */
 int32_t no_os_timer_counter_set(struct no_os_timer_desc *desc, uint32_t new_val)
 {
-	if (!desc)
+	if (!desc || !desc->platform_ops)
 		return -EINVAL;
+
+	if (!desc->platform_ops->counter_set)
+		return -ENOSYS;
 
 	return desc->platform_ops->counter_set(desc, new_val);
 }
@@ -144,8 +165,11 @@ int32_t no_os_timer_counter_set(struct no_os_timer_desc *desc, uint32_t new_val)
 int32_t no_os_timer_count_clk_get(struct no_os_timer_desc *desc,
 				  uint32_t *freq_hz)
 {
-	if (!desc || !freq_hz)
+	if (!desc || !desc->platform_ops || !freq_hz)
 		return -EINVAL;
+
+	if (!desc->platform_ops->count_clk_get)
+		return -ENOSYS;
 
 	return desc->platform_ops->count_clk_get(desc, freq_hz);
 }
@@ -159,8 +183,11 @@ int32_t no_os_timer_count_clk_get(struct no_os_timer_desc *desc,
 int32_t no_os_timer_count_clk_set(struct no_os_timer_desc *desc,
 				  uint32_t freq_hz)
 {
-	if (!desc)
+	if (!desc || !desc->platform_ops)
 		return -EINVAL;
+
+	if (!desc->platform_ops->count_clk_set)
+		return -ENOSYS;
 
 	return desc->platform_ops->count_clk_set(desc, freq_hz);
 }
@@ -174,8 +201,11 @@ int32_t no_os_timer_count_clk_set(struct no_os_timer_desc *desc,
 int32_t no_os_timer_get_elapsed_time_nsec(struct no_os_timer_desc *desc,
 		uint64_t *elapsed_time)
 {
-	if (!desc)
+	if (!desc || !desc->platform_ops)
 		return -EINVAL;
+
+	if (!desc->platform_ops->get_elapsed_time_nsec)
+		return -ENOSYS;
 
 	return desc->platform_ops->get_elapsed_time_nsec(desc, elapsed_time);
 }
