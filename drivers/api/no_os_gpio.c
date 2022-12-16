@@ -55,11 +55,17 @@
 int32_t no_os_gpio_get(struct no_os_gpio_desc **desc,
 		       const struct no_os_gpio_init_param *param)
 {
-	if (!param)
-		return -1;
+	int32_t ret;
 
-	if ((param->platform_ops->gpio_ops_get(desc, param)))
-		return -1;
+	if (!param || !param->platform_ops)
+		return -EINVAL;
+
+	if (!param->platform_ops->gpio_ops_get)
+		return -ENOSYS;
+
+	ret = param->platform_ops->gpio_ops_get(desc, param);
+	if (ret)
+		return ret;
 
 	(*desc)->platform_ops = param->platform_ops;
 
@@ -75,13 +81,22 @@ int32_t no_os_gpio_get(struct no_os_gpio_desc **desc,
 int32_t no_os_gpio_get_optional(struct no_os_gpio_desc **desc,
 				const struct no_os_gpio_init_param *param)
 {
+	int32_t ret;
+
 	if (!param || (param->number == -1)) {
 		*desc = NULL;
 		return 0;
 	}
 
-	if ((param->platform_ops->gpio_ops_get_optional(desc, param)))
-		return -1;
+	if (!param->platform_ops)
+		return -EINVAL;
+
+	if (!param->platform_ops->gpio_ops_get_optional)
+		return -ENOSYS;
+
+	ret = param->platform_ops->gpio_ops_get_optional(desc, param);
+	if (ret)
+		return ret;
 
 	(*desc)->platform_ops = param->platform_ops;
 
@@ -94,10 +109,17 @@ int32_t no_os_gpio_get_optional(struct no_os_gpio_desc **desc,
  */
 int32_t no_os_gpio_remove(struct no_os_gpio_desc *desc)
 {
-	if (desc)
+	if (desc) {
+		if (!desc->platform_ops)
+			return -EINVAL;
+
+		if (!desc->platform_ops->gpio_ops_remove)
+			return -ENOSYS;
+
 		return desc->platform_ops->gpio_ops_remove(desc);
-	else
-		return 0;
+	}
+
+	return 0;
 }
 
 /**
@@ -107,10 +129,17 @@ int32_t no_os_gpio_remove(struct no_os_gpio_desc *desc)
  */
 int32_t no_os_gpio_direction_input(struct no_os_gpio_desc *desc)
 {
-	if (desc)
+	if (desc) {
+		if (!desc->platform_ops)
+			return -EINVAL;
+
+		if (!desc->platform_ops->gpio_ops_direction_input)
+			return -ENOSYS;
+
 		return desc->platform_ops->gpio_ops_direction_input(desc);
-	else
-		return 0;
+	}
+
+	return 0;
 }
 
 /**
@@ -124,11 +153,18 @@ int32_t no_os_gpio_direction_input(struct no_os_gpio_desc *desc)
 int32_t no_os_gpio_direction_output(struct no_os_gpio_desc *desc,
 				    uint8_t value)
 {
-	if (desc)
+	if (desc) {
+		if (!desc->platform_ops)
+			return -EINVAL;
+
+		if (!desc->platform_ops->gpio_ops_direction_output)
+			return -ENOSYS;
+
 		return desc->platform_ops->
 		       gpio_ops_direction_output(desc, value);
-	else
-		return 0;
+	}
+
+	return 0;
 }
 
 /**
@@ -142,11 +178,18 @@ int32_t no_os_gpio_direction_output(struct no_os_gpio_desc *desc,
 int32_t no_os_gpio_get_direction(struct no_os_gpio_desc *desc,
 				 uint8_t *direction)
 {
-	if (desc)
+	if (desc) {
+		if (!desc->platform_ops)
+			return -EINVAL;
+
+		if (!desc->platform_ops->gpio_ops_get_direction)
+			return -ENOSYS;
+
 		return desc->platform_ops->
 		       gpio_ops_get_direction(desc, direction);
-	else
-		return 0;
+	}
+
+	return 0;
 }
 
 /**
@@ -160,10 +203,17 @@ int32_t no_os_gpio_get_direction(struct no_os_gpio_desc *desc,
 int32_t no_os_gpio_set_value(struct no_os_gpio_desc *desc,
 			     uint8_t value)
 {
-	if (desc)
+	if (desc) {
+		if (!desc->platform_ops)
+			return -EINVAL;
+
+		if (!desc->platform_ops->gpio_ops_set_value)
+			return -ENOSYS;
+
 		return desc->platform_ops->gpio_ops_set_value(desc, value);
-	else
-		return 0;
+	}
+
+	return 0;
 }
 
 /**
@@ -177,8 +227,15 @@ int32_t no_os_gpio_set_value(struct no_os_gpio_desc *desc,
 int32_t no_os_gpio_get_value(struct no_os_gpio_desc *desc,
 			     uint8_t *value)
 {
-	if (desc)
+	if (desc) {
+		if (!desc->platform_ops)
+			return -EINVAL;
+
+		if (!desc->platform_ops->gpio_ops_set_value)
+			return -ENOSYS;
+
 		return desc->platform_ops->gpio_ops_get_value(desc, value);
-	else
-		return 0;
+	}
+
+	return 0;
 }

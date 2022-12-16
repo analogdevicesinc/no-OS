@@ -51,11 +51,17 @@
 int32_t no_os_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
 			    const struct no_os_irq_init_param *param)
 {
-	if (!param)
-		return -1;
+	int32_t ret;
 
-	if ((param->platform_ops->init(desc, param)))
-		return -1;
+	if (!param || !param->platform_ops)
+		return -EINVAL;
+
+	if (!param->platform_ops->init)
+		return -ENOSYS;
+
+	ret = param->platform_ops->init(desc, param);
+	if (ret)
+		return ret;
 
 	(*desc)->platform_ops = param->platform_ops;
 
@@ -69,6 +75,12 @@ int32_t no_os_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
  */
 int32_t no_os_irq_ctrl_remove(struct no_os_irq_ctrl_desc *desc)
 {
+	if (!desc || !desc->platform_ops)
+		return -EINVAL;
+
+	if (!desc->platform_ops->remove)
+		return -ENOSYS;
+
 	return desc->platform_ops->remove(desc);
 }
 
@@ -83,6 +95,12 @@ int32_t no_os_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 				    uint32_t irq_id,
 				    struct no_os_callback_desc *callback)
 {
+	if (!desc || !desc->platform_ops)
+		return -EINVAL;
+
+	if (!desc->platform_ops->register_callback)
+		return -ENOSYS;
+
 	return desc->platform_ops->register_callback(desc, irq_id, callback);
 }
 
@@ -97,6 +115,12 @@ int32_t no_os_irq_unregister_callback(struct no_os_irq_ctrl_desc *desc,
 				      uint32_t irq_id,
 				      struct no_os_callback_desc *callback)
 {
+	if (!desc || !desc->platform_ops)
+		return -EINVAL;
+
+	if (!desc->platform_ops->unregister_callback)
+		return -ENOSYS;
+
 	return desc->platform_ops->unregister_callback(desc, irq_id, callback);
 }
 
@@ -106,6 +130,12 @@ int32_t no_os_irq_unregister_callback(struct no_os_irq_ctrl_desc *desc,
  */
 int32_t no_os_irq_global_enable(struct no_os_irq_ctrl_desc *desc)
 {
+	if (!desc || !desc->platform_ops)
+		return -EINVAL;
+
+	if (!desc->platform_ops->global_enable)
+		return -ENOSYS;
+
 	return desc->platform_ops->global_enable(desc);
 }
 
@@ -115,6 +145,12 @@ int32_t no_os_irq_global_enable(struct no_os_irq_ctrl_desc *desc)
  */
 int32_t no_os_irq_global_disable(struct no_os_irq_ctrl_desc *desc)
 {
+	if (!desc || !desc->platform_ops)
+		return -EINVAL;
+
+	if (!desc->platform_ops->global_disable)
+		return -ENOSYS;
+
 	return desc->platform_ops->global_disable(desc);
 }
 
@@ -129,10 +165,13 @@ int32_t no_os_irq_trigger_level_set(struct no_os_irq_ctrl_desc *desc,
 				    uint32_t irq_id,
 				    enum no_os_irq_trig_level trig)
 {
-	if(desc->platform_ops->trigger_level_set)
-		return desc->platform_ops->trigger_level_set(desc, irq_id, trig);
-	else
-		return ENOSYS;
+	if (!desc || !desc->platform_ops)
+		return -EINVAL;
+
+	if(!desc->platform_ops->trigger_level_set)
+		return -ENOSYS;
+
+	return desc->platform_ops->trigger_level_set(desc, irq_id, trig);
 }
 
 /**
@@ -143,6 +182,12 @@ int32_t no_os_irq_trigger_level_set(struct no_os_irq_ctrl_desc *desc,
  */
 int32_t no_os_irq_enable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
 {
+	if (!desc || !desc->platform_ops)
+		return -EINVAL;
+
+	if (!desc->platform_ops->enable)
+		return -ENOSYS;
+
 	return desc->platform_ops->enable(desc, irq_id);
 }
 
@@ -154,6 +199,12 @@ int32_t no_os_irq_enable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
  */
 int32_t no_os_irq_disable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
 {
+	if (!desc || !desc->platform_ops)
+		return -EINVAL;
+
+	if (!desc->platform_ops->disable)
+		return -ENOSYS;
+
 	return desc->platform_ops->disable(desc, irq_id);
 }
 
@@ -168,8 +219,11 @@ int32_t no_os_irq_set_priority(struct no_os_irq_ctrl_desc *desc,
 			       uint32_t irq_id,
 			       uint32_t priority_level)
 {
-	if (desc && desc->platform_ops)
-		return desc->platform_ops->set_priority(desc, irq_id, priority_level);
+	if (!desc || desc->platform_ops)
+		return -EINVAL;
 
-	return -EINVAL;
+	if (!desc->platform_ops->set_priority)
+		return -ENOSYS;
+
+	return desc->platform_ops->set_priority(desc, irq_id, priority_level);
 }
