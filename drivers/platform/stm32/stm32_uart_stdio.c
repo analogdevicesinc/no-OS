@@ -85,7 +85,7 @@ int _write(int fd, char* ptr, int len)
 	int ret;
 
 	if (fd == STDOUT_FILENO || fd == STDERR_FILENO) {
-		ret = no_os_uart_write(guart, (uint8_t *)ptr, len);
+		ret = stm32_uart_write(guart, (uint8_t *)ptr, len);
 		if (ret < 0) {
 			errno = -ret;
 			return -1;
@@ -121,7 +121,7 @@ int _read(int fd, char* ptr, int len)
 	int ret;
 
 	if (fd == STDIN_FILENO) {
-		ret = no_os_uart_read(guart, (uint8_t *)ptr, 1);
+		ret = stm32_uart_read(guart, (uint8_t *)ptr, 1);
 		if (ret < 0) {
 			errno = -ret;
 			return -1;
