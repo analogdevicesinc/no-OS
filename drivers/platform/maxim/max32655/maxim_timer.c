@@ -122,7 +122,6 @@ int max_timer_init(struct no_os_timer_desc **desc,
 	descriptor->id = param->id;
 	descriptor->freq_hz = param->freq_hz;
 	descriptor->ticks_count = param->ticks_count;
-	descriptor->platform_ops = param->platform_ops;
 
 	tmr_regs = MXC_TMR_GET_TMR(param->id);
 

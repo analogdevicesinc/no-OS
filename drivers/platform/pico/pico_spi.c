@@ -165,7 +165,6 @@ int32_t pico_spi_init(struct no_os_spi_desc **desc,
 
 	/* Only MSB is supported */
 	descriptor->bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST;
-	descriptor->platform_ops = &pico_spi_ops;
 
 	pico_spi_ip = param->extra;
 	pico_spi->spi_cs_pin = pico_spi_ip->spi_cs_pin;
