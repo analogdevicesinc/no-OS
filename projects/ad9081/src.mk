@@ -30,6 +30,7 @@ SRCS += $(PROJECT)/src/app.c \
 	$(DRIVERS)/axi_core/jesd204/xilinx_transceiver.c \
 	$(DRIVERS)/api/no_os_spi.c \
 	$(DRIVERS)/api/no_os_gpio.c \
+	$(DRIVERS)/api/no_os_uart.c \
 	$(PLATFORM_DRIVERS)/xilinx_axi_io.c \
 	$(PLATFORM_DRIVERS)/xilinx_delay.c \
 	$(PLATFORM_DRIVERS)/xilinx_gpio.c \

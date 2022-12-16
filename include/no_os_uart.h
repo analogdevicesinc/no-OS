@@ -97,6 +97,13 @@ enum no_os_uart_stop {
 };
 
 /**
+ * @struct no_os_uart_platform_ops
+ * @brief Structure holding UART function pointers that point to the platform
+ * specific function
+ */
+struct no_os_uart_platform_ops ;
+
+/**
  * @struct no_os_uart_init_param
  * @brief Structure holding the parameters for UART initialization
  */
@@ -115,6 +122,7 @@ struct no_os_uart_init_param {
 	enum no_os_uart_parity	parity;
 	/** UART number of stop bits */
 	enum no_os_uart_stop		stop;
+	const struct no_os_uart_platform_ops *platform_ops;
 	/** UART extra parameters (device specific) */
 	void		*extra;
 };
@@ -132,8 +140,32 @@ struct no_os_uart_desc {
 	struct lf256fifo *rx_fifo;
 	/** UART Baud Rate */
 	uint32_t 	baud_rate;
+	const struct no_os_uart_platform_ops *platform_ops;
 	/** UART extra parameters (device specific) */
 	void 		*extra;
+};
+
+/**
+ * @struct no_os_uart_platform_ops
+ * @brief Structure holding UART function pointers that point to the platform
+ * specific function
+ */
+struct no_os_uart_platform_ops {
+	/** UART initialization function pointer */
+	int32_t (*init)(struct no_os_uart_desc **, struct no_os_uart_init_param *);
+	/** UART read function pointer */
+	int32_t (*read)(struct no_os_uart_desc *, uint8_t *, uint32_t);
+	/** UART write function pointer */
+	int32_t (*write)(struct no_os_uart_desc *, const uint8_t *, uint32_t);
+	/** UART read non-blocking function pointer */
+	int32_t (*read_nonblocking)(struct no_os_uart_desc *, uint8_t *, uint32_t);
+	/** UART wrote non-blocking function pointer */
+	int32_t (*write_nonblocking)(struct no_os_uart_desc *, const uint8_t *,
+				     uint32_t);
+	/** UART remove function pointer */
+	int32_t (*remove)(struct no_os_uart_desc *);
+	/** UART get errors function pointer */
+	uint32_t (*get_errors)(struct no_os_uart_desc *);
 };
 
 /******************************************************************************/

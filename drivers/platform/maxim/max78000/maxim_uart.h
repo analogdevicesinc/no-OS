@@ -43,6 +43,7 @@
 #include "uart.h"
 #include "no_os_irq.h"
 #include "max78000.h"
+#include "no_os_uart.h"
 
 /**
  * @brief UART flow control
@@ -67,5 +68,10 @@ struct max_uart_desc {
 	/** Controller that handles UART interrupts */
 	struct no_os_irq_ctrl_desc *nvic;
 };
+
+/**
+ * @brief Maxim specific UART platform ops structure
+ */
+extern const struct no_os_uart_platform_ops max_uart_ops;
 
 #endif

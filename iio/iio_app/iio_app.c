@@ -93,6 +93,22 @@
 #include "no_os_error.h"
 #endif
 
+#ifdef ADUCM_PLATFORM
+#define UART_OPS &aducm_uart_ops
+#elif LINUX_PLATFORM
+#define UART_OPS &linux_uart_ops
+#elif defined MAXIM_PLATFORM
+#define UART_OPS &max_uart_ops
+#elif defined PICO_PLATFORM
+#define UART_OPS &pico_uart_ops
+#elif defined STM32_PLATFORM
+#define UART_OPS &stm32_uart_ops
+#elif defined XILINX_PLATFORM
+#define UART_OPS &xil_uart_ops
+#else
+#error "UART_OPS not defined"
+#endif
+
 // The default baudrate iio_app will use to print messages to console.
 #define UART_BAUDRATE_DEFAULT	115200
 
@@ -260,6 +276,7 @@ static int32_t uart_setup(struct no_os_uart_desc **uart_desc,
 		.size = NO_OS_UART_CS_8,
 		.parity = NO_OS_UART_PAR_NO,
 		.stop = NO_OS_UART_STOP_1_BIT,
+		.platform_ops = UART_OPS,
 #ifndef ADUCM_PLATFORM
 		.extra = &platform_uart_init_par
 #endif

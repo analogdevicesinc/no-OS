@@ -25,6 +25,7 @@ SRCS += $(NO-OS)/util/no_os_fifo.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_uart.c \
 	$(NO-OS)/util/no_os_lf256fifo.c \
 	$(PLATFORM_DRIVERS)/irq.c \
+	$(DRIVERS)/api/no_os_uart.c \
 	$(NO-OS)/iio/iio_app/iio_app.c \
 	$(DRIVERS)/frequency/adf4377/iio_adf4377.c
 endif

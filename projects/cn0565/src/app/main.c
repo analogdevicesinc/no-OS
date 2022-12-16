@@ -118,6 +118,11 @@ int main(void)
 #endif
 		.asynchronous_rx = true,
 		.irq_id = UART_IRQ_ID,
+#if defined(STM32_PLATFORM)
+		.platform_ops = &stm32_uart_ops,
+#elif defined(ADUCM_PLATFORM)
+		.platform_ops = &aducm_uart_ops,
+#endif
 	};
 
 	ret = no_os_uart_init(&uart, &uip);

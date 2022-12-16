@@ -11,6 +11,7 @@
 
 SRCS += $(PROJECT)/src/ad7124-4sdz.c
 SRCS += $(DRIVERS)/api/no_os_spi.c \
+	$(DRIVERS)/api/no_os_uart.c \
 	$(DRIVERS)/adc/ad7124/ad7124.c \
 	$(DRIVERS)/adc/ad7124/ad7124_regs.c				
 SRCS +=	$(PLATFORM_DRIVERS)/xilinx_axi_io.c \
@@ -30,4 +31,5 @@ INCS +=	$(INCLUDE)/no_os_axi_io.h \
 	$(INCLUDE)/no_os_delay.h \
 	$(INCLUDE)/no_os_irq.h \
 	$(INCLUDE)/no_os_uart.h \
+	$(INCLUDE)/no_os_lf256fifo.h \
 	$(INCLUDE)/no_os_util.h

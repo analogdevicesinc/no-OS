@@ -174,8 +174,8 @@ bool platform_usbcdc::data_transmited(void)
  * @param bytes_number[in] - Number of bytes to read.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t no_os_uart_read(struct no_os_uart_desc *desc, uint8_t *data,
-			uint32_t bytes_number)
+static int32_t mbed_uart_read(struct no_os_uart_desc *desc, uint8_t *data,
+			      uint32_t bytes_number)
 {
 	mbed::BufferedSerial *uart;	// pointer to BufferedSerial/UART instance
 	platform_usbcdc *usb_cdc_dev;	// Pointer to usb cdc device class instance
@@ -214,8 +214,9 @@ int32_t no_os_uart_read(struct no_os_uart_desc *desc, uint8_t *data,
  * @param bytes_number[in] - Number of bytes to read.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t no_os_uart_write(struct no_os_uart_desc *desc, const uint8_t *data,
-			 uint32_t bytes_number)
+static int32_t mbed_uart_write(struct no_os_uart_desc *desc,
+			       const uint8_t *data,
+			       uint32_t bytes_number)
 {
 	mbed::BufferedSerial *uart;	// pointer to BufferedSerial/UART instance
 	platform_usbcdc *usb_cdc_dev;	// Pointer to usb cdc device class instance
@@ -269,9 +270,9 @@ int32_t no_os_uart_write(struct no_os_uart_desc *desc, const uint8_t *data,
  * @return 0 in case of success, negative error code otherwise.
  * @note Currently implemented only for UART and not for USBSerial (VCOM)
  */
-int32_t no_os_uart_read_nonblocking(struct no_os_uart_desc *desc,
-				    uint8_t *data,
-				    uint32_t bytes_number)
+static int32_t mbed_uart_read_nonblocking(struct no_os_uart_desc *desc,
+		uint8_t *data,
+		uint32_t bytes_number)
 {
 	mbed::BufferedSerial *uart;	// pointer to BufferedSerial/UART instance
 
@@ -299,9 +300,9 @@ int32_t no_os_uart_read_nonblocking(struct no_os_uart_desc *desc,
  * @return 0 in case of success, negative error code otherwise.
  * @note Currently implemented only for UART and not for USBSerial (VCOM)
  */
-int32_t no_os_uart_write_nonblocking(struct no_os_uart_desc *desc,
-				     const uint8_t *data,
-				     uint32_t bytes_number)
+static int32_t mbed_uart_write_nonblocking(struct no_os_uart_desc *desc,
+		const uint8_t *data,
+		uint32_t bytes_number)
 {
 	mbed::BufferedSerial *uart;		// pointer to BufferedSerial/UART instance
 
@@ -396,8 +397,8 @@ static int32_t mbed_uart_set_format(struct no_os_uart_init_param *param,
  * @param param[in] - The structure that contains the UART parameters.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t no_os_uart_init(struct no_os_uart_desc **desc,
-			struct no_os_uart_init_param *param)
+static int32_t mbed_uart_init(struct no_os_uart_desc **desc,
+			      struct no_os_uart_init_param *param)
 {
 	mbed::BufferedSerial *uart;	// Pointer to new BufferedSerial/UART instance
 	platform_usbcdc *usb_cdc_dev;	// Pointer to usb cdc device class instance
@@ -476,11 +477,11 @@ err_mbed_uart_desc:
 }
 
 /**
- * @brief Free the resources allocated by no_os_uart_init().
+ * @brief Free the resources allocated by mbed_uart_init().
  * @param desc[in] - The UART descriptor.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t no_os_uart_remove(struct no_os_uart_desc *desc)
+static int32_t mbed_uart_remove(struct no_os_uart_desc *desc)
 {
 	if (!desc || !desc->extra)
 		return -EINVAL;
@@ -502,6 +503,18 @@ int32_t no_os_uart_remove(struct no_os_uart_desc *desc)
 
 	return 0;
 }
+
+/**
+ * @brief Mbed platform specific UART platform ops structure
+ */
+const struct no_os_uart_platform_ops mbed_uart_ops = {
+	.init = &mbed_uart_init,
+	.read = &mbed_uart_read,
+	.write = &mbed_uart_write,
+	.read_nonblocking = &mbed_uart_read_nonblocking,
+	.write_nonblocking = &mbed_uart_write_nonblocking,
+	.remove = &mbed_uart_remove
+};
 
 #ifdef __cplusplus  // Closing extern c
 }

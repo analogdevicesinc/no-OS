@@ -104,4 +104,9 @@ struct xil_uart_desc {
 	void				*instance;
 };
 
+/**
+ * @brief Xilinx platform specific UART platform ops structure
+ */
+extern const struct no_os_uart_platform_ops xil_uart_ops;
+
 #endif

@@ -16,6 +16,7 @@ SRC_DIRS += $(NO-OS)/iio/iio_app
 
 SRCS += $(DRIVERS)/accel/adxl367/iio_adxl367.c \
 	$(DRIVERS)/api/no_os_irq.c \
+	$(DRIVERS)/api/no_os_uart.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_uart.c \
 	$(NO-OS)/util/no_os_fifo.c
 

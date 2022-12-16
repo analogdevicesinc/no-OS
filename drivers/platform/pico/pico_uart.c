@@ -72,8 +72,8 @@ void uart_rx_callback(void *context)
  * @param param - The structure that contains the UART parameters.
  * @return 0 in case of success, error code otherwise.
  */
-int32_t no_os_uart_init(struct no_os_uart_desc **desc,
-			struct no_os_uart_init_param *param)
+static int32_t pico_uart_init(struct no_os_uart_desc **desc,
+			      struct no_os_uart_init_param *param)
 {
 	struct pico_uart_desc *pico_uart;
 	struct pico_uart_init_param *pico_uart_ip;
@@ -207,11 +207,11 @@ error:
 }
 
 /**
- * @brief Free the resources allocated by no_os_uart_init().
+ * @brief Free the resources allocated by pico_uart_init().
  * @param desc - The UART descriptor.
  * @return 0 in case of success, error code otherwise.
  */
-int32_t no_os_uart_remove(struct no_os_uart_desc *desc)
+static int32_t pico_uart_remove(struct no_os_uart_desc *desc)
 {
 	struct pico_uart_desc *pico_uart;
 
@@ -243,8 +243,9 @@ int32_t no_os_uart_remove(struct no_os_uart_desc *desc)
  * @param bytes_number - Number of bytes to read.
  * @return 0 in case of success, error code otherwise.
  */
-int32_t no_os_uart_write(struct no_os_uart_desc *desc, const uint8_t *data,
-			 uint32_t bytes_number)
+static int32_t pico_uart_write(struct no_os_uart_desc *desc,
+			       const uint8_t *data,
+			       uint32_t bytes_number)
 {
 	struct pico_uart_desc *pico_uart;
 
@@ -268,8 +269,8 @@ int32_t no_os_uart_write(struct no_os_uart_desc *desc, const uint8_t *data,
  * @param bytes_number - Number of bytes to read.
  * @return positive number of received bytes in case of success, error code otherwise.
  */
-int32_t no_os_uart_read(struct no_os_uart_desc *desc, uint8_t *data,
-			uint32_t bytes_number)
+static int32_t pico_uart_read(struct no_os_uart_desc *desc, uint8_t *data,
+			      uint32_t bytes_number)
 {
 	struct pico_uart_desc *pico_uart;
 	int ret;
@@ -296,3 +297,13 @@ int32_t no_os_uart_read(struct no_os_uart_desc *desc, uint8_t *data,
 
 	return bytes_number;
 }
+
+/**
+ * @brief pico platform specific UART platform ops structure
+ */
+const struct no_os_uart_platform_ops pico_uart_ops = {
+	.init = &pico_uart_init,
+	.read = &pico_uart_read,
+	.write = &pico_uart_write,
+	.remove = &pico_uart_remove
+};
