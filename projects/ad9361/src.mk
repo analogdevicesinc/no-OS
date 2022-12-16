@@ -92,6 +92,8 @@ INCS += $(INCLUDE)/no_os_fifo.h \
 	$(DRIVERS)/axi_core/iio_axi_dac/iio_axi_dac.h \
 	$(NO-OS)/iio/iio_app/iio_app.h \
 	$(INCLUDE)/no_os_circular_buffer.h
+
+SRCS += $(DRIVERS)/api/no_os_uart.c
 endif
 ifeq (xilinx,$(strip $(PLATFORM)))
 SRCS += $(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c \

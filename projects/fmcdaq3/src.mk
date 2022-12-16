@@ -40,6 +40,7 @@ SRCS += $(NO-OS)/util/no_os_fifo.c \
 	$(DRIVERS)/adc/ad9680/iio_ad9680.c \
 	$(DRIVERS)/dac/ad9152/iio_ad9152.c \
 	$(DRIVERS)/api/no_os_irq.c \
+	$(DRIVERS)/api/no_os_uart.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_uart.c \
 	$(NO-OS)/util/no_os_lf256fifo.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c

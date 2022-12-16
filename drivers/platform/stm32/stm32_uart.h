@@ -71,4 +71,9 @@ struct stm32_uart_desc {
 	struct no_os_callback_desc rx_callback;
 };
 
+/**
+ * @brief STM32 specific UART platform ops structure
+ */
+extern const struct no_os_uart_platform_ops stm32_uart_ops;
+
 #endif

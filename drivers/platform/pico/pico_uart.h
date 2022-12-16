@@ -100,4 +100,9 @@ struct pico_uart_init_param {
 	enum uart_rx_gp uart_rx_pin;
 };
 
+/**
+ * @brief pico specific UART platform ops structure
+ */
+extern const struct no_os_uart_platform_ops pico_uart_ops;
+
 #endif
