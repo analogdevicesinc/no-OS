@@ -51,11 +51,17 @@
 int32_t no_os_spi_init(struct no_os_spi_desc **desc,
 		       const struct no_os_spi_init_param *param)
 {
-	if (!param)
-		return -1;
+	int32_t ret;
 
-	if ((param->platform_ops->init(desc, param)))
-		return -1;
+	if (!param || !param->platform_ops)
+		return -EINVAL;
+
+	if (!param->platform_ops->init)
+		return -ENOSYS;
+
+	ret = param->platform_ops->init(desc, param);
+	if (ret)
+		return ret;
 
 	(*desc)->platform_ops = param->platform_ops;
 	(*desc)->parent = param->parent;
@@ -70,6 +76,12 @@ int32_t no_os_spi_init(struct no_os_spi_desc **desc,
  */
 int32_t no_os_spi_remove(struct no_os_spi_desc *desc)
 {
+	if (!desc || !desc->platform_ops)
+		return -EINVAL;
+
+	if (!desc->platform_ops->remove)
+		return -ENOSYS;
+
 	return desc->platform_ops->remove(desc);
 }
 
@@ -84,6 +96,12 @@ int32_t no_os_spi_write_and_read(struct no_os_spi_desc *desc,
 				 uint8_t *data,
 				 uint16_t bytes_number)
 {
+	if (!desc || !desc->platform_ops)
+		return -EINVAL;
+
+	if (!desc->platform_ops->write_and_read)
+		return -ENOSYS;
+
 	return desc->platform_ops->write_and_read(desc, data, bytes_number);
 }
 

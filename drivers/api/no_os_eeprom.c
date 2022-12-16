@@ -51,11 +51,17 @@
 int32_t no_os_eeprom_init(struct no_os_eeprom_desc **desc,
 			  const struct no_os_eeprom_init_param *param)
 {
-	if (!param)
+	int32_t ret;
+
+	if (!param || !param->platform_ops)
 		return -EINVAL;
 
-	if ((param->platform_ops->init(desc, param)))
-		return -EINVAL;
+	if (!param->platform_ops->init)
+		return -ENOSYS;
+
+	ret = param->platform_ops->init(desc, param);
+	if (ret)
+		return ret;
 
 	(*desc)->platform_ops = param->platform_ops;
 
@@ -69,8 +75,11 @@ int32_t no_os_eeprom_init(struct no_os_eeprom_desc **desc,
  */
 int32_t no_os_eeprom_remove(struct no_os_eeprom_desc *desc)
 {
-	if (!desc)
+	if (!desc || !desc->platform_ops)
 		return -EINVAL;
+
+	if (!desc->platform_ops->remove)
+		return -ENOSYS;
 
 	return desc->platform_ops->remove(desc);
 }
@@ -86,8 +95,11 @@ int32_t no_os_eeprom_remove(struct no_os_eeprom_desc *desc)
 int32_t no_os_eeprom_write(struct no_os_eeprom_desc *desc, uint32_t address,
 			   uint8_t *data, uint16_t bytes)
 {
-	if (!desc || !data)
+	if (!desc || !desc->platform_ops || !data)
 		return -EINVAL;
+
+	if (!desc->platform_ops->write)
+		return -ENOSYS;
 
 	return desc->platform_ops->write(desc, address, data, bytes);
 }
@@ -103,8 +115,11 @@ int32_t no_os_eeprom_write(struct no_os_eeprom_desc *desc, uint32_t address,
 int32_t no_os_eeprom_read(struct no_os_eeprom_desc *desc, uint32_t address,
 			  uint8_t *data, uint16_t bytes)
 {
-	if (!desc || !data)
+	if (!desc || !desc->platform_ops || !data)
 		return -EINVAL;
+
+	if (!desc->platform_ops->read)
+		return -ENOSYS;
 
 	return desc->platform_ops->read(desc, address, data, bytes);
 }
