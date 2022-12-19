@@ -20,6 +20,7 @@ INCS += $(INCLUDE)/no_os_delay.h     \
 		$(INCLUDE)/no_os_util.h \
 		$(INCLUDE)/no_os_units.h \
 		$(INCLUDE)/no_os_circular_buffer.h \
+		$(INCLUDE)/no_os_trng.h \
 		$(DRIVERS)/power/ade9430/ade9430.h \
 
 SRCS += $(DRIVERS)/api/no_os_gpio.c \
@@ -29,10 +30,12 @@ SRCS += $(DRIVERS)/api/no_os_gpio.c \
 		$(DRIVERS)/api/no_os_irq.c  \
 		$(DRIVERS)/api/no_os_spi.c  \
 		$(DRIVERS)/api/no_os_timer.c  \
+		$(DRIVERS)/platform/generic/generic_trng.c  \
 		$(NO-OS)/util/no_os_list.c \
 		$(NO-OS)/util/no_os_util.c	\
 		$(NO-OS)/util/no_os_circular_buffer.c
 
+LIBRARIES += mbedtls
 LIBRARIES += mqtt
 SRC_DIRS += $(NO-OS)/network
 

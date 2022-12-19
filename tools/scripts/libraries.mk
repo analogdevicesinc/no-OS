@@ -20,6 +20,9 @@ endif
 
 #	MBEDTLS
 ifneq ($(if $(findstring mbedtls, $(LIBRARIES)), 1),)
+
+include $(NO-OS)/tools/scripts/mbedtls_srcs.mk
+
 # Generic part
 MBEDTLS_DIR					= $(NO-OS)/libraries/mbedtls
 MBEDTLS_LIB_DIR				= $(MBEDTLS_DIR)/library
@@ -27,7 +30,7 @@ MBEDTLS_LIB_NAMES			= libmbedtls.a libmbedx509.a libmbedcrypto.a
 MBEDTLS_LIBS				= $(addprefix $(MBEDTLS_LIB_DIR)/,$(MBEDTLS_LIB_NAMES))
 EXTRA_LIBS					+= $(MBEDTLS_LIBS)
 EXTRA_LIBS_PATHS			+= $(MBEDTLS_LIB_DIR)
-EXTRA_INC_PATHS		+= $(MBEDTLS_DIR)/include
+EXTRA_INC_PATHS_MBEDTLS		+= $(MBEDTLS_DIR)/include
 
 #Rules
 MBED_TLS_CONFIG_FILE = $(NO-OS)/network/noos_mbedtls_config.h
@@ -102,7 +105,7 @@ libs: $(LIB_TARGETS)
 
 PHONY += clean_libs
 clean_libs:
-	-$(CLEAN_MBEDTLS)
+# 	-$(CLEAN_MBEDTLS)
 	-$(CLEAN_FATFS)
 	-$(CLEAN_MQTT)
 	-$(CLEAN_IIO)
