@@ -94,7 +94,7 @@
 
 /* AD7768_REG_PWR_MODE */
 #define AD7768_PWR_MODE_SLEEP_MODE			(1 << 7)
-#define AD7768_PWR_MODE_POWER_MODE(x)		(((x) & 0x3) << 5)
+#define AD7768_PWR_MODE_POWER_MODE(x)		(((x) & 0x3) << 4)
 #define AD7768_PWR_MODE_LVDS_ENABLE			(1 << 3)
 #define AD7768_PWR_MODE_MCLK_DIV(x)			(((x) & 0x3) << 0)
 
