@@ -70,15 +70,83 @@
 } while (0)
 
 az_iot_hub_client my_client;
-static az_span my_iothub_hostname = AZ_SPAN_LITERAL_FROM_STR("iot-hub-pun3bk4utuxzs.azure-devices.net");
-static az_span my_device_id = AZ_SPAN_LITERAL_FROM_STR("EnergyMonitoringDevice1");
+static az_span my_iothub_hostname = AZ_SPAN_LITERAL_FROM_STR("iot-hub-m7atugrfle3ns.azure-devices.net");
+static az_span my_device_id = AZ_SPAN_LITERAL_FROM_STR("EnergyMonitoringDevice2");
 
 // Make sure to size the buffer to fit the client id (16 is an example)
 static char my_mqtt_client_id[16];
 static size_t my_mqtt_client_id_length;
 
 //This assumes an X509 Cert. SAS keys may also be used.
-static const char my_device_cert[]= "-----BEGIN CERTIFICATE-----abcdefg-----END CERTIFICATE-----";
+static const char my_ca_cert[]= \
+"-----BEGIN CERTIFICATE-----\n"
+"MIIDHzCCAgegAwIBAgIUGSa0OxKNup96dpDHNOJYqky/18YwDQYJKoZIhvcNAQEL\n"
+"BQAwHzEdMBsGA1UEAwwUQW5hbG9nIERldmljZXMsIEluYy4wHhcNMjIxMjIwMDky\n"
+"ODA0WhcNMzIwOTE4MDkyODA0WjAfMR0wGwYDVQQDDBRBbmFsb2cgRGV2aWNlcywg\n"
+"SW5jLjCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBALqsM26xEVm3RlD1\n"
+"R5iuooGe7ZJ9IuOvxYhYyDah0brVtx4IJsDS0MGdTZDKjxwQGv93rxFx7UY0WyFc\n"
+"kzA+AlLKMCwrbATtEzXoRi9EkWru4XKlEUjR3GWjx3+2GMd2yKnkRJTH+UgBPndf\n"
+"nS01FXq06F2bQrOVi4BZbvzmxGmLRdj4BGh1IlXaZ8HiXmK202prHRNA1D8OFTzo\n"
+"AQW5xJXxDsieXzH5OL5+OHJbj09vZWyHvUIP+TbCRlog06txq7OXbicmrHms/w6V\n"
+"cIB0F8cFoc38KCWeQRF0PT4p7Zd2v2/n1KSeXY84kKRR14GK0islmR9nLUxQ840p\n"
+"umtDo88CAwEAAaNTMFEwHQYDVR0OBBYEFGEYPPRUp2x3fOLWS+MO7jO0weXFMB8G\n"
+"A1UdIwQYMBaAFGEYPPRUp2x3fOLWS+MO7jO0weXFMA8GA1UdEwEB/wQFMAMBAf8w\n"
+"DQYJKoZIhvcNAQELBQADggEBAC0O+/p6Dc5yfqa54uLGVqsZSUxv2LQsuMitR44S\n"
+"m0qBZ98Knr1vHLjd5GtkJiioc8kjegnTdfi624k+rhdeqS5K58vTTMZDuW+NiA7/\n"
+"gHXjHd8xE7k7wMtod2W4hVHd5akQ/hc4SePnjLU+sGmZb8XqEUsdkcOIlP25bfOw\n"
+"Kvu7CEASD8kixaWqxkZmbRsE+D+MpRFUzm0BV8TAneIfGWXyPK08+XrvQwlG3Ot9\n"
+"zWVXuSKe1u5NtJ5Jzxsq9MWg0M3NVmPg3VRZa6Az1v6GBw12m3uWSBxBEwVwPMyn\n"
+"zKCqhYFP6vnYz6QRzN+1qCec9Tjyf4CSfM3MKr+pC6aAHMU=\n"
+"-----END CERTIFICATE-----\n";
+
+static const char my_cli_cert[]= \
+"-----BEGIN CERTIFICATE-----\n"
+"MIICyDCCAbACFB2GazFUJ6ofN6kFRe4qTnUFCdYtMA0GCSqGSIb3DQEBCwUAMB8x\n"
+"HTAbBgNVBAMMFEFuYWxvZyBEZXZpY2VzLCBJbmMuMB4XDTIyMTIyMDExNDEwN1oX\n"
+"DTIzMDExOTExNDEwN1owIjEgMB4GA1UEAwwXRW5lcmd5TW9uaXRvcmluZ0Rldmlj\n"
+"ZTEwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDy9QcbYm3/8ZG4zXfK\n"
+"VHd0H/0GN5xpLV+61jBnWvvnn2raX1xuw9vH6ExHs5NR7i/c0TSO69SnQ/3DjD7l\n"
+"+4lOUmkdJ9odYYQo3SEFhGAC0+0W/XSef97XQIudsYuALxFEHvr8XW/qG9RXX3vM\n"
+"xzTdfHQHlP+4F8W6mMVsey0KjwnK1yAhaTf4Wl73mw/uXE6F4Cve+JygIs4R+Xg+\n"
+"R3oej3ojEDtHOqueiEndWk5OFxXSKHbVDlmwu6MZLCf70vfLeuEwFE6APxTMUfi1\n"
+"U4zKWfij3zns2X/mBJ7aDS41UllE330jnT+FWPbfJrCd4x810vfWxW6aumq1IP+b\n"
+"3L+VAgMBAAEwDQYJKoZIhvcNAQELBQADggEBAHz54zcNB1NFpS7SLQj4uGuQ8MWM\n"
+"ztESbadGtANthFiN68ESvolDaFWkrPZUnvqEIBMEWmaviOQqdq/UYJH+r/E/C5xX\n"
+"Mg1M0jVLi0rrUNHewJXnbvjq6MBkz9T4McX7a+ruCVdkjwsS2o5iDVPiArj+dPyJ\n"
+"JOGIpr12GSAgHUJq716TmqPa0muS5z/Ahh3CmGJGK/qyeBjYCbSC46U5UvpGD+YJ\n"
+"+WeXLosSLTGdB/pf6+AMiDsX3FwLBRyCn149jJcgYH1hMGOL1nC2yA7ZkMijpQjt\n"
+"n0Xs1T8QbrjRM0HLjsHD7xRyhW61I51UdgV0RlVYJ08438DgLgUJ1/WYed8=\n"
+"-----END CERTIFICATE-----\n";
+
+static const char my_cli_pk[]= \
+"-----BEGIN PRIVATE KEY-----\n"
+"MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDy9QcbYm3/8ZG4\n"
+"zXfKVHd0H/0GN5xpLV+61jBnWvvnn2raX1xuw9vH6ExHs5NR7i/c0TSO69SnQ/3D\n"
+"jD7l+4lOUmkdJ9odYYQo3SEFhGAC0+0W/XSef97XQIudsYuALxFEHvr8XW/qG9RX\n"
+"X3vMxzTdfHQHlP+4F8W6mMVsey0KjwnK1yAhaTf4Wl73mw/uXE6F4Cve+JygIs4R\n"
+"+Xg+R3oej3ojEDtHOqueiEndWk5OFxXSKHbVDlmwu6MZLCf70vfLeuEwFE6APxTM\n"
+"Ufi1U4zKWfij3zns2X/mBJ7aDS41UllE330jnT+FWPbfJrCd4x810vfWxW6aumq1\n"
+"IP+b3L+VAgMBAAECggEBAJRxVVhL+X2JsUlCcNB0b0/KQ6RK0gwJJxZWy9g6ZPMO\n"
+"GhE2dplOnbg0nHaqp3ZFm4TFZeF1Acb46dFSnROTbj8mZwbjVIbjEAaPpR9j0+2m\n"
+"YpPLZDd7VUIbM7KzydIV7+y5KQyMYladjk2cD1380LYK1jHTvbJTBAKQWP+A+vIZ\n"
+"ZlbuuzPOss4hrRTPDuCBsOlFKx89qm7SP+hJh+qhkT2qtG8t7IkuMaghlfft7vXX\n"
+"te1ebmReP2djiaKHstcDQiA7125MfrGP7c7WstVY3/oy5FIJakV3S++ODHNItUT/\n"
+"f3s7deIBzkPX+MuHzb1Fs/yJgdhKWW7aUSpfSiPC2wECgYEA+cJCyZusILG8Df9G\n"
+"v5afpg/gpR1nzRxQqs4/94KqSa+Llw3ogBxV+t5aKbCxkzBPiEOK2eCnSlo0U/iT\n"
+"GoIps7kYTFoH120HfhgB8IRzthH03+Zw1oG25YUNltYlhWkRzz2VoXrH1qpx4FmV\n"
+"q8XSGJjxccow2O5zygQm3r6k/WECgYEA+QdBbdDsoKL/k3UF695c95C4uYDfk/b4\n"
+"7XSI2UDXM+QTnSdSl/I+f3thZjJjW6p90HMVedm2gR2B17nS2htl35XbWkxdA6Mz\n"
+"6QGxmHyzW8vMo5VcGgFQ9Ux0lShgqv/AY5mjOqQ+yDGrvcyD7h2KHpLFH0jkuEqT\n"
+"RTLv2D4R2rUCgYEAiRhvHMeM1m15cp17slL102vHvhrEDbzLMtcAGdbproTjtMj3\n"
+"pMrpD0naaCQLdWYBYiThJPPCIHgfXTCHXvev+G1TvyV0RHYetMJs3h92fKyio/yU\n"
+"V8rgIGDGstNdyTuBgSam6frBkz4AQEwschumVcYuUm3QHmPVv0BELeSsIEECgYBj\n"
+"2+z4xFae873Yu4xsUPamr3njqTH+e4LGdXyK4d1qCYNz+Vi9ZX56UFd2S65cC7n3\n"
+"5K4v9oWgsNxoTTOoEmR/i/Ax/X0vADrIrM0ygI7LuKWO003jf7OfKdF2HoLlDzlu\n"
+"tyUlVsd2L7TWnzQoP+Aq8l/pc6mD3SPBE/Ppmro+IQKBgBjdhDgRLtqSRz9RJZoq\n"
+"mCnGyQf02YopKvhD828lVHjqqDoYVbYZVlYTV3h1edx3d2i5jAicjn25M/BNTYzO\n"
+"RM5rhN+zLoBF6V728kraaX3A/HJbOFnqH7J/ed0FWvtcCCD+4CMr71kytx/tS+Is\n"
+"HjKbpJjgh0Tf/HOK00ksJ2j5\n"
+"-----END PRIVATE KEY-----\n";
 
 // Make sure to size the buffer to fit the username (128 is an example)
 static char my_mqtt_user_name[128];
@@ -275,7 +343,17 @@ int main()
 
 	wifi_get_network_interface(wifi, &socket_param.net);
 
+	struct secure_init_param sip = {
+		.ca_cert = my_ca_cert,
+		.ca_cert_len = NO_OS_ARRAY_SIZE(my_ca_cert),
+		.cli_cert = my_cli_cert,
+		.cli_cert_len = NO_OS_ARRAY_SIZE(my_cli_cert),
+		.cli_pk = my_cli_pk,
+		.cli_pk_len = NO_OS_ARRAY_SIZE(my_cli_pk)
+	};
+
 	socket_param.max_buff_size = 0;
+	socket_param.secure_init_param = &sip;
 
 	static struct tcp_socket_desc	*sock;
 	status = socket_init(&sock, &socket_param);

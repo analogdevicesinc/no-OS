@@ -30,7 +30,6 @@ SRCS += $(DRIVERS)/api/no_os_gpio.c \
 		$(DRIVERS)/api/no_os_irq.c  \
 		$(DRIVERS)/api/no_os_spi.c  \
 		$(DRIVERS)/api/no_os_timer.c  \
-		$(DRIVERS)/platform/generic/generic_trng.c  \
 		$(NO-OS)/util/no_os_list.c \
 		$(NO-OS)/util/no_os_util.c	\
 		$(NO-OS)/util/no_os_circular_buffer.c

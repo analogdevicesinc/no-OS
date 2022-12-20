@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   parameters.h
- *   @brief  Definitions specific to Maxim platform used by eval-adxl355-pmdz
- *           project.
+ *   @file   maxim_trng.c
+ *   @brief  MAX32650 implementation of true random number generator
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
+ *   @copyright
  * Copyright 2022(c) Analog Devices, Inc.
  *
  * All rights reserved.
@@ -37,42 +37,51 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __PARAMETERS_H__
-#define __PARAMETERS_H__
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "maxim_irq.h"
-#include "maxim_spi.h"
-#include "maxim_gpio.h"
-#include "maxim_uart.h"
-#include "maxim_stdio.h"
 
+#include "trng.h"
+#include "no_os_trng.h"
+#include "no_os_util.h"
+#include "no_os_error.h"
 
-/********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-#define UART_DEVICE_ID	1
-#define INTC_DEVICE_ID	0
-#define UART_IRQ_ID		UART1_IRQn
-#define UART_BAUDRATE	57600
+/*************************** Types Declarations *******************************/
+/******************************************************************************/
 
-#define WIFI_SSID	        "AnalogDevices_5GHz"
-#define WIFI_PWD	        "Analog123!"
-#define SERVER_PORT		8883
-#define SERVER_ADDR		"iot-hub-m7atugrfle3ns.azure-devices.net"
-#define BUFF_LEN		200
-#define TIMER_ID		1
-#define MQTT_CONFIG_CMD_TIMEOUT	20000
-#define MQTT_PUBLISH_TOPIC	"adxl"
-#define MQTT_SUBSCRIBE_TOPIC	"maxim_messages"
-#define MQTT_CONFIG_CMD_TIMEOUT	20000
-#define MQTT_CONFIG_VERSION	MQTT_VERSION_3_1
-#define MQTT_CONFIG_KEEP_ALIVE	7200
-#define MQTT_CONFIG_CLIENT_NAME	"maxim-client"
-#define MQTT_CONFIG_CLI_USER	NULL
-#define MQTT_CONFIG_CLI_PASS	NULL
-#define SCAN_SENSOR_TIME	500
-#define MQTT_PUBLISH_TOPIC	"adxl"
+/* Hold trng device information */
+struct no_os_trng_desc {
+	/* Add here fields needed by implementation */
+};
 
-#endif /* __PARAMETERS_H__ */
+/******************************************************************************/
+/************************ Functions Definitions *******************************/
+/******************************************************************************/
+
+/* Initialize descriptor */
+int32_t no_os_trng_init(struct no_os_trng_desc **desc,
+			struct no_os_trng_init_param *param)
+{
+	NO_OS_UNUSED_PARAM(desc);
+	NO_OS_UNUSED_PARAM(param);
+
+	return MXC_TRNG_Init();
+}
+
+/* Free resources allocated in descriptor */
+void no_os_trng_remove(struct no_os_trng_desc *desc)
+{
+	NO_OS_UNUSED_PARAM(desc);
+	MXC_TRNG_Shutdown();
+}
+
+/* Fill buffer with random numbers */
+int32_t no_os_trng_fill_buffer(struct no_os_trng_desc *desc, uint8_t *buff,
+			       uint32_t len)
+{
+	NO_OS_UNUSED_PARAM(desc);
+
+	return MXC_TRNG_Random(buff, len);
+}
