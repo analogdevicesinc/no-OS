@@ -51,6 +51,7 @@ struct no_os_uart_init_param adin1110_uart_ip = {
 	.baud_rate = UART_BAUDRATE,
 	.size = NO_OS_UART_CS_8,
 	.parity = NO_OS_UART_PAR_NO,
+	.platform_ops = &max_uart_ops,
 	.stop = NO_OS_UART_STOP_1_BIT,
 	.platform_ops = UART_OPS,
 	.extra = UART_EXTRA,

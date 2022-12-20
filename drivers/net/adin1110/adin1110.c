@@ -70,6 +70,24 @@ int adin1110_reg_update(struct adin1110_desc *desc, uint16_t addr,
 	return adin1110_reg_write(desc, addr, val);
 }
 
+static int adin1110_mac_set(struct adin1110_desc *desc, uint8_t mac_address[6])
+{
+	uint32_t val;
+	uint32_t reg_val;
+	int ret;
+
+	reg_val = no_os_get_unaligned_be16(&mac_address[0]);
+
+	ret = adin1110_reg_update(desc, ADIN1110_MAC_ADDR_FILTER_UPR,
+							  NO_OS_GENMASK(15, 0), reg_val);
+	if (ret)
+		return ret;
+
+	reg_val = no_os_get_unaligned_be32(&mac_address[2]);
+
+	return adin1110_reg_write(desc, ADIN1110_MAC_ADDR_FILTER_LWR, reg_val);
+}
+
 int adin1110_write_fifo(struct adin1110_desc *desc, struct adin1110_sk_buff *sk_buff)
 {
 	int padding = 0;
@@ -107,25 +125,33 @@ int adin1110_write_fifo(struct adin1110_desc *desc, struct adin1110_sk_buff *sk_
 int adin1110_read_fifo(struct adin1110_desc *desc, struct adin1110_sk_buff *sk_buff)
 {
 	uint32_t frame_size;
+	uint32_t frame_content;
+	uint32_t count = 0;
+
+	struct no_os_spi_msg xfer = {
+		.tx_buff = desc->tx_buff,
+		.rx_buff = desc->rx_buff,
+		.cs_change = 1,
+	};
 	int ret;
+
+	memset(desc->tx_buff, 0, ADIN1110_CTRL_FRAME_SIZE);
+	no_os_put_unaligned_be16(ADIN1110_RX, &desc->tx_buff[0]);
+	desc->tx_buff[0] |= NO_OS_BIT(7);
+	desc->tx_buff[2] = 0x00;
 
 	ret = adin1110_reg_read(desc, ADIN1110_RX_FSIZE, &frame_size);
 	if (ret)
 		return ret;
 
-	ret = adin1110_reg_read(desc, 0x0D, &frame_size);
-	ret = adin1110_reg_read(desc, ADIN1110_RX_FRM_CNT, &frame_size);
-	ret = adin1110_reg_read(desc, 0x08, &frame_size);
-	ret = adin1110_reg_read(desc, 0x09, &frame_size);
-	ret = adin1110_reg_read(desc, ADIN1110_RX_FRM_CNT, &frame_size);
-	ret = adin1110_reg_read(desc, ADIN1110_RX_FRM_CNT, &frame_size);
-	ret = adin1110_reg_read(desc, ADIN1110_RX_FRM_CNT, &frame_size);
-	ret = adin1110_reg_read(desc, ADIN1110_RX_FRM_CNT, &frame_size);
+	xfer.bytes_number = frame_size / 4;
 
-	ret = adin1110_reg_read(desc, ADIN1110_RX_CRC_ERR_CNT, &frame_size);
-	ret = adin1110_reg_read(desc, ADIN1110_RX_PHY_ERR_CNT, &frame_size);
-	ret = adin1110_reg_read(desc, ADIN1110_RX_ALGN_ERR_CNT, &frame_size);
-	ret = adin1110_reg_read(desc, ADIN1110_RX_LS_ERR_CNT, &frame_size);
+	/** Burst read the whole frame */
+	ret = no_os_spi_transfer(desc->comm_desc, &xfer, 1);
+	if (ret)
+		return ret;
+
+	return 0;
 }
 
 static int adin1110_mac_reset(struct adin1110_desc *desc)
@@ -238,7 +264,7 @@ int adin1110_init(struct adin1110_desc **desc,
 
 	ret = no_os_gpio_get(&descriptor->reset_gpio, &param->reset_param);
 	if (ret)
-		return ret;
+		goto err;
 
 	// ret = adin1110_reg_update(descriptor, 0x03, 1, 1);
 	// if (ret)
@@ -246,21 +272,30 @@ int adin1110_init(struct adin1110_desc **desc,
 
 	ret = adin1110_phy_reset(descriptor);
 	if (ret)
-		return ret;
+		goto err;
 
 	ret = adin1110_check_reset(descriptor);
 	if (ret)
-		return ret;
+		goto err;
 
 	ret = adin1110_reg_read(descriptor, ADIN1110_STATUS1, &reg_val);
 	if (ret)
-		return ret;
+		goto err;
 
 	reg_val = no_os_field_get(NO_OS_BIT(0), reg_val);
 
 	ret = adin1110_reg_read(descriptor, 0x32, &reg_val);
 	if (ret)
+		goto err;
+
+	ret = adin1110_reg_update(descriptor, 0x6, NO_OS_BIT(2), NO_OS_BIT(2));
+	if (ret)
 		return ret;
+
+	ret = adin1110_reg_read(descriptor, 0x6, &reg_val);
+	// ret = adin1110_mac_set(descriptor, param->mac_address);
+	// if (ret)
+	// 	goto err;
 
 	*desc = descriptor;
 

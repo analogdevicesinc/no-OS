@@ -65,12 +65,12 @@
 
 #define ADIN1110_MAC_RST_STATUS_REG		0x3B
 
-#define ADIN1110_MAC_ADDR_FILTER_UPR		0x50
 #define   ADIN2111_MAC_ADDR_APPLY2PORT2		NO_OS_BIT(31)
 #define   ADIN1110_MAC_ADDR_APPLY2PORT		NO_OS_BIT(30)
 #define   ADIN2111_MAC_ADDR_TO_OTHER_PORT	NO_OS_BIT(17)
 #define   ADIN1110_MAC_ADDR_TO_HOST		NO_OS_BIT(16)
 
+#define ADIN1110_MAC_ADDR_FILTER_UPR		0x50
 #define ADIN1110_MAC_ADDR_FILTER_LWR		0x51
 
 #define ADIN1110_MAC_ADDR_MASK_UPR		0x70
@@ -81,6 +81,9 @@
 #define ADIN1110_RX_ALGN_ERR_CNT	0xA5
 #define ADIN1110_RX_LS_ERR_CNT		0xA6
 #define ADIN1110_RX_PHY_ERR_CNT		0xA7
+
+#define ADIN1110_RX_DROP_FULL_CNT   0xAC
+#define ADIN1110_RX_DROP_FILT_CNT   0xAD
 
 #define ADIN1110_RX_FSIZE			0x90
 #define ADIN1110_RX				0x91
@@ -121,7 +124,7 @@ enum adin1110_ethertype {
 struct adin1110_desc {
     struct no_os_spi_desc *comm_desc;
     uint8_t mac_address[6];
-    uint8_t rx_buff[48];
+    uint8_t rx_buff[1500];
     uint8_t tx_buff[48];
 
     struct no_os_gpio_desc *reset_gpio;
