@@ -84,6 +84,15 @@ static const int ad713x_output_data_frame[3][9][2] = {
 		{ADC_16_BIT_DATA, CRC_8},
 		{INVALID}
 	},
+	{
+		{ADC_16_BIT_DATA, NO_CRC},
+		{ADC_16_BIT_DATA, CRC_6},
+		{ADC_24_BIT_DATA, NO_CRC},
+		{ADC_24_BIT_DATA, CRC_6},
+		{ADC_16_BIT_DATA, CRC_8},
+		{ADC_24_BIT_DATA, CRC_8},
+		{INVALID}
+	},
 };
 
 /******************************************************************************/
