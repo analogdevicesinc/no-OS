@@ -234,7 +234,7 @@ static int32_t stcp_socket_init(struct secure_socket_desc **desc,
 	/* Config Random number generator */
 	mbedtls_ssl_conf_rng(&ldesc->conf,
 			     (int (*)(void *, unsigned char *, size_t))
-			     trng_fill_buffer,
+			     no_os_trng_fill_buffer,
 			     (void *)ldesc->trng);
 
 	/* Set the resulting protocol configuration */
