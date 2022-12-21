@@ -78,7 +78,7 @@ const struct adt7420_chip_info chip_info[] = {
  * @return register_value  - Value of the register.
 *******************************************************************************/
 int adt7420_reg_read(struct adt7420_dev *dev,
-		     uint8_t register_address, uint16_t *data)
+		     uint16_t register_address, uint16_t *data)
 {
 	if (adt7420_is_spi(dev))
 		return adt7420_spi_reg_read(dev, register_address, data);
@@ -97,10 +97,9 @@ int adt7420_reg_read(struct adt7420_dev *dev,
  * @return 0 in case of success, -1 otherwise.
 *******************************************************************************/
 int adt7420_reg_update_bits(struct adt7420_dev *dev,
-			    uint8_t register_address, uint8_t mask, uint8_t value)
+			    uint16_t register_address, uint8_t mask, uint8_t value)
 {
 
-	uint8_t data_buffer[3] = {0, 0, 0};
 	uint16_t regval;
 
 	if (adt7420_reg_read(dev, register_address, &regval))
@@ -108,14 +107,8 @@ int adt7420_reg_update_bits(struct adt7420_dev *dev,
 
 	regval &= ~mask;
 	regval |= value;
-	if (adt7420_is_spi(dev) && no_os_field_get(ADT7320_L16, register_address)) {
-		data_buffer[0] = regval >> 8;
-		data_buffer[1] = regval & 0xFF;
-	} else {
-		data_buffer[0] = regval;
-	}
 
-	return adt7420_reg_write(dev, register_address, data_buffer);
+	return adt7420_reg_write(dev, register_address, regval);
 }
 
 /***************************************************************************//**
@@ -128,7 +121,7 @@ int adt7420_reg_update_bits(struct adt7420_dev *dev,
  * @return 0 in case of success, -1 otherwise.
 *******************************************************************************/
 int adt7420_reg_write(struct adt7420_dev *dev,
-		      uint8_t register_address,
+		      uint16_t register_address,
 		      uint32_t data)
 {
 
@@ -384,16 +377,15 @@ float adt7420_get_temperature(struct adt7420_dev *dev)
  * @return register_value  - Value of the register.
 *******************************************************************************/
 int adt7420_spi_reg_read(struct adt7420_dev *dev,
-			 uint8_t register_address, uint16_t *data)
+			 uint16_t register_address, uint16_t *data)
 {
 	uint8_t data_buffer[3] = { 0, 0, 0 };
-	uint16_t read_back_data = 0;
 	uint8_t num_bytes;
 
 	if (no_os_field_get(ADT7320_L16, register_address))
-		num_bytes = 2;
-	else
 		num_bytes = 3;
+	else
+		num_bytes = 2;
 
 	data_buffer[0] = ADT7320_READ_CMD  | (no_os_field_get(ADT7320_ADDR_MSK,
 					      register_address) << 3);
@@ -419,17 +411,27 @@ int adt7420_spi_reg_read(struct adt7420_dev *dev,
  * @return register_value  - Value of the register.
 *******************************************************************************/
 int adt7420_i2c_reg_read(struct adt7420_dev *dev,
-			 uint8_t register_address, uint8_t *data)
+			 uint16_t register_address,
+			 uint16_t *data)
 {
-	uint8_t register_value = 0;
+	uint8_t data_buffer[3] = { 0, 0 };
+	uint8_t num_bytes;
+
+	if (no_os_field_get(ADT7320_L16, register_address))
+		num_bytes = 2;
+	else
+		num_bytes = 1;
 
 	if (no_os_i2c_write(dev->i2c_desc, &register_address, 1,
 			    0)) //add a repeat start
 		return -1;
-	if (no_os_i2c_read(dev->i2c_desc, &register_value, 1, 1))
+	if (no_os_i2c_read(dev->i2c_desc, data_buffer, num_bytes, 1))
 		return -1;
 
-	*data = register_value;
+	if (num_bytes == 1)
+		*data = data_buffer[0];
+	else
+		*data = no_os_get_unaligned_be16(data_buffer);
 
 	return 0;
 }
