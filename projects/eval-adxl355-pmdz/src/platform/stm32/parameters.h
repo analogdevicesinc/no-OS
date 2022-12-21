@@ -65,6 +65,7 @@ extern UART_HandleTypeDef huart5;
 #define UART_DEVICE_ID  5
 #define UART_BAUDRATE   115200
 #define UART_EXTRA      &adxl355_uart_extra_ip
+#define UART_OPS        &stm32_uart_ops
 
 #define SPI_DEVICE_ID   1
 #define SPI_BAUDRATE    4000000

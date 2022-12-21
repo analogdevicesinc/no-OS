@@ -72,6 +72,7 @@ static int32_t initialize_uart(struct no_os_uart_desc **uart)
 		.size =  NO_OS_UART_CS_8,
 		.device_id = UART_DEVICE_ID,
 		.baud_rate = UART_BAUDRATE,
+		.platform_ops = &aducm_uart_ops,
 	};
 
 	return no_os_uart_init(uart, &uart_init_par);
