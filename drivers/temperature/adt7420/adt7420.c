@@ -380,10 +380,7 @@ float adt7420_get_temperature(struct adt7420_dev *dev)
 	if (adt7420_is_spi(dev))
 		adt7420_reg_read(dev, ADT7320_REG_TEMP, &temp);
 	else {
-		uint8_t temp_msb = 0, temp_lsb = 0;
-		adt7420_reg_read(dev, ADT7420_REG_TEMP_MSB, &temp_msb);
-		adt7420_reg_read(dev, ADT7420_REG_TEMP_LSB, &temp_lsb);
-		temp = (temp_msb << 8) | temp_lsb;
+		adt7420_reg_read(dev, ADT7420_REG_TEMP_MSB, &temp);
 	}
 
 	if (dev->resolution_setting) {
