@@ -53,6 +53,7 @@ struct no_os_uart_init_param uip = {
 	.parity = NO_OS_UART_PAR_NO,
 	.stop = NO_OS_UART_STOP_1_BIT,
 	.extra = &xuip,
+	.platform_ops = UART_OPS,
 };
 #endif
 

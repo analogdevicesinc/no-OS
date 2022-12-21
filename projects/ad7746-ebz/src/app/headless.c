@@ -78,6 +78,7 @@ int main(void)
 		.size = NO_OS_UART_CS_8,
 		.parity = NO_OS_UART_PAR_NO,
 		.stop = NO_OS_UART_STOP_1_BIT,
+		.platform_ops = &aducm_uart_ops,
 	};
 #ifdef IIO_SUPPORT
 	struct ad7746_iio_dev *adciio = NULL;
