@@ -60,6 +60,7 @@
 #define UART_BAUDRATE   115200
 #define UART_IRQ_ID     20
 #define UART_EXTRA      &adxl355_uart_extra_ip
+#define UART_OPS        &pico_uart_ops
 
 #define UART_TX_PIN     UART0_TX_GP0
 #define UART_RX_PIN     UART0_RX_GP1

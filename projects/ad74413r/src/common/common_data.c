@@ -52,6 +52,7 @@ struct no_os_uart_init_param ad74413r_uart_ip = {
 	.size = NO_OS_UART_CS_8,
 	.parity = NO_OS_UART_PAR_NO,
 	.stop = NO_OS_UART_STOP_1_BIT,
+	.platform_ops = UART_OPS,
 	.extra = UART_EXTRA,
 };
 #endif

@@ -62,6 +62,7 @@ extern UART_HandleTypeDef huart2;
 #endif
 #define UART_DEVICE_ID      2
 #define UART_BAUDRATE  115200
+#define UART_OPS        &stm32_uart_ops
 
 #define SPI_DEVICE_ID    1
 #define SPI_CS          4
