@@ -44,6 +44,8 @@
 #include "no_os_spi.h"
 #include "stm32_spi.h"
 
+#warning SPI delays are not supported on the stm32 platform
+
 static int stm32_spi_config(struct no_os_spi_desc *desc)
 {
 	int ret;
