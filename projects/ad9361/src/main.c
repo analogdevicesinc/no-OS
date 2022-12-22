@@ -558,7 +558,8 @@ int main(void)
 #endif
 
 #ifdef ADI_RF_SOM_CMOS
-	default_init_param.swap_ports_enable = 1;
+	if (AD9361_DEVICE)
+		default_init_param.swap_ports_enable = 1;
 	default_init_param.lvds_mode_enable = 0;
 	default_init_param.lvds_rx_onchip_termination_enable = 0;
 	default_init_param.full_port_enable = 1;
