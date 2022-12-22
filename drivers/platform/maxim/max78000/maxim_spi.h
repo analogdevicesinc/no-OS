@@ -55,6 +55,7 @@ enum spi_ss_polarity {
 struct max_spi_init_param {
 	uint32_t numSlaves;
 	enum spi_ss_polarity polarity;
+	mxc_gpio_vssel_t vssel;
 };
 
 struct max_spi_state {

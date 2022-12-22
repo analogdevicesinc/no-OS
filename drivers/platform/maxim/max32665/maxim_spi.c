@@ -64,18 +64,21 @@
 /******************************************************************************/
 
 /**
- * @brief Enable the chip select gpio on MAX32665 or MAX32650
- * @param spi - The SPI port registers
- * @param chip_select - cs index
+ * @brief Configure the VDDIO level for a SPI interface
+ * @param desc - the SPI descriptor
  * @return 0 in case of success, -EINVAL otherwise
  */
-static int32_t _max_spi_enable_ss(uint32_t id, uint32_t chip_select)
+static int32_t _max_spi_config_pins(struct no_os_spi_desc *desc)
 {
+	struct max_spi_state *st = desc->extra;
+	mxc_gpio_cfg_t spi_pins;
 	mxc_gpio_cfg_t cs;
 
-	switch(id) {
+	switch(desc->device_id) {
 	case 0:
-		switch(chip_select) {
+		spi_pins = gpio_cfg_spi0a;
+
+		switch(desc->chip_select) {
 		case 0:
 			cs = gpio_cfg_spi0_ss0a;
 			break;
@@ -90,7 +93,9 @@ static int32_t _max_spi_enable_ss(uint32_t id, uint32_t chip_select)
 		}
 		break;
 	case 1:
-		switch(chip_select) {
+		spi_pins = gpio_cfg_spi1;
+
+		switch(desc->chip_select) {
 		case 0:
 			cs = gpio_cfg_spi1_ss0;
 			break;
@@ -106,7 +111,9 @@ static int32_t _max_spi_enable_ss(uint32_t id, uint32_t chip_select)
 		break;
 
 	case 2:
-		switch(chip_select) {
+		spi_pins = gpio_cfg_spi2;
+
+		switch(desc->chip_select) {
 		case 0:
 			cs = gpio_cfg_spi2_ss0;
 			break;
@@ -122,7 +129,7 @@ static int32_t _max_spi_enable_ss(uint32_t id, uint32_t chip_select)
 		break;
 #ifdef MXC_SPI3
 	case 3:
-		switch(chip_select) {
+		switch(desc->chip_select) {
 		case 0:
 			cs = gpio_cfg_spi2_ss0;
 			break;
@@ -141,6 +148,9 @@ static int32_t _max_spi_enable_ss(uint32_t id, uint32_t chip_select)
 		return -EINVAL;
 	}
 
+	spi_pins.vssel = st->init_param->vssel;
+	cs.vssel = st->init_param->vssel;
+	MXC_GPIO_Config(&spi_pins);
 	MXC_GPIO_Config(&cs);
 
 	return 0;
@@ -234,11 +244,9 @@ static int _max_spi_config(struct no_os_spi_desc *desc)
 		goto err_init;
 	}
 
-	ret = _max_spi_enable_ss(desc->device_id, desc->chip_select);
-	if (ret) {
-		ret = -EINVAL;
+	ret = _max_spi_config_pins(desc);
+	if (ret)
 		goto err_init;
-	}
 
 	ret = MXC_SPI_SetMode(MXC_SPI_GET_SPI(desc->device_id),
 			      (mxc_spi_mode_t)desc->mode);
