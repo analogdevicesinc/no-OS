@@ -134,6 +134,11 @@ error:
 	spi->sstime = sstime_cache;
 }
 
+/**
+ * @brief Configure a SPI peripheral
+ * @param spi - The SPI descriptor which stores the configuration parameters.
+ * @return 0 in case of success, a negative error code otherwise
+ */
 static int _max_spi_config(struct no_os_spi_desc *desc)
 {
 	struct max_spi_init_param *eparam;
@@ -152,7 +157,7 @@ static int _max_spi_config(struct no_os_spi_desc *desc)
 		.mosi = true,
 		.sdio2 = false,
 		.sdio3 = false,
-		.vddioh = true,
+		.vddioh = st->init_param->vssel,
 	};
 
 	ret = MXC_SPI_Init(MXC_SPI_GET_SPI(desc->device_id), SPI_MASTER_MODE,
