@@ -152,7 +152,7 @@ static int _max_spi_config(struct no_os_spi_desc *desc)
 		.mosi = true,
 		.sdio2 = false,
 		.sdio3 = false,
-		.vddioh = true,
+		.vddioh = eparam->vssel,
 	};
 
 	ret = MXC_SPI_Init(MXC_SPI_GET_SPI(desc->device_id), SPI_MASTER_MODE,
