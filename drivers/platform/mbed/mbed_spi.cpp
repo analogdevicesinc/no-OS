@@ -55,6 +55,8 @@ extern "C"
 
 #define		SPI_8_BIT_FRAME			8		// SPI 8-bit frame size
 
+#warning SPI delays are not supported on the mbed platform
+
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
