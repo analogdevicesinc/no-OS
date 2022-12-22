@@ -102,7 +102,7 @@ static uint8_t out_buff[MAX_SIZE_BASE_ADDR];
 uint32_t dac_buffer[DAC_BUFFER_SAMPLES] __attribute__ ((aligned));
 #endif
 uint16_t adc_buffer[ADC_BUFFER_SAMPLES * ADC_CHANNELS] __attribute__ ((
-	aligned));
+			aligned));
 
 #define AD9361_ADC_DAC_BYTES_PER_SAMPLE 2
 
