@@ -43,6 +43,7 @@
 #include "uart.h"
 #include "no_os_irq.h"
 #include "max32650.h"
+#include "mxc_pins.h"
 #include "no_os_uart.h"
 
 /**
@@ -59,6 +60,7 @@ enum max_uart_flow_ctrl {
  */
 struct max_uart_init_param {
 	enum max_uart_flow_ctrl flow;
+	mxc_gpio_vssel_t vssel;
 };
 
 /**
