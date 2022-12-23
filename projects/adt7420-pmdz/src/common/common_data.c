@@ -62,7 +62,8 @@ const struct no_os_i2c_init_param iip = {
 	.max_speed_hz = 100000,
 	.slave_address = 0x4B,
 	.extra = NULL,
-	.platform_ops = I2C_OPS
+	.platform_ops = I2C_OPS,
+	.extra = &adt7420_i2c_extra,
 };
 
 struct adt7420_init_param adt7420_user_init = {

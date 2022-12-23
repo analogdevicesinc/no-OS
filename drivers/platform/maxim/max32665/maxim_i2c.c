@@ -80,6 +80,36 @@ void I2C2_IRQHandler(void)
 #endif
 
 /**
+ * @brief Configure the VDDIO level for a I2C interface
+ * @param device_id - the interface number.
+ * @param vssel - the VDDIO level.
+ * @return 0 in case of success, -EINVAL otherwise.
+ */
+static int32_t _max_i2c_pins_config(uint32_t device_id, mxc_gpio_vssel_t vssel)
+{
+	mxc_gpio_cfg_t *i2c_pins;
+
+	switch (device_id) {
+	case 0:
+		i2c_pins = &gpio_cfg_i2c0;
+		break;
+	case 1:
+		i2c_pins = &gpio_cfg_i2c1;
+		break;
+	case 2:
+		i2c_pins = &gpio_cfg_i2c2;
+		break;
+	default:
+		return -EINVAL;
+	}
+
+	i2c_pins->vssel = vssel;
+	MXC_GPIO_Config(i2c_pins);
+
+	return 0;
+}
+
+/**
  * @brief Initialize the I2C communication peripheral.
  * Supported bitrates are between 100kHz and 400 kHz.
  * Is slave address is 0, then this instance will be used for general call.
@@ -93,13 +123,14 @@ void I2C2_IRQHandler(void)
 static int32_t max_i2c_init(struct no_os_i2c_desc **desc,
 			    const struct no_os_i2c_init_param *param)
 {
+	struct max_i2c_init_param *eparam;
 	int32_t ret;
 	struct max_i2c_extra *max_i2c;
 	mxc_i2c_regs_t *i2c_regs;
 	uint32_t current_freq = 0;
 	uint32_t freq;
 
-	if (!desc || !param)
+	if (!desc || !param || !param->extra)
 		return -EINVAL;
 	if (param->device_id >= MXC_I2C_INSTANCES)
 		return -EINVAL;
@@ -114,6 +145,7 @@ static int32_t max_i2c_init(struct no_os_i2c_desc **desc,
 		goto error_desc;
 	}
 
+	eparam = param->extra;
 	i2c_regs = MXC_I2C_GET_I2C(param->device_id);
 	max_i2c->handler = i2c_regs;
 	(*desc)->device_id = param->device_id;
@@ -140,6 +172,11 @@ static int32_t max_i2c_init(struct no_os_i2c_desc **desc,
 			goto error_extra;
 		}
 	}
+
+	ret = _max_i2c_pins_config((*desc)->device_id, eparam->vssel);
+	if (ret)
+		return ret;
+
 	freq = MXC_I2C_GetFrequency(i2c_regs);
 	freq = no_os_min(freq, (*desc)->max_speed_hz);
 	ret = MXC_I2C_SetFrequency(i2c_regs, freq);
