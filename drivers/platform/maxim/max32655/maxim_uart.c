@@ -76,6 +76,36 @@ static void _discard_callback(mxc_uart_req_t *req, int result)
 }
 
 /**
+ * @brief Configure the VDDIO for the UART pins.
+ * @param device_id - the interface number.
+ * @param vssel - the voltage level of the interface.
+ * @return 0 in case of success, -EINVAL otherwise.
+ */
+static int32_t _max_uart_pins_config(uint32_t device_id, mxc_gpio_vssel_t vssel)
+{
+	mxc_gpio_cfg_t *uart_pins;
+
+	switch (device_id) {
+	case 0:
+		uart_pins = &gpio_cfg_uart0;
+		break;
+	case 1:
+		uart_pins = &gpio_cfg_uart1;
+		break;
+	case 2:
+		uart_pins = &gpio_cfg_uart2;
+		break;
+	default:
+		return -EINVAL;
+	}
+
+	uart_pins->vssel = vssel;
+	MXC_GPIO_Config(uart_pins);
+
+	return 0;
+}
+
+/**
  * @brief Read data from UART device. Blocking function.
  * @param desc - Instance of UART.
  * @param data - Pointer to buffer containing data.
@@ -306,6 +336,10 @@ static int32_t max_uart_init(struct no_os_uart_desc **desc,
 		ret = -EINVAL;
 		goto error;
 	}
+
+	ret = _max_uart_pins_config(descriptor->device_id, eparam->vssel);
+	if (ret)
+		return ret;
 
 	ret = MXC_UART_SetDataSize(uart_regs, size);
 	if (ret != E_NO_ERROR) {
