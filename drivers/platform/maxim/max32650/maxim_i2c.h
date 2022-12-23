@@ -59,6 +59,10 @@ struct max_i2c_extra {
 	uint8_t prologue_size;
 };
 
+struct max_i2c_init_param {
+	mxc_gpio_vssel_t vssel;
+};
+
 /**
  * @enum max_i2c_speed
  * @brief MAXIM I2C SCL frequency options
