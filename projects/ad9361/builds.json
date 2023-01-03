@@ -37,7 +37,7 @@
                   ]
             },
             "dma-irq-example": {
-                  "flags": "NEW_CFLAGS=-DDAC_DMA_EXAMPLE\\-DADC_DMA_EXAMPLE\\-DADC_DMA_IRQ_EXAMPLE",
+                  "flags": "NEW_CFLAGS=-DDAC_DMA_EXAMPLE\\-DADC_DMA_EXAMPLE\\-DDMA_IRQ_ENABLE",
                   "hardware": [
                         "fmcomms2_kc705",
                         "fmcomms2_kcu105",
