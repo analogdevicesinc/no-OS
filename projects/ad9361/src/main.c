@@ -714,7 +714,6 @@ int main(void)
 		return status;
 #endif
 
-#ifdef FMCOMMS5
 	struct axi_dma_transfer transfer = {
 		// Number of bytes to write/read
 		.size = sizeof(sine_lut_iq),
@@ -736,28 +735,6 @@ int main(void)
 
 	no_os_mdelay(1000);
 
-#else
-	struct axi_dma_transfer transfer = {
-		// Number of bytes to write/read
-		.size = sizeof(sine_lut_iq),
-		// Transfer done flag
-		.transfer_done = 0,
-		// Signal transfer mode
-		.cyclic = CYCLIC,
-		// Address of data source
-		.src_addr = (uintptr_t)dac_buffer,
-		// Address of data destination
-		.dest_addr = 0
-	};
-
-	/* Transfer the data. */
-	axi_dmac_transfer_start(tx_dmac, &transfer);
-
-	/* Flush cache data. */
-	Xil_DCacheInvalidateRange((uintptr_t)dac_buffer,sizeof(sine_lut_iq));
-
-	no_os_mdelay(1000);
-#endif
 #endif
 #ifdef FMCOMMS5
 	struct axi_dma_transfer read_transfer = {
