@@ -160,7 +160,7 @@ struct axi_dac_init tx_dac_init = {
 struct axi_dmac_init rx_dmac_init = {
 	"rx_dmac",
 	CF_AD9361_RX_DMA_BASEADDR,
-#ifdef ADC_DMA_IRQ_EXAMPLE
+#ifdef DMA_IRQ_ENABLE
 	IRQ_ENABLED
 #else
 	IRQ_DISABLED
@@ -170,7 +170,7 @@ struct axi_dmac *rx_dmac;
 struct axi_dmac_init tx_dmac_init = {
 	"tx_dmac",
 	CF_AD9361_TX_DMA_BASEADDR,
-#ifdef ADC_DMA_IRQ_EXAMPLE
+#ifdef DMA_IRQ_ENABLE
 	IRQ_ENABLED
 #else
 	IRQ_DISABLED
@@ -641,7 +641,7 @@ int main(void)
 #if (defined XILINX_PLATFORM || defined ALTERA_PLATFORM) && \
 	(defined ADC_DMA_EXAMPLE)
 	uint32_t samples = 16384;
-#if (defined ADC_DMA_IRQ_EXAMPLE)
+#if (defined DMA_IRQ_ENABLE)
 	/**
 	 * Xilinx platform dependent initialization for IRQ.
 	 */
@@ -698,7 +698,7 @@ int main(void)
 	// of the cache line.
 
 #ifdef DAC_DMA_EXAMPLE
-#ifdef ADC_DMA_IRQ_EXAMPLE
+#ifdef DMA_IRQ_ENABLE
 	struct no_os_callback_desc tx_dmac_callback = {
 		.ctx = tx_dmac,
 		.callback = axi_dmac_mem_to_dev_isr,
