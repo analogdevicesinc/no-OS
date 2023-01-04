@@ -78,6 +78,14 @@
 #define AD74413R_CHANNELS(name) \
         _AD74413R_CHANNELS(ad74413r_ ## name ## _channels)
 
+#define AD74413R_CONFIG_CHANNEL			                \
+        {                                                       \
+                .ch_type = IIO_VOLTAGE,                         \
+                .indexed = 1,                                   \
+                .ch_out = 0,                                    \
+                .attributes = ad74413r_iio_config_attrs		\
+        }
+
 static int32_t ad74413r_sample_rate_avail[] = {
 	20, 4800, 10, 1200
 };
@@ -85,6 +93,39 @@ static int32_t ad74413r_sample_rate_avail[] = {
 static int32_t ad74412r_sample_rate_avail[] = {
 	20, 4800
 };
+
+static int32_t ad74413r_slew_rate_avail[] = {
+	4, 64, 150, 240,
+};
+
+static int32_t ad74413r_slew_step_avail[] = {
+	64, 120, 500, 1820,
+};
+
+static char *ad74413r_function_available[11] = {
+	[AD74413R_HIGH_Z] = "high_z",
+	[AD74413R_VOLTAGE_OUT] = "voltage_out",
+	[AD74413R_CURRENT_OUT] = "current_out",
+	[AD74413R_VOLTAGE_IN] = "voltage_in",
+	[AD74413R_CURRENT_IN_EXT] = "current_in_ext",
+	[AD74413R_CURRENT_IN_LOOP] = "current_in_loop",
+	[AD74413R_RESISTANCE] = "resistance",
+	[AD74413R_DIGITAL_INPUT] = "digital_input",
+	[AD74413R_DIGITAL_INPUT_LOOP] = "digital_input_loop",
+	[AD74413R_CURRENT_IN_EXT_HART] = "current_in_ext_hart",
+	[AD74413R_CURRENT_IN_LOOP_HART] = "current_in_loop_hart"
+};
+
+/* 
+ * Used to save the channels config information, so that it may be used during the 
+ * iio device's actual init.
+ */
+struct ad74413r_channel_config ad74413r_global_config[AD74413R_N_CHANNELS];
+
+/*
+ * The configuration was done and the context may be replaced. 
+ */
+extern int ad74413r_apply;
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
@@ -112,11 +153,47 @@ static int ad74413r_iio_read_sampling_freq_avail(void *dev, char *buf,
 		const struct iio_ch_info *channel, intptr_t priv);
 static int ad74413r_iio_read_processed(void *dev, char *buf, uint32_t len,
 				       const struct iio_ch_info *channel, intptr_t priv);
+static int ad74413r_iio_read_slew_en(void *dev, char *buf, uint32_t len,
+				     const struct iio_ch_info *channel, intptr_t priv);
+static int ad74413r_iio_write_slew_en(void *dev, char *buf, uint32_t len,
+				      const struct iio_ch_info *channel, intptr_t priv);
+static int ad74413r_iio_read_slew_rate(void *dev, char *buf, uint32_t len,
+				       const struct iio_ch_info *channel, intptr_t priv);
+static int ad74413r_iio_write_slew_rate(void *dev, char *buf, uint32_t len,
+				        const struct iio_ch_info *channel, intptr_t priv);
+static int ad74413r_iio_read_slew_step(void *dev, char *buf, uint32_t len,
+				       const struct iio_ch_info *channel, intptr_t priv);
+static int ad74413r_iio_write_slew_step(void *dev, char *buf, uint32_t len,
+				        const struct iio_ch_info *channel, intptr_t priv);
+static int ad74413r_iio_read_slew_rate_avail(void *dev, char *buf, uint32_t len,
+					     const struct iio_ch_info *channel,
+					     intptr_t priv);
+static int ad74413r_iio_read_slew_step_avail(void *dev, char *buf, uint32_t len,
+					     const struct iio_ch_info *channel,
+					     intptr_t priv);
 static int ad74413r_iio_update_channels(void *dev, uint32_t mask);
 static int ad74413r_iio_buffer_disable(void *dev);
 static int ad74413r_iio_read_samples(void *dev, uint32_t *buf,
 				     uint32_t samples);
 static int ad74413r_iio_trigger_handler(struct iio_device_data *dev_data);
+
+static int ad74413r_iio_read_config_enabled(void *dev, char *buf, uint32_t len,
+		const struct iio_ch_info *channel, intptr_t priv);
+static int ad74413r_iio_write_config_enabled(void *dev, char *buf, uint32_t len,
+		const struct iio_ch_info *channel, intptr_t priv);
+static int ad74413r_iio_read_config_function(void *dev, char *buf, uint32_t len,
+		const struct iio_ch_info *channel, intptr_t priv);
+static int ad74413r_iio_write_config_function(void *dev, char *buf, uint32_t len,
+		const struct iio_ch_info *channel, intptr_t priv);
+static int ad74413r_iio_read_config_function_avail(void *dev, char *buf, uint32_t len,
+						   const struct iio_ch_info *channel,
+						   intptr_t priv);
+static int ad74413r_iio_read_config_apply(void *dev, char *buf, uint32_t len,
+					  const struct iio_ch_info *channel,
+					  intptr_t priv);
+static int ad74413r_iio_write_config_apply(void *dev, char *buf, uint32_t len,
+					   const struct iio_ch_info *channel,
+					   intptr_t priv);
 
 /******************************************************************************/
 /************************ Variable Declarations *******************************/
@@ -189,6 +266,56 @@ static struct iio_attribute ad74413r_iio_dac_attrs[] = {
 		.name = "offset",
 		.show = ad74413r_iio_read_offset
 	},
+	{
+		.name = "slew_en",
+		.show = ad74413r_iio_read_slew_en,
+		.store = ad74413r_iio_write_slew_en,
+	},
+	{
+		.name = "slew_rate",
+		.show = ad74413r_iio_read_slew_step,
+		.store = ad74413r_iio_write_slew_step,
+	},
+	{
+		.name = "slew_rate_available",
+		.show = ad74413r_iio_read_slew_rate_avail,
+	},
+	{
+		.name = "slew_step",
+		.show = ad74413r_iio_read_slew_rate,
+		.store = ad74413r_iio_write_slew_rate,
+	},
+	{
+		.name = "slew_step_available",
+		.show = ad74413r_iio_read_slew_step_avail,
+	},
+	END_ATTRIBUTES_ARRAY
+};
+
+static struct iio_attribute ad74413r_iio_config_attrs[] = {
+	{
+		.name = "enabled",
+		.show = ad74413r_iio_read_config_enabled,
+		.store = ad74413r_iio_write_config_enabled
+	},
+	{
+		.name = "function",
+		.show = ad74413r_iio_read_config_function,
+		.store = ad74413r_iio_write_config_function
+	},
+	{
+		.name = "function_available",
+		.show = ad74413r_iio_read_config_function_avail,
+	},
+	END_ATTRIBUTES_ARRAY
+};
+
+static struct iio_attribute ad74413r_config_dev_attrs[] = {
+	{
+		.name = "apply",
+		.show = ad74413r_iio_read_config_apply,
+		.store = ad74413r_iio_write_config_apply
+	},
 	END_ATTRIBUTES_ARRAY
 };
 
@@ -218,6 +345,13 @@ static struct iio_channel ad74413r_digital_input_channels[] = {
 	AD74413R_ADC_CHANNEL(IIO_VOLTAGE, ad74413r_iio_adc_attrs)
 };
 
+static struct iio_channel ad74413r_iio_config[] = {
+	AD74413R_CONFIG_CHANNEL,
+	AD74413R_CONFIG_CHANNEL,
+	AD74413R_CONFIG_CHANNEL,
+	AD74413R_CONFIG_CHANNEL,
+};
+
 static struct ad74413r_channel_map channel_map[] = {
 	[AD74413R_HIGH_Z] = AD74413R_CHANNELS(voltage_input),
 	[AD74413R_VOLTAGE_OUT] = AD74413R_CHANNELS(voltage_output),
@@ -239,6 +373,12 @@ static struct iio_device ad74413r_iio_dev = {
 	.read_dev = (int32_t (*)())ad74413r_iio_read_samples,
 	.debug_reg_read = (int32_t (*)())ad74413r_iio_read_reg,
 	.debug_reg_write = (int32_t (*)())ad74413r_iio_write_reg
+};
+
+static struct iio_device ad74413r_iio_config_dev = {
+	.channels = ad74413r_iio_config,
+	.num_ch = AD74413R_N_CHANNELS,
+	.attributes = ad74413r_config_dev_attrs,
 };
 
 /******************************************************************************/
@@ -500,7 +640,7 @@ static int ad74413r_iio_read_processed(void *dev, char *buf, uint32_t len,
 	switch (channel->type) {
 	case IIO_RESISTANCE:
 		ret = ad74413r_adc_get_value(((struct ad74413r_iio_desc *)dev)->ad74413r_desc,
-					     channel->address,
+					     AD74413R_OUTPUT_CONFIG(channel->address),
 					     &decimal_val);
 		if (ret)
 			return ret;
@@ -510,6 +650,154 @@ static int ad74413r_iio_read_processed(void *dev, char *buf, uint32_t len,
 	default:
 		return -EINVAL;
 	}
+}
+
+static int ad74413r_iio_read_slew_en(void *dev, char *buf, uint32_t len,
+				     const struct iio_ch_info *channel, intptr_t priv)
+{
+	struct ad74413r_iio_desc *desc = dev;
+	uint32_t val;
+	int ret;
+
+	ret = ad74413r_reg_read(desc->ad74413r_desc, AD74413R_OUTPUT_CONFIG(channel->address),
+				&val);
+	if (ret)
+		return ret;
+
+	val = !!no_os_field_get(AD74413R_SLEW_EN_MASK, val);
+
+	return iio_format_value(buf, len, IIO_VAL_INT, 1, (int32_t *)&val);
+}
+
+static int ad74413r_iio_write_slew_en(void *dev, char *buf, uint32_t len,
+				      const struct iio_ch_info *channel, intptr_t priv)
+{
+	struct ad74413r_iio_desc *desc = dev;
+	int32_t val;
+	int ret;
+
+	iio_parse_value(buf, IIO_VAL_INT, &val, NULL);
+
+	return ad74413r_reg_update(desc->ad74413r_desc, AD74413R_OUTPUT_CONFIG(channel->address),
+				   AD74413R_SLEW_EN_MASK, !!val);
+}
+
+static int ad74413r_iio_read_slew_step(void *dev, char *buf, uint32_t len,
+				       const struct iio_ch_info *channel, intptr_t priv)
+{
+	struct ad74413r_iio_desc *desc = dev;
+	uint32_t val;
+	int ret;
+
+	ret = ad74413r_reg_read(desc->ad74413r_desc,
+				AD74413R_OUTPUT_CONFIG(channel->address), &val);
+	if (ret)
+		return ret;
+
+	val = no_os_field_get(AD74413R_SLEW_LIN_STEP_MASK, val);
+	val = ad74413r_slew_step_avail[val];
+
+	return iio_format_value(buf, len, IIO_VAL_INT, 1, (int32_t *)&val);
+}
+
+static int ad74413r_iio_write_slew_step(void *dev, char *buf, uint32_t len,
+				        const struct iio_ch_info *channel, intptr_t priv)
+{
+	struct ad74413r_iio_desc *desc = dev;
+	enum ad74413r_slew_lin_step step;
+	int32_t val;
+	int ret;
+
+	iio_parse_value(buf, IIO_VAL_INT, &val, NULL);
+
+	switch (val){
+		case 64:
+			step = AD74413R_STEP_64;
+			break;
+		case 120:
+			step = AD74413R_STEP_120;
+			break;
+		case 500:
+			step = AD74413R_STEP_500;
+			break;
+		case 1820:
+			step = AD74413R_STEP_1820;
+			break;
+		default:
+			return -EINVAL;
+	}
+
+	return ad74413r_reg_update(desc->ad74413r_desc,
+				   AD74413R_OUTPUT_CONFIG(channel->address),
+				   AD74413R_SLEW_LIN_STEP_MASK, step);
+}
+
+static int ad74413r_iio_read_slew_rate(void *dev, char *buf, uint32_t len,
+				       const struct iio_ch_info *channel, intptr_t priv)
+{
+	struct ad74413r_iio_desc *desc = dev;
+	uint32_t val;
+	int ret;
+
+	ret = ad74413r_reg_read(desc->ad74413r_desc,
+				AD74413R_OUTPUT_CONFIG(channel->address), &val);
+	if (ret)
+		return ret;
+
+	val = no_os_field_get(AD74413R_SLEW_LIN_RATE_MASK, val);
+	val = ad74413r_slew_rate_avail[val];
+
+	return iio_format_value(buf, len, IIO_VAL_INT, 1, (int32_t *)&val);
+}
+
+static int ad74413r_iio_write_slew_rate(void *dev, char *buf, uint32_t len,
+				        const struct iio_ch_info *channel, intptr_t priv)
+{
+	struct ad74413r_iio_desc *desc = dev;
+	enum ad74413r_slew_lin_step rate;
+	int32_t val;
+	int ret;
+
+	iio_parse_value(buf, IIO_VAL_INT, &val, NULL);
+
+	switch (val){
+		case 4:
+			rate = AD74413R_LIN_RATE_4KHZ;
+			break;
+		case 64:
+			rate = AD74413R_LIN_RATE_64KHZ;
+			break;
+		case 150:
+			rate = AD74413R_LIN_RATE_150KHZ;
+			break;
+		case 240:
+			rate = AD74413R_LIN_RATE_240KHZ;
+			break;
+		default:
+			return -EINVAL;
+	}
+
+	return ad74413r_reg_update(desc->ad74413r_desc,
+				   AD74413R_OUTPUT_CONFIG(channel->address),
+				   AD74413R_SLEW_LIN_RATE_MASK, rate);
+}
+
+static int ad74413r_iio_read_slew_rate_avail(void *dev, char *buf, uint32_t len,
+					     const struct iio_ch_info *channel,
+					     intptr_t priv)
+{
+	iio_format_value(buf, len, IIO_VAL_INT_MULTIPLE, 4, ad74413r_slew_rate_avail);
+
+	return strlen(buf);
+}
+
+static int ad74413r_iio_read_slew_step_avail(void *dev, char *buf, uint32_t len,
+					     const struct iio_ch_info *channel,
+					     intptr_t priv)
+{
+	iio_format_value(buf, len, IIO_VAL_INT_MULTIPLE, 4, ad74413r_slew_step_avail);
+
+	return strlen(buf);
 }
 
 /**
@@ -668,6 +956,85 @@ static int ad74413r_iio_trigger_handler(struct iio_device_data *dev_data)
 	return iio_buffer_push_scan(dev_data->buffer, buff);
 }
 
+static int ad74413r_iio_read_config_enabled(void *dev, char *buf, uint32_t len,
+					    const struct iio_ch_info *channel,
+					    intptr_t priv)
+{
+	int32_t en;
+	struct ad74413r_iio_desc *iio_desc = dev;
+
+	en = ad74413r_global_config[channel->address].enabled;
+
+	return iio_format_value(buf, len, IIO_VAL_INT, 1, &en);
+}
+
+static int ad74413r_iio_write_config_enabled(void *dev, char *buf, uint32_t len,
+					     const struct iio_ch_info *channel,
+					     intptr_t priv)
+{
+	int32_t en;
+	struct ad74413r_iio_desc *iio_desc = dev;
+
+	en = ad74413r_global_config[channel->address].enabled;
+
+	return iio_format_value(buf, len, IIO_VAL_INT, 1, &en);
+}
+
+static int ad74413r_iio_read_config_function(void *dev, char *buf, uint32_t len,
+		const struct iio_ch_info *channel, intptr_t priv)
+{
+	struct ad74413r_iio_desc *iio_desc = dev;
+	struct ad74413r_desc *desc = iio_desc->ad74413r_desc;
+	enum ad74413r_op_mode op_mode;
+	char *config_function;
+
+	op_mode = desc->channel_configs[channel->address].function;
+	config_function = ad74413r_function_available[op_mode];
+
+	strcpy(buf, "");
+	strcat(buf, config_function);
+
+	return strlen(buf);
+}
+
+static int ad74413r_iio_write_config_function(void *dev, char *buf, uint32_t len,
+		const struct iio_ch_info *channel, intptr_t priv)
+{
+	return 0;
+}
+
+static int ad74413r_iio_read_config_function_avail(void *dev, char *buf, uint32_t len,
+						   const struct iio_ch_info *channel,
+						   intptr_t priv)
+{
+	size_t i;
+
+	strcpy(buf, "");
+	for (i = 0; i < 11; i++) {
+		strcat(buf, ad74413r_function_available[i]);
+		if (i != 10)
+			strcat(buf, " ");
+	};
+
+	return strlen(buf);
+}
+
+static int ad74413r_iio_read_config_apply(void *dev, char *buf, uint32_t len,
+					  const struct iio_ch_info *channel,
+					  intptr_t priv)
+{
+	return iio_format_value(buf, len, IIO_VAL_INT, 1, &ad74413r_apply);
+}
+
+static int ad74413r_iio_write_config_apply(void *dev, char *buf, uint32_t len,
+					   const struct iio_ch_info *channel,
+					   intptr_t priv)
+{
+	ad74413r_apply = 1;
+
+	return 0;
+}
+
 /**
  * @brief Initializes the AD74413R IIO descriptor.
  * @param iio_desc - The iio device descriptor.
@@ -675,7 +1042,8 @@ static int ad74413r_iio_trigger_handler(struct iio_device_data *dev_data)
  * @return 0 in case of success, an error code otherwise.
  */
 int ad74413r_iio_init(struct ad74413r_iio_desc **iio_desc,
-		      struct ad74413r_iio_desc_init_param *init_param)
+		      struct ad74413r_iio_desc_init_param *init_param,
+		      bool config)
 {
 	int ret;
 	uint32_t i;
@@ -687,6 +1055,12 @@ int ad74413r_iio_init(struct ad74413r_iio_desc **iio_desc,
 	descriptor = calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
+
+	if (config) {
+		descriptor->iio_dev = &ad74413r_iio_config_dev;
+		*iio_desc = descriptor;
+		return 0;
+	}
 
 	descriptor->iio_dev = &ad74413r_iio_dev;
 

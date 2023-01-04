@@ -78,7 +78,7 @@ struct ad74413r_channel_map {
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 int ad74413r_iio_init(struct ad74413r_iio_desc **,
-		      struct ad74413r_iio_desc_init_param *);
+		      struct ad74413r_iio_desc_init_param *, bool);
 int ad74413r_iio_remove(struct ad74413r_iio_desc *);
 
 #endif /** IIO_AD74413R_H */

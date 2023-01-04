@@ -112,6 +112,8 @@
 // The default baudrate iio_app will use to print messages to console.
 #define UART_BAUDRATE_DEFAULT	115200
 
+int ad74413r_apply;
+
 static inline uint32_t _calc_uart_xfer_time(uint32_t len, uint32_t baudrate)
 {
 	uint32_t ms = 1000ul * len * 8 / UART_BAUDRATE_DEFAULT;

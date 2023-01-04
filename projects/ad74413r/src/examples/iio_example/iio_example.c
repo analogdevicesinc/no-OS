@@ -96,7 +96,7 @@ int iio_example_main()
 		.function = AD74413R_CURRENT_IN_EXT
 	};
 
-	ret = ad74413r_iio_init(&ad74413r_iio_desc, &ad74413r_iio_ip);
+	ret = ad74413r_iio_init(&ad74413r_iio_desc, &ad74413r_iio_ip, true);
 	if (ret)
 		return ret;
 
