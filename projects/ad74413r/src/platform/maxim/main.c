@@ -77,7 +77,7 @@ int main()
 #endif
 
 #ifdef IIO_TRIGGER_EXAMPLE
-#error IIO trigger example is not supported on Maxim platform.
+	ret = iio_trigger_example_main();
 #endif
 
 #if (DUMMY_EXAMPLE + IIO_EXAMPLE == 0)
