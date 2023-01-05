@@ -586,7 +586,7 @@ int main(void)
 	default_init_param.rx_synthesizer_frequency_hz = 2300000000UL;
 	default_init_param.tx_synthesizer_frequency_hz = 2300000000UL;
 
-	rx_adc_init.base = AD9361_RX_1_BASEADDR;
+	default_init_param.rx_adc_init->base = AD9361_RX_1_BASEADDR;
 	tx_dac_init.base = AD9361_TX_1_BASEADDR;
 
 	ad9361_init(&ad9361_phy_b, &default_init_param);
@@ -610,7 +610,6 @@ int main(void)
 #ifdef FMCOMMS5
 	axi_dac_init(&ad9361_phy_b->tx_dac, &tx_dac_init);
 	axi_dac_set_datasel(ad9361_phy_b->tx_dac, -1, AXI_DAC_DATA_SEL_DMA);
-	rx_adc_init.base = AD9361_RX_0_BASEADDR;
 	tx_dac_init.base = AD9361_TX_0_BASEADDR;
 #endif
 	axi_dac_init(&ad9361_phy->tx_dac, &tx_dac_init);
@@ -789,7 +788,7 @@ int main(void)
 	printf("DAC_DMA_EXAMPLE: address=%#x samples=%lu channels=%u bits=%u\n",
 	       (uintptr_t)ADC_DDR_BASEADDR,
 	       read_transfer.size / AD9361_ADC_DAC_BYTES_PER_SAMPLE,
-	       rx_adc_init.num_channels * 2,
+	       default_init_param.rx_adc_init->num_channels * 2,
 	       8 * sizeof(adc_buffer[0]));
 #else
 	Xil_DCacheInvalidateRange((uintptr_t)adc_buffer, sizeof(adc_buffer));
