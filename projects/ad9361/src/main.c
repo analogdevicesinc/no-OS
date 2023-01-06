@@ -821,36 +821,57 @@ int main(void)
 	 * iio axi adc configurations.
 	 */
 	struct iio_axi_adc_init_param iio_axi_adc_init_par;
+#ifdef FMCOMMS5
+	struct iio_axi_adc_init_param iio_axi_adc_b_init_par;
+#endif
 
 	/**
 	 * iio axi dac configurations.
 	 */
 	struct iio_axi_dac_init_param iio_axi_dac_init_par;
+#ifdef FMCOMMS5
+	struct iio_axi_dac_init_param iio_axi_dac_b_init_par;
+#endif
 
 	/**
 	 * iio ad9361 configurations.
 	 */
 	struct iio_ad9361_init_param iio_ad9361_init_param;
+#ifdef FMCOMMS5
+	struct iio_ad9361_init_param iio_ad9361_b_init_param;
+#endif
 
 	/**
 	 * iio instance descriptor.
 	 */
 	struct iio_axi_adc_desc *iio_axi_adc_desc;
+#ifdef FMCOMMS5
+	struct iio_axi_adc_desc *iio_axi_adc_b_desc;
+#endif
 
 	/**
 	 * iio instance descriptor.
 	 */
 	struct iio_axi_dac_desc *iio_axi_dac_desc;
+#ifdef FMCOMMS5
+	struct iio_axi_dac_desc *iio_axi_dac_b_desc;
+#endif
 
 	/**
 	 * iio ad9361 instance descriptor.
 	 */
 	struct iio_ad9361_desc *iio_ad9361_desc;
+#ifdef FMCOMMS5
+	struct iio_ad9361_desc *iio_ad9361_b_desc;
+#endif
 
 	/**
 	 * iio devices corresponding to every device.
 	 */
 	struct iio_device *adc_dev_desc, *dac_dev_desc, *ad9361_dev_desc;
+#ifdef FMCOMMS5
+	struct iio_device *adc_b_dev_desc, *dac_b_dev_desc, *ad9361_b_dev_desc;
+#endif
 
 	status = axi_dmac_init(&tx_dmac, &tx_dmac_init);
 	if(status < 0)
@@ -869,10 +890,22 @@ int main(void)
 	if(status < 0)
 		return status;
 	iio_axi_adc_get_dev_descriptor(iio_axi_adc_desc, &adc_dev_desc);
+
 	struct iio_data_buffer read_buff = {
 		.buff = (void *)ADC_DDR_BASEADDR,
 		.size = 0xFFFFFFFF,
 	};
+
+#ifdef FMCOMMS5
+	iio_axi_adc_b_init_par = (struct iio_axi_adc_init_param) {
+		.rx_adc = ad9361_phy_b->rx_adc,
+	};
+
+	status = iio_axi_adc_init(&iio_axi_adc_b_desc, &iio_axi_adc_b_init_par);
+	if(status < 0)
+		return status;
+	iio_axi_adc_get_dev_descriptor(iio_axi_adc_b_desc, &adc_b_dev_desc);
+#endif
 
 	iio_axi_dac_init_par = (struct iio_axi_dac_init_param) {
 		.tx_dac = ad9361_phy->tx_dac,
@@ -892,6 +925,17 @@ int main(void)
 		.size = 0xFFFFFFFF,
 	};
 
+#ifdef FMCOMMS5
+	iio_axi_dac_b_init_par = (struct iio_axi_dac_init_param) {
+		.tx_dac = ad9361_phy_b->tx_dac,
+	};
+
+	status = iio_axi_dac_init(&iio_axi_dac_b_desc, &iio_axi_dac_b_init_par);
+	if (status < 0)
+		return status;
+	iio_axi_dac_get_dev_descriptor(iio_axi_dac_b_desc, &dac_b_dev_desc);
+#endif
+
 	iio_ad9361_init_param = (struct iio_ad9361_init_param) {
 		.ad9361_phy = ad9361_phy,
 	};
@@ -901,10 +945,26 @@ int main(void)
 		return status;
 	iio_ad9361_get_dev_descriptor(iio_ad9361_desc, &ad9361_dev_desc);
 
+#ifdef FMCOMMS5
+	iio_ad9361_b_init_param = (struct iio_ad9361_init_param) {
+		.ad9361_phy = ad9361_phy_b,
+	};
+
+	status = iio_ad9361_init(&iio_ad9361_b_desc, &iio_ad9361_b_init_param);
+	if (status < 0)
+		return status;
+	iio_ad9361_get_dev_descriptor(iio_ad9361_b_desc, &ad9361_b_dev_desc);
+#endif
+
 	struct iio_app_device devices[] = {
 		IIO_APP_DEVICE("cf-ad9361-lpc", iio_axi_adc_desc, adc_dev_desc, &read_buff, NULL),
 		IIO_APP_DEVICE("cf-ad9361-dds-core-lpc", iio_axi_dac_desc, dac_dev_desc, NULL, &write_buff),
-		IIO_APP_DEVICE("ad9361-phy", ad9361_phy, ad9361_dev_desc, NULL, NULL)
+		IIO_APP_DEVICE("ad9361-phy", ad9361_phy, ad9361_dev_desc, NULL, NULL),
+#ifdef FMCOMMS5
+		IIO_APP_DEVICE("cf-ad9361-B", iio_axi_adc_b_desc, adc_b_dev_desc, &read_buff, NULL),
+		IIO_APP_DEVICE("cf-ad9361-dds-core-B", iio_axi_dac_b_desc, dac_b_dev_desc, NULL, &write_buff),
+		IIO_APP_DEVICE("ad9361-phy-B", ad9361_phy_b, ad9361_b_dev_desc, NULL, NULL)
+#endif
 	};
 
 	iio_app_run(devices, NO_OS_ARRAY_SIZE(devices));
