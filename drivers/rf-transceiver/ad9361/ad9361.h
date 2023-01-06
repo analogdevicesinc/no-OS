@@ -3443,7 +3443,11 @@ enum debugfs_cmd {
 int32_t ad9361_spi_readm(struct no_os_spi_desc *spi, uint32_t reg,
 			 uint8_t *rbuf, uint32_t num);
 int32_t ad9361_spi_read(struct no_os_spi_desc *spi, uint32_t reg);
+int32_t ad9361_reg_read(struct ad9361_rf_phy *phy,
+			uint32_t reg, uint32_t *val);
 int32_t ad9361_spi_write(struct no_os_spi_desc *spi,
+			 uint32_t reg, uint32_t val);
+int32_t ad9361_reg_write(struct ad9361_rf_phy *phy,
 			 uint32_t reg, uint32_t val);
 int32_t ad9361_reset(struct ad9361_rf_phy *phy);
 int32_t ad9361_register_clocks(struct ad9361_rf_phy *phy);
