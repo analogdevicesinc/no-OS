@@ -750,6 +750,25 @@ int32_t ad9361_spi_read(struct no_os_spi_desc *spi, uint32_t reg)
 }
 
 /**
+ * IIO SPI register read.
+ * @param phy The AD9361 state structure.
+ * @param reg The register address.
+ * @return The register value or negative error code in case of failure.
+ */
+int32_t ad9361_reg_read(struct ad9361_rf_phy *phy, uint32_t reg, uint32_t *val)
+{
+	int32_t ret;
+
+	ret = ad9361_spi_read(phy->spi, reg);
+	if (ret < 0)
+		return ret;
+
+	*val = ret;
+
+	return 0;
+}
+
+/**
  * SPI register bits read.
  * @param spi
  * @param reg The register address.
@@ -816,6 +835,19 @@ int32_t ad9361_spi_write(struct no_os_spi_desc *spi,
 #endif
 
 	return 0;
+}
+
+/**
+ * IIO SPI register write.
+ * @param phy The AD9361 state structure.
+ * @param reg The register address.
+ * @param val The value of the register.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad9361_reg_write(struct ad9361_rf_phy *phy,
+			 uint32_t reg, uint32_t val)
+{
+	return ad9361_spi_write(phy->spi, reg, val);
 }
 
 /**
