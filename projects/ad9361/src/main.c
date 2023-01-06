@@ -147,9 +147,15 @@ struct xil_gpio_init_param xil_gpio_param = {
 #endif
 
 struct axi_adc_init rx_adc_init = {
-	"cf-ad9361-lpc",
-	RX_CORE_BASEADDR,
-	4
+	.name = "cf-ad9361-lpc",
+	.base = RX_CORE_BASEADDR,
+#ifdef FMCOMMS5
+	.slave_base = AD9361_RX_1_BASEADDR,
+	.num_channels = 8,
+#else
+	.num_channels = 4,
+#endif
+	.num_slave_channels =  4
 };
 struct axi_dac_init tx_dac_init = {
 	"cf-ad9361-dds-core-lpc",
@@ -587,6 +593,7 @@ int main(void)
 	default_init_param.tx_synthesizer_frequency_hz = 2300000000UL;
 
 	rx_adc_init.base = AD9361_RX_1_BASEADDR;
+	rx_adc_init.num_slave_channels = 0;
 	tx_dac_init.base = AD9361_TX_1_BASEADDR;
 
 	ad9361_init(&ad9361_phy_b, &default_init_param);
@@ -611,6 +618,7 @@ int main(void)
 	axi_dac_init(&ad9361_phy_b->tx_dac, &tx_dac_init);
 	axi_dac_set_datasel(ad9361_phy_b->tx_dac, -1, AXI_DAC_DATA_SEL_DMA);
 	rx_adc_init.base = AD9361_RX_0_BASEADDR;
+	rx_adc_init.num_slave_channels = 4;
 	tx_dac_init.base = AD9361_TX_0_BASEADDR;
 #endif
 	axi_dac_init(&ad9361_phy->tx_dac, &tx_dac_init);
@@ -626,6 +634,9 @@ int main(void)
 #ifdef FMCOMMS5
 	axi_dac_init(&ad9361_phy_b->tx_dac, &tx_dac_init);
 	axi_dac_set_datasel(ad9361_phy_b->tx_dac, -1, AXI_DAC_DATA_SEL_DDS);
+	rx_adc_init.base = AD9361_RX_0_BASEADDR;
+	rx_adc_init.num_slave_channels = 4;
+	tx_dac_init.base = AD9361_TX_0_BASEADDR;
 #endif
 	axi_dac_init(&ad9361_phy->tx_dac, &tx_dac_init);
 	axi_dac_set_datasel(ad9361_phy->tx_dac, -1, AXI_DAC_DATA_SEL_DDS);
@@ -739,8 +750,7 @@ int main(void)
 #ifdef FMCOMMS5
 	struct axi_dma_transfer read_transfer = {
 		// Number of bytes to write/read
-		.size = samples * AD9361_ADC_DAC_BYTES_PER_SAMPLE *
-		(ad9361_phy_b->rx_adc->num_channels + ad9361_phy->rx_adc->num_channels),
+		.size = samples * AD9361_ADC_DAC_BYTES_PER_SAMPLE * ad9361_phy->rx_adc->num_channels,
 		// Transfer done flag
 		.transfer_done = 0,
 		// Signal transfer mode
@@ -783,13 +793,12 @@ int main(void)
 #ifdef XILINX_PLATFORM
 #ifdef FMCOMMS5
 	Xil_DCacheInvalidateRange((uintptr_t)ADC_DDR_BASEADDR,
-				  samples * AD9361_ADC_DAC_BYTES_PER_SAMPLE * (ad9361_phy_b->rx_adc->num_channels
-						  +
-						  ad9361_phy->rx_adc->num_channels));
+				  samples * AD9361_ADC_DAC_BYTES_PER_SAMPLE *
+				  ad9361_phy->rx_adc->num_channels);
 	printf("DAC_DMA_EXAMPLE: address=%#x samples=%lu channels=%u bits=%u\n",
 	       (uintptr_t)ADC_DDR_BASEADDR,
 	       read_transfer.size / AD9361_ADC_DAC_BYTES_PER_SAMPLE,
-	       rx_adc_init.num_channels * 2,
+	       rx_adc_init.num_channels,
 	       8 * sizeof(adc_buffer[0]));
 #else
 	Xil_DCacheInvalidateRange((uintptr_t)adc_buffer, sizeof(adc_buffer));

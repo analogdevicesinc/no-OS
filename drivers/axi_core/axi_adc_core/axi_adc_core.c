@@ -82,6 +82,34 @@ int32_t axi_adc_write(struct axi_adc *adc,
 }
 
 /**
+ * @brief Slave AXI ADC Data read.
+ * @param adc - The device structure.
+ * @param reg_addr - The register address.
+ * @param reg_data - Read data value.
+ * @return Returns 0 in case of success or negative error code otherwise.
+ */
+int32_t axi_slave_adc_read(struct axi_adc *adc,
+			   uint32_t reg_addr,
+			   uint32_t *reg_data)
+{
+	return no_os_axi_io_read(adc->slave_base, reg_addr, reg_data);
+}
+
+/**
+ * @brief Slave AXI ADC Data Write.
+ * @param adc - The device structure.
+ * @param reg_addr - The register address.
+ * @param reg_data - Data value to be written.
+ * @return Returns 0 in case of success or negative error code otherwise.
+ */
+int32_t axi_slave_adc_write(struct axi_adc *adc,
+			    uint32_t reg_addr,
+			    uint32_t reg_data)
+{
+	return no_os_axi_io_write(adc->slave_base, reg_addr, reg_data);
+}
+
+/**
  * @brief Set AXI ADC PN sequence.
  * @param adc - The device structure.
  * @param chan - The AXI ADC channel.
@@ -514,6 +542,7 @@ int32_t axi_adc_get_calib_bias(struct axi_adc *adc,
  */
 int32_t axi_adc_update_active_channels(struct axi_adc *adc, uint32_t mask)
 {
+	int32_t ret;
 	uint32_t ch;
 	uint32_t val;
 	uint32_t new_val;
@@ -523,12 +552,30 @@ int32_t axi_adc_update_active_channels(struct axi_adc *adc, uint32_t mask)
 
 	adc->mask = mask;
 	for (ch = 0; ch < adc->num_channels; ch++) {
-		axi_adc_read(adc, AXI_ADC_REG_CHAN_CNTRL(ch), &val);
+		if (ch > (adc->num_slave_channels - 1))
+			ret = axi_slave_adc_read(adc,
+						 AXI_ADC_REG_CHAN_CNTRL(ch - adc->num_slave_channels),
+						 &val);
+		else
+			ret = axi_adc_read(adc, AXI_ADC_REG_CHAN_CNTRL(ch), &val);
+
+		if (ret)
+			return ret;
+
 		new_val = val & (~AXI_ADC_ENABLE);
 		if (mask & 1)
 			new_val = val | AXI_ADC_ENABLE;
-		if (new_val != val)
-			axi_adc_write(adc, AXI_ADC_REG_CHAN_CNTRL(ch), new_val);
+		if (new_val != val) {
+			if (ch > (adc->num_slave_channels - 1))
+				ret = axi_slave_adc_write(adc,
+							  AXI_ADC_REG_CHAN_CNTRL(ch - adc->num_slave_channels),
+							  new_val);
+			else
+				ret = axi_adc_write(adc, AXI_ADC_REG_CHAN_CNTRL(ch), new_val);
+
+			if (ret)
+				return ret;
+		}
 		mask >>= 1;
 	}
 
@@ -552,7 +599,9 @@ int32_t axi_adc_init_begin(struct axi_adc **adc_core,
 
 	adc->name = init->name;
 	adc->base = init->base;
+	adc->slave_base = init->slave_base;
 	adc->num_channels = init->num_channels;
+	adc->num_slave_channels = init->num_slave_channels;
 
 	*adc_core = adc;
 
