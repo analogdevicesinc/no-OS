@@ -180,3 +180,9 @@ int32_t no_os_uart_write_nonblocking(struct no_os_uart_desc *desc,
 	return desc->platform_ops->write_nonblocking(desc, data, bytes_number);
 }
 
+
+void __attribute__((weak)) no_os_uart_stdio(struct no_os_uart_desc *desc)
+{
+	/* This can optionally be implemented under drivers/platform.
+	 * It does nothing if unimplemented. */
+}

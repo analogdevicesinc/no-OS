@@ -43,7 +43,7 @@
 #include "no_os_uart.h"
 #include "stm32_uart.h"
 
-void stm32_uart_stdio(struct no_os_uart_desc *desc);
+void no_os_uart_stdio(struct no_os_uart_desc *desc);
 int _isatty(int fd);
 int _write(int fd, char* ptr, int len);
 int _close(int fd);

@@ -127,7 +127,7 @@ int main(void)
 	if (ret < 0)
 		goto error;
 
-	init_uart_stdio(uart);
+	no_os_uart_stdio(uart);
 
 	pr_info("Hello!\n");
 

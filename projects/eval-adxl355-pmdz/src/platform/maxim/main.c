@@ -106,7 +106,7 @@ int main()
 	if (ret)
 		return ret;
 
-	maxim_uart_stdio(uart_desc);
+	no_os_uart_stdio(uart_desc);
 	ret = dummy_example_main();
 #endif
 

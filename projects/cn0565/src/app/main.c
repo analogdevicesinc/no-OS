@@ -129,11 +129,8 @@ int main(void)
 	if (ret < 0)
 		return ret;
 
-#if defined(STM32_PLATFORM)
-	stm32_uart_stdio(uart);
-#elif defined(ADUCM_PLATFORM)
-	init_uart_stdio(uart);
-#endif
+	no_os_uart_stdio(uart);
+
 	printf("Hello!\n");
 #endif
 	struct no_os_i2c_init_param i2cip = {
