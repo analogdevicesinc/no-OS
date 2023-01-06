@@ -431,6 +431,9 @@ static int32_t iio_axi_adc_create_device_descriptor(
 	int32_t i;
 	int32_t ret;
 
+	if (!desc->dmac)
+		default_channel.scan_type = NULL;
+
 	iio_device->num_ch = desc->adc->num_channels;
 	iio_device->attributes = NULL; /* no device attribute */
 	iio_device->channels = calloc(iio_device->num_ch,
@@ -491,7 +494,7 @@ int32_t iio_axi_adc_init(struct iio_axi_adc_desc **desc,
 	if (!init)
 		return -1;
 
-	if (!init->rx_adc || !init->rx_dmac)
+	if (!init->rx_adc)
 		return -1;
 
 	iio_axi_adc_inst = (struct iio_axi_adc_desc *)calloc(1,
@@ -500,8 +503,10 @@ int32_t iio_axi_adc_init(struct iio_axi_adc_desc **desc,
 		return -1;
 
 	iio_axi_adc_inst->adc = init->rx_adc;
-	iio_axi_adc_inst->dmac = init->rx_dmac;
-	iio_axi_adc_inst->dcache_invalidate_range = init->dcache_invalidate_range;
+	if (init->rx_dmac) {
+		iio_axi_adc_inst->dmac = init->rx_dmac;
+		iio_axi_adc_inst->dcache_invalidate_range = init->dcache_invalidate_range;
+	}
 	iio_axi_adc_inst->get_sampling_frequency = init->get_sampling_frequency;
 
 	status = iio_axi_adc_create_device_descriptor(iio_axi_adc_inst,
