@@ -79,7 +79,7 @@ int main()
 	if (ret)
 		goto error;
 
-	stm32_uart_stdio(uart);
+	no_os_uart_stdio(uart);
 	ret = basic_example_main();
 	if (ret)
 		goto error;

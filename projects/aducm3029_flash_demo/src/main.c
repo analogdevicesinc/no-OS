@@ -101,7 +101,7 @@ int main(int argc, char *argv[])
 	ret = no_os_uart_init(&uart_dut, &uart_init_par);
 	if (ret < 0)
 		return ret;
-	init_uart_stdio(uart_dut);
+	no_os_uart_stdio(uart_dut);
 
 	ret = no_os_flash_init(&flash_dut, &flash_init_par);
 	if (ret < 0)

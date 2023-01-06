@@ -58,7 +58,7 @@
 
 static struct no_os_uart_desc *guart = NULL;
 
-void maxim_uart_stdio(struct no_os_uart_desc *desc)
+void no_os_uart_stdio(struct no_os_uart_desc *desc)
 {
 	if (!desc)
 		return;

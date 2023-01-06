@@ -42,7 +42,7 @@
 #include <sys/stat.h>
 #include "no_os_uart.h"
 
-void maxim_uart_stdio(struct no_os_uart_desc *);
+void no_os_uart_stdio(struct no_os_uart_desc *);
 int _isatty(int);
 int _write(int, char *, int);
 int _close(int);
