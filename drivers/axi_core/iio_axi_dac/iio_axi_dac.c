@@ -588,6 +588,9 @@ static int32_t iio_axi_dac_create_device_descriptor(
 	int32_t ret;
 	char ch;
 
+	if (!desc->dmac)
+		default_voltage_channel.scan_type = NULL;
+
 	voltage_ch_no = desc->dac->num_channels;
 	altvoltage_ch_no = desc->dac->num_channels * 2;
 	iio_device->num_ch = voltage_ch_no + altvoltage_ch_no;
@@ -667,7 +670,7 @@ int32_t iio_axi_dac_init(struct iio_axi_dac_desc **desc,
 	if (!init)
 		return -1;
 
-	if (!init->tx_dac || !init->tx_dmac)
+	if (!init->tx_dac)
 		return -1;
 
 	iio_axi_dac_inst = (struct iio_axi_dac_desc *)calloc(1,
@@ -676,8 +679,10 @@ int32_t iio_axi_dac_init(struct iio_axi_dac_desc **desc,
 		return -1;
 
 	iio_axi_dac_inst->dac = init->tx_dac;
-	iio_axi_dac_inst->dmac = init->tx_dmac;
-	iio_axi_dac_inst->dcache_flush_range = init->dcache_flush_range;
+	if (init->tx_dmac) {
+		iio_axi_dac_inst->dmac = init->tx_dmac;
+		iio_axi_dac_inst->dcache_flush_range = init->dcache_flush_range;
+	}
 
 	status = iio_axi_dac_create_device_descriptor(iio_axi_dac_inst,
 			&iio_axi_dac_inst->dev_descriptor);
