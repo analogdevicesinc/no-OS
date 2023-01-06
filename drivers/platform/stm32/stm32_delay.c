@@ -80,3 +80,23 @@ void no_os_mdelay(uint32_t msecs)
 {
 	HAL_Delay(msecs);
 }
+
+/**
+ * @brief Get current time.
+ * @return Current time structure from system start (seconds, microseconds).
+ */
+struct no_os_time no_os_get_time(void)
+{
+	unsigned long long Xtime_Global;
+	float fractional_part = 0;
+	struct no_os_time t;
+
+	Xtime_Global = HAL_GetTick();
+	t.s = Xtime_Global / 1000; // milliseconds
+
+	fractional_part = (float)Xtime_Global / 1000 - Xtime_Global / 1000;
+	t.us = fractional_part * 1000;
+	t.us *= 1000;
+
+	return t;
+}
