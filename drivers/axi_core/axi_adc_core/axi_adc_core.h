@@ -127,8 +127,12 @@ struct axi_adc {
 	const char *name;
 	/** Base Address */
 	uint32_t base;
+	/** Slave Base Address */
+	uint32_t slave_base;
 	/** Number of channels */
 	uint8_t	num_channels;
+	/** Number of slave channels */
+	uint8_t	num_slave_channels;
 	/** AXI ADC Clock */
 	uint64_t clock_hz;
 	/** AXI ADC Channel Mask*/
@@ -144,8 +148,12 @@ struct axi_adc_init {
 	const char *name;
 	/** Base Address */
 	uint32_t base;
+	/** Slave Base Address */
+	uint32_t slave_base;
 	/** Number of channels */
 	uint8_t	num_channels;
+	/** Number of slave channels */
+	uint8_t	num_slave_channels;
 };
 
 enum axi_adc_pn_sel {
