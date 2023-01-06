@@ -49,7 +49,7 @@ static struct no_os_uart_desc *g_uart;
 #define STDOUT_FILENO 1
 #define STDERR_FILENO 2
 
-void init_uart_stdio(struct no_os_uart_desc *desc)
+void no_os_uart_stdio(struct no_os_uart_desc *desc)
 {
 	g_uart = desc;
 }

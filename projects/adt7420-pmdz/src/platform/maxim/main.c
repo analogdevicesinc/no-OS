@@ -73,7 +73,7 @@ int main()
 	if (ret)
 		goto error;
 
-	maxim_uart_stdio(uart);
+	no_os_uart_stdio(uart);
 	ret = dummy_example_main();
 	if (ret)
 		goto error;

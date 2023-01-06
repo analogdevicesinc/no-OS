@@ -41,6 +41,6 @@
 
 #include "no_os_uart.h"
 
-void init_uart_stdio(struct no_os_uart_desc *desc);
+void no_os_uart_stdio(struct no_os_uart_desc *desc);
 
 #endif //_ADUCM3029_UART_STDIO_H_
