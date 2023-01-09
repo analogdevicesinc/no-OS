@@ -44,7 +44,7 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include "maxim_uart.h"
-#include "maxim_stdio.h"
+#include "maxim_uart_stdio.h"
 #include "maxim_i2c.h"
 #include "maxim_irq.h"
 #include "maxim_gpio.h"

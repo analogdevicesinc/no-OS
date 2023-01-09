@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   maxim_stdio.c
+ *   @file   maxim_uart_stdio.c
  *   @brief  Implementation file of MAX32660 UART driver stdout/stdin redirection.
  *   @author Ciprian Regus (ciprian.regus@analog.com)
  *
@@ -43,7 +43,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include "maxim_stdio.h"
+#include "maxim_uart_stdio.h"
 
 #include "mxc_sys.h"
 #include "no_os_uart.h"
