@@ -41,6 +41,7 @@
 
 #include <stdbool.h>
 #include <stdint.h>
+#include "no_os_util.h"
 
 #define NO_OS_MDIO_C22_REGS		32
 #define NO_OS_MDIO_C45_START		0
