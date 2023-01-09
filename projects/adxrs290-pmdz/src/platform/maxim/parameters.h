@@ -47,7 +47,7 @@
 #include "maxim_spi.h"
 #include "maxim_gpio.h"
 #include "maxim_uart.h"
-#include "maxim_stdio.h"
+#include "maxim_uart_stdio.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
