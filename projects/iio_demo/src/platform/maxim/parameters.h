@@ -45,7 +45,7 @@
 /******************************************************************************/
 #include "maxim_irq.h"
 #include "maxim_uart.h"
-#include "maxim_stdio.h"
+#include "maxim_uart_stdio.h"
 #include "maxim_timer.h"
 #include "common_data.h"
 #include "no_os_util.h"
