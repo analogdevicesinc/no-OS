@@ -56,6 +56,7 @@ struct ad74413r_iio_desc {
 	struct iio_device *iio_dev;
 	uint32_t active_channels;
 	uint8_t no_of_active_channels;
+	uint32_t diag_reg_base;
 };
 
 /**

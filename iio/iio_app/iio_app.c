@@ -113,6 +113,7 @@
 #define UART_BAUDRATE_DEFAULT	115200
 
 int ad74413r_apply;
+int max14906_apply;
 
 static inline uint32_t _calc_uart_xfer_time(uint32_t len, uint32_t baudrate)
 {
@@ -423,6 +424,10 @@ int32_t iio_app_run_with_trigs(struct iio_app_device *devices, uint32_t nb_devs,
 
 	do {
 		status = iio_step(*iio_desc);
+		if (ad74413r_apply && max14906_apply) {
+			iio_remove(*iio_desc);
+			return 0;
+		}
 	} while (true);
 error:
 	status = print_uart_error_message(&uart_desc, uart_init_par, status);

@@ -42,8 +42,13 @@
 /******************************************************************************/
 #include "iio_example.h"
 #include "iio_ad74413r.h"
+#include "iio_max14906.h"
 #include "common_data.h"
 #include "no_os_util.h"
+
+#include "iio.h"
+#include "iio_types.h"
+#include "iiod.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -54,6 +59,7 @@
 /************************ Variable Declarations ******************************/
 /******************************************************************************/
 uint8_t iio_data_buffer[DATA_BUFFER_SIZE * sizeof(uint32_t) * 8];
+uint8_t iio_data_buffer2[DATA_BUFFER_SIZE * sizeof(uint32_t) * 8];
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -73,10 +79,23 @@ int iio_example_main()
 		.buff = (void *)iio_data_buffer,
 		.size = DATA_BUFFER_SIZE * sizeof(uint32_t) * 8
 	};
+	struct iio_data_buffer buff2 = {
+		.buff = (void *)iio_data_buffer2,
+		.size = DATA_BUFFER_SIZE * sizeof(uint32_t) * 8
+	};
 	struct ad74413r_init_param ad74413r_ip = {
 		.chip_id = AD74412R,
 		.comm_param = ad74413r_spi_ip
 	};
+
+	struct no_os_gpio_desc max14906_gpios[MAX14906_CHANNELS];
+	struct max14906_init_param max14906_ip = {
+		.chip_address = 0,
+		.comm_param = &max14906_spi_ip,
+		.ch_config = max14906_gpios,
+	};
+	struct max14906_iio_desc *max14906_iio_desc;
+	struct max14906_iio_desc_init_param max14906_iio_ip;
 
 	ad74413r_iio_ip.ad74413r_init_param = &ad74413r_ip;
 	ad74413r_iio_ip.channel_configs[0] = (struct ad74413r_channel_config) {
@@ -100,14 +119,41 @@ int iio_example_main()
 	if (ret)
 		return ret;
 
+	ret = max14906_iio_init(&max14906_iio_desc, &max14906_iio_ip, true);
+	if (ret)
+		return ret;
+
 	struct iio_app_device iio_devices[] = {
 		{
 			.name = "ad74413r",
 			.dev = ad74413r_iio_desc,
 			.dev_descriptor = ad74413r_iio_desc->iio_dev,
 			.read_buff = &buff,
+		},
+		{
+			.name = "max14906",
+			.dev = max14906_iio_desc,
+			.dev_descriptor = max14906_iio_desc->iio_dev,
+			.read_buff = &buff2,
 		}
 	};
 
-	return iio_app_run(iio_devices, NO_OS_ARRAY_SIZE(iio_devices));
+	while (1) {
+		ret = iio_app_run(iio_devices, NO_OS_ARRAY_SIZE(iio_devices));
+		if (ret)
+			return ret;
+		
+		/* Probe the drivers in the run mode */
+		ret = ad74413r_iio_init(&ad74413r_iio_desc, &ad74413r_iio_ip, false);
+		if (ret)
+			return ret;
+
+		ret = max14906_iio_init(&max14906_iio_desc, &max14906_iio_ip, false);
+		if (ret)
+			return ret;
+
+		ret = iio_app_run(iio_devices, NO_OS_ARRAY_SIZE(iio_devices));
+		if (ret)
+			return ret;
+	}
 }

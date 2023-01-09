@@ -39,6 +39,9 @@ SRCS += $(DRIVERS)/net/adin1110/adin1110.c
 INCS += $(DRIVERS)/adc-dac/ad74413r/ad74413r.h
 SRCS += $(DRIVERS)/adc-dac/ad74413r/ad74413r.c
 
+INCS += $(DRIVERS)/digital-io/max14906/max14906.h
+SRCS += $(DRIVERS)/digital-io/max14906/max14906.c
+
 ifeq (y,$(strip $(IIO_EXAMPLE)))
 INCS += $(DRIVERS)/adc-dac/ad74413r/iio_ad74413r.h
 SRCS += $(DRIVERS)/adc-dac/ad74413r/iio_ad74413r.c

@@ -68,6 +68,26 @@ struct no_os_spi_init_param adin1110_spi_ip = {
 	.extra = SPI_EXTRA,
 };
 
+struct no_os_spi_init_param ad74413r_spi_ip = {
+	.device_id = 1,
+	.max_speed_hz = SPI_BAUDRATE,
+	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
+	.mode = NO_OS_SPI_MODE_1,
+	.platform_ops = SPI_OPS,
+	.chip_select = SPI_CS,
+	.extra = SPI_EXTRA,
+};
+
+struct no_os_spi_init_param max14906_spi_ip = {
+	.device_id = 2,
+	.max_speed_hz = SPI_BAUDRATE,
+	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
+	.mode = NO_OS_SPI_MODE_0,
+	.platform_ops = SPI_OPS,
+	.chip_select = SPI_CS,
+	.extra = SPI_EXTRA,
+};
+
 #ifdef IIO_TRIGGER_EXAMPLE
 /* GPIO trigger */
 struct no_os_irq_init_param ad74413r_gpio_irq_ip = {

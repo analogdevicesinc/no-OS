@@ -56,6 +56,8 @@ extern struct no_os_uart_init_param adin1110_uart_ip;
 #endif
 
 extern struct no_os_spi_init_param adin1110_spi_ip;
+extern struct no_os_spi_init_param ad74413r_spi_ip;
+extern struct no_os_spi_init_param max14906_spi_ip;
 extern struct ad74413r_init_param ad74413r_ip;
 
 #ifdef IIO_TRIGGER_EXAMPLE
