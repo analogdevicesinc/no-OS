@@ -58,7 +58,7 @@ int max14906_reg_update(struct max14906_desc *desc, uint32_t addr,
 	return max14906_reg_write(desc, addr, reg_val);
 }
 
-int max14906_ch_read(struct max14906_desc *desc, uint32_t ch, uint32_t *val)
+int max14906_ch_get(struct max14906_desc *desc, uint32_t ch, uint32_t *val)
 {
 	if (ch >= MAX14906_CHANNELS)
 		return -EINVAL;
@@ -78,7 +78,7 @@ int max14906_ch_dir(struct max14906_desc *desc, uint32_t ch,
 		    enum max14906_dir direction)
 {
 	return max14906_reg_update(desc, MAX14906_SETOUT_REG,
-				   MAX14906_CH_DIR_MASK, direction);
+				   MAX14906_CH_DIR_MASK(ch), direction);
 }
 
 int max14906_init(struct max14906_desc **desc, struct max14906_init_param *param)
@@ -97,7 +97,7 @@ int max14906_init(struct max14906_desc **desc, struct max14906_init_param *param
 		goto err;
 
 	for (i = 0; i < MAX14906_CHANNELS; i++) {
-		ch_config = param->ch_config[i];
+		ch_config = &param->ch_config[i];
 		ret = no_os_gpio_get(&descriptor->dio[i], &ch_config->gpio_param);
 		if (ret)
 			return ret;

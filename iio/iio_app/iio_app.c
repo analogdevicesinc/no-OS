@@ -81,6 +81,7 @@
 #define UART_BAUDRATE_DEFAULT	115200
 
 int ad74413r_apply;
+int max14906_apply;
 
 static inline uint32_t _calc_uart_xfer_time(uint32_t len, uint32_t baudrate)
 {

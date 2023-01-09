@@ -67,7 +67,7 @@ struct max14906_desc {
 int max14906_reg_write(struct max14906_desc *, uint32_t, uint8_t);
 int max14906_reg_read(struct max14906_desc *, uint32_t, uint8_t *);
 int max14906_reg_update(struct max14906_desc *, uint32_t, uint8_t, uint8_t);
-int max14906_ch_read(struct max14906_desc *, uint32_t, uint32_t *);
+int max14906_ch_get(struct max14906_desc *, uint32_t, uint32_t *);
 int max14906_ch_set(struct max14906_desc *, uint32_t, uint32_t);
 int max14906_ch_dir(struct max14906_desc *, uint32_t, enum max14906_dir);
 int max14906_init(struct max14906_desc **, struct max14906_init_param *);
