@@ -41,6 +41,7 @@
 #define AD7616_H_
 
 #include "no_os_gpio.h"
+#include "no_os_pwm.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -89,6 +90,9 @@
 #define AD7616_STATUS_A(x)				(((x) & 0xF) << 12)
 #define AD7616_STATUS_B(x)				(((x) & 0xF) << 8)
 #define AD7616_STATUS_CRC(x)			(((x) & 0xFF) << 0)
+
+/* AD7616_REG_PWM */
+#define AD7616_TRIGGER_PULSE_WIDTH_NS	        50
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -151,6 +155,8 @@ struct ad7616_dev {
 	struct no_os_gpio_desc	*gpio_os0;
 	struct no_os_gpio_desc	*gpio_os1;
 	struct no_os_gpio_desc	*gpio_os2;
+	/** PWM */
+	struct no_os_pwm_desc *trigger_pwm_desc;
 	/* AXI Core */
 	uint32_t core_baseaddr;
 	/* Device Settings */
@@ -174,6 +180,8 @@ struct ad7616_init_param {
 	struct no_os_gpio_init_param		*gpio_os0_param;
 	struct no_os_gpio_init_param		*gpio_os1_param;
 	struct no_os_gpio_init_param		*gpio_os2_param;
+	/** PWM */
+	struct no_os_pwm_init_param             *trigger_pwm_init;
 	/* Core */
 	uint32_t			core_baseaddr;
 	/* Device Settings */
