@@ -50,7 +50,7 @@
 #include <string.h>
 #include <assert.h>
 #include <stdio.h>
-
+#include "axi_dmac.h"
 #include "ad7616.h"
 #include "no_os_gpio.h"
 #include "no_os_error.h"
@@ -317,6 +317,12 @@ int32_t ad7616_read_channel_source(struct ad7616_dev *dev, enum ad7616_ch *ch_a,
 
 	return 0;
 }
+=======
+#include "no_os_pwm.h"
+#if (HDL_AD7616_PARALLEL == 0)
+#include "spi_engine.h"
+#endif
+>>>>>>> a0d2e4a8f (ad7616: Remove spi engine from the ad7616 IP core)
 
 /**
  * Read from device.
@@ -618,9 +624,13 @@ static int32_t ad7616_read_data_serial_zynqmp(struct ad7616_dev *dev,
 	struct spi_engine_offload_message msg;
 	uint32_t spi_eng_msg_cmds[3] = {
 		CS_LOW,
-		READ(2),
+		READ(1),
 		CS_HIGH,
 	};
+
+	ret = no_os_pwm_enable(dev->trigger_pwm_desc);
+	if (ret != 0)
+		return ret;
 
 	dev->spi_desc->mode = NO_OS_SPI_MODE_3;
 	spi_engine_set_speed(dev->spi_desc, dev->spi_desc->max_speed_hz);
@@ -816,13 +826,11 @@ int32_t ad7616_core_setup(struct ad7616_dev *dev)
 	no_os_axi_io_write(dev->core_baseaddr, AD7616_REG_UP_CTRL, AD7616_CTRL_RESETN);
 	no_os_mdelay(10);
 
-	no_os_axi_io_read(dev->core_baseaddr, AD7616_REG_UP_IF_TYPE, &type);
-
-	if (type)
+	#if (HDL_AD7616_PARALLEL == 1)
 		dev->interface = AD7616_PARALLEL;
-	else
+	#else
 		dev->interface = AD7616_SERIAL;
-
+	#endif
 	return 0;
 }
 #endif
@@ -1028,10 +1036,15 @@ int32_t ad7616_setup(struct ad7616_dev **device,
 	if (ret != 0)
 		return ret;
 
+	ret = no_os_pwm_init(&dev->trigger_pwm_desc, init_param->trigger_pwm_init);
+	if (ret != 0)
+		goto error_spi;
+
 	*device = dev;
 
 	dev->layers_nb = 1;
 
+<<<<<<< HEAD
 	if (init_param->crc) {
 		ret = ad7616_enable_crc(dev);
 		if (ret != 0)
@@ -1041,4 +1054,40 @@ int32_t ad7616_setup(struct ad7616_dev **device,
 	}
 
 	return ad7616_self_test(dev);
+=======
+	return ret;
+
+error_spi:
+	no_os_spi_remove(dev->spi_desc);
+
+error_dev:
+	free(dev);
+
+	return -1;
+}
+
+/**
+ * @brief Free the memory allocated by ad7616_setup().
+ * @param [in] dev - Pointer to the device handler.
+ * @return 0 in case of success, -1 otherwise
+ */
+int32_t ad7616_remove(struct ad7616_dev *dev)
+{
+	int32_t ret;
+
+	if (!dev)
+		return -1;
+
+	ret = no_os_pwm_remove(dev->trigger_pwm_desc);
+	if (ret != 0)
+		return ret;
+
+	ret = no_os_spi_remove(dev->spi_desc);
+	if (ret != 0)
+		return ret;
+
+	free(dev);
+
+	return ret;
+>>>>>>> a0d2e4a8f (ad7616: Remove spi engine from the ad7616 IP core)
 }

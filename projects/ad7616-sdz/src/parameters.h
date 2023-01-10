@@ -43,7 +43,12 @@
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-#define AD7616_CORE_BASEADDR		XPAR_AXI_AD7616_BASEADDR
+#if (HDL_AD7616_PARALLEL == 1)
+#define AD7616_CORE_BASEADDR		        XPAR_AXI_AD7616_BASEADDR
+#else
+#define AD7616_SPI_ENGINE_BASEADDR  		XPAR_AXI_SPI_ENGINE_0_BASEADDR
+#endif
+#define AXI_PWMGEN_BASEADDR		    	XPAR_AD7616_PWM_GEN_BASEADDR
 #define AD7616_DMA_BASEADDR			XPAR_AXI_AD7616_DMA_BASEADDR
 #define SPI_AD7616_CS				0
 #define GPIO_DEVICE_ID				XPAR_PS7_GPIO_0_DEVICE_ID
