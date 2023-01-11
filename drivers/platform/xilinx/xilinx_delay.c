@@ -43,7 +43,9 @@
 
 #include "no_os_delay.h"
 #include <sleep.h>
-#include <xtime_l.h>
+#ifdef _XPARAMETERS_PS_H_
+#include "xtime_l.h"
+#endif
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -83,16 +85,26 @@ void no_os_mdelay(uint32_t msecs)
  */
 struct no_os_time no_os_get_time(void)
 {
+#ifdef _XPARAMETERS_PS_H_
 	unsigned long long Xtime_Global;
 	float fractional_part = 0;
+#endif
 	struct no_os_time t;
 
+#ifdef _XPARAMETERS_PS_H_
 	XTime_GetTime(&Xtime_Global);
 	t.s = Xtime_Global / COUNTS_PER_SECOND;
+#else
+	t.s = 0;
+#endif
 
+#ifdef _XPARAMETERS_PS_H_
 	fractional_part = (float)Xtime_Global / COUNTS_PER_SECOND - Xtime_Global /
 			  COUNTS_PER_SECOND;
 	t.us = fractional_part * 1000000;
+#else
+	t.us = 0;
+#endif
 
 	return t;
 }
