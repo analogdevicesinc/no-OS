@@ -104,55 +104,55 @@ static const char my_ca_cert[] = CA_CRT_PEM;
 
 static const char my_cli_cert[]=
 "-----BEGIN CERTIFICATE-----\n"
-"MIICyDCCAbACFB2GazFUJ6ofN6kFRe4qTnUFCdYtMA0GCSqGSIb3DQEBCwUAMB8x\n"
-"HTAbBgNVBAMMFEFuYWxvZyBEZXZpY2VzLCBJbmMuMB4XDTIyMTIyMDExNDEwN1oX\n"
-"DTIzMDExOTExNDEwN1owIjEgMB4GA1UEAwwXRW5lcmd5TW9uaXRvcmluZ0Rldmlj\n"
-"ZTEwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDy9QcbYm3/8ZG4zXfK\n"
-"VHd0H/0GN5xpLV+61jBnWvvnn2raX1xuw9vH6ExHs5NR7i/c0TSO69SnQ/3DjD7l\n"
-"+4lOUmkdJ9odYYQo3SEFhGAC0+0W/XSef97XQIudsYuALxFEHvr8XW/qG9RXX3vM\n"
-"xzTdfHQHlP+4F8W6mMVsey0KjwnK1yAhaTf4Wl73mw/uXE6F4Cve+JygIs4R+Xg+\n"
-"R3oej3ojEDtHOqueiEndWk5OFxXSKHbVDlmwu6MZLCf70vfLeuEwFE6APxTMUfi1\n"
-"U4zKWfij3zns2X/mBJ7aDS41UllE330jnT+FWPbfJrCd4x810vfWxW6aumq1IP+b\n"
-"3L+VAgMBAAEwDQYJKoZIhvcNAQELBQADggEBAHz54zcNB1NFpS7SLQj4uGuQ8MWM\n"
-"ztESbadGtANthFiN68ESvolDaFWkrPZUnvqEIBMEWmaviOQqdq/UYJH+r/E/C5xX\n"
-"Mg1M0jVLi0rrUNHewJXnbvjq6MBkz9T4McX7a+ruCVdkjwsS2o5iDVPiArj+dPyJ\n"
-"JOGIpr12GSAgHUJq716TmqPa0muS5z/Ahh3CmGJGK/qyeBjYCbSC46U5UvpGD+YJ\n"
-"+WeXLosSLTGdB/pf6+AMiDsX3FwLBRyCn149jJcgYH1hMGOL1nC2yA7ZkMijpQjt\n"
-"n0Xs1T8QbrjRM0HLjsHD7xRyhW61I51UdgV0RlVYJ08438DgLgUJ1/WYed8=\n"
-"-----END CERTIFICATE-----\n";
+"MIICyDCCAbACFBhDPi10huvZNJYgKltRGCBE2l9lMA0GCSqGSIb3DQEBCwUAMB8x\r\n" \
+"HTAbBgNVBAMMFEFuYWxvZyBEZXZpY2VzLCBJbmMuMB4XDTIzMDExMjEwMzUxN1oX\r\n" \
+"DTIzMDIxMTEwMzUxN1owIjEgMB4GA1UEAwwXRW5lcmd5TW9uaXRvcmluZ0Rldmlj\r\n" \
+"ZTEwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQD5e81cT1BLOsZNHz7s\r\n" \
+"wn4/WXm5gFO/kK8JjlvC2G2QLlhzUJDQ+FraTcbWGz0sRlbX5kareyxLpYNcKKxF\r\n" \
+"LCcglI8fRlPLM2v88vsE8xiVav6uIyPh7koolmn9RQ2bEZlwcXJRoo53W9XbEWMK\r\n" \
+"gADsL4gzj+IK3Wd7JAdmqsJEiSg6u2ePjuBF/1XB+4LvkvbqrP+NmmDzqouu06hj\r\n" \
+"PLsf3uWzOtUO1DsWjMkUW00V6ZVV0Ljr73dxdezuQGyH5GIKy2bjO4C+3NNFl517\r\n" \
+"+3VmEiIIR1n8sfRCtRaeO/o4VJW5rpaMHbhI9xTYnk6vTc4BMuHP3eFxtj/aU09K\r\n" \
+"xhyXAgMBAAEwDQYJKoZIhvcNAQELBQADggEBAF7UDpmL7PswJcYf7mGTjesOaTDr\r\n" \
+"cGgFtotuXlidLz2S2exX5nUKuoNmWzEl+vUDmI/d8VqWy61I6gDk35pqXgrcX9Rm\r\n" \
+"naqYluhHcjQwQfsHwkDsGDz9uwLAe0JK6wlbCZDcgSXdvU6CxUDtrv9WBXl7kcgU\r\n" \
+"Lph5a/t9L/LFp24Sh5wsK6iUTtCW4MFGwqWhFdeglTDJrM7YdPLsf72feBkH9vfR\r\n" \
+"fxm/2d6dxkqcJg952k49qq5iCB41fAemS6TwizwNJfcGPT31dE4WS0wCI1wx6jHy\r\n" \
+"Zfm7ChOD+OGOwx627UdIXtfBOzv45SMQIAGvj55GRBvQZ9Hoo3j0GbXNA3M=\r\n"     \
+"-----END CERTIFICATE-----\r\n";
 
 static const char my_cli_pk[]= \
 "-----BEGIN PRIVATE KEY-----\n"
-"MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDy9QcbYm3/8ZG4\n"
-"zXfKVHd0H/0GN5xpLV+61jBnWvvnn2raX1xuw9vH6ExHs5NR7i/c0TSO69SnQ/3D\n"
-"jD7l+4lOUmkdJ9odYYQo3SEFhGAC0+0W/XSef97XQIudsYuALxFEHvr8XW/qG9RX\n"
-"X3vMxzTdfHQHlP+4F8W6mMVsey0KjwnK1yAhaTf4Wl73mw/uXE6F4Cve+JygIs4R\n"
-"+Xg+R3oej3ojEDtHOqueiEndWk5OFxXSKHbVDlmwu6MZLCf70vfLeuEwFE6APxTM\n"
-"Ufi1U4zKWfij3zns2X/mBJ7aDS41UllE330jnT+FWPbfJrCd4x810vfWxW6aumq1\n"
-"IP+b3L+VAgMBAAECggEBAJRxVVhL+X2JsUlCcNB0b0/KQ6RK0gwJJxZWy9g6ZPMO\n"
-"GhE2dplOnbg0nHaqp3ZFm4TFZeF1Acb46dFSnROTbj8mZwbjVIbjEAaPpR9j0+2m\n"
-"YpPLZDd7VUIbM7KzydIV7+y5KQyMYladjk2cD1380LYK1jHTvbJTBAKQWP+A+vIZ\n"
-"ZlbuuzPOss4hrRTPDuCBsOlFKx89qm7SP+hJh+qhkT2qtG8t7IkuMaghlfft7vXX\n"
-"te1ebmReP2djiaKHstcDQiA7125MfrGP7c7WstVY3/oy5FIJakV3S++ODHNItUT/\n"
-"f3s7deIBzkPX+MuHzb1Fs/yJgdhKWW7aUSpfSiPC2wECgYEA+cJCyZusILG8Df9G\n"
-"v5afpg/gpR1nzRxQqs4/94KqSa+Llw3ogBxV+t5aKbCxkzBPiEOK2eCnSlo0U/iT\n"
-"GoIps7kYTFoH120HfhgB8IRzthH03+Zw1oG25YUNltYlhWkRzz2VoXrH1qpx4FmV\n"
-"q8XSGJjxccow2O5zygQm3r6k/WECgYEA+QdBbdDsoKL/k3UF695c95C4uYDfk/b4\n"
-"7XSI2UDXM+QTnSdSl/I+f3thZjJjW6p90HMVedm2gR2B17nS2htl35XbWkxdA6Mz\n"
-"6QGxmHyzW8vMo5VcGgFQ9Ux0lShgqv/AY5mjOqQ+yDGrvcyD7h2KHpLFH0jkuEqT\n"
-"RTLv2D4R2rUCgYEAiRhvHMeM1m15cp17slL102vHvhrEDbzLMtcAGdbproTjtMj3\n"
-"pMrpD0naaCQLdWYBYiThJPPCIHgfXTCHXvev+G1TvyV0RHYetMJs3h92fKyio/yU\n"
-"V8rgIGDGstNdyTuBgSam6frBkz4AQEwschumVcYuUm3QHmPVv0BELeSsIEECgYBj\n"
-"2+z4xFae873Yu4xsUPamr3njqTH+e4LGdXyK4d1qCYNz+Vi9ZX56UFd2S65cC7n3\n"
-"5K4v9oWgsNxoTTOoEmR/i/Ax/X0vADrIrM0ygI7LuKWO003jf7OfKdF2HoLlDzlu\n"
-"tyUlVsd2L7TWnzQoP+Aq8l/pc6mD3SPBE/Ppmro+IQKBgBjdhDgRLtqSRz9RJZoq\n"
-"mCnGyQf02YopKvhD828lVHjqqDoYVbYZVlYTV3h1edx3d2i5jAicjn25M/BNTYzO\n"
-"RM5rhN+zLoBF6V728kraaX3A/HJbOFnqH7J/ed0FWvtcCCD+4CMr71kytx/tS+Is\n"
-"HjKbpJjgh0Tf/HOK00ksJ2j5\n"
-"-----END PRIVATE KEY-----\n";
+"MIIEwAIBADANBgkqhkiG9w0BAQEFAASCBKowggSmAgEAAoIBAQD5e81cT1BLOsZN\r\n"
+"Hz7swn4/WXm5gFO/kK8JjlvC2G2QLlhzUJDQ+FraTcbWGz0sRlbX5kareyxLpYNc\r\n"
+"KKxFLCcglI8fRlPLM2v88vsE8xiVav6uIyPh7koolmn9RQ2bEZlwcXJRoo53W9Xb\r\n"
+"EWMKgADsL4gzj+IK3Wd7JAdmqsJEiSg6u2ePjuBF/1XB+4LvkvbqrP+NmmDzqouu\r\n"
+"06hjPLsf3uWzOtUO1DsWjMkUW00V6ZVV0Ljr73dxdezuQGyH5GIKy2bjO4C+3NNF\r\n"
+"l517+3VmEiIIR1n8sfRCtRaeO/o4VJW5rpaMHbhI9xTYnk6vTc4BMuHP3eFxtj/a\r\n"
+"U09KxhyXAgMBAAECggEBAOmntF7m/Xlns39ZazKMuXaVUzaT5Fu+ouCdTn1++6YU\r\n"
+"ccyWQPsmDtj0DOxLmJBV1FHiHn/OHV8/xXZTtXwXbRHLcPvGfwYJw/KkkspA7t5J\r\n"
+"1fq7eIjKBvRaYyvMN4DrC7zO01V3nFxXS0Qf1ZVo6vRJVBOOhxLL53Xh+XiDJuzN\r\n"
+"ethkGaDEHRbnMk3s3I/5OB5SmshIubteQbLfGj6m27BGdUmWEdbcoNz0xWJX3pir\r\n"
+"YyraXKM6RctfBTL/KNXf3iz52OHbyhwKtpmVs4yvoL3jvxMzd5qQsMluE6rOopfd\r\n"
+"eBsRFnId5kMCrd/ngzPaki2keXagkQJXmxvIbf46HYkCgYEA/cd4CI+j5AQWAS/6\r\n"
+"EyDmTW8PL+D5jgteBsVoNzvN6TDqIPBhMEx66XwRhbkWgjd4VOfb6QCm6UPWXwHu\r\n"
+"GsBzz2xLhtwD2S1+BfYklS63bT+jHRHQuUEkID3u/aWJeiQ207NOvxEk3/0ZsByc\r\n"
+"UxEjI7a0NLJJPkwMaxeK1eJfT00CgYEA+6q1ye1fFJXxlWFIE1/j7/eesNo/E6V0\r\n"
+"Eykr24kiNZCrlMJV7o/YyLG6GEvvjt6eHRKUfVBTZj6FHP6IsvrGeGXeQcSj4gsU\r\n"
+"U0vaVIv2+oJqJNPzrYY8w05DlqFK5VGUx8YyhhT/oAQOZ7bPLpeIJ1oNqvJBD1vu\r\n"
+"b1EeNdaG8XMCgYEAmhBANKJPEpvQaAQiQv6UEao8hAqGNc9804uASxfJV6nUWQ7V\r\n"
+"Uab8b0ZctNu6aG8YZCMmA/vbWH1QZPkc/aycIe5So5pp06ykdyYI63Ai9vXNJlas\r\n"
+"aeq77b7rmZynKzlU94xBYAkeY8SZlaqo1FzxAjtmhx89C87LMzBlnpcA2XkCgYEA\r\n"
+"yjbhuO2NL2pH4kJ3enHbIa7yiKHkevG/scGsJssqfKXQ6Ee6amSUyLXdlLY3N7Hy\r\n"
+"k+OhAovvZ0EnDiQLTNypaoZXrrrE/9TtMPzK4pJQEfuGNC9GJhCtdDTHpBnXpykF\r\n"
+"BfxgDlKDD10TAgzmrkY9tXjrcIcU9bVlgXZJcvL8HLcCgYEA7eIu1N8T0bH0Bd/w\r\n"
+"QRzNo1wzYLR21AZ0aNqgATQmTHdwXDtEoL14wJisr/L0w+rV+AEA+XczvR81NzIe\r\n"
+"Rb7SPxgKJ9ZviuxC1FXTsxlAMlEyhJDQOc1EYreidKZvuk8Mq3NWXHyMQdRiz9Uw\r\n"
+"gtV47HSZkKlslkvgtRxCe6nuZ6U=\r\n"
+"-----END PRIVATE KEY-----\r\n";
 
 // Make sure to size the buffer to fit the username (128 is an example)
-static char my_mqtt_user_name[128];
+static char my_mqtt_user_name[256];
 static size_t my_mqtt_user_name_length;
 
 static char telemetry_topic[128];
@@ -417,10 +417,10 @@ int main()
 	struct secure_init_param sip = {
 		.ca_cert = my_ca_cert,
 		.ca_cert_len = NO_OS_ARRAY_SIZE(my_ca_cert),
-		// .cli_cert = my_cli_cert,
-		// .cli_cert_len = NO_OS_ARRAY_SIZE(my_cli_cert),
-		// .cli_pk = my_cli_pk,
-		// .cli_pk_len = NO_OS_ARRAY_SIZE(my_cli_pk)
+		.cli_cert = my_cli_cert,
+		.cli_cert_len = NO_OS_ARRAY_SIZE(my_cli_cert),
+		.cli_pk = my_cli_pk,
+		.cli_pk_len = NO_OS_ARRAY_SIZE(my_cli_pk)
 	};
 
 	socket_param.max_buff_size = 0;

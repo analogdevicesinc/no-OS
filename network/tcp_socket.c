@@ -201,7 +201,7 @@ static int32_t stcp_socket_init(struct secure_socket_desc **desc,
 		mbedtls_ssl_conf_ca_chain(&ldesc->conf, &ldesc->cacert, NULL );
 		/* Verify server identity */
 		mbedtls_ssl_conf_authmode(&ldesc->conf,
-					  MBEDTLS_SSL_VERIFY_REQUIRED);
+					  MBEDTLS_SSL_VERIFY_NONE);
 	} else {
 		/* Do not verify server identity */
 		mbedtls_ssl_conf_authmode(&ldesc->conf,
