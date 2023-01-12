@@ -22,6 +22,7 @@ INCS += $(INCLUDE)/no_os_delay.h     \
 		$(INCLUDE)/no_os_circular_buffer.h \
 		$(INCLUDE)/no_os_trng.h \
 		$(DRIVERS)/power/ade9430/ade9430.h \
+		$(DRIVERS)/display/nhd_c12832a1z/nhd_c12832a1z.h \
 
 SRCS += $(DRIVERS)/api/no_os_gpio.c \
 		$(DRIVERS)/power/ade9430/ade9430.c \
@@ -32,7 +33,8 @@ SRCS += $(DRIVERS)/api/no_os_gpio.c \
 		$(DRIVERS)/api/no_os_timer.c  \
 		$(NO-OS)/util/no_os_list.c \
 		$(NO-OS)/util/no_os_util.c	\
-		$(NO-OS)/util/no_os_circular_buffer.c
+		$(NO-OS)/util/no_os_circular_buffer.c \
+		$(DRIVERS)/display/nhd_c12832a1z/nhd_c12832a1z.c
 
 LIBRARIES += mbedtls
 LIBRARIES += mqtt

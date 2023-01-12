@@ -57,10 +57,10 @@
 #define UART_IRQ_ID		UART1_IRQn
 #define UART_BAUDRATE	57600
 
-#define WIFI_SSID	        "AnalogDevices_5GHz"
+#define WIFI_SSID	        "AnalogDevices"
 #define WIFI_PWD	        "Analog123!"
 #define SERVER_PORT		8883
-#define SERVER_ADDR		"iot-hub-m7atugrfle3ns.azure-devices.net"
+#define SERVER_ADDR		"iot-hub-ylr4pd6jbvxtc.azure-devices.net"
 #define BUFF_LEN		200
 #define TIMER_ID		1
 #define MQTT_CONFIG_CMD_TIMEOUT	20000

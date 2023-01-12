@@ -90,7 +90,7 @@
  * 2000 is a eoungh to do the tls handshake and is no to much
  * platforms with memory constrains like ADuCM3029
  */
-#define MAX_CONTENT_LEN 2500
+#define MAX_CONTENT_LEN 16384
 
 /*
  * ENABLE_MEMORY_OPTIMIZATIONS should be defined in the case memory
@@ -143,7 +143,8 @@
 
 /* Enable KEY_EXCHANGE_ECDHE_RSA_ENABLED if used one of these chipersuites is defined */
 #define MBEDTLS_KEY_EXCHANGE_ECDHE_RSA_ENABLED
-
+#define MBEDTLS_PLATFORM_C
+#define MBEDTLS_PLATFORM_PRINTF_ALT
 #endif /* Chipers that use ENABLE_KEY_EXCHANGE_ECDHE_RSA_ENABLED */
 #endif /* ENABLE_TLS1_2 */
 

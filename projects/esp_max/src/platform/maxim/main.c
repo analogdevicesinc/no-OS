@@ -51,6 +51,7 @@
 #include "no_os_timer.h"
 #include "mqtt_client.h"
 #include "ade9430.h"
+#include "nhd_c12832a1z.h"
 
 #include "az_iot_hub_client.h"
 #include "maxim_gpio.h"
@@ -62,6 +63,7 @@
 
 #include "wifi.h"
 #include "tcp_socket.h"
+#include "mbedtls/config.h"
 
 // The default baudrate iio_app will use to print messages to console.
 #define PRINT_ERR_AND_RET(msg, ret) do {\
@@ -70,36 +72,37 @@
 } while (0)
 
 az_iot_hub_client my_client;
-static az_span my_iothub_hostname = AZ_SPAN_LITERAL_FROM_STR("iot-hub-m7atugrfle3ns.azure-devices.net");
-static az_span my_device_id = AZ_SPAN_LITERAL_FROM_STR("EnergyMonitoringDevice2");
+static az_span my_iothub_hostname = AZ_SPAN_LITERAL_FROM_STR("iot-hub-ylr4pd6jbvxtc.azure-devices.net");
+static az_span my_device_id = AZ_SPAN_LITERAL_FROM_STR("EnergyMonitoringDevice1");
 
 // Make sure to size the buffer to fit the client id (16 is an example)
-static char my_mqtt_client_id[16];
+static char my_mqtt_client_id[64];
 static size_t my_mqtt_client_id_length;
 
-//This assumes an X509 Cert. SAS keys may also be used.
-static const char my_ca_cert[]= \
-"-----BEGIN CERTIFICATE-----\n"
-"MIIDHzCCAgegAwIBAgIUGSa0OxKNup96dpDHNOJYqky/18YwDQYJKoZIhvcNAQEL\n"
-"BQAwHzEdMBsGA1UEAwwUQW5hbG9nIERldmljZXMsIEluYy4wHhcNMjIxMjIwMDky\n"
-"ODA0WhcNMzIwOTE4MDkyODA0WjAfMR0wGwYDVQQDDBRBbmFsb2cgRGV2aWNlcywg\n"
-"SW5jLjCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBALqsM26xEVm3RlD1\n"
-"R5iuooGe7ZJ9IuOvxYhYyDah0brVtx4IJsDS0MGdTZDKjxwQGv93rxFx7UY0WyFc\n"
-"kzA+AlLKMCwrbATtEzXoRi9EkWru4XKlEUjR3GWjx3+2GMd2yKnkRJTH+UgBPndf\n"
-"nS01FXq06F2bQrOVi4BZbvzmxGmLRdj4BGh1IlXaZ8HiXmK202prHRNA1D8OFTzo\n"
-"AQW5xJXxDsieXzH5OL5+OHJbj09vZWyHvUIP+TbCRlog06txq7OXbicmrHms/w6V\n"
-"cIB0F8cFoc38KCWeQRF0PT4p7Zd2v2/n1KSeXY84kKRR14GK0islmR9nLUxQ840p\n"
-"umtDo88CAwEAAaNTMFEwHQYDVR0OBBYEFGEYPPRUp2x3fOLWS+MO7jO0weXFMB8G\n"
-"A1UdIwQYMBaAFGEYPPRUp2x3fOLWS+MO7jO0weXFMA8GA1UdEwEB/wQFMAMBAf8w\n"
-"DQYJKoZIhvcNAQELBQADggEBAC0O+/p6Dc5yfqa54uLGVqsZSUxv2LQsuMitR44S\n"
-"m0qBZ98Knr1vHLjd5GtkJiioc8kjegnTdfi624k+rhdeqS5K58vTTMZDuW+NiA7/\n"
-"gHXjHd8xE7k7wMtod2W4hVHd5akQ/hc4SePnjLU+sGmZb8XqEUsdkcOIlP25bfOw\n"
-"Kvu7CEASD8kixaWqxkZmbRsE+D+MpRFUzm0BV8TAneIfGWXyPK08+XrvQwlG3Ot9\n"
-"zWVXuSKe1u5NtJ5Jzxsq9MWg0M3NVmPg3VRZa6Az1v6GBw12m3uWSBxBEwVwPMyn\n"
-"zKCqhYFP6vnYz6QRzN+1qCec9Tjyf4CSfM3MKr+pC6aAHMU=\n"
-"-----END CERTIFICATE-----\n";
+#define CA_CRT_PEM							\
+"-----BEGIN CERTIFICATE-----\r\n"					\
+"MIIDHzCCAgegAwIBAgIULv9GOV/gHojd0KXRx9GZ0PUqyBwwDQYJKoZIhvcNAQEL\r\n"	\
+"BQAwHzEdMBsGA1UEAwwUQW5hbG9nIERldmljZXMsIEluYy4wHhcNMjMwMTEyMDkz\r\n"	\
+"NjExWhcNMzIxMDExMDkzNjExWjAfMR0wGwYDVQQDDBRBbmFsb2cgRGV2aWNlcywg\r\n"	\
+"SW5jLjCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBANrAoQnTHwOW2TXr\r\n"	\
+"v4hWXSeU/7upsbIdIPB5TgWFN5lX+SY0tx0ljcGKymrnf6a/tAzdljGqRXH2H4Ln\r\n"	\
+"sW2sj7qbntppe1023SHA5S8d4WGqbmoh7Lf+FrYY9oAScT/nGNMXZ5hWgpJkloLN\r\n"	\
+"AFYCS7eJ08aR0geUt2Qc7YM77Rogmp0x95Z2yIV2QvKB41U6p151x63D5/tWvICJ\r\n"	\
+"q9PPKxeGuS2wa0h2zP82BKLyHDZdxSUkV2O/MbjxY/48amvZHrYRk+t8HfClIOt8\r\n"	\
+"ECobTnuLO8uEcz/H8mwaQGWDd5B3IwoUulI8gsCcQI1/iXcxZOEFgv8zwW/PeV4D\r\n"	\
+"h9vJkQMCAwEAAaNTMFEwHQYDVR0OBBYEFBsV5sXaaKZFFpNHB3rtmiBgMEsZMB8G\r\n"	\
+"A1UdIwQYMBaAFBsV5sXaaKZFFpNHB3rtmiBgMEsZMA8GA1UdEwEB/wQFMAMBAf8w\r\n"	\
+"DQYJKoZIhvcNAQELBQADggEBANexrLjMSe9r3inDDTme9LgWQpLeJ374ZgIMesgn\r\n"	\
+"hjrMYWloJa2Uqvj/7qc0aE9nkaGmnQwlMQ8ozBFizkyNoUFl5JdT+JzpQZv+6B3P\r\n"	\
+"DfQ+AKjfvcVNwsSgMIs6zZs4P47i745p5uvjdtVGW3rExQmI8/2398cBjeByyNT9\r\n"	\
+"N+TCK8ZwHS4fHYDJTSLUuWvX54Xl7S3Nmgq5frca4Bi7+i2wqjQWW6/QTbK7ZSdG\r\n"	\
+"m7qpW8nDxClkgO+5IQmqaENkohMwAlF99FBK0iJlSSSIsuo0SFXtqINFa7emFwGa\r\n"	\
+"oAMxi2Zfx52/MhR5WfVvQx4YIX2fIQP+OPLBTMMYNdesZ+U=\r\n"			\
+"-----END CERTIFICATE-----\r\n"
 
-static const char my_cli_cert[]= \
+static const char my_ca_cert[] = CA_CRT_PEM;
+
+static const char my_cli_cert[]=
 "-----BEGIN CERTIFICATE-----\n"
 "MIICyDCCAbACFB2GazFUJ6ofN6kFRe4qTnUFCdYtMA0GCSqGSIb3DQEBCwUAMB8x\n"
 "HTAbBgNVBAMMFEFuYWxvZyBEZXZpY2VzLCBJbmMuMB4XDTIyMTIyMDExNDEwN1oX\n"
@@ -252,13 +255,63 @@ int main()
 	if (ret)
 		return ret;
 
+	struct no_os_spi_init_param spi_lcd_ip = {
+		.device_id = 1,
+		.max_speed_hz = 1000000,
+		.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
+		.mode = NO_OS_SPI_MODE_3,
+		.platform_ops = &max_spi_ops,
+		.chip_select = 2,
+		.extra = &spi_extra_ip,
+	};
+
+	struct max_gpio_init_param gpio_dc_extra_ip = {
+		.direction = NO_OS_GPIO_OUT,
+	};
+
+	struct no_os_gpio_init_param gpio_dc_ip = {
+		.port = 2,
+		.number = 15,
+		.pull = NO_OS_PULL_NONE,
+		.platform_ops = &max_gpio_ops,
+		.extra = &gpio_dc_extra_ip,
+	};
+
+	struct max_gpio_init_param gpio_rst_extra_ip = {
+		.direction = NO_OS_GPIO_OUT,
+	};
+
+	struct no_os_gpio_init_param gpio_rst_ip = {
+		.port = 1,
+		.number = 25,
+		.pull = NO_OS_PULL_NONE,
+		.platform_ops = &max_gpio_ops,
+		.extra = &gpio_rst_extra_ip,
+	};
+
+	struct nhd_c12832a1z_init_param nhd_c12832a1z_ip = {
+		.spi_ip = &spi_lcd_ip,
+		.dc_pin_ip = &gpio_dc_ip,
+		.reset_pin_ip = &gpio_rst_ip
+	};
+
+	struct nhd_c12832a1z_dev *nhd_c12832a1z_device;
+
+	ret = nhd_c12832a1z_init(&nhd_c12832a1z_device, nhd_c12832a1z_ip);
+	if (ret)
+		return ret;
+
+	ret = nhd_c12832a1z_print_ascii(nhd_c12832a1z_device, 0x00, 0, 0);
+	if (ret)
+		return ret;
+
 	struct max_gpio_init_param gpio_extra_ip = {
 		.direction = NO_OS_GPIO_OUT,
 	};
 
 	struct no_os_gpio_init_param gpio_reset_ip = {
 		.port = 2,
-		.number = 17,
+		.number = 13,
 		.pull = NO_OS_PULL_NONE,
 		.platform_ops = &max_gpio_ops,
 		.extra = &gpio_extra_ip
@@ -320,6 +373,25 @@ int main()
 	if (status < 0)
 		return status;
 
+	struct no_os_uart_init_param luart0_par = {
+		.device_id = 0,
+		/* TODO: remove this ifdef when asynchrounous rx is implemented on every platform. */
+		.irq_id = UART0_IRQn,
+		.asynchronous_rx = true,
+		.baud_rate = UART_BAUDRATE,
+		.size = NO_OS_UART_CS_8,
+		.parity = NO_OS_UART_PAR_NO,
+		.stop = NO_OS_UART_STOP_1_BIT,
+		.extra = &ip
+	};
+	struct no_os_uart_desc *uart0_desc;
+
+	ret = no_os_uart_init(&uart0_desc, &luart0_par);
+	if (ret)
+		return ret;
+
+	maxim_uart_stdio(uart0_desc);
+
 	static struct tcp_socket_init_param socket_param;
 
 	static struct wifi_desc *wifi;
@@ -340,16 +412,15 @@ int main()
 	char buff[100];
 	wifi_get_ip(wifi, buff, 100);
 	printf("Tinyiiod ip is: %s\n", buff);
-
 	wifi_get_network_interface(wifi, &socket_param.net);
 
 	struct secure_init_param sip = {
 		.ca_cert = my_ca_cert,
 		.ca_cert_len = NO_OS_ARRAY_SIZE(my_ca_cert),
-		.cli_cert = my_cli_cert,
-		.cli_cert_len = NO_OS_ARRAY_SIZE(my_cli_cert),
-		.cli_pk = my_cli_pk,
-		.cli_pk_len = NO_OS_ARRAY_SIZE(my_cli_pk)
+		// .cli_cert = my_cli_cert,
+		// .cli_cert_len = NO_OS_ARRAY_SIZE(my_cli_cert),
+		// .cli_pk = my_cli_pk,
+		// .cli_pk_len = NO_OS_ARRAY_SIZE(my_cli_pk)
 	};
 
 	socket_param.max_buff_size = 0;
