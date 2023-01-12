@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   hmc630x.h
+ *   @file   hmc630x.c
  *   @brief  hmc6300 and hmc6301 device driver implementation.
  *   @author Darius Berghe (darius.berghe@analog.com)
 ********************************************************************************
@@ -196,6 +196,45 @@ int hmc630x_init(struct hmc630x_dev **dev, struct hmc630x_init_param *init)
 	if (ret)
 		goto error;
 
+	ret = hmc630x_set_enable(d, init->enabled);
+	if (ret)
+		goto error;
+
+	ret = hmc630x_set_temp_en(d, init->temp_en);
+	if (ret)
+		goto error;
+
+	ret = hmc630x_set_if_attn(d, init->if_attn);
+	if (ret)
+		goto error;
+
+	if (init->type == HMC6300) {
+		ret = hmc6300_set_rf_attn(d, init->tx.rf_attn);
+		if (ret)
+			goto error;
+	} else {
+		ret = hmc6301_set_lna_gain(d, init->rx.lna_gain);
+		if (ret)
+			goto error;
+
+		ret = hmc6301_set_bb_attn(d, init->rx.bb_attn1, init->rx.bb_attn2);
+		if (ret)
+			goto error;
+
+		ret = hmc6301_set_bb_attn_fine(d, init->rx.bb_attni_fine,
+					       init->rx.bb_attnq_fine);
+		if (ret)
+			goto error;
+
+		ret = hmc6301_set_bb_lpc_hpc(d, init->rx.bb_lpc, init->rx.bb_hpc);
+		if (ret)
+			goto error;
+	}
+
+	ret = hmc630x_set_vco(d, init->vco);
+	if (ret)
+		goto error;
+
 	*dev = d;
 	return 0;
 error:
@@ -244,6 +283,14 @@ int hmc630x_remove(struct hmc630x_dev *dev)
 	dev = NULL;
 
 	return 0;
+}
+
+enum hmc630x_type hmc630x_type(struct hmc630x_dev *dev)
+{
+	if (dev)
+		return dev->type;
+	else
+		return -EINVAL;
 }
 
 /* Write a device row using GPIO bit-banging. */
@@ -343,7 +390,6 @@ int hmc630x_write_regmap(struct hmc630x_dev *dev, const uint8_t *regmap)
 		skip2 = 15;
 		break;
 	default:
-	case HMC6300:
 		r = 1;
 		skip1 = 13;
 		skip2 = 15;
@@ -436,7 +482,7 @@ int hmc630x_read_regmap(struct hmc630x_dev *dev, uint8_t *regmap)
 }
 
 /* Enable temperature sensor. */
-int hmc630x_enable_temp(struct hmc630x_dev *dev, bool enable)
+int hmc630x_set_temp_en(struct hmc630x_dev *dev, bool enable)
 {
 	int ret;
 	uint16_t tempflash, tempsensor;
@@ -460,6 +506,38 @@ int hmc630x_enable_temp(struct hmc630x_dev *dev, bool enable)
 	return hmc630x_write(dev, tempsensor, !enable);
 }
 
+/* Is temperature sensor enabled? */
+int hmc630x_get_temp_en(struct hmc630x_dev *dev, bool *enable)
+{
+	int ret;
+	uint16_t tempflash, tempsensor;
+	uint8_t ena1, ena2;
+
+	switch (dev->type) {
+	case HMC6301:
+		tempflash = HMC6301_EN_TEMPFLASH;
+		tempsensor = HMC6301_ENBAR_TEMPS;
+		break;
+	default:
+	case HMC6300:
+		tempflash = HMC6300_EN_TEMPFLASH;
+		tempsensor = HMC6300_TEMPSENSOR_PWRDN;
+		break;
+	};
+
+	ret = hmc630x_read(dev, tempflash, &ena1);
+	if (ret)
+		return ret;
+
+	ret = hmc630x_read(dev, tempsensor, &ena2);
+	if (ret)
+		return ret;
+
+	*enable = ena1 && !ena2;
+
+	return 0;
+}
+
 /* Get a temperature reading. */
 int hmc630x_get_temp(struct hmc630x_dev *dev, uint8_t *temp)
 {
@@ -467,7 +545,7 @@ int hmc630x_get_temp(struct hmc630x_dev *dev, uint8_t *temp)
 }
 
 /* Enable FSK/MSK modulation inputs. */
-int hmc6300_enable_fm(struct hmc630x_dev *dev, bool enable)
+int hmc6300_set_fm_en(struct hmc630x_dev *dev, bool enable)
 {
 	if (!dev)
 		return -EINVAL;
@@ -479,8 +557,21 @@ int hmc6300_enable_fm(struct hmc630x_dev *dev, bool enable)
 	return hmc630x_write(dev, HMC6300_ENABLE_FM, (uint8_t)enable);
 }
 
+/* Are FSK/MSK modulation inputs enabled. */
+int hmc6300_get_fm_en(struct hmc630x_dev *dev, bool *enable)
+{
+	if (!dev)
+		return -EINVAL;
+
+	// this is a transmitter specific feature
+	if (dev->type != HMC6300)
+		return -ENOSYS;
+
+	return hmc630x_read(dev, HMC6300_ENABLE_FM, (uint8_t *)enable);
+}
+
 /* Power On/Off the chip. */
-int hmc630x_enable(struct hmc630x_dev *dev, bool enable)
+int hmc630x_set_enable(struct hmc630x_dev *dev, bool enable)
 {
 	int ret = -EFAULT;
 	uint8_t row;
@@ -522,6 +613,54 @@ int hmc630x_enable(struct hmc630x_dev *dev, bool enable)
 	return ret;
 }
 
+/* Is the chip power on? */
+int hmc630x_get_enable(struct hmc630x_dev *dev, bool *enable)
+{
+	int ret = -EFAULT;
+	uint8_t row, mask;
+	bool ena1, ena2;
+
+	if (dev->type == HMC6300) {
+		/* row4 */
+		ret = hmc630x_read_row(dev, HMC630X_ROW(HMC6300_DRIVER_PWRDN), &row);
+		if (ret)
+			return ret;
+		ena1 = (bool)row;
+
+		ret = hmc630x_read(dev, HMC630X_EN_SYNTH_LDO, &row);
+		if (ret)
+			return ret;
+		ena2 = (bool)row;
+	} else {
+		/* row0 */
+		mask = no_os_field_prep(HMC630X_MASK(HMC6301_IFVGA_PWRDN), 1);
+		mask |= no_os_field_prep(HMC630X_MASK(HMC6301_MIXER_PWRDN), 1);
+		mask |= no_os_field_prep(HMC630X_MASK(HMC6301_BBAMP_PWRDN_I), 1);
+		mask |= no_os_field_prep(HMC630X_MASK(HMC6301_TRIPLER_PWRDN), 1);
+		mask |= no_os_field_prep(HMC630X_MASK(HMC6301_LNA_PWRDWN), 1);
+		ret = hmc630x_read_row(dev, HMC630X_ROW(HMC6301_LNA_PWRDWN), &row);
+		if (ret)
+			return ret;
+
+		ena1 = (bool)(row & mask);
+
+		/* row1 */
+		mask = no_os_field_prep(HMC630X_MASK(HMC6301_ASK_PWRDN), 1);
+		mask |= no_os_field_prep(HMC630X_MASK(HMC6301_IF_BGMUX_PWRDN), 1);
+		ret = hmc630x_read_row(dev, HMC630X_ROW(HMC6301_BBAMP_SELL_ASK), &row);
+		if (ret)
+			return ret;
+		ena1 = ena1 && (bool)(row & mask);
+
+		mask = no_os_field_prep(HMC630X_MASK(HMC6301_BBAMP_SELL_ASK), 1);
+		mask |= no_os_field_prep(HMC630X_MASK(HMC6301_IFMIX_PWRDN_Q), 1);
+		ena2 = (bool)(row & mask);
+	}
+
+	*enable = !ena1 && ena2;
+	return 0;
+}
+
 /* Set the IF attenuation in steps from 0 (highest gain) to 15.
  * For digital setting to dB correlation, see the datasheet.
  */
@@ -542,6 +681,26 @@ int hmc630x_set_if_attn(struct hmc630x_dev *dev, uint8_t attn)
 	return hmc630x_write(dev, param, attn);
 }
 
+/* Get the IF attenuation in steps from 0 (highest gain) to 15.
+ * For digital setting to dB correlation, see the datasheet.
+ */
+int hmc630x_get_if_attn(struct hmc630x_dev *dev, uint8_t *attn)
+{
+	uint16_t param;
+
+	switch (dev->type) {
+	case HMC6301:
+		param = HMC6301_IFVGA_VGA_ADJ;
+		break;
+	default:
+	case HMC6300:
+		param = HMC6300_IFVGA_VGA_ADJ;
+		break;
+	};
+
+	return hmc630x_read(dev, param, attn);
+}
+
 /* Set the RF attenuation in steps from 0 (highest gain) to 15.
  * For digital setting to dB correlation, see the datasheet.
  */
@@ -557,6 +716,21 @@ int hmc6300_set_rf_attn(struct hmc630x_dev *dev, uint8_t attn)
 	return hmc630x_write(dev, HMC6300_RFVGAGAIN, attn);
 }
 
+/* Get the RF attenuation in steps from 0 (highest gain) to 15.
+ * For digital setting to dB correlation, see the datasheet.
+ */
+int hmc6300_get_rf_attn(struct hmc630x_dev *dev, uint8_t *attn)
+{
+	if (!dev)
+		return -EINVAL;
+
+	// this is an transmitter specific feature
+	if (dev->type != HMC6300)
+		return -ENOSYS;
+
+	return hmc630x_read(dev, HMC6300_RFVGAGAIN, attn);
+}
+
 /* Set the VCO frequency (Hz). */
 int hmc630x_set_vco(struct hmc630x_dev *dev, uint64_t frequency)
 {
@@ -568,7 +742,7 @@ int hmc630x_set_vco(struct hmc630x_dev *dev, uint64_t frequency)
 	uint8_t lock;
 
 	/* Search the provided frequency in the generated set of available V-band frequencies. */
-	for (e = dev->vco.entries; e >= 0; e--) {
+	for (e = dev->vco.entries - 1; e >= 0; e--) {
 		if (frequency == dev->vco.freqs[e])
 			break;
 	}
@@ -625,6 +799,47 @@ int hmc630x_set_vco(struct hmc630x_dev *dev, uint64_t frequency)
 	return lock ? 0 : -EFAULT;
 }
 
+/* Get the VCO frequency (Hz). */
+int hmc630x_get_vco(struct hmc630x_dev *dev, uint64_t *frequency)
+{
+	int ret, e;
+	uint8_t fbdiv;
+	uint8_t lockdet;
+
+	if (!dev || !frequency)
+		return -EINVAL;
+
+	ret = hmc630x_read(dev, HMC630X_LOCKDET, &lockdet);
+	if (ret)
+		return ret;
+
+	/* Abort early if there is no lock. */
+	if (!lockdet) {
+		*frequency = 0;
+		return 0;
+	}
+
+	/* Read Feedback Divider Ratio for the Integer-N Synthesizer */
+	ret = hmc630x_read(dev, HMC630X_FBDIV_CODE, &fbdiv);
+	if (ret)
+		return ret;
+
+	for (e = dev->vco.entries - 1; e >= 0; e--) {
+		if (fbdiv == dev->vco.fbdiv[e])
+			break;
+	}
+
+	/* Invalid fbdiv. */
+	if (e < 0) {
+		*frequency = 0;
+		return 0;
+	}
+
+	*frequency = dev->vco.freqs[e];
+
+	return 0;
+}
+
 /* Get the available VCO frequencies in the avail array with avail_num entries. */
 int hmc630x_get_avail_vco(struct hmc630x_dev *dev, const uint64_t **avail,
 			  uint8_t *avail_num)
@@ -651,6 +866,19 @@ int hmc6301_set_lna_gain(struct hmc630x_dev *dev, enum hmc6301_lna_gain gain)
 	return hmc630x_write(dev, HMC6301_LNA_GAIN, (uint8_t)gain);
 }
 
+/* Get the receiver LNA gain. */
+int hmc6301_get_lna_gain(struct hmc630x_dev *dev, enum hmc6301_lna_gain *gain)
+{
+	if (!dev)
+		return -EINVAL;
+
+	// this is an receiver specific feature
+	if (dev->type != HMC6301)
+		return -ENOSYS;
+
+	return hmc630x_read(dev, HMC6301_LNA_GAIN, (uint8_t *)gain);
+}
+
 /* Set the receiver baseband attenuation. */
 int hmc6301_set_bb_attn(struct hmc630x_dev *dev, enum hmc6301_bb_attn attn1,
 			enum hmc6301_bb_attn attn2)
@@ -664,6 +892,9 @@ int hmc6301_set_bb_attn(struct hmc630x_dev *dev, enum hmc6301_bb_attn attn1,
 	if (dev->type != HMC6301)
 		return -ENOSYS;
 
+	if ((attn1 > HMC6301_BB_ATTN_18dB) || (attn2 > HMC6301_BB_ATTN_18dB))
+		return -EINVAL;
+
 	ret = hmc630x_write(dev, HMC6301_BBAMP_ATTEN1, (uint8_t)attn1);
 	if (ret)
 		return ret;
@@ -671,9 +902,9 @@ int hmc6301_set_bb_attn(struct hmc630x_dev *dev, enum hmc6301_bb_attn attn1,
 	return hmc630x_write(dev, HMC6301_BBAMP_ATTEN2, (uint8_t)attn2);
 }
 
-/* Set the receiver fine baseband attenuation (0-5 dB). */
-int hmc6301_set_bb_attn_fine(struct hmc630x_dev *dev, uint8_t attn_i,
-			     uint8_t attn_q)
+/* Get the receiver baseband attenuation. */
+int hmc6301_get_bb_attn(struct hmc630x_dev *dev, enum hmc6301_bb_attn *attn1,
+			enum hmc6301_bb_attn *attn2)
 {
 	int ret;
 
@@ -684,11 +915,59 @@ int hmc6301_set_bb_attn_fine(struct hmc630x_dev *dev, uint8_t attn_i,
 	if (dev->type != HMC6301)
 		return -ENOSYS;
 
+	ret = hmc630x_read(dev, HMC6301_BBAMP_ATTEN1, (uint8_t *)attn1);
+	if (ret)
+		return ret;
+
+	return hmc630x_read(dev, HMC6301_BBAMP_ATTEN2, (uint8_t *)attn2);
+}
+
+/* Set the receiver fine baseband attenuation (0-5 dB). */
+int hmc6301_set_bb_attn_fine(struct hmc630x_dev *dev,
+			     enum hmc6301_bb_attn_fine attn_i,
+			     enum hmc6301_bb_attn_fine attn_q)
+{
+	int ret;
+
+	if (!dev)
+		return -EINVAL;
+
+	// this is a receiver specific feature
+	if (dev->type != HMC6301)
+		return -ENOSYS;
+
+	if ((attn_i == HMC6301_BB_ATTN_FINE_RESERVED1)
+	    || (attn_i >= HMC6301_BB_ATTN_FINE_RESERVED2)
+	    || (attn_q == HMC6301_BB_ATTN_FINE_RESERVED1)
+	    || (attn_q >= HMC6301_BB_ATTN_FINE_RESERVED2))
+		return -EINVAL;
+
 	ret = hmc630x_write(dev, HMC6301_BBAMP_ATTENFI, attn_i);
 	if (ret)
 		return ret;
 
 	return hmc630x_write(dev, HMC6301_BBAMP_ATTENFQ, attn_q);
+}
+
+/* Get the receiver fine baseband attenuation (0-5 dB). */
+int hmc6301_get_bb_attn_fine(struct hmc630x_dev *dev,
+			     enum hmc6301_bb_attn_fine *attn_i,
+			     enum hmc6301_bb_attn_fine *attn_q)
+{
+	int ret;
+
+	if (!dev)
+		return -EINVAL;
+
+	// this is a receiver specific feature
+	if (dev->type != HMC6301)
+		return -ENOSYS;
+
+	ret = hmc630x_read(dev, HMC6301_BBAMP_ATTENFI, attn_i);
+	if (ret)
+		return ret;
+
+	return hmc630x_read(dev, HMC6301_BBAMP_ATTENFQ, attn_q);
 }
 
 /* Set the low-pass corner and high-pass corner of the baseband amplifiers. */
@@ -709,4 +988,24 @@ int hmc6301_set_bb_lpc_hpc(struct hmc630x_dev *dev, enum hmc6301_bb_lpc lpc,
 		return ret;
 
 	return hmc630x_write(dev, HMC6301_BBAMP_SELFASTREC, (uint8_t)hpc);
+}
+
+/* Get the low-pass corner and high-pass corner of the baseband amplifiers. */
+int hmc6301_get_bb_lpc_hpc(struct hmc630x_dev *dev, enum hmc6301_bb_lpc *lpc,
+			   enum hmc6301_bb_hpc *hpc)
+{
+	int ret;
+
+	if (!dev)
+		return -EINVAL;
+
+	// this is a receiver specific feature
+	if (dev->type != HMC6301)
+		return -ENOSYS;
+
+	ret = hmc630x_read(dev, HMC6301_BBAMP_SELBW, (uint8_t *)lpc);
+	if (ret)
+		return ret;
+
+	return hmc630x_read(dev, HMC6301_BBAMP_SELFASTREC, (uint8_t *)hpc);
 }

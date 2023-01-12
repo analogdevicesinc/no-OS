@@ -281,6 +281,20 @@ enum hmc630x_ref_clk {
 	HMC6300_REF_CLK_154p2857MHz,
 };
 
+struct hmc6300_attr {
+	uint8_t rf_attn;
+};
+
+struct hmc6301_attr {
+	enum hmc6301_bb_attn bb_attn1;
+	enum hmc6301_bb_attn bb_attn2;
+	enum hmc6301_bb_attn_fine bb_attni_fine;
+	enum hmc6301_bb_attn_fine bb_attnq_fine;
+	enum hmc6301_lna_gain lna_gain;
+	enum hmc6301_bb_lpc bb_lpc;
+	enum hmc6301_bb_hpc bb_hpc;
+};
+
 /* Initialization parameters for hmc6300_init(). */
 struct hmc630x_init_param {
 	enum hmc630x_type type;
@@ -292,6 +306,14 @@ struct hmc630x_init_param {
 		data; /* DATA GPIO signal of the digital interface. */
 	struct no_os_gpio_init_param
 		scanout; /* SCANOUT GPIO signal of the digital interface. */
+	bool enabled;
+	bool temp_en;
+	uint64_t vco;
+	uint8_t if_attn;
+	union {
+		struct hmc6300_attr tx;
+		struct hmc6301_attr rx;
+	};
 };
 
 struct hmc630x_dev;
@@ -300,6 +322,7 @@ struct hmc630x_vco;
 /* Device driver init/remove API. */
 int hmc630x_init(struct hmc630x_dev **dev, struct hmc630x_init_param *init);
 int hmc630x_remove(struct hmc630x_dev *dev);
+enum hmc630x_type hmc630x_type(struct hmc630x_dev *dev);
 
 /* Register access API. */
 int hmc630x_write_row(struct hmc630x_dev *dev, uint8_t row, uint8_t val);
@@ -310,25 +333,40 @@ int hmc630x_write_regmap(struct hmc630x_dev *dev, const uint8_t *regmap);
 int hmc630x_read_regmap(struct hmc630x_dev *dev, uint8_t *regmap);
 
 /* hmc6300/hmc6301 API. */
-int hmc630x_enable_temp(struct hmc630x_dev *dev, bool enable);
+int hmc630x_set_temp_en(struct hmc630x_dev *dev, bool enable);
+int hmc630x_get_temp_en(struct hmc630x_dev *dev, bool *enable);
 int hmc630x_get_temp(struct hmc630x_dev *dev, uint8_t *temp);
-int hmc630x_enable(struct hmc630x_dev *dev, bool enable);
+int hmc630x_set_enable(struct hmc630x_dev *dev, bool enable);
+int hmc630x_get_enable(struct hmc630x_dev *dev, bool *enable);
 int hmc630x_set_if_attn(struct hmc630x_dev *dev, uint8_t attn);
+int hmc630x_get_if_attn(struct hmc630x_dev *dev, uint8_t *attn);
 int hmc630x_set_vco(struct hmc630x_dev *dev, uint64_t frequency);
+int hmc630x_get_vco(struct hmc630x_dev *dev, uint64_t *frequency);
 int hmc630x_get_avail_vco(struct hmc630x_dev *dev, const uint64_t **avail,
 			  uint8_t *avail_num);
 
 /* hmc6300-only API. */
-int hmc6300_enable_fm(struct hmc630x_dev *dev, bool enable);
+int hmc6300_set_fm_en(struct hmc630x_dev *dev, bool enable);
+int hmc6300_get_fm_en(struct hmc630x_dev *dev, bool *enable);
 int hmc6300_set_rf_attn(struct hmc630x_dev *dev, uint8_t attn);
+int hmc6300_get_rf_attn(struct hmc630x_dev *dev, uint8_t *attn);
 
 /* hmc6301-only API. */
 int hmc6301_set_lna_gain(struct hmc630x_dev *dev, enum hmc6301_lna_gain gain);
+int hmc6301_get_lna_gain(struct hmc630x_dev *dev, enum hmc6301_lna_gain *gain);
 int hmc6301_set_bb_attn(struct hmc630x_dev *dev, enum hmc6301_bb_attn attn1,
 			enum hmc6301_bb_attn attn2);
-int hmc6301_set_bb_attn_fine(struct hmc630x_dev *dev, uint8_t attn_i,
-			     uint8_t attn_q);
+int hmc6301_get_bb_attn(struct hmc630x_dev *dev, enum hmc6301_bb_attn *attn1,
+			enum hmc6301_bb_attn *attn2);
+int hmc6301_set_bb_attn_fine(struct hmc630x_dev *dev,
+			     enum hmc6301_bb_attn_fine attn_i,
+			     enum hmc6301_bb_attn_fine attn_q);
+int hmc6301_get_bb_attn_fine(struct hmc630x_dev *dev,
+			     enum hmc6301_bb_attn_fine *attn_i,
+			     enum hmc6301_bb_attn_fine *attn_q);
 int hmc6301_set_bb_lpc_hpc(struct hmc630x_dev *dev, enum hmc6301_bb_lpc lpc,
 			   enum hmc6301_bb_hpc hpc);
+int hmc6301_get_bb_lpc_hpc(struct hmc630x_dev *dev, enum hmc6301_bb_lpc *lpc,
+			   enum hmc6301_bb_hpc *hpc);
 
 #endif
