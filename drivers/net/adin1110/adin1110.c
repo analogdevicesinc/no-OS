@@ -6,6 +6,11 @@
 #include "adin1110.h"
 #include "no_os_util.h"
 #include "no_os_delay.h"
+#include "no_os_crc8.h";
+
+#define ADIN1110_CRC_POLYNOMIAL	0x7
+
+NO_OS_DECLARE_CRC8_TABLE(_crc_table);
 
 int adin1110_format_frame(struct adin1110_sk_buff *sk_buff, uint8_t *frame)
 {
@@ -37,6 +42,8 @@ int adin1110_reg_read(struct adin1110_desc *desc, uint16_t addr, uint32_t *data)
 		.rx_buff = desc->rx_buff,
 		.bytes_number = ADIN1110_CTRL_FRAME_SIZE,
 		.cs_change = 1,
+		.cs_delay_first = 4,
+		.cs_delay_last = 4,
 	};
 	int ret;
 
@@ -90,8 +97,9 @@ static int adin1110_mac_set(struct adin1110_desc *desc, uint8_t mac_address[6])
 
 int adin1110_write_fifo(struct adin1110_desc *desc, struct adin1110_sk_buff *sk_buff)
 {
-	int padding = 0;
-	int frame_len;
+	uint32_t header_len = ADIN1110_WR_HEADER_LEN;
+	uint32_t padding = 0;
+	uint32_t frame_len;
 	int ret;
 
 	struct no_os_spi_msg xfer = {
@@ -99,33 +107,46 @@ int adin1110_write_fifo(struct adin1110_desc *desc, struct adin1110_sk_buff *sk_
 		.cs_change = 1,
 	};
 
+	/* 
+	 * The minimum frame length is 64 bytes.
+	 * The MAC will add the frame check sequence.
+	 */
 	if (sk_buff->buff_len + ADIN1110_FCS_LEN < 64)
 		padding = 64 - (sk_buff->buff_len + ADIN1110_FCS_LEN);
 
 	frame_len = sk_buff->buff_len + padding + ADIN1110_FRAME_HEADER_LEN;
-	
-	/** Align the frame length to 4 bytes */
-	frame_len = no_os_round_up(frame_len, 4);
 
 	ret = adin1110_reg_write(desc, ADIN1110_TX_FSIZE, frame_len);
 	if (ret)
 		return ret;
 
-	memset(desc->data, 0, frame_len + ADIN1110_WR_HEADER_LEN);
+	/** Align the frame length to 4 bytes */
+	frame_len = no_os_round_up(frame_len, 4);
+
+	memset(desc->data, 0, frame_len);
 
 	no_os_put_unaligned_be16(ADIN1110_TX, &desc->data[0]);
 	desc->data[0] |= ADIN1110_SPI_CD | ADIN1110_SPI_RW;
-	xfer.bytes_number = frame_len + ADIN1110_WR_HEADER_LEN;
 
-	//memcpy(desc->data[3], )
-
+	if (desc->append_crc) {
+		desc->data[2] = no_os_crc8(_crc_table, desc->data, 2, 0);
+		header_len++;
+	}
+	xfer.bytes_number = frame_len;
+	
+	memcpy(desc->data[header_len + ADIN1110_FRAME_HEADER_LEN],
+	       sk_buff->payload, sk_buff->buff_len + padding);
+	
 	return no_os_spi_transfer(desc->comm_desc, &xfer, 1);
 }
 
 int adin1110_read_fifo(struct adin1110_desc *desc, struct adin1110_sk_buff *sk_buff)
 {
-	uint32_t frame_size;
+
+	uint32_t header_len = ADIN1110_RD_HEADER_LEN;
+	uint32_t frame_size_no_fcs;
 	uint32_t frame_content;
+	uint32_t frame_size;
 	uint32_t count = 0;
 
 	struct no_os_spi_msg xfer = {
@@ -144,7 +165,16 @@ int adin1110_read_fifo(struct adin1110_desc *desc, struct adin1110_sk_buff *sk_b
 	if (ret)
 		return ret;
 
+	if (frame_size < ADIN1110_FRAME_HEADER_LEN + ADIN1110_FEC_LEN)
+		return ret;
+
+	/* Can only read multiples of 4 bytes (the last bytes might be 0) */
 	xfer.bytes_number = frame_size / 4;
+
+	if (desc->append_crc) {
+		desc->tx_buff[2] = no_os_crc8(_crc_table, desc->tx_buff, 2, 0);
+		header_len++;
+	}
 
 	/** Burst read the whole frame */
 	ret = no_os_spi_transfer(desc->comm_desc, &xfer, 1);
@@ -259,7 +289,7 @@ int adin1110_init(struct adin1110_desc **desc,
 	if (ret)
 		goto err;
 
-	descriptor->spi_oa = param->spi_oa;
+	no_os_crc8_populate_msb(_crc_table, ADIN1110_CRC_POLYNOMIAL);
 	strncpy(descriptor->mac_address, param->mac_address, ADIN1110_MAC_LEN);
 
 	ret = no_os_gpio_get(&descriptor->reset_gpio, &param->reset_param);

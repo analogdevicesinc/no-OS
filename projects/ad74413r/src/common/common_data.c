@@ -59,12 +59,12 @@ struct no_os_uart_init_param adin1110_uart_ip = {
 #endif
 
 struct no_os_spi_init_param adin1110_spi_ip = {
-	.device_id = SPI_DEVICE_ID,
+	.device_id = 1,
 	.max_speed_hz = SPI_BAUDRATE,
 	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
 	.mode = NO_OS_SPI_MODE_0,
 	.platform_ops = SPI_OPS,
-	.chip_select = SPI_CS,
+	.chip_select = 0,
 	.extra = SPI_EXTRA,
 };
 

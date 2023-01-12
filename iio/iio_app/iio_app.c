@@ -425,6 +425,9 @@ int32_t iio_app_run_with_trigs(struct iio_app_device *devices, uint32_t nb_devs,
 	do {
 		status = iio_step(*iio_desc);
 		if (ad74413r_apply && max14906_apply) {
+			ad74413r_apply = 0;
+			max14906_apply = 0;
+
 			iio_remove(*iio_desc);
 			return 0;
 		}

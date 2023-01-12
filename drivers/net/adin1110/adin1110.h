@@ -129,14 +129,14 @@ struct adin1110_desc {
 
     struct no_os_gpio_desc *reset_gpio;
     uint8_t data[ADIN1110_MAX_BUFF];
-    bool spi_oa;
+    bool append_crc;
 };
 
 struct adin1110_init_param {
     struct no_os_spi_init_param comm_param;
     struct no_os_gpio_init_param reset_param;
     uint8_t mac_address[6];
-    bool spi_oa;
+    bool append_crc;
 };
 
 struct adin1110_sk_buff {

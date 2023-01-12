@@ -50,6 +50,9 @@
 #include "iio_types.h"
 #include "iiod.h"
 
+#include <malloc.h>
+#include <stdio.h>
+
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
@@ -60,6 +63,9 @@
 /******************************************************************************/
 uint8_t iio_data_buffer[DATA_BUFFER_SIZE * sizeof(uint32_t) * 8];
 uint8_t iio_data_buffer2[DATA_BUFFER_SIZE * sizeof(uint32_t) * 8];
+
+extern unsigned int __HeapBase;
+extern unsigned int __HeapLimit;
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -88,15 +94,25 @@ int iio_example_main()
 		.comm_param = ad74413r_spi_ip
 	};
 
-	struct no_os_gpio_desc max14906_gpios[MAX14906_CHANNELS];
+	struct max_gpio_init_param max14906_gpio_param = {
+		.vssel = 1
+	};
+	struct no_os_gpio_init_param max14906_gpio_ip = {
+		.port = 0,
+		.number = 16,
+		.platform_ops = &max_gpio_ops,
+		.pull = NO_OS_PULL_UP,
+		.extra = &max14906_gpio_param
+	};
 	struct max14906_init_param max14906_ip = {
 		.chip_address = 0,
 		.comm_param = &max14906_spi_ip,
-		.ch_config = max14906_gpios,
 	};
+
 	struct max14906_iio_desc *max14906_iio_desc;
 	struct max14906_iio_desc_init_param max14906_iio_ip;
 
+	max14906_iio_ip.max14906_init_param = &max14906_ip;
 	ad74413r_iio_ip.ad74413r_init_param = &ad74413r_ip;
 	ad74413r_iio_ip.channel_configs[0] = (struct ad74413r_channel_config) {
 		.enabled = true,
@@ -114,6 +130,12 @@ int iio_example_main()
 		.enabled = true,
 		.function = AD74413R_CURRENT_IN_EXT
 	};
+
+	for (int i = 0; i < 4; i++) {
+		max14906_ip.ch_config[i].gpio_param = max14906_gpio_ip;
+		max14906_ip.ch_config[i].dir = 0;
+		max14906_ip.ch_config[i].val = 0;
+	}
 
 	ret = ad74413r_iio_init(&ad74413r_iio_desc, &ad74413r_iio_ip, true);
 	if (ret)
@@ -151,6 +173,12 @@ int iio_example_main()
 		ret = max14906_iio_init(&max14906_iio_desc, &max14906_iio_ip, false);
 		if (ret)
 			return ret;
+
+		iio_devices[0].dev = ad74413r_iio_desc;
+		iio_devices[0].dev_descriptor = ad74413r_iio_desc->iio_dev;
+
+		iio_devices[1].dev = max14906_iio_desc;
+		iio_devices[1].dev_descriptor = max14906_iio_desc->iio_dev;
 
 		ret = iio_app_run(iio_devices, NO_OS_ARRAY_SIZE(iio_devices));
 		if (ret)

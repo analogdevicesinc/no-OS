@@ -10,10 +10,17 @@
 
 #define MAX14906_CHANNEL(_addr)			\
         {					\
-            .ch_type = IIO_VOLTAGE,		\
-            .indexed = 1,			\
-	    .channel = _addr,			\
-	    .address = _addr,			\
+            	.ch_type = IIO_VOLTAGE,		\
+        	.indexed = 1,			\
+		.channel = _addr,		\
+	    	.address = _addr,		\
+	}
+
+#define MAX14906_FAULT_CHANNEL				\
+        {						\
+            	.ch_type = IIO_VOLTAGE,			\
+		.name = "fault",			\
+		.attributes = max14906_fault_attrs,	\
 	}
 
 <<<<<<< HEAD
@@ -52,7 +59,13 @@ static int max14906_iio_trigger_handler(struct iio_device_data *dev_data);
 static int max14906_iio_update_channels(void *dev, uint32_t mask);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+static int max14906_iio_read_fault_raw(void *dev, char *buf, uint32_t len,
+				       const struct iio_ch_info *channel, intptr_t priv);
+
+>>>>>>> 822257950 (Reconfiguration flow and device channels)
 static int max14906_iio_read_config_direction(void *dev, char *buf, uint32_t len,
 					      const struct iio_ch_info *channel, intptr_t priv);
 static int max14906_iio_write_config_direction(void *dev, char *buf, uint32_t len,
@@ -106,6 +119,7 @@ static struct iio_attribute max14906_out_attrs[] = {
 	},
 	{
 		.name = "do_mode_available",
+		.shared = IIO_SHARED_BY_ALL,
 		.show = max14906_iio_read_do_mode_avail
 	},
 	END_ATTRIBUTES_ARRAY
@@ -129,7 +143,18 @@ static struct iio_attribute max14906_in_attrs[] = {
 };
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+static struct iio_attribute max14906_fault_attrs[] = {
+	{
+		.name = "raw",
+		.show = max14906_iio_read_fault_raw,
+	},
+	END_ATTRIBUTES_ARRAY
+};
+
+>>>>>>> 822257950 (Reconfiguration flow and device channels)
 static struct iio_attribute max14906_config_attrs[] = {
 	{
 		.name = "direction",
@@ -137,7 +162,8 @@ static struct iio_attribute max14906_config_attrs[] = {
 		.store = max14906_iio_write_config_direction,
 	},
 	{
-		.name = "direction_avail",
+		.name = "direction_available",
+		.shared = IIO_SHARED_BY_ALL,
 		.show = max14906_iio_read_config_direction_available,
 	},
 	END_ATTRIBUTES_ARRAY
@@ -152,12 +178,17 @@ static struct iio_attribute max14906_config_dev_attrs[] = {
 	END_ATTRIBUTES_ARRAY
 };
 
+<<<<<<< HEAD
 >>>>>>> 204978e8c (wip)
 static struct iio_channel max14906_channels[MAX14906_CHANNELS] = {
+=======
+static struct iio_channel max14906_channels[5] = {
+>>>>>>> 822257950 (Reconfiguration flow and device channels)
 	MAX14906_CHANNEL(0),
 	MAX14906_CHANNEL(1),
 	MAX14906_CHANNEL(2),
 	MAX14906_CHANNEL(3),
+	MAX14906_FAULT_CHANNEL,
 };
 
 <<<<<<< HEAD
@@ -171,7 +202,7 @@ static struct iio_channel max14906_config_channels[MAX14906_CHANNELS] = {
 
 >>>>>>> 204978e8c (wip)
 static struct iio_device max14906_iio_dev = {
-	.num_ch = 4,
+	.num_ch = 5,
 	.channels = max14906_channels,
     .read_dev = (int32_t (*)())max14906_iio_read_samples,
 	.debug_reg_read = (int32_t (*)())max14906_reg_read,
@@ -323,8 +354,10 @@ static int max14906_iio_write_config_direction(void *dev, char *buf, uint32_t le
 	size_t i;
 
 	for (i = 0; i < 2; i++) {
-		if (!strcmp(buf, max14906_do_mode_avail[i]))
+		if (!strcmp(buf, max14906_direction_avail[i])) {
 			max14906_ch_configs[channel->address].direction = i;
+			break;
+		}
 
 		if (i == 1)
 			return -EINVAL;
@@ -416,6 +449,14 @@ static int max14906_iio_trigger_handler(struct iio_device_data *dev_data)
 	// }
 }
 
+static int max14906_iio_read_fault_raw(void *dev, char *buf, uint32_t len,
+				       const struct iio_ch_info *channel, intptr_t priv)
+{
+	int32_t val = 0;
+
+	return iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
+}
+
 static int max14906_iio_read_config_apply(void *dev, char *buf, uint32_t len,
 					  const struct iio_ch_info *channel, intptr_t priv)
 {
@@ -435,6 +476,7 @@ int max14906_iio_init(struct max14906_iio_desc **iio_desc,
 {
 	struct max14906_iio_desc *descriptor;
 	int ret;
+	int *a;
 
 	if (!init_param || !init_param->max14906_init_param)
 		return -EINVAL;
@@ -452,7 +494,12 @@ int max14906_iio_init(struct max14906_iio_desc **iio_desc,
 		return 0;
 	}
 
+<<<<<<< HEAD
 >>>>>>> 204978e8c (wip)
+=======
+	descriptor->iio_dev = &max14906_iio_dev;
+
+>>>>>>> 822257950 (Reconfiguration flow and device channels)
 	ret = max14906_init(&descriptor->max14906_desc,
 			    init_param->max14906_init_param);
 	if (ret)
@@ -462,8 +509,9 @@ int max14906_iio_init(struct max14906_iio_desc **iio_desc,
 	if (ret)
 		return ret;
 
-	descriptor->iio_dev = &max14906_iio_dev;
 	*iio_desc = descriptor;
+
+	return 0;
 
 free_desc:
 	free(descriptor);

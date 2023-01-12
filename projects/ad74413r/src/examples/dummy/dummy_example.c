@@ -64,11 +64,11 @@ int dummy_example_main()
 	int ret;
 
 	struct max_gpio_init_param reset_gpio_extra = {
-		.direction = 1,
+		.vssel = 1
 	};
 	struct no_os_gpio_init_param reset_gpio_ip = {
-		.port = 0,
-		.number = 17,
+		.port = 2,
+		.number = 0,
 		.pull = NO_OS_PULL_UP,
 		.platform_ops = &max_gpio_ops,
 		.extra = &reset_gpio_extra,
@@ -77,7 +77,7 @@ int dummy_example_main()
 		.comm_param = adin1110_spi_ip,
 		.reset_param = reset_gpio_ip,
 		.mac_address = {0xCA, 0x2F, 0xB7, 0x10, 0x23, 0x63},
-		.spi_oa = 0,
+		.append_crc = false,
 	};
 	struct adin1110_desc *adin1110;
 
