@@ -62,6 +62,18 @@
                 .attributes = attrs				\
         }
 
+#define AD74413R_DIAG_CHANNEL(_addr, _name)	               		\
+        {                                                       \
+                .ch_type = IIO_VOLTAGE,                         \
+				.name = _name,									\
+                .indexed = 1,                                   \
+                .ch_out = 0,									\
+				.channel = _addr,								\
+				.address = _addr,                               \
+                .scan_type = &ad74413r_iio_adc_scan_type,		\
+                .attributes = ad74413r_iio_adc_attrs			\
+        }
+
 #define AD74413R_DAC_CHANNEL(type)                              \
         {                                                       \
                 .ch_type = type,                                \
@@ -244,11 +256,13 @@ static struct iio_attribute ad74413r_iio_adc_resistance_attrs[] = {
 	},
 	{
 		.name = "sampling_frequency",
+		.shared = IIO_SHARED_BY_ALL,
 		.show = ad74413r_iio_read_sampling_freq,
 		.store = ad74413r_iio_write_sampling_freq
 	},
 	{
 		.name = "sampling_frequency_available",
+		.shared = IIO_SHARED_BY_ALL,
 		.show = ad74413r_iio_read_sampling_freq_avail
 	},
 	{
@@ -261,13 +275,13 @@ static struct iio_attribute ad74413r_iio_adc_resistance_attrs[] = {
 static struct iio_attribute ad74413r_iio_adc_attrs[] = {
 	{
 		.name = "sampling_frequency",
-		.shared = IIO_SHARED_BY_DIR,
+		.shared = IIO_SHARED_BY_ALL,
 		.show = ad74413r_iio_read_sampling_freq,
 		.store = ad74413r_iio_write_sampling_freq,
 	},
 	{
 		.name = "sampling_frequency_available",
-		.shared = IIO_SHARED_BY_DIR,
+		.shared = IIO_SHARED_BY_ALL,
 		.show = ad74413r_iio_read_sampling_freq_avail
 	},
 	{
@@ -385,6 +399,7 @@ static struct iio_attribute ad74413r_iio_config_attrs[] = {
 	},
 	{
 		.name = "function_available",
+		.shared = IIO_SHARED_BY_ALL,
 		.show = ad74413r_iio_read_config_function_avail,
 	},
 	END_ATTRIBUTES_ARRAY
@@ -426,7 +441,10 @@ static struct iio_channel ad74413r_digital_input_channels[] = {
 };
 
 static struct iio_channel ad74413r_diag_channels[] = {
-	AD74413R_ADC_CHANNEL(IIO_VOLTAGE, ad74413r_iio_adc_attrs)
+	AD74413R_DIAG_CHANNEL(0, "diag0"),
+	AD74413R_DIAG_CHANNEL(1, "diag1"),
+	AD74413R_DIAG_CHANNEL(2, "diag2"),
+	AD74413R_DIAG_CHANNEL(3, "diag3"),
 };
 
 static struct iio_channel ad74413r_fault_channels[] = {
@@ -989,7 +1007,7 @@ static int ad74413r_iio_setup_channels(struct ad74413r_iio_desc *iio_desc)
 	/*
 	 * config = ad74413r_desc->channel_configs;
 	 */
-	
+
 	config = ad74413r_global_config;
 
 	for (i = 0; i < AD74413R_N_CHANNELS; i++) {
@@ -998,7 +1016,12 @@ static int ad74413r_iio_setup_channels(struct ad74413r_iio_desc *iio_desc)
 		channel_buff_cnt += channel_map[config[i].function].num_channels;
 	}
 
+<<<<<<< HEAD
 	chan_buffer = no_os_calloc(channel_buff_cnt, sizeof(*chan_buffer));
+=======
+	chan_buffer = calloc(channel_buff_cnt + AD74413R_DIAG_CH,
+						 sizeof(*chan_buffer));
+>>>>>>> 6847b614d (Reconfiguration flow and device channels)
 	if (!chan_buffer)
 		return -ENOMEM;
 
@@ -1038,21 +1061,18 @@ static int ad74413r_iio_setup_channels(struct ad74413r_iio_desc *iio_desc)
 	}
 
 	/** Add the diagnostics channels */
-	// for (int i = 0; i < AD74413R_N_CHANNELS; i++) {
-	// 	chan = &ad74413r_diag_channels[0];
-	// 	chan->channel = i;
-	// 	chan->address = i;
+	for (int i = 0; i < AD74413R_N_CHANNELS; i++) {
+		chan = &ad74413r_diag_channels[i];
+		memcpy(chan_buffer + n_chan, chan, sizeof(*chan));
+		n_chan++;
+		iio_desc->iio_dev->num_ch++;
+	}
 
-	// 	memcpy(chan_buffer + n_chan, chan, sizeof(*chan));
-	// 	n_chan++;
-	// 	iio_desc->iio_dev->num_ch++;
-	// }
-
-	// /* Add the fault channel */
-	// chan = &ad74413r_fault_channels[0];
-	// memcpy(chan_buffer + n_chan, chan, sizeof(*chan));
-	// n_chan++;
-	// iio_desc->iio_dev->num_ch++;
+	/* Add the fault channel */
+	chan = &ad74413r_fault_channels[0];
+	memcpy(chan_buffer + n_chan, chan, sizeof(*chan));
+	n_chan++;
+	iio_desc->iio_dev->num_ch++;
 
 	return 0;
 }
@@ -1149,24 +1169,25 @@ static int ad74413r_iio_read_config_enabled(void *dev, char *buf, uint32_t len,
 					    const struct iio_ch_info *channel,
 					    intptr_t priv)
 {
-	int32_t en;
+	int32_t val;
 	struct ad74413r_iio_desc *iio_desc = dev;
 
-	en = ad74413r_global_config[channel->address].enabled;
+	val = ad74413r_global_config[channel->address].enabled;
 
-	return iio_format_value(buf, len, IIO_VAL_INT, 1, &en);
+	return iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
 }
 
 static int ad74413r_iio_write_config_enabled(void *dev, char *buf, uint32_t len,
 					     const struct iio_ch_info *channel,
 					     intptr_t priv)
 {
-	int32_t en;
+	int32_t val;
 	struct ad74413r_iio_desc *iio_desc = dev;
 
-	en = ad74413r_global_config[channel->address].enabled;
+	iio_parse_value(buf, IIO_VAL_INT, &val, NULL);
+	ad74413r_global_config[channel->address].enabled = !!val;
 
-	return iio_format_value(buf, len, IIO_VAL_INT, 1, &en);
+	return 0;
 }
 
 static int ad74413r_iio_read_config_function(void *dev, char *buf, uint32_t len,
@@ -1275,13 +1296,13 @@ int ad74413r_iio_init(struct ad74413r_iio_desc **iio_desc,
 
 	/** The operation modes for the physical channels are set only at initialization. */
 	for (i = 0; i < AD74413R_N_CHANNELS; i++) {
-		if (init_param->channel_configs[i].enabled) {
+		if (ad74413r_global_config[i].enabled) {
 			ret = ad74413r_set_adc_channel_enable(descriptor->ad74413r_desc, i, true);
 			if (ret)
 				goto err;
 
 			ret = ad74413r_set_channel_function(descriptor->ad74413r_desc, i,
-							    init_param->channel_configs[i].function);
+							    ad74413r_global_config[i].function);
 			if (ret)
 				goto err;
 

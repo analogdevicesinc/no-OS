@@ -67,7 +67,7 @@ LDFLAGS = -mcpu=cortex-m4 	\
 	-mfpu=fpv4-sp-d16 	\
 	--entry=Reset_Handler		
 	
-CFLAGS += -mthumb                                                                 \
+CFLAGS += -mthumb                                                               \
         -mcpu=cortex-m4                                                         \
         -mfloat-abi=hard                                                        \
         -mfpu=fpv4-sp-d16                                                       \
@@ -78,8 +78,9 @@ CFLAGS += -mthumb                                                               
         -MD                                                                     \
         -Wall                                                                   \
         -Wdouble-promotion                                                      \
-        -Wno-format                                                      \
-	-g3									\
+        -Wno-format                                                      		\
+		-D__HEAP_SIZE=0x100000													\
+	-g3																			\
 	-c	
 
 ASFLAGS += -x assembler-with-cpp

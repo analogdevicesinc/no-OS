@@ -102,9 +102,9 @@ int max14906_init(struct max14906_desc **desc, struct max14906_init_param *param
 		if (ret)
 			return ret;
 		if (ch_config->dir == MAX14906_CH_OUT)
-			ret = no_os_gpio_direction_output(&descriptor->dio[i], ch_config->val);
+			ret = no_os_gpio_direction_output(descriptor->dio[i], ch_config->val);
 		else
-			ret = no_os_gpio_direction_input(&descriptor->dio[i]);
+			ret = no_os_gpio_direction_input(descriptor->dio[i]);
 		if (ret)
 			goto err;
 	}
