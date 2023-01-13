@@ -335,8 +335,8 @@ endif
 
 $(BINARY): $(LIB_TARGETS) $(OBJS) $(ASM_OBJS) $(LSCRIPT) $(BOOTOBJ)
 	@$(call print,[LD] $(notdir $(OBJS)))
-	$(MUTE) $(CC) $(LSCRIPT_FLAG) $(LDFLAGS) $(LIB_PATHS) -o $(BINARY) $(OBJS) $(BOOTOBJ)\
-			 $(ASM_OBJS) $(LIB_FLAGS)
+	$(MUTE) $(CC) $(LSCRIPT_FLAG) $(LIB_PATHS) -o $(BINARY) $(OBJS) $(BOOTOBJ)\
+			 $(ASM_OBJS) $(LIB_FLAGS) $(LDFLAGS)
 	$(MUTE) $(MAKE) --no-print-directory post_build
 
 PHONY += $(BINARY).id
