@@ -93,7 +93,7 @@ static int _max_spi_config(struct no_os_spi_desc *desc)
 
 	return 0;
 err_init:
-	MXC_SPI_Shutdown(MXC_SPI_GET_SPI(descriptor->device_id));
+	MXC_SPI_Shutdown(MXC_SPI_GET_SPI(desc->device_id));
 
 	return ret;
 }
