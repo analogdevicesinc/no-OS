@@ -64,7 +64,7 @@ struct no_os_spi_init_param adin1110_spi_ip = {
 	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
 	.mode = NO_OS_SPI_MODE_0,
 	.platform_ops = SPI_OPS,
-	.chip_select = 0,
+	.chip_select = SPI_CS,
 	.extra = SPI_EXTRA,
 };
 

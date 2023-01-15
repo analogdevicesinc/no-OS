@@ -49,6 +49,15 @@
 #include "adin1110.h"
 #include "no_os_gpio.h"
 
+uint8_t eth_frame[] = {
+        0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+	0xCA, 0x2F, 0xB7, 0x10, 0x23, 0x63,
+        0x08, 0x00,
+        0x01, 0x00, 0x00, 0x00,
+        0xC5, 0xDA, 0x48, 0x9A, 0x67, 0xA0, 0xBE, 0x3B,
+	0xa2, 0xf7, 0xec, 0x7f,
+    };
+
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
@@ -60,32 +69,63 @@
 *******************************************************************************/
 int dummy_example_main()
 {
-	struct adin1110_sk_buff sk_buff;
 	int ret;
+	uint32_t frame_counter;
 
 	struct max_gpio_init_param reset_gpio_extra = {
 		.vssel = 1
 	};
 	struct no_os_gpio_init_param reset_gpio_ip = {
-		.port = 2,
-		.number = 0,
+		.port = 0,
+		.number = 19,
 		.pull = NO_OS_PULL_UP,
 		.platform_ops = &max_gpio_ops,
 		.extra = &reset_gpio_extra,
 	};
 	struct adin1110_init_param adin1110_ip = {
+		.chip_type = ADIN2111,
 		.comm_param = adin1110_spi_ip,
 		.reset_param = reset_gpio_ip,
 		.mac_address = {0xCA, 0x2F, 0xB7, 0x10, 0x23, 0x63},
 		.append_crc = false,
 	};
 	struct adin1110_desc *adin1110;
+	struct adin1110_sk_buff sk_buff = {
+		.buff_len = NO_OS_ARRAY_SIZE(eth_frame),
+		.payload = eth_frame
+	};
 
 	ret = adin1110_init(&adin1110, &adin1110_ip);
 	if (ret)
 		return ret;
 
-	ret = adin1110_read_fifo(adin1110, &sk_buff);
+	ret = adin1110_set_promisc(adin1110, 0, true);
+	if (ret)
+		return ret;
+
+	ret = adin1110_write_fifo(adin1110, &sk_buff);
+	if (ret)
+		return ret;
+
+	ret = adin1110_reg_read(adin1110, 0xAB, &frame_counter);
+	if (ret)
+		return ret;
+	
+	ret = adin1110_write_fifo(adin1110, &sk_buff);
+	ret = adin1110_write_fifo(adin1110, &sk_buff);
+	ret = adin1110_write_fifo(adin1110, &sk_buff);
+	ret = adin1110_write_fifo(adin1110, &sk_buff);
+	ret = adin1110_write_fifo(adin1110, &sk_buff);
+	if (ret)
+		return ret;
+
+	ret = adin1110_reg_read(adin1110, 0xAB, &frame_counter);
+	if (ret)
+		return ret;
+
+	// ret = adin1110_read_fifo(adin1110, &sk_buff);
+	// if (ret)
+	// 	return ret;
 
 // 	uint8_t val;
 // 	uint32_t dac_code;

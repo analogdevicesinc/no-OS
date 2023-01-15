@@ -8,7 +8,7 @@ UNIX_TOOLS_PATH = $(MAXIM_LIBRARIES)/../Tools/MSYS2/usr/bin
 ARM_COMPILER_PATH := $(dir $(call rwildcard, $(MAXIM_LIBRARIES)/../Tools/GNUTools, *bin/arm-none-eabi-gcc.exe))
 export PATH := $(PATH):$(ARM_COMPILER_PATH):$(UNIX_TOOLS_PATH)
 else
-PYTHON = python3
+PYTHON = python
 ARM_COMPILER_PATH = $(realpath $(dir $(call rwildcard, $(MAXIM_LIBRARIES)/../Tools/GNUTools, *bin/arm-none-eabi-gcc)))
 export PATH := $(PATH):$(ARM_COMPILER_PATH)
 endif
