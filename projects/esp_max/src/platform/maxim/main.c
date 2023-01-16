@@ -157,23 +157,27 @@ static size_t my_mqtt_user_name_length;
 
 static char telemetry_topic[128];
 
-int32_t read_and_send(struct mqtt_desc *mqtt, struct ade9430_dev *dev)
+int32_t read_and_send(struct mqtt_desc *mqtt, struct ade9430_dev *ade9430_dev, struct nhd_c12832a1z_device *nhd_c12832a1z_dev)
 {
 	struct mqtt_message	msg;
 	uint8_t			buff[100];
 	uint32_t		len;
 	int			ret, temp;
 
-	ret = ade9430_read_temp(dev, &temp);
+	ret = ade9430_read_temp(ade9430_dev, &temp);
 	if (ret)
 		return ret;
 
-	ret = ade9430_read_watt(dev);
+	ret = ade9430_read_watt(ade9430_dev);
 	if (ret)
 		return ret;
 
 	/* Serialize data */
-	len = sprintf(buff, "ADE9430 Temp: %d, AWATT_ACC: %u, AWATTHR: %llu", temp, dev->awatt_acc, dev->awatthr);
+	len = sprintf(buff, "ADE9430 Temp: %d; AWATT_ACC: %u; AWATTHR: %llu", temp, ade9430_dev->awatt_acc, ade9430_dev->awatthr);
+
+	ret = nhd_c12832a1z_print_string(nhd_c12832a1z_dev, buff, len);
+	if (ret)
+		return ret;
 
 	//Get the topic to send a telemetry message
 	az_iot_hub_client_telemetry_get_publish_topic(&my_client, NULL, telemetry_topic, sizeof(telemetry_topic), NULL);
@@ -298,10 +302,6 @@ int main()
 	struct nhd_c12832a1z_dev *nhd_c12832a1z_device;
 
 	ret = nhd_c12832a1z_init(&nhd_c12832a1z_device, nhd_c12832a1z_ip);
-	if (ret)
-		return ret;
-
-	ret = nhd_c12832a1z_print_ascii(nhd_c12832a1z_device, 0x00, 0, 0);
 	if (ret)
 		return ret;
 
@@ -506,7 +506,7 @@ int main()
 	printf("Subscribed to topic: %s\n", AZ_IOT_HUB_CLIENT_TWIN_RESPONSE_SUBSCRIBE_TOPIC);
 
 	while (true) {
-		status = read_and_send(mqtt, ade9430_device);
+		status = read_and_send(mqtt, ade9430_device, nhd_c12832a1z_device);
 		if (NO_OS_IS_ERR_VALUE(status))
 			PRINT_ERR_AND_RET("Error read_and_send", status);
 		printf("Data sent to broker\n");

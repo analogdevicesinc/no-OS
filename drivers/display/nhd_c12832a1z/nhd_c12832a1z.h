@@ -110,8 +110,6 @@ int nhd_c12832a1z_write_cmd(struct nhd_c12832a1z_dev *dev, uint8_t cmd);
 
 int nhd_c12832a1z_write_data(struct nhd_c12832a1z_dev *dev, uint8_t data);
 
-int nhd_c12832a1z_print_string(struct nhd_c12832a1z_dev *dev, char *msg);
-
 int nhd_c12832a1z_clear_lcd(struct nhd_c12832a1z_dev *dev);
 
 /** Initialize the nhd_c12832a1z peripheral for display operation. */
@@ -124,9 +122,8 @@ int nhd_c12832a1z_display_on_off(struct nhd_c12832a1z_dev *device, uint8_t on_of
 int nhd_c12832a1z_move_cursor(struct nhd_c12832a1z_dev *device, uint8_t row,
 			     uint8_t column);
 
-/** Prints character at selected position. */
-int nhd_c12832a1z_print_ascii(struct nhd_c12832a1z_dev *device, uint8_t ascii,
-				uint8_t row, uint8_t column);
+/** Print string */
+int nhd_c12832a1z_print_string(struct nhd_c12832a1z_dev *dev, char *msg, int len);
 
 /** Removes resources allocated by device. */
 int nhd_c12832a1z_remove(struct nhd_c12832a1z_dev *device);

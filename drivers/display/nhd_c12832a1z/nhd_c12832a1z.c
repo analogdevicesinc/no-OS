@@ -344,13 +344,13 @@ int nhd_c12832a1z_write_data(struct nhd_c12832a1z_dev *dev, uint8_t data)
 }
 
 
-int nhd_c12832a1z_print_string(struct nhd_c12832a1z_dev *dev, char *msg)
+int nhd_c12832a1z_print_string(struct nhd_c12832a1z_dev *dev, char *msg, int len)
 {
 	int ret;
 
 	uint8_t framebuffer_memory[4][128] = { 0 };
 
-	int32_t count = strlen(msg);
+	int32_t count = len;
 	int32_t t_cursor = 0;
 
 	if ((t_cursor + count) > 128)
@@ -517,10 +517,6 @@ int nhd_c12832a1z_init(struct nhd_c12832a1z_dev **device,
 		goto error_rst;
 
 	ret = nhd_c12832a1z_clear_lcd(dev);
-	if (ret)
-		goto error_rst;
-
-	ret = nhd_c12832a1z_print_string(dev, "asdfase");
 	if (ret)
 		goto error_rst;
 
