@@ -268,11 +268,11 @@ int ade9430_read_watt(struct ade9430_dev *dev)
 	// if (ret)
 	// 	return ret;
 
-	// ret = ade9430_read(dev, ADE9430_REG_BWATTHR_HI, &temp);
-	// if (ret)
-	// 	return ret;
+	ret = ade9430_read(dev, ADE9430_REG_BWATT, &temp);
+	if (ret)
+		return ret;
 
-	// dev->bwatthr = (temp << 32ULL) | dev->bwatthr;
+	dev->bwatthr = temp;
 
 	// ret = ade9430_read(dev, ADE9430_REG_CWATTHR_HI, &dev->cwatthr);
 	// if (ret)

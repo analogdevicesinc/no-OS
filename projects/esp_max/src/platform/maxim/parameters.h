@@ -57,10 +57,11 @@
 #define UART_IRQ_ID		UART1_IRQn
 #define UART_BAUDRATE	57600
 
-#define WIFI_SSID	        "AnalogDevices"
-#define WIFI_PWD	        "Analog123!"
+#define WIFI_SSID	        "moto g 5G plus"
+#define WIFI_PWD	        "blabla1234"
 #define SERVER_PORT		8883
 #define SERVER_ADDR		"iot-hub-ylr4pd6jbvxtc.azure-devices.net"
+#define DPS_SERVER_ADDR		"dps-ylr4pd6jbvxtc.azure-devices-provisioning.net"
 #define BUFF_LEN		200
 #define TIMER_ID		1
 #define MQTT_CONFIG_CMD_TIMEOUT	20000

@@ -40,3 +40,5 @@ LIBRARIES += mbedtls
 LIBRARIES += mqtt
 SRC_DIRS += $(NO-OS)/network
 
+SRCS += $(PROJECT)/src/platform/$(PLATFORM)/iot_sample_common.c
+
