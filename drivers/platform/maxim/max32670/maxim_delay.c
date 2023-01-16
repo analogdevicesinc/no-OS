@@ -1,4 +1,4 @@
-/***************************************************************************//**
+/*******************************************************************************
  *   @file   maxim_delay.c
  *   @brief  Implementation of maxim delay functions.
  *   @author Ciprian Regus (ciprian.regus@analog.com)
@@ -37,7 +37,20 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 #include "no_os_delay.h"
+#include "no_os_util.h"
 #include "mxc_delay.h"
+#include "mxc_sys.h"
+
+static volatile unsigned long long _system_ticks = 0;
+
+extern void SysTick_Handler(void);
+
+/* ************************************************************************** */
+void SysTick_Handler(void)
+{
+	MXC_DelayHandler();
+	_system_ticks++;
+}
 
 /**
  * @brief Generate microseconds delay.
@@ -57,4 +70,20 @@ void no_os_udelay(uint32_t usecs)
 void no_os_mdelay(uint32_t msecs)
 {
 	MXC_Delay(MXC_DELAY_MSEC(msecs));
+}
+
+/**
+ * @brief Get current time.
+ * @return Current time structure from system start (seconds, microseconds).
+ */
+struct no_os_time no_os_get_time(void)
+{
+	struct no_os_time t;
+
+	t.s = _system_ticks / 1000;
+
+	t.us = (_system_ticks - t.s * 1000) * 1000 + SysTick->VAL /
+	       (SystemCoreClock / 1000000);
+
+	return t;
 }
