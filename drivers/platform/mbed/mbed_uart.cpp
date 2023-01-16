@@ -1,8 +1,8 @@
 /***************************************************************************//**
  * @file  mbed_uart.cpp
- * @brief Implementation of UART Mbed platform driver interfaces
+ * @brief Implementation of UART/VCOM Mbed platform driver interfaces
 ********************************************************************************
- * Copyright (c) 2021-22 Analog Devices, Inc.
+ * Copyright (c) 2021-23 Analog Devices, Inc.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -178,6 +178,29 @@ static int32_t mbed_uart_read(struct no_os_uart_desc *desc, uint8_t *data,
 			      uint32_t bytes_number)
 {
 	mbed::BufferedSerial *uart;	// pointer to BufferedSerial/UART instance
+
+	if (!desc || !desc->extra || !data)
+		return -EINVAL;
+
+	if (!((struct mbed_uart_desc *)(desc->extra))->uart_port)
+		return -EINVAL;
+
+	uart = (BufferedSerial *)(((struct mbed_uart_desc *)(
+					   desc->extra))->uart_port);
+	return uart->read(data, bytes_number);
+}
+
+/**
+ * @brief Read data from VCOM device.
+ * @param desc[in, out] - Instance of VCOM.
+ * @param data[out] - Pointer to buffer containing data.
+ * @param bytes_number[in] - Number of bytes to read.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+static int32_t mbed_virtual_com_read(struct no_os_uart_desc *desc,
+				     uint8_t *data,
+				     uint32_t bytes_number)
+{
 	platform_usbcdc *usb_cdc_dev;	// Pointer to usb cdc device class instance
 	uint32_t size_rd;
 
@@ -187,24 +210,18 @@ static int32_t mbed_uart_read(struct no_os_uart_desc *desc, uint8_t *data,
 	if (!((struct mbed_uart_desc *)(desc->extra))->uart_port)
 		return -EINVAL;
 
-	if (((struct mbed_uart_desc *)desc->extra)->virtual_com_enable) {
-		usb_cdc_dev = (platform_usbcdc *)((struct mbed_uart_desc *)(
-				desc->extra))->uart_port;
+	usb_cdc_dev = (platform_usbcdc *)((struct mbed_uart_desc *)(
+			desc->extra))->uart_port;
 
-		while (!usb_cdc_dev->data_received(bytes_number)) {
-			/* Wait until new data is available */
-		}
-
-		/* Change terminal connection status manually */
-		usb_cdc_dev->change_terminal_connection(true);
-
-		usb_cdc_dev->receive_nb(data, bytes_number, &size_rd);
-		return bytes_number;
-	} else {
-		uart = (BufferedSerial *)(((struct mbed_uart_desc *)(
-						   desc->extra))->uart_port);
-		return uart->read(data, bytes_number);
+	while (!usb_cdc_dev->data_received(bytes_number)) {
+		/* Wait until new data is available */
 	}
+
+	/* Change terminal connection status manually */
+	usb_cdc_dev->change_terminal_connection(true);
+
+	usb_cdc_dev->receive_nb(data, bytes_number, &size_rd);
+	return bytes_number;
 }
 
 /**
@@ -219,6 +236,29 @@ static int32_t mbed_uart_write(struct no_os_uart_desc *desc,
 			       uint32_t bytes_number)
 {
 	mbed::BufferedSerial *uart;	// pointer to BufferedSerial/UART instance
+
+	if (!desc || !desc->extra || !data)
+		return -EINVAL;
+
+	if (!((struct mbed_uart_desc *)(desc->extra))->uart_port)
+		return -EINVAL;
+
+	uart = (BufferedSerial *)(((struct mbed_uart_desc *)(
+					   desc->extra))->uart_port);
+	return uart->write(data, bytes_number);
+}
+
+/**
+ * @brief Write data to VCOM device.
+ * @param desc[in] - Instance of VCOM.
+ * @param data[in, out] - Pointer to buffer containing data.
+ * @param bytes_number[in] - Number of bytes to read.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+static int32_t mbed_virtual_com_write(struct no_os_uart_desc *desc,
+				      const uint8_t *data,
+				      uint32_t bytes_number)
+{
 	platform_usbcdc *usb_cdc_dev;	// Pointer to usb cdc device class instance
 	uint32_t d_sz;
 	uint32_t indx = 0;
@@ -230,35 +270,29 @@ static int32_t mbed_uart_write(struct no_os_uart_desc *desc,
 	if (!((struct mbed_uart_desc *)(desc->extra))->uart_port)
 		return -EINVAL;
 
-	if (((struct mbed_uart_desc *)desc->extra)->virtual_com_enable) {
-		usb_cdc_dev = (platform_usbcdc *)((struct mbed_uart_desc *)(
-				desc->extra))->uart_port;
+	usb_cdc_dev = (platform_usbcdc *)((struct mbed_uart_desc *)(
+			desc->extra))->uart_port;
 
-		while (bytes_number) {
-			while (!usb_cdc_dev->data_transmited()) {
-				/* Wait until old data is transmitted */
-			}
-
-			/* Make sure packet size is less than max CDC packet size during data transmit */
-			d_sz = (bytes_number > (USB_CDC_MAX_PACKET_SIZE - 1)) ?
-			       (USB_CDC_MAX_PACKET_SIZE - 1) :
-			       bytes_number;
-
-			/* Change terminal connection status manually */
-			usb_cdc_dev->change_terminal_connection(true);
-
-			usb_cdc_dev->send_nb((uint8_t *)&data[indx], d_sz, &d_sz);
-
-			bytes_number -= d_sz;
-			indx += d_sz;
+	while (bytes_number) {
+		while (!usb_cdc_dev->data_transmited()) {
+			/* Wait until old data is transmitted */
 		}
 
-		return tx_bytes;
-	} else {
-		uart = (BufferedSerial *)(((struct mbed_uart_desc *)(
-						   desc->extra))->uart_port);
-		return uart->write(data, bytes_number);
+		/* Make sure packet size is less than max CDC packet size during data transmit */
+		d_sz = (bytes_number > (USB_CDC_MAX_PACKET_SIZE - 1)) ?
+		       (USB_CDC_MAX_PACKET_SIZE - 1) :
+		       bytes_number;
+
+		/* Change terminal connection status manually */
+		usb_cdc_dev->change_terminal_connection(true);
+
+		usb_cdc_dev->send_nb((uint8_t *)&data[indx], d_sz, &d_sz);
+
+		bytes_number -= d_sz;
+		indx += d_sz;
 	}
+
+	return tx_bytes;
 }
 
 /**
@@ -268,7 +302,6 @@ static int32_t mbed_uart_write(struct no_os_uart_desc *desc,
  * @param data[out] - Buffer where data will be read
  * @param bytes_number[in] - Number of bytes to be read.
  * @return 0 in case of success, negative error code otherwise.
- * @note Currently implemented only for UART and not for USBSerial (VCOM)
  */
 static int32_t mbed_uart_read_nonblocking(struct no_os_uart_desc *desc,
 		uint8_t *data,
@@ -298,7 +331,6 @@ static int32_t mbed_uart_read_nonblocking(struct no_os_uart_desc *desc,
  * @param data[in,out] - Buffer where data will be written
  * @param bytes_number[in] - Number of bytes to be written.
  * @return 0 in case of success, negative error code otherwise.
- * @note Currently implemented only for UART and not for USBSerial (VCOM)
  */
 static int32_t mbed_uart_write_nonblocking(struct no_os_uart_desc *desc,
 		const uint8_t *data,
@@ -401,6 +433,71 @@ static int32_t mbed_uart_init(struct no_os_uart_desc **desc,
 			      struct no_os_uart_init_param *param)
 {
 	mbed::BufferedSerial *uart;	// Pointer to new BufferedSerial/UART instance
+	struct mbed_uart_desc *mbed_uart_desc;	// Pointer to mbed uart descriptor
+	struct no_os_uart_desc *uart_desc; 			// UART descriptor
+
+	if (!desc || !param)
+		return -EINVAL;
+
+	// Create the UART description object for the device
+	uart_desc = (struct no_os_uart_desc *)calloc(1, sizeof(*uart_desc));
+	if (!uart_desc)
+		return -ENOMEM;
+
+	uart_desc->baud_rate = param->baud_rate;
+
+	// Create a new mbed descriptor to store new UART instances
+	mbed_uart_desc = (struct mbed_uart_desc *)calloc(1, sizeof(*mbed_uart_desc));
+	if (!mbed_uart_desc)
+		goto err_mbed_uart_desc;
+
+	// Create and configure a new instance of BufferedSerial/UART port
+	uart = new BufferedSerial(
+		(PinName)(((struct mbed_uart_init_param *)param->extra)->uart_tx_pin),
+		(PinName)(((struct mbed_uart_init_param *)param->extra)->uart_rx_pin),
+		(int)param->baud_rate);
+
+	if (!uart)
+		goto err_serial_port;
+
+	/* Set the UART format */
+	if (mbed_uart_set_format(param, uart) != 0)
+		goto err_uart_set_format;
+
+	mbed_uart_desc->uart_port = (BufferedSerial *)uart;
+
+	/* Stores the address of the object instance in a global variable to be
+	 * later used by console stdio operations */
+	mbed_uart_desc->is_console_stdio_port = ((struct mbed_uart_init_param *)
+						param->extra)->is_console_stdio_port;
+	if (mbed_uart_desc->is_console_stdio_port) {
+		console_stdio_port = mbed_uart_desc;
+	}
+
+	uart_desc->extra = mbed_uart_desc;
+	*desc = uart_desc;
+
+	return 0;
+
+err_uart_set_format:
+	delete(uart);
+err_serial_port:
+	free(mbed_uart_desc);
+err_mbed_uart_desc:
+	free(uart_desc);
+
+	return -ENOMEM;
+}
+
+/**
+ * @brief Initialize the VCOM communication peripheral.
+ * @param desc[in, out] - The VCOM descriptor.
+ * @param param[in] - The structure that contains the VCOM parameters.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+static int32_t mbed_virtual_com_init(struct no_os_uart_desc **desc,
+				     struct no_os_uart_init_param *param)
+{
 	platform_usbcdc *usb_cdc_dev;	// Pointer to usb cdc device class instance
 	struct mbed_uart_desc *mbed_uart_desc;	// Pointer to mbed uart descriptor
 	struct no_os_uart_desc *uart_desc; 			// UART descriptor
@@ -420,36 +517,20 @@ static int32_t mbed_uart_init(struct no_os_uart_desc **desc,
 	if (!mbed_uart_desc)
 		goto err_mbed_uart_desc;
 
-	if (((struct mbed_uart_init_param *)param->extra)->virtual_com_enable) {
-		// Create a new instance of platform_usbcdc class
-		usb_cdc_dev = new platform_usbcdc(false,
-						  ((struct mbed_uart_init_param *)param->extra)->vendor_id,
-						  ((struct mbed_uart_init_param *)param->extra)->product_id,
-						  ((struct mbed_uart_init_param *)param->extra)->serial_number);
-		if (!usb_cdc_dev)
-			goto err_serial_port;
+	// Create a new instance of platform_usbcdc class
+	usb_cdc_dev = new platform_usbcdc(false,
+					  ((struct mbed_uart_init_param *)param->extra)->vendor_id,
+					  ((struct mbed_uart_init_param *)param->extra)->product_id,
+					  ((struct mbed_uart_init_param *)param->extra)->serial_number);
+	if (!usb_cdc_dev)
+		goto err_serial_port;
 
-		mbed_uart_desc->uart_port = (platform_usbcdc *)usb_cdc_dev;
+	mbed_uart_desc->uart_port = (platform_usbcdc *)usb_cdc_dev;
+	mbed_uart_desc->virtual_com_enable = true;
 
-		/* Establish connection with the USB CDC communication port */
-		usb_cdc_dev->connect();
-		no_os_mdelay(2000);
-	} else {
-		// Create and configure a new instance of BufferedSerial/UART port
-		uart = new BufferedSerial(
-			(PinName)(((struct mbed_uart_init_param *)param->extra)->uart_tx_pin),
-			(PinName)(((struct mbed_uart_init_param *)param->extra)->uart_rx_pin),
-			(int)param->baud_rate);
-
-		if (!uart)
-			goto err_serial_port;
-
-		/* Set the UART format */
-		if (mbed_uart_set_format(param, uart) != 0)
-			goto err_uart_set_format;
-
-		mbed_uart_desc->uart_port = (BufferedSerial *)uart;
-	}
+	/* Establish connection with the USB CDC communication port */
+	usb_cdc_dev->connect();
+	no_os_mdelay(2000);
 
 	/* Stores the address of the object instance in a global variable to be
 	 * later used by console stdio operations */
@@ -459,15 +540,11 @@ static int32_t mbed_uart_init(struct no_os_uart_desc **desc,
 		console_stdio_port = mbed_uart_desc;
 	}
 
-	mbed_uart_desc->virtual_com_enable = ((struct mbed_uart_init_param *)
-					      param->extra)->virtual_com_enable;
 	uart_desc->extra = mbed_uart_desc;
 	*desc = uart_desc;
 
 	return 0;
 
-err_uart_set_format:
-	delete(uart);
 err_serial_port:
 	free(mbed_uart_desc);
 err_mbed_uart_desc:
@@ -487,17 +564,33 @@ static int32_t mbed_uart_remove(struct no_os_uart_desc *desc)
 		return -EINVAL;
 
 	/* Free the UART object */
-	if (((struct mbed_uart_desc *)desc->extra)->virtual_com_enable) {
-		if ((platform_usbcdc *)((struct mbed_uart_desc *)desc->extra)->uart_port)
-			delete((platform_usbcdc *)((struct mbed_uart_desc *)
-						   desc->extra)->uart_port);
-	} else {
-		if ((BufferedSerial *)(((struct mbed_uart_desc *)(desc->extra))->uart_port))
-			delete((BufferedSerial *)(((struct mbed_uart_desc *)(
-							   desc->extra))->uart_port));
-	}
+	if ((BufferedSerial *)(((struct mbed_uart_desc *)(desc->extra))->uart_port))
+		delete((BufferedSerial *)(((struct mbed_uart_desc *)(
+						   desc->extra))->uart_port));
 
 	/* Free the UART descriptor objects */
+	free(desc->extra);
+	free(desc);
+
+	return 0;
+}
+
+/**
+ * @brief Free the resources allocated by mbed_virtual_com_init().
+ * @param desc[in] - The VCOM descriptor.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+static int32_t mbed_virtual_com_remove(struct no_os_uart_desc *desc)
+{
+	if (!desc || !desc->extra)
+		return -EINVAL;
+
+	/* Free the VCOM object */
+	if ((platform_usbcdc *)((struct mbed_uart_desc *)desc->extra)->uart_port)
+		delete((platform_usbcdc *)((struct mbed_uart_desc *)
+					   desc->extra)->uart_port);
+
+	/* Free the VCOM descriptor objects */
 	free(desc->extra);
 	free(desc);
 
@@ -514,6 +607,17 @@ const struct no_os_uart_platform_ops mbed_uart_ops = {
 	.read_nonblocking = &mbed_uart_read_nonblocking,
 	.write_nonblocking = &mbed_uart_write_nonblocking,
 	.remove = &mbed_uart_remove
+};
+
+/**
+ * @brief Mbed platform specific VCOM platform ops structure
+ */
+const struct no_os_uart_platform_ops mbed_virtual_com_ops = {
+	.init = &mbed_virtual_com_init,
+	.read = &mbed_virtual_com_read,
+	.write = &mbed_virtual_com_write,
+	.remove = &mbed_virtual_com_remove
+	// TODO VCOM blocking read and write is yet to be implemented
 };
 
 #ifdef __cplusplus  // Closing extern c
