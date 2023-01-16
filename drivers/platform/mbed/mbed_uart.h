@@ -2,7 +2,7 @@
  *   @file   mbed_uart.h
  *   @brief  Header containing extra types required for UART interface
 ********************************************************************************
- * Copyright (c) 2021-22 Analog Devices, Inc.
+ * Copyright (c) 2021-23 Analog Devices, Inc.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -67,8 +67,6 @@ extern "C"
  * @brief Structure holding the UART init parameters for mbed platform.
  */
 struct mbed_uart_init_param {
-	bool virtual_com_enable;	/* To enable the selection between
-	                             * Virtual COM Port Or standard UART link */
 	uint16_t uart_tx_pin;		/* UART Transmit Pin (only for UART comm) */
 	uint16_t uart_rx_pin;		/* UART Receive Pin (only for UART comm) */
 	uint16_t vendor_id;			/* USB VCOM Vendor ID (only for USB Virtual comm) */
@@ -83,8 +81,7 @@ struct mbed_uart_init_param {
  */
 struct mbed_uart_desc {
 	void *uart_port; 			/* UART port instance */
-	bool virtual_com_enable;	/* To enable the selection between  Virtual COM Port
-                                 * Or standard UART link */
+	bool virtual_com_enable;	/* To set port for console stdio operation */
 	bool is_console_stdio_port; /* Set the UART/USB port for console stdio operation */
 };
 
@@ -92,6 +89,11 @@ struct mbed_uart_desc {
 * @brief Mbed platform specific UART platform ops structure
 */
 extern const struct no_os_uart_platform_ops mbed_uart_ops;
+
+/**
+* @brief Mbed platform specific VCOM platform ops structure
+*/
+extern const struct no_os_uart_platform_ops mbed_virtual_com_ops;
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
