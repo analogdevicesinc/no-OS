@@ -173,7 +173,7 @@ int32_t read_and_send(struct mqtt_desc *mqtt, struct ade9430_dev *ade9430_dev, s
 		return ret;
 
 	/* Serialize data */
-	len = sprintf(buff, "ADE9430 Temp: %d; AWATT_ACC: %u; AWATTHR: %llu", temp, ade9430_dev->awatt_acc, ade9430_dev->awatthr);
+	len = sprintf(buff, "ADE9430 Temp: %d; AIRMS: %u; AWATTHR: %llu", temp, ade9430_dev->airms, ade9430_dev->awatthr);
 
 	ret = nhd_c12832a1z_print_string(nhd_c12832a1z_dev, buff, len);
 	if (ret)
@@ -258,6 +258,17 @@ int main()
 	ret = ade9430_init(&ade9430_device, ade9430_ip);
 	if (ret)
 		return ret;
+
+	int			temp;
+
+	ret = ade9430_read_temp(ade9430_device, &temp);
+	if (ret)
+		return ret;
+
+	ret = ade9430_read_watt(ade9430_device);
+	if (ret)
+		return ret;
+
 
 	struct no_os_spi_init_param spi_lcd_ip = {
 		.device_id = 1,
@@ -481,29 +492,28 @@ int main()
 
 	printf("Connected to mqtt broker\n");
 
-	//Subscribe to c2d messages
-	status = mqtt_subscribe(mqtt, AZ_IOT_HUB_CLIENT_C2D_SUBSCRIBE_TOPIC, MQTT_QOS0, NULL);
-	if (NO_OS_IS_ERR_VALUE(status))
-		PRINT_ERR_AND_RET("Error mqtt_subscribe", status);
-	printf("Subscribed to topic: %s\n", AZ_IOT_HUB_CLIENT_C2D_SUBSCRIBE_TOPIC);
-
-	//Subscribe to device methods
-	status = mqtt_subscribe(mqtt, AZ_IOT_HUB_CLIENT_METHODS_SUBSCRIBE_TOPIC, MQTT_QOS0, NULL);
-	if (NO_OS_IS_ERR_VALUE(status))
-		PRINT_ERR_AND_RET("Error mqtt_subscribe", status);
-	printf("Subscribed to topic: %s\n", AZ_IOT_HUB_CLIENT_METHODS_SUBSCRIBE_TOPIC);
-
-	//Subscribe to twin patch topic
-	status = mqtt_subscribe(mqtt, AZ_IOT_HUB_CLIENT_TWIN_PATCH_SUBSCRIBE_TOPIC, MQTT_QOS0, NULL);
-	if (NO_OS_IS_ERR_VALUE(status))
-		PRINT_ERR_AND_RET("Error mqtt_subscribe", status);
-	printf("Subscribed to topic: %s\n", AZ_IOT_HUB_CLIENT_TWIN_PATCH_SUBSCRIBE_TOPIC);
-
 	//Subscribe to twin response topic
 	status = mqtt_subscribe(mqtt, AZ_IOT_HUB_CLIENT_TWIN_RESPONSE_SUBSCRIBE_TOPIC, MQTT_QOS0, NULL);
 	if (NO_OS_IS_ERR_VALUE(status))
 		PRINT_ERR_AND_RET("Error mqtt_subscribe", status);
 	printf("Subscribed to topic: %s\n", AZ_IOT_HUB_CLIENT_TWIN_RESPONSE_SUBSCRIBE_TOPIC);
+
+	struct mqtt_message	msg;
+	uint32_t		len;
+	uint8_t			twin_buff[100];
+	
+	len = sprintf(twin_buff, "{\"key\":\"value\"}");
+
+	msg = (struct mqtt_message) {
+		.qos = AZ_HUB_CLIENT_DEFAULT_MQTT_TELEMETRY_QOS,
+		.payload = twin_buff,
+		.len = len,
+		.retained = false
+	};
+
+	ret = mqtt_publish(mqtt, AZ_IOT_HUB_CLIENT_TWIN_RESPONSE_SUBSCRIBE_TOPIC, &msg);
+	if (ret)
+		return ret;
 
 	while (true) {
 		status = read_and_send(mqtt, ade9430_device, nhd_c12832a1z_device);

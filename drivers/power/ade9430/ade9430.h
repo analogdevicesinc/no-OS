@@ -884,6 +884,7 @@ struct ade9430_dev {
 	uint64_t			awatthr;
 	uint64_t			bwatthr;
 	uint64_t			cwatthr;
+	uint32_t			airms;
 };
 
 /******************************************************************************/

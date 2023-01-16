@@ -65,7 +65,7 @@ int ade9430_read(struct ade9430_dev *dev, uint16_t reg_addr, uint32_t *reg_data)
 	buff[0] = reg_addr >> 4;
 	buff[1] = ADE9430_SPI_READ | reg_addr << 4;
 
-	if (reg_addr >= ADE9430_REG_CONFIG1 && reg_addr <= ADE9430_REG_VERSION) {
+	if (reg_addr >= ADE9430_REG_RUN && reg_addr <= ADE9430_REG_VERSION) {
 		ret = no_os_spi_write_and_read(dev->spi_desc, buff, 4);
 		if (ret)
 			return ret;
@@ -94,7 +94,7 @@ int ade9430_write(struct ade9430_dev *dev, uint16_t reg_addr, uint32_t reg_data)
 	buff[0] = reg_addr >> 4;
 	buff[1] = reg_addr << 4;
 
-	if (reg_addr >= ADE9430_REG_CONFIG1 && reg_addr <= ADE9430_REG_VERSION) {
+	if (reg_addr >= ADE9430_REG_RUN && reg_addr <= ADE9430_REG_VERSION) {
 		no_os_put_unaligned_be16(reg_data, &buff[2]);
 		return no_os_spi_write_and_read(dev->spi_desc, buff, 4);
 	} else {
@@ -158,15 +158,40 @@ int ade9430_init(struct ade9430_dev **device,
 
 	no_os_mdelay(100);
 
+	ret = ade9430_update_bits(dev, ADE9430_REG_CONFIG1, ADE9430_SWRST,
+				no_os_field_prep(ADE9430_SWRST, 0));
+	if (ret)
+		return ret;
+
 	ret = ade9430_read(dev, ADE9430_REG_CONFIG5, &chip_id);
+	if (ret)
+		return ret;
+
+	ret = ade9430_write(dev, ADE9430_REG_RUN, 0);
 	if (ret)
 		return ret;
 
 	if (chip_id != 0x63)
 		return -EINVAL;
 
+	ret = ade9430_write(dev, ADE9430_REG_EP_CFG,
+				no_os_field_prep(ADE9430_EGY_LD_ACCUM, 1) |
+				no_os_field_prep(ADE9430_EGY_TMR_MODE, 0) |
+				no_os_field_prep(ADE9430_RD_RST_EN, 0) |
+				no_os_field_prep(ADE9430_EGY_PWR_EN, 1));
+	if (ret)
+		return ret;
+
+	ret = ade9430_write(dev, ADE9430_REG_EGY_TIME, 10);
+	if (ret)
+		return ret;
+
 	ret = ade9430_update_bits(dev, ADE9430_REG_TEMP_CFG, ADE9430_TEMP_EN,
 				no_os_field_prep(ADE9430_TEMP_EN, 1));
+	if (ret)
+		return ret;
+
+	ret = ade9430_write(dev, ADE9430_REG_RUN, 1);
 	if (ret)
 		return ret;
 
@@ -227,76 +252,53 @@ int ade9430_read_watt(struct ade9430_dev *dev)
 	int ret;
 	uint32_t temp;
 
-	ret = ade9430_read(dev, ADE9430_REG_EP_CFG, &temp);
+	no_os_mdelay(7000);
+
+	ret = ade9430_read(dev, ADE9430_REG_AWATT, &dev->awatthr);
 	if (ret)
 		return ret;
 
-	if(!(no_os_field_get(ADE9430_EGY_PWR_EN, temp))) {
-		ret = ade9430_update_bits(dev, ADE9430_REG_EP_CFG, ADE9430_EGY_PWR_EN,
-					no_os_field_prep(ADE9430_EGY_PWR_EN, 1));
-		if (ret)
-			return ret;
-	}
+	// ret = ade9430_read(dev, ADE9430_REG_AWATTHR_HI, &temp);
+	// if (ret)
+	// 	return ret;
 
-	ret = ade9430_read(dev, ADE9430_REG_RUN, &temp);
+	// dev->awatthr = (temp << 32ULL) | dev->awatthr;
+
+	// ret = ade9430_read(dev, ADE9430_REG_AWATT, &dev->bwatthr);
+	// if (ret)
+	// 	return ret;
+
+	// ret = ade9430_read(dev, ADE9430_REG_BWATTHR_HI, &temp);
+	// if (ret)
+	// 	return ret;
+
+	// dev->bwatthr = (temp << 32ULL) | dev->bwatthr;
+
+	// ret = ade9430_read(dev, ADE9430_REG_CWATTHR_HI, &dev->cwatthr);
+	// if (ret)
+	// 	return ret;
+
+	// ret = ade9430_read(dev, ADE9430_REG_CWATTHR_HI, &temp);
+	// if (ret)
+	// 	return ret;
+
+	// dev->cwatthr = (temp << 32ULL) | dev->cwatthr;
+
+	ret = ade9430_read(dev, ADE9430_REG_AIRMS, &dev->airms);
 	if (ret)
 		return ret;
 
-	if (temp) {
-		ret = ade9430_write(dev, ADE9430_REG_RUN, 1);
-		if (ret)
-			return ret;
-	}
-
-	no_os_mdelay(5000);
-
-	ret = ade9430_read(dev, ADE9430_REG_AWATT_ACC, dev->awatt_acc);
+	ret = ade9430_read(dev, ADE9430_REG_AWATT_ACC, &dev->awatt_acc);
 	if (ret)
 		return ret;
 
-	ret = ade9430_read(dev, ADE9430_REG_BWATT_ACC, dev->bwatt_acc);
-	if (ret)
-		return ret;
+	// ret = ade9430_read(dev, ADE9430_REG_BWATT_ACC, &dev->bwatt_acc);
+	// if (ret)
+	// 	return ret;
 
-	ret = ade9430_read(dev, ADE9430_REG_CWATT_ACC, dev->cwatt_acc);
-	if (ret)
-		return ret;
-
-	ret = ade9430_read(dev, ADE9430_REG_AWATTHR_LO, &temp);
-	if (ret)
-		return ret;
-
-	dev->awatthr = temp;
-
-	ret = ade9430_read(dev, ADE9430_REG_AWATTHR_HI, &temp);
-	if (ret)
-		return ret;
-
-	dev->awatthr = (temp << 32ULL) | dev->awatthr;
-
-	ret = ade9430_read(dev, ADE9430_REG_BWATTHR_LO, &temp);
-	if (ret)
-		return ret;
-
-	dev->bwatthr = temp;
-
-	ret = ade9430_read(dev, ADE9430_REG_BWATTHR_HI, &temp);
-	if (ret)
-		return ret;
-
-	dev->bwatthr = (temp << 32ULL) | dev->bwatthr;
-
-	ret = ade9430_read(dev, ADE9430_REG_CWATTHR_LO, &temp);
-	if (ret)
-		return ret;
-
-	dev->cwatthr = temp;
-
-	ret = ade9430_read(dev, ADE9430_REG_CWATTHR_HI, &temp);
-	if (ret)
-		return ret;
-
-	dev->cwatthr = (temp << 32ULL) | dev->cwatthr;
+	// ret = ade9430_read(dev, ADE9430_REG_CWATT_ACC, &dev->cwatt_acc);
+	// if (ret)
+	// 	return ret;
 
 	return 0;
 }
