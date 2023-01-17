@@ -602,16 +602,38 @@ int main()
 	if (NO_OS_IS_ERR_VALUE(status))
 		PRINT_ERR_AND_RET("Error socket_connect", status);
 
+	status = socket_init(&sock, &socket_param);
+	if (NO_OS_IS_ERR_VALUE(status))
+		PRINT_ERR_AND_RET("Error socket_init", status);
+
 	/* Connect socket to mqtt borker server */
 	mqtt_broker_addr = (struct socket_address) {
 		.addr = SERVER_ADDR,
 		.port = SERVER_PORT
 	};
+
 	status = socket_connect(sock, &mqtt_broker_addr);
 	if (NO_OS_IS_ERR_VALUE(status))
 		PRINT_ERR_AND_RET("Error socket_connect", status);
 	// At this point you are free to use my_mqtt_client_id and my_mqtt_user_name to connect using
 	// your MQTT client.
+
+	mqtt_init_param = (struct mqtt_init_param) {
+		.timer_id = TIMER_ID,
+		.extra_timer_init_param = &max_timer_ops,
+		.sock = sock,
+		.command_timeout_ms = MQTT_CONFIG_CMD_TIMEOUT,
+		.send_buff = send_buff,
+		.read_buff = read_buff,
+		.send_buff_size = BUFF_LEN,
+		.read_buff_size = BUFF_LEN,
+		.message_handler = mqtt_message_handler
+	};
+
+	status = mqtt_init(&mqtt, &mqtt_init_param);
+	if (NO_OS_IS_ERR_VALUE(status))
+		PRINT_ERR_AND_RET("Error mqtt_init", status);
+
 	conn_config = (struct mqtt_connect_config) {
 		.version = MQTT_CONFIG_VERSION,
 		.keep_alive_ms = MQTT_CONFIG_KEEP_ALIVE,
