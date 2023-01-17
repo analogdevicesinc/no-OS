@@ -300,7 +300,8 @@ int main()
 
 	struct max_spi_init_param spi_extra_ip  = {
 		.numSlaves = 1,
-		.polarity = SPI_SS_POL_LOW
+		.polarity = SPI_SS_POL_LOW,
+		.vssel = MXC_GPIO_VSSEL_VDDIOH
 	};
 
 	struct no_os_spi_init_param spi_ip = {

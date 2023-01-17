@@ -63,13 +63,17 @@
  * @param chip_select - cs index
  * @return 0 in case of success, -EINVAL otherwise
  */
-static int32_t _max_spi_enable_ss(uint32_t id, uint32_t chip_select)
+static int32_t _max_spi_config_pins(struct no_os_spi_desc *desc)
 {
+	struct max_spi_init_param *st = desc->extra;
+	mxc_gpio_cfg_t spi_pins;
 	mxc_gpio_cfg_t cs;
 
-	switch(id) {
+	switch(desc->device_id) {
 	case 0:
-		switch(chip_select) {
+		spi_pins = gpio_cfg_spi0_1;
+
+		switch(desc->chip_select) {
 		case 0:
 			cs = gpio_cfg_spi0_0;
 			break;
@@ -78,7 +82,9 @@ static int32_t _max_spi_enable_ss(uint32_t id, uint32_t chip_select)
 		}
 		break;
 	case 1:
-		switch(chip_select) {
+		spi_pins = gpio_cfg_spi1;
+
+		switch(desc->chip_select) {
 		case 0:
 			cs = gpio_cfg_spi1_ss0;
 			break;
@@ -97,7 +103,9 @@ static int32_t _max_spi_enable_ss(uint32_t id, uint32_t chip_select)
 		break;
 
 	case 2:
-		switch(chip_select) {
+		spi_pins = gpio_cfg_spi2;
+
+		switch(desc->chip_select) {
 		case 0:
 			cs = gpio_cfg_spi2_ss0;
 			break;
@@ -115,7 +123,9 @@ static int32_t _max_spi_enable_ss(uint32_t id, uint32_t chip_select)
 		}
 		break;
 	case 3:
-		switch(chip_select) {
+		spi_pins = gpio_cfg_spi3;
+
+		switch(desc->chip_select) {
 		case 0:
 			cs = gpio_cfg_spi2_ss0;
 			break;
@@ -136,7 +146,9 @@ static int32_t _max_spi_enable_ss(uint32_t id, uint32_t chip_select)
 		return -EINVAL;
 	}
 
-	cs.vssel = MXC_GPIO_VSSEL_VDDIOH;
+	spi_pins.vssel = st->vssel;
+	cs.vssel = st->vssel;
+	MXC_GPIO_Config(&spi_pins);
 	MXC_GPIO_Config(&cs);
 
 	return 0;
@@ -162,7 +174,7 @@ static int _max_spi_config(struct no_os_spi_desc *desc)
 		goto err_init;
 	}
 
-	ret = _max_spi_enable_ss(desc->device_id, desc->chip_select);
+	ret = _max_spi_config_pins(desc);
 	if (ret) {
 		ret = -EINVAL;
 		goto err_init;
