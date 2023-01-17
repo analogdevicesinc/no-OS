@@ -43,6 +43,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include "adxl355.h"
+#include "no_os_delay.h"
 
 /******************************************************************************/
 /************************ Variable Declarations ******************************/
