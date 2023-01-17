@@ -219,7 +219,7 @@ int32_t no_os_irq_set_priority(struct no_os_irq_ctrl_desc *desc,
 			       uint32_t irq_id,
 			       uint32_t priority_level)
 {
-	if (!desc || desc->platform_ops)
+	if (!desc || !desc->platform_ops)
 		return -EINVAL;
 
 	if (!desc->platform_ops->set_priority)
