@@ -1,7 +1,7 @@
-/***************************************************************************//**
- *   @file   maxim_stdio.h
- *   @brief  Header file for UART driver stdout/stdin redirection.
- *   @author Ciprian Regus (ciprian.regus@analog.com)
+/*******************************************************************************
+ *   @file   no_os_init.h
+ *   @brief  Header file of platform initialization.
+ *   @author GMois (george.mois@analog.com)
 ********************************************************************************
  * Copyright 2022(c) Analog Devices, Inc.
  *
@@ -36,18 +36,9 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef MAXIM_STDIO_H_
-#define MAXIM_STDIO_H_
+#ifndef _NO_OS_INIT_H_
+#define _NO_OS_INIT_H_
 
-#include <sys/stat.h>
-#include "no_os_uart.h"
+int no_os_init(void);
 
-void maxim_uart_stdio(struct no_os_uart_desc *);
-int _isatty(int);
-int _write(int, char *, int);
-int _close(int);
-int _lseek(int, off_t, int);
-int _read(int, char *, int);
-int _fstat(int, struct stat *);
-
-#endif
+#endif // _NO_OS_INIT_H_

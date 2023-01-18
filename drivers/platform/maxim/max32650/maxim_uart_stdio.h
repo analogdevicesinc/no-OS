@@ -1,8 +1,7 @@
 /***************************************************************************//**
- *   @file   maxim_stdio.c
- *   @brief  Implementation file of MAX32660 UART driver stdout/stdin redirection.
+ *   @file   maxim_uart_stdio.h
+ *   @brief  Header file for UART driver stdout/stdin redirection.
  *   @author Ciprian Regus (ciprian.regus@analog.com)
- *
 ********************************************************************************
  * Copyright 2022(c) Analog Devices, Inc.
  *
@@ -37,102 +36,18 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
+#ifndef MAXIM_UART_STDIO_H_
+#define MAXIM_UART_STDIO_H_
 
-#include <errno.h>
-#include <stdint.h>
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include "maxim_stdio.h"
-
-#include "mxc_sys.h"
-#include "no_os_uart.h"
-#include "uart.h"
-
-#include <unistd.h>
 #include <sys/stat.h>
+#include "no_os_uart.h"
 
-#define STDIN_FILENO	0   /**> Definition of stdin */
-#define STDOUT_FILENO   1   /**> Definition of stdout */
-#define STDERR_FILENO   2   /**> Definition of stderr */
+void no_os_uart_stdio(struct no_os_uart_desc *);
+int _isatty(int);
+int _write(int, char *, int);
+int _close(int);
+int _lseek(int, off_t, int);
+int _read(int, char *, int);
+int _fstat(int, struct stat *);
 
-static struct no_os_uart_desc *guart = NULL;
-
-void maxim_uart_stdio(struct no_os_uart_desc *desc)
-{
-	if (!desc)
-		return;
-	guart = desc;
-
-	setvbuf(stdout, NULL, _IONBF, 0);
-}
-
-int _close(int file)
-{
-	if (file >= STDIN_FILENO && file <= STDERR_FILENO)
-		return 0;
-
-	errno = EBADF;
-	return -1;
-}
-int _isatty(int file)
-{
-	if (file >= STDIN_FILENO && file <= STDERR_FILENO)
-		return 1;
-
-	errno = EBADF;
-	return 0;
-}
-int _lseek(int file, off_t offset, int whence)
-{
-	(void) file;
-	(void) offset;
-	(void) whence;
-
-	errno = EBADF;
-	return -1;
-}
-int _fstat(int file, struct stat *st)
-{
-	if (file >= STDIN_FILENO && file <= STDERR_FILENO) {
-		st->st_mode = S_IFCHR;
-		return 0;
-	}
-
-	errno = EBADF;
-	return 0;
-}
-
-int _read(int file, char *ptr, int len)
-{
-	int ret;
-
-	if (file == STDIN_FILENO) {
-		ret = no_os_uart_read(guart, (uint8_t *)ptr, len);
-		if (ret < 0) {
-			errno = -ret;
-			return -1;
-		}
-
-		return ret;
-	}
-	errno = EBADF;
-	return -1;
-}
-
-int _write(int file, char *ptr, int len)
-{
-	int ret;
-
-	if (file == STDOUT_FILENO || file == STDERR_FILENO) {
-		ret = no_os_uart_write(guart, (uint8_t *)ptr, len);
-		if (ret < 0) {
-			errno = -ret;
-			return -1;
-		}
-
-		return ret;
-	}
-	errno = EBADF;
-	return -1;
-}
+#endif

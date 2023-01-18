@@ -87,7 +87,7 @@ int main()
 	if (ret)
 		return ret;
 
-	maxim_uart_stdio(max11205_uart_desc);
+	no_os_uart_stdio(max11205_uart_desc);
 
 	ret = basic_example_main();
 #endif

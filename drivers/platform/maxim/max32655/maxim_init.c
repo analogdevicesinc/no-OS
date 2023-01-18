@@ -1,7 +1,7 @@
-/***************************************************************************//**
- *   @file   maxim_stdio.h
- *   @brief  Header file for UART driver stdout/stdin redirection.
- *   @author Ciprian Regus (ciprian.regus@analog.com)
+/*******************************************************************************
+ *   @file   maxim_init.c
+ *   @brief  Implementation of maxim initialization functions.
+ *   @author GMois (george.mois@analog.com)
 ********************************************************************************
  * Copyright 2022(c) Analog Devices, Inc.
  *
@@ -36,18 +36,11 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef MAXIM_STDIO_H_
-#define MAXIM_STDIO_H_
+#include "no_os_init.h"
+#include "mxc_sys.h"
 
-#include <sys/stat.h>
-#include "no_os_uart.h"
-
-void maxim_uart_stdio(struct no_os_uart_desc *);
-int _isatty(int);
-int _write(int, char *, int);
-int _close(int);
-int _lseek(int, off_t, int);
-int _read(int, char *, int);
-int _fstat(int, struct stat *);
-
-#endif
+/* ************************************************************************** */
+__weak int no_os_init(void)
+{
+	return SysTick_Config(SystemCoreClock / 1000);
+}

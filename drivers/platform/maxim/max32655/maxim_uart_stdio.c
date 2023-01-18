@@ -1,7 +1,8 @@
 /***************************************************************************//**
- *   @file   main.c
- *   @brief  Main file for Maxim platform of eval-adxl355-pmdz project.
+ *   @file   maxim_uart_stdio.c
+ *   @brief  Implementation file of MAX32660 UART driver stdout/stdin redirection.
  *   @author Ciprian Regus (ciprian.regus@analog.com)
+ *
 ********************************************************************************
  * Copyright 2022(c) Analog Devices, Inc.
  *
@@ -37,86 +38,101 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-#include "platform_includes.h"
-#include "common_data.h"
-#include "no_os_error.h"
+#include <errno.h>
+#include <stdint.h>
+#include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include "maxim_uart_stdio.h"
 
-#ifdef IIO_EXAMPLE
-#include "iio_example.h"
-#endif
+#include "mxc_sys.h"
+#include "no_os_uart.h"
+#include "uart.h"
 
-#ifdef IIO_TRIGGER_EXAMPLE
-#include "iio_trigger_example.h"
-#endif
+#include <unistd.h>
+#include <sys/stat.h>
 
-#ifdef DUMMY_EXAMPLE
-#include "dummy_example.h"
-#endif
+#define STDIN_FILENO	0   /**> Definition of stdin */
+#define STDOUT_FILENO   1   /**> Definition of stdout */
+#define STDERR_FILENO   2   /**> Definition of stderr */
 
-/***************************************************************************//**
- * @brief Main function execution for STM32 platform.
- *
- * @return ret - Result of the enabled examples execution.
-*******************************************************************************/
-int main()
+static struct no_os_uart_desc *guart = NULL;
+
+void no_os_uart_stdio(struct no_os_uart_desc *desc)
 {
-	int ret = -EINVAL;
+	if (!desc)
+		return;
+	guart = desc;
 
-	adxl355_ip.comm_init.spi_init = adxl355_spi_ip;
-
-#ifdef IIO_EXAMPLE
-	ret = iio_example_main();
-#endif
-
-#ifdef IIO_TRIGGER_EXAMPLE
-	struct no_os_gpio_desc *adxl355_gpio_desc;
-	struct no_os_irq_ctrl_desc *nvic_desc;
-	struct no_os_irq_init_param nvic_ip = {
-		.platform_ops = &max_irq_ops,
-	};
-
-	/* Initialize DATA READY pin */
-	ret = no_os_gpio_get_optional(&adxl355_gpio_desc, &adxl355_gpio_drdy_ip);
-	if (ret)
-		return ret;
-
-	ret = no_os_gpio_direction_input(adxl355_gpio_desc);
-	if (ret)
-		return ret;
-
-	/* Initialize GPIO IRQ controller */
-	ret = no_os_irq_ctrl_init(&nvic_desc, &nvic_ip);
-	if (ret)
-		return ret;
-
-	ret = no_os_irq_enable(nvic_desc, NVIC_GPIO_IRQ);
-	if (ret)
-		return ret;
-
-	ret = iio_trigger_example_main();
-#endif
-
-#ifdef DUMMY_EXAMPLE
-	struct no_os_uart_desc *uart_desc;
-
-	ret = no_os_uart_init(&uart_desc, &adxl355_uart_ip);
-	if (ret)
-		return ret;
-
-	no_os_uart_stdio(uart_desc);
-	ret = dummy_example_main();
-#endif
-
-#if (DUMMY_EXAMPLE + IIO_EXAMPLE + IIO_TRIGGER_EXAMPLE == 0)
-#error At least one example has to be selected using y value in Makefile.
-#elif (DUMMY_EXAMPLE + IIO_EXAMPLE + IIO_TRIGGER_EXAMPLE > 1)
-#error Selected example projects cannot be enabled at the same time. \
-Please enable only one example and re-build the project.
-#endif
-
-	return ret;
+	setvbuf(stdout, NULL, _IONBF, 0);
 }
 
+int _close(int file)
+{
+	if (file >= STDIN_FILENO && file <= STDERR_FILENO)
+		return 0;
+
+	errno = EBADF;
+	return -1;
+}
+int _isatty(int file)
+{
+	if (file >= STDIN_FILENO && file <= STDERR_FILENO)
+		return 1;
+
+	errno = EBADF;
+	return 0;
+}
+int _lseek(int file, off_t offset, int whence)
+{
+	(void) file;
+	(void) offset;
+	(void) whence;
+
+	errno = EBADF;
+	return -1;
+}
+int _fstat(int file, struct stat *st)
+{
+	if (file >= STDIN_FILENO && file <= STDERR_FILENO) {
+		st->st_mode = S_IFCHR;
+		return 0;
+	}
+
+	errno = EBADF;
+	return 0;
+}
+
+int _read(int file, char *ptr, int len)
+{
+	int ret;
+
+	if (file == STDIN_FILENO) {
+		ret = no_os_uart_read(guart, (uint8_t *)ptr, len);
+		if (ret < 0) {
+			errno = -ret;
+			return -1;
+		}
+
+		return ret;
+	}
+	errno = EBADF;
+	return -1;
+}
+
+int _write(int file, char *ptr, int len)
+{
+	int ret;
+
+	if (file == STDOUT_FILENO || file == STDERR_FILENO) {
+		ret = no_os_uart_write(guart, (uint8_t *)ptr, len);
+		if (ret < 0) {
+			errno = -ret;
+			return -1;
+		}
+
+		return ret;
+	}
+	errno = EBADF;
+	return -1;
+}
