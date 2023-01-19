@@ -879,12 +879,8 @@ struct ade9430_dev {
 	/** Device communication descriptor */
 	struct no_os_spi_desc		*spi_desc;
 	uint32_t			awatt_acc;
-	uint32_t			bwatt_acc;
-	uint32_t			cwatt_acc;
-	uint64_t			awatthr;
-	uint64_t			bwatthr;
-	uint64_t			cwatthr;
-	uint32_t			airms;
+	uint32_t			awatthr;
+	uint32_t			awatt;
 };
 
 /******************************************************************************/
