@@ -407,7 +407,7 @@ int main(void)
 			       &read_buff0, NULL),
 	};
 
-	return iio_app_run(devices, NO_OS_ARRAY_SIZE(devices));
+	return iio_app_run(NULL, 0, devices, NO_OS_ARRAY_SIZE(devices));
 #endif
 
 	printf("adc5: setup and configuration is done\n");

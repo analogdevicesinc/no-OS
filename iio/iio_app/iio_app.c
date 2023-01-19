@@ -325,6 +325,8 @@ static int32_t irq_setup(struct no_os_irq_ctrl_desc **irq_desc)
 
 /**
  * @brief IIO Application API with trigger initialization.
+ * @param ctx_attrs - array of context attributes.
+ * @param nb_ctx_attr - number of attributes in ctx_attrs.
  * @param devices  - IIO devices to be used.
  * @param nb_devs  - Number of devices to be used.
  * @param trigs    - IIO triggers to be used.
@@ -333,7 +335,9 @@ static int32_t irq_setup(struct no_os_irq_ctrl_desc **irq_desc)
  * @param iio_desc - IIO descriptor to be returned.
  * @return 0 in case of success or negative value otherwise.
  */
-int32_t iio_app_run_with_trigs(struct iio_app_device *devices, uint32_t nb_devs,
+int32_t iio_app_run_with_trigs(struct iio_ctx_attr *ctx_attrs,
+			       uint32_t nb_ctx_attr,
+			       struct iio_app_device *devices, uint32_t nb_devs,
 			       struct iio_trigger_init *trigs, int32_t nb_trigs,
 			       void *irq_desc, struct iio_desc **iio_desc)
 {
@@ -412,7 +416,8 @@ int32_t iio_app_run_with_trigs(struct iio_app_device *devices, uint32_t nb_devs,
 	iio_init_param.nb_devs = nb_devs;
 	iio_init_param.trigs = trigs;
 	iio_init_param.nb_trigs = nb_trigs;
-	iio_init_param.cntx_attrs = NULL;
+	iio_init_param.ctx_attrs = ctx_attrs;
+	iio_init_param.nb_ctx_attr = nb_ctx_attr;
 	status = iio_init(iio_desc, &iio_init_param);
 	if(status < 0)
 		goto error;
@@ -427,12 +432,14 @@ error:
 	return status;
 }
 
-int32_t iio_app_run(struct iio_app_device *devices, uint32_t len)
+int32_t iio_app_run(struct iio_ctx_attr *ctx_attrs, uint32_t nb_ctx_attr,
+		    struct iio_app_device *devices, uint32_t len)
 {
 	struct iio_desc	*iio_desc;
 	void *irq_desc = NULL;
 
-	return iio_app_run_with_trigs(devices, len, NULL, 0, irq_desc, &iio_desc);
+	return iio_app_run_with_trigs(ctx_attrs, nb_ctx_attr, devices, len, NULL, 0,
+				      irq_desc, &iio_desc);
 }
 
 #endif

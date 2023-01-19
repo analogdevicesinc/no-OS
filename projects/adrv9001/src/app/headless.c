@@ -225,7 +225,7 @@ static int32_t iio_run(struct iio_axi_adc_init_param *adc_pars,
 		app_devices[a].write_buff = &iio_dac_buffers[i];
 	}
 
-	return iio_app_run(app_devices, NO_OS_ARRAY_SIZE(app_devices));
+	return iio_app_run(NULL, 0, app_devices, NO_OS_ARRAY_SIZE(app_devices));
 }
 #endif
 

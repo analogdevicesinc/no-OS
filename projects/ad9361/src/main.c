@@ -898,7 +898,7 @@ int main(void)
 		IIO_APP_DEVICE("ad9361-phy", ad9361_phy, ad9361_dev_desc, NULL, NULL)
 	};
 
-	iio_app_run(devices, NO_OS_ARRAY_SIZE(devices));
+	iio_app_run(NULL, 0, devices, NO_OS_ARRAY_SIZE(devices));
 
 #endif // IIO_SUPPORT
 

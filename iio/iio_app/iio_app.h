@@ -74,13 +74,18 @@ struct iio_app_device {
  * @brief Register devices and start an iio application
  *
  * Configuration for communication is done in parameters.h
+ * @param ctx_attrs - array of context attribute name/value pairs.
+ * @param nb_ctx_attr - number of context attributes in the array above.
  * @param devices - is an array of devices to register to iiod
  * @param len - is the number of devices
  * @return 0 on success, negative value otherwise
  */
-int32_t iio_app_run(struct iio_app_device *devices, uint32_t len);
+int32_t iio_app_run(struct iio_ctx_attr *ctx_attrs, uint32_t nb_ctx_attr,
+		    struct iio_app_device *devices, uint32_t len);
 
-int32_t iio_app_run_with_trigs(struct iio_app_device *devices, uint32_t len,
+int32_t iio_app_run_with_trigs(struct iio_ctx_attr *ctx_attrs,
+			       uint32_t nb_ctx_attr,
+			       struct iio_app_device *devices, uint32_t len,
 			       struct iio_trigger_init *trigs, int32_t nb_trigs,
 			       void *irq_desc, struct iio_desc **iio_desc);
 #endif
