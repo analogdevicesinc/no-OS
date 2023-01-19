@@ -247,7 +247,7 @@ int main()
 
 	err = 0;
 	while (err >= 0) {
-		err = iio_app_run(devices, NO_OS_ARRAY_SIZE(devices));
+		err = iio_app_run(NULL, 0, devices, NO_OS_ARRAY_SIZE(devices));
 	}
 
 	iio_ad3552r_remove(iio_dac);

@@ -124,6 +124,7 @@ int iio_timer_trigger_example_main()
 				&adxrs290_iio_trig_desc)
 	};
 
-	return iio_app_run_with_trigs(iio_devices, NO_OS_ARRAY_SIZE(iio_devices),
+	return iio_app_run_with_trigs(NULL, 0, iio_devices,
+				      NO_OS_ARRAY_SIZE(iio_devices),
 				      trigs, NO_OS_ARRAY_SIZE(trigs), adxrs290_timer_irq_desc, &iio_desc);
 }
