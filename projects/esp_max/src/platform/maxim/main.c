@@ -86,19 +86,6 @@ static const char my_ca_cert[] = CA_CERT;
 static const char my_cli_cert[] = DEVICE_CERT;
 static const char my_cli_pk[] = DEVICE_PRIVATE_KEY;
 
-#define AZ_IOT_PROVISIONING_ID_SCOPE "0ne0090DBBD"
-#define AZ_IOT_PROVISIONING_REGISTRATION_ID "EnergyMonitoringDevice1"
-
-#define SAMPLE_TYPE PAHO_IOT_PROVISIONING
-#define SAMPLE_NAME PAHO_IOT_PNP_WITH_PROVISIONING_SAMPLE
-
-#define QUERY_TOPIC_BUFFER_LENGTH 256
-#define REGISTER_TOPIC_BUFFER_LENGTH 128
-#define PROVISIONING_ENDPOINT_BUFFER_LENGTH 256
-#define MQTT_PAYLOAD_BUFFER_LENGTH 256
-
-#define CLIENT_ID_BUFFER_LENGTH 128
-
 // Make sure to size the buffer to fit the username (128 is an example)
 static char my_mqtt_user_name[256];
 static size_t my_mqtt_user_name_length;
@@ -116,10 +103,16 @@ static char iot_hub_device_id_buffer[128];
 static az_span device_iot_hub_endpoint;
 static az_span device_id;
 static char mqtt_client_username_buffer[256];
-char mqtt_client_id_buffer[CLIENT_ID_BUFFER_LENGTH];
+static char mqtt_client_id_buffer[CLIENT_ID_BUFFER_LENGTH];
+static char mqtt_endpoint_buffer[PROVISIONING_ENDPOINT_BUFFER_LENGTH];
 
-uint8_t mqtt_payload[MQTT_PAYLOAD_BUFFER_LENGTH];
-size_t mqtt_payload_length;
+static uint8_t mqtt_payload[MQTT_PAYLOAD_BUFFER_LENGTH];
+static size_t mqtt_payload_length;
+
+static char register_topic_buffer[REGISTER_TOPIC_BUFFER_LENGTH];
+
+static uint8_t			send_buff[BUFF_LEN];
+static uint8_t			read_buff[BUFF_LEN];
 
 int32_t read_and_send(struct mqtt_desc *mqtt, struct ade9430_dev *ade9430_dev, struct nhd_c12832a1z_device *nhd_c12832a1z_dev)
 {
@@ -176,46 +169,36 @@ void mqtt_message_handler(struct mqtt_message_data *msg)
 	printf("Topic:%s -- Payload: %s\n", msg->topic, buff);
 }
 
-int main()
+/* create_and_configure_mqtt_client_for_provisioning */
+void create_and_configure_mqtt_client_for_provisioning(void)
 {
-	int ret = -EINVAL;
-	int i = 0;
-	int status;
-	putenv("AZ_IOT_PROVISIONING_ID_SCOPE=0ne0090DBBD");
-	putenv("AZ_IOT_PROVISIONING_REGISTRATION_ID=EnergyMonitoringDevice1");
-	/* create_and_configure_mqtt_client_for_provisioning */
-	iot_sample_read_environment_variables(SAMPLE_TYPE, SAMPLE_NAME, &env_vars);
-	char mqtt_endpoint_buffer[PROVISIONING_ENDPOINT_BUFFER_LENGTH];
-	iot_sample_create_mqtt_endpoint(
-	SAMPLE_TYPE, &env_vars, mqtt_endpoint_buffer, sizeof(mqtt_endpoint_buffer));
-	int rc = az_iot_provisioning_client_init(&provisioning_client, az_span_create_from_str(mqtt_endpoint_buffer),
-							env_vars.provisioning_id_scope, env_vars.provisioning_registration_id,
+	iot_sample_create_mqtt_endpoint(SAMPLE_TYPE, &env_vars, mqtt_endpoint_buffer, sizeof(mqtt_endpoint_buffer));
+	az_iot_provisioning_client_init(&provisioning_client, az_span_create_from_str(mqtt_endpoint_buffer),
+							az_span_create_from_str(AZ_IOT_PROVISIONING_ID_SCOPE), 
+							az_span_create_from_str(AZ_IOT_PROVISIONING_REGISTRATION_ID),
 							NULL);
-	if (az_result_failed(rc))
-	{
-		IOT_SAMPLE_LOG_ERROR(
-			"Failed to initialize provisioning client: az_result return code 0x%08x.", rc);
-		exit(rc);
-	}
 
 	// Get the MQTT client id used for the MQTT connection.
-	rc = az_iot_provisioning_client_get_client_id(
+	az_iot_provisioning_client_get_client_id(
 	&provisioning_client, mqtt_client_id_buffer, sizeof(mqtt_client_id_buffer), NULL);
-	if (az_result_failed(rc))
-	{
-		IOT_SAMPLE_LOG_ERROR("Failed to get MQTT client id: az_result return code 0x%08x.", rc);
-		exit(rc);
-	}
 
-	rc = az_iot_provisioning_client_get_user_name(&provisioning_client, mqtt_client_username_buffer, sizeof(mqtt_client_username_buffer), NULL);
-	if (az_result_failed(rc))
-	{
-		IOT_SAMPLE_LOG_ERROR("Failed to get MQTT client username: az_result return code 0x%08x.", rc);
-		exit(rc);
-	}
+	az_iot_provisioning_client_get_user_name(&provisioning_client, mqtt_client_username_buffer,
+							sizeof(mqtt_client_username_buffer), NULL);
+	
+	az_iot_provisioning_client_register_get_publish_topic(&provisioning_client, register_topic_buffer, sizeof(register_topic_buffer), NULL);
 
-	/* create_and_configure_mqtt_client_for_iot_hub */
+	az_iot_provisioning_client_get_request_payload(
+				&provisioning_client,
+				custom_registration_payload_property,
+				NULL,
+				mqtt_payload,
+				sizeof(mqtt_payload),
+				&mqtt_payload_length);
+}
 
+/* create_and_configure_mqtt_client_for_iot_hub */
+void create_and_configure_mqtt_client_for_iot_hub(void)
+{
 	az_iot_hub_client_options options = az_iot_hub_client_options_default();
  
 	// Initialize the hub client with hostname, device id, and default connection options.
@@ -228,6 +211,15 @@ int main()
 	// Get the MQTT user name to connect.
 	az_iot_hub_client_get_user_name(
 	&my_client, my_mqtt_user_name, sizeof(my_mqtt_user_name), &my_mqtt_user_name_length);
+
+	az_iot_hub_client_properties_get_reported_publish_topic(&my_client, my_request_id, reported_topic, sizeof(reported_topic), NULL);
+}
+
+int main()
+{
+	int ret = -EINVAL;
+	int i = 0;
+	int status;
 
 	struct max_spi_init_param spi_extra_ip  = {
 		.numSlaves = 1,
@@ -252,12 +244,6 @@ int main()
 	struct ade9430_dev *ade9430_device;
 
 	ret = ade9430_init(&ade9430_device, ade9430_ip);
-	if (ret)
-		return ret;
-
-	int			temp;
-
-	ret = ade9430_read_temp(ade9430_device, &temp);
 	if (ret)
 		return ret;
 
@@ -411,9 +397,6 @@ int main()
 	if (status < 0)
 		return status;
 
-	char buff[100];
-	wifi_get_ip(wifi, buff, 100);
-	printf("Tinyiiod ip is: %s\n", buff);
 	wifi_get_network_interface(wifi, &socket_param.net);
 
 	struct secure_init_param sip = {
@@ -445,8 +428,6 @@ int main()
 
 	printf("Connection with \"%s\" established\n", SERVER_ADDR);
 
-	static uint8_t			send_buff[BUFF_LEN];
-	static uint8_t			read_buff[BUFF_LEN];
 	struct mqtt_init_param		mqtt_init_param;
 	/* Initialize mqtt descriptor */
 	mqtt_init_param = (struct mqtt_init_param) {
@@ -468,6 +449,8 @@ int main()
 
 	struct mqtt_connect_config	conn_config;
 
+	create_and_configure_mqtt_client_for_provisioning();
+
 	conn_config = (struct mqtt_connect_config) {
 		.version = MQTT_CONFIG_VERSION,
 		.keep_alive_ms = MQTT_CONFIG_KEEP_ALIVE,
@@ -484,28 +467,6 @@ int main()
 	if (NO_OS_IS_ERR_VALUE(status))
 		PRINT_ERR_AND_RET("Error mqtt_subscribe", status);
 	printf("Subscribed to topic: %s\n", AZ_IOT_HUB_CLIENT_TWIN_RESPONSE_SUBSCRIBE_TOPIC);
-
-	char register_topic_buffer[REGISTER_TOPIC_BUFFER_LENGTH];
-	rc = az_iot_provisioning_client_register_get_publish_topic(&provisioning_client, register_topic_buffer, sizeof(register_topic_buffer), NULL);
-	if (az_result_failed(rc))
-	{
-		IOT_SAMPLE_LOG_ERROR("Failed to get the Register topic: az_result return code 0x%08x.", rc);
-		exit(rc);
-	}
-
-	rc = az_iot_provisioning_client_get_request_payload(
-				&provisioning_client,
-				custom_registration_payload_property,
-				NULL,
-				mqtt_payload,
-				sizeof(mqtt_payload),
-				&mqtt_payload_length);
-	if (az_result_failed(rc))
-	{
-		IOT_SAMPLE_LOG_ERROR(
-			"Failed to initialize provisioning client: az_result return code 0x%08x.", rc);
-		exit(rc);
-	}
 
 	struct mqtt_message	msg;
 	uint32_t		len;
@@ -542,8 +503,6 @@ int main()
 	status = socket_connect(sock, &mqtt_broker_addr);
 	if (NO_OS_IS_ERR_VALUE(status))
 		PRINT_ERR_AND_RET("Error socket_connect", status);
-	// At this point you are free to use my_mqtt_client_id and my_mqtt_user_name to connect using
-	// your MQTT client.
 
 	mqtt_init_param = (struct mqtt_init_param) {
 		.timer_id = TIMER_ID,
@@ -560,6 +519,8 @@ int main()
 	status = mqtt_init(&mqtt, &mqtt_init_param);
 	if (NO_OS_IS_ERR_VALUE(status))
 		PRINT_ERR_AND_RET("Error mqtt_init", status);
+
+	create_and_configure_mqtt_client_for_iot_hub();
 
 	conn_config = (struct mqtt_connect_config) {
 		.version = MQTT_CONFIG_VERSION,
@@ -581,9 +542,7 @@ int main()
 		PRINT_ERR_AND_RET("Error mqtt_subscribe", status);
 	printf("Subscribed to topic: %s\n", AZ_IOT_HUB_CLIENT_TWIN_RESPONSE_SUBSCRIBE_TOPIC);
 
-	az_iot_hub_client_properties_get_reported_publish_topic(&my_client, my_request_id, reported_topic, sizeof(reported_topic), NULL);
 	uint8_t			twin_buff[100];
-	
 	len = sprintf(twin_buff, "{\"key\":\"value\"}");
 
 	msg = (struct mqtt_message) {
