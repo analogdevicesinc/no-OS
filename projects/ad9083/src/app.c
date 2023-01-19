@@ -199,7 +199,7 @@ int main(void)
 			       &ad9083_iio_descriptor, NULL, NULL)
 	};
 
-	status = iio_app_run(devices, 2);
+	status = iio_app_run(NULL, 0, devices, 2);
 	if (status != 0)
 		pr_err("error: %"PRIi32" iio_app_run()\n", status);
 

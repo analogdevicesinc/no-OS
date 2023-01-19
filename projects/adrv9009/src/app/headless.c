@@ -118,7 +118,7 @@ int32_t start_iiod(struct axi_dmac *rx_dmac, struct axi_dmac *tx_dmac,
 #endif
 	};
 
-	return iio_app_run(devices, NO_OS_ARRAY_SIZE(devices));
+	return iio_app_run(NULL, 0, devices, NO_OS_ARRAY_SIZE(devices));
 }
 
 #endif // IIO_SUPPORT

@@ -117,6 +117,6 @@ int iio_sw_trigger_example_main()
 				&dac_iio_sw_trig_desc),
 	};
 
-	return iio_app_run_with_trigs(devices, NO_OS_ARRAY_SIZE(devices),
+	return iio_app_run_with_trigs(NULL, 0, devices, NO_OS_ARRAY_SIZE(devices),
 				      trigs, NO_OS_ARRAY_SIZE(trigs), NULL, &iio_desc);
 }

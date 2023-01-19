@@ -200,7 +200,7 @@ int main()
 		}
 	};
 
-	ret = iio_app_run(iio_devices, NO_OS_ARRAY_SIZE(iio_devices));
+	ret = iio_app_run(NULL, 0, iio_devices, NO_OS_ARRAY_SIZE(iio_devices));
 error:
 	ad413x_iio_remove(adciio);
 	return ret;

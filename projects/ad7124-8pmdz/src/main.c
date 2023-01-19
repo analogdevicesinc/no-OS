@@ -139,6 +139,6 @@ int main(void)
 			       &iio_ad7124_read_buff, NULL)
 	};
 
-	return iio_app_run(devices, NUMBER_OF_DEVICES);
+	return iio_app_run(NULL, 0, devices, NUMBER_OF_DEVICES);
 }
 
