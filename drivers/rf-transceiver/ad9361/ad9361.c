@@ -753,6 +753,7 @@ int32_t ad9361_spi_read(struct no_os_spi_desc *spi, uint32_t reg)
  * IIO SPI register read.
  * @param phy The AD9361 state structure.
  * @param reg The register address.
+ * @param val The value read from register address.
  * @return The register value or negative error code in case of failure.
  */
 int32_t ad9361_reg_read(struct ad9361_rf_phy *phy, uint32_t reg, uint32_t *val)
