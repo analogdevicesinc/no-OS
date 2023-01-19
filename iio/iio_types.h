@@ -125,17 +125,6 @@ enum iio_attribute_shared {
 };
 
 /**
- * @struct iio_context_attribute
- * @brief Structure holding the context attribute members
- */
-struct iio_context_attribute {
-	/** Attribute name */
-	const char *name;
-	/** Attribute value */
-	const char *value;
-};
-
-/**
  * @struct iio_attribute
  * @brief Structure holding pointers to show and store functions.
  */

@@ -133,7 +133,7 @@ int main(void)
 	ch.ch_num = 8;
 	set_pwm_attr(&g_aducm3029_desc, "1", 1, &ch, PWM_ENABLE);
 
-	return iio_app_run(devices, NO_OS_ARRAY_SIZE(devices));
+	return iio_app_run(NULL, 0, devices, NO_OS_ARRAY_SIZE(devices));
 #endif
 
 	struct adc_init_param	adc_init_param = {0};

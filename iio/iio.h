@@ -86,8 +86,15 @@ struct iio_trigger_init {
 	struct iio_trigger *descriptor;
 };
 
-struct iio_cntx_attr_init {
-	struct iio_context_attribute *descriptor;
+/**
+ * @struct iio_ctx_attr
+ * @brief Structure holding the context attribute members
+ */
+struct iio_ctx_attr {
+	/** Attribute name */
+	const char *name;
+	/** Attribute value */
+	const char *value;
 };
 
 struct iio_init_param {
@@ -98,8 +105,8 @@ struct iio_init_param {
 		struct tcp_socket_init_param *tcp_socket_init_param;
 #endif
 	};
-	struct iio_cntx_attr_init *cntx_attrs;
-	uint32_t nb_cntx_attrs;
+	struct iio_ctx_attr *ctx_attrs;
+	uint32_t nb_ctx_attr;
 	struct iio_device_init *devs;
 	uint32_t nb_devs;
 	struct iio_trigger_init *trigs;

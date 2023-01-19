@@ -312,7 +312,7 @@ int main()
 
 	};
 
-	return iio_app_run(devices, NO_OS_ARRAY_SIZE(devices));
+	return iio_app_run(NULL, 0, devices, NO_OS_ARRAY_SIZE(devices));
 
 #endif /* IIO_SUPPORT */
 

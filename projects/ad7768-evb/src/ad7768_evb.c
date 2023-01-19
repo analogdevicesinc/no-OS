@@ -334,7 +334,7 @@ int main(void)
 			       &read_buff, NULL),
 	};
 
-	return iio_app_run(devs, NO_OS_ARRAY_SIZE(devs));
+	return iio_app_run(NULL, 0, devs, NO_OS_ARRAY_SIZE(devs));
 #endif
 
 	/* Disable the instruction cache. */
