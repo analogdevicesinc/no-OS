@@ -26,6 +26,10 @@ INCLUDE			?= $(NO-OS)/include
 DRIVERS 		?= $(NO-OS)/drivers
 PLATFORM_DRIVERS	?= $(NO-OS)/drivers/platform/$(PLATFORM)
 
+GIT_VERSION := $(shell git describe --all --long --dirty=-modified)
+GIT_VERSION := $(subst heads/,,$(GIT_VERSION))
+GIT_VERSION := $(subst -0-g,-,$(GIT_VERSION))
+CFLAGS += -D NO_OS_VERSION=\"$(GIT_VERSION)\"
 #------------------------------------------------------------------------------
 #                          EVALUATE PLATFORM
 #------------------------------------------------------------------------------
