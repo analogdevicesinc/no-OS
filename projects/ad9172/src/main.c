@@ -69,6 +69,8 @@
 
 int main(void)
 {
+	struct axi_dac_channel channel_data[8] = {};
+
 	struct xil_spi_init_param xil_spi_param = {
 		.type = SPI_PS,
 		.flags = 0
@@ -84,10 +86,10 @@ int main(void)
 	};
 
 	struct hmc7044_chan_spec chan_spec[4] = {
-		{.disable = 0, .num = 2, .divider = 8, .driver_mode = 1},		/* DAC_CLK */
-		{.disable = 0, .num = 3, .divider = 512, .driver_mode = 1},		/* DAC_SYSREF */
-		{.disable = 0, .num = 12, .divider = 8, .driver_mode = 2},		/* FPGA_CLK */
-		{.disable = 0, .num = 13, .divider = 512, .driver_mode = 2},	/* FPGA_SYSREF */
+		{.disable = 0, .num = 2, .divider = 8, .driver_mode = 1},	/*  DAC_CLK */
+		{.disable = 0, .num = 3, .divider = 384, .driver_mode = 1},	/*  DAC_SYSREF */
+		{.disable = 0, .num = 12, .divider = 6, .driver_mode = 2},	/*  FPGA_CLK */
+		{.disable = 0, .num = 13, .divider = 384, .driver_mode = 2}, /* FPGA_SYSREF */
 	};
 
 	struct hmc7044_init_param hmc7044_param = {
@@ -108,16 +110,16 @@ int main(void)
 	struct jesd204_tx_init tx_jesd_init = {
 		.name = "tx_jesd",
 		.base = TX_JESD_BASEADDR,
-		.octets_per_frame = 2,
+		.octets_per_frame = 1,
 		.frames_per_multiframe = 32,
-		.converters_per_device = 4,
+		.converters_per_device = 2,
 		.converter_resolution = 16,
 		.bits_per_sample = 16,
-		.high_density = false,
+		.high_density = true,
 		.control_bits_per_sample = 0,
 		.subclass = 1,
-		.device_clk_khz = 184320,	/* (lane_clk_khz / 40) */
-		.lane_clk_khz = 7372800,	/* LaneRate = ( M/L)*NP*(10/8)*DataRate */
+		.device_clk_khz = 245760, /* (lane_clk_khz / 40) */
+		.lane_clk_khz = 9830400, /*  LaneRate = ( M/L)*NP*(10/8)*DataRate */
 	};
 
 	struct adxcvr_init tx_adxcvr_init = {
@@ -126,8 +128,8 @@ int main(void)
 		.sys_clk_sel = ADXCVR_SYS_CLK_QPLL0,
 		.out_clk_sel = ADXCVR_REFCLK_DIV2,
 		.lpm_enable = 1,
-		.lane_rate_khz = 7372800,	/* LaneRate = ( M/L)*NP*(10/8)*DataRate */
-		.ref_rate_khz = 368640,		/* FPGA_CLK, output 12 of HMC 7044 */
+		.lane_rate_khz = 9830400, /* LaneRate = ( M/L)*NP*(10/8)*DataRate */
+		.ref_rate_khz = 491520,  /* FPGA_CLK, output 12 of HMC 7044 */
 	};
 
 	struct no_os_spi_init_param ad9172_spi_param = {
@@ -159,12 +161,12 @@ int main(void)
 			.platform_ops = &xil_gpio_ops,
 			.extra = &xilinx_gpio_init_param
 		},
-		.dac_rate_khz = 11796480,		/* or sample rate */
-		.dac_clkin_Hz = 368640000,		/* DAC_CLK, output 2 of HMC 7044 */
-		.jesd_link_mode = 4,
+		.dac_rate_khz = 11796480, /*  or sample rate */
+		.dac_clkin_Hz = 368640000, /* DAC_CLK, output 2 of HMC 7044 */
+		.jesd_link_mode = 8,
 		.jesd_subclass = 1,
-		.dac_interpolation = 8,
-		.channel_interpolation = 4,
+		.dac_interpolation = 12,
+		.channel_interpolation = 1,
 		.clock_output_config = 4,
 		.syncoutb_type = SIGNAL_LVDS,
 		.sysref_coupling = COUPLING_AC,
@@ -173,9 +175,90 @@ int main(void)
 	struct axi_dac_init tx_dac_init = {
 		"tx_dac",
 		TX_CORE_BASEADDR,
-		4,
-		NULL
+		8,
+		channel_data,
+		//NULL
 	};
+
+	channel_data[0].dds_frequency_0 = 10000000;
+	channel_data[0].dds_phase_0 = 90000;
+	channel_data[0].dds_scale_0 = 500000;
+	channel_data[0].dds_frequency_1 = 20000000;
+	channel_data[0].dds_phase_1 = 90000;
+	channel_data[0].dds_scale_1 = 500000;
+	channel_data[0].dds_dual_tone = 1;
+	channel_data[0].pat_data = 0;
+	channel_data[0].sel = AXI_DAC_DATA_SEL_DDS;
+
+	channel_data[1].dds_frequency_0 = 30000000;
+	channel_data[1].dds_phase_0 = 90000;
+	channel_data[1].dds_scale_0 = 500000;
+	channel_data[1].dds_frequency_1 = 40000000;
+	channel_data[1].dds_phase_1 = 90000;
+	channel_data[1].dds_scale_1 = 500000;
+	channel_data[1].dds_dual_tone = 1;
+	channel_data[1].pat_data = 0;
+	channel_data[1].sel = AXI_DAC_DATA_SEL_DDS;
+
+	channel_data[2].dds_frequency_0 = 10000000;
+	channel_data[2].dds_phase_0 = 90000;
+	channel_data[2].dds_scale_0 = 500000;
+	channel_data[2].dds_frequency_1 = 20000000;
+	channel_data[2].dds_phase_1 = 90000;
+	channel_data[2].dds_scale_1 = 500000;
+	channel_data[2].dds_dual_tone = 1;
+	channel_data[2].pat_data = 0;
+	channel_data[2].sel = AXI_DAC_DATA_SEL_DDS;
+
+	channel_data[3].dds_frequency_0 = 30000000;
+	channel_data[3].dds_phase_0 = 90000;
+	channel_data[3].dds_scale_0 = 500000;
+	channel_data[3].dds_frequency_1 = 40000000;
+	channel_data[3].dds_phase_1 = 90000;
+	channel_data[3].dds_scale_1 = 500000;
+	channel_data[3].dds_dual_tone = 1;
+	channel_data[3].pat_data = 0;
+	channel_data[3].sel = AXI_DAC_DATA_SEL_DDS;
+
+	channel_data[4].dds_frequency_0 = 10000000;
+	channel_data[4].dds_phase_0 = 90000;
+	channel_data[4].dds_scale_0 = 500000;
+	channel_data[4].dds_frequency_1 = 20000000;
+	channel_data[4].dds_phase_1 = 90000;
+	channel_data[4].dds_scale_1 = 500000;
+	channel_data[4].dds_dual_tone = 1;
+	channel_data[4].pat_data = 0;
+	channel_data[4].sel = AXI_DAC_DATA_SEL_DDS;
+
+	channel_data[5].dds_frequency_0 = 30000000;
+	channel_data[5].dds_phase_0 = 90000;
+	channel_data[5].dds_scale_0 = 500000;
+	channel_data[5].dds_frequency_1 = 40000000;
+	channel_data[5].dds_phase_1 = 90000;
+	channel_data[5].dds_scale_1 = 500000;
+	channel_data[5].dds_dual_tone = 1;
+	channel_data[5].pat_data = 0;
+	channel_data[5].sel = AXI_DAC_DATA_SEL_DDS;
+
+	channel_data[6].dds_frequency_0 = 10000000;
+	channel_data[6].dds_phase_0 = 90000;
+	channel_data[6].dds_scale_0 = 500000;
+	channel_data[6].dds_frequency_1 = 20000000;
+	channel_data[6].dds_phase_1 = 90000;
+	channel_data[6].dds_scale_1 = 500000;
+	channel_data[6].dds_dual_tone = 1;
+	channel_data[6].pat_data = 0;
+	channel_data[6].sel = AXI_DAC_DATA_SEL_DDS;
+
+	channel_data[7].dds_frequency_0 = 30000000;
+	channel_data[7].dds_phase_0 = 90000;
+	channel_data[7].dds_scale_0 = 500000;
+	channel_data[7].dds_frequency_1 = 40000000;
+	channel_data[7].dds_phase_1 = 90000;
+	channel_data[7].dds_scale_1 = 500000;
+	channel_data[7].dds_dual_tone = 1;
+	channel_data[7].pat_data = 0;
+	channel_data[7].sel = AXI_DAC_DATA_SEL_DDS;
 
 #ifdef DAC_DMA_EXAMPLE
 	struct axi_dmac_init tx_dmac_init = {
@@ -278,41 +361,41 @@ int main(void)
 	Xil_DCacheInvalidateRange((uintptr_t)DDR_MEM_BASEADDR,
 				  sizeof(sine_lut_iq) * (tx_dac->num_channels / 2));
 #else /* DAC_DMA_EXAMPLE */
-	printf("Set dds frequency at 40MHz\n");
+	// printf("Set dds frequency at 10MHz\n");
 
-	axi_dac_dds_set_frequency(tx_dac, 0, 40000000);	/* TX1_I_F1 */
-	axi_dac_dds_set_frequency(tx_dac, 1, 40000000);	/* TX1_I_F2 */
-	axi_dac_dds_set_frequency(tx_dac, 2, 40000000);	/* TX1_Q_F1 */
-	axi_dac_dds_set_frequency(tx_dac, 3, 40000000);	/* TX1_Q_F2 */
+	// axi_dac_dds_set_frequency(tx_dac, 0, 10000000);	/* TX1_I_F1 */
+	// axi_dac_dds_set_frequency(tx_dac, 1, 10000000);	/* TX1_I_F2 */
+	// axi_dac_dds_set_frequency(tx_dac, 2, 10000000);	/* TX1_Q_F1 */
+	// axi_dac_dds_set_frequency(tx_dac, 3, 10000000);	/* TX1_Q_F2 */
 
-	axi_dac_dds_set_frequency(tx_dac, 4, 40000000); /* TX2_I_F1 */
-	axi_dac_dds_set_frequency(tx_dac, 5, 40000000); /* TX2_I_F2 */
-	axi_dac_dds_set_frequency(tx_dac, 6, 40000000); /* TX2_Q_F1 */
-	axi_dac_dds_set_frequency(tx_dac, 7, 40000000); /* TX2_Q_F2 */
-
-
-	axi_dac_dds_set_scale(tx_dac, 0, 250000);
-	axi_dac_dds_set_scale(tx_dac, 1, 250000);
-	axi_dac_dds_set_scale(tx_dac, 2, 250000);
-	axi_dac_dds_set_scale(tx_dac, 3, 250000);
-
-	axi_dac_dds_set_scale(tx_dac, 4, 250000);
-	axi_dac_dds_set_scale(tx_dac, 5, 250000);
-	axi_dac_dds_set_scale(tx_dac, 6, 250000);
-	axi_dac_dds_set_scale(tx_dac, 7, 250000);
+	// axi_dac_dds_set_frequency(tx_dac, 4, 10000000); /* TX2_I_F1 */
+	// axi_dac_dds_set_frequency(tx_dac, 5, 10000000); /* TX2_I_F2 */
+	// axi_dac_dds_set_frequency(tx_dac, 6, 10000000); /* TX2_Q_F1 */
+	// axi_dac_dds_set_frequency(tx_dac, 7, 10000000); /* TX2_Q_F2 */
 
 
-	axi_dac_dds_set_phase(tx_dac, 0, 90000);
-	axi_dac_dds_set_phase(tx_dac, 1, 90000);
-	axi_dac_dds_set_phase(tx_dac, 2, 0);
-	axi_dac_dds_set_phase(tx_dac, 3, 0);
+	// axi_dac_dds_set_scale(tx_dac, 0, 500000);
+	// axi_dac_dds_set_scale(tx_dac, 1, 500000);
+	// axi_dac_dds_set_scale(tx_dac, 2, 500000);
+	// axi_dac_dds_set_scale(tx_dac, 3, 500000);
 
-	axi_dac_dds_set_phase(tx_dac, 4, 90000);
-	axi_dac_dds_set_phase(tx_dac, 5, 90000);
-	axi_dac_dds_set_phase(tx_dac, 6, 0);
-	axi_dac_dds_set_phase(tx_dac, 7, 0);
+	// axi_dac_dds_set_scale(tx_dac, 4, 500000);
+	// axi_dac_dds_set_scale(tx_dac, 5, 500000);
+	// axi_dac_dds_set_scale(tx_dac, 6, 500000);
+	// axi_dac_dds_set_scale(tx_dac, 7, 500000);
 
-	axi_dac_set_datasel(tx_dac, -1, AXI_DAC_DATA_SEL_DDS);
+
+	// axi_dac_dds_set_phase(tx_dac, 0, 90000);
+	// axi_dac_dds_set_phase(tx_dac, 1, 90000);
+	// axi_dac_dds_set_phase(tx_dac, 2, 0);
+	// axi_dac_dds_set_phase(tx_dac, 3, 0);
+
+	// axi_dac_dds_set_phase(tx_dac, 4, 90000);
+	// axi_dac_dds_set_phase(tx_dac, 5, 90000);
+	// axi_dac_dds_set_phase(tx_dac, 6, 0);
+	// axi_dac_dds_set_phase(tx_dac, 7, 0);
+
+	// axi_dac_set_datasel(tx_dac, -1, AXI_DAC_DATA_SEL_DDS);
 #endif /* DAC_DMA_EXAMPLE */
 
 #ifdef IIO_SUPPORT

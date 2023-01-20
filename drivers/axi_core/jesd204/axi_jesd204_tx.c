@@ -421,6 +421,10 @@ int32_t axi_jesd204_tx_init(struct axi_jesd204_tx **jesd204,
 
 	axi_jesd204_tx_read(jesd, JESD204_TX_REG_SYNTH_REG_1,
 			    &synth_1);
+	
+	printf("Number of lanes: %"PRIu32"\n", jesd->num_lanes);
+	printf("Number of links: %"PRIu32"\n", (synth_1 & 0xFF));
+
 	jesd->encoder = JESD204_TX_ENCODER_GET(synth_1);
 	if (jesd->encoder == JESD204_TX_ENCODER_UNKNOWN)
 		jesd->encoder = JESD204_TX_ENCODER_8B10B;

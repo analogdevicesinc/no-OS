@@ -343,6 +343,8 @@ int32_t ad9172_init(ad9172_dev **device,
 	st->clock_output_config = init_param->clock_output_config;
 	st->syncoutb_type = init_param->syncoutb_type;
 	st->sysref_coupling = init_param->sysref_coupling;
+	//Note: Hardcoded dual link
+	st->jesd_dual_link_mode = 1;
 
 	st->dac_h.user_data = dev->spi_desc;
 	st->dac_h.sdo = SPI_SDO;
