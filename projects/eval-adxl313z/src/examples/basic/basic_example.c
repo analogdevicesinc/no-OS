@@ -62,10 +62,10 @@ int basic_example_main()
 	int ret = -EINVAL;
 
 	/* Clear the screen. */
-	pr_info("%c",27);
-	pr_info("%c",'[');
-	pr_info("%c",'2');
-	pr_info("%c",'J');
+	printf("%c",27);
+	printf("%c",'[');
+	printf("%c",'2');
+	printf("%c",'J');
 
 	/* Initialize component. */
 	ret = adxl313_init(&adxl313, adxl313_user_init);
@@ -158,10 +158,10 @@ int basic_example_main()
 
 	while(1) {
 		/* Clear the screen. */
-		pr_info("%c",27);
-		pr_info("%c",'[');
-		pr_info("%c",'2');
-		pr_info("%c",'J');
+		printf("%c",27);
+		printf("%c",'[');
+		printf("%c",'2');
+		printf("%c",'J');
 
 		pr_info("Single read raw data:\n");
 		ret = adxl313_get_raw_xyz(adxl313,&x_raw, &y_raw, &z_raw);
