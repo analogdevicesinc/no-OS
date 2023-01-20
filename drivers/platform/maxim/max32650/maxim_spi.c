@@ -152,7 +152,7 @@ static int32_t _max_spi_config_pins(struct no_os_spi_desc *desc)
 	}
 
 	spi_pins.vssel = st->init_param->vssel;
-	spi_pins.cs = st->init_param->vssel;
+	cs.vssel = st->init_param->vssel;
 	MXC_GPIO_Config(&spi_pins);
 	MXC_GPIO_Config(&cs);
 
