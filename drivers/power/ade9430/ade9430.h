@@ -878,9 +878,9 @@ struct ade9430_init_param {
 struct ade9430_dev {
 	/** Device communication descriptor */
 	struct no_os_spi_desc		*spi_desc;
-	uint32_t			awatt_acc;
-	uint32_t			awatthr;
-	uint32_t			awatt;
+	float				awatt;
+	float				airms;
+	float				avrms;
 };
 
 /******************************************************************************/

@@ -130,7 +130,7 @@ int32_t read_and_send(struct mqtt_desc *mqtt, struct ade9430_dev *ade9430_dev, s
 		return ret;
 
 	/* Serialize data */
-	len = sprintf(buff, "ADE9430 Temp: %d; AWATT_ACC: %u; AWATTHR: %llu", temp, ade9430_dev->awatt_acc, ade9430_dev->awatthr);
+	len = sprintf(buff, "Temp: %d; AIRMS: %.2f; AVRMS: %.2f; AWATT: %.2f", temp, ade9430_dev->airms, ade9430_dev->avrms, ade9430_dev->awatt);
 
 	ret = nhd_c12832a1z_print_string(nhd_c12832a1z_dev, buff, len);
 	if (ret)

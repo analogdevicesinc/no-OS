@@ -256,20 +256,25 @@ int ade9430_read_watt(struct ade9430_dev *dev)
 {
 	int ret;
 	uint32_t temp;
+	float watt_comp;
 
-	no_os_mdelay(1000);
-
-	ret = ade9430_read(dev, ADE9430_REG_AWATT, &dev->awatt);
+	ret = ade9430_read(dev, ADE9430_REG_AIRMS, &temp);
 	if (ret)
 		return ret;
 
-	ret = ade9430_read(dev, ADE9430_REG_AFWATTHR_HI, &dev->awatthr);
+	dev->airms = (float)(temp * 4.018) / 1000000;
+
+	ret = ade9430_read(dev, ADE9430_REG_AVRMS, &temp);
 	if (ret)
 		return ret;
 
-	ret = ade9430_read(dev, ADE9430_REG_AWATT_ACC, &dev->awatt_acc);
+	dev->avrms = (float)(temp * 13.357) / 1000000;
+
+	ret = ade9430_read(dev, ADE9430_REG_AWATTHR_HI, &temp);
 	if (ret)
 		return ret;
+
+	dev->awatt = (float)(temp * 7.203) / 1000;
 
 	return 0;
 }
