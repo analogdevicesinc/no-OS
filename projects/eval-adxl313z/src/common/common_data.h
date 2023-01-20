@@ -58,10 +58,6 @@ extern struct no_os_uart_init_param uip;
 extern struct no_os_spi_init_param sip;
 extern struct adxl313_init_param adxl313_user_init;
 
-#ifdef BASIC_EXAMPLE
-#define UART_BAUD_RATE			115200
-#endif
-
 #define SPI_MAX_HZ			4000000
 
 #endif /* __COMMON_DATA_H__ */

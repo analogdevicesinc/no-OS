@@ -48,7 +48,7 @@
 #ifdef BASIC_EXAMPLE
 struct no_os_uart_init_param uip = {
 	.device_id = UART_DEVICE_ID,
-	.baud_rate = UART_BAUD_RATE,
+	.baud_rate = UART_BAUDRATE,
 	.size = NO_OS_UART_CS_8,
 	.parity = NO_OS_UART_PAR_NO,
 	.stop = NO_OS_UART_STOP_1_BIT,
