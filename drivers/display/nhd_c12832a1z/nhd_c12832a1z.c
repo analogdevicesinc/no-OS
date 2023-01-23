@@ -351,18 +351,30 @@ int nhd_c12832a1z_print_string(struct nhd_c12832a1z_dev *dev, char *msg, int len
 	uint8_t framebuffer_memory[4][128] = { 0 };
 
 	int32_t count = len;
-	int32_t t_cursor = 0;
+	int32_t t_cursor = 0, k = 1;
+	int x = 0, y = 0;
+	char chr;
 
 	if ((t_cursor + count) > 128)
 		count = 128 - t_cursor;
 
 	for (int j = 0; j < count; ++j) {
 		int cursor = (t_cursor + j) % 64;
-		int y = cursor >> 4; // page
-		int x = (cursor & 0xf) << 3; // segment
+
+		if (msg[cursor] == '\n')
+			chr = ' ';
+		else
+			chr = msg[cursor];
 
 		for (int i = 0; i < 8; i++)
-			framebuffer_memory[y][x+i] = ASC16[msg[cursor]][i];
+			framebuffer_memory[y][x+i] = ASC16[chr][i];
+
+		if (msg[cursor] == '\n') {
+			y++; // page
+			x = 0; // segment
+		} else {
+			x += 8;
+		}
 	}
 
 
