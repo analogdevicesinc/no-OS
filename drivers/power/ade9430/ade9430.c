@@ -216,7 +216,7 @@ error_dev:
  * @param temp_deg - The temperature value in degree celsius.
  * @return 0 in case of success, negative error code otherwise.
  */
-int ade9430_read_temp(struct ade9430_dev *dev, int *temp_deg)
+int ade9430_read_temp(struct ade9430_dev *dev)
 {
 	int ret;
 	uint32_t temp_raw, temp, gain, offset;
@@ -241,7 +241,7 @@ int ade9430_read_temp(struct ade9430_dev *dev, int *temp_deg)
 	gain = no_os_field_get(ADE9430_TEMP_GAIN, temp);
 	offset = no_os_field_get(ADE9430_TEMP_OFFSET, temp);
 
-	*temp_deg = temp_raw * (((-1000) * (int64_t)gain / 65536)) / 1000 + (offset / 32);
+	dev->temp_deg = temp_raw * (((-1000) * ((float)gain / 65536))) / 1000 + ((float)offset / 32);
 
 	return 0;
 }

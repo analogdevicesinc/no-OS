@@ -119,9 +119,9 @@ int32_t read_and_send(struct mqtt_desc *mqtt, struct ade9430_dev *ade9430_dev, s
 	struct mqtt_message	msg;
 	uint8_t			buff[100];
 	uint32_t		len;
-	int			ret, temp;
+	int			ret;
 
-	ret = ade9430_read_temp(ade9430_dev, &temp);
+	ret = ade9430_read_temp(ade9430_dev);
 	if (ret)
 		return ret;
 
@@ -130,7 +130,7 @@ int32_t read_and_send(struct mqtt_desc *mqtt, struct ade9430_dev *ade9430_dev, s
 		return ret;
 
 	/* Serialize data */
-	len = sprintf(buff, "Temp: %d\nAIRMS: %.2f\nAVRMS: %.2f\nAWATT: %.2f", temp, ade9430_dev->airms, ade9430_dev->avrms, ade9430_dev->awatt);
+	len = sprintf(buff, "Temp: %.2f\nAIRMS: %.2f\nAVRMS: %.2f\nAWATT: %.2f", ade9430_dev->temp_deg, ade9430_dev->airms, ade9430_dev->avrms, ade9430_dev->awatt);
 
 	ret = nhd_c12832a1z_print_string(nhd_c12832a1z_dev, buff, len);
 	if (ret)
@@ -244,6 +244,10 @@ int main()
 	struct ade9430_dev *ade9430_device;
 
 	ret = ade9430_init(&ade9430_device, ade9430_ip);
+	if (ret)
+		return ret;
+
+	ret = ade9430_read_temp(ade9430_device);
 	if (ret)
 		return ret;
 

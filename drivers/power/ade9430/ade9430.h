@@ -881,6 +881,7 @@ struct ade9430_dev {
 	float				awatt;
 	float				airms;
 	float				avrms;
+	float				temp_deg;
 };
 
 /******************************************************************************/
@@ -904,7 +905,7 @@ int ade9430_init(struct ade9430_dev **device,
 		 struct ade9430_init_param init_param);
 
 /* Read temperature */
-int ade9430_read_temp(struct ade9430_dev *dev, int *temp_deg);
+int ade9430_read_temp(struct ade9430_dev *dev);
 
 /* Read Energy/Power */
 int ade9430_read_watt(struct ade9430_dev *dev);
