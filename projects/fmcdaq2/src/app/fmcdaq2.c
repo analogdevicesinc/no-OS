@@ -78,6 +78,10 @@
 #include "iio_ad9144.h"
 #endif
 
+#ifdef JESD_FSM_ON
+#include "no_os_print_log.h"
+#include "jesd204.h"
+#endif
 struct fmcdaq2_dev {
 	struct ad9523_dev *ad9523_device;
 	struct ad9144_dev *ad9144_device;
@@ -104,6 +108,30 @@ struct fmcdaq2_dev {
 	struct axi_dmac *ad9680_dmac;
 } fmcdaq2;
 
+#ifdef JESD_FSM_ON
+struct link_init_param {
+	uint32_t	link_id;
+	uint32_t	device_id;
+	uint32_t	octets_per_frame;
+	uint32_t	frames_per_multiframe;
+	uint32_t	samples_per_converter_per_frame;
+	uint32_t	high_density;
+	uint8_t		scrambling;
+	uint32_t	converter_resolution;
+	uint32_t	bits_per_sample;
+	uint32_t	converters_per_device;
+	uint32_t	control_bits_per_sample;
+	uint32_t	lanes_per_device;
+	uint32_t	subclass;
+	uint32_t	version;
+	uint8_t		logical_lane_mapping[8];
+	/* JTX */
+	uint8_t		link_converter_select[16];
+	/* JRX */
+	uint32_t	tpl_phase_adjust;
+};
+#endif
+
 struct fmcdaq2_init_param {
 	struct ad9523_init_param ad9523_param;
 	struct ad9144_init_param ad9144_param;
@@ -121,6 +149,11 @@ struct fmcdaq2_init_param {
 
 	struct axi_dmac_init ad9144_dmac_param;
 	struct axi_dmac_init ad9680_dmac_param;
+
+#ifdef JESD_FSM_ON
+	struct link_init_param	jrx_link_tx;
+	struct link_init_param	jtx_link_rx;
+#endif
 } fmcdaq2_init;
 
 static int fmcdaq2_gpio_init(struct fmcdaq2_dev *dev)
@@ -383,7 +416,7 @@ static int fmcdaq2_jesd_init(struct fmcdaq2_init_param *dev_init)
 		.octets_per_frame = 1,
 		.frames_per_multiframe = 32,
 		.converters_per_device = 2,
-		.converter_resolution = 16,
+		.converter_resolution = 14,
 		.bits_per_sample = 16,
 		.high_density = false,
 		.control_bits_per_sample = 0,
@@ -400,6 +433,44 @@ static int fmcdaq2_jesd_init(struct fmcdaq2_init_param *dev_init)
 		.device_clk_khz = 10000000/40,
 		.lane_clk_khz = 10000000
 	};
+
+#ifdef JESD_FSM_ON
+	struct link_init_param jrx_link_tx = {
+		.link_id = 1,
+		.device_id = 0,
+		.octets_per_frame = 1,
+		.frames_per_multiframe = 32,
+		.samples_per_converter_per_frame = 1,
+		.scrambling = 0,
+		.high_density = 0,
+		.converter_resolution = 14,
+		.bits_per_sample = 16,
+		.converters_per_device = 2,
+		.control_bits_per_sample = 2,
+		.lanes_per_device = 4,
+		.subclass = 1,
+		.version = 2,
+	};
+	struct link_init_param jtx_link_rx = {
+		.link_id = 2,
+		.device_id = 0,
+		.octets_per_frame = 1,
+		.frames_per_multiframe = 32,
+		.samples_per_converter_per_frame = 1,
+		.scrambling = 1,
+		.high_density = 1,
+		.converter_resolution = 14,
+		.bits_per_sample = 16,
+		.converters_per_device = 2,
+		.control_bits_per_sample = 2,
+		.lanes_per_device = 4,
+		.subclass = 1,
+		.version = 2,
+	};
+
+	fmcdaq2_init.jtx_link_rx = jtx_link_rx;
+	fmcdaq2_init.jrx_link_tx = jrx_link_tx;
+#endif
 
 	return 0;
 }
@@ -462,6 +533,15 @@ static int fmcdaq2_trasnceiver_setup(struct fmcdaq2_dev *dev,
 {
 	int status;
 
+#ifdef JESD_FSM_ON
+	status = axi_jesd204_tx_init_jesd_fsm(&dev->ad9144_jesd,
+					      &dev_init->ad9144_jesd_param);
+	if (status) {
+		printf("error: %s: axi_jesd204_tx_init_jesd_fsm() failed\n",
+		       dev_init->ad9144_jesd_param.name);
+		return status;
+	}
+#else
 	status = axi_jesd204_tx_init(&dev->ad9144_jesd, &dev_init->ad9144_jesd_param);
 	if (status != 0) {
 		printf("error: %s: axi_jesd204_tx_init() failed\n",
@@ -475,6 +555,7 @@ static int fmcdaq2_trasnceiver_setup(struct fmcdaq2_dev *dev,
 		       dev->ad9144_jesd->name);
 		return status;
 	}
+#endif
 
 	status = adxcvr_init(&dev->ad9144_xcvr, &dev_init->ad9144_xcvr_param);
 	if (status != 0) {
@@ -501,6 +582,15 @@ static int fmcdaq2_trasnceiver_setup(struct fmcdaq2_dev *dev,
 		return status;
 	}
 #endif
+#ifdef JESD_FSM_ON
+	status = axi_jesd204_rx_init_jesd_fsm(&dev->ad9680_jesd,
+					      &dev_init->ad9680_jesd_param);
+	if (status) {
+		printf("error: %s: axi_jesd204_rx_init_jesd_fsm() failed\n",
+		       dev_init->ad9680_jesd_param.name);
+		return status;
+	}
+#else
 	status = axi_jesd204_rx_init(&dev->ad9680_jesd, &dev_init->ad9680_jesd_param);
 	if (status != 0) {
 		printf("error: %s: axi_jesd204_rx_init() failed\n",
@@ -514,6 +604,7 @@ static int fmcdaq2_trasnceiver_setup(struct fmcdaq2_dev *dev,
 		       dev->ad9680_jesd->name);
 		return status;
 	}
+#endif
 
 	return status;
 }
@@ -593,9 +684,9 @@ static int fmcdaq2_dac_init(struct fmcdaq2_dev *dev,
 	};
 
 	for(uint32_t n=0;
-	    n < NO_OS_ARRAY_SIZE(dev_init->ad9144_param.jesd204_lane_xbar);
+	    n < NO_OS_ARRAY_SIZE(dev_init->ad9144_param.lane_mux);
 	    n++)
-		dev_init->ad9144_param.jesd204_lane_xbar[n] = n;
+		dev_init->ad9144_param.lane_mux[n] = n;
 
 	dev_init->ad9144_param.stpl_samples[0][0] =
 		(dev->ad9144_channels[0].pat_data >> 0)  & 0xffff;
@@ -930,9 +1021,18 @@ static int fmcdaq2_setup(struct fmcdaq2_dev *dev,
 	};
 
 	dev_init->ad9680_param.lane_rate_kbps = 10000000;
+	dev_init->ad9680_param.dcm = 1; // from devicetree
+	dev_init->ad9680_param.sampling_frequency_hz = 1000000000;
+	dev_init->ad9680_param.sysref_mode = 1; // From devicetree
 	dev_init->ad9144_param.lane_rate_kbps = 10000000;
 	dev_init->ad9144_param.spi3wire = 1;
+#ifdef JESD_FSM_ON
+	dev_init->ad9144_param.num_converters =
+		fmcdaq2_init.jtx_link_rx.converters_per_device;
+	dev_init->ad9144_param.num_lanes = fmcdaq2_init.jtx_link_rx.lanes_per_device;
+#endif
 	dev_init->ad9144_param.interpolation = 1;
+	dev_init->ad9144_param.fcenter_shift = 0;
 	dev_init->ad9144_param.pll_enable = 0;
 	dev_init->ad9144_param.jesd204_subclass = 1;
 	dev_init->ad9144_param.jesd204_scrambling = 1;
@@ -980,21 +1080,109 @@ static int fmcdaq2_setup(struct fmcdaq2_dev *dev,
 	if (status != 0)
 		return status;
 
+#ifdef JESD_FSM_ON
+	status = ad9680_setup_jesd_fsm(&dev->ad9680_device, &dev_init->ad9680_param);
+	if (status) {
+		printf("error: ad9680_setup_jesd_fsm() failed\n");
+		return status;
+	}
+#else
 	status = ad9680_setup(&dev->ad9680_device, &dev_init->ad9680_param);
 	if (status != 0) {
 		printf("error: ad9680_setup() failed\n");
 		return status;
 	}
+#endif
+
+#ifdef JESD_FSM_ON
+	dev->ad9680_device->jesd204_link.is_transmit = false;
+	dev->ad9680_device->jesd204_link.link_id = fmcdaq2_init.jrx_link_tx.link_id;
+	dev->ad9680_device->jesd204_link.bank_id = 0;
+	dev->ad9680_device->jesd204_link.device_id = fmcdaq2_init.jrx_link_tx.device_id;
+	dev->ad9680_device->jesd204_link.octets_per_frame =
+		fmcdaq2_init.jrx_link_tx.octets_per_frame;
+	dev->ad9680_device->jesd204_link.frames_per_multiframe =
+		fmcdaq2_init.jrx_link_tx.frames_per_multiframe;
+	dev->ad9680_device->jesd204_link.samples_per_conv_frame =
+		fmcdaq2_init.jrx_link_tx.samples_per_converter_per_frame;
+	dev->ad9680_device->jesd204_link.high_density =
+		fmcdaq2_init.jrx_link_tx.high_density;
+	dev->ad9680_device->jesd204_link.scrambling =
+		fmcdaq2_init.jrx_link_tx.scrambling;
+	dev->ad9680_device->jesd204_link.converter_resolution =
+		fmcdaq2_init.jrx_link_tx.converter_resolution;
+	dev->ad9680_device->jesd204_link.num_converters =
+		fmcdaq2_init.jrx_link_tx.converters_per_device;
+	dev->ad9680_device->jesd204_link.bits_per_sample =
+		fmcdaq2_init.jrx_link_tx.bits_per_sample;
+	dev->ad9680_device->jesd204_link.ctrl_bits_per_sample =
+		fmcdaq2_init.jrx_link_tx.control_bits_per_sample;
+	dev->ad9680_device->jesd204_link.num_lanes =
+		fmcdaq2_init.jrx_link_tx.lanes_per_device;
+	dev->ad9680_device->jesd204_link.subclass = fmcdaq2_init.jrx_link_tx.subclass;
+	dev->ad9680_device->jesd204_link.jesd_version =
+		fmcdaq2_init.jrx_link_tx.version;
+
+	dev->ad9680_device->jesd204_link.sysref.lmfc_offset = 0; //devicetree
+#endif
 
 	status = fmcdaq2_trasnceiver_setup(&fmcdaq2, &fmcdaq2_init);
 	if (status != 0)
 		return status;
 
-	status = ad9144_setup(&dev->ad9144_device, &dev_init->ad9144_param);
-	if (status != 0) {
-		printf("error: ad9144_setup() failed\n");
+#ifdef JESD_FSM_ON
+	status = ad9144_setup_jesd_fsm(&dev->ad9144_device, &dev_init->ad9144_param);
+	if (status) {
+		printf("error: ad9144_setup_jesd_fsm() failed\n");
 		return status;
 	}
+#else
+	status = ad9144_setup_legacy(&dev->ad9144_device, &dev_init->ad9144_param);
+	if (status != 0) {
+		printf("error: ad9144_setup_legacy() failed\n");
+		return status;
+	}
+#endif
+
+#ifdef JESD_FSM_ON
+	dev->ad9144_device->link_config.is_transmit = true;
+	dev->ad9144_device->link_config.link_id = fmcdaq2_init.jtx_link_rx.link_id;
+	dev->ad9144_device->link_config.bank_id = 0;
+	dev->ad9144_device->link_config.device_id = fmcdaq2_init.jtx_link_rx.device_id;
+	dev->ad9144_device->link_config.octets_per_frame =
+		fmcdaq2_init.jtx_link_rx.octets_per_frame;
+	dev->ad9144_device->link_config.frames_per_multiframe =
+		fmcdaq2_init.jtx_link_rx.frames_per_multiframe;
+	dev->ad9144_device->link_config.samples_per_conv_frame =
+		fmcdaq2_init.jtx_link_rx.samples_per_converter_per_frame;
+	dev->ad9144_device->link_config.high_density =
+		fmcdaq2_init.jtx_link_rx.high_density;
+	dev->ad9144_device->link_config.scrambling =
+		fmcdaq2_init.jtx_link_rx.scrambling;
+	dev->ad9144_device->link_config.converter_resolution =
+		fmcdaq2_init.jtx_link_rx.converter_resolution;
+	dev->ad9144_device->link_config.num_converters =
+		fmcdaq2_init.jtx_link_rx.converters_per_device;
+	dev->ad9144_device->link_config.bits_per_sample =
+		fmcdaq2_init.jtx_link_rx.bits_per_sample;
+	dev->ad9144_device->link_config.ctrl_bits_per_sample =
+		fmcdaq2_init.jtx_link_rx.control_bits_per_sample;
+	dev->ad9144_device->link_config.num_lanes =
+		fmcdaq2_init.jtx_link_rx.lanes_per_device;
+	dev->ad9144_device->link_config.subclass = fmcdaq2_init.jtx_link_rx.subclass;
+	dev->ad9144_device->link_config.jesd_version = fmcdaq2_init.jtx_link_rx.version;
+
+	dev->ad9144_device->link_config.sysref.capture_falling_edge = 1;
+	dev->ad9144_device->link_config.sysref.mode = JESD204_SYSREF_ONESHOT;
+
+	dev->ad9144_device->link_config.lane_ids = calloc(
+				dev->ad9144_device->link_config.num_lanes, sizeof(uint8_t));
+	if (!dev->ad9144_device->link_config.lane_ids)
+		return -ENOMEM;
+
+	for (int lane = 0; lane < dev->ad9144_device->link_config.num_lanes; lane++)
+		dev->ad9144_device->link_config.lane_ids[lane] = lane;
+#endif
 
 	status = axi_adc_init(&dev->ad9680_core,  &dev_init->ad9680_core_param);
 	if (status != 0) {
@@ -1008,7 +1196,7 @@ static int fmcdaq2_setup(struct fmcdaq2_dev *dev,
 		return status;
 	}
 
-	return fmcdaq2_test(&fmcdaq2, &fmcdaq2_init);
+	return status;
 }
 
 int main(void)
@@ -1019,6 +1207,50 @@ int main(void)
 	status = fmcdaq2_setup(&fmcdaq2, &fmcdaq2_init);
 	if (status < 0)
 		return status;
+
+#ifdef JESD_FSM_ON
+	pr_info("Using JESD FSM.\n");
+
+	struct jesd204_topology *topology, *topology_tx;
+	struct jesd204_topology_dev devs[] = {
+		{
+			.jdev = fmcdaq2.ad9680_jesd->jdev,
+			.link_ids = {1},
+			.links_number = 1,
+		},
+		{
+			.jdev = fmcdaq2.ad9680_device->jdev,
+			.link_ids = {1},
+			.links_number = 1,
+			.is_top_device = true,
+		},
+	};
+
+	struct jesd204_topology_dev devs_tx[] = {
+		{
+			.jdev = fmcdaq2.ad9144_jesd->jdev,
+			.link_ids = {2},
+			.links_number = 1,
+		},
+		{
+			.jdev = fmcdaq2.ad9144_device->jdev,
+			.link_ids = {2},
+			.links_number = 1,
+			.is_top_device = true,
+		},
+	};
+
+	jesd204_topology_init(&topology, devs,
+			      sizeof(devs) / sizeof(*devs));
+
+	jesd204_topology_init(&topology_tx, devs_tx,
+			      sizeof(devs_tx) / sizeof(*devs_tx));
+
+	jesd204_fsm_start(topology, JESD204_LINKS_ALL);
+	jesd204_fsm_start(topology_tx, JESD204_LINKS_ALL);
+#endif
+
+	fmcdaq2_test(&fmcdaq2, &fmcdaq2_init);
 
 	status = axi_dmac_init(&fmcdaq2.ad9680_dmac, &fmcdaq2_init.ad9680_dmac_param);
 	if (status)

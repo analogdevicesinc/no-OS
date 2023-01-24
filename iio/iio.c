@@ -99,8 +99,7 @@ static char header[] =
 	"<!ATTLIST debug-attribute name CDATA #REQUIRED>"
 	"<!ATTLIST buffer-attribute name CDATA #REQUIRED>"
 	"]>"
-	"<context name=\"xml\" description=\"no-OS analog 1.1.0-g0000000 #1 Tue Nov 26 09:52:32 IST 2019 armv7l\" >"
-	"<context-attribute name=\"no-OS\" value=\"1.1.0-g0000000\" />";
+	"<context name=\"xml\" description=\"no-OS " NO_OS_VERSION "\" >";
 static char header_end[] = "</context>";
 
 static const char * const iio_chan_type_string[] = {

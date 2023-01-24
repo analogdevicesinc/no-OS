@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   maxim_spi.h
- *   @brief  maxim specific header for SPI driver
- *   @author Ciprian Regus (ciprian.regus@analog.com)
+ *   @file   linux_timer.h
+ *   @brief  Header file for Linux timer platform driver.
+ *   @author Dragos Bogdan (dragos.bogdan@analog.com)
 ********************************************************************************
- * Copyright 2022(c) Analog Devices, Inc.
+ * Copyright 2023(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -37,32 +37,18 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef MAXIM_SPI_H_
-#define MAXIM_SPI_H_
+#ifndef LINUX_TIMER_H_
+#define LINUX_TIMER_H_
 
-#include <stdint.h>
-#include "max32650.h"
+/******************************************************************************/
+/***************************** Include Files **********************************/
+/******************************************************************************/
+#include "no_os_timer.h"
 
 /**
- * @brief maxim specific SPI platform ops structure
+ * @brief Linux specific timer platform ops.
  */
-extern const struct no_os_spi_platform_ops max_spi_ops;
+extern const struct no_os_timer_platform_ops linux_timer_ops;
 
-enum spi_ss_polarity {
-	SPI_SS_POL_LOW,
-	SPI_SS_POL_HIGH
-};
+#endif //LINUX_TIMER_H_
 
-struct max_spi_init_param {
-	uint32_t numSlaves;
-	enum spi_ss_polarity polarity;
-	mxc_gpio_vssel_t vssel;
-};
-
-struct max_spi_state {
-	struct max_spi_init_param *init_param;
-	uint32_t cs_delay_first;
-	uint32_t cs_delay_last;
-};
-
-#endif

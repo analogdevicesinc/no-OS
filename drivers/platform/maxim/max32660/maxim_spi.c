@@ -134,11 +134,17 @@ error:
 	spi->ss_time = sstime_cache;
 }
 
+/**
+ * @brief Configure the VDDIO level for a SPI interface
+ * @param desc - the SPI descriptor
+ * @return 0 in case of success, -EINVAL otherwise
+ */
 static int _max_spi_config(struct no_os_spi_desc *desc)
 {
 	int32_t ret;
 	struct max_spi_state *st;
 	struct max_spi_init_param *eparam;
+	mxc_gpio_cfg_t spi_pins = gpio_cfg_spi0;
 
 	st = desc->extra;
 	eparam = st->init_param;
@@ -150,6 +156,9 @@ static int _max_spi_config(struct no_os_spi_desc *desc)
 		ret = -EINVAL;
 		goto err_init;
 	}
+
+	spi_pins.vssel = eparam->vssel;
+	MXC_GPIO_Config(&spi_pins);
 
 	ret = MXC_SPI_SetMode(MXC_SPI_GET_SPI(desc->device_id),
 			      (mxc_spi_mode_t)desc->mode);

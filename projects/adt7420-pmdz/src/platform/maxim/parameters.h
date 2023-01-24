@@ -65,5 +65,6 @@
 #define I2C_OPS         &max_i2c_ops
 
 extern struct max_uart_init_param xuip;
+extern struct max_i2c_init_param adt7420_i2c_extra;
 
 #endif /* __PARAMETERS_H__ */

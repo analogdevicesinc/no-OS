@@ -16,7 +16,8 @@ SRCS += $(DRIVERS)/api/no_os_spi.c \
 	$(DRIVERS)/adc/ad7124/ad7124_regs.c				
 SRCS +=	$(PLATFORM_DRIVERS)/xilinx_axi_io.c \
 	$(PLATFORM_DRIVERS)/xilinx_spi.c \
-	$(PLATFORM_DRIVERS)/xilinx_delay.c
+	$(PLATFORM_DRIVERS)/xilinx_delay.c \
+	$(NO-OS)/util/no_os_util.c
 INCS += $(DRIVERS)/adc/ad7124/ad7124.h \
 	$(DRIVERS)/adc/ad7124/ad7124_regs.h
 

@@ -58,4 +58,5 @@ struct max_gpio_init_param max11205_gpio_extra_ip = {
 struct max_spi_init_param max11205_spi_extra_ip  = {
 	.numSlaves = 1,
 	.polarity = SPI_SS_POL_LOW,
+	.vssel = MXC_GPIO_VSSEL_VDDIOH,
 };
