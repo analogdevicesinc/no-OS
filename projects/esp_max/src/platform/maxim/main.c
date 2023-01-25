@@ -404,6 +404,7 @@ int main()
 	wifi_get_network_interface(wifi, &socket_param.net);
 
 	struct secure_init_param sip = {
+		.hostname = DPS_SERVER_ADDR,
 		.ca_cert = my_ca_cert,
 		.ca_cert_len = NO_OS_ARRAY_SIZE(my_ca_cert),
 		.cli_cert = my_cli_cert,
@@ -493,6 +494,8 @@ int main()
 	status = socket_disconnect(sock);
 	if (NO_OS_IS_ERR_VALUE(status))
 		PRINT_ERR_AND_RET("Error socket_connect", status);
+
+	sip.hostname = SERVER_ADDR;
 
 	status = socket_init(&sock, &socket_param);
 	if (NO_OS_IS_ERR_VALUE(status))

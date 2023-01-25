@@ -160,8 +160,6 @@ static int32_t stcp_socket_init(struct secure_socket_desc **desc,
 	if (!desc || !param)
 		return -1;
 
-	const char *HTTPS_SERVER_NAME = "iot-hub-ylr4pd6jbvxtc.azure-devices.net";
-
 	ldesc = (typeof(ldesc))calloc(1, sizeof(*ldesc));
 	if (!ldesc)
 		return -1;
@@ -245,7 +243,9 @@ static int32_t stcp_socket_init(struct secure_socket_desc **desc,
 	if (NO_OS_IS_ERR_VALUE(ret))
 		goto exit;
 
-	mbedtls_ssl_set_hostname(&ldesc->ssl, HTTPS_SERVER_NAME);
+	ret = mbedtls_ssl_set_hostname(&ldesc->ssl, param->hostname);
+	if (NO_OS_IS_ERR_VALUE(ret))
+		goto exit;
 
 	/* Set socket callbacks */
 	mbedtls_ssl_set_bio(&ldesc->ssl, sock,
