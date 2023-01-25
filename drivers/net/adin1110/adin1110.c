@@ -28,11 +28,6 @@ static struct _adin1110_priv driver_data[2] = {
 	},
 };
 
-int adin1110_format_frame(struct adin1110_sk_buff *sk_buff, uint8_t *frame)
-{
-
-}
-
 int adin1110_reg_write(struct adin1110_desc *desc, uint16_t addr, uint32_t data)
 {
 	struct no_os_spi_msg xfer = {
@@ -58,8 +53,7 @@ int adin1110_reg_read(struct adin1110_desc *desc, uint16_t addr, uint32_t *data)
 		.rx_buff = desc->rx_buff,
 		.bytes_number = ADIN1110_RD_FRAME_SIZE,
 		.cs_change = 1,
-		.cs_delay_first = 1,
-		.cs_delay_last = 1,
+		.cs_change_delay = 5,
 	};
 	int ret;
 
@@ -97,6 +91,7 @@ int adin1110_mdio_read(struct adin1110_desc *desc, uint32_t phy_id,
 {
 	uint32_t mdio_val = 0;
 	uint32_t mdio_done = 0;
+	uint32_t ta_err;
 	uint32_t val = 0;
 	int ret;
 
@@ -106,13 +101,13 @@ int adin1110_mdio_read(struct adin1110_desc *desc, uint32_t phy_id,
 	val |= no_os_field_prep(ADIN1110_MDIO_PRTAD, phy_id);
 	val |= no_os_field_prep(ADIN1110_MDIO_DEVAD, reg);
 
-	ret = adin1110_reg_write(desc, ADIN1110_MDIOACC, val);
+	ret = adin1110_reg_write(desc, ADIN1110_MDIOACC(0), val);
 	if (ret)
 		return ret;
 
 	/* The PHY will set the MDIO_TRDONE bit to 1 once a transaction completes */
 	while (!mdio_done) {
-		ret = adin1110_reg_read(desc, ADIN1110_MDIOACC, &mdio_val);
+		ret = adin1110_reg_read(desc, ADIN1110_MDIOACC(0), &mdio_val);
 		if (ret)
 			return ret;
 
@@ -133,24 +128,123 @@ int adin1110_mdio_write(struct adin1110_desc *desc, uint32_t phy_id,
 	int ret;
 
 	/* Only use clause 22 for the MDIO register addressing */
-	val |= no_os_field_prep(ADIN1110_MDIO_ST, 0x1);
+	val = no_os_field_prep(ADIN1110_MDIO_ST, 0x1);
 	val |= no_os_field_prep(ADIN1110_MDIO_OP, ADIN1110_MDIO_OP_WR);
 	val |= no_os_field_prep(ADIN1110_MDIO_PRTAD, phy_id);
 	val |= no_os_field_prep(ADIN1110_MDIO_DEVAD, reg);
 	val |= no_os_field_prep(ADIN1110_MDIO_DATA, data);
 
-	ret = adin1110_reg_write(desc, ADIN1110_MDIOACC, val);
+	ret = adin1110_reg_write(desc, ADIN1110_MDIOACC(0), val);
 	if (ret)
 		return ret;
 
 	/* The PHY will set the MDIO_TRDONE bit to 1 once a transaction completes */
 	while (!mdio_done) {
-		ret = adin1110_reg_read(desc, ADIN1110_MDIOACC, &mdio_val);
+		ret = adin1110_reg_read(desc, ADIN1110_MDIOACC(0), &mdio_val);
 		if (ret)
 			return ret;
 
 		mdio_done = no_os_field_get(ADIN1110_MDIO_TRDONE, mdio_val);
 	}
+
+	return 0;
+}
+
+int adin1110_mdio_write_c45(struct adin1110_desc *desc, uint32_t phy_id,
+				   uint32_t dev_id, uint32_t reg, uint32_t data)
+{
+	uint32_t mdio_val = 0;
+	uint32_t mdio_done = 0;
+	uint32_t val;
+	int ret;
+
+	val = no_os_field_prep(ADIN1110_MDIO_ST, 0x0);
+	val |= no_os_field_prep(ADIN1110_MDIO_OP, ADIN1110_MDIO_OP_ADDR);
+	val |= no_os_field_prep(ADIN1110_MDIO_PRTAD, phy_id);
+	val |= no_os_field_prep(ADIN1110_MDIO_DEVAD, dev_id);
+	val |= no_os_field_prep(ADIN1110_MDIO_DATA, reg);
+
+	ret = adin1110_reg_write(desc, ADIN1110_MDIOACC(0), val);
+	if (ret)
+		return ret;
+
+	val = no_os_field_prep(ADIN1110_MDIO_ST, 0x0);
+	val |= no_os_field_prep(ADIN1110_MDIO_OP, ADIN1110_MDIO_OP_WR);
+	val |= no_os_field_prep(ADIN1110_MDIO_PRTAD, phy_id);
+	val |= no_os_field_prep(ADIN1110_MDIO_DEVAD, dev_id);
+	val |= no_os_field_prep(ADIN1110_MDIO_DATA, data);
+
+	ret = adin1110_reg_write(desc, ADIN1110_MDIOACC(1), val);
+	if (ret)
+		return ret;
+
+	/* The PHY will set the MDIO_TRDONE bit to 1 once a transaction completes */
+	while (!mdio_done) {
+		ret = adin1110_reg_read(desc, ADIN1110_MDIOACC(0), &mdio_val);
+		if (ret)
+			return ret;
+
+		mdio_done = no_os_field_get(ADIN1110_MDIO_TRDONE, mdio_val);
+	}
+
+	mdio_done = 0;
+	while (!mdio_done) {
+		ret = adin1110_reg_read(desc, ADIN1110_MDIOACC(1), &mdio_val);
+		if (ret)
+			return ret;
+
+		mdio_done = no_os_field_get(ADIN1110_MDIO_TRDONE, mdio_val);
+	}
+
+	return 0;
+}
+
+int adin1110_mdio_read_c45(struct adin1110_desc *desc, uint32_t phy_id,
+				  uint32_t dev_id, uint32_t reg, uint32_t *data)
+{
+	uint32_t mdio_val = 0;
+	uint32_t mdio_done = 0;
+	uint32_t ta_err;
+	uint32_t val;
+	int ret;
+
+	val = no_os_field_prep(ADIN1110_MDIO_ST, 0x0);
+	val |= no_os_field_prep(ADIN1110_MDIO_OP, ADIN1110_MDIO_OP_ADDR);
+	val |= no_os_field_prep(ADIN1110_MDIO_PRTAD, phy_id);
+	val |= no_os_field_prep(ADIN1110_MDIO_DEVAD, dev_id);
+	val |= no_os_field_prep(ADIN1110_MDIO_DATA, reg);
+
+	ret = adin1110_reg_write(desc, ADIN1110_MDIOACC(0), val);
+	if (ret)
+		return ret;
+
+	while (!mdio_done) {
+		ret = adin1110_reg_read(desc, ADIN1110_MDIOACC(0), &mdio_val);
+		if (ret)
+			return ret;
+
+		mdio_done = no_os_field_get(ADIN1110_MDIO_TRDONE, mdio_val);
+	}
+
+	val = no_os_field_prep(ADIN1110_MDIO_ST, 0x0);
+	val |= no_os_field_prep(ADIN1110_MDIO_OP, ADIN1110_MDIO_OP_RD);
+	val |= no_os_field_prep(ADIN1110_MDIO_DEVAD, dev_id);
+	val |= no_os_field_prep(ADIN1110_MDIO_PRTAD, phy_id);
+
+	ret = adin1110_reg_write(desc, ADIN1110_MDIOACC(1), val);
+	if (ret)
+		return ret;
+
+	mdio_done = 0;
+	while (!mdio_done) {
+		ret = adin1110_reg_read(desc, ADIN1110_MDIOACC(1), &mdio_val);
+		if (ret)
+			return ret;
+
+		mdio_done = no_os_field_get(ADIN1110_MDIO_TRDONE, mdio_val);
+	}
+
+	*data = no_os_field_get(ADIN1110_MDIO_DATA, mdio_val);
 
 	return 0;
 }
@@ -199,7 +293,7 @@ int adin1110_write_fifo(struct adin1110_desc *desc, struct adin1110_sk_buff *sk_
 		return ret;
 
 	/** Align the frame length to 4 bytes */
-	frame_len = frame_len + frame_len % 4;
+	frame_len = frame_len;
 
 	memset(desc->tx_buff, 0, frame_len);
 
@@ -212,7 +306,7 @@ int adin1110_write_fifo(struct adin1110_desc *desc, struct adin1110_sk_buff *sk_
 	}
 	xfer.bytes_number = frame_len;
 	
-	memcpy(desc->tx_buff[header_len + ADIN1110_FRAME_HEADER_LEN],
+	memcpy(&desc->tx_buff[header_len + ADIN1110_FRAME_HEADER_LEN],
 	       sk_buff->payload, sk_buff->buff_len + padding);
 	
 	return no_os_spi_transfer(desc->comm_desc, &xfer, 1);
@@ -268,6 +362,40 @@ int adin1110_read_fifo(struct adin1110_desc *desc, struct adin1110_sk_buff *sk_b
 	return 0;
 }
 
+int adin1110_set_mac_address(struct adin1110_desc *desc, uint32_t port, uint8_t *addr)
+{
+	uint32_t port_rules_mask;
+	uint32_t port_rules;
+	uint32_t offset;
+	uint32_t val;
+	int ret;
+
+	if (!port) {
+		port_rules = ADIN1110_MAC_P1_ADDR_SLOT;
+		port_rules_mask = ADIN1110_MAC_ADDR_APPLY2PORT;
+	} else {
+		port_rules = ADIN2110_MAC_P2_ADDR_SLOT;
+		port_rules_mask = ADIN2111_MAC_ADDR_APPLY2PORT2;
+	}
+
+	if (port_rules & port_rules_mask)
+		port_rules_mask |= ADIN1110_MAC_ADDR_TO_HOST | ADIN2111_MAC_ADDR_TO_OTHER_PORT;		
+
+	port_rules_mask |= NO_OS_GENMASK(15, 0);
+	val = port_rules | no_os_get_unaligned_be16(addr);
+	ret = adin1110_reg_update(desc, ADIN1110_MAC_ADDR_FILTER_UPR + offset,
+				  port_rules_mask, val);
+	if (ret)
+		return ret;
+	
+	val = no_os_get_unaligned_be32(&addr[2]);
+	ret = adin1110_reg_write(desc, ADIN1110_MAC_ADDR_FILTER_LWR, val);
+	if (ret)
+		return ret;
+
+	return ret;
+}
+
 static int adin1110_mac_reset(struct adin1110_desc *desc)
 {
 	uint32_t val;
@@ -280,8 +408,6 @@ static int adin1110_mac_reset(struct adin1110_desc *desc)
 	ret = adin1110_reg_write(desc, ADIN1110_SOFT_RST_REG, ADIN1110_SWRESET_KEY2);
 	if (ret)
 		return ret;
-
-	no_os_udelay(1);
 
 	ret = adin1110_reg_write(desc, ADIN1110_SOFT_RST_REG, ADIN1110_SWRELEASE_KEY1);
 	if (ret)
@@ -318,12 +444,8 @@ static int adin1110_check_reset(struct adin1110_desc *desc)
 	if (ret)
 		return ret;
 
-	/** 
-	 * Signal that the MAC configuration is complete and the link
-	 * autonegotiation may start.
-	 */
 	return adin1110_reg_update(desc, ADIN1110_CONFIG1,
-			    	  ADIN1110_CONFIG1_SYNC, ADIN1110_CONFIG1_SYNC);
+			    	   ADIN1110_CONFIG1_SYNC, ADIN1110_CONFIG1_SYNC);
 
 }
 
@@ -331,20 +453,20 @@ static int adin1110_phy_reset(struct adin1110_desc *desc)
 {
 	uint32_t phy_id;
 	uint32_t expected_id;
-	uint32_t test = 0x1234;
 	int ret;
 
-	ret = no_os_gpio_set_value(desc->reset_gpio, 0);
-	if (ret)
-		return ret;
-	
-	no_os_mdelay(100);
-
-	ret = no_os_gpio_set_value(desc->reset_gpio, 1);
+	/* The timing values for the reset sequence are spcified in the datasheet */
+	ret = no_os_gpio_set_value(desc->reset_gpio, NO_OS_GPIO_LOW);
 	if (ret)
 		return ret;
 
-	no_os_mdelay(200);
+	no_os_mdelay(10);
+
+	ret = no_os_gpio_set_value(desc->reset_gpio, NO_OS_GPIO_HIGH);
+	if (ret)
+		return ret;
+
+	no_os_mdelay(90);
 
 	ret = adin1110_reg_read(desc, ADIN1110_PHY_ID_REG, &phy_id);
 	if (ret)
@@ -408,8 +530,6 @@ static int adin1110_setup_phy(struct adin1110_desc *desc)
 							 ADIN1110_MI_CONTROL_REG, &reg_val);
 				if (ret)
 					return ret;
-
-				retries++;
 			}
 		}
 	}
@@ -420,11 +540,22 @@ static int adin1110_setup_phy(struct adin1110_desc *desc)
 static int adin1110_setup_mac(struct adin1110_desc *desc)
 {
 	int ret;
+	uint32_t reg_val;
 
 	ret = adin1110_reg_update(desc, ADIN1110_CONFIG2, ADIN1110_CRC_APPEND,
 				  ADIN1110_CRC_APPEND);
 	if (ret)
 		return ret;
+
+	ret = adin1110_reg_read(desc, ADIN1110_CONFIG2, &reg_val);
+	if (ret)
+		return ret;
+
+	reg_val = ADIN1110_TX_RDY_IRQ | ADIN1110_RX_RDY_IRQ | ADIN1110_SPI_ERR_IRQ;
+	if (desc->chip_type == ADIN2111)
+		reg_val |= ADIN2111_RX_RDY_IRQ;
+
+	ret = adin1110_reg_write(desc, ADIN1110_IMASK1, reg_val);
 
 	return 0;
 }

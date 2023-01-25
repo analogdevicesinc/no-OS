@@ -32,38 +32,45 @@
 #define ADIN1110_SWRELEASE_KEY2			0xA1F6
 
 #define ADIN1110_SPI_CD				NO_OS_BIT(7)
-#define ADIN1110_SPI_RW             NO_OS_BIT(5)
+#define ADIN1110_SPI_RW             		NO_OS_BIT(5)
 
 #define ADIN1110_CONFIG1			0x04
-#define   ADIN1110_CONFIG1_SYNC			NO_OS_BIT(15)
+#define ADIN1110_CONFIG1_SYNC			NO_OS_BIT(15)
 
 #define ADIN1110_CONFIG2			0x06
-#define   ADIN2111_P2_FWD_UNK2HOST_MASK		NO_OS_BIT(12)
-#define   ADIN2111_PORT_CUT_THRU_EN		NO_OS_BIT(11)
-#define   ADIN1110_CRC_APPEND			NO_OS_BIT(5)
-#define   ADIN1110_FWD_UNK2HOST_MASK		NO_OS_BIT(2)
+#define ADIN2111_P2_FWD_UNK2HOST_MASK		NO_OS_BIT(12)
+#define ADIN2111_PORT_CUT_THRU_EN		NO_OS_BIT(11)
+#define ADIN1110_CRC_APPEND			NO_OS_BIT(5)
+#define ADIN1110_FWD_UNK2HOST_MASK		NO_OS_BIT(2)
 
 #define ADIN1110_STATUS0			0x08
 #define ADIN1110_RESETC_MASK			NO_OS_BIT(6)
 
 #define ADIN1110_STATUS1			0x09
-#define   ADIN2111_P2_RX_RDY			NO_OS_BIT(17)
-#define   ADIN1110_SPI_ERR			NO_OS_BIT(10)
-#define   ADIN1110_RX_RDY			NO_OS_BIT(4)
+#define ADIN2111_P2_RX_RDY			NO_OS_BIT(17)
+#define ADIN1110_SPI_ERR			NO_OS_BIT(10)
+#define ADIN1110_RX_RDY			NO_OS_BIT(4)
 
 #define ADIN1110_IMASK1				0x0D
-#define   ADIN2111_RX_RDY_IRQ			NO_OS_BIT(17)
-#define   ADIN1110_SPI_ERR_IRQ			NO_OS_BIT(10)
-#define   ADIN1110_RX_RDY_IRQ			NO_OS_BIT(4)
-#define   ADIN1110_TX_RDY_IRQ			NO_OS_BIT(3)
+#define ADIN2111_RX_RDY_IRQ			NO_OS_BIT(17)
+#define ADIN1110_SPI_ERR_IRQ			NO_OS_BIT(10)
+#define ADIN1110_RX_RDY_IRQ			NO_OS_BIT(4)
+#define ADIN1110_TX_RDY_IRQ			NO_OS_BIT(3)
 
-#define ADIN1110_MDIOACC			0x20
-#define   ADIN1110_MDIO_TRDONE			NO_OS_BIT(31)
-#define   ADIN1110_MDIO_ST			NO_OS_GENMASK(29, 28)
-#define   ADIN1110_MDIO_OP			NO_OS_GENMASK(27, 26)
-#define   ADIN1110_MDIO_PRTAD			NO_OS_GENMASK(25, 21)
-#define   ADIN1110_MDIO_DEVAD			NO_OS_GENMASK(20, 16)
-#define   ADIN1110_MDIO_DATA			NO_OS_GENMASK(15, 0)
+#define ADIN1110_MDIOACC(x)			(0x20 + (x))
+#define ADIN1110_MDIO_TRDONE			NO_OS_BIT(31)
+#define ADIN1110_MDIO_TAERR			NO_OS_BIT(30)
+#define ADIN1110_MDIO_ST			NO_OS_GENMASK(29, 28)
+#define ADIN1110_MDIO_OP			NO_OS_GENMASK(27, 26)
+#define ADIN1110_MDIO_PRTAD			NO_OS_GENMASK(25, 21)
+#define ADIN1110_MDIO_DEVAD			NO_OS_GENMASK(20, 16)
+#define ADIN1110_MDIO_DATA			NO_OS_GENMASK(15, 0)
+
+#define ADIN1110_MMD_ACR_DEVAD_MASK		NO_OS_GENMASK(4, 0)
+#define ADIN1110_MMD_ACR_FUNCTION_MASK		NO_OS_GENMASK(15, 14)
+#define ADIN1110_MMD_ACCESS_MASK		NO_OS_GENMASK(15, 0)
+#define ADIN1110_MMD_ACCESS_CNTRL		0x0D
+#define ADIN1110_MMD_ACCESS			0x0E
 
 #define ADIN1110_MI_SFT_PD_MASK			NO_OS_BIT(11)
 #define ADIN1110_MDIO_PHY_ID(x)			((x) + 1)
@@ -75,16 +82,18 @@
 
 #define ADIN1110_MAC_RST_STATUS_REG		0x3B
 
-#define   ADIN2111_MAC_ADDR_APPLY2PORT2		NO_OS_BIT(31)
-#define   ADIN1110_MAC_ADDR_APPLY2PORT		NO_OS_BIT(30)
-#define   ADIN2111_MAC_ADDR_TO_OTHER_PORT	NO_OS_BIT(17)
-#define   ADIN1110_MAC_ADDR_TO_HOST		NO_OS_BIT(16)
+#define ADIN2111_MAC_ADDR_APPLY2PORT2		NO_OS_BIT(31)
+#define ADIN1110_MAC_ADDR_APPLY2PORT		NO_OS_BIT(30)
+#define ADIN2111_MAC_ADDR_TO_OTHER_PORT		NO_OS_BIT(17)
+#define ADIN1110_MAC_ADDR_TO_HOST		NO_OS_BIT(16)
 
 #define ADIN1110_MAC_ADDR_FILTER_UPR		0x50
 #define ADIN1110_MAC_ADDR_FILTER_LWR		0x51
 
 #define ADIN1110_MAC_ADDR_MASK_UPR		0x70
 #define ADIN1110_MAC_ADDR_MASK_LWR		0x71
+#define ADIN1110_MAC_P1_ADDR_SLOT		2
+#define ADIN2110_MAC_P2_ADDR_SLOT		3
 
 #define ADIN1110_RX_FRM_CNT		0xA0
 #define ADIN1110_RX_CRC_ERR_CNT		0xA4
@@ -104,6 +113,7 @@
 #define ADIN1110_CLEAR_STATUS0			0xFFF
 
 /* MDIO_OP codes */
+#define ADIN1110_MDIO_OP_ADDR			0x0
 #define ADIN1110_MDIO_OP_WR			0x1
 #define ADIN1110_MDIO_OP_RD			0x3
 
@@ -136,6 +146,11 @@ enum adin1110_ethertype {
 	ADIN1110_IPV6 = 0x86DD,
 };
 
+enum adin1110_mmd_acr_func {
+	adin1110_address_func,
+	adin1110_data_func,
+};
+
 struct adin1110_desc {
     enum adin1110_chip_id chip_type;
     uint32_t ports;
@@ -150,11 +165,12 @@ struct adin1110_desc {
 };
 
 struct adin1110_init_param {
-    enum adin1110_chip_id chip_type; 
-    struct no_os_spi_init_param comm_param;
-    struct no_os_gpio_init_param reset_param;
-    uint8_t mac_address[6];
-    bool append_crc;
+	enum adin1110_chip_id chip_type; 
+	struct no_os_spi_init_param comm_param;
+	struct no_os_gpio_init_param reset_param;
+	uint8_t mac_address[6];
+
+	bool append_crc;
 };
 
 struct adin1110_sk_buff {
@@ -165,6 +181,12 @@ struct adin1110_sk_buff {
 	uint8_t *payload;
 };
 
+int adin1110_mdio_write_c45(struct adin1110_desc *desc, uint32_t phy_id,
+				   uint32_t dev_id, uint32_t reg, uint32_t data);
+int adin1110_mdio_read_c45(struct adin1110_desc *desc, uint32_t phy_id,
+				  uint32_t dev_id, uint32_t reg, uint32_t *data);
+int adin1110_write_mmd(struct adin1110_desc *, uint32_t , uint32_t , uint32_t, uint32_t);
+int adin1110_read_mmd(struct adin1110_desc *, uint32_t , uint32_t , uint32_t, uint32_t *);
 int adin1110_mdio_write(struct adin1110_desc *, uint32_t, uint32_t, uint32_t);
 int adin1110_mdio_read(struct adin1110_desc *, uint32_t, uint32_t, uint32_t *);
 int adin1110_reg_update(struct adin1110_desc *, uint16_t, uint32_t, uint32_t);
