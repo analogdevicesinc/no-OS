@@ -23,8 +23,6 @@
 		.attributes = max14906_fault_attrs,	\
 	}
 
-<<<<<<< HEAD
-=======
 #define MAX14906_CONFIG_CHANNEL(_addr)			\
         {						\
         	.ch_type = IIO_VOLTAGE,			\
@@ -35,7 +33,6 @@
 	}
 
 
->>>>>>> 204978e8c (wip)
 static int max14906_iio_read_raw(void *dev, char *buf, uint32_t len,
 				 const struct iio_ch_info *channel, intptr_t priv);
 static int max14906_iio_write_raw(void *dev, char *buf, uint32_t len,
@@ -58,21 +55,23 @@ static int max14906_iio_read_samples(void *dev, uint8_t *buf, uint32_t samples);
 static int max14906_iio_trigger_handler(struct iio_device_data *dev_data);
 static int max14906_iio_update_channels(void *dev, uint32_t mask);
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
 static int max14906_iio_read_fault_raw(void *dev, char *buf, uint32_t len,
 				       const struct iio_ch_info *channel, intptr_t priv);
 
->>>>>>> 822257950 (Reconfiguration flow and device channels)
-static int max14906_iio_read_config_direction(void *dev, char *buf, uint32_t len,
+static int max14906_iio_read_config_function(void *dev, char *buf, uint32_t len,
+					     const struct iio_ch_info *channel, intptr_t priv);
+static int max14906_iio_write_config_function(void *dev, char *buf, uint32_t len,
 					      const struct iio_ch_info *channel, intptr_t priv);
-static int max14906_iio_write_config_direction(void *dev, char *buf, uint32_t len,
-					       const struct iio_ch_info *channel, intptr_t priv);
-static int max14906_iio_read_config_direction_available(void *dev, char *buf, uint32_t len,
-				     			const struct iio_ch_info *channel,
-							intptr_t priv);
+static int max14906_iio_read_config_function_available(void *dev, char *buf, uint32_t len,
+				     		       const struct iio_ch_info *channel,
+						       intptr_t priv);
+static int max14906_iio_read_config_iec(void *dev, char *buf, uint32_t len,
+					const struct iio_ch_info *channel, intptr_t priv);
+static int max14906_iio_write_config_iec(void *dev, char *buf, uint32_t len,
+					 const struct iio_ch_info *channel, intptr_t priv);
+static int max14906_iio_read_config_iec_available(void *dev, char *buf, uint32_t len,
+				     		  const struct iio_ch_info *channel,
+						  intptr_t priv);
 
 static int max14906_iio_read_config_apply(void *dev, char *buf, uint32_t len,
 					  const struct iio_ch_info *channel, intptr_t priv);
@@ -80,9 +79,15 @@ static int max14906_iio_write_config_apply(void *dev, char *buf, uint32_t len,
 					   const struct iio_ch_info *channel, intptr_t priv);
 
 extern int max14906_apply;
-struct max14906_channel_config max14906_ch_configs[MAX14906_CHANNELS];
 
->>>>>>> 204978e8c (wip)
+struct max14906_ch_config max14906_ch_configs[MAX14906_CHANNELS];
+
+static char *max14906_function_avail[3] = {
+	[MAX14906_CH_OUT] = "direction_out",
+	[MAX14906_CH_IN] = "direction_in",
+	[MAX14906_CH_HIGH_Z] = "direction_high_z"
+};
+
 static const char *const max14906_do_mode_avail[4] = {
 	[MAX14906_HIGH_SIDE] = "High_side",
 	[MAX14906_HIGH_SIDE_INRUSH] = "High_side_inrush",
@@ -142,10 +147,6 @@ static struct iio_attribute max14906_in_attrs[] = {
 	END_ATTRIBUTES_ARRAY
 };
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
 static struct iio_attribute max14906_fault_attrs[] = {
 	{
 		.name = "raw",
@@ -154,18 +155,26 @@ static struct iio_attribute max14906_fault_attrs[] = {
 	END_ATTRIBUTES_ARRAY
 };
 
->>>>>>> 822257950 (Reconfiguration flow and device channels)
 static struct iio_attribute max14906_config_attrs[] = {
 	{
-		.name = "direction",
-		.show = max14906_iio_read_config_direction,
-		.store = max14906_iio_write_config_direction,
+		.name = "function",
+		.show = max14906_iio_read_config_function,
+		.store = max14906_iio_write_config_function,
 	},
 	{
-		.name = "direction_available",
+		.name = "function_available",
 		.shared = IIO_SHARED_BY_ALL,
-		.show = max14906_iio_read_config_direction_available,
+		.show = max14906_iio_read_config_function_available,
 	},
+	{
+		.name = "IEC_type",
+		.show = max14906_iio_read_config_iec,
+		.store = max14906_iio_write_config_iec,
+	},
+	{
+		.name = "IEC_type_available",
+		.show = max14906_iio_read_config_iec_available,
+	}
 	END_ATTRIBUTES_ARRAY
 };
 
@@ -178,12 +187,7 @@ static struct iio_attribute max14906_config_dev_attrs[] = {
 	END_ATTRIBUTES_ARRAY
 };
 
-<<<<<<< HEAD
->>>>>>> 204978e8c (wip)
 static struct iio_channel max14906_channels[MAX14906_CHANNELS] = {
-=======
-static struct iio_channel max14906_channels[5] = {
->>>>>>> 822257950 (Reconfiguration flow and device channels)
 	MAX14906_CHANNEL(0),
 	MAX14906_CHANNEL(1),
 	MAX14906_CHANNEL(2),
@@ -191,8 +195,6 @@ static struct iio_channel max14906_channels[5] = {
 	MAX14906_FAULT_CHANNEL,
 };
 
-<<<<<<< HEAD
-=======
 static struct iio_channel max14906_config_channels[MAX14906_CHANNELS] = {
 	MAX14906_CONFIG_CHANNEL(0),
 	MAX14906_CONFIG_CHANNEL(1),
@@ -200,24 +202,20 @@ static struct iio_channel max14906_config_channels[MAX14906_CHANNELS] = {
 	MAX14906_CONFIG_CHANNEL(3),
 };
 
->>>>>>> 204978e8c (wip)
 static struct iio_device max14906_iio_dev = {
 	.num_ch = 5,
 	.channels = max14906_channels,
-    .read_dev = (int32_t (*)())max14906_iio_read_samples,
+    	.read_dev = (int32_t (*)())max14906_iio_read_samples,
 	.debug_reg_read = (int32_t (*)())max14906_reg_read,
 	.debug_reg_write = (int32_t (*)())max14906_reg_write,
 };
 
-<<<<<<< HEAD
-=======
 static struct iio_device max14906_iio_config_dev = {
 	.num_ch = 4,
 	.channels = max14906_config_channels,
 	.attributes = max14906_config_dev_attrs,
 };
 
->>>>>>> 204978e8c (wip)
 static int max14906_iio_read_raw(void *dev, char *buf, uint32_t len,
 				 const struct iio_ch_info *channel, intptr_t priv)
 {
@@ -325,37 +323,34 @@ static int max14906_iio_write_do_mode(void *dev, char *buf, uint32_t len,
 	if (do_mode == NO_OS_ARRAY_SIZE(max14906_do_mode_avail))
 		return -EINVAL;
 
-	return 0;
-	//return max14906_do_config(desc, channel->address, do_mode);
+	return max14906_do_config(desc, channel->address, do_mode);
 }
 
-<<<<<<< HEAD
-=======
-static int max14906_iio_read_config_direction(void *dev, char *buf, uint32_t len,
+static int max14906_iio_read_config_function(void *dev, char *buf, uint32_t len,
 					      const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct max14906_iio_desc *iio_desc = dev;
-	int32_t direction_dev;
-	char *direction;
+	int32_t function_dev;
+	char *function;
 
-	direction_dev = max14906_ch_configs[channel->address].direction;
-	direction = max14906_direction_avail[direction_dev];
+	function_dev = max14906_ch_configs[channel->address].function;
+	function = max14906_function_avail[function_dev];
 
-	strcpy(buf, direction);
+	strcpy(buf, function);
 
 	return strlen(buf);
 }
 
-static int max14906_iio_write_config_direction(void *dev, char *buf, uint32_t len,
-					       const struct iio_ch_info *channel, intptr_t priv)
+static int max14906_iio_write_config_function(void *dev, char *buf, uint32_t len,
+					      const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct max14906_iio_desc *iio_desc = dev;
-	char *direction;
+	char *function;
 	size_t i;
 
 	for (i = 0; i < 2; i++) {
-		if (!strcmp(buf, max14906_direction_avail[i])) {
-			max14906_ch_configs[channel->address].direction = i;
+		if (!strcmp(buf, max14906_function_avail[i])) {
+			max14906_ch_configs[channel->address].function = i;
 			break;
 		}
 
@@ -366,7 +361,7 @@ static int max14906_iio_write_config_direction(void *dev, char *buf, uint32_t le
 	return 0;
 }
 
-static int max14906_iio_read_config_direction_available(void *dev, char *buf, uint32_t len,
+static int max14906_iio_read_config_function_available(void *dev, char *buf, uint32_t len,
 				     			const struct iio_ch_info *channel,
 							intptr_t priv)
 {
@@ -375,7 +370,7 @@ static int max14906_iio_read_config_direction_available(void *dev, char *buf, ui
 	strcpy(buf, "");
 
 	for (i = 0; i < 2; i++) {
-		strcat(buf, max14906_direction_avail[i]);
+		strcat(buf, max14906_function_avail[i]);
 
 		if (i != 1)
 			strcat(buf, " ");
@@ -384,7 +379,18 @@ static int max14906_iio_read_config_direction_available(void *dev, char *buf, ui
 	return strlen(buf);
 }
 
->>>>>>> 204978e8c (wip)
+static int max14906_iio_read_config_iec(void *dev, char *buf, uint32_t len,
+					const struct iio_ch_info *channel, intptr_t priv)
+{
+
+}
+
+static int max14906_iio_write_config_iec(void *dev, char *buf, uint32_t len,
+					 const struct iio_ch_info *channel, intptr_t priv);
+static int max14906_iio_read_config_iec_available(void *dev, char *buf, uint32_t len,
+				     		  const struct iio_ch_info *channel,
+						  intptr_t priv);
+
 int max14906_iio_setup_channels(struct max14906_iio_desc *desc)
 {
 	struct max14906_desc *dev = desc->max14906_desc;
@@ -393,7 +399,7 @@ int max14906_iio_setup_channels(struct max14906_iio_desc *desc)
 	size_t i;
 
 	for (i = 0; i < MAX14906_CHANNELS; i++){
-		dir = max14906_ch_configs[i].direction;
+		dir = max14906_ch_configs[i].function;
 		if (dir == 0){
 			max14906_channels[i].attributes = max14906_in_attrs;
 			max14906_channels[i].ch_out = 0;
@@ -428,27 +434,6 @@ static int max14906_iio_read_samples(void *dev, uint8_t *buf, uint32_t samples)
 	return samples;
 }
 
-static int max14906_iio_trigger_handler(struct iio_device_data *dev_data)
-{
-	struct max14906_iio_desc *iio_desc = dev_data->dev;
-	struct max14906_desc *desc = iio_desc->max14906_desc;
-	uint8_t data_buff[MAX14906_CHANNELS];
-	uint32_t val;
-	int ret;
-	int i;
-
-	if (iio_desc->active_channels & NO_OS_BIT(i)){
-		ret = max14906_ch_get(desc, i, &val);
-		if (ret)
-			return ret;
-		data_buff[i++] = val;
-	}
-
-	// for (i = 0; i < MAX14906_CHANNELS; i++){
-		
-	// }
-}
-
 static int max14906_iio_read_fault_raw(void *dev, char *buf, uint32_t len,
 				       const struct iio_ch_info *channel, intptr_t priv)
 {
@@ -472,7 +457,8 @@ static int max14906_iio_write_config_apply(void *dev, char *buf, uint32_t len,
 }
 
 int max14906_iio_init(struct max14906_iio_desc **iio_desc,
-		      struct max14906_iio_desc_init_param *init_param)
+		      struct max14906_iio_desc_init_param *init_param,
+		      bool config)
 {
 	struct max14906_iio_desc *descriptor;
 	int ret;
@@ -485,8 +471,6 @@ int max14906_iio_init(struct max14906_iio_desc **iio_desc,
 	if (!descriptor)
 		return -ENOMEM;
 
-<<<<<<< HEAD
-=======
 	if (config) {
 		*iio_desc = descriptor;
 		descriptor->iio_dev = &max14906_iio_config_dev;
@@ -494,12 +478,7 @@ int max14906_iio_init(struct max14906_iio_desc **iio_desc,
 		return 0;
 	}
 
-<<<<<<< HEAD
->>>>>>> 204978e8c (wip)
-=======
 	descriptor->iio_dev = &max14906_iio_dev;
-
->>>>>>> 822257950 (Reconfiguration flow and device channels)
 	ret = max14906_init(&descriptor->max14906_desc,
 			    init_param->max14906_init_param);
 	if (ret)

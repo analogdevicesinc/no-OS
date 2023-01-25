@@ -31,9 +31,10 @@
 #define MAX14906_SLED_MASK          NO_OS_BIT(1)
 #define MAX14906_FLED_MASK          NO_OS_BIT(0)
 
-enum max14906_dir {
-	MAX14906_CH_OUT,
-	MAX14906_CH_IN
+enum max14906_function {
+	MAX14906_OUT,
+	MAX14906_IN,
+	MAX14906_HIGH_Z
 };
 
 enum max14906_do_mode {
@@ -46,7 +47,7 @@ enum max14906_do_mode {
 struct max14906_ch_config {
     /** Configuration for the GPIO connected to the DIO_ pin */
     struct no_os_gpio_init_param gpio_param;
-    enum max14906_dir dir;
+    enum max14906_function function;
     /** The value set to the GPIO in case it's configured as output */
     uint32_t val;
 };

@@ -74,11 +74,17 @@ int max14906_ch_set(struct max14906_desc *desc, uint32_t ch, uint32_t val)
 	return no_os_gpio_set_value(&desc->dio[ch], val);
 }
 
-int max14906_ch_dir(struct max14906_desc *desc, uint32_t ch,
-		    enum max14906_dir direction)
+int max14906_ch_func(struct max14906_desc *desc, uint32_t ch,
+		     enum max14906_function function)
 {
+	int ret;
+
+	if (function == MAX14906_HIGH_Z) {
+		
+	}
+
 	return max14906_reg_update(desc, MAX14906_SETOUT_REG,
-				   MAX14906_CH_DIR_MASK(ch), direction);
+				   MAX14906_CH_DIR_MASK(ch), function);
 }
 
 int max14906_init(struct max14906_desc **desc, struct max14906_init_param *param)
@@ -101,7 +107,7 @@ int max14906_init(struct max14906_desc **desc, struct max14906_init_param *param
 		ret = no_os_gpio_get(&descriptor->dio[i], &ch_config->gpio_param);
 		if (ret)
 			return ret;
-		if (ch_config->dir == MAX14906_CH_OUT)
+		if (ch_config->function == MAX14906_OUT)
 			ret = no_os_gpio_direction_output(descriptor->dio[i], ch_config->val);
 		else
 			ret = no_os_gpio_direction_input(descriptor->dio[i]);

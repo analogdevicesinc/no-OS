@@ -5,17 +5,11 @@
 #include "max14906.h"
 
 struct max14906_iio_desc {
-<<<<<<< HEAD
-    struct max14906_desc *max14906_desc;
-    struct iio_device *iio_dev;
-    uint32_t no_active_cha
-=======
 	struct max14906_desc *max14906_desc;
 	struct iio_device *iio_dev;
 	uint32_t active_channels;
 	uint32_t no_active_channels;
-	struct max14906_channel_config channel_configs[MAX14906_CHANNELS];
->>>>>>> 204978e8c (wip)
+	struct max14906_ch_config channel_configs[MAX14906_CHANNELS];
 };
 
 struct max14906_iio_desc_init_param {
@@ -24,6 +18,6 @@ struct max14906_iio_desc_init_param {
 
 int max14906_iio_init(struct max14906_iio_desc **,
                       struct max14906_iio_desc_init_param *);
-int max14906_iio_init(struct max14906_iio_desc *);
+int max14906_iio_remove(struct max14906_iio_desc *);
 
 #endif
