@@ -3,7 +3,7 @@
  *   @brief  Implementation of ltc2672 Driver.
  *   @author JSanBuen (jose.sanbuenaventura@analog.com)
 ********************************************************************************
- * Copyright 2022(c) Analog Devices, Inc.
+ * Copyright 2023(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -40,13 +40,14 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-
 #include <errno.h>
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdbool.h>
 #include "ltc2672.h"
 #include "no_os_spi.h"
+#include "no_os_error.h"
+#include "no_os_util.h"
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -54,13 +55,13 @@
 /******************************************************************************/
 
 /**
- * @brief Device and comm init function
+ * @brief Device and communication init function
  * @param device - ltc2672 descriptor to be initialized
- * @param init_param - Init parameter for descriptor
+ * @param init_param - Initial parameter for descriptor
  * @return 0 in case of success, errno errors otherwise
  */
 int ltc2672_init(struct ltc2672_dev **device,
-		  struct ltc2672_init_param *init_param)
+		 struct ltc2672_init_param *init_param)
 {
 	int ret;
 	struct ltc2672_dev *descriptor;
@@ -70,14 +71,25 @@ int ltc2672_init(struct ltc2672_dev **device,
 		return -ENOMEM;
 
 	ret = no_os_spi_init(&descriptor->comm_desc, &init_param->spi_init);
+	if (ret)
+		goto error_init;
 
-	if (ret) {
-		free(descriptor);
-		return ret;
+	descriptor->active_device = init_param->active_device;
+	descriptor->prev_command = 0x00000000;
+	descriptor->global_toggle = false; // default toggle is false
+
+	/* Default at power up: ALL channels turned off */
+	for (int i = 0; i < 5; i++) {
+		descriptor->out_spans[i] = LTC2672_OFF;
+		descriptor->max_currents[i] = LTC2672_OFF;
 	}
 
 	*device = descriptor;
 
+	return 0;
+
+error_init:
+	free(descriptor);
 	return ret;
 }
 
@@ -94,8 +106,6 @@ int ltc2672_remove(struct ltc2672_dev *device)
 		return -ENODEV;
 
 	ret = no_os_spi_remove(device->comm_desc);
-	if (ret)
-		return -EINVAL;
 
 	free(device);
 
@@ -103,330 +113,403 @@ int ltc2672_remove(struct ltc2672_dev *device)
 }
 
 /**
- * @brief Read raw register value
+ * @brief Write raw register value
  * @param device - ltc2672 descriptor
- * @param reg_addr - register value
- * @param *reg_val - pointer for register value read
+ * @param comm - command byte to send
+ * @param is_32 - flag if command is 32 bit (True) or 24 bit (False) format
  * @return 0 in case of success, negative error code otherwise
  */
-int ltc2672_read(struct ltc2672_dev *device, uint8_t reg_addr,
-		  uint8_t *reg_data)
+int ltc2672_transaction(struct ltc2672_dev *device, uint32_t comm, bool is_32)
 {
 	int ret;
-	uint8_t raw_array[1];
+	uint8_t raw_array[4]; // highest bytes transmitted is 4 bytes
+	uint16_t bytes;
+	uint32_t read_back = 0;
 
-	raw_array[0] = reg_addr;
+	if(is_32)
+		bytes = 4;
+	else
+		bytes = 3;
 
-	if( (reg_addr & ltc2672_READ_MASK) != reg_addr)
-		reg_addr &= ltc2672_READ_MASK;
+	for(int i = bytes; i > 0; i--) {
+		raw_array[i - 1] = (uint8_t)(comm >> (8 * (bytes - i)));
+	}
 
-	if(reg_addr < ltc2672_CONFIG_REG || reg_addr > ltc2672_FAULTSTAT_REG)
-		return -ENXIO;
-
-	ret = no_os_spi_write_and_read(device->comm_desc, raw_array, 1);
-
+	ret = no_os_spi_write_and_read(device->comm_desc, raw_array, bytes);
 	if (ret)
 		return ret;
 
-	*reg_data = raw_array[0];
+	for(int i = bytes; i > 0; i --) {
+		read_back |= (uint8_t)(raw_array[i - 1] << (8 * (bytes - i)));
+	}
 
-	return ret;
+	device->prev_command = read_back;
+
+	return 0;
 }
 
 /**
- * @brief Write raw register value
+ * @brief set the current for a selected DAC channel
  * @param device - ltc2672 descriptor
- * @param reg_addr - register value
- * @param reg_val - data to write in register
+ * @param current - current to set in mA
+ * @param out_ch - channel to set the current
  * @return 0 in case of success, negative error code otherwise
  */
-int ltc2672_write(struct ltc2672_dev *device, uint8_t reg_addr,
-		   uint8_t reg_data)
+int ltc2672_set_current_channel(struct ltc2672_dev *device, float current,
+				enum ltc2672_dac_ch out_ch)
 {
-	int ret;
-	uint8_t raw_array[2];
+	float current_code;
+	uint32_t command;
 
-	if((reg_addr & ltc2672_WRITE_MASK) != ltc2672_WRITE_MASK)
-		reg_addr |= ltc2672_WRITE_MASK;
+	if(current < 0 && device->out_spans[out_ch] != LTC2672_VMINUS_VREF)
+		return -EINVAL;
 
-	if(reg_addr < ltc2672_CONFIG_REG || reg_addr > ltc2672_FAULTSTAT_REG)
-		return -ENXIO;
+	if(current > device->max_currents[out_ch])
+		return -EINVAL;
 
-	raw_array[0] = reg_addr;
-	raw_array[1] = reg_data;
+	if(out_ch < LTC2672_DAC0 || out_ch > LTC2672_DAC4)
+		return -EINVAL;
 
-	ret = no_os_spi_write_and_read(device->comm_desc, raw_array, 2);
-	if (!ret)
-		return ret;
+	current_code = (float)(current / device->max_currents[0]);
 
-	return ret;
-}
-
-/**
- * @brief Read the raw 8-bit FAULTSTAT register
- * @param device ltc2672 descriptor
- * @return The raw unsigned 8-bit FAULT status register
- */
-int ltc2672_read_fault(struct ltc2672_dev *device, uint8_t *fault)
-{
-	uint8_t reg_data;
-	int ret;
-
-	*fault = reg_data;
-
-	ret = ltc2672_read(device, ltc2672_FAULTSTAT_REG, &reg_data);
-
-	return ret;
-}
-
-/**
- * @brief Clear all faults in FAULTSTAT
- * @param device ltc2672 descriptor
- */
-int ltc2672_clear_fault(struct ltc2672_dev *device)
-{
-	uint8_t reg_data;
-	int ret;
-
-	ret = ltc2672_read(device, ltc2672_CONFIG_REG, &reg_data);
-	if(ret)
-		return ret;
-
-	reg_data &= ~0x2C;
-	reg_data |= ltc2672_CONFIG_FAULTSTAT;
-
-	ret = ltc2672_write(device, ltc2672_CONFIG_REG, reg_data);
-
-	return ret;
-}
-
-/**
- * @brief Enable the bias voltage on the RTD sensor
- * @param device ltc2672 descriptor
- * @param b If true bias is enabled, else disabled
- */
-int ltc2672_enable_bias(struct ltc2672_dev *device, bool bias_en)
-{
-	uint8_t reg_data;
-	int ret;
-
-	ret = ltc2672_read(device, ltc2672_CONFIG_REG, &reg_data);
-	if(ret)
-		return ret;
-
-	if (bias_en)
-		reg_data |= ltc2672_CONFIG_BIAS;
+	if(device->active_device == LTC2672_12)
+		current_code = (uint32_t)(current_code * (float)(LTC2672_12BIT_RESO)) << 4;
 	else
-		reg_data &= ~ltc2672_CONFIG_BIAS;
+		current_code *= LTC2672_16BIT_RESO;
 
-	ret = ltc2672_write(device, ltc2672_CONFIG_REG, reg_data);
+	command = LTC2672_COMMAND24_GENERATE(LTC2672_CODE_PWRUP_UPD_CHANNEL_X, out_ch,
+					     (uint32_t)current_code);
 
-	return ret;
+	return ltc2672_transaction(device, command, false);
 }
 
 /**
- * @brief Option for continuous conversions between 50/60 Hz
- * @param device ltc2672 descriptor
- * @param b If true, auto conversion is enabled
+ * @brief sets the same current for all channels
+ * @param device - ltc2672 descriptor
+ * @param current - current to set in mA
+ * @return 0 in case of success, negative error code otherwise
  */
-int ltc2672_auto_convert(struct ltc2672_dev *device, bool auto_conv_en)
+int ltc2672_set_current_all_channels(struct ltc2672_dev *device, float current)
 {
-	uint8_t reg_data;
-	int ret;
+	uint32_t command;
+	float current_code;
+	enum ltc2672_out_range out_range_sum = 0;
 
-	ret = ltc2672_read(device, ltc2672_CONFIG_REG, &reg_data);
+	for(int i = 0; i < 5; i++) {
+		out_range_sum += device->out_spans[i];
+	}
 
-	if(ret)
-		return ret;
+	out_range_sum /= 5;
 
-	if (auto_conv_en)
-		reg_data |= ltc2672_CONFIG_MODEAUTO;
+	/* Check if all channels have same span */
+	if(out_range_sum != device->out_spans[0])
+		return -EINVAL;
+
+	/* Check if current is valid */
+	if( (current < 0 && device->out_spans[0] != LTC2672_VMINUS_VREF)
+	    || current > device->max_currents[0])
+		return -EINVAL;
+
+	current_code = (float)(current / device->max_currents[0]);
+
+	if(device->active_device == LTC2672_12)
+		current_code = (uint32_t)(current_code * (float)(LTC2672_12BIT_RESO)) << 4;
 	else
-		reg_data &= ~ltc2672_CONFIG_MODEAUTO;
+		current_code *= LTC2672_16BIT_RESO;
 
-	ret = ltc2672_write(device, ltc2672_CONFIG_REG, reg_data);
+	command = LTC2672_COMMAND24_GENERATE(LTC2672_CODE_PWRUP_UPD_CHANNEL_ALL,
+					     LTC2672_DAC0, (uint32_t)current_code);
 
-	return ret;
+	return ltc2672_transaction(device, command, false);
 }
 
 /**
- * @brief Option for 50Hz or 60Hz noise filters
- * @param device ltc2672 descriptor
- * @param b If true, 50Hz noise is filtered, else 60Hz(default)
+ * @brief sets output span for channel
+ * @param device - ltc2672 descriptor
+ * @param ch_span - max current span
+ * @param out_ch - DAC channel output to set
+ * @return 0 in case of success, negative error code otherwise
  */
-int ltc2672_enable_50Hz(struct ltc2672_dev *device, bool filt_en)
-{
-	uint8_t reg_data;
+int ltc2672_set_span_channel(struct ltc2672_dev *device,
+			     enum ltc2672_out_range ch_span
+			     ,enum ltc2672_dac_ch out_ch) {
 	int ret;
+	uint32_t span = 0;
+	uint32_t command;
 
-	ret = ltc2672_read(device, ltc2672_CONFIG_REG, &reg_data);
+	if(ch_span < LTC2672_OFF || ch_span > LTC2672_4800VREF)
+		return -EINVAL;
+
+	if(out_ch < LTC2672_DAC0 || out_ch > LTC2672_DAC4)
+		return -EINVAL;
+
+	device->out_spans[out_ch] = ch_span;
+
+	span = LTC2672_SPAN_SET(ch_span);
+
+	command = LTC2672_COMMAND24_GENERATE(LTC2672_SPAN_TO_CHANNEL_X, out_ch, span);
+	ret = ltc2672_transaction(device, command, false);
 	if(ret)
 		return ret;
 
-	if (filt_en)
-		reg_data |= ltc2672_CONFIG_FILT50HZ;
+	device->out_spans[out_ch] = ch_span;
+
+	if(ch_span == LTC2672_VMINUS_VREF)
+		device->max_currents[out_ch] = device->neg_current;
+	else if(ch_span == LTC2672_4800VREF)
+		device->max_currents[out_ch] = 300;
+	else if(ch_span == LTC2672_OFF)
+		device->max_currents[out_ch] = 0;
 	else
-		reg_data &= ~ltc2672_CONFIG_FILT50HZ;
+		device->max_currents[out_ch] = (float)((1 << (ch_span - 1)) *
+						       LTC2672_BASE_CURRENT);
 
-	ret = ltc2672_write(device, ltc2672_CONFIG_REG, reg_data);
-
-	return ret;
+	return 0;
 }
 
 /**
- * @brief Write the lower and upper values into the threshold fault
-    register to values as returned by readRTD()
- * @param device ltc2672 descriptor
- * @param lower raw lower threshold
- * @param upper raw upper threshold
+ * @brief sets the same output span for all channels
+ * @param device - ltc2672 descriptor
+ * @param ch_span - max current span
+ * @return 0 in case of success, negative error code otherwise
  */
-int ltc2672_set_threshold(struct ltc2672_dev *device, uint16_t lower,
-			   uint16_t upper)
+int ltc2672_set_span_all_channels(struct ltc2672_dev *device,
+				  enum ltc2672_out_range ch_span)
 {
-	uint16_t lsb;
-	uint16_t msb;
 	int ret;
+	uint16_t span = 0;
+	uint32_t command;
 
-	lsb = no_os_field_get(0x00FF, upper);
-	msb = no_os_field_get(0xFF00, upper);
+	if(ch_span < LTC2672_OFF || ch_span > LTC2672_4800VREF)
+		return -EINVAL;
 
-	ret = ltc2672_write(device, ltc2672_HFAULTMSB_REG, (uint8_t)lsb);
+	for(int i = 0; i < 5; i++)
+		device->out_spans[i] = ch_span;
+
+	span = LTC2672_SPAN_SET(ch_span);
+
+	command = LTC2672_COMMAND24_GENERATE(LTC2672_SPAN_TO_CHANNEL_ALL, LTC2672_DAC0,
+					     span);
+	ret = ltc2672_transaction(device, command, false);
 	if(ret)
 		return ret;
 
-	ret = ltc2672_write(device, ltc2672_HFAULTLSB_REG, (uint8_t)msb);
-	if(ret)
-		return ret;
+	if(ch_span == LTC2672_VMINUS_VREF) {
+		for(int i = 0; i < 5; i++)
+			device->max_currents[i] = device->neg_current;
+	} else if(ch_span == LTC2672_4800VREF) {
+		for(int i = 0; i < 5; i++)
+			device->max_currents[i] = 300;
+	} else if(ch_span == LTC2672_OFF) {
+		for(int i = 0; i < 5; i++)
+			device->max_currents[i] = 0;
+	} else {
+		for(int i = 0; i < 5; i++)
+			device->max_currents[i] = (float)((1 << (ch_span - 1) ) *
+							  LTC2672_BASE_CURRENT );
+	}
 
-	lsb = no_os_field_get(0x00FF, lower);
-	msb = no_os_field_get(0xFF00, lower);
-
-	ret = ltc2672_write(device, ltc2672_LFAULTMSB_REG, (uint8_t)lsb);
-	if(ret)
-		return ret;
-
-	ret = ltc2672_write(device, ltc2672_LFAULTLSB_REG, (uint8_t)msb);
-
-	return ret;
+	return 0;
 }
 
 /**
- * @brief Read the raw 16-bit lower threshold value
- * @param device ltc2672 descriptor
- * @return The raw unsigned 16-bit value, NOT temperature value
+ * @brief power down ltc2672
+ * @param device - ltc2672 descriptor
+ * @param out_ch - DAC channel output to set
+ * @return 0 in case of success, negative error code otherwise
  */
-int ltc2672_get_lower_threshold(struct ltc2672_dev *device,
-				 uint16_t *low_threshold)
+int ltc2672_chip_power_down(struct ltc2672_dev *device)
 {
-	uint8_t low_msb;
-	uint8_t low_lsb;
-	int ret;
+	uint32_t command;
 
-	ret = ltc2672_read(device, ltc2672_LFAULTMSB_REG, &low_msb);
-	if(ret)
-		return ret;
+	command = LTC2672_COMMAND24_GENERATE(LTC2672_PWRDWN_DEV, LTC2672_DAC0,
+					     LTC2672_DUMMY);
 
-	ret = ltc2672_read(device, ltc2672_LFAULTLSB_REG, &low_lsb);
-	if(ret)
-		return ret;
-
-	*low_threshold = (((uint16_t)low_msb << 8) | (uint16_t)low_lsb);
-
-	return ret;
+	return ltc2672_transaction(device, command, false);
 }
 
 /**
- * @brief Read the raw 16-bit upper threshold value
- * @param device ltc2672 descriptor
- * @return The raw unsigned 16-bit value, NOT temperature value
+ * @brief power down a channel
+ * @param device - ltc2672 descriptor
+ * @param out_ch - DAC channel output to set
+ * @return 0 in case of success, negative error code otherwise
  */
-int ltc2672_get_upper_threshold(struct ltc2672_dev *device,
-				 uint16_t *up_threshold)
+int ltc2672_power_down_channel(struct ltc2672_dev *device,
+			       enum ltc2672_dac_ch out_ch)
 {
-	uint8_t high_msb;
-	uint8_t high_lsb;
-	int ret;
+	uint32_t command;
 
-	ret = ltc2672_read(device, ltc2672_HFAULTMSB_REG, &high_msb);
-	if(ret)
-		return ret;
+	if(out_ch < LTC2672_DAC0 || out_ch > LTC2672_DAC4)
+		return -EINVAL;
 
-	ret = ltc2672_read(device, ltc2672_HFAULTLSB_REG, &high_lsb);
-	if(ret)
-		return ret;
+	command = LTC2672_COMMAND24_GENERATE(LTC2672_PWRDWN_CHANNEL_X, out_ch,
+					     LTC2672_DUMMY);
 
-	*up_threshold = (((uint16_t)high_msb << 8) | (uint16_t)high_lsb);
-
-	return ret;
+	return ltc2672_transaction(device, command, false);
 }
 
 /**
- * @brief RTD setup options for ltc2672_2WIRE, ltc2672_3WIRE, ltc2672_4WIRE
- * @param device ltc2672 descriptor
- * @param wires The number of wires in enum format
+ * @brief power down ALL channels
+ * @param device - ltc2672 descriptor
+ * @return 0 in case of success, negative error code otherwise
  */
-int ltc2672_set_wires(struct ltc2672_dev *device, bool is_odd_wire)
+int ltc2672_power_down_all_channels(struct ltc2672_dev *device)
 {
-	uint8_t reg_data = 0x00;
 	int ret;
+	uint32_t command;
 
-	ret = ltc2672_read(device, ltc2672_CONFIG_REG, &reg_data);
-	if(ret)
-		return ret;
+	for(enum ltc2672_dac_ch i = LTC2672_DAC0; i < (LTC2672_DAC4 + 1); i++) {
+		command = LTC2672_COMMAND24_GENERATE(LTC2672_PWRDWN_CHANNEL_X, i,
+						     LTC2672_DUMMY);
+		ret = ltc2672_transaction(device, command, false);
+		if(ret)
+			return ret;
+	}
 
-	if (is_odd_wire)
-		reg_data |= ltc2672_CONFIG_3WIRE;
+	return 0;
+}
+
+/**
+ * @brief configures mux output depending on target measurement
+ * @param device - ltc2672 descriptor
+ * @param mux_comm - multiplexer command code
+ * @return 0 in case of success, negative error code otherwise
+ */
+int ltc2672_monitor_mux(struct ltc2672_dev *device,
+			enum ltc2672_mux_commands mux_comm)
+{
+	uint32_t mux = 0;
+	uint32_t command;
+
+	if(mux_comm < LTC2672_MUX_DISABLED || mux_comm > LTC2672_MUX_VOUT4)
+		return -EINVAL;
+
+	mux = LTC2672_MUX_SET(mux_comm);
+
+	command = LTC2672_MUX24_GENERATE(LTC2672_MON_MUX, mux);
+
+	return ltc2672_transaction(device, command, false);
+}
+
+/**
+ * @brief setup toggle parameters for a channel
+ * @param device - ltc2672 descriptor
+ * @param out_ch - channel to toggle
+ * @param current_reg_a - current to write in register A
+ * @param current_reg_b - current to write in register B
+ * @return 0 in case of success, negative error code otherwise
+ */
+int ltc2672_setup_toggle_channel(struct ltc2672_dev *device,
+				 enum ltc2672_dac_ch out_ch
+				 ,float current_reg_a, float current_reg_b) {
+	int ret;
+	float current_code;
+	uint32_t command;
+
+	if ((current_reg_a < 0 && device->out_spans[out_ch] != LTC2672_VMINUS_VREF)
+	    || (current_reg_b < 0 && device->out_spans[out_ch] != LTC2672_VMINUS_VREF)
+	    || (current_reg_a > device->max_currents[out_ch])
+	    || (current_reg_b > device->max_currents[out_ch]))
+		return -EINVAL;
+
+	if (out_ch < LTC2672_DAC0 || out_ch > LTC2672_DAC4)
+		return -EINVAL;
+
+	/* Write code to Register A of out_ch */
+	current_code = (float)(current_reg_a / device->max_currents[out_ch]);
+
+	if(device->active_device == LTC2672_12)
+		current_code = (uint32_t)(current_code * (float)(LTC2672_12BIT_RESO)) << 4;
 	else
-		reg_data &= ~ltc2672_CONFIG_3WIRE;
+		current_code *= LTC2672_16BIT_RESO;
 
-	ret = ltc2672_write(device, ltc2672_CONFIG_REG, reg_data);
+	command = LTC2672_COMMAND24_GENERATE(LTC2672_CODE_TO_CHANNEL_X, out_ch,
+					     (uint32_t)current_code);
 
-	return ret;
+	ret = ltc2672_transaction(device, command, false);
+	if(ret)
+		return ret;
+
+	/* Toggle to enable register B*/
+	command = LTC2672_COMMAND24_GENERATE(LTC2672_TOGGLE_SEL, LTC2672_DAC0, (1 << out_ch));
+
+	ret = ltc2672_transaction(device, command, false);
+	if(ret)
+		return ret;
+
+	/* Write code to Register B of out_ch */
+	current_code = (float)(current_reg_b / device->max_currents[out_ch]);
+
+	if(device->active_device == LTC2672_12)
+		current_code = (uint32_t)(current_code * (float)(LTC2672_12BIT_RESO)) << 4;
+	else
+		current_code *= LTC2672_16BIT_RESO;
+
+	command = LTC2672_COMMAND24_GENERATE(LTC2672_CODE_TO_CHANNEL_X, out_ch,
+					     (uint32_t)current_code);
+
+	ret = ltc2672_transaction(device, command, false);
+	if(ret)
+		return ret;
+
+	/* Toggle to enable register A*/
+	command = LTC2672_COMMAND24_GENERATE(LTC2672_TOGGLE_SEL, LTC2672_DAC0, (1 << out_ch));
+
+	command &= ~(1 << out_ch);
+
+	return ltc2672_transaction(device, command, false);
 }
 
+/**
+ * @brief enables or disables selected channel/s for toggling
+ * @param device - ltc2672 descriptor
+ * @param mask - mask that describes which channel/s to toggle
+ * @return 0 in case of success, negative error code otherwise
+ */
+int ltc2672_enable_toggle_channel(struct ltc2672_dev *device, uint32_t mask)
+{
+	uint32_t command;
+
+	if(mask > 31)
+		return -EINVAL;
+
+	command = LTC2672_COMMAND24_GENERATE(LTC2672_TOGGLE_SEL, LTC2672_DAC0, mask);
+
+	return ltc2672_transaction(device, command, false);
+}
 
 /**
- * @brief Read the raw 16-bit value from the RTD_REG in one shot mode
- * @param device ltc2672 descriptor
- * @return The raw unsigned 16-bit value, NOT temperature
+ * @brief enables or disables global toggle bit
+ * @param device - ltc2672 descriptor
+ * @param is_enable - sets or resets the global toggle bit
+ * @return 0 in case of success, negative error code otherwise
  */
-int ltc2672_read_rtd(struct ltc2672_dev *device, uint16_t *rtd_reg)
+int ltc2672_global_toggle(struct ltc2672_dev *device, bool is_enable)
 {
-	uint8_t reg_data;
-	int ret;
+	uint32_t command;
 
-	ret = ltc2672_clear_fault(device);
-	if(ret)
-		return ret;
+	device->global_toggle = is_enable;
 
-	ret = ltc2672_enable_bias(device, true);
-	if(ret)
-		return ret;
+	command = LTC2672_COMMAND24_GENERATE(LTC2672_TOGGLE_GLBL, LTC2672_DAC0,
+					     (uint8_t)device->global_toggle);
 
-	ret = ltc2672_read(device, ltc2672_CONFIG_REG, &reg_data);
-	if(ret)
-		return ret;
+	return ltc2672_transaction(device, command, false);
+}
 
-	reg_data |= ltc2672_CONFIG_1SHOT;
+/**
+ * @brief configures the fault detection bits
+ * @param device - ltc2672 descriptor
+ * @param mask - mask that describes desired configuration
+ * @return 0 in case of success, negative error code otherwise
+ */
+int ltc2672_config_command(struct ltc2672_dev *device, uint8_t mask)
+{
+	uint32_t command;
 
-	ret = ltc2672_write(device, ltc2672_CONFIG_REG, reg_data);
-	if(ret)
-		return ret;
+	if(mask > 15)
+		return -EINVAL;
 
-	ret = ltc2672_read(device, ltc2672_RTDMSB_REG, &reg_data);
-	if(ret)
-		return ret;
+	command = LTC2672_COMMAND24_GENERATE(LTC2672_CNFG_CMD, LTC2672_DAC0, mask);
 
-	*rtd_reg = ((uint16_t)reg_data << 8);
-
-	ret = ltc2672_read(device, ltc2672_RTDLSB_REG, &reg_data);
-	if(ret)
-		return ret;
-
-	*rtd_reg = *rtd_reg | (uint16_t)reg_data;
-	*rtd_reg >>= 1;
-
-	ret = ltc2672_enable_bias(device, false);
-
-	return ret;
+	return ltc2672_transaction(device, command, false);
 }
