@@ -61,16 +61,16 @@
                 .attributes = attrs				\
         }
 
-#define AD74413R_DIAG_CHANNEL(_addr, _name)	               		\
+#define AD74413R_DIAG_CHANNEL(_addr, _name)	               	\
         {                                                       \
                 .ch_type = IIO_VOLTAGE,                         \
-				.name = _name,									\
+		.name = _name,					\
                 .indexed = 1,                                   \
-                .ch_out = 0,									\
-				.channel = _addr,								\
-				.address = _addr,                               \
-                .scan_type = &ad74413r_iio_adc_scan_type,		\
-                .attributes = ad74413r_iio_adc_attrs			\
+                .ch_out = 0,					\
+		.channel = _addr,				\
+		.address = _addr,				\
+                .scan_type = &ad74413r_iio_adc_scan_type,	\
+                .attributes = ad74413r_iio_adc_attrs		\
         }
 
 #define AD74413R_DAC_CHANNEL(type)                              \
@@ -91,13 +91,13 @@
         _AD74413R_CHANNELS(ad74413r_ ## name ## _channels)
 
 #define AD74413R_CONFIG_CHANNEL(_name, _addr)			        \
-        {                            							\
-				.name = _name,                 					\
-                .ch_type = IIO_VOLTAGE,                         \
-                .indexed = 1,                                   \
-                .ch_out = 0,                                    \
-				.address = _addr,								\
-				.channel = _addr,								\
+        {                            					\
+				.name = _name,                 		\
+                .ch_type = IIO_VOLTAGE,                         	\
+                .indexed = 1,                                   	\
+                .ch_out = 0,                                    	\
+		.address = _addr,					\
+		.channel = _addr,					\
                 .attributes = ad74413r_iio_config_attrs			\
         }
 
@@ -158,6 +158,11 @@ struct ad74413r_channel_config ad74413r_global_config[AD74413R_N_CHANNELS];
  * The configuration was done and the context may be replaced. 
  */
 extern int ad74413r_apply;
+
+/*
+ * The configuration context has to be brought back 
+ */
+extern int ad74413r_back;
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
@@ -230,12 +235,19 @@ static int ad74413r_iio_write_config_function(void *dev, char *buf, uint32_t len
 static int ad74413r_iio_read_config_function_avail(void *dev, char *buf, uint32_t len,
 						   const struct iio_ch_info *channel,
 						   intptr_t priv);
+
 static int ad74413r_iio_read_config_apply(void *dev, char *buf, uint32_t len,
 					  const struct iio_ch_info *channel,
 					  intptr_t priv);
 static int ad74413r_iio_write_config_apply(void *dev, char *buf, uint32_t len,
 					   const struct iio_ch_info *channel,
 					   intptr_t priv);
+static int ad74413r_iio_read_config_back(void *dev, char *buf, uint32_t len,
+					 const struct iio_ch_info *channel,
+					 intptr_t priv);
+static int ad74413r_iio_write_config_back(void *dev, char *buf, uint32_t len,
+					  const struct iio_ch_info *channel,
+					  intptr_t priv);
 
 /******************************************************************************/
 /************************ Variable Declarations *******************************/
@@ -409,6 +421,11 @@ static struct iio_attribute ad74413r_config_dev_attrs[] = {
 		.name = "apply",
 		.show = ad74413r_iio_read_config_apply,
 		.store = ad74413r_iio_write_config_apply
+	},
+	{
+		.name = "back",
+		.show = ad74413r_iio_read_config_back,
+		.store = ad74413r_iio_write_config_back
 	},
 	END_ATTRIBUTES_ARRAY
 };
@@ -1247,6 +1264,22 @@ static int ad74413r_iio_write_config_apply(void *dev, char *buf, uint32_t len,
 					   intptr_t priv)
 {
 	ad74413r_apply = 1;
+
+	return 0;
+}
+
+static int ad74413r_iio_read_config_back(void *dev, char *buf, uint32_t len,
+					 const struct iio_ch_info *channel,
+					 intptr_t priv)
+{
+	return iio_format_value(buf, len, IIO_VAL_INT, 1, &ad74413r_back);
+}
+
+static int ad74413r_iio_write_config_back(void *dev, char *buf, uint32_t len,
+					  const struct iio_ch_info *channel,
+					  intptr_t priv)
+{
+	ad74413r_back = 1;
 
 	return 0;
 }
