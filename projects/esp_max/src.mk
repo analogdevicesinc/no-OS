@@ -21,11 +21,13 @@ INCS += $(INCLUDE)/no_os_delay.h     \
 		$(INCLUDE)/no_os_units.h \
 		$(INCLUDE)/no_os_circular_buffer.h \
 		$(INCLUDE)/no_os_trng.h \
+		$(DRIVERS)/rtc/pcf85263/pcf85263.h \
 		$(DRIVERS)/power/ade9430/ade9430.h \
 		$(DRIVERS)/display/nhd_c12832a1z/nhd_c12832a1z.h \
 
 SRCS += $(DRIVERS)/api/no_os_gpio.c \
 		$(DRIVERS)/power/ade9430/ade9430.c \
+		$(DRIVERS)/rtc/pcf85263/pcf85263.c \
 		$(DRIVERS)/api/no_os_i2c.c  \
 		$(NO-OS)/util/no_os_lf256fifo.c \
 		$(DRIVERS)/api/no_os_irq.c  \

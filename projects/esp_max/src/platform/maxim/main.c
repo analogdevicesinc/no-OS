@@ -49,8 +49,10 @@
 #include "no_os_gpio.h"
 #include "no_os_delay.h"
 #include "no_os_timer.h"
+#include "no_os_i2c.h"
 #include "mqtt_client.h"
 #include "ade9430.h"
+#include "pcf85263.h"
 #include "nhd_c12832a1z.h"
 
 #include "az_iot_hub_client.h"
@@ -59,6 +61,7 @@
 #include "maxim_gpio.h"
 #include "maxim_uart.h"
 #include "maxim_irq.h"
+#include "maxim_i2c.h"
 #include "maxim_timer.h"
 #include "no_os_irq.h"
 #include "no_os_error.h"
@@ -220,6 +223,23 @@ int main()
 	int ret = -EINVAL;
 	int i = 0;
 	int status;
+
+	struct no_os_i2c_init_param i2c_ip = {
+		.device_id = 1,
+		.max_speed_hz = 100000,
+		.slave_address = 0x51,
+		.platform_ops = &max_i2c_ops,
+	};
+
+	struct pcf85263_init_param pcf85263_ip = {
+		.i2c_init = &i2c_ip,
+	};
+
+	struct pcf85263_dev *pcf85263_device;
+
+	ret = pcf85263_init(&pcf85263_device, pcf85263_ip);
+	if (ret)
+		return ret;
 
 	struct max_spi_init_param spi_extra_ip  = {
 		.numSlaves = 1,
@@ -547,6 +567,7 @@ int main()
 	status = mqtt_subscribe(mqtt, AZ_IOT_HUB_CLIENT_TWIN_RESPONSE_SUBSCRIBE_TOPIC, MQTT_QOS0, NULL);
 	if (NO_OS_IS_ERR_VALUE(status))
 		PRINT_ERR_AND_RET("Error mqtt_subscribe", status);
+
 	printf("Subscribed to topic: %s\n", AZ_IOT_HUB_CLIENT_TWIN_RESPONSE_SUBSCRIBE_TOPIC);
 
 	uint8_t			twin_buff[100];
