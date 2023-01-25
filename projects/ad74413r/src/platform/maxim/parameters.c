@@ -47,7 +47,8 @@
 /******************************************************************************/
 #ifdef DUMMY_EXAMPLE
 struct max_uart_init_param adin1110_uart_extra_ip = {
-	.flow = UART_FLOW_DIS
+	.flow = UART_FLOW_DIS,
+	.vssel = 1
 };
 #endif
 

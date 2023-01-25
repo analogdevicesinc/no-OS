@@ -69,6 +69,7 @@ int main()
 		return ret;
 
 	no_os_uart_stdio(uart_desc);
+	printf("1234\n");
 	ret = dummy_example_main();
 #endif
 
