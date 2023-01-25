@@ -79,7 +79,8 @@ enum iio_chan_type {
 	IIO_MAGN,
 	IIO_INCLI,
 	IIO_VELOCITY,
-	IIO_ANGL
+	IIO_ANGL,
+	IIO_ROT,
 };
 
 /**
@@ -91,7 +92,10 @@ enum iio_modifier {
 	IIO_MOD_X,
 	IIO_MOD_Y,
 	IIO_MOD_Z,
-	IIO_MOD_TEMP_AMBIENT
+	IIO_MOD_TEMP_AMBIENT,
+	IIO_MOD_PITCH,
+	IIO_MOD_YAW,
+	IIO_MOD_ROLL,
 };
 
 /**
