@@ -114,14 +114,18 @@ static const char * const iio_chan_type_string[] = {
 	[IIO_MAGN] = "magn",
 	[IIO_INCLI] = "incli",
 	[IIO_VELOCITY] = "velocity",
-	[IIO_ANGL] = "angl"
+	[IIO_ANGL] = "angl",
+	[IIO_ROT] = "rot",
 };
 
 static const char * const iio_modifier_names[] = {
 	[IIO_MOD_X] = "x",
 	[IIO_MOD_Y] = "y",
 	[IIO_MOD_Z] = "z",
-	[IIO_MOD_TEMP_AMBIENT] = "ambient"
+	[IIO_MOD_TEMP_AMBIENT] = "ambient",
+	[IIO_MOD_PITCH] = "pitch",
+	[IIO_MOD_YAW] = "yaw",
+	[IIO_MOD_ROLL] = "roll",
 };
 
 /* Parameters used in show and store functions */
