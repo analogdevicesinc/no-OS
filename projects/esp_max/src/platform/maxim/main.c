@@ -233,11 +233,27 @@ int main()
 
 	struct pcf85263_init_param pcf85263_ip = {
 		.i2c_init = &i2c_ip,
+		.sec = RTC_SEC_DEFAULT,
+		.min = RTC_MIN_DEFAULT,
+		.hr = RTC_HR_DEFAULT,
+		.day = RTC_DAY_DEFAULT,
+		.mon = RTC_MON_DEFAULT,
+		.year = RTC_YEAR_DEFAULT,
 	};
 
 	struct pcf85263_dev *pcf85263_device;
 
 	ret = pcf85263_init(&pcf85263_device, pcf85263_ip);
+	if (ret)
+		return ret;
+
+#ifdef RTC_SET_DEFAULT
+	ret = pcf85263_set_date(pcf85263_device);
+	if (ret)
+		return ret;
+#endif
+
+	ret = pcf85263_read_ts(pcf85263_device);
 	if (ret)
 		return ret;
 

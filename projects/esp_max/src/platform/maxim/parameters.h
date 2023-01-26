@@ -51,10 +51,19 @@
 
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
+// #define RTC_SET_DEFAULT
+
 #define UART_DEVICE_ID		1
 #define INTC_DEVICE_ID		0
 #define UART_IRQ_ID		UART1_IRQn
 #define UART_BAUDRATE		57600
+
+#define RTC_SEC_DEFAULT		0x0
+#define RTC_MIN_DEFAULT		0x15
+#define RTC_HR_DEFAULT		0x13
+#define RTC_DAY_DEFAULT		0x26
+#define RTC_MON_DEFAULT		0x1
+#define RTC_YEAR_DEFAULT	0x23
 
 #define WIFI_SSID	        "moto g 5G plus"
 #define WIFI_PWD	        "blabla1234"
