@@ -65,6 +65,7 @@
 /************************ Variables Definitions *******************************/
 /******************************************************************************/
 #define AD7616_SDZ_SAMPLE_NO 1000
+#define AD7616_SDZ_CH_NO 2
 
 #if (HDL_AD7616_PARALLEL == 0)
 struct spi_engine_offload_init_param spi_engine_offload_init_param = {
@@ -150,7 +151,11 @@ int main(void)
 {
 	struct ad7616_dev	*dev;
 	uint32_t buf[AD7616_SDZ_SAMPLE_NO] __attribute__ ((aligned));
-	uint32_t i;
+	//uint32_t i;
+
+	uint32_t i = 0, j;
+	const float lsb = 2.5 / (pow(2, 15));
+	float data;
 
 	Xil_ICacheEnable();
 	Xil_DCacheEnable();
@@ -164,9 +169,26 @@ int main(void)
 	else
 		ad7616_read_data_serial(dev, buf, AD7616_SDZ_SAMPLE_NO);
 
-	for (i = 0; i < AD7616_SDZ_SAMPLE_NO; i++) {
-		pr_info("ADC sample %lu : %lu \n", i * 2, buf[i] >> 16);
-		pr_info("ADC sample %lu : %lu \n", (i * 2) + 1, buf[i] & 0xFFFF);
+	//for (i = 0; i < AD7616_SDZ_SAMPLE_NO/2; i++) {
+	//	pr_info("ADC sample %lu : %lu \n", i * 2, buf[i] >> 16);
+	//	pr_info("ADC sample %lu : %lu \n", (i * 2) + 1, buf[i] & 0xFFFF);
+	//}
+
+	for(i = 0; i < AD7616_SDZ_SAMPLE_NO/2; i++) {
+		j = 0;
+		printf("%lu: ", i);
+		while(j < AD7616_SDZ_CH_NO) {
+			buf[AD7616_SDZ_CH_NO*i+j] >>= 16;
+			buf[AD7616_SDZ_CH_NO*i+j] &= 0xffff;
+			data = lsb * (int32_t)buf[AD7616_SDZ_CH_NO*i+j];
+			if(data > 2.5)
+				data = data - 5;
+			printf("CH%lu: 0x%08lx = %+1.5fV ", j,
+					buf[AD7616_SDZ_CH_NO*i+j], data);
+			if(j == (AD7616_SDZ_CH_NO - 1))
+				printf("\n");
+			j++;
+		}
 	}
 
 	pr_info("Capture done. \n");
