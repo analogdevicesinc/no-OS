@@ -440,7 +440,6 @@ int main()
 	wifi_get_network_interface(wifi, &socket_param.net);
 
 	struct secure_init_param sip = {
-		.hostname = DPS_SERVER_ADDR,
 		.ca_cert = my_ca_cert,
 		.ca_cert_len = NO_OS_ARRAY_SIZE(my_ca_cert),
 		.cli_cert = my_cli_cert,
@@ -453,11 +452,22 @@ int main()
 	socket_param.secure_init_param = &sip;
 
 	static struct tcp_socket_desc	*sock;
+
+	struct mqtt_message	msg;
+	uint32_t		len;
+
+	struct socket_address		mqtt_broker_addr;
+	struct mqtt_init_param		mqtt_init_param;
+	struct mqtt_desc		*mqtt;
+	struct mqtt_connect_config	conn_config;
+
+#ifdef CONFIG_DPS
+	sip.hostname = DPS_SERVER_ADDR;
+
 	status = socket_init(&sock, &socket_param);
 		if (NO_OS_IS_ERR_VALUE(status))
 			PRINT_ERR_AND_RET("Error socket_init", status);
 
-	struct socket_address		mqtt_broker_addr;
 	/* Connect socket to mqtt borker server */
 	mqtt_broker_addr = (struct socket_address) {
 		.addr = DPS_SERVER_ADDR,
@@ -469,7 +479,6 @@ int main()
 
 	printf("Connection with \"%s\" established\n", SERVER_ADDR);
 
-	struct mqtt_init_param		mqtt_init_param;
 	/* Initialize mqtt descriptor */
 	mqtt_init_param = (struct mqtt_init_param) {
 		.timer_id = TIMER_ID,
@@ -482,13 +491,10 @@ int main()
 		.read_buff_size = BUFF_LEN,
 		.message_handler = mqtt_message_handler
 	};
-	struct mqtt_desc	*mqtt;
 
 	status = mqtt_init(&mqtt, &mqtt_init_param);
 	if (NO_OS_IS_ERR_VALUE(status))
 		PRINT_ERR_AND_RET("Error mqtt_init", status);
-
-	struct mqtt_connect_config	conn_config;
 
 	create_and_configure_mqtt_client_for_provisioning();
 
@@ -509,9 +515,6 @@ int main()
 		PRINT_ERR_AND_RET("Error mqtt_subscribe", status);
 	printf("Subscribed to topic: %s\n", AZ_IOT_HUB_CLIENT_TWIN_RESPONSE_SUBSCRIBE_TOPIC);
 
-	struct mqtt_message	msg;
-	uint32_t		len;
-
 	msg = (struct mqtt_message) {
 		.qos = 1,
 		.payload = mqtt_payload,
@@ -530,6 +533,7 @@ int main()
 	status = socket_disconnect(sock);
 	if (NO_OS_IS_ERR_VALUE(status))
 		PRINT_ERR_AND_RET("Error socket_connect", status);
+#endif
 
 	sip.hostname = SERVER_ADDR;
 

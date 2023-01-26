@@ -51,6 +51,8 @@
 
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
+
+// #define CONFIG_DPS
 // #define RTC_SET_DEFAULT
 
 #define UART_DEVICE_ID		1
