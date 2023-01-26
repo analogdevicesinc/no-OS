@@ -117,7 +117,8 @@ static char register_topic_buffer[REGISTER_TOPIC_BUFFER_LENGTH];
 static uint8_t			send_buff[BUFF_LEN];
 static uint8_t			read_buff[BUFF_LEN];
 
-int32_t read_and_send(struct mqtt_desc *mqtt, struct ade9430_dev *ade9430_dev, struct nhd_c12832a1z_device *nhd_c12832a1z_dev)
+int32_t read_and_send(struct mqtt_desc *mqtt, struct ade9430_dev *ade9430_dev, struct nhd_c12832a1z_device *nhd_c12832a1z_dev,
+			struct pcf85263_dev *pcf85263_dev)
 {
 	struct mqtt_message	msg;
 	uint8_t			buff[100];
@@ -138,6 +139,22 @@ int32_t read_and_send(struct mqtt_desc *mqtt, struct ade9430_dev *ade9430_dev, s
 	ret = nhd_c12832a1z_print_string(nhd_c12832a1z_dev, buff, len);
 	if (ret)
 		return ret;
+
+	ret = pcf85263_read_ts(pcf85263_dev);
+	if (ret)
+		return ret;
+
+	len = sprintf(buff, "Temp: %.2f;AIRMS: %.2f;AVRMS: %.2f;AWATT: %.2f;timestamp:20%02x-%02x-%02xT%02x:%02x:%02x+02:00",
+			ade9430_dev->temp_deg,
+			ade9430_dev->airms,
+			ade9430_dev->avrms,
+			ade9430_dev->awatt,
+			pcf85263_dev->year,
+			pcf85263_dev->mon,
+			pcf85263_dev->day,
+			pcf85263_dev->hr,
+			pcf85263_dev->min,
+			pcf85263_dev->sec);
 
 	//Get the topic to send a telemetry message
 	az_iot_hub_client_telemetry_get_publish_topic(&my_client, NULL, telemetry_topic, sizeof(telemetry_topic), NULL);
@@ -252,10 +269,6 @@ int main()
 	if (ret)
 		return ret;
 #endif
-
-	ret = pcf85263_read_ts(pcf85263_device);
-	if (ret)
-		return ret;
 
 	struct max_spi_init_param spi_extra_ip  = {
 		.numSlaves = 1,
@@ -609,7 +622,7 @@ int main()
 			PRINT_ERR_AND_RET("Error mqtt_yield", status);
 
 	while (true) {
-		status = read_and_send(mqtt, ade9430_device, nhd_c12832a1z_device);
+		status = read_and_send(mqtt, ade9430_device, nhd_c12832a1z_device, pcf85263_device);
 		if (NO_OS_IS_ERR_VALUE(status))
 			PRINT_ERR_AND_RET("Error read_and_send", status);
 		printf("Data sent to broker\n");
