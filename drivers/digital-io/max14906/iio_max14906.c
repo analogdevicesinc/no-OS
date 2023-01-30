@@ -8,8 +8,6 @@
 #include "max14906.h"
 #include "iio_max14906.h"
 
-#define MAX14906_IIO_MAX_CH	5
-
 #define MAX14906_CHANNEL(_addr)			\
         {					\
             	.ch_type = IIO_VOLTAGE,		\
@@ -83,7 +81,13 @@ static int max14906_iio_read_config_apply(void *dev, char *buf, uint32_t len,
 static int max14906_iio_write_config_apply(void *dev, char *buf, uint32_t len,
 		const struct iio_ch_info *channel, intptr_t priv);
 
+static int max14906_iio_read_runtime_back(void *dev, char *buf, uint32_t len,
+		const struct iio_ch_info *channel, intptr_t priv);
+static int max14906_iio_write_runtime_back(void *dev, char *buf, uint32_t len,
+		const struct iio_ch_info *channel, intptr_t priv);
+
 extern int max14906_apply;
+extern int max14906_back;
 
 struct max14906_ch_config max14906_ch_configs[MAX14906_CHANNELS];
 
@@ -178,11 +182,13 @@ static struct iio_attribute max14906_config_attrs[] = {
 	},
 	{
 		.name = "IEC_type",
+		.shared = IIO_SHARED_BY_ALL,
 		.show = max14906_iio_read_config_iec,
 		.store = max14906_iio_write_config_iec,
 	},
 	{
 		.name = "IEC_type_available",
+		.shared = IIO_SHARED_BY_ALL,
 		.show = max14906_iio_read_config_iec_available,
 	}
 	END_ATTRIBUTES_ARRAY
@@ -197,6 +203,15 @@ static struct iio_attribute max14906_config_dev_attrs[] = {
 	END_ATTRIBUTES_ARRAY
 };
 
+static struct iio_attribute max14906_runtime_dev_attrs[] = {
+	{
+		.name = "back",
+		.show = max14906_iio_read_runtime_back,
+		.store = max14906_iio_write_runtime_back,
+	},
+	END_ATTRIBUTES_ARRAY
+};
+
 static struct iio_channel *max14906_iio_channels;
 
 static struct iio_channel max14906_config_channels[MAX14906_CHANNELS] = {
@@ -207,11 +222,10 @@ static struct iio_channel max14906_config_channels[MAX14906_CHANNELS] = {
 };
 
 static struct iio_device max14906_iio_dev = {
-	.num_ch = 5,
-	.channels = max14906_channels,
 	.read_dev = (int32_t (*)())max14906_iio_read_samples,
 	.debug_reg_read = (int32_t (*)())max14906_reg_read,
 	.debug_reg_write = (int32_t (*)())max14906_reg_write,
+	.attrs = max14906_runtime_dev_attrs,
 };
 
 static struct iio_device max14906_iio_config_dev = {
@@ -496,7 +510,9 @@ int max14906_iio_setup_channels(struct max14906_iio_desc *desc)
 		max14906_iio_channels[ch_offset++] = channel;
 	}
 
-	max14906_iio_channels[ch_offset] = MAX14906_FAULT_CHANNEL;
+	max14906_iio_channels[ch_offset++] = MAX14906_FAULT_CHANNEL;
+	max14906_iio_dev.num_channels = ch_offset;
+	max14906_iio_dev.channels = max14906_iio_channels;
 
 	return 0;
 }
@@ -541,6 +557,20 @@ static int max14906_iio_write_config_apply(void *dev, char *buf, uint32_t len,
 		const struct iio_ch_info *channel, intptr_t priv)
 {
 	max14906_apply = 1;
+
+	return 0;
+}
+
+static int max14906_iio_read_runtime_back(void *dev, char *buf, uint32_t len,
+		const struct iio_ch_info *channel, intptr_t priv)
+{
+	return iio_format_value(buf, len, IIO_VAL_INT, 1, &max14906_back);
+}
+
+static int max14906_iio_write_runtime_back(void *dev, char *buf, uint32_t len,
+		const struct iio_ch_info *channel, intptr_t priv)
+{
+	max14906_back = 1;
 
 	return 0;
 }

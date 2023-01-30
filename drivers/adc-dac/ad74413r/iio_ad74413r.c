@@ -52,6 +52,8 @@
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
+#define AD74413R_DIAG_CH_OFFSET		4
+
 #define AD74413R_ADC_CHANNEL(type, attrs)                	\
         {                                                       \
                 .ch_type = type,                                \
@@ -158,9 +160,8 @@ struct ad74413r_channel_config ad74413r_global_config[AD74413R_N_CHANNELS];
  * The configuration was done and the context may be replaced. 
  */
 extern int ad74413r_apply;
-
 /*
- * The configuration context has to be brought back 
+ * Bring back the configuration context 
  */
 extern int ad74413r_back;
 
@@ -422,6 +423,10 @@ static struct iio_attribute ad74413r_config_dev_attrs[] = {
 		.show = ad74413r_iio_read_config_apply,
 		.store = ad74413r_iio_write_config_apply
 	},
+	END_ATTRIBUTES_ARRAY
+};
+
+static struct iio_attribute ad74413r_runtime_dev_attrs[] = {
 	{
 		.name = "back",
 		.show = ad74413r_iio_read_config_back,
@@ -499,7 +504,8 @@ static struct iio_device ad74413r_iio_dev = {
 	.trigger_handler = (int32_t (*)())ad74413r_iio_trigger_handler,
 	.read_dev = (int32_t (*)())ad74413r_iio_read_samples,
 	.debug_reg_read = (int32_t (*)())ad74413r_iio_read_reg,
-	.debug_reg_write = (int32_t (*)())ad74413r_iio_write_reg
+	.debug_reg_write = (int32_t (*)())ad74413r_iio_write_reg,
+	.attributes = ad74413r_runtime_dev_attrs,
 };
 
 static struct iio_device ad74413r_iio_config_dev = {
@@ -1039,42 +1045,70 @@ static int ad74413r_iio_setup_channels(struct ad74413r_iio_desc *iio_desc)
 
 	iio_desc->iio_dev->channels = chan_buffer;
 
-	/** Add the ADC channels */
+	/* Both the ADC and DAC channels have to be added in one iteration */
 	for (int i = 0; i < AD74413R_N_CHANNELS; i++) {
 		if (!config[i].enabled)
 			continue;
+
 		channels_info = channel_map[config[i].function];
 		chan = channels_info.channels;
 
-		chan[0].channel = i;
-		chan[0].address = i;
-		chan[0].scan_index = i;
+		for (int ch_idx = 0; ch_idx < channels_info.num_channels; ch_idx++) {
+			chan[ch_idx].channel = i;
+			chan[ch_idx].address = i;
 
-		memcpy(chan_buffer + n_chan, chan, sizeof(*chan));
-		n_chan++;
-		iio_desc->iio_dev->num_ch++;
+			/* Only add a scan index to the ADC channels */
+			if (ch_idx == 0)
+				chan[ch_idx].scan_index = i;
+
+			memcpy(chan_buffer + n_chan, chan, sizeof(*chan));
+			n_chan++;
+			iio_desc->iio_dev->num_ch++;
+		}
 	}
 
-	/** Add the DAC channels */
-	for (int i = 0; i < AD74413R_N_CHANNELS; i++) {
-		if (!config[i].enabled)
-			continue;
-		channels_info = channel_map[config[i].function];
-		chan = channels_info.channels;
-		if (channels_info.num_channels == 1)
-			continue;
+	// /** Add the ADC channels */
+	// for (int i = 0; i < AD74413R_N_CHANNELS; i++) {
+	// 	if (!config[i].enabled)
+	// 		continue;
+	// 	channels_info = channel_map[config[i].function];
+	// 	chan = channels_info.channels;
 
-		chan[1].channel = i;
-		chan[1].address = i;
+	// 	chan[0].channel = i;
+	// 	chan[0].address = i;
+	// 	chan[0].scan_index = i;
 
-		memcpy(chan_buffer + n_chan, &chan[1], sizeof(chan[1]));
-		n_chan++;
-		iio_desc->iio_dev->num_ch++;
-	}
+	// 	memcpy(chan_buffer + n_chan, chan, sizeof(*chan));
+	// 	n_chan++;
+	// 	iio_desc->iio_dev->num_ch++;
+	// }
 
-	/** Add the diagnostics channels */
+	// /** Add the DAC channels */
+	// for (int i = 0; i < AD74413R_N_CHANNELS; i++) {
+	// 	if (!config[i].enabled)
+	// 		continue;
+	// 	channels_info = channel_map[config[i].function];
+	// 	chan = channels_info.channels;
+	// 	if (channels_info.num_channels == 1)
+	// 		continue;
+
+	// 	chan[1].channel = i;
+	// 	chan[1].address = i;
+
+	// 	memcpy(chan_buffer + n_chan, &chan[1], sizeof(chan[1]));
+	// 	n_chan++;
+	// 	iio_desc->iio_dev->num_ch++;
+	// }
+
+	/* Add the diagnostics channels */
 	for (int i = 0; i < AD74413R_N_CHANNELS; i++) {
 		chan = &ad74413r_diag_channels[i];
+
+		/* These will have a fixed offset, independent of how many channels have been added */
+		chan->address = i + AD74413R_DIAG_CH_OFFSET;
+		chan->channel = i + AD74413R_DIAG_CH_OFFSET;
+		chan->indexed = i + AD74413R_DIAG_CH_OFFSET;
+
 		memcpy(chan_buffer + n_chan, chan, sizeof(*chan));
 		n_chan++;
 		iio_desc->iio_dev->num_ch++;

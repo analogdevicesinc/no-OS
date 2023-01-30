@@ -114,6 +114,8 @@
 
 int ad74413r_apply;
 int max14906_apply;
+int ad74413r_back;
+int max14906_back;
 
 static inline uint32_t _calc_uart_xfer_time(uint32_t len, uint32_t baudrate)
 {
@@ -424,9 +426,11 @@ int32_t iio_app_run_with_trigs(struct iio_app_device *devices, uint32_t nb_devs,
 
 	do {
 		status = iio_step(*iio_desc);
-		if (ad74413r_apply && max14906_apply) {
+		if ((ad74413r_apply && max14906_apply) || (ad74413r_back && max14906_back)) {
 			ad74413r_apply = 0;
 			max14906_apply = 0;
+			ad74413r_back = 0;
+			max14906_back = 0;
 
 			iio_remove(*iio_desc);
 			return 0;
