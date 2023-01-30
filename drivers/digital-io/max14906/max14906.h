@@ -27,9 +27,15 @@
 #define MAX14906_DO_MASK(x)         (NO_OS_GENMASK(1, 0) << (x))
 #define MAX14906_CH_DIR_MASK(x)		NO_OS_BIT((x) + 4)
 #define MAX14906_CH(x)              (x)
+#define MAX14906_IEC_TYPE_MASK      NO_OS_BIT(7)
 
 #define MAX14906_SLED_MASK          NO_OS_BIT(1)
 #define MAX14906_FLED_MASK          NO_OS_BIT(0)
+
+enum max14906_iec_type {
+	MAX14906_TYPE_1_3,
+	MAX14906_TYPE_2,
+};
 
 enum max14906_function {
 	MAX14906_OUT,
@@ -38,31 +44,32 @@ enum max14906_function {
 };
 
 enum max14906_do_mode {
-    MAX14906_HIGH_SIDE,
-    MAX14906_HIGH_SIDE_INRUSH,
-    MAX14906_PUSH_PULL_CLAMP,
-    MAX14906_PUSH_PULL
+	MAX14906_HIGH_SIDE,
+	MAX14906_HIGH_SIDE_INRUSH,
+	MAX14906_PUSH_PULL_CLAMP,
+	MAX14906_PUSH_PULL
 };
 
 struct max14906_ch_config {
-    /** Configuration for the GPIO connected to the DIO_ pin */
-    struct no_os_gpio_init_param gpio_param;
-    enum max14906_function function;
-    /** The value set to the GPIO in case it's configured as output */
-    uint32_t val;
+	bool enable;
+	/** Configuration for the GPIO connected to the DIO_ pin */
+	struct no_os_gpio_init_param gpio_param;
+	enum max14906_function function;
+	/** The value set to the GPIO in case it's configured as output */
+	uint32_t val;
 };
 
 struct max14906_init_param {
-    uint32_t chip_address;
-    struct no_os_spi_init_param *comm_param;
-    struct max14906_ch_config ch_config[MAX14906_CHANNELS];
+	uint32_t chip_address;
+	struct no_os_spi_init_param *comm_param;
+	struct max14906_ch_config ch_config[MAX14906_CHANNELS];
 };
 
 struct max14906_desc {
-    uint32_t chip_address; 
-    struct no_os_spi_desc *comm_desc;
-    struct no_os_gpio_desc *dio[MAX14906_CHANNELS];
-    uint8_t buff[MAX14906_FRAME_SIZE];
+	uint32_t chip_address;
+	struct no_os_spi_desc *comm_desc;
+	struct no_os_gpio_desc *dio[MAX14906_CHANNELS];
+	uint8_t buff[MAX14906_FRAME_SIZE];
 };
 
 int max14906_reg_write(struct max14906_desc *, uint32_t, uint8_t);
