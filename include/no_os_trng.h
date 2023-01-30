@@ -52,10 +52,22 @@
 /******************************************************************************/
 
 /**
+ * @struct no_os_trng_platform_ops
+ * @brief Structure holding TRNG function pointers that point to the platform
+ * specific function
+ */
+struct no_os_trng_platform_ops;
+
+/**
  * @struct no_os_trng_desc
  * @brief TRNG Descriptor
  */
-struct no_os_trng_desc;
+struct no_os_trng_desc {
+	/** Platform ops */
+	const struct no_os_trng_platform_ops *platform_ops;
+	/** Platform specific parameters */
+	void *extra;
+};
 
 /**
  * @struct no_os_trng_init_param
@@ -66,6 +78,23 @@ struct no_os_trng_init_param {
 	uint32_t	dev_id;
 	/** Platform specific parameter */
 	void		*extra;
+	/** Platform ops */
+	const struct no_os_trng_platform_ops *platform_ops;
+};
+
+/**
+ * @struct no_os_trng_platform_ops
+ * @brief Structure holding TRNG function pointers that point to the platform
+ * specific function
+ */
+struct no_os_trng_platform_ops {
+	/** TRNG initialization function pointer */
+	int (*init)(struct no_os_trng_desc **,
+		    const struct no_os_trng_init_param *);
+	/** Fill buffer with random numbers */
+	int (*fill_buffer)(struct no_os_trng_desc *, uint8_t *, uint32_t);
+	/** TRNG remove function pointer */
+	int (*remove)(struct no_os_trng_desc *);
 };
 
 /******************************************************************************/
@@ -73,14 +102,14 @@ struct no_os_trng_init_param {
 /******************************************************************************/
 
 /* Initialize descriptor */
-int32_t no_os_trng_init(struct no_os_trng_desc **desc,
-			struct no_os_trng_init_param *param);
+int no_os_trng_init(struct no_os_trng_desc **desc,
+		    const struct no_os_trng_init_param *param);
 
 /* Free resources allocated in descriptor */
-void no_os_trng_remove(struct no_os_trng_desc *desc);
+int no_os_trng_remove(struct no_os_trng_desc *desc);
 
 /* Fill buffer with random numbers */
-int32_t no_os_trng_fill_buffer(struct no_os_trng_desc *desc, uint8_t *buff,
-			       uint32_t len);
+int no_os_trng_fill_buffer(struct no_os_trng_desc *desc, uint8_t *buff,
+			   uint32_t len);
 
 #endif // _NO_OS_TRNG_H_

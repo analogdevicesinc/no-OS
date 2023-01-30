@@ -1,10 +1,9 @@
 /***************************************************************************//**
- *   @file   generic_trng.c
- *   @brief  Generic implementation of true random number generator
- *   @author Mihail Chindris (mihail.chindris@analog.com)
+ *   @file   no_os_trng.c
+ *   @brief  Implementation of the TRNG Interface
+ *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
- *   @copyright
- * Copyright 2020(c) Analog Devices, Inc.
+ * Copyright 2023(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -41,47 +40,72 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-
+#include <inttypes.h>
 #include "no_os_trng.h"
-#include "no_os_util.h"
+#include <stdlib.h>
 #include "no_os_error.h"
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
 
-/* Initialize descriptor */
-int generic_trng_init(struct no_os_trng_desc **desc,
-		      struct no_os_trng_init_param *param)
+/**
+ * @brief Initialize the TRNG.
+ * @param desc - The TRNG descriptor.
+ * @param param - The structure that contains the TRNG parameters.
+ * @return 0 in case of success, -1 otherwise.
+ */
+int no_os_trng_init(struct no_os_trng_desc **desc,
+		    const struct no_os_trng_init_param *param)
 {
-	NO_OS_UNUSED_PARAM(desc);
-	NO_OS_UNUSED_PARAM(param);
+	int ret;
 
-	return -1;
-}
+	if (!param || !param->platform_ops)
+		return -EINVAL;
 
-/* Free resources allocated in descriptor */
-int generic_trng_remove(struct no_os_trng_desc *desc)
-{
-	NO_OS_UNUSED_PARAM(desc);
-}
+	if (!param->platform_ops->init)
+		return -ENOSYS;
 
-/* Fill buffer with random numbers */
-int generic_trng_fill_buffer(struct no_os_trng_desc *desc, uint8_t *buff,
-			     uint32_t len)
-{
-	NO_OS_UNUSED_PARAM(desc);
-	NO_OS_UNUSED_PARAM(buff);
-	NO_OS_UNUSED_PARAM(len);
+	ret = param->platform_ops->init(desc, param);
+	if (ret)
+		return ret;
 
-	return -1;
+	(*desc)->platform_ops = param->platform_ops;
+
+	return 0;
 }
 
 /**
- * @brief Generic TRNG platform ops structure
+ * @brief Free the resources allocated by no_os_trng_init().
+ * @param desc - The TRNG descriptor.
+ * @return 0 in case of success, -1 otherwise.
  */
-const struct no_os_trng_platform_ops aducm_trng_ops = {
-	.init = &generic_trng_init,
-	.fill_buffer = &generic_trng_fill_buffer,
-	.remove = &generic_trng_remove
-};
+int no_os_trng_remove(struct no_os_trng_desc *desc)
+{
+	if (!desc || !desc->platform_ops)
+		return -EINVAL;
+
+	if (!desc->platform_ops->remove)
+		return -ENOSYS;
+
+	return desc->platform_ops->remove(desc);
+}
+
+/**
+ * @brief Fill buffer with rng data.
+ * @param desc - The TRNG descriptor.
+ * @param buff - Buffer to be filled
+ * @param len - Size of the buffer
+ * @return 0 in case of success, -1 otherwise.
+ */
+int no_os_trng_fill_buffer(struct no_os_trng_desc *desc, uint8_t *buff,
+			   uint32_t len)
+{
+	if (!desc || !desc->platform_ops)
+		return -EINVAL;
+
+	if (!desc->platform_ops->fill_buffer)
+		return -ENOSYS;
+
+	return desc->platform_ops->fill_buffer(desc, buff, len);
+}

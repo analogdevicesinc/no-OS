@@ -1,10 +1,9 @@
 /***************************************************************************//**
- *   @file   generic_trng.c
- *   @brief  Generic implementation of true random number generator
- *   @author Mihail Chindris (mihail.chindris@analog.com)
+ *   @file   aducm3029_trng.h
+ *   @brief  ADuCM302x specific header for TRNG driver
+ *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
- *   @copyright
- * Copyright 2020(c) Analog Devices, Inc.
+ * Copyright 2023(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -38,50 +37,45 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
+#ifndef ADUCM3029_TRNG_H
+#define ADUCM3029_TRNG_H
+
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-
+#include <drivers/rng/adi_rng.h>
 #include "no_os_trng.h"
-#include "no_os_util.h"
-#include "no_os_error.h"
 
 /******************************************************************************/
-/************************ Functions Definitions *******************************/
+/********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 
-/* Initialize descriptor */
-int generic_trng_init(struct no_os_trng_desc **desc,
-		      struct no_os_trng_init_param *param)
-{
-	NO_OS_UNUSED_PARAM(desc);
-	NO_OS_UNUSED_PARAM(param);
+/* LenReload: 0 - 4095 */
+#define NO_OS_TRNG_CNT_VAL		4095
+/* Prescaler: 0 - 10 */
+#define NO_OS_TRNG_PRESCALER		2
+/* Aducm device ID */
+#define NO_OS_ADUCM_TRNG_DEVICE_ID	0
 
-	return -1;
-}
+/******************************************************************************/
+/*************************** Types Declarations *******************************/
+/******************************************************************************/
 
-/* Free resources allocated in descriptor */
-int generic_trng_remove(struct no_os_trng_desc *desc)
-{
-	NO_OS_UNUSED_PARAM(desc);
-}
-
-/* Fill buffer with random numbers */
-int generic_trng_fill_buffer(struct no_os_trng_desc *desc, uint8_t *buff,
-			     uint32_t len)
-{
-	NO_OS_UNUSED_PARAM(desc);
-	NO_OS_UNUSED_PARAM(buff);
-	NO_OS_UNUSED_PARAM(len);
-
-	return -1;
-}
+/* Stucture holding the TRNG descriptor. */
+struct aducm3029_trng_desc {
+	/*
+	 * Memory used by the DFP
+	 * At least ADI_RNG_MEMORY_SIZE bytes of 4 bytes aligned memory are
+	 * needed by the DFP driver. The formula is to align memory only.
+	 */
+	uint32_t	dev_mem[(ADI_RNG_MEMORY_SIZE + 3) / 4];
+	/* DFP Hanler */
+	ADI_RNG_HANDLE	dev;
+};
 
 /**
- * @brief Generic TRNG platform ops structure
+ * @brief ADuCM3029 specific TRNG platform ops structure
  */
-const struct no_os_trng_platform_ops aducm_trng_ops = {
-	.init = &generic_trng_init,
-	.fill_buffer = &generic_trng_fill_buffer,
-	.remove = &generic_trng_remove
-};
+extern const struct no_os_trng_platform_ops aducm_trng_ops;
+
+#endif // ADUCM3029_TRNG_H

@@ -43,37 +43,9 @@
 /******************************************************************************/
 
 #include <stdlib.h>
-#include <drivers/rng/adi_rng.h>
-#include "no_os_trng.h"
+#include "aducm3029_trng.h"
 #include "no_os_util.h"
 #include "no_os_error.h"
-
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
-
-/* LenReload: 0 - 4095 */
-#define NO_OS_TRNG_CNT_VAL		4095
-/* Prescaler: 0 - 10 */
-#define NO_OS_TRNG_PRESCALER		2
-/* Aducm device ID */
-#define NO_OS_ADUCM_TRNG_DEVICE_ID	0
-
-/******************************************************************************/
-/*************************** Types Declarations *******************************/
-/******************************************************************************/
-
-/* Stucture holding the TRNG descriptor. */
-struct no_os_trng_desc {
-	/*
-	 * Memory used by the DFP
-	 * At least ADI_RNG_MEMORY_SIZE bytes of 4 bytes aligned memory are
-	 * needed by the DFP driver. The formula is to align memory only.
-	 */
-	uint32_t	dev_mem[(ADI_RNG_MEMORY_SIZE + 3)/4];
-	/* DFP Hanler */
-	ADI_RNG_HANDLE	dev;
-};
 
 /******************************************************************************/
 /**************************** Global Variables ********************************/
@@ -82,14 +54,14 @@ struct no_os_trng_desc {
 /** Number of references to the descriptor */
 static uint32_t		nb_references;
 /** TRNG Descriptor */
-static struct no_os_trng_desc	g_desc;
+static struct aducm3029_trng_desc	g_desc;
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
 
 /* Initialize the TRNG device and the global descriptor */
-static void no_os_gdesc_init()
+static void aducm3029_gdesc_init()
 {
 	adi_rng_Open(NO_OS_ADUCM_TRNG_DEVICE_ID, g_desc.dev_mem, ADI_RNG_MEMORY_SIZE,
 		     &g_desc.dev);
@@ -102,7 +74,7 @@ static void no_os_gdesc_init()
 }
 
 /* Remove the TRNG device and the global descriptor */
-static void no_os_gdesc_remove()
+static void aducm3029_gdesc_remove()
 {
 	adi_rng_Enable(g_desc.dev, false);
 	adi_rng_Close(g_desc.dev);
@@ -114,19 +86,27 @@ static void no_os_gdesc_remove()
  * @param param - Unused
  * @return 0 or -1 if desc is null
  */
-int32_t no_os_trng_init(struct no_os_trng_desc **desc,
+int aducm3029_trng_init(struct no_os_trng_desc **desc,
 			struct no_os_trng_init_param *param)
 {
+	struct no_os_trng_desc *trng_desc;
+
 	NO_OS_UNUSED_PARAM(param);
 
 	if (!desc)
 		return -1;
 
+	trng_desc = (struct no_os_trng_desc *)calloc(1, sizeof(*trng_desc));
+	if (!trng_desc)
+		return -1;
+
 	if (!nb_references)
-		no_os_gdesc_init();
+		aducm3029_gdesc_init();
+
+	trng_desc->extra = &g_desc;
 
 	nb_references++;
-	*desc = &g_desc;
+	*desc = trng_desc;
 
 	return 0;
 }
@@ -135,11 +115,18 @@ int32_t no_os_trng_init(struct no_os_trng_desc **desc,
  * @brief Free resources allocated in descriptor
  * @param desc - TRNG Descriptor
  */
-void no_os_trng_remove(struct no_os_trng_desc *desc)
+int aducm3029_trng_remove(struct no_os_trng_desc *desc)
 {
+	if (!desc || !desc->extra)
+		return -1;
+
 	nb_references--;
 	if (nb_references == 0)
-		no_os_gdesc_remove();
+		aducm3029_gdesc_remove();
+
+	free(desc);
+
+	return 0;
 }
 
 /**
@@ -150,28 +137,40 @@ void no_os_trng_remove(struct no_os_trng_desc *desc)
  * @return 0 if no errors, -1 is an error occurs and the
  * data in the buffer is not useful.
  */
-int32_t no_os_trng_fill_buffer(struct no_os_trng_desc *desc, uint8_t *buff,
+int aducm3029_trng_fill_buffer(struct no_os_trng_desc *desc, uint8_t *buff,
 			       uint32_t len)
 {
 	uint32_t	data;
 	uint32_t	i;
 	bool		ready;
 	bool		stuck;
+	struct aducm3029_trng_desc *aducm_desc;
+
+	aducm_desc = desc->extra;
 
 	for (i = 0; i < len; i++) {
 		ready = 0;
 		while (!ready)
-			adi_rng_GetRdyStatus(desc->dev, &ready);
-		adi_rng_GetStuckStatus(desc->dev, &stuck);
+			adi_rng_GetRdyStatus(aducm_desc->dev, &ready);
+		adi_rng_GetStuckStatus(aducm_desc->dev, &stuck);
 		if (stuck) {
 			/* This is needed in order to clear the stuck bit */
 			no_os_gdesc_remove();
 			no_os_gdesc_init();
 			return -1;
 		}
-		adi_rng_GetRngData(desc->dev, &data);
+		adi_rng_GetRngData(aducm_desc->dev, &data);
 		buff[i] = data & 0xFF;
 	}
 
 	return 0;
 }
+
+/**
+ * @brief ADuCM3029 platform specific TRNG platform ops structure
+ */
+const struct no_os_trng_platform_ops aducm_trng_ops = {
+	.init = &aducm3029_trng_init,
+	.fill_buffer = &aducm3029_trng_fill_buffer,
+	.remove = &aducm3029_trng_remove
+};
