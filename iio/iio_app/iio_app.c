@@ -82,6 +82,8 @@
 
 int ad74413r_apply;
 int max14906_apply;
+int ad74413r_back;
+int max14906_back;
 
 static inline uint32_t _calc_uart_xfer_time(uint32_t len, uint32_t baudrate)
 {
