@@ -45,7 +45,7 @@
 #include "adin1110.h"
 #include "no_os_util.h"
 #include "no_os_delay.h"
-#include "no_os_crc8.h";
+#include "no_os_crc8.h"
 
 #define ADIN1110_CRC_POLYNOMIAL	0x7
 
@@ -67,6 +67,13 @@ static struct _adin1110_priv driver_data[2] = {
 	},
 };
 
+/**
+ * @brief Write a register's value
+ * @param desc - the device descriptor
+ * @param addr - register's address
+ * @param data - register's value
+ * @return 0 in case of success, negative error code otherwise
+ */
 int adin1110_reg_write(struct adin1110_desc *desc, uint16_t addr, uint32_t data)
 {
 	struct no_os_spi_msg xfer = {
@@ -84,6 +91,13 @@ int adin1110_reg_write(struct adin1110_desc *desc, uint16_t addr, uint32_t data)
 	return no_os_spi_transfer(desc->comm_desc, &xfer, 1);
 }
 
+/**
+ * @brief Read a register's value
+ * @param desc - the device descriptor
+ * @param addr - register's address
+ * @param data - register's value
+ * @return 0 in case of success, negative error code otherwise
+ */
 int adin1110_reg_read(struct adin1110_desc *desc, uint16_t addr, uint32_t *data)
 {
 	struct no_os_spi_msg xfer = {
@@ -108,6 +122,14 @@ int adin1110_reg_read(struct adin1110_desc *desc, uint16_t addr, uint32_t *data)
 	return 0;
 }
 
+/**
+ * @brief Update a register's value based on a mask
+ * @param desc - the device descriptor
+ * @param addr - register's address
+ * @param mask - the bits that may be modified
+ * @param data - register's value
+ * @return 0 in case of success, negative error code otherwise
+ */
 int adin1110_reg_update(struct adin1110_desc *desc, uint16_t addr,
 			uint32_t mask, uint32_t data)
 {
@@ -124,12 +146,19 @@ int adin1110_reg_update(struct adin1110_desc *desc, uint16_t addr,
 	return adin1110_reg_write(desc, addr, val);
 }
 
+/**
+ * @brief Read a PHY register using clause 22
+ * @param desc - the device descriptor
+ * @param phy_id - the phy device's id
+ * @param reg - register's address
+ * @param data - register's value
+ * @return 0 in case of success, negative error code otherwise
+ */
 int adin1110_mdio_read(struct adin1110_desc *desc, uint32_t phy_id,
 		       uint32_t reg, uint32_t *data)
 {
 	uint32_t mdio_val = 0;
 	uint32_t mdio_done = 0;
-	uint32_t ta_err;
 	uint32_t val = 0;
 	int ret;
 
@@ -157,6 +186,14 @@ int adin1110_mdio_read(struct adin1110_desc *desc, uint32_t phy_id,
 	return 0;
 }
 
+/**
+ * @brief Write a PHY register using clause 22
+ * @param desc - the device descriptor
+ * @param phy_id - the phy device's id
+ * @param reg - register's address
+ * @param data - register's value
+ * @return 0 in case of success, negative error code otherwise
+ */
 int adin1110_mdio_write(struct adin1110_desc *desc, uint32_t phy_id,
 			uint32_t reg, uint32_t data)
 {
@@ -188,8 +225,17 @@ int adin1110_mdio_write(struct adin1110_desc *desc, uint32_t phy_id,
 	return 0;
 }
 
+/**
+ * @brief Write a PHY register using clause 45
+ * @param desc - the device descriptor
+ * @param phy_id - the phy device's MDIO id
+ * @param dev_id - the device id of the register
+ * @param reg - register's address
+ * @param data - register's value
+ * @return 0 in case of success, negative error code otherwise
+ */
 int adin1110_mdio_write_c45(struct adin1110_desc *desc, uint32_t phy_id,
-				   uint32_t dev_id, uint32_t reg, uint32_t data)
+			    uint32_t dev_id, uint32_t reg, uint32_t data)
 {
 	uint32_t mdio_val = 0;
 	uint32_t mdio_done = 0;
@@ -237,12 +283,20 @@ int adin1110_mdio_write_c45(struct adin1110_desc *desc, uint32_t phy_id,
 	return 0;
 }
 
+/**
+ * @brief Read a PHY register using clause 45
+ * @param desc - the device descriptor
+ * @param phy_id - the phy device's MDIO id
+ * @param dev_id - the device id of the register
+ * @param reg - register's address
+ * @param data - register's value
+ * @return 0 in case of success, negative error code otherwise
+ */
 int adin1110_mdio_read_c45(struct adin1110_desc *desc, uint32_t phy_id,
-				  uint32_t dev_id, uint32_t reg, uint32_t *data)
+			   uint32_t dev_id, uint32_t reg, uint32_t *data)
 {
 	uint32_t mdio_val = 0;
 	uint32_t mdio_done = 0;
-	uint32_t ta_err;
 	uint32_t val;
 	int ret;
 
@@ -287,16 +341,28 @@ int adin1110_mdio_read_c45(struct adin1110_desc *desc, uint32_t phy_id,
 	return 0;
 }
 
-static int adin1110_mac_addr_set(struct adin1110_desc *desc, uint8_t mac_address[6])
+/**
+ * @brief Set a MAC address destination filter, frames who's DA doesn't match
+ * 	  are dropped.
+ * @param desc - the device descriptor
+ * @param mac_address - the MAC filter to be set
+ * @return 0 in case of success, negative error code otherwise
+ */
+static int adin1110_mac_addr_set(struct adin1110_desc *desc,
+				 uint8_t mac_address[ADIN1110_ETH_ALEN])
 {
-	uint32_t val;
 	uint32_t reg_val;
 	int ret;
 
 	reg_val = no_os_get_unaligned_be16(&mac_address[0]);
 
+	/* Forward frames from both ports to the host */
+	reg_val |= ADIN1110_MAC_ADDR_APPLY2PORT | ADIN1110_MAC_ADDR_TO_HOST;
+	if (desc->chip_type == ADIN2111)
+		reg_val |= ADIN2111_MAC_ADDR_APPLY2PORT2;
+
 	ret = adin1110_reg_update(desc, ADIN1110_MAC_ADDR_FILTER_UPR_REG,
-				  NO_OS_GENMASK(15, 0), reg_val);
+				  NO_OS_GENMASK(31, 0), reg_val);
 	if (ret)
 		return ret;
 
@@ -305,15 +371,19 @@ static int adin1110_mac_addr_set(struct adin1110_desc *desc, uint8_t mac_address
 	return adin1110_reg_write(desc, ADIN1110_MAC_ADDR_FILTER_LWR_REG, reg_val);
 }
 
+/**
+ * @brief Write a frame to the TX FIFO.
+ * @param desc - the device descriptor
+ * @param port - the port for the frame to be transmitted on.
+ * @param eth_buff - the frame to be transmitted.
+ * @return 0 in case of success, negative error code otherwise
+ */
 int adin1110_write_fifo(struct adin1110_desc *desc, uint32_t port,
 			struct adin1110_eth_buff *eth_buff)
 {
 	uint32_t field_offset = ADIN1110_WR_HEADER_LEN;
-	uint32_t fifo_fsize_reg;
-	uint16_t frame_header;
 	uint32_t padding = 0;
 	uint32_t frame_len;
-	uint32_t fifo_reg;
 	int ret;
 
 	struct no_os_spi_msg xfer = {
@@ -324,15 +394,7 @@ int adin1110_write_fifo(struct adin1110_desc *desc, uint32_t port,
 	if (port >= driver_data[desc->chip_type].num_ports)
 		return -EINVAL;
 
-	if (!port) {
-		fifo_reg = ADIN1110_RX_REG;
-		fifo_fsize_reg = ADIN1110_RX_FSIZE_REG;
-	} else {
-		fifo_reg = ADIN2111_RX_P2_REG;
-		fifo_fsize_reg = ADIN2111_RX_P2_FSIZE_REG;
-	}
-
-	/* 
+	/*
 	 * The minimum frame length is 64 bytes.
 	 * The MAC is by default configured to add the frame check sequence, so it's
 	 * length shouldn't be added here.
@@ -345,11 +407,12 @@ int adin1110_write_fifo(struct adin1110_desc *desc, uint32_t port,
 	/** Align the frame length to 4 bytes */
 	frame_len = frame_len + frame_len % 4;
 
-	ret = adin1110_reg_write(desc, fifo_fsize_reg, frame_len - ADIN1110_FRAME_HEADER_LEN);
+	ret = adin1110_reg_write(desc, ADIN1110_TX_FSIZE_REG,
+				 frame_len - ADIN1110_FRAME_HEADER_LEN);
 	if (ret)
 		return ret;
 
-	no_os_put_unaligned_be16(fifo_reg, &desc->tx_buff[0]);
+	no_os_put_unaligned_be16(ADIN1110_TX_REG, &desc->tx_buff[0]);
 	desc->tx_buff[0] |= ADIN1110_SPI_CD | ADIN1110_SPI_RW;
 
 	if (desc->append_crc) {
@@ -363,28 +426,33 @@ int adin1110_write_fifo(struct adin1110_desc *desc, uint32_t port,
 
 	xfer.bytes_number = frame_len;
 
-	memcpy(&desc->tx_buff[field_offset], eth_buff->mac_destination, ADIN1110_ETH_ALEN);
+	memcpy(&desc->tx_buff[field_offset], eth_buff->mac_dest, ADIN1110_ETH_ALEN);
 	field_offset += ADIN1110_ETH_ALEN;
 	memcpy(&desc->tx_buff[field_offset], eth_buff->mac_source, ADIN1110_ETH_ALEN);
 	field_offset += ADIN1110_ETH_ALEN;
-	memcpy(&desc->tx_buff[field_offset], &eth_buff->ethertype, ADIN1110_ETHERTYPE_LEN);
+	no_os_put_unaligned_be16(eth_buff->ethertype, &desc->tx_buff[field_offset]);
 	field_offset += ADIN1110_ETHERTYPE_LEN;
-	memcpy(&desc->tx_buff[field_offset], eth_buff->payload, eth_buff->payload_len + padding);
-	
+	memcpy(&desc->tx_buff[field_offset], eth_buff->payload,
+	       eth_buff->payload_len + padding);
+
 	return no_os_spi_transfer(desc->comm_desc, &xfer, 1);
 }
 
-int adin1110_read_fifo(struct adin1110_desc *desc, uint32_t port, struct adin1110_eth_buff *eth_buff)
+/**
+ * @brief Read a frame from the RX FIFO.
+ * @param desc - the device descriptor
+ * @param port - the port from which the frame shall be received.
+ * @param eth_buff - the frame to be received.
+ * @return 0 in case of success, negative error code otherwise
+ */
+int adin1110_read_fifo(struct adin1110_desc *desc, uint32_t port,
+		       struct adin1110_eth_buff *eth_buff)
 {
 
 	uint32_t field_offset = ADIN1110_RD_HEADER_LEN;
-	uint32_t frame_size_no_fcs;
 	uint32_t fifo_fsize_reg;
-	uint32_t frame_content;
 	uint32_t frame_size;
-	uint32_t count = 0;
 	uint32_t fifo_reg;
-	uint32_t rem;
 
 	struct no_os_spi_msg xfer = {
 		.tx_buff = desc->tx_buff,
@@ -432,52 +500,25 @@ int adin1110_read_fifo(struct adin1110_desc *desc, uint32_t port, struct adin111
 	if (ret)
 		return ret;
 
-	memcpy(eth_buff->mac_destination, &desc->rx_buff[field_offset], ADIN1110_ETH_ALEN);
+	memcpy(eth_buff->mac_source, &desc->rx_buff[field_offset], ADIN1110_ETH_ALEN);
 	field_offset += ADIN1110_ETH_ALEN;
-	memcpy(eth_buff->mac_destination, &desc->rx_buff[field_offset], ADIN1110_ETH_ALEN);
+	memcpy(eth_buff->mac_dest, &desc->rx_buff[field_offset], ADIN1110_ETH_ALEN);
 	field_offset += ADIN1110_ETH_ALEN;
-	memcpy(&eth_buff->ethertype, &desc->rx_buff[field_offset], ADIN1110_ETHERTYPE_LEN);
+	eth_buff->ethertype = no_os_get_unaligned_be16(&desc->rx_buff[field_offset]);
 	field_offset += ADIN1110_ETHERTYPE_LEN;
 	memcpy(eth_buff->payload, &desc->rx_buff[field_offset], frame_size);
+
+	eth_buff->payload_len = frame_size;
 
 	return 0;
 }
 
-int adin1110_add_mac_filter(struct adin1110_desc *desc, uint32_t port, uint8_t *addr)
-{
-	uint32_t port_rules_mask;
-	uint32_t port_rules;
-	uint32_t offset;
-	uint32_t val;
-	int ret;
-
-	if (!port) {
-		port_rules = ADIN1110_MAC_P1_ADDR_SLOT;
-		port_rules_mask = ADIN1110_MAC_ADDR_APPLY2PORT;
-	} else {
-		port_rules = ADIN2110_MAC_P2_ADDR_SLOT;
-		port_rules_mask = ADIN2111_MAC_ADDR_APPLY2PORT2;
-	}
-
-	if (port_rules & port_rules_mask)
-		port_rules_mask |= ADIN1110_MAC_ADDR_TO_HOST | ADIN2111_MAC_ADDR_TO_OTHER_PORT;		
-
-	port_rules_mask |= NO_OS_GENMASK(15, 0);
-	val = port_rules | no_os_get_unaligned_be16(addr);
-	ret = adin1110_reg_update(desc, ADIN1110_MAC_ADDR_FILTER_UPR_REG + offset,
-				  port_rules_mask, val);
-	if (ret)
-		return ret;
-	
-	val = no_os_get_unaligned_be32(&addr[2]);
-	ret = adin1110_reg_write(desc, ADIN1110_MAC_ADDR_FILTER_LWR_REG, val);
-	if (ret)
-		return ret;
-
-	return ret;
-}
-
-static int adin1110_mac_reset(struct adin1110_desc *desc)
+/**
+ * @brief Reset the MAC device.
+ * @param desc - the device descriptor
+ * @return 0 in case of success, negative error code otherwise
+ */
+int adin1110_mac_reset(struct adin1110_desc *desc)
 {
 	uint32_t val;
 	int ret;
@@ -508,6 +549,11 @@ static int adin1110_mac_reset(struct adin1110_desc *desc)
 	return 0;
 }
 
+/**
+ * @brief Complete the reset sequence.
+ * @param desc - the device descriptor.
+ * @return 0 in case of success, negative error code otherwise
+ */
 static int adin1110_check_reset(struct adin1110_desc *desc)
 {
 	uint32_t reg_val;
@@ -526,11 +572,16 @@ static int adin1110_check_reset(struct adin1110_desc *desc)
 		return ret;
 
 	return adin1110_reg_update(desc, ADIN1110_CONFIG1_REG,
-			    	   ADIN1110_CONFIG1_SYNC, ADIN1110_CONFIG1_SYNC);
+				   ADIN1110_CONFIG1_SYNC, ADIN1110_CONFIG1_SYNC);
 
 }
 
-static int adin1110_phy_reset(struct adin1110_desc *desc)
+/**
+ * @brief Reset the PHY device.
+ * @param desc - the device descriptor
+ * @return 0 in case of success, negative error code otherwise
+ */
+int adin1110_phy_reset(struct adin1110_desc *desc)
 {
 	uint32_t phy_id;
 	uint32_t expected_id;
@@ -561,16 +612,27 @@ static int adin1110_phy_reset(struct adin1110_desc *desc)
 	return 0;
 }
 
+/**
+ * @brief Reset both the MAC and PHY.
+ * @param desc - the device descriptor
+ * @return 0 in case of success, negative error code otherwise
+ */
 int adin1110_sw_reset(struct adin1110_desc *desc)
 {
 	return adin1110_reg_write(desc, ADIN1110_RESET_REG, 0x1);
 }
 
-int adin1110_set_promisc(struct adin1110_desc *desc, uint32_t port, bool promisc)
+/**
+ * @brief Set a port in promiscuous mode. All MAC filters are dropped.
+ * @param desc - the device descriptor
+ * @param port - the port for which the mode will be applied
+ * @param promisc - either enable or disable the promiscuous mode.
+ * @return 0 in case of success, negative error code otherwise
+ */
+int adin1110_set_promisc(struct adin1110_desc *desc, uint32_t port,
+			 bool promisc)
 {
-	uint32_t num_ports;
 	uint32_t fwd_mask;
-	int ret;
 
 	if (port >= driver_data[desc->chip_type].num_ports)
 		return -EINVAL;
@@ -584,6 +646,11 @@ int adin1110_set_promisc(struct adin1110_desc *desc, uint32_t port, bool promisc
 				   promisc ? fwd_mask : 0);
 }
 
+/**
+ * @brief Get the PHY out of software reset.
+ * @param desc - the device descriptor
+ * @return 0 in case of success, negative error code otherwise
+ */
 static int adin1110_setup_phy(struct adin1110_desc *desc)
 {
 	uint32_t reg_val;
@@ -591,7 +658,6 @@ static int adin1110_setup_phy(struct adin1110_desc *desc)
 	uint32_t sw_pd;
 	size_t i;
 	int ret;
-	uint32_t retries = 0;
 
 	ports = driver_data[desc->chip_type].num_ports;
 
@@ -607,7 +673,7 @@ static int adin1110_setup_phy(struct adin1110_desc *desc)
 			while (reg_val & ADIN1110_MI_SFT_PD_MASK) {
 				reg_val &= ~ADIN1110_MI_SFT_PD_MASK;
 				ret = adin1110_mdio_write(desc, ADIN1110_MDIO_PHY_ID(i),
-							ADIN1110_MI_CONTROL_REG, reg_val);
+							  ADIN1110_MI_CONTROL_REG, reg_val);
 				if (ret)
 					return ret;
 				ret = adin1110_mdio_read(desc, ADIN1110_MDIO_PHY_ID(i),
@@ -621,6 +687,11 @@ static int adin1110_setup_phy(struct adin1110_desc *desc)
 	return 0;
 }
 
+/**
+ * @brief Enable CRC, interrupts and a MAC filter for the MAC device.
+ * @param desc - the device descriptor
+ * @return 0 in case of success, negative error code otherwise
+ */
 static int adin1110_setup_mac(struct adin1110_desc *desc)
 {
 	int ret;
@@ -640,17 +711,22 @@ static int adin1110_setup_mac(struct adin1110_desc *desc)
 		reg_val |= ADIN2111_RX_RDY_IRQ;
 
 	ret = adin1110_reg_write(desc, ADIN1110_IMASK1_REG, reg_val);
+	if (ret)
+		return ret;
 
-	return 0;
+	return adin1110_mac_addr_set(desc, desc->mac_address);
 }
 
+/**
+ * @brief Initialize the device
+ * @param desc - the device descriptor to be initialized
+ * @param param - the device's parameter
+ * @return 0 in case of success, negative error code otherwise
+ */
 int adin1110_init(struct adin1110_desc **desc,
-                  struct adin1110_init_param *param)
+		  struct adin1110_init_param *param)
 {
 	struct adin1110_desc *descriptor;
-	uint32_t reg_val;
-	uint32_t phy_id;
-	size_t i;
 	int ret;
 
 	descriptor = calloc(1, sizeof(*descriptor));
@@ -659,51 +735,70 @@ int adin1110_init(struct adin1110_desc **desc,
 
 	ret = no_os_spi_init(&descriptor->comm_desc, &param->comm_param);
 	if (ret)
-		goto err;
+		goto free_desc;
 
 	no_os_crc8_populate_msb(_crc_table, ADIN1110_CRC_POLYNOMIAL);
-	strncpy(descriptor->mac_address, param->mac_address, ADIN1110_MAC_LEN);
+	strncpy((char *)descriptor->mac_address, (char *)param->mac_address,
+		ADIN1110_MAC_LEN);
 
 	ret = no_os_gpio_get(&descriptor->reset_gpio, &param->reset_param);
 	if (ret)
-		goto err;
+		goto free_spi;
 
 	ret = no_os_gpio_direction_output(descriptor->reset_gpio, NO_OS_GPIO_OUT);
 	if (ret)
-		return ret;
+		goto free_gpio;
 
+	if (!param->mac_address) {
+		ret = -EINVAL;
+		goto free_gpio;
+	}
+
+	memcpy(descriptor->mac_address, param->mac_address, ADIN1110_ETH_ALEN);
 	descriptor->chip_type = param->chip_type;
 
 	ret = adin1110_sw_reset(descriptor);
 	if (ret)
-		return ret;
+		goto free_gpio;
+
+	/* Wait for the MAC and PHY digital interface to intialize */
+	no_os_mdelay(90);
 
 	ret = no_os_gpio_set_value(descriptor->reset_gpio, NO_OS_GPIO_HIGH);
 	if (ret)
-		return ret;
+		goto free_gpio;
 
 	ret = adin1110_setup_mac(descriptor);
 	if (ret)
-		return ret;
+		goto free_gpio;
 
 	ret = adin1110_setup_phy(descriptor);
 	if (ret)
-		goto err;
+		goto free_gpio;
 
 	ret = adin1110_check_reset(descriptor);
 	if (ret)
-		goto err;
+		goto free_gpio;
 
 	*desc = descriptor;
 
 	return 0;
 
-err:
+free_gpio:
+	no_os_gpio_remove(descriptor->reset_gpio);
+free_spi:
+	no_os_spi_remove(descriptor->comm_desc);
+free_desc:
 	free(descriptor);
 
 	return ret;
 }
 
+/**
+ * @brief Free a device descriptor
+ * @param desc - the device descriptor to be removed.
+ * @return 0 in case of success, negative error code otherwise
+ */
 int adin1110_remove(struct adin1110_desc *desc)
 {
 	int ret;
@@ -715,7 +810,7 @@ int adin1110_remove(struct adin1110_desc *desc)
 	if (ret)
 		return ret;
 
-	ret = no_os_spi_remove(desc->reset_gpio);
+	ret = no_os_gpio_remove(desc->reset_gpio);
 	if (ret)
 		return ret;
 
