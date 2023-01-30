@@ -50,77 +50,79 @@
 #include "no_os_gpio.h"
 
 uint8_t eth_frame[] = {
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
-        0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
+	0x44, 0x44, 0x44, 0x44,
 	0x11, 0x11,
 };
+
+uint8_t eth_rx_buff[ADIN1110_BUFF_LEN];
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
@@ -133,9 +135,14 @@ uint8_t eth_frame[] = {
 *******************************************************************************/
 int dummy_example_main()
 {
+	uint32_t ucast_frame_rx_cnt;
+	uint32_t bcast_frame_rx_cnt;
+	uint32_t mcast_frame_rx_cnt;
+	uint32_t ucast_frame_tx_cnt;
+	uint32_t bcast_frame_tx_cnt;
+	uint32_t mcast_frame_tx_cnt;
+	size_t i;
 	int ret;
-	uint32_t frame_counter;
-	uint32_t reg_val;
 
 	struct max_gpio_init_param reset_gpio_extra = {
 		.vssel = MXC_GPIO_VSSEL_VDDIOH,
@@ -155,12 +162,16 @@ int dummy_example_main()
 		.append_crc = false,
 	};
 	struct adin1110_desc *adin1110;
-	struct adin1110_eth_buff eth_buff = {
-		.mac_destination = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,},
+	struct adin1110_eth_buff eth_tx_buff = {
+		.mac_dest = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,},
 		.mac_source = {0xCA, 0x2F, 0xB7, 0x10, 0x23, 0x63},
-		.ethertype = 0x0008,
+		.ethertype = 0x0800,
 		.payload_len = NO_OS_ARRAY_SIZE(eth_frame),
 		.payload = eth_frame
+	};
+
+	struct adin1110_eth_buff eth_rx = {
+		.payload = eth_rx_buff
 	};
 
 	ret = adin1110_init(&adin1110, &adin1110_ip);
@@ -171,158 +182,81 @@ int dummy_example_main()
 	if (ret)
 		return ret;
 
-	ret = adin1110_read_fifo(adin1110, &eth_buff);
-	uint8_t a[100];
-	memcpy(a, eth_buff.payload, 100);
+	while (1) {
+		/* Clear the screen */
+		printf("%c",27);
+		printf("%c",'[');
+		printf("%c",'2');
+		printf("%c",'J');
 
-	ret = adin1110_write_fifo(adin1110, 0, &eth_buff);
-	ret = adin1110_write_fifo(adin1110, 0, &eth_buff);
-	ret = adin1110_write_fifo(adin1110, 0, &eth_buff);
-	ret = adin1110_write_fifo(adin1110, 0, &eth_buff);
-	ret = adin1110_write_fifo(adin1110, 0, &eth_buff);
-	if (ret)
-		return ret;
+		ret = adin1110_reg_read(adin1110, ADIN1110_TX_UCAST_CNT_REG,
+					&ucast_frame_tx_cnt);
+		if (ret)
+			goto error;
 
-	ret = adin1110_reg_read(adin1110, 0xAB, &frame_counter);
-	if (ret)
-		return ret;
+		ret = adin1110_reg_read(adin1110, ADIN1110_TX_BCAST_CNT_REG,
+					&bcast_frame_tx_cnt);
+		if (ret)
+			goto error;
 
-	// ret = adin1110_read_fifo(adin1110, &sk_buff);
-	// if (ret)
-	// 	return ret;
+		ret = adin1110_reg_read(adin1110, ADIN1110_TX_MCAST_CNT_REG,
+					&mcast_frame_tx_cnt);
+		if (ret)
+			goto error;
 
-// 	uint8_t val;
-// 	uint32_t dac_code;
-// 	uint16_t temp;
-// 	union ad74413r_live_status status;
-// 	struct ad74413r_desc *ad74413r_desc;
-// 	struct ad74413r_init_param ad74413r_ip = {
-// 		.chip_id = AD74412R,
-// 		.comm_param = ad74413r_spi_ip
-// 	};
+		ret = adin1110_reg_read(adin1110, ADIN1110_RX_UCAST_CNT_REG,
+					&ucast_frame_rx_cnt);
+		if (ret)
+			goto error;
 
-// 	struct ad74413r_decimal result[3];
+		ret = adin1110_reg_read(adin1110, ADIN1110_RX_BCAST_CNT_REG,
+					&bcast_frame_rx_cnt);
+		if (ret)
+			goto error;
 
-// 	ret = ad74413r_init(&ad74413r_desc, &ad74413r_ip);
-// 	if (ret)
-// 		goto error;
+		ret = adin1110_reg_read(adin1110, ADIN1110_RX_MCAST_CNT_REG,
+					&mcast_frame_rx_cnt);
+		if (ret)
+			goto error;
 
-// 	ret = ad74413r_clear_errors(ad74413r_desc);
-// 	if (ret)
-// 		goto error;
+		printf("TX unicast frames: %d\n", ucast_frame_tx_cnt);
+		printf("TX boardcast frames: %d\n", bcast_frame_tx_cnt);
+		printf("TX multicast frames: %d\n", mcast_frame_tx_cnt);
+		printf("RX unicast frames: %d\n", ucast_frame_rx_cnt);
+		printf("RX boardcast frames: %d\n", bcast_frame_rx_cnt);
+		printf("RX multicast frames: %d\n\n", mcast_frame_rx_cnt);
 
-// 	ret = ad74413r_set_adc_channel_enable(ad74413r_desc, AD74413R_CH_A, true);
-// 	if (ret)
-// 		goto error;
+		ret = adin1110_write_fifo(adin1110, 0, &eth_tx_buff);
+		if (ret)
+			return ret;
 
-// 	ret = ad74413r_set_channel_function(ad74413r_desc, AD74413R_CH_A,
-// 					    AD74413R_DIGITAL_INPUT);
-// 	if (ret)
-// 		goto error;
+		ret = adin1110_read_fifo(adin1110, 0, &eth_rx);
+		if (ret)
+			return ret;
 
-// 	/** Set the threshold voltage to 5V */
-// 	ret = ad74413r_set_threshold(ad74413r_desc, AD74413R_CH_A, 5000);
-// 	if (ret)
-// 		goto error;
+		if (eth_rx.payload_len) {
+			printf("Received the frame:\n");
+			printf("\nDestination MAC: %02X:%02X:%02X:%02X:%02X:%02X",
+			       eth_rx.mac_dest[0], eth_rx.mac_dest[1], eth_rx.mac_dest[2],
+			       eth_rx.mac_dest[3], eth_rx.mac_dest[4], eth_rx.mac_dest[5]);
+			printf("\nSource MAC: %02X:%02X:%02X:%02X:%02X:%02X",
+			       eth_rx.mac_source[0], eth_rx.mac_source[1], eth_rx.mac_source[2],
+			       eth_rx.mac_source[3], eth_rx.mac_source[4], eth_rx.mac_source[5]);
+			printf("\nEthertype: 0x%02X", eth_rx.ethertype);
+			printf("\n\nPayload: \n");
+			for (i = 0; i < eth_rx.payload_len; i++) {
+				printf("0x%02X ", eth_rx.payload[i]);
+				if ((i + 1) % 20 == 0)
+					printf("\n");
+			}
+		}
 
-// 	/** The comparator output will be available on the GPO_A pin */
-// 	ret = ad74413r_set_gpo_config(ad74413r_desc, AD74413R_CH_A,
-// 				      AD74413R_GPO_CONFIG_COMP);
-// 	if (ret)
-// 		goto error;
+		no_os_mdelay(5000);
+	}
 
-// 	ret = ad74413r_set_adc_channel_enable(ad74413r_desc, AD74413R_CH_B, true);
-// 	if (ret)
-// 		goto error;
-
-// 	ret = ad74413r_set_channel_function(ad74413r_desc, AD74413R_CH_B,
-// 					    AD74413R_VOLTAGE_IN);
-// 	if (ret)
-// 		goto error;
-
-// 	ret = ad74413r_set_adc_channel_enable(ad74413r_desc, AD74413R_CH_C, true);
-// 	if (ret)
-// 		goto error;
-
-// 	ret = ad74413r_set_channel_function(ad74413r_desc, AD74413R_CH_C,
-// 					    AD74413R_VOLTAGE_OUT);
-// 	if (ret)
-// 		goto error;
-
-// 	ad74413r_dac_voltage_to_code(5000, &dac_code);
-// 	/** Set the DAC output on channel C to 5V */
-// 	ret = ad74413r_set_channel_dac_code(ad74413r_desc, AD74413R_CH_C, dac_code);
-// 	if (ret)
-// 		goto error;
-
-// 	ret = ad74413r_set_adc_channel_enable(ad74413r_desc, AD74413R_CH_D, true);
-// 	if (ret)
-// 		return ret;
-
-// 	/** Measure input current on channel D */
-// 	ret = ad74413r_set_channel_function(ad74413r_desc, AD74413R_CH_D,
-// 					    AD74413R_CURRENT_IN_EXT);
-// 	if (ret)
-// 		return ret;
-
-// 	ret = ad74413r_set_diag_channel_enable(ad74413r_desc, AD74413R_CH_A, true);
-// 	if (ret)
-// 		goto error;
-
-// 	ret = ad74413r_set_diag(ad74413r_desc, AD74413R_CH_A, AD74413R_DIAG_TEMP);
-// 	if (ret)
-// 		goto error;
-
-// 	while (1) {
-// 		/* Clear the screen. */
-// 		pr_info("%c",27);
-// 		pr_info("%c",'[');
-// 		pr_info("%c",'2');
-// 		pr_info("%c",'J');
-
-// 		ret = ad74413r_gpo_get(ad74413r_desc, AD74413R_CH_A, &val);
-// 		if (ret)
-// 			goto error;
-
-// 		for (uint32_t i = 0; i < 3; i++) {
-// 			ret = ad74413r_adc_get_value(ad74413r_desc, AD74413R_CH_B + i, &result[i]);
-// 			if (ret)
-// 				goto error;
-// 		}
-
-// 		ret = ad74413r_get_live(ad74413r_desc, &status);
-// 		if (ret)
-// 			goto error;
-
-// 		ret = ad74413r_get_temp(ad74413r_desc, AD74413R_CH_A, &temp);
-// 		if (ret)
-// 			goto error;
-
-// 		pr_info("Channel A: GPO_A status %d (5V threshold)\n", val);
-// 		pr_info("Channel B: %ld"".%02lu mV (Voltage input)\n",
-// 			(int32_t)result[0].integer,
-// 			result[0].decimal);
-// 		pr_info("Channel C: %ld"".%02lu mA (Voltage output)\n",
-// 			(int32_t)result[1].integer,
-// 			result[1].decimal);
-// 		pr_info("Channel D: %ld"".%02lu mA (Current input)\n",
-// 			(int32_t)result[2].integer,
-// 			result[2].decimal);
-// 		pr_info("\nDiagnostic channel A: %d deg. C (die's temperature)\n", temp);
-
-// 		pr_info("\n================================================================================\n\n");
-
-// 		pr_info("Channel A fault: %d\n", status.status_bits.VI_ERR_A);
-// 		pr_info("Channel B fault: %d\n", status.status_bits.VI_ERR_B);
-// 		pr_info("Channel C fault: %d\n", status.status_bits.VI_ERR_C);
-// 		pr_info("Channel D fault: %d\n", status.status_bits.VI_ERR_D);
-
-// 		no_os_mdelay(1000);
-// 	}
-
-// error:
-// 	pr_info("Error!\n");
-// 	ad74413r_remove(ad74413r_desc);
+error:
+	printf("Error!\n");
+	adin1110_remove(adin1110);
 
 	return 0;
 }
