@@ -93,9 +93,9 @@
 #define ADIN1110_STATUS1_REG			0x09
 #define ADIN2111_P2_RX_RDY			NO_OS_BIT(17)
 #define ADIN1110_SPI_ERR			NO_OS_BIT(10)
-#define ADIN1110_RX_RDY			NO_OS_BIT(4)
+#define ADIN1110_RX_RDY				NO_OS_BIT(4)
 
-#define ADIN1110_IMASK1_REG				0x0D
+#define ADIN1110_IMASK1_REG			0x0D
 #define ADIN2111_RX_RDY_IRQ			NO_OS_BIT(17)
 #define ADIN1110_SPI_ERR_IRQ			NO_OS_BIT(10)
 #define ADIN1110_RX_RDY_IRQ			NO_OS_BIT(4)
@@ -137,13 +137,20 @@
 #define ADIN1110_MAC_ADDR_MASK_UPR_REG		0x70
 #define ADIN1110_MAC_ADDR_MASK_LWR_REG		0x71
 #define ADIN1110_MAC_P1_ADDR_SLOT		2
-#define ADIN2110_MAC_P2_ADDR_SLOT		3
+#define ADIN2111_MAC_P2_ADDR_SLOT		3
 
 #define ADIN1110_RX_FRM_CNT_REG			0xA0
 #define ADIN1110_RX_CRC_ERR_CNT_REG		0xA4
 #define ADIN1110_RX_ALGN_ERR_CNT_REG		0xA5
 #define ADIN1110_RX_LS_ERR_CNT_REG		0xA6
 #define ADIN1110_RX_PHY_ERR_CNT_REG		0xA7
+#define ADIN1110_TX_FRM_CNT_REG			0xA8
+#define ADIN1110_TX_BCAST_CNT_REG		0xA9
+#define ADIN1110_TX_MCAST_CNT_REG		0xAA
+#define ADIN1110_TX_UCAST_CNT_REG		0xAB
+#define ADIN1110_RX_BCAST_CNT_REG		0xA1
+#define ADIN1110_RX_MCAST_CNT_REG		0xA2
+#define ADIN1110_RX_UCAST_CNT_REG		0xA3
 
 #define ADIN1110_RX_DROP_FULL_CNT_REG		0xAC
 #define ADIN1110_RX_DROP_FILT_CNT_REG		0xAD
@@ -161,17 +168,11 @@
 #define ADIN1110_MDIO_OP_WR			0x1
 #define ADIN1110_MDIO_OP_RD			0x3
 
-#define ADIN1110_MAX_BUFF			2048
-#define ADIN1110_MAX_FRAMES_READ		64
 #define ADIN1110_WR_HEADER_LEN			2
 #define ADIN1110_FRAME_HEADER_LEN		2
-#define ADIN1110_INTERNAL_SIZE_HEADER_LEN	2
 #define ADIN1110_RD_HEADER_LEN			3
 #define ADIN1110_REG_LEN			4
 #define ADIN1110_FEC_LEN			4
-
-#define ADIN_MAC_MAX_PORTS			2
-#define ADIN_MAC_MAX_ADDR_SLOTS			16
 
 #define ADIN_MAC_MULTICAST_ADDR_SLOT		0
 #define ADIN_MAC_BROADCAST_ADDR_SLOT		1
@@ -179,57 +180,97 @@
 #define ADIN_MAC_P2_ADDR_SLOT			3
 #define ADIN_MAC_FDB_ADDR_SLOT			4
 
+/**
+ * @brief The chips supported by this driver.
+ */
 enum adin1110_chip_id {
-    ADIN1110,
-    ADIN2111,
+	ADIN1110,
+	ADIN2111,
 };
 
-enum adin1110_mmd_acr_func {
-	adin1110_address_func,
-	adin1110_data_func,
-};
-
+/**
+ * @brief ADIN1110 device descriptor.
+ */
 struct adin1110_desc {
-    enum adin1110_chip_id chip_type;
-    struct no_os_spi_desc *comm_desc;
-    uint8_t mac_address[ADIN1110_ETH_ALEN];
-    uint8_t rx_buff[ADIN1110_BUFF_LEN];
-    uint8_t tx_buff[ADIN1110_BUFF_LEN];
+	enum adin1110_chip_id chip_type;
+	struct no_os_spi_desc *comm_desc;
+	uint8_t mac_address[ADIN1110_ETH_ALEN];
+	uint8_t rx_buff[ADIN1110_BUFF_LEN];
+	uint8_t tx_buff[ADIN1110_BUFF_LEN];
 
-    struct no_os_gpio_desc *reset_gpio;
-    bool append_crc;
+	struct no_os_gpio_desc *reset_gpio;
+	bool append_crc;
 };
 
+/**
+ * @brief Initialization parameter for the device descriptor.
+ */
 struct adin1110_init_param {
-	enum adin1110_chip_id chip_type; 
+	enum adin1110_chip_id chip_type;
 	struct no_os_spi_init_param comm_param;
 	struct no_os_gpio_init_param reset_param;
 	uint8_t mac_address[ADIN1110_ETH_ALEN];
 	bool append_crc;
 };
 
+/**
+ * @brief Buffer structure used for frame RX and TX transactions.
+ */
 struct adin1110_eth_buff {
 	uint8_t mac_source[ADIN1110_ETH_ALEN];
-	uint8_t mac_destination[ADIN1110_ETH_ALEN];
+	uint8_t mac_dest[ADIN1110_ETH_ALEN];
 	uint16_t ethertype;
 	uint32_t payload_len;
 	uint8_t *payload;
 };
 
+/* Reset both the MAC and PHY. */
 int adin1110_sw_reset(struct adin1110_desc *desc);
-int adin1110_mdio_write_c45(struct adin1110_desc *, uint32_t, uint32_t, uint32_t, uint32_t);
-int adin1110_mdio_read_c45(struct adin1110_desc *, uint32_t, uint32_t, uint32_t, uint32_t *);
-int adin1110_write_mmd(struct adin1110_desc *, uint32_t , uint32_t , uint32_t, uint32_t);
-int adin1110_read_mmd(struct adin1110_desc *, uint32_t , uint32_t , uint32_t, uint32_t *);
+
+/* Write a PHY register using clause 45 */
+int adin1110_mdio_write_c45(struct adin1110_desc *, uint32_t, uint32_t,
+			    uint32_t, uint32_t);
+
+/* Read a PHY register using clause 45 */
+int adin1110_mdio_read_c45(struct adin1110_desc *, uint32_t, uint32_t, uint32_t,
+			   uint32_t *);
+
+/* Write a PHY register using clause 22 */
 int adin1110_mdio_write(struct adin1110_desc *, uint32_t, uint32_t, uint32_t);
+
+/* Read a PHY register using clause 22 */
 int adin1110_mdio_read(struct adin1110_desc *, uint32_t, uint32_t, uint32_t *);
+
+/* Update a register's value based on a mask */
 int adin1110_reg_update(struct adin1110_desc *, uint16_t, uint32_t, uint32_t);
+
+/* Write a register's value */
 int adin1110_reg_write(struct adin1110_desc *, uint16_t, uint32_t);
+
+/* Read a register's value */
 int adin1110_reg_read(struct adin1110_desc *, uint16_t, uint32_t *);
-int adin1110_write_fifo(struct adin1110_desc *, uint32_t, struct adin1110_eth_buff *);
-int adin1110_read_fifo(struct adin1110_desc *, uint32_t, struct adin1110_eth_buff *);
-int adin1110_set_promisc(struct adin1110_desc *, uint32_t , bool);
+
+/* Write a frame to the TX FIFO */
+int adin1110_write_fifo(struct adin1110_desc *, uint32_t,
+			struct adin1110_eth_buff *);
+
+/* Read a frame from the RX FIFO */
+int adin1110_read_fifo(struct adin1110_desc *, uint32_t,
+		       struct adin1110_eth_buff *);
+
+/* Set a port in promiscuous mode. All MAC filters are dropped */
+int adin1110_set_promisc(struct adin1110_desc *, uint32_t, bool);
+
+/* Reset the MAC device */
+int adin1110_mac_reset(struct adin1110_desc *);
+
+/* Reset the PHY device */
+int adin1110_phy_reset(struct adin1110_desc *);
+
+/* Initialize the device */
 int adin1110_init(struct adin1110_desc **, struct adin1110_init_param *);
+
+/* Free a device descriptor */
 int adin1110_remove(struct adin1110_desc *);
 
 #endif
