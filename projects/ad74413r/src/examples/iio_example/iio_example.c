@@ -69,6 +69,7 @@ int iio_example_main()
 	int ret;
 	struct ad74413r_iio_desc *ad74413r_iio_desc;
 	struct ad74413r_iio_desc_init_param ad74413r_iio_ip;
+	struct iio_app_desc *app;
 	struct iio_data_buffer buff = {
 		.buff = (void *)iio_data_buffer,
 		.size = DATA_BUFFER_SIZE * sizeof(uint32_t) * 8
@@ -77,6 +78,7 @@ int iio_example_main()
 		.chip_id = AD74412R,
 		.comm_param = ad74413r_spi_ip
 	};
+	struct iio_app_init_param app_init_param = { 0 };
 
 	ad74413r_iio_ip.ad74413r_init_param = &ad74413r_ip;
 	ad74413r_iio_ip.channel_configs[0] = (struct ad74413r_channel_config) {
@@ -109,5 +111,13 @@ int iio_example_main()
 		}
 	};
 
-	return iio_app_run(NULL, 0, iio_devices, NO_OS_ARRAY_SIZE(iio_devices));
+	app_init_param.devices = iio_devices;
+	app_init_param.nb_devices = NO_OS_ARRAY_SIZE(iio_devices);
+	app_init_param.uart_init_params = ad74413r_uart_ip;
+
+	ret = iio_app_init(&app, app_init_param);
+	if (ret)
+		return ret;
+
+	return iio_app_run(app);
 }

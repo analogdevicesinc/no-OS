@@ -50,6 +50,7 @@
 #include "aducm3029_irq.h"
 #include "aducm3029_gpio_irq.h"
 #include "aducm3029_timer.h"
+#include "aducm3029_uart.h"
 #include "no_os_timer.h"
 
 /******************************************************************************/
@@ -59,6 +60,8 @@
 #define INTC_DEVICE_ID	0
 #define UART_IRQ_ID		ADUCM_UART_INT_ID
 #define UART_BAUDRATE	115200
+#define UART_EXTRA      NULL
+#define UART_OPS        &aducm_uart_ops
 
 #define SPI_DEVICE_ID   1
 #define SPI_BAUDRATE    4000000

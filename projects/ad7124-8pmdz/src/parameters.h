@@ -85,6 +85,8 @@
 #define UART_IRQ_ID		XPAR_AXI_INTC_AXI_UART_INTERRUPT_INTR
 #endif // _XPARAMETERS_PS_H_
 
+#define UART_OPS        &xil_uart_ops
+
 /* 400 * 8 * 2 = 6400‬ Default number of samples requested on a capture */
 #define MAX_SIZE_BASE_ADDR	10000
 #define UART_BAUDRATE	115200
@@ -97,6 +99,7 @@
 #define INTC_DEVICE_ID	0
 #define UART_IRQ_ID		ADUCM_UART_INT_ID
 #define UART_BAUDRATE	115200
+#define UART_OPS        &aducm_uart_ops
 
 #endif //ADUCM_PLATFORM
 

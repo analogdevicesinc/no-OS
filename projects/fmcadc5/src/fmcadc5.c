@@ -64,6 +64,7 @@
 #ifdef IIO_SUPPORT
 #include "iio_app.h"
 #include "iio_axi_adc.h"
+#include "xilinx_uart.h"
 #endif
 
 static uint16_t adc_buff[ADC_MAX_SAMPLES] __attribute__((aligned));
@@ -382,6 +383,28 @@ int main(void)
 	Xil_DCacheInvalidateRange((uintptr_t)adc_buff, sizeof(adc_buff));
 
 #ifdef IIO_SUPPORT
+	struct xil_uart_init_param platform_uart_init_par = {
+#ifdef XPAR_XUARTLITE_NUM_INSTANCES
+		.type = UART_PL,
+#else
+		.type = UART_PS,
+		.irq_id = UART_IRQ_ID
+#endif
+	};
+
+	struct no_os_uart_init_param iio_uart_ip = {
+		.device_id = UART_DEVICE_ID,
+		.irq_id = UART_IRQ_ID,
+		.baud_rate = UART_BAUDRATE,
+		.size = NO_OS_UART_CS_8,
+		.parity = NO_OS_UART_PAR_NO,
+		.stop = NO_OS_UART_STOP_1_BIT,
+		.extra = &platform_uart_init_par,
+		.platform_ops = &xil_uart_ops
+	};
+
+	struct iio_app_desc *app;
+	struct iio_app_init_param app_init_param = { 0 };
 	struct iio_device *adc_dev_0_desc;
 	struct iio_axi_adc_desc *iio_axi_adc_0_desc;
 	struct iio_axi_adc_init_param iio_axi_adc_0_init_par;
@@ -407,7 +430,15 @@ int main(void)
 			       &read_buff0, NULL),
 	};
 
-	return iio_app_run(NULL, 0, devices, NO_OS_ARRAY_SIZE(devices));
+	app_init_param.devices = devices;
+	app_init_param.nb_devices = NO_OS_ARRAY_SIZE(devices);
+	app_init_param.uart_init_params = iio_uart_ip;
+
+	status = iio_app_init(&app, app_init_param);
+	if (status)
+		return status;
+
+	return iio_app_run(app);
 #endif
 
 	printf("adc5: setup and configuration is done\n");

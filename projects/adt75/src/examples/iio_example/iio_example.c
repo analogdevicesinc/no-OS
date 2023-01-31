@@ -69,10 +69,12 @@ int iio_example_main()
 	int ret;
 	struct adt75_iio_desc *adt75_iio_desc;
 	struct adt75_iio_init_param adt75_iio_ip;
+	struct iio_app_desc *app;
 	struct iio_data_buffer buff = {
 		.buff = (void *)iio_data_buffer,
 		.size = DATA_BUFFER_SIZE * sizeof(int16_t)
 	};
+	struct iio_app_init_param app_init_param = { 0 };
 
 	adt75_iio_ip.adt75_init_param = &adt75_ip;
 	ret = adt75_iio_init(&adt75_iio_desc, &adt75_iio_ip);
@@ -88,5 +90,13 @@ int iio_example_main()
 		}
 	};
 
-	return iio_app_run(NULL, 0, iio_devices, NO_OS_ARRAY_SIZE(iio_devices));
+	app_init_param.devices = iio_devices;
+	app_init_param.nb_devices = NO_OS_ARRAY_SIZE(iio_devices);
+	app_init_param.uart_init_params = adt75_uart_ip;
+
+	ret = iio_app_init(&app, app_init_param);
+	if (ret)
+		return ret;
+
+	return iio_app_run(app);
 }

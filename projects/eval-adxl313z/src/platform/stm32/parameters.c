@@ -45,11 +45,9 @@
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-#ifdef BASIC_EXAMPLE
 struct stm32_uart_init_param xuip = {
 	.huart = &huart2,
 };
-#endif
 
 struct stm32_spi_init_param xsip  = {
 	.chip_select_port = SPI_CS_PORT,

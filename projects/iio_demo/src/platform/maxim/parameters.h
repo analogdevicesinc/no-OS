@@ -63,6 +63,10 @@
 #define UART_IRQ_ID    	UART0_IRQn
 #define UART_DEVICE_ID	0
 #define UART_BAUDRATE	57600
+#define UART_EXTRA      &iio_demo_uart_extra_ip
+#define UART_OPS        &max_uart_ops
+
+extern struct max_uart_init_param iio_demo_uart_extra_ip;
 
 #ifdef IIO_TIMER_TRIGGER_EXAMPLE
 /* Adc Demo Timer settings */

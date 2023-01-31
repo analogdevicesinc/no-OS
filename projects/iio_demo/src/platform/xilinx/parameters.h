@@ -45,6 +45,7 @@
 /******************************************************************************/
 #include <xparameters.h>
 #include <xil_cache.h>
+#include <xilinx_uart.h>
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -64,6 +65,11 @@
 #define INTC_DEVICE_ID	XPAR_INTC_SINGLE_DEVICE_ID
 #define UART_IRQ_ID		XPAR_AXI_INTC_AXI_UART_INTERRUPT_INTR
 #endif // _XPARAMETERS_PS_H_
+
+#define UART_EXTRA		&iio_demo_uart_extra_ip
+#define UART_OPS		&xil_uart_ops
+
+extern struct xil_uart_init_param iio_demo_uart_extra_ip;
 
 /* This value can be modified based on the number
 of samples needed to be stored in the device buffer

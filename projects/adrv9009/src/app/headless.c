@@ -43,17 +43,43 @@
 #include "iio_app.h"
 #include "iio_axi_adc.h"
 #include "iio_axi_dac.h"
+#ifndef ALTERA_PLATFORM
+#include "xilinx_uart.h"
+#else
+#include "altera_uart.h"
+#endif
 
 int32_t start_iiod(struct axi_dmac *rx_dmac, struct axi_dmac *tx_dmac,
 		   struct axi_adc *rx_adc, struct axi_dac *tx_dac)
 {
 	struct iio_axi_adc_init_param	iio_axi_adc_init_par;
 	struct iio_axi_dac_init_param	iio_axi_dac_init_par;
+	struct iio_app_init_param app_init_param = { 0 };
 	struct iio_axi_adc_desc		*iio_axi_adc_desc;
 	struct iio_axi_dac_desc		*iio_axi_dac_desc;
 	struct iio_device		*adc_dev_desc;
 	struct iio_device		*dac_dev_desc;
+	struct iio_app_desc *app;
 	int32_t				status;
+	struct xil_uart_init_param platform_uart_init_par = {
+#ifdef XPAR_XUARTLITE_NUM_INSTANCES
+		.type = UART_PL,
+#else
+		.type = UART_PS,
+		.irq_id = UART_IRQ_ID
+#endif
+	};
+
+	struct no_os_uart_init_param iio_uart_ip = {
+		.device_id = UART_DEVICE_ID,
+		.irq_id = UART_IRQ_ID,
+		.baud_rate = UART_BAUDRATE,
+		.size = NO_OS_UART_CS_8,
+		.parity = NO_OS_UART_PAR_NO,
+		.stop = NO_OS_UART_STOP_1_BIT,
+		.extra = &platform_uart_init_par,
+		.platform_ops = &xil_uart_ops
+	};
 
 #ifndef ADRV9008_2
 	iio_axi_adc_init_par = (struct iio_axi_adc_init_param) {
@@ -118,7 +144,15 @@ int32_t start_iiod(struct axi_dmac *rx_dmac, struct axi_dmac *tx_dmac,
 #endif
 	};
 
-	return iio_app_run(NULL, 0, devices, NO_OS_ARRAY_SIZE(devices));
+	app_init_param.devices = devices;
+	app_init_param.nb_devices = NO_OS_ARRAY_SIZE(devices);
+	app_init_param.uart_init_params = iio_uart_ip;
+
+	status = iio_app_init(&app, app_init_param);
+	if (status)
+		return status;
+
+	return iio_app_run(app);
 }
 
 #endif // IIO_SUPPORT

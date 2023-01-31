@@ -45,11 +45,9 @@
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-#ifdef DUMMY_EXAMPLE
 struct stm32_uart_init_param ad74413r_uart_extra_ip = {
 	.huart = &huart3,
 };
-#endif
 
 struct stm32_spi_init_param ad74413r_spi_extra_ip  = {
 	.chip_select_port = SPI_CS_PORT,

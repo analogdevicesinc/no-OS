@@ -43,6 +43,7 @@
 #include "iio_example.h"
 #include "iio_adxl355.h"
 #include "common_data.h"
+#include "iio_app.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -65,15 +66,18 @@ uint8_t iio_data_buffer[DATA_BUFFER_SIZE*3*sizeof(int)];
  * @return ret - Result of the example execution. If working correctly, will
  *               execute continuously function iio_app_run and will not return.
 *******************************************************************************/
+
 int iio_example_main()
 {
 	int ret;
 	struct adxl355_iio_dev *adxl355_iio_desc;
 	struct adxl355_iio_dev_init_param adxl355_iio_ip;
+	struct iio_app_desc *app;
 	struct iio_data_buffer accel_buff = {
 		.buff = (void *)iio_data_buffer,
 		.size = DATA_BUFFER_SIZE*3*sizeof(int)
 	};
+	struct iio_app_init_param app_init_param = { 0 };
 
 	adxl355_iio_ip.adxl355_dev_init = &adxl355_ip;
 	ret = adxl355_iio_init(&adxl355_iio_desc, &adxl355_iio_ip);
@@ -89,5 +93,13 @@ int iio_example_main()
 		}
 	};
 
-	return iio_app_run(NULL, 0, iio_devices, NO_OS_ARRAY_SIZE(iio_devices));
+	app_init_param.devices = iio_devices;
+	app_init_param.nb_devices = NO_OS_ARRAY_SIZE(iio_devices);
+	app_init_param.uart_init_params = adxl355_uart_ip;
+
+	ret = iio_app_init(&app, app_init_param);
+	if (ret)
+		return ret;
+
+	return iio_app_run(app);
 }

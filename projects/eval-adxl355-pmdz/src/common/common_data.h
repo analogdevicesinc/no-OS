@@ -54,10 +54,7 @@
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-#ifdef DUMMY_EXAMPLE
 extern struct no_os_uart_init_param adxl355_uart_ip;
-#endif
-
 extern struct no_os_spi_init_param adxl355_spi_ip;
 extern struct adxl355_init_param adxl355_ip;
 

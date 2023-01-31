@@ -65,6 +65,10 @@ extern UART_HandleTypeDef huart5;
 #define UART_IRQ_ID     UART5_IRQn
 #define UART_DEVICE_ID      5
 #define UART_BAUDRATE  115200
+#define UART_EXTRA      &iio_demo_uart_extra_ip
+#define UART_OPS        &stm32_uart_ops
+
+extern struct stm32_uart_init_param iio_demo_uart_extra_ip;
 
 #ifdef IIO_TIMER_TRIGGER_EXAMPLE
 /* Adc Demo Timer settings */

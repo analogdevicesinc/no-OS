@@ -45,11 +45,9 @@
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-#ifdef DUMMY_EXAMPLE
 struct max_uart_init_param adxl355_uart_extra_ip = {
 	.flow = UART_FLOW_DIS
 };
-#endif
 
 #ifdef IIO_TRIGGER_EXAMPLE
 /* Initialization for Sync pin GPIO. */

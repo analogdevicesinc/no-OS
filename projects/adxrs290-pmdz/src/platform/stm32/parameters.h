@@ -60,6 +60,8 @@ extern UART_HandleTypeDef huart5;
 #define UART_IRQ_ID     UART5_IRQn
 #define UART_DEVICE_ID  5
 #define UART_BAUDRATE   115200
+#define UART_EXTRA		&adxrs290_uart_extra_ip
+#define UART_OPS		&stm32_uart_ops
 #endif
 
 #define SPI_DEVICE_ID   1
@@ -78,6 +80,7 @@ extern UART_HandleTypeDef huart5;
 #error IIO_TRIGGER_EXAMPLE is not supported on STM32 platform for adxrs290-pmdz project.
 #endif
 
+extern struct stm32_uart_init_param adxrs290_uart_extra_ip;
 extern struct stm32_spi_init_param adxrs290_spi_extra_ip;
 extern struct stm32_gpio_init_param adxrs290_gpio_extra_ip;
 

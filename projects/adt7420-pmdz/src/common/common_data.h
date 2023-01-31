@@ -51,9 +51,7 @@
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-#ifdef DUMMY_EXAMPLE
 extern struct no_os_uart_init_param uip;
-#endif
 
 extern const struct no_os_i2c_init_param iip;
 extern struct adt7420_init_param adt7420_user_init;

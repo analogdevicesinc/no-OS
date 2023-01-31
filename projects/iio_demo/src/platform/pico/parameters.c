@@ -41,3 +41,8 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include "parameters.h"
+
+struct pico_uart_init_param iio_demo_uart_extra_ip = {
+	.uart_tx_pin = UART_TX_PIN,
+	.uart_rx_pin = UART_RX_PIN,
+};

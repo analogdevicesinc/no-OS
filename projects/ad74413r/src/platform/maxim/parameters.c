@@ -45,11 +45,9 @@
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-#ifdef DUMMY_EXAMPLE
 struct max_uart_init_param ad74413r_uart_extra_ip = {
 	.flow = UART_FLOW_DIS
 };
-#endif
 
 struct max_spi_init_param ad74413r_spi_extra_ip  = {
 	.numSlaves = 1,

@@ -87,6 +87,9 @@ int iio_timer_trigger_example_main()
 	/* iio desc */
 	struct iio_desc *iio_desc;
 
+	/* iio application desc */
+	struct iio_app_desc *app;
+
 	struct iio_data_buffer adc_buff = {
 		.buff = (void *)ADC_DDR_BASEADDR,
 		.size = MAX_SIZE_BASE_ADDR
@@ -96,6 +99,8 @@ int iio_timer_trigger_example_main()
 		.buff = (void *)DAC_DDR_BASEADDR,
 		.size = MAX_SIZE_BASE_ADDR
 	};
+
+	struct iio_app_init_param app_init_param = { 0 };
 
 	ret = adc_demo_init(&adc_desc, &adc_init_par);
 	if (ret)
@@ -168,6 +173,20 @@ int iio_timer_trigger_example_main()
 				&dac_iio_timer_trig_desc)
 	};
 
-	return iio_app_run_with_trigs(NULL, 0, devices, NO_OS_ARRAY_SIZE(devices),
-				      trigs, NO_OS_ARRAY_SIZE(trigs), NULL, &iio_desc);
+	app_init_param.devices = devices;
+	app_init_param.nb_devices = NO_OS_ARRAY_SIZE(devices);
+	app_init_param.uart_init_params = iio_demo_uart_ip;
+	app_init_param.trigs = trigs;
+	app_init_param.nb_trigs = NO_OS_ARRAY_SIZE(trigs);
+	app_init_param.irq_desc = NULL;
+
+	ret = iio_app_init(&app, app_init_param);
+	if (ret)
+		return ret;
+
+	// update the reference to iio_desc
+	adc_timer_trig_desc->iio_desc = app->iio_desc;
+	dac_timer_trig_desc->iio_desc = app->iio_desc;
+
+	return iio_app_run(app);
 }
