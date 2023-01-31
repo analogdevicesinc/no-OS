@@ -102,19 +102,6 @@ int max14906_init(struct max14906_desc **desc, struct max14906_init_param *param
 	if (ret)
 		goto err;
 
-	for (i = 0; i < MAX14906_CHANNELS; i++) {
-		ch_config = &param->ch_config[i];
-		ret = no_os_gpio_get(&descriptor->dio[i], &ch_config->gpio_param);
-		if (ret)
-			return ret;
-		if (ch_config->function == MAX14906_OUT)
-			ret = no_os_gpio_direction_output(descriptor->dio[i], ch_config->val);
-		else
-			ret = no_os_gpio_direction_input(descriptor->dio[i]);
-		if (ret)
-			goto err;
-	}
-
 	*desc = descriptor;
 
 	return 0;

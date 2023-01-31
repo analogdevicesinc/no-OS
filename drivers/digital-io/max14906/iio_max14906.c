@@ -17,7 +17,7 @@
 	}
 
 #define MAX14906_FAULT_CHANNEL				\
-        {						\
+	{						\
             	.ch_type = IIO_VOLTAGE,			\
 		.name = "fault",			\
 		.attributes = max14906_fault_attrs,	\
@@ -92,9 +92,9 @@ extern int max14906_back;
 struct max14906_ch_config max14906_ch_configs[MAX14906_CHANNELS];
 
 static char *max14906_function_avail[3] = {
-	[MAX14906_CH_OUT] = "direction_out",
-	[MAX14906_CH_IN] = "direction_in",
-	[MAX14906_CH_HIGH_Z] = "direction_high_z"
+	[MAX14906_OUT] = "direction_out",
+	[MAX14906_IN] = "direction_in",
+	[MAX14906_HIGH_Z] = "direction_high_z"
 };
 
 static const char *const max14906_do_mode_avail[4] = {
@@ -190,7 +190,7 @@ static struct iio_attribute max14906_config_attrs[] = {
 		.name = "IEC_type_available",
 		.shared = IIO_SHARED_BY_ALL,
 		.show = max14906_iio_read_config_iec_available,
-	}
+	},
 	END_ATTRIBUTES_ARRAY
 };
 
@@ -225,7 +225,7 @@ static struct iio_device max14906_iio_dev = {
 	.read_dev = (int32_t (*)())max14906_iio_read_samples,
 	.debug_reg_read = (int32_t (*)())max14906_reg_read,
 	.debug_reg_write = (int32_t (*)())max14906_reg_write,
-	.attrs = max14906_runtime_dev_attrs,
+	.attributes = max14906_runtime_dev_attrs,
 };
 
 static struct iio_device max14906_iio_config_dev = {
@@ -342,7 +342,10 @@ static int max14906_iio_write_do_mode(void *dev, char *buf, uint32_t len,
 	if (do_mode == NO_OS_ARRAY_SIZE(max14906_do_mode_avail))
 		return -EINVAL;
 
-	return max14906_do_config(desc, channel->address, do_mode);
+	do_mode = no_os_field_prep(MAX14906_DO_MASK(channel->address), do_mode);
+
+	return max14906_reg_update(desc, MAX14906_CONFIG_DO_REG,
+				   MAX14906_DO_MASK(channel->address), do_mode);
 }
 
 static int max14906_iio_read_config_function(void *dev, char *buf, uint32_t len,
@@ -510,8 +513,8 @@ int max14906_iio_setup_channels(struct max14906_iio_desc *desc)
 		max14906_iio_channels[ch_offset++] = channel;
 	}
 
-	max14906_iio_channels[ch_offset++] = MAX14906_FAULT_CHANNEL;
-	max14906_iio_dev.num_channels = ch_offset;
+	max14906_iio_channels[ch_offset++] = (struct iio_channel)MAX14906_FAULT_CHANNEL;
+	max14906_iio_dev.num_ch = ch_offset;
 	max14906_iio_dev.channels = max14906_iio_channels;
 
 	return 0;
@@ -522,7 +525,7 @@ static int max14906_iio_read_samples(void *dev, uint8_t *buf, uint32_t samples)
 	struct max14906_iio_desc *iio_desc = dev;
 	struct max14906_desc *desc = iio_desc->max14906_desc;
 	uint32_t val;
-	int i, j;
+	size_t i, j;
 	int ret;
 
 	for (i = 0; i < samples * iio_desc->no_active_channels; i++) {
