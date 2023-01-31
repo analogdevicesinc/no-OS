@@ -42,6 +42,10 @@
 /******************************************************************************/
 #include "parameters.h"
 
+struct stm32_uart_init_param iio_demo_uart_extra_ip = {
+	.huart = &huart5,
+};
+
 #ifdef IIO_TIMER_TRIGGER_EXAMPLE
 extern TIM_HandleTypeDef htim13;
 struct stm32_timer_init_param adc_demo_xtip = {

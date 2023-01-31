@@ -278,6 +278,28 @@ int main(void)
 	if (ret < 0)
 		goto error;
 #else
+#if defined(STM32_PLATFORM)
+	struct stm32_uart_init_param uart_extra_ip = {
+		.huart = &huart5,
+	};
+#endif
+
+	struct no_os_uart_init_param iio_uart_ip = {
+		.device_id = UART_DEVICE_ID,
+		.irq_id = UART_IRQ_ID,
+		.baud_rate = UART_BAUDRATE,
+		.size = NO_OS_UART_CS_8,
+		.parity = NO_OS_UART_PAR_NO,
+		.stop = NO_OS_UART_STOP_1_BIT,
+#if defined(STM32_PLATFORM)
+		.extra = &uart_extra_ip,
+#else
+		.extra = NULL,
+#endif
+		.platform_ops = UART_OPS
+	};
+	struct iio_app_desc *app;
+	struct iio_app_init_param app_init_param = { 0 };
 	struct ad5940_iio_dev *ad5940_iio = NULL;
 	struct ad5940_iio_init_param ad5940_iio_ip = {
 		.ad5940_init = &ad5940_ip,
@@ -306,7 +328,15 @@ int main(void)
 		},
 	};
 
-	return iio_app_run(NULL, 0, devices, NO_OS_ARRAY_SIZE(devices));
+	app_init_param.devices = devices;
+	app_init_param.nb_devices = NO_OS_ARRAY_SIZE(devices);
+	app_init_param.uart_init_params = iio_uart_ip;
+
+	ret = iio_app_init(&app, app_init_param);
+	if (ret)
+		return ret;
+
+	return iio_app_run(app);
 #endif
 
 	printf("Bye!\n");

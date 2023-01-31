@@ -49,6 +49,18 @@
 static uint16_t loopback_buffs[DEMO_CHANNELS][SAMPLES_PER_CHANNEL];
 #endif
 
+struct no_os_uart_init_param iio_demo_uart_ip = {
+	.device_id = UART_DEVICE_ID,
+	.irq_id = UART_IRQ_ID,
+	.asynchronous_rx = true,
+	.baud_rate = UART_BAUDRATE,
+	.size = NO_OS_UART_CS_8,
+	.parity = NO_OS_UART_PAR_NO,
+	.stop = NO_OS_UART_STOP_1_BIT,
+	.extra = UART_EXTRA,
+	.platform_ops = UART_OPS,
+};
+
 struct adc_demo_init_param adc_init_par = {
 	.ext_buff_len = SAMPLES_PER_CHANNEL,
 	.ext_buff = (uint16_t **)loopback_buffs,
@@ -112,7 +124,17 @@ struct iio_hw_trig_init_param adc_demo_timer_trig_ip = {
 	.cb_info = adc_demo_timer_cb_info,
 	.name = ADC_DEMO_TIMER_TRIG_NAME,
 };
-
+struct no_os_uart_init_param adxl355_uart_ip = {
+	.device_id = UART_DEVICE_ID,
+	.irq_id = UART_IRQ_ID,
+	.asynchronous_rx = true,
+	.baud_rate = UART_BAUDRATE,
+	.size = NO_OS_UART_CS_8,
+	.parity = NO_OS_UART_PAR_NO,
+	.stop = NO_OS_UART_STOP_1_BIT,
+	.extra = UART_EXTRA,
+	.platform_ops = UART_OPS,
+};
 /* Dac Demo timer init parameter */
 struct no_os_timer_init_param dac_demo_tip = {
 	.id = DAC_DEMO_TIMER_DEVICE_ID,

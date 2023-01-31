@@ -45,6 +45,10 @@
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
+struct stm32_uart_init_param adxrs290_uart_extra_ip = {
+	.huart = &huart5,
+};
+
 struct stm32_spi_init_param adxrs290_spi_extra_ip  = {
 	.chip_select_port = SPI_CS_PORT,
 };

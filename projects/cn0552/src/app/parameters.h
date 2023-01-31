@@ -39,6 +39,8 @@
 #ifndef __PARAMETERS_H
 #define __PARAMETERS_H
 
+#include "aducm3029_irq.h"
+
 #define UART_DEVICE_ID	0
 #define INTC_DEVICE_ID	0
 #define UART_IRQ_ID	ADUCM_UART_INT_ID

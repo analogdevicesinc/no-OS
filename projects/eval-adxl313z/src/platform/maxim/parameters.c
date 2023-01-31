@@ -45,11 +45,9 @@
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-#ifdef BASIC_EXAMPLE
 struct max_uart_init_param xuip = {
 	.flow = UART_FLOW_DIS
 };
-#endif
 
 struct max_spi_init_param xsip  = {
 	.numSlaves = 1,

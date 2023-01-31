@@ -49,6 +49,7 @@
 #include "iio_ad7124.h"
 #include "ad7124_regs.h"
 #include "iio_app.h"
+#include "parameters.h"
 
 #include <sys/platform.h>
 #include "adi_initialize.h"
@@ -94,12 +95,41 @@ int main(void)
 	/* IRQ instance. */
 	struct no_os_irq_ctrl_desc *irq_desc;
 
+	/* IIO application data. */
+	struct iio_app_desc *app;
+	struct iio_app_init_param app_init_param = { 0 };
+
 #ifdef XILINX_PLATFORM
 	/* Enable the instruction cache. */
 	Xil_ICacheEnable();
 	/* Enable the data cache. */
 	Xil_DCacheEnable();
+	ret
+	struct xil_uart_init_param platform_uart_init_par = {
+#ifdef XPAR_XUARTLITE_NUM_INSTANCES
+		.type = UART_PL,
+#else
+		.type = UART_PS,
+		.irq_id = UART_IRQ_ID
+#endif
+	};
 #endif //XILINX_PLATFORM
+
+	struct no_os_uart_init_param ad7124_uart_ip = {
+		.device_id = UART_DEVICE_ID,
+		.irq_id = UART_IRQ_ID,
+		.asynchronous_rx = true,
+		.baud_rate = UART_BAUDRATE,
+		.size = NO_OS_UART_CS_8,
+		.parity = NO_OS_UART_PAR_NO,
+		.stop = NO_OS_UART_STOP_1_BIT,
+#ifdef XILINX_PLATFORM
+		.extra = &platform_uart_init_par,
+#else
+		.extra = NULL,
+#endif
+		.platform_ops = UART_OPS,
+	};
 
 	status = platform_init();
 	if (NO_OS_IS_ERR_VALUE(status))
@@ -139,6 +169,14 @@ int main(void)
 			       &iio_ad7124_read_buff, NULL)
 	};
 
-	return iio_app_run(NULL, 0, devices, NUMBER_OF_DEVICES);
+	app_init_param.devices = devices;
+	app_init_param.nb_devices = NUMBER_OF_DEVICES;
+	app_init_param.uart_init_params = ad7124_uart_ip;
+
+	status = iio_app_init(&app, app_init_param);
+	if (status)
+		return status;
+
+	return iio_app_run(app);
 }
 

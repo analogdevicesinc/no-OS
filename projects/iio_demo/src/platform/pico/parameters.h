@@ -58,8 +58,12 @@ and based on the available RAM memory of the platform */
 #define UART_DEVICE_ID      0
 #define UART_BAUDRATE  115200
 #define UART_IRQ_ID        20
+#define UART_EXTRA      &iio_demo_uart_extra_ip
+#define UART_OPS        &pico_uart_ops
 
 #define UART_TX_PIN     UART0_TX_GP0
 #define UART_RX_PIN     UART0_RX_GP1
+
+extern struct pico_uart_init_param iio_demo_uart_extra_ip;
 
 #endif /* __PARAMETERS_H__ */

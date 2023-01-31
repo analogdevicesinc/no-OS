@@ -65,6 +65,12 @@ int iio_example_main()
 	/* dac instance descriptor. */
 	struct dac_demo_desc *dac_desc;
 
+	/* IIO application descriptor. */
+	struct iio_app_desc *app;
+
+	/* IIO application initialization parameters. */
+	struct iio_app_init_param app_init_param = { 0 };
+
 	struct iio_data_buffer adc_buff = {
 		.buff = (void *)ADC_DDR_BASEADDR,
 		.size = MAX_SIZE_BASE_ADDR
@@ -90,5 +96,13 @@ int iio_example_main()
 			       &dac_demo_iio_descriptor,NULL, &dac_buff)
 	};
 
-	return iio_app_run(NULL, 0, devices, NO_OS_ARRAY_SIZE(devices));
+	app_init_param.devices = devices;
+	app_init_param.nb_devices = NO_OS_ARRAY_SIZE(devices);
+	app_init_param.uart_init_params = iio_demo_uart_ip;
+
+	status = iio_app_init(&app, app_init_param);
+	if (status)
+		return status;
+
+	return iio_app_run(app);
 }

@@ -45,9 +45,10 @@
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-#ifdef DUMMY_EXAMPLE
 struct no_os_uart_init_param ad74413r_uart_ip = {
 	.device_id = UART_DEVICE_ID,
+	.irq_id = UART_IRQ_ID,
+	.asynchronous_rx = true,
 	.baud_rate = UART_BAUDRATE,
 	.size = NO_OS_UART_CS_8,
 	.parity = NO_OS_UART_PAR_NO,
@@ -55,7 +56,6 @@ struct no_os_uart_init_param ad74413r_uart_ip = {
 	.platform_ops = UART_OPS,
 	.extra = UART_EXTRA,
 };
-#endif
 
 struct no_os_spi_init_param ad74413r_spi_ip = {
 	.device_id = SPI_DEVICE_ID,

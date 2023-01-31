@@ -51,9 +51,7 @@
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-#ifdef BASIC_EXAMPLE
 extern struct no_os_uart_init_param uip;
-#endif
 
 extern struct no_os_spi_init_param sip;
 extern struct adxl313_init_param adxl313_user_init;

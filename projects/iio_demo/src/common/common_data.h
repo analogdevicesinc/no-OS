@@ -54,6 +54,8 @@
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
+extern struct no_os_uart_init_param iio_demo_uart_ip;
+
 #define DEMO_CHANNELS no_os_max(TOTAL_ADC_CHANNELS, TOTAL_DAC_CHANNELS)
 
 #ifdef ENABLE_LOOPBACK

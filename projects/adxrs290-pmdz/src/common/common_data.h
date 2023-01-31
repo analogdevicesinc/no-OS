@@ -54,6 +54,7 @@
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
+extern struct no_os_uart_init_param adxrs290_uart_ip;
 extern struct no_os_spi_init_param adxrs290_spi_ip;
 extern struct no_os_gpio_init_param adxrs290_gpio_sync_ip;
 extern struct adxrs290_init_param adxrs290_ip;

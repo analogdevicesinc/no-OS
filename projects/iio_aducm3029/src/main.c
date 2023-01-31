@@ -113,6 +113,21 @@ int main(void)
 		return status;
 
 #ifdef IIO_SUPPORT
+	struct iio_app_desc *app;
+	struct iio_app_init_param app_init_param = { 0 };
+
+	struct no_os_uart_init_param uart_ip = {
+		.device_id = UART_DEVICE_ID,
+		.irq_id = UART_IRQ_ID,
+		.asynchronous_rx = true,
+		.baud_rate = UART_BAUDRATE,
+		.size = NO_OS_UART_CS_8,
+		.parity = NO_OS_UART_PAR_NO,
+		.stop = NO_OS_UART_STOP_1_BIT,
+		.extra = NULL,
+		.platform_ops = &aducm_uart_ops,
+	};
+
 	struct iio_app_device devices[] = {
 		IIO_APP_DEVICE("adcum3029", &g_aducm3029_desc,
 			       &iio_aducm3029_desc,
@@ -133,7 +148,15 @@ int main(void)
 	ch.ch_num = 8;
 	set_pwm_attr(&g_aducm3029_desc, "1", 1, &ch, PWM_ENABLE);
 
-	return iio_app_run(NULL, 0, devices, NO_OS_ARRAY_SIZE(devices));
+	app_init_param.devices = devices;
+	app_init_param.nb_devices = NO_OS_ARRAY_SIZE(devices);
+	app_init_param.uart_init_params = uart_ip;
+
+	status = iio_app_init(&app, app_init_param);
+	if (status)
+		return status;
+
+	return iio_app_run(app);
 #endif
 
 	struct adc_init_param	adc_init_param = {0};
@@ -167,6 +190,8 @@ int main(void)
 	uint32_t nb_samples = 10;
 	uint32_t i,j,k;
 
+
+
 	status = aducm3029_adc_update_active_channels(adc, ch_mask);
 	if (NO_OS_IS_ERR_VALUE(status))
 		return status;
@@ -180,7 +205,7 @@ int main(void)
 			for (j = 0; j < active_ch; j++) {
 				n += sprintf(buff + n, "ch%d:%d",j,adc_buffer[k++]);
 				if (j == active_ch - 1)
-					n += sprintf(buff + n, "\n");
+					n += sprintf(buff + n, "\r\n");
 				else
 					n += sprintf(buff + n, ",");
 			}

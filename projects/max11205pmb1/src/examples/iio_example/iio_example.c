@@ -67,6 +67,7 @@ uint8_t iio_data_buffer[DATA_BUFFER_SIZE * sizeof(int16_t)];
 int iio_example_main()
 {
 	int ret;
+	struct iio_app_desc *app;
 	struct max11205_iio_dev *max11205_iio_desc;
 	struct max11205_iio_dev_init_param max11205_iio_ip;
 	struct no_os_irq_ctrl_desc *max11205_gpio_irq_desc;
@@ -74,6 +75,7 @@ int iio_example_main()
 		.buff = (void *)iio_data_buffer,
 		.size = DATA_BUFFER_SIZE * sizeof(int16_t)
 	};
+	struct iio_app_init_param app_init_param = { 0 };
 
 	/* Initialize GPIO IRQ controller */
 	ret = no_os_irq_ctrl_init(&max11205_gpio_irq_desc, &max11205_gpio_irq_ip);
@@ -99,5 +101,13 @@ int iio_example_main()
 		}
 	};
 
-	return iio_app_run(NULL, 0, iio_devices, NO_OS_ARRAY_SIZE(iio_devices));
+	app_init_param.devices = iio_devices;
+	app_init_param.nb_devices = NO_OS_ARRAY_SIZE(iio_devices);
+	app_init_param.uart_init_params = max11205_uart_ip;
+
+	ret = iio_app_init(&app, app_init_param);
+	if (ret)
+		return ret;
+
+	return iio_app_run(app);
 }

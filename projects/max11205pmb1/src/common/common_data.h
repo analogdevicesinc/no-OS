@@ -48,9 +48,7 @@
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-#ifdef BASIC_EXAMPLE
 extern struct no_os_uart_init_param max11205_uart_ip;
-#endif
 
 extern struct no_os_spi_init_param max11205_spi_ip;
 extern struct no_os_gpio_init_param max11205_gpio_rdy_ip;

@@ -50,6 +50,7 @@
 #include "iio_ada4250.h"
 #include "no_os_spi.h"
 #include "aducm3029_spi.h"
+#include "aducm3029_uart.h"
 #include "iio_app.h"
 
 /***************************************************************************//**
@@ -62,6 +63,8 @@ int main()
 	adi_initComponents();
 
 	struct ada4250_dev *ada4250_dev;
+	struct iio_app_desc *app;
+	struct iio_app_init_param app_init_param = { 0 };
 
 	struct aducm_spi_init_param spi_param = {
 		.continuous_mode = true,
@@ -89,6 +92,18 @@ int main()
 		.offset_nv = 0,
 	};
 
+	struct no_os_uart_init_param ada4250_uart_ip = {
+		.device_id = UART_DEVICE_ID,
+		.irq_id = UART_IRQ_ID,
+		.asynchronous_rx = true,
+		.baud_rate = UART_BAUDRATE,
+		.size = NO_OS_UART_CS_8,
+		.parity = NO_OS_UART_PAR_NO,
+		.stop = NO_OS_UART_STOP_1_BIT,
+		.extra = NULL,
+		.platform_ops = &aducm_uart_ops,
+	};
+
 	ret = ada4250_init(&ada4250_dev, &ada4250_param);
 	if (NO_OS_IS_ERR_VALUE(ret))
 		return ret;
@@ -99,5 +114,13 @@ int main()
 			       NULL, NULL)
 	};
 
-	return iio_app_run(NULL, 0, devices, NO_OS_ARRAY_SIZE(devices));
+	app_init_param.devices = devices;
+	app_init_param.nb_devices = NO_OS_ARRAY_SIZE(devices);
+	app_init_param.uart_init_params = ada4250_uart_ip;
+
+	ret = iio_app_init(&app, app_init_param);
+	if (ret)
+		return ret;
+
+	return iio_app_run(app);
 }

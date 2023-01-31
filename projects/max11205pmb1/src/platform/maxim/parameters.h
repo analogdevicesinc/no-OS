@@ -52,11 +52,9 @@
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-#ifdef BASIC_EXAMPLE
 #define UART_OPS                &max_uart_ops
 #define UART_EXTRA              &max11205_uart_extra_ip
 extern struct max_uart_init_param max11205_uart_extra_ip;
-#endif
 
 #define INTC_DEVICE_ID          0
 #define UART_DEVICE_ID          0

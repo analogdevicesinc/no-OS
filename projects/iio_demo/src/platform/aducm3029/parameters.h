@@ -48,6 +48,7 @@
 #include "adi_initialize.h"
 #include <drivers/pwr/adi_pwr.h>
 #include "aducm3029_irq.h"
+#include "aducm3029_uart.h"
 #include "common_data.h"
 #include "no_os_util.h"
 
@@ -58,6 +59,8 @@
 #define INTC_DEVICE_ID	0
 #define UART_IRQ_ID		ADUCM_UART_INT_ID
 #define UART_BAUDRATE	115200
+#define UART_EXTRA      NULL
+#define UART_OPS        &aducm_uart_ops
 
 /* This value can be modified based on the number
 of samples needed to be stored in the device buffer

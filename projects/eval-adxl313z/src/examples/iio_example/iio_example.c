@@ -70,10 +70,12 @@ int iio_example_main()
 	char *dev_name = "adxl312";
 	struct adxl313_iio_dev *adxl313_iio_desc;
 	struct adxl313_iio_dev_init_param adxl313_init_par;
+	struct iio_app_desc *app;
 	struct iio_data_buffer accel_buff = {
 		.buff = (void *)iio_data_buffer,
 		.size = DATA_BUFFER_SIZE*3*sizeof(int)
 	};
+	struct iio_app_init_param app_init_param = { 0 };
 
 	adxl313_init_par.adxl313_dev_init = &adxl313_user_init;
 	ret = adxl313_iio_init(&adxl313_iio_desc, &adxl313_init_par);
@@ -103,5 +105,13 @@ int iio_example_main()
 		}
 	};
 
-	return iio_app_run(NULL, 0, iio_devices, NO_OS_ARRAY_SIZE(iio_devices));
+	app_init_param.devices = iio_devices;
+	app_init_param.nb_devices = NO_OS_ARRAY_SIZE(iio_devices);
+	app_init_param.uart_init_params = uip;
+
+	ret = iio_app_init(&app, app_init_param);
+	if (ret)
+		return ret;
+
+	return iio_app_run(app);
 }

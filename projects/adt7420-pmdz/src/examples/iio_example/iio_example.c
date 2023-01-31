@@ -68,10 +68,12 @@ int iio_example_main()
 	int ret;
 	struct adt7420_iio_dev *adt7420_iio_desc;
 	struct adt7420_iio_init_param adt7420_init_param;
+	struct iio_app_desc *app;
 	struct iio_data_buffer dbuff = {
 		.buff = (void *)iio_data_buffer,
 		.size = DATA_BUFFER_SIZE * sizeof(uint16_t)
 	};
+	struct iio_app_init_param app_init_param = { 0 };
 
 	adt7420_init_param.adt7420_dev_init = &adt7420_user_init;
 	ret = adt7420_iio_init(&adt7420_iio_desc, &adt7420_init_param);
@@ -87,5 +89,13 @@ int iio_example_main()
 		}
 	};
 
-	iio_app_run(NULL, 0, iio_devices, NO_OS_ARRAY_SIZE(iio_devices));
+	app_init_param.devices = iio_devices;
+	app_init_param.nb_devices = NO_OS_ARRAY_SIZE(iio_devices);
+	app_init_param.uart_init_params = uip;
+
+	ret = iio_app_init(&app, app_init_param);
+	if (ret)
+		return ret;
+
+	return iio_app_run(app);
 }

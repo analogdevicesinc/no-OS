@@ -66,6 +66,8 @@ int iio_trigger_example_main()
 {
 	int ret;
 	struct adxrs290_dev *adxrs290_desc;
+	struct iio_app_desc *app;
+	struct iio_app_init_param app_init_param = { 0 };
 	struct iio_data_buffer rd_buf = {
 		.buff = (void *)GYRO_DDR_BASEADDR,
 		.size = MAX_SIZE_BASE_ADDR
@@ -115,7 +117,19 @@ int iio_trigger_example_main()
 				&adxrs290_iio_trig_desc)
 	};
 
-	return iio_app_run_with_trigs(NULL, 0, iio_devices,
-				      NO_OS_ARRAY_SIZE(iio_devices),
-				      trigs, NO_OS_ARRAY_SIZE(trigs), adxrs290_irq_desc, &iio_desc);
+	app_init_param.devices = iio_devices;
+	app_init_param.nb_devices = NO_OS_ARRAY_SIZE(iio_devices);
+	app_init_param.uart_init_params = adxrs290_uart_ip;
+	app_init_param.trigs = trigs;
+	app_init_param.nb_trigs = NO_OS_ARRAY_SIZE(trigs);
+	app_init_param.irq_desc = adxrs290_irq_desc;
+
+	ret = iio_app_init(&app, app_init_param);
+	if (ret)
+		return ret;
+
+	// update the reference to iio_desc
+	adxrs290_trig_desc->iio_desc = app->iio_desc;
+
+	return iio_app_run(app);
 }

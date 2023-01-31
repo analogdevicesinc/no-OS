@@ -58,6 +58,8 @@
 #define UART_IRQ_ID     UART0_IRQn
 #define UART_DEVICE_ID  0
 #define UART_BAUDRATE   57600
+#define UART_EXTRA		  &adxrs290_uart_extra_ip
+#define UART_OPS		    &max_uart_ops
 #endif
 
 #define SPI_DEVICE_ID   0
@@ -75,6 +77,7 @@
 #define GPIO_SYNC_PORT_NUM  1
 #endif
 
+extern struct max_uart_init_param adxrs290_uart_extra_ip;
 extern struct max_gpio_init_param adxrs290_gpio_extra_ip;
 extern struct max_spi_init_param adxrs290_spi_extra_ip;
 

@@ -74,15 +74,21 @@ int main(void)
 	struct no_os_uart_desc *uart;
 	struct no_os_uart_init_param uip = {
 		.device_id = UART_DEVICE_ID,
+		.irq_id = UART_IRQ_ID,
+		.asynchronous_rx = true,
 		.baud_rate = UART_BAUDRATE,
 		.size = NO_OS_UART_CS_8,
 		.parity = NO_OS_UART_PAR_NO,
 		.stop = NO_OS_UART_STOP_1_BIT,
+		.extra = NULL,
 		.platform_ops = &aducm_uart_ops,
 	};
 #ifdef IIO_SUPPORT
 	struct ad7746_iio_dev *adciio = NULL;
 	struct ad7746_iio_init_param adciio_init;
+
+	struct iio_app_desc *app;
+	struct iio_app_init_param app_init_param = { 0 };
 #endif
 
 	ret = platform_init();
@@ -207,7 +213,15 @@ error:
 		}
 	};
 
-	ret = iio_app_run(NULL, 0, iio_devices, NO_OS_ARRAY_SIZE(iio_devices));
+	app_init_param.devices = iio_devices;
+	app_init_param.nb_devices = NO_OS_ARRAY_SIZE(iio_devices);
+	app_init_param.uart_init_params = uip;
+
+	ret = iio_app_init(&app, app_init_param);
+	if (ret)
+		return ret;
+
+	return iio_app_run(app);
 error:
 	ad7746_iio_remove(adciio);
 	return ret;

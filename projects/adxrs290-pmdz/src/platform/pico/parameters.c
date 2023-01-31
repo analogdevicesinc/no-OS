@@ -42,6 +42,11 @@
 /******************************************************************************/
 #include "parameters.h"
 
+struct pico_uart_init_param adxrs290_uart_extra_ip = {
+	.uart_tx_pin = UART_TX_PIN,
+	.uart_rx_pin = UART_RX_PIN,
+};
+
 struct pico_spi_init_param adxrs290_spi_extra_ip  = {
 	.spi_tx_pin = SPI0_TX_GP19,
 	.spi_rx_pin = SPI0_RX_GP16,

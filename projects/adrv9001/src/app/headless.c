@@ -58,6 +58,7 @@
 #include "iio_app.h"
 #include "iio_axi_adc.h"
 #include "iio_axi_dac.h"
+#include "xilinx_uart.h"
 #endif
 
 #include "adrv9002.h"
@@ -194,6 +195,24 @@ static int32_t iio_run(struct iio_axi_adc_init_param *adc_pars,
 	struct iio_data_buffer iio_adc_buffers[IIO_DEV_COUNT];
 	struct iio_device *iio_descs[IIO_DEV_COUNT * 2];
 	struct iio_app_device app_devices[IIO_DEV_COUNT * 2] = {0};
+	struct xil_uart_init_param platform_uart_init_par = {
+		.type = UART_PS,
+		.irq_id = UART_IRQ_ID
+	};
+
+	struct no_os_uart_init_param iio_uart_ip = {
+		.device_id = UART_DEVICE_ID,
+		.irq_id = UART_IRQ_ID,
+		.baud_rate = UART_BAUDRATE,
+		.size = NO_OS_UART_CS_8,
+		.parity = NO_OS_UART_PAR_NO,
+		.stop = NO_OS_UART_STOP_1_BIT,
+		.extra = &platform_uart_init_par,
+		.platform_ops = &xil_uart_ops
+	};
+
+	struct iio_app_desc *app;
+	struct iio_app_init_param app_init_param = { 0 };
 	int32_t i, ret;
 	int32_t a; // linear iterator for iio_descs and app_devices flat arrays
 
@@ -225,7 +244,15 @@ static int32_t iio_run(struct iio_axi_adc_init_param *adc_pars,
 		app_devices[a].write_buff = &iio_dac_buffers[i];
 	}
 
-	return iio_app_run(NULL, 0, app_devices, NO_OS_ARRAY_SIZE(app_devices));
+	app_init_param.devices = app_devices;
+	app_init_param.nb_devices = NO_OS_ARRAY_SIZE(app_devices);
+	app_init_param.uart_init_params = iio_uart_ip;
+
+	ret = iio_app_init(&app, app_init_param);
+	if (ret)
+		return ret;
+
+	return iio_app_run(app);
 }
 #endif
 

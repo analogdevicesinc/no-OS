@@ -45,11 +45,9 @@
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-#ifdef DUMMY_EXAMPLE
 struct max_uart_init_param xuip = {
 	.flow = UART_FLOW_DIS,
 };
-#endif
 
 struct max_i2c_init_param adt7420_i2c_extra = {
 	.vssel = MXC_GPIO_VSSEL_VDDIOH
