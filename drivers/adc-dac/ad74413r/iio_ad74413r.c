@@ -1058,7 +1058,7 @@ static int ad74413r_iio_setup_channels(struct ad74413r_iio_desc *iio_desc)
 			chan[ch_idx].address = i;
 
 			/* Only add a scan index to the ADC channels */
-			if (ch_idx == 0)
+			if (chan[ch_idx].ch_out == 0)
 				chan[ch_idx].scan_index = i;
 
 			memcpy(chan_buffer + n_chan, chan, sizeof(*chan));

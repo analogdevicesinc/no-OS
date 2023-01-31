@@ -17,7 +17,8 @@ struct max14906_iio_desc_init_param {
 };
 
 int max14906_iio_init(struct max14906_iio_desc **,
-                      struct max14906_iio_desc_init_param *);
+                      struct max14906_iio_desc_init_param *,
+		      bool);
 int max14906_iio_remove(struct max14906_iio_desc *);
 
 #endif

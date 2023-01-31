@@ -115,6 +115,15 @@ int iio_example_main()
 	max14906_iio_ip.max14906_init_param = &max14906_ip;
 	ad74413r_iio_ip.ad74413r_init_param = &ad74413r_ip;
 
+	/* Probe the iio drivers in config mode */
+	ret = ad74413r_iio_init(&ad74413r_iio_desc, &ad74413r_iio_ip, true);
+	if (ret)
+		return ret;
+
+	ret = max14906_iio_init(&max14906_iio_desc, &max14906_iio_ip, true);
+	if (ret)
+		return ret;
+
 	struct iio_app_device iio_devices[] = {
 		{
 			.name = "ad74413r",
@@ -131,15 +140,6 @@ int iio_example_main()
 	};
 
 	while (1) {
-		/* Probe the iio drivers in config mode */
-		ret = ad74413r_iio_init(&ad74413r_iio_desc, &ad74413r_iio_ip, true);
-		if (ret)
-			return ret;
-
-		ret = max14906_iio_init(&max14906_iio_desc, &max14906_iio_ip, true);
-		if (ret)
-		return ret;
-
 		ret = iio_app_run(iio_devices, NO_OS_ARRAY_SIZE(iio_devices));
 		if (ret)
 			return ret;
