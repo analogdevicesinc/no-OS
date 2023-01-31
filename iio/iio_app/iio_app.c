@@ -41,19 +41,12 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include "iio.h"
 #include "iio_app.h"
 #include "parameters.h"
-#include "no_os_uart.h"
-#include "no_os_delay.h"
 
 #if defined(ADUCM_PLATFORM)
 #include "aducm3029_uart.h"
 #include "aducm3029_irq.h"
-#endif
-#if defined(ADUCM_PLATFORM) || defined(XILINX_PLATFORM)
-#include "no_os_irq.h"
-#include "no_os_error.h"
 #endif
 #if defined(XILINX_PLATFORM)
 #include "xilinx_uart.h"
@@ -63,15 +56,10 @@
 #include <errno.h>
 #include "stm32_uart.h"
 #include "stm32_irq.h"
-#include "no_os_irq.h"
-#include "no_os_error.h"
 #endif
-
 #if defined(MAXIM_PLATFORM)
 #include "maxim_irq.h"
 #include "maxim_uart.h"
-#include "no_os_irq.h"
-#include "no_os_error.h"
 #endif
 
 #ifdef NO_OS_NETWORKING
@@ -86,27 +74,6 @@
 #ifdef LINUX_PLATFORM
 #include "linux_socket.h"
 #include "tcp_socket.h"
-#include "no_os_error.h"
-#endif
-
-#ifdef PICO_PLATFORM
-#include "no_os_error.h"
-#endif
-
-#ifdef ADUCM_PLATFORM
-#define UART_OPS &aducm_uart_ops
-#elif LINUX_PLATFORM
-#define UART_OPS &linux_uart_ops
-#elif defined MAXIM_PLATFORM
-#define UART_OPS &max_uart_ops
-#elif defined PICO_PLATFORM
-#define UART_OPS &pico_uart_ops
-#elif defined STM32_PLATFORM
-#define UART_OPS &stm32_uart_ops
-#elif defined XILINX_PLATFORM
-#define UART_OPS &xil_uart_ops
-#else
-#error "UART_OPS not defined"
 #endif
 
 // The default baudrate iio_app will use to print messages to console.
@@ -121,7 +88,7 @@ static inline uint32_t _calc_uart_xfer_time(uint32_t len, uint32_t baudrate)
 
 #if !defined(LINUX_PLATFORM) && !defined(NO_OS_NETWORKING)
 static int32_t iio_print_uart_info_message(struct no_os_uart_desc **uart_desc,
-		struct no_os_uart_init_param *uart_init_par,
+		struct no_os_uart_init_param *user_uart_params,
 		char *message, int32_t msglen)
 {
 	int32_t status;
@@ -133,18 +100,15 @@ static int32_t iio_print_uart_info_message(struct no_os_uart_desc **uart_desc,
 
 	delay_ms = _calc_uart_xfer_time(msglen, UART_BAUDRATE_DEFAULT);
 	no_os_mdelay(delay_ms);
-	if (UART_BAUDRATE_DEFAULT != UART_BAUDRATE) {
-		no_os_uart_remove(*uart_desc);
-		uart_init_par->baud_rate = UART_BAUDRATE;
-		return no_os_uart_init(uart_desc, uart_init_par);
-	}
 
-	return 0;
+	/** Reinitialize UART with parameters required by the IIO application */
+	no_os_uart_remove(*uart_desc);
+	return no_os_uart_init(uart_desc, user_uart_params);
 }
 #endif
 
 static int32_t print_uart_hello_message(struct no_os_uart_desc **uart_desc,
-					struct no_os_uart_init_param *uart_init_par)
+					struct no_os_uart_init_param *user_uart_params)
 {
 #if defined(LINUX_PLATFORM) || defined(NO_OS_NETWORKING)
 	return 0;
@@ -163,18 +127,18 @@ static int32_t print_uart_hello_message(struct no_os_uart_desc **uart_desc,
 				  "\tParity: %s\n"
 				  "\tStop bits: %s\n"
 				  "\tFlow control: none\n",
-				  UART_BAUDRATE,
-				  uart_data_size[uart_init_par->size],
-				  uart_parity[uart_init_par->parity],
-				  uart_stop[uart_init_par->stop]);
+				  user_uart_params->baud_rate,
+				  uart_data_size[user_uart_params->size],
+				  uart_parity[user_uart_params->parity],
+				  uart_stop[user_uart_params->stop]);
 
-	return iio_print_uart_info_message(uart_desc, uart_init_par, message,
-					   msglen);
+	return iio_print_uart_info_message(uart_desc, user_uart_params,
+					   message, msglen);
 #endif
 }
 
 static int32_t print_uart_error_message(struct no_os_uart_desc **uart_desc,
-					struct no_os_uart_init_param *uart_init_par,
+					struct no_os_uart_init_param *user_uart_params,
 					int32_t status)
 {
 	char message[512];
@@ -186,8 +150,8 @@ static int32_t print_uart_error_message(struct no_os_uart_desc **uart_desc,
 	printf("%s", message);
 	return 0;
 #else
-	return iio_print_uart_info_message(uart_desc, uart_init_par, message,
-					   msglen);
+	return iio_print_uart_info_message(uart_desc, user_uart_params,
+					   message, msglen);
 #endif
 }
 
@@ -235,55 +199,30 @@ static int32_t network_setup(struct iio_init_param *iio_init_param,
 #endif
 
 static int32_t uart_setup(struct no_os_uart_desc **uart_desc,
-			  struct no_os_uart_init_param **uart_init_par)
+			  struct no_os_uart_init_param *uart_init_par)
 {
 #ifdef LINUX_PLATFORM
 	*uart_desc = NULL;
 	return 0;
-#else
-#ifdef XILINX_PLATFORM
-	static struct xil_uart_init_param platform_uart_init_par = {
-#ifdef XPAR_XUARTLITE_NUM_INSTANCES
-		.type = UART_PL,
-#else
-		.type = UART_PS,
-		.irq_id = UART_IRQ_ID
 #endif
-	};
-#elif defined(STM32_PLATFORM)
-	static struct stm32_uart_init_param platform_uart_init_par = {
-		.huart = IIO_APP_HUART,
-	};
-#elif defined(MAXIM_PLATFORM)
-	static struct max_uart_init_param platform_uart_init_par = {
-		.flow = UART_FLOW_DIS
-	};
-#elif defined(PICO_PLATFORM)
-	static struct pico_uart_init_param platform_uart_init_par = {
-		.uart_tx_pin = UART_TX_PIN,
-		.uart_rx_pin = UART_RX_PIN,
-	};
-#endif
-	static struct no_os_uart_init_param luart_par = {
-		.device_id = UART_DEVICE_ID,
+	struct no_os_uart_init_param luart_par = {
+		.device_id = uart_init_par->device_id,
 		/* TODO: remove this ifdef when asynchrounous rx is implemented on every platform. */
 #if defined(STM32_PLATFORM) || defined(MAXIM_PLATFORM) || defined(ADUCM_PLATFORM) || defined(PICO_PLATFORM)
-		.irq_id = UART_IRQ_ID,
+		.irq_id = uart_init_par->irq_id,
 		.asynchronous_rx = true,
 #endif
 		.baud_rate = UART_BAUDRATE_DEFAULT,
 		.size = NO_OS_UART_CS_8,
 		.parity = NO_OS_UART_PAR_NO,
 		.stop = NO_OS_UART_STOP_1_BIT,
-		.platform_ops = UART_OPS,
+		.platform_ops = uart_init_par->platform_ops,
 #ifndef ADUCM_PLATFORM
-		.extra = &platform_uart_init_par
+		.extra = uart_init_par->extra
 #endif
 	};
-	*uart_init_par = &luart_par;
 
 	return no_os_uart_init(uart_desc, &luart_par);
-#endif
 }
 
 #if defined(ADUCM_PLATFORM) || (defined(STM32_PLATFORM)) || defined(MAXIM_PLATFORM)
@@ -315,39 +254,40 @@ static int32_t irq_setup(struct no_os_irq_ctrl_desc **irq_desc)
 }
 #endif
 
-
 /**
- * @brief IIO Application API with trigger initialization.
- * @param ctx_attrs - array of context attributes.
- * @param nb_ctx_attr - number of attributes in ctx_attrs.
- * @param devices  - IIO devices to be used.
- * @param nb_devs  - Number of devices to be used.
- * @param trigs    - IIO triggers to be used.
- * @param nb_trigs - Number of triggers to be used.
- * @param irq_desc - IRQ descriptor to be used
- * @param iio_desc - IIO descriptor to be returned.
- * @return 0 in case of success or negative value otherwise.
+ * @brief Register devices for an iio application
+ *
+ * Configuration for communication is done in parameters.h
+ * @param app - the iio application descriptor
+ * @param app_init_param - the iio application initialization parameters
+ * @return 0 on success, negative value otherwise
  */
-int32_t iio_app_run_with_trigs(struct iio_ctx_attr *ctx_attrs,
-			       uint32_t nb_ctx_attr,
-			       struct iio_app_device *devices, uint32_t nb_devs,
-			       struct iio_trigger_init *trigs, int32_t nb_trigs,
-			       void *irq_desc, struct iio_desc **iio_desc)
+int iio_app_init(struct iio_app_desc **app,
+		 struct iio_app_init_param app_init_param)
 {
-	int32_t			status;
-	struct iio_init_param	iio_init_param;
-	struct no_os_uart_desc	*uart_desc;
-	struct no_os_uart_init_param	*uart_init_par;
-	struct iio_device_init	*iio_init_devs;
-	uint32_t		i;
+	struct iio_device_init *iio_init_devs;
+	struct iio_init_param iio_init_param;
+	struct no_os_uart_desc *uart_desc;
+	struct iio_app_desc *application;
 	struct iio_data_buffer *buff;
+	unsigned int i;
+	int status;
+	void *irq_desc = app_init_param.irq_desc;
+
+	application = (struct iio_app_desc *)calloc(1, sizeof(*application));
+	if (!application)
+		return -ENOMEM;
+
+	application->post_step_callback = app_init_param.post_step_callback;
+	application->arg = app_init_param.arg;
 
 #if defined(ADUCM_PLATFORM) || defined(STM32_PLATFORM)
 	/* Only one irq controller can exist and be initialized in
 	 * any of the iio_devices. */
-	for (i = 0; i < nb_devs; i++) {
-		if (devices[i].dev_descriptor->irq_desc) {
-			irq_desc = (struct no_os_irq_ctrl_desc *)devices[i].dev_descriptor->irq_desc;
+	for (i = 0; i < app_init_param.nb_devices; i++) {
+		if (app_init_param.devices[i].dev_descriptor->irq_desc) {
+			irq_desc = (struct no_os_irq_ctrl_desc *)
+				   app_init_param.devices[i].dev_descriptor->irq_desc;
 			break;
 		}
 	}
@@ -359,16 +299,19 @@ int32_t iio_app_run_with_trigs(struct iio_ctx_attr *ctx_attrs,
 	}
 #endif
 
-	status = uart_setup(&uart_desc, &uart_init_par);
+	status = uart_setup(&uart_desc, &app_init_param.uart_init_params);
 	if (status < 0)
-		return status;
+		goto error_uart;
 
-	status = print_uart_hello_message(&uart_desc, uart_init_par);
+	status = print_uart_hello_message(&uart_desc,
+					  &app_init_param.uart_init_params);
 	if (status < 0)
-		return status;
+		goto error;
+
+	application->uart_desc = uart_desc;
 
 #if defined(NO_OS_NETWORKING) || defined(LINUX_PLATFORM)
-	status = network_setup(&iio_init_param, uart_desc, irq_desc);
+	status = network_setup(&iio_init_param, uart_desc, application->irq_desc);
 	if(status < 0)
 		goto error;
 #else
@@ -376,26 +319,29 @@ int32_t iio_app_run_with_trigs(struct iio_ctx_attr *ctx_attrs,
 	iio_init_param.uart_desc = uart_desc;
 #endif
 
-	iio_init_devs = calloc(nb_devs, sizeof(*iio_init_devs));
-	if (!iio_init_devs)
-		return -ENOMEM;
+	iio_init_devs = calloc(app_init_param.nb_devices, sizeof(*iio_init_devs));
+	if (!iio_init_devs) {
+		status = -ENOMEM;
+		goto error;
+	}
 
-	for (i = 0; i < nb_devs; ++i) {
+	for (i = 0; i < app_init_param.nb_devices; ++i) {
 		/*
 		 * iio_app_device is from iio_app.h and we don't want to include
 		 * this in iio.h.
 		 * At the moment iio_device_init has the same parameters but
 		 * it will change.
 		 * When changes are done in iio. iio_app_device may be removed
-		 * and use iio_device_init instead.
+		 *iio_init_param and use iio_device_init instead.
 		 * This way faster changes can be done without changing all
 		 * project for each change.
 		 */
-		iio_init_devs[i].name = devices[i].name;
-		iio_init_devs[i].dev = devices[i].dev;
-		iio_init_devs[i].dev_descriptor = devices[i].dev_descriptor;
-		buff = devices[i].read_buff ? devices[i].read_buff :
-		       devices[i].write_buff;
+		iio_init_devs[i].name = app_init_param.devices[i].name;
+		iio_init_devs[i].dev = app_init_param.devices[i].dev;
+		iio_init_devs[i].dev_descriptor = app_init_param.devices[i].dev_descriptor;
+		buff = app_init_param.devices[i].read_buff ?
+		       app_init_param.devices[i].read_buff :
+		       app_init_param.devices[i].write_buff;
 		if (buff) {
 			iio_init_devs[i].raw_buf = buff->buff;
 			iio_init_devs[i].raw_buf_len = buff->size;
@@ -406,33 +352,82 @@ int32_t iio_app_run_with_trigs(struct iio_ctx_attr *ctx_attrs,
 	}
 
 	iio_init_param.devs = iio_init_devs;
-	iio_init_param.nb_devs = nb_devs;
-	iio_init_param.trigs = trigs;
-	iio_init_param.nb_trigs = nb_trigs;
-	iio_init_param.ctx_attrs = ctx_attrs;
-	iio_init_param.nb_ctx_attr = nb_ctx_attr;
-	status = iio_init(iio_desc, &iio_init_param);
+	iio_init_param.nb_devs = app_init_param.nb_devices;
+	iio_init_param.trigs = app_init_param.trigs;
+	iio_init_param.nb_trigs = app_init_param.nb_trigs;
+	iio_init_param.ctx_attrs = app_init_param.ctx_attrs;
+	iio_init_param.nb_ctx_attr = app_init_param.nb_ctx_attr;
+
+	status = iio_init(&application->iio_desc, &iio_init_param);
 	if(status < 0)
 		goto error;
 
 	free(iio_init_devs);
 
-	do {
-		status = iio_step(*iio_desc);
-	} while (true);
+	*app = application;
+
+	return 0;
 error:
-	status = print_uart_error_message(&uart_desc, uart_init_par, status);
+	/** We might have to reinit UART, settings might have changed for IIO */
+	uart_setup(&uart_desc, &app_init_param.uart_init_params);
+error_uart:
+	free(application);
+
+	status = print_uart_error_message(&uart_desc,
+					  &app_init_param.uart_init_params, status);
+	no_os_uart_remove(uart_desc);
+
 	return status;
 }
 
-int32_t iio_app_run(struct iio_ctx_attr *ctx_attrs, uint32_t nb_ctx_attr,
-		    struct iio_app_device *devices, uint32_t len)
+/**
+ * @brief Start an IIO application
+ *
+ * Configuration for communication is done through iio_app_init_param
+ * @param app - the iio application parameters
+ * @return 0 on success, negative value otherwise
+ */
+int iio_app_run(struct iio_app_desc *app)
 {
-	struct iio_desc	*iio_desc;
-	void *irq_desc = NULL;
+	int status;
 
-	return iio_app_run_with_trigs(ctx_attrs, nb_ctx_attr, devices, len, NULL, 0,
-				      irq_desc, &iio_desc);
+	do {
+		status = iio_step(app->iio_desc);
+		if (status && status != -EAGAIN && status != -ENOTCONN)
+			return status;
+		if (app->post_step_callback)
+			status = app->post_step_callback(app->arg);
+	} while (true);
+}
+
+/**
+ * @brief Remove resources allocated by the IIO application
+ *
+ * Configuration for communication is done through iio_app_init_param
+ * @param app - the iio application parameters
+ * @return 0 on success, negative value otherwise
+ */
+int iio_app_remove(struct iio_app_desc *app)
+{
+	int ret;
+
+#if defined(ADUCM_PLATFORM) || (defined(XILINX_PLATFORM) && !defined(PLATFORM_MB)) || defined(STM32_PLATFORM)
+	ret = no_os_irq_ctrl_remove(app->irq_desc);
+	if (ret)
+		return ret;
+#endif
+
+	ret = no_os_uart_remove(app->uart_desc);
+	if (ret)
+		return ret;
+
+	ret = iio_remove(app->iio_desc);
+	if (ret)
+		return ret;
+
+	free(app);
+
+	return 0;
 }
 
 #endif
