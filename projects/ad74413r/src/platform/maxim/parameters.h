@@ -58,7 +58,7 @@
 #endif
 
 #define UART_DEVICE_ID  0
-#define UART_BAUDRATE   57600
+#define UART_BAUDRATE   115200
 #define UART_OPS        &max_uart_ops
 #define UART_EXTRA      &adin1110_uart_extra_ip
 

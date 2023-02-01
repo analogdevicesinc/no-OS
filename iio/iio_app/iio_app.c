@@ -280,7 +280,7 @@ static int32_t uart_setup(struct no_os_uart_desc **uart_desc,
 		.baud_rate = UART_BAUDRATE_DEFAULT,
 		.size = NO_OS_UART_CS_8,
 		.parity = NO_OS_UART_PAR_NO,
-		.stop = NO_OS_UART_STOP_1_BIT,
+		.stop = NO_OS_UART_STOP_2_BIT,
 		.platform_ops = UART_OPS,
 #ifndef ADUCM_PLATFORM
 		.extra = &platform_uart_init_par
