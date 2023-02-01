@@ -2,16 +2,30 @@ ifndef MAXIM_LIBRARIES
 $(error MAXIM_LIBRARIES not defined.$(ENDL))
 endif
 
+CC=arm-none-eabi-gcc
+AR=arm-none-eabi-ar
+AS=arm-none-eabi-gcc
+GDB=arm-none-eabi-gdb
+OC=arm-none-eabi-objcopy
+
 ifeq ($(OS),Windows_NT)
 PYTHON = python
+WHICH = where
 UNIX_TOOLS_PATH = $(MAXIM_LIBRARIES)/../Tools/MSYS2/usr/bin
+export PATH := $(PATH):$(UNIX_TOOLS_PATH)
 ARM_COMPILER_PATH := $(dir $(call rwildcard, $(MAXIM_LIBRARIES)/../Tools/GNUTools, *bin/arm-none-eabi-gcc.exe))
-export PATH := $(PATH):$(ARM_COMPILER_PATH):$(UNIX_TOOLS_PATH)
 else
 PYTHON = python3
+WHICH = which
 ARM_COMPILER_PATH = $(realpath $(dir $(call rwildcard, $(MAXIM_LIBRARIES)/../Tools/GNUTools, *bin/arm-none-eabi-gcc)))
-export PATH := $(PATH):$(ARM_COMPILER_PATH)
 endif
+
+# Use the user provided compiler if the SDK doesn't contain it.
+ifeq ($(ARM_COMPILER_PATH),)
+ARM_COMPILER_PATH = $(realpath $(dir $(shell $(WHICH) $(CC))))
+endif
+
+export PATH := $(PATH):$(ARM_COMPILER_PATH)
 
 PLATFORM_RELATIVE_PATH = $1
 PLATFORM_FULL_PATH = $1
@@ -25,12 +39,6 @@ endif
 ifneq "$(STACK_SIZE)" ""
 CFLAGS+=-D_STACK_SIZE=$(STACK_SIZE)
 endif
-
-CC=arm-none-eabi-gcc
-AR=arm-none-eabi-ar
-AS=arm-none-eabi-gcc
-GDB=arm-none-eabi-gdb
-OC=arm-none-eabi-objcopy
 
 TARGET?=max32660
 TARGET_NUMBER:=$(word 2,$(subst x, ,$(TARGET)))
