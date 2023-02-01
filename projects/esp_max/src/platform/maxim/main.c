@@ -121,6 +121,7 @@ int32_t read_and_send(struct mqtt_desc *mqtt, struct ade9430_dev *ade9430_dev, s
 			struct pcf85263_dev *pcf85263_dev)
 {
 	struct mqtt_message	msg;
+	struct pcf85263_date	ts;
 	uint8_t			buff[100];
 	uint32_t		len;
 	int			ret;
@@ -140,7 +141,7 @@ int32_t read_and_send(struct mqtt_desc *mqtt, struct ade9430_dev *ade9430_dev, s
 	if (ret)
 		return ret;
 
-	ret = pcf85263_read_ts(pcf85263_dev);
+	ret = pcf85263_read_ts(pcf85263_dev, &ts);
 	if (ret)
 		return ret;
 
@@ -149,12 +150,12 @@ int32_t read_and_send(struct mqtt_desc *mqtt, struct ade9430_dev *ade9430_dev, s
 			ade9430_dev->airms,
 			ade9430_dev->avrms,
 			ade9430_dev->awatt,
-			pcf85263_dev->year,
-			pcf85263_dev->mon,
-			pcf85263_dev->day,
-			pcf85263_dev->hr,
-			pcf85263_dev->min,
-			pcf85263_dev->sec);
+			ts.year,
+			ts.mon,
+			ts.day,
+			ts.hr,
+			ts.min,
+			ts.sec);
 
 	//Get the topic to send a telemetry message
 	az_iot_hub_client_telemetry_get_publish_topic(&my_client, NULL, telemetry_topic, sizeof(telemetry_topic), NULL);
@@ -250,6 +251,10 @@ int main()
 
 	struct pcf85263_init_param pcf85263_ip = {
 		.i2c_init = &i2c_ip,
+		.battery_en = 1,
+	};
+
+	struct pcf85263_date pcf85263_date = {
 		.sec = RTC_SEC_DEFAULT,
 		.min = RTC_MIN_DEFAULT,
 		.hr = RTC_HR_DEFAULT,
@@ -265,7 +270,7 @@ int main()
 		return ret;
 
 #ifdef RTC_SET_DEFAULT
-	ret = pcf85263_set_date(pcf85263_device);
+	ret = pcf85263_set_date(pcf85263_device, pcf85263_date);
 	if (ret)
 		return ret;
 #endif

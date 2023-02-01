@@ -62,30 +62,30 @@
 #define PCF85263_REG_YEARS			0x07
 #define PCF85263_REG_SECOND_ALARM1		0x08
 #define PCF85263_REG_MINUTE_ALARM1		0x09
-#define PCF85263_REG_HOUR_ALARM1			0x0A
+#define PCF85263_REG_HOUR_ALARM1		0x0A
 #define PCF85263_REG_DAY_ALARM1			0x0B
 #define PCF85263_REG_MONTH_ALARM1		0x0C
 #define PCF85263_REG_MINUTE_ALARM2		0x0D
-#define PCF85263_REG_HOUR_ALARM2			0x0E
+#define PCF85263_REG_HOUR_ALARM2		0x0E
 #define PCF85263_REG_WEEKDAY_ALARM2		0x0F
 #define PCF85263_REG_ALARM_ENABLES		0x10
 #define PCF85263_REG_TSR1_SECONDS		0x11
 #define PCF85263_REG_TSR1_MINUTES		0x12
 #define PCF85263_REG_TSR1_HOURS			0x13
 #define PCF85263_REG_TSR1_DAYS			0x14
-#define PCF85263_REG_TSR1_MONTHS			0x15
+#define PCF85263_REG_TSR1_MONTHS		0x15
 #define PCF85263_REG_TSR1_YEARS			0x16
 #define PCF85263_REG_TSR2_SECONDS		0x17
 #define PCF85263_REG_TSR2_MINUTES		0x18
 #define PCF85263_REG_TSR2_HOURS			0x19
 #define PCF85263_REG_TSR2_DAYS			0x1A
-#define PCF85263_REG_TSR2_MONTHS			0x1B
+#define PCF85263_REG_TSR2_MONTHS		0x1B
 #define PCF85263_REG_TSR2_YEARS			0x1C
 #define PCF85263_REG_TSR3_SECONDS		0x1D
 #define PCF85263_REG_TSR3_MINUTES		0x1E
 #define PCF85263_REG_TSR3_HOURS			0x1F
 #define PCF85263_REG_TSR3_DAYS			0x20
-#define PCF85263_REG_TSR3_MONTHS			0x21
+#define PCF85263_REG_TSR3_MONTHS		0x21
 #define PCF85263_REG_TSR3_YEARS			0x22
 #define PCF85263_REG_TSR_MODE			0x23
 #define PCF85263_REG_OFFSET			0x24
@@ -93,17 +93,33 @@
 #define PCF85263_REG_BATTERY_SWITCH		0x26
 #define PCF85263_REG_PIN_IO			0x27
 #define PCF85263_REG_FUNCTION			0x28
-#define PCF85263_REG_INTA_ENABLE			0x29
-#define PCF85263_REG_INTB_ENABLE			0x2A
+#define PCF85263_REG_INTA_ENABLE		0x29
+#define PCF85263_REG_INTB_ENABLE		0x2A
 #define PCF85263_REG_FLAGS			0x2B
 #define PCF85263_REG_RAM_BYTE			0x2C
 #define PCF85263_REG_WATCH_DOG			0x2D
-#define PCF85263_REG_STOP_ENABLE			0x2E
+#define PCF85263_REG_STOP_ENABLE		0x2E
 #define PCF85263_REG_RESETS			0x2F
+
+#define PCF85263_CPR				0xA4
+#define PCF85263_BATTERY_SW_MSK			NO_OS_BIT(4)
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
+
+/**
+ * @struct pcf85263_date
+ * @brief Structure holding the date parameters.
+ */
+struct pcf85263_date {
+	uint8_t				sec;
+	uint8_t				min;
+	uint8_t				hr;
+	uint8_t				day;
+	uint8_t				mon;
+	uint8_t				year;
+};
 
 /**
  * @struct pcf85263_init_param
@@ -112,12 +128,7 @@
 struct pcf85263_init_param {
 	/** Device communication descriptor */
 	struct no_os_i2c_init_param 	*i2c_init;
-	uint8_t sec;
-	uint8_t min;
-	uint8_t hr;
-	uint8_t day;
-	uint8_t mon;
-	uint8_t year;
+	uint8_t				battery_en;
 };
 
 /**
@@ -127,12 +138,7 @@ struct pcf85263_init_param {
 struct pcf85263_dev {
 	/** Device communication descriptor */
 	struct no_os_spi_desc		*i2c_desc;
-	uint8_t sec;
-	uint8_t min;
-	uint8_t hr;
-	uint8_t day;
-	uint8_t mon;
-	uint8_t year;
+	uint8_t				battery_en;
 };
 
 /******************************************************************************/
@@ -141,25 +147,25 @@ struct pcf85263_dev {
 
 /* Read device register. */
 int pcf85263_read(struct pcf85263_dev *dev, uint8_t reg_addr,
-		 uint8_t *reg_data);
+		  uint8_t *reg_data);
 
 /* Write device register. */
 int pcf85263_write(struct pcf85263_dev *dev, uint8_t reg_addr,
-		  uint8_t reg_data);
+		   uint8_t reg_data);
 
 /* Update specific register bits. */
 int pcf85263_update_bits(struct pcf85263_dev *dev, uint8_t reg_addr,
-			uint8_t mask, uint8_t reg_data);
+			 uint8_t mask, uint8_t reg_data);
 
 /* Set date */
-int pcf85263_set_date(struct pcf85263_dev *dev);
+int pcf85263_set_date(struct pcf85263_dev *dev, struct pcf85263_date date);
 
 /* Read time stamp */
-int pcf85263_read_ts(struct pcf85263_dev *dev);
+int pcf85263_read_ts(struct pcf85263_dev *dev, struct pcf85263_date *ts);
 
 /* Initialize the device. */
 int pcf85263_init(struct pcf85263_dev **device,
-		 struct pcf85263_init_param init_param);
+		  struct pcf85263_init_param init_param);
 
 /* Remove the device and release resources. */
 int pcf85263_remove(struct pcf85263_dev *dev);
