@@ -24,7 +24,7 @@
 #define MAX14906_ADDR_MASK		NO_OS_GENMASK(4, 1)
 #define MAX14906_RW_MASK		NO_OS_BIT(0)
 
-#define MAX14906_DO_MASK(x)         (NO_OS_GENMASK(1, 0) << (x))
+#define MAX14906_DO_MASK(x)         (NO_OS_GENMASK(1, 0) << (2 * x))
 #define MAX14906_CH_DIR_MASK(x)		NO_OS_BIT((x) + 4)
 #define MAX14906_CH(x)              (x)
 #define MAX14906_IEC_TYPE_MASK      NO_OS_BIT(7)

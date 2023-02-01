@@ -423,11 +423,17 @@ error_desc:
  */
 static int32_t max_uart_remove(struct no_os_uart_desc *desc)
 {
+	struct max_uart_desc *extra;
+
 	if (!desc)
 		return -EINVAL;
 
+	extra = desc->extra;
+
 	MXC_UART_Shutdown(MXC_UART_GET_UART(desc->device_id));
-	no_os_free(desc);
+	no_os_irq_ctrl_remove(extra->nvic);
+	free(desc->extra);
+	free(desc);
 
 	return 0;
 }

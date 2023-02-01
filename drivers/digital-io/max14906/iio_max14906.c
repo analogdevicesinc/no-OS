@@ -212,7 +212,7 @@ static struct iio_attribute max14906_runtime_dev_attrs[] = {
 	END_ATTRIBUTES_ARRAY
 };
 
-static struct iio_channel *max14906_iio_channels;
+static struct iio_channel max14906_iio_channels[MAX14906_CHANNELS + 1];
 
 static struct iio_channel max14906_config_channels[MAX14906_CHANNELS] = {
 	MAX14906_CONFIG_CHANNEL(0),
@@ -443,8 +443,7 @@ static int max14906_iio_write_config_iec(void *dev, char *buf, uint32_t len,
 
 	val = no_os_field_prep(MAX14906_IEC_TYPE_MASK, iec_type);
 
-	return max14906_reg_update(desc, MAX14906_CONFIG_DI_REG, MAX14906_IEC_TYPE_MASK,
-				   val);
+	return max14906_reg_update(desc, MAX14906_CONFIG_DI_REG, MAX14906_IEC_TYPE_MASK, val);
 }
 
 static int max14906_iio_read_config_iec_available(void *dev, char *buf,
@@ -481,9 +480,9 @@ int max14906_iio_setup_channels(struct max14906_iio_desc *desc)
 		if (max14906_ch_configs[i].enable)
 			enabled_ch++;
 
-	max14906_iio_channels = calloc(enabled_ch, sizeof(max14906_iio_channels));
-	if (!max14906_iio_channels)
-		return -ENOMEM;
+	// max14906_iio_channels = calloc(enabled_ch, sizeof(max14906_iio_channels));
+	// if (!max14906_iio_channels)
+	// 	return -ENOMEM;
 
 	/*
 	 * Once get to setup the IIO channels, the device is already configured
@@ -626,6 +625,7 @@ int max14906_iio_remove(struct max14906_iio_desc *iio_desc)
 		return -ENODEV;
 
 	max14906_remove(iio_desc->max14906_desc);
+	max14906_remove();
 	free(iio_desc);
 
 	return 0;

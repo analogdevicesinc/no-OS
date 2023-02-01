@@ -80,11 +80,15 @@ int max14906_ch_func(struct max14906_desc *desc, uint32_t ch,
 	int ret;
 
 	if (function == MAX14906_HIGH_Z) {
-		
+		ret = max14906_reg_update(desc, MAX14906_CONFIG_DO_REG, MAX14906_DO_MASK(ch),
+					  no_os_field_prep(MAX14906_DO_MASK(ch),
+					  MAX14906_PUSH_PULL_CLAMP));
+		if (ret)
+			return ret;
 	}
 
-	return max14906_reg_update(desc, MAX14906_SETOUT_REG,
-				   MAX14906_CH_DIR_MASK(ch), function);
+	return max14906_reg_update(desc, MAX14906_SETOUT_REG, MAX14906_CH_DIR_MASK(ch),
+				   no_os_field_prep(MAX14906_CH_DIR_MASK(ch), function));
 }
 
 int max14906_init(struct max14906_desc **desc, struct max14906_init_param *param)
@@ -105,8 +109,7 @@ int max14906_init(struct max14906_desc **desc, struct max14906_init_param *param
 	*desc = descriptor;
 
 	return 0;
-err_init:
-	
+
 err:
 	free(descriptor);
 
@@ -126,5 +129,5 @@ int max14906_remove(struct max14906_desc *desc)
 
 	free(desc);
 
-	return ret;
+	return 0;
 }
