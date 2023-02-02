@@ -69,6 +69,14 @@ struct secure_init_param {
 	struct no_os_trng_init_param	*trng_init_param;
 	/** Server Hostname */
 	uint8_t			*hostname;
+	/** Certificate Verification Mode:
+	 * MBEDTLS_SSL_VERIFY_NONE: peer certificate is not checked
+	 * MBEDTLS_SSL_VERIFY_OPTIONAL: peer certificate is checked, however the
+	 * handshake continues even if verification failed;
+	 * MBEDTLS_SSL_VERIFY_REQUIRED: peer *must* present a valid certificate,
+	 * handshake is aborted if verification failed.
+	 */
+	int			cert_verify_mode;
 	/**
 	  * Certificate authority certificate.
 	  * If set, server identity will be verified, otherwise not.
