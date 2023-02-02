@@ -61,7 +61,7 @@
  */
 struct iio_hw_trig {
 	/** IIO descriptor */
-	struct iio_desc	**iio_desc;
+	struct iio_desc	*iio_desc;
 	/** Interrupt descriptor to be linked with the trigger */
 	struct no_os_irq_ctrl_desc *irq_ctrl;
 	/** Interrupt id to be linked with the trigger */
@@ -91,7 +91,7 @@ struct iio_hw_trig_cb_info {
  */
 struct iio_hw_trig_init_param {
 	/** IIO descriptor */
-	struct iio_desc **iio_desc;
+	struct iio_desc *iio_desc;
 	/** Interrupt descriptor to be linked with the trigger */
 	struct no_os_irq_ctrl_desc *irq_ctrl;
 	/** Interrupt id to be linked with the trigger */
@@ -110,7 +110,7 @@ struct iio_hw_trig_init_param {
  */
 struct iio_sw_trig {
 	/** IIO descriptor */
-	struct iio_desc **iio_desc;
+	struct iio_desc *iio_desc;
 	/** Device trigger name */
 	char name[TRIG_MAX_NAME_SIZE + 1];
 };
@@ -121,7 +121,7 @@ struct iio_sw_trig {
  */
 struct iio_sw_trig_init_param {
 	/** IIO descriptor */
-	struct iio_desc **iio_desc;
+	struct iio_desc *iio_desc;
 	/** Device trigger name */
 	const char *name;
 };

@@ -64,7 +64,7 @@ int iio_hw_trig_init(struct iio_hw_trig **iio_trig,
 	struct iio_hw_trig *trig_desc;
 	int ret;
 
-	if (!init_param->iio_desc || !init_param->name)
+	if (!init_param->name)
 		return -EINVAL;
 
 	trig_desc = (struct iio_hw_trig*)calloc(1, sizeof(*trig_desc));
@@ -152,7 +152,7 @@ void iio_hw_trig_handler(void *trig)
 
 	struct iio_hw_trig *desc = trig;
 
-	iio_process_trigger_type(*desc->iio_desc, desc->name);
+	iio_process_trigger_type(desc->iio_desc, desc->name);
 }
 
 /**
@@ -219,7 +219,7 @@ int iio_sw_trig_handler(void *trig, char *buf, uint32_t len,
 
 	struct iio_sw_trig *desc = trig;
 
-	return iio_process_trigger_type(*desc->iio_desc, desc->name);
+	return iio_process_trigger_type(desc->iio_desc, desc->name);
 }
 
 /**
