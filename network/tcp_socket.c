@@ -242,6 +242,10 @@ static int32_t stcp_socket_init(struct secure_socket_desc **desc,
 	if (NO_OS_IS_ERR_VALUE(ret))
 		goto exit;
 
+	ret = mbedtls_ssl_set_hostname(&ldesc->ssl, param->hostname);
+	if (NO_OS_IS_ERR_VALUE(ret))
+		goto exit;
+
 	/* Set socket callbacks */
 	mbedtls_ssl_set_bio(&ldesc->ssl, sock,
 			    (mbedtls_ssl_send_t *)tls_net_send,
