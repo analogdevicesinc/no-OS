@@ -169,6 +169,7 @@ static int32_t stcp_socket_init(struct secure_socket_desc **desc,
 	mbedtls_x509_crt_init(&ldesc->cacert);
 	mbedtls_x509_crt_init(&ldesc->clicert);
 	mbedtls_pk_init(&ldesc->pkey);
+	mbedtls_ssl_init(&ldesc->ssl);
 
 	ret = no_os_trng_init(&ldesc->trng, param->trng_init_param);
 	if (NO_OS_IS_ERR_VALUE(ret)) {
