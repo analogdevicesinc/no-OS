@@ -375,14 +375,14 @@ int32_t max_spi_transfer(struct no_os_spi_desc *desc,
 	if (!desc || !msgs)
 		return -EINVAL;
 
-	slave_id = desc->chip_select;
-	if (slave_id != last_slave_id[desc->device_id]) {
-		ret = _max_spi_config(desc);
-		if (ret)
-			return ret;
+	// slave_id = desc->chip_select;
+	// if (slave_id != last_slave_id[desc->device_id]) {
+	// 	ret = _max_spi_config(desc);
+	// 	if (ret)
+	// 		return ret;
 
-		last_slave_id[desc->device_id] = slave_id;
-	}
+	// 	last_slave_id[desc->device_id] = slave_id;
+	// }
 
 	req.spi = MXC_SPI_GET_SPI(desc->device_id);
 	req.ssIdx = desc->chip_select;

@@ -63,7 +63,7 @@
 #define UART_EXTRA      &adin1110_uart_extra_ip
 
 #define SPI_DEVICE_ID   1
-#define SPI_BAUDRATE    15000000
+#define SPI_BAUDRATE    1500000
 #define SPI_CS          0
 #define SPI_OPS         &max_spi_ops
 #define SPI_EXTRA       &adin1110_spi_extra_ip

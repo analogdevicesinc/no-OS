@@ -145,11 +145,11 @@ int iio_example_main()
 			return ret;
 		
 		/* Probe the drivers in the run mode */
-		ret = ad74413r_iio_init(&ad74413r_iio_desc, &ad74413r_iio_ip, false);
+		ret = max14906_iio_init(&max14906_iio_desc, &max14906_iio_ip, false);
 		if (ret)
 			return ret;
 
-		ret = max14906_iio_init(&max14906_iio_desc, &max14906_iio_ip, false);
+		ret = ad74413r_iio_init(&ad74413r_iio_desc, &ad74413r_iio_ip, false);
 		if (ret)
 			return ret;
 
