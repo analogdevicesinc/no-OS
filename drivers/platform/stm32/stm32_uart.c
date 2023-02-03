@@ -162,6 +162,9 @@ static int32_t stm32_uart_init(struct no_os_uart_desc **desc,
 		}
 	}
 
+	descriptor->device_id = param->device_id;
+	descriptor->baud_rate = param->baud_rate;
+
 	*desc = descriptor;
 
 	return 0;
