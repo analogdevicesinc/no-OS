@@ -60,18 +60,23 @@ int max14906_reg_update(struct max14906_desc *desc, uint32_t addr,
 
 int max14906_ch_get(struct max14906_desc *desc, uint32_t ch, uint32_t *val)
 {
+	int ret;
+
 	if (ch >= MAX14906_CHANNELS)
 		return -EINVAL;
 
-	return no_os_gpio_get_value(&desc->dio[ch], val);
+	//return max14906_reg_read(desc, );
+	return 0;
 }
 
 int max14906_ch_set(struct max14906_desc *desc, uint32_t ch, uint32_t val)
 {
+	int ret;
+
 	if (ch >= MAX14906_CHANNELS)
 		return -EINVAL;
 
-	return no_os_gpio_set_value(&desc->dio[ch], val);
+	return 0;
 }
 
 int max14906_ch_func(struct max14906_desc *desc, uint32_t ch,
@@ -93,10 +98,9 @@ int max14906_ch_func(struct max14906_desc *desc, uint32_t ch,
 
 int max14906_init(struct max14906_desc **desc, struct max14906_init_param *param)
 {
-	struct max14906_ch_config *ch_config;
 	struct max14906_desc *descriptor;
+	uint8_t reg_val;
 	int ret;
-	int i;
 
 	descriptor = calloc(1, sizeof(*descriptor));
 	if (!descriptor)
@@ -105,6 +109,22 @@ int max14906_init(struct max14906_desc **desc, struct max14906_init_param *param
 	ret = no_os_spi_init(&descriptor->comm_desc, param->comm_param);
 	if (ret)
 		goto err;
+
+	ret = max14906_reg_read(descriptor, MAX14906_DOILEVEL_REG, &reg_val);
+	if (ret)
+		return ret;
+
+	ret = max14906_reg_read(descriptor, 0x5, &reg_val);
+	if (ret)
+		return ret;
+
+	ret = max14906_reg_read(descriptor, 0x6, &reg_val);
+	if (ret)
+		return ret;
+
+	ret = max14906_reg_read(descriptor, MAX14906_GLOBAL_ERR_REG, &reg_val);
+	if (ret)
+		return ret;
 
 	*desc = descriptor;
 

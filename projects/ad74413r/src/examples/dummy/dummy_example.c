@@ -155,7 +155,7 @@ int dummy_example_main()
 		.extra = &reset_gpio_extra,
 	};
 	struct adin1110_init_param adin1110_ip = {
-		.chip_type = ADIN2111,
+		.chip_type = ADIN1110,
 		.comm_param = adin1110_spi_ip,
 		.reset_param = reset_gpio_ip,
 		.mac_address = {0xCA, 0x2F, 0xB7, 0x10, 0x23, 0x63},
