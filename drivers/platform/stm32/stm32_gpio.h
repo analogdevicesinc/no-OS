@@ -48,8 +48,6 @@
  * @brief Structure holding the initialization parameters for stm32 platform
  */
 struct stm32_gpio_init_param {
-	/** Port */
-	GPIO_TypeDef *port;
 	/** Output mode */
 	uint32_t mode;
 	/** Speed grade */
