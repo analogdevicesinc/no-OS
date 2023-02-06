@@ -107,6 +107,12 @@ int main()
 		return ret;
 
 	no_os_uart_stdio(uart_desc);
+
+	while(1) {
+		printf("Baudrate: %d\n", uart_desc->baud_rate);
+		no_os_mdelay(1000);
+	}
+
 	ret = dummy_example_main();
 #endif
 

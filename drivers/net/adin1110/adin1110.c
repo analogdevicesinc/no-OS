@@ -622,6 +622,19 @@ int adin1110_sw_reset(struct adin1110_desc *desc)
 	return adin1110_reg_write(desc, ADIN1110_RESET_REG, 0x1);
 }
 
+int adin1110_link_state(struct adin1110_desc *desc, uint32_t *state)
+{
+	int ret;
+
+	ret = adin1110_reg_read(desc, ADIN1110_STATUS1_REG, state);
+	if (ret)
+		return ret;
+
+	*state = no_os_field_get(ADIN1110_LINK_STATE_MASK, *state);
+
+	return 0;
+}
+
 /**
  * @brief Set a port in promiscuous mode. All MAC filters are dropped.
  * @param desc - the device descriptor

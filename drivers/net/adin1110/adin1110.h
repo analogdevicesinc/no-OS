@@ -91,6 +91,7 @@
 #define ADIN1110_RESETC_MASK			NO_OS_BIT(6)
 
 #define ADIN1110_STATUS1_REG			0x09
+#define ADIN1110_LINK_STATE_MASK		NO_OS_BIT(0)
 #define ADIN2111_P2_RX_RDY			NO_OS_BIT(17)
 #define ADIN1110_SPI_ERR			NO_OS_BIT(10)
 #define ADIN1110_RX_RDY				NO_OS_BIT(4)
@@ -257,6 +258,9 @@ int adin1110_write_fifo(struct adin1110_desc *, uint32_t,
 /* Read a frame from the RX FIFO */
 int adin1110_read_fifo(struct adin1110_desc *, uint32_t,
 		       struct adin1110_eth_buff *);
+
+/* Get the link state for a given port */
+int adin1110_link_state(struct adin1110_desc *, uint32_t *);
 
 /* Set a port in promiscuous mode. All MAC filters are dropped */
 int adin1110_set_promisc(struct adin1110_desc *, uint32_t, bool);
