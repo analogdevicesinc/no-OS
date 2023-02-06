@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   no_os_fifo.h
+ *   @file   no_os_units.h
  *   @brief  Header file of Units
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
