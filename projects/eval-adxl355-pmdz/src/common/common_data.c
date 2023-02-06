@@ -51,7 +51,7 @@ struct no_os_uart_init_param adxl355_uart_ip = {
 	.baud_rate = UART_BAUDRATE,
 	.size = NO_OS_UART_CS_8,
 	.parity = NO_OS_UART_PAR_NO,
-	.stop = NO_OS_UART_STOP_1_BIT,
+	.stop = NO_OS_UART_STOP_2_BIT,
 	.extra = UART_EXTRA,
 	.platform_ops = UART_OPS,
 };
