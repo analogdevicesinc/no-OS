@@ -63,35 +63,51 @@ static int32_t _gpio_init(struct no_os_gpio_desc *desc,
 		return -EINVAL;
 
 	/* enable gpio port in RCC */
-	if (pextra->port == GPIOA)
+	if (param->port == 0) {
 		__HAL_RCC_GPIOA_CLK_ENABLE();
+		extra->port = GPIOA;
+	}
 #ifdef GPIOB
-	else if (pextra->port == GPIOB)
+	else if (param->port == 1) {
 		__HAL_RCC_GPIOB_CLK_ENABLE();
+		extra->port = GPIOB;
+	}
 #endif
 #ifdef GPIOC
-	else if (pextra->port == GPIOC)
+	else if (param->port == 2) {
 		__HAL_RCC_GPIOC_CLK_ENABLE();
+		extra->port = GPIOC;
+	}
 #endif
 #ifdef GPIOD
-	else if (pextra->port == GPIOD)
+	else if (param->port == 3) {
 		__HAL_RCC_GPIOD_CLK_ENABLE();
+		extra->port = GPIOD;
+	}
 #endif
 #ifdef GPIOE
-	else if (pextra->port == GPIOE)
+	else if (param->port == 4) {
 		__HAL_RCC_GPIOE_CLK_ENABLE();
+		extra->port = GPIOE;
+	}
 #endif
 #ifdef GPIOF
-	else if (pextra->port == GPIOF)
+	else if (param->port == 5) {
 		__HAL_RCC_GPIOF_CLK_ENABLE();
+		extra->port = GPIOF;
+	}
 #endif
 #ifdef GPIOG
-	else if (pextra->port == GPIOG)
+	else if (param->port == 6) {
 		__HAL_RCC_GPIOG_CLK_ENABLE();
+		extra->port = GPIOG;
+	}
 #endif
 #ifdef GPIOH
-	else if (pextra->port == GPIOH)
+	else if (param->port == 7) {
 		__HAL_RCC_GPIOH_CLK_ENABLE();
+		extra->port = GPIOH;
+	}
 #endif
 	else
 		return -EINVAL;
@@ -108,9 +124,9 @@ static int32_t _gpio_init(struct no_os_gpio_desc *desc,
 	}
 
 	/* copy the settings to gpio descriptor */
+	desc->port = param->port;
 	desc->number = param->number;
 	desc->pull = param->pull;
-	extra->port = pextra->port;
 
 	switch (param->pull) {
 	case NO_OS_PULL_NONE:
