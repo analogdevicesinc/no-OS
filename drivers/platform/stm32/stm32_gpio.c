@@ -118,6 +118,7 @@ static int32_t _gpio_init(struct no_os_gpio_desc *desc,
 	switch (pextra->mode) {
 	case GPIO_MODE_INPUT:
 	case GPIO_MODE_OUTPUT_PP:
+	case GPIO_MODE_OUTPUT_OD:
 		break;
 	default:
 		return -EINVAL;
@@ -277,7 +278,8 @@ int32_t stm32_gpio_direction_output(struct no_os_gpio_desc *desc,
 	HAL_GPIO_WritePin(extra->port, NO_OS_BIT(desc->number), (GPIO_PinState)value);
 
 	/* configure gpio with user configuration */
-	extra->gpio_config.Mode = GPIO_MODE_OUTPUT_PP;
+	if (extra->gpio_config.Mode == GPIO_MODE_INPUT)
+		extra->gpio_config.Mode = GPIO_MODE_OUTPUT_PP;
 	HAL_GPIO_Init(extra->port, &extra->gpio_config);
 
 	return 0;
@@ -298,8 +300,10 @@ int32_t stm32_gpio_get_direction(struct no_os_gpio_desc *desc,
 		return -EINVAL;
 
 	struct stm32_gpio_desc *extra = desc->extra;
-	*direction = (extra->gpio_config.Mode & GPIO_MODE_OUTPUT_PP) ? NO_OS_GPIO_OUT :
-		     NO_OS_GPIO_IN;
+	if (!extra->gpio_config.Mode)
+		*direction = NO_OS_GPIO_IN;
+	else
+		*direction = NO_OS_GPIO_OUT;
 	return 0;
 }
 
