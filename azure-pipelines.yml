@@ -42,6 +42,8 @@ jobs:
     fetchDepth: 50
     clean: true
     persistCredentials: true
-  - script: ./ci/run_build.sh
+  - script: |
+      sudo apt-get -y update -o="APT::Acquire::Retries=3"
+      ./ci/run_build.sh
     condition: eq(variables.runCondition, true)
     displayName: 'Run $(BUILD_TYPE)'
