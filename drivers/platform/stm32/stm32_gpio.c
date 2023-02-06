@@ -58,6 +58,8 @@ static int32_t _gpio_init(struct no_os_gpio_desc *desc,
 	int32_t ret = 0;
 	struct stm32_gpio_desc *extra = desc->extra;
 	struct stm32_gpio_init_param *pextra = param->extra;
+	uint32_t mode = GPIO_MODE_INPUT;
+	uint32_t speed = GPIO_SPEED_FREQ_LOW;
 
 	if (!param)
 		return -EINVAL;
@@ -112,10 +114,15 @@ static int32_t _gpio_init(struct no_os_gpio_desc *desc,
 	else
 		return -EINVAL;
 
-	if (!IS_GPIO_MODE(pextra->mode))
+	if (param->extra) {
+		mode = pextra->mode;
+		speed = pextra->speed;
+	}
+
+	if (!IS_GPIO_MODE(mode))
 		return -EINVAL;
 
-	switch (pextra->mode) {
+	switch (mode) {
 	case GPIO_MODE_INPUT:
 	case GPIO_MODE_OUTPUT_PP:
 	case GPIO_MODE_OUTPUT_OD:
@@ -147,8 +154,8 @@ static int32_t _gpio_init(struct no_os_gpio_desc *desc,
 
 	/* configure gpio with user configuration */
 	extra->gpio_config.Pin = NO_OS_BIT(param->number);
-	extra->gpio_config.Mode = pextra->mode;
-	extra->gpio_config.Speed = pextra->speed;
+	extra->gpio_config.Mode = mode;
+	extra->gpio_config.Speed = speed;
 
 	HAL_GPIO_Init(extra->port, &extra->gpio_config);
 
