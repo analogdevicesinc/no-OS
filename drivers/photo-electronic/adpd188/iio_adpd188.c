@@ -103,6 +103,7 @@ struct scan_type adpd188_iio_scan_type = {
 		.name = nm, \
 		.ch_type = IIO_CURRENT, \
 		.channel = ch1, \
+		.scan_index = ch1, \
 		.scan_type = &adpd188_iio_scan_type, \
 		.attributes = adpd188_channel_attributes, \
 		.indexed = 1, \
