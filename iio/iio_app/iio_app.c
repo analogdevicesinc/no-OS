@@ -208,7 +208,8 @@ static int32_t network_setup(struct iio_init_param *iio_init_param,
 		.irq_desc = irq_desc,
 		.uart_desc = uart_desc,
 		.uart_irq_conf = uart_desc,
-		.uart_irq_id = UART_IRQ_ID
+		.uart_irq_id = UART_IRQ_ID,
+		.sw_reset_en = true
 	};
 	status = wifi_init(&wifi, &wifi_param);
 	if (status < 0)

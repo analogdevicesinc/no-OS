@@ -960,8 +960,10 @@ int32_t at_init(struct at_desc **desc, const struct at_init_param *param)
 	/* The read will be handled by the callback */
 	no_os_uart_read_nonblocking(ldesc->uart_desc, &ldesc->read_ch, 1);
 
-	if (at_run_cmd(ldesc, AT_RESET, AT_EXECUTE_OP, NULL))
-		goto free_irq;
+	/** Software reset */
+	if (param->sw_reset_en)
+		if (at_run_cmd(ldesc, AT_RESET, AT_EXECUTE_OP, NULL))
+			goto free_irq;
 
 	/* Disable echoing response */
 	if (0 != stop_echo(ldesc))

@@ -329,6 +329,8 @@ struct at_init_param {
 			enum at_event event,
 			uint32_t conn_id,
 			struct no_os_circular_buffer **cb);
+	/* Software reset enable */
+	bool		sw_reset_en;
 };
 
 /**
