@@ -162,12 +162,15 @@ int32_t stm32_i2c_write(struct no_os_i2c_desc *desc,
 
 	xdesc = desc->extra;
 
-	// TODO: implement no stop bit
-	if (!stop_bit)
-		return -EINVAL;
+	if (!stop_bit) {
+		ret = HAL_I2C_Master_Seq_Transmit_IT(&xdesc->hi2c, desc->slave_address << 1,
+						     data,
+						     bytes_number, I2C_FIRST_FRAME);
+	} else {
+		ret = HAL_I2C_Master_Transmit(&xdesc->hi2c, desc->slave_address << 1, data,
+					      bytes_number, HAL_MAX_DELAY);
+	}
 
-	ret = HAL_I2C_Master_Transmit(&xdesc->hi2c, desc->slave_address << 1, data,
-				      bytes_number, HAL_MAX_DELAY);
 	if (ret != HAL_OK)
 		return -EIO;
 
@@ -196,12 +199,15 @@ int32_t stm32_i2c_read(struct no_os_i2c_desc *desc,
 
 	xdesc = desc->extra;
 
-	// TODO: implement no stop bit
-	if (!stop_bit)
-		return -EINVAL;
+	if (!stop_bit) {
+		ret = HAL_I2C_Master_Seq_Receive_IT(&xdesc->hi2c, desc->slave_address << 1,
+						    data,
+						    bytes_number, I2C_LAST_FRAME);
+	} else {
+		ret = HAL_I2C_Master_Receive(&xdesc->hi2c, desc->slave_address << 1, data,
+					     bytes_number, HAL_MAX_DELAY);
+	}
 
-	ret = HAL_I2C_Master_Receive(&xdesc->hi2c, desc->slave_address << 1, data,
-				     bytes_number, HAL_MAX_DELAY);
 	if (ret != HAL_OK)
 		return -EIO;
 
