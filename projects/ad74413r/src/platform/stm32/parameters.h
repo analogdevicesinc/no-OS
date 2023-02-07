@@ -70,7 +70,7 @@ extern UART_HandleTypeDef huart3;
 #define SPI_DEVICE_ID   1
 #define SPI_BAUDRATE    1000000
 #define SPI_CS          14
-#define SPI_CS_PORT     GPIOD
+#define SPI_CS_PORT     3
 #define SPI_OPS         &stm32_spi_ops
 #define SPI_EXTRA       &ad74413r_spi_extra_ip
 

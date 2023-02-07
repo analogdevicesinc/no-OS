@@ -65,7 +65,7 @@ extern UART_HandleTypeDef huart5;
 #define SPI_DEVICE_ID   1
 #define SPI_BAUDRATE    4000000
 #define SPI_CS          15
-#define SPI_CS_PORT     GPIOA
+#define SPI_CS_PORT     0
 #define SPI_OPS         &stm32_spi_ops
 #define SPI_EXTRA       &adxrs290_spi_extra_ip
 
