@@ -66,7 +66,7 @@ extern UART_HandleTypeDef huart2;
 
 #define SPI_DEVICE_ID    1
 #define SPI_CS          4
-#define SPI_CS_PORT     GPIOA
+#define SPI_CS_PORT     0
 #define SPI_OPS         &stm32_spi_ops
 
 extern struct stm32_uart_init_param xuip;

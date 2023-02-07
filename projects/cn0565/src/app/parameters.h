@@ -62,7 +62,7 @@
 
 #define SPI_DEVICE_ID		1
 #define SPI_CS			15
-#define SPI_CS_PORT		GPIOA
+#define SPI_CS_PORT		0
 #define INTC_DEVICE_ID		0
 #define INT_IRQn		EXTI9_5_IRQn
 #define UART_DEVICE_ID		5
