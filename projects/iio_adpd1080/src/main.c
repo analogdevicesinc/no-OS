@@ -52,6 +52,7 @@
 #include "aducm3029_irq.h"
 #include "aducm3029_i2c.h"
 #include "aducm3029_gpio_irq.h"
+#include "aducm3029_timer.h"
 
 #define MAX_SIZE_BASE_ADDR		1024
 
@@ -78,6 +79,7 @@ static int32_t adpd1080pmod_32k_calib(struct adpd188_dev *adpd1080_dev)
 		.id = 0,
 		.ticks_count = 0,
 		.freq_hz = 1,
+		.platform_ops = &aducm3029_timer_ops,
 		.extra = NULL
 	};
 	struct no_os_gpio_desc *sync_gpio;
