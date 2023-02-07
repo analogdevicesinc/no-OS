@@ -323,6 +323,7 @@ int32_t wifi_init(struct wifi_desc **desc, struct wifi_init_param *param)
 	at_param.uart_irq_id = param->uart_irq_id;
 	at_param.connection_callback = _wifi_connection_callback;
 	at_param.callback_ctx = ldesc;
+	at_param.sw_reset_en = param->sw_reset_en;
 
 	result = at_init(&ldesc->at, &at_param);
 	if (NO_OS_IS_ERR_VALUE(result))

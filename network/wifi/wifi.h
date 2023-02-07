@@ -73,6 +73,8 @@ struct wifi_init_param {
 	uint32_t		uart_irq_id;
 	/** Configuration param for registering uart callback */
 	void			*uart_irq_conf;
+	/** ESP8266 Software reset enable */
+	bool			sw_reset_en;
 };
 
 /******************************************************************************/
