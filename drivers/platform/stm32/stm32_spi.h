@@ -50,7 +50,7 @@
  */
 struct stm32_spi_init_param {
 	/** Chip select port */
-	GPIO_TypeDef *chip_select_port;
+	uint32_t chip_select_port;
 	/** Get perihperal source clock function */
 	uint32_t (*get_input_clock)(void);
 };

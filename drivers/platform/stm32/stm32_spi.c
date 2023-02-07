@@ -186,9 +186,9 @@ int32_t stm32_spi_init(struct no_os_spi_desc **desc,
 	spi_desc->extra = sdesc;
 	sinit = param->extra;
 
-	csip_extra.port = sinit->chip_select_port;
 	csip_extra.mode = GPIO_MODE_OUTPUT_PP;
 	csip_extra.speed = GPIO_SPEED_FREQ_LOW;
+	csip.port = sinit->chip_select_port;
 	csip.number = param->chip_select;
 	csip.pull = NO_OS_PULL_NONE;
 	csip.extra = &csip_extra;
