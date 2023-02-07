@@ -429,6 +429,53 @@ int32_t max_spi_write_and_read(struct no_os_spi_desc *desc,
 	return max_spi_transfer(desc, &xfer, 1);
 }
 
+int32_t max_spi_transfer_ll(struct no_os_spi_desc *desc,
+			    struct no_os_spi_msg *msgs,
+			    uint32_t len)
+{
+	mxc_spi_regs_t *spi = MXC_SPI_GET_SPI(desc->device_id);
+	uint32_t bytes_number = msgs->bytes_number;
+	uint32_t tx_avail, rx_avail;
+	uint32_t tx_len = 0;
+	uint32_t rx_len = 0;
+	uint32_t cnt;
+	size_t i;
+
+	/* Assert chip select */
+	spi->ctrl0 &= ~NO_OS_GENMASK(19, 16);
+	spi->ctrl0 |= NO_OS_BIT(16 + desc->chip_select);
+
+	for (i = 0; i < len; i++) {
+		rx_len = msgs[i].bytes_number;
+		tx_len = msgs[i].bytes_number;
+		spi->ctrl1 = 0;
+		cnt = 0;
+		if (msgs[i].rx_buff)
+			spi->ctrl1 |= msgs[i].bytes_number << MXC_F_SPI_CTRL1_RX_NUM_CHAR_POS;
+		if (msgs[i].tx_buff)
+			spi->ctrl1 |= msgs[i].bytes_number;
+
+		spi->ctrl0 |= MXC_F_SPI_REVA_CTRL0_START;
+		while (rx_len || tx_len) {
+			while (tx_len && spi->dma & NO_OS_GENMASK(13, 8) < MXC_SPI_FIFO_DEPTH) {
+				spi->fifo8[0] = msgs[i].tx_buff[cnt++];
+				tx_len--;
+			}
+
+			/* While the RX FIFO is not empty */
+			while (rx_len && no_os_field_get(NO_OS_GENMASK(29, 24), spi->dma)){
+				msgs[i].rx_buff[i] = spi->fifo8[0];			
+				rx_len--;
+			}
+		}
+		
+
+		spi->ctrl0 &= ~MXC_F_SPI_REVA_CTRL0_SS_CTRL;
+	}
+
+	return 0;
+}
+
 /**
  * @brief maxim platform specific SPI platform ops structure
  */
@@ -436,5 +483,6 @@ const struct no_os_spi_platform_ops max_spi_ops = {
 	.init = &max_spi_init,
 	.write_and_read = &max_spi_write_and_read,
 	.transfer = &max_spi_transfer,
+	//.transfer = &max_spi_transfer_ll,
 	.remove = &max_spi_remove
 };
