@@ -88,6 +88,10 @@ int32_t aducm3029_gpio_get(struct no_os_gpio_desc **desc,
 			*desc = NULL;
 			return -1;
 		}
+
+		/* Disable the group interrupts, they are enabled in adi_gpio_Init */
+		NVIC_DisableIRQ(SYS_GPIO_INTA_IRQn);
+		NVIC_DisableIRQ(SYS_GPIO_INTB_IRQn);
 	}
 
 	/* Increment number of GPIOs */
