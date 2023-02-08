@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   iio_example.c
- *   @brief  Implementation of IIO example for eval-adxl355-pmdz project.
+ *   @file   main.c
+ *   @brief  Main file for aducm3029 platform of eval-adxl355-pmdz project.
  *   @author RBolboac (ramona.bolboaca@analog.com)
 ********************************************************************************
- * Copyright 2022(c) Analog Devices, Inc.
+ * Copyright 2023(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -40,54 +40,85 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "iio_example.h"
-#include "iio_adxl355.h"
+#include "platform_includes.h"
 #include "common_data.h"
 
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
-#ifndef DATA_BUFFER_SIZE
-#define DATA_BUFFER_SIZE 400
+#ifdef DUMMY_EXAMPLE
+#include "dummy_example.h"
 #endif
 
-/******************************************************************************/
-/************************ Variable Declarations ******************************/
-/******************************************************************************/
-uint8_t iio_data_buffer[DATA_BUFFER_SIZE*3*sizeof(int)];
+#ifdef IIO_EXAMPLE
+#include "iio_example.h"
+#endif
 
-/******************************************************************************/
-/************************ Functions Definitions *******************************/
-/******************************************************************************/
+#ifdef IIO_TRIGGER_EXAMPLE
+#include "iio_trigger_example.h"
+#endif
+
 /***************************************************************************//**
- * @brief IIO example main execution.
+ * @brief Main function execution for ADUCM3029 platform.
  *
- * @return ret - Result of the example execution. If working correctly, will
- *               execute continuously function iio_app_run and will not return.
+ * @return ret - Result of the enabled examples execution.
 *******************************************************************************/
-int iio_example_main()
+int main()
 {
 	int ret;
-	struct adxl355_iio_dev *adxl355_iio_desc;
-	struct adxl355_iio_dev_init_param adxl355_iio_ip;
-	struct iio_data_buffer accel_buff = {
-		.buff = (void *)iio_data_buffer,
-		.size = DATA_BUFFER_SIZE*3*sizeof(int)
-	};
+	adxl355_ip.comm_init.spi_init = adxl355_spi_ip;
 
-	adxl355_iio_ip.adxl355_dev_init = &adxl355_ip;
-	ret = adxl355_iio_init(&adxl355_iio_desc, &adxl355_iio_ip);
+	ret = platform_init();
 	if (ret)
-		return ret;
+		goto error;
 
-	struct iio_app_device iio_devices[] = {
-		{
-			.name = "adxl355",
-			.dev = adxl355_iio_desc,
-			.dev_descriptor = adxl355_iio_desc->iio_dev,
-			.read_buff = &accel_buff,
-		}
-	};
+#ifdef DUMMY_EXAMPLE
+	struct no_os_uart_desc *uart_desc;
 
-	return iio_app_run(NULL, 0, iio_devices, NO_OS_ARRAY_SIZE(iio_devices));
+	ret = no_os_uart_init(&uart_desc, &adxl355_uart_ip);
+	if (ret)
+		goto error;
+
+	no_os_uart_stdio(uart_desc);
+
+	ret = dummy_example_main();
+	if (ret)
+		goto error_uart;
+error_uart:
+	return no_os_uart_remove(uart_desc);
+#endif
+
+#ifdef IIO_EXAMPLE
+	ret = iio_example_main();
+	if (ret)
+		goto error;
+#endif
+
+#ifdef IIO_TRIGGER_EXAMPLE
+
+	struct no_os_gpio_desc *adxl355_gpio_desc;
+
+	/* Initialize DATA READY pin */
+	ret = no_os_gpio_get_optional(&adxl355_gpio_desc, &adxl355_gpio_drdy_ip);
+	if (ret)
+		goto error;
+
+	ret = no_os_gpio_direction_input(adxl355_gpio_desc);
+	if (ret)
+		goto error_gpio;
+
+	ret = iio_trigger_example_main();
+	if (ret)
+		goto error_gpio;
+
+error_gpio:
+	return no_os_gpio_remove(adxl355_gpio_desc);
+#endif
+
+#if (DUMMY_EXAMPLE + IIO_EXAMPLE + IIO_TRIGGER_EXAMPLE == 0)
+#error At least one example has to be selected using y value in Makefile.
+#elif (DUMMY_EXAMPLE + IIO_EXAMPLE + IIO_TRIGGER_EXAMPLE > 1)
+#error Selected example projects cannot be enabled at the same time. \
+Please enable only one example and re-build the project.
+#endif
+
+error:
+	return ret;
 }
