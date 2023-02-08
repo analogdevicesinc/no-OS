@@ -54,6 +54,10 @@
 #include "pico/parameters.h"
 #endif
 
+#ifdef ADUCM_PLATFORM
+#include "aducm3029/parameters.h"
+#endif
+
 #ifdef IIO_SUPPORT
 #include "iio_app.h"
 #endif
