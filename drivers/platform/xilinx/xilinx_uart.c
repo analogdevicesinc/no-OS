@@ -37,7 +37,9 @@
 #include <stdlib.h>
 #include "no_os_error.h"
 #include "no_os_uart.h"
+#include "no_os_irq.h"
 #include "xilinx_uart.h"
+#include "xilinx_irq.h"
 #ifdef XPAR_XUARTPS_NUM_INSTANCES
 #include "no_os_irq.h"
 #include "no_os_fifo.h"
@@ -324,6 +326,31 @@ static int32_t uart_irq_init(struct no_os_uart_desc *descriptor)
 }
 #endif // XUARTPS_H
 
+#ifdef _XPARAMETERS_PS_H_
+static int32_t irq_setup(struct no_os_irq_ctrl_desc **irq_desc)
+{
+	int32_t status;
+
+	struct xil_irq_init_param p = {
+		.type = IRQ_PS,
+	};
+	struct xil_irq_init_param *platform_irq_init_par = &p;
+	const struct no_os_irq_platform_ops *platform_irq_ops = &xil_irq_ops;
+
+	struct no_os_irq_init_param irq_init_param = {
+		.irq_ctrl_id = XPAR_SCUGIC_SINGLE_DEVICE_ID,
+		.platform_ops = platform_irq_ops,
+		.extra = platform_irq_init_par
+	};
+
+	status = no_os_irq_ctrl_init(irq_desc, &irq_init_param);
+	if (status < 0)
+		return status;
+
+	return no_os_irq_global_enable(*irq_desc);
+}
+#endif
+
 /**
  * @brief Initialize the UART communication peripheral.
  * @param desc - The UART descriptor.
@@ -357,8 +384,13 @@ static int32_t xil_uart_init(struct no_os_uart_desc **desc,
 	xil_uart_init_param = param->extra;
 	xil_uart_desc = descriptor->extra;
 	xil_uart_desc->irq_id = xil_uart_init_param->irq_id;
-	xil_uart_desc->irq_desc = xil_uart_init_param->irq_desc;
 	xil_uart_desc->type = xil_uart_init_param->type;
+
+#ifdef _XPARAMETERS_PS_H_
+	status = irq_setup((struct no_os_irq_ctrl_desc **)&xil_uart_desc->irq_desc);
+	if (status)
+		goto error_free_xil_uart_desc;
+#endif
 
 	switch(xil_uart_desc->type) {
 	case UART_PS:
