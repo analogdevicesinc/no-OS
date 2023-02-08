@@ -27,11 +27,9 @@ SRCS += $(DRIVERS)/adc-dac/ad74413r/iio_ad74413r.c
 INCS += $(DRIVERS)/digital-io/max14906/iio_max14906.h
 SRCS += $(DRIVERS)/digital-io/max14906/iio_max14906.c
 
-ifeq (y,$(strip $(IIO_TRIGGER_EXAMPLE)))
 SRCS += $(NO-OS)/iio/iio_trigger.c
 INCS += $(NO-OS)/iio/iio_trigger.h
 SRCS += $(DRIVERS)/adc-dac/ad74413r/iio_ad74413r_trig.c
-endif
 
 INCS += $(INCLUDE)/no_os_list.h \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_uart.h

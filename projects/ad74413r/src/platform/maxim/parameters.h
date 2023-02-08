@@ -71,4 +71,11 @@
 extern struct max_uart_init_param adin1110_uart_extra_ip;
 extern struct max_spi_init_param adin1110_spi_extra_ip;
 
+#define AD74413R_GPIO_TRIG_IRQ_ID     9    /* Not used in stm32 platform */
+#define AD74413R_GPIO_CB_HANDLE       NULL /* Not used in stm32 platform */
+
+#define GPIO_IRQ_ID             0 /* Pin 0 */
+#define GPIO_IRQ_OPS            &max_gpio_irq_ops
+#define GPIO_IRQ_EXTRA          NULL
+
 #endif /* __PARAMETERS_H__ */
