@@ -235,8 +235,7 @@ static int32_t network_setup(struct iio_init_param *iio_init_param,
 #endif
 
 static int32_t uart_setup(struct no_os_uart_desc **uart_desc,
-			  struct no_os_uart_init_param **uart_init_par,
-			  void *irq_desc)
+			  struct no_os_uart_init_param **uart_init_par)
 {
 #ifdef LINUX_PLATFORM
 	*uart_desc = NULL;
@@ -251,7 +250,6 @@ static int32_t uart_setup(struct no_os_uart_desc **uart_desc,
 		.irq_id = UART_IRQ_ID
 #endif
 	};
-	platform_uart_init_par.irq_desc = irq_desc;
 #elif defined(STM32_PLATFORM)
 	static struct stm32_uart_init_param platform_uart_init_par = {
 		.huart = IIO_APP_HUART,
@@ -288,17 +286,11 @@ static int32_t uart_setup(struct no_os_uart_desc **uart_desc,
 #endif
 }
 
-#if defined(ADUCM_PLATFORM) || (defined(XILINX_PLATFORM) && !defined(PLATFORM_MB)) || (defined(STM32_PLATFORM)) || defined(MAXIM_PLATFORM)
+#if defined(ADUCM_PLATFORM) || (defined(STM32_PLATFORM)) || defined(MAXIM_PLATFORM)
 static int32_t irq_setup(struct no_os_irq_ctrl_desc **irq_desc)
 {
 	int32_t status;
-#if defined(XILINX_PLATFORM) && !defined(PLATFORM_MB)
-	struct xil_irq_init_param p = {
-		.type = IRQ_PS,
-	};
-	struct xil_irq_init_param *platform_irq_init_par = &p;
-	const struct no_os_irq_platform_ops *platform_irq_ops = &xil_irq_ops;
-#elif defined(ADUCM_PLATFORM)
+#if defined(ADUCM_PLATFORM)
 	void *platform_irq_init_par = NULL;
 	const struct no_os_irq_platform_ops *platform_irq_ops = &aducm_irq_ops;
 #elif defined(STM32_PLATFORM)
@@ -350,7 +342,7 @@ int32_t iio_app_run_with_trigs(struct iio_ctx_attr *ctx_attrs,
 	uint32_t		i;
 	struct iio_data_buffer *buff;
 
-#if defined(ADUCM_PLATFORM) || (defined(XILINX_PLATFORM) && !defined(PLATFORM_MB)) || defined(STM32_PLATFORM)
+#if defined(ADUCM_PLATFORM) || defined(STM32_PLATFORM)
 	/* Only one irq controller can exist and be initialized in
 	 * any of the iio_devices. */
 	for (i = 0; i < nb_devs; i++) {
@@ -367,7 +359,7 @@ int32_t iio_app_run_with_trigs(struct iio_ctx_attr *ctx_attrs,
 	}
 #endif
 
-	status = uart_setup(&uart_desc, &uart_init_par, irq_desc);
+	status = uart_setup(&uart_desc, &uart_init_par);
 	if (status < 0)
 		return status;
 
