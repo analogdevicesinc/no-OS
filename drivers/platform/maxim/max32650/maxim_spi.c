@@ -455,7 +455,7 @@ int32_t max_spi_transfer_ll(struct no_os_spi_desc *desc,
 		if (msgs[i].tx_buff)
 			spi->ctrl1 |= msgs[i].bytes_number;
 
-		spi->ctrl0 |= MXC_F_SPI_REVA_CTRL0_START;
+		spi->ctrl0 |= MXC_F_SPI_CTRL0_START;
 		while (rx_len || tx_len) {
 			while (tx_len && spi->dma & NO_OS_GENMASK(13, 8) < MXC_SPI_FIFO_DEPTH) {
 				spi->fifo8[0] = msgs[i].tx_buff[cnt++];
@@ -470,7 +470,7 @@ int32_t max_spi_transfer_ll(struct no_os_spi_desc *desc,
 		}
 		
 
-		spi->ctrl0 &= ~MXC_F_SPI_REVA_CTRL0_SS_CTRL;
+		spi->ctrl0 &= ~MXC_F_SPI_CTRL0_SS_CTRL;
 	}
 
 	return 0;

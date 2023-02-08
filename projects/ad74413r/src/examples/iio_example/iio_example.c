@@ -79,7 +79,10 @@ extern unsigned int __HeapLimit;
 int iio_example_main()
 {
 	int ret;
+	struct iio_desc *iio_desc;
+	struct iio_hw_trig *ad74413r_trig_desc;
 	struct ad74413r_iio_desc *ad74413r_iio_desc;
+	struct no_os_irq_ctrl_desc *ad74413r_irq_desc;
 	struct ad74413r_iio_desc_init_param ad74413r_iio_ip;
 	struct iio_data_buffer buff = {
 		.buff = (void *)iio_data_buffer,
@@ -115,6 +118,24 @@ int iio_example_main()
 	max14906_iio_ip.max14906_init_param = &max14906_ip;
 	ad74413r_iio_ip.ad74413r_init_param = &ad74413r_ip;
 
+	/* Initialize interrupt controller */
+	ret = no_os_irq_ctrl_init(&ad74413r_irq_desc, &ad74413r_gpio_irq_ip);
+	if (ret)
+		return ret;
+
+	ret = no_os_irq_set_priority(ad74413r_irq_desc, ad74413r_gpio_trig_ip.irq_id,
+				     1);
+	if (ret)
+		return ret;
+
+	ad74413r_gpio_trig_ip.irq_ctrl = ad74413r_irq_desc;
+
+	/* Initialize hardware trigger */
+	ad74413r_gpio_trig_ip.iio_desc = &iio_desc,
+	ret = iio_hw_trig_init(&ad74413r_trig_desc, &ad74413r_gpio_trig_ip);
+	if (ret)
+		return ret;
+
 	/* Probe the iio drivers in config mode */
 	ret = ad74413r_iio_init(&ad74413r_iio_desc, &ad74413r_iio_ip, true);
 	if (ret)
@@ -123,6 +144,12 @@ int iio_example_main()
 	ret = max14906_iio_init(&max14906_iio_desc, &max14906_iio_ip, true);
 	if (ret)
 		return ret;
+
+	struct iio_trigger_init trigs[] = {
+		IIO_APP_TRIGGER(AD74413R_GPIO_TRIG_NAME, ad74413r_trig_desc,
+				&ad74413r_iio_trig_desc)
+	};
+
 
 	struct iio_app_device iio_devices[] = {
 		{
@@ -140,10 +167,14 @@ int iio_example_main()
 	};
 
 	while (1) {
-		ret = iio_app_run(iio_devices, NO_OS_ARRAY_SIZE(iio_devices));
+		// ret = iio_app_run(iio_devices, NO_OS_ARRAY_SIZE(iio_devices));
+		// if (ret)
+		// 	return ret;
+		ret = iio_app_run_with_trigs(iio_devices, NO_OS_ARRAY_SIZE(iio_devices),
+				      	      trigs, NO_OS_ARRAY_SIZE(trigs), ad74413r_irq_desc, &iio_desc);
 		if (ret)
 			return ret;
-		
+
 		/* Probe the drivers in the run mode */
 		ret = max14906_iio_init(&max14906_iio_desc, &max14906_iio_ip, false);
 		if (ret)
@@ -159,8 +190,7 @@ int iio_example_main()
 		iio_devices[1].dev = max14906_iio_desc;
 		iio_devices[1].dev_descriptor = max14906_iio_desc->iio_dev;
 
-		ret = iio_app_run(iio_devices, NO_OS_ARRAY_SIZE(iio_devices));
-		if (ret)
-			return ret;
+		return iio_app_run_with_trigs(iio_devices, NO_OS_ARRAY_SIZE(iio_devices),
+				      	      trigs, NO_OS_ARRAY_SIZE(trigs), ad74413r_irq_desc, &iio_desc);
 	}
 }
