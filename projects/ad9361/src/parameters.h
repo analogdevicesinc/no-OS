@@ -48,7 +48,11 @@
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
+#ifdef _XPARAMETERS_PS_H_
 #define UART_BAUDRATE 921600
+#else
+#define UART_BAUDRATE 115200
+#endif
 #ifdef XPAR_AXI_AD9361_0_BASEADDR
 #define AD9361_RX_0_BASEADDR		XPAR_AXI_AD9361_0_BASEADDR
 #define AD9361_TX_0_BASEADDR		XPAR_AXI_AD9361_0_BASEADDR + 0x4000
