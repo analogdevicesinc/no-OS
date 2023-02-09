@@ -178,7 +178,7 @@ int32_t pico_gpio_direction_input(struct no_os_gpio_desc *desc)
 
 	pico_gpio = desc->extra;
 
-	gpio_set_input_enabled(desc->number, true);
+	gpio_set_dir(desc->number, false);
 	pico_gpio->input_enabled = true;
 
 	return 0;
@@ -202,8 +202,10 @@ int32_t pico_gpio_direction_output(struct no_os_gpio_desc *desc,
 
 	pico_gpio = desc->extra;
 
-	gpio_set_input_enabled(desc->number, false);
+	gpio_set_dir(desc->number, true);
 	pico_gpio->input_enabled = false;
+
+	gpio_put(desc->number, value == NO_OS_GPIO_HIGH ? true : false);
 
 	return 0;
 }
