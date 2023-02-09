@@ -314,7 +314,7 @@ int adis_read_reg(struct adis_dev *adis,  unsigned int reg,
 	}
 
 	ret = no_os_spi_transfer(adis->spi_desc, msgs_to_send, send_idx);
-	if (ret < 0)
+	if (ret)
 		return ret;
 
 	adis->current_page = page;
@@ -412,7 +412,7 @@ int adis_write_reg(struct adis_dev *adis, unsigned int reg,
 		msgs_to_send[send_idx] = msgs[i];
 
 	ret = no_os_spi_transfer(adis->spi_desc, msgs_to_send, send_idx);
-	if (ret < 0)
+	if (ret)
 		return ret;
 
 	adis->current_page = page;
