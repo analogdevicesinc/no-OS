@@ -926,7 +926,16 @@ static int iio_get_trigger(struct iiod_ctx *ctx, const char *device,
 			   char *trigger, uint32_t len)
 {
 	struct iio_dev_priv *dev;
+	struct iio_trig_priv *trig;
 	struct iio_desc *desc = ctx->instance;
+
+	if (!desc->nb_trigs)
+		return -ENOENT;
+
+	trig = get_iio_trig_device(desc, device);
+	/* Device is a trigger and triggers cannot have other triggers */
+	if (trig)
+		return -ENOENT;
 
 	dev = get_iio_device(desc, device);
 	if (!dev)
@@ -954,9 +963,19 @@ static int iio_set_trigger(struct iiod_ctx *ctx, const char *device,
 			   const char *trigger, uint32_t len)
 {
 	struct iio_dev_priv	*dev;
+	struct iio_trig_priv	*trig;
 	uint32_t i;
+	struct iio_desc *desc = ctx->instance;
 
-	dev = get_iio_device(ctx->instance, device);
+	if (!desc->nb_trigs)
+		return -ENOENT;
+
+	trig = get_iio_trig_device(desc, device);
+	/* Device is a trigger and triggers cannot have other triggers */
+	if (trig)
+		return -ENOENT;
+
+	dev = get_iio_device(desc, device);
 	if (!dev)
 		return -ENODEV;
 
@@ -965,7 +984,7 @@ static int iio_set_trigger(struct iiod_ctx *ctx, const char *device,
 		return 0;
 	}
 
-	i = iio_get_trig_idx_by_id(ctx->instance, trigger);
+	i = iio_get_trig_idx_by_id(desc, trigger);
 	if (i == NO_TRIGGER)
 		return -EINVAL;
 
@@ -1837,11 +1856,8 @@ int iio_init(struct iio_desc **desc, struct iio_init_param *init_param)
 	ops = &ldesc->iiod_ops;
 	ops->read_attr = iio_read_attr;
 	ops->write_attr = iio_write_attr;
-	// Allow set trigger and get trigger operations only if trigger exists in application
-	if (init_param->nb_trigs && init_param->trigs) {
-		ops->get_trigger = iio_get_trigger;
-		ops->set_trigger = iio_set_trigger;
-	}
+	ops->get_trigger = iio_get_trigger;
+	ops->set_trigger = iio_set_trigger;
 	ops->read_buffer = iio_read_buffer;
 	ops->write_buffer = iio_write_buffer;
 	ops->refill_buffer = iio_refill_buffer;
