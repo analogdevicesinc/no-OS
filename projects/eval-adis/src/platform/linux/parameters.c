@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   platform_includes.h
- *   @brief  Includes for used platforms used by eval-adis project.
+ *   @file   parameters.c
+ *   @brief  Definition of linux platform data used by eval-adis project.
  *   @author RBolboac (ramona.bolboaca@analog.com)
 ********************************************************************************
  * Copyright 2023(c) Analog Devices, Inc.
@@ -37,31 +37,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef __PLATFORM_INCLUDES_H__
-#define __PLATFORM_INCLUDES_H__
-
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
 
-#ifdef PICO_PLATFORM
-#include "pico/parameters.h"
-#endif
+#include "parameters.h"
 
-#ifdef MAXIM_PLATFORM
-#include "maxim/parameters.h"
-#endif
 
-#ifdef STM32_PLATFORM
-#include "stm32/parameters.h"
-#endif
-
-#ifdef IIO_SUPPORT
-#include "iio_app.h"
-#endif
-
-#ifdef LINUX_PLATFORM
-#include "linux/parameters.h"
-#endif
-
-#endif /* __PLATFORM_INCLUDES_H__ */

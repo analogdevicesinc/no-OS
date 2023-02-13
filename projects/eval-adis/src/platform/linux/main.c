@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   platform_includes.h
- *   @brief  Includes for used platforms used by eval-adis project.
+ *   @file   main.c
+ *   @brief  Main file for linux platform of eval-adis project.
  *   @author RBolboac (ramona.bolboaca@analog.com)
 ********************************************************************************
  * Copyright 2023(c) Analog Devices, Inc.
@@ -37,31 +37,58 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef __PLATFORM_INCLUDES_H__
-#define __PLATFORM_INCLUDES_H__
-
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
 
-#ifdef PICO_PLATFORM
-#include "pico/parameters.h"
+#include "platform_includes.h"
+#include "common_data.h"
+#include "no_os_error.h"
+
+#ifdef IIO_EXAMPLE
+#include "iio_example.h"
 #endif
 
-#ifdef MAXIM_PLATFORM
-#include "maxim/parameters.h"
+#ifdef IIO_TRIGGER_EXAMPLE
+#include "iio_trigger_example.h"
 #endif
 
-#ifdef STM32_PLATFORM
-#include "stm32/parameters.h"
+#ifdef DUMMY_EXAMPLE
+#include "dummy_example.h"
 #endif
 
-#ifdef IIO_SUPPORT
-#include "iio_app.h"
+/******************************************************************************/
+/************************* Functions Definitions ******************************/
+/******************************************************************************/
+
+/**
+ * @brief Main function execution for linux platform.
+ *
+ * @return ret - Result of the enabled examples execution.
+ */
+int main()
+{
+	int ret = -EINVAL;
+	adis16505_ip.spi_init = &adis16505_spi_ip;
+
+#ifdef DUMMY_EXAMPLE
+#error Dummy example is not supported on linux platform.
 #endif
 
-#ifdef LINUX_PLATFORM
-#include "linux/parameters.h"
+#ifdef IIO_EXAMPLE
+	ret = iio_example_main();
 #endif
 
-#endif /* __PLATFORM_INCLUDES_H__ */
+#ifdef IIO_TRIGGER_EXAMPLE
+#error Iio trigger example is not supported on linux platform.
+#endif
+
+#if (DUMMY_EXAMPLE + IIO_EXAMPLE + IIO_TRIGGER_EXAMPLE == 0)
+#error At least one example has to be selected using y value in Makefile.
+#elif (DUMMY_EXAMPLE + IIO_EXAMPLE + IIO_TRIGGER_EXAMPLE > 1)
+#error Selected example projects cannot be enabled at the same time. \
+Please enable only one example and re-build the project.
+#endif
+
+	return ret;
+}

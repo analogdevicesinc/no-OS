@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   platform_includes.h
- *   @brief  Includes for used platforms used by eval-adis project.
+ *   @file   parameters.h
+ *   @brief  Definitions specific to linux platform used by eval-adis project.
  *   @author RBolboac (ramona.bolboaca@analog.com)
 ********************************************************************************
  * Copyright 2023(c) Analog Devices, Inc.
@@ -37,31 +37,31 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef __PLATFORM_INCLUDES_H__
-#define __PLATFORM_INCLUDES_H__
+#ifndef __PARAMETERS_H__
+#define __PARAMETERS_H__
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
 
-#ifdef PICO_PLATFORM
-#include "pico/parameters.h"
-#endif
+#include "common_data.h"
+#include "no_os_util.h"
+#include "linux_spi.h"
+#include "linux_gpio.h"
 
-#ifdef MAXIM_PLATFORM
-#include "maxim/parameters.h"
-#endif
+/******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
 
-#ifdef STM32_PLATFORM
-#include "stm32/parameters.h"
-#endif
+#define SPI_DEVICE_ID   0
+#define SPI_BAUDRATE    1000000
+#define SPI_CS          0
+#define SPI_OPS         &linux_spi_ops
+#define SPI_EXTRA       NULL
 
-#ifdef IIO_SUPPORT
-#include "iio_app.h"
-#endif
+#define GPIO_RESET_PIN_NUM      12
+#define GPIO_RESET_PORT_NUM     0
+#define GPIO_OPS                &linux_gpio_ops
+#define GPIO_EXTRA              NULL
 
-#ifdef LINUX_PLATFORM
-#include "linux/parameters.h"
-#endif
-
-#endif /* __PLATFORM_INCLUDES_H__ */
+#endif /* __PARAMETERS_H__ */
