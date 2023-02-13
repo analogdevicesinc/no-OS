@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   platform_includes.h
- *   @brief  Includes for used platforms used by eval-adis project.
+ *   @file   parameters.c
+ *   @brief  Definition of STM32 platform data used by eval-adis project.
  *   @author RBolboac (ramona.bolboaca@analog.com)
 ********************************************************************************
  * Copyright 2023(c) Analog Devices, Inc.
@@ -37,27 +37,32 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef __PLATFORM_INCLUDES_H__
-#define __PLATFORM_INCLUDES_H__
-
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
 
-#ifdef PICO_PLATFORM
-#include "pico/parameters.h"
-#endif
+#include "parameters.h"
 
-#ifdef MAXIM_PLATFORM
-#include "maxim/parameters.h"
-#endif
+/******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
 
-#ifdef STM32_PLATFORM
-#include "stm32/parameters.h"
-#endif
+struct stm32_uart_init_param adis16505_uart_extra_ip = {
+	.huart = &huart5,
+};
 
-#ifdef IIO_SUPPORT
-#include "iio_app.h"
-#endif
 
-#endif /* __PLATFORM_INCLUDES_H__ */
+struct stm32_spi_init_param adis16505_spi_extra_ip  = {
+	.chip_select_port = SPI_CS_PORT,
+};
+
+struct stm32_gpio_init_param adis16505_gpio_reset_extra_ip = {
+	.mode = GPIO_MODE_OUTPUT_OD,
+	.speed = GPIO_SPEED_FREQ_VERY_HIGH,
+};
+
+#ifdef IIO_TRIGGER_EXAMPLE
+struct stm32_gpio_irq_init_param adis16505_gpio_irq_extra_ip = {
+	.port_nb = 0, /* Port A */
+};
+#endif

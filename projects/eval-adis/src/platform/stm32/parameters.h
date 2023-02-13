@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   platform_includes.h
- *   @brief  Includes for used platforms used by eval-adis project.
+ *   @file   parameters.h
+ *   @brief  Definitions specific to STM32 platform used by eval-adis project.
  *   @author RBolboac (ramona.bolboaca@analog.com)
 ********************************************************************************
  * Copyright 2023(c) Analog Devices, Inc.
@@ -37,27 +37,68 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef __PLATFORM_INCLUDES_H__
-#define __PLATFORM_INCLUDES_H__
+#ifndef __PARAMETERS_H__
+#define __PARAMETERS_H__
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
 
-#ifdef PICO_PLATFORM
-#include "pico/parameters.h"
-#endif
+#include "stm32_hal.h"
+#include "stm32_irq.h"
+#include "stm32_gpio_irq.h"
+#include "stm32_spi.h"
+#include "stm32_gpio.h"
+#include "stm32_uart.h"
+#include "stm32_uart_stdio.h"
 
-#ifdef MAXIM_PLATFORM
-#include "maxim/parameters.h"
-#endif
+/******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
 
-#ifdef STM32_PLATFORM
-#include "stm32/parameters.h"
-#endif
+extern UART_HandleTypeDef huart5;
 
 #ifdef IIO_SUPPORT
-#include "iio_app.h"
+#define INTC_DEVICE_ID  0
 #endif
 
-#endif /* __PLATFORM_INCLUDES_H__ */
+#define UART_DEVICE_ID  5
+#define UART_BAUDRATE   115200
+#define UART_EXTRA      &adis16505_uart_extra_ip
+#define UART_OPS        &stm32_uart_ops
+#define UART_IRQ_ID     UART5_IRQn
+
+#define SPI_DEVICE_ID   1
+#define SPI_BAUDRATE    1000000
+#define SPI_CS          15
+#define SPI_CS_PORT     0
+#define SPI_OPS         &stm32_spi_ops
+#define SPI_EXTRA       &adis16505_spi_extra_ip
+
+extern struct stm32_uart_init_param adis16505_uart_extra_ip;
+extern struct stm32_spi_init_param adis16505_spi_extra_ip;
+
+#define GPIO_RESET_PIN_NUM   4
+#define GPIO_RESET_PORT_NUM  0
+#define GPIO_OPS            &stm32_gpio_ops
+#define GPIO_EXTRA          &adis16505_gpio_reset_extra_ip
+extern struct stm32_gpio_init_param adis16505_gpio_reset_extra_ip ;
+
+#ifdef IIO_TRIGGER_EXAMPLE
+
+#define GPIO_DRDY_PIN_NUM   2
+#define GPIO_DRDY_PORT_NUM  0
+
+extern struct stm32_gpio_irq_init_param adis16505_gpio_irq_extra_ip;
+/* Setting for PortA Pin2 used for DATA_READY.
+   Has to be adapted accordingly if another pin is used.
+ */
+#define ADIS16505_GPIO_TRIG_IRQ_ID     0    /* Not used in stm32 platform */
+#define ADIS16505_GPIO_CB_HANDLE       NULL /* Not used in stm32 platform */
+
+#define GPIO_IRQ_ID             2 /* Pin 2 */
+#define GPIO_IRQ_OPS            &stm32_gpio_irq_ops
+#define GPIO_IRQ_EXTRA          &adis16505_gpio_irq_extra_ip
+#endif
+
+#endif /* __PARAMETERS_H__ */
