@@ -43,8 +43,7 @@
 #include "stm32_gpio.h"
 #include "no_os_spi.h"
 #include "stm32_spi.h"
-
-#warning SPI delays are not supported on the stm32 platform
+#include "no_os_delay.h"
 
 static int stm32_spi_config(struct no_os_spi_desc *desc)
 {
@@ -244,29 +243,25 @@ int32_t stm32_spi_remove(struct no_os_spi_desc *desc)
 }
 
 /**
- * @brief Write and read data to/from SPI.
+ * @brief Write/read multiple messages to/from SPI.
  * @param desc - The SPI descriptor.
- * @param data - The buffer with the transmitted/received data.
- * @param bytes_number - Number of bytes to write/read.
- * @return 0 in case of success, -1 otherwise.
+ * @param msgs - The messages array.
+ * @param len - Number of messages.
+ * @return 0 in case of success, errno codes otherwise.
  */
-int32_t stm32_spi_write_and_read(struct no_os_spi_desc *desc,
-				 uint8_t *data,
-				 uint16_t bytes_number)
+int32_t stm32_spi_transfer(struct no_os_spi_desc *desc,
+			   struct no_os_spi_msg *msgs,
+			   uint32_t len)
 {
-	int ret;
-	static uint64_t last_slave_id;
-	uint64_t slave_id;
-	uint8_t *tx = data;
-	uint8_t *rx = data;
 	struct stm32_spi_desc *sdesc;
 	struct stm32_gpio_desc *gdesc;
 	SPI_TypeDef * SPIx;
-	if (!desc || !desc->extra || !data)
-		return -EINVAL;
+	uint64_t slave_id;
+	static uint64_t last_slave_id;
+	int ret;
 
-	if (!bytes_number)
-		return 0;
+	if (!desc || !desc->extra || !msgs)
+		return -EINVAL;
 
 	sdesc = desc->extra;
 	gdesc = sdesc->chip_select->extra;
@@ -284,20 +279,64 @@ int32_t stm32_spi_write_and_read(struct no_os_spi_desc *desc,
 			return ret;
 	}
 
-	gdesc->port->BSRR = NO_OS_BIT(sdesc->chip_select->number) << 16;
-	__HAL_SPI_ENABLE(&sdesc->hspi);
-	while(bytes_number--) {
-		while(!(SPIx->SR & SPI_SR_TXE))
-			;
-		*(volatile uint8_t *)&SPIx->DR = *tx++;
-		while(!(SPIx->SR & SPI_SR_RXNE))
-			;
-		*rx++ = *(volatile uint8_t *)&SPIx->DR;
+	for (uint32_t i = 0; i < len; i++) {
+
+		/* Assert CS */
+		gdesc->port->BSRR = NO_OS_BIT(sdesc->chip_select->number) << 16;
+
+		if(msgs[i].cs_delay_first)
+			no_os_udelay(msgs[i].cs_delay_first);
+
+		__HAL_SPI_ENABLE(&sdesc->hspi);
+		while(msgs[i].bytes_number--) {
+			while(!(SPIx->SR & SPI_SR_TXE))
+				;
+			*(volatile uint8_t *)&SPIx->DR = *msgs[i].tx_buff++;
+			while(!(SPIx->SR & SPI_SR_RXNE))
+				;
+			*msgs[i].rx_buff++ = *(volatile uint8_t *)&SPIx->DR;
+		}
+		__HAL_SPI_DISABLE(&sdesc->hspi);
+
+		if(msgs[i].cs_delay_last)
+			no_os_udelay(msgs[i].cs_delay_last);
+
+		if (msgs[i].cs_change)
+			/* De-assert CS */
+			gdesc->port->BSRR = NO_OS_BIT(sdesc->chip_select->number);
+
+		if(msgs[i].cs_change_delay)
+			no_os_udelay(msgs[i].cs_change_delay);
 	}
-	__HAL_SPI_DISABLE(&sdesc->hspi);
-	gdesc->port->BSRR = NO_OS_BIT(sdesc->chip_select->number);
 
 	return 0;
+}
+
+/**
+ * @brief Write and read data to/from SPI.
+ * @param desc - The SPI descriptor.
+ * @param data - The buffer with the transmitted/received data.
+ * @param bytes_number - Number of bytes to write/read.
+ * @return 0 in case of success, -1 otherwise.
+ */
+int32_t stm32_spi_write_and_read(struct no_os_spi_desc *desc,
+				 uint8_t *data,
+				 uint16_t bytes_number)
+{
+	struct no_os_spi_msg msg = {
+		.bytes_number = bytes_number,
+		.cs_change = true,
+		.rx_buff = data,
+		.tx_buff = data,
+	};
+
+	if (!desc || !desc->extra || !data)
+		return -EINVAL;
+
+	if (!bytes_number)
+		return 0;
+
+	return stm32_spi_transfer(desc, &msg, 1);
 }
 
 /**
@@ -306,5 +345,6 @@ int32_t stm32_spi_write_and_read(struct no_os_spi_desc *desc,
 const struct no_os_spi_platform_ops stm32_spi_ops = {
 	.init = &stm32_spi_init,
 	.write_and_read = &stm32_spi_write_and_read,
-	.remove = &stm32_spi_remove
+	.remove = &stm32_spi_remove,
+	.transfer = &stm32_spi_transfer
 };
