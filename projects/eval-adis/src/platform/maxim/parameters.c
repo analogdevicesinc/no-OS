@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   platform_includes.h
- *   @brief  Includes for used platforms used by eval-adis project.
+ *   @file   parameters.c
+ *   @brief  Definition of Maxim platform data used by eval-adis project.
  *   @author RBolboac (ramona.bolboaca@analog.com)
 ********************************************************************************
  * Copyright 2023(c) Analog Devices, Inc.
@@ -37,23 +37,41 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef __PLATFORM_INCLUDES_H__
-#define __PLATFORM_INCLUDES_H__
-
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
 
-#ifdef PICO_PLATFORM
-#include "pico/parameters.h"
-#endif
+#include "parameters.h"
 
-#ifdef MAXIM_PLATFORM
-#include "maxim/parameters.h"
-#endif
+/******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
 
-#ifdef IIO_SUPPORT
-#include "iio_app.h"
-#endif
+struct max_uart_init_param adis16505_uart_extra_ip = {
+	.flow = UART_FLOW_DIS
+};
 
-#endif /* __PLATFORM_INCLUDES_H__ */
+struct max_gpio_init_param adis16505_gpio_extra_ip = {
+	.vssel = MXC_GPIO_VSSEL_VDDIOH,
+};
+
+struct max_spi_init_param adis16505_spi_extra_ip  = {
+	.numSlaves = 1,
+	.polarity = SPI_SS_POL_LOW,
+	.vssel = MXC_GPIO_VSSEL_VDDIOH,
+};
+
+#ifdef IIO_TRIGGER_EXAMPLE
+/* Initialization for Sync pin GPIO. */
+struct no_os_gpio_init_param adis_gpio_drdy_ip = {
+	.port = GPIO_DRDY_PORT_NUM,
+	.number = GPIO_DRDY_PIN_NUM,
+	.pull = NO_OS_PULL_NONE,
+	.platform_ops = GPIO_OPS,
+	.extra = GPIO_EXTRA
+};
+
+struct max_gpio_init_param adis_gpio_drdy_extra_ip = {
+	.vssel = MXC_GPIO_VSSEL_VDDIOH,
+};
+#endif
