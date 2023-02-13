@@ -52,7 +52,7 @@
 #include <unistd.h>
 #include <linux/spi/spidev.h>
 
-#warning SPI delays are not supported on the linux platform
+#warning SPI cs_delay_first and cs_delay_last delays are not supported on the linux platform
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -212,6 +212,7 @@ static int32_t linux_spi_transfer(struct no_os_spi_desc *desc,
 		tr[i].rx_buf = (unsigned long) msgs[i].rx_buff;
 		tr[i].len = msgs[i].bytes_number;
 		tr[i].cs_change = msgs[i].cs_change;
+		tr[i].word_delay_usecs = msgs[i].cs_change_delay;
 	}
 
 	ret = ioctl(linux_desc->spidev_fd, SPI_IOC_MESSAGE(len), tr);
