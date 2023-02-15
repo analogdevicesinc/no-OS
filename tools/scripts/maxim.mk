@@ -44,6 +44,8 @@ include $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/$(TARGET_UCASE)/Source/GCC/$(TARGE
 endif
 include $(MAXIM_LIBRARIES)/PeriphDrivers/$(TARGET_LCASE)_files.mk
 
+include $(NO-OS)/tools/scripts/lwip.mk
+
 HEX=$(basename $(BINARY)).hex
 TARGET_REV=0x4131
 
@@ -61,6 +63,7 @@ LDFLAGS = -mcpu=cortex-m4 	\
 	
 CFLAGS += -mthumb                                                               \
         -mcpu=cortex-m4                                                         \
+	-Os									\
         -mfloat-abi=hard                                                        \
         -mfpu=fpv4-sp-d16                                                       \
         -Wa,-mimplicit-it=thumb                                                 \
@@ -93,6 +96,10 @@ DRIVER_INCLUDE_DIR = $(foreach src,$(INCLUDE_DIR_TMP),$(addprefix $(MAXIM_LIBRAR
 ifeq ($(OS),Windows_NT)
 INCLUDE_DIR_TMP += /Include/$(TARGET_UCASE)
 endif
+
+# Add lwip
+#INCS += $(NO-OS)/network/maxim_network
+SRC_DIRS += $(NO-OS)/network/maxim_network
 
 INCS += $(foreach dir,$(DRIVER_INCLUDE_DIR), $(wildcard $(dir)/*.h))
 

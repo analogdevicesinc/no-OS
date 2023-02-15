@@ -40,6 +40,9 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
+#include <malloc.h>
+#include <stdio.h>
+
 #include "iio_example.h"
 #include "iio_ad74413r.h"
 #include "iio_max14906.h"
@@ -50,8 +53,12 @@
 #include "iio_types.h"
 #include "iiod.h"
 
-#include <malloc.h>
-#include <stdio.h>
+#include "no_os_timer.h"
+#include "max_eth.h"
+
+#include "lwip/init.h"
+#include "lwip/netif.h"
+#include "lwip/tcp.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -64,9 +71,6 @@
 uint8_t iio_data_buffer[DATA_BUFFER_SIZE * sizeof(uint32_t) * 8];
 uint8_t iio_data_buffer2[DATA_BUFFER_SIZE * sizeof(uint32_t) * 8];
 
-extern unsigned int __HeapBase;
-extern unsigned int __HeapLimit;
-
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
@@ -78,8 +82,12 @@ extern unsigned int __HeapLimit;
 *******************************************************************************/
 int iio_example_main()
 {
+	struct tcp_pcb *pcb;
+
 	int ret;
+	uint32_t reg_val;
 	struct iio_desc *iio_desc;
+	struct adin1110_desc *adin1110;
 	struct iio_hw_trig *ad74413r_trig_desc;
 	struct ad74413r_iio_desc *ad74413r_iio_desc;
 	struct no_os_irq_ctrl_desc *ad74413r_irq_desc;
@@ -96,7 +104,6 @@ int iio_example_main()
 		.chip_id = AD74412R,
 		.comm_param = ad74413r_spi_ip
 	};
-
 	struct max_gpio_init_param max14906_gpio_param = {
 		.vssel = 1
 	};
@@ -112,21 +119,67 @@ int iio_example_main()
 		.comm_param = &max14906_spi_ip,
 	};
 
+	struct no_os_timer_init_param eth_tick_param = {
+		.id = 0,
+		.freq_hz = 64000,
+		.ticks_count = 120000,
+		.platform_ops = &max_timer_ops,
+		.extra = NULL,
+	};
+
+	struct netif *netif_desc;
+	struct max_eth_desc *eth_desc;
+	struct max_eth_param eth_param = {
+		.name = "e7",
+		.link_callback = NULL,
+		.adin1110_ip = adin1110_ip,
+		.tick_param = eth_tick_param,
+	};
+
+	struct no_os_irq_ctrl_desc *ad74413r_nvic;
+	struct no_os_irq_init_param ad74413r_nvic_ip = {
+		.irq_ctrl_id = 0,
+		.platform_ops = &max_irq_ops,
+		.extra = NULL,
+	};
+
 	struct max14906_iio_desc *max14906_iio_desc;
 	struct max14906_iio_desc_init_param max14906_iio_ip;
 
+	// ret = max_eth_init(&netif_desc, &eth_param);
+	// if (ret)
+	// 	return ret;
+
+	// uint8_t a[] = "abcb";
+
+
+	// ret = adin1110_init(&adin1110, &adin1110_ip);
+	// if (ret)
+	// 	return ret;
+
 	max14906_iio_ip.max14906_init_param = &max14906_ip;
 	ad74413r_iio_ip.ad74413r_init_param = &ad74413r_ip;
+
+	ret = no_os_irq_ctrl_init(&ad74413r_nvic, &ad74413r_nvic_ip);
+	if (ret)
+		return ret;
+	
+	ret = no_os_irq_enable(ad74413r_nvic, GPIO1_IRQn);
+	if (ret)
+		return ret;
 
 	/* Initialize interrupt controller */
 	ret = no_os_irq_ctrl_init(&ad74413r_irq_desc, &ad74413r_gpio_irq_ip);
 	if (ret)
 		return ret;
 
-	ret = no_os_irq_set_priority(ad74413r_irq_desc, ad74413r_gpio_trig_ip.irq_id,
-				     1);
+	ret = no_os_irq_set_priority(ad74413r_irq_desc, ad74413r_gpio_irq_ip.irq_ctrl_id, 1);
 	if (ret)
 		return ret;
+
+	// ret = no_os_irq_enable(ad74413r_irq_desc, ad74413r_irq_desc->irq_ctrl_id);
+	// if (ret)
+	// 	return ret;
 
 	ad74413r_gpio_trig_ip.irq_ctrl = ad74413r_irq_desc;
 
@@ -150,7 +203,6 @@ int iio_example_main()
 				&ad74413r_iio_trig_desc)
 	};
 
-
 	struct iio_app_device iio_devices[] = {
 		{
 			.name = "ad74413r",
@@ -167,13 +219,13 @@ int iio_example_main()
 	};
 
 	while (1) {
-		// ret = iio_app_run(iio_devices, NO_OS_ARRAY_SIZE(iio_devices));
-		// if (ret)
-		// 	return ret;
-		ret = iio_app_run_with_trigs(iio_devices, NO_OS_ARRAY_SIZE(iio_devices),
-				      	      trigs, NO_OS_ARRAY_SIZE(trigs), ad74413r_irq_desc, &iio_desc);
+		ret = iio_app_run(iio_devices, NO_OS_ARRAY_SIZE(iio_devices));
 		if (ret)
 			return ret;
+		// ret = iio_app_run_with_trigs(iio_devices, NO_OS_ARRAY_SIZE(iio_devices),
+		// 		      	      trigs, NO_OS_ARRAY_SIZE(trigs), ad74413r_irq_desc, &iio_desc);
+		// if (ret)
+		// 	return ret;
 
 		/* Probe the drivers in the run mode */
 		ret = max14906_iio_init(&max14906_iio_desc, &max14906_iio_ip, false);

@@ -211,10 +211,17 @@ int ad74413r_reg_read_raw(struct ad74413r_desc *desc, uint32_t addr,
  */
 int ad74413r_reg_write(struct ad74413r_desc *desc, uint32_t addr, uint16_t val)
 {
+	struct no_os_spi_msg xfer = {
+		.tx_buff = desc->comm_buff,
+		.bytes_number = AD74413R_FRAME_SIZE,
+		.cs_change = 1,
+	};
+
 	ad74413r_format_reg_write(addr, val, desc->comm_buff);
 
-	return no_os_spi_write_and_read(desc->comm_desc, desc->comm_buff,
-					AD74413R_FRAME_SIZE);
+	return no_os_spi_transfer(desc->comm_desc, &xfer, 1);
+	// return no_os_spi_write_and_read(desc->comm_desc, desc->comm_buff,
+	// 				AD74413R_FRAME_SIZE);
 }
 
 /**
@@ -589,10 +596,10 @@ int ad74413r_get_adc_single(struct ad74413r_desc *desc, uint32_t ch,
 		delay = conv_times_ad74412r[rejection];
 
 	// /** Wait for all channels to complete the conversion. */
-	// if (delay < 1000)
-	// 	no_os_udelay(delay * nb_active_channels);
-	// else
-	// 	no_os_mdelay((delay * nb_active_channels) / 1000);
+	if (delay < 1000)
+		no_os_udelay(delay * nb_active_channels);
+	else
+		no_os_mdelay((delay * nb_active_channels) / 1000);
 
 	ret = ad74413r_get_raw_adc_result(desc, ch, val);
 	if (ret)

@@ -71,6 +71,7 @@
                 .ch_out = 0,					\
 		.channel = _addr,				\
 		.address = _addr,				\
+		.scan_index = _addr,				\
                 .scan_type = &ad74413r_iio_adc_scan_type,	\
                 .attributes = ad74413r_iio_adc_diag_attrs	\
         }
@@ -644,7 +645,7 @@ static int ad74413r_iio_read_raw(void *dev, char *buf, uint32_t len,
 				 const struct iio_ch_info *channel, intptr_t priv)
 {
 	int ret;
-	uint16_t val;
+	uint32_t val = 0;
 
 	if (channel->ch_out)
 		return -EINVAL;
@@ -704,7 +705,7 @@ static int ad74413r_iio_read_sampling_freq(void *dev, char *buf, uint32_t len,
 		const struct iio_ch_info *channel, intptr_t priv)
 {
 	int ret;
-	enum ad74413r_adc_sample val;
+	enum ad74413r_adc_sample val = 0;
 
 	ret = ad74413r_get_adc_rate(((struct ad74413r_iio_desc *)dev)->ad74413r_desc,
 				    channel->address, &val);
@@ -1143,8 +1144,10 @@ static int ad74413r_iio_setup_channels(struct ad74413r_iio_desc *iio_desc)
 
 	/* Add the diagnostics channels */
 	for (int i = 0; i < AD74413R_N_CHANNELS; i++) {
-		chan_buffer[n_chan++] = ad74413r_diag_channels[i];
+		chan_buffer[n_chan] = ad74413r_diag_channels[i];
+		chan_buffer[n_chan].scan_index = i + AD74413R_DIAG_CH_OFFSET;
 		iio_desc->iio_dev->num_ch++;
+		n_chan++;
 	}
 
 	/* Add the fault channel */
@@ -1222,14 +1225,14 @@ static int ad74413r_iio_trigger_handler(struct iio_device_data *dev_data)
 	int ret;
 	uint32_t i;
 	uint32_t val;
-	uint32_t buff[4];
+	int32_t buff[8];
 	struct ad74413r_iio_desc *iio_desc;
 	struct ad74413r_desc *desc;
 
 	iio_desc = dev_data->dev;
 	desc = iio_desc->ad74413r_desc;
 
-	for (i = 0; i < AD74413R_N_CHANNELS; i++) {
+	for (i = 0; i < AD74413R_N_CHANNELS + AD74413R_DIAG_CH_OFFSET; i++) {
 		if (iio_desc->active_channels & NO_OS_BIT(i)) {
 			ret = ad74413r_reg_read_raw(desc, AD74413R_ADC_RESULT(i),
 						    (uint8_t *)&val);
@@ -1400,7 +1403,7 @@ int ad74413r_iio_init(struct ad74413r_iio_desc **iio_desc,
 				goto err;
 
 			ret = ad74413r_set_adc_rate(descriptor->ad74413r_desc, i,
-						    AD74413R_ADC_SAMPLE_20HZ);
+						    AD74413R_ADC_SAMPLE_4800HZ);
 			if (ret)
 				return ret;
 		}

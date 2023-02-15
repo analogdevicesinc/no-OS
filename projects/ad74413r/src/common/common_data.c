@@ -58,19 +58,47 @@ struct no_os_uart_init_param adin1110_uart_ip = {
 };
 #endif
 
-struct no_os_spi_init_param adin1110_spi_ip = {
+struct max_gpio_init_param reset_gpio_extra = {
+	.vssel = MXC_GPIO_VSSEL_VDDIOH,
+};
+
+const struct no_os_spi_init_param adin1110_spi_ip = {
 	.device_id = 2,
 	.max_speed_hz = 15000000,
 	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
 	.mode = NO_OS_SPI_MODE_0,
-	.platform_ops = 0,
+	.platform_ops = &max_spi_ops,
 	.chip_select = SPI_CS,
 	.extra = SPI_EXTRA,
 };
 
+const struct no_os_gpio_init_param adin1110_int_gpio_ip = {
+	.port = 2,
+	.number = 6,
+	.pull = NO_OS_PULL_UP,
+	.platform_ops = &max_gpio_ops,
+	.extra = &reset_gpio_extra,
+};
+
+const struct no_os_gpio_init_param adin1110_rst_gpio_ip = {
+	.port = 2,
+	.number = 1,
+	.pull = NO_OS_PULL_UP,
+	.platform_ops = &max_gpio_ops,
+	.extra = &reset_gpio_extra,
+};
+const struct adin1110_init_param adin1110_ip = {
+	.chip_type = ADIN1110,
+	.comm_param = adin1110_spi_ip,
+	.reset_param = adin1110_rst_gpio_ip,
+	.int_param = adin1110_int_gpio_ip,
+	.mac_address = {0xCA, 0x2F, 0xB7, 0x10, 0x23, 0x63},
+	.append_crc = false,
+};
+
 struct no_os_spi_init_param ad74413r_spi_ip = {
-	.device_id = 1,
-	.max_speed_hz = SPI_BAUDRATE,
+	.device_id = 3,
+	.max_speed_hz = 1500000,
 	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
 	.mode = NO_OS_SPI_MODE_1,
 	.platform_ops = SPI_OPS,
