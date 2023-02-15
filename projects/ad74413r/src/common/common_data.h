@@ -44,18 +44,21 @@
 /******************************************************************************/
 #include "platform_includes.h"
 #include "ad74413r.h"
+#include "adin1110.h"
 #include "iio_trigger.h"
-
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 extern struct no_os_uart_init_param adin1110_uart_ip;
 
-extern struct no_os_spi_init_param adin1110_spi_ip;
+extern const struct adin1110_init_param adin1110_ip;
+extern const struct no_os_spi_init_param adin1110_spi_ip;
 extern struct no_os_spi_init_param ad74413r_spi_ip;
 extern struct no_os_spi_init_param max14906_spi_ip;
 extern struct ad74413r_init_param ad74413r_ip;
+extern const struct no_os_gpio_init_param adin1110_int_gpio_ip ;
+extern const struct no_os_gpio_init_param adin1110_rst_gpio_ip ;
 
 #define AD74413R_GPIO_TRIG_NAME "ad74413r-dev0"
 

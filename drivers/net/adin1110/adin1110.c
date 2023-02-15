@@ -448,7 +448,6 @@ int adin1110_write_fifo(struct adin1110_desc *desc, uint32_t port,
 int adin1110_read_fifo(struct adin1110_desc *desc, uint32_t port,
 		       struct adin1110_eth_buff *eth_buff)
 {
-
 	uint32_t field_offset = ADIN1110_RD_HEADER_LEN;
 	uint32_t fifo_fsize_reg;
 	uint32_t frame_size;
@@ -500,14 +499,14 @@ int adin1110_read_fifo(struct adin1110_desc *desc, uint32_t port,
 	if (ret)
 		return ret;
 
-	memcpy(eth_buff->mac_source, &desc->rx_buff[field_offset], ADIN1110_ETH_ALEN);
-	field_offset += ADIN1110_ETH_ALEN;
 	memcpy(eth_buff->mac_dest, &desc->rx_buff[field_offset], ADIN1110_ETH_ALEN);
 	field_offset += ADIN1110_ETH_ALEN;
-	eth_buff->ethertype = no_os_get_unaligned_be16(&desc->rx_buff[field_offset]);
+	memcpy(eth_buff->mac_source, &desc->rx_buff[field_offset], ADIN1110_ETH_ALEN);
+	field_offset += ADIN1110_ETH_ALEN;
+	// eth_buff->ethertype = no_os_get_unaligned_be16(&desc->rx_buff[field_offset]);
+	eth_buff->ethertype = no_os_get_unaligned_le16(&desc->rx_buff[field_offset]);
 	field_offset += ADIN1110_ETHERTYPE_LEN;
 	memcpy(eth_buff->payload, &desc->rx_buff[field_offset], frame_size);
-
 	eth_buff->payload_len = frame_size;
 
 	return 0;
@@ -573,7 +572,6 @@ static int adin1110_check_reset(struct adin1110_desc *desc)
 
 	return adin1110_reg_update(desc, ADIN1110_CONFIG1_REG,
 				   ADIN1110_CONFIG1_SYNC, ADIN1110_CONFIG1_SYNC);
-
 }
 
 /**
@@ -719,7 +717,7 @@ static int adin1110_setup_mac(struct adin1110_desc *desc)
 	if (ret)
 		return ret;
 
-	reg_val = ADIN1110_TX_RDY_IRQ | ADIN1110_RX_RDY_IRQ | ADIN1110_SPI_ERR_IRQ;
+	reg_val = ADIN1110_TX_RDY_IRQ | ADIN1110_RX_RDY_IRQ | ADIN1110_SPI_ERR_IRQ | NO_OS_BIT(1);
 	if (desc->chip_type == ADIN2111)
 		reg_val |= ADIN2111_RX_RDY_IRQ;
 
@@ -760,11 +758,19 @@ int adin1110_init(struct adin1110_desc **desc,
 
 	ret = no_os_gpio_direction_output(descriptor->reset_gpio, NO_OS_GPIO_OUT);
 	if (ret)
-		goto free_gpio;
+		goto free_rst_gpio;
+
+	ret = no_os_gpio_get(&descriptor->int_gpio, &param->int_param);
+	if (ret)
+		goto free_rst_gpio;
+
+	ret = no_os_gpio_direction_input(descriptor->int_gpio);
+	if (ret)
+		goto free_int_gpio;
 
 	if (!param->mac_address) {
 		ret = -EINVAL;
-		goto free_gpio;
+		goto free_int_gpio;
 	}
 
 	memcpy(descriptor->mac_address, param->mac_address, ADIN1110_ETH_ALEN);
@@ -772,32 +778,34 @@ int adin1110_init(struct adin1110_desc **desc,
 
 	ret = adin1110_sw_reset(descriptor);
 	if (ret)
-		goto free_gpio;
+		goto free_int_gpio;
 
 	/* Wait for the MAC and PHY digital interface to intialize */
 	no_os_mdelay(90);
 
 	ret = no_os_gpio_set_value(descriptor->reset_gpio, NO_OS_GPIO_HIGH);
 	if (ret)
-		goto free_gpio;
+		goto free_int_gpio;
 
 	ret = adin1110_setup_mac(descriptor);
 	if (ret)
-		goto free_gpio;
+		goto free_int_gpio;
 
 	ret = adin1110_setup_phy(descriptor);
 	if (ret)
-		goto free_gpio;
+		goto free_int_gpio;
 
 	ret = adin1110_check_reset(descriptor);
 	if (ret)
-		goto free_gpio;
+		goto free_int_gpio;
 
 	*desc = descriptor;
 
 	return 0;
 
-free_gpio:
+free_int_gpio:
+	no_os_gpio_remove(descriptor->int_gpio);
+free_rst_gpio:
 	no_os_gpio_remove(descriptor->reset_gpio);
 free_spi:
 	no_os_spi_remove(descriptor->comm_desc);

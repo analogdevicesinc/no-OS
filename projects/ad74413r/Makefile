@@ -3,6 +3,9 @@ DUMMY_EXAMPLE = n
 IIO_EXAMPLE = y
 IIO_TRIGGER_EXAMPLE = n
 
+PLATFORM = maxim
+TARGET = max32650
+
 include ../../tools/scripts/generic_variables.mk
 
 include src.mk

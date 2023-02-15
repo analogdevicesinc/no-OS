@@ -200,6 +200,7 @@ struct adin1110_desc {
 	uint8_t tx_buff[ADIN1110_BUFF_LEN];
 
 	struct no_os_gpio_desc *reset_gpio;
+	struct no_os_gpio_desc *int_gpio;
 	bool append_crc;
 };
 
@@ -210,6 +211,7 @@ struct adin1110_init_param {
 	enum adin1110_chip_id chip_type;
 	struct no_os_spi_init_param comm_param;
 	struct no_os_gpio_init_param reset_param;
+	struct no_os_gpio_init_param int_param;
 	uint8_t mac_address[ADIN1110_ETH_ALEN];
 	bool append_crc;
 };
