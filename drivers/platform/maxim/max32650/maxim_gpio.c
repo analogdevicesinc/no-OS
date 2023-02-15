@@ -183,7 +183,6 @@ int32_t max_gpio_remove(struct no_os_gpio_desc *desc)
  */
 int32_t max_gpio_direction_input(struct no_os_gpio_desc *desc)
 {
-	int32_t ret;
 	mxc_gpio_cfg_t *maxim_extra;
 
 	if (!desc || desc->number >= N_PINS)
