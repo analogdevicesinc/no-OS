@@ -1554,6 +1554,8 @@ int32_t ad7779_init(ad7779_dev **device,
 			ret |= ad7779_set_state(dev, (ad7779_ch)i, dev->state[i]);
 	}
 
+	no_os_mdelay(50);
+
 	for (i = AD7779_CH0; i <= AD7779_CH7; i++) {
 		dev->gain[i] = init_param.gain[i];
 		if (dev->ctrl_mode == AD7779_SPI_CTRL)
@@ -1564,6 +1566,9 @@ int32_t ad7779_init(ad7779_dev **device,
 	dev->dec_rate_dec = init_param.dec_rate_dec;
 	if (dev->ctrl_mode == AD7779_SPI_CTRL)
 		ret |= ad7779_set_dec_rate(dev, dev->dec_rate_int, dev->dec_rate_dec);
+
+	ret |= ad7779_spi_int_reg_write(dev, AD7779_REG_SRC_UPDATE, 0x01);
+	ret |= ad7779_spi_int_reg_write(dev, AD7779_REG_SRC_UPDATE, 0x00);
 
 	dev->ref_type = init_param.ref_type;
 	if (dev->ctrl_mode == AD7779_SPI_CTRL)
