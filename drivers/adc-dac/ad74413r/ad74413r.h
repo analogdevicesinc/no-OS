@@ -134,12 +134,13 @@
 #define AD74413R_DIN_THRESH_MODE_MASK		NO_OS_BIT(0)
 
 /** ADC_CONV_CTRL register */
+#define AD74413R_EN_REJ_DIAG_MASK		NO_OS_BIT(10)
 #define AD74413R_CONV_SEQ_MASK                  NO_OS_GENMASK(9, 8)
 #define AD74413R_DIAG_EN_MASK(x)		(NO_OS_BIT(x) << 4)
 #define AD74413R_CH_EN_MASK(x)                  NO_OS_BIT(x)
 
 /** DIAG_ASSIGN register */
-#define AD74413R_DIAG_ASSIGN_MASK(x)		(NO_OS_GENMASK(3, 0) << (x))
+#define AD74413R_DIAG_ASSIGN_MASK(x)		(NO_OS_GENMASK(3, 0) << ((x) * 4))
 
 /** The maximum voltage output of the DAC is 11V */
 #define AD74413R_DAC_RANGE			11000
@@ -335,7 +336,7 @@ struct _ad74413r_live_status {
  */
 union ad74413r_live_status {
 	struct _ad74413r_live_status status_bits;
-	uint16_t value;
+	uint32_t value;
 };
 
 /**
@@ -345,24 +346,24 @@ struct ad74413r_desc {
 	enum ad74413r_chip_id chip_id;
 	struct no_os_spi_desc *comm_desc;
 	uint8_t comm_buff[4];
-	struct ad74413r_channel_config channel_configs[AD74413R_N_CHANNELS];
+	struct ad74413r_channel_config channel_configs[AD74413R_N_CHANNELS + 4];
 };
 
 /** Converts a millivolt value in the corresponding DAC 13 bit code */
 int ad74413r_dac_voltage_to_code(uint32_t, uint32_t *);
 
 /** Write a register's value */
-int ad74413r_reg_write(struct ad74413r_desc *, uint32_t, uint16_t);
+int ad74413r_reg_write(struct ad74413r_desc *, uint32_t, uint32_t);
 
 /** Read a raw communication frame */
 int ad74413r_reg_read_raw(struct ad74413r_desc *, uint32_t, uint8_t *);
 
 /** Read a register's value */
-int ad74413r_reg_read(struct ad74413r_desc *, uint32_t, uint16_t *);
+int ad74413r_reg_read(struct ad74413r_desc *, uint32_t, uint32_t *);
 
 /** Update a register's field */
-int ad74413r_reg_update(struct ad74413r_desc *, uint32_t, uint16_t,
-			uint16_t);
+int ad74413r_reg_update(struct ad74413r_desc *, uint32_t, uint32_t,
+			uint32_t);
 
 /** Get the number of active channels */
 int ad74413r_nb_active_channels(struct ad74413r_desc *, uint8_t *);
@@ -374,7 +375,7 @@ int ad74413r_clear_errors(struct ad74413r_desc *);
  * Select which information the device will respond with (in the readback field)
  * when a read operation is performed
  */
-int ad74413r_set_info(struct ad74413r_desc *desc, uint16_t mode);
+int ad74413r_set_info(struct ad74413r_desc *desc, uint32_t mode);
 
 /** Perform a soft reset */
 int ad74413r_reset(struct ad74413r_desc *);
@@ -385,7 +386,7 @@ int ad74413r_set_channel_function(struct ad74413r_desc *,
 
 /** Read the raw ADC raw conversion value */
 int ad74413r_get_raw_adc_result(struct ad74413r_desc *, uint32_t,
-				uint16_t *);
+				uint32_t *);
 
 /** Enable/disable a specific ADC channel */
 int ad74413r_set_adc_channel_enable(struct ad74413r_desc *, uint32_t,
@@ -395,7 +396,7 @@ int ad74413r_set_adc_channel_enable(struct ad74413r_desc *, uint32_t,
 int ad74413r_set_diag_channel_enable(struct ad74413r_desc *, uint32_t, bool);
 
 /** Get the ADC measurement range for a specific channel */
-int ad74413r_get_adc_range(struct ad74413r_desc *, uint32_t, uint16_t *);
+int ad74413r_get_adc_range(struct ad74413r_desc *, uint32_t, enum ad74413r_adc_range *);
 
 /** Get the rejection setting for a specific channel */
 int ad74413r_get_adc_rejection(struct ad74413r_desc *, uint32_t,
@@ -417,24 +418,24 @@ int ad74413r_set_adc_rate(struct ad74413r_desc *, uint32_t,
 int ad74413r_set_adc_conv_seq(struct ad74413r_desc *, enum ad74413r_conv_seq);
 
 /** Get a single ADC raw value for a specific channel, then power down the ADC */
-int ad74413r_get_adc_single(struct ad74413r_desc *, uint32_t, uint16_t *);
+int ad74413r_get_adc_single(struct ad74413r_desc *, uint32_t, uint32_t *);
 
 /** Get the ADC real value, according to the operation mode */
 int ad74413r_adc_get_value(struct ad74413r_desc *, uint32_t,
 			   struct ad74413r_decimal *);
 
 /** Read the die's temperature from the diagnostic register */
-int ad74413r_get_temp(struct ad74413r_desc *, uint32_t, uint16_t *);
+int ad74413r_get_temp(struct ad74413r_desc *, uint32_t, uint32_t *);
 
 /** Set and load a code for the DAC on a specific channel */
-int ad74413r_set_channel_dac_code(struct ad74413r_desc *, uint32_t, uint16_t);
+int ad74413r_set_channel_dac_code(struct ad74413r_desc *, uint32_t, uint32_t);
 
 /** Set which diagnostic value to be loaded in the DIAG_RESULT register */
 int ad74413r_set_diag(struct ad74413r_desc *, uint32_t,
 		      enum ad74413r_diag_mode);
 
 /** Get the diagnostic value for a specific channel */
-int ad74413r_get_diag(struct ad74413r_desc *, uint32_t, uint16_t *);
+int ad74413r_get_diag(struct ad74413r_desc *, uint32_t, uint32_t *);
 
 /**
  * Set the debounce mode for the IOx inputs when the ADC is running in digital
@@ -476,7 +477,7 @@ int ad74413r_get_live(struct ad74413r_desc *,
  * The code value will be loaded into the DACs when the CLR_EN bit in the
  * OUTPUT_CONFIGx registers is asserted and the DAC clear key is written
  */
-int ad74413r_set_dac_clear_code(struct ad74413r_desc *, uint32_t, uint16_t);
+int ad74413r_set_dac_clear_code(struct ad74413r_desc *, uint32_t, uint32_t);
 
 /** Clear the DAC (to the code in DAC_CLR_CODE register) */
 int ad74413r_clear_dac(struct ad74413r_desc *, uint32_t);

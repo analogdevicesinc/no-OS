@@ -31,6 +31,66 @@ static volatile unsigned int		eth_packet_is_in_que = 0;
 static unsigned char 			mxc_lwip_internal_buff[MXC_ETH_INTERNAL_BUFF_SIZE];
 static uint8_t tmp_payload[MXC_ETH_INTERNAL_BUFF_SIZE];
 
+struct socket_desc {
+	enum {
+		/* Available to be used */
+		SOCKET_UNUSED,
+		/* Connection set as server bound to a port */
+		SOCKET_LISTENING,
+		/* Connection set as server and accepting incomming conns  */
+		SOCKET_ACCEPTING,
+		/* Accept callback received, waiting call to accept function */
+		SOCKET_WAITING_ACCEPT,
+		/* Socket is connected to remote */
+		SOCKET_CONNECTED,
+		/* Socked has been disconnected. */
+		SOCKET_DISCONNECTED,
+	} state;
+	struct tcp_pcb *pcb;
+	/* List of buffers to be read */
+	struct pbuf *p;
+	/* Inedex for p->payload. To keep track of read bytes */
+	uint32_t p_idx;
+	/* Reference to ethernet structure */
+	struct max_eth_desc *desc;
+	/* Current socket ID. Same as index in sockets */
+	uint32_t id;
+};
+
+/* Get socket pointer from socket id */
+static struct socket_desc *_get_sock(struct max_eth_desc *desc, uint32_t id)
+{
+	if (id >= MAX_SOCKETS)
+		return NULL;
+
+	return &desc->sockets[id];
+}
+
+/* Get first socket with state SOCKET_UNUSED. Then, set id with index */
+static int32_t _get_unused_socket(struct max_eth_desc *desc, uint32_t *id)
+{
+	uint32_t i;
+
+	for (i = 0; i < MAX_SOCKETS; i++)
+		if (desc->sockets[i].state == SOCKET_UNUSED) {
+			*id = i;
+			desc->sockets[i].state = SOCKET_DISCONNECTED;
+
+			return SUCCESS;
+		}
+
+	/* All the available connections are used */
+	return -ENOMEM;
+}
+
+/* Mark socket as SOCKET_UNUSED. */
+static void _release_socket(struct max_eth_desc *desc, uint32_t id)
+{
+	struct socket_desc *sock = _get_sock(desc, id);
+
+	sock->state = SOCKET_UNUSED;
+}
+
 static err_t mxc_eth_netif_output(struct netif *netif, struct pbuf *p)
 {
 	struct adin1110_desc *mac_desc = netif->state;
@@ -120,65 +180,58 @@ static int max_lwip_tick(void *data)
 	eth_desc = netif_desc->state;
 	mac_desc = eth_desc->mac_desc;
 
-// 	/** Check Link State **/
+ 	/** Check Link State **/
 	ret = adin1110_link_state(mac_desc, &link_status);
 	if (ret)
 		return ret;
 
-	if (!link_status)
-		test_cnt = 0;
+	if (link_status != prev_link_status) {
+		if (link_status) {
+			/* Link Down */
+			netif_set_link_down(netif_desc);
 
-	test_cnt++;
+			// result = MXC_EMAC_Stop();
+			// if (result)
+			// 	return result;
+		} else {
+			/* Link Up */
+			// result = MXC_EMAC_Start();
+			// if (result)
+			// 	return result;
 
-	return ret;
+			netif_set_link_up(netif_desc);
 
-// 	if (link_status != prev_link_status) {
-// 		if (link_status) {
-// 			/* Link Down */
-// 			netif_set_link_down(netif_desc);
+#if USE_DHCP
+			result = dhcp_start(netif_desc);
+			if (result)
+				return result;
+#endif
+		}
+	}
+	prev_link_status = link_status;
 
-// 			// result = MXC_EMAC_Stop();
-// 			// if (result)
-// 			// 	return result;
-// 		} else {
-// 			/* Link Up */
-// 			// result = MXC_EMAC_Start();
-// 			// if (result)
-// 			// 	return result;
+	p = get_recvd_frames(mac_desc);
+	// /** Check Received Frames **/
+	// if (eth_packet_is_in_que > 0) {
+	// 	__disable_irq();
+	// 	p = get_recvd_frames(mac_desc);
+	// 	eth_packet_is_in_que--;
+	// 	__enable_irq();
+	// } else {
+	// 	p = NULL;
+	// }
 
-// 			netif_set_link_up(netif_desc);
+	if (p != NULL) {
+		LINK_STATS_INC(link.recv);
+		if (netif_desc->input(p, netif_desc) != ERR_OK) {
+			pbuf_free(p);
+		}
+	}
 
-// #if USE_DHCP
-// 			result = dhcp_start(netif_desc);
-// 			if (result)
-// 				return result;
-// #endif
-// 		}
-// 	}
-// 	prev_link_status = link_status;
+	/** Cyclic Timers Check **/
+	sys_check_timeouts();
 
-// 	p = get_recvd_frames(mac_desc);
-// 	// /** Check Received Frames **/
-// 	// if (eth_packet_is_in_que > 0) {
-// 	// 	__disable_irq();
-// 	// 	p = get_recvd_frames(mac_desc);
-// 	// 	eth_packet_is_in_que--;
-// 	// 	__enable_irq();
-// 	// } else {
-// 	// 	p = NULL;
-// 	// }
-
-// 	if (p != NULL) {
-// 		LINK_STATS_INC(link.recv);
-// 		if (netif_desc->input(p, netif_desc) != ERR_OK) {
-// 			pbuf_free(p);
-// 		}
-// 	}
-
-// 	/** Cyclic Timers Check **/
-// 	sys_check_timeouts();
-
-// 	return E_NO_ERROR;
+	return E_NO_ERROR;
 }
 
 int max_eth_init(struct netif **netif_desc, struct max_eth_param *param)
@@ -297,6 +350,30 @@ free_netif:
 
 	return ret;
 }
+
+static int32_t max_socket_open(struct max_eth_desc *desc, uint32_t *sock_id,
+			       uint32_t buff_size)
+{
+	int32_t err;
+	struct tcp_pcb *pcb;
+
+	err = _get_unused_socket(desc, sock_id);
+	if (IS_ERR_VALUE(err))
+		return err;
+
+	pcb = tcp_new_ip_type(IPADDR_TYPE_ANY);
+	if (!pcb) {
+		_release_socket(desc, *sock_id);
+		return -ENOMEM;
+	}
+	desc->sockets[*sock_id].pcb = pcb;
+
+	xil_eth_config_sock(&desc->sockets[*sock_id]);
+
+	return SUCCESS;
+}
+
+
 
 void MXC_ETH_RecvIrq(void)
 {
