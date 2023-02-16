@@ -576,7 +576,7 @@ int nhd_c12832a1z_remove(struct nhd_c12832a1z_dev *dev)
 	if (ret)
 		return ret;
 
-	ret = no_os_gpio_remove(dev->spi_desc);
+	ret = no_os_spi_remove(dev->spi_desc);
 	if (ret)
 		return ret;
 
