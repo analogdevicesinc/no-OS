@@ -64,8 +64,8 @@
 /******************************************************************************/
 /************************ Variables Definitions *******************************/
 /******************************************************************************/
-#define AD7616_SDZ_SAMPLE_NO 1000
-#define AD7616_SDZ_CH_NO 2
+#define AD7616_SDZ_SAMPLE_NO 10
+#define AD7616_SDZ_CH_NO 8
 
 #if (HDL_AD7616_PARALLEL == 0)
 struct spi_engine_offload_init_param spi_engine_offload_init_param = {
@@ -153,7 +153,7 @@ int main(void)
 	uint32_t buf[AD7616_SDZ_SAMPLE_NO] __attribute__ ((aligned));
 	//uint32_t i;
 
-	uint32_t i = 0, j;
+	uint32_t i = 0, ch;
 	const float lsb = 2.5 / (pow(2, 15));
 	float data;
 
@@ -167,27 +167,33 @@ int main(void)
 	if(dev->interface == AD7616_PARALLEL)
 		ad7616_read_data_parallel(dev, buf, AD7616_SDZ_SAMPLE_NO);
 	else
-		ad7616_read_data_serial(dev, buf, AD7616_SDZ_SAMPLE_NO);
+		ad7616_read_data_serial(dev, buf, AD7616_SDZ_SAMPLE_NO * AD7616_SDZ_CH_NO);
 
 	//for (i = 0; i < AD7616_SDZ_SAMPLE_NO/2; i++) {
 	//	pr_info("ADC sample %lu : %lu \n", i * 2, buf[i] >> 16);
 	//	pr_info("ADC sample %lu : %lu \n", (i * 2) + 1, buf[i] & 0xFFFF);
 	//}
 
-	for(i = 0; i < AD7616_SDZ_SAMPLE_NO/2; i++) {
-		j = 0;
-		printf("%lu: ", i);
-		while(j < AD7616_SDZ_CH_NO) {
-			buf[AD7616_SDZ_CH_NO*i+j] >>= 16;
-			buf[AD7616_SDZ_CH_NO*i+j] &= 0xffff;
-			data = lsb * (int32_t)buf[AD7616_SDZ_CH_NO*i+j];
-			if(data > 2.5)
-				data = data - 5;
-			printf("CH%lu: 0x%08lx = %+1.5fV ", j,
-					buf[AD7616_SDZ_CH_NO*i+j], data);
-			if(j == (AD7616_SDZ_CH_NO - 1))
-				printf("\n");
-			j++;
+	for(i = 0; i < AD7616_SDZ_SAMPLE_NO; i++) {
+		ch = 0;
+		printf("%lu:\n", i);
+		for(ch = 0; ch < AD7616_SDZ_CH_NO; ch++) {
+//			buf[AD7616_SDZ_CH_NO*i+ch] >>= 16;
+//			//buf[AD7616_SDZ_CH_NO*i+j] &= 0xffff;
+//			data = lsb * (int32_t)buf[AD7616_SDZ_CH_NO*i+ch];
+//			if(data > 2.5)
+//				data = data - 5;
+//			printf("CH%lu: 0x%08lx = %+1.5fV ", ch,
+//					buf[AD7616_SDZ_CH_NO*i+ch], data);
+//			if(ch == (AD7616_SDZ_CH_NO - 1))
+//				printf("\n");
+//			ch++;
+			uint32_t vab = buf[ch * AD7616_SDZ_CH_NO + i];
+			uint16_t va = vab >> 16;
+			double va_volts= (double)va * 10 * 2 / 65536 - 10;
+			uint16_t vb = (uint16_t)vab;
+			double vb_volts= (double)vb * 10 * 2 / 65536 - 10;
+			printf(" VA%d: 0x%.4x %.2lfV VB%d 0x%.4x %.2lfV\n", ch, va, va_volts, ch, vb, vb_volts);
 		}
 	}
 
