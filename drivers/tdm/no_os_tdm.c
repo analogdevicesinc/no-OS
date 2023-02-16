@@ -87,6 +87,36 @@ int32_t  no_os_tdm_read(struct no_os_tdm_desc *desc,
 }
 
 /**
+ * @brief Pause TDM DMA transfer
+ * @param desc - The TDM descriptor.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t  no_os_tdm_pause(struct no_os_tdm_desc *desc)
+{
+	return desc->platform_ops->tdm_ops_pause(desc);
+}
+
+/**
+ * @brief Resume TDM DMA transfer
+ * @param desc - The TDM descriptor.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t  no_os_tdm_resume(struct no_os_tdm_desc *desc)
+{
+	return desc->platform_ops->tdm_ops_resume(desc);
+}
+
+/**
+ * @brief Stop TDM DMA transfer
+ * @param desc - The TDM descriptor.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t  no_os_tdm_stop(struct no_os_tdm_desc *desc)
+{
+	return desc->platform_ops->tdm_ops_stop(desc);
+}
+
+/**
  * @brief Write data using the TDM interface
  * @param desc - The TDM descriptor.
  * @param data - The buffer with the data to be transmitted.

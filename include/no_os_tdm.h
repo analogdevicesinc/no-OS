@@ -79,6 +79,12 @@ struct no_os_tdm_init_param {
 	bool fs_lastbit;
 	/** Specify whether data sampling occurs on SCK rising edge (default: on SCK falling edge) */
 	bool rising_edge_sampling;
+	/* IRQ ID */
+	uint32_t irq_id;
+	/** DMA receive complete callback **/
+	void (*rx_complete_callback)(void *rx_arg);
+	/** DMA receive Half complete callback **/
+	void (*rx_half_complete_callback)(void *rx_arg);
 	/** Platform operation function pointers */
 	const struct no_os_tdm_platform_ops *platform_ops;
 	/**  TDM extra parameters (platform specific) */
@@ -90,8 +96,12 @@ struct no_os_tdm_init_param {
  * @brief Structure holding TDM descriptor.
  */
 struct no_os_tdm_desc {
+	/* IRQ ID */
+	uint32_t irq_id;
 	/** Platform operation function pointers */
 	const struct no_os_tdm_platform_ops *platform_ops;
+	/** Software FIFO. */
+	struct lf256fifo *rx_fifo;
 	/**  TDM extra parameters (device specific) */
 	void *extra;
 };
@@ -109,6 +119,12 @@ struct no_os_tdm_platform_ops {
 	int32_t (*tdm_ops_read)(struct no_os_tdm_desc *, void *, uint16_t);
 	/** TDM write operation function pointer */
 	int32_t (*tdm_ops_write)(struct no_os_tdm_desc *, void *, uint16_t);
+	/** Pause TDM DMA transfer */
+	int32_t (*tdm_ops_pause)(struct no_os_tdm_desc *);
+	/** Resume TDM DMA transfer */
+	int32_t (*tdm_ops_resume)(struct no_os_tdm_desc *);
+	/** Stop TDM DMA transfer */
+	int32_t (*tdm_ops_stop)(struct no_os_tdm_desc *);
 	/** TDM remove operation function pointer */
 	int32_t (*tdm_ops_remove)(struct no_os_tdm_desc *);
 };
@@ -129,5 +145,14 @@ int32_t  no_os_tdm_read(struct no_os_tdm_desc *desc,
 int32_t  no_os_tdm_write(struct no_os_tdm_desc *desc,
 			 void *data,
 			 uint16_t bytes_number);
+
+/* Pause TDM DMA Transfer */
+int32_t  no_os_tdm_pause(struct no_os_tdm_desc *desc);
+
+/* Resume TDM DMA Transfer */
+int32_t  no_os_tdm_resume(struct no_os_tdm_desc *desc);
+
+/* Stop TDM DMA Transfer */
+int32_t  no_os_tdm_stop(struct no_os_tdm_desc *desc);
 
 #endif // _NO_OS_TDM_H_

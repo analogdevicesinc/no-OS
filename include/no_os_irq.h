@@ -71,7 +71,9 @@ enum no_os_irq_event {
 	NO_OS_EVT_UART_ERROR,
 	NO_OS_EVT_RTC,
 	NO_OS_EVT_XINT,
-	NO_OS_EVT_TIM_ELAPSED
+	NO_OS_EVT_TIM_ELAPSED,
+	NO_OS_EVT_DMA_RX_COMPLETE,
+	NO_OS_EVT_DMA_RX_HALF_COMPLETE,
 };
 
 enum no_os_irq_trig_level {
@@ -86,7 +88,8 @@ enum no_os_irq_peripheral {
 	NO_OS_GPIO_IRQ,
 	NO_OS_UART_IRQ,
 	NO_OS_RTC_IRQ,
-	NO_OS_TIM_IRQ
+	NO_OS_TIM_IRQ,
+	NO_OS_DMA_IRQ
 };
 
 /**

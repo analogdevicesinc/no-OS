@@ -42,6 +42,7 @@
 #include <stdint.h>
 #include "no_os_tdm.h"
 #include "stm32_hal.h"
+#include "no_os_irq.h"
 
 /**
  * @struct stm32_tdm_init_param
@@ -51,6 +52,8 @@
 struct stm32_tdm_init_param {
 	/** Device ID */
 	SAI_Block_TypeDef *base;
+	/** Interrupt controller descriptor */
+	//struct no_os_irq_ctrl_desc *nvic;
 };
 
 /**
@@ -60,6 +63,14 @@ struct stm32_tdm_init_param {
 struct stm32_tdm_desc {
 	/** TDM instance */
 	SAI_HandleTypeDef hsai;
+	/** Interrupt controller descriptor - Rx Half complete */
+	struct no_os_irq_ctrl_desc *nvic_rx_halfcplt;
+	/** Interrupt controller descriptor -Rx complete */
+	struct no_os_irq_ctrl_desc *nvic_rxcplt;
+	/** Rx half complete callback */
+	struct no_os_callback_desc rx_half_callback;
+	/** Rx complete callback */
+	struct no_os_callback_desc rx_callback;
 };
 
 /**
@@ -78,5 +89,15 @@ int32_t stm32_tdm_remove(struct no_os_tdm_desc *desc);
 /* Write and read data to/from TDM. */
 int32_t stm32_tdm_read(struct no_os_tdm_desc *desc, void *data,
 		       uint16_t bytes_number);
+
+/* Stop TDM DMA Data transfer */
+int32_t stm32_stop_tdm_transfer(struct no_os_tdm_desc *desc);
+
+/* Pause TDM DMA Data transfer */
+int32_t stm32_pause_tdm_transfer(struct no_os_tdm_desc *desc);
+
+/* Resume TDM DMA Data transfer */
+int32_t stm32_resume_tdm_transfer(struct no_os_tdm_desc *desc);
+
 
 #endif // STM32_TDM_H_

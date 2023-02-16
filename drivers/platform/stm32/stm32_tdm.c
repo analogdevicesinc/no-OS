@@ -44,6 +44,9 @@
 #include "stm32_tdm.h"
 #include "no_os_error.h"
 #include "no_os_alloc.h"
+#include "no_os_irq.h"
+#include "stm32_irq.h"
+#include "no_os_lf256fifo.h"
 
 /**
  * @brief stm32 platform specific TDM platform ops structure
@@ -51,6 +54,9 @@
 const struct no_os_tdm_platform_ops stm32_tdm_platform_ops = {
 	.tdm_ops_init = &stm32_tdm_init,
 	.tdm_ops_read = &stm32_tdm_read,
+	.tdm_ops_stop = &stm32_stop_tdm_transfer,
+	.tdm_ops_pause = &stm32_pause_tdm_transfer,
+	.tdm_ops_resume = &stm32_resume_tdm_transfer,
 	.tdm_ops_remove = &stm32_tdm_remove
 };
 
@@ -130,6 +136,7 @@ int32_t stm32_tdm_init(struct no_os_tdm_desc **desc,
 		goto error;
 		break;
 	};
+	tdm_desc->irq_id = param->irq_id;
 	tdesc->hsai.Init.DataSize = tmp;
 	tdesc->hsai.Init.FirstBit = param->data_lsb_first ? SAI_FIRSTBIT_LSB :
 				    SAI_FIRSTBIT_MSB;
@@ -159,6 +166,60 @@ int32_t stm32_tdm_init(struct no_os_tdm_desc **desc,
 		goto error;
 	}
 
+	if(param->rx_complete_callback) {
+		ret = lf256fifo_init(&tdm_desc->rx_fifo);
+		if (ret < 0)
+			goto error;
+
+		struct no_os_irq_init_param nvic_rx_cplt = {
+			.platform_ops = &stm32_irq_ops
+		};
+
+		ret = no_os_irq_ctrl_init(&tdesc->nvic_rxcplt, &nvic_rx_cplt);
+		if (ret < 0)
+			goto error;
+
+		tdesc->rx_callback.callback = param->rx_complete_callback;
+		tdesc->rx_callback.ctx = tdm_desc;
+		tdesc->rx_callback.event = NO_OS_EVT_DMA_RX_COMPLETE;
+		tdesc->rx_callback.peripheral = NO_OS_DMA_IRQ;
+		tdesc->rx_callback.handle = &tdesc->hsai;
+
+		ret = no_os_irq_register_callback(tdesc->nvic_rxcplt, param->irq_id,
+						  &tdesc->rx_callback);
+		if (ret < 0)
+			goto error;
+
+		ret = no_os_irq_enable(tdesc->nvic_rxcplt, tdm_desc->irq_id);
+		if (ret < 0)
+			goto error;
+	}
+
+	if(param->rx_half_complete_callback) {
+		struct no_os_irq_init_param nvic_rx_half_cplt = {
+			.platform_ops = &stm32_irq_ops
+		};
+
+		ret = no_os_irq_ctrl_init(&tdesc->nvic_rx_halfcplt, &nvic_rx_half_cplt);
+		if (ret < 0)
+			goto error;
+
+		tdesc->rx_half_callback.callback = param->rx_complete_callback;;
+		tdesc->rx_half_callback.ctx = tdm_desc;
+		tdesc->rx_half_callback.event = NO_OS_EVT_DMA_RX_HALF_COMPLETE;
+		tdesc->rx_half_callback.peripheral = NO_OS_DMA_IRQ;
+		tdesc->rx_half_callback.handle = &tdesc->hsai;
+
+
+		ret = no_os_irq_register_callback(tdesc->nvic_rx_halfcplt, param->irq_id,
+						  &tdesc->rx_half_callback);
+		if (ret < 0)
+			goto error;
+
+		ret = no_os_irq_enable(tdesc->nvic_rx_halfcplt, tdm_desc->irq_id);
+		if (ret < 0)
+			goto error;
+	}
 	*desc = tdm_desc;
 
 	return 0;
@@ -210,7 +271,11 @@ int32_t stm32_tdm_read(struct no_os_tdm_desc *desc,
 
 	tdesc = desc->extra;
 
-	ret = HAL_SAI_Receive(&tdesc->hsai, data, nb_samples, HAL_MAX_DELAY);
+	if (desc->irq_id)
+		ret = HAL_SAI_Receive_DMA(&tdesc->hsai, data, nb_samples);
+	else
+		ret = HAL_SAI_Receive(&tdesc->hsai, data, nb_samples, HAL_MAX_DELAY);
+
 	if (ret != HAL_OK) {
 		if (ret == HAL_TIMEOUT)
 			ret = -ETIMEDOUT;
@@ -219,4 +284,80 @@ int32_t stm32_tdm_read(struct no_os_tdm_desc *desc,
 	}
 
 	return ret;
+}
+
+/**
+ * @brief Stop SAI DMA transfer
+ * @param desc - The TDM descriptor.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t stm32_stop_tdm_transfer(struct no_os_tdm_desc *desc)
+{
+	int32_t	ret;
+	struct stm32_tdm_desc *tdesc;
+
+	if (!desc)
+		return -EINVAL;
+
+	if (!desc->irq_id)
+		return -ENOSYS;
+
+	tdesc = desc->extra;
+
+	ret = HAL_SAI_DMAStop(&tdesc->hsai);
+	if (ret)
+		return ret;
+
+
+	return 0;
+}
+
+/**
+ * @brief Pause SAI DMA transfer
+ * @param desc - The TDM descriptor.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t stm32_pause_tdm_transfer(struct no_os_tdm_desc *desc)
+{
+	int32_t ret;
+	struct stm32_tdm_desc *tdesc;
+
+	if (!desc)
+		return -EINVAL;
+
+	if (!desc->irq_id)
+		return -ENOSYS;
+
+	tdesc = desc->extra;
+
+	ret = HAL_SAI_DMAPause(&tdesc->hsai);
+	if (ret)
+		return ret;
+
+	return 0;
+}
+
+/**
+ * @brief Resume SAI DMA transfer
+ * @param desc - The TDM descriptor.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t stm32_resume_tdm_transfer(struct no_os_tdm_desc *desc)
+{
+	int32_t ret;
+	struct stm32_tdm_desc *tdesc;
+
+	if (!desc)
+		return -EINVAL;
+
+	if (!desc->irq_id)
+		return -ENOSYS;
+
+	tdesc = desc->extra;
+
+	ret = HAL_SAI_DMAStop(&tdesc->hsai);
+	if (ret)
+		return ret;
+
+	return 0;
 }
