@@ -155,7 +155,7 @@ int ad74413r_dac_voltage_to_code(uint32_t mvolts, uint32_t *code)
  * @param val - Register value.
  * @param buff - The communication buffer.
  */
-static void ad74413r_format_reg_write(uint8_t reg, uint16_t val, uint8_t *buff)
+static void ad74413r_format_reg_write(uint8_t reg, uint32_t val, uint8_t *buff)
 {
 	buff[0] = reg;
 	no_os_put_unaligned_be16(val, &buff[1]);
@@ -209,7 +209,7 @@ int ad74413r_reg_read_raw(struct ad74413r_desc *desc, uint32_t addr,
  * @param val - The register's value.
  * @return 0 in case of success, negative error otherwise
  */
-int ad74413r_reg_write(struct ad74413r_desc *desc, uint32_t addr, uint16_t val)
+int ad74413r_reg_write(struct ad74413r_desc *desc, uint32_t addr, uint32_t val)
 {
 	struct no_os_spi_msg xfer = {
 		.tx_buff = desc->comm_buff,
@@ -231,7 +231,7 @@ int ad74413r_reg_write(struct ad74413r_desc *desc, uint32_t addr, uint16_t val)
  * @param val - The register's read value.
  * @return 0 in case of success, negative error otherwise
  */
-int ad74413r_reg_read(struct ad74413r_desc *desc, uint32_t addr, uint16_t *val)
+int ad74413r_reg_read(struct ad74413r_desc *desc, uint32_t addr, uint32_t *val)
 {
 	int ret;
 	uint8_t expected_crc;
@@ -258,11 +258,11 @@ int ad74413r_reg_read(struct ad74413r_desc *desc, uint32_t addr, uint16_t *val)
  * @return 0 in case of success, negative error otherwise.
  */
 int ad74413r_reg_update(struct ad74413r_desc *desc, uint32_t addr,
-			uint16_t mask,
-			uint16_t val)
+			uint32_t mask,
+			uint32_t val)
 {
 	int ret;
-	uint16_t c_val;
+	uint32_t c_val;
 
 	ret = ad74413r_reg_read(desc, addr, &c_val);
 	if (ret)
@@ -284,13 +284,13 @@ int ad74413r_nb_active_channels(struct ad74413r_desc *desc,
 				uint8_t *nb_channels)
 {
 	int ret;
-	uint16_t reg_val;
+	uint32_t reg_val;
 
 	ret = ad74413r_reg_read(desc, AD74413R_ADC_CONV_CTRL, &reg_val);
 	if (ret)
 		return ret;
 
-	reg_val = no_os_field_get(NO_OS_GENMASK(3, 0), reg_val);
+	reg_val = no_os_field_get(NO_OS_GENMASK(7, 0), reg_val);
 	*nb_channels = no_os_hweight8((uint8_t)reg_val);
 
 	return 0;
@@ -315,7 +315,7 @@ int ad74413r_clear_errors(struct ad74413r_desc *desc)
  * 			1 - Respond with status bits.
  * @return 0 in case of success, negative error otherwise.
  */
-int ad74413r_set_info(struct ad74413r_desc *desc, uint16_t mode)
+int ad74413r_set_info(struct ad74413r_desc *desc, uint32_t mode)
 {
 	return ad74413r_reg_update(desc, AD74413R_READ_SELECT,
 				   AD74413R_SPI_RD_RET_INFO_MASK, mode);
@@ -329,8 +329,8 @@ int ad74413r_set_info(struct ad74413r_desc *desc, uint16_t mode)
 static int ad74413r_scratch_test(struct ad74413r_desc *desc)
 {
 	int ret;
-	uint16_t val = 0;
-	uint16_t test_val = 0x1234;
+	uint32_t val = 0;
+	uint32_t test_val = 0x1234;
 
 	ret = ad74413r_reg_write(desc, AD74413R_SCRATCH, test_val);
 	if (ret)
@@ -397,7 +397,7 @@ int ad74413r_set_channel_function(struct ad74413r_desc *desc,
  * @return 0 in case of success, negative error code otherwise.
  */
 int ad74413r_get_raw_adc_result(struct ad74413r_desc *desc, uint32_t ch,
-				uint16_t *val)
+				uint32_t *val)
 {
 	return ad74413r_reg_read(desc, AD74413R_ADC_RESULT(ch), val);
 }
@@ -419,7 +419,7 @@ int ad74413r_set_adc_channel_enable(struct ad74413r_desc *desc, uint32_t ch,
 	if (ret)
 		return ret;
 
-	desc->channel_configs[ch].enabled = status;
+	//desc->channel_configs[ch].enabled = status;
 
 	return 0;
 }
@@ -446,15 +446,16 @@ int ad74413r_set_diag_channel_enable(struct ad74413r_desc *desc, uint32_t ch,
  * @return 0 in case of success, negative error code otherwise.
  */
 int ad74413r_get_adc_range(struct ad74413r_desc *desc, uint32_t ch,
-			   uint16_t *val)
+			   enum ad74413r_adc_range *range)
 {
+	uint32_t val;
 	int ret;
 
-	ret = ad74413r_reg_read(desc, AD74413R_ADC_CONFIG(ch), val);
+	ret = ad74413r_reg_read(desc, AD74413R_ADC_CONFIG(ch), &val);
 	if (ret)
 		return ret;
 
-	*val = no_os_field_get(AD74413R_ADC_RANGE_MASK, *val);
+	*range = no_os_field_get(AD74413R_ADC_RANGE_MASK, val);
 
 	return 0;
 }
@@ -470,7 +471,7 @@ int ad74413r_get_adc_rejection(struct ad74413r_desc *desc, uint32_t ch,
 			       enum ad74413r_rejection *val)
 {
 	int ret;
-	uint16_t rejection_val;
+	uint32_t rejection_val;
 
 	ret = ad74413r_reg_read(desc, AD74413R_ADC_CONFIG(ch), &rejection_val);
 	if (ret)
@@ -567,7 +568,7 @@ int ad74413r_set_adc_conv_seq(struct ad74413r_desc *desc,
  * @return 0 in case of success, negative error code otherwise.
  */
 int ad74413r_get_adc_single(struct ad74413r_desc *desc, uint32_t ch,
-			    uint16_t *val)
+			    uint32_t *val)
 {
 	int ret;
 	uint32_t delay;
@@ -624,7 +625,7 @@ int ad74413r_adc_get_value(struct ad74413r_desc *desc, uint32_t ch,
 			   struct ad74413r_decimal *val)
 {
 	int ret;
-	uint16_t adc_code;
+	uint32_t adc_code;
 
 	ret = ad74413r_get_adc_single(desc, ch, &adc_code);
 	if (ret)
@@ -689,7 +690,7 @@ int ad74413r_adc_get_value(struct ad74413r_desc *desc, uint32_t ch,
  * @param temp - The measured temperature (in degrees Celsius).
  * @return 0 in case of success, -EINVAL otherwise.
  */
-int ad74413r_get_temp(struct ad74413r_desc *desc, uint32_t ch, uint16_t *temp)
+int ad74413r_get_temp(struct ad74413r_desc *desc, uint32_t ch, uint32_t *temp)
 {
 	int ret;
 
@@ -711,7 +712,7 @@ int ad74413r_get_temp(struct ad74413r_desc *desc, uint32_t ch, uint16_t *temp)
  * @return 0 in case of success, negative error code otherwise.
  */
 int ad74413r_set_channel_dac_code(struct ad74413r_desc *desc, uint32_t ch,
-				  uint16_t dac_code)
+				  uint32_t dac_code)
 {
 	int ret;
 
@@ -744,7 +745,7 @@ int ad74413r_set_diag(struct ad74413r_desc *desc, uint32_t ch,
  * @return 0 in case of success, negative error code otherwise.
  */
 int ad74413r_get_diag(struct ad74413r_desc *desc, uint32_t ch,
-		      uint16_t *diag_code)
+		      uint32_t *diag_code)
 {
 	int ret;
 
@@ -805,7 +806,7 @@ int ad74413r_set_debounce_time(struct ad74413r_desc *desc, uint32_t ch,
 int ad74413r_gpo_get(struct ad74413r_desc *desc, uint32_t ch, uint8_t *val)
 {
 	int ret;
-	uint16_t reg;
+	uint32_t reg;
 
 	ret = ad74413r_reg_read(desc, AD74413R_DIN_COMP_OUT, &reg);
 	if (ret)
@@ -930,7 +931,7 @@ int ad74413r_get_live(struct ad74413r_desc *desc,
  * @return 0 in case of success, negative error code otherwise.
  */
 int ad74413r_set_dac_clear_code(struct ad74413r_desc *desc, uint32_t ch,
-				uint16_t code)
+				uint32_t code)
 {
 	return ad74413r_reg_write(desc, AD74413R_DAC_CLR_CODE(ch), code);
 }

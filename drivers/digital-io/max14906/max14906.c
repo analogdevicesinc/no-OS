@@ -3,7 +3,7 @@
 #include "max14906.h"
 #include "no_os_util.h"
 
-int max14906_reg_write(struct max14906_desc *desc, uint32_t addr, uint8_t val)
+int max14906_reg_write(struct max14906_desc *desc, uint32_t addr, uint32_t val)
 {
 	struct no_os_spi_msg xfer = {
 		.tx_buff = desc->buff,
@@ -19,7 +19,7 @@ int max14906_reg_write(struct max14906_desc *desc, uint32_t addr, uint8_t val)
 	return no_os_spi_transfer(desc->comm_desc, &xfer, 1);
 }
 
-int max14906_reg_read(struct max14906_desc *desc, uint32_t addr, uint8_t *val)
+int max14906_reg_read(struct max14906_desc *desc, uint32_t addr, uint32_t *val)
 {
 	struct no_os_spi_msg xfer = {
 		.tx_buff = desc->buff,
@@ -43,10 +43,10 @@ int max14906_reg_read(struct max14906_desc *desc, uint32_t addr, uint8_t *val)
 }
 
 int max14906_reg_update(struct max14906_desc *desc, uint32_t addr,
-			uint8_t mask, uint8_t val)
+			uint32_t mask, uint32_t val)
 {
 	int ret;
-	uint8_t reg_val;
+	uint32_t reg_val;
 
 	ret = max14906_reg_read(desc, addr, &reg_val);
 	if (ret)
@@ -65,18 +65,22 @@ int max14906_ch_get(struct max14906_desc *desc, uint32_t ch, uint32_t *val)
 	if (ch >= MAX14906_CHANNELS)
 		return -EINVAL;
 
-	//return max14906_reg_read(desc, );
+	ret = max14906_reg_read(desc, MAX14906_DOILEVEL_REG, val);
+	if (ret)
+		return ret;
+
+	*val = no_os_field_get(MAX14906_DOI_LEVEL_MASK(ch), *val);
+
 	return 0;
 }
 
 int max14906_ch_set(struct max14906_desc *desc, uint32_t ch, uint32_t val)
 {
-	int ret;
-
 	if (ch >= MAX14906_CHANNELS)
 		return -EINVAL;
 
-	return 0;
+	return max14906_reg_update(desc, MAX14906_SETOUT_REG,
+				   MAX14906_HIGHO_MASK(ch), (val) ? MAX14906_HIGHO_MASK(ch) : 0);
 }
 
 int max14906_ch_func(struct max14906_desc *desc, uint32_t ch,
@@ -99,7 +103,7 @@ int max14906_ch_func(struct max14906_desc *desc, uint32_t ch,
 int max14906_init(struct max14906_desc **desc, struct max14906_init_param *param)
 {
 	struct max14906_desc *descriptor;
-	uint8_t reg_val;
+	uint32_t reg_val;
 	int ret;
 
 	descriptor = calloc(1, sizeof(*descriptor));
@@ -114,15 +118,20 @@ int max14906_init(struct max14906_desc **desc, struct max14906_init_param *param
 	if (ret)
 		return ret;
 
-	ret = max14906_reg_read(descriptor, 0x5, &reg_val);
+	/* Clear the latched faults generated at power up */
+	ret = max14906_reg_read(descriptor, MAX14906_OPN_WIR_FLT_REG, &reg_val);
 	if (ret)
 		return ret;
 
-	ret = max14906_reg_read(descriptor, 0x6, &reg_val);
+	ret = max14906_reg_read(descriptor, MAX14906_SHD_VDD_FLT_REG, &reg_val);
 	if (ret)
 		return ret;
 
-	ret = max14906_reg_read(descriptor, MAX14906_GLOBAL_ERR_REG, &reg_val);
+	ret = max14906_reg_read(descriptor, MAX14906_GLOBAL_FLT_REG, &reg_val);
+	if (ret)
+		return ret;
+
+	ret = max14906_reg_update(descriptor, 0xA, NO_OS_GENMASK(1, 0), 0);
 	if (ret)
 		return ret;
 

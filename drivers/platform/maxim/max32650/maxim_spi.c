@@ -395,14 +395,14 @@ int32_t max_spi_transfer(struct no_os_spi_desc *desc,
 		req.txLen = req.txData ? msgs[i].bytes_number : 0;
 		req.rxLen = req.rxData ? msgs[i].bytes_number : 0;
 
-		_max_delay_config(desc, &msgs[i]);
+		//_max_delay_config(desc, &msgs[i]);
 		ret = MXC_SPI_MasterTransaction(&req);
 		if (ret == E_BAD_PARAM)
 			return -EINVAL;
 		if (ret == E_BAD_STATE)
 			return -EBUSY;
 
-		no_os_udelay(msgs[i].cs_change_delay);
+		//no_os_udelay(msgs[i].cs_change_delay);
 	}
 
 	return 0;

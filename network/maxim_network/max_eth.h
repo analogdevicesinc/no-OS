@@ -4,11 +4,15 @@
 #include "lwip/netif.h"
 #include "no_os_irq.h"
 #include "no_os_timer.h"
+#include "network_interface.h"
 #include "adin1110.h"
+
 
 #define MXC_ETH_INTERNAL_BUFF_SIZE			2048
 #define MXC_NETIF_MTU_SIZE				1500
 #define MXC_ETH_MAX_DATA_SIZE				(MXC_NETIF_MTU_SIZE + 14)
+
+#define MAX_SOCKETS	2
 
 struct max_eth_desc {
 	char name[2];
@@ -16,6 +20,9 @@ struct max_eth_desc {
 	struct no_os_irq_desc *nvic;
 	struct no_os_timer_desc *lwip_tick;
 	struct no_os_callback_desc *tick_callback;
+
+	struct network_interface noos_net;
+	struct socket_desc sockets[MAX_SOCKETS];
 };
 
 struct max_eth_param {

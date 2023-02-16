@@ -146,9 +146,9 @@ int iio_example_main()
 	struct max14906_iio_desc *max14906_iio_desc;
 	struct max14906_iio_desc_init_param max14906_iio_ip;
 
-	// ret = max_eth_init(&netif_desc, &eth_param);
-	// if (ret)
-	// 	return ret;
+	ret = max_eth_init(&netif_desc, &eth_param);
+	if (ret)
+		return ret;
 
 	// uint8_t a[] = "abcb";
 
@@ -222,10 +222,6 @@ int iio_example_main()
 		ret = iio_app_run(iio_devices, NO_OS_ARRAY_SIZE(iio_devices));
 		if (ret)
 			return ret;
-		// ret = iio_app_run_with_trigs(iio_devices, NO_OS_ARRAY_SIZE(iio_devices),
-		// 		      	      trigs, NO_OS_ARRAY_SIZE(trigs), ad74413r_irq_desc, &iio_desc);
-		// if (ret)
-		// 	return ret;
 
 		/* Probe the drivers in the run mode */
 		ret = max14906_iio_init(&max14906_iio_desc, &max14906_iio_ip, false);

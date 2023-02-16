@@ -108,11 +108,11 @@ struct no_os_spi_init_param ad74413r_spi_ip = {
 
 struct no_os_spi_init_param max14906_spi_ip = {
 	.device_id = 1,
-	.max_speed_hz = SPI_BAUDRATE,
+	.max_speed_hz = 10000000,
 	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
 	.mode = NO_OS_SPI_MODE_0,
 	.platform_ops = SPI_OPS,
-	.chip_select = 1,
+	.chip_select = 0,
 	.extra = SPI_EXTRA,
 };
 
