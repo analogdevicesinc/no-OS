@@ -70,7 +70,11 @@ static struct event_list _events[] = {
 	[NO_OS_EVT_UART_RX_COMPLETE] = {.event = NO_OS_EVT_UART_RX_COMPLETE, .hal_event = HAL_UART_RX_COMPLETE_CB_ID},
 	[NO_OS_EVT_UART_ERROR] = {.event = NO_OS_EVT_UART_ERROR, .hal_event = HAL_UART_ERROR_CB_ID},
 #ifdef HAL_TIM_MODULE_ENABLED
-	[NO_OS_EVT_TIM_ELAPSED] = {.event = NO_OS_EVT_TIM_ELAPSED, .hal_event = HAL_TIM_PERIOD_ELAPSED_CB_ID}
+	[NO_OS_EVT_TIM_ELAPSED] = {.event = NO_OS_EVT_TIM_ELAPSED, .hal_event = HAL_TIM_PERIOD_ELAPSED_CB_ID},
+#endif
+#ifdef HAL_DMA_MODULE_ENABLED
+	[NO_OS_EVT_DMA_RX_COMPLETE] = {.event = NO_OS_EVT_DMA_RX_COMPLETE, .hal_event = HAL_DMA_XFER_CPLT_CB_ID},
+	[NO_OS_EVT_DMA_RX_HALF_COMPLETE] = {.event = NO_OS_EVT_DMA_RX_HALF_COMPLETE, .hal_event = HAL_DMA_XFER_HALFCPLT_CB_ID}
 #endif
 };
 
@@ -113,6 +117,23 @@ static inline void _common_uart_callback(UART_HandleTypeDef *huart,
 		a->callback(a->ctx);
 }
 
+#if defined (HAL_SAI_MODULE_ENABLED)
+static inline void _common_sai_dma_callback(SAI_HandleTypeDef *hsai,
+		uint32_t no_os_event)
+{
+	struct event_list *ue = &_events[no_os_event];
+	struct irq_action *a;
+	struct irq_action key = {.handle = hsai};
+	int ret;
+	ret = no_os_list_read_find(ue->actions, (void **)&a, &key);
+	if (ret < 0)
+		return;
+
+	if(a->callback)
+		a->callback(a->ctx);
+}
+#endif
+
 // equivalent of HAL_UART_TxCpltCallback
 void _TxCpltCallback(UART_HandleTypeDef *huart)
 {
@@ -124,6 +145,18 @@ void _RxCpltCallback(UART_HandleTypeDef *huart)
 {
 	_common_uart_callback(huart, NO_OS_EVT_UART_RX_COMPLETE);
 }
+
+#if defined (HAL_SAI_MODULE_ENABLED)
+void _SAIRxCpltCallback(SAI_HandleTypeDef *hsai)
+{
+	_common_sai_dma_callback(hsai, NO_OS_EVT_DMA_RX_COMPLETE);
+}
+
+void _SAI_RxHalfCpltCallback(SAI_HandleTypeDef *hsai)
+{
+	_common_sai_dma_callback(hsai, NO_OS_EVT_DMA_RX_HALF_COMPLETE);
+}
+#endif
 
 // equivalent of HAL_UART_ErrorCallback
 void _ErrorCallback(UART_HandleTypeDef *huart)
@@ -205,6 +238,9 @@ int32_t stm32_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 {
 	int ret;
 	pUART_CallbackTypeDef pUartCallback;
+#ifdef HAL_SAI_MODULE_ENABLED
+	pSAI_CallbackTypeDef pSaiDmaCallback;
+#endif
 #ifdef HAL_TIM_MODULE_ENABLED
 	pTIM_CallbackTypeDef pTimCallback;
 	struct irq_action action_key = {.handle = cb->handle};
@@ -303,6 +339,61 @@ int32_t stm32_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 		}
 		break;
 #endif
+#if defined(HAL_DMA_MODULE_ENABLED) && defined(HAL_SAI_MODULE_ENABLED)
+	case NO_OS_DMA_IRQ:
+		switch(hal_event) {
+		case HAL_DMA_XFER_CPLT_CB_ID:
+			pSaiDmaCallback = _SAIRxCpltCallback;
+			ret = HAL_SAI_RegisterCallback(cb->handle, hal_event, pSaiDmaCallback);
+			if (_events[cb->event].actions == NULL) {
+				ret = no_os_list_init(&_events[cb->event].actions, NO_OS_LIST_PRIORITY_LIST,
+						      irq_action_cmp);
+				if (ret < 0)
+					return ret;
+			}
+
+			li = no_os_calloc(1, sizeof(struct irq_action));
+			if(!li)
+				return -ENOMEM;
+
+			li->handle = cb->handle;
+			li->callback = cb->callback;
+			li->ctx = cb->ctx;
+			ret = no_os_list_add_last(_events[cb->event].actions, li);
+			if (ret < 0) {
+				no_os_free(li);
+				return ret;
+			}
+			break;
+		case HAL_DMA_XFER_HALFCPLT_CB_ID:
+			pSaiDmaCallback = _SAI_RxHalfCpltCallback;
+			ret = HAL_SAI_RegisterCallback(cb->handle, hal_event, pSaiDmaCallback);
+			if (ret != HAL_OK) {
+				ret = -EFAULT;
+				break;
+			}
+			if (_events[cb->event].actions == NULL) {
+				ret = no_os_list_init(&_events[cb->event].actions, NO_OS_LIST_PRIORITY_LIST,
+						      irq_action_cmp);
+				if (ret < 0)
+					return ret;
+			}
+			li = no_os_calloc(1, sizeof(struct irq_action));
+			if(!li)
+				return -ENOMEM;
+
+			li->handle = cb->handle;
+			li->callback = cb->callback;
+			li->ctx = cb->ctx;
+			ret = no_os_list_add_last(_events[cb->event].actions, li);
+			if (ret < 0) {
+				no_os_free(li);
+				return ret;
+			}
+			break;
+		}
+		break;
+#endif
 	default:
 		ret = -EINVAL;
 		break;
@@ -343,6 +434,17 @@ int32_t stm32_irq_unregister_callback(struct no_os_irq_ctrl_desc *desc,
 		if (ret < 0)
 			break;
 		ret = HAL_TIM_UnRegisterCallback(cb->handle, hal_event);
+		if (ret != HAL_OK)
+			ret = -EFAULT;
+		break;
+#endif
+#if defined(HAL_DMA_MODULE_ENABLED) && defined(HAL_SAI_MODULE_ENABLED)
+	case NO_OS_DMA_IRQ:
+		key.handle = cb->handle;
+		ret = no_os_list_get_find(_events[cb->event].actions, &discard, &key);
+		if (ret < 0)
+			break;
+		ret = HAL_SAI_UnRegisterCallback(cb->handle, hal_event);
 		if (ret != HAL_OK)
 			ret = -EFAULT;
 		break;
