@@ -70,7 +70,6 @@ int iio_trigger_example_main()
 	int ret;
 	struct iio_hw_trig *ad74413r_trig_desc;
 	struct no_os_irq_ctrl_desc *ad74413r_irq_desc;
-	struct iio_desc *iio_desc;
 	struct iio_app_desc *app;
 	struct iio_app_init_param app_init_param = { 0 };
 
@@ -120,7 +119,6 @@ int iio_trigger_example_main()
 	ad74413r_gpio_trig_ip.irq_ctrl = ad74413r_irq_desc;
 
 	/* Initialize hardware trigger */
-	ad74413r_gpio_trig_ip.iio_desc = &iio_desc,
 	ret = iio_hw_trig_init(&ad74413r_trig_desc, &ad74413r_gpio_trig_ip);
 	if (ret)
 		return ret;

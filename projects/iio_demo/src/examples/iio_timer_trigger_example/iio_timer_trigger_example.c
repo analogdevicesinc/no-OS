@@ -84,9 +84,6 @@ int iio_timer_trigger_example_main()
 	/* dac demo irq instance descriptor */
 	struct no_os_irq_ctrl_desc *dac_demo_irq_desc;
 
-	/* iio desc */
-	struct iio_desc *iio_desc;
-
 	/* iio application desc */
 	struct iio_app_desc *app;
 
@@ -141,12 +138,10 @@ int iio_timer_trigger_example_main()
 	dac_demo_timer_trig_ip.irq_ctrl = dac_demo_irq_desc;
 
 	/* Initialize hardware trigger */
-	adc_demo_timer_trig_ip.iio_desc = &iio_desc,
 	ret = iio_hw_trig_init(&adc_timer_trig_desc, &adc_demo_timer_trig_ip);
 	if (ret)
 		return ret;
 
-	dac_demo_timer_trig_ip.iio_desc = &iio_desc,
 	ret = iio_hw_trig_init(&dac_timer_trig_desc, &dac_demo_timer_trig_ip);
 	if (ret)
 		return ret;

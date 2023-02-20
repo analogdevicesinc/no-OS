@@ -76,7 +76,6 @@ int iio_timer_trigger_example_main()
 	struct iio_hw_trig *adxrs290_trig_desc;
 	struct no_os_timer_desc *adxrs290_timer_desc;
 	struct no_os_irq_ctrl_desc *adxrs290_timer_irq_desc;
-	struct iio_desc *iio_desc;
 
 	ret = adxrs290_init(&adxrs290_desc, &adxrs290_ip);
 	if (ret)
@@ -101,7 +100,6 @@ int iio_timer_trigger_example_main()
 	adxrs290_timer_trig_ip.cb_info.handle = adxrs290_timer_desc;
 
 	/* Initialize hardware trigger */
-	adxrs290_timer_trig_ip.iio_desc = &iio_desc,
 	ret = iio_hw_trig_init(&adxrs290_trig_desc, &adxrs290_timer_trig_ip);
 	if (ret)
 		return ret;
