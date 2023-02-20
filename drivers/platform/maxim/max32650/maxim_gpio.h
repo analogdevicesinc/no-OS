@@ -44,6 +44,7 @@
 #include "no_os_irq.h"
 #include "no_os_gpio.h"
 #include "max32650.h"
+#include "gpio.h"
 
 #define N_PINS	MXC_CFG_GPIO_PINS_PORT
 #define N_PORTS	MXC_CFG_GPIO_INSTANCES
