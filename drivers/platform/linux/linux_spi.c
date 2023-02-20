@@ -216,12 +216,15 @@ static int32_t linux_spi_transfer(struct no_os_spi_desc *desc,
 	}
 
 	ret = ioctl(linux_desc->spidev_fd, SPI_IOC_MESSAGE(len), tr);
-	if (ret < 0)
-		printf("%s: Can't send spi message (%d)\n\r", __func__, errno);
 
 	free(tr);
 
-	return ret;
+	if (ret < 0) {
+		printf("%s: Can't send spi message (%d)\n\r", __func__, errno);
+		return ret;
+	}
+
+	return 0;
 }
 /**
  * @brief Linux platform specific SPI platform ops structure
