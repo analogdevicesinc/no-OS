@@ -137,7 +137,7 @@ struct pcf85263_init_param {
  */
 struct pcf85263_dev {
 	/** Device communication descriptor */
-	struct no_os_spi_desc		*i2c_desc;
+	struct no_os_i2c_desc		*i2c_desc;
 	uint8_t				battery_en;
 };
 
