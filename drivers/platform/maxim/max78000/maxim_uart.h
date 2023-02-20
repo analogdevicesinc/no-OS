@@ -44,6 +44,7 @@
 #include "no_os_irq.h"
 #include "max78000.h"
 #include "no_os_uart.h"
+#include "gpio.h"
 
 /**
  * @brief UART flow control

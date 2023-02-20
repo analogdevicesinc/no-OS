@@ -41,6 +41,7 @@
 #define MAXIM_SPI_H_
 
 #include <stdint.h>
+#include "gpio.h"
 
 /**
  * @brief maxim specific SPI platform ops structure

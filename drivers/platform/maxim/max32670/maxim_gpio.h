@@ -48,6 +48,7 @@
 #include "no_os_irq.h"
 #include "no_os_gpio.h"
 #include "max32670.h"
+#include "gpio.h"
 
 /******************************************************************************/
 /********************** Macros an Constants Definitions ***********************/
