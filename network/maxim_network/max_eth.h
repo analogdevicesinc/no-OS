@@ -4,15 +4,43 @@
 #include "lwip/netif.h"
 #include "no_os_irq.h"
 #include "no_os_timer.h"
-#include "network_interface.h"
 #include "adin1110.h"
-
+#include "network_interface.h"
+#include "tcp_socket.h"
 
 #define MXC_ETH_INTERNAL_BUFF_SIZE			2048
 #define MXC_NETIF_MTU_SIZE				1500
 #define MXC_ETH_MAX_DATA_SIZE				(MXC_NETIF_MTU_SIZE + 14)
 
 #define MAX_SOCKETS	2
+
+struct max_eth_desc;
+
+struct socket_desc {
+	enum {
+		/* Available to be used */
+		SOCKET_UNUSED,
+		/* Connection set as server bound to a port */
+		SOCKET_LISTENING,
+		/* Connection set as server and accepting incomming conns  */
+		SOCKET_ACCEPTING,
+		/* Accept callback received, waiting call to accept function */
+		SOCKET_WAITING_ACCEPT,
+		/* Socket is connected to remote */
+		SOCKET_CONNECTED,
+		/* Socked has been disconnected. */
+		SOCKET_DISCONNECTED,
+	} state;
+	struct tcp_pcb *pcb;
+	/* List of buffers to be read */
+	struct pbuf *p;
+	/* Inedex for p->payload. To keep track of read bytes */
+	uint32_t p_idx;
+	/* Reference to ethernet structure */
+	struct max_eth_desc *desc;
+	/* Current socket ID. Same as index in sockets */
+	uint32_t id;
+};
 
 struct max_eth_desc {
 	char name[2];

@@ -7,7 +7,9 @@
 #include "lwip/timeouts.h"
 #include "lwip/stats.h"
 #include "lwip/init.h"
+#include "lwip/tcpbase.h"
 #include "lwip/tcpip.h"
+#include "lwip/tcp.h"
 #include "lwip/netif.h"
 #include "lwip/api.h"
 #include "lwip/etharp.h"
@@ -24,6 +26,8 @@
 
 #include "adin1110.h"
 
+#define ETHARP_SUPPORT_STATIC_ENTRIES	1
+
 uint32_t test_cnt = 0;
 static struct netif			mxc_eth_netif = {0};
 static int				prev_link_status = -1;
@@ -31,31 +35,7 @@ static volatile unsigned int		eth_packet_is_in_que = 0;
 static unsigned char 			mxc_lwip_internal_buff[MXC_ETH_INTERNAL_BUFF_SIZE];
 static uint8_t tmp_payload[MXC_ETH_INTERNAL_BUFF_SIZE];
 
-struct socket_desc {
-	enum {
-		/* Available to be used */
-		SOCKET_UNUSED,
-		/* Connection set as server bound to a port */
-		SOCKET_LISTENING,
-		/* Connection set as server and accepting incomming conns  */
-		SOCKET_ACCEPTING,
-		/* Accept callback received, waiting call to accept function */
-		SOCKET_WAITING_ACCEPT,
-		/* Socket is connected to remote */
-		SOCKET_CONNECTED,
-		/* Socked has been disconnected. */
-		SOCKET_DISCONNECTED,
-	} state;
-	struct tcp_pcb *pcb;
-	/* List of buffers to be read */
-	struct pbuf *p;
-	/* Inedex for p->payload. To keep track of read bytes */
-	uint32_t p_idx;
-	/* Reference to ethernet structure */
-	struct max_eth_desc *desc;
-	/* Current socket ID. Same as index in sockets */
-	uint32_t id;
-};
+static void max_eth_config_noos_if(struct max_eth_desc *desc);
 
 /* Get socket pointer from socket id */
 static struct socket_desc *_get_sock(struct max_eth_desc *desc, uint32_t id)
@@ -76,7 +56,7 @@ static int32_t _get_unused_socket(struct max_eth_desc *desc, uint32_t *id)
 			*id = i;
 			desc->sockets[i].state = SOCKET_DISCONNECTED;
 
-			return SUCCESS;
+			return 0;
 		}
 
 	/* All the available connections are used */
@@ -93,17 +73,21 @@ static void _release_socket(struct max_eth_desc *desc, uint32_t id)
 
 static err_t mxc_eth_netif_output(struct netif *netif, struct pbuf *p)
 {
-	struct adin1110_desc *mac_desc = netif->state;
+	struct max_eth_desc *eth_desc = netif->state;
+	struct adin1110_desc *mac_desc = eth_desc->mac_desc;
         struct adin1110_eth_buff buff;
-	int result;
 	(void)(netif);
 	int ret;
 
 	LINK_STATS_INC(link.xmit);
 	pbuf_copy_partial(p, mxc_lwip_internal_buff, p->tot_len, 0);
 
-	buff.payload_len = p->tot_len;
-	buff.payload = mxc_lwip_internal_buff;
+	memcpy(&buff.mac_dest, mxc_lwip_internal_buff, 14);
+	memcpy(&buff.mac_source, &mxc_lwip_internal_buff[6], 6);
+	buff.ethertype = no_os_get_unaligned_be16(&mxc_lwip_internal_buff[12]);
+
+	buff.payload_len = p->tot_len - 14;
+	buff.payload = &mxc_lwip_internal_buff[14];
 
 	ret = adin1110_write_fifo(mac_desc, 0, &buff);
 	if (ret)
@@ -144,14 +128,14 @@ static struct pbuf *get_recvd_frames(struct adin1110_desc *mac_desc)
 	mac_buff.payload = tmp_payload;
 	ret = adin1110_reg_read(mac_desc, ADIN1110_RX_FSIZE_REG, &eth_data_len);
 	if (ret)
-		return ret;
+		return NULL;
 
 	if (!eth_data_len)
-		return -EAGAIN;
+		return NULL;
 
 	ret = adin1110_read_fifo(mac_desc, 0, &mac_buff);
 	if (ret)
-		return ret;
+		return NULL;
 
 	memcpy(mxc_lwip_internal_buff, mac_buff.mac_dest, 6);
 	offset += 6;
@@ -185,29 +169,32 @@ static int max_lwip_tick(void *data)
 	if (ret)
 		return ret;
 
-	if (link_status != prev_link_status) {
-		if (link_status) {
-			/* Link Down */
-			netif_set_link_down(netif_desc);
+	//if (link_status)
+	netif_set_link_up(netif_desc);
 
-			// result = MXC_EMAC_Stop();
-			// if (result)
-			// 	return result;
-		} else {
-			/* Link Up */
-			// result = MXC_EMAC_Start();
-			// if (result)
-			// 	return result;
+// 	if (link_status != prev_link_status) {
+// 		if (link_status) {
+// 			/* Link Down */
+// 			netif_set_link_down(netif_desc);
 
-			netif_set_link_up(netif_desc);
+// 			// result = MXC_EMAC_Stop();
+// 			// if (result)
+// 			// 	return result;
+// 		} else {
+// 			/* Link Up */
+// 			// result = MXC_EMAC_Start();
+// 			// if (result)
+// 			// 	return result;
 
-#if USE_DHCP
-			result = dhcp_start(netif_desc);
-			if (result)
-				return result;
-#endif
-		}
-	}
+// 			netif_set_link_up(netif_desc);
+
+// #if USE_DHCP
+// 			result = dhcp_start(netif_desc);
+// 			if (result)
+// 				return result;
+// #endif
+// 		}
+// 	}
 	prev_link_status = link_status;
 
 	p = get_recvd_frames(mac_desc);
@@ -223,11 +210,14 @@ static int max_lwip_tick(void *data)
 
 	if (p != NULL) {
 		LINK_STATS_INC(link.recv);
-		if (netif_desc->input(p, netif_desc) != ERR_OK) {
+		ret = netif_desc->input(p, netif_desc);
+		if (ret) {
 			pbuf_free(p);
+			return ret;
 		}
 	}
 
+	tcp_tmr();
 	/** Cyclic Timers Check **/
 	sys_check_timeouts();
 
@@ -236,6 +226,7 @@ static int max_lwip_tick(void *data)
 
 int max_eth_init(struct netif **netif_desc, struct max_eth_param *param)
 {
+	struct network_interface *network_descriptor;
 	struct no_os_callback_desc *tick_callback;
 	struct no_os_irq_init_param nvic_param;
 	struct max_eth_desc *descriptor;
@@ -259,17 +250,27 @@ int max_eth_init(struct netif **netif_desc, struct max_eth_param *param)
 // 		return E_NULL_PTR;
 // #endif
 
-	netif_descriptor = calloc(1, sizeof(*netif_descriptor));
-	if (!netif_descriptor)
+	network_descriptor = calloc(1, sizeof(*network_descriptor));
+	if (!network_descriptor)
 		return -ENOMEM;
 
+	netif_descriptor = calloc(1, sizeof(*netif_descriptor));
+	if (!netif_descriptor) {
+		ret = -ENOMEM;
+		goto free_network_descriptor;
+	}
+
 	descriptor = calloc(1, sizeof(*descriptor));
-	if (!descriptor)
+	if (!descriptor) {
+		ret = -ENOMEM;
 		goto free_netif;
+	}
 
 	tick_callback = calloc(1, sizeof(*tick_callback));
-	if (!tick_callback)
+	if (!tick_callback) {
+		ret = -ENOMEM;
 		goto free_desc;
+	}
 
 	ret = adin1110_init(&descriptor->mac_desc, &param->adin1110_ip);
 	if (ret)
@@ -299,8 +300,11 @@ int max_eth_init(struct netif **netif_desc, struct max_eth_param *param)
 
 	addr = ip4addr_ntoa(&netmask);
 	addr = ip4addr_ntoa(&gw);
-	netif_add(netif_descriptor, &ipaddr, &netmask, &gw, NULL, max_eth_netif_init, netif_input);
+	netif_add(netif_descriptor, &ipaddr, &netmask, &gw, NULL, max_eth_netif_init, ethernet_input);
 	netif_descriptor->state = descriptor;
+
+	/* Just for testing, add an ARP table entry */
+	ret = update_arp_entry();
 
 	descriptor->name[0] = param->name[0];
 	descriptor->name[1] = param->name[1];
@@ -337,6 +341,8 @@ int max_eth_init(struct netif **netif_desc, struct max_eth_param *param)
 	if (ret)
 		return ret;
 
+	max_eth_config_noos_if(descriptor);
+
 	*netif_desc = netif_descriptor;
 
 	return E_NO_ERROR;
@@ -347,40 +353,308 @@ free_desc:
 	free(descriptor);
 free_netif:
 	free(netif_descriptor);
+free_network_descriptor:
+	free(network_descriptor);
 
 	return ret;
 }
 
-static int32_t max_socket_open(struct max_eth_desc *desc, uint32_t *sock_id,
+void max_eth_err_callback(struct socket_desc *socket)
+{
+	eth_packet_is_in_que++;
+}
+
+void max_eth_recv_callback(void *arg, struct tcp_pcb *tpcb, struct pbuf *p, err_t err)
+{
+	eth_packet_is_in_que++;
+}
+
+static void max_eth_config_socket(struct socket_desc *socket)
+{
+	tcp_arg(socket->pcb, socket);
+	tcp_recv(socket->pcb, max_eth_recv_callback);
+	tcp_err(socket->pcb, max_eth_err_callback);
+}
+
+static int32_t max_socket_open(void *net, uint32_t sock_id, enum socket_protocol proto,
 			       uint32_t buff_size)
 {
-	int32_t err;
+	struct max_eth_desc *desc = net;
 	struct tcp_pcb *pcb;
+	int32_t ret;
 
-	err = _get_unused_socket(desc, sock_id);
-	if (IS_ERR_VALUE(err))
-		return err;
+	ret = _get_unused_socket(desc, &sock_id);
+	if (ret)
+		return ret;
 
 	pcb = tcp_new_ip_type(IPADDR_TYPE_ANY);
 	if (!pcb) {
-		_release_socket(desc, *sock_id);
+		_release_socket(desc, sock_id);
 		return -ENOMEM;
 	}
-	desc->sockets[*sock_id].pcb = pcb;
+	desc->sockets[sock_id].pcb = pcb;
 
-	xil_eth_config_sock(&desc->sockets[*sock_id]);
+	max_eth_config_socket(&desc->sockets[sock_id]);
 
-	return SUCCESS;
+	return 0;
 }
 
-
-
-void MXC_ETH_RecvIrq(void)
+static int32_t max_socket_close(void *net, uint32_t sock_id)
 {
-	eth_packet_is_in_que++;
+	struct max_eth_desc *desc = net;
+	struct socket_desc *sock;
+
+	sock = _get_sock(desc, sock_id);
+	if (!sock)
+		return -EINVAL;
+
+	if (sock->state == SOCKET_UNUSED)
+		return -ENOENT;
+
+	tcp_recv(sock->pcb, NULL);
+	tcp_err(sock->pcb, NULL);
+	if (sock->p) {
+		tcp_recved(sock->pcb, sock->p->tot_len);
+		pbuf_free(sock->p);
+	}
+
+	tcp_close(sock->pcb);
+	sock->p_idx = 0;
+	_release_socket(desc, sock_id);
+
+	return 0;
+}
+
+static int32_t max_socket_send(void *net, uint32_t sock_id, const void *data,
+			       uint32_t size)
+{
+	struct max_eth_desc *desc = net;
+	struct socket_desc *sock;
+	err_t err;
+	uint32_t aval;
+	uint32_t flags;
+	int8_t _err;
+
+	sock = _get_sock(desc, sock_id);
+	if (!sock)
+		return -EINVAL;
+
+	if (sock->state != SOCKET_CONNECTED)
+		return -ENOTCONN;
+
+	aval = tcp_sndbuf(sock->pcb);
+	flags = TCP_WRITE_FLAG_COPY;
+	if (aval < size)
+		/* Partial write */
+		flags |= TCP_WRITE_FLAG_MORE;
+	size = no_os_min(aval, size);
+	err = tcp_write(sock->pcb, data, size, flags);
+	if (err != ERR_OK) {
+		_err = err;
+		printf("TCP write err: %"PRIi8"\n", _err);
+		return _err;
+	}
+
+	if (!(flags & TCP_WRITE_FLAG_MORE)) {
+		/* Mark data as ready to be sent */
+		err = tcp_output(sock->pcb);
+		if (err != ERR_OK) {
+			_err = err;
+			printf("TCP output err: %"PRIi8"\n", _err);
+			return _err;
+		}
+	}
+
+	return size;
+}
+
+static int32_t max_socket_recv(void *net, uint32_t sock_id, void *data, uint32_t size)
+{
+	struct max_eth_desc *desc = net;
+	struct socket_desc *sock;
+	struct pbuf *p, *old_p;
+	uint8_t *buf, *pdata;
+	uint32_t i, len;
+
+	sock = _get_sock(desc, sock_id);
+	if (!sock)
+		return -EINVAL;
+
+	if (sock->state != SOCKET_CONNECTED)
+		return -ENOTCONN;
+
+	i = 0;
+	p = sock->p;
+	pdata = data;
+	/* Iterate over payloads until requested data has been read */
+	while (p && i < size) {
+		len = no_os_min(size - i, p->len - sock->p_idx);
+		buf = p->payload;
+		buf += sock->p_idx;
+		memcpy(pdata + i, buf, len);
+		i += len;
+		sock->p_idx += len;
+		if (sock->p_idx == p->len) {
+			/* Done with current p. Cleanup and mark as read */
+			old_p = p;
+			p = p->next;
+			if (p)
+				pbuf_ref(p);
+			pbuf_free(old_p);
+			tcp_recved(sock->pcb, sock->p_idx);
+			sock->p_idx = 0;
+		}
+	}
+	sock->p = p;
+
+	return i;
+}
+
+static int32_t max_socket_bind(void *net, uint32_t sock_id, uint16_t port)
+{
+	struct max_eth_desc *desc = net;
+	struct socket_desc *sock;
+	err_t err;
+
+	sock = _get_sock(desc, sock_id);
+	if (!sock)
+		return -EINVAL;
+
+	err = tcp_bind(sock->pcb, IP_ANY_TYPE, port);
+	if (err != ERR_OK) {
+		printf("Unable to bind port %"PRIu16"\n", port);
+		return -EINVAL;
+	}
+
+	return 0;
+}
+
+static int32_t max_socket_listen(void *net, uint32_t sock_id, uint32_t back_log)
+{
+	struct max_eth_desc *desc = net;
+	struct socket_desc *sock;
+	struct tcp_pcb *pcb;
+
+	sock = _get_sock(desc, sock_id);
+	if (!sock)
+		return -EINVAL;
+
+	pcb = tcp_listen_with_backlog(sock->pcb, back_log);
+	if (!pcb) {
+		printf("Unable to listen on socket\n");
+		return -ENOMEM;
+	}
+	sock->pcb = pcb;
+	sock->state = LISTEN;
+
+	max_eth_config_socket(sock);
+
+	return 0;
+}
+
+static err_t max_eth_accept_callback(void *arg, struct tcp_pcb *new_pcb, err_t err)
+{
+	int32_t ret;
+	int8_t _err;
+	uint32_t id;
+	struct socket_desc *sock;
+	struct socket_desc *serv_sock = arg;
+	struct max_eth_desc *desc = serv_sock->desc;
+
+	if (err != ERR_OK) {
+		_err = err;
+		printf("Accept callback err %"PRIi8"\n", _err);
+		return ERR_OK;
+	}
+
+	ret = _get_unused_socket(desc, &id);
+	if (ret)
+		return ret;
+
+	sock = _get_sock(desc, id);
+	sock->pcb = new_pcb;
+	sock->state = SOCKET_WAITING_ACCEPT;
+
+	max_eth_config_socket(sock);
+
+	return 0;
+}
+
+static int32_t max_socket_accept(void *net, uint32_t sock_id, uint32_t *client_socket_id)
+{
+	struct max_eth_desc *desc = net;
+	struct socket_desc *serv_sock;
+	struct socket_desc *cli_sock;
+	uint32_t i;
+
+	serv_sock = _get_sock(desc, sock_id);
+	if (!serv_sock)
+		return -EINVAL;
+
+	if (serv_sock->state != SOCKET_ACCEPTING) {
+		if (serv_sock->state != SOCKET_LISTENING)
+			return -EINVAL;
+		tcp_accept(serv_sock->pcb, max_eth_accept_callback);
+		serv_sock->state = SOCKET_ACCEPTING;
+	}
+
+	for (i = 0; i < MAX_SOCKETS; ++i) {
+		cli_sock = &desc->sockets[i];
+		if (cli_sock->state == SOCKET_WAITING_ACCEPT) {
+			/* New client connection for server */
+			*client_socket_id = i;
+			cli_sock->state = SOCKET_CONNECTED;
+			return 0;
+		}
+	}
+
+	return -EAGAIN;
+}
+
+static int32_t max_socket_sendto(void *net, uint32_t sock_id, const void *data,
+				 uint32_t size, const struct socket_address *to)
+{
+	return -ENOENT;
+}
+
+static int32_t max_socket_recvfrom(void *net, uint32_t sock_id, void *data, uint32_t size,
+				   struct socket_address *from)
+{
+	return -ENOENT;
+}
+
+static int32_t max_socket_connect(void *net, uint32_t sock_id,
+				  struct socket_address *addr)
+{
+	return -ENOENT;
+
+}
+
+static int32_t max_socket_disconnect(void *net, uint32_t sock_id)
+{
+	return -ENOENT;
 }
 
 u32_t sys_now(void)
 {
 	return 0;
+}
+
+static void max_eth_config_noos_if(struct max_eth_desc *desc)
+{
+	struct network_interface *net = &desc->noos_net;
+
+	net->socket_open = max_socket_open;
+	net->socket_close = max_socket_close;
+	net->socket_connect = max_socket_connect;
+	net->socket_disconnect = max_socket_disconnect;
+	net->socket_send = max_socket_send;
+	net->socket_recv = max_socket_recv;
+	net->socket_sendto = max_socket_sendto;
+	net->socket_recvfrom = max_socket_recvfrom;
+	net->socket_bind = max_socket_bind;
+	net->socket_listen = max_socket_listen;
+	net->socket_accept = max_socket_accept;
+
+	net->net = desc;
 }

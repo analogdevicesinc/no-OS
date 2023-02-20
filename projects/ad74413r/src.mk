@@ -1,5 +1,14 @@
+#NETWORKING = y
+#DISABLE_SECURE_SOCKETS = y
+
 include $(PROJECT)/src/platform/$(PLATFORM)/platform_src.mk
 include $(PROJECT)/src/examples/examples_src.mk
+
+INCS += $(NO-OS)/network/tcp_socket.h
+INCS += $(NO-OS)/network/noos_mbedtls_config.h
+INCS += $(NO-OS)/network/network_interface.h
+
+SRCS += $(NO-OS)/network/tcp_socket.c
 
 SRCS += $(PROJECT)/src/platform/$(PLATFORM)/main.c
 
