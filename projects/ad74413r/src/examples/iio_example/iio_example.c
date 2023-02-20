@@ -83,6 +83,7 @@ uint8_t iio_data_buffer2[DATA_BUFFER_SIZE * sizeof(uint32_t) * 8];
 int iio_example_main()
 {
 	struct tcp_pcb *pcb;
+	uint32_t client_id;
 
 	int ret;
 	uint32_t reg_val;
@@ -150,8 +151,17 @@ int iio_example_main()
 	if (ret)
 		return ret;
 
-	// uint8_t a[] = "abcb";
+	eth_desc = netif_desc->state;
+	ret = eth_desc->noos_net.socket_open(eth_desc, 0, 0, 100);
+	if (ret)
+		return ret;
 
+	ret = eth_desc->noos_net.socket_bind(eth_desc, 0, 10000);
+	if (ret)
+		return ret;
+
+	ret = eth_desc->noos_net.socket_listen(eth_desc, 0, 10);
+	ret = eth_desc->noos_net.socket_accept(eth_desc, 0, &client_id);
 
 	// ret = adin1110_init(&adin1110, &adin1110_ip);
 	// if (ret)
