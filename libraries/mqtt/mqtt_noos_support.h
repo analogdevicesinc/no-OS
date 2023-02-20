@@ -46,6 +46,7 @@
 
 #include <stdint.h>
 #include "tcp_socket.h"
+#include "no_os_timer.h"
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -87,7 +88,7 @@ struct network_port_noos {
 /******************************************************************************/
 
 /* Init porting file */
-int32_t mqtt_timer_init(uint32_t timer_id, void *extra_init_param);
+int32_t mqtt_timer_init(struct no_os_timer_init_param *timer_init_param);
 /* Uninit porting file */
 void mqtt_timer_remove();
 

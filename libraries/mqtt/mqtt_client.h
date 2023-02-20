@@ -213,10 +213,8 @@ struct mqtt_init_param {
 	 * calling any MQTT client functions.
 	 */
 	struct tcp_socket_desc	*sock;
-	/** Id of the hardware timer to be used by the mqtt files */
-	uint32_t		timer_id;
-	/** Platform specific parameter to initialize a \ref timer_desc */
-	void			*extra_timer_init_param;
+	/** Parameter to initialize a \ref timer_desc */
+	struct no_os_timer_init_param	*timer_init_param;
 	/** Timeout for a MQTT command to be executed */
 	uint32_t		command_timeout_ms;
 	/** Buffer used by the client to read messages */
