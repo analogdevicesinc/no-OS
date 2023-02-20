@@ -1,0 +1,22 @@
+{
+  "maxim": {
+    "eval_ade9430_example": {
+      "flags" : "TARGET=max32650"
+    },
+    "eval_ade9430_example_rtc": {
+      "flags" : "TARGET=max32650 NEW_CFLAGS=-DRTC_SET_DEFAULT"
+    },
+    "eval_ade9430_azure_iot_hub": {
+      "flags" : "TARGET=max32650 AZURE_IOT_HUB=y"
+    },
+    "eval_ade9430_azure_iot_hub_rtc": {
+      "flags" : "TARGET=max32650 AZURE_IOT_HUB=y NEW_CFLAGS=-DRTC_SET_DEFAULT"
+    },
+    "eval_ade9430_azure_iot_hub_dps": {
+      "flags" : "TARGET=max32650 AZURE_IOT_HUB=y NEW_CFLAGS=-DCONFIG_DPS"
+    },
+    "eval_ade9430_azure_iot_hub_dps_rtc": {
+      "flags" : "TARGET=max32650 AZURE_IOT_HUB=y NEW_CFLAGS=-DCONFIG_DPS NEW_CFLAGS=-DRTC_SET_DEFAULT"
+    }
+  }
+}
