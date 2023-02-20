@@ -64,17 +64,11 @@ static uint32_t			nb_references;
 /******************************************************************************/
 
 /* Allcoate resources for timer. Must be called from mqqt_init */
-int32_t mqtt_timer_init(uint32_t timer_id, void *extra_init_param)
+int32_t mqtt_timer_init(struct no_os_timer_init_param *timer_init_param)
 {
-	struct no_os_timer_init_param init_param = {
-		.id = timer_id,
-		.freq_hz = 1000,
-		.ticks_count = 0,
-		.extra = extra_init_param
-	};
 	int32_t			ret;
 
-	ret = no_os_timer_init(&timer, &init_param);
+	ret = no_os_timer_init(&timer, timer_init_param);
 	if (NO_OS_IS_ERR_VALUE(ret)) {
 		timer = NULL;
 		return -1;
@@ -91,7 +85,6 @@ int32_t mqtt_timer_init(uint32_t timer_id, void *extra_init_param)
 
 	return 0;
 }
-
 
 /* Remove resources allocated with \ref mqtt_timere_init. */
 void mqtt_timer_remove()

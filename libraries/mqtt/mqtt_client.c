@@ -112,7 +112,7 @@ int32_t mqtt_init(struct mqtt_desc **desc,
 	if (!ldesc)
 		return -1;
 
-	ret = mqtt_timer_init(param->timer_id, param->extra_timer_init_param);
+	ret = mqtt_timer_init(param->timer_init_param);
 	if (NO_OS_IS_ERR_VALUE(ret)) {
 		free(ldesc);
 		return -1;
