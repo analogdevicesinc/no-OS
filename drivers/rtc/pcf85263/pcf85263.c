@@ -119,7 +119,6 @@ int pcf85263_init(struct pcf85263_dev **device,
 		  struct pcf85263_init_param init_param)
 {
 	struct pcf85263_dev *dev;
-	uint32_t chip_id;
 	int ret;
 
 	dev = (struct pcf85263_dev *)calloc(1, sizeof(*dev));
