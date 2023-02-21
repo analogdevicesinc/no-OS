@@ -125,7 +125,6 @@ static int32_t max_i2c_init(struct no_os_i2c_desc **desc,
 	int32_t ret;
 	struct max_i2c_extra *max_i2c;
 	mxc_i2c_regs_t *i2c_regs;
-	uint32_t current_freq = 0;
 	uint32_t freq;
 
 	if (!desc || !param || !param->extra)
