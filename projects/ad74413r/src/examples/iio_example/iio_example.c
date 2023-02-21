@@ -40,6 +40,7 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
+#include <errno.h>
 #include <malloc.h>
 #include <stdio.h>
 
@@ -123,7 +124,7 @@ int iio_example_main()
 	struct no_os_timer_init_param eth_tick_param = {
 		.id = 0,
 		.freq_hz = 64000,
-		.ticks_count = 120000,
+		.ticks_count = 600,
 		.platform_ops = &max_timer_ops,
 		.extra = NULL,
 	};
@@ -156,12 +157,39 @@ int iio_example_main()
 	if (ret)
 		return ret;
 
-	ret = eth_desc->noos_net.socket_bind(eth_desc, 0, 10000);
+	ret = eth_desc->noos_net.socket_bind(eth_desc, 0, 30431);
 	if (ret)
 		return ret;
 
+	uint8_t *demo_str = "<?xml version=\"1.0\" encoding=\"utf-8\"?><!DOCTYPE context [<!ELEMENT context (device | context-attribute)*><!ELEMENT context-attribute EMPTY><!ELEMENT device (channel | attribute | debug-attribute | buffer-attribu \
+				te)*><!ELEMENT channel (scan-element?, attribute*)><!ELEMENT attribute EMPTY><!ELEMENT scan-element EMPTY><!ELEMENT debug-attribute EMPTY><!ELEMENT buffer-attribute EMPTY><!ATTLIST context name CDATA #REQUIRED d \
+				escription CDATA #IMPLIED><!ATTLIST context-attribute name CDATA #REQUIRED value CDATA #REQUIRED><!ATTLIST device id CDATA #REQUIRED name CDATA #IMPLIED><!ATTLIST channel id CDATA #REQUIRED type (input|output) # \
+				REQUIRED name CDATA #IMPLIED><!ATTLIST scan-element index CDATA #REQUIRED format CDATA #REQUIRED scale CDATA #IMPLIED><!ATTLIST attribute name CDATA #REQUIRED filename CDATA #IMPLIED><!ATTLIST debug-attribute na \
+				me CDATA #REQUIRED><!ATTLIST buffer-attribute name CDATA #REQUIRED>]><context name=\"xml\" description=\"no-OS master-088abd736\" ><device id=\"iio:device0\" name=\"adc_demo\"><channel id=\"voltage0\" name=\"adc_in_ch0\" ty \
+				pe=\"input\" ><scan-element index=\"0\" format=\"le:s16/16>>0\" /><attribute name=\"adc_channel_attr\" filename=\"in_voltage0_adc_channel_attr\" /></channel><channel id=\"voltage1\" name=\"adc_in_ch1\" type=\"input\" ><scan-ele \
+				ment index=\"1\" format=\"le:s16/16>>0\" /><attribute name=\"adc_channel_attr\" filename=\"in_voltage1_adc_channel_attr\" /></channel><attribute name=\"adc_global_attr\" /><debug-attribute name=\"direct_reg_access\" /></dev \
+				ice><device id=\"iio:device1\" name=\"dac_demo\"><channel id=\"voltage0\" name=\"dac_out_ch0\" type=\"output\" ><scan-element index=\"0\" format=\"le:s16/16>>0\" /><attribute name=\"dac_channel_attr\" filename=\"out_voltage0_dac \
+				_channel_attr\" /></channel><channel id=\"voltage1\" name=\"dac_out_ch1\" type=\"output\" ><scan-element index=\"1\" format=\"le:s16/16>>0\" /><attribute name=\"dac_channel_attr\" filename=\"out_voltage1_dac_channel_attr\" />< \
+				/channel><attribute name=\"dac_global_attr\" /><debug-attribute name=\"direct_reg_access\" /></device></context>";
+
+	uint8_t *demo_ctx = "<?xml version=\"1.0\" encoding=\"utf-8\"?><!DOCTYPE context [<!ELEMENT context (device | context-attribute)*><!ELEMENT context-attribute EMPTY><!ELEMENT device (channel | attribute | debug-attribute | buffer-attribute)*><!ELEMENT channel (scan-element?, attribute*)><!ELEMENT attribute EMPTY><!ELEMENT scan-element EMPTY><!ELEMENT debug-attribute EMPTY><!ELEMENT buffer-attribute EMPTY><!ATTLIST context name CDATA #REQUIRED description CDATA #IMPLIED><!ATTLIST context-attribute name CDATA #REQUIRED value CDATA #REQUIRED><!ATTLIST device id CDATA #REQUIRED name CDATA #IMPLIED><!ATTLIST channel id CDATA #REQUIRED type (input|output) #REQUIRED name CDATA #IMPLIED><!ATTLIST scan-element index CDATA #REQUIRED format CDATA #REQUIRED scale CDATA #IMPLIED><!ATTLIST attribute name CDATA #REQUIRED filename CDATA #IMPLIED value CDATA #IMPLIED><!ATTLIST debug-attribute name CDATA #REQUIRED value CDATA #IMPLIED><!ATTLIST buffer-attribute name CDATA #REQUIRED value CDATA #IMPLIED>]><context name=\"serial\" description=\"/dev/ttyUSB1: FT230X Basic UART - D3091LE6\" ><context-attribute name=\"uri\" value=\"serial:/dev/ttyUSB1,115200,8n2n\" /><device id=\"iio:device0\" name=\"ad74413r\" ><channel id=\"voltage0\" name=\"config_ch0\" type=\"input\" ><attribute name=\"enabled\" filename=\"in_voltage0_enabled\" value=\"0\" /><attribute name=\"function_cfg\" filename=\"in_voltage0_function_cfg\" value=\"high_z\" /><attribute name=\"function_cfg_available\" filename=\"function_cfg_available\" value=\"ERROR\" /></channel><channel id=\"voltage1\" name=\"config_ch1\" type=\"input\" ><attribute name=\"enabled\" filename=\"in_voltage1_enabled\" value=\"0\" /><attribute name=\"function_cfg\" filename=\"in_voltage1_function_cfg\" value=\"high_z\" /><attribute name=\"function_cfg_available\" filename=\"function_cfg_available\" value=\"ERROR\" /></channel><channel id=\"voltage2\" name=\"config_ch2\" type=\"input\" ><attribute name=\"enabled\" filename=\"in_voltage2_enabled\" value=\"0\" /><attribute name=\"function_cfg\" filename=\"in_voltage2_function_cfg\" value=\"high_z\" /><attribute name=\"function_cfg_available\" filename=\"function_cfg_available\" value=\"ERROR\" /></channel><channel id=\"voltage3\" name=\"config_ch3\" type=\"input\" ><attribute name=\"enabled\" filename=\"in_voltage3_enabled\" value=\"0\" /><attribute name=\"function_cfg\" filename=\"in_voltage3_function_cfg\" value=\"high_z\" /><attribute name=\"function_cfg_available\" filename=\"function_cfg_available\" value=\"ERROR\" /></channel><attribute name=\"apply\" value=\"0\" /></device><device id=\"iio:device1\" name=\"max14906\" ><channel id=\"voltage0\" type=\"input\" ><attribute name=\"function\" filename=\"in_voltage0_function\" value=\"direction_out\" /><attribute name=\"function_available\" filename=\"function_available\" value=\"direction_out direction_in direction_high_z\" /><attribute name=\"IEC_type\" filename=\"in_IEC_type\" value=\"Type_1_3\" /><attribute name=\"IEC_type_available\" filename=\"in_IEC_type_available\" value=\"Type_1_3 Type_2\" /><attribute name=\"enabled\" filename=\"in_voltage0_enabled\" value=\"0\" /></channel><channel id=\"voltage1\" type=\"input\" ><attribute name=\"function\" filename=\"in_voltage1_function\" value=\"direction_out\" /><attribute name=\"function_available\" filename=\"function_available\" value=\"direction_out direction_in direction_high_z\" /><attribute name=\"IEC_type\" filename=\"in_IEC_type\" value=\"Type_1_3\" /><attribute name=\"IEC_type_available\" filename=\"in_IEC_type_available\" value=\"Type_1_3 Type_2\" /><attribute name=\"enabled\" filename=\"in_voltage1_enabled\" value=\"0\" /></channel><channel id=\"voltage2\" type=\"input\" ><attribute name=\"function\" filename=\"in_voltage2_function\" value=\"direction_out\" /><attribute name=\"function_available\" filename=\"function_available\" value=\"direction_out direction_in direction_high_z\" /><attribute name=\"IEC_type\" filename=\"in_IEC_type\" value=\"Type_1_3\" /><attribute name=\"IEC_type_available\" filename=\"in_IEC_type_available\" value=\"Type_1_3 Type_2\" /><attribute name=\"enabled\" filename=\"in_voltage2_enabled\" value=\"0\" /></channel><channel id=\"voltage3\" type=\"input\" ><attribute name=\"function\" filename=\"in_voltage3_function\" value=\"direction_out\" /><attribute name=\"function_available\" filename=\"function_available\" value=\"direction_out direction_in direction_high_z\" /><attribute name=\"IEC_type\" filename=\"in_IEC_type\" value=\"Type_1_3\" /><attribute name=\"IEC_type_available\" filename=\"in_IEC_type_available\" value=\"Type_1_3 Type_2\" /><attribute name=\"enabled\" filename=\"in_voltage3_enabled\" value=\"0\" /></channel><attribute name=\"apply\" value=\"0\" /></device></context>";
+
+	uint8_t eth_recv_data[100] = {0};
+	uint8_t eth_data[4] = {0x99, 0x99, 0x99, 0x99};
 	ret = eth_desc->noos_net.socket_listen(eth_desc, 0, 10);
-	ret = eth_desc->noos_net.socket_accept(eth_desc, 0, &client_id);
+
+	do {
+		ret = eth_desc->noos_net.socket_accept(eth_desc, 0, &client_id);
+	} while (ret == -EAGAIN);
+
+	do {
+		ret = eth_desc->noos_net.socket_recv(eth_desc, 1, eth_recv_data, 5);
+	} while (!ret);
+
+	char *ab = "PRINT21shfghfghfghfghdfghfdghdfghfdghdfghfdghfgytyryrtydfsfsfs2";
+	ret = eth_desc->noos_net.socket_send(eth_desc, 1, demo_ctx, strlen(demo_ctx));
+	no_os_mdelay(3000);
+	while(1);
 
 	// ret = adin1110_init(&adin1110, &adin1110_ip);
 	// if (ret)

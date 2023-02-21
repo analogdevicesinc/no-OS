@@ -86,7 +86,7 @@ static err_t mxc_eth_netif_output(struct netif *netif, struct pbuf *p)
 	memcpy(&buff.mac_source, &mxc_lwip_internal_buff[6], 6);
 	buff.ethertype = no_os_get_unaligned_be16(&mxc_lwip_internal_buff[12]);
 
-	buff.payload_len = p->tot_len - 14;
+	buff.payload_len = p->tot_len;
 	buff.payload = &mxc_lwip_internal_buff[14];
 
 	ret = adin1110_write_fifo(mac_desc, 0, &buff);
@@ -295,16 +295,15 @@ int max_eth_init(struct netif **netif_desc, struct max_eth_param *param)
 #else
 	LWIP_PORT_INIT_IPADDR(&ipaddr);
 	LWIP_PORT_INIT_NETMASK(&netmask);
-	LWIP_PORT_INIT_GW(&gw);
+	//LWIP_PORT_INIT_GW(&gw);
 #endif
+
+	ret = ip4addr_aton("10.48.65.124", &gw);
 
 	addr = ip4addr_ntoa(&netmask);
 	addr = ip4addr_ntoa(&gw);
 	netif_add(netif_descriptor, &ipaddr, &netmask, &gw, NULL, max_eth_netif_init, ethernet_input);
 	netif_descriptor->state = descriptor;
-
-	/* Just for testing, add an ARP table entry */
-	ret = update_arp_entry();
 
 	descriptor->name[0] = param->name[0];
 	descriptor->name[1] = param->name[1];
@@ -359,14 +358,37 @@ free_network_descriptor:
 	return ret;
 }
 
-void max_eth_err_callback(struct socket_desc *socket)
+err_t max_eth_err_callback(void *arg, struct tcp_pcb *tpcb, struct pbuf *p, err_t err)
 {
 	eth_packet_is_in_que++;
+
+	return ERR_OK;
 }
 
-void max_eth_recv_callback(void *arg, struct tcp_pcb *tpcb, struct pbuf *p, err_t err)
+err_t max_eth_recv_callback(void *arg, struct tcp_pcb *tpcb, struct pbuf *p, err_t err)
 {
-	eth_packet_is_in_que++;
+	struct socket_desc *sock = arg;
+
+	if (!p) {
+		tcp_recv(sock->pcb, NULL);
+		sock->state = SOCKET_DISCONNECTED;
+
+		return ERR_OK;
+	}
+
+	if (err != ERR_OK) {
+		pbuf_free(p);
+		return err;
+	}
+
+	if (!sock->p) {
+		sock->p = p;
+		sock->p_idx = 0;
+	} else {
+		pbuf_cat(sock->p, p);
+	}
+
+	return ERR_OK;
 }
 
 static void max_eth_config_socket(struct socket_desc *socket)
@@ -393,6 +415,10 @@ static int32_t max_socket_open(void *net, uint32_t sock_id, enum socket_protocol
 		return -ENOMEM;
 	}
 	desc->sockets[sock_id].pcb = pcb;
+	desc->sockets[sock_id].desc = desc;
+	desc->sockets[sock_id].id = sock_id;
+
+	//tcp_nagle_disable(pcb);
 
 	max_eth_config_socket(&desc->sockets[sock_id]);
 
@@ -567,6 +593,7 @@ static err_t max_eth_accept_callback(void *arg, struct tcp_pcb *new_pcb, err_t e
 		return ERR_OK;
 	}
 
+	/* ??? LOOK HERE ??? THIS IS RETURNING AN ERROR, WHICH CAUSES THE SERVER TO SEND ACK RST */
 	ret = _get_unused_socket(desc, &id);
 	if (ret)
 		return ret;

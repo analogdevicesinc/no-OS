@@ -12,7 +12,7 @@
 #define MXC_NETIF_MTU_SIZE				1500
 #define MXC_ETH_MAX_DATA_SIZE				(MXC_NETIF_MTU_SIZE + 14)
 
-#define MAX_SOCKETS	2
+#define MAX_SOCKETS	10
 
 struct max_eth_desc;
 
