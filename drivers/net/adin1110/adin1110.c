@@ -509,6 +509,9 @@ int adin1110_read_fifo(struct adin1110_desc *desc, uint32_t port,
 	memcpy(eth_buff->payload, &desc->rx_buff[field_offset], frame_size);
 	eth_buff->payload_len = frame_size;
 
+	// /* Clear RX FIFO (just for testing) */
+	// adin1110_reg_write(desc, 0x36, 1);
+
 	return 0;
 }
 
