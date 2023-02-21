@@ -1,0 +1,83 @@
+/***************************************************************************//**
+ *   @file   no_os_pid.h
+ *   @brief  Header file for PID control utility.
+ *   @author Darius Berghe (darius.berghe@analog.com)
+********************************************************************************
+ * Copyright 2023(c) Analog Devices, Inc.
+ *
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *  - Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *  - Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in
+ *    the documentation and/or other materials provided with the
+ *    distribution.
+ *  - Neither the name of Analog Devices, Inc. nor the names of its
+ *    contributors may be used to endorse or promote products derived
+ *    from this software without specific prior written permission.
+ *  - The use of this software may or may not infringe the patent rights
+ *    of one or more patent holders.  This license does not release you
+ *    from the requirement that you obtain separate licenses from these
+ *    patent holders to use this software.
+ *  - Use of the software either in source or binary form, must be run
+ *    on or directly connected to an Analog Devices Inc. component.
+ *
+ * THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES "AS IS" AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, NON-INFRINGEMENT,
+ * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL ANALOG DEVICES BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, INTELLECTUAL PROPERTY RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*******************************************************************************/
+#ifndef _NO_OS_PID_H
+#define _NO_OS_PID_H
+#include <stdlib.h>
+#include <stdio.h>
+#include <stdint.h>
+
+/**
+ * @struct no_os_pid_range
+ * @brief Range definition for limiting PID control output or internal integrator accumulator
+ */
+struct no_os_pid_range {
+	/* High limit of the range */
+	int high;
+	/** Low limit of the range */
+	int low;
+};
+
+/**
+ * @struct no_os_pid_config
+ * @brief Configuration of the PID
+ */
+struct no_os_pid_config {
+	/** Proportional gain (micro-units) */
+	unsigned int Kp;
+	/** Integral gain (micro-units) */
+	unsigned int Ki;
+	/** Derivative gain (micro-units) */
+	unsigned int Kd;
+	/** (Optional) Control supressed when process variable  is within set point +/- hysteresis */
+	unsigned int hysteresis;
+	/** (Optional) Boundary limits for integral component */
+	struct no_os_pid_range i_clip;
+	/** (Optional) Boundary limits for the output (for example, for an 8-bit controlled PWM, one would clip the output to 0-255 range) */
+	struct no_os_pid_range output_clip;
+	/** (Optional) Initial output */
+	int initial;
+};
+
+struct no_os_pid;
+
+int no_os_pid_init(struct no_os_pid **pid, struct no_os_pid_config config);
+int no_os_pid_control(struct no_os_pid *pid, int SP, int PV, int *output);
+int no_os_pid_remove(struct no_os_pid *pid);
+
+#endif
