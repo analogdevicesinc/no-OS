@@ -82,11 +82,12 @@ static err_t mxc_eth_netif_output(struct netif *netif, struct pbuf *p)
 	LINK_STATS_INC(link.xmit);
 	pbuf_copy_partial(p, mxc_lwip_internal_buff, p->tot_len, 0);
 
-	memcpy(&buff.mac_dest, mxc_lwip_internal_buff, 14);
+	memcpy(&buff.mac_dest, &mxc_lwip_internal_buff[0], 6);
 	memcpy(&buff.mac_source, &mxc_lwip_internal_buff[6], 6);
 	buff.ethertype = no_os_get_unaligned_be16(&mxc_lwip_internal_buff[12]);
 
-	buff.payload_len = p->tot_len;
+	/* Only get the payload length by removing the ethernet header */
+	buff.payload_len = p->tot_len - ADIN1110_ETH_HDR_LEN;
 	buff.payload = &mxc_lwip_internal_buff[14];
 
 	ret = adin1110_write_fifo(mac_desc, 0, &buff);
@@ -146,7 +147,8 @@ static struct pbuf *get_recvd_frames(struct adin1110_desc *mac_desc)
 	memcpy(mxc_lwip_internal_buff + offset, mac_buff.payload, mac_buff.payload_len);
 	p = pbuf_alloc(PBUF_RAW, eth_data_len, PBUF_POOL);
 	if (p != NULL)
-		pbuf_take(p, mxc_lwip_internal_buff, eth_data_len);
+		/* -2 because the field contains the 2 byte ADIN1110 header */
+		pbuf_take(p, mxc_lwip_internal_buff, eth_data_len - 2);
 
 	return p;
 }
