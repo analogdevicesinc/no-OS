@@ -72,7 +72,40 @@ include $(NO-OS)/tools/scripts/mqtt_srcs.mk
 
 endif
 
-LIB_TARGETS			+= $(IIO_LIB) $(MBEDTLS_LIBS) $(FATFS_LIB) $(MQTT_LIB)
+#	AZURE_SDK_FOR_C
+ifneq ($(if $(findstring azure-sdk-for-c, $(LIBRARIES)), 1),)
+
+include $(NO-OS)/tools/scripts/azure_sdk_for_c.mk
+
+AZURE_LIBS			= $(AZURE_DIR_BUILD_LIBS)/iot/libaz_iot_hub.a
+AZURE_LIBS			+= $(AZURE_DIR_BUILD_LIBS)/iot/libaz_iot_provisioning.a
+AZURE_LIBS			+= $(AZURE_DIR_BUILD_LIBS)/platform/libaz_noplatform.a
+AZURE_LIBS			+= $(AZURE_DIR_BUILD_LIBS)/platform/libaz_nohttp.a
+AZURE_LIBS			+= $(AZURE_DIR_BUILD_LIBS)/iot/libaz_iot_adu.a
+AZURE_LIBS			+= $(AZURE_DIR_BUILD_LIBS)/iot/libaz_iot_common.a
+AZURE_LIBS			+= $(AZURE_DIR_BUILD_LIBS)/core/libaz_core.a
+
+EXTRA_LIBS			+= $(AZURE_LIBS)
+EXTRA_LIBS_PATHS		+= $(AZURE_DIR_BUILD_LIBS)/iot
+EXTRA_LIBS_PATHS		+= $(AZURE_DIR_BUILD_LIBS)/platform
+EXTRA_LIBS_PATHS		+= $(AZURE_DIR_BUILD_LIBS)/core
+
+AZURE_BUILD_CMD = $(shell mkdir -p $(AZURE_DIR_BUILD) && \
+		    cd $(AZURE_DIR_BUILD) && \
+		    cmake -DCMAKE_TOOLCHAIN_FILE=../cmake-modules/gcc-arm-toolchain.cmake .. >/dev/null && \
+		    cmake --build . >/dev/null)
+
+CLEAN_AZURE = $(shell rm -rf $(AZURE_DIR_BUILD))
+
+$(AZURE_LIBS):
+	$(AZURE_BUILD_CMD)
+
+# Custom settings
+CFLAGS += -I$(AZURE_DIR)/sdk/inc
+
+endif
+
+LIB_TARGETS			+= $(IIO_LIB) $(MBEDTLS_LIBS) $(FATFS_LIB) $(MQTT_LIB) $(AZURE_LIBS)
 EXTRA_LIBS_NAMES	= $(subst lib,,$(basename $(notdir $(EXTRA_LIBS))))
 LIB_FLAGS			+= $(addprefix -l,$(EXTRA_LIBS_NAMES))
 LIB_PATHS			+= $(addprefix -L,$(EXTRA_LIBS_PATHS))
@@ -95,3 +128,4 @@ clean_libs:
 	-$(CLEAN_FATFS)
 	-$(CLEAN_MQTT)
 	-$(CLEAN_IIO)
+	-$(CLEAN_AZURE)
