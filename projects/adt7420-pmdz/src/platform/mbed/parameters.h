@@ -1,9 +1,10 @@
 /***************************************************************************//**
- *   @file   platform_includes.h
- *   @brief  Includes for used platforms used by adt7420-pmdz project.
- *   @author RNechita (ramona.nechita@analog.com)
+ *   @file   parameters.h
+ *   @brief  Definitions specific to Mbed platform used by adt7420-pmdz
+ *           project.
+ *   @author CMinajigi (chandrakant.minajigi@analog.com)
 ********************************************************************************
- * Copyright 2022(c) Analog Devices, Inc.
+ * Copyright 2023(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -36,20 +37,35 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __PLATFORM_INCLUDES_H__
-#define __PLATFORM_INCLUDES_H__
+#ifndef __PARAMETERS_H__
+#define __PARAMETERS_H__
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#ifdef MAXIM_PLATFORM
-#include "maxim/parameters.h"
-#elif  MBED_PLATFORM
-#include "mbed/parameters.h"
-#endif
+#include <PinNames.h>
+#include "mbed_uart.h"
+#include "mbed_i2c.h"
+#include "no_os_uart.h"
 
-#ifdef IIO_SUPPORT
-#include "iio_app.h"
-#endif
+/******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
 
-#endif /* __PLATFORM_INCLUDES_H__ */
+#define UART_TX_PIN	    CONSOLE_TX
+#define	UART_RX_PIN	    CONSOLE_RX
+#define UART_DEVICE_ID  0
+#define UART_IRQ_ID     0
+#define UART_BAUDRATE   115200
+#define UART_OPS        &mbed_uart_ops
+
+/* I2C Pin mapping for Arduino interface */
+#define I2C_SCL         ARDUINO_UNO_D15
+#define I2C_SDA         ARDUINO_UNO_D14
+#define I2C_DEVICE_ID   0
+#define I2C_OPS         &mbed_i2c_ops
+
+extern struct mbed_uart_init_param xuip;
+extern struct mbed_i2c_init_param adt7420_i2c_extra;
+
+#endif /* __PARAMETERS_H__ */

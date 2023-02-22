@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   platform_includes.h
- *   @brief  Includes for used platforms used by adt7420-pmdz project.
- *   @author RNechita (ramona.nechita@analog.com)
+ *   @file   parameters.c
+ *   @brief  Definition of Mbed platform data used by adt7420-pmdz project.
+ *   @author CMinajigi (chandrakant.minajigi@analog.com)
 ********************************************************************************
- * Copyright 2022(c) Analog Devices, Inc.
+ * Copyright 2023(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -36,20 +36,21 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __PLATFORM_INCLUDES_H__
-#define __PLATFORM_INCLUDES_H__
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#ifdef MAXIM_PLATFORM
-#include "maxim/parameters.h"
-#elif  MBED_PLATFORM
-#include "mbed/parameters.h"
-#endif
+#include "parameters.h"
 
-#ifdef IIO_SUPPORT
-#include "iio_app.h"
-#endif
+/******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
+struct mbed_uart_init_param xuip = {
+	.uart_tx_pin = UART_TX_PIN,
+	.uart_rx_pin = UART_RX_PIN
+};
 
-#endif /* __PLATFORM_INCLUDES_H__ */
+struct mbed_i2c_init_param adt7420_i2c_extra = {
+	.i2c_sda_pin = I2C_SDA,
+	.i2c_scl_pin = I2C_SCL
+};
