@@ -399,18 +399,18 @@ int adin1110_write_fifo(struct adin1110_desc *desc, uint32_t port,
 	 * The MAC is by default configured to add the frame check sequence, so it's
 	 * length shouldn't be added here.
 	 */
-	if (eth_buff->payload_len + ADIN1110_FCS_LEN < 64)
-		padding = 64 - (eth_buff->payload_len + ADIN1110_FCS_LEN);
+	if (eth_buff->payload_len + ADIN1110_ETH_HDR_LEN + ADIN1110_FCS_LEN < 64)
+		padding = 64 - (eth_buff->payload_len + ADIN1110_ETH_HDR_LEN + ADIN1110_FCS_LEN);
 
-	frame_len = eth_buff->payload_len + padding + ADIN1110_FRAME_HEADER_LEN;
+	frame_len = eth_buff->payload_len + padding + ADIN1110_ETH_HDR_LEN + ADIN1110_FRAME_HEADER_LEN;
+
+	ret = adin1110_reg_write(desc, ADIN1110_TX_FSIZE_REG,
+				 frame_len);
+	if (ret)
+		return ret;
 
 	/** Align the frame length to 4 bytes */
 	frame_len = frame_len + frame_len % 4;
-
-	ret = adin1110_reg_write(desc, ADIN1110_TX_FSIZE_REG,
-				 frame_len - ADIN1110_FRAME_HEADER_LEN);
-	if (ret)
-		return ret;
 
 	no_os_put_unaligned_be16(ADIN1110_TX_REG, &desc->tx_buff[0]);
 	desc->tx_buff[0] |= ADIN1110_SPI_CD | ADIN1110_SPI_RW;
@@ -449,6 +449,7 @@ int adin1110_read_fifo(struct adin1110_desc *desc, uint32_t port,
 		       struct adin1110_eth_buff *eth_buff)
 {
 	uint32_t field_offset = ADIN1110_RD_HEADER_LEN;
+	uint32_t payload_length;
 	uint32_t fifo_fsize_reg;
 	uint32_t frame_size;
 	uint32_t fifo_reg;
@@ -475,6 +476,7 @@ int adin1110_read_fifo(struct adin1110_desc *desc, uint32_t port,
 	if (ret)
 		return ret;
 
+	payload_length = frame_size - ADIN1110_FRAME_HEADER_LEN - ADIN1110_ETH_HDR_LEN;
 	if (frame_size < ADIN1110_FRAME_HEADER_LEN + ADIN1110_FEC_LEN)
 		return ret;
 
@@ -507,10 +509,7 @@ int adin1110_read_fifo(struct adin1110_desc *desc, uint32_t port,
 	eth_buff->ethertype = no_os_get_unaligned_le16(&desc->rx_buff[field_offset]);
 	field_offset += ADIN1110_ETHERTYPE_LEN;
 	memcpy(eth_buff->payload, &desc->rx_buff[field_offset], frame_size);
-	eth_buff->payload_len = frame_size;
-
-	// /* Clear RX FIFO (just for testing) */
-	// adin1110_reg_write(desc, 0x36, 1);
+	eth_buff->payload_len = payload_length;
 
 	return 0;
 }
