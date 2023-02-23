@@ -85,4 +85,6 @@ void MXC_ETH_RecvIrq(void);
  */
 int MXC_ETH_Tick(void);
 
+extern const struct network_interface maxim_net;
+
 #endif /* _MAX_ETH_H_ */
