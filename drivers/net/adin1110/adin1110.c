@@ -410,7 +410,7 @@ int adin1110_write_fifo(struct adin1110_desc *desc, uint32_t port,
 		return ret;
 
 	/** Align the frame length to 4 bytes */
-	frame_len = frame_len + frame_len % 4;
+	frame_len = (frame_len + 3) & ~0x03;
 
 	no_os_put_unaligned_be16(ADIN1110_TX_REG, &desc->tx_buff[0]);
 	desc->tx_buff[0] |= ADIN1110_SPI_CD | ADIN1110_SPI_RW;
@@ -424,7 +424,7 @@ int adin1110_write_fifo(struct adin1110_desc *desc, uint32_t port,
 	no_os_put_unaligned_be16(port, &desc->tx_buff[field_offset]);
 	field_offset += ADIN1110_FRAME_HEADER_LEN;
 
-	xfer.bytes_number = frame_len;
+	xfer.bytes_number = frame_len + field_offset;
 
 	memcpy(&desc->tx_buff[field_offset], eth_buff->mac_dest, ADIN1110_ETH_ALEN);
 	field_offset += ADIN1110_ETH_ALEN;
@@ -484,9 +484,6 @@ int adin1110_read_fifo(struct adin1110_desc *desc, uint32_t port,
 	desc->tx_buff[0] |= ADIN1110_SPI_CD;
 	desc->tx_buff[2] = 0x00;
 
-	/* Can only read multiples of 4 bytes (the last bytes might be 0) */
-	xfer.bytes_number = frame_size + frame_size % 4;
-
 	if (desc->append_crc) {
 		desc->tx_buff[2] = no_os_crc8(_crc_table, desc->tx_buff, 2, 0);
 		field_offset ++;
@@ -495,6 +492,11 @@ int adin1110_read_fifo(struct adin1110_desc *desc, uint32_t port,
 	/* Set the port from which to receive the frame */
 	no_os_put_unaligned_be16(port, &desc->tx_buff[field_offset]);
 	field_offset += ADIN1110_FRAME_HEADER_LEN;
+
+	frame_size = (frame_size + 3) & ~0x3;
+
+	/* Can only read multiples of 4 bytes (the last bytes might be 0) */
+	xfer.bytes_number = frame_size + field_offset;
 
 	/** Burst read the whole frame */
 	ret = no_os_spi_transfer(desc->comm_desc, &xfer, 1);
