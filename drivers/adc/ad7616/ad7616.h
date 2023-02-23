@@ -82,7 +82,7 @@
 
 /* AD7616_REG_SEQUENCER_STACK(x) */
 #define AD7616_ADDR(x)					(((x) & 0x7F) << 9)
-#define AD7616_SSREN					(1 << 8)
+#define AD7616_SSREN(x)					((x) << 8)
 #define AD7616_BSEL(x)					(((x) & 0xF) << 4)
 #define AD7616_ASEL(x)					(((x) & 0xF) << 0)
 
@@ -143,6 +143,47 @@ enum ad7616_osr {
 	AD7616_OSR_128,
 };
 
+enum ad7616_seq_addr {
+	AD7616_AD0,
+	AD7616_AD1,
+	AD7616_AD2,
+	AD7616_AD3,
+	AD7616_AD4,
+	AD7616_AD5,
+	AD7616_AD6,
+	AD7616_AD7,
+	AD7616_ADP,
+};
+
+enum ad7616_seq_ssren {
+	AD7616_SRREN_0 = 0,
+	AD7616_SSREN_1 = 1,
+};
+
+enum ad7616_seq_bsel {
+	AD7616_CH_B0,
+	AD7616_CH_B1,
+	AD7616_CH_B2,
+	AD7616_CH_B3,
+	AD7616_CH_B4,
+	AD7616_CH_B5,
+	AD7616_CH_B6,
+	AD7616_CH_B7,
+	AD7616_CH_BP,
+};
+
+enum ad7616_seq_asel {
+	AD7616_CH_A0,
+	AD7616_CH_A1,
+	AD7616_CH_A2,
+	AD7616_CH_A3,
+	AD7616_CH_A4,
+	AD7616_CH_A5,
+	AD7616_CH_A6,
+	AD7616_CH_A7,
+	AD7616_CH_AP,
+};
+
 struct ad7616_dev {
 	/* SPI */
 	struct no_os_spi_desc		*spi_desc;
@@ -181,14 +222,18 @@ struct ad7616_init_param {
 	struct no_os_gpio_init_param		*gpio_os1_param;
 	struct no_os_gpio_init_param		*gpio_os2_param;
 	/** PWM */
-	struct no_os_pwm_init_param             *trigger_pwm_init;
+	struct no_os_pwm_init_param         *trigger_pwm_init;
 	/* Core */
 	uint32_t			core_baseaddr;
 	/* Device Settings */
-	enum ad7616_mode			mode;
+	enum ad7616_mode	    mode;
 	enum ad7616_range		va[8];
 	enum ad7616_range		vb[8];
 	enum ad7616_osr			osr;
+	enum ad7616_seq_addr    seq_addr[8];
+	enum ad7616_seq_ssren   seq_ssren[8];
+	enum ad7616_seq_bsel    seq_bsel[8];
+	enum ad7616_seq_asel    seq_asel[8];
 	void (*dcache_invalidate_range)(uint32_t address, uint32_t bytes_count);
 };
 
@@ -241,6 +286,12 @@ int32_t ad7616_set_mode(struct ad7616_dev *dev,
 /* Set the oversampling ratio. */
 int32_t ad7616_set_oversampling_ratio(struct ad7616_dev *dev,
 				      enum ad7616_osr osr);
+/* Set the sequencer stack registers. */
+int32_t ad7616_set_sequencer_stack_registers(struct ad7616_dev *dev,
+				      enum ad7616_seq_addr seq_addr,
+					  enum ad7616_seq_ssren seq_ssren,
+					  enum ad7616_seq_bsel seq_bsel,
+					  enum ad7616_seq_asel seq_asel);
 /* Read data in serial mode. */
 int32_t ad7616_read_data_serial(struct ad7616_dev *dev,
 				uint32_t *buf,
