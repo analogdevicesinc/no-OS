@@ -687,3 +687,17 @@ static void max_eth_config_noos_if(struct max_eth_desc *desc)
 
 	net->net = desc;
 }
+
+const struct network_interface maxim_net = {
+	.socket_open = max_socket_open,
+	.socket_bind = max_socket_bind,
+	.socket_listen = max_socket_listen,
+	.socket_accept = max_socket_accept,
+	.socket_connect = max_socket_connect,
+	.socket_recv = max_socket_recv,
+	.socket_send = max_socket_send,
+	.socket_recvfrom = max_socket_recvfrom,
+	.socket_sendto = max_socket_sendto,
+	.socket_disconnect = max_socket_disconnect,
+	.socket_close = max_socket_close,
+};

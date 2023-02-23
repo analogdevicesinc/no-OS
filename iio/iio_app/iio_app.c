@@ -61,6 +61,9 @@
 #if defined(MAXIM_PLATFORM)
 #include "maxim_irq.h"
 #include "maxim_uart.h"
+#include "no_os_irq.h"
+#include "no_os_error.h"
+#include "max_eth.h"
 #endif
 
 #ifdef NO_OS_NETWORKING
@@ -168,6 +171,9 @@ static int32_t network_setup(struct iio_init_param *iio_init_param,
 {
 	static struct tcp_socket_init_param socket_param;
 
+#ifdef MAXIM_PLATFORM
+	socket_param.net = &maxim_net;
+#endif
 #ifdef LINUX_PLATFORM
 	socket_param.net = &linux_net;
 #endif
@@ -207,7 +213,7 @@ static int32_t network_setup(struct iio_init_param *iio_init_param,
 static int32_t uart_setup(struct no_os_uart_desc **uart_desc,
 			  struct no_os_uart_init_param *uart_init_par)
 {
-#ifdef LINUX_PLATFORM
+#ifdef LINUX_PLATFORM || MAXIM_PLATFORM
 	*uart_desc = NULL;
 	return 0;
 #endif

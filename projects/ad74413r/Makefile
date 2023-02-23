@@ -6,6 +6,8 @@ IIO_TRIGGER_EXAMPLE = n
 PLATFORM = maxim
 TARGET = max32650
 
+CFLAGS += -DNO_OS_NETWORKING
+
 include ../../tools/scripts/generic_variables.mk
 
 include src.mk
