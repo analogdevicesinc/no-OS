@@ -371,7 +371,7 @@ static inline void start_conn_read(struct at_desc *desc, bool is_new_message)
 	struct connection_desc	*conn;
 	uint8_t			*buff;
 	uint32_t		available_len;
-	uint32_t		ret;
+	int32_t			ret;
 
 	conn = &desc->conn[desc->current_conn];
 
