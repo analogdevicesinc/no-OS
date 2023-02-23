@@ -414,6 +414,32 @@ int32_t ad7616_write_mask(struct ad7616_dev *dev,
 }
 
 /**
+ * SPI write to device to configure the sequencer.
+ * @param dev - The device structure.
+ * @param reg_addr - The register address.
+ * @param ssren - The SSREN.
+ * @param bsel - The register data for channel B.
+ * @param asel - The register data for channel A.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad7616_write_seq(struct ad7616_dev *dev,
+			  uint8_t seq_addr,
+			  uint8_t seq_ssren,
+			  uint8_t seq_bsel,
+			  uint8_t seq_asel)
+{
+	uint8_t buf[2];
+	int32_t ret;
+
+	buf[0] = 0x80 | ((seq_addr & 0x3F) << 1) | (seq_ssren & 0x01);
+	buf[1] = ((seq_bsel & 0x0F) << 4) | (seq_asel & 0x0F);
+	ret = no_os_spi_write_and_read(dev->spi_desc, buf, 2);
+
+	return ret;
+}
+
+
+/**
  * SPI read from device.
  * @param dev - The device structure.
  * @param reg_addr - The register address.
@@ -607,6 +633,60 @@ int32_t ad7616_set_oversampling_ratio(struct ad7616_dev *dev,
 }
 
 #ifdef PLATFORM_ZYNQMP
+/**
+ * Set the sequencer stack registers.
+ * @param dev - The device structure.
+ * @param seq_addr - The sequencer stack registers address.
+ * 			   Accepted values: AD7616_AD0
+ * 								AD7616_AD1
+ * 								AD7616_VA2
+ * 								AD7616_AD2
+ * 								AD7616_AD4
+ * 								AD7616_VA5
+ * 								AD7616_AD6
+ * 								AD7616_AD7
+ * @param seq_ssren - The sequencer stack registers SSREN.
+ *  		   Accepted values: AD7616_SSREN_0
+ *  							AD7616_SSREN_1
+ * @param seq_bsel - The sequencer stack registers channel B select.
+ *  		   Accepted values: AD7616_CH_B0
+ *  							AD7616_CH_B1
+ * 								AD7616_CH_B2
+ * 								AD7616_CH_B3
+ * 								AD7616_CH_B4
+ * 								AD7616_CH_B5
+ * 								AD7616_CH_B6
+ * 								AD7616_CH_B7
+ * 							    AD7616_CH_BP
+ * @param seq_asel - The sequencer stack registers channel A select.
+ *  		   Accepted values: AD7616_CH_A0
+ *  							AD7616_CH_A1
+ * 								AD7616_CH_A2
+ * 								AD7616_CH_A3
+ * 								AD7616_CH_A4
+ * 								AD7616_CH_A5
+ * 								AD7616_CH_A6
+ * 								AD7616_CH_A7
+ * 								AD7616_CH_AP
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad7616_set_sequencer_stack_registers(struct ad7616_dev *dev,
+				      enum ad7616_seq_addr seq_addr,
+					  enum ad7616_seq_ssren seq_ssren,
+					  enum ad7616_seq_bsel seq_bsel,
+					  enum ad7616_seq_asel seq_asel)
+{
+	int32_t ret = 0;
+
+	if (dev->mode == AD7616_SW) {
+		ret = ad7616_write_seq(dev, AD7616_ADDR(seq_addr),
+				    AD7616_SSREN(seq_ssren),
+					AD7616_BSEL(seq_bsel),
+					AD7616_ASEL(seq_asel));
+    }
+	return ret;
+}
+
 /**
  * @brief Read from device in serial mode.
  *        Enter register mode to read/write registers,

@@ -65,7 +65,7 @@
 /************************ Variables Definitions *******************************/
 /******************************************************************************/
 #define AD7616_SDZ_SAMPLE_NO 10
-#define AD7616_SDZ_CH_NO 8
+#define AD7616_SDZ_CH_NO 1
 
 #if (HDL_AD7616_PARALLEL == 0)
 struct spi_engine_offload_init_param spi_engine_offload_init_param = {
@@ -140,6 +140,26 @@ struct ad7616_init_param init_param = {
 		AD7616_10V, AD7616_10V, AD7616_10V, AD7616_10V
 	},
 	.osr = AD7616_OSR_0,
+	.seq_addr = {
+		AD7616_ADP, AD7616_ADP, AD7616_ADP,
+		AD7616_ADP, AD7616_ADP, AD7616_ADP,
+		AD7616_ADP, AD7616_ADP
+	},
+	.seq_ssren = {
+		AD7616_SRREN_0, AD7616_SRREN_0, AD7616_SRREN_0,
+		AD7616_SRREN_0, AD7616_SRREN_0, AD7616_SRREN_0,
+		AD7616_SRREN_0, AD7616_SSREN_1
+	},
+	.seq_bsel = {
+		AD7616_CH_BP, AD7616_CH_BP, AD7616_CH_BP,
+		AD7616_CH_BP, AD7616_CH_BP, AD7616_CH_BP,
+		AD7616_CH_BP, AD7616_CH_BP
+	},
+	.seq_asel = {
+		AD7616_CH_AP, AD7616_CH_AP, AD7616_CH_AP,
+		AD7616_CH_AP, AD7616_CH_AP, AD7616_CH_AP,
+		AD7616_CH_AP, AD7616_CH_AP
+	},
 	.dcache_invalidate_range =
 	(void (*)(uint32_t, uint32_t))Xil_DCacheInvalidateRange,
 };
@@ -163,6 +183,20 @@ int main(void)
 	pr_info("AD7616 Reference Design.\n");
 
 	ad7616_setup(&dev, &init_param);
+
+	//ad7616_spi_write(dev, 0x20, 0x41BB);
+	ad7616_write_mask(dev, 0x2, 0x20, 0x20); // SEQ EN
+	ad7616_spi_write(dev, 0x20, 0x41BB);
+	uint16_t val;
+	ad7616_spi_read(dev, 0x20, &val);
+	printf("reg 0x20: 0x%x\n", val);
+	uint16_t val2;
+	ad7616_spi_read(dev, 0x3, &val2);
+	printf("reg 0x3: 0x%x\n", val2);
+	uint16_t val3;
+	ad7616_spi_read(dev, AD7616_CTRL_RESETN, &val3);
+	printf("reg AD7616_CTRL_RESETN: 0x%x\n", val3);
+
 
 	if(dev->interface == AD7616_PARALLEL)
 		ad7616_read_data_parallel(dev, buf, AD7616_SDZ_SAMPLE_NO);
