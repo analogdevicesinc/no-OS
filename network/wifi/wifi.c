@@ -542,7 +542,7 @@ static int32_t wifi_socket_connect(struct wifi_desc *desc, uint32_t sock_id,
 				   struct socket_address *addr)
 {
 	union in_out_param	param;
-	uint32_t		ret;
+	int32_t			ret;
 	struct socket_desc	*sock;
 
 	if (!desc || !addr || sock_id >= NB_SOCKETS ||
@@ -592,7 +592,7 @@ static void _remove_server_back_log(struct wifi_desc *desc)
 static int32_t wifi_socket_disconnect(struct wifi_desc *desc, uint32_t sock_id)
 {
 	union in_out_param	param;
-	uint32_t		ret;
+	int32_t			ret;
 	struct socket_desc	*sock;
 
 	if (!desc || sock_id >= NB_SOCKETS)
@@ -635,7 +635,7 @@ static int32_t wifi_socket_send(struct wifi_desc *desc, uint32_t sock_id,
 				const void *data, uint32_t size)
 {
 	union in_out_param	param;
-	uint32_t		ret;
+	int32_t			ret;
 	struct socket_desc	*sock;
 	uint32_t		to_send;
 	uint32_t		i;
