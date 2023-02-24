@@ -90,7 +90,7 @@
  * 2000 is a eoungh to do the tls handshake and is no to much
  * platforms with memory constrains like ADuCM3029
  */
-#define MAX_CONTENT_LEN 2500
+//#define MAX_CONTENT_LEN 2500
 
 /*
  * ENABLE_MEMORY_OPTIMIZATIONS should be defined in the case memory
