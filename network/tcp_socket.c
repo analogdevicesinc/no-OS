@@ -48,7 +48,6 @@
 #include "no_os_util.h"
 
 #ifndef DISABLE_SECURE_SOCKET
-#include "mbedtls/ssl.h"
 #include "noos_mbedtls_config.h"
 #include "no_os_trng.h"
 #endif /* DISABLE_SECURE_SOCKET */
