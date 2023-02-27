@@ -348,8 +348,8 @@ int adin1110_mdio_read_c45(struct adin1110_desc *desc, uint32_t phy_id,
  * @param mac_address - the MAC filter to be set
  * @return 0 in case of success, negative error code otherwise
  */
-static int adin1110_mac_addr_set(struct adin1110_desc *desc,
-				 uint8_t mac_address[ADIN1110_ETH_ALEN])
+int adin1110_mac_addr_set(struct adin1110_desc *desc,
+			  uint8_t mac_address[ADIN1110_ETH_ALEN])
 {
 	uint32_t reg_val;
 	int ret;
