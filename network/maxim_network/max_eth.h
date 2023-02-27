@@ -48,6 +48,8 @@ struct max_eth_desc {
 	struct no_os_irq_desc *nvic;
 	struct no_os_timer_desc *lwip_tick;
 	struct no_os_callback_desc *tick_callback;
+	struct no_os_timer_desc *tcp_timer;
+	struct no_os_callback_desc *tcp_timer_callback;
 
 	struct network_interface noos_net;
 	struct socket_desc sockets[MAX_SOCKETS];
@@ -85,6 +87,6 @@ void MXC_ETH_RecvIrq(void);
  */
 int MXC_ETH_Tick(void);
 
-extern const struct network_interface maxim_net;
+extern struct network_interface maxim_net;
 
 #endif /* _MAX_ETH_H_ */

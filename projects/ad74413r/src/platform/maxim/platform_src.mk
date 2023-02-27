@@ -15,6 +15,7 @@ SRCS += $(PLATFORM_DRIVERS)/maxim_delay.c     \
         $(PLATFORM_DRIVERS)/maxim_gpio.c      \
         $(PLATFORM_DRIVERS)/maxim_spi.c       \
         $(PLATFORM_DRIVERS)/maxim_rtc.c       \
+        $(PLATFORM_DRIVERS)/maxim_init.c       \
         $(PLATFORM_DRIVERS)/maxim_timer.c       \
         $(PLATFORM_DRIVERS)/maxim_gpio_irq.c  \
         $(PLATFORM_DRIVERS)/maxim_irq.c       \

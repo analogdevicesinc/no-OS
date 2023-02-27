@@ -203,7 +203,6 @@ static int32_t network_setup(struct iio_init_param *iio_init_param,
 			     void *irq_desc)
 {
 	static struct tcp_socket_init_param socket_param;
-
 #ifdef MAXIM_PLATFORM
 	socket_param.net = &maxim_net;
 #endif

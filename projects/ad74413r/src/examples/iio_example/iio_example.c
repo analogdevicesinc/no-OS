@@ -125,7 +125,7 @@ int iio_example_main()
 	struct no_os_timer_init_param eth_tick_param = {
 		.id = 0,
 		.freq_hz = 64000,
-		.ticks_count = 600,
+		.ticks_count = 200,
 		.platform_ops = &max_timer_ops,
 		.extra = NULL,
 	};
@@ -152,6 +152,8 @@ int iio_example_main()
 	ret = max_eth_init(&netif_desc, &eth_param);
 	if (ret)
 		return ret;
+
+	maxim_net.net = netif_desc->state;
 
 	// eth_desc = netif_desc->state;
 	// ret = eth_desc->noos_net.socket_open(eth_desc, 0, 0, 100);

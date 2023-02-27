@@ -268,6 +268,9 @@ int adin1110_link_state(struct adin1110_desc *, uint32_t *);
 /* Set a port in promiscuous mode. All MAC filters are dropped */
 int adin1110_set_promisc(struct adin1110_desc *, uint32_t, bool);
 
+int adin1110_mac_addr_set(struct adin1110_desc *desc,
+			  uint8_t mac_address[ADIN1110_ETH_ALEN]);
+
 /* Reset the MAC device */
 int adin1110_mac_reset(struct adin1110_desc *);
 
