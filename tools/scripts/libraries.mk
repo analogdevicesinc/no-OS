@@ -30,7 +30,10 @@ EXTRA_LIBS_PATHS			+= $(MBEDTLS_LIB_DIR)
 EXTRA_INC_PATHS		+= $(MBEDTLS_DIR)/include
 
 #Rules
+#If no application specific mbedtls config file is defined, use the standard one.
+ifeq ($(MBED_TLS_CONFIG_FILE),)
 MBED_TLS_CONFIG_FILE = $(NO-OS)/network/noos_mbedtls_config.h
+endif
 CLEAN_MBEDTLS	= $(call remove_file,$(MBEDTLS_LIB_DIR)/*.o $(MBEDTLS_LIBS))
 $(MBEDTLS_LIB_DIR)/libmbedcrypto.a: $(MBED_TLS_CONFIG_FILE)
 	-$(CLEAN_MBEDTLS)
