@@ -426,6 +426,7 @@ int adin1110_write_fifo(struct adin1110_desc *desc, uint32_t port,
 
 	xfer.bytes_number = frame_len + field_offset;
 
+	memset(&desc->tx_buff[field_offset], 0, frame_len);
 	memcpy(&desc->tx_buff[field_offset], eth_buff->mac_dest, ADIN1110_ETH_ALEN);
 	field_offset += ADIN1110_ETH_ALEN;
 	memcpy(&desc->tx_buff[field_offset], eth_buff->mac_source, ADIN1110_ETH_ALEN);
