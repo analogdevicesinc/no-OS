@@ -86,28 +86,38 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy,
 	int32_t rev = 0;
 	int32_t i   = 0;
 
-	phy = (struct ad9361_rf_phy *)zmalloc(sizeof(*phy));
+	phy = (struct ad9361_rf_phy *)calloc(1, sizeof(*phy));
 	if (!phy) {
 		return -ENOMEM;
 	}
 
-	phy->clk_refin = (struct no_os_clk *)zmalloc(sizeof(*phy->clk_refin));
+	phy->clk_refin = (struct no_os_clk *)calloc(1, sizeof(*phy->clk_refin));
 	if (!phy->clk_refin) {
+		free(phy);
 		return -ENOMEM;
 	}
 
-	phy->pdata = (struct ad9361_phy_platform_data *)zmalloc(sizeof(*phy->pdata));
+	phy->pdata = (struct ad9361_phy_platform_data *)calloc(1, sizeof(*phy->pdata));
 	if (!phy->pdata) {
+		free(phy->clk_refin);
+		free(phy);
 		return -ENOMEM;
 	}
 #ifndef AXI_ADC_NOT_PRESENT
-	phy->adc_conv = (struct axiadc_converter *)zmalloc(sizeof(*phy->adc_conv));
+	phy->adc_conv = (struct axiadc_converter *)calloc(1, sizeof(*phy->adc_conv));
 	if (!phy->adc_conv) {
+		free(phy->pdata);
+		free(phy->clk_refin);
+		free(phy);
 		return -ENOMEM;
 	}
 
-	phy->adc_state = (struct axiadc_state *)zmalloc(sizeof(*phy->adc_state));
+	phy->adc_state = (struct axiadc_state *)calloc(1, sizeof(*phy->adc_state));
 	if (!phy->adc_state) {
+		free(phy->adc_conv);
+		free(phy->pdata);
+		free(phy->clk_refin);
+		free(phy);
 		return -ENOMEM;
 	}
 	phy->adc_state->phy = phy;
