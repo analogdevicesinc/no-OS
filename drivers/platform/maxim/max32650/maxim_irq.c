@@ -389,7 +389,7 @@ int32_t max_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 		break;
 
 	case NO_OS_TIM_IRQ:
-		if (_events[NO_OS_EVT_RTC].actions == NULL) {
+		if (_events[NO_OS_EVT_TIM_ELAPSED].actions == NULL) {
 			ret = no_os_list_init(&_events[NO_OS_EVT_TIM_ELAPSED].actions,
 					      NO_OS_LIST_PRIORITY_LIST,
 					      irq_action_cmp);
@@ -397,8 +397,8 @@ int32_t max_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 				return ret;
 		}
 
-		ret = no_os_list_read_first(_events[NO_OS_EVT_TIM_ELAPSED].actions,
-					    (void **)&action);
+		ret = no_os_list_read_find(_events[NO_OS_EVT_TIM_ELAPSED].actions,
+					   (void **)&action, &action_key);
 		if (ret) {
 			action = calloc(1, sizeof(*action));
 			if (!action)

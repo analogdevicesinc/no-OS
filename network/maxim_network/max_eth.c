@@ -124,9 +124,8 @@ static err_t max_eth_netif_init(struct netif *netif)
 
 static struct pbuf *get_recvd_frames(struct adin1110_desc *mac_desc)
 {
-	int eth_data_len;
+	uint32_t eth_data_len;
 	size_t offset = 0;
-	uint8_t buff_dbg[100];
 	struct adin1110_eth_buff mac_buff;
 	struct pbuf *p = NULL;
 	int ret;
@@ -150,6 +149,7 @@ static struct pbuf *get_recvd_frames(struct adin1110_desc *mac_desc)
 	memcpy(mxc_lwip_internal_buff + offset, &mac_buff.ethertype, 2);
 	offset += 2;
 	memcpy(mxc_lwip_internal_buff + offset, mac_buff.payload, mac_buff.payload_len);
+	//memcpy(mxc_lwip_internal_buff, mac_buff.mac_dest, mac_buff.payload_len + ADIN1110_ETH_HDR_LEN);
 	p = pbuf_alloc(PBUF_RAW, eth_data_len, PBUF_POOL);
 	if (p != NULL)
 		/* -2 because the field contains the 2 byte ADIN1110 header */
@@ -158,11 +158,12 @@ static struct pbuf *get_recvd_frames(struct adin1110_desc *mac_desc)
 	return p;
 }
 
-static int max_lwip_tick(void *data)
+int max_lwip_tick(void *data)
 {
 	struct netif *netif_desc = data;
 	struct adin1110_desc *mac_desc;
 	struct max_eth_desc *eth_desc;
+	uint32_t dhcp_timeout = 100;
 	uint32_t link_status;
 	struct pbuf *p;
 	char *addr;
@@ -179,14 +180,27 @@ static int max_lwip_tick(void *data)
 
 	if (link_status != prev_link_status) {
 		netif_set_link_up(netif_desc);
-// //#if USE_DHCP
 		ret = dhcp_start(netif_desc);
 		if (ret)
 			return ret;
-// //#endif
+
+		// while (!netif_desc->ip_addr.addr && dhcp_timeout) {
+		// 	p = get_recvd_frames(mac_desc);
+		// 	if (p != NULL) {
+		// 		LINK_STATS_INC(link.recv);
+		// 		ret = netif_desc->input(p, netif_desc);
+		// 		if (ret) {
+		// 			pbuf_free(p);
+		// 			return ret;
+		// 		}
+
+		// 		dhcp_timeout--;
+		// 	}
+		// 	no_os_mdelay(1);
+		// }
 	}
 
-	prev_link_status = link_status;
+ 	prev_link_status = link_status;
 
 // 	if (link_status != prev_link_status) {
 // 		if (!link_status) {
@@ -212,7 +226,6 @@ static int max_lwip_tick(void *data)
 // 		}
 //  	}
 
-	addr = inet_ntoa(netif_desc->ip_addr);
 
 	p = get_recvd_frames(mac_desc);
 	// /** Check Received Frames **/
@@ -242,11 +255,32 @@ static int max_lwip_tick(void *data)
 
 static int lwip_tcp_tmr_tick(void *data)
 {
+	struct adin1110_desc *mac_desc;
 	struct max_eth_desc *eth_desc;
 	struct netif *netif_desc;
+	uint32_t link_status;
+	char *addr;
+	int ret;
 
 	netif_desc = data;
 	eth_desc = netif_desc->state;
+	mac_desc = eth_desc->mac_desc;
+
+	// /** Check Link State **/
+	// ret = adin1110_link_state(mac_desc, &link_status);
+	// if (ret)
+	// 	return ret;
+
+	// if (link_status != prev_link_status) {
+	// 	netif_set_link_up(netif_desc);
+	// 	ret = dhcp_start(netif_desc);
+	// 	if (ret)
+	// 		return ret;
+	// }
+
+	//prev_link_status = link_status;
+
+	//addr = inet_ntoa(netif_desc->ip_addr);
 
 	tcp_tmr();
 	sys_check_timeouts();
@@ -263,6 +297,7 @@ int max_eth_init(struct netif **netif_desc, struct max_eth_param *param)
 	struct max_eth_desc *descriptor;
 	struct netif *netif_descriptor;
 	ip4_addr_t ipaddr, netmask, gw;
+	uint32_t reg_val;
 	char *addr;
 	int ret;
 
@@ -312,6 +347,15 @@ int max_eth_init(struct netif **netif_desc, struct max_eth_param *param)
 	ret = adin1110_init(&descriptor->mac_desc, &param->adin1110_ip);
 	if (ret)
 		goto free_tick;
+	
+	// ret = adin1110_reg_write(descriptor->mac_desc, ADIN1110_STATUS0_REG, NO_OS_BIT(6));
+	// if (ret)
+	// 	return ret;
+
+	// ret = adin1110_reg_write(descriptor->mac_desc, ADIN1110_IMASK1_REG,
+	// 			 NO_OS_GENMASK(31, 0 ) ^ NO_OS_BIT(4));
+	// if (ret)
+	// 	return ret;
 
 	/* Just for testing */
 	// ret = adin1110_set_promisc(descriptor->mac_desc, 0, true);
@@ -375,26 +419,26 @@ int max_eth_init(struct netif **netif_desc, struct max_eth_param *param)
 	if (ret)
 		goto free_tick;
 
-	// ret = no_os_irq_register_callback(descriptor->nvic, MXC_TMR_GET_IRQ(descriptor->tcp_timer->id),
-	// 				  descriptor->tcp_timer_callback);
-	// if (ret)
-	// 	goto free_tick;
+	ret = no_os_irq_register_callback(descriptor->nvic, MXC_TMR_GET_IRQ(descriptor->tcp_timer->id),
+					  descriptor->tcp_timer_callback);
+	if (ret)
+		goto free_tick;
 
 	ret = no_os_irq_enable(descriptor->nvic, MXC_TMR_GET_IRQ(param->tick_param.id));
 	if (ret)
 		goto free_tick;
 
-	// ret = no_os_irq_enable(descriptor->nvic, MXC_TMR_GET_IRQ(descriptor->tcp_timer->id));
-	// if (ret)
-	// 	goto free_tick;
+	ret = no_os_irq_enable(descriptor->nvic, MXC_TMR_GET_IRQ(descriptor->tcp_timer->id));
+	if (ret)
+		goto free_tick;
 
 	ret = no_os_timer_start(descriptor->lwip_tick);
 	if (ret)
 		return ret;
 
-	// ret = no_os_timer_start(descriptor->tcp_timer);
-	// if (ret)
-	// 	return ret;
+	ret = no_os_timer_start(descriptor->tcp_timer);
+	if (ret)
+		return ret;
 
 	max_eth_config_noos_if(descriptor);
 

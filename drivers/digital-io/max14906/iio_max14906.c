@@ -445,8 +445,10 @@ static int max14906_iio_write_config_iec(void *dev, char *buf, uint32_t len,
 
 	desc = iio_desc->max14906_desc;
 	for (i = 0; i < NO_OS_ARRAY_SIZE(max14906_iec_avail); i++) {
-		if (!strcmp(buf, max14906_iec_avail[i]))
+		if (!strcmp(buf, max14906_iec_avail[i])) {
 			iec_type = i;
+			break;
+		}
 
 		if (i == NO_OS_ARRAY_SIZE(max14906_iec_avail) - 1)
 			return -EINVAL;

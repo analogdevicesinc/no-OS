@@ -397,6 +397,7 @@ int32_t max_spi_transfer(struct no_os_spi_desc *desc,
 		req.ssDeassert = msgs[i].cs_change;
 		req.txLen = req.txData ? msgs[i].bytes_number : 0;
 		req.rxLen = req.rxData ? msgs[i].bytes_number : 0;
+		req.completeCB = NULL;
 
 		//_max_delay_config(desc, &msgs[i]);
 		ret = MXC_SPI_MasterTransaction(&req);

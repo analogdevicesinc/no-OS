@@ -125,7 +125,7 @@ int iio_example_main()
 	struct no_os_timer_init_param eth_tick_param = {
 		.id = 0,
 		.freq_hz = 64000,
-		.ticks_count = 200,
+		.ticks_count = 150,
 		.platform_ops = &max_timer_ops,
 		.extra = NULL,
 	};
