@@ -65,7 +65,8 @@ SRCS += $(NO-OS)/util/no_os_fifo.c \
 	$(NO-OS)/util/no_os_lf256fifo.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c
 endif
-SRCS +=	$(NO-OS)/util/no_os_util.c
+SRCS +=	$(NO-OS)/util/no_os_util.c \
+	$(NO-OS)/util/no_os_alloc.c
 ifeq (xilinx,$(strip $(PLATFORM)))
 SRCS += $(DRIVERS)/axi_core/jesd204/xilinx_transceiver.c \
 	$(DRIVERS)/axi_core/jesd204/axi_adxcvr.c \
@@ -145,6 +146,7 @@ INCS +=	$(INCLUDE)/no_os_axi_io.h \
 	$(INCLUDE)/no_os_error.h \
 	$(INCLUDE)/no_os_delay.h \
 	$(INCLUDE)/no_os_util.h \
+	$(INCLUDE)/no_os_alloc.h \
 	$(INCLUDE)/no_os_units.h \
 	$(INCLUDE)/no_os_print_log.h \
 	$(INCLUDE)/jesd204.h \

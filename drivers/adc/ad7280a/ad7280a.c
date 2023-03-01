@@ -44,6 +44,7 @@
 /******************************************************************************/
 #include <stdlib.h>
 #include "ad7280a.h"
+#include "no_os_alloc.h"
 
 /*****************************************************************************/
 /************************ Functions Definitions ******************************/
@@ -67,7 +68,7 @@ int8_t ad7280a_init(struct ad7280a_dev **device,
 	int8_t status;
 	uint32_t value;
 
-	dev = (struct ad7280a_dev *)malloc(sizeof(*dev));
+	dev = (struct ad7280a_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -133,7 +134,7 @@ int32_t ad7280a_remove(struct ad7280a_dev *dev)
 	ret |= no_os_gpio_remove(dev->gpio_cnvst);
 	ret |= no_os_gpio_remove(dev->gpio_alert);
 
-	free(dev);
+	no_os_free(dev);
 
 	return ret;
 }

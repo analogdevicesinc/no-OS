@@ -44,6 +44,7 @@
 #include "no_os_error.h"
 #include "no_os_uart.h"
 #include "no_os_lf256fifo.h"
+#include "no_os_alloc.h"
 #include "pico_uart.h"
 #include "pico_irq.h"
 #include "pico/stdlib.h"
@@ -86,11 +87,11 @@ static int32_t pico_uart_init(struct no_os_uart_desc **desc,
 	if (!desc || !param || !param->extra)
 		return -EINVAL;
 
-	descriptor = (struct no_os_uart_desc *) malloc(sizeof(*descriptor));
+	descriptor = (struct no_os_uart_desc *) no_os_malloc(sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
-	pico_uart = (struct pico_uart_desc *) malloc(sizeof(*pico_uart));
+	pico_uart = (struct pico_uart_desc *) no_os_malloc(sizeof(*pico_uart));
 	if (!pico_uart) {
 		ret = -ENOMEM;
 		goto error;
@@ -200,8 +201,8 @@ static int32_t pico_uart_init(struct no_os_uart_desc **desc,
 error_nvic:
 	no_os_irq_ctrl_remove(pico_uart->nvic);
 error:
-	free(descriptor);
-	free(pico_uart);
+	no_os_free(descriptor);
+	no_os_free(pico_uart);
 
 	return ret;
 }
@@ -230,8 +231,8 @@ static int32_t pico_uart_remove(struct no_os_uart_desc *desc)
 		no_os_irq_ctrl_remove(pico_uart->nvic);
 	}
 
-	free(desc->extra);
-	free(desc);
+	no_os_free(desc->extra);
+	no_os_free(desc);
 
 	return 0;
 };

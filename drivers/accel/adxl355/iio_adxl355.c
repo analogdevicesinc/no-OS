@@ -47,6 +47,7 @@
 #include "iio_adxl355.h"
 #include "adxl355.h"
 #include "no_os_units.h"
+#include "no_os_alloc.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -1046,7 +1047,7 @@ int adxl355_iio_init(struct adxl355_iio_dev **iio_dev,
 	int ret;
 	struct adxl355_iio_dev *desc;
 
-	desc = (struct adxl355_iio_dev *)calloc(1, sizeof(*desc));
+	desc = (struct adxl355_iio_dev *)no_os_calloc(1, sizeof(*desc));
 	if (!desc)
 		return -ENOMEM;
 
@@ -1079,11 +1080,11 @@ int adxl355_iio_init(struct adxl355_iio_dev **iio_dev,
 	return 0;
 
 error_adxl355_init:
-	free(desc);
+	no_os_free(desc);
 	return ret;
 error_config:
 	adxl355_remove(desc->adxl355_dev);
-	free(desc);
+	no_os_free(desc);
 	return ret;
 }
 
@@ -1102,7 +1103,7 @@ int adxl355_iio_remove(struct adxl355_iio_dev *desc)
 	if (ret)
 		return ret;
 
-	free(desc);
+	no_os_free(desc);
 
 	return 0;
 }

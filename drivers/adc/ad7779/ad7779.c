@@ -45,6 +45,7 @@
 #include "ad7779.h"
 #include "no_os_util.h"
 #include "no_os_error.h"
+#include "no_os_alloc.h"
 
 /******************************************************************************/
 /*************************** Constants Definitions ****************************/
@@ -1472,7 +1473,7 @@ int32_t ad7779_init(ad7779_dev **device,
 	uint8_t i;
 	int32_t ret;
 
-	dev = (ad7779_dev *)malloc(sizeof(*dev));
+	dev = (ad7779_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -1631,7 +1632,7 @@ int32_t ad7779_remove(ad7779_dev *dev)
 	ret |= no_os_gpio_remove(dev->gpio_sync_in);
 	ret |= no_os_gpio_remove(dev->gpio_convst_sar);
 
-	free(dev);
+	no_os_free(dev);
 
 	return ret;
 }

@@ -9,6 +9,7 @@
 #include "no_os_i2c.h"
 #include "tx_lib.h"
 #include "tx_isr.h"
+#include "no_os_alloc.h"
 
 CONSTANT UINT16 VicInfo[NUM_OF_VICS*4] = {
 	/* H     V     I   Hz */
@@ -252,7 +253,7 @@ UINT32 ATV_I2CReadField32 (UCHAR DevAddr, UCHAR RegAddr, UCHAR MsbMask,
 	uint32_t value = 0;
 	int8_t i;
 
-	read_data = calloc(FldSpan, sizeof *read_data);
+	read_data = no_os_calloc(FldSpan, sizeof *read_data);
 	if(!read_data)
 		return 0xDEADDEAD;
 
@@ -268,11 +269,11 @@ UINT32 ATV_I2CReadField32 (UCHAR DevAddr, UCHAR RegAddr, UCHAR MsbMask,
 		value |= (read_data[i] << (j++ * 8 - LsbPos));
 	}
 
-	free(read_data);
+	no_os_free(read_data);
 
 	return value;
 error:
-	free(read_data);
+	no_os_free(read_data);
 
 	return 0xDEADDEAD;
 }
@@ -307,7 +308,7 @@ UINT32 ATV_I2CReadField32LE (UCHAR DevAddr, UCHAR RegAddr, UCHAR MsbMask,
 	uint8_t *read_data, i;
 	uint32_t value = 0;
 
-	read_data = calloc(FldSpan, sizeof *read_data);
+	read_data = no_os_calloc(FldSpan, sizeof *read_data);
 	if(!read_data)
 		return 0xDEADDEAD;
 
@@ -323,11 +324,11 @@ UINT32 ATV_I2CReadField32LE (UCHAR DevAddr, UCHAR RegAddr, UCHAR MsbMask,
 		value |= read_data[i] << (i * 8 - LsbPos);
 	}
 
-	free(read_data);
+	no_os_free(read_data);
 
 	return value;
 error:
-	free(read_data);
+	no_os_free(read_data);
 
 	return 0xDEADDEAD;
 }
@@ -359,7 +360,7 @@ void ATV_I2CWriteField32 (UCHAR DevAddr, UCHAR RegAddr, UCHAR MsbMask,
 	uint8_t *read_data, j = 1;
 	int8_t i;
 
-	read_data = calloc(FldSpan, sizeof *read_data);
+	read_data = no_os_calloc(FldSpan, sizeof *read_data);
 	if(!read_data)
 		return;
 
@@ -382,7 +383,7 @@ void ATV_I2CWriteField32 (UCHAR DevAddr, UCHAR RegAddr, UCHAR MsbMask,
 
 	HAL_I2CWriteBlock(DevAddr, RegAddr, read_data, FldSpan);
 error:
-	free(read_data);
+	no_os_free(read_data);
 }
 
 /*===========================================================================
@@ -455,7 +456,7 @@ void ATV_I2CWriteField32LE (UCHAR DevAddr, UCHAR RegAddr, UCHAR MsbMask,
 	uint8_t *read_data, j = 0;
 	int8_t i;
 
-	read_data = calloc(FldSpan, sizeof *read_data);
+	read_data = no_os_calloc(FldSpan, sizeof *read_data);
 	if(!read_data)
 		return;
 
@@ -478,7 +479,7 @@ void ATV_I2CWriteField32LE (UCHAR DevAddr, UCHAR RegAddr, UCHAR MsbMask,
 
 	HAL_I2CWriteBlock(DevAddr, RegAddr, read_data, FldSpan);
 error:
-	free(read_data);
+	no_os_free(read_data);
 }
 
 /*===========================================================================
@@ -626,7 +627,7 @@ UINT16  HAL_I2CWriteBlock (UCHAR Dev, UCHAR Reg, UCHAR *Data,
 
 	i2c_handler->slave_address = i2c_addr;
 
-	data_write = calloc((NumberBytes + 1), sizeof *data_write);
+	data_write = no_os_calloc((NumberBytes + 1), sizeof *data_write);
 	if(!data_write)
 		return 0xDEAD;
 
@@ -638,11 +639,11 @@ UINT16  HAL_I2CWriteBlock (UCHAR Dev, UCHAR Reg, UCHAR *Data,
 	if(ret != 0)
 		goto error;
 
-	free(data_write);
+	no_os_free(data_write);
 
 	return 0;
 error:
-	free(data_write);
+	no_os_free(data_write);
 
 	return 0xDEAD;
 }

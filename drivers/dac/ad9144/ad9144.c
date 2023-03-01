@@ -45,6 +45,7 @@
 #include <stdbool.h>
 #include "ad9144.h"
 #include "no_os_error.h"
+#include "no_os_alloc.h"
 #include "no_os_print_log.h"
 
 struct ad9144_jesd204_link_mode {
@@ -983,7 +984,7 @@ int32_t ad9144_setup_legacy(struct ad9144_dev **device,
 	int32_t ret;
 	struct ad9144_dev *dev;
 
-	dev = (struct ad9144_dev *)malloc(sizeof(*dev));
+	dev = (struct ad9144_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -1139,7 +1140,7 @@ int32_t ad9144_setup_jesd_fsm(struct ad9144_dev **device,
 	struct ad9144_dev *dev;
 	unsigned char i;
 
-	dev = (struct ad9144_dev *)malloc(sizeof(*dev));
+	dev = (struct ad9144_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -1237,7 +1238,7 @@ int32_t ad9144_remove(struct ad9144_dev *dev)
 
 	ret = no_os_spi_remove(dev->spi_desc);
 
-	free(dev);
+	no_os_free(dev);
 
 	return ret;
 }

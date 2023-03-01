@@ -39,6 +39,7 @@
 *******************************************************************************/
 #include <errno.h>
 #include "no_os_lf256fifo.h"
+#include "no_os_alloc.h"
 
 /**
  * @struct lf256fifo
@@ -60,13 +61,13 @@ int lf256fifo_init(struct lf256fifo **fifo)
 	if (fifo == NULL)
 		return -EINVAL;
 
-	struct lf256fifo *b = calloc(1, sizeof(struct lf256fifo));
+	struct lf256fifo *b = no_os_calloc(1, sizeof(struct lf256fifo));
 	if (b == NULL)
 		return -ENOMEM;
 
-	b->data = calloc(1, 256);
+	b->data = no_os_calloc(1, 256);
 	if (b->data == NULL) {
-		free(b);
+		no_os_free(b);
 		return -ENOMEM;
 	}
 
@@ -148,6 +149,6 @@ void lf256fifo_flush(struct lf256fifo *fifo)
 void lf256fifo_remove(struct lf256fifo *fifo)
 {
 	if (fifo && fifo->data)
-		free(fifo->data);
+		no_os_free(fifo->data);
 }
 

@@ -54,6 +54,7 @@
 #include "no_os_irq.h"
 #include "no_os_list.h"
 #include "no_os_util.h"
+#include "no_os_alloc.h"
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -125,11 +126,11 @@ static int aducm_gpio_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
 	if (!param)
 		return -EINVAL;
 
-	descriptor = calloc(1, sizeof(*descriptor));
+	descriptor = no_os_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
-	extra = calloc(1, sizeof(*extra));
+	extra = no_os_calloc(1, sizeof(*extra));
 	if (!extra)
 		goto error_dev;
 
@@ -171,9 +172,9 @@ static int aducm_gpio_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
 	return 0;
 
 error_extra:
-	free(extra);
+	no_os_free(extra);
 error_dev:
-	free(descriptor);
+	no_os_free(descriptor);
 
 	return ret;
 }
@@ -211,11 +212,11 @@ static int aducm_gpio_irq_ctrl_remove(struct no_os_irq_ctrl_desc *desc)
 	}
 
 	while (0 == no_os_list_get_last(extra->actions, (void **)&discard))
-		free(discard);
+		no_os_free(discard);
 
 	no_os_list_remove(extra->actions);
-	free(desc->extra);
-	free(desc);
+	no_os_free(desc->extra);
+	no_os_free(desc);
 
 	return 0;
 }
@@ -250,7 +251,7 @@ static int aducm_gpio_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 	* If no action was found, insert a new one, otherwise update it
 	*/
 	if (ret) {
-		action = calloc(1, sizeof(*action));
+		action = no_os_calloc(1, sizeof(*action));
 		if (!action)
 			return -ENOMEM;
 
@@ -282,7 +283,7 @@ static int aducm_gpio_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 	return 0;
 
 free_action:
-	free(action);
+	no_os_free(action);
 
 	return ret;
 }
@@ -326,7 +327,7 @@ static int aducm_gpio_irq_unregister_callback(struct no_os_irq_ctrl_desc *desc,
 			return ret;
 	}
 
-	free(discard_action);
+	no_os_free(discard_action);
 
 	return 0;
 }

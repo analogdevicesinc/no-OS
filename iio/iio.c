@@ -53,6 +53,7 @@
 #include "no_os_error.h"
 #include "no_os_uart.h"
 #include "no_os_error.h"
+#include "no_os_alloc.h"
 #include "no_os_circular_buffer.h"
 #include <inttypes.h>
 #include <stdio.h>
@@ -151,7 +152,7 @@ struct iio_buffer_priv {
 	uint32_t		raw_buf_len;
 	/* Set when this devices has buffer */
 	bool			initalized;
-	/* Set when calloc was used to initalize cb.buf */
+	/* Set when no_os_calloc was used to initalize cb.buf */
 	bool			allocated;
 };
 
@@ -1118,11 +1119,11 @@ static int iio_open_dev(struct iiod_ctx *ctx, const char *device,
 	} else {
 		if (dev->buffer.allocated) {
 			/* Free in case iio_close_dev wasn't called to free it*/
-			free(dev->buffer.cb.buff);
+			no_os_free(dev->buffer.cb.buff);
 			dev->buffer.allocated = 0;
 		}
 		buf_size = dev->buffer.public.size;
-		buf = (int8_t *)calloc(dev->buffer.public.size, sizeof(*buf));
+		buf = (int8_t *)no_os_calloc(dev->buffer.public.size, sizeof(*buf));
 		if (!buf)
 			return -ENOMEM;
 		dev->buffer.allocated = 1;
@@ -1131,7 +1132,7 @@ static int iio_open_dev(struct iiod_ctx *ctx, const char *device,
 	ret = no_os_cb_cfg(&dev->buffer.cb, buf, buf_size);
 	if (NO_OS_IS_ERR_VALUE(ret)) {
 		if (dev->buffer.allocated) {
-			free(dev->buffer.cb.buff);
+			no_os_free(dev->buffer.cb.buff);
 			dev->buffer.allocated = 0;
 		}
 
@@ -1141,7 +1142,7 @@ static int iio_open_dev(struct iiod_ctx *ctx, const char *device,
 	if (dev->dev_descriptor->pre_enable) {
 		ret = dev->dev_descriptor->pre_enable(dev->dev_instance, mask);
 		if (NO_OS_IS_ERR_VALUE(ret) && dev->buffer.allocated) {
-			free(dev->buffer.cb.buff);
+			no_os_free(dev->buffer.cb.buff);
 			dev->buffer.allocated = 0;
 			return ret;
 		}
@@ -1179,7 +1180,7 @@ static int iio_close_dev(struct iiod_ctx *ctx, const char *device)
 
 	if (dev->buffer.allocated) {
 		/* Should something else be used to free internal strucutre */
-		free(dev->buffer.cb.buff);
+		no_os_free(dev->buffer.cb.buff);
 		dev->buffer.allocated = 0;
 	}
 
@@ -1421,7 +1422,7 @@ static int32_t accept_network_clients(struct iio_desc *desc)
 			return ret;
 
 		data.conn = sock;
-		data.buf = calloc(1, IIOD_CONN_BUFFER_SIZE);
+		data.buf = no_os_calloc(1, IIOD_CONN_BUFFER_SIZE);
 		data.len = IIOD_CONN_BUFFER_SIZE;
 
 		ret = iiod_conn_add(desc->iiod, &data, &id);
@@ -1468,7 +1469,7 @@ int iio_step(struct iio_desc *desc)
 		if (desc->server) {
 			iiod_conn_remove(desc->iiod, conn_id, &data);
 			socket_remove(data.conn);
-			free(data.buf);
+			no_os_free(data.buf);
 		}
 #endif
 	} else {
@@ -1717,7 +1718,7 @@ static int32_t iio_init_xml(struct iio_desc *desc)
 						NULL, -1);
 	}
 
-	desc->xml_desc = (char *)calloc(size + 1, sizeof(*desc->xml_desc));
+	desc->xml_desc = (char *)no_os_calloc(size + 1, sizeof(*desc->xml_desc));
 	if (!desc->xml_desc)
 		return -ENOMEM;
 
@@ -1752,7 +1753,7 @@ static int32_t iio_init_devs(struct iio_desc *desc,
 	struct iio_device_init *ndev;
 
 	desc->nb_devs = n;
-	desc->devs = (struct iio_dev_priv *)calloc(desc->nb_devs,
+	desc->devs = (struct iio_dev_priv *)no_os_calloc(desc->nb_devs,
 			sizeof(*desc->devs));
 	if (!desc->devs)
 		return -ENOMEM;
@@ -1798,7 +1799,7 @@ static int32_t iio_init_trigs(struct iio_desc *desc,
 	struct iio_trigger_init *trig_init_iter;
 
 	desc->nb_trigs = n;
-	desc->trigs = (struct iio_trig_priv *)calloc(desc->nb_trigs,
+	desc->trigs = (struct iio_trig_priv *)no_os_calloc(desc->nb_trigs,
 			sizeof(*desc->trigs));
 	if (!desc->trigs)
 		return -ENOMEM;
@@ -1833,7 +1834,7 @@ int iio_init(struct iio_desc **desc, struct iio_init_param *init_param)
 	if (!desc || !init_param)
 		return -EINVAL;
 
-	ldesc = (struct iio_desc *)calloc(1, sizeof(*ldesc));
+	ldesc = (struct iio_desc *)no_os_calloc(1, sizeof(*ldesc));
 	if (!ldesc)
 		return -ENOMEM;
 
@@ -1930,13 +1931,13 @@ free_conns:
 free_iiod:
 	iiod_remove(ldesc->iiod);
 free_xml:
-	free(ldesc->xml_desc);
+	no_os_free(ldesc->xml_desc);
 free_trigs:
-	free(ldesc->trigs);
+	no_os_free(ldesc->trigs);
 free_devs:
-	free(ldesc->devs);
+	no_os_free(ldesc->devs);
 free_desc:
-	free(ldesc);
+	no_os_free(ldesc);
 
 	return ret;
 }
@@ -1956,10 +1957,9 @@ int iio_remove(struct iio_desc *desc)
 #endif
 	no_os_cb_remove(desc->conns);
 	iiod_remove(desc->iiod);
-	free(desc->devs);
-	free(desc->trigs);
-	free(desc->xml_desc);
-	free(desc);
+	no_os_free(desc->devs);
+	no_os_free(desc->trigs);
+	no_os_free(desc);
 
 	return 0;
 }

@@ -45,6 +45,7 @@
 #include <stdlib.h>
 #include "aducm3029_trng.h"
 #include "no_os_util.h"
+#include "no_os_alloc.h"
 #include "no_os_error.h"
 
 /******************************************************************************/
@@ -96,7 +97,7 @@ int aducm3029_trng_init(struct no_os_trng_desc **desc,
 	if (!desc)
 		return -1;
 
-	trng_desc = (struct no_os_trng_desc *)calloc(1, sizeof(*trng_desc));
+	trng_desc = (struct no_os_trng_desc *)no_os_calloc(1, sizeof(*trng_desc));
 	if (!trng_desc)
 		return -1;
 
@@ -124,7 +125,7 @@ int aducm3029_trng_remove(struct no_os_trng_desc *desc)
 	if (nb_references == 0)
 		aducm3029_gdesc_remove();
 
-	free(desc);
+	no_os_free(desc);
 
 	return 0;
 }

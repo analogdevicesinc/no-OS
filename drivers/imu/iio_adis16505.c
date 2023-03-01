@@ -44,6 +44,7 @@
 #include "iio_adis16505.h"
 #include "iio_adis.h"
 #include "no_os_units.h"
+#include "no_os_alloc.h"
 #include <stdio.h>
 
 /******************************************************************************/
@@ -132,7 +133,7 @@ int adis16505_iio_init(struct adis_iio_dev **iio_dev,
 	int ret;
 	struct adis_iio_dev *desc;
 
-	desc = (struct adis_iio_dev *)calloc(1, sizeof(*desc));
+	desc = (struct adis_iio_dev *)no_os_calloc(1, sizeof(*desc));
 	if (!desc)
 		return -ENOMEM;
 
@@ -149,7 +150,7 @@ int adis16505_iio_init(struct adis_iio_dev **iio_dev,
 	return 0;
 
 error_adis16505_init:
-	free(desc);
+	no_os_free(desc);
 	return ret;
 }
 
@@ -160,5 +161,5 @@ error_adis16505_init:
 void adis16505_iio_remove(struct adis_iio_dev *desc)
 {
 	adis_remove(desc->adis_dev);
-	free(desc);
+	no_os_free(desc);
 }

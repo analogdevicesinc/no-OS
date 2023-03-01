@@ -44,6 +44,7 @@
 #include "no_os_error.h"
 #include "no_os_gpio.h"
 #include "no_os_delay.h"
+#include "no_os_alloc.h"
 
 #include <errno.h>
 #include <fcntl.h>
@@ -90,11 +91,11 @@ int32_t linux_gpio_get(struct no_os_gpio_desc **desc,
 	int ret;
 	int timeout;
 
-	descriptor = calloc(1, sizeof(*descriptor));
+	descriptor = no_os_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -1;
 
-	linux_desc = calloc(1, sizeof(*linux_desc));
+	linux_desc = no_os_calloc(1, sizeof(*linux_desc));
 	if (!linux_desc)
 		goto free_desc;
 
@@ -154,9 +155,9 @@ int32_t linux_gpio_get(struct no_os_gpio_desc **desc,
 close_dir:
 	close(linux_desc->direction_fd);
 free_linux_desc:
-	free(linux_desc);
+	no_os_free(linux_desc);
 free_desc:
-	free(descriptor);
+	no_os_free(descriptor);
 
 	return -1;
 }
@@ -221,8 +222,8 @@ int32_t linux_gpio_remove(struct no_os_gpio_desc *desc)
 		return -1;
 	}
 
-	free(desc->extra);
-	free(desc);
+	no_os_free(desc->extra);
+	no_os_free(desc);
 
 	return 0;
 }

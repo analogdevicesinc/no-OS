@@ -6,7 +6,8 @@ SRCS += $(PROJECT)/src/app/main.c \
         $(DRIVERS)/api/no_os_spi.c \
         $(DRIVERS)/platform/xilinx/xilinx_spi.c \
         $(DRIVERS)/platform/xilinx/xilinx_gpio.c \
-	$(NO-OS)/util/no_os_font_8x8.c
+	$(NO-OS)/util/no_os_font_8x8.c \
+        $(NO-OS)/util/no_os_alloc.c
 
 INCS += $(INCLUDE)/no_os_gpio.h \
 	$(INCLUDE)/no_os_spi.h \
@@ -15,5 +16,6 @@ INCS += $(INCLUDE)/no_os_gpio.h \
         $(PROJECT)/src/app/parameters.h \
         $(INCLUDE)/no_os_error.h \
         $(INCLUDE)/no_os_delay.h \
+        $(INCLUDE)/no_os_alloc.h \
         $(DRIVERS)/platform/xilinx/$(PLATFORM)_gpio.h \
 	$(DRIVERS)/platform/xilinx/$(PLATFORM)_spi.h

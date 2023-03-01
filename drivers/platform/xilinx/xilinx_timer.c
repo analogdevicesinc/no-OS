@@ -46,6 +46,7 @@
 #include "no_os_timer.h"
 #include "xilinx_timer.h"
 #include "no_os_error.h"
+#include "no_os_alloc.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -79,10 +80,10 @@ int32_t xilinx_timer_init(struct no_os_timer_desc **desc,
 
 	xinit = param->extra;
 
-	dev = (struct no_os_timer_desc *)calloc(1, sizeof(*dev));
+	dev = (struct no_os_timer_desc *)no_os_calloc(1, sizeof(*dev));
 	if(!dev)
 		return -1;
-	xdesc = (struct xil_timer_desc *)calloc(1, sizeof(*xdesc));
+	xdesc = (struct xil_timer_desc *)no_os_calloc(1, sizeof(*xdesc));
 	if(!xdesc)
 		goto error_desc;
 
@@ -97,13 +98,13 @@ int32_t xilinx_timer_init(struct no_os_timer_desc **desc,
 	case TIMER_PS:
 #ifdef XSCUTIMER_H
 		xdesc->config = XScuTimer_LookupConfig(dev->id);
-		xdesc->instance = calloc(1, sizeof(XScuTimer));
+		xdesc->instance = no_os_calloc(1, sizeof(XScuTimer));
 		if (!xdesc->instance)
 			goto error_xdesc;
 		ret = XScuTimer_CfgInitialize(xdesc->instance, xdesc->config,
 					      ((XScuTimer_Config *)xdesc->config)->BaseAddr);
 		if (ret != XST_SUCCESS) {
-			free(xdesc->instance);
+			no_os_free(xdesc->instance);
 			goto error_xdesc;
 		}
 		ret = no_os_timer_count_clk_set(dev, param->freq_hz);
@@ -121,20 +122,20 @@ int32_t xilinx_timer_init(struct no_os_timer_desc **desc,
 		goto error_xdesc;
 	case TIMER_PL:
 #ifdef XTMRCTR_H
-		xdesc->instance = (XTmrCtr *)calloc(1, sizeof(XTmrCtr));
+		xdesc->instance = (XTmrCtr *)no_os_calloc(1, sizeof(XTmrCtr));
 		if (!xdesc->instance)
 			return -1;
 
 		xdesc->config = XTmrCtr_LookupConfig(dev->id);
 		if (!xdesc->config) {
-			free(xdesc->instance);
+			no_os_free(xdesc->instance);
 			goto error_desc;
 		}
 		XTmrCtr_CfgInitialize(xdesc->instance, xdesc->config,
 				      ((XTmrCtr_Config *)xdesc->config)->BaseAddress);
 		ret = XTmrCtr_InitHw(xdesc->instance);
 		if (ret != 0) {
-			free(xdesc->instance);
+			no_os_free(xdesc->instance);
 			goto error_desc;
 		}
 		dev->freq_hz = ((XTmrCtr_Config *)xdesc->config)->SysClockFreqHz;
@@ -159,9 +160,9 @@ int32_t xilinx_timer_init(struct no_os_timer_desc **desc,
 	return 0;
 
 error_xdesc:
-	free(xdesc);
+	no_os_free(xdesc);
 error_desc:
-	free(dev);
+	no_os_free(dev);
 
 	return -1;
 }
@@ -184,7 +185,7 @@ int32_t xilinx_timer_remove(struct no_os_timer_desc *desc)
 	case TIMER_PS:
 #ifdef XSCUTIMER_H
 		XScuTimer_Stop(xdesc->instance);
-		free(xdesc->instance);
+		no_os_free(xdesc->instance);
 		break;
 #endif
 		return -1;
@@ -198,8 +199,8 @@ int32_t xilinx_timer_remove(struct no_os_timer_desc *desc)
 		return -1;
 	}
 
-	free(xdesc);
-	free(desc);
+	no_os_free(xdesc);
+	no_os_free(desc);
 
 	return 0;
 }

@@ -43,6 +43,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "ad9625.h"
+#include "no_os_alloc.h"
 
 /***************************************************************************//**
  * @brief ad9625_spi_read
@@ -98,7 +99,7 @@ int32_t ad9625_setup(struct ad9625_dev **device,
 	int32_t ret;
 	struct ad9625_dev *dev;
 
-	dev = (struct ad9625_dev *)malloc(sizeof(*dev));
+	dev = (struct ad9625_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -151,7 +152,7 @@ int32_t ad9625_remove(struct ad9625_dev *dev)
 
 	ret = no_os_spi_remove(dev->spi_desc);
 
-	free(dev);
+	no_os_free(dev);
 
 	return ret;
 }

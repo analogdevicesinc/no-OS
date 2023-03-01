@@ -45,6 +45,7 @@
 #include <stdbool.h>
 #include "adgs1408.h"
 #include "no_os_error.h"
+#include "no_os_alloc.h"
 
 /******************************************************************************/
 /************************** Functions Implementation **************************/
@@ -394,7 +395,7 @@ int32_t adgs1408_init(struct adgs1408_dev **device,
 	struct adgs1408_dev *dev;
 	int32_t ret;
 
-	dev = (struct adgs1408_dev *)malloc(sizeof(*dev));
+	dev = (struct adgs1408_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -456,7 +457,7 @@ int32_t adgs1408_remove(struct adgs1408_dev *dev)
 
 	ret = no_os_spi_remove(dev->spi_desc);
 
-	free(dev);
+	no_os_free(dev);
 
 	return ret;
 }

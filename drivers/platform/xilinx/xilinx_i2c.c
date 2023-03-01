@@ -55,6 +55,7 @@
 #include "no_os_i2c.h"
 #include "xilinx_i2c.h"
 #include "no_os_list.h"
+#include "no_os_alloc.h"
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -165,8 +166,8 @@ int32_t xil_i2c_init(struct no_os_i2c_desc **desc,
 	struct xil_i2c_desc	*xdesc;
 	struct xil_i2c_init_param	*xinit;
 
-	idesc = (struct no_os_i2c_desc *)malloc(sizeof(*idesc));
-	xdesc = (struct xil_i2c_desc *)malloc(sizeof(*xdesc));
+	idesc = (struct no_os_i2c_desc *)no_os_malloc(sizeof(*idesc));
+	xdesc = (struct xil_i2c_desc *)no_os_malloc(sizeof(*xdesc));
 
 	if(!idesc || !xdesc)
 		goto error;
@@ -199,7 +200,7 @@ int32_t xil_i2c_init(struct no_os_i2c_desc **desc,
 			break;
 		}
 
-		xdesc->instance = (XIic *)malloc(sizeof(XIic));
+		xdesc->instance = (XIic *)no_os_malloc(sizeof(XIic));
 		if(!xdesc->instance)
 			goto pl_error;
 
@@ -232,7 +233,7 @@ int32_t xil_i2c_init(struct no_os_i2c_desc **desc,
 		if(ret < 0)
 			goto pl_error;
 
-		temp_el_pl = (struct inst_table_item*)calloc(1, sizeof(*temp_el_pl));
+		temp_el_pl = (struct inst_table_item*)no_os_calloc(1, sizeof(*temp_el_pl));
 		temp_el_pl->device_id = xinit->device_id;
 		temp_el_pl->inst_no = 1;
 		temp_el_pl->instance = xdesc->instance;
@@ -240,7 +241,7 @@ int32_t xil_i2c_init(struct no_os_i2c_desc **desc,
 
 		break;
 pl_error:
-		free(xdesc->instance);
+		no_os_free(xdesc->instance);
 #endif
 		goto error;
 	case IIC_PS:
@@ -264,7 +265,7 @@ pl_error:
 			break;
 		}
 
-		xdesc->instance = (XIicPs *)malloc(sizeof(XIicPs));
+		xdesc->instance = (XIicPs *)no_os_malloc(sizeof(XIicPs));
 		if(!xdesc->instance)
 			goto ps_error;
 
@@ -281,7 +282,7 @@ pl_error:
 
 		XIicPs_SetSClk(xdesc->instance, param->max_speed_hz);
 
-		temp_el_ps = (struct inst_table_item*)calloc(1, sizeof(*temp_el_ps));
+		temp_el_ps = (struct inst_table_item*)no_os_calloc(1, sizeof(*temp_el_ps));
 		temp_el_ps->device_id = xinit->device_id;
 		temp_el_ps->inst_no = 1;
 		temp_el_ps->instance = xdesc->instance;
@@ -289,7 +290,7 @@ pl_error:
 
 		break;
 ps_error:
-		free(xdesc->instance);
+		no_os_free(xdesc->instance);
 #endif
 		goto error;
 
@@ -303,8 +304,8 @@ ps_error:
 	return 0;
 
 error:
-	free(idesc);
-	free(xdesc);
+	no_os_free(idesc);
+	no_os_free(xdesc);
 
 	return -1;
 }
@@ -343,7 +344,7 @@ int32_t xil_i2c_remove(struct no_os_i2c_desc *desc)
 
 		/** Remove list element */
 		no_os_iterator_get(pl_it, (void **)&temp_el_pl);
-		free(temp_el_pl);
+		no_os_free(temp_el_pl);
 		break;
 #endif
 		goto error;
@@ -363,7 +364,7 @@ int32_t xil_i2c_remove(struct no_os_i2c_desc *desc)
 
 		/** Remove list element */
 		no_os_iterator_get(ps_it, (void **)&temp_el_ps);
-		free(temp_el_ps);
+		no_os_free(temp_el_ps);
 		break;
 #endif
 		/* Intended fallthrough */
@@ -373,8 +374,8 @@ error:
 		return -1;
 	}
 
-	free(desc->extra);
-	free(desc);
+	no_os_free(desc->extra);
+	no_os_free(desc);
 
 	return 0;
 }

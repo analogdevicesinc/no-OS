@@ -44,6 +44,7 @@
 /*****************************************************************************/
 #include <stdlib.h>
 #include "ad5449.h"
+#include "no_os_alloc.h"
 
 #define MAX_RESOLUTION  12     /* Maximum resolution of the supported devices */
 #define DATA_MASK       0xFFF  /* Mask for 16 data bits */
@@ -115,7 +116,7 @@ int8_t ad5449_init(struct ad5449_dev **device,
 	struct ad5449_dev *dev;
 	int8_t status;
 
-	dev = (struct ad5449_dev *)malloc(sizeof(*dev));
+	dev = (struct ad5449_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -169,7 +170,7 @@ int32_t ad5449_remove(struct ad5449_dev *dev)
 	ret |= no_os_gpio_remove(dev->gpio_ldac);
 	ret |= no_os_gpio_remove(dev->gpio_clr);
 
-	free(dev);
+	no_os_free(dev);
 
 	return ret;
 }

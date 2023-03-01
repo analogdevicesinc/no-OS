@@ -44,6 +44,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "ad9523.h"
+#include "no_os_alloc.h"
 
 /* Helpers to avoid excess line breaks */
 #define AD_IFE(_pde, _a, _b) ((dev->pdata->_pde) ? _a : _b)
@@ -435,7 +436,7 @@ int32_t ad9523_setup(struct ad9523_dev **device,
 	uint32_t version_id;
 	struct ad9523_dev *dev;
 
-	dev = (struct ad9523_dev *)malloc(sizeof(*dev));
+	dev = (struct ad9523_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -733,7 +734,7 @@ int32_t ad9523_remove(struct ad9523_dev *dev)
 
 	ret = no_os_spi_remove(dev->spi_desc);
 
-	free(dev);
+	no_os_free(dev);
 
 	return ret;
 }

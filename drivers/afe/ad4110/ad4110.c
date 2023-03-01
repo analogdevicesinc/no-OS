@@ -46,6 +46,7 @@
 #include <stdlib.h>
 #include "ad4110.h"
 #include "no_os_util.h"
+#include "no_os_alloc.h"
 #include "no_os_error.h"
 #include "no_os_irq.h"
 #include "no_os_print_log.h"
@@ -897,7 +898,7 @@ int32_t ad4110_setup(struct ad4110_dev **device,
 {
 	struct ad4110_dev *dev;
 	int32_t ret;
-	dev = (struct ad4110_dev *)malloc(sizeof(*dev));
+	dev = (struct ad4110_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -1028,7 +1029,7 @@ int32_t ad4110_setup(struct ad4110_dev **device,
 err_spi:
 	no_os_spi_remove(dev->spi_dev);
 err_dev:
-	free(dev);
+	no_os_free(dev);
 	pr_err("AD4110 initialization error (%d)\n", ret);
 	return ret;
 }
@@ -1095,7 +1096,7 @@ int32_t ad4110_remove(struct ad4110_dev *dev)
 
 	ret = no_os_spi_remove(dev->spi_dev);
 
-	free(dev);
+	no_os_free(dev);
 
 	return ret;
 }

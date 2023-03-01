@@ -46,6 +46,7 @@
 #include "io.h"
 #include "no_os_error.h"
 #include "no_os_util.h"
+#include "no_os_alloc.h"
 #include "altera_a10_atx_pll.h"
 #include "altera_a10_cdr_pll.h"
 #include "altera_adxcvr.h"
@@ -447,7 +448,7 @@ int32_t adxcvr_init(struct adxcvr **ad_xcvr,
 	uint32_t synth_conf;
 	uint32_t i;
 
-	xcvr = (struct adxcvr *)malloc(sizeof(*xcvr));
+	xcvr = (struct adxcvr *)no_os_malloc(sizeof(*xcvr));
 	if (!xcvr)
 		return -1;
 
@@ -483,7 +484,7 @@ int32_t adxcvr_init(struct adxcvr **ad_xcvr,
 	return 0;
 
 err:
-	free(xcvr);
+	no_os_free(xcvr);
 
 	return -1;
 }
@@ -493,7 +494,7 @@ err:
  */
 int32_t adxcvr_remove(struct adxcvr *xcvr)
 {
-	free(xcvr);
+	no_os_free(xcvr);
 
 	return 0;
 }

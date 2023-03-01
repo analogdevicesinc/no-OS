@@ -43,6 +43,7 @@
 /*****************************************************************************/
 #include <stdlib.h>
 #include "adf4106.h"
+#include "no_os_alloc.h"
 
 #define DATA_MASK_MSB8      0xFF0000
 #define DATA_OFFSET_MSB8    16
@@ -99,7 +100,7 @@ int8_t adf4106_init(struct adf4106_dev **device,
 	struct adf4106_dev *dev;
 	int8_t status = -1;
 
-	dev = (struct adf4106_dev *)malloc(sizeof(*dev));
+	dev = (struct adf4106_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -170,7 +171,7 @@ int32_t adf4106_remove(struct adf4106_dev *dev)
 	ret |= no_os_gpio_remove(dev->gpio_le2);
 	ret |= no_os_gpio_remove(dev->gpio_ce2);
 
-	free(dev);
+	no_os_free(dev);
 
 	return ret;
 }

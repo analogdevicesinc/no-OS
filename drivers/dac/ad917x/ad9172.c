@@ -47,6 +47,7 @@
 #include <string.h>
 #include "ad9172.h"
 #include <inttypes.h>
+#include "no_os_alloc.h"
 
 /**
  * Setup the device.
@@ -274,7 +275,7 @@ static int32_t ad9172_spi_xfer(void *user_data, uint8_t *wbuf,
 {
 	int32_t ret;
 	struct no_os_spi_desc *spi = user_data;
-	uint8_t * buffer = (uint8_t *) malloc(len);
+	uint8_t * buffer = (uint8_t *) no_os_malloc(len);
 
 	memcpy(buffer, wbuf, 3);
 	ret = no_os_spi_write_and_read(spi, buffer, len);
@@ -283,7 +284,7 @@ static int32_t ad9172_spi_xfer(void *user_data, uint8_t *wbuf,
 	} else {
 		memcpy(rbuf, buffer, len);
 	}
-	free(buffer);
+	no_os_free(buffer);
 
 	return ret;
 }
@@ -301,11 +302,11 @@ int32_t ad9172_init(ad9172_dev **device,
 	int32_t ret;
 	ad9172_dev *dev;
 
-	dev = (ad9172_dev *)calloc(1, sizeof(*dev));
+	dev = (ad9172_dev *)no_os_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
-	struct ad9172_state *st = (struct ad9172_state *)calloc(1, sizeof(*st));
+	struct ad9172_state *st = (struct ad9172_state *)no_os_calloc(1, sizeof(*st));
 	if (!st) {
 		ret = -ENOMEM;
 		goto error_1;
@@ -367,9 +368,9 @@ int32_t ad9172_init(ad9172_dev **device,
 error_3:
 	no_os_spi_remove(dev->spi_desc);
 error_2:
-	free(st);
+	no_os_free(st);
 error_1:
-	free(dev);
+	no_os_free(dev);
 
 	return ret;
 }
@@ -388,9 +389,9 @@ int32_t ad9172_remove(ad9172_dev *device)
 	ret += no_os_gpio_remove(device->gpio_txen0);
 	ret += no_os_gpio_remove(device->gpio_txen1);
 
-	free(device->st);
+	no_os_free(device->st);
 
-	free(device);
+	no_os_free(device);
 
 	return ret;
 }

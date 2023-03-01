@@ -42,6 +42,7 @@
 /******************************************************************************/
 #include <stdlib.h>
 #include "adxl362.h"
+#include "no_os_alloc.h"
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -65,7 +66,7 @@ int32_t adxl362_init(struct adxl362_dev **device,
 	uint8_t reg_value = 0;
 	int32_t status = -1;
 
-	dev = (struct adxl362_dev *)malloc(sizeof(*dev));
+	dev = (struct adxl362_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -96,7 +97,7 @@ int32_t adxl362_remove(struct adxl362_dev *dev)
 
 	ret = no_os_spi_remove(dev->spi_desc);
 
-	free(dev);
+	no_os_free(dev);
 
 	return ret;
 }

@@ -45,6 +45,7 @@
 #include "adpd188.h"
 #include "no_os_error.h"
 #include "no_os_delay.h"
+#include "no_os_alloc.h"
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -64,7 +65,7 @@ int32_t adpd188_init(struct adpd188_dev **device,
 	struct adpd188_dev *dev;
 	uint16_t reg_data;
 
-	dev = (struct adpd188_dev *)calloc(1, sizeof (*dev));
+	dev = (struct adpd188_dev *)no_os_calloc(1, sizeof (*dev));
 	if(!dev)
 		return -1;
 	dev->device = init_param->device;
@@ -127,7 +128,7 @@ error_phy:
 	else if(dev->phy_opt == ADPD188_I2C)
 		no_os_i2c_remove(dev->phy_desc);
 error_dev:
-	free(dev);
+	no_os_free(dev);
 
 	return -1;
 }
@@ -157,7 +158,7 @@ int32_t adpd188_remove(struct adpd188_dev *dev)
 	if(ret != 0)
 		return -1;
 
-	free(dev);
+	no_os_free(dev);
 
 	return 0;
 }

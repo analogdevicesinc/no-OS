@@ -44,6 +44,7 @@
 #include "ad719x.h"    // AD719X definitions.
 #include "no_os_error.h"
 #include "no_os_delay.h"
+#include "no_os_alloc.h"
 #include <string.h>
 
 /******************************************************************************/
@@ -67,7 +68,7 @@ int ad719x_init(struct ad719x_dev **device,
 	uint32_t reg_val;
 	int ret;
 
-	dev = (struct ad719x_dev *)malloc(sizeof(*dev));
+	dev = (struct ad719x_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -177,7 +178,7 @@ error_miso:
 error_spi:
 	no_os_spi_remove(dev->spi_desc);
 error_dev:
-	free(dev);
+	no_os_free(dev);
 
 	return -1;
 }
@@ -201,7 +202,7 @@ int ad719x_remove(struct ad719x_dev *dev)
 	if (ret != 0)
 		return ret;
 
-	free(dev);
+	no_os_free(dev);
 
 	return ret;
 }

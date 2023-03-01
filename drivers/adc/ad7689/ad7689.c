@@ -42,6 +42,7 @@
 #include "no_os_error.h"
 #include "no_os_print_log.h"
 #include "no_os_delay.h"
+#include "no_os_alloc.h"
 
 const char *ad7689_device_name[] = {
 	"AD7689",
@@ -152,7 +153,7 @@ int32_t ad7689_init(struct ad7689_dev **dev,
 	if (init_param->id > ID_AD7699)
 		return -EINVAL;
 
-	d = (struct ad7689_dev *)calloc(1, sizeof(*d));
+	d = (struct ad7689_dev *)no_os_calloc(1, sizeof(*d));
 	if (!d)
 		return -ENOMEM;
 
@@ -178,7 +179,7 @@ int32_t ad7689_init(struct ad7689_dev **dev,
 error_init:
 	no_os_spi_remove(d->spi_desc);
 error_spi:
-	free(d);
+	no_os_free(d);
 	pr_err("%s initialization failed with status %d\n", d->name,
 	       ret);
 
@@ -287,7 +288,7 @@ int32_t ad7689_remove(struct ad7689_dev *dev)
 		return -EINVAL;
 
 	no_os_spi_remove(dev->spi_desc);
-	free(dev);
+	no_os_free(dev);
 
 	return 0;
 }

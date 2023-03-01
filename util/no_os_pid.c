@@ -38,6 +38,7 @@
 *******************************************************************************/
 #include <errno.h>
 #include "no_os_pid.h"
+#include "no_os_alloc.h"
 #include "no_os_print_log.h"
 
 struct no_os_pid {
@@ -64,7 +65,7 @@ int no_os_pid_init(struct no_os_pid **pid, struct no_os_pid_config config)
 	if (config.output_clip.high < config.output_clip.low)
 		return -EINVAL;
 
-	*pid = calloc(1, sizeof(**pid));
+	*pid = no_os_calloc(1, sizeof(**pid));
 	if (!*pid)
 		return -ENOMEM;
 
@@ -164,7 +165,7 @@ int no_os_pid_remove(struct no_os_pid *pid)
 	if (!pid)
 		return -EINVAL;
 
-	free(pid);
+	no_os_free(pid);
 	pid = NULL;
 
 	return 0;

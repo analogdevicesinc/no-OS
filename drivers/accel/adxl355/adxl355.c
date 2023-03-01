@@ -44,6 +44,7 @@
 #include <errno.h>
 #include "adxl355.h"
 #include "no_os_delay.h"
+#include "no_os_alloc.h"
 
 /******************************************************************************/
 /************************ Variable Declarations ******************************/
@@ -155,7 +156,7 @@ int adxl355_init(struct adxl355_dev **device,
 		return -EINVAL;
 	}
 
-	dev = (struct adxl355_dev *)calloc(1, sizeof(*dev));
+	dev = (struct adxl355_dev *)no_os_calloc(1, sizeof(*dev));
 
 	if (!dev)
 		return -ENOMEM;
@@ -218,10 +219,10 @@ error_com:
 		no_os_spi_remove(dev->com_desc.spi_desc);
 	else
 		no_os_i2c_remove(dev->com_desc.i2c_desc);
-	free(dev);
+	no_os_free(dev);
 	return -1;
 error_dev:
-	free(dev);
+	no_os_free(dev);
 	return ret;
 }
 
@@ -241,7 +242,7 @@ int adxl355_remove(struct adxl355_dev *dev)
 	else
 		ret = no_os_i2c_remove(dev->com_desc.i2c_desc);
 
-	free(dev);
+	no_os_free(dev);
 
 	return ret;
 }

@@ -48,6 +48,7 @@
 #include "inttypes.h"
 #include "no_os_print_log.h"
 #include "no_os_spi.h"
+#include "no_os_alloc.h"
 #include "stdbool.h"
 #include "stdio.h"
 #include "stdlib.h"
@@ -775,7 +776,7 @@ int32_t ad5758_init(struct ad5758_dev **device,
 	struct ad5758_dev *dev;
 	int32_t ret;
 
-	dev = (struct ad5758_dev *)malloc(sizeof(*dev));
+	dev = (struct ad5758_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -871,6 +872,6 @@ error_gpio_ldac:
 	no_os_gpio_remove(dev->reset_n);
 error_init:
 	pr_err("ad5758 could not be initialized\n");
-	free(dev);
+	no_os_free(dev);
 	return ret;
 }

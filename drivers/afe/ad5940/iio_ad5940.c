@@ -43,6 +43,7 @@
 #include "no_os_error.h"
 #include "no_os_delay.h"
 #include "no_os_util.h"
+#include "no_os_alloc.h"
 #include "iio.h"
 #include "iio_ad5940.h"
 #include "bia_measurement.h"
@@ -300,13 +301,13 @@ int32_t ad5940_iio_init(struct ad5940_iio_dev **iio_dev,
 	if (!iio_dev || !init_param)
 		return -EINVAL;
 
-	desc = (struct ad5940_iio_dev *)calloc(1, sizeof(*desc));
+	desc = (struct ad5940_iio_dev *)no_os_calloc(1, sizeof(*desc));
 	if (!desc)
 		return -ENOMEM;
 
 	desc->iio = &ad5940_iio_device;
 
-	desc->iio->channels = (struct iio_channel *)calloc(1,
+	desc->iio->channels = (struct iio_channel *)no_os_calloc(1,
 			      sizeof(struct iio_channel));
 	if (!desc->iio->channels)
 		goto error_1;
@@ -353,9 +354,9 @@ int32_t ad5940_iio_init(struct ad5940_iio_dev **iio_dev,
 
 	return 0;
 error_2:
-	free(desc->iio->channels);
+	no_os_free(desc->iio->channels);
 error_1:
-	free(desc);
+	no_os_free(desc);
 
 	return ret;
 }
@@ -368,8 +369,8 @@ int32_t ad5940_iio_remove(struct ad5940_iio_dev *desc)
 	if (ret != 0)
 		return ret;
 
-	free(desc->iio->channels);
-	free(desc);
+	no_os_free(desc->iio->channels);
+	no_os_free(desc);
 
 	return 0;
 }

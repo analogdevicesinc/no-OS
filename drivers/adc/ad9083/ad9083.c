@@ -51,6 +51,7 @@
 #include "no_os_clk.h"
 #include "uc_settings.h"
 #include "no_os_util.h"
+#include "no_os_alloc.h"
 #include "no_os_print_log.h"
 
 /******************************************************************************/
@@ -347,7 +348,7 @@ int32_t ad9083_init(struct ad9083_phy **device,
 	uint8_t api_rev[3];
 	int32_t ret;
 
-	phy = (struct ad9083_phy *)calloc(1, sizeof(*phy));
+	phy = (struct ad9083_phy *)no_os_calloc(1, sizeof(*phy));
 	if (!phy)
 		return -ENOMEM;
 
@@ -426,7 +427,7 @@ error_2:
 	no_os_gpio_remove(phy->gpio_reset);
 error_1:
 	if (phy)
-		free(phy);
+		no_os_free(phy);
 
 	return ret;
 }
@@ -455,7 +456,7 @@ int32_t ad9083_remove(struct ad9083_phy *dev)
 	if (ret != 0)
 		return ret;
 
-	free(dev);
+	no_os_free(dev);
 
 	return 0;
 }

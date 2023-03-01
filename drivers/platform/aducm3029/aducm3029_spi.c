@@ -46,6 +46,7 @@
 #include "no_os_error.h"
 #include <stdlib.h>
 #include "no_os_util.h"
+#include "no_os_alloc.h"
 
 #define	NB_SPI_DEVICES	3
 #define	MAX_CS_NUMBER	3
@@ -141,12 +142,12 @@ int32_t aducm3029_spi_init(struct no_os_spi_desc **desc,
 		return -1;
 
 	/* Memory allocation */
-	spi_desc = (struct no_os_spi_desc *)calloc(1, sizeof(*spi_desc));
+	spi_desc = (struct no_os_spi_desc *)no_os_calloc(1, sizeof(*spi_desc));
 	if (!spi_desc)
 		return -1;
-	aducm_desc = (struct aducm_spi_desc *)calloc(1, sizeof(*aducm_desc));
+	aducm_desc = (struct aducm_spi_desc *)no_os_calloc(1, sizeof(*aducm_desc));
 	if (!aducm_desc) {
-		free(spi_desc);
+		no_os_free(spi_desc);
 		return -1;
 	}
 
@@ -161,10 +162,10 @@ int32_t aducm3029_spi_init(struct no_os_spi_desc **desc,
 	dev = devices[param->device_id];
 	/* If device not initialized initialize it */
 	if (!dev) {
-		dev = (struct aducm_device_desc *)calloc(1, sizeof(*dev));
+		dev = (struct aducm_device_desc *)no_os_calloc(1, sizeof(*dev));
 		if (!dev) {
-			free(spi_desc);
-			free(aducm_desc);
+			no_os_free(spi_desc);
+			no_os_free(aducm_desc);
 			return -1;
 		}
 		if (ADI_SPI_SUCCESS != adi_spi_Open(param->device_id,
@@ -182,9 +183,9 @@ int32_t aducm3029_spi_init(struct no_os_spi_desc **desc,
 
 	return 0;
 failure:
-	free(dev);
-	free(spi_desc);
-	free(aducm_desc);
+	no_os_free(dev);
+	no_os_free(spi_desc);
+	no_os_free(aducm_desc);
 	return -1;
 }
 
@@ -208,11 +209,11 @@ int32_t aducm3029_spi_remove(struct no_os_spi_desc *desc)
 		if (ADI_SPI_SUCCESS != adi_spi_Close(
 			    aducm_desc->dev->spi_handle))
 			return -1;
-		free(aducm_desc->dev);
+		no_os_free(aducm_desc->dev);
 		devices[desc->device_id] = NULL;
 	}
-	free(aducm_desc);
-	free(desc);
+	no_os_free(aducm_desc);
+	no_os_free(desc);
 
 	return 0;
 }

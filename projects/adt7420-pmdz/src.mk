@@ -21,7 +21,8 @@ INCS += $(INCLUDE)/no_os_delay.h     \
 		$(INCLUDE)/no_os_list.h      \
 		$(INCLUDE)/no_os_uart.h      \
 		$(INCLUDE)/no_os_lf256fifo.h \
-		$(INCLUDE)/no_os_util.h 
+		$(INCLUDE)/no_os_util.h \
+		$(INCLUDE)/no_os_alloc.h
 
 SRCS += $(DRIVERS)/api/no_os_gpio.c \
 		$(DRIVERS)/api/no_os_i2c.c  \
@@ -30,7 +31,8 @@ SRCS += $(DRIVERS)/api/no_os_gpio.c \
 		$(DRIVERS)/api/no_os_spi.c  \
 		$(DRIVERS)/api/no_os_uart.c \
 		$(NO-OS)/util/no_os_list.c \
-		$(NO-OS)/util/no_os_util.c
+		$(NO-OS)/util/no_os_util.c \
+		$(NO-OS)/util/no_os_alloc.c
 
 INCS += $(DRIVERS)/temperature/adt7420/adt7420.h
 SRCS += $(DRIVERS)/temperature/adt7420/adt7420.c

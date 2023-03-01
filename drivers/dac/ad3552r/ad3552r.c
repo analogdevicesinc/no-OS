@@ -51,6 +51,7 @@
 #include "no_os_spi.h"
 #include "no_os_timer.h"
 #include "no_os_util.h"
+#include "no_os_alloc.h"
 
 /* Private attributes */
 enum ad3552r_spi_attributes {
@@ -1073,7 +1074,7 @@ int32_t ad3552r_init(struct ad3552r_desc **desc,
 	if (!desc || !param)
 		return -EINVAL;
 
-	ldesc = (struct ad3552r_desc*)calloc(1, sizeof(*ldesc));
+	ldesc = (struct ad3552r_desc*)no_os_calloc(1, sizeof(*ldesc));
 	if (!ldesc)
 		return -ENOMEM;
 
@@ -1148,7 +1149,7 @@ err_reset:
 err_spi:
 	no_os_spi_remove(ldesc->spi);
 err:
-	free(ldesc);
+	no_os_free(ldesc);
 
 	return err;
 }
@@ -1160,7 +1161,7 @@ int32_t ad3552r_remove(struct ad3552r_desc *desc)
 	if (desc->reset)
 		no_os_gpio_remove(desc->reset);
 	no_os_spi_remove(desc->spi);
-	free(desc);
+	no_os_free(desc);
 
 	return 0;
 }

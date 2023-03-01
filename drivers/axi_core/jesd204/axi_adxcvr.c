@@ -45,6 +45,7 @@
 #include <inttypes.h>
 #include "no_os_axi_io.h"
 #include "no_os_util.h"
+#include "no_os_alloc.h"
 #include "no_os_error.h"
 #include "no_os_delay.h"
 #include "xilinx_transceiver.h"
@@ -586,7 +587,7 @@ int32_t adxcvr_init(struct adxcvr **ad_xcvr,
 	uint32_t i;
 	int32_t ret;
 
-	xcvr = (struct adxcvr *)calloc(1, sizeof(*xcvr));
+	xcvr = (struct adxcvr *)no_os_calloc(1, sizeof(*xcvr));
 	if (!xcvr)
 		return -1;
 
@@ -680,7 +681,7 @@ int32_t adxcvr_init(struct adxcvr **ad_xcvr,
 	return 0;
 
 err:
-	free(xcvr);
+	no_os_free(xcvr);
 
 	return -1;
 }
@@ -692,7 +693,7 @@ err:
  */
 int32_t adxcvr_remove(struct adxcvr *xcvr)
 {
-	free(xcvr);
+	no_os_free(xcvr);
 
 	return 0;
 }

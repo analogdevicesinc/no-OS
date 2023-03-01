@@ -40,6 +40,7 @@
 #include <errno.h>
 #include "no_os_util.h"
 #include "no_os_timer.h"
+#include "no_os_alloc.h"
 #include "stm32_timer.h"
 
 
@@ -148,7 +149,7 @@ int32_t stm32_timer_init(struct no_os_timer_desc **desc,
 	if (!desc || !param)
 		return -EINVAL;
 
-	no_os_desc = (struct no_os_timer_desc *)calloc(1, sizeof(*no_os_desc));
+	no_os_desc = (struct no_os_timer_desc *)no_os_calloc(1, sizeof(*no_os_desc));
 	if (!no_os_desc)
 		return -ENOMEM;
 
@@ -189,7 +190,7 @@ int32_t stm32_timer_init(struct no_os_timer_desc **desc,
 	return 0;
 
 error:
-	free(no_os_desc);
+	no_os_free(no_os_desc);
 	return ret;
 }
 
@@ -205,7 +206,7 @@ int32_t stm32_timer_remove(struct no_os_timer_desc *desc)
 		return -EINVAL;
 
 	if (!HAL_TIM_Base_DeInit(desc->extra)) {
-		free(desc);
+		no_os_free(desc);
 		return 0;
 	}
 

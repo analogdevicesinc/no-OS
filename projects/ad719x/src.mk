@@ -26,7 +26,8 @@ SRCS += $(DRIVERS)/api/no_os_spi.c \
 	$(DRIVERS)/api/no_os_gpio.c \
 	$(DRIVERS)/adc/ad719x/ad719x.c \
 	$(NO-OS)/util/no_os_list.c \
-	$(NO-OS)/util/no_os_util.c
+	$(NO-OS)/util/no_os_util.c \
+	$(NO-OS)/util/no_os_alloc.c
 
 INCS += $(DRIVERS)/adc/ad719x/ad719x.h
 
@@ -37,4 +38,5 @@ INCS += $(INCLUDE)/no_os_spi.h \
 	$(INCLUDE)/no_os_irq.h \
 	$(INCLUDE)/no_os_util.h \
 	$(INCLUDE)/no_os_print_log.h \
-	$(INCLUDE)/no_os_list.h
+	$(INCLUDE)/no_os_list.h \
+	$(INCLUDE)/no_os_alloc.h

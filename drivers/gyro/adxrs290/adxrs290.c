@@ -44,6 +44,7 @@
 #include <stdint.h>
 #include <string.h>
 #include "no_os_error.h"
+#include "no_os_alloc.h"
 #include "adxrs290.h"
 
 /******************************************************************************/
@@ -342,7 +343,7 @@ int32_t adxrs290_init(struct adxrs290_dev **device,
 	int32_t ret = 0;
 	uint8_t val = 0;
 
-	dev = (struct adxrs290_dev *)malloc(sizeof(*dev));
+	dev = (struct adxrs290_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -404,7 +405,7 @@ error_spi:
 	no_os_spi_remove(dev->spi_desc);
 
 error_dev:
-	free(dev);
+	no_os_free(dev);
 
 	return ret;
 }
@@ -418,7 +419,7 @@ int32_t adxrs290_remove(struct adxrs290_dev *dev)
 {
 	no_os_spi_remove(dev->spi_desc);
 	no_os_gpio_remove(dev->gpio_sync);
-	free(dev);
+	no_os_free(dev);
 
 	return 0;
 }

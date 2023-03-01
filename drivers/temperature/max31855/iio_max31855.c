@@ -46,6 +46,7 @@
 #include "iio_max31855.h"
 #include "max31855.h"
 #include "no_os_util.h"
+#include "no_os_alloc.h"
 #include "iio.h"
 
 /******************************************************************************/
@@ -143,7 +144,7 @@ int max31855_iio_init(struct max31855_iio_dev **iio_dev,
 	if (!init_param)
 		return -EINVAL;
 
-	descriptor = calloc(1, sizeof(*descriptor));
+	descriptor = no_os_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
@@ -157,7 +158,7 @@ int max31855_iio_init(struct max31855_iio_dev **iio_dev,
 
 	return 0;
 init_err:
-	free(descriptor);
+	no_os_free(descriptor);
 
 	return ret;
 }
@@ -175,7 +176,7 @@ int max31855_iio_remove(struct max31855_iio_dev *desc)
 	if (ret)
 		return ret;
 
-	free(desc);
+	no_os_free(desc);
 
 	return 0;
 }

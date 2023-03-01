@@ -43,6 +43,7 @@
 #include <malloc.h>
 #include "admv8818.h"
 #include "no_os_error.h"
+#include "no_os_alloc.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -346,7 +347,7 @@ int admv8818_init(struct admv8818_dev **device,
 	struct admv8818_dev *dev;
 	int ret;
 
-	dev = (struct admv8818_dev *)calloc(1, sizeof(*dev));
+	dev = (struct admv8818_dev *)no_os_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -403,7 +404,7 @@ int admv8818_init(struct admv8818_dev **device,
 error_spi:
 	no_os_spi_remove(dev->spi_desc);
 error_dev:
-	free(dev);
+	no_os_free(dev);
 
 	return ret;
 }
@@ -421,7 +422,7 @@ int admv8818_remove(struct admv8818_dev *dev)
 	if (ret)
 		return ret;
 
-	free(dev);
+	no_os_free(dev);
 
 	return 0;
 }

@@ -46,6 +46,7 @@
 #include <malloc.h>
 #include "no_os_delay.h"
 #include "no_os_util.h"
+#include "no_os_alloc.h"
 #include "adf5355.h"
 
 /******************************************************************************/
@@ -443,7 +444,7 @@ int32_t adf5355_init(struct adf5355_dev **device,
 	int32_t ret;
 	struct adf5355_dev *dev;
 
-	dev = (struct adf5355_dev *)calloc(1, sizeof(*dev));
+	dev = (struct adf5355_dev *)no_os_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -507,7 +508,7 @@ int32_t adf5355_init(struct adf5355_dev **device,
 error_spi:
 	no_os_spi_remove(dev->spi_desc);
 error_dev:
-	free(dev);
+	no_os_free(dev);
 
 	return ret;
 }
@@ -524,7 +525,7 @@ int32_t adf5355_remove(struct adf5355_dev *device)
 	if (device->spi_desc)
 		ret = no_os_spi_remove(device->spi_desc);
 
-	free(device);
+	no_os_free(device);
 
 	return ret;
 }

@@ -44,6 +44,7 @@
 #include <stdbool.h>
 #include "display.h"
 #include "no_os_error.h"
+#include "no_os_alloc.h"
 #include <string.h>
 
 /******************************************************************************/
@@ -67,7 +68,7 @@ int32_t display_init(struct display_dev **device,
 	if (!device || !param)
 		return -EINVAL;
 
-	dev = (struct display_dev *)malloc(sizeof(*dev));
+	dev = (struct display_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 	dev->cols_nb = param->cols_nb;
@@ -77,7 +78,7 @@ int32_t display_init(struct display_dev **device,
 
 	ret = dev->controller_ops->init(dev);
 	if (ret != 0) {
-		free(dev);
+		no_os_free(dev);
 		return -1;
 	}
 
@@ -102,7 +103,7 @@ int32_t display_remove(struct display_dev *device)
 	ret = device->controller_ops->remove(device);
 	if (ret != 0)
 		return -1;
-	free(device);
+	no_os_free(device);
 
 	return ret;
 }

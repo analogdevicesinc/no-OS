@@ -43,6 +43,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "ad9152.h"
+#include "no_os_alloc.h"
 
 /***************************************************************************//**
  * @brief ad9152_spi_read
@@ -100,7 +101,7 @@ int32_t ad9152_setup(struct ad9152_dev **device,
 	int32_t ret;
 	struct ad9152_dev *dev;
 
-	dev = (struct ad9152_dev *)malloc(sizeof(*dev));
+	dev = (struct ad9152_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -209,7 +210,7 @@ int32_t ad9152_remove(struct ad9152_dev *dev)
 
 	ret = no_os_spi_remove(dev->spi_desc);
 
-	free(dev);
+	no_os_free(dev);
 
 	return ret;
 }

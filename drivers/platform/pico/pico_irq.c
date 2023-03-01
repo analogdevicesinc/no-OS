@@ -47,6 +47,7 @@
 #include "no_os_util.h"
 #include "no_os_error.h"
 #include "no_os_timer.h"
+#include "no_os_alloc.h"
 #include "pico_irq.h"
 #include "pico_uart.h"
 #include "pico_timer.h"
@@ -179,7 +180,7 @@ int32_t pico_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
 		return -EINVAL;
 
 	if (!initialized) {
-		descriptor = calloc(1, sizeof(*descriptor));
+		descriptor = no_os_calloc(1, sizeof(*descriptor));
 		if (!descriptor)
 			return -ENOMEM;
 		initialized = true;
@@ -204,7 +205,7 @@ int32_t pico_irq_ctrl_remove(struct no_os_irq_ctrl_desc *desc)
 	initialized = false;
 
 	if (desc)
-		free(desc);
+		no_os_free(desc);
 
 	return 0;
 }
@@ -284,7 +285,7 @@ int32_t pico_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 	 * otherwise update
 	 */
 	if (ret) {
-		action = calloc(1, sizeof(*action));
+		action = no_os_calloc(1, sizeof(*action));
 		if (!action)
 			return -ENOMEM;
 
@@ -295,7 +296,7 @@ int32_t pico_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 
 		ret = no_os_list_add_last(_events[cb->event].actions, action);
 		if (ret) {
-			free(action);
+			no_os_free(action);
 			return ret;
 		}
 	} else {
@@ -328,7 +329,7 @@ int32_t pico_irq_unregister_callback(struct no_os_irq_ctrl_desc *desc,
 		return ret;
 
 	irq_remove_handler(irq_id, NULL);
-	free(discard);
+	no_os_free(discard);
 
 	return 0;
 }

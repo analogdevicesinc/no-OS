@@ -43,6 +43,7 @@
 
 #include "no_os_util.h"
 #include "no_os_error.h"
+#include "no_os_alloc.h"
 #include "pico_i2c.h"
 #include "pico/stdlib.h"
 
@@ -89,11 +90,11 @@ int32_t pico_i2c_init(struct no_os_i2c_desc **desc,
 	if (!desc || !param || !param->extra)
 		return -EINVAL;
 
-	descriptor = (struct no_os_i2c_desc *)calloc(1, sizeof(*descriptor));
+	descriptor = (struct no_os_i2c_desc *)no_os_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
-	pico_i2c = (struct pico_i2c_desc *)calloc(1,sizeof(*pico_i2c));
+	pico_i2c = (struct pico_i2c_desc *)no_os_calloc(1,sizeof(*pico_i2c));
 	if (!pico_i2c) {
 		ret = -ENOMEM;
 		goto free_desc;
@@ -127,9 +128,9 @@ int32_t pico_i2c_init(struct no_os_i2c_desc **desc,
 
 	return 0;
 error:
-	free(pico_i2c);
+	no_os_free(pico_i2c);
 free_desc:
-	free(descriptor);
+	no_os_free(descriptor);
 	return ret;
 }
 
@@ -148,8 +149,8 @@ int32_t pico_i2c_remove(struct no_os_i2c_desc *desc)
 	pico_i2c = desc->extra;
 	i2c_deinit(pico_i2c->i2c_instance);
 
-	free(desc->extra);
-	free(desc);
+	no_os_free(desc->extra);
+	no_os_free(desc);
 
 	return 0;
 }

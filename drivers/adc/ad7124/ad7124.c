@@ -45,6 +45,7 @@
 #include <stdbool.h>
 #include "ad7124.h"
 #include "no_os_delay.h"
+#include "no_os_alloc.h"
 
 /* Error codes */
 #define INVALID_VAL -1 /* Invalid argument */
@@ -555,7 +556,7 @@ int32_t ad7124_setup(struct ad7124_dev **device,
 	enum ad7124_registers reg_nr;
 	struct ad7124_dev *dev;
 
-	dev = (struct ad7124_dev *)malloc(sizeof(*dev));
+	dev = (struct ad7124_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
 		return INVALID_VAL;
 
@@ -788,7 +789,7 @@ int32_t ad7124_remove(struct ad7124_dev *dev)
 
 	ret = no_os_spi_remove(dev->spi_desc);
 
-	free(dev);
+	no_os_free(dev);
 
 	return ret;
 }

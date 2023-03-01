@@ -54,6 +54,7 @@
 #include "no_os_list.h"
 #include "no_os_uart.h"
 #include "no_os_util.h"
+#include "no_os_alloc.h"
 
 static struct event_list _events[] = {
 	[NO_OS_EVT_GPIO] = {.event = NO_OS_EVT_GPIO},
@@ -254,7 +255,7 @@ int max_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
 	if (!param)
 		return -EINVAL;
 
-	descriptor = calloc(1, sizeof(*descriptor));
+	descriptor = no_os_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
@@ -280,10 +281,10 @@ int max_irq_ctrl_remove(struct no_os_irq_ctrl_desc *desc)
 
 	for (i = 0; i < NO_OS_ARRAY_SIZE(_events); i++) {
 		while (0 == no_os_list_read_first(_events[i].actions, &discard))
-			free(discard);
+			no_os_free(discard);
 		no_os_list_remove(_events[i].actions);
 	}
-	free(desc);
+	no_os_free(desc);
 
 	return 0;
 }
@@ -328,7 +329,7 @@ int max_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 		 * otherwise update
 		 */
 		if (ret) {
-			action = calloc(1, sizeof(*action));
+			action = no_os_calloc(1, sizeof(*action));
 			if (!action)
 				return -ENOMEM;
 
@@ -361,7 +362,7 @@ int max_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 		 */
 		ret = no_os_list_read_first(_events[NO_OS_EVT_RTC].actions, (void **)&action);
 		if (ret) {
-			action = calloc(1, sizeof(*action));
+			action = no_os_calloc(1, sizeof(*action));
 			if (!action)
 				return -ENOMEM;
 
@@ -397,7 +398,7 @@ int max_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 		ret = no_os_list_read_first(_events[NO_OS_EVT_TIM_ELAPSED].actions,
 					    (void **)&action);
 		if (ret) {
-			action = calloc(1, sizeof(*action));
+			action = no_os_calloc(1, sizeof(*action));
 			if (!action)
 				return -ENOMEM;
 
@@ -424,7 +425,7 @@ int max_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 	return 0;
 
 free_action:
-	free(action);
+	no_os_free(action);
 	return ret;
 }
 
@@ -465,7 +466,7 @@ int max_irq_unregister_callback(struct no_os_irq_ctrl_desc *desc,
 	if (ret)
 		return -ENODEV;
 
-	free(discard_action);
+	no_os_free(discard_action);
 
 	return ret;
 }

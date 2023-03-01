@@ -45,6 +45,7 @@
 #include <stdlib.h>
 #include <inttypes.h>
 #include "no_os_util.h"
+#include "no_os_alloc.h"
 #include "no_os_error.h"
 #include "no_os_delay.h"
 #include "clk_axi_clkgen.h"
@@ -526,7 +527,7 @@ int32_t axi_clkgen_init(struct axi_clkgen **clk,
 {
 	struct axi_clkgen *clkgen;
 
-	clkgen = (struct axi_clkgen *)malloc(sizeof(*clkgen));
+	clkgen = (struct axi_clkgen *)no_os_malloc(sizeof(*clkgen));
 	if (!clkgen)
 		return -1;
 
@@ -544,7 +545,7 @@ int32_t axi_clkgen_init(struct axi_clkgen **clk,
  */
 int32_t axi_clkgen_remove(struct axi_clkgen *clkgen)
 {
-	free(clkgen);
+	no_os_free(clkgen);
 
 	return 0;
 }

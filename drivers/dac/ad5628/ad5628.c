@@ -42,6 +42,7 @@
 /******************************************************************************/
 #include <stdlib.h>
 #include "ad5628.h"
+#include "no_os_alloc.h"
 
 /***************************************************************************//**
  * @brief Initializes the communication peripheral and the initial Values for
@@ -63,7 +64,7 @@ int32_t ad5628_init(struct ad5628_dev **device,
 	struct ad5628_dev *dev;
 	int32_t status;
 
-	dev = (struct ad5628_dev *)malloc(sizeof(*dev));
+	dev = (struct ad5628_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -98,7 +99,7 @@ int32_t ad5628_remove(struct ad5628_dev *dev)
 
 	status = no_os_spi_remove(dev->spi_desc);
 
-	free(dev);
+	no_os_free(dev);
 
 	return status;
 }

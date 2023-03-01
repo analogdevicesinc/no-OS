@@ -20,6 +20,7 @@ SRCS += $(PLATFORM_DRIVERS)/xilinx_spi.c \
 	$(PLATFORM_DRIVERS)/xilinx_gpio.c \
 	$(PLATFORM_DRIVERS)/xilinx_gpio_irq.c \
 	$(PLATFORM_DRIVERS)/xilinx_delay.c \
+	$(NO-OS)/util/no_os_alloc.c \
 	$(NO-OS)/util/no_os_list.c \
 	$(NO-OS)/util/no_os_crc8.c
 
@@ -38,7 +39,8 @@ INCS += $(INCLUDE)/no_os_spi.h \
 	$(INCLUDE)/no_os_util.h \
 	$(INCLUDE)/no_os_print_log.h \
 	$(INCLUDE)/no_os_list.h \
-	$(INCLUDE)/no_os_crc8.h
+	$(INCLUDE)/no_os_crc8.h \
+	$(INCLUDE)/no_os_alloc.h
 
 ifeq (y,$(strip $(TINYIIOD)))
 LIBRARIES += iio

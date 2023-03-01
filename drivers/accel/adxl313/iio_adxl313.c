@@ -44,6 +44,7 @@
 #include <stdio.h>
 #include "no_os_error.h"
 #include "no_os_util.h"
+#include "no_os_alloc.h"
 #include "iio_adxl313.h"
 #include "adxl313.h"
 
@@ -1038,7 +1039,7 @@ int adxl313_iio_init(struct adxl313_iio_dev **iio_dev,
 	int ret;
 	struct adxl313_iio_dev *desc;
 
-	desc = (struct adxl313_iio_dev *)calloc(1, sizeof(*desc));
+	desc = (struct adxl313_iio_dev *)no_os_calloc(1, sizeof(*desc));
 	if (!desc)
 		return -ENOMEM;
 
@@ -1084,11 +1085,11 @@ int adxl313_iio_init(struct adxl313_iio_dev **iio_dev,
 	return 0;
 
 error_adxl313_init:
-	free(desc);
+	no_os_free(desc);
 	return ret;
 error_config:
 	adxl313_remove(desc->adxl313_dev);
-	free(desc);
+	no_os_free(desc);
 	return ret;
 }
 
@@ -1107,7 +1108,7 @@ int adxl313_iio_remove(struct adxl313_iio_dev *desc)
 	if (ret)
 		return ret;
 
-	free(desc);
+	no_os_free(desc);
 
 	return 0;
 }

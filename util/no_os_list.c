@@ -43,6 +43,7 @@
 
 #include "no_os_list.h"
 #include "no_os_error.h"
+#include "no_os_alloc.h"
 #include <stdlib.h>
 
 /******************************************************************************/
@@ -111,7 +112,7 @@ static inline struct no_os_list_elem *create_element(void *data,
 {
 	struct no_os_list_elem *elem;
 
-	elem = (struct no_os_list_elem *)calloc(1, sizeof(*elem));
+	elem = (struct no_os_list_elem *)no_os_calloc(1, sizeof(*elem));
 	if (!elem)
 		return NULL;
 	elem->data = data;
@@ -217,12 +218,12 @@ int32_t no_os_list_init(struct no_os_list_desc **list_desc,
 
 	if (!list_desc)
 		return -1;
-	l_desc = (struct no_os_list_desc *)calloc(1, sizeof(*l_desc));
+	l_desc = (struct no_os_list_desc *)no_os_calloc(1, sizeof(*l_desc));
 	if (!l_desc)
 		return -1;
-	list = (struct _list_desc *)calloc(1, sizeof(*list));
+	list = (struct _list_desc *)no_os_calloc(1, sizeof(*list));
 	if (!list) {
-		free(l_desc);
+		no_os_free(l_desc);
 		return -1;
 	}
 
@@ -262,8 +263,8 @@ int32_t no_os_list_remove(struct no_os_list_desc *list_desc)
 	/* Remove all the elements */
 	while (0 == no_os_list_get_first(list_desc, &data))
 		;
-	free(list_desc->priv_desc);
-	free(list_desc);
+	no_os_free(list_desc->priv_desc);
+	no_os_free(list_desc);
 
 	return 0;
 }
@@ -565,7 +566,7 @@ int32_t no_os_list_get_first(struct no_os_list_desc *list_desc, void **data)
 	list->nb_elements--;
 
 	*data = elem->data;
-	free(elem);
+	no_os_free(elem);
 
 	return 0;
 }
@@ -595,7 +596,7 @@ int32_t no_os_list_get_last(struct no_os_list_desc *list_desc, void **data)
 	list->nb_elements--;
 
 	*data = elem->data;
-	free(elem);
+	no_os_free(elem);
 
 	return 0;
 }
@@ -658,7 +659,7 @@ int32_t no_os_iterator_init(struct no_os_iterator **iter,
 	if (!list_desc)
 		return -1;
 
-	it = (struct no_os_iterator *)calloc(1, sizeof(*it));
+	it = (struct no_os_iterator *)no_os_calloc(1, sizeof(*it));
 	if (!it)
 		return -1;
 	it->list = list_desc->priv_desc;
@@ -684,7 +685,7 @@ int32_t no_os_iterator_remove(struct no_os_iterator *iter)
 		return -1;
 
 	it->list->nb_iterators--;
-	free(it);
+	no_os_free(it);
 
 	return 0;
 }
@@ -825,7 +826,7 @@ int32_t no_os_iterator_get(struct no_os_iterator *iter, void **data)
 		next = it->elem->prev;
 	else
 		next = it->elem->next;
-	free(it->elem);
+	no_os_free(it->elem);
 	it->elem = next;
 
 	return 0;

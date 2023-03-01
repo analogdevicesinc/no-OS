@@ -46,6 +46,7 @@
 #include "no_os_delay.h"
 #include "ad463x.h"
 #include "no_os_print_log.h"
+#include "no_os_alloc.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -403,7 +404,7 @@ int32_t ad463x_init(struct ad463x_dev **device,
 		return -1;
 	}
 
-	dev = (struct ad463x_dev *)malloc(sizeof(*dev));
+	dev = (struct ad463x_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -529,7 +530,7 @@ error_clkgen:
 error_gpio:
 	no_os_gpio_remove(dev->gpio_resetn);
 error_dev:
-	free(dev);
+	no_os_free(dev);
 
 	return -1;
 }
@@ -562,7 +563,7 @@ int32_t ad463x_remove(struct ad463x_dev *dev)
 	if (ret != 0)
 		return ret;
 
-	free(dev);
+	no_os_free(dev);
 
 	return ret;
 }

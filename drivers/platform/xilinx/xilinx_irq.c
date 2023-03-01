@@ -45,6 +45,7 @@
 #include <stdlib.h>
 #include "no_os_error.h"
 #include "no_os_irq.h"
+#include "no_os_alloc.h"
 #include "xilinx_irq.h"
 #ifdef XPAR_XSCUGIC_NUM_INSTANCES
 #include <xscugic.h>
@@ -76,12 +77,12 @@ int32_t xil_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
 	void *config;
 #endif
 
-	descriptor = (struct no_os_irq_ctrl_desc *)calloc(1, sizeof *descriptor);
+	descriptor = (struct no_os_irq_ctrl_desc *)no_os_calloc(1, sizeof *descriptor);
 	if(!descriptor)
 		return -1;
-	xil_dev = (struct xil_irq_desc *)calloc(1, sizeof *xil_dev);
+	xil_dev = (struct xil_irq_desc *)no_os_calloc(1, sizeof *xil_dev);
 	if(!xil_dev) {
-		free(descriptor);
+		no_os_free(descriptor);
 		return -1;
 	}
 
@@ -94,7 +95,7 @@ int32_t xil_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
 	switch(xil_dev->type) {
 	case IRQ_PS:
 #ifdef XSCUGIC_H
-		xil_dev->instance = calloc(1, sizeof(XScuGic));
+		xil_dev->instance = no_os_calloc(1, sizeof(XScuGic));
 		if(!xil_dev->instance)
 			goto error;
 
@@ -113,12 +114,12 @@ int32_t xil_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
 
 		break;
 ps_error:
-		free(xil_dev->instance);
+		no_os_free(xil_dev->instance);
 #endif
 		goto error;
 	case IRQ_PL:
 #ifdef XINTC_H
-		xil_dev->instance = calloc(1, sizeof(XIntc));
+		xil_dev->instance = no_os_calloc(1, sizeof(XIntc));
 		if(!xil_dev->instance)
 			goto error;
 
@@ -132,7 +133,7 @@ ps_error:
 
 		break;
 pl_error:
-		free(xil_dev->instance);
+		no_os_free(xil_dev->instance);
 #endif
 		goto error;
 	default:
@@ -146,8 +147,8 @@ pl_error:
 	return 0;
 
 error:
-	free(xil_dev);
-	free(descriptor);
+	no_os_free(xil_dev);
+	no_os_free(descriptor);
 
 	return -1;
 }
@@ -365,9 +366,9 @@ int32_t xil_irq_unregister_callback(struct no_os_irq_ctrl_desc *desc,
 int32_t xil_irq_ctrl_remove(struct no_os_irq_ctrl_desc *desc)
 {
 	struct xil_irq_desc *xil_dev = desc->extra;
-	free(xil_dev->instance);
-	free(desc->extra);
-	free(desc);
+	no_os_free(xil_dev->instance);
+	no_os_free(desc->extra);
+	no_os_free(desc);
 
 	return 0;
 }

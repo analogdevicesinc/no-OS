@@ -48,6 +48,7 @@
 #include "at_parser.h"
 #include "no_os_error.h"
 #include "no_os_util.h"
+#include "no_os_alloc.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -309,7 +310,7 @@ int32_t wifi_init(struct wifi_desc **desc, struct wifi_init_param *param)
 	if (!desc || !param)
 		return -1;
 
-	ldesc = (struct wifi_desc *)calloc(1, sizeof(*ldesc));
+	ldesc = (struct wifi_desc *)no_os_calloc(1, sizeof(*ldesc));
 	if (!ldesc)
 		return -1;
 
@@ -346,7 +347,7 @@ int32_t wifi_init(struct wifi_desc **desc, struct wifi_init_param *param)
 at_err:
 	at_remove(ldesc->at);
 ldesc_err:
-	free(ldesc);
+	no_os_free(ldesc);
 
 	return -1;
 }
@@ -370,7 +371,7 @@ int32_t wifi_remove(struct wifi_desc *desc)
 
 	wifi_disconnect(desc);
 	at_remove(desc->at);
-	free(desc);
+	no_os_free(desc);
 
 	return 0;
 }

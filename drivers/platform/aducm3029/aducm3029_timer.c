@@ -50,6 +50,7 @@
 #include "aducm3029_timer.h"
 #include "no_os_timer.h"
 #include "no_os_error.h"
+#include "no_os_alloc.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -119,11 +120,11 @@ int32_t aducm3029_timer_init(struct no_os_timer_desc **desc,
 	if (!desc || !param || param->freq_hz > NO_OS_FREQ_1MHZ)
 		return -1;
 
-	if (!(ldesc = calloc(1, sizeof(*ldesc))))
+	if (!(ldesc = no_os_calloc(1, sizeof(*ldesc))))
 		return -1;
 
-	if (!(aducm_desc = calloc(1, sizeof(*aducm_desc)))) {
-		free(ldesc);
+	if (!(aducm_desc = no_os_calloc(1, sizeof(*aducm_desc)))) {
+		no_os_free(ldesc);
 		*desc = NULL;
 		return -1;
 	}
@@ -186,8 +187,8 @@ int32_t aducm3029_timer_init(struct no_os_timer_desc **desc,
 			prescaler = 256;
 			break;
 		default:
-			free(aducm_desc);
-			free(ldesc);
+			no_os_free(aducm_desc);
+			no_os_free(ldesc);
 			return -EINVAL;
 			break;
 		}
@@ -217,8 +218,8 @@ int32_t aducm3029_timer_remove(struct no_os_timer_desc *desc)
 {
 	if (!desc)
 		return -1;
-	free(desc->extra);
-	free(desc);
+	no_os_free(desc->extra);
+	no_os_free(desc);
 	if (desc->id == 0) {
 		nb_instances--;
 		if (nb_instances == 0) {
