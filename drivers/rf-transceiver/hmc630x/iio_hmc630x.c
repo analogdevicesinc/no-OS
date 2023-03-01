@@ -234,7 +234,7 @@ static int hmc630x_iio_write_attr(void *device, char *buf,
 		if (ret)
 			break;
 
-		if (priv == HMC6301_IIO_ATTR_BB_ATTN1)
+		if (priv == HMC6301_IIO_ATTR_BB_LPC)
 			ret = hmc6301_set_bb_lpc_hpc(d, (enum hmc6301_bb_lpc)val, hpc);
 		else
 			ret = hmc6301_set_bb_lpc_hpc(d, lpc, (enum hmc6301_bb_hpc)val);
@@ -243,7 +243,10 @@ static int hmc630x_iio_write_attr(void *device, char *buf,
 		return -EINVAL;
 	};
 
-	return ret;
+	if (ret)
+		return ret;
+
+	return len;
 }
 
 static int hmc630x_iio_read_vco_available(void *device, char *buf,
