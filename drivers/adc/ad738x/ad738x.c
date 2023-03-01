@@ -50,6 +50,7 @@
 #include "ad738x.h"
 #include "no_os_delay.h"
 #include "no_os_error.h"
+#include "no_os_alloc.h"
 
 /******************************************************************************/
 /************************** Functions Implementation **************************/
@@ -340,7 +341,7 @@ int32_t ad738x_init(struct ad738x_dev **device,
 	struct ad738x_dev *dev;
 	int32_t ret;
 
-	dev = (struct ad738x_dev *)malloc(sizeof(*dev));
+	dev = (struct ad738x_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -379,7 +380,7 @@ int32_t ad738x_remove(struct ad738x_dev *dev)
 
 	ret = no_os_spi_remove(dev->spi_desc);
 
-	free(dev);
+	no_os_free(dev);
 
 	return ret;
 }

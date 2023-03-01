@@ -46,6 +46,7 @@
 #include "no_os_error.h"
 #include "ad9553.h"
 #include "no_os_delay.h"
+#include "no_os_alloc.h"
 
 /**
  * @brief Reads from the ad9553 that is contected to the SPI
@@ -115,7 +116,7 @@ int32_t ad9553_setup(struct ad9553_dev **device,
 
 	struct ad9553_dev *dev;
 
-	dev = (struct ad9553_dev *)malloc(sizeof(*dev));
+	dev = (struct ad9553_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -238,7 +239,7 @@ int32_t ad9553_remove(struct ad9553_dev *dev)
 	if (ret != 0)
 		return ret;
 
-	free(dev);
+	no_os_free(dev);
 
 	return ret;
 }

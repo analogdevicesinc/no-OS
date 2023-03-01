@@ -44,6 +44,7 @@
 #include <stdlib.h>
 #include "ad9833.h"
 #include "no_os_error.h"
+#include "no_os_alloc.h"
 
 /******************************************************************************/
 /************************** Constants Definitions *****************************/
@@ -91,7 +92,7 @@ int8_t ad9833_init(struct ad9833_dev **device,
 	uint16_t spi_data = 0;
 	int8_t status = -1;
 
-	dev = (struct ad9833_dev *)malloc(sizeof(*dev));
+	dev = (struct ad9833_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -159,7 +160,7 @@ int32_t ad9833_remove(struct ad9833_dev *dev)
 	ret |= no_os_gpio_remove(dev->gpio_reset);
 	ret |= no_os_gpio_remove(dev->gpio_sleep);
 
-	free(dev);
+	no_os_free(dev);
 
 	return ret;
 }

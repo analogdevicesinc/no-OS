@@ -44,6 +44,7 @@
 #include "adf4377.h"
 #include "no_os_error.h"
 #include "no_os_delay.h"
+#include "no_os_alloc.h"
 
 /******************************************************************************/
 /************************** Functions Implementation **************************/
@@ -524,7 +525,7 @@ int32_t adf4377_init(struct adf4377_dev **device,
 	uint8_t chip_type;
 	struct adf4377_dev *dev;
 
-	dev = (struct adf4377_dev *)calloc(1, sizeof(*dev));
+	dev = (struct adf4377_dev *)no_os_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -637,7 +638,7 @@ error_gpio_ce:
 	no_os_gpio_remove(dev->gpio_ce);
 
 error_dev:
-	free(dev);
+	no_os_free(dev);
 
 	return ret;
 }
@@ -667,7 +668,7 @@ int32_t adf4377_remove(struct adf4377_dev *dev)
 	if (ret < 0)
 		return ret;
 
-	free(dev);
+	no_os_free(dev);
 
 	return ret;
 }

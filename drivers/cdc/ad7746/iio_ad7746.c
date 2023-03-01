@@ -7,6 +7,7 @@
 #include "iio.h"
 #include "iio_ad7746.h"
 #include "no_os_util.h"
+#include "no_os_alloc.h"
 #include "ad7746.h"
 #include <string.h>
 
@@ -743,7 +744,7 @@ int32_t ad7746_iio_init(struct ad7746_iio_dev **iio_dev,
 	int32_t ret;
 	struct ad7746_iio_dev *desc;
 
-	desc = (struct ad7746_iio_dev *)calloc(1, sizeof(*desc));
+	desc = (struct ad7746_iio_dev *)no_os_calloc(1, sizeof(*desc));
 	if (!desc)
 		return -1;
 
@@ -761,7 +762,7 @@ int32_t ad7746_iio_init(struct ad7746_iio_dev **iio_dev,
 
 	return 0;
 error_desc:
-	free(desc);
+	no_os_free(desc);
 
 	return ret;
 }
@@ -774,7 +775,7 @@ int32_t ad7746_iio_remove(struct ad7746_iio_dev *desc)
 	if (ret != 0)
 		return ret;
 
-	free(desc);
+	no_os_free(desc);
 
 	return 0;
 }

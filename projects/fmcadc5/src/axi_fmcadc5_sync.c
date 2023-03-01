@@ -3,6 +3,7 @@
 #include "ad9625.h"
 #include "axi_fmcadc5_sync.h"
 #include "no_os_axi_io.h"
+#include "no_os_alloc.h"
 
 /* Simple read */
 static inline int i5g_read(struct s_i5g *st, int reg)
@@ -379,7 +380,7 @@ int32_t i5g_setup(struct s_i5g **descriptor,
 	struct s_i5g *st;
 	int32_t data;
 
-	st = malloc(sizeof(*st));
+	st = no_os_malloc(sizeof(*st));
 
 	st->regs = init_param.regs;
 	st->ad9625_cs_0 = init_param.ad9625_cs_0;
@@ -414,7 +415,7 @@ int32_t i5g_setup(struct s_i5g **descriptor,
 
 int32_t i5g_remove(struct s_i5g *desc)
 {
-	free(desc);
+	no_os_free(desc);
 
 	return 0;
 }

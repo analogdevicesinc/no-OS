@@ -44,6 +44,7 @@
 #include "no_os_error.h"
 #include "no_os_util.h"
 #include "no_os_spi.h"
+#include "no_os_alloc.h"
 #include "pico_spi.h"
 #include "pico/stdlib.h"
 #include "no_os_delay.h"
@@ -148,11 +149,11 @@ int32_t pico_spi_init(struct no_os_spi_desc **desc,
 	if (!desc || !param || !param->extra)
 		return -EINVAL;
 
-	descriptor = (struct no_os_spi_desc *)calloc(1, sizeof(*descriptor));
+	descriptor = (struct no_os_spi_desc *)no_os_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
-	pico_spi = (struct pico_spi_desc *)calloc(1, sizeof(*pico_spi));
+	pico_spi = (struct pico_spi_desc *)no_os_calloc(1, sizeof(*pico_spi));
 	if (!pico_spi) {
 		ret = -ENOMEM;
 		goto free_desc;
@@ -183,9 +184,9 @@ int32_t pico_spi_init(struct no_os_spi_desc **desc,
 	return 0;
 
 error:
-	free(pico_spi);
+	no_os_free(pico_spi);
 free_desc:
-	free(descriptor);
+	no_os_free(descriptor);
 	return ret;
 }
 
@@ -205,8 +206,8 @@ int32_t pico_spi_remove(struct no_os_spi_desc *desc)
 
 	spi_deinit(pico_spi->spi_instance);
 
-	free(desc->extra);
-	free(desc);
+	no_os_free(desc->extra);
+	no_os_free(desc);
 	return 0;
 }
 

@@ -41,6 +41,7 @@
 #include "no_os_uart.h"
 #include "no_os_irq.h"
 #include "no_os_lf256fifo.h"
+#include "no_os_alloc.h"
 #include "stm32_irq.h"
 #include "stm32_uart.h"
 #include "stm32_hal.h"
@@ -71,11 +72,12 @@ static int32_t stm32_uart_init(struct no_os_uart_desc **desc,
 	if (!desc || !param)
 		return -EINVAL;
 
-	descriptor = (struct no_os_uart_desc *) calloc(1, sizeof(*descriptor));
+	descriptor = (struct no_os_uart_desc *) no_os_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
-	sud = (struct stm32_uart_desc *) calloc(1, sizeof(struct stm32_uart_desc));
+	sud = (struct stm32_uart_desc *) no_os_calloc(1,
+			sizeof(struct stm32_uart_desc));
 	if (!sud) {
 		ret = -ENOMEM;
 		goto error;
@@ -175,8 +177,8 @@ error_register:
 error_nvic:
 	no_os_irq_ctrl_remove(sud->nvic);
 error:
-	free(descriptor);
-	free(sud);
+	no_os_free(descriptor);
+	no_os_free(sud);
 
 	return ret;
 }
@@ -202,8 +204,8 @@ static int32_t stm32_uart_remove(struct no_os_uart_desc *desc)
 		no_os_irq_unregister_callback(sud->nvic, desc->irq_id, &sud->rx_callback);
 		no_os_irq_ctrl_remove(sud->nvic);
 	}
-	free(desc->extra);
-	free(desc);
+	no_os_free(desc->extra);
+	no_os_free(desc);
 
 	return 0;
 };

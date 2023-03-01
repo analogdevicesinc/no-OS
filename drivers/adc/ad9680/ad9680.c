@@ -45,6 +45,7 @@
 #include "ad9680.h"
 #include "no_os_error.h"
 #include "no_os_print_log.h"
+#include "no_os_alloc.h"
 
 struct ad9680_jesd204_priv {
 	struct ad9680_dev *dev;
@@ -232,7 +233,7 @@ int32_t ad9680_setup(struct ad9680_dev **device,
 
 	ret = 0;
 
-	dev = (struct ad9680_dev *)malloc(sizeof(*dev));
+	dev = (struct ad9680_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -307,7 +308,7 @@ int32_t ad9680_setup_jesd_fsm(struct ad9680_dev **device,
 
 	ret = 0;
 
-	dev = (struct ad9680_dev *)malloc(sizeof(*dev));
+	dev = (struct ad9680_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -392,7 +393,7 @@ int32_t ad9680_remove(struct ad9680_dev *dev)
 
 	ret = no_os_spi_remove(dev->spi_desc);
 
-	free(dev);
+	no_os_free(dev);
 
 	return ret;
 }

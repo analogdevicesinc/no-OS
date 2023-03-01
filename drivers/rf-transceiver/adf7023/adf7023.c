@@ -43,6 +43,7 @@
 #include <stdlib.h>
 #include "adf7023_config.h"
 #include "adf7023.h"
+#include "no_os_alloc.h"
 
 /******************************************************************************/
 /*************************** Macros Definitions *******************************/
@@ -100,7 +101,7 @@ int32_t adf7023_init(struct adf7023_dev **device,
 	uint8_t status = 0;
 	int32_t ret = 0;
 
-	dev = (struct adf7023_dev *)malloc(sizeof(*dev));
+	dev = (struct adf7023_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -151,7 +152,7 @@ int32_t adf7023_remove(struct adf7023_dev *dev)
 	ret |= no_os_gpio_remove(dev->gpio_cs);
 	ret |= no_os_gpio_remove(dev->gpio_miso);
 
-	free(dev);
+	no_os_free(dev);
 
 	return ret;
 }

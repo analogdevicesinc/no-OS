@@ -44,6 +44,7 @@
 #include "no_os_error.h"
 #include "no_os_util.h"
 #include "no_os_timer.h"
+#include "no_os_alloc.h"
 #include "pico_timer.h"
 #include "hardware/timer.h"
 #include "hardware/irq.h"
@@ -88,11 +89,11 @@ int32_t pico_timer_init(struct no_os_timer_desc **desc,
 	if (hardware_alarm_is_claimed(param->id))
 		return -EINVAL;
 
-	no_os_desc = (struct no_os_timer_desc *)calloc(1, sizeof(*no_os_desc));
+	no_os_desc = (struct no_os_timer_desc *)no_os_calloc(1, sizeof(*no_os_desc));
 	if (!no_os_desc)
 		return -ENOMEM;
 
-	pico_timer = (struct pico_timer_desc*)calloc(1,sizeof(*pico_timer));
+	pico_timer = (struct pico_timer_desc*)no_os_calloc(1,sizeof(*pico_timer));
 	if (!pico_timer) {
 		ret = -ENOMEM;
 		goto error;
@@ -125,7 +126,7 @@ int32_t pico_timer_init(struct no_os_timer_desc **desc,
 	return 0;
 
 error:
-	free(no_os_desc);
+	no_os_free(no_os_desc);
 	return ret;
 }
 
@@ -142,7 +143,7 @@ int32_t pico_timer_remove(struct no_os_timer_desc *desc)
 	/* Unclaim alarm */
 	hardware_alarm_unclaim(desc->id);
 	pico_alarm_desc[desc->id] = NULL;
-	free(desc);
+	no_os_free(desc);
 
 	return 0;
 }

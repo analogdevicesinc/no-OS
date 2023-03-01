@@ -43,6 +43,7 @@
 
 #include "no_os_util.h"
 #include "no_os_error.h"
+#include "no_os_alloc.h"
 #include "pico_gpio.h"
 #include "hardware/gpio.h"
 
@@ -107,11 +108,11 @@ int32_t pico_gpio_get(struct no_os_gpio_desc **desc,
 	if (!desc || !param)
 		return -EINVAL;
 
-	descriptor = (struct no_os_gpio_desc *)malloc(sizeof(*descriptor));
+	descriptor = (struct no_os_gpio_desc *)no_os_malloc(sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
-	extra = (struct pico_gpio_desc*)malloc(sizeof(*extra));
+	extra = (struct pico_gpio_desc*)no_os_malloc(sizeof(*extra));
 	if (!extra) {
 		ret = -ENOMEM;
 		goto error;
@@ -126,8 +127,8 @@ int32_t pico_gpio_get(struct no_os_gpio_desc **desc,
 
 	return 0;
 error:
-	free(extra);
-	free(descriptor);
+	no_os_free(extra);
+	no_os_free(descriptor);
 
 	return ret;
 }
@@ -157,9 +158,9 @@ int32_t pico_gpio_get_optional(struct no_os_gpio_desc **desc,
 int32_t pico_gpio_remove(struct no_os_gpio_desc *desc)
 {
 	if (desc != NULL)
-		free(desc->extra);
+		no_os_free(desc->extra);
 
-	free(desc);
+	no_os_free(desc);
 
 	return 0;
 }

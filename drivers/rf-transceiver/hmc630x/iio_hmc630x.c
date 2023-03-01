@@ -45,6 +45,7 @@
 #include "iio.h"
 #include "iio_hmc630x.h"
 #include "no_os_util.h"
+#include "no_os_alloc.h"
 #include "hmc630x.h"
 #include <string.h>
 
@@ -413,11 +414,11 @@ int32_t hmc630x_iio_init(struct hmc630x_iio_dev **iiodev,
 	struct hmc630x_iio_dev *d;
 	struct iio_device *d2;
 
-	d = (struct hmc630x_iio_dev *)calloc(1, sizeof(*d));
+	d = (struct hmc630x_iio_dev *)no_os_calloc(1, sizeof(*d));
 	if (!d)
 		return -ENOMEM;
 
-	d2 = (struct iio_device *)calloc(1, sizeof(*d2));
+	d2 = (struct iio_device *)no_os_calloc(1, sizeof(*d2));
 	if (!d2)
 		goto end_0;
 
@@ -438,9 +439,9 @@ int32_t hmc630x_iio_init(struct hmc630x_iio_dev **iiodev,
 
 	return 0;
 end_1:
-	free(d2);
+	no_os_free(d2);
 end_0:
-	free(d);
+	no_os_free(d);
 
 	return ret;
 }
@@ -456,8 +457,8 @@ int32_t hmc630x_iio_remove(struct hmc630x_iio_dev *iiodev)
 	if (ret != 0)
 		return ret;
 
-	free(iiodev->iio_dev);
-	free(iiodev);
+	no_os_free(iiodev->iio_dev);
+	no_os_free(iiodev);
 
 	return 0;
 }

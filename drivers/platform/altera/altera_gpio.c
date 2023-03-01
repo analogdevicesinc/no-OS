@@ -46,6 +46,7 @@
 #include "no_os_gpio.h"
 #include "altera_gpio.h"
 #include "no_os_error.h"
+#include "no_os_alloc.h"
 #include "parameters.h"
 
 /******************************************************************************/
@@ -66,14 +67,14 @@ int32_t altera_gpio_get(struct no_os_gpio_desc **desc,
 	struct altera_gpio_desc *altera_descriptor;
 	struct altera_gpio_init_param *altera_param;
 
-	descriptor = calloc(1, sizeof(*descriptor));
+	descriptor = no_os_calloc(1, sizeof(*descriptor));
 
 	if (!descriptor)
 		return -1;
 
-	descriptor->extra = calloc(1, sizeof *altera_descriptor);
+	descriptor->extra = no_os_calloc(1, sizeof *altera_descriptor);
 	if (!(descriptor->extra)) {
-		free(descriptor);
+		no_os_free(descriptor);
 		return -1;
 	}
 
@@ -116,8 +117,8 @@ int32_t altera_gpio_get_optional(struct no_os_gpio_desc **desc,
 int32_t altera_gpio_remove(struct no_os_gpio_desc *desc)
 {
 	if (desc) {
-		free(desc->extra);
-		free(desc);
+		no_os_free(desc->extra);
+		no_os_free(desc);
 	}
 
 	return 0;

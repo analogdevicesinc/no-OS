@@ -48,6 +48,7 @@
 #include "no_os_spi.h"
 #include "no_os_error.h"
 #include "no_os_util.h"
+#include "no_os_alloc.h"
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -66,7 +67,7 @@ int ltc2672_init(struct ltc2672_dev **device,
 	int ret;
 	struct ltc2672_dev *descriptor;
 
-	descriptor = (struct ltc2672_dev *)calloc(1, sizeof(*descriptor));
+	descriptor = (struct ltc2672_dev *)no_os_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
@@ -81,7 +82,7 @@ int ltc2672_init(struct ltc2672_dev **device,
 	return 0;
 
 error_init:
-	free(descriptor);
+	no_os_free(descriptor);
 	return ret;
 }
 
@@ -99,7 +100,7 @@ int ltc2672_remove(struct ltc2672_dev *device)
 
 	ret = no_os_spi_remove(device->comm_desc);
 
-	free(device);
+	no_os_free(device);
 
 	return ret;
 }

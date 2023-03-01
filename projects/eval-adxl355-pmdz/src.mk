@@ -24,7 +24,8 @@ INCS += $(INCLUDE)/no_os_delay.h     \
 		$(INCLUDE)/no_os_lf256fifo.h \
 		$(INCLUDE)/no_os_util.h \
 		$(INCLUDE)/no_os_units.h \
-		$(INCLUDE)/no_os_init.h
+		$(INCLUDE)/no_os_init.h \
+		$(INCLUDE)/no_os_alloc.h
 
 SRCS += $(DRIVERS)/api/no_os_gpio.c \
 		$(DRIVERS)/api/no_os_i2c.c  \
@@ -34,7 +35,8 @@ SRCS += $(DRIVERS)/api/no_os_gpio.c \
 		$(DRIVERS)/api/no_os_timer.c  \
 		$(DRIVERS)/api/no_os_uart.c \
 		$(NO-OS)/util/no_os_list.c \
-		$(NO-OS)/util/no_os_util.c
+		$(NO-OS)/util/no_os_util.c \
+		$(NO-OS)/util/no_os_alloc.c
 
 INCS += $(DRIVERS)/accel/adxl355/adxl355.h
 SRCS += $(DRIVERS)/accel/adxl355/adxl355.c

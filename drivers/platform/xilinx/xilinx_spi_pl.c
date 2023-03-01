@@ -52,6 +52,7 @@
 #include "no_os_error.h"
 #include "no_os_delay.h"
 #include "no_os_util.h"
+#include "no_os_alloc.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -197,11 +198,11 @@ static int32_t xil_spi_init_pl(struct no_os_spi_desc **desc,
 	if (param->chip_select > cfg->NumSlaveBits)
 		return -EINVAL;
 
-	ldesc = (struct no_os_spi_desc *)calloc(1, sizeof(*ldesc));
+	ldesc = (struct no_os_spi_desc *)no_os_calloc(1, sizeof(*ldesc));
 	if (!ldesc)
 		return -ENOMEM;
 
-	xdesc = (struct xspi_desc *)calloc(1, sizeof(*xdesc));
+	xdesc = (struct xspi_desc *)no_os_calloc(1, sizeof(*xdesc));
 	if (!xdesc) {
 		err = -ENOMEM;
 		goto error;
@@ -224,8 +225,8 @@ static int32_t xil_spi_init_pl(struct no_os_spi_desc **desc,
 	return 0;
 
 error:
-	free(xdesc);
-	free(ldesc);
+	no_os_free(xdesc);
+	no_os_free(ldesc);
 
 	return err;
 }
@@ -236,8 +237,8 @@ static int32_t xil_spi_remove_pl(struct no_os_spi_desc *desc)
 	if (!desc)
 		return -EINVAL;
 
-	free(desc->extra);
-	free(desc);
+	no_os_free(desc->extra);
+	no_os_free(desc);
 
 	return 0;
 }

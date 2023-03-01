@@ -36,6 +36,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "no_os_error.h"
+#include "no_os_alloc.h"
 #include "no_os_uart.h"
 #include "no_os_irq.h"
 #include "xilinx_uart.h"
@@ -371,10 +372,10 @@ static int32_t xil_uart_init(struct no_os_uart_desc **desc,
 #endif // XUARTLITE_H
 	int32_t status;
 
-	descriptor = calloc(1, sizeof(struct no_os_uart_desc));
+	descriptor = no_os_calloc(1, sizeof(struct no_os_uart_desc));
 	if (!descriptor)
 		return -1;
-	xil_uart_desc = calloc(1, sizeof(struct xil_uart_desc));
+	xil_uart_desc = no_os_calloc(1, sizeof(struct xil_uart_desc));
 	if (!xil_uart_desc)
 		goto error_free_descriptor;
 
@@ -395,7 +396,7 @@ static int32_t xil_uart_init(struct no_os_uart_desc **desc,
 	switch(xil_uart_desc->type) {
 	case UART_PS:
 #ifdef XUARTPS_H
-		xil_uart_desc->instance = calloc(1, sizeof(XUartPs));
+		xil_uart_desc->instance = no_os_calloc(1, sizeof(XUartPs));
 		if (!(xil_uart_desc->instance))
 			goto error_free_xil_uart_desc;
 		/*
@@ -441,7 +442,7 @@ static int32_t xil_uart_init(struct no_os_uart_desc **desc,
 #endif // XUARTPS_H
 	case UART_PL:
 #ifdef XUARTLITE_H
-		xil_uart_desc->instance = calloc(1, sizeof(XUartLite));
+		xil_uart_desc->instance = no_os_calloc(1, sizeof(XUartLite));
 		if (!(xil_uart_desc->instance))
 			goto error_free_xil_uart_desc;
 
@@ -468,11 +469,11 @@ static int32_t xil_uart_init(struct no_os_uart_desc **desc,
 	return 0;
 
 error_free_instance:
-	free(xil_uart_desc->instance);
+	no_os_free(xil_uart_desc->instance);
 error_free_xil_uart_desc:
-	free(xil_uart_desc);
+	no_os_free(xil_uart_desc);
 error_free_descriptor:
-	free(descriptor);
+	no_os_free(descriptor);
 
 	return -1;
 }
@@ -485,9 +486,9 @@ error_free_descriptor:
 static int32_t xil_uart_remove(struct no_os_uart_desc *desc)
 {
 	struct xil_uart_desc *xil_uart_desc = desc->extra;
-	free(xil_uart_desc->instance);
-	free(xil_uart_desc);
-	free(desc);
+	no_os_free(xil_uart_desc->instance);
+	no_os_free(xil_uart_desc);
+	no_os_free(desc);
 
 	return 0;
 }

@@ -45,6 +45,7 @@
 #include <string.h>
 #include "no_os_error.h"
 #include "ad7799.h"
+#include "no_os_alloc.h"
 
 /*****************************************************************************/
 /***************************** Constant definition ***************************/
@@ -401,7 +402,7 @@ int32_t ad7799_init(struct ad7799_dev **device,
 	uint32_t chip_id = 0;
 
 
-	dev = (struct ad7799_dev *)calloc(1, sizeof(*dev));
+	dev = (struct ad7799_dev *)no_os_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -419,13 +420,13 @@ int32_t ad7799_init(struct ad7799_dev **device,
 		dev->reg_size = ad7799_reg_size;
 		break;
 	default:
-		free(dev);
+		no_os_free(dev);
 		return -1;
 	}
 
 	ret = no_os_spi_init(&dev->spi_desc, &init_param->spi_init);
 	if (ret) {
-		free(dev);
+		no_os_free(dev);
 		return -1;
 	}
 
@@ -481,7 +482,7 @@ int32_t ad7799_remove(struct ad7799_dev *device)
 	int32_t ret;
 
 	ret = no_os_spi_remove(device->spi_desc);
-	free(device);
+	no_os_free(device);
 
 	return ret;
 }

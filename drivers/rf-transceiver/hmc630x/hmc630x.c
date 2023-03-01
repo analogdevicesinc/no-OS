@@ -40,6 +40,7 @@
 #include <stdlib.h>
 #include "hmc630x.h"
 #include "no_os_delay.h"
+#include "no_os_alloc.h"
 
 #define HMC630X_ARRAY_ADDRESS_MASK NO_OS_GENMASK(13, 8)
 #define HMC630X_RW_MASK NO_OS_BIT(14)
@@ -87,11 +88,11 @@ static int _hmc630x_generate_vco(struct hmc630x_dev *d, uint64_t f_start,
 {
 	int ret, e;
 
-	d->vco.freqs = (uint64_t *)calloc(entries, sizeof(*d->vco.freqs));
+	d->vco.freqs = (uint64_t *)no_os_calloc(entries, sizeof(*d->vco.freqs));
 	if (!d->vco.freqs)
 		return -ENOMEM;
 
-	d->vco.fbdiv = (uint8_t *)calloc(entries, sizeof(*d->vco.fbdiv));
+	d->vco.fbdiv = (uint8_t *)no_os_calloc(entries, sizeof(*d->vco.fbdiv));
 	if (!d->vco.fbdiv) {
 		ret = -ENOMEM;
 		goto error;
@@ -106,7 +107,7 @@ static int _hmc630x_generate_vco(struct hmc630x_dev *d, uint64_t f_start,
 
 	return 0;
 error:
-	free(d->vco.freqs);
+	no_os_free(d->vco.freqs);
 	return ret;
 }
 
@@ -120,7 +121,7 @@ int hmc630x_init(struct hmc630x_dev **dev, struct hmc630x_init_param *init)
 	if (!dev || !init)
 		return -EINVAL;
 
-	d = (struct hmc630x_dev *) calloc(1, sizeof(*d));
+	d = (struct hmc630x_dev *) no_os_calloc(1, sizeof(*d));
 	if (!d)
 		return -ENOMEM;
 
@@ -246,10 +247,10 @@ error_3:
 error_2:
 	no_os_gpio_remove(d->en);
 error_1:
-	free(d->vco.freqs);
-	free(d->vco.fbdiv);
+	no_os_free(d->vco.freqs);
+	no_os_free(d->vco.fbdiv);
 error_0:
-	free(d);
+	no_os_free(d);
 	return ret;
 }
 
@@ -258,9 +259,9 @@ int hmc630x_remove(struct hmc630x_dev *dev)
 {
 	int ret;
 
-	free(dev->vco.freqs);
+	no_os_free(dev->vco.freqs);
 	dev->vco.freqs = NULL;
-	free(dev->vco.fbdiv);
+	no_os_free(dev->vco.fbdiv);
 	dev->vco.fbdiv = NULL;
 
 	ret = no_os_gpio_remove(dev->en);
@@ -279,7 +280,7 @@ int hmc630x_remove(struct hmc630x_dev *dev)
 	if (ret)
 		return ret;
 
-	free(dev);
+	no_os_free(dev);
 	dev = NULL;
 
 	return 0;

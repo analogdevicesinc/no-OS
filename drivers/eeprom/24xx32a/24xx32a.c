@@ -52,6 +52,7 @@
 #include "no_os_error.h"
 #include "no_os_delay.h"
 #include "no_os_util.h"
+#include "no_os_alloc.h"
 
 /******************************************************************************/
 /************************** Functions Definitions *****************************/
@@ -74,13 +75,13 @@ int32_t eeprom_24xx32a_init(struct no_os_eeprom_desc **desc,
 	if (!desc || !param)
 		return -EINVAL;
 
-	eeprom_desc = (struct no_os_eeprom_desc*)calloc(1, sizeof(*eeprom_desc));
+	eeprom_desc = (struct no_os_eeprom_desc*)no_os_calloc(1, sizeof(*eeprom_desc));
 	if (!eeprom_desc)
 		return -ENOMEM;
 
 	eeprom_desc->device_id = param->device_id;
 
-	eeprom_dev = (struct eeprom_24xx32a_dev*)calloc(1, sizeof(*eeprom_dev));
+	eeprom_dev = (struct eeprom_24xx32a_dev*)no_os_calloc(1, sizeof(*eeprom_dev));
 	if (!eeprom_dev) {
 		ret = -ENOMEM;
 		goto error_eeprom_dev;
@@ -97,9 +98,9 @@ int32_t eeprom_24xx32a_init(struct no_os_eeprom_desc **desc,
 	return 0;
 
 error_eeprom_init:
-	free(eeprom_dev);
+	no_os_free(eeprom_dev);
 error_eeprom_dev:
-	free(eeprom_desc);
+	no_os_free(eeprom_desc);
 
 	return ret;
 }
@@ -205,8 +206,8 @@ int32_t eeprom_24xx32a_remove(struct no_os_eeprom_desc *desc)
 		return ret;
 
 	/* Free the EEPROM descriptor objects */
-	free(desc->extra);
-	free(desc);
+	no_os_free(desc->extra);
+	no_os_free(desc);
 
 	return 0;
 }

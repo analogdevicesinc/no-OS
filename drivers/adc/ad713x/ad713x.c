@@ -52,6 +52,7 @@
 #include "ad713x.h"
 #include "no_os_delay.h"
 #include "no_os_error.h"
+#include "no_os_alloc.h"
 
 /******************************************************************************/
 /***************************** Variable definition ****************************/
@@ -527,7 +528,7 @@ int32_t ad713x_init(struct ad713x_dev **device,
 	int32_t ret;
 	uint8_t data;
 
-	dev = (struct ad713x_dev *)calloc(1, sizeof(*dev));
+	dev = (struct ad713x_dev *)no_os_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -536,7 +537,7 @@ int32_t ad713x_init(struct ad713x_dev **device,
 		if (NO_OS_IS_ERR_VALUE(ret))
 			goto error_dev;
 	} else {
-		dev->spi_desc = calloc(1, sizeof *dev->spi_desc);
+		dev->spi_desc = no_os_calloc(1, sizeof *dev->spi_desc);
 		dev->spi_desc->chip_select = init_param->spi_init_prm.chip_select;
 		dev->spi_desc->extra = init_param->spi_common_dev->extra;
 		dev->spi_desc->max_speed_hz = init_param->spi_init_prm.max_speed_hz;
@@ -622,7 +623,7 @@ int32_t ad713x_remove(struct ad713x_dev *dev)
 	if(NO_OS_IS_ERR_VALUE(ret))
 		return -1;
 
-	free(dev);
+	no_os_free(dev);
 
 	return 0;
 }

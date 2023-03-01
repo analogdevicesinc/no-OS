@@ -53,6 +53,7 @@
 
 #include "no_os_error.h"
 #include "no_os_spi.h"
+#include "no_os_alloc.h"
 #include "xilinx_spi.h"
 
 #if defined(PLATFORM_ZYNQ)
@@ -86,9 +87,9 @@ static int32_t spi_init_pl(struct no_os_spi_desc *desc,
 	struct xil_spi_desc 		*xdesc;
 	struct xil_spi_init_param	*xinit;
 
-	xdesc = (struct xil_spi_desc*)malloc(sizeof(struct xil_spi_desc));
+	xdesc = (struct xil_spi_desc*)no_os_malloc(sizeof(struct xil_spi_desc));
 	if(!xdesc) {
-		free(xdesc);
+		no_os_free(xdesc);
 		return -1;
 	}
 
@@ -97,7 +98,7 @@ static int32_t spi_init_pl(struct no_os_spi_desc *desc,
 	xdesc->type = xinit->type;
 	xdesc->flags = xinit->flags;
 
-	xdesc->instance = (XSpi*)calloc(1, sizeof(XSpi));
+	xdesc->instance = (XSpi*)no_os_calloc(1, sizeof(XSpi));
 	if(!xdesc->instance)
 		goto pl_error;
 
@@ -134,8 +135,8 @@ static int32_t spi_init_pl(struct no_os_spi_desc *desc,
 	return 0;
 
 pl_error:
-	free(xdesc->instance);
-	free(xdesc);
+	no_os_free(xdesc->instance);
+	no_os_free(xdesc);
 #endif
 	return -1;
 }
@@ -160,9 +161,9 @@ static int32_t spi_init_ps(struct no_os_spi_desc *desc,
 	uint32_t			prescaler = 0u;
 	uint32_t			input_clock = 0u;
 
-	xdesc = (struct xil_spi_desc*)malloc(sizeof(struct xil_spi_desc));
+	xdesc = (struct xil_spi_desc*)no_os_malloc(sizeof(struct xil_spi_desc));
 	if(!xdesc) {
-		free(xdesc);
+		no_os_free(xdesc);
 		return -1;
 	}
 
@@ -171,7 +172,7 @@ static int32_t spi_init_ps(struct no_os_spi_desc *desc,
 	xdesc->type = xinit->type;
 	xdesc->flags = xinit->flags;
 
-	xdesc->instance = (XSpiPs*)malloc(sizeof(XSpiPs));
+	xdesc->instance = (XSpiPs*)no_os_malloc(sizeof(XSpiPs));
 	if(!xdesc->instance)
 		goto ps_error;
 
@@ -239,8 +240,8 @@ static int32_t spi_init_ps(struct no_os_spi_desc *desc,
 	return 0;
 
 ps_error:
-	free(xdesc->instance);
-	free(xdesc);
+	no_os_free(xdesc->instance);
+	no_os_free(xdesc);
 #endif
 	return -1;
 }
@@ -261,9 +262,9 @@ int32_t xil_spi_init(struct no_os_spi_desc **desc,
 		return -1;
 	}
 
-	*desc = malloc(sizeof(**desc));
+	*desc = no_os_malloc(sizeof(**desc));
 	if(! *desc) {
-		free(*desc);
+		no_os_free(*desc);
 		return -1;
 	}
 
@@ -292,7 +293,7 @@ int32_t xil_spi_init(struct no_os_spi_desc **desc,
 
 	if (ret != 0) {
 init_error:
-		free(*desc);
+		no_os_free(*desc);
 
 		return -1;
 	}
@@ -349,9 +350,9 @@ error:
 	}
 
 	if(xdesc)
-		free(xdesc->instance);
-	free(desc->extra);
-	free(desc);
+		no_os_free(xdesc->instance);
+	no_os_free(desc->extra);
+	no_os_free(desc);
 
 	return 0;
 }

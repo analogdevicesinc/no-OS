@@ -48,6 +48,7 @@
 #include "no_os_util.h"
 #include "no_os_list.h"
 #include "no_os_irq.h"
+#include "no_os_alloc.h"
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -146,13 +147,13 @@ int32_t xil_gpio_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
 	struct xil_gpio_irq_init_param *xil_ip;
 	struct no_os_callback_desc callback;
 
-	xil_desc = (struct xil_gpio_irq_desc *)calloc(1, sizeof(*xil_desc));
+	xil_desc = (struct xil_gpio_irq_desc *)no_os_calloc(1, sizeof(*xil_desc));
 	if(!xil_desc)
 		return -ENOMEM;
 
-	ldesc = (struct no_os_irq_ctrl_desc *)calloc(1, sizeof(*ldesc));
+	ldesc = (struct no_os_irq_ctrl_desc *)no_os_calloc(1, sizeof(*ldesc));
 	if(!ldesc) {
-		free(xil_desc);
+		no_os_free(xil_desc);
 		return -ENOMEM;
 	}
 
@@ -203,8 +204,8 @@ error_op:
 error_list:
 	no_os_list_remove(xil_desc->callback_list);
 error_desc:
-	free(xil_desc);
-	free(ldesc);
+	no_os_free(xil_desc);
+	no_os_free(ldesc);
 	return status;
 }
 
@@ -247,7 +248,8 @@ int32_t xil_gpio_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 	struct xil_callback_desc *dev_callback;
 	struct xil_gpio_irq_desc *extra;
 
-	dev_callback = (struct xil_callback_desc *)calloc(1, sizeof(*dev_callback));
+	dev_callback = (struct xil_callback_desc *)no_os_calloc(1,
+			sizeof(*dev_callback));
 	if(!dev_callback)
 		return -1;
 
@@ -285,7 +287,7 @@ int32_t xil_gpio_irq_unregister_callback(struct no_os_irq_ctrl_desc *desc,
 	if(status)
 		return -ENXIO;
 
-	free(dev_callback);
+	no_os_free(dev_callback);
 
 	return 0;
 }
@@ -335,12 +337,12 @@ int32_t xil_gpio_irq_ctrl_remove(struct no_os_irq_ctrl_desc *desc)
 
 	extra = desc->extra;
 	while (0 == no_os_list_get_first(extra->callback_list, &callback_desc))
-		free(callback_desc);
+		no_os_free(callback_desc);
 
 	no_os_iterator_remove(extra->it);
 	no_os_list_remove(extra->callback_list);
-	free(extra);
-	free(desc);
+	no_os_free(extra);
+	no_os_free(desc);
 
 	return 0;
 }

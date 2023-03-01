@@ -22,7 +22,8 @@ INCS += $(INCLUDE)/no_os_delay.h     		\
 		$(INCLUDE)/no_os_uart.h      	\
 		$(INCLUDE)/no_os_lf256fifo.h 	\
 		$(INCLUDE)/no_os_util.h 	\
-		$(INCLUDE)/no_os_units.h 
+		$(INCLUDE)/no_os_units.h        \
+		$(INCLUDE)/no_os_alloc.h
 
 SRCS += $(NO-OS)/util/no_os_lf256fifo.c 	\
 		$(DRIVERS)/api/no_os_i2c.c  	\
@@ -30,7 +31,8 @@ SRCS += $(NO-OS)/util/no_os_lf256fifo.c 	\
 		$(DRIVERS)/api/no_os_irq.c  	\
 		$(DRIVERS)/api/no_os_gpio.c  	\
 		$(NO-OS)/util/no_os_util.c	\
-		$(NO-OS)/util/no_os_list.c
+		$(NO-OS)/util/no_os_list.c      \
+		$(NO-OS)/util/no_os_alloc.c
 
 SRCS += $(DRIVERS)/temperature/adt75/adt75.c
 INCS += $(DRIVERS)/temperature/adt75/adt75.h

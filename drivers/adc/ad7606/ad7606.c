@@ -50,6 +50,7 @@
 #include "no_os_error.h"
 #include "no_os_util.h"
 #include "no_os_crc.h"
+#include "no_os_alloc.h"
 
 struct ad7606_chip_info {
 	uint8_t num_channels;
@@ -1116,7 +1117,7 @@ int32_t ad7606_init(struct ad7606_dev **device,
 	no_os_crc8_populate_msb(ad7606_crc8, 0x7);
 	no_os_crc16_populate_msb(ad7606_crc16, 0x755b);
 
-	dev = (struct ad7606_dev *)calloc(1, sizeof(*dev));
+	dev = (struct ad7606_dev *)no_os_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -1249,7 +1250,7 @@ int32_t ad7606_remove(struct ad7606_dev *dev)
 
 	ret = no_os_spi_remove(dev->spi_desc);
 
-	free(dev);
+	no_os_free(dev);
 
 	return ret;
 }

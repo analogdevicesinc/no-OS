@@ -47,6 +47,7 @@
 #include "max31855.h"
 #include "no_os_spi.h"
 #include "no_os_util.h"
+#include "no_os_alloc.h"
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -65,7 +66,7 @@ int max31855_init(struct max31855_dev **device,
 	int ret;
 	struct max31855_dev *descriptor;
 
-	descriptor = calloc(1, sizeof(*descriptor));
+	descriptor = no_os_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
@@ -77,7 +78,7 @@ int max31855_init(struct max31855_dev **device,
 
 	return 0;
 spi_err:
-	free(descriptor);
+	no_os_free(descriptor);
 
 	return ret;
 }
@@ -96,7 +97,7 @@ int max31855_remove(struct max31855_dev *device)
 	if (ret)
 		return -EINVAL;
 
-	free(device);
+	no_os_free(device);
 
 	return 0;
 }

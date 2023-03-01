@@ -43,6 +43,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "no_os_util.h"
+#include "no_os_alloc.h"
 
 #define ADUCM3029_DEV_ID 0
 
@@ -134,7 +135,7 @@ int32_t aducm3029_adc_init(struct adc_desc **desc, struct adc_init_param *param)
 	if (!desc)
 		return -EINVAL;
 
-	ldesc = (struct adc_desc *)calloc(1, sizeof(*ldesc));
+	ldesc = (struct adc_desc *)no_os_calloc(1, sizeof(*ldesc));
 	if (!ldesc)
 		return -ENOMEM;
 
@@ -177,7 +178,7 @@ close_adc:
 	adi_adc_PowerUp(ldesc->dev, false);
 	adi_adc_Close(ldesc->dev);
 free_desc:
-	free(ldesc);
+	no_os_free(ldesc);
 	*desc = NULL;
 	return -ret;
 }
@@ -194,7 +195,7 @@ int32_t aducm3029_adc_remove(struct adc_desc *desc)
 	adi_adc_PowerUp(desc->dev, false);
 	adi_adc_Close(desc->dev);
 
-	free(desc);
+	no_os_free(desc);
 
 	return 0;
 }

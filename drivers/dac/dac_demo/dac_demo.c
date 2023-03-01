@@ -46,6 +46,7 @@
 #include "dac_demo.h"
 #include "no_os_error.h"
 #include "no_os_util.h"
+#include "no_os_alloc.h"
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -61,7 +62,7 @@ int32_t dac_demo_init(struct dac_demo_desc **desc,
 		      struct dac_demo_init_param *param)
 {
 	struct dac_demo_desc *adesc;
-	adesc = (struct dac_demo_desc*)calloc(1, sizeof(*adesc));
+	adesc = (struct dac_demo_desc*)no_os_calloc(1, sizeof(*adesc));
 
 	if(!adesc)
 		return -ENOMEM;
@@ -86,7 +87,7 @@ int32_t dac_demo_remove(struct dac_demo_desc *desc)
 	if(!desc)
 		return -EINVAL;
 
-	free(desc);
+	no_os_free(desc);
 
 	return 0;
 }

@@ -47,6 +47,7 @@
 
 #include "no_os_error.h"
 #include "no_os_util.h"
+#include "no_os_alloc.h"
 #include "no_os_list.h"
 #include "no_os_irq.h"
 #include "no_os_gpio.h"
@@ -118,7 +119,7 @@ static int max_gpio_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
 	if (!param)
 		return -EINVAL;
 
-	descriptor = calloc(1, sizeof(*descriptor));
+	descriptor = no_os_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
@@ -135,7 +136,7 @@ static int max_gpio_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
 
 error:
 	no_os_list_remove(actions);
-	free(descriptor);
+	no_os_free(descriptor);
 
 	return ret;
 }
@@ -153,11 +154,11 @@ static int max_gpio_irq_ctrl_remove(struct no_os_irq_ctrl_desc *desc)
 		return -EINVAL;
 
 	while (0 == no_os_list_get_first(actions, (void **)&discard))
-		free(discard);
+		no_os_free(discard);
 
 	no_os_list_remove(actions);
-	free(desc->extra);
-	free(desc);
+	no_os_free(desc->extra);
+	no_os_free(desc);
 
 	return 0;
 }
@@ -187,7 +188,7 @@ static int max_gpio_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 	* If no action was found, insert a new one, otherwise update it
 	*/
 	if (ret) {
-		action = calloc(1, sizeof(*action));
+		action = no_os_calloc(1, sizeof(*action));
 		if (!action)
 			return -ENOMEM;
 
@@ -215,7 +216,7 @@ static int max_gpio_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 	return 0;
 
 free_action:
-	free(action);
+	no_os_free(action);
 	return ret;
 }
 
@@ -247,7 +248,7 @@ static int max_gpio_irq_unregister_callback(struct no_os_irq_ctrl_desc *desc,
 		.mask = NO_OS_BIT(irq_id)
 	};
 	MXC_GPIO_RegisterCallback(&cfg, NULL, NULL);
-	free(discard_action);
+	no_os_free(discard_action);
 
 	return 0;
 }

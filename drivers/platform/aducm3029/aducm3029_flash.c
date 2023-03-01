@@ -49,6 +49,7 @@
 #include "no_os_flash.h"
 #include "aducm3029_flash.h"
 #include "no_os_error.h"
+#include "no_os_alloc.h"
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -87,12 +88,12 @@ int32_t no_os_flash_init(struct no_os_flash_dev **device,
 	struct no_os_flash_dev *dev;
 	struct adicup_flash_dev *adicup_extra;
 
-	dev = (struct no_os_flash_dev *)calloc(1, sizeof(*dev));
+	dev = (struct no_os_flash_dev *)no_os_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -1;
 
 	dev->id = init_param->id;
-	adicup_extra = (struct adicup_flash_dev *)calloc(1,
+	adicup_extra = (struct adicup_flash_dev *)no_os_calloc(1,
 			sizeof(*adicup_extra));
 	if (!adicup_extra)
 		goto error_dev;
@@ -113,9 +114,9 @@ int32_t no_os_flash_init(struct no_os_flash_dev **device,
 	return 0;
 
 error_adicup:
-	free(adicup_extra);
+	no_os_free(adicup_extra);
 error_dev:
-	free(dev);
+	no_os_free(dev);
 
 	return -1;
 }
@@ -141,8 +142,8 @@ int32_t no_os_flash_remove(struct no_os_flash_dev *dev)
 	if (ret != ADI_FEE_SUCCESS)
 		return -1;
 
-	free(adicup_extra);
-	free(dev);
+	no_os_free(adicup_extra);
+	no_os_free(dev);
 
 	return 0;
 }

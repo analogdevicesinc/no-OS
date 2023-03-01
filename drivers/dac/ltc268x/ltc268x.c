@@ -43,6 +43,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "no_os_error.h"
+#include "no_os_alloc.h"
 
 #include "ltc268x.h" /* LTC268X definitions. */
 
@@ -422,7 +423,7 @@ int32_t ltc268x_init(struct ltc268x_dev **device,
 	uint8_t channel = 0;
 	int ret;
 
-	dev = (struct ltc268x_dev*)calloc(1, sizeof(*dev));
+	dev = (struct ltc268x_dev*)no_os_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -494,7 +495,7 @@ int32_t ltc268x_init(struct ltc268x_dev **device,
 
 error:
 	printf("LTC268X initialization error (%d)\n", ret);
-	free(dev);
+	no_os_free(dev);
 	return ret;
 }
 
@@ -512,7 +513,7 @@ int32_t ltc268x_remove(struct ltc268x_dev *dev)
 
 	ret = no_os_spi_remove(dev->spi_desc);
 
-	free(dev);
+	no_os_free(dev);
 
 	return ret;
 }

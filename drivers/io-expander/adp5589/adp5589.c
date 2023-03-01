@@ -42,6 +42,7 @@
 /******************************************************************************/
 #include <stdlib.h>
 #include "adp5589.h"			// ADP5589 definitions.
+#include "no_os_alloc.h"
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -109,7 +110,7 @@ int8_t adp5589_init(struct adp5589_dev **device,
 	struct adp5589_dev *dev;
 	static uint8_t status;
 
-	dev = (struct adp5589_dev *)malloc(sizeof(*dev));
+	dev = (struct adp5589_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -142,7 +143,7 @@ int32_t adp5589_remove(struct adp5589_dev *dev)
 
 	ret = no_os_i2c_remove(dev->i2c_desc);
 
-	free(dev);
+	no_os_free(dev);
 
 	return ret;
 }

@@ -43,6 +43,7 @@
 #include "no_os_tdm.h"
 #include "stm32_tdm.h"
 #include "no_os_error.h"
+#include "no_os_alloc.h"
 
 /**
  * @brief stm32 platform specific TDM platform ops structure
@@ -72,14 +73,14 @@ int32_t stm32_tdm_init(struct no_os_tdm_desc **desc,
 	if (param->mode > NO_OS_TDM_SLAVE_RX)
 		return -EINVAL;
 
-	tdm_desc = (struct no_os_tdm_desc *)calloc(1, sizeof(*tdm_desc));
+	tdm_desc = (struct no_os_tdm_desc *)no_os_calloc(1, sizeof(*tdm_desc));
 	if (!tdm_desc)
 		return -ENOMEM;
 
 	struct stm32_tdm_desc *tdesc;
 	struct stm32_tdm_init_param *tinit;
 
-	tdesc = (struct stm32_tdm_desc*)calloc(1,sizeof(struct stm32_tdm_desc));
+	tdesc = (struct stm32_tdm_desc*)no_os_calloc(1,sizeof(struct stm32_tdm_desc));
 	if (!tdesc) {
 		ret = -ENOMEM;
 		goto error;
@@ -162,8 +163,8 @@ int32_t stm32_tdm_init(struct no_os_tdm_desc **desc,
 
 	return 0;
 error:
-	free(tdm_desc);
-	free(tdesc);
+	no_os_free(tdm_desc);
+	no_os_free(tdesc);
 	return ret;
 }
 
@@ -181,8 +182,8 @@ int32_t stm32_tdm_remove(struct no_os_tdm_desc *desc)
 
 	tdesc = desc->extra;
 	HAL_SAI_DeInit(&tdesc->hsai);
-	free(desc->extra);
-	free(desc);
+	no_os_free(desc->extra);
+	no_os_free(desc);
 
 	return 0;
 }

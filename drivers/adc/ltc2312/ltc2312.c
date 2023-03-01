@@ -50,6 +50,7 @@ ongoing work.
 #include <stdlib.h>
 #include <math.h>
 #include "ltc2312.h"
+#include "no_os_alloc.h"
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -70,7 +71,7 @@ int32_t ltc2312_setup(struct ltc2312_dev **device,
 	struct ltc2312_dev *dev;
 	int32_t ret;
 
-	dev = malloc(sizeof(*dev));
+	dev = no_os_malloc(sizeof(*dev));
 	if(!dev)
 		return -1;
 
@@ -84,7 +85,7 @@ int32_t ltc2312_setup(struct ltc2312_dev **device,
 
 	return ret;
 error:
-	free(dev);
+	no_os_free(dev);
 
 	return ret;
 }
@@ -107,7 +108,7 @@ int32_t ltc2312_remove(struct ltc2312_dev *dev)
 	if(ret != 0)
 		return ret;
 
-	free(dev);
+	no_os_free(dev);
 
 	return ret;
 }

@@ -43,6 +43,7 @@
 
 #include "demux_spi.h"
 #include "no_os_error.h"
+#include "no_os_alloc.h"
 #include <stdlib.h>
 #include <string.h>
 
@@ -77,7 +78,7 @@ int32_t demux_spi_init(struct no_os_spi_desc **desc,
 	if (!param)
 		return -1;
 
-	descriptor = (struct no_os_spi_desc *)calloc(1, sizeof(*descriptor));
+	descriptor = (struct no_os_spi_desc *)no_os_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -1;
 
@@ -89,7 +90,7 @@ int32_t demux_spi_init(struct no_os_spi_desc **desc,
 
 	ret = no_os_spi_init(&spi_dev_desc, spi_dev_param);
 	if (ret != 0) {
-		free(descriptor);
+		no_os_free(descriptor);
 		return -1;
 	}
 
@@ -113,7 +114,7 @@ int32_t demux_spi_remove(struct no_os_spi_desc *desc)
 	if (no_os_spi_remove(desc->extra))
 		return -1;
 
-	free(desc);
+	no_os_free(desc);
 
 	return 0;
 }
@@ -137,7 +138,7 @@ int32_t demux_spi_write_and_read(struct no_os_spi_desc *desc, uint8_t *data,
 	if (!desc)
 		return -1;
 
-	buff = malloc(sizeof(*buff) * (bytes_number+1));
+	buff = no_os_malloc(sizeof(*buff) * (bytes_number+1));
 	if (!buff)
 		return -1;
 
@@ -151,7 +152,7 @@ int32_t demux_spi_write_and_read(struct no_os_spi_desc *desc, uint8_t *data,
 
 	memcpy(data, buff+1, bytes_number);
 
-	free(buff);
+	no_os_free(buff);
 
 	return ret;
 }

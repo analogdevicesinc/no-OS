@@ -46,6 +46,7 @@
 #include "aducm3029_uart.h"
 #include "aducm3029_irq.h"
 #include "no_os_util.h"
+#include "no_os_alloc.h"
 #include <drivers/uart/adi_uart.h>
 
 /******************************************************************************/
@@ -103,21 +104,21 @@ static struct no_os_uart_desc *alloc_desc_mem(void)
 	struct no_os_aducm_uart_desc	*aducm_desc;
 	uint32_t		mem;
 
-	desc = calloc(1, sizeof(*desc));
+	desc = no_os_calloc(1, sizeof(*desc));
 	if (!desc)
 		return NULL;
-	aducm_desc = calloc(1, sizeof(*aducm_desc));
+	aducm_desc = no_os_calloc(1, sizeof(*aducm_desc));
 	if (!aducm_desc) {
-		free(desc);
+		no_os_free(desc);
 		return NULL;
 	}
 	desc->extra = aducm_desc;
 
 	/* Allocate and align buffer to 32 bits */
-	aducm_desc->adi_uart_buffer = calloc(1, ADI_UART_BIDIR_MEMORY_SIZE + 3);
+	aducm_desc->adi_uart_buffer = no_os_calloc(1, ADI_UART_BIDIR_MEMORY_SIZE + 3);
 	if (!aducm_desc->adi_uart_buffer) {
-		free(aducm_desc);
-		free(desc);
+		no_os_free(aducm_desc);
+		no_os_free(desc);
 		return NULL;
 	}
 
@@ -137,12 +138,12 @@ static void free_desc_mem(struct no_os_uart_desc *desc)
 {
 	struct no_os_aducm_uart_desc	*aducm_desc = desc->extra;
 
-	free((void *)((uint32_t)aducm_desc->adi_uart_buffer -
-		      aducm_desc->adi_uart_buffer_offset));
+	no_os_free((void *)((uint32_t)aducm_desc->adi_uart_buffer -
+			    aducm_desc->adi_uart_buffer_offset));
 	aducm_desc->adi_uart_buffer = NULL;
 	aducm_desc->adi_uart_buffer_offset = 0;
-	free(desc->extra);
-	free(desc);
+	no_os_free(desc->extra);
+	no_os_free(desc);
 }
 
 /**

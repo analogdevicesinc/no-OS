@@ -45,6 +45,7 @@
 #include "ade9430.h"
 #include "no_os_delay.h"
 #include "no_os_units.h"
+#include "no_os_alloc.h"
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -293,7 +294,7 @@ int ade9430_init(struct ade9430_dev **device,
 	uint32_t chip_id;
 	int ret;
 
-	dev = (struct ade9430_dev *)calloc(1, sizeof(*dev));
+	dev = (struct ade9430_dev *)no_os_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -335,7 +336,7 @@ int ade9430_init(struct ade9430_dev **device,
 error_spi:
 	no_os_spi_remove(dev->spi_desc);
 error_dev:
-	free(dev);
+	no_os_free(dev);
 
 	return ret;
 }
@@ -353,7 +354,7 @@ int ade9430_remove(struct ade9430_dev *dev)
 	if (ret)
 		return ret;
 
-	free(dev);
+	no_os_free(dev);
 	dev = NULL;
 
 	return 0;

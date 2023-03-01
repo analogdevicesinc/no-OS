@@ -46,6 +46,7 @@
 #include <time.h>
 #include "no_os_error.h"
 #include "no_os_timer.h"
+#include "no_os_alloc.h"
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -77,11 +78,11 @@ int linux_timer_init(struct no_os_timer_desc **desc,
 	struct no_os_timer_desc *descriptor;
 	struct linux_timer_desc *linux_desc;
 
-	descriptor = calloc(1, sizeof(*descriptor));
+	descriptor = no_os_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
-	linux_desc = calloc(1, sizeof(*linux_desc));
+	linux_desc = no_os_calloc(1, sizeof(*linux_desc));
 	if (!linux_desc)
 		goto free_desc;
 
@@ -96,7 +97,7 @@ int linux_timer_init(struct no_os_timer_desc **desc,
 	return 0;
 
 free_desc:
-	free(descriptor);
+	no_os_free(descriptor);
 
 	return -ENOMEM;
 }
@@ -108,8 +109,8 @@ free_desc:
  */
 int linux_timer_remove(struct no_os_timer_desc *desc)
 {
-	free(desc->extra);
-	free(desc);
+	no_os_free(desc->extra);
+	no_os_free(desc);
 
 	return 0;
 }

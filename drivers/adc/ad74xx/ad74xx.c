@@ -42,6 +42,7 @@
 /******************************************************************************/
 #include <stdlib.h>
 #include "ad74xx.h"		// AD74xx definitions.
+#include "no_os_alloc.h"
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -67,7 +68,7 @@ int8_t ad74xx_init(struct ad74xx_dev **device,
 	struct ad74xx_dev *dev;
 	uint8_t status;
 
-	dev = (struct ad74xx_dev *)malloc(sizeof(*dev));
+	dev = (struct ad74xx_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -104,7 +105,7 @@ int32_t ad74xx_remove(struct ad74xx_dev *dev)
 
 	status = no_os_gpio_remove(dev->gpio_cs);
 
-	free(dev);
+	no_os_free(dev);
 
 	return status;
 }

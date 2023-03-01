@@ -46,6 +46,7 @@
 #include "no_os_irq.h"
 #include "no_os_rtc.h"
 #include "no_os_util.h"
+#include "no_os_alloc.h"
 #include "rtc.h"
 #include "maxim_rtc.h"
 #include "rtc_reva_regs.h"
@@ -72,7 +73,7 @@ int32_t no_os_rtc_init(struct no_os_rtc_desc **device,
 	if(!init_param)
 		return -EINVAL;
 
-	dev = calloc(1, sizeof(*dev));
+	dev = no_os_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -91,7 +92,7 @@ int32_t no_os_rtc_init(struct no_os_rtc_desc **device,
 	return 0;
 
 error:
-	free(dev);
+	no_os_free(dev);
 
 	return ret;
 }
@@ -106,7 +107,7 @@ int32_t no_os_rtc_remove(struct no_os_rtc_desc *dev)
 	if (!dev)
 		return -EINVAL;
 
-	free(dev);
+	no_os_free(dev);
 
 	return 0;
 }

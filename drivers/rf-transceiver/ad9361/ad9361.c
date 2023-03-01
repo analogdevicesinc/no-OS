@@ -51,6 +51,7 @@
 #include "no_os_delay.h"
 #include "ad9361_util.h"
 #include "no_os_util.h"
+#include "no_os_alloc.h"
 #include "app_config.h"
 
 #define diff_abs(x, y) ((x) > (y) ? (x - y) : (y - x))
@@ -706,7 +707,7 @@ int32_t ad9361_spi_readm(struct no_os_spi_desc *spi, uint32_t reg,
 		return -EINVAL;
 
 	cmd = AD_READ | AD_CNT(num) | AD_ADDR(reg);
-	rbuffer = malloc(num + 2);
+	rbuffer = no_os_malloc(num + 2);
 	if(!rbuffer)
 		return -ENOMEM;
 	rbuffer[0] = cmd >> 8;
@@ -718,7 +719,7 @@ int32_t ad9361_spi_readm(struct no_os_spi_desc *spi, uint32_t reg,
 	else
 		memcpy(rbuf, &rbuffer[2], num);
 
-	free(rbuffer);
+	no_os_free(rbuffer);
 #ifdef _DEBUG
 	{
 		int32_t i;
@@ -7197,7 +7198,7 @@ static struct no_os_clk *ad9361_clk_register(struct ad9361_rf_phy *phy,
 		// Unused variable - fix compiler warning
 	}
 
-	clk_priv = (struct refclk_scale *)malloc(sizeof(*clk_priv));
+	clk_priv = (struct refclk_scale *)no_os_malloc(sizeof(*clk_priv));
 	if (!clk_priv) {
 		dev_err(&phy->spi->dev,
 			"ad9361_clk_register: could not allocate fixed factor clk");
@@ -7212,9 +7213,9 @@ static struct no_os_clk *ad9361_clk_register(struct ad9361_rf_phy *phy,
 
 	phy->ref_clk_scale[source] = clk_priv;
 
-	clk = (struct no_os_clk *)malloc(sizeof(*clk));
+	clk = (struct no_os_clk *)no_os_malloc(sizeof(*clk));
 	if (!clk) {
-		free(clk_priv);
+		no_os_free(clk_priv);
 		return (struct no_os_clk *)ERR_PTR(-ENOMEM);
 	}
 
@@ -7408,8 +7409,8 @@ int32_t ad9361_unregister_clocks(struct ad9361_rf_phy *phy)
 	int32_t i;
 
 	for (i = 0; i < NUM_AD9361_CLKS; i++) {
-		free(phy->clks[i]);
-		free(phy->ref_clk_scale[i]);
+		no_os_free(phy->clks[i]);
+		no_os_free(phy->ref_clk_scale[i]);
 	}
 
 	return 0;

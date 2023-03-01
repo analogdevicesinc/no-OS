@@ -17,7 +17,8 @@ SRCS += $(DRIVERS)/api/no_os_spi.c \
 	$(DRIVERS)/adc/ad7768-1/ad77681.c \
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.c \
 	$(DRIVERS)/axi_core/spi_engine/spi_engine.c \
-	$(NO-OS)/util/no_os_util.c
+	$(NO-OS)/util/no_os_util.c \
+	$(NO-OS)/util/no_os_alloc.c
 SRCS +=	$(PLATFORM_DRIVERS)/xilinx_axi_io.c \
 	$(PLATFORM_DRIVERS)/xilinx_gpio.c \
 	$(PLATFORM_DRIVERS)/xilinx_spi.c \
@@ -38,4 +39,5 @@ INCS +=	$(INCLUDE)/no_os_axi_io.h \
 	$(INCLUDE)/no_os_delay.h \
 	$(INCLUDE)/no_os_irq.h \
 	$(INCLUDE)/no_os_uart.h \
-	$(INCLUDE)/no_os_util.h
+	$(INCLUDE)/no_os_util.h \
+	$(INCLUDE)/no_os_alloc.h

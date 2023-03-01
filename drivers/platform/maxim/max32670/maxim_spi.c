@@ -49,6 +49,7 @@
 #include "maxim_spi.h"
 #include "no_os_spi.h"
 #include "no_os_util.h"
+#include "no_os_alloc.h"
 
 #define SPI_MASTER_MODE	1
 #define SPI_SINGLE_MODE	0
@@ -114,7 +115,7 @@ int32_t max_spi_init(struct no_os_spi_desc **desc,
 	if (!param || !param->extra)
 		return -EINVAL;
 
-	descriptor = calloc(1, sizeof(*descriptor));
+	descriptor = no_os_calloc(1, sizeof(*descriptor));
 
 	if (!descriptor)
 		return -ENOMEM;
@@ -142,7 +143,7 @@ int32_t max_spi_init(struct no_os_spi_desc **desc,
 err_init:
 	MXC_SPI_Shutdown(MXC_SPI_GET_SPI(descriptor->device_id));
 err:
-	free(descriptor);
+	no_os_free(descriptor);
 
 	return ret;
 }
@@ -158,7 +159,7 @@ int32_t max_spi_remove(struct no_os_spi_desc *desc)
 		return -EINVAL;
 
 	MXC_SPI_Shutdown(MXC_SPI_GET_SPI(desc->device_id));
-	free(desc);
+	no_os_free(desc);
 
 	return 0;
 }

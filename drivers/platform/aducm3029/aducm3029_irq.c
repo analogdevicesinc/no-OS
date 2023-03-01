@@ -56,6 +56,7 @@
 #include "aducm3029_timer.h"
 #include "no_os_util.h"
 #include "no_os_list.h"
+#include "no_os_alloc.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -215,13 +216,13 @@ int32_t aducm3029_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
 	if (!desc || !param)
 		return -1;
 
-	*desc = (struct no_os_irq_ctrl_desc *)calloc(1, sizeof(**desc));
+	*desc = (struct no_os_irq_ctrl_desc *)no_os_calloc(1, sizeof(**desc));
 	if (!*desc)
 		return -1;
 	aducm_desc = (struct aducm_irq_ctrl_desc *)
-		     calloc(1, sizeof(*aducm_desc));
+		     no_os_calloc(1, sizeof(*aducm_desc));
 	if (!aducm_desc) {
-		free(*desc);
+		no_os_free(*desc);
 		*desc = NULL;
 		return -1;
 	}
@@ -245,8 +246,8 @@ int32_t aducm3029_irq_ctrl_remove(struct no_os_irq_ctrl_desc *desc)
 	no_os_irq_unregister_callback(desc, ADUCM_UART_INT_ID, NULL);
 	no_os_irq_unregister_callback(desc, ADUCM_RTC_INT_ID, NULL);
 	no_os_irq_unregister_callback(desc, ADUCM_TIMER1_INT_ID, NULL);
-	free(desc->extra);
-	free(desc);
+	no_os_free(desc->extra);
+	no_os_free(desc);
 
 	return 0;
 }
@@ -339,7 +340,7 @@ int32_t aducm3029_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 	ret = no_os_list_read_last(_events[callback_desc->event].actions,
 				   (void **)&action);
 	if (ret) {
-		action = calloc(1, sizeof(*action));
+		action = no_os_calloc(1, sizeof(*action));
 		if (!action)
 			return -ENOMEM;
 
@@ -361,7 +362,7 @@ int32_t aducm3029_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 
 	return 0;
 free_action:
-	free(action);
+	no_os_free(action);
 
 	return ret;
 }

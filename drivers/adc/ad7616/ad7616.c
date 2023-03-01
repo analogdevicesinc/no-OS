@@ -51,6 +51,7 @@
 #include "no_os_error.h"
 #include "no_os_delay.h"
 #include "no_os_axi_io.h"
+#include "no_os_alloc.h"
 
 /**
  * Read from device.
@@ -520,7 +521,7 @@ int32_t ad7616_setup(struct ad7616_dev **device,
 	uint8_t i;
 	int32_t ret = 0;
 
-	dev = (struct ad7616_dev *)malloc(sizeof(*dev));
+	dev = (struct ad7616_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev) {
 		return -1;
 	}
@@ -536,7 +537,7 @@ int32_t ad7616_setup(struct ad7616_dev **device,
 		ret = no_os_spi_init(&dev->spi_desc, init_param->spi_param);
 
 	if (ret != 0) {
-		free(dev);
+		no_os_free(dev);
 		return ret;
 	}
 

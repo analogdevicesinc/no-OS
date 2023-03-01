@@ -45,6 +45,7 @@
 #include "no_os_error.h"
 #include "no_os_timer.h"
 #include "no_os_util.h"
+#include "no_os_alloc.h"
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -112,11 +113,11 @@ int max_timer_init(struct no_os_timer_desc **desc,
 	if (!param || param->id >= MXC_CFG_TMR_INSTANCES)
 		return -EINVAL;
 
-	descriptor = calloc(1, sizeof(*descriptor));
+	descriptor = no_os_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
-	cfg = calloc(1, sizeof(*cfg));
+	cfg = no_os_calloc(1, sizeof(*cfg));
 	if (!cfg) {
 		ret = -ENOMEM;
 		goto free_descriptor;
@@ -148,9 +149,9 @@ int max_timer_init(struct no_os_timer_desc **desc,
 	return 0;
 
 free_cfg:
-	free(cfg);
+	no_os_free(cfg);
 free_descriptor:
-	free(descriptor);
+	no_os_free(descriptor);
 
 	return ret;
 }
@@ -166,8 +167,8 @@ int max_timer_remove(struct no_os_timer_desc *desc)
 		return -EINVAL;
 
 	MXC_TMR_Shutdown(MXC_TMR_GET_TMR(desc->id));
-	free(desc->extra);
-	free(desc);
+	no_os_free(desc->extra);
+	no_os_free(desc);
 
 	return 0;
 }

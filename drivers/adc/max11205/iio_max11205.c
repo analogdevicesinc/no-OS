@@ -45,6 +45,7 @@
 #include "iio_max11205.h"
 #include "errno.h"
 #include "no_os_util.h"
+#include "no_os_alloc.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -260,7 +261,7 @@ int max11205_iio_init(struct max11205_iio_dev **iio_dev,
 	int ret;
 	struct max11205_iio_dev *desc;
 
-	desc = (struct max11205_iio_dev *)calloc(1, sizeof(*desc));
+	desc = (struct max11205_iio_dev *)no_os_calloc(1, sizeof(*desc));
 	if (!desc)
 		return -ENOMEM;
 
@@ -279,7 +280,7 @@ int max11205_iio_init(struct max11205_iio_dev **iio_dev,
 	return 0;
 
 error_max11205_init:
-	free(desc);
+	no_os_free(desc);
 	return ret;
 }
 
@@ -296,7 +297,7 @@ int max11205_iio_remove(struct max11205_iio_dev *desc)
 	if (ret)
 		return ret;
 
-	free(desc);
+	no_os_free(desc);
 
 	return 0;
 }

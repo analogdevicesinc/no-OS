@@ -44,6 +44,7 @@
 #include <stdlib.h>
 #include "ad5766.h"
 #include "no_os_error.h"
+#include "no_os_alloc.h"
 
 /******************************************************************************/
 /************************** Functions Implementation **************************/
@@ -294,7 +295,7 @@ int32_t ad5766_init(struct ad5766_dev **device,
 	struct ad5766_dev *dev;
 	int32_t ret;
 
-	dev = (struct ad5766_dev *)malloc(sizeof(*dev));
+	dev = (struct ad5766_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev) {
 		return -1;
 	}
@@ -344,7 +345,7 @@ int32_t ad5766_remove(struct ad5766_dev *dev)
 
 	ret |= no_os_gpio_remove(dev->gpio_reset);
 
-	free(dev);
+	no_os_free(dev);
 
 	return ret;
 }

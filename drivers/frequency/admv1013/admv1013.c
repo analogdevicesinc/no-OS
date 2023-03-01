@@ -43,6 +43,7 @@
 #include <malloc.h>
 #include "admv1013.h"
 #include "no_os_error.h"
+#include "no_os_alloc.h"
 
 /******************************************************************************/
 /************************** Functions Implementation **************************/
@@ -303,7 +304,7 @@ int admv1013_init(struct admv1013_dev **device,
 	uint16_t data;
 	int ret;
 
-	dev = (struct admv1013_dev *)calloc(1, sizeof(*dev));
+	dev = (struct admv1013_dev *)no_os_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -374,7 +375,7 @@ int admv1013_init(struct admv1013_dev **device,
 error_spi:
 	no_os_spi_remove(dev->spi_desc);
 error_dev:
-	free(dev);
+	no_os_free(dev);
 
 	return ret;
 }
@@ -392,7 +393,7 @@ int admv1013_remove(struct admv1013_dev *dev)
 	if (ret)
 		return ret;
 
-	free(dev);
+	no_os_free(dev);
 
 	return 0;
 }

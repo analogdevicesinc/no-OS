@@ -43,6 +43,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "ad9434.h"
+#include "no_os_alloc.h"
 
 #define DCO_DEBUG
 
@@ -146,7 +147,7 @@ int32_t ad9434_setup(struct ad9434_dev **device,
 	int32_t ret = 0;
 	struct ad9434_dev *dev;
 
-	dev = (struct ad9434_dev *)malloc(sizeof(*dev));
+	dev = (struct ad9434_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -177,7 +178,7 @@ int32_t ad9434_remove(struct ad9434_dev *dev)
 
 	ret = no_os_spi_remove(dev->spi_desc);
 
-	free(dev);
+	no_os_free(dev);
 
 	return ret;
 }

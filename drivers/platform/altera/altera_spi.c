@@ -45,6 +45,7 @@
 #include <altera_avalon_spi_regs.h>
 #include "parameters.h"
 #include "no_os_error.h"
+#include "no_os_alloc.h"
 #include "no_os_spi.h"
 #include "altera_spi.h"
 
@@ -67,13 +68,13 @@ int32_t altera_spi_init(struct no_os_spi_desc **desc,
 	struct altera_spi_desc *altera_descriptor;
 	struct altera_spi_init_param *altera_param;
 
-	descriptor = malloc(sizeof(*descriptor));
+	descriptor = no_os_malloc(sizeof(*descriptor));
 	if (!descriptor)
 		return -1;
 
-	descriptor->extra = calloc(1, sizeof *altera_descriptor);
+	descriptor->extra = no_os_calloc(1, sizeof *altera_descriptor);
 	if (!(descriptor->extra)) {
-		free(descriptor);
+		no_os_free(descriptor);
 		return -1;
 	}
 

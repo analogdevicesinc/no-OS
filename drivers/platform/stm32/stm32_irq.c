@@ -47,6 +47,7 @@
 #include "no_os_list.h"
 #include "no_os_irq.h"
 #include "no_os_util.h"
+#include "no_os_alloc.h"
 #include "stm32_irq.h"
 
 struct irq_action {
@@ -148,7 +149,7 @@ int32_t stm32_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
 		return -EINVAL;
 
 	if (!initialized) {
-		descriptor = calloc(1, sizeof(*descriptor));
+		descriptor = no_os_calloc(1, sizeof(*descriptor));
 		if (!descriptor)
 			return -ENOMEM;
 	}
@@ -172,7 +173,7 @@ int32_t stm32_irq_ctrl_remove(struct no_os_irq_ctrl_desc *desc)
 	initialized = false;
 
 	if (desc)
-		free(desc);
+		no_os_free(desc);
 
 	return 0;
 }
@@ -240,7 +241,7 @@ int32_t stm32_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 				return ret;
 		}
 
-		li = calloc(1, sizeof(struct irq_action));
+		li = no_os_calloc(1, sizeof(struct irq_action));
 		if(!li)
 			return -ENOMEM;
 
@@ -249,7 +250,7 @@ int32_t stm32_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 		li->ctx = cb->ctx;
 		ret = no_os_list_add_last(_events[cb->event].actions, li);
 		if (ret < 0) {
-			free(li);
+			no_os_free(li);
 			return ret;
 		}
 		break;
@@ -283,7 +284,7 @@ int32_t stm32_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 		 * otherwise update
 		 */
 		if (ret) {
-			li = calloc(1, sizeof(struct irq_action));
+			li = no_os_calloc(1, sizeof(struct irq_action));
 			if(!li)
 				return -ENOMEM;
 
@@ -292,7 +293,7 @@ int32_t stm32_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 			li->ctx = cb->ctx;
 			ret = no_os_list_add_last(_events[cb->event].actions, li);
 			if (ret < 0) {
-				free(li);
+				no_os_free(li);
 				return ret;
 			}
 		} else {
@@ -351,7 +352,7 @@ int32_t stm32_irq_unregister_callback(struct no_os_irq_ctrl_desc *desc,
 		break;
 	}
 
-	free(discard);
+	no_os_free(discard);
 
 	return ret;
 }

@@ -1,5 +1,6 @@
 SRCS += $(NO-OS)/util/no_os_util.c \
 	$(NO-OS)/util/no_os_list.c \
+	$(NO-OS)/util/no_os_alloc.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_delay.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_i2c.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c \
@@ -28,6 +29,7 @@ INCS +=	$(INCLUDE)/no_os_uart.h \
 	$(INCLUDE)/no_os_rtc.h \
 	$(INCLUDE)/no_os_i2c.h \
 	$(INCLUDE)/no_os_print_log.h \
+	$(INCLUDE)/no_os_alloc.h \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.h \
 	$(PLATFORM_DRIVERS)/aducm3029_timer.h \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_uart.h \

@@ -41,6 +41,7 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include "no_os_error.h"
+#include "no_os_alloc.h"
 #include "linux_uart.h"
 
 #include <fcntl.h>
@@ -85,17 +86,18 @@ static int32_t linux_uart_init(struct no_os_uart_desc **desc,
 	char path[64];
 	int ret;
 
-	descriptor = malloc(sizeof(*descriptor));
+	descriptor = no_os_malloc(sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
-	linux_desc = (struct linux_uart_desc*) malloc(sizeof(struct linux_uart_desc));
+	linux_desc = (struct linux_uart_desc*) no_os_malloc(sizeof(
+				struct linux_uart_desc));
 	if (!linux_desc) {
 		ret = -ENOMEM;
 		goto free_desc;
 	}
 
-	linux_desc->terminal = (struct termios*) malloc(sizeof(struct termios));
+	linux_desc->terminal = (struct termios*) no_os_malloc(sizeof(struct termios));
 	if (!linux_desc->terminal) {
 		ret = -ENOMEM;
 		goto free_linux_desc;
@@ -227,11 +229,11 @@ static int32_t linux_uart_init(struct no_os_uart_desc **desc,
 free:
 	close(linux_desc->fd);
 free_terminal:
-	free(linux_desc->terminal);
+	no_os_free(linux_desc->terminal);
 free_linux_desc:
-	free(linux_desc);
+	no_os_free(linux_desc);
 free_desc:
-	free(descriptor);
+	no_os_free(descriptor);
 
 	return ret;
 };
@@ -252,8 +254,8 @@ static int32_t linux_uart_remove(struct no_os_uart_desc *desc)
 	if (ret < 0)
 		printf("%s: Can't close device\n\r", __func__);
 
-	free(desc->extra);
-	free(desc);
+	no_os_free(desc->extra);
+	no_os_free(desc);
 
 	return 0;
 };

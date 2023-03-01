@@ -8,6 +8,7 @@ SRC_DIRS += $(INCLUDE)
 
 SRCS += $(NO-OS)/util/no_os_util.c \
 	$(NO-OS)/util/no_os_list.c \
+	$(NO-OS)/util/no_os_alloc.c \
 	$(DRIVERS)/api/no_os_spi.c \
 	$(DRIVERS)/api/no_os_irq.c \
 	$(DRIVERS)/api/no_os_gpio.c \
@@ -26,6 +27,7 @@ INCS += $(INCLUDE)/no_os_spi.h \
 	$(INCLUDE)/no_os_irq.h \
 	$(INCLUDE)/no_os_uart.h \
 	$(INCLUDE)/no_os_lf256fifo.h \
+	$(INCLUDE)/no_os_alloc.h \
 	$(DRIVERS)/platform/$(PLATFORM)/$(PLATFORM)_spi.h \
 	$(DRIVERS)/platform/$(PLATFORM)/$(PLATFORM)_irq.h \
 	$(DRIVERS)/platform/$(PLATFORM)/aducm3029_gpio.h \

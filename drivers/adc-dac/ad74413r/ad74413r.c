@@ -45,6 +45,7 @@
 #include "no_os_delay.h"
 #include "no_os_error.h"
 #include "no_os_util.h"
+#include "no_os_alloc.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -1005,7 +1006,7 @@ int ad74413r_init(struct ad74413r_desc **desc,
 	if (!init_param)
 		return -EINVAL;
 
-	descriptor = calloc(1, sizeof(*descriptor));
+	descriptor = no_os_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
@@ -1036,7 +1037,7 @@ int ad74413r_init(struct ad74413r_desc **desc,
 comm_err:
 	no_os_spi_remove(descriptor->comm_desc);
 err:
-	free(descriptor);
+	no_os_free(descriptor);
 
 	return ret;
 }
@@ -1057,7 +1058,7 @@ int ad74413r_remove(struct ad74413r_desc *desc)
 	if (ret)
 		return ret;
 
-	free(desc);
+	no_os_free(desc);
 
 	return 0;
 }

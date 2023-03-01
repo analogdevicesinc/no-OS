@@ -44,6 +44,7 @@
 #include <errno.h>
 #include "adaq8092.h"
 #include "no_os_delay.h"
+#include "no_os_alloc.h"
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -127,7 +128,7 @@ int adaq8092_init(struct adaq8092_dev **device,
 	struct adaq8092_dev *dev;
 	int ret;
 
-	dev = (struct adaq8092_dev *)calloc(1, sizeof(*dev));
+	dev = (struct adaq8092_dev *)no_os_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -260,7 +261,7 @@ error_adc_pd1:
 error_spi:
 	no_os_spi_remove(dev->spi_desc);
 error_dev:
-	free(dev);
+	no_os_free(dev);
 
 	return ret;
 }
@@ -294,7 +295,7 @@ int adaq8092_remove(struct adaq8092_dev *dev)
 	if (ret)
 		return ret;
 
-	free(dev);
+	no_os_free(dev);
 
 	return ret;
 }

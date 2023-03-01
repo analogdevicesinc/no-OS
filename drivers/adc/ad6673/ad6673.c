@@ -43,6 +43,7 @@
 #include <stdlib.h>
 #include "ad6673.h"
 #include "ad6673_cfg.h"
+#include "no_os_alloc.h"
 
 /*****************************************************************************/
 /***************************** Constant definition ***************************/
@@ -97,7 +98,7 @@ int32_t ad6673_setup(struct ad6673_dev **device,
 	int32_t ret = 0;
 	int8_t i = 0;
 
-	dev = (struct ad6673_dev *)malloc(sizeof(*dev));
+	dev = (struct ad6673_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -196,7 +197,7 @@ int32_t ad6673_remove(struct ad6673_dev *dev)
 
 	ret = no_os_spi_remove(dev->spi_desc);
 
-	free(dev);
+	no_os_free(dev);
 
 	return ret;
 }

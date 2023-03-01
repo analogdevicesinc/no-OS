@@ -43,6 +43,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include "no_os_error.h"
+#include "no_os_alloc.h"
 #include "adt7420.h"
 
 const struct adt7420_chip_info chip_info[] = {
@@ -211,7 +212,7 @@ int32_t adt7420_init(struct adt7420_dev **device,
 	int32_t status;
 	uint8_t device_connected_check = 0;
 
-	dev = (struct adt7420_dev *)malloc(sizeof(*dev));
+	dev = (struct adt7420_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -274,7 +275,7 @@ int32_t adt7420_remove(struct adt7420_dev *dev)
 		ret = no_os_i2c_remove(dev->i2c_desc);
 	else
 		ret = no_os_spi_remove(dev->spi_desc);
-	free(dev);
+	no_os_free(dev);
 
 	return ret;
 }
