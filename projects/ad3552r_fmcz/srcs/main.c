@@ -163,7 +163,6 @@ int main()
 	if (NO_OS_IS_ERR_VALUE(err)) {
 		pr_err("init_gpios_to_defaults failed: %"PRIi32"\n", err);
 		return err;
-		fmcdaq3.c
 	}
 
 	struct no_os_gpio_init_param ldac_param = default_gpio_param;
