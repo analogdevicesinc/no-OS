@@ -59,7 +59,7 @@ struct no_os_uart_init_param adin1110_uart_ip = {
 #endif
 
 struct max_gpio_init_param reset_gpio_extra = {
-	.vssel = MXC_GPIO_VSSEL_VDDIOH,
+	.vssel = 1,
 };
 
 const struct no_os_spi_init_param adin1110_spi_ip = {

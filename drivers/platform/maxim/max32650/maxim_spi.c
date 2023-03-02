@@ -59,8 +59,8 @@
 #define MAX_DELAY_SCLK	255
 #define NS_PER_US	1000
 
-#define SPI_RX_CNT(x) (((x)->dma >> 24) & 0x3F)
-#define SPI_TX_CNT(x) (((x)->dma >> 8) & 0x3F)
+#define SPI_RX_CNT(x) (((x)->dma >> 24) & NO_OS_GENMASK(5, 0))
+#define SPI_TX_CNT(x) (((x)->dma >> 8) & NO_OS_GENMASK(5, 0))
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -438,46 +438,45 @@ int32_t max_spi_transfer_ll(struct no_os_spi_desc *desc,
 			    uint32_t len)
 {
 	mxc_spi_regs_t *spi = MXC_SPI_GET_SPI(desc->device_id);
-	uint32_t tx_cnt = 0;
-	uint32_t rx_cnt = 0;
+	size_t bytes_cnt = 0;
 	size_t i = 0;
 
 	/* Assert CS desc->chip_select when the SPI transaction is started */
     	spi->ctrl0 |= NO_OS_BIT(desc->chip_select) << 16;
 	/* Enable the RX and TX FIFOs */
-	spi->dma = NO_OS_BIT(6) | NO_OS_BIT(22);
+	spi->dma |= NO_OS_BIT(6) | NO_OS_BIT(22);
 	/* CS is deasserted at the end of the transaction */
 	spi->ctrl0 &= NO_OS_GENMASK(31, 0) ^ NO_OS_BIT(8);
 
-	for (i = 0; i < len; i++) {
-		rx_cnt = 0;
-		tx_cnt = 0;
+	// /* Flush the RX and TX FIFOs */
+	// spi->dma |= NO_OS_BIT(23) | NO_OS_BIT(7);
 
-		/* Flush the RX and TX FIFOs */
-		spi->dma |= NO_OS_BIT(23) | NO_OS_BIT(7);
+	for (i = 0; i < len; i++) {
 		/* Set the transfer size (in each direction) */
-		spi->ctrl1 |= msgs->bytes_number;
+		spi->ctrl1 = msgs->bytes_number;
 
 		/* Start the transaction */
     		spi->ctrl0 |= NO_OS_BIT(5);
 		
-		while ((msgs[i].rx_buff && rx_cnt < msgs[i].bytes_number) ||
-		       (msgs[i].tx_buff && tx_cnt < msgs[i].bytes_number)) {
+		for (bytes_cnt = 0; bytes_cnt < msgs[i].bytes_number; bytes_cnt++) {
+			while (SPI_TX_CNT(spi) == MXC_SPI_FIFO_DEPTH);
+			if (msgs[i].tx_buff)
+				*spi->fifo8 = msgs[i].tx_buff[bytes_cnt];
+			else
+				*spi->fifo8 = 0;
 
-			if (msgs[i].tx_buff) {
-				while (tx_cnt < msgs[i].bytes_number &&
-				       SPI_TX_CNT(spi) < MXC_SPI_FIFO_DEPTH)
-					spi->fifo8[0] = msgs[i].tx_buff[tx_cnt++];
-			}
-
-			if (msgs[i].rx_buff) {
-				while (rx_cnt < msgs[i].bytes_number && SPI_RX_CNT(spi) > 0)
-					msgs[i].rx_buff[rx_cnt++] = spi->fifo8[0];
-			}
+			/* Wait for 1 byte in RX FIFO */
+			while (!(spi->int_fl & NO_OS_BIT(2)));
+			/* Clear */
+			spi->int_fl |= NO_OS_BIT(2);
+			if (msgs[i].rx_buff)
+				msgs[i].rx_buff[bytes_cnt] = *spi->fifo8;
+			else
+				(void)*spi->fifo8;
 		}
 
 		/* End the transaction */
-    		spi->ctrl0 |= NO_OS_GENMASK(31, 0) ^ NO_OS_BIT(5);
+    		spi->ctrl0 &= NO_OS_GENMASK(31, 0) ^ NO_OS_BIT(5);
 	}
 
 	return 0;
@@ -489,7 +488,7 @@ int32_t max_spi_transfer_ll(struct no_os_spi_desc *desc,
 const struct no_os_spi_platform_ops max_spi_ops = {
 	.init = &max_spi_init,
 	.write_and_read = &max_spi_write_and_read,
-	.transfer = &max_spi_transfer,
-	//.transfer = &max_spi_transfer_ll,
+	//.transfer = &max_spi_transfer,
+	.transfer = &max_spi_transfer_ll,
 	.remove = &max_spi_remove
 };

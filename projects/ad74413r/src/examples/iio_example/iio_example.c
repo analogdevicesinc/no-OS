@@ -125,7 +125,7 @@ int iio_example_main()
 	struct no_os_timer_init_param eth_tick_param = {
 		.id = 0,
 		.freq_hz = 64000,
-		.ticks_count = 150,
+		.ticks_count = 400,
 		.platform_ops = &max_timer_ops,
 		.extra = NULL,
 	};
@@ -155,61 +155,6 @@ int iio_example_main()
 
 	maxim_net.net = netif_desc->state;
 
-	// eth_desc = netif_desc->state;
-	// ret = eth_desc->noos_net.socket_open(eth_desc, 0, 0, 100);
-	// if (ret)
-	// 	return ret;
-
-	// ret = eth_desc->noos_net.socket_bind(eth_desc, 0, 30431);
-	// if (ret)
-	// 	return ret;
-
-	// uint8_t *demo_str = "<?xml version=\"1.0\" encoding=\"utf-8\"?><!DOCTYPE context [<!ELEMENT context (device | context-attribute)*><!ELEMENT context-attribute EMPTY><!ELEMENT device (channel | attribute | debug-attribute | buffer-attribu \
-	// 			te)*><!ELEMENT channel (scan-element?, attribute*)><!ELEMENT attribute EMPTY><!ELEMENT scan-element EMPTY><!ELEMENT debug-attribute EMPTY><!ELEMENT buffer-attribute EMPTY><!ATTLIST context name CDATA #REQUIRED d \
-	// 			escription CDATA #IMPLIED><!ATTLIST context-attribute name CDATA #REQUIRED value CDATA #REQUIRED><!ATTLIST device id CDATA #REQUIRED name CDATA #IMPLIED><!ATTLIST channel id CDATA #REQUIRED type (input|output) # \
-	// 			REQUIRED name CDATA #IMPLIED><!ATTLIST scan-element index CDATA #REQUIRED format CDATA #REQUIRED scale CDATA #IMPLIED><!ATTLIST attribute name CDATA #REQUIRED filename CDATA #IMPLIED><!ATTLIST debug-attribute na \
-	// 			me CDATA #REQUIRED><!ATTLIST buffer-attribute name CDATA #REQUIRED>]><context name=\"xml\" description=\"no-OS master-088abd736\" ><device id=\"iio:device0\" name=\"adc_demo\"><channel id=\"voltage0\" name=\"adc_in_ch0\" ty \
-	// 			pe=\"input\" ><scan-element index=\"0\" format=\"le:s16/16>>0\" /><attribute name=\"adc_channel_attr\" filename=\"in_voltage0_adc_channel_attr\" /></channel><channel id=\"voltage1\" name=\"adc_in_ch1\" type=\"input\" ><scan-ele \
-	// 			ment index=\"1\" format=\"le:s16/16>>0\" /><attribute name=\"adc_channel_attr\" filename=\"in_voltage1_adc_channel_attr\" /></channel><attribute name=\"adc_global_attttr\" /><debug-attribute name=\"direct_reg_access\" /></dev \
-	// 			ice><device id=\"iio:device1\" name=\"dac_demo\"><channel id=\"voltage0\" name=\"dac_out_ch0\" type=\"output\" ><scan-element index=\"0\" format=\"le:s16/16>>0\" /><attribute name=\"dac_channel_attr\" filename=\"out_voltage0_dac \
-	// 			_channel_attr\" /></channel><channel id=\"voltage1\" name=\"dac_out_ch1\" type=\"output\" ><scan-element index=\"1\" format=\"le:s16/16>>0\" /><attribute name=\"dac_channel_attr\" filename=\"out_voltage1_dac_channel_attr\" />< \
-	// 			/channel><attribute name=\"dac_global_attr\" /><debug-attribute name=\"direct_reg_access\" /></device></context>";
-
-	// uint8_t *demo_ctx = "4490\n<?xml version=\"1.0\" encoding=\"utf-8\"?><!DOCTYPE context [<!ELEMENT context (device | context-attribute)*><!ELEMENT context-attribute EMPTY><!ELEMENT device (channel | attribute | debug-attribute | buffer-attribute)*><!ELEMENT channel (scan-element?, attribute*)><!ELEMENT attribute EMPTY><!ELEMENT scan-element EMPTY><!ELEMENT debug-attribute EMPTY><!ELEMENT buffer-attribute EMPTY><!ATTLIST context name CDATA #REQUIRED description CDATA #IMPLIED><!ATTLIST context-attribute name CDATA #REQUIRED value CDATA #REQUIRED><!ATTLIST device id CDATA #REQUIRED name CDATA #IMPLIED><!ATTLIST channel id CDATA #REQUIRED type (input|output) #REQUIRED name CDATA #IMPLIED><!ATTLIST scan-element index CDATA #REQUIRED format CDATA #REQUIRED scale CDATA #IMPLIED><!ATTLIST attribute name CDATA #REQUIRED filename CDATA #IMPLIED value CDATA #IMPLIED><!ATTLIST debug-attribute name CDATA #REQUIRED value CDATA #IMPLIED><!ATTLIST buffer-attribute name CDATA #REQUIRED value CDATA #IMPLIED>]><context name=\"serial\" description=\"/dev/ttyUSB1: FT230X Basic UART - D3091LE6\" ><context-attribute name=\"uri\" value=\"serial:/dev/ttyUSB1,115200,8n2n\" /><device id=\"iio:device0\" name=\"ad74413r\" ><channel id=\"voltage0\" name=\"config_ch0\" type=\"input\" ><attribute name=\"enabled\" filename=\"in_voltage0_enabled\" value=\"0\" /><attribute name=\"function_cfg\" filename=\"in_voltage0_function_cfg\" value=\"high_z\" /><attribute name=\"function_cfg_available\" filename=\"function_cfg_available\" value=\"ERROR\" /></channel><channel id=\"voltage1\" name=\"config_ch1\" type=\"input\" ><attribute name=\"enabled\" filename=\"in_voltage1_enabled\" value=\"0\" /><attribute name=\"function_cfg\" filename=\"in_voltage1_function_cfg\" value=\"high_z\" /><attribute name=\"function_cfg_available\" filename=\"function_cfg_available\" value=\"ERROR\" /></channel><channel id=\"voltage2\" name=\"config_ch2\" type=\"input\" ><attribute name=\"enabled\" filename=\"in_voltage2_enabled\" value=\"0\" /><attribute name=\"function_cfg\" filename=\"in_voltage2_function_cfg\" value=\"high_z\" /><attribute name=\"function_cfg_available\" filename=\"function_cfg_available\" value=\"ERROR\" /></channel><channel id=\"voltage3\" name=\"config_ch3\" type=\"input\" ><attribute name=\"enabled\" filename=\"in_voltage3_enabled\" value=\"0\" /><attribute name=\"function_cfg\" filename=\"in_voltage3_function_cfg\" value=\"high_z\" /><attribute name=\"function_cfg_available\" filename=\"function_cfg_available\" value=\"ERROR\" /></channel><attribute name=\"apply\" value=\"0\" /></device><device id=\"iio:device1\" name=\"max14906\" ><channel id=\"voltage0\" type=\"input\" ><attribute name=\"function\" filename=\"in_voltage0_function\" value=\"direction_out\" /><attribute name=\"function_available\" filename=\"function_available\" value=\"direction_out direction_in direction_high_z\" /><attribute name=\"IEC_type\" filename=\"in_IEC_type\" value=\"Type_1_3\" /><attribute name=\"IEC_type_available\" filename=\"in_IEC_type_available\" value=\"Type_1_3 Type_2\" /><attribute name=\"enabled\" filename=\"in_voltage0_enabled\" value=\"0\" /></channel><channel id=\"voltage1\" type=\"input\" ><attribute name=\"function\" filename=\"in_voltage1_function\" value=\"direction_out\" /><attribute name=\"function_available\" filename=\"function_available\" value=\"direction_out direction_in direction_high_z\" /><attribute name=\"IEC_type\" filename=\"in_IEC_type\" value=\"Type_1_3\" /><attribute name=\"IEC_type_available\" filename=\"in_IEC_type_available\" value=\"Type_1_3 Type_2\" /><attribute name=\"enabled\" filename=\"in_voltage1_enabled\" value=\"0\" /></channel><channel id=\"voltage2\" type=\"input\" ><attribute name=\"function\" filename=\"in_voltage2_function\" value=\"direction_out\" /><attribute name=\"function_available\" filename=\"function_available\" value=\"direction_out direction_in direction_high_z\" /><attribute name=\"IEC_type\" filename=\"in_IEC_type\" value=\"Type_1_3\" /><attribute name=\"IEC_type_available\" filename=\"in_IEC_type_available\" value=\"Type_1_3 Type_2\" /><attribute name=\"enabled\" filename=\"in_voltage2_enabled\" value=\"0\" /></channel><channel id=\"voltage3\" type=\"input\" ><attribute name=\"function\" filename=\"in_voltage3_function\" value=\"direction_out\" /><attribute name=\"function_available\" filename=\"function_available\" value=\"direction_out direction_in direction_high_z\" /><attribute name=\"IEC_type\" filename=\"in_IEC_type\" value=\"Type_1_3\" /><attribute name=\"IEC_type_available\" filename=\"in_IEC_type_available\" value=\"Type_1_3 Type_2\" /><attribute name=\"enabled\" filename=\"in_voltage3_enabled\" value=\"0\" /></channel><attribute name=\"apply\" value=\"0\" /></device></context>\n";
-
-	// uint8_t eth_recv_data[100] = {0};
-	// uint8_t eth_data[4] = {0x99, 0x99, 0x99, 0x99};
-	// ret = eth_desc->noos_net.socket_listen(eth_desc, 0, 10);
-
-	// do {
-	// 	ret = eth_desc->noos_net.socket_accept(eth_desc, 0, &client_id);
-	// } while (ret == -EAGAIN);
-
-
-	// uint8_t *ethbuff = calloc(10000, sizeof(*ethbuff));
-
-	// uint8_t example[] = "dasdasdakfjgdjfkgdfkgjdnfgkldfgndfklfsdfsdfsdfasdfsdafsadfsafasfasfsdfaffffffffffffffadfsadfsgndkfgndkfgjndfslgksdfngjksldn123dasdasdakfjgdjfkgdfkgjdnfgkldfgndfklfsdfsdfsdfasdfsdafsadfsafasfasfsdfaffffffffffffffadfsadfsgndkfgndkfgjndfslgksdfngjksldn123dasdasdakfjgdjfkgdfkgjdnfgkldfgndfklfsdfsdfsdfasdfsdafsadfsafasfasfsdfaffffffffffffffadfsadfsgndkfgndkfgjndfslgksdfngjksldn123dasdasdakfjgdjfkgdfkgjdnfgkldfgndfklfsdfsdfsdfasdfsdafsadfsafasfasfsdfaffffffffffffffadfsadfsgndkfgndkfgjndfslgksdfngjksldn123dasdasdakfjgdjfkgdfkgjdnfgkldfgndfklfsdfsdfsdfasdfsdafsadfsafasfasfsdfaffffffffffffffadfsadfsgndkfgndkfgjndfslgksdfngjksldn123dasdasdakfjgdjfkgdfkgjdnfgkldfgndfklfsdfsdfsdfasdfsdafsadfsafasfasfsdfaffffffffffffffadfsadfsgndkfgndkfgjndfslgksdfngjksldn123dasdasdakfjgdjfkgdfkgjdnfgkldfgndfklfsdfsdfsdfasdfsdafsadfsafasfasfsdfaffffffffffffffadfsadfsgndkfgndkfgjndfslgksdfngjksldn123dasdasdakfjgdjfkgdfkgjdnfgkldfgndfklfsdfsdfsdfasdfsdafsadfsafasfasfsdfaffffffffffffffadfsadfsgndkfgndkfgjndfslgksdfngjksldn123dasdasdakfjgdjfkgdfkgjdnfgkldfgndfklfsdfsdfsdfasdfsdafsadfsafasfasfsdfaffffffffffffffadfsadfsgndkfgndkfgjndfslgksdfngjksldn123dasdasdakfjgdjfkgdfkgjdnfgkldfgndfklfsdfsdfsdfasdfsdafsadfsafasfasfsdfaffffffffffffffadfsadfsgndkfgndkfgjndfslgksdfngjksldn123dasdasdakfjgdjfkgdfkgjdnfgkldfgndfklfsdfsdfsdfasdfsdafsadfsafasfasfsdfaffffffffffffffadfsadfsgndkfgndkfgjndfslgksdfngjksldn123dasdasdakfjgdjfkgdfkgjdnfgkldfgndfklfsdfsdfsdfasdfsdafsadfsafasfasfsdfaffffffffffffffadfsadfsgndkfgndkfgjndfslgksdfngjksldn123dasdasdakfjgdjfkgdfkgjdnfgkldfgndfklfsdfsdfsdfasdfsdafsadfsafasfasfsdfaffffffffffffffadfsadfsgndkfgndkfgjndfslgksdfngjksldn123dasdasdakfjgdjfkgdfkgjdnfgkldfgndfklfsdfsdfsdfasdfsdafsadfsafasfasfsdfaffffffffffffffadfsadfsgndkfgndkfgjndfslgksdfngjksldn123dasdasdakfjgdjfkgdfkgjdnfgkldfgndfklfsdfsdfsdfasdfsdafsadfsafasfasfsdfaffffffffffffffadfsadfsgndkfgndkfgjndfslgksdfngjksldn123dasdasdakfjgdjfkgdfkgjdnfgkldfgndfklfsdfsdfsdfasdfsdafsadfsafasfasfsdfaffffffffffffffadfsadfsgndkfgndkfgjndfslgksdfngjksldn123dasdasdakfjgdjfkgdfkgjdnfgkldfgndfklfsdfsdfsdfasdfsdafsadfsafasfasfsdfaffffffffffffffadfsadfsgndkfgndkfgjndfslgksdfngjksldn123dasdasdakfjgdjfkgdfkgjdnfgkldfgndfklfsdfsdfsdfasdfsdafsadfsafasfasfsdfaffffffffffffffadfsadfsgndkfgndkfgjndfslgksdfngjksldn123dasdasdakfjgdjfkgdfkgjdnfgkldfgndfklfsdfsdfsdfasdfsdafsadfsafasfasfsdfaffffffffffffffadfsadfsgndkfgndkfgjndfslgksdfngjksldn123dasdasdakfjgdjfkgdfkgjdnfgkldfgndfklfsdfsdfsdfasdfsdafsadfsafasfasfsdfaffffffffffffffadfsadfsgndkfgndkfgjndfslgksdfngjksldn123dasdasdakfjgdjfkgdfkgjdnfgkldfgndfklfsdfsdfsdfasdfsdafsadfsafasfasfsdfaffffffffffffffadfsadfsgndkfgndkfgjndfslgksdfngjksldn123dasdasdakfjgdjfkgdfkgjdnfgkldfgndfklfsdfsdfsdfasdfsdafsadfsafasfasfsdfaffffffffffffffadfsadfsgndkfgndkfgjndfslgksdfngjksldn123dasdasdakfjgdjfkgdfkgjdnfgkldfgndfklfsdfsdfsdfasdfsdafsadfsafasfasfsdfaffffffffffffffadfsadfsgndkfgndkfgjndfslgksdfngjksldn123dasdasdakfjgdjfkgdfkgjdnfgkldfgndfklfsdfsdfsdfasdfsdafsadfsafasfasfsdfaffffffffffffffadfsadfsgndkfgndkfgjndfslgksdfngjksldn123dasdasdakfjgdjfkgdfkgjdnfgkldfgndfklfsdfsdfsdfasdfsdafsadfsafasfasfsdfaffffffffffffffadfsadfsgndkfgndkfgjndfslgksdfngjksldn123dasdasdakfjgdjfkgdfkgjdnfgkldfgndfklfsdfsdfsdfasdfsdafsadfsafasfasfsdfaffffffffffffffadfsadfsgndkfgndkfgjndfslgksdfngjksldn123dasdasdakfjgdjfkgdfkgjdnfgkldfgndfklfsdfsdfsdfasdfsdafsadfsafasfasfsdfaffffffffffffffadfsadfsgndkfgndkfgjndfslgksdfngjksldn123dasdasdakfjgdjfkgdfkgjdnfgkldfgndfklfsdfsdfsdfasdfsdafsadfsafasfasfsdfaffffffffffffffadfsadfsgndkfgndkfgjndfslgksdfngjksldn123dasdasdakfjgdjfkgdfkgjdnfgkldfgndfklfsdfsdfsdfasdfsdafsadfsafasfasfsdfaffffffffffffffadfsadfsgndkfgndkfgjndfslgksdfngjksldn123dasdasdakfjgdjfkgdfkgjdnfgkldfgndfklfsdfsdfsdfasdfsdafsadfsafasfasfsdfaffffffffffffffadfsadfsgndkfgndkfgjndfslgksdfngjksldn123dasdasdakfjgdjfkgdfkgjdnfgkldfgndfklfsdfsdfsdfasdfsdafsadfsafasfasfsdfaffffffffffffffadfsadfsgndkfgndkfgjndfslgksdfngjksldn123dasdasdakfjgdjfkgdfkgjdnfgkldfgndfklfsdfsdfsdfasdfsdafsadfsafasfasfsdfaffffffffffffffadfsadfsgndkfgndkfgjndfslgksdfngjksldn123dasdasdakfjgdjfkgdfkgjdnfgkldfgndfklfsdfsdfsdfasdfsdafsadfsafasfasfsdfaffffffffffffffadfsadfsgndkfgndkfgjndfslgksdfngjksldn123dasdasdakfjgdjfkgdfkgjdnfgkldfgndfklfsdfsdfsdfasdfsdafsadfsafasfasfsdfaffffffffffffffadfsadfsgndkfgndkfgjndfslgksdfngjksldn123dasdasdakfjgdjfkgdfkgjdnfgkldfgndfklfsdfsdfsdfasdfsdafsadfsafasfasfsdfaffffffffffffffadfsadfsgndkfgndkfgjndfslgksdfngjksldn123dasdasdakfjgdjfkgdfkgjdnfgkldfgndfklfsdfsdfsdfasdfsdafsadfsafasfasfsdfaffffffffffffffadfsadfsgndkfgndkfgjndfslgksdfngjksldn123dasdasdakfjgdjfkgdfkgjdnfgkldfgndfklfsdfsdfsdfasdfsdafsadfsafasfasfsdfaffffffffffffffadfsadfsgndkfgndkfgjndfslgksdfngjksldn123dasdasdakfjgdjfkgdfkgjdnfgkldfgndfklfsdfsdfsdfasdfsdafsadfsafasfasfsdfaffffffffffffffadfsadfsgndkfgndkfgjndfslgksdfngjksldn123dasdasdakfjgdjfkgdfkgjdnfgkldfgndfklfsdfsdfsdfasdfsdafsadfsafasfasfsdfaffffffffffffffadfsadfsgndkfgndkfgjndfslgksdfngjksldn123dasdasdakfjgdjfkgdfkgjdnfgkldfgndfklfsdfsdfsdfasdfsdafsadfsafasfasfsdfaffffffffffffffadfsadfsgndkfgndkfgjndfslgksdfngjksldn123";
-	// uint8_t ab2[1000] = {0};
-	// memcpy(ethbuff, demo_ctx, strlen(demo_ctx));
-	
-	// do {
-	// 	ret = eth_desc->noos_net.socket_recv(eth_desc, 1, eth_recv_data, 7);
-	// 	if (!ret)
-	// 		continue;
-	// 	if (strncmp(eth_recv_data, "PRINT", 5))
-	// 		continue;
-	// 	eth_desc->noos_net.socket_send(eth_desc, 1, ethbuff, strlen(demo_ctx));
-	// 	memcpy(eth_recv_data, 0, 7);
-	// } while (!ret);
-
-
-	// no_os_mdelay(3000);
-	// while(1);
-
-	// ret = adin1110_init(&adin1110, &adin1110_ip);
-	// if (ret)
-	// 	return ret;
-
 	max14906_iio_ip.max14906_init_param = &max14906_ip;
 	ad74413r_iio_ip.ad74413r_init_param = &ad74413r_ip;
 
@@ -226,7 +171,7 @@ int iio_example_main()
 	if (ret)
 		return ret;
 
-	ret = no_os_irq_set_priority(ad74413r_irq_desc, ad74413r_gpio_irq_ip.irq_ctrl_id, 1);
+	ret = no_os_irq_set_priority(ad74413r_irq_desc, ad74413r_gpio_irq_ip.irq_ctrl_id, 2);
 	if (ret)
 		return ret;
 
@@ -247,9 +192,9 @@ int iio_example_main()
 	if (ret)
 		return ret;
 
-	ret = max14906_iio_init(&max14906_iio_desc, &max14906_iio_ip, true);
-	if (ret)
-		return ret;
+	// ret = max14906_iio_init(&max14906_iio_desc, &max14906_iio_ip, true);
+	// if (ret)
+	// 	return ret;
 
 	struct iio_trigger_init trigs[] = {
 		IIO_APP_TRIGGER(AD74413R_GPIO_TRIG_NAME, ad74413r_trig_desc,
@@ -263,12 +208,12 @@ int iio_example_main()
 			.dev_descriptor = ad74413r_iio_desc->iio_dev,
 			.read_buff = &buff,
 		},
-		{
-			.name = "max14906",
-			.dev = max14906_iio_desc,
-			.dev_descriptor = max14906_iio_desc->iio_dev,
-			.read_buff = &buff2,
-		}
+		// {
+		// 	.name = "max14906",
+		// 	.dev = max14906_iio_desc,
+		// 	.dev_descriptor = max14906_iio_desc->iio_dev,
+		// 	.read_buff = &buff2,
+		// }
 	};
 
 	while (1) {

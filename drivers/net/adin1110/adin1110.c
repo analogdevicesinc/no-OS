@@ -571,10 +571,6 @@ static int adin1110_check_reset(struct adin1110_desc *desc)
 	if (!reg_val)
 		return -EBUSY;
 
-	ret = adin1110_reg_read(desc, ADIN1110_CONFIG1_REG, &reg_val);
-	if (ret)
-		return ret;
-
 	return adin1110_reg_update(desc, ADIN1110_CONFIG1_REG,
 				   ADIN1110_CONFIG1_SYNC, ADIN1110_CONFIG1_SYNC);
 }

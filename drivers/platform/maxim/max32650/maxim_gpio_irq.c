@@ -125,9 +125,11 @@ static int max_gpio_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
 	descriptor->irq_ctrl_id = param->irq_ctrl_id;
 	descriptor->extra = param->extra;
 
-	ret = no_os_list_init(&actions, NO_OS_LIST_PRIORITY_LIST, irq_action_cmp);
-	if (ret)
-		goto error;
+	if (!actions) {
+		ret = no_os_list_init(&actions, NO_OS_LIST_PRIORITY_LIST, irq_action_cmp);
+		if (ret)
+			goto error;
+	}
 
 	*desc = descriptor;
 
@@ -158,6 +160,9 @@ static int max_gpio_irq_ctrl_remove(struct no_os_irq_ctrl_desc *desc)
 	no_os_list_remove(actions);
 	free(desc->extra);
 	free(desc);
+
+	actions = NULL;
+	desc = NULL;
 
 	return 0;
 }
@@ -208,7 +213,7 @@ static int max_gpio_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 
 	cfg = (mxc_gpio_cfg_t) {
 		.mask = NO_OS_BIT(irq_id),
-		.port = MXC_GPIO_GET_GPIO(desc->irq_ctrl_id)
+		.port = MXC_GPIO_GET_GPIO(desc->irq_ctrl_id),
 	};
 	MXC_GPIO_RegisterCallback(&cfg, gpio_irq_callback, action);
 

@@ -46,6 +46,7 @@ struct max_eth_desc {
 	char name[2];
 	struct adin1110_desc *mac_desc;
 	struct no_os_irq_desc *nvic;
+	struct no_os_irq_ctrl_desc *rx_int;
 	struct no_os_timer_desc *lwip_tick;
 	struct no_os_callback_desc *tick_callback;
 	struct no_os_timer_desc *tcp_timer;
