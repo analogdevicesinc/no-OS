@@ -240,14 +240,24 @@ int32_t pico_spi_transfer(struct no_os_spi_desc *desc,
 
 	for (uint32_t i = 0; i < len; i++) {
 
+		if (!msgs[i].tx_buff && !msgs[i].rx_buff)
+			return -EINVAL;
+
 		/* Assert CS */
 		gpio_put(pico_spi->spi_cs_pin, 0);
 
-		if(msgs[i].cs_delay_first)
+		if (msgs[i].cs_delay_first)
 			no_os_udelay(msgs[i].cs_delay_first);
 
-		spi_write_read_blocking(pico_spi->spi_instance, msgs[i].tx_buff,
-					msgs[i].rx_buff, msgs[i].bytes_number);
+		if (!msgs[i].tx_buff)
+			spi_read_blocking(pico_spi->spi_instance, 0, msgs[i].rx_buff,
+					  msgs[i].bytes_number);
+		else if (!msgs[i].rx_buff)
+			spi_write_blocking(pico_spi->spi_instance, msgs[i].tx_buff,
+					   msgs[i].bytes_number);
+		else
+			spi_write_read_blocking(pico_spi->spi_instance, msgs[i].tx_buff,
+						msgs[i].rx_buff, msgs[i].bytes_number);
 
 		if(msgs[i].cs_delay_last)
 			no_os_udelay(msgs[i].cs_delay_last);
