@@ -259,6 +259,8 @@ int32_t stm32_spi_transfer(struct no_os_spi_desc *desc,
 	uint64_t slave_id;
 	static uint64_t last_slave_id;
 	int ret;
+	uint32_t tx_cnt = 0;
+	uint32_t rx_cnt = 0;
 
 	if (!desc || !desc->extra || !msgs)
 		return -EINVAL;
@@ -280,6 +282,8 @@ int32_t stm32_spi_transfer(struct no_os_spi_desc *desc,
 	}
 
 	for (uint32_t i = 0; i < len; i++) {
+		rx_cnt = 0;
+		tx_cnt = 0;
 
 		/* Assert CS */
 		gdesc->port->BSRR = NO_OS_BIT(sdesc->chip_select->number) << 16;
@@ -288,14 +292,24 @@ int32_t stm32_spi_transfer(struct no_os_spi_desc *desc,
 			no_os_udelay(msgs[i].cs_delay_first);
 
 		__HAL_SPI_ENABLE(&sdesc->hspi);
-		while(msgs[i].bytes_number--) {
+
+		while ((msgs[i].rx_buff && rx_cnt < msgs[i].bytes_number) ||
+		       (msgs[i].tx_buff && tx_cnt < msgs[i].bytes_number)) {
 			while(!(SPIx->SR & SPI_SR_TXE))
 				;
-			*(volatile uint8_t *)&SPIx->DR = *msgs[i].tx_buff++;
+			if (msgs[i].tx_buff)
+				*(volatile uint8_t *)&SPIx->DR = msgs[i].tx_buff[tx_cnt++];
+			else
+				*(volatile uint8_t *)&SPIx->DR = 0;
+
 			while(!(SPIx->SR & SPI_SR_RXNE))
 				;
-			*msgs[i].rx_buff++ = *(volatile uint8_t *)&SPIx->DR;
+			if (msgs[i].rx_buff)
+				msgs[i].rx_buff[rx_cnt++] = *(volatile uint8_t *)&SPIx->DR;
+			else
+				(void)*(volatile uint8_t *)&SPIx->DR;
 		}
+
 		__HAL_SPI_DISABLE(&sdesc->hspi);
 
 		if(msgs[i].cs_delay_last)
