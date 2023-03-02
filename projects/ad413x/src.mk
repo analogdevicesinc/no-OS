@@ -22,6 +22,7 @@ SRCS += $(PLATFORM_DRIVERS)/xilinx_spi.c \
 	$(PLATFORM_DRIVERS)/xilinx_delay.c \
 	$(NO-OS)/util/no_os_alloc.c \
 	$(NO-OS)/util/no_os_list.c \
+	$(NO-OS)/util/no_os_util.c \
 	$(NO-OS)/util/no_os_crc8.c
 
 INCS += $(DRIVERS)/afe/ad413x/ad413x.h
@@ -48,8 +49,7 @@ SRCS += $(DRIVERS)/afe/ad413x/iio_ad413x.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_uart.c \
 	$(NO-OS)/iio/iio_app/iio_app.c \
 	$(NO-OS)/util/no_os_fifo.c \
-	$(DRIVERS)/api/no_os_uart.c \
-	$(NO-OS)/util/no_os_util.c
+	$(DRIVERS)/api/no_os_uart.c
 INCS += $(DRIVERS)/afe/ad413x/iio_ad413x.h \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_uart.h \
 	$(NO-OS)/iio/iio_app/iio_app.h \
