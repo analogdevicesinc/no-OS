@@ -196,7 +196,7 @@ int main()
 	uint32_t mode;
 	uint8_t ret_val;
 	uint32_t ret_val_32 = 0;
-	int32_t status;
+	int32_t status, ret;
 	uint8_t i;
 
 	Xil_DCacheDisable();
@@ -262,65 +262,106 @@ int main()
 	struct axi_dmac *ad9467_dmac;
 
 	/* AD9467 Setup. */
-	ad9467_setup(&ad9467_device, ad9467_init);
+	status = ad9467_setup(&ad9467_device, ad9467_init);
+	if (status)
+		return status;
 
 	/* AD9517 Setup. */
 	/* Initialize device. */
-	ad9517_setup(&ad9517_device, ad9517_init);
+	status = ad9517_setup(&ad9517_device, ad9517_init);
+	if (status)
+		return status;
 	/* Set channel 3 for normal operation */
-	ad9517_power_mode(ad9517_device, 3, 0);
+	status = ad9517_power_mode(ad9517_device, 3, 0);
+	if (status)
+		return status;
 	/* Set the channel 3 frequency to 250Mhz */
 	ad9517_frequency(ad9517_device, 3, 250000000);
 	/* Update registers */
-	ad9517_update(ad9517_device);
+	status = ad9517_update(ad9517_device);
+	if (status)
+		return status;
 
 	/* Read the device ID for AD9467 and AD9517. */
 	printf("\n\r*****************************************************\r\n");
 	printf("  ADI AD9467-FMC-EBZ Reference Design\n\r");
-	ad9467_read(ad9467_device, AD9467_REG_CHIP_ID, &ret_val);
+	status = ad9467_read(ad9467_device, AD9467_REG_CHIP_ID, &ret_val);
+	if (status)
+		return status;
 	printf("  AD9467 CHIP ID: 0x%02x\n\r", ret_val);
-	ad9467_read(ad9467_device, AD9467_REG_CHIP_GRADE, &ret_val);
+	status = ad9467_read(ad9467_device, AD9467_REG_CHIP_GRADE, &ret_val);
+	if (status)
+		return status;
 	printf("  AD9467 CHIP GRADE: 0x%02x\n\r", ret_val);
-	ad9517_read(ad9517_device, AD9517_REG_PART_ID, &ret_val_32);
+	status = ad9517_read(ad9517_device, AD9517_REG_PART_ID, &ret_val_32);
+	if (status)
+		return status;
 	printf("  AD9517 CHIP ID: 0x%02x", ret_val_32);
 	printf("\n\r*****************************************************\r\n");
 
 	status = axi_adc_init(&ad9467_core,  &ad9467_core_param);
 	if (status != 0) {
 		printf("axi_adc_init() error: %s\n", ad9467_core->name);
-		return -1;
+		return status;
 	}
 
 	status = axi_dmac_init(&ad9467_dmac, &ad9467_dmac_param);
 	if (status != 0) {
 		printf("axi_dmac_init() error: %s\n", ad9467_dmac->name);
-		return -1;
+		return status;
 	}
 
 	// setup device
-	ad9467_write(ad9467_device, AD9467_REG_TEST_IO, 0x05); // pn23
-	ad9467_write(ad9467_device, AD9467_REG_DEVICE_UPDATE, 0x01); // update
-	ad9467_write(ad9467_device, AD9467_REG_DEVICE_UPDATE, 0x00);
+	status = ad9467_write(ad9467_device, AD9467_REG_TEST_IO, 0x05); // pn23
+	if (status)
+		return status;
+	status = ad9467_write(ad9467_device, AD9467_REG_DEVICE_UPDATE, 0x01); // update
+	if (status)
+		return status;
+	status = ad9467_write(ad9467_device, AD9467_REG_DEVICE_UPDATE, 0x00);
+	if (status)
+		return status;
 
-	ad9467_read(ad9467_device, AD9467_REG_OUT_PHASE, &ret_val);
+	status = ad9467_read(ad9467_device, AD9467_REG_OUT_PHASE, &ret_val);
+	if (status)
+		return status;
 	printf("AD9467[0x016]: %02x\n\r", ret_val);
 	// setup adc core
 
-	axi_adc_write(ad9467_core, AXI_ADC_REG_CNTRL, 0x2);
-	for(i = 0; i < ad9467_core->num_channels; i++)
-		axi_adc_write(ad9467_core, AXI_ADC_REG_CHAN_CNTRL(i), 0x03);
+	status = axi_adc_write(ad9467_core, AXI_ADC_REG_CNTRL, 0x2);
+	if (status)
+		return status;
+	for(i = 0; i < ad9467_core->num_channels; i++) {
+		status = axi_adc_write(ad9467_core, AXI_ADC_REG_CHAN_CNTRL(i), 0x03);
+		if (status)
+			return status;
+	}
 
-	axi_adc_write(ad9467_core, AXI_ADC_REG_DELAY_CNTRL, 0x0);
-	axi_adc_write(ad9467_core, AXI_ADC_REG_DELAY_CNTRL, 0x20F1F);
+	status = axi_adc_write(ad9467_core, AXI_ADC_REG_DELAY_CNTRL, 0x0);
+	if (status)
+		return status;
+	status = axi_adc_write(ad9467_core, AXI_ADC_REG_DELAY_CNTRL, 0x20F1F);
+	if (status)
+		return status;
 
 	no_os_mdelay(10);
 	if (axi_adc_delay_calibrate(ad9467_core, 8, 1)) {
-		ad9467_read(ad9467_device, 0x16, &ret_val);
+		status = ad9467_read(ad9467_device, 0x16, &ret_val);
+		if (status)
+			return status;
 		printf("AD9467[0x016]: %02x\n\r", ret_val);
-		ad9467_write(ad9467_device, AD9467_REG_OUT_PHASE, 0x80);
-		ad9467_write(ad9467_device, AD9467_REG_DEVICE_UPDATE, 0x01);
-		ad9467_write(ad9467_device, AD9467_REG_DEVICE_UPDATE, 0x00);
-		ad9467_read(ad9467_device, 0x16, &ret_val);
+		status = ad9467_write(ad9467_device, AD9467_REG_OUT_PHASE, 0x80);
+		if (status)
+			return status;
+		status = ad9467_write(ad9467_device, AD9467_REG_DEVICE_UPDATE, 0x01);
+		if (status)
+			return status;
+		status = ad9467_write(ad9467_device, AD9467_REG_DEVICE_UPDATE, 0x00);
+		if (status)
+			return status;
+		status = ad9467_read(ad9467_device, 0x16, &ret_val);
+		if (status)
+			return status;
 		printf("AD9467[0x016]: %02x\n\r", ret_val);
 		no_os_mdelay(10);
 		if (axi_adc_delay_calibrate(ad9467_core, 16, 1)) {
@@ -337,16 +378,36 @@ int main()
 	}
 	printf("Testing done.\n\r");
 	/* AD9467 Setup for data acquisition */
-	ad9467_output_invert(ad9467_device, 0, &status);	// Output invert Off
-	ad9467_transfer(ad9467_device);				// Synchronously update registers
-	ad9467_output_format(ad9467_device, 1, &status);	// Twos complement
-	ad9467_transfer(ad9467_device);				// Synchronously update registers
-	ad9467_reset_pn9(ad9467_device, 0, &status);		// Clear PN9 bit
-	ad9467_transfer(ad9467_device);				// Synchronously update registers
-	ad9467_reset_pn23(ad9467_device, 0, &status);		// Clear PN23 bit
-	ad9467_transfer(ad9467_device);				// Synchronously update registers
-	ad9467_test_mode(ad9467_device, 0, &status);		// Test mode Off
-	ad9467_transfer(ad9467_device);				// Synchronously update registers
+	ret = ad9467_output_invert(ad9467_device, 0, &status);	// Output invert Off
+	if (ret)
+		return ret;
+	ret = ad9467_transfer(ad9467_device);				// Synchronously update registers
+	if (ret)
+		return ret;
+	ret = ad9467_output_format(ad9467_device, 1, &status);	// Twos complement
+	if (ret)
+		return ret;
+	ret = ad9467_transfer(ad9467_device);				// Synchronously update registers
+	if (ret)
+		return ret;
+	ret = ad9467_reset_pn9(ad9467_device, 0, &status);		// Clear PN9 bit
+	if (ret)
+		return ret;
+	ret = ad9467_transfer(ad9467_device);				// Synchronously update registers
+	if (ret)
+		return ret;
+	ret = ad9467_reset_pn23(ad9467_device, 0, &status);		// Clear PN23 bit
+	if (ret)
+		return ret;
+	ret = ad9467_transfer(ad9467_device);				// Synchronously update registers
+	if (ret)
+		return ret;
+	ret = ad9467_test_mode(ad9467_device, 0, &status);		// Test mode Off
+	if (ret)
+		return ret;
+	ret = ad9467_transfer(ad9467_device);				// Synchronously update registers
+	if (ret)
+		return ret;
 
 	printf("Start capturing data...\n\r");
 
@@ -362,7 +423,9 @@ int main()
 		// Address of data destination
 		.dest_addr = (uintptr_t)ADC_DDR_BASEADDR
 	};
-	axi_dmac_transfer_start(ad9467_dmac, &read_transfer);
+	status = axi_dmac_transfer_start(ad9467_dmac, &read_transfer);
+	if(status)
+		return status;
 	/* Wait until transfer finishes */
 	status = axi_dmac_transfer_wait_completion(ad9467_dmac, 500);
 	if(status)
@@ -473,7 +536,7 @@ void adc_test(struct axi_adc *adc,
 	/* Wait until transfer finishes */
 	status = axi_dmac_transfer_wait_completion(dmac, 500);
 	if(status)
-		return status;
+		printf("  ERROR: DMA transfer.\n\r");
 	Xil_DCacheInvalidateRange((uintptr_t)ADC_DDR_BASEADDR, 16384);
 
 	display_test_mode(mode, format);
