@@ -76,8 +76,6 @@ CFLAGS += -mthumb                                                               
         -mfpu=fpv4-sp-d16                                                       \
         -Wa,-mimplicit-it=thumb                                                 \
         -fsingle-precision-constant                                             \
-        -ffunction-sections                                                     \
-        -fdata-sections                                                         \
         -MD                                                                     \
         -Wall                                                                   \
         -Wdouble-promotion                                                      \
