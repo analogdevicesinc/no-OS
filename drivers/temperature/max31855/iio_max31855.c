@@ -258,7 +258,7 @@ static int max31855_iio_read_raw(void *dev, char *buf, uint32_t len,
 			return -EINVAL;
 		}
 
-		return iio_format_value(buf, len, IIO_VAL_INT, 1, &temp);
+		return iio_format_value(buf, len, IIO_VAL_INT, 1, (int32_t *)&temp);
 
 	default:
 		return -EINVAL;
