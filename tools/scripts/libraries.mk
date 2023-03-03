@@ -95,7 +95,7 @@ EXTRA_LIBS_PATHS		+= $(AZURE_DIR_BUILD_LIBS)/core
 
 AZURE_BUILD_CMD = $(shell mkdir -p $(AZURE_DIR_BUILD) && \
 		    cd $(AZURE_DIR_BUILD) && \
-		    cmake -DCMAKE_TOOLCHAIN_FILE=../cmake-modules/gcc-arm-toolchain.cmake .. >/dev/null && \
+		    cmake -DCMAKE_TOOLCHAIN_FILE=../../noos-azure-toolchain.cmake .. >/dev/null && \
 		    cmake --build . >/dev/null)
 
 CLEAN_AZURE = $(shell rm -rf $(AZURE_DIR_BUILD))
