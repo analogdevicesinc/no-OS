@@ -374,8 +374,13 @@ int max_eth_init(struct netif **netif_desc, struct max_eth_param *param)
 	netif_set_default(netif_descriptor);
 	netif_set_up(netif_descriptor);
 
-	tick_callback->event = NO_OS_EVT_GPIO;
-	tick_callback->peripheral = NO_OS_GPIO_IRQ;
+	// tick_callback->event = NO_OS_EVT_GPIO;
+	// tick_callback->peripheral = NO_OS_GPIO_IRQ;
+	// tick_callback->callback = max_lwip_tick;
+	// tick_callback->ctx = netif_descriptor;
+
+	tick_callback->event = NO_OS_EVT_TMR_ELAPSED;
+	tick_callback->peripheral = NO_OS_TMR_IRQ;
 	tick_callback->callback = max_lwip_tick;
 	tick_callback->ctx = netif_descriptor;
 
@@ -401,22 +406,22 @@ int max_eth_init(struct netif **netif_desc, struct max_eth_param *param)
 	if (ret)
 		goto free_tick;
 
-	ret = no_os_irq_register_callback(descriptor->rx_int, 6, tick_callback);
-	if (ret)
-		goto free_tick;
-
-	ret = no_os_irq_trigger_level_set(descriptor->rx_int, 6, NO_OS_IRQ_LEVEL_LOW);
-	if (ret)
-		return ret;
-
-	ret = no_os_irq_set_priority(descriptor->nvic, MXC_GPIO_GET_IRQ(2), 1);
-	if (ret)
-		return ret;
-
-	// ret = no_os_irq_register_callback(descriptor->nvic, MXC_TMR_GET_IRQ(param->tick_param.id),
-	// 				  tick_callback);
+	// ret = no_os_irq_register_callback(descriptor->rx_int, 6, tick_callback);
 	// if (ret)
 	// 	goto free_tick;
+
+	// ret = no_os_irq_trigger_level_set(descriptor->rx_int, 6, NO_OS_IRQ_LEVEL_LOW);
+	// if (ret)
+	// 	return ret;
+
+	// ret = no_os_irq_set_priority(descriptor->nvic, MXC_GPIO_GET_IRQ(2), 1);
+	// if (ret)
+	// 	return ret;
+
+	ret = no_os_irq_register_callback(descriptor->nvic, MXC_TMR_GET_IRQ(param->tick_param.id),
+					  tick_callback);
+	if (ret)
+		goto free_tick;
 
 	ret = no_os_irq_register_callback(descriptor->nvic, MXC_TMR_GET_IRQ(descriptor->tcp_timer->id),
 					  descriptor->tcp_timer_callback);
@@ -432,17 +437,17 @@ int max_eth_init(struct netif **netif_desc, struct max_eth_param *param)
 	if (ret)
 		goto free_tick;
 
-	// ret = no_os_irq_enable(descriptor->nvic, MXC_TMR_GET_IRQ(param->tick_param.id));
-	// if (ret)
-	// 	goto free_tick;
+	ret = no_os_irq_enable(descriptor->nvic, MXC_TMR_GET_IRQ(param->tick_param.id));
+	if (ret)
+		goto free_tick;
 
 	ret = no_os_irq_enable(descriptor->nvic, MXC_TMR_GET_IRQ(descriptor->tcp_timer->id));
 	if (ret)
 		goto free_tick;
 
-	// ret = no_os_timer_start(descriptor->lwip_tick);
-	// if (ret)
-	// 	return ret;
+	ret = no_os_timer_start(descriptor->lwip_tick);
+	if (ret)
+		return ret;
 
 	netif_set_link_up(netif_descriptor);
 	ret = dhcp_start(netif_descriptor);
