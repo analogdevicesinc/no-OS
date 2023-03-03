@@ -50,7 +50,7 @@
 #include "platform_init.h"
 #include "no_os_uart.h"
 #include "aducm3029_uart.h"
-#include "uart_stdio.h"
+#include "aducm3029_uart_stdio.h"
 
 /***************************************************************************//**
  * @brief main
@@ -80,10 +80,9 @@ int main(int argc, char *argv[])
 		.platform_ops = &aducm_uart_ops,
 	};
 	struct no_os_irq_ctrl_desc *irq_dut;
-	int32_t platform_irq_init_par = 0;
 	struct no_os_irq_init_param irq_init = {
 		.irq_ctrl_id = 0,
-		.extra = &platform_irq_init_par
+		.extra = NULL
 	};
 
 	ret = platform_init();
