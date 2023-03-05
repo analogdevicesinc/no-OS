@@ -66,6 +66,7 @@
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 #define DATA_BUFFER_SIZE 400
+#define IIO_IGNORE_BUFF_OVERRUN_ERR
 
 /******************************************************************************/
 /************************ Variable Declarations ******************************/
@@ -128,7 +129,7 @@ int iio_example_main()
 	struct no_os_timer_init_param eth_tick_param = {
 		.id = 0,
 		.freq_hz = 64000,
-		.ticks_count = 400,
+		.ticks_count = 200,
 		.platform_ops = &max_timer_ops,
 		.extra = NULL,
 	};
@@ -174,7 +175,7 @@ int iio_example_main()
 	if (ret)
 		return ret;
 
-	ret = no_os_irq_set_priority(ad74413r_irq_desc, ad74413r_gpio_irq_ip.irq_ctrl_id, 2);
+	ret = no_os_irq_set_priority(ad74413r_irq_desc, ad74413r_gpio_irq_ip.irq_ctrl_id, 1);
 	if (ret)
 		return ret;
 
@@ -195,9 +196,9 @@ int iio_example_main()
 	if (ret)
 		return ret;
 
-	// ret = max14906_iio_init(&max14906_iio_desc, &max14906_iio_ip, true);
-	// if (ret)
-	// 	return ret;
+	ret = max14906_iio_init(&max14906_iio_desc, &max14906_iio_ip, true);
+	if (ret)
+		return ret;
 
 	struct iio_trigger_init trigs[] = {
 		IIO_APP_TRIGGER(AD74413R_GPIO_TRIG_NAME, ad74413r_trig_desc,
@@ -211,12 +212,12 @@ int iio_example_main()
 			.dev_descriptor = ad74413r_iio_desc->iio_dev,
 			.read_buff = &buff,
 		},
-		// {
-		// 	.name = "max14906",
-		// 	.dev = max14906_iio_desc,
-		// 	.dev_descriptor = max14906_iio_desc->iio_dev,
-		// 	.read_buff = &buff2,
-		// }
+		{
+			.name = "max14906",
+			.dev = max14906_iio_desc,
+			.dev_descriptor = max14906_iio_desc->iio_dev,
+			.read_buff = &buff2,
+		}
 	};
 
 	app_init_param.devices = iio_devices;

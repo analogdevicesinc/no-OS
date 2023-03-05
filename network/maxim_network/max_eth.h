@@ -8,11 +8,11 @@
 #include "network_interface.h"
 #include "tcp_socket.h"
 
-#define MXC_ETH_INTERNAL_BUFF_SIZE			2048
+#define MXC_ETH_INTERNAL_BUFF_SIZE			15000
 #define MXC_NETIF_MTU_SIZE				1500
 #define MXC_ETH_MAX_DATA_SIZE				(MXC_NETIF_MTU_SIZE + 14)
 
-#define MAX_SOCKETS	10
+#define MAX_SOCKETS	5
 
 struct max_eth_desc;
 
@@ -63,6 +63,8 @@ struct max_eth_param {
 	struct adin1110_init_param adin1110_ip;
 	struct no_os_timer_init_param tick_param;
 };
+
+int max_lwip_tick(void *);
 
 /**
  * @brief      Initialize lwIP stack
