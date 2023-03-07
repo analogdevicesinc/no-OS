@@ -393,7 +393,8 @@ int iio_app_run(struct iio_app_desc *app)
 
 	do {
 		status = iio_step(app->iio_desc);
-		if (status && status != -EAGAIN && status != -ENOTCONN)
+		if (status && status != -EAGAIN && status != -ENOTCONN
+		    && status != -NO_OS_EOVERRUN)
 			return status;
 		if (app->post_step_callback)
 			status = app->post_step_callback(app->arg);
