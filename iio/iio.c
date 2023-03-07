@@ -1957,6 +1957,7 @@ int iio_remove(struct iio_desc *desc)
 	no_os_cb_remove(desc->conns);
 	iiod_remove(desc->iiod);
 	free(desc->devs);
+	free(desc->trigs);
 	free(desc->xml_desc);
 	free(desc);
 
