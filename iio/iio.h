@@ -57,6 +57,7 @@
 
 enum pysical_link_type {
 	USE_UART,
+	USE_LOCAL_BACKEND,
 #ifdef NO_OS_NETWORKING
 	USE_NETWORK
 #endif
@@ -97,6 +98,17 @@ struct iio_ctx_attr {
 	const char *value;
 };
 
+/**
+ * @struct iio_local_backend
+ * @brief Structure holding the local backend init parameters
+ */
+struct iio_local_backend {
+	int(*local_backend_event_read)(void *conn, uint8_t *buf, uint32_t len);
+	int(*local_backend_event_write)(void *conn, uint8_t *buf, uint32_t len);
+	char *local_backend_buff;
+	uint32_t local_backend_buff_len;
+};
+
 struct iio_init_param {
 	enum pysical_link_type	phy_type;
 	union {
@@ -105,6 +117,7 @@ struct iio_init_param {
 		struct tcp_socket_init_param *tcp_socket_init_param;
 #endif
 	};
+	struct iio_local_backend *local_backend;
 	struct iio_ctx_attr *ctx_attrs;
 	uint32_t nb_ctx_attr;
 	struct iio_device_init *devs;
