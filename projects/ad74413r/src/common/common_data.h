@@ -47,9 +47,6 @@
 #include "adin1110.h"
 #include "iio_trigger.h"
 
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
 extern struct no_os_uart_init_param adin1110_uart_ip;
 
 extern const struct adin1110_init_param adin1110_ip;

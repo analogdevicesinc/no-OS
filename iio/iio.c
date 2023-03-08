@@ -62,6 +62,7 @@
 #ifdef NO_OS_NETWORKING
 #include "no_os_delay.h"
 #include "tcp_socket.h"
+#include "max_eth.h"
 #endif
 
 /******************************************************************************/
@@ -1460,6 +1461,7 @@ int iio_step(struct iio_desc *desc)
 		ret = accept_network_clients(desc);
 		if (NO_OS_IS_ERR_VALUE(ret) && ret != -EAGAIN)
 			return ret;
+		max_lwip_tick(desc->server->net->net);
 	}
 #endif
 
@@ -1975,9 +1977,16 @@ int iio_remove(struct iio_desc *desc)
 #endif
 	no_os_cb_remove(desc->conns);
 	iiod_remove(desc->iiod);
+<<<<<<< HEAD
 	no_os_free(desc->devs);
 	no_os_free(desc->trigs);
 	no_os_free(desc);
+=======
+	free(desc->devs);
+	free(desc->trigs);
+	free(desc->xml_desc);
+	free(desc);
+>>>>>>> 9adb71d96 (wip)
 
 	return 0;
 }

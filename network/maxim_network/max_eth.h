@@ -12,7 +12,7 @@
 #define MXC_NETIF_MTU_SIZE				1500
 #define MXC_ETH_MAX_DATA_SIZE				(MXC_NETIF_MTU_SIZE + 14)
 
-#define MAX_SOCKETS	5
+#define MAX_SOCKETS	20
 
 struct max_eth_desc;
 
@@ -51,6 +51,7 @@ struct max_eth_desc {
 	struct no_os_callback_desc *tick_callback;
 	struct no_os_timer_desc *tcp_timer;
 	struct no_os_callback_desc *tcp_timer_callback;
+	struct netif *lwip_netif;
 
 	struct network_interface noos_net;
 	struct socket_desc sockets[MAX_SOCKETS];

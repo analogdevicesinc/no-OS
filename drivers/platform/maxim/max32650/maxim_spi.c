@@ -461,14 +461,15 @@ int32_t max_spi_transfer_ll(struct no_os_spi_desc *desc,
 	size_t i = 0;
 
 	/* Assert CS desc->chip_select when the SPI transaction is started */
+    	spi->ctrl0 &= NO_OS_GENMASK(31, 0) ^ NO_OS_GENMASK(19, 16); 
     	spi->ctrl0 |= NO_OS_BIT(desc->chip_select) << 16;
 	/* Enable the RX and TX FIFOs */
 	spi->dma |= NO_OS_BIT(6) | NO_OS_BIT(22);
 	/* CS is deasserted at the end of the transaction */
 	spi->ctrl0 &= NO_OS_GENMASK(31, 0) ^ NO_OS_BIT(8);
 	/* Enable the RX threshold interrupt */
-	spi->int_en |= NO_OS_BIT(2);
-	spi->int_en |= NO_OS_BIT(1);
+	// spi->int_en |= NO_OS_BIT(2);
+	// spi->int_en |= NO_OS_BIT(1);
 	// /* Flush the RX and TX FIFOs */
 	// spi->dma |= NO_OS_BIT(23) | NO_OS_BIT(7);
 
@@ -480,25 +481,18 @@ int32_t max_spi_transfer_ll(struct no_os_spi_desc *desc,
     		spi->ctrl0 |= NO_OS_BIT(5);
 		
 		for (bytes_cnt = 0; bytes_cnt < msgs[i].bytes_number; bytes_cnt++) {
-			while (SPI_TX_CNT(spi))
-				//SPI_TX_CNT(spi);
-			if (msgs[i].tx_buff) {
+			while (spi->int_fl & NO_OS_BIT(0));
+			if (msgs[i].tx_buff)
 				*spi->fifo8 = msgs[i].tx_buff[bytes_cnt];
-			} else {
+			else
 				*spi->fifo8 = 0xFF;
-			}
 
 			/* Wait for 1 byte in RX FIFO */
-			while(!SPI_RX_CNT(spi))
-				//SPI_RX_CNT(spi);
-			//while (!(spi->int_fl & NO_OS_BIT(2)));
+			while(!(spi->int_fl & NO_OS_BIT(2)));
 			if (msgs[i].rx_buff)
 				msgs[i].rx_buff[bytes_cnt] = *spi->fifo8;
 			else
 				*spi->fifo8;
-			// /* Clear in case we've read everything */
-			// if (!SPI_RX_CNT(spi))
-			// 	spi->int_fl |= NO_OS_BIT(2);
 		}
 
 		/* End the transaction */

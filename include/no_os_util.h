@@ -45,6 +45,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <stddef.h>
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
@@ -115,6 +116,9 @@
 #define NO_OS_UNUSED_PARAM(x) ((void)x)
 
 #define no_os_shift_right(x, s) ((x) < 0 ? -(-(x) >> (s)) : (x) >> (s))
+
+#define NO_OS_CONTAINER_OF(ptr, type, field)	((type *)(((char *)(ptr)) - \
+						 offsetof(type, field)))
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
