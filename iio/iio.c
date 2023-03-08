@@ -1912,7 +1912,20 @@ int iio_init(struct iio_desc **desc, struct iio_init_param *init_param)
 			goto free_pylink;
 	}
 #endif
-	else {
+	else if (init_param->phy_type == USE_LOCAL_BACKEND) {
+		ldesc->recv = init_param->local_backend->local_backend_event_read;
+		ldesc->send = init_param->local_backend->local_backend_event_write;
+
+		struct iiod_conn_data data = {
+			.conn = NULL,
+			.buf = init_param->local_backend->local_backend_buff,
+			.len = init_param->local_backend->local_backend_buff_len
+		};
+		ret = iiod_conn_add(ldesc->iiod, &data, &conn_id);
+		if (NO_OS_IS_ERR_VALUE(ret))
+			goto free_conns;
+		_push_conn(ldesc, conn_id);
+	} else {
 		ret = -EINVAL;
 		goto free_conns;
 	}
