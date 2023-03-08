@@ -465,7 +465,8 @@ free_network_descriptor:
 
 err_t max_eth_err_callback(void *arg, struct tcp_pcb *tpcb, struct pbuf *p, err_t err)
 {
-	printf("Error :? %d", err);
+	uint8_t _err = err;
+	printf("Error :? %PRIi32", _err);
 	return ERR_OK;
 }
 
@@ -489,7 +490,8 @@ err_t max_eth_recv_callback(void *arg, struct tcp_pcb *tpcb, struct pbuf *p, err
 		sock->p = p;
 		sock->p_idx = 0;
 	} else {
-		pbuf_cat(sock->p, p);
+		if (p != sock->p)
+			pbuf_cat(sock->p, p);
 	}
 
 	return ERR_OK;
@@ -692,15 +694,13 @@ static int32_t max_socket_listen(void *net, uint32_t sock_id, uint32_t back_log)
 static err_t max_eth_accept_callback(void *arg, struct tcp_pcb *new_pcb, err_t err)
 {
 	int32_t ret;
-	int8_t _err;
 	uint32_t id;
 	struct socket_desc *sock;
 	struct socket_desc *serv_sock = arg;
 	struct max_eth_desc *desc = serv_sock->desc;
 
 	if (err != ERR_OK) {
-		_err = err;
-		printf("Accept callback err %"PRIi8"\n", _err);
+		printf("Accept callback err %d\n", err);
 		return ERR_OK;
 	}
 
