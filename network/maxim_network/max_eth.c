@@ -100,9 +100,9 @@ static err_t mxc_eth_netif_output(struct netif *netif, struct pbuf *p)
 	buff.payload_len = p->tot_len - ADIN1110_ETH_HDR_LEN;
 	buff.payload = &mxc_lwip_internal_buff[14];
 
-	no_os_irq_global_disable(eth_desc->nvic);
+	// no_os_irq_global_disable(eth_desc->nvic);
 	ret = adin1110_write_fifo(mac_desc, 0, &buff);
-	no_os_irq_global_enable(eth_desc->nvic);
+	// no_os_irq_global_enable(eth_desc->nvic);
 	// result = MXC_EMAC_SendSync(mxc_lwip_internal_buff, p->tot_len);
 	// if (result)
 	// 	return ERR_TIMEOUT;
@@ -159,7 +159,7 @@ static struct pbuf *get_recvd_frames(struct max_eth_desc *eth_desc)
 	offset += 2;
 	memcpy(mxc_lwip_internal_buff + offset, mac_buff.payload, mac_buff.payload_len);
 	//memcpy(mxc_lwip_internal_buff, mac_buff.mac_dest, mac_buff.payload_len + ADIN1110_ETH_HDR_LEN);
-	p = pbuf_alloc(PBUF_RAW, eth_data_len, PBUF_POOL);
+	p = pbuf_alloc(PBUF_RAW, eth_data_len - 2, PBUF_POOL);
 	if (p != NULL)
 		/* -2 because the field contains the 2 byte ADIN1110 header */
 		pbuf_take(p, mxc_lwip_internal_buff, eth_data_len - 2);
@@ -186,8 +186,8 @@ int max_lwip_tick(void *data)
 	//eth_desc = netif_desc->state;
 	mac_desc = eth_desc->mac_desc;
 
-	//no_os_irq_global_disable(eth_desc->nvic);
-	no_os_irq_disable(eth_desc->nvic, MXC_GPIO_GET_IRQ(2));
+	no_os_irq_global_disable(eth_desc->nvic);
+	// no_os_irq_disable(eth_desc->nvic, MXC_GPIO_GET_IRQ(2));
 	p = get_recvd_frames(eth_desc);
 	//no_os_irq_enable(eth_desc->nvic, MXC_GPIO_GET_IRQ(2));
 	if (p != NULL) {
@@ -197,12 +197,14 @@ int max_lwip_tick(void *data)
 			pbuf_free(p);
 	}
 
+	tcp_tmr();
 	// time = no_os_get_time();
 	// ms_diff = (time.s - old_time.s) * 1000 + ((int)time.us - (int)old_time.us) / 1000;
-	// if (ms_diff >= 250) {
-		tcp_tmr();
-		sys_check_timeouts();
-	//}
+	// if (ms_diff >= 500) {
+	// 	tcp_slowtmr();
+	// 	old_time = time;
+	// }
+	sys_check_timeouts();
 
 	no_os_irq_global_enable(eth_desc->nvic);
 
@@ -234,10 +236,10 @@ static int lwip_tcp_tmr_tick(void *data)
 
 	//addr = inet_ntoa(netif_desc->ip_addr);
 
-	no_os_irq_global_disable(eth_desc->nvic);
-	tcp_tmr();
-	sys_check_timeouts();
-	no_os_irq_global_enable(eth_desc->nvic);
+	// no_os_irq_global_disable(eth_desc->nvic);
+	// tcp_tmr();
+	// sys_check_timeouts();
+	// no_os_irq_global_enable(eth_desc->nvic);
 
 	return 0;
 }
@@ -377,21 +379,21 @@ int max_eth_init(struct netif **netif_desc, struct max_eth_param *param)
 	descriptor->tcp_timer_callback->ctx = netif_descriptor;
 
 	/* TODO: This error handling is horrible, fix it */
-	ret = no_os_timer_init(&descriptor->lwip_tick, &param->tick_param);
-	if (ret)
-		goto free_tick;
+	// ret = no_os_timer_init(&descriptor->lwip_tick, &param->tick_param);
+	// if (ret)
+	// 	goto free_tick;
 
-	ret = no_os_timer_init(&descriptor->tcp_timer, &tcp_tmr_param);
-	if (ret)
-		goto free_tick;
+	// ret = no_os_timer_init(&descriptor->tcp_timer, &tcp_tmr_param);
+	// if (ret)
+	// 	goto free_tick;
 
-	ret = no_os_irq_ctrl_init(&descriptor->nvic, &nvic_param);
-	if (ret)
-		goto free_tick;
+	// ret = no_os_irq_ctrl_init(&descriptor->nvic, &nvic_param);
+	// if (ret)
+	// 	goto free_tick;
 
-	ret = no_os_irq_ctrl_init(&descriptor->rx_int, &gpio_irq_param);
-	if (ret)
-		goto free_tick;
+	// ret = no_os_irq_ctrl_init(&descriptor->rx_int, &gpio_irq_param);
+	// if (ret)
+	// 	goto free_tick;
 
 	// ret = no_os_irq_register_callback(descriptor->rx_int, 6, tick_callback);
 	// if (ret)
@@ -410,27 +412,27 @@ int max_eth_init(struct netif **netif_desc, struct max_eth_param *param)
 	// if (ret)
 	// 	goto free_tick;
 
-	ret = no_os_irq_register_callback(descriptor->nvic, MXC_TMR_GET_IRQ(descriptor->tcp_timer->id),
-					  descriptor->tcp_timer_callback);
-	if (ret)
-		goto free_tick;
+	// ret = no_os_irq_register_callback(descriptor->nvic, MXC_TMR_GET_IRQ(descriptor->tcp_timer->id),
+	// 				  descriptor->tcp_timer_callback);
+	// if (ret)
+	// 	goto free_tick;
 
 	// /* Enable the interrupt on GPIO 6, port 2 */
 	// ret = no_os_irq_enable(descriptor->nvic, MXC_GPIO_GET_IRQ(2));
 	// if (ret)
 	// 	goto free_tick;
 
-	ret = no_os_irq_enable(descriptor->rx_int, 6);
-	if (ret)
-		goto free_tick;
+	// ret = no_os_irq_enable(descriptor->rx_int, 6);
+	// if (ret)
+	// 	goto free_tick;
 
 	// ret = no_os_irq_enable(descriptor->nvic, MXC_TMR_GET_IRQ(param->tick_param.id));
 	// if (ret)
 	// 	goto free_tick;
 
-	ret = no_os_irq_enable(descriptor->nvic, MXC_TMR_GET_IRQ(descriptor->tcp_timer->id));
-	if (ret)
-		goto free_tick;
+	// ret = no_os_irq_enable(descriptor->nvic, MXC_TMR_GET_IRQ(descriptor->tcp_timer->id));
+	// if (ret)
+	// 	goto free_tick;
 
 	// ret = no_os_timer_start(descriptor->lwip_tick);
 	// if (ret)
@@ -465,8 +467,8 @@ free_network_descriptor:
 
 err_t max_eth_err_callback(void *arg, struct tcp_pcb *tpcb, struct pbuf *p, err_t err)
 {
-	uint8_t _err = err;
-	printf("Error :? %PRIi32", _err);
+	int8_t _err = err;
+	printf("Error :? %hhi", _err);
 	return ERR_OK;
 }
 
@@ -481,10 +483,10 @@ err_t max_eth_recv_callback(void *arg, struct tcp_pcb *tpcb, struct pbuf *p, err
 		return ERR_OK;
 	}
 
-	if (err != ERR_OK) {
-		pbuf_free(p);
-		return err;
-	}
+	// if (err != ERR_OK) {
+	// 	pbuf_free(p);
+	// 	return err;
+	// }
 
 	if (!sock->p) {
 		sock->p = p;
@@ -493,6 +495,8 @@ err_t max_eth_recv_callback(void *arg, struct tcp_pcb *tpcb, struct pbuf *p, err
 		if (p != sock->p)
 			pbuf_cat(sock->p, p);
 	}
+
+	pbuf_ref(p);
 
 	return ERR_OK;
 }
@@ -590,19 +594,19 @@ static int32_t max_socket_send(void *net, uint32_t sock_id, const void *data,
 	err = tcp_write(sock->pcb, data, size, flags);
 	if (err != ERR_OK) {
 		_err = err;
-		printf("TCP write err: %"PRIi8"\n", _err);
+		printf("TCP write err: %hhi\n", _err);
 		return _err;
 	}
 
-	if (!(flags & TCP_WRITE_FLAG_MORE)) {
-		/* Mark data as ready to be sent */
-		err = tcp_output(sock->pcb);
-		if (err != ERR_OK) {
-			_err = err;
-			printf("TCP output err: %"PRIi8"\n", _err);
-			return _err;
-		}
-	}
+	// if (!(flags & TCP_WRITE_FLAG_MORE)) {
+	// 	/* Mark data as ready to be sent */
+	// 	err = tcp_output(sock->pcb);
+	// 	if (err != ERR_OK) {
+	// 		_err = err;
+	// 		printf("TCP output err: %"PRIi8"\n", _err);
+	// 		return _err;
+	// 	}
+	// }
 
 	return size;
 }
@@ -627,6 +631,8 @@ static int32_t max_socket_recv(void *net, uint32_t sock_id, void *data, uint32_t
 	pdata = data;
 	/* Iterate over payloads until requested data has been read */
 	while (p && i < size) {
+		if (!p->ref)
+			pbuf_ref(p);
 		len = no_os_min(size - i, p->len - sock->p_idx);
 		buf = p->payload;
 		buf += sock->p_idx;
@@ -639,7 +645,7 @@ static int32_t max_socket_recv(void *net, uint32_t sock_id, void *data, uint32_t
 			p = p->next;
 			if (p)
 				pbuf_ref(p);
-			pbuf_free(old_p);
+			//pbuf_free(old_p);
 			tcp_recved(sock->pcb, sock->p_idx);
 			sock->p_idx = 0;
 		}
