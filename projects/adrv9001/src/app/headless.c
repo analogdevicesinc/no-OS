@@ -266,9 +266,9 @@ int main(void)
 	unsigned int c;
 
 	struct axi_adc_init rx1_adc_init = {
-		"axi-adrv9002-rx-lpc",
-		RX1_ADC_BASEADDR,
-		ADRV9001_I_Q_CHANNELS,
+		.name = "axi-adrv9002-rx-lpc",
+		.base = RX1_ADC_BASEADDR,
+		.num_channels = ADRV9001_I_Q_CHANNELS,
 	};
 
 	struct axi_dac_channel  tx1_dac_channels[2];
@@ -276,17 +276,17 @@ int main(void)
 	tx1_dac_channels[1].sel = AXI_DAC_DATA_SEL_DMA;
 
 	struct axi_dac_init tx1_dac_init = {
-		"axi-adrv9002-tx-lpc",
-		TX1_DAC_BASEADDR,
-		ADRV9001_I_Q_CHANNELS,
-		tx1_dac_channels,
+		.name = "axi-adrv9002-tx-lpc",
+		.base = TX1_DAC_BASEADDR,
+		.num_channels = ADRV9001_I_Q_CHANNELS,
+		.channels = tx1_dac_channels,
 	};
 
 #ifndef ADRV9002_RX2TX2
 	struct axi_adc_init rx2_adc_init = {
-		"axi-adrv9002-rx2-lpc",
-		RX2_ADC_BASEADDR,
-		ADRV9001_I_Q_CHANNELS,
+		.name = "axi-adrv9002-rx2-lpc",
+		.base = RX2_ADC_BASEADDR,
+		.num_channels = ADRV9001_I_Q_CHANNELS,
 	};
 
 	struct axi_dac_channel  tx2_dac_channels[2];
@@ -294,10 +294,10 @@ int main(void)
 	tx2_dac_channels[1].sel = AXI_DAC_DATA_SEL_DMA;
 
 	struct axi_dac_init tx2_dac_init = {
-		"axi-adrv9002-tx2-lpc",
-		TX2_DAC_BASEADDR,
-		ADRV9001_I_Q_CHANNELS,
-		tx2_dac_channels,
+		.name = "axi-adrv9002-tx2-lpc",
+		.base = TX2_DAC_BASEADDR,
+		.num_channels = ADRV9001_I_Q_CHANNELS,
+		.channels = tx2_dac_channels,
 	};
 #endif
 	struct axi_dmac_init rx1_dmac_init = {
