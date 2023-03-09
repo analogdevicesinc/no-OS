@@ -262,7 +262,8 @@ int main(void)
 	struct adi_common_ApiVersion api_version;
 	struct adi_adrv9001_ArmVersion arm_version;
 	struct adi_adrv9001_SiliconVersion silicon_version;
-	struct adrv9002_rf_phy phy;
+	struct adi_adrv9001_Device adrv9001_device = {0};
+	struct adrv9002_rf_phy phy = {0};
 	unsigned int c;
 
 	struct axi_adc_init rx1_adc_init = {
@@ -333,12 +334,11 @@ int main(void)
 
 	printf("Hello\n");
 
-	memset(&phy, 0, sizeof(struct adrv9002_rf_phy));
-
 #if defined(ADRV9002_RX2TX2)
 	phy.rx2tx2 = true;
 #endif
 
+	phy.adrv9001 = &adrv9001_device;
 	ret = adi_adrv9001_profileutil_Parse(phy.adrv9001, &phy.profile,
 					     (char *)json_profile, strlen(json_profile));
 	if (ret)
