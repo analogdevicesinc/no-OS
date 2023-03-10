@@ -241,7 +241,8 @@ void adf4106_init_latch_method(struct adf4106_dev *dev)
 			     ADF4106_TCC(dev->adf4106_st.timer_counter_control) |\
 			     ADF4106_CS1(dev->adf4106_st.current_setting1) | \
 			     ADF4106_CS2(dev->adf4106_st.current_setting2) | \
-			     ADF4106_PD2(dev->adf4106_st.power_down2));
+			     ADF4106_PD2(dev->adf4106_st.power_down2) | \
+			     ADF4106_PS(dev->adf4106_st.prescaler_value));
 
 	/* Do an R load */
 	adf4106_update_latch(dev,
