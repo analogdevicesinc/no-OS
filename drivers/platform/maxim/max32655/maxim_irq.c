@@ -111,7 +111,7 @@ static void _timer_common_callback(mxc_tmr_regs_t *tmr)
 	struct irq_action *action;
 	struct event_list *evt_list = &_events[NO_OS_EVT_TIM_ELAPSED];
 
-	ret = no_os_list_read_find(evt_list->actions, &action, &key);
+	ret = no_os_list_read_find(evt_list->actions, (void **)&action, &key);
 	if (ret)
 		return;
 
