@@ -62,8 +62,8 @@ bool is_callback;
 
 static uint8_t c;
 
-const mxc_gpio_cfg_t gpio_cfg_uart2_flow         =   { MXC_GPIO0, (MXC_GPIO_PIN_14 | MXC_GPIO_PIN_15), MXC_GPIO_FUNC_ALT2, MXC_GPIO_PAD_NONE };
-const mxc_gpio_cfg_t gpio_cfg_uart2_flow_disable =   { MXC_GPIO0, (MXC_GPIO_PIN_14 | MXC_GPIO_PIN_15), MXC_GPIO_FUNC_IN, MXC_GPIO_PAD_NONE };
+const mxc_gpio_cfg_t gpio_cfg_uart2_flow         =   { MXC_GPIO0, (MXC_GPIO_PIN_14 | MXC_GPIO_PIN_15), MXC_GPIO_FUNC_ALT2, MXC_GPIO_PAD_NONE, MXC_GPIO_VSSEL_VDDIO };
+const mxc_gpio_cfg_t gpio_cfg_uart2_flow_disable =   { MXC_GPIO0, (MXC_GPIO_PIN_14 | MXC_GPIO_PIN_15), MXC_GPIO_FUNC_IN, MXC_GPIO_PAD_NONE, MXC_GPIO_VSSEL_VDDIO };
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
