@@ -144,6 +144,7 @@ static int _max_spi_config(struct no_os_spi_desc *desc)
 {
 	struct max_spi_init_param *eparam;
 	struct max_spi_state *st;
+	mxc_spi_mode_t mode;
 	int32_t ret;
 
 	st = desc->extra;
@@ -169,8 +170,23 @@ static int _max_spi_config(struct no_os_spi_desc *desc)
 		goto err_init;
 	}
 
-	ret = MXC_SPI_SetMode(MXC_SPI_GET_SPI(desc->device_id),
-			      (mxc_spi_mode_t)desc->mode);
+	/* For Maxim Platforms SPI Mode 1 and 2 are reversed */
+	switch (desc->mode) {
+	case NO_OS_SPI_MODE_1:
+		mode = SPI_MODE_2;
+		break;
+	case NO_OS_SPI_MODE_2:
+		mode = SPI_MODE_1;
+		break;
+	case NO_OS_SPI_MODE_0:
+	case NO_OS_SPI_MODE_3:
+		mode = (mxc_spi_mode_t)desc->mode;
+		break;
+	default:
+		return -EINVAL;
+	}
+
+	ret = MXC_SPI_SetMode(MXC_SPI_GET_SPI(desc->device_id), mode);
 	if (ret) {
 		ret = -EINVAL;
 		goto err_init;
