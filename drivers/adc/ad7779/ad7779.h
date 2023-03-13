@@ -122,6 +122,9 @@
 #define AD7779_DOUT_HEADER_FORMAT		(1 << 5)
 #define AD7779_DCLK_CLK_DIV(x)			(((x) & 0x7) << 1)
 
+/* AD7779_REG_ADC_MUX_CONFIG */
+#define AD7779_REF_MUX_CTRL(x)			(((x) & 0x3) << 6)
+
 /* AD7779_REG_GLOBAL_MUX_CONFIG */
 #define AD7779_GLOBAL_MUX_CTRL(x)		(((x) & 0x1F) << 3)
 
@@ -202,6 +205,8 @@ typedef enum {
 typedef enum {
 	AD7779_EXT_REF,
 	AD7779_INT_REF,
+	AD7779_EXT_SUPPLY,
+	AD7779_EXT_REF_INV,
 } ad7779_ref_type;
 
 typedef enum {

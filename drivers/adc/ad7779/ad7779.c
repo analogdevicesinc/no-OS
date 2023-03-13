@@ -739,9 +739,9 @@ int32_t ad7779_set_reference_type(ad7779_dev *dev,
 	int32_t ret;
 
 	ret = ad7779_spi_int_reg_write_mask(dev,
-					    AD7779_REG_GENERAL_USER_CONFIG_1,
-					    AD7779_PDB_REFOUT_BUF,
-					    ref_type ? AD7779_PDB_REFOUT_BUF : 0);
+					    AD7779_REG_ADC_MUX_CONFIG,
+					    AD7779_REF_MUX_CTRL(0x3),
+					    AD7779_REF_MUX_CTRL(ref_type));
 	dev->ref_type = ref_type;
 
 	return ret;
@@ -760,10 +760,10 @@ int32_t ad7779_get_reference_type(ad7779_dev *dev,
 	uint8_t reg_data;
 
 	if (!dev->read_from_cache) {
-		ret = ad7779_spi_int_reg_read(dev, AD7779_REG_GENERAL_USER_CONFIG_1, &reg_data);
+		ret = ad7779_spi_int_reg_read(dev, AD7779_REG_ADC_MUX_CONFIG, &reg_data);
 		if (ret)
 			return ret;
-		*ref_type = no_os_field_get(AD7779_PDB_REFOUT_BUF, reg_data);
+		*ref_type = no_os_field_get(AD7779_REF_MUX_CTRL(0x3), reg_data);
 	} else {
 		*ref_type = dev->ref_type;
 	}
