@@ -38,7 +38,7 @@ uint32_t test_cnt = 0;
 static struct netif			mxc_eth_netif = {0};
 static int				prev_link_status = 0;
 static volatile unsigned int		eth_packet_is_in_que = 0;
-static unsigned char 			mxc_lwip_internal_buff[MXC_ETH_INTERNAL_BUFF_SIZE];
+static uint8_t	mxc_lwip_internal_buff[MXC_ETH_INTERNAL_BUFF_SIZE];
 static uint8_t tmp_payload[MXC_ETH_INTERNAL_BUFF_SIZE];
 static struct no_os_time old_time = {.s = 0, .us = 0};
 
@@ -138,7 +138,7 @@ static struct pbuf *get_recvd_frames(struct max_eth_desc *eth_desc)
 	int ret;
 
 	mac_desc = eth_desc->mac_desc;
-	mac_buff.payload = tmp_payload;
+	mac_buff.payload = &mxc_lwip_internal_buff[14];
 
 	ret = adin1110_reg_read(mac_desc, ADIN1110_RX_FSIZE_REG, &eth_data_len);
 	if (ret)
@@ -157,7 +157,7 @@ static struct pbuf *get_recvd_frames(struct max_eth_desc *eth_desc)
 	offset += 6;
 	memcpy(mxc_lwip_internal_buff + offset, &mac_buff.ethertype, 2);
 	offset += 2;
-	memcpy(mxc_lwip_internal_buff + offset, mac_buff.payload, mac_buff.payload_len);
+	//memcpy(mxc_lwip_internal_buff + offset, mac_buff.payload, mac_buff.payload_len);
 	//memcpy(mxc_lwip_internal_buff, mac_buff.mac_dest, mac_buff.payload_len + ADIN1110_ETH_HDR_LEN);
 	p = pbuf_alloc(PBUF_RAW, eth_data_len - 2, PBUF_POOL);
 	if (p != NULL)
@@ -186,27 +186,29 @@ int max_lwip_tick(void *data)
 	//eth_desc = netif_desc->state;
 	mac_desc = eth_desc->mac_desc;
 
-	no_os_irq_global_disable(eth_desc->nvic);
+	//no_os_irq_global_disable(eth_desc->nvic);
 	// no_os_irq_disable(eth_desc->nvic, MXC_GPIO_GET_IRQ(2));
 	p = get_recvd_frames(eth_desc);
 	//no_os_irq_enable(eth_desc->nvic, MXC_GPIO_GET_IRQ(2));
 	if (p != NULL) {
 		LINK_STATS_INC(link.recv);
 		ret = netif_desc->input(p, netif_desc);
-		if (ret)
-			pbuf_free(p);
+		if (ret) {
+			if (p->ref)
+				pbuf_free(p);
+		}
 	}
 
-	tcp_tmr();
-	// time = no_os_get_time();
-	// ms_diff = (time.s - old_time.s) * 1000 + ((int)time.us - (int)old_time.us) / 1000;
-	// if (ms_diff >= 500) {
-	// 	tcp_slowtmr();
-	// 	old_time = time;
-	// }
+	time = no_os_get_time();
+	ms_diff = (time.s - old_time.s) * 1000 + ((int)time.us - (int)old_time.us) / 1000;
+	//if (ms_diff >= 250) {
+		tcp_tmr();
+		old_time = time;
+	//}
+
 	sys_check_timeouts();
 
-	no_os_irq_global_enable(eth_desc->nvic);
+	//no_os_irq_global_enable(eth_desc->nvic);
 
 	return ret;
 }
@@ -468,7 +470,7 @@ free_network_descriptor:
 err_t max_eth_err_callback(void *arg, struct tcp_pcb *tpcb, struct pbuf *p, err_t err)
 {
 	int8_t _err = err;
-	printf("Error :? %hhi", _err);
+	printf("Error :? %d", err);
 	return ERR_OK;
 }
 
@@ -483,20 +485,18 @@ err_t max_eth_recv_callback(void *arg, struct tcp_pcb *tpcb, struct pbuf *p, err
 		return ERR_OK;
 	}
 
-	// if (err != ERR_OK) {
-	// 	pbuf_free(p);
-	// 	return err;
-	// }
+	if (err != ERR_OK) {
+		pbuf_free(p);
+		return err;
+	}
 
 	if (!sock->p) {
 		sock->p = p;
 		sock->p_idx = 0;
 	} else {
 		if (p != sock->p)
-			pbuf_cat(sock->p, p);
+			pbuf_chain(sock->p, p);
 	}
-
-	pbuf_ref(p);
 
 	return ERR_OK;
 }
@@ -531,7 +531,7 @@ static int32_t max_socket_open(void *net, uint32_t sock_id, enum socket_protocol
 	desc->sockets[sock_id].desc = desc;
 	desc->sockets[sock_id].id = sock_id;
 
-	//tcp_nagle_disable(pcb);
+	tcp_nagle_disable(pcb);
 
 	max_eth_config_socket(&desc->sockets[sock_id]);
 
@@ -542,6 +542,7 @@ static int32_t max_socket_close(void *net, uint32_t sock_id)
 {
 	struct max_eth_desc *desc = net;
 	struct socket_desc *sock;
+	struct pbuf *p, *old_p;
 	err_t ret;
 
 	sock = _get_sock(desc, sock_id);
@@ -550,6 +551,9 @@ static int32_t max_socket_close(void *net, uint32_t sock_id)
 
 	if (sock->state == SOCKET_UNUSED)
 		return -ENOENT;
+
+	tcp_recv(sock->pcb, NULL);
+	tcp_err(sock->pcb, NULL);
 
 	if (sock->p) {
 		tcp_recved(sock->pcb, sock->p->tot_len);
@@ -560,8 +564,6 @@ static int32_t max_socket_close(void *net, uint32_t sock_id)
 		ret = tcp_close(sock->pcb);
 	} while(ret != ERR_OK);
 
-	tcp_recv(sock->pcb, NULL);
-	tcp_err(sock->pcb, NULL);
 	sock->p_idx = 0;
 	_release_socket(desc, sock_id);
 
@@ -585,28 +587,42 @@ static int32_t max_socket_send(void *net, uint32_t sock_id, const void *data,
 	if (sock->state != SOCKET_CONNECTED)
 		return -ENOTCONN;
 
+	// if (!tcp_nagle_disabled(sock->pcb))
+	// 	tcp_nagle_disable(sock->pcb);
+
 	aval = tcp_sndbuf(sock->pcb);
 	flags = TCP_WRITE_FLAG_COPY;
 	if (aval < size)
 		/* Partial write */
 		flags |= TCP_WRITE_FLAG_MORE;
 	size = no_os_min(aval, size);
+
 	err = tcp_write(sock->pcb, data, size, flags);
 	if (err != ERR_OK) {
 		_err = err;
 		printf("TCP write err: %hhi\n", _err);
+		if (err == ERR_MEM) {
+			printf("ERR_MEM\n");
+			return -EAGAIN;
+		}
+
 		return _err;
 	}
 
-	// if (!(flags & TCP_WRITE_FLAG_MORE)) {
-	// 	/* Mark data as ready to be sent */
-	// 	err = tcp_output(sock->pcb);
-	// 	if (err != ERR_OK) {
-	// 		_err = err;
-	// 		printf("TCP output err: %"PRIi8"\n", _err);
-	// 		return _err;
-	// 	}
-	// }
+	// err = tcp_output(sock->pcb);
+
+	if (!(flags & TCP_WRITE_FLAG_MORE)) {
+		/* Mark data as ready to be sent */
+		err = tcp_output(sock->pcb);
+		if (err != ERR_OK) {
+			_err = err;
+			printf("TCP output err: %"PRIi8"\n", _err);
+
+			if (err == ERR_MEM) {
+				return -EAGAIN;
+			}
+		}
+	}
 
 	return size;
 }
@@ -617,6 +633,7 @@ static int32_t max_socket_recv(void *net, uint32_t sock_id, void *data, uint32_t
 	struct socket_desc *sock;
 	struct pbuf *p, *old_p;
 	uint8_t *buf, *pdata;
+	static bool refed = 0;
 	uint32_t i, len;
 
 	sock = _get_sock(desc, sock_id);
@@ -629,6 +646,7 @@ static int32_t max_socket_recv(void *net, uint32_t sock_id, void *data, uint32_t
 	i = 0;
 	p = sock->p;
 	pdata = data;
+
 	/* Iterate over payloads until requested data has been read */
 	while (p && i < size) {
 		if (!p->ref)
@@ -645,7 +663,10 @@ static int32_t max_socket_recv(void *net, uint32_t sock_id, void *data, uint32_t
 			p = p->next;
 			if (p)
 				pbuf_ref(p);
-			//pbuf_free(old_p);
+			//pbuf_dechain(old_p);
+
+			if (old_p->ref > 0)
+				pbuf_free(old_p);
 			tcp_recved(sock->pcb, sock->p_idx);
 			sock->p_idx = 0;
 		}

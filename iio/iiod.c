@@ -537,6 +537,18 @@ static int32_t do_read_buff(struct iiod_desc *desc, struct iiod_conn_priv *conn)
 			return -EAGAIN;
 	}
 
+	// if (conn->nb_buf.idx >= conn->nb_buf.len) {
+	// 	/* Write on conn */
+	// 	ret = rw_iiod_buff(desc, conn, &conn->nb_buf, IIOD_WR);
+	// 	if (NO_OS_IS_ERR_VALUE(ret))
+	// 		return ret;
+
+	// 	conn->cmd_data.bytes_count = 0;
+	// 	conn->nb_buf.len = 0;
+	// 	// if (conn->cmd_data.bytes_count)
+	// 	// 	return -EAGAIN;
+	// }
+
 	return 0;
 }
 
