@@ -144,7 +144,7 @@ static int32_t max_uart_write(struct no_os_uart_desc *desc, const uint8_t *data,
 	if(!desc || !data || !bytes_number)
 		return -EINVAL;
 
-	ret = MXC_UART_Write(MXC_UART_GET_UART(desc->device_id), data,
+	ret = MXC_UART_Write(MXC_UART_GET_UART(desc->device_id), (uint8_t *)data,
 			     (int *)&bytes_number);
 	if (ret != E_SUCCESS)
 		return -EIO;
@@ -207,7 +207,7 @@ static int32_t max_uart_write_nonblocking(struct no_os_uart_desc *desc,
 
 	id = desc->device_id;
 	uart_irq_state[id].uart = MXC_UART_GET_UART(id);
-	uart_irq_state[id].txData = data;
+	uart_irq_state[id].txData = (uint8_t *)data;
 	uart_irq_state[id].txLen = bytes_number;
 	uart_irq_state[id].rxData = NULL;
 	uart_irq_state[id].rxLen = 0;
