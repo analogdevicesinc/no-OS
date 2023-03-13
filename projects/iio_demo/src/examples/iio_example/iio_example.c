@@ -91,9 +91,9 @@ int iio_example_main()
 
 	struct iio_app_device devices[] = {
 		IIO_APP_DEVICE("adc_demo", adc_desc,
-			       &adc_demo_iio_descriptor,&adc_buff, NULL),
+			       &adc_demo_iio_descriptor,NULL /*&adc_buff*/, NULL),
 		IIO_APP_DEVICE("dac_demo", dac_desc,
-			       &dac_demo_iio_descriptor,NULL, &dac_buff)
+			       &dac_demo_iio_descriptor,NULL, NULL /*&dac_buff*/)
 	};
 
 	app_init_param.devices = devices;

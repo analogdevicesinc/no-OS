@@ -211,10 +211,10 @@ struct iio_cyclic_buffer_info {
 struct iio_buffer {
 	/* Mask with active channels */
 	uint32_t active_mask;
-	/* Size in bytes */
-	uint32_t size;
 	/* Number of bytes per sample * number of active channels */
 	uint32_t bytes_per_scan;
+	/* Number of samples */
+	uint32_t nb_scans;
 	/* Buffer direction */
 	enum iio_buffer_direction dir;
 	/* Buffer where data is stored */

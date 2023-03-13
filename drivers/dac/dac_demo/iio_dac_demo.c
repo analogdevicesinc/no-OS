@@ -124,8 +124,7 @@ int32_t dac_submit_samples(struct iio_device_data *dev_data)
 	if (!desc->loopback_buffers)
 		return -EINVAL;
 
-	for (i = 0; i < dev_data->buffer->size / dev_data->buffer->bytes_per_scan;
-	     i++) {
+	for (i = 0; i < dev_data->buffer->nb_scans; i++) {
 		ret = iio_buffer_pop_scan(dev_data->buffer, data);
 		if (ret)
 			return ret;
