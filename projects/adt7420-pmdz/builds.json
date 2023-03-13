@@ -1,10 +1,34 @@
 {
     "maxim": {
-      "dummy_example": {
+      "dummy_example_max32650": {
+        "flags" : "DUMMY_EXAMPLE=y IIO_EXAMPLE=n TARGET=max32650"
+      },
+      "iio_example_max32650": {
+        "flags" : "DUMMY_EXAMPLE=n IIO_EXAMPLE=y TARGET=max32650"
+      },
+      "dummy_example_max32655": {
         "flags" : "DUMMY_EXAMPLE=y IIO_EXAMPLE=n TARGET=max32655"
       },
-      "iio_example": {
+      "iio_example_max32655": {
         "flags" : "DUMMY_EXAMPLE=n IIO_EXAMPLE=y TARGET=max32655"
+      },
+      "dummy_example_max32660": {
+        "flags" : "DUMMY_EXAMPLE=y IIO_EXAMPLE=n TARGET=max32660"
+      },
+      "iio_example_max32660": {
+        "flags" : "DUMMY_EXAMPLE=n IIO_EXAMPLE=y TARGET=max32660"
+      },
+      "dummy_example_max32665": {
+        "flags" : "DUMMY_EXAMPLE=y IIO_EXAMPLE=n TARGET=max32665"
+      },
+      "iio_example_max32665": {
+        "flags" : "DUMMY_EXAMPLE=n IIO_EXAMPLE=y TARGET=max32665"
+      },
+      "dummy_example_max78000": {
+        "flags" : "DUMMY_EXAMPLE=y IIO_EXAMPLE=n TARGET=max78000"
+      },
+      "iio_example_max78000": {
+        "flags" : "DUMMY_EXAMPLE=n IIO_EXAMPLE=y TARGET=max78000"
       }
     }
 }
