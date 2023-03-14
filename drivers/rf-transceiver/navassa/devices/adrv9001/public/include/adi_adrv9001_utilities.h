@@ -18,6 +18,8 @@
 #include "adi_adrv9001_types.h"
 #include "adi_adrv9001_arm_types.h"
 #include "adi_adrv9001_rx_types.h"
+#include "adrv9001_arm_macros.h"
+#include "adi_adrv9001_radio.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -103,6 +105,43 @@ int32_t adi_adrv9001_Utilities_RxGainTable_Load(adi_adrv9001_Device_t *adrv9001,
 int32_t adi_adrv9001_Utilities_TxAttenTable_Load(adi_adrv9001_Device_t *adrv9001,
                                                  const char *txAttenTablePath,
                                                  uint32_t txChannelMask);
+
+/**
+ * \brief Wrapper function for adi_common_hal_Wait_us
+ *
+ * User configurable blocking wait for the specified length of time
+ *
+ * \param[in] adrv9001          Context variable - Pointer to the ADRV9001 device data structure
+ * \param[in] waitInterval_ms   User configurable time to wait, denoted in milliseconds (ms)
+ *
+ * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
+ */
+int32_t adi_adrv9001_Utilities_WaitMs(adi_adrv9001_Device_t *adrv9001, uint32_t waitInterval_ms);
+	
+/**
+ * \brief Function for In-System Debugging
+ *
+ * \pre This function can be called by the user anytime before initialization.
+ *
+ * \param[in] adrv9001          Context variable - Pointer to the ADRV9001 device data structure
+ * \param[in] init              Pointer to the ADRV9001 initialization settings data structure
+ * \param[in] armImagePath      Absolute path of the ARM image to be programmed
+ * \param[in] streamImagePath   Absolute path of the stream image to be programmed
+ *
+ * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
+ */
+int32_t adi_adrv9001_Utilities_SystemDebugPreCalibrate(adi_adrv9001_Device_t *adrv9001, adi_adrv9001_Init_t *init, const char *armImagePath, const char *streamImagePath);
+
+/**
+ * \brief Function for In-System Debugging
+ *
+ * \pre All the initialized channels must be in CALIBRATED
+ *
+ * \param[in] adrv9001          Context variable - Pointer to the ADRV9001 device data structure
+ *
+ * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
+ */
+int32_t adi_adrv9001_Utilities_SystemDebugPostCalibrate(adi_adrv9001_Device_t *adrv9001);
 
 #ifdef __cplusplus
 }

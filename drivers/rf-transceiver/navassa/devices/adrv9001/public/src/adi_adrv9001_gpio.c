@@ -443,7 +443,9 @@ int32_t adi_adrv9001_gpio_Configure(adi_adrv9001_Device_t *device,
     static const uint8_t GPIO_ENABLE = 0x04;
 
     uint8_t extData[5] = { 0 };
+#if ADI_ADRV9001_PRE_MCS_BROADCAST_DISABLE > 0
     uint8_t cmdStatusByte = 0;
+#endif
 
     int32_t recoveryAction = ADI_COMMON_ACT_NO_ACTION;
 
@@ -458,24 +460,37 @@ int32_t adi_adrv9001_gpio_Configure(adi_adrv9001_Device_t *device,
 
     recoveryAction = adi_adrv9001_arm_Cmd_Write(device, ADRV9001_ARM_SET_OPCODE, &extData[0], sizeof(extData));
     ADI_ERROR_RETURN(device->common.error.newAction);
-
+    
+#if ADI_ADRV9001_PRE_MCS_BROADCAST_DISABLE > 0
     /* Wait for command to finish executing */
     recoveryAction = adi_adrv9001_arm_CmdStatus_Wait(device,
                                                      ADRV9001_ARM_SET_OPCODE,
                                                      &cmdStatusByte,
                                                      ADI_ADRV9001_SETARMGPIO_TIMEOUT_US,
                                                      ADI_ADRV9001_SETARMGPIO_INTERVAL_US);
-
-    if (recoveryAction != ADI_COMMON_ACT_NO_ACTION)
-    {
-        /* If cmdStatusByte is non-zero then flag an ARM error and release the acquired shared resource */
-        if ((cmdStatusByte >> 1) > 0)
-        {
-            ADI_EXPECT(adrv9001_ArmCmdErrorHandler,
-                        device,
-                        ADRV9001_ARMCMD_ERRCODE(ADRV9001_ARM_SET_OPCODE, extData[0], cmdStatusByte));
-        }
-    }
+	if (recoveryAction != ADI_COMMON_ACT_NO_ACTION)
+	{
+		/* If cmdStatusByte is non-zero then flag an ARM error and release the acquired shared resource */
+		if ((cmdStatusByte >> 1) > 0)
+		{
+			ADI_EXPECT(adrv9001_ArmCmdErrorHandler,
+				device,
+				ADRV9001_ARMCMD_ERRCODE(ADRV9001_ARM_SET_OPCODE, extData[0], cmdStatusByte));
+		}
+	}
+#else
+	recoveryAction = adi_common_hal_Wait_us(&device->common, ADI_ADRV9001_ARM_SET_OPCODE_WAIT_INTERVAL_US);
+	if (recoveryAction != ADI_COMMON_ACT_NO_ACTION)
+	{
+		ADI_ERROR_REPORT(&device->common,
+			ADI_COMMON_ERRSRC_ADI_HAL,
+			recoveryAction,
+			ADI_COMMON_ACT_ERR_CHECK_TIMER,
+			device,
+			"Timer not working");
+		ADI_ERROR_RETURN(device->common.error.newAction);
+	}
+#endif
 
     ADI_API_RETURN(device);
 }
