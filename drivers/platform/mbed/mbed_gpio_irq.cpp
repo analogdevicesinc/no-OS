@@ -41,6 +41,7 @@
 
 #include <stdio.h>
 #include <mbed.h>
+#include <InterruptIn.h>
 
 // Platform support needs to be C-compatible to work with other drivers
 #ifdef __cplusplus
@@ -75,6 +76,17 @@ static struct mbed_irq_callback_desc mbed_gpio_irq_callback[NB_GPIO_IRQS];
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
+
+/* Derived class to inherit the protected member of InterruptIn class */
+class interrupt_inherited : public InterruptIn
+{
+public:
+	/* Return the IRQn */
+	IRQn_Type get_irqn()
+	{
+		return gpio_irq.irq_n;
+	}
+};
 
 /**
  * @brief	Mbed callback function for gpio/external interrupt ID1 event.
@@ -339,6 +351,32 @@ int32_t mbed_gpio_irq_trigger_level_set(struct no_os_irq_ctrl_desc *desc,
 }
 
 /**
+ * @brief Set interrupt Priority
+ * @param desc[in] - Interrupt controller descriptor.
+ * @param irq_id[in] - Interrupt Identifier.
+ * @param priority[in] - Interrupt Priority
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t mbed_gpio_irq_set_priority(struct no_os_irq_ctrl_desc *desc,
+				   uint32_t irq_id, uint32_t priority)
+{
+	IRQn_Type irq_n;
+
+	if (!desc || !desc->extra || (irq_id >= NB_GPIO_IRQS))
+		return -EINVAL;
+
+	interrupt_inherited *ext_interrupt = (interrupt_inherited *)(((
+			struct mbed_gpio_irq_desc *)(
+					desc->extra))->int_obj);
+
+	irq_n = ext_interrupt->get_irqn();
+
+	NVIC_SetPriority(irq_n, priority);
+
+	return 0;
+}
+
+/**
  * @brief	Free the resources allocated by mbed_irq_ctrl_init()
  * @param	desc[in, out] - Interrupt controller descriptor.
  * @return	0 in case of success, negative error code otherwise.
@@ -377,6 +415,7 @@ const struct no_os_irq_platform_ops mbed_gpio_irq_ops = {
 	.trigger_level_set = &mbed_gpio_irq_trigger_level_set,
 	.enable = &mbed_gpio_irq_enable,
 	.disable = &mbed_gpio_irq_disable,
+	.set_priority = &mbed_gpio_irq_set_priority,
 	.remove = &mbed_gpio_irq_ctrl_remove
 };
 
