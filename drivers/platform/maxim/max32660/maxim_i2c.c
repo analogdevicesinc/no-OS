@@ -239,7 +239,6 @@ static int32_t max_i2c_write(struct no_os_i2c_desc *desc,
 	mxc_i2c_req_t req;
 	struct max_i2c_extra *max_i2c_desc;
 	void *ptr;
-	int32_t ret;
 
 	if (!desc || !desc->extra)
 		return -EINVAL;
