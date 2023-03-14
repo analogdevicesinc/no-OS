@@ -469,7 +469,7 @@ free_network_descriptor:
 
 err_t max_eth_err_callback(void *arg, struct tcp_pcb *tpcb, struct pbuf *p, err_t err)
 {
-	int8_t _err = err;
+	int32_t _err = err;
 	printf("Error :? %d", err);
 	return ERR_OK;
 }
@@ -530,8 +530,7 @@ static int32_t max_socket_open(void *net, uint32_t sock_id, enum socket_protocol
 	desc->sockets[sock_id].pcb = pcb;
 	desc->sockets[sock_id].desc = desc;
 	desc->sockets[sock_id].id = sock_id;
-
-	tcp_nagle_disable(pcb);
+	desc->sockets[sock_id].p = NULL;
 
 	max_eth_config_socket(&desc->sockets[sock_id]);
 
@@ -565,6 +564,7 @@ static int32_t max_socket_close(void *net, uint32_t sock_id)
 	} while(ret != ERR_OK);
 
 	sock->p_idx = 0;
+	sock->p = NULL;
 	_release_socket(desc, sock_id);
 
 	return 0;
@@ -578,7 +578,7 @@ static int32_t max_socket_send(void *net, uint32_t sock_id, const void *data,
 	err_t err;
 	uint32_t aval;
 	uint32_t flags = 0;
-	int8_t _err;
+	int32_t _err;
 
 	sock = _get_sock(desc, sock_id);
 	if (!sock)
@@ -600,7 +600,7 @@ static int32_t max_socket_send(void *net, uint32_t sock_id, const void *data,
 	err = tcp_write(sock->pcb, data, size, flags);
 	if (err != ERR_OK) {
 		_err = err;
-		printf("TCP write err: %hhi\n", _err);
+		printf("TCP write err: %d\n", _err);
 		if (err == ERR_MEM) {
 			printf("ERR_MEM\n");
 			return -EAGAIN;
@@ -649,8 +649,8 @@ static int32_t max_socket_recv(void *net, uint32_t sock_id, void *data, uint32_t
 
 	/* Iterate over payloads until requested data has been read */
 	while (p && i < size) {
-		if (!p->ref)
-			pbuf_ref(p);
+		// if (!p->ref)
+		// 	pbuf_ref(p);
 		len = no_os_min(size - i, p->len - sock->p_idx);
 		buf = p->payload;
 		buf += sock->p_idx;
@@ -663,7 +663,6 @@ static int32_t max_socket_recv(void *net, uint32_t sock_id, void *data, uint32_t
 			p = p->next;
 			if (p)
 				pbuf_ref(p);
-			//pbuf_dechain(old_p);
 
 			if (old_p->ref > 0)
 				pbuf_free(old_p);

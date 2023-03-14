@@ -54,7 +54,6 @@ struct no_os_uart_init_param adin1110_uart_ip = {
 	.parity = NO_OS_UART_PAR_NO,
 	.platform_ops = &max_uart_ops,
 	.stop = NO_OS_UART_STOP_1_BIT,
-	.platform_ops = UART_OPS,
 	.extra = UART_EXTRA,
 };
 
@@ -98,7 +97,7 @@ const struct adin1110_init_param adin1110_ip = {
 
 struct no_os_spi_init_param ad74413r_spi_ip = {
 	.device_id = 3,
-	.max_speed_hz = 10000000,
+	.max_speed_hz = 30000000,
 	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
 	.mode = NO_OS_SPI_MODE_1,
 	.platform_ops = SPI_OPS,
