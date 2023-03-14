@@ -138,7 +138,8 @@ int iio_format_value(char *buf, uint32_t len, enum iio_val fmt,
 
 /* DMA buffer functions. */
 /* Get buffer addr where to write iio_buffer.size bytes */
-int iio_buffer_get_block(struct iio_buffer *buffer, void **addr);
+int iio_buffer_get_block(struct iio_buffer *buffer, void **addr,
+			 uint32_t *size);
 /* To be called to mark last iio_buffer_read as done */
 int iio_buffer_block_done(struct iio_buffer *buffer);
 

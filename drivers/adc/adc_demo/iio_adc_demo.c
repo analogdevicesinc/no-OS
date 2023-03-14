@@ -148,24 +148,26 @@ int32_t adc_submit_samples(struct iio_device_data *dev_data)
 	uint16_t buff[TOTAL_ADC_CHANNELS];
 	uint32_t i;
 	uint16_t *ch_buf_ptr;
+	uint32_t nb_scans;
 
 	if(!dev_data)
 		return -ENODEV;
 
 	desc = (struct adc_demo_desc *)dev_data->dev;
+	nb_scans = dev_data->buffer->nb_scans;
 
 	if(desc->ext_buff == NULL) {
 		int offset_per_ch = NO_OS_ARRAY_SIZE(sine_lut) / TOTAL_ADC_CHANNELS;
-		for(i = 0; i < dev_data->buffer->size / dev_data->buffer->bytes_per_scan; i++) {
+		for(i = 0; i < nb_scans; i++) {
 			while(get_next_ch_idx(desc->active_ch, ch, &ch))
 				buff[k++] = sine_lut[(i + ch * offset_per_ch ) % NO_OS_ARRAY_SIZE(sine_lut)];
 			k = 0;
 			iio_buffer_push_scan(dev_data->buffer, buff);
 		}
-		return dev_data->buffer->size / dev_data->buffer->bytes_per_scan;
+		return nb_scans;
 	}
 
-	for(i = 0; i < dev_data->buffer->size / dev_data->buffer->bytes_per_scan; i++) {
+	for(i = 0; i < nb_scans; i++) {
 		while(get_next_ch_idx(desc->active_ch, ch, &ch)) {
 			ch_buf_ptr = (uint16_t*)desc->ext_buff + (ch * desc->ext_buff_len);
 			buff[k++] = ch_buf_ptr[i];
@@ -173,7 +175,7 @@ int32_t adc_submit_samples(struct iio_device_data *dev_data)
 		k = 0;
 		iio_buffer_push_scan(dev_data->buffer, buff);
 	}
-	return dev_data->buffer->size / dev_data->buffer->bytes_per_scan;
+	return nb_scans;
 }
 
 

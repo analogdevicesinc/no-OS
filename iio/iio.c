@@ -1088,7 +1088,7 @@ static int iio_open_dev(struct iiod_ctx *ctx, const char *device,
 	uint32_t ch_mask;
 	int32_t ret;
 	int8_t *buf;
-	uint32_t buf_size;
+	uint32_t buf_size, dynamic_size;
 
 	dev = get_iio_device(ctx->instance, device);
 	if (!dev)
@@ -1108,9 +1108,10 @@ static int iio_open_dev(struct iiod_ctx *ctx, const char *device,
 	dev->buffer.public.active_mask = mask;
 	dev->buffer.public.bytes_per_scan =
 		bytes_per_scan(dev->dev_descriptor->channels, mask);
-	dev->buffer.public.size = dev->buffer.public.bytes_per_scan * samples;
+	dev->buffer.public.nb_scans = samples;
+	dynamic_size = dev->buffer.public.bytes_per_scan * samples;
 	if (dev->buffer.raw_buf && dev->buffer.raw_buf_len) {
-		if (dev->buffer.raw_buf_len < dev->buffer.public.size)
+		if (dev->buffer.raw_buf_len < dynamic_size)
 			/* Need a bigger buffer or to allocate */
 			return -ENOMEM;
 
@@ -1122,8 +1123,8 @@ static int iio_open_dev(struct iiod_ctx *ctx, const char *device,
 			no_os_free(dev->buffer.cb.buff);
 			dev->buffer.allocated = 0;
 		}
-		buf_size = dev->buffer.public.size;
-		buf = (int8_t *)no_os_calloc(dev->buffer.public.size, sizeof(*buf));
+		buf_size = dynamic_size;
+		buf = (int8_t *)no_os_calloc(buf_size, sizeof(*buf));
 		if (!buf)
 			return -ENOMEM;
 		dev->buffer.allocated = 1;
@@ -1221,13 +1222,14 @@ static int iio_call_submit(struct iiod_ctx *ctx, const char *device,
 		int32_t ret;
 		uint32_t nb_scans;
 		void *buff;
+		uint32_t size;
 		struct iio_buffer *buffer = &dev->buffer.public;
 
-		ret = iio_buffer_get_block(buffer, &buff);
+		ret = iio_buffer_get_block(buffer, &buff, &size);
 		if (NO_OS_IS_ERR_VALUE(ret))
 			return ret;
 
-		nb_scans = buffer->size / buffer->bytes_per_scan;
+		nb_scans = size / buffer->bytes_per_scan;
 		if (dir == IIO_DIRECTION_INPUT)
 			ret = dev->dev_descriptor->read_dev(dev->dev_instance,
 							    buff, nb_scans);
@@ -1315,7 +1317,6 @@ static int iio_write_buffer(struct iiod_ctx *ctx, const char *device,
 {
 	struct iio_dev_priv	*dev;
 	int32_t			ret;
-	uint32_t		available;
 	uint32_t		size;
 
 	dev = get_iio_device(ctx->instance, device);
@@ -1326,8 +1327,7 @@ static int iio_write_buffer(struct iiod_ctx *ctx, const char *device,
 	if (NO_OS_IS_ERR_VALUE(ret))
 		return ret;
 
-	available = dev->buffer.public.size - size;
-	bytes = no_os_min(available, bytes);
+	bytes = no_os_min(size, bytes);
 	ret = no_os_cb_write(&dev->buffer.cb, buf, bytes);
 	if (NO_OS_IS_ERR_VALUE(ret))
 		return ret;
@@ -1335,37 +1335,17 @@ static int iio_write_buffer(struct iiod_ctx *ctx, const char *device,
 	return bytes;
 }
 
-int iio_buffer_get_block(struct iio_buffer *buffer, void **addr)
+int iio_buffer_get_block(struct iio_buffer *buffer, void **addr, uint32_t *size)
 {
-	int32_t ret;
-	uint32_t size;
-
 	if (!buffer)
 		return -EINVAL;
 
 	if (buffer->dir == IIO_DIRECTION_INPUT)
-		ret = no_os_cb_prepare_async_write(buffer->buf, buffer->size, addr,
-						   &size);
-	else
-		ret = no_os_cb_prepare_async_read(buffer->buf, buffer->size, addr,
-						  &size);
-	if (NO_OS_IS_ERR_VALUE(ret))
-		/* ToDo: Implement async cancel. And cancel transaction here.
-		 * Also cancel may be needed for a posible future abort callback
-		 * If this is not done, after the first error all future calls
-		 * to async will fail.
-		 * An other option will be to call cb_cfg but then data is lost
-		 */
-		return ret;
+		return no_os_cb_prepare_async_write(buffer->buf, 1000000, addr,
+						    size);
 
-	/* This function is exepected to be called for a DMA transaction of the
-	 * full buffer. But if can't do in one transaction won't work.
-	 * This behavior is not expected anyway.
-	 */
-	if (size != buffer->size)
-		return -ENOMEM;
-
-	return 0;
+	return no_os_cb_prepare_async_read(buffer->buf, 1000000, addr,
+					   size);
 }
 
 int iio_buffer_block_done(struct iio_buffer *buffer)
@@ -1402,7 +1382,7 @@ int iio_buffer_pop_scan(struct iio_buffer *buffer, void *data)
 	       buffer->bytes_per_scan);
 
 	buffer->cyclic_info.buff_index += buffer->bytes_per_scan;
-	if (buffer->size == buffer->cyclic_info.buff_index)
+	if (buffer->nb_scans * buffer->bytes_per_scan == buffer->cyclic_info.buff_index)
 		buffer->cyclic_info.buff_index = 0;
 
 	return 0;
