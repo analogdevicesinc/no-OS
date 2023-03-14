@@ -40,6 +40,7 @@
 
 #include <stdint.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "i2c.h"
 #include "no_os_error.h"
