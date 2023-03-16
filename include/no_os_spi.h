@@ -66,9 +66,9 @@ enum no_os_spi_mode {
 	NO_OS_SPI_MODE_0 = (0 | 0),
 	/** Data on falling, shift out on rising */
 	NO_OS_SPI_MODE_1 = (0 | NO_OS_SPI_CPHA),
-	/** Data on falling, shift out on rising */
-	NO_OS_SPI_MODE_2 = (NO_OS_SPI_CPOL | 0),
 	/** Data on rising, shift out on falling */
+	NO_OS_SPI_MODE_2 = (NO_OS_SPI_CPOL | 0),
+	/** Data on falling, shift out on rising */
 	NO_OS_SPI_MODE_3 = (NO_OS_SPI_CPOL | NO_OS_SPI_CPHA)
 };
 
