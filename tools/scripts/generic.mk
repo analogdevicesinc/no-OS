@@ -78,6 +78,16 @@ rwildcard=$(foreach d,$(wildcard $(1:=/*)),$(call rwildcard,$d,$2) $(filter $(su
 # Creates file with the specified name
 set_one_time_rule = echo Target file. Do not delete > $1
 
+# Append text to file
+APPEND_TO_FILE = echo $1 >> $2
+
+# Add blank line to a file
+ifeq ($(OS), Windows_NT)
+ADD_BLANK_LINE = echo. > $1
+else
+ADD_BLANK_LINE = echo> $1
+endif
+
 # Transform full path to relative path to be used in build
 # $(PROJECT)/something -> srcs/something
 # $(NO-OS)/something -> noos/something
@@ -280,6 +290,8 @@ EXTRA_INC_PATHS += $(call relative_to_project, $(INCLUDE))
 
 CFLAGS += $(addprefix -I,$(EXTRA_INC_PATHS)) $(PLATFORM_INCS)
 
+# File containing object files names.
+OBJECT_FILES_NAMES = $(BUILD_DIR)/object-files-names.txt
 #------------------------------------------------------------------------------
 #                             Generic Goals                         
 #------------------------------------------------------------------------------
@@ -333,9 +345,15 @@ ifneq ($(strip $(LSCRIPT)),)
 LSCRIPT_FLAG = -T$(LSCRIPT)
 endif
 
+PHONY += pre_build
+pre_build:
+	$(MUTE) $(call print, putting project object files names to text file)
+	$(MUTE) $(call ADD_BLANK_LINE, $(OBJECT_FILES_NAMES)) $(cmd_separator) $(foreach file,$(sort $(OBJS)),$(call APPEND_TO_FILE,$(file),$(OBJECT_FILES_NAMES)) $(cmd_separator)) echo . $(HIDE)
+
 $(BINARY): $(LIB_TARGETS) $(OBJS) $(ASM_OBJS) $(LSCRIPT) $(BOOTOBJ)
 	@$(call print,[LD] $(notdir $(OBJS)))
-	$(MUTE) $(CC) $(LSCRIPT_FLAG) $(LDFLAGS) $(LIB_PATHS) -o $(BINARY) $(OBJS) $(BOOTOBJ)\
+	$(MUTE) $(MAKE) --no-print-directory pre_build
+	$(MUTE) $(CC) $(LSCRIPT_FLAG) $(LDFLAGS) $(LIB_PATHS) -o $(BINARY) @$(OBJECT_FILES_NAMES) $(BOOTOBJ)\
 			 $(ASM_OBJS) $(LIB_FLAGS)
 	$(MUTE) $(MAKE) --no-print-directory post_build
 
