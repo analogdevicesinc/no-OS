@@ -312,7 +312,7 @@ def main():
 						if _hw != hardware:
 							continue
 					env = dict(os.environ)
-					shell_source("~/." + platform + "_environment.sh")
+					shell_source("/no-OS_agent/." + platform + "_environment.sh")
 
 					new_build = BuildConfig(project_dir,
 								platform,
