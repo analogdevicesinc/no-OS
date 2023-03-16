@@ -1113,17 +1113,20 @@ static int ad74413r_iio_setup_channels(struct ad74413r_iio_desc *iio_desc)
 		chan = channels_info.channels;
 
 		for (uint32_t ch_idx = 0; ch_idx < channels_info.num_channels; ch_idx++) {
+			/* Only add a scan index to the ADC channels */
+			if (chan[ch_idx].ch_out == 1)
+				continue;
+
+			chan[ch_idx].scan_index = scan_idx++;
 			chan[ch_idx].channel = i;
 			chan[ch_idx].address = i;
-
-			/* Only add a scan index to the ADC channels */
-			if (chan[ch_idx].ch_out == 0)
-				chan[ch_idx].scan_index = scan_idx++;
 
 			chan_buffer[n_chan] = chan[ch_idx];
 			iio_desc->iio_dev->num_ch++;
 			n_chan++;
 		}
+
+		iio_desc->no_of_active_adc_channels++;
 	}
 
 	/* Add the diagnostics channels */
@@ -1132,6 +1135,27 @@ static int ad74413r_iio_setup_channels(struct ad74413r_iio_desc *iio_desc)
 		chan_buffer[n_chan].scan_index = scan_idx++;
 		iio_desc->iio_dev->num_ch++;
 		n_chan++;
+	}
+
+	for (int i = 0; i < AD74413R_N_CHANNELS; i++) {
+		if (!config[i].enabled)
+			continue;
+
+		channels_info = channel_map[config[i].function];
+		chan = channels_info.channels;
+
+		for (uint32_t ch_idx = 0; ch_idx < channels_info.num_channels; ch_idx++) {
+			/* Only add a scan index to the ADC channels */
+			if (chan[ch_idx].ch_out == 0)
+				continue;
+
+			chan[ch_idx].channel = i;
+			chan[ch_idx].address = i;
+
+			chan_buffer[n_chan] = chan[ch_idx];
+			iio_desc->iio_dev->num_ch++;
+			n_chan++;
+		}
 	}
 
 	/* Add the fault channel */
@@ -1155,7 +1179,7 @@ static int ad74413r_iio_update_channels(void *dev, uint32_t mask)
 	int ret;
 
 	iio_desc->active_channels = mask;
-	iio_desc->no_of_active_channels = no_os_hweight8(mask);
+	iio_desc->no_of_active_channels = no_os_hweight32(mask);
 
 	/* Disable all channels */
 	ret = ad74413r_reg_update(iio_desc->ad74413r_desc, AD74413R_ADC_CONV_CTRL,
@@ -1163,7 +1187,7 @@ static int ad74413r_iio_update_channels(void *dev, uint32_t mask)
 	if (ret)
 		return ret;
 
-	for (i = 0; i < AD74413R_N_CHANNELS + AD74413R_DIAG_CH_OFFSET; i++) {
+	for (i = 0; i < iio_desc->no_of_active_adc_channels + AD74413R_DIAG_CH_OFFSET; i++) {
 		if (mask & NO_OS_BIT(i)) {
 			ret = _get_ch_by_idx(iio_desc->iio_dev, i, &ch);
 			if (ret)
@@ -1199,20 +1223,21 @@ static int ad74413r_iio_buffer_disable(void *dev)
  */
 static int ad74413r_iio_read_samples(void *dev, uint32_t *buf, uint32_t samples)
 {
+	struct ad74413r_iio_desc *iio_desc = dev;
 	int ret;
 	uint32_t j = 0;
-	uint32_t val;
+	uint8_t val[4];
 	uint32_t i, chan_i;
 
 	for (i = 0; i < samples; i++) {
-		for (chan_i = 0; chan_i < AD74413R_N_CHANNELS; chan_i++) {
-			if (((struct ad74413r_iio_desc *)dev)->active_channels & NO_OS_BIT(chan_i)) {
+		for (chan_i = 0; chan_i < iio_desc->no_of_active_adc_channels; chan_i++) {
+			if (iio_desc->active_channels & NO_OS_BIT(chan_i)) {
 				ret = ad74413r_reg_read_raw(((struct ad74413r_iio_desc *)dev)->ad74413r_desc,
-							    AD74413R_ADC_RESULT(chan_i),
-							    (uint8_t *)&val);
+							    AD74413R_ADC_RESULT(chan_i), val);
 				if (ret)
 					return ret;
-				buf[j++] = val;
+
+				memcpy(&buf[j++], val, NO_OS_ARRAY_SIZE(val));
 			}
 		}
 	}
@@ -1229,33 +1254,35 @@ static int ad74413r_iio_trigger_handler(struct iio_device_data *dev_data)
 {
 	int ret;
 	uint32_t i;
-	uint32_t val;
+	uint8_t val[4];
 	uint32_t ch;
-	uint32_t buff[8];
+	uint32_t buff[8] = {0};
 	uint32_t buffer_idx = 0;
 	struct ad74413r_desc *desc;
 	struct ad74413r_iio_desc *iio_desc;
-
+	uint32_t active_adc_ch;
+	
 	iio_desc = dev_data->dev;
 	desc = iio_desc->ad74413r_desc;
+	active_adc_ch = iio_desc->no_of_active_adc_channels;
 
-	for (i = 0; i < AD74413R_N_CHANNELS + AD74413R_DIAG_CH_OFFSET; i++) {
+	for (i = 0; i < iio_desc->no_of_active_adc_channels + AD74413R_DIAG_CH_OFFSET; i++) {
 		if (iio_desc->active_channels & NO_OS_BIT(i)) {
 			ret = _get_ch_by_idx(iio_desc->iio_dev, i, &ch);
 			if (ret)
 				continue;
 
-			if (ch < 4)
+			if (ch < active_adc_ch)
 				ret = ad74413r_reg_read_raw(desc, AD74413R_ADC_RESULT(ch),
-							    (uint8_t *)&val);
+							    &buff[buffer_idx++]);
 			else
 				ret = ad74413r_reg_read_raw(desc,
-							    AD74413R_DIAG_RESULT(ch - 4),
-							    (uint8_t *)&val);
+							    AD74413R_DIAG_RESULT(ch - active_adc_ch),
+							    &buff[buffer_idx++]);
 			if (ret)
 				return ret;
 
-			buff[buffer_idx++] = val;
+			// memcpy(&buff[buffer_idx++], val, 4);
 		}
 	}
 
