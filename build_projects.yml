@@ -12,8 +12,11 @@ variables:
   value: $[eq(variables['Build.SourceBranch'], 'refs/heads/master')]
 
 jobs:
-- job: Projects
-  pool: LocalPool
+- job: Xilinx
+  pool:
+    name: Default
+    demands:
+      - agent.name -equals no-OS_xilinx
   steps:
   - checkout: self
     fetchDepth: 50
@@ -23,7 +26,8 @@ jobs:
   - script: 'python3 ./tools/scripts/build_projects.py . 
                -export_dir $(RELEASE_DIR)
                -log_dir $(LOG_DIR)
-               -builds_dir $(BUILDS_DIR)'
+               -builds_dir /no-OS_builds/builds
+               -platform xilinx'
     displayName: 'Run project build'
   - task: PublishPipelineArtifact@1
     timeoutInMinutes: 10
@@ -36,5 +40,160 @@ jobs:
     condition: true
     inputs:
       targetPath: '$(Build.Repository.LocalPath)/$(LOG_DIR)'
-      artifact: 'logs_$(System.JobId)'
+      artifact: 'logs_Xilinx_$(System.JobId)'
+      publishLocation: 'pipeline'
+
+- job: STM32
+  pool:
+    name: Default
+    demands:
+      - agent.name -equals no-OS
+  steps:
+  - checkout: self
+    fetchDepth: 50
+    submodules: true
+    clean: true
+    persistCredentials: true
+  - script: 'python3 ./tools/scripts/build_projects.py .
+               -export_dir $(RELEASE_DIR)
+               -log_dir $(LOG_DIR)
+               -builds_dir /no-OS_builds/builds
+               -platform stm32'
+    displayName: 'Run project build'
+  - task: PublishPipelineArtifact@1
+    timeoutInMinutes: 10
+    condition: eq(variables.isMaster, true)
+    inputs:
+      targetPath: '$(Build.Repository.LocalPath)/$(RELEASE_DIR)'
+      artifact: '$(ARTIFACT_NAME)'
+      publishLocation: 'pipeline'
+  - task: PublishPipelineArtifact@1
+    condition: true
+    inputs:
+      targetPath: '$(Build.Repository.LocalPath)/$(LOG_DIR)'
+      artifact: 'logs_STM32_$(System.JobId)'
+      publishLocation: 'pipeline'
+
+- job: Maxim
+  pool:
+    name: Default
+    demands:
+      - agent.name -equals no-OS
+  steps:
+  - checkout: self
+    fetchDepth: 50
+    submodules: true
+    clean: true
+    persistCredentials: true
+  - script: 'python3 ./tools/scripts/build_projects.py .
+               -export_dir $(RELEASE_DIR)
+               -log_dir $(LOG_DIR)
+               -builds_dir /no-OS_builds/builds
+               -platform maxim'
+    displayName: 'Run project build'
+  - task: PublishPipelineArtifact@1
+    timeoutInMinutes: 10
+    condition: eq(variables.isMaster, true)
+    inputs:
+      targetPath: '$(Build.Repository.LocalPath)/$(RELEASE_DIR)'
+      artifact: '$(ARTIFACT_NAME)'
+      publishLocation: 'pipeline'
+  - task: PublishPipelineArtifact@1
+    condition: true
+    inputs:
+      targetPath: '$(Build.Repository.LocalPath)/$(LOG_DIR)'
+      artifact: 'logs_Maxim_$(System.JobId)'
+      publishLocation: 'pipeline'
+
+- job: Mbed
+  pool:
+    name: Default
+    demands:
+      - agent.name -equals no-OS
+  steps:
+  - checkout: self
+    fetchDepth: 50
+    submodules: true
+    clean: true
+    persistCredentials: true
+  - script: 'python3 ./tools/scripts/build_projects.py .
+               -export_dir $(RELEASE_DIR)
+               -log_dir $(LOG_DIR)
+               -builds_dir /no-OS_builds/builds
+               -platform mbed'
+    displayName: 'Run project build'
+  - task: PublishPipelineArtifact@1
+    timeoutInMinutes: 10
+    condition: eq(variables.isMaster, true)
+    inputs:
+      targetPath: '$(Build.Repository.LocalPath)/$(RELEASE_DIR)'
+      artifact: '$(ARTIFACT_NAME)'
+      publishLocation: 'pipeline'
+  - task: PublishPipelineArtifact@1
+    condition: true
+    inputs:
+      targetPath: '$(Build.Repository.LocalPath)/$(LOG_DIR)'
+      artifact: 'logs_Mbed_$(System.JobId)'
+      publishLocation: 'pipeline'
+
+- job: Pico
+  pool:
+    name: Default
+    demands:
+      - agent.name -equals no-OS
+  steps:
+  - checkout: self
+    fetchDepth: 50
+    submodules: true
+    clean: true
+    persistCredentials: true
+  - script: 'python3 ./tools/scripts/build_projects.py .
+               -export_dir $(RELEASE_DIR)
+               -log_dir $(LOG_DIR)
+               -builds_dir /no-OS_builds/builds
+               -platform pico'
+    displayName: 'Run project build'
+  - task: PublishPipelineArtifact@1
+    timeoutInMinutes: 10
+    condition: eq(variables.isMaster, true)
+    inputs:
+      targetPath: '$(Build.Repository.LocalPath)/$(RELEASE_DIR)'
+      artifact: '$(ARTIFACT_NAME)'
+      publishLocation: 'pipeline'
+  - task: PublishPipelineArtifact@1
+    condition: true
+    inputs:
+      targetPath: '$(Build.Repository.LocalPath)/$(LOG_DIR)'
+      artifact: 'logs_Pico_$(System.JobId)'
+      publishLocation: 'pipeline'
+
+- job: ADuCM3029
+  pool:
+    name: Default
+    demands:
+      - agent.name -equals no-OS
+  steps:
+  - checkout: self
+    fetchDepth: 50
+    submodules: true
+    clean: true
+    persistCredentials: true
+  - script: 'python3 ./tools/scripts/build_projects.py .
+               -export_dir $(RELEASE_DIR)
+               -log_dir $(LOG_DIR)
+               -builds_dir /no-OS_builds/builds
+               -platform aducm3029'
+    displayName: 'Run project build'
+  - task: PublishPipelineArtifact@1
+    timeoutInMinutes: 10
+    condition: eq(variables.isMaster, true)
+    inputs:
+      targetPath: '$(Build.Repository.LocalPath)/$(RELEASE_DIR)'
+      artifact: '$(ARTIFACT_NAME)'
+      publishLocation: 'pipeline'
+  - task: PublishPipelineArtifact@1
+    condition: true
+    inputs:
+      targetPath: '$(Build.Repository.LocalPath)/$(LOG_DIR)'
+      artifact: 'logs_ADuCM3029_$(System.JobId)'
       publishLocation: 'pipeline'
