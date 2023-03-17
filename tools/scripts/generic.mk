@@ -134,7 +134,8 @@ endif
 PROJECT_NAME	= $(notdir $(PROJECT))
 OBJECTS_DIR		= $(BUILD_DIR)/objs
 PLATFORM_TOOLS	= $(NO-OS)/tools/scripts/platform/$(PLATFORM)
-BINARY			?= $(BUILD_DIR)/$(PROJECT_NAME).elf
+BINARY_FILE_NAME ?= $(PROJECT_NAME)
+BINARY			?= $(BUILD_DIR)/$(BINARY_FILE_NAME).elf
 PROJECT_TARGET		= $(BUILD_DIR)/.project.target
 
 # New line variable
@@ -202,6 +203,10 @@ ifeq 'pico' '$(PLATFORM)'
 include $(NO-OS)/tools/scripts/pico.mk
 endif
 
+ifeq 'mbed' '$(PLATFORM)'
+include $(NO-OS)/tools/scripts/mbed.mk
+endif
+
 #------------------------------------------------------------------------------
 #                            COMMON COMPILER FLAGS                             
 #------------------------------------------------------------------------------
@@ -231,8 +236,9 @@ endif
 
 SRC_DIRS := $(patsubst %/,%,$(SRC_DIRS))
 
-# Get all .c and .h files from SRC_DIRS
+# Get all .c, .cpp and .h files from SRC_DIRS
 SRCS     += $(foreach dir, $(SRC_DIRS), $(call rwildcard, $(dir),*.c))
+SRCS     += $(foreach dir, $(SRC_DIRS), $(call rwildcard, $(dir),*.cpp))
 INCS     += $(foreach dir, $(SRC_DIRS), $(call rwildcard, $(dir),*.h))
 
 # Recursive ignored files. If a directory is in the variable IGNORED_FILES,
@@ -247,7 +253,7 @@ INCS     := $(filter-out $(ALL_IGNORED_FILES),$(INCS))
 FILES_OUT_OF_DIRS := $(filter-out $(call rwildcard, $(SRC_DIRS),*), $(SRCS) $(INCS)) 
 
 REL_SRCS = $(addprefix $(OBJECTS_DIR)/,$(call get_relative_path,$(SRCS_IN_BUILD) $(PLATFORM_SRCS)))
-OBJS = $(REL_SRCS:.c=.o)
+OBJS = $(patsubst %.cpp,%.o,$(patsubst %.c,%.o,$(REL_SRCS)))
 
 REL_ASM_SRCS = $(addprefix $(OBJECTS_DIR)/,$(call get_relative_path,$(ASM_SRCS)))
 ASM_OBJS_s = $(REL_ASM_SRCS:.s=.o)
@@ -279,6 +285,7 @@ EXTRA_INC_PATHS := $(filter-out $(call relative_to_project,$(NO-OS)/include/),$(
 EXTRA_INC_PATHS += $(call relative_to_project, $(INCLUDE))
 
 CFLAGS += $(addprefix -I,$(EXTRA_INC_PATHS)) $(PLATFORM_INCS)
+CPPFLAGS += $(addprefix -I,$(EXTRA_INC_PATHS)) $(PLATFORM_INCS)
 
 #------------------------------------------------------------------------------
 #                             Generic Goals                         
@@ -321,6 +328,10 @@ $(OBJECTS_DIR)/%.o: $$(call get_full_path, %).c | $$(@D)/.
 	@$(call print,[CC] $(notdir $<))
 	$(MUTE) $(CC) -c $(CFLAGS) $< -o $@
 
+$(OBJECTS_DIR)/%.o: $$(call get_full_path, %).cpp | $$(@D)/.
+	@$(call print,[CPP] $(notdir $<))
+	$(MUTE) $(CPP) -c $(CPPFLAGS) $< -o $@
+
 $(OBJECTS_DIR)/%.o: $$(call get_full_path, %).s | $$(@D)/. 
 	@$(call print,[AS] $(notdir $<))
 	$(MUTE) $(AS) -c $(ASFLAGS) $< -o $@
@@ -335,7 +346,8 @@ endif
 
 $(BINARY): $(LIB_TARGETS) $(OBJS) $(ASM_OBJS) $(LSCRIPT) $(BOOTOBJ)
 	@$(call print,[LD] $(notdir $(OBJS)))
-	$(MUTE) $(CC) $(LSCRIPT_FLAG) $(LDFLAGS) $(LIB_PATHS) -o $(BINARY) $(OBJS) $(BOOTOBJ)\
+	$(MUTE) $(MAKE) --no-print-directory pre_build
+	$(MUTE) $(CC) $(LSCRIPT_FLAG) $(LDFLAGS) $(LIB_PATHS) -o $(BINARY) @$(OBJECT_FILES_NAMES) $(EXTRA_FILES) $(BOOTOBJ)\
 			 $(ASM_OBJS) $(LIB_FLAGS)
 	$(MUTE) $(MAKE) --no-print-directory post_build
 
@@ -401,3 +413,6 @@ list:
 	$(call print_lines, $(sort $(SRCS) $(INCS)))
 
 .PHONY: $(PHONY)
+
+# Adding header files dependancy on object files
+-include $(OBJS:.o=.d)
