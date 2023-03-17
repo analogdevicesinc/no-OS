@@ -161,6 +161,7 @@ struct iiod_conn_priv {
 	char *strtok_ctx;
 	/* True if the device was open with cyclic buffer flag */
 	bool is_cyclic_buffer;
+	uint32_t output_idx;
 };
 
 /* Private iiod information */

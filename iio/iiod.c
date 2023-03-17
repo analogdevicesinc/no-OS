@@ -510,46 +510,63 @@ static int32_t rw_iiod_buff(struct iiod_desc *desc, struct iiod_conn_priv *conn,
 static int32_t do_read_buff(struct iiod_desc *desc, struct iiod_conn_priv *conn)
 {
 	struct iiod_ctx ctx = IIOD_CTX(desc, conn);
+	static uint32_t wr_idx = 0;
 	int32_t ret, len;
+	void *buf;
 
-	if (conn->nb_buf.len == 0) {
-		conn->nb_buf.buf = conn->payload_buf;
-		len = no_os_min(conn->payload_buf_len,
-				conn->cmd_data.bytes_count);
-		/* Read from dev */
-		ret = desc->ops.read_buffer(&ctx, conn->cmd_data.device,
-					    conn->nb_buf.buf, len);
-		if (NO_OS_IS_ERR_VALUE(ret))
-			return ret;
-		len = ret;
-		conn->nb_buf.len = len;
-		conn->nb_buf.idx = 0;
-	}
-	if (conn->nb_buf.idx < conn->nb_buf.len) {
-		/* Write on conn */
+	conn->nb_buf.buf = conn->payload_buf;
+	buf = conn->nb_buf.buf;
+	len = no_os_min(conn->payload_buf_len, conn->cmd_data.bytes_count);
+
+	if (!len)
+		return 0;
+
+	ret = desc->ops.read_buffer(&ctx, conn->cmd_data.device, buf + wr_idx, len);
+	if (ret < 0)
+		return ret;
+
+	conn->nb_buf.len = len;
+	wr_idx += ret;
+
+	if (wr_idx >= conn->nb_buf.len) {
 		ret = rw_iiod_buff(desc, conn, &conn->nb_buf, IIOD_WR);
-		if (NO_OS_IS_ERR_VALUE(ret))
-			return ret;
 
-		conn->cmd_data.bytes_count -= conn->nb_buf.len;
+		conn->cmd_data.bytes_count -= wr_idx;
+		conn->nb_buf.idx = 0;
 		conn->nb_buf.len = 0;
-		if (conn->cmd_data.bytes_count)
-			return -EAGAIN;
+		wr_idx = 0;
+
+		return ret;
 	}
 
-	// if (conn->nb_buf.idx >= conn->nb_buf.len) {
+	return -EAGAIN;
+
+	// if (conn->nb_buf.len == 0) {
+	// 	conn->nb_buf.buf = conn->payload_buf;
+	// 	len = no_os_min(conn->payload_buf_len,
+	// 			conn->cmd_data.bytes_count);
+	// 	/* Read from dev */
+	// 	ret = desc->ops.read_buffer(&ctx, conn->cmd_data.device,
+	// 				    conn->nb_buf.buf, len);
+	// 	if (NO_OS_IS_ERR_VALUE(ret))
+	// 		return ret;
+	// 	len = ret;
+	// 	conn->nb_buf.len = len;
+	// 	conn->nb_buf.idx = 0;
+	// }
+	// if (conn->nb_buf.idx < conn->nb_buf.len) {
 	// 	/* Write on conn */
 	// 	ret = rw_iiod_buff(desc, conn, &conn->nb_buf, IIOD_WR);
 	// 	if (NO_OS_IS_ERR_VALUE(ret))
 	// 		return ret;
 
-	// 	conn->cmd_data.bytes_count = 0;
+	// 	conn->cmd_data.bytes_count -= conn->nb_buf.len;
 	// 	conn->nb_buf.len = 0;
-	// 	// if (conn->cmd_data.bytes_count)
-	// 	// 	return -EAGAIN;
+	// 	if (conn->cmd_data.bytes_count)
+	// 		return -EAGAIN;
 	// }
 
-	return 0;
+	// return 0;
 }
 
 static int32_t do_write_buff(struct iiod_desc *desc,
