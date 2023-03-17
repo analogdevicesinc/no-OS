@@ -44,6 +44,7 @@
 #include "admv8818.h"
 #include "no_os_error.h"
 #include "no_os_alloc.h"
+#include "no_os_units.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -176,7 +177,7 @@ int admv8818_hpf_select(struct admv8818_dev *dev, unsigned long long freq)
 	}
 
 	/* Close HPF frequency gap between 12 and 12.5 GHz */
-	if (freq >= 12000000000 && freq <= 12500000000) {
+	if (freq >= 12000 * HZ_PER_MHZ && freq <= 12500 * HZ_PER_MHZ) {
 		hpf_band = 3;
 		hpf_step = 15;
 	}
