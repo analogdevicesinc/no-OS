@@ -271,7 +271,7 @@ int adrv9002_check_tx_test_pattern(struct adrv9002_rf_phy *phy, const int chann)
 	adi_adrv9001_SsiTestModeData_e test_data = phy->ssi_type ==
 			ADI_ADRV9001_SSI_TYPE_CMOS ?
 			ADI_ADRV9001_SSI_TESTMODE_DATA_RAMP_NIBBLE :
-			ADI_ADRV9001_SSI_TESTMODE_DATA_PRBS15;
+			ADI_ADRV9001_SSI_TESTMODE_DATA_PRBS7;
 	struct adi_adrv9001_TxSsiTestModeCfg cfg = {0};
 	struct adi_adrv9001_TxSsiTestModeStatus status = {0};
 
