@@ -1,10 +1,10 @@
 /***************************************************************************//**
  *   @file   max31865.h
- *   @brief  Implementation of MAX31865 Driver.
+ *   @brief  Header File of MAX31865 Driver.
  *   @author JSanBuen (jose.sanbuenaventura@analog.com)
  *   @author MSosa (marcpaolo.sosa@analog.com)
 ********************************************************************************
- * Copyright 2022(c) Analog Devices, Inc.
+ * Copyright 2023(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -38,8 +38,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef __MAX31855_H__
-#define __MAX31855_H__
+#ifndef __MAX31865_H__
+#define __MAX31865_H__
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
@@ -140,4 +140,4 @@ int max31865_set_wires(struct max31865_dev *, bool);
 /** Read RTD **/
 int max31865_read_rtd(struct max31865_dev *, uint16_t *);
 
-#endif // __MAX31855_H__
+#endif // __MAX31865_H__

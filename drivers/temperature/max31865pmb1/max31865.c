@@ -4,7 +4,7 @@
  *   @author JSanBuen (jose.sanbuenaventura@analog.com)
  *   @author MSosa (marcpaolo.sosa@analog.com)
 ********************************************************************************
- * Copyright 2022(c) Analog Devices, Inc.
+ * Copyright 2023(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -134,10 +134,10 @@ int max31865_reg_update(struct max31865_dev *device, uint8_t reg_addr,
 	int ret;
 
 	ret = max31865_read(device, reg_addr, &temp);
-	if(ret)
+	if (ret)
 		return ret;
 
-	if(or_mask)
+	if (or_mask)
 		temp |= reg_update;
 	else
 		temp &= reg_update;
@@ -149,7 +149,7 @@ int max31865_reg_update(struct max31865_dev *device, uint8_t reg_addr,
  * @brief Read raw register value
  * @param device - MAX31865 descriptor
  * @param reg_addr - register value to read from
- * @param *reg_data - pointer for register value read
+ * @param reg_data - pointer for register value read
  * @return 0 in case of success, negative error code otherwise
  */
 int max31865_read(struct max31865_dev *device, uint8_t reg_addr,
@@ -167,11 +167,11 @@ int max31865_read(struct max31865_dev *device, uint8_t reg_addr,
 	raw_array[0] = reg_addr;
 	raw_array[1] = reg_addr;
 
-	if( (reg_addr & MAX31865_READ_MASK) != reg_addr)
+	if ((reg_addr & MAX31865_READ_MASK) != reg_addr)
 		reg_addr &= MAX31865_READ_MASK;
 
-	if(reg_addr < MAX31865_CONFIG_REG || reg_addr > MAX31865_FAULTSTAT_REG)
-		return -ENXIO;
+	if (reg_addr < MAX31865_CONFIG_REG || reg_addr > MAX31865_FAULTSTAT_REG)
+		return -EINVAL;
 
 	ret = no_os_spi_transfer(device->comm_desc, &temp_xfer, 1);
 	if (ret)
@@ -201,14 +201,13 @@ int max31865_write(struct max31865_dev *device, uint8_t reg_addr,
 		.cs_change = 1,
 	};
 
-	if(reg_addr < MAX31865_CONFIG_REG || reg_addr >= MAX31865_FAULTSTAT_REG)
-		return -ENXIO;
+	if (reg_addr < MAX31865_CONFIG_REG || reg_addr >= MAX31865_FAULTSTAT_REG)
+		return -EINVAL;
 
-	if(reg_addr == MAX31865_RTDMSB_REG || reg_addr == MAX31865_RTDLSB_REG)
-		return -ENXIO;
+	if (reg_addr == MAX31865_RTDMSB_REG || reg_addr == MAX31865_RTDLSB_REG)
+		return -EINVAL;
 
-	if((reg_addr & MAX31865_WRITE_MASK) != MAX31865_WRITE_MASK)
-		reg_addr |= MAX31865_WRITE_MASK;
+	reg_addr |= MAX31865_WRITE_MASK;
 
 	raw_array[0] = reg_addr;
 	raw_array[1] = reg_data;
@@ -227,7 +226,7 @@ int max31865_clear_fault(struct max31865_dev *device)
 
 	ret = max31865_reg_update(device, MAX31865_CONFIG_REG,
 				  MAX31865_CONFIG_CLRFAULT_MASK, false);
-	if(ret)
+	if (ret)
 		return ret;
 
 	return max31865_reg_update(device, MAX31865_CONFIG_REG,
@@ -245,9 +244,9 @@ int max31865_enable_bias(struct max31865_dev *device, bool bias_en)
 	if (bias_en)
 		return max31865_reg_update(device, MAX31865_CONFIG_REG, MAX31865_CONFIG_BIAS,
 					   true);
-	else
-		return max31865_reg_update(device, MAX31865_CONFIG_REG, ~MAX31865_CONFIG_BIAS,
-					   false);
+
+	return max31865_reg_update(device, MAX31865_CONFIG_REG, ~MAX31865_CONFIG_BIAS,
+				   false);
 }
 
 /**
@@ -261,9 +260,9 @@ int max31865_auto_convert(struct max31865_dev *device, bool auto_conv_en)
 	if (auto_conv_en)
 		return max31865_reg_update(device, MAX31865_CONFIG_REG,
 					   MAX31865_CONFIG_MODEAUTO, true);
-	else
-		return max31865_reg_update(device, MAX31865_CONFIG_REG, MAX31865_CONFIG_MODEOFF,
-					   false);
+
+	return max31865_reg_update(device, MAX31865_CONFIG_REG, MAX31865_CONFIG_MODEOFF,
+				   false);
 }
 
 /**
@@ -279,9 +278,9 @@ int max31865_enable_50Hz(struct max31865_dev *device, bool filt_en)
 	if (filt_en)
 		return max31865_reg_update(device, MAX31865_CONFIG_REG,
 					   MAX31865_CONFIG_FILT50HZ, true);
-	else
-		return max31865_reg_update(device, MAX31865_CONFIG_REG,
-					   MAX31865_CONFIG_FILT60HZ, false);
+
+	return max31865_reg_update(device, MAX31865_CONFIG_REG,
+				   MAX31865_CONFIG_FILT60HZ, false);
 }
 
 /**
@@ -302,18 +301,18 @@ int max31865_set_threshold(struct max31865_dev *device, uint16_t lower,
 	msb = no_os_field_get(0xFF00, upper);
 
 	ret = max31865_write(device, MAX31865_HFAULTMSB_REG, (uint8_t)msb);
-	if(ret)
+	if (ret)
 		return ret;
 
 	ret = max31865_write(device, MAX31865_HFAULTLSB_REG, (uint8_t)lsb);
-	if(ret)
+	if (ret)
 		return ret;
 
 	lsb = no_os_field_get(0x00FF, lower);
 	msb = no_os_field_get(0xFF00, lower);
 
 	ret = max31865_write(device, MAX31865_LFAULTMSB_REG, (uint8_t)msb);
-	if(ret)
+	if (ret)
 		return ret;
 
 	return max31865_write(device, MAX31865_LFAULTLSB_REG, (uint8_t)lsb);
@@ -333,11 +332,11 @@ int max31865_get_lower_threshold(struct max31865_dev *device,
 	int ret;
 
 	ret = max31865_read(device, MAX31865_LFAULTMSB_REG, &low_msb);
-	if(ret)
+	if (ret)
 		return ret;
 
 	ret = max31865_read(device, MAX31865_LFAULTLSB_REG, &low_lsb);
-	if(ret)
+	if (ret)
 		return ret;
 
 	*low_threshold = (low_msb << 8) | low_lsb;
@@ -359,11 +358,11 @@ int max31865_get_upper_threshold(struct max31865_dev *device,
 	int ret;
 
 	ret = max31865_read(device, MAX31865_HFAULTMSB_REG, &high_msb);
-	if(ret)
+	if (ret)
 		return ret;
 
 	ret = max31865_read(device, MAX31865_HFAULTLSB_REG, &high_lsb);
-	if(ret)
+	if (ret)
 		return ret;
 
 	*up_threshold = (high_msb << 8) | high_lsb;
@@ -384,9 +383,9 @@ int max31865_set_wires(struct max31865_dev *device, bool is_odd_wire)
 	if (is_odd_wire)
 		return max31865_reg_update(device, MAX31865_CONFIG_REG, MAX31865_CONFIG_3WIRE,
 					   true);
-	else
-		return max31865_reg_update(device, MAX31865_CONFIG_REG, MAX31865_CONFIG_2_4WIRE,
-					   false);
+
+	return max31865_reg_update(device, MAX31865_CONFIG_REG, MAX31865_CONFIG_2_4WIRE,
+				   false);
 }
 
 /**
@@ -401,16 +400,16 @@ int max31865_read_rtd(struct max31865_dev *device, uint16_t *rtd_reg)
 	int ret;
 
 	ret = max31865_clear_fault(device);
-	if(ret)
+	if (ret)
 		return ret;
 
 	ret = max31865_enable_bias(device, true);
-	if(ret)
+	if (ret)
 		return ret;
 
 	ret = max31865_reg_update(device, MAX31865_CONFIG_REG, MAX31865_CONFIG_1SHOT,
 				  true);
-	if(ret)
+	if (ret)
 		return ret;
 
 	if (device->is_filt_50)
@@ -419,7 +418,7 @@ int max31865_read_rtd(struct max31865_dev *device, uint16_t *rtd_reg)
 		no_os_udelay(52000 + device->t_rc_delay);
 
 	ret = max31865_read(device, MAX31865_RTDMSB_REG, &reg_data);
-	if(ret)
+	if (ret)
 		return ret;
 
 	*rtd_reg = reg_data << 8;
