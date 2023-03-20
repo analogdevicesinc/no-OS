@@ -210,7 +210,7 @@ int32_t adt7420_init(struct adt7420_dev **device,
 {
 	struct adt7420_dev *dev;
 	int32_t status;
-	uint8_t device_connected_check = 0;
+	uint16_t device_connected_check = 0;
 
 	dev = (struct adt7420_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
