@@ -85,6 +85,9 @@ int dummy_example_main()
 	if (ret)
 		goto error_adt7420;
 
+	/* Datasheet specified delay between conversions. */
+	no_os_mdelay(240);
+
 	while(1) {
 		ret = adt7420_reg_read(adt7420, ADT7420_REG_T_HIGH_MSB, &temp_msb_l);
 		if (ret)
