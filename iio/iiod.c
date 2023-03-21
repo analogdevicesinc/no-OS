@@ -170,7 +170,7 @@ static int32_t iiod_parse_set(const char *token, struct comand_desc *res,
 	if (!token)
 		return -EINVAL;
 
-	if (strcmp(token, "BUFFERS_COUNT") != 0)
+	if (!strcmp(token, "BUFFERS_COUNT"))
 		return -EINVAL;
 
 	token = strtok_r(NULL, delim, ctx);
@@ -459,7 +459,7 @@ static int32_t call_op(struct iiod_ops *ops, struct comand_desc *data,
 		return ops->set_trigger(ctx, data->device, data->trigger,
 					strlen(data->trigger));
 	case IIOD_CMD_SET:
-		break;
+		return ops->set_buffers_count(ctx, data->device, data->count);
 	default:
 		break;
 	}

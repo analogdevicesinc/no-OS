@@ -349,6 +349,30 @@ static struct iio_trig_priv *get_iio_trig_device(struct iio_desc *desc,
 }
 
 /**
+ * @brief Sets buffers count.
+ * @param ctx           - IIO instance and conn instance.
+ * @param device        - String containing device name.
+ * @param buffers_count - Value to be set.
+ * @return Positive if index was set, negative if not.
+ */
+static int iio_set_buffers_count(struct iiod_ctx *ctx, const char *device,
+				 uint32_t buffers_count)
+{
+	struct iio_desc *desc = ctx->instance;
+
+	if(!get_iio_device(desc, device))
+		return -ENODEV;
+
+	/* Our implementation uses a circular buffer to send/receive data so
+	 * only 1 is a valid value.
+	 */
+	if (buffers_count != 1)
+		return -EINVAL;
+
+	return 0;
+}
+
+/**
  * @brief Read all attributes from an attribute list.
  * @param device - Physical instance of a device.
  * @param buf - Buffer where values are read.
@@ -1867,6 +1891,7 @@ int iio_init(struct iio_desc **desc, struct iio_init_param *init_param)
 	ops->close = iio_close_dev;
 	ops->send = iio_send;
 	ops->recv = iio_recv;
+	ops->set_buffers_count = iio_set_buffers_count;
 
 	iiod_param.instance = ldesc;
 	iiod_param.ops = ops;
