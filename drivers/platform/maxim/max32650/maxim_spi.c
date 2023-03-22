@@ -248,7 +248,7 @@ static int _max_spi_config(struct no_os_spi_desc *desc)
 
 	ret = MXC_SPI_Init(MXC_SPI_GET_SPI(desc->device_id), SPI_MASTER_MODE,
 			   SPI_SINGLE_MODE,
-			   eparam->numSlaves, eparam->polarity, desc->max_speed_hz);
+			   eparam->num_slaves, eparam->polarity, desc->max_speed_hz);
 	if (ret) {
 		ret = -EINVAL;
 		goto err_init;
