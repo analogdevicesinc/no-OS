@@ -61,6 +61,15 @@
     },
     "iio_trigger_example_max32655_adxl357": {
       "flags" : "DUMMY_EXAMPLE=n IIO_EXAMPLE=n IIO_TRIGGER_EXAMPLE=y TARGET=max32655 ADXL357=y"
+    },
+    "dummy_example_max32690_adxl355": {
+      "flags" : "DUMMY_EXAMPLE=y IIO_EXAMPLE=n IIO_TRIGGER_EXAMPLE=n TARGET=max32690 ADXL355=y"
+    },
+    "iio_example_max32690_adxl355": {
+      "flags" : "DUMMY_EXAMPLE=n IIO_EXAMPLE=y IIO_TRIGGER_EXAMPLE=n TARGET=max32690 ADXL355=y"
+    },
+    "iio_trigger_example_max32690_adxl355": {
+      "flags" : "DUMMY_EXAMPLE=n IIO_EXAMPLE=n IIO_TRIGGER_EXAMPLE=y TARGET=max32690 ADXL355=y"
     }
   },
   "pico": {

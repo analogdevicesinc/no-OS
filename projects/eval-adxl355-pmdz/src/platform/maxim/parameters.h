@@ -56,10 +56,16 @@
 #ifdef IIO_SUPPORT
 #define INTC_DEVICE_ID  0
 #endif
-#define UART_IRQ_ID     UART0_IRQn
 
+#if (TARGET_NUM == 32690)
+#define UART_IRQ_ID     UART2_IRQn
+#define UART_DEVICE_ID  2
+#define UART_BAUDRATE   57600
+#else
+#define UART_IRQ_ID     UART0_IRQn
 #define UART_DEVICE_ID  0
 #define UART_BAUDRATE   57600
+#endif
 #define UART_EXTRA      &adxl355_uart_extra_ip
 #define UART_OPS        &max_uart_ops
 
@@ -69,6 +75,9 @@
 #elif (TARGET_NUM == 32650)
 #define SPI_DEVICE_ID   1
 #define SPI_CS          0
+#elif (TARGET_NUM == 32690)
+#define SPI_DEVICE_ID   0
+#define SPI_CS          1
 #else
 #define SPI_DEVICE_ID   0
 #define SPI_CS          0
@@ -100,6 +109,11 @@ Has to be adapted accordingly if another pin is used.
  */
 #define NVIC_GPIO_IRQ   GPIO1_IRQn
 #define GPIO_IRQ_ID     1
+#elif (TARGET_NUM == 32690)
+#define GPIO_DRDY_PIN_NUM   14
+#define GPIO_DRDY_PORT_NUM  0
+#define NVIC_GPIO_IRQ   GPIO0_IRQn
+#define GPIO_IRQ_ID     0
 #else
 #error IIO_TRIGGER_EXAMPLE is currently supported only on max32655 and max 78000 targets.
 #endif
