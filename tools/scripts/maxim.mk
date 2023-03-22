@@ -47,7 +47,7 @@ TARGET_LCASE=$(addprefix max,$(TARGET_NUMBER))
 
 PLATFORM_DRIVERS := $(NO-OS)/drivers/platform/maxim/$(TARGET)
 
-ifeq ($(TARGET), max32655)
+ifeq ($(TARGET), $(filter $(TARGET),max32655 max32690))
 include $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/$(TARGET_UCASE)/Source/GCC/$(TARGET)_memory.mk
 endif
 include $(MAXIM_LIBRARIES)/PeriphDrivers/$(TARGET_LCASE)_files.mk
