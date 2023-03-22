@@ -71,7 +71,7 @@
 /******************************************************************************/
 /************************ Variable Declarations ******************************/
 /******************************************************************************/
-uint8_t iio_data_buffer[400 * sizeof(uint32_t) * 8];
+uint8_t iio_data_buffer[5000 * sizeof(uint32_t) * 8];
 uint8_t iio_data_buffer2[5000 * sizeof(uint32_t) * 8];
 
 /******************************************************************************/
@@ -99,7 +99,7 @@ int iio_example_main()
 	struct iio_app_desc *app;
 	struct iio_data_buffer buff = {
 		.buff = (void *)iio_data_buffer,
-		.size = 400 * sizeof(uint32_t) * 8
+		.size = 5000 * sizeof(uint32_t) * 8
 	};
 	struct iio_data_buffer buff2 = {
 		.buff = (void *)iio_data_buffer2,
