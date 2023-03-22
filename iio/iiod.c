@@ -170,7 +170,7 @@ static int32_t iiod_parse_set(const char *token, struct comand_desc *res,
 	if (!token)
 		return -EINVAL;
 
-	if (!strcmp(token, "BUFFERS_COUNT"))
+	if (strcmp(token, "BUFFERS_COUNT"))
 		return -EINVAL;
 
 	token = strtok_r(NULL, delim, ctx);
@@ -276,7 +276,7 @@ int32_t iiod_parse_line(char *buf, struct comand_desc *res, char **ctx)
 
 		return 0;
 	case IIOD_CMD_SET:
-		return iiod_parse_set(buf, res, ctx);
+		return iiod_parse_set(token, res, ctx);
 	default:
 		break;
 	}
