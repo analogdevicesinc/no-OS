@@ -59,7 +59,7 @@ enum spi_ss_polarity {
  * @brief Maxim specific SPI initialization parameters
  */
 struct max_spi_init_param {
-	uint32_t numSlaves;
+	uint32_t num_slaves;
 	enum spi_ss_polarity polarity;
 };
 
