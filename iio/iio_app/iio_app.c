@@ -123,7 +123,7 @@ static int32_t print_uart_hello_message(struct no_os_uart_desc **uart_desc,
 				  "If successful, you may connect an IIO client application by:\n"
 				  "1. Disconnecting the serial terminal you use to view this message.\n"
 				  "2. Connecting the IIO client application using the serial backend configured as shown:\n"
-				  "\tBaudrate: %d\n"
+				  "\tBaudrate: %lu\n"
 				  "\tData size: %s bits\n"
 				  "\tParity: %s\n"
 				  "\tStop bits: %s\n"
