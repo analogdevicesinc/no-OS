@@ -58,10 +58,7 @@
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 
-#ifndef LINUX_PLATFORM
 extern struct no_os_uart_init_param adis16505_uart_ip;
-#endif
-
 extern struct no_os_spi_init_param adis16505_spi_ip;
 extern struct no_os_gpio_init_param adis16505_gpio_reset_ip;
 extern struct adis_init_param adis16505_ip;

@@ -48,7 +48,6 @@
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 
-#ifndef LINUX_PLATFORM
 struct no_os_uart_init_param adis16505_uart_ip = {
 	.device_id = UART_DEVICE_ID,
 	.irq_id = UART_IRQ_ID,
@@ -60,7 +59,6 @@ struct no_os_uart_init_param adis16505_uart_ip = {
 	.extra = UART_EXTRA,
 	.platform_ops = UART_OPS,
 };
-#endif
 
 struct no_os_spi_init_param adis16505_spi_ip = {
 	.device_id = SPI_DEVICE_ID,

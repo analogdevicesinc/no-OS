@@ -45,10 +45,6 @@
 #include "common_data.h"
 #include "no_os_error.h"
 
-#ifdef IIO_EXAMPLE
-#include "iio_example.h"
-#endif
-
 #ifdef IIO_TRIGGER_EXAMPLE
 #include "iio_trigger_example.h"
 #endif
@@ -74,10 +70,6 @@ int main()
 
 	stm32_init();
 
-#ifdef IIO_EXAMPLE
-	ret = iio_example_main();
-#endif
-
 #ifdef IIO_TRIGGER_EXAMPLE
 	ret = iio_trigger_example_main();
 #endif
@@ -95,9 +87,9 @@ int main()
 		no_os_uart_remove(uart_desc);
 #endif
 
-#if (DUMMY_EXAMPLE + IIO_EXAMPLE + IIO_TRIGGER_EXAMPLE == 0)
+#if (DUMMY_EXAMPLE + IIO_TRIGGER_EXAMPLE == 0)
 #error At least one example has to be selected using y value in Makefile.
-#elif (DUMMY_EXAMPLE + IIO_EXAMPLE + IIO_TRIGGER_EXAMPLE > 1)
+#elif (DUMMY_EXAMPLE + IIO_TRIGGER_EXAMPLE > 1)
 #error Selected example projects cannot be enabled at the same time. \
 Please enable only one example and re-build the project.
 #endif
