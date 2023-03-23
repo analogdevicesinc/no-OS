@@ -864,66 +864,6 @@ int adis_iio_update_channels(void* dev, uint32_t mask)
 }
 
 /**
- * @brief Reads the number of given samples for the active channels.
- * @param dev     - The iio device structure.
- * @param samples - The number of samples to be read.
- * @param buff    - The buffer to be filled with the requested number of samples.
- * @return the size of the buffer in case of success, error code otherwise.
- */
-int adis_iio_read_samples(void* dev, int* buff, uint32_t samples)
-{
-	struct adis_iio_dev *iio_adis;
-	struct adis_dev *adis;
-	struct adis_burst_data burst_data;
-	int ret;
-
-	if (!dev)
-		return -EINVAL;
-
-	iio_adis = (struct adis_iio_dev *)dev;
-
-	if (!iio_adis->adis_dev)
-		return -EINVAL;
-
-	adis = iio_adis->adis_dev;
-
-	for(uint32_t i = 0; i < samples*iio_adis->no_of_active_channels;) {
-		ret = adis_read_burst_data(adis, &burst_data);
-		if (ret)
-			return ret;
-
-		if (iio_adis->active_channels & NO_OS_BIT(ADIS_GYRO_X))
-			buff[i++] = adis->burst_sel ? 0 : burst_data.x_gyro;
-		if (iio_adis->active_channels & NO_OS_BIT(ADIS_GYRO_Y))
-			buff[i++] = adis->burst_sel ? 0 : burst_data.y_gyro;
-		if (iio_adis->active_channels & NO_OS_BIT(ADIS_GYRO_Z))
-			buff[i++] = adis->burst_sel ? 0 : burst_data.z_gyro;
-		if (iio_adis->active_channels & NO_OS_BIT(ADIS_ACCEL_X))
-			buff[i++] = adis->burst_sel ? 0 : burst_data.x_accl;
-		if (iio_adis->active_channels & NO_OS_BIT(ADIS_ACCEL_Y))
-			buff[i++] = adis->burst_sel ? 0 : burst_data.y_accl;
-		if (iio_adis->active_channels & NO_OS_BIT(ADIS_ACCEL_Z))
-			buff[i++] = adis->burst_sel ? 0 : burst_data.z_accl;
-		if (iio_adis->active_channels & NO_OS_BIT(ADIS_TEMP))
-			buff[i++] = burst_data.temp_out;
-		if (iio_adis->active_channels & NO_OS_BIT(ADIS_DELTA_ANGL_X))
-			buff[i++] = adis->burst_sel ?  burst_data.x_gyro : 0;
-		if (iio_adis->active_channels & NO_OS_BIT(ADIS_DELTA_ANGL_Y))
-			buff[i++] = adis->burst_sel ? burst_data.y_gyro : 0;
-		if (iio_adis->active_channels & NO_OS_BIT(ADIS_DELTA_ANGL_Z))
-			buff[i++] = adis->burst_sel ? burst_data.z_gyro : 0;
-		if (iio_adis->active_channels & NO_OS_BIT(ADIS_DELTA_VEL_X))
-			buff[i++] = adis->burst_sel ? burst_data.x_accl : 0;
-		if (iio_adis->active_channels & NO_OS_BIT(ADIS_DELTA_VEL_Y))
-			buff[i++] = adis->burst_sel ? burst_data.y_accl : 0;
-		if (iio_adis->active_channels & NO_OS_BIT(ADIS_DELTA_VEL_Z))
-			buff[i++] = adis->burst_sel ? burst_data.z_accl : 0;
-	}
-
-	return samples;
-}
-
-/**
  * @brief Handles trigger: reads one data-set and writes it to the buffer.
  * @param dev_data  - The iio device data structure.
  * @return the size of the written data in case of success, error code otherwise.
