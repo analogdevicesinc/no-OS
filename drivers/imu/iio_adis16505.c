@@ -113,7 +113,6 @@ static struct iio_device adis16505_iio_dev = {
 	.debug_attributes 	= adis_debug_attrs,
 	.attributes		= adis_dev_attrs,
 	.pre_enable 		= (int32_t (*)())adis_iio_update_channels,
-	.read_dev 		= (int32_t (*)())adis_iio_read_samples,
 	.trigger_handler 	= (int32_t (*)())adis_iio_trigger_handler,
 };
 
