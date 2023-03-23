@@ -183,7 +183,6 @@ int max_lwip_tick(void *data)
 		}
 	} while(p);
 
-
 	time = no_os_get_time();
 	ms_diff = (time.s - old_time.s) * 1000 + (abs((int)time.us - (int)old_time.us)) / 1000;
 	if (ms_diff >= 250) {
@@ -545,6 +544,8 @@ static err_t max_eth_accept_callback(void *arg, struct tcp_pcb *new_pcb, err_t e
 	tcp_setprio(sock->pcb, 0);
 
 	max_eth_config_socket(sock);
+
+	tcp_nagle_disable(sock->pcb);
 
 	return 0;
 }
