@@ -326,7 +326,7 @@ int main()
 
 	/* Platform SPI Initialization Parameters */
 	struct max_spi_init_param spi_extra_ip  = {
-		.numSlaves = 1,
+		.num_slaves = 1,
 		.polarity = SPI_SS_POL_LOW,
 		.vssel = MXC_GPIO_VSSEL_VDDIOH
 	};
