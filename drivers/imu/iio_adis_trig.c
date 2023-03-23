@@ -50,7 +50,7 @@
 /******************************************************************************/
 
 struct iio_trigger adis_iio_trig_desc = {
-	.is_synchronous = false,
+	.is_synchronous = true,
 	.enable = iio_trig_enable,
 	.disable = iio_trig_disable
 };
