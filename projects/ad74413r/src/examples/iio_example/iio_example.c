@@ -66,13 +66,13 @@
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 #define DATA_BUFFER_SIZE 3000
-#define IIO_IGNORE_BUFF_OVERRUN_ERR
+//#define IIO_IGNORE_BUFF_OVERRUN_ERR
 
 /******************************************************************************/
 /************************ Variable Declarations ******************************/
 /******************************************************************************/
-uint8_t iio_data_buffer[5000 * sizeof(uint32_t) * 8];
-uint8_t iio_data_buffer2[5000 * sizeof(uint32_t) * 8];
+uint8_t iio_data_buffer[1500 * sizeof(uint32_t) * 8];
+uint8_t iio_data_buffer2[1500 * sizeof(uint32_t) * 8];
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -99,11 +99,11 @@ int iio_example_main()
 	struct iio_app_desc *app;
 	struct iio_data_buffer buff = {
 		.buff = (void *)iio_data_buffer,
-		.size = 5000 * sizeof(uint32_t) * 8
+		.size = 1500 * sizeof(uint32_t) * 8
 	};
 	struct iio_data_buffer buff2 = {
 		.buff = (void *)iio_data_buffer2,
-		.size = 5000 * sizeof(uint32_t) * 8
+		.size = 1500 * sizeof(uint32_t) * 8
 	};
 	struct ad74413r_init_param ad74413r_ip = {
 		.chip_id = AD74412R,

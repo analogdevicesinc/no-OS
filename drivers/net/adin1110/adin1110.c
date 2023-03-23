@@ -88,6 +88,11 @@ int adin1110_reg_write(struct adin1110_desc *desc, uint16_t addr, uint32_t data)
 	no_os_put_unaligned_be16(addr, desc->tx_buff);
 	no_os_put_unaligned_be32(data, &desc->tx_buff[2]);
 
+	if (desc->append_crc) {
+		desc->tx_buff[2] = no_os_crc8(_crc_table, data, 4, 0);
+		xfer.bytes_number++;
+	}
+
 	return no_os_spi_transfer(desc->comm_desc, &xfer, 1);
 }
 
@@ -105,13 +110,12 @@ int adin1110_reg_read(struct adin1110_desc *desc, uint16_t addr, uint32_t *data)
 		.rx_buff = desc->rx_buff,
 		.bytes_number = ADIN1110_RD_FRAME_SIZE,
 		.cs_change = 1,
-		.cs_change_delay = 5,
 	};
 	int ret;
 
 	no_os_put_unaligned_be16(addr, &desc->tx_buff[0]);
-	desc->tx_buff[0] |= NO_OS_BIT(7);
-	desc->tx_buff[2] = 0x00;
+	desc->tx_buff[0] |= ADIN1110_SPI_CD;
+	desc->tx_buff[2] = 0x0;
 
 	ret = no_os_spi_transfer(desc->comm_desc, &xfer, 1);
 	if (ret)

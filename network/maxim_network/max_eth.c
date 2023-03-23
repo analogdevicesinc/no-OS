@@ -166,6 +166,7 @@ int max_lwip_tick(void *data)
 	char *addr;
  	int result;
 	int ret = 0;
+	static int tst = 0;
 
 	netif_desc = eth_desc->lwip_netif;
 	mac_desc = eth_desc->mac_desc;
@@ -182,12 +183,13 @@ int max_lwip_tick(void *data)
 		}
 	} while(p);
 
+
 	time = no_os_get_time();
-	ms_diff = (time.s - old_time.s) * 1000 + ((int)time.us - (int)old_time.us) / 1000;
-	//if (ms_diff >= 250) {
+	ms_diff = (time.s - old_time.s) * 1000 + (abs((int)time.us - (int)old_time.us)) / 1000;
+	if (ms_diff >= 250) {
 		tcp_tmr();
 		old_time = time;
-	//}
+	}
 
 	sys_check_timeouts();
 
@@ -381,6 +383,7 @@ static int32_t max_socket_send(void *net, uint32_t sock_id, const void *data,
 {
 	struct max_eth_desc *desc = net;
 	struct socket_desc *sock;
+	uint32_t segment_size;
 	uint32_t avail;
 	uint32_t flags;
 	err_t err;
@@ -423,6 +426,8 @@ static int32_t max_socket_send(void *net, uint32_t sock_id, const void *data,
 
 			return ret;
 		}
+	} else {
+		printf("More\n");
 	}
 
 	return size;
@@ -536,6 +541,8 @@ static err_t max_eth_accept_callback(void *arg, struct tcp_pcb *new_pcb, err_t e
 	sock = _get_sock(desc, id);
 	sock->pcb = new_pcb;
 	sock->state = SOCKET_WAITING_ACCEPT;
+
+	tcp_setprio(sock->pcb, 0);
 
 	max_eth_config_socket(sock);
 
