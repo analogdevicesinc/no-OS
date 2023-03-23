@@ -4,15 +4,6 @@ SRCS += $(PROJECT)/src/examples/dummy/dummy_example.c
 INCS += $(PROJECT)/src/examples/dummy/dummy_example.h
 endif
 
-# not available yet
-ifeq (y,$(strip $(IIO_EXAMPLE)))
-TINYIIOD=y
-CFLAGS += -DIIO_EXAMPLE=1
-SRCS += $(PROJECT)/src/examples/iio_example/iio_example.c
-INCS += $(PROJECT)/src/examples/iio_example/iio_example.h
-endif
-
-# not available yet
 ifeq (y,$(strip $(IIO_TRIGGER_EXAMPLE)))
 TINYIIOD=y
 CFLAGS += -DIIO_TRIGGER_EXAMPLE=1
