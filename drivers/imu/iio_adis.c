@@ -74,6 +74,7 @@ static const unsigned int adis_3db_freqs[] = {
 /******************************************************************************/
 
 enum {
+	LOST_SAMPLES_COUNT,
 	DIAG_CHECKSUM_ERR,
 	DIAG_FLS_MEM_WR_CNT_EXCEED,
 	DIAG_ACCL_SELF_TEST_ERR,
@@ -581,6 +582,9 @@ static int adis_iio_read_debug_attrs(void *dev, char *buf, uint32_t len,
 	adis = iio_adis->adis_dev;
 
 	switch(priv) {
+	case LOST_SAMPLES_COUNT:
+		res = iio_adis->samples_lost;
+		break;
 	case DIAG_CHECKSUM_ERR:
 		adis_read_diag_checksum_err(adis, &res);
 		break;
@@ -859,6 +863,8 @@ int adis_iio_update_channels(void* dev, uint32_t mask)
 
 	iio_adis->active_channels = mask;
 	iio_adis->no_of_active_channels = no_os_hweight32(mask);
+	iio_adis->samples_lost = 0;
+	iio_adis->data_cntr = 0;
 
 	return 0;
 }
@@ -891,6 +897,15 @@ int adis_iio_trigger_handler(struct iio_device_data *dev_data)
 	ret = adis_read_burst_data(adis, &burst_data);
 	if (ret)
 		return ret;
+
+	if (iio_adis->data_cntr) {
+		if(burst_data.data_cntr > iio_adis->data_cntr)
+			iio_adis->samples_lost += burst_data.data_cntr - iio_adis->data_cntr - 1;
+		else /* data counter overflowed occurred */
+			iio_adis->samples_lost += 0xFFFFU - iio_adis->data_cntr + burst_data.data_cntr;
+	}
+
+	iio_adis->data_cntr = burst_data.data_cntr;
 
 	if (dev_data->buffer->active_mask & NO_OS_BIT(ADIS_GYRO_X))
 		buff[i++] = adis->burst_sel ? 0 : burst_data.x_gyro;
@@ -939,6 +954,11 @@ struct iio_attribute adis_dev_attrs[] = {
 };
 
 struct iio_attribute adis_debug_attrs[] = {
+	{
+		.name = "lost_samples_count",
+		.show = adis_iio_read_debug_attrs,
+		.priv = LOST_SAMPLES_COUNT,
+	},
 	{
 		.name = "diag_checksum_error_flag",
 		.show = adis_iio_read_debug_attrs,

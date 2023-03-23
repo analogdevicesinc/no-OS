@@ -72,6 +72,8 @@ struct adis_iio_dev {
 	struct iio_device *iio_dev;
 	uint32_t active_channels;
 	uint8_t no_of_active_channels;
+	uint16_t samples_lost;
+	uint16_t data_cntr;
 };
 
 /******************************************************************************/
