@@ -416,6 +416,8 @@ int adin1110_write_fifo(struct adin1110_desc *desc, uint32_t port,
 	/** Align the frame length to 4 bytes */
 	frame_len = (frame_len + 3) & ~0x03;
 
+	memset(&desc->tx_buff[field_offset], 0, 1522);
+	memset(&desc->rx_buff[field_offset], 0, 1522);
 	no_os_put_unaligned_be16(ADIN1110_TX_REG, &desc->tx_buff[0]);
 	desc->tx_buff[0] |= ADIN1110_SPI_CD | ADIN1110_SPI_RW;
 
@@ -430,7 +432,6 @@ int adin1110_write_fifo(struct adin1110_desc *desc, uint32_t port,
 
 	xfer.bytes_number = frame_len + field_offset;
 
-	memset(&desc->tx_buff[field_offset], 0, frame_len);
 	memcpy(&desc->tx_buff[field_offset], eth_buff->mac_dest, ADIN1110_ETH_ALEN);
 	field_offset += ADIN1110_ETH_ALEN;
 	memcpy(&desc->tx_buff[field_offset], eth_buff->mac_source, ADIN1110_ETH_ALEN);
@@ -485,6 +486,8 @@ int adin1110_read_fifo(struct adin1110_desc *desc, uint32_t port,
 	if (frame_size < ADIN1110_FRAME_HEADER_LEN + ADIN1110_FEC_LEN)
 		return ret;
 
+	memset(desc->tx_buff, 0, 1522);
+	memset(desc->rx_buff, 0, 1522);
 	no_os_put_unaligned_be16(fifo_reg, &desc->tx_buff[0]);
 	desc->tx_buff[0] |= ADIN1110_SPI_CD;
 	desc->tx_buff[2] = 0x00;

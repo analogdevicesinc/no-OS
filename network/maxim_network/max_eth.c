@@ -145,10 +145,10 @@ static struct pbuf *get_recvd_frames(struct max_eth_desc *eth_desc)
 	offset += 6;
 	memcpy(mxc_lwip_internal_buff + offset, &mac_buff.ethertype, 2);
 	offset += 2;
-	p = pbuf_alloc(PBUF_RAW, eth_data_len - 2, PBUF_POOL);
+	p = pbuf_alloc(PBUF_RAW, eth_data_len, PBUF_POOL);
 	if (p != NULL)
 		/* -2 because the field contains the 2 byte ADIN1110 header */
-		pbuf_take(p, mxc_lwip_internal_buff, eth_data_len - 2);
+		pbuf_take(p, mxc_lwip_internal_buff, eth_data_len);
 
 out:
 	return p;
@@ -185,7 +185,7 @@ int max_lwip_tick(void *data)
 
 	time = no_os_get_time();
 	ms_diff = (time.s - old_time.s) * 1000 + (abs((int)time.us - (int)old_time.us)) / 1000;
-	if (ms_diff >= 250) {
+	if (ms_diff >= 200) {
 		tcp_tmr();
 		old_time = time;
 	}
