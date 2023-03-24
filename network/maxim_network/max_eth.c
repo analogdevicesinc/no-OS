@@ -92,7 +92,9 @@ static err_t mxc_eth_netif_output(struct netif *netif, struct pbuf *p)
 	buff.payload_len = p->tot_len - ADIN1110_ETH_HDR_LEN;
 	buff.payload = &mxc_lwip_internal_buff[14];
 
-	ret = adin1110_write_fifo(mac_desc, 0, &buff);
+	do {
+		ret = adin1110_write_fifo(mac_desc, 0, &buff);
+	} while (ret == -EAGAIN);
 
 	return ret;
 }
