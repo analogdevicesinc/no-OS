@@ -5072,7 +5072,7 @@ int32_t ad9361_fastlock_store(struct ad9361_rf_phy *phy, bool tx,
 	/* Wide BW option: N = 1
 	* Set init and steady state values to the same - let user space handle it
 	*/
-	val[6] = (x << 3) | y;
+	val[6] = (x << 6) | y;
 	val[7] = y;
 
 	x = ad9361_spi_readf(spi, REG_RX_LOOP_FILTER_3 + offs, LOOP_FILTER_R3(~0));
