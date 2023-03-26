@@ -416,8 +416,12 @@ int adin1110_write_fifo(struct adin1110_desc *desc, uint32_t port,
 	if (ret)
 		return ret;
 
-	if (frame_len > 2 * (tx_space - 2))
+	if (frame_len > 2 * (tx_space - 2)) {
+		// ret = adin1110_reg_read(desc, 0x3F, &tx_space);
+		ret = adin1110_reg_write(desc, 0x36, 0x2);
+		// ret = adin1110_reg_read(desc, ADIN1110_TX_SPACE_REG, &tx_space);
 		return -EAGAIN;
+	}
 
 	ret = adin1110_reg_write(desc, ADIN1110_TX_FSIZE_REG,
 				 frame_len);
@@ -814,6 +818,10 @@ int adin1110_init(struct adin1110_desc **desc,
 	ret = adin1110_check_reset(descriptor);
 	if (ret)
 		goto free_int_gpio;
+
+	ret = adin1110_reg_write(descriptor, 0x3E, 0x77);
+	if (ret)
+		return ret;
 
 	*desc = descriptor;
 

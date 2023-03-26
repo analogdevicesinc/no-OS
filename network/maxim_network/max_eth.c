@@ -94,6 +94,8 @@ static err_t mxc_eth_netif_output(struct netif *netif, struct pbuf *p)
 
 	do {
 		ret = adin1110_write_fifo(mac_desc, 0, &buff);
+		if (ret == -EAGAIN)
+			printf("Overflow??");
 	} while (ret == -EAGAIN);
 
 	return ret;
@@ -187,12 +189,14 @@ int max_lwip_tick(void *data)
 
 	time = no_os_get_time();
 	ms_diff = (time.s - old_time.s) * 1000 + (abs((int)time.us - (int)old_time.us)) / 1000;
-	if (ms_diff >= 200) {
+	if (ms_diff >= 250) {
+		// ret = adin1110_reg_read(mac_desc, 0xAC, &link_status);
+		// if (link_status)
+		// 	printf("Dropped");
 		tcp_tmr();
 		old_time = time;
+		sys_check_timeouts();
 	}
-
-	sys_check_timeouts();
 
 	return ret;
 }
@@ -547,7 +551,7 @@ static err_t max_eth_accept_callback(void *arg, struct tcp_pcb *new_pcb, err_t e
 
 	max_eth_config_socket(sock);
 
-	tcp_nagle_disable(sock->pcb);
+	//tcp_nagle_disable(sock->pcb);
 
 	return 0;
 }
