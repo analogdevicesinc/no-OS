@@ -1794,6 +1794,10 @@ int adis_read_up_scale(struct adis_dev *adis, unsigned int *up_scale)
 int adis_write_up_scale(struct adis_dev *adis, unsigned int up_scale)
 {
 	struct adis_reg reg = adis->data->reg_map->up_scale;
+
+	if(up_scale > reg.mask)
+		return -EINVAL;
+
 	return adis_write_reg(adis, reg.addr, up_scale, reg.size);
 }
 
@@ -2001,6 +2005,10 @@ int adis_read_usr_scr_1(struct adis_dev *adis, unsigned int *usr_scr_1)
 int adis_write_usr_scr_1(struct adis_dev *adis, unsigned int usr_scr_1)
 {
 	struct adis_reg reg = adis->data->reg_map->usr_scr_1;
+
+	if (usr_scr_1 > reg.mask)
+		return -EINVAL;
+
 	return adis_write_reg(adis, reg.addr, usr_scr_1, reg.size);
 }
 
@@ -2025,6 +2033,10 @@ int adis_read_usr_scr_2(struct adis_dev *adis, unsigned int *usr_scr_2)
 int adis_write_usr_scr_2(struct adis_dev *adis, unsigned int usr_scr_2)
 {
 	struct adis_reg reg = adis->data->reg_map->usr_scr_2;
+
+	if (usr_scr_2 > reg.mask)
+		return -EINVAL;
+
 	return adis_write_reg(adis, reg.addr, usr_scr_2, reg.size);
 }
 
@@ -2049,6 +2061,10 @@ int adis_read_usr_scr_3(struct adis_dev *adis, unsigned int *usr_scr_3)
 int adis_write_usr_scr_3(struct adis_dev *adis, unsigned int usr_scr_3)
 {
 	struct adis_reg reg = adis->data->reg_map->usr_scr_3;
+
+	if (usr_scr_3 > reg.mask)
+		return -EINVAL;
+
 	return adis_write_reg(adis, reg.addr, usr_scr_3, reg.size);
 }
 
