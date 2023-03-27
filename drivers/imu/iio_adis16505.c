@@ -56,7 +56,7 @@ static struct scan_type adis16505_iio_accel_scan_type = {
 	.realbits 	= 32,
 	.storagebits 	= 32,
 	.shift 		= 0,
-	.is_big_endian 	= false
+	.is_big_endian 	= true
 };
 
 static struct scan_type adis16505_iio_anglvel_scan_type = {
@@ -64,7 +64,7 @@ static struct scan_type adis16505_iio_anglvel_scan_type = {
 	.realbits 	= 32,
 	.storagebits 	= 32,
 	.shift 		= 0,
-	.is_big_endian 	= false
+	.is_big_endian 	= true
 };
 
 static struct scan_type adis16505_iio_delta_vel_scan_type = {
@@ -72,7 +72,7 @@ static struct scan_type adis16505_iio_delta_vel_scan_type = {
 	.realbits 	= 32,
 	.storagebits 	= 32,
 	.shift 		= 0,
-	.is_big_endian 	= false
+	.is_big_endian 	= true
 };
 
 static struct scan_type adis16505_iio_delta_angl_scan_type = {
@@ -80,7 +80,7 @@ static struct scan_type adis16505_iio_delta_angl_scan_type = {
 	.realbits 	= 32,
 	.storagebits 	= 32,
 	.shift 		= 0,
-	.is_big_endian 	= false
+	.is_big_endian 	= true
 };
 
 static struct scan_type adis16505_iio_temp_scan_type = {
@@ -88,7 +88,7 @@ static struct scan_type adis16505_iio_temp_scan_type = {
 	.realbits 	= 32,
 	.storagebits 	= 32,
 	.shift 		= 0,
-	.is_big_endian 	= false
+	.is_big_endian 	= true
 };
 
 static struct iio_channel adis16505_channels[] = {

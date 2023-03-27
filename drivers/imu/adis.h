@@ -136,8 +136,6 @@ struct adis_dev {
 	uint8_t			rx[4];
 	const struct adis_data  *data;
 	union adis_diag_flags 	diag_flags;
-	unsigned int 		burst_size;
-	unsigned int   		burst_sel;
 	unsigned int 		clk_freq;
 	unsigned int 		ext_clk;
 };
@@ -301,8 +299,9 @@ int adis_update_bits_base(struct adis_dev *adis, unsigned int reg,
 int adis_update_ext_clk_freq(struct adis_dev *adis, unsigned int clk_freq);
 
 /*! Read burst data */
-int adis_read_burst_data(struct adis_dev *adis,
-			 struct adis_burst_data *burst_data);
+int adis_read_burst_data(struct adis_dev *adis, uint8_t burst_data_size,
+			 uint16_t *burst_data,
+			 uint8_t burst_size_selection);
 
 /*! Read diag status register and update device diag flags. */
 int adis_read_diag_stat(struct adis_dev *adis,
