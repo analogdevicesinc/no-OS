@@ -128,45 +128,12 @@ int adis_init(struct adis_dev **adis, const struct adis_data *data)
 
 	dev->data = data;
 
-	if(data->adis_ip->sync_mode > data->sync_mode_max) {
-		ret = -EINVAL;
-		goto error;
-	}
-
-	dev->sync_mode = data->adis_ip->sync_mode;
-
-	if (dev->sync_mode != ADIS_SYNC_DEFAULT && dev->sync_mode != ADIS_SYNC_OUTPUT) {
-		/* Sync pulse is external */
-		if (data->adis_ip->ext_clk < data->sync_rate_limit[dev->sync_mode].sync_min_rate
-		    || data->adis_ip->ext_clk >
-		    data->sync_rate_limit[dev->sync_mode].sync_max_rate) {
-			ret = -EINVAL;
-			goto error;
-		}
-
-		dev->ext_clk = data->adis_ip->ext_clk;
-		dev->clk_freq = dev->ext_clk;
-
-		if (dev->sync_mode == ADIS_SYNC_SCALED) {
-			/*
-			 * In sync scaled mode, the IMU sample rate is the clk_freq * sync_scale.
-			 * Hence, default the IMU sample rate to the highest multiple of the input
-			 * clock lower than the IMU max sample rate. The optimal range is
-			 * 1900-2100 sps...
-			 */
-			ret = adis_write_up_scale(dev, 2100 / dev->clk_freq);
-			if (ret)
-				goto error;
-		}
-	} else {
-		dev->clk_freq = data->int_clk;
-	}
-
 	ret = adis_initial_startup(dev);
 	if (ret)
 		goto error;
 
-	ret = adis_write_sync_mode(dev, dev->sync_mode);
+	ret = adis_update_sync_mode(dev, data->adis_ip->sync_mode,
+				    data->adis_ip->ext_clk);
 	if (ret)
 		goto error;
 
@@ -492,6 +459,31 @@ static void adis_update_diag_flags(struct adis_dev *adis, uint16_t diag_stat)
 			reg_map->gyro2_self_test_mask ? 1 : 0;
 	adis->diag_flags.adis_diag_flags_bits.ACCL_SELF_TEST_ERR = diag_stat &
 			reg_map->accl_self_test_mask ? 1 : 0;
+}
+
+/**
+ * @brief Update external clock frequency.
+ * @param adis     - The adis device.
+ * @param clk_freq - New external clock frequency in Hz.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_update_ext_clk_freq(struct adis_dev *adis, unsigned int clk_freq)
+{
+	unsigned int sync_mode;
+	int ret;
+	ret = adis_read_sync_mode(adis, &sync_mode);
+	if (ret)
+		return ret;
+
+	if (sync_mode != ADIS_SYNC_DEFAULT && sync_mode != ADIS_SYNC_OUTPUT)
+		if (clk_freq < adis->data->sync_rate_limit[sync_mode].sync_min_rate
+		    || clk_freq > adis->data->sync_rate_limit[sync_mode].sync_max_rate)
+			return -EINVAL;
+
+	/* Allow setting of clock frequency in other modes because it will not be used. */
+	adis->ext_clk = clk_freq;
+
+	return 0;
 }
 
 /**
@@ -1646,30 +1638,48 @@ int adis_read_sync_mode(struct adis_dev *adis, unsigned int *sync_mode)
 }
 
 /**
- * @brief Write synchronization mode encoded value.
+ * @brief Update synchronization mode.
  * @param adis      - The adis device.
- * @param sync_mode - The synchronization mode encoded value to write.
+ * @param sync_mode - The synchronization mode encoded value to update.
+ * @param ext_clk   - The external clock frequency to update, will be ignored
+ * if sync_mode is different from ADIS_SYNC_SCALED and ADIS_SYNC_DIRECT.
  * @return 0 in case of success, error code otherwise.
  */
-int adis_write_sync_mode(struct adis_dev *adis, unsigned int sync_mode)
+int adis_update_sync_mode(struct adis_dev *adis, unsigned int sync_mode,
+			  unsigned int ext_clk)
 {
-	struct adis_reg reg = adis->data->reg_map->sync_mode;
 	int ret;
+	struct adis_reg reg = adis->data->reg_map->sync_mode;
 
-	if (sync_mode > adis->data->sync_mode_max)
+	if(sync_mode > adis->data->sync_mode_max)
 		return -EINVAL;
 
-	ret = adis_update_bits_base(adis, reg.addr, reg.mask, sync_mode, reg.size);
-	if (ret)
-		return ret;
+	if (sync_mode != ADIS_SYNC_DEFAULT && sync_mode != ADIS_SYNC_OUTPUT) {
+		/* Sync pulse is external */
+		if (ext_clk < adis->data->sync_rate_limit[sync_mode].sync_min_rate
+		    || ext_clk > adis->data->sync_rate_limit[sync_mode].sync_max_rate)
+			return -EINVAL;
 
-	adis->sync_mode = sync_mode;
+		adis->ext_clk = ext_clk;
+		adis->clk_freq = ext_clk;
 
-	/* Update clock frequency is external clock is used */
-	if(sync_mode == ADIS_SYNC_DIRECT || sync_mode == ADIS_SYNC_SCALED)
-		adis->clk_freq = adis->ext_clk;
+		if (sync_mode == ADIS_SYNC_SCALED) {
+			/*
+			 * In sync scaled mode, the IMU sample rate is the clk_freq * sync_scale.
+			 * Hence, default the IMU sample rate to the highest multiple of the input
+			 * clock lower than the IMU max sample rate. The optimal range is
+			 * 1900-2100 sps...
+			 */
+			ret = adis_write_up_scale(adis, 2100 / adis->clk_freq);
+			if (ret)
+				return ret;
+		}
 
-	return 0;
+	} else {
+		adis->clk_freq = adis->data->int_clk;
+	}
+
+	return adis_update_bits_base(adis, reg.addr, reg.mask, sync_mode, reg.size);
 }
 
 /**
@@ -1794,8 +1804,22 @@ int adis_read_up_scale(struct adis_dev *adis, unsigned int *up_scale)
 int adis_write_up_scale(struct adis_dev *adis, unsigned int up_scale)
 {
 	struct adis_reg reg = adis->data->reg_map->up_scale;
+	unsigned int sync_mode;
+	int ret;
 
 	if(up_scale > reg.mask)
+		return -EINVAL;
+
+	ret = adis_read_sync_mode(adis, &sync_mode);
+	if (ret)
+		return ret;
+
+	/* Allow for any value to be written unless the device is in SYNC_SCALED synchronization mode.
+	 * If the device is in SYNC_SCALED syncronization mode, make sure the result for clk_freq * up_scale
+	is between 1900 and 2100 Hz, otherwise return -EINVAL.
+	*/
+	if (sync_mode == ADIS_SYNC_SCALED && (adis->clk_freq*up_scale > 2100
+					      || adis->clk_freq*up_scale < 1900))
 		return -EINVAL;
 
 	return adis_write_reg(adis, reg.addr, up_scale, reg.size);
