@@ -120,6 +120,7 @@ enum {
 	SCR_PAD_REG2,
 	SCR_PAD_REG3,
 	FLASH_COUNT,
+	EXT_CLK_FREQ,
 };
 
 /******************************************************************************/
@@ -314,15 +315,20 @@ static int adis_iio_write_lpf(void *dev, char *buf, uint32_t len,
  * @param freq - The sampling frequency of the device.
  * @return 0 in case of success, error code otherwise.
  */
-static int adis_iio_get_freq(struct adis_dev* adis, unsigned int *freq)
+static int adis_iio_get_freq(struct adis_dev* adis, uint32_t *freq)
 {
 	unsigned int sample_rate;
 	unsigned int up_scale;
 	unsigned int dec_rate;
+	unsigned int sync_mode;
 	int ret;
 
 	sample_rate = adis->clk_freq;
-	if(adis->sync_mode == ADIS_SYNC_SCALED) {
+	ret = adis_read_sync_mode(adis, &sync_mode);
+	if (ret)
+		return ret;
+
+	if(sync_mode == ADIS_SYNC_SCALED) {
 		ret = adis_read_up_scale(adis, &up_scale);
 		if (ret)
 			return ret;
@@ -352,7 +358,7 @@ static int adis_iio_read_sampling_freq(void *dev, char *buf, uint32_t len,
 {
 	struct adis_iio_dev *iio_adis;
 	struct adis_dev *adis;
-	unsigned int freq;
+	uint32_t freq;
 	int ret;
 
 	if (!dev)
@@ -369,6 +375,8 @@ static int adis_iio_read_sampling_freq(void *dev, char *buf, uint32_t len,
 	if(ret)
 		return ret;
 
+	iio_adis->sampling_frequency = freq;
+
 	return iio_format_value(buf, len, IIO_VAL_INT, 1, (int32_t*)&freq);
 }
 
@@ -378,15 +386,20 @@ static int adis_iio_read_sampling_freq(void *dev, char *buf, uint32_t len,
  * @param freq - The desired sampling frequency of the device.
  * @return 0 in case of success, error code otherwise.
  */
-static int adis_iio_set_freq(struct adis_dev* adis, unsigned int freq)
+static int adis_iio_set_freq(struct adis_dev* adis, uint32_t freq)
 {
 	uint32_t scaled_rate;
 	unsigned int up_scale;
 	int ret;
 	unsigned int sample_rate = adis->clk_freq;
 	unsigned int dec_rate;
+	unsigned int sync_mode;
 
-	if (adis->sync_mode == ADIS_SYNC_SCALED) {
+	ret = adis_read_sync_mode(adis, &sync_mode);
+	if (ret)
+		return ret;
+
+	if(sync_mode == ADIS_SYNC_SCALED) {
 		scaled_rate = no_os_lowest_common_multiple(adis->clk_freq, freq);
 
 		/*
@@ -432,7 +445,7 @@ static int adis_iio_write_sampling_freq(void *dev, char *buf,
 {
 	struct adis_iio_dev *iio_adis;
 	struct adis_dev *adis;
-	unsigned int freq;
+	uint32_t freq;
 	int ret;
 
 	if (!dev)
@@ -449,7 +462,12 @@ static int adis_iio_write_sampling_freq(void *dev, char *buf,
 	if (ret)
 		return ret;
 
-	return adis_iio_set_freq(adis, freq);
+	ret = adis_iio_set_freq(adis, freq);
+	if (ret)
+		return ret;
+
+	/* Update sampling frequency */
+	return adis_iio_get_freq(adis, &iio_adis->sampling_frequency);
 }
 
 /**
@@ -684,6 +702,10 @@ static int adis_iio_read_debug_attrs(void *dev, char *buf, uint32_t len,
 	case FLASH_COUNT:
 		ret = adis_read_flshcnt(adis, &res);
 		break;
+	case EXT_CLK_FREQ:
+		res = adis->ext_clk;
+		ret = 0;
+		break;
 	default:
 		return -EINVAL;
 	}
@@ -739,17 +761,37 @@ static int adis_iio_write_debug_attrs(void *dev, char *buf, uint32_t len,
 	case SENS_BW:
 		return adis_write_sens_bw(adis, val);
 	case SYNC_MODE:
-		return adis_write_sync_mode(adis, val);
+		ret = adis_update_sync_mode(adis, val, adis->ext_clk);
+		if (ret)
+			return ret;
+
+		/* Update sampling frequency */
+		return adis_iio_get_freq(adis, &iio_adis->sampling_frequency);
 	case SYNC_POL:
 		return adis_write_sync_polarity(adis, val);
 	case DR_POL:
 		return adis_write_dr_polarity(adis, val);
 	case UP_SCALE:
-		return adis_write_up_scale(adis, val);
+		ret = adis_write_up_scale(adis, val);
+		if (ret)
+			return ret;
+
+		/* Update sampling frequency */
+		return adis_iio_get_freq(adis, &iio_adis->sampling_frequency);
 	case DEC_RATE:
-		return adis_write_dec_rate(adis, val);
+		ret = adis_write_dec_rate(adis, val);
+		if (ret)
+			return ret;
+
+		/* Update sampling frequency */
+		return adis_iio_get_freq(adis, &iio_adis->sampling_frequency);
 	case SOFTWARE_RESET_CMD:
-		return adis_cmd_sw_res(adis);
+		ret = adis_cmd_sw_res(adis);
+		if (ret)
+			return ret;
+
+		/* Update sampling frequency */
+		return adis_iio_get_freq(adis, &iio_adis->sampling_frequency);
 	case FLASH_MEM_TEST_CMD:
 		return adis_cmd_fls_mem_test(adis);
 	case FLASH_UPDATE_CMD:
@@ -757,13 +799,20 @@ static int adis_iio_write_debug_attrs(void *dev, char *buf, uint32_t len,
 	case SENSOR_SELF_TEST_CMD:
 		return adis_cmd_snsr_self_test(adis);
 	case FACT_CALIB_RESTORE_CMD:
-		return adis_cmd_fact_calib_restore(adis);
+		ret = adis_cmd_fact_calib_restore(adis);
+		if (ret)
+			return ret;
+
+		/* Update sampling frequency */
+		return adis_iio_get_freq(adis, &iio_adis->sampling_frequency);
 	case SCR_PAD_REG1:
 		return adis_write_usr_scr_1(adis, val);
 	case SCR_PAD_REG2:
 		return adis_write_usr_scr_2(adis, val);
 	case SCR_PAD_REG3:
 		return adis_write_usr_scr_3(adis, val);
+	case EXT_CLK_FREQ:
+		return adis_update_ext_clk_freq(adis, val);
 	default:
 		return -EINVAL;
 	}
@@ -1168,6 +1217,12 @@ struct iio_attribute adis_debug_attrs[] = {
 		.name = "flash_counter",
 		.show = adis_iio_read_debug_attrs,
 		.priv = FLASH_COUNT,
+	},
+	{
+		.name = "external_clock_frequency",
+		.show = adis_iio_read_debug_attrs,
+		.store = adis_iio_write_debug_attrs,
+		.priv = EXT_CLK_FREQ,
 	},
 	END_ATTRIBUTES_ARRAY
 };

@@ -74,6 +74,7 @@ struct adis_iio_dev {
 	uint8_t no_of_active_channels;
 	uint16_t samples_lost;
 	uint16_t data_cntr;
+	uint32_t sampling_frequency;
 };
 
 /******************************************************************************/

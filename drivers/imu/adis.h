@@ -140,7 +140,6 @@ struct adis_dev {
 	unsigned int   		burst_sel;
 	unsigned int 		clk_freq;
 	unsigned int 		ext_clk;
-	unsigned int		sync_mode;
 };
 
 /**
@@ -298,6 +297,9 @@ int adis_update_bits_base(struct adis_dev *adis, unsigned int reg,
 			  const unsigned int mask,
 			  const unsigned int val, uint8_t size);
 
+/*! Update external clock frequency. */
+int adis_update_ext_clk_freq(struct adis_dev *adis, unsigned int clk_freq);
+
 /*! Read burst data */
 int adis_read_burst_data(struct adis_dev *adis,
 			 struct adis_burst_data *burst_data);
@@ -434,7 +436,8 @@ int adis_write_pt_of_perc_algnmt(struct adis_dev *adis,
 int adis_read_sens_bw(struct adis_dev *adis, unsigned int *sens_bw);
 int adis_write_sens_bw(struct adis_dev *adis, unsigned int sens_bw);
 int adis_read_sync_mode(struct adis_dev *adis, unsigned int *sync_mode);
-int adis_write_sync_mode(struct adis_dev *adis, unsigned int sync_mode);
+int adis_update_sync_mode (struct adis_dev *adis, unsigned int sync_mode,
+			   unsigned int ext_clk);
 int adis_read_sync_polarity(struct adis_dev *adis,
 			    unsigned int *sync_polarity);
 int adis_write_sync_polarity(struct adis_dev *adis,
