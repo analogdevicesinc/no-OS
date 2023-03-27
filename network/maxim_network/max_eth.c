@@ -187,16 +187,18 @@ int max_lwip_tick(void *data)
 		}
 	} while(p);
 
-	time = no_os_get_time();
-	ms_diff = (time.s - old_time.s) * 1000 + (abs((int)time.us - (int)old_time.us)) / 1000;
-	if (ms_diff >= 250) {
-		// ret = adin1110_reg_read(mac_desc, 0xAC, &link_status);
-		// if (link_status)
-		// 	printf("Dropped");
-		tcp_tmr();
-		old_time = time;
-		sys_check_timeouts();
-	}
+	// time = no_os_get_time();
+	// ms_diff = (time.s - old_time.s) * 1000 + (abs((int)time.us - (int)old_time.us)) / 1000;
+	// if (ms_diff >= 250) {
+	// 	// ret = adin1110_reg_read(mac_desc, 0xAC, &link_status);
+	// 	// if (link_status)
+	// 	// 	printf("Dropped");
+	// 	old_time = time;
+	// 	/* sys_check_timeouts calls this */
+	// 	// tcp_tmr();
+	// }
+
+	sys_check_timeouts();
 
 	return ret;
 }
@@ -276,7 +278,7 @@ free_network_descriptor:
 	return ret;
 }
 
-err_t max_eth_err_callback(void *arg, struct tcp_pcb *tpcb, struct pbuf *p, err_t err)
+err_t max_eth_err_callback(void *arg, err_t err)
 {
 	int32_t _err = err;
 	printf("Error :? %s\n", lwip_strerr(err));
@@ -551,7 +553,7 @@ static err_t max_eth_accept_callback(void *arg, struct tcp_pcb *new_pcb, err_t e
 
 	max_eth_config_socket(sock);
 
-	//tcp_nagle_disable(sock->pcb);
+	tcp_nagle_disable(sock->pcb);
 
 	return 0;
 }
