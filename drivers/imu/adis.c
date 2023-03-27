@@ -47,6 +47,7 @@
 #include "no_os_util.h"
 #include "no_os_alloc.h"
 #include "no_os_print_log.h"
+#include <string.h>
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -86,6 +87,15 @@
 #define ADIS_ZACCL_IDX_32_BIT_BURST	22
 #define ADIS_TEMP_IDX_32_BIT_BURST	26
 #define ADIS_CNT_IDX_32_BIT_BURST	28
+
+/******************************************************************************/
+/************************** Variable Definitions ******************************/
+/******************************************************************************/
+
+static const uint8_t burst_size_bytes[] = {
+	[ADIS_16_BIT_BURST_SIZE] = ADIS_MSG_SIZE_16_BIT_BURST,
+	[ADIS_32_BIT_BURST_SIZE] = ADIS_MSG_SIZE_32_BIT_BURST,
+};
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -488,20 +498,26 @@ int adis_update_ext_clk_freq(struct adis_dev *adis, unsigned int clk_freq)
 
 /**
  * @brief Read burst data.
- * @param adis       - The adis device.
- * @param burst_data - Array filled with read data.
+ * @param adis                 - The adis device.
+ * @param burst_data           - Array filled with read data.
+ * @param burst_data_size      - Size of burst_data.
+ * @param burst_size_selection - Burst size selection encoded value.
  * @return 0 in case of success, error code otherwise.
  */
-int adis_read_burst_data(struct adis_dev *adis,
-			 struct adis_burst_data *burst_data)
+int adis_read_burst_data(struct adis_dev *adis, uint8_t burst_data_size,
+			 uint16_t *burst_data,
+			 uint8_t burst_size_selection)
 {
-	uint8_t msg_size;
 	int ret;
+	uint8_t msg_size;
 
-	if (adis->burst_size == ADIS_16_BIT_BURST_SIZE)
-		msg_size = ADIS_MSG_SIZE_16_BIT_BURST;
-	else
-		msg_size = ADIS_MSG_SIZE_32_BIT_BURST;
+	if (burst_size_selection > adis->data->burst_size_max)
+		return -EINVAL;
+
+	msg_size = burst_size_bytes[burst_size_selection];
+
+	if (burst_data_size > (msg_size - ADIS_CHECKSUM_SIZE))
+		burst_data_size = msg_size - ADIS_CHECKSUM_SIZE;
 
 	uint8_t buffer[msg_size + ADIS_READ_BURST_DATA_CMD_SIZE];
 	buffer[0] = ADIS_READ_BURST_DATA_CMD_MSB;
@@ -519,53 +535,11 @@ int adis_read_burst_data(struct adis_dev *adis,
 
 	adis->diag_flags.adis_diag_flags_bits.CHECKSUM_ERR = false;
 
-	if (adis->burst_size == ADIS_16_BIT_BURST_SIZE) {
-		burst_data->diag_stat = no_os_get_unaligned_be16(
-						&buffer[ADIS_DIAG_IDX_16_BIT_BURST + ADIS_READ_BURST_DATA_CMD_SIZE]);
-		burst_data->x_gyro = no_os_sign_extend16(no_os_get_unaligned_be16(
-					     &buffer[ADIS_XGYRO_IDX_16_BIT_BURST + ADIS_READ_BURST_DATA_CMD_SIZE]),
-				     ADIS_SIGN_BIT_POS);
-		burst_data->y_gyro = no_os_sign_extend16(no_os_get_unaligned_be16(
-					     &buffer[ADIS_YGYRO_IDX_16_BIT_BURST + ADIS_READ_BURST_DATA_CMD_SIZE]),
-				     ADIS_SIGN_BIT_POS);
-		burst_data->z_gyro = no_os_sign_extend16(no_os_get_unaligned_be16(
-					     &buffer[ADIS_ZGYRO_IDX_16_BIT_BURST + ADIS_READ_BURST_DATA_CMD_SIZE]),
-				     ADIS_SIGN_BIT_POS);
-		burst_data->x_accl = no_os_sign_extend16(no_os_get_unaligned_be16(
-					     &buffer[ADIS_XACCL_IDX_16_BIT_BURST + ADIS_READ_BURST_DATA_CMD_SIZE]),
-				     ADIS_SIGN_BIT_POS);
-		burst_data->y_accl = no_os_sign_extend16(no_os_get_unaligned_be16(
-					     &buffer[ADIS_YACCL_IDX_16_BIT_BURST + ADIS_READ_BURST_DATA_CMD_SIZE]),
-				     ADIS_SIGN_BIT_POS);
-		burst_data->z_accl = no_os_sign_extend16(no_os_get_unaligned_be16(
-					     &buffer[ADIS_ZACCL_IDX_16_BIT_BURST + ADIS_READ_BURST_DATA_CMD_SIZE]),
-				     ADIS_SIGN_BIT_POS);
-		burst_data->temp_out = no_os_get_unaligned_be16(
-					       &buffer[ADIS_TEMP_IDX_16_BIT_BURST + ADIS_READ_BURST_DATA_CMD_SIZE]);
-		burst_data->data_cntr = no_os_get_unaligned_be16(
-						&buffer[ADIS_CNT_IDX_16_BIT_BURST + ADIS_READ_BURST_DATA_CMD_SIZE]);
-	} else {
-		burst_data->diag_stat = no_os_get_unaligned_be16(
-						&buffer[ADIS_DIAG_IDX_32_BIT_BURST + ADIS_READ_BURST_DATA_CMD_SIZE]);
-		burst_data->x_gyro = no_os_get_unaligned_be32(
-					     &buffer[ADIS_XGYRO_IDX_32_BIT_BURST + ADIS_READ_BURST_DATA_CMD_SIZE]);
-		burst_data->y_gyro = no_os_get_unaligned_be32(
-					     &buffer[ADIS_YGYRO_IDX_32_BIT_BURST + ADIS_READ_BURST_DATA_CMD_SIZE]);
-		burst_data->z_gyro =no_os_get_unaligned_be32(&buffer[ADIS_ZGYRO_IDX_32_BIT_BURST
-				    + ADIS_READ_BURST_DATA_CMD_SIZE]);
-		burst_data->x_accl = no_os_get_unaligned_be32(
-					     &buffer[ADIS_XACCL_IDX_32_BIT_BURST + ADIS_READ_BURST_DATA_CMD_SIZE]);
-		burst_data->y_accl = no_os_get_unaligned_be32(
-					     &buffer[ADIS_YACCL_IDX_32_BIT_BURST + ADIS_READ_BURST_DATA_CMD_SIZE]);
-		burst_data->z_accl = no_os_get_unaligned_be32(
-					     &buffer[ADIS_ZACCL_IDX_32_BIT_BURST + ADIS_READ_BURST_DATA_CMD_SIZE]);
-		burst_data->temp_out = no_os_get_unaligned_be16(
-					       &buffer[ADIS_TEMP_IDX_32_BIT_BURST + ADIS_READ_BURST_DATA_CMD_SIZE]);
-		burst_data->data_cntr = no_os_get_unaligned_be16(
-						&buffer[ADIS_CNT_IDX_32_BIT_BURST + ADIS_READ_BURST_DATA_CMD_SIZE]);
-	}
+	/* Copy read data to buffer, based on burst_data_size value */
+	memcpy(burst_data, &buffer[ADIS_READ_BURST_DATA_CMD_SIZE], burst_data_size);
 
-	adis_update_diag_flags(adis, burst_data->diag_stat);
+	/* Update diagnosis flags at each reading */
+	adis_update_diag_flags(adis, buffer[ADIS_READ_BURST_DATA_CMD_SIZE]);
 
 	return 0;
 }
@@ -1402,7 +1376,6 @@ int adis_read_burst_size(struct adis_dev *adis, unsigned int *burst_size)
 		return ret;
 
 	*burst_size = reg_val & reg.mask ? 1 : 0;
-	adis->burst_size = *burst_size;
 
 	return 0;
 }
@@ -1424,7 +1397,6 @@ int adis_write_burst_size(struct adis_dev *adis, unsigned int burst_size)
 	ret = adis_update_bits_base(adis, reg.addr, reg.mask, burst_size, reg.size);
 	if (ret)
 		return ret;
-	adis->burst_size = burst_size;
 
 	no_os_udelay(adis->data->timeouts->msc_reg_update_us);
 
@@ -1448,7 +1420,6 @@ int adis_read_burst_sel(struct adis_dev *adis, unsigned int *burst_sel)
 		return ret;
 
 	*burst_sel = reg_val & reg.mask ? 1 : 0;
-	adis->burst_sel = *burst_sel;
 
 	return 0;
 }
@@ -1470,8 +1441,6 @@ int adis_write_burst_sel(struct adis_dev *adis, unsigned int burst_sel)
 	ret = adis_update_bits_base(adis, reg.addr, reg.mask, burst_sel, reg.size);
 	if (ret)
 		return ret;
-
-	adis->burst_sel = burst_sel;
 
 	no_os_udelay(adis->data->timeouts->msc_reg_update_us);
 
