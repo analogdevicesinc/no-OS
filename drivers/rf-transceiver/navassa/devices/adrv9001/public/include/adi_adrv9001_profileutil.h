@@ -20,6 +20,8 @@
 extern "C" {
 #endif
 
+#ifndef CLIENT_IGNORE
+
 /**
  * \brief This utility function parses the device profile available in JSON buffer, loading the contents into an init struct.
  *
@@ -38,6 +40,7 @@ int32_t adi_adrv9001_profileutil_Parse(adi_adrv9001_Device_t *adrv9001,
                                        adi_adrv9001_Init_t *init,
                                        char *jsonBuffer,
                                        uint32_t length);
+#endif // !CLIENT_IGNORE
 
 #ifdef __cplusplus
 }

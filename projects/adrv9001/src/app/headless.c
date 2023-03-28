@@ -263,6 +263,7 @@ int main(void)
 	struct adi_adrv9001_ArmVersion arm_version;
 	struct adi_adrv9001_SiliconVersion silicon_version;
 	struct adi_adrv9001_Device adrv9001_device = {0};
+	struct adrv9002_chip_info chip = {0};
 	struct adrv9002_rf_phy phy = {0};
 	unsigned int c;
 
@@ -339,6 +340,15 @@ int main(void)
 #endif
 
 	phy.adrv9001 = &adrv9001_device;
+
+	/* ADRV9002 */
+	chip.cmos_profile = "Navassa_CMOS_profile.json";
+	chip.lvd_profile = "Navassa_LVDS_profile.json";
+	chip.name = "adrv9002-phy";
+	chip.n_tx = ADRV9002_CHANN_MAX;
+
+	phy.chip = &chip;
+
 	ret = adi_adrv9001_profileutil_Parse(phy.adrv9001, &phy.profile,
 					     (char *)json_profile, strlen(json_profile));
 	if (ret)
@@ -432,16 +442,6 @@ int main(void)
 	phy.tx2_dac->clock_hz = phy.curr_profile->tx.txProfile[1].txInputRate_Hz;
 #endif
 
-	/* TODO: Remove this when it gets fixed in the API. */
-	adi_adrv9001_Radio_Channel_ToState(phy.adrv9001, ADI_RX,
-					   ADI_CHANNEL_1, ADI_ADRV9001_CHANNEL_PRIMED);
-	adi_adrv9001_Radio_Channel_ToState(phy.adrv9001, ADI_RX,
-					   ADI_CHANNEL_1, ADI_ADRV9001_CHANNEL_RF_ENABLED);
-	adi_adrv9001_Radio_Channel_ToState(phy.adrv9001, ADI_RX,
-					   ADI_CHANNEL_2, ADI_ADRV9001_CHANNEL_PRIMED);
-	adi_adrv9001_Radio_Channel_ToState(phy.adrv9001, ADI_RX,
-					   ADI_CHANNEL_2, ADI_ADRV9001_CHANNEL_RF_ENABLED);
-
 	/* Initialize the AXI DMA Controller cores */
 	ret = axi_dmac_init(&phy.tx1_dmac, &tx1_dmac_init);
 	if (ret) {
@@ -521,7 +521,7 @@ int main(void)
 
 	struct axi_dma_transfer read_transfer1 = {
 		// Number of bytes to write/read
-		.size = 16384 * ADRV9001_I_Q_CHANNELS * 2, /* nr of samples * rx1 i/q, rx2 i/q * bytes per sample */
+		.size = ADC_BUFFER_SAMPLES * ADRV9001_I_Q_CHANNELS * 2, /* nr of samples * rx1 i/q, rx2 i/q * bytes per sample */
 		// Transfer done flag
 		.transfer_done = 0,
 		// Signal transfer mode
@@ -531,7 +531,7 @@ int main(void)
 		// Address of data destination
 		.dest_addr = (uintptr_t)adc_buffers[0]
 	};
-	/* Transfer 16384 samples from ADC to MEM */
+	/* Transfer ADC_BUFFER_SAMPLES samples from ADC to MEM */
 #ifdef ADRV9002_RX2TX2
 	axi_adc_update_active_channels(phy.rx1_adc, 0xf);
 #else
@@ -543,14 +543,14 @@ int main(void)
 		return ret;
 #ifdef XILINX_PLATFORM
 	Xil_DCacheInvalidateRange((uintptr_t)adc_buffers[0],
-				  16384 * /* nr of samples */
+				  ADC_BUFFER_SAMPLES * /* nr of samples */
 				  ADRV9001_I_Q_CHANNELS * /* rx1 i/q, rx2 i/q*/
 				  2 /* bytes per sample */);
 #endif /* XILINX_PLATFORM */
 #ifndef ADRV9002_RX2TX2
 	struct axi_dma_transfer read_transfer2 = {
 		// Number of bytes to write/read
-		.size = 16384 * ADRV9001_I_Q_CHANNELS * 2, /* nr of samples * rx1 i/q, rx2 i/q * bytes per sample */
+		.size = ADC_BUFFER_SAMPLES * ADRV9001_I_Q_CHANNELS * 2, /* nr of samples * rx1 i/q, rx2 i/q * bytes per sample */
 		// Transfer done flag
 		.transfer_done = 0,
 		// Signal transfer mode
@@ -567,16 +567,16 @@ int main(void)
 		return ret;
 #ifdef XILINX_PLATFORM
 	Xil_DCacheInvalidateRange((uintptr_t)adc_buffers[1],
-				  16384 * /* nr of samples */
+				  ADC_BUFFER_SAMPLES * /* nr of samples */
 				  ADRV9001_I_Q_CHANNELS * /* nr of channels */
 				  2 /* bytes per sample */);
 #endif /* XILINX_PLATFORM */
 	printf("DMA_EXAMPLE: address=%#lx samples=%lu channels=%u bits=%lu\n",
-	       (uintptr_t)adc_buffers[1], 16384 * rx2_adc_init.num_channels,
+	       (uintptr_t)adc_buffers[1], ADC_BUFFER_SAMPLES * rx2_adc_init.num_channels,
 	       rx2_adc_init.num_channels, 8 * sizeof(adc_buffers[1][0]));
 #endif
 	printf("DMA_EXAMPLE: address=%#lx samples=%lu channels=%u bits=%lu\n",
-	       (uintptr_t)adc_buffers[0], 16384 * rx1_adc_init.num_channels,
+	       (uintptr_t)adc_buffers[0], ADC_BUFFER_SAMPLES * rx1_adc_init.num_channels,
 	       rx1_adc_init.num_channels, 8 * sizeof(adc_buffers[0][0]));
 #endif
 

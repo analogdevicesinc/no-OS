@@ -1795,7 +1795,7 @@ static __maybe_unused int32_t adrv9001_mag21CompPfir_Write(adi_adrv9001_Device_t
     for (i = 0; i < totalFilters; i++)
     {
         pfirBufferAddr = pfirMag21BufferStructAddr[i];
-        cfgData[offset++] = pfirBufferAddr[i].numCoeff;
+        cfgData[offset++] = pfirBufferAddr->numCoeff;
 
         /* 3 bytes padding is needed for alignment */
         offset += 3;
@@ -1829,7 +1829,7 @@ static __maybe_unused int32_t adrv9001_mag13CompPfir_Write(adi_adrv9001_Device_t
     for (i = 0; i < totalFilters; i++)
     {
         pfirBufferAddr = pfirMag13BufferStructAddr[i];
-        cfgData[offset++] = pfirBufferAddr[i].numCoeff;
+        cfgData[offset++] = pfirBufferAddr->numCoeff;
 
         /* 3 bytes padding is needed for alignment */
         offset += 3;
@@ -1988,11 +1988,13 @@ int32_t adrv9001_DmaMemWrite(adi_adrv9001_Device_t *device, uint32_t address, co
     uint32_t ADDR_ARM_DMA_DATA[4] = { ADRV9001_ADDR_ARM_DMA_DATA3, ADRV9001_ADDR_ARM_DMA_DATA2, ADRV9001_ADDR_ARM_DMA_DATA1, ADRV9001_ADDR_ARM_DMA_DATA0 };
     uint32_t index = 0;
     uint32_t armMemAddress = address;
+#if ADI_ADRV9001_PRE_MCS_BROADCAST_DISABLE > 0
     uint8_t regVal = 0;
+	uint8_t spiConfig_A = 0;
+#endif
     int32_t recoveryAction = ADI_COMMON_ACT_NO_ACTION;
     uint8_t singleInstruction = 0;
     uint8_t spiMode = 0;
-    uint8_t spiConfig_A = 0;
     
     ADI_ENTRY_PTR_ARRAY_EXPECT(device, data, byteCount);
 
@@ -2000,6 +2002,7 @@ int32_t adrv9001_DmaMemWrite(adi_adrv9001_Device_t *device, uint32_t address, co
 
     spiMode = device->spiSettings.enSpiStreaming;
     ADI_EXPECT(adrv9001_NvsRegmapCore_SingleInstruction_Get, device, &singleInstruction);
+#if ADI_ADRV9001_PRE_MCS_BROADCAST_DISABLE > 0
     ADRV9001_SPIREADBYTEDMA(device, "SPI_INTERFACE_CONFIG_A", ADRV9001_ADDR_SPI_INTERFACE_CONFIG_A, &spiConfig_A);
 
     ADRV9001_SPIREADBYTEDMA(device, "ARM_DMA_CTL", ADRV9001_ADDR_ARM_DMA_CTL, &regVal);
@@ -2008,6 +2011,7 @@ int32_t adrv9001_DmaMemWrite(adi_adrv9001_Device_t *device, uint32_t address, co
     {
         ADRV9001_DEBUG_INFO_NUM("ARM_MEM_WRITE BUS ERROR ADRV9001_ADDR_ARM_DMA_CTL", regVal);
     }
+#endif
 
     /* If Address is not on word boundary, Or ByteCount is not on Word boundary */
     if (((armMemAddress & 0x00000003) > 0) || ((byteCount & 0x00000003) > 0))
@@ -2161,8 +2165,9 @@ int32_t adrv9001_DmaMemWrite(adi_adrv9001_Device_t *device, uint32_t address, co
     /* setting up the DMA control register for a read to avoid accidental writing */
     regWrite |= ADRV9001_DMA_CTL_RD_WRB;
     ADRV9001_SPIWRITEBYTEDMA(device, "ARM_DMA_CTL", ADRV9001_ADDR_ARM_DMA_CTL, regWrite);
-
+#if ADI_ADRV9001_PRE_MCS_BROADCAST_DISABLE > 0
     ADRV9001_SPIWRITEBYTEDMA(device, "SPI_INTERFACE_CONFIG_A", ADRV9001_ADDR_SPI_INTERFACE_CONFIG_A, spiConfig_A);
+#endif
     ADI_EXPECT(adrv9001_NvsRegmapCore_SingleInstruction_Set, device, singleInstruction);
     device->spiSettings.enSpiStreaming = spiMode;
 
@@ -2339,18 +2344,22 @@ int32_t adrv9001_DmaMemRead(adi_adrv9001_Device_t *device, uint32_t address, uin
     uint32_t i = 0;
     uint8_t regRead = 0;
     uint8_t dataRead = 0;
+#if ADI_ADRV9001_PRE_MCS_BROADCAST_DISABLE > 0
     uint8_t regVal = 0;
+#endif
 
     ADI_ENTRY_PTR_ARRAY_EXPECT(device, returnData, byteCount);
 
     ADRV9001_DMAINFO("ARM_MEM_READ", address, byteCount);
 
+#if ADI_ADRV9001_PRE_MCS_BROADCAST_DISABLE > 0
     ADRV9001_SPIREADBYTEDMA(device, "ARM_DMA_CTL", ADRV9001_ADDR_ARM_DMA_CTL, &regVal);
 
     if (ADRV9001_BF_EQUAL(regVal, ADRV9001_DMA_CTL_BUS_WAITING))
     {
         ADRV9001_DEBUG_INFO_NUM("ARM_MEM_READ BUS ERROR ADRV9001_ADDR_ARM_DMA_CTL", regVal);
     }
+#endif
 
     ADRV9001_DMA_SKIP();
 
@@ -2452,11 +2461,13 @@ int32_t adrv9001_FlexStreamProcessorMemWrite(adi_adrv9001_Device_t *device,
     uint32_t ADDR_FLEX_SP_ARM_DMA_DATA[4] = { ADRV9001_ADDR_FLEX_SP_ARM_DMA_DATA3, ADRV9001_ADDR_FLEX_SP_ARM_DMA_DATA2, ADRV9001_ADDR_FLEX_SP_ARM_DMA_DATA1, ADRV9001_ADDR_FLEX_SP_ARM_DMA_DATA0 };
     uint32_t index = 0;
     uint32_t flexSpAddress = address;
+#if ADI_ADRV9001_PRE_MCS_BROADCAST_DISABLE > 0
     uint8_t regVal = 0;
+	uint8_t spiConfig_A = 0;
+#endif
     int32_t recoveryAction = ADI_COMMON_ACT_NO_ACTION;
     uint8_t singleInstruction = 0;
     uint8_t spiMode = 0;
-    uint8_t spiConfig_A = 0;
 
     ADI_ENTRY_PTR_ARRAY_EXPECT(device, data, byteCount);
 
@@ -2464,6 +2475,8 @@ int32_t adrv9001_FlexStreamProcessorMemWrite(adi_adrv9001_Device_t *device,
 
     spiMode = device->spiSettings.enSpiStreaming;
     ADI_EXPECT(adrv9001_NvsRegmapCore_SingleInstruction_Get, device, &singleInstruction);
+
+#if ADI_ADRV9001_PRE_MCS_BROADCAST_DISABLE > 0
     ADRV9001_SPIREADBYTEDMA(device, "SPI_INTERFACE_CONFIG_A", ADRV9001_ADDR_SPI_INTERFACE_CONFIG_A, &spiConfig_A);
 
     ADRV9001_SPIREADBYTEDMA(device, "FLEX_SP_ARM_DMA_CTL", ADRV9001_ADDR_FLEX_SP_ARM_DMA_CTL, &regVal);
@@ -2472,6 +2485,7 @@ int32_t adrv9001_FlexStreamProcessorMemWrite(adi_adrv9001_Device_t *device,
     {
         ADRV9001_DEBUG_INFO_NUM("FLEX_SP_ARM_MEM_WRITE BUS ERROR ADRV9001_ADDR_FLEX_SP_ARM_DMA_CTL", regVal);
     }
+#endif
 
     /* If Address is not on word boundary, Or ByteCount is not on Word boundary */
     if (((flexSpAddress & 0x00000003) > 0) || ((byteCount & 0x00000003) > 0))
@@ -2628,7 +2642,10 @@ int32_t adrv9001_FlexStreamProcessorMemWrite(adi_adrv9001_Device_t *device,
     regWrite |= ADRV9001_DMA_CTL_RD_WRB;
     ADRV9001_SPIWRITEBYTEDMA(device, "ADRV9001_ADDR_FLEX_SP_ARM_DMA_CTL", ADRV9001_ADDR_FLEX_SP_ARM_DMA_CTL, regWrite);
 
+#if ADI_ADRV9001_PRE_MCS_BROADCAST_DISABLE > 0
     ADRV9001_SPIWRITEBYTEDMA(device, "SPI_INTERFACE_CONFIG_A", ADRV9001_ADDR_SPI_INTERFACE_CONFIG_A, spiConfig_A);
+#endif
+
     ADI_EXPECT(adrv9001_NvsRegmapCore_SingleInstruction_Set, device, singleInstruction);
     device->spiSettings.enSpiStreaming = spiMode;
 

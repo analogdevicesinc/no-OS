@@ -480,7 +480,6 @@ int32_t adi_adrv9001_Tx_Attenuation_Get(adi_adrv9001_Device_t* device,
                                         uint16_t *attenuation_mdB)
 {
     adrv9001_BfNvsRegmapTx_e txBfChannel = ADRV9001_BF_TX1_CORE;
-    uint32_t waitInterval_us = 0;
     int32_t halError = 0;
     uint16_t txAttenReadBack = 0;
     uint16_t attenStepSizeDiv = 50;
@@ -488,6 +487,7 @@ int32_t adi_adrv9001_Tx_Attenuation_Get(adi_adrv9001_Device_t* device,
     uint8_t chan_index = 0;
     adi_adrv9001_TxAttenStepSize_e stepSize = ADI_ADRV9001_TXATTEN_0P05_DB;
     uint8_t bfVal = 0;
+	uint32_t waitInterval_us = ADI_ADRV9001_GETTXATTEN_WAIT_INTERVAL_US;
 
     ADI_PERFORM_VALIDATION(adi_adrv9001_Tx_Attenuation_Get_Validate, device, channel, attenuation_mdB);
 
@@ -498,7 +498,7 @@ int32_t adi_adrv9001_Tx_Attenuation_Get(adi_adrv9001_Device_t* device,
     ADI_EXPECT(adrv9001_NvsRegmapTx_TxAttenuationRead_Set, device, txBfChannel, regData);
 
     /* A delay is needed between set and get function */
-    waitInterval_us = 100;
+  
 
     halError = adi_common_hal_Wait_us(&device->common, waitInterval_us);
     ADI_ERROR_REPORT(&device->common,
@@ -1083,6 +1083,9 @@ int32_t adi_adrv9001_Tx_SlewRateLimiter_Configure(adi_adrv9001_Device_t *device,
 {
     uint8_t armData[10] = { 0 };
     uint8_t extData[2] = { 0 };
+#if !ADI_ADRV9001_PRE_MCS_BROADCAST_DISABLE > 0
+	int32_t halError = ADI_COMMON_ACT_NO_ACTION;
+#endif
 
     ADI_PERFORM_VALIDATION(adi_adrv9001_SlewRateLimiter_Configure_Validate, device, channel, config);
 
@@ -1112,12 +1115,26 @@ int32_t adi_adrv9001_Tx_SlewRateLimiter_Configure(adi_adrv9001_Device_t *device,
 
     ADI_EXPECT(adi_adrv9001_arm_Cmd_Write, device, ADRV9001_ARM_SET_OPCODE, &extData[0], sizeof(extData));
 
+#if ADI_ADRV9001_PRE_MCS_BROADCAST_DISABLE > 0
     /* Wait for command to finish executing */
     ADRV9001_ARM_CMD_STATUS_WAIT_EXPECT(device,
         (uint8_t)ADRV9001_ARM_SET_OPCODE,
         extData[1],
         (uint32_t)ADI_ADRV9001_SETSRLCONFIG_TIMEOUT_US,
         (uint32_t)ADI_ADRV9001_SETSRLCONFIG_INTERVAL_US);
+#else
+	halError = adi_common_hal_Wait_us(&device->common, ADI_ADRV9001_ARM_SET_OPCODE_WAIT_INTERVAL_US);
+	if (halError != ADI_COMMON_ACT_NO_ACTION)
+	{
+		ADI_ERROR_REPORT(&device->common,
+			ADI_COMMON_ERRSRC_ADI_HAL,
+			halError,
+			ADI_COMMON_ACT_ERR_CHECK_TIMER,
+			device,
+			"Timer not working");
+		ADI_ERROR_RETURN(device->common.error.newAction);
+	}
+#endif
 
     ADI_API_RETURN(device);
 }
