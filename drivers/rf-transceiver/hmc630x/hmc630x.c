@@ -210,10 +210,6 @@ int hmc630x_init(struct hmc630x_dev **dev, struct hmc630x_init_param *init)
 		goto error;
 
 	if (init->type == HMC6300) {
-		ret = hmc630x_write(d, HMC6300_PA_PWRDWN_FAST, 1);
-		if (ret)
-			goto error;
-
 		ret = hmc6300_set_rf_attn(d, init->tx.rf_attn);
 		if (ret)
 			goto error;
