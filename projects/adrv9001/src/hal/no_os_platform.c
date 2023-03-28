@@ -54,6 +54,7 @@
 #include "ORxGainTable.h"
 #include "RxGainTable.h"
 #include "TxAttenTable.h"
+#include "RxGainTable_GainCompensated.h"
 #include "adi_platform.h"
 #include "adi_platform_types.h"
 #include "no_os_platform.h"
@@ -463,6 +464,18 @@ int32_t no_os_rx_gain_table_entry_get(void *devHalCfg,
 		*digGain = RxGainTable[lineCount].digGain;
 	} else if (!strcmp(rxGainTablePath, "ORxGainTable.csv")) {
 		if (lineCount > sizeof(ORxGainTable) / sizeof(struct ORxGainTableEntry))
+			return -EINVAL;
+
+		*gainIndex = ORxGainTable[lineCount].gainIndex;
+		*rxFeGain = ORxGainTable[lineCount].rxFeGain;
+		*tiaControl = ORxGainTable[lineCount].tiaControl;
+		*adcControl = ORxGainTable[lineCount].adcControl;
+		*extControl = ORxGainTable[lineCount].extControl;
+		*phaseOffset = ORxGainTable[lineCount].phaseOffset;
+		*digGain = ORxGainTable[lineCount].digGain;
+	} else if (!strcmp(rxGainTablePath, "RxGainTable_GainCompensated.csv")) {
+		if (lineCount > sizeof(RxGainTable_GainCompensated) / sizeof(
+			    struct RxGainTable_GainCompensatedEntry))
 			return -EINVAL;
 
 		*gainIndex = ORxGainTable[lineCount].gainIndex;

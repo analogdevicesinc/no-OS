@@ -543,7 +543,26 @@ int32_t adi_adrv9001_Radio_ChannelEnablementDelays_Inspect(adi_adrv9001_Device_t
 *
 * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
 */
-int32_t adi_adrv9001_Radio_ToMcsReady(adi_adrv9001_Device_t *adrv9001); 
+int32_t adi_adrv9001_Radio_ToMcsReady(adi_adrv9001_Device_t *adrv9001);
+
+/**
+ * \brief Gets the Logen Divider for the specified PLL (RF1/RF2)
+ *
+ * The device contains two RF PLLs(RF1/RF2).
+ * The RF LO frequency for each of the PLLs is derived by dividing down the
+ * VCO output in the LOGEN block . The corresponding Logen Divider for each RF PLL
+ * is calculated as : ((2^(RFx Logen divide mode + 1) * (RFx Logen divide ratio))
+ *
+ * \pre Channel state any of CALIBRATED, PRIMED or RF_ENABLED
+ *
+ * \param[in]  adrv9001         Context variable - Pointer to the ADRV9001 device settings data structure
+ * \param[in]  pll              The PLL of interest among RF1 and RF2
+ * \param[out] RfLogenDivider   The calculated value of Logen Divider for the specified PLL (RF1/RF2)
+ *                              ranging from 0 to 130816(256*511)
+ *
+ * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
+ */
+int32_t adi_adrv9001_Radio_RfLogenDivider_Get(adi_adrv9001_Device_t *adrv9001, adi_adrv9001_Pll_e pll, uint32_t *RfLogenDivider);
 
 #ifdef __cplusplus
 }

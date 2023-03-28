@@ -22,6 +22,7 @@
 #define ADI_ADRV9001_ARM_MEM_AUTO_INCR 1
 #define ADI_ADRV9001_ARM_MEM_CACHE_ENABLE 1
 #define ADI_ADRV9001_PRE_MCS_BROADCAST_DISABLE 1    /* Set to 0 for SPI Write only (Broadcasting) */
+#define ADI_ADRV9001_ARM_SET_OPCODE_WAIT_INTERVAL_US 18
 
 #define ADI_ADRV9001_FRONT_END_GPIO_DOWNLOAD 0      /* Set this to '1' to download front end GPIO */
 #define	ADI_ADRV9001_SLEWRATE_CONFIG    1           /* Set this to '1' to enable slew rate configuration */
@@ -153,6 +154,7 @@
 #define ADI_ADRV9001_SSI_DEBUG_TIMEOUT_US         1000000
 #define ADI_ADRV9001_SSI_DEBUG_INTERVAL_US          10000
 
+#define ADI_ADRV9001_GETTXATTEN_WAIT_INTERVAL_US	0
 /*
  *****************************************
  * Rx and ObsRx gain tables

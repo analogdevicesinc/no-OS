@@ -109,8 +109,6 @@ typedef struct adi_adrv9001_PowerDetector
 */
 typedef struct adi_adrv9001_ExtLna
 {
-    uint8_t     gpio;                               /*!< TBD */
-    uint8_t     powerDown;                          /*!< TBD */
     uint8_t     settlingDelay;                      /*!< External LNA Settling Delay. Valid range is from 0 to 255 */
 } adi_adrv9001_ExtLna_t;
 

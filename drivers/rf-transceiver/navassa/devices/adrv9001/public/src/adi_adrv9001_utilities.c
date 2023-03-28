@@ -35,6 +35,7 @@
 #include "adi_adrv9001_fh.h"
 
 #include "adi_adrv9001_gpio.h"
+
 #include "adi_adrv9001_ssi.h"
 
 #include "adrv9001_reg_addr_macros.h"
@@ -42,11 +43,18 @@
 #include "adrv9001_bf.h"
 
 #define ADI_ADRV9001_ARM_BINARY_IMAGE_FILE_SIZE_BYTES (288*1024)
+#define ADI_ADRV9001_STREAM_BINARY_IMAGE_FILE_SIZE_BYTES (32*1024)
 
 #define ADI_ADRV9001_RX_GAIN_TABLE_SIZE_ROWS 256
 #define ADI_ADRV9001_TX_ATTEN_TABLE_SIZE_ROWS 1024
 
-int32_t adi_adrv9001_Utilities_ArmImage_Load(adi_adrv9001_Device_t *device, const char *armImagePath, adi_adrv9001_ArmSingleSpiWriteMode_e spiWriteMode) 
+#define ADI_ADRV9001_NUMBER_OF_ARM_BINARY_IMAGE_BYTES_TO_VERIFY 12
+
+#ifdef __KERNEL__
+#define printf(...)	pr_info(__VA_ARGS__)
+#endif
+
+int32_t adi_adrv9001_Utilities_ArmImage_Load(adi_adrv9001_Device_t *device, const char *armImagePath, adi_adrv9001_ArmSingleSpiWriteMode_e spiWriteMode)
 {
     int32_t recoveryAction = ADI_COMMON_ACT_NO_ACTION;
     uint32_t i = 0;
@@ -93,7 +101,7 @@ int32_t adi_adrv9001_Utilities_ArmImage_Load(adi_adrv9001_Device_t *device, cons
     return recoveryAction;
 }
 
-int32_t adi_adrv9001_Utilities_StreamImage_Load(adi_adrv9001_Device_t *device, const char *streamImagePath, adi_adrv9001_ArmSingleSpiWriteMode_e spiWriteMode) 
+int32_t adi_adrv9001_Utilities_StreamImage_Load(adi_adrv9001_Device_t *device, const char *streamImagePath, adi_adrv9001_ArmSingleSpiWriteMode_e spiWriteMode)
 {
 
     int32_t recoveryAction = ADI_COMMON_ACT_NO_ACTION;
@@ -170,7 +178,7 @@ int32_t adi_adrv9001_Utilities_RxGainTable_Load(adi_adrv9001_Device_t *device, a
     ADI_EXPECT(adrv9001_NvsRegmapRxb_AgcMinimumGainIndex_Get, device, instance, &minIndex);
 
     /*Loop until the gain table end is reached or no. of lines scanned exceeds maximum*/
-    while (lineCount <  ADI_ADRV9001_RX_GAIN_TABLE_SIZE_ROWS) 
+    while (lineCount <  ADI_ADRV9001_RX_GAIN_TABLE_SIZE_ROWS)
     {
         returnTableEntry = adi_hal_RxGainTableEntryGet(device->common.devHalInfo,
                                                        rxGainTablePath,
@@ -221,7 +229,7 @@ int32_t adi_adrv9001_Utilities_RxGainTable_Load(adi_adrv9001_Device_t *device, a
 
     maxGainIndex = prevGainIndex;
     ADI_EXPECT(adi_adrv9001_Rx_GainTable_Write, device, port, channel, maxGainIndex, &rxGainTableRowBuffer[0], lineCount, lnaConfig, gainTableType);
-    
+
     ADI_API_RETURN(device);
 }
 
@@ -242,7 +250,7 @@ int32_t adi_adrv9001_Utilities_TxAttenTable_Load(adi_adrv9001_Device_t *device, 
     ADI_ENTRY_PTR_EXPECT(device, txAttenTablePath);
 
     /*Loop until the atten table end is reached or no. of lines scanned exceeds maximum*/
-    while (lineCount < ADRV9001_TX_ATTEN_TABLE_MAX) 
+    while (lineCount < ADRV9001_TX_ATTEN_TABLE_MAX)
     {
         returnTableEntry = adi_hal_TxAttenTableEntryGet(device->common.devHalInfo,
                                                         txAttenTablePath,
@@ -291,6 +299,201 @@ int32_t adi_adrv9001_Utilities_TxAttenTable_Load(adi_adrv9001_Device_t *device, 
     tableSize = attenIndex - minAttenIndex + 1;
 
     ADI_EXPECT(adi_adrv9001_Tx_AttenuationTable_Write, device, txChannelMask, minAttenIndex, &txAttenTableRowBuffer[0], tableSize);
-    
+
     ADI_API_RETURN(device);
 }
+
+int32_t adi_adrv9001_Utilities_WaitMs(adi_adrv9001_Device_t *adrv9001, uint32_t waitInterval_ms)
+{
+	int32_t halError = 0;
+
+	/* Check device pointer is not null */
+	ADI_ENTRY_EXPECT(adrv9001);
+
+	halError = adi_common_hal_Wait_us(&adrv9001->common, (1000*waitInterval_ms));
+
+	ADI_ERROR_REPORT(&adrv9001->common,
+		ADI_COMMON_ERRSRC_ADI_HAL,
+		halError,
+		ADI_COMMON_ACT_ERR_CHECK_TIMER,
+		device,
+		"Timer not working");
+
+	return halError;
+}
+
+int32_t adi_adrv9001_Utilities_SystemDebugPreCalibrate(adi_adrv9001_Device_t *adrv9001, adi_adrv9001_Init_t *init, const char *armImagePath, const char *streamImagePath)
+{
+	uint8_t i = 0;
+	int32_t status = 0;
+	uint8_t gp1LdoResistorValue = 0;
+	uint8_t devClkLdoRegisterValue = 0;
+	uint8_t clkSynthLdoReg = 0;
+	uint8_t lpClkSynthLdoReg = 0;
+	bool armImageLoadVerifyFail = 0;
+	uint32_t armStatusCheckTimeoutUs = 5000000;
+	uint8_t armMemoryReadData[ADI_ADRV9001_NUMBER_OF_ARM_BINARY_IMAGE_BYTES_TO_VERIFY] = { 0 };
+	const uint8_t armBinaryImageVerifyBuffer[ADI_ADRV9001_NUMBER_OF_ARM_BINARY_IMAGE_BYTES_TO_VERIFY] = { 168, 30, 1, 32, 189, 91, 4, 1, 9, 170, 0, 1 };
+
+	adi_common_ApiVersion_t apiVersion_0 = {
+		.major = 0,
+		.minor = 0,
+		.patch = 0
+	};
+
+	adi_adrv9001_SpiSettings_t spiSettings = {
+		.msbFirst = 1,
+		.enSpiStreaming = 0,
+		.autoIncAddrUp = 1,
+		.fourWireMode = 1,
+		.cmosPadDrvStrength = ADI_ADRV9001_CMOSPAD_DRV_STRONG
+	};
+
+	adi_adrv9001_StreamVersion_t StreamVersion = {
+		.majorVer = 0,
+		.minorVer = 0,
+		.maintVer = 0,
+		.buildVer = 0,
+	};
+
+	adi_adrv9001_ArmSingleSpiWriteMode_e spiWriteMode = ADI_ADRV9001_ARM_SINGLE_SPI_WRITE_MODE_STANDARD_BYTES_252;
+
+	/* NULL pointer check */
+	ADI_ENTRY_EXPECT(adrv9001);
+	ADI_NULL_PTR_RETURN(adrv9001, init);
+	ADI_NULL_PTR_RETURN(adrv9001, armImagePath);
+	ADI_NULL_PTR_RETURN(adrv9001, streamImagePath);
+
+	printf("*** ADRV9001 Pre-Calibrate System Debugging Started ***\r\n");
+
+	printf("--> . Hardware Reset\r\n");
+	ADI_MSG_EXPECT("Failed to reset device and set SPI config.", adi_adrv9001_HwReset, adrv9001);
+	printf("      OK\r\n");
+
+	printf("--> . API Version\r\n");
+	ADI_MSG_EXPECT("Error fetching API Version.", adi_adrv9001_ApiVersion_Get, adrv9001, &apiVersion_0);
+	printf("      OK - API Version = %u.%u.%u\r\n", apiVersion_0.major, apiVersion_0.minor, apiVersion_0.patch);
+
+	printf("--> . Configure SPI\r\n");
+	ADI_MSG_EXPECT("Problem Closing HW.", adi_adrv9001_HwClose, adrv9001);
+	ADI_MSG_EXPECT("Problem Opening HW.", adi_adrv9001_HwOpen, adrv9001, &spiSettings);
+	printf("      OK\r\n");
+
+	printf("--> . Check SPI\r\n");
+	ADI_MSG_EXPECT("SPI Verify failed.", adi_adrv9001_spi_Verify, adrv9001);
+	printf("      OK\r\n");
+
+	printf("--> . Check Power Supplies\r\n");
+	status = adi_bf_hal_Register_Read(adrv9001, 0x01ac, &gp1LdoResistorValue);
+	ADI_ERROR_RETURN(status);
+	status = adi_bf_hal_Register_Read(adrv9001, ADRV9001_ADDR_DEV_CLK_LDO_BYTE1, &devClkLdoRegisterValue);
+	ADI_ERROR_RETURN(status);
+	if ((gp1LdoResistorValue & (1 << 4)) && (devClkLdoRegisterValue & (1 << 4)))
+	{
+		printf("      OK\r\n");
+	}
+	else
+	{
+		printf("      NOK - Check power supply is connected correctly\r\n");
+		ADI_ERROR_RETURN(ADI_COMMON_ERR_API_FAIL);
+	}
+
+	ADI_MSG_EXPECT("Problem Init Analog.", adi_adrv9001_InitAnalog, adrv9001, init, ADI_ADRV9001_DEVICECLOCKDIVISOR_2);
+	ADI_MSG_EXPECT("Problem AhbSpiBridge Enable.", adi_adrv9001_arm_AhbSpiBridge_Enable, adrv9001);
+
+	printf("--> . Load Stream Processor Image\r\n");
+	ADI_MSG_EXPECT("Stream Processor Image Load Error. Check Dev_Clk, SPI and Power Supply.", adi_adrv9001_Utilities_StreamImage_Load, adrv9001, streamImagePath, spiWriteMode);
+	printf("      OK\r\n");
+
+	printf("--> . Verify Stream Processor Image Load\r\n");
+	ADI_MSG_EXPECT("Stream Processor Image not loaded correctly. Check Dev_Clk, SPI and Power Supply.", adi_adrv9001_Stream_Version, adrv9001, &StreamVersion);
+	printf("      OK -  Version = %u.%u.%u.%u\r\n", StreamVersion.majorVer, StreamVersion.minorVer, StreamVersion.maintVer, StreamVersion.buildVer);
+
+	printf("--> . Load ARM Image\r\n");
+	ADI_MSG_EXPECT("ARM Image Load Error. Check Dev_Clk, SPI and Power Supply.", adi_adrv9001_Utilities_ArmImage_Load, adrv9001, armImagePath, spiWriteMode);
+	ADI_MSG_EXPECT("ARM Profile Write Error.", adi_adrv9001_arm_Profile_Write, adrv9001, init);
+	ADI_MSG_EXPECT("ARM Pfir Profiles Write Error.", adi_adrv9001_arm_PfirProfiles_Write, adrv9001, init);
+	ADI_MSG_EXPECT("ARM Start Error.", adi_adrv9001_arm_Start, adrv9001);
+	adi_adrv9001_arm_System_Program(adrv9001, (uint8_t)(init->tx.txInitChannelMask | (init->rx.rxInitChannelMask & 0x33)));
+	printf("      OK\r\n");
+
+	printf("--> . Verify ARM Image Load\r\n");
+	ADI_MSG_EXPECT("ARM Start Status Check Error.", adi_adrv9001_arm_StartStatus_Check, adrv9001, armStatusCheckTimeoutUs);
+	ADI_MSG_EXPECT("ARM Memory Read Error.", adi_adrv9001_arm_Memory_Read, adrv9001, ADRV9001_ADDR_ARM_START_PROG, &armMemoryReadData[0], sizeof(armMemoryReadData), spiWriteMode);
+
+	for (i = 0; i < ADI_ADRV9001_NUMBER_OF_ARM_BINARY_IMAGE_BYTES_TO_VERIFY; i++)
+	{
+		if (armMemoryReadData[i] == armBinaryImageVerifyBuffer[i])
+		{
+			armImageLoadVerifyFail = 0;
+		}
+		else
+		{
+			armImageLoadVerifyFail = 1;
+			break;
+		}
+	}
+
+	if (armImageLoadVerifyFail)
+	{
+		printf("      NOK - ARM Read Back Error. Check Dev_Clk, SPI and Power Supply\r\n");
+		ADI_ERROR_RETURN(ADI_COMMON_ERR_API_FAIL);
+	}
+	else
+	{
+		printf("      OK\r\n");
+	}
+
+	printf("--> . Check Dev_Clk \r\n");
+	status = adi_bf_hal_Register_Read(adrv9001, ADRV9001_ADDR_CLK_SYNTH_LDO_BYTE1, &clkSynthLdoReg);
+	ADI_ERROR_RETURN(status);
+	status = adi_bf_hal_Register_Read(adrv9001, ADRV9001_ADDR_CLK_SYNTH_LP_LDO_BYTE2, &lpClkSynthLdoReg);
+	ADI_ERROR_RETURN(status);
+	if ((clkSynthLdoReg & (1 << 4)) || (lpClkSynthLdoReg & (1 << 4)))
+	{
+		printf("      OK\r\n");
+	}
+	else
+	{
+		printf("      NOK - Check if device clock is connected correctly\r\n");
+		ADI_ERROR_RETURN(ADI_COMMON_ERR_API_FAIL);
+	}
+
+	printf("*** ADRV9001 Pre-Calibrate System Debugging Completed ***\r\n");
+
+	ADI_API_RETURN(adrv9001);
+}
+
+int32_t adi_adrv9001_Utilities_SystemDebugPostCalibrate(adi_adrv9001_Device_t *adrv9001)
+{
+	bool pllLO1LockStatus = 0;
+	bool pllLO2LockStatus = 0;
+
+	/* Check device pointer is not null */
+	ADI_ENTRY_EXPECT(adrv9001);
+
+	printf("*** ADRV9001 Post-Calibrate System Debugging Started ***\r\n");
+
+	printf("--> . Check RF PLLs \r\n");
+	ADI_MSG_EXPECT("RF Pll Error. Can't prime channel. The device should be calibrated", adi_adrv9001_Radio_Channel_ToPrimed, adrv9001, ADI_RX, ADI_CHANNEL_1);
+	ADI_MSG_EXPECT("RF Pll Error. Can't prime channel. The device should be calibrated", adi_adrv9001_Radio_Channel_ToPrimed, adrv9001, ADI_TX, ADI_CHANNEL_1);
+
+	ADI_MSG_EXPECT("Error fetching PLL LO1 lock status", adi_adrv9001_Radio_PllStatus_Get, adrv9001, ADI_ADRV9001_PLL_LO1, &pllLO1LockStatus);
+	ADI_MSG_EXPECT("Error fetching PLL LO2 lock status", adi_adrv9001_Radio_PllStatus_Get, adrv9001, ADI_ADRV9001_PLL_LO2, &pllLO2LockStatus);
+
+	if (pllLO1LockStatus | pllLO2LockStatus)
+	{
+		printf("      OK\r\n");
+	}
+	else
+	{
+		printf("      NOK - RF Plls can't lock\r\n");
+		ADI_ERROR_RETURN(ADI_COMMON_ERR_API_FAIL);
+	}
+
+	printf("*** ADRV9001 Post-Calibrate System Debugging Completed ***\r\n");
+
+	ADI_API_RETURN(adrv9001);
+}
+
+

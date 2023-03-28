@@ -41,6 +41,7 @@
 
 #include "no_os_gpio.h"
 #include "no_os_delay.h"
+#include "no_os_clk.h"
 
 #include "adi_common_log.h"
 #include "adi_adrv9001_user.h"
@@ -61,6 +62,8 @@
 #define ADRV9002_FH_HOP_SIGNALS_NR	2
 #define ADRV9002_FH_TABLES_NR		2
 #define ADRV9002_FH_BIN_ATTRS_CNT	(ADRV9002_FH_HOP_SIGNALS_NR * ADRV9002_FH_TABLES_NR)
+#define ADRV9002_RX_MIN_GAIN_IDX       ADI_ADRV9001_RX_GAIN_INDEX_MIN
+#define ADRV9002_RX_MAX_GAIN_IDX       ADI_ADRV9001_RX_GAIN_INDEX_MAX
 
 enum {
 	ADRV9002_CHANN_1,
@@ -86,6 +89,8 @@ struct adrv9002_fh_bin_table {
 enum ad900x_device_id {
 	ID_ADRV9002,
 	ID_ADRV9002_RX2TX2,
+	ID_ADRV9003,
+	ID_ADRV9003_RX2TX2,
 };
 
 enum adrv9002_clocks {
@@ -130,6 +135,15 @@ enum adrv9002_tx_ext_info {
 	TX_NCO_FREQUENCY
 };
 
+#define api_call(phy, func, args...)	({				\
+	int __ret = func((phy)->adrv9001, ##args);			\
+									\
+	if (__ret)							\
+		__ret = adrv9002_dev_err(phy);	\
+									\
+	__ret;								\
+})
+
 struct adrv9002_clock {
 	struct spi_device	*spi;
 	struct adrv9002_rf_phy	*phy;
@@ -138,6 +152,8 @@ struct adrv9002_clock {
 };
 
 struct adrv9002_chan {
+	struct no_os_clk *clk;
+	struct adrv9002_ext_lo *ext_lo;
 	/*
 	 * These values are in nanoseconds. They need to be converted with
 	 * @adrv9002_chan_ns_to_en_delay() before passing them to the API.
@@ -185,13 +201,31 @@ struct mutex {
 	uint32_t unused;
 };
 
+struct adrv9002_chip_info {
+	const char *cmos_profile;
+	const char *lvd_profile;
+	const char *name;
+	uint32_t n_tx;
+	bool rx2tx2;
+};
+
+struct adrv9002_ext_lo {
+	struct no_os_clk *clk;
+	unsigned short divider;
+};
+
 struct adrv9002_rf_phy {
+	const struct adrv9002_chip_info *chip;
 	struct spi_device		*spi;
 	struct iio_dev			*indio_dev;
 	struct no_os_gpio_desc		*reset_gpio;
 	struct no_os_gpio_desc		*ssi_sync;
 	struct mutex			lock;
 	struct adrv9002_clock		clk_priv[NUM_ADRV9002_CLKS];
+	/* each LO controls two ports (at least) */
+	struct adrv9002_ext_lo		ext_los[ADRV9002_CHANN_MAX];
+	char                        	profile_buf[350];
+	size_t                      	profile_len;
 	uint8_t				*stream_buf;
 	uint16_t			stream_size;
 	struct adrv9002_fh_bin_table	fh_table_bin_attr[ADRV9002_FH_BIN_ATTRS_CNT];
@@ -234,6 +268,7 @@ int adrv9002_post_setup(struct adrv9002_rf_phy *phy);
 int adrv9002_setup(struct adrv9002_rf_phy *phy);
 adi_adrv9001_SsiType_e adrv9002_axi_ssi_type_get(struct adrv9002_rf_phy *phy);
 
+/* Main driver API's */
 void adrv9002_en_delays_ns_to_arm(const struct adrv9002_rf_phy *phy,
 				  const struct adi_adrv9001_ChannelEnablementDelays *d_ns,
 				  struct adi_adrv9001_ChannelEnablementDelays *d);
@@ -241,7 +276,7 @@ void adrv9002_en_delays_arm_to_ns(const struct adrv9002_rf_phy *phy,
 				  const struct adi_adrv9001_ChannelEnablementDelays *d,
 				  struct adi_adrv9001_ChannelEnablementDelays *d_ns);
 /* phy lock must be held before entering the API */
-int adrv9002_channel_to_state(struct adrv9002_rf_phy *phy,
+int adrv9002_channel_to_state(const struct adrv9002_rf_phy *phy,
 			      struct adrv9002_chan *chann,
 			      const adi_adrv9001_ChannelState_e state, const bool cache_state);
 int adrv9002_init(struct adrv9002_rf_phy *phy,
@@ -250,13 +285,14 @@ int __adrv9002_dev_err(const struct adrv9002_rf_phy *phy, const char *function,
 		       const int line);
 #define adrv9002_dev_err(phy)	__adrv9002_dev_err(phy, __func__, __LINE__)
 
+/* AXI core API's */
 int adrv9002_register_axi_converter(struct adrv9002_rf_phy *phy);
-int adrv9002_axi_interface_set(struct adrv9002_rf_phy *phy,
+int adrv9002_axi_interface_set(const struct adrv9002_rf_phy *phy,
 			       const uint8_t n_lanes,
 			       const bool cmos_ddr,
 			       const int channel,
 			       const bool tx);
-int adrv9002_axi_intf_tune(struct adrv9002_rf_phy *phy, const bool tx,
+int adrv9002_axi_intf_tune(const struct adrv9002_rf_phy *phy, const bool tx,
 			   const int chann,
 			   uint8_t *clk_delay, uint8_t *data_delay);
 void adrv9002_axi_interface_enable(struct adrv9002_rf_phy *phy, const int chan,
@@ -265,15 +301,17 @@ int __maybe_unused adrv9002_axi_tx_test_pattern_cfg(struct adrv9002_rf_phy *phy,
 		const int channel,
 		const adi_adrv9001_SsiTestModeData_e data);
 int adrv9002_post_init(struct adrv9002_rf_phy *phy);
-int adrv9002_intf_test_cfg(struct adrv9002_rf_phy *phy, const int chann,
+int adrv9002_intf_test_cfg(const struct adrv9002_rf_phy *phy, const int chann,
 			   const bool tx,
 			   const bool stop);
-int adrv9002_check_tx_test_pattern(struct adrv9002_rf_phy *phy,
+int adrv9002_check_tx_test_pattern(const struct adrv9002_rf_phy *phy,
 				   const int chann);
-int adrv9002_intf_change_delay(struct adrv9002_rf_phy *phy, const int channel,
+int adrv9002_intf_change_delay(const struct adrv9002_rf_phy *phy,
+			       const int channel,
 			       uint8_t clk_delay,
 			       uint8_t data_delay, const bool tx);
-uint32_t adrv9002_axi_dds_rate_get(struct adrv9002_rf_phy *phy, const int chan);
+uint32_t adrv9002_axi_dds_rate_get(const struct adrv9002_rf_phy *phy,
+				   const int chan);
 
 struct adi_adrv9001_SpiSettings *adrv9002_spi_settings_get(void);
 
