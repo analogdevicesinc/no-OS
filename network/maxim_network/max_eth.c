@@ -76,20 +76,20 @@ static err_t mxc_eth_netif_output(struct netif *netif, struct pbuf *p)
 	struct max_eth_desc *eth_desc;
 	struct adin1110_desc *mac_desc;
         struct adin1110_eth_buff buff;
+	uint32_t frame_len;
 	int ret;
 
 	eth_desc = netif->state;
 	mac_desc = eth_desc->mac_desc;
 
 	LINK_STATS_INC(link.xmit);
-	pbuf_copy_partial(p, mxc_lwip_internal_buff, p->tot_len, 0);
+	frame_len = pbuf_copy_partial(p, mxc_lwip_internal_buff, p->tot_len, 0);
 
 	memcpy(&buff.mac_dest, &mxc_lwip_internal_buff[0], 6);
 	memcpy(&buff.mac_source, &mxc_lwip_internal_buff[6], 6);
 	buff.ethertype = no_os_get_unaligned_be16(&mxc_lwip_internal_buff[12]);
 
-	/* Only get the payload length by removing the ethernet header */
-	buff.payload_len = p->tot_len - ADIN1110_ETH_HDR_LEN;
+	buff.len = p->tot_len;
 	buff.payload = &mxc_lwip_internal_buff[14];
 
 	do {
@@ -119,7 +119,7 @@ static err_t max_eth_netif_init(struct netif *netif)
 
 static struct pbuf *get_recvd_frames(struct max_eth_desc *eth_desc)
 {
-	uint32_t eth_data_len;
+	uint32_t frame_cnt;
 	size_t offset = 0;
 	struct adin1110_desc *mac_desc;
 	struct adin1110_eth_buff mac_buff;
@@ -129,13 +129,11 @@ static struct pbuf *get_recvd_frames(struct max_eth_desc *eth_desc)
 	mac_desc = eth_desc->mac_desc;
 	mac_buff.payload = &mxc_lwip_internal_buff[14];
 
-	do {
-		ret = adin1110_reg_read(mac_desc, ADIN1110_RX_FSIZE_REG, &eth_data_len);
-		if (ret)
-			goto out;
-	} while (eth_data_len > 0xF0000);
+	ret = adin1110_reg_read(mac_desc, ADIN1110_RX_FRM_CNT_REG, &frame_cnt);
+	if (ret)
+		goto out;
 
-	if (!eth_data_len)
+	if (!frame_cnt)
 		goto out;
 
 	ret = adin1110_read_fifo(mac_desc, 0, &mac_buff);
@@ -148,10 +146,9 @@ static struct pbuf *get_recvd_frames(struct max_eth_desc *eth_desc)
 	offset += 6;
 	memcpy(mxc_lwip_internal_buff + offset, &mac_buff.ethertype, 2);
 	offset += 2;
-	p = pbuf_alloc(PBUF_RAW, eth_data_len, PBUF_POOL);
+	p = pbuf_alloc(PBUF_RAW, mac_buff.len, PBUF_POOL);
 	if (p != NULL)
-		/* -2 because the field contains the 2 byte ADIN1110 header */
-		pbuf_take(p, mxc_lwip_internal_buff, eth_data_len);
+		pbuf_take(p, mxc_lwip_internal_buff, mac_buff.len);
 
 out:
 	return p;

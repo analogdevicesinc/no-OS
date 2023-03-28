@@ -138,9 +138,7 @@ int iio_example_main()
 	struct max_eth_desc *eth_desc;
 	struct max_eth_param eth_param = {
 		.name = "e7",
-		.link_callback = NULL,
 		.adin1110_ip = adin1110_ip,
-		.tick_param = eth_tick_param,
 	};
 
 	struct no_os_irq_ctrl_desc *ad74413r_nvic;

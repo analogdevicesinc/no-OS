@@ -58,6 +58,8 @@
 #define ADIN1110_ADDR_MASK			NO_OS_GENMASK(12, 0)
 #define ADIN1110_RD_FRAME_SIZE			7
 #define ADIN1110_WR_FRAME_SIZE			6
+#define ADIN1110_RD_HDR_SIZE			3
+#define ADIN1110_WR_HDR_SIZE			2
 #define ADIN1110_PHY_ID_REG			1
 
 #define ADIN1110_PHY_ID				0x0283BC91
@@ -201,8 +203,7 @@ struct adin1110_desc {
 	enum adin1110_chip_id chip_type;
 	struct no_os_spi_desc *comm_desc;
 	uint8_t mac_address[ADIN1110_ETH_ALEN];
-	uint8_t rx_buff[ADIN1110_BUFF_LEN];
-	uint8_t tx_buff[ADIN1110_BUFF_LEN];
+	uint8_t data[ADIN1110_BUFF_LEN];
 
 	struct no_os_gpio_desc *reset_gpio;
 	struct no_os_gpio_desc *int_gpio;
@@ -225,10 +226,10 @@ struct adin1110_init_param {
  * @brief Buffer structure used for frame RX and TX transactions.
  */
 struct adin1110_eth_buff {
+	uint32_t len;
 	uint8_t mac_source[ADIN1110_ETH_ALEN];
 	uint8_t mac_dest[ADIN1110_ETH_ALEN];
 	uint16_t ethertype;
-	uint32_t payload_len;
 	uint8_t *payload;
 };
 
