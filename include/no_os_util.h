@@ -119,6 +119,12 @@
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
+/* Check if bit set */
+inline int no_os_test_bit(int pos, const volatile void * addr)
+{
+	return (((const int *)addr)[pos / 32] >> pos) & 1UL;
+}
+
 /* Find first set bit in word. */
 uint32_t no_os_find_first_set_bit(uint32_t word);
 /* Find last set bit in word. */
