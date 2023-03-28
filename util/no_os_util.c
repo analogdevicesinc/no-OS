@@ -48,6 +48,8 @@
 /************************** Functions Implementation **************************/
 /******************************************************************************/
 
+extern int no_os_test_bit(int pos, const volatile void * addr);
+
 /**
  * Find first set bit in word.
  */
