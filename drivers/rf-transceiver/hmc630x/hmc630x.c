@@ -581,6 +581,17 @@ int hmc630x_set_enable(struct hmc630x_dev *dev, bool enable)
 	uint8_t row;
 
 	if (dev->type == HMC6300) {
+		/* row2 */
+		ret = hmc630x_write(dev, HMC6300_PA_SEP_PA_PWRDWN_FAST, !enable);
+		if (ret)
+			return ret;
+		ret = hmc630x_write(dev, HMC6300_PA_PWRDWN_FAST, !enable);
+		if (ret)
+			return ret;
+		ret = hmc630x_write(dev, HMC6300_POWER_DET_PWRDN, !enable);
+		if (ret)
+			return ret;
+
 		/* row4 */
 		row = no_os_field_prep(HMC630X_MASK(HMC6300_DRIVER_PWRDN), !enable);
 		row |= no_os_field_prep(HMC630X_MASK(HMC6300_UPMIXER_PWRDN), !enable);
@@ -593,28 +604,23 @@ int hmc630x_set_enable(struct hmc630x_dev *dev, bool enable)
 		ret = hmc630x_write_row(dev, HMC630X_ROW(HMC6300_DRIVER_PWRDN), row);
 		if (ret)
 			return ret;
-
-		ret = hmc630x_write(dev, HMC630X_EN_SYNTH_LDO, enable);
 	} else {
 		/* row0 */
-		row = no_os_field_prep(HMC630X_MASK(HMC6301_IFVGA_PWRDN), !enable);
-		row |= no_os_field_prep(HMC630X_MASK(HMC6301_MIXER_PWRDN), !enable);
-		row |= no_os_field_prep(HMC630X_MASK(HMC6301_BBAMP_PWRDN_I), !enable);
-		row |= no_os_field_prep(HMC630X_MASK(HMC6301_TRIPLER_PWRDN), !enable);
-		row |= no_os_field_prep(HMC630X_MASK(HMC6301_LNA_PWRDWN), !enable);
+		row = enable ? 0 : 0xff;
 		ret = hmc630x_write_row(dev, HMC630X_ROW(HMC6301_LNA_PWRDWN), row);
 		if (ret)
 			return ret;
 
 		/* row1 */
 		row = no_os_field_prep(HMC630X_MASK(HMC6301_BBAMP_SELL_ASK), enable);
-		row |= no_os_field_prep(HMC630X_MASK(HMC6301_IFMIX_PWRDN_Q), enable);
+		row |= no_os_field_prep(HMC630X_MASK(HMC6301_IPC_PWRDWN), !enable);
+		row |= no_os_field_prep(HMC630X_MASK(HMC6301_IFMIX_PWRDN_Q), !enable);
 		row |= no_os_field_prep(HMC630X_MASK(HMC6301_ASK_PWRDN), !enable);
 		row |= no_os_field_prep(HMC630X_MASK(HMC6301_IF_BGMUX_PWRDN), !enable);
 		ret = hmc630x_write_row(dev, HMC630X_ROW(HMC6301_BBAMP_SELL_ASK), row);
 	}
 
-	return ret;
+	return hmc630x_write(dev, HMC630X_EN_SYNTH_LDO, enable);
 }
 
 /* Is the chip power on? */
@@ -622,44 +628,50 @@ int hmc630x_get_enable(struct hmc630x_dev *dev, bool *enable)
 {
 	int ret = -EFAULT;
 	uint8_t row, mask;
-	bool ena1, ena2;
+	bool ena1;
+	bool ena2 = true;
 
 	if (dev->type == HMC6300) {
+		/* row2 */
+		mask = no_os_field_prep(HMC630X_MASK(HMC6300_PA_SEP_PA_PWRDWN_FAST), 1);
+		mask = no_os_field_prep(HMC630X_MASK(HMC6300_PA_PWRDWN_FAST), 1);
+		mask = no_os_field_prep(HMC630X_MASK(HMC6300_POWER_DET_PWRDN), 1);
+		ret = hmc630x_read_row(dev, HMC630X_ROW(HMC6300_PA_SEP_PA_PWRDWN_FAST), &row);
+		if (ret)
+			return ret;
+		ena1 = (bool)(row & mask);
+
 		/* row4 */
 		ret = hmc630x_read_row(dev, HMC630X_ROW(HMC6300_DRIVER_PWRDN), &row);
 		if (ret)
 			return ret;
-		ena1 = (bool)row;
-
-		ret = hmc630x_read(dev, HMC630X_EN_SYNTH_LDO, &row);
-		if (ret)
-			return ret;
-		ena2 = (bool)row;
+		ena1 = ena1 && (bool)row;
 	} else {
 		/* row0 */
-		mask = no_os_field_prep(HMC630X_MASK(HMC6301_IFVGA_PWRDN), 1);
-		mask |= no_os_field_prep(HMC630X_MASK(HMC6301_MIXER_PWRDN), 1);
-		mask |= no_os_field_prep(HMC630X_MASK(HMC6301_BBAMP_PWRDN_I), 1);
-		mask |= no_os_field_prep(HMC630X_MASK(HMC6301_TRIPLER_PWRDN), 1);
-		mask |= no_os_field_prep(HMC630X_MASK(HMC6301_LNA_PWRDWN), 1);
 		ret = hmc630x_read_row(dev, HMC630X_ROW(HMC6301_LNA_PWRDWN), &row);
 		if (ret)
 			return ret;
 
-		ena1 = (bool)(row & mask);
+		ena1 = (bool)row;
 
 		/* row1 */
 		mask = no_os_field_prep(HMC630X_MASK(HMC6301_ASK_PWRDN), 1);
 		mask |= no_os_field_prep(HMC630X_MASK(HMC6301_IF_BGMUX_PWRDN), 1);
+		mask |= no_os_field_prep(HMC630X_MASK(HMC6301_IFMIX_PWRDN_Q), 1);
+		mask |= no_os_field_prep(HMC630X_MASK(HMC6301_IPC_PWRDWN), 1);
 		ret = hmc630x_read_row(dev, HMC630X_ROW(HMC6301_BBAMP_SELL_ASK), &row);
 		if (ret)
 			return ret;
 		ena1 = ena1 && (bool)(row & mask);
 
 		mask = no_os_field_prep(HMC630X_MASK(HMC6301_BBAMP_SELL_ASK), 1);
-		mask |= no_os_field_prep(HMC630X_MASK(HMC6301_IFMIX_PWRDN_Q), 1);
 		ena2 = (bool)(row & mask);
 	}
+
+	ret = hmc630x_read(dev, HMC630X_EN_SYNTH_LDO, &row);
+	if (ret)
+		return ret;
+	ena2 = ena2 && (bool)row;
 
 	*enable = !ena1 && ena2;
 	return 0;
