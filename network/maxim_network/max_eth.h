@@ -9,7 +9,7 @@
 #include "tcp_socket.h"
 
 #define MXC_ETH_INTERNAL_BUFF_SIZE			15000
-#define MXC_NETIF_MTU_SIZE				1508
+#define MXC_NETIF_MTU_SIZE				1500
 #define MXC_ETH_MAX_DATA_SIZE				(MXC_NETIF_MTU_SIZE + 14)
 
 #define MAX_SOCKETS	20

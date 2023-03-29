@@ -120,6 +120,8 @@
 #define NO_OS_CONTAINER_OF(ptr, type, field)	((type *)(((char *)(ptr)) - \
 						 offsetof(type, field)))
 
+#define no_os_align(x, align) (((x) + ((typeof(x))(align) - 1)) & ~((typeof(x))(align) - 1))
+
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/

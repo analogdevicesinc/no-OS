@@ -33,7 +33,7 @@
 #include "adin1110.h"
 
 static uint8_t mxc_lwip_internal_buff[MXC_ETH_INTERNAL_BUFF_SIZE];
-static struct no_os_time old_time;;
+static struct no_os_time old_time;
 
 static void max_eth_config_noos_if(struct max_eth_desc *desc);
 
@@ -134,7 +134,6 @@ static struct pbuf *get_recvd_frames(struct max_eth_desc *eth_desc)
 		if (ret)
 			goto out;
 	} while (eth_data_len > 0xF0000);
-
 
 	if (!eth_data_len)
 		goto out;
@@ -278,11 +277,10 @@ free_network_descriptor:
 	return ret;
 }
 
-err_t max_eth_err_callback(void *arg, err_t err)
+void max_eth_err_callback(void *arg, err_t err)
 {
 	int32_t _err = err;
 	printf("Error :? %s\n", lwip_strerr(err));
-	return ERR_OK;
 }
 
 err_t max_eth_recv_callback(void *arg, struct tcp_pcb *tpcb, struct pbuf *p, err_t err)

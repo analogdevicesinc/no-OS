@@ -409,27 +409,22 @@ int adin1110_write_fifo(struct adin1110_desc *desc, uint32_t port,
 
 	frame_len = eth_buff->payload_len + padding + ADIN1110_ETH_HDR_LEN + ADIN1110_FRAME_HEADER_LEN;
 
-	/** Align the frame length to 4 bytes */
-	frame_len = (frame_len + 3) & ~0x03;
-
 	ret = adin1110_reg_read(desc, ADIN1110_TX_SPACE_REG, &tx_space);
 	if (ret)
 		return ret;
 
-	if (frame_len > 2 * (tx_space - 2)) {
-		// ret = adin1110_reg_read(desc, 0x3F, &tx_space);
-		ret = adin1110_reg_write(desc, 0x36, 0x2);
-		// ret = adin1110_reg_read(desc, ADIN1110_TX_SPACE_REG, &tx_space);
+	if (frame_len > 2 * (tx_space - 2))
 		return -EAGAIN;
-	}
 
 	ret = adin1110_reg_write(desc, ADIN1110_TX_FSIZE_REG,
 				 frame_len);
 	if (ret)
 		return ret;
 
-	memset(desc->tx_buff, 0, 1522);
-	memset(desc->rx_buff, 0, 1522);
+	/** Align the frame length to 4 bytes */
+	frame_len = no_os_align(frame_len, 4);
+
+	memset(desc->tx_buff, 0, frame_len + field_offset);
 	no_os_put_unaligned_be16(ADIN1110_TX_REG, &desc->tx_buff[0]);
 	desc->tx_buff[0] |= ADIN1110_SPI_CD | ADIN1110_SPI_RW;
 
@@ -440,9 +435,9 @@ int adin1110_write_fifo(struct adin1110_desc *desc, uint32_t port,
 
 	/* Set the port on which to send the frame */
 	no_os_put_unaligned_be16(port, &desc->tx_buff[field_offset]);
-	field_offset += ADIN1110_FRAME_HEADER_LEN;
 
 	xfer.bytes_number = frame_len + field_offset;
+	field_offset += ADIN1110_FRAME_HEADER_LEN;
 
 	memcpy(&desc->tx_buff[field_offset], eth_buff->mac_dest, ADIN1110_ETH_ALEN);
 	field_offset += ADIN1110_ETH_ALEN;
@@ -453,7 +448,19 @@ int adin1110_write_fifo(struct adin1110_desc *desc, uint32_t port,
 	memcpy(&desc->tx_buff[field_offset], eth_buff->payload,
 	       eth_buff->payload_len + padding);
 
-	return no_os_spi_transfer(desc->comm_desc, &xfer, 1);
+	ret = no_os_spi_transfer(desc->comm_desc, &xfer, 1);
+	if (ret)
+		return ret;
+
+	ret = adin1110_reg_read(desc, 0x8, &tx_space);
+	if (tx_space & NO_OS_BIT(0)) {
+		/* Flush TX FIFO */
+		ret = adin1110_reg_write(desc, 0x36, 0x2);
+		ret = adin1110_reg_write(desc, 0x8, 0x1);
+		return -EAGAIN;
+	}
+
+	return ret;
 }
 
 /**
@@ -498,25 +505,25 @@ int adin1110_read_fifo(struct adin1110_desc *desc, uint32_t port,
 	if (frame_size < ADIN1110_FRAME_HEADER_LEN + ADIN1110_FEC_LEN)
 		return ret;
 
-	memset(desc->tx_buff, 0, 1522);
-	memset(desc->rx_buff, 0, 1522);
+	memset(desc->tx_buff, 0, 2048);
+	memset(desc->rx_buff, 0, 2048);
 	no_os_put_unaligned_be16(fifo_reg, &desc->tx_buff[0]);
 	desc->tx_buff[0] |= ADIN1110_SPI_CD;
 	desc->tx_buff[2] = 0x00;
 
 	if (desc->append_crc) {
 		desc->tx_buff[2] = no_os_crc8(_crc_table, desc->tx_buff, 2, 0);
-		field_offset ++;
+		field_offset++;
 	}
 
 	/* Set the port from which to receive the frame */
 	no_os_put_unaligned_be16(port, &desc->tx_buff[field_offset]);
-	field_offset += ADIN1110_FRAME_HEADER_LEN;
 
 	frame_size = (frame_size + 3) & ~0x3;
 
 	/* Can only read multiples of 4 bytes (the last bytes might be 0) */
 	xfer.bytes_number = frame_size + field_offset;
+	field_offset += ADIN1110_FRAME_HEADER_LEN;
 
 	/** Burst read the whole frame */
 	ret = no_os_spi_transfer(desc->comm_desc, &xfer, 1);
@@ -530,7 +537,7 @@ int adin1110_read_fifo(struct adin1110_desc *desc, uint32_t port,
 	// eth_buff->ethertype = no_os_get_unaligned_be16(&desc->rx_buff[field_offset]);
 	eth_buff->ethertype = no_os_get_unaligned_le16(&desc->rx_buff[field_offset]);
 	field_offset += ADIN1110_ETHERTYPE_LEN;
-	memcpy(eth_buff->payload, &desc->rx_buff[field_offset], frame_size);
+	memcpy(eth_buff->payload, &desc->rx_buff[field_offset], payload_length);
 	eth_buff->payload_len = payload_length;
 
 	return 0;

@@ -46,7 +46,7 @@
 #include "no_os_util.h"
 
 /* The maximum length of an Ethernet frame */
-#define ADIN1110_BUFF_LEN			1522
+#define ADIN1110_BUFF_LEN			2048
 #define ADIN1110_ETH_ALEN			6
 #define ADIN1110_ETHERTYPE_LEN			2
 #define ADIN1110_ETH_HDR_LEN			14
