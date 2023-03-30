@@ -1,7 +1,6 @@
 trigger:
 - main
 - master
-- staging/*
 
 pr:
 - main
