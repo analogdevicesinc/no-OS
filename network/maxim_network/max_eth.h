@@ -8,7 +8,7 @@
 #include "network_interface.h"
 #include "tcp_socket.h"
 
-#define MXC_ETH_INTERNAL_BUFF_SIZE			15000
+#define ADIN1110_LWIP_BUFF_SIZE				1530
 #define MXC_NETIF_MTU_SIZE				1500
 
 #define MAX_SOCKETS	20

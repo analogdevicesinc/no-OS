@@ -81,7 +81,6 @@ int adin1110_reg_write(struct adin1110_desc *desc, uint16_t addr, uint32_t data)
 		.tx_buff = desc->data,
 		.bytes_number = ADIN1110_WR_FRAME_SIZE,
 		.cs_change = 1,
-		.bytes_number = ADIN1110_WR_HDR_SIZE
 	};
 
 	/** The address is 13 bit wide */
@@ -98,10 +97,9 @@ int adin1110_reg_write(struct adin1110_desc *desc, uint16_t addr, uint32_t data)
 	no_os_put_unaligned_be32(data, &desc->data[header_len]);
 	if (desc->append_crc) {
 		desc->data[header_len + ADIN1110_REG_LEN] =
-			no_os_crc8(_crc_table, desc->data[header_len], ADIN1110_REG_LEN, 0);
+			no_os_crc8(_crc_table, &desc->data[header_len], ADIN1110_REG_LEN, 0);
 		xfer.bytes_number++;
 	}
-
 
 	return no_os_spi_transfer(desc->comm_desc, &xfer, 1);
 }
@@ -118,11 +116,10 @@ int adin1110_reg_read(struct adin1110_desc *desc, uint16_t addr, uint32_t *data)
 	uint8_t crc;
 	uint8_t recv_crc;
 	uint32_t header_len = ADIN1110_RD_HEADER_LEN;
-	uint32_t read_len = ADIN1110_REG_LEN;
 	struct no_os_spi_msg xfer = {
 		.tx_buff = desc->data,
 		.rx_buff = desc->data,
-		.bytes_number = read_len,
+		.bytes_number = ADIN1110_REG_LEN,
 		.cs_change = 1,
 	};
 	int ret;
@@ -386,7 +383,6 @@ int adin1110_set_mac_addr(struct adin1110_desc *desc,
 {
 	uint32_t addr_upr;
 	uint32_t addr_lwr;
-	uint32_t reg_val;
 	uint32_t temp;
 	int ret;
 	int i;
@@ -412,7 +408,7 @@ int adin1110_set_mac_addr(struct adin1110_desc *desc,
 			return ret;
 
 		if (temp == 0)
-			break;	
+			break;
 	}
 
 	ret = adin1110_reg_write(desc, ADIN1110_MAC_ADDR_FILT_UPR_REG(i), addr_upr);
@@ -424,11 +420,17 @@ int adin1110_set_mac_addr(struct adin1110_desc *desc,
 	return adin1110_reg_write(desc, ADIN1110_MAC_ADDR_FILT_LWR_REG(i), addr_lwr);
 }
 
-int adin1110_clear_mac_adress(struct adin1110_desc *desc, uint8_t mac_address[ADIN1110_ETH_ALEN])
+/**
+ * @brief Drop a MAC address filter.
+ * @param desc - the device descriptor
+ * @param mac_address - the MAC filter to be cleared
+ * @return 0 in case of success, negative error code otherwise
+ */
+int adin1110_clear_mac_adress(struct adin1110_desc *desc,
+			      uint8_t mac_address[ADIN1110_ETH_ALEN])
 {
 	uint32_t addr_upr;
 	uint32_t addr_lwr;
-	uint32_t reg_val;
 	uint32_t temp;
 	int ret;
 	int i;
@@ -449,7 +451,7 @@ int adin1110_clear_mac_adress(struct adin1110_desc *desc, uint8_t mac_address[AD
 		if (ret)
 			return ret;
 
-		if (addr_upr == temp) {
+		if (addr_lwr == temp) {
 			ret = adin1110_reg_write(desc, ADIN1110_MAC_ADDR_FILT_UPR_REG(i), 0);
 			if (ret)
 				return ret;
@@ -463,6 +465,13 @@ int adin1110_clear_mac_adress(struct adin1110_desc *desc, uint8_t mac_address[AD
 	return 0;
 }
 
+/**
+ * @brief Set/clear a broadcast filter. By enabling this, broadcast frames will
+ * 	be forwarded to the host.
+ * @param desc - the device descriptor
+ * @param enabled - the set/clear option
+ * @return 0 in case of success, negative error code otherwise
+ */
 int adin1110_broadcast_filter(struct adin1110_desc *desc, bool enabled)
 {
 	uint8_t broadcast_addr[ADIN1110_ETH_ALEN];
@@ -488,7 +497,6 @@ int adin1110_write_fifo(struct adin1110_desc *desc, uint32_t port,
 	uint32_t header_len = ADIN1110_WR_HEADER_LEN;
 	uint32_t frame_offset;
 	uint32_t padding = 0;
-	uint32_t frame_len;
 	uint32_t padded_len;
 	uint32_t round_len;
 	uint32_t tx_space;
@@ -502,9 +510,7 @@ int adin1110_write_fifo(struct adin1110_desc *desc, uint32_t port,
 	if (port >= driver_data[desc->chip_type].num_ports)
 		return -EINVAL;
 
-	/*
-	 * The minimum frame length is 64 bytes.
-	 */
+	/* The minimum frame length is 64 bytes */
 	if (eth_buff->len + ADIN1110_FCS_LEN < 64)
 		padding = 64 - (eth_buff->len + ADIN1110_FCS_LEN);
 
@@ -517,14 +523,17 @@ int adin1110_write_fifo(struct adin1110_desc *desc, uint32_t port,
 	if (ret)
 		return ret;
 
-	if (padded_len > 2 * (tx_space - 2))
+	/*
+	 * Check if there is enough space for the frame in the TX FIFO.
+	 * The tx_space value is expressed in 16 bit words.
+	 */
+	if (padded_len > 2 * (tx_space - ADIN1110_FRAME_HEADER_LEN))
 		return -EAGAIN;
 
 	ret = adin1110_reg_write(desc, ADIN1110_TX_FSIZE_REG, padded_len);
 	if (ret)
 		return ret;
 
-	memset(desc->data, 0, 2048);
 	no_os_put_unaligned_be16(ADIN1110_TX_REG, &desc->data[0]);
 	desc->data[0] |= ADIN1110_SPI_CD | ADIN1110_SPI_RW;
 
@@ -534,34 +543,36 @@ int adin1110_write_fifo(struct adin1110_desc *desc, uint32_t port,
 	}
 
 	/* Set the port on which to send the frame */
-	//no_os_put_unaligned_be16(port, &desc->data[header_len]);
+	no_os_put_unaligned_be16(port, &desc->data[header_len]);
 	xfer.bytes_number = round_len + header_len;
-
-	// memcpy(&desc->data[header_len + ADIN1110_FRAME_HEADER_LEN],
-	//        eth_buff->mac_source, ADIN1110_ETH_HDR_LEN);
-	// frame_offset = header_len + ADIN1110_FRAME_HEADER_LEN + ADIN1110_ETH_HDR_LEN;
-
-	// memcpy(&desc->data[frame_offset], eth_buff->payload, eth_buff->len -
-	//        ADIN1110_ETH_HDR_LEN);
-
 	frame_offset = header_len + ADIN1110_FRAME_HEADER_LEN;
-	memcpy(&desc->data[frame_offset], eth_buff->mac_dest, ADIN1110_ETH_ALEN);
-	frame_offset += ADIN1110_ETH_ALEN;
-	memcpy(&desc->data[frame_offset], eth_buff->mac_source, ADIN1110_ETH_ALEN);
-	frame_offset += ADIN1110_ETH_ALEN;
-	no_os_put_unaligned_be16(eth_buff->ethertype, &desc->data[frame_offset]);
-	frame_offset += ADIN1110_ETHERTYPE_LEN;
-	memcpy(&desc->data[frame_offset], eth_buff->payload, eth_buff->len - ADIN1110_ETH_HDR_LEN);
+
+	memcpy(&desc->data[frame_offset], eth_buff->mac_dest, ADIN1110_ETH_HDR_LEN);
+	frame_offset += ADIN1110_ETH_HDR_LEN;
+	memcpy(&desc->data[frame_offset], eth_buff->payload,
+	       eth_buff->len - ADIN1110_ETH_HDR_LEN);
 
 	ret = no_os_spi_transfer(desc->comm_desc, &xfer, 1);
 	if (ret)
 		return ret;
 
-	ret = adin1110_reg_read(desc, 0x8, &tx_space);
-	if (tx_space & NO_OS_BIT(0)) {
+	/*
+	 * Check for TXPE error. This is not usually expected, but has to be handled
+	 * since it may result in FIFO overflow.
+	 */
+	ret = adin1110_reg_read(desc, ADIN1110_STATUS0_REG, &tx_space);
+	if (tx_space & ADIN1110_STATUS0_TXPE_MASK) {
 		/* Flush TX FIFO */
-		ret = adin1110_reg_write(desc, 0x36, 0x2);
-		ret = adin1110_reg_write(desc, 0x8, 0x1);
+		ret = adin1110_reg_write(desc, ADIN1110_FIFO_CLR_REG,
+					 ADIN1110_FIFO_CLR_TX_MASK);
+		if (ret)
+			return ret;
+
+		ret = adin1110_reg_write(desc, ADIN1110_STATUS0_REG,
+					 ADIN1110_STATUS0_TXPE_MASK);
+		if (ret)
+			return ret;
+
 		return -EAGAIN;
 	}
 
@@ -622,8 +633,6 @@ int adin1110_read_fifo(struct adin1110_desc *desc, uint32_t port,
 
 	/* Set the port from which to receive the frame */
 	no_os_put_unaligned_be16(port, &desc->data[field_offset]);
-	field_offset += ADIN1110_FRAME_HEADER_LEN;
-
 	rounded_len = no_os_align(frame_size, 4);
 
 	/* Can only read multiples of 4 bytes (the last bytes might be 0) */
@@ -635,15 +644,11 @@ int adin1110_read_fifo(struct adin1110_desc *desc, uint32_t port,
 	if (ret)
 		return ret;
 
-	memcpy(eth_buff->mac_dest, &desc->data[field_offset], ADIN1110_ETH_ALEN);
-	field_offset += ADIN1110_ETH_ALEN;
-	memcpy(eth_buff->mac_source, &desc->data[field_offset], ADIN1110_ETH_ALEN);
-	field_offset += ADIN1110_ETH_ALEN;
-	// eth_buff->ethertype = no_os_get_unaligned_be16(&desc->data[field_offset]);
-	eth_buff->ethertype = no_os_get_unaligned_be16(&desc->data[field_offset]);
-	field_offset += ADIN1110_ETHERTYPE_LEN;
-	memcpy(eth_buff->payload, &desc->data[field_offset], frame_size - ADIN1110_FRAME_HEADER_LEN - 2);
-	eth_buff->len = frame_size - 2;
+	payload_length = frame_size - ADIN1110_FRAME_HEADER_LEN - ADIN1110_ETH_HDR_LEN;
+	memcpy(eth_buff->mac_dest, &desc->data[field_offset], ADIN1110_ETH_HDR_LEN);
+	field_offset += ADIN1110_ETH_HDR_LEN;
+	memcpy(eth_buff->payload, &desc->data[field_offset], payload_length);
+	eth_buff->len = frame_size - ADIN1110_FRAME_HEADER_LEN;
 
 	return 0;
 }
@@ -752,6 +757,12 @@ int adin1110_sw_reset(struct adin1110_desc *desc)
 	return adin1110_reg_write(desc, ADIN1110_RESET_REG, 0x1);
 }
 
+/**
+ * @brief Reset both the MAC and PHY.
+ * @param desc - the device descriptor
+ * @param state - status (up/down) of the link
+ * @return 0 in case of success, negative error code otherwise
+ */
 int adin1110_link_state(struct adin1110_desc *desc, uint32_t *state)
 {
 	int ret;
@@ -845,7 +856,8 @@ static int adin1110_setup_mac(struct adin1110_desc *desc)
 	if (ret)
 		return ret;
 
-	reg_val = ADIN1110_TX_RDY_IRQ | ADIN1110_RX_RDY_IRQ | ADIN1110_SPI_ERR_IRQ | NO_OS_BIT(1);
+	reg_val = ADIN1110_TX_RDY_IRQ | ADIN1110_RX_RDY_IRQ | ADIN1110_SPI_ERR_IRQ |
+		  NO_OS_BIT(1);
 	if (desc->chip_type == ADIN2111)
 		reg_val |= ADIN2111_RX_RDY_IRQ;
 
@@ -853,10 +865,7 @@ static int adin1110_setup_mac(struct adin1110_desc *desc)
 	if (ret)
 		return ret;
 
-	if (desc->mac_address)
-		ret = adin1110_set_mac_addr(desc, desc->mac_address);
-
-	return ret;
+	return adin1110_set_mac_addr(desc, desc->mac_address);
 }
 
 /**
@@ -929,10 +938,6 @@ int adin1110_init(struct adin1110_desc **desc,
 	ret = adin1110_check_reset(descriptor);
 	if (ret)
 		goto free_int_gpio;
-
-	ret = adin1110_reg_write(descriptor, 0x3E, 0x77);
-	if (ret)
-		return ret;
 
 	*desc = descriptor;
 

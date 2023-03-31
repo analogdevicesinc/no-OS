@@ -45,8 +45,7 @@
 #include "no_os_gpio.h"
 #include "no_os_util.h"
 
-/* The maximum length of an Ethernet frame */
-#define ADIN1110_BUFF_LEN			2048
+#define ADIN1110_BUFF_LEN			1530
 #define ADIN1110_ETH_ALEN			6
 #define ADIN1110_ETHERTYPE_LEN			2
 #define ADIN1110_ETH_HDR_LEN			14
@@ -92,6 +91,7 @@
 #define ADIN1110_FWD_UNK2HOST_MASK		NO_OS_BIT(2)
 
 #define ADIN1110_STATUS0_REG			0x08
+#define ADIN1110_STATUS0_TXPE_MASK		NO_OS_BIT(0)
 #define ADIN1110_RESETC_MASK			NO_OS_BIT(6)
 
 #define ADIN1110_STATUS1_REG			0x09
@@ -129,6 +129,10 @@
 #define ADIN1110_TX_REG				0x31
 #define ADIN1110_TX_SPACE_REG			0x32
 
+#define ADIN1110_FIFO_CLR_REG			0x36
+#define ADIN1110_FIFO_CLR_RX_MASK		NO_OS_BIT(0)
+#define ADIN1110_FIFO_CLR_TX_MASK		NO_OS_BIT(1)
+
 #define ADIN1110_MAC_RST_STATUS_REG		0x3B
 
 #define ADIN2111_MAC_ADDR_APPLY2PORT2		NO_OS_BIT(31)
@@ -144,8 +148,6 @@
 
 #define ADIN1110_MAC_ADDR_MASK_UPR_REG		0x70
 #define ADIN1110_MAC_ADDR_MASK_LWR_REG		0x71
-#define ADIN1110_MAC_P1_ADDR_SLOT		2
-#define ADIN2111_MAC_P2_ADDR_SLOT		3
 
 #define ADIN1110_RX_FRM_CNT_REG			0xA0
 #define ADIN1110_RX_CRC_ERR_CNT_REG		0xA4
@@ -227,9 +229,9 @@ struct adin1110_init_param {
  */
 struct adin1110_eth_buff {
 	uint32_t len;
-	uint8_t mac_source[ADIN1110_ETH_ALEN];
 	uint8_t mac_dest[ADIN1110_ETH_ALEN];
-	uint16_t ethertype;
+	uint8_t mac_source[ADIN1110_ETH_ALEN];
+	uint8_t ethertype[2];
 	uint8_t *payload;
 };
 
@@ -273,9 +275,14 @@ int adin1110_link_state(struct adin1110_desc *, uint32_t *);
 /* Set a port in promiscuous mode. All MAC filters are dropped */
 int adin1110_set_promisc(struct adin1110_desc *, uint32_t, bool);
 
+/*
+ * Set a MAC filter. The frames with destination MAC addresses matching this will be
+ * forwarded to the host.
+ */
 int adin1110_set_mac_addr(struct adin1110_desc *desc,
 			  uint8_t mac_address[ADIN1110_ETH_ALEN]);
 
+/* Enable/disable the forwarding (to host) of broadcast frames */
 int adin1110_broadcast_filter(struct adin1110_desc *, bool);
 
 /* Reset the MAC device */

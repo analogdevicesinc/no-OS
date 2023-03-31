@@ -32,8 +32,7 @@
 
 #include "adin1110.h"
 
-static uint8_t mxc_lwip_internal_buff[MXC_ETH_INTERNAL_BUFF_SIZE];
-static struct no_os_time old_time;
+static uint8_t lwip_buff[ADIN1110_LWIP_BUFF_SIZE];
 
 static void max_eth_config_noos_if(struct max_eth_desc *desc);
 
@@ -75,7 +74,7 @@ static err_t mxc_eth_netif_output(struct netif *netif, struct pbuf *p)
 {
 	struct max_eth_desc *eth_desc;
 	struct adin1110_desc *mac_desc;
-        struct adin1110_eth_buff buff;
+	struct adin1110_eth_buff buff;
 	uint32_t frame_len;
 	int ret;
 
@@ -83,19 +82,16 @@ static err_t mxc_eth_netif_output(struct netif *netif, struct pbuf *p)
 	mac_desc = eth_desc->mac_desc;
 
 	LINK_STATS_INC(link.xmit);
-	frame_len = pbuf_copy_partial(p, mxc_lwip_internal_buff, p->tot_len, 0);
+	frame_len = pbuf_copy_partial(p, lwip_buff, p->tot_len, 0);
 
-	memcpy(&buff.mac_dest, &mxc_lwip_internal_buff[0], 6);
-	memcpy(&buff.mac_source, &mxc_lwip_internal_buff[6], 6);
-	buff.ethertype = no_os_get_unaligned_be16(&mxc_lwip_internal_buff[12]);
+	memcpy(&buff.mac_dest, lwip_buff, ADIN1110_ETH_HDR_LEN);
 
-	buff.len = p->tot_len;
-	buff.payload = &mxc_lwip_internal_buff[14];
+	buff.len = frame_len;
+	buff.payload = &lwip_buff[ADIN1110_ETH_HDR_LEN];
 
+	/* The TX FIFO might be full, so retry. */
 	do {
 		ret = adin1110_write_fifo(mac_desc, 0, &buff);
-		if (ret == -EAGAIN)
-			printf("Overflow??");
 	} while (ret == -EAGAIN);
 
 	return ret;
@@ -104,7 +100,8 @@ static err_t mxc_eth_netif_output(struct netif *netif, struct pbuf *p)
 static err_t max_eth_netif_init(struct netif *netif)
 {
 	unsigned char hwaddr[MAC_LEN] = {MAC_BYTE1, MAC_BYTE2, MAC_BYTE3,
-					 MAC_BYTE4, MAC_BYTE5, MAC_BYTE6};
+					 MAC_BYTE4, MAC_BYTE5, MAC_BYTE6
+					};
 
 	netif->linkoutput = mxc_eth_netif_output;
 	netif->output = etharp_output;
@@ -127,7 +124,7 @@ static struct pbuf *get_recvd_frames(struct max_eth_desc *eth_desc)
 	int ret;
 
 	mac_desc = eth_desc->mac_desc;
-	mac_buff.payload = &mxc_lwip_internal_buff[14];
+	mac_buff.payload = &lwip_buff[ADIN1110_ETH_HDR_LEN];
 
 	ret = adin1110_reg_read(mac_desc, ADIN1110_RX_FRM_CNT_REG, &frame_cnt);
 	if (ret)
@@ -140,15 +137,10 @@ static struct pbuf *get_recvd_frames(struct max_eth_desc *eth_desc)
 	if (ret)
 		goto out;
 
-	memcpy(mxc_lwip_internal_buff, mac_buff.mac_dest, 6);
-	offset += 6;
-	memcpy(mxc_lwip_internal_buff + offset, mac_buff.mac_source, 6);
-	offset += 6;
-	memcpy(mxc_lwip_internal_buff + offset, &mac_buff.ethertype, 2);
-	offset += 2;
+	memcpy(lwip_buff, mac_buff.mac_dest, ADIN1110_ETH_HDR_LEN);
 	p = pbuf_alloc(PBUF_RAW, mac_buff.len, PBUF_POOL);
 	if (p != NULL)
-		pbuf_take(p, mxc_lwip_internal_buff, mac_buff.len);
+		pbuf_take(p, lwip_buff, mac_buff.len);
 
 out:
 	return p;
@@ -159,14 +151,8 @@ int max_lwip_tick(void *data)
 	struct max_eth_desc *eth_desc = data;
 	struct adin1110_desc *mac_desc;
 	struct netif *netif_desc;
-	struct no_os_time time;
-	uint32_t link_status;
-	int32_t ms_diff;
 	struct pbuf *p;
-	char *addr;
- 	int result;
 	int ret = 0;
-	static int tst = 0;
 
 	netif_desc = eth_desc->lwip_netif;
 	mac_desc = eth_desc->mac_desc;
@@ -182,17 +168,6 @@ int max_lwip_tick(void *data)
 			}
 		}
 	} while(p);
-
-	// time = no_os_get_time();
-	// ms_diff = (time.s - old_time.s) * 1000 + (abs((int)time.us - (int)old_time.us)) / 1000;
-	// if (ms_diff >= 250) {
-	// 	// ret = adin1110_reg_read(mac_desc, 0xAC, &link_status);
-	// 	// if (link_status)
-	// 	// 	printf("Dropped");
-	// 	old_time = time;
-	// 	/* sys_check_timeouts calls this */
-	// 	// tcp_tmr();
-	// }
 
 	sys_check_timeouts();
 
@@ -239,7 +214,8 @@ int max_eth_init(struct netif **netif_desc, struct max_eth_param *param)
 	ip4_addr_set_zero(&netmask);
 	ip4_addr_set_zero(&gw);
 
-	netif_add(netif_descriptor, &ipaddr, &netmask, &gw, NULL, max_eth_netif_init, ethernet_input);
+	netif_add(netif_descriptor, &ipaddr, &netmask, &gw, NULL, max_eth_netif_init,
+		  ethernet_input);
 	descriptor->lwip_netif = netif_descriptor;
 	netif_descriptor->state = descriptor;
 
@@ -284,7 +260,8 @@ void max_eth_err_callback(void *arg, err_t err)
 	printf("Error :? %s\n", lwip_strerr(err));
 }
 
-err_t max_eth_recv_callback(void *arg, struct tcp_pcb *tpcb, struct pbuf *p, err_t err)
+err_t max_eth_recv_callback(void *arg, struct tcp_pcb *tpcb, struct pbuf *p,
+			    err_t err)
 {
 	struct socket_desc *sock = arg;
 
@@ -318,7 +295,8 @@ static void max_eth_config_socket(struct socket_desc *socket)
 	tcp_err(socket->pcb, max_eth_err_callback);
 }
 
-static int32_t max_socket_open(void *net, uint32_t sock_id, enum socket_protocol proto,
+static int32_t max_socket_open(void *net, uint32_t sock_id,
+			       enum socket_protocol proto,
 			       uint32_t buff_size)
 {
 	struct max_eth_desc *desc = net;
@@ -369,7 +347,7 @@ static int32_t max_socket_close(void *net, uint32_t sock_id)
 		pbuf_free(sock->p);
 	}
 
-	/* 
+	/*
 	 * This may fail if there is not enough memory for the RST pbuf.
 	 * In such case retry.
 	 */
@@ -439,7 +417,8 @@ static int32_t max_socket_send(void *net, uint32_t sock_id, const void *data,
 	return size;
 }
 
-static int32_t max_socket_recv(void *net, uint32_t sock_id, void *data, uint32_t size)
+static int32_t max_socket_recv(void *net, uint32_t sock_id, void *data,
+			       uint32_t size)
 {
 	struct max_eth_desc *desc = net;
 	struct socket_desc *sock;
@@ -527,7 +506,8 @@ static int32_t max_socket_listen(void *net, uint32_t sock_id, uint32_t back_log)
 	return 0;
 }
 
-static err_t max_eth_accept_callback(void *arg, struct tcp_pcb *new_pcb, err_t err)
+static err_t max_eth_accept_callback(void *arg, struct tcp_pcb *new_pcb,
+				     err_t err)
 {
 	int32_t ret;
 	uint32_t id;
@@ -557,7 +537,8 @@ static err_t max_eth_accept_callback(void *arg, struct tcp_pcb *new_pcb, err_t e
 	return 0;
 }
 
-static int32_t max_socket_accept(void *net, uint32_t sock_id, uint32_t *client_socket_id)
+static int32_t max_socket_accept(void *net, uint32_t sock_id,
+				 uint32_t *client_socket_id)
 {
 	struct max_eth_desc *desc = net;
 	struct socket_desc *serv_sock;
@@ -594,7 +575,8 @@ static int32_t max_socket_sendto(void *net, uint32_t sock_id, const void *data,
 	return -ENOENT;
 }
 
-static int32_t max_socket_recvfrom(void *net, uint32_t sock_id, void *data, uint32_t size,
+static int32_t max_socket_recvfrom(void *net, uint32_t sock_id, void *data,
+				   uint32_t size,
 				   struct socket_address *from)
 {
 	return -ENOENT;
