@@ -63,7 +63,7 @@ struct max_gpio_init_param reset_gpio_extra = {
 
 const struct no_os_spi_init_param adin1110_spi_ip = {
 	.device_id = 2,
-	.max_speed_hz = 15000000,
+	.max_speed_hz = 30000000,
 	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
 	.mode = NO_OS_SPI_MODE_0,
 	.platform_ops = &max_spi_ops,

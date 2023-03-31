@@ -64,7 +64,7 @@ int main()
 
 	ret = no_os_init();
 	if (ret)
-		return ret;
+	return ret;
 
 #ifdef DUMMY_EXAMPLE
 	struct no_os_uart_desc *uart_desc;

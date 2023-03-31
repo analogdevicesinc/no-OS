@@ -352,27 +352,98 @@ int adin1110_mdio_read_c45(struct adin1110_desc *desc, uint32_t phy_id,
  * @param mac_address - the MAC filter to be set
  * @return 0 in case of success, negative error code otherwise
  */
-int adin1110_mac_addr_set(struct adin1110_desc *desc,
+int adin1110_set_mac_addr(struct adin1110_desc *desc,
 			  uint8_t mac_address[ADIN1110_ETH_ALEN])
 {
+	uint32_t addr_upr;
+	uint32_t addr_lwr;
 	uint32_t reg_val;
+	uint32_t temp;
 	int ret;
+	int i;
 
-	reg_val = no_os_get_unaligned_be16(&mac_address[0]);
+	addr_upr = no_os_get_unaligned_be16(&mac_address[0]);
 
 	/* Forward frames from both ports to the host */
-	reg_val |= ADIN1110_MAC_ADDR_APPLY2PORT | ADIN1110_MAC_ADDR_TO_HOST;
+	addr_upr |= ADIN1110_MAC_ADDR_APPLY2PORT | ADIN1110_MAC_ADDR_TO_HOST;
 	if (desc->chip_type == ADIN2111)
-		reg_val |= ADIN2111_MAC_ADDR_APPLY2PORT2;
+		addr_upr |= ADIN2111_MAC_ADDR_APPLY2PORT2;
 
-	ret = adin1110_reg_update(desc, ADIN1110_MAC_ADDR_FILTER_UPR_REG,
-				  NO_OS_GENMASK(31, 0), reg_val);
+	/* Look for a free slot. */
+	for (i = 0; i < ADIN1110_ADDR_FILT_LEN; i++) {
+		ret = adin1110_reg_read(desc, ADIN1110_MAC_ADDR_FILT_UPR_REG(i), &temp);
+		if (ret)
+			return ret;
+
+		if (temp != 0)
+			continue;
+
+		ret = adin1110_reg_read(desc, ADIN1110_MAC_ADDR_FILT_LWR_REG(i), &temp);
+		if (ret)
+			return ret;
+
+		if (temp == 0)
+			break;	
+	}
+
+	ret = adin1110_reg_write(desc, ADIN1110_MAC_ADDR_FILT_UPR_REG(i), addr_upr);
 	if (ret)
 		return ret;
 
-	reg_val = no_os_get_unaligned_be32(&mac_address[2]);
+	addr_lwr = no_os_get_unaligned_be32(&mac_address[2]);
 
-	return adin1110_reg_write(desc, ADIN1110_MAC_ADDR_FILTER_LWR_REG, reg_val);
+	return adin1110_reg_write(desc, ADIN1110_MAC_ADDR_FILT_LWR_REG(i), addr_lwr);
+}
+
+int adin1110_clear_mac_adress(struct adin1110_desc *desc, uint8_t mac_address[ADIN1110_ETH_ALEN])
+{
+	uint32_t addr_upr;
+	uint32_t addr_lwr;
+	uint32_t reg_val;
+	uint32_t temp;
+	int ret;
+	int i;
+
+	addr_upr = no_os_get_unaligned_be16(&mac_address[0]);
+	addr_lwr = no_os_get_unaligned_be32(&mac_address[2]);
+
+	for (i = 0; i < ADIN1110_ADDR_FILT_LEN; i++) {
+		ret = adin1110_reg_read(desc, ADIN1110_MAC_ADDR_FILT_UPR_REG(i), &temp);
+		if (ret)
+			return ret;
+
+		temp &= ADIN1110_MAC_ADDR_UPR_MASK;
+		if (addr_upr != temp)
+			continue;
+
+		ret = adin1110_reg_read(desc, ADIN1110_MAC_ADDR_FILT_LWR_REG(i), &temp);
+		if (ret)
+			return ret;
+
+		if (addr_upr == temp) {
+			ret = adin1110_reg_write(desc, ADIN1110_MAC_ADDR_FILT_UPR_REG(i), 0);
+			if (ret)
+				return ret;
+
+			ret = adin1110_reg_write(desc, ADIN1110_MAC_ADDR_FILT_LWR_REG(i), 0);
+			if (ret)
+				return ret;
+		}
+	}
+
+	return 0;
+}
+
+int adin1110_broadcast_filter(struct adin1110_desc *desc, bool enabled)
+{
+	uint8_t broadcast_addr[ADIN1110_ETH_ALEN];
+
+	memset(broadcast_addr, 0xFF, ADIN1110_ETH_ALEN);
+
+	if (enabled)
+		return adin1110_set_mac_addr(desc, broadcast_addr);
+
+	return adin1110_set_mac_addr(desc, broadcast_addr);
 }
 
 /**
@@ -424,7 +495,7 @@ int adin1110_write_fifo(struct adin1110_desc *desc, uint32_t port,
 	/** Align the frame length to 4 bytes */
 	frame_len = no_os_align(frame_len, 4);
 
-	memset(desc->tx_buff, 0, frame_len + field_offset);
+	//memset(desc->tx_buff, 0, frame_len + field_offset);
 	no_os_put_unaligned_be16(ADIN1110_TX_REG, &desc->tx_buff[0]);
 	desc->tx_buff[0] |= ADIN1110_SPI_CD | ADIN1110_SPI_RW;
 
@@ -503,10 +574,8 @@ int adin1110_read_fifo(struct adin1110_desc *desc, uint32_t port,
 
 	payload_length = frame_size - ADIN1110_FRAME_HEADER_LEN - ADIN1110_ETH_HDR_LEN;
 	if (frame_size < ADIN1110_FRAME_HEADER_LEN + ADIN1110_FEC_LEN)
-		return ret;
+		return -ESTRPIPE;
 
-	memset(desc->tx_buff, 0, 2048);
-	memset(desc->rx_buff, 0, 2048);
 	no_os_put_unaligned_be16(fifo_reg, &desc->tx_buff[0]);
 	desc->tx_buff[0] |= ADIN1110_SPI_CD;
 	desc->tx_buff[2] = 0x00;
@@ -752,7 +821,7 @@ static int adin1110_setup_mac(struct adin1110_desc *desc)
 	if (ret)
 		return ret;
 
-	return adin1110_mac_addr_set(desc, desc->mac_address);
+	return adin1110_set_mac_addr(desc, desc->mac_address);
 }
 
 /**

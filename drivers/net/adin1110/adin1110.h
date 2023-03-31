@@ -50,6 +50,7 @@
 #define ADIN1110_ETH_ALEN			6
 #define ADIN1110_ETHERTYPE_LEN			2
 #define ADIN1110_ETH_HDR_LEN			14
+#define ADIN1110_ADDR_FILT_LEN			16
 
 #define ADIN1110_FCS_LEN			4
 #define ADIN1110_MAC_LEN			6
@@ -133,8 +134,11 @@
 #define ADIN2111_MAC_ADDR_TO_OTHER_PORT		NO_OS_BIT(17)
 #define ADIN1110_MAC_ADDR_TO_HOST		NO_OS_BIT(16)
 
-#define ADIN1110_MAC_ADDR_FILTER_UPR_REG	0x50
-#define ADIN1110_MAC_ADDR_FILTER_LWR_REG	0x51
+#define ADIN1110_MAC_ADDR_FILT_UPR_REG(x)	(0x50 + 2 * (x))
+#define ADIN1110_MAC_ADDR_FILT_LWR_REG(x)	(0x51 + 2 * (x))
+
+#define ADIN1110_MAC_ADDR_UPR_MASK		NO_OS_GENMASK(15, 0)
+#define ADIN1110_MAC_ADDR_LWR_MASK		NO_OS_GENMASK(31, 0)
 
 #define ADIN1110_MAC_ADDR_MASK_UPR_REG		0x70
 #define ADIN1110_MAC_ADDR_MASK_LWR_REG		0x71
@@ -229,7 +233,7 @@ struct adin1110_eth_buff {
 };
 
 /* Reset both the MAC and PHY. */
-int adin1110_sw_reset(struct adin1110_desc *desc);
+int adin1110_sw_reset(struct adin1110_desc *);
 
 /* Write a PHY register using clause 45 */
 int adin1110_mdio_write_c45(struct adin1110_desc *, uint32_t, uint32_t,
@@ -268,8 +272,10 @@ int adin1110_link_state(struct adin1110_desc *, uint32_t *);
 /* Set a port in promiscuous mode. All MAC filters are dropped */
 int adin1110_set_promisc(struct adin1110_desc *, uint32_t, bool);
 
-int adin1110_mac_addr_set(struct adin1110_desc *desc,
+int adin1110_set_mac_addr(struct adin1110_desc *desc,
 			  uint8_t mac_address[ADIN1110_ETH_ALEN]);
+
+int adin1110_broadcast_filter(struct adin1110_desc *, bool);
 
 /* Reset the MAC device */
 int adin1110_mac_reset(struct adin1110_desc *);

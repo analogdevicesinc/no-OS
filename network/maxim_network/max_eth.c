@@ -246,7 +246,11 @@ int max_eth_init(struct netif **netif_desc, struct max_eth_param *param)
 	descriptor->lwip_netif = netif_descriptor;
 	netif_descriptor->state = descriptor;
 
-	ret = adin1110_mac_addr_set(descriptor->mac_desc, netif_descriptor->hwaddr);
+	ret = adin1110_set_mac_addr(descriptor->mac_desc, netif_descriptor->hwaddr);
+	if (ret)
+		goto free_descriptor;
+
+	ret = adin1110_broadcast_filter(descriptor->mac_desc, true);
 	if (ret)
 		goto free_descriptor;
 
