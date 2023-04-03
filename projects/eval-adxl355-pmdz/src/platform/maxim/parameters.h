@@ -66,6 +66,9 @@
 #if (TARGET_NUM == 78000)
 #define SPI_DEVICE_ID   1
 #define SPI_CS          1
+#elif (TARGET_NUM == 32650)
+#define SPI_DEVICE_ID   1
+#define SPI_CS          0
 #else
 #define SPI_DEVICE_ID   0
 #define SPI_CS          0
