@@ -14,8 +14,10 @@ struct mwc_iio_dev {
 	struct no_os_gpio_desc *reset_gpio;
 	bool tx_autotuning;
 	unsigned int tx_target;
+	unsigned int tx_tolerance;
 	bool rx_autotuning;
 	unsigned int rx_target;
+	unsigned int rx_tolerance;
 	bool tx_auto_ifvga;
 	bool rx_auto_ifvga_rflna;
 	bool hbtx;
@@ -27,8 +29,10 @@ struct mwc_iio_init_param {
 	struct no_os_gpio_init_param *reset_gpio_ip;
 	bool tx_autotuning;
 	unsigned int tx_target;
+	unsigned int tx_tolerance;
 	bool rx_autotuning;
 	unsigned int rx_target;
+	unsigned int rx_tolerance;
 	bool tx_auto_ifvga;
 	bool rx_auto_ifvga_rflna;
 	bool hbtx;
@@ -37,8 +41,10 @@ struct mwc_iio_init_param {
 enum mwc_iio_attr_id {
 	MWC_IIO_ATTR_TX_AUTOTUNING,
 	MWC_IIO_ATTR_TX_TARGET,
+	MWC_IIO_ATTR_TX_TOLERANCE,
 	MWC_IIO_ATTR_RX_AUTOTUNING,
 	MWC_IIO_ATTR_RX_TARGET,
+	MWC_IIO_ATTR_RX_TOLERANCE,
 	MWC_IIO_ATTR_TX_AUTO_IFVGA,
 	MWC_IIO_ATTR_RX_AUTO_IFVGA_RFLNA,
 	MWC_IIO_ATTR_RESET,

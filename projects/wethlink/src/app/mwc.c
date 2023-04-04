@@ -10,6 +10,7 @@
 #include "no_os_util.h"
 #include "adc.h"
 #include "mxc_sys.h"
+#include "led.h"
 
 struct mwc_temp_if_correlation {
 	uint8_t ifreq;
@@ -155,11 +156,22 @@ int mwc_algorithms(struct mwc_iio_dev *mwc)
 
 			prev_attn = attn;
 
-			if (match_count == 10 || iter_count == 20)
+			if (match_count == 10 || iter_count == 20) {
 				done = true;
+				led_tx_det_green(false);
+				led_tx_det_red(false);
+				if (abs((int)mV - (int)mwc->tx_target) <= mwc->tx_tolerance)
+					led_tx_det_green(true);
+				else
+					led_tx_det_red(true);
+			}
 
 			iter_count++;
 		}
+	}
+	else {
+		led_tx_det_green(false);
+		led_tx_det_red(false);
 	}
 
 	if (mwc->rx_autotuning) {
@@ -245,11 +257,17 @@ static int mwc_iio_read_attr(void *device, char *buf,
 	case MWC_IIO_ATTR_TX_TARGET:
 		val = iiodev->tx_target;
 		break;
+	case MWC_IIO_ATTR_TX_TOLERANCE:
+		val = iiodev->tx_tolerance;
+		break;
 	case MWC_IIO_ATTR_RX_AUTOTUNING:
 		val = iiodev->rx_autotuning;
 		break;
 	case MWC_IIO_ATTR_RX_TARGET:
 		val = iiodev->rx_target;
+		break;
+	case MWC_IIO_ATTR_RX_TOLERANCE:
+		val = iiodev->rx_tolerance;
 		break;
 	case MWC_IIO_ATTR_TX_AUTO_IFVGA:
 		val = iiodev->tx_auto_ifvga;
@@ -283,11 +301,17 @@ static int mwc_iio_write_attr(void *device, char *buf,
 	case MWC_IIO_ATTR_TX_TARGET:
 		iiodev->tx_target = val;
 		break;
+	case MWC_IIO_ATTR_TX_TOLERANCE:
+		iiodev->tx_tolerance = val;
+		break;
 	case MWC_IIO_ATTR_RX_AUTOTUNING:
 		iiodev->rx_autotuning = (bool)val;
 		break;
 	case MWC_IIO_ATTR_RX_TARGET:
 		iiodev->rx_target = val;
+		break;
+	case MWC_IIO_ATTR_RX_TOLERANCE:
+		iiodev->rx_tolerance = val;
 		break;
 	case MWC_IIO_ATTR_TX_AUTO_IFVGA:
 		iiodev->tx_auto_ifvga = (bool)val;
@@ -416,6 +440,12 @@ static struct iio_attribute mwc_iio_attrs[] = {
 		.store = mwc_iio_write_attr,
 	},
 	{
+		.name = "tx_tolerance",
+		.priv = MWC_IIO_ATTR_TX_TOLERANCE,
+		.show = mwc_iio_read_attr,
+		.store = mwc_iio_write_attr,
+	},
+	{
 		.name = "rx_autotuning",
 		.priv = MWC_IIO_ATTR_RX_AUTOTUNING,
 		.show = mwc_iio_read_attr,
@@ -424,6 +454,12 @@ static struct iio_attribute mwc_iio_attrs[] = {
 	{
 		.name = "rx_target",
 		.priv = MWC_IIO_ATTR_RX_TARGET,
+		.show = mwc_iio_read_attr,
+		.store = mwc_iio_write_attr,
+	},
+	{
+		.name = "rx_tolerance",
+		.priv = MWC_IIO_ATTR_RX_TOLERANCE,
 		.show = mwc_iio_read_attr,
 		.store = mwc_iio_write_attr,
 	},
@@ -472,8 +508,10 @@ int mwc_iio_init(struct mwc_iio_dev **iiodev,
 	d->iio_dev = d2;
 	d->tx_autotuning = init_param->tx_autotuning;
 	d->tx_target = init_param->tx_target;
+	d->tx_tolerance = init_param->tx_tolerance;
 	d->rx_autotuning = init_param->rx_autotuning;
 	d->rx_target = init_param->rx_target;
+	d->rx_tolerance = init_param->rx_tolerance;
 	d->tx_auto_ifvga = init_param->tx_auto_ifvga;
 	d->rx_auto_ifvga_rflna = init_param->rx_auto_ifvga_rflna;
 	d->hbtx = init_param->hbtx;
