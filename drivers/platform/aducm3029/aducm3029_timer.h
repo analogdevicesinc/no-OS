@@ -99,6 +99,6 @@ struct aducm_timer_init_param {
 /**
  * @brief aducm3029 specific timer platform ops structure
  */
-extern const struct no_os_timer_platform_ops aducm3029_timer_ops;
+extern const struct no_os_timer_platform_ops aducm_timer_ops;
 
 #endif /* ADUCM3029_TIMER_H */

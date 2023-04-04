@@ -82,7 +82,7 @@ static uint32_t initialize_timer(struct no_os_timer_desc **timer,
 	param.id = 0;
 	param.freq_hz = is_us ? 1000000u : 1000u;
 	param.ticks_count = 0;
-	param.platform_ops = &aducm3029_timer_ops;
+	param.platform_ops = &aducm_timer_ops;
 
 	if (is_us) {
 		if (0 != no_os_timer_init(&dummy_timer, &param))
