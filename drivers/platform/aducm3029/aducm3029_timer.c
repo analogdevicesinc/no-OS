@@ -437,7 +437,7 @@ int32_t aducm3029_timer_get_elapsed_time_nsec(struct no_os_timer_desc *desc,
 /**
  * @brief aducm3029 platform specific timer platform ops structure
  */
-const struct no_os_timer_platform_ops aducm3029_timer_ops = {
+const struct no_os_timer_platform_ops aducm_timer_ops = {
 	.init = &aducm3029_timer_init,
 	.start = &aducm3029_timer_start,
 	.stop = &aducm3029_timer_stop,

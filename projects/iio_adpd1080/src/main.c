@@ -81,7 +81,7 @@ static int32_t adpd1080pmod_32k_calib(struct adpd188_dev *adpd1080_dev)
 		.id = 0,
 		.ticks_count = 0,
 		.freq_hz = 1,
-		.platform_ops = &aducm3029_timer_ops,
+		.platform_ops = &aducm_timer_ops,
 		.extra = NULL
 	};
 	struct no_os_gpio_desc *sync_gpio;
