@@ -173,6 +173,17 @@ int main(void)
 	if (ret)
 		goto end;
 
+	// admv9615 specific initializations
+	ret = hmc630x_write(iio_tx->dev, HMC6300_PA_SEL_VREF, 0x8);
+	if (ret)
+		goto end;
+	ret = hmc630x_write(iio_tx->dev, HMC6300_PA_PWRDWN_FAST, 0);
+	if (ret)
+		goto end;
+	ret = hmc630x_write(iio_tx->dev, HMC6300_PA_SE_SEL, 0);
+	if (ret)
+		goto end;
+
 	struct hmc630x_iio_dev *iio_rx;
 	struct hmc630x_init_param rxip = {0};
 	rxip.type = HMC6301;
