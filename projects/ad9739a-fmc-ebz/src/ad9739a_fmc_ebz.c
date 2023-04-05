@@ -51,6 +51,7 @@
 #include "ad9739a.h"
 #include "adf4350.h"
 #include "parameters.h"
+#include "app_config.h"
 #include "xilinx_spi.h"
 #include "no_os_error.h"
 
