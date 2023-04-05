@@ -35,6 +35,7 @@ SRCS +=	$(PLATFORM_DRIVERS)/xilinx_axi_io.c \
 	$(PLATFORM_DRIVERS)/xilinx_spi.c \
 	$(PLATFORM_DRIVERS)/xilinx_delay.c
 INCS += $(PROJECT)/src/parameters.h \
+	$(PROJECT)/src/app_config.h \
 	$(DRIVERS)/frequency/adf4350/adf4350.h \
 	$(DRIVERS)/dac/ad9739a/ad9739a.h \
 	$(DRIVERS)/axi_core/axi_dac_core/axi_dac_core.h \
