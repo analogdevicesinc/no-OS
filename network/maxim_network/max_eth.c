@@ -89,10 +89,13 @@ static err_t mxc_eth_netif_output(struct netif *netif, struct pbuf *p)
 	buff.len = frame_len;
 	buff.payload = &lwip_buff[ADIN1110_ETH_HDR_LEN];
 
+	MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 15, 1 << 15);
+
 	/* The TX FIFO might be full, so retry. */
 	do {
 		ret = adin1110_write_fifo(mac_desc, 0, &buff);
 	} while (ret == -EAGAIN);
+	MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 15, 0);
 
 	return ret;
 }
@@ -126,6 +129,7 @@ static struct pbuf *get_recvd_frames(struct max_eth_desc *eth_desc)
 	mac_desc = eth_desc->mac_desc;
 	mac_buff.payload = &lwip_buff[ADIN1110_ETH_HDR_LEN];
 
+	//__disable_irq();
 	do {
 		ret = adin1110_reg_read(mac_desc, ADIN1110_RX_FRM_CNT_REG, &frame_cnt);
 		if (ret)
@@ -138,6 +142,7 @@ static struct pbuf *get_recvd_frames(struct max_eth_desc *eth_desc)
 	ret = adin1110_read_fifo(mac_desc, 0, &mac_buff);
 	if (ret)
 		goto out;
+	//__enable_irq();
 
 	memcpy(lwip_buff, mac_buff.mac_dest, ADIN1110_ETH_HDR_LEN);
 	p = pbuf_alloc(PBUF_RAW, mac_buff.len, PBUF_POOL);

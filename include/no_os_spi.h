@@ -45,6 +45,7 @@
 /******************************************************************************/
 
 #include <stdint.h>
+#include <stdbool.h>
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -105,6 +106,7 @@ struct no_os_spi_msg {
 	uint32_t		cs_delay_first;
 	/** Delay (in us) between the last SCLK edge and the CS deassert */
 	uint32_t		cs_delay_last;
+	bool use_dma;
 };
 
 /**

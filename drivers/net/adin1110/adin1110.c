@@ -505,6 +505,7 @@ int adin1110_write_fifo(struct adin1110_desc *desc, uint32_t port,
 	struct no_os_spi_msg xfer = {
 		.tx_buff = desc->data,
 		.cs_change = 1,
+		.use_dma = false,
 	};
 
 	if (port >= driver_data[desc->chip_type].num_ports)
@@ -600,6 +601,7 @@ int adin1110_read_fifo(struct adin1110_desc *desc, uint32_t port,
 		.tx_buff = desc->data,
 		.rx_buff = desc->data,
 		.cs_change = 1,
+		.use_dma = false,
 	};
 	int ret;
 
@@ -878,6 +880,7 @@ int adin1110_init(struct adin1110_desc **desc,
 		  struct adin1110_init_param *param)
 {
 	struct adin1110_desc *descriptor;
+	uint32_t reg_val;
 	int ret;
 
 	descriptor = calloc(1, sizeof(*descriptor));
@@ -916,6 +919,10 @@ int adin1110_init(struct adin1110_desc **desc,
 	memcpy(descriptor->mac_address, param->mac_address, ADIN1110_ETH_ALEN);
 	descriptor->chip_type = param->chip_type;
 
+	ret = no_os_gpio_set_value(descriptor->reset_gpio, NO_OS_GPIO_LOW);
+	if (ret)
+		goto free_int_gpio;
+
 	ret = adin1110_sw_reset(descriptor);
 	if (ret)
 		goto free_int_gpio;
@@ -923,9 +930,9 @@ int adin1110_init(struct adin1110_desc **desc,
 	/* Wait for the MAC and PHY digital interface to intialize */
 	no_os_mdelay(90);
 
-	ret = no_os_gpio_set_value(descriptor->reset_gpio, NO_OS_GPIO_HIGH);
+	ret = adin1110_reg_read(descriptor, 0x0, &reg_val);
 	if (ret)
-		goto free_int_gpio;
+		return ret;
 
 	ret = adin1110_setup_mac(descriptor);
 	if (ret)

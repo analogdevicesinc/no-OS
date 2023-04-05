@@ -49,6 +49,7 @@
 #include "no_os_alloc.h"
 #include "ad74413r.h"
 #include "iio_ad74413r.h"
+#include "mxc_device.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -1262,6 +1263,8 @@ static int ad74413r_iio_trigger_handler(struct iio_device_data *dev_data)
 	struct ad74413r_iio_desc *iio_desc;
 	uint32_t active_adc_ch;
 	
+	MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 1, 1 << 1);
+
 	iio_desc = dev_data->dev;
 	desc = iio_desc->ad74413r_desc;
 	active_adc_ch = iio_desc->no_of_active_adc_channels;
@@ -1286,7 +1289,11 @@ static int ad74413r_iio_trigger_handler(struct iio_device_data *dev_data)
 		}
 	}
 
-	return iio_buffer_push_scan(dev_data->buffer, buff);
+	iio_buffer_push_scan(dev_data->buffer, buff);
+
+	MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 1, 0);
+
+	return 0;
 }
 
 static int ad74413r_iio_read_config_enabled(void *dev, char *buf, uint32_t len,

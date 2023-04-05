@@ -67,6 +67,19 @@
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
 
+volatile uint32_t dma_done = 0;
+
+void DMA0_IRQHandler(void)
+{
+    MXC_DMA_Handler();
+}
+
+void DMA1_IRQHandler(void)
+{
+    MXC_DMA_Handler();
+    dma_done = 1;
+}
+
 /**
  * @brief Configure the VDDIO level for a SPI interface
  * @param desc - the SPI descriptor
@@ -419,7 +432,20 @@ int32_t max_spi_transfer(struct no_os_spi_desc *desc,
 		req.completeCB = NULL;
 
 		//_max_delay_config(desc, &msgs[i]);
-		ret = MXC_SPI_MasterTransaction(&req);
+		if (msgs[i].use_dma) {
+			MXC_DMA_ReleaseChannel(0);
+			MXC_DMA_ReleaseChannel(1);
+			NVIC_EnableIRQ(DMA0_IRQn);
+			NVIC_EnableIRQ(DMA1_IRQn);
+			ret = MXC_SPI_MasterTransactionDMA(&req);
+
+			while (!dma_done);
+			dma_done = 0;
+		}
+		else {
+			ret = MXC_SPI_MasterTransaction(&req);
+		}
+
 		if (ret == E_BAD_PARAM)
 			return -EINVAL;
 		if (ret == E_BAD_STATE)
@@ -463,29 +489,39 @@ int32_t max_spi_transfer_ll(struct no_os_spi_desc *desc,
 	/* Assert CS desc->chip_select when the SPI transaction is started */
     	spi->ctrl0 &= NO_OS_GENMASK(31, 0) ^ NO_OS_GENMASK(19, 16); 
     	spi->ctrl0 |= NO_OS_BIT(desc->chip_select) << 16;
-	/* Enable the RX and TX FIFOs */
-	spi->dma |= NO_OS_BIT(6) | NO_OS_BIT(22);
 	/* CS is deasserted at the end of the transaction */
 	spi->ctrl0 &= NO_OS_GENMASK(31, 0) ^ NO_OS_BIT(8);
 	/* Enable the RX threshold interrupt */
 	// spi->int_en |= NO_OS_BIT(2);
 	// spi->int_en |= NO_OS_BIT(1);
+	/* Clear master done */
+	spi->int_fl |= NO_OS_BIT(11);
 	// /* Flush the RX and TX FIFOs */
-	// spi->dma |= NO_OS_BIT(23) | NO_OS_BIT(7);
+	spi->dma |= NO_OS_BIT(23) | NO_OS_BIT(7);
+
+	/* Enable the RX and TX FIFOs */
+	spi->dma |= NO_OS_BIT(6) | NO_OS_BIT(22);
 
 	for (i = 0; i < len; i++) {
 		/* Set the transfer size (in each direction) */
 		spi->ctrl1 = msgs->bytes_number;
-
+		
 		/* Start the transaction */
     		spi->ctrl0 |= NO_OS_BIT(5);
-		
+
+		if (msgs[i].tx_buff)
+			*spi->fifo8 = msgs[i].tx_buff[0];
+		else
+			*spi->fifo8 = 0xFF;
+
 		for (bytes_cnt = 0; bytes_cnt < msgs[i].bytes_number; bytes_cnt++) {
 			while (spi->int_fl & NO_OS_BIT(0));
-			if (msgs[i].tx_buff)
-				*spi->fifo8 = msgs[i].tx_buff[bytes_cnt];
-			else
-				*spi->fifo8 = 0xFF;
+			if (bytes_cnt < msgs[i].bytes_number - 1) {
+				if (msgs[i].tx_buff)
+					*spi->fifo8 = msgs[i].tx_buff[bytes_cnt + 1];
+				else
+					*spi->fifo8 = 0xFF;
+			}
 
 			/* Wait for 1 byte in RX FIFO */
 			while(!(spi->int_fl & NO_OS_BIT(2)));
@@ -494,6 +530,8 @@ int32_t max_spi_transfer_ll(struct no_os_spi_desc *desc,
 			else
 				*spi->fifo8;
 		}
+
+		while (!(spi->int_fl & NO_OS_BIT(11)));
 
 		/* End the transaction */
     		spi->ctrl0 &= NO_OS_GENMASK(31, 0) ^ NO_OS_BIT(5);
