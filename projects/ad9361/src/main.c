@@ -649,8 +649,7 @@ int main(void)
 #endif
 
 #ifndef AXI_ADC_NOT_PRESENT
-#if (defined XILINX_PLATFORM || defined ALTERA_PLATFORM) && \
-	(defined ADC_DMA_EXAMPLE)
+#if (defined XILINX_PLATFORM || defined ALTERA_PLATFORM)
 	uint32_t samples = 16384;
 #if (defined DMA_IRQ_ENABLE)
 	/**
