@@ -45,7 +45,7 @@
 //#define XILINX_PLATFORM
 //#define ALTERA_PLATFORM
 
-//#define DAC_DMA_EXAMPLE
+//#define DMA_EXAMPLE
 //#define IIO_SUPPORT
 
 //#define JESD_FSM_ON

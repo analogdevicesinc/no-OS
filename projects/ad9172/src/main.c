@@ -58,9 +58,9 @@
 #include "no_os_gpio.h"
 #include "xilinx_gpio.h"
 
-#ifdef DAC_DMA_EXAMPLE
+#ifdef DMA_EXAMPLE
 #include "axi_dmac.h"
-#endif /* DAC_DMA_EXAMPLE */
+#endif /* DMA_EXAMPLE */
 
 #ifdef IIO_SUPPORT
 #include "iio_app.h"
@@ -178,14 +178,14 @@ int main(void)
 		NULL
 	};
 
-#ifdef DAC_DMA_EXAMPLE
+#ifdef DMA_EXAMPLE
 	struct axi_dmac_init tx_dmac_init = {
 		"tx_dmac",
 		TX_DMA_BASEADDR,
 		IRQ_DISABLED
 	};
 	struct axi_dmac *tx_dmac;
-#endif /* DAC_DMA_EXAMPLE */
+#endif /* DMA_EXAMPLE */
 
 	struct hmc7044_dev *hmc7044_device;
 	struct ad9172_dev *ad9172_device;
@@ -249,7 +249,7 @@ int main(void)
 		goto error_5;
 	}
 
-#ifdef DAC_DMA_EXAMPLE
+#ifdef DMA_EXAMPLE
 	extern const uint32_t sine_lut_iq[1024];
 	axi_dac_load_custom_data(tx_dac, sine_lut_iq,
 				 NO_OS_ARRAY_SIZE(sine_lut_iq),
@@ -278,7 +278,7 @@ int main(void)
 	/* Flush cache data. */
 	Xil_DCacheInvalidateRange((uintptr_t)DDR_MEM_BASEADDR,
 				  sizeof(sine_lut_iq) * (tx_dac->num_channels / 2));
-#else /* DAC_DMA_EXAMPLE */
+#else /* DMA_EXAMPLE */
 	printf("Set dds frequency at 40MHz\n");
 
 	axi_dac_dds_set_frequency(tx_dac, 0, 40000000);	/* TX1_I_F1 */
@@ -314,7 +314,7 @@ int main(void)
 	axi_dac_dds_set_phase(tx_dac, 7, 0);
 
 	axi_dac_set_datasel(tx_dac, -1, AXI_DAC_DATA_SEL_DDS);
-#endif /* DAC_DMA_EXAMPLE */
+#endif /* DMA_EXAMPLE */
 
 #ifdef IIO_SUPPORT
 	printf("The board accepts libiio clients connections through the serial backend.\n");

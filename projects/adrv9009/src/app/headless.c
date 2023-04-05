@@ -228,7 +228,7 @@ int main(void)
 	};
 	struct axi_dmac *tx_dmac;
 
-#ifdef DAC_DMA_EXAMPLE
+#ifdef DMA_EXAMPLE
 	struct no_os_gpio_desc *gpio_plddrbypass;
 	struct no_os_gpio_init_param gpio_init_plddrbypass;
 	extern const uint32_t sine_lut_iq[1024];
@@ -370,7 +370,7 @@ int main(void)
 	}
 #endif
 
-#ifdef DAC_DMA_EXAMPLE
+#ifdef DMA_EXAMPLE
 	gpio_init_plddrbypass.extra = &hal_gpio_param;
 #ifndef ALTERA_PLATFORM
 	gpio_init_plddrbypass.platform_ops = &xil_gpio_ops;

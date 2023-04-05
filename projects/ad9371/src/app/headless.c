@@ -79,7 +79,7 @@
 extern ad9528Device_t clockAD9528_;
 extern mykonosDevice_t mykDevice;
 
-#if defined(DAC_DMA_EXAMPLE) || defined(IIO_SUPPORT)
+#if defined(DMA_EXAMPLE) || defined(IIO_SUPPORT)
 uint32_t dac_buffer[DAC_BUFFER_SAMPLES] __attribute__ ((aligned));
 uint16_t adc_buffer[ADC_BUFFER_SAMPLES * ADC_CHANNELS] __attribute__ ((
 			aligned));
@@ -293,7 +293,7 @@ int main(void)
 	};
 	struct axi_dmac *rx_obs_dmac;
 
-#ifdef DAC_DMA_EXAMPLE
+#ifdef DMA_EXAMPLE
 	struct axi_dmac_init tx_dmac_init = {
 		"tx_dmac",
 		TX_DMA_BASEADDR,
@@ -916,7 +916,7 @@ int main(void)
 
 	axi_adc_init(&rx_obs_adc, &rx_obs_adc_init);
 
-#ifdef DAC_DMA_EXAMPLE
+#ifdef DMA_EXAMPLE
 	axi_dac_load_custom_data(tx_dac, sine_lut_iq,
 				 NO_OS_ARRAY_SIZE(sine_lut_iq),
 				 (uintptr_t)dac_buffer);
@@ -967,7 +967,7 @@ int main(void)
 	Xil_DCacheInvalidateRange((uintptr_t)adc_buffer, sizeof(adc_buffer));
 #endif
 
-	printf("DAC_DMA_EXAMPLE: address=%#lx samples=%lu channels=%u bits=%lu\n",
+	printf("DMA_EXAMPLE: address=%#lx samples=%lu channels=%u bits=%lu\n",
 	       (uintptr_t)adc_buffer, NO_OS_ARRAY_SIZE(adc_buffer), rx_adc_init.num_channels,
 	       8 * sizeof(adc_buffer[0]));
 #endif
