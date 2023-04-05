@@ -55,7 +55,7 @@
 //#define ADRV9008_2
 
 /* To build a specific example, uncomment one (only one) of the lines below: */
-// #define DAC_DMA_EXAMPLE
+// #define DMA_EXAMPLE
 // #define IIO_SUPPORT
 
 #endif /* APP_CONFIG_H_ */

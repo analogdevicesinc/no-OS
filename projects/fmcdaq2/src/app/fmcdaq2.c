@@ -1289,8 +1289,8 @@ int main(void)
 	if (status)
 		return status;
 
-	/* DAC DMA Example */
-#ifdef DAC_DMA_EXAMPLE
+	/* DMA Example */
+#ifdef DMA_EXAMPLE
 	extern const uint32_t sine_lut_iq[1024];
 	fmcdaq2_init.ad9144_dmac_param = (struct axi_dmac_init) {
 		.name = "tx_dmac",

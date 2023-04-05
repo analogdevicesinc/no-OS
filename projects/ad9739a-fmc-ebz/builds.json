@@ -9,7 +9,7 @@
               "hardware" : ["ad9739a_fmc_zc706"]
         },
         "dma_example": {
-              "flags" : "NEW_CFLAGS=-DDAC_DMA_EXAMPLE",
+              "flags" : "NEW_CFLAGS=-DDMA_EXAMPLE",
               "hardware" : ["ad9739a_fmc_zc706"]
         }
       }

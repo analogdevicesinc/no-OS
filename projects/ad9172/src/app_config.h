@@ -40,7 +40,7 @@
 #ifndef APP_CONFIG_H_
 #define APP_CONFIG_H_
 
-//#define DAC_DMA_EXAMPLE
+//#define DMA_EXAMPLE
 
 //#define IIO_SUPPORT
 
