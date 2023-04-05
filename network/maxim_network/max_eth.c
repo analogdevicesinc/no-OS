@@ -126,9 +126,11 @@ static struct pbuf *get_recvd_frames(struct max_eth_desc *eth_desc)
 	mac_desc = eth_desc->mac_desc;
 	mac_buff.payload = &lwip_buff[ADIN1110_ETH_HDR_LEN];
 
-	ret = adin1110_reg_read(mac_desc, ADIN1110_RX_FRM_CNT_REG, &frame_cnt);
-	if (ret)
-		goto out;
+	do {
+		ret = adin1110_reg_read(mac_desc, ADIN1110_RX_FRM_CNT_REG, &frame_cnt);
+		if (ret)
+			goto out;
+	} while (frame_cnt > 0xFFFF);
 
 	if (!frame_cnt)
 		goto out;
