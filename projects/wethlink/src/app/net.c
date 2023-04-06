@@ -286,14 +286,14 @@ int net_init(bool hbtx)
 
 	// auto negotiation
 	//if (!hbtx)
-	{
+	// {
 		val = no_os_field_prep(MAX24287_AN_ADV_W_MASK, 1);
 		val |= no_os_field_prep(MAX24287_LK_MASK, 1);
 		val |= no_os_field_prep(MAX24287_DPLX_MASK, 1);
 		val |= no_os_field_prep(MAX24287_SPD_MASK, 2); // 0 - 10Mbps, 1 - 100 Mbps, 2 - 1000 Mbps
 		max24287_write(serdes, MAX24287_AN_ADV, val);
 		//max24287_write(serdes, MAX24287_BMCR, MAX24287_AN_EN_MASK | MAX24287_AN_START_MASK);
-	}
+	// }
 	// else
 	// {
 	// 	max24287_write(serdes, MAX24287_AN_ADV, 0x0001);

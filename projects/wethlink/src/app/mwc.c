@@ -17,6 +17,7 @@ struct mwc_temp_if_correlation {
 };
 
 struct mwc_temp_if_correlation mwc_tx_temp_lookup[32][2] = {
+	// lbtx, hbtx
 	{{0}, {0}},
 	{{14}, {15}},
 	{{13}, {14}},
@@ -57,6 +58,7 @@ struct mwc_temp_if_lna_correlation {
 };
 
 struct mwc_temp_if_lna_correlation mwc_rx_temp_lookup[32][2] = {
+	// lbtx, hbtx
 	{{0}, {0}},
 	{{11, HMC6301_LNA_GAIN_18dB}, {6, HMC6301_LNA_GAIN_18dB}},
 	{{11, HMC6301_LNA_GAIN_18dB}, {6, HMC6301_LNA_GAIN_18dB}},
@@ -220,8 +222,20 @@ int mwc_algorithms(struct mwc_iio_dev *mwc)
 
 			prev_attn = attn;
 
-			if (match_count == 10 || iter_count == 20)
+			if (match_count == 10 || iter_count == 20) {
 				done = true;
+				uint8_t if_attn;
+				enum hmc6301_lna_gain rflna_attn;
+				hmc630x_get_if_attn(rx, &if_attn);
+				hmc6301_get_lna_gain(rx, &rflna_attn);
+				float gain = 69 - (float)if_attn * 1.3 - (float)rflna_attn * 6 - 
+						attn1 * 6 - attn2 * 6 - attni_fine;
+				float s = mwc->hbtx ? 10 : 18;
+				float e = mwc->hbtx ? 31.2 : 37.2;
+				if ((gain - s) < 0)
+					gain = s;
+				led_rx_det(100 - (int)(100 * (gain - s) / (e - s)));
+			}
 
 			iter_count++;
 		}
