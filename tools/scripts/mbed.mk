@@ -24,7 +24,6 @@ CPP = arm-none-eabi-g++
 OC = arm-none-eabi-objcopy
 
 # Project related build Files
-MBED_OS_INCLUDE_PATHS_NAMES = $(BUILD_DIR)/mbed-os-include-path-names.txt
 LSCRIPT = $(BUILD_DIR)/$(PROJECT_NAME)-linker-file.ld
 PROJECT_BIN_FILE = $(subst elf,bin,$(BINARY))
 PROJECT_MAP_FILE = $(subst elf,map,$(BINARY))
@@ -44,15 +43,15 @@ SPACE := $(NULL) $(NULL)
 
 MBED_C_FLAGS = $(subst ",,$(subst $(COMMA), ,$(patsubst {"flags":[%,%,$(firstword $(subst ]$(COMMA)"macros", "macros",$(subst $(SPACE),,$(READ_MBED_GENERATED_PROFILE_C_FILE)))))))
 MBED_C_SYMBOLS = $(patsubst %,-D%,$(subst ",,$(subst $(COMMA), ,$(patsubst %]},%,$(lastword $(subst "symbols":[,"symbols":[ ,$(subst $(SPACE),,$(READ_MBED_GENERATED_PROFILE_C_FILE))))))))
-CFLAGS += $(MBED_C_FLAGS) $(MBED_C_SYMBOLS) -include $(MBED_OS_BUILD_DIRECTORY)/mbed_config.h -DMBED_PLATFORM $(TEST_FLAGS)
+CFLAGS += $(MBED_C_FLAGS) $(MBED_C_SYMBOLS) -include $(MBED_OS_BUILD_DIRECTORY)/mbed_config.h -DMBED_PLATFORM
 
 MBED_CPP_FLAGS = $(subst ",,$(subst $(COMMA), ,$(patsubst {"flags":[%,%,$(firstword $(subst ]$(COMMA)"macros", "macros",$(subst $(SPACE),,$(READ_MBED_GENERATED_PROFILE_CPP_FILE)))))))
 MBED_CPP_SYMBOLS = $(patsubst %,-D%,$(subst ",,$(subst $(COMMA), ,$(patsubst %]},%,$(lastword $(subst "symbols":[,"symbols":[ ,$(subst $(SPACE),,$(READ_MBED_GENERATED_PROFILE_CPP_FILE))))))))
-CPPFLAGS += $(MBED_CPP_FLAGS) $(MBED_CPP_SYMBOLS) -include $(MBED_OS_BUILD_DIRECTORY)/mbed_config.h -DMBED_PLATFORM $(TEST_FLAGS)
+CPPFLAGS += $(MBED_CPP_FLAGS) $(MBED_CPP_SYMBOLS) -include $(MBED_OS_BUILD_DIRECTORY)/mbed_config.h -DMBED_PLATFORM
 
 MBED_ASM_FLAGS = $(subst ",,$(subst $(COMMA), ,$(patsubst {"flags":[%,%,$(firstword $(subst ]$(COMMA)"macros", "macros",$(subst $(SPACE),,$(READ_MBED_GENERATED_PROFILE_ASM_FILE)))))))
 MBED_ASM_SYMBOLS = $(patsubst %,-D%,$(subst ",,$(subst $(COMMA), ,$(patsubst %]},%,$(lastword $(subst "symbols":[,"symbols":[ ,$(subst $(SPACE),,$(READ_MBED_GENERATED_PROFILE_ASM_FILE))))))))
-ASFLAGS += $(MBED_ASM_FLAGS) $(MBED_ASM_SYMBOLS) -include $(MBED_OS_BUILD_DIRECTORY)/mbed_config.h -DMBED_PLATFORM $(TEST_FLAGS)
+ASFLAGS += $(MBED_ASM_FLAGS) $(MBED_ASM_SYMBOLS) -include $(MBED_OS_BUILD_DIRECTORY)/mbed_config.h -DMBED_PLATFORM
 
 MBED_LINKER_FLAGS = $(subst ",,$(subst "$(COMMA)", ,$(patsubst {"flags":[%,%,$(firstword $(subst ]$(COMMA)"macros", "macros",$(subst $(SPACE),,$(READ_MBED_GENERATED_PROFILE_LINKER_FILE)))))))
 MBED_LINKER_SYMBOLS = $(patsubst %,-D%,$(subst ",,$(subst $(COMMA), ,$(patsubst %]},%,$(lastword $(subst "symbols":[,"symbols":[ ,$(subst $(SPACE),,$(READ_MBED_GENERATED_PROFILE_LINKER_FILE))))))))
@@ -69,7 +68,7 @@ UPDATE_MBED_GENERATED_ARCHIVE_FILE = $(addprefix $(MBED_OS_DIRECTORY)/, $(shell 
 
 # Platform include paths
 MBED_PLATFORM_INCLUDE_PATHS = $(patsubst %,%/,$(patsubst %,-I%,$(patsubst mbed-os%,$(MBED_OS_DIRECTORY)/mbed-os%,$(patsubst -I%,%,$(subst ",,$(READ_MBED_GENERATED_INCLUDE_FILE))))))
-PLATFORM_INCS = @$(MBED_OS_INCLUDE_PATHS_NAMES)
+PLATFORM_INCS = $(MBED_PLATFORM_INCLUDE_PATHS)
 
 # Extra files for build
 EXTRA_FILES =@$(UPDATED_MBED_GENERATED_ARCHIVE_FILE)
@@ -77,9 +76,8 @@ EXTRA_FILES =@$(UPDATED_MBED_GENERATED_ARCHIVE_FILE)
 # Rule for building Mbed-OS
 $(PROJECT_TARGET): MBED-OS-build
 	-$(MUTE) $(call mk_dir,$(BUILD_DIR)) $(HIDE)
-	$(MUTE) $(call print, putting mbed-os include path names and object files names to text file)
-	$(MUTE) $(call ADD_BLANK_LINE, $(MBED_OS_INCLUDE_PATHS_NAMES)) $(cmd_separator) $(foreach file,$(sort $(MBED_PLATFORM_INCLUDE_PATHS)),$(call APPEND_TO_FILE,$(file),$(MBED_OS_INCLUDE_PATHS_NAMES)) $(cmd_separator)) echo . $(HIDE)
-	$(MUTE) $(call ADD_BLANK_LINE, $(UPDATED_MBED_GENERATED_ARCHIVE_FILE)) $(cmd_separator) $(foreach file,$(sort $(UPDATE_MBED_GENERATED_ARCHIVE_FILE)),$(call APPEND_TO_FILE,$(file),$(UPDATED_MBED_GENERATED_ARCHIVE_FILE)) $(cmd_separator)) echo . $(HIDE)
+	$(MUTE) $(call print, putting mbed-os object files names to text file)
+	$(MUTE) $(call ADD_BLANK_LINE_TO_FILE, $(UPDATED_MBED_GENERATED_ARCHIVE_FILE)) $(cmd_separator) $(foreach mbed_os_object_file,$(sort $(UPDATE_MBED_GENERATED_ARCHIVE_FILE)),$(call APPEND_TEXT_TO_FILE,$(mbed_os_object_file),$(UPDATED_MBED_GENERATED_ARCHIVE_FILE)) $(cmd_separator)) echo . $(HIDE)
 	$(MUTE) $(call set_one_time_rule,$@)
 
 $(MBED_OS_LIBRARY):
@@ -89,7 +87,7 @@ PHONY_TARGET += MBED-OS-build
 MBED-OS-build:
 	-$(MUTE) $(call mk_dir,$(MBED_APP_JSON_DIRECTORY)) $(HIDE)
 	$(MUTE) $(call copy_file,$(MBED_OS_DIRECTORY)/mbed_app.json,$(MBED_APP_JSON_DIRECTORY)/) $(HIDE)
-	cd $(MBED_OS_DIRECTORY) $(cmd_separator) mbed config root . $(cmd_separator) mbed compile --source $(MBED_OS_DIRECTORY)/mbed-os --source $(MBED_APP_JSON_DIRECTORY) -m $(TARGET_BOARD) -t $(COMPILER) --build $(MBED_OS_BUILD_DIRECTORY) --library
+	$(MUTE) cd $(MBED_OS_DIRECTORY) $(cmd_separator) mbed config root . $(cmd_separator) mbed compile --source $(MBED_OS_DIRECTORY)/mbed-os --source $(MBED_APP_JSON_DIRECTORY) -m $(TARGET_BOARD) -t $(COMPILER) --build $(MBED_OS_BUILD_DIRECTORY) --library
 	$(MUTE) $(call print, Mbed-OS build completed)
 
 # Linker-Script Preprocessing

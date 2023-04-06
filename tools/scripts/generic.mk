@@ -19,7 +19,7 @@ export BOOTOBJ
 #	WINDOWS
 ifeq ($(OS), Windows_NT)
 SHELL=cmd
-ROOT_DRIVE = C:
+ROOT_DRIVE ?= C:
 # It is slow to print timestamp in windows
 #TIMESTAMP = $(shell powershell Get-Date -Format "HH:mm.ss")
 TIMESTAMP = 00:00:00
@@ -79,13 +79,13 @@ rwildcard=$(foreach d,$(wildcard $(1:=/*)),$(call rwildcard,$d,$2) $(filter $(su
 set_one_time_rule = echo Target file. Do not delete > $1
 
 # Append text to file
-APPEND_TO_FILE = echo $1 >> $2
+APPEND_TEXT_TO_FILE = echo $1 >> $2
 
 # Add blank line to a file
 ifeq ($(OS), Windows_NT)
-ADD_BLANK_LINE = echo. > $1
+ADD_BLANK_LINE_TO_FILE = echo. > $1
 else
-ADD_BLANK_LINE = echo> $1
+ADD_BLANK_LINE_TO_FILE = echo> $1
 endif
 
 # Transform full path to relative path to be used in build
@@ -221,6 +221,7 @@ endif
 #                            COMMON COMPILER FLAGS                             
 #------------------------------------------------------------------------------
 CFLAGS += $(NEW_CFLAGS)
+CPPFLAGS += $(NEW_CFLAGS)
 CFLAGS += -Wall								\
 	 -Wextra							\
 	 -Wno-unused-parameter						\
@@ -297,8 +298,12 @@ EXTRA_INC_PATHS += $(call relative_to_project, $(INCLUDE))
 CFLAGS += $(addprefix -I,$(EXTRA_INC_PATHS)) $(PLATFORM_INCS)
 CPPFLAGS += $(addprefix -I,$(EXTRA_INC_PATHS)) $(PLATFORM_INCS)
 
-# File containing object files names.
-OBJECT_FILES_NAMES = $(BUILD_DIR)/object-files-names.txt
+# Text files containing build pre-requisite names.
+PROJECT_OBJECT_FILES_NAMES_FILE = $(BUILD_DIR)/$(PROJECT_NAME)-object-files-names.txt
+PROJECT_CFLAGS_NAMES_FILE = $(BUILD_DIR)/$(PROJECT_NAME)-cflags-names.txt
+PROJECT_CPPFLAGS_NAMES_FILE = $(BUILD_DIR)/$(PROJECT_NAME)-cppflags-names.txt
+PROJECT_ASFLAGS_NAMES_FILE = $(BUILD_DIR)/$(PROJECT_NAME)-asflags-names.txt
+
 #------------------------------------------------------------------------------
 #                             Generic Goals                         
 #------------------------------------------------------------------------------
@@ -338,19 +343,19 @@ $(OBJECTS_DIR)%/.:
 .SECONDEXPANSION:
 $(OBJECTS_DIR)/%.o: $$(call get_full_path, %).c | $$(@D)/.
 	@$(call print,[CC] $(notdir $<))
-	$(MUTE) $(CC) -c $(CFLAGS) $< -o $@
+	$(MUTE) $(CC) -c @$(PROJECT_CFLAGS_NAMES_FILE) $< -o $@
 
 $(OBJECTS_DIR)/%.o: $$(call get_full_path, %).cpp | $$(@D)/.
 	@$(call print,[CPP] $(notdir $<))
-	$(MUTE) $(CPP) -c $(CPPFLAGS) $< -o $@
+	$(MUTE) $(CPP) -c @$(PROJECT_CPPFLAGS_NAMES_FILE) $< -o $@
 
 $(OBJECTS_DIR)/%.o: $$(call get_full_path, %).s | $$(@D)/. 
 	@$(call print,[AS] $(notdir $<))
-	$(MUTE) $(AS) -c $(ASFLAGS) $< -o $@
+	$(MUTE) $(AS) -c @$(PROJECT_ASFLAGS_NAMES_FILE) $< -o $@
 
 $(OBJECTS_DIR)/%.o: $$(call get_full_path, %).S | $$(@D)/. 
 	@$(call print,[AS] $(notdir $<))
-	$(MUTE) $(AS) -c $(ASFLAGS) $< -o $@
+	$(MUTE) $(AS) -c @$(PROJECT_ASFLAGS_NAMES_FILE) $< -o $@
 
 ifneq ($(strip $(LSCRIPT)),)
 LSCRIPT_FLAG = -T$(LSCRIPT)
@@ -358,13 +363,24 @@ endif
 
 PHONY += pre_build
 pre_build:
-	$(MUTE) $(call print, putting project object files names to text file)
-	$(MUTE) $(call ADD_BLANK_LINE, $(OBJECT_FILES_NAMES)) $(cmd_separator) $(foreach file,$(sort $(OBJS)),$(call APPEND_TO_FILE,$(file),$(OBJECT_FILES_NAMES)) $(cmd_separator)) echo . $(HIDE)
+	$(MUTE) $(call print, putting project build pre-requisite names to text files)
+	$(MUTE) $(call ADD_BLANK_LINE_TO_FILE, $(PROJECT_CFLAGS_NAMES_FILE)) $(cmd_separator)\
+		$(foreach c_flag_name,$(subst \",\\\",$(CFLAGS)),$(call APPEND_TEXT_TO_FILE,$(c_flag_name),$(PROJECT_CFLAGS_NAMES_FILE))\
+		$(cmd_separator)) echo . $(HIDE)
+	$(MUTE) $(call ADD_BLANK_LINE_TO_FILE, $(PROJECT_CPPFLAGS_NAMES_FILE)) $(cmd_separator)\
+		$(foreach cpp_flag_name,$(subst \",\\\",$(CPPFLAGS)),$(call APPEND_TEXT_TO_FILE,$(cpp_flag_name),$(PROJECT_CPPFLAGS_NAMES_FILE))\
+		$(cmd_separator)) echo . $(HIDE)
+	$(MUTE) $(call ADD_BLANK_LINE_TO_FILE, $(PROJECT_ASFLAGS_NAMES_FILE)) $(cmd_separator)\
+		$(foreach as_flag_name,$(subst \",\\\",$(ASFLAGS)),$(call APPEND_TEXT_TO_FILE,$(as_flag_name),$(PROJECT_ASFLAGS_NAMES_FILE))\
+		$(cmd_separator)) echo . $(HIDE)
+	$(MUTE) $(call ADD_BLANK_LINE_TO_FILE, $(PROJECT_OBJECT_FILES_NAMES_FILE)) $(cmd_separator)\
+		$(foreach object_file_name,$(sort $(OBJS)),$(call APPEND_TEXT_TO_FILE,$(object_file_name),$(PROJECT_OBJECT_FILES_NAMES_FILE))\
+		$(cmd_separator)) echo . $(HIDE)
+
 
 $(BINARY): $(LIB_TARGETS) $(OBJS) $(ASM_OBJS) $(LSCRIPT) $(BOOTOBJ)
 	@$(call print,[LD] $(notdir $(OBJS)))
-	$(MUTE) $(MAKE) --no-print-directory pre_build
-	$(MUTE) $(CC) $(LSCRIPT_FLAG) $(LDFLAGS) $(LIB_PATHS) -o $(BINARY) @$(OBJECT_FILES_NAMES) $(EXTRA_FILES) $(BOOTOBJ)\
+	$(MUTE) $(CC) $(LSCRIPT_FLAG) $(LDFLAGS) $(LIB_PATHS) -o $(BINARY) @$(PROJECT_OBJECT_FILES_NAMES_FILE) $(EXTRA_FILES) $(BOOTOBJ)\
 			 $(ASM_OBJS) $(LIB_FLAGS)
 	$(MUTE) $(MAKE) --no-print-directory post_build
 
@@ -397,6 +413,7 @@ update: $(PROJECT_TARGET)
 	$(MUTE) $(foreach file,$(sort $(FILES_OUT_OF_DIRS)),\
 		$(call update_file,$(file),$(call relative_to_project,$(file))) $(HIDE)\
 		$(cmd_separator)) echo . $(HIDE)
+	$(MUTE) $(MAKE) --no-print-directory pre_build MAKEFLAGS=$(MAKEOVERRIDES)
 
 standalone:
 	$(MUTE) $(MAKE) --no-print-directory project LINK_SRCS=n MAKEFLAGS=$(MAKEOVERRIDES)
