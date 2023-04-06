@@ -145,4 +145,11 @@ struct no_os_gpio_init_param led_tx_det_red_gpio_ip = {
 	.platform_ops = &max_gpio_ops,
 	.extra = &xgpio,
 };
+
+struct no_os_gpio_init_param led_rx_det_gpio_ip = {
+	.port = LED_RX_DET_PORT,
+	.number = LED_RX_DET_PIN,
+	.platform_ops = &max_gpio_ops,
+	.extra = &xgpio,
+};
 #endif

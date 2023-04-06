@@ -59,8 +59,8 @@
 #define LED_TX_DET_RED_PIN	4
 #define LED_TX_DET_GREEN_PORT	0
 #define LED_TX_DET_GREEN_PIN	5
-#define LED_RX_N_PORT		3
-#define LED_RX_N_PIN		4
+#define LED_RX_DET_PORT		3
+#define LED_RX_DET_PIN		4
 #define LED_TX_LOCK_PORT	0
 #define LED_TX_LOCK_PIN		6
 #define LED_RX_LOCK_PORT	0
@@ -103,7 +103,7 @@ extern struct no_os_gpio_init_param max24287_mdio_gpio_ip;
 extern struct no_os_gpio_init_param brd_select_gpio_ip;
 extern struct no_os_gpio_init_param led_tx_det_red_gpio_ip;
 extern struct no_os_gpio_init_param led_tx_det_green_gpio_ip;
-extern struct no_os_gpio_init_param led_rx_n_gpio_ip;
+extern struct no_os_gpio_init_param led_rx_det_gpio_ip;
 extern struct no_os_gpio_init_param led_tx_lock_gpio_ip;
 extern struct no_os_gpio_init_param led_rx_lock_gpio_ip;
 
