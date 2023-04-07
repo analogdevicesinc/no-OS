@@ -46,6 +46,7 @@
 #include "no_os_util.h"
 #include "no_os_delay.h"
 #include "no_os_crc8.h"
+#include "mxc_device.h"
 
 #define ADIN1110_CRC_POLYNOMIAL	0x7
 
@@ -596,10 +597,11 @@ int adin1110_read_fifo(struct adin1110_desc *desc, uint32_t port,
 	uint32_t rounded_len;
 	uint32_t frame_size;
 	uint32_t fifo_reg;
+	uint8_t buf[1530];
 
 	struct no_os_spi_msg xfer = {
 		.tx_buff = desc->data,
-		.rx_buff = desc->data,
+		.rx_buff = buf,
 		.cs_change = 1,
 		.use_dma = false,
 	};
@@ -647,9 +649,9 @@ int adin1110_read_fifo(struct adin1110_desc *desc, uint32_t port,
 		return ret;
 
 	payload_length = frame_size - ADIN1110_FRAME_HEADER_LEN - ADIN1110_ETH_HDR_LEN;
-	memcpy(eth_buff->mac_dest, &desc->data[field_offset], ADIN1110_ETH_HDR_LEN);
+	memcpy(eth_buff->mac_dest, &buf[field_offset], ADIN1110_ETH_HDR_LEN);
 	field_offset += ADIN1110_ETH_HDR_LEN;
-	memcpy(eth_buff->payload, &desc->data[field_offset], payload_length);
+	memcpy(eth_buff->payload, &buf[field_offset], payload_length);
 	eth_buff->len = frame_size - ADIN1110_FRAME_HEADER_LEN;
 
 	return 0;
@@ -930,7 +932,7 @@ int adin1110_init(struct adin1110_desc **desc,
 	/* Wait for the MAC and PHY digital interface to intialize */
 	no_os_mdelay(90);
 
-	ret = adin1110_reg_read(descriptor, 0x0, &reg_val);
+	ret = adin1110_reg_read(descriptor, 0x1, &reg_val);
 	if (ret)
 		return ret;
 

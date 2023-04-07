@@ -105,6 +105,8 @@
                 .attributes = ad74413r_iio_config_attrs			\
         }
 
+static uint64_t skip = 0;
+
 static int32_t ad74413r_sample_rate_avail[] = {
 	20, 4800, 10, 1200
 };
@@ -1262,8 +1264,9 @@ static int ad74413r_iio_trigger_handler(struct iio_device_data *dev_data)
 	struct ad74413r_desc *desc;
 	struct ad74413r_iio_desc *iio_desc;
 	uint32_t active_adc_ch;
-	
-	MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 1, 1 << 1);
+
+	if ((skip++) % 4 == 0)
+		return 0;
 
 	iio_desc = dev_data->dev;
 	desc = iio_desc->ad74413r_desc;
@@ -1290,8 +1293,6 @@ static int ad74413r_iio_trigger_handler(struct iio_device_data *dev_data)
 	}
 
 	iio_buffer_push_scan(dev_data->buffer, buff);
-
-	MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 1, 0);
 
 	return 0;
 }

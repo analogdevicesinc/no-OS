@@ -65,14 +65,15 @@
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-#define DATA_BUFFER_SIZE 3000
-//#define IIO_IGNORE_BUFF_OVERRUN_ERR
+#define DATA_BUFFER_SIZE 4000
+#define IIO_IGNORE_BUFF_OVERRUN_ERR
 
 /******************************************************************************/
 /************************ Variable Declarations ******************************/
 /******************************************************************************/
-uint8_t iio_data_buffer[1500 * sizeof(uint32_t) * 8];
-uint8_t iio_data_buffer2[1500 * sizeof(uint32_t) * 8];
+
+uint8_t iio_data_buffer[DATA_BUFFER_SIZE * sizeof(uint32_t) * 8];
+uint8_t iio_data_buffer2[DATA_BUFFER_SIZE * sizeof(uint32_t) * 8];
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -99,11 +100,11 @@ int iio_example_main()
 	struct iio_app_desc *app;
 	struct iio_data_buffer buff = {
 		.buff = (void *)iio_data_buffer,
-		.size = 1500 * sizeof(uint32_t) * 8
+		.size = DATA_BUFFER_SIZE * sizeof(uint32_t) * 8,
 	};
 	struct iio_data_buffer buff2 = {
 		.buff = (void *)iio_data_buffer2,
-		.size = 1500 * sizeof(uint32_t) * 8
+		.size = DATA_BUFFER_SIZE * sizeof(uint32_t) * 8,
 	};
 	struct ad74413r_init_param ad74413r_ip = {
 		.chip_id = AD74412R,
@@ -173,7 +174,7 @@ int iio_example_main()
 	if (ret)
 		return ret;
 
-	ret = no_os_irq_set_priority(ad74413r_irq_desc, ad74413r_gpio_irq_ip.irq_ctrl_id, 0);
+	ret = no_os_irq_set_priority(ad74413r_irq_desc, ad74413r_gpio_irq_ip.irq_ctrl_id, 1);
 	if (ret)
 		return ret;
 
@@ -186,15 +187,6 @@ int iio_example_main()
 	/* Initialize hardware trigger */
 	ad74413r_gpio_trig_ip.iio_desc = &iio_desc,
 	ret = iio_hw_trig_init(&ad74413r_trig_desc, &ad74413r_gpio_trig_ip);
-	if (ret)
-		return ret;
-
-	/* Probe the iio drivers in config mode */
-	ret = ad74413r_iio_init(&ad74413r_iio_desc, &ad74413r_iio_ip, true);
-	if (ret)
-		return ret;
-
-	ret = max14906_iio_init(&max14906_iio_desc, &max14906_iio_ip, true);
 	if (ret)
 		return ret;
 
@@ -228,6 +220,21 @@ int iio_example_main()
 
 	return iio_app_run(app);
 	while (1) {
+		/* Probe the iio drivers in config mode */
+		ret = ad74413r_iio_init(&ad74413r_iio_desc, &ad74413r_iio_ip, true);
+		if (ret)
+			return ret;
+
+		ret = max14906_iio_init(&max14906_iio_desc, &max14906_iio_ip, true);
+		if (ret)
+			return ret;
+
+		iio_devices[0].dev = ad74413r_iio_desc;
+		iio_devices[0].dev_descriptor = ad74413r_iio_desc->iio_dev;
+
+		iio_devices[1].dev = max14906_iio_desc;
+		iio_devices[1].dev_descriptor = max14906_iio_desc->iio_dev;
+
 		ret = iio_app_run(iio_devices, NO_OS_ARRAY_SIZE(iio_devices));
 		if (ret)
 			return ret;
@@ -247,7 +254,7 @@ int iio_example_main()
 		iio_devices[1].dev = max14906_iio_desc;
 		iio_devices[1].dev_descriptor = max14906_iio_desc->iio_dev;
 
-		return iio_app_run_with_trigs(iio_devices, NO_OS_ARRAY_SIZE(iio_devices),
-				      	      trigs, NO_OS_ARRAY_SIZE(trigs), ad74413r_irq_desc, &iio_desc);
+		iio_app_run_with_trigs(iio_devices, NO_OS_ARRAY_SIZE(iio_devices),
+				       trigs, NO_OS_ARRAY_SIZE(trigs), ad74413r_irq_desc, &iio_desc);
 	}
 }

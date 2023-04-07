@@ -89,13 +89,13 @@ static err_t mxc_eth_netif_output(struct netif *netif, struct pbuf *p)
 	buff.len = frame_len;
 	buff.payload = &lwip_buff[ADIN1110_ETH_HDR_LEN];
 
-	MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 15, 1 << 15);
-
 	/* The TX FIFO might be full, so retry. */
 	do {
+		MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 1, 0);
+		MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 1, 1 << 1);
 		ret = adin1110_write_fifo(mac_desc, 0, &buff);
+		MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 1, 0);
 	} while (ret == -EAGAIN);
-	MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 15, 0);
 
 	return ret;
 }
@@ -129,7 +129,6 @@ static struct pbuf *get_recvd_frames(struct max_eth_desc *eth_desc)
 	mac_desc = eth_desc->mac_desc;
 	mac_buff.payload = &lwip_buff[ADIN1110_ETH_HDR_LEN];
 
-	//__disable_irq();
 	do {
 		ret = adin1110_reg_read(mac_desc, ADIN1110_RX_FRM_CNT_REG, &frame_cnt);
 		if (ret)
@@ -139,10 +138,10 @@ static struct pbuf *get_recvd_frames(struct max_eth_desc *eth_desc)
 	if (!frame_cnt)
 		goto out;
 
+	
 	ret = adin1110_read_fifo(mac_desc, 0, &mac_buff);
 	if (ret)
 		goto out;
-	//__enable_irq();
 
 	memcpy(lwip_buff, mac_buff.mac_dest, ADIN1110_ETH_HDR_LEN);
 	p = pbuf_alloc(PBUF_RAW, mac_buff.len, PBUF_POOL);
@@ -263,8 +262,7 @@ free_network_descriptor:
 
 void max_eth_err_callback(void *arg, err_t err)
 {
-	int32_t _err = err;
-	printf("Error :? %s\n", lwip_strerr(err));
+	printf("Error :? %d\n", err);
 }
 
 err_t max_eth_recv_callback(void *arg, struct tcp_pcb *tpcb, struct pbuf *p,

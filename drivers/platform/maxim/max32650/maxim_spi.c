@@ -72,6 +72,7 @@ volatile uint32_t dma_done = 0;
 void DMA0_IRQHandler(void)
 {
     MXC_DMA_Handler();
+    dma_done = 1;
 }
 
 void DMA1_IRQHandler(void)
@@ -329,6 +330,7 @@ int32_t max_spi_init(struct no_os_spi_desc **desc,
 	struct no_os_spi_desc *descriptor;
 	struct max_spi_init_param *eparam;
 	struct max_spi_state *st;
+	mxc_spi_regs_t *spi;
 
 	if (!param || !param->extra)
 		return -EINVAL;
@@ -361,6 +363,14 @@ int32_t max_spi_init(struct no_os_spi_desc **desc,
 	ret = _max_spi_config(descriptor);
 	if (ret)
 		goto err_init;
+
+	spi = MXC_SPI_GET_SPI(descriptor->device_id);
+	spi->ss_time |= 10;
+	spi->ss_time |= 10 << 8;
+	spi->ss_time |= 10 << 16;
+
+	NVIC_SetPriority(DMA0_IRQn, 0);
+	NVIC_SetPriority(DMA1_IRQn, 0);
 
 	*desc = descriptor;
 
@@ -403,12 +413,15 @@ int32_t max_spi_transfer(struct no_os_spi_desc *desc,
 			 uint32_t len)
 {
 	static uint32_t last_slave_id[MXC_SPI_INSTANCES];
+	mxc_spi_regs_t *spi;
 	mxc_spi_req_t req;
 	uint32_t slave_id;
 	int32_t ret;
 
 	if (!desc || !msgs)
 		return -EINVAL;
+
+	spi = MXC_SPI_GET_SPI(desc->device_id);
 
 	// slave_id = desc->chip_select;
 	// if (slave_id != last_slave_id[desc->device_id]) {
@@ -432,13 +445,14 @@ int32_t max_spi_transfer(struct no_os_spi_desc *desc,
 		req.completeCB = NULL;
 
 		//_max_delay_config(desc, &msgs[i]);
-		if (msgs[i].use_dma) {
+		if (msgs[i].use_dma && msgs[i].bytes_number >= 16) {
 			MXC_DMA_ReleaseChannel(0);
 			MXC_DMA_ReleaseChannel(1);
 			NVIC_EnableIRQ(DMA0_IRQn);
 			NVIC_EnableIRQ(DMA1_IRQn);
 			ret = MXC_SPI_MasterTransactionDMA(&req);
 
+			// while (!(spi->int_fl & NO_OS_BIT(11)));
 			while (!dma_done);
 			dma_done = 0;
 		}
@@ -486,18 +500,20 @@ int32_t max_spi_transfer_ll(struct no_os_spi_desc *desc,
 	size_t bytes_cnt = 0;
 	size_t i = 0;
 
+	/* Flush the RX and TX FIFOs */
+	spi->dma |= NO_OS_BIT(23) | NO_OS_BIT(7);
+
 	/* Assert CS desc->chip_select when the SPI transaction is started */
     	spi->ctrl0 &= NO_OS_GENMASK(31, 0) ^ NO_OS_GENMASK(19, 16); 
     	spi->ctrl0 |= NO_OS_BIT(desc->chip_select) << 16;
+
 	/* CS is deasserted at the end of the transaction */
 	spi->ctrl0 &= NO_OS_GENMASK(31, 0) ^ NO_OS_BIT(8);
 	/* Enable the RX threshold interrupt */
 	// spi->int_en |= NO_OS_BIT(2);
-	// spi->int_en |= NO_OS_BIT(1);
+	// spi->int_en |= NO_OS_BIT(0);
 	/* Clear master done */
 	spi->int_fl |= NO_OS_BIT(11);
-	// /* Flush the RX and TX FIFOs */
-	spi->dma |= NO_OS_BIT(23) | NO_OS_BIT(7);
 
 	/* Enable the RX and TX FIFOs */
 	spi->dma |= NO_OS_BIT(6) | NO_OS_BIT(22);
@@ -505,36 +521,41 @@ int32_t max_spi_transfer_ll(struct no_os_spi_desc *desc,
 	for (i = 0; i < len; i++) {
 		/* Set the transfer size (in each direction) */
 		spi->ctrl1 = msgs->bytes_number;
-		
+
 		/* Start the transaction */
     		spi->ctrl0 |= NO_OS_BIT(5);
 
-		if (msgs[i].tx_buff)
-			*spi->fifo8 = msgs[i].tx_buff[0];
-		else
-			*spi->fifo8 = 0xFF;
+		// if (msgs[i].tx_buff)
+		// 	spi->fifo8[0] = msgs[i].tx_buff[0];
+		// else
+		// 	spi->fifo8[0] = 0xFF;
 
 		for (bytes_cnt = 0; bytes_cnt < msgs[i].bytes_number; bytes_cnt++) {
 			while (spi->int_fl & NO_OS_BIT(0));
-			if (bytes_cnt < msgs[i].bytes_number - 1) {
-				if (msgs[i].tx_buff)
-					*spi->fifo8 = msgs[i].tx_buff[bytes_cnt + 1];
-				else
-					*spi->fifo8 = 0xFF;
-			}
+			//spi->int_fl |= NO_OS_BIT(0);
+			// if (bytes_cnt < msgs[i].bytes_number - 1) {
+			if (msgs[i].tx_buff)
+				spi->fifo8[0] = msgs[i].tx_buff[bytes_cnt];
+			else
+				spi->fifo8[0] = 0xFF;
+			// }
 
 			/* Wait for 1 byte in RX FIFO */
 			while(!(spi->int_fl & NO_OS_BIT(2)));
+			spi->int_fl |= NO_OS_BIT(2);
 			if (msgs[i].rx_buff)
-				msgs[i].rx_buff[bytes_cnt] = *spi->fifo8;
+				msgs[i].rx_buff[bytes_cnt] = spi->fifo8[0];
 			else
-				*spi->fifo8;
+				spi->fifo8[0];
 		}
 
 		while (!(spi->int_fl & NO_OS_BIT(11)));
 
 		/* End the transaction */
     		spi->ctrl0 &= NO_OS_GENMASK(31, 0) ^ NO_OS_BIT(5);
+
+		/* Disable the RX and TX FIFOs */
+		spi->dma &= NO_OS_GENMASK(31, 0) ^ (NO_OS_BIT(6) | NO_OS_BIT(22));
 	}
 
 	return 0;

@@ -205,7 +205,7 @@ struct adin1110_desc {
 	enum adin1110_chip_id chip_type;
 	struct no_os_spi_desc *comm_desc;
 	uint8_t mac_address[ADIN1110_ETH_ALEN];
-	uint8_t data[ADIN1110_BUFF_LEN];
+	uint8_t data[ADIN1110_BUFF_LEN] __attribute__((aligned(32)));
 
 	struct no_os_gpio_desc *reset_gpio;
 	struct no_os_gpio_desc *int_gpio;
