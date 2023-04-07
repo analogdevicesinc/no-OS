@@ -91,10 +91,7 @@ static err_t mxc_eth_netif_output(struct netif *netif, struct pbuf *p)
 
 	/* The TX FIFO might be full, so retry. */
 	do {
-		MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 1, 0);
-		MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 1, 1 << 1);
 		ret = adin1110_write_fifo(mac_desc, 0, &buff);
-		MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 1, 0);
 	} while (ret == -EAGAIN);
 
 	return ret;
@@ -378,6 +375,8 @@ static int32_t max_socket_send(void *net, uint32_t sock_id, const void *data,
 	err_t err;
 	int ret;
 
+	MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 1, 0);
+	MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 1, 1 << 1);
 	sock = _get_sock(desc, sock_id);
 	if (!sock)
 		return -EINVAL;
@@ -418,6 +417,8 @@ static int32_t max_socket_send(void *net, uint32_t sock_id, const void *data,
 	} else {
 		printf("More\n");
 	}
+
+	MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 1, 0);
 
 	return size;
 }

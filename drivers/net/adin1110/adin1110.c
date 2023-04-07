@@ -909,7 +909,7 @@ int adin1110_init(struct adin1110_desc **desc,
 	if (ret)
 		goto free_rst_gpio;
 
-	ret = no_os_gpio_direction_input(descriptor->int_gpio);
+	ret = no_os_gpio_direction_output(descriptor->int_gpio, 0);
 	if (ret)
 		goto free_int_gpio;
 

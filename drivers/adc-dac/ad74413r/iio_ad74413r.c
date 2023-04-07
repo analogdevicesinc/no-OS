@@ -1177,6 +1177,7 @@ static int ad74413r_iio_setup_channels(struct ad74413r_iio_desc *iio_desc)
 static int ad74413r_iio_update_channels(void *dev, uint32_t mask)
 {
 	struct ad74413r_iio_desc *iio_desc = dev;
+	uint32_t addr_val;
 	uint32_t ch;
 	size_t i;
 	int ret;
@@ -1202,7 +1203,14 @@ static int ad74413r_iio_update_channels(void *dev, uint32_t mask)
 		}
 	}
 
-	return ad74413r_set_adc_conv_seq(iio_desc->ad74413r_desc, AD74413R_START_CONT);
+	ret = ad74413r_set_adc_conv_seq(iio_desc->ad74413r_desc, AD74413R_START_CONT);
+	if (ret)
+		return ret;
+
+	addr_val = no_os_field_prep(0xF, AD74413R_ADC_RESULT(0));
+	addr_val |= no_os_field_prep(NO_OS_BIT(9), 0x1);
+
+	return ad74413r_reg_write(iio_desc->ad74413r_desc, AD74413R_READ_SELECT, addr_val);
 }
 
 /**
@@ -1257,7 +1265,7 @@ static int ad74413r_iio_trigger_handler(struct iio_device_data *dev_data)
 {
 	int ret;
 	uint32_t i;
-	uint8_t val[4];
+	uint8_t val;
 	uint32_t ch;
 	uint32_t buff[8] = {0};
 	uint32_t buffer_idx = 0;
@@ -1265,12 +1273,23 @@ static int ad74413r_iio_trigger_handler(struct iio_device_data *dev_data)
 	struct ad74413r_iio_desc *iio_desc;
 	uint32_t active_adc_ch;
 
-	if ((skip++) % 4 == 0)
-		return 0;
+	uint8_t ch_buff[40];
+	struct no_os_spi_msg xfer = {
+		.rx_buff = ch_buff,
+		.bytes_number = 32,
+		.cs_change = 1,
+	};
+
+	MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 6, 0);
+	MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 6, 1 << 6);
 
 	iio_desc = dev_data->dev;
 	desc = iio_desc->ad74413r_desc;
 	active_adc_ch = iio_desc->no_of_active_adc_channels;
+
+	ret = no_os_spi_transfer(desc->comm_desc, &xfer, 1);
+	if (ret)
+		return ret;
 
 	for (i = 0; i < iio_desc->no_of_active_adc_channels + AD74413R_DIAG_CH_OFFSET; i++) {
 		if (iio_desc->active_channels & NO_OS_BIT(i)) {
@@ -1278,21 +1297,25 @@ static int ad74413r_iio_trigger_handler(struct iio_device_data *dev_data)
 			if (ret)
 				continue;
 
-			if (ch < active_adc_ch)
-				ret = ad74413r_reg_read_raw(desc, AD74413R_ADC_RESULT(ch),
-							    &buff[buffer_idx++]);
-			else
-				ret = ad74413r_reg_read_raw(desc,
-							    AD74413R_DIAG_RESULT(ch - active_adc_ch),
-							    &buff[buffer_idx++]);
-			if (ret)
-				return ret;
+			memcpy(&buff[buffer_idx++], &ch_buff[3 * ch], 4);
+
+			// if (ch < active_adc_ch)
+			// 	ret = ad74413r_reg_read_raw(desc, AD74413R_ADC_RESULT(ch),
+			// 				    &buff[buffer_idx++]);
+			// else
+			// 	ret = ad74413r_reg_read_raw(desc,
+			// 				    AD74413R_DIAG_RESULT(ch - active_adc_ch),
+			// 				    &buff[buffer_idx++]);
+			// if (ret)
+			// 	return ret;
 
 			// memcpy(&buff[buffer_idx++], val, 4);
 		}
 	}
 
 	iio_buffer_push_scan(dev_data->buffer, buff);
+
+	MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 6, 0);
 
 	return 0;
 }

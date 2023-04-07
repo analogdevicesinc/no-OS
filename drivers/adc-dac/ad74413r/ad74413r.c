@@ -156,7 +156,7 @@ int ad74413r_dac_voltage_to_code(uint32_t mvolts, uint32_t *code)
  * @param val - Register value.
  * @param buff - The communication buffer.
  */
-static void ad74413r_format_reg_write(uint8_t reg, uint32_t val, uint8_t *buff)
+void ad74413r_format_reg_write(uint8_t reg, uint32_t val, uint8_t *buff)
 {
 	buff[0] = reg;
 	no_os_put_unaligned_be16(val, &buff[1]);

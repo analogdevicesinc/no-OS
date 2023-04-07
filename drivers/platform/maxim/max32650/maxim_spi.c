@@ -71,14 +71,16 @@ volatile uint32_t dma_done = 0;
 
 void DMA0_IRQHandler(void)
 {
-    MXC_DMA_Handler();
-    dma_done = 1;
+	MXC_DMA_ChannelClearFlags(0, 0xFF);
+	// MXC_DMA_Handler();
+	dma_done = 1;
 }
 
 void DMA1_IRQHandler(void)
 {
-    MXC_DMA_Handler();
-    dma_done = 1;
+	MXC_DMA_ChannelClearFlags(1, 0xFF);
+	// MXC_DMA_Handler();
+	dma_done = 1;
 }
 
 /**
@@ -310,6 +312,9 @@ static int _max_spi_config(struct no_os_spi_desc *desc)
 		goto err_init;
 	}
 
+	NVIC_EnableIRQ(DMA0_IRQn);
+	NVIC_EnableIRQ(DMA1_IRQn);
+
 	return 0;
 err_init:
 	MXC_SPI_Shutdown(MXC_SPI_GET_SPI(desc->device_id));
@@ -448,11 +453,8 @@ int32_t max_spi_transfer(struct no_os_spi_desc *desc,
 		if (msgs[i].use_dma && msgs[i].bytes_number >= 16) {
 			MXC_DMA_ReleaseChannel(0);
 			MXC_DMA_ReleaseChannel(1);
-			NVIC_EnableIRQ(DMA0_IRQn);
-			NVIC_EnableIRQ(DMA1_IRQn);
 			ret = MXC_SPI_MasterTransactionDMA(&req);
 
-			// while (!(spi->int_fl & NO_OS_BIT(11)));
 			while (!dma_done);
 			dma_done = 0;
 		}

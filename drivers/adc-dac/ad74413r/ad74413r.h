@@ -499,4 +499,6 @@ int ad74413r_init(struct ad74413r_desc **, struct ad74413r_init_param *);
 /** Free the device descriptor */
 int ad74413r_remove(struct ad74413r_desc *desc);
 
+void ad74413r_format_reg_write(uint8_t, uint32_t, uint8_t *);
+
 #endif // _AD74413R_H
