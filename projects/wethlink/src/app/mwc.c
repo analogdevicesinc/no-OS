@@ -17,7 +17,7 @@ struct mwc_temp_if_correlation {
 };
 
 struct mwc_temp_if_correlation mwc_tx_temp_lookup[32][2] = {
-	// lbtx, hbtx
+	// hbtx, lbtx
 	{{0}, {0}},
 	{{14}, {15}},
 	{{13}, {14}},
@@ -58,7 +58,7 @@ struct mwc_temp_if_lna_correlation {
 };
 
 struct mwc_temp_if_lna_correlation mwc_rx_temp_lookup[32][2] = {
-	// lbtx, hbtx
+	// hbtx, lbtx
 	{{0}, {0}},
 	{{11, HMC6301_LNA_GAIN_18dB}, {6, HMC6301_LNA_GAIN_18dB}},
 	{{11, HMC6301_LNA_GAIN_18dB}, {6, HMC6301_LNA_GAIN_18dB}},
@@ -105,7 +105,7 @@ int mwc_algorithms(struct mwc_iio_dev *mwc)
 		if (ret)
 			return ret;
 
-		ret = hmc630x_set_if_attn(tx, mwc_tx_temp_lookup[temp][mwc->hbtx].ifreq);
+		ret = hmc630x_set_if_attn(tx, mwc_tx_temp_lookup[temp][!mwc->hbtx].ifreq);
 		if (ret)
 			return ret;
 	}
@@ -115,11 +115,11 @@ int mwc_algorithms(struct mwc_iio_dev *mwc)
 		if (ret)
 			return ret;
 
-		ret = hmc630x_set_if_attn(rx, mwc_rx_temp_lookup[temp][mwc->hbtx].ifreq);
+		ret = hmc630x_set_if_attn(rx, mwc_rx_temp_lookup[temp][!mwc->hbtx].ifreq);
 		if (ret)
 			return ret;
 
-		ret = hmc6301_set_lna_gain(rx, mwc_rx_temp_lookup[temp][mwc->hbtx].lna_gain);
+		ret = hmc6301_set_lna_gain(rx, mwc_rx_temp_lookup[temp][!mwc->hbtx].lna_gain);
 	}
 
 	if (mwc->tx_autotuning) {
