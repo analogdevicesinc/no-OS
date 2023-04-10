@@ -81,6 +81,7 @@ enum iio_chan_type {
 	IIO_VELOCITY,
 	IIO_ANGL,
 	IIO_ROT,
+	IIO_COUNT,
 };
 
 /**
