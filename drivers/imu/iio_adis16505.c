@@ -91,6 +91,14 @@ static struct scan_type adis16505_iio_temp_scan_type = {
 	.is_big_endian 	= true
 };
 
+static struct scan_type adis16505_iio_data_counter_scan_type = {
+	.sign 		= 'u',
+	.realbits 	= 32,
+	.storagebits 	= 32,
+	.shift 		= 0,
+	.is_big_endian 	= true
+};
+
 static struct iio_channel adis16505_channels[] = {
 	ADIS_GYRO_CHAN		(X, 	ADIS_GYRO_X, 		16505),
 	ADIS_GYRO_CHAN		(Y, 	ADIS_GYRO_Y, 		16505),
@@ -105,6 +113,7 @@ static struct iio_channel adis16505_channels[] = {
 	ADIS_DELTA_VEL_CHAN	(X, 	ADIS_DELTA_VEL_X, 	16505),
 	ADIS_DELTA_VEL_CHAN	(Y, 	ADIS_DELTA_VEL_Y, 	16505),
 	ADIS_DELTA_VEL_CHAN	(Z, 	ADIS_DELTA_VEL_Z, 	16505),
+	ADIS_DATA_COUNTER_CHAN	(ADIS_DATA_COUNTER,		16505),
 };
 
 static struct iio_device adis16505_iio_dev = {

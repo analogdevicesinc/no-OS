@@ -51,7 +51,7 @@
 /******************************************************************************/
 /************************ Variable Declarations ******************************/
 /******************************************************************************/
-uint8_t iio_data_buffer[DATA_BUFFER_SIZE*13*sizeof(int)];
+uint8_t iio_data_buffer[DATA_BUFFER_SIZE*14*sizeof(int)];
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -69,7 +69,7 @@ int iio_trigger_example_main()
 	struct adis_iio_dev *adis16505_iio_desc;
 	struct iio_data_buffer data_buff = {
 		.buff = (void *)iio_data_buffer,
-		.size = DATA_BUFFER_SIZE*13*sizeof(int)
+		.size = DATA_BUFFER_SIZE*14*sizeof(int)
 	};
 
 	struct iio_hw_trig *adis16505_trig_desc;
