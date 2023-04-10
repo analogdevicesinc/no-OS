@@ -145,6 +145,16 @@ int main(void)
 		goto end;
 	};
 
+	uint8_t tx_correlation[][5] = {
+		{1, 3, 7, 15, 31}, // index
+		{15, 15, 15, 10, 0}, // if_attn
+	};
+	uint8_t rx_correlation[][5] = {
+		{1, 3, 7, 15, 31}, // index
+		{6, 6, 6, 6, 3}, // if_attn
+		{HMC6301_LNA_ATTN_18dB, HMC6301_LNA_ATTN_18dB, HMC6301_LNA_ATTN_12dB, HMC6301_LNA_ATTN_6dB, HMC6301_LNA_ATTN_0dB} // lna_attn
+	};
+
 	struct mwc_iio_dev *mwc;
 	struct mwc_iio_init_param mwc_ip = {
 		.reset_gpio_ip = &xcvr_reset_gpio_ip,
@@ -155,7 +165,11 @@ int main(void)
 		.rx_target = 1950,
 		.rx_tolerance = 50,
 		.tx_auto_ifvga = true,
+		.tx_auto_if_correlation = (uint8_t **)tx_correlation,
+		.tx_auto_if_correlation_entries = NO_OS_ARRAY_SIZE(tx_correlation[0]),
 		.rx_auto_ifvga_rflna = true,
+		.rx_auto_if_lna_correlation = (uint8_t **)rx_correlation,
+		.rx_auto_if_lna_correlation_entries = NO_OS_ARRAY_SIZE(rx_correlation[0]),
 		.id = id,
 		.hbtx = hbtx,
 	};

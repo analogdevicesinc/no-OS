@@ -12,86 +12,19 @@
 #include "mxc_sys.h"
 #include "led.h"
 
-struct mwc_temp_if_correlation {
-	uint8_t ifreq;
-};
+void mwc_temp_correlation(uint8_t **correlation, uint8_t entries, uint8_t temp, uint8_t *if_attn, uint8_t *lna_attn)
+{
+	uint8_t e;
 
-struct mwc_temp_if_correlation mwc_tx_temp_lookup[32][2] = {
-	// hbtx, lbtx
-	{{0}, {0}},
-	{{14}, {15}},
-	{{13}, {14}},
-	{{13}, {14}},
-	{{12}, {13}},
-	{{12}, {13}},
-	{{12}, {13}},
-	{{12}, {13}},
-	{{6}, {8}},
-	{{6}, {8}},
-	{{6}, {8}},
-	{{6}, {8}},
-	{{6}, {8}},
-	{{6}, {8}},
-	{{6}, {8}},
-	{{6}, {8}},
-	{{0}, {4}},
-	{{0}, {4}},
-	{{0}, {4}},
-	{{0}, {4}},
-	{{0}, {4}},
-	{{0}, {4}},
-	{{0}, {4}},
-	{{0}, {4}},
-	{{0}, {4}},
-	{{0}, {4}},
-	{{0}, {4}},
-	{{0}, {4}},
-	{{0}, {4}},
-	{{0}, {4}},
-	{{0}, {4}},
-	{{0}, {4}},
-};
-
-struct mwc_temp_if_lna_correlation {
-	uint8_t if_attn;
-	uint8_t lna_attn;
-};
-
-struct mwc_temp_if_lna_correlation mwc_rx_temp_lookup[32][2] = {
-	// hbtx, lbtx
-	{{0}, {0}},
-	{{11, HMC6301_LNA_ATTN_18dB}, {6, HMC6301_LNA_ATTN_18dB}},
-	{{11, HMC6301_LNA_ATTN_18dB}, {6, HMC6301_LNA_ATTN_18dB}},
-	{{11, HMC6301_LNA_ATTN_18dB}, {6, HMC6301_LNA_ATTN_18dB}},
-	{{11, HMC6301_LNA_ATTN_18dB}, {6, HMC6301_LNA_ATTN_18dB}},
-	{{11, HMC6301_LNA_ATTN_18dB}, {6, HMC6301_LNA_ATTN_18dB}},
-	{{11, HMC6301_LNA_ATTN_18dB}, {6, HMC6301_LNA_ATTN_18dB}},
-	{{11, HMC6301_LNA_ATTN_12dB}, {6, HMC6301_LNA_ATTN_12dB}},
-	{{11, HMC6301_LNA_ATTN_12dB}, {6, HMC6301_LNA_ATTN_12dB}},
-	{{11, HMC6301_LNA_ATTN_12dB}, {6, HMC6301_LNA_ATTN_12dB}},
-	{{11, HMC6301_LNA_ATTN_12dB}, {6, HMC6301_LNA_ATTN_12dB}},
-	{{11, HMC6301_LNA_ATTN_12dB}, {6, HMC6301_LNA_ATTN_12dB}},
-	{{11, HMC6301_LNA_ATTN_12dB}, {6, HMC6301_LNA_ATTN_12dB}},
-	{{11, HMC6301_LNA_ATTN_12dB}, {6, HMC6301_LNA_ATTN_12dB}},
-	{{11, HMC6301_LNA_ATTN_12dB}, {6, HMC6301_LNA_ATTN_12dB}},
-	{{11, HMC6301_LNA_ATTN_6dB}, {6, HMC6301_LNA_ATTN_6dB}},
-	{{11, HMC6301_LNA_ATTN_6dB}, {6, HMC6301_LNA_ATTN_6dB}},
-	{{11, HMC6301_LNA_ATTN_6dB}, {6, HMC6301_LNA_ATTN_6dB}},
-	{{11, HMC6301_LNA_ATTN_6dB}, {6, HMC6301_LNA_ATTN_6dB}},
-	{{11, HMC6301_LNA_ATTN_6dB}, {6, HMC6301_LNA_ATTN_6dB}},
-	{{11, HMC6301_LNA_ATTN_6dB}, {6, HMC6301_LNA_ATTN_6dB}},
-	{{11, HMC6301_LNA_ATTN_6dB}, {6, HMC6301_LNA_ATTN_6dB}},
-	{{11, HMC6301_LNA_ATTN_6dB}, {6, HMC6301_LNA_ATTN_6dB}},
-	{{11, HMC6301_LNA_ATTN_6dB}, {6, HMC6301_LNA_ATTN_6dB}},
-	{{11, HMC6301_LNA_ATTN_6dB}, {6, HMC6301_LNA_ATTN_6dB}},
-	{{11, HMC6301_LNA_ATTN_6dB}, {6, HMC6301_LNA_ATTN_6dB}},
-	{{11, HMC6301_LNA_ATTN_6dB}, {6, HMC6301_LNA_ATTN_6dB}},
-	{{11, HMC6301_LNA_ATTN_6dB}, {6, HMC6301_LNA_ATTN_6dB}},
-	{{11, HMC6301_LNA_ATTN_6dB}, {6, HMC6301_LNA_ATTN_6dB}},
-	{{11, HMC6301_LNA_ATTN_6dB}, {6, HMC6301_LNA_ATTN_6dB}},
-	{{11, HMC6301_LNA_ATTN_6dB}, {6, HMC6301_LNA_ATTN_6dB}},
-	{{8, HMC6301_LNA_ATTN_0dB}, {3, HMC6301_LNA_ATTN_0dB}},
-};
+	for (e = 0; e < entries; e++) {
+		if (temp <= correlation[0][e]) {
+			*if_attn = correlation[1][e];
+			if (lna_attn != NULL)
+				*lna_attn = correlation[2][e];
+			break;
+		}
+	}
+}
 
 int mwc_algorithms(struct mwc_iio_dev *mwc)
 {
@@ -101,25 +34,35 @@ int mwc_algorithms(struct mwc_iio_dev *mwc)
 	struct hmc630x_dev *rx = mwc->rx_iiodev->dev;
 
 	if (mwc->tx_auto_ifvga) {
+		uint8_t if_attn;
 		ret = hmc630x_get_temp(tx, &temp);
 		if (ret)
 			return ret;
 
-		ret = hmc630x_set_if_attn(tx, mwc_tx_temp_lookup[temp][!mwc->hbtx].ifreq);
+		mwc_temp_correlation(mwc->tx_auto_if_correlation,
+					mwc->tx_auto_if_correlation_entries,
+					temp, &if_attn, NULL);
+
+		ret = hmc630x_set_if_attn(tx, if_attn);
 		if (ret)
 			return ret;
 	}
 
 	if (mwc->rx_auto_ifvga_rflna) {
+		uint8_t if_attn, lna_attn;
 		ret = hmc630x_get_temp(rx, &temp);
 		if (ret)
 			return ret;
 
-		ret = hmc630x_set_if_attn(rx, mwc_rx_temp_lookup[temp][!mwc->hbtx].if_attn);
+		mwc_temp_correlation(mwc->rx_auto_if_lna_correlation,
+			mwc->rx_auto_if_lna_correlation_entries,
+			temp, &if_attn, &lna_attn);
+
+		ret = hmc630x_set_if_attn(rx, if_attn);
 		if (ret)
 			return ret;
 
-		ret = hmc6301_set_lna_gain(rx, mwc_rx_temp_lookup[temp][!mwc->hbtx].lna_attn);
+		ret = hmc6301_set_lna_gain(rx, lna_attn);
 	}
 
 	if (mwc->tx_autotuning) {
@@ -527,7 +470,11 @@ int mwc_iio_init(struct mwc_iio_dev **iiodev,
 	d->rx_target = init_param->rx_target;
 	d->rx_tolerance = init_param->rx_tolerance;
 	d->tx_auto_ifvga = init_param->tx_auto_ifvga;
+	d->tx_auto_if_correlation = init_param->tx_auto_if_correlation;
+	d->tx_auto_if_correlation_entries = init_param->tx_auto_if_correlation_entries;
 	d->rx_auto_ifvga_rflna = init_param->rx_auto_ifvga_rflna;
+	d->rx_auto_if_lna_correlation = init_param->rx_auto_if_lna_correlation;
+	d->rx_auto_if_lna_correlation_entries = init_param->rx_auto_if_lna_correlation_entries;
 	d->id = init_param->id;
 	d->hbtx = init_param->hbtx;
 
