@@ -81,7 +81,7 @@ static int hmc630x_iio_read_attr(void *device, char *buf,
 	bool enable;
 	uint64_t vco;
 	uint8_t attn;
-	enum hmc6301_lna_gain lna_gain;
+	enum hmc6301_lna_attn lna_attn;
 	enum hmc6301_bb_attn attn1, attn2;
 	enum hmc6301_bb_attn_fine attni, attnq;
 	enum hmc6301_bb_lpc lpc;
@@ -124,11 +124,11 @@ static int hmc630x_iio_read_attr(void *device, char *buf,
 		val = attn;
 		break;
 	case HMC6301_IIO_ATTR_RF_LNA_GAIN:
-		ret = hmc6301_get_lna_gain(d, &lna_gain);
+		ret = hmc6301_get_lna_gain(d, &lna_attn);
 		if (ret)
 			return ret;
 
-		val = lna_gain;
+		val = lna_attn;
 		break;
 	case HMC6301_IIO_ATTR_BB_ATTN1:
 	case HMC6301_IIO_ATTR_BB_ATTN2:
@@ -204,7 +204,7 @@ static int hmc630x_iio_write_attr(void *device, char *buf,
 		ret = hmc6300_set_rf_attn(d, (uint8_t)val);
 		break;
 	case HMC6301_IIO_ATTR_RF_LNA_GAIN:
-		ret = hmc6301_set_lna_gain(d, (enum hmc6301_lna_gain)val);
+		ret = hmc6301_set_lna_gain(d, (enum hmc6301_lna_attn)val);
 		break;
 	case HMC6301_IIO_ATTR_BB_ATTN1:
 	case HMC6301_IIO_ATTR_BB_ATTN2:
