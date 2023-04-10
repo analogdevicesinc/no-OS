@@ -1044,6 +1044,10 @@ int adis_iio_trigger_handler(struct iio_device_data *dev_data)
 					}
 				}
 				break;
+			case ADIS_DATA_COUNTER:
+				iio_adis->data[i++] = 0;
+				iio_adis->data[i++] = buff[data_cntr_offset];
+				break;
 			default:
 				break;
 			}
