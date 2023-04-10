@@ -229,12 +229,12 @@ enum hmc630x_type {
 	HMC6301,
 };
 
-/* Possible values for receiver LNA gain. */
-enum hmc6301_lna_gain {
-	HMC6301_LNA_GAIN_0dB,
-	HMC6301_LNA_GAIN_6dB,
-	HMC6301_LNA_GAIN_12dB,
-	HMC6301_LNA_GAIN_18dB
+/* Possible values for receiver LNA attenuator. */
+enum hmc6301_lna_attn {
+	HMC6301_LNA_ATTN_0dB,
+	HMC6301_LNA_ATTN_6dB,
+	HMC6301_LNA_ATTN_12dB,
+	HMC6301_LNA_ATTN_18dB
 };
 
 /* Possible baseband attenuation values. */
@@ -290,7 +290,7 @@ struct hmc6301_attr {
 	enum hmc6301_bb_attn bb_attn2;
 	enum hmc6301_bb_attn_fine bb_attni_fine;
 	enum hmc6301_bb_attn_fine bb_attnq_fine;
-	enum hmc6301_lna_gain lna_gain;
+	enum hmc6301_lna_attn lna_attn;
 	enum hmc6301_bb_lpc bb_lpc;
 	enum hmc6301_bb_hpc bb_hpc;
 };
@@ -352,8 +352,8 @@ int hmc6300_set_rf_attn(struct hmc630x_dev *dev, uint8_t attn);
 int hmc6300_get_rf_attn(struct hmc630x_dev *dev, uint8_t *attn);
 
 /* hmc6301-only API. */
-int hmc6301_set_lna_gain(struct hmc630x_dev *dev, enum hmc6301_lna_gain gain);
-int hmc6301_get_lna_gain(struct hmc630x_dev *dev, enum hmc6301_lna_gain *gain);
+int hmc6301_set_lna_gain(struct hmc630x_dev *dev, enum hmc6301_lna_attn gain);
+int hmc6301_get_lna_gain(struct hmc630x_dev *dev, enum hmc6301_lna_attn *gain);
 int hmc6301_set_bb_attn(struct hmc630x_dev *dev, enum hmc6301_bb_attn attn1,
 			enum hmc6301_bb_attn attn2);
 int hmc6301_get_bb_attn(struct hmc630x_dev *dev, enum hmc6301_bb_attn *attn1,

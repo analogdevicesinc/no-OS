@@ -214,7 +214,7 @@ int hmc630x_init(struct hmc630x_dev **dev, struct hmc630x_init_param *init)
 		if (ret)
 			goto error;
 	} else {
-		ret = hmc6301_set_lna_gain(d, init->rx.lna_gain);
+		ret = hmc6301_set_lna_gain(d, init->rx.lna_attn);
 		if (ret)
 			goto error;
 
@@ -866,7 +866,7 @@ int hmc630x_get_avail_vco(struct hmc630x_dev *dev, const uint64_t **avail,
 }
 
 /* Set the receiver LNA gain. */
-int hmc6301_set_lna_gain(struct hmc630x_dev *dev, enum hmc6301_lna_gain gain)
+int hmc6301_set_lna_gain(struct hmc630x_dev *dev, enum hmc6301_lna_attn gain)
 {
 	if (!dev)
 		return -EINVAL;
@@ -879,7 +879,7 @@ int hmc6301_set_lna_gain(struct hmc630x_dev *dev, enum hmc6301_lna_gain gain)
 }
 
 /* Get the receiver LNA gain. */
-int hmc6301_get_lna_gain(struct hmc630x_dev *dev, enum hmc6301_lna_gain *gain)
+int hmc6301_get_lna_gain(struct hmc630x_dev *dev, enum hmc6301_lna_attn *gain)
 {
 	if (!dev)
 		return -EINVAL;
