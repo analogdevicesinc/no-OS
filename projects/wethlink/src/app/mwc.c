@@ -53,44 +53,44 @@ struct mwc_temp_if_correlation mwc_tx_temp_lookup[32][2] = {
 };
 
 struct mwc_temp_if_lna_correlation {
-	uint8_t ifreq;
-	uint8_t lna_gain;
+	uint8_t if_attn;
+	uint8_t lna_attn;
 };
 
 struct mwc_temp_if_lna_correlation mwc_rx_temp_lookup[32][2] = {
 	// hbtx, lbtx
 	{{0}, {0}},
-	{{11, HMC6301_LNA_GAIN_18dB}, {6, HMC6301_LNA_GAIN_18dB}},
-	{{11, HMC6301_LNA_GAIN_18dB}, {6, HMC6301_LNA_GAIN_18dB}},
-	{{11, HMC6301_LNA_GAIN_18dB}, {6, HMC6301_LNA_GAIN_18dB}},
-	{{11, HMC6301_LNA_GAIN_18dB}, {6, HMC6301_LNA_GAIN_18dB}},
-	{{11, HMC6301_LNA_GAIN_18dB}, {6, HMC6301_LNA_GAIN_18dB}},
-	{{11, HMC6301_LNA_GAIN_18dB}, {6, HMC6301_LNA_GAIN_18dB}},
-	{{11, HMC6301_LNA_GAIN_12dB}, {6, HMC6301_LNA_GAIN_12dB}},
-	{{11, HMC6301_LNA_GAIN_12dB}, {6, HMC6301_LNA_GAIN_12dB}},
-	{{11, HMC6301_LNA_GAIN_12dB}, {6, HMC6301_LNA_GAIN_12dB}},
-	{{11, HMC6301_LNA_GAIN_12dB}, {6, HMC6301_LNA_GAIN_12dB}},
-	{{11, HMC6301_LNA_GAIN_12dB}, {6, HMC6301_LNA_GAIN_12dB}},
-	{{11, HMC6301_LNA_GAIN_12dB}, {6, HMC6301_LNA_GAIN_12dB}},
-	{{11, HMC6301_LNA_GAIN_12dB}, {6, HMC6301_LNA_GAIN_12dB}},
-	{{11, HMC6301_LNA_GAIN_12dB}, {6, HMC6301_LNA_GAIN_12dB}},
-	{{11, HMC6301_LNA_GAIN_6dB}, {6, HMC6301_LNA_GAIN_6dB}},
-	{{11, HMC6301_LNA_GAIN_6dB}, {6, HMC6301_LNA_GAIN_6dB}},
-	{{11, HMC6301_LNA_GAIN_6dB}, {6, HMC6301_LNA_GAIN_6dB}},
-	{{11, HMC6301_LNA_GAIN_6dB}, {6, HMC6301_LNA_GAIN_6dB}},
-	{{11, HMC6301_LNA_GAIN_6dB}, {6, HMC6301_LNA_GAIN_6dB}},
-	{{11, HMC6301_LNA_GAIN_6dB}, {6, HMC6301_LNA_GAIN_6dB}},
-	{{11, HMC6301_LNA_GAIN_6dB}, {6, HMC6301_LNA_GAIN_6dB}},
-	{{11, HMC6301_LNA_GAIN_6dB}, {6, HMC6301_LNA_GAIN_6dB}},
-	{{11, HMC6301_LNA_GAIN_6dB}, {6, HMC6301_LNA_GAIN_6dB}},
-	{{11, HMC6301_LNA_GAIN_6dB}, {6, HMC6301_LNA_GAIN_6dB}},
-	{{11, HMC6301_LNA_GAIN_6dB}, {6, HMC6301_LNA_GAIN_6dB}},
-	{{11, HMC6301_LNA_GAIN_6dB}, {6, HMC6301_LNA_GAIN_6dB}},
-	{{11, HMC6301_LNA_GAIN_6dB}, {6, HMC6301_LNA_GAIN_6dB}},
-	{{11, HMC6301_LNA_GAIN_6dB}, {6, HMC6301_LNA_GAIN_6dB}},
-	{{11, HMC6301_LNA_GAIN_6dB}, {6, HMC6301_LNA_GAIN_6dB}},
-	{{11, HMC6301_LNA_GAIN_6dB}, {6, HMC6301_LNA_GAIN_6dB}},
-	{{8, HMC6301_LNA_GAIN_0dB}, {3, HMC6301_LNA_GAIN_0dB}},
+	{{11, HMC6301_LNA_ATTN_18dB}, {6, HMC6301_LNA_ATTN_18dB}},
+	{{11, HMC6301_LNA_ATTN_18dB}, {6, HMC6301_LNA_ATTN_18dB}},
+	{{11, HMC6301_LNA_ATTN_18dB}, {6, HMC6301_LNA_ATTN_18dB}},
+	{{11, HMC6301_LNA_ATTN_18dB}, {6, HMC6301_LNA_ATTN_18dB}},
+	{{11, HMC6301_LNA_ATTN_18dB}, {6, HMC6301_LNA_ATTN_18dB}},
+	{{11, HMC6301_LNA_ATTN_18dB}, {6, HMC6301_LNA_ATTN_18dB}},
+	{{11, HMC6301_LNA_ATTN_12dB}, {6, HMC6301_LNA_ATTN_12dB}},
+	{{11, HMC6301_LNA_ATTN_12dB}, {6, HMC6301_LNA_ATTN_12dB}},
+	{{11, HMC6301_LNA_ATTN_12dB}, {6, HMC6301_LNA_ATTN_12dB}},
+	{{11, HMC6301_LNA_ATTN_12dB}, {6, HMC6301_LNA_ATTN_12dB}},
+	{{11, HMC6301_LNA_ATTN_12dB}, {6, HMC6301_LNA_ATTN_12dB}},
+	{{11, HMC6301_LNA_ATTN_12dB}, {6, HMC6301_LNA_ATTN_12dB}},
+	{{11, HMC6301_LNA_ATTN_12dB}, {6, HMC6301_LNA_ATTN_12dB}},
+	{{11, HMC6301_LNA_ATTN_12dB}, {6, HMC6301_LNA_ATTN_12dB}},
+	{{11, HMC6301_LNA_ATTN_6dB}, {6, HMC6301_LNA_ATTN_6dB}},
+	{{11, HMC6301_LNA_ATTN_6dB}, {6, HMC6301_LNA_ATTN_6dB}},
+	{{11, HMC6301_LNA_ATTN_6dB}, {6, HMC6301_LNA_ATTN_6dB}},
+	{{11, HMC6301_LNA_ATTN_6dB}, {6, HMC6301_LNA_ATTN_6dB}},
+	{{11, HMC6301_LNA_ATTN_6dB}, {6, HMC6301_LNA_ATTN_6dB}},
+	{{11, HMC6301_LNA_ATTN_6dB}, {6, HMC6301_LNA_ATTN_6dB}},
+	{{11, HMC6301_LNA_ATTN_6dB}, {6, HMC6301_LNA_ATTN_6dB}},
+	{{11, HMC6301_LNA_ATTN_6dB}, {6, HMC6301_LNA_ATTN_6dB}},
+	{{11, HMC6301_LNA_ATTN_6dB}, {6, HMC6301_LNA_ATTN_6dB}},
+	{{11, HMC6301_LNA_ATTN_6dB}, {6, HMC6301_LNA_ATTN_6dB}},
+	{{11, HMC6301_LNA_ATTN_6dB}, {6, HMC6301_LNA_ATTN_6dB}},
+	{{11, HMC6301_LNA_ATTN_6dB}, {6, HMC6301_LNA_ATTN_6dB}},
+	{{11, HMC6301_LNA_ATTN_6dB}, {6, HMC6301_LNA_ATTN_6dB}},
+	{{11, HMC6301_LNA_ATTN_6dB}, {6, HMC6301_LNA_ATTN_6dB}},
+	{{11, HMC6301_LNA_ATTN_6dB}, {6, HMC6301_LNA_ATTN_6dB}},
+	{{11, HMC6301_LNA_ATTN_6dB}, {6, HMC6301_LNA_ATTN_6dB}},
+	{{8, HMC6301_LNA_ATTN_0dB}, {3, HMC6301_LNA_ATTN_0dB}},
 };
 
 int mwc_algorithms(struct mwc_iio_dev *mwc)
@@ -115,11 +115,11 @@ int mwc_algorithms(struct mwc_iio_dev *mwc)
 		if (ret)
 			return ret;
 
-		ret = hmc630x_set_if_attn(rx, mwc_rx_temp_lookup[temp][!mwc->hbtx].ifreq);
+		ret = hmc630x_set_if_attn(rx, mwc_rx_temp_lookup[temp][!mwc->hbtx].if_attn);
 		if (ret)
 			return ret;
 
-		ret = hmc6301_set_lna_gain(rx, mwc_rx_temp_lookup[temp][!mwc->hbtx].lna_gain);
+		ret = hmc6301_set_lna_gain(rx, mwc_rx_temp_lookup[temp][!mwc->hbtx].lna_attn);
 	}
 
 	if (mwc->tx_autotuning) {
@@ -225,7 +225,7 @@ int mwc_algorithms(struct mwc_iio_dev *mwc)
 			if (match_count == 10 || iter_count == 20) {
 				done = true;
 				uint8_t if_attn;
-				enum hmc6301_lna_gain rflna_attn;
+				enum hmc6301_lna_attn rflna_attn;
 				hmc630x_get_if_attn(rx, &if_attn);
 				hmc6301_get_lna_gain(rx, &rflna_attn);
 				float gain = 69 - (float)if_attn * 1.3 - (float)rflna_attn * 6 - 
