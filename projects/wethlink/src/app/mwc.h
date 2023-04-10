@@ -7,6 +7,12 @@
 #include "hmc630x.h"
 #include "no_os_pid.h"
 
+enum admv96xx_id {
+	ID_ADMV96X1 = 1,
+	ID_ADMV96X3 = 3,
+	ID_ADMV96X5 = 5,
+};
+
 struct mwc_iio_dev {
 	struct iio_device *iio_dev;
 	struct hmc630x_iio_dev *tx_iiodev;
@@ -20,9 +26,10 @@ struct mwc_iio_dev {
 	unsigned int rx_tolerance;
 	bool tx_auto_ifvga;
 	bool rx_auto_ifvga_rflna;
-	bool hbtx;
 	struct no_os_pid *tx_pid;
 	struct no_os_pid *rx_pid;
+	enum admv96xx_id id;
+	bool hbtx;
 };
 
 struct mwc_iio_init_param {
@@ -35,6 +42,7 @@ struct mwc_iio_init_param {
 	unsigned int rx_tolerance;
 	bool tx_auto_ifvga;
 	bool rx_auto_ifvga_rflna;
+	enum admv96xx_id id;
 	bool hbtx;
 };
 
