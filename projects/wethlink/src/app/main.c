@@ -215,7 +215,7 @@ int main(void)
 	rxip.rx.bb_attn2 = HMC6301_BB_ATTN_18dB;
 	rxip.rx.bb_attni_fine = HMC6301_BB_ATTN_FINE_3dB;
 	rxip.rx.bb_attnq_fine = HMC6301_BB_ATTN_FINE_0dB;
-	rxip.rx.lna_gain = HMC6301_LNA_GAIN_12dB;
+	rxip.rx.lna_attn = HMC6301_LNA_ATTN_12dB;
 	rxip.rx.bb_lpc = HMC6301_BB_LPC_1400MHz;
 	rxip.rx.bb_hpc = HMC6301_BB_HPC_45kHz;
 	struct hmc630x_iio_init_param iio_rxip = {
