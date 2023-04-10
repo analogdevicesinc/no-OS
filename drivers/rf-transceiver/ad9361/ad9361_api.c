@@ -563,7 +563,6 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy,
 		goto out_clk;
 
 #ifndef AXI_ADC_NOT_PRESENT
-	axi_adc_init(&phy->rx_adc, init_param->rx_adc_init);
 	axi_adc_read(phy->rx_adc, ADI_REG_VERSION, &phy->adc_state->pcore_version);
 	/* platform specific wrapper to call ad9361_post_setup() */
 	ret = ad9361_post_setup(phy);

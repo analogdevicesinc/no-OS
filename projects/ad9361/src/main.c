@@ -452,10 +452,6 @@ AD9361_InitParam default_init_param = {
 	NULL,	//(*ad9361_rfpll_ext_recalc_rate)()
 	NULL,	//(*ad9361_rfpll_ext_round_rate)()
 	NULL,	//(*ad9361_rfpll_ext_set_rate)()
-#ifndef AXI_ADC_NOT_PRESENT
-	&rx_adc_init,	// *rx_adc_init
-	&tx_dac_init,   // *tx_dac_init
-#endif
 };
 
 AD9361_RXFIRConfig rx_fir_config = {	// BPF PASSBAND 3/20 fs to 1/4 fs
@@ -615,11 +611,17 @@ int main(void)
 #if defined XILINX_PLATFORM || defined LINUX_PLATFORM || defined ALTERA_PLATFORM
 #ifdef DMA_EXAMPLE
 #ifdef FMCOMMS5
+#ifndef AXI_ADC_NOT_PRESENT
+	axi_adc_init(&ad9361_phy_b->rx_adc, &rx_adc_init);
+#endif
 	axi_dac_init(&ad9361_phy_b->tx_dac, &tx_dac_init);
 	axi_dac_set_datasel(ad9361_phy_b->tx_dac, -1, AXI_DAC_DATA_SEL_DMA);
 	rx_adc_init.base = AD9361_RX_0_BASEADDR;
 	rx_adc_init.num_slave_channels = 4;
 	tx_dac_init.base = AD9361_TX_0_BASEADDR;
+#endif
+#ifndef AXI_ADC_NOT_PRESENT
+	axi_adc_init(&ad9361_phy->rx_adc, &rx_adc_init);
 #endif
 	axi_dac_init(&ad9361_phy->tx_dac, &tx_dac_init);
 	extern const uint32_t sine_lut_iq[1024];
@@ -634,8 +636,6 @@ int main(void)
 #ifdef FMCOMMS5
 	axi_dac_init(&ad9361_phy_b->tx_dac, &tx_dac_init);
 	axi_dac_set_datasel(ad9361_phy_b->tx_dac, -1, AXI_DAC_DATA_SEL_DDS);
-	rx_adc_init.base = AD9361_RX_0_BASEADDR;
-	rx_adc_init.num_slave_channels = 4;
 	tx_dac_init.base = AD9361_TX_0_BASEADDR;
 #endif
 	axi_dac_init(&ad9361_phy->tx_dac, &tx_dac_init);

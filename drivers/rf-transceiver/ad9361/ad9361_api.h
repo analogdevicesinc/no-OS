@@ -291,10 +291,6 @@ typedef struct {
 			uint32_t rate);
 	int32_t		(*ad9361_rfpll_ext_set_rate)(struct refclk_scale *clk_priv,
 			uint32_t rate);
-#ifndef AXI_ADC_NOT_PRESENT
-	struct axi_adc_init	*rx_adc_init;
-	struct axi_dac_init	*tx_dac_init;
-#endif
 } AD9361_InitParam;
 
 typedef struct {
