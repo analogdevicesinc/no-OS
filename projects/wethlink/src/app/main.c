@@ -95,7 +95,9 @@ int main(void)
 	int ret;
 	struct no_os_uart_desc *console;
 	char hw_model_str[10];
-	uint8_t admv9615;
+	enum admv96xx_id id = ID_ADMV96X5;
+	uint8_t hbtx;
+	uint64_t txfreq, rxfreq;
 	struct no_os_gpio_desc *brd_select;
 
 #if (TARGET_NUM == 32650)
@@ -113,16 +115,13 @@ int main(void)
 	ret = no_os_gpio_direction_input(brd_select);
 	if (ret)
 		goto end;
-	ret = no_os_gpio_get_value(brd_select, &admv9615);
+	ret = no_os_gpio_get_value(brd_select, &hbtx);
 	if (ret)
 		goto end;
 #else
-	admv9615 = false;
+	hbtx = false; // manually set this for the eval kit
 #endif
-	if (admv9615)
-		strcpy(hw_model_str, "admv9615");
-	else
-		strcpy(hw_model_str, "admv9625");
+	sprintf(hw_model_str, "admv96%d%d", hbtx ? 1 : 2, id);
 
 	printf("Board: %s\n", hw_model_str);
 #if (TARGET_NUM == 32650)
@@ -131,8 +130,20 @@ int main(void)
 		goto end;
 #endif
 
-	const uint64_t txfreq = admv9615 ? 63000000000 : 58012500000;
-	const uint64_t rxfreq = admv9615 ? 58012500000 : 63000000000;
+	switch(id) {
+	case ID_ADMV96X1:
+		txfreq = hbtx ? 63000000000 : 58012500000;
+		rxfreq = hbtx ? 58012500000 : 63000000000;
+		break;
+	case ID_ADMV96X3:
+	case ID_ADMV96X5:
+		txfreq = hbtx ? 63262500000 : 59850000000;
+		rxfreq = hbtx ? 59850000000 : 63262500000;
+		break;
+	default:
+		ret = -EINVAL;
+		goto end;
+	};
 
 	struct mwc_iio_dev *mwc;
 	struct mwc_iio_init_param mwc_ip = {
@@ -145,7 +156,8 @@ int main(void)
 		.rx_tolerance = 50,
 		.tx_auto_ifvga = true,
 		.rx_auto_ifvga_rflna = true,
-		.hbtx = admv9615,
+		.id = id,
+		.hbtx = hbtx,
 	};
 	ret = mwc_iio_init(&mwc, &mwc_ip);
 	if (ret)
@@ -175,16 +187,17 @@ int main(void)
 	if (ret)
 		goto end;
 
-	// admv9615 specific initializations
-	ret = hmc630x_write(iio_tx->dev, HMC6300_PA_SEL_VREF, 0x8);
-	if (ret)
-		goto end;
-	ret = hmc630x_write(iio_tx->dev, HMC6300_PA_PWRDWN_FAST, 0);
-	if (ret)
-		goto end;
-	ret = hmc630x_write(iio_tx->dev, HMC6300_PA_SE_SEL, 0);
-	if (ret)
-		goto end;
+	if (id == ID_ADMV96X5) {
+		ret = hmc630x_write(iio_tx->dev, HMC6300_PA_SEL_VREF, 0x8);
+		if (ret)
+			goto end;
+		ret = hmc630x_write(iio_tx->dev, HMC6300_PA_PWRDWN_FAST, 0);
+		if (ret)
+			goto end;
+		ret = hmc630x_write(iio_tx->dev, HMC6300_PA_SE_SEL, 0);
+		if (ret)
+			goto end;
+	}
 
 	struct hmc630x_iio_dev *iio_rx;
 	struct hmc630x_init_param rxip = {0};
@@ -281,7 +294,7 @@ int main(void)
 #if (TARGET_NUM == 32650)
 	mwc_algorithms(mwc);
 
-	ret = net_init(admv9615);
+	ret = net_init(hbtx);
 	if (ret)
 		goto end;
 #endif

@@ -528,6 +528,7 @@ int mwc_iio_init(struct mwc_iio_dev **iiodev,
 	d->rx_tolerance = init_param->rx_tolerance;
 	d->tx_auto_ifvga = init_param->tx_auto_ifvga;
 	d->rx_auto_ifvga_rflna = init_param->rx_auto_ifvga_rflna;
+	d->id = init_param->id;
 	d->hbtx = init_param->hbtx;
 
 	// initialize reset gpio separately
