@@ -49,11 +49,11 @@
 //#define XILINX_PLATFORM
 //#define ALTERA_PLATFORM
 //#define LINUX_PLATFORM
-//#define FMCOMMS5
+#define FMCOMMS5
 //#define ADI_RF_SOM
 //#define ADI_RF_SOM_CMOS
 //#define DMA_IRQ_ENABLE
-//#define DMA_EXAMPLE
+#define DMA_EXAMPLE
 //#define AXI_ADC_NOT_PRESENT
 //#define TDD_SWITCH_STATE_EXAMPLE
 
