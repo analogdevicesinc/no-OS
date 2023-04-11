@@ -136,11 +136,11 @@ int32_t start_iiod(struct axi_dmac *rx_dmac, struct axi_dmac *tx_dmac,
 	struct iio_app_device devices[] = {
 #ifndef ADRV9008_2
 		IIO_APP_DEVICE("axi_adc", iio_axi_adc_desc, adc_dev_desc,
-			       &read_buff, NULL),
+			       &read_buff, NULL, NULL),
 #endif
 #ifndef ADRV9008_1
 		IIO_APP_DEVICE("axi_dac", iio_axi_dac_desc, dac_dev_desc,
-			       NULL, &write_buff)
+			       NULL, &write_buff, NULL)
 #endif
 	};
 

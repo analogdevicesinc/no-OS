@@ -261,7 +261,7 @@ int main(void)
 	};
 	struct iio_app_device devices[] = {
 		IIO_APP_DEVICE("ad9739a_dev", iio_axi_dac_desc, dev_desc,
-			       &read_buff, NULL),
+			       &read_buff, NULL, NULL),
 	};
 
 	app_init_param.devices = devices;

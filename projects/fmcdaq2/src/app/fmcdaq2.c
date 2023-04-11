@@ -797,13 +797,13 @@ static int fmcdaq2_iio_init(struct fmcdaq2_dev *dev,
 
 	struct iio_app_device devices[] = {
 		IIO_APP_DEVICE("axi_adc", iio_axi_adc_desc, adc_dev_desc,
-			       &read_buff, NULL),
+			       &read_buff, NULL, NULL),
 		IIO_APP_DEVICE("axi_dac", iio_axi_dac_desc, dac_dev_desc,
-			       NULL, &write_buff),
+			       NULL, &write_buff, NULL),
 		IIO_APP_DEVICE("ad9680_dev", dev->ad9680_device,
-			       &ad9680_iio_descriptor, NULL, NULL),
+			       &ad9680_iio_descriptor, NULL, NULL, NULL),
 		IIO_APP_DEVICE("ad9144_dev", dev->ad9144_device,
-			       &ad9144_iio_descriptor, NULL, NULL)
+			       &ad9144_iio_descriptor, NULL, NULL, NULL)
 	};
 
 	app_init_param.devices = devices;

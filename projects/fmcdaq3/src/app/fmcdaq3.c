@@ -713,13 +713,13 @@ int main(void)
 
 	struct iio_app_device devices[] = {
 		IIO_APP_DEVICE("axi_adc", iio_axi_adc_desc, adc_dev_desc,
-			       &read_buff, NULL),
+			       &read_buff, NULL, NULL),
 		IIO_APP_DEVICE("axi_dac", iio_axi_dac_desc, dac_dev_desc,
-			       NULL, &write_buff),
+			       NULL, &write_buff, NULL),
 		IIO_APP_DEVICE("ad9680_dev", ad9680_device,
-			       &ad9680_iio_descriptor, NULL, NULL),
+			       &ad9680_iio_descriptor, NULL, NULL, NULL),
 		IIO_APP_DEVICE("ad9152_dev", ad9152_device,
-			       &ad9152_iio_descriptor, NULL, NULL),
+			       &ad9152_iio_descriptor, NULL, NULL, NULL),
 	};
 
 	app_init_param.devices = devices;

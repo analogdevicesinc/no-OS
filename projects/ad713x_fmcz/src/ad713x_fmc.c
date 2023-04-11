@@ -327,11 +327,11 @@ int main()
 
 	struct iio_app_device devices[] = {
 		IIO_APP_DEVICE("dual_ad7134", iio_ad713x, ad713x_dev_desc,
-			       &rd_buff, NULL),
+			       &rd_buff, NULL, NULL),
 		IIO_APP_DEVICE("ad7134_1", ad713x_dev_1, &ad713x_iio_desc,
-			       NULL, NULL),
+			       NULL, NULL, NULL),
 		IIO_APP_DEVICE("ad7134_2", ad713x_dev_2, &ad713x_iio_desc,
-			       NULL, NULL)
+			       NULL, NULL, NULL)
 
 	};
 

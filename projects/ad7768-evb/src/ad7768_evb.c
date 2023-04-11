@@ -351,7 +351,7 @@ int main(void)
 
 	struct iio_app_device devs[] = {
 		IIO_APP_DEVICE("ad7768_dev", iio_axi_adc_desc, dev_desc,
-			       &read_buff, NULL),
+			       &read_buff, NULL, NULL),
 	};
 
 	app_init_param.devices = devs;

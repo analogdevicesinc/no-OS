@@ -46,12 +46,13 @@
 #include "no_os_error.h"
 #include "no_os_delay.h"
 
-#define IIO_APP_DEVICE(_name, _dev, _dev_descriptor, _read_buff, _write_buff) {\
+#define IIO_APP_DEVICE(_name, _dev, _dev_descriptor, _read_buff, _write_buff, _default_trigger_id) {\
 	.name = _name,\
 	.dev = _dev,\
 	.dev_descriptor = _dev_descriptor,\
 	.read_buff = _read_buff,\
-	.write_buff = _write_buff\
+	.write_buff = _write_buff,\
+	.default_trigger_id = _default_trigger_id\
 }
 
 #define IIO_APP_TRIGGER(_name, _trig, _trig_descriptor) {\
@@ -71,6 +72,7 @@ struct iio_app_device {
 	struct iio_device *dev_descriptor;
 	struct iio_data_buffer *read_buff;
 	struct iio_data_buffer *write_buff;
+	char *default_trigger_id;
 };
 
 /**

@@ -370,7 +370,7 @@ int main(void)
 	};
 	struct iio_app_device devices[] = {
 		IIO_APP_DEVICE("axi_dac", iio_axi_dac_desc, dac_dev_desc,
-			       &write_buff, NULL),
+			       &write_buff, NULL, NULL),
 	};
 
 	app_init_param.devices = devices;

@@ -196,7 +196,7 @@ int main()
 			.dev = adciio,
 			.dev_descriptor = adciio->iio_dev,
 			.read_buff =  &iio_ad413x_read_buff,
-			.write_buff = NULL
+			.write_buff = NULL,
 		}
 	};
 

@@ -139,7 +139,7 @@ int main(void)
 	struct iio_app_device devices[] = {
 		IIO_APP_DEVICE("ad5791", ad5791_iio_handle,
 			       ad5791_iio_handle->ad5791_iio_dev,
-			       &iio_ad5791_read_buff, NULL)
+			       &iio_ad5791_read_buff, NULL, NULL)
 	};
 
 	app_init_param.devices = devices;

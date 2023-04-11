@@ -420,7 +420,7 @@ int main(void)
 
 	struct iio_app_device devices[] = {
 		IIO_APP_DEVICE("adpd1080", adpd1080_iio_device, &iio_adpd188_device,
-			       &iio_adpd1080_read_buff, NULL)
+			       &iio_adpd1080_read_buff, NULL, NULL)
 	};
 
 	app_init_param.devices = devices;

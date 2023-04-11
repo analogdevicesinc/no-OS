@@ -131,7 +131,7 @@ int main(void)
 	struct iio_app_device devices[] = {
 		IIO_APP_DEVICE("adcum3029", &g_aducm3029_desc,
 			       &iio_aducm3029_desc,
-			       &adc_read_buff, NULL)
+			       &adc_read_buff, NULL, NULL)
 	};
 
 	/**

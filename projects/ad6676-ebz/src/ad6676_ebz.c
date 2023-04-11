@@ -517,7 +517,7 @@ int main(void)
 	iio_axi_adc_get_dev_descriptor(iio_axi_adc_desc, &adc_dev_desc);
 	struct iio_app_device devices[] = {
 		IIO_APP_DEVICE("ad6676_dev", iio_axi_adc_desc,
-			       adc_dev_desc, &read_buff, NULL),
+			       adc_dev_desc, &read_buff, NULL, NULL),
 	};
 
 	app_init_param.devices = devices;
