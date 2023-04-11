@@ -96,6 +96,7 @@ int main(void)
 	struct no_os_uart_desc *console;
 	char hw_model_str[10];
 	enum admv96xx_id id = ID_ADMV96X5;
+	int speed;
 	uint8_t hbtx;
 	uint64_t txfreq, rxfreq;
 	struct no_os_gpio_desc *brd_select;
@@ -161,7 +162,7 @@ int main(void)
 		.tx_autotuning = true,
 		.tx_target = 350,
 		.tx_tolerance = 50,
-		.rx_autotuning = true,
+		.rx_autotuning = id == ID_ADMV96X1 ? false : true,
 		.rx_target = 1950,
 		.rx_tolerance = 50,
 		.tx_auto_ifvga = true,
@@ -308,7 +309,20 @@ int main(void)
 #if (TARGET_NUM == 32650)
 	mwc_algorithms(mwc);
 
-	ret = net_init(hbtx);
+	switch(id) {
+	case ID_ADMV96X1:
+		speed = 100;
+		break;
+	case ID_ADMV96X3:
+		speed = 100;
+		break;
+	default:
+	case ID_ADMV96X5:
+		speed = 1000;
+		break;
+	};
+
+	ret = net_init(hbtx, speed);
 	if (ret)
 		goto end;
 #endif

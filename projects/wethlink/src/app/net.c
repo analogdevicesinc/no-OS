@@ -9,6 +9,22 @@
 
 #define ADIN1300_MII_CONTROL		0x0000
 #define ADIN1300_LOOPBACK_MASK		NO_OS_BIT(14)
+#define ADIN1300_SPEED_SEL_LSB_MASK	NO_OS_BIT(13)
+#define ADIN1300_AUTONEG_EN_MASK	NO_OS_BIT(12)
+#define ADIN1300_RESTART_ANEG_MASK	NO_OS_BIT(9)
+#define ADIN1300_DPLX_MODE_MASK		NO_OS_BIT(8)
+#define ADIN1300_SPEED_SEL_MSB_MASK	NO_OS_BIT(6)
+
+#define ADIN1300_AUTONEG_ADV		0x04
+#define ADIN1300_FD_100_ADV_MASK	NO_OS_BIT(8)
+#define ADIN1300_HD_100_ADV_MASK	NO_OS_BIT(7)
+#define ADIN1300_FD_10_ADV_MASK		NO_OS_BIT(6)
+#define ADIN1300_HD_10_ADV_MASK		NO_OS_BIT(5)
+#define ADIN1300_SELECTOR_ADV_MASK	NO_OS_GENMASK(4, 0)
+
+#define ADIN1300_MSTR_SLV_CONTROL	0x09
+#define ADIN1300_FD_1000_ADV_MASK	NO_OS_BIT(9)
+#define ADIN1300_HD_1000_ADV_MASK	NO_OS_BIT(8)
 
 #define ADIN1300_PHY_CTRL_1		0x0012
 #define ADIN1300_DIAG_CLK_EN_MASK	NO_OS_BIT(2)
@@ -18,9 +34,14 @@
 
 #define ADIN1300_RX_ERR_CNT		0x0014
 
+#define ADIN1300_PHY_CTRL_2		0x0016
+#define ADIN1300_DN_SPEED_TO_100_EN_MASK	NO_OS_BIT(11)
+#define ADIN1300_DN_SPEED_TO_10_EN_MASK	NO_OS_BIT(10)
+#define ADIN1300_CLK_CNTRL_MASK		NO_OS_GENMASK(3, 1)
+
 #define ADIN1300_PHY_STATUS_1		0x001a
 #define ADIN1300_HCD_TECH_MASK		NO_OS_GENMASK(9, 7)
-#define ADIN1300_LINK_STAT		NO_OS_BIT(6)
+#define ADIN1300_LINK_STAT_MASK		NO_OS_BIT(6)
 
 #define ADIN1300_PHY_STATUS_2		0x001f
 
@@ -215,12 +236,27 @@ int adin1300_regmap(struct no_os_mdio_desc *phy)
 	return 0;
 }
 
-int net_init(bool hbtx)
+int net_init(bool hbtx, unsigned int speed)
 {
 	int ret;
 	uint16_t val;
+	uint16_t spd;
 	struct no_os_mdio_desc *phy, *serdes;
 	struct no_os_gpio_desc *phy_reset, *serdes_reset;
+
+	// used for in MAX24287_GMIICR_SPD_MASK and MAX24287_SPD_MASK
+	switch(speed) {
+	case 10:
+		spd = 0;
+		break;
+	case 100:
+		spd = 1;
+		break;
+	case 1000:
+	default:
+		spd = 2;
+		break;
+	};
 
 	no_os_gpio_get(&phy_reset, &adin1300_reset_gpio_ip);
 	no_os_gpio_direction_output(phy_reset, NO_OS_GPIO_LOW);
@@ -274,7 +310,8 @@ int net_init(bool hbtx)
 
 	// GMIICR
 	val = no_os_field_prep(MAX24287_GMIICR_W_MASK, 1); // write 1
-	val |= no_os_field_prep(MAX24287_GMIICR_SPD_MASK, 2); // 0 - RGMII-10, 1 - RGMII-100, 2 - RGMII-1000 or 3 - RTBI
+	// parallel interface speed
+	val |= no_os_field_prep(MAX24287_GMIICR_SPD_MASK, spd); // 0 - RGMII-10, 1 - RGMII-100, 2 - RGMII-1000 or 3 - RTBI
 	val |= no_os_field_prep(MAX24287_GMIICR_DDR_MASK, 1);
 	max24287_write(serdes, MAX24287_GMIICR, val);
 
@@ -290,7 +327,8 @@ int net_init(bool hbtx)
 		val = no_os_field_prep(MAX24287_AN_ADV_W_MASK, 1);
 		val |= no_os_field_prep(MAX24287_LK_MASK, 1);
 		val |= no_os_field_prep(MAX24287_DPLX_MASK, 1);
-		val |= no_os_field_prep(MAX24287_SPD_MASK, 2); // 0 - 10Mbps, 1 - 100 Mbps, 2 - 1000 Mbps
+		// serial interface speed
+		val |= no_os_field_prep(MAX24287_SPD_MASK, spd); // 0 - 10Mbps, 1 - 100 Mbps, 2 - 1000 Mbps
 		max24287_write(serdes, MAX24287_AN_ADV, val);
 		//max24287_write(serdes, MAX24287_BMCR, MAX24287_AN_EN_MASK | MAX24287_AN_START_MASK);
 	// }
@@ -322,15 +360,46 @@ int net_init(bool hbtx)
 	no_os_mdio_write(phy, ADIN1300_GE_CLK_CFG,
 		ADIN1300_GE_REF_CLK_EN_MASK | ADIN1300_GE_CLK_RCVR_125_EN_MASK);
 
+	
+	// set speed capabilities
+	val = no_os_field_prep(ADIN1300_SELECTOR_ADV_MASK, 0x1);
+	if (speed >= 10)
+		val |= ADIN1300_FD_10_ADV_MASK | ADIN1300_HD_10_ADV_MASK;
+	if (speed >= 100)
+		val |= ADIN1300_FD_100_ADV_MASK | ADIN1300_HD_100_ADV_MASK;
+	no_os_mdio_write(phy, ADIN1300_AUTONEG_ADV, val);
+
+	if (speed >= 1000)
+		val |= ADIN1300_FD_1000_ADV_MASK | ADIN1300_HD_1000_ADV_MASK;
+	no_os_mdio_write(phy, ADIN1300_MSTR_SLV_CONTROL, val);
+
+	// autonegotiate
+	val = ADIN1300_DPLX_MODE_MASK | ADIN1300_AUTONEG_EN_MASK | ADIN1300_RESTART_ANEG_MASK;
+	// if (spd == 2)
+	// 	val |= ADIN1300_AUTONEG_EN_MASK;
+	if (spd & 0x1)
+		val |= ADIN1300_SPEED_SEL_LSB_MASK;
+	if (spd & 0x2)
+		val |= ADIN1300_SPEED_SEL_MSB_MASK;
+	no_os_mdio_write(phy, ADIN1300_MII_CONTROL, val);
+	
+	/* downspeed 1000 -> 100 -> 10
+	val = no_os_field_prep(ADIN1300_DN_SPEED_TO_100_EN_MASK, 1);
+	val |= no_os_field_prep(ADIN1300_DN_SPEED_TO_10_EN_MASK, 1);
+	val |= no_os_field_prep(ADIN1300_CLK_CNTRL_MASK, 0x4); // default
+	no_os_mdio_write(phy, ADIN1300_PHY_CTRL_2, val);
+	*/
+
 	// wait a bit for PHY to establish link
-	int timeout;
+	int timeout = 0;
 	while(timeout < 5000) {
 		timeout++;
 		no_os_mdio_read(phy, ADIN1300_PHY_STATUS_1, &val);
-		if (val & ADIN1300_LINK_STAT)
+		if (val & ADIN1300_LINK_STAT_MASK)
 			break;
 		no_os_mdelay(1);
 	}
+
 	adin1300_regmap(phy);
 
 	// figure out resolved speed
@@ -347,6 +416,8 @@ int net_init(bool hbtx)
 		"reserved"
 	};
 	printf("Resolved speed: %s (0x%x) in %d ms\n", speeds[val], val, timeout);
+	no_os_mdio_read(phy, ADIN1300_AUTONEG_ADV, &val);
+	printf("AUTONEG_ADV: %x\n", val);
 
 	return 0;
 }
