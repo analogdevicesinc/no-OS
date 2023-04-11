@@ -230,7 +230,7 @@ int main(void)
 #ifdef IIO_SUPPORT
 	struct iio_app_device devices[] = {
 		IIO_APP_DEVICE("adf5902_dev", dev, &adf5902_iio_descriptor,
-			       NULL, NULL),
+			       NULL, NULL, NULL),
 	};
 	return iio_app_run(NULL, 0, devices, NO_OS_ARRAY_SIZE(devices));
 #endif

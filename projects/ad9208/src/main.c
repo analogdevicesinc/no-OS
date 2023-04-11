@@ -139,9 +139,9 @@ int32_t start_iiod(struct axi_adc *rx_0_adc, struct axi_adc *rx_1_adc,
 
 	struct iio_app_device devices[2] = {
 		IIO_APP_DEVICE("axi_adc0", iio_axi_adc_0_desc, adc0_dev_desc,
-			       &rd_buff0, NULL),
+			       &rd_buff0, NULL, NULL),
 		IIO_APP_DEVICE("axi_adc1", iio_axi_adc_1_desc, adc1_dev_desc,
-			       &rd_buff1, NULL),
+			       &rd_buff1, NULL, NULL),
 	};
 
 	app_init_param.devices = devices;

@@ -1122,8 +1122,8 @@ int main(void)
 	};
 	iio_axi_dac_get_dev_descriptor(iio_axi_dac_desc, &dac_dev_desc);
 	struct iio_app_device devices[] = {
-		IIO_APP_DEVICE("cf-ad9371-lpc", iio_axi_adc_desc, adc_dev_desc, &read_buff, NULL),
-		IIO_APP_DEVICE("cf-ad9371-dds-core-lpc", iio_axi_dac_desc, dac_dev_desc, NULL, &write_buff)
+		IIO_APP_DEVICE("cf-ad9371-lpc", iio_axi_adc_desc, adc_dev_desc, &read_buff, NULL, NULL),
+		IIO_APP_DEVICE("cf-ad9371-dds-core-lpc", iio_axi_dac_desc, dac_dev_desc, NULL, &write_buff, NULL)
 	};
 
 	app_init_param.devices = devices;

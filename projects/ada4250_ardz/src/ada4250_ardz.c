@@ -111,7 +111,7 @@ int main()
 	struct iio_app_device devices[] = {
 		IIO_APP_DEVICE("ADA4250", ada4250_dev,
 			       &ada4250_iio_descriptor,
-			       NULL, NULL)
+			       NULL, NULL, NULL)
 	};
 
 	app_init_param.devices = devices;

@@ -237,7 +237,7 @@ int main()
 
 	struct iio_app_device devices[] = {
 		IIO_APP_DEVICE("ad469x", dev, &ad469x_iio_descriptor,
-			       &read_buff, NULL),
+			       &read_buff, NULL, NULL),
 	};
 
 	app_init_param.devices = devices;

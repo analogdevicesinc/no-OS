@@ -254,7 +254,7 @@ int main()
 
 	struct iio_app_device devices[] = {
 		IIO_APP_DEVICE("ad3552r", iio_dac, iio_dac_descriptor, NULL,
-			       &wr_buff)
+			       &wr_buff, NULL)
 	};
 
 	err = 0;

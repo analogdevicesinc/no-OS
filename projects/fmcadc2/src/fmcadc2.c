@@ -280,7 +280,7 @@ int main(void)
 
 	struct iio_app_device devices[] = {
 		IIO_APP_DEVICE("axi-ad9625", iio_axi_adc_desc, adc_dev_desc,
-			       &read_buff, NULL),
+			       &read_buff, NULL, NULL),
 	};
 
 	app_init_param.devices = devices;
