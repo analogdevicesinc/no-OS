@@ -19,7 +19,8 @@ SRCS += $(DRIVERS)/dac/ad9739a/ad9739a.c \
 	$(DRIVERS)/api/no_os_spi.c \
 	$(DRIVERS)/axi_core/axi_dac_core/axi_dac_core.c \
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.c \
-	$(NO-OS)/util/no_os_util.c
+	$(NO-OS)/util/no_os_util.c \
+	$(NO-OS)/util/no_os_alloc.c
 ifeq (y,$(strip $(TINYIIOD)))
 SRCS += $(NO-OS)/util/no_os_fifo.c \
 	$(DRIVERS)/axi_core/iio_axi_dac/iio_axi_dac.c \
@@ -34,6 +35,7 @@ SRCS +=	$(PLATFORM_DRIVERS)/xilinx_axi_io.c \
 	$(PLATFORM_DRIVERS)/xilinx_spi.c \
 	$(PLATFORM_DRIVERS)/xilinx_delay.c
 INCS += $(PROJECT)/src/parameters.h \
+	$(PROJECT)/src/app_config.h \
 	$(DRIVERS)/frequency/adf4350/adf4350.h \
 	$(DRIVERS)/dac/ad9739a/ad9739a.h \
 	$(DRIVERS)/axi_core/axi_dac_core/axi_dac_core.h \
@@ -44,7 +46,8 @@ INCS +=	$(INCLUDE)/no_os_axi_io.h \
 	$(INCLUDE)/no_os_error.h \
 	$(INCLUDE)/no_os_delay.h \
 	$(INCLUDE)/no_os_print_log.h \
-	$(INCLUDE)/no_os_util.h
+	$(INCLUDE)/no_os_util.h \
+	$(INCLUDE)/no_os_alloc.h
 ifeq (y,$(strip $(TINYIIOD)))
 INCS +=	$(INCLUDE)/no_os_fifo.h \
 	$(INCLUDE)/no_os_irq.h \

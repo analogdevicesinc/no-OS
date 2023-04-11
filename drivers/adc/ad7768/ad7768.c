@@ -43,6 +43,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "ad7768.h"
+#include "no_os_alloc.h"
 
 const uint8_t standard_pin_ctrl_mode_sel[3][4] = {
 //		MCLK/1,	MCLK/2,	MCLK/4,	MCLK/8
@@ -625,7 +626,7 @@ int32_t ad7768_setup(ad7768_dev **device,
 	ad7768_dev *dev;
 	int32_t ret;
 
-	dev = (ad7768_dev *)malloc(sizeof(*dev));
+	dev = (ad7768_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev) {
 		return -1;
 	}

@@ -48,6 +48,7 @@
 #include "spi_engine.h"
 #endif
 #include "no_os_error.h"
+#include "no_os_alloc.h"
 
 /**
  * @brief Device resolution
@@ -164,7 +165,7 @@ int32_t ad400x_init(struct ad400x_dev **device,
 	spi_eng_init_param = init_param->spi_init.extra;
 #endif
 
-	dev = (struct ad400x_dev *)malloc(sizeof(*dev));
+	dev = (struct ad400x_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -213,7 +214,7 @@ int32_t ad400x_remove(struct ad400x_dev *dev)
 
 	ret = no_os_spi_remove(dev->spi_desc);
 
-	free(dev);
+	no_os_free(dev);
 
 	return ret;
 }

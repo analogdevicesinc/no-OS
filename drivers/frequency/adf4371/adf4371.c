@@ -46,6 +46,7 @@
 #include <stdio.h>
 #include "no_os_error.h"
 #include "no_os_util.h"
+#include "no_os_alloc.h"
 #include "adf4371.h"
 
 /******************************************************************************/
@@ -750,7 +751,7 @@ int32_t adf4371_init(struct adf4371_dev **device,
 	int32_t ret;
 	uint32_t i;
 
-	dev = (struct adf4371_dev *)calloc(1, sizeof(*dev));
+	dev = (struct adf4371_dev *)no_os_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -811,7 +812,7 @@ int32_t adf4371_init(struct adf4371_dev **device,
 
 error:
 	no_os_spi_remove(dev->spi_desc);
-	free(dev);
+	no_os_free(dev);
 
 	return ret;
 }
@@ -828,7 +829,7 @@ int32_t adf4371_remove(struct adf4371_dev *device)
 	if (device->spi_desc)
 		ret = no_os_spi_remove(device->spi_desc);
 
-	free(device);
+	no_os_free(device);
 
 	return ret;
 }

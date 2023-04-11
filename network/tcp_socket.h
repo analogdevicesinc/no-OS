@@ -46,6 +46,9 @@
 /******************************************************************************/
 
 #include "network_interface.h"
+#ifndef DISABLE_SECURE_SOCKET
+#include "mbedtls/ssl.h"
+#endif
 #include <stdint.h>
 
 /******************************************************************************/

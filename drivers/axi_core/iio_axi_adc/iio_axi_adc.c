@@ -47,6 +47,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "no_os_error.h"
+#include "no_os_alloc.h"
 #include "iio.h"
 #include "iio_axi_adc.h"
 
@@ -395,10 +396,10 @@ static int iio_axi_adc_delete_device_descriptor(
 		return -1;
 
 	if (desc->dev_descriptor.channels)
-		free(desc->dev_descriptor.channels);
+		no_os_free(desc->dev_descriptor.channels);
 
 	if (desc->ch_names)
-		free(desc->ch_names);
+		no_os_free(desc->ch_names);
 
 	return 0;
 }
@@ -436,12 +437,12 @@ static int32_t iio_axi_adc_create_device_descriptor(
 
 	iio_device->num_ch = desc->adc->num_channels;
 	iio_device->attributes = NULL; /* no device attribute */
-	iio_device->channels = calloc(iio_device->num_ch,
-				      sizeof(struct iio_channel));
+	iio_device->channels = no_os_calloc(iio_device->num_ch,
+					    sizeof(struct iio_channel));
 	if (!iio_device->channels)
 		goto error;
 
-	desc->ch_names = calloc(iio_device->num_ch, sizeof(*desc->ch_names));
+	desc->ch_names = no_os_calloc(iio_device->num_ch, sizeof(*desc->ch_names));
 	if (!desc->ch_names)
 		goto error;
 
@@ -497,7 +498,7 @@ int32_t iio_axi_adc_init(struct iio_axi_adc_desc **desc,
 	if (!init->rx_adc)
 		return -1;
 
-	iio_axi_adc_inst = (struct iio_axi_adc_desc *)calloc(1,
+	iio_axi_adc_inst = (struct iio_axi_adc_desc *)no_os_calloc(1,
 			   sizeof(struct iio_axi_adc_desc));
 	if (!iio_axi_adc_inst)
 		return -1;
@@ -512,7 +513,7 @@ int32_t iio_axi_adc_init(struct iio_axi_adc_desc **desc,
 	status = iio_axi_adc_create_device_descriptor(iio_axi_adc_inst,
 			&iio_axi_adc_inst->dev_descriptor);
 	if (NO_OS_IS_ERR_VALUE(status)) {
-		free(iio_axi_adc_inst);
+		no_os_free(iio_axi_adc_inst);
 		return status;
 	}
 
@@ -537,7 +538,7 @@ int32_t iio_axi_adc_remove(struct iio_axi_adc_desc *desc)
 	if (status < 0)
 		return status;
 
-	free(desc);
+	no_os_free(desc);
 
 	return 0;
 }

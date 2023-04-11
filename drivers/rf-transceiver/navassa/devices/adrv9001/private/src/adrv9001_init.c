@@ -161,7 +161,9 @@ static __maybe_unused int32_t adrv9001_ClocksSet(adi_adrv9001_Device_t *device,
 {
     adi_adrv9001_ClockSettings_t *clocks = NULL;
 
+#if ADI_ADRV9001_PRE_MCS_BROADCAST_DISABLE > 0
     int32_t recoveryAction = ADI_COMMON_ACT_NO_ACTION;
+#endif
     uint8_t modeAdc = 0;
     static const uint32_t DEV_CLOCK_MIN_KHZ = 10000;
     static const uint32_t DEV_CLOCK_MAX_KHZ = 1000000;

@@ -45,6 +45,7 @@
 #include "ad463x.h"
 #include "iio_ad463x.h"
 #include "no_os_error.h"
+#include "no_os_alloc.h"
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -124,7 +125,7 @@ int32_t iio_ad463x_init(struct iio_ad463x **desc,
 {
 	struct iio_ad463x *iio_ad463x;
 
-	iio_ad463x = (struct iio_ad463x *)calloc(1, sizeof(struct iio_ad463x));
+	iio_ad463x = (struct iio_ad463x *)no_os_calloc(1, sizeof(struct iio_ad463x));
 	if (!iio_ad463x)
 		return -1;
 
@@ -146,7 +147,7 @@ int32_t iio_ad463x_remove(struct iio_ad463x *desc)
 	if (!desc)
 		return -1;
 
-	free(desc);
+	no_os_free(desc);
 
 	return 0;
 }

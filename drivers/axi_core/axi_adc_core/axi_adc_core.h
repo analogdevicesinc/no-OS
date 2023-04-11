@@ -148,10 +148,10 @@ struct axi_adc_init {
 	const char *name;
 	/** Base Address */
 	uint32_t base;
-	/** Slave Base Address */
-	uint32_t slave_base;
 	/** Number of channels */
 	uint8_t	num_channels;
+	/** Slave Base Address */
+	uint32_t slave_base;
 	/** Number of slave channels */
 	uint8_t	num_slave_channels;
 };

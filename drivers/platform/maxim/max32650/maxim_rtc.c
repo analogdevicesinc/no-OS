@@ -46,6 +46,7 @@
 #include "no_os_irq.h"
 #include "no_os_rtc.h"
 #include "no_os_util.h"
+#include "no_os_alloc.h"
 #include "rtc.h"
 #include "maxim_rtc.h"
 #include "rtc_reva_regs.h"
@@ -72,7 +73,7 @@ int32_t no_os_rtc_init(struct no_os_rtc_desc **device,
 	if(!init_param)
 		return -EINVAL;
 
-	dev = calloc(1, sizeof(*dev));
+	dev = no_os_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -91,7 +92,7 @@ int32_t no_os_rtc_init(struct no_os_rtc_desc **device,
 	return 0;
 
 error:
-	free(dev);
+	no_os_free(dev);
 
 	return ret;
 }
@@ -106,7 +107,7 @@ int32_t no_os_rtc_remove(struct no_os_rtc_desc *dev)
 	if (!dev)
 		return -EINVAL;
 
-	free(dev);
+	no_os_free(dev);
 
 	return 0;
 }
@@ -118,7 +119,7 @@ int32_t no_os_rtc_remove(struct no_os_rtc_desc *dev)
  */
 int32_t no_os_rtc_start(struct no_os_rtc_desc *dev)
 {
-	MXC_RTC_Wait_BusyToClear();
+	while(MXC_RTC_GetBusyFlag());
 	MXC_RTC_Start();
 
 	return 0;
@@ -131,7 +132,7 @@ int32_t no_os_rtc_start(struct no_os_rtc_desc *dev)
  */
 int32_t no_os_rtc_stop(struct no_os_rtc_desc *dev)
 {
-	MXC_RTC_Wait_BusyToClear();
+	while(MXC_RTC_GetBusyFlag());
 	MXC_RTC_Stop();
 
 	return 0;
@@ -165,19 +166,19 @@ int32_t no_os_rtc_set_cnt(struct no_os_rtc_desc *dev, uint32_t tmr_cnt)
 
 	rtc_regs = MXC_RTC;
 
-	MXC_RTC_Wait_BusyToClear();
+	while(MXC_RTC_GetBusyFlag());
 	rtc_regs->ctrl |= MXC_F_RTC_REVA_CTRL_WR_EN;
 
-	MXC_RTC_Wait_BusyToClear();
+	while(MXC_RTC_GetBusyFlag());
 	no_os_rtc_stop(dev);
 
-	MXC_RTC_Wait_BusyToClear();
+	while(MXC_RTC_GetBusyFlag());
 	rtc_regs->sec = tmr_cnt;
 
-	MXC_RTC_Wait_BusyToClear();
+	while(MXC_RTC_GetBusyFlag());
 	no_os_rtc_start(dev);
 
-	MXC_RTC_Wait_BusyToClear();
+	while(MXC_RTC_GetBusyFlag());
 	rtc_regs->ctrl &= ~MXC_F_RTC_REVA_CTRL_WR_EN;
 
 	return 0;

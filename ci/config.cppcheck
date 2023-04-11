@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<def>
+ <resource>
+  <alloc>no_os_malloc</alloc>
+  <alloc>no_os_calloc</alloc>
+  <dealloc>no_os_free</dealloc>
+ </resource>
+</def>

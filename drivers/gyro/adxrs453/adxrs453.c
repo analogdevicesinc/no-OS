@@ -42,6 +42,7 @@
 /******************************************************************************/
 #include <stdlib.h>
 #include "adxrs453.h"
+#include "no_os_alloc.h"
 
 /***************************************************************************//**
  * @brief Initializes the ADXRS453 and checks if the device is present.
@@ -62,7 +63,7 @@ int32_t adxrs453_init(struct adxrs453_dev **device,
 	int32_t status = 0;
 	uint16_t adxrs453_id = 0;
 
-	dev = (struct adxrs453_dev *)malloc(sizeof(*dev));
+	dev = (struct adxrs453_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -91,7 +92,7 @@ int32_t adxrs453_remove(struct adxrs453_dev *dev)
 
 	ret = no_os_spi_remove(dev->spi_desc);
 
-	free(dev);
+	no_os_free(dev);
 
 	return ret;
 }

@@ -55,6 +55,7 @@ significant delays */
 #include "axi_dmac.h"
 #include "no_os_axi_io.h"
 #include "no_os_error.h"
+#include "no_os_alloc.h"
 #include "spi_engine.h"
 
 /**
@@ -237,7 +238,7 @@ static int32_t spi_engine_queue_new_cmd(struct spi_engine_cmd_queue **fifo,
 {
 	struct spi_engine_cmd_queue *local_fifo;
 
-	local_fifo = (spi_engine_cmd_queue*)malloc(sizeof(*local_fifo));
+	local_fifo = (spi_engine_cmd_queue*)no_os_malloc(sizeof(*local_fifo));
 
 	if(!local_fifo)
 		return -1;
@@ -311,9 +312,9 @@ static int32_t spi_engine_queue_get_cmd(struct spi_engine_cmd_queue **fifo,
 	*cmd = local_fifo->cmd;
 	if ((*fifo)->next) {
 		*fifo = local_fifo->next;
-		free(local_fifo);
+		no_os_free(local_fifo);
 	} else {
-		free(*fifo);
+		no_os_free(*fifo);
 		*fifo = NULL;
 	}
 
@@ -326,12 +327,12 @@ static int32_t spi_engine_queue_get_cmd(struct spi_engine_cmd_queue **fifo,
  * @param fifo The queue that needs it's memory freed
  * @return int32_t This function allways returns 0
  */
-static int32_t spi_engine_queue_free(struct spi_engine_cmd_queue **fifo)
+static int32_t spi_engine_queue_no_os_free(struct spi_engine_cmd_queue **fifo)
 {
 	if(*fifo && (*fifo)->next)
-		spi_engine_queue_free(&(*fifo)->next);
+		spi_engine_queue_no_os_free(&(*fifo)->next);
 	if((*fifo) != NULL) {
-		free(*fifo);
+		no_os_free(*fifo);
 		*fifo = NULL;
 	}
 
@@ -631,13 +632,13 @@ int32_t spi_engine_init(struct no_os_spi_desc **desc,
 		return -1;
 	}
 
-	*desc = malloc(sizeof(**desc));
+	*desc = no_os_malloc(sizeof(**desc));
 	if(! *desc) {
-		free(*desc);
+		no_os_free(*desc);
 		return -1;
 	}
 
-	eng_desc = (struct spi_engine_desc*)malloc(sizeof(*eng_desc));
+	eng_desc = (struct spi_engine_desc*)no_os_malloc(sizeof(*eng_desc));
 
 	if (!eng_desc)
 		return -1;
@@ -710,12 +711,12 @@ int32_t spi_engine_write_and_read(struct no_os_spi_desc *desc,
 
 	words_number = spi_get_words_number(desc_extra, bytes_number);
 
-	msg.cmds = (spi_engine_cmd_queue*)malloc(sizeof(*msg.cmds));
+	msg.cmds = (spi_engine_cmd_queue*)no_os_malloc(sizeof(*msg.cmds));
 	if (!msg.cmds)
 		return -1;
 
-	msg.tx_buf =(uint32_t*)calloc(words_number, sizeof(msg.tx_buf[0]));
-	msg.rx_buf =(uint32_t*)calloc(words_number, sizeof(msg.rx_buf[0]));
+	msg.tx_buf =(uint32_t*)no_os_calloc(words_number, sizeof(msg.tx_buf[0]));
+	msg.rx_buf =(uint32_t*)no_os_calloc(words_number, sizeof(msg.rx_buf[0]));
 	msg.length = words_number;
 
 	/* Get the length of transfered word */
@@ -740,9 +741,9 @@ int32_t spi_engine_write_and_read(struct no_os_spi_desc *desc,
 			  (desc_extra->data_width -
 			   ((i) % word_len + 1) * 8);
 
-	spi_engine_queue_free(&msg.cmds);
-	free(msg.tx_buf);
-	free(msg.rx_buf);
+	spi_engine_queue_no_os_free(&msg.cmds);
+	no_os_free(msg.tx_buf);
+	no_os_free(msg.rx_buf);
 
 	return ret;
 }
@@ -822,7 +823,7 @@ int32_t spi_engine_offload_transfer(struct no_os_spi_desc *desc,
 	eng_desc->offload_tx_len = 0;
 	eng_desc->offload_rx_len = 0;
 
-	transfer.cmds = (spi_engine_cmd_queue*)malloc(sizeof(*transfer.cmds));
+	transfer.cmds = (spi_engine_cmd_queue*)no_os_malloc(sizeof(*transfer.cmds));
 
 	if (!transfer.cmds)
 		return -1;
@@ -879,7 +880,7 @@ int32_t spi_engine_offload_transfer(struct no_os_spi_desc *desc,
 
 	usleep(1000);
 
-	spi_engine_queue_free(&transfer.cmds);
+	spi_engine_queue_no_os_free(&transfer.cmds);
 
 	return 0;
 }
@@ -900,8 +901,8 @@ int32_t spi_engine_remove(struct no_os_spi_desc *desc)
 		axi_dmac_remove(eng_desc->offload_tx_dma);
 	if(eng_desc->offload_config & OFFLOAD_RX_EN)
 		axi_dmac_remove(eng_desc->offload_rx_dma);
-	free(desc->extra);
-	free(desc);
+	no_os_free(desc->extra);
+	no_os_free(desc);
 
 	return 0;
 }

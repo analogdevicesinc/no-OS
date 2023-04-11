@@ -15,7 +15,8 @@ SRCS += $(PROJECT)/src/platform/$(PLATFORM)/parameters.c
 SRCS += $(DRIVERS)/api/no_os_uart.c     \
         $(NO-OS)/util/no_os_fifo.c      \
         $(NO-OS)/util/no_os_list.c      \
-        $(NO-OS)/util/no_os_util.c
+        $(NO-OS)/util/no_os_util.c      \
+        $(NO-OS)/util/no_os_alloc.c
 
 INCS += $(INCLUDE)/no_os_delay.h     \
         $(INCLUDE)/no_os_error.h     \
@@ -25,7 +26,8 @@ INCS += $(INCLUDE)/no_os_delay.h     \
         $(INCLUDE)/no_os_list.h      \
         $(INCLUDE)/no_os_timer.h     \
         $(INCLUDE)/no_os_uart.h      \
-        $(INCLUDE)/no_os_util.h
+        $(INCLUDE)/no_os_util.h      \
+        $(INCLUDE)/no_os_alloc.h
 
 INCS += $(DRIVERS)/adc/adc_demo/adc_demo.h \
         $(DRIVERS)/dac/dac_demo/dac_demo.h

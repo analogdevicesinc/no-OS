@@ -90,7 +90,7 @@ static uint8_t out_buff[MAX_SIZE_BASE_ADDR];
 
 #endif // IIO_SUPPORT
 
-#ifdef DAC_DMA_EXAMPLE
+#ifdef DMA_EXAMPLE
 #include <string.h>
 #endif
 
@@ -98,7 +98,7 @@ static uint8_t out_buff[MAX_SIZE_BASE_ADDR];
 /************************ Variables Definitions *******************************/
 /******************************************************************************/
 
-#if defined(DAC_DMA_EXAMPLE) || defined(IIO_SUPPORT)
+#if defined(DMA_EXAMPLE) || defined(IIO_SUPPORT)
 uint32_t dac_buffer[DAC_BUFFER_SAMPLES] __attribute__ ((aligned));
 #endif
 uint16_t adc_buffer[ADC_BUFFER_SAMPLES * ADC_CHANNELS] __attribute__ ((
@@ -613,7 +613,7 @@ int main(void)
 	}
 #ifndef AXI_ADC_NOT_PRESENT
 #if defined XILINX_PLATFORM || defined LINUX_PLATFORM || defined ALTERA_PLATFORM
-#ifdef DAC_DMA_EXAMPLE
+#ifdef DMA_EXAMPLE
 #ifdef FMCOMMS5
 	axi_dac_init(&ad9361_phy_b->tx_dac, &tx_dac_init);
 	axi_dac_set_datasel(ad9361_phy_b->tx_dac, -1, AXI_DAC_DATA_SEL_DMA);
@@ -649,8 +649,7 @@ int main(void)
 #endif
 
 #ifndef AXI_ADC_NOT_PRESENT
-#if (defined XILINX_PLATFORM || defined ALTERA_PLATFORM) && \
-	(defined ADC_DMA_EXAMPLE)
+#if (defined XILINX_PLATFORM || defined ALTERA_PLATFORM)
 	uint32_t samples = 16384;
 #if (defined DMA_IRQ_ENABLE)
 	/**
@@ -708,7 +707,7 @@ int main(void)
 	// size of the capture and the start address must be aligned to the size
 	// of the cache line.
 
-#ifdef DAC_DMA_EXAMPLE
+#ifdef DMA_EXAMPLE
 #ifdef DMA_IRQ_ENABLE
 	struct no_os_callback_desc tx_dmac_callback = {
 		.ctx = tx_dmac,
@@ -795,14 +794,14 @@ int main(void)
 	Xil_DCacheInvalidateRange((uintptr_t)ADC_DDR_BASEADDR,
 				  samples * AD9361_ADC_DAC_BYTES_PER_SAMPLE *
 				  ad9361_phy->rx_adc->num_channels);
-	printf("DAC_DMA_EXAMPLE: address=%#x samples=%lu channels=%u bits=%u\n",
+	printf("DMA_EXAMPLE: address=%#x samples=%lu channels=%u bits=%u\n",
 	       (uintptr_t)ADC_DDR_BASEADDR,
 	       read_transfer.size / AD9361_ADC_DAC_BYTES_PER_SAMPLE,
 	       rx_adc_init.num_channels,
 	       8 * sizeof(adc_buffer[0]));
 #else
 	Xil_DCacheInvalidateRange((uintptr_t)adc_buffer, sizeof(adc_buffer));
-	printf("DAC_DMA_EXAMPLE: address=%#lx samples=%lu channels=%u bits=%lu\n",
+	printf("DMA_EXAMPLE: address=%#lx samples=%lu channels=%u bits=%lu\n",
 	       (uintptr_t)adc_buffer, NO_OS_ARRAY_SIZE(adc_buffer), rx_adc_init.num_channels,
 	       8 * sizeof(adc_buffer[0]));
 #endif

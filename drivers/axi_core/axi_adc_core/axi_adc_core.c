@@ -46,8 +46,10 @@
 #include "no_os_error.h"
 #include "no_os_delay.h"
 #include "no_os_util.h"
+#include "no_os_alloc.h"
 #include "axi_adc_core.h"
 #include "no_os_axi_io.h"
+
 
 /**
  * @brief AXI ADC Data read.
@@ -593,7 +595,7 @@ int32_t axi_adc_init_begin(struct axi_adc **adc_core,
 {
 	struct axi_adc *adc;
 
-	adc = (struct axi_adc *)malloc(sizeof(*adc));
+	adc = (struct axi_adc *)no_os_malloc(sizeof(*adc));
 	if (!adc)
 		return -1;
 
@@ -672,7 +674,7 @@ int32_t axi_adc_init(struct axi_adc **adc_core,
 
 	return 0;
 error:
-	free(adc);
+	no_os_free(adc);
 
 	return -1;
 }
@@ -684,7 +686,7 @@ error:
  */
 int32_t axi_adc_remove(struct axi_adc *adc)
 {
-	free(adc);
+	no_os_free(adc);
 
 	return 0;
 }

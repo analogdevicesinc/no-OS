@@ -81,6 +81,9 @@
  */
 struct max31865_dev {
 	struct no_os_spi_desc *comm_desc;
+	bool is_filt_50;
+	bool is_odd_wire;
+	int t_rc_delay;
 };
 
 /**
@@ -89,6 +92,7 @@ struct max31865_dev {
  */
 struct max31865_init_param {
 	struct no_os_spi_init_param spi_init;
+	float rtd_rc;
 };
 
 /** Device and comm init function */

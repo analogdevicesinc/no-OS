@@ -97,6 +97,29 @@ def run_cmd(cmd):
 		ERR = 1
 
 	return err
+
+
+def run_cmd_stm(cmd):
+	global ERR
+	tmp = cmd.split(' ')
+	if tmp[0] == 'make':
+		log('make ' + tmp[-1])
+	else:
+		log(cmd)
+	sys.stdout.flush()
+	err = os.system('echo %s >> %s' % (cmd, log_file))
+	if err != 0:
+		ERR = 1
+		return err
+	err = os.system(cmd + ' >> %s 2>&1' % log_file)
+	if err != 0 and err != 31744 and tmp[0] != 'cp':
+		log_err("ERROR")
+		log("See log %s " \
+		    "-- Use cat (linux) or type (windows) to see colored output"
+		    % log_file)
+		ERR = 1
+
+	return err
 def to_blue(str):
 	return TBLUE + str + TWHITE
 
@@ -216,8 +239,8 @@ class BuildConfig:
 			err = run_cmd(cmd + ' reset')
 			if err != 0:
 				return err
-			err = run_cmd("timeout 200s " + cmd + ' VERBOSE=y -j%d all' % (multiprocessing.cpu_count() - 1))
-			if err != 0:
+			err = run_cmd_stm("timeout 200s " + cmd + ' VERBOSE=y -j%d all' % (multiprocessing.cpu_count() - 1))
+			if err != 0 and err != 31744:
 				return err
 		else:
 			if new_hdf:
@@ -308,9 +331,19 @@ def main():
 							exit()
 						continue
 					else:
-						run_cmd("cp %s %s" % 
+						if platform == 'stm32':
+							err = run_cmd_stm("cp %s %s" %
 							(new_build.export_file, project_export))
-						binary_created = True
+							if err:
+								binary_created = False
+							else:
+								binary_created = True
+
+
+						else:
+							run_cmd("cp %s %s" %
+								(new_build.export_file, project_export))
+							binary_created = True
 			
 		fp.close()
 

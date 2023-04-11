@@ -43,6 +43,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "no_os_util.h"
+#include "no_os_alloc.h"
 #include "ad9528.h"
 
 static bool ad9528_pll2_valid_calib_div(unsigned int div)
@@ -368,7 +369,7 @@ int32_t ad9528_setup(struct ad9528_dev **device,
 	uint32_t pll2_ndiv, pll2_ndiv_a_cnt, pll2_ndiv_b_cnt;
 	struct ad9528_dev *dev;
 
-	dev = (struct ad9528_dev *)malloc(sizeof(*dev));
+	dev = (struct ad9528_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -715,7 +716,7 @@ int32_t ad9528_remove(struct ad9528_dev *dev)
 
 	ret = no_os_spi_remove(dev->spi_desc);
 
-	free(dev);
+	no_os_free(dev);
 
 	return ret;
 }

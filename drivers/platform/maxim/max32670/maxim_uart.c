@@ -49,6 +49,7 @@
 #include "mxc_errors.h"
 #include "no_os_irq.h"
 #include "no_os_util.h"
+#include "no_os_alloc.h"
 #include "no_os_lf256fifo.h"
 #include "uart.h"
 
@@ -223,11 +224,11 @@ static int32_t max_uart_init(struct no_os_uart_desc **desc,
 	if (!param || !param->extra)
 		return -EINVAL;
 
-	descriptor = calloc(1, sizeof(*descriptor));
+	descriptor = no_os_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
-	max_uart = calloc(1, sizeof(*max_uart));
+	max_uart = no_os_calloc(1, sizeof(*max_uart));
 	if (!descriptor) {
 		ret = -ENOMEM;
 		goto error;
@@ -367,8 +368,8 @@ static int32_t max_uart_init(struct no_os_uart_desc **desc,
 error_nvic:
 	no_os_irq_ctrl_remove(max_uart->nvic);
 error:
-	free(max_uart);
-	free(descriptor);
+	no_os_free(max_uart);
+	no_os_free(descriptor);
 	MXC_UART_Shutdown(uart_regs);
 
 	return ret;
@@ -385,7 +386,7 @@ static int32_t max_uart_remove(struct no_os_uart_desc *desc)
 		return -EINVAL;
 
 	MXC_UART_Shutdown(MXC_UART_GET_UART(desc->device_id));
-	free(desc);
+	no_os_free(desc);
 
 	return 0;
 }

@@ -45,6 +45,7 @@
 #include <stdlib.h>
 #include "no_os_fifo.h"
 #include "no_os_error.h"
+#include "no_os_alloc.h"
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -58,14 +59,15 @@
  */
 static struct no_os_fifo_element * fifo_new_element(char *buff, uint32_t len)
 {
-	struct no_os_fifo_element *q = calloc(1, sizeof(struct no_os_fifo_element));
+	struct no_os_fifo_element *q = no_os_calloc(1,
+				       sizeof(struct no_os_fifo_element));
 	if (!q)
 		return NULL;
 
 	q->len = len;
-	q->data = calloc(1, len);
+	q->data = no_os_calloc(1, len);
 	if (!(q->data)) {
-		free(q);
+		no_os_free(q);
 		return NULL;
 	}
 	memcpy(q->data, buff, len);
@@ -130,8 +132,8 @@ struct no_os_fifo_element * no_os_fifo_remove(struct no_os_fifo_element *p_fifo)
 
 	if (p_fifo != NULL) {
 		p_fifo = p_fifo->next;
-		free(p->data);
-		free(p);
+		no_os_free(p->data);
+		no_os_free(p);
 	}
 
 	return p_fifo;

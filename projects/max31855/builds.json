@@ -1,0 +1,28 @@
+{
+    "maxim": {
+      "basic_example_max32650": {
+        "flags" : "BASIC_EXAMPLE=y IIO_EXAMPLE=n TARGET=max32650"
+      },
+      "iio_example_max32650": {
+        "flags" : "BASIC_EXAMPLE=n IIO_EXAMPLE=y TARGET=max32650"
+      },
+      "basic_example_max32655": {
+        "flags" : "BASIC_EXAMPLE=y IIO_EXAMPLE=n TARGET=max32655"
+      },
+      "iio_example_max32655": {
+        "flags" : "BASIC_EXAMPLE=n IIO_EXAMPLE=y TARGET=max32655"
+      },
+      "basic_example_max32665": {
+        "flags" : "BASIC_EXAMPLE=y IIO_EXAMPLE=n TARGET=max32665"
+      },
+      "iio_example_max32665": {
+        "flags" : "BASIC_EXAMPLE=n IIO_EXAMPLE=y TARGET=max32665"
+      },
+      "basic_example_max78000": {
+        "flags" : "BASIC_EXAMPLE=y IIO_EXAMPLE=n TARGET=max78000"
+      },
+      "iio_example_max78000": {
+        "flags" : "BASIC_EXAMPLE=n IIO_EXAMPLE=y TARGET=max78000"
+      }
+    }
+}

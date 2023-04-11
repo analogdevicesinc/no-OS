@@ -42,6 +42,7 @@
 /******************************************************************************/
 #include <stdlib.h>
 #include "adxl345.h"
+#include "no_os_alloc.h"
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -133,7 +134,7 @@ int32_t adxl345_init(struct adxl345_dev **device,
 	struct adxl345_dev *dev;
 	int32_t status = 0;
 
-	dev = (struct adxl345_dev *)malloc(sizeof(*dev));
+	dev = (struct adxl345_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -171,7 +172,7 @@ int32_t adxl345_remove(struct adxl345_dev *dev)
 	else
 		ret = no_os_i2c_remove(dev->i2c_desc);
 
-	free(dev);
+	no_os_free(dev);
 
 	return ret;
 }

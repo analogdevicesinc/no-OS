@@ -54,6 +54,7 @@
 #include "no_os_irq.h"
 #include "no_os_util.h"
 #include "no_os_error.h"
+#include "no_os_alloc.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -371,7 +372,7 @@ static inline void start_conn_read(struct at_desc *desc, bool is_new_message)
 	struct connection_desc	*conn;
 	uint8_t			*buff;
 	uint32_t		available_len;
-	uint32_t		ret;
+	int32_t			ret;
 
 	conn = &desc->conn[desc->current_conn];
 
@@ -916,7 +917,7 @@ int32_t at_init(struct at_desc **desc, const struct at_init_param *param)
 	if (!desc || !param || !param->connection_callback)
 		return -1;
 
-	ldesc = calloc(1, sizeof(*ldesc));
+	ldesc = no_os_calloc(1, sizeof(*ldesc));
 	if (!ldesc)
 		return -1;
 
@@ -992,13 +993,13 @@ int32_t at_init(struct at_desc **desc, const struct at_init_param *param)
 free_irq:
 	no_os_irq_unregister_callback(ldesc->irq_desc, ldesc->uart_irq_id, NULL);
 free_desc:
-	free(ldesc);
+	no_os_free(ldesc);
 	*desc = NULL;
 	return -1;
 }
 
 /**
- * @brief Free resources allocated at \ref at_init
+ * @brief no_os_free resources allocated at \ref at_init
  * @param desc - AT parser reference
  * @return
  *  - 0 : On success
@@ -1010,7 +1011,7 @@ int32_t at_remove(struct at_desc *desc)
 		return -1;
 
 	no_os_irq_unregister_callback(desc->irq_desc, desc->uart_irq_id, NULL);
-	free(desc);
+	no_os_free(desc);
 
 	return 0;
 }

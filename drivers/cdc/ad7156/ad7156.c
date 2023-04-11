@@ -42,6 +42,7 @@
 /******************************************************************************/
 #include <stdlib.h>
 #include "ad7156.h"
+#include "no_os_alloc.h"
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -110,7 +111,7 @@ int8_t ad7156_init(struct ad7156_dev **device,
 	int8_t status = -1;
 	uint8_t test = 0;
 
-	dev = (struct ad7156_dev *)malloc(sizeof(*dev));
+	dev = (struct ad7156_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -144,7 +145,7 @@ int32_t ad7156_remove(struct ad7156_dev *dev)
 
 	status = no_os_i2c_remove(dev->i2c_desc);
 
-	free(dev);
+	no_os_free(dev);
 
 	return status;
 }

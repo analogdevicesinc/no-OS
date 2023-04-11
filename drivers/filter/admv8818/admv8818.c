@@ -43,6 +43,8 @@
 #include <malloc.h>
 #include "admv8818.h"
 #include "no_os_error.h"
+#include "no_os_alloc.h"
+#include "no_os_units.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -175,7 +177,7 @@ int admv8818_hpf_select(struct admv8818_dev *dev, unsigned long long freq)
 	}
 
 	/* Close HPF frequency gap between 12 and 12.5 GHz */
-	if (freq >= 12000000000 && freq <= 12500000000) {
+	if (freq >= 12000 * HZ_PER_MHZ && freq <= 12500 * HZ_PER_MHZ) {
 		hpf_band = 3;
 		hpf_step = 15;
 	}
@@ -211,7 +213,7 @@ int admv8818_read_hpf_freq(struct admv8818_dev *dev, unsigned long long *freq)
 		return ret;
 
 	hpf_band = no_os_field_get(ADMV8818_SW_IN_WR0_MSK, data);
-	if (!hpf_band) {
+	if (!hpf_band  || hpf_band > 4) {
 		*freq = 0;
 		return ret;
 	}
@@ -298,7 +300,7 @@ int admv8818_read_lpf_freq(struct admv8818_dev *dev, unsigned long long *freq)
 		return ret;
 
 	lpf_band = no_os_field_get(ADMV8818_SW_OUT_WR0_MSK, data);
-	if (!lpf_band) {
+	if (!lpf_band || lpf_band > 4) {
 		*freq= 0;
 		return ret;
 	}
@@ -346,7 +348,7 @@ int admv8818_init(struct admv8818_dev **device,
 	struct admv8818_dev *dev;
 	int ret;
 
-	dev = (struct admv8818_dev *)calloc(1, sizeof(*dev));
+	dev = (struct admv8818_dev *)no_os_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -403,7 +405,7 @@ int admv8818_init(struct admv8818_dev **device,
 error_spi:
 	no_os_spi_remove(dev->spi_desc);
 error_dev:
-	free(dev);
+	no_os_free(dev);
 
 	return ret;
 }
@@ -421,7 +423,7 @@ int admv8818_remove(struct admv8818_dev *dev)
 	if (ret)
 		return ret;
 
-	free(dev);
+	no_os_free(dev);
 
 	return 0;
 }

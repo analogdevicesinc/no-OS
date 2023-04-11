@@ -46,6 +46,7 @@
 #include "no_os_rtc.h"
 #include "aducm3029_rtc.h"
 #include "no_os_irq.h"
+#include "no_os_alloc.h"
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -64,15 +65,15 @@ int32_t no_os_rtc_init(struct no_os_rtc_desc **device,
 	struct no_os_rtc_desc *dev;
 	struct aducm_rtc_desc *adev;
 
-	dev = (struct no_os_rtc_desc *)calloc(1, sizeof(*dev));
+	dev = (struct no_os_rtc_desc *)no_os_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -1;
 
-	adev = (struct aducm_rtc_desc *)calloc(1, sizeof(*adev));
+	adev = (struct aducm_rtc_desc *)no_os_calloc(1, sizeof(*adev));
 	if (!adev)
 		goto error_dev;
 
-	adev->memory = calloc(1, ADI_RTC_MEMORY_SIZE);
+	adev->memory = no_os_calloc(1, ADI_RTC_MEMORY_SIZE);
 	if(!adev->memory)
 		goto error_extra;
 
@@ -105,11 +106,11 @@ int32_t no_os_rtc_init(struct no_os_rtc_desc **device,
 error_open:
 	adi_rtc_Close(adev->instance);
 error_mem:
-	free(adev->memory);
+	no_os_free(adev->memory);
 error_extra:
-	free(adev);
+	no_os_free(adev);
 error_dev:
-	free(dev);
+	no_os_free(dev);
 
 	return -1;
 }
@@ -128,9 +129,9 @@ int32_t no_os_rtc_remove(struct no_os_rtc_desc *dev)
 	if(ret != 0)
 		return -1;
 
-	free(adev->memory);
-	free(adev);
-	free(dev);
+	no_os_free(adev->memory);
+	no_os_free(adev);
+	no_os_free(dev);
 
 	return 0;
 }

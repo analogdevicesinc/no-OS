@@ -46,6 +46,7 @@
 #include "no_os_i2c.h"
 #include "no_os_error.h"
 #include "no_os_util.h"
+#include "no_os_alloc.h"
 #include "iio_adt7420.h"
 #include "adt7420.h"
 
@@ -143,7 +144,7 @@ int adt7420_iio_init(struct adt7420_iio_dev **iio_dev,
 	int ret;
 	struct adt7420_iio_dev *desc;
 
-	desc = (struct adt7420_iio_dev*)calloc(1, sizeof(*desc));
+	desc = (struct adt7420_iio_dev*)no_os_calloc(1, sizeof(*desc));
 	if (!desc)
 		return -ENOMEM;
 
@@ -162,7 +163,7 @@ int adt7420_iio_init(struct adt7420_iio_dev **iio_dev,
 error_reset:
 	adt7420_remove(desc->adt7420_dev);
 error_init:
-	free(desc);
+	no_os_free(desc);
 	return ret;
 }
 
@@ -181,7 +182,7 @@ int adt7420_iio_remove(struct adt7420_iio_dev *desc)
 	if (ret)
 		return ret;
 
-	free(desc);
+	no_os_free(desc);
 
 	return 0;
 }

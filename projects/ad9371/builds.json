@@ -17,7 +17,7 @@
                   ]
             },
             "dma_example": {
-                  "flags": "NEW_CFLAGS=-DDAC_DMA_EXAMPLE",
+                  "flags": "NEW_CFLAGS=-DDMA_EXAMPLE",
                   "hardware": [
                         "adrv9371x_kcu105",
                         "adrv9371x_zc706",

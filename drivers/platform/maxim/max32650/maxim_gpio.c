@@ -43,6 +43,7 @@
 #include "no_os_gpio.h"
 #include "no_os_irq.h"
 #include "no_os_util.h"
+#include "no_os_alloc.h"
 #include "gpio.h"
 #include "gpio_regs.h"
 #include "maxim_gpio.h"
@@ -80,11 +81,11 @@ int32_t max_gpio_get(struct no_os_gpio_desc **desc,
 	if (!param || !param->extra || param->number >= N_PINS)
 		return -EINVAL;
 
-	descriptor = calloc(1, sizeof(*descriptor));
+	descriptor = no_os_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
-	g_cfg = calloc(1, sizeof(*g_cfg));
+	g_cfg = no_os_calloc(1, sizeof(*g_cfg));
 	if (!g_cfg) {
 		ret = -ENOMEM;
 		goto free_descriptor;
@@ -135,9 +136,9 @@ int32_t max_gpio_get(struct no_os_gpio_desc **desc,
 	return 0;
 
 free_g_cfg:
-	free(g_cfg);
+	no_os_free(g_cfg);
 free_descriptor:
-	free(descriptor);
+	no_os_free(descriptor);
 
 	return ret;
 }
@@ -169,8 +170,8 @@ int32_t max_gpio_remove(struct no_os_gpio_desc *desc)
 	if (!desc)
 		return -EINVAL;
 
-	free(desc->extra);
-	free(desc);
+	no_os_free(desc->extra);
+	no_os_free(desc);
 
 	return 0;
 }
@@ -182,7 +183,6 @@ int32_t max_gpio_remove(struct no_os_gpio_desc *desc)
  */
 int32_t max_gpio_direction_input(struct no_os_gpio_desc *desc)
 {
-	int32_t ret;
 	mxc_gpio_cfg_t *maxim_extra;
 
 	if (!desc || desc->number >= N_PINS)

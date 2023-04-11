@@ -50,6 +50,7 @@
 #include "no_os_delay.h"
 #include "no_os_error.h"
 #include "no_os_util.h"
+#include "no_os_alloc.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -885,7 +886,7 @@ int32_t ad469x_init(struct ad469x_dev **device,
 	int32_t ret;
 	uint8_t data = 0;
 
-	dev = (struct ad469x_dev *)malloc(sizeof(*dev));
+	dev = (struct ad469x_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -968,7 +969,7 @@ error_clkgen:
 	axi_clkgen_remove(dev->clkgen);
 #endif
 error_dev:
-	free(dev);
+	no_os_free(dev);
 
 	return -1;
 }
@@ -1013,7 +1014,7 @@ int32_t ad469x_remove(struct ad469x_dev *dev)
 		return ret;
 #endif
 
-	free(dev);
+	no_os_free(dev);
 
 	return ret;
 }

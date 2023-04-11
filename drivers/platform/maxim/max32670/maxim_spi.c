@@ -49,6 +49,7 @@
 #include "maxim_spi.h"
 #include "no_os_spi.h"
 #include "no_os_util.h"
+#include "no_os_alloc.h"
 
 #define SPI_MASTER_MODE	1
 #define SPI_SINGLE_MODE	0
@@ -61,19 +62,36 @@ static int _max_spi_config(struct no_os_spi_desc *desc)
 {
 	int32_t ret;
 	struct max_spi_init_param *eparam;
+	mxc_spi_mode_t mode;
 
 	eparam = desc->extra;
 
 	ret = MXC_SPI_Init(MXC_SPI_GET_SPI(desc->device_id), SPI_MASTER_MODE,
 			   SPI_SINGLE_MODE,
-			   eparam->numSlaves, eparam->polarity, desc->max_speed_hz);
+			   eparam->num_slaves, eparam->polarity, desc->max_speed_hz);
 	if (ret) {
 		ret = -EINVAL;
 		goto err_init;
 	}
 
-	ret = MXC_SPI_SetMode(MXC_SPI_GET_SPI(desc->device_id),
-			      (mxc_spi_mode_t)desc->mode);
+	/* For Maxim Platforms SPI Mode 1 and 2 are reversed */
+	switch (desc->mode) {
+	case NO_OS_SPI_MODE_1:
+		mode = SPI_MODE_2;
+		break;
+	case NO_OS_SPI_MODE_2:
+		mode = SPI_MODE_1;
+		break;
+	case NO_OS_SPI_MODE_0:
+	/* fallthrough */
+	case NO_OS_SPI_MODE_3:
+		mode = (mxc_spi_mode_t)desc->mode;
+		break;
+	default:
+		return -EINVAL;
+	}
+
+	ret = MXC_SPI_SetMode(MXC_SPI_GET_SPI(desc->device_id), mode);
 	if (ret) {
 		ret = -EINVAL;
 		goto err_init;
@@ -114,7 +132,7 @@ int32_t max_spi_init(struct no_os_spi_desc **desc,
 	if (!param || !param->extra)
 		return -EINVAL;
 
-	descriptor = calloc(1, sizeof(*descriptor));
+	descriptor = no_os_calloc(1, sizeof(*descriptor));
 
 	if (!descriptor)
 		return -ENOMEM;
@@ -142,7 +160,7 @@ int32_t max_spi_init(struct no_os_spi_desc **desc,
 err_init:
 	MXC_SPI_Shutdown(MXC_SPI_GET_SPI(descriptor->device_id));
 err:
-	free(descriptor);
+	no_os_free(descriptor);
 
 	return ret;
 }
@@ -158,7 +176,7 @@ int32_t max_spi_remove(struct no_os_spi_desc *desc)
 		return -EINVAL;
 
 	MXC_SPI_Shutdown(MXC_SPI_GET_SPI(desc->device_id));
-	free(desc);
+	no_os_free(desc);
 
 	return 0;
 }

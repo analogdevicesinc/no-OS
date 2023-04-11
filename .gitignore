@@ -25,3 +25,4 @@ aducm_build
 *.sopcinfo
 
 local_variables.mk
+*generated*

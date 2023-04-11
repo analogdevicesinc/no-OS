@@ -42,6 +42,7 @@
 /******************************************************************************/
 
 #include "no_os_error.h"
+#include "no_os_alloc.h"
 #include "max31875.h"
 
 /******************************************************************************/
@@ -148,7 +149,7 @@ int32_t max31875_init(struct max31875_dev **device,
 	if (!device || !init_param)
 		return -EINVAL;
 
-	dev = calloc(1, sizeof(*dev));
+	dev = no_os_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -160,7 +161,7 @@ int32_t max31875_init(struct max31875_dev **device,
 
 	return 0;
 error:
-	free(dev);
+	no_os_free(dev);
 
 	return ret;
 }
@@ -181,7 +182,7 @@ int32_t max31875_remove(struct max31875_dev *dev)
 	if (NO_OS_IS_ERR_VALUE(ret))
 		return ret;
 
-	free(dev);
+	no_os_free(dev);
 
 	return 0;
 }

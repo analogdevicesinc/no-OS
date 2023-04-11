@@ -40,6 +40,7 @@
 #include "no_os_pwm.h"
 #include "stdlib.h"
 #include "no_os_error.h"
+#include "no_os_alloc.h"
 #include <drivers/tmr/adi_tmr.h>
 #include <drivers/pwr/adi_pwr.h>
 
@@ -160,7 +161,7 @@ int32_t no_os_pwm_init(struct no_os_pwm_desc **desc,
 	if (param->id < ADI_TMR_DEVICE_GP0  || param->id > ADI_TMR_DEVICE_GP2)
 		return -EINVAL;
 
-	ldesc = (struct no_os_pwm_desc *)calloc(1, sizeof(*ldesc));
+	ldesc = (struct no_os_pwm_desc *)no_os_calloc(1, sizeof(*ldesc));
 	if (!ldesc)
 		return -ENOMEM;
 
@@ -182,7 +183,7 @@ int32_t no_os_pwm_init(struct no_os_pwm_desc **desc,
 	return 0;
 error:
 	*desc = NULL;
-	free(ldesc);
+	no_os_free(ldesc);
 
 	return ret;
 }
@@ -193,8 +194,8 @@ int32_t no_os_pwm_remove(struct no_os_pwm_desc *desc)
 	if (!desc || !desc->extra)
 		return -EINVAL;
 
-	free(desc->extra);
-	free(desc);
+	no_os_free(desc->extra);
+	no_os_free(desc);
 
 	return 0;
 }

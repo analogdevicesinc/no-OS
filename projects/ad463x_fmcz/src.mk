@@ -19,7 +19,8 @@ SRCS += $(DRIVERS)/api/no_os_spi.c \
 	$(DRIVERS)/axi_core/clk_axi_clkgen/clk_axi_clkgen.c \
 	$(DRIVERS)/axi_core/axi_pwmgen/axi_pwm.c \
 	$(DRIVERS)/axi_core/spi_engine/spi_engine.c \
-	$(NO-OS)/util/no_os_util.c
+	$(NO-OS)/util/no_os_util.c \
+	$(NO-OS)/util/no_os_alloc.c
 SRCS +=	$(PLATFORM_DRIVERS)/xilinx_axi_io.c \
 	$(PLATFORM_DRIVERS)/xilinx_gpio.c \
 	$(PLATFORM_DRIVERS)/xilinx_spi.c \
@@ -56,7 +57,8 @@ INCS +=	$(INCLUDE)/no_os_axi_io.h \
 	$(INCLUDE)/no_os_uart.h \
 	$(INCLUDE)/no_os_lf256fifo.h \
 	$(INCLUDE)/no_os_util.h \
-	$(INCLUDE)/no_os_print_log.h
+	$(INCLUDE)/no_os_print_log.h \
+	$(INCLUDE)/no_os_alloc.h
 ifeq (y,$(strip $(TINYIIOD)))
 INCS += $(DRIVERS)/adc/ad463x/iio_ad463x.h \
 	$(INCLUDE)/no_os_fifo.h \

@@ -39,6 +39,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include "no_os_util.h"
+#include "no_os_alloc.h"
 #include "no_os_i2c.h"
 #include "stm32_i2c.h"
 
@@ -59,11 +60,12 @@ int32_t stm32_i2c_init(struct no_os_i2c_desc **desc,
 	if (!desc || !param)
 		return -EINVAL;
 
-	descriptor = (struct no_os_i2c_desc *)calloc(1, sizeof(struct no_os_i2c_desc));
+	descriptor = (struct no_os_i2c_desc *)no_os_calloc(1,
+			sizeof(struct no_os_i2c_desc));
 	if (!descriptor)
 		return -ENOMEM;
 
-	xdesc = (struct stm32_i2c_desc *)calloc(1,sizeof(struct stm32_i2c_desc));
+	xdesc = (struct stm32_i2c_desc *)no_os_calloc(1,sizeof(struct stm32_i2c_desc));
 	if (!xdesc) {
 		ret = -ENOMEM;
 		goto error_1;
@@ -116,9 +118,9 @@ int32_t stm32_i2c_init(struct no_os_i2c_desc **desc,
 
 	return 0;
 error_2:
-	free(xdesc);
+	no_os_free(xdesc);
 error_1:
-	free(descriptor);
+	no_os_free(descriptor);
 	return ret;
 }
 
@@ -136,8 +138,8 @@ int32_t stm32_i2c_remove(struct no_os_i2c_desc *desc)
 
 	sdesc = desc->extra;
 	HAL_I2C_DeInit(&sdesc->hi2c);
-	free(desc->extra);
-	free(desc);
+	no_os_free(desc->extra);
+	no_os_free(desc);
 	return 0;
 }
 

@@ -39,6 +39,8 @@
 #ifndef ORX_GAIN_TABLE_H
 #define ORX_GAIN_TABLE_H
 
+#include <stdint.h>
+
 struct ORxGainTableEntry {
 	uint8_t gainIndex;
 	uint8_t rxFeGain;

@@ -44,6 +44,7 @@
 #include "no_os_i2c.h"
 #include "aducm3029_i2c.h"
 #include "no_os_error.h"
+#include "no_os_alloc.h"
 #include <stdlib.h>
 #include <drivers/i2c/adi_i2c.h>
 #include <drivers/gpio/adi_gpio.h>
@@ -135,7 +136,7 @@ static int32_t aducm3029_i2c_init(struct no_os_i2c_desc **desc,
 	if (!desc || !param)
 		return -EINVAL;
 
-	*desc = calloc(1, sizeof(**desc));
+	*desc = no_os_calloc(1, sizeof(**desc));
 	if (!(*desc))
 		return -ENOMEM;
 
@@ -143,7 +144,7 @@ static int32_t aducm3029_i2c_init(struct no_os_i2c_desc **desc,
 		if (ADI_I2C_SUCCESS != adi_i2c_Open(0, adi_i2c_buffer,
 						    ADI_I2C_MEMORY_SIZE,
 						    &i2c_handler)) {
-			free(*desc);
+			no_os_free(*desc);
 			*desc = NULL;
 			return -EFAULT;
 		}
@@ -151,7 +152,7 @@ static int32_t aducm3029_i2c_init(struct no_os_i2c_desc **desc,
 		if (ADI_GPIO_SUCCESS != adi_gpio_DriveStrengthEnable(
 			    ADI_GPIO_PORT0, ADI_GPIO_PIN_4 | ADI_GPIO_PIN_5,
 			    true)) {
-			free(*desc);
+			no_os_free(*desc);
 			*desc = NULL;
 			adi_i2c_Close(i2c_handler);
 			i2c_handler = NULL;
@@ -159,7 +160,7 @@ static int32_t aducm3029_i2c_init(struct no_os_i2c_desc **desc,
 		}
 	}
 
-	aducm_i2c = calloc(1, sizeof(*aducm_i2c));
+	aducm_i2c = no_os_calloc(1, sizeof(*aducm_i2c));
 	(*desc)->max_speed_hz = param->max_speed_hz;
 	(*desc)->slave_address = param->slave_address;
 	(*desc)->extra = aducm_i2c;
@@ -187,9 +188,9 @@ static int32_t aducm3029_i2c_remove(struct no_os_i2c_desc *desc)
 		last_bitrate = UNINITIALIZED_BITRATE;
 	}
 	if (aducm_i2c->prologue_data)
-		free(aducm_i2c->prologue_data);
-	free(aducm_i2c);
-	free(desc);
+		no_os_free(aducm_i2c->prologue_data);
+	no_os_free(aducm_i2c);
+	no_os_free(desc);
 
 	return 0;
 }
@@ -235,12 +236,12 @@ static int32_t aducm3029_i2c_write(struct no_os_i2c_desc *desc,
 		if (aducm_i2c->prologue_data) {
 			temp_ptr = realloc(aducm_i2c->prologue_data, bytes_number);
 			if (!temp_ptr) {
-				free(aducm_i2c->prologue_data);
+				no_os_free(aducm_i2c->prologue_data);
 				return -1;
 			}
 			aducm_i2c->prologue_data = temp_ptr;
 		} else {
-			aducm_i2c->prologue_data = malloc(bytes_number);
+			aducm_i2c->prologue_data = no_os_malloc(bytes_number);
 			if (!aducm_i2c->prologue_data)
 				return -1;
 		}
@@ -305,7 +306,7 @@ static int32_t aducm3029_i2c_read(struct no_os_i2c_desc *desc,
 	ret = adi_i2c_ReadWrite(i2c_handler, trans, &errors);
 
 	if (aducm_i2c->prologue_size != 0) {
-		free(aducm_i2c->prologue_data);
+		no_os_free(aducm_i2c->prologue_data);
 		aducm_i2c->prologue_data = NULL;
 		aducm_i2c->prologue_size = 0;
 	}

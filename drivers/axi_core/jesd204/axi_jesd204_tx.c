@@ -45,6 +45,7 @@
 #include <inttypes.h>
 #include "no_os_error.h"
 #include "no_os_util.h"
+#include "no_os_alloc.h"
 #include "axi_jesd204_tx.h"
 #include "no_os_axi_io.h"
 #include "no_os_delay.h"
@@ -718,7 +719,7 @@ int32_t axi_jesd204_tx_init(struct axi_jesd204_tx **jesd204,
 	uint32_t status;
 	uint32_t tmp;
 
-	jesd = (struct axi_jesd204_tx *)malloc(sizeof(*jesd));
+	jesd = (struct axi_jesd204_tx *)no_os_malloc(sizeof(*jesd));
 	if (!jesd)
 		return -1;
 
@@ -787,7 +788,7 @@ int32_t axi_jesd204_tx_init(struct axi_jesd204_tx **jesd204,
 	return 0;
 
 err:
-	free(jesd);
+	no_os_free(jesd);
 
 	return -1;
 }
@@ -809,7 +810,7 @@ int32_t axi_jesd204_tx_init_jesd_fsm(struct axi_jesd204_tx **jesd204,
 	uint32_t tmp;
 	int ret;
 
-	jesd = (struct axi_jesd204_tx *)calloc(1, sizeof(*jesd));
+	jesd = (struct axi_jesd204_tx *)no_os_calloc(1, sizeof(*jesd));
 	if (!jesd)
 		return -ENOMEM;
 
@@ -862,7 +863,7 @@ int32_t axi_jesd204_tx_init_jesd_fsm(struct axi_jesd204_tx **jesd204,
 	return 0;
 
 err:
-	free(jesd);
+	no_os_free(jesd);
 
 	return ret;
 }
@@ -874,7 +875,7 @@ err:
  */
 int32_t axi_jesd204_tx_remove(struct axi_jesd204_tx *jesd)
 {
-	free(jesd);
+	no_os_free(jesd);
 
 	return 0;
 }

@@ -43,6 +43,7 @@
 #include <stdlib.h>
 #include "adf4157.h"
 #include "adf4157_cfg.h"
+#include "no_os_alloc.h"
 
 /***************************************************************************//**
  * @brief Initialize the SPI communication with the device.
@@ -62,7 +63,7 @@ int8_t adf4157_init(struct adf4157_dev **device,
 	uint32_t cfg_value = 0;
 	int8_t status = -1;
 
-	dev = (struct adf4157_dev *)malloc(sizeof(*dev));
+	dev = (struct adf4157_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -143,7 +144,7 @@ int32_t adf4157_remove(struct adf4157_dev *dev)
 	ret |= no_os_gpio_remove(dev->gpio_le);
 	ret |= no_os_gpio_remove(dev->gpio_ce);
 
-	free(dev);
+	no_os_free(dev);
 
 	return ret;
 }

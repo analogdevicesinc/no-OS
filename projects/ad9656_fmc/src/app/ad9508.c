@@ -46,6 +46,7 @@
 #include "no_os_error.h"
 #include "ad9508.h"
 #include "no_os_delay.h"
+#include "no_os_alloc.h"
 
 /**
  * @brief Reads from the ad9508 that is contected to the SPI
@@ -119,7 +120,7 @@ int32_t ad9508_setup(struct ad9508_dev **device,
 	struct ad9508_dev *dev;
 	uint8_t reg_data;
 
-	dev = (struct ad9508_dev *)malloc(sizeof(*dev));
+	dev = (struct ad9508_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -192,7 +193,7 @@ int32_t ad9508_remove(struct ad9508_dev *dev)
 	if (ret != 0)
 		return ret;
 
-	free(dev);
+	no_os_free(dev);
 
 	return ret;
 }

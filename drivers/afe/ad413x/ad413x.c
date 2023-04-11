@@ -49,6 +49,7 @@
 #include "no_os_delay.h"
 #include "no_os_crc8.h"
 #include "no_os_spi.h"
+#include "no_os_alloc.h"
 
 NO_OS_DECLARE_CRC8_TABLE(ad413x_crc8);
 uint32_t timeout = 0xFFFFFF;
@@ -944,7 +945,7 @@ int32_t ad413x_init(struct ad413x_dev **device,
 
 	no_os_crc8_populate_msb(ad413x_crc8, AD413X_CRC8_POLY);
 
-	dev = (struct ad413x_dev *)malloc(sizeof(*dev));
+	dev = (struct ad413x_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -1079,7 +1080,7 @@ int32_t ad413x_init(struct ad413x_dev **device,
 err_spi:
 	no_os_spi_remove(dev->spi_dev);
 err_dev:
-	free(dev);
+	no_os_free(dev);
 	pr_err("AD413X initialization error (%d)\n", ret);
 	return ret;
 }
@@ -1099,7 +1100,7 @@ int32_t ad413x_remove(struct ad413x_dev *dev)
 	if (ret)
 		return ret;
 
-	free(dev);
+	no_os_free(dev);
 
 	return 0;
 }

@@ -44,6 +44,7 @@
 #include "no_os_error.h"
 #include "no_os_util.h"
 #include "no_os_spi.h"
+#include "no_os_alloc.h"
 #include "pico_spi.h"
 #include "pico/stdlib.h"
 #include "no_os_delay.h"
@@ -148,11 +149,11 @@ int32_t pico_spi_init(struct no_os_spi_desc **desc,
 	if (!desc || !param || !param->extra)
 		return -EINVAL;
 
-	descriptor = (struct no_os_spi_desc *)calloc(1, sizeof(*descriptor));
+	descriptor = (struct no_os_spi_desc *)no_os_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
-	pico_spi = (struct pico_spi_desc *)calloc(1, sizeof(*pico_spi));
+	pico_spi = (struct pico_spi_desc *)no_os_calloc(1, sizeof(*pico_spi));
 	if (!pico_spi) {
 		ret = -ENOMEM;
 		goto free_desc;
@@ -183,9 +184,9 @@ int32_t pico_spi_init(struct no_os_spi_desc **desc,
 	return 0;
 
 error:
-	free(pico_spi);
+	no_os_free(pico_spi);
 free_desc:
-	free(descriptor);
+	no_os_free(descriptor);
 	return ret;
 }
 
@@ -205,8 +206,8 @@ int32_t pico_spi_remove(struct no_os_spi_desc *desc)
 
 	spi_deinit(pico_spi->spi_instance);
 
-	free(desc->extra);
-	free(desc);
+	no_os_free(desc->extra);
+	no_os_free(desc);
 	return 0;
 }
 
@@ -240,14 +241,24 @@ int32_t pico_spi_transfer(struct no_os_spi_desc *desc,
 
 	for (uint32_t i = 0; i < len; i++) {
 
+		if (!msgs[i].tx_buff && !msgs[i].rx_buff)
+			return -EINVAL;
+
 		/* Assert CS */
 		gpio_put(pico_spi->spi_cs_pin, 0);
 
-		if(msgs[i].cs_delay_first)
+		if (msgs[i].cs_delay_first)
 			no_os_udelay(msgs[i].cs_delay_first);
 
-		spi_write_read_blocking(pico_spi->spi_instance, msgs[i].tx_buff,
-					msgs[i].rx_buff, msgs[i].bytes_number);
+		if (!msgs[i].tx_buff)
+			spi_read_blocking(pico_spi->spi_instance, 0, msgs[i].rx_buff,
+					  msgs[i].bytes_number);
+		else if (!msgs[i].rx_buff)
+			spi_write_blocking(pico_spi->spi_instance, msgs[i].tx_buff,
+					   msgs[i].bytes_number);
+		else
+			spi_write_read_blocking(pico_spi->spi_instance, msgs[i].tx_buff,
+						msgs[i].rx_buff, msgs[i].bytes_number);
 
 		if(msgs[i].cs_delay_last)
 			no_os_udelay(msgs[i].cs_delay_last);

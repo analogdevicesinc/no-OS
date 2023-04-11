@@ -45,6 +45,7 @@
 #include "adi_cms_api_common.h"
 #include "no_os_util.h"
 #include "no_os_delay.h"
+#include "no_os_alloc.h"
 #include "adi_ad9081_hal.h"
 #include "ad9081.h"
 
@@ -1058,7 +1059,7 @@ int32_t ad9081_init(struct ad9081_phy **dev,
 	uint8_t api_rev[3];
 	int32_t ret;
 
-	phy = (struct ad9081_phy *)calloc(1, sizeof(*phy));
+	phy = (struct ad9081_phy *)no_os_calloc(1, sizeof(*phy));
 	if (!phy)
 		return -1;
 
@@ -1131,7 +1132,7 @@ error_3:
 error_2:
 	no_os_gpio_remove(phy->gpio_reset);
 error_1:
-	free(phy);
+	no_os_free(phy);
 
 	return ret;
 }
@@ -1147,7 +1148,7 @@ int32_t ad9081_remove(struct ad9081_phy *dev)
 
 	ret = no_os_gpio_remove(dev->gpio_reset);
 	ret += no_os_spi_remove(dev->spi_desc);
-	free(dev);
+	no_os_free(dev);
 
 	return ret;
 }

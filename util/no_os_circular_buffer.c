@@ -48,6 +48,7 @@
 #include "no_os_circular_buffer.h"
 #include "no_os_error.h"
 #include "no_os_util.h"
+#include "no_os_alloc.h"
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -88,16 +89,16 @@ int32_t no_os_cb_init(struct no_os_circular_buffer **desc, uint32_t buff_size)
 	if (!desc || !buff_size)
 		return -EINVAL;
 
-	ldesc = (struct no_os_circular_buffer*)calloc(1, sizeof(*ldesc));
+	ldesc = (struct no_os_circular_buffer*)no_os_calloc(1, sizeof(*ldesc));
 	if (!ldesc)
 		return -ENOMEM;
 
 	*desc = ldesc;
 
 	ldesc->size = buff_size;
-	ldesc->buff = calloc(1, buff_size);
+	ldesc->buff = no_os_calloc(1, buff_size);
 	if (!ldesc->buff) {
-		free(ldesc);
+		no_os_free(ldesc);
 		return -ENOMEM;
 	}
 
@@ -117,8 +118,8 @@ int32_t no_os_cb_remove(struct no_os_circular_buffer *desc)
 		return -1;
 
 	if (desc->buff)
-		free(desc->buff);
-	free(desc);
+		no_os_free(desc->buff);
+	no_os_free(desc);
 
 	return 0;
 }

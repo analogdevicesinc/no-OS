@@ -1,0 +1,9 @@
+SRC_DIRS += $(PROJECT)/src
+SRC_DIRS += $(PLATFORM_DRIVERS)
+SRC_DIRS += $(INCLUDE)
+SRC_DIRS += $(NO-OS)/util
+SRC_DIRS += $(NO-OS)/network
+SRC_DIRS += $(NO-OS)/drivers/api
+DISABLE_SECURE_SOCKET=y
+
+LIBRARIES += mqtt

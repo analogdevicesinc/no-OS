@@ -48,6 +48,8 @@
 #include "max31865.h"
 #include "no_os_spi.h"
 #include "no_os_util.h"
+#include "no_os_alloc.h"
+#include "no_os_delay.h"
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -69,7 +71,7 @@ int max31865_init(struct max31865_dev **device,
 	if (!init_param)
 		return -EINVAL;
 
-	descriptor = (struct max31865_dev *)calloc(1, sizeof(*descriptor));
+	descriptor = (struct max31865_dev *)no_os_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
@@ -77,12 +79,21 @@ int max31865_init(struct max31865_dev **device,
 	if (ret)
 		goto err;
 
+	descriptor->t_rc_delay = (int) (init_param->rtd_rc * 10.5 * 1000000);
+
+	if (descriptor->t_rc_delay < 1)
+		/* default 2mS/2000uS delay if no RC time constant specified */
+		descriptor->t_rc_delay = 2000;
+	else
+		/* additional 1mS/1000uS delay (1-Shot section)  */
+		descriptor->t_rc_delay += 1000;
+
 	*device = descriptor;
 
 	return 0;
 
 err:
-	free(descriptor);
+	no_os_free(descriptor);
 
 	return ret;
 }
@@ -103,7 +114,7 @@ int max31865_remove(struct max31865_dev *device)
 	if (ret)
 		return ret;
 
-	free(device);
+	no_os_free(device);
 
 	return 0;
 }
@@ -263,6 +274,8 @@ int max31865_auto_convert(struct max31865_dev *device, bool auto_conv_en)
  */
 int max31865_enable_50Hz(struct max31865_dev *device, bool filt_en)
 {
+	device->is_filt_50 = filt_en;
+
 	if (filt_en)
 		return max31865_reg_update(device, MAX31865_CONFIG_REG,
 					   MAX31865_CONFIG_FILT50HZ, true);
@@ -366,6 +379,8 @@ int max31865_get_upper_threshold(struct max31865_dev *device,
  */
 int max31865_set_wires(struct max31865_dev *device, bool is_odd_wire)
 {
+	device->is_odd_wire = is_odd_wire;
+
 	if (is_odd_wire)
 		return max31865_reg_update(device, MAX31865_CONFIG_REG, MAX31865_CONFIG_3WIRE,
 					   true);
@@ -397,6 +412,11 @@ int max31865_read_rtd(struct max31865_dev *device, uint16_t *rtd_reg)
 				  true);
 	if(ret)
 		return ret;
+
+	if (device->is_filt_50)
+		no_os_udelay(62500 + device->t_rc_delay);
+	else
+		no_os_udelay(52000 + device->t_rc_delay);
 
 	ret = max31865_read(device, MAX31865_RTDMSB_REG, &reg_data);
 	if(ret)

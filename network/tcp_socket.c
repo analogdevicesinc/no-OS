@@ -46,9 +46,9 @@
 #include "no_os_error.h"
 #include "tcp_socket.h"
 #include "no_os_util.h"
+#include "no_os_alloc.h"
 
 #ifndef DISABLE_SECURE_SOCKET
-#include "mbedtls/ssl.h"
 #include "noos_mbedtls_config.h"
 #include "no_os_trng.h"
 #endif /* DISABLE_SECURE_SOCKET */
@@ -146,7 +146,7 @@ static void stcp_socket_remove(struct secure_socket_desc *desc)
 	if (desc->trng)
 		no_os_trng_remove(desc->trng);
 
-	free(desc);
+	no_os_free(desc);
 }
 
 /* Init secure descriptor */
@@ -160,7 +160,7 @@ static int32_t stcp_socket_init(struct secure_socket_desc **desc,
 	if (!desc || !param)
 		return -1;
 
-	ldesc = (typeof(ldesc))calloc(1, sizeof(*ldesc));
+	ldesc = (typeof(ldesc))no_os_calloc(1, sizeof(*ldesc));
 	if (!ldesc)
 		return -1;
 
@@ -281,7 +281,7 @@ int32_t socket_init(struct tcp_socket_desc **desc,
 	if (!desc || !param)
 		return -1;
 
-	ldesc = (typeof(ldesc))calloc(1, sizeof(*ldesc));
+	ldesc = (typeof(ldesc))no_os_calloc(1, sizeof(*ldesc));
 	if (!ldesc)
 		return -1;
 
@@ -295,7 +295,7 @@ int32_t socket_init(struct tcp_socket_desc **desc,
 	ret = ldesc->net->socket_open(ldesc->net->net, &ldesc->id, PROTOCOL_TCP,
 				      buff_size);
 	if (NO_OS_IS_ERR_VALUE(ret)) {
-		free(ldesc);
+		no_os_free(ldesc);
 		return ret;
 	}
 
@@ -307,7 +307,7 @@ int32_t socket_init(struct tcp_socket_desc **desc,
 				       param->secure_init_param);
 	if (NO_OS_IS_ERR_VALUE(ret)) {
 		ldesc->net->socket_close(ldesc->net->net, ldesc->id);
-		free(ldesc);
+		no_os_free(ldesc);
 		return ret;
 	}
 #endif /* DISABLE_SECURE_SOCKET */
@@ -339,7 +339,7 @@ int32_t socket_remove(struct tcp_socket_desc *desc)
 	ret = desc->net->socket_close(desc->net->net, desc->id);
 	if (NO_OS_IS_ERR_VALUE(ret))
 		return ret;
-	free(desc);
+	no_os_free(desc);
 
 	return 0;
 }
@@ -462,7 +462,7 @@ int32_t socket_accept(struct tcp_socket_desc *desc,
 	if (NO_OS_IS_ERR_VALUE(ret))
 		return ret;
 
-	*new_client = (typeof(*new_client))calloc(1, sizeof(**new_client));
+	*new_client = (typeof(*new_client))no_os_calloc(1, sizeof(**new_client));
 	if (!*new_client) {
 		desc->net->socket_close(desc->net->net, desc->id);
 		return -ENOMEM;

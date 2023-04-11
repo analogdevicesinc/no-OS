@@ -51,6 +51,7 @@
 #include "ad9739a.h"
 #include "adf4350.h"
 #include "parameters.h"
+#include "app_config.h"
 #include "xilinx_spi.h"
 #include "no_os_error.h"
 
@@ -171,7 +172,7 @@ int main(void)
 		return -1;
 	}
 
-#ifdef DAC_DMA_EXAMPLE
+#ifdef DMA_EXAMPLE
 	extern const uint16_t sine_lut[128];
 	struct axi_dmac_init ad9739a_dmac_init_param = {
 		.name = "ad9739a_dmac",

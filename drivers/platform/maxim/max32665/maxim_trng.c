@@ -44,6 +44,7 @@
 #include "trng.h"
 #include "maxim_trng.h"
 #include "no_os_util.h"
+#include "no_os_alloc.h"
 #include "no_os_error.h"
 
 /******************************************************************************/
@@ -63,7 +64,7 @@ int max_trng_init(struct no_os_trng_desc **desc,
 	int ret;
 	struct no_os_trng_desc *descriptor;
 
-	descriptor = calloc(1, sizeof(*descriptor));
+	descriptor = no_os_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
@@ -78,7 +79,7 @@ int max_trng_init(struct no_os_trng_desc **desc,
 	return 0;
 
 error:
-	free(desc);
+	no_os_free(desc);
 
 	return ret;
 }
@@ -93,7 +94,7 @@ int max_trng_remove(struct no_os_trng_desc *desc)
 	if (!desc)
 		return -EINVAL;
 
-	free(desc);
+	no_os_free(desc);
 
 	return MXC_TRNG_Shutdown();
 }

@@ -44,6 +44,7 @@
 #include "no_os_spi.h"
 #include "stm32_spi.h"
 #include "no_os_delay.h"
+#include "no_os_alloc.h"
 
 static int stm32_spi_config(struct no_os_spi_desc *desc)
 {
@@ -167,7 +168,7 @@ int32_t stm32_spi_init(struct no_os_spi_desc **desc,
 	if (!desc || !param)
 		return -EINVAL;
 
-	spi_desc = (struct no_os_spi_desc *)calloc(1, sizeof(*spi_desc));
+	spi_desc = (struct no_os_spi_desc *)no_os_calloc(1, sizeof(*spi_desc));
 	if (!spi_desc)
 		return -ENOMEM;
 
@@ -176,7 +177,7 @@ int32_t stm32_spi_init(struct no_os_spi_desc **desc,
 	struct no_os_gpio_init_param csip;
 	struct stm32_gpio_init_param csip_extra;
 
-	sdesc = (struct stm32_spi_desc*)calloc(1,sizeof(struct stm32_spi_desc));
+	sdesc = (struct stm32_spi_desc*)no_os_calloc(1,sizeof(struct stm32_spi_desc));
 	if (!sdesc) {
 		ret = -ENOMEM;
 		goto error;
@@ -217,8 +218,8 @@ int32_t stm32_spi_init(struct no_os_spi_desc **desc,
 
 	return 0;
 error:
-	free(spi_desc);
-	free(sdesc);
+	no_os_free(spi_desc);
+	no_os_free(sdesc);
 	return ret;
 }
 
@@ -237,8 +238,8 @@ int32_t stm32_spi_remove(struct no_os_spi_desc *desc)
 	sdesc = desc->extra;
 	HAL_SPI_DeInit(&sdesc->hspi);
 	no_os_gpio_remove(sdesc->chip_select);
-	free(desc->extra);
-	free(desc);
+	no_os_free(desc->extra);
+	no_os_free(desc);
 	return 0;
 }
 
@@ -259,6 +260,8 @@ int32_t stm32_spi_transfer(struct no_os_spi_desc *desc,
 	uint64_t slave_id;
 	static uint64_t last_slave_id;
 	int ret;
+	uint32_t tx_cnt = 0;
+	uint32_t rx_cnt = 0;
 
 	if (!desc || !desc->extra || !msgs)
 		return -EINVAL;
@@ -280,6 +283,8 @@ int32_t stm32_spi_transfer(struct no_os_spi_desc *desc,
 	}
 
 	for (uint32_t i = 0; i < len; i++) {
+		rx_cnt = 0;
+		tx_cnt = 0;
 
 		/* Assert CS */
 		gdesc->port->BSRR = NO_OS_BIT(sdesc->chip_select->number) << 16;
@@ -288,14 +293,24 @@ int32_t stm32_spi_transfer(struct no_os_spi_desc *desc,
 			no_os_udelay(msgs[i].cs_delay_first);
 
 		__HAL_SPI_ENABLE(&sdesc->hspi);
-		while(msgs[i].bytes_number--) {
+
+		while ((msgs[i].rx_buff && rx_cnt < msgs[i].bytes_number) ||
+		       (msgs[i].tx_buff && tx_cnt < msgs[i].bytes_number)) {
 			while(!(SPIx->SR & SPI_SR_TXE))
 				;
-			*(volatile uint8_t *)&SPIx->DR = *msgs[i].tx_buff++;
+			if (msgs[i].tx_buff)
+				*(volatile uint8_t *)&SPIx->DR = msgs[i].tx_buff[tx_cnt++];
+			else
+				*(volatile uint8_t *)&SPIx->DR = 0;
+
 			while(!(SPIx->SR & SPI_SR_RXNE))
 				;
-			*msgs[i].rx_buff++ = *(volatile uint8_t *)&SPIx->DR;
+			if (msgs[i].rx_buff)
+				msgs[i].rx_buff[rx_cnt++] = *(volatile uint8_t *)&SPIx->DR;
+			else
+				(void)*(volatile uint8_t *)&SPIx->DR;
 		}
+
 		__HAL_SPI_DISABLE(&sdesc->hspi);
 
 		if(msgs[i].cs_delay_last)

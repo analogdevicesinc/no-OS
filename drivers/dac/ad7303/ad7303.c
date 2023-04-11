@@ -42,6 +42,7 @@
 /******************************************************************************/
 #include <stdlib.h>
 #include "ad7303.h"           // AD7303 definitions.
+#include "no_os_alloc.h"
 
 /***************************************************************************//**
  * @brief Initializes SPI communication.
@@ -60,7 +61,7 @@ int8_t ad7303_init(struct ad7303_dev **device,
 	struct ad7303_dev *dev;
 	int8_t status;
 
-	dev = (struct ad7303_dev *)malloc(sizeof(*dev));
+	dev = (struct ad7303_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -84,7 +85,7 @@ int32_t ad7303_remove(struct ad7303_dev *dev)
 
 	ret = no_os_spi_remove(dev->spi_desc);
 
-	free(dev);
+	no_os_free(dev);
 
 	return ret;
 }

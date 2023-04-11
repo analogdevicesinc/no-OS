@@ -45,6 +45,7 @@
 #include "no_os_delay.h"
 #include "no_os_spi.h"
 #include "no_os_gpio.h"
+#include "no_os_alloc.h"
 #include "ad5940.h"
 
 static int AD5940_Initialize(struct ad5940_dev *dev);
@@ -88,7 +89,7 @@ int ad5940_init(struct ad5940_dev **device,
 	if (!device || !init_param)
 		return -EINVAL;
 
-	dev = (struct ad5940_dev *) calloc(1, sizeof(struct ad5940_dev));
+	dev = (struct ad5940_dev *) no_os_calloc(1, sizeof(struct ad5940_dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -188,7 +189,7 @@ error_2:
 error_1:
 	no_os_spi_remove(dev->spi);
 error:
-	free(dev);
+	no_os_free(dev);
 	return ret;
 }
 
@@ -200,7 +201,7 @@ int ad5940_remove(struct ad5940_dev *dev)
 	no_os_gpio_remove(dev->reset_gpio);
 	no_os_spi_remove(dev->spi);
 	dev->spi = NULL;
-	free(dev);
+	no_os_free(dev);
 
 	return 0;
 }
@@ -660,7 +661,7 @@ static int AD5940_FIFORd_Fast(struct no_os_spi_desc *spi, uint32_t *pBuffer,
 	uint32_t s = 0;
 
 	if (!iobuf_alloc_sz) {
-		iobuf = malloc(iobuf_sz);
+		iobuf = no_os_malloc(iobuf_sz);
 		if (!iobuf)
 			return -ENOMEM;
 	}

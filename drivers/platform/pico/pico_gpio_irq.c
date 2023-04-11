@@ -44,6 +44,7 @@
 #include "no_os_list.h"
 #include "no_os_irq.h"
 #include "no_os_util.h"
+#include "no_os_alloc.h"
 #include "pico_gpio_irq.h"
 #include "hardware/irq.h"
 
@@ -113,11 +114,12 @@ static int32_t pico_gpio_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
 		return -EINVAL;
 
 	if (!initialized) {
-		gpio_irq_desc = calloc(1, sizeof(*gpio_irq_desc));
+		gpio_irq_desc = no_os_calloc(1, sizeof(*gpio_irq_desc));
 		if (!gpio_irq_desc)
 			return -ENOMEM;
 
-		pico_gpio_irq = (struct pico_gpio_irq_desc*)calloc(1, sizeof(*pico_gpio_irq));
+		pico_gpio_irq = (struct pico_gpio_irq_desc*)no_os_calloc(1,
+				sizeof(*pico_gpio_irq));
 		if (!pico_gpio_irq) {
 			ret = -ENOMEM;
 			goto error;
@@ -139,8 +141,8 @@ static int32_t pico_gpio_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
 
 error:
 	no_os_list_remove(actions);
-	free(gpio_irq_desc);
-	free(pico_gpio_irq);
+	no_os_free(gpio_irq_desc);
+	no_os_free(pico_gpio_irq);
 	return ret;
 }
 
@@ -157,14 +159,14 @@ static int32_t pico_gpio_irq_ctrl_remove(struct no_os_irq_ctrl_desc *desc)
 		return -EINVAL;
 
 	while (0 == no_os_list_get_first(actions, (void **)&discard))
-		free(discard);
+		no_os_free(discard);
 
 	no_os_list_remove(actions);
 
 	initialized = false;
 
-	free(desc->extra);
-	free(desc);
+	no_os_free(desc->extra);
+	no_os_free(desc);
 
 	return 0;
 }
@@ -234,7 +236,7 @@ static int32_t pico_gpio_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 	ret = no_os_list_read_find(actions, (void **)&action, &action_key);
 	/* If no action was found, insert a new one, otherwise update it */
 	if (ret) {
-		action = calloc(1, sizeof(*action));
+		action = no_os_calloc(1, sizeof(*action));
 		if (!action)
 			return -ENOMEM;
 
@@ -258,7 +260,7 @@ static int32_t pico_gpio_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 	return 0;
 
 free_action:
-	free(action);
+	no_os_free(action);
 	return ret;
 }
 
@@ -292,7 +294,7 @@ static int32_t pico_gpio_irq_unregister_callback(
 	if (ret)
 		return -ENODEV;
 
-	free(discard_action);
+	no_os_free(discard_action);
 	return 0;
 }
 

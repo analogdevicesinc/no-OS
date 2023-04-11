@@ -51,6 +51,7 @@
 #include "no_os_print_log.h"
 #include "no_os_spi.h"
 #include "no_os_util.h"
+#include "no_os_alloc.h"
 #include "no_os_units.h"
 
 #define SPI_MASTER_MODE	1
@@ -138,6 +139,7 @@ static int _max_spi_config(struct no_os_spi_desc *desc)
 {
 	struct max_spi_init_param *eparam;
 	struct max_spi_state *st;
+	mxc_spi_mode_t mode;
 	int32_t ret;
 
 	st = desc->extra;
@@ -157,14 +159,30 @@ static int _max_spi_config(struct no_os_spi_desc *desc)
 
 	ret = MXC_SPI_Init(MXC_SPI_GET_SPI(desc->device_id), SPI_MASTER_MODE,
 			   SPI_SINGLE_MODE,
-			   eparam->numSlaves, eparam->polarity, desc->max_speed_hz, spi_pins_config);
+			   eparam->num_slaves, eparam->polarity, desc->max_speed_hz, spi_pins_config);
 	if (ret) {
 		ret = -EINVAL;
 		goto err_init;
 	}
 
-	ret = MXC_SPI_SetMode(MXC_SPI_GET_SPI(desc->device_id),
-			      (mxc_spi_mode_t)desc->mode);
+	/* For Maxim Platforms SPI Mode 1 and 2 are reversed */
+	switch (desc->mode) {
+	case NO_OS_SPI_MODE_1:
+		mode = SPI_MODE_2;
+		break;
+	case NO_OS_SPI_MODE_2:
+		mode = SPI_MODE_1;
+		break;
+	case NO_OS_SPI_MODE_0:
+	/* fallthrough */
+	case NO_OS_SPI_MODE_3:
+		mode = (mxc_spi_mode_t)desc->mode;
+		break;
+	default:
+		return -EINVAL;
+	}
+
+	ret = MXC_SPI_SetMode(MXC_SPI_GET_SPI(desc->device_id), mode);
 	if (ret) {
 		ret = -EINVAL;
 		goto err_init;
@@ -206,11 +224,11 @@ int32_t max_spi_init(struct no_os_spi_desc **desc,
 	if (!param || !param->extra)
 		return -EINVAL;
 
-	descriptor = calloc(1, sizeof(*descriptor));
+	descriptor = no_os_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
-	st = calloc(1, sizeof(*st));
+	st = no_os_calloc(1, sizeof(*st));
 	if (!st) {
 		ret = -ENOMEM;
 		goto err;
@@ -242,8 +260,8 @@ int32_t max_spi_init(struct no_os_spi_desc **desc,
 err_init:
 	MXC_SPI_Shutdown(MXC_SPI_GET_SPI(descriptor->device_id));
 err:
-	free(st);
-	free(descriptor);
+	no_os_free(st);
+	no_os_free(descriptor);
 
 	return ret;
 }
@@ -259,8 +277,8 @@ int32_t max_spi_remove(struct no_os_spi_desc *desc)
 		return -EINVAL;
 
 	MXC_SPI_Shutdown(MXC_SPI_GET_SPI(desc->device_id));
-	free(desc->extra);
-	free(desc);
+	no_os_free(desc->extra);
+	no_os_free(desc);
 
 	return 0;
 }

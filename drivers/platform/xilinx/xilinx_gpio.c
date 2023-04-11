@@ -53,6 +53,7 @@
 
 #include "no_os_error.h"
 #include "no_os_gpio.h"
+#include "no_os_alloc.h"
 #include "xilinx_gpio.h"
 
 /******************************************************************************/
@@ -83,7 +84,7 @@ int32_t _gpio_init(struct no_os_gpio_desc *desc,
 	switch (xinit->type) {
 	case GPIO_PL:
 #ifdef XGPIO_H
-		xdesc->instance = (XGpio *)malloc(sizeof(XGpio));
+		xdesc->instance = (XGpio *)no_os_malloc(sizeof(XGpio));
 		if(!xdesc->instance)
 			goto pl_error;
 
@@ -100,12 +101,12 @@ int32_t _gpio_init(struct no_os_gpio_desc *desc,
 
 		break;
 pl_error:
-		free(xdesc->instance);
+		no_os_free(xdesc->instance);
 #endif
 		goto error;
 	case GPIO_PS:
 #ifdef XGPIOPS_H
-		xdesc->instance = (XGpioPs *)malloc(sizeof(XGpioPs));
+		xdesc->instance = (XGpioPs *)no_os_malloc(sizeof(XGpioPs));
 		if(!xdesc->instance)
 			goto ps_error;
 
@@ -120,7 +121,7 @@ pl_error:
 			goto ps_error;
 		break;
 ps_error:
-		free(xdesc->instance);
+		no_os_free(xdesc->instance);
 #endif
 		goto error;
 error:
@@ -144,8 +145,8 @@ int32_t xil_gpio_get(struct no_os_gpio_desc **desc,
 	struct xil_gpio_desc	*extra;
 	int32_t			ret;
 
-	descriptor = (struct no_os_gpio_desc *)malloc(sizeof(*descriptor));
-	extra = (struct xil_gpio_desc*)malloc(sizeof(*extra));
+	descriptor = (struct no_os_gpio_desc *)no_os_malloc(sizeof(*descriptor));
+	extra = (struct xil_gpio_desc*)no_os_malloc(sizeof(*extra));
 
 	if (!descriptor || !extra)
 		return -1;
@@ -160,8 +161,8 @@ int32_t xil_gpio_get(struct no_os_gpio_desc **desc,
 
 	return 0;
 error:
-	free(extra);
-	free(descriptor);
+	no_os_free(extra);
+	no_os_free(descriptor);
 
 	return -1;
 }
@@ -191,9 +192,9 @@ int32_t xil_gpio_get_optional(struct no_os_gpio_desc **desc,
 int32_t xil_gpio_remove(struct no_os_gpio_desc *desc)
 {
 	if (desc != NULL) {
-		free(((struct xil_gpio_desc *)(desc->extra))->instance);
-		free(desc->extra);
-		free(desc);
+		no_os_free(((struct xil_gpio_desc *)(desc->extra))->instance);
+		no_os_free(desc->extra);
+		no_os_free(desc);
 	}
 
 	return 0;

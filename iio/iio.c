@@ -53,6 +53,7 @@
 #include "no_os_error.h"
 #include "no_os_uart.h"
 #include "no_os_error.h"
+#include "no_os_alloc.h"
 #include "no_os_circular_buffer.h"
 #include <inttypes.h>
 #include <stdio.h>
@@ -151,7 +152,7 @@ struct iio_buffer_priv {
 	uint32_t		raw_buf_len;
 	/* Set when this devices has buffer */
 	bool			initalized;
-	/* Set when calloc was used to initalize cb.buf */
+	/* Set when no_os_calloc was used to initalize cb.buf */
 	bool			allocated;
 };
 
@@ -345,6 +346,30 @@ static struct iio_trig_priv *get_iio_trig_device(struct iio_desc *desc,
 	}
 
 	return NULL;
+}
+
+/**
+ * @brief Sets buffers count.
+ * @param ctx           - IIO instance and conn instance.
+ * @param device        - String containing device name.
+ * @param buffers_count - Value to be set.
+ * @return Positive if index was set, negative if not.
+ */
+static int iio_set_buffers_count(struct iiod_ctx *ctx, const char *device,
+				 uint32_t buffers_count)
+{
+	struct iio_desc *desc = ctx->instance;
+
+	if(!get_iio_device(desc, device))
+		return -ENODEV;
+
+	/* Our implementation uses a circular buffer to send/receive data so
+	 * only 1 is a valid value.
+	 */
+	if (buffers_count != 1)
+		return -EINVAL;
+
+	return 0;
 }
 
 /**
@@ -1108,21 +1133,22 @@ static int iio_open_dev(struct iiod_ctx *ctx, const char *device,
 	dev->buffer.public.bytes_per_scan =
 		bytes_per_scan(dev->dev_descriptor->channels, mask);
 	dev->buffer.public.size = dev->buffer.public.bytes_per_scan * samples;
+	dev->buffer.public.samples = samples;
 	if (dev->buffer.raw_buf && dev->buffer.raw_buf_len) {
 		if (dev->buffer.raw_buf_len < dev->buffer.public.size)
 			/* Need a bigger buffer or to allocate */
 			return -ENOMEM;
-
-		buf_size = dev->buffer.raw_buf_len;
+		buf_size = dev->buffer.raw_buf_len - (dev->buffer.raw_buf_len %
+						      dev->buffer.public.size);
 		buf = dev->buffer.raw_buf;
 	} else {
 		if (dev->buffer.allocated) {
 			/* Free in case iio_close_dev wasn't called to free it*/
-			free(dev->buffer.cb.buff);
+			no_os_free(dev->buffer.cb.buff);
 			dev->buffer.allocated = 0;
 		}
 		buf_size = dev->buffer.public.size;
-		buf = (int8_t *)calloc(dev->buffer.public.size, sizeof(*buf));
+		buf = (int8_t *)no_os_calloc(dev->buffer.public.size, sizeof(*buf));
 		if (!buf)
 			return -ENOMEM;
 		dev->buffer.allocated = 1;
@@ -1131,7 +1157,7 @@ static int iio_open_dev(struct iiod_ctx *ctx, const char *device,
 	ret = no_os_cb_cfg(&dev->buffer.cb, buf, buf_size);
 	if (NO_OS_IS_ERR_VALUE(ret)) {
 		if (dev->buffer.allocated) {
-			free(dev->buffer.cb.buff);
+			no_os_free(dev->buffer.cb.buff);
 			dev->buffer.allocated = 0;
 		}
 
@@ -1141,7 +1167,7 @@ static int iio_open_dev(struct iiod_ctx *ctx, const char *device,
 	if (dev->dev_descriptor->pre_enable) {
 		ret = dev->dev_descriptor->pre_enable(dev->dev_instance, mask);
 		if (NO_OS_IS_ERR_VALUE(ret) && dev->buffer.allocated) {
-			free(dev->buffer.cb.buff);
+			no_os_free(dev->buffer.cb.buff);
 			dev->buffer.allocated = 0;
 			return ret;
 		}
@@ -1179,7 +1205,7 @@ static int iio_close_dev(struct iiod_ctx *ctx, const char *device)
 
 	if (dev->buffer.allocated) {
 		/* Should something else be used to free internal strucutre */
-		free(dev->buffer.cb.buff);
+		no_os_free(dev->buffer.cb.buff);
 		dev->buffer.allocated = 0;
 	}
 
@@ -1218,7 +1244,6 @@ static int iio_call_submit(struct iiod_ctx *ctx, const char *device,
 		     dev->dev_descriptor->write_dev && dev->trig_idx==NO_TRIGGER)) {
 		/* Code used to don't break devices using read_dev */
 		int32_t ret;
-		uint32_t nb_scans;
 		void *buff;
 		struct iio_buffer *buffer = &dev->buffer.public;
 
@@ -1226,13 +1251,12 @@ static int iio_call_submit(struct iiod_ctx *ctx, const char *device,
 		if (NO_OS_IS_ERR_VALUE(ret))
 			return ret;
 
-		nb_scans = buffer->size / buffer->bytes_per_scan;
 		if (dir == IIO_DIRECTION_INPUT)
 			ret = dev->dev_descriptor->read_dev(dev->dev_instance,
-							    buff, nb_scans);
+							    buff, buffer->samples);
 		else
 			ret = dev->dev_descriptor->write_dev(dev->dev_instance,
-							     buff, nb_scans);
+							     buff, buffer->samples);
 		if (NO_OS_IS_ERR_VALUE(ret))
 			return ret;
 
@@ -1336,35 +1360,15 @@ static int iio_write_buffer(struct iiod_ctx *ctx, const char *device,
 
 int iio_buffer_get_block(struct iio_buffer *buffer, void **addr)
 {
-	int32_t ret;
 	uint32_t size;
 
 	if (!buffer)
 		return -EINVAL;
 
 	if (buffer->dir == IIO_DIRECTION_INPUT)
-		ret = no_os_cb_prepare_async_write(buffer->buf, buffer->size, addr,
-						   &size);
-	else
-		ret = no_os_cb_prepare_async_read(buffer->buf, buffer->size, addr,
-						  &size);
-	if (NO_OS_IS_ERR_VALUE(ret))
-		/* ToDo: Implement async cancel. And cancel transaction here.
-		 * Also cancel may be needed for a posible future abort callback
-		 * If this is not done, after the first error all future calls
-		 * to async will fail.
-		 * An other option will be to call cb_cfg but then data is lost
-		 */
-		return ret;
+		return no_os_cb_prepare_async_write(buffer->buf, buffer->size, addr, &size);
 
-	/* This function is exepected to be called for a DMA transaction of the
-	 * full buffer. But if can't do in one transaction won't work.
-	 * This behavior is not expected anyway.
-	 */
-	if (size != buffer->size)
-		return -ENOMEM;
-
-	return 0;
+	return no_os_cb_prepare_async_read(buffer->buf, buffer->size, addr, &size);
 }
 
 int iio_buffer_block_done(struct iio_buffer *buffer)
@@ -1421,7 +1425,7 @@ static int32_t accept_network_clients(struct iio_desc *desc)
 			return ret;
 
 		data.conn = sock;
-		data.buf = calloc(1, IIOD_CONN_BUFFER_SIZE);
+		data.buf = no_os_calloc(1, IIOD_CONN_BUFFER_SIZE);
 		data.len = IIOD_CONN_BUFFER_SIZE;
 
 		ret = iiod_conn_add(desc->iiod, &data, &id);
@@ -1468,7 +1472,7 @@ int iio_step(struct iio_desc *desc)
 		if (desc->server) {
 			iiod_conn_remove(desc->iiod, conn_id, &data);
 			socket_remove(data.conn);
-			free(data.buf);
+			no_os_free(data.buf);
 		}
 #endif
 	} else {
@@ -1717,7 +1721,7 @@ static int32_t iio_init_xml(struct iio_desc *desc)
 						NULL, -1);
 	}
 
-	desc->xml_desc = (char *)calloc(size + 1, sizeof(*desc->xml_desc));
+	desc->xml_desc = (char *)no_os_calloc(size + 1, sizeof(*desc->xml_desc));
 	if (!desc->xml_desc)
 		return -ENOMEM;
 
@@ -1752,7 +1756,7 @@ static int32_t iio_init_devs(struct iio_desc *desc,
 	struct iio_device_init *ndev;
 
 	desc->nb_devs = n;
-	desc->devs = (struct iio_dev_priv *)calloc(desc->nb_devs,
+	desc->devs = (struct iio_dev_priv *)no_os_calloc(desc->nb_devs,
 			sizeof(*desc->devs));
 	if (!desc->devs)
 		return -ENOMEM;
@@ -1798,7 +1802,7 @@ static int32_t iio_init_trigs(struct iio_desc *desc,
 	struct iio_trigger_init *trig_init_iter;
 
 	desc->nb_trigs = n;
-	desc->trigs = (struct iio_trig_priv *)calloc(desc->nb_trigs,
+	desc->trigs = (struct iio_trig_priv *)no_os_calloc(desc->nb_trigs,
 			sizeof(*desc->trigs));
 	if (!desc->trigs)
 		return -ENOMEM;
@@ -1833,7 +1837,7 @@ int iio_init(struct iio_desc **desc, struct iio_init_param *init_param)
 	if (!desc || !init_param)
 		return -EINVAL;
 
-	ldesc = (struct iio_desc *)calloc(1, sizeof(*ldesc));
+	ldesc = (struct iio_desc *)no_os_calloc(1, sizeof(*ldesc));
 	if (!ldesc)
 		return -ENOMEM;
 
@@ -1866,6 +1870,7 @@ int iio_init(struct iio_desc **desc, struct iio_init_param *init_param)
 	ops->close = iio_close_dev;
 	ops->send = iio_send;
 	ops->recv = iio_recv;
+	ops->set_buffers_count = iio_set_buffers_count;
 
 	iiod_param.instance = ldesc;
 	iiod_param.ops = ops;
@@ -1912,7 +1917,20 @@ int iio_init(struct iio_desc **desc, struct iio_init_param *init_param)
 			goto free_pylink;
 	}
 #endif
-	else {
+	else if (init_param->phy_type == USE_LOCAL_BACKEND) {
+		ldesc->recv = init_param->local_backend->local_backend_event_read;
+		ldesc->send = init_param->local_backend->local_backend_event_write;
+
+		struct iiod_conn_data data = {
+			.conn = NULL,
+			.buf = init_param->local_backend->local_backend_buff,
+			.len = init_param->local_backend->local_backend_buff_len
+		};
+		ret = iiod_conn_add(ldesc->iiod, &data, &conn_id);
+		if (NO_OS_IS_ERR_VALUE(ret))
+			goto free_conns;
+		_push_conn(ldesc, conn_id);
+	} else {
 		ret = -EINVAL;
 		goto free_conns;
 	}
@@ -1930,13 +1948,13 @@ free_conns:
 free_iiod:
 	iiod_remove(ldesc->iiod);
 free_xml:
-	free(ldesc->xml_desc);
+	no_os_free(ldesc->xml_desc);
 free_trigs:
-	free(ldesc->trigs);
+	no_os_free(ldesc->trigs);
 free_devs:
-	free(ldesc->devs);
+	no_os_free(ldesc->devs);
 free_desc:
-	free(ldesc);
+	no_os_free(ldesc);
 
 	return ret;
 }
@@ -1956,9 +1974,9 @@ int iio_remove(struct iio_desc *desc)
 #endif
 	no_os_cb_remove(desc->conns);
 	iiod_remove(desc->iiod);
-	free(desc->devs);
-	free(desc->xml_desc);
-	free(desc);
+	no_os_free(desc->devs);
+	no_os_free(desc->trigs);
+	no_os_free(desc);
 
 	return 0;
 }

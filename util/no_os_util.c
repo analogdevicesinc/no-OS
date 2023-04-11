@@ -48,6 +48,8 @@
 /************************** Functions Implementation **************************/
 /******************************************************************************/
 
+extern int no_os_test_bit(int pos, const volatile void * addr);
+
 /**
  * Find first set bit in word.
  */
@@ -145,6 +147,16 @@ uint32_t no_os_greatest_common_divisor(uint32_t a,
 			common_div = div;
 
 	return common_div;
+}
+/**
+ * Find lowest common multiple of the given two numbers.
+ */
+uint32_t no_os_lowest_common_multiple(uint32_t a, uint32_t b)
+{
+	if (a && b)
+		return (a / no_os_greatest_common_divisor(a, b)) * b;
+	else
+		return 0;
 }
 
 /**

@@ -44,6 +44,7 @@
 #include <malloc.h>
 #include <stdio.h>
 #include "adf4350.h"
+#include "no_os_alloc.h"
 
 /***************************************************************************//**
  * @brief Writes 4 bytes of data to ADF4350.
@@ -281,7 +282,7 @@ int32_t adf4350_setup(adf4350_dev **device,
 	adf4350_dev *dev;
 	int32_t ret;
 
-	dev = (adf4350_dev *)malloc(sizeof(*dev));
+	dev = (adf4350_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev) {
 		return -1;
 	}
@@ -289,7 +290,7 @@ int32_t adf4350_setup(adf4350_dev **device,
 	/* SPI */
 	ret = no_os_spi_init(&dev->spi_desc, &init_param.spi_init);
 
-	dev->pdata = (struct adf4350_platform_data *)malloc(sizeof(*dev->pdata));
+	dev->pdata = (struct adf4350_platform_data *)no_os_malloc(sizeof(*dev->pdata));
 	if (!dev->pdata)
 		return -1;
 

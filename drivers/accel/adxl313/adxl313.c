@@ -47,6 +47,7 @@
 #include "no_os_print_log.h"
 #include "no_os_util.h"
 #include "no_os_delay.h"
+#include "no_os_alloc.h"
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
@@ -172,7 +173,7 @@ int adxl313_init(struct adxl313_dev **device,
 	uint8_t reg_value = 0;
 
 
-	dev = (struct adxl313_dev *)calloc(1, sizeof(*dev));
+	dev = (struct adxl313_dev *)no_os_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -340,10 +341,10 @@ error_com:
 		no_os_spi_remove(dev->com_desc.spi_desc);
 	else
 		no_os_i2c_remove(dev->com_desc.i2c_desc);
-	free(dev);
+	no_os_free(dev);
 	return -EPIPE;
 error_dev:
-	free(dev);
+	no_os_free(dev);
 	return -ENODEV;
 }
 
@@ -364,7 +365,7 @@ int adxl313_remove(struct adxl313_dev *dev)
 		ret = no_os_i2c_remove(dev->com_desc.i2c_desc);
 
 	if (!ret)
-		free(dev);
+		no_os_free(dev);
 
 	return ret;
 }

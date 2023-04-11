@@ -45,6 +45,7 @@
 /******************************************************************************/
 #include <stdlib.h>
 #include "ad5629r.h"
+#include "no_os_alloc.h"
 
 /******************************************************************************/
 /************************ Variables Definitions *******************************/
@@ -94,7 +95,7 @@ int8_t ad5629r_init(struct ad5629r_dev **device,
 	struct ad5629r_dev *dev;
 	int8_t status;
 
-	dev = (struct ad5629r_dev *)malloc(sizeof(*dev));
+	dev = (struct ad5629r_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -141,7 +142,7 @@ int32_t ad5629r_remove(struct ad5629r_dev *dev)
 	if (dev->gpio_clr)
 		ret |= no_os_gpio_remove(dev->gpio_clr);
 
-	free(dev);
+	no_os_free(dev);
 
 	return ret;
 }

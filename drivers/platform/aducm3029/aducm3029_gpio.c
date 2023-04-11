@@ -43,6 +43,7 @@
 
 #include "no_os_error.h"
 #include "no_os_gpio.h"
+#include "no_os_alloc.h"
 #include <drivers/gpio/adi_gpio.h>
 #include <stdlib.h>
 #include "aducm3029_gpio.h"
@@ -72,7 +73,7 @@ int32_t aducm3029_gpio_get(struct no_os_gpio_desc **desc,
 	if (!desc || !param)
 		return -1;
 
-	(*desc) = calloc(1, sizeof(**desc));
+	(*desc) = no_os_calloc(1, sizeof(**desc));
 	if (!(*desc))
 		return -1;
 
@@ -84,7 +85,7 @@ int32_t aducm3029_gpio_get(struct no_os_gpio_desc **desc,
 		adi_gpio_UnInit();
 		if (0 != adi_gpio_Init(mem_gpio_handler,
 				       ADI_GPIO_MEMORY_SIZE)) {
-			free(*desc);
+			no_os_free(*desc);
 			*desc = NULL;
 			return -1;
 		}
@@ -127,7 +128,7 @@ int32_t aducm3029_gpio_remove(struct no_os_gpio_desc *desc)
 	if (!desc || !nb_gpio)
 		return -1;
 
-	free(desc);
+	no_os_free(desc);
 	/* Decrement number of GPIOs */
 	nb_gpio--;
 	/* If no more GPIOs free driver memory */

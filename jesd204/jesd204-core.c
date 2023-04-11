@@ -6,6 +6,7 @@
 
 #include <stdlib.h>
 #include "no_os_error.h"
+#include "no_os_alloc.h"
 #include "no_os_print_log.h"
 #include "no_os_util.h"
 #include "jesd204-priv.h"
@@ -17,7 +18,7 @@ static int jesd204_dev_alloc_links(struct jesd204_dev_top *jdev_top)
 	unsigned int i;
 
 	links = (struct jesd204_link_opaque *)
-		calloc(1, jdev_top->num_links * sizeof(*links));
+		no_os_calloc(1, jdev_top->num_links * sizeof(*links));
 	if (!links)
 		return -ENOMEM;
 	jdev_top->active_links = links;
@@ -43,11 +44,11 @@ int jesd204_dev_register(struct jesd204_dev **jdev,
 	if (!dev_data)
 		return -EINVAL;
 
-	dev = (struct jesd204_dev *)calloc(1, sizeof(*dev));
+	dev = (struct jesd204_dev *)no_os_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
-	dev->priv = (void *)calloc(1, dev_data->sizeof_priv);
+	dev->priv = (void *)no_os_calloc(1, dev_data->sizeof_priv);
 
 	dev->dev_data = dev_data;
 
@@ -62,8 +63,8 @@ int jesd204_dev_unregister(struct jesd204_dev *jdev)
 	if (!jdev)
 		return -EINVAL;
 
-	free(jdev->priv);
-	free(jdev);
+	no_os_free(jdev->priv);
+	no_os_free(jdev);
 
 	return 0;
 }
@@ -82,18 +83,18 @@ int jesd204_topology_init(struct jesd204_topology **topology,
 	if (!devs)
 		return -EINVAL;
 
-	top = (struct jesd204_topology *)calloc(1, sizeof(*top));
+	top = (struct jesd204_topology *)no_os_calloc(1, sizeof(*top));
 	if (!top)
 		return -ENOMEM;
 
-	top->dev_top = (struct jesd204_dev_top *)calloc(1, sizeof(*top->dev_top));
+	top->dev_top = (struct jesd204_dev_top *)no_os_calloc(1, sizeof(*top->dev_top));
 	if (!top->dev_top) {
-		free(top);
+		no_os_free(top);
 		return -ENOMEM;
 	}
 
 	top->devs_number = devs_number - 1;
-	top->devs = (struct jesd204_topology_dev *)calloc(1,
+	top->devs = (struct jesd204_topology_dev *)no_os_calloc(1,
 			top->devs_number * sizeof(*top->devs));
 
 	for (i = 0; i < devs_number; i++) {
@@ -124,8 +125,8 @@ int jesd204_topology_remove(struct jesd204_topology *topology)
 	if (!topology)
 		return -EINVAL;
 
-	free(topology->dev_top);
-	free(topology);
+	no_os_free(topology->dev_top);
+	no_os_free(topology);
 
 	return 0;
 }

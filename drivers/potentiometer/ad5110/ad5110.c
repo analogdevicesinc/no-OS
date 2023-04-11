@@ -43,6 +43,7 @@
 /******************************************************************************/
 #include <stdlib.h>
 #include "ad5110.h"
+#include "no_os_alloc.h"
 
 /***************************************************************************//**
  * @brief Initializes the communication with the device.
@@ -61,7 +62,7 @@ int8_t ad5110_init(struct ad5110_dev **device,
 	struct ad5110_dev *dev;
 	int8_t status;
 
-	dev = (struct ad5110_dev *)malloc(sizeof(*dev));
+	dev = (struct ad5110_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -86,7 +87,7 @@ int32_t ad5110_remove(struct ad5110_dev *dev)
 
 	ret = no_os_i2c_remove(dev->i2c_desc);
 
-	free(dev);
+	no_os_free(dev);
 
 	return ret;
 }

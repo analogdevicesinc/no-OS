@@ -44,6 +44,8 @@
 /******************************************************************************/
 #ifdef MAXIM_PLATFORM
 #include "maxim/parameters.h"
+#elif  MBED_PLATFORM
+#include "mbed/parameters.h"
 #endif
 
 #ifdef IIO_SUPPORT

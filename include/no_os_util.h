@@ -119,6 +119,12 @@
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
+/* Check if bit set */
+inline int no_os_test_bit(int pos, const volatile void * addr)
+{
+	return (((const int *)addr)[pos / 32] >> pos) & 1UL;
+}
+
 /* Find first set bit in word. */
 uint32_t no_os_find_first_set_bit(uint32_t word);
 /* Find last set bit in word. */
@@ -136,6 +142,8 @@ int32_t no_os_log_base_2(uint32_t x);
 /* Find greatest common divisor of the given two numbers. */
 uint32_t no_os_greatest_common_divisor(uint32_t a,
 				       uint32_t b);
+/* Find lowest common multiple of the given two numbers. */
+uint32_t no_os_lowest_common_multiple(uint32_t a, uint32_t b);
 /* Calculate best rational approximation for a given fraction. */
 void no_os_rational_best_approximation(uint32_t given_numerator,
 				       uint32_t given_denominator,

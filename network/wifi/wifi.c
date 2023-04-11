@@ -48,6 +48,7 @@
 #include "at_parser.h"
 #include "no_os_error.h"
 #include "no_os_util.h"
+#include "no_os_alloc.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -309,7 +310,7 @@ int32_t wifi_init(struct wifi_desc **desc, struct wifi_init_param *param)
 	if (!desc || !param)
 		return -1;
 
-	ldesc = (struct wifi_desc *)calloc(1, sizeof(*ldesc));
+	ldesc = (struct wifi_desc *)no_os_calloc(1, sizeof(*ldesc));
 	if (!ldesc)
 		return -1;
 
@@ -346,7 +347,7 @@ int32_t wifi_init(struct wifi_desc **desc, struct wifi_init_param *param)
 at_err:
 	at_remove(ldesc->at);
 ldesc_err:
-	free(ldesc);
+	no_os_free(ldesc);
 
 	return -1;
 }
@@ -370,7 +371,7 @@ int32_t wifi_remove(struct wifi_desc *desc)
 
 	wifi_disconnect(desc);
 	at_remove(desc->at);
-	free(desc);
+	no_os_free(desc);
 
 	return 0;
 }
@@ -542,7 +543,7 @@ static int32_t wifi_socket_connect(struct wifi_desc *desc, uint32_t sock_id,
 				   struct socket_address *addr)
 {
 	union in_out_param	param;
-	uint32_t		ret;
+	int32_t			ret;
 	struct socket_desc	*sock;
 
 	if (!desc || !addr || sock_id >= NB_SOCKETS ||
@@ -592,7 +593,7 @@ static void _remove_server_back_log(struct wifi_desc *desc)
 static int32_t wifi_socket_disconnect(struct wifi_desc *desc, uint32_t sock_id)
 {
 	union in_out_param	param;
-	uint32_t		ret;
+	int32_t			ret;
 	struct socket_desc	*sock;
 
 	if (!desc || sock_id >= NB_SOCKETS)
@@ -635,7 +636,7 @@ static int32_t wifi_socket_send(struct wifi_desc *desc, uint32_t sock_id,
 				const void *data, uint32_t size)
 {
 	union in_out_param	param;
-	uint32_t		ret;
+	int32_t			ret;
 	struct socket_desc	*sock;
 	uint32_t		to_send;
 	uint32_t		i;

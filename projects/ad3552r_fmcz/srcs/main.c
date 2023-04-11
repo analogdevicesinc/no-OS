@@ -163,7 +163,6 @@ int main()
 	if (NO_OS_IS_ERR_VALUE(err)) {
 		pr_err("init_gpios_to_defaults failed: %"PRIi32"\n", err);
 		return err;
-		fmcdaq3.c
 	}
 
 	struct no_os_gpio_init_param ldac_param = default_gpio_param;
@@ -172,6 +171,15 @@ int main()
 	ldac_param.number = GPIO_OFFSET + GPIO_LDAC_N;
 	reset_param.number = GPIO_OFFSET + GPIO_RESET_N;
 
+	struct xil_spi_init_param xil_spi_param = {
+#ifdef PLATFORM_MB
+		.type = SPI_PL,
+#else
+		.type = SPI_PS,
+#endif
+		.flags = 0
+	};
+
 	struct ad3552r_init_param default_ad3552r_param = {
 		.chip_id = AD3542R_ID,
 		.spi_param = {
@@ -179,8 +187,12 @@ int main()
 			.chip_select = 0,
 			.mode = NO_OS_SPI_MODE_0,
 			.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
+#ifdef XPAR_XSPI_NUM_INSTANCES
 			.platform_ops = &xil_spi_pl_ops,
-			.extra = NULL
+#else
+			.platform_ops = &xil_spi_ops,
+#endif
+			.extra = &xil_spi_param
 		},
 		.ldac_gpio_param_optional = &ldac_param,
 		.reset_gpio_param_optional = &reset_param,

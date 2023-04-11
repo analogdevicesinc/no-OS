@@ -43,6 +43,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "no_os_error.h"
+#include "no_os_alloc.h"
 #include "iio.h"
 #include "iio_trigger.h"
 
@@ -67,7 +68,7 @@ int iio_hw_trig_init(struct iio_hw_trig **iio_trig,
 	if (!init_param->name)
 		return -EINVAL;
 
-	trig_desc = (struct iio_hw_trig*)calloc(1, sizeof(*trig_desc));
+	trig_desc = (struct iio_hw_trig*)no_os_calloc(1, sizeof(*trig_desc));
 	if (!trig_desc)
 		return -ENOMEM;
 
@@ -101,7 +102,7 @@ int iio_hw_trig_init(struct iio_hw_trig **iio_trig,
 
 	return 0;
 error:
-	free(trig_desc);
+	no_os_free(trig_desc);
 	return ret;
 }
 
@@ -165,7 +166,7 @@ void iio_hw_trig_handler(void *trig)
 int iio_hw_trig_remove(struct iio_hw_trig *trig)
 {
 	if(trig)
-		free(trig);
+		no_os_free(trig);
 
 	return 0;
 }
@@ -187,7 +188,7 @@ int iio_sw_trig_init(struct iio_sw_trig **iio_trig,
 	if (!init_param->iio_desc || !init_param->name)
 		return -EINVAL;
 
-	trig_desc = (struct iio_sw_trig*)calloc(1, sizeof(*trig_desc));
+	trig_desc = (struct iio_sw_trig*)no_os_calloc(1, sizeof(*trig_desc));
 	if (!trig_desc)
 		return -ENOMEM;
 
@@ -232,7 +233,7 @@ int iio_sw_trig_handler(void *trig, char *buf, uint32_t len,
 int iio_sw_trig_remove(struct iio_sw_trig *trig)
 {
 	if(trig)
-		free(trig);
+		no_os_free(trig);
 
 	return 0;
 }

@@ -45,6 +45,7 @@
 #include "adaq7980.h"
 #include "no_os_error.h"
 #include "no_os_delay.h"
+#include "no_os_alloc.h"
 
 /**
  * @brief Read from device.
@@ -92,7 +93,7 @@ int32_t adaq7980_setup(struct adaq7980_dev **device,
 	struct adaq7980_dev *dev;
 	int32_t ret;
 
-	dev = (struct adaq7980_dev *)malloc(sizeof(*dev));
+	dev = (struct adaq7980_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -131,7 +132,7 @@ int32_t adaq7980_setup(struct adaq7980_dev **device,
 error_spi:
 	no_os_spi_remove(dev->spi_desc);
 error_dev:
-	free(dev);
+	no_os_free(dev);
 
 	return -1;
 }

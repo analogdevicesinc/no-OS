@@ -44,6 +44,7 @@
 #include <stdlib.h>
 #include "adgs5412.h"
 #include "no_os_error.h"
+#include "no_os_alloc.h"
 
 /******************************************************************************/
 /************************** Functions Implementation **************************/
@@ -327,7 +328,7 @@ int32_t adgs5412_init(adgs5412_dev **device,
 	adgs5412_dev *dev;
 	int32_t ret;
 
-	dev = (adgs5412_dev *)malloc(sizeof(*dev));
+	dev = (adgs5412_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -380,7 +381,7 @@ int32_t adgs5412_remove(adgs5412_dev *dev)
 
 	ret = no_os_spi_remove(dev->spi_desc);
 
-	free(dev);
+	no_os_free(dev);
 
 	return ret;
 }

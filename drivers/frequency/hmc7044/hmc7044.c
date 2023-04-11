@@ -44,6 +44,7 @@
 #include <stdio.h>
 #include "no_os_error.h"
 #include "no_os_util.h"
+#include "no_os_alloc.h"
 #include "hmc7044.h"
 
 /******************************************************************************/
@@ -792,7 +793,7 @@ int32_t hmc7044_init(struct hmc7044_dev **device,
 	int32_t ret;
 	unsigned int i;
 
-	dev = (struct hmc7044_dev *)malloc(sizeof(*dev));
+	dev = (struct hmc7044_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -845,7 +846,7 @@ int32_t hmc7044_init(struct hmc7044_dev **device,
 
 	dev->num_channels = init_param->num_channels;
 	dev->channels = (struct hmc7044_chan_spec *)
-			malloc(sizeof(*dev->channels) * dev->num_channels);
+			no_os_malloc(sizeof(*dev->channels) * dev->num_channels);
 
 	for (i = 0; i < dev->num_channels; i++) {
 		dev->channels[i].num = init_param->channels[i].num;
@@ -891,8 +892,8 @@ int32_t hmc7044_remove(struct hmc7044_dev *device)
 	int32_t ret;
 
 	ret = no_os_spi_remove(device->spi_desc);
-	free(device->channels);
-	free(device);
+	no_os_free(device->channels);
+	no_os_free(device);
 
 	return ret;
 }

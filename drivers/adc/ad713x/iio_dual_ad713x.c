@@ -53,6 +53,7 @@
 #include "spi_engine.h"
 #include "iio_dual_ad713x.h"
 #include "no_os_delay.h"
+#include "no_os_alloc.h"
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -167,7 +168,7 @@ int32_t iio_dual_ad713x_init(struct iio_ad713x **desc,
 {
 	struct iio_ad713x *iio_ad713x;
 
-	iio_ad713x = (struct iio_ad713x *)calloc(1, sizeof(struct iio_ad713x));
+	iio_ad713x = (struct iio_ad713x *)no_os_calloc(1, sizeof(struct iio_ad713x));
 	if (!iio_ad713x)
 		return -1;
 
@@ -197,7 +198,7 @@ int32_t iio_dual_ad713x_remove(struct iio_ad713x *desc)
 	if (!desc)
 		return -1;
 
-	free(desc);
+	no_os_free(desc);
 
 	return 0;
 }

@@ -44,6 +44,7 @@
 #include "ada4250.h"
 #include "no_os_delay.h"
 #include "no_os_error.h"
+#include "no_os_alloc.h"
 
 /******************************************************************************/
 /************************** Functions Implementation **************************/
@@ -525,7 +526,7 @@ int32_t ada4250_init(struct ada4250_dev **device,
 	uint16_t chip_id;
 	struct ada4250_dev *dev;
 
-	dev = (struct ada4250_dev *)calloc(1, sizeof(*dev));
+	dev = (struct ada4250_dev *)no_os_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -650,7 +651,7 @@ error_slp:
 error_shtdwn:
 	no_os_gpio_remove(dev->gpio_shtdwn);
 error_dev:
-	free(dev);
+	no_os_free(dev);
 
 	return ret;
 }
@@ -692,7 +693,7 @@ int32_t ada4250_remove(struct ada4250_dev *dev)
 			return ret;
 	}
 
-	free(dev);
+	no_os_free(dev);
 
 	return ret;
 }

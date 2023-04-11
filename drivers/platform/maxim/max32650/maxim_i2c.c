@@ -40,11 +40,13 @@
 
 #include <stdint.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "i2c.h"
 #include "no_os_error.h"
 #include "no_os_i2c.h"
 #include "no_os_util.h"
+#include "no_os_alloc.h"
 #include "maxim_i2c.h"
 #include "mxc_errors.h"
 #include "max32650.h"
@@ -91,10 +93,10 @@ static int32_t _max_i2c_pins_config(uint32_t device_id, mxc_gpio_vssel_t vssel)
 
 	switch (device_id) {
 	case 0:
-		i2c_pins = &gpio_cfg_i2c0;
+		i2c_pins = (mxc_gpio_cfg_t *)&gpio_cfg_i2c0;
 		break;
 	case 1:
-		i2c_pins = &gpio_cfg_i2c1;
+		i2c_pins = (mxc_gpio_cfg_t *)&gpio_cfg_i2c1;
 		break;
 	default:
 		return -EINVAL;
@@ -131,11 +133,11 @@ static int32_t max_i2c_init(struct no_os_i2c_desc **desc,
 	if (param->device_id >= MXC_I2C_INSTANCES)
 		return -EINVAL;
 
-	*desc = calloc(1, sizeof(**desc));
+	*desc = no_os_calloc(1, sizeof(**desc));
 	if (!(*desc))
 		return -ENOMEM;
 
-	max_i2c = calloc(1, sizeof(*max_i2c));
+	max_i2c = no_os_calloc(1, sizeof(*max_i2c));
 	if (!max_i2c) {
 		ret = -ENOMEM;
 		goto error_desc;
@@ -183,9 +185,9 @@ static int32_t max_i2c_init(struct no_os_i2c_desc **desc,
 
 	return 0;
 error_extra:
-	free(max_i2c);
+	no_os_free(max_i2c);
 error_desc:
-	free(*desc);
+	no_os_free(*desc);
 
 	return ret;
 }
@@ -211,8 +213,8 @@ static int32_t max_i2c_remove(struct no_os_i2c_desc *desc)
 		NVIC_DisableIRQ(MXC_I2C_GET_IRQ(desc->device_id));
 	}
 
-	free(max_i2c);
-	free(desc);
+	no_os_free(max_i2c);
+	no_os_free(desc);
 
 	return 0;
 }
@@ -236,7 +238,6 @@ static int32_t max_i2c_write(struct no_os_i2c_desc *desc,
 	mxc_i2c_req_t req;
 	struct max_i2c_extra *max_i2c_desc;
 	void *ptr;
-	int32_t ret;
 
 	if (!desc || !desc->extra)
 		return -EINVAL;
@@ -250,7 +251,7 @@ static int32_t max_i2c_write(struct no_os_i2c_desc *desc,
 			ptr = realloc(max_i2c_desc->prologue_data, bytes_number);
 			max_i2c_desc->prologue_data = ptr;
 		} else {
-			max_i2c_desc->prologue_data = malloc(bytes_number);
+			max_i2c_desc->prologue_data = no_os_malloc(bytes_number);
 			if (!max_i2c_desc->prologue_data)
 				return -ENOMEM;
 		}
@@ -314,7 +315,7 @@ static int32_t max_i2c_read(struct no_os_i2c_desc *desc,
 	ret = MXC_I2C_MasterTransaction(&req);
 
 	if (max_i2c_desc->prologue_size != 0) {
-		free(max_i2c_desc->prologue_data);
+		no_os_free(max_i2c_desc->prologue_data);
 		max_i2c_desc->prologue_size = 0;
 		max_i2c_desc->prologue_data = NULL;
 	}

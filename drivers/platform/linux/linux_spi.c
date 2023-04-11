@@ -43,6 +43,7 @@
 
 #include "no_os_error.h"
 #include "no_os_spi.h"
+#include "no_os_alloc.h"
 #include "linux_spi.h"
 
 #include <fcntl.h>
@@ -86,11 +87,12 @@ int32_t linux_spi_init(struct no_os_spi_desc **desc,
 	char path[64];
 	int ret;
 
-	descriptor = malloc(sizeof(*descriptor));
+	descriptor = no_os_malloc(sizeof(*descriptor));
 	if (!descriptor)
 		return -1;
 
-	linux_desc = (struct linux_spi_desc*) malloc(sizeof(struct linux_spi_desc));
+	linux_desc = (struct linux_spi_desc*) no_os_malloc(sizeof(
+				struct linux_spi_desc));
 	if (!linux_desc)
 		goto free_desc;
 
@@ -130,9 +132,9 @@ int32_t linux_spi_init(struct no_os_spi_desc **desc,
 
 	return 0;
 free:
-	free(linux_desc);
+	no_os_free(linux_desc);
 free_desc:
-	free(descriptor);
+	no_os_free(descriptor);
 
 	return -1;
 }
@@ -185,8 +187,8 @@ int32_t linux_spi_remove(struct no_os_spi_desc *desc)
 		return -1;
 	}
 
-	free(desc->extra);
-	free(desc);
+	no_os_free(desc->extra);
+	no_os_free(desc);
 
 	return 0;
 }
@@ -203,7 +205,7 @@ static int32_t linux_spi_transfer(struct no_os_spi_desc *desc,
 
 	linux_desc = desc->extra;
 
-	tr = (struct spi_ioc_transfer *)calloc(len, sizeof(*tr));
+	tr = (struct spi_ioc_transfer *)no_os_calloc(len, sizeof(*tr));
 	if (!tr)
 		return -ENOMEM;
 
@@ -217,7 +219,7 @@ static int32_t linux_spi_transfer(struct no_os_spi_desc *desc,
 
 	ret = ioctl(linux_desc->spidev_fd, SPI_IOC_MESSAGE(len), tr);
 
-	free(tr);
+	no_os_free(tr);
 
 	if (ret < 0) {
 		printf("%s: Can't send spi message (%d)\n\r", __func__, errno);

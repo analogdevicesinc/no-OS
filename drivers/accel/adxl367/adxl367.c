@@ -44,6 +44,7 @@
 #include "adxl367.h"
 #include "no_os_delay.h"
 #include "no_os_util.h"
+#include "no_os_alloc.h"
 #include "no_os_print_log.h"
 
 /******************************************************************************/
@@ -73,7 +74,7 @@ int adxl367_init(struct adxl367_dev **device,
 	uint8_t reg_value;
 	int status;
 
-	dev = (struct adxl367_dev *)calloc(1, sizeof(*dev));
+	dev = (struct adxl367_dev *)no_os_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -127,7 +128,7 @@ err:
 	else
 		no_os_i2c_remove(dev->i2c_desc);
 comm_err:
-	free(dev);
+	no_os_free(dev);
 	pr_err("%s: Failed initialization.\n", __func__);
 	return -1;
 }
@@ -148,7 +149,7 @@ int adxl367_remove(struct adxl367_dev *dev)
 	else
 		ret = no_os_i2c_remove(dev->i2c_desc);
 
-	free(dev);
+	no_os_free(dev);
 
 	return ret;
 }

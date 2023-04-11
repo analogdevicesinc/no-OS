@@ -49,6 +49,7 @@
 #include "mxc_errors.h"
 #include "no_os_irq.h"
 #include "no_os_util.h"
+#include "no_os_alloc.h"
 #include "no_os_lf256fifo.h"
 #include "uart.h"
 
@@ -77,13 +78,13 @@ static int32_t _max_uart_pins_config(uint32_t device_id, mxc_gpio_vssel_t vssel)
 
 	switch (device_id) {
 	case 0:
-		uart_pins = &gpio_cfg_uart0;
+		uart_pins = (mxc_gpio_cfg_t *)&gpio_cfg_uart0;
 		break;
 	case 1:
-		uart_pins = &gpio_cfg_uart1;
+		uart_pins = (mxc_gpio_cfg_t *)&gpio_cfg_uart1;
 		break;
 	case 2:
-		uart_pins = &gpio_cfg_uart2;
+		uart_pins = (mxc_gpio_cfg_t *)&gpio_cfg_uart2;
 		break;
 	default:
 		return -EINVAL;
@@ -143,7 +144,7 @@ static int32_t max_uart_write(struct no_os_uart_desc *desc, const uint8_t *data,
 	if(!desc || !data || !bytes_number)
 		return -EINVAL;
 
-	ret = MXC_UART_Write(MXC_UART_GET_UART(desc->device_id), data,
+	ret = MXC_UART_Write(MXC_UART_GET_UART(desc->device_id), (uint8_t *)data,
 			     (int *)&bytes_number);
 	if (ret != E_SUCCESS)
 		return -EIO;
@@ -206,7 +207,7 @@ static int32_t max_uart_write_nonblocking(struct no_os_uart_desc *desc,
 
 	id = desc->device_id;
 	uart_irq_state[id].uart = MXC_UART_GET_UART(id);
-	uart_irq_state[id].txData = data;
+	uart_irq_state[id].txData = (uint8_t *)data;
 	uart_irq_state[id].txLen = bytes_number;
 	uart_irq_state[id].rxData = NULL;
 	uart_irq_state[id].rxLen = 0;
@@ -248,11 +249,11 @@ static int32_t max_uart_init(struct no_os_uart_desc **desc,
 	if (!param || !param->extra)
 		return -EINVAL;
 
-	descriptor = calloc(1, sizeof(*descriptor));
+	descriptor = no_os_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
-	max_uart = calloc(1, sizeof(*max_uart));
+	max_uart = no_os_calloc(1, sizeof(*max_uart));
 	if (!max_uart) {
 		ret = -ENOMEM;
 		goto error_desc;
@@ -408,9 +409,9 @@ error_nvic:
 error_uart:
 	MXC_UART_Shutdown(uart_regs);
 error_max:
-	free(max_uart);
+	no_os_free(max_uart);
 error_desc:
-	free(descriptor);
+	no_os_free(descriptor);
 
 	return ret;
 }
@@ -426,7 +427,7 @@ static int32_t max_uart_remove(struct no_os_uart_desc *desc)
 		return -EINVAL;
 
 	MXC_UART_Shutdown(MXC_UART_GET_UART(desc->device_id));
-	free(desc);
+	no_os_free(desc);
 
 	return 0;
 }

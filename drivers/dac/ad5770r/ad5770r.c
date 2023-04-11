@@ -45,6 +45,7 @@
 #include <string.h>
 #include "no_os_error.h"
 #include "ad5770r.h"
+#include "no_os_alloc.h"
 
 /******************************************************************************/
 /************************** Functions Implementation **************************/
@@ -99,19 +100,19 @@ int32_t ad5770r_spi_reg_read_multiple(struct ad5770r_dev *dev,
 	if (!dev || !reg_data)
 		return -1;
 
-	buf = (uint8_t*)calloc(count + 1, sizeof(uint8_t));
+	buf = (uint8_t*)no_os_calloc(count + 1, sizeof(uint8_t));
 
 	buf[0] = AD5770R_REG_READ(reg_addr);
 
 	ret = no_os_spi_write_and_read(dev->spi_desc, buf, count + 1);
 
 	if (ret) {
-		free(buf);
+		no_os_free(buf);
 		return ret;
 	}
 
 	memcpy(reg_data, buf + 1, count);
-	free(buf);
+	no_os_free(buf);
 
 	return ret;
 }
@@ -157,13 +158,13 @@ int32_t ad5770r_spi_reg_write_multiple(struct ad5770r_dev *dev,
 	if (!dev | !reg_data)
 		return -1;
 
-	data = (uint8_t*)calloc(count + 1, sizeof(uint8_t));
+	data = (uint8_t*)no_os_calloc(count + 1, sizeof(uint8_t));
 
 	data[0] = AD5770R_REG_WRITE(reg_addr);
 	memcpy(&data[1], reg_data, count);
 
 	ret = no_os_spi_write_and_read(dev->spi_desc, data, count + 1);
-	free(data);
+	no_os_free(data);
 
 	return ret;
 }
@@ -677,7 +678,7 @@ int32_t ad5770r_init(struct ad5770r_dev **device,
 	if (!device || !init_param)
 		return -1;
 
-	dev = (struct ad5770r_dev *)calloc(1, sizeof(*dev));
+	dev = (struct ad5770r_dev *)no_os_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -776,7 +777,7 @@ error_gpio:
 error_spi:
 	no_os_spi_remove(dev->spi_desc);
 error_dev:
-	free(dev);
+	no_os_free(dev);
 
 	return -1;
 }
@@ -799,7 +800,7 @@ int32_t ad5770r_remove(struct ad5770r_dev *dev)
 	if (NO_OS_IS_ERR_VALUE(ret))
 		return -1;
 
-	free(dev);
+	no_os_free(dev);
 
 	return ret;
 }

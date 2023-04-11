@@ -8,6 +8,7 @@
 #include "iio.h"
 #include "iio_adg2128.h"
 #include "no_os_util.h"
+#include "no_os_alloc.h"
 #include "iio_adg2128.h"
 
 static int32_t _adg2128_read_register2(struct adg2128_iio_dev *dev,
@@ -52,7 +53,7 @@ static struct iio_device adg2128_iio_device = {
 int32_t adg2128_iio_init(struct adg2128_iio_dev **iio_dev,
 			 struct no_os_i2c_desc *i2c_desc)
 {
-	struct adg2128_iio_dev *desc = (struct adg2128_iio_dev *)calloc(1,
+	struct adg2128_iio_dev *desc = (struct adg2128_iio_dev *)no_os_calloc(1,
 				       sizeof(*desc));
 	if (!desc)
 		return -ENOMEM;
@@ -67,7 +68,7 @@ int32_t adg2128_iio_init(struct adg2128_iio_dev **iio_dev,
 
 int32_t adg2128_iio_remove(struct adg2128_iio_dev *desc)
 {
-	free(desc);
+	no_os_free(desc);
 
 	return 0;
 }

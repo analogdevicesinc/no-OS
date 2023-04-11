@@ -45,6 +45,7 @@
 /*****************************************************************************/
 #include <stdlib.h>
 #include "ad5421.h"
+#include "no_os_alloc.h"
 
 /*****************************************************************************/
 /************************* Functions Definitions *****************************/
@@ -73,7 +74,7 @@ int32_t ad5421_init(struct ad5421_dev **device,
 			     !CTRL_SPI_WATCHDOG);
 	int32_t ret_value = -1;
 
-	dev = (struct ad5421_dev *)malloc(sizeof(*dev));
+	dev = (struct ad5421_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -130,7 +131,7 @@ int32_t ad5421_remove(struct ad5421_dev *dev)
 	ret |= no_os_gpio_remove(dev->gpio_ldac);
 	ret |= no_os_gpio_remove(dev->gpio_faultin);
 
-	free(dev);
+	no_os_free(dev);
 
 	return ret;
 }

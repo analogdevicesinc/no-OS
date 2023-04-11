@@ -45,6 +45,7 @@
 #include "no_os_delay.h"
 #include "no_os_spi.h"
 #include "no_os_util.h"
+#include "no_os_alloc.h"
 #include "app_config.h"
 #include <string.h>
 #ifndef AXI_ADC_NOT_PRESENT
@@ -86,28 +87,41 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy,
 	int32_t rev = 0;
 	int32_t i   = 0;
 
-	phy = (struct ad9361_rf_phy *)zmalloc(sizeof(*phy));
+	phy = (struct ad9361_rf_phy *)no_os_calloc(1, sizeof(*phy));
 	if (!phy) {
 		return -ENOMEM;
 	}
 
-	phy->clk_refin = (struct no_os_clk *)zmalloc(sizeof(*phy->clk_refin));
+	phy->clk_refin = (struct no_os_clk *)no_os_calloc(1, sizeof(*phy->clk_refin));
 	if (!phy->clk_refin) {
+		no_os_free(phy);
 		return -ENOMEM;
 	}
 
-	phy->pdata = (struct ad9361_phy_platform_data *)zmalloc(sizeof(*phy->pdata));
+	phy->pdata = (struct ad9361_phy_platform_data *)no_os_calloc(1,
+			sizeof(*phy->pdata));
 	if (!phy->pdata) {
+		no_os_free(phy->clk_refin);
+		no_os_free(phy);
 		return -ENOMEM;
 	}
 #ifndef AXI_ADC_NOT_PRESENT
-	phy->adc_conv = (struct axiadc_converter *)zmalloc(sizeof(*phy->adc_conv));
+	phy->adc_conv = (struct axiadc_converter *)no_os_calloc(1,
+			sizeof(*phy->adc_conv));
 	if (!phy->adc_conv) {
+		no_os_free(phy->pdata);
+		no_os_free(phy->clk_refin);
+		no_os_free(phy);
 		return -ENOMEM;
 	}
 
-	phy->adc_state = (struct axiadc_state *)zmalloc(sizeof(*phy->adc_state));
+	phy->adc_state = (struct axiadc_state *)no_os_calloc(1,
+			 sizeof(*phy->adc_state));
 	if (!phy->adc_state) {
+		no_os_free(phy->adc_conv);
+		no_os_free(phy->pdata);
+		no_os_free(phy->clk_refin);
+		no_os_free(phy);
 		return -ENOMEM;
 	}
 	phy->adc_state->phy = phy;
@@ -567,12 +581,12 @@ out_clk:
 	ad9361_unregister_clocks(phy);
 out:
 #ifndef AXI_ADC_NOT_PRESENT
-	free(phy->adc_conv);
-	free(phy->adc_state);
+	no_os_free(phy->adc_conv);
+	no_os_free(phy->adc_state);
 #endif
-	free(phy->clk_refin);
-	free(phy->pdata);
-	free(phy);
+	no_os_free(phy->clk_refin);
+	no_os_free(phy->pdata);
+	no_os_free(phy);
 	printf("%s : AD936x initialization error\n", __func__);
 
 	return -ENODEV;
@@ -592,12 +606,12 @@ int32_t ad9361_remove(struct ad9361_rf_phy *phy)
 	no_os_gpio_remove(phy->gpio_desc_cal_sw1);
 	no_os_gpio_remove(phy->gpio_desc_cal_sw2);
 #ifndef AXI_ADC_NOT_PRESENT
-	free(phy->adc_conv);
-	free(phy->adc_state);
+	no_os_free(phy->adc_conv);
+	no_os_free(phy->adc_state);
 #endif
-	free(phy->clk_refin);
-	free(phy->pdata);
-	free(phy);
+	no_os_free(phy->clk_refin);
+	no_os_free(phy->pdata);
+	no_os_free(phy);
 
 	return 0;
 }

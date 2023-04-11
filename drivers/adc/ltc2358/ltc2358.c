@@ -44,6 +44,7 @@
 #include <stdlib.h>
 #include "ltc2358.h"
 #include "errno.h"
+#include "no_os_alloc.h"
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -126,7 +127,7 @@ int32_t ltc2358_init(struct ltc2358_dev **device,
 	struct ltc2358_dev *dev;
 	int32_t ret;
 
-	dev = (struct ltc2358_dev *)calloc(1, sizeof(*dev));
+	dev = (struct ltc2358_dev *)no_os_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -138,7 +139,7 @@ int32_t ltc2358_init(struct ltc2358_dev **device,
 
 	return ret;
 error:
-	free(dev);
+	no_os_free(dev);
 
 	return 0;
 }
@@ -159,7 +160,7 @@ int32_t ltc2358_remove(struct ltc2358_dev *dev)
 	if (ret)
 		return ret;
 
-	free(dev);
+	no_os_free(dev);
 
 	return 0;
 }
