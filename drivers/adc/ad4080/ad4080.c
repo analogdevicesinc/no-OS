@@ -716,6 +716,78 @@ enum ad4080_fifo_mode ad4080_get_fifo_mode(struct ad4080_dev *dev)
 }
 
 /**
+ * @brief Configure the config SPI interface during initialization
+ * @param dev - The device structure.
+ * @param init_param - The structure that contains the device initial
+ * 		       parameters.
+ * @return 0 in case of success, negative error code otherwise
+ */
+init ad4080_configuration_intf_init(struct ad4080_dev *dev,
+				   struct ad4080_init_param init_param)
+{
+	int ret;
+	
+	if (!dev)
+		return -EINVAL;
+
+	ret = ad4080_set_single_instr(dev, init_param.single_instr);
+	if (ret)
+		return ret;
+	
+	ret = ad4080_set_short_instr(dev, init_param.short_instr);
+	if (ret)
+		return ret;
+	
+	ret = ad4080_set_strict_reg_access(dev, init_param.strict_reg);
+	if (ret)
+		return ret;
+		
+	return 0;
+}
+
+/**
+ * @brief Configure the data interface during initialization
+ * @param dev - The device structure.
+ * @param init_param - The structure that contains the device initial
+ * 		       parameters.
+ * @return 0 in case of success, negative error code otherwise
+ */
+init ad4080_data_intf_init(struct ad4080_dev *dev,
+				   struct ad4080_init_param init_param)
+{
+	int ret;
+	
+	if (!dev)
+		return -EINVAL;
+
+	ret = ad4080_set_cnv_spi_lvds_lanes(dev, init_param.cnv_spi_lvds_lanes);
+	if (ret)
+		return ret;
+	
+	ret = ad4080_set_conv_data_spi_lvds(dev, init_param.conv_data_spi_lvds) ;
+	if (ret)
+		return ret;
+	
+	ret = ad4080_set_lvds_cnv_clk_cnt(dev, init_param.lvds_cnv_clk_cnt) ;
+	if (ret)
+		return ret;
+	
+	ret = ad4080_set_lvds_self_clk_mode(dev, init_param.lvds_self_clk_mode) ;
+	if (ret)
+		return ret;
+	
+	ret = ad4080_set_lvds_vod(dev, init_param.lvds_vod) ;
+	if (ret)
+		return ret;
+	
+	ret = ad4080_set_lvds_cnv_clk_mode(dev, init_param.cnv_clk_mode) ;
+	if (ret)
+		return ret;
+	
+	return 0;
+}
+
+/**
  * @brief Initialize the device.
  * @param device - The device structure.
  * @param init_param - The structure that contains the device initial
@@ -762,6 +834,21 @@ int ad4080_init(struct ad4080_dev **device,
 		goto error_spi;
 
 	*device = dev;
+	
+	/* Configuration SPI Interface Initialization */
+	ret = ad4080_configuration_intf_init(dev, init_param);
+	if (ret)
+		goto error_spi;
+	
+	/* Data Interface Initialization */
+	ret = ad4080_data_intf_init(dev, init_param);
+	if (ret)
+		goto error_spi;	
+	
+	/* Set SDO Output Drive Current Strength */
+	ret = ad4080_set_mspi_drv(dev, init_param.mspi_drv) ;
+	if (ret)
+		goto error_spi;
 
 	return 0;
 

@@ -424,6 +424,14 @@ int ad4080_set_fifo_mode(struct ad4080_dev *dev,
 /** Get AD4080 Conversion Data FIFO Mode */
 enum ad4080_fifo_mode ad4080_get_fifo_mode(struct ad4080_dev *dev);
 
+/** Configure the config SPI interface during initialization */
+int ad4080_configuration_intf_init(struct ad4080_dev *device,
+		struct ad4080_init_param init_param);
+
+/** Configure the data interface during initialization */
+int ad4080_data_intf_init(struct ad4080_dev *device,
+		struct ad4080_init_param init_param);
+
 /** Initialize the device. */
 int ad4080_init(struct ad4080_dev **device,
 		struct ad4080_init_param init_param);
