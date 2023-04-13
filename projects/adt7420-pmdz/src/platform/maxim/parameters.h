@@ -56,12 +56,20 @@
 #ifdef IIO_SUPPORT
 #define INTC_DEVICE_ID  0
 #endif
+
+#if (TARGET_NUM == 32650) || (TARGET_NUM == 78000)
+#define I2C_DEVICE_ID    1
+#elif (TARGET_NUM == 32655)
+#define I2C_DEVICE_ID    2
+#elif (TARGET_NUM == 32665) || (TARGET_NUM == 32660)
+#define I2C_DEVICE_ID    0
+#endif
+
 #define UART_IRQ_ID     UART0_IRQn
 #define UART_DEVICE_ID  0
 #define UART_BAUDRATE   57600
 #define UART_OPS        &max_uart_ops
 
-#define I2C_DEVICE_ID    2
 #define I2C_OPS         &max_i2c_ops
 
 extern struct max_uart_init_param xuip;
