@@ -987,7 +987,7 @@ int ad4080_init(struct ad4080_dev **device,
 				 no_os_field_prep(AD4080_ADDR_ASC_MSK, dev->addr_asc));
 	if (ret)
 		goto error_spi;
-	
+
 	/* Configuration SPI Interface Initialization */
 	ret = ad4080_configuration_intf_init(dev, init_param);
 	if (ret)
