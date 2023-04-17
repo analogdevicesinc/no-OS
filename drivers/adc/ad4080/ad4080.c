@@ -45,6 +45,7 @@
 #include <errno.h>
 #include "ad4080.h"
 #include "no_os_delay.h"
+#include "ad4080_regs.h"
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -58,18 +59,95 @@
  * @param reg_val - The data to be written.
  * @return 0 in case of success, negative error code otherwise.
  */
-int ad4080_write(struct ad4080_dev *dev, uint16_t reg_addr, uint8_t reg_val)
+int ad4080_write(struct ad4080_dev *dev, uint32_t reg_addr,
+		 uint32_t reg_val)
 {
-	uint8_t buff[3];
+	int ret;
+	uint32_t reg_size = 0;
+	uint8_t buff[6];
+	uint8_t buf_size = 0;
+	uint8_t address_increment = 1;
+	uint32_t i;
 
 	if (!dev)
 		return -EINVAL;
 
+	reg_size = AD4080_ADDR(reg_addr);
+
+	/* Check addr asc/desc and based on that set the base address and
+	 * address increment */
+	if ((!dev->addr_asc) & (reg_size > 1)) {
+		address_increment = -1;
+		reg_addr += reg_size - 1; /* Switch to address of last byte */
+	}
+
+	/* In this case, only a single transaction is required. */
+	if (reg_size == 1 || dev->strict_reg || !dev->single_instr) {
+
+		if (!dev->short_instr) {
+			/* Fill up the buffer execute and return */
 	buff[0] = no_os_field_get(BYTE_ADDR_H, reg_addr);
 	buff[1] = no_os_field_get(BYTE_ADDR_L, reg_addr);
-	buff[2] = reg_val;
+			buf_size = LONG_INSTR_LENGTH;
+		} else {
+			buff[0] = no_os_field_get(BYTE_ADDR_L, reg_addr);
+			buf_size = SHORT_INSTR_LENGTH;
+		}
 
-	return no_os_spi_write_and_read(dev->spi_desc, buff, 3);
+		for (i = 0; i < reg_size; i++) {
+			buff[buf_size + i - 1] = dev->addr_asc ?
+						 reg_val >> (8*(reg_size + i - 1)) :
+						 reg_val >> 8*(i);
+		}
+
+		buf_size += reg_size;
+
+		ret = no_os_spi_write_and_read(dev->spi_desc, buff, buf_size);
+
+		/* If any of the register interface config modes were updated,
+		 * store the updated value locally */
+		switch (reg_addr) {
+		case AD4080_ADDR(AD4080_REG_INTERFACE_CONFIG_A):
+			dev->addr_asc = no_os_field_get(AD4080_ADDR_ASC_MSK, reg_val);
+			break;
+		case AD4080_ADDR(AD4080_REG_INTERFACE_CONFIG_B):
+			dev->single_instr = no_os_field_get(AD4080_SINGLE_INST_MSK, reg_val);
+			dev->short_instr = no_os_field_get(AD4080_SHORT_INST_MSK, reg_val);
+			break;
+
+		case AD4080_ADDR(AD4080_REG_INTERFACE_CONFIG_C):
+			dev->strict_reg = no_os_field_get(AD4080_STRICT_REG_ACCESS_MSK, reg_val);
+			break;
+		default:
+			break;
+		}
+
+		return ret;
+
+	} else {
+		/* It's neither strict nor streaming. Multiple transactions are
+		 * required for each byte */
+
+		for (i = 0; i < reg_size; i++) {
+			if (!dev->short_instr) {
+				buff[0] = no_os_field_get(BYTE_ADDR_H, reg_addr + i*address_increment);
+				buff[1] = no_os_field_get(BYTE_ADDR_L, reg_addr + i*address_increment);
+				buf_size = LONG_INSTR_LENGTH;
+			} else {
+				buff[0] = no_os_field_get(BYTE_ADDR_L, reg_addr);
+				buf_size = SHORT_INSTR_LENGTH;
+			}
+			buff[buf_size] = dev->addr_asc ? reg_val >> 8*(reg_size - i - 1) : reg_val >>
+					 8*(i);
+			buf_size += 1;
+
+			ret = no_os_spi_write_and_read(dev->spi_desc, buff, buf_size);
+			if (ret)
+				return EINVAL;
+		}
+	}
+	return ret;
+
 }
 
 /**
@@ -79,22 +157,77 @@ int ad4080_write(struct ad4080_dev *dev, uint16_t reg_addr, uint8_t reg_val)
  * @param reg_val - The data read from the register.
  * @return 0 in case of success, negative error code otherwise.
  */
-int ad4080_read(struct ad4080_dev *dev, uint16_t reg_addr, uint8_t *reg_val)
+int ad4080_read(struct ad4080_dev *dev, uint32_t reg_addr,
+		uint32_t *reg_val)
 {
-	int32_t ret;
-	uint8_t buff[3];
+	int ret;
+	uint32_t reg_size = 0;
+	uint8_t buff[6];
+	uint8_t buf_size = 0;
+	uint8_t address_increment = 1;
+	uint32_t i;
+	uint32_t data_index;
+	uint32_t left_shift;
 
 	if (!dev)
 		return -EINVAL;
 
+	reg_size = AD4080_ADDR(reg_addr);
+
+	/* Check addr asc/desc and based on that set the base address and
+	 * address increment, and reverse the order of the bytes */
+	if ((!dev->addr_asc) & (reg_size > 1)) {
+		address_increment = -1;
+		reg_addr += reg_size - 1; /* Switch to address of last byte */
+	}
+
+	/* In this case, only a single transaction is required. */
+	if (reg_size == 1 || dev->strict_reg || !dev->single_instr) {
+
+		if (!dev->short_instr) {
+			/* Fill up the buffer execute and return */
 	buff[0] = no_os_field_get(BYTE_ADDR_H, reg_addr) | AD4080_SPI_READ;
+			;
 	buff[1] = no_os_field_get(BYTE_ADDR_L, reg_addr);
+			buf_size = LONG_INSTR_LENGTH;
+		} else {
+			buff[0] = no_os_field_get(BYTE_ADDR_L, reg_addr) | AD4080_SPI_READ;
+			buf_size = SHORT_INSTR_LENGTH;
+		}
+		buf_size += reg_size;
 
 	ret = no_os_spi_write_and_read(dev->spi_desc, buff, 3);
+		if (ret)
+			return ret;
+
+		for (i = buf_size - reg_size; i < buf_size; i++) {
+			data_index = i + reg_size - buf_size;
+			left_shift = dev->addr_asc ? 8*(reg_size - data_index - 1) : 8*(data_index);
+			*reg_val += buff[i] << left_shift;
+		}
+
+	} else {
+		/* It's neither strict nor streaming. Multiple transactions are
+		 * required for each byte */
+
+		for (i = 0; i < reg_size; i++) {
+			if (!dev->short_instr) {
+				buff[0] = no_os_field_get(BYTE_ADDR_H, reg_addr + i*address_increment);
+				buff[1] = no_os_field_get(BYTE_ADDR_L, reg_addr + i*address_increment);
+				buf_size = LONG_INSTR_LENGTH + 1;
+			} else {
+				buff[0] = no_os_field_get(BYTE_ADDR_L, reg_addr);
+				buf_size = SHORT_INSTR_LENGTH + 1;
+			}
+
+			ret = no_os_spi_write_and_read(dev->spi_desc, buff, buf_size);
 	if (ret)
 		return ret;
 
-	*reg_val = buff[2];
+			left_shift = dev->addr_asc ? 8*(reg_size - i - 1) : 8*(i);
+			*(reg_val) |= (buff[buf_size - 1]) << left_shift;
+		}
+	}
 
 	return 0;
 }
@@ -107,7 +240,9 @@ int ad4080_read(struct ad4080_dev *dev, uint16_t reg_addr, uint8_t *reg_val)
  * @param reg_val - The data to be written.
  * @return 0 in case of success, negative error code otherwise.
  */
-int ad4080_update_bits(struct ad4080_dev *dev, uint16_t reg_addr, uint8_t mask,
+int ad4080_update_bits(struct ad4080_dev *dev,
+		       uint16_t reg_addr,
+		       uint8_t mask,
 		       uint8_t reg_val)
 {
 	int ret;
@@ -116,7 +251,7 @@ int ad4080_update_bits(struct ad4080_dev *dev, uint16_t reg_addr, uint8_t mask,
 	if (!dev)
 		return -EINVAL;
 
-	ret = ad4080_read(dev, reg_addr, &data);
+	ret = ad4080_read(dev, reg_addr, (uint32_t *)&data);
 	if (ret)
 		return ret;
 
@@ -138,13 +273,17 @@ int ad4080_soft_reset(struct ad4080_dev *dev)
 	if (!dev)
 		return -EINVAL;
 
-	ret = ad4080_update_bits(dev, AD4080_REG_INTERFACE_CONFIG_A,
-				 AD4080_SW_RESET_MSK, AD4080_SW_RESET);
+	ret = ad4080_update_bits(dev,
+				 AD4080_ADDR(AD4080_REG_INTERFACE_CONFIG_A),
+				 AD4080_SW_RESET_MSK,
+				 AD4080_SW_RESET);
 	if (ret)
 		return ret;
 
-	return ad4080_update_bits(dev, AD4080_REG_INTERFACE_CONFIG_A,
-				  AD4080_SW_RESET_MSK, 0);
+	return ad4080_update_bits(dev,
+				  AD4080_ADDR(AD4080_REG_INTERFACE_CONFIG_A),
+				  AD4080_SW_RESET_MSK,
+				  0);
 }
 
 /**
@@ -160,7 +299,8 @@ int ad4080_set_addr_asc(struct ad4080_dev *dev, enum ad4080_addr_asc addr_asc)
 	if (!dev)
 		return -EINVAL;
 
-	ret = ad4080_update_bits(dev, AD4080_REG_INTERFACE_CONFIG_A,
+	ret = ad4080_update_bits(dev,
+				 AD4080_ADDR(AD4080_REG_INTERFACE_CONFIG_A),
 				 AD4080_ADDR_ASC_MSK,
 				 no_os_field_prep(AD4080_ADDR_ASC_MSK, addr_asc));
 	if (ret)
@@ -195,7 +335,8 @@ int ad4080_set_single_instr(struct ad4080_dev *dev,
 	if (!dev)
 		return -EINVAL;
 
-	ret = ad4080_update_bits(dev, AD4080_REG_INTERFACE_CONFIG_B,
+	ret = ad4080_update_bits(dev,
+				 AD4080_ADDR(AD4080_REG_INTERFACE_CONFIG_B),
 				 AD4080_SINGLE_INST_MSK,
 				 no_os_field_prep(AD4080_SINGLE_INST_MSK, single_instr));
 	if (ret)
@@ -233,7 +374,8 @@ int ad4080_set_short_instr(struct ad4080_dev *dev,
 	if (!dev)
 		return -EINVAL;
 
-	ret = ad4080_update_bits(dev, AD4080_REG_INTERFACE_CONFIG_B,
+	ret = ad4080_update_bits(dev,
+				 AD4080_ADDR(AD4080_REG_INTERFACE_CONFIG_B),
 				 AD4080_SHORT_INST_MSK,
 				 no_os_field_prep(AD4080_SHORT_INST_MSK, short_instr));
 	if (ret)
@@ -271,7 +413,8 @@ int ad4080_set_strict_reg_access(struct ad4080_dev *dev,
 	if (!dev)
 		return -EINVAL;
 
-	ret = ad4080_update_bits(dev, AD4080_REG_INTERFACE_CONFIG_C,
+	ret = ad4080_update_bits(dev,
+				 AD4080_ADDR(AD4080_REG_INTERFACE_CONFIG_C),
 				 AD4080_STRICT_REG_ACCESS_MSK,
 				 no_os_field_prep(AD4080_STRICT_REG_ACCESS_MSK, strict_reg));
 	if (ret)
@@ -310,7 +453,8 @@ int ad4080_set_intf_chk_en(struct ad4080_dev *dev,
 	if (!dev)
 		return -EINVAL;
 
-	ret = ad4080_update_bits(dev, AD4080_REG_DATA_INTF_CONFIG_A,
+	ret = ad4080_update_bits(dev,
+				 AD4080_ADDR(AD4080_REG_DATA_INTF_CONFIG_A),
 				 AD4080_INTF_CHK_EN_MSK,
 				 no_os_field_prep(AD4080_INTF_CHK_EN_MSK, intf_chk_en));
 	if (ret)
@@ -345,7 +489,8 @@ int ad4080_set_cnv_spi_lvds_lanes(struct ad4080_dev *dev,
 	if (!dev)
 		return -EINVAL;
 
-	ret = ad4080_update_bits(dev, AD4080_REG_DATA_INTF_CONFIG_A,
+	ret = ad4080_update_bits(dev,
+				 AD4080_ADDR(AD4080_REG_DATA_INTF_CONFIG_A),
 				 AD4080_DATA_LANE_CNT_MSK,
 				 no_os_field_prep(AD4080_DATA_LANE_CNT_MSK, cnv_spi_lvds_lanes));
 	if (ret)
@@ -384,7 +529,8 @@ int ad4080_set_conv_data_spi_lvds(struct ad4080_dev *dev,
 	if (!dev)
 		return -EINVAL;
 
-	ret = ad4080_update_bits(dev, AD4080_REG_DATA_INTF_CONFIG_A,
+	ret = ad4080_update_bits(dev,
+				 AD4080_ADDR(AD4080_REG_DATA_INTF_CONFIG_A),
 				 AD4080_DATA_INTF_SEL_MSK,
 				 no_os_field_prep(AD4080_DATA_INTF_SEL_MSK, conv_data_spi_lvds));
 	if (ret)
@@ -423,7 +569,8 @@ int ad4080_set_lvds_cnv_clk_cnt(struct ad4080_dev *dev,
 	if (!dev)
 		return -EINVAL;
 
-	ret = ad4080_update_bits(dev, AD4080_REG_DATA_INTF_CONFIG_B,
+	ret = ad4080_update_bits(dev,
+				 AD4080_ADDR(AD4080_REG_DATA_INTF_CONFIG_B),
 				 AD4080_LVDS_CNV_CLK_CNT_MSK,
 				 no_os_field_prep( AD4080_LVDS_CNV_CLK_CNT_MSK, lvds_cnv_clk_cnt));
 	if (ret)
@@ -461,7 +608,8 @@ int ad4080_set_lvds_self_clk_mode(struct ad4080_dev *dev,
 	if (!dev)
 		return -EINVAL;
 
-	ret = ad4080_update_bits(dev, AD4080_REG_DATA_INTF_CONFIG_B,
+	ret = ad4080_update_bits(dev,
+				 AD4080_ADDR(AD4080_REG_DATA_INTF_CONFIG_B),
 				 AD4080_LVDS_SELF_CLK_EN_MSK,
 				 no_os_field_prep(AD4080_LVDS_SELF_CLK_EN_MSK, lvds_self_clk_mode));
 	if (ret)
@@ -500,7 +648,8 @@ int ad4080_set_lvds_cnv_clk_mode(struct ad4080_dev *dev,
 	if (!dev)
 		return -EINVAL;
 
-	ret = ad4080_update_bits(dev, AD4080_REG_DATA_INTF_CONFIG_B,
+	ret = ad4080_update_bits(dev,
+				 AD4080_ADDR(AD4080_REG_DATA_INTF_CONFIG_B),
 				 AD4080_LVDS_CNV_EN,
 				 no_os_field_prep(AD4080_LVDS_CNV_EN, cnv_clk_mode));
 	if (ret)
@@ -539,7 +688,8 @@ int ad4080_set_lvds_vod(struct ad4080_dev *dev,
 	if (!dev)
 		return -EINVAL;
 
-	ret = ad4080_update_bits(dev, AD4080_REG_DATA_INTF_CONFIG_C,
+	ret = ad4080_update_bits(dev,
+				 AD4080_ADDR(AD4080_REG_DATA_INTF_CONFIG_C),
 				 AD4080_LVDS_VOD_MSK,
 				 no_os_field_prep(AD4080_LVDS_VOD_MSK, lvds_vod));
 	if (ret)
@@ -577,7 +727,8 @@ int ad4080_set_mspi_drv(struct ad4080_dev *dev,
 	if (!dev)
 		return -EINVAL;
 
-	ret = ad4080_update_bits(dev, AD4080_REG_DATA_INTF_CONFIG_C,
+	ret = ad4080_update_bits(dev,
+				 AD4080_ADDR(AD4080_REG_DATA_INTF_CONFIG_C),
 				 AD4080_MSPI_DRV_MSK,
 				 no_os_field_prep(AD4080_MSPI_DRV_MSK, mspi_drv));
 	if (ret)
@@ -615,7 +766,8 @@ int ad4080_set_ana_dig_ldo_pd(struct ad4080_dev *dev,
 	if (!dev)
 		return -EINVAL;
 
-	ret = ad4080_update_bits(dev, AD4080_REG_PWR_CTRL,
+	ret = ad4080_update_bits(dev,
+				 AD4080_ADDR(AD4080_REG_PWR_CTRL),
 				 AD4080_ANA_DIG_LDO_PD_MSK,
 				 no_os_field_prep(AD4080_ANA_DIG_LDO_PD_MSK, ana_dig_ldo_pd));
 	if (ret)
@@ -653,7 +805,8 @@ int ad4080_set_intf_ldo_pd(struct ad4080_dev *dev,
 	if (!dev)
 		return -EINVAL;
 
-	ret = ad4080_update_bits(dev, AD4080_REG_PWR_CTRL,
+	ret = ad4080_update_bits(dev,
+				 AD4080_ADDR(AD4080_REG_PWR_CTRL),
 				 AD4080_INTF_LDO_PD_MSK,
 				 no_os_field_prep(AD4080_INTF_LDO_PD_MSK, intf_ldo_pd));
 	if (ret)
@@ -691,7 +844,8 @@ int ad4080_set_fifo_mode(struct ad4080_dev *dev,
 	if (!dev)
 		return -EINVAL;
 
-	ret = ad4080_update_bits(dev, AD4080_REG_FIFO_CONFIG,
+	ret = ad4080_update_bits(dev,
+				 AD4080_ADDR(AD4080_REG_FIFO_CONFIG),
 				 AD4080_FIFO_MODE_MSK,
 				 no_os_field_prep(AD4080_FIFO_MODE_MSK, fifo_mode));
 	if (ret)
@@ -722,7 +876,7 @@ enum ad4080_fifo_mode ad4080_get_fifo_mode(struct ad4080_dev *dev)
  * 		       parameters.
  * @return 0 in case of success, negative error code otherwise
  */
-init ad4080_configuration_intf_init(struct ad4080_dev *dev,
+int ad4080_configuration_intf_init(struct ad4080_dev *dev,
 				   struct ad4080_init_param init_param)
 {
 	int ret;
@@ -752,7 +906,7 @@ init ad4080_configuration_intf_init(struct ad4080_dev *dev,
  * 		       parameters.
  * @return 0 in case of success, negative error code otherwise
  */
-init ad4080_data_intf_init(struct ad4080_dev *dev,
+int ad4080_data_intf_init(struct ad4080_dev *dev,
 				   struct ad4080_init_param init_param)
 {
 	int ret;
@@ -810,7 +964,7 @@ int ad4080_init(struct ad4080_dev **device,
 	if (ret)
 		goto error_dev;
 
-	ret = ad4080_read(dev, AD4080_REG_CHIP_TYPE, &data);
+	ret = ad4080_read(dev, AD4080_ADDR(AD4080_REG_CHIP_TYPE), (uint32_t *)&data) ;
 	if (ret)
 		goto error_spi;
 
@@ -825,15 +979,14 @@ int ad4080_init(struct ad4080_dev **device,
 	dev->spi3wire = init_param.spi3wire;
 	dev->addr_asc = init_param.addr_asc;
 
-	ret = ad4080_update_bits(dev, AD4080_REG_INTERFACE_CONFIG_A,
+	ret = ad4080_update_bits(dev,
+				 AD4080_ADDR(AD4080_REG_INTERFACE_CONFIG_A),
 				 AD4080_ADDR_ASC_MSK |
 				 AD4080_SDO_ENABLE_MSK,
 				 no_os_field_prep(AD4080_SDO_ENABLE_MSK, dev->spi3wire) |
 				 no_os_field_prep(AD4080_ADDR_ASC_MSK, dev->addr_asc));
 	if (ret)
 		goto error_spi;
-
-	*device = dev;
 	
 	/* Configuration SPI Interface Initialization */
 	ret = ad4080_configuration_intf_init(dev, init_param);
@@ -851,6 +1004,10 @@ int ad4080_init(struct ad4080_dev **device,
 		goto error_spi;
 
 	return 0;
+
+	*device = dev ;
+
+	return 0 ;
 
 error_spi:
 	no_os_spi_remove(dev->spi_desc);

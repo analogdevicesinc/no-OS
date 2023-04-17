@@ -54,29 +54,40 @@
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 
+#define AD4080_R1B				(1ul << 16)
+#define AD4080_R2B				(2ul << 16)
+#define AD4080_LEN(x)			((x) >> 16)
+#define AD4080_ADDR(x)			((x) & 0xFFFF)
+
 /** Register Definition */
-#define AD4080_REG_INTERFACE_CONFIG_A		0x0000
-#define AD4080_REG_INTERFACE_CONFIG_B		0x0001
-#define AD4080_REG_CHIP_TYPE			0x0003
-#define AD4080_REG_PRODUCT_ID_L			0x0004
-#define AD4080_REG_PRODUCT_ID_H			0x0005
-#define AD4080_REG_CHIP_GRADE			0x0006
-#define AD4080_REG_SCRATCH_PAD			0x000A
-#define AD4080_REG_SPI_REVISION			0x000B
-#define AD4080_REG_VENDOR_L			0x000C
-#define AD4080_REG_VENDOR_H			0x000D
-#define AD4080_REG_STREAM_MODE			0x000E
-#define AD4080_REG_TRANSFER_CONFIG		0x000F
-#define AD4080_REG_INTERFACE_CONFIG_C		0x0010
-#define AD4080_REG_INTERFACE_STATUS_A		0x0011
-#define AD4080_REG_DEVICE_STATUS		0x0014
-#define AD4080_REG_DATA_INTF_CONFIG_A		0x0015
-#define AD4080_REG_DATA_INTF_CONFIG_B		0x0016
-#define AD4080_REG_DATA_INTF_CONFIG_C		0x0017
-#define AD4080_REG_PWR_CTRL			0x0018
-#define AD4080_REG_FIFO_CONFIG			0x001C
-#define AD4080_REG_FIFO_WATERMARK		0x001D
-#define AD4080_REG_GAIN				0x0027
+#define AD4080_REG_INTERFACE_CONFIG_A		AD4080_R1B | 0x0000
+#define AD4080_REG_INTERFACE_CONFIG_B		AD4080_R1B | 0x0001
+#define AD4080_REG_DEVICE_CONFIG		AD4080_R1B | 0x0002
+#define AD4080_REG_CHIP_TYPE			AD4080_R1B | 0x0003
+#define AD4080_REG_PRODUCT_ID_L			AD4080_R1B | 0x0004
+#define AD4080_REG_PRODUCT_ID_H			AD4080_R1B | 0x0005
+#define AD4080_REG_CHIP_GRADE			AD4080_R1B | 0x0006
+#define AD4080_REG_SCRATCH_PAD			AD4080_R1B | 0x000A
+#define AD4080_REG_SPI_REVISION			AD4080_R1B | 0x000B
+#define AD4080_REG_VENDOR_L			AD4080_R1B | 0x000C
+#define AD4080_REG_VENDOR_H			AD4080_R1B | 0x000D
+#define AD4080_REG_STREAM_MODE			AD4080_R1B | 0x000E
+#define AD4080_REG_TRANSFER_CONFIG		AD4080_R1B | 0x000F
+#define AD4080_REG_INTERFACE_CONFIG_C		AD4080_R1B | 0x0010
+#define AD4080_REG_INTERFACE_STATUS_A		AD4080_R1B | 0x0011
+#define AD4080_REG_DEVICE_STATUS		AD4080_R1B | 0x0014
+#define AD4080_REG_DATA_INTF_CONFIG_A		AD4080_R1B | 0x0015
+#define AD4080_REG_DATA_INTF_CONFIG_B		AD4080_R1B | 0x0016
+#define AD4080_REG_DATA_INTF_CONFIG_C		AD4080_R1B | 0x0017
+#define AD4080_REG_PWR_CTRL			AD4080_R1B | 0x0018
+#define AD4080_REG_GPIO_CONFIG_A		AD4080_R1B | 0x0019
+#define AD4080_REG_GPIO_CONFIG_B		AD4080_R1B | 0x001A
+#define AD4080_REG_GPIO_CONFIG_C		AD4080_R1B | 0x001B
+#define AD4080_REG_FIFO_CONFIG			AD4080_R1B | 0x001C
+#define AD4080_REG_FIFO_WATERMARK		AD4080_R2B | 0x001D
+#define AD4080_REG_FIFO_STATUS		AD4080_R1B | 0x0023
+#define AD4080_REG_OFFSET			AD4080_R2B | 0x0025
+#define AD4080_REG_GAIN				AD4080_R2B | 0x0027
 
 /** AD4080_REG_INTERFACE_CONFIG_A Bit Definition */
 #define AD4080_SW_RESET_MSK			NO_OS_BIT(7) | NO_OS_BIT(0)
@@ -120,6 +131,11 @@
 #define BYTE_ADDR_H				NO_OS_GENMASK(15, 8)
 #define BYTE_ADDR_L				NO_OS_GENMASK(7, 0)
 #define AD4080_CHIP_ID				NO_OS_GENMASK(2, 0)
+
+#define AD4080_NUM_REGS			18  // Number of valid registers (mb regs considered a single entity)
+
+#define LONG_INSTR_LENGTH		2	// bytes
+#define SHORT_INSTR_LENGTH		1	// bytes
 
 /******************************************************************************/
 /************************ Types Declarations **********************************/
@@ -302,13 +318,15 @@ struct ad4080_init_param {
 	enum ad4080_fifo_mode fifo_mode;
 };
 /** Writes data into a register.  */
-int ad4080_write(struct ad4080_dev *dev, uint16_t reg_addr, uint8_t reg_val);
+int ad4080_write(struct ad4080_dev *dev, uint32_t reg_addr, uint32_t reg_val);
 
 /** Reads data from a register. */
-int ad4080_read(struct ad4080_dev *dev, uint16_t reg_addr, uint8_t *reg_val);
+int ad4080_read(struct ad4080_dev *dev, uint32_t reg_addr, uint32_t *reg_val);
 
 /** Update specific register bits */
-int ad4080_update_bits(struct ad4080_dev *dev, uint16_t reg_addr, uint8_t mask,
+int ad4080_update_bits(struct ad4080_dev *dev,
+		       uint16_t reg_addr,
+		       uint8_t mask,
 		       uint8_t reg_val);
 
 /** Software Reset. */
