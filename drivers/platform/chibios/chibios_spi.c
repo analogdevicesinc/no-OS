@@ -62,14 +62,14 @@ int32_t chibios_spi_init(struct no_os_spi_desc **desc,
 	if (!desc || !param)
 		return -EINVAL;
 
-	spi_desc = (struct no_os_spi_desc *)no_os_calloc(sizeof(*spi_desc));
+	spi_desc = (struct no_os_spi_desc *)no_os_calloc(1, sizeof(*spi_desc));
 
 	if (!spi_desc) {
 		ret = -ENOMEM;
 		goto error_1;
 	}
 
-	sdesc = (struct chibios_spi_desc*)no_os_calloc(sizeof(*sdesc));
+	sdesc = (struct chibios_spi_desc*)no_os_calloc(1, sizeof(*sdesc));
 
 	if (!sdesc) {
 		ret = -ENOMEM;
