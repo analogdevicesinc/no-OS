@@ -39,6 +39,7 @@
 
 #include "no_os_alloc.h"
 #include "hal.h"
+#include <string.h>
 
 /**
  * @brief Allocate memory and return a pointer to it.
