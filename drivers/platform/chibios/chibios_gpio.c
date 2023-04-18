@@ -94,12 +94,12 @@ int32_t chibios_gpio_get(struct no_os_gpio_desc **desc,
 	if (!desc || !param)
 		return -EINVAL;
 
-	descriptor = (struct no_os_gpio_desc *)no_os_calloc(sizeof(*descriptor));
+	descriptor = (struct no_os_gpio_desc *)no_os_calloc(1, sizeof(*descriptor));
 	if (!descriptor) {
 		ret = -ENOMEM;
 		goto error_1;
 	}
-	extra = (struct chibios_gpio_desc*)no_os_calloc(sizeof(*extra));
+	extra = (struct chibios_gpio_desc*)no_os_calloc(1, sizeof(*extra));
 	if (!extra) {
 		ret = -ENOMEM;
 		goto error_2;
