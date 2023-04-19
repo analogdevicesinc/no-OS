@@ -503,6 +503,8 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy,
 
 	no_os_gpio_direction_output(phy->gpio_desc_resetb, 0);
 
+	no_os_gpio_direction_output(phy->gpio_desc_sync, 0);
+
 	no_os_spi_init(&phy->spi, &init_param->spi_param);
 
 	phy->pdata->port_ctrl.digital_io_ctrl = 0;
