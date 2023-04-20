@@ -39,6 +39,8 @@ SRCS += $(PLATFORM_DRIVERS)/xilinx_gpio.c \
 	$(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c \
 	$(DRIVERS)/axi_core/axi_dac_core/axi_dac_core.c \
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.c \
+	$(DRIVERS)/rf-transceiver/navassa/adrv9002.c \
+	$(DRIVERS)/rf-transceiver/navassa/adrv9002_conv.c \
 	$(PLATFORM_DRIVERS)/xilinx_axi_io.c
 INCS +=	$(INCLUDE)/no_os_spi.h \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_spi.h \
@@ -53,10 +55,17 @@ INCS +=	$(INCLUDE)/no_os_spi.h \
 	$(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.h \
 	$(DRIVERS)/axi_core/axi_dac_core/axi_dac_core.h \
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.h \
+	$(DRIVERS)/rf-transceiver/navassa/adrv9002.h \
 	$(INCLUDE)/no_os_axi_io.h
 
 # Navassa API sources
-SRC_DIRS += $(DRIVERS)/rf-transceiver/navassa
+SRC_DIRS += $(DRIVERS)/rf-transceiver/navassa/common
+SRC_DIRS += $(DRIVERS)/rf-transceiver/navassa/devices/adrv9001/private/include
+SRC_DIRS += $(DRIVERS)/rf-transceiver/navassa/devices/adrv9001/public/include
+SRC_DIRS += $(DRIVERS)/rf-transceiver/navassa/devices/adrv9001/private/src
+SRC_DIRS += $(DRIVERS)/rf-transceiver/navassa/devices/adrv9001/public/src
+SRC_DIRS += $(DRIVERS)/rf-transceiver/navassa/third_party/adi_pmag_macros
+SRC_DIRS += $(DRIVERS)/rf-transceiver/navassa/third_party/jsmn
 
 # IIO
 ifeq (y,$(strip $(TINYIIOD)))
