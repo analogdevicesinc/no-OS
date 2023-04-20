@@ -165,6 +165,7 @@ int main()
 		.period_ns = 1000,	/* 1Mhz */
 		.duty_cycle_ns = 10,
 		.polarity = NO_OS_PWM_POLARITY_HIGH,
+		.platform_ops = &axi_pwm_ops,
 		.extra = &axi_pwm_init,
 	};
 

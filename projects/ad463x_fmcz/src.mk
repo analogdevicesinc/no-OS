@@ -11,6 +11,7 @@
 
 SRCS := $(PROJECT)/src/ad463x_fmc.c
 SRCS += $(DRIVERS)/api/no_os_spi.c \
+	$(DRIVERS)/api/no_os_pwm.c \
 	$(DRIVERS)/api/no_os_gpio.c \
 	$(DRIVERS)/api/no_os_irq.c \
 	$(DRIVERS)/api/no_os_uart.c \

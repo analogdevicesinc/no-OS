@@ -1,9 +1,8 @@
 /***************************************************************************//**
- *   @file   stm32/stm32_gpio.h
- *   @brief  Header file for stm32 gpio specifics.
- *   @author Darius Berghe (darius.berghe@analog.com)
+ *   @file   aducm3029_pwm.h
+ *   @brief  Header file for aducm3029 pwm specifics.
 ********************************************************************************
- * Copyright 2020(c) Analog Devices, Inc.
+ * Copyright 2023(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -36,40 +35,25 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef STM32_GPIO_H_
-#define STM32_GPIO_H_
 
-#include <stdint.h>
-#include <stdbool.h>
-#include "stm32_hal.h"
+#ifndef ADUCM3029_PWM_H_
+#define ADUCM3029_PWM_H_
 
+/******************************************************************************/
+/***************************** Include Files **********************************/
+/******************************************************************************/
+#include "no_os_pwm.h"
+
+/******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
+
+/******************************************************************************/
+/*************************** Types Declarations *******************************/
+/******************************************************************************/
 /**
- * @struct stm32_gpio_init_param
- * @brief Structure holding the initialization parameters for stm32 platform
+ * @brief ADUCM3029 specific PWM platform ops structure
  */
-struct stm32_gpio_init_param {
-	/** Output mode */
-	uint32_t mode;
-	/** Speed grade */
-	uint32_t speed;
-	/** Alternate functionality */
-	uint32_t alternate;
-};
+extern const struct no_os_pwm_platform_ops aducm3029_pwm_ops;
 
-/**
- * @struct stm32_gpio_desc
- * @brief stm32 platform specific gpio descriptor
- */
-struct stm32_gpio_desc {
-	/** Port */
-	GPIO_TypeDef *port;
-	/** GPIO configuration */
-	GPIO_InitTypeDef gpio_config;
-};
-
-/**
- * @brief stm32 platform specific gpio platform ops structure
- */
-extern const struct no_os_gpio_platform_ops stm32_gpio_ops;
-
-#endif
+#endif // ADUCM3029_PWM_H_

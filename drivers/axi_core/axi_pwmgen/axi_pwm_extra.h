@@ -44,6 +44,7 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include <stdint.h>
+#include "no_os_pwm.h"
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -75,5 +76,10 @@ struct axi_pwm_desc {
 	/** Used to store the period when the channel is disabled */
 	uint32_t ch_period;
 };
+
+/**
+ * @brief AXI specific PWM platform ops structure
+ */
+extern const struct no_os_pwm_platform_ops axi_pwm_ops;
 
 #endif

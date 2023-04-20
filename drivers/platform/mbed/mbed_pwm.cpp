@@ -63,8 +63,8 @@ extern "C"
  * @param	param[in] - The structure that contains the PWM init parameters.
  * @return	0 in case of success, negative error code otherwise.
  */
-int32_t no_os_pwm_init(struct no_os_pwm_desc **desc,
-		 const struct no_os_pwm_init_param *param)
+int32_t mbed_pwm_init(struct no_os_pwm_desc **desc,
+		      const struct no_os_pwm_init_param *param)
 {
 	struct no_os_pwm_desc *pwm_desc;
 	mbed::PwmOut *pwm;
@@ -117,7 +117,7 @@ err_pwm:
  * @param	desc[in] - Pointer where the configured instance is stored.
  * @return	0 in case of success, negative error code otherwise.
  */
-int32_t no_os_pwm_enable(struct no_os_pwm_desc *desc)
+int32_t mbed_pwm_enable(struct no_os_pwm_desc *desc)
 {
 	mbed::PwmOut *pwm;
 
@@ -138,7 +138,7 @@ int32_t no_os_pwm_enable(struct no_os_pwm_desc *desc)
  * @param	desc[in] - Pointer where the configured instance is stored.
  * @return	0 in case of success, negative error code otherwise.
  */
-int32_t no_os_pwm_disable(struct no_os_pwm_desc *desc)
+int32_t mbed_pwm_disable(struct no_os_pwm_desc *desc)
 {
 	mbed::PwmOut *pwm;
 
@@ -160,8 +160,8 @@ int32_t no_os_pwm_disable(struct no_os_pwm_desc *desc)
  * @param	period_ns[in] - PWM period.
  * @return	0 in case of success, negative error code otherwise.
  */
-int32_t no_os_pwm_set_period(struct no_os_pwm_desc *desc,
-		       uint32_t period_ns)
+int32_t mbed_pwm_set_period(struct no_os_pwm_desc *desc,
+			    uint32_t period_ns)
 {
 	mbed::PwmOut *pwm;
 
@@ -183,8 +183,8 @@ int32_t no_os_pwm_set_period(struct no_os_pwm_desc *desc,
  * @param	period_ns[in] - PWM period.
  * @return	0 in case of success, negative error code otherwise.
  */
-int32_t no_os_pwm_get_period(struct no_os_pwm_desc *desc,
-		       uint32_t *period_ns)
+int32_t mbed_pwm_get_period(struct no_os_pwm_desc *desc,
+			    uint32_t *period_ns)
 {
 	mbed::PwmOut *pwm;
 
@@ -206,8 +206,8 @@ int32_t no_os_pwm_get_period(struct no_os_pwm_desc *desc,
  * @param	duty_cycle_ns[in] - PWM duty cycle.
  * @return	0 in case of success, negative error code otherwise.
  */
-int32_t no_os_pwm_set_duty_cycle(struct no_os_pwm_desc *desc,
-			   uint32_t duty_cycle_ns)
+int32_t mbed_pwm_set_duty_cycle(struct no_os_pwm_desc *desc,
+				uint32_t duty_cycle_ns)
 {
 	mbed::PwmOut *pwm;
 
@@ -229,8 +229,8 @@ int32_t no_os_pwm_set_duty_cycle(struct no_os_pwm_desc *desc,
  * @param	duty_cycle_ns[in] - PWM duty cycle.
  * @return	0 in case of success, negative error code otherwise.
  */
-int32_t no_os_pwm_get_duty_cycle(struct no_os_pwm_desc *desc,
-			   uint32_t *duty_cycle_ns)
+int32_t mbed_pwm_get_duty_cycle(struct no_os_pwm_desc *desc,
+				uint32_t *duty_cycle_ns)
 {
 	mbed::PwmOut *pwm;
 
@@ -251,7 +251,7 @@ int32_t no_os_pwm_get_duty_cycle(struct no_os_pwm_desc *desc,
  * @param	desc[in, out] - Pointer where the configured instance is stored
  * @return	0 in case of success, negative error code otherwise.
  */
-int32_t no_os_pwm_remove(struct no_os_pwm_desc *desc)
+int32_t mbed_pwm_remove(struct no_os_pwm_desc *desc)
 {
 	if (!desc || !desc->extra)
 		return -EINVAL;
@@ -264,6 +264,20 @@ int32_t no_os_pwm_remove(struct no_os_pwm_desc *desc)
 
 	return 0;
 }
+
+/**
+* @brief Mbed platform specific PWM platform ops structure
+*/
+const struct no_os_pwm_platform_ops mbed_pwm_ops = {
+	.pwm_ops_init = &mbed_pwm_init,
+	.pwm_ops_enable = &mbed_pwm_enable,
+	.pwm_ops_disable = &mbed_pwm_disable,
+	.pwm_ops_set_period = &mbed_pwm_set_period,
+	.pwm_ops_get_period = &mbed_pwm_get_period,
+	.pwm_set_duty_cycle = &mbed_pwm_set_duty_cycle,
+	.pwm_ops_get_duty_cycle = &mbed_pwm_get_duty_cycle,
+	.pwm_ops_remove = &mbed_pwm_remove
+};
 
 #ifdef __cplusplus  // Closing extern c
 }

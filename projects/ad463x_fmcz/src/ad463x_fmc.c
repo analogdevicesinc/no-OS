@@ -118,6 +118,7 @@ int main()
 		.period_ns = 500,	/* 2Mhz */
 		.duty_cycle_ns = AD463X_TRIGGER_PULSE_WIDTH_NS,
 		.polarity = NO_OS_PWM_POLARITY_HIGH,
+		.platform_ops = &axi_pwm_ops,
 		.extra = &axi_pwm_init,
 	};
 

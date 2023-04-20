@@ -46,6 +46,7 @@
 #include "no_os_gpio.h"
 #include "iio_aducm3029.h"
 #include "aducm3029_adc.h"
+#include "aducm3029_pwm.h"
 #include "no_os_error.h"
 #include "no_os_util.h"
 
@@ -64,6 +65,7 @@ static struct no_os_pwm_init_param default_pwm_init_par = {
 	.duty_cycle_ns = 5000000,
 	.period_ns = 10000000,
 	.polarity = NO_OS_PWM_POLARITY_HIGH,
+	.platform_ops = &aducm3029_pwm_ops,
 	.extra = NULL
 };
 static struct no_os_gpio_init_param default_gpio_init_par = {

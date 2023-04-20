@@ -180,6 +180,7 @@ int main()
 		.period_ns = 3333,
 		.duty_cycle_ns = 600,
 		.phase_ns = 0,
+		.platform_ops = &axi_pwm_ops,
 		.extra = &axi_zed_pwm_init
 	};
 

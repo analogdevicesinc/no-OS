@@ -105,7 +105,7 @@ static int32_t axi_pwmgen_write_mask(uint32_t base, uint32_t offset,
  * @param [in] desc - Decriptor containing PWM generator parameters.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t no_os_pwm_enable(struct no_os_pwm_desc *desc)
+int32_t axi_pwm_enable(struct no_os_pwm_desc *desc)
 {
 	struct axi_pwm_desc *axi_desc = desc->extra;
 	int ret;
@@ -126,7 +126,7 @@ int32_t no_os_pwm_enable(struct no_os_pwm_desc *desc)
  * @param [in] desc - Decriptor containing PWM generator parameters.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t no_os_pwm_disable(struct no_os_pwm_desc *desc)
+int32_t axi_pwm_disable(struct no_os_pwm_desc *desc)
 {
 	struct axi_pwm_desc *axi_desc = desc->extra;
 	int ret;
@@ -148,7 +148,7 @@ int32_t no_os_pwm_disable(struct no_os_pwm_desc *desc)
  * @param [in] period_ns - PWM period.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t no_os_pwm_set_period(struct no_os_pwm_desc *desc, uint32_t period_ns)
+int32_t axi_pwm_set_period(struct no_os_pwm_desc *desc, uint32_t period_ns)
 {
 	struct axi_pwm_desc *axi_desc = desc->extra;
 	uint32_t tmp, period_cnt;
@@ -176,7 +176,7 @@ int32_t no_os_pwm_set_period(struct no_os_pwm_desc *desc, uint32_t period_ns)
  * @param [out] period_ns - PWM period.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t no_os_pwm_get_period(struct no_os_pwm_desc *desc, uint32_t *period_ns)
+int32_t axi_pwm_get_period(struct no_os_pwm_desc *desc, uint32_t *period_ns)
 {
 
 	*period_ns = desc->period_ns;
@@ -191,8 +191,8 @@ int32_t no_os_pwm_get_period(struct no_os_pwm_desc *desc, uint32_t *period_ns)
  * @param [in] duty_cycle_ns - PWM duty cycle.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t no_os_pwm_set_duty_cycle(struct no_os_pwm_desc *desc,
-				 uint32_t duty_cycle_ns)
+int32_t axi_pwm_set_duty_cycle(struct no_os_pwm_desc *desc,
+			       uint32_t duty_cycle_ns)
 {
 	struct axi_pwm_desc *axi_desc = desc->extra;
 	uint32_t tmp, duty_cnt;
@@ -222,8 +222,8 @@ int32_t no_os_pwm_set_duty_cycle(struct no_os_pwm_desc *desc,
  * @param [out] duty_cycle_ns - PWM duty cycle.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t no_os_pwm_get_duty_cycle(struct no_os_pwm_desc *desc,
-				 uint32_t *duty_cycle_ns)
+int32_t axi_pwm_get_duty_cycle(struct no_os_pwm_desc *desc,
+			       uint32_t *duty_cycle_ns)
 {
 	*duty_cycle_ns = desc->duty_cycle_ns;
 
@@ -237,7 +237,7 @@ int32_t no_os_pwm_get_duty_cycle(struct no_os_pwm_desc *desc,
  * @param [in] phase_ns - PWM phase.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t no_os_pwm_set_phase(struct no_os_pwm_desc *desc, uint32_t phase_ns)
+int32_t axi_pwm_set_phase(struct no_os_pwm_desc *desc, uint32_t phase_ns)
 {
 	struct axi_pwm_desc *axi_desc = desc->extra;
 	uint32_t tmp, phase_cnt;
@@ -264,7 +264,7 @@ int32_t no_os_pwm_set_phase(struct no_os_pwm_desc *desc, uint32_t phase_ns)
  * @param [out] phase_ns - PWM phase.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t no_os_pwm_get_phase(struct no_os_pwm_desc *desc, uint32_t *phase_ns)
+int32_t axi_pwm_get_phase(struct no_os_pwm_desc *desc, uint32_t *phase_ns)
 {
 	*phase_ns = desc->phase_ns;
 
@@ -278,8 +278,8 @@ int32_t no_os_pwm_get_phase(struct no_os_pwm_desc *desc, uint32_t *phase_ns)
  * @param [in] param - Structure containing the PWM generator init parameters.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t no_os_pwm_init(struct no_os_pwm_desc **desc,
-		       const struct no_os_pwm_init_param *param)
+int32_t axi_pwm_init(struct no_os_pwm_desc **desc,
+		     const struct no_os_pwm_init_param *param)
 {
 	struct no_os_pwm_desc *pwm_desc;
 	struct axi_pwm_init_param *axi_init;
@@ -337,19 +337,19 @@ int32_t no_os_pwm_init(struct no_os_pwm_desc **desc,
 	if (data != AXI_PWMGEN_TEST_DATA)
 		goto error_xdesc;
 
-	ret = no_os_pwm_set_period(pwm_desc, pwm_desc->period_ns);
+	ret = axi_pwm_set_period(pwm_desc, pwm_desc->period_ns);
 	if (ret != 0)
 		goto error_xdesc;
 
-	ret = no_os_pwm_set_duty_cycle(pwm_desc, pwm_desc->duty_cycle_ns);
+	ret = axi_pwm_set_duty_cycle(pwm_desc, pwm_desc->duty_cycle_ns);
 	if (ret != 0)
 		goto error_xdesc;
 
-	ret = no_os_pwm_set_phase(pwm_desc, pwm_desc->phase_ns);
+	ret = axi_pwm_set_phase(pwm_desc, pwm_desc->phase_ns);
 	if (ret != 0)
 		goto error_xdesc;
 
-	ret = no_os_pwm_enable(pwm_desc);
+	ret = axi_pwm_enable(pwm_desc);
 	if (ret != 0)
 		goto error_xdesc;
 
@@ -370,7 +370,7 @@ error_desc:
  * @param [in] desc - Pointer to the device handler.
  * @return 0 in case of success, -1 otherwise
  */
-int32_t no_os_pwm_remove(struct no_os_pwm_desc *desc)
+int32_t axi_pwm_remove(struct no_os_pwm_desc *desc)
 {
 	struct axi_pwm_desc *axi_desc = desc->extra;
 	int32_t ret;
@@ -389,3 +389,19 @@ int32_t no_os_pwm_remove(struct no_os_pwm_desc *desc)
 
 	return 0;
 }
+
+/**
+* @brief AXI platform specific PWM platform ops structure
+*/
+const struct no_os_pwm_platform_ops axi_pwm_ops = {
+	.pwm_ops_init = &axi_pwm_init,
+	.pwm_ops_enable = &axi_pwm_enable,
+	.pwm_ops_disable = &axi_pwm_disable,
+	.pwm_ops_set_period = &axi_pwm_set_period,
+	.pwm_ops_get_period = &axi_pwm_get_period,
+	.pwm_ops_set_duty_cycle = &axi_pwm_set_duty_cycle,
+	.pwm_ops_get_duty_cycle = &axi_pwm_get_duty_cycle,
+	.pwm_ops_set_phase = &axi_pwm_set_phase,
+	.pwm_ops_get_phase = &axi_pwm_get_phase,
+	.pwm_ops_remove = &axi_pwm_remove
+};

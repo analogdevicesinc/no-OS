@@ -50,8 +50,8 @@
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
-static int32_t no_os_config_clock_init(ADI_TMR_CONFIG *cfg, uint32_t period,
-				       uint32_t duty, uint32_t *match)
+static int32_t aducm3029_config_clock_init(ADI_TMR_CONFIG *cfg, uint32_t period,
+		uint32_t duty, uint32_t *match)
 {
 	float		base_time;
 	float		aux;
@@ -111,7 +111,7 @@ static int32_t no_os_config_clock_init(ADI_TMR_CONFIG *cfg, uint32_t period,
 	return 0;
 }
 
-static int32_t no_os_update_pwm_config(struct no_os_pwm_desc *desc)
+static int32_t aducm3029_update_pwm_config(struct no_os_pwm_desc *desc)
 {
 	ADI_TMR_CONFIG		cfg;
 	ADI_TMR_PWM_CONFIG	pwm_cfg;
@@ -127,8 +127,8 @@ static int32_t no_os_update_pwm_config(struct no_os_pwm_desc *desc)
 		.bReloading = true,
 		.bSyncBypass = true
 	};
-	ret = no_os_config_clock_init(&cfg, desc->period_ns, desc->duty_cycle_ns,
-				      &match_val);
+	ret = aducm3029_config_clock_init(&cfg, desc->period_ns, desc->duty_cycle_ns,
+					  &match_val);
 	if (NO_OS_IS_ERR_VALUE(ret))
 		return ret;
 	do {
@@ -149,8 +149,8 @@ static int32_t no_os_update_pwm_config(struct no_os_pwm_desc *desc)
 }
 
 /* Initialize the PWM generator device */
-int32_t no_os_pwm_init(struct no_os_pwm_desc **desc,
-		       const struct no_os_pwm_init_param *param)
+int32_t aducm3029_pwm_init(struct no_os_pwm_desc **desc,
+			   const struct no_os_pwm_init_param *param)
 {
 	ADI_TMR_RESULT	ret;
 	struct no_os_pwm_desc	*ldesc;
@@ -174,7 +174,7 @@ int32_t no_os_pwm_init(struct no_os_pwm_desc **desc,
 	if (ret != ADI_TMR_SUCCESS)
 		goto error;
 
-	ret = no_os_update_pwm_config(ldesc);
+	ret = aducm3029_update_pwm_config(ldesc);
 	if (NO_OS_IS_ERR_VALUE(ret))
 		goto error;
 
@@ -189,7 +189,7 @@ error:
 }
 
 /* Free the resources used by the PWM generator device */
-int32_t no_os_pwm_remove(struct no_os_pwm_desc *desc)
+int32_t aducm3029_pwm_remove(struct no_os_pwm_desc *desc)
 {
 	if (!desc || !desc->extra)
 		return -EINVAL;
@@ -201,7 +201,7 @@ int32_t no_os_pwm_remove(struct no_os_pwm_desc *desc)
 }
 
 /* Enable PWM generator device */
-int32_t no_os_pwm_enable(struct no_os_pwm_desc *desc)
+int32_t aducm3029_pwm_enable(struct no_os_pwm_desc *desc)
 {
 	ADI_TMR_RESULT		ret;
 
@@ -216,7 +216,7 @@ int32_t no_os_pwm_enable(struct no_os_pwm_desc *desc)
 }
 
 /* Disable PWM generator device */
-int32_t no_os_pwm_disable(struct no_os_pwm_desc *desc)
+int32_t aducm3029_pwm_disable(struct no_os_pwm_desc *desc)
 {
 	ADI_TMR_RESULT		ret;
 
@@ -231,20 +231,20 @@ int32_t no_os_pwm_disable(struct no_os_pwm_desc *desc)
 }
 
 /* Set period of PWM generator device */
-int32_t no_os_pwm_set_period(struct no_os_pwm_desc *desc,
-			     uint32_t period_ns)
+int32_t aducm3029_pwm_set_period(struct no_os_pwm_desc *desc,
+				 uint32_t period_ns)
 {
 	if (!desc)
 		return -EINVAL;
 
 	desc->period_ns = period_ns;
 
-	return no_os_update_pwm_config(desc);
+	return aducm3029_update_pwm_config(desc);
 }
 
 /* Get period of PWM generator device */
-int32_t no_os_pwm_get_period(struct no_os_pwm_desc *desc,
-			     uint32_t *period_ns)
+int32_t aducm3029_pwm_get_period(struct no_os_pwm_desc *desc,
+				 uint32_t *period_ns)
 {
 	if (!desc || !period_ns)
 		return -EINVAL;
@@ -255,20 +255,20 @@ int32_t no_os_pwm_get_period(struct no_os_pwm_desc *desc,
 }
 
 /* Set duty cycle of PWM generator device */
-int32_t no_os_pwm_set_duty_cycle(struct no_os_pwm_desc *desc,
-				 uint32_t duty_cycle_ns)
+int32_t aducm3029_pwm_set_duty_cycle(struct no_os_pwm_desc *desc,
+				     uint32_t duty_cycle_ns)
 {
 	if (!desc)
 		return -EINVAL;
 
 	desc->duty_cycle_ns = duty_cycle_ns;
 
-	return no_os_update_pwm_config(desc);
+	return aducm3029_update_pwm_config(desc);
 }
 
 /* Get period of PWM generator device */
-int32_t no_os_pwm_get_duty_cycle(struct no_os_pwm_desc *desc,
-				 uint32_t *duty_cycle_ns)
+int32_t aducm3029_pwm_get_duty_cycle(struct no_os_pwm_desc *desc,
+				     uint32_t *duty_cycle_ns)
 {
 	if (!desc || !duty_cycle_ns)
 		return -EINVAL;
@@ -279,20 +279,20 @@ int32_t no_os_pwm_get_duty_cycle(struct no_os_pwm_desc *desc,
 }
 
 /* Set polarity of PWM generator device */
-int32_t no_os_pwm_set_polarity(struct no_os_pwm_desc *desc,
-			       enum no_os_pwm_polarity polarity)
+int32_t aducm3029_pwm_set_polarity(struct no_os_pwm_desc *desc,
+				   enum no_os_pwm_polarity polarity)
 {
 	if (!desc)
 		return -EINVAL;
 
 	desc->polarity = polarity;
 
-	return no_os_update_pwm_config(desc);
+	return aducm3029_update_pwm_config(desc);
 }
 
 /* Set polarity of PWM generator device */
-int32_t no_os_pwm_get_polarity(struct no_os_pwm_desc *desc,
-			       enum no_os_pwm_polarity *polarity)
+int32_t aducm3029_pwm_get_polarity(struct no_os_pwm_desc *desc,
+				   enum no_os_pwm_polarity *polarity)
 {
 	if (!desc || !polarity)
 		return -EINVAL;
@@ -301,3 +301,19 @@ int32_t no_os_pwm_get_polarity(struct no_os_pwm_desc *desc,
 
 	return 0;
 }
+
+/**
+* @brief ADUCM3029 platform specific PWM platform ops structure
+*/
+const struct no_os_pwm_platform_ops aducm3029_pwm_ops = {
+	.pwm_ops_init = &aducm3029_pwm_init,
+	.pwm_ops_enable = &aducm3029_pwm_enable,
+	.pwm_ops_disable = &aducm3029_pwm_disable,
+	.pwm_ops_set_period = &aducm3029_pwm_set_period,
+	.pwm_ops_get_period = &aducm3029_pwm_get_period,
+	.pwm_ops_set_duty_cycle = &aducm3029_pwm_set_duty_cycle,
+	.pwm_ops_get_duty_cycle = &aducm3029_pwm_get_duty_cycle,
+	.pwm_ops_set_polarity = &aducm3029_pwm_set_polarity,
+	.pwm_ops_get_polarity = &aducm3029_pwm_get_polarity,
+	.pwm_ops_remove = &aducm3029_pwm_remove
+};
