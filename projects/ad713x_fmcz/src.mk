@@ -13,6 +13,7 @@ SRC_DIRS += $(PROJECT)/src
 SRC_DIRS += $(DRIVERS)/adc/ad713x
 
 SRCS += $(DRIVERS)/api/no_os_spi.c \
+	$(DRIVERS)/api/no_os_pwm.c \
 	$(DRIVERS)/api/no_os_gpio.c \
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.c \
 	$(DRIVERS)/axi_core/spi_engine/spi_engine.c \

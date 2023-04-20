@@ -62,9 +62,10 @@ struct mbed_pwm_desc {
 	void *pwm_obj;		// Mbed PWM instance/object
 };
 
-/******************************************************************************/
-/************************ Public Declarations *********************************/
-/******************************************************************************/
+/**
+ * @brief Mbed specific PWM platform ops structure
+ */
+extern const struct no_os_pwm_platform_ops mbed_pwm_ops;
 
 #ifdef __cplusplus // Closing extern c
 }

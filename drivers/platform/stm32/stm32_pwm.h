@@ -1,9 +1,8 @@
 /***************************************************************************//**
- *   @file   stm32/stm32_gpio.h
- *   @brief  Header file for stm32 gpio specifics.
- *   @author Darius Berghe (darius.berghe@analog.com)
+ *   @file   stm32/stm32_pwm.h
+ *   @brief  Header file for stm32 pwm specifics.
 ********************************************************************************
- * Copyright 2020(c) Analog Devices, Inc.
+ * Copyright 2023(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -36,40 +35,79 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef STM32_GPIO_H_
-#define STM32_GPIO_H_
+#ifndef STM32_PWM_H_
+#define STM32_PWM_H_
 
 #include <stdint.h>
 #include <stdbool.h>
+#include "no_os_gpio.h"
+#include "stm32_gpio.h"
 #include "stm32_hal.h"
 
-/**
- * @struct stm32_gpio_init_param
- * @brief Structure holding the initialization parameters for stm32 platform
- */
-struct stm32_gpio_init_param {
-	/** Output mode */
-	uint32_t mode;
-	/** Speed grade */
-	uint32_t speed;
-	/** Alternate functionality */
-	uint32_t alternate;
+/******************************************************************************/
+/***************************** Include Files **********************************/
+/******************************************************************************/
+
+#include <stdbool.h>
+
+/******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
+
+/******************************************************************************/
+/*************************** Types Declarations *******************************/
+/******************************************************************************/
+enum TimOCMode {
+	TIM_OC_TOGGLE = 0,
+	TIM_OC_PWM1 = 1,
+	TIM_OC_PWM2 = 2,
 };
 
 /**
- * @struct stm32_gpio_desc
- * @brief stm32 platform specific gpio descriptor
+ * @struct stm32_pwm_init_param
+ * @brief Structure holding the STM32 PWM parameters.
  */
-struct stm32_gpio_desc {
-	/** Port */
-	GPIO_TypeDef *port;
-	/** GPIO configuration */
-	GPIO_InitTypeDef gpio_config;
+struct stm32_pwm_init_param {
+	/** Timer prescaler */
+	uint32_t prescaler;
+	/** Timer autoreload enable */
+	bool timer_autoreload;
+	/** Timer output compare Mode */
+	enum TimOCMode mode;
+	/** PWM timer channel */
+	uint32_t timer_chn;
+	/** Get timer source clock function */
+	uint32_t (*get_timer_clock)(void);
+	/** Get timer source clock divider */
+	uint32_t clock_divider;
 };
 
 /**
- * @brief stm32 platform specific gpio platform ops structure
+ * @struct stm32_pwm_desc
+ * @brief Structure holding the STM32 PWM descriptor.
  */
-extern const struct no_os_gpio_platform_ops stm32_gpio_ops;
+struct stm32_pwm_desc {
+	/** PWM Timer Instance */
+	TIM_HandleTypeDef htimer;
+	/** Timer GPIO instance */
+	struct no_os_gpio_desc *gpio;
+	/** Timer prescaler */
+	uint32_t prescaler;
+	/** Timer autoreload enable */
+	bool timer_autoreload;
+	/** Timer output compare Mode */
+	enum TimOCMode mode;
+	/** PWM timer channel */
+	uint32_t timer_chn;
+	/** Get timer source clock function */
+	uint32_t (*get_timer_clock)(void);
+	/** Get timer source clock divider */
+	uint32_t clock_divider;
+};
 
-#endif
+/**
+ * @brief STM32 specific PWM platform ops structure
+ */
+extern const struct no_os_pwm_platform_ops stm32_pwm_ops;
+
+#endif // STM32_PWM_H_

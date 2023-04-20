@@ -128,6 +128,9 @@ static int32_t _gpio_init(struct no_os_gpio_desc *desc,
 	case GPIO_MODE_OUTPUT_PP:
 	case GPIO_MODE_OUTPUT_OD:
 		break;
+	case GPIO_MODE_AF_PP:
+		extra->gpio_config.Alternate = pextra->alternate;
+		break;
 	default:
 		return -EINVAL;
 	}

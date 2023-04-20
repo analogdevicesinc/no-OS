@@ -45,6 +45,7 @@
 #include "platform_init.h"
 #include "no_os_error.h"
 #include "aducm3029_adc.h"
+#include "aducm3029_pwm.h"
 #include "no_os_uart.h"
 #include "aducm3029_uart.h"
 #include "no_os_pwm.h"
@@ -86,6 +87,7 @@ static int32_t init_pwms(struct no_os_pwm_desc **pwms)
 	struct no_os_pwm_init_param		pwm_init_par = {
 		.period_ns = 400000000,
 		.polarity = NO_OS_PWM_POLARITY_HIGH,
+		.platform_ops = &aducm3029_pwm_ops,
 		.extra = NULL
 	};
 	struct no_os_pwm_desc *pwm;

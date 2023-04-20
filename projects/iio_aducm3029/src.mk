@@ -8,7 +8,8 @@ SRC_DIRS += $(PROJECT)/src \
 		$(NO-OS)/util \
 		$(NO-OS)/include
 SRCS += $(NO-OS)/drivers/api/no_os_irq.c
-SRCS += $(NO-OS)/drivers/api/no_os_uart.c
+SRCS += $(NO-OS)/drivers/api/no_os_uart.c 
+SRCS += $(NO-OS)/drivers/api/no_os_pwm.c
 
 ifeq '$(TINYIIOD)' 'y'
 SRC_DIRS += $(NO-OS)/iio/iio_app

@@ -11,6 +11,7 @@
 
 SRCS += $(PROJECT)/src/adaq7980_sdz.c
 SRCS += $(DRIVERS)/api/no_os_spi.c \
+	$(DRIVERS)/api/no_os_pwm.c \
 	$(DRIVERS)/api/no_os_gpio.c \
 	$(DRIVERS)/api/no_os_uart.c \
 	$(DRIVERS)/adc/adaq7980/adaq7980.c \
