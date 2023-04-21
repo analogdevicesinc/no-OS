@@ -8,6 +8,9 @@ sw.elf
 xsct.log
 RemoteSystemsTempFiles
 build
+BUILD
+mbed-app-json
+.mbed
 projects/*/build_*
 dfp_drivers
 aducm_project
