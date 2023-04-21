@@ -10,3 +10,6 @@
 [submodule "libraries/azure-sdk-for-c"]
 	path = libraries/azure/azure-sdk-for-c
 	url = https://github.com/Azure/azure-sdk-for-c.git
+[submodule "libraries/mbed/mbed-os"]
+	path = libraries/mbed/mbed-os
+	url = https://github.com/ARMmbed/mbed-os
