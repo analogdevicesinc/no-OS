@@ -29,7 +29,7 @@ PLATFORM_DRIVERS	?= $(NO-OS)/drivers/platform/$(PLATFORM)
 GIT_VERSION := $(shell git describe --all --long --dirty=-modified)
 GIT_VERSION := $(subst heads/,,$(GIT_VERSION))
 GIT_VERSION := $(subst -0-g,-,$(GIT_VERSION))
-CFLAGS += -DNO_OS_VERSION=$(GIT_VERSION)
+CFLAGS := -DNO_OS_VERSION=$(GIT_VERSION)
 #------------------------------------------------------------------------------
 #                          EVALUATE PLATFORM
 #------------------------------------------------------------------------------
