@@ -254,14 +254,14 @@ INCS     += $(foreach dir, $(SRC_DIRS), $(call rwildcard, $(dir),*.h))
 
 # Recursive ignored files. If a directory is in the variable IGNORED_FILES,
 # all files from inside the directory will be ignored
-ALL_IGNORED_FILES = $(foreach dir, $(IGNORED_FILES), $(call rwildcard, $(dir),*))
+ALL_IGNORED_FILES += $(foreach dir, $(IGNORED_FILES), $(call rwildcard, $(dir),*))
 
 # Remove ignored files
 SRCS     := $(filter-out $(ALL_IGNORED_FILES),$(SRCS))
 INCS     := $(filter-out $(ALL_IGNORED_FILES),$(INCS))
 
 # Get all src files that are not in SRC_DRIS
-FILES_OUT_OF_DIRS := $(filter-out $(call rwildcard, $(SRC_DIRS),*), $(SRCS) $(INCS)) 
+FILES_OUT_OF_DIRS := $(filter-out $(foreach source_directory_name,$(sort $(SRC_DIRS)),$(wildcard $(source_directory_name)/*)),$(SRCS) $(INCS))
 
 REL_SRCS = $(addprefix $(OBJECTS_DIR)/,$(call get_relative_path,$(SRCS_IN_BUILD) $(PLATFORM_SRCS)))
 OBJS = $(patsubst %.cpp,%.o,$(patsubst %.c,%.o,$(REL_SRCS)))
@@ -286,7 +286,7 @@ INCS := $(sort $(INCS))
 CREATED_DIRECTORIES += noos root $(PROJECT_NAME)
 SRCS_IN_BUILD = $(call relative_to_project, $(SRCS))
 INCS_IN_BUILD = $(call relative_to_project, $(INCS))
-DIRS_TO_CREATE = $(sort $(dir $(call relative_to_project, $(FILES_OUT_OF_DIRS) $(SRC_DIRS) $(PLATFORM_DIRS))))
+DIRS_TO_CREATE = $(sort $(call relative_to_project, $(dir $(FILES_OUT_OF_DIRS)) $(SRC_DIRS) $(PLATFORM_DIRS)))
 # Prefixes from get_relative_path
 DIRS_TO_REMOVE = $(addprefix $(PROJECT_BUILD)/,$(CREATED_DIRECTORIES))
 
@@ -407,10 +407,7 @@ update: $(PROJECT_TARGET)
 	@$(call print, $(ACTION) srcs to created project)
 	$(MUTE) $(call remove_dir,$(DIRS_TO_REMOVE)) $(HIDE)
 	$(MUTE) -$(call mk_dir,$(DIRS_TO_CREATE)) $(HIDE)
-	$(MUTE) $(foreach dir,$(sort $(SRC_DIRS)),\
-		$(call update_dir,$(dir),$(call relative_to_project,$(dir))) $(HIDE)\
-		$(cmd_separator)) echo . $(HIDE)
-	$(MUTE) $(foreach file,$(sort $(FILES_OUT_OF_DIRS)),\
+	$(MUTE) $(foreach file,$(sort $(SRCS) $(INCS)),\
 		$(call update_file,$(file),$(call relative_to_project,$(file))) $(HIDE)\
 		$(cmd_separator)) echo . $(HIDE)
 	$(MUTE) $(MAKE) --no-print-directory pre_build MAKEFLAGS=$(MAKEOVERRIDES)
