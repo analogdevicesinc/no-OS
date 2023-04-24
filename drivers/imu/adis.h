@@ -371,8 +371,6 @@ struct adis_chip_info {
 	uint16_t				fls_mem_wr_cntr_max;
 	/** Chip specific internal clock frequency in Hertz. */
 	uint32_t 				int_clk;
-	/** Chip specific product id. */
-	uint32_t 				prod_id;
 };
 
 /******************************************************************************/
