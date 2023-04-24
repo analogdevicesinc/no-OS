@@ -101,7 +101,7 @@ int iio_trigger_example_main()
 	/* List of devices */
 	struct iio_app_device iio_devices[] = {
 		{
-			.name = "adis16505",
+			.name = "adis16505-2",
 			.dev = adis16505_iio_desc,
 			.dev_descriptor = adis16505_iio_desc->iio_dev,
 			.read_buff = &data_buff,

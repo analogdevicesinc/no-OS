@@ -64,7 +64,7 @@ extern struct no_os_gpio_init_param adis16505_gpio_reset_ip;
 extern struct adis_init_param adis16505_ip;
 
 #ifdef IIO_TRIGGER_EXAMPLE
-#define ADIS16505_GPIO_TRIG_NAME "adis16505-dev0"
+#define ADIS16505_GPIO_TRIG_NAME "adis16505-2-dev0"
 
 extern struct iio_hw_trig_init_param adis16505_gpio_trig_ip;
 extern struct no_os_irq_init_param adis16505_gpio_irq_ip;

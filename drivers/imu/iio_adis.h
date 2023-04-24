@@ -72,6 +72,26 @@ enum adis16505_chan_type {
 	ADIS_NUM_CHAN,
 };
 
+/** @struct adis_iio_scale_fractional
+ *  @brief ADIS IIO fractional scale format structure; scale = dividend/divisor
+ */
+struct adis_iio_scale_fractional {
+	/** Scale dividend. */
+	uint32_t dividend;
+	/** Scale divisor. */
+	uint32_t divisor;
+};
+
+/** @struct adis_iio_scale_fractional_log2
+ *  @brief ADIS IIO fractional log2 scale format structure; scale = dividend/2^power
+ */
+struct adis_iio_scale_fractional_log2 {
+	/** Scale dividend. */
+	uint32_t dividend;
+	/** Scale 2's power. */
+	uint32_t power;
+};
+
 /** @struct adis_iio_dev
  *  @brief ADIS IIO device descriptor structure
  */
@@ -94,6 +114,18 @@ struct adis_iio_dev {
 	uint32_t sync_mode;
 	/** Data buffer to store one sample-set. */
 	uint16_t data[26];
+	/** Gyroscope fractional scale. */
+	struct adis_iio_scale_fractional gyro_scale;
+	/** Accelerometer fractional scale. */
+	struct adis_iio_scale_fractional accl_scale;
+	/** Rotation angle fractional log2 scale. */
+	struct adis_iio_scale_fractional_log2 rot_scale;
+	/** Linear velocity fractional log2 scale. */
+	struct adis_iio_scale_fractional_log2 vel_scale;
+	/** Temperature fractional scale. */
+	struct adis_iio_scale_fractional temp_scale;
+	/** Gyroscope measurement range value in text. */
+	const char *rang_mdl_txt;
 };
 
 /******************************************************************************/
