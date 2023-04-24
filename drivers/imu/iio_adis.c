@@ -65,56 +65,6 @@ static const uint32_t adis_3db_freqs[] = {
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
-enum {
-	ADIS_DIAG_DATA_PATH_OVERRUN,
-	ADIS_DIAG_FLS_MEM_UPDATE_FAILURE,
-	ADIS_DIAG_SPI_COMM_ERR,
-	ADIS_DIAG_STANDBY_MODE,
-	ADIS_DIAG_SNSR_FAILURE,
-	ADIS_DIAG_MEM_FAILURE,
-	ADIS_DIAG_CLK_ERR,
-	ADIS_DIAG_GYRO1_FAILURE,
-	ADIS_DIAG_GYRO2_FAILURE,
-	ADIS_DIAG_ACCL_FAILURE,
-	ADIS_DIAG_CHECKSUM_ERR,
-	ADIS_DIAG_FLS_MEM_WR_CNT_EXCEED,
-	ADIS_DIAG_LOST_SAMPLES_COUNT,
-
-	ADIS_TIME_STAMP,
-	ADIS_DATA_CNTR,
-
-	ADIS_FILT_SIZE_VAR_B,
-	ADIS_GYRO_MEAS_RANGE,
-
-	ADIS_DR_POLARITY,
-	ADIS_SYNC_POLARITY,
-	ADIS_SYNC_MODE,
-	ADIS_SENS_BW,
-	ADIS_PT_OF_PERC_ALGNMT,
-	ADIS_LINEAR_ACCL_COMP,
-	ADIS_BURST_SEL,
-	ADIS_BURST32,
-
-	ADIS_UP_SCALE,
-	ADIS_DEC_RATE,
-
-	ADIS_CMD_FACT_CALIB_RESTORE,
-	ADIS_CMD_SNSR_SELF_TEST,
-	ADIS_CMD_FLS_MEM_UPDATE,
-	ADIS_CMD_FLS_MEM_TEST,
-	ADIS_CMD_SW_RES,
-
-	ADIS_FIRM_REV,
-	ADIS_FIRM_DATE,
-	ADIS_PROD_ID,
-	ADIS_SERIAL_NUM,
-	ADIS_USR_SCR_1,
-	ADIS_USR_SCR_2,
-	ADIS_USR_SCR_3,
-	ADIS_FLS_MEM_WR_CNTR,
-	ADIS_EXT_CLK_FREQ,
-};
-
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
@@ -442,9 +392,14 @@ static int adis_iio_get_freq(struct adis_dev* adis, uint32_t *freq)
 	uint32_t up_scale;
 	uint32_t dec_rate;
 	uint32_t sync_mode;
+	uint32_t adis_sync_clk_freq;
 	int ret;
 
-	sample_rate = adis->clk_freq;
+	ret = adis_get_sync_clk_freq(adis, &adis_sync_clk_freq);
+	if (ret)
+		return ret;
+
+	sample_rate = adis_sync_clk_freq;
 	ret = adis_read_sync_mode(adis, &sync_mode);
 	if (ret)
 		return ret;
@@ -453,7 +408,7 @@ static int adis_iio_get_freq(struct adis_dev* adis, uint32_t *freq)
 		ret = adis_read_up_scale(adis, &up_scale);
 		if (ret)
 			return ret;
-		sample_rate = adis->clk_freq * up_scale;
+		sample_rate = adis_sync_clk_freq * up_scale;
 	}
 
 	ret =  adis_read_dec_rate(adis, &dec_rate);
@@ -513,16 +468,23 @@ static int adis_iio_set_freq(struct adis_dev* adis, uint32_t freq)
 	uint32_t scaled_rate;
 	uint32_t up_scale;
 	int ret;
-	uint32_t sample_rate = adis->clk_freq;
+	uint32_t sample_rate;
+	uint32_t max_sampling_clk_freq = adis->info->sampling_clk_limits.max_freq;
 	uint32_t dec_rate;
 	uint32_t sync_mode;
+	uint32_t adis_sync_clk_freq;
+
+	ret = adis_get_sync_clk_freq(adis, &adis_sync_clk_freq);
+	if (ret)
+		return ret;
+	sample_rate = adis_sync_clk_freq;
 
 	ret = adis_read_sync_mode(adis, &sync_mode);
 	if (ret)
 		return ret;
 
 	if(sync_mode == ADIS_SYNC_SCALED) {
-		scaled_rate = no_os_lowest_common_multiple(adis->clk_freq, freq);
+		scaled_rate = no_os_lowest_common_multiple(adis_sync_clk_freq, freq);
 
 		/*
 		 * If lcm is bigger than the IMU maximum sampling rate there's
@@ -530,12 +492,12 @@ static int adis_iio_set_freq(struct adis_dev* adis, uint32_t freq)
 		 * multiple of the input clock lower than the IMU max sample
 		 * rate.
 		 */
-		if (scaled_rate > 2100)
-			scaled_rate = 2100 / adis->clk_freq * adis->clk_freq;
+		if (scaled_rate > max_sampling_clk_freq)
+			scaled_rate = max_sampling_clk_freq / adis->ext_clk * adis->ext_clk;
 		else
-			scaled_rate = 2100 / scaled_rate * scaled_rate;
+			scaled_rate = max_sampling_clk_freq / scaled_rate * scaled_rate;
 
-		up_scale = scaled_rate / adis->clk_freq;
+		up_scale = scaled_rate / adis_sync_clk_freq;
 		ret = adis_write_up_scale(adis, up_scale);
 		if (ret)
 			return ret;
@@ -645,8 +607,8 @@ static int adis_read_fw_rev(struct adis_dev* adis, char *buf, uint8_t size)
 
 /**
  * @brief Reads gyroscope measurement range value and returns it in char format.
- * @param adis - The adis device.
- * @param buf  - The gyroscope measurement range value in char format.
+ * @param iio_adis - The iio adis device.
+ * @param buf      - The gyroscope measurement range value in char format.
  * @return the size of the written data in buf in case of success, error code
  *         otherwise.
  */
@@ -664,8 +626,8 @@ int iio_adis_read_gyro_meas_range(struct adis_iio_dev* iio_adis, char *buf)
  * @param priv    - Command attribute id.
  * @return the size of the read data in case of success, error code otherwise.
  */
-static int adis_iio_read_debug_attrs(void *dev, char *buf, uint32_t len,
-				     const struct iio_ch_info *channel, intptr_t priv)
+int adis_iio_read_debug_attrs(void *dev, char *buf, uint32_t len,
+			      const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct adis_iio_dev *iio_adis;
 	struct adis_dev *adis;
@@ -683,6 +645,9 @@ static int adis_iio_read_debug_attrs(void *dev, char *buf, uint32_t len,
 	adis = iio_adis->adis_dev;
 
 	switch(priv) {
+	case ADIS_DIAG_SNSR_INIT_FAILURE:
+		ret = adis_read_diag_snsr_init_failure(adis, &res);
+		break;
 	case ADIS_DIAG_DATA_PATH_OVERRUN:
 		ret = adis_read_diag_data_path_overrun(adis, &res);
 		break;
@@ -713,6 +678,27 @@ static int adis_iio_read_debug_attrs(void *dev, char *buf, uint32_t len,
 	case ADIS_DIAG_ACCL_FAILURE:
 		ret = adis_read_diag_accl_failure(adis, &res);
 		break;
+	case ADIS_DIAG_X_AXIS_GYRO_FAILURE:
+		ret = adis_read_diag_x_axis_gyro_failure(adis, &res);
+		break;
+	case ADIS_DIAG_Y_AXIS_GYRO_FAILURE:
+		ret = adis_read_diag_y_axis_gyro_failure(adis, &res);
+		break;
+	case ADIS_DIAG_Z_AXIS_GYRO_FAILURE:
+		ret = adis_read_diag_z_axis_gyro_failure(adis, &res);
+		break;
+	case ADIS_DIAG_X_AXIS_ACCL_FAILURE:
+		ret = adis_read_diag_x_axis_accl_failure(adis, &res);
+		break;
+	case ADIS_DIAG_Y_AXIS_ACCL_FAILURE:
+		ret = adis_read_diag_y_axis_accl_failure(adis, &res);
+		break;
+	case ADIS_DIAG_Z_AXIS_ACCL_FAILURE:
+		ret = adis_read_diag_z_axis_accl_failure(adis, &res);
+		break;
+	case ADIS_DIAG_ADUC_MCU_FAULT:
+		ret = adis_read_diag_aduc_mcu_fault(adis, &res);
+		break;
 	case ADIS_DIAG_CHECKSUM_ERR:
 		adis_read_diag_checksum_err(adis, &res);
 		break;
@@ -727,6 +713,27 @@ static int adis_iio_read_debug_attrs(void *dev, char *buf, uint32_t len,
 		break;
 	case ADIS_DATA_CNTR:
 		ret = adis_read_data_cntr(adis, &res);
+		break;
+	case ADIS_FIFO_CNT:
+		ret = adis_read_fifo_cnt(adis, &res);
+		break;
+	case ADIS_SPI_CHKSUM:
+		ret = adis_read_spi_chksum(adis, &res);
+		break;
+	case ADIS_FIFO_EN:
+		ret = adis_read_fifo_en(adis, &res);
+		break;
+	case ADIS_FIFO_OVERFLOW:
+		ret = adis_read_fifo_overflow(adis, &res);
+		break;
+	case ADIS_FIFO_WM_INT_EN:
+		ret = adis_read_fifo_wm_int_en(adis, &res);
+		break;
+	case ADIS_FIFO_WM_INT_POL:
+		ret = adis_read_fifo_wm_int_pol(adis, &res);
+		break;
+	case ADIS_FIFO_WM_LVL:
+		ret = adis_read_fifo_wm_lvl(adis, &res);
 		break;
 	case ADIS_FILT_SIZE_VAR_B:
 		ret = adis_read_filt_size_var_b(adis, &res);
@@ -757,11 +764,38 @@ static int adis_iio_read_debug_attrs(void *dev, char *buf, uint32_t len,
 	case ADIS_BURST32:
 		ret = adis_read_burst32(adis, &res);
 		break;
+	case ADIS_TIMESTAMP32:
+		ret = adis_read_timestamp32(adis, &res);
+		break;
+	case ADIS_SYNC_4KHZ:
+		ret = adis_read_sync_4khz(adis, &res);
+		break;
 	case ADIS_UP_SCALE:
 		ret = adis_read_up_scale(adis, &res);
 		break;
 	case ADIS_DEC_RATE:
 		ret = adis_read_dec_rate(adis, &res);
+		break;
+	case ADIS_BIAS_CORR_TBC:
+		ret = adis_read_bias_corr_tbc(adis, &res);
+		break;
+	case ADIS_BIAS_CORR_EN_XG:
+		ret = adis_read_bias_corr_en_xg(adis, &res);
+		break;
+	case ADIS_BIAS_CORR_EN_YG:
+		ret = adis_read_bias_corr_en_yg(adis, &res);
+		break;
+	case ADIS_BIAS_CORR_EN_ZG:
+		ret = adis_read_bias_corr_en_zg(adis, &res);
+		break;
+	case ADIS_BIAS_CORR_EN_XA:
+		ret = adis_read_bias_corr_en_xa(adis, &res);
+		break;
+	case ADIS_BIAS_CORR_EN_YA:
+		ret = adis_read_bias_corr_en_ya(adis, &res);
+		break;
+	case ADIS_BIAS_CORR_EN_ZA:
+		ret = adis_read_bias_corr_en_za(adis, &res);
 		break;
 	case ADIS_FIRM_REV:
 		return adis_read_fw_rev(adis, buf, 7);
@@ -808,8 +842,8 @@ static int adis_iio_read_debug_attrs(void *dev, char *buf, uint32_t len,
  * @param priv    - Command attribute id.
  * @return the result of the writing procedure.
  */
-static int adis_iio_write_debug_attrs(void *dev, char *buf, uint32_t len,
-				      const struct iio_ch_info *channel, intptr_t priv)
+int adis_iio_write_debug_attrs(void *dev, char *buf, uint32_t len,
+			       const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct adis_iio_dev *iio_adis;
 	struct adis_dev *adis;
@@ -831,6 +865,16 @@ static int adis_iio_write_debug_attrs(void *dev, char *buf, uint32_t len,
 		return ret;
 
 	switch(priv) {
+	case ADIS_FIFO_EN:
+		return adis_write_fifo_en(adis, val);
+	case ADIS_FIFO_OVERFLOW:
+		return adis_write_fifo_overflow(adis, val);
+	case ADIS_FIFO_WM_INT_EN:
+		return adis_write_fifo_wm_int_en(adis, val);
+	case ADIS_FIFO_WM_INT_POL:
+		return adis_write_fifo_wm_int_pol(adis, val);
+	case ADIS_FIFO_WM_LVL:
+		return adis_write_fifo_wm_lvl(adis, val);
 	case ADIS_FILT_SIZE_VAR_B:
 		return adis_write_filt_size_var_b(adis, val);
 	case ADIS_DR_POLARITY:
@@ -854,6 +898,10 @@ static int adis_iio_write_debug_attrs(void *dev, char *buf, uint32_t len,
 		return adis_write_burst_sel(adis, val);
 	case ADIS_BURST32:
 		return adis_write_burst32(adis, val);
+	case ADIS_TIMESTAMP32:
+		return adis_write_timestamp32(adis, val);
+	case ADIS_SYNC_4KHZ:
+		return adis_write_sync_4khz(adis, val);
 	case ADIS_UP_SCALE:
 		ret = adis_write_up_scale(adis, val);
 		if (ret)
@@ -868,6 +916,22 @@ static int adis_iio_write_debug_attrs(void *dev, char *buf, uint32_t len,
 
 		/* Update sampling frequency */
 		return adis_iio_get_freq(adis, &iio_adis->sampling_frequency);
+	case ADIS_BIAS_CORR_TBC:
+		return adis_write_bias_corr_tbc(adis, val);
+	case ADIS_BIAS_CORR_EN_XG:
+		return adis_write_bias_corr_en_xg(adis, val);
+	case ADIS_BIAS_CORR_EN_YG:
+		return adis_write_bias_corr_en_yg(adis, val);
+	case ADIS_BIAS_CORR_EN_ZG:
+		return adis_write_bias_corr_en_zg(adis, val);
+	case ADIS_BIAS_CORR_EN_XA:
+		return adis_write_bias_corr_en_xa(adis, val);
+	case ADIS_BIAS_CORR_EN_YA:
+		return adis_write_bias_corr_en_ya(adis, val);
+	case ADIS_BIAS_CORR_EN_ZA:
+		return adis_write_bias_corr_en_za(adis, val);
+	case ADIS_CMD_BIAS_CORR_UPDATE:
+		return adis_cmd_bias_corr_update(adis);
 	case ADIS_CMD_FACT_CALIB_RESTORE:
 		ret = adis_cmd_fact_calib_restore(adis);
 		if (ret)
@@ -881,6 +945,8 @@ static int adis_iio_write_debug_attrs(void *dev, char *buf, uint32_t len,
 		return adis_cmd_fls_mem_update(adis);
 	case ADIS_CMD_FLS_MEM_TEST:
 		return adis_cmd_fls_mem_test(adis);
+	case ADIS_CMD_FIFO_FLUSH:
+		return adis_cmd_fifo_flush(adis);
 	case ADIS_CMD_SW_RES:
 		ret = adis_cmd_sw_res(adis);
 		if (ret)
@@ -902,12 +968,12 @@ static int adis_iio_write_debug_attrs(void *dev, char *buf, uint32_t len,
 }
 
 /**
- * @brief Updates active channels iio adis parameter.
+ * @brief API to be called before trigger is enabled.
  * @param dev  - The iio device structure.
  * @param mask - The active channels mask.
  * @return 0 in case of success, error code otherwise.
  */
-int adis_iio_update_channels(void* dev, uint32_t mask)
+int adis_iio_pre_enable(void* dev, uint32_t mask)
 {
 	struct adis_iio_dev *iio_adis;
 	struct adis_dev *adis;
@@ -933,38 +999,67 @@ int adis_iio_update_channels(void* dev, uint32_t mask)
 	if (ret)
 		return ret;
 
+	if (iio_adis->has_fifo) {
+		/* Set FIFO overflow behavior to overwrite old data when FIFO is full. */
+		ret = adis_write_fifo_overflow(adis, 1);
+		if (ret)
+			return ret;
+		ret = adis_write_fifo_en(adis, 1);
+		if (ret)
+			return ret;
+	}
+
 	return adis_read_sync_mode(adis, &iio_adis->sync_mode);
 }
 
 /**
- * @brief Handles trigger: reads one data-set and writes it to the buffer.
- * @param dev_data  - The iio device data structure.
- * @return the size of the written data in case of success, error code otherwise.
+ * @brief API to be called after trigger is disabled.
+ * @param dev  - The iio device structure.
+ * @param mask - The active channels mask.
+ * @return 0 in case of success, error code otherwise.
  */
-int adis_iio_trigger_handler(struct iio_device_data *dev_data)
+int adis_iio_post_disable(void* dev, uint32_t mask)
 {
+	struct adis_iio_dev *iio_adis;
+	struct adis_dev *adis;
+
+	if (!dev)
+		return -EINVAL;
+
+	iio_adis = (struct adis_iio_dev *)dev;
+
+	if (!iio_adis->adis_dev)
+		return -EINVAL;
+
+	adis = iio_adis->adis_dev;
+
+	if (iio_adis->has_fifo)
+		return adis_write_fifo_en(adis, 0);
+
+	return 0;
+}
+
+/**
+ * @brief API to be called to get one single sample-set based on the given mask.
+ * @param iio_adis - The iio adis structure.
+ * @param mask     - The active channels mask.
+ * @param buffer   - IIO buffer to push the sample set to.
+ * @return 0 in case of success, error code otherwise.
+ */
+static int adis_iio_trigger_push_single_sample(struct adis_iio_dev *iio_adis,
+		uint32_t mask, struct iio_buffer *buffer)
+{
+	struct adis_dev *adis;
+	int ret;
 	uint16_t buff[15];
 	uint8_t i = 0;
 	uint8_t buff_idx;
-
-	struct adis_iio_dev *iio_adis;
-	struct adis_dev *adis;
-	int ret;
 	uint8_t temp_offset;
 	uint8_t data_cntr_offset;
 	uint16_t current_data_cntr;
 	uint32_t res1;
 	uint32_t res2;
-	uint32_t mask;
 	uint8_t chan;
-
-	if (!dev_data)
-		return -EINVAL;
-
-	iio_adis = (struct adis_iio_dev *)dev_data->dev;
-
-	if (!iio_adis->adis_dev)
-		return -EINVAL;
 
 	adis = iio_adis->adis_dev;
 
@@ -992,15 +1087,19 @@ int adis_iio_trigger_handler(struct iio_device_data *dev_data)
 				}
 			}
 
-		} else /* data counter overflowed occurred */
+		} else if (current_data_cntr == iio_adis->data_cntr) {
+			/* No new data, nothing else to do */
+			return 0;
+		}
+
+		else { /* data counter overflowed occurred */
 			if (iio_adis->sync_mode != ADIS_SYNC_SCALED)
 				iio_adis->samples_lost += NO_OS_U16_MAX - iio_adis->data_cntr +
 							  current_data_cntr;
+		}
 	}
 
 	iio_adis->data_cntr = current_data_cntr;
-
-	mask = dev_data->buffer->active_mask;
 
 	for (chan = 0; chan < ADIS_NUM_CHAN; chan++) {
 		if (mask & (1 << chan)) {
@@ -1058,7 +1157,67 @@ int adis_iio_trigger_handler(struct iio_device_data *dev_data)
 		}
 	}
 
-	return iio_buffer_push_scan(dev_data->buffer, &iio_adis->data[0]);
+	return iio_buffer_push_scan(buffer, &iio_adis->data[0]);
+}
+
+/**
+ * @brief Handles trigger: reads one data-set and writes it to the buffer.
+ * @param dev_data  - The iio device data structure.
+ * @return the size of the written data in case of success, error code otherwise.
+ */
+int adis_iio_trigger_handler(struct iio_device_data *dev_data)
+{
+	struct adis_iio_dev *iio_adis;
+
+	if (!dev_data)
+		return -EINVAL;
+
+	iio_adis = (struct adis_iio_dev *)dev_data->dev;
+
+	if (!iio_adis->adis_dev)
+		return -EINVAL;
+
+	return adis_iio_trigger_push_single_sample(iio_adis,
+			dev_data->buffer->active_mask, dev_data->buffer);
+}
+
+/**
+ * @brief Handles trigger: reads all available samples in FIFO and writes them
+ *                         to the buffer.
+ * @param dev_data  - The iio device data structure.
+ * @return the size of the written data in case of success, error code otherwise.
+ */
+int adis_iio_trigger_handler_with_fifo(struct iio_device_data *dev_data)
+{
+	struct adis_iio_dev *iio_adis;
+	struct adis_dev *adis;
+	int ret;
+	uint32_t fifo_cnt;
+	uint16_t j;
+
+	if (!dev_data)
+		return -EINVAL;
+
+	iio_adis = (struct adis_iio_dev *)dev_data->dev;
+
+	if (!iio_adis->adis_dev)
+		return -EINVAL;
+
+	adis = iio_adis->adis_dev;
+
+	ret = adis_read_fifo_cnt(adis, &fifo_cnt);
+	if (ret)
+		return ret;
+
+	for (j = 0; j < fifo_cnt; j++) {
+
+		ret = adis_iio_trigger_push_single_sample(iio_adis,
+				dev_data->buffer->active_mask, dev_data->buffer);
+		if (ret)
+			return ret;
+	}
+
+	return 0;
 }
 
 struct iio_attribute adis_dev_attrs[] = {
@@ -1073,231 +1232,6 @@ struct iio_attribute adis_dev_attrs[] = {
 		.shared = IIO_SHARED_BY_ALL,
 		.show   = adis_iio_read_sampling_freq,
 		.store  = adis_iio_write_sampling_freq,
-	},
-	END_ATTRIBUTES_ARRAY
-};
-
-struct iio_attribute adis_debug_attrs[] = {
-	{
-		.name = "lost_samples_count",
-		.show = adis_iio_read_debug_attrs,
-		.priv = ADIS_DIAG_LOST_SAMPLES_COUNT,
-	},
-	{
-		.name = "diag_checksum_error_flag",
-		.show = adis_iio_read_debug_attrs,
-		.priv = ADIS_DIAG_CHECKSUM_ERR,
-	},
-	{
-		.name = "diag_flash_memory_write_count_exceeded_error",
-		.show = adis_iio_read_debug_attrs,
-		.priv = ADIS_DIAG_FLS_MEM_WR_CNT_EXCEED,
-	},
-	{
-		.name = "diag_acceleration_self_test_error",
-		.show = adis_iio_read_debug_attrs,
-		.priv = ADIS_DIAG_ACCL_FAILURE,
-	},
-	{
-		.name = "diag_gyroscope2_self_test_error",
-		.show = adis_iio_read_debug_attrs,
-		.priv = ADIS_DIAG_GYRO2_FAILURE,
-	},
-	{
-		.name = "diag_gyroscope1_self_test_error",
-		.show = adis_iio_read_debug_attrs,
-		.priv = ADIS_DIAG_GYRO1_FAILURE,
-	},
-	{
-		.name = "diag_clock_error",
-		.show = adis_iio_read_debug_attrs,
-		.priv = ADIS_DIAG_CLK_ERR,
-	},
-	{
-		.name = "diag_flash_memory_test_error",
-		.show = adis_iio_read_debug_attrs,
-		.priv = ADIS_DIAG_MEM_FAILURE,
-	},
-	{
-		.name = "diag_sensor_self_test_error",
-		.show = adis_iio_read_debug_attrs,
-		.priv = ADIS_DIAG_SNSR_FAILURE,
-	},
-	{
-		.name = "diag_standby_mode",
-		.show = adis_iio_read_debug_attrs,
-		.priv = ADIS_DIAG_STANDBY_MODE,
-	},
-	{
-		.name = "diag_spi_communication_error",
-		.show = adis_iio_read_debug_attrs,
-		.priv = ADIS_DIAG_SPI_COMM_ERR,
-	},
-	{
-		.name = "diag_flash_memory_update_error",
-		.show = adis_iio_read_debug_attrs,
-		.priv = ADIS_DIAG_FLS_MEM_UPDATE_FAILURE,
-	},
-	{
-		.name = "diag_data_path_overrun",
-		.show = adis_iio_read_debug_attrs,
-		.priv = ADIS_DIAG_DATA_PATH_OVERRUN,
-	},
-	{
-		.name = "time_stamp",
-		.show = adis_iio_read_debug_attrs,
-		.priv = ADIS_TIME_STAMP,
-	},
-	{
-		.name = "data_counter",
-		.show = adis_iio_read_debug_attrs,
-		.priv = ADIS_DATA_CNTR,
-	},
-	{
-		.name = "filter_size",
-		.show = adis_iio_read_debug_attrs,
-		.store = adis_iio_write_debug_attrs,
-		.priv = ADIS_FILT_SIZE_VAR_B,
-	},
-	{
-		.name = "gyroscope_measurement_range",
-		.show = adis_iio_read_debug_attrs,
-		.store = adis_iio_write_debug_attrs,
-		.priv = ADIS_GYRO_MEAS_RANGE,
-	},
-	{
-		.name = "burst_size_selection",
-		.show = adis_iio_read_debug_attrs,
-		.store = adis_iio_write_debug_attrs,
-		.priv = ADIS_BURST32,
-	},
-	{
-		.name = "burst_data_selection",
-		.show = adis_iio_read_debug_attrs,
-		.store = adis_iio_write_debug_attrs,
-		.priv = ADIS_BURST_SEL,
-	},
-	{
-		.name = "linear_acceleration_compensation",
-		.show = adis_iio_read_debug_attrs,
-		.store = adis_iio_write_debug_attrs,
-		.priv = ADIS_LINEAR_ACCL_COMP,
-	},
-	{
-		.name = "point_of_percussion_alignment",
-		.show = adis_iio_read_debug_attrs,
-		.store = adis_iio_write_debug_attrs,
-		.priv = ADIS_PT_OF_PERC_ALGNMT,
-	},
-	{
-		.name = "internal_sensor_bandwidth",
-		.show = adis_iio_read_debug_attrs,
-		.store = adis_iio_write_debug_attrs,
-		.priv = ADIS_SENS_BW,
-	},
-	{
-		.name = "sync_mode_select",
-		.show = adis_iio_read_debug_attrs,
-		.store = adis_iio_write_debug_attrs,
-		.priv = ADIS_SYNC_MODE,
-	},
-	{
-		.name = "sync_polarity",
-		.show = adis_iio_read_debug_attrs,
-		.store = adis_iio_write_debug_attrs,
-		.priv = ADIS_SYNC_POLARITY,
-	},
-	{
-		.name = "data_ready_polarity",
-		.show = adis_iio_read_debug_attrs,
-		.store = adis_iio_write_debug_attrs,
-		.priv = ADIS_DR_POLARITY,
-	},
-	{
-		.name = "sync_signal_scale",
-		.show = adis_iio_read_debug_attrs,
-		.store = adis_iio_write_debug_attrs,
-		.priv = ADIS_UP_SCALE,
-	},
-	{
-		.name = "decimation_filter",
-		.show = adis_iio_read_debug_attrs,
-		.store = adis_iio_write_debug_attrs,
-		.priv = ADIS_DEC_RATE,
-	},
-	{
-		.name = "software_reset",
-		.store = adis_iio_write_debug_attrs,
-		.priv = ADIS_CMD_SW_RES,
-	},
-	{
-		.name = "flash_memory_test",
-		.store = adis_iio_write_debug_attrs,
-		.priv = ADIS_CMD_FLS_MEM_TEST,
-	},
-	{
-		.name = "flash_memory_update",
-		.store = adis_iio_write_debug_attrs,
-		.priv = ADIS_CMD_FLS_MEM_UPDATE,
-	},
-	{
-		.name = "sensor_self_test",
-		.store = adis_iio_write_debug_attrs,
-		.priv = ADIS_CMD_SNSR_SELF_TEST,
-	},
-	{
-		.name = "factory_calibration_restore",
-		.store = adis_iio_write_debug_attrs,
-		.priv = ADIS_CMD_FACT_CALIB_RESTORE,
-	},
-	{
-		.name = "firmware_revision",
-		.show = adis_iio_read_debug_attrs,
-		.priv = ADIS_FIRM_REV,
-	},
-	{
-		.name = "firmware_date",
-		.show = adis_iio_read_debug_attrs,
-		.priv = ADIS_FIRM_DATE,
-	},
-	{
-		.name = "product_id",
-		.show = adis_iio_read_debug_attrs,
-		.priv = ADIS_PROD_ID,
-	},
-	{
-		.name = "serial_number",
-		.show = adis_iio_read_debug_attrs,
-		.priv = ADIS_SERIAL_NUM,
-	},
-	{
-		.name = "scratch_pad_register1",
-		.show = adis_iio_read_debug_attrs,
-		.store = adis_iio_write_debug_attrs,
-		.priv = ADIS_USR_SCR_1,
-	},
-	{
-		.name = "scratch_pad_register2",
-		.show = adis_iio_read_debug_attrs,
-		.store = adis_iio_write_debug_attrs,
-		.priv = ADIS_USR_SCR_2,
-	},
-	{
-		.name = "scratch_pad_register3",
-		.show = adis_iio_read_debug_attrs,
-		.store = adis_iio_write_debug_attrs,
-		.priv = ADIS_USR_SCR_3,
-	},
-	{
-		.name = "flash_counter",
-		.show = adis_iio_read_debug_attrs,
-		.priv = ADIS_FLS_MEM_WR_CNTR,
-	},
-	{
-		.name = "external_clock_frequency",
-		.show = adis_iio_read_debug_attrs,
-		.store = adis_iio_write_debug_attrs,
-		.priv = ADIS_EXT_CLK_FREQ,
 	},
 	END_ATTRIBUTES_ARRAY
 };

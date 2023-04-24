@@ -42,10 +42,8 @@
 /******************************************************************************/
 
 #include "iio_adis16505.h"
-#include "iio_adis.h"
-#include "no_os_units.h"
 #include "no_os_alloc.h"
-#include <stdio.h>
+#include "no_os_units.h"
 
 /******************************************************************************/
 /************************** Variable Definitions ******************************/
@@ -154,12 +152,238 @@ static struct iio_channel adis16505_channels[] = {
 	ADIS_DATA_COUNTER_CHAN	(ADIS_DATA_COUNTER,		16505),
 };
 
+static struct iio_attribute adis16505_debug_attrs[] = {
+
+	{
+		.name = "diag_data_path_overrun",
+		.show = adis_iio_read_debug_attrs,
+		.priv = ADIS_DIAG_DATA_PATH_OVERRUN,
+	},
+	{
+		.name = "diag_flash_memory_update_error",
+		.show = adis_iio_read_debug_attrs,
+		.priv = ADIS_DIAG_FLS_MEM_UPDATE_FAILURE,
+	},
+	{
+		.name = "diag_spi_communication_error",
+		.show = adis_iio_read_debug_attrs,
+		.priv = ADIS_DIAG_SPI_COMM_ERR,
+	},
+	{
+		.name = "diag_standby_mode",
+		.show = adis_iio_read_debug_attrs,
+		.priv = ADIS_DIAG_STANDBY_MODE,
+	},
+	{
+		.name = "diag_sensor_self_test_error",
+		.show = adis_iio_read_debug_attrs,
+		.priv = ADIS_DIAG_SNSR_FAILURE,
+	},
+	{
+		.name = "diag_flash_memory_test_error",
+		.show = adis_iio_read_debug_attrs,
+		.priv = ADIS_DIAG_MEM_FAILURE,
+	},
+	{
+		.name = "diag_clock_error",
+		.show = adis_iio_read_debug_attrs,
+		.priv = ADIS_DIAG_CLK_ERR,
+	},
+	{
+		.name = "diag_gyroscope1_self_test_error",
+		.show = adis_iio_read_debug_attrs,
+		.priv = ADIS_DIAG_GYRO1_FAILURE,
+	},
+	{
+		.name = "diag_gyroscope2_self_test_error",
+		.show = adis_iio_read_debug_attrs,
+		.priv = ADIS_DIAG_GYRO2_FAILURE,
+	},
+	{
+		.name = "diag_acceleration_self_test_error",
+		.show = adis_iio_read_debug_attrs,
+		.priv = ADIS_DIAG_ACCL_FAILURE,
+	},
+	{
+		.name = "diag_checksum_error_flag",
+		.show = adis_iio_read_debug_attrs,
+		.priv = ADIS_DIAG_CHECKSUM_ERR,
+	},
+	{
+		.name = "diag_flash_memory_write_count_exceeded_error",
+		.show = adis_iio_read_debug_attrs,
+		.priv = ADIS_DIAG_FLS_MEM_WR_CNT_EXCEED,
+	},
+	{
+		.name = "lost_samples_count",
+		.show = adis_iio_read_debug_attrs,
+		.priv = ADIS_DIAG_LOST_SAMPLES_COUNT,
+	},
+	{
+		.name = "time_stamp",
+		.show = adis_iio_read_debug_attrs,
+		.priv = ADIS_TIME_STAMP,
+	},
+	{
+		.name = "data_counter",
+		.show = adis_iio_read_debug_attrs,
+		.priv = ADIS_DATA_CNTR,
+	},
+	{
+		.name = "filter_size",
+		.show = adis_iio_read_debug_attrs,
+		.store = adis_iio_write_debug_attrs,
+		.priv = ADIS_FILT_SIZE_VAR_B,
+	},
+	{
+		.name = "gyroscope_measurement_range",
+		.show = adis_iio_read_debug_attrs,
+		.store = adis_iio_write_debug_attrs,
+		.priv = ADIS_GYRO_MEAS_RANGE,
+	},
+	{
+		.name = "data_ready_polarity",
+		.show = adis_iio_read_debug_attrs,
+		.store = adis_iio_write_debug_attrs,
+		.priv = ADIS_DR_POLARITY,
+	},
+	{
+		.name = "sync_polarity",
+		.show = adis_iio_read_debug_attrs,
+		.store = adis_iio_write_debug_attrs,
+		.priv = ADIS_SYNC_POLARITY,
+	},
+	{
+		.name = "sync_mode_select",
+		.show = adis_iio_read_debug_attrs,
+		.store = adis_iio_write_debug_attrs,
+		.priv = ADIS_SYNC_MODE,
+	},
+	{
+		.name = "internal_sensor_bandwidth",
+		.show = adis_iio_read_debug_attrs,
+		.store = adis_iio_write_debug_attrs,
+		.priv = ADIS_SENS_BW,
+	},
+	{
+		.name = "point_of_percussion_alignment",
+		.show = adis_iio_read_debug_attrs,
+		.store = adis_iio_write_debug_attrs,
+		.priv = ADIS_PT_OF_PERC_ALGNMT,
+	},
+	{
+		.name = "linear_acceleration_compensation",
+		.show = adis_iio_read_debug_attrs,
+		.store = adis_iio_write_debug_attrs,
+		.priv = ADIS_LINEAR_ACCL_COMP,
+	},
+	{
+		.name = "burst_data_selection",
+		.show = adis_iio_read_debug_attrs,
+		.store = adis_iio_write_debug_attrs,
+		.priv = ADIS_BURST_SEL,
+	},
+	{
+		.name = "burst_size_selection",
+		.show = adis_iio_read_debug_attrs,
+		.store = adis_iio_write_debug_attrs,
+		.priv = ADIS_BURST32,
+	},
+	{
+		.name = "sync_signal_scale",
+		.show = adis_iio_read_debug_attrs,
+		.store = adis_iio_write_debug_attrs,
+		.priv = ADIS_UP_SCALE,
+	},
+	{
+		.name = "decimation_filter",
+		.show = adis_iio_read_debug_attrs,
+		.store = adis_iio_write_debug_attrs,
+		.priv = ADIS_DEC_RATE,
+	},
+	{
+		.name = "factory_calibration_restore",
+		.store = adis_iio_write_debug_attrs,
+		.priv = ADIS_CMD_FACT_CALIB_RESTORE,
+	},
+	{
+		.name = "sensor_self_test",
+		.store = adis_iio_write_debug_attrs,
+		.priv = ADIS_CMD_SNSR_SELF_TEST,
+	},
+	{
+		.name = "flash_memory_update",
+		.store = adis_iio_write_debug_attrs,
+		.priv = ADIS_CMD_FLS_MEM_UPDATE,
+	},
+	{
+		.name = "flash_memory_test",
+		.store = adis_iio_write_debug_attrs,
+		.priv = ADIS_CMD_FLS_MEM_TEST,
+	},
+	{
+		.name = "software_reset",
+		.store = adis_iio_write_debug_attrs,
+		.priv = ADIS_CMD_SW_RES,
+	},
+	{
+		.name = "firmware_revision",
+		.show = adis_iio_read_debug_attrs,
+		.priv = ADIS_FIRM_REV,
+	},
+	{
+		.name = "firmware_date",
+		.show = adis_iio_read_debug_attrs,
+		.priv = ADIS_FIRM_DATE,
+	},
+	{
+		.name = "product_id",
+		.show = adis_iio_read_debug_attrs,
+		.priv = ADIS_PROD_ID,
+	},
+	{
+		.name = "serial_number",
+		.show = adis_iio_read_debug_attrs,
+		.priv = ADIS_SERIAL_NUM,
+	},
+	{
+		.name = "scratch_pad_register1",
+		.show = adis_iio_read_debug_attrs,
+		.store = adis_iio_write_debug_attrs,
+		.priv = ADIS_USR_SCR_1,
+	},
+	{
+		.name = "scratch_pad_register2",
+		.show = adis_iio_read_debug_attrs,
+		.store = adis_iio_write_debug_attrs,
+		.priv = ADIS_USR_SCR_2,
+	},
+	{
+		.name = "scratch_pad_register3",
+		.show = adis_iio_read_debug_attrs,
+		.store = adis_iio_write_debug_attrs,
+		.priv = ADIS_USR_SCR_3,
+	},
+	{
+		.name = "flash_counter",
+		.show = adis_iio_read_debug_attrs,
+		.priv = ADIS_FLS_MEM_WR_CNTR,
+	},
+	{
+		.name = "external_clock_frequency",
+		.show = adis_iio_read_debug_attrs,
+		.store = adis_iio_write_debug_attrs,
+		.priv = ADIS_EXT_CLK_FREQ,
+	},
+	END_ATTRIBUTES_ARRAY
+};
+
 static struct iio_device adis16505_iio_dev = {
 	.num_ch 		= NO_OS_ARRAY_SIZE(adis16505_channels),
 	.channels 		= adis16505_channels,
-	.debug_attributes 	= adis_debug_attrs,
+	.debug_attributes 	= adis16505_debug_attrs,
 	.attributes		= adis_dev_attrs,
-	.pre_enable 		= (int32_t (*)())adis_iio_update_channels,
+	.pre_enable 		= (int32_t (*)())adis_iio_pre_enable,
 	.trigger_handler 	= (int32_t (*)())adis_iio_trigger_handler,
 };
 

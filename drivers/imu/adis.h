@@ -70,12 +70,20 @@ enum adis_device_id {
 	ADIS16505_1,
 	ADIS16505_2,
 	ADIS16505_3,
+	ADIS16575_2,
+	ADIS16575_3,
+	ADIS16576_2,
+	ADIS16576_3,
+	ADIS16577_2,
+	ADIS16577_3,
 };
 
 /** @struct adis_diag_flags
  *  @brief Bitfield struct which maps on the diagnosis register
  */
 struct adis_diag_flags {
+	/** Sensor initialization failure. */
+	uint8_t snsr_init_failure	:1;
 	/** Data path overrun bit. */
 	uint8_t data_path_overrun	:1;
 	/** Flash memory update failure. */
@@ -96,6 +104,20 @@ struct adis_diag_flags {
 	uint8_t gyro2_failure		:1;
 	/** Accelerometer failure. */
 	uint8_t accl_failure		:1;
+	/** X-Axis gyroscope failure. */
+	uint8_t x_axis_gyro_failure	:1;
+	/** Y-Axis gyroscope failure. */
+	uint8_t y_axis_gyro_failure	:1;
+	/** Z-Axis gyroscope failure. */
+	uint8_t z_axis_gyro_failure	:1;
+	/** X-Axis accelerometer failure. */
+	uint8_t x_axis_accl_failure	:1;
+	/** Y-Axis accelerometer failure. */
+	uint8_t y_axis_accl_failure	:1;
+	/** Z-Axis accelerometer failure. */
+	uint8_t z_axis_accl_failure	:1;
+	/** ADuC microcontroller fault. */
+	uint8_t aduc_mcu_fault		:1;
 	/** Checksum error.  */
 	uint8_t checksum_err		:1;
 	/** Flash memory write count exceeded. */
@@ -147,13 +169,13 @@ struct adis_timeout {
 	uint16_t sens_bw_update_ms;
 };
 
-/** @struct adis_sync_clk_freq_limit
+/** @struct adis_clk_freq_limit
  *  @brief ADIS frequency limit for input synchronization clock
  */
-struct adis_sync_clk_freq_limit {
-	/** Minimum allowed frequency for input synchronization clock in Hertz. */
+struct adis_clk_freq_limit {
+	/** Minimum allowed frequency for adis clocks in Hertz. */
 	uint32_t min_freq;
-	/** Maximum allowed frequency for input synchronization clock in Hertz. */
+	/** Maximum allowed frequency for adis clocks in Hertz. */
 	uint32_t max_freq;
 };
 
@@ -177,10 +199,12 @@ struct adis_dev {
 	uint8_t				tx[10];
 	/** Receive buffer used in SPI transactions. */
 	uint8_t				rx[4];
-	/** Current clock frequency in Hertz. */
-	uint32_t 			clk_freq;
+	/** Internal clock frequency in Hertz. */
+	uint32_t 			int_clk;
 	/** External clock frequency in Hertz. */
 	uint32_t 			ext_clk;
+	/** Set to true if device fifo is enabled. */
+	bool				fifo_enabled;
 };
 
 /** @struct adis_init_param
@@ -221,6 +245,8 @@ struct adis_field {
 struct adis_data_field_map_def {
 	/** Status/Error Flag Indicators register. */
 	struct adis_field diag_stat;
+	/** Sensor initialization failure bit mask. */
+	uint16_t diag_snsr_init_failure_mask;
 	/** Data path overrun bit mask. */
 	uint16_t diag_data_path_overrun_mask;
 	/** Flash memory update failure bit mask. */
@@ -241,6 +267,20 @@ struct adis_data_field_map_def {
 	uint16_t diag_gyro2_failure_mask;
 	/** Accelerometer failure bit mask. */
 	uint16_t diag_accl_failure_mask;
+	/** X-Axis gyroscope failure bit mask. */
+	uint16_t diag_x_axis_gyro_failure_mask;
+	/** Y-Axis gyroscope failure bit mask. */
+	uint16_t diag_y_axis_gyro_failure_mask;
+	/** Z-Axis gyroscope failure bit mask. */
+	uint16_t diag_z_axis_gyro_failure_mask;
+	/** X-Axis accelerometer failure bit mask. */
+	uint16_t diag_x_axis_accl_failure_mask;
+	/** Y-Axis accelerometer failure bit mask. */
+	uint16_t diag_y_axis_accl_failure_mask;
+	/** Z-Axis accelerometer failure bit mask. */
+	uint16_t diag_z_axis_accl_failure_mask;
+	/** ADuC microcontroller fault bit mask. */
+	uint16_t diag_aduc_mcu_fault_mask;
 
 	/** X-axis gyroscope raw data. */
 	struct adis_field x_gyro;
@@ -275,6 +315,11 @@ struct adis_data_field_map_def {
 	/** Z-axis delta velocity raw data. */
 	struct adis_field z_deltvel;
 
+	/** FIFO sample count.  */
+	struct adis_field fifo_cnt;
+	/** SPI dynamic checksum.  */
+	struct adis_field spi_chksum;
+
 	/** X-axis gyroscope offset correction. */
 	struct adis_field xg_bias;
 	/** Y-axis gyroscope offset correction. */
@@ -287,6 +332,17 @@ struct adis_data_field_map_def {
 	struct adis_field ya_bias;
 	/** Z-axis accelerometer offset correction. */
 	struct adis_field za_bias;
+
+	/** FIFO mode enable. */
+	struct adis_field fifo_en;
+	/** FIFO overflow behavior. */
+	struct adis_field fifo_overflow;
+	/** FIFO watermark interrupt enable. */
+	struct adis_field fifo_wm_int_en;
+	/** FIFO watermark interrupt polarity. */
+	struct adis_field fifo_wm_int_pol;
+	/** FIFO watermark threshold level. */
+	struct adis_field fifo_wm_lvl;
 
 	/** Filter size variable B. */
 	struct adis_field filt_size_var_b;
@@ -310,12 +366,33 @@ struct adis_data_field_map_def {
 	struct adis_field burst_sel;
 	/** 32-bit burst enable bit. */
 	struct adis_field burst32;
+	/** 32-bit timestamp enable bit. */
+	struct adis_field timestamp32;
+	/** 4khz internal sync enable bit. */
+	struct adis_field sync_4khz;
 
 	/** External clock scale factor. */
 	struct adis_field up_scale;
 	/** Decimation rate. */
 	struct adis_field dec_rate;
 
+	/** Bias correction time base control. */
+	struct adis_field bias_corr_tbc;
+	/** X-axis gyroscope bias correction enable. */
+	struct adis_field bias_corr_en_xg;
+	/** Y-axis gyroscope bias correction enable. */
+	struct adis_field bias_corr_en_yg;
+	/** Z-axis gyroscope bias correction enable. */
+	struct adis_field bias_corr_en_zg;
+	/** X-axis accelerometer bias correction enable. */
+	struct adis_field bias_corr_en_xa;
+	/** Y-axis accelerometer bias correction enable. */
+	struct adis_field bias_corr_en_ya;
+	/** Z-axis accelerometer bias correction enable. */
+	struct adis_field bias_corr_en_za;
+
+	/** Bias correction update command bit. */
+	struct adis_field bias_corr_update;
 	/** Factory calibration restore command bit. */
 	struct adis_field fact_calib_restore;
 	/** Sensor self test command bit. */
@@ -324,6 +401,8 @@ struct adis_data_field_map_def {
 	struct adis_field fls_mem_update;
 	/** Flash memory test command bit. */
 	struct adis_field fls_mem_test;
+	/** FIFO flush command bit. */
+	struct adis_field fifo_flush;
 	/** Software reset command bit. */
 	struct adis_field sw_res;
 
@@ -360,7 +439,9 @@ struct adis_chip_info {
 	/** Chip specific field map configuration. */
 	const struct adis_data_field_map_def 	*field_map;
 	/** Chip specific synchronization clock frequency limits. */
-	const struct adis_sync_clk_freq_limit	*sync_clk_freq_limits;
+	const struct adis_clk_freq_limit	*sync_clk_freq_limits;
+	/** Chip specific sampling clock frequency limits. */
+	const struct adis_clk_freq_limit	sampling_clk_limits;
 	/** Chip specific timeouts. */
 	const struct adis_timeout 		*timeouts;
 	/** Chip specific read delay for SPI transactions. */
@@ -373,6 +454,10 @@ struct adis_chip_info {
 	 *  supports paging.
 	 */
 	bool 					has_paging;
+	/** Chip specific flag to specify wether a burst request is needed
+	 *  before reading burst data.
+	 */
+	bool					burst_request;
 	/** Chip specific filter size variable B field maximum allowed value. */
 	uint16_t 				filt_size_var_b_max;
 	/** Chip specific decimation rate field maximum allowed	value. */
@@ -380,7 +465,11 @@ struct adis_chip_info {
 	/** Chip specific sync mode select field maximum allowed value. */
 	uint8_t 				sync_mode_max;
 	/** Chip specific flash memory write counter maximum allowed value. */
-	uint16_t				fls_mem_wr_cntr_max;
+	uint32_t				fls_mem_wr_cntr_max;
+	/** Chip specific bias correction time base control maximum allowed
+	 *  encoded value.
+	 */
+	uint8_t 				bias_corr_tbc_max;
 	/** Chip specific internal clock frequency in Hertz. */
 	uint32_t 				int_clk;
 };
@@ -409,6 +498,10 @@ int adis_update_bits_base(struct adis_dev *adis, uint32_t reg,
 /*! Read diag status register and update device diag flags. */
 int adis_read_diag_stat(struct adis_dev *adis,
 			struct adis_diag_flags *diag_flags);
+
+/*! Diagnosis: read sensor initialization failure flag value. */
+int adis_read_diag_snsr_init_failure(struct adis_dev *adis,
+				     uint32_t *snsr_init_failure);
 /*! Diagnosis: read data path overrun flag value. */
 int adis_read_diag_data_path_overrun(struct adis_dev *adis,
 				     uint32_t *data_path_overrun_err);
@@ -434,6 +527,27 @@ int adis_read_diag_gyro2_failure(struct adis_dev *adis,
 				 uint32_t *gyro2_failure);
 /*! Diagnosis: read accelerometer self test error flag value. */
 int adis_read_diag_accl_failure(struct adis_dev *adis, uint32_t *accl_failure);
+/*! Diagnosis: read X-Axis Gyroscope failure flag value. */
+int adis_read_diag_x_axis_gyro_failure(struct adis_dev *adis,
+				       uint32_t *x_axis_gyro_failure);
+/*! Diagnosis: read Y-Axis Gyroscope failure flag value. */
+int adis_read_diag_y_axis_gyro_failure(struct adis_dev *adis,
+				       uint32_t *y_axis_gyro_failure);
+/*! Diagnosis: read Z-Axis Gyroscope failure flag value. */
+int adis_read_diag_z_axis_gyro_failure(struct adis_dev *adis,
+				       uint32_t *z_axis_gyro_failure);
+/*! Diagnosis: read X-Axis Accelerometer failure flag value. */
+int adis_read_diag_x_axis_accl_failure(struct adis_dev *adis,
+				       uint32_t *x_axis_accl_failure);
+/*! Diagnosis: read Y-Axis Accelerometer failure flag value. */
+int adis_read_diag_y_axis_accl_failure(struct adis_dev *adis,
+				       uint32_t *y_axis_accl_failure);
+/*! Diagnosis: read Z-Axis Accelerometer failure flag value. */
+int adis_read_diag_z_axis_accl_failure(struct adis_dev *adis,
+				       uint32_t *z_axis_accl_failure);
+/*! Diagnosis: read ADuC microcontroller fault flag value. */
+int adis_read_diag_aduc_mcu_fault(struct adis_dev *adis,
+				  uint32_t *aduc_mcu_fault);
 /*! Diagnosis: read checksum error flag value. */
 void adis_read_diag_checksum_err(struct adis_dev *adis, uint32_t *checksum_err);
 /*! Diagnosis: read flash memory write counts exceeded flag value. */
@@ -475,6 +589,11 @@ int adis_read_x_deltvel(struct adis_dev *adis, int32_t *x_deltvel);
 int adis_read_y_deltvel(struct adis_dev *adis, int32_t *y_deltvel);
 /*! Delta velocity data: read raw delta velocity data on z axis. */
 int adis_read_z_deltvel(struct adis_dev *adis, int32_t *z_deltvel);
+
+/*! Read output FIFO sample count. */
+int adis_read_fifo_cnt(struct adis_dev *adis, uint32_t *fifo_cnt);
+/*! Read current sample SPI transaction checksum. */
+int adis_read_spi_chksum(struct adis_dev *adis, uint32_t *checksum);
 
 /*! Gyroscope calibration offset: read raw gyroscope offset correction on
  *  x axis.
@@ -525,6 +644,27 @@ int adis_read_za_bias(struct adis_dev *adis, int32_t *za_bias);
  *  z axis.
  */
 int adis_write_za_bias(struct adis_dev *adis, int32_t za_bias);
+
+/*! FIFO control: read FIFO enable bit value. */
+int adis_read_fifo_en(struct adis_dev *adis, uint32_t *fifo_en);
+/*! FIFO control: write FIFO enable bit value. */
+int adis_write_fifo_en(struct adis_dev *adis, uint32_t fifo_en);
+/*! FIFO overflow: read FIFO enable bit value. */
+int adis_read_fifo_overflow(struct adis_dev *adis, uint32_t *fifo_overflow);
+/*! FIFO control: write FIFO overflow bit value. */
+int adis_write_fifo_overflow(struct adis_dev *adis, uint32_t fifo_overflow);
+/*! FIFO control: read FIFO watermark interrupt enable bit value. */
+int adis_read_fifo_wm_int_en(struct adis_dev *adis, uint32_t *fifo_wm_int_en);
+/*! FIFO control: write FIFO watermark interrupt enable bit value. */
+int adis_write_fifo_wm_int_en(struct adis_dev *adis, uint32_t fifo_wm_int_en);
+/*! FIFO control: read FIFO watermark interrupt polarity bit value. */
+int adis_read_fifo_wm_int_pol(struct adis_dev *adis, uint32_t *fifo_wm_int_pol);
+/*! FIFO control: write FIFO watermark interrupt polarity bit value. */
+int adis_write_fifo_wm_int_pol(struct adis_dev *adis, uint32_t fifo_wm_int_pol);
+/*! FIFO control: read FIFO watermark threshold level value. */
+int adis_read_fifo_wm_lvl(struct adis_dev *adis, uint32_t *fifo_wm_lvl);
+/*! FIFO control: write FIFO watermark threshold level value. */
+int adis_write_fifo_wm_lvl(struct adis_dev *adis, uint32_t fifo_wm_lvl);
 
 /*! Filter control: read filter size variable B value. */
 int adis_read_filt_size_var_b(struct adis_dev *adis, uint32_t *filt_size_var_b);
@@ -579,6 +719,14 @@ int adis_write_burst_sel(struct adis_dev *adis, uint32_t burst_sel);
 int adis_read_burst32(struct adis_dev *adis, uint32_t *burst_size);
 /*! Miscellaneous control: write burst32 enable bit value. */
 int adis_write_burst32(struct adis_dev *adis, uint32_t burst_size);
+/*! Miscellaneous control: read timestamp32 enable bit value. */
+int adis_read_timestamp32(struct adis_dev *adis, uint32_t *timestamp32);
+/*! Miscellaneous control: write timestamp32 enable bit value. */
+int adis_write_timestamp32(struct adis_dev *adis, uint32_t timestamp32);
+/*! Miscellaneous control: read 4khz internal sync enable bit value. */
+int adis_read_sync_4khz(struct adis_dev *adis, uint32_t *sync_4khz);
+/*! Miscellaneous control: write 4khz internal sync enable bit value. */
+int adis_write_sync_4khz(struct adis_dev *adis, uint32_t sync_4khz);
 
 /*! Sync input frequency multiplier: read external clock scale factor value. */
 int adis_read_up_scale(struct adis_dev *adis, uint32_t *up_scale);
@@ -590,6 +738,61 @@ int adis_read_dec_rate(struct adis_dev *adis, uint32_t *dec_rate);
 /*! Decimation filter: write decimation rate value.*/
 int adis_write_dec_rate(struct adis_dev *adis, uint32_t dec_rate);
 
+/*! Continuous bias estimation: read time bias control. */
+int adis_read_bias_corr_tbc(struct adis_dev *adis, uint32_t *bias_corr_tbc);
+/*! Continuous bias estimation: write time bias control. */
+int adis_write_bias_corr_tbc(struct adis_dev *adis, uint32_t bias_corr_tbc);
+/*! Continuous bias estimation: read X-axis gyroscope bias correction enable
+ *  bit.
+ */
+int adis_read_bias_corr_en_xg(struct adis_dev *adis, uint32_t *bias_corr_en_xg);
+/*! Continuous bias estimation: write X-axis gyroscope bias correction enable
+ *  bit.
+ */
+int adis_write_bias_corr_en_xg(struct adis_dev *adis, uint32_t bias_corr_en_xg);
+/*! Continuous bias estimation: read Y-axis gyroscope bias correction enable
+ *  bit.
+ */
+int adis_read_bias_corr_en_yg(struct adis_dev *adis, uint32_t *bias_corr_en_yg);
+/*! Continuous bias estimation: write Y-axis gyroscope bias correction enable
+ *  bit.
+ */
+int adis_write_bias_corr_en_yg(struct adis_dev *adis, uint32_t bias_corr_en_yg);
+/*! Continuous bias estimation: read Z-axis gyroscope bias correction enable
+ *  bit.
+ */
+int adis_read_bias_corr_en_zg(struct adis_dev *adis, uint32_t *bias_corr_en_zg);
+/*! Continuous bias estimation: write Z-axis gyroscope bias correction enable
+ *  bit.
+ */
+int adis_write_bias_corr_en_zg(struct adis_dev *adis, uint32_t bias_corr_en_zg);
+/*! Continuous bias estimation: read X-axis accelerometer bias correction enable
+ *  bit.
+ */
+int adis_read_bias_corr_en_xa(struct adis_dev *adis, uint32_t *bias_corr_en_xa);
+/*! Continuous bias estimation: write X-axis accelerometer bias correction
+ *  enable bit.
+ */
+int adis_write_bias_corr_en_xa(struct adis_dev *adis, uint32_t bias_corr_en_xa);
+/*! Continuous bias estimation: read Y-axis accelerometer bias correction enable
+ *  bit.
+ */
+int adis_read_bias_corr_en_ya(struct adis_dev *adis, uint32_t *bias_corr_en_ya);
+/*! Continuous bias estimation: write Y-axis accelerometer bias correction
+ *  enable bit.
+ */
+int adis_write_bias_corr_en_ya(struct adis_dev *adis, uint32_t bias_corr_en_ya);
+/*! Continuous bias estimation: read Z-axis accelerometer bias correction enable
+ *  bit.
+ */
+int adis_read_bias_corr_en_za(struct adis_dev *adis, uint32_t *bias_corr_en_za);
+/*! Continuous bias estimation: write Z-axis accelerometer bias correction
+ *  enable bit.
+ */
+int adis_write_bias_corr_en_za(struct adis_dev *adis, uint32_t bias_corr_en_za);
+
+/*! Global commands: perform bias correction update command. */
+int adis_cmd_bias_corr_update(struct adis_dev *adis);
 /*! Global commands: perform factory calibration restore command. */
 int adis_cmd_fact_calib_restore(struct adis_dev *adis);
 /*! Global commands: perform sensor self test command. */
@@ -598,6 +801,8 @@ int adis_cmd_snsr_self_test(struct adis_dev *adis);
 int adis_cmd_fls_mem_update(struct adis_dev *adis);
 /*! Global commands: perform flash memory test command. */
 int adis_cmd_fls_mem_test(struct adis_dev *adis);
+/*! Global commands: perform fifo flush command. */
+int adis_cmd_fifo_flush(struct adis_dev *adis);
 /*! Global commands: perform software reset command. */
 int adis_cmd_sw_res(struct adis_dev *adis);
 
@@ -636,5 +841,8 @@ int adis_read_burst_data(struct adis_dev *adis, uint8_t burst_data_size,
 
 /*! Update external clock frequency. */
 int adis_update_ext_clk_freq(struct adis_dev *adis, uint32_t clk_freq);
+
+/*! Read adis synchronization clock frequency value in Hertz. */
+int adis_get_sync_clk_freq(struct adis_dev *adis, uint32_t *clk_freq);
 
 #endif
