@@ -36,5 +36,10 @@
       "iio_example_max32690": {
         "flags" : "DUMMY_EXAMPLE=n IIO_EXAMPLE=y TARGET=max32690"
       }
+    },
+    "mbed": {
+      "dummy_example_mbed": {
+        "flags" : "DUMMY_EXAMPLE=y IIO_EXAMPLE=n"
+      }
     }
 }
