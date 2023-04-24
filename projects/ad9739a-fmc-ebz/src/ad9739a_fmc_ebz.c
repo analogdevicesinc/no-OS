@@ -145,7 +145,8 @@ int main(void)
 		.name = "ad9739a_dac",
 		.base =	TX_CORE_BASEADDR,
 		.num_channels = 1,
-		.channels = &ad9739a_channels[0]
+		.channels = &ad9739a_channels[0],
+		.rate = 3
 	};
 	struct axi_dac	*ad9739a_core;
 

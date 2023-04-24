@@ -210,7 +210,8 @@ int main(void)
 		"tx_dac",
 		TX_CORE_BASEADDR,
 		TALISE_NUM_CHANNELS,
-		NULL
+		NULL,
+		3
 	};
 	struct axi_dac *tx_dac;
 

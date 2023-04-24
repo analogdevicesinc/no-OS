@@ -682,7 +682,8 @@ static int fmcdaq2_dac_init(struct fmcdaq2_dev *dev,
 		.name = "ad9144_dac",
 		.base =	TX_CORE_BASEADDR,
 		.num_channels = 2,
-		.channels = &dev->ad9144_channels[0]
+		.channels = &dev->ad9144_channels[0],
+		.rate = 3
 	};
 
 	for(uint32_t n=0;
