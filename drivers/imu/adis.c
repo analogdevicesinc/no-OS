@@ -184,7 +184,6 @@ int adis_initial_startup(struct adis_dev *adis)
 {
 	const struct adis_timeout *timeouts = adis->info->timeouts;
 	struct adis_diag_flags diag_flags;
-	uint32_t prod_id;
 	int ret;
 
 	if (adis->gpio_reset) {
@@ -206,19 +205,7 @@ int adis_initial_startup(struct adis_dev *adis)
 	if (ret)
 		return ret;
 
-	ret = adis_read_diag_stat(adis, &diag_flags);
-	if (ret)
-		return ret;
-
-	ret = adis_read_prod_id(adis, &prod_id);
-	if (ret)
-		return ret;
-
-	if (prod_id != adis->info->prod_id)
-		pr_warning("Device ID(%lu) and product ID(%lu) do not match.\n",
-			   adis->info->prod_id, prod_id);
-
-	return 0;
+	return adis_read_diag_stat(adis, &diag_flags);
 }
 
 /**

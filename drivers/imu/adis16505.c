@@ -140,7 +140,6 @@ struct adis_chip_info adis16505_chip_info = {
 	.filt_size_var_b_max 	= 6,
 	.dec_rate_max 		= 1999,
 	.sync_mode_max 		= ADIS_SYNC_OUTPUT,
-	.prod_id 		= 0x4079,
 	.fls_mem_wr_cntr_max 	= 10000,
 	.int_clk		= 2000,
 	.sync_clk_freq_limits	= adis16505_sync_clk_freq_limits,
