@@ -348,7 +348,8 @@ int main(void)
 		.name = "ad9152_dac",
 		.base =	TX_CORE_BASEADDR,
 		.num_channels = 2,
-		.channels = &ad9152_channels[0]
+		.channels = &ad9152_channels[0],
+		.rate = 3
 	};
 	struct axi_dac	*ad9152_core;
 

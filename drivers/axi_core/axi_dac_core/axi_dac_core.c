@@ -951,7 +951,7 @@ int32_t axi_dac_init(struct axi_dac **dac_core,
 	axi_dac_write(dac, AXI_DAC_REG_RSTN,
 		      AXI_DAC_MMCM_RSTN | AXI_DAC_RSTN);
 
-	axi_dac_write(dac, AXI_DAC_REG_RATECNTRL, AXI_DAC_RATE(3));
+	axi_dac_write(dac, AXI_DAC_REG_RATECNTRL, AXI_DAC_RATE(init->rate));
 	axi_dac_data_setup(dac);
 	axi_dac_write(dac, AXI_DAC_REG_SYNC_CONTROL, AXI_DAC_SYNC);
 

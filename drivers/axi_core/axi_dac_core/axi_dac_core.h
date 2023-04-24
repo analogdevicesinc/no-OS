@@ -73,6 +73,8 @@ struct axi_dac_init {
 	uint8_t	num_channels;
 	/** DAC channels manual configuration */
 	struct axi_dac_channel *channels;
+	/** The effective DAC rate */
+	uint8_t rate;
 };
 
 enum axi_dac_data_sel {

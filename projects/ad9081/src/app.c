@@ -195,7 +195,8 @@ int main(void)
 	struct axi_dac_init tx_dac_init = {
 		.name = "tx_dac",
 		.base = TX_CORE_BASEADDR,
-		.channels = NULL
+		.channels = NULL,
+		.rate = 3
 	};
 	struct axi_dac *tx_dac;
 	struct axi_dmac_init rx_dmac_init = {

@@ -175,7 +175,8 @@ int main(void)
 		"tx_dac",
 		TX_CORE_BASEADDR,
 		4,
-		NULL
+		NULL,
+		3
 	};
 
 #ifdef DMA_EXAMPLE

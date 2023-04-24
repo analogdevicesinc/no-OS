@@ -282,6 +282,7 @@ int main(void)
 		.base = TX1_DAC_BASEADDR,
 		.num_channels = ADRV9001_I_Q_CHANNELS,
 		.channels = tx1_dac_channels,
+		.rate = 3
 	};
 
 #ifndef ADRV9002_RX2TX2
@@ -300,6 +301,7 @@ int main(void)
 		.base = TX2_DAC_BASEADDR,
 		.num_channels = ADRV9001_I_Q_CHANNELS,
 		.channels = tx2_dac_channels,
+		.rate = 3
 	};
 #endif
 	struct axi_dmac_init rx1_dmac_init = {

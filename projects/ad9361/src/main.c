@@ -161,7 +161,8 @@ struct axi_dac_init tx_dac_init = {
 	"cf-ad9361-dds-core-lpc",
 	TX_CORE_BASEADDR,
 	4,
-	NULL
+	NULL,
+	3
 };
 struct axi_dmac_init rx_dmac_init = {
 	"rx_dmac",
@@ -554,8 +555,13 @@ int main(void)
 	default_init_param.gpio_cal_sw2.number = -1;
 #endif
 
-	if (AD9364_DEVICE)
+	if (AD9364_DEVICE) {
 		default_init_param.dev_sel = ID_AD9364;
+		tx_dac_init.num_channels = 2;
+		tx_dac_init.rate = 1;
+		rx_adc_init.num_channels = 2;
+		rx_adc_init.num_slave_channels = 0;
+	}
 	if (AD9363A_DEVICE)
 		default_init_param.dev_sel = ID_AD9363A;
 
