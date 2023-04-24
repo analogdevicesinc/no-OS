@@ -51,12 +51,6 @@
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 
-static const char * const rang_mdl_txt[] = {
-	"+/-125_degrees_per_sec",
-	"+/-500_degrees_per_sec",
-	"+/-2000_degrees_per_sec",
-};
-
 static const uint32_t adis_3db_freqs[] = {
 	720, /* Filter disabled, full BW (~720Hz) */
 	360,
@@ -215,27 +209,37 @@ static int adis_iio_read_scale(void *dev, char *buf, uint32_t len,
 			       const struct iio_ch_info *channel, intptr_t priv)
 {
 	uint32_t vals[2];
+	struct adis_iio_dev *iio_adis;
+
+	if (!dev)
+		return -EINVAL;
+
+	iio_adis = (struct adis_iio_dev *)dev;
+
+	if (!iio_adis->adis_dev)
+		return -EINVAL;
 
 	switch (channel->type) {
 	case IIO_ANGL_VEL:
-		vals[0] = 1;
-		vals[1] = RAD_TO_DEGREE(40 << 16);
+		vals[0] = iio_adis->gyro_scale.dividend;
+		vals[1] = iio_adis->gyro_scale.divisor;
 		return iio_format_value(buf, len, IIO_VAL_FRACTIONAL, 2, (int32_t*)vals);
 	case IIO_ACCEL:
-		vals[0] = 78;
-		vals[1] = 32000 << 16;
+		vals[0] = iio_adis->accl_scale.dividend;
+		vals[1] = iio_adis->accl_scale.divisor;
 		return iio_format_value(buf, len, IIO_VAL_FRACTIONAL, 2, (int32_t*)vals);
 	case IIO_ROT:
-		vals[0] = 720;
-		vals[1] = 31;
+		vals[0] = iio_adis->rot_scale.dividend;
+		vals[1] = iio_adis->rot_scale.power;
 		return iio_format_value(buf, len, IIO_VAL_FRACTIONAL_LOG2, 2, (int32_t*)vals);
 	case IIO_VELOCITY:
-		vals[0] = 100;
-		vals[1] = 31;
+		vals[0] = iio_adis->vel_scale.dividend;
+		vals[1] = iio_adis->vel_scale.power;
 		return iio_format_value(buf, len, IIO_VAL_FRACTIONAL_LOG2, 2, (int32_t*)vals);
 	case IIO_TEMP:
-		vals[0] = 100;
-		return iio_format_value(buf, len, IIO_VAL_INT, 1, (int32_t*)vals);
+		vals[0] = iio_adis->temp_scale.dividend;
+		vals[1] = iio_adis->temp_scale.divisor;
+		return iio_format_value(buf, len, IIO_VAL_FRACTIONAL, 2, (int32_t*)vals);
 	default:
 		return -EINVAL;
 	}
@@ -646,16 +650,9 @@ static int adis_read_fw_rev(struct adis_dev* adis, char *buf, uint8_t size)
  * @return the size of the written data in buf in case of success, error code
  *         otherwise.
  */
-int iio_adis_read_gyro_meas_range(struct adis_dev* adis, char *buf)
+int iio_adis_read_gyro_meas_range(struct adis_iio_dev* iio_adis, char *buf)
 {
-	int ret;
-	uint32_t gyro_meas_range;
-	ret = adis_read_gyro_meas_range(adis, &gyro_meas_range);
-	if (ret)
-		return ret;
-
-	return snprintf(buf, strlen(rang_mdl_txt[gyro_meas_range]) + 1, "%s\n",
-			rang_mdl_txt[gyro_meas_range]);
+	return snprintf(buf, 50, "%s", iio_adis->rang_mdl_txt);
 }
 
 /**
@@ -735,7 +732,7 @@ static int adis_iio_read_debug_attrs(void *dev, char *buf, uint32_t len,
 		ret = adis_read_filt_size_var_b(adis, &res);
 		break;
 	case ADIS_GYRO_MEAS_RANGE:
-		return iio_adis_read_gyro_meas_range(adis, buf);
+		return iio_adis_read_gyro_meas_range(iio_adis, buf);
 	case ADIS_DR_POLARITY:
 		ret = adis_read_dr_polarity(adis, &res);
 		break;

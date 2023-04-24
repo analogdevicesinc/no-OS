@@ -125,6 +125,7 @@ int adis_init(struct adis_dev **adis, const struct adis_chip_info *info)
 	else
 		dev->current_page = 0;
 
+	dev->dev_id = info->ip->dev_id;
 	ret = no_os_gpio_get_optional(&dev->gpio_reset, info->ip->gpio_reset);
 	if (ret) {
 		pr_warning("No reset pin found \n");

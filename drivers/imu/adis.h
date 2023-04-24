@@ -64,6 +64,15 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
+/**
+ * @brief Supported device ids
+ */
+enum adis_device_id {
+	ADIS16505_1,
+	ADIS16505_2,
+	ADIS16505_3,
+};
+
 /** @struct adis_diag_flags
  *  @brief Bitfield struct which maps on the diagnosis register
  */
@@ -161,6 +170,8 @@ struct adis_dev {
 	const struct adis_chip_info  	*info;
 	/** Current diagnosis flags values. */
 	struct adis_diag_flags 		diag_flags;
+	/** Current device id, specified by the user */
+	enum adis_device_id		dev_id;
 	/** Current page to be accessed in register map. */
 	uint32_t			current_page;
 	/** Transmit buffer used in SPI transactions. */
@@ -189,6 +200,8 @@ struct adis_init_param {
 	 *  phase.
 	 */
 	uint32_t			sync_mode;
+	/** Device id, specified by the user  */
+	enum adis_device_id		dev_id;
 };
 
 /** @struct adis_field

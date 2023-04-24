@@ -82,6 +82,7 @@ struct no_os_gpio_init_param adis16505_gpio_reset_ip = {
 struct adis_init_param adis16505_ip = {
 	.gpio_reset = &adis16505_gpio_reset_ip,
 	.sync_mode = ADIS_SYNC_OUTPUT,
+	.dev_id = ADIS16505_2,
 };
 
 #ifdef IIO_TRIGGER_EXAMPLE

@@ -51,6 +51,44 @@
 /************************** Variable Definitions ******************************/
 /******************************************************************************/
 
+/* Values from datasheet for 32-bit data */
+static const struct adis_iio_scale_fractional adis16505_gyro_scale[] = {
+	[ADIS16505_1] = {1, RAD_TO_DEGREE(10485760)},
+	[ADIS16505_2] = {1, RAD_TO_DEGREE(2621440)},
+	[ADIS16505_3] = {1, RAD_TO_DEGREE(655360)},
+};
+
+static const struct adis_iio_scale_fractional adis16505_accl_scale[] = {
+	[ADIS16505_1] = {1, 26756268},
+	[ADIS16505_2] = {1, 26756268},
+	[ADIS16505_3] = {1, 26756268},
+};
+
+static const struct adis_iio_scale_fractional_log2 adis16505_rot_scale[] = {
+	[ADIS16505_1] = {360, 31},
+	[ADIS16505_2] = {720, 31},
+	[ADIS16505_3] = {2160, 31},
+};
+
+static const struct adis_iio_scale_fractional_log2 adis16505_vel_scale[] = {
+	[ADIS16505_1] = {100, 31},
+	[ADIS16505_2] = {100, 31},
+	[ADIS16505_3] = {100, 31},
+};
+
+/* IIO uses milli-degrees Celsius for temperature */
+static const struct adis_iio_scale_fractional adis16505_temp_scale[] = {
+	[ADIS16505_1] = {1 * MILLIDEGREE_PER_DEGREE, 10},
+	[ADIS16505_2] = {1 * MILLIDEGREE_PER_DEGREE, 10},
+	[ADIS16505_3] = {1 * MILLIDEGREE_PER_DEGREE, 10},
+};
+
+static const char * const adis16505_rang_mdl_txt[] = {
+	[ADIS16505_1] = "+/-125_degrees_per_sec",
+	[ADIS16505_2] = "+/-500_degrees_per_sec",
+	[ADIS16505_3] = "+/-2000_degrees_per_sec",
+};
+
 static struct scan_type adis16505_iio_accel_scan_type = {
 	.sign 		= 's',
 	.realbits 	= 32,
@@ -148,6 +186,14 @@ int adis16505_iio_init(struct adis_iio_dev **iio_dev,
 	desc->iio_dev = &adis16505_iio_dev;
 
 	adis16505_chip_info.ip = init_param;
+
+	/* Update scales based on the device id */
+	desc->gyro_scale = adis16505_gyro_scale[init_param->dev_id];
+	desc->accl_scale = adis16505_accl_scale[init_param->dev_id];
+	desc->rot_scale = adis16505_rot_scale[init_param->dev_id];
+	desc->vel_scale = adis16505_vel_scale[init_param->dev_id];
+	desc->temp_scale = adis16505_temp_scale[init_param->dev_id];
+	desc->rang_mdl_txt = adis16505_rang_mdl_txt[init_param->dev_id];
 
 	ret = adis_init(&desc->adis_dev, &adis16505_chip_info);
 	if (ret)
