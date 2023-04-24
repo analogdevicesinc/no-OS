@@ -1,0 +1,7 @@
+{
+    "mbed": {
+      "dummy_example_mbed": {
+        "flags" : "DUMMY_EXAMPLE=y IIO_EXAMPLE=n"
+      }
+    }
+}
