@@ -7,7 +7,7 @@ PLATFORM = maxim
 TARGET = max32650
 
 CFLAGS += -DNO_OS_NETWORKING
-#CFLAGS += -DIIO_IGNORE_BUFF_OVERRUN_ERR
+CFLAGS += -DIIO_IGNORE_BUFF_OVERRUN_ERR
 
 include ../../tools/scripts/generic_variables.mk
 

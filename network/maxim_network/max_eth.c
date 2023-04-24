@@ -91,7 +91,9 @@ static err_t mxc_eth_netif_output(struct netif *netif, struct pbuf *p)
 
 	/* The TX FIFO might be full, so retry. */
 	do {
+		__disable_irq();
 		ret = adin1110_write_fifo(mac_desc, 0, &buff);
+		__enable_irq();
 	} while (ret == -EAGAIN);
 
 	return ret;
@@ -119,25 +121,24 @@ static struct pbuf *get_recvd_frames(struct max_eth_desc *eth_desc)
 	uint32_t frame_cnt;
 	size_t offset = 0;
 	struct adin1110_desc *mac_desc;
-	struct adin1110_eth_buff mac_buff;
+	struct adin1110_eth_buff mac_buff = {0};
 	struct pbuf *p = NULL;
 	int ret;
 
 	mac_desc = eth_desc->mac_desc;
 	mac_buff.payload = &lwip_buff[ADIN1110_ETH_HDR_LEN];
 
-	do {
-		ret = adin1110_reg_read(mac_desc, ADIN1110_RX_FRM_CNT_REG, &frame_cnt);
-		if (ret)
-			goto out;
-	} while (frame_cnt > 0xFFFF);
+	// do {
+	// ret = adin1110_reg_read(mac_desc, ADIN1110_RX_FSIZE_REG, &frame_cnt);
+	// if (ret)
+	// 	goto out;
+	// } while (frame_cnt > 0xFFFFF);
 
-	if (!frame_cnt)
-		goto out;
+	// if (!frame_cnt)
+	// 	goto out;
 
-	
 	ret = adin1110_read_fifo(mac_desc, 0, &mac_buff);
-	if (ret)
+	if (ret || !mac_buff.len)
 		goto out;
 
 	memcpy(lwip_buff, mac_buff.mac_dest, ADIN1110_ETH_HDR_LEN);
@@ -161,7 +162,9 @@ int max_lwip_tick(void *data)
 	mac_desc = eth_desc->mac_desc;
 
 	do {
+		__disable_irq();
 		p = get_recvd_frames(eth_desc);
+		__enable_irq();
 		if (p != NULL) {
 			LINK_STATS_INC(link.recv);
 			ret = netif_desc->input(p, netif_desc);

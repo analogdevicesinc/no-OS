@@ -623,7 +623,7 @@ int adin1110_read_fifo(struct adin1110_desc *desc, uint32_t port,
 		return ret;
 
 	if (frame_size < ADIN1110_FRAME_HEADER_LEN + ADIN1110_FEC_LEN)
-		return -ESTRPIPE;
+		return 0;
 
 	no_os_put_unaligned_be16(fifo_reg, &desc->data[0]);
 	desc->data[0] |= ADIN1110_SPI_CD;
@@ -936,6 +936,11 @@ int adin1110_init(struct adin1110_desc **desc,
 	if (ret)
 		return ret;
 
+	// ret = adin1110_reg_update(descriptor, ADIN1110_CONFIG1_REG, NO_OS_BIT(9),
+	// 			  NO_OS_BIT(9));
+	// if (ret)
+	// 	goto free_int_gpio;
+
 	ret = adin1110_setup_mac(descriptor);
 	if (ret)
 		goto free_int_gpio;
@@ -947,6 +952,11 @@ int adin1110_init(struct adin1110_desc **desc,
 	ret = adin1110_check_reset(descriptor);
 	if (ret)
 		goto free_int_gpio;
+
+	// ret = adin1110_reg_update(descriptor, ADIN1110_CONFIG1_REG, NO_OS_BIT(8),
+	// 			  NO_OS_BIT(8));
+	// if (ret)
+	// 	goto free_int_gpio;
 
 	*desc = descriptor;
 
