@@ -528,7 +528,7 @@ static int32_t do_read_buff(struct iiod_desc *desc, struct iiod_conn_priv *conn)
 	conn->nb_buf.len = len;
 	wr_idx += ret;
 
-	if (wr_idx >= conn->nb_buf.len / 4) {
+	if (wr_idx >= conn->nb_buf.len) {
 		ret = rw_iiod_buff(desc, conn, &conn->nb_buf, IIOD_WR);
 
 		conn->cmd_data.bytes_count -= wr_idx;

@@ -82,6 +82,7 @@ int adin1110_reg_write(struct adin1110_desc *desc, uint16_t addr, uint32_t data)
 		.tx_buff = desc->data,
 		.bytes_number = ADIN1110_WR_FRAME_SIZE,
 		.cs_change = 1,
+		.use_dma = true,
 	};
 
 	/** The address is 13 bit wide */
@@ -122,6 +123,7 @@ int adin1110_reg_read(struct adin1110_desc *desc, uint16_t addr, uint32_t *data)
 		.rx_buff = desc->data,
 		.bytes_number = ADIN1110_REG_LEN,
 		.cs_change = 1,
+		.use_dma = true,
 	};
 	int ret;
 

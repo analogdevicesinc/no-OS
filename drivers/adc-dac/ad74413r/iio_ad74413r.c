@@ -1061,7 +1061,7 @@ static int ad74413r_iio_read_fault_raw(void *dev, char *buf, uint32_t len,
 	/* Ignore the RESET_OCCURED bit */
 	fault = no_os_field_get(NO_OS_GENMASK(14, 0), fault);
 
-	return iio_format_value(buf, len, IIO_VAL_INT, 1, (int32_t *)fault);
+	return iio_format_value(buf, len, IIO_VAL_INT, 1, (int32_t *)&fault);
 }
 
 /**
@@ -1222,8 +1222,13 @@ static int ad74413r_iio_update_channels(void *dev, uint32_t mask)
 static int ad74413r_iio_buffer_disable(void *dev)
 {
 	struct ad74413r_iio_desc *iio_desc = dev;
+	int ret;
 
-	return ad74413r_set_adc_conv_seq(iio_desc->ad74413r_desc, AD74413R_STOP_PWR_DOWN);
+	__disable_irq();
+	ret = ad74413r_set_adc_conv_seq(iio_desc->ad74413r_desc, AD74413R_STOP_PWR_DOWN);
+	__enable_irq();
+
+	return ret;
 }
 
 /**
@@ -1268,7 +1273,7 @@ static int ad74413r_iio_trigger_handler(struct iio_device_data *dev_data)
 	uint32_t i;
 	uint8_t val;
 	uint32_t ch;
-	uint32_t buff[8] = {0};
+	uint8_t buff[32] = {0};
 	uint32_t buffer_idx = 0;
 	struct ad74413r_desc *desc;
 	struct ad74413r_iio_desc *iio_desc;
@@ -1281,7 +1286,7 @@ static int ad74413r_iio_trigger_handler(struct iio_device_data *dev_data)
 	// 	.cs_change = 1,
 	// };
 
-	__disable_irq();
+	// __disable_irq();
 
 	MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 6, 0);
 	MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 6, 1 << 6);
@@ -1304,14 +1309,15 @@ static int ad74413r_iio_trigger_handler(struct iio_device_data *dev_data)
 
 			if (ch < active_adc_ch)
 				ret = ad74413r_reg_read_raw(desc, AD74413R_ADC_RESULT(ch),
-							    (uint8_t *)&buff[buffer_idx++]);
+							    &buff[buffer_idx]);
 			else
 				ret = ad74413r_reg_read_raw(desc,
 							    AD74413R_DIAG_RESULT(ch - active_adc_ch),
-							    (uint8_t *)&buff[buffer_idx++]);
+							    &buff[buffer_idx]);
 			if (ret)
 				goto out;
 
+			buffer_idx += 4;
 			// memcpy(&buff[buffer_idx++], val, 4);
 		}
 	}
@@ -1320,11 +1326,11 @@ static int ad74413r_iio_trigger_handler(struct iio_device_data *dev_data)
 
 	MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 6, 0);
 
-	__enable_irq();
+	// __enable_irq();
 
 	return 0;
 out:
-	__enable_irq();
+	// __enable_irq();
 
 	return ret;
 }

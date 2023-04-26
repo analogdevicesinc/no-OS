@@ -16,6 +16,11 @@
 #include "lwip/dhcp.h"
 #include "netif/ethernet.h"
 #include "lwip/inet.h"
+#include "lwip/apps/mdns.h"
+#include "lwip/apps/mdns.h"
+#include "lwip/apps/mdns_priv.h"
+#include "lwip/apps/mdns_domain.h"
+#include "lwip/apps/mdns_out.h"
 
 #include "lwipcfg.h"
 #include "lwipopts.h"
@@ -137,14 +142,16 @@ static struct pbuf *get_recvd_frames(struct max_eth_desc *eth_desc)
 	// if (!frame_cnt)
 	// 	goto out;
 
+	__disable_irq();
 	ret = adin1110_read_fifo(mac_desc, 0, &mac_buff);
+	__enable_irq();
 	if (ret || !mac_buff.len)
 		goto out;
 
-	memcpy(lwip_buff, mac_buff.mac_dest, ADIN1110_ETH_HDR_LEN);
+	//memcpy(lwip_buff, mac_buff.mac_dest, ADIN1110_ETH_HDR_LEN);
 	p = pbuf_alloc(PBUF_RAW, mac_buff.len, PBUF_POOL);
 	if (p != NULL)
-		pbuf_take(p, lwip_buff, mac_buff.len);
+		pbuf_take(p, mac_buff.mac_dest, mac_buff.len);
 
 out:
 	return p;
@@ -162,9 +169,7 @@ int max_lwip_tick(void *data)
 	mac_desc = eth_desc->mac_desc;
 
 	do {
-		__disable_irq();
 		p = get_recvd_frames(eth_desc);
-		__enable_irq();
 		if (p != NULL) {
 			LINK_STATS_INC(link.recv);
 			ret = netif_desc->input(p, netif_desc);
@@ -243,6 +248,11 @@ int max_eth_init(struct netif **netif_desc, struct max_eth_param *param)
 	ret = dhcp_start(netif_descriptor);
 	if (ret)
 		return ret;
+
+	mdns_resp_init();
+
+	mdns_resp_add_netif(netif_descriptor, "analog", 255);
+	mdns_resp_announce(netif_descriptor);
 
 	max_eth_config_noos_if(descriptor);
 

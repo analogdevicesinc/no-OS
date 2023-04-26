@@ -14,7 +14,9 @@ SRCS += $(PROJECT)/src/platform/$(PLATFORM)/main.c
 
 INCS += $(PROJECT)/src/common/common_data.h
 SRCS += $(PROJECT)/src/common/common_data.c
-	
+INCS += $(PROJECT)/src/common/swiot.h
+SRCS += $(PROJECT)/src/common/swiot.c
+
 INCS += $(PROJECT)/src/platform/platform_includes.h
 
 INCS += $(PROJECT)/src/platform/$(PLATFORM)/parameters.h
