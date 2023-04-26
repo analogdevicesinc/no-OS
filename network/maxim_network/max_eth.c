@@ -133,22 +133,12 @@ static struct pbuf *get_recvd_frames(struct max_eth_desc *eth_desc)
 	mac_desc = eth_desc->mac_desc;
 	mac_buff.payload = &lwip_buff[ADIN1110_ETH_HDR_LEN];
 
-	// do {
-	// ret = adin1110_reg_read(mac_desc, ADIN1110_RX_FSIZE_REG, &frame_cnt);
-	// if (ret)
-	// 	goto out;
-	// } while (frame_cnt > 0xFFFFF);
-
-	// if (!frame_cnt)
-	// 	goto out;
-
 	__disable_irq();
 	ret = adin1110_read_fifo(mac_desc, 0, &mac_buff);
 	__enable_irq();
 	if (ret || !mac_buff.len)
 		goto out;
 
-	//memcpy(lwip_buff, mac_buff.mac_dest, ADIN1110_ETH_HDR_LEN);
 	p = pbuf_alloc(PBUF_RAW, mac_buff.len, PBUF_POOL);
 	if (p != NULL)
 		pbuf_take(p, mac_buff.mac_dest, mac_buff.len);
@@ -191,6 +181,7 @@ int max_eth_init(struct netif **netif_desc, struct max_eth_param *param)
 	struct max_eth_desc *descriptor;
 	struct netif *netif_descriptor;
 	ip4_addr_t ipaddr, netmask, gw;
+	uint32_t dhcp_timeout = 50;
 	uint32_t reg_val;
 	char *addr;
 	int ret;
@@ -249,11 +240,6 @@ int max_eth_init(struct netif **netif_desc, struct max_eth_param *param)
 	if (ret)
 		return ret;
 
-	mdns_resp_init();
-
-	mdns_resp_add_netif(netif_descriptor, "analog", 255);
-	mdns_resp_announce(netif_descriptor);
-
 	max_eth_config_noos_if(descriptor);
 
 	*netif_desc = netif_descriptor;
@@ -272,7 +258,9 @@ free_network_descriptor:
 
 void max_eth_err_callback(void *arg, err_t err)
 {
-	printf("Error :? %d\n", err);
+	struct socket_desc *socket = arg;
+
+	socket->state = SOCKET_DISCONNECTED;
 }
 
 err_t max_eth_recv_callback(void *arg, struct tcp_pcb *tpcb, struct pbuf *p,
@@ -388,8 +376,6 @@ static int32_t max_socket_send(void *net, uint32_t sock_id, const void *data,
 	err_t err;
 	int ret;
 
-	MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 1, 0);
-	MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 1, 1 << 1);
 	sock = _get_sock(desc, sock_id);
 	if (!sock)
 		return -EINVAL;
@@ -405,33 +391,15 @@ static int32_t max_socket_send(void *net, uint32_t sock_id, const void *data,
 
 	size = no_os_min(avail, size);
 	err = tcp_write(sock->pcb, data, size, flags);
-	if (err != ERR_OK) {
-		ret = err;
-		printf("TCP write err: %d\n", ret);
-
-		if (err == ERR_MEM)
-			return -EAGAIN;
-
-		return ret;
-	}
+	if (err != ERR_OK)
+		return err;
 
 	if (!(flags & TCP_WRITE_FLAG_MORE)) {
 		/* Mark data as ready to be sent */
 		err = tcp_output(sock->pcb);
-		if (err != ERR_OK) {
-			ret = err;
-			printf("TCP output err: %d\n", ret);
-
-			if (err == ERR_MEM)
-				return -EAGAIN;
-
-			return ret;
-		}
-	} else {
-		printf("More\n");
+		if (err != ERR_OK)
+			return err;
 	}
-
-	MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 1, 0);
 
 	return size;
 }
@@ -474,6 +442,7 @@ static int32_t max_socket_recv(void *net, uint32_t sock_id, void *data,
 
 			if (old_p->ref > 0)
 				pbuf_free(old_p);
+
 			tcp_recved(sock->pcb, sock->p_idx);
 			sock->p_idx = 0;
 		}
