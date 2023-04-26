@@ -16,11 +16,11 @@
 #include "lwip/dhcp.h"
 #include "netif/ethernet.h"
 #include "lwip/inet.h"
-#include "lwip/apps/mdns.h"
-#include "lwip/apps/mdns.h"
-#include "lwip/apps/mdns_priv.h"
-#include "lwip/apps/mdns_domain.h"
-#include "lwip/apps/mdns_out.h"
+// #include "lwip/apps/mdns.h"
+// #include "lwip/apps/mdns.h"
+// #include "lwip/apps/mdns_priv.h"
+// #include "lwip/apps/mdns_domain.h"
+// #include "lwip/apps/mdns_out.h"
 
 #include "lwipcfg.h"
 #include "lwipopts.h"
@@ -139,9 +139,10 @@ static struct pbuf *get_recvd_frames(struct max_eth_desc *eth_desc)
 	if (ret || !mac_buff.len)
 		goto out;
 
+	memcpy(lwip_buff, mac_buff.mac_dest, ADIN1110_ETH_HDR_LEN);
 	p = pbuf_alloc(PBUF_RAW, mac_buff.len, PBUF_POOL);
 	if (p != NULL)
-		pbuf_take(p, mac_buff.mac_dest, mac_buff.len);
+		pbuf_take(p, lwip_buff, mac_buff.len);
 
 out:
 	return p;
