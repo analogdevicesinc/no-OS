@@ -83,11 +83,6 @@
 // The default baudrate iio_app will use to print messages to console.
 #define UART_BAUDRATE_DEFAULT	115200
 
-int ad74413r_apply;
-int max14906_apply;
-int ad74413r_back;
-int max14906_back;
-
 static inline uint32_t _calc_uart_xfer_time(uint32_t len, uint32_t baudrate)
 {
 	uint32_t ms = 1000ul * len * 8 / UART_BAUDRATE_DEFAULT;
@@ -404,6 +399,8 @@ int iio_app_run(struct iio_app_desc *app)
 	int status;
 
 	do {
+		if (!app)
+			return -EINVAL;
 		status = iio_step(app->iio_desc);
 		if (status && status != -EAGAIN && status != -ENOTCONN
 		    && status != -NO_OS_EOVERRUN)
@@ -442,6 +439,7 @@ int iio_app_remove(struct iio_app_desc *app)
 		return ret;
 
 	no_os_free(app);
+	app = NULL;
 
 	return 0;
 }
