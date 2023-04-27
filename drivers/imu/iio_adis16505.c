@@ -147,9 +147,9 @@ int adis16505_iio_init(struct adis_iio_dev **iio_dev,
 
 	desc->iio_dev = &adis16505_iio_dev;
 
-	adis16505_data.adis_ip = init_param;
+	adis16505_chip_info.ip = init_param;
 
-	ret = adis_init(&desc->adis_dev, &adis16505_data);
+	ret = adis_init(&desc->adis_dev, &adis16505_chip_info);
 	if (ret)
 		goto error_adis16505_init;
 

@@ -77,9 +77,9 @@ struct adis_iio_dev {
 	uint16_t samples_lost;
 	uint16_t data_cntr;
 	uint32_t sampling_frequency;
-	unsigned int burst_size;
-	unsigned int burst_sel;
-	unsigned int sync_mode;
+	uint32_t burst_size;
+	uint32_t burst_sel;
+	uint32_t sync_mode;
 	uint16_t data[26];
 };
 

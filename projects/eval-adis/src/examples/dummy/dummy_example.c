@@ -98,9 +98,9 @@ int dummy_example_main()
 	int ret;
 	int val[7];
 
-	adis16505_data.adis_ip = &adis16505_ip;
+	adis16505_chip_info.ip = &adis16505_ip;
 
-	ret = adis_init(&adis16505_desc, &adis16505_data);
+	ret = adis_init(&adis16505_desc, &adis16505_chip_info);
 	if (ret)
 		goto error;
 
