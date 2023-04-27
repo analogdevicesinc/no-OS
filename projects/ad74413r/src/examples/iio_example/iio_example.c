@@ -48,6 +48,7 @@
 #include "iio_example.h"
 #include "iio_ad74413r.h"
 #include "iio_max14906.h"
+#include "swiot.h"
 #include "common_data.h"
 #include "no_os_util.h"
 
@@ -97,7 +98,9 @@ int step_callback(void *arg)
 		ad74413r_back = 0;
 		max14906_back = 0;
 
-		return iio_app_remove(iio_app);
+		iio_app_remove(iio_app);
+
+		return -ENOTCONN;
 	}
 
 	return 0;
@@ -118,6 +121,7 @@ int iio_example_main()
 	uint32_t reg_val;
 	struct iio_desc *iio_desc;
 	struct adin1110_desc *adin1110;
+	struct swiot_iio_desc *swiot_iio_desc;
 	struct iio_hw_trig *ad74413r_trig_desc;
 	struct ad74413r_iio_desc *ad74413r_iio_desc;
 	struct no_os_irq_ctrl_desc *ad74413r_irq_desc;
@@ -147,17 +151,22 @@ int iio_example_main()
 		.pull = NO_OS_PULL_UP,
 		.extra = &max14906_gpio_param
 	};
+
+	struct no_os_gpio_init_param swiot_psu_gpio_ip = {
+		.port = 3,
+		.number = 1,
+		.platform_ops = &max_gpio_ops,
+		.pull = NO_OS_PULL_UP,
+		.extra = &max14906_gpio_param
+	};
+
+	struct swiot_iio_desc_init_param swiot_ip = {
+		.psu_gpio_param = swiot_psu_gpio_ip,
+	};
+
 	struct max14906_init_param max14906_ip = {
 		.chip_address = 0,
 		.comm_param = &max14906_spi_ip,
-	};
-
-	struct no_os_timer_init_param eth_tick_param = {
-		.id = 0,
-		.freq_hz = 64000,
-		.ticks_count = 200,
-		.platform_ops = &max_timer_ops,
-		.extra = NULL,
 	};
 
 	struct netif *netif_desc;
@@ -199,7 +208,7 @@ int iio_example_main()
 	if (ret)
 		return ret;
 
-	ret = no_os_irq_set_priority(ad74413r_irq_desc, ad74413r_gpio_irq_ip.irq_ctrl_id, 1);
+	ret = no_os_irq_set_priority(ad74413r_irq_desc, ad74413r_gpio_irq_ip.irq_ctrl_id, 0);
 	if (ret)
 		return ret;
 
@@ -222,6 +231,11 @@ int iio_example_main()
 
 	struct iio_app_device iio_devices[] = {
 		{
+			.name = "swiot",
+			.dev = swiot_iio_desc,
+			.dev_descriptor = swiot_iio_desc->iio_dev,
+		},
+		{
 			.name = "ad74413r",
 			.dev = ad74413r_iio_desc,
 			.dev_descriptor = ad74413r_iio_desc->iio_dev,
@@ -232,7 +246,7 @@ int iio_example_main()
 			.dev = max14906_iio_desc,
 			.dev_descriptor = max14906_iio_desc->iio_dev,
 			.read_buff = &buff2,
-		}
+		},
 	};
 
 	while (1) {
@@ -245,13 +259,25 @@ int iio_example_main()
 		if (ret)
 			return ret;
 
-		iio_devices[0].dev = ad74413r_iio_desc;
-		iio_devices[0].dev_descriptor = ad74413r_iio_desc->iio_dev;
+		swiot_ip.ad74413r = ad74413r_iio_desc;
+		swiot_ip.max14906 = max14906_iio_desc;
 
-		iio_devices[1].dev = max14906_iio_desc;
-		iio_devices[1].dev_descriptor = max14906_iio_desc->iio_dev;
+		ret = swiot_iio_init(&swiot_iio_desc, &swiot_ip);
+		if (ret)
+			return ret;
+
+		iio_devices[0].dev = swiot_iio_desc;
+		iio_devices[0].dev_descriptor = swiot_iio_desc->iio_dev;
+
+		iio_devices[1].dev = ad74413r_iio_desc;
+		iio_devices[1].dev_descriptor = ad74413r_iio_desc->iio_dev;
+
+		iio_devices[2].dev = max14906_iio_desc;
+		iio_devices[2].dev_descriptor = max14906_iio_desc->iio_dev;
 
 		app_init_param.devices = iio_devices;
+		app_init_param.trigs = NULL;
+		app_init_param.trigs = 0;
 		app_init_param.nb_devices = NO_OS_ARRAY_SIZE(iio_devices);
 		app_init_param.uart_init_params = adin1110_uart_ip;
 		app_init_param.post_step_callback = step_callback;
@@ -260,11 +286,9 @@ int iio_example_main()
 		if (ret)
 			return ret;
 
-		app.arg = app;		
+		app->arg = app;		
 
 		ret = iio_app_run(app);
-		if (ret)
-			return ret;
 
 		/* Probe the drivers in the run mode */
 		ret = max14906_iio_init(&max14906_iio_desc, &max14906_iio_ip, false);
@@ -275,17 +299,35 @@ int iio_example_main()
 		if (ret)
 			return ret;
 
-		iio_devices[0].dev = ad74413r_iio_desc;
-		iio_devices[0].dev_descriptor = ad74413r_iio_desc->iio_dev;
+		swiot_ip.ad74413r = ad74413r_iio_desc;
+		swiot_ip.max14906 = max14906_iio_desc;
 
-		iio_devices[1].dev = max14906_iio_desc;
-		iio_devices[1].dev_descriptor = max14906_iio_desc->iio_dev;
+		ret = swiot_iio_init(&swiot_iio_desc, &swiot_ip);
+		if (ret)
+			return ret;
+
+		iio_devices[0].dev = swiot_iio_desc;
+		iio_devices[0].dev_descriptor = swiot_iio_desc->iio_dev;
+
+		iio_devices[1].dev = ad74413r_iio_desc;
+		iio_devices[1].dev_descriptor = ad74413r_iio_desc->iio_dev;
+
+		iio_devices[2].dev = max14906_iio_desc;
+		iio_devices[2].dev_descriptor = max14906_iio_desc->iio_dev;
+
+		app_init_param.devices = iio_devices;
+		app_init_param.trigs = trigs;
+		app_init_param.nb_trigs = 1;
+		app_init_param.nb_devices = NO_OS_ARRAY_SIZE(iio_devices);
+		app_init_param.uart_init_params = adin1110_uart_ip;
+		app_init_param.post_step_callback = step_callback;
 
 		ret = iio_app_init(&app, app_init_param);
 		if (ret)
 			return ret;
 
-		app.arg = app;		
+		ad74413r_trig_desc->iio_desc = app->iio_desc;
+		app->arg = app;		
 
 		ret = iio_app_run(app);
 		if (ret)

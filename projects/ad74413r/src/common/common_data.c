@@ -54,19 +54,16 @@ struct no_os_uart_init_param adin1110_uart_ip = {
 	.parity = NO_OS_UART_PAR_NO,
 	.platform_ops = &max_uart_ops,
 	.stop = NO_OS_UART_STOP_1_BIT,
+	.platform_ops = UART_OPS,
 	.extra = UART_EXTRA,
 };
 
-struct max_gpio_init_param reset_gpio_extra = {
-	.vssel = 1,
-};
-
 const struct no_os_spi_init_param adin1110_spi_ip = {
-	.device_id = 2,
-	.max_speed_hz = 15000000,
+	.device_id = SPI_DEVICE_ID,
+	.max_speed_hz = SPI_BAUDRATE,
 	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
 	.mode = NO_OS_SPI_MODE_0,
-	.platform_ops = &max_spi_ops,
+	.platform_ops = SPI_OPS,
 	.chip_select = SPI_CS,
 	.extra = SPI_EXTRA,
 };
@@ -76,7 +73,7 @@ const struct no_os_gpio_init_param adin1110_int_gpio_ip = {
 	.number = 6,
 	.pull = NO_OS_PULL_UP,
 	.platform_ops = &max_gpio_ops,
-	.extra = &reset_gpio_extra,
+	.extra = &adin1110_rst_gpio_extra,
 };
 
 const struct no_os_gpio_init_param adin1110_rst_gpio_ip = {
@@ -84,14 +81,15 @@ const struct no_os_gpio_init_param adin1110_rst_gpio_ip = {
 	.number = 1,
 	.pull = NO_OS_PULL_UP,
 	.platform_ops = &max_gpio_ops,
-	.extra = &reset_gpio_extra,
+	.extra = &adin1110_rst_gpio_extra,
 };
+
 const struct adin1110_init_param adin1110_ip = {
 	.chip_type = ADIN1110,
 	.comm_param = adin1110_spi_ip,
 	.reset_param = adin1110_rst_gpio_ip,
 	.int_param = adin1110_int_gpio_ip,
-	.mac_address = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF},
+	.mac_address = {0xCA, 0x2F, 0xB7, 0x10, 0x23, 0x63},
 	.append_crc = false,
 };
 
@@ -101,25 +99,25 @@ struct no_os_spi_init_param ad74413r_spi_ip = {
 	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
 	.mode = NO_OS_SPI_MODE_1,
 	.platform_ops = SPI_OPS,
-	.chip_select = 0,
+	.chip_select = SPI_CS,
 	.extra = SPI_EXTRA,
 };
 
 struct no_os_spi_init_param max14906_spi_ip = {
-	.device_id = 1,
-	.max_speed_hz = 5000000,
+	.device_id = 2,
+	.max_speed_hz = SPI_BAUDRATE,
 	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
 	.mode = NO_OS_SPI_MODE_0,
 	.platform_ops = SPI_OPS,
-	.chip_select = 0,
+	.chip_select = SPI_CS,
 	.extra = SPI_EXTRA,
 };
 
 /* GPIO trigger */
 struct no_os_irq_init_param ad74413r_gpio_irq_ip = {
-	.irq_ctrl_id = 1,	/* Port 1 */
-	.platform_ops = &max_gpio_irq_ops,
-	.extra = NULL,
+	.irq_ctrl_id = GPIO_IRQ_ID,
+	.platform_ops = GPIO_IRQ_OPS,
+	.extra = GPIO_IRQ_EXTRA,
 };
 
 const struct iio_hw_trig_cb_info gpio_cb_info = {
@@ -129,7 +127,7 @@ const struct iio_hw_trig_cb_info gpio_cb_info = {
 };
 
 struct iio_hw_trig_init_param ad74413r_gpio_trig_ip = {
-	.irq_id = 9,	/* Pin 9 */
+	.irq_id = AD74413R_GPIO_TRIG_IRQ_ID,
 	.irq_trig_lvl = NO_OS_IRQ_EDGE_RISING,
 	.cb_info = gpio_cb_info,
 	.name = AD74413R_GPIO_TRIG_NAME,

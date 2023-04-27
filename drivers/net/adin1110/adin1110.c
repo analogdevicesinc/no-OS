@@ -923,7 +923,7 @@ int adin1110_init(struct adin1110_desc **desc,
 	memcpy(descriptor->mac_address, param->mac_address, ADIN1110_ETH_ALEN);
 	descriptor->chip_type = param->chip_type;
 
-	ret = no_os_gpio_set_value(descriptor->reset_gpio, NO_OS_GPIO_LOW);
+	ret = no_os_gpio_set_value(descriptor->reset_gpio, NO_OS_GPIO_HIGH);
 	if (ret)
 		goto free_int_gpio;
 
@@ -938,11 +938,6 @@ int adin1110_init(struct adin1110_desc **desc,
 	if (ret)
 		return ret;
 
-	// ret = adin1110_reg_update(descriptor, ADIN1110_CONFIG1_REG, NO_OS_BIT(9),
-	// 			  NO_OS_BIT(9));
-	// if (ret)
-	// 	goto free_int_gpio;
-
 	ret = adin1110_setup_mac(descriptor);
 	if (ret)
 		goto free_int_gpio;
@@ -954,11 +949,6 @@ int adin1110_init(struct adin1110_desc **desc,
 	ret = adin1110_check_reset(descriptor);
 	if (ret)
 		goto free_int_gpio;
-
-	// ret = adin1110_reg_update(descriptor, ADIN1110_CONFIG1_REG, NO_OS_BIT(8),
-	// 			  NO_OS_BIT(8));
-	// if (ret)
-	// 	goto free_int_gpio;
 
 	*desc = descriptor;
 

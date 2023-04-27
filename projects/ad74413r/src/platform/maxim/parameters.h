@@ -65,7 +65,7 @@
 #define UART_OPS        &max_uart_ops
 #define UART_EXTRA      &adin1110_uart_extra_ip
 
-#define SPI_DEVICE_ID   1
+#define SPI_DEVICE_ID   2
 #define SPI_BAUDRATE    15000000
 #define SPI_CS          0
 #define SPI_OPS         &max_spi_ops
@@ -73,11 +73,12 @@
 
 extern struct max_uart_init_param adin1110_uart_extra_ip;
 extern struct max_spi_init_param adin1110_spi_extra_ip;
+extern const struct max_gpio_init_param adin1110_rst_gpio_extra;
 
 #define AD74413R_GPIO_TRIG_IRQ_ID     9    /* Not used in stm32 platform */
 #define AD74413R_GPIO_CB_HANDLE       NULL /* Not used in stm32 platform */
 
-#define GPIO_IRQ_ID             0 /* Pin 0 */
+#define GPIO_IRQ_ID             1 /* Pin 0 */
 #define GPIO_IRQ_OPS            &max_gpio_irq_ops
 #define GPIO_IRQ_EXTRA          NULL
 

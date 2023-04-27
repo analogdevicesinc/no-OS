@@ -1977,16 +1977,9 @@ int iio_remove(struct iio_desc *desc)
 #endif
 	no_os_cb_remove(desc->conns);
 	iiod_remove(desc->iiod);
-<<<<<<< HEAD
 	no_os_free(desc->devs);
 	no_os_free(desc->trigs);
 	no_os_free(desc);
-=======
-	free(desc->devs);
-	free(desc->trigs);
-	free(desc->xml_desc);
-	free(desc);
->>>>>>> 9adb71d96 (wip)
 
 	return 0;
 }

@@ -183,6 +183,7 @@ static int max_gpio_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 	int ret;
 	struct irq_action *action;
 	struct irq_action action_key = {.irq_id = irq_id};
+	uint32_t id;
 	mxc_gpio_cfg_t cfg;
 
 	if (!desc || !callback_desc)

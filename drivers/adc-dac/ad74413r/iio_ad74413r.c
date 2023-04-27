@@ -124,20 +124,6 @@ static int32_t ad74413r_slew_step_avail[] = {
 	64, 120, 500, 1820,
 };
 
-static char *ad74413r_function_available[11] = {
-	[AD74413R_HIGH_Z] = "high_z",
-	[AD74413R_VOLTAGE_OUT] = "voltage_out",
-	[AD74413R_CURRENT_OUT] = "current_out",
-	[AD74413R_VOLTAGE_IN] = "voltage_in",
-	[AD74413R_CURRENT_IN_EXT] = "current_in_ext",
-	[AD74413R_CURRENT_IN_LOOP] = "current_in_loop",
-	[AD74413R_RESISTANCE] = "resistance",
-	[AD74413R_DIGITAL_INPUT] = "digital_input",
-	[AD74413R_DIGITAL_INPUT_LOOP] = "digital_input_loop",
-	[AD74413R_CURRENT_IN_EXT_HART] = "current_in_ext_hart",
-	[AD74413R_CURRENT_IN_LOOP_HART] = "current_in_loop_hart"
-};
-
 static char *ad74413r_diag_available[14] = {
 	[AD74413R_DIAG_AGND] = "agnd",
 	[AD74413R_DIAG_TEMP] = "temp",
@@ -164,11 +150,11 @@ struct ad74413r_channel_config ad74413r_global_config[AD74413R_N_CHANNELS];
 /*
  * The configuration was done and the context may be replaced. 
  */
-extern int ad74413r_apply;
+int ad74413r_apply;
 /*
  * Bring back the configuration context 
  */
-extern int ad74413r_back;
+int ad74413r_back;
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
@@ -1081,10 +1067,6 @@ static int ad74413r_iio_setup_channels(struct ad74413r_iio_desc *iio_desc)
 	struct iio_channel *chan_buffer;
 	struct ad74413r_channel_map channels_info;
 
-	/*
-	 * config = ad74413r_desc->channel_configs;
-	 */
-
 	config = ad74413r_global_config;
 
 	for (i = 0; i < AD74413R_N_CHANNELS; i++) {
@@ -1093,16 +1075,8 @@ static int ad74413r_iio_setup_channels(struct ad74413r_iio_desc *iio_desc)
 		channel_buff_cnt += channel_map[config[i].function].num_channels;
 	}
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-	chan_buffer = no_os_calloc(channel_buff_cnt, sizeof(*chan_buffer));
-=======
-	chan_buffer = calloc(channel_buff_cnt + AD74413R_DIAG_CH,
+	chan_buffer = no_os_calloc(channel_buff_cnt + AD74413R_DIAG_CH,
 						 sizeof(*chan_buffer));
->>>>>>> 6847b614d (Reconfiguration flow and device channels)
-=======
-	chan_buffer = calloc(channel_buff_cnt + AD74413R_DIAG_CH, sizeof(*chan_buffer));
->>>>>>> 688f63ba1 (new contexts)
 	if (!chan_buffer)
 		return -ENOMEM;
 
@@ -1286,8 +1260,6 @@ static int ad74413r_iio_trigger_handler(struct iio_device_data *dev_data)
 	// 	.cs_change = 1,
 	// };
 
-	// __disable_irq();
-
 	MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 6, 0);
 	MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 6, 1 << 6);
 
@@ -1326,11 +1298,8 @@ static int ad74413r_iio_trigger_handler(struct iio_device_data *dev_data)
 
 	MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 6, 0);
 
-	// __enable_irq();
-
 	return 0;
 out:
-	// __enable_irq();
 
 	return ret;
 }
