@@ -50,6 +50,6 @@
 /************************ Variables Declarations ******************************/
 /******************************************************************************/
 
-extern struct adis_data adis16505_data;
+extern struct adis_chip_info adis16505_chip_info;
 
 #endif

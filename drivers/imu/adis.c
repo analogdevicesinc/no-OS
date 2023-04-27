@@ -104,10 +104,10 @@ static const uint8_t burst_size_bytes[] = {
 /**
  * @brief Initialize adis device.
  * @param adis - The adis device.
- * @param data - Initialization data.
+ * @param info - Initialization data.
  * @return 0 in case of success, error code otherwise.
  */
-int adis_init(struct adis_dev **adis, const struct adis_data *data)
+int adis_init(struct adis_dev **adis, const struct adis_chip_info *info)
 {
 	struct adis_dev *dev;
 	int ret;
@@ -116,34 +116,35 @@ int adis_init(struct adis_dev **adis, const struct adis_data *data)
 	if (!dev)
 		return -ENOMEM;
 
-	ret = no_os_spi_init(&dev->spi_desc, data->adis_ip->spi_init);
+	ret = no_os_spi_init(&dev->spi_desc, info->ip->spi_init);
 	if (ret)
 		goto error_spi;
 
-	if(data->has_paging)
+	if(info->has_paging)
 		dev->current_page = -1;
 	else
 		dev->current_page = 0;
 
-	ret = no_os_gpio_get_optional(&dev->gpio_reset, data->adis_ip->gpio_reset);
+	ret = no_os_gpio_get_optional(&dev->gpio_reset, info->ip->gpio_reset);
 	if (ret) {
 		pr_warning("No reset pin found \n");
 	}
 
 	if (dev->gpio_reset) {
-		ret = no_os_gpio_direction_output(dev->gpio_reset, NO_OS_GPIO_LOW);
+		ret = no_os_gpio_direction_output(dev->gpio_reset,
+						  NO_OS_GPIO_LOW);
 		if (ret)
 			goto error;
 	}
 
-	dev->data = data;
+	dev->info = info;
 
 	ret = adis_initial_startup(dev);
 	if (ret)
 		goto error;
 
-	ret = adis_update_sync_mode(dev, data->adis_ip->sync_mode,
-				    data->adis_ip->ext_clk);
+	ret = adis_write_sync_mode(dev, info->ip->sync_mode,
+				   info->ip->ext_clk);
 	if (ret)
 		goto error;
 
@@ -181,9 +182,9 @@ void adis_remove(struct adis_dev *adis)
  */
 int adis_initial_startup(struct adis_dev *adis)
 {
-	const struct adis_timeout *timeouts = adis->data->timeouts;
-	union adis_diag_flags diag_flags;
-	unsigned int prod_id;
+	const struct adis_timeout *timeouts = adis->info->timeouts;
+	struct adis_diag_flags diag_flags;
+	uint32_t prod_id;
 	int ret;
 
 	if (adis->gpio_reset) {
@@ -213,9 +214,9 @@ int adis_initial_startup(struct adis_dev *adis)
 	if (ret)
 		return ret;
 
-	if (prod_id != adis->data->prod_id)
-		pr_warning("Device ID(%u) and product ID(%u) do not match.\n",
-			   adis->data->prod_id, prod_id);
+	if (prod_id != adis->info->prod_id)
+		pr_warning("Device ID(%lu) and product ID(%lu) do not match.\n",
+			   adis->info->prod_id, prod_id);
 
 	return 0;
 }
@@ -228,39 +229,39 @@ int adis_initial_startup(struct adis_dev *adis)
  * @param size - The size of the val buffer.
  * @return 0 in case of success, error code otherwise.
  */
-int adis_read_reg(struct adis_dev *adis,  unsigned int reg,
-		  unsigned int *val, unsigned int size)
+int adis_read_reg(struct adis_dev *adis,  uint32_t reg, uint32_t *val,
+		  uint32_t size)
 {
 	int ret;
-	unsigned int page = reg / ADIS_PAGE_SIZE;
+	uint32_t page = reg / ADIS_PAGE_SIZE;
 	struct no_os_spi_msg msgs[] = {
 		{
 			.tx_buff = adis->tx,
 			.bytes_number = 2,
 			.cs_change = 1,
-			.cs_change_delay = adis->data->cs_change_delay,
-			.cs_delay_last = adis->data->read_delay,
+			.cs_change_delay = adis->info->cs_change_delay,
+			.cs_delay_last = adis->info->read_delay,
 		},
 		{
 			.tx_buff = adis->tx + 2,
 			.bytes_number = 2,
 			.cs_change = 1,
-			.cs_change_delay = adis->data->cs_change_delay,
-			.cs_delay_last = adis->data->read_delay,
+			.cs_change_delay = adis->info->cs_change_delay,
+			.cs_delay_last = adis->info->read_delay,
 		},
 		{
 			.tx_buff = adis->tx + 4,
 			.rx_buff = adis->rx,
 			.bytes_number = 2,
 			.cs_change = 1,
-			.cs_change_delay = adis->data->cs_change_delay,
-			.cs_delay_last = adis->data->read_delay,
+			.cs_change_delay = adis->info->cs_change_delay,
+			.cs_delay_last = adis->info->read_delay,
 		},
 		{
 			.rx_buff = adis->rx + 2,
 			.bytes_number = 2,
 			.cs_change = 1,
-			.cs_delay_last = adis->data->read_delay,
+			.cs_delay_last = adis->info->read_delay,
 		},
 	};
 
@@ -317,43 +318,43 @@ int adis_read_reg(struct adis_dev *adis,  unsigned int reg,
  * @param size - The size of the val buffer.
  * @return 0 in case of success, error code otherwise.
  */
-int adis_write_reg(struct adis_dev *adis, unsigned int reg,
-		   unsigned int val, unsigned int size)
+int adis_write_reg(struct adis_dev *adis, uint32_t reg, uint32_t val,
+		   uint32_t size)
 {
 	int ret;
-	unsigned int page = reg / ADIS_PAGE_SIZE, i;
+	uint32_t page = reg / ADIS_PAGE_SIZE, i;
 	struct no_os_spi_msg msgs[] = {
 		{
 			.tx_buff = adis->tx,
 			.bytes_number = 2,
 			.cs_change = 1,
-			.cs_change_delay = adis->data->cs_change_delay,
-			.cs_delay_last = adis->data->write_delay,
+			.cs_change_delay = adis->info->cs_change_delay,
+			.cs_delay_last = adis->info->write_delay,
 		},
 		{
 			.tx_buff = adis->tx + 2,
 			.bytes_number = 2,
 			.cs_change = 1,
-			.cs_change_delay = adis->data->cs_change_delay,
-			.cs_delay_last = adis->data->write_delay,
+			.cs_change_delay = adis->info->cs_change_delay,
+			.cs_delay_last = adis->info->write_delay,
 		},
 		{
 			.tx_buff = adis->tx + 4,
 			.bytes_number = 2,
 			.cs_change = 1,
-			.cs_change_delay = adis->data->cs_change_delay,
-			.cs_delay_last = adis->data->write_delay,
+			.cs_change_delay = adis->info->cs_change_delay,
+			.cs_delay_last = adis->info->write_delay,
 		},
 		{
 			.tx_buff = adis->tx + 6,
 			.bytes_number = 2,
-			.cs_delay_last = adis->data->write_delay,
+			.cs_delay_last = adis->info->write_delay,
 		},
 		{
 			.tx_buff = adis->tx + 8,
 			.bytes_number = 2,
 			.cs_change = 1,
-			.cs_delay_last = adis->data->write_delay,
+			.cs_delay_last = adis->info->write_delay,
 		},
 	};
 
@@ -399,6 +400,68 @@ int adis_write_reg(struct adis_dev *adis, unsigned int reg,
 }
 
 /**
+ * @brief Read field to uint32 value.
+ * @param adis      - The adis device.
+ * @param field     - The field structure to be read
+ * @param field_val - The read field value.
+ * @return 0 in case of success, error code otherwise.
+ */
+static int adis_read_field_u32(struct adis_dev *adis, struct adis_field field,
+			       uint32_t *field_val)
+{
+	int ret;
+	uint32_t reg_val;
+	ret = adis_read_reg(adis, field.reg_addr, &reg_val, field.reg_size);
+	if(ret)
+		return ret;
+
+	*field_val = no_os_field_get(field.field_mask, reg_val);
+
+	return 0;
+}
+
+/**
+ * @brief Read field to int32 value.
+ * @param adis      - The adis device.
+ * @param field     - The field structure to be read
+ * @param field_val - The read field value.
+ * @return 0 in case of success, error code otherwise.
+ */
+static int adis_read_field_s32(struct adis_dev *adis, struct adis_field field,
+			       int32_t *field_val)
+{
+	int ret;
+	uint32_t reg_val;
+
+	ret = adis_read_reg(adis, field.reg_addr, &reg_val, field.reg_size);
+	if(ret)
+		return ret;
+
+	*field_val = no_os_field_get(field.field_mask, reg_val);
+	*field_val = no_os_sign_extend32(*field_val,
+					 no_os_find_last_set_bit(field.field_mask));
+
+	return 0;
+}
+
+/**
+ * @brief Write field from uint32 value.
+ * @param adis      - The adis device.
+ * @param field     - The field structure to be written.
+ * @param field_val - The field value to be written.
+ * @return 0 in case of success, error code otherwise.
+ */
+static int adis_write_field_u32(struct adis_dev *adis, struct adis_field field,
+				uint32_t field_val)
+{
+	if (field_val > no_os_field_get(field.field_mask, field.field_mask))
+		return -EINVAL;
+
+	return adis_update_bits_base(adis, field.reg_addr, field.field_mask,
+				     field_val, field.reg_size);
+}
+
+/**
  * @brief Update the desired bits of reg in accordance with mask and val.
  * @param adis - The adis device.
  * @param reg  - The address of the lower of the two registers.
@@ -407,12 +470,11 @@ int adis_write_reg(struct adis_dev *adis, unsigned int reg,
  * @param size - Size of the register to update.
  * @return 0 in case of success, error code otherwise.
  */
-int adis_update_bits_base(struct adis_dev *adis, unsigned int reg,
-			  const unsigned int mask,
-			  const unsigned int val, uint8_t size)
+int adis_update_bits_base(struct adis_dev *adis, uint32_t reg,
+			  const uint32_t mask, const uint32_t val, uint8_t size)
 {
 	int ret;
-	unsigned int __val;
+	uint32_t __val;
 
 	ret = adis_read_reg(adis, reg, &__val, size);
 	if (ret)
@@ -447,51 +509,1262 @@ static bool adis_validate_checksum(uint8_t *buffer, uint8_t size)
  */
 static void adis_update_diag_flags(struct adis_dev *adis, uint16_t diag_stat)
 {
-	const struct adis_data_def *reg_map = adis->data->reg_map;
+	const struct adis_data_field_map_def *field_map = adis->info->field_map;
 
-	adis->diag_flags.adis_diag_flags_bits.DATA_PATH_OVERRUN = diag_stat &
-			reg_map->data_path_overrun_mask ? 1 : 0;
-	adis->diag_flags.adis_diag_flags_bits.SPI_COMM_ERR = diag_stat &
-			reg_map->spi_comm_err_mask ? 1 : 0;
-	adis->diag_flags.adis_diag_flags_bits.STANDBY_MODE = diag_stat &
-			reg_map->standby_mode_mask ? 1 : 0;
-	adis->diag_flags.adis_diag_flags_bits.CLOCK_ERR = diag_stat &
-			reg_map->clock_err_mask ? 1 : 0;
-	adis->diag_flags.adis_diag_flags_bits.FLS_MEM_UPDATE_ERR = diag_stat &
-			reg_map->fls_mem_update_mask ? 1 : 0;
-	adis->diag_flags.adis_diag_flags_bits.FLS_MEM_TEST_ERR = diag_stat &
-			reg_map->fls_mem_test_mask ? 1 : 0;
-	adis->diag_flags.adis_diag_flags_bits.SNSR_SELF_TEST_ERR = diag_stat &
-			reg_map->snsr_self_test_mask ? 1 : 0;
-	adis->diag_flags.adis_diag_flags_bits.GYRO1_SELF_TEST_ERR = diag_stat &
-			reg_map->gyro1_self_test_mask ? 1 : 0;
-	adis->diag_flags.adis_diag_flags_bits.GYRO2_SELF_TEST_ERR = diag_stat &
-			reg_map->gyro2_self_test_mask ? 1 : 0;
-	adis->diag_flags.adis_diag_flags_bits.ACCL_SELF_TEST_ERR = diag_stat &
-			reg_map->accl_self_test_mask ? 1 : 0;
+	adis->diag_flags.data_path_overrun = diag_stat &
+					     field_map->diag_data_path_overrun_mask ? 1 : 0;
+	adis->diag_flags.spi_comm_err = diag_stat &
+					field_map->diag_spi_comm_err_mask ? 1 : 0;
+	adis->diag_flags.diag_standby_mode = diag_stat &
+					     field_map->diag_standby_mode_mask ? 1 : 0;
+	adis->diag_flags.clk_err = diag_stat &
+				   field_map->diag_clk_err_mask ? 1 : 0;
+	adis->diag_flags.fls_mem_update_failure = diag_stat &
+			field_map->diag_fls_mem_update_failure_mask ? 1 : 0;
+	adis->diag_flags.mem_failure = diag_stat &
+				       field_map->diag_mem_failure_mask ? 1 : 0;
+	adis->diag_flags.snsr_failure = diag_stat &
+					field_map->diag_snsr_failure_mask ? 1 : 0;
+	adis->diag_flags.gyro1_failure = diag_stat &
+					 field_map->diag_gyro1_failure_mask ? 1 : 0;
+	adis->diag_flags.gyro2_failure = diag_stat &
+					 field_map->diag_gyro2_failure_mask ? 1 : 0;
+	adis->diag_flags.accl_failure = diag_stat &
+					field_map->diag_accl_failure_mask ? 1 : 0;
 }
 
 /**
- * @brief Update external clock frequency.
- * @param adis     - The adis device.
- * @param clk_freq - New external clock frequency in Hz.
+ * @brief Read diag status register and update device diag flags.
+ * @param adis       - The adis device.
+ * @param diag_flags - The read diag flags.
  * @return 0 in case of success, error code otherwise.
  */
-int adis_update_ext_clk_freq(struct adis_dev *adis, unsigned int clk_freq)
+int adis_read_diag_stat(struct adis_dev *adis,
+			struct adis_diag_flags *diag_flags)
 {
-	unsigned int sync_mode;
+	struct adis_field field = adis->info->field_map->diag_stat;
+	uint32_t field_val;
 	int ret;
+
+	ret = adis_read_reg(adis, field.reg_addr, &field_val, field.reg_size);
+	if (ret)
+		return ret;
+
+	adis_update_diag_flags(adis, field_val);
+	*diag_flags = adis->diag_flags;
+
+	return 0;
+}
+
+/**
+ * @brief Diagnosis: read data path overrun flag value.
+ * @param adis                  - The adis device.
+ * @param data_path_overrun_err - Data path overrun flag value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_diag_data_path_overrun(struct adis_dev *adis,
+				     uint32_t *data_path_overrun_err)
+{
+	struct adis_diag_flags diag_flags;
+	int ret;
+
+	ret = adis_read_diag_stat(adis, &diag_flags);
+	if (ret)
+		return ret;
+
+	*data_path_overrun_err = diag_flags.data_path_overrun;
+
+	return 0;
+}
+
+/**
+ * @brief Diagnosis: read flash memory update error flag value.
+ * @param adis                   - The adis device.
+ * @param fls_mem_update_failure - Flash memory update error flag value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_diag_fls_mem_update_failure(struct adis_dev *adis,
+		uint32_t *fls_mem_update_failure)
+{
+	struct adis_diag_flags diag_flags;
+	int ret;
+
+	ret = adis_read_diag_stat(adis, &diag_flags);
+	if (ret)
+		return ret;
+
+	*fls_mem_update_failure = diag_flags.fls_mem_update_failure;
+
+	return 0;
+}
+
+/**
+ * @brief Diagnosis: read spi communication error flag value.
+ * @param adis         - The adis device.
+ * @param spi_comm_err - Spi communication error flag value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_diag_spi_comm_err(struct adis_dev *adis, uint32_t *spi_comm_err)
+{
+	struct adis_diag_flags diag_flags;
+	int ret;
+
+	ret = adis_read_diag_stat(adis, &diag_flags);
+	if (ret)
+		return ret;
+
+	*spi_comm_err = diag_flags.spi_comm_err;
+
+	return 0;
+}
+
+/**
+ * @brief Diagnosis: read standby mode flag value.
+ * @param adis              - The adis device.
+ * @param diag_standby_mode - Standby mode flag value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_diag_standby_mode(struct adis_dev *adis,
+				uint32_t *diag_standby_mode)
+{
+	struct adis_diag_flags diag_flags;
+	int ret;
+
+	ret = adis_read_diag_stat(adis, &diag_flags);
+	if (ret)
+		return ret;
+
+	*diag_standby_mode = diag_flags.diag_standby_mode;
+
+	return 0;
+}
+
+/**
+ * @brief Diagnosis: read sensor self test error flag value.
+ * @param adis         - The adis device.
+ * @param snsr_failure - Sensor self test error flag value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_diag_snsr_failure(struct adis_dev *adis, uint32_t *snsr_failure)
+{
+	struct adis_diag_flags diag_flags;
+	int ret;
+
+	ret = adis_read_diag_stat(adis, &diag_flags);
+	if (ret)
+		return ret;
+
+	*snsr_failure = diag_flags.snsr_failure;
+
+	return 0;
+}
+
+/**
+ * @brief Diagnosis: read flash memory test error flag value.
+ * @param adis        - The adis device.
+ * @param mem_failure - Flash memory test error flag value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_diag_mem_failure(struct adis_dev *adis, uint32_t *mem_failure)
+{
+	struct adis_diag_flags diag_flags;
+	int ret;
+
+	ret = adis_read_diag_stat(adis, &diag_flags);
+	if (ret)
+		return ret;
+
+	*mem_failure = diag_flags.mem_failure;
+
+	return 0;
+}
+
+/**
+ * @brief Diagnosis: read clock error flag value.
+ * @param adis    - The adis device.
+ * @param clk_err - Clock error flag value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_diag_clk_err(struct adis_dev *adis, uint32_t *clk_err)
+{
+	struct adis_diag_flags diag_flags;
+	int ret;
+
+	ret = adis_read_diag_stat(adis, &diag_flags);
+	if (ret)
+		return ret;
+
+	*clk_err = diag_flags.clk_err;
+
+	return 0;
+}
+
+/**
+ * @brief Diagnosis: read gyroscope1 self test error flag value.
+ * @param adis          - The adis device.
+ * @param gyro1_failure - Gyroscope1 self test error flag value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_diag_gyro1_failure(struct adis_dev *adis, uint32_t *gyro1_failure)
+{
+	struct adis_diag_flags diag_flags;
+	int ret;
+
+	ret = adis_read_diag_stat(adis, &diag_flags);
+	if (ret)
+		return ret;
+
+	*gyro1_failure = diag_flags.gyro1_failure;
+
+	return 0;
+}
+
+/**
+ * @brief Diagnosis: read gyroscope2 self test error flag value.
+ * @param adis          - The adis device.
+ * @param gyro2_failure - Gyroscope2 self test error flag value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_diag_gyro2_failure(struct adis_dev *adis, uint32_t *gyro2_failure)
+{
+	struct adis_diag_flags diag_flags;
+	int ret;
+
+	ret = adis_read_diag_stat(adis, &diag_flags);
+	if (ret)
+		return ret;
+
+	*gyro2_failure = diag_flags.gyro2_failure;
+
+	return 0;
+}
+
+/**
+ * @brief Diagnosis: read accelerometer self test error flag value.
+ * @param adis         - The adis device.
+ * @param accl_failure - Accelerometer self test error flag value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_diag_accl_failure(struct adis_dev *adis, uint32_t *accl_failure)
+{
+	struct adis_diag_flags diag_flags;
+	int ret;
+
+	ret = adis_read_diag_stat(adis, &diag_flags);
+	if (ret)
+		return ret;
+
+	*accl_failure = diag_flags.accl_failure;
+
+	return 0;
+}
+
+/**
+ * @brief Diagnosis: read checksum error flag value.
+ * @param adis         - The adis device.
+ * @param checksum_err - Checksum error flag value.
+ */
+void adis_read_diag_checksum_err(struct adis_dev *adis, uint32_t *checksum_err)
+{
+	*checksum_err = adis->diag_flags.checksum_err;
+}
+
+/**
+ * @brief Diagnosis: read flash memory write counts exceeded flag value.
+ * @param adis                  - The adis device.
+ * @param fls_mem_wr_cnt_exceed - Flash memory write counts exceeded flag value.
+ */
+void adis_read_diag_fls_mem_wr_cnt_exceed(struct adis_dev *adis,
+		uint32_t *fls_mem_wr_cnt_exceed)
+{
+	*fls_mem_wr_cnt_exceed =
+		adis->diag_flags.fls_mem_wr_cnt_exceed;
+}
+
+/**
+ * @brief Read raw gyroscope data on x axis.
+ * @param adis   - The adis device.
+ * @param x_gyro - The raw read value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_x_gyro(struct adis_dev *adis, int32_t *x_gyro)
+{
+	struct adis_field field = adis->info->field_map->x_gyro;
+	return adis_read_field_s32(adis, field, x_gyro);
+}
+
+/**
+ * @brief Read raw gyroscope data on y axis.
+ * @param adis   - The adis device.
+ * @param y_gyro - The raw read value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_y_gyro(struct adis_dev *adis, int32_t *y_gyro)
+{
+	struct adis_field field = adis->info->field_map->y_gyro;
+	return adis_read_field_s32(adis, field, y_gyro);
+}
+
+/**
+ * @brief Read raw gyroscope data on z axis.
+ * @param adis   - The adis device.
+ * @param z_gyro - The raw read value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_z_gyro(struct adis_dev *adis, int32_t *z_gyro)
+{
+	struct adis_field field = adis->info->field_map->z_gyro;
+	return adis_read_field_s32(adis, field, z_gyro);
+}
+
+/**
+ * @brief Read raw acceleration data on x axis.
+ * @param adis   - The adis device.
+ * @param x_accl - The raw read value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_x_accl(struct adis_dev *adis, int32_t *x_accl)
+{
+	struct adis_field field = adis->info->field_map->x_accl;
+	return adis_read_field_s32(adis, field, x_accl);
+}
+
+/**
+ * @brief Read raw acceleration data on y axis.
+ * @param adis   - The adis device.
+ * @param y_accl - The raw read value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_y_accl(struct adis_dev *adis, int32_t *y_accl)
+{
+	struct adis_field field = adis->info->field_map->y_accl;
+	return adis_read_field_s32(adis, field, y_accl);
+}
+
+/**
+ * @brief Read raw acceleration data on z axis.
+ * @param adis   - The adis device.
+ * @param z_accl - The raw read value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_z_accl(struct adis_dev *adis, int32_t *z_accl)
+{
+	struct adis_field field = adis->info->field_map->z_accl;
+	return adis_read_field_s32(adis, field, z_accl);
+}
+
+/**
+ * @brief Read raw temperature data.
+ * @param adis     - The adis device.
+ * @param temp_out - The raw read value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_temp_out(struct adis_dev *adis, int32_t *temp_out)
+{
+	struct adis_field field = adis->info->field_map->temp_out;
+	return adis_read_field_s32(adis, field, temp_out);
+}
+
+/**
+ * @brief Read raw time stamp data.
+ * @param adis       - The adis device.
+ * @param time_stamp - The raw read value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_time_stamp(struct adis_dev *adis, uint32_t *time_stamp)
+{
+	struct adis_field field = adis->info->field_map->time_stamp;
+	return adis_read_field_u32(adis, field, time_stamp);
+}
+
+/**
+ * @brief Read data counter value.
+ * @param adis      - The adis device.
+ * @param data_cntr - The read value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_data_cntr(struct adis_dev *adis, uint32_t *data_cntr)
+{
+	struct adis_field field = adis->info->field_map->data_cntr;
+	return adis_read_field_u32(adis, field, data_cntr);
+}
+
+/**
+ * @brief Read raw delta angle data on x axis.
+ * @param adis      - The adis device.
+ * @param x_deltang - The raw read value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_x_deltang(struct adis_dev *adis, int32_t *x_deltang)
+{
+	struct adis_field field = adis->info->field_map->x_deltang;
+	return adis_read_field_s32(adis, field, x_deltang);
+}
+
+/**
+ * @brief Read raw delta angle data on y axis.
+ * @param adis      - The adis device.
+ * @param y_deltang - The raw read value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_y_deltang(struct adis_dev *adis, int32_t *y_deltang)
+{
+	struct adis_field field = adis->info->field_map->y_deltang;
+	return adis_read_field_s32(adis, field, y_deltang);
+}
+
+/**
+ * @brief Read raw delta angle data on z axis.
+ * @param adis      - The adis device.
+ * @param z_deltang - The raw read value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_z_deltang(struct adis_dev *adis, int32_t *z_deltang)
+{
+	struct adis_field field = adis->info->field_map->z_deltang;
+	return adis_read_field_s32(adis, field, z_deltang);
+}
+
+/**
+ * @brief Read raw delta velocity data on x axis.
+ * @param adis      - The adis device.
+ * @param x_deltvel - The raw read value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_x_deltvel(struct adis_dev *adis, int32_t *x_deltvel)
+{
+	struct adis_field field = adis->info->field_map->x_deltvel;
+	return adis_read_field_s32(adis, field, x_deltvel);
+}
+
+/**
+ * @brief Read raw delta velocity data on y axis.
+ * @param adis      - The adis device.
+ * @param y_deltvel - The raw read value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_y_deltvel(struct adis_dev *adis, int32_t *y_deltvel)
+{
+	struct adis_field field = adis->info->field_map->y_deltvel;
+	return adis_read_field_s32(adis, field, y_deltvel);
+}
+
+/**
+ * @brief Read raw delta velocity data on z axis.
+ * @param adis      - The adis device.
+ * @param z_deltvel - The raw read value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_z_deltvel(struct adis_dev *adis, int32_t *z_deltvel)
+{
+	struct adis_field field = adis->info->field_map->z_deltvel;
+	return adis_read_field_s32(adis, field, z_deltvel);
+}
+
+/**
+ * @brief Read raw gyroscope offset correction on x axis.
+ * @param adis    - The adis device.
+ * @param xg_bias - The raw read value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_xg_bias(struct adis_dev *adis, int32_t *xg_bias)
+{
+	struct adis_field field = adis->info->field_map->xg_bias;
+	return adis_read_field_s32(adis, field, xg_bias);
+}
+
+/**
+ * @brief Write raw gyroscope offset correction on x axis.
+ * @param adis    - The adis device.
+ * @param xg_bias - The raw value to write.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_write_xg_bias(struct adis_dev *adis, int32_t xg_bias)
+{
+	struct adis_field field = adis->info->field_map->xg_bias;
+	return adis_write_field_u32(adis, field, xg_bias);
+}
+
+/**
+ * @brief Read raw gyroscope offset correction on y axis.
+ * @param adis    - The adis device.
+ * @param yg_bias - The raw read value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_yg_bias(struct adis_dev *adis, int32_t *yg_bias)
+{
+	struct adis_field field = adis->info->field_map->yg_bias;
+	return adis_read_field_s32(adis, field, yg_bias);
+}
+
+/**
+ * @brief Write raw gyroscope offset correction on y axis.
+ * @param adis    - The adis device.
+ * @param yg_bias - The raw value to write.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_write_yg_bias(struct adis_dev *adis, int32_t yg_bias)
+{
+	struct adis_field field = adis->info->field_map->yg_bias;
+	return adis_write_field_u32(adis, field, yg_bias);
+}
+
+/**
+ * @brief Read raw gyroscope offset correction on z axis.
+ * @param adis    - The adis device.
+ * @param zg_bias - The raw read value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_zg_bias(struct adis_dev *adis, int32_t *zg_bias)
+{
+	struct adis_field field = adis->info->field_map->zg_bias;
+	return adis_read_field_s32(adis, field, zg_bias);
+}
+
+/**
+ * @brief Write raw gyroscope offset correction on z axis.
+ * @param adis    - The adis device.
+ * @param zg_bias - The raw value to write.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_write_zg_bias(struct adis_dev *adis, int32_t zg_bias)
+{
+	struct adis_field field = adis->info->field_map->zg_bias;
+	return adis_write_field_u32(adis, field, zg_bias);
+}
+
+/**
+ * @brief Read raw acceleration offset correction on x axis.
+ * @param adis    - The adis device.
+ * @param xa_bias - The raw read value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_xa_bias(struct adis_dev *adis, int32_t *xa_bias)
+{
+	struct adis_field field = adis->info->field_map->xa_bias;
+	return adis_read_field_s32(adis, field, xa_bias);
+}
+
+/**
+ * @brief Write raw acceleration offset correction on x axis.
+ * @param adis    - The adis device.
+ * @param xa_bias - The raw value to write.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_write_xa_bias(struct adis_dev *adis, int32_t xa_bias)
+{
+	struct adis_field field = adis->info->field_map->xa_bias;
+	return adis_write_field_u32(adis, field, xa_bias);
+}
+
+/**
+ * @brief Read raw acceleration offset correction on y axis.
+ * @param adis    - The adis device.
+ * @param ya_bias - The raw read value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_ya_bias(struct adis_dev *adis, int32_t *ya_bias)
+{
+	struct adis_field field = adis->info->field_map->ya_bias;
+	return adis_read_field_s32(adis, field, ya_bias);
+}
+
+/**
+ * @brief Write raw acceleration offset correction on y axis.
+ * @param adis    - The adis device.
+ * @param ya_bias - The raw value to write.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_write_ya_bias(struct adis_dev *adis, int32_t ya_bias)
+{
+	struct adis_field field = adis->info->field_map->ya_bias;
+	return adis_write_field_u32(adis, field, ya_bias);
+}
+
+/**
+ * @brief Read raw acceleration offset correction on z axis.
+ * @param adis    - The adis device.
+ * @param za_bias - The raw read value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_za_bias(struct adis_dev *adis, int32_t *za_bias)
+{
+	struct adis_field field = adis->info->field_map->za_bias;
+	return adis_read_field_s32(adis, field, za_bias);
+}
+
+/**
+ * @brief Write raw acceleration offset correction on z axis.
+ * @param adis    - The adis device.
+ * @param za_bias - The raw value to write.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_write_za_bias(struct adis_dev *adis, int32_t za_bias)
+{
+	struct adis_field field = adis->info->field_map->za_bias;
+	return adis_write_field_u32(adis, field, za_bias);
+}
+
+/**
+ * @brief Read filter size variable B value.
+ * @param adis            - The adis device.
+ * @param filt_size_var_b - The filter size variable B read value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_filt_size_var_b(struct adis_dev *adis, uint32_t *filt_size_var_b)
+{
+	struct adis_field field = adis->info->field_map->filt_size_var_b;
+	return adis_read_field_u32(adis, field, filt_size_var_b);
+}
+
+/**
+ * @brief Write filter size variable B value.
+ * @param adis            - The adis device.
+ * @param filt_size_var_b - The filter size variable B value to write.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_write_filt_size_var_b(struct adis_dev *adis, uint32_t filt_size_var_b)
+{
+	struct adis_field field = adis->info->field_map->filt_size_var_b;
+	int ret;
+
+	if(filt_size_var_b > adis->info->filt_size_var_b_max)
+		return -EINVAL;
+
+	ret = adis_write_field_u32(adis, field, filt_size_var_b);
+	if (ret)
+		return ret;
+
+	no_os_udelay(adis->info->timeouts->filt_size_var_b_update_us);
+
+	return 0;
+}
+
+/**
+ * @brief Read gyroscope measurement range value.
+ * @param adis            - The adis device.
+ * @param gyro_meas_range - The gyroscope measurement range value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_gyro_meas_range(struct adis_dev *adis, uint32_t *gyro_meas_range)
+{
+	struct adis_field field = adis->info->field_map->gyro_meas_range;
+	return adis_read_field_u32(adis, field, gyro_meas_range);
+}
+
+/**
+ * @brief Read data ready polarity encoded value.
+ * @param adis        - The adis device.
+ * @param dr_polarity - The data ready polarity encoded value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_dr_polarity(struct adis_dev *adis, uint32_t *dr_polarity)
+{
+	struct adis_field field = adis->info->field_map->dr_polarity;
+	return adis_read_field_u32(adis, field, dr_polarity);
+}
+
+/**
+ * @brief Write data ready polarity encoded value.
+ * @param adis        - The adis device.
+ * @param dr_polarity - The data ready polarity encoded value to write.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_write_dr_polarity(struct adis_dev *adis, uint32_t dr_polarity)
+{
+	struct adis_field field = adis->info->field_map->dr_polarity;
+	int ret;
+
+	if (dr_polarity > 1)
+		return -EINVAL;
+
+	ret = adis_write_field_u32(adis, field, dr_polarity);
+	if (ret)
+		return ret;
+
+	no_os_udelay(adis->info->timeouts->msc_reg_update_us);
+
+	return 0;
+}
+
+/**
+ * @brief Read sync polarity encoded value.
+ * @param adis          - The adis device.
+ * @param sync_polarity - The sync polarity encoded value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_sync_polarity(struct adis_dev *adis, uint32_t *sync_polarity)
+{
+	struct adis_field field = adis->info->field_map->sync_polarity;
+	return adis_read_field_u32(adis, field, sync_polarity);
+}
+
+/**
+ * @brief Write sync polarity encoded value.
+ * @param adis          - The adis device.
+ * @param sync_polarity - The sync polarity encoded value to write.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_write_sync_polarity(struct adis_dev *adis, uint32_t sync_polarity)
+{
+	struct adis_field field = adis->info->field_map->sync_polarity;
+	int ret;
+
+	if (sync_polarity > 1)
+		return -EINVAL;
+
+	ret = adis_write_field_u32(adis, field, sync_polarity);
+	if (ret)
+		return ret;
+
+	no_os_udelay(adis->info->timeouts->msc_reg_update_us);
+
+	return 0;
+}
+
+/**
+ * @brief Read synchronization mode encoded value.
+ * @param adis      - The adis device.
+ * @param sync_mode - The synchronization mode encoded value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_sync_mode(struct adis_dev *adis, uint32_t *sync_mode)
+{
+	struct adis_field field = adis->info->field_map->sync_mode;
+	return adis_read_field_u32(adis, field, sync_mode);
+}
+
+/**
+ * @brief Update synchronization mode.
+ * @param adis      - The adis device.
+ * @param sync_mode - The synchronization mode encoded value to update.
+ * @param ext_clk   - The external clock frequency to update, will be ignored
+ * if sync_mode is different from ADIS_SYNC_SCALED and ADIS_SYNC_DIRECT.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_write_sync_mode(struct adis_dev *adis, uint32_t sync_mode,
+			 uint32_t ext_clk)
+{
+	int ret;
+	struct adis_field field = adis->info->field_map->sync_mode;
+
+	if(sync_mode > adis->info->sync_mode_max)
+		return -EINVAL;
+
+	if (sync_mode != ADIS_SYNC_DEFAULT && sync_mode != ADIS_SYNC_OUTPUT) {
+		/* Sync pulse is external */
+		if (ext_clk < adis->info->sync_clk_freq_limits[sync_mode].min_freq
+		    || ext_clk > adis->info->sync_clk_freq_limits[sync_mode].max_freq)
+			return -EINVAL;
+
+		adis->ext_clk = ext_clk;
+		adis->clk_freq = ext_clk;
+
+		if (sync_mode == ADIS_SYNC_SCALED) {
+			/*
+			 * In sync scaled mode, the IMU sample rate is the
+			 * clk_freq * sync_scale.
+			 * Hence, default the IMU sample rate to the highest
+			 * multiple of the input clock lower than the IMU max
+			 * sample rate. The optimal range is 1900-2100 sps.
+			 */
+			ret = adis_write_up_scale(adis, 2100 / adis->clk_freq);
+			if (ret)
+				return ret;
+		}
+
+	} else {
+		adis->clk_freq = adis->info->int_clk;
+	}
+
+	return adis_write_field_u32(adis, field, sync_mode);
+}
+
+/**
+ * @brief Read internal sensor bandwidth encoded value.
+ * @param adis    - The adis device.
+ * @param sens_bw - The internal sensor bandwidth encoded value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_sens_bw(struct adis_dev *adis, uint32_t *sens_bw)
+{
+	struct adis_field field = adis->info->field_map->sens_bw;
+	return adis_read_field_u32(adis, field, sens_bw);
+}
+
+/**
+ * @brief Write internal sensor bandwidth encoded value.
+ * @param adis    - The adis device.
+ * @param sens_bw - The internal sensor bandwidth encoded value to write.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_write_sens_bw(struct adis_dev *adis, uint32_t sens_bw)
+{
+	struct adis_field field = adis->info->field_map->sens_bw;
+	int ret;
+
+	ret = adis_write_field_u32(adis, field, sens_bw);
+	if (ret)
+		return ret;
+
+	no_os_mdelay(adis->info->timeouts->sens_bw_update_ms);
+
+	return 0;
+}
+
+/**
+ * @brief Read point of percussion alignment enable bit value.
+ * @param adis              - The adis device.
+ * @param pt_of_perc_algnmt - The point of percussion alignment enable bit
+ *                            value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_pt_of_perc_algnmt(struct adis_dev *adis,
+				uint32_t *pt_of_perc_algnmt)
+{
+	struct adis_field field = adis->info->field_map->pt_of_perc_algnmt;
+	return adis_read_field_u32(adis, field, pt_of_perc_algnmt);
+}
+
+/**
+ * @brief Write point of percussion alignment enable bit value.
+ * @param adis              - The adis device.
+ * @param pt_of_perc_algnmt - The point of percussion alignment enable bit
+ * 			      value to write.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_write_pt_of_perc_algnmt(struct adis_dev *adis,
+				 uint32_t pt_of_perc_algnmt)
+{
+	struct adis_field field = adis->info->field_map->pt_of_perc_algnmt;
+	int ret;
+
+	ret = adis_write_field_u32(adis, field, pt_of_perc_algnmt);
+	if (ret)
+		return ret;
+
+	no_os_udelay(adis->info->timeouts->msc_reg_update_us);
+
+	return 0;
+}
+
+/**
+ * @brief Read linear acceleration compensation enable bit value.
+ * @param adis             - The adis device.
+ * @param linear_accl_comp - The linear acceleration compensation enable bit
+ * 			     value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_linear_accl_comp(struct adis_dev *adis,
+			       uint32_t *linear_accl_comp)
+{
+	struct adis_field field = adis->info->field_map->linear_accl_comp;
+	return adis_read_field_u32(adis, field, linear_accl_comp);
+}
+
+/**
+ * @brief Write linear acceleration compensation enable bit value.
+ * @param adis             - The adis device.
+ * @param linear_accl_comp - The linear acceleration compensation enable bit
+ * 			     value to write.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_write_linear_accl_comp(struct adis_dev *adis,
+				uint32_t linear_accl_comp)
+{
+	struct adis_field field = adis->info->field_map->linear_accl_comp;
+	int ret;
+
+	ret = adis_write_field_u32(adis, field, linear_accl_comp);
+	if (ret)
+		return ret;
+
+	no_os_udelay(adis->info->timeouts->msc_reg_update_us);
+
+	return 0;
+}
+
+/**
+ * @brief Read burst selection encoded value.
+ * @param adis      - The adis device.
+ * @param burst_sel - The burst selection encoded value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_burst_sel(struct adis_dev *adis, uint32_t *burst_sel)
+{
+	struct adis_field field = adis->info->field_map->burst_sel;
+	return adis_read_field_u32(adis, field, burst_sel);
+}
+
+/**
+ * @brief Write burst selection encoded value.
+ * @param adis      - The adis device.
+ * @param burst_sel - The burst selection encoded value to write.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_write_burst_sel(struct adis_dev *adis, uint32_t burst_sel)
+{
+	struct adis_field field = adis->info->field_map->burst_sel;
+	int ret;
+
+	ret = adis_write_field_u32(adis, field, burst_sel);
+	if (ret)
+		return ret;
+
+	no_os_udelay(adis->info->timeouts->msc_reg_update_us);
+
+	return 0;
+}
+
+/**
+ * @brief Read burst32 enable bit value.
+ * @param adis    - The adis device.
+ * @param burst32 - The burst32 enable bit value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_burst32(struct adis_dev *adis, uint32_t *burst32)
+{
+	struct adis_field field = adis->info->field_map->burst32;
+	return adis_read_field_u32(adis, field, burst32);
+}
+
+/**
+ * @brief Write burst32 enable bit value.
+ * @param adis    - The adis device.
+ * @param burst32 - The burst32 enable bit value to write.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_write_burst32(struct adis_dev *adis, uint32_t burst32)
+{
+	struct adis_field field = adis->info->field_map->burst32;
+	int ret;
+
+	ret = adis_write_field_u32(adis, field, burst32);
+	if (ret)
+		return ret;
+
+	no_os_udelay(adis->info->timeouts->msc_reg_update_us);
+
+	return 0;
+}
+
+/**
+ * @brief Read external clock scale factor value.
+ * @param adis     - The adis device.
+ * @param up_scale - The external clock scale factor read value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_up_scale(struct adis_dev *adis, uint32_t *up_scale)
+{
+	struct adis_field field = adis->info->field_map->up_scale;
+	return adis_read_field_u32(adis, field, up_scale);
+}
+
+/**
+ * @brief Write external clock scale factor value.
+ * @param adis     - The adis device.
+ * @param up_scale - The external clock scale factor value to write.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_write_up_scale(struct adis_dev *adis, uint32_t up_scale)
+{
+	struct adis_field field = adis->info->field_map->up_scale;
+	uint32_t sync_mode;
+	int ret;
+
 	ret = adis_read_sync_mode(adis, &sync_mode);
 	if (ret)
 		return ret;
 
-	if (sync_mode != ADIS_SYNC_DEFAULT && sync_mode != ADIS_SYNC_OUTPUT)
-		if (clk_freq < adis->data->sync_rate_limit[sync_mode].sync_min_rate
-		    || clk_freq > adis->data->sync_rate_limit[sync_mode].sync_max_rate)
-			return -EINVAL;
+	/*
+	 * Allow for any value to be written unless the device is in SYNC_SCALED
+	 * synchronization mode.
+	 * If the device is in SYNC_SCALED syncronization mode, make sure the
+	 * result for clk_freq * up_scale is between 1900 and 2100 Hz, otherwise
+	 * return -EINVAL.
+	 */
+	if (sync_mode == ADIS_SYNC_SCALED && (adis->clk_freq*up_scale > 2100
+					      || adis->clk_freq*up_scale < 1900))
+		return -EINVAL;
 
-	/* Allow setting of clock frequency in other modes because it will not be used. */
-	adis->ext_clk = clk_freq;
+	return adis_write_field_u32(adis, field, up_scale);
+}
+
+/**
+ * @brief Read decimation rate value.
+ * @param adis     - The adis device.
+ * @param dec_rate - The decimation rate read value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_dec_rate(struct adis_dev *adis, uint32_t *dec_rate)
+{
+	struct adis_field field = adis->info->field_map->dec_rate;
+	return adis_read_field_u32(adis, field, dec_rate);
+}
+
+/**
+ * @brief Write decimation rate value.
+ * @param adis     - The adis device.
+ * @param dec_rate - The decimation rate value to write.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_write_dec_rate(struct adis_dev *adis, uint32_t dec_rate)
+{
+	struct adis_field field = adis->info->field_map->dec_rate;
+	int ret;
+
+	if(dec_rate > adis->info->dec_rate_max)
+		return -EINVAL;
+
+	ret = adis_write_field_u32(adis, field, dec_rate);
+	if(ret)
+		return ret;
+
+	no_os_udelay(adis->info->timeouts->dec_rate_update_us);
+
+	return 0;
+}
+
+/**
+ * @brief Command: factory calibration restore
+ * @param adis - The adis device.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_cmd_fact_calib_restore(struct adis_dev *adis)
+{
+	struct adis_field field = adis->info->field_map->fact_calib_restore;
+	return adis_write_reg(adis, field.reg_addr, field.field_mask, field.reg_size);
+}
+
+/**
+ * @brief Command: sensor self test
+ * @param adis - The adis device.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_cmd_snsr_self_test(struct adis_dev *adis)
+{
+	int ret;
+	struct adis_field field = adis->info->field_map->snsr_self_test;
+
+	ret = adis_write_reg(adis, field.reg_addr, field.field_mask, field.reg_size);
+	if(ret)
+		return ret;
+
+	no_os_mdelay(adis->info->timeouts->self_test_ms);
+
+	return 0;
+}
+
+/**
+ * @brief Command: flash memory update
+ * @param adis - The adis device.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_cmd_fls_mem_update(struct adis_dev *adis)
+{
+	int ret;
+	uint32_t flash_cnt;
+	struct adis_field field = adis->info->field_map->fls_mem_update;
+
+	ret =  adis_write_reg(adis, field.reg_addr, field.field_mask, field.reg_size);
+	if (ret)
+		return ret;
+
+	/* Make sure flash counter is read after each flash update */
+	return adis_read_fls_mem_wr_cntr(adis, &flash_cnt);
+}
+
+/**
+ * @brief Command: flash memory test
+ * @param adis - The adis device.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_cmd_fls_mem_test(struct adis_dev *adis)
+{
+	struct adis_field field = adis->info->field_map->fls_mem_test;
+	return adis_write_reg(adis, field.reg_addr, field.field_mask, field.reg_size);
+}
+
+/**
+ * @brief Command: software reset.
+ * @param adis - The adis device.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_cmd_sw_res(struct adis_dev *adis)
+{
+	int ret;
+	struct adis_field field = adis->info->field_map->sw_res;
+
+	ret = adis_write_reg(adis, field.reg_addr, field.field_mask, field.reg_size);
+	if(ret)
+		return ret;
+
+	no_os_mdelay(adis->info->timeouts->sw_reset_ms);
+
+	return 0;
+}
+
+/**
+ * @brief Read firmware revision value.
+ * @param adis     - The adis device.
+ * @param firm_rev - The firmware revision value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_firm_rev(struct adis_dev *adis, uint32_t *firm_rev)
+{
+	struct adis_field field = adis->info->field_map->firm_rev;
+	return adis_read_field_u32(adis, field, firm_rev);
+}
+
+/**
+ * @brief Read firmware factory configuration day value.
+ * @param adis   - The adis device.
+ * @param firm_d - The factory configuration day value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_firm_d(struct adis_dev *adis, uint32_t *firm_d)
+{
+	struct adis_field field = adis->info->field_map->firm_d;
+	return adis_read_field_u32(adis, field, firm_d);
+}
+
+/**
+ * @brief Read firmware factory configuration month value.
+ * @param adis   - The adis device.
+ * @param firm_m - The factory configuration month value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_firm_m(struct adis_dev *adis, uint32_t *firm_m)
+{
+	struct adis_field field = adis->info->field_map->firm_m;
+	return adis_read_field_u32(adis, field, firm_m);
+}
+
+/**
+ * @brief Read firmware factory configuration year value.
+ * @param adis   - The adis device.
+ * @param firm_y - The factory configuration year value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_firm_y(struct adis_dev *adis, uint32_t *firm_y)
+{
+	struct adis_field field = adis->info->field_map->firm_y;
+	return adis_read_field_u32(adis, field, firm_y);
+}
+
+/**
+ * @brief Read product id value.
+ * @param adis    - The adis device.
+ * @param prod_id - The product id value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_prod_id(struct adis_dev *adis, uint32_t *prod_id)
+{
+	struct adis_field field = adis->info->field_map->prod_id;
+	return adis_read_field_u32(adis, field, prod_id);
+}
+
+/**
+ * @brief Read serial number value.
+ * @param adis       - The adis device.
+ * @param serial_num - The serial number value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_serial_num(struct adis_dev *adis, uint32_t *serial_num)
+{
+	struct adis_field field = adis->info->field_map->serial_num;
+	return adis_read_field_u32(adis, field, serial_num);
+}
+
+/**
+ * @brief Read user scratch register 1 value.
+ * @param adis      - The adis device.
+ * @param usr_scr_1 - The user scratch register 1 value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_usr_scr_1(struct adis_dev *adis, uint32_t *usr_scr_1)
+{
+	struct adis_field field = adis->info->field_map->usr_scr_1;
+	return adis_read_field_u32(adis, field, usr_scr_1);
+}
+
+/**
+ * @brief Write user scratch register 1 value.
+ * @param adis      - The adis device.
+ * @param usr_scr_1 - The user scratch register 1 value to write.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_write_usr_scr_1(struct adis_dev *adis, uint32_t usr_scr_1)
+{
+	struct adis_field field = adis->info->field_map->usr_scr_1;
+	return adis_write_field_u32(adis, field, usr_scr_1);
+}
+
+/**
+ * @brief Read user scratch register 2 value.
+ * @param adis      - The adis device.
+ * @param usr_scr_2 - The user scratch register 2 value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_usr_scr_2(struct adis_dev *adis, uint32_t *usr_scr_2)
+{
+	struct adis_field field = adis->info->field_map->usr_scr_2;
+	return adis_read_field_u32(adis, field, usr_scr_2);
+}
+
+/**
+ * @brief Write user scratch register 2 value.
+ * @param adis      - The adis device.
+ * @param usr_scr_2 - The user scratch register 2 value to write.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_write_usr_scr_2(struct adis_dev *adis, uint32_t usr_scr_2)
+{
+	struct adis_field field = adis->info->field_map->usr_scr_2;
+	return adis_write_field_u32(adis, field, usr_scr_2);
+}
+
+/**
+ * @brief Read user scratch register 3 value.
+ * @param adis      - The adis device.
+ * @param usr_scr_3 - The user scratch register 3 value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_usr_scr_3(struct adis_dev *adis, uint32_t *usr_scr_3)
+{
+	struct adis_field field = adis->info->field_map->usr_scr_3;
+	return adis_read_field_u32(adis, field, usr_scr_3);
+}
+
+/**
+ * @brief Write user scratch register 3 value.
+ * @param adis      - The adis device.
+ * @param usr_scr_3 - The user scratch register 3 value to write.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_write_usr_scr_3(struct adis_dev *adis, uint32_t usr_scr_3)
+{
+	struct adis_field field = adis->info->field_map->usr_scr_3;
+	return adis_write_field_u32(adis, field, usr_scr_3);
+}
+
+/**
+ * @brief Read flash memory write cycle counter value.
+ * @param adis    - The adis device.
+ * @param fls_mem_wr_cntr - The flash memory write cycle counter value.
+ * @return 0 in case of success, error code otherwise.
+ */
+int adis_read_fls_mem_wr_cntr(struct adis_dev *adis, uint32_t *fls_mem_wr_cntr)
+{
+	int ret;
+	struct adis_field field = adis->info->field_map->fls_mem_wr_cntr;
+
+	ret = adis_read_field_u32(adis, field, fls_mem_wr_cntr);
+	if (ret)
+		return ret;
+
+	if(*fls_mem_wr_cntr > adis->info->fls_mem_wr_cntr_max)
+		adis->diag_flags.fls_mem_wr_cnt_exceed = true;
 
 	return 0;
 }
@@ -505,14 +1778,10 @@ int adis_update_ext_clk_freq(struct adis_dev *adis, unsigned int clk_freq)
  * @return 0 in case of success, error code otherwise.
  */
 int adis_read_burst_data(struct adis_dev *adis, uint8_t burst_data_size,
-			 uint16_t *burst_data,
-			 uint8_t burst_size_selection)
+			 uint16_t *burst_data, uint8_t burst_size_selection)
 {
 	int ret;
 	uint8_t msg_size;
-
-	if (burst_size_selection > adis->data->burst_size_max)
-		return -EINVAL;
 
 	msg_size = burst_size_bytes[burst_size_selection];
 
@@ -529,11 +1798,11 @@ int adis_read_burst_data(struct adis_dev *adis, uint8_t burst_data_size,
 		return ret;
 
 	if(!adis_validate_checksum(&buffer[ADIS_READ_BURST_DATA_CMD_SIZE], msg_size)) {
-		adis->diag_flags.adis_diag_flags_bits.CHECKSUM_ERR = true;
+		adis->diag_flags.checksum_err = true;
 		return -EINVAL;
 	}
 
-	adis->diag_flags.adis_diag_flags_bits.CHECKSUM_ERR = false;
+	adis->diag_flags.checksum_err = false;
 
 	/* Copy read data to buffer, based on burst_data_size value */
 	memcpy(burst_data, &buffer[ADIS_READ_BURST_DATA_CMD_SIZE], burst_data_size);
@@ -545,1539 +1814,29 @@ int adis_read_burst_data(struct adis_dev *adis, uint8_t burst_data_size,
 }
 
 /**
- * @brief Read diag status register and update device diag flags.
- * @param adis       - The adis device.
- * @param diag_flags - The read diag flags.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_read_diag_stat(struct adis_dev *adis,
-			union adis_diag_flags *diag_flags)
-{
-	struct adis_reg reg = adis->data->reg_map->diag_stat;
-	unsigned int reg_val;
-	int ret;
-
-	ret = adis_read_reg(adis, reg.addr, &reg_val, reg.size);
-	if (ret)
-		return ret;
-
-	adis_update_diag_flags(adis, reg_val);
-	*diag_flags = adis->diag_flags;
-
-	return 0;
-}
-
-/**
- * @brief Diagnosis: read checksum error flag value.
- * @param adis         - The adis device.
- * @param checksum_err - Checksum error flag value.
- */
-void adis_read_diag_checksum_err(struct adis_dev *adis,
-				 unsigned int *checksum_err)
-{
-	*checksum_err = adis->diag_flags.adis_diag_flags_bits.CHECKSUM_ERR;
-}
-
-/**
- * @brief Diagnosis: read flash memory write counts exceeded flag value.
- * @param adis                  - The adis device.
- * @param fls_mem_wr_cnt_exceed - Flash memory write counts exceeded flag value.
- */
-void adis_read_diag_fls_mem_wr_cnt_exceed(struct adis_dev *adis,
-		unsigned int *fls_mem_wr_cnt_exceed)
-{
-	*fls_mem_wr_cnt_exceed =
-		adis->diag_flags.adis_diag_flags_bits.FLS_MEM_WR_CNT_EXCEED;
-}
-
-/**
- * @brief Diagnosis: read accelerometer self test error flag value.
- * @param adis               - The adis device.
- * @param accl_self_test_err - Accelerometer self test error flag value.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_read_diag_accl_self_test_err(struct adis_dev *adis,
-				      unsigned int *accl_self_test_err)
-{
-	union adis_diag_flags diag_flags;
-	int ret;
-
-	ret = adis_read_diag_stat(adis, &diag_flags);
-	if (ret)
-		return ret;
-
-	*accl_self_test_err = diag_flags.adis_diag_flags_bits.ACCL_SELF_TEST_ERR;
-
-	return 0;
-}
-
-/**
- * @brief Diagnosis: read gyroscope2 self test error flag value.
- * @param adis                - The adis device.
- * @param gyro2_self_test_err - Gyroscope2 self test error flag value.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_read_diag_gyro2_self_test_err(struct adis_dev *adis,
-				       unsigned int *gyro2_self_test_err)
-{
-	union adis_diag_flags diag_flags;
-	int ret;
-
-	ret = adis_read_diag_stat(adis, &diag_flags);
-	if (ret)
-		return ret;
-
-	*gyro2_self_test_err = diag_flags.adis_diag_flags_bits.GYRO2_SELF_TEST_ERR;
-
-	return 0;
-}
-
-/**
- * @brief Diagnosis: read gyroscope1 self test error flag value.
- * @param adis                - The adis device.
- * @param gyro1_self_test_err - Gyroscope1 self test error flag value.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_read_diag_gyro1_self_test_err(struct adis_dev *adis,
-				       unsigned int *gyro1_self_test_err)
-{
-	union adis_diag_flags diag_flags;
-	int ret;
-
-	ret = adis_read_diag_stat(adis, &diag_flags);
-	if (ret)
-		return ret;
-
-	*gyro1_self_test_err = diag_flags.adis_diag_flags_bits.GYRO1_SELF_TEST_ERR;
-
-	return 0;
-}
-
-/**
- * @brief Diagnosis: read clock error flag value.
- * @param adis      - The adis device.
- * @param clock_err - Clock error flag value.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_read_diag_clock_err(struct adis_dev *adis, unsigned int *clock_err)
-{
-	union adis_diag_flags diag_flags;
-	int ret;
-
-	ret = adis_read_diag_stat(adis, &diag_flags);
-	if (ret)
-		return ret;
-
-	*clock_err = diag_flags.adis_diag_flags_bits.CLOCK_ERR;
-
-	return 0;
-}
-
-/**
- * @brief Diagnosis: read flash memory test error flag value.
- * @param adis             - The adis device.
- * @param fls_mem_test_err - Flash memory test error flag value.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_read_diag_fls_mem_test_err(struct adis_dev *adis,
-				    unsigned int *fls_mem_test_err)
-{
-	union adis_diag_flags diag_flags;
-	int ret;
-
-	ret = adis_read_diag_stat(adis, &diag_flags);
-	if (ret)
-		return ret;
-
-	*fls_mem_test_err = diag_flags.adis_diag_flags_bits.FLS_MEM_TEST_ERR;
-
-	return 0;
-}
-
-/**
- * @brief Diagnosis: read sensor self test error flag value.
- * @param adis               - The adis device.
- * @param snsr_self_test_err - Sensor self test error flag value.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_read_diag_snsr_self_test_err(struct adis_dev *adis,
-				      unsigned int *snsr_self_test_err)
-{
-	union adis_diag_flags diag_flags;
-	int ret;
-
-	ret = adis_read_diag_stat(adis, &diag_flags);
-	if (ret)
-		return ret;
-
-	*snsr_self_test_err = diag_flags.adis_diag_flags_bits.SNSR_SELF_TEST_ERR;
-
-	return 0;
-}
-
-/**
- * @brief Diagnosis: read standby mode flag value.
- * @param adis         - The adis device.
- * @param standby_mode - Standby mode flag value.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_read_diag_standby_mode(struct adis_dev *adis,
-				unsigned int *standby_mode)
-{
-	union adis_diag_flags diag_flags;
-	int ret;
-
-	ret = adis_read_diag_stat(adis, &diag_flags);
-	if (ret)
-		return ret;
-
-	*standby_mode = diag_flags.adis_diag_flags_bits.STANDBY_MODE;
-
-	return 0;
-}
-
-/**
- * @brief Diagnosis: read spi communication error flag value.
- * @param adis         - The adis device.
- * @param spi_comm_err - Spi communication error flag value.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_read_diag_spi_comm_err(struct adis_dev *adis,
-				unsigned int *spi_comm_err)
-{
-	union adis_diag_flags diag_flags;
-	int ret;
-
-	ret = adis_read_diag_stat(adis, &diag_flags);
-	if (ret)
-		return ret;
-
-	*spi_comm_err = diag_flags.adis_diag_flags_bits.SPI_COMM_ERR;
-
-	return 0;
-}
-
-/**
- * @brief Diagnosis: read flash memory update error flag value.
- * @param adis               - The adis device.
- * @param fls_mem_update_err - Flash memory update error flag value.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_read_diag_fls_mem_update_err(struct adis_dev *adis,
-				      unsigned int *fls_mem_update_err)
-{
-	union adis_diag_flags diag_flags;
-	int ret;
-
-	ret = adis_read_diag_stat(adis, &diag_flags);
-	if (ret)
-		return ret;
-
-	*fls_mem_update_err = diag_flags.adis_diag_flags_bits.FLS_MEM_UPDATE_ERR;
-
-	return 0;
-}
-
-/**
- * @brief Diagnosis: read data path overrun flag value.
- * @param adis                  - The adis device.
- * @param data_path_overrun_err - Data path overrun flag value.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_read_diag_data_path_overrun(struct adis_dev *adis,
-				     unsigned int *data_path_overrun_err)
-{
-	union adis_diag_flags diag_flags;
-	int ret;
-
-	ret = adis_read_diag_stat(adis, &diag_flags);
-	if (ret)
-		return ret;
-
-	*data_path_overrun_err = diag_flags.adis_diag_flags_bits.DATA_PATH_OVERRUN;
-
-	return 0;
-}
-
-/**
- * @brief Read raw gyroscope data on x axis.
- * @param adis   - The adis device.
- * @param x_gyro - The raw read value.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_read_x_gyro(struct adis_dev *adis, int *x_gyro)
-{
-	struct adis_reg reg = adis->data->reg_map->x_gyro;
-	unsigned int reg_val;
-	int ret;
-
-	ret = adis_read_reg(adis, reg.addr, &reg_val, reg.size);
-	if(ret)
-		return ret;
-
-	*x_gyro = no_os_sign_extend32(reg_val, reg.size * 8 - 1);
-
-	return 0;
-}
-
-/**
- * @brief Read raw gyroscope data on y axis.
- * @param adis   - The adis device.
- * @param y_gyro - The raw read value.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_read_y_gyro(struct adis_dev *adis, int *y_gyro)
-{
-	struct adis_reg reg = adis->data->reg_map->y_gyro;
-	unsigned int reg_val;
-	int ret;
-
-	ret = adis_read_reg(adis, reg.addr, &reg_val, reg.size);
-	if(ret)
-		return ret;
-
-	*y_gyro = no_os_sign_extend32(reg_val, reg.size * 8 - 1);
-
-	return 0;
-}
-
-/**
- * @brief Read raw gyroscope data on z axis.
- * @param adis   - The adis device.
- * @param z_gyro - The raw read value.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_read_z_gyro(struct adis_dev *adis, int *z_gyro)
-{
-	struct adis_reg reg = adis->data->reg_map->z_gyro;
-	unsigned int reg_val;
-	int ret;
-
-	ret = adis_read_reg(adis, reg.addr, &reg_val, reg.size);
-	if(ret)
-		return ret;
-
-	*z_gyro = no_os_sign_extend32(reg_val, reg.size * 8 - 1);
-
-	return 0;
-}
-
-/**
- * @brief Read raw acceleration data on x axis.
- * @param adis   - The adis device.
- * @param x_accl - The raw read value.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_read_x_accl(struct adis_dev *adis, int *x_accl)
-{
-	struct adis_reg reg = adis->data->reg_map->x_accl;
-	unsigned int reg_val;
-	int ret;
-
-	ret = adis_read_reg(adis, reg.addr, &reg_val, reg.size);
-	if(ret)
-		return ret;
-
-	*x_accl = no_os_sign_extend32(reg_val, reg.size * 8 - 1);
-
-	return 0;
-}
-
-/**
- * @brief Read raw acceleration data on y axis.
- * @param adis   - The adis device.
- * @param y_accl - The raw read value.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_read_y_accl(struct adis_dev *adis, int *y_accl)
-{
-	struct adis_reg reg = adis->data->reg_map->y_accl;
-	unsigned int reg_val;
-	int ret;
-
-	ret = adis_read_reg(adis, reg.addr, &reg_val, reg.size);
-	if(ret)
-		return ret;
-
-	*y_accl = no_os_sign_extend32(reg_val, reg.size * 8 - 1);
-
-	return 0;
-}
-
-/**
- * @brief Read raw acceleration data on z axis.
- * @param adis   - The adis device.
- * @param z_accl - The raw read value.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_read_z_accl(struct adis_dev *adis, int *z_accl)
-{
-	struct adis_reg reg = adis->data->reg_map->z_accl;
-	unsigned int reg_val;
-	int ret;
-
-	ret = adis_read_reg(adis, reg.addr, &reg_val, reg.size);
-	if(ret)
-		return ret;
-
-	*z_accl = no_os_sign_extend32(reg_val, reg.size * 8 - 1);
-
-	return 0;
-}
-
-/**
- * @brief Read raw temperature data.
+ * @brief Update external clock frequency.
  * @param adis     - The adis device.
- * @param temp_out - The raw read value.
+ * @param clk_freq - New external clock frequency in Hz.
  * @return 0 in case of success, error code otherwise.
  */
-int adis_read_temp_out(struct adis_dev *adis, int *temp_out)
+int adis_update_ext_clk_freq(struct adis_dev *adis, uint32_t clk_freq)
 {
-	struct adis_reg reg = adis->data->reg_map->temp_out;
-	unsigned int reg_val;
+	uint32_t sync_mode;
 	int ret;
-
-	ret = adis_read_reg(adis, reg.addr, &reg_val, reg.size);
-	if(ret)
-		return ret;
-
-	*temp_out = no_os_sign_extend32(reg_val, reg.size * 8 - 1);
-
-	return 0;
-}
-
-/**
- * @brief Read raw time stamp data.
- * @param adis       - The adis device.
- * @param time_stamp - The raw read value.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_read_time_stamp(struct adis_dev *adis, unsigned int *time_stamp)
-{
-	struct adis_reg reg = adis->data->reg_map->time_stamp;
-	return adis_read_reg(adis, reg.addr, time_stamp, reg.size);
-}
-
-/**
- * @brief Read data counter value.
- * @param adis      - The adis device.
- * @param data_cntr - The read value.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_read_data_cntr(struct adis_dev *adis, unsigned int *data_cntr)
-{
-	struct adis_reg reg = adis->data->reg_map->data_cntr;
-	return adis_read_reg(adis, reg.addr, data_cntr, reg.size);
-}
-
-/**
- * @brief Read raw delta angle data on x axis.
- * @param adis      - The adis device.
- * @param x_deltang - The raw read value.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_read_x_deltang(struct adis_dev *adis, int *x_deltang)
-{
-	struct adis_reg reg = adis->data->reg_map->x_deltang;
-	unsigned int reg_val;
-	int ret;
-
-	ret = adis_read_reg(adis, reg.addr, &reg_val, reg.size);
-	if(ret)
-		return ret;
-
-	*x_deltang = no_os_sign_extend32(reg_val, reg.size * 8 - 1);
-
-	return 0;
-}
-
-/**
- * @brief Read raw delta angle data on y axis.
- * @param adis      - The adis device.
- * @param y_deltang - The raw read value.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_read_y_deltang(struct adis_dev *adis, int *y_deltang)
-{
-	struct adis_reg reg = adis->data->reg_map->y_deltang;
-	unsigned int reg_val;
-	int ret;
-
-	ret = adis_read_reg(adis, reg.addr, &reg_val, reg.size);
-	if(ret)
-		return ret;
-
-	*y_deltang = no_os_sign_extend32(reg_val, reg.size * 8 - 1);
-
-	return 0;
-}
-
-/**
- * @brief Read raw delta angle data on z axis.
- * @param adis      - The adis device.
- * @param z_deltang - The raw read value.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_read_z_deltang(struct adis_dev *adis, int *z_deltang)
-{
-	struct adis_reg reg = adis->data->reg_map->z_deltang;
-	unsigned int reg_val;
-	int ret;
-
-	ret = adis_read_reg(adis, reg.addr, &reg_val, reg.size);
-	if(ret)
-		return ret;
-
-	*z_deltang = no_os_sign_extend32(reg_val, reg.size * 8 - 1);
-
-	return 0;
-}
-
-/**
- * @brief Read raw delta velocity data on x axis.
- * @param adis      - The adis device.
- * @param x_deltvel - The raw read value.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_read_x_deltvel(struct adis_dev *adis, int *x_deltvel)
-{
-	struct adis_reg reg = adis->data->reg_map->x_deltvel;
-	unsigned int reg_val;
-	int ret;
-
-	ret = adis_read_reg(adis, reg.addr, &reg_val, reg.size);
-	if(ret)
-		return ret;
-
-	*x_deltvel = no_os_sign_extend32(reg_val, reg.size * 8 - 1);
-
-	return 0;
-}
-
-/**
- * @brief Read raw delta velocity data on y axis.
- * @param adis      - The adis device.
- * @param y_deltvel - The raw read value.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_read_y_deltvel(struct adis_dev *adis, int *y_deltvel)
-{
-	struct adis_reg reg = adis->data->reg_map->y_deltvel;
-	unsigned int reg_val;
-	int ret;
-
-	ret = adis_read_reg(adis, reg.addr, &reg_val, reg.size);
-	if(ret)
-		return ret;
-
-	*y_deltvel = no_os_sign_extend32(reg_val, reg.size * 8 - 1);
-
-	return 0;
-}
-
-/**
- * @brief Read raw delta velocity data on z axis.
- * @param adis      - The adis device.
- * @param z_deltvel - The raw read value.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_read_z_deltvel(struct adis_dev *adis, int *z_deltvel)
-{
-	struct adis_reg reg = adis->data->reg_map->z_deltvel;
-	unsigned int reg_val;
-	int ret;
-
-	ret = adis_read_reg(adis, reg.addr, &reg_val, reg.size);
-	if(ret)
-		return ret;
-
-	*z_deltvel = no_os_sign_extend32(reg_val, reg.size * 8 - 1);
-
-	return 0;
-}
-
-/**
- * @brief Read raw gyroscope offset correction on x axis.
- * @param adis    - The adis device.
- * @param xg_bias - The raw read value.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_read_xg_bias(struct adis_dev *adis, int *xg_bias)
-{
-	struct adis_reg reg = adis->data->reg_map->xg_bias;
-	unsigned int reg_val;
-	int ret;
-
-	ret = adis_read_reg(adis, reg.addr, &reg_val, reg.size);
-	if(ret)
-		return ret;
-
-	*xg_bias = no_os_sign_extend32(reg_val, reg.size * 8 - 1);
-
-	return 0;
-}
-
-/**
- * @brief Write raw gyroscope offset correction on x axis.
- * @param adis    - The adis device.
- * @param xg_bias - The raw value to write.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_write_xg_bias(struct adis_dev *adis, int xg_bias)
-{
-	struct adis_reg reg = adis->data->reg_map->xg_bias;
-	return adis_write_reg(adis, reg.addr, xg_bias, reg.size);
-}
-
-/**
- * @brief Read raw gyroscope offset correction on y axis.
- * @param adis    - The adis device.
- * @param yg_bias - The raw read value.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_read_yg_bias(struct adis_dev *adis, int *yg_bias)
-{
-	struct adis_reg reg = adis->data->reg_map->yg_bias;
-	unsigned int reg_val;
-	int ret;
-
-	ret = adis_read_reg(adis, reg.addr, &reg_val, reg.size);
-	if(ret)
-		return ret;
-
-	*yg_bias = no_os_sign_extend32(reg_val, reg.size * 8 - 1);
-
-	return 0;
-}
-
-/**
- * @brief Write raw gyroscope offset correction on y axis.
- * @param adis    - The adis device.
- * @param yg_bias - The raw value to write.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_write_yg_bias(struct adis_dev *adis, int yg_bias)
-{
-	struct adis_reg reg = adis->data->reg_map->yg_bias;
-	return adis_write_reg(adis, reg.addr, yg_bias, reg.size);
-}
-
-/**
- * @brief Read raw gyroscope offset correction on z axis.
- * @param adis    - The adis device.
- * @param zg_bias - The raw read value.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_read_zg_bias(struct adis_dev *adis, int *zg_bias)
-{
-	struct adis_reg reg = adis->data->reg_map->zg_bias;
-	unsigned int reg_val;
-	int ret;
-
-	ret = adis_read_reg(adis, reg.addr, &reg_val, reg.size);
-	if(ret)
-		return ret;
-
-	*zg_bias = no_os_sign_extend32(reg_val, reg.size * 8 - 1);
-
-	return 0;
-}
-
-/**
- * @brief Write raw gyroscope offset correction on z axis.
- * @param adis    - The adis device.
- * @param zg_bias - The raw value to write.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_write_zg_bias(struct adis_dev *adis, int zg_bias)
-{
-	struct adis_reg reg = adis->data->reg_map->zg_bias;
-	return adis_write_reg(adis, reg.addr, zg_bias, reg.size);
-}
-
-/**
- * @brief Read raw acceleration offset correction on x axis.
- * @param adis    - The adis device.
- * @param xa_bias - The raw read value.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_read_xa_bias(struct adis_dev *adis, int *xa_bias)
-{
-	struct adis_reg reg = adis->data->reg_map->xa_bias;
-	unsigned int reg_val;
-	int ret;
-
-	ret = adis_read_reg(adis, reg.addr, &reg_val, reg.size);
-	if(ret)
-		return ret;
-
-	*xa_bias = no_os_sign_extend32(reg_val, reg.size * 8 - 1);
-
-	return 0;
-}
-
-/**
- * @brief Write raw acceleration offset correction on x axis.
- * @param adis    - The adis device.
- * @param xa_bias - The raw value to write.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_write_xa_bias(struct adis_dev *adis, int xa_bias)
-{
-	struct adis_reg reg = adis->data->reg_map->xa_bias;
-	return adis_write_reg(adis, reg.addr, xa_bias, reg.size);
-}
-
-/**
- * @brief Read raw acceleration offset correction on y axis.
- * @param adis    - The adis device.
- * @param ya_bias - The raw read value.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_read_ya_bias(struct adis_dev *adis, int *ya_bias)
-{
-	struct adis_reg reg = adis->data->reg_map->ya_bias;
-	unsigned int reg_val;
-	int ret;
-
-	ret = adis_read_reg(adis, reg.addr, &reg_val, reg.size);
-	if(ret)
-		return ret;
-
-	*ya_bias = no_os_sign_extend32(reg_val, reg.size * 8 - 1);
-
-	return 0;
-}
-
-/**
- * @brief Write raw acceleration offset correction on y axis.
- * @param adis    - The adis device.
- * @param ya_bias - The raw value to write.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_write_ya_bias(struct adis_dev *adis, int ya_bias)
-{
-	struct adis_reg reg = adis->data->reg_map->ya_bias;
-	return adis_write_reg(adis, reg.addr, ya_bias, reg.size);
-}
-
-/**
- * @brief Read raw acceleration offset correction on z axis.
- * @param adis    - The adis device.
- * @param za_bias - The raw read value.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_read_za_bias(struct adis_dev *adis, int *za_bias)
-{
-	struct adis_reg reg = adis->data->reg_map->za_bias;
-	unsigned int reg_val;
-	int ret;
-
-	ret = adis_read_reg(adis, reg.addr, &reg_val, reg.size);
-	if(ret)
-		return ret;
-
-	*za_bias = no_os_sign_extend32(reg_val, reg.size * 8 - 1);
-
-	return 0;
-}
-
-/**
- * @brief Write raw acceleration offset correction on z axis.
- * @param adis    - The adis device.
- * @param za_bias - The raw value to write.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_write_za_bias(struct adis_dev *adis, int za_bias)
-{
-	struct adis_reg reg = adis->data->reg_map->za_bias;
-	return adis_write_reg(adis, reg.addr, za_bias, reg.size);
-}
-
-/**
- * @brief Read filter size variable B value.
- * @param adis      - The adis device.
- * @param filt_ctrl - The filter size variable B read value.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_read_filt_ctrl(struct adis_dev *adis, unsigned int *filt_ctrl)
-{
-	struct adis_reg reg = adis->data->reg_map->filt_ctrl;
-	unsigned int reg_val;
-	int ret;
-
-	ret = adis_read_reg(adis, reg.addr, &reg_val, reg.size);
-	if(ret)
-		return ret;
-
-	*filt_ctrl = reg_val & reg.mask;
-
-	return 0;
-}
-
-/**
- * @brief Write filter size variable B value.
- * @param adis      - The adis device.
- * @param filt_ctrl - The filter size variable B value to write.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_write_filt_ctrl(struct adis_dev *adis, unsigned int filt_ctrl)
-{
-	struct adis_reg reg = adis->data->reg_map->filt_ctrl;
-	int ret;
-
-	if(filt_ctrl > adis->data->filt_ctrl_max)
-		return -EINVAL;
-
-	ret = adis_write_reg(adis, reg.addr, filt_ctrl, reg.size);
-	if (ret)
-		return ret;
-
-	no_os_udelay(adis->data->timeouts->filter_update_us);
-
-	return 0;
-}
-
-/**
- * @brief Read gyroscope measurement range value.
- * @param adis     - The adis device.
- * @param rang_mdl - The gyroscope measurement range value.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_read_rang_mdl(struct adis_dev *adis, unsigned int *rang_mdl)
-{
-	struct adis_reg reg = adis->data->reg_map->rang_mdl;
-	unsigned int reg_val;
-	int ret;
-
-	ret = adis_read_reg(adis, reg.addr, &reg_val, reg.size);
-	if (ret)
-		return ret;
-
-	*rang_mdl = no_os_field_get(reg.mask, reg_val);
-
-	return 0;
-}
-
-/**
- * @brief Read burst size encoded value.
- * @param adis       - The adis device.
- * @param burst_size - The burst size encoded value.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_read_burst_size(struct adis_dev *adis, unsigned int *burst_size)
-{
-	struct adis_reg reg = adis->data->reg_map->burst_size;
-	unsigned int reg_val;
-	int ret;
-
-	ret = adis_read_reg(adis, reg.addr, &reg_val, reg.size);
-	if(ret)
-		return ret;
-
-	*burst_size = reg_val & reg.mask ? 1 : 0;
-
-	return 0;
-}
-
-/**
- * @brief Write burst size value.
- * @param adis       - The adis device.
- * @param burst_size - The burst size encoded value to write.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_write_burst_size(struct adis_dev *adis, unsigned int burst_size)
-{
-	struct adis_reg reg = adis->data->reg_map->burst_size;
-	int ret;
-
-	if (burst_size > adis->data->burst_size_max)
-		return -EINVAL;
-
-	ret = adis_update_bits_base(adis, reg.addr, reg.mask, burst_size, reg.size);
-	if (ret)
-		return ret;
-
-	no_os_udelay(adis->data->timeouts->msc_reg_update_us);
-
-	return 0;
-}
-
-/**
- * @brief Read burst selection encoded value.
- * @param adis      - The adis device.
- * @param burst_sel - The burst selection encoded value.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_read_burst_sel(struct adis_dev *adis, unsigned int *burst_sel)
-{
-	struct adis_reg reg = adis->data->reg_map->burst_sel;
-	unsigned int reg_val;
-	int ret;
-
-	ret = adis_read_reg(adis, reg.addr, &reg_val, reg.size);
-	if(ret)
-		return ret;
-
-	*burst_sel = reg_val & reg.mask ? 1 : 0;
-
-	return 0;
-}
-
-/**
- * @brief Write burst selection encoded value.
- * @param adis      - The adis device.
- * @param burst_sel - The burst selection encoded value to write.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_write_burst_sel(struct adis_dev *adis, unsigned int burst_sel)
-{
-	struct adis_reg reg = adis->data->reg_map->burst_sel;
-	int ret;
-
-	if (burst_sel > adis->data->burst_sel_max)
-		return -EINVAL;
-
-	ret = adis_update_bits_base(adis, reg.addr, reg.mask, burst_sel, reg.size);
-	if (ret)
-		return ret;
-
-	no_os_udelay(adis->data->timeouts->msc_reg_update_us);
-
-	return 0;
-}
-
-/**
- * @brief Read linear acceleration compensation encoded value.
- * @param adis             - The adis device.
- * @param linear_accl_comp - The linear acceleration compensation encoded value.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_read_linear_accl_comp(struct adis_dev *adis,
-			       unsigned int *linear_accl_comp)
-{
-	struct adis_reg reg = adis->data->reg_map->linear_accl_comp;
-	unsigned int reg_val;
-	int ret;
-
-	ret = adis_read_reg(adis, reg.addr, &reg_val, reg.size);
-	if(ret)
-		return ret;
-
-	*linear_accl_comp = reg_val & reg.mask ? 1 : 0;
-
-	return 0;
-}
-
-/**
- * @brief Write linear acceleration compensation encoded value.
- * @param adis             - The adis device.
- * @param linear_accl_comp - The linear acceleration compensation encoded value to write.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_write_linear_accl_comp(struct adis_dev *adis,
-				unsigned int linear_accl_comp)
-{
-	struct adis_reg reg = adis->data->reg_map->linear_accl_comp;
-	int ret;
-
-	if (linear_accl_comp > adis->data->linear_accl_comp_max)
-		return -EINVAL;
-
-	ret = adis_update_bits_base(adis, reg.addr, reg.mask, linear_accl_comp,
-				    reg.size);
-	if (ret)
-		return ret;
-
-	no_os_udelay(adis->data->timeouts->msc_reg_update_us);
-
-	return 0;
-}
-
-/**
- * @brief Read point of percussion alignment encoded value.
- * @param adis              - The adis device.
- * @param pt_of_perc_algnmt - The point of percussion alignment encoded value.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_read_pt_of_perc_algnmt(struct adis_dev *adis,
-				unsigned int *pt_of_perc_algnmt)
-{
-	struct adis_reg reg = adis->data->reg_map->pt_of_perc_algnmt;
-	unsigned int reg_val;
-	int ret;
-
-	ret = adis_read_reg(adis, reg.addr, &reg_val, reg.size);
-	if(ret)
-		return ret;
-
-	*pt_of_perc_algnmt = reg_val & reg.mask ? 1 : 0;
-
-	return 0;
-}
-
-/**
- * @brief Write point of percussion alignment encoded value.
- * @param adis              - The adis device.
- * @param pt_of_perc_algnmt - The point of percussion alignment encoded value to write.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_write_pt_of_perc_algnmt(struct adis_dev *adis,
-				 unsigned int pt_of_perc_algnmt)
-{
-	struct adis_reg reg = adis->data->reg_map->pt_of_perc_algnmt;
-	int ret;
-
-	if (pt_of_perc_algnmt > adis->data->pt_of_perc_algnmt_max)
-		return -EINVAL;
-
-	ret = adis_update_bits_base(adis, reg.addr, reg.mask, pt_of_perc_algnmt,
-				    reg.size);
-	if (ret)
-		return ret;
-
-	no_os_udelay(adis->data->timeouts->msc_reg_update_us);
-
-	return 0;
-}
-
-/**
- * @brief Read internal sensor bandwidth encoded value.
- * @param adis    - The adis device.
- * @param sens_bw - The internal sensor bandwidth encoded value.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_read_sens_bw(struct adis_dev *adis, unsigned int *sens_bw)
-{
-	struct adis_reg reg = adis->data->reg_map->sens_bw;
-	unsigned int reg_val;
-	int ret;
-
-	ret = adis_read_reg(adis, reg.addr, &reg_val, reg.size);
-	if(ret)
-		return ret;
-
-	*sens_bw = no_os_field_get(reg.mask, reg_val);
-
-	return 0;
-}
-
-/**
- * @brief Write internal sensor bandwidth encoded value.
- * @param adis    - The adis device.
- * @param sens_bw - The internal sensor bandwidth encoded value to write.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_write_sens_bw(struct adis_dev *adis, unsigned int sens_bw)
-{
-	struct adis_reg reg = adis->data->reg_map->sens_bw;
-	int ret;
-
-	if (sens_bw > adis->data->sens_bw_max)
-		return -EINVAL;
-
-	ret = adis_update_bits_base(adis, reg.addr, reg.mask, sens_bw, reg.size);
-	if (ret)
-		return ret;
-
-	no_os_mdelay(adis->data->timeouts->sens_bw_update_ms);
-
-	return 0;
-}
-
-/**
- * @brief Read synchronization mode encoded value.
- * @param adis      - The adis device.
- * @param sync_mode - The synchronization mode encoded value.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_read_sync_mode(struct adis_dev *adis, unsigned int *sync_mode)
-{
-	struct adis_reg reg = adis->data->reg_map->sync_mode;
-	unsigned int reg_val;
-	int ret;
-
-	ret = adis_read_reg(adis, reg.addr, &reg_val, reg.size);
-	if(ret)
-		return ret;
-
-	*sync_mode = no_os_field_get(reg.mask, reg_val);
-
-	return 0;
-}
-
-/**
- * @brief Update synchronization mode.
- * @param adis      - The adis device.
- * @param sync_mode - The synchronization mode encoded value to update.
- * @param ext_clk   - The external clock frequency to update, will be ignored
- * if sync_mode is different from ADIS_SYNC_SCALED and ADIS_SYNC_DIRECT.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_update_sync_mode(struct adis_dev *adis, unsigned int sync_mode,
-			  unsigned int ext_clk)
-{
-	int ret;
-	struct adis_reg reg = adis->data->reg_map->sync_mode;
-
-	if(sync_mode > adis->data->sync_mode_max)
-		return -EINVAL;
-
-	if (sync_mode != ADIS_SYNC_DEFAULT && sync_mode != ADIS_SYNC_OUTPUT) {
-		/* Sync pulse is external */
-		if (ext_clk < adis->data->sync_rate_limit[sync_mode].sync_min_rate
-		    || ext_clk > adis->data->sync_rate_limit[sync_mode].sync_max_rate)
-			return -EINVAL;
-
-		adis->ext_clk = ext_clk;
-		adis->clk_freq = ext_clk;
-
-		if (sync_mode == ADIS_SYNC_SCALED) {
-			/*
-			 * In sync scaled mode, the IMU sample rate is the clk_freq * sync_scale.
-			 * Hence, default the IMU sample rate to the highest multiple of the input
-			 * clock lower than the IMU max sample rate. The optimal range is
-			 * 1900-2100 sps...
-			 */
-			ret = adis_write_up_scale(adis, 2100 / adis->clk_freq);
-			if (ret)
-				return ret;
-		}
-
-	} else {
-		adis->clk_freq = adis->data->int_clk;
-	}
-
-	return adis_update_bits_base(adis, reg.addr, reg.mask, sync_mode, reg.size);
-}
-
-/**
- * @brief Read sync polarity encoded value.
- * @param adis          - The adis device.
- * @param sync_polarity - The sync polarity encoded value.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_read_sync_polarity(struct adis_dev *adis,
-			    unsigned int *sync_polarity)
-{
-	struct adis_reg reg = adis->data->reg_map->sync_polarity;
-	unsigned int reg_val;
-	int ret;
-
-	ret = adis_read_reg(adis, reg.addr, &reg_val, reg.size);
-	if(ret)
-		return ret;
-
-	*sync_polarity = reg_val & reg.mask ? 1 : 0;
-
-	return 0;
-}
-
-/**
- * @brief Write sync polarity encoded value.
- * @param adis          - The adis device.
- * @param sync_polarity - The sync polarity encoded value to write.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_write_sync_polarity(struct adis_dev *adis,
-			     unsigned int sync_polarity)
-{
-	struct adis_reg reg = adis->data->reg_map->sync_polarity;
-	int ret;
-
-	if (sync_polarity > 1)
-		return -EINVAL;
-
-	ret = adis_update_bits_base(adis, reg.addr, reg.mask, sync_polarity, reg.size);
-	if (ret)
-		return ret;
-
-	no_os_udelay(adis->data->timeouts->msc_reg_update_us);
-
-	return 0;
-}
-
-/**
- * @brief Read data ready polarity encoded value.
- * @param adis        - The adis device.
- * @param dr_polarity - The data ready polarity encoded value.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_read_dr_polarity(struct adis_dev *adis,
-			  unsigned int *dr_polarity)
-{
-	struct adis_reg reg = adis->data->reg_map->dr_polarity;
-	unsigned int reg_val;
-	int ret;
-
-	ret = adis_read_reg(adis, reg.addr, &reg_val, reg.size);
-	if(ret)
-		return ret;
-
-	*dr_polarity = reg_val & reg.mask ? 1 : 0;
-
-	return 0;
-}
-
-/**
- * @brief Write data ready polarity encoded value.
- * @param adis        - The adis device.
- * @param dr_polarity - The data ready polarity encoded value to write.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_write_dr_polarity(struct adis_dev *adis,
-			   unsigned int dr_polarity)
-{
-	struct adis_reg reg = adis->data->reg_map->dr_polarity;
-	int ret;
-
-	if (dr_polarity > 1)
-		return -EINVAL;
-
-	ret = adis_update_bits_base(adis, reg.addr, reg.mask, dr_polarity, reg.size);
-	if (ret)
-		return ret;
-
-	no_os_udelay(adis->data->timeouts->msc_reg_update_us);
-
-	return 0;
-}
-
-/**
- * @brief Read external clock scale factor value.
- * @param adis     - The adis device.
- * @param up_scale - The external clock scale factor read value.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_read_up_scale(struct adis_dev *adis, unsigned int *up_scale)
-{
-	struct adis_reg reg = adis->data->reg_map->up_scale;
-	unsigned int reg_val;
-	int ret;
-
-	ret = adis_read_reg(adis, reg.addr, &reg_val, reg.size);
-	if(ret)
-		return ret;
-
-	*up_scale = reg_val & reg.mask;
-
-	return 0;
-}
-
-/**
- * @brief Write external clock scale factor value.
- * @param adis     - The adis device.
- * @param up_scale - The external clock scale factor value to write.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_write_up_scale(struct adis_dev *adis, unsigned int up_scale)
-{
-	struct adis_reg reg = adis->data->reg_map->up_scale;
-	unsigned int sync_mode;
-	int ret;
-
-	if(up_scale > reg.mask)
-		return -EINVAL;
-
 	ret = adis_read_sync_mode(adis, &sync_mode);
 	if (ret)
 		return ret;
 
-	/* Allow for any value to be written unless the device is in SYNC_SCALED synchronization mode.
-	 * If the device is in SYNC_SCALED syncronization mode, make sure the result for clk_freq * up_scale
-	is between 1900 and 2100 Hz, otherwise return -EINVAL.
-	*/
-	if (sync_mode == ADIS_SYNC_SCALED && (adis->clk_freq*up_scale > 2100
-					      || adis->clk_freq*up_scale < 1900))
-		return -EINVAL;
+	if (sync_mode != ADIS_SYNC_DEFAULT && sync_mode != ADIS_SYNC_OUTPUT)
+		if (clk_freq < adis->info->sync_clk_freq_limits[sync_mode].min_freq
+		    || clk_freq > adis->info->sync_clk_freq_limits[sync_mode].max_freq)
+			return -EINVAL;
 
-	return adis_write_reg(adis, reg.addr, up_scale, reg.size);
-}
-
-/**
- * @brief Read decimation rate value.
- * @param adis     - The adis device.
- * @param dec_rate - The decimation rate read value.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_read_dec_rate(struct adis_dev *adis, unsigned int *dec_rate)
-{
-	struct adis_reg reg = adis->data->reg_map->dec_rate;
-	unsigned int reg_val;
-	int ret;
-
-	ret = adis_read_reg(adis, reg.addr, &reg_val, reg.size);
-	if(ret)
-		return ret;
-
-	*dec_rate = reg_val & reg.mask;
-
-	return 0;
-}
-
-/**
- * @brief Write decimation rate value.
- * @param adis     - The adis device.
- * @param dec_rate - The decimation rate value to write.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_write_dec_rate(struct adis_dev *adis, unsigned int dec_rate)
-{
-	struct adis_reg reg = adis->data->reg_map->dec_rate;
-	int ret;
-
-	if(dec_rate > adis->data->dec_rate_max)
-		return -EINVAL;
-
-	ret = adis_write_reg(adis, reg.addr, dec_rate, reg.size);
-	if(ret)
-		return ret;
-
-	no_os_udelay(adis->data->timeouts->filter_update_us);
-
-	return 0;
-}
-
-/**
- * @brief Command: software reset
- * @param adis - The adis device.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_cmd_sw_res(struct adis_dev *adis)
-{
-	int ret;
-	struct adis_reg reg = adis->data->reg_map->sw_res;
-
-	ret = adis_write_reg(adis, reg.addr, reg.mask, reg.size);
-	if(ret)
-		return ret;
-
-	no_os_mdelay(adis->data->timeouts->sw_reset_ms);
-
-	return 0;
-}
-
-/**
- * @brief Command: flash memory test
- * @param adis - The adis device.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_cmd_fls_mem_test(struct adis_dev *adis)
-{
-	struct adis_reg reg = adis->data->reg_map->fls_mem_test;
-	return adis_write_reg(adis, reg.addr, reg.mask, reg.size);
-}
-
-/**
- * @brief Command: flash memory update
- * @param adis - The adis device.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_cmd_fls_mem_update(struct adis_dev *adis)
-{
-	int ret;
-	unsigned int flash_cnt;
-	struct adis_reg reg = adis->data->reg_map->fls_mem_update;
-
-	ret =  adis_write_reg(adis, reg.addr, reg.mask, reg.size);
-	if (ret)
-		return ret;
-
-	/* Make sure flash counter is read after each flash update */
-	return adis_read_flshcnt(adis, &flash_cnt);
-}
-
-/**
- * @brief Command: sensor self test
- * @param adis - The adis device.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_cmd_snsr_self_test(struct adis_dev *adis)
-{
-	int ret;
-	struct adis_reg reg = adis->data->reg_map->snsr_self_test;
-
-	ret = adis_write_reg(adis, reg.addr, reg.mask, reg.size);
-	if(ret)
-		return ret;
-
-	no_os_mdelay(adis->data->timeouts->self_test_ms);
-
-	return 0;
-}
-
-/**
- * @brief Command: factory calibration restore
- * @param adis - The adis device.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_cmd_fact_calib_restore(struct adis_dev *adis)
-{
-	struct adis_reg reg = adis->data->reg_map->fact_calib_restore;
-	return adis_write_reg(adis, reg.addr, reg.mask, reg.size);
-}
-
-/**
- * @brief Read firmware revision value.
- * @param adis     - The adis device.
- * @param firm_rev - The firmware revision value.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_read_firm_rev(struct adis_dev *adis, unsigned int *firm_rev)
-{
-	struct adis_reg reg = adis->data->reg_map->firm_rev;
-	return adis_read_reg(adis, reg.addr, firm_rev, reg.size);
-}
-
-/**
- * @brief Read firmware factory configuration month and day value.
- * @param adis    - The adis device.
- * @param firm_dm - The factory configuration month and day value.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_read_firm_dm(struct adis_dev *adis, unsigned int *firm_dm)
-{
-	struct adis_reg reg = adis->data->reg_map->firm_dm;
-	return adis_read_reg(adis, reg.addr, firm_dm, reg.size);
-}
-
-/**
- * @brief Read firmware factory configuration year value.
- * @param adis   - The adis device.
- * @param firm_y - The factory configuration year value.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_read_firm_y(struct adis_dev *adis, unsigned int *firm_y)
-{
-	struct adis_reg reg = adis->data->reg_map->firm_y;
-	return adis_read_reg(adis, reg.addr, firm_y, reg.size);
-}
-
-/**
- * @brief Read product id value.
- * @param adis   - The adis device.
- * @param prod_id - The product id value.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_read_prod_id(struct adis_dev *adis, unsigned int *prod_id)
-{
-	struct adis_reg reg = adis->data->reg_map->prod_id;
-	return adis_read_reg(adis, reg.addr, prod_id, reg.size);
-}
-
-/**
- * @brief Read serial number value.
- * @param adis   - The adis device.
- * @param serial_num - The serial number value.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_read_serial_num(struct adis_dev *adis, unsigned int *serial_num)
-{
-	struct adis_reg reg = adis->data->reg_map->serial_num;
-	return adis_read_reg(adis, reg.addr, serial_num, reg.size);
-}
-
-/**
- * @brief Read user scratch register 1 value.
- * @param adis      - The adis device.
- * @param usr_scr_1 - The user scratch register 1 value.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_read_usr_scr_1(struct adis_dev *adis, unsigned int *usr_scr_1)
-{
-	struct adis_reg reg = adis->data->reg_map->usr_scr_1;
-	return adis_read_reg(adis, reg.addr, usr_scr_1, reg.size);
-}
-
-/**
- * @brief Write user scratch register 1 value.
- * @param adis      - The adis device.
- * @param usr_scr_1 - The user scratch register 1 value to write.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_write_usr_scr_1(struct adis_dev *adis, unsigned int usr_scr_1)
-{
-	struct adis_reg reg = adis->data->reg_map->usr_scr_1;
-
-	if (usr_scr_1 > reg.mask)
-		return -EINVAL;
-
-	return adis_write_reg(adis, reg.addr, usr_scr_1, reg.size);
-}
-
-/**
- * @brief Read user scratch register 2 value.
- * @param adis      - The adis device.
- * @param usr_scr_2 - The user scratch register 2 value.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_read_usr_scr_2(struct adis_dev *adis, unsigned int *usr_scr_2)
-{
-	struct adis_reg reg = adis->data->reg_map->usr_scr_2;
-	return adis_read_reg(adis, reg.addr, usr_scr_2, reg.size);
-}
-
-/**
- * @brief Write user scratch register 2 value.
- * @param adis      - The adis device.
- * @param usr_scr_2 - The user scratch register 2 value to write.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_write_usr_scr_2(struct adis_dev *adis, unsigned int usr_scr_2)
-{
-	struct adis_reg reg = adis->data->reg_map->usr_scr_2;
-
-	if (usr_scr_2 > reg.mask)
-		return -EINVAL;
-
-	return adis_write_reg(adis, reg.addr, usr_scr_2, reg.size);
-}
-
-/**
- * @brief Read user scratch register 3 value.
- * @param adis      - The adis device.
- * @param usr_scr_3 - The user scratch register 3 value.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_read_usr_scr_3(struct adis_dev *adis, unsigned int *usr_scr_3)
-{
-	struct adis_reg reg = adis->data->reg_map->usr_scr_3;
-	return adis_read_reg(adis, reg.addr, usr_scr_3, reg.size);
-}
-
-/**
- * @brief Write user scratch register 3 value.
- * @param adis      - The adis device.
- * @param usr_scr_3 - The user scratch register 3 value to write.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_write_usr_scr_3(struct adis_dev *adis, unsigned int usr_scr_3)
-{
-	struct adis_reg reg = adis->data->reg_map->usr_scr_3;
-
-	if (usr_scr_3 > reg.mask)
-		return -EINVAL;
-
-	return adis_write_reg(adis, reg.addr, usr_scr_3, reg.size);
-}
-
-/**
- * @brief Read flash memory write cycle counter value.
- * @param adis    - The adis device.
- * @param flshcnt - The flash memory write cycle counter value.
- * @return 0 in case of success, error code otherwise.
- */
-int adis_read_flshcnt(struct adis_dev *adis, unsigned int *flshcnt)
-{
-	int ret;
-	struct adis_reg reg = adis->data->reg_map->flshcnt;
-
-	ret = adis_read_reg(adis, reg.addr, flshcnt, reg.size);
-	if (ret)
-		return ret;
-
-	if(*flshcnt > adis->data->flshcnt_max)
-		adis->diag_flags.adis_diag_flags_bits.FLS_MEM_WR_CNT_EXCEED = true;
+	/*
+	 * Allow setting of clock frequency in other modes because it will not
+	 * be used.
+	 */
+	adis->ext_clk = clk_freq;
 
 	return 0;
 }
