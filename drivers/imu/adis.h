@@ -100,14 +100,26 @@ struct adis_diag_flags {
 struct adis_timeout {
 	/** Wait time in milliseconds needed after a hardware reset. */
 	uint16_t reset_ms;
-	/** Wait time in milliseconds needed after a software reset command is
-	 * issued.
+	/** Wait time in milliseconds needed after a factory calibration restore
+	 *  command is issued.
 	 */
-	uint16_t sw_reset_ms;
+	uint16_t fact_calib_restore_ms;
 	/** Wait time in milliseconds needed after a self test
 	 * command is issued.
 	 */
 	uint16_t self_test_ms;
+	/** Wait time in milliseconds needed after a flash memory update command
+	 *  is issued.
+	 */
+	uint16_t fls_mem_update_ms;
+	/** Wait time in milliseconds needed after a flash memory test command
+	 *  is issued.
+	 */
+	uint16_t fls_mem_test_ms;
+	/** Wait time in milliseconds needed after a software reset command is
+	 * issued.
+	 */
+	uint16_t sw_reset_ms;
 	/** Wait time in microseconds needed after a write command is issued for
 	 *  the decimation rate field.
 	 */
