@@ -20,7 +20,7 @@ jobs:
     submodules: true
     clean: true
     persistCredentials: true
-  - script: 'python3 ./tools/scripts/build_projects.py . 
+  - script: 'sudo python3 ./tools/scripts/build_projects.py . 
                -export_dir $(RELEASE_DIR)
                -log_dir $(LOG_DIR)
                -builds_dir $(BUILDS_DIR)'
