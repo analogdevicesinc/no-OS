@@ -23,3 +23,4 @@ SRC_DIRS += $(LWIP_DIR)/core
 #SRC_DIRS += $(LWIP_DIR)/Maxim
 SRC_DIRS += $(LWIP_DIR)/netif
 SRC_DIRS += $(LWIP_DIR)/apps/mdns
+SRC_DIRS += $(LWIP_DIR)/apps/lwiperf

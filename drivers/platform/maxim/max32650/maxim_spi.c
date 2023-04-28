@@ -437,8 +437,6 @@ int32_t max_spi_transfer(struct no_os_spi_desc *desc,
 	// 	last_slave_id[desc->device_id] = slave_id;
 	// }
 
-	__disable_irq();
-
 	req.spi = MXC_SPI_GET_SPI(desc->device_id);
 	req.ssIdx = desc->chip_select;
 	for (uint32_t i = 0; i < len; i++) {
@@ -471,8 +469,6 @@ int32_t max_spi_transfer(struct no_os_spi_desc *desc,
 
 		//no_os_udelay(msgs[i].cs_change_delay);
 	}
-
-	__enable_irq();
 
 	return 0;
 }

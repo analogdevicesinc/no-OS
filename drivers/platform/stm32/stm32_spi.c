@@ -343,6 +343,7 @@ int32_t stm32_spi_write_and_read(struct no_os_spi_desc *desc,
 		.cs_change = true,
 		.rx_buff = data,
 		.tx_buff = data,
+		.use_dma = 0,
 	};
 
 	if (!desc || !desc->extra || !data)

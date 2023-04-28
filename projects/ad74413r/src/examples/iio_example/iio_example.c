@@ -63,6 +63,9 @@
 #include "lwip/netif.h"
 #include "lwip/tcp.h"
 
+#include "lwip/apps/lwiperf.h"
+#include "lwip/ip_addr.h"
+
 #include "core_cm4.h"
 
 /******************************************************************************/
@@ -76,7 +79,7 @@
 /******************************************************************************/
 
 uint8_t iio_data_buffer[DATA_BUFFER_SIZE * sizeof(uint32_t) * 8];
-uint8_t iio_data_buffer2[100 * sizeof(uint32_t) * 8];
+uint8_t iio_data_buffer2[1000 * sizeof(uint32_t) * 8];
 
 extern int ad74413r_apply;
 extern int max14906_apply;

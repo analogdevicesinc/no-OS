@@ -16,11 +16,11 @@
 #include "lwip/dhcp.h"
 #include "netif/ethernet.h"
 #include "lwip/inet.h"
-// #include "lwip/apps/mdns.h"
-// #include "lwip/apps/mdns.h"
-// #include "lwip/apps/mdns_priv.h"
-// #include "lwip/apps/mdns_domain.h"
-// #include "lwip/apps/mdns_out.h"
+#include "lwip/apps/mdns.h"
+#include "lwip/apps/mdns.h"
+#include "lwip/apps/mdns_priv.h"
+#include "lwip/apps/mdns_domain.h"
+#include "lwip/apps/mdns_out.h"
 
 #include "lwipcfg.h"
 #include "lwipopts.h"
@@ -37,6 +37,7 @@
 
 #include "adin1110.h"
 
+static uint32_t mdns_conflict_id;
 static uint8_t lwip_buff[ADIN1110_LWIP_BUFF_SIZE];
 
 static void max_eth_config_noos_if(struct max_eth_desc *desc);
@@ -113,7 +114,7 @@ static err_t max_eth_netif_init(struct netif *netif)
 	netif->linkoutput = mxc_eth_netif_output;
 	netif->output = etharp_output;
 	netif->mtu = MXC_NETIF_MTU_SIZE;
-	netif->flags = NETIF_FLAG_BROADCAST | NETIF_FLAG_ETHARP | NETIF_FLAG_ETHERNET;
+	netif->flags = NETIF_FLAG_BROADCAST | NETIF_FLAG_ETHARP | NETIF_FLAG_ETHERNET | NETIF_FLAG_IGMP;
 
 	memcpy(netif->hwaddr, hwaddr, MAC_LEN);
 	netif->hwaddr_len = MAC_LEN;
@@ -176,13 +177,50 @@ int max_lwip_tick(void *data)
 	return ret;
 }
 
+static void mdns_name_result(struct netif* netif, u8_t result, s8_t slot)
+{
+	if (result == MDNS_PROBING_CONFLICT)
+		mdns_conflict_id++;
+
+	return 0;
+}
+
+static void srv_txt(struct mdns_service *service, void *txt_userdata)
+{
+	err_t ret;
+
+	ret = mdns_resp_add_service_txtitem(service, "path=/", 6);
+	LWIP_ERROR("mdns add service txt failed\n", (ret == ERR_OK), return);
+}
+
+static int _lwip_start_mdns(struct netif *netif)
+{
+	int ret;
+
+	mdns_resp_init();
+	mdns_resp_register_name_result_cb(mdns_name_result);
+
+	ret = mdns_resp_add_netif(netif, NO_OS_DOMAIN_NAME);
+	if (ret)
+		return ret;
+
+	ret = mdns_resp_add_service(netif, "analog", "_iio", DNSSD_PROTO_TCP,
+				    30431, srv_txt, NULL);
+	if (ret)
+		return ret;
+
+	mdns_resp_announce(netif);
+
+	return 0;
+}
+
 int max_eth_init(struct netif **netif_desc, struct max_eth_param *param)
 {
 	struct network_interface *network_descriptor;
 	struct max_eth_desc *descriptor;
 	struct netif *netif_descriptor;
 	ip4_addr_t ipaddr, netmask, gw;
-	uint32_t dhcp_timeout = 50;
+	uint32_t dhcp_timeout = 5000;
 	uint32_t reg_val;
 	char *addr;
 	int ret;
@@ -240,6 +278,16 @@ int max_eth_init(struct netif **netif_desc, struct max_eth_param *param)
 	ret = dhcp_start(netif_descriptor);
 	if (ret)
 		return ret;
+
+	while (!netif_descriptor->ip_addr.addr && dhcp_timeout > 0) {
+		max_lwip_tick(descriptor);
+		dhcp_timeout--;
+		no_os_mdelay(1);
+	}
+
+	ret = _lwip_start_mdns(netif_descriptor);
+	if (ret)
+		goto free_descriptor;
 
 	max_eth_config_noos_if(descriptor);
 
@@ -325,6 +373,8 @@ static int32_t max_socket_open(void *net, uint32_t sock_id,
 	desc->sockets[sock_id].p = NULL;
 
 	max_eth_config_socket(&desc->sockets[sock_id]);
+
+	mdns_conflict_id = 0;
 
 	return 0;
 }

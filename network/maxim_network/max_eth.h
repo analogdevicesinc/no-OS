@@ -10,6 +10,7 @@
 
 #define ADIN1110_LWIP_BUFF_SIZE				1530
 #define MXC_NETIF_MTU_SIZE				1500
+#define NO_OS_DOMAIN_NAME				"swiot"
 
 #define MAX_SOCKETS	20
 
@@ -48,6 +49,8 @@ struct max_eth_desc {
 	struct network_interface noos_net;
 	struct socket_desc sockets[MAX_SOCKETS];
 	void *extra;
+
+	char domain_name[256];
 };
 
 struct max_eth_param {
