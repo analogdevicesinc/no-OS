@@ -111,9 +111,12 @@ static const struct adis_data_field_map_def adis16505_def = {
 };
 
 static const struct adis_timeout adis16505_timeouts = {
-	.reset_ms 			= 260,
-	.sw_reset_ms 			= 260,
-	.self_test_ms 			= 20,
+	.reset_ms 			= 310,
+	.fact_calib_restore_ms		= 136,
+	.self_test_ms 			= 24,
+	.fls_mem_update_ms		= 70,
+	.fls_mem_test_ms		= 30,
+	.sw_reset_ms 			= 255,
 	.filt_size_var_b_update_us 	= 30,
 	.dec_rate_update_us		= 30,
 	.msc_reg_update_us 		= 200,

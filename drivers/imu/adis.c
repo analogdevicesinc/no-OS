@@ -1533,7 +1533,15 @@ int adis_write_dec_rate(struct adis_dev *adis, uint32_t dec_rate)
 int adis_cmd_fact_calib_restore(struct adis_dev *adis)
 {
 	struct adis_field field = adis->info->field_map->fact_calib_restore;
-	return adis_write_reg(adis, field.reg_addr, field.field_mask, field.reg_size);
+	int ret;
+
+	ret = adis_write_reg(adis, field.reg_addr, field.field_mask, field.reg_size);
+	if (ret)
+		return ret;
+
+	no_os_mdelay(adis->info->timeouts->fact_calib_restore_ms);
+
+	return 0;
 }
 
 /**
@@ -1570,6 +1578,8 @@ int adis_cmd_fls_mem_update(struct adis_dev *adis)
 	if (ret)
 		return ret;
 
+	no_os_mdelay(adis->info->timeouts->fls_mem_update_ms);
+
 	/* Make sure flash counter is read after each flash update */
 	return adis_read_fls_mem_wr_cntr(adis, &flash_cnt);
 }
@@ -1582,7 +1592,15 @@ int adis_cmd_fls_mem_update(struct adis_dev *adis)
 int adis_cmd_fls_mem_test(struct adis_dev *adis)
 {
 	struct adis_field field = adis->info->field_map->fls_mem_test;
-	return adis_write_reg(adis, field.reg_addr, field.field_mask, field.reg_size);
+	int ret;
+
+	ret = adis_write_reg(adis, field.reg_addr, field.field_mask, field.reg_size);
+	if (ret)
+		return ret;
+
+	no_os_mdelay(adis->info->timeouts->fls_mem_test_ms);
+
+	return 0;
 }
 
 /**
