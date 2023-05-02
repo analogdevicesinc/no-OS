@@ -37,6 +37,8 @@
 
 #include "adin1110.h"
 
+static bool mdns_result;
+static bool mdns_is_conflict;
 static uint32_t mdns_conflict_id;
 static uint8_t lwip_buff[ADIN1110_LWIP_BUFF_SIZE];
 
@@ -51,15 +53,14 @@ static struct socket_desc *_get_sock(struct max_eth_desc *desc, uint32_t id)
 	return &desc->sockets[id];
 }
 
-/* Get first socket with state SOCKET_UNUSED. Then, set id with index */
-static int32_t _get_unused_socket(struct max_eth_desc *desc, uint32_t *id)
+/* Get first socket with state SOCKET_CLOSED. Then, set id with index */
+static int32_t _get_closed_socket(struct max_eth_desc *desc, uint32_t *id)
 {
 	uint32_t i;
 
 	for (i = 0; i < MAX_SOCKETS; i++)
-		if (desc->sockets[i].state == SOCKET_UNUSED) {
+		if (desc->sockets[i].state == SOCKET_CLOSED) {
 			*id = i;
-			desc->sockets[i].state = SOCKET_DISCONNECTED;
 
 			return 0;
 		}
@@ -68,12 +69,11 @@ static int32_t _get_unused_socket(struct max_eth_desc *desc, uint32_t *id)
 	return -ENOMEM;
 }
 
-/* Mark socket as SOCKET_UNUSED. */
 static void _release_socket(struct max_eth_desc *desc, uint32_t id)
 {
 	struct socket_desc *sock = _get_sock(desc, id);
 
-	sock->state = SOCKET_UNUSED;
+	sock->state = SOCKET_CLOSED;
 }
 
 static err_t mxc_eth_netif_output(struct netif *netif, struct pbuf *p)
@@ -179,10 +179,16 @@ int max_lwip_tick(void *data)
 
 static void mdns_name_result(struct netif* netif, u8_t result, s8_t slot)
 {
-	if (result == MDNS_PROBING_CONFLICT)
+	mdns_result = true;
+
+	if (result == MDNS_PROBING_CONFLICT) {
+		mdns_is_conflict = true;
 		mdns_conflict_id++;
 
-	return 0;
+		return;
+	}
+
+	mdns_is_conflict = false;
 }
 
 static void srv_txt(struct mdns_service *service, void *txt_userdata)
@@ -193,16 +199,38 @@ static void srv_txt(struct mdns_service *service, void *txt_userdata)
 	LWIP_ERROR("mdns add service txt failed\n", (ret == ERR_OK), return);
 }
 
-static int _lwip_start_mdns(struct netif *netif)
+static int _lwip_start_mdns(struct max_eth_desc *desc, struct netif *netif)
 {
+	char mdns_name_buff[256];
+	uint32_t len;
 	int ret;
 
 	mdns_resp_init();
 	mdns_resp_register_name_result_cb(mdns_name_result);
 
-	ret = mdns_resp_add_netif(netif, NO_OS_DOMAIN_NAME);
-	if (ret)
-		return ret;
+	/*
+	 * DNS conflict resolution. If domain_name is already taken, try domain_name-X
+	 * (X = 1, 2, ... ), until one is available. This might take a long time
+	 * (up to a few seconds) depending on the number of conflicts.
+	 */
+	do {
+		mdns_is_conflict = false;
+		len = sprintf(mdns_name_buff, "%s", NO_OS_DOMAIN_NAME);
+		if (mdns_conflict_id)
+			sprintf(mdns_name_buff + len, "%c%d", '-', mdns_conflict_id);
+
+		ret = mdns_resp_add_netif(netif, mdns_name_buff);
+		if (ret)
+			return ret;
+
+		while (!mdns_result)
+			max_lwip_tick(desc);
+
+		// if (mdns_is_conflict)
+		// 	mdns_resp_remove_netif(netif);
+
+		mdns_result = false;
+	} while (mdns_is_conflict);
 
 	ret = mdns_resp_add_service(netif, "analog", "_iio", DNSSD_PROTO_TCP,
 				    30431, srv_txt, NULL);
@@ -224,6 +252,9 @@ int max_eth_init(struct netif **netif_desc, struct max_eth_param *param)
 	uint32_t reg_val;
 	char *addr;
 	int ret;
+	int i;
+
+	uint8_t multicast_addr[6] = {0x01, 0x00, 0x5e, 0x00, 0x00, 0xfb};
 
 	if (!param)
 		return -EINVAL;
@@ -268,6 +299,10 @@ int max_eth_init(struct netif **netif_desc, struct max_eth_param *param)
 	if (ret)
 		goto free_descriptor;
 
+	ret = adin1110_set_mac_addr(descriptor->mac_desc, multicast_addr);
+	if (ret)
+		return ret;
+
 	descriptor->name[0] = param->name[0];
 	descriptor->name[1] = param->name[1];
 
@@ -285,13 +320,19 @@ int max_eth_init(struct netif **netif_desc, struct max_eth_param *param)
 		no_os_mdelay(1);
 	}
 
-	ret = _lwip_start_mdns(netif_descriptor);
+	ret = _lwip_start_mdns(descriptor, netif_descriptor);
 	if (ret)
 		goto free_descriptor;
 
 	max_eth_config_noos_if(descriptor);
 
 	*netif_desc = netif_descriptor;
+
+	for (i = 0; i < MAX_SOCKETS; i++) {
+		descriptor->sockets[i].state = SOCKET_CLOSED;
+		descriptor->sockets[i].desc = descriptor;
+		descriptor->sockets[i].id = i;
+	}
 
 	return 0;
 
@@ -309,7 +350,46 @@ void max_eth_err_callback(void *arg, err_t err)
 {
 	struct socket_desc *socket = arg;
 
-	socket->state = SOCKET_DISCONNECTED;
+	socket->state = SOCKET_CLOSED;
+}
+
+static int32_t max_socket_close(void *net, uint32_t sock_id)
+{
+	struct max_eth_desc *desc = net;
+	struct socket_desc *sock;
+	struct pbuf *p, *old_p;
+	err_t ret;
+
+	sock = _get_sock(desc, sock_id);
+	if (!sock)
+		return -EINVAL;
+
+	/* Socket close already called from recv callback */
+	// if (!sock->pcb)
+	// 	return 0;
+
+	tcp_recv(sock->pcb, NULL);
+	tcp_err(sock->pcb, NULL);
+
+	if (sock->p) {
+		tcp_recved(sock->pcb, sock->p->tot_len);
+		pbuf_free(sock->p);
+	}
+
+	/*
+	 * This may fail if there is not enough memory for the RST pbuf.
+	 * In such case retry.
+	 */
+	do {
+		ret = tcp_close(sock->pcb);
+	} while(ret != ERR_OK);
+
+	sock->p_idx = 0;
+	sock->pcb = NULL;
+	sock->p = NULL;
+	_release_socket(desc, sock_id);
+
+	return 0;
 }
 
 err_t max_eth_recv_callback(void *arg, struct tcp_pcb *tpcb, struct pbuf *p,
@@ -319,7 +399,10 @@ err_t max_eth_recv_callback(void *arg, struct tcp_pcb *tpcb, struct pbuf *p,
 
 	if (!p) {
 		tcp_recv(sock->pcb, NULL);
-		sock->state = SOCKET_DISCONNECTED;
+		sock->state = SOCKET_CLOSED;
+
+		// if (!sock->p)
+		// 	max_socket_close(sock->desc, sock->id);
 
 		return ERR_OK;
 	}
@@ -355,7 +438,7 @@ static int32_t max_socket_open(void *net, uint32_t sock_id,
 	struct tcp_pcb *pcb;
 	int32_t ret;
 
-	ret = _get_unused_socket(desc, &sock_id);
+	ret = _get_closed_socket(desc, &sock_id);
 	if (ret)
 		return ret;
 
@@ -375,43 +458,6 @@ static int32_t max_socket_open(void *net, uint32_t sock_id,
 	max_eth_config_socket(&desc->sockets[sock_id]);
 
 	mdns_conflict_id = 0;
-
-	return 0;
-}
-
-static int32_t max_socket_close(void *net, uint32_t sock_id)
-{
-	struct max_eth_desc *desc = net;
-	struct socket_desc *sock;
-	struct pbuf *p, *old_p;
-	err_t ret;
-
-	sock = _get_sock(desc, sock_id);
-	if (!sock)
-		return -EINVAL;
-
-	if (sock->state == SOCKET_UNUSED)
-		return -ENOENT;
-
-	tcp_recv(sock->pcb, NULL);
-	tcp_err(sock->pcb, NULL);
-
-	if (sock->p) {
-		tcp_recved(sock->pcb, sock->p->tot_len);
-		pbuf_free(sock->p);
-	}
-
-	/*
-	 * This may fail if there is not enough memory for the RST pbuf.
-	 * In such case retry.
-	 */
-	do {
-		ret = tcp_close(sock->pcb);
-	} while(ret != ERR_OK);
-
-	sock->p_idx = 0;
-	sock->p = NULL;
-	_release_socket(desc, sock_id);
 
 	return 0;
 }
@@ -556,10 +602,10 @@ static err_t max_eth_accept_callback(void *arg, struct tcp_pcb *new_pcb,
 
 	if (err != ERR_OK) {
 		printf("Accept callback err %d\n", err);
-		return ERR_OK;
+		return err;
 	}
 
-	ret = _get_unused_socket(desc, &id);
+	ret = _get_closed_socket(desc, &id);
 	if (ret)
 		return ret;
 

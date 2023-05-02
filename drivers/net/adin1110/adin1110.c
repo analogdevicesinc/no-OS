@@ -429,7 +429,7 @@ int adin1110_set_mac_addr(struct adin1110_desc *desc,
  * @param mac_address - the MAC filter to be cleared
  * @return 0 in case of success, negative error code otherwise
  */
-int adin1110_clear_mac_adress(struct adin1110_desc *desc,
+int adin1110_clear_mac_addr(struct adin1110_desc *desc,
 			      uint8_t mac_address[ADIN1110_ETH_ALEN])
 {
 	uint32_t addr_upr;
@@ -484,7 +484,7 @@ int adin1110_broadcast_filter(struct adin1110_desc *desc, bool enabled)
 	if (enabled)
 		return adin1110_set_mac_addr(desc, broadcast_addr);
 
-	return adin1110_set_mac_addr(desc, broadcast_addr);
+	return adin1110_clear_mac_addr(desc, broadcast_addr);
 }
 
 /**

@@ -19,7 +19,7 @@ struct max_eth_desc;
 struct socket_desc {
 	enum {
 		/* Available to be used */
-		SOCKET_UNUSED,
+		SOCKET_CLOSED,
 		/* Connection set as server bound to a port */
 		SOCKET_LISTENING,
 		/* Connection set as server and accepting incomming conns  */
@@ -28,8 +28,6 @@ struct socket_desc {
 		SOCKET_WAITING_ACCEPT,
 		/* Socket is connected to remote */
 		SOCKET_CONNECTED,
-		/* Socked has been disconnected. */
-		SOCKET_DISCONNECTED,
 	} state;
 	struct tcp_pcb *pcb;
 	/* List of buffers to be read */
@@ -49,8 +47,6 @@ struct max_eth_desc {
 	struct network_interface noos_net;
 	struct socket_desc sockets[MAX_SOCKETS];
 	void *extra;
-
-	char domain_name[256];
 };
 
 struct max_eth_param {
