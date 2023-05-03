@@ -51,6 +51,9 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
+/** @struct adis16505_chan_type
+ *  @brief ADIS channels enumeration
+ */
 enum adis16505_chan_type {
 	ADIS_GYRO_X,
 	ADIS_GYRO_Y,
@@ -69,15 +72,27 @@ enum adis16505_chan_type {
 	ADIS_NUM_CHAN,
 };
 
+/** @struct adis_iio_dev
+ *  @brief ADIS IIO device descriptor structure
+ */
 struct adis_iio_dev {
+	/** ADIS device structure. */
 	struct adis_dev *adis_dev;
+	/** IIO device structure. */
 	struct iio_device *iio_dev;
+	/** Number of lost samples for the current buffer reading. */
 	uint16_t samples_lost;
+	/** Current data counter for the current buffer reading.*/
 	uint16_t data_cntr;
+	/** ADIS sampling frequency. */
 	uint32_t sampling_frequency;
+	/** Current setting for adis burst size. */
 	uint32_t burst_size;
+	/** Current setting for adis burst data selection. */
 	uint32_t burst_sel;
+	/** Current setting for adis sync mode. */
 	uint32_t sync_mode;
+	/** Data buffer to store one sample-set. */
 	uint16_t data[26];
 };
 
