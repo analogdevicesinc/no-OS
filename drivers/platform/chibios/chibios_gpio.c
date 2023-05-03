@@ -107,7 +107,7 @@ int32_t chibios_gpio_get(struct no_os_gpio_desc **desc,
 
 	descriptor->extra = extra;
 	ret = _gpio_init(descriptor, param);
-	if (!ret)
+	if (ret)
 		goto error_2;
 
 	*desc = descriptor;
