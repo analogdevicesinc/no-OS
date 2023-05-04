@@ -51,6 +51,7 @@
 #include "swiot.h"
 #include "common_data.h"
 #include "no_os_util.h"
+#include "no_os_gpio.h"
 
 #include "iio.h"
 #include "iio_types.h"
@@ -71,7 +72,7 @@
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-#define DATA_BUFFER_SIZE 5000
+#define DATA_BUFFER_SIZE 400
 #define IIO_IGNORE_BUFF_OVERRUN_ERR
 
 /******************************************************************************/
@@ -129,6 +130,8 @@ int iio_example_main()
 	struct ad74413r_iio_desc *ad74413r_iio_desc;
 	struct no_os_irq_ctrl_desc *ad74413r_irq_desc;
 	struct ad74413r_iio_desc_init_param ad74413r_iio_ip;
+	struct no_os_gpio_desc *tx_gpio;
+	struct no_os_gpio_desc *rx_gpio;
 	struct iio_app_desc *app;
 	struct iio_data_buffer buff = {
 		.buff = (void *)iio_data_buffer,
@@ -194,6 +197,11 @@ int iio_example_main()
 		return ret;
 
 	maxim_net.net = netif_desc->state;
+
+	no_os_gpio_get(&tx_gpio, &tx_perf_gpio_ip);
+	no_os_gpio_get(&rx_gpio, &rx_perf_gpio_ip);
+	no_os_gpio_direction_output(tx_gpio, 0);
+	no_os_gpio_direction_output(rx_gpio, 0);
 
 	max14906_iio_ip.max14906_init_param = &max14906_ip;
 	ad74413r_iio_ip.ad74413r_init_param = &ad74413r_ip;

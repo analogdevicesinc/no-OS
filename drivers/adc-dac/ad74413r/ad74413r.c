@@ -655,10 +655,10 @@ int ad74413r_adc_get_value(struct ad74413r_desc *desc, uint32_t ch,
 		break;
 	case AD74413R_CURRENT_IN_EXT_HART:
 		if (desc->chip_id == AD74412R)
-			return -ENOTSUP;
+			return -EOPNOTSUPP;
 	case AD74413R_CURRENT_IN_LOOP_HART:
 		if (desc->chip_id == AD74412R)
-			return -ENOTSUP;
+			return -EOPNOTSUPP;
 	case AD74413R_CURRENT_IN_EXT:
 	case AD74413R_CURRENT_IN_LOOP:
 		val->integer = no_os_div_u64_rem(adc_code * AD74413R_RANGE_2V5_SCALE,

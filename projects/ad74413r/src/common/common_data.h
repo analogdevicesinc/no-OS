@@ -54,8 +54,10 @@ extern const struct no_os_spi_init_param adin1110_spi_ip;
 extern struct no_os_spi_init_param ad74413r_spi_ip;
 extern struct no_os_spi_init_param max14906_spi_ip;
 extern struct ad74413r_init_param ad74413r_ip;
-extern const struct no_os_gpio_init_param adin1110_int_gpio_ip ;
-extern const struct no_os_gpio_init_param adin1110_rst_gpio_ip ;
+extern const struct no_os_gpio_init_param adin1110_int_gpio_ip;
+extern const struct no_os_gpio_init_param tx_perf_gpio_ip;
+extern const struct no_os_gpio_init_param rx_perf_gpio_ip;
+extern const struct no_os_gpio_init_param adin1110_rst_gpio_ip;
 
 #define AD74413R_GPIO_TRIG_NAME "ad74413r-dev0"
 

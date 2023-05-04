@@ -1,5 +1,5 @@
-LWIP_DIR = /home/xvr/Downloads/lwip
-# LWIP_DIR = $(MAXIM_LIBRARIES)/lwIP
+#LWIP_DIR = /home/xvr/Downloads/lwip
+LWIP_DIR = $(MAXIM_LIBRARIES)/lwIP
 
 CFLAGS += -DLWIP_PROVIDE_ERRNO
 
@@ -13,8 +13,8 @@ CFLAGS += -I$(LWIP_DIR)/include/compat/stdc
 CFLAGS += -I$(LWIP_DIR)/include/lwip
 CFLAGS += -I$(LWIP_DIR)/include/lwip/priv
 CFLAGS += -I$(LWIP_DIR)/include/lwip/prot
-# CFLAGS += -I$(LWIP_DIR)/include/Maxim
-# CFLAGS += -I$(LWIP_DIR)/include/Maxim/arch
+CFLAGS += -I$(LWIP_DIR)/include/Maxim
+CFLAGS += -I$(LWIP_DIR)/include/Maxim/arch
 CFLAGS += -I$(LWIP_DIR)/include/netif
 CFLAGS += -I$(LWIP_DIR)/include/netif/ppp
 CFLAGS += -I$(LWIP_DIR)/include/netif/ppp/polarssl
@@ -26,5 +26,5 @@ SRC_DIRS += $(LWIP_DIR)/netif
 SRC_DIRS += $(LWIP_DIR)/apps/mdns
 SRC_DIRS += $(LWIP_DIR)/apps/lwiperf
 
-CFLAGS += -I$(MAXIM_LIBRARIES)/lwIP/include/Maxim
-CFLAGS += -I$(MAXIM_LIBRARIES)/lwIP/include/Maxim/arch
+# CFLAGS += -I$(MAXIM_LIBRARIES)/lwIP/include/Maxim
+# CFLAGS += -I$(MAXIM_LIBRARIES)/lwIP/include/Maxim/arch

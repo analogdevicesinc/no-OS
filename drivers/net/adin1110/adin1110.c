@@ -564,21 +564,21 @@ int adin1110_write_fifo(struct adin1110_desc *desc, uint32_t port,
 	 * Check for TXPE error. This is not usually expected, but has to be handled
 	 * since it may result in FIFO overflow.
 	 */
-	ret = adin1110_reg_read(desc, ADIN1110_STATUS0_REG, &tx_space);
-	if (tx_space & ADIN1110_STATUS0_TXPE_MASK) {
-		/* Flush TX FIFO */
-		ret = adin1110_reg_write(desc, ADIN1110_FIFO_CLR_REG,
-					 ADIN1110_FIFO_CLR_TX_MASK);
-		if (ret)
-			return ret;
+	// ret = adin1110_reg_read(desc, ADIN1110_STATUS0_REG, &tx_space);
+	// if (tx_space & ADIN1110_STATUS0_TXPE_MASK) {
+	// 	/* Flush TX FIFO */
+	// 	ret = adin1110_reg_write(desc, ADIN1110_FIFO_CLR_REG,
+	// 				 ADIN1110_FIFO_CLR_TX_MASK);
+	// 	if (ret)
+	// 		return ret;
 
-		ret = adin1110_reg_write(desc, ADIN1110_STATUS0_REG,
-					 ADIN1110_STATUS0_TXPE_MASK);
-		if (ret)
-			return ret;
+	// 	ret = adin1110_reg_write(desc, ADIN1110_STATUS0_REG,
+	// 				 ADIN1110_STATUS0_TXPE_MASK);
+	// 	if (ret)
+	// 		return ret;
 
-		return -EAGAIN;
-	}
+	// 	return -EAGAIN;
+	// }
 
 	return ret;
 }

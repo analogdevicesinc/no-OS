@@ -84,6 +84,22 @@ const struct no_os_gpio_init_param adin1110_rst_gpio_ip = {
 	.extra = &adin1110_rst_gpio_extra,
 };
 
+const struct no_os_gpio_init_param tx_perf_gpio_ip = {
+	.port = 3,
+	.number = 3,
+	.pull = NO_OS_PULL_UP,
+	.platform_ops = &max_gpio_ops,
+	.extra = &adin1110_rst_gpio_extra,
+};
+
+const struct no_os_gpio_init_param rx_perf_gpio_ip = {
+	.port = 3,
+	.number = 2,
+	.pull = NO_OS_PULL_UP,
+	.platform_ops = &max_gpio_ops,
+	.extra = &adin1110_rst_gpio_extra,
+};
+
 const struct adin1110_init_param adin1110_ip = {
 	.chip_type = ADIN1110,
 	.comm_param = adin1110_spi_ip,

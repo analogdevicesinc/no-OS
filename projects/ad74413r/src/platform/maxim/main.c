@@ -61,7 +61,6 @@
 int main()
 {
 	int ret = -EINVAL;
-
 	ret = no_os_init();
 	if (ret)
 		return ret;

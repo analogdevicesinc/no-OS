@@ -95,26 +95,30 @@ static err_t mxc_eth_netif_output(struct netif *netif, struct pbuf *p)
 	buff.len = frame_len;
 	buff.payload = &lwip_buff[ADIN1110_ETH_HDR_LEN];
 
+	MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(3), 1 << 3, 0);
+	MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(3), 1 << 3, 1 << 3);
 	/* The TX FIFO might be full, so retry. */
 	do {
-		__disable_irq();
+		// __disable_irq();
 		ret = adin1110_write_fifo(mac_desc, 0, &buff);
-		__enable_irq();
+		// __enable_irq();
 	} while (ret == -EAGAIN);
+	MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(3), 1 << 3, 0);
 
 	return ret;
 }
 
 static err_t max_eth_netif_init(struct netif *netif)
 {
-	unsigned char hwaddr[MAC_LEN] = {MAC_BYTE1, MAC_BYTE2, MAC_BYTE3,
-					 MAC_BYTE4, MAC_BYTE5, MAC_BYTE6
-					};
+	unsigned char hwaddr[NETIF_MAX_HWADDR_LEN] = {MAC_BYTE1, MAC_BYTE2, MAC_BYTE3,
+					 	      MAC_BYTE4, MAC_BYTE5, MAC_BYTE6
+						     };
 
 	netif->linkoutput = mxc_eth_netif_output;
 	netif->output = etharp_output;
 	netif->mtu = MXC_NETIF_MTU_SIZE;
-	netif->flags = NETIF_FLAG_BROADCAST | NETIF_FLAG_ETHARP | NETIF_FLAG_ETHERNET | NETIF_FLAG_IGMP;
+	netif->flags = NETIF_FLAG_BROADCAST | NETIF_FLAG_ETHARP | NETIF_FLAG_ETHERNET |
+		       NETIF_FLAG_IGMP | NETIF_FLAG_LINK_UP;
 
 	memcpy(netif->hwaddr, hwaddr, MAC_LEN);
 	netif->hwaddr_len = MAC_LEN;
@@ -134,9 +138,9 @@ static struct pbuf *get_recvd_frames(struct max_eth_desc *eth_desc)
 	mac_desc = eth_desc->mac_desc;
 	mac_buff.payload = &lwip_buff[ADIN1110_ETH_HDR_LEN];
 
-	__disable_irq();
+	// __disable_irq();
 	ret = adin1110_read_fifo(mac_desc, 0, &mac_buff);
-	__enable_irq();
+	// __enable_irq();
 	if (ret || !mac_buff.len)
 		goto out;
 
@@ -157,8 +161,13 @@ int max_lwip_tick(void *data)
 	struct pbuf *p;
 	int ret = 0;
 
+	MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(3), 1 << 2, 0);
+	MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(3), 1 << 2, 1 << 2);
+
 	netif_desc = eth_desc->lwip_netif;
 	mac_desc = eth_desc->mac_desc;
+
+	sys_check_timeouts();
 
 	do {
 		p = get_recvd_frames(eth_desc);
@@ -172,7 +181,7 @@ int max_lwip_tick(void *data)
 		}
 	} while(p);
 
-	sys_check_timeouts();
+	MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(3), 1 << 2, 0);
 
 	return ret;
 }
@@ -226,8 +235,8 @@ static int _lwip_start_mdns(struct max_eth_desc *desc, struct netif *netif)
 		while (!mdns_result)
 			max_lwip_tick(desc);
 
-		// if (mdns_is_conflict)
-		// 	mdns_resp_remove_netif(netif);
+		if (mdns_is_conflict)
+			mdns_resp_remove_netif(netif);
 
 		mdns_result = false;
 	} while (mdns_is_conflict);
@@ -242,6 +251,11 @@ static int _lwip_start_mdns(struct max_eth_desc *desc, struct netif *netif)
 	return 0;
 }
 
+static void _lwip_link_status_cb(struct netif *netif)
+{
+	printf("link: %d\n", netif_is_link_up(netif));
+}
+
 int max_eth_init(struct netif **netif_desc, struct max_eth_param *param)
 {
 	struct network_interface *network_descriptor;
@@ -254,7 +268,7 @@ int max_eth_init(struct netif **netif_desc, struct max_eth_param *param)
 	int ret;
 	int i;
 
-	uint8_t multicast_addr[6] = {0x01, 0x00, 0x5e, 0x00, 0x00, 0xfb};
+	uint8_t multicast_addr[NETIF_MAX_HWADDR_LEN] = {0x01, 0x00, 0x5e, 0x00, 0x00, 0xfb};
 
 	if (!param)
 		return -EINVAL;
@@ -307,9 +321,8 @@ int max_eth_init(struct netif **netif_desc, struct max_eth_param *param)
 	descriptor->name[1] = param->name[1];
 
 	netif_set_default(netif_descriptor);
-	netif_set_up(netif_descriptor);
-
 	netif_set_link_up(netif_descriptor);
+	netif_set_up(netif_descriptor);
 	ret = dhcp_start(netif_descriptor);
 	if (ret)
 		return ret;
@@ -365,16 +378,16 @@ static int32_t max_socket_close(void *net, uint32_t sock_id)
 		return -EINVAL;
 
 	/* Socket close already called from recv callback */
-	// if (!sock->pcb)
-	// 	return 0;
-
-	tcp_recv(sock->pcb, NULL);
-	tcp_err(sock->pcb, NULL);
+	if (!sock->pcb || sock->state == SOCKET_CLOSED)
+		return 0;
 
 	if (sock->p) {
 		tcp_recved(sock->pcb, sock->p->tot_len);
 		pbuf_free(sock->p);
 	}
+
+	tcp_recv(sock->pcb, NULL);
+	tcp_err(sock->pcb, NULL);
 
 	/*
 	 * This may fail if there is not enough memory for the RST pbuf.
@@ -389,20 +402,66 @@ static int32_t max_socket_close(void *net, uint32_t sock_id)
 	sock->p = NULL;
 	_release_socket(desc, sock_id);
 
+	// printf("Closing: %d state %s\n", sock_id, tcp_debug_state_str(sock->pcb->state));
+
 	return 0;
 }
 
-err_t max_eth_recv_callback(void *arg, struct tcp_pcb *tpcb, struct pbuf *p,
+static int32_t max_socket_send(void *net, uint32_t sock_id, const void *data,
+			       uint32_t size)
+{
+	struct max_eth_desc *desc = net;
+	struct socket_desc *sock;
+	uint32_t segment_size;
+	uint32_t avail;
+	uint32_t flags;
+	err_t err;
+	int ret;
+
+	// MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(3), 1 << 3, 0);
+	// MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(3), 1 << 3, 1 << 3);
+
+	sock = _get_sock(desc, sock_id);
+	if (!sock)
+		return -EINVAL;
+
+	if (sock->state != SOCKET_CONNECTED)
+		return -ENOTCONN;
+
+	avail = tcp_sndbuf(sock->pcb);
+	flags = TCP_WRITE_FLAG_COPY;
+	if (avail < size)
+		/* Partial write */
+		flags |= TCP_WRITE_FLAG_MORE;
+
+	size = no_os_min(avail, size);
+	err = tcp_write(sock->pcb, data, size, flags);
+	if (err != ERR_OK)
+		return err;
+
+	if (!(flags & TCP_WRITE_FLAG_MORE)) {
+		/* Mark data as ready to be sent */
+		err = tcp_output(sock->pcb);
+		if (err != ERR_OK)
+			return err;
+	}
+
+	// MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(3), 1 << 3, 0);
+
+	return size;
+}
+
+err_t max_eth_recv_callback(void *arg, struct tcp_pcb *pcb, struct pbuf *p,
 			    err_t err)
 {
 	struct socket_desc *sock = arg;
+	int ret;
 
+	/* A NULL pbuf signals that the other end has closed the connection */
 	if (!p) {
-		tcp_recv(sock->pcb, NULL);
-		sock->state = SOCKET_CLOSED;
-
-		// if (!sock->p)
-		// 	max_socket_close(sock->desc, sock->id);
+		ret = max_socket_close(sock->desc, sock->id);
+		if (ret)
+			return ret;
 
 		return ERR_OK;
 	}
@@ -456,49 +515,11 @@ static int32_t max_socket_open(void *net, uint32_t sock_id,
 	desc->sockets[sock_id].p = NULL;
 
 	max_eth_config_socket(&desc->sockets[sock_id]);
+	tcp_nagle_disable(pcb);
 
 	mdns_conflict_id = 0;
 
 	return 0;
-}
-
-static int32_t max_socket_send(void *net, uint32_t sock_id, const void *data,
-			       uint32_t size)
-{
-	struct max_eth_desc *desc = net;
-	struct socket_desc *sock;
-	uint32_t segment_size;
-	uint32_t avail;
-	uint32_t flags;
-	err_t err;
-	int ret;
-
-	sock = _get_sock(desc, sock_id);
-	if (!sock)
-		return -EINVAL;
-
-	if (sock->state != SOCKET_CONNECTED)
-		return -ENOTCONN;
-
-	avail = tcp_sndbuf(sock->pcb);
-	flags = TCP_WRITE_FLAG_COPY;
-	if (avail < size)
-		/* Partial write */
-		flags |= TCP_WRITE_FLAG_MORE;
-
-	size = no_os_min(avail, size);
-	err = tcp_write(sock->pcb, data, size, flags);
-	if (err != ERR_OK)
-		return err;
-
-	if (!(flags & TCP_WRITE_FLAG_MORE)) {
-		/* Mark data as ready to be sent */
-		err = tcp_output(sock->pcb);
-		if (err != ERR_OK)
-			return err;
-	}
-
-	return size;
 }
 
 static int32_t max_socket_recv(void *net, uint32_t sock_id, void *data,
@@ -609,11 +630,15 @@ static err_t max_eth_accept_callback(void *arg, struct tcp_pcb *new_pcb,
 	if (ret)
 		return ret;
 
-	sock = _get_sock(desc, id);
-	sock->pcb = new_pcb;
-	sock->state = SOCKET_WAITING_ACCEPT;
+	ip_set_option(new_pcb, SOF_REUSEADDR);
 
-	tcp_setprio(sock->pcb, 0);
+	sock = _get_sock(desc, id);
+	sock->state = SOCKET_WAITING_ACCEPT;
+	sock->pcb = new_pcb;
+	sock->p = NULL;
+	sock->p_idx = 0;
+
+	tcp_setprio(sock->pcb, 1);
 
 	max_eth_config_socket(sock);
 
