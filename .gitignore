@@ -9,6 +9,10 @@ xsct.log
 RemoteSystemsTempFiles
 build
 BUILD
+builds
+exports
+logs
+log.txt
 mbed-app-json
 .mbed
 projects/*/build_*
