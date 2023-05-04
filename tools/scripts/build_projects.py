@@ -38,7 +38,7 @@ def parse_input():
 	parser.add_argument('-platform', help="Name of platform to be built")
 	parser.add_argument('-hardware', help="Name of hardware to be built")
 	parser.add_argument('-build_name', help="Name of built type to be built")
-	parser.add_argument('-builds_dir', help="Directory where to build projects")
+	parser.add_argument('-builds_dir', default=(os.getcwd() +'/builds'), help="Directory where to build projects")
 	args = parser.parse_args()
 
 	return (args.noos_location, args.export_dir, args.log_dir, args.project,
