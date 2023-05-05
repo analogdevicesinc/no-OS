@@ -731,6 +731,8 @@ int32_t ad7779_get_power_mode(ad7779_dev *dev,
  * @param ref_type - The reference type.
  *		     Accepted values: AD7779_EXT_REF
  *				      AD7779_INT_REF
+ *				      AD7779_EXT_SUPPLY
+ *				      AD7779_EXT_REF_INV
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7779_set_reference_type(ad7779_dev *dev,
