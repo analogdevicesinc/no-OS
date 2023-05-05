@@ -418,3 +418,43 @@ uint64_t no_os_mul_u64_u32_shr(uint64_t a, uint32_t mul, unsigned int shift)
 
 	return ret;
 }
+
+/**
+ * @brief Check big endianess of the host processor.
+ * @return Big endianess status (true/false)
+ */
+bool no_os_is_big_endian(void)
+{
+	uint16_t a = 0x0100;
+	return (bool) *(uint8_t *)&a;
+}
+
+/* @brief Swap bytes in a buffer with a given step
+ *        Swap with step of 2:
+ *        AA BB CC DD EE FF 00 11 becomes
+ *        BB AA DD CC FF EE 11 00
+ *        Swap with step of 3:
+ *        AA BB CC DD EE FF 00 11 22 becomes
+ *        CC BB AA FF EE DD 22 11 00
+ *        etc.
+ * @param buf - Input buffer to be swapped.
+ * @param bytes - Number of bytes.
+ * @param step - Number of steps.
+ * @return None
+ */
+void no_os_memswap64(void *buf, uint32_t bytes, uint32_t step)
+{
+	uint8_t * p = buf;
+	uint32_t i, j;
+	uint8_t temp[8];
+
+	if (step < 2 || step > 8 || bytes < step || bytes % step != 0)
+		return;
+
+	for (i = 0; i < bytes; i += step) {
+		memcpy(temp, p, step);
+		for (j = step; j > 0; j--) {
+			*p++ = temp[j - 1];
+		}
+	}
+}
