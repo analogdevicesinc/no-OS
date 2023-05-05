@@ -503,8 +503,8 @@ static void adis_update_diag_flags(struct adis_dev *adis, uint16_t diag_stat)
 					     field_map->diag_data_path_overrun_mask ? 1 : 0;
 	adis->diag_flags.spi_comm_err = diag_stat &
 					field_map->diag_spi_comm_err_mask ? 1 : 0;
-	adis->diag_flags.diag_standby_mode = diag_stat &
-					     field_map->diag_standby_mode_mask ? 1 : 0;
+	adis->diag_flags.standby_mode = diag_stat &
+					field_map->diag_standby_mode_mask ? 1 : 0;
 	adis->diag_flags.clk_err = diag_stat &
 				   field_map->diag_clk_err_mask ? 1 : 0;
 	adis->diag_flags.fls_mem_update_failure = diag_stat &
@@ -609,11 +609,11 @@ int adis_read_diag_spi_comm_err(struct adis_dev *adis, uint32_t *spi_comm_err)
 /**
  * @brief Diagnosis: read standby mode flag value.
  * @param adis              - The adis device.
- * @param diag_standby_mode - Standby mode flag value.
+ * @param standby_mode - Standby mode flag value.
  * @return 0 in case of success, error code otherwise.
  */
 int adis_read_diag_standby_mode(struct adis_dev *adis,
-				uint32_t *diag_standby_mode)
+				uint32_t *standby_mode)
 {
 	struct adis_diag_flags diag_flags;
 	int ret;
@@ -622,7 +622,7 @@ int adis_read_diag_standby_mode(struct adis_dev *adis,
 	if (ret)
 		return ret;
 
-	*diag_standby_mode = diag_flags.diag_standby_mode;
+	*standby_mode = diag_flags.standby_mode;
 
 	return 0;
 }

@@ -58,7 +58,6 @@
 #define ADIS_SYNC_DIRECT	1
 #define ADIS_SYNC_SCALED	2
 #define ADIS_SYNC_OUTPUT	3
-#define ADIS_SYNC_PULSE		5
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -84,7 +83,7 @@ struct adis_diag_flags {
 	/** SPI communication error. */
 	uint8_t spi_comm_err		:1;
 	/** Standby mode. */
-	uint8_t diag_standby_mode	:1;
+	uint8_t standby_mode		:1;
 	/** Sensor failure. */
 	uint8_t snsr_failure		:1;
 	/** Memory failure. */
@@ -420,7 +419,7 @@ int adis_read_diag_fls_mem_update_failure(struct adis_dev *adis,
 int adis_read_diag_spi_comm_err(struct adis_dev *adis, uint32_t *spi_comm_err);
 /*! Diagnosis: read standby mode flag value. */
 int adis_read_diag_standby_mode(struct adis_dev *adis,
-				uint32_t *diag_standby_mode);
+				uint32_t *standby_mode);
 /*! Diagnosis: read sensor self test error flag value. */
 int adis_read_diag_snsr_failure(struct adis_dev *adis, uint32_t *snsr_failure);
 /*! Diagnosis: read flash memory test error flag value. */
