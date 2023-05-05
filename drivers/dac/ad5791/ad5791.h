@@ -47,6 +47,8 @@
 #include "no_os_delay.h"
 #include "no_os_gpio.h"
 #include "no_os_spi.h"
+#include "no_os_util.h"
+#include "no_os_error.h"
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -130,12 +132,16 @@ struct ad5791_init_param {
 #define AD5791_ADDR_REG(x)         (((uint32_t)(x) & 0x7) << 20)
 
 /* Control Register bit Definition */
-#define AD5791_CTRL_LINCOMP(x)   (((x) & 0xF) << 6) // Linearity error compensation.
-#define AD5791_CTRL_SDODIS       (1 << 5) // SDO pin enable/disable control.
-#define AD5791_CTRL_BIN2SC       (1 << 4) // DAC register coding selection.
-#define AD5791_CTRL_DACTRI       (1 << 3) // DAC tristate control.
-#define AD5791_CTRL_OPGND        (1 << 2) // Output ground clamp control.
-#define AD5791_CTRL_RBUF         (1 << 1) // Output amplifier configuration control.
+#define AD5791_CTRL_LINCOMP_MASK   NO_OS_GENMASK(9,6) // Linearity error compensation.
+#define AD5791_CTRL_LINCOMP(x)     (((x) & 0xF) << 6)
+#define AD5791_CTRL_SDODIS_MASK    NO_OS_BIT(5)       // SDO pin enable/disable control.
+#define AD5791_CTRL_SDODIS(x)      ((x & 0x01) << 5)
+#define AD5791_CTRL_BIN2SC_MASK    NO_OS_BIT(4)       // DAC register coding selection.
+#define AD5791_CTRL_BIN2SC(x)      ((x & 0x01) << 4)
+#define AD5791_CTRL_DACTRI         NO_OS_BIT(3)       // DAC tristate control.
+#define AD5791_CTRL_OPGND          NO_OS_BIT(2)       // Output ground clamp control.
+#define AD5791_CTRL_RBUF_MASK      NO_OS_BIT(1)       // Output amplifier configuration control.
+#define AD5791_CTRL_RBUF(x)        ((x & 0x01) << 1)
 
 /* Software Control Register bit definition */
 #define AD5791_SOFT_CTRL_RESET      (1 << 2) // RESET function.
@@ -184,5 +190,11 @@ int32_t ad5791_soft_instruction(struct ad5791_dev *dev,
     error compensation. */
 int32_t ad5791_setup(struct ad5791_dev *dev,
 		     uint32_t setup_word);
+
+/*! SPI write to device using a mask. */
+int ad5791_spi_write_mask(struct ad5791_dev *dev,
+			  uint8_t register_address,
+			  uint32_t mask,
+			  uint32_t value);
 
 #endif /* __AD5791_H__ */
