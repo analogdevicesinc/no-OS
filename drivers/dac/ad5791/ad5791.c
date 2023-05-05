@@ -381,3 +381,24 @@ int ad5791_spi_write_mask(struct ad5791_dev *dev,
 	return ad5791_set_register_value(dev, register_address, reg_data);
 }
 
+/***************************************************************************//**
+ * @brief	Set Linearity error compensation based on the reference voltage span.
+ *
+ * @param	dev		- The device structure.
+ * @param	v_span	- voltage span to set the corresponding lin_comp value.
+ * @return	0 in case of success, negative error code otherwise.
+ */
+int ad5791_set_lin_comp(struct ad5791_dev *dev,
+			enum ad5791_lin_comp_select v_span)
+{
+	if(!dev || (dev->act_device != ID_AD5781 && dev->act_device != ID_AD5791))
+		return -EINVAL;
+
+	if (!v_span)
+		v_span |= NO_OS_BIT(4);
+
+	return ad5791_spi_write_mask(dev,
+				     AD5791_REG_CTRL,
+				     AD5791_CTRL_LINCOMP_MASK,
+				     AD5791_CTRL_LINCOMP(v_span));
+}
