@@ -62,6 +62,16 @@ enum ad5791_type {
 	ID_AD5791
 };
 
+/* Possible voltage spans for linearity error compensation */
+enum ad5791_lin_comp_select {
+	AD5781_SPAN_UPTO_10V = 0,
+	AD5781_SPAN_10V_TO_20V = 4,
+	AD5791_SPAN_10V_TO_12V = 1,
+	AD5791_SPAN_12V_TO_16V = 2,
+	AD5791_SPAN_16V_TO_19V = 3,
+	AD5791_SPAN_19V_TO_20V = 4
+};
+
 struct ad5791_chip_info {
 	uint32_t resolution;
 };
@@ -196,5 +206,9 @@ int ad5791_spi_write_mask(struct ad5791_dev *dev,
 			  uint8_t register_address,
 			  uint32_t mask,
 			  uint32_t value);
+
+/*! Set Linearity error compensation based on the reference voltage span. */
+int ad5791_set_lin_comp(struct ad5791_dev *dev,
+			enum ad5791_lin_comp_select v_span);
 
 #endif /* __AD5791_H__ */
