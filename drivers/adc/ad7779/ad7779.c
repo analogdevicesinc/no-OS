@@ -757,9 +757,12 @@ int32_t ad7779_set_reference_type(ad7779_dev *dev,
 					    AD7779_REG_ADC_MUX_CONFIG,
 					    AD7779_REF_MUX_CTRL(0x3),
 					    AD7779_REF_MUX_CTRL(ref_type));
+	if (ret)
+		return ret;
+
 	dev->ref_type = ref_type;
 
-	return ret;
+	return 0;
 }
 
 /**
