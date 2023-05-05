@@ -130,7 +130,7 @@ int main(void)
 					   AD5791_REG_CTRL, &val);
 	if (status < 0)
 		return status;
-	val &= ~(AD5791_CTRL_OPGND | AD5791_CTRL_RBUF);
+	val &= ~(AD5791_CTRL_OPGND | AD5791_CTRL_RBUF_MASK);
 	status = ad5791_set_register_value(ad5791_iio_handle->ad5791_handle,
 					   AD5791_REG_CTRL, (uint32_t)val);
 	if (status != 0)

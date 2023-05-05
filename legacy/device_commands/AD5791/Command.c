@@ -348,7 +348,7 @@ void SetCoding(double* param, char paramNo) // "coding=" command
 
         if(codingStyle == 0)
         {
-            AD5791_Setup(rbuf * AD5791_CTRL_RBUF);
+            AD5791_Setup(rbuf * AD5791_CTRL_RBUF_MASK);
             /* Write to DAC register */
             AD5791_SetDacValue(registerValue);
             CONSOLE_Print("%s%d(two's complement)\r\n",cmdList[2].name,
@@ -356,7 +356,7 @@ void SetCoding(double* param, char paramNo) // "coding=" command
         }
         else
         {
-            AD5791_Setup(AD5791_CTRL_BIN2SC | rbuf * AD5791_CTRL_RBUF);
+            AD5791_Setup(AD5791_CTRL_BIN2SC_MASK | rbuf * AD5791_CTRL_RBUF_MASK);
             /* Write to DAC register */
             AD5791_SetDacValue(registerValue);
             /* Send feedback to user for coding change */
@@ -653,8 +653,8 @@ void SetRbuf(double* param, char paramNo) // "rbuf=" command
         rbuf = (unsigned char)param[0];
 
         regValue = AD5791_GetRegisterValue(AD5791_REG_CTRL);
-        regValue &= ~AD5791_CTRL_RBUF;
-        regValue |= rbuf * AD5791_CTRL_RBUF;
+        regValue &= ~AD5791_CTRL_RBUF_MASK;
+        regValue |= rbuf * AD5791_CTRL_RBUF_MASK;
         AD5791_SetRegisterValue(AD5791_REG_CTRL,regValue);
 
         /* Send feedback to user */
