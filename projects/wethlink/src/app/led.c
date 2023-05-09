@@ -3,9 +3,9 @@
 #include "parameters.h"
 #include "tmr.h"
 #include "mxc_sys.h"
+#include "led.h"
 
 #if (TARGET_NUM == 32650)
-
 struct no_os_gpio_desc *tx_det_red;
 struct no_os_gpio_desc *tx_det_green;
 struct no_os_gpio_desc *tx_lock;
@@ -105,7 +105,7 @@ void led_tx_det_red(bool on)
 	no_os_gpio_set_value(tx_det_red, on ? NO_OS_GPIO_HIGH : NO_OS_GPIO_LOW);
 }
 
-int led_rx_det(int brightness)
+void led_rx_det(int brightness)
 {
 	if (brightness > 100)
 		brightness = 100;

@@ -2,8 +2,8 @@
 #include <stdint.h>
 
 int led_init(void);
-int led_tx_lock(bool on);
-int led_rx_lock(bool on);
-int led_tx_det_green(bool on);
-int led_tx_det_red(bool on);
-int led_rx_det(int brightness);
+void led_tx_lock(bool on);
+void led_rx_lock(bool on);
+void led_tx_det_green(bool on);
+void led_tx_det_red(bool on);
+void led_rx_det(int brightness);

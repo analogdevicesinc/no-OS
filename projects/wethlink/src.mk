@@ -21,6 +21,10 @@ SRCS += $(DRIVERS)/api/no_os_gpio.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_uart_stdio.c \
 	$(DRIVERS)/api/no_os_mdio.c \
 	$(DRIVERS)/net/mdio_bitbang.c \
+	$(DRIVERS)/net/adin1300.c \
+	$(DRIVERS)/net/iio_adin1300.c \
+	$(DRIVERS)/net/max24287.c \
+	$(DRIVERS)/net/iio_max24287.c \
 	$(NO-OS)/util/no_os_lf256fifo.c \
 	$(NO-OS)/util/no_os_util.c \
 	$(NO-OS)/util/no_os_alloc.c \
@@ -41,6 +45,10 @@ INCS += $(INCLUDE)/no_os_gpio.h \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_uart_stdio.h \
 	$(INCLUDE)/no_os_mdio.h \
 	$(DRIVERS)/net/mdio_bitbang.h \
+	$(DRIVERS)/net/adin1300.h \
+	$(DRIVERS)/net/iio_adin1300.h \
+	$(DRIVERS)/net/max24287.h \
+	$(DRIVERS)/net/iio_max24287.h \
 	$(INCLUDE)/no_os_error.h \
 	$(INCLUDE)/no_os_util.h \
 	$(INCLUDE)/no_os_alloc.h \
