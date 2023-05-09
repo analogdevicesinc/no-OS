@@ -95,15 +95,12 @@ static err_t mxc_eth_netif_output(struct netif *netif, struct pbuf *p)
 	buff.len = frame_len;
 	buff.payload = &lwip_buff[ADIN1110_ETH_HDR_LEN];
 
-	MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(3), 1 << 3, 0);
-	MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(3), 1 << 3, 1 << 3);
 	/* The TX FIFO might be full, so retry. */
-	do {
+	// do {
 		// __disable_irq();
 		ret = adin1110_write_fifo(mac_desc, 0, &buff);
 		// __enable_irq();
-	} while (ret == -EAGAIN);
-	MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(3), 1 << 3, 0);
+	// } while (ret == -EAGAIN);
 
 	return ret;
 }
@@ -161,9 +158,6 @@ int max_lwip_tick(void *data)
 	struct pbuf *p;
 	int ret = 0;
 
-	MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(3), 1 << 2, 0);
-	MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(3), 1 << 2, 1 << 2);
-
 	netif_desc = eth_desc->lwip_netif;
 	mac_desc = eth_desc->mac_desc;
 
@@ -180,8 +174,6 @@ int max_lwip_tick(void *data)
 			}
 		}
 	} while(p);
-
-	MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(3), 1 << 2, 0);
 
 	return ret;
 }
@@ -330,7 +322,6 @@ int max_eth_init(struct netif **netif_desc, struct max_eth_param *param)
 	while (!netif_descriptor->ip_addr.addr && dhcp_timeout > 0) {
 		max_lwip_tick(descriptor);
 		dhcp_timeout--;
-		no_os_mdelay(1);
 	}
 
 	ret = _lwip_start_mdns(descriptor, netif_descriptor);
@@ -418,8 +409,8 @@ static int32_t max_socket_send(void *net, uint32_t sock_id, const void *data,
 	err_t err;
 	int ret;
 
-	// MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(3), 1 << 3, 0);
-	// MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(3), 1 << 3, 1 << 3);
+	// MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 17, 0);
+	// MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 17, 1 << 17);
 
 	sock = _get_sock(desc, sock_id);
 	if (!sock)
@@ -446,7 +437,7 @@ static int32_t max_socket_send(void *net, uint32_t sock_id, const void *data,
 			return err;
 	}
 
-	// MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(3), 1 << 3, 0);
+	// MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 17, 0);
 
 	return size;
 }

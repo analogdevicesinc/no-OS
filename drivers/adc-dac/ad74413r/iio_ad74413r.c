@@ -1196,6 +1196,7 @@ static int ad74413r_iio_update_channels(void *dev, uint32_t mask)
 static int ad74413r_iio_buffer_disable(void *dev)
 {
 	struct ad74413r_iio_desc *iio_desc = dev;
+	uint32_t prim;
 	int ret;
 
 	__disable_irq();
@@ -1260,6 +1261,8 @@ static int ad74413r_iio_trigger_handler(struct iio_device_data *dev_data)
 	// 	.cs_change = 1,
 	// };
 
+	MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 16, 0);
+	MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 16, 1 << 16);
 	iio_desc = dev_data->dev;
 	desc = iio_desc->ad74413r_desc;
 	active_adc_ch = iio_desc->no_of_active_adc_channels;
@@ -1281,7 +1284,7 @@ static int ad74413r_iio_trigger_handler(struct iio_device_data *dev_data)
 							    &buff[buffer_idx]);
 			else
 				ret = ad74413r_reg_read_raw(desc,
-							    AD74413R_DIAG_RESULT(ch - active_adc_ch),
+							    AD74413R_DIAG_RESULT(ch - 4),
 							    &buff[buffer_idx]);
 			if (ret)
 				goto out;
@@ -1292,6 +1295,7 @@ static int ad74413r_iio_trigger_handler(struct iio_device_data *dev_data)
 	}
 
 	iio_buffer_push_scan(dev_data->buffer, buff);
+	MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 16, 0);
 
 	return 0;
 out:

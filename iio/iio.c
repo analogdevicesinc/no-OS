@@ -63,6 +63,7 @@
 #include "no_os_delay.h"
 #include "tcp_socket.h"
 #include "max_eth.h"
+#include "mxc_device.h"
 #endif
 
 /******************************************************************************/
@@ -72,7 +73,7 @@
 #define IIOD_PORT		30431
 #define MAX_SOCKET_TO_HANDLE	10
 #define REG_ACCESS_ATTRIBUTE	"direct_reg_access"
-#define IIOD_CONN_BUFFER_SIZE	0x1000
+#define IIOD_CONN_BUFFER_SIZE	0x8000
 #define NO_TRIGGER				(uint32_t)-1
 
 #define NO_OS_STRINGIFY(x) #x
@@ -1302,9 +1303,6 @@ static int iio_read_buffer(struct iiod_ctx *ctx, const char *device, char *buf,
 
 	ret = no_os_cb_size(&dev->buffer.cb, &size);
 
-	if (ret == -NO_OS_EOVERRUN)
-		printf("Buffer overflow");
-
 #ifdef IIO_IGNORE_BUFF_OVERRUN_ERR
 #warning Buffer overrun error checking is disabled.
 	if (ret != -NO_OS_EOVERRUN)
@@ -1314,7 +1312,6 @@ static int iio_read_buffer(struct iiod_ctx *ctx, const char *device, char *buf,
 	bytes = no_os_min(size, bytes);
 	if (!bytes)
 		return -EAGAIN;
-
 
 	ret = no_os_cb_read(&dev->buffer.cb, buf, bytes);
 #ifdef IIO_IGNORE_BUFF_OVERRUN_ERR
@@ -1455,6 +1452,7 @@ int iio_step(struct iio_desc *desc)
 {
 	struct iiod_conn_data data;
 	uint32_t conn_id;
+	uint32_t skip = 0;
 	int32_t ret;
 
 	iio_process_async_triggers(desc);

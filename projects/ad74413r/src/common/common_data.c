@@ -85,16 +85,16 @@ const struct no_os_gpio_init_param adin1110_rst_gpio_ip = {
 };
 
 const struct no_os_gpio_init_param tx_perf_gpio_ip = {
-	.port = 3,
-	.number = 3,
+	.port = 2,
+	.number = 16,
 	.pull = NO_OS_PULL_UP,
 	.platform_ops = &max_gpio_ops,
 	.extra = &adin1110_rst_gpio_extra,
 };
 
 const struct no_os_gpio_init_param rx_perf_gpio_ip = {
-	.port = 3,
-	.number = 2,
+	.port = 2,
+	.number = 17,
 	.pull = NO_OS_PULL_UP,
 	.platform_ops = &max_gpio_ops,
 	.extra = &adin1110_rst_gpio_extra,
@@ -113,7 +113,7 @@ struct no_os_spi_init_param ad74413r_spi_ip = {
 	.device_id = 3,
 	.max_speed_hz = 20000000,
 	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
-	.mode = NO_OS_SPI_MODE_1,
+	.mode = NO_OS_SPI_MODE_2,
 	.platform_ops = SPI_OPS,
 	.chip_select = SPI_CS,
 	.extra = SPI_EXTRA,
@@ -144,7 +144,7 @@ const struct iio_hw_trig_cb_info gpio_cb_info = {
 
 struct iio_hw_trig_init_param ad74413r_gpio_trig_ip = {
 	.irq_id = AD74413R_GPIO_TRIG_IRQ_ID,
-	.irq_trig_lvl = NO_OS_IRQ_EDGE_RISING,
+	.irq_trig_lvl = NO_OS_IRQ_EDGE_FALLING,
 	.cb_info = gpio_cb_info,
 	.name = AD74413R_GPIO_TRIG_NAME,
 };

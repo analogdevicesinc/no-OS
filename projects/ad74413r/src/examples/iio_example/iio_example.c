@@ -72,7 +72,7 @@
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-#define DATA_BUFFER_SIZE 400
+#define DATA_BUFFER_SIZE 5000
 #define IIO_IGNORE_BUFF_OVERRUN_ERR
 
 /******************************************************************************/
@@ -240,26 +240,6 @@ int iio_example_main()
 				&ad74413r_iio_trig_desc)
 	};
 
-	struct iio_app_device iio_devices[] = {
-		{
-			.name = "swiot",
-			.dev = swiot_iio_desc,
-			.dev_descriptor = swiot_iio_desc->iio_dev,
-		},
-		{
-			.name = "ad74413r",
-			.dev = ad74413r_iio_desc,
-			.dev_descriptor = ad74413r_iio_desc->iio_dev,
-			.read_buff = &buff,
-		},
-		{
-			.name = "max14906",
-			.dev = max14906_iio_desc,
-			.dev_descriptor = max14906_iio_desc->iio_dev,
-			.read_buff = &buff2,
-		},
-	};
-
 	while (1) {
 		/* Probe the iio drivers in config mode */
 		ret = ad74413r_iio_init(&ad74413r_iio_desc, &ad74413r_iio_ip, true);
@@ -269,6 +249,26 @@ int iio_example_main()
 		ret = max14906_iio_init(&max14906_iio_desc, &max14906_iio_ip, true);
 		if (ret)
 			return ret;
+
+		struct iio_app_device iio_devices[] = {
+			{
+				.name = "swiot",
+				.dev = swiot_iio_desc,
+				.dev_descriptor = swiot_iio_desc->iio_dev,
+			},
+			{
+				.name = "ad74413r",
+				.dev = ad74413r_iio_desc,
+				.dev_descriptor = ad74413r_iio_desc->iio_dev,
+				.read_buff = &buff,
+			},
+			{
+				.name = "max14906",
+				.dev = max14906_iio_desc,
+				.dev_descriptor = max14906_iio_desc->iio_dev,
+				.read_buff = &buff2,
+			},
+		};
 
 		swiot_ip.ad74413r = ad74413r_iio_desc;
 		swiot_ip.max14906 = max14906_iio_desc;

@@ -93,10 +93,7 @@ void GPIO0_IRQHandler()
 #ifdef MXC_GPIO1
 void GPIO1_IRQHandler()
 {
-	MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 6, 0);
-	MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 6, 1 << 6);
 	MXC_GPIO_Handler(1);
-	MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 6, 0);
 }
 #endif
 
