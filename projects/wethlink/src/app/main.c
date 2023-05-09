@@ -100,6 +100,8 @@ int main(void)
 	uint8_t hbtx;
 	uint64_t txfreq, rxfreq;
 	struct no_os_gpio_desc *brd_select;
+	struct adin1300_iio_desc *iio_adin1300;
+	struct max24287_iio_desc *iio_max24287;
 
 #if (TARGET_NUM == 32650)
 	// Greeting
@@ -244,6 +246,30 @@ int main(void)
 	mwc->tx_iiodev = iio_tx;
 	mwc->rx_iiodev = iio_rx;
 
+	ret = heartbeat_prepare();
+	if (ret)
+		goto end;
+#if (TARGET_NUM == 32650)
+	mwc_algorithms(mwc);
+
+	switch(id) {
+	case ID_ADMV96X1:
+		speed = 100;
+		break;
+	case ID_ADMV96X3:
+		speed = 100;
+		break;
+	default:
+	case ID_ADMV96X5:
+		speed = 1000;
+		break;
+	};
+
+	ret = net_init(&iio_adin1300, &iio_max24287, speed);
+	if (ret)
+		goto end;
+#endif
+
 	struct iio_app_device iio_devices[] = {
 		{
 			.name = "hmc6300",
@@ -260,6 +286,16 @@ int main(void)
 			.dev = mwc,
 			.dev_descriptor = mwc->iio_dev,
 		},
+		{
+			.name = "adin1300",
+			.dev = iio_adin1300,
+			.dev_descriptor = iio_adin1300->iio_dev,
+		},
+		{
+			.name = "max24287",
+			.dev = iio_max24287,
+			.dev_descriptor = iio_max24287->iio_dev,
+		}
 	};
 
 	struct iio_ctx_attr iio_ctx_attrs[] = {
@@ -298,34 +334,12 @@ int main(void)
 		.post_step_callback = mwc_step,
 		.arg = mwc,
 	};
+
+
 	struct iio_app_desc *app;
 	ret = iio_app_init(&app, aip);
 	if (ret)
 		goto end;
-
-	ret = heartbeat_prepare();
-	if (ret)
-		goto end;
-#if (TARGET_NUM == 32650)
-	mwc_algorithms(mwc);
-
-	switch(id) {
-	case ID_ADMV96X1:
-		speed = 100;
-		break;
-	case ID_ADMV96X3:
-		speed = 100;
-		break;
-	default:
-	case ID_ADMV96X5:
-		speed = 1000;
-		break;
-	};
-
-	ret = net_init(hbtx, speed);
-	if (ret)
-		goto end;
-#endif
 
 	iio_app_run(app);
 end:
