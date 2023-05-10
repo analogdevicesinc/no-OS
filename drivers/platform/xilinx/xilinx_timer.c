@@ -90,6 +90,7 @@ int32_t xilinx_timer_init(struct no_os_timer_desc **desc,
 	dev->id = param->id;
 	dev->freq_hz = param->freq_hz;
 	dev->ticks_count = param->ticks_count;
+	dev->platform_ops = param->platform_ops;
 	dev->extra = xdesc;
 	xdesc->active_tmr = xinit->active_tmr;
 	xdesc->type = xinit->type;
