@@ -161,8 +161,6 @@ int max_lwip_tick(void *data)
 	netif_desc = eth_desc->lwip_netif;
 	mac_desc = eth_desc->mac_desc;
 
-	sys_check_timeouts();
-
 	do {
 		p = get_recvd_frames(eth_desc);
 		if (p != NULL) {
@@ -174,6 +172,8 @@ int max_lwip_tick(void *data)
 			}
 		}
 	} while(p);
+
+	sys_check_timeouts();
 
 	return ret;
 }
@@ -322,6 +322,7 @@ int max_eth_init(struct netif **netif_desc, struct max_eth_param *param)
 	while (!netif_descriptor->ip_addr.addr && dhcp_timeout > 0) {
 		max_lwip_tick(descriptor);
 		dhcp_timeout--;
+		// no_os_mdelay(1);
 	}
 
 	ret = _lwip_start_mdns(descriptor, netif_descriptor);

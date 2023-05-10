@@ -772,8 +772,8 @@ static int ad74413r_iio_read_scale(void *dev, char *buf, uint32_t len,
 	switch (channel->type) {
 	case IIO_VOLTAGE:
 		if (channel->ch_out) {
-			val[0] = 0;
-			val[1] = 762940;
+			val[0] = 1;
+			val[1] = 342937;
 		} else {
 			val[0] = 0;
 			val[1] = 152590;
