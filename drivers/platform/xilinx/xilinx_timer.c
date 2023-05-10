@@ -341,11 +341,11 @@ int32_t xilinx_timer_init(struct no_os_timer_desc **desc,
 			no_os_free(xdesc->instance);
 			goto error_xdesc;
 		}
-		ret = no_os_timer_count_clk_set(dev, param->freq_hz);
+		ret = xilinx_timer_count_clk_set(dev, param->freq_hz);
 		if (NO_OS_IS_ERR_VALUE(ret))
 			goto error_xdesc;
 
-		ret = no_os_timer_counter_set(dev, dev->ticks_count);
+		ret = xilinx_timer_counter_set(dev, dev->ticks_count);
 		if (NO_OS_IS_ERR_VALUE(ret))
 			goto error_xdesc;
 
