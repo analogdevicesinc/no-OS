@@ -72,8 +72,6 @@ enum adis16505_chan_type {
 struct adis_iio_dev {
 	struct adis_dev *adis_dev;
 	struct iio_device *iio_dev;
-	uint32_t active_channels;
-	uint8_t no_of_active_channels;
 	uint16_t samples_lost;
 	uint16_t data_cntr;
 	uint32_t sampling_frequency;

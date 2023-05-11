@@ -926,8 +926,6 @@ int adis_iio_update_channels(void* dev, uint32_t mask)
 
 	adis = iio_adis->adis_dev;
 
-	iio_adis->active_channels = mask;
-	iio_adis->no_of_active_channels = no_os_hweight32(mask);
 	iio_adis->samples_lost = 0;
 	iio_adis->data_cntr = 0;
 	ret  = adis_read_burst_sel(adis, &iio_adis->burst_sel);
