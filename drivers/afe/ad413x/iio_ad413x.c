@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <inttypes.h>
 #include <math.h>
+#include <string.h>
 #include "no_os_error.h"
 #include "no_os_delay.h"
 #include "iio.h"
@@ -117,9 +118,7 @@ static int ad413x_iio_read_calibscale(void *device, char *buf, uint32_t len,
 	struct ad413x_iio_dev *iiodev = (struct ad413x_iio_dev *)device;
 	struct ad413x_dev *dev = iiodev->ad413x_dev;
 	int32_t vals;
-	uint8_t regval[2], pr_nb;
-	uint8_t reg;
-	int32_t ret;
+	uint8_t pr_nb;
 	enum ad413x_gain gain;
 
 	pr_nb = dev->ch[channel->ch_num].preset;
@@ -207,7 +206,6 @@ static int ad413x_iio_scale_available(void *device, char *buf,
 				      uint32_t len,
 				      const struct iio_ch_info *channel, intptr_t priv)
 {
-	int32_t ret;
 	//        2.5V unipolar, 1.25V unipolar, 2.5V bipolar, 1.25V bipolar
 	strcpy(buf, "0.000149011U 0.000074505U 0.000298023B 0.000149011B");
 	return strlen(buf);
@@ -315,8 +313,8 @@ static int32_t ad413x_iio_read_samples(void *device,
 				       uint32_t nb_samples)
 {
 	struct ad413x_iio_dev *iiodev = (struct ad413x_iio_dev *)device;
-	int32_t ret, value, ch_nb = 0;
-	uint32_t ch_id = -1, test, mask;
+	int32_t ret, ch_nb = 0;
+	uint32_t mask;
 	ret = ad413x_iio_get_active_channels(device, &mask);
 	if (ret)
 		return ret;
@@ -442,7 +440,6 @@ int32_t ad413x_iio_init(struct ad413x_iio_dev **iio_dev,
 		return -1;
 
 	desc->iio_dev = &ad413x_iio_device;
-	desc->iio_dev->irq_desc = init_param.irq_desc;
 
 	ret = ad413x_init(&desc->ad413x_dev, init_param.ad413x_ip);
 	if (ret != 0)
