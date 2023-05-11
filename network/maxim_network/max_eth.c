@@ -158,6 +158,9 @@ int max_lwip_tick(void *data)
 	struct pbuf *p;
 	int ret = 0;
 
+	MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 17, 0);
+	MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 17, 1 << 17);
+
 	netif_desc = eth_desc->lwip_netif;
 	mac_desc = eth_desc->mac_desc;
 
@@ -166,14 +169,14 @@ int max_lwip_tick(void *data)
 		if (p != NULL) {
 			LINK_STATS_INC(link.recv);
 			ret = netif_desc->input(p, netif_desc);
-			if (ret) {
-				if (p->ref)
-					pbuf_free(p);
-			}
+			if (ret)
+				pbuf_free(p);
 		}
 	} while(p);
 
 	sys_check_timeouts();
+
+	MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 17, 0);
 
 	return ret;
 }
@@ -254,7 +257,7 @@ int max_eth_init(struct netif **netif_desc, struct max_eth_param *param)
 	struct max_eth_desc *descriptor;
 	struct netif *netif_descriptor;
 	ip4_addr_t ipaddr, netmask, gw;
-	uint32_t dhcp_timeout = 5000;
+	uint32_t dhcp_timeout = 50000;
 	uint32_t reg_val;
 	char *addr;
 	int ret;

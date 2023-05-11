@@ -518,9 +518,6 @@ int32_t max_spi_transfer_ll(struct no_os_spi_desc *desc,
 	/* Clear master done */
 
 	for (i = 0; i < len; i++) {
-
-		// spi->ctrl0 |= 0x1;
-
 		/* Flush the RX and TX FIFOs */
 		spi->dma |= NO_OS_BIT(23) | NO_OS_BIT(7);
 		/* Enable SPI */

@@ -250,6 +250,13 @@ int iio_example_main()
 		if (ret)
 			return ret;
 
+		swiot_ip.ad74413r = ad74413r_iio_desc;
+		swiot_ip.max14906 = max14906_iio_desc;
+
+		ret = swiot_iio_init(&swiot_iio_desc, &swiot_ip);
+		if (ret)
+			return ret;
+
 		struct iio_app_device iio_devices[] = {
 			{
 				.name = "swiot",
@@ -269,13 +276,6 @@ int iio_example_main()
 				.read_buff = &buff2,
 			},
 		};
-
-		swiot_ip.ad74413r = ad74413r_iio_desc;
-		swiot_ip.max14906 = max14906_iio_desc;
-
-		ret = swiot_iio_init(&swiot_iio_desc, &swiot_ip);
-		if (ret)
-			return ret;
 
 		iio_devices[0].dev = swiot_iio_desc;
 		iio_devices[0].dev_descriptor = swiot_iio_desc->iio_dev;
@@ -306,9 +306,9 @@ int iio_example_main()
 		if (ret)
 			return ret;
 
-		ret = ad74413r_iio_init(&ad74413r_iio_desc, &ad74413r_iio_ip, false);
-		if (ret)
-			return ret;
+		do {
+			ret = ad74413r_iio_init(&ad74413r_iio_desc, &ad74413r_iio_ip, false);
+		} while (ret);
 
 		swiot_ip.ad74413r = ad74413r_iio_desc;
 		swiot_ip.max14906 = max14906_iio_desc;
