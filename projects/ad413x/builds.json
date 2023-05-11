@@ -1,0 +1,13 @@
+{
+        "xilinx": {
+              "demo": {
+                    "flags": "",
+                    "hardware": ["ad4110_zed"]
+              },
+              "iio": {
+                    "flags": "TINYIIOD=y",
+                    "hardware": ["ad4110_zed"]
+              }
+        }
+  }
+  
