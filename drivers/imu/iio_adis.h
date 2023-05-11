@@ -144,6 +144,7 @@ struct adis_iio_dev {
 /******************************************************************************/
 /************************ Variables Declarations ******************************/
 /******************************************************************************/
+
 extern struct iio_attribute adis_dev_attrs[];
 extern struct iio_attribute adis_iio_anglvel_attrs[];
 extern struct iio_attribute adis_iio_delta_angl_attrs[];
