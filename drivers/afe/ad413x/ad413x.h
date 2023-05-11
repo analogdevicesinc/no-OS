@@ -476,8 +476,7 @@ struct ad413x_dev {
 	/* SPI */
 	struct no_os_spi_desc			*spi_dev;
 	/* GPIO - used to know when conversion is rdy */
-	struct no_os_irq_ctrl_desc *irq_desc;
-	uint32_t rdy_pin;
+	struct no_os_gpio_desc *rdy_pin_desc;
 	/* Device Settings */
 	struct ad413x_preset preset[8];
 	struct ad413x_channel ch[16];
@@ -500,8 +499,7 @@ struct ad413x_init_param {
 	/* SPI */
 	struct no_os_spi_init_param	*spi_init;
 	/* GPIO - used to know when conversion is rdy */
-	struct no_os_irq_ctrl_desc *irq_desc;
-	uint32_t rdy_pin;
+	struct no_os_gpio_init_param *rdy_pin_init;
 	/* Device Settings */
 	struct ad413x_preset preset[8];
 	struct ad413x_channel ch[16];
@@ -521,8 +519,8 @@ struct ad413x_init_param {
  */
 struct ad413x_callback_ctx {
 	struct ad413x_dev *dev;
-	int32_t *buffer;
-	int32_t buffer_size;
+	uint32_t *buffer;
+	uint32_t buffer_size;
 };
 
 /******************************************************************************/

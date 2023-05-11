@@ -71,7 +71,7 @@ static uint8_t in_buff[MAX_SIZE_BASE_ADDR];
 *******************************************************************************/
 int main()
 {
-	uint32_t ret;
+	int ret;
 	uint32_t buffer[20];
 	int32_t i;
 
@@ -90,39 +90,17 @@ int main()
 		.extra = &spi_extra
 	};
 
-	/* IRQ instance. */
-	struct no_os_irq_ctrl_desc *irq_desc;
-	struct xil_irq_init_param irq_extra = {
-		.type = IRQ_PS
-	};
-	struct no_os_irq_init_param irq_ip = {
-		.irq_ctrl_id = INTC_DEVICE_ID,
-		.platform_ops = &xil_irq_ops,
-		.extra = &irq_extra
+	struct xil_gpio_init_param xil_gpio_param = {
+		.type = GPIO_PS,
+		.device_id = XPAR_PS7_GPIO_0_DEVICE_ID
 	};
 
-	ret = no_os_irq_ctrl_init(&irq_desc, &irq_ip);
-	if (ret)
-		return -1;
-	ret = no_os_irq_global_enable(irq_desc);
-	if (ret)
-		return -1;
-
-	/* GPIO IRQ instance. */
-	struct no_os_irq_ctrl_desc *gpio_irq_desc;
-	struct xil_gpio_irq_init_param gpio_irq_extra = {
-		.parent_desc = irq_desc,
-		.gpio_device_id = XPAR_PS7_GPIO_0_DEVICE_ID
+	/* GPIO_RDY instance desc */
+	struct no_os_gpio_init_param  gpio_init = {
+		.number = RDY_PIN,
+		.platform_ops = &xil_gpio_ops,
+		.extra = &xil_gpio_param
 	};
-	struct no_os_irq_init_param gpio_irq_ip = {
-		.irq_ctrl_id = GPIO_IRQ_ID,
-		.platform_ops = &xil_gpio_irq_ops,
-		.extra = &gpio_irq_extra
-	};
-
-	ret = no_os_irq_ctrl_init(&gpio_irq_desc, &gpio_irq_ip);
-	if (ret)
-		return -1;
 
 	/* Device AD413X instance. */
 	struct ad413x_dev *ad413x_dev;
@@ -130,10 +108,9 @@ int main()
 		.spi_init = &spi_ip,
 		.chip_id = AD4130_8,
 		.mclk = AD413X_INT_76_8_KHZ_OUT_OFF,
-		.irq_desc = gpio_irq_desc,
-		.rdy_pin = RDY_PIN,
-		.preset[0] = { AD413X_REFIN1, AD413X_GAIN_1, AD413X_SYNC4_STANDALONE, AD413X_32_MCLK },
-		.preset[1] = { AD413X_REFOUT_AVSS, AD413X_GAIN_16, AD413X_SYNC3_PF1, AD413X_128_MCLK },
+		.rdy_pin_init = &gpio_init,
+		.preset[0] = { AD413X_INT_REF, AD413X_GAIN_1, AD413X_SYNC4_STANDALONE, AD413X_32_MCLK },
+		.preset[1] = { AD413X_REFOUT_AVSS, AD413X_GAIN_1, AD413X_SYNC3_PF1, AD413X_128_MCLK },
 		.ch[0]  = { AD413X_PRESET_0, ENABLE,  AD413X_AIN0,  AD413X_DGND },
 		.ch[1]  = { AD413X_PRESET_0, ENABLE,  AD413X_AIN1,  AD413X_DGND },
 		.ch[2]  = { AD413X_PRESET_0, DISABLE, AD413X_AIN2,  AD413X_DGND },
@@ -166,7 +143,8 @@ int main()
 		return -1;
 
 	for(i = 0; i < 20; i++)
-		printf("DATA[%"PRIi32"] = %"PRIi32" \n", i, buffer[i]);
+		printf("DATA[%"PRIi32"], chan %d = %f V \n", i, i % 3, buffer[i],
+		       (float)buffer[i] / 0xFFFFFF * 2.5);
 
 	return 0;
 #else
