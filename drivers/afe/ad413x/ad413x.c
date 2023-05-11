@@ -59,23 +59,6 @@ uint32_t timeout = 0xFFFFFF;
 /******************************************************************************/
 
 /***************************************************************************//**
- * IRQ handler for ADC read.
-*******************************************************************************/
-static void irq_adc_read(struct ad413x_callback_ctx *ctx)
-{
-	struct ad413x_dev *dev = ctx->dev;
-	timeout = 0xFFFFFF;
-	if(ctx->buffer_size > 0) {
-		ad413x_reg_read(ctx->dev, AD413X_REG_DATA, ctx->buffer);
-		ctx->buffer_size--;
-		ctx->buffer++;
-		no_os_irq_enable(dev->irq_desc, dev->rdy_pin);
-	} else {
-		no_os_irq_disable(dev->irq_desc, dev->rdy_pin);
-	}
-}
-
-/***************************************************************************//**
  * SPI internal register write to device using a mask.
  *
  * @param dev      - The device structure.
@@ -746,6 +729,9 @@ int32_t ad413x_reg_read(struct ad413x_dev *dev,
 		data_size--;
 	}
 
+	if ((reg_addr == AD413X_REG_DATA) && (dev->data_stat))
+		data_size--;
+
 	switch (data_size) {
 	case 1:
 		data = buf[1];
@@ -787,6 +773,7 @@ int32_t ad413x_single_conv(struct ad413x_dev *dev, uint32_t *buffer,
 			   uint8_t ch_nb)
 {
 	int32_t ret;
+	uint8_t pin_val;
 
 	struct ad413x_callback_ctx ctx = {
 		.dev = dev,
@@ -794,39 +781,31 @@ int32_t ad413x_single_conv(struct ad413x_dev *dev, uint32_t *buffer,
 		.buffer_size = ch_nb
 	};
 
-	struct no_os_callback_desc irq_callback = {
-		.callback = &irq_adc_read,
-		.ctx = &ctx
-	};
-
-	ret = no_os_irq_trigger_level_set(dev->irq_desc, dev->rdy_pin,
-					  NO_OS_IRQ_EDGE_FALLING);
-	if (ret)
-		return ret;
-
-	ret = no_os_irq_register_callback(dev->irq_desc, dev->rdy_pin, &irq_callback);
-	if (ret)
-		return ret;
-
-	ret = no_os_irq_enable(dev->irq_desc, dev->rdy_pin);
-	if (ret)
-		return ret;
-
 	ret = ad413x_set_adc_mode(dev, AD413X_SINGLE_CONV_MODE);
 	if (ret)
 		return ret;
 
-	while((ctx.buffer_size != 0U) && --timeout) ;
+	while(ctx.buffer_size) {
+		timeout = 0xFFFFFF;
+		do {
+			ret = no_os_gpio_get_value(dev->rdy_pin_desc, &pin_val);;
+			if (ret)
+				timeout = 0;
+			timeout--;
+		} while (pin_val && timeout);
+		if (timeout) {
+			ret = ad413x_reg_read(dev, AD413X_REG_DATA, ctx.buffer);
+			if (ret)
+				return ret;
+			ctx.buffer_size--;
+			ctx.buffer++;
+		}
+	}
 
 	if (!timeout)
-		pr_err("Timeout error (%s)\n", __func__);
+		return -ETIMEDOUT;
 
-	ret = no_os_irq_disable(dev->irq_desc, dev->rdy_pin);
-	if (ret)
-		return ret;
-
-	return no_os_irq_unregister_callback(dev->irq_desc, dev->rdy_pin,
-					     &irq_callback);
+	return 0;
 }
 
 /***************************************************************************//**
@@ -845,7 +824,8 @@ int32_t ad413x_single_conv(struct ad413x_dev *dev, uint32_t *buffer,
 int32_t ad413x_continuous_conv(struct ad413x_dev *dev, uint32_t *buffer,
 			       uint8_t ch_nb, uint32_t sample_nb)
 {
-	int32_t ret;
+	int ret;
+	uint8_t pin_val;
 
 	struct ad413x_callback_ctx ctx = {
 		.dev = dev,
@@ -853,39 +833,35 @@ int32_t ad413x_continuous_conv(struct ad413x_dev *dev, uint32_t *buffer,
 		.buffer_size = ch_nb * sample_nb
 	};
 
-	struct no_os_callback_desc irq_callback = {
-		.callback = &irq_adc_read,
-		.ctx = &ctx
-	};
-
-	ret = no_os_irq_trigger_level_set(dev->irq_desc, dev->rdy_pin,
-					  NO_OS_IRQ_EDGE_FALLING);
-	if (ret)
-		return ret;
-
-	ret = no_os_irq_register_callback(dev->irq_desc, dev->rdy_pin, &irq_callback);
-	if (ret)
-		return ret;
-
-	ret = no_os_irq_enable(dev->irq_desc, dev->rdy_pin);
-	if (ret)
-		return ret;
-
 	ret = ad413x_set_adc_mode(dev, AD413X_CONTINOUS_CONV_MODE);
 	if (ret)
 		return ret;
 
-	while((ctx.buffer_size != 0U) && --timeout) ;
-
-	if (!timeout)
-		pr_err("Timeout error (%s)\n", __func__);
+	while(ctx.buffer_size > 0) {
+		timeout = 0xFFFFFF;
+		do {
+			ret = no_os_gpio_get_value(dev->rdy_pin_desc, &pin_val);
+			if (ret)
+				timeout = 0;
+			timeout--;
+		} while (pin_val);// && timeout);
+		if (timeout) {
+			ret = ad413x_reg_read(dev, AD413X_REG_DATA, ctx.buffer);
+			if (ret)
+				return ret;
+			ctx.buffer_size--;
+			ctx.buffer++;
+		}
+	}
 
 	ret = ad413x_set_adc_mode(dev, AD413X_STANDBY_MODE);
 	if (ret)
 		return ret;
 
-	return no_os_irq_unregister_callback(dev->irq_desc, dev->rdy_pin,
-					     &irq_callback);
+	if (!timeout)
+		return -ETIMEDOUT;
+
+	return 0;
 }
 
 /***************************************************************************//**
@@ -950,12 +926,20 @@ int32_t ad413x_init(struct ad413x_dev **device,
 		return -1;
 
 	dev->chip_id = init_param.chip_id;
-	dev->irq_desc = init_param.irq_desc;
-	dev->rdy_pin = init_param.rdy_pin;
 	dev->spi_crc_en = 0;
 
 	/* SPI */
 	ret = no_os_spi_init(&dev->spi_dev, init_param.spi_init);
+	if (ret)
+		goto err_dev;
+
+	/* RDY pin */
+	ret = no_os_gpio_get(&dev->rdy_pin_desc, init_param.rdy_pin_init);
+	if (ret)
+		goto err_dev;
+
+	/* Enable the input direction of the specified GPIO. */
+	ret = no_os_gpio_direction_input(dev->rdy_pin_desc);
 	if (ret)
 		goto err_dev;
 
