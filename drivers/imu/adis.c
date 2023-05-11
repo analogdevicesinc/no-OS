@@ -777,8 +777,7 @@ void adis_read_diag_fls_mem_wr_cnt_exceed(struct adis_dev *adis,
  */
 int adis_read_x_gyro(struct adis_dev *adis, int32_t *x_gyro)
 {
-	struct adis_field field = adis->info->field_map->x_gyro;
-	return adis_read_field_s32(adis, field, x_gyro);
+	return adis_read_field_s32(adis, adis->info->field_map->x_gyro, x_gyro);
 }
 
 /**
@@ -789,8 +788,7 @@ int adis_read_x_gyro(struct adis_dev *adis, int32_t *x_gyro)
  */
 int adis_read_y_gyro(struct adis_dev *adis, int32_t *y_gyro)
 {
-	struct adis_field field = adis->info->field_map->y_gyro;
-	return adis_read_field_s32(adis, field, y_gyro);
+	return adis_read_field_s32(adis, adis->info->field_map->y_gyro, y_gyro);
 }
 
 /**
@@ -801,8 +799,7 @@ int adis_read_y_gyro(struct adis_dev *adis, int32_t *y_gyro)
  */
 int adis_read_z_gyro(struct adis_dev *adis, int32_t *z_gyro)
 {
-	struct adis_field field = adis->info->field_map->z_gyro;
-	return adis_read_field_s32(adis, field, z_gyro);
+	return adis_read_field_s32(adis, adis->info->field_map->z_gyro, z_gyro);
 }
 
 /**
@@ -813,8 +810,7 @@ int adis_read_z_gyro(struct adis_dev *adis, int32_t *z_gyro)
  */
 int adis_read_x_accl(struct adis_dev *adis, int32_t *x_accl)
 {
-	struct adis_field field = adis->info->field_map->x_accl;
-	return adis_read_field_s32(adis, field, x_accl);
+	return adis_read_field_s32(adis, adis->info->field_map->x_accl, x_accl);
 }
 
 /**
@@ -825,8 +821,7 @@ int adis_read_x_accl(struct adis_dev *adis, int32_t *x_accl)
  */
 int adis_read_y_accl(struct adis_dev *adis, int32_t *y_accl)
 {
-	struct adis_field field = adis->info->field_map->y_accl;
-	return adis_read_field_s32(adis, field, y_accl);
+	return adis_read_field_s32(adis, adis->info->field_map->y_accl, y_accl);
 }
 
 /**
@@ -837,8 +832,7 @@ int adis_read_y_accl(struct adis_dev *adis, int32_t *y_accl)
  */
 int adis_read_z_accl(struct adis_dev *adis, int32_t *z_accl)
 {
-	struct adis_field field = adis->info->field_map->z_accl;
-	return adis_read_field_s32(adis, field, z_accl);
+	return adis_read_field_s32(adis, adis->info->field_map->z_accl, z_accl);
 }
 
 /**
@@ -849,8 +843,7 @@ int adis_read_z_accl(struct adis_dev *adis, int32_t *z_accl)
  */
 int adis_read_temp_out(struct adis_dev *adis, int32_t *temp_out)
 {
-	struct adis_field field = adis->info->field_map->temp_out;
-	return adis_read_field_s32(adis, field, temp_out);
+	return adis_read_field_s32(adis, adis->info->field_map->temp_out, temp_out);
 }
 
 /**
@@ -861,8 +854,7 @@ int adis_read_temp_out(struct adis_dev *adis, int32_t *temp_out)
  */
 int adis_read_time_stamp(struct adis_dev *adis, uint32_t *time_stamp)
 {
-	struct adis_field field = adis->info->field_map->time_stamp;
-	return adis_read_field_u32(adis, field, time_stamp);
+	return adis_read_field_u32(adis, adis->info->field_map->time_stamp, time_stamp);
 }
 
 /**
@@ -873,8 +865,7 @@ int adis_read_time_stamp(struct adis_dev *adis, uint32_t *time_stamp)
  */
 int adis_read_data_cntr(struct adis_dev *adis, uint32_t *data_cntr)
 {
-	struct adis_field field = adis->info->field_map->data_cntr;
-	return adis_read_field_u32(adis, field, data_cntr);
+	return adis_read_field_u32(adis, adis->info->field_map->data_cntr, data_cntr);
 }
 
 /**
@@ -885,8 +876,7 @@ int adis_read_data_cntr(struct adis_dev *adis, uint32_t *data_cntr)
  */
 int adis_read_x_deltang(struct adis_dev *adis, int32_t *x_deltang)
 {
-	struct adis_field field = adis->info->field_map->x_deltang;
-	return adis_read_field_s32(adis, field, x_deltang);
+	return adis_read_field_s32(adis, adis->info->field_map->x_deltang, x_deltang);
 }
 
 /**
@@ -897,8 +887,7 @@ int adis_read_x_deltang(struct adis_dev *adis, int32_t *x_deltang)
  */
 int adis_read_y_deltang(struct adis_dev *adis, int32_t *y_deltang)
 {
-	struct adis_field field = adis->info->field_map->y_deltang;
-	return adis_read_field_s32(adis, field, y_deltang);
+	return adis_read_field_s32(adis, adis->info->field_map->y_deltang, y_deltang);
 }
 
 /**
@@ -909,8 +898,7 @@ int adis_read_y_deltang(struct adis_dev *adis, int32_t *y_deltang)
  */
 int adis_read_z_deltang(struct adis_dev *adis, int32_t *z_deltang)
 {
-	struct adis_field field = adis->info->field_map->z_deltang;
-	return adis_read_field_s32(adis, field, z_deltang);
+	return adis_read_field_s32(adis, adis->info->field_map->z_deltang, z_deltang);
 }
 
 /**
@@ -921,8 +909,7 @@ int adis_read_z_deltang(struct adis_dev *adis, int32_t *z_deltang)
  */
 int adis_read_x_deltvel(struct adis_dev *adis, int32_t *x_deltvel)
 {
-	struct adis_field field = adis->info->field_map->x_deltvel;
-	return adis_read_field_s32(adis, field, x_deltvel);
+	return adis_read_field_s32(adis, adis->info->field_map->x_deltvel, x_deltvel);
 }
 
 /**
@@ -933,8 +920,7 @@ int adis_read_x_deltvel(struct adis_dev *adis, int32_t *x_deltvel)
  */
 int adis_read_y_deltvel(struct adis_dev *adis, int32_t *y_deltvel)
 {
-	struct adis_field field = adis->info->field_map->y_deltvel;
-	return adis_read_field_s32(adis, field, y_deltvel);
+	return adis_read_field_s32(adis, adis->info->field_map->y_deltvel, y_deltvel);
 }
 
 /**
@@ -945,8 +931,7 @@ int adis_read_y_deltvel(struct adis_dev *adis, int32_t *y_deltvel)
  */
 int adis_read_z_deltvel(struct adis_dev *adis, int32_t *z_deltvel)
 {
-	struct adis_field field = adis->info->field_map->z_deltvel;
-	return adis_read_field_s32(adis, field, z_deltvel);
+	return adis_read_field_s32(adis, adis->info->field_map->z_deltvel, z_deltvel);
 }
 
 /**
@@ -957,8 +942,7 @@ int adis_read_z_deltvel(struct adis_dev *adis, int32_t *z_deltvel)
  */
 int adis_read_xg_bias(struct adis_dev *adis, int32_t *xg_bias)
 {
-	struct adis_field field = adis->info->field_map->xg_bias;
-	return adis_read_field_s32(adis, field, xg_bias);
+	return adis_read_field_s32(adis, adis->info->field_map->xg_bias, xg_bias);
 }
 
 /**
@@ -969,8 +953,7 @@ int adis_read_xg_bias(struct adis_dev *adis, int32_t *xg_bias)
  */
 int adis_write_xg_bias(struct adis_dev *adis, int32_t xg_bias)
 {
-	struct adis_field field = adis->info->field_map->xg_bias;
-	return adis_write_field_u32(adis, field, xg_bias);
+	return adis_write_field_u32(adis, adis->info->field_map->xg_bias, xg_bias);
 }
 
 /**
@@ -981,8 +964,7 @@ int adis_write_xg_bias(struct adis_dev *adis, int32_t xg_bias)
  */
 int adis_read_yg_bias(struct adis_dev *adis, int32_t *yg_bias)
 {
-	struct adis_field field = adis->info->field_map->yg_bias;
-	return adis_read_field_s32(adis, field, yg_bias);
+	return adis_read_field_s32(adis, adis->info->field_map->yg_bias, yg_bias);
 }
 
 /**
@@ -993,8 +975,7 @@ int adis_read_yg_bias(struct adis_dev *adis, int32_t *yg_bias)
  */
 int adis_write_yg_bias(struct adis_dev *adis, int32_t yg_bias)
 {
-	struct adis_field field = adis->info->field_map->yg_bias;
-	return adis_write_field_u32(adis, field, yg_bias);
+	return adis_write_field_u32(adis, adis->info->field_map->yg_bias, yg_bias);
 }
 
 /**
@@ -1005,8 +986,7 @@ int adis_write_yg_bias(struct adis_dev *adis, int32_t yg_bias)
  */
 int adis_read_zg_bias(struct adis_dev *adis, int32_t *zg_bias)
 {
-	struct adis_field field = adis->info->field_map->zg_bias;
-	return adis_read_field_s32(adis, field, zg_bias);
+	return adis_read_field_s32(adis, adis->info->field_map->zg_bias, zg_bias);
 }
 
 /**
@@ -1017,8 +997,7 @@ int adis_read_zg_bias(struct adis_dev *adis, int32_t *zg_bias)
  */
 int adis_write_zg_bias(struct adis_dev *adis, int32_t zg_bias)
 {
-	struct adis_field field = adis->info->field_map->zg_bias;
-	return adis_write_field_u32(adis, field, zg_bias);
+	return adis_write_field_u32(adis, adis->info->field_map->zg_bias, zg_bias);
 }
 
 /**
@@ -1029,8 +1008,7 @@ int adis_write_zg_bias(struct adis_dev *adis, int32_t zg_bias)
  */
 int adis_read_xa_bias(struct adis_dev *adis, int32_t *xa_bias)
 {
-	struct adis_field field = adis->info->field_map->xa_bias;
-	return adis_read_field_s32(adis, field, xa_bias);
+	return adis_read_field_s32(adis, adis->info->field_map->xa_bias, xa_bias);
 }
 
 /**
@@ -1041,8 +1019,7 @@ int adis_read_xa_bias(struct adis_dev *adis, int32_t *xa_bias)
  */
 int adis_write_xa_bias(struct adis_dev *adis, int32_t xa_bias)
 {
-	struct adis_field field = adis->info->field_map->xa_bias;
-	return adis_write_field_u32(adis, field, xa_bias);
+	return adis_write_field_u32(adis, adis->info->field_map->xa_bias, xa_bias);
 }
 
 /**
@@ -1053,8 +1030,7 @@ int adis_write_xa_bias(struct adis_dev *adis, int32_t xa_bias)
  */
 int adis_read_ya_bias(struct adis_dev *adis, int32_t *ya_bias)
 {
-	struct adis_field field = adis->info->field_map->ya_bias;
-	return adis_read_field_s32(adis, field, ya_bias);
+	return adis_read_field_s32(adis, adis->info->field_map->ya_bias, ya_bias);
 }
 
 /**
@@ -1065,8 +1041,7 @@ int adis_read_ya_bias(struct adis_dev *adis, int32_t *ya_bias)
  */
 int adis_write_ya_bias(struct adis_dev *adis, int32_t ya_bias)
 {
-	struct adis_field field = adis->info->field_map->ya_bias;
-	return adis_write_field_u32(adis, field, ya_bias);
+	return adis_write_field_u32(adis, adis->info->field_map->ya_bias, ya_bias);
 }
 
 /**
@@ -1077,8 +1052,7 @@ int adis_write_ya_bias(struct adis_dev *adis, int32_t ya_bias)
  */
 int adis_read_za_bias(struct adis_dev *adis, int32_t *za_bias)
 {
-	struct adis_field field = adis->info->field_map->za_bias;
-	return adis_read_field_s32(adis, field, za_bias);
+	return adis_read_field_s32(adis, adis->info->field_map->za_bias, za_bias);
 }
 
 /**
@@ -1089,8 +1063,7 @@ int adis_read_za_bias(struct adis_dev *adis, int32_t *za_bias)
  */
 int adis_write_za_bias(struct adis_dev *adis, int32_t za_bias)
 {
-	struct adis_field field = adis->info->field_map->za_bias;
-	return adis_write_field_u32(adis, field, za_bias);
+	return adis_write_field_u32(adis, adis->info->field_map->za_bias, za_bias);
 }
 
 /**
@@ -1101,8 +1074,8 @@ int adis_write_za_bias(struct adis_dev *adis, int32_t za_bias)
  */
 int adis_read_filt_size_var_b(struct adis_dev *adis, uint32_t *filt_size_var_b)
 {
-	struct adis_field field = adis->info->field_map->filt_size_var_b;
-	return adis_read_field_u32(adis, field, filt_size_var_b);
+	return adis_read_field_u32(adis, adis->info->field_map->filt_size_var_b,
+				   filt_size_var_b);
 }
 
 /**
@@ -1113,13 +1086,13 @@ int adis_read_filt_size_var_b(struct adis_dev *adis, uint32_t *filt_size_var_b)
  */
 int adis_write_filt_size_var_b(struct adis_dev *adis, uint32_t filt_size_var_b)
 {
-	struct adis_field field = adis->info->field_map->filt_size_var_b;
 	int ret;
 
 	if(filt_size_var_b > adis->info->filt_size_var_b_max)
 		return -EINVAL;
 
-	ret = adis_write_field_u32(adis, field, filt_size_var_b);
+	ret = adis_write_field_u32(adis, adis->info->field_map->filt_size_var_b,
+				   filt_size_var_b);
 	if (ret)
 		return ret;
 
@@ -1136,8 +1109,8 @@ int adis_write_filt_size_var_b(struct adis_dev *adis, uint32_t filt_size_var_b)
  */
 int adis_read_gyro_meas_range(struct adis_dev *adis, uint32_t *gyro_meas_range)
 {
-	struct adis_field field = adis->info->field_map->gyro_meas_range;
-	return adis_read_field_u32(adis, field, gyro_meas_range);
+	return adis_read_field_u32(adis, adis->info->field_map->gyro_meas_range,
+				   gyro_meas_range);
 }
 
 /**
@@ -1148,8 +1121,8 @@ int adis_read_gyro_meas_range(struct adis_dev *adis, uint32_t *gyro_meas_range)
  */
 int adis_read_dr_polarity(struct adis_dev *adis, uint32_t *dr_polarity)
 {
-	struct adis_field field = adis->info->field_map->dr_polarity;
-	return adis_read_field_u32(adis, field, dr_polarity);
+	return adis_read_field_u32(adis, adis->info->field_map->dr_polarity,
+				   dr_polarity);
 }
 
 /**
@@ -1160,13 +1133,13 @@ int adis_read_dr_polarity(struct adis_dev *adis, uint32_t *dr_polarity)
  */
 int adis_write_dr_polarity(struct adis_dev *adis, uint32_t dr_polarity)
 {
-	struct adis_field field = adis->info->field_map->dr_polarity;
 	int ret;
 
 	if (dr_polarity > 1)
 		return -EINVAL;
 
-	ret = adis_write_field_u32(adis, field, dr_polarity);
+	ret = adis_write_field_u32(adis, adis->info->field_map->dr_polarity,
+				   dr_polarity);
 	if (ret)
 		return ret;
 
@@ -1183,8 +1156,8 @@ int adis_write_dr_polarity(struct adis_dev *adis, uint32_t dr_polarity)
  */
 int adis_read_sync_polarity(struct adis_dev *adis, uint32_t *sync_polarity)
 {
-	struct adis_field field = adis->info->field_map->sync_polarity;
-	return adis_read_field_u32(adis, field, sync_polarity);
+	return adis_read_field_u32(adis, adis->info->field_map->sync_polarity,
+				   sync_polarity);
 }
 
 /**
@@ -1195,13 +1168,13 @@ int adis_read_sync_polarity(struct adis_dev *adis, uint32_t *sync_polarity)
  */
 int adis_write_sync_polarity(struct adis_dev *adis, uint32_t sync_polarity)
 {
-	struct adis_field field = adis->info->field_map->sync_polarity;
 	int ret;
 
 	if (sync_polarity > 1)
 		return -EINVAL;
 
-	ret = adis_write_field_u32(adis, field, sync_polarity);
+	ret = adis_write_field_u32(adis, adis->info->field_map->sync_polarity,
+				   sync_polarity);
 	if (ret)
 		return ret;
 
@@ -1218,8 +1191,7 @@ int adis_write_sync_polarity(struct adis_dev *adis, uint32_t sync_polarity)
  */
 int adis_read_sync_mode(struct adis_dev *adis, uint32_t *sync_mode)
 {
-	struct adis_field field = adis->info->field_map->sync_mode;
-	return adis_read_field_u32(adis, field, sync_mode);
+	return adis_read_field_u32(adis, adis->info->field_map->sync_mode, sync_mode);
 }
 
 /**
@@ -1234,7 +1206,6 @@ int adis_write_sync_mode(struct adis_dev *adis, uint32_t sync_mode,
 			 uint32_t ext_clk)
 {
 	int ret;
-	struct adis_field field = adis->info->field_map->sync_mode;
 
 	if(sync_mode > adis->info->sync_mode_max)
 		return -EINVAL;
@@ -1265,7 +1236,7 @@ int adis_write_sync_mode(struct adis_dev *adis, uint32_t sync_mode,
 		adis->clk_freq = adis->info->int_clk;
 	}
 
-	return adis_write_field_u32(adis, field, sync_mode);
+	return adis_write_field_u32(adis, adis->info->field_map->sync_mode, sync_mode);
 }
 
 /**
@@ -1276,8 +1247,7 @@ int adis_write_sync_mode(struct adis_dev *adis, uint32_t sync_mode,
  */
 int adis_read_sens_bw(struct adis_dev *adis, uint32_t *sens_bw)
 {
-	struct adis_field field = adis->info->field_map->sens_bw;
-	return adis_read_field_u32(adis, field, sens_bw);
+	return adis_read_field_u32(adis, adis->info->field_map->sens_bw, sens_bw);
 }
 
 /**
@@ -1288,10 +1258,9 @@ int adis_read_sens_bw(struct adis_dev *adis, uint32_t *sens_bw)
  */
 int adis_write_sens_bw(struct adis_dev *adis, uint32_t sens_bw)
 {
-	struct adis_field field = adis->info->field_map->sens_bw;
 	int ret;
 
-	ret = adis_write_field_u32(adis, field, sens_bw);
+	ret = adis_write_field_u32(adis, adis->info->field_map->sens_bw, sens_bw);
 	if (ret)
 		return ret;
 
@@ -1310,8 +1279,8 @@ int adis_write_sens_bw(struct adis_dev *adis, uint32_t sens_bw)
 int adis_read_pt_of_perc_algnmt(struct adis_dev *adis,
 				uint32_t *pt_of_perc_algnmt)
 {
-	struct adis_field field = adis->info->field_map->pt_of_perc_algnmt;
-	return adis_read_field_u32(adis, field, pt_of_perc_algnmt);
+	return adis_read_field_u32(adis, adis->info->field_map->pt_of_perc_algnmt,
+				   pt_of_perc_algnmt);
 }
 
 /**
@@ -1324,10 +1293,10 @@ int adis_read_pt_of_perc_algnmt(struct adis_dev *adis,
 int adis_write_pt_of_perc_algnmt(struct adis_dev *adis,
 				 uint32_t pt_of_perc_algnmt)
 {
-	struct adis_field field = adis->info->field_map->pt_of_perc_algnmt;
 	int ret;
 
-	ret = adis_write_field_u32(adis, field, pt_of_perc_algnmt);
+	ret = adis_write_field_u32(adis, adis->info->field_map->pt_of_perc_algnmt,
+				   pt_of_perc_algnmt);
 	if (ret)
 		return ret;
 
@@ -1346,8 +1315,8 @@ int adis_write_pt_of_perc_algnmt(struct adis_dev *adis,
 int adis_read_linear_accl_comp(struct adis_dev *adis,
 			       uint32_t *linear_accl_comp)
 {
-	struct adis_field field = adis->info->field_map->linear_accl_comp;
-	return adis_read_field_u32(adis, field, linear_accl_comp);
+	return adis_read_field_u32(adis, adis->info->field_map->linear_accl_comp,
+				   linear_accl_comp);
 }
 
 /**
@@ -1360,10 +1329,10 @@ int adis_read_linear_accl_comp(struct adis_dev *adis,
 int adis_write_linear_accl_comp(struct adis_dev *adis,
 				uint32_t linear_accl_comp)
 {
-	struct adis_field field = adis->info->field_map->linear_accl_comp;
 	int ret;
 
-	ret = adis_write_field_u32(adis, field, linear_accl_comp);
+	ret = adis_write_field_u32(adis, adis->info->field_map->linear_accl_comp,
+				   linear_accl_comp);
 	if (ret)
 		return ret;
 
@@ -1380,8 +1349,7 @@ int adis_write_linear_accl_comp(struct adis_dev *adis,
  */
 int adis_read_burst_sel(struct adis_dev *adis, uint32_t *burst_sel)
 {
-	struct adis_field field = adis->info->field_map->burst_sel;
-	return adis_read_field_u32(adis, field, burst_sel);
+	return adis_read_field_u32(adis, adis->info->field_map->burst_sel, burst_sel);
 }
 
 /**
@@ -1392,10 +1360,9 @@ int adis_read_burst_sel(struct adis_dev *adis, uint32_t *burst_sel)
  */
 int adis_write_burst_sel(struct adis_dev *adis, uint32_t burst_sel)
 {
-	struct adis_field field = adis->info->field_map->burst_sel;
 	int ret;
 
-	ret = adis_write_field_u32(adis, field, burst_sel);
+	ret = adis_write_field_u32(adis, adis->info->field_map->burst_sel, burst_sel);
 	if (ret)
 		return ret;
 
@@ -1412,8 +1379,7 @@ int adis_write_burst_sel(struct adis_dev *adis, uint32_t burst_sel)
  */
 int adis_read_burst32(struct adis_dev *adis, uint32_t *burst32)
 {
-	struct adis_field field = adis->info->field_map->burst32;
-	return adis_read_field_u32(adis, field, burst32);
+	return adis_read_field_u32(adis, adis->info->field_map->burst32, burst32);
 }
 
 /**
@@ -1424,10 +1390,9 @@ int adis_read_burst32(struct adis_dev *adis, uint32_t *burst32)
  */
 int adis_write_burst32(struct adis_dev *adis, uint32_t burst32)
 {
-	struct adis_field field = adis->info->field_map->burst32;
 	int ret;
 
-	ret = adis_write_field_u32(adis, field, burst32);
+	ret = adis_write_field_u32(adis, adis->info->field_map->burst32, burst32);
 	if (ret)
 		return ret;
 
@@ -1444,8 +1409,7 @@ int adis_write_burst32(struct adis_dev *adis, uint32_t burst32)
  */
 int adis_read_up_scale(struct adis_dev *adis, uint32_t *up_scale)
 {
-	struct adis_field field = adis->info->field_map->up_scale;
-	return adis_read_field_u32(adis, field, up_scale);
+	return adis_read_field_u32(adis, adis->info->field_map->up_scale, up_scale);
 }
 
 /**
@@ -1456,7 +1420,6 @@ int adis_read_up_scale(struct adis_dev *adis, uint32_t *up_scale)
  */
 int adis_write_up_scale(struct adis_dev *adis, uint32_t up_scale)
 {
-	struct adis_field field = adis->info->field_map->up_scale;
 	uint32_t sync_mode;
 	int ret;
 
@@ -1475,7 +1438,7 @@ int adis_write_up_scale(struct adis_dev *adis, uint32_t up_scale)
 					      || adis->clk_freq*up_scale < 1900))
 		return -EINVAL;
 
-	return adis_write_field_u32(adis, field, up_scale);
+	return adis_write_field_u32(adis, adis->info->field_map->up_scale, up_scale);
 }
 
 /**
@@ -1486,8 +1449,7 @@ int adis_write_up_scale(struct adis_dev *adis, uint32_t up_scale)
  */
 int adis_read_dec_rate(struct adis_dev *adis, uint32_t *dec_rate)
 {
-	struct adis_field field = adis->info->field_map->dec_rate;
-	return adis_read_field_u32(adis, field, dec_rate);
+	return adis_read_field_u32(adis, adis->info->field_map->dec_rate, dec_rate);
 }
 
 /**
@@ -1498,13 +1460,12 @@ int adis_read_dec_rate(struct adis_dev *adis, uint32_t *dec_rate)
  */
 int adis_write_dec_rate(struct adis_dev *adis, uint32_t dec_rate)
 {
-	struct adis_field field = adis->info->field_map->dec_rate;
 	int ret;
 
 	if(dec_rate > adis->info->dec_rate_max)
 		return -EINVAL;
 
-	ret = adis_write_field_u32(adis, field, dec_rate);
+	ret = adis_write_field_u32(adis, adis->info->field_map->dec_rate, dec_rate);
 	if(ret)
 		return ret;
 
@@ -1618,8 +1579,7 @@ int adis_cmd_sw_res(struct adis_dev *adis)
  */
 int adis_read_firm_rev(struct adis_dev *adis, uint32_t *firm_rev)
 {
-	struct adis_field field = adis->info->field_map->firm_rev;
-	return adis_read_field_u32(adis, field, firm_rev);
+	return adis_read_field_u32(adis, adis->info->field_map->firm_rev, firm_rev);
 }
 
 /**
@@ -1630,8 +1590,7 @@ int adis_read_firm_rev(struct adis_dev *adis, uint32_t *firm_rev)
  */
 int adis_read_firm_d(struct adis_dev *adis, uint32_t *firm_d)
 {
-	struct adis_field field = adis->info->field_map->firm_d;
-	return adis_read_field_u32(adis, field, firm_d);
+	return adis_read_field_u32(adis, adis->info->field_map->firm_d, firm_d);
 }
 
 /**
@@ -1642,8 +1601,7 @@ int adis_read_firm_d(struct adis_dev *adis, uint32_t *firm_d)
  */
 int adis_read_firm_m(struct adis_dev *adis, uint32_t *firm_m)
 {
-	struct adis_field field = adis->info->field_map->firm_m;
-	return adis_read_field_u32(adis, field, firm_m);
+	return adis_read_field_u32(adis, adis->info->field_map->firm_m, firm_m);
 }
 
 /**
@@ -1654,8 +1612,7 @@ int adis_read_firm_m(struct adis_dev *adis, uint32_t *firm_m)
  */
 int adis_read_firm_y(struct adis_dev *adis, uint32_t *firm_y)
 {
-	struct adis_field field = adis->info->field_map->firm_y;
-	return adis_read_field_u32(adis, field, firm_y);
+	return adis_read_field_u32(adis, adis->info->field_map->firm_y, firm_y);
 }
 
 /**
@@ -1666,8 +1623,7 @@ int adis_read_firm_y(struct adis_dev *adis, uint32_t *firm_y)
  */
 int adis_read_prod_id(struct adis_dev *adis, uint32_t *prod_id)
 {
-	struct adis_field field = adis->info->field_map->prod_id;
-	return adis_read_field_u32(adis, field, prod_id);
+	return adis_read_field_u32(adis, adis->info->field_map->prod_id, prod_id);
 }
 
 /**
@@ -1678,8 +1634,7 @@ int adis_read_prod_id(struct adis_dev *adis, uint32_t *prod_id)
  */
 int adis_read_serial_num(struct adis_dev *adis, uint32_t *serial_num)
 {
-	struct adis_field field = adis->info->field_map->serial_num;
-	return adis_read_field_u32(adis, field, serial_num);
+	return adis_read_field_u32(adis, adis->info->field_map->serial_num, serial_num);
 }
 
 /**
@@ -1690,8 +1645,7 @@ int adis_read_serial_num(struct adis_dev *adis, uint32_t *serial_num)
  */
 int adis_read_usr_scr_1(struct adis_dev *adis, uint32_t *usr_scr_1)
 {
-	struct adis_field field = adis->info->field_map->usr_scr_1;
-	return adis_read_field_u32(adis, field, usr_scr_1);
+	return adis_read_field_u32(adis, adis->info->field_map->usr_scr_1, usr_scr_1);
 }
 
 /**
@@ -1702,8 +1656,7 @@ int adis_read_usr_scr_1(struct adis_dev *adis, uint32_t *usr_scr_1)
  */
 int adis_write_usr_scr_1(struct adis_dev *adis, uint32_t usr_scr_1)
 {
-	struct adis_field field = adis->info->field_map->usr_scr_1;
-	return adis_write_field_u32(adis, field, usr_scr_1);
+	return adis_write_field_u32(adis, adis->info->field_map->usr_scr_1, usr_scr_1);
 }
 
 /**
@@ -1714,8 +1667,7 @@ int adis_write_usr_scr_1(struct adis_dev *adis, uint32_t usr_scr_1)
  */
 int adis_read_usr_scr_2(struct adis_dev *adis, uint32_t *usr_scr_2)
 {
-	struct adis_field field = adis->info->field_map->usr_scr_2;
-	return adis_read_field_u32(adis, field, usr_scr_2);
+	return adis_read_field_u32(adis, adis->info->field_map->usr_scr_2, usr_scr_2);
 }
 
 /**
@@ -1726,8 +1678,7 @@ int adis_read_usr_scr_2(struct adis_dev *adis, uint32_t *usr_scr_2)
  */
 int adis_write_usr_scr_2(struct adis_dev *adis, uint32_t usr_scr_2)
 {
-	struct adis_field field = adis->info->field_map->usr_scr_2;
-	return adis_write_field_u32(adis, field, usr_scr_2);
+	return adis_write_field_u32(adis, adis->info->field_map->usr_scr_2, usr_scr_2);
 }
 
 /**
@@ -1738,8 +1689,7 @@ int adis_write_usr_scr_2(struct adis_dev *adis, uint32_t usr_scr_2)
  */
 int adis_read_usr_scr_3(struct adis_dev *adis, uint32_t *usr_scr_3)
 {
-	struct adis_field field = adis->info->field_map->usr_scr_3;
-	return adis_read_field_u32(adis, field, usr_scr_3);
+	return adis_read_field_u32(adis, adis->info->field_map->usr_scr_3, usr_scr_3);
 }
 
 /**
@@ -1750,8 +1700,7 @@ int adis_read_usr_scr_3(struct adis_dev *adis, uint32_t *usr_scr_3)
  */
 int adis_write_usr_scr_3(struct adis_dev *adis, uint32_t usr_scr_3)
 {
-	struct adis_field field = adis->info->field_map->usr_scr_3;
-	return adis_write_field_u32(adis, field, usr_scr_3);
+	return adis_write_field_u32(adis, adis->info->field_map->usr_scr_3, usr_scr_3);
 }
 
 /**
@@ -1763,9 +1712,9 @@ int adis_write_usr_scr_3(struct adis_dev *adis, uint32_t usr_scr_3)
 int adis_read_fls_mem_wr_cntr(struct adis_dev *adis, uint32_t *fls_mem_wr_cntr)
 {
 	int ret;
-	struct adis_field field = adis->info->field_map->fls_mem_wr_cntr;
 
-	ret = adis_read_field_u32(adis, field, fls_mem_wr_cntr);
+	ret = adis_read_field_u32(adis, adis->info->field_map->fls_mem_wr_cntr,
+				  fls_mem_wr_cntr);
 	if (ret)
 		return ret;
 
