@@ -44,6 +44,7 @@
 #include "iio.h"
 #include "iio_ad413x.h"
 #include "iio_app.h"
+#include "xilinx_uart.h"
 #endif
 #include "no_os_irq.h"
 #include "xilinx_irq.h"
@@ -60,9 +61,9 @@
 #include <stdint.h>
 #include <inttypes.h>
 
-#define MAX_SIZE_BASE_ADDR	25600
+#define DATA_BUFFER_SIZE 400
 
-static uint8_t in_buff[MAX_SIZE_BASE_ADDR];
+static uint8_t in_buff[DATA_BUFFER_SIZE*16*sizeof(int)];
 
 #define ADC_DDR_BASEADDR	((uint32_t)in_buff)
 
@@ -150,27 +151,41 @@ int main()
 #else
 
 	/* IIO device */
+	struct iio_app_desc *app;
 	struct ad413x_iio_dev *adciio = NULL;
 	struct ad413x_iio_init_param adciio_init;
-	struct xil_gpio_irq_init_param *iio_gpio_irq_extra;
+	struct iio_app_init_param app_init_param = { 0 };
 
-	struct iio_data_buffer iio_ad413x_read_buff = {
-		.buff = ADC_DDR_BASEADDR,
-		.size = MAX_SIZE_BASE_ADDR,
+	struct xil_uart_init_param platform_uart_init_par = {
+		.type = UART_PS,
+		.irq_id = UART_IRQ_ID
 	};
 
-	iio_gpio_irq_extra = (struct xil_gpio_irq_init_param *)
-			     adciio_init.ad413x_ip.irq_desc->extra;
+	struct no_os_uart_init_param iio_uart_ip = {
+		.device_id = UART_DEVICE_ID,
+		.irq_id = UART_IRQ_ID,
+		.baud_rate = UART_BAUDRATE,
+		.size = NO_OS_UART_CS_8,
+		.parity = NO_OS_UART_PAR_NO,
+		.stop = NO_OS_UART_STOP_1_BIT,
+		.extra = &platform_uart_init_par,
+		.platform_ops = &xil_uart_ops,
+	};
+
+	struct iio_data_buffer iio_ad413x_read_buff = {
+		.buff = (void *)in_buff,
+		.size = DATA_BUFFER_SIZE*16*sizeof(int)
+	};
 
 	adciio_init.ad413x_ip = ad413x_dev_ip;
-	adciio_init->irq_desc = iio_gpio_irq_extra->parent_desc;
+
 	ret = ad413x_iio_init(&adciio, adciio_init);
 	if (ret < 0)
 		goto error;
 
 	struct iio_app_device iio_devices[] = {
 		{
-			.name = "ad413x",
+			.name = "ad4130",
 			.dev = adciio,
 			.dev_descriptor = adciio->iio_dev,
 			.read_buff =  &iio_ad413x_read_buff,
@@ -178,7 +193,15 @@ int main()
 		}
 	};
 
-	ret = iio_app_run(NULL, 0, iio_devices, NO_OS_ARRAY_SIZE(iio_devices));
+	app_init_param.devices = iio_devices;
+	app_init_param.nb_devices = NO_OS_ARRAY_SIZE(iio_devices);
+	app_init_param.uart_init_params = iio_uart_ip;
+
+	ret = iio_app_init(&app, app_init_param);
+	if (ret)
+		return ret;
+
+	return iio_app_run(app);
 error:
 	ad413x_iio_remove(adciio);
 	return ret;

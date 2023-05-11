@@ -50,7 +50,6 @@ struct ad413x_iio_dev {
 
 struct ad413x_iio_init_param {
 	struct ad413x_init_param ad413x_ip;
-	struct no_os_irq_ctrl_desc *irq_desc;
 };
 
 int32_t ad413x_iio_init(struct ad413x_iio_dev **iio_dev,
