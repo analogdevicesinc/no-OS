@@ -61,7 +61,7 @@ enum max14906_do_mode {
 };
 
 struct max14906_ch_config {
-	bool enable;
+	bool enabled;
 	enum max14906_function function;
 	/** The value set to the GPIO in case it's configured as output */
 	uint32_t val;

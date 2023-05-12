@@ -83,7 +83,7 @@ struct ad74413r_iio_desc {
  */
 struct ad74413r_iio_desc_init_param {
 	struct ad74413r_init_param *ad74413r_init_param;
-	struct ad74413r_channel_config channel_configs[AD74413R_N_CHANNELS];
+	struct ad74413r_channel_config (*channel_configs)[AD74413R_N_CHANNELS];
 };
 
 /**

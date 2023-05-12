@@ -662,7 +662,9 @@ static int ad74413r_iio_read_raw(void *dev, char *buf, uint32_t len,
 				 const struct iio_ch_info *channel, intptr_t priv)
 {
 	int ret;
-	uint32_t val;
+	uint32_t val = 0;
+
+	// return iio_format_value(buf, len, IIO_VAL_INT, 1, (int32_t *)&val);
 
 	if (channel->ch_out)
 		return -EINVAL;
@@ -1168,7 +1170,8 @@ static int ad74413r_iio_read_fault_raw(void *dev, char *buf, uint32_t len,
  * @param iio_desc - Specific IIO descriptor for AD74413R
  * @return 0 in case of success, error code otherwise
  */
-static int ad74413r_iio_setup_channels(struct ad74413r_iio_desc *iio_desc)
+static int ad74413r_iio_setup_channels(struct ad74413r_iio_desc *iio_desc,
+				       struct ad74413r_iio_desc_init_param *init_param)
 {
 	uint32_t i;
 	uint32_t n_chan = 0;
@@ -1179,7 +1182,7 @@ static int ad74413r_iio_setup_channels(struct ad74413r_iio_desc *iio_desc)
 	struct iio_channel *chan_buffer;
 	struct ad74413r_channel_map channels_info;
 
-	config = ad74413r_global_config;
+	config = &init_param->channel_configs[0];
 
 	for (i = 0; i < AD74413R_N_CHANNELS; i++) {
 		if (!config[i].enabled)
@@ -1193,6 +1196,7 @@ static int ad74413r_iio_setup_channels(struct ad74413r_iio_desc *iio_desc)
 		return -ENOMEM;
 
 	iio_desc->iio_dev->channels = chan_buffer;
+	iio_desc->iio_dev->num_ch = 0;
 
 	/* Both the ADC and DAC channels have to be added in one iteration */
 	for (int i = 0; i < AD74413R_N_CHANNELS; i++) {
@@ -1523,11 +1527,11 @@ int ad74413r_iio_init(struct ad74413r_iio_desc **iio_desc,
 	if (!descriptor)
 		return -ENOMEM;
 
-	if (config) {
-		descriptor->iio_dev = &ad74413r_iio_config_dev;
-		*iio_desc = descriptor;
-		return 0;
-	}
+	// if (config) {
+	// 	descriptor->iio_dev = &ad74413r_iio_config_dev;
+	// 	*iio_desc = descriptor;
+	// 	return 0;
+	// }
 
 	descriptor->iio_dev = &ad74413r_iio_dev;
 
@@ -1563,7 +1567,7 @@ int ad74413r_iio_init(struct ad74413r_iio_desc **iio_desc,
 			return ret;
 	}
 
-	ret = ad74413r_iio_setup_channels(descriptor);
+	ret = ad74413r_iio_setup_channels(descriptor, init_param);
 	if (ret)
 		goto err;
 

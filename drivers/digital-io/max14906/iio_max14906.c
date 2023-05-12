@@ -432,16 +432,19 @@ static int max14906_iio_read_config_iec_available(void *dev, char *buf,
 	return strlen(buf);
 }
 
-int max14906_iio_setup_channels(struct max14906_iio_desc *desc)
+int max14906_iio_setup_channels(struct max14906_iio_desc *desc,
+				struct max14906_iio_desc_init_param *init_param)
 {
 	struct iio_channel *max14906_iio_channels;
 	/* The fault channel is always active */
 	uint32_t enabled_ch = 1;
+	struct max14906_ch_config *ch_cfg;
 	size_t ch_offset = 0;
 	size_t i;
 
+	ch_cfg = *init_param->channel_configs;
 	for (i = 0; i < MAX14906_CHANNELS; i++)
-		if (max14906_ch_configs[i].enable)
+		if (ch_cfg[i].enabled)
 			enabled_ch++;
 
 	max14906_iio_channels = calloc(enabled_ch, sizeof(*max14906_iio_channels));
@@ -454,13 +457,13 @@ int max14906_iio_setup_channels(struct max14906_iio_desc *desc)
 	 * mirror's the state.
 	 */
 	for (i = 0; i < MAX14906_CHANNELS; i++) {
-		if (!max14906_ch_configs[i].enable)
+		if (!ch_cfg[i].enabled)
 			continue;
 
 		max14906_iio_channels[ch_offset] = (struct iio_channel)MAX14906_CHANNEL(i);
 
 		/* Set the direction and attributes based on configuration */
-		if (max14906_ch_configs[i].function == MAX14906_IN) {
+		if (ch_cfg[i].function == MAX14906_IN) {
 			max14906_iio_channels[ch_offset].attributes = max14906_in_attrs;
 			max14906_iio_channels[ch_offset].ch_out = 0;
 		} else {
@@ -489,7 +492,7 @@ static int max14906_iio_read_fault_raw(void *dev, char *buf, uint32_t len,
 static int max14906_iio_read_config_enabled(void *dev, char *buf, uint32_t len,
 					const struct iio_ch_info *channel, intptr_t priv)
 {
-	int32_t enabled = max14906_ch_configs[channel->address].enable;
+	int32_t enabled = max14906_ch_configs[channel->address].enabled;
 
 	return iio_format_value(buf, len, IIO_VAL_INT, 1, &enabled);
 }
@@ -500,7 +503,7 @@ static int max14906_iio_write_config_enabled(void *dev, char *buf, uint32_t len,
 	int32_t enabled;
 
 	iio_parse_value(buf, IIO_VAL_INT, &enabled, NULL);
-	max14906_ch_configs[channel->address].enable = !!enabled;
+	max14906_ch_configs[channel->address].enabled = !!enabled;
 
 	return 0;
 }
@@ -552,16 +555,16 @@ int max14906_iio_init(struct max14906_iio_desc **iio_desc,
 	if (ret)
 		goto free_desc;
 
-	if (config) {
-		*iio_desc = descriptor;
-		descriptor->iio_dev = &max14906_iio_config_dev;
+	// if (config) {
+	// 	*iio_desc = descriptor;
+	// 	descriptor->iio_dev = &max14906_iio_config_dev;
 
-		return 0;
-	}
+	// 	return 0;
+	// }
 
 	descriptor->iio_dev = &max14906_iio_dev;
 
-	ret = max14906_iio_setup_channels(descriptor);
+	ret = max14906_iio_setup_channels(descriptor, init_param);
 	if (ret)
 		return ret;
 

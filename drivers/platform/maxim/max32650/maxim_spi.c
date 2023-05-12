@@ -499,6 +499,7 @@ int32_t max_spi_transfer_ll(struct no_os_spi_desc *desc,
 			    uint32_t len)
 {
 	mxc_spi_regs_t *spi = MXC_SPI_GET_SPI(desc->device_id);
+	int timeout;
 	size_t bytes_cnt = 0;
 	uint32_t tx_cnt = 0;
 	uint32_t rx_cnt = 0;
@@ -518,6 +519,7 @@ int32_t max_spi_transfer_ll(struct no_os_spi_desc *desc,
 	/* Clear master done */
 
 	for (i = 0; i < len; i++) {
+		timeout = 0;
 		/* Flush the RX and TX FIFOs */
 		spi->dma |= NO_OS_BIT(23) | NO_OS_BIT(7);
 		/* Enable SPI */
@@ -555,6 +557,8 @@ int32_t max_spi_transfer_ll(struct no_os_spi_desc *desc,
 							     msgs[i].bytes_number - rx_cnt);
 				rx_done = (rx_cnt == msgs[i].bytes_number) ? true : false;
 			}
+			// if (timeout++ >= 20000)
+			// 	return -22;
 		}
 
 		while (!(spi->int_fl & NO_OS_BIT(11)));
