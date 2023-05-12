@@ -1055,7 +1055,7 @@ int32_t ad4110_continuous_read(struct ad4110_dev *dev, uint32_t *buffer,
 	};
 
 	struct no_os_callback_desc irq_callback = {
-		.legacy_callback = &irq_adc_read,
+		.callback = &irq_adc_read,
 		.ctx = &ctx
 	};
 
