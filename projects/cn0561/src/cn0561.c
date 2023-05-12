@@ -143,33 +143,33 @@ int main()
 	struct axi_pwm_init_param axi_zed_pwm_init0 = {
 		.base_addr = XPAR_ODR_GENERATOR_BASEADDR,
 		.ref_clock_Hz = 96000000,
-		.channel = 1
+		.channel = 0
 	};
 
 	struct axi_pwm_init_param axi_zed_pwm_init1 = {
 		.base_addr = XPAR_ODR_GENERATOR_BASEADDR,
 		.ref_clock_Hz = 96000000,
-		.channel = 2
+		.channel = 1
 	};
 
 	struct no_os_pwm_init_param axi_pwm_init0 = {
 		.period_ns = 850,
-		.duty_cycle_ns = 130,
-		.phase_ns = 0,
+		.duty_cycle_ns = 1,
+		.phase_ns = 30,
 		.extra = &axi_zed_pwm_init0
 	};
 
 	struct no_os_pwm_init_param axi_pwm_init1 = {
 		.period_ns = 850,
-		.duty_cycle_ns = 1,
-		.phase_ns = 30,
+		.duty_cycle_ns = 130,
+		.phase_ns = 0,
 		.extra = &axi_zed_pwm_init1
 	};
 
 	gpio_extra_param.device_id = GPIO_DEVICE_ID;
 	gpio_extra_param.type = GPIO_PS;
 
-	cn0561_init_param.adc_data_len = ADC_24_BIT_DATA; // HERE MODIFY DATA SIZE ADC
+	cn0561_init_param.adc_data_len = ADC_32_BIT_DATA; // HERE MODIFY DATA SIZE ADC
 	cn0561_init_param.clk_delay_en = false;
 	cn0561_init_param.crc_header = CRC_6;  // HERE MODIFY/ACTIVATE THE CRC HEADER
 //	cn0561_init_param.crc_header = NO_CRC; // HERE MODIFY/ACTIVATE THE CRC HEADER
