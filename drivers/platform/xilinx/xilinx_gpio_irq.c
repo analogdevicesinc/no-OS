@@ -93,7 +93,7 @@ static void xil_gpio_irq_handler(struct xil_gpio_irq_desc *param)
 			callback_desc->triggered = false;
 			XGpioPs_IntrDisablePin(&param->my_Gpio, callback_desc->pin_nb);
 			XGpioPs_IntrClearPin(&param->my_Gpio, callback_desc->pin_nb);
-			callback_desc->callback.legacy_callback(callback_desc->callback.ctx, 0U, NULL);
+			callback_desc->callback.callback(callback_desc->callback.ctx);
 			if(callback_desc->enabled)
 				XGpioPs_IntrEnablePin(&param->my_Gpio, callback_desc->pin_nb);
 		}
@@ -188,7 +188,7 @@ int32_t xil_gpio_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
 	if(status)
 		goto error_op;
 
-	callback.legacy_callback = &xil_gpio_irq_handler;
+	callback.callback = &xil_gpio_irq_handler;
 	callback.ctx = ldesc->extra;
 	status = no_os_irq_register_callback(xil_desc->parent_desc, ldesc->irq_ctrl_id,
 					     &callback);
@@ -254,7 +254,7 @@ int32_t xil_gpio_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 		return -1;
 
 	dev_callback->pin_nb = irq_id;
-	dev_callback->callback.legacy_callback = callback_desc->legacy_callback;
+	dev_callback->callback.callback = callback_desc->callback;
 	dev_callback->callback.ctx = callback_desc->ctx;
 	dev_callback->triggered = false;
 

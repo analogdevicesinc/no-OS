@@ -262,10 +262,10 @@ int32_t xil_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 			int32_t ret;
 
 			ret = XIntc_Connect(xil_dev->instance, irq_id,
-					    XTmrCtr_InterruptHandler, callback_desc->legacy_config);
+					    XTmrCtr_InterruptHandler, NULL);
 			if (NO_OS_IS_ERR_VALUE(ret))
 				return -1;
-			XTmrCtr_SetHandler(callback_desc->legacy_config,
+			XTmrCtr_SetHandler(xil_dev->instance,
 					   (XTmrCtr_Handler)callback_desc->callback,
 					   callback_desc->ctx);
 

@@ -136,18 +136,8 @@ struct no_os_irq_ctrl_desc {
 struct no_os_callback_desc {
 	/** Callback to be called when the event an event occurs. */
 	void (*callback)(void *context);
-	/**
-	 * Callback to be called when the event an event occurs
-	 *  @param ctx - Same as \ref no_os_callback_desc.ctx
-	 *  @param event - Event that generated the callback
-	 *  @param extra - Platform specific data
-	 */
-	void (*legacy_callback)(void *ctx, uint32_t event,
-				void *extra); /* TODO: remove this. */
 	/** Parameter to be passed when the callback is called */
 	void *ctx;
-	/** Platform specific configuration for a callback */
-	void *legacy_config; /* TODO: remove this. */
 	/** Platform specific event that triggers the calling of the callback. */
 	enum no_os_irq_event event;
 	/** Interrupt source peripheral specifier. */
@@ -165,7 +155,7 @@ struct no_os_irq_platform_ops {
 	/** Initialize a interrupt controller peripheral. */
 	int32_t (*init)(struct no_os_irq_ctrl_desc **desc,
 			const struct no_os_irq_init_param *param);
-	/** Register a legacy_callback to handle the irq events */
+	/** Register a callback to handle the irq events */
 	int32_t (*register_callback)(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id,
 				     struct no_os_callback_desc *callback);
 	/** Unregisters a generic IRQ handling function */
