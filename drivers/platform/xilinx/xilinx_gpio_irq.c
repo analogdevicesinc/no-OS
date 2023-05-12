@@ -273,7 +273,7 @@ int32_t xil_gpio_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
  * @return 0 in case of success, -1 otherwise.
  */
 int32_t xil_gpio_irq_unregister_callback(struct no_os_irq_ctrl_desc *desc,
-		uint32_t irq_id, struct callback_desc *cb)
+		uint32_t irq_id, struct no_os_callback_desc *cb)
 {
 	int32_t status;
 	struct xil_gpio_irq_desc *extra;
