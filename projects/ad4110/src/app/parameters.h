@@ -45,9 +45,9 @@
 /******************************************************************************/
 #define BUF_LENGTH 	32U
 #define SPI_DEVICE_ID 	0U
-#define GPIO_OFFSET  	31U
+#define GPIO_OFFSET  	54U
 
-#define NREADY_PIN   	GPIO_OFFSET + 1U
+#define NREADY_PIN   	GPIO_OFFSET + 32U
 #define GPIO_IRQ_ID 	52U
 
 #endif
