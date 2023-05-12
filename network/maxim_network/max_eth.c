@@ -158,8 +158,8 @@ int max_lwip_tick(void *data)
 	struct pbuf *p;
 	int ret = 0;
 
-	MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 17, 0);
-	MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 17, 1 << 17);
+	MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 6, 0);
+	MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 6, 1 << 6);
 
 	netif_desc = eth_desc->lwip_netif;
 	mac_desc = eth_desc->mac_desc;
@@ -176,7 +176,7 @@ int max_lwip_tick(void *data)
 
 	sys_check_timeouts();
 
-	MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 17, 0);
+	MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 6, 0);
 
 	return ret;
 }

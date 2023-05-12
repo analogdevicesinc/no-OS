@@ -82,6 +82,9 @@ static int max14906_iio_read_runtime_back(void *dev, char *buf, uint32_t len,
 static int max14906_iio_write_runtime_back(void *dev, char *buf, uint32_t len,
 		const struct iio_ch_info *channel, intptr_t priv);
 
+static int max14906_iio_reg_read(struct max14906_iio_desc *, uint32_t, uint32_t *);
+static int max14906_iio_reg_write(struct max14906_iio_desc *, uint32_t, uint32_t);
+
 int max14906_apply;
 int max14906_back;
 
@@ -205,8 +208,8 @@ static struct iio_channel max14906_config_channels[MAX14906_CHANNELS] = {
 };
 
 static struct iio_device max14906_iio_dev = {
-	.debug_reg_read = (int32_t (*)())max14906_reg_read,
-	.debug_reg_write = (int32_t (*)())max14906_reg_write,
+	.debug_reg_read = (int32_t (*)())max14906_iio_reg_read,
+	.debug_reg_write = (int32_t (*)())max14906_iio_reg_write,
 	.attributes = max14906_runtime_dev_attrs,
 };
 
@@ -441,6 +444,7 @@ int max14906_iio_setup_channels(struct max14906_iio_desc *desc,
 	struct max14906_ch_config *ch_cfg;
 	size_t ch_offset = 0;
 	size_t i;
+	int ret;
 
 	ch_cfg = *init_param->channel_configs;
 	for (i = 0; i < MAX14906_CHANNELS; i++)
@@ -470,6 +474,10 @@ int max14906_iio_setup_channels(struct max14906_iio_desc *desc,
 			max14906_iio_channels[ch_offset].attributes = max14906_out_attrs;
 			max14906_iio_channels[ch_offset].ch_out = 1;
 		}
+
+		ret = max14906_ch_func(desc->max14906_desc, i, ch_cfg[i].function);
+		if (ret)
+			return ret;
 
 		ch_offset++;
 	}
@@ -534,6 +542,18 @@ static int max14906_iio_write_runtime_back(void *dev, char *buf, uint32_t len,
 	max14906_back = 1;
 
 	return 0;
+}
+
+static int max14906_iio_reg_read(struct max14906_iio_desc *dev, uint32_t reg,
+				 uint32_t *readval)
+{
+	return max14906_reg_read(dev->max14906_desc, reg, readval);
+}
+
+static int max14906_iio_reg_write(struct max14906_iio_desc *dev, uint32_t reg,
+				  uint32_t writeval)
+{
+	return max14906_reg_write(dev->max14906_desc, reg, writeval);
 }
 
 int max14906_iio_init(struct max14906_iio_desc **iio_desc,

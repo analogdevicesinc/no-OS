@@ -727,14 +727,20 @@ static int ad74413r_iio_read_sampling_freq(void *dev, char *buf, uint32_t len,
 	int32_t sample_rate;
 	enum ad74413r_adc_sample val;
 
+	__disable_irq();
 	ret = ad74413r_get_adc_rate(((struct ad74413r_iio_desc *)dev)->ad74413r_desc,
 				    0, &val);
-	if (ret)
+	if (ret) {
+		__enable_irq();
 		return ret;
+	}
 
 	sample_rate = val;
 
-	return iio_format_value(buf, len, IIO_VAL_INT, 1, &sample_rate);
+	ret = iio_format_value(buf, len, IIO_VAL_INT, 1, &sample_rate);
+	__enable_irq();
+
+	return ret;
 }
 
 /**
@@ -1272,6 +1278,7 @@ static int ad74413r_iio_update_channels(void *dev, uint32_t mask)
 	size_t i;
 	int ret;
 
+	__disable_irq();
 	iio_desc->active_channels = mask;
 	iio_desc->no_of_active_channels = no_os_hweight32(mask);
 
@@ -1279,21 +1286,24 @@ static int ad74413r_iio_update_channels(void *dev, uint32_t mask)
 	ret = ad74413r_reg_update(iio_desc->ad74413r_desc, AD74413R_ADC_CONV_CTRL,
 				  NO_OS_GENMASK(7, 0), 0);
 	if (ret)
-		return ret;
+		goto out;
 
 	for (i = 0; i < iio_desc->no_of_active_adc_channels + AD74413R_DIAG_CH_OFFSET; i++) {
 		if (mask & NO_OS_BIT(i)) {
 			ret = _get_ch_by_idx(iio_desc->iio_dev, i, &ch);
 			if (ret)
-				return ret;
+				goto out;
 
 			ret = ad74413r_set_adc_channel_enable(iio_desc->ad74413r_desc, ch, true);
 			if (ret)
-				return ret;
+				goto out;
 		}
 	}
 
-	return ad74413r_set_adc_conv_seq(iio_desc->ad74413r_desc, AD74413R_START_CONT);
+	ret = ad74413r_set_adc_conv_seq(iio_desc->ad74413r_desc, AD74413R_START_CONT);
+out:
+	__enable_irq();
+	return ret;
 	// if (ret)
 	// 	return ret;
 
@@ -1367,6 +1377,8 @@ static int ad74413r_iio_trigger_handler(struct iio_device_data *dev_data)
 	struct ad74413r_iio_desc *iio_desc;
 	uint32_t active_adc_ch;
 
+	__disable_irq();
+
 	MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 16, 0);
 	MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 16, 1 << 16);
 	iio_desc = dev_data->dev;
@@ -1396,8 +1408,10 @@ static int ad74413r_iio_trigger_handler(struct iio_device_data *dev_data)
 	iio_buffer_push_scan(dev_data->buffer, buff);
 	MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 16, 0);
 
+	__enable_irq();
 	return 0;
 out:
+	__enable_irq();
 
 	return ret;
 }
