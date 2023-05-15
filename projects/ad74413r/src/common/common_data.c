@@ -104,7 +104,7 @@ const struct adin1110_init_param adin1110_ip = {
 	.chip_type = ADIN1110,
 	.comm_param = adin1110_spi_ip,
 	.reset_param = adin1110_rst_gpio_ip,
-	.int_param = adin1110_int_gpio_ip,
+	// .int_param = adin1110_int_gpio_ip,
 	.mac_address = {0xCA, 0x2F, 0xB7, 0x10, 0x23, 0x63},
 	.append_crc = false,
 };

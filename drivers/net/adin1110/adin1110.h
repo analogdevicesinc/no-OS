@@ -44,6 +44,7 @@
 #include "no_os_spi.h"
 #include "no_os_gpio.h"
 #include "no_os_util.h"
+#include "no_os_mdio.h"
 
 #define ADIN1110_BUFF_LEN			2000
 #define ADIN1110_ETH_ALEN			6
@@ -206,9 +207,7 @@ struct adin1110_desc {
 	struct no_os_spi_desc *comm_desc;
 	uint8_t mac_address[ADIN1110_ETH_ALEN];
 	uint8_t data[ADIN1110_BUFF_LEN];
-
 	struct no_os_gpio_desc *reset_gpio;
-	struct no_os_gpio_desc *int_gpio;
 	bool append_crc;
 };
 
@@ -219,7 +218,6 @@ struct adin1110_init_param {
 	enum adin1110_chip_id chip_type;
 	struct no_os_spi_init_param comm_param;
 	struct no_os_gpio_init_param reset_param;
-	struct no_os_gpio_init_param int_param;
 	uint8_t mac_address[ADIN1110_ETH_ALEN];
 	bool append_crc;
 };
@@ -238,20 +236,6 @@ struct adin1110_eth_buff {
 /* Reset both the MAC and PHY. */
 int adin1110_sw_reset(struct adin1110_desc *);
 
-/* Write a PHY register using clause 45 */
-int adin1110_mdio_write_c45(struct adin1110_desc *, uint32_t, uint32_t,
-			    uint32_t, uint32_t);
-
-/* Read a PHY register using clause 45 */
-int adin1110_mdio_read_c45(struct adin1110_desc *, uint32_t, uint32_t, uint32_t,
-			   uint32_t *);
-
-/* Write a PHY register using clause 22 */
-int adin1110_mdio_write(struct adin1110_desc *, uint32_t, uint32_t, uint32_t);
-
-/* Read a PHY register using clause 22 */
-int adin1110_mdio_read(struct adin1110_desc *, uint32_t, uint32_t, uint32_t *);
-
 /* Update a register's value based on a mask */
 int adin1110_reg_update(struct adin1110_desc *, uint16_t, uint32_t, uint32_t);
 
@@ -268,6 +252,20 @@ int adin1110_write_fifo(struct adin1110_desc *, uint32_t,
 /* Read a frame from the RX FIFO */
 int adin1110_read_fifo(struct adin1110_desc *, uint32_t,
 		       struct adin1110_eth_buff *);
+
+/* Write a PHY register using clause 22 */
+int adin1110_mdio_write(struct adin1110_desc *, uint32_t, uint32_t, uint16_t);
+
+/* Read a PHY register using clause 22 */
+int adin1110_mdio_read(struct adin1110_desc *, uint32_t, uint32_t, uint16_t *);
+
+/* Write a PHY register using clause 45 */
+int adin1110_mdio_write_c45(struct adin1110_desc *, uint32_t, uint32_t, uint32_t,
+			    uint16_t);
+
+/* Read a PHY register using clause 45 */
+int adin1110_mdio_read_c45(struct adin1110_desc *, uint32_t, uint32_t, uint16_t,
+			   uint16_t *);
 
 /* Get the link state for a given port */
 int adin1110_link_state(struct adin1110_desc *, uint32_t *);

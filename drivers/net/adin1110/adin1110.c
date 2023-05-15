@@ -43,10 +43,10 @@
 #include <string.h>
 #include "no_os_spi.h"
 #include "adin1110.h"
-#include "no_os_util.h"
-#include "no_os_delay.h"
+#include "no_os_alloc.h"
 #include "no_os_crc8.h"
-#include "mxc_device.h"
+#include "no_os_delay.h"
+#include "no_os_util.h"
 
 #define ADIN1110_CRC_POLYNOMIAL	0x7
 
@@ -85,7 +85,6 @@ int adin1110_reg_write(struct adin1110_desc *desc, uint16_t addr, uint32_t data)
 		.use_dma = false,
 	};
 
-	/** The address is 13 bit wide */
 	addr &= ADIN1110_ADDR_MASK;
 	addr |= ADIN1110_CD_MASK | ADIN1110_RW_MASK;
 	no_os_put_unaligned_be16(addr, desc->data);
@@ -123,7 +122,6 @@ int adin1110_reg_read(struct adin1110_desc *desc, uint16_t addr, uint32_t *data)
 		.rx_buff = desc->data,
 		.bytes_number = ADIN1110_REG_LEN,
 		.cs_change = 1,
-		.use_dma = false,
 	};
 	int ret;
 
@@ -188,7 +186,7 @@ int adin1110_reg_update(struct adin1110_desc *desc, uint16_t addr,
  * @return 0 in case of success, negative error code otherwise
  */
 int adin1110_mdio_read(struct adin1110_desc *desc, uint32_t phy_id,
-		       uint32_t reg, uint32_t *data)
+		       uint32_t reg, uint16_t *data)
 {
 	uint32_t mdio_val = 0;
 	uint32_t mdio_done = 0;
@@ -228,7 +226,7 @@ int adin1110_mdio_read(struct adin1110_desc *desc, uint32_t phy_id,
  * @return 0 in case of success, negative error code otherwise
  */
 int adin1110_mdio_write(struct adin1110_desc *desc, uint32_t phy_id,
-			uint32_t reg, uint32_t data)
+			uint32_t reg, uint16_t data)
 {
 	uint32_t mdio_val = 0;
 	uint32_t mdio_done = 0;
@@ -268,7 +266,7 @@ int adin1110_mdio_write(struct adin1110_desc *desc, uint32_t phy_id,
  * @return 0 in case of success, negative error code otherwise
  */
 int adin1110_mdio_write_c45(struct adin1110_desc *desc, uint32_t phy_id,
-			    uint32_t dev_id, uint32_t reg, uint32_t data)
+			    uint32_t dev_id, uint32_t reg, uint16_t data)
 {
 	uint32_t mdio_val = 0;
 	uint32_t mdio_done = 0;
@@ -326,7 +324,7 @@ int adin1110_mdio_write_c45(struct adin1110_desc *desc, uint32_t phy_id,
  * @return 0 in case of success, negative error code otherwise
  */
 int adin1110_mdio_read_c45(struct adin1110_desc *desc, uint32_t phy_id,
-			   uint32_t dev_id, uint32_t reg, uint32_t *data)
+			   uint32_t dev_id, uint16_t reg, uint16_t *data)
 {
 	uint32_t mdio_val = 0;
 	uint32_t mdio_done = 0;
@@ -508,7 +506,6 @@ int adin1110_write_fifo(struct adin1110_desc *desc, uint32_t port,
 	struct no_os_spi_msg xfer = {
 		.tx_buff = desc->data,
 		.cs_change = 1,
-		.use_dma = false,
 	};
 
 	if (port >= driver_data[desc->chip_type].num_ports)
@@ -556,31 +553,7 @@ int adin1110_write_fifo(struct adin1110_desc *desc, uint32_t port,
 	memcpy(&desc->data[frame_offset], eth_buff->payload,
 	       eth_buff->len - ADIN1110_ETH_HDR_LEN);
 
-	ret = no_os_spi_transfer(desc->comm_desc, &xfer, 1);
-	if (ret)
-		return ret;
-
-	/*
-	 * Check for TXPE error. This is not usually expected, but has to be handled
-	 * since it may result in FIFO overflow.
-	 */
-	// ret = adin1110_reg_read(desc, ADIN1110_STATUS0_REG, &tx_space);
-	// if (tx_space & ADIN1110_STATUS0_TXPE_MASK) {
-	// 	/* Flush TX FIFO */
-	// 	ret = adin1110_reg_write(desc, ADIN1110_FIFO_CLR_REG,
-	// 				 ADIN1110_FIFO_CLR_TX_MASK);
-	// 	if (ret)
-	// 		return ret;
-
-	// 	ret = adin1110_reg_write(desc, ADIN1110_STATUS0_REG,
-	// 				 ADIN1110_STATUS0_TXPE_MASK);
-	// 	if (ret)
-	// 		return ret;
-
-	// 	return -EAGAIN;
-	// }
-
-	return ret;
+	return no_os_spi_transfer(desc->comm_desc, &xfer, 1);
 }
 
 /**
@@ -603,7 +576,6 @@ int adin1110_read_fifo(struct adin1110_desc *desc, uint32_t port,
 		.tx_buff = desc->data,
 		.rx_buff = desc->data,
 		.cs_change = 1,
-		.use_dma = false,
 	};
 	int ret;
 
@@ -812,7 +784,7 @@ int adin1110_set_promisc(struct adin1110_desc *desc, uint32_t port,
  */
 static int adin1110_setup_phy(struct adin1110_desc *desc)
 {
-	uint32_t reg_val;
+	uint16_t reg_val;
 	uint32_t ports;
 	uint32_t sw_pd;
 	size_t i;
@@ -821,8 +793,8 @@ static int adin1110_setup_phy(struct adin1110_desc *desc)
 	ports = driver_data[desc->chip_type].num_ports;
 
 	for (i = 0; i < ports; i++) {
-		ret = adin1110_mdio_read(desc, ADIN1110_MDIO_PHY_ID(i),
-					 ADIN1110_MI_CONTROL_REG, &reg_val);
+		ret = adin1110_mdio_read_c45(desc, ADIN1110_MDIO_PHY_ID(i),
+					     0, ADIN1110_MI_CONTROL_REG, &reg_val);
 		if (ret)
 			return ret;
 
@@ -831,12 +803,12 @@ static int adin1110_setup_phy(struct adin1110_desc *desc)
 		if (sw_pd) {
 			while (reg_val & ADIN1110_MI_SFT_PD_MASK) {
 				reg_val &= ~ADIN1110_MI_SFT_PD_MASK;
-				ret = adin1110_mdio_write(desc, ADIN1110_MDIO_PHY_ID(i),
-							  ADIN1110_MI_CONTROL_REG, reg_val);
+				ret = adin1110_mdio_write_c45(desc, ADIN1110_MDIO_PHY_ID(i),
+							      0, ADIN1110_MI_CONTROL_REG, reg_val);
 				if (ret)
 					return ret;
-				ret = adin1110_mdio_read(desc, ADIN1110_MDIO_PHY_ID(i),
-							 ADIN1110_MI_CONTROL_REG, &reg_val);
+				ret = adin1110_mdio_read_c45(desc, ADIN1110_MDIO_PHY_ID(i),
+							     0, ADIN1110_MI_CONTROL_REG, &reg_val);
 				if (ret)
 					return ret;
 			}
@@ -861,12 +833,11 @@ static int adin1110_setup_mac(struct adin1110_desc *desc)
 	if (ret)
 		return ret;
 
-	reg_val = ADIN1110_TX_RDY_IRQ | ADIN1110_RX_RDY_IRQ | ADIN1110_SPI_ERR_IRQ |
-		  NO_OS_BIT(1);
+	reg_val = ADIN1110_TX_RDY_IRQ | ADIN1110_RX_RDY_IRQ | ADIN1110_SPI_ERR_IRQ;
 	if (desc->chip_type == ADIN2111)
 		reg_val |= ADIN2111_RX_RDY_IRQ;
 
-	ret = adin1110_reg_write(desc, ADIN1110_IMASK1_REG, reg_val);
+	ret = adin1110_reg_write(desc, ADIN1110_IMASK1_REG, ~reg_val);
 	if (ret)
 		return ret;
 
@@ -883,8 +854,10 @@ int adin1110_init(struct adin1110_desc **desc,
 		  struct adin1110_init_param *param)
 {
 	struct adin1110_desc *descriptor;
-	uint32_t reg_val;
 	int ret;
+
+	if (!param->mac_address)
+		return -EINVAL;
 
 	descriptor = calloc(1, sizeof(*descriptor));
 	if (!descriptor)
@@ -906,55 +879,36 @@ int adin1110_init(struct adin1110_desc **desc,
 	if (ret)
 		goto free_rst_gpio;
 
-	ret = no_os_gpio_get(&descriptor->int_gpio, &param->int_param);
-	if (ret)
-		goto free_rst_gpio;
-
-	ret = no_os_gpio_direction_output(descriptor->int_gpio, 0);
-	if (ret)
-		goto free_int_gpio;
-
-	if (!param->mac_address) {
-		ret = -EINVAL;
-		goto free_int_gpio;
-	}
-
 	memcpy(descriptor->mac_address, param->mac_address, ADIN1110_ETH_ALEN);
 	descriptor->chip_type = param->chip_type;
 
 	ret = no_os_gpio_set_value(descriptor->reset_gpio, NO_OS_GPIO_HIGH);
 	if (ret)
-		goto free_int_gpio;
+		goto free_rst_gpio;
 
 	ret = adin1110_sw_reset(descriptor);
 	if (ret)
-		goto free_int_gpio;
+		goto free_rst_gpio;
 
 	/* Wait for the MAC and PHY digital interface to intialize */
 	no_os_mdelay(90);
 
-	ret = adin1110_reg_read(descriptor, 0x1, &reg_val);
-	if (ret)
-		return ret;
-
 	ret = adin1110_setup_mac(descriptor);
 	if (ret)
-		goto free_int_gpio;
+		goto free_rst_gpio;
 
 	ret = adin1110_setup_phy(descriptor);
 	if (ret)
-		goto free_int_gpio;
+		goto free_rst_gpio;
 
 	ret = adin1110_check_reset(descriptor);
 	if (ret)
-		goto free_int_gpio;
+		goto free_rst_gpio;
 
 	*desc = descriptor;
 
 	return 0;
 
-free_int_gpio:
-	no_os_gpio_remove(descriptor->int_gpio);
 free_rst_gpio:
 	no_os_gpio_remove(descriptor->reset_gpio);
 free_spi:
