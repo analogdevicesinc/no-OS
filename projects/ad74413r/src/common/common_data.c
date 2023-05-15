@@ -106,12 +106,12 @@ const struct adin1110_init_param adin1110_ip = {
 	.reset_param = adin1110_rst_gpio_ip,
 	// .int_param = adin1110_int_gpio_ip,
 	.mac_address = {0xCA, 0x2F, 0xB7, 0x10, 0x23, 0x63},
-	.append_crc = false,
+	.append_crc = true,
 };
 
 struct no_os_spi_init_param ad74413r_spi_ip = {
 	.device_id = 3,
-	.max_speed_hz = 10000000,
+	.max_speed_hz = 20000000,
 	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
 	.mode = NO_OS_SPI_MODE_2,
 	.platform_ops = SPI_OPS,
@@ -121,7 +121,7 @@ struct no_os_spi_init_param ad74413r_spi_ip = {
 
 struct no_os_spi_init_param max14906_spi_ip = {
 	.device_id = 1,
-	.max_speed_hz = 1000000,
+	.max_speed_hz = 10000000,
 	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
 	.mode = NO_OS_SPI_MODE_0,
 	.platform_ops = SPI_OPS,

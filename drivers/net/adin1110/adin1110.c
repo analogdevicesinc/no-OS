@@ -82,7 +82,6 @@ int adin1110_reg_write(struct adin1110_desc *desc, uint16_t addr, uint32_t data)
 		.tx_buff = desc->data,
 		.bytes_number = ADIN1110_WR_FRAME_SIZE,
 		.cs_change = 1,
-		.use_dma = false,
 	};
 
 	addr &= ADIN1110_ADDR_MASK;
@@ -120,7 +119,7 @@ int adin1110_reg_read(struct adin1110_desc *desc, uint16_t addr, uint32_t *data)
 	struct no_os_spi_msg xfer = {
 		.tx_buff = desc->data,
 		.rx_buff = desc->data,
-		.bytes_number = ADIN1110_REG_LEN,
+		.bytes_number = ADIN1110_REG_LEN + ADIN1110_CRC_LEN,
 		.cs_change = 1,
 	};
 	int ret;
@@ -273,11 +272,11 @@ int adin1110_mdio_write_c45(struct adin1110_desc *desc, uint32_t phy_id,
 	uint32_t val;
 	int ret;
 
-	val = no_os_field_prep(ADIN1110_MDIO_ST, 0x0);
-	val |= no_os_field_prep(ADIN1110_MDIO_OP, ADIN1110_MDIO_OP_ADDR);
-	val |= no_os_field_prep(ADIN1110_MDIO_PRTAD, phy_id);
-	val |= no_os_field_prep(ADIN1110_MDIO_DEVAD, dev_id);
-	val |= no_os_field_prep(ADIN1110_MDIO_DATA, reg);
+	val = no_os_field_prep(ADIN1110_MDIO_ST, 0x0) |
+	      no_os_field_prep(ADIN1110_MDIO_OP, ADIN1110_MDIO_OP_ADDR) |
+	      no_os_field_prep(ADIN1110_MDIO_PRTAD, phy_id) |
+	      no_os_field_prep(ADIN1110_MDIO_DEVAD, dev_id) |
+	      no_os_field_prep(ADIN1110_MDIO_DATA, reg);
 
 	ret = adin1110_reg_write(desc, ADIN1110_MDIOACC(0), val);
 	if (ret)
@@ -867,6 +866,7 @@ int adin1110_init(struct adin1110_desc **desc,
 	if (ret)
 		goto free_desc;
 
+	descriptor->append_crc = param->append_crc;
 	no_os_crc8_populate_msb(_crc_table, ADIN1110_CRC_POLYNOMIAL);
 	strncpy((char *)descriptor->mac_address, (char *)param->mac_address,
 		ADIN1110_MAC_LEN);
