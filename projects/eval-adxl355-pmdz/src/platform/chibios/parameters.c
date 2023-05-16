@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   platform_includes.h
- *   @brief  Includes for used platforms used by eval-adxl355-pmdz project.
- *   @author RBolboac (ramona.bolboaca@analog.com)
+ *   @file   parameters.c
+ *   @brief  Definition of chibios platform data used by eval-adxl355-pmdz project.
+ *   @author Robert Budai (robert.budai@analog.com)
 ********************************************************************************
- * Copyright 2022(c) Analog Devices, Inc.
+ * Copyright 2023(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -36,34 +36,38 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __PLATFORM_INCLUDES_H__
-#define __PLATFORM_INCLUDES_H__
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#ifdef CHIBIOS_PLATFORM
-#include "chibios/parameters.h"
-#endif
+#include "parameters.h"
 
-#ifdef STM32_PLATFORM
-#include "stm32/parameters.h"
-#endif
+/******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
 
-#ifdef MAXIM_PLATFORM
-#include "maxim/parameters.h"
-#endif
+struct chibios_uart_init_param adxl355_uart_extra_ip = {
+	.huart          = &SD5,
+	.sdconfig       = NULL
+};
 
-#ifdef PICO_PLATFORM
-#include "pico/parameters.h"
-#endif
+SPIConfig spicfg_ch = {
+	.circular         = false,
+	.slave            = false,
+	.data_cb          = NULL,
+	.error_cb         = NULL,
+	.ssline           = LINE_ARD_D10,
+	.cr1              = SPI_CR1_BR_2,
+	.cr2              = 0
+};
 
-#ifdef ADUCM_PLATFORM
-#include "aducm3029/parameters.h"
-#endif
+struct chibios_spi_init_param adxl355_spi_extra_ip  = {
+	.hspi=&SPID1,
+	.spicfg=&spicfg_ch,
+};
 
-#ifdef IIO_SUPPORT
-#include "iio_app.h"
+#ifdef IIO_TRIGGER_EXAMPLE
+struct chibios_gpio_irq_init_param adxl355_gpio_irq_extra_ip = {
+	.port_nb = 0, /* Port A */
+};
 #endif
-
-#endif /* __PLATFORM_INCLUDES_H__ */

@@ -35,9 +35,7 @@ SRCS += $(DRIVERS)/api/no_os_gpio.c \
 		$(DRIVERS)/api/no_os_timer.c  \
 		$(DRIVERS)/api/no_os_uart.c \
 		$(NO-OS)/util/no_os_list.c \
-		$(NO-OS)/util/no_os_util.c \
-		$(NO-OS)/util/no_os_alloc.c
+		$(NO-OS)/util/no_os_util.c 
 
 INCS += $(DRIVERS)/accel/adxl355/adxl355.h
 SRCS += $(DRIVERS)/accel/adxl355/adxl355.c
-

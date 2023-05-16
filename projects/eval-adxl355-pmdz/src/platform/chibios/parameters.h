@@ -1,9 +1,10 @@
 /***************************************************************************//**
- *   @file   platform_includes.h
- *   @brief  Includes for used platforms used by eval-adxl355-pmdz project.
- *   @author RBolboac (ramona.bolboaca@analog.com)
+ *   @file   parameters.h
+ *   @brief  Definitions specific to chibios platform used by eval-adxl355-pmdz
+ *           project.
+ *   @author Robert Budai (robert.budai@analog.com)
 ********************************************************************************
- * Copyright 2022(c) Analog Devices, Inc.
+ * Copyright 2023(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -36,34 +37,53 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __PLATFORM_INCLUDES_H__
-#define __PLATFORM_INCLUDES_H__
+#ifndef __PARAMETERS_H__
+#define __PARAMETERS_H__
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#ifdef CHIBIOS_PLATFORM
-#include "chibios/parameters.h"
-#endif
+#include "hal.h"
+#include "chibios_spi.h"
+#include "chibios_gpio.h"
+#include "chibios_uart.h"
 
-#ifdef STM32_PLATFORM
-#include "stm32/parameters.h"
-#endif
-
-#ifdef MAXIM_PLATFORM
-#include "maxim/parameters.h"
-#endif
-
-#ifdef PICO_PLATFORM
-#include "pico/parameters.h"
-#endif
-
-#ifdef ADUCM_PLATFORM
-#include "aducm3029/parameters.h"
-#endif
+/******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
 
 #ifdef IIO_SUPPORT
-#include "iio_app.h"
+#define INTC_DEVICE_ID  0
+#define IIO_APP_HUART   (&huart5)
+#endif
+#define UART_IRQ_ID     UART5_IRQn
+
+#define UART_DEVICE_ID  5
+#define UART_BAUDRATE   115200
+#define UART_EXTRA      &adxl355_uart_extra_ip
+#define UART_OPS        &chibios_uart_ops
+
+#define SPI_DEVICE_ID   1
+#define SPI_BAUDRATE    4000000
+#define SPI_CS          15
+#define SPI_CS_PORT     0
+#define SPI_OPS         &chibios_spi_ops
+#define SPI_EXTRA       &adxl355_spi_extra_ip
+
+extern struct chibios_uart_init_param adxl355_uart_extra_ip;
+extern struct chibios_spi_init_param adxl355_spi_extra_ip;
+
+#ifdef IIO_TRIGGER_EXAMPLE
+extern struct chibios_gpio_irq_init_param adxl355_gpio_irq_extra_ip;
+/* Setting for PortA Pin2 used for DATA_READY.
+   Has to be adapted accordingly if another pin is used.
+ */
+#define ADXL355_GPIO_TRIG_IRQ_ID     0    /* Not used in chibios platform */
+#define ADXL355_GPIO_CB_HANDLE       NULL /* Not used in chibios platform */
+
+#define GPIO_IRQ_ID             2 /* Pin 2 */
+#define GPIO_IRQ_OPS            &chibios_gpio_irq_ops
+#define GPIO_IRQ_EXTRA          &adxl355_gpio_irq_extra_ip
 #endif
 
-#endif /* __PLATFORM_INCLUDES_H__ */
+#endif /* __PARAMETERS_H__ */

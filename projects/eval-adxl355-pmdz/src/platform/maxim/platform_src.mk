@@ -14,3 +14,5 @@ SRCS += $(PLATFORM_DRIVERS)/maxim_delay.c     \
         $(PLATFORM_DRIVERS)/maxim_uart.c      \
         $(PLATFORM_DRIVERS)/maxim_init.c      \
         $(PLATFORM_DRIVERS)/maxim_uart_stdio.c
+
+SRCS += $(NO-OS)/util/no_os_alloc.c

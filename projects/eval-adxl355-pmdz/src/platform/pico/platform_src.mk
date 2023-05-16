@@ -12,3 +12,5 @@ SRCS += $(PLATFORM_DRIVERS)/pico_delay.c    \
         $(PLATFORM_DRIVERS)/pico_spi.c      \
         $(PLATFORM_DRIVERS)/pico_timer.c    \
         $(PLATFORM_DRIVERS)/pico_uart.c
+
+SRCS += $(NO-OS)/util/no_os_alloc.c

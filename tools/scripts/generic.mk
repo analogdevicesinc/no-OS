@@ -165,6 +165,10 @@ endif
 #                          INCLUDE SPECIFIC MAKEFILES
 #------------------------------------------------------------------------------
 
+ifeq 'chibios' '$(PLATFORM)'
+include $(NO-OS)/tools/scripts/chibios.mk
+else
+
 ifeq 'xilinx' '$(PLATFORM)'
 TMP_HW := $(filter %.xsa, $(HARDWARE))
 ifeq '' '$(TMP_HW)'
@@ -433,3 +437,4 @@ list:
 
 # Adding header files dependancy on object files
 -include $(OBJS:.o=.d)
+endif

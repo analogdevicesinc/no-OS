@@ -8,4 +8,6 @@ endif
 SRC_DIRS += $(PLATFORM_DRIVERS)
 SRC_DIRS += $(INCLUDE)
 
+SRCS += $(NO-OS)/util/no_os_alloc.c
+
 CFLAGS += -DENABLE_UART_STDIO
