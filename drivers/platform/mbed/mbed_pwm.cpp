@@ -274,7 +274,7 @@ const struct no_os_pwm_platform_ops mbed_pwm_ops = {
 	.pwm_ops_disable = &mbed_pwm_disable,
 	.pwm_ops_set_period = &mbed_pwm_set_period,
 	.pwm_ops_get_period = &mbed_pwm_get_period,
-	.pwm_set_duty_cycle = &mbed_pwm_set_duty_cycle,
+	.pwm_ops_set_duty_cycle = &mbed_pwm_set_duty_cycle,
 	.pwm_ops_get_duty_cycle = &mbed_pwm_get_duty_cycle,
 	.pwm_ops_remove = &mbed_pwm_remove
 };
