@@ -1,0 +1,21 @@
+{
+    "maxim": {
+      "basic_example_max32650": {
+        "flags" : "basic_example=y TARGET=max32650"
+      },
+      "basic_example_max32655": {
+        "flags" : "basic_example=y TARGET=max32655"
+      },
+      "basic_example_max32660": {
+        "flags" : "basic_example=y TARGET=max32660"
+      },
+      "basic_example_max32665": {
+        "flags" : "basic_example=y TARGET=max32665"
+      }
+    },
+    "aducm3029": {
+      "basic_example": {
+        "flags" : "basic_example=y"
+      }
+    }
+}
