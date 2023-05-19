@@ -114,6 +114,13 @@ CFLAGS += -I$(AZURE_DIR)/sdk/inc
 
 endif
 
+ifneq ($(if $(findstring lwip, $(LIBRARIES)), 1),)
+include $(NO-OS)/tools/scripts/lwip.mk
+INCS += $(NO-OS)/libraries/lwip/arch
+INCS += $(NO-OS)/libraries/lwip/configs/lwipcfg.h
+INCS += $(NO-OS)/libraries/lwip/configs/lwipopts.h
+endif
+
 LIB_TARGETS			+= $(IIO_LIB) $(MBEDTLS_LIBS) $(FATFS_LIB) $(MQTT_LIB) $(AZURE_LIBS)
 EXTRA_LIBS_NAMES	= $(subst lib,,$(basename $(notdir $(EXTRA_LIBS))))
 LIB_FLAGS			+= $(addprefix -l,$(EXTRA_LIBS_NAMES))
