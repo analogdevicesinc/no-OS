@@ -240,8 +240,8 @@ int ad74416h_get_raw_adc_result(struct ad74416h_desc *desc, uint32_t ch,
 	if (ret)
 		return ret;
 
-	*val = (no_os_field_get(AD74416H_ADC_RESULT_UPR_MSK, val_msb) << 16) |
-	       no_os_field_get(AD74416H_ADC_RESULT_MSK, val_lsb);
+	*val = (no_os_field_get(AD74416H_CONV_RES_UPR_MSK, val_msb) << 16) |
+	       no_os_field_get(AD74416H_CONV_RESULT_MSK, val_lsb);
 
 	return 0;
 }
@@ -496,7 +496,7 @@ int ad74416h_get_diag(struct ad74416h_desc *desc, uint32_t ch,
 	if (ret)
 		return ret;
 
-	*diag_code = no_os_field_get(AD74416H_ADC_DIAG_RESULT_MSK, *diag_code);
+	*diag_code = no_os_field_get(AD74416H_DIAG_RESULT_MSK, *diag_code);
 
 	return ret;
 }
@@ -593,7 +593,7 @@ int ad74416h_set_threshold(struct ad74416h_desc *desc, uint32_t ch,
 
 	/** Set a fixed range (0 - 16 V) for the threshold, so it would not depend on Vadd. */
 	ret = ad74416h_reg_update(desc, AD74416H_DIN_CONFIG1(ch),
-				  AD74416H_DIN_THRESH_MODE_MASK, 1);
+				  AD74416H_DIN_THRESH_MODE_MSK, 1);
 	if (ret)
 		return ret;
 
@@ -601,7 +601,7 @@ int ad74416h_set_threshold(struct ad74416h_desc *desc, uint32_t ch,
 			AD74416H_THRESHOLD_RANGE;
 
 	return ad74416h_reg_update(desc, AD74416H_DIN_CONFIG1(ch),
-				   AD74416H_COMP_THRESH_MASK, dac_threshold);
+				   AD74416H_COMP_THRESH_MSK, dac_threshold);
 }
 
 /**
@@ -620,7 +620,7 @@ int ad74416h_gpio_set(struct ad74416h_desc *desc, uint32_t ch, uint8_t val)
 		return ret;
 
 	return ad74416h_reg_update(desc, AD74416H_GPIO_CONFIG(ch),
-				   AD74416H_GPIO_DATA_MSK, val);
+				   AD74416H_GPO_DATA_MSK, val);
 }
 
 /**
