@@ -56,11 +56,17 @@
 /******************************************************************************/
 #define MAX_BACKLOG 0xFFFFFFFF
 
-/**
- * @struct tcp_socket_desc
- * @brief TCP Socket descriptor
- */
-struct tcp_socket_desc;
+/* Socket descriptor */
+struct tcp_socket_desc {
+	/* Id of the opened socket */
+	uint32_t			id;
+	/* Reference to the network interface */
+	struct network_interface	*net;
+#ifndef DISABLE_SECURE_SOCKET
+	/* Reference to secure descriptor */
+	struct secure_socket_desc	*secure;
+#endif /* DISABLE_SECURE_SOCKET */
+};
 
 #ifndef DISABLE_SECURE_SOCKET
 /**
