@@ -64,6 +64,12 @@
 #include "tcp_socket.h"
 #endif
 
+#ifdef NO_OS_LWIP_NETWORKING
+#include "no_os_delay.h"
+#include "tcp_socket.h"
+#include "lwip_socket.h"
+#endif
+
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
@@ -216,7 +222,7 @@ struct iio_desc {
 	int (*send)(void *conn, uint8_t *buf, uint32_t len);
 	/* FIFO for socket descriptors */
 	struct no_os_circular_buffer	*conns;
-#ifdef NO_OS_NETWORKING
+#if defined(NO_OS_NETWORKING) || defined(NO_OS_LWIP_NETWORKING)
 	struct tcp_socket_desc	*current_sock;
 	/* Instance of server socket */
 	struct tcp_socket_desc	*server;
@@ -1412,7 +1418,7 @@ int iio_buffer_pop_scan(struct iio_buffer *buffer, void *data)
 	return 0;
 }
 
-#ifdef NO_OS_NETWORKING
+#if defined(NO_OS_NETWORKING) || defined(NO_OS_LWIP_NETWORKING)
 
 static int32_t accept_network_clients(struct iio_desc *desc)
 {
@@ -1455,11 +1461,14 @@ int iio_step(struct iio_desc *desc)
 
 	iio_process_async_triggers(desc);
 
-#ifdef NO_OS_NETWORKING
+#if defined(NO_OS_NETWORKING) || defined(NO_OS_LWIP_NETWORKING)
 	if (desc->server) {
 		ret = accept_network_clients(desc);
 		if (NO_OS_IS_ERR_VALUE(ret) && ret != -EAGAIN)
 			return ret;
+#if defined(NO_OS_LWIP_NETWORKING)
+		no_os_lwip_step(desc->server->net->net, desc->server->net->net);
+#endif
 	}
 #endif
 
@@ -1469,12 +1478,10 @@ int iio_step(struct iio_desc *desc)
 
 	ret = iiod_conn_step(desc->iiod, conn_id);
 	if (ret == -ENOTCONN) {
-#ifdef NO_OS_NETWORKING
-		if (desc->server) {
-			iiod_conn_remove(desc->iiod, conn_id, &data);
-			socket_remove(data.conn);
-			no_os_free(data.buf);
-		}
+#if defined(NO_OS_NETWORKING) || defined(NO_OS_LWIP_NETWORKING)
+		iiod_conn_remove(desc->iiod, conn_id, &data);
+		socket_remove(data.conn);
+		no_os_free(data.buf);
 #endif
 	} else {
 		_push_conn(desc, conn_id);
@@ -1902,7 +1909,7 @@ int iio_init(struct iio_desc **desc, struct iio_init_param *init_param)
 			goto free_conns;
 		_push_conn(ldesc, conn_id);
 	}
-#ifdef NO_OS_NETWORKING
+#if defined(NO_OS_NETWORKING) || defined(NO_OS_LWIP_NETWORKING)
 	else if (init_param->phy_type == USE_NETWORK) {
 		ldesc->send = (int (*)())socket_send;
 		ldesc->recv = (int (*)())socket_recv;
