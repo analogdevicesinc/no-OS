@@ -77,6 +77,10 @@
 #include "tcp_socket.h"
 #endif
 
+#ifdef NO_OS_LWIP_NETWORKING
+#include "lwip_socket.h"
+#endif
+
 // The default baudrate iio_app will use to print messages to console.
 #define UART_BAUDRATE_DEFAULT	115200
 
@@ -155,6 +159,28 @@ static int32_t print_uart_error_message(struct no_os_uart_desc **uart_desc,
 					   message, msglen);
 #endif
 }
+
+#if defined(NO_OS_LWIP_NETWORKING)
+static int32_t lwip_network_setup(struct iio_app_desc *app,
+				  struct iio_app_init_param param,
+				  struct iio_init_param *iio_init_param)
+{
+	static struct tcp_socket_init_param socket_param;
+	int ret;
+
+	ret = no_os_lwip_init(&app->lwip_desc, &param.lwip_param);
+	if (ret)
+		return ret;
+
+	socket_param.net = &app->lwip_desc->no_os_net;
+	socket_param.max_buff_size = 0;
+
+	iio_init_param->phy_type = USE_NETWORK;
+	iio_init_param->tcp_socket_init_param = &socket_param;
+
+	return 0;
+}
+#endif
 
 #if defined(NO_OS_NETWORKING) || defined(LINUX_PLATFORM)
 static int32_t network_setup(struct iio_init_param *iio_init_param,
@@ -310,8 +336,11 @@ int iio_app_init(struct iio_app_desc **app,
 		goto error;
 
 	application->uart_desc = uart_desc;
-
-#if defined(NO_OS_NETWORKING) || defined(LINUX_PLATFORM)
+#if defined(NO_OS_LWIP_NETWORKING)
+	status = lwip_network_setup(application, app_init_param, &iio_init_param);
+	if (status)
+		goto error;
+#elif defined(NO_OS_NETWORKING) || defined(LINUX_PLATFORM)
 	status = network_setup(&iio_init_param, uart_desc, application->irq_desc);
 	if(status < 0)
 		goto error;
