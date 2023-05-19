@@ -56,9 +56,9 @@ ITC = $(call rwildcard, $(PROJECT_BUILD)/Src,*_it.c)
 HALCONF = $(call rwildcard, $(PROJECT_BUILD)/Inc,*_hal_conf.h)
 
 ifneq (,$(wildcard $(PROJECT_BUILD)))
-TARGET = $(shell sed -rn 's|^.*(STM32[A-Z][0-9][0-9][0-9]x.)"/>$$|\1|p' $(PROJECT_BUILDROOT)/.cproject | head -n 1)
+TARGET = $(shell sed -rn 's|^.*(STM32[A-Z][0-9][0-9A-Z][0-9]x.)"/>$$|\1|p' $(PROJECT_BUILDROOT)/.cproject | head -n 1)
 CFLAGS += -D$(TARGET)
-CHIPNAME = $(shell sed -rn 's|^.*(STM32[A-Z][0-9][0-9][0-9][A-Z][A-Z][A-Z]x+)" .*$$|\1|p' $(PROJECT_BUILDROOT)/.cproject | head -n 1)
+CHIPNAME = $(shell sed -rn 's|^.*(STM32[A-Z][0-9][0-9A-Z][0-9][A-Z][A-Z][A-Z]x+)" .*$$|\1|p' $(PROJECT_BUILDROOT)/.cproject | head -n 1)
 TARGETCFG = $(shell sed -rn "s|^.*(STM32[A-Z][0-9]).*$$|target/\L\1x.cfg|p" $(PROJECT_BUILDROOT)/.cproject | head -n 1)
 endif
 
@@ -101,7 +101,7 @@ $(PROJECT_TARGET)_configure:
 		-import $(PROJECT_BUILDROOT) -data $(BUILD_DIR) \
 		$(HIDE)
 	$(MUTE) sed -i  's/HAL_NVIC_EnableIRQ(\EXTI/\/\/ HAL_NVIC_EnableIRQ\(EXTI/' $(PROJECT_BUILD)/Src/generated_main.c $(HIDE)
-	$(shell python3 $(PLATFORM_TOOLS)/exti_script.py $(ASM_SRCS) $(EXTI_GEN_FILE))
+	$(shell python $(PLATFORM_TOOLS)/exti_script.py $(ASM_SRCS) $(EXTI_GEN_FILE))
 	$(MUTE) $(call copy_file, $(EXTI_GEN_FILE), $(PROJECT_BUILD)/Src/stm32_gpio_irq_generated.c) $(HIDE)
 
 $(PLATFORM)_sdkopen:
