@@ -26,6 +26,15 @@ SRCS += $(PROJECT)/src/examples/dummy/dummy_example.c
 INCS += $(PROJECT)/src/examples/dummy/dummy_example.h
 endif
 
+ifeq (y,$(strip $(IIO_LWIP_EXAMPLE)))
+TINYIIOD = y
+CFLAGS += -DIIO_LWIP_EXAMPLE=1
+CFLAGS += -DNO_OS_LWIP_NETWORKING
+LIBRARIES += lwip
+SRCS += $(PROJECT)/src/examples/iio_lwip_example/iio_lwip_example.c
+INCS += $(PROJECT)/src/examples/iio_lwip_example/iio_lwip_example.h
+endif
+
 ifeq (y,$(strip $(TINYIIOD)))
 SRC_DIRS += $(NO-OS)/iio/iio_app
 
