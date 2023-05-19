@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   eval-adxl355-pmdz/src/common/common_data.h
- *   @brief  Defines common data to be used by eval-adxl355-pmdz examples.
- *   @author RBolboac (ramona.bolboaca@analog.com)
+ *   @file   iio_lwip_example.c
+ *   @brief  Implementation of IIO LWIP example for eval-adxl355-pmdz project.
+ *   @author Ciprian Regus (ciprian.regus@analog.com)
 ********************************************************************************
- * Copyright 2022(c) Analog Devices, Inc.
+ * Copyright 2023(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -36,41 +36,78 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __COMMON_DATA_H__
-#define __COMMON_DATA_H__
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "platform_includes.h"
-#include "adxl355.h"
-#ifdef IIO_SUPPORT
+#include "iio_lwip_example.h"
 #include "iio_adxl355.h"
-#ifdef IIO_TRIGGER_EXAMPLE
-#include "iio_trigger.h"
-#endif
-#ifdef IIO_LWIP_EXAMPLE
-#include "adin1110.h"
-#endif
-#endif
+#include "common_data.h"
+#include "iio_app.h"
+#include "lwip_socket.h"
+#include "lwip_adin1110.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-extern struct no_os_uart_init_param adxl355_uart_ip;
-extern struct no_os_spi_init_param adxl355_spi_ip;
-extern struct adxl355_init_param adxl355_ip;
-
-#ifdef IIO_TRIGGER_EXAMPLE
-#define ADXL355_GPIO_TRIG_NAME "adxl355-dev0"
-
-extern struct iio_hw_trig_init_param adxl355_gpio_trig_ip;
-extern struct no_os_irq_init_param adxl355_gpio_irq_ip;
+#ifndef DATA_BUFFER_SIZE
+#define DATA_BUFFER_SIZE 400
 #endif
 
-#ifdef IIO_LWIP_EXAMPLE
-extern uint8_t adin1110_mac_address[6];
-extern struct adin1110_init_param adin1110_ip;
-#endif
+/******************************************************************************/
+/************************ Variable Declarations ******************************/
+/******************************************************************************/
+uint8_t iio_data_buffer[DATA_BUFFER_SIZE*3*sizeof(int)];
 
-#endif /* __COMMON_DATA_H__ */
+/******************************************************************************/
+/************************ Functions Definitions *******************************/
+/******************************************************************************/
+/***************************************************************************//**
+ * @brief IIO example main execution.
+ *
+ * @return ret - Result of the example execution. If working correctly, will
+ *               execute continuously function iio_app_run and will not return.
+*******************************************************************************/
+
+int iio_lwip_example_main()
+{
+	int ret;
+	struct adxl355_iio_dev *adxl355_iio_desc;
+	struct adxl355_iio_dev_init_param adxl355_iio_ip;
+	struct iio_app_desc *app;
+	struct iio_data_buffer accel_buff = {
+		.buff = (void *)iio_data_buffer,
+		.size = DATA_BUFFER_SIZE*3*sizeof(int)
+	};
+	struct iio_app_init_param app_init_param = { 0 };
+
+	adxl355_iio_ip.adxl355_dev_init = &adxl355_ip;
+	ret = adxl355_iio_init(&adxl355_iio_desc, &adxl355_iio_ip);
+	if (ret)
+		return ret;
+
+	struct iio_app_device iio_devices[] = {
+		{
+			.name = "adxl355",
+			.dev = adxl355_iio_desc,
+			.dev_descriptor = adxl355_iio_desc->iio_dev,
+			.read_buff = &accel_buff,
+		}
+	};
+
+	memcpy(adin1110_ip.mac_address, adin1110_mac_address, NETIF_MAX_HWADDR_LEN);
+	app_init_param.devices = iio_devices;
+	app_init_param.nb_devices = NO_OS_ARRAY_SIZE(iio_devices);
+	app_init_param.uart_init_params = adxl355_uart_ip;
+	app_init_param.lwip_param.platform_ops = &adin1110_lwip_ops;
+	app_init_param.lwip_param.mac_param = &adin1110_ip;
+	app_init_param.lwip_param.extra = NULL;
+	memcpy(app_init_param.lwip_param.hwaddr, adin1110_mac_address,
+	       NETIF_MAX_HWADDR_LEN);
+
+	ret = iio_app_init(&app, app_init_param);
+	if (ret)
+		return ret;
+
+	return iio_app_run(app);
+}
