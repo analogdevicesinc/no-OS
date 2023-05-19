@@ -54,23 +54,23 @@
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-extern UART_HandleTypeDef huart5;
+extern UART_HandleTypeDef huart1;
 
 #ifdef IIO_SUPPORT
 #define INTC_DEVICE_ID  0
-#define IIO_APP_HUART   (&huart5)
+#define IIO_APP_HUART   (&huart1)
 #endif
-#define UART_IRQ_ID     UART5_IRQn
+#define UART_IRQ_ID     USART1_IRQn
 
-#define UART_DEVICE_ID  5
+#define UART_DEVICE_ID  1
 #define UART_BAUDRATE   115200
 #define UART_EXTRA      &adxl355_uart_extra_ip
 #define UART_OPS        &stm32_uart_ops
 
-#define SPI_DEVICE_ID   1
-#define SPI_BAUDRATE    4000000
-#define SPI_CS          15
-#define SPI_CS_PORT     0
+#define SPI_DEVICE_ID   3
+#define SPI_BAUDRATE    1000000
+#define SPI_CS          12
+#define SPI_CS_PORT     6
 #define SPI_OPS         &stm32_spi_ops
 #define SPI_EXTRA       &adxl355_spi_extra_ip
 
@@ -88,6 +88,19 @@ extern struct stm32_gpio_irq_init_param adxl355_gpio_irq_extra_ip;
 #define GPIO_IRQ_ID             2 /* Pin 2 */
 #define GPIO_IRQ_OPS            &stm32_gpio_irq_ops
 #define GPIO_IRQ_EXTRA          &adxl355_gpio_irq_extra_ip
+#endif
+
+#ifdef IIO_LWIP_EXAMPLE
+#define ADIN1110_GPIO_RESET_PORT	2
+#define ADIN1110_GPIO_RESET_PIN		7
+#define ADIN1110_SPI_DEVICE_ID		2
+#define ADIN1110_SPI_CS			12
+#define ADIN1110_SPI_CS_PORT		1
+#define ADIN1110_SPI_CLK_RATE		25000000
+#define GPIO_OPS			&stm32_gpio_ops
+
+extern struct stm32_gpio_init_param adin1110_reset_gpio_extra_ip;
+extern struct stm32_spi_init_param adin1110_spi_extra_ip;
 #endif
 
 #endif /* __PARAMETERS_H__ */
