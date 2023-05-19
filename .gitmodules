@@ -13,3 +13,6 @@
 [submodule "libraries/mbed/mbed-os"]
 	path = libraries/mbed/mbed-os
 	url = https://github.com/ARMmbed/mbed-os
+[submodule "libraries/lwip/lwip"]
+	path = libraries/lwip/lwip
+	url = https://github.com/lwip-tcpip/lwip
