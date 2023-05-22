@@ -1,6 +1,7 @@
 /***************************************************************************//**
- *   @file   platform_includes.h
- *   @brief  Includes for used platforms used by eval-ad74416h project.
+ *   @file   parameters.h
+ *   @brief  Definitions specific to Mbed platform used by ad74416h
+ *           project.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
  * Copyright 2023(c) Analog Devices, Inc.
@@ -36,18 +37,44 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __PLATFORM_INCLUDES_H__
-#define __PLATFORM_INCLUDES_H__
+#ifndef __PARAMETERS_H__
+#define __PARAMETERS_H__
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#ifdef STM32_PLATFORM
-#include "stm32/parameters.h"
-#endif
+#include <PinNames.h>
+#include "mbed_uart.h"
+#include "mbed_i2c.h"
+#include "mbed_spi.h"
+#include "no_os_uart.h"
 
-#ifdef MBED_PLATFORM
-#include "mbed/parameters.h"
-#endif
+/******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
 
-#endif /* __PLATFORM_INCLUDES_H__ */
+#define UART_TX_PIN	    CONSOLE_TX
+#define	UART_RX_PIN	    CONSOLE_RX
+#define UART_DEVICE_ID  0
+#define UART_IRQ_ID     0
+#define UART_BAUDRATE   115200
+#define UART_EXTRA	&ad74416h_uart_extra_ip
+#define UART_OPS        &mbed_uart_ops
+
+/* I2C Pin mapping for Arduino interface */
+#define I2C_SCL         ARDUINO_UNO_D15
+#define I2C_SDA         ARDUINO_UNO_D14
+#define I2C_DEVICE_ID   0
+#define I2C_OPS         &mbed_i2c_ops
+
+#define SPI_BAUDRATE    1000000
+#define SPI_OPS         &mbed_spi_ops
+#define SPI_EXTRA       &ad74416h_spi_extra
+#define SPI_DEVICE_ID   0
+#define SPI_CS          ARDUINO_UNO_D10
+
+extern struct mbed_uart_init_param ad74416h_uart_extra_ip;
+extern struct mbed_i2c_init_param ad74416h_i2c_extra;
+extern struct mbed_spi_init_param ad74416h_spi_extra;
+
+#endif /* __PARAMETERS_H__ */

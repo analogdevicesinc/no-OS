@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   platform_includes.h
- *   @brief  Includes for used platforms used by eval-ad74416h project.
+ *   @file   main.c
+ *   @brief  Main file for Mbed platform of ad74416h project.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
  * Copyright 2023(c) Analog Devices, Inc.
@@ -36,18 +36,46 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __PLATFORM_INCLUDES_H__
-#define __PLATFORM_INCLUDES_H__
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#ifdef STM32_PLATFORM
-#include "stm32/parameters.h"
+#include "platform_includes.h"
+#include "common_data.h"
+
+#ifdef BASIC_EXAMPLE
+#include "basic_example.h"
 #endif
 
-#ifdef MBED_PLATFORM
-#include "mbed/parameters.h"
+/***************************************************************************//**
+ * @brief Main function for Mbed platform.
+ *
+ * @return ret - Result of the enabled examples.
+*******************************************************************************/
+
+int main()
+{
+	int ret;
+	ad74416h_ip.spi_ip = ad74416h_spi_ip;
+
+#ifdef BASIC_EXAMPLE
+	struct no_os_uart_desc* uart;
+	ret = no_os_uart_init(&uart, &ad74416h_uart_ip);
+	if (ret) {
+		no_os_uart_remove(uart);
+		return ret;
+	}
+	no_os_uart_stdio(uart);
+	ret = basic_example_main();
+	if (ret) {
+		no_os_uart_remove(uart);
+		return ret;
+	}
 #endif
 
-#endif /* __PLATFORM_INCLUDES_H__ */
+#if (IIO_EXAMPLE+BASIC_EXAMPLE != 1)
+#error Selected example projects cannot be enabled at the same time. \
+Please enable only one example and re-build the project.
+#endif
+	return 0;
+}
