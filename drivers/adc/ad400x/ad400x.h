@@ -65,6 +65,7 @@ enum ad400x_supported_dev_ids {
 	ID_AD4007,
 	ID_AD4011,
 	ID_AD4020,
+	ID_ADAQ4003,
 };
 
 extern const uint16_t ad400x_device_resol[];
