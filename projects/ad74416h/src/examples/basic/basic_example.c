@@ -51,7 +51,7 @@
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 /***************************************************************************//**
- * @brief Dummy example main execution.
+ * @brief Basic example main execution.
  *
  * @return ret - Result of the example execution. If working correctly, will
  *               execute continuously the while(1) loop and will not return.
