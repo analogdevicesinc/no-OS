@@ -1,7 +1,7 @@
 /***************************************************************************//**
  *   @file   platform_includes.h
  *   @brief  Includes for used platforms used by eval-ad74416h project.
- *   @author Antoniu Miclaus (antoniu.miclaus@gmail.com)
+ *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
  * Copyright 2023(c) Analog Devices, Inc.
  *
