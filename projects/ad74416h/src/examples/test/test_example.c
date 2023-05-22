@@ -1,7 +1,7 @@
 /***************************************************************************//**
- *   @file   basic_example.c
- *   @brief  Basic example header for eval-ad74416h project
- *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
+ *   @file   test_example.c
+ *   @brief  test example code for ad74416h-pmdz project
+ *   @author Raquel Grau (raquel.grau@analog.com)
 ********************************************************************************
  * Copyright 2023(c) Analog Devices, Inc.
  *
@@ -40,23 +40,22 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "basic_example.h"
+#include "test_example.h"
 #include "common_data.h"
 #include "ad74416h.h"
 #include "no_os_delay.h"
-#include "no_os_gpio.h"
 #include "no_os_print_log.h"
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 /***************************************************************************//**
- * @brief Basic example main execution.
+ * @brief Dummy example main execution.
  *
  * @return ret - Result of the example execution. If working correctly, will
  *               execute continuously the while(1) loop and will not return.
 *******************************************************************************/
-int basic_example_main()
+int test_example_main()
 {
 	struct ad74416h_desc *ad74416h_desc;
 	int ret;
@@ -67,20 +66,18 @@ int basic_example_main()
 
 	pr_info("ad74416h successfully initialized!\r\n");
 
-	ret = ad74416h_gpio_set(ad74416h_desc, AD74416H_CH_C, NO_OS_GPIO_HIGH);
+	ret = ad74416h_gpio_set(ad74416h_desc, 0, 1);
 	if (ret) {
-		pr_info("Error setting GPIO C\r\n");
+		pr_info("Error setting GPIO A\r\n");
 		goto error_ad74416h;
 	}
 
-	pr_info("ad74416h GPO2 set to HIGH\r\n");
-
-	return 0;
+	pr_info("ad74416h GPOA set to HIGH\r\n");
 
 error_ad74416h:
 	ad74416h_remove(ad74416h_desc);
-	return ret;
+	return 0;
 error:
 	pr_info("Error!\r\n");
-	return ret;
+	return 0;
 }

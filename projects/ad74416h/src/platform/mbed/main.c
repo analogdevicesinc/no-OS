@@ -47,6 +47,19 @@
 #include "basic_example.h"
 #endif
 
+#ifdef TEST_EXAMPLE
+#include "test_example.h"
+#endif
+
+#ifdef VOLTAGE_OUTPUT_EXAMPLE
+#include "voltage_output.h"
+#endif
+
+#ifdef CURRENT_OUTPUT_EXAMPLE
+#include "current_output.h"
+#endif
+
+
 /***************************************************************************//**
  * @brief Main function for Mbed platform.
  *
@@ -73,7 +86,53 @@ int main()
 	}
 #endif
 
-#if (IIO_EXAMPLE+BASIC_EXAMPLE != 1)
+#ifdef TEST_EXAMPLE
+	struct no_os_uart_desc* uart;
+	ret = no_os_uart_init(&uart, &ad74416h_uart_ip);
+	if (ret) {
+		no_os_uart_remove(uart);
+		return ret;
+	}
+	no_os_uart_stdio(uart);
+	ret = test_example_main();
+	if (ret) {
+		no_os_uart_remove(uart);
+		return ret;
+	}
+#endif
+
+
+#ifdef VOLTAGE_OUTPUT_EXAMPLE
+	struct no_os_uart_desc* uart;
+	ret = no_os_uart_init(&uart, &ad74416h_uart_ip);
+	if (ret) {
+		no_os_uart_remove(uart);
+		return ret;
+	}
+	no_os_uart_stdio(uart);
+	ret = voltage_output_example_main();
+	if (ret) {
+		no_os_uart_remove(uart);
+		return ret;
+	}
+#endif
+
+#ifdef CURRENT_OUTPUT_EXAMPLE
+	struct no_os_uart_desc* uart;
+	ret = no_os_uart_init(&uart, &ad74416h_uart_ip);
+	if (ret) {
+		no_os_uart_remove(uart);
+		return ret;
+	}
+	no_os_uart_stdio(uart);
+	ret = current_output_example_main();
+	if (ret) {
+		no_os_uart_remove(uart);
+		return ret;
+	}
+#endif
+
+#if (VOLTAGE_OUTPUT_EXAMPLE+BASIC_EXAMPLE+TEST_EXAMPLE+CURRENT_OUTPUT_EXAMPLE != 1)
 #error Selected example projects cannot be enabled at the same time. \
 Please enable only one example and re-build the project.
 #endif

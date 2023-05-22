@@ -1,7 +1,7 @@
 /***************************************************************************//**
- *   @file   basic_example.c
- *   @brief  Basic example header for eval-ad74416h project
- *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
+ *   @file   voltage_output.c
+ *   @brief  Voltage Output example code for ad74416h-pmdz project
+ *   @author Raquel Grau (raquel.grau@analog.com)
 ********************************************************************************
  * Copyright 2023(c) Analog Devices, Inc.
  *
@@ -40,26 +40,27 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "basic_example.h"
+#include "voltage_output.h"
 #include "common_data.h"
 #include "ad74416h.h"
 #include "no_os_delay.h"
-#include "no_os_gpio.h"
 #include "no_os_print_log.h"
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 /***************************************************************************//**
- * @brief Basic example main execution.
+ * @brief Voltage output example main execution.
  *
  * @return ret - Result of the example execution. If working correctly, will
  *               execute continuously the while(1) loop and will not return.
 *******************************************************************************/
-int basic_example_main()
+int voltage_output_example_main()
 {
 	struct ad74416h_desc *ad74416h_desc;
 	int ret;
+
+	uint16_t reg_value = 0xAAAA;
 
 	ret = ad74416h_init(&ad74416h_desc, &ad74416h_ip);
 	if (ret)
@@ -67,20 +68,39 @@ int basic_example_main()
 
 	pr_info("ad74416h successfully initialized!\r\n");
 
-	ret = ad74416h_gpio_set(ad74416h_desc, AD74416H_CH_C, NO_OS_GPIO_HIGH);
+	//Configure voltage range to +-10 V
+	ad74416h_reg_read(ad74416h_desc, AD74416H_OUTPUT_CONFIG(0), &reg_value);
+	pr_info("Value of register before write = %0x\r\n", reg_value);
+	ret = ad74416h_set_channel_vout_range(ad74416h_desc, 0,
+					      AD74416H_VOUT_RANGE_RNG_NEG12_12V);
 	if (ret) {
-		pr_info("Error setting GPIO C\r\n");
+		pr_info("Error setting Channel 0 to range +-10 V");
+		goto error_ad74416h;
+	}
+	ad74416h_reg_read(ad74416h_desc, AD74416H_OUTPUT_CONFIG(0), &reg_value);
+	pr_info("Value of register after write = %0x\r\n", reg_value);
+
+	//Configure Current Limit for channel A in Vout mode to 8mA
+	ret = ad74416h_set_channel_i_limit(ad74416h_desc, 0, AD74416H_I_LIMIT1);
+	if (ret) {
+		pr_info("Error setting the current limit to 8mA");
 		goto error_ad74416h;
 	}
 
-	pr_info("ad74416h GPO2 set to HIGH\r\n");
+	//Configure Channel A as Voltage Output
+	ret = ad74416h_set_channel_function(ad74416h_desc, 0, AD74416H_VOLTAGE_OUT);
+	if (ret) {
+		pr_info("Error setting Channel 0 as voltage output");
+		goto error_ad74416h;
+	}
 
-	return 0;
+	//Configure Channel A code to middle range
+	ret = ad74416h_set_channel_dac_code(ad74416h_desc, 0, 0x8000);
 
 error_ad74416h:
 	ad74416h_remove(ad74416h_desc);
-	return ret;
+	return 0;
 error:
 	pr_info("Error!\r\n");
-	return ret;
+	return 0;
 }

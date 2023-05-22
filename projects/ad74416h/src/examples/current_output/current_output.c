@@ -1,7 +1,7 @@
 /***************************************************************************//**
- *   @file   basic_example.c
- *   @brief  Basic example header for eval-ad74416h project
- *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
+ *   @file   current_output.c
+ *   @brief  Current Output example code for ad74416h-pmdz project
+ *   @author Raquel Grau (raquel.grau@analog.com)
 ********************************************************************************
  * Copyright 2023(c) Analog Devices, Inc.
  *
@@ -40,26 +40,26 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "basic_example.h"
+#include "current_output.h"
 #include "common_data.h"
 #include "ad74416h.h"
 #include "no_os_delay.h"
-#include "no_os_gpio.h"
 #include "no_os_print_log.h"
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 /***************************************************************************//**
- * @brief Basic example main execution.
+ * @brief Current output example main execution.
  *
  * @return ret - Result of the example execution. If working correctly, will
  *               execute continuously the while(1) loop and will not return.
 *******************************************************************************/
-int basic_example_main()
+int current_output_example_main()
 {
 	struct ad74416h_desc *ad74416h_desc;
 	int ret;
+	uint16_t dac_code;
 
 	ret = ad74416h_init(&ad74416h_desc, &ad74416h_ip);
 	if (ret)
@@ -67,20 +67,33 @@ int basic_example_main()
 
 	pr_info("ad74416h successfully initialized!\r\n");
 
-	ret = ad74416h_gpio_set(ad74416h_desc, AD74416H_CH_C, NO_OS_GPIO_HIGH);
+	//Configure Channel A as Current Output
+	ret = ad74416h_set_channel_function(ad74416h_desc, 0, AD74416H_CURRENT_OUT);
 	if (ret) {
-		pr_info("Error setting GPIO C\r\n");
+		pr_info("Error setting Channel 0 as current output\r\n");
 		goto error_ad74416h;
 	}
 
-	pr_info("ad74416h GPO2 set to HIGH\r\n");
+	//Calculate the code for the DAC
+	ret = ad74416h_dac_current_to_code(10000, &dac_code);
+	if (ret) {
+		pr_info("Error calculating the code for the DAC\r\n");
+		goto error_ad74416h;
+	}
 
-	return 0;
+	pr_info("The code for the dac for 10mA is %0x\r\n", dac_code);
+
+	//Configure Channel A code to middle range
+	ret = ad74416h_set_channel_dac_code(ad74416h_desc, 0, dac_code);
+	if (ret) {
+		pr_info("Error setting the dac code\r\n");
+		goto error_ad74416h;
+	}
 
 error_ad74416h:
 	ad74416h_remove(ad74416h_desc);
-	return ret;
+	return 0;
 error:
 	pr_info("Error!\r\n");
-	return ret;
+	return 0;
 }

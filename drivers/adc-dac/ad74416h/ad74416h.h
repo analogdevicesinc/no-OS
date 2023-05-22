@@ -422,12 +422,29 @@
 #define AD74416H_THRESHOLD_DAC_RANGE		98
 #define AD74416H_THRESHOLD_RANGE		30000
 #define AD74416H_DAC_RANGE			12000
+#define AD74416H_DAC_CURRENT_RANGE		25000
 #define AD74416H_DAC_RESOLUTION			16
 #define AD74116H_CONV_TIME_US			1000000
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
+
+/**
+ * @brief DAC output ranges in Vout mode
+ */
+enum ad74416h_vout_range {
+	AD74416H_VOUT_RANGE_RNG_0_12V,
+	AD74416H_VOUT_RANGE_RNG_NEG12_12V,
+};
+
+/**
+ * @brief DAC Current limits in Vout mode
+ */
+enum ad74416h_i_limit {
+	AD74416H_I_LIMIT0,
+	AD74416H_I_LIMIT1,
+};
 
 /**
  * @brief Operation modes of the device.
@@ -571,6 +588,8 @@ struct ad74416h_init_param {
 struct ad74416h_channel_config {
 	bool enabled;
 	enum ad74416h_op_mode function;
+	enum ad74416h_vout_range vout_range;
+	enum ad74416h_i_limit i_limit;
 };
 
 /**
@@ -587,8 +606,11 @@ struct ad74416h_desc {
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
-/** Converts a millivolt value in the corresponding DAC 13 bit code */
+/** Converts a millivolt value in the corresponding DAC 16 bit code */
 int ad74416h_dac_voltage_to_code(uint32_t, uint32_t *);
+
+/** Converts a microamp value in the corresponding DAC 16 bit code */
+int ad74416h_dac_current_to_code(uint32_t, uint16_t *);
 
 /** Write a register's value */
 int ad74416h_reg_write(struct ad74416h_desc *, uint32_t, uint16_t);
@@ -615,6 +637,14 @@ int ad74416h_set_info(struct ad74416h_desc *desc, uint16_t mode);
 /** Set the operation mode for a specific channel */
 int ad74416h_set_channel_function(struct ad74416h_desc *,
 				  uint32_t, enum ad74416h_op_mode);
+
+/** Set the voltage range for a specific channel DAC */
+int ad74416h_set_channel_vout_range(struct ad74416h_desc *,
+				    uint32_t, enum ad74416h_vout_range);
+
+/** Set the current limit for vout mode for a specific channel DAC */
+int ad74416h_set_channel_i_limit(struct ad74416h_desc *,
+				 uint32_t, enum ad74416h_i_limit);
 
 /** Read the raw ADC raw conversion value */
 int ad74416h_get_raw_adc_result(struct ad74416h_desc *, uint32_t,
