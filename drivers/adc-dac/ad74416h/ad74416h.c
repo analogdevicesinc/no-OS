@@ -90,6 +90,21 @@ int ad74416h_dac_voltage_to_code(uint32_t mvolts, uint32_t *code)
 }
 
 /**
+ * @brief Convers a microamp value in the corresponding DAC 16 bit code
+ * @param uamps - The microamps value
+ * @param code - The resulting DAC code
+ * @return 0 in case of success, -EINVAL otherwise
+ */
+int ad74416h_dac_current_to_code(uint32_t uamps, uint16_t *code)
+{
+	if (uamps > AD74416H_DAC_CURRENT_RANGE)
+		return -EINVAL;
+	*code = uamps * NO_OS_BIT(AD74416H_DAC_RESOLUTION) / AD74416H_DAC_CURRENT_RANGE;
+	return 0;
+}
+
+
+/**
  * @brief Load the address and value in a communication buffer using
  * the format that the device expects.
  * @param reg - Register address.
@@ -451,6 +466,47 @@ int ad74416h_set_channel_function(struct ad74416h_desc *desc,
 		return ret;
 
 	desc->channel_configs[ch].function = ch_func;
+
+	return 0;
+}
+
+/**
+ * @brief Set the voltage range of a specific DAC channel
+ * @param desc - The device structure
+ * @param ch - The channel index
+ * @param range - The voltage range
+ * @return 0 in case of success, negative error otherwise
+ */
+int ad74416h_set_channel_vout_range(struct ad74416h_desc *desc,
+				    uint32_t ch, enum ad74416h_vout_range range)
+{
+	int ret;
+
+	ret = ad74416h_reg_update(desc, AD74416H_CH_FUNC_SETUP(ch), AD74416H_VOUT_RANGE_MSK, range);
+	if (ret)
+		return ret;
+
+	desc->channel_configs[ch].vout_range = range;
+				  
+	return 0;
+}
+
+/**
+ * @brief Set the current limit for a specific DAC channel in vout mode
+ * @param desc - The devices structure
+ * @param ch - The channel index
+ * @param param i_limit - The current limit
+ * @return 0 in case of success, negative error otherwise
+ */
+int ad74416h_set_channel_i_limit(struct ad74416h_desc *desc,
+                                 uint32_t ch, enum ad74416h_i_limit i_limit)
+{
+	int ret;
+	ret = ad74416h_reg_update(desc, AD74416H_CH_FUNC_SETUP(ch), AD74416H_I_LIMIT_MSK, i_limit);
+	if (ret)
+		return ret;
+
+	desc-> channel_configs[ch].i_limit = i_limit;
 
 	return 0;
 }

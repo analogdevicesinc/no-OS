@@ -3,5 +3,8 @@
       "dummy_example_mbed": {
         "flags" : "DUMMY_EXAMPLE=y IIO_EXAMPLE=n"
       }
+      "test_example_mbed": {
+	"flags" : "TEST_EXAMPLE=y IIO_EXAMPLE=n"
+      }
     }
 }

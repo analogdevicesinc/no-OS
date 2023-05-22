@@ -68,12 +68,16 @@ int dummy_example_main()
 
 	ret = ad74416h_gpio_set(ad74416h_desc, 2, 1);
 	if (ret)
+	{
+		pr_info("Error setting GPIO C\r\n");
 		goto error_ad74416h;
+	}
 
 	pr_info("ad74416h GPO2 set to HIGH\r\n");
 
 error_ad74416h:
 	ad74416h_remove(ad74416h_desc);
+	return 0;
 error:
 	pr_info("Error!\r\n");
 	return 0;

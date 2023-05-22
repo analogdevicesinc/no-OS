@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   main.c
- *   @brief  Main file for Mbed platform of ad74416h-pmdz project.
- *   @author CMinajigi (chandrakant.minajigi@analog.com)
+ *   @file   dummy_example.c
+ *   @brief  DUMMY example code for ad74416h-pmdz project
+ *   @author Raquel Grau (raquel.grau@analog.com)
 ********************************************************************************
- * Copyright 2023(c) Analog Devices, Inc.
+ * Copyright 2022(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -40,101 +40,45 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "platform_includes.h"
-#include "common_data.h"
-
-#ifdef DUMMY_EXAMPLE
-#include "dummy_example.h"
-#endif
-
-#ifdef TEST_EXAMPLE
 #include "test_example.h"
-#endif
+#include "common_data.h"
+#include "ad74416h.h"
+#include "no_os_delay.h"
+#include "no_os_print_log.h"
 
-#ifdef VOLTAGE_OUTPUT_EXAMPLE
-#include "voltage_output.h"
-#endif
-
-#ifdef CURRENT_OUTPUT_EXAMPLE
-#include "current_output.h"
-#endif
-
+/******************************************************************************/
+/************************ Functions Declarations ******************************/
+/******************************************************************************/
 /***************************************************************************//**
- * @brief Main function for Mbed platform.
+ * @brief Dummy example main execution.
  *
- * @return ret - Result of the enabled examples.
+ * @return ret - Result of the example execution. If working correctly, will
+ *               execute continuously the while(1) loop and will not return.
 *******************************************************************************/
-
-int main()
+int test_example_main()
 {
+	struct ad74416h_desc *ad74416h_desc;
 	int ret;
-	ad74416h_ip.spi_ip = ad74416h_spi_ip;
 
-#ifdef DUMMY_EXAMPLE
-	struct no_os_uart_desc* uart;
-	ret = no_os_uart_init(&uart, &uip);
-	if (ret) {
-		no_os_uart_remove(uart);
-		return ret;
+	ret = ad74416h_init(&ad74416h_desc, &ad74416h_ip);
+	if (ret)
+		goto error;
+
+	pr_info("ad74416h successfully initialized!\r\n");
+
+	ret = ad74416h_gpio_set(ad74416h_desc, 0, 1);
+	if (ret)
+	{
+		pr_info("Error setting GPIO A\r\n");
+		goto error_ad74416h;
 	}
-	no_os_uart_stdio(uart);
-	ret = dummy_example_main();
-	if (ret) {
-		no_os_uart_remove(uart);
-		return ret;
-	}
-#endif
 
-#ifdef TEST_EXAMPLE
-	struct no_os_uart_desc* uart;
-        ret = no_os_uart_init(&uart, &uip);
-        if (ret) {
-                no_os_uart_remove(uart);
-                return ret;
-        }
-        no_os_uart_stdio(uart);
-        ret = test_example_main();
-        if (ret) {
-                no_os_uart_remove(uart);
-                return ret;
-        }
-#endif
+	pr_info("ad74416h GPOA set to HIGH\r\n");
 
-
-#ifdef VOLTAGE_OUTPUT_EXAMPLE
-        struct no_os_uart_desc* uart;
-        ret = no_os_uart_init(&uart, &uip);
-        if (ret) {
-                no_os_uart_remove(uart);
-                return ret;
-        }
-        no_os_uart_stdio(uart);
-        ret = voltage_output_example_main();
-        if (ret) {
-                no_os_uart_remove(uart);
-                return ret;
-        }
-#endif
-
-#ifdef CURRENT_OUTPUT_EXAMPLE
-	struct no_os_uart_desc* uart;
-	ret = no_os_uart_init(&uart, &uip);
-	if (ret) {
-		no_os_uart_remove(uart);
-		return ret;
-	}
-	no_os_uart_stdio(uart);
-	ret = current_output_example_main();
-	if (ret) {
-		no_os_uart_remove(uart);
-		return ret;
-	}
-#endif
-
-/*
-#if (IIO_EXAMPLE+DUMMY_EXAMPLE+TEST_EXAMPLE != 1)
-#error Selected example projects cannot be enabled at the same time. \
-Please enable only one example and re-build the project.
-#endif*/
+error_ad74416h:
+	ad74416h_remove(ad74416h_desc);
+	return 0;
+error:
+	pr_info("Error!\r\n");
 	return 0;
 }
