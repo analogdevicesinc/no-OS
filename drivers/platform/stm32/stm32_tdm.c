@@ -355,7 +355,7 @@ int32_t stm32_resume_tdm_transfer(struct no_os_tdm_desc *desc)
 
 	tdesc = desc->extra;
 
-	ret = HAL_SAI_DMAStop(&tdesc->hsai);
+	ret = HAL_SAI_DMAResume(&tdesc->hsai);
 	if (ret)
 		return ret;
 
