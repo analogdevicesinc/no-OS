@@ -317,6 +317,22 @@ int ad74416h_get_adc_range(struct ad74416h_desc *desc, uint32_t ch,
 }
 
 /**
+ * @brief Set the ADC measurement range for a specific channel
+ * @param desc - The device structure.
+ * @param ch - The channel index.
+ * @param val - The ADC range value.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int ad74416h_set_adc_range(struct ad74416h_desc *desc, uint32_t ch,
+                           enum ad74416h_adc_range val)
+{
+        int ret;
+
+        return(ad74416h_reg_update(desc, AD74416H_ADC_CONFIG(ch), AD74416H_ADC_CONV_RANGE_MSK, val));
+}
+
+
+/**
  * @brief Get the ADC Conversion Rate for a specific channel.
  * @param desc - The device structure.
  * @param ch - The channel index.

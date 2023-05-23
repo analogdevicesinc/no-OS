@@ -476,6 +476,20 @@ enum ad74416h_gpio_select {
 };
 
 /**
+ * @brief Conversion range configuration values
+ */
+enum ad74416h_adc_range {
+	AD74416H_RNG_0_12_V,
+	AD74416H_RNG_NEG12_12_V,
+	AD74416H_RNG_NEG0P3125_0P3125V,
+	AD74416H_RNG_NEG0P3125_0V,
+	AD74416H_RNG_0_0P3125V,   
+	AD74416H_RNG_0_0P625V,    
+	AD74416H_RNG_NEG104_104MV,
+	AD74416H_RNG_NEG2P5_2P5V 
+};
+
+/**
  * @brief Conversion configuration values.
  */
 enum ad74416h_adc_rate {
@@ -659,6 +673,10 @@ int ad74416h_set_diag_channel_enable(struct ad74416h_desc *, uint32_t, bool);
 
 /** Get the ADC measurement range for a specific channel */
 int ad74416h_get_adc_range(struct ad74416h_desc *, uint32_t, uint16_t *);
+
+/** Set the ADC measurement range for a specific channel */
+int ad74416h_set_adc_range(struct ad74416h_desc *, uint32_t,
+			   enum ad74416h_adc_range);
 
 /** Get the ADC sample rate. */
 int ad74416h_get_adc_rate(struct ad74416h_desc *, uint32_t,
