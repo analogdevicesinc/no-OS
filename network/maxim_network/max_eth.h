@@ -12,7 +12,7 @@
 #define MXC_NETIF_MTU_SIZE				1500
 #define NO_OS_DOMAIN_NAME				"swiot"
 
-#define MAX_SOCKETS	20
+#define MAX_SOCKETS	50
 
 struct max_eth_desc;
 

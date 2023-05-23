@@ -45,6 +45,7 @@
 #include "maxim_irq.h"
 #include "maxim_spi.h"
 #include "maxim_gpio.h"
+#include "maxim_i2c.h"
 #include "maxim_uart.h"
 #include "maxim_uart_stdio.h"
 #include "maxim_timer.h"
@@ -71,8 +72,11 @@
 #define SPI_OPS         &max_spi_ops
 #define SPI_EXTRA       &adin1110_spi_extra_ip
 
+#define I2C_EXTRA	&adt75_i2c_extra
+
 extern struct max_uart_init_param adin1110_uart_extra_ip;
 extern struct max_spi_init_param adin1110_spi_extra_ip;
+extern struct max_i2c_init_param adt75_i2c_extra;
 extern const struct max_gpio_init_param adin1110_rst_gpio_extra;
 
 #define AD74413R_GPIO_TRIG_IRQ_ID     9    /* Not used in stm32 platform */

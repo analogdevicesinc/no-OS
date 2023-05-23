@@ -54,3 +54,7 @@ const struct max_gpio_init_param adin1110_rst_gpio_extra = {
 	.vssel = MXC_GPIO_VSSEL_VDDIOH,
 };
 
+struct max_i2c_init_param adt75_i2c_extra = {
+	.vssel = MXC_GPIO_VSSEL_VDDIOH,
+};
+

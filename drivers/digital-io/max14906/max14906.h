@@ -22,6 +22,8 @@
 #define MAX14906_CONFIG2_REG        	0xB
 #define MAX14906_CONFIG_DI_REG      	0xC
 #define MAX14906_CONFIG_DO_REG      	0xD
+#define MAX14906_CONFIG_CURR_LIM	0xE
+#define MAX14906_CONFIG_MASK		0xF
 
 /* DoiLevel register */
 #define MAX14906_DOI_LEVEL_MASK(x)	NO_OS_BIT(x)
@@ -33,10 +35,11 @@
 #define MAX14906_ADDR_MASK		NO_OS_GENMASK(4, 1)
 #define MAX14906_RW_MASK		NO_OS_BIT(0)
 
-#define MAX14906_DO_MASK(x)		(NO_OS_GENMASK(1, 0) << (2 * x))
+#define MAX14906_DO_MASK(x)		(NO_OS_GENMASK(1, 0) << (2 * (x)))
 #define MAX14906_CH_DIR_MASK(x)		NO_OS_BIT((x) + 4)
 #define MAX14906_CH(x)			(x)
 #define MAX14906_IEC_TYPE_MASK		NO_OS_BIT(7)
+#define MAX14906_CL_MASK(x)		(NO_OS_GENMASK(1, 0) << (2 * (x)))
 
 /* Config1 register */
 #define MAX14906_SLED_MASK          NO_OS_BIT(1)

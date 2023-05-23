@@ -23,16 +23,6 @@
 		.attributes = max14906_fault_attrs,	\
 	}
 
-#define MAX14906_CONFIG_CHANNEL(_addr)			\
-        {						\
-        	.ch_type = IIO_VOLTAGE,			\
-        	.indexed = 1,				\
-		.address = _addr,			\
-		.channel = _addr,			\
-        	.attributes = max14906_config_attrs,	\
-	}
-
-
 static int max14906_iio_read_raw(void *dev, char *buf, uint32_t len,
 				 const struct iio_ch_info *channel, intptr_t priv);
 static int max14906_iio_write_raw(void *dev, char *buf, uint32_t len,
@@ -48,6 +38,13 @@ static int max14906_iio_read_do_mode_avail(void *dev, char *buf, uint32_t len,
 		intptr_t priv);
 static int max14906_iio_write_do_mode(void *dev, char *buf, uint32_t len,
 				      const struct iio_ch_info *channel, intptr_t priv);
+static int max14906_iio_read_climit(void *dev, char *buf, uint32_t len,
+				    const struct iio_ch_info *channel, intptr_t priv);
+static int max14906_iio_write_climit(void *dev, char *buf, uint32_t len,
+				     const struct iio_ch_info *channel, intptr_t priv);
+static int max14906_iio_read_climit_avail(void *dev, char *buf, uint32_t len,
+					  const struct iio_ch_info *channel,
+					  intptr_t priv);
 static int max14906_iio_read_fault_raw(void *dev, char *buf, uint32_t len,
 				       const struct iio_ch_info *channel, intptr_t priv);
 static int max14906_iio_read_config_function(void *dev, char *buf, uint32_t len,
@@ -85,10 +82,8 @@ static int max14906_iio_write_runtime_back(void *dev, char *buf, uint32_t len,
 static int max14906_iio_reg_read(struct max14906_iio_desc *, uint32_t, uint32_t *);
 static int max14906_iio_reg_write(struct max14906_iio_desc *, uint32_t, uint32_t);
 
-int max14906_apply;
-int max14906_back;
-
 struct max14906_ch_config max14906_ch_configs[MAX14906_CHANNELS];
+static uint32_t max14906_limit_avail[4] = {600, 130, 300, 1200};
 
 static struct iio_attribute max14906_out_attrs[] = {
 	{
@@ -113,6 +108,16 @@ static struct iio_attribute max14906_out_attrs[] = {
 		.name = "do_mode_available",
 		.shared = IIO_SHARED_BY_ALL,
 		.show = max14906_iio_read_do_mode_avail
+	},
+	{
+		.name = "current_limit",
+		.show = max14906_iio_read_climit,
+		.store = max14906_iio_write_climit,
+	},
+	{
+		.name = "current_limit_available",
+		.shared = IIO_SHARED_BY_ALL,
+		.show = max14906_iio_read_climit_avail
 	},
 	END_ATTRIBUTES_ARRAY
 };
@@ -141,6 +146,16 @@ static struct iio_attribute max14906_in_attrs[] = {
 		.name = "IEC_type_available",
 		.show = max14906_iio_read_config_iec_available,
 	},
+	// {
+	// 	.name = "current_limit",
+	// 	.show = max14906_iio_read_climit,
+	// 	.store = max14906_iio_write_climit,
+	// },
+	// {
+	// 	.name = "current_limit_available",
+	// 	.shared = IIO_SHARED_BY_ALL,
+	// 	.show = max14906_iio_read_climit_avail
+	// },
 	END_ATTRIBUTES_ARRAY
 };
 
@@ -152,71 +167,9 @@ static struct iio_attribute max14906_fault_attrs[] = {
 	END_ATTRIBUTES_ARRAY
 };
 
-static struct iio_attribute max14906_config_attrs[] = {
-	{
-		.name = "function",
-		.show = max14906_iio_read_config_function,
-		.store = max14906_iio_write_config_function,
-	},
-	{
-		.name = "function_available",
-		.shared = IIO_SHARED_BY_ALL,
-		.show = max14906_iio_read_config_function_available,
-	},
-	{
-		.name = "IEC_type",
-		.shared = IIO_SHARED_BY_DIR,
-		.show = max14906_iio_read_config_iec,
-		.store = max14906_iio_write_config_iec,
-	},
-	{
-		.name = "IEC_type_available",
-		.shared = IIO_SHARED_BY_DIR,
-		.show = max14906_iio_read_config_iec_available,
-	},
-	{
-		.name = "enabled",
-		.show = max14906_iio_read_config_enabled,
-		.store = max14906_iio_write_config_enabled,
-	},
-	END_ATTRIBUTES_ARRAY
-};
-
-static struct iio_attribute max14906_config_dev_attrs[] = {
-	{
-		.name = "apply",
-		.show = max14906_iio_read_config_apply,
-		.store = max14906_iio_write_config_apply,
-	},
-	END_ATTRIBUTES_ARRAY
-};
-
-static struct iio_attribute max14906_runtime_dev_attrs[] = {
-	{
-		.name = "back",
-		.show = max14906_iio_read_runtime_back,
-		.store = max14906_iio_write_runtime_back,
-	},
-	END_ATTRIBUTES_ARRAY
-};
-
-static struct iio_channel max14906_config_channels[MAX14906_CHANNELS] = {
-	MAX14906_CONFIG_CHANNEL(0),
-	MAX14906_CONFIG_CHANNEL(1),
-	MAX14906_CONFIG_CHANNEL(2),
-	MAX14906_CONFIG_CHANNEL(3),
-};
-
 static struct iio_device max14906_iio_dev = {
 	.debug_reg_read = (int32_t (*)())max14906_iio_reg_read,
 	.debug_reg_write = (int32_t (*)())max14906_iio_reg_write,
-	.attributes = max14906_runtime_dev_attrs,
-};
-
-static struct iio_device max14906_iio_config_dev = {
-	.num_ch = 4,
-	.channels = max14906_config_channels,
-	.attributes = max14906_config_dev_attrs,
 };
 
 static int max14906_iio_read_raw(void *dev, char *buf, uint32_t len,
@@ -287,9 +240,8 @@ static int max14906_iio_read_do_mode_avail(void *dev, char *buf, uint32_t len,
 	int length = 0;
 	int i;
 
-	for (i = 0; i < 4; i++) {
+	for (i = 0; i < 4; i++)
 		length += sprintf(buf + length, "%s ", max14906_do_mode_avail[i]);
-	}
 
 	return length;
 }
@@ -317,6 +269,61 @@ static int max14906_iio_write_do_mode(void *dev, char *buf, uint32_t len,
 
 	return max14906_reg_update(desc, MAX14906_CONFIG_DO_REG,
 				   MAX14906_DO_MASK(channel->address), do_mode);
+}
+
+static int max14906_iio_read_climit(void *dev, char *buf, uint32_t len,
+				    const struct iio_ch_info *channel, intptr_t priv)
+{
+	struct max14906_iio_desc *iio_desc = dev;
+	struct max14906_desc *desc = iio_desc->max14906_desc;
+	uint8_t current_limit;
+	int ret;
+
+	ret = max14906_reg_read(desc, MAX14906_CONFIG_CURR_LIM, &current_limit);
+	if (ret)
+		return ret;
+
+	current_limit = no_os_field_get(MAX14906_CL_MASK(channel->ch_num),
+					current_limit);
+
+	return iio_format_value(buf, len, IIO_VAL_INT, 1,
+				&max14906_limit_avail[current_limit]);
+}
+
+static int max14906_iio_write_climit(void *dev, char *buf, uint32_t len,
+				     const struct iio_ch_info *channel, intptr_t priv)
+{
+	struct max14906_iio_desc *iio_desc = dev;
+	struct max14906_desc *desc = iio_desc->max14906_desc;
+	char climit[5];
+	int ret;
+	int i;
+
+	for (i = 0; i < NO_OS_ARRAY_SIZE(max14906_limit_avail); i++) {
+		sprintf(climit, "%d", max14906_limit_avail[i]);
+		if (!strcmp(buf, climit))
+			break;
+
+		if (i == NO_OS_ARRAY_SIZE(max14906_limit_avail) - 1)
+			return -EINVAL;
+	}
+
+	return max14906_reg_update(desc, MAX14906_CONFIG_CURR_LIM,
+				   MAX14906_CL_MASK(channel->ch_num),
+				   no_os_field_prep(MAX14906_CL_MASK(channel->ch_num), i));
+}
+
+static int max14906_iio_read_climit_avail(void *dev, char *buf, uint32_t len,
+					  const struct iio_ch_info *channel,
+					  intptr_t priv)
+{
+	uint32_t length = 0;
+	int i;
+
+	for (i = 0; i < NO_OS_ARRAY_SIZE(max14906_limit_avail); i++)
+		length += sprintf(buf + length, "%d ", max14906_limit_avail[i]);
+
+	return length;
 }
 
 static int max14906_iio_read_config_function(void *dev, char *buf, uint32_t len,
@@ -512,34 +519,6 @@ static int max14906_iio_write_config_enabled(void *dev, char *buf, uint32_t len,
 
 	iio_parse_value(buf, IIO_VAL_INT, &enabled, NULL);
 	max14906_ch_configs[channel->address].enabled = !!enabled;
-
-	return 0;
-}
-
-static int max14906_iio_read_config_apply(void *dev, char *buf, uint32_t len,
-		const struct iio_ch_info *channel, intptr_t priv)
-{
-	return iio_format_value(buf, len, IIO_VAL_INT, 1, (int32_t *)&max14906_apply);
-}
-
-static int max14906_iio_write_config_apply(void *dev, char *buf, uint32_t len,
-		const struct iio_ch_info *channel, intptr_t priv)
-{
-	max14906_apply = 1;
-
-	return 0;
-}
-
-static int max14906_iio_read_runtime_back(void *dev, char *buf, uint32_t len,
-		const struct iio_ch_info *channel, intptr_t priv)
-{
-	return iio_format_value(buf, len, IIO_VAL_INT, 1, (int32_t *)&max14906_back);
-}
-
-static int max14906_iio_write_runtime_back(void *dev, char *buf, uint32_t len,
-		const struct iio_ch_info *channel, intptr_t priv)
-{
-	max14906_back = 1;
 
 	return 0;
 }

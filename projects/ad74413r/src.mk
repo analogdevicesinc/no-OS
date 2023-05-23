@@ -32,6 +32,7 @@ INCS += $(INCLUDE)/no_os_delay.h     \
 		$(INCLUDE)/no_os_list.h      \
 		$(INCLUDE)/no_os_crc8.h      \
 		$(INCLUDE)/no_os_uart.h      \
+		$(INCLUDE)/no_os_i2c.h      \
 		$(INCLUDE)/no_os_mdio.h      \
 		$(INCLUDE)/no_os_timer.h      \
 		$(INCLUDE)/no_os_lf256fifo.h \
@@ -44,6 +45,7 @@ SRCS += $(DRIVERS)/api/no_os_gpio.c \
 		$(DRIVERS)/api/no_os_irq.c  \
 		$(DRIVERS)/api/no_os_spi.c  \
 		$(DRIVERS)/api/no_os_uart.c \
+		$(DRIVERS)/api/no_os_i2c.c \
 		$(DRIVERS)/api/no_os_timer.c \
 		$(DRIVERS)/api//no_os_mdio.c \
 		$(NO-OS)/util/no_os_list.c \
@@ -59,6 +61,9 @@ SRCS += $(DRIVERS)/adc-dac/ad74413r/ad74413r.c
 
 INCS += $(DRIVERS)/digital-io/max14906/max14906.h
 SRCS += $(DRIVERS)/digital-io/max14906/max14906.c
+
+INCS += $(DRIVERS)/temperature/adt75/adt75.h
+SRCS += $(DRIVERS)/temperature/adt75/adt75.c
 
 ifeq (y,$(strip $(IIO_EXAMPLE)))
 INCS += $(DRIVERS)/adc-dac/ad74413r/iio_ad74413r.h

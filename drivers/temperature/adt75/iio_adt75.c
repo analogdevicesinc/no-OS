@@ -200,6 +200,7 @@ int adt75_iio_init(struct adt75_iio_desc **desc,
 		   struct adt75_iio_init_param *init_param)
 {
 	struct adt75_iio_desc *descriptor;
+	int32_t reg_val;
 	int ret;
 
 	descriptor = no_os_calloc(1, sizeof(*descriptor));

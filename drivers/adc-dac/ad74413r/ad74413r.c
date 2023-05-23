@@ -1024,6 +1024,7 @@ int ad74413r_init(struct ad74413r_desc **desc,
 {
 	int ret;
 	struct ad74413r_desc *descriptor;
+	uint32_t reg_val;
 
 	if (!init_param)
 		return -EINVAL;

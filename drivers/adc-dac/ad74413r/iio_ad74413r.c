@@ -413,24 +413,6 @@ static struct iio_attribute ad74413r_iio_config_attrs[] = {
 	END_ATTRIBUTES_ARRAY
 };
 
-static struct iio_attribute ad74413r_config_dev_attrs[] = {
-	{
-		.name = "apply",
-		.show = ad74413r_iio_read_config_apply,
-		.store = ad74413r_iio_write_config_apply
-	},
-	END_ATTRIBUTES_ARRAY
-};
-
-static struct iio_attribute ad74413r_runtime_dev_attrs[] = {
-	{
-		.name = "back",
-		.show = ad74413r_iio_read_config_back,
-		.store = ad74413r_iio_write_config_back
-	},
-	END_ATTRIBUTES_ARRAY
-};
-
 static struct iio_channel ad74413r_voltage_input_channels[] = {
 	AD74413R_ADC_CHANNEL(IIO_VOLTAGE, ad74413r_iio_adc_attrs),
 };
@@ -501,13 +483,6 @@ static struct iio_device ad74413r_iio_dev = {
 	.read_dev = (int32_t (*)())ad74413r_iio_read_samples,
 	.debug_reg_read = (int32_t (*)())ad74413r_iio_read_reg,
 	.debug_reg_write = (int32_t (*)())ad74413r_iio_write_reg,
-	.attributes = ad74413r_runtime_dev_attrs,
-};
-
-static struct iio_device ad74413r_iio_config_dev = {
-	.channels = ad74413r_iio_config,
-	.num_ch = AD74413R_N_CHANNELS,
-	.attributes = ad74413r_config_dev_attrs,
 };
 
 /******************************************************************************/
@@ -1560,13 +1535,13 @@ int ad74413r_iio_init(struct ad74413r_iio_desc **iio_desc,
 
 	/** The operation modes for the physical channels are set only at initialization. */
 	for (i = 0; i < AD74413R_N_CHANNELS; i++) {
-		if (ad74413r_global_config[i].enabled) {
+		if ((*init_param->channel_configs)[i].enabled) {
 			ret = ad74413r_set_adc_channel_enable(descriptor->ad74413r_desc, i, true);
 			if (ret)
 				return ret;
 
 			ret = ad74413r_set_channel_function(descriptor->ad74413r_desc, i,
-							    ad74413r_global_config[i].function);
+							    (*init_param->channel_configs)[i].function);
 			if (ret)
 				goto err;
 
@@ -1576,7 +1551,7 @@ int ad74413r_iio_init(struct ad74413r_iio_desc **iio_desc,
 				return ret;
 		}
 
-		ret =ad74413r_set_diag_channel_enable(descriptor->ad74413r_desc, i, true);
+		ret = ad74413r_set_diag_channel_enable(descriptor->ad74413r_desc, i, true);
 		if (ret)
 			return ret;
 	}
