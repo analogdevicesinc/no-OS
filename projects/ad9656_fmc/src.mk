@@ -11,8 +11,7 @@
 
 # Uncomment to select the profile
 
-SRCS += $(PROJECT)/src/app/ad9656_fmc.c \
-	$(PROJECT)/src/app/ad9508.c
+SRCS += $(PROJECT)/src/app/ad9656_fmc.c
 ifeq (y,$(strip $(TINYIIOD)))
 LIBRARIES += iio
 SRC_DIRS += $(NO-OS)/iio/iio_app
@@ -25,6 +24,7 @@ SRCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c \
         $(DRIVERS)/axi_core/jesd204/xilinx_transceiver.c \
         $(DRIVERS)/adc/ad9656/ad9656.c \
         $(DRIVERS)/frequency/ad9553/ad9553.c \
+        $(DRIVERS)/frequency/ad9508/ad9508.c \
         $(DRIVERS)/api/no_os_spi.c \
         $(NO-OS)/util/no_os_util.c \
         $(NO-OS)/util/no_os_alloc.c \
@@ -44,8 +44,7 @@ SRCS +=	$(PLATFORM_DRIVERS)/xilinx_axi_io.c \
         $(PLATFORM_DRIVERS)/xilinx_spi.c \
         $(PLATFORM_DRIVERS)/xilinx_delay.c
 INCS +=	$(PROJECT)/src/app/app_config.h \
-        $(PROJECT)/src/devices/adi_hal/parameters.h \
-        $(PROJECT)/src/app/ad9508.h
+        $(PROJECT)/src/devices/adi_hal/parameters.h
 INCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.h \
         $(DRIVERS)/axi_core/axi_dmac/axi_dmac.h \
         $(DRIVERS)/axi_core/clk_axi_clkgen/clk_axi_clkgen.h \
@@ -53,6 +52,7 @@ INCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.h \
         $(DRIVERS)/axi_core/jesd204/axi_jesd204_rx.h \
         $(DRIVERS)/axi_core/jesd204/xilinx_transceiver.h \
         $(DRIVERS)/frequency/ad9553/ad9553.h \
+        $(DRIVERS)/frequency/ad9508/ad9508.h \
         $(DRIVERS)/adc/ad9656/ad9656.h
 INCS +=	$(PLATFORM_DRIVERS)/$(PLATFORM)_spi.h
 INCS +=	$(INCLUDE)/no_os_axi_io.h \
