@@ -145,6 +145,8 @@ $(HEX): $(BINARY)
 	$(MUTE) $(OC) -O ihex $(BINARY) $(HEX)
 	$(MUTE) $(call print,$(notdir $@) is ready)
 
+.NOTINTERMEDIATE: $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/$(TARGET_UCASE)/Source/GCC/startup_$(TARGET_LCASE).s
+
 post_build: $(HEX)
 
 clean_hex:
