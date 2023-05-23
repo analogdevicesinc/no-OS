@@ -326,8 +326,6 @@ int ad74416h_get_adc_range(struct ad74416h_desc *desc, uint32_t ch,
 int ad74416h_set_adc_range(struct ad74416h_desc *desc, uint32_t ch,
                            enum ad74416h_adc_range val)
 {
-        int ret;
-
         return(ad74416h_reg_update(desc, AD74416H_ADC_CONFIG(ch), AD74416H_ADC_CONV_RANGE_MSK, val));
 }
 
