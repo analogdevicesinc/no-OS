@@ -4,6 +4,9 @@
 
 TEMP_DIR	= $(BUILD_DIR)/tmp
 BINARY		= $(BUILD_DIR)/$(PROJECT_NAME).elf
+BOOT_BIN_DIR    = $(BUILD_DIR)/output_boot_bin
+FSBL_PATH	= $(TEMP_DIR)/output/hw0/export/hw0/sw/hw0/boot/fsbl.elf
+comma	:= ,
 
 ifeq (y,$(strip $(NETWORKING)))
 TEMPLATE	= "lwIP Echo Server"
@@ -19,6 +22,16 @@ define tcl_util
 endef
 
 ARCH = $(shell $(call read_file, $(TEMP_DIR)/arch.txt))
+
+define create_bif_file
+$(call print_line_in_file,the_ROM_image:, $(BOOT_BIN_DIR)/project.bif)
+$(call append_file,{, $(BOOT_BIN_DIR)/project.bif)
+$(call append_file,$1 $(FSBL_PATH), $(BOOT_BIN_DIR)/project.bif)
+$(call append_file,$2 $(TEMP_DIR)/system_top.bit, $(BOOT_BIN_DIR)/project.bif)
+$(call append_file,$3 $(BINARY), $(BOOT_BIN_DIR)/project.bif)
+$(call append_file,}, $(BOOT_BIN_DIR)/project.bif)
+$(call append_file, , $(BOOT_BIN_DIR)/project.bif)
+endef
 
 # Define the platform compiler switch
 CFLAGS += -DXILINX_PLATFORM						\
@@ -171,6 +184,40 @@ ifeq (y,$(strip $(NETWORKING)))
 	$(MUTE) $(call remove_file,$(BUILD_DIR)/app/src/main.c $(BUILD_DIR)/app/src/echo.c) $(HIDE)
 endif
 	$(MUTE) $(call set_one_time_rule,$@)
+	$(call print,Creating fsbl.elf)
+	$(MUTE) $(call copy_file,$(NO-OS)/tools/scripts/platform/xilinx/create_fsbl_project.tcl,$(TEMP_DIR)) $(HIDE)
+	$(MUTE) xsct $(TEMP_DIR)/create_fsbl_project.tcl $(BUILD_DIR) $(TEMP_DIR)/$(notdir $(HARDWARE)) $(HIDE)
+
+PHONY += create_boot_bin
+create_boot_bin:
+ifneq ($(findstring sys_mb,$(strip $(ARCH))),sys_mb)
+	$(call print,Creating BOOT.BIN and archive with files)
+	$(MUTE) $(call remove_dir,$(BOOT_BIN_DIR)) $(HIDE)
+	$(MUTE) $(call mk_dir,$(BOOT_BIN_DIR)) $(HIDE)
+ifeq ($(findstring cortexa53,$(strip $(ARCH))),cortexa53)
+	$(MUTE) $(call create_bif_file,[bootloader$(comma)destination_cpu = a53-0],[destination_device = pl],[destination_cpu = a53-0]) $(HIDE)
+	$(MUTE) bootgen -arch zynqmp -image $(BOOT_BIN_DIR)/project.bif -o $(BOOT_BIN_DIR)/BOOT.BIN -w $(HIDE)
+endif
+ifeq ($(findstring cortexa9,$(strip $(ARCH))),cortexa9)
+	$(MUTE) $(call create_bif_file,[bootloader],,) $(HIDE)
+	$(MUTE) bootgen -arch zynq -image $(BOOT_BIN_DIR)/project.bif -o $(BOOT_BIN_DIR)/BOOT.BIN -w $(HIDE)
+endif
+ifeq ($(findstring cortexr5,$(strip $(ARCH))),cortexr5)
+	$(MUTE) $(call create_bif_file,[bootloader$(comma)destination_cpu = r5-0],[destination_device = pl],[destinatio_cpu = r5-0]) $(HIDE)
+	$(MUTE) bootgen -arch zynqmp -image $(BOOT_BIN_DIR)/project.bif -o $(BOOT_BIN_DIR)/BOOT.BIN -w $(HIDE)
+endif
+	$(MUTE) $(call copy_file,$(TEMP_DIR)/system_top.bit,$(BOOT_BIN_DIR)) $(HIDE)
+	$(MUTE) $(call copy_file,$(FSBL_PATH),$(BOOT_BIN_DIR)) $(HIDE)
+	$(MUTE) $(call copy_file,$(BINARY),$(BOOT_BIN_DIR)) $(HIDE)
+	$(MUTE) zip -rj -FS $(BUILD_DIR)/bootgen_sysfiles.zip $(BOOT_BIN_DIR)/* -x '*BOOT.BIN'
+else
+	$(call print,Creating archive with files)
+	$(MUTE) $(call remove_dir,$(BUILD_DIR)/boot_files) $(HIDE)
+	$(MUTE) $(call mk_dir,$(BUILD_DIR)/boot_files) $(HIDE)
+	$(MUTE) $(call copy_file,$(TEMP_DIR)/system_top.bit,$(BUILD_DIR)/boot_files) $(HIDE)
+	$(MUTE) $(call copy_file,$(BINARY),$(BUILD_DIR)/boot_files) $(HIDE)
+	$(MUTE) zip -rj -FS $(BUILD_DIR)/bootgen_sysfiles.zip $(BUILD_DIR)/boot_files/*
+endif
 
 reset: xilinx_clean_all
 

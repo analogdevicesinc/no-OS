@@ -60,6 +60,9 @@ cmd_separator = ;
 HIDE_OUTPUT = > /dev/null
 endif
 
+print_line_in_file = @echo $1 > $2
+append_file = @echo $1 >> $2
+
 VERBOSE ?= 0
 export VERBOSE
 
@@ -316,6 +319,9 @@ ifneq ($(wildcard $(PROJECT_TARGET)),)
 all:
 	$(call print_build_type,$(PLATFORM))
 	$(MUTE) $(MAKE) --no-print-directory build
+ifeq 'xilinx' '$(PLATFORM)'
+	$(MUTE) $(MAKE) --no-print-directory create_boot_bin
+endif
 	$(call print,Done ($(notdir $(BUILD_DIR))/$(notdir $(BINARY))))
 else
 all:
@@ -323,6 +329,9 @@ all:
 # Remove -j flag for running project target. (It doesn't work on xilinx on this target)
 	$(MUTE) $(MAKE) --no-print-directory update MAKEFLAGS=$(MAKEOVERRIDES)
 	$(MUTE) $(MAKE) --no-print-directory build
+ifeq 'xilinx' '$(PLATFORM)'
+	$(MUTE) $(MAKE) --no-print-directory create_boot_bin
+endif
 	$(call print,Done ($(notdir $(BUILD_DIR))/$(notdir $(BINARY))))
 endif
 
