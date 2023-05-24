@@ -38,8 +38,6 @@ make_link = mklink "$(strip $(subst /,\,$2))" "$(strip $(subst /,\,$1))"
 print_lines = $(foreach f,$1,@echo $f && ) @echo Done
 green = [32m$1[0m
 print = @echo $(call green,[$(TIMESTAMP)]) $1
-print_line_in_file = @echo $1 | -encoding ASCII $2
-append_file = @echo $1 | -Append -encoding ASCII $2
 cmd_separator = &
 HIDE_OUTPUT = > nul
 
@@ -58,11 +56,12 @@ make_link = ln -sf $1 $2
 print_lines = @echo $1 | tr ' ' '\n'
 green = \\e[32m$1\\e[39m
 print = @printf "$(call green,[$(TIMESTAMP)]) $1\n"
-print_line_in_file = @echo $1 > $2
-append_file = @echo $1 >> $2
 cmd_separator = ;
 HIDE_OUTPUT = > /dev/null
 endif
+
+print_line_in_file = @echo $1 > $2
+append_file = @echo $1 >> $2
 
 VERBOSE ?= 0
 export VERBOSE
@@ -327,6 +326,9 @@ all:
 # Remove -j flag for running project target. (It doesn't work on xilinx on this target)
 	$(MUTE) $(MAKE) --no-print-directory update MAKEFLAGS=$(MAKEOVERRIDES)
 	$(MUTE) $(MAKE) --no-print-directory build
+ifeq 'xilinx' '$(PLATFORM)'
+	$(MUTE) $(MAKE) --no-print-directory create_boot_bin
+endif
 	$(call print,Done ($(notdir $(BUILD_DIR))/$(notdir $(BINARY))))
 endif
 

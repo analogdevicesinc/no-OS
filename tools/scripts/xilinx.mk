@@ -24,13 +24,13 @@ endef
 ARCH = $(shell $(call read_file, $(TEMP_DIR)/arch.txt))
 
 define create_bif_file
-$(call print_line_in_file, "the_ROM_image:", $(BOOT_BIN_DIR)/project.bif)
-$(call append_file, "{", $(BOOT_BIN_DIR)/project.bif)
-$(call append_file, "$1 $(FSBL_PATH)", $(BOOT_BIN_DIR)/project.bif)
-$(call append_file, "$2 $(TEMP_DIR)/system_top.bit", $(BOOT_BIN_DIR)/project.bif)
-$(call append_file, "$3 $(BINARY)", $(BOOT_BIN_DIR)/project.bif)
-$(call append_file, "}", $(BOOT_BIN_DIR)/project.bif)
-$(call append_file, "", $(BOOT_BIN_DIR)/project.bif)
+$(call print_line_in_file,the_ROM_image:, $(BOOT_BIN_DIR)/project.bif)
+$(call append_file,{, $(BOOT_BIN_DIR)/project.bif)
+$(call append_file,$1 $(FSBL_PATH), $(BOOT_BIN_DIR)/project.bif)
+$(call append_file,$2 $(TEMP_DIR)/system_top.bit, $(BOOT_BIN_DIR)/project.bif)
+$(call append_file,$3 $(BINARY), $(BOOT_BIN_DIR)/project.bif)
+$(call append_file,}, $(BOOT_BIN_DIR)/project.bif)
+$(call append_file, , $(BOOT_BIN_DIR)/project.bif)
 endef
 
 # Define the platform compiler switch
@@ -189,6 +189,7 @@ endif
 PHONY += create_boot_bin
 create_boot_bin:
 ifneq ($(findstring sys_mb,$(strip $(ARCH))),sys_mb)
+	$(call print,Creating BOOT.BIN and arhive with files)
 	$(MUTE) $(call mk_dir,$(BOOT_BIN_DIR)) $(HIDE)
 	$(MUTE) $(call copy_file,$(NO-OS)/tools/scripts/platform/xilinx/create_fsbl_project.tcl,$(TEMP_DIR)) $(HIDE)
 	$(MUTE) xsct $(TEMP_DIR)/create_fsbl_project.tcl $(HIDE)
@@ -206,6 +207,7 @@ ifeq ($(findstring cortexr5,$(strip $(ARCH))),cortexr5)
 endif
 	$(MUTE) tar -czvf ./build/bootgen_sysfiles.tar.gz $(BINARY) $(FSBL_PATH) $(TEMP_DIR)/system_top.bit $(HARDWARE) $(BOOT_BIN_DIR)/project.bif
 else
+	$(call print,Creating arhive with files)
 	$(MUTE) tar -czvf ./build/bootgen_sysfiles.tar.gz $(BINARY) $(TEMP_DIR)/system_top.bit $(HARDWARE)
 endif
 
