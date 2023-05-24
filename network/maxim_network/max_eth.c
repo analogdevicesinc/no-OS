@@ -95,12 +95,7 @@ static err_t mxc_eth_netif_output(struct netif *netif, struct pbuf *p)
 	buff.len = frame_len;
 	buff.payload = &lwip_buff[ADIN1110_ETH_HDR_LEN];
 
-	/* The TX FIFO might be full, so retry. */
-	// do {
-		// __disable_irq();
-		ret = adin1110_write_fifo(mac_desc, 0, &buff);
-		// __enable_irq();
-	// } while (ret == -EAGAIN);
+	ret = adin1110_write_fifo(mac_desc, 0, &buff);
 
 	return ret;
 }
@@ -158,9 +153,6 @@ int max_lwip_tick(void *data)
 	struct pbuf *p;
 	int ret = 0;
 
-	MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 6, 0);
-	MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 6, 1 << 6);
-
 	netif_desc = eth_desc->lwip_netif;
 	mac_desc = eth_desc->mac_desc;
 
@@ -175,8 +167,6 @@ int max_lwip_tick(void *data)
 	} while(p);
 
 	sys_check_timeouts();
-
-	MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 6, 0);
 
 	return ret;
 }
@@ -600,7 +590,7 @@ static int32_t max_socket_listen(void *net, uint32_t sock_id, uint32_t back_log)
 		return -ENOMEM;
 	}
 	sock->pcb = pcb;
-	sock->state = LISTEN;
+	sock->state = SOCKET_LISTENING;
 
 	max_eth_config_socket(sock);
 

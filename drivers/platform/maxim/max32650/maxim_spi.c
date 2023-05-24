@@ -312,8 +312,8 @@ static int _max_spi_config(struct no_os_spi_desc *desc)
 		goto err_init;
 	}
 
-	NVIC_EnableIRQ(DMA0_IRQn);
-	NVIC_EnableIRQ(DMA1_IRQn);
+	// NVIC_EnableIRQ(DMA0_IRQn);
+	// NVIC_EnableIRQ(DMA1_IRQn);
 
 	return 0;
 err_init:

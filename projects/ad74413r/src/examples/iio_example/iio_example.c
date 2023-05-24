@@ -136,6 +136,17 @@ int iio_example_main()
 	struct ad74413r_iio_desc_init_param ad74413r_iio_ip;
 	struct no_os_gpio_desc *tx_gpio;
 	struct no_os_gpio_desc *rx_gpio;
+	struct no_os_gpio_desc *ad74413r_reset_gpio;
+	struct no_os_gpio_desc *ad74413r_ldac_gpio;
+	struct no_os_gpio_desc *max14906_en_gpio;
+	struct no_os_gpio_desc *max14906_d1_gpio;
+	struct no_os_gpio_desc *max14906_d2_gpio;
+	struct no_os_gpio_desc *max14906_d3_gpio;
+	struct no_os_gpio_desc *max14906_d4_gpio;
+	struct no_os_gpio_desc *adin1110_swpd_gpio;
+	struct no_os_gpio_desc *adin1110_tx2p4_gpio;
+	struct no_os_gpio_desc *adin1110_cfg0_gpio;
+	struct no_os_gpio_desc *adin1110_cfg1_gpio;
 	struct iio_app_desc *app;
 	struct iio_data_buffer buff = {
 		.buff = (void *)iio_data_buffer,
@@ -179,6 +190,7 @@ int iio_example_main()
 	struct max14906_init_param max14906_ip = {
 		.chip_address = 0,
 		.comm_param = &max14906_spi_ip,
+		.crc_en = true,
 	};
 
 	struct netif *netif_desc;
@@ -198,16 +210,39 @@ int iio_example_main()
 	struct max14906_iio_desc *max14906_iio_desc;
 	struct max14906_iio_desc_init_param max14906_iio_ip;
 
+	// no_os_gpio_get(&tx_gpio, &tx_perf_gpio_ip);
+	// no_os_gpio_get(&rx_gpio, &rx_perf_gpio_ip);
+	// no_os_gpio_direction_output(tx_gpio, 0);
+	// no_os_gpio_direction_output(rx_gpio, 0);
+
+	no_os_gpio_get(&adin1110_cfg0_gpio, &adin1110_cfg0_ip);
+	no_os_gpio_get(&ad74413r_reset_gpio, &ad74413r_reset_ip);
+	no_os_gpio_get(&ad74413r_ldac_gpio, &ad74413r_ldac_ip);
+	no_os_gpio_get(&max14906_en_gpio, &max14906_en_ip);
+	no_os_gpio_get(&max14906_d1_gpio, &max14906_d1_ip);
+	no_os_gpio_get(&max14906_d2_gpio, &max14906_d2_ip);
+	no_os_gpio_get(&max14906_d3_gpio, &max14906_d3_ip);
+	no_os_gpio_get(&max14906_d4_gpio, &max14906_d4_ip);
+	no_os_gpio_get(&adin1110_swpd_gpio, &adin1110_swpd_ip);
+	no_os_gpio_get(&adin1110_tx2p4_gpio, &adin1110_tx2p4_ip);
+	no_os_gpio_get(&adin1110_cfg1_gpio, &adin1110_cfg1_ip);
+	no_os_gpio_direction_output(ad74413r_reset_gpio, 1);
+	no_os_gpio_direction_output(ad74413r_ldac_gpio, 0);
+	no_os_gpio_direction_output(max14906_en_gpio, 1);
+	no_os_gpio_direction_output(max14906_d1_gpio, 0);
+	no_os_gpio_direction_output(max14906_d2_gpio, 0);
+	no_os_gpio_direction_output(max14906_d3_gpio, 0);
+	no_os_gpio_direction_output(max14906_d4_gpio, 0);
+	no_os_gpio_direction_output(adin1110_swpd_gpio, 1);
+	no_os_gpio_direction_output(adin1110_tx2p4_gpio, 0);
+	no_os_gpio_direction_output(adin1110_cfg1_gpio, 1);
+	no_os_gpio_direction_output(adin1110_cfg0_gpio, 0);
+
 	ret = max_eth_init(&netif_desc, &eth_param);
 	if (ret)
 		return ret;
 
 	maxim_net.net = netif_desc->state;
-
-	// no_os_gpio_get(&tx_gpio, &tx_perf_gpio_ip);
-	// no_os_gpio_get(&rx_gpio, &rx_perf_gpio_ip);
-	// no_os_gpio_direction_output(tx_gpio, 0);
-	// no_os_gpio_direction_output(rx_gpio, 0);
 
 	ret = no_os_irq_ctrl_init(&ad74413r_nvic, &ad74413r_nvic_ip);
 	if (ret)
@@ -292,8 +327,8 @@ int iio_example_main()
 
 		app_init_param.devices = iio_devices;
 		app_init_param.nb_devices = 1;
-		app_init_param.trigs = trigs;
-		app_init_param.nb_trigs = 1;
+		app_init_param.trigs = NULL;
+		app_init_param.nb_trigs = 0;
 		app_init_param.uart_init_params = adin1110_uart_ip;
 		app_init_param.post_step_callback = step_callback;
 
@@ -306,6 +341,8 @@ int iio_example_main()
 		app->arg = &step_p;		
 
 		ret = iio_app_run(app);
+		if (ret != -ENOTCONN)
+			return ret;
 
 		max14906_iio_ip.channel_configs = &swiot_iio_desc->max14906_configs;
 		ad74413r_iio_ip.channel_configs = &swiot_iio_desc->ad74413r_configs;
@@ -318,9 +355,9 @@ int iio_example_main()
 		if (ret)
 			return ret;
 
-		do {
-			ret = ad74413r_iio_init(&ad74413r_iio_desc, &ad74413r_iio_ip, false);
-		} while (ret);
+		ret = ad74413r_iio_init(&ad74413r_iio_desc, &ad74413r_iio_ip, false);
+		if (ret)
+			return ret;
 
 		swiot_ip.ad74413r = ad74413r_iio_desc;
 		swiot_ip.max14906 = max14906_iio_desc;
@@ -364,6 +401,8 @@ int iio_example_main()
 		app->arg = &step_p;		
 
 		ret = iio_app_run(app);
+		if (ret != -ENOTCONN)
+			return ret;
 
 		ret = ad74413r_iio_remove(ad74413r_iio_desc);
 		if (ret)

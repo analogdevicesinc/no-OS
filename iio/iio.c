@@ -73,7 +73,7 @@
 #define IIOD_PORT		30431
 #define MAX_SOCKET_TO_HANDLE	10
 #define REG_ACCESS_ATTRIBUTE	"direct_reg_access"
-#define IIOD_CONN_BUFFER_SIZE	0x8000
+#define IIOD_CONN_BUFFER_SIZE	0x1000
 #define NO_TRIGGER				(uint32_t)-1
 
 #define NO_OS_STRINGIFY(x) #x
@@ -232,12 +232,17 @@ struct iio_desc {
 static inline int32_t _pop_conn(struct iio_desc *desc, uint32_t *conn_id)
 {
 	uint32_t size;
+	int ret;
 
 	no_os_cb_size(desc->conns, &size);
 	if (size < sizeof(uint32_t))
 		return -EAGAIN;
 
-	return no_os_cb_read(desc->conns, conn_id, sizeof(*conn_id));
+	ret =  no_os_cb_read(desc->conns, conn_id, sizeof(*conn_id));
+	if (ret)
+		return ret;
+
+	return 0;
 }
 
 static inline int32_t _push_conn(struct iio_desc *desc, uint32_t conn_id)

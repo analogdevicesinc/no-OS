@@ -1354,8 +1354,6 @@ static int ad74413r_iio_trigger_handler(struct iio_device_data *dev_data)
 
 	__disable_irq();
 
-	MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 16, 0);
-	MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 16, 1 << 16);
 	iio_desc = dev_data->dev;
 	desc = iio_desc->ad74413r_desc;
 	active_adc_ch = iio_desc->no_of_active_adc_channels;
@@ -1381,7 +1379,6 @@ static int ad74413r_iio_trigger_handler(struct iio_device_data *dev_data)
 	}
 
 	iio_buffer_push_scan(dev_data->buffer, buff);
-	MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 16, 0);
 
 	__enable_irq();
 	return 0;

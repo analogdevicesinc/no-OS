@@ -830,10 +830,7 @@ static int32_t iiod_run_state(struct iiod_desc *desc,
 		/* IIOD_CMD_READBUF and IIOD_CMD_WRITEBUF special case */
 		/* Non blocking read/write until all data is processed */
 		if (conn->cmd_data.cmd == IIOD_CMD_READBUF) {
-			MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 17, 0);
-			MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 17, 1 << 17);
 			ret = do_read_buff(desc, conn);
-			MXC_GPIO_OutPut(MXC_GPIO_GET_GPIO(2), 1 << 17, 0);
 		} else {
 			ret = do_write_buff(desc, conn);
 			if (ret == 0) {

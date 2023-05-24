@@ -3,6 +3,84 @@
 #include "max14906.h"
 #include "no_os_util.h"
 
+static uint8_t max14906_crc_encode(uint8_t *data)
+{
+	uint8_t crc5_start = 0x1f;
+	uint8_t crc5_poly = 0x15;
+	uint8_t crc5_result = crc5_start;
+	uint8_t extra_byte = 0x00;
+	uint8_t data_bit;
+	uint8_t result_bit;
+
+	for (int i = 0; i < 8; i++) {
+		data_bit = (data[0] >> (7 - i)) & 0x01; 
+		result_bit = (crc5_result & 0x10) >> 4;
+		if (data_bit ^ result_bit)
+			crc5_result = crc5_poly ^ ((crc5_result << 1) & 0x1f);
+		else
+			crc5_result = (crc5_result << 1) & 0x1f;
+	}
+
+	for (int i = 0; i < 8; i++) {
+		data_bit = (data[1] >> (7 - i)) & 0x01; 
+		result_bit = (crc5_result & 0x10) >> 4;
+		if (data_bit ^ result_bit)
+			crc5_result = crc5_poly ^ ((crc5_result << 1) & 0x1f);
+		else
+			crc5_result = (crc5_result << 1) & 0x1f;
+	}
+
+	for (int i = 0; i < 3; i++) {
+		data_bit = (extra_byte >> (7 - i)) & 0x01; 
+		result_bit = (crc5_result & 0x10) >> 4;
+		if (data_bit ^ result_bit)
+			crc5_result = crc5_poly ^ ((crc5_result << 1) & 0x1f);
+		else
+			crc5_result = (crc5_result << 1) & 0x1f;
+	}
+
+	return crc5_result;
+}
+
+static uint8_t max14906_crc_decode(uint8_t *data)
+{
+	uint8_t crc5_start = 0x1f;
+	uint8_t crc5_poly = 0x15;
+	uint8_t crc5_result = crc5_start;
+	uint8_t extra_byte = 0x00;
+	uint8_t data_bit;
+	uint8_t result_bit;
+
+	for (int i = 2; i < 8; i++) {
+		data_bit = (data[0] >> (7 - i)) & 0x01;
+		result_bit = (crc5_result & 0x10) >> 4;
+		if (data_bit ^ result_bit)
+			crc5_result = crc5_poly ^ ((crc5_result << 1) & 0x1f);
+		else
+			crc5_result = (crc5_result << 1) & 0x1f;
+	}
+
+	for (int i = 0; i < 8; i++) {
+		data_bit = (data[1] >> (7 - i)) & 0x01;
+		result_bit = (crc5_result & 0x10) >> 4;
+		if (data_bit ^ result_bit)
+			crc5_result = crc5_poly ^ ((crc5_result << 1) & 0x1f);
+		else
+			crc5_result = (crc5_result << 1) & 0x1f;
+	}
+
+	for (int i = 0; i < 3; i++) {
+		data_bit = (extra_byte >> (7 - i)) & 0x01;
+		result_bit = (crc5_result & 0x10) >> 4;
+		if (data_bit ^ result_bit)
+			crc5_result = crc5_poly ^ ((crc5_result << 1) & 0x1f);
+		else
+			crc5_result = (crc5_result << 1) & 0x1f;
+	}
+
+	return crc5_result;
+}
+
 int max14906_reg_write(struct max14906_desc *desc, uint32_t addr, uint32_t val)
 {
 	struct no_os_spi_msg xfer = {
@@ -10,11 +88,17 @@ int max14906_reg_write(struct max14906_desc *desc, uint32_t addr, uint32_t val)
 		.bytes_number = MAX14906_FRAME_SIZE,
 		.cs_change = 1,
 	};
+	int ret;
 
 	desc->buff[0] = no_os_field_prep(MAX14906_CHIP_ADDR_MASK, desc->chip_address);
 	desc->buff[0] |= no_os_field_prep(MAX14906_ADDR_MASK, addr);
 	desc->buff[0] |= no_os_field_prep(MAX14906_RW_MASK, 1);
 	desc->buff[1] = val;
+
+	if (desc->crc_en) {
+		xfer.bytes_number++;
+		desc->buff[2] = max14906_crc_encode(desc->buff);
+	}
 
 	return no_os_spi_transfer(desc->comm_desc, &xfer, 1);
 }
@@ -27,7 +111,11 @@ int max14906_reg_read(struct max14906_desc *desc, uint32_t addr, uint32_t *val)
 		.bytes_number = MAX14906_FRAME_SIZE,
 		.cs_change = 1,
 	};
+	uint8_t crc;
 	int ret;
+
+	if (desc->crc_en)
+		xfer.bytes_number++;
 
 	desc->buff[0] = no_os_field_prep(MAX14906_CHIP_ADDR_MASK, desc->chip_address);
 	desc->buff[0] |= no_os_field_prep(MAX14906_ADDR_MASK, addr);
@@ -38,6 +126,12 @@ int max14906_reg_read(struct max14906_desc *desc, uint32_t addr, uint32_t *val)
 		return ret;
 
 	*val = desc->buff[1];
+
+	if (desc->crc_en) {
+		crc = max14906_crc_decode(desc->buff);
+		if (crc != desc->buff[2])
+			return -EINVAL;
+	}
 
 	return 0;
 }
@@ -113,6 +207,8 @@ int max14906_init(struct max14906_desc **desc, struct max14906_init_param *param
 	ret = no_os_spi_init(&descriptor->comm_desc, param->comm_param);
 	if (ret)
 		goto err;
+
+	descriptor->crc_en = param->crc_en;
 
 	ret = max14906_reg_read(descriptor, MAX14906_DOILEVEL_REG, &reg_val);
 	if (ret)

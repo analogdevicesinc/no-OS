@@ -74,13 +74,15 @@ struct max14906_init_param {
 	uint32_t chip_address;
 	struct no_os_spi_init_param *comm_param;
 	struct max14906_ch_config ch_config[MAX14906_CHANNELS];
+	bool crc_en;
 };
 
 struct max14906_desc {
 	uint32_t chip_address;
 	struct no_os_spi_desc *comm_desc;
 	struct no_os_gpio_desc *dio[MAX14906_CHANNELS];
-	uint8_t buff[MAX14906_FRAME_SIZE];
+	uint8_t buff[MAX14906_FRAME_SIZE + 1];
+	bool crc_en;
 };
 
 int max14906_reg_write(struct max14906_desc *, uint32_t, uint32_t);
