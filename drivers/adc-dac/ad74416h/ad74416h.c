@@ -560,6 +560,27 @@ int ad74416h_set_channel_vout_range(struct ad74416h_desc *desc, uint32_t ch,
 }
 
 /**
+ * @brief Set the current limit for a specific DAC channel in vout mode
+ * @param desc - The devices structure
+ * @param ch - The channel index
+ * @param i_limit - The current limit
+ * @return 0 in case of success, negative error otherwise
+ */
+int ad74416h_set_channel_i_limit(struct ad74416h_desc *desc,
+				 uint32_t ch, enum ad74416h_i_limit i_limit)
+{
+	int ret;
+	ret = ad74416h_reg_update(desc, AD74416H_CH_FUNC_SETUP(ch),
+				  AD74416H_I_LIMIT_MSK, i_limit);
+	if (ret)
+		return ret;
+
+	desc->channel_configs[ch].i_limit = i_limit;
+
+	return 0;
+}
+
+/**
  * @brief Set and load a code for the DAC on a specific channel.
  * @param desc - The device structure.
  * @param ch - The channel index.

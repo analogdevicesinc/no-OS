@@ -564,6 +564,14 @@ enum ad74416h_vout_range {
 };
 
 /**
+ * @brief DAC Current limits in Vout mode
+ */
+enum ad74416h_i_limit {
+	AD74416H_I_LIMIT0,
+	AD74416H_I_LIMIT1,
+};
+
+/**
  * @brief Bitfield struct which maps on the LIVE_STATUS register
  */
 struct _ad74416h_live_status {
@@ -606,6 +614,7 @@ struct ad74416h_channel_config {
 	bool enabled;
 	enum ad74416h_op_mode function;
 	enum ad74416h_vout_range vout_range;
+	enum ad74416h_i_limit i_limit;
 };
 
 /**
@@ -658,6 +667,10 @@ int ad74416h_set_channel_function(struct ad74416h_desc *,
 /** Set the voltage range for a specific channel */
 int ad74416h_set_channel_vout_range(struct ad74416h_desc *desc, uint32_t ch,
 				    enum ad74416h_vout_range vout_range);
+
+/** Set the current limit for a specific DAC channel in vout mode */
+int ad74416h_set_channel_i_limit(struct ad74416h_desc *, uint32_t,
+				 enum ad74416h_i_limit);
 
 /** Read the raw ADC raw conversion value */
 int ad74416h_get_raw_adc_result(struct ad74416h_desc *, uint32_t,
