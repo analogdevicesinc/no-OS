@@ -174,11 +174,9 @@ int main(void)
 		.rx_target = 1950,
 		.rx_tolerance = 50,
 		.tx_auto_ifvga = true,
-		.tx_auto_if_correlation = (uint8_t **)tx_correlation,
-		.tx_auto_if_correlation_entries = NO_OS_ARRAY_SIZE(tx_correlation[0]),
+		.tx_auto_if_correlation = tx_correlation,
 		.rx_auto_ifvga_rflna = true,
-		.rx_auto_if_lna_correlation = (uint8_t **)rx_correlation,
-		.rx_auto_if_lna_correlation_entries = NO_OS_ARRAY_SIZE(rx_correlation[0]),
+		.rx_auto_if_lna_correlation = rx_correlation,
 		.id = id,
 		.hbtx = hbtx,
 	};

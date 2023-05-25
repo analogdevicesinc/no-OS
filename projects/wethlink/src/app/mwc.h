@@ -25,11 +25,9 @@ struct mwc_iio_dev {
 	unsigned int rx_target;
 	unsigned int rx_tolerance;
 	bool tx_auto_ifvga;
-	uint8_t **tx_auto_if_correlation;
-	uint8_t tx_auto_if_correlation_entries;
+	uint8_t (*tx_auto_if_correlation)[5];
 	bool rx_auto_ifvga_rflna;
-	uint8_t **rx_auto_if_lna_correlation;
-	uint8_t rx_auto_if_lna_correlation_entries;
+	uint8_t (*rx_auto_if_lna_correlation)[5];
 	struct no_os_pid *tx_pid;
 	struct no_os_pid *rx_pid;
 	enum admv96xx_id id;
@@ -45,11 +43,9 @@ struct mwc_iio_init_param {
 	unsigned int rx_target;
 	unsigned int rx_tolerance;
 	bool tx_auto_ifvga;
-	uint8_t **tx_auto_if_correlation;
-	uint8_t tx_auto_if_correlation_entries;
+	uint8_t (*tx_auto_if_correlation)[5];
 	bool rx_auto_ifvga_rflna;
-	uint8_t **rx_auto_if_lna_correlation;
-	uint8_t rx_auto_if_lna_correlation_entries;
+	uint8_t (*rx_auto_if_lna_correlation)[5];
 	enum admv96xx_id id;
 	bool hbtx;
 };
