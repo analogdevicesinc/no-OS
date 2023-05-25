@@ -109,6 +109,20 @@ int ad74416h_dac_voltage_to_code(struct ad74416h_desc *desc, int32_t mvolts,
 }
 
 /**
+ * @brief Convers a microamp value in the corresponding DAC 16 bit code
+ * @param uamps - The microamps value
+ * @param code - The resulting DAC code
+ * @return 0 in case of success, -EINVAL otherwise
+ */
+int ad74416h_dac_current_to_code(uint32_t uamps, uint16_t *code)
+{
+	if (uamps > AD74416H_DAC_CURRENT_RANGE)
+		return -EINVAL;
+	*code = uamps * NO_OS_BIT(AD74416H_DAC_RESOLUTION) / AD74416H_DAC_CURRENT_RANGE;
+	return 0;
+}
+
+/**
  * @brief Load the address and value in a communication buffer using
  * the format that the device expects.
  * @param reg - Register address.
