@@ -75,16 +75,35 @@ static const uint32_t conv_rate_ad74416h[] = { 10, 20, 1200, 4800, 9600, 200 };
 
 /**
  * @brief Converts a millivolt value in the corresponding DAC 16 bit code.
+ * @param desc - The device structure.
  * @param mvolts - The millivolts value.
  * @param code - The resulting DAC code.
+ * @param ch - The channel index.
  * @return 0 in case of success, -EINVAL otherwise
  */
-int ad74416h_dac_voltage_to_code(uint32_t mvolts, uint32_t *code)
+int ad74416h_dac_voltage_to_code(struct ad74416h_desc *desc, int32_t mvolts,
+				 uint32_t *code, uint32_t ch)
 {
-	if (mvolts > AD74416H_DAC_RANGE)
-		return -EINVAL;
+	uint32_t range, offset;
 
-	*code = mvolts * NO_OS_BIT(AD74416H_DAC_RESOLUTION) / AD74416H_DAC_RANGE;
+	switch (desc->channel_configs[ch].vout_range) {
+	case AD74416H_VOUT_RANGE_0_12V:
+		if (mvolts > AD74416H_DAC_RANGE || mvolts < 0)
+			return -EINVAL;
+		range = AD74416H_DAC_RANGE;
+		offset = 0;
+		break;
+	case AD74416H_VOUT_RANGE_NEG12_12V:
+		if (mvolts > AD74416H_DAC_RANGE || mvolts < -AD74416H_DAC_RANGE)
+			return -EINVAL;
+		range = AD74416H_DAC_RANGE * 2;
+		offset = AD74416H_DAC_RANGE;
+		break;
+	default:
+		return -EINVAL;
+	}
+
+	*code = (mvolts + offset) * NO_OS_BIT(AD74416H_DAC_RESOLUTION) / range;
 
 	return 0;
 }
