@@ -12,11 +12,11 @@
 #include "mxc_sys.h"
 #include "led.h"
 
-void mwc_temp_correlation(uint8_t **correlation, uint8_t entries, uint8_t temp, uint8_t *if_attn, uint8_t *lna_attn)
+void mwc_temp_correlation(uint8_t (*correlation)[5], uint8_t temp, uint8_t *if_attn, uint8_t *lna_attn)
 {
 	uint8_t e;
 
-	for (e = 0; e < entries; e++) {
+	for (e = 0; e < NO_OS_ARRAY_SIZE(correlation[0]); e++) {
 		if (temp <= correlation[0][e]) {
 			*if_attn = correlation[1][e];
 			if (lna_attn != NULL)
@@ -40,7 +40,6 @@ int mwc_algorithms(struct mwc_iio_dev *mwc)
 			return ret;
 
 		mwc_temp_correlation(mwc->tx_auto_if_correlation,
-					mwc->tx_auto_if_correlation_entries,
 					temp, &if_attn, NULL);
 
 		ret = hmc630x_set_if_attn(tx, if_attn);
@@ -55,7 +54,6 @@ int mwc_algorithms(struct mwc_iio_dev *mwc)
 			return ret;
 
 		mwc_temp_correlation(mwc->rx_auto_if_lna_correlation,
-			mwc->rx_auto_if_lna_correlation_entries,
 			temp, &if_attn, &lna_attn);
 
 		ret = hmc630x_set_if_attn(rx, if_attn);
@@ -471,10 +469,8 @@ int mwc_iio_init(struct mwc_iio_dev **iiodev,
 	d->rx_tolerance = init_param->rx_tolerance;
 	d->tx_auto_ifvga = init_param->tx_auto_ifvga;
 	d->tx_auto_if_correlation = init_param->tx_auto_if_correlation;
-	d->tx_auto_if_correlation_entries = init_param->tx_auto_if_correlation_entries;
 	d->rx_auto_ifvga_rflna = init_param->rx_auto_ifvga_rflna;
 	d->rx_auto_if_lna_correlation = init_param->rx_auto_if_lna_correlation;
-	d->rx_auto_if_lna_correlation_entries = init_param->rx_auto_if_lna_correlation_entries;
 	d->id = init_param->id;
 	d->hbtx = init_param->hbtx;
 
