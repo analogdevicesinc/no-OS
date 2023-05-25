@@ -77,14 +77,6 @@ int voltage_input_example_main()
 	}
 
 	//Configure ADC Conversions
-	//Configure ADC range -2.5 to 2.5 V
-	ret = ad74416h_set_adc_range(ad74416h_desc, 0, AD74416H_RNG_NEG2P5_2P5V);
-	if (ret)
-	{
-		pr_info("Error setting range -2.5 to 2.5 V\r\n");
-		goto error_ad74416h;
-	}
-
 	//Configure the ADC sample rate
 	ret = ad74416h_set_adc_rate(ad74416h_desc, 0, AD74416H_20SPS_50_60HZ_REJECTION);
 	if (ret)
