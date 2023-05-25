@@ -59,6 +59,14 @@
 #include "current_output.h"
 #endif
 
+#ifdef VOLTAGE_INPUT_EXAMPLE
+#include "voltage_input.h"
+#endif
+
+#ifdef CURRENT_INPUT_EXT_EXAMPLE
+#include "current_input_ext.h"
+#endif
+
 
 /***************************************************************************//**
  * @brief Main function for Mbed platform.
@@ -132,7 +140,38 @@ int main()
 	}
 #endif
 
-#if (VOLTAGE_OUTPUT_EXAMPLE+BASIC_EXAMPLE+TEST_EXAMPLE+CURRENT_OUTPUT_EXAMPLE != 1)
+#ifdef VOLTAGE_INPUT_EXAMPLE
+	struct no_os_uart_desc* uart;
+	ret = no_os_uart_init(&uart, &ad74416h_uart_ip);
+	if(ret) {
+		no_os_uart_remove(uart);
+		return ret;
+	}
+	no_os_uart_stdio(uart);
+	ret = voltage_input_example_main();
+	if (ret) {
+		no_os_uart_remove(uart);
+		return ret;
+	}
+#endif
+
+#ifdef CURRENT_INPUT_EXT_EXAMPLE
+        struct no_os_uart_desc* uart;
+        ret = no_os_uart_init(&uart, &ad74416h_uart_ip);
+        if(ret) {
+                no_os_uart_remove(uart);
+                return ret;
+        }
+        no_os_uart_stdio(uart);
+        ret = current_input_ext_example_main();
+        if (ret) {
+                no_os_uart_remove(uart);
+                return ret;
+        }
+#endif
+
+
+#if (VOLTAGE_OUTPUT_EXAMPLE+BASIC_EXAMPLE+TEST_EXAMPLE+CURRENT_OUTPUT_EXAMPLE+VOLTAGE_INPUT_EXAMPLE+CURRENT_INPUT_EXT_EXAMPLE != 1)
 #error Selected example projects cannot be enabled at the same time. \
 Please enable only one example and re-build the project.
 #endif
