@@ -367,6 +367,40 @@ int ad74416h_set_adc_rate(struct ad74416h_desc *desc, uint32_t ch,
 }
 
 /**
+ * @brief Get the ADC Input Node for conversion.
+ * @param desc - The device structure.
+ * @param ch - The channel index.
+ * @param val - The ADC input node setting.
+ */
+int ad74416h_get_adc_conv_mux(struct ad74416h_desc *desc, uint32_t ch,
+                              enum ad74416h_adc_conv_mux *val)
+{
+	int ret;
+	uint16_t rate_val;
+	
+	ret = ad74416h_reg_read(desc, AD74416H_ADC_CONFIG(ch), &rate_val);
+	if (ret)
+	        return ret;
+	
+	*val = no_os_field_get(AD74416H_CONV_MUX_MSK, rate_val);
+	
+	return 0;
+}
+
+/**
+ * @brief Set the ADC Input Node for conversion.
+ * @param desc - The device structure
+ * @param ch - The channel index.
+ * @param val - The ADC input node setting.
+ */
+int ad74416h_set_adc_conv_mux(struct ad74416h_desc *desc, uint32_t ch,
+                              enum ad74416h_adc_conv_mux val)
+{
+        return ad74416h_reg_update(desc, AD74416H_ADC_CONFIG(ch),
+                                   AD74416H_CONV_MUX_MSK, val);
+}
+
+/**
  * @brief Start or stop ADC conversions.
  * @param desc - The device structure.
  * @param status - The ADC conversion sequence.
