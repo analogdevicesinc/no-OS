@@ -154,9 +154,15 @@ int main(void)
 	};
 	uint8_t rx_correlation[][5] = {
 		{1, 3, 7, 15, 31}, // index
-		{6, 6, 6, 6, 3}, // if_attn
+		{6, 6, 6, 6, 6}, // if_attn
 		{HMC6301_LNA_ATTN_18dB, HMC6301_LNA_ATTN_18dB, HMC6301_LNA_ATTN_12dB, HMC6301_LNA_ATTN_6dB, HMC6301_LNA_ATTN_0dB} // lna_attn
 	};
+
+	// patch the temperature correlation table for admv962x
+	if (!hbtx) {
+		tx_correlation[1][3] = 10;
+		tx_correlation[1][4] = 5;
+	}
 
 	struct mwc_iio_dev *mwc;
 	struct mwc_iio_init_param mwc_ip = {
