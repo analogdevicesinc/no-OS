@@ -530,6 +530,14 @@ enum ad74416h_lin_rate {
 };
 
 /**
+ * @brief Possible voltage output ranges for the DAC
+ */
+enum ad74416h_vout_range {
+	AD74416H_VOUT_RANGE_0_12V,
+	AD74416H_VOUT_RANGE_NEG12_12V,
+};
+
+/**
  * @brief Bitfield struct which maps on the LIVE_STATUS register
  */
 struct _ad74416h_live_status {
@@ -571,6 +579,7 @@ struct ad74416h_init_param {
 struct ad74416h_channel_config {
 	bool enabled;
 	enum ad74416h_op_mode function;
+	enum ad74416h_vout_range vout_range;
 };
 
 /**
@@ -615,6 +624,10 @@ int ad74416h_set_info(struct ad74416h_desc *desc, uint16_t mode);
 /** Set the operation mode for a specific channel */
 int ad74416h_set_channel_function(struct ad74416h_desc *,
 				  uint32_t, enum ad74416h_op_mode);
+
+/** Set the voltage range for a specific channel */
+int ad74416h_set_channel_vout_range(struct ad74416h_desc *desc, uint32_t ch,
+				    enum ad74416h_vout_range vout_range);
 
 /** Read the raw ADC raw conversion value */
 int ad74416h_get_raw_adc_result(struct ad74416h_desc *, uint32_t,

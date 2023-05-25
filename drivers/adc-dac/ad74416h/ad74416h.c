@@ -457,6 +457,28 @@ int ad74416h_set_channel_function(struct ad74416h_desc *desc,
 }
 
 /**
+ * @brief Set the voltage range for a specific channel
+ * @param desc - The device structure.
+ * @param ch - The channel index.
+ * @param vout_range - The voltage range.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int ad74416h_set_channel_vout_range(struct ad74416h_desc *desc, uint32_t ch,
+				    enum ad74416h_vout_range vout_range)
+{
+	int ret;
+
+	ret = ad74416h_reg_update(desc, AD74416H_OUTPUT_CONFIG(ch),
+				  AD74416H_VOUT_RANGE_MSK, vout_range);
+	if (ret)
+		return ret;
+
+	desc->channel_configs[ch].vout_range = vout_range;
+
+	return 0;
+}
+
+/**
  * @brief Set and load a code for the DAC on a specific channel.
  * @param desc - The device structure.
  * @param ch - The channel index.
