@@ -486,6 +486,17 @@ enum ad74416h_adc_rate {
 };
 
 /**
+ * @brief ADC input configuration values.
+ */
+enum ad74416h_adc_conv_mux {
+	AD74416H_MUX_LF_TO_AGND,
+	AD74416H_MUX_HF_TO_LF,
+	AD74416H_MUX_VSENSEN_TO_AGND,
+	AD74416H_MUX_LF_TO_VSENSEN,
+	AD74416H_MUX_AGND_TO_AGND,
+};
+
+/**
  * @brief Debounce modes for the IOx inputs when using the digital input op mode.
  */
 enum ad74416h_debounce_mode {
@@ -669,6 +680,14 @@ int ad74416h_get_adc_rate(struct ad74416h_desc *, uint32_t,
 /** Set the ADC sample rate. */
 int ad74416h_set_adc_rate(struct ad74416h_desc *, uint32_t,
 			  enum ad74416h_adc_rate);
+
+/** Get the ADC input node */
+int ad74416h_get_adc_conv_mux(struct ad74416h_desc *, uint32_t,
+			      enum ad74416h_adc_conv_mux *);
+
+/** Set the ADC input node */
+int ad74416h_set_adc_conv_mux(struct ad74416h_desc *, uint32_t,
+			      enum ad74416h_adc_conv_mux);
 
 /** Start or stop ADC conversions */
 int ad74416h_set_adc_conv_seq(struct ad74416h_desc *, enum ad74416h_conv_seq);
