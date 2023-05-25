@@ -597,7 +597,8 @@ struct ad74416h_desc {
 /******************************************************************************/
 
 /** Converts a millivolt value in the corresponding DAC 13 bit code */
-int ad74416h_dac_voltage_to_code(uint32_t, uint32_t *);
+int ad74416h_dac_voltage_to_code(struct ad74416h_desc *, int32_t,
+				 uint32_t *, uint32_t);
 
 /** Write a register's value */
 int ad74416h_reg_write(struct ad74416h_desc *, uint32_t, uint16_t);
