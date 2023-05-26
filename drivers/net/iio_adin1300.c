@@ -55,10 +55,6 @@ static int adin1300_iio_read_attr(void *device, char *buf,
 		val = link;
 		break;
 	case ADIN1300_IIO_ATTR_SPEED:
-		link = adin1300_link_is_up(d);
-		if (!link)
-			return -EBUSY;
-
 		speed = adin1300_resolved_speed(d);
 		val = speed;
 		break;
