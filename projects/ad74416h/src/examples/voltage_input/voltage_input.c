@@ -119,6 +119,7 @@ int voltage_input_example_main()
 				pr_info("Error getting raw adc result in ADC A\r\n");
 				goto error_ad74416h;
 			}
+			pr_info("ADC Input value = %0x\r\n", adc_value);
 		}
 	}
 
