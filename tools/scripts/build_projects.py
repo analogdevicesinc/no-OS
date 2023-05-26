@@ -195,9 +195,12 @@ class BuildConfig:
 		self.hardware = hardware
 		short_build_dir = 'build_%s' % platform
 		self._binary = "%s_%s_%s.elf" % (self.project, platform, build_name)
+		self.boot_dir = "%s_%s_%s" % (self.project, platform, build_name)
 		if hardware != '':
 			short_build_dir = short_build_dir + '_' + hardware
 			self._binary = "%s_%s_%s_%s.elf" % (
+				self.project, platform, build_name, hardware)
+			self.boot_dir = "%s_%s_%s_%s" % (
 				self.project, platform, build_name, hardware)
 		self.build_dir = os.path.join(self.builds_dir, short_build_dir)
 		self.binary = os.path.join(self.build_dir, self._binary)
@@ -208,6 +211,9 @@ class BuildConfig:
 			self.export_file = self.export_file.replace('.elf', '.uf2')
 		if (platform == 'mbed'):
 			self.export_file = self.export_file.replace('.elf', '.bin')
+		if (platform == 'xilinx'):
+			self.export_boot_bin = os.path.join(self.build_dir, "output_boot_bin/BOOT.BIN")
+			self.export_archive = os.path.join(self.build_dir, "bootgen_sysfiles.zip")
 
 	def build(self):
 		global log_file
@@ -342,8 +348,16 @@ def main():
 								binary_created = False
 							else:
 								binary_created = True
-
-
+						elif platform == 'xilinx':
+							project_export_dir = os.path.join(project_export, new_build.boot_dir)
+							run_cmd(create_dir_cmd.format(project_export_dir))
+							run_cmd("cp %s %s" %
+								(new_build.export_archive, project_export_dir))
+							file = open(os.path.join(new_build.build_dir,"tmp/arch.txt"))
+							if 'sys_mb' not in file.read(): #for sys_mb no BOOT.BIN is created
+								run_cmd("cp %s %s" %
+									(new_build.export_boot_bin, project_export_dir))
+							binary_created = True
 						else:
 							run_cmd("cp %s %s" %
 								(new_build.export_file, project_export))
@@ -358,8 +372,11 @@ def main():
 		all_status = os.path.join(log_dir, 'all_builds.txt')
 		os.system('echo Project %20s -- %s >> %s' % (project, status, all_status))
 		if binary_created:
-			run_cmd("zip -jm %s.zip %s" % (project_export, os.path.join(project_export, "*")))
-
+			cwd = os.getcwd()
+			os.chdir(project_export)
+			os.system("zip -mr -FS %s.zip . >> %s 2>&1" % ("../"+project, "../../"+log_file))
+			os.chdir(cwd)
+			run_cmd("rm -r %s" % project_export)
 main()
 
 if ERR != 0:
