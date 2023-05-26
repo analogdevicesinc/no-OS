@@ -81,11 +81,14 @@ set_one_time_rule = echo Target file. Do not delete > $1
 # Append text to file
 APPEND_TEXT_TO_FILE = echo $1 >> $2
 
-# Add blank line to a file
 ifeq ($(OS), Windows_NT)
+# Add blank line to a file
 ADD_BLANK_LINE_TO_FILE = echo. > $1
+# Add extra backslashes to flags
+ADD_BACKSLASHES_TO_FLAG = $1
 else
 ADD_BLANK_LINE_TO_FILE = echo> $1
+ADD_BACKSLASHES_TO_FLAG = $(subst \",\\\",$1)
 endif
 
 # Transform full path to relative path to be used in build
@@ -365,13 +368,13 @@ PHONY += pre_build
 pre_build:
 	$(MUTE) $(call print, putting project build pre-requisite names to text files)
 	$(MUTE) $(call ADD_BLANK_LINE_TO_FILE, $(PROJECT_CFLAGS_NAMES_FILE)) $(cmd_separator)\
-		$(foreach c_flag_name,$(subst \",\\\",$(CFLAGS)),$(call APPEND_TEXT_TO_FILE,$(c_flag_name),$(PROJECT_CFLAGS_NAMES_FILE))\
+		$(foreach c_flag_name,$(call ADD_BACKSLASHES_TO_FLAG,$(CFLAGS)),$(call APPEND_TEXT_TO_FILE,$(c_flag_name),$(PROJECT_CFLAGS_NAMES_FILE))\
 		$(cmd_separator)) echo . $(HIDE)
 	$(MUTE) $(call ADD_BLANK_LINE_TO_FILE, $(PROJECT_CPPFLAGS_NAMES_FILE)) $(cmd_separator)\
-		$(foreach cpp_flag_name,$(subst \",\\\",$(CPPFLAGS)),$(call APPEND_TEXT_TO_FILE,$(cpp_flag_name),$(PROJECT_CPPFLAGS_NAMES_FILE))\
+		$(foreach cpp_flag_name,$(call ADD_BACKSLASHES_TO_FLAG,$(CPPFLAGS)),$(call APPEND_TEXT_TO_FILE,$(cpp_flag_name),$(PROJECT_CPPFLAGS_NAMES_FILE))\
 		$(cmd_separator)) echo . $(HIDE)
 	$(MUTE) $(call ADD_BLANK_LINE_TO_FILE, $(PROJECT_ASFLAGS_NAMES_FILE)) $(cmd_separator)\
-		$(foreach as_flag_name,$(subst \",\\\",$(ASFLAGS)),$(call APPEND_TEXT_TO_FILE,$(as_flag_name),$(PROJECT_ASFLAGS_NAMES_FILE))\
+		$(foreach as_flag_name,$(call ADD_BACKSLASHES_TO_FLAG,$(ASFLAGS)),$(call APPEND_TEXT_TO_FILE,$(as_flag_name),$(PROJECT_ASFLAGS_NAMES_FILE))\
 		$(cmd_separator)) echo . $(HIDE)
 	$(MUTE) $(call ADD_BLANK_LINE_TO_FILE, $(PROJECT_OBJECT_FILES_NAMES_FILE)) $(cmd_separator)\
 		$(foreach object_file_name,$(sort $(OBJS)),$(call APPEND_TEXT_TO_FILE,$(object_file_name),$(PROJECT_OBJECT_FILES_NAMES_FILE))\
