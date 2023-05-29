@@ -1,0 +1,337 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>no-OS drivers guide &#8212; no-OS  documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Contributing to no-OS" href="contributing.html" />
+    <link rel="prev" title="no-OS’s documentation" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="no-os-drivers-guide">
+<h1>no-OS drivers guide<a class="headerlink" href="#no-os-drivers-guide" title="Permalink to this headline">¶</a></h1>
+<p>This page represents a quick guide on how to create a no-OS driver and at the same time a generic documentation of the already available drivers.</p>
+<div class="section" id="c-code-c-compatible">
+<h2>C code C++ compatible<a class="headerlink" href="#c-code-c-compatible" title="Permalink to this headline">¶</a></h2>
+<p>The code must be written in C, but be compatible with C + + environments too since some platforms of this type (e.g., Mbed OS)  are already capable of using the no-OS drivers.</p>
+<div class="section" id="conversion-from-void">
+<h3>Conversion from void*<a class="headerlink" href="#conversion-from-void" title="Permalink to this headline">¶</a></h3>
+<p>Implicit conversion from void* is forbidden in C + +, so, explicit cast is required.</p>
+<div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span> <span class="nc">ad1234_dev</span> <span class="o">*</span><span class="n">dev</span><span class="p">;</span>
+
+<span class="n">dev</span> <span class="o">=</span> <span class="p">(</span><span class="k">struct</span> <span class="nc">ad1234_dev</span> <span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="o">*</span><span class="n">dev</span><span class="p">));</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="coding-style">
+<h2>Coding Style<a class="headerlink" href="#coding-style" title="Permalink to this headline">¶</a></h2>
+<p>While the preferred no-OS coding style is mainly the Linux kernel one (<a class="reference external" href="https://www.kernel.org/doc/html/latest/process/coding-style.html">https://www.kernel.org/doc/html/latest/process/coding-style.html</a>), we should still mention here some important rules.</p>
+<div class="section" id="license-header">
+<h3>License Header<a class="headerlink" href="#license-header" title="Permalink to this headline">¶</a></h3>
+<p>Each source or header file should include a license header - this will allow customers to quickly determine if the module can be used in their system.</p>
+<div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="cm">/***************************************************************************//**</span>
+<span class="cm">*   @file   ad1234.c</span>
+<span class="cm">*   @brief  Implementation of AD1234 Driver</span>
+<span class="cm">*   @author Your Name (your.name@analog.com)</span>
+<span class="cm">********************************************************************************</span>
+<span class="cm">* Copyright 2023(c) Analog Devices, Inc.</span>
+<span class="cm">*</span>
+<span class="cm">* All rights reserved.</span>
+<span class="cm">*</span>
+<span class="cm">* Redistribution and use in source and binary forms, with or without</span>
+<span class="cm">* modification, are permitted provided that the following conditions are met:</span>
+<span class="cm">*  - Redistributions of source code must retain the above copyright</span>
+<span class="cm">*    notice, this list of conditions and the following disclaimer.</span>
+<span class="cm">*  - Redistributions in binary form must reproduce the above copyright</span>
+<span class="cm">*    notice, this list of conditions and the following disclaimer in</span>
+<span class="cm">*    the documentation and/or other materials provided with the</span>
+<span class="cm">*    distribution.</span>
+<span class="cm">*  - Neither the name of Analog Devices, Inc. nor the names of its</span>
+<span class="cm">*    contributors may be used to endorse or promote products derived</span>
+<span class="cm">*    from this software without specific prior written permission.</span>
+<span class="cm">*  - The use of this software may or may not infringe the patent rights</span>
+<span class="cm">*    of one or more patent holders.  This license does not release you</span>
+<span class="cm">*    from the requirement that you obtain separate licenses from these</span>
+<span class="cm">*    patent holders to use this software.</span>
+<span class="cm">*  - Use of the software either in source or binary form, must be run</span>
+<span class="cm">*    on or directly connected to an Analog Devices Inc. component.</span>
+<span class="cm">*</span>
+<span class="cm">* THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES &quot;AS IS&quot; AND ANY EXPRESS OR</span>
+<span class="cm">* IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, NON-INFRINGEMENT,</span>
+<span class="cm">* MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.</span>
+<span class="cm">* IN NO EVENT SHALL ANALOG DEVICES BE LIABLE FOR ANY DIRECT, INDIRECT,</span>
+<span class="cm">* INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT</span>
+<span class="cm">* LIMITED TO, INTELLECTUAL PROPERTY RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR</span>
+<span class="cm">* SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER</span>
+<span class="cm">* CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,</span>
+<span class="cm">* OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE</span>
+<span class="cm">* OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</span>
+<span class="cm">*******************************************************************************/</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="include-guards">
+<h3>Include Guards<a class="headerlink" href="#include-guards" title="Permalink to this headline">¶</a></h3>
+<p>To prevent the inclusion of the header file content more than once, include guards must be used in all .h files.</p>
+<div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="cp">#ifndef __AD1234_H__</span>
+<span class="cp">#define __AD1234_H__</span>
+
+<span class="c1">// ...</span>
+
+<span class="cp">#endif </span><span class="c1">// __AD1234_H__</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="indentation">
+<h3>Indentation<a class="headerlink" href="#indentation" title="Permalink to this headline">¶</a></h3>
+<p>Tabs should have a size of 8 characters and should be used instead of spaces for indentation (don’t use 8 spaces instead of a tab).</p>
+</div>
+<div class="section" id="naming">
+<h3>Naming<a class="headerlink" href="#naming" title="Permalink to this headline">¶</a></h3>
+<p>The name of the functions should be prefixed with the part number the driver is created for. If the driver will support multiple parts, the prefix can be the name of one of the parts.</p>
+</div>
+<div class="section" id="variables">
+<h3>Variables<a class="headerlink" href="#variables" title="Permalink to this headline">¶</a></h3>
+<p>In order to make the drivers support multiple instances, don’t use global variables; use the device handler instead.</p>
+</div>
+<div class="section" id="structures">
+<h3>Structures<a class="headerlink" href="#structures" title="Permalink to this headline">¶</a></h3>
+<p>At least 2 structures need to be defined.</p>
+<div class="section" id="initialization-structure">
+<h4>1) Initialization structure<a class="headerlink" href="#initialization-structure" title="Permalink to this headline">¶</a></h4>
+<p>The initialization structure contains all the information required to initialize the device: the interface parameters (e.g., SPI, I2C, GPIOs) or device specific settings.</p>
+<div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span> <span class="nc">ad1234_init_param</span> <span class="p">{</span>
+        <span class="k">struct</span> <span class="nc">no_os_gpio_init_param</span> <span class="n">gpio_reset</span><span class="p">;</span>
+        <span class="k">struct</span> <span class="nc">no_os_spi_init_param</span>  <span class="n">spi_init</span><span class="p">;</span>
+        <span class="kt">int</span>                          <span class="n">some_settings</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="device-handler-structure">
+<h4>2) Device handler structure<a class="headerlink" href="#device-handler-structure" title="Permalink to this headline">¶</a></h4>
+<p>The device handler structure contains all the information that must be passed between the driver’s functions: the interface descriptors (e.g., SPI, I2C, GPIOs) or device specific settings.</p>
+<div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span> <span class="nc">ad1234_dev</span> <span class="p">{</span>
+        <span class="k">struct</span> <span class="nc">no_os_gpio_desc</span> <span class="o">*</span><span class="n">gpio_reset</span><span class="p">;</span>
+        <span class="k">struct</span> <span class="nc">no_os_spi_desc</span>  <span class="o">*</span><span class="n">spi</span><span class="p">;</span>
+        <span class="kt">int</span>                    <span class="n">some_settings</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h3>
+<p>Usually, all functions should return an integer error code (a negative number meaning an error).</p>
+<p>At least 2 functions need to be defined.</p>
+<div class="section" id="initialization-function">
+<h4>1) Initialization function<a class="headerlink" href="#initialization-function" title="Permalink to this headline">¶</a></h4>
+<p>It is mandatory to have this function; its name will be composed by a prefix (usually, the part number) and “_init” (e.g., ad1234_init()).</p>
+<p>It should take 2 arguments: a pointer to a pointer (it allocates memory for a structure that will be used outside) of a device handler structure and a pointer to an initialization structure.</p>
+<div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span> <span class="n">ad1234_init</span><span class="p">(</span><span class="k">struct</span> <span class="nc">ad1234_dev</span> <span class="o">**</span><span class="n">device</span><span class="p">,</span>
+                <span class="k">struct</span> <span class="nc">ad1234_init_param</span> <span class="o">*</span><span class="n">init_param</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>It creates the device handler, initializes the communication peripherals, requests the GPIOs and set up the device according to the parameters specified in the dedicated structure.</p>
+<div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+        <span class="k">struct</span> <span class="nc">ad1234_dev</span> <span class="o">*</span><span class="n">dev</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">ret</span><span class="p">;</span>
+
+        <span class="n">dev</span> <span class="o">=</span> <span class="p">(</span><span class="k">struct</span> <span class="nc">ad1234_dev</span> <span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="o">*</span><span class="n">dev</span><span class="p">));</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">dev</span><span class="p">)</span>
+                <span class="k">return</span> <span class="o">-</span><span class="n">ENOMEM</span><span class="p">;</span>
+
+        <span class="n">ret</span> <span class="o">=</span> <span class="n">no_os_gpio_get</span><span class="p">(</span><span class="o">&amp;</span><span class="n">dev</span><span class="o">-&gt;</span><span class="n">gpio_reset</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">init_param</span><span class="p">.</span><span class="n">gpio_reset</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">ret</span><span class="p">)</span>
+                <span class="k">goto</span> <span class="n">error_1</span><span class="p">;</span>
+
+        <span class="n">ret</span> <span class="o">=</span> <span class="n">no_os_spi_init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">dev</span><span class="o">-&gt;</span><span class="n">spi_desc</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">init_param</span><span class="p">.</span><span class="n">spi_init</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">ret</span><span class="p">)</span>
+                <span class="k">goto</span> <span class="n">error_2</span><span class="p">;</span>
+
+        <span class="n">dev</span><span class="o">-&gt;</span><span class="n">some_settings</span> <span class="o">=</span> <span class="n">init_param</span><span class="o">-&gt;</span><span class="n">some_settings</span><span class="p">;</span>
+        <span class="n">ret</span> <span class="o">=</span>  <span class="n">ad1234_setup</span><span class="p">(</span><span class="n">dev</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">ret</span><span class="p">)</span>
+                <span class="k">goto</span> <span class="n">error_3</span><span class="p">;</span>
+
+        <span class="o">*</span><span class="n">device</span> <span class="o">=</span> <span class="n">dev</span><span class="p">;</span>
+
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+
+        <span class="nl">error_3</span><span class="p">:</span>
+                <span class="n">spi_remove</span><span class="p">(</span><span class="n">dev</span><span class="o">-&gt;</span><span class="n">spi_desc</span><span class="p">);</span>
+        <span class="nl">error_2</span><span class="p">:</span>
+                <span class="n">gpio_remove</span><span class="p">(</span><span class="n">dev</span><span class="o">-&gt;</span><span class="n">gpio_reset</span><span class="p">);</span>
+        <span class="nl">error_1</span><span class="p">:</span>
+                <span class="n">free</span><span class="p">(</span><span class="n">dev</span><span class="p">);</span>
+
+                <span class="k">return</span> <span class="n">ret</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="remove-function">
+<h4>2) Remove function<a class="headerlink" href="#remove-function" title="Permalink to this headline">¶</a></h4>
+<p>It is mandatory to have this function; its name will be composed by a prefix (usually, the part number) and “_remove” (e.g., ad1234_remove()).</p>
+<div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span> <span class="n">ad1234_remove</span><span class="p">(</span><span class="k">struct</span> <span class="nc">adt1234_dev</span> <span class="o">*</span><span class="n">dev</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>It frees the resources allocated by the initialization function.</p>
+<div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+        <span class="kt">int</span> <span class="n">ret</span><span class="p">;</span>
+
+        <span class="n">ret</span> <span class="o">=</span> <span class="n">spi_remove</span><span class="p">(</span><span class="n">dev</span><span class="o">-&gt;</span><span class="n">spi_desc</span><span class="p">);</span>
+        <span class="n">ret</span> <span class="o">|=</span> <span class="n">gpio_remove</span><span class="p">(</span><span class="n">dev</span><span class="o">-&gt;</span><span class="n">gpio_reset</span><span class="p">);</span>
+
+        <span class="n">free</span><span class="p">(</span><span class="n">dev</span><span class="p">);</span>
+
+        <span class="k">return</span> <span class="n">ret</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="documenting-the-code">
+<h3>Documenting the Code<a class="headerlink" href="#documenting-the-code" title="Permalink to this headline">¶</a></h3>
+<p>Doxygen comments of the code are required.</p>
+</div>
+</div>
+<div class="section" id="important-considerations">
+<h2>Important Considerations<a class="headerlink" href="#important-considerations" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="avoiding-race-conditions">
+<h3>Avoiding Race Conditions<a class="headerlink" href="#avoiding-race-conditions" title="Permalink to this headline">¶</a></h3>
+<p>The no-OS software doesn’t offer yet full support for Locks, Mutexes or Semaphores. If in the final application there is a risk of having multiple threads accessing the same resource at the same time, the user must deal with this threat so race conditions are avoided.</p>
+</div>
+<div class="section" id="avoiding-heap-fragmentation">
+<h3>Avoiding Heap Fragmentation<a class="headerlink" href="#avoiding-heap-fragmentation" title="Permalink to this headline">¶</a></h3>
+<p>Since the driver’s _init() function is allocating memory on heap and the _remove() one is clearing it, the user must pay attention to how many times and when these two are called in his or her final application so the heap fragmentation won’t cause any harmful effect.</p>
+</div>
+</div>
+<div class="section" id="beautifying-code">
+<h2>Beautifying code<a class="headerlink" href="#beautifying-code" title="Permalink to this headline">¶</a></h2>
+<p>Once a new driver or an update is ready to be merged on the master branch, tools that check the coding style compliance can be used. Some examples are given below.</p>
+<div class="section" id="artistic-style">
+<h3>Artistic Style<a class="headerlink" href="#artistic-style" title="Permalink to this headline">¶</a></h3>
+<p>Artistic Style is a source code indenter, formatter, and beautifier for the C, C++, C++/CLI, Objective‑C, C# and Java programming languages.</p>
+<p>Example:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>analog@debian:~$ astyle --style<span class="o">=</span>linux --indent<span class="o">=</span>force-tab<span class="o">=</span><span class="m">8</span> --max-code-length<span class="o">=</span><span class="m">80</span> platform_drivers.c
+</pre></div>
+</div>
+</div>
+<div class="section" id="clangformat">
+<h3>ClangFormat<a class="headerlink" href="#clangformat" title="Permalink to this headline">¶</a></h3>
+<p>Clang-Format is a tool to format C/C++/Java/JavaScript/Objective-C/Objective-C++/Protobuf code. It can be configured with a config file within the working folder or a parent folder.</p>
+<p>Example:</p>
+<p>Dump default configuration options to .clang-format.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>analog@debian:~$ clang-format -dump-config &gt; .clang-format
+</pre></div>
+</div>
+<p>Modify .clang-format according to the project’s specifications. Use -style=file command line option to use the customized style (.clang-format file).</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>analog@debian:~$ clang-format -style<span class="o">=</span>file -i platform_drivers.c
+</pre></div>
+</div>
+</div>
+<div class="section" id="uncrustify">
+<h3>Uncrustify<a class="headerlink" href="#uncrustify" title="Permalink to this headline">¶</a></h3>
+<p>Source Code Beautifier for C, C++, C#, ObjectiveC, D, Java, Pawn and VALA.</p>
+<p>Example:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>analog@debian:~$ wget https:/raw.githubusercontent.com/uncrustify/uncrustify/master/documentation/htdocs/default.cfg
+analog@debian:~$ uncrustify -c default.cfg -f platform_drivers.c -o platform_drivers.c
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/adi_logo.png" alt="Logo"/>
+            </a></p>
+<h1 class="logo"><a href="index.html">no-OS</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">no-OS drivers guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#c-code-c-compatible">C code C++ compatible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#coding-style">Coding Style</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#important-considerations">Important Considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#beautifying-code">Beautifying code</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing to no-OS</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">no-OS’s documentation</a></li>
+      <li>Next: <a href="contributing.html" title="next chapter">Contributing to no-OS</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, Analog Devices, Inc..
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
+      
+      |
+      <a href="_sources/drivers_guide.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

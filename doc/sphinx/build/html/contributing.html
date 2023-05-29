@@ -1,0 +1,129 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contributing to no-OS &#8212; no-OS  documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="no-OS drivers guide" href="drivers_guide.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="contributing-to-no-os">
+<h1>Contributing to no-OS<a class="headerlink" href="#contributing-to-no-os" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="fork-and-pull-request-workflow">
+<h2>Fork and pull request workflow<a class="headerlink" href="#fork-and-pull-request-workflow" title="Permalink to this headline">¶</a></h2>
+<p>When you don’t have write permissions to the <strong>no-OS</strong> repository, the
+<strong>fork and pull request</strong> workflow can be used.</p>
+<p>More details: <a class="reference external" href="https://docs.github.com/en/get-started/quickstart/contributing-to-projects">GitHub Quickstart: Contributing to projects</a>.</p>
+<p>Once a pull request is opened, select the <strong>analogdevicesinc/noos</strong> team as a
+reviewer. The changes should be approved by at least one no-OS maintainer
+before they can be merged to the base brach.</p>
+</div>
+<div class="section" id="submission-checklist">
+<h2>Submission Checklist<a class="headerlink" href="#submission-checklist" title="Permalink to this headline">¶</a></h2>
+<p>Before being reviewed by the no-OS maintainers and then accepted to the GitHub
+repository, each commit should respect a few rules:</p>
+<ul class="simple">
+<li><p>The commit contains a <strong>Signed-off-by</strong> trailer by the committer at the end
+of the commit log message - it certifies that the committer has the rights to
+submit the work under the project’s license.</p></li>
+<li><p>If built using <strong>gcc</strong>, options such as <strong>-Wall</strong> and <strong>-Wextra</strong> don’t
+detect any issues with the commit. When the pull request is created, drivers
+and project build are automatically triggered.</p></li>
+<li><p><strong>astyle –style=linux –indent=force-tab=8 –max-code-length=80</strong> doesn’t
+detect any issue with the commit.</p></li>
+<li><p>A detailed description of how the new changes were tested is provided. This
+information can be written in the pull request description. If the driver
+was tested on one of the supported no-OS platforms, it is recommended to also
+add a project example which uses the newly added driver.</p></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/adi_logo.png" alt="Logo"/>
+            </a></p>
+<h1 class="logo"><a href="index.html">no-OS</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="drivers_guide.html">no-OS drivers guide</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Contributing to no-OS</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#fork-and-pull-request-workflow">Fork and pull request workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#submission-checklist">Submission Checklist</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="drivers_guide.html" title="previous chapter">no-OS drivers guide</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, Analog Devices, Inc..
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
+      
+      |
+      <a href="_sources/contributing.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
