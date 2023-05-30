@@ -1,0 +1,5 @@
+<map id="ltm4686_read_byte" name="ltm4686_read_byte">
+<area shape="rect" id="node1" title="Perform a raw PMBus read byte operation." alt="" coords="212,31,360,57"/>
+<area shape="rect" id="node2" href="$ltm4686_8h.html#a306c50c5863288699cc4ee356b4245ae" title="Sets the PWM mode for a specific channel of the LTM4686 device." alt="" coords="5,5,164,32"/>
+<area shape="rect" id="node3" href="$ltm4686_8h.html#a66a76854d4d41f63bf79db51df919d78" title="Read statuses." alt="" coords="5,56,164,83"/>
+</map>

@@ -1,0 +1,4 @@
+<map id="process_and_prepare_output" name="process_and_prepare_output">
+<area shape="rect" id="node1" title="The function gets AFE input and calls main processing APIs of the library. This also gets the measure..." alt="" coords="176,5,336,47"/>
+<area shape="rect" id="node2" href="$pqlib__example_8h.html#adc8d2b871a496114eee015af96680bae" title="One complete cycle for IIO callback function." alt="" coords="5,13,128,39"/>
+</map>

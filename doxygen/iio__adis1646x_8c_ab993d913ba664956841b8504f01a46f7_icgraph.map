@@ -1,0 +1,5 @@
+<map id="adis1646x_iio_remove" name="adis1646x_iio_remove">
+<area shape="rect" id="node1" title="Remove adis1646x iio device." alt="" coords="348,5,517,32"/>
+<area shape="rect" id="node2" href="$eval-adis1657x_2src_2examples_2iio__trigger__example_2iio__trigger__example_8h.html#aa6785eab0c37adc61db331ebebdc40ee" title="IIO trigger example main execution." alt="" coords="108,5,300,32"/>
+<area shape="rect" id="node3" href="$eval-adis1646x_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="5,5,60,32"/>
+</map>

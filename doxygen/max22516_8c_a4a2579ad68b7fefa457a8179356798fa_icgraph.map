@@ -1,0 +1,7 @@
+<map id="max22516_update" name="max22516_update">
+<area shape="rect" id="node1" title="Update MAX22516 register." alt="" coords="395,56,537,83"/>
+<area shape="rect" id="node2" href="$max22516_8h.html#a6f8764f664b871d843917d904fa86fc1" title="MAX22516 do set." alt="" coords="199,5,341,32"/>
+<area shape="rect" id="node3" href="$max22516_8h.html#a6adc1e843f960601d831b5abfba8b792" title="MAX22516 tx set." alt="" coords="201,56,339,83"/>
+<area shape="rect" id="node5" href="$max22516_8h.html#a53bf50b71fcc5c956338c7f87f5820ef" title="MAX22516 txen set." alt="" coords="193,107,347,133"/>
+<area shape="rect" id="node4" href="$max22516_8h.html#a6b7ec792151ee38bd99fdf22b4cc0420" title="MAX22516 set cq." alt="" coords="5,81,145,108"/>
+</map>

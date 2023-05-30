@@ -1,0 +1,30 @@
+<map id="ade9153a_get_int_status" name="ade9153a_get_int_status">
+<area shape="rect" id="node1" title="Get interrupt indicator from STATUS register." alt="" coords="665,613,851,640"/>
+<area shape="rect" id="node2" href="$ade9153a_8h.html#a5900330af664e03211d461792fe33c76" title="Get APA (active power) sign change indicator." alt="" coords="412,5,617,32"/>
+<area shape="rect" id="node3" href="$ade9153a_8h.html#a99dd155f9f68f5a37b609c74e0b8757c" title="Get CF1 pulse issued indicator." alt="" coords="444,56,585,83"/>
+<area shape="rect" id="node4" href="$ade9153a_8h.html#ad6156a7b1a5ee7b47df9cac991b41db4" title="Get CF1 polarity change indicator." alt="" coords="429,107,600,133"/>
+<area shape="rect" id="node5" href="$ade9153a_8h.html#a50a790b901c1c0c252ce35ace4754f19" title="Get CF2 pulse issued indicator." alt="" coords="444,157,585,184"/>
+<area shape="rect" id="node6" href="$ade9153a_8h.html#af858607d8c42cebc209676bf73d8f8fe" title="Get CF2 polarity change indicator." alt="" coords="429,208,600,235"/>
+<area shape="rect" id="node7" href="$ade9153a_8h.html#ab102603c73021574525977582ee5811e" title="Get chip status indicator." alt="" coords="425,259,605,285"/>
+<area shape="rect" id="node8" href="$ade9153a_8h.html#a795feb91e1df87a4c8aca6d905368b3c" title="Get CRC change indicator." alt="" coords="429,309,600,336"/>
+<area shape="rect" id="node9" href="$ade9153a_8h.html#a1ef0cd963c4dd874405bb11fe6444df4" title="Get CRC done indicator." alt="" coords="425,360,604,387"/>
+<area shape="rect" id="node10" href="$ade9153a_8h.html#a998c503c9f3ef4934fb1ca0544389474" title="Get new waveform samples ready indicator." alt="" coords="431,411,598,437"/>
+<area shape="rect" id="node11" href="$ade9153a_8h.html#ab7a23853e43f3ce42572465bb453871c" title="Get power values egy ready indicator." alt="" coords="431,461,598,488"/>
+<area shape="rect" id="node12" href="$ade9153a_8h.html#a12627d10ca88b7e277ef6a7592c2304b" title="Get event status indicator." alt="" coords="419,512,610,539"/>
+<area shape="rect" id="node13" href="$ade9153a_8h.html#a0237039b90c920fcfb327a3c83af93aa" title="Get fundamental reactive energy no load condition indicator." alt="" coords="435,563,594,589"/>
+<area shape="rect" id="node14" href="$ade9153a_8h.html#a40f308df3428fc7f907d7e4da34200a4" title="Get MS status indicator." alt="" coords="428,613,601,640"/>
+<area shape="rect" id="node15" href="$ade9153a_8h.html#a532aa0769531b09bf2629657d65086a6" title="Get PF ready indicator." alt="" coords="433,664,596,691"/>
+<area shape="rect" id="node16" href="$ade9153a_8h.html#ade9d493a4c4ffd0703505d4dae920e3e" title="Get power values registers update indicator." alt="" coords="431,715,598,741"/>
+<area shape="rect" id="node17" href="$ade9153a_8h.html#a9cb3bf7b1c0609065ae3abe541f6ef0d" title="Get RMS_OC values update indicator." alt="" coords="417,765,613,792"/>
+<area shape="rect" id="node18" href="$ade9153a_8h.html#a495403440bbb7f7dcf66d4ff808c4d4c" title="Get RPA (reactive power) sign change indicator." alt="" coords="413,816,616,843"/>
+<area shape="rect" id="node19" href="$ade9153a_8h.html#aaae8ca3efebb8f84d21d72ce3c55f94b" title="Get reset done indicator." alt="" coords="429,867,600,893"/>
+<area shape="rect" id="node20" href="$ade9153a_8h.html#afbafce13b8a8beac8d506ea37286f826" title="Get new temperature reading ready indicator." alt="" coords="423,917,606,944"/>
+<area shape="rect" id="node23" href="$ade9153a_8h.html#a2d47824fc9cbf1bb93d61738606a24c6" title="Get total apparent energy no load condition indicator." alt="" coords="440,968,589,995"/>
+<area shape="rect" id="node24" href="$ade9153a_8h.html#ae057c4e4c170d5ba1f1519a7aad1b36d" title="Get total active energy no load condition indicator." alt="" coords="433,1019,596,1045"/>
+<area shape="rect" id="node25" href="$ade9153a_8h.html#ad68e3c2fd6a64ce58af4b468be0b6efb" title="Get zero crossing detect on I ch A indicator." alt="" coords="441,1069,589,1096"/>
+<area shape="rect" id="node26" href="$ade9153a_8h.html#a4f1c56c99522dfa35f05581bd85f984f" title="Get zero crossing detect on V ch indicator." alt="" coords="439,1120,591,1147"/>
+<area shape="rect" id="node27" href="$ade9153a_8h.html#a0cdbfa2f7008aeec74b68aaeba2186f7" title="Get zero crossing detect on I ch B indicator." alt="" coords="441,1171,589,1197"/>
+<area shape="rect" id="node28" href="$ade9153a_8h.html#afdeb67169c05afa9f7b4a8725ffbf4b0" title="Get zero crossing timout on V ch indicator." alt="" coords="432,1221,597,1248"/>
+<area shape="rect" id="node21" href="$ade9153a_8h.html#a97870faa000dbef25c9705e5aefdc356" title="Temperature value in deg C." alt="" coords="209,917,364,944"/>
+<area shape="rect" id="node22" href="$eval-ade9153a_2src_2common_2common__data_8h.html#a9b065d0400a39009e3266707f94e0439" title="Read measurements." alt="" coords="5,917,161,944"/>
+</map>

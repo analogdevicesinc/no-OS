@@ -1,0 +1,9 @@
+<map id="lt8491_reg_read" name="lt8491_reg_read">
+<area shape="rect" id="node1" title="Read a register value." alt="" coords="424,137,551,163"/>
+<area shape="rect" id="node2" href="$lt8491_8h.html#a2455e3be05ae4bdce060b0068084d3c0" title="Read the telemetry battery charging stage." alt="" coords="213,5,376,47"/>
+<area shape="rect" id="node4" href="$lt8491_8h.html#a41839457101d482143d6d0b4731cda17" title="Read the telemetry battery charging status." alt="" coords="213,71,376,112"/>
+<area shape="rect" id="node5" href="$lt8491_8h.html#ab0fe4584eb75af25b6fc3c451bdbb324" title="Read the telemetry battery charging enable." alt="" coords="219,137,370,163"/>
+<area shape="rect" id="node6" href="$lt8491_8h.html#adb32f41dc200268123047f1fc84e904c" title="Read the scratch register." alt="" coords="218,187,371,214"/>
+<area shape="rect" id="node7" href="$lt8491_8h.html#a169de5932319a2a6b567bd19e1ea37ab" title="Read the serial ID." alt="" coords="214,238,375,265"/>
+<area shape="rect" id="node3" href="$dc2703a_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="5,137,165,163"/>
+</map>

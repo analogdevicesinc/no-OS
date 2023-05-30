@@ -1,0 +1,8 @@
+<map id="no_os_cb_write" name="no_os_cb_write">
+<area shape="rect" id="node1" title=" " alt="" coords="591,42,713,69"/>
+<area shape="rect" id="node2" href="$pqlib__afe_8h.html#a725294779cec6b09e4dea980195bc590" title=" " alt="" coords="408,15,519,42"/>
+<area shape="rect" id="node5" href="$iio_8h.html#ad21a979de252c355ad7396776d43422a" title=" " alt="" coords="384,67,543,94"/>
+<area shape="rect" id="node3" href="$pqlib__example_8h.html#a29612a8fa6ea890a303a57ce75abd9d8" title="The function gets AFE input and calls main processing APIs of the library. This also gets the measure..." alt="" coords="176,5,336,47"/>
+<area shape="rect" id="node4" href="$pqlib__example_8h.html#adc8d2b871a496114eee015af96680bae" title="One complete cycle for IIO callback function." alt="" coords="5,13,128,39"/>
+<area shape="rect" id="node6" href="$iio__pqm_8c.html#aae401df2dfda8e88f46d8020d78a4309" title="Handles trigger: reads one data&#45;set and writes it to the buffer." alt="" coords="177,71,335,98"/>
+</map>

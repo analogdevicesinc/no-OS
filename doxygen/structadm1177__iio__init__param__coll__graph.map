@@ -1,0 +1,6 @@
+<map id="adm1177_iio_init_param" name="adm1177_iio_init_param">
+<area shape="rect" id="node1" title=" " alt="" coords="5,273,188,300"/>
+<area shape="rect" id="node2" href="$structadm1177__init__param.html" title=" " alt="" coords="17,184,177,211"/>
+<area shape="rect" id="node3" href="$structno__os__i2c__init__param.html" title="Structure holding the parameters for I2C initialization." alt="" coords="15,95,178,121"/>
+<area shape="rect" id="node4" href="$structno__os__i2c__platform__ops.html" title="Structure holding I2C function pointers that point to the platform specific function." alt="" coords="7,5,186,32"/>
+</map>

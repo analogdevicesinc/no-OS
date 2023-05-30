@@ -1,0 +1,8 @@
+<map id="projects/ades1754/src/platform/maxim/main.c" name="projects/ades1754/src/platform/maxim/main.c">
+<area shape="rect" id="node1" title="Main file for Maxim platform of ades1754 project." alt="" coords="121,5,301,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,95,132,121"/>
+<area shape="rect" id="node3" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="157,95,266,121"/>
+<area shape="rect" id="node5" href="$no__os__print__log_8h.html" title="Print messages helpers." alt="" coords="290,95,426,121"/>
+<area shape="rect" id="node4" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="177,169,245,196"/>
+<area shape="rect" id="node6" title=" " alt="" coords="325,169,391,196"/>
+</map>

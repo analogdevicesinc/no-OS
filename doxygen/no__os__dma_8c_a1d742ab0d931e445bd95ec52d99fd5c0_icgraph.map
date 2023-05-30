@@ -1,0 +1,6 @@
+<map id="no_os_dma_xfer_start" name="no_os_dma_xfer_start">
+<area shape="rect" id="node1" title="Acquire a channel and configure the list of transfers." alt="" coords="460,35,627,61"/>
+<area shape="rect" id="node2" href="$stm32__spi_8c.html#ab6cca445715be6bcb7bf563bf8388829" title="Configure and start a series of transfers using DMA." alt="" coords="236,27,412,69"/>
+<area shape="rect" id="node3" href="$stm32__spi_8c.html#a523da63f0a8b55feff12987dd565df18" title="Configure and start a series of transfers using DMA. Wait for the completion before returning." alt="" coords="5,5,188,32"/>
+<area shape="rect" id="node4" href="$stm32__spi_8c.html#ac1bb3dc339d72e8eeb06ff5cdba6ce5a" title="Configure and start a series of transfers using DMA. Don&#39;t Wait for the completion before returning." alt="" coords="23,57,170,98"/>
+</map>

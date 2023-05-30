@@ -1,0 +1,15 @@
+<map id="drivers/platform/maxim/max32670/maxim_spi.c" name="drivers/platform/maxim/max32670/maxim_spi.c">
+<area shape="rect" id="node1" title="Implementation of SPI driver." alt="" coords="331,5,514,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="661,169,731,196"/>
+<area shape="rect" id="node3" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="137,95,205,121"/>
+<area shape="rect" id="node4" title=" " alt="" coords="229,95,283,121"/>
+<area shape="rect" id="node5" title=" " alt="" coords="307,95,413,121"/>
+<area shape="rect" id="node6" title=" " alt="" coords="437,95,533,121"/>
+<area shape="rect" id="node7" href="$max32670_2maxim__spi_8h.html" title="maxim specific header for SPI driver" alt="" coords="5,95,112,121"/>
+<area shape="rect" id="node10" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="558,95,658,121"/>
+<area shape="rect" id="node12" href="$no__os__alloc_8h.html" title=" " alt="" coords="734,95,845,121"/>
+<area shape="rect" id="node8" title=" " alt="" coords="110,244,181,271"/>
+<area shape="rect" id="node9" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="96,169,195,196"/>
+<area shape="rect" id="node11" title=" " alt="" coords="553,169,636,196"/>
+<area shape="rect" id="node13" title=" " alt="" coords="756,169,823,196"/>
+</map>

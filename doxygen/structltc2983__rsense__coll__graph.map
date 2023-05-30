@@ -1,0 +1,5 @@
+<map id="ltc2983_rsense" name="ltc2983_rsense">
+<area shape="rect" id="node1" title="sense resistor descriptor for LTC2983" alt="" coords="76,95,196,121"/>
+<area shape="rect" id="node2" href="$structltc2983__sensor.html" title="common LTC2983 sensor struct" alt="" coords="5,5,125,32"/>
+<area shape="rect" id="node3" href="$structr__sense__value.html" title="LTC2983 sense resistance value." alt="" coords="149,5,264,32"/>
+</map>

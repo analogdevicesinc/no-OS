@@ -1,0 +1,10 @@
+<map id="adp5589_set_register_value" name="adp5589_set_register_value">
+<area shape="rect" id="node1" title="Writes data into a register." alt="" coords="231,150,393,191"/>
+<area shape="rect" id="node2" href="$adp5589_8h.html#a8f72cb7501f903550bf857f9948a7173" title="Sets the direction of the pins." alt="" coords="5,5,183,32"/>
+<area shape="rect" id="node3" href="$adp5589_8h.html#a0be6cd6c51c1a7e61eeb3e845a4ff211" title="Initializes the communication peripheral and checks if the ADP5589 part is present." alt="" coords="41,56,147,83"/>
+<area shape="rect" id="node4" href="$adp5589_8h.html#ad27d45de6044faf886de84348f76f71d" title="Initializes keyboard decoder." alt="" coords="26,107,162,133"/>
+<area shape="rect" id="node5" href="$adp5589_8h.html#aca12875a042564b8477e564c7d567eee" title="Initializes the PWM generator in continuous mode." alt="" coords="21,157,167,184"/>
+<area shape="rect" id="node6" href="$adp5589_8h.html#a00c689e4357243d8a5242456a0547006" title="Locks the ADP5589 and requests Password for unlock." alt="" coords="23,208,165,235"/>
+<area shape="rect" id="node7" href="$adp5589_8h.html#a1be7b79145ba9807fe9d046c6c5e63a8" title="Sets the state of the pins." alt="" coords="8,259,180,285"/>
+<area shape="rect" id="node8" href="$adp5589_8h.html#a9801c2a8869b67d3d192541021b21c05" title="Sets the PWM On and Off times." alt="" coords="22,309,166,336"/>
+</map>

@@ -1,0 +1,15 @@
+<map id="ltc4162l_iio_device" name="ltc4162l_iio_device">
+<area shape="rect" id="node1" title="Structure holding the LTC4162L IIO device descriptor." alt="" coords="1109,167,1256,193"/>
+<area shape="rect" id="node2" href="$structiio__device.html" title="Structure holding channels and attributes of a device." alt="" coords="910,119,998,145"/>
+<area shape="rect" id="node3" href="$structiio__channel.html" title="Struct describing the scan type." alt="" coords="665,93,761,120"/>
+<area shape="rect" id="node4" href="$structiio__attribute.html" title="Structure holding pointers to show and store functions." alt="" coords="361,25,462,52"/>
+<area shape="rect" id="node5" href="$structiio__chan__type.html" title="IIO channel types." alt="" coords="355,89,467,116"/>
+<area shape="rect" id="node6" href="$structscan__type.html" title=" " alt="" coords="367,140,455,167"/>
+<area shape="rect" id="node7" href="$structno__os__irq__ctrl__desc.html" title=" " alt="" coords="639,144,788,171"/>
+<area shape="rect" id="node8" href="$structno__os__irq__platform__ops.html" title="Structure holding IRQ function pointers that point to the platform specific function." alt="" coords="323,191,500,217"/>
+<area shape="rect" id="node9" href="$structltc4162l__desc.html" title="LTC4162L descriptor." alt="" coords="899,195,1009,221"/>
+<area shape="rect" id="node10" href="$structltc4162l__chip__info.html" title="LTC4162L chip info." alt="" coords="643,195,783,221"/>
+<area shape="rect" id="node11" href="$structno__os__i2c__desc.html" title="Structure holding I2C address descriptor." alt="" coords="652,245,775,272"/>
+<area shape="rect" id="node12" href="$structno__os__i2c__platform__ops.html" title="Structure holding I2C function pointers that point to the platform specific function." alt="" coords="5,275,184,301"/>
+<area shape="rect" id="node13" href="$structno__os__i2cbus__desc.html" title="Structure holding I2C bus descriptor." alt="" coords="338,305,485,332"/>
+</map>

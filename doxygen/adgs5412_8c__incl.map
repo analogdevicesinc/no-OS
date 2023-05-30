@@ -1,0 +1,11 @@
+<map id="drivers/mux/adgs5412/adgs5412.c" name="drivers/mux/adgs5412/adgs5412.c">
+<area shape="rect" id="node1" title="Implementation of ADGS5412 Driver." alt="" coords="127,5,294,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,169,72,196"/>
+<area shape="rect" id="node3" title=" " alt="" coords="106,169,177,196"/>
+<area shape="rect" id="node4" href="$adgs5412_8h.html" title="Header file of ADGS5412 Driver." alt="" coords="249,95,346,121"/>
+<area shape="rect" id="node7" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="371,95,480,121"/>
+<area shape="rect" id="node9" href="$no__os__alloc_8h.html" title=" " alt="" coords="62,95,173,121"/>
+<area shape="rect" id="node5" title=" " alt="" coords="227,244,298,271"/>
+<area shape="rect" id="node6" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="257,169,356,196"/>
+<area shape="rect" id="node8" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="391,169,459,196"/>
+</map>

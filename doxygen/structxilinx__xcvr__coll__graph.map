@@ -1,0 +1,6 @@
+<map id="xilinx_xcvr" name="xilinx_xcvr">
+<area shape="rect" id="node1" title="xilinx_xcvr parameters structure." alt="" coords="5,95,99,121"/>
+<area shape="rect" id="node2" href="$structadxcvr.html" title="ADI JESD204B/C AXI_ADXCVR Highspeed Transceiver Device structure." alt="" coords="87,184,153,211"/>
+<area shape="rect" id="node3" href="$structno__os__clk__desc.html" title="Structure holding CLK descriptor." alt="" coords="145,95,268,121"/>
+<area shape="rect" id="node4" href="$structno__os__clk__platform__ops.html" title="Structure holding CLK function pointers that point to the platform specific function." alt="" coords="117,5,296,32"/>
+</map>

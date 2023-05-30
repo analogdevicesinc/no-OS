@@ -1,0 +1,9 @@
+<map id="no_os_uart_remove" name="no_os_uart_remove">
+<area shape="rect" id="node1" title="Free the resources allocated by no_os_uart_init()." alt="" coords="424,81,575,108"/>
+<area shape="rect" id="node2" href="$ades1754_8h.html#a8d3cb097da679fab95e936f8b2cb626f" title="ADES1754 device intialization function." alt="" coords="238,5,351,32"/>
+<area shape="rect" id="node4" href="$ades1754_8h.html#ab4de2134ccbc42d937ad7d2d0873a681" title="Deallocate any resources used by the initialization function.." alt="" coords="223,56,366,83"/>
+<area shape="rect" id="node5" href="$demo__esp_2src_2examples_2basic_2basic__example_8c.html#adf61ab6fc732b20dc9f8a4be75985c1a" title=" " alt="" coords="213,107,376,133"/>
+<area shape="rect" id="node7" href="$ad-acevsecrdset-sl_2src_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="267,157,322,184"/>
+<area shape="rect" id="node3" href="$ades1754_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="26,5,145,32"/>
+<area shape="rect" id="node6" href="$demo__esp_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="5,107,165,133"/>
+</map>

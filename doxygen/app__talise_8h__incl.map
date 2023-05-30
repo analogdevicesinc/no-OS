@@ -1,0 +1,10 @@
+<map id="projects/adrv9009/src/app/app_talise.h" name="projects/adrv9009/src/app/app_talise.h">
+<area shape="rect" id="node1" title="Talise initialization and control routines." alt="" coords="5,5,168,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="53,244,123,271"/>
+<area shape="rect" id="node3" title=" " alt="" coords="30,95,143,121"/>
+<area shape="rect" id="node4" href="$adi__hal_8h.html" title="Contains Talise ADI HAL function prototypes type definitions for adi_hal.c." alt="" coords="167,95,249,121"/>
+<area shape="rect" id="node5" title=" " alt="" coords="125,169,200,196"/>
+<area shape="rect" id="node6" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="225,169,325,196"/>
+<area shape="rect" id="node7" title=" " alt="" coords="193,244,263,271"/>
+<area shape="rect" id="node8" title=" " alt="" coords="288,244,371,271"/>
+</map>

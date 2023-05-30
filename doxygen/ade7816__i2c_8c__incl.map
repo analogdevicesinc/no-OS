@@ -1,0 +1,16 @@
+<map id="drivers/meter/ade7816/ade7816_i2c.c" name="drivers/meter/ade7816/ade7816_i2c.c">
+<area shape="rect" id="node1" title="Source file of ADE7816 I2C Driver." alt="" coords="153,5,324,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="183,244,254,271"/>
+<area shape="rect" id="node3" title=" " alt="" coords="344,244,427,271"/>
+<area shape="rect" id="node4" title=" " alt="" coords="241,169,311,196"/>
+<area shape="rect" id="node5" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="5,169,115,196"/>
+<area shape="rect" id="node7" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="1025,169,1124,196"/>
+<area shape="rect" id="node9" href="$ade7816_8h.html" title="Header file of ADE7816 Driver." alt="" coords="479,95,569,121"/>
+<area shape="rect" id="node6" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="26,244,94,271"/>
+<area shape="rect" id="node8" title=" " alt="" coords="638,244,709,271"/>
+<area shape="rect" id="node10" title=" " alt="" coords="815,169,881,196"/>
+<area shape="rect" id="node11" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="335,169,435,196"/>
+<area shape="rect" id="node12" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="561,169,660,196"/>
+<area shape="rect" id="node13" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="684,169,791,196"/>
+<area shape="rect" id="node14" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="905,169,1001,196"/>
+</map>

@@ -1,0 +1,20 @@
+<map id="projects/eval&#45;adxl355&#45;pmdz/src/examples/iio_trigger_example/iio_trigger_example.c" name="projects/eval&#45;adxl355&#45;pmdz/src/examples/iio_trigger_example/iio_trigger_example.c">
+<area shape="rect" id="node1" title="Implementation of IIO trigger example for eval&#45;adxl355&#45;pmdz project." alt="" coords="362,5,569,76"/>
+<area shape="rect" id="node2" title=" " alt="" coords="137,124,263,151"/>
+<area shape="rect" id="node3" href="$iio__app_8h.html" title="Header file of iio_app." alt="" coords="545,124,626,151"/>
+<area shape="rect" id="node16" title=" " alt="" coords="651,124,760,151"/>
+<area shape="rect" id="node17" href="$iio__trigger_8h.html" title="Header file for iio_trigger." alt="" coords="288,124,387,151"/>
+<area shape="rect" id="node18" href="$iio__adxl355_8h.html" title="Header file of IIO ADXL355 Driver." alt="" coords="411,124,520,151"/>
+<area shape="rect" id="node4" href="$iio_8h.html" title="Header file of iio." alt="" coords="360,199,411,225"/>
+<area shape="rect" id="node9" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="350,273,455,300"/>
+<area shape="rect" id="node12" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="435,199,531,225"/>
+<area shape="rect" id="node13" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="656,199,765,225"/>
+<area shape="rect" id="node15" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="589,348,702,375"/>
+<area shape="rect" id="node5" href="$iio__types_8h.html" title="Header file for iio_types." alt="" coords="232,273,325,300"/>
+<area shape="rect" id="node6" title=" " alt="" coords="5,423,88,449"/>
+<area shape="rect" id="node7" title=" " alt="" coords="403,423,474,449"/>
+<area shape="rect" id="node8" href="$no__os__circular__buffer_8h.html" title="Circular buffer library header." alt="" coords="292,348,463,375"/>
+<area shape="rect" id="node10" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="84,348,217,375"/>
+<area shape="rect" id="node11" title=" " alt="" coords="115,423,186,449"/>
+<area shape="rect" id="node14" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="677,273,745,300"/>
+</map>

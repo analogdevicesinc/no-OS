@@ -1,0 +1,23 @@
+<map id="max22017_reg_write" name="max22017_reg_write">
+<area shape="rect" id="node1" title="Write the value of a device register." alt="" coords="1275,107,1433,133"/>
+<area shape="rect" id="node2" href="$max22017_8h.html#a795c1f9508914c346c43ae1de826905f" title="Set gain value for calibration of requested channel." alt="" coords="1058,5,1222,32"/>
+<area shape="rect" id="node3" href="$max22017_8h.html#aaa47e2010337d77ec3a1e4d1e49b59d4" title="Set offset value for output calibration." alt="" coords="1053,56,1227,83"/>
+<area shape="rect" id="node4" href="$max22017_8h.html#ab50b754b7677fd75b3f7fa8249becb90" title="Update the value of a device register (read/write sequence)." alt="" coords="1055,427,1225,453"/>
+<area shape="rect" id="node20" href="$max22017_8h.html#ad308647e3e628b640e5cd2600036e0db" title="Set data of the selected channel." alt="" coords="603,107,758,133"/>
+<area shape="rect" id="node21" href="$max22017_8h.html#ab8497e3c081a6dad7ea05ec53fad6348" title="Set slew rate settings for requested channels." alt="" coords="600,157,761,184"/>
+<area shape="rect" id="node5" href="$max22017_8h.html#ad0427b662a5c79e85c5a7d20f009afc1" title="Set AO configuration." alt="" coords="415,208,552,235"/>
+<area shape="rect" id="node7" href="$max22017_8h.html#aa52c4fb809e8e6852330419338210ba2" title="Enable the input direction of the specified GPIO." alt="" coords="812,681,1003,722"/>
+<area shape="rect" id="node8" href="$max22017_8h.html#a7d0d27c1524efe271ddc1a784a04fd2f" title="Enable the output direction of the specified GPIO." alt="" coords="812,259,1003,301"/>
+<area shape="rect" id="node9" href="$max22017_8h.html#a7cd7aa80843d5901f80b11e6cacf5259" title="Obtain the GPIO decriptor." alt="" coords="830,325,985,352"/>
+<area shape="rect" id="node10" href="$max22017_8h.html#a0efa58262e3ac34b714430d934699421" title="Free the resources allocated by no_os_gpio_get()." alt="" coords="816,376,999,403"/>
+<area shape="rect" id="node11" href="$max22017_8h.html#aba79f3cf0041f7bf716c46ef066cc9ed" title="Set the value of the specified GPIO." alt="" coords="809,427,1005,453"/>
+<area shape="rect" id="node12" href="$max22017_8h.html#a5c1135bc9151f597a2da1c4548ca036c" title="Initialize and configure the MAX22017 device." alt="" coords="424,448,543,475"/>
+<area shape="rect" id="node15" href="$max22017_8h.html#a427e0b80cf89c417f4f002a206878587" title="Set operation mode for requested channel." alt="" coords="828,579,987,605"/>
+<area shape="rect" id="node16" href="$max22017_8h.html#a2302b2a056b480f7353c6e2a65b96c54" title="Set timeout settings for MAX22017 device." alt="" coords="819,629,995,656"/>
+<area shape="rect" id="node17" href="$max22017_8h.html#af24d265545711c48f0bc1265f62dc6ca" title="Soft reset requested channel." alt="" coords="826,477,989,504"/>
+<area shape="rect" id="node6" href="$max22017_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="201,208,361,235"/>
+<area shape="rect" id="node13" href="$iio__max22017_8h.html#add7c20215b1dc69f86967c7ccbbcefe3" title=" " alt="" coords="210,448,353,475"/>
+<area shape="rect" id="node14" href="$max22017_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="5,423,148,449"/>
+<area shape="rect" id="node18" href="$max22017_8h.html#ab7a736f1079e13511c590e57ddab83d5" title="Free the resources allocated during init and perform a soft reset." alt="" coords="607,423,755,449"/>
+<area shape="rect" id="node19" href="$iio__max22017_8h.html#a44db74f03db8e4fe09992f90613ba7f3" title=" " alt="" coords="196,397,367,424"/>
+</map>

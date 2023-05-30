@@ -1,0 +1,15 @@
+<map id="drivers/adc/ad738x/iio_ad738x.h" name="drivers/adc/ad738x/iio_ad738x.h">
+<area shape="rect" id="node1" title="Header file for AD738X IIO interface." alt="" coords="562,5,709,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="440,319,511,345"/>
+<area shape="rect" id="node3" href="$iio_8h.html" title="Header file of iio." alt="" coords="411,95,462,121"/>
+<area shape="rect" id="node4" href="$iio__types_8h.html" title="Header file for iio_types." alt="" coords="390,169,483,196"/>
+<area shape="rect" id="node10" href="$ad738x_8h.html" title="Header file for AD738x Driver." alt="" coords="709,169,791,196"/>
+<area shape="rect" id="node7" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="183,169,288,196"/>
+<area shape="rect" id="node5" title=" " alt="" coords="41,319,123,345"/>
+<area shape="rect" id="node6" href="$no__os__circular__buffer_8h.html" title="Circular buffer library header." alt="" coords="451,244,622,271"/>
+<area shape="rect" id="node8" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="67,244,201,271"/>
+<area shape="rect" id="node9" title=" " alt="" coords="149,319,220,345"/>
+<area shape="rect" id="node11" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="225,244,325,271"/>
+<area shape="rect" id="node12" href="$clk__axi__clkgen_8h.html" title="Driver for the Analog Devices AXI CLKGEN." alt="" coords="697,244,827,271"/>
+<area shape="rect" id="node13" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="851,244,950,271"/>
+</map>

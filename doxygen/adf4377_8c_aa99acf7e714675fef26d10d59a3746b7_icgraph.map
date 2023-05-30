@@ -1,0 +1,8 @@
+<map id="adf4377_spi_update_bit" name="adf4377_spi_update_bit">
+<area shape="rect" id="node1" title="Update ADF4377 register." alt="" coords="245,107,423,133"/>
+<area shape="rect" id="node2" href="$adf4377_8h.html#af78d51afb9eb08b039e13dea5b2313f8" title="Set the bleed word, which represents the value of the bleed current written to the register space." alt="" coords="9,5,193,32"/>
+<area shape="rect" id="node3" href="$adf4377_8h.html#a707fa9b96d7b81b1dd9edf1d01f17003" title="Set the charge pump value which will be written to the register. The value will be between 0 and 15 o..." alt="" coords="34,56,169,83"/>
+<area shape="rect" id="node4" href="$adf4377_8h.html#abac8fcaff324082a34e0995424ba6e80" title="Set the output channel to enable or disable based on the passed parameter. If the parameter is differ..." alt="" coords="20,107,183,133"/>
+<area shape="rect" id="node5" href="$adf4377_8h.html#a6572366719abe30d6cba9e8424a17d04" title="Set the output power register value of a channel and reset everything over to maximum supported value..." alt="" coords="13,157,190,184"/>
+<area shape="rect" id="node6" href="$adf4377_8h.html#a2e743cba2e09dce1b3f1199dfccebf12" title="Set the rfout frequency divider register value and reset everything over to maximum supported value o..." alt="" coords="5,208,197,235"/>
+</map>

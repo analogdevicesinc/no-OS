@@ -1,0 +1,7 @@
+<map id="tmc7300_init_param" name="tmc7300_init_param">
+<area shape="rect" id="node1" title="TMC7300 initialization structure." alt="" coords="113,199,269,225"/>
+<area shape="rect" id="node2" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="48,95,180,121"/>
+<area shape="rect" id="node3" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="5,5,193,32"/>
+<area shape="rect" id="node4" href="$structno__os__uart__desc.html" title="Stucture holding the UART descriptor." alt="" coords="233,95,363,121"/>
+<area shape="rect" id="node5" href="$structno__os__uart__platform__ops.html" title="Structure holding UART function pointers that point to the platform specific function." alt="" coords="218,5,405,32"/>
+</map>

@@ -1,0 +1,14 @@
+<map id="no_os_irq_register_callback" name="no_os_irq_register_callback">
+<area shape="rect" id="node1" title="Register a callback to handle the irq events." alt="" coords="556,99,697,141"/>
+<area shape="rect" id="node2" href="$max14906_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="348,5,508,32"/>
+<area shape="rect" id="node3" href="$voltage__input__irq_8c.html#a2bfc118c928afb7881e002eb11b748aa" title=" " alt="" coords="360,56,496,83"/>
+<area shape="rect" id="node5" href="$iio__trigger_8h.html#ac463acd613c3864b48d7c5d8671d7bef" title="Initialize hardware trigger." alt="" coords="367,107,489,133"/>
+<area shape="rect" id="node11" href="$ad9361_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="401,157,455,184"/>
+<area shape="rect" id="node12" href="$stm32__tdm_8h.html#a056ca840bde6d6da60fc98ba6a3cdab5" title="Initialize the TDM communication peripheral." alt="" coords="366,208,490,235"/>
+<area shape="rect" id="node4" href="$voltage__input__irq_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Voltage input irq example main execution." alt="" coords="145,31,263,57"/>
+<area shape="rect" id="node6" href="$adxrs290-pmdz_2src_2examples_2iio__timer__trigger__example_2iio__timer__trigger__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="IIO trigger example main execution." alt="" coords="145,81,263,108"/>
+<area shape="rect" id="node7" href="$eval-adis1657x_2src_2examples_2iio__trigger__example_2iio__trigger__example_8h.html#aa6785eab0c37adc61db331ebebdc40ee" title="IIO trigger example main execution." alt="" coords="108,132,300,159"/>
+<area shape="rect" id="node9" href="$swiot__fw_8h.html#a427f9beea005fab8fccd9774acb53fc3" title="IIO example main execution." alt="" coords="143,183,265,209"/>
+<area shape="rect" id="node8" href="$eval-adis1646x_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="5,132,60,159"/>
+<area shape="rect" id="node10" href="$swiot1l_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function." alt="" coords="5,183,60,209"/>
+</map>

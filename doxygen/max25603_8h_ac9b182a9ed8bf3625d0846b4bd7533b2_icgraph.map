@@ -1,0 +1,5 @@
+<map id="max25603_set_beam" name="max25603_set_beam">
+<area shape="rect" id="node1" title="MAX25603 set and configure BEAM PWM dimming." alt="" coords="380,5,543,32"/>
+<area shape="rect" id="node2" href="$max25603_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="5,5,165,32"/>
+<area shape="rect" id="node3" href="$max25603_8h.html#aeacd01230e74bebbc2311031c4d8bf42" title="MAX25603 descriptor initialization function." alt="" coords="213,31,332,57"/>
+</map>

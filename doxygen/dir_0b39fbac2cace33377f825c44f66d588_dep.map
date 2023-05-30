@@ -1,0 +1,25 @@
+<map id="drivers/rf&#45;transceiver" name="drivers/rf&#45;transceiver">
+<area shape="rect" id="node2" href="dir_4ed417a91f9ccc543343a95aa671159a.html" title="ad9361" alt="" coords="118,63,190,111"/>
+<area shape="rect" id="node5" href="dir_d44c64559bbebec7f509842c48db8b23.html" title="include" alt="" coords="133,351,205,399"/>
+<area shape="rect" id="edge7-headlabel" href="dir_000255_000279.html" title="18" alt="" coords="177,327,194,342"/>
+<area shape="rect" id="node6" href="dir_0bb79d6a83cfcf0ad99764c4144043fa.html" title="iio" alt="" coords="97,255,169,303"/>
+<area shape="rect" id="edge8-headlabel" href="dir_000255_000277.html" title="2" alt="" coords="141,230,150,245"/>
+<area shape="rect" id="node7" href="dir_b149ab1ccab96ed12cd84b06194c8551.html" title="axi_core" alt="" coords="23,159,101,207"/>
+<area shape="rect" id="edge9-headlabel" href="dir_000255_000078.html" title="3" alt="" coords="99,144,108,159"/>
+<area shape="rect" id="node8" href="dir_481058711dd13ded877a88795a4a55f2.html" title="platform" alt="" coords="129,447,208,495"/>
+<area shape="rect" id="edge10-headlabel" href="dir_000255_000206.html" title="1" alt="" coords="116,422,126,436"/>
+<area shape="rect" id="node3" href="dir_3e14040dbe29f5bfc0562555b33e4be5.html" title="adf7023" alt="" coords="214,63,289,111"/>
+<area shape="rect" id="edge6-headlabel" href="dir_000261_000279.html" title="3" alt="" coords="191,330,201,345"/>
+<area shape="rect" id="node4" href="dir_800530c666b44857813facfa99e43e62.html" title="hmc630x" alt="" coords="313,63,395,111"/>
+<area shape="rect" id="edge1-headlabel" href="dir_000262_000279.html" title="8" alt="" coords="203,335,212,350"/>
+<area shape="rect" id="edge2-headlabel" href="dir_000262_000277.html" title="2" alt="" coords="174,242,183,256"/>
+<area shape="rect" id="edge3-headlabel" href="dir_000262_000206.html" title="1" alt="" coords="198,429,207,444"/>
+<area shape="rect" id="edge4-headlabel" href="dir_000279_000206.html" title="1" alt="" coords="163,421,173,435"/>
+<area shape="rect" id="edge5-headlabel" href="dir_000277_000279.html" title="17" alt="" coords="153,323,170,338"/>
+<area shape="rect" id="edge11-headlabel" href="dir_000078_000279.html" title="80" alt="" coords="115,326,132,341"/>
+<area shape="rect" id="edge12-headlabel" href="dir_000078_000277.html" title="4" alt="" coords="107,228,116,242"/>
+<area shape="rect" id="edge13-headlabel" href="dir_000078_000206.html" title="1" alt="" coords="138,420,148,435"/>
+<area shape="rect" id="edge14-headlabel" href="dir_000206_000279.html" title="711" alt="" coords="157,410,182,425"/>
+<area shape="rect" id="clust2" href="dir_0b39fbac2cace33377f825c44f66d588.html" alt="" coords="107,52,539,121"/>
+<area shape="rect" id="clust1" href="dir_14bc92f4b96c8519b376567118ac28b3.html" title="drivers" alt="" coords="97,16,550,132"/>
+</map>

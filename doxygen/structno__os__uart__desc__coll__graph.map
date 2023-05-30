@@ -1,0 +1,4 @@
+<map id="no_os_uart_desc" name="no_os_uart_desc">
+<area shape="rect" id="node1" title="Stucture holding the UART descriptor." alt="" coords="33,95,164,121"/>
+<area shape="rect" id="node2" href="$structno__os__uart__platform__ops.html" title="Structure holding UART function pointers that point to the platform specific function." alt="" coords="5,5,192,32"/>
+</map>

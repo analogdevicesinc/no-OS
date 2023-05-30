@@ -1,0 +1,4 @@
+<map id="adis_write_yg_bias" name="adis_write_yg_bias">
+<area shape="rect" id="node1" title="Write raw gyroscope offset correction on y axis." alt="" coords="231,5,377,32"/>
+<area shape="rect" id="node2" href="$iio__adis__internals_8h.html#a668f0e032ce85e71e07e298e044488d3" title="Handles the write request for calibbias attribute." alt="" coords="5,5,183,32"/>
+</map>

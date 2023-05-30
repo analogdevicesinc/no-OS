@@ -1,0 +1,16 @@
+<map id="drivers/power/max42500/max42500.c" name="drivers/power/max42500/max42500.c">
+<area shape="rect" id="node1" title="Source file of MAX42500 Driver." alt="" coords="467,5,651,47"/>
+<area shape="rect" id="node2" href="$max42500_8h.html" title="Header file of MAX42500 Driver." alt="" coords="221,95,323,121"/>
+<area shape="rect" id="node7" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="776,95,885,121"/>
+<area shape="rect" id="node9" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="379,95,479,121"/>
+<area shape="rect" id="node11" href="$no__os__alloc_8h.html" title=" " alt="" coords="503,95,614,121"/>
+<area shape="rect" id="node13" href="$no__os__crc8_8h.html" title="Header file of CRC&#45;8 computation." alt="" coords="639,95,745,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="237,244,307,271"/>
+<area shape="rect" id="node4" title=" " alt="" coords="309,169,392,196"/>
+<area shape="rect" id="node5" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="5,169,104,196"/>
+<area shape="rect" id="node6" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="128,169,235,196"/>
+<area shape="rect" id="node8" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="803,169,871,196"/>
+<area shape="rect" id="node10" title=" " alt="" coords="467,169,538,196"/>
+<area shape="rect" id="node12" title=" " alt="" coords="563,169,629,196"/>
+<area shape="rect" id="node14" title=" " alt="" coords="653,169,728,196"/>
+</map>

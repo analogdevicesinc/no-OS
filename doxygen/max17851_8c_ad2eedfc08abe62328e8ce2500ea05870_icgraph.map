@@ -1,0 +1,4 @@
+<map id="max17851_send_command" name="max17851_send_command">
+<area shape="rect" id="node1" title="Send specific device command over SPI." alt="" coords="172,5,373,32"/>
+<area shape="rect" id="node2" href="$max17851_8h.html#a66a3ec73171c8be3fcdeb686807a4d6f" title="MAX17851 device initialization function." alt="" coords="5,5,124,32"/>
+</map>

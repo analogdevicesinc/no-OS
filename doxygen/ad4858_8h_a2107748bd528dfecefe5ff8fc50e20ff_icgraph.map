@@ -1,0 +1,4 @@
+<map id="ad4858_spi_data_read" name="ad4858_spi_data_read">
+<area shape="rect" id="node1" title="Read ADC conversion data over SPI." alt="" coords="196,5,364,32"/>
+<area shape="rect" id="node2" href="$ad4858_8h.html#a543e38084df829f2e85a9908265bcc36" title="Read ADC data (for all channels)." alt="" coords="5,5,148,32"/>
+</map>

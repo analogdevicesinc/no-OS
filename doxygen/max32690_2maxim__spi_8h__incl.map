@@ -1,0 +1,13 @@
+<map id="drivers/platform/maxim/max32690/maxim_spi.h" name="drivers/platform/maxim/max32690/maxim_spi.h">
+<area shape="rect" id="node1" title="maxim specific header for SPI driver" alt="" coords="35,5,218,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="71,244,142,271"/>
+<area shape="rect" id="node3" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="25,95,124,121"/>
+<area shape="rect" id="node4" title=" " alt="" coords="149,95,211,121"/>
+<area shape="rect" id="node5" href="$no__os__dma_8h.html" title="Platform independent function definitions and data types for the DMA API." alt="" coords="235,95,343,121"/>
+<area shape="rect" id="node6" title=" " alt="" coords="144,169,211,196"/>
+<area shape="rect" id="node7" title=" " alt="" coords="235,169,306,196"/>
+<area shape="rect" id="node8" href="$no__os__list_8h.html" title="List library header." alt="" coords="451,169,549,196"/>
+<area shape="rect" id="node10" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="331,169,427,196"/>
+<area shape="rect" id="node11" href="$no__os__mutex_8h.html" title=" " alt="" coords="574,169,695,196"/>
+<area shape="rect" id="node9" title=" " alt="" coords="459,244,541,271"/>
+</map>

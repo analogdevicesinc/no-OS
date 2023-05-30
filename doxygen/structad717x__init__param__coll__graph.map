@@ -1,0 +1,13 @@
+<map id="ad717x_init_param" name="ad717x_init_param">
+<area shape="rect" id="node1" title=" " alt="" coords="1288,107,1435,133"/>
+<area shape="rect" id="node2" href="$structad717x__channel__setup.html" title=" " alt="" coords="943,5,1113,32"/>
+<area shape="rect" id="node3" href="$structad717x__filtcon.html" title=" " alt="" coords="969,56,1087,83"/>
+<area shape="rect" id="node4" href="$structno__os__spi__init__param.html" title="Structure holding the parameters for SPI initialization." alt="" coords="947,107,1109,133"/>
+<area shape="rect" id="node5" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="653,96,776,123"/>
+<area shape="rect" id="node6" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,41,184,68"/>
+<area shape="rect" id="node8" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="324,103,471,129"/>
+<area shape="rect" id="node7" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="323,155,472,197"/>
+<area shape="rect" id="node9" href="$structad717x__st__reg.html" title=" " alt="" coords="969,157,1087,184"/>
+<area shape="rect" id="node10" href="$structad717x__channel__map.html" title=" " alt="" coords="946,223,1110,249"/>
+<area shape="rect" id="node11" href="$unionad717x__analog__inputs.html" title=" " alt="" coords="631,227,799,253"/>
+</map>

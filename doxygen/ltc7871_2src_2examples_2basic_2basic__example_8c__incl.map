@@ -1,0 +1,15 @@
+<map id="projects/ltc7871/src/examples/basic/basic_example.c" name="projects/ltc7871/src/examples/basic/basic_example.c">
+<area shape="rect" id="node1" title="Basic example source file for ltc7871 project." alt="" coords="272,5,439,61"/>
+<area shape="rect" id="node2" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="5,109,119,136"/>
+<area shape="rect" id="node4" href="$no__os__print__log_8h.html" title="Print messages helpers." alt="" coords="143,109,279,136"/>
+<area shape="rect" id="node6" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="190,184,289,211"/>
+<area shape="rect" id="node7" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="681,184,781,211"/>
+<area shape="rect" id="node10" title=" " alt="" coords="461,109,588,136"/>
+<area shape="rect" id="node11" href="$ltc7871_8h.html" title="Header file for the LTC7871 Driver." alt="" coords="354,109,437,136"/>
+<area shape="rect" id="node3" title=" " alt="" coords="291,259,361,285"/>
+<area shape="rect" id="node5" title=" " alt="" coords="99,184,166,211"/>
+<area shape="rect" id="node8" title=" " alt="" coords="709,259,780,285"/>
+<area shape="rect" id="node9" title=" " alt="" coords="602,259,685,285"/>
+<area shape="rect" id="node12" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="363,184,470,211"/>
+<area shape="rect" id="node13" href="$no__os__units_8h.html" title="Header file of Units." alt="" coords="495,184,605,211"/>
+</map>

@@ -1,0 +1,30 @@
+<map id="ade7758_read" name="ade7758_read">
+<area shape="rect" id="node1" title="Read device register." alt="" coords="804,357,919,383"/>
+<area shape="rect" id="node2" href="$ade7758_8h.html#a249f6bcc83e667569eebaa495281ff84" title="Clear irq status flags." alt="" coords="286,37,474,63"/>
+<area shape="rect" id="node5" href="$ade7758_8h.html#abc386b01cd89b400f7fee467062228da" title="Read energy values phase A." alt="" coords="561,291,725,332"/>
+<area shape="rect" id="node7" href="$ade7758_8h.html#aa493dbdd6b50370582cadfe11ada3980" title="Read energy values phase B." alt="" coords="561,408,725,449"/>
+<area shape="rect" id="node8" href="$ade7758_8h.html#ae68965f9ebb288666e6de7c66d49f6ae" title="Read energy values phase C." alt="" coords="561,473,725,515"/>
+<area shape="rect" id="node9" href="$ade7758_8c.html#a8fd7f4ba21deeeb1930a899d28fbff79" title="Read frequency/period value." alt="" coords="531,87,756,114"/>
+<area shape="rect" id="node10" href="$eval-ade7758_2src_2common_2common__data_8c.html#a66705c23e62f9e1acdb85fc1c2224b3d" title="print measurements" alt="" coords="301,87,459,114"/>
+<area shape="rect" id="node11" href="$ade7758_8h.html#a3ebf76f1da30f309401baea4767666b2" title="Get interrupt indicator from STATUS register." alt="" coords="291,447,469,474"/>
+<area shape="rect" id="node12" href="$ade7758_8h.html#a08c0e9e17e5aa038d4003ed4f3caa765" title="read Ipeak val" alt="" coords="559,357,727,383"/>
+<area shape="rect" id="node13" href="$ade7758_8h.html#a25850cd8719d5449893284ef0b7ab1ab" title="Read rms values phase A." alt="" coords="541,138,746,165"/>
+<area shape="rect" id="node14" href="$ade7758_8h.html#adcb7cc944e27754239046b3705460811" title="Read rms values phase B." alt="" coords="541,189,746,215"/>
+<area shape="rect" id="node15" href="$ade7758_8h.html#a72f0a90993fad8bba667a682d10407da" title="Read rms values phase C." alt="" coords="541,239,745,266"/>
+<area shape="rect" id="node16" href="$ade7758_8c.html#ae81cf636596267c17e619058e8c31e64" title="Read temperature value." alt="" coords="547,590,740,617"/>
+<area shape="rect" id="node17" href="$ade7758_8h.html#ab90b3e3f7e4b70be3ad6442da4b91c6b" title="Update specific register bits." alt="" coords="563,691,724,718"/>
+<area shape="rect" id="node27" href="$ade7758_8h.html#a1f93dfac629e849d0823a4908c07a7ea" title="Version product." alt="" coords="549,539,738,566"/>
+<area shape="rect" id="node28" href="$ade7758_8h.html#aa26a7bbcfdeabacf52747bbe7e4f872e" title="read Vpeak val" alt="" coords="575,742,711,769"/>
+<area shape="rect" id="node3" href="$ade7758_8h.html#a422e1a9832e2a6c7451aa9857d446c90" title="Initialize the device." alt="" coords="115,422,222,449"/>
+<area shape="rect" id="node4" href="$eval-ade7758_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,422,60,449"/>
+<area shape="rect" id="node6" href="$eval-ade7758_2src_2common_2common__data_8h.html#aa00b46d14528947fba9763a4a33cbfa6" title="Read measurements." alt="" coords="302,269,458,295"/>
+<area shape="rect" id="node18" href="$ade7758_8h.html#a85ea4d235a62d1d2c1f4198746ef00b8" title="Operation mode of the ADCs." alt="" coords="301,717,459,743"/>
+<area shape="rect" id="node20" href="$ade7758_8h.html#ae42bfdaa8620b923435a3ac51b0ae0ea" title="Select the input to the energy accumulation registers." alt="" coords="317,767,443,794"/>
+<area shape="rect" id="node21" href="$ade7758_8h.html#af563e84e29d4f693ed1c74396787db67" title="Enable/Disable interrupt." alt="" coords="303,818,457,845"/>
+<area shape="rect" id="node22" href="$ade7758_8h.html#a25768e9b2e97a4bdd6b858a1c1645dfc" title="Select the source of the measurement of the voltage line frequency." alt="" coords="299,869,461,895"/>
+<area shape="rect" id="node23" href="$ade7758_8h.html#a7abd5adabc220a2509032906244a57ef" title="Reset the device using SW reset." alt="" coords="309,498,451,525"/>
+<area shape="rect" id="node24" href="$ade7758_8h.html#a6256795cf572104190077c90bd04e58e" title="Select the phase of sampled data for wave register." alt="" coords="284,549,476,575"/>
+<area shape="rect" id="node25" href="$ade7758_8h.html#ac77450d3d9e7dd6ed665944487e24ecc" title="Select source of sampled data for wave register." alt="" coords="293,600,467,641"/>
+<area shape="rect" id="node26" href="$ade7758_8h.html#aae0adecdd5d9ca76c6f6aa88aa82a9a8" title="Select waveform register update rate." alt="" coords="277,666,483,693"/>
+<area shape="rect" id="node19" href="$ade7758_8h.html#ad643b16ba67d694a04b326f1df0a3820" title="Setup the ADE7758 device." alt="" coords="108,691,229,718"/>
+</map>

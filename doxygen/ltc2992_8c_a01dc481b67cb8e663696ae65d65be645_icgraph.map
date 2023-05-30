@@ -1,0 +1,9 @@
+<map id="ltc2992_read_reg" name="ltc2992_read_reg">
+<area shape="rect" id="node1" title="Read raw data from device register." alt="" coords="427,56,561,83"/>
+<area shape="rect" id="node2" href="$ltc2992_8h.html#abecde49247db59f84eb2ba3a8d2f7751" title="Get fault status." alt="" coords="236,5,371,32"/>
+<area shape="rect" id="node3" href="$ltc2992_8h.html#aea961d47ceba8c7c09c8746652d0fbc7" title="Initialize communication peripheral for the device." alt="" coords="254,56,353,83"/>
+<area shape="rect" id="node4" href="$ltc2992_8h.html#a3dfe86d10ef3623a6ebf07e7ff86d5c3" title="Update register value in the device." alt="" coords="228,107,379,133"/>
+<area shape="rect" id="node5" href="$ltc2992_8h.html#aa4a1f71b696f9294e5d0a06337297d10" title="Clear fault status." alt="" coords="19,56,166,83"/>
+<area shape="rect" id="node6" href="$ltc2992_8h.html#ab551f128b2c4b618f6a83d8281cfc872" title="Reset alert pin (GPI04) status." alt="" coords="5,107,180,133"/>
+<area shape="rect" id="node7" href="$ltc2992_8h.html#ad93c1f2a307644ad2400567de082a410" title="Enable alert." alt="" coords="25,157,160,184"/>
+</map>

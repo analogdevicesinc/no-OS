@@ -1,0 +1,10 @@
+<map id="drivers/platform/generic/generic_trng.c" name="drivers/platform/generic/generic_trng.c">
+<area shape="rect" id="node1" title="Generic implementation of true random number generator." alt="" coords="95,5,274,47"/>
+<area shape="rect" id="node2" href="$no__os__trng_8h.html" title="Header file of true random number generator." alt="" coords="5,95,111,121"/>
+<area shape="rect" id="node4" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="135,95,235,121"/>
+<area shape="rect" id="node7" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="279,95,389,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="23,169,93,196"/>
+<area shape="rect" id="node5" title=" " alt="" coords="117,169,188,196"/>
+<area shape="rect" id="node6" title=" " alt="" coords="213,169,295,196"/>
+<area shape="rect" id="node8" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="320,169,388,196"/>
+</map>

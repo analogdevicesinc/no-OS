@@ -1,0 +1,4 @@
+<map id="adis_write_fifo_wm_lvl" name="adis_write_fifo_wm_lvl">
+<area shape="rect" id="node1" title="Write FIFO watermark threshold level value." alt="" coords="212,13,383,39"/>
+<area shape="rect" id="node2" href="$iio__adis__internals_8h.html#a8b8ea22e9082e5bd826bcc4ce8104e08" title="Handles the write request for debug attributes." alt="" coords="5,5,164,47"/>
+</map>

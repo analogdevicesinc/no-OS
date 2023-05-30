@@ -1,0 +1,22 @@
+<map id="projects/adf5611/src/examples/iio_example/iio_example.c" name="projects/adf5611/src/examples/iio_example/iio_example.c">
+<area shape="rect" id="node1" title="Implementation of IIO example for adf5611 project." alt="" coords="228,5,402,61"/>
+<area shape="rect" id="node2" title=" " alt="" coords="7,184,74,211"/>
+<area shape="rect" id="node3" title=" " alt="" coords="185,109,256,136"/>
+<area shape="rect" id="node4" title=" " alt="" coords="280,109,350,136"/>
+<area shape="rect" id="node5" href="$iio__adf5611_8h.html" title="Implementation of IIO ADF5611 Driver." alt="" coords="480,109,590,136"/>
+<area shape="rect" id="node14" title=" " alt="" coords="614,109,741,136"/>
+<area shape="rect" id="node15" href="$no__os__print__log_8h.html" title="Print messages helpers." alt="" coords="24,109,160,136"/>
+<area shape="rect" id="node16" href="$iio__app_8h.html" title="Header file of iio_app." alt="" coords="374,109,456,136"/>
+<area shape="rect" id="node6" href="$iio__types_8h.html" title="Header file for iio_types." alt="" coords="583,259,676,285"/>
+<area shape="rect" id="node10" href="$iio_8h.html" title="Header file of iio." alt="" coords="507,184,558,211"/>
+<area shape="rect" id="node7" title=" " alt="" coords="796,408,879,435"/>
+<area shape="rect" id="node8" title=" " alt="" coords="410,408,481,435"/>
+<area shape="rect" id="node9" href="$no__os__circular__buffer_8h.html" title="Circular buffer library header." alt="" coords="422,333,592,360"/>
+<area shape="rect" id="node11" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="453,259,558,285"/>
+<area shape="rect" id="node12" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="667,333,800,360"/>
+<area shape="rect" id="node13" title=" " alt="" coords="698,408,769,435"/>
+<area shape="rect" id="node17" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="251,333,347,360"/>
+<area shape="rect" id="node18" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="268,184,378,211"/>
+<area shape="rect" id="node20" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="157,259,270,285"/>
+<area shape="rect" id="node19" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="294,259,362,285"/>
+</map>

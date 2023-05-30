@@ -1,0 +1,20 @@
+<map id="ad5460_reg_write" name="ad5460_reg_write">
+<area shape="rect" id="node1" title="Write a register&#39;s value." alt="" coords="805,515,944,542"/>
+<area shape="rect" id="node2" href="$ad5460_8h.html#a08c7febef35caf12c403e76398eb6b71" title="Update a register&#39;s field." alt="" coords="599,239,749,266"/>
+<area shape="rect" id="node14" href="$ad5460_8h.html#a13138e31d0b24f189f8839beec0934fe" title="Perform software or hardware reset and wait for device reset time." alt="" coords="619,633,729,659"/>
+<area shape="rect" id="node16" href="$ad5460_8h.html#afc63b03433965e4192662f7972612d1f" title="Set and load a code for the DAC on a specific channel." alt="" coords="597,567,751,608"/>
+<area shape="rect" id="node17" href="$ad5460_8h.html#a02542fed980968f73fba6f0e4a99dd92" title="Set which diagnostic value to be loaded in the DIAG_RESULT register." alt="" coords="608,465,740,491"/>
+<area shape="rect" id="node18" href="$ad5460_8h.html#a031cc7df8bf88928752fdc9e8f5e2c40" title="Enable or disable the higher thermal reset." alt="" coords="591,515,757,542"/>
+<area shape="rect" id="node3" href="$ad5460_8h.html#af6dce2561d89992c6132034a42cb6477" title="Disable the slew rate control." alt="" coords="352,239,543,266"/>
+<area shape="rect" id="node4" href="$ad5460_8h.html#ace4100908d1c6f6c7220eb77641d0aea" title="Configure and enable slew rate control for a DAC on a specific channel." alt="" coords="353,290,541,317"/>
+<area shape="rect" id="node6" href="$ad5460_8h.html#ad820aff697367d02c3df2bc2803507f8" title="Set the logic value of a GPO pin." alt="" coords="172,189,304,215"/>
+<area shape="rect" id="node8" href="$ad5460_8h.html#a3ac149b8ac0e51abe4a0a543f5cff2d6" title="Set the operation mode for a specific channel." alt="" coords="370,341,525,383"/>
+<area shape="rect" id="node9" href="$ad5460_8h.html#a83ab0c31b4c6787df032e94e1ce55f49" title="Set the current limit for a specific DAC channel in vout mode." alt="" coords="370,123,525,164"/>
+<area shape="rect" id="node10" href="$ad5460_8h.html#a15df7e48eca2a50e452eff927a9fc29b" title="Set the current range for a specific channel." alt="" coords="370,5,525,47"/>
+<area shape="rect" id="node12" href="$ad5460_8h.html#a7c17c388ab71313269c2a441ae2a6dbc" title="Set the voltage range for a specific channel." alt="" coords="370,407,525,448"/>
+<area shape="rect" id="node13" href="$ad5460_8h.html#a09df865017b68029dfe0d01b3151cb98" title="Set the GPIO operation mode." alt="" coords="358,189,537,215"/>
+<area shape="rect" id="node5" href="$channel__output__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Channel output example main execution." alt="" coords="179,414,297,441"/>
+<area shape="rect" id="node7" href="$ad5460_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="5,407,124,434"/>
+<area shape="rect" id="node11" href="$current__output__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Current output example main execution." alt="" coords="179,13,297,39"/>
+<area shape="rect" id="node15" href="$ad5460_8h.html#a0c526c188d044e9ee48951ee831ee5c5" title="Initialize the device structure." alt="" coords="189,545,287,571"/>
+</map>

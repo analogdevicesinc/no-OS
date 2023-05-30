@@ -1,0 +1,13 @@
+<map id="projects/pulsar&#45;adc/src/examples/basic_example/basic_example.h" name="projects/pulsar&#45;adc/src/examples/basic_example/basic_example.h">
+<area shape="rect" id="node1" title="BASIC example header." alt="" coords="955,5,1155,61"/>
+<area shape="rect" id="node2" href="$ade7816_2src_2platform_2maxim_2main_8c.html" title="Main file for Maxim platform of ade7816 project." alt="" coords="5,117,185,158"/>
+<area shape="rect" id="node3" href="$dc2903a_2src_2platform_2maxim_2main_8c.html" title="Main file for Maxim platform of DC2903A project." alt="" coords="209,117,389,158"/>
+<area shape="rect" id="node4" href="$demo__esp_2src_2platform_2aducm3029_2main_8c.html" title="Main file for aducm3029 platform of demo_esp project." alt="" coords="414,117,625,158"/>
+<area shape="rect" id="node5" href="$demo__esp_2src_2platform_2maxim_2main_8c.html" title="Main file for maxim platform of demo_esp project." alt="" coords="649,117,829,158"/>
+<area shape="rect" id="node6" href="$eval-ltc4306_2src_2platform_2aducm3029_2main_8c.html" title="Main file for aducm3029 platform of eval&#45;ltc4306&#45;pmdz project." alt="" coords="853,109,1039,165"/>
+<area shape="rect" id="node7" href="$eval-ltc4306_2src_2platform_2maxim_2main_8c.html" title="Main file for MAX32xxx platform of eval&#45;ltc4306&#45;pmdz project." alt="" coords="1063,117,1266,158"/>
+<area shape="rect" id="node8" href="$max14914_2src_2platform_2maxim_2main_8c.html" title="Main file for Maxim platform of max14914 project." alt="" coords="1291,117,1471,158"/>
+<area shape="rect" id="node9" href="$max14919_2src_2platform_2maxim_2main_8c.html" title="Main file for Maxim platform of max14919 project." alt="" coords="1495,117,1675,158"/>
+<area shape="rect" id="node10" href="$max25603_2src_2platform_2maxim_2main_8c.html" title="Main file for Maxim platform of MAX25603 project." alt="" coords="1699,117,1879,158"/>
+<area shape="rect" id="node11" href="$pulsar-adc_2src_2examples_2basic__example_2basic__example_8c.html" title="Implementation of IIO example for basic_demo project." alt="" coords="1903,109,2101,165"/>
+</map>

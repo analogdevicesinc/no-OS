@@ -1,0 +1,5 @@
+<map id="max31855_init" name="max31855_init">
+<area shape="rect" id="node1" title="Device and comm init function." alt="" coords="213,31,332,57"/>
+<area shape="rect" id="node2" href="$max31855_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="5,5,165,32"/>
+<area shape="rect" id="node3" href="$iio__max31855_8h.html#aabdd7a2af43ae6033a57f22a27ba860a" title="Initializes the MAX31855 IIO driver." alt="" coords="14,56,157,83"/>
+</map>

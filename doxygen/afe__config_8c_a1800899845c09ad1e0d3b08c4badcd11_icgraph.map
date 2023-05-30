@@ -1,0 +1,17 @@
+<map id="afe_read_32bit_buff" name="afe_read_32bit_buff">
+<area shape="rect" id="node1" title="reads the 32bit value from the register and saves to a 32bit buffer." alt="" coords="931,157,1081,184"/>
+<area shape="rect" id="node2" href="$afe__config_8h.html#a0704d74646e948b4ecb8dc725f8e77af" title="reads period registers." alt="" coords="743,5,870,32"/>
+<area shape="rect" id="node6" href="$afe__config_8h.html#aacae322ee886069937979582906cc247" title="reads rms1012value registers." alt="" coords="731,56,882,83"/>
+<area shape="rect" id="node7" href="$afe__config_8h.html#aaf76db1f70b29ef161967d24082effe0" title="reads rmsonevalue registers." alt="" coords="735,107,878,133"/>
+<area shape="rect" id="node8" href="$afe__config_8h.html#aef1b196eb349217367cbb7fcbee5a90a" title="Read STATUS0 register." alt="" coords="739,259,874,285"/>
+<area shape="rect" id="node13" href="$afe__config_8h.html#a5f38b9cf8c3d64723726e875b21a286d" title="Read STATUS1 register." alt="" coords="736,157,877,184"/>
+<area shape="rect" id="node14" href="$afe__config_8h.html#ad5b1247da8507b6d7f9b58586f91bba9" title="reads AFE version." alt="" coords="548,309,683,336"/>
+<area shape="rect" id="node15" href="$afe__config_8h.html#a2c439b6d3229e353d9eef6b78da9d489" title="reads waveform buffer." alt="" coords="731,208,883,235"/>
+<area shape="rect" id="node3" href="$pqlib__afe_8h.html#a725294779cec6b09e4dea980195bc590" title=" " alt="" coords="560,157,671,184"/>
+<area shape="rect" id="node4" href="$pqlib__example_8h.html#a29612a8fa6ea890a303a57ce75abd9d8" title="The function gets AFE input and calls main processing APIs of the library. This also gets the measure..." alt="" coords="327,171,487,213"/>
+<area shape="rect" id="node5" href="$pqlib__example_8h.html#adc8d2b871a496114eee015af96680bae" title="One complete cycle for IIO callback function." alt="" coords="125,204,248,231"/>
+<area shape="rect" id="node9" href="$afe__config_8h.html#a969a1b69d5fee8ce240851bfc5a8ea89" title="Waits for passed number of cycles." alt="" coords="548,259,683,285"/>
+<area shape="rect" id="node10" href="$pqlib__example_8h.html#a66acd6db00e29ea544ea13777674a4ef" title="Starts Power Quality measurement as per configured cycles." alt="" coords="313,259,500,285"/>
+<area shape="rect" id="node11" href="$eval-pqmon_2src_2examples_2basic_2basic__example_8h.html#a1681c88b1933ada9b895fe6c81a8aac6" title="PQM example main execution." alt="" coords="108,259,265,285"/>
+<area shape="rect" id="node12" href="$eval-pqmon_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function that executes on Maxim platform." alt="" coords="5,259,60,285"/>
+</map>

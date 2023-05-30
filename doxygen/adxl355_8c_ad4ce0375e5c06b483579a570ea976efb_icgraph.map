@@ -1,0 +1,5 @@
+<map id="adxl355_get_sts_reg" name="adxl355_get_sts_reg">
+<area shape="rect" id="node1" title="Reads the status register value." alt="" coords="365,31,521,57"/>
+<area shape="rect" id="node2" href="$adxl355_8h.html#a71f7b8a40d6c14dad5998c5aa0e87753" title="Performs a soft reset of the device." alt="" coords="172,5,317,32"/>
+<area shape="rect" id="node3" href="$eval-adxl355-pmdz_2src_2examples_2dummy_2dummy__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Dummy example main execution." alt="" coords="5,31,124,57"/>
+</map>

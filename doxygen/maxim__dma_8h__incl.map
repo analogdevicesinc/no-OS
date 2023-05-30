@@ -1,0 +1,12 @@
+<map id="drivers/platform/maxim/common/maxim_dma.h" name="drivers/platform/maxim/common/maxim_dma.h">
+<area shape="rect" id="node1" title="Maxim platform specific header DMA API." alt="" coords="66,5,247,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="93,244,164,271"/>
+<area shape="rect" id="node3" href="$no__os__dma_8h.html" title="Platform independent function definitions and data types for the DMA API." alt="" coords="103,95,211,121"/>
+<area shape="rect" id="node10" title=" " alt="" coords="235,95,297,121"/>
+<area shape="rect" id="node4" title=" " alt="" coords="30,169,97,196"/>
+<area shape="rect" id="node5" title=" " alt="" coords="121,169,192,196"/>
+<area shape="rect" id="node6" href="$no__os__list_8h.html" title="List library header." alt="" coords="337,169,435,196"/>
+<area shape="rect" id="node8" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="217,169,313,196"/>
+<area shape="rect" id="node9" href="$no__os__mutex_8h.html" title=" " alt="" coords="460,169,581,196"/>
+<area shape="rect" id="node7" title=" " alt="" coords="345,244,427,271"/>
+</map>

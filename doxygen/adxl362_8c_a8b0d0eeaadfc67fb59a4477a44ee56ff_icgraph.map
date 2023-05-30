@@ -1,0 +1,10 @@
+<map id="adxl362_set_register_value" name="adxl362_set_register_value">
+<area shape="rect" id="node1" title="Writes data into a register." alt="" coords="245,150,404,191"/>
+<area shape="rect" id="node2" href="$adxl362_8h.html#a91a9d6505a4102e0d0676d5efa8583f1" title="Configures the FIFO feature." alt="" coords="29,5,174,32"/>
+<area shape="rect" id="node3" href="$adxl362_8h.html#a7d4d7e82f2a2f6d3ed88aa013b982e34" title="Selects the Output Data Rate of the device." alt="" coords="10,56,193,83"/>
+<area shape="rect" id="node4" href="$adxl362_8h.html#aa8b08894551865247233a1d9ac3d08ec" title="Places the device into standby/measure mode." alt="" coords="5,107,197,133"/>
+<area shape="rect" id="node5" href="$adxl362_8h.html#a248bb86ec9c4ff20e27bca063dce1e75" title="Selects the measurement range." alt="" coords="29,157,174,184"/>
+<area shape="rect" id="node6" href="$adxl362_8h.html#a0cc6fa4ec0b9bb68e1d59dfe139a22d7" title="Configures activity detection." alt="" coords="15,209,188,250"/>
+<area shape="rect" id="node7" href="$adxl362_8h.html#aa516c3ee05c5f49b0497aa63d1b28cab" title="Configures inactivity detection." alt="" coords="9,274,194,315"/>
+<area shape="rect" id="node8" href="$adxl362_8h.html#a9253625d2be3399d10b0ede59dc5f95c" title="Resets the device via SPI communication bus." alt="" coords="13,340,190,367"/>
+</map>

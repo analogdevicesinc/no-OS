@@ -1,0 +1,15 @@
+<map id="drivers/axi_core/axi_adc_core/axi_adc_core.c" name="drivers/axi_core/axi_adc_core/axi_adc_core.c">
+<area shape="rect" id="node1" title="Driver for the Analog Devices AXI&#45;ADC&#45;CORE module." alt="" coords="357,5,543,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="397,244,468,271"/>
+<area shape="rect" id="node3" title=" " alt="" coords="110,169,177,196"/>
+<area shape="rect" id="node4" title=" " alt="" coords="192,95,279,121"/>
+<area shape="rect" id="node5" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="303,95,413,121"/>
+<area shape="rect" id="node7" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="796,169,909,196"/>
+<area shape="rect" id="node9" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="477,169,577,196"/>
+<area shape="rect" id="node11" href="$no__os__alloc_8h.html" title=" " alt="" coords="5,95,116,121"/>
+<area shape="rect" id="node12" href="$axi__adc__core_8h.html" title="Driver for the Analog Devices AXI&#45;ADC&#45;CORE module." alt="" coords="539,95,657,121"/>
+<area shape="rect" id="node13" href="$no__os__axi__io_8h.html" title="Header file of AXI IO." alt="" coords="653,169,772,196"/>
+<area shape="rect" id="node6" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="324,169,392,196"/>
+<area shape="rect" id="node8" title=" " alt="" coords="641,244,712,271"/>
+<area shape="rect" id="node10" title=" " alt="" coords="493,244,575,271"/>
+</map>

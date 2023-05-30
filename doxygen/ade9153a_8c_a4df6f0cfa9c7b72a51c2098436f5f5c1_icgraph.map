@@ -1,0 +1,5 @@
+<map id="ade9153a_temp_start" name="ade9153a_temp_start">
+<area shape="rect" id="node1" title="Manually request a new temperature sensor reading." alt="" coords="412,5,576,32"/>
+<area shape="rect" id="node2" href="$ade9153a_8h.html#a97870faa000dbef25c9705e5aefdc356" title="Temperature value in deg C." alt="" coords="209,5,364,32"/>
+<area shape="rect" id="node3" href="$eval-ade9153a_2src_2common_2common__data_8h.html#a9b065d0400a39009e3266707f94e0439" title="Read measurements." alt="" coords="5,5,161,32"/>
+</map>

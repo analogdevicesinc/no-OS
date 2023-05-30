@@ -1,0 +1,14 @@
+<map id="projects/ad74416h/src/examples/voltage_input_irq/voltage_input_irq.c" name="projects/ad74416h/src/examples/voltage_input_irq/voltage_input_irq.c">
+<area shape="rect" id="node1" title="Voltage input with interrupt example code for ad74416h&#45;pmdz project." alt="" coords="289,5,472,61"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,109,132,136"/>
+<area shape="rect" id="node3" href="$ad74416h_8h.html" title="Header file of AD74416h Driver." alt="" coords="157,109,255,136"/>
+<area shape="rect" id="node7" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="259,184,366,211"/>
+<area shape="rect" id="node8" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="391,184,504,211"/>
+<area shape="rect" id="node9" href="$no__os__print__log_8h.html" title="Print messages helpers." alt="" coords="418,109,554,136"/>
+<area shape="rect" id="node11" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="578,109,674,136"/>
+<area shape="rect" id="node12" title=" " alt="" coords="699,109,767,136"/>
+<area shape="rect" id="node4" title=" " alt="" coords="277,259,348,285"/>
+<area shape="rect" id="node5" title=" " alt="" coords="30,184,113,211"/>
+<area shape="rect" id="node6" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="137,184,235,211"/>
+<area shape="rect" id="node10" title=" " alt="" coords="529,184,595,211"/>
+</map>

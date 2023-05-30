@@ -1,0 +1,9 @@
+<map id="max22017_soft_reset" name="max22017_soft_reset">
+<area shape="rect" id="node1" title="Soft reset requested channel." alt="" coords="819,56,981,83"/>
+<area shape="rect" id="node2" href="$max22017_8h.html#ab7a736f1079e13511c590e57ddab83d5" title="Free the resources allocated during init and perform a soft reset." alt="" coords="623,56,771,83"/>
+<area shape="rect" id="node3" href="$max22017_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="196,56,356,83"/>
+<area shape="rect" id="node4" href="$iio__max22017_8h.html#a44db74f03db8e4fe09992f90613ba7f3" title=" " alt="" coords="404,5,575,32"/>
+<area shape="rect" id="node6" href="$max22017_8h.html#a5c1135bc9151f597a2da1c4548ca036c" title="Initialize and configure the MAX22017 device." alt="" coords="430,107,549,133"/>
+<area shape="rect" id="node5" href="$max22017_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="5,56,148,83"/>
+<area shape="rect" id="node7" href="$iio__max22017_8h.html#add7c20215b1dc69f86967c7ccbbcefe3" title=" " alt="" coords="205,107,347,133"/>
+</map>

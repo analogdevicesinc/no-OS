@@ -1,0 +1,23 @@
+<map id="no_os_put_unaligned_le16" name="no_os_put_unaligned_le16">
+<area shape="rect" id="node1" title=" " alt="" coords="1223,132,1417,159"/>
+<area shape="rect" id="node2" href="$ad8460_8h.html#a946bf2639d5ce67072823419f32bf2ec" title="Set the value of a high voltage DAC word." alt="" coords="992,56,1175,83"/>
+<area shape="rect" id="node5" href="$lt3074_8h.html#a29b134001ceaa60715a9271a8ec5f0c3" title="Perform a raw PMBus write word operation." alt="" coords="1012,107,1155,133"/>
+<area shape="rect" id="node13" href="$lt7170_8h.html#ab89b79e0020f4aed46e4ceacb4c7cfca" title="Perform a raw PMBus write word operation." alt="" coords="1012,157,1155,184"/>
+<area shape="rect" id="node15" href="$ltp8800_8h.html#a84a4646c361e218d30692ab3caccf99c" title="Perform a raw PMBus write word operation." alt="" coords="1008,216,1159,243"/>
+<area shape="rect" id="node3" href="$ad8460_8h.html#af782c21707be15e28af9ecd0605d2163" title="Set the sample value." alt="" coords="785,5,937,32"/>
+<area shape="rect" id="node4" href="$eval-ad8460_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="781,56,941,83"/>
+<area shape="rect" id="node6" href="$lt3074_8h.html#a0608c21951399f7ee47cbd104bf28fa8" title="Generic register write wrapper." alt="" coords="795,107,926,133"/>
+<area shape="rect" id="node7" href="$lt3074_8h.html#a0465fe8224f0d6774e45c9a08dc648ee" title="Set operation." alt="" coords="571,84,729,111"/>
+<area shape="rect" id="node12" href="$lt3074_8h.html#ae65f3c229ab9f13258e2f1239c5cac18" title="Set output voltage margin." alt="" coords="574,135,726,161"/>
+<area shape="rect" id="node8" href="$lt3074_8h.html#adbb25a5e0bfec64795789a60e0b67507" title="Initialize the device structure." alt="" coords="397,84,488,111"/>
+<area shape="rect" id="node9" href="$lt3074_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="184,135,303,161"/>
+<area shape="rect" id="node10" href="$iio__lt3074_8h.html#a0d877a2fe54762f2932c52e49b7f4b5a" title="Initializes the LT3074 IIO descriptor." alt="" coords="186,84,301,111"/>
+<area shape="rect" id="node11" href="$lt3074_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="5,84,124,111"/>
+<area shape="rect" id="node14" href="$lt7170_8h.html#a30b2bb5c6fcd4f0cf0afdb61361c7a0e" title="Set output PWM mode." alt="" coords="787,157,934,184"/>
+<area shape="rect" id="node16" href="$ltp8800_8h.html#a613ac6d7323b5995e0e60723902f6cbe" title="Set phase order for polyphase application." alt="" coords="789,209,933,250"/>
+<area shape="rect" id="node21" href="$ltp8800_8h.html#a0c4e0a76ceb3b8ef7b23e8481479ea77" title="Set output voltage and its upper limit." alt="" coords="777,275,944,301"/>
+<area shape="rect" id="node17" href="$ltp8800_8h.html#a560a898903409b89d4063940b94e4c0e" title="Initialize the device structure." alt="" coords="601,216,699,243"/>
+<area shape="rect" id="node18" href="$ltp8800_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="363,189,523,216"/>
+<area shape="rect" id="node19" href="$iio__ltp8800_8h.html#ae91bc4bceb8a86bc476ffae79c750cda" title="Initializes the LTP8800 IIO descriptor." alt="" coords="381,240,504,267"/>
+<area shape="rect" id="node20" href="$ltp8800_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="172,240,315,267"/>
+</map>

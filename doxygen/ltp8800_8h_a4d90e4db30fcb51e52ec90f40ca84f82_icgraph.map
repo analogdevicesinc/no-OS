@@ -1,0 +1,7 @@
+<map id="ltp8800_write_word_data" name="ltp8800_write_word_data">
+<area shape="rect" id="node1" title="Converts value to register data and do PMBus write word operation." alt="" coords="433,56,620,83"/>
+<area shape="rect" id="node2" href="$ltp8800_8h.html#acf160b5e41252593ae47988845aa8aae" title="Set overvalue and undervalue limits." alt="" coords="213,5,385,32"/>
+<area shape="rect" id="node4" href="$ltp8800_8h.html#ae0e78a7f7c33f18b56412a8ff393f5cc" title="Set input voltage window at which power conversion will proceed." alt="" coords="237,56,362,83"/>
+<area shape="rect" id="node5" href="$ltp8800_8h.html#ae352a6346715bc18065e55f1eb77ad36" title="Set output voltage command." alt="" coords="224,107,375,133"/>
+<area shape="rect" id="node3" href="$ltp8800_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="5,56,165,83"/>
+</map>

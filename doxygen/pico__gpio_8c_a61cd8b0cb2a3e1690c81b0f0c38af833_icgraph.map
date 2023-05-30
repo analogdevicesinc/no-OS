@@ -1,0 +1,4 @@
+<map id="pico_gpio_get" name="pico_gpio_get">
+<area shape="rect" id="node1" title="Obtain the GPIO descriptor." alt="" coords="225,5,337,32"/>
+<area shape="rect" id="node2" href="$pico__gpio_8c.html#a26a9efb9bacce937bacada7d740c4ca0" title="Get the value of an optional GPIO." alt="" coords="5,5,177,32"/>
+</map>

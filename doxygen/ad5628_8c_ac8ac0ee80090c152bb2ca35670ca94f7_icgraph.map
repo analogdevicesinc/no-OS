@@ -1,0 +1,6 @@
+<map id="ad5628_set_input_register" name="ad5628_set_input_register">
+<area shape="rect" id="node1" title="Writes a 32&#45;bit data&#45;word to the Input Register of the device." alt="" coords="361,24,556,50"/>
+<area shape="rect" id="node2" href="$ad5628_8h.html#a1206c55252c05153d608d3c28ddc93bb" title="Initializes the communication peripheral and the initial Values for AD5628 Board and resets the devic..." alt="" coords="5,24,104,50"/>
+<area shape="rect" id="node3" href="$ad5628_8h.html#a0fbccf104b99790f1a3096afc45c4822" title="Sets the device in a specific power mode." alt="" coords="152,24,313,50"/>
+<area shape="rect" id="node4" href="$ad5628_8h.html#a608a7b47f89355c0ca260c06b66b7194" title="Resets the device." alt="" coords="177,74,288,101"/>
+</map>

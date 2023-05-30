@@ -1,0 +1,4 @@
+<map id="max_pwm_set_duty_cycle" name="max_pwm_set_duty_cycle">
+<area shape="rect" id="node1" title="Set the PWM duty cycle." alt="" coords="172,5,367,32"/>
+<area shape="rect" id="node2" href="$max32650_2maxim__pwm_8c.html#aae32d88704bd9d5add123de92faa305a" title="Initialize the PWM." alt="" coords="5,5,124,32"/>
+</map>

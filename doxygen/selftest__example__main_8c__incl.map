@@ -1,0 +1,14 @@
+<map id="projects/eval&#45;adxl38x/src/examples/selftest_example/selftest_example_main.c" name="projects/eval&#45;adxl38x/src/examples/selftest_example/selftest_example_main.c">
+<area shape="rect" id="node1" title="Main program for self test example eval&#45;adxl38x project." alt="" coords="352,5,605,61"/>
+<area shape="rect" id="node2" href="$selftest__example__main_8h.html" title="Main header for example eval&#45;adxl38x project." alt="" coords="5,109,192,136"/>
+<area shape="rect" id="node3" title=" " alt="" coords="217,109,343,136"/>
+<area shape="rect" id="node4" href="$adxl38x_8h.html" title="Header file of ADXL38X Driver." alt="" coords="367,109,454,136"/>
+<area shape="rect" id="node9" href="$no__os__print__log_8h.html" title="Print messages helpers." alt="" coords="479,109,615,136"/>
+<area shape="rect" id="node11" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="639,109,707,136"/>
+<area shape="rect" id="node12" title=" " alt="" coords="731,109,802,136"/>
+<area shape="rect" id="node5" title=" " alt="" coords="375,259,446,285"/>
+<area shape="rect" id="node6" title=" " alt="" coords="255,184,337,211"/>
+<area shape="rect" id="node7" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="361,184,460,211"/>
+<area shape="rect" id="node8" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="484,184,583,211"/>
+<area shape="rect" id="node10" title=" " alt="" coords="607,184,673,211"/>
+</map>

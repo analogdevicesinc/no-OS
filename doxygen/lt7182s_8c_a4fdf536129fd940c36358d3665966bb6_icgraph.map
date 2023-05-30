@@ -1,0 +1,7 @@
+<map id="lt7182s_write_byte" name="lt7182s_write_byte">
+<area shape="rect" id="node1" title="Perform a raw PMBus write byte operation." alt="" coords="220,81,367,108"/>
+<area shape="rect" id="node2" href="$lt7182s_8h.html#a14c5d608469c9ae6f58c62bfd88fb44f" title="Configure ADC control." alt="" coords="13,5,165,32"/>
+<area shape="rect" id="node3" href="$lt7182s_8h.html#a9a4f7bb789424d3294a697ec5343b3d9" title="Perform commands for non&#45;volatile memory/EEPROM." alt="" coords="18,56,159,83"/>
+<area shape="rect" id="node4" href="$lt7182s_8h.html#a86fdeef5bde2bf5c700c88716df5dbb4" title="Set channel operation." alt="" coords="5,107,172,133"/>
+<area shape="rect" id="node5" href="$lt7182s_8h.html#af90ec06e9a51eb4d82d2873708430caa" title="Configure SYNC pin for clock synchronization." alt="" coords="12,157,165,184"/>
+</map>

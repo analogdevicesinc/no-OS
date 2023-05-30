@@ -1,0 +1,7 @@
+<map id="drivers/power/ltc4296/ltc4296.h" name="drivers/power/ltc4296/ltc4296.h">
+<area shape="rect" id="node1" title="Header file for the LTC4296 Driver." alt="" coords="207,5,369,47"/>
+<area shape="rect" id="node2" href="$ltc4296_8c.html" title="Implementation file for the LTC4296 Driver." alt="" coords="5,102,168,143"/>
+<area shape="rect" id="node3" href="$ltc4296_2src_2common_2common__data_8h.html" title="Defines common data to be used by ltc4296 examples." alt="" coords="192,102,384,143"/>
+<area shape="rect" id="node5" href="$ltc4296_2src_2examples_2basic_2basic__example_8c.html" title="Basic example source file for ltc4296 project." alt="" coords="409,95,575,151"/>
+<area shape="rect" id="node4" href="$ltc4296_2src_2common_2common__data_8c.html" title="Defines common data to be used by ltc4296 examples." alt="" coords="193,199,383,240"/>
+</map>

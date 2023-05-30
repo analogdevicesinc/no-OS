@@ -1,0 +1,5 @@
+<map id="delay_fdata_cycles" name="delay_fdata_cycles">
+<area shape="rect" id="node1" title="Delay for a number of fdata clock cycles." alt="" coords="277,5,424,32"/>
+<area shape="rect" id="node2" href="$ad9739a_8h.html#a5790358339c8085a397128ede20af842" title="Initializes the AD9739A." alt="" coords="108,5,229,32"/>
+<area shape="rect" id="node3" href="$ad9739a__fmc__ebz_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="5,5,60,32"/>
+</map>

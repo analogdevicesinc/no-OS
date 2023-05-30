@@ -1,0 +1,9 @@
+<map id="admv1014_spi_write" name="admv1014_spi_write">
+<area shape="rect" id="node1" title="Writes data to ADMV1014 over SPI." alt="" coords="513,56,671,83"/>
+<area shape="rect" id="node2" href="$admv1014_8h.html#af54aeecd75abebc7ad4b44d2eb947844" title="Initializes the admv1014." alt="" coords="52,5,171,32"/>
+<area shape="rect" id="node3" href="$admv1014_8h.html#a898a127684be3100b115b70bd66ef9b0" title="Update ADMV1014 register." alt="" coords="265,81,465,108"/>
+<area shape="rect" id="node4" href="$admv1014_8h.html#a2f848f997531fdcabe617ff5f3c522b4" title="Set Baseband Amp Gain." alt="" coords="5,56,217,83"/>
+<area shape="rect" id="node5" href="$admv1014_8h.html#a5f4cbdd053844a1893904b5a23cfdb44" title="Set Digital Rx Detector." alt="" coords="20,107,203,133"/>
+<area shape="rect" id="node6" href="$admv1014_8h.html#a2a23fff172e8a95840dc3cffb903cbb9" title="Set IF Amp Gain." alt="" coords="9,157,214,184"/>
+<area shape="rect" id="node7" href="$admv1014_8h.html#a3595daf13e57a2467b3fb87cc2763707" title="Set LO Amp Phase." alt="" coords="29,208,193,235"/>
+</map>

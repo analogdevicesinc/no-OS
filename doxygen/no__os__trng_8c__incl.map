@@ -1,0 +1,9 @@
+<map id="drivers/api/no_os_trng.c" name="drivers/api/no_os_trng.c">
+<area shape="rect" id="node1" title="Implementation of the TRNG Interface." alt="" coords="136,5,313,32"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,80,92,107"/>
+<area shape="rect" id="node3" href="$no__os__trng_8h.html" title="Header file of true random number generator." alt="" coords="116,80,221,107"/>
+<area shape="rect" id="node5" title=" " alt="" coords="245,80,316,107"/>
+<area shape="rect" id="node6" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="341,80,450,107"/>
+<area shape="rect" id="node4" title=" " alt="" coords="133,155,204,181"/>
+<area shape="rect" id="node7" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="361,155,429,181"/>
+</map>

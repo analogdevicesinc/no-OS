@@ -1,0 +1,12 @@
+<map id="max14906_iio_desc_init_param" name="max14906_iio_desc_init_param">
+<area shape="rect" id="node1" title="Initialization parameter for the MAX14906 IIO descriptor." alt="" coords="1667,50,1845,91"/>
+<area shape="rect" id="node2" href="$structmax14906__ch__config.html" title="Configuration structure for a MAX14906 channel." alt="" coords="1305,32,1463,59"/>
+<area shape="rect" id="node3" href="$structmax149x6__init__param.html" title="Initialization parameter for the MAX149X6 device." alt="" coords="1300,83,1468,109"/>
+<area shape="rect" id="node4" href="$structno__os__gpio__init__param.html" title="Structure holding the parameters for GPIO initialization." alt="" coords="957,35,1129,61"/>
+<area shape="rect" id="node5" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="631,23,819,49"/>
+<area shape="rect" id="node6" href="$structno__os__spi__init__param.html" title="Structure holding the parameters for SPI initialization." alt="" coords="962,108,1125,135"/>
+<area shape="rect" id="node7" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="663,163,786,189"/>
+<area shape="rect" id="node8" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,125,184,152"/>
+<area shape="rect" id="node10" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="324,187,471,213"/>
+<area shape="rect" id="node9" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="323,239,472,281"/>
+</map>

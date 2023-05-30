@@ -1,0 +1,33 @@
+<map id="spi_engine_set_speed" name="spi_engine_set_speed">
+<area shape="rect" id="node1" title="Set SPI engine clock frequency." alt="" coords="1005,537,1171,564"/>
+<area shape="rect" id="node2" href="$ad463x_8h.html#a21a02068593b02844ec89b5f7039118d" title="Exit register configuration mode." alt="" coords="756,267,957,293"/>
+<area shape="rect" id="node3" href="$ad469x_8h.html#a29fa81e8b7bda592a13959d2f7467e00" title=" " alt="" coords="777,317,937,344"/>
+<area shape="rect" id="node23" href="$ad469x_8h.html#a5229fb4d37180b1359fdc0086f8b3528" title=" " alt="" coords="775,511,939,537"/>
+<area shape="rect" id="node26" href="$ad7616_8h.html#a28a5328adc3dd216fad7dbe17b37dfd8" title=" " alt="" coords="800,563,913,589"/>
+<area shape="rect" id="node28" href="$pulsar__adc_8h.html#a2b45d9d3ec79f01774eb4514ac2b6c24" title=" " alt="" coords="765,615,948,641"/>
+<area shape="rect" id="node31" href="$pulsar__adc_8h.html#ad3294b4629cbd21dba90022b1e860bab" title=" " alt="" coords="783,670,930,711"/>
+<area shape="rect" id="node4" href="$ad469x_8h.html#a7434be359b6fde84674e24e3077dc3cd" title="Get the status of analog input high Z mode." alt="" coords="534,310,694,351"/>
+<area shape="rect" id="node5" href="$ad469x_8h.html#a18edcd3a7118bd76d357e1a1cecf97fb" title="Get the value of reference." alt="" coords="531,157,697,184"/>
+<area shape="rect" id="node6" href="$ad469x_8h.html#a8c1119c2b26ad1832cae39c5befb608c" title="Resets the ad469x device." alt="" coords="543,208,685,235"/>
+<area shape="rect" id="node7" href="$ad469x_8h.html#a1ead06cbf08ce55e3968fbe012404cf0" title=" " alt="" coords="527,259,701,285"/>
+<area shape="rect" id="node8" href="$ad469x_8h.html#a1d320a09c42214fd9a3a3e817905f68a" title=" " alt="" coords="525,376,703,403"/>
+<area shape="rect" id="node9" href="$ad469x_8h.html#a6a54b9f28e37a2c3013a2fa29aebea2d" title="Configure over sampling ratio in advanced sequencer mode." alt="" coords="275,611,434,637"/>
+<area shape="rect" id="node11" href="$ad469x_8h.html#aef0ac4841f289df5fbdf1814444af477" title="Configure advanced sequencer number of slots, temp channel not included." alt="" coords="269,427,440,469"/>
+<area shape="rect" id="node12" href="$ad469x_8h.html#af7fcfce092cbb65e39671977873db213" title="Configure analog input high Z mode." alt="" coords="273,545,437,586"/>
+<area shape="rect" id="node13" href="$ad469x_8h.html#a9d0b903c127a29bfdbe2f48cb7e085f7" title="Enter conversion mode. To exit conversion mode send a 5 bit conversion mode command AD469x_CMD_REG_CO..." alt="" coords="238,493,471,520"/>
+<area shape="rect" id="node14" href="$ad469x_8h.html#a8b72a2fecde49c1b9b24d68208ea5564" title="Disable temperature read at the end of the sequence, for standard and advanced sequencer." alt="" coords="237,5,472,32"/>
+<area shape="rect" id="node15" href="$ad469x_8h.html#a80ed0cdb13565e54690ef469ce3bc7fe" title="Enable temperature read at the end of the sequence, for standard and advanced sequencer." alt="" coords="239,224,470,251"/>
+<area shape="rect" id="node17" href="$ad469x_8h.html#abdc7812a777bfc86481f0514b2c3ac15" title="Configure converter busy indicator to the output of the specified port." alt="" coords="287,275,422,301"/>
+<area shape="rect" id="node18" href="$ad469x_8h.html#a98894c2703a93e32ac8939521cf05198" title="Set channel sequence." alt="" coords="277,57,432,98"/>
+<area shape="rect" id="node19" href="$ad469x_8h.html#a133301905557dac320c3612d2a50b4a1" title="Set the value of reference." alt="" coords="271,173,438,200"/>
+<area shape="rect" id="node20" href="$ad469x_8c.html#a7378e364d2508802118c9c41c986f4d1" title="Configure register access mode." alt="" coords="245,325,465,352"/>
+<area shape="rect" id="node21" href="$ad469x_8h.html#afd56203eb99ded0592e4af54947ab320" title="Configure the pin pairing option in standard sequencer mode." alt="" coords="267,376,443,403"/>
+<area shape="rect" id="node22" href="$ad469x_8h.html#a6785c64a2085f2cbc35baeb76b0aaa54" title="Configure over sampling ratio in standard sequencer mode." alt="" coords="277,123,432,149"/>
+<area shape="rect" id="node10" href="$ad469x_8c.html#a10a460881b625198baafdb96a81eb6b6" title=" " alt="" coords="5,376,189,403"/>
+<area shape="rect" id="node16" href="$ad469x_8h.html#a8c42a57e73b808c98550cb1b8eccbaa3" title=" " alt="" coords="39,249,155,276"/>
+<area shape="rect" id="node24" href="$ad469x_8h.html#a2601614954834f568eb6fc653c129398" title="Advanced sequencer, assign channel to a slot." alt="" coords="529,562,699,603"/>
+<area shape="rect" id="node25" href="$ad469x_8h.html#a51eef171f98e1bc8c25d8dbf9b05952b" title="Configure standard sequencer channels." alt="" coords="520,511,708,537"/>
+<area shape="rect" id="node27" href="$ad7616__sdz_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="587,628,641,655"/>
+<area shape="rect" id="node29" href="$pulsar__adc_8h.html#a073bc069570261ee26cb17eb2d880ced" title=" " alt="" coords="554,679,674,705"/>
+<area shape="rect" id="node30" href="$pulsar-adc_2src_2examples_2basic__example_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="275,763,435,789"/>
+</map>

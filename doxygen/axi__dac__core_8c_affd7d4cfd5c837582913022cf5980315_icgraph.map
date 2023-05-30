@@ -1,0 +1,20 @@
+<map id="axi_dac_update_bits" name="axi_dac_update_bits">
+<area shape="rect" id="node1" title="AXI DAC Update Data bits." alt="" coords="1007,132,1161,159"/>
+<area shape="rect" id="node2" href="$axi__dac__core_8h.html#a35b4348d0812ce072dc10f58ab748508" title="AXI DAC Bus Data Write." alt="" coords="786,5,929,32"/>
+<area shape="rect" id="node13" href="$axi__dac__core_8h.html#a742bbc91b524a8102cf6d120fdb34c29" title="AXI DAC data format." alt="" coords="764,56,951,83"/>
+<area shape="rect" id="node14" href="$axi__dac__core_8h.html#a6c7981356943ccd12b99e7590e8e0c23" title="AXI DAC Set starting dma data trasfer address." alt="" coords="756,107,959,133"/>
+<area shape="rect" id="node15" href="$axi__dac__core_8h.html#afff2fa81b555036327565a0dae937dfd" title="AXI DAC Set data stream mode." alt="" coords="763,157,951,184"/>
+<area shape="rect" id="node16" href="$axi__dac__core_8h.html#a4cd031cad59c11cbe7a078e617a7cc46" title="AXI DAC Set DDR (bus double&#45;data&#45;rate) mode." alt="" coords="794,208,921,235"/>
+<area shape="rect" id="node18" href="$axi__dac__core_8h.html#a4ed9f03cae2249fccd45d145e88f1313" title="AXI DAC Set IO mode." alt="" coords="776,259,939,285"/>
+<area shape="rect" id="node3" href="$ad3552r_8h.html#a14cac9936d965b7a9a49bb689f76dfd9" title=" " alt="" coords="565,96,708,123"/>
+<area shape="rect" id="node11" href="$axi__dac__core_8h.html#a4d843cad23a06079bb7d6245fe0a277f" title="AXI DAC Bus Data Read." alt="" coords="567,5,706,32"/>
+<area shape="rect" id="node4" href="$ad3552r_8h.html#a118aa692c26c404334c0f2019043fbeb" title=" " alt="" coords="381,183,483,209"/>
+<area shape="rect" id="node7" href="$ad3552r_8h.html#a4b118dc51ba86b1c81b8a5fbfe1c384f" title=" " alt="" coords="353,125,511,152"/>
+<area shape="rect" id="node10" href="$ad3552r_8h.html#a8e59071eb5dc9e29dcef464b5ee97c37" title=" " alt="" coords="347,59,517,101"/>
+<area shape="rect" id="node5" href="$ltc7871_2src_2platform_2maxim_2main_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="5,201,124,228"/>
+<area shape="rect" id="node6" href="$iio__ad3552r_8h.html#a690d5a4cec9b9316e0d635113c09e9d6" title=" " alt="" coords="172,231,299,257"/>
+<area shape="rect" id="node8" href="$generic__spi__example_8c.html#aa363cb929bbd18eaee1295cecbcc7a22" title=" " alt="" coords="182,125,289,152"/>
+<area shape="rect" id="node9" href="$generic__spi__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title=" " alt="" coords="5,125,124,152"/>
+<area shape="rect" id="node12" href="$ad3552r_8h.html#acf6f55ec6fb20867e06bcc1237f91909" title=" " alt="" coords="363,5,501,32"/>
+<area shape="rect" id="node17" href="$ad3552r_8c.html#a99b8d9b1903e38e171e19132336af7fb" title=" " alt="" coords="571,191,702,217"/>
+</map>

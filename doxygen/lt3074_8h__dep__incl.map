@@ -1,0 +1,10 @@
+<map id="drivers/power/lt3074/lt3074.h" name="drivers/power/lt3074/lt3074.h">
+<area shape="rect" id="node1" title=" " alt="" coords="301,5,457,47"/>
+<area shape="rect" id="node2" href="$iio__lt3074_8c.html" title="Source file for the LT3074 IIO Driver." alt="" coords="5,206,161,247"/>
+<area shape="rect" id="node3" href="$iio__lt3074_8h.html" title="Header file for the LT3074 IIO Driver." alt="" coords="121,102,277,143"/>
+<area shape="rect" id="node5" href="$lt3074_8c.html" title=" " alt="" coords="301,102,457,143"/>
+<area shape="rect" id="node6" href="$lt3074_2src_2common_2common__data_8h.html" title="Defines common data to be used by lt3074 examples." alt="" coords="482,102,674,143"/>
+<area shape="rect" id="node8" href="$lt3074_2src_2examples_2basic_2basic__example_8c.html" title="Basic example source file for lt3074 project." alt="" coords="699,95,865,151"/>
+<area shape="rect" id="node4" href="$lt3074_2src_2examples_2iio__example_2iio__example_8c.html" title="IIO example source file for lt3074 project." alt="" coords="185,199,360,255"/>
+<area shape="rect" id="node7" href="$lt3074_2src_2common_2common__data_8c.html" title="Defines common data to be used by lt3074 examples." alt="" coords="483,206,673,247"/>
+</map>

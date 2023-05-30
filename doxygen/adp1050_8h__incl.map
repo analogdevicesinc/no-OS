@@ -1,0 +1,12 @@
+<map id="drivers/power/adp1050/adp1050.h" name="drivers/power/adp1050/adp1050.h">
+<area shape="rect" id="node1" title="Header file for the ADP1050 Driver." alt="" coords="315,5,486,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="172,169,243,196"/>
+<area shape="rect" id="node3" title=" " alt="" coords="374,169,457,196"/>
+<area shape="rect" id="node4" title=" " alt="" coords="591,95,658,121"/>
+<area shape="rect" id="node5" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="27,95,134,121"/>
+<area shape="rect" id="node6" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="158,95,257,121"/>
+<area shape="rect" id="node7" href="$no__os__pwm_8h.html" title="Header file of PWM Interface." alt="" coords="281,95,392,121"/>
+<area shape="rect" id="node8" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="416,95,516,121"/>
+<area shape="rect" id="node10" href="$no__os__units_8h.html" title="Header file of Units." alt="" coords="683,95,793,121"/>
+<area shape="rect" id="node9" title=" " alt="" coords="481,169,552,196"/>
+</map>
