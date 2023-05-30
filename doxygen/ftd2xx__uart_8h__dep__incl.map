@@ -1,0 +1,15 @@
+<map id="drivers/platform/ftd2xx/mpsse/ftd2xx_uart.h" name="drivers/platform/ftd2xx/mpsse/ftd2xx_uart.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="225,5,397,45"/>
+<area shape="rect" id="Node000002" href="$ftd2xx__uart_8c.html" title=" " alt="" coords="5,93,177,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="252,53,140,96,139,91,250,48"/>
+<area shape="rect" id="Node000003" href="$max14916_2src_2platform_2ftd2xx_2parameters_8h.html" title="Definition of FTD2XX platform data used by max14916 project." alt="" coords="202,93,421,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="314,59,314,93,309,93,309,59"/>
+<area shape="rect" id="Node000006" href="$max31827-evkit_2src_2platform_2ftd2xx_2parameters_8h.html" title=" " alt="" coords="445,93,687,133"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="381,47,511,91,509,96,379,52"/>
+<area shape="rect" id="Node000004" href="$max14916_2src_2platform_2ftd2xx_2main_8c.html" title="Main file for FTD2XX platform of max14916 project." alt="" coords="5,181,180,221"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="251,141,142,184,140,179,250,136"/>
+<area shape="rect" id="Node000005" href="$max14916_2src_2platform_2ftd2xx_2parameters_8c.html" title="Definition of FTD2XX platform data used by max14916 project." alt="" coords="204,181,421,221"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="315,147,315,181,310,181,309,147"/>
+<area shape="rect" id="Node000007" href="$max31827-evkit_2src_2platform_2ftd2xx_2parameters_8c.html" title=" " alt="" coords="446,181,686,221"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="569,147,569,181,563,181,563,147"/>
+</map>

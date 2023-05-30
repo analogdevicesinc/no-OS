@@ -1,0 +1,5 @@
+<map id="no_os_mdio_init_param" name="no_os_mdio_init_param">
+<area shape="rect" id="Node000001" title="Parameters for an MDIO slave." alt="" coords="5,93,183,119"/>
+<area shape="rect" id="Node000002" href="$structno__os__mdio__ops.html" title="Collection of MDIO ops that point to specific implementations." alt="" coords="29,5,159,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="97,45,97,93,91,93,91,45"/>
+</map>

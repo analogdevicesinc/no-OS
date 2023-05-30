@@ -1,0 +1,7 @@
+<map id="no_os_i3c_do_daa" name="no_os_i3c_do_daa">
+<area shape="rect" id="Node000001" title="Do DAA to assign the dynamic addresses." alt="" coords="360,5,500,31"/>
+<area shape="rect" id="Node000002" href="$no__os__i3c_8c.html#a1a8b6ccd9d5a915e699054af2a8e3f68" title="Initialize the I3C bus." alt="" coords="168,5,312,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="346,21,313,21,313,15,346,15"/>
+<area shape="rect" id="Node000003" href="$no__os__i3c_8c.html#ab54a357ab3d63706a3fbe455a4cd6fd8" title="Initialize the I3C device. If the bus of the I3C device is not initialized, it will call to init it." alt="" coords="5,5,120,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="154,21,121,21,121,15,154,15"/>
+</map>

@@ -1,0 +1,24 @@
+<map id="projects/max14916/src/platform/ftd2xx/parameters.h" name="projects/max14916/src/platform/ftd2xx/parameters.h">
+<area shape="rect" id="Node000001" title="Definition of FTD2XX platform data used by max14916 project." alt="" coords="104,5,323,45"/>
+<area shape="rect" id="Node000002" href="$ftd2xx__spi_8h.html" title=" " alt="" coords="228,93,329,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="231,44,262,81,258,84,227,47"/>
+<area shape="rect" id="Node000006" href="$ftd2xx__uart_8h.html" title=" " alt="" coords="95,93,203,119"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="200,47,170,84,166,81,196,44"/>
+<area shape="rect" id="Node000003" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="291,240,389,265"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="289,117,317,166,337,225,332,227,312,168,284,120"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="228,167,303,192"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="279,119,273,154,267,153,274,119"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="218,313,289,339"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="328,267,280,307,276,302,324,263"/>
+<area shape="rect" id="Node000007" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="97,167,202,192"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="152,119,152,153,147,153,147,119"/>
+<area shape="poly" id="edge7_Node000007_Node000004" title=" " alt="" coords="173,190,203,210,230,238,245,269,253,299,248,301,240,271,226,242,199,214,170,194"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="5,313,88,339"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="129,194,99,214,73,242,59,271,52,301,47,299,54,269,68,238,96,210,126,190"/>
+<area shape="rect" id="Node000009" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="83,240,216,265"/>
+<area shape="poly" id="edge9_Node000007_Node000009" title=" " alt="" coords="152,192,152,226,147,226,147,192"/>
+<area shape="poly" id="edge11_Node000009_Node000004" title=" " alt="" coords="168,263,226,303,223,307,165,268"/>
+<area shape="poly" id="edge12_Node000009_Node000008" title=" " alt="" coords="134,268,76,307,73,303,131,263"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="114,313,185,339"/>
+<area shape="poly" id="edge10_Node000009_Node000010" title=" " alt="" coords="152,266,152,300,147,300,147,266"/>
+</map>

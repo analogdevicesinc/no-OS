@@ -1,0 +1,25 @@
+<map id="max31827_reg_write" name="max31827_reg_write">
+<area shape="rect" id="Node000001" title="Write a register value." alt="" coords="1025,65,1184,91"/>
+<area shape="rect" id="Node000002" href="$max31827_8c.html#acf60373c1d4f07f1fb9850b75c1ae299" title="Initialize MAX31827 device setup." alt="" coords="795,11,957,36"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1037,65,929,39,930,33,1038,60"/>
+<area shape="rect" id="Node000008" href="$max31827_8c.html#af12781416b9b04a63d2fd67109676e6a" title="Read&#45;modify&#45;write operation." alt="" coords="775,65,977,91"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="1011,81,977,81,977,75,1011,75"/>
+<area shape="rect" id="Node000010" href="$max31827_8c.html#a0c301ae1d6106477de04566e075bc380" title="Shutdown then write register value." alt="" coords="525,120,727,145"/>
+<area shape="poly" id="edge12_Node000001_Node000010" title=" " alt="" coords="1030,96,978,105,847,120,727,129,727,124,847,114,977,99,1029,91"/>
+<area shape="rect" id="Node000003" href="$max31827_8c.html#af2a1841b0ff4828abe3e45fe8be2cbbc" title="Device and comm init function." alt="" coords="567,5,685,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="781,24,686,22,686,17,781,19"/>
+<area shape="rect" id="Node000004" href="$max31827-evkit_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="317,59,435,84"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="553,36,436,61,435,56,552,31"/>
+<area shape="rect" id="Node000005" href="$iio__max31827_8c.html#a4dd055100a02994fb2af0330e10557bc" title="Initializes the MAX31827 IIO driver." alt="" coords="305,5,447,31"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="552,21,447,21,447,15,552,15"/>
+<area shape="rect" id="Node000006" href="$max31827-evkit_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="108,5,227,31"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="291,21,227,21,227,15,291,15"/>
+<area shape="rect" id="Node000007" href="$ad3552r__fmcz_2src_2platform_2xilinx_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for xilinx platform." alt="" coords="5,5,60,31"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="94,21,60,21,60,15,94,15"/>
+<area shape="rect" id="Node000009" href="$max31827_8c.html#aabcf0e0ace3ae231d60646c3a793f363" title="Read input temperature." alt="" coords="542,55,710,95"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="761,79,710,79,710,74,761,74"/>
+<area shape="poly" id="edge10_Node000008_Node000010" title=" " alt="" coords="804,96,685,123,684,117,803,91"/>
+<area shape="poly" id="edge9_Node000009_Node000004" title=" " alt="" coords="528,76,435,75,435,70,528,71"/>
+<area shape="rect" id="Node000011" href="$max31827_8c.html#af4aa71f953a9fb60e16ba9a080fc78f4" title="Write the alarm value to the specified register." alt="" coords="275,120,477,145"/>
+<area shape="poly" id="edge11_Node000010_Node000011" title=" " alt="" coords="512,135,477,135,477,130,512,130"/>
+</map>

@@ -1,0 +1,38 @@
+<map id="max22017_reg_update" name="max22017_reg_update">
+<area shape="rect" id="Node000001" title="Update the value of a device register (read/write sequence)." alt="" coords="1063,261,1233,287"/>
+<area shape="rect" id="Node000002" href="$max22017_8c.html#a3756e7203c59969bf0619a571b7d65f5" title="Set AO configuration." alt="" coords="628,9,765,35"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1137,248,1122,203,1097,148,1061,93,1039,69,1013,49,984,34,953,23,887,11,823,9,766,13,765,8,823,3,888,5,954,18,986,29,1016,45,1043,65,1066,90,1102,145,1127,201,1142,246"/>
+<area shape="rect" id="Node000004" href="$max22017_8c.html#a10c14de12ba5409698b02d3575800e04" title="Enable the input direction of the specified GPIO." alt="" coords="821,161,1012,201"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="1108,258,1014,215,981,203,983,198,1016,210,1110,253"/>
+<area shape="rect" id="Node000005" href="$max22017_8c.html#a5e59562b09b426a97b112696aa40c2ab" title="Enable the output direction of the specified GPIO." alt="" coords="821,225,1012,265"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="1048,264,1012,259,1013,254,1049,259"/>
+<area shape="rect" id="Node000006" href="$max22017_8c.html#af87efea498e723603cf471d230b76074" title="Obtain the GPIO decriptor." alt="" coords="839,289,994,315"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="1049,289,995,295,994,290,1048,283"/>
+<area shape="rect" id="Node000007" href="$max22017_8c.html#aa1e8feaec3b673a3f0ba352029d44284" title="Free the resources allocated by no_os_gpio_get()." alt="" coords="825,339,1008,364"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="1107,295,1016,330,976,341,974,336,1014,325,1105,290"/>
+<area shape="rect" id="Node000008" href="$max22017_8c.html#a8233522eeb69e2052205118fb1a93cf8" title="Set the value of the specified GPIO." alt="" coords="819,388,1015,413"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="1126,298,1078,339,1048,361,1016,379,986,390,984,385,1014,374,1045,356,1075,335,1123,294"/>
+<area shape="rect" id="Node000009" href="$max22017_8c.html#a30aec5321f3cb133a4a1504ff6223b9d" title="Initialize and configure the MAX22017 device." alt="" coords="430,111,549,136"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="1128,252,1081,198,1049,171,1014,151,953,130,889,115,824,107,760,103,642,106,549,116,549,111,642,101,760,98,825,101,890,110,954,125,1016,146,1052,167,1085,194,1132,248"/>
+<area shape="rect" id="Node000012" href="$max22017_8c.html#aa944393da5461fca8017eab6042091df" title="Set operation mode for requested channel." alt="" coords="837,437,996,463"/>
+<area shape="poly" id="edge12_Node000001_Node000012" title=" " alt="" coords="1134,300,1087,364,1054,399,1016,428,992,439,990,435,1013,424,1051,395,1083,361,1130,297"/>
+<area shape="rect" id="Node000013" href="$max22017_8c.html#aab284c408b16a3e902e66bcc9840d0b8" title="Set timeout settings for MAX22017 device." alt="" coords="829,487,1005,512"/>
+<area shape="poly" id="edge13_Node000001_Node000013" title=" " alt="" coords="1140,301,1122,340,1096,388,1060,436,1016,477,995,489,993,484,1013,473,1056,433,1091,385,1117,338,1135,298"/>
+<area shape="rect" id="Node000014" href="$max22017_8c.html#a0259bc69148e570701f7ea286039b5df" title="Soft reset requested channel." alt="" coords="835,60,998,85"/>
+<area shape="poly" id="edge14_Node000001_Node000014" title=" " alt="" coords="1132,251,1085,179,1052,140,1013,107,974,88,976,83,1016,102,1056,137,1089,176,1136,248"/>
+<area shape="rect" id="Node000003" href="$max22017_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="196,60,356,85"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="614,33,404,57,357,63,356,58,404,51,614,27"/>
+<area shape="poly" id="edge9_Node000009_Node000003" title=" " alt="" coords="421,110,329,88,331,83,422,105"/>
+<area shape="rect" id="Node000010" href="$iio__max22017_8c.html#af886f607d1393c77ca1fc9c6b524aa66" title=" " alt="" coords="205,111,347,136"/>
+<area shape="poly" id="edge10_Node000009_Node000010" title=" " alt="" coords="416,126,348,126,348,121,416,121"/>
+<area shape="rect" id="Node000011" href="$max22017_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="5,136,148,161"/>
+<area shape="poly" id="edge11_Node000010_Node000011" title=" " alt="" coords="191,137,149,142,148,137,191,131"/>
+<area shape="rect" id="Node000015" href="$max22017_8c.html#ac2fd9424dde3013e676024d0dfa500af" title="Free the resources allocated during init and perform a soft reset." alt="" coords="623,60,771,85"/>
+<area shape="poly" id="edge15_Node000014_Node000015" title=" " alt="" coords="822,75,771,75,771,70,822,70"/>
+<area shape="poly" id="edge16_Node000015_Node000003" title=" " alt="" coords="609,75,356,75,356,70,609,70"/>
+<area shape="poly" id="edge20_Node000015_Node000009" title=" " alt="" coords="631,91,543,113,541,108,630,86"/>
+<area shape="rect" id="Node000016" href="$iio__max22017_8c.html#a8a360915cc677cd521e1ba41c116b11a" title=" " alt="" coords="404,160,575,185"/>
+<area shape="poly" id="edge17_Node000015_Node000016" title=" " alt="" coords="669,96,626,124,576,151,545,162,543,157,574,146,623,119,666,91"/>
+<area shape="poly" id="edge19_Node000016_Node000010" title=" " alt="" coords="420,159,331,139,332,133,421,154"/>
+<area shape="poly" id="edge18_Node000016_Node000011" title=" " alt="" coords="390,169,148,155,148,150,390,164"/>
+</map>

@@ -1,0 +1,30 @@
+<map id="projects/ad74416h/src/examples/voltage_input_irq/voltage_input_irq.c" name="projects/ad74416h/src/examples/voltage_input_irq/voltage_input_irq.c">
+<area shape="rect" id="Node000001" title="Voltage input with interrupt example code for ad74416h&#45;pmdz project." alt="" coords="289,5,472,60"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,108,132,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="290,62,124,107,123,102,288,56"/>
+<area shape="rect" id="Node000003" href="$ad74416h_8h.html" title="Header file of AD74416h Driver." alt="" coords="157,108,255,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="328,62,243,104,240,100,326,58"/>
+<area shape="rect" id="Node000007" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="259,181,366,207"/>
+<area shape="poly" id="edge13_Node000001_Node000007" title=" " alt="" coords="372,61,325,170,321,167,367,59"/>
+<area shape="rect" id="Node000008" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="391,181,504,207"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="387,60,395,95,408,132,431,169,427,172,404,134,390,96,382,61"/>
+<area shape="rect" id="Node000009" href="$no__os__print__log_8h.html" title="Print messages helpers." alt="" coords="418,108,554,133"/>
+<area shape="poly" id="edge11_Node000001_Node000009" title=" " alt="" coords="415,58,463,97,459,101,411,62"/>
+<area shape="rect" id="Node000011" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="578,108,674,133"/>
+<area shape="poly" id="edge14_Node000001_Node000011" title=" " alt="" coords="456,58,581,101,580,106,455,63"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="699,108,767,133"/>
+<area shape="poly" id="edge16_Node000001_Node000012" title=" " alt="" coords="473,54,686,105,685,110,472,59"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="277,255,348,280"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="157,133,76,154,41,168,20,183,15,194,20,205,36,217,60,228,124,244,198,255,264,261,263,266,197,260,123,250,58,233,33,222,16,208,10,194,16,180,38,163,74,149,156,128"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="30,181,113,207"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="186,136,107,177,104,172,183,131"/>
+<area shape="rect" id="Node000006" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="137,181,235,207"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="205,134,195,169,190,167,200,133"/>
+<area shape="poly" id="edge7_Node000003_Node000007" title=" " alt="" coords="225,131,285,171,282,176,222,136"/>
+<area shape="poly" id="edge6_Node000006_Node000004" title=" " alt="" coords="208,204,281,245,279,250,205,209"/>
+<area shape="poly" id="edge8_Node000007_Node000004" title=" " alt="" coords="315,207,315,241,310,241,310,207"/>
+<area shape="poly" id="edge10_Node000008_Node000004" title=" " alt="" coords="427,209,348,250,346,246,424,204"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="529,181,595,207"/>
+<area shape="poly" id="edge12_Node000009_Node000010" title=" " alt="" coords="500,131,541,170,538,174,496,135"/>
+<area shape="poly" id="edge15_Node000011_Node000004" title=" " alt="" coords="630,134,628,170,621,191,609,209,591,221,566,231,500,247,427,258,362,265,361,260,426,253,499,242,564,226,589,216,605,205,616,189,622,169,624,134"/>
+</map>

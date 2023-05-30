@@ -1,0 +1,5 @@
+<map id="adis_write_za_scale" name="adis_write_za_scale">
+<area shape="rect" id="Node000001" title="Write raw acceleration scale adjustment on z axis." alt="" coords="237,5,389,31"/>
+<area shape="rect" id="Node000002" href="$iio__adis_8c.html#aedca9e1cc912124ab7272928dcf8c349" title="Handles the write request for calibscale attribute." alt="" coords="5,5,189,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="223,21,190,21,190,15,223,15"/>
+</map>

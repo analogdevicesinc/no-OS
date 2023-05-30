@@ -1,0 +1,9 @@
+<map id="drivers/platform/ftd2xx/mpsse/ftd2xx_platform.c" name="drivers/platform/ftd2xx/mpsse/ftd2xx_platform.c">
+<area shape="rect" id="Node000001" title="Implementation of HAL for ftd2xx platform." alt="" coords="5,5,193,45"/>
+<area shape="rect" id="Node000002" href="$ftd2xx__platform_8h.html" title="Implementation of HAL for ftd2xx platform." alt="" coords="30,93,169,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="102,46,102,79,97,79,97,46"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="13,167,87,192"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="93,121,68,157,64,154,89,117"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="111,167,189,192"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="110,117,136,154,132,157,106,121"/>
+</map>

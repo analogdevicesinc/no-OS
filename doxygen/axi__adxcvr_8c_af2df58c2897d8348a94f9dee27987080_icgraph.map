@@ -1,0 +1,32 @@
+<map id="adxcvr_write" name="adxcvr_write">
+<area shape="rect" id="Node000001" title="AXI ADXCVR Write." alt="" coords="595,252,701,277"/>
+<area shape="rect" id="Node000002" href="$axi__adxcvr_8c.html#a149984176c30c12dad5c193f4746fcb5" title="AXI ADXCVR Clock Disable." alt="" coords="400,80,547,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="622,244,486,108,490,104,626,240"/>
+<area shape="rect" id="Node000007" href="$axi__adxcvr_8c.html#a508bce6b00ea4fb0e316517b9c6dd0f9" title="AXI ADXCVR Clock Enable." alt="" coords="402,203,545,228"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="589,251,519,231,520,226,590,246"/>
+<area shape="rect" id="Node000013" href="$axi__adxcvr_8c.html#a8d899f5b5004a4f001e45d725c0469f0" title="AXI ADXCVR DPR Port Read." alt="" coords="408,252,539,277"/>
+<area shape="poly" id="edge13_Node000001_Node000013" title=" " alt="" coords="581,267,539,267,539,262,581,262"/>
+<area shape="rect" id="Node000014" href="$axi__adxcvr_8c.html#aced69997b25476d0e77f8e3f99e40995" title="AXI ADXCVR DPR Port Write." alt="" coords="406,301,541,327"/>
+<area shape="poly" id="edge14_Node000001_Node000014" title=" " alt="" coords="590,284,520,304,519,299,589,279"/>
+<area shape="rect" id="Node000015" href="$axi__adxcvr_8c.html#a67ef0bb38e4648e42b5cfa3a7991c49c" title="AXI ADXCVR Device Initialization." alt="" coords="426,351,521,376"/>
+<area shape="poly" id="edge15_Node000001_Node000015" title=" " alt="" coords="624,288,589,316,548,342,521,353,519,348,545,337,586,311,621,284"/>
+<area shape="rect" id="Node000003" href="$axi__adxcvr_8c.html#a95953cb03a2a6cffae96b78658b1e8f2" title=" " alt="" coords="161,5,352,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="431,77,351,45,313,33,314,28,353,39,433,72"/>
+<area shape="rect" id="Node000004" href="$jesd204__clk_8c.html#ac6c34646d1c05b88bf73af88f24bf6c4" title=" " alt="" coords="180,55,333,80"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="386,85,333,79,334,74,386,80"/>
+<area shape="rect" id="Node000006" href="$ad9208_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="229,104,284,129"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="387,105,285,116,284,111,386,100"/>
+<area shape="rect" id="Node000005" href="$ad9083_2src_2app__jesd_8c.html#a3fc69d9cce4bef3b10d0ea379c5cbd86" title="Application JESD setup." alt="" coords="5,129,113,155"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="185,86,162,94,120,112,84,132,81,127,118,108,160,89,183,81"/>
+<area shape="rect" id="Node000008" href="$axi__adxcvr_8c.html#a32cf9657d258ef0794e9c9e5c2d9337c" title=" " alt="" coords="163,153,351,179"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="403,202,313,181,314,176,404,197"/>
+<area shape="rect" id="Node000009" href="$app__transceiver_8c.html#ab75f92d0fa79151108cc487cd7829c98" title=" " alt="" coords="199,252,314,277"/>
+<area shape="poly" id="edge8_Node000007_Node000009" title=" " alt="" coords="404,234,314,255,313,249,403,228"/>
+<area shape="rect" id="Node000011" href="$jesd204__clk_8c.html#a6e197a63ac1e02eb48611524cfe27f67" title=" " alt="" coords="181,203,332,228"/>
+<area shape="poly" id="edge10_Node000007_Node000011" title=" " alt="" coords="388,218,332,218,332,213,388,213"/>
+<area shape="rect" id="Node000012" href="$ad6676__ebz_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="229,301,284,327"/>
+<area shape="poly" id="edge12_Node000007_Node000012" title=" " alt="" coords="412,236,402,242,387,254,378,266,369,279,353,291,318,306,285,313,284,308,317,301,351,286,365,275,374,263,383,250,398,237,410,231"/>
+<area shape="rect" id="Node000010" href="$headless__arm_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="32,252,87,277"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="185,267,87,267,87,262,185,262"/>
+<area shape="poly" id="edge11_Node000011_Node000005" title=" " alt="" coords="187,201,160,192,83,157,85,152,162,188,189,196"/>
+</map>

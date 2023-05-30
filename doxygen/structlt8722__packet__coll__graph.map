@@ -1,0 +1,7 @@
+<map id="lt8722_packet" name="lt8722_packet">
+<area shape="rect" id="Node000001" title="LT8722 packet structure." alt="" coords="84,93,197,119"/>
+<area shape="rect" id="Node000002" href="$structlt8722__command.html" title="LT8722 command structure." alt="" coords="5,5,140,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="92,40,113,68,133,91,129,95,109,71,88,43"/>
+<area shape="rect" id="Node000003" href="$structlt8722__reg.html" title="LT8722 register structure." alt="" coords="165,5,255,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="201,44,183,71,158,95,154,91,179,68,196,41"/>
+</map>

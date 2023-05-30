@@ -1,0 +1,17 @@
+<map id="drivers/platform/stm32/stm32_dma.h" name="drivers/platform/stm32/stm32_dma.h">
+<area shape="rect" id="Node000001" title="Platform independent function definitions and data types for the DMA API." alt="" coords="593,5,765,45"/>
+<area shape="rect" id="Node000002" href="$stm32__dma_8c.html" title="Implementation of stm32 DMA functionality." alt="" coords="5,93,177,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="580,41,398,65,189,96,178,98,177,93,188,91,397,60,579,36"/>
+<area shape="rect" id="Node000003" href="$stm32__gpdma_8c.html" title="Implementation of STM32 GPDMA functionality." alt="" coords="201,93,373,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="581,51,374,96,373,91,579,46"/>
+<area shape="rect" id="Node000004" href="$stm32__i3c_8c.html" title="Implementation of stm32 I3C driver." alt="" coords="397,93,569,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="625,53,527,96,525,91,623,48"/>
+<area shape="rect" id="Node000005" href="$stm32__spi_8c.html" title="Implementation of stm32 spi driver." alt="" coords="593,93,765,133"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="682,59,682,93,677,93,677,59"/>
+<area shape="rect" id="Node000006" href="$stm32__xspi_8c.html" title="Implementation of stm32 xspi driver." alt="" coords="789,93,961,133"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="736,48,833,91,831,96,734,53"/>
+<area shape="rect" id="Node000007" href="$ad463x__fmcz_2src_2platform_2stm32_2parameters_8c.html" title="Definition of STM32 platform data used by ad463x_fmcz project." alt="" coords="986,93,1226,133"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="780,44,1013,91,1012,96,778,49"/>
+<area shape="rect" id="Node000008" href="$ad738x__fmcz_2src_2platform_2stm32_2parameters_8c.html" title="Definition of STM32 platform data used by eval&#45;ad738x project." alt="" coords="1250,93,1490,133"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="779,35,1238,91,1250,92,1250,98,1238,96,778,41"/>
+</map>

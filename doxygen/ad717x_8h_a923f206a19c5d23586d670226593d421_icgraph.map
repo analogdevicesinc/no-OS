@@ -1,0 +1,5 @@
+<map id="AD717X_WaitForReady" name="AD717X_WaitForReady">
+<area shape="rect" id="Node000001" title="Waits until a new conversion result is available." alt="" coords="205,5,376,31"/>
+<area shape="rect" id="Node000002" href="$ad717x_8c.html#a89992ef25955f947d86b6f587e98349c" title="Perform Single Conversion." alt="" coords="5,5,157,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="192,21,157,21,157,15,192,15"/>
+</map>

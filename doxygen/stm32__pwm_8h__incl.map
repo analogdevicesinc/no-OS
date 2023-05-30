@@ -1,0 +1,22 @@
+<map id="drivers/platform/stm32/stm32_pwm.h" name="drivers/platform/stm32/stm32_pwm.h">
+<area shape="rect" id="Node000001" title="Header file for stm32 pwm specifics." alt="" coords="181,5,353,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="105,167,176,192"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="181,40,81,62,39,77,14,95,9,106,9,116,15,126,26,135,57,151,92,164,90,169,55,156,23,140,11,130,4,118,4,105,10,92,37,72,79,57,180,35"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="296,167,379,192"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="337,43,372,63,387,76,400,92,405,111,398,130,385,146,369,161,365,157,381,143,393,127,399,111,395,94,384,80,369,67,335,48"/>
+<area shape="rect" id="Node000004" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="24,93,131,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="223,48,119,90,117,85,221,43"/>
+<area shape="rect" id="Node000005" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="155,93,251,119"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="254,47,223,84,219,81,249,44"/>
+<area shape="rect" id="Node000006" href="$stm32__gpio_8h.html" title="Header file for stm32 gpio specifics." alt="" coords="276,93,386,119"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="285,44,315,81,311,84,280,47"/>
+<area shape="rect" id="Node000007" href="$stm32__hal_8h.html" title=" " alt="" coords="417,167,520,192"/>
+<area shape="poly" id="edge12_Node000001_Node000007" title=" " alt="" coords="334,43,379,63,421,91,445,121,462,153,457,155,441,124,417,95,376,68,332,48"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="90,117,123,154,119,158,86,121"/>
+<area shape="poly" id="edge6_Node000005_Node000002" title=" " alt="" coords="195,121,162,158,158,154,191,117"/>
+<area shape="poly" id="edge8_Node000006_Node000002" title=" " alt="" coords="301,121,185,164,183,159,299,116"/>
+<area shape="poly" id="edge9_Node000006_Node000003" title=" " alt="" coords="335,119,338,153,333,153,329,119"/>
+<area shape="poly" id="edge10_Node000006_Node000007" title=" " alt="" coords="354,116,435,158,433,163,352,121"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="435,240,502,265"/>
+<area shape="poly" id="edge11_Node000007_Node000008" title=" " alt="" coords="471,192,471,226,466,226,466,192"/>
+</map>

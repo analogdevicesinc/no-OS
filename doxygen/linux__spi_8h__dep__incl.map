@@ -1,0 +1,9 @@
+<map id="drivers/platform/linux/linux_spi.h" name="drivers/platform/linux/linux_spi.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="111,5,273,45"/>
+<area shape="rect" id="Node000002" href="$linux__spi_8c.html" title="Implementation of Linux platform SPI Driver." alt="" coords="5,93,168,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="160,56,112,95,108,91,157,52"/>
+<area shape="rect" id="Node000003" href="$ad9545_2src_2platform_2linux_2parameters_8h.html" title="Definitions specific to Maxim platform used by ad9545 project." alt="" coords="193,93,402,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="227,52,276,91,272,95,224,56"/>
+<area shape="rect" id="Node000004" href="$ad9545_2src_2platform_2linux_2parameters_8c.html" title="Definitions specific to Linux platform used by ad9545 project." alt="" coords="193,181,401,221"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="300,147,300,181,295,181,295,147"/>
+</map>

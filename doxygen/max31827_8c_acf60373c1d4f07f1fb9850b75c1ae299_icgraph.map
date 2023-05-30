@@ -1,0 +1,13 @@
+<map id="max31827_init_client" name="max31827_init_client">
+<area shape="rect" id="Node000001" title="Initialize MAX31827 device setup." alt="" coords="632,31,795,56"/>
+<area shape="rect" id="Node000002" href="$max31827_8c.html#af2a1841b0ff4828abe3e45fe8be2cbbc" title="Device and comm init function." alt="" coords="465,31,584,56"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="618,46,584,46,584,41,618,41"/>
+<area shape="rect" id="Node000003" href="$max31827-evkit_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="287,5,405,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="451,36,405,29,406,24,452,30"/>
+<area shape="rect" id="Node000004" href="$iio__max31827_8c.html#a4dd055100a02994fb2af0330e10557bc" title="Initializes the MAX31827 IIO driver." alt="" coords="275,55,417,80"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="452,56,418,60,417,55,451,50"/>
+<area shape="rect" id="Node000005" href="$max31827-evkit_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="108,55,227,80"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="261,70,227,70,227,65,261,65"/>
+<area shape="rect" id="Node000006" href="$ad3552r__fmcz_2src_2platform_2xilinx_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for xilinx platform." alt="" coords="5,55,60,80"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="94,70,60,70,60,65,94,65"/>
+</map>

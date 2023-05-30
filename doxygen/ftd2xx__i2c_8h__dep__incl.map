@@ -1,0 +1,9 @@
+<map id="drivers/platform/ftd2xx/mpsse/ftd2xx_i2c.h" name="drivers/platform/ftd2xx/mpsse/ftd2xx_i2c.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="120,5,292,45"/>
+<area shape="rect" id="Node000002" href="$ftd2xx__i2c_8c.html" title=" " alt="" coords="5,93,177,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="171,56,118,95,115,91,168,52"/>
+<area shape="rect" id="Node000003" href="$max31827-evkit_2src_2platform_2ftd2xx_2parameters_8h.html" title=" " alt="" coords="201,93,443,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="244,52,298,91,295,95,241,56"/>
+<area shape="rect" id="Node000004" href="$max31827-evkit_2src_2platform_2ftd2xx_2parameters_8c.html" title=" " alt="" coords="202,181,442,221"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="325,147,325,181,319,181,319,147"/>
+</map>

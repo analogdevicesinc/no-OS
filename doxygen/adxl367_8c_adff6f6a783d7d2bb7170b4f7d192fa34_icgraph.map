@@ -1,0 +1,5 @@
+<map id="adxl367_get_raw_xyz" name="adxl367_get_raw_xyz">
+<area shape="rect" id="Node000001" title="Reads the 3&#45;axis raw data from the accelerometer." alt="" coords="200,5,363,31"/>
+<area shape="rect" id="Node000002" href="$adxl367_8c.html#a976dcc45108e1317d14b9b7a5de91e37" title="Reads the 3&#45;axis raw data from the accelerometer and converts it to g." alt="" coords="5,5,152,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="186,21,152,21,152,15,186,15"/>
+</map>

@@ -1,0 +1,13 @@
+<map id="stm32_pwm_desc" name="stm32_pwm_desc">
+<area shape="rect" id="Node000001" title="Structure holding the STM32 PWM descriptor." alt="" coords="226,181,365,207"/>
+<area shape="rect" id="Node000002" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="44,93,176,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="149,122,271,179,269,183,146,127"/>
+<area shape="rect" id="Node000003" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="5,5,193,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="105,44,111,92,106,93,100,45"/>
+<area shape="rect" id="Node000004" href="$structno__os__irq__ctrl__desc.html" title=" " alt="" coords="221,93,370,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="298,133,298,181,293,181,293,133"/>
+<area shape="rect" id="Node000005" href="$structno__os__irq__platform__ops.html" title="Structure holding IRQ function pointers that point to the platform specific function." alt="" coords="217,5,395,31"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="305,45,299,93,294,92,300,44"/>
+<area shape="rect" id="Node000006" href="$structno__os__callback__desc.html" title="Structure describing a callback to be registered." alt="" coords="395,93,553,119"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="439,127,321,183,318,179,437,122"/>
+</map>

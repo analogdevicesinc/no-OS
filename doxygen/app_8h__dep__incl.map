@@ -1,0 +1,9 @@
+<map id="projects/cn0565/src/app/app.h" name="projects/cn0565/src/app/app.h">
+<area shape="rect" id="Node000001" title="EIT application header." alt="" coords="177,5,325,45"/>
+<area shape="rect" id="Node000002" href="$cn0565_2src_2app_2app_8c.html" title="EIT application source." alt="" coords="5,93,153,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="202,54,118,96,116,91,200,49"/>
+<area shape="rect" id="Node000003" href="$cn0565_2src_2app_2main_8c.html" title="EIT main." alt="" coords="177,93,325,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="254,59,254,93,249,93,249,59"/>
+<area shape="rect" id="Node000004" href="$mux__board_8c.html" title="Cross&#45;point switch handling code." alt="" coords="350,93,537,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="307,49,402,91,400,96,305,53"/>
+</map>

@@ -1,0 +1,11 @@
+<map id="max31827_remove" name="max31827_remove">
+<area shape="rect" id="Node000001" title="Free resources allocated by the init function." alt="" coords="493,31,641,56"/>
+<area shape="rect" id="Node000002" href="$max31827-evkit_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="301,5,419,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="479,35,419,28,420,23,480,30"/>
+<area shape="rect" id="Node000003" href="$iio__max31827_8c.html#a59d5d804db04a17bcdeb7ddfb5e869ba" title="Free resources allocated by the init function." alt="" coords="275,55,445,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="480,56,446,60,445,55,480,51"/>
+<area shape="rect" id="Node000004" href="$max31827-evkit_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="108,55,227,80"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="261,70,227,70,227,65,261,65"/>
+<area shape="rect" id="Node000005" href="$ad3552r__fmcz_2src_2platform_2xilinx_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for xilinx platform." alt="" coords="5,55,60,80"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="94,70,60,70,60,65,94,65"/>
+</map>

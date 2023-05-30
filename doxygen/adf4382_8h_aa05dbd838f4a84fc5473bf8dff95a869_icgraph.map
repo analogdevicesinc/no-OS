@@ -1,0 +1,60 @@
+<map id="adf4382_spi_write" name="adf4382_spi_write">
+<area shape="rect" id="Node000001" title="Writes data to ADF4382 over SPI." alt="" coords="1084,512,1225,538"/>
+<area shape="rect" id="Node000002" href="$adf4382_8c.html#af72d0899bbe73092b615195d788b8bab" title="Initializes the ADF4382." alt="" coords="387,611,490,636"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1086,543,943,573,774,601,619,617,491,624,490,619,619,611,773,596,942,568,1085,538"/>
+<area shape="rect" id="Node000006" href="$adf4382_8c.html#ab213d53064724a85c44fccf98aea1225" title="Set the output frequency. This will set the required registers to device but skip NDIV value,..." alt="" coords="581,663,771,688"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="1140,551,1098,601,1069,626,1037,646,971,670,901,683,833,688,771,687,771,682,832,682,900,677,969,664,1035,641,1066,622,1094,597,1135,547"/>
+<area shape="rect" id="Node000008" href="$adf4382_8c.html#a3f4a0e1104b1241c2a4705c469dcd2fe" title="Fast calibration function. Computes Minimum VCO frequency (fmin), uses the minimum NDIV value to gene..." alt="" coords="360,112,517,152"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="1138,501,1091,419,1055,366,1012,309,961,252,904,200,841,155,772,121,708,105,640,101,575,105,518,114,517,109,575,100,640,95,708,99,774,116,844,150,908,196,965,249,1016,306,1059,363,1095,416,1143,498"/>
+<area shape="rect" id="Node000009" href="$adf4382_8c.html#a42f85422e7f1541fcd6235b2a678df73" title="Set the output frequency." alt="" coords="609,512,743,538"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="1070,528,743,528,743,522,1070,522"/>
+<area shape="rect" id="Node000016" href="$adf4382_8c.html#abfbbf0996cba0aaa13b6f84647673daa" title="Set the phase adjustment in pico&#45;seconds. The phase adjust will enable the Bleed current option as we..." alt="" coords="579,18,773,43"/>
+<area shape="poly" id="edge18_Node000001_Node000016" title=" " alt="" coords="1148,499,1136,402,1113,270,1097,203,1079,143,1058,95,1034,64,1000,41,963,25,922,15,881,10,800,11,732,20,732,15,800,6,881,5,923,10,964,20,1003,37,1038,60,1062,93,1084,142,1102,202,1118,268,1141,401,1153,499"/>
+<area shape="rect" id="Node000017" href="$adf4382_8c.html#af4111e2eed2baa475d12be0f307db49a" title="Set REG0010 value in device structure to the device to start autocal." alt="" coords="821,714,1036,739"/>
+<area shape="poly" id="edge20_Node000001_Node000017" title=" " alt="" coords="1145,552,1105,623,1074,663,1038,697,998,716,996,711,1034,692,1070,659,1100,621,1140,549"/>
+<area shape="rect" id="Node000018" href="$adf4382_8c.html#a757680a0978c8bab202e3877011aaa22" title="Updates the values of the ADF4382 register." alt="" coords="837,363,1021,388"/>
+<area shape="poly" id="edge21_Node000001_Node000018" title=" " alt="" coords="1121,507,948,391,950,386,1124,502"/>
+<area shape="rect" id="Node000003" href="$iio__adf4382_8c.html#a98024760107fb7218ace561900ad4b6a" title="Initializes the ADF4382 IIO driver." alt="" coords="172,611,299,636"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="374,626,299,626,299,621,374,621"/>
+<area shape="rect" id="Node000005" href="$adf4382_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="176,562,295,587"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="373,611,288,590,289,584,375,606"/>
+<area shape="rect" id="Node000004" href="$adf4382_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="IIO example main execution." alt="" coords="5,611,124,636"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="158,626,124,626,124,621,158,621"/>
+<area shape="rect" id="Node000007" href="$adf4382_8c.html#a79674522d563a02a9e0d79374c6e7772" title="Set the desired output frequency and reset everything over to maximum supported value of 22GHz (21GHz..." alt="" coords="361,661,517,701"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="568,681,517,682,517,677,568,675"/>
+<area shape="poly" id="edge9_Node000009_Node000002" title=" " alt="" coords="596,543,580,551,566,563,557,575,547,588,532,601,491,617,489,612,529,596,544,584,552,572,562,559,577,547,594,539"/>
+<area shape="poly" id="edge12_Node000009_Node000008" title=" " alt="" coords="594,514,577,502,557,476,545,451,541,426,540,401,541,349,538,320,528,289,490,212,452,153,457,150,495,210,533,287,543,319,546,349,545,401,546,425,550,449,561,473,581,498,597,510"/>
+<area shape="rect" id="Node000010" href="$adf4382_8c.html#a90a2e1956072778acaeb2885373e50e7" title="Set the bleed word, which represents the value of the bleed current written to the register space." alt="" coords="347,463,531,488"/>
+<area shape="poly" id="edge10_Node000009_Node000010" title=" " alt="" coords="600,512,500,491,501,486,601,507"/>
+<area shape="rect" id="Node000011" href="$adf4382_8c.html#a9545e93dd75ebffedeedd8a88a19c5ce" title="Set the charge pump value which will be written to the register. The value will be between 0 and 15 o..." alt="" coords="371,512,506,538"/>
+<area shape="poly" id="edge11_Node000009_Node000011" title=" " alt="" coords="595,528,506,528,506,522,595,522"/>
+<area shape="rect" id="Node000012" href="$adf4382_8c.html#a437e2d35a220c2ea09744e8147550366" title="Set the reference doubler to enable or disable based on the passed parameter. If the parameter is dif..." alt="" coords="363,300,514,340"/>
+<area shape="poly" id="edge13_Node000009_Node000012" title=" " alt="" coords="594,514,577,502,562,483,554,464,551,427,549,390,542,372,529,354,513,341,516,337,533,350,547,369,554,388,557,426,559,463,566,480,580,498,597,509"/>
+<area shape="rect" id="Node000013" href="$adf4382_8c.html#ad97aa58924c0eeca883bfdd340ae4817" title="Set the desired reference frequency and reset everything over to maximum supported value of 5GHz to t..." alt="" coords="362,364,515,390"/>
+<area shape="poly" id="edge14_Node000009_Node000013" title=" " alt="" coords="595,513,577,502,565,489,558,477,552,451,546,426,540,414,529,403,511,392,514,387,532,399,544,411,551,424,557,450,563,475,569,486,580,498,598,508"/>
+<area shape="rect" id="Node000014" href="$adf4382_8c.html#af6e5b66e0da30c50bd332f340ad7adff" title="Set the reference divider value and reset everything over to maximum supported value of 63 to the max..." alt="" coords="361,414,516,439"/>
+<area shape="poly" id="edge15_Node000009_Node000014" title=" " alt="" coords="594,510,577,502,562,489,552,477,544,464,529,453,505,442,507,437,532,448,548,461,557,473,566,486,580,497,597,505"/>
+<area shape="rect" id="Node000015" href="$adf4382_8c.html#a6c3387b311effd620ce0264c6db07674" title="Set the desired output frequency and reset everything over to maximum supported value of 22GHz (21GHz..." alt="" coords="369,562,509,587"/>
+<area shape="poly" id="edge16_Node000009_Node000015" title=" " alt="" coords="601,543,501,564,500,559,600,538"/>
+<area shape="poly" id="edge17_Node000015_Node000005" title=" " alt="" coords="355,577,295,577,295,572,355,572"/>
+<area shape="poly" id="edge19_Node000016_Node000005" title=" " alt="" coords="565,28,509,33,451,45,396,67,371,83,349,101,325,137,304,191,286,258,271,331,250,470,240,562,235,561,245,469,266,330,281,257,299,190,320,135,345,98,368,78,394,62,450,40,508,27,565,23"/>
+<area shape="poly" id="edge22_Node000018_Node000006" title=" " alt="" coords="916,402,859,493,819,548,775,600,735,637,698,665,695,661,732,633,771,597,815,544,854,490,911,399"/>
+<area shape="poly" id="edge24_Node000018_Node000008" title=" " alt="" coords="915,351,896,307,865,254,824,201,799,178,772,159,742,145,710,134,642,122,577,119,518,122,517,117,576,114,643,116,711,129,744,140,775,155,803,174,828,197,870,251,901,305,920,349"/>
+<area shape="poly" id="edge27_Node000018_Node000009" title=" " alt="" coords="907,400,850,452,814,479,775,502,742,515,740,510,772,497,811,474,847,447,904,396"/>
+<area shape="poly" id="edge30_Node000018_Node000016" title=" " alt="" coords="913,351,858,244,818,178,771,115,732,75,694,45,697,41,735,71,775,111,822,175,863,241,918,349"/>
+<area shape="rect" id="Node000019" href="$adf4382_8c.html#a852efef52e399e72459cce02555bb5dd" title="Set the output channel to enable or disable based on the passed parameter. If the parameter is differ..." alt="" coords="595,334,757,359"/>
+<area shape="poly" id="edge23_Node000018_Node000019" title=" " alt="" coords="823,366,757,358,758,353,823,361"/>
+<area shape="rect" id="Node000020" href="$adf4382_8c.html#a3be833c93a77ff0f9c8ad6f9d3b8aebe" title="Sets Fast calibration LUT Calibration. Refer to en_fastcal function to first generate fastcal Lookup ..." alt="" coords="601,384,751,424"/>
+<area shape="poly" id="edge25_Node000018_Node000020" title=" " alt="" coords="823,390,751,398,751,393,823,385"/>
+<area shape="rect" id="Node000021" href="$adf4382_8c.html#a4712eb3ced902ced893bf49622498f36" title="Set the EZSYNC features&#39; initial state. Awaits the SW_SYNC toggle." alt="" coords="599,448,753,488"/>
+<area shape="poly" id="edge26_Node000018_Node000021" title=" " alt="" coords="884,396,774,438,740,450,738,445,772,433,882,391"/>
+<area shape="rect" id="Node000022" href="$adf4382_8c.html#abaccee7f877e8f82d1aebdb37237cedf" title="Set the output power register value of a channel and reset everything over to maximum supported value..." alt="" coords="587,562,765,587"/>
+<area shape="poly" id="edge28_Node000018_Node000022" title=" " alt="" coords="915,401,892,435,860,476,820,517,775,551,747,564,745,559,772,547,817,513,856,472,887,432,910,398"/>
+<area shape="rect" id="Node000023" href="$adf4382_8c.html#ae04f11139e36334d3ee35c44016217e5" title="Set the phase polarity. If pol = 0 then it will add the phase value otherwise it will subtract the ph..." alt="" coords="589,170,763,195"/>
+<area shape="poly" id="edge31_Node000018_Node000023" title=" " alt="" coords="910,353,855,280,816,241,772,209,747,197,750,193,775,204,820,237,859,277,914,349"/>
+<area shape="rect" id="Node000024" href="$adf4382_8c.html#a255bb294a8cc86e9119a51f34286ab16" title="Set Software SYNC Request. Setting SW_SYNC resets the RF block. Clearing SW_SYNC makes ready for a ne..." alt="" coords="594,219,758,244"/>
+<area shape="poly" id="edge32_Node000018_Node000024" title=" " alt="" coords="903,356,846,307,810,281,772,259,739,247,741,242,774,255,813,277,850,303,907,352"/>
+<area shape="rect" id="Node000025" href="$adf4382_8c.html#a68d33a672ca123ef92ec514e79a9b7ae" title="Set Timed SYNC features&#39; initial state. Uses SYNC pin." alt="" coords="584,269,768,309"/>
+<area shape="poly" id="edge33_Node000018_Node000025" title=" " alt="" coords="878,361,772,324,737,312,739,307,774,318,880,356"/>
+<area shape="poly" id="edge29_Node000022_Node000002" title=" " alt="" coords="601,592,491,616,490,610,600,587"/>
+</map>

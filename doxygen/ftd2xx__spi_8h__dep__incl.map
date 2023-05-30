@@ -1,0 +1,11 @@
+<map id="drivers/platform/ftd2xx/mpsse/ftd2xx_spi.h" name="drivers/platform/ftd2xx/mpsse/ftd2xx_spi.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="115,5,287,45"/>
+<area shape="rect" id="Node000002" href="$ftd2xx__spi_8c.html" title=" " alt="" coords="5,93,177,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="167,56,117,95,114,91,164,52"/>
+<area shape="rect" id="Node000003" href="$max14916_2src_2platform_2ftd2xx_2parameters_8h.html" title="Definition of FTD2XX platform data used by max14916 project." alt="" coords="202,93,421,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="238,52,288,91,285,95,235,56"/>
+<area shape="rect" id="Node000004" href="$max14916_2src_2platform_2ftd2xx_2main_8c.html" title="Main file for FTD2XX platform of max14916 project." alt="" coords="113,181,288,221"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="277,144,227,183,224,179,274,140"/>
+<area shape="rect" id="Node000005" href="$max14916_2src_2platform_2ftd2xx_2parameters_8c.html" title="Definition of FTD2XX platform data used by max14916 project." alt="" coords="312,181,529,221"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="348,140,398,179,395,183,345,144"/>
+</map>

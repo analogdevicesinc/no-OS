@@ -1,0 +1,12 @@
+<map id="app_ad9083_init" name="app_ad9083_init">
+<area shape="rect" id="Node000001" title="Structure holding the parameters for ad9083 app initialization." alt="" coords="5,269,135,295"/>
+<area shape="rect" id="Node000002" href="$structno__os__clk.html" title=" " alt="" coords="135,181,221,207"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="123,212,106,221,91,232,79,251,74,270,69,269,75,249,87,229,103,216,120,207"/>
+<area shape="rect" id="Node000003" href="$structno__os__clk__hw.html" title=" " alt="" coords="167,269,279,295"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="174,220,173,233,176,244,186,257,200,267,197,271,183,261,172,247,168,233,168,220"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="213,257,201,232,185,209,190,206,206,229,217,255"/>
+<area shape="rect" id="Node000004" href="$structno__os__clk__desc.html" title="Structure holding CLK descriptor." alt="" coords="117,93,239,119"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="181,133,181,181,175,181,175,133"/>
+<area shape="rect" id="Node000005" href="$structno__os__clk__platform__ops.html" title="Structure holding CLK function pointers that point to the platform specific function." alt="" coords="89,5,267,31"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="181,45,181,93,175,93,175,45"/>
+</map>
