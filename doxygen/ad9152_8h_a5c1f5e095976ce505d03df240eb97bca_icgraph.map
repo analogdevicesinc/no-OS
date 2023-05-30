@@ -1,0 +1,16 @@
+<map id="ad9152_spi_read" name="ad9152_spi_read">
+<area shape="rect" id="Node000001" title="ad9152_spi_read" alt="" coords="359,80,491,105"/>
+<area shape="rect" id="Node000002" href="$ad9152_8c.html#a705143476843ff958370208e4c003726" title="ad9152_setup" alt="" coords="108,5,311,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="385,76,310,45,271,33,272,28,312,39,387,71"/>
+<area shape="rect" id="Node000004" href="$ad9152_8c.html#ad5ea3eadd4d829092d271a52c939bca5" title="ad9152_setup" alt="" coords="153,55,266,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="345,86,266,77,267,71,345,81"/>
+<area shape="rect" id="Node000005" href="$ad9152_8c.html#a0ed7e5e95a06425ebe0e06423e41e441" title="ad9152_setup" alt="" coords="111,104,307,129"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="345,104,308,108,307,103,345,99"/>
+<area shape="rect" id="Node000006" href="$ad9152_8c.html#ab1b891f60c3a39809d7b93695299ac6e" title="ad9152_setup" alt="" coords="151,153,268,179"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="385,114,312,143,268,156,266,151,310,138,383,109"/>
+<area shape="rect" id="Node000003" href="$fmcdaq3_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="5,80,60,105"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="128,37,109,44,77,62,51,82,48,77,74,58,107,40,126,32"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="140,80,61,91,60,86,139,75"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="102,105,60,99,60,94,103,99"/>
+<area shape="poly" id="edge8_Node000006_Node000003" title=" " alt="" coords="136,154,107,143,75,126,49,108,52,103,78,121,109,138,138,149"/>
+</map>

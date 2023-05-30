@@ -1,0 +1,23 @@
+<map id="adt7420_spi_reg_read" name="adt7420_spi_reg_read">
+<area shape="rect" id="Node000001" title="Reads the value of a register SPI interface device." alt="" coords="860,81,1025,107"/>
+<area shape="rect" id="Node000002" href="$adt7420_8c.html#ae8c9a7ec123d3b672f551de3dc2bebd6" title="Reads the value of a register." alt="" coords="673,81,812,107"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="846,97,812,97,812,91,846,91"/>
+<area shape="rect" id="Node000003" href="$adt7420_8c.html#a04499e58b0fca74cdc4dc704a5e44c6a" title="Reads the temperature data and converts it to Celsius degrees." alt="" coords="435,5,625,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="695,79,624,53,569,33,571,28,626,47,697,74"/>
+<area shape="rect" id="Node000004" href="$adt7420-pmdz_2src_2examples_2dummy_2dummy__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Dummy example main execution." alt="" coords="220,56,339,81"/>
+<area shape="poly" id="edge11_Node000002_Node000004" title=" " alt="" coords="659,92,339,75,339,69,659,87"/>
+<area shape="rect" id="Node000005" href="$adt7420_8c.html#a002fbfa6b776f9d63d6e394710c6fc49" title="Initializes the communication peripheral and checks if the device is present." alt="" coords="479,107,581,132"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="660,106,582,116,582,111,659,101"/>
+<area shape="rect" id="Node000008" href="$adt7420_8c.html#aa37e104e0f4f67268bb38e7ab79fe910" title="Sets the value of a register SPI/I2C." alt="" coords="437,156,623,181"/>
+<area shape="poly" id="edge8_Node000002_Node000008" title=" " alt="" coords="704,115,626,147,588,158,587,153,624,142,702,110"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="453,36,340,59,338,54,452,31"/>
+<area shape="poly" id="edge7_Node000005_Node000004" title=" " alt="" coords="465,109,339,83,340,78,466,104"/>
+<area shape="rect" id="Node000006" href="$iio__adt7420_8c.html#a6cbb1d170acd8a5a0de1aa4890fd8340" title="Initializes the adt7420 IIO driver." alt="" coords="216,107,343,132"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="465,122,343,122,343,117,465,117"/>
+<area shape="rect" id="Node000007" href="$adt7420-pmdz_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="IIO example main execution." alt="" coords="5,107,124,132"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="202,122,124,122,124,117,202,117"/>
+<area shape="rect" id="Node000009" href="$adt7420_8c.html#a6b22b40bd3315083e90bd52beacb1627" title="Sets the operational mode for ADT7420/ADT7320." alt="" coords="172,156,387,181"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="423,171,387,171,387,166,423,166"/>
+<area shape="rect" id="Node000010" href="$adt7420_8c.html#af3c4b14319003f5a2edf1dd69ac4dcad" title="Sets the resolution for ADT7420/ADT7320." alt="" coords="192,205,367,231"/>
+<area shape="poly" id="edge10_Node000008_Node000010" title=" " alt="" coords="452,187,345,208,344,203,451,181"/>
+</map>

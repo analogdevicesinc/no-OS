@@ -1,0 +1,7 @@
+<map id="ad463x_exit_reg_cfg_mode" name="ad463x_exit_reg_cfg_mode">
+<area shape="rect" id="Node000001" title="Exit register configuration mode." alt="" coords="316,5,517,31"/>
+<area shape="rect" id="Node000002" href="$ad463x__fmcz_2src_2examples_2basic__example_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="108,5,268,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="302,21,268,21,268,15,302,15"/>
+<area shape="rect" id="Node000003" href="$ad463x__fmcz_2src_2platform_2stm32_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for STM32 platform." alt="" coords="5,5,60,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="94,21,60,21,60,15,94,15"/>
+</map>

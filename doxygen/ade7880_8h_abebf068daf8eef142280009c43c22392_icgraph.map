@@ -1,0 +1,14 @@
+<map id="ade7880_write" name="ade7880_write">
+<area shape="rect" id="Node000001" title="Write device register." alt="" coords="487,29,605,55"/>
+<area shape="rect" id="Node000002" href="$ade7880_8c.html#acbb1d0b3d6852f6d53dc0d73afa6c559" title="Initialize the device." alt="" coords="115,5,222,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="488,29,438,19,323,13,222,17,222,11,323,8,439,14,489,23"/>
+<area shape="rect" id="Node000004" href="$ade7880_8c.html#ab0cc4bba34968c40a2b2d5dbe79f305c" title="Setup the device." alt="" coords="108,55,229,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="489,61,439,70,328,76,229,74,230,69,328,71,438,65,488,55"/>
+<area shape="rect" id="Node000005" href="$ade7880_8c.html#a289029d193e186764383568d4f8f2c29" title="Update specific register bits." alt="" coords="277,29,439,55"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="473,45,439,45,439,39,473,39"/>
+<area shape="rect" id="Node000003" href="$eval-ade7880_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,31,60,56"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="102,33,61,41,60,36,101,28"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="94,57,60,51,61,45,95,52"/>
+<area shape="poly" id="edge6_Node000005_Node000002" title=" " alt="" coords="263,33,222,27,223,22,264,27"/>
+<area shape="poly" id="edge7_Node000005_Node000004" title=" " alt="" coords="264,57,230,62,229,57,263,52"/>
+</map>

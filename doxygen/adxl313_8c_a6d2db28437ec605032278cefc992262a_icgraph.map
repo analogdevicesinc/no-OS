@@ -1,0 +1,17 @@
+<map id="adxl313_conf_int_enable" name="adxl313_conf_int_enable">
+<area shape="rect" id="Node000001" title=" " alt="" coords="633,109,817,134"/>
+<area shape="rect" id="Node000002" href="$adxl313_8c.html#aeb28597f93ea9a03d763da796d696077" title=" " alt="" coords="431,5,585,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="684,105,584,60,557,48,559,43,586,55,686,100"/>
+<area shape="rect" id="Node000003" href="$adxl313_8c.html#aef549346ff1a4d98f930d77321082d54" title=" " alt="" coords="431,69,585,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="625,109,585,103,586,98,626,104"/>
+<area shape="rect" id="Node000005" href="$adxl313_8c.html#abbae14878e1a6dca680d606d531a64bb" title=" " alt="" coords="437,133,579,173"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="625,139,580,146,579,140,625,133"/>
+<area shape="rect" id="Node000006" href="$adxl313_8c.html#a9cd152bc1d41a1d03306e2059d6d1c38" title=" " alt="" coords="437,197,579,237"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="686,142,586,188,559,200,557,195,584,183,684,137"/>
+<area shape="rect" id="Node000004" href="$adxl313_8c.html#ad14d5588767f1b178ff91d1ebb6034d6" title="Enable the activity detection." alt="" coords="219,69,377,109"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="417,92,377,92,377,87,417,87"/>
+<area shape="rect" id="Node000007" href="$adxl313_8c.html#aef4533824eea2c42410b877c50d58c75" title="Enables the inactivity detection." alt="" coords="213,197,383,237"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="423,220,383,220,383,215,423,215"/>
+<area shape="rect" id="Node000008" href="$eval-adxl313z_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="5,205,165,230"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="200,220,166,220,166,215,200,215"/>
+</map>

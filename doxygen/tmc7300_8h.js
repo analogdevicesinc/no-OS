@@ -1,0 +1,77 @@
+var tmc7300_8h =
+[
+    [ "_tmc7300_drv_status", "struct__tmc7300__drv__status.html", "struct__tmc7300__drv__status" ],
+    [ "tmc7300_drv_status", "uniontmc7300__drv__status.html", "uniontmc7300__drv__status" ],
+    [ "_tmc7300_ioin", "struct__tmc7300__ioin.html", "struct__tmc7300__ioin" ],
+    [ "tmc7300_ioin", "uniontmc7300__ioin.html", "uniontmc7300__ioin" ],
+    [ "tmc7300_bridge_priv", "structtmc7300__bridge__priv.html", "structtmc7300__bridge__priv" ],
+    [ "tmc7300_desc", "structtmc7300__desc.html", "structtmc7300__desc" ],
+    [ "tmc7300_init_param", "structtmc7300__init__param.html", "structtmc7300__init__param" ],
+    [ "TMC7300_BLANK_TIME_MASK", "tmc7300_8h.html#a1c2359cad6d71aa31a2934dd8056e249", null ],
+    [ "TMC7300_BRIDGE_NUM", "tmc7300_8h.html#a411ccafd7bcb44a687e2243c7832179a", null ],
+    [ "TMC7300_CHOPCONF_REG", "tmc7300_8h.html#a4f30db5efac73de409092747f033354f", null ],
+    [ "TMC7300_CURRENT_LIMIT_REG", "tmc7300_8h.html#a8ecd3fa9c51f6ce350942c415256251f", null ],
+    [ "TMC7300_DRV_ENABLE_MASK", "tmc7300_8h.html#a2b1f98800ffc4216ec140af89d498c8a", null ],
+    [ "TMC7300_DRV_STATUS_REG", "tmc7300_8h.html#a0c7d0e12bd6d5e5368681bce9cb03838", null ],
+    [ "TMC7300_DUTY_MAX_VALUE", "tmc7300_8h.html#ade4af766051ec2c32bf4645ebfeea622", null ],
+    [ "TMC7300_FREEWHEEL_MASK", "tmc7300_8h.html#a2f6238b560ae53c201a00fb1807788bf", null ],
+    [ "TMC7300_GCONF_REG", "tmc7300_8h.html#a5e55a088664ab42004e0389d2a84d6a0", null ],
+    [ "TMC7300_IFCNT_REG", "tmc7300_8h.html#a9b2c8be19c51229ff0f566702a91bfc4", null ],
+    [ "TMC7300_IOIN_REG", "tmc7300_8h.html#a81e1063ac942bbde4629249a11a7c0a7", null ],
+    [ "TMC7300_IRUN_MASK", "tmc7300_8h.html#a00294d461b02ca4ac74f57e2ab603a90", null ],
+    [ "TMC7300_LI_MASK", "tmc7300_8h.html#ac7bac0522421d08a127e61eb46823268", null ],
+    [ "TMC7300_PAR_MODE_MASK", "tmc7300_8h.html#a820c3f607d0b732c84825ff9f5ee0ca0", null ],
+    [ "TMC7300_PWM_AB_REG", "tmc7300_8h.html#ac54c8096673dd7b3a070e7e3cc787c07", null ],
+    [ "TMC7300_PWM_B_MASK", "tmc7300_8h.html#a7d405adc78e112633529a5bb1093034b", null ],
+    [ "TMC7300_PWM_DIRECT_MASK", "tmc7300_8h.html#abc785fea93413ad24819a9eae0b7927c", null ],
+    [ "TMC7300_PWM_FREQ_MASK", "tmc7300_8h.html#a816ed2ce8759056276d109d1b8ae7429", null ],
+    [ "TMC7300_PWM_MASK", "tmc7300_8h.html#a226d5c3df6d5f56fa6040ed99b0d09c6", null ],
+    [ "TMC7300_PWMCONF_REG", "tmc7300_8h.html#ae5afafaa641b11668b78664c598390f6", null ],
+    [ "TMC7300_SENDDELAY_MAX_VALUE", "tmc7300_8h.html#a28dfa4ab6656bebd44e6cadb06ef0ce5", null ],
+    [ "TMC7300_SLAVECONF_MASK", "tmc7300_8h.html#abd40868c166748af67c038f7417fb317", null ],
+    [ "TMC7300_SLAVECONF_REG", "tmc7300_8h.html#acefd8744301a831f90c389bf8b855c07", null ],
+    [ "tmc7300_blank_time", "tmc7300_8h.html#a481f5335e18729b637c4dbc76825201e", [
+      [ "TMC7300_BLANK_TIME_16", "tmc7300_8h.html#a481f5335e18729b637c4dbc76825201ea201617f67bdc8e7cfb76d176d640fb14", null ],
+      [ "TMC7300_BLANK_TIME_24", "tmc7300_8h.html#a481f5335e18729b637c4dbc76825201ea5da48bcea9d9c44a630df658a3920112", null ],
+      [ "TMC7300_BLANK_TIME_32", "tmc7300_8h.html#a481f5335e18729b637c4dbc76825201ea24c5640327dc8cf2050b2cb6104a8a8f", null ],
+      [ "TMC7300_BLANK_TIME_40", "tmc7300_8h.html#a481f5335e18729b637c4dbc76825201ea83c9b8409b90ae80b50fad08ff817717", null ]
+    ] ],
+    [ "tmc7300_bridge", "tmc7300_8h.html#a9ea80aff8f19c8d955af76a8937e9551", [
+      [ "TMC7300_BRIDGE_A", "tmc7300_8h.html#a9ea80aff8f19c8d955af76a8937e9551aa98a933f504f802cedc63761f1d13bc5", null ],
+      [ "TMC7300_BRIDGE_B", "tmc7300_8h.html#a9ea80aff8f19c8d955af76a8937e9551ac32e218773cd327dd2286e40e911921f", null ]
+    ] ],
+    [ "tmc7300_motor_dir", "tmc7300_8h.html#a5cab4ed0292c5164e1438fb59d277aaf", [
+      [ "TMC7300_DIR_CW", "tmc7300_8h.html#a5cab4ed0292c5164e1438fb59d277aafa98c5f347e248134f0b767da9cf44dab9", null ],
+      [ "TMC7300_DIR_CCW", "tmc7300_8h.html#a5cab4ed0292c5164e1438fb59d277aafac562e176c5414364d6e900b17b34dc79", null ]
+    ] ],
+    [ "tmc7300_pwm_freq", "tmc7300_8h.html#aa86961bd28228564b6b680ee24f931ba", [
+      [ "TMC7300_PWM_FREQ_2_1024", "tmc7300_8h.html#aa86961bd28228564b6b680ee24f931baad36dcb0e0d97627a1d83e6d20b26918c", null ],
+      [ "TMC7300_PWM_FREQ_2_683", "tmc7300_8h.html#aa86961bd28228564b6b680ee24f931baa4e2f9018b8eab1953430635d751a8e8f", null ],
+      [ "TMC7300_PWM_FREQ_2_512", "tmc7300_8h.html#aa86961bd28228564b6b680ee24f931baaed118c244e2e982b27b49278c7f7520f", null ],
+      [ "TMC7300_PWM_FREQ_2_410", "tmc7300_8h.html#aa86961bd28228564b6b680ee24f931baadbfa26a6085480486430d34c97c2736b", null ]
+    ] ],
+    [ "tmc7300_standstill_mode", "tmc7300_8h.html#aab98fd8afa046139e7b3d61a9e43a6e2", [
+      [ "TMC7300_FREEWHEELING", "tmc7300_8h.html#aab98fd8afa046139e7b3d61a9e43a6e2a16775164e61a5d14725501b09ee25eb9", null ],
+      [ "TMC7300_BREAK_LS", "tmc7300_8h.html#aab98fd8afa046139e7b3d61a9e43a6e2a275497ff0b1be80deba830afe5d38ce7", null ],
+      [ "TMC7300_BREAK_HS", "tmc7300_8h.html#aab98fd8afa046139e7b3d61a9e43a6e2a12d36ae428e1c6b66c4fad94e8a0d015", null ]
+    ] ],
+    [ "tmc7300_drv_enable", "tmc7300_8h.html#ab856211cc81990c6ca06c8c31e30fbf8", null ],
+    [ "tmc7300_get_blank_time", "tmc7300_8h.html#a4e4be4c578ae70ceb9f9ca9d75b296b2", null ],
+    [ "tmc7300_get_drv_status", "tmc7300_8h.html#adf2d2b5af1a1925919b5c5e9ff2a49a5", null ],
+    [ "tmc7300_get_ifcnt", "tmc7300_8h.html#a8f019d7072aab2a74eb1395cf8985406", null ],
+    [ "tmc7300_get_ioin", "tmc7300_8h.html#a64693336ee371cb59f317d723e1f7829", null ],
+    [ "tmc7300_get_load_indicator", "tmc7300_8h.html#a1c3a046ea520f4f545b459687bfb19b3", null ],
+    [ "tmc7300_get_pwm_freq", "tmc7300_8h.html#a4fcbdb65bf0f51854172a8872ecc0332", null ],
+    [ "tmc7300_init", "tmc7300_8h.html#a4426d8fd03399282f65235db55383e9f", null ],
+    [ "tmc7300_reg_read", "tmc7300_8h.html#a93dbd8438df6f6dce8bd6aa0d38b43eb", null ],
+    [ "tmc7300_reg_update", "tmc7300_8h.html#aa1e60f88d1fb8766bc4818873b148166", null ],
+    [ "tmc7300_reg_write", "tmc7300_8h.html#a95c78c795fc3944b1eaeaacfcdb01e85", null ],
+    [ "tmc7300_remove", "tmc7300_8h.html#a484f7a3541dd71cc5e029ef70f71de6b", null ],
+    [ "tmc7300_set_blank_time", "tmc7300_8h.html#a558ef2d094c410c1e1cc41f9f886d195", null ],
+    [ "tmc7300_set_current_limit", "tmc7300_8h.html#a8e0dad4430278aaebc059323a579a523", null ],
+    [ "tmc7300_set_pwm_duty", "tmc7300_8h.html#a7655e595b5f083d6085014c09fd6bca1", null ],
+    [ "tmc7300_set_pwm_duty_dir", "tmc7300_8h.html#a33f587fc0e0a2b9a15ad2806f9a2458e", null ],
+    [ "tmc7300_set_pwm_freq", "tmc7300_8h.html#ae99e390551fd30f6db5f2006539d5d18", null ],
+    [ "tmc7300_set_send_delay", "tmc7300_8h.html#ae02df3709a39257f8b0c0a861f2c7d5b", null ],
+    [ "tmc7300_set_standstill_mode", "tmc7300_8h.html#a4cbd6fe045e5e03007e33b74c9d40ae7", null ]
+];

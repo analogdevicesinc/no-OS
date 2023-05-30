@@ -1,0 +1,7 @@
+<map id="ad717x_set_channel_status" name="ad717x_set_channel_status">
+<area shape="rect" id="Node000001" title="Set channel status &#45; Enable/Disable." alt="" coords="205,23,360,63"/>
+<area shape="rect" id="Node000002" href="$ad717x_8c.html#af92ad585cabc0f6ef31f41589946bb34" title="Initializes the AD717X." alt="" coords="30,5,133,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="191,35,133,27,134,22,192,29"/>
+<area shape="rect" id="Node000003" href="$ad717x_8c.html#a89992ef25955f947d86b6f587e98349c" title="Perform Single Conversion." alt="" coords="5,55,157,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="192,57,158,61,157,56,192,51"/>
+</map>

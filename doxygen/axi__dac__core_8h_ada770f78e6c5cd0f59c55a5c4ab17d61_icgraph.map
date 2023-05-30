@@ -1,0 +1,25 @@
+<map id="axi_dac_dds_set_scale" name="axi_dac_dds_set_scale">
+<area shape="rect" id="Node000001" title="AXI DAC Set DDS scale for specific channel." alt="" coords="1083,155,1253,180"/>
+<area shape="rect" id="Node000002" href="$axi__dac__core_8c.html#ad2e10485918e87d7d2c6f6a72c971544" title="AXI DAC Data Setup." alt="" coords="884,104,1035,129"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1101,154,1012,132,1013,127,1102,149"/>
+<area shape="rect" id="Node000008" href="$ad9172_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="535,129,590,155"/>
+<area shape="poly" id="edge12_Node000001_Node000008" title=" " alt="" coords="1093,185,1008,198,903,208,789,208,731,203,675,194,626,178,585,157,587,152,628,173,677,189,732,198,789,203,903,202,1007,193,1093,180"/>
+<area shape="rect" id="Node000003" href="$axi__dac__core_8c.html#a88b7d1d48e908b038ef3faea467aaa0c" title="AXI DAC Main Initialization." alt="" coords="706,5,806,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="927,98,885,71,835,44,805,33,807,28,837,40,887,66,930,94"/>
+<area shape="rect" id="Node000009" href="$adrv902x_2src_2examples_2basic__example_2basic__example_8c.html#ac5f0064cb4ac7ddab3ec02b10217b456" title="Basic example main execution." alt="" coords="676,55,836,80"/>
+<area shape="poly" id="edge9_Node000002_Node000009" title=" " alt="" coords="893,103,809,83,810,77,894,98"/>
+<area shape="rect" id="Node000010" href="$adrv902x_2src_2examples_2iio__example_2iio__example_8c.html#a692b15b864d48091dc3d7095bea120b4" title="IIO example main execution." alt="" coords="685,104,827,129"/>
+<area shape="poly" id="edge10_Node000002_Node000010" title=" " alt="" coords="870,119,828,119,828,114,870,114"/>
+<area shape="rect" id="Node000011" href="$ad9739a__fmc__ebz_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="729,153,783,179"/>
+<area shape="poly" id="edge11_Node000002_Node000011" title=" " alt="" coords="894,135,784,162,783,157,892,130"/>
+<area shape="rect" id="Node000004" href="$ad3552r_8c.html#a99b8d9b1903e38e171e19132336af7fb" title=" " alt="" coords="497,5,628,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="692,21,628,21,628,15,692,15"/>
+<area shape="poly" id="edge8_Node000003_Node000008" title=" " alt="" coords="694,36,677,44,646,65,618,89,577,131,573,127,615,85,643,61,675,40,692,32"/>
+<area shape="rect" id="Node000005" href="$ad3552r_8c.html#ae80ba21fae1f11883703b87a0bb676e2" title=" " alt="" coords="347,5,449,31"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="484,21,449,21,449,15,484,15"/>
+<area shape="rect" id="Node000006" href="$axi__qspi__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title=" " alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="333,21,125,21,125,15,333,15"/>
+<area shape="rect" id="Node000007" href="$iio__ad3552r_8c.html#a690d5a4cec9b9316e0d635113c09e9d6" title=" " alt="" coords="172,31,299,56"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="334,31,299,36,299,31,333,25"/>
+<area shape="poly" id="edge7_Node000007_Node000006" title=" " alt="" coords="158,35,124,29,125,24,159,29"/>
+</map>

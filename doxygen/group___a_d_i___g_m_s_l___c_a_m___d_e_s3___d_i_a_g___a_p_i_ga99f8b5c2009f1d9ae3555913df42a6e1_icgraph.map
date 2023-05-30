@@ -1,0 +1,13 @@
+<map id="max96792_check_gmsl_link_enable" name="max96792_check_gmsl_link_enable">
+<area shape="rect" id="Node000001" title="Check if the GMSL links are enabled for the MAX96792 device." alt="" coords="287,149,461,189"/>
+<area shape="rect" id="Node000002" href="$group___a_d_i___g_m_s_l___c_a_m___d_e_s3___d_i_a_g___a_p_i.html#ga2741a9d22c285713b9c54db1a3a974cf" title="Check decode error status for max96792 link diagnostics." alt="" coords="43,5,201,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="337,142,291,108,237,75,200,59,203,54,240,70,294,103,340,138"/>
+<area shape="rect" id="Node000003" href="$group___a_d_i___g_m_s_l___c_a_m___d_e_s3___d_i_a_g___a_p_i.html#ga6b7f144ef2b1779d7dff850af4e02626" title="Check for Eye Open Monitor errors in the MAX96792 deserializer." alt="" coords="5,85,239,125"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="281,148,201,127,202,122,282,143"/>
+<area shape="rect" id="Node000004" href="$group___a_d_i___g_m_s_l___c_a_m___d_e_s3___d_i_a_g___a_p_i.html#gaf71396f7f1f0d2f5a8d7d43283aef8c5" title="Check the idle error status of the max96792 link." alt="" coords="31,149,213,189"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="273,171,214,171,214,166,273,166"/>
+<area shape="rect" id="Node000005" href="$group___a_d_i___g_m_s_l___c_a_m___d_e_s3___d_i_a_g___a_p_i.html#ga839d3b15ee03df4a07f84ae7431fbc7c" title="Check the link lock status of the max96792 deserializer." alt="" coords="33,213,211,253"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="282,195,202,215,201,210,281,190"/>
+<area shape="rect" id="Node000006" href="$group___a_d_i___g_m_s_l___c_a_m___d_e_s3___d_i_a_g___a_p_i.html#ga97d200352cc8897463af4921be9fc03f" title="Get the link lock status of the MAX96792 deserializer." alt="" coords="19,277,225,332"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="340,200,294,234,240,267,212,280,210,275,237,262,291,230,337,195"/>
+</map>
