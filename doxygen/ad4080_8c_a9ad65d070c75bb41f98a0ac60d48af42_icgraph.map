@@ -1,0 +1,9 @@
+<map id="ad4080_set_fifo_watermark" name="ad4080_set_fifo_watermark">
+<area shape="rect" id="Node000001" title="Set AD4080 FIFO Watermark." alt="" coords="561,13,764,38"/>
+<area shape="rect" id="Node000002" href="$iio__ad4080_8c.html#aacf74c6dd1acb9626c23d5356c4b3c96" title="Sets the FIFO watermark for the AD4080 device." alt="" coords="365,5,513,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="548,28,514,28,514,23,548,23"/>
+<area shape="rect" id="Node000003" href="$iio__ad4080_8c.html#a4c3881b748799947d1bc735745dd48a8" title="Initializes the IIO AD4080 descriptor." alt="" coords="196,13,317,38"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="352,28,318,28,318,23,352,23"/>
+<area shape="rect" id="Node000004" href="$adalm-mmsc_2src_2examples_2iio__example_2iio__example_8c.html#a692b15b864d48091dc3d7095bea120b4" title="IIO example main execution." alt="" coords="5,13,148,38"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="182,28,148,28,148,23,182,23"/>
+</map>

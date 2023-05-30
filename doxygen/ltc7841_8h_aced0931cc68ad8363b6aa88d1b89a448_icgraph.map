@@ -1,0 +1,46 @@
+<map id="ltc7841_reg_write" name="ltc7841_reg_write">
+<area shape="rect" id="Node000001" title="Write a raw value to a register." alt="" coords="849,490,988,515"/>
+<area shape="rect" id="Node000002" href="$ltc7841_8c.html#a8e5911c872850899ff69b6b0520c74ea" title="Change margin high command." alt="" coords="599,5,777,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="911,477,897,384,873,258,840,137,821,91,799,59,775,43,779,38,803,55,825,88,845,136,878,257,902,383,917,476"/>
+<area shape="rect" id="Node000003" href="$ltc7841_8c.html#a5b56219b210e66790d9886c1c3e6138b" title="Change margin low command." alt="" coords="599,69,777,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="915,477,910,407,895,311,880,261,860,211,833,164,800,123,775,107,778,102,803,119,838,161,865,208,885,259,900,310,916,406,920,476"/>
+<area shape="rect" id="Node000004" href="$ltc7841_8c.html#ad33c8252b948624318720ba09054d36c" title="Perform change of rail address of LTC7841." alt="" coords="612,133,764,173"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="913,476,905,417,886,339,871,298,852,257,829,220,800,187,783,175,763,167,765,162,785,171,803,183,833,217,857,255,876,296,891,337,910,416,918,476"/>
+<area shape="rect" id="Node000005" href="$ltc7841_8c.html#a585c109dd1cce2487c82338a532a093b" title="Change to Fast Slew Rate for LTC7841." alt="" coords="600,197,776,237"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="910,477,899,429,878,368,845,305,824,276,800,251,775,236,778,232,803,247,828,273,850,302,883,366,904,427,915,476"/>
+<area shape="rect" id="Node000006" href="$ltc7841_8c.html#a3e244eea01c494d76a5b448b6f053b71" title="Change to Internal Die Temeperature Reading for LTC7841." alt="" coords="587,261,789,301"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="906,478,891,441,868,397,838,353,800,315,781,304,783,299,803,311,842,350,873,395,896,439,911,476"/>
+<area shape="rect" id="Node000007" href="$ltc7841_8c.html#a6ca77375525f0eb02d6c8d59e227f5fe" title="Change to Nominal Slew Rate for LTC7841." alt="" coords="586,325,790,365"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="899,480,858,429,831,402,800,380,776,368,779,363,803,375,834,398,862,425,903,477"/>
+<area shape="rect" id="Node000008" href="$ltc7841_8c.html#af149a0be53b9c04ed99cc896b2c3cbfa" title="Change to Slow Slew Rate for LTC7841." alt="" coords="597,389,779,429"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="884,486,800,444,767,432,769,427,802,439,886,481"/>
+<area shape="rect" id="Node000009" href="$ltc7841_8c.html#abbb9114003478b799dc99f53dea04ffd" title="Change to TSNS PIN VOLTAGE for LTC7841." alt="" coords="599,453,777,493"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="835,495,777,487,778,482,836,489"/>
+<area shape="rect" id="Node000010" href="$ltc7841_8c.html#a3e2c5021908337684ab8c8664cb06e3f" title="Change Vout command." alt="" coords="608,619,768,659"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="897,527,855,565,803,602,761,621,759,616,800,598,852,561,894,524"/>
+<area shape="rect" id="Node000015" href="$ltc7841_8c.html#a2d59b371c40e4de1d261d10628b247be" title="This clears the STATUS_WORD BITS that are clearable." alt="" coords="356,511,512,551"/>
+<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="836,510,512,529,512,524,836,505"/>
+<area shape="rect" id="Node000016" href="$ltc7841_8c.html#a457ba3d99f38d70c11c8e713997ca5d2" title="This clears the MFR peak data values." alt="" coords="341,575,527,601"/>
+<area shape="poly" id="edge16_Node000001_Node000016" title=" " alt="" coords="849,521,802,531,521,578,520,573,801,525,848,516"/>
+<area shape="rect" id="Node000017" href="$ltc7841_8c.html#aa94b9e6e18dd6125ed36214062456fe9" title="Margin High for LTC7841 Operation." alt="" coords="575,683,801,709"/>
+<area shape="poly" id="edge18_Node000001_Node000017" title=" " alt="" coords="909,529,893,563,870,602,840,640,803,673,778,686,775,681,800,668,836,637,866,599,889,560,905,527"/>
+<area shape="rect" id="Node000018" href="$ltc7841_8c.html#a8870d106b5a210371380ea6cfdcb7589" title="Margin Low for LTC7841 Operation." alt="" coords="577,733,799,758"/>
+<area shape="poly" id="edge19_Node000001_Node000018" title=" " alt="" coords="914,529,900,572,878,624,846,677,826,701,803,722,781,735,778,730,800,718,822,698,842,674,873,622,895,570,909,528"/>
+<area shape="rect" id="Node000019" href="$ltc7841_8c.html#a18c2693f8b5fe29e30ffbe8959ceba74" title="Perform a reset to the LTC7841." alt="" coords="633,782,743,807"/>
+<area shape="poly" id="edge20_Node000001_Node000019" title=" " alt="" coords="916,529,906,581,885,647,852,714,830,745,803,771,775,787,744,795,743,790,773,782,800,767,826,741,848,711,881,645,901,580,911,528"/>
+<area shape="rect" id="Node000020" href="$ltc7841_8c.html#a623410da44591acb959251306239ed97" title="Turn off LTC7841." alt="" coords="625,831,751,857"/>
+<area shape="poly" id="edge21_Node000001_Node000020" title=" " alt="" coords="918,530,911,590,892,669,877,710,858,751,833,788,803,821,779,835,752,844,751,838,777,831,800,817,829,785,853,748,873,708,887,667,906,589,913,529"/>
+<area shape="rect" id="Node000021" href="$ltc7841_8c.html#a80ca28df9f7736bfa07ced6bb60cbc9a" title="Turn on LTC7841." alt="" coords="625,881,751,906"/>
+<area shape="poly" id="edge22_Node000001_Node000021" title=" " alt="" coords="920,529,916,598,900,691,885,740,864,788,838,833,803,871,779,886,752,894,751,889,777,881,800,867,833,829,860,786,880,738,894,689,910,597,915,529"/>
+<area shape="rect" id="Node000011" href="$ltc7841_8c.html#a2fcb18b33431e2e40329ccc8befa7fdf" title="Initialize the device structure." alt="" coords="385,626,483,651"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="594,641,484,641,484,636,594,636"/>
+<area shape="rect" id="Node000012" href="$ltc7841_2src_2examples_2basic_2basic__example_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="Basic example main executiont." alt="" coords="173,575,292,601"/>
+<area shape="poly" id="edge11_Node000011_Node000012" title=" " alt="" coords="371,626,283,603,284,598,372,621"/>
+<area shape="rect" id="Node000013" href="$iio__ltc7841_8c.html#a08c7b193ba1977f985581017243ec512" title="Initializes the LTC7841 IIO descriptor." alt="" coords="172,626,293,651"/>
+<area shape="poly" id="edge12_Node000011_Node000013" title=" " alt="" coords="371,641,293,641,293,636,371,636"/>
+<area shape="rect" id="Node000014" href="$ltc7841_2src_2examples_2iio__example_2iio__example_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="Basic example main executiont." alt="" coords="5,626,124,651"/>
+<area shape="poly" id="edge13_Node000013_Node000014" title=" " alt="" coords="158,641,124,641,124,636,158,636"/>
+<area shape="poly" id="edge15_Node000015_Node000012" title=" " alt="" coords="351,557,279,578,278,573,349,552"/>
+<area shape="poly" id="edge17_Node000016_Node000012" title=" " alt="" coords="327,591,292,591,292,585,327,585"/>
+<area shape="poly" id="edge23_Node000021_Node000011" title=" " alt="" coords="610,888,573,872,544,847,519,818,479,755,452,695,437,653,442,651,457,693,484,753,523,815,548,843,576,867,612,884"/>
+</map>

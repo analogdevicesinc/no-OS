@@ -1,0 +1,17 @@
+<map id="ad7293_dev" name="ad7293_dev">
+<area shape="rect" id="Node000001" title="AD7293 Device Descriptor." alt="" coords="923,111,1024,137"/>
+<area shape="rect" id="Node000002" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="674,82,797,107"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="811,101,923,115,922,120,811,107"/>
+<area shape="poly" id="edge6_Node000002_Node000002" title=" " alt="" coords="710,67,718,59,735,55,750,58,759,64,761,74,757,83,752,81,756,73,755,67,748,63,735,61,721,63,714,71"/>
+<area shape="rect" id="Node000003" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="343,53,490,78"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="504,71,674,86,674,92,503,76"/>
+<area shape="rect" id="Node000004" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,22,184,47"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="198,24,208,24,332,19,429,18,525,28,646,55,710,79,708,84,645,60,525,33,429,23,332,24,208,29,198,30"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="198,42,343,56,343,61,198,47"/>
+<area shape="rect" id="Node000005" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="342,103,491,143"/>
+<area shape="poly" id="edge5_Node000002_Node000005" title=" " alt="" coords="505,121,574,118,645,112,685,105,686,110,646,117,574,124,505,126"/>
+<area shape="rect" id="Node000006" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="669,135,801,161"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="815,147,898,141,932,134,933,139,899,147,815,153"/>
+<area shape="rect" id="Node000007" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="323,167,511,193"/>
+<area shape="poly" id="edge8_Node000006_Node000007" title=" " alt="" coords="524,167,669,152,669,157,524,172"/>
+</map>

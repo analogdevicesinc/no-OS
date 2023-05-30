@@ -1,0 +1,5 @@
+<map id="drivers/temperature/max31827/iio_max31827.h" name="drivers/temperature/max31827/iio_max31827.h">
+<area shape="rect" id="Node000001" title="Implementation of IIO MAX31827 Driver." alt="" coords="5,5,208,45"/>
+<area shape="rect" id="Node000002" href="$iio__max31827_8c.html" title="Implementation of IIO MAX31827 Driver." alt="" coords="5,93,208,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="109,59,109,93,104,93,104,59"/>
+</map>

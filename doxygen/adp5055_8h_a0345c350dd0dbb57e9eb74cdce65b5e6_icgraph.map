@@ -1,0 +1,16 @@
+<map id="adp5055_remove" name="adp5055_remove">
+<area shape="rect" id="Node000001" title="Free the resources allocated by the adp5055_init()" alt="" coords="556,55,691,80"/>
+<area shape="rect" id="Node000002" href="$iio__adp5055_8c.html#a71490bd3a8727caea3b59dc75f224636" title="Free resources allocated by the init function." alt="" coords="349,5,508,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="559,54,479,33,481,28,560,49"/>
+<area shape="rect" id="Node000005" href="$adp5055_8c.html#ace46ac8c2d3b18ff79bcd2bfe9e9436a" title="Initialize the ADP5055 device." alt="" coords="375,55,482,80"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="542,70,482,70,482,65,542,65"/>
+<area shape="rect" id="Node000006" href="$adp5055_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="177,104,296,129"/>
+<area shape="poly" id="edge8_Node000001_Node000006" title=" " alt="" coords="558,86,508,95,396,109,296,116,296,111,395,103,508,90,557,80"/>
+<area shape="rect" id="Node000003" href="$iio__adp5055_8c.html#ac4644065226f939d8c615e9fd5a2409d" title="Initializes the ADP5055 IIO descriptor." alt="" coords="172,55,301,80"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="366,37,288,57,287,52,365,31"/>
+<area shape="rect" id="Node000004" href="$adp5055_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,29,124,55"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="336,27,124,41,124,35,335,21"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="158,58,124,53,125,48,159,53"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="361,70,302,70,302,65,361,65"/>
+<area shape="poly" id="edge7_Node000005_Node000006" title=" " alt="" coords="366,86,288,106,287,101,365,81"/>
+</map>

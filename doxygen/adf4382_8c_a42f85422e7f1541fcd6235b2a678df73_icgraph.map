@@ -1,0 +1,27 @@
+<map id="adf4382_set_freq" name="adf4382_set_freq">
+<area shape="rect" id="Node000001" title="Set the output frequency." alt="" coords="609,183,744,208"/>
+<area shape="rect" id="Node000002" href="$adf4382_8c.html#af72d0899bbe73092b615195d788b8bab" title="Initializes the ADF4382." alt="" coords="418,5,521,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="661,172,622,107,594,73,560,44,541,34,520,27,522,22,543,29,563,40,597,69,626,104,666,169"/>
+<area shape="rect" id="Node000006" href="$adf4382_8c.html#a90a2e1956072778acaeb2885373e50e7" title="Set the bleed word, which represents the value of the bleed current written to the register space." alt="" coords="377,55,561,80"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="654,174,613,132,588,111,560,94,534,83,536,78,563,89,591,107,617,128,658,170"/>
+<area shape="rect" id="Node000007" href="$adf4382_8c.html#a9545e93dd75ebffedeedd8a88a19c5ce" title="Set the charge pump value which will be written to the register. The value will be between 0 and 15 o..." alt="" coords="402,104,537,129"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="639,179,560,143,525,132,526,127,562,138,641,174"/>
+<area shape="rect" id="Node000008" href="$adf4382_8c.html#a3f4a0e1104b1241c2a4705c469dcd2fe" title="Fast calibration function. Computes Minimum VCO frequency (fmin), uses the minimum NDIV value to gene..." alt="" coords="172,335,329,375"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="668,222,653,255,631,293,601,330,563,358,534,370,505,378,443,386,383,384,329,377,330,372,384,379,443,380,504,373,533,365,560,353,597,326,626,290,649,252,664,220"/>
+<area shape="rect" id="Node000009" href="$adf4382_8c.html#a437e2d35a220c2ea09744e8147550366" title="Set the reference doubler to enable or disable based on the passed parameter. If the parameter is dif..." alt="" coords="394,203,545,243"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="596,209,545,216,545,211,595,204"/>
+<area shape="rect" id="Node000010" href="$adf4382_8c.html#ad97aa58924c0eeca883bfdd340ae4817" title="Set the desired reference frequency and reset everything over to maximum supported value of 5GHz to t..." alt="" coords="393,268,546,293"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="644,217,562,258,524,270,523,265,560,253,641,213"/>
+<area shape="rect" id="Node000011" href="$adf4382_8c.html#af6e5b66e0da30c50bd332f340ad7adff" title="Set the reference divider value and reset everything over to maximum supported value of 63 to the max..." alt="" coords="392,317,547,343"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="660,220,619,265,592,289,563,308,536,320,534,315,560,304,589,284,615,261,656,217"/>
+<area shape="rect" id="Node000012" href="$adf4382_8c.html#a6c3387b311effd620ce0264c6db07674" title="Set the desired output frequency and reset everything over to maximum supported value of 22GHz (21GHz..." alt="" coords="399,153,539,179"/>
+<area shape="poly" id="edge12_Node000001_Node000012" title=" " alt="" coords="595,187,539,179,540,173,596,181"/>
+<area shape="rect" id="Node000003" href="$iio__adf4382_8c.html#a98024760107fb7218ace561900ad4b6a" title="Initializes the ADF4382 IIO driver." alt="" coords="187,5,314,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="404,21,314,21,314,15,404,15"/>
+<area shape="rect" id="Node000005" href="$adf4382_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="191,104,310,129"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="405,35,378,44,319,75,271,106,268,102,316,71,376,40,403,30"/>
+<area shape="rect" id="Node000004" href="$adf4382_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="IIO example main execution." alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="174,21,124,21,124,15,174,15"/>
+<area shape="poly" id="edge11_Node000011_Node000008" title=" " alt="" coords="379,343,330,349,329,344,378,338"/>
+<area shape="poly" id="edge13_Node000012_Node000005" title=" " alt="" coords="399,153,307,132,308,127,400,148"/>
+</map>

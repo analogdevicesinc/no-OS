@@ -1,0 +1,28 @@
+var status_8h =
+[
+    [ "SYS_STATUS_AFE_ACCMODE_FAILED", "status_8h.html#ab04e594f71e6f46117e94fe589cf40c1", null ],
+    [ "SYS_STATUS_AFE_CONFIG0_FAILED", "status_8h.html#a106849c68eda1178cb71db6ec6951c59", null ],
+    [ "SYS_STATUS_AFE_CONFIG1_FAILED", "status_8h.html#a8f21e0723653602014e7aa14f06f2c47", null ],
+    [ "SYS_STATUS_AFE_CONFIG2_FAILED", "status_8h.html#a0ae617fc4bd40e704944a73dc62468a5", null ],
+    [ "SYS_STATUS_AFE_MASK0_FAILED", "status_8h.html#a4d6b088f5f4a58da716dace02ad9b0ab", null ],
+    [ "SYS_STATUS_AFE_READANGLE_FAILED", "status_8h.html#a24661074cd7fed899108d6cf1a9e54b9", null ],
+    [ "SYS_STATUS_AFE_READPERIOD_FAILED", "status_8h.html#a1f3d28b9ae372dec7fba16365b8e2346", null ],
+    [ "SYS_STATUS_AFE_READRMS1012_FAILED", "status_8h.html#a73fce4c78745fdf103e1efd8250ffbc4", null ],
+    [ "SYS_STATUS_AFE_READRMSONE_FAILED", "status_8h.html#a11fc90aed5c6f4bf256bed9da897220f", null ],
+    [ "SYS_STATUS_AFE_READVERSION_FAILED", "status_8h.html#afe21a4b56c560072909471eb4819036d", null ],
+    [ "SYS_STATUS_AFE_READWAVEFORM_FAILED", "status_8h.html#a4b0bd533605abf5f691fd5392934587b", null ],
+    [ "SYS_STATUS_AFE_RUN_FAILED", "status_8h.html#aae17250fdab100b8cb36a02ddb98ab81", null ],
+    [ "SYS_STATUS_AFE_STATUS0_FAILED", "status_8h.html#ae577b2d74e66068bdc6f1b7ca87de7d7", null ],
+    [ "SYS_STATUS_AFE_STATUS1_FAILED", "status_8h.html#a5b2ad23723681fc6cd3d9c6eb0cdcbad", null ],
+    [ "SYS_STATUS_AFE_WFB_CFG_FAILED", "status_8h.html#a133cc5c8761dbad7dd2050b805d8cc84", null ],
+    [ "SYS_STATUS_AFE_ZX_LP_SEL_FAILED", "status_8h.html#a61ad2fc71d1823ae390f18d5424ebcce", null ],
+    [ "SYS_STATUS_CALIBRATION_ERROR", "status_8h.html#ab24b0510c4a157b132ac33a51df82b7b", null ],
+    [ "SYS_STATUS_CALIBRATION_IN_PROGRESS", "status_8h.html#a807db95e7bcdd2149bbba5894fdfc075", null ],
+    [ "SYS_STATUS_CALIBRATION_SUCCESS", "status_8h.html#afa8feb447cad7038cd7d3ca73e4f0cde", null ],
+    [ "SYS_STATUS_NO_SIGNAL", "status_8h.html#af6ca4ec9cb3cc51764ba2343f3af3063", null ],
+    [ "SYS_STATUS_PQLIB_CONFIG_ERROR", "status_8h.html#ade61f68b1c563ce3a0f1c00d1933d724", null ],
+    [ "SYS_STATUS_PQLIB_ERROR", "status_8h.html#a61b46b88cc73054f8658d02249e41c3e", null ],
+    [ "SYS_STATUS_PQLIB_RUNNING", "status_8h.html#a557b5745a60a194d3c288f3c807af899", null ],
+    [ "SYS_STATUS_SUCCESS", "status_8h.html#aaa049a117b27c9b336174e28a67030f9", null ],
+    [ "SYS_STATUS_TIMER_INIT_FAILED", "status_8h.html#a76bb360dfae3d3e63c1fce72b66d975b", null ]
+];

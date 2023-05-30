@@ -1,0 +1,79 @@
+<map id="ade9153a_write" name="ade9153a_write">
+<area shape="rect" id="Node000001" title="Write device register." alt="" coords="691,792,817,817"/>
+<area shape="rect" id="Node000002" href="$ade9153a_8c.html#af2b3784b3383441ce8a13692509c716a" title="Set PGA gain for current channel B." alt="" coords="450,5,641,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="750,778,746,628,732,408,718,294,699,189,674,103,658,70,641,45,625,33,628,29,645,42,663,67,679,101,704,188,724,293,737,407,752,628,755,778"/>
+<area shape="rect" id="Node000003" href="$ade9153a_8c.html#a19f7cd1cba2518bba0934cb72be8bb8e" title="Clear APA (active power) sign change int mask." alt="" coords="467,55,623,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="749,779,743,640,727,440,713,336,694,241,670,162,656,132,641,109,622,94,625,90,645,106,661,130,675,161,699,240,718,335,732,439,749,640,755,778"/>
+<area shape="rect" id="Node000004" href="$ade9153a_8c.html#af2d4ff52ceebb515fd52c8bc3419f558" title="Clear CF1 pulse issued int mask." alt="" coords="469,120,621,145"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="749,779,743,648,726,462,711,366,693,278,669,207,656,179,641,159,620,144,623,140,645,155,660,176,674,205,698,277,717,365,731,461,748,648,755,778"/>
+<area shape="rect" id="Node000005" href="$ade9153a_8c.html#a58771eb204fe044003414147b1e439ce" title="Clear CF1 polarity change int mask." alt="" coords="454,169,637,195"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="749,778,741,656,722,485,708,397,690,317,668,252,655,227,641,208,626,197,630,193,645,204,659,224,672,250,695,316,713,396,728,484,746,656,754,778"/>
+<area shape="rect" id="Node000006" href="$ade9153a_8c.html#aedadd5e431e332992a87f93b6e058cdb" title="Clear CF2 pulse issued int mask." alt="" coords="469,219,621,244"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="748,778,739,666,719,509,705,429,687,356,666,297,641,257,620,243,623,239,645,253,671,295,692,355,710,428,725,508,744,665,754,778"/>
+<area shape="rect" id="Node000007" href="$ade9153a_8c.html#a70dc2bc3dd3b2d8c3533c1d806740e07" title="Clear CF2 polarity change int mask." alt="" coords="454,268,637,293"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="748,778,737,675,716,533,702,461,684,395,664,342,641,306,626,296,630,291,645,303,669,340,689,394,707,460,721,532,742,674,753,778"/>
+<area shape="rect" id="Node000008" href="$ade9153a_8c.html#a93acbff8aee7dec991f5f02a351ae5e0" title="Clear CRC change int mask." alt="" coords="455,317,636,343"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="747,778,735,684,713,557,698,493,681,435,662,387,641,356,626,345,629,341,645,352,667,385,686,433,703,491,718,556,740,683,752,778"/>
+<area shape="rect" id="Node000009" href="$ade9153a_8c.html#a6ed9b1028c41dbdd596fcb323715b09f" title="Clear CRC done int mask." alt="" coords="450,367,641,392"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="746,779,732,694,709,581,678,474,660,433,641,405,626,394,629,390,645,401,665,430,683,472,714,580,738,693,752,778"/>
+<area shape="rect" id="Node000010" href="$ade9153a_8c.html#ae83bb1bbd4a872d0c7abfb4f8de247f8" title="Clear new waveform samples ready int mask." alt="" coords="457,416,634,441"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="750,778,746,713,730,625,716,579,697,533,672,491,641,455,625,444,628,439,644,451,677,488,702,531,721,577,735,624,751,712,755,778"/>
+<area shape="rect" id="Node000011" href="$ade9153a_8c.html#ae3ac1aa17ddad104c21672acdd33e6e2" title="Clear power values egy ready int mask." alt="" coords="457,465,634,491"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="748,778,741,721,724,647,710,608,692,570,669,535,641,504,624,493,627,489,644,500,673,531,696,567,715,606,729,645,746,720,754,778"/>
+<area shape="rect" id="Node000012" href="$ade9153a_8c.html#a3e67bc631e66f90bc09e1776cf9cd3d4" title="Clear fundamental reactive energy no load condition int mask." alt="" coords="460,515,631,540"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="746,779,736,730,717,669,686,606,665,578,641,553,623,542,626,538,644,549,669,575,690,604,722,667,741,729,752,778"/>
+<area shape="rect" id="Node000013" href="$ade9153a_8c.html#a11f838fd1e69e680616c1feda3b91a35" title="Clear PF ready int mask." alt="" coords="459,564,632,589"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="744,780,731,740,710,692,680,643,662,622,641,603,622,592,625,587,644,599,666,618,684,640,714,690,736,738,749,778"/>
+<area shape="rect" id="Node000014" href="$ade9153a_8c.html#aef7e7f046a5842fa6faa78c00a20625a" title="Clear power values registers update int mask." alt="" coords="457,613,634,639"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="739,781,702,716,674,682,641,654,617,641,619,636,644,649,678,679,706,713,744,778"/>
+<area shape="rect" id="Node000015" href="$ade9153a_8c.html#a5768e76dd3dc3975e3f1ad02a672a143" title="Clear RMS_OC values update int mask." alt="" coords="467,663,624,703"/>
+<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="729,784,690,750,641,718,616,706,618,701,644,713,693,746,732,780"/>
+<area shape="rect" id="Node000016" href="$ade9153a_8c.html#a4f7de945ea1911274ee96e5e7c8b9577" title="Clear RPA (reactive power) sign change int mask." alt="" coords="469,727,622,767"/>
+<area shape="poly" id="edge15_Node000001_Node000016" title=" " alt="" coords="693,791,618,770,619,765,694,786"/>
+<area shape="rect" id="Node000017" href="$ade9153a_8c.html#a9dc30e3c30671e09b8c0a29be4cf68a4" title="Clear reset done int mask." alt="" coords="455,792,636,817"/>
+<area shape="poly" id="edge16_Node000001_Node000017" title=" " alt="" coords="677,807,636,807,636,802,677,802"/>
+<area shape="rect" id="Node000018" href="$ade9153a_8c.html#a118df0db7ab61ad9d364d8ba539ff287" title="Clear new temperature reading ready int mask." alt="" coords="448,841,643,867"/>
+<area shape="poly" id="edge17_Node000001_Node000018" title=" " alt="" coords="687,823,601,844,599,839,686,818"/>
+<area shape="rect" id="Node000021" href="$ade9153a_8c.html#a012c6c4017e93e1afa201193831e0d6d" title="Clear total apparent energy no load condition int mask." alt="" coords="465,891,625,916"/>
+<area shape="poly" id="edge20_Node000001_Node000021" title=" " alt="" coords="728,828,689,855,644,880,608,893,606,888,642,876,687,851,725,824"/>
+<area shape="rect" id="Node000022" href="$ade9153a_8c.html#a86a9ea2becea170bcdb6709974ae38c8" title="Clear total active energy no load condition int mask." alt="" coords="459,940,632,965"/>
+<area shape="poly" id="edge21_Node000001_Node000022" title=" " alt="" coords="739,831,700,881,674,907,644,930,616,942,614,937,641,925,670,903,696,878,735,828"/>
+<area shape="rect" id="Node000023" href="$ade9153a_8c.html#a9e993ec90a4611f4f25899d60ec41b04" title="Clear zero crossing detect on I ch A int mask." alt="" coords="466,989,625,1015"/>
+<area shape="poly" id="edge22_Node000001_Node000023" title=" " alt="" coords="746,832,731,865,709,905,680,945,644,979,620,992,618,987,641,975,676,941,704,902,726,863,741,830"/>
+<area shape="rect" id="Node000024" href="$ade9153a_8c.html#ac25c450c07a2829a4685e7af8e9a5a20" title="Clear zero crossing detect on V ch int mask." alt="" coords="464,1039,627,1064"/>
+<area shape="poly" id="edge23_Node000001_Node000024" title=" " alt="" coords="750,831,738,874,717,928,686,982,667,1006,644,1028,623,1041,620,1036,641,1024,663,1003,682,979,712,925,732,873,745,830"/>
+<area shape="rect" id="Node000025" href="$ade9153a_8c.html#ab47be5f1b27e8c611a6c4531f8b909e2" title="Clear zero crossing detect on I ch B int mask." alt="" coords="466,1088,625,1113"/>
+<area shape="poly" id="edge24_Node000001_Node000025" title=" " alt="" coords="752,832,743,883,724,950,692,1018,671,1050,644,1077,624,1090,622,1086,641,1073,666,1046,688,1016,719,948,738,882,747,831"/>
+<area shape="rect" id="Node000026" href="$ade9153a_8c.html#afeb270063d456210699cbf7d080b4fb5" title="Clear zero crossing timout on V ch int mask." alt="" coords="457,1137,633,1163"/>
+<area shape="poly" id="edge25_Node000001_Node000026" title=" " alt="" coords="754,832,748,892,731,972,717,1014,698,1055,674,1093,644,1127,625,1139,622,1135,641,1123,670,1090,693,1052,712,1012,726,970,742,891,749,831"/>
+<area shape="rect" id="Node000027" href="$ade9153a_8c.html#aabf054f4ac17617bd9b93ccb35ac1548" title="COMPMODE." alt="" coords="462,1187,629,1212"/>
+<area shape="poly" id="edge26_Node000001_Node000027" title=" " alt="" coords="756,831,752,900,737,992,723,1042,704,1091,678,1136,644,1176,626,1189,623,1184,641,1172,674,1133,699,1088,718,1040,732,991,747,899,750,831"/>
+<area shape="rect" id="Node000028" href="$ade9153a_8c.html#a1b0d3202f129c89f6d407e01ed421bd9" title="ADE9153A setup." alt="" coords="240,1237,369,1263"/>
+<area shape="poly" id="edge34_Node000001_Node000028" title=" " alt="" coords="752,831,740,921,718,1040,704,1099,686,1153,667,1196,644,1225,612,1247,576,1262,537,1272,498,1276,422,1275,358,1265,359,1260,422,1269,498,1271,536,1266,574,1257,609,1242,641,1221,662,1194,681,1151,698,1098,713,1039,735,920,747,831"/>
+<area shape="rect" id="Node000030" href="$ade9153a_8c.html#af89ce9721bb6412b724367405adb65b2" title="Start measurements." alt="" coords="488,1288,603,1313"/>
+<area shape="poly" id="edge29_Node000001_Node000030" title=" " alt="" coords="752,832,740,928,718,1059,703,1125,686,1186,666,1236,645,1270,626,1285,604,1295,602,1290,623,1281,641,1267,662,1233,681,1184,698,1124,712,1058,735,928,747,831"/>
+<area shape="rect" id="Node000032" href="$eval-ade9153a_2src_2common_2common__data_8c.html#a5b32942d81fb899bcf8c3907bc9fde17" title="Autocalibration read values." alt="" coords="209,1339,400,1364"/>
+<area shape="poly" id="edge39_Node000001_Node000032" title=" " alt="" coords="754,831,745,939,726,1089,711,1165,693,1234,671,1289,658,1311,644,1327,612,1349,576,1365,537,1374,497,1379,420,1377,356,1367,357,1361,421,1371,497,1373,536,1369,574,1360,609,1345,641,1323,654,1308,666,1287,688,1232,706,1164,720,1088,740,939,748,831"/>
+<area shape="rect" id="Node000033" href="$ade9153a_8c.html#a78a3139cbb4fb1dbf5cf3d3b436b4b83" title="Stop measurements." alt="" coords="485,1389,606,1415"/>
+<area shape="poly" id="edge35_Node000001_Node000033" title=" " alt="" coords="754,831,744,946,724,1108,710,1190,692,1266,670,1328,645,1372,627,1386,607,1395,605,1390,625,1381,641,1368,665,1326,687,1264,704,1189,719,1107,739,946,748,831"/>
+<area shape="rect" id="Node000034" href="$ade9153a_8c.html#a6bbe212f26b3327fea7e5cfe2919f071" title="Lock device." alt="" coords="474,1439,617,1464"/>
+<area shape="poly" id="edge37_Node000001_Node000034" title=" " alt="" coords="754,831,747,957,729,1137,715,1229,697,1313,673,1382,660,1409,644,1429,618,1446,616,1442,641,1425,655,1406,668,1380,691,1311,710,1228,724,1136,742,957,749,831"/>
+<area shape="rect" id="Node000035" href="$ade9153a_8c.html#a84c95b7f7f2788a321ae3d26a529966a" title="Unlock device." alt="" coords="466,1488,625,1513"/>
+<area shape="poly" id="edge38_Node000001_Node000035" title=" " alt="" coords="755,831,749,966,732,1160,718,1260,700,1351,675,1427,661,1456,645,1479,627,1492,623,1488,641,1475,656,1453,670,1425,694,1350,713,1259,727,1159,744,966,749,831"/>
+<area shape="rect" id="Node000036" href="$eval-ade9153a_2src_2common_2common__data_8c.html#a8ab286a0277c4951842d176a2ce4c41c" title="Autocalibration start." alt="" coords="467,1537,624,1563"/>
+<area shape="poly" id="edge40_Node000001_Node000036" title=" " alt="" coords="755,831,751,975,735,1184,721,1292,702,1390,677,1472,662,1504,645,1528,626,1542,623,1537,641,1524,657,1501,672,1470,697,1389,716,1291,730,1183,745,975,750,831"/>
+<area shape="rect" id="Node000019" href="$ade9153a_8c.html#a97870faa000dbef25c9705e5aefdc356" title="Temperature value in deg C." alt="" coords="227,841,382,867"/>
+<area shape="poly" id="edge18_Node000018_Node000019" title=" " alt="" coords="434,857,382,857,382,851,434,851"/>
+<area shape="rect" id="Node000020" href="$eval-ade9153a_2src_2common_2common__data_8c.html#a9b065d0400a39009e3266707f94e0439" title="Read measurements." alt="" coords="5,841,161,867"/>
+<area shape="poly" id="edge19_Node000019_Node000020" title=" " alt="" coords="213,857,161,857,161,851,213,851"/>
+<area shape="poly" id="edge27_Node000027_Node000028" title=" " alt="" coords="471,1218,366,1240,365,1235,470,1212"/>
+<area shape="rect" id="Node000029" href="$eval-ade9153a_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="56,1288,111,1313"/>
+<area shape="poly" id="edge28_Node000028_Node000029" title=" " alt="" coords="235,1268,111,1297,110,1292,234,1263"/>
+<area shape="rect" id="Node000031" href="$ade9153a_8c.html#ad93af9e1aabc3f67b04304db2fd36912" title="Initialize the device." alt="" coords="247,1288,362,1313"/>
+<area shape="poly" id="edge30_Node000030_Node000031" title=" " alt="" coords="474,1303,362,1303,362,1298,474,1298"/>
+<area shape="poly" id="edge32_Node000030_Node000032" title=" " alt="" coords="475,1318,366,1341,365,1336,474,1313"/>
+<area shape="poly" id="edge31_Node000031_Node000029" title=" " alt="" coords="233,1303,111,1303,111,1298,233,1298"/>
+<area shape="poly" id="edge33_Node000032_Node000029" title=" " alt="" coords="234,1338,110,1309,111,1304,235,1333"/>
+<area shape="poly" id="edge36_Node000033_Node000032" title=" " alt="" coords="471,1389,365,1367,366,1361,472,1384"/>
+<area shape="poly" id="edge41_Node000036_Node000032" title=" " alt="" coords="458,1534,447,1528,399,1489,359,1443,329,1399,310,1366,315,1363,334,1396,364,1440,403,1485,449,1524,460,1530"/>
+</map>

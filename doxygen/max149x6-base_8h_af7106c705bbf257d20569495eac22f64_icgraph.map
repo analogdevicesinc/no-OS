@@ -1,0 +1,76 @@
+<map id="max149x6_reg_read" name="max149x6_reg_read">
+<area shape="rect" id="Node000001" title="Read the value of a device register." alt="" coords="1196,296,1351,321"/>
+<area shape="rect" id="Node000002" href="$max14916_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="325,630,443,656"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1266,335,1228,426,1198,486,1160,551,1114,616,1061,677,1000,730,966,752,930,771,871,794,819,805,770,807,724,801,678,788,629,770,516,723,452,690,402,658,405,654,455,686,518,718,631,765,680,783,725,796,771,802,818,800,870,788,928,766,963,747,996,725,1057,673,1110,612,1155,548,1193,483,1223,423,1261,333"/>
+<area shape="rect" id="Node000003" href="$max14906_2src_2examples_2basic_2basic__example_8c.html#a32f2e0e32a9b8d4215e10f596e8fcc25" title=" " alt="" coords="533,114,664,140"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="1211,295,647,142,648,137,1212,289"/>
+<area shape="rect" id="Node000005" href="$max14906_8c.html#a1d4ee7cc908562fd4d364be67293ea56" title="Read the (voltage) state of a channel (works for both input or output)." alt="" coords="992,14,1133,40"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="1264,283,1251,234,1228,172,1194,108,1172,78,1146,53,1128,42,1131,37,1150,49,1176,75,1198,105,1233,169,1256,232,1269,282"/>
+<area shape="rect" id="Node000006" href="$max14906_8c.html#a44a92bbc761e9ef7a4f202fa4db5a74d" title="Read an output channel&#39;s current limit." alt="" coords="981,64,1144,89"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="1260,284,1244,246,1219,200,1186,152,1146,110,1112,91,1115,87,1150,106,1190,149,1223,197,1248,244,1265,282"/>
+<area shape="rect" id="Node000007" href="$max14906_8c.html#aadb9ea330ffdaf973ddfe5e36c3cd9a0" title="Initialize and configure the MAX14906 device." alt="" coords="539,314,658,340"/>
+<area shape="poly" id="edge8_Node000001_Node000007" title=" " alt="" coords="1182,313,658,328,658,323,1182,308"/>
+<area shape="rect" id="Node000012" href="$max14916_8c.html#a644783cb5a4c4730dfc04e330c8a1f73" title="Read the high&#45;side state of a channel&#39;s switch." alt="" coords="992,833,1133,858"/>
+<area shape="poly" id="edge14_Node000001_Node000012" title=" " alt="" coords="1271,335,1257,439,1231,582,1214,655,1195,722,1174,777,1150,815,1137,827,1122,835,1119,831,1134,822,1146,812,1169,775,1190,720,1209,654,1226,581,1251,438,1266,335"/>
+<area shape="rect" id="Node000013" href="$max14916_8c.html#ae699a7641185ddb8c874077c7450a89d" title="Initialize and configure the MAX14916 device." alt="" coords="539,478,658,504"/>
+<area shape="poly" id="edge15_Node000001_Node000013" title=" " alt="" coords="1220,328,930,414,657,481,656,476,929,408,1218,323"/>
+<area shape="rect" id="Node000016" href="$max149x6-base_8c.html#aeee8ddd276067dcb2aee30bcbb1787bd" title="Update the value of a device register (read/write sequence)." alt="" coords="977,478,1148,504"/>
+<area shape="poly" id="edge19_Node000001_Node000016" title=" " alt="" coords="1259,334,1215,396,1184,430,1149,460,1109,481,1107,476,1147,455,1180,426,1211,393,1255,331"/>
+<area shape="rect" id="Node000004" href="$max14906_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="304,190,464,216"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="550,147,422,193,420,188,548,142"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="978,17,880,10,762,11,700,17,637,28,576,45,519,68,477,95,441,130,414,165,395,192,391,189,409,161,438,126,474,91,516,63,575,39,636,23,699,11,762,5,881,4,979,12"/>
+<area shape="poly" id="edge7_Node000006_Node000004" title=" " alt="" coords="967,67,871,60,757,61,636,74,576,86,518,104,481,122,447,146,399,192,395,188,444,142,478,118,516,99,575,81,635,68,757,56,871,55,968,61"/>
+<area shape="poly" id="edge9_Node000007_Node000004" title=" " alt="" coords="534,312,516,304,481,283,448,260,398,218,401,214,451,255,484,279,519,299,536,307"/>
+<area shape="rect" id="Node000008" href="$iio__max14906_8c.html#a9c2313da78bf3d7e5c3a69ff4a274bce" title="Initializes the MAX14906 IIO descriptor." alt="" coords="313,376,455,401"/>
+<area shape="poly" id="edge10_Node000007_Node000008" title=" " alt="" coords="541,346,430,378,428,373,540,341"/>
+<area shape="rect" id="Node000009" href="$max14906_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="108,376,251,401"/>
+<area shape="poly" id="edge11_Node000008_Node000009" title=" " alt="" coords="299,391,251,391,251,386,299,386"/>
+<area shape="rect" id="Node000010" href="$swiot__fw_8c.html#a427f9beea005fab8fccd9774acb53fc3" title="IIO example main execution." alt="" coords="118,425,241,450"/>
+<area shape="poly" id="edge12_Node000008_Node000010" title=" " alt="" coords="318,407,233,427,232,422,317,402"/>
+<area shape="rect" id="Node000011" href="$swiot1l_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function." alt="" coords="5,425,60,450"/>
+<area shape="poly" id="edge13_Node000010_Node000011" title=" " alt="" coords="104,440,60,440,60,435,104,435"/>
+<area shape="poly" id="edge16_Node000013_Node000002" title=" " alt="" coords="546,511,519,525,482,552,448,581,398,632,395,628,444,577,479,548,516,521,543,507"/>
+<area shape="rect" id="Node000014" href="$iio__max14916_8c.html#ad81756ab2e8b282c4f1e2fe65af8f9c9" title="Initializes the MAX14916 IIO descriptor." alt="" coords="313,478,455,504"/>
+<area shape="poly" id="edge17_Node000013_Node000014" title=" " alt="" coords="525,494,456,494,456,488,525,488"/>
+<area shape="rect" id="Node000015" href="$max14916_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="120,478,239,504"/>
+<area shape="poly" id="edge18_Node000014_Node000015" title=" " alt="" coords="299,494,239,494,239,488,299,488"/>
+<area shape="poly" id="edge20_Node000016_Node000004" title=" " alt="" coords="1051,466,1035,423,1009,369,974,315,952,290,928,269,907,257,878,246,808,227,680,206,567,198,465,200,464,195,567,193,680,200,809,222,880,241,909,252,931,265,956,287,978,312,1014,367,1040,421,1056,464"/>
+<area shape="rect" id="Node000017" href="$max14906_8c.html#a1669b8a38e3771d3bb928b604aa99f55" title="Configure a channel&#39;s function." alt="" coords="755,374,903,400"/>
+<area shape="poly" id="edge21_Node000016_Node000017" title=" " alt="" coords="1020,475,857,402,859,397,1022,470"/>
+<area shape="rect" id="Node000021" href="$max14906_8c.html#a11250a4872e7b7492c50eb18d31117bc" title="Write the (logic) state of a channel (only for output channels)." alt="" coords="529,216,669,241"/>
+<area shape="poly" id="edge31_Node000016_Node000021" title=" " alt="" coords="1047,467,1028,433,1002,392,968,352,928,317,882,296,814,276,668,243,669,238,815,271,883,291,931,313,972,348,1006,389,1033,430,1052,465"/>
+<area shape="rect" id="Node000022" href="$max14906_8c.html#a3ce12096e18b3551e7298ba95e4ebc10" title="Configure the current limit for output channels." alt="" coords="517,265,680,290"/>
+<area shape="poly" id="edge33_Node000016_Node000022" title=" " alt="" coords="1042,469,994,415,963,388,928,364,880,345,812,325,666,293,667,288,813,320,882,340,931,359,966,383,998,412,1046,465"/>
+<area shape="rect" id="Node000023" href="$max14916_8c.html#a605e987333073e51d2b9911ee1ad71fb" title="Write the (logic) state of a channel (on/off)." alt="" coords="759,478,899,504"/>
+<area shape="poly" id="edge35_Node000016_Node000023" title=" " alt="" coords="964,494,899,494,899,488,964,488"/>
+<area shape="rect" id="Node000024" href="$max14916_8c.html#ac6947afb2460b35ffb9ba42e043c7363" title="Set FLEDs minimum on&#45;time to requested value." alt="" coords="735,580,922,605"/>
+<area shape="poly" id="edge37_Node000016_Node000024" title=" " alt="" coords="1032,513,985,541,930,568,888,582,887,577,928,563,983,537,1030,509"/>
+<area shape="rect" id="Node000025" href="$max14916_8c.html#a3831b043c5a7a6facb3c1c1828ab3769" title="Set current magnitude for the ow off in the config2 register." alt="" coords="745,630,913,656"/>
+<area shape="poly" id="edge39_Node000016_Node000025" title=" " alt="" coords="1045,516,997,568,965,595,931,619,897,633,895,628,928,614,962,591,993,564,1041,512"/>
+<area shape="rect" id="Node000026" href="$max14916_8c.html#a3ae559c2c2c05fcbb2abac1b08b076a0" title="Set short to vdd threshold in the config2 register." alt="" coords="728,681,929,706"/>
+<area shape="poly" id="edge41_Node000016_Node000026" title=" " alt="" coords="1052,517,1033,552,1006,593,972,634,931,669,902,683,900,678,928,665,968,630,1002,590,1028,549,1047,515"/>
+<area shape="rect" id="Node000027" href="$max14916_8c.html#ae75030c223adb5ffb43fcdae5e3ff127" title="Set watchdog timeout in the config2 register." alt="" coords="757,529,901,554"/>
+<area shape="poly" id="edge43_Node000016_Node000027" title=" " alt="" coords="990,509,889,532,887,526,989,504"/>
+<area shape="rect" id="Node000028" href="$max14916_8c.html#a3f2dc3ad1451b424a50af6122b49ddec" title="Read an output channel&#39;s current limit." alt="" coords="753,730,905,756"/>
+<area shape="poly" id="edge45_Node000016_Node000028" title=" " alt="" coords="1056,518,1040,562,1015,617,979,673,956,699,931,721,906,734,904,730,928,717,952,695,974,670,1010,615,1036,560,1051,516"/>
+<area shape="poly" id="edge24_Node000017_Node000007" title=" " alt="" coords="765,373,647,342,649,337,767,368"/>
+<area shape="rect" id="Node000018" href="$iio__max14906_8c.html#a6821b5e1c7f1557c56453ea435f5278c" title="Configure a set if IIO channels based on the operation modes of the enabled physical channels." alt="" coords="520,364,677,404"/>
+<area shape="poly" id="edge22_Node000017_Node000018" title=" " alt="" coords="741,389,677,388,677,383,741,383"/>
+<area shape="rect" id="Node000019" href="$max14906_8c.html#aa4ea1254007543a1679fc6e788da65fc" title="Free the resources allocated during init and place all the channels in high&#45;z." alt="" coords="525,429,673,454"/>
+<area shape="poly" id="edge25_Node000017_Node000019" title=" " alt="" coords="762,405,653,432,652,426,761,400"/>
+<area shape="poly" id="edge23_Node000018_Node000008" title=" " alt="" coords="506,389,455,390,455,384,506,383"/>
+<area shape="poly" id="edge26_Node000019_Node000004" title=" " alt="" coords="526,425,516,418,483,380,446,322,390,217,394,215,451,320,487,377,519,414,529,421"/>
+<area shape="poly" id="edge27_Node000019_Node000008" title=" " alt="" coords="533,428,435,404,436,398,534,423"/>
+<area shape="rect" id="Node000020" href="$iio__max14906_8c.html#afcfbbd7dad3b9c0a3c70d7746e0b5ef8" title="Free resources allocated by the init function." alt="" coords="299,425,469,450"/>
+<area shape="poly" id="edge28_Node000019_Node000020" title=" " alt="" coords="511,443,469,442,469,437,511,437"/>
+<area shape="poly" id="edge29_Node000020_Node000009" title=" " alt="" coords="317,424,232,404,233,398,318,419"/>
+<area shape="poly" id="edge30_Node000020_Node000010" title=" " alt="" coords="285,440,241,440,241,435,285,435"/>
+<area shape="poly" id="edge32_Node000021_Node000004" title=" " alt="" coords="515,221,464,215,464,210,516,216"/>
+<area shape="poly" id="edge34_Node000022_Node000004" title=" " alt="" coords="542,263,516,255,417,218,419,213,518,250,543,258"/>
+<area shape="poly" id="edge36_Node000023_Node000013" title=" " alt="" coords="745,494,658,494,658,488,745,488"/>
+<area shape="poly" id="edge38_Node000024_Node000002" title=" " alt="" coords="722,605,518,627,444,637,443,632,517,622,722,600"/>
+<area shape="poly" id="edge40_Node000025_Node000002" title=" " alt="" coords="730,646,443,646,443,640,730,640"/>
+<area shape="poly" id="edge42_Node000026_Node000002" title=" " alt="" coords="714,683,443,652,444,647,714,678"/>
+<area shape="poly" id="edge44_Node000027_Node000002" title=" " alt="" coords="744,556,635,574,518,600,419,633,417,628,517,595,634,569,743,551"/>
+<area shape="poly" id="edge46_Node000028_Node000002" title=" " alt="" coords="739,730,633,710,517,684,425,658,426,653,518,679,634,705,740,725"/>
+</map>

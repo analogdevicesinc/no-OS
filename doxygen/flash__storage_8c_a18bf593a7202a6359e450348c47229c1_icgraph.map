@@ -1,0 +1,9 @@
+<map id="flash_write_calibration" name="flash_write_calibration">
+<area shape="rect" id="Node000001" title="Write calibration data to flash." alt="" coords="413,35,583,60"/>
+<area shape="rect" id="Node000002" href="$flash__storage_8c.html#a179f45789534eb226bdb1cbbbd7ba5ff" title="Save all calibration data to flash." alt="" coords="175,5,365,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="399,37,365,33,366,28,400,32"/>
+<area shape="rect" id="Node000003" href="$flash__storage_8c.html#a1f78c0c966345b80d9aa000720eb0d7f" title="Save current calibration context to flash for specified channel." alt="" coords="187,55,353,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="400,62,354,68,353,62,399,57"/>
+<area shape="rect" id="Node000004" href="$iio__pqm_8c.html#a5049c1a1897c0c058c807dd7bdbd8a24" title="Write a pqm device attribute." alt="" coords="5,63,127,88"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="173,78,127,78,127,73,173,73"/>
+</map>

@@ -1,0 +1,13 @@
+<map id="flash_storage_init" name="flash_storage_init">
+<area shape="rect" id="Node000001" title="Initialize flash storage." alt="" coords="539,55,676,80"/>
+<area shape="rect" id="Node000002" href="$pqlib__example_8c.html#a706632b98cda205f69858b86a48b4a32" title="Initializes Power Quality Measurement." alt="" coords="313,5,491,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="540,54,455,33,456,28,541,49"/>
+<area shape="rect" id="Node000005" href="$iio__pqm_8c.html#a7579bb84d6998edfe7203f244b85ba6b" title="Read a pqm device attribute." alt="" coords="343,55,461,80"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="525,70,461,70,461,65,525,65"/>
+<area shape="rect" id="Node000006" href="$iio__pqm_8c.html#a5049c1a1897c0c058c807dd7bdbd8a24" title="Write a pqm device attribute." alt="" coords="341,104,463,129"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="541,86,456,107,455,101,540,81"/>
+<area shape="rect" id="Node000003" href="$eval-pqmon_2src_2examples_2basic_2basic__example_8c.html#a1681c88b1933ada9b895fe6c81a8aac6" title="PQM example main execution." alt="" coords="108,5,265,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="299,21,266,21,266,15,299,15"/>
+<area shape="rect" id="Node000004" href="$eval-pqmon_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function that executes on Maxim platform." alt="" coords="5,5,60,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="94,21,60,21,60,15,94,15"/>
+</map>

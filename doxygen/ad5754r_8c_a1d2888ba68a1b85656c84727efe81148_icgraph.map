@@ -1,0 +1,5 @@
+<map id="ad5754r_spi_verify" name="ad5754r_spi_verify">
+<area shape="rect" id="Node000001" title="Write to and read back a register to verify SPI." alt="" coords="156,5,301,31"/>
+<area shape="rect" id="Node000002" href="$ad5754r_8c.html#a9ccf291f05624d517a9a12d62725b06c" title="Initialize the device." alt="" coords="5,5,108,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="142,21,108,21,108,15,142,15"/>
+</map>

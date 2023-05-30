@@ -1,0 +1,31 @@
+<map id="adis_init" name="adis_init">
+<area shape="rect" id="Node000001" title="Initialize adis device." alt="" coords="556,153,633,179"/>
+<area shape="rect" id="Node000002" href="$iio__adis1646x_8c.html#aed886da3c824f9d666d090fa37745977" title="Initialize adis1646x iio device." alt="" coords="358,5,498,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="580,142,551,93,530,67,506,46,484,33,486,28,510,41,534,64,555,90,584,140"/>
+<area shape="rect" id="Node000005" href="$iio__adis1647x_8c.html#a207b572fce1d02774cca7174f9264024" title="Initialize adis1647x iio device." alt="" coords="358,55,498,80"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="570,145,541,119,507,95,478,83,480,78,509,90,544,115,574,141"/>
+<area shape="rect" id="Node000007" href="$iio__adis1650x_8c.html#aa1decd80e7c6178c550c6a9e7e7ed24d" title="Initialize adis1650x iio device." alt="" coords="358,104,498,129"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="542,153,471,132,473,127,544,148"/>
+<area shape="rect" id="Node000009" href="$iio__adis1654x_8c.html#a1c648207e6f8a483e1c2dc1df64e7e32" title="Initialize adis1654x iio device." alt="" coords="358,153,498,179"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="542,169,498,169,498,163,542,163"/>
+<area shape="rect" id="Node000011" href="$iio__adis1655x_8c.html#a1fc3ab4f4718ddf8e9f9cbd61e38a149" title="Initialize adis1655x iio device." alt="" coords="358,203,498,228"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="544,184,473,205,471,200,542,179"/>
+<area shape="rect" id="Node000013" href="$iio__adis1657x_8c.html#a32fc1f743a4b4051dd39cb633c1c3f27" title="Initialize adis1657x iio device." alt="" coords="358,252,498,277"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="574,191,545,218,509,243,483,254,481,249,507,238,542,214,571,187"/>
+<area shape="rect" id="Node000015" href="$eval-adis1646x_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Dummy example main execution." alt="" coords="348,301,508,327"/>
+<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="585,193,555,243,534,269,510,292,489,304,486,299,506,288,531,266,551,240,580,190"/>
+<area shape="rect" id="Node000003" href="$eval-adis1646x_2src_2examples_2iio__trigger__example_2iio__trigger__example_8c.html#aa6785eab0c37adc61db331ebebdc40ee" title="IIO trigger example main execution." alt="" coords="108,5,300,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="344,21,300,21,300,15,344,15"/>
+<area shape="rect" id="Node000004" href="$eval-adis1646x_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="5,5,60,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="95,21,60,21,60,15,95,15"/>
+<area shape="rect" id="Node000006" href="$eval-adis1647x_2src_2examples_2iio__trigger__example_2iio__trigger__example_8c.html#aa6785eab0c37adc61db331ebebdc40ee" title="IIO trigger example main execution." alt="" coords="108,55,300,80"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="344,70,300,70,300,65,344,65"/>
+<area shape="rect" id="Node000008" href="$eval-adis1650x_2src_2examples_2iio__trigger__example_2iio__trigger__example_8c.html#aa6785eab0c37adc61db331ebebdc40ee" title="IIO trigger example main execution." alt="" coords="108,104,300,129"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="344,119,300,119,300,114,344,114"/>
+<area shape="rect" id="Node000010" href="$eval-adis1654x_2src_2examples_2iio__trigger__example_2iio__trigger__example_8c.html#aa6785eab0c37adc61db331ebebdc40ee" title="IIO trigger example main execution." alt="" coords="108,153,300,179"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="344,169,300,169,300,163,344,163"/>
+<area shape="rect" id="Node000012" href="$eval-adis1655x_2src_2examples_2iio__trigger__example_2iio__trigger__example_8c.html#aa6785eab0c37adc61db331ebebdc40ee" title="IIO trigger example main execution." alt="" coords="108,203,300,228"/>
+<area shape="poly" id="edge11_Node000011_Node000012" title=" " alt="" coords="344,218,300,218,300,213,344,213"/>
+<area shape="rect" id="Node000014" href="$eval-adis1657x_2src_2examples_2iio__trigger__example_2iio__trigger__example_8c.html#aa6785eab0c37adc61db331ebebdc40ee" title="IIO trigger example main execution." alt="" coords="108,252,300,277"/>
+<area shape="poly" id="edge13_Node000013_Node000014" title=" " alt="" coords="344,267,300,267,300,262,344,262"/>
+</map>

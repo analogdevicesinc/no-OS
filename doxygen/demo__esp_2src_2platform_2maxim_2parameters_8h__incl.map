@@ -1,0 +1,13 @@
+<map id="projects/demo_esp/src/platform/maxim/parameters.h" name="projects/demo_esp/src/platform/maxim/parameters.h">
+<area shape="rect" id="Node000001" title="Definitions specific to maxim platform used by demo_esp project." alt="" coords="183,5,406,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,93,72,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="234,48,86,93,85,88,233,43"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="97,93,218,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="263,48,191,89,188,84,260,43"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="243,93,347,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="297,46,297,79,292,79,292,46"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="371,93,485,119"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="328,43,398,84,395,89,325,48"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="509,93,624,119"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="361,43,515,87,513,92,359,48"/>
+</map>

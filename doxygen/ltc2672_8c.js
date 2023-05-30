@@ -1,0 +1,27 @@
+var ltc2672_8c =
+[
+    [ "ltc2672_chip_power_down", "ltc2672_8c.html#a54f9f1b347663b30f4f5df972f617ae8", null ],
+    [ "ltc2672_config_command", "ltc2672_8c.html#ac5d36a739c06f7c4c60a5f6338aa4e01", null ],
+    [ "ltc2672_current_to_code", "ltc2672_8c.html#ac6807a9b9cc3003b598624180f9a1b69", null ],
+    [ "ltc2672_enable_toggle_channel", "ltc2672_8c.html#a3a1d0b24cd65568eeea113ff402b0bb5", null ],
+    [ "ltc2672_global_toggle", "ltc2672_8c.html#abfb6482f1f409d593eed6fe8846e734a", null ],
+    [ "ltc2672_hw_ldac_update", "ltc2672_8c.html#a731414a11c3739e1dc3f7cfc3670ca28", null ],
+    [ "ltc2672_init", "ltc2672_8c.html#afc23459b7461772351a3417558574c9c", null ],
+    [ "ltc2672_monitor_mux", "ltc2672_8c.html#a1d36170a7754cb809ffd2684e6c51be1", null ],
+    [ "ltc2672_power_down_all_channels", "ltc2672_8c.html#a36631880a13e9f7a623bb1ec896a0b3b", null ],
+    [ "ltc2672_power_down_channel", "ltc2672_8c.html#aa60a564b4108d96e5839d4c000117b8a", null ],
+    [ "ltc2672_remove", "ltc2672_8c.html#a1232b0cf65a9ab836daca1a73fa9d749", null ],
+    [ "ltc2672_reset", "ltc2672_8c.html#a4348c6a38b3422a1cfd97ab952696ca6", null ],
+    [ "ltc2672_set_code_all_channels", "ltc2672_8c.html#a0abababa3db467fe8eef14e63f3d2894", null ],
+    [ "ltc2672_set_code_channel", "ltc2672_8c.html#a2ad5dfbec025fdd04cd81e92d1e86c6c", null ],
+    [ "ltc2672_set_current_all_channels", "ltc2672_8c.html#a1925a7ba84e10d9845b6663853a1a5d2", null ],
+    [ "ltc2672_set_current_channel", "ltc2672_8c.html#ac94ad5cab8fa0c407aeda8139638dd8c", null ],
+    [ "ltc2672_set_span_all_channels", "ltc2672_8c.html#a6920eca6de621459b93ccf003eb4aed6", null ],
+    [ "ltc2672_set_span_channel", "ltc2672_8c.html#a0b950ef76098e6cc78274e22acbcc49c", null ],
+    [ "ltc2672_setup_toggle_channel", "ltc2672_8c.html#a0e6e9a7425d2717f6a620a886255637e", null ],
+    [ "ltc2672_transaction", "ltc2672_8c.html#a3fcd5b1ef7fe3aa4c357a22e7de95b27", null ],
+    [ "ltc2672_update_all_channels", "ltc2672_8c.html#a1def86a6675902daf4116ccb7f2a9ab1", null ],
+    [ "ltc2672_update_channel", "ltc2672_8c.html#aeb0b18a163631ca1f102c6362b284840", null ],
+    [ "ltc2672_write_input_register_all_channels", "ltc2672_8c.html#a0e50093dfbdf5c727590dfe7e9545f70", null ],
+    [ "ltc2672_write_input_register_channel", "ltc2672_8c.html#a6147850fb033cb0cee82f3615f85a703", null ]
+];

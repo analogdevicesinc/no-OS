@@ -1,0 +1,20 @@
+<map id="drivers/imu/adis1650x.h" name="drivers/imu/adis1650x.h">
+<area shape="rect" id="Node000001" title="Implementation of adis1650x.h." alt="" coords="140,5,319,31"/>
+<area shape="rect" id="Node000002" href="$adis_8h.html" title="Implementation of adis.h." alt="" coords="199,79,260,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="232,31,232,65,227,65,227,31"/>
+<area shape="rect" id="Node000003" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="5,152,104,177"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="202,106,97,149,95,144,200,102"/>
+<area shape="rect" id="Node000005" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="179,152,279,177"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="232,104,232,138,227,138,227,104"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="163,225,234,251"/>
+<area shape="poly" id="edge9_Node000002_Node000006" title=" " alt="" coords="213,106,189,126,170,153,167,168,170,183,183,213,179,215,164,185,162,168,166,151,185,123,209,102"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="267,225,349,251"/>
+<area shape="poly" id="edge10_Node000002_Node000007" title=" " alt="" coords="248,102,273,123,294,151,305,181,310,211,305,212,300,183,290,153,269,126,245,106"/>
+<area shape="rect" id="Node000008" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="355,152,423,177"/>
+<area shape="poly" id="edge8_Node000002_Node000008" title=" " alt="" coords="256,102,352,144,350,149,254,106"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="53,225,123,251"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="63,177,79,212,74,214,58,179"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="208,180,124,221,122,217,205,175"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="227,179,211,214,207,212,222,177"/>
+<area shape="poly" id="edge7_Node000005_Node000007" title=" " alt="" coords="244,175,287,214,283,218,240,179"/>
+</map>

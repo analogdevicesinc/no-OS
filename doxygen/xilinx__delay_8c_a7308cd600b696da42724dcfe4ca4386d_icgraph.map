@@ -1,0 +1,8 @@
+<map id="no_os_get_time" name="no_os_get_time">
+<area shape="rect" id="Node000001" title="Get current time." alt="" coords="275,29,400,55"/>
+<area shape="poly" id="edge1_Node000001_Node000001" title=" " alt="" coords="367,19,358,11,337,8,320,10,311,15,309,20,314,28,309,31,303,21,306,11,318,5,337,3,360,6,370,15"/>
+<area shape="rect" id="Node000002" href="$state__machine_8c.html#a92bc605df80f651e105fe804f43d615b" title="State machine main execution." alt="" coords="108,29,227,55"/>
+<area shape="poly" id="edge2_Node000001_Node000002" title=" " alt="" coords="261,45,227,45,227,39,261,39"/>
+<area shape="rect" id="Node000003" href="$ad-acevsecrdset-sl_2src_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="5,29,60,55"/>
+<area shape="poly" id="edge3_Node000002_Node000003" title=" " alt="" coords="94,45,60,45,60,39,94,39"/>
+</map>

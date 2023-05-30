@@ -1,0 +1,29 @@
+<map id="max9611_read" name="max9611_read">
+<area shape="rect" id="Node000001" title="Reads data from device register (I2C)" alt="" coords="419,153,537,179"/>
+<area shape="rect" id="Node000002" href="$max9611_8c.html#a7fc99ace4628168fff72c9ccc875cbd1" title="Get MAX9611 configured delay time." alt="" coords="212,5,367,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="460,143,422,93,397,67,369,44,347,33,349,28,372,40,401,63,427,89,464,140"/>
+<area shape="rect" id="Node000003" href="$max9611_8c.html#a1288b75d9995b4542a16bde83f52b111" title="Get LR bit value." alt="" coords="226,55,353,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="450,147,413,119,369,94,341,83,343,78,372,89,416,115,453,143"/>
+<area shape="rect" id="Node000004" href="$max9611_8c.html#af301db2467ebad736beccb45ed26cf25" title="Get the MAX9611 operating mode." alt="" coords="212,104,367,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="415,152,338,132,340,127,416,147"/>
+<area shape="rect" id="Node000005" href="$max9611_8c.html#ad1291b31653dfd330ece9ec4aac156f1" title="Get the internal MUX settings." alt="" coords="216,153,363,179"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="405,169,363,169,363,163,405,163"/>
+<area shape="rect" id="Node000006" href="$max9611_8c.html#ab11d851aa93b5e5c315ff23a468ba24a" title="Receive data from ADC (single value only)." alt="" coords="218,203,361,228"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="416,185,340,205,338,200,415,180"/>
+<area shape="rect" id="Node000007" href="$max9611_8c.html#a72823a2a5b13b85cf2b04f45bbc3e173" title="Get MAX9611 configured retry time." alt="" coords="215,252,364,277"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="452,190,415,216,372,242,340,254,338,249,369,237,412,212,449,185"/>
+<area shape="rect" id="Node000008" href="$max9611_8c.html#a705e39818ba4cefb522ba28f2f2993f8" title="Update selected I2C register contents." alt="" coords="208,301,371,327"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="464,192,426,242,401,268,372,291,346,304,344,299,369,286,397,264,422,238,460,189"/>
+<area shape="rect" id="Node000009" href="$max9611_8c.html#ad35655d8b6147f1c0f142dff01732405" title="Configures MAX9611 delay time." alt="" coords="6,177,159,203"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="217,298,206,291,189,272,182,252,174,234,158,216,139,205,142,200,162,212,179,231,186,250,194,269,210,287,220,293"/>
+<area shape="rect" id="Node000010" href="$max9611_8c.html#a73149820869b0b1fd986669612ee047e" title="Configure LR bit operation." alt="" coords="19,227,146,252"/>
+<area shape="poly" id="edge9_Node000008_Node000010" title=" " alt="" coords="229,300,207,291,159,266,128,255,130,250,161,261,209,286,231,295"/>
+<area shape="rect" id="Node000011" href="$max9611_8c.html#aed49ffe1818884bbaf9351aeafe18c50" title="Configures MAX9611 operating mode." alt="" coords="5,276,160,301"/>
+<area shape="poly" id="edge10_Node000008_Node000011" title=" " alt="" coords="194,305,160,301,161,296,195,300"/>
+<area shape="rect" id="Node000012" href="$max9611_8c.html#a5358fd37d5a5358c42dc6e99d5b3a9b3" title="Configures the internal MUX settings." alt="" coords="9,325,156,351"/>
+<area shape="poly" id="edge11_Node000008_Node000012" title=" " alt="" coords="195,328,157,332,156,327,194,322"/>
+<area shape="rect" id="Node000013" href="$max9611_8c.html#a6a32d751ecc4363280c7f8229aeeb149" title="Configures MAX9611 retry time." alt="" coords="9,375,157,400"/>
+<area shape="poly" id="edge12_Node000008_Node000013" title=" " alt="" coords="243,334,161,365,124,377,122,372,159,359,242,329"/>
+<area shape="rect" id="Node000014" href="$max9611_8c.html#a9b82e483c22b90d478dad88629c8b29f" title="Device shutdown or power up." alt="" coords="6,424,159,449"/>
+<area shape="poly" id="edge13_Node000008_Node000014" title=" " alt="" coords="266,338,219,376,161,414,131,426,129,421,159,409,216,372,263,334"/>
+</map>

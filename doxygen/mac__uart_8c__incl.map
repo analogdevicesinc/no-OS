@@ -1,0 +1,36 @@
+<map id="drivers/platform/mac/mac_uart.c" name="drivers/platform/mac/mac_uart.c">
+<area shape="rect" id="Node000001" title="Implementation of Mac platform UART Driver." alt="" coords="345,5,503,45"/>
+<area shape="rect" id="Node000002" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="5,93,115,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="345,46,127,93,126,88,344,41"/>
+<area shape="rect" id="Node000004" href="$no__os__alloc_8h.html" title=" " alt="" coords="190,93,301,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="382,48,285,90,283,85,380,43"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="152,167,219,192"/>
+<area shape="poly" id="edge15_Node000001_Node000005" title=" " alt="" coords="345,40,245,62,204,77,179,95,173,108,172,123,177,153,172,154,166,123,168,107,175,92,202,73,244,57,344,35"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="303,313,374,339"/>
+<area shape="poly" id="edge16_Node000001_Node000006" title=" " alt="" coords="403,48,383,69,366,94,349,149,340,206,338,259,339,299,334,300,333,259,335,206,344,148,362,92,378,66,399,44"/>
+<area shape="rect" id="Node000007" href="$mac__uart_8h.html" title="Implementation of Mac platform UART Driver." alt="" coords="377,93,471,119"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="427,46,427,79,421,79,421,46"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="495,93,558,119"/>
+<area shape="poly" id="edge14_Node000001_Node000012" title=" " alt="" coords="450,43,502,83,499,87,447,48"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="582,93,666,119"/>
+<area shape="poly" id="edge17_Node000001_Node000013" title=" " alt="" coords="473,43,583,86,581,91,471,48"/>
+<area shape="rect" id="Node000014" title=" " alt="" coords="691,93,765,119"/>
+<area shape="poly" id="edge18_Node000001_Node000014" title=" " alt="" coords="497,43,678,89,677,94,496,48"/>
+<area shape="rect" id="Node000015" title=" " alt="" coords="789,93,877,119"/>
+<area shape="poly" id="edge19_Node000001_Node000015" title=" " alt="" coords="504,39,776,90,775,96,503,44"/>
+<area shape="rect" id="Node000003" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="26,167,94,192"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="63,119,63,153,57,153,57,119"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="237,121,206,158,202,154,233,117"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="253,118,331,299,326,301,248,120"/>
+<area shape="rect" id="Node000008" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="409,167,514,192"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="433,118,451,153,447,156,428,120"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="547,313,618,339"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="503,190,541,208,559,222,574,239,586,269,588,299,583,300,581,270,570,241,556,226,539,213,501,194"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="425,313,508,339"/>
+<area shape="poly" id="edge9_Node000008_Node000010" title=" " alt="" coords="450,194,423,226,416,245,417,265,429,285,444,302,440,306,424,288,412,266,410,244,418,223,445,190"/>
+<area shape="rect" id="Node000011" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="427,240,560,265"/>
+<area shape="poly" id="edge10_Node000008_Node000011" title=" " alt="" coords="469,191,485,227,480,229,464,193"/>
+<area shape="poly" id="edge11_Node000011_Node000006" title=" " alt="" coords="470,268,377,310,375,305,467,263"/>
+<area shape="poly" id="edge12_Node000011_Node000009" title=" " alt="" coords="509,263,559,302,556,307,506,267"/>
+<area shape="poly" id="edge13_Node000011_Node000010" title=" " alt="" coords="491,267,478,302,473,300,486,265"/>
+</map>

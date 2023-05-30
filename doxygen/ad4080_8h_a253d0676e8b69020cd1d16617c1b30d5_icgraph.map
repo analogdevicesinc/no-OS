@@ -1,0 +1,10 @@
+<map id="ad4080_remove" name="ad4080_remove">
+<area shape="rect" id="Node000001" title="Remove the device and release resources." alt="" coords="365,31,492,56"/>
+<area shape="rect" id="Node000002" href="$iio__ad4080_8c.html#a0d027c587f47f7cde05f71c9495b060c" title="teardown the ad4080 IIO driver" alt="" coords="197,5,317,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="352,35,316,29,317,24,352,29"/>
+<area shape="rect" id="Node000004" href="$iio__ad4080_8c.html#a4c3881b748799947d1bc735745dd48a8" title="Initializes the IIO AD4080 descriptor." alt="" coords="196,55,317,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="352,57,318,61,317,56,352,51"/>
+<area shape="rect" id="Node000003" href="$adalm-mmsc_2src_2examples_2iio__example_2iio__example_8c.html#a692b15b864d48091dc3d7095bea120b4" title="IIO example main execution." alt="" coords="5,31,148,56"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="183,31,149,36,148,31,182,26"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="182,60,148,55,148,50,183,55"/>
+</map>

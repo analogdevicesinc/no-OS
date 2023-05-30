@@ -1,0 +1,7 @@
+<map id="ad713x_mag_phase_clk_delay" name="ad713x_mag_phase_clk_delay">
+<area shape="rect" id="Node000001" title="Magnitude and phase matching calibration clock delay enable for all channels at 2 clock delay...." alt="" coords="255,5,433,45"/>
+<area shape="rect" id="Node000002" href="$ad713x_8c.html#aeebe94d6a7a09c6dc2a17fb2e2a5858c" title="Initialize the device." alt="" coords="108,13,207,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="241,28,207,28,207,23,241,23"/>
+<area shape="rect" id="Node000003" href="$ad713x__fmc_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,13,60,38"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="94,28,60,28,60,23,94,23"/>
+</map>

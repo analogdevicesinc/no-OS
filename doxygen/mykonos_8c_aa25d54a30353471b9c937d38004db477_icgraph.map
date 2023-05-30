@@ -1,0 +1,47 @@
+<map id="MYKONOS_writeArmMem" name="MYKONOS_writeArmMem">
+<area shape="rect" id="Node000001" title="Write to the Mykonos ARM program or data memory." alt="" coords="968,326,1156,351"/>
+<area shape="rect" id="Node000002" href="$mykonos_8c.html#a07971466ea16db91fcced059910eb196" title="Sets which ARM tracking cals are enabled during the radioOn state." alt="" coords="110,51,331,77"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1053,313,1038,262,1012,198,995,165,973,135,948,107,919,85,878,63,834,45,743,21,650,10,556,9,468,16,388,27,266,54,265,49,387,22,467,11,556,4,650,5,744,16,836,40,880,58,921,80,952,103,977,131,999,163,1017,196,1043,260,1058,312"/>
+<area shape="rect" id="Node000004" href="$mykonos_8c.html#a2b5ba77b572023bf56813ed659695307" title="Function called automatically that loads the ADC profiles into the ARM." alt="" coords="695,95,890,121"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="1049,314,1030,274,1002,224,965,175,943,153,919,134,889,120,891,116,921,130,946,149,969,171,1007,221,1035,271,1053,312"/>
+<area shape="rect" id="Node000006" href="$mykonos_8c.html#a354bf76c64b7ef66cb177fcc18347942" title="Loads binary byte array into ARM program memory." alt="" coords="108,190,333,215"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="1015,324,919,289,770,238,704,219,617,204,551,198,500,199,381,204,333,204,333,199,381,199,500,193,551,193,618,199,705,214,772,232,921,284,1017,319"/>
+<area shape="rect" id="Node000007" href="$mykonos_8c.html#a111d88c14bfc69497f06e50c1cd6fd81" title="This function will allow loading of the DPD model file." alt="" coords="689,557,896,582"/>
+<area shape="poly" id="edge8_Node000001_Node000007" title=" " alt="" coords="1052,365,1033,404,1004,451,967,499,921,540,880,559,878,554,919,535,963,496,1000,448,1028,401,1048,363"/>
+<area shape="rect" id="Node000008" href="$mykonos_8c.html#a440839e03f93581c7944c031a0d09ddd" title="Suspend or resume tracking calibrations in RADIO_ON." alt="" coords="682,606,903,631"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="1057,366,1041,416,1014,479,975,543,950,572,922,597,901,608,899,604,918,593,946,568,971,540,1010,477,1036,414,1052,364"/>
+<area shape="rect" id="Node000009" href="$mykonos_8c.html#aa3101b2f0cc1b4f30d4df2cbed688b98" title="This function will configure the path delay settings for all the features: DPD, VSWR and CLGC." alt="" coords="702,655,883,681"/>
+<area shape="poly" id="edge10_Node000001_Node000009" title=" " alt="" coords="1059,366,1047,424,1022,501,1004,541,981,580,954,616,922,646,904,657,885,664,883,659,902,652,918,642,950,612,977,577,999,539,1017,499,1041,423,1054,364"/>
+<area shape="rect" id="Node000010" href="$mykonos_8c.html#a42e222e6dc5237978034cca4582f83b1" title="Configures the Radio power up/down control for Rx and Tx paths to be controlled by pins (TX1/2_ENABLE..." alt="" coords="665,299,920,325"/>
+<area shape="poly" id="edge11_Node000001_Node000010" title=" " alt="" coords="954,331,920,327,921,322,955,325"/>
+<area shape="rect" id="Node000011" href="$mykonos_8c.html#a98d61cecb6eed941484e6db331da2ec8" title="Sets the RF PLL local oscillator frequency (RF carrier frequency)." alt="" coords="115,421,327,446"/>
+<area shape="poly" id="edge13_Node000001_Node000011" title=" " alt="" coords="1027,360,921,417,848,451,789,475,733,502,667,546,653,560,645,575,635,588,619,600,554,624,500,631,445,623,380,600,353,585,327,567,282,524,248,481,227,448,231,445,253,477,286,520,330,563,355,581,382,595,446,618,500,626,553,619,616,595,632,584,641,572,649,557,664,542,730,497,787,470,846,446,919,412,1024,356"/>
+<area shape="rect" id="Node000012" href="$mykonos_8c.html#a098948dc72e67594cf6e5cf65743f049" title="Low level helper function used by Mykonos API to write the ARM memory config structures." alt="" coords="695,378,891,403"/>
+<area shape="poly" id="edge15_Node000001_Node000012" title=" " alt="" coords="982,357,860,381,859,375,981,351"/>
+<area shape="rect" id="Node000020" href="$mykonos_8c.html#a151e75ae341921c0529b7f075adf58e7" title="Mykonos ARM configuration write." alt="" coords="695,145,891,170"/>
+<area shape="poly" id="edge24_Node000001_Node000020" title=" " alt="" coords="1043,316,992,253,958,220,919,192,872,173,874,168,921,187,961,216,996,250,1047,313"/>
+<area shape="rect" id="Node000003" href="$ad9371_2src_2app_2headless_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="5,165,60,190"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="164,84,109,110,74,139,47,166,43,163,70,135,107,106,162,79"/>
+<area shape="rect" id="Node000005" href="$mykonos_8c.html#a6f62c877342da46ec31250276e7fb49d" title="Resets the ARM processor and performs initialization." alt="" coords="428,95,571,121"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="681,111,571,111,571,105,681,105"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="415,123,61,176,60,171,414,118"/>
+<area shape="poly" id="edge7_Node000006_Node000003" title=" " alt="" coords="112,191,60,184,61,178,113,185"/>
+<area shape="poly" id="edge12_Node000010_Node000006" title=" " alt="" coords="756,295,692,264,617,237,544,222,470,213,333,204,334,199,471,207,545,217,618,232,694,259,758,290"/>
+<area shape="poly" id="edge14_Node000011_Node000003" title=" " alt="" coords="200,411,41,192,45,189,204,408"/>
+<area shape="rect" id="Node000013" href="$mykonos_8c.html#a366f39050ef5877e4f98ccfe0744b284" title="This function will configure CLGC settings." alt="" coords="418,559,581,585"/>
+<area shape="poly" id="edge16_Node000012_Node000013" title=" " alt="" coords="767,414,667,502,645,527,635,538,619,549,582,563,580,558,616,544,631,534,641,524,663,498,764,410"/>
+<area shape="rect" id="Node000014" href="$mykonos_8c.html#a9abc5ff152769a26905f0a454d1713ad" title="This function will configure DPD settings." alt="" coords="419,297,579,322"/>
+<area shape="poly" id="edge17_Node000012_Node000014" title=" " alt="" coords="743,376,617,336,569,325,570,320,618,331,745,371"/>
+<area shape="rect" id="Node000015" href="$mykonos_8c.html#a7baa5941b75ba68d467285adda7dc8b5" title="This function, when called during RadioOff, will configure VSWR settings." alt="" coords="416,346,583,371"/>
+<area shape="poly" id="edge18_Node000012_Node000015" title=" " alt="" coords="681,381,583,370,583,365,682,376"/>
+<area shape="rect" id="Node000016" href="$mykonos_8c.html#a16cf26692afd555ee9e355493f365679" title="CLGC feature to set the TX attenuation tuning range to a relative range around a nominal value." alt="" coords="389,396,609,436"/>
+<area shape="poly" id="edge19_Node000012_Node000016" title=" " alt="" coords="681,403,610,409,609,404,681,398"/>
+<area shape="rect" id="Node000017" href="$mykonos_8c.html#a476245e3463907bbcc2a6a227abc5700" title="Sets the default Obs Rx channel to enter when device moves from radioOff to radioOn." alt="" coords="383,247,616,273"/>
+<area shape="poly" id="edge20_Node000012_Node000017" title=" " alt="" coords="737,376,700,359,664,338,649,324,640,311,631,298,616,286,590,275,592,270,619,282,635,294,644,308,653,321,667,334,702,355,739,371"/>
+<area shape="rect" id="Node000018" href="$mykonos_8c.html#a6dde751ed5cc38f1086a158760e5bb9d" title="DPD feature to set the actuator gain difference check. If the gain before and after the actuator exce..." alt="" coords="381,461,617,486"/>
+<area shape="poly" id="edge22_Node000012_Node000018" title=" " alt="" coords="745,410,618,451,566,463,565,458,617,445,743,405"/>
+<area shape="rect" id="Node000019" href="$mykonos_8c.html#aec69a32ff6353cfe1178f07c584f90ce" title="DPD feature to set the bypassing actuator when Tx signal power is below a programmable threshold give..." alt="" coords="385,510,614,535"/>
+<area shape="poly" id="edge23_Node000012_Node000019" title=" " alt="" coords="765,414,700,458,660,480,618,500,578,513,576,507,616,495,658,476,697,453,762,410"/>
+<area shape="poly" id="edge21_Node000017_Node000006" title=" " alt="" coords="423,247,283,218,284,213,424,242"/>
+<area shape="poly" id="edge25_Node000020_Node000005" title=" " alt="" coords="703,145,570,123,571,117,703,140"/>
+</map>

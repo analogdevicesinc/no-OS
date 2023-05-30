@@ -1,0 +1,8 @@
+<map id="ad9517_update" name="ad9517_update">
+<area shape="rect" id="Node000001" title="Transfers the contents of the buffer registers into the active registers." alt="" coords="269,31,392,56"/>
+<area shape="rect" id="Node000002" href="$ad9517_8c.html#a238147bdb3fc2a80bbcf749657f5db3b" title="Initializes the AD9517." alt="" coords="108,5,221,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="255,35,221,29,222,24,256,29"/>
+<area shape="rect" id="Node000003" href="$ad9467__fmc_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function." alt="" coords="5,31,60,56"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="256,46,60,46,60,41,256,41"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="95,34,61,41,60,36,94,29"/>
+</map>

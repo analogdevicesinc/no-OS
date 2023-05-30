@@ -1,0 +1,7 @@
+<map id="projects/eval&#45;adxl355&#45;pmdz/src/platform/stm32/parameters.h" name="projects/eval&#45;adxl355&#45;pmdz/src/platform/stm32/parameters.h">
+<area shape="rect" id="Node000001" title="Definitions specific to STM32 platform used by eval&#45;adxl355&#45;pmdz project." alt="" coords="112,5,303,60"/>
+<area shape="rect" id="Node000002" href="$eval-adxl355-pmdz_2src_2platform_2stm32_2main_8c.html" title="Main file for STM32 platform of eval&#45;adxl355&#45;pmdz project." alt="" coords="5,108,196,163"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="171,72,130,110,127,106,168,68"/>
+<area shape="rect" id="Node000003" href="$eval-adxl355-pmdz_2src_2platform_2stm32_2parameters_8c.html" title="Definition of STM32 platform data used by eval&#45;adxl355&#45;pmdz project." alt="" coords="220,108,411,163"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="248,68,289,106,285,110,244,72"/>
+</map>

@@ -1,0 +1,25 @@
+<map id="ad7091r5_i2c_reg_write" name="ad7091r5_i2c_reg_write">
+<area shape="rect" id="Node000001" title=" " alt="" coords="645,268,823,293"/>
+<area shape="rect" id="Node000002" href="$ad7091r5_8c.html#ae7c89b3a56043899fd1130188a763ec7" title=" " alt="" coords="405,169,597,195"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="689,265,531,197,534,192,691,260"/>
+<area shape="rect" id="Node000010" href="$ad7091r5_8c.html#a4b7341a8ad881172bdeeac9bed14b83b" title=" " alt="" coords="417,268,585,293"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="632,283,585,283,585,278,632,278"/>
+<area shape="rect" id="Node000012" href="$ad7091r5_8c.html#a495fc1c9d3909a4f1612be6198985f47" title=" " alt="" coords="428,317,575,343"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="661,299,563,320,562,315,660,294"/>
+<area shape="rect" id="Node000003" href="$ad7091r5_8c.html#ab5910ad53c54d79c7fcf4f9a3d0d3e5f" title="Initialize GPIO driver handlers for the GPIOs in the system. ad7091r5_init() helper function." alt="" coords="199,5,322,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="480,160,428,102,394,72,356,46,321,31,323,27,359,41,397,67,432,99,484,157"/>
+<area shape="rect" id="Node000004" href="$ad7091r5_8c.html#a3f8a54fe65cfc89920b07ed66ee3c646" title=" " alt="" coords="185,55,336,95"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="465,165,415,137,356,110,326,98,328,93,358,105,417,133,468,160"/>
+<area shape="rect" id="Node000005" href="$ad7091r5_8c.html#ad6f09a2a2f289b0c9c1f7dd64df73e8f" title=" " alt="" coords="164,120,357,145"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="425,169,323,148,324,143,426,164"/>
+<area shape="rect" id="Node000006" href="$ad7091r5_8c.html#ab7e6212b303777358db1f635c5633da9" title=" " alt="" coords="183,169,338,195"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="392,185,338,185,338,179,392,179"/>
+<area shape="rect" id="Node000008" href="$ad7091r5_8c.html#a148942113a94c0fd6bddbf28667e9979" title=" " alt="" coords="189,219,332,244"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="426,200,324,221,323,216,425,195"/>
+<area shape="rect" id="Node000009" href="$ad7091r5_8c.html#ae02330da130a896a798df4487fc83eb6" title=" " alt="" coords="176,268,345,293"/>
+<area shape="poly" id="edge8_Node000002_Node000009" title=" " alt="" coords="469,204,418,232,358,259,322,270,321,265,356,254,416,227,467,199"/>
+<area shape="rect" id="Node000007" href="$ad7091r5_8c.html#a90e8a880f37bee7db5c860350b3d0215" title=" " alt="" coords="5,169,116,195"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="169,185,116,185,116,179,169,179"/>
+<area shape="rect" id="Node000011" href="$ad7091r5_8c.html#afd5f1bab7a81aa51cb426cd9bdf63277" title=" " alt="" coords="185,317,336,343"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="426,299,324,320,323,315,425,294"/>
+</map>

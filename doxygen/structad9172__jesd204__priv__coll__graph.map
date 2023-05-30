@@ -1,0 +1,30 @@
+<map id="ad9172_jesd204_priv" name="ad9172_jesd204_priv">
+<area shape="rect" id="Node000001" title=" " alt="" coords="923,302,1083,327"/>
+<area shape="rect" id="Node000002" href="$structad9172__state.html" title=" " alt="" coords="680,261,791,286"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="771,290,798,302,826,311,874,317,923,318,923,324,874,323,825,316,796,307,769,295"/>
+<area shape="rect" id="Node000007" href="$structad9172__dev.html" title=" " alt="" coords="952,189,1053,214"/>
+<area shape="poly" id="edge15_Node000007_Node000002" title=" " alt="" coords="796,255,954,211,955,217,797,260"/>
+<area shape="rect" id="Node000003" href="$structad917x__handle__t.html" title=" " alt="" coords="350,215,483,241"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="498,235,646,255,680,260,679,266,645,260,497,240"/>
+<area shape="rect" id="Node000004" href="$structjesd__param__t.html" title=" " alt="" coords="361,265,472,290"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="486,274,680,271,680,277,486,279"/>
+<area shape="rect" id="Node000005" href="$structno__os__clk__desc.html" title="Structure holding CLK descriptor." alt="" coords="355,322,478,347"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="491,330,566,323,645,308,708,284,710,289,646,313,567,328,492,335"/>
+<area shape="rect" id="Node000006" href="$structno__os__clk__platform__ops.html" title="Structure holding CLK function pointers that point to the platform specific function." alt="" coords="5,322,184,347"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="198,332,355,332,355,337,198,337"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="978,225,943,250,899,271,844,281,791,281,791,276,843,275,898,265,940,245,975,221"/>
+<area shape="rect" id="Node000008" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="674,62,797,87"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="789,89,843,110,900,135,946,161,984,186,982,191,943,166,897,140,841,115,787,94"/>
+<area shape="poly" id="edge12_Node000008_Node000008" title=" " alt="" coords="710,47,718,39,735,35,750,38,759,44,761,54,757,63,752,61,756,53,755,47,748,43,735,41,721,43,714,51"/>
+<area shape="rect" id="Node000009" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="343,51,490,77"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="504,64,674,70,674,75,503,70"/>
+<area shape="rect" id="Node000010" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,7,184,33"/>
+<area shape="poly" id="edge10_Node000008_Node000010" title=" " alt="" coords="198,15,405,20,526,30,646,47,696,59,695,64,645,52,526,35,405,26,198,20"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="198,32,208,33,343,52,343,57,208,39,197,37"/>
+<area shape="rect" id="Node000011" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="342,101,491,141"/>
+<area shape="poly" id="edge11_Node000008_Node000011" title=" " alt="" coords="504,109,645,89,674,84,674,90,646,95,505,114"/>
+<area shape="rect" id="Node000012" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="669,166,801,191"/>
+<area shape="poly" id="edge13_Node000007_Node000012" title=" " alt="" coords="815,183,952,194,952,200,815,188"/>
+<area shape="rect" id="Node000013" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="323,166,511,191"/>
+<area shape="poly" id="edge14_Node000012_Node000013" title=" " alt="" coords="525,176,669,176,669,181,525,181"/>
+</map>

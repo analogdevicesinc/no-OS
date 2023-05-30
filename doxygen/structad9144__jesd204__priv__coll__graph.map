@@ -1,0 +1,19 @@
+<map id="ad9144_jesd204_priv" name="ad9144_jesd204_priv">
+<area shape="rect" id="Node000001" title=" " alt="" coords="360,372,520,397"/>
+<area shape="rect" id="Node000002" href="$structad9144__dev.html" title=" " alt="" coords="389,284,491,309"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="443,323,443,371,437,371,437,323"/>
+<area shape="rect" id="Node000003" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="276,196,399,221"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="364,228,427,281,424,286,360,232"/>
+<area shape="poly" id="edge7_Node000003_Node000003" title=" " alt="" coords="414,200,425,209,417,216,399,219,398,214,415,212,420,209,411,205"/>
+<area shape="rect" id="Node000004" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="188,101,335,126"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="281,135,330,194,326,198,277,138"/>
+<area shape="rect" id="Node000005" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,5,184,31"/>
+<area shape="poly" id="edge5_Node000003_Node000005" title=" " alt="" coords="87,44,77,88,78,111,87,132,99,142,116,152,165,170,276,195,275,200,163,175,114,157,96,147,83,135,73,113,71,88,82,43"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="128,35,242,98,239,103,126,40"/>
+<area shape="rect" id="Node000006" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="359,93,508,133"/>
+<area shape="poly" id="edge6_Node000003_Node000006" title=" " alt="" coords="406,145,351,198,348,194,402,141"/>
+<area shape="rect" id="Node000007" href="$structjesd204__link.html" title="JESD204 link configuration settings." alt="" coords="524,196,628,221"/>
+<area shape="poly" id="edge8_Node000002_Node000007" title=" " alt="" coords="548,231,460,286,457,281,545,226"/>
+<area shape="rect" id="Node000008" href="$structjesd204__sysref.html" title="JESD204 parameters for SYSREF." alt="" coords="532,101,652,126"/>
+<area shape="poly" id="edge9_Node000007_Node000008" title=" " alt="" coords="590,140,581,196,575,195,585,139"/>
+</map>

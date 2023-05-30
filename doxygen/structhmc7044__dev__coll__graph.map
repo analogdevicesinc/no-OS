@@ -1,0 +1,19 @@
+<map id="hmc7044_dev" name="hmc7044_dev">
+<area shape="rect" id="Node000001" title=" " alt="" coords="928,150,1041,175"/>
+<area shape="rect" id="Node000002" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="677,69,800,94"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="792,96,946,147,944,152,790,101"/>
+<area shape="poly" id="edge6_Node000002_Node000002" title=" " alt="" coords="712,54,720,45,739,42,754,44,764,51,766,60,762,70,757,67,761,60,759,54,752,49,739,47,723,50,716,57"/>
+<area shape="rect" id="Node000003" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="339,50,485,75"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="499,65,677,75,677,81,499,70"/>
+<area shape="rect" id="Node000004" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,19,184,45"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="198,22,208,21,329,17,423,17,517,26,637,47,704,66,703,71,635,52,517,31,423,23,329,23,208,27,198,27"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="198,39,339,53,338,58,197,45"/>
+<area shape="rect" id="Node000005" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="337,100,487,140"/>
+<area shape="poly" id="edge5_Node000002_Node000005" title=" " alt="" coords="500,109,636,93,676,88,677,93,636,99,501,114"/>
+<area shape="rect" id="Node000006" href="$structno__os__clk__desc.html" title="Structure holding CLK descriptor." alt="" coords="677,150,800,175"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="814,160,928,160,928,165,814,165"/>
+<area shape="rect" id="Node000007" href="$structno__os__clk__platform__ops.html" title="Structure holding CLK function pointers that point to the platform specific function." alt="" coords="323,165,501,190"/>
+<area shape="poly" id="edge8_Node000006_Node000007" title=" " alt="" coords="515,170,677,163,677,168,515,175"/>
+<area shape="rect" id="Node000008" href="$structhmc7044__chan__spec.html" title=" " alt="" coords="660,199,817,225"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="830,194,903,180,935,173,936,178,905,185,831,200"/>
+</map>

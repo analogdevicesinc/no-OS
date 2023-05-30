@@ -1,0 +1,7 @@
+<map id="adis1646x_iio_init" name="adis1646x_iio_init">
+<area shape="rect" id="Node000001" title="Initialize adis1646x iio device." alt="" coords="348,5,488,31"/>
+<area shape="rect" id="Node000002" href="$eval-adis1646x_2src_2examples_2iio__trigger__example_2iio__trigger__example_8c.html#aa6785eab0c37adc61db331ebebdc40ee" title="IIO trigger example main execution." alt="" coords="108,5,300,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="334,21,300,21,300,15,334,15"/>
+<area shape="rect" id="Node000003" href="$eval-adis1646x_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="5,5,60,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="95,21,60,21,60,15,95,15"/>
+</map>
