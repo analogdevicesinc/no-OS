@@ -1,0 +1,35 @@
+<map id="iio/iio_app/iio_app.h" name="iio/iio_app/iio_app.h">
+<area shape="rect" id="Node000001" title="Header file of iio_app." alt="" coords="343,5,495,31"/>
+<area shape="rect" id="Node000002" href="$iio_8h.html" title="Header file of iio." alt="" coords="393,79,444,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="421,31,421,65,416,65,416,31"/>
+<area shape="rect" id="Node000007" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="425,152,530,177"/>
+<area shape="poly" id="edge16_Node000001_Node000007" title=" " alt="" coords="430,30,458,78,476,137,471,139,454,80,425,32"/>
+<area shape="rect" id="Node000010" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="5,225,101,251"/>
+<area shape="poly" id="edge14_Node000001_Node000010" title=" " alt="" coords="370,33,308,52,244,81,193,114,146,151,75,217,72,213,143,147,190,109,241,76,306,47,368,28"/>
+<area shape="rect" id="Node000011" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="521,79,631,104"/>
+<area shape="poly" id="edge17_Node000001_Node000011" title=" " alt="" coords="445,28,539,71,537,75,443,33"/>
+<area shape="rect" id="Node000013" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="255,79,369,104"/>
+<area shape="poly" id="edge19_Node000001_Node000013" title=" " alt="" coords="403,33,342,73,339,69,400,28"/>
+<area shape="rect" id="Node000003" href="$iio__types_8h.html" title="Header file for iio_types." alt="" coords="253,152,347,177"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="401,106,333,147,330,142,398,102"/>
+<area shape="poly" id="edge7_Node000002_Node000007" title=" " alt="" coords="430,103,461,140,457,143,426,106"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="601,299,684,324"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="348,169,507,194,579,208,619,223,630,237,638,253,644,284,639,285,633,254,626,240,616,228,578,214,506,199,347,175"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="323,299,394,324"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="307,177,351,285,346,287,302,179"/>
+<area shape="rect" id="Node000006" href="$no__os__circular__buffer_8h.html" title="Circular buffer library header." alt="" coords="125,225,296,251"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="287,179,238,219,234,214,284,175"/>
+<area shape="poly" id="edge6_Node000006_Node000005" title=" " alt="" coords="236,248,323,290,321,295,233,253"/>
+<area shape="poly" id="edge9_Node000007_Node000004" title=" " alt="" coords="531,173,609,194,642,208,663,224,670,239,670,256,660,287,655,286,665,255,665,240,659,227,640,212,607,199,530,178"/>
+<area shape="poly" id="edge8_Node000007_Node000005" title=" " alt="" coords="470,179,379,290,375,286,466,176"/>
+<area shape="rect" id="Node000008" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="472,225,605,251"/>
+<area shape="poly" id="edge10_Node000007_Node000008" title=" " alt="" coords="489,176,522,213,518,217,485,179"/>
+<area shape="poly" id="edge13_Node000008_Node000004" title=" " alt="" coords="557,248,616,288,613,293,554,253"/>
+<area shape="poly" id="edge12_Node000008_Node000005" title=" " alt="" coords="511,253,402,296,400,291,509,248"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="503,299,574,324"/>
+<area shape="poly" id="edge11_Node000008_Node000009" title=" " alt="" coords="541,251,541,285,536,285,536,251"/>
+<area shape="poly" id="edge15_Node000010_Node000005" title=" " alt="" coords="102,248,311,296,310,301,101,253"/>
+<area shape="rect" id="Node000012" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="554,152,622,177"/>
+<area shape="poly" id="edge18_Node000011_Node000012" title=" " alt="" coords="581,104,586,138,581,139,575,105"/>
+<area shape="poly" id="edge20_Node000013_Node000005" title=" " alt="" coords="327,103,346,124,361,151,369,187,372,223,366,285,361,285,366,223,364,188,356,153,342,127,323,106"/>
+</map>

@@ -1,0 +1,28 @@
+var structad7606__dev =
+[
+    [ "config", "structad7606__dev.html#aaf7af8260ef0835f3c50e8e25d4091df", null ],
+    [ "data", "structad7606__dev.html#a6b1df70db32a3bf4f66c24bc65e9bda2", null ],
+    [ "device_id", "structad7606__dev.html#a2d2ebf866a7abd17fe7b36c7a8a9844e", null ],
+    [ "digital_diag_enable", "structad7606__dev.html#afafb5d51fd579631f624478a19fcc3d7", null ],
+    [ "gain_ch", "structad7606__dev.html#ab62f650246badd62179fe2f03d39f89a", null ],
+    [ "gpio_busy", "structad7606__dev.html#a16938f2386c36175c18e6656ab08b8ff", null ],
+    [ "gpio_convst", "structad7606__dev.html#a3ff1366acc7f0bda9fbe0d0e5baf8014", null ],
+    [ "gpio_os0", "structad7606__dev.html#a001893f2d8bf8af41257c8987ea08ed3", null ],
+    [ "gpio_os1", "structad7606__dev.html#afd66d86ce70e95ca4734a5639d09f260", null ],
+    [ "gpio_os2", "structad7606__dev.html#a65e3349ffac83ad7a598e0cedbbeac7e", null ],
+    [ "gpio_par_ser", "structad7606__dev.html#a01d7d43d4417268a09ee83b1e34259a7", null ],
+    [ "gpio_range", "structad7606__dev.html#a4d35b68083dfca6f58ed2d69ba808172", null ],
+    [ "gpio_reset", "structad7606__dev.html#a6cd38bd1efc48f59e3b3bc89ba431591", null ],
+    [ "gpio_stby_n", "structad7606__dev.html#aba837e79298190f3f64f47f8a4725b8e", null ],
+    [ "max_dout_lines", "structad7606__dev.html#a6eacbcdb51ed791d7d305c16002979e3", null ],
+    [ "num_channels", "structad7606__dev.html#a1e3b12062cc541c8c9824a2a31ec1954", null ],
+    [ "offset_ch", "structad7606__dev.html#a4dccc57cf2116a2aca69cb54d775e386", null ],
+    [ "oversampling", "structad7606__dev.html#a2f7f36fd1c8d7c3d56ae8c5f751fd4b9", null ],
+    [ "parallel_interface", "structad7606__dev.html#add66f233c60c7b1420cc62a5940f9cb1", null ],
+    [ "phase_ch", "structad7606__dev.html#ae068afb32c8bd7167e3b9a45f26d6d6d", null ],
+    [ "range_ch_type", "structad7606__dev.html#a65238ef25cc3b67bec999598f74af96b", null ],
+    [ "reg_mode", "structad7606__dev.html#aa930e653f6d7d443e50ed6c16d17a277", null ],
+    [ "scale_ch", "structad7606__dev.html#abf9815d859020835cf20e5be1631a0ab", null ],
+    [ "spi_desc", "structad7606__dev.html#a1512d2c09681e760067ba9a8786cdb67", null ],
+    [ "sw_mode", "structad7606__dev.html#a07c5b134a0cc6e59b69edb964fb5558e", null ]
+];

@@ -1,0 +1,25 @@
+<map id="drivers/adc/ltc2358/ltc2358.c" name="drivers/adc/ltc2358/ltc2358.c">
+<area shape="rect" id="Node000001" title="Implementation of LTC2358 Driver." alt="" coords="79,5,226,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,240,76,265"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="90,48,57,67,42,80,31,95,19,128,19,163,25,198,33,227,28,228,19,199,13,164,14,127,26,92,38,76,53,63,87,43"/>
+<area shape="rect" id="Node000003" href="$ltc2358_8h.html" title="Implementation of LTC2358 Driver." alt="" coords="285,93,367,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="195,43,289,85,287,90,193,48"/>
+<area shape="rect" id="Node000008" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="176,93,244,119"/>
+<area shape="poly" id="edge10_Node000001_Node000008" title=" " alt="" coords="169,44,195,80,191,84,164,47"/>
+<area shape="rect" id="Node000009" href="$no__os__alloc_8h.html" title=" " alt="" coords="41,93,152,119"/>
+<area shape="poly" id="edge11_Node000001_Node000009" title=" " alt="" coords="141,47,115,84,111,80,137,44"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="308,240,379,265"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="353,117,383,136,396,150,407,166,410,185,404,203,391,220,375,234,372,230,387,216,399,201,405,184,402,168,392,153,379,140,350,121"/>
+<area shape="rect" id="Node000005" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="294,167,393,192"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="331,118,340,153,335,154,326,120"/>
+<area shape="rect" id="Node000006" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="169,167,269,192"/>
+<area shape="poly" id="edge6_Node000003_Node000006" title=" " alt="" coords="310,121,250,161,247,157,307,116"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="346,192,346,226,341,226,341,192"/>
+<area shape="poly" id="edge8_Node000006_Node000002" title=" " alt="" coords="192,195,83,237,81,232,190,190"/>
+<area shape="poly" id="edge7_Node000006_Node000004" title=" " alt="" coords="241,190,313,231,310,235,238,194"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="178,240,261,265"/>
+<area shape="poly" id="edge9_Node000006_Node000007" title=" " alt="" coords="222,192,222,226,217,226,217,192"/>
+<area shape="poly" id="edge13_Node000009_Node000002" title=" " alt="" coords="92,120,68,168,49,227,44,226,64,166,88,118"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="78,167,145,192"/>
+<area shape="poly" id="edge12_Node000009_Node000010" title=" " alt="" coords="102,118,109,153,104,154,96,120"/>
+</map>

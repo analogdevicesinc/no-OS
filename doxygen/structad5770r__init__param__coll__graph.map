@@ -1,0 +1,33 @@
+<map id="ad5770r_init_param" name="ad5770r_init_param">
+<area shape="rect" id="Node000001" title=" " alt="" coords="1324,381,1476,406"/>
+<area shape="rect" id="Node000002" href="$structno__os__spi__init__param.html" title="Structure holding the parameters for SPI initialization." alt="" coords="975,102,1137,127"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1152,119,1190,127,1229,139,1267,156,1302,179,1325,202,1344,229,1373,287,1390,341,1399,380,1394,381,1385,342,1368,289,1339,232,1321,206,1298,183,1265,161,1227,144,1188,132,1150,124"/>
+<area shape="rect" id="Node000003" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,35,184,61"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="197,33,323,23,479,16,649,19,735,25,819,36,878,48,935,65,1026,99,1024,104,933,70,876,54,818,41,735,31,649,24,479,22,323,28,198,39"/>
+<area shape="rect" id="Node000005" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="663,90,786,115"/>
+<area shape="poly" id="edge7_Node000005_Node000003" title=" " alt="" coords="198,51,388,63,607,83,663,90,663,95,606,88,388,68,198,56"/>
+<area shape="rect" id="Node000006" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="324,97,471,122"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="148,62,209,79,324,98,323,104,207,84,147,67"/>
+<area shape="rect" id="Node000004" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="323,149,472,189"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="486,162,818,139,974,122,975,127,819,144,486,167"/>
+<area shape="poly" id="edge8_Node000005_Node000004" title=" " alt="" coords="485,150,606,125,665,113,666,118,607,131,486,155"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="800,103,974,109,974,114,800,108"/>
+<area shape="poly" id="edge9_Node000005_Node000005" title=" " alt="" coords="693,75,702,67,725,63,743,66,755,72,758,82,752,91,747,88,752,81,751,75,742,71,725,69,705,72,696,79"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="484,105,663,101,663,107,484,110"/>
+<area shape="rect" id="Node000007" href="$structno__os__gpio__init__param.html" title="Structure holding the parameters for GPIO initialization." alt="" coords="970,215,1142,241"/>
+<area shape="poly" id="edge10_Node000001_Node000007" title=" " alt="" coords="1156,225,1230,236,1267,248,1301,264,1334,291,1361,322,1395,379,1390,382,1357,326,1331,294,1299,269,1265,253,1229,241,1155,230"/>
+<area shape="rect" id="Node000008" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="631,221,819,246"/>
+<area shape="poly" id="edge11_Node000007_Node000008" title=" " alt="" coords="832,229,970,227,970,232,832,234"/>
+<area shape="rect" id="Node000009" href="$structad5770r__device__spi__settings.html" title=" " alt="" coords="981,265,1131,305"/>
+<area shape="poly" id="edge12_Node000001_Node000009" title=" " alt="" coords="1146,281,1223,289,1263,298,1301,311,1328,325,1353,344,1389,379,1386,382,1349,348,1325,330,1299,316,1261,303,1222,294,1145,286"/>
+<area shape="rect" id="Node000010" href="$structad5770r__channel__switches.html" title=" " alt="" coords="957,354,1155,379"/>
+<area shape="poly" id="edge13_Node000001_Node000010" title=" " alt="" coords="1168,373,1324,385,1324,390,1168,378"/>
+<area shape="rect" id="Node000011" href="$structad5770r__output__range.html" title=" " alt="" coords="972,403,1140,429"/>
+<area shape="poly" id="edge14_Node000001_Node000011" title=" " alt="" coords="1154,417,1225,417,1300,412,1349,403,1350,409,1300,417,1226,422,1154,423"/>
+<area shape="rect" id="Node000012" href="$structad5770r__alarm__cfg.html" title=" " alt="" coords="983,453,1129,478"/>
+<area shape="poly" id="edge15_Node000001_Node000012" title=" " alt="" coords="1143,462,1220,455,1299,439,1341,423,1377,404,1379,408,1343,427,1301,444,1221,460,1144,467"/>
+<area shape="rect" id="Node000013" href="$structad5770r__monitor__setup.html" title=" " alt="" coords="968,502,1144,527"/>
+<area shape="poly" id="edge16_Node000001_Node000013" title=" " alt="" coords="1158,512,1229,503,1265,493,1299,480,1326,464,1351,443,1387,405,1391,408,1355,447,1329,468,1301,485,1267,498,1230,508,1159,517"/>
+<area shape="rect" id="Node000014" href="$structad5770r__dac__page__mask.html" title=" " alt="" coords="963,551,1149,577"/>
+<area shape="poly" id="edge17_Node000001_Node000014" title=" " alt="" coords="1163,566,1233,557,1267,546,1299,531,1333,503,1360,467,1379,432,1391,405,1396,407,1384,435,1364,470,1336,506,1301,536,1269,551,1234,562,1164,572"/>
+</map>

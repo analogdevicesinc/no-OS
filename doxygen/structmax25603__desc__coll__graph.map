@@ -1,0 +1,12 @@
+<map id="max25603_desc" name="max25603_desc">
+<area shape="rect" id="Node000001" title=" " alt="" coords="192,347,320,372"/>
+<area shape="rect" id="Node000002" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="235,93,367,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="309,132,315,170,318,219,314,272,298,324,289,338,276,349,273,345,285,334,294,322,309,271,313,219,310,171,304,132"/>
+<area shape="rect" id="Node000004" href="$structno__os__pwm__desc.html" title="Structure representing an PWM generator device." alt="" coords="131,183,267,209"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="252,126,226,145,212,164,204,184,199,182,208,161,222,141,249,122"/>
+<area shape="rect" id="Node000003" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="207,5,395,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="304,45,304,93,299,93,299,45"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="205,222,216,269,234,322,249,345,244,348,230,324,211,270,200,223"/>
+<area shape="rect" id="Node000005" href="$structno__os__pwm__platform__ops.html" title="Structure holding PWM function pointers that point to the platform specific function." alt="" coords="5,93,197,119"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="99,132,100,145,105,156,120,171,139,181,137,186,117,175,100,159,95,146,94,132"/>
+</map>

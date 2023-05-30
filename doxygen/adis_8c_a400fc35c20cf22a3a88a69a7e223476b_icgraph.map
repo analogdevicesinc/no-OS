@@ -1,0 +1,7 @@
+<map id="adis_read_fifo_cnt" name="adis_read_fifo_cnt">
+<area shape="rect" id="Node000001" title="Read output FIFO sample count." alt="" coords="232,45,372,70"/>
+<area shape="rect" id="Node000002" href="$iio__adis_8c.html#ace76ecb27ca5c4368c7e29d77f54ec7d" title="Handles the read request for debug attributes." alt="" coords="17,5,172,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="218,47,172,40,173,35,219,42"/>
+<area shape="rect" id="Node000003" href="$iio__adis_8c.html#aa3fb4f6fcd0868abc263f5db5b782538" title="Handles trigger: reads all available samples in FIFO and writes them to the buffer." alt="" coords="5,69,184,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="219,73,185,78,184,73,218,68"/>
+</map>

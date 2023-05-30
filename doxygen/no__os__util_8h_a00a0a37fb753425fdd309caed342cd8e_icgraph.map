@@ -1,0 +1,60 @@
+<map id="no_os_div_s64_rem" name="no_os_div_s64_rem">
+<area shape="rect" id="Node000001" title=" " alt="" coords="611,252,761,277"/>
+<area shape="rect" id="Node000002" href="$ad74413r_8c.html#a85e28f0d13f64bd42e0ca4843c053048" title="Get the ADC real value, according to the operation mode." alt="" coords="371,29,555,55"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="674,240,658,201,634,154,602,107,561,68,541,57,543,52,564,64,606,104,639,152,663,199,679,238"/>
+<area shape="rect" id="Node000006" href="$adxl313_8c.html#abe3973b9472473f33e98502f802b7241" title=" " alt="" coords="380,79,547,104"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="669,242,627,179,596,145,561,118,538,106,540,102,564,113,600,142,631,175,674,239"/>
+<area shape="rect" id="Node000008" href="$adxl313_8c.html#aba7db8244b208799c405fe572044c926" title=" " alt="" coords="397,128,529,153"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="662,244,618,204,591,184,562,167,528,155,530,150,564,162,593,180,621,200,665,240"/>
+<area shape="rect" id="Node000009" href="$adxl355_8c.html#a3dfc3d88cc09e28b63a815471ebb25c6" title="Reads fifo data and returns the values converted in m/s^2." alt="" coords="380,177,547,203"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="644,249,562,217,522,205,524,200,564,211,646,244"/>
+<area shape="rect" id="Node000011" href="$adxl355_8c.html#ab2cca702bfd799f169c4c82cb13ecbb8" title="Reads the raw temperature data and converts it to millidegrees Celsius." alt="" coords="392,227,535,252"/>
+<area shape="poly" id="edge11_Node000001_Node000011" title=" " alt="" coords="597,257,535,250,535,245,597,252"/>
+<area shape="rect" id="Node000012" href="$adxl355_8c.html#a31457c441689b591b9177bc6e4d877d0" title="Reads the raw output data of each axis and converts it to g." alt="" coords="397,276,529,301"/>
+<area shape="poly" id="edge13_Node000001_Node000012" title=" " alt="" coords="597,277,530,284,529,279,596,272"/>
+<area shape="rect" id="Node000013" href="$adxl38x_8c.html#a62978924f7d955a44d1229e513c1e754" title="Function to convert accel data to gees." alt="" coords="364,325,563,351"/>
+<area shape="poly" id="edge15_Node000001_Node000013" title=" " alt="" coords="643,285,564,315,520,328,518,323,562,310,641,280"/>
+<area shape="rect" id="Node000016" href="$adxl38x_8c.html#afa7f79f725e45d0a8813ffeb79533545" title="Reads the raw output data of each axis and converts it to g." alt="" coords="378,375,549,400"/>
+<area shape="poly" id="edge18_Node000001_Node000016" title=" " alt="" coords="664,289,620,328,564,364,531,377,529,372,561,360,617,324,661,285"/>
+<area shape="rect" id="Node000018" href="$iio_8c.html#a5de19adb6399a7b8b228beba45f1e739" title=" " alt="" coords="397,563,529,588"/>
+<area shape="poly" id="edge20_Node000001_Node000018" title=" " alt="" coords="670,290,476,564,472,561,666,287"/>
+<area shape="rect" id="Node000027" href="$max31855_8c.html#a88bc0e9d1059be6bd4b4efb9eb93d3b6" title="Read thermocouple and internal temperatures (converted in deg. C)" alt="" coords="379,711,547,736"/>
+<area shape="poly" id="edge29_Node000001_Node000027" title=" " alt="" coords="681,291,640,427,606,515,565,601,520,665,479,712,475,709,516,662,560,598,602,513,635,425,676,290"/>
+<area shape="rect" id="Node000003" href="$ad74413r_2src_2examples_2dummy_2dummy__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Dummy example main execution." alt="" coords="153,5,271,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="357,35,271,26,272,21,358,29"/>
+<area shape="rect" id="Node000004" href="$swiot1l__mqtt_8c.html#ab4316fc56ae71292fd2845eb8cb6fd42" title=" " alt="" coords="159,55,265,80"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="358,55,266,65,265,59,357,50"/>
+<area shape="rect" id="Node000005" href="$swiot1l_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function." alt="" coords="5,55,60,80"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="145,70,60,70,60,65,145,65"/>
+<area shape="rect" id="Node000007" href="$eval-adxl313z_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="132,104,292,129"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="367,104,293,111,292,106,366,98"/>
+<area shape="poly" id="edge8_Node000008_Node000007" title=" " alt="" coords="384,136,292,127,293,122,384,130"/>
+<area shape="rect" id="Node000010" href="$eval-adxl355-pmdz_2src_2examples_2dummy_2dummy__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Dummy example main execution." alt="" coords="153,227,271,252"/>
+<area shape="poly" id="edge10_Node000009_Node000010" title=" " alt="" coords="385,208,272,230,271,225,384,203"/>
+<area shape="poly" id="edge12_Node000011_Node000010" title=" " alt="" coords="378,242,272,242,272,237,378,237"/>
+<area shape="poly" id="edge14_Node000012_Node000010" title=" " alt="" coords="384,276,271,254,272,248,385,271"/>
+<area shape="rect" id="Node000014" href="$fifo__example__main_8c.html#af9ba15b05e7f1ce5a5a3db1b2ff1caba" title="Example main execution." alt="" coords="139,300,285,325"/>
+<area shape="poly" id="edge16_Node000013_Node000014" title=" " alt="" coords="350,329,285,323,286,317,350,324"/>
+<area shape="rect" id="Node000015" href="$eval-adxl38x_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="5,300,60,325"/>
+<area shape="poly" id="edge17_Node000014_Node000015" title=" " alt="" coords="125,315,60,315,60,310,125,310"/>
+<area shape="rect" id="Node000017" href="$basic__example__main_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Example main execution." alt="" coords="132,349,292,375"/>
+<area shape="poly" id="edge19_Node000016_Node000017" title=" " alt="" coords="364,380,292,373,293,367,364,375"/>
+<area shape="rect" id="Node000019" href="$iio__adis_8c.html#aa3917a9da23da634bfd781829196a31f" title="Handles the read request for calibbias attribute." alt="" coords="125,399,299,424"/>
+<area shape="poly" id="edge21_Node000018_Node000019" title=" " alt="" coords="442,554,389,495,354,464,315,438,288,427,290,422,317,433,357,459,393,491,446,550"/>
+<area shape="rect" id="Node000020" href="$iio__adis_8c.html#a7c5174eeea19d0677ba78481174e773b" title="Handles the read request for calibscale attribute." alt="" coords="122,448,302,473"/>
+<area shape="poly" id="edge22_Node000018_Node000020" title=" " alt="" coords="432,557,379,522,315,488,277,476,279,471,317,484,382,517,435,552"/>
+<area shape="rect" id="Node000021" href="$iio__adis_8c.html#ace76ecb27ca5c4368c7e29d77f54ec7d" title="Handles the read request for debug attributes." alt="" coords="135,498,289,538"/>
+<area shape="poly" id="edge23_Node000018_Node000021" title=" " alt="" coords="393,562,289,538,290,533,394,557"/>
+<area shape="rect" id="Node000022" href="$iio__adis_8c.html#a8b816d4fafaeb9b303a5d948fc240318" title="Handles the read request for lpf attribute." alt="" coords="146,563,278,588"/>
+<area shape="poly" id="edge24_Node000018_Node000022" title=" " alt="" coords="384,578,278,578,278,573,384,573"/>
+<area shape="rect" id="Node000023" href="$iio__adis_8c.html#aaedb46cc4fe942a8837df6283c46684c" title="Handles the read request for offset attribute." alt="" coords="136,612,288,637"/>
+<area shape="poly" id="edge25_Node000018_Node000023" title=" " alt="" coords="385,593,278,615,277,609,384,588"/>
+<area shape="rect" id="Node000024" href="$iio__adis_8c.html#a6c6d17dd4a8320c17bde427cf5387f9b" title="Handles the read request for raw attribute." alt="" coords="143,661,281,687"/>
+<area shape="poly" id="edge26_Node000018_Node000024" title=" " alt="" coords="430,597,378,625,317,651,276,664,274,659,315,646,375,620,427,592"/>
+<area shape="rect" id="Node000025" href="$iio__adis_8c.html#aa107585de83812d4a0c5d99680614ad9" title="Handles the read request for sampling frequency attribute." alt="" coords="108,711,316,736"/>
+<area shape="poly" id="edge27_Node000018_Node000025" title=" " alt="" coords="443,600,389,651,355,678,317,700,284,713,282,708,315,696,352,673,386,647,439,596"/>
+<area shape="rect" id="Node000026" href="$iio__adis_8c.html#a3af5eca69087d95aeae7f3374198c25c" title="Handles the read request for scale attribute." alt="" coords="137,760,287,785"/>
+<area shape="poly" id="edge28_Node000018_Node000026" title=" " alt="" coords="445,601,374,688,318,749,288,763,286,758,314,745,370,685,441,597"/>
+<area shape="rect" id="Node000028" href="$max31855_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="132,809,292,835"/>
+<area shape="poly" id="edge30_Node000027_Node000028" title=" " alt="" coords="430,745,378,774,317,801,279,812,278,807,315,795,376,769,428,741"/>
+</map>

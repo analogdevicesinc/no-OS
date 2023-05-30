@@ -1,0 +1,10 @@
+<map id="no_os_clk" name="no_os_clk">
+<area shape="rect" id="Node000001" title=" " alt="" coords="51,181,138,207"/>
+<area shape="rect" id="Node000002" href="$structno__os__clk__hw.html" title=" " alt="" coords="39,269,151,295"/>
+<area shape="poly" id="edge2_Node000002_Node000001" title=" " alt="" coords="75,219,68,231,67,241,70,250,83,267,79,271,65,253,62,241,63,230,70,216"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="92,255,92,207,97,207,97,255"/>
+<area shape="rect" id="Node000003" href="$structno__os__clk__desc.html" title="Structure holding CLK descriptor." alt="" coords="33,93,156,119"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="97,133,97,181,92,181,92,133"/>
+<area shape="rect" id="Node000004" href="$structno__os__clk__platform__ops.html" title="Structure holding CLK function pointers that point to the platform specific function." alt="" coords="5,5,184,31"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="97,45,97,93,92,93,92,45"/>
+</map>

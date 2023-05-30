@@ -1,0 +1,39 @@
+<map id="ltc6953_update" name="ltc6953_update">
+<area shape="rect" id="Node000001" title="Update LTC6953 register." alt="" coords="395,400,517,425"/>
+<area shape="rect" id="Node000002" href="$ltc6953_8c.html#a1e57a304ac1d94f1acaf7059ddcf8b50" title="Enable LTC6953 VCO Input filter." alt="" coords="170,5,329,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="453,386,450,318,436,225,422,176,403,128,378,83,345,44,327,32,330,28,348,40,382,80,408,125,427,174,441,224,455,317,458,386"/>
+<area shape="rect" id="Node000003" href="$ltc6953_8c.html#a04237aba9b4ba9be5f1b00761bfd7dd5" title="Set LTC6953 Channel Sync mode." alt="" coords="170,55,329,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="451,387,445,326,429,247,416,205,397,164,374,126,345,93,328,82,331,77,348,89,378,123,402,162,421,203,434,246,451,325,457,386"/>
+<area shape="rect" id="Node000004" href="$ltc6953_8c.html#a189fc9defdc0f88c1081de7565086ff2" title="Set LTC6953 TEMPO value." alt="" coords="152,104,347,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="449,387,441,335,422,268,409,234,392,200,370,170,345,143,328,132,331,127,348,139,375,166,396,198,414,232,428,267,446,333,455,386"/>
+<area shape="rect" id="Node000005" href="$ltc6953_8c.html#a1f270ebc5d6b8d6bd2353a5f252cc534" title="Set LTC6953 EZSYNC mode." alt="" coords="166,153,333,179"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="447,387,435,344,416,291,386,237,367,213,345,192,327,181,329,176,348,188,371,210,390,234,420,289,440,342,452,386"/>
+<area shape="rect" id="Node000006" href="$ltc6953_8c.html#a8dbf7ca540d4f144ebe62c1a69050d42" title="Set LTC6953 output channel inversion." alt="" coords="167,203,331,228"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="443,388,429,354,408,314,380,275,345,241,325,230,327,226,348,237,384,271,413,312,434,352,448,386"/>
+<area shape="rect" id="Node000007" href="$ltc6953_8c.html#a06b97fe68d1ed7f76b20664c43cedb6d" title="Set LTC6953 SYSCT/Num pulse value." alt="" coords="175,252,323,277"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="438,390,400,339,374,313,345,291,321,280,324,275,348,286,378,309,404,336,442,387"/>
+<area shape="rect" id="Node000008" href="$ltc6953_8c.html#a9c4db74e61cf4924f732ca41819fad1f" title="Powers down all LTC6953 output channels." alt="" coords="158,301,341,327"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="428,393,390,366,346,340,314,329,316,324,348,336,393,361,431,389"/>
+<area shape="rect" id="Node000009" href="$ltc6953_8c.html#a1974942d69098b5559a40dbd820bf13c" title="Powers down LTC6953 VCO Input channel." alt="" coords="155,351,344,376"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="388,399,303,379,304,373,390,394"/>
+<area shape="rect" id="Node000010" href="$ltc6953_8c.html#a17459104fd3b8c3f04417875bf8ac03a" title="Set LTC6953 Channel Power Mode." alt="" coords="169,400,330,425"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="381,415,330,415,330,410,381,410"/>
+<area shape="rect" id="Node000011" href="$ltc6953_8c.html#a1ac97ab380f4acc0a60ccc75a8d232c2" title="Software reset of the device." alt="" coords="194,449,305,475"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="390,431,304,452,303,447,388,426"/>
+<area shape="rect" id="Node000013" href="$ltc6953_8c.html#abe36aed3125d1c0b5777a9f93e4f9c8e" title="Set analog delay/phase of LTC6953 output channel." alt="" coords="175,499,323,539"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="430,436,392,463,348,488,317,502,315,497,345,484,389,458,426,432"/>
+<area shape="rect" id="Node000014" href="$ltc6953_8c.html#ac921178421bce033d247e57d02780510" title="Set digital delay/phase of LTC6953 output channel." alt="" coords="177,563,322,603"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="444,439,406,496,379,527,348,554,323,567,321,562,345,549,375,523,402,493,439,436"/>
+<area shape="rect" id="Node000015" href="$ltc6953_8c.html#a9c4fb8556b361084dadda925a394d4c5" title="Write LTC6953 INVSTAT bit." alt="" coords="175,628,324,653"/>
+<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="451,440,438,479,417,527,388,576,348,617,326,630,323,626,345,613,383,573,412,525,433,477,446,438"/>
+<area shape="rect" id="Node000016" href="$ltc6953_8c.html#a74fbc81039807fae6af2d4acbfc6a9d0" title="Set LTC6953 output channel mode." alt="" coords="179,677,320,703"/>
+<area shape="poly" id="edge15_Node000001_Node000016" title=" " alt="" coords="454,439,444,488,425,549,394,612,373,641,348,667,321,682,319,678,345,663,369,638,389,610,420,547,439,486,449,438"/>
+<area shape="rect" id="Node000017" href="$ltc6953_8c.html#a21112836fc84ba6cdcf5018433a1df51" title="Set LTC6953 x bitfield status." alt="" coords="193,727,305,752"/>
+<area shape="poly" id="edge16_Node000001_Node000017" title=" " alt="" coords="456,439,449,497,431,571,417,611,399,649,377,685,348,716,329,729,306,737,305,732,326,724,345,712,372,681,395,646,413,609,426,570,443,496,451,439"/>
+<area shape="rect" id="Node000018" href="$ltc6953_8c.html#a11638c5b9ebec5c5ea968e070ff167b6" title="Set LTC6953 SSRQ mode." alt="" coords="175,776,323,801"/>
+<area shape="poly" id="edge17_Node000001_Node000018" title=" " alt="" coords="457,439,453,505,438,592,424,639,405,685,380,728,348,765,325,780,322,776,345,761,376,725,401,683,419,637,433,591,448,504,452,439"/>
+<area shape="rect" id="Node000019" href="$ltc6953_8c.html#a096737dc8db67e8f6096077bee727d07" title="Set LTC6953 SRQ mode." alt="" coords="174,825,325,851"/>
+<area shape="poly" id="edge18_Node000001_Node000019" title=" " alt="" coords="454,439,440,524,417,636,387,744,369,786,349,815,326,829,323,825,345,811,364,783,382,742,412,635,435,523,448,439"/>
+<area shape="rect" id="Node000012" href="$ltc6953_8c.html#a5c59f96b149e6541a468c27c8ce54cf2" title="Initializes the SPI communication with LTC6953." alt="" coords="5,449,104,475"/>
+<area shape="poly" id="edge11_Node000011_Node000012" title=" " alt="" coords="180,465,104,465,104,459,180,459"/>
+</map>

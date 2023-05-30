@@ -1,0 +1,51 @@
+<map id="drivers/platform/stm32/stm32_i3c.c" name="drivers/platform/stm32/stm32_i3c.c">
+<area shape="rect" id="Node000001" title="Implementation of stm32 I3C driver." alt="" coords="169,5,341,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="152,313,222,339"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="253,46,195,301,190,299,248,45"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="29,93,100,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="210,48,106,91,104,86,208,43"/>
+<area shape="rect" id="Node000004" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="124,93,192,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="233,48,184,87,181,82,230,43"/>
+<area shape="rect" id="Node000005" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="49,240,149,265"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="169,42,78,64,41,78,18,95,10,112,9,129,13,148,21,166,47,201,76,229,72,233,43,205,17,169,8,149,3,130,5,110,14,92,38,74,76,59,168,37"/>
+<area shape="rect" id="Node000008" href="$no__os__alloc_8h.html" title=" " alt="" coords="225,240,336,265"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="260,45,280,226,275,227,254,46"/>
+<area shape="rect" id="Node000010" href="$no__os__i3c_8h.html" title="Header file of I3C Interface." alt="" coords="324,167,423,192"/>
+<area shape="poly" id="edge11_Node000001_Node000010" title=" " alt="" coords="272,44,358,154,354,157,268,47"/>
+<area shape="rect" id="Node000015" href="$stm32__i3c_8h.html" title="Header file for the stm32 I3C driver." alt="" coords="427,93,528,119"/>
+<area shape="poly" id="edge24_Node000001_Node000015" title=" " alt="" coords="309,43,433,86,431,91,307,48"/>
+<area shape="rect" id="Node000018" href="$stm32__dma_8h.html" title="Platform independent function definitions and data types for the DMA API." alt="" coords="572,93,682,119"/>
+<area shape="poly" id="edge29_Node000001_Node000018" title=" " alt="" coords="342,42,560,88,559,93,341,47"/>
+<area shape="poly" id="edge6_Node000005_Node000002" title=" " alt="" coords="115,263,164,302,160,307,111,267"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="518,387,589,412"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="103,265,115,301,126,321,142,336,161,344,195,352,295,368,505,391,504,396,294,373,194,357,159,349,139,341,122,324,110,303,98,266"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="275,387,358,412"/>
+<area shape="poly" id="edge7_Node000005_Node000007" title=" " alt="" coords="97,266,89,301,90,320,97,337,122,354,164,369,262,388,261,394,163,374,120,359,93,340,84,321,83,301,91,265"/>
+<area shape="poly" id="edge10_Node000008_Node000002" title=" " alt="" coords="267,267,215,307,211,303,264,263"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="247,313,314,339"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="283,266,283,300,278,300,278,266"/>
+<area shape="poly" id="edge13_Node000010_Node000005" title=" " alt="" coords="330,195,157,239,156,234,329,189"/>
+<area shape="poly" id="edge12_Node000010_Node000006" title=" " alt="" coords="372,193,365,221,360,259,363,300,369,320,378,337,404,362,437,378,472,389,505,394,504,399,471,394,435,383,401,366,374,340,364,322,357,301,355,259,360,220,367,192"/>
+<area shape="rect" id="Node000011" href="$no__os__dma_8h.html" title="Platform independent function definitions and data types for the DMA API." alt="" coords="434,240,542,265"/>
+<area shape="poly" id="edge14_Node000010_Node000011" title=" " alt="" coords="393,190,459,230,457,235,391,194"/>
+<area shape="poly" id="edge16_Node000011_Node000002" title=" " alt="" coords="440,268,236,316,235,311,439,263"/>
+<area shape="poly" id="edge17_Node000011_Node000006" title=" " alt="" coords="543,256,571,263,600,274,626,290,648,312,653,323,653,334,642,353,622,370,597,383,595,378,619,365,638,350,648,332,648,324,643,315,623,294,598,278,570,268,542,262"/>
+<area shape="poly" id="edge15_Node000011_Node000009" title=" " alt="" coords="456,268,327,311,326,306,454,263"/>
+<area shape="rect" id="Node000012" href="$no__os__list_8h.html" title="List library header." alt="" coords="388,313,487,339"/>
+<area shape="poly" id="edge18_Node000011_Node000012" title=" " alt="" coords="482,267,456,304,452,301,478,264"/>
+<area shape="rect" id="Node000013" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="708,313,804,339"/>
+<area shape="poly" id="edge21_Node000011_Node000013" title=" " alt="" coords="532,263,701,307,699,312,531,268"/>
+<area shape="rect" id="Node000014" href="$no__os__mutex_8h.html" title=" " alt="" coords="512,313,633,339"/>
+<area shape="poly" id="edge23_Node000011_Node000014" title=" " alt="" coords="503,263,550,302,546,306,500,267"/>
+<area shape="poly" id="edge19_Node000012_Node000006" title=" " alt="" coords="458,336,524,377,522,382,455,341"/>
+<area shape="poly" id="edge20_Node000012_Node000007" title=" " alt="" coords="419,341,349,382,346,377,417,336"/>
+<area shape="poly" id="edge22_Node000013_Node000006" title=" " alt="" coords="725,341,600,385,598,380,723,336"/>
+<area shape="poly" id="edge25_Node000015_Node000006" title=" " alt="" coords="490,117,563,185,615,226,672,263,693,272,713,276,751,278,786,285,803,295,818,312,826,326,829,338,827,350,820,360,798,376,764,387,682,398,603,401,603,396,682,393,763,381,795,371,817,356,822,348,824,339,821,328,814,315,799,299,784,290,751,284,713,282,692,277,670,268,612,231,559,189,487,121"/>
+<area shape="poly" id="edge26_Node000015_Node000010" title=" " alt="" coords="462,121,404,161,401,156,459,116"/>
+<area shape="rect" id="Node000016" href="$stm32__hal_8h.html" title=" " alt="" coords="665,167,768,192"/>
+<area shape="poly" id="edge27_Node000015_Node000016" title=" " alt="" coords="517,116,665,160,664,165,515,121"/>
+<area shape="rect" id="Node000017" title=" " alt="" coords="683,240,750,265"/>
+<area shape="poly" id="edge28_Node000016_Node000017" title=" " alt="" coords="719,192,719,226,714,226,714,192"/>
+<area shape="poly" id="edge30_Node000018_Node000011" title=" " alt="" coords="617,121,511,232,507,228,614,117"/>
+<area shape="poly" id="edge31_Node000018_Node000016" title=" " alt="" coords="643,117,692,156,689,160,640,121"/>
+</map>

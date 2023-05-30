@@ -1,0 +1,5 @@
+<map id="selftest_example_main" name="selftest_example_main">
+<area shape="rect" id="Node000001" title="Example main execution." alt="" coords="108,5,283,31"/>
+<area shape="rect" id="Node000002" href="$eval-adxl38x_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="5,5,60,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="95,21,60,21,60,15,95,15"/>
+</map>

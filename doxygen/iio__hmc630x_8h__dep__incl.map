@@ -1,0 +1,17 @@
+<map id="drivers/rf&#45;transceiver/hmc630x/iio_hmc630x.h" name="drivers/rf&#45;transceiver/hmc630x/iio_hmc630x.h">
+<area shape="rect" id="Node000001" title="Header file of hmc6300 and hmc6301 driver extension for IIOD." alt="" coords="134,5,319,45"/>
+<area shape="rect" id="Node000002" href="$iio__hmc630x_8c.html" title="Source file of hmc6300 and hmc6301 driver extension for IIOD." alt="" coords="5,93,189,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="188,56,127,95,124,91,185,51"/>
+<area shape="rect" id="Node000003" href="$wethlink_2src_2app_2main_8c.html" title=" " alt="" coords="199,269,356,309"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="236,58,276,269,271,270,230,59"/>
+<area shape="rect" id="Node000004" href="$mwc_8h.html" title=" " alt="" coords="289,93,447,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="271,50,338,91,336,96,268,55"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="335,145,319,163,305,183,288,228,281,270,276,269,283,227,300,180,315,159,331,141"/>
+<area shape="rect" id="Node000005" href="$mwc_8c.html" title=" " alt="" coords="315,181,472,221"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="380,146,390,180,385,182,375,147"/>
+<area shape="rect" id="Node000006" href="$net_8h.html" title=" " alt="" coords="496,181,653,221"/>
+<area shape="poly" id="edge6_Node000004_Node000006" title=" " alt="" coords="427,136,530,179,528,184,425,141"/>
+<area shape="poly" id="edge7_Node000006_Node000003" title=" " alt="" coords="497,228,343,272,342,267,496,223"/>
+<area shape="rect" id="Node000007" href="$net_8c.html" title=" " alt="" coords="496,269,653,309"/>
+<area shape="poly" id="edge8_Node000006_Node000007" title=" " alt="" coords="577,235,577,269,572,269,572,235"/>
+</map>

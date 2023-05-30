@@ -1,0 +1,7 @@
+<map id="oa_tc6_get_rx_frame_match_vs" name="oa_tc6_get_rx_frame_match_vs">
+<area shape="rect" id="Node000001" title="Get a frame buffer that is ready to be read by the user. The VS field in the chunk footer fields shou..." alt="" coords="367,5,525,45"/>
+<area shape="rect" id="Node000002" href="$adin1110_8c.html#a659fe962d24d38fbd9c432e0aa865a8e" title="Read a frame from the RX FIFO." alt="" coords="172,13,319,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="353,28,319,28,319,23,353,23"/>
+<area shape="rect" id="Node000003" href="$frame__rx__tx__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Frame receive an transmit example main execution." alt="" coords="5,13,124,38"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="158,28,124,28,124,23,158,23"/>
+</map>

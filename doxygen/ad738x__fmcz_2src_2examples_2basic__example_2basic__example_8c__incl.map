@@ -1,0 +1,11 @@
+<map id="projects/ad738x_fmcz/src/examples/basic_example/basic_example.c" name="projects/ad738x_fmcz/src/examples/basic_example/basic_example.c">
+<area shape="rect" id="Node000001" title="Implementation of basic example for eval&#45;ad738x project." alt="" coords="117,5,332,60"/>
+<area shape="rect" id="Node000002" href="$ad738x__fmcz_2src_2examples_2basic__example_2basic__example_8h.html" title="BASIC example header." alt="" coords="5,108,137,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="179,62,105,104,102,99,177,58"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="161,108,288,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="227,60,227,94,222,94,222,60"/>
+<area shape="rect" id="Node000004" href="$no__os__print__log_8h.html" title="Print messages helpers." alt="" coords="313,108,449,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="274,58,349,99,346,104,271,62"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="347,181,414,207"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="383,134,383,168,378,168,378,134"/>
+</map>

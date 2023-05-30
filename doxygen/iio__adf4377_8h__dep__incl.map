@@ -1,0 +1,7 @@
+<map id="drivers/frequency/adf4377/iio_adf4377.h" name="drivers/frequency/adf4377/iio_adf4377.h">
+<area shape="rect" id="Node000001" title="Implementation of IIO ADF4377 Driver." alt="" coords="115,5,308,45"/>
+<area shape="rect" id="Node000002" href="$iio__adf4377_8c.html" title="Implementation of ADF4377 IIO Driver." alt="" coords="5,101,199,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="181,56,126,103,122,99,177,52"/>
+<area shape="rect" id="Node000003" href="$adf4377__sdz_2src_2examples_2iio__example_2iio__example_8c.html" title="Implementation of IIO example for adf4377 project." alt="" coords="223,93,421,148"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="246,52,293,91,289,95,242,56"/>
+</map>
