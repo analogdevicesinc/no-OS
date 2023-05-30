@@ -14,6 +14,11 @@
 #include "led.h"
 
 const struct nvmp factory_defaults = {
+	.hw_version = "Rev A",
+	.hw_serial = "-",
+	.carrier_model = "ADMV96S-WGBE-EK1",
+	.carrier_version = "Rev A",
+	.carrier_serial = "-",
 	.tx_autotuning = true,
 	.tx_target = 350,
 	.tx_tolerance = 50,

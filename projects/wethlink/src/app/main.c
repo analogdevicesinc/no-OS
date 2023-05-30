@@ -313,23 +313,23 @@ int main(void)
 		},
 		{
 			.name = "hw_version",
-			.value = "TODO-READ-VERSION-FROM-EEPROM"
+			.value = nvmp->hw_version
 		},
 		{
 			.name = "hw_serial",
-			.value = "TODO-READ-SERIAL-NO-FROM-EEPROM"
+			.value = nvmp->hw_serial
 		},
 		{
 			.name = "carrier_model",
-			.value = "ETHERNET-MICROWAVE-EVAL"
+			.value = nvmp->carrier_model
 		},
 		{
 			.name = "carrier_version",
-			.value = "TODO-READ-VERSION-FROM-EEPROM"
+			.value = nvmp->carrier_version
 		},
 		{
 			.name = "carrier_serial",
-			.value = "TODO-READ-SERIAL-NO-FROM-EEPROM"
+			.value = nvmp->carrier_serial
 		},
 	};
 
