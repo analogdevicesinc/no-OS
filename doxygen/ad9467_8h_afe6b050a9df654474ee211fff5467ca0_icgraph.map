@@ -1,0 +1,11 @@
+<map id="ad9467_transfer" name="ad9467_transfer">
+<area shape="rect" id="Node000001" title="Initiates a transfer and waits for the operation to end." alt="" coords="269,56,397,81"/>
+<area shape="rect" id="Node000002" href="$ad9467_8c.html#af1eea7aa6b5fe4a6c7e0b72a479340a9" title="Configures the test mode and the output mode to a default state." alt="" coords="108,5,221,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="276,55,207,33,209,28,278,49"/>
+<area shape="rect" id="Node000003" href="$ad9467__fmc_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function." alt="" coords="5,56,60,81"/>
+<area shape="poly" id="edge5_Node000001_Node000003" title=" " alt="" coords="255,71,60,71,60,66,255,66"/>
+<area shape="rect" id="Node000004" href="$ad9467__fmc_8c.html#afc006e4134a35aad96e8224c95db5d43" title=" " alt="" coords="126,107,203,132"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="278,88,204,110,203,105,276,83"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="119,38,61,61,59,56,117,33"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="117,104,59,81,61,76,119,99"/>
+</map>

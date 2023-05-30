@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>ADE9113 no-OS Driver &#8212; no-OS  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="../_static/app.min.css?v=25ed7d6a" />
+    <script defer="" src="../_static/app.umd.js?v=80d097f0"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ADRV902x (Madura) no-OS Driver" href="madura.html" />
+    <link rel="prev" title="ADE7913 no-OS Driver" href="ade7913.html" />
+   
+  
+  <meta name="repository" content="no-OS">
+  <meta name="version" content="">
+  
+    <meta name="page_source_suffix" content=".rst">
+  
+  
+
+
+<style>
+  body {
+    
+  }
+
+  body.dark {
+    
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body:not(.light) {
+      
+    }
+  }
+</style>
+  </head><body>
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
+  <input type="checkbox" id="input-show-repotoc">
+
+  
+  <div class="search-area">
+    <form action="" method="get">
+      <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+      <button class="icon"></button>
+    </form>
+  </div>
+  
+
+  <header>
+    <div id="left">
+      <label id="show-sidebar" class="icon" for="input-show-toc" title="Show/hide index"></label>
+    </div>
+    <div id="right">
+      <span>
+        <a id="logo-org" href="https://analog.com"></a>
+        <div class="vertical-divider"></div>
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
+        <a id="logo" href="../index.html">
+          <div>no-OS</div>
+        </a>
+      </span>
+      <span class="reverse">
+        <label id="show-localtoc" class="icon" for="input-show-localtoc" title="Show/hide contents"></label>
+      </span>
+    </div>
+  </header>
+
+
+  <div class="repotoc-tree overlay">
+    <root>
+  <a href="../index.html" class="current">no-OS</a>
+</root>
+
+  </div>
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div>
+          <div class="localtoc-header"></div>
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">ADE9113 no-OS Driver</a><ul>
+<li><a class="reference internal" href="#supported-devices">Supported Devices</a></li>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#applications">Applications</a></li>
+<li><a class="reference internal" href="#operation-modes">Operation Modes</a></li>
+<li><a class="reference internal" href="#device-configuration">Device Configuration</a><ul>
+<li><a class="reference internal" href="#initialization-and-configuration">Initialization and Configuration</a></li>
+<li><a class="reference internal" href="#communication-management">Communication Management</a></li>
+<li><a class="reference internal" href="#error-and-interrupt-handling">Error and Interrupt Handling</a></li>
+<li><a class="reference internal" href="#device-control-and-utility">Device Control and Utility</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#driver-initialization-example">Driver Initialization Example</a></li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
+  
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+    <a id="no-logo" href="../index.html">
+      no-OS
+    </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
+All content
+</label>
+<label id="show-toc" for="input-switch-toc">
+Content on this topic
+</label>
+<div class="repotoc-tree">
+  <root>
+  <a href="../index.html" class="current">no-OS</a>
+</root>
+
+</div>
+<div class="toc-tree">
+  <html>
+  <body><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../drivers_guide.html">no-OS drivers guide</a></li>
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1" checked=""/><div class="collapse"><a class="reference internal" href="../drivers_doc.html">no-OS drivers list</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="adxl355.html">ADXL355 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adxl38x.html">ADXL38x no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad405x.html">AD405X no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad7768.html">AD7768 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad7768-1.html">AD7768-1 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad796x.html">AD796X no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad9083.html">AD9083 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad9208.html">AD9208 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adm1177.html">ADM1177 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pulsar_adc.html">AD400X no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad9625.html">AD9625 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad74416h.html">AD74416H no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="axi_sysid.html">System ID (AXI_SYSID) no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max14914.html">MAX14914 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max14919.html">MAX14919 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max149x6.html">MAX149X6 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22190.html">MAX22190 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22196.html">MAX22196 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22200.html">MAX22200 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad8460.html">AD8460 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22017.html">MAX22017 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad3552r.html">AD3552R no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4030.html">ADF4030 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4368.html">ADF4368 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4377.html">ADF4377 No-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4382.html">ADF4382 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf5611.html">ADF5611 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admfm2000.html">ADMFM2000 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4350.html">ADF4350 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="imu.html">ADIS no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max25603.html">MAX25603 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ade7816.html">ADE7816 no-OS documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ade7913.html">ADE7913 no-OS Driver</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">ADE9113 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="madura.html">ADRV902x (Madura) no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="talise.html">ADRV9009 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc2983.html">LTC2983 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max31827.html">MAX31827 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max31855.html">MAX31855 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adt75.html">ADT75 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ades1754.html">ADES1754 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adp1050.html">ADP1050 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adp1055.html">ADP1055 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adp5055.html">ADP5055 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt3074.html">LT3074 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt7170.html">LT7170 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt7182s.html">LT7182S no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt8491.html">LT8491 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt8722.html">LT8722 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc2992.html">LTC2992 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc4162l.html">LTC4162L no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc4296.html">LTC4296 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc7841.html">LTC7841 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc7871.html">LTC7871 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltm4686.html">LTM4686 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltp8800.html">LTP8800 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max17851.html">MAX17851 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max42500.html">MAX42500 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad5293.html">AD5293 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adin1110.html">ADIN1110 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adxrs290.html">ADXRS290 no-OS Driver</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2"/><div class="collapse"><a class="reference internal" href="../projects_doc.html">no-OS projects list</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad469x_evb.html">AD469x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7091r8-sdz.html">AD7091R-2/-4/-8 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7606x-fmc.html">AD7606x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7616-st.html">AD7616 no-OS Example Project on SDP-K1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7768-1fmcz.html">AD7768-1 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad796x_fmcz.html">AD796x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/pulsar-adc.html">AD400x no-OS Example Project on ZED and SDP-K1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad9467.html">AD9467 no-OS Example project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad9081.html">ad9081 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad74416h.html">AD74416H no-OS Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adf4030.html">Evaluating the ADF4030</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adf4368.html">Evaluating the ADF4368</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adf4377_sdz.html">Evaluating the ADF4377 Wideband Synthesizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adf4382.html">ADF4382 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adf5611.html">Evaluating the ADF5611</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1646x.html">ADIS1646X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1647x.html">ADIS1647X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1650x.html">ADIS1650X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1654x.html">ADIS1654X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1655x.html">ADIS1655X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1657x.html">ADIS1657X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-ade7913.html">EVAL-ADE7913 no-OS Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-ade9430.html">EVAL-ADE9430 Sensor-to-Cloud no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adrv902x.html">adrv902x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adrv9001.html">ADRV9001 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/apard32690.html">AD-APARD32690-SL no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max14914.html">MAX14914 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max14919.html">MAX14919 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ades1754.html">Evaluating the EVAL-ADES1754</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adp1050.html">ADP1050 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adp1055.html">ADP1055 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adp5055.html">ADP5055 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/dc2703a.html">Evaluating the LT8491</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/lt3074.html">Evaluating the LT3074</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/lt7170.html">Evaluating the LT7170</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/lt7182s.html">Evaluating the LT7182S</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/lt8722.html">Evaluating the LT8722</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc4162l.html">Evaluating the LTC4162L</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc4296.html">LTC4296 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc7841.html">Evaluating the LTC7841</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc7871.html">Evaluating the LTC7871</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltm4686.html">Evaluating the LTM4686</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltp8800.html">Evaluating the LTP8800</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max42500.html">MAX42500 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-ad8460.html">Evaluating the EVAL-AD8460</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max22017.html">MAX22017 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad3552r_fmcz.html">EVAL-AD3552R no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc2983.html">Evaluating the LTC2983</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max31827-evkit.html">Evaluating the MAX31827</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adxrs290-pmdz.html">ADXRS290-PMDZ no-OS Project</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3" id="toctree-collapse-3"/><div class="collapse"><a class="reference internal" href="../build_guide.html">No-OS Build Guide</a><label for="toctree-collapse-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../build_guides/build_maxim.html">Maxim Build Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../build_guides/build_ftd2xx.html">Build against FTD2XX library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../build_guides/build_win.html">Windows Build Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../build_guides/build_mac.html">MAC Build Prerequisites</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to no-OS</a></li>
+</ul>
+</body>
+</html>
+
+</div>
+        </div>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body-header">
+    <nav class="breadcrumb">
+        <ol>
+          <li><a href="../drivers_doc.html">no-OS drivers list</a></li>
+          </ol>
+    </nav>
+  </div>
+
+          <div class="body" role="main">
+            
+  <section id="ade9113-no-os-driver">
+<h1>ADE9113 no-OS Driver<a class="headerlink" href="#ade9113-no-os-driver" title="Link to this heading"></a></h1>
+<section id="supported-devices">
+<h2>Supported Devices<a class="headerlink" href="#supported-devices" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="icon adi reference external" href="https://www.analog.com/ADE9103">ADE9103</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/ADE9112">ADE9112</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/ADE9113">ADE9113</a></p></li>
+</ul>
+</section>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>The ADE9113 is an isolated, precision Σ-Δ analog-to-digital converter (ADC)
+tailored for energy metering, especially in shunt-based DC and polyphase systems.
+It features three concurrently sampled 24-bit Σ-Δ ADC channels with SNRs of
+86 dBFS for the current channel and 91 dBFS for the voltage channels,
+operating at 4 kSPS. The device includes safety-certified galvanic
+isolation for signal and power. It is designed to support lower
+resistance shunts, minimizing heat loss and optimizing performance for
+DC metering and energy monitoring applications.</p>
+</section>
+<section id="applications">
+<h2>Applications<a class="headerlink" href="#applications" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Shunt-based polyphase meters</p></li>
+<li><p>Electric vehicle supply equipment</p></li>
+<li><p>DC meters</p></li>
+<li><p>Power quality monitoring</p></li>
+<li><p>Solar inverters</p></li>
+<li><p>Process monitoring</p></li>
+<li><p>Protective devices</p></li>
+<li><p>Isolated sensor interfaces</p></li>
+</ul>
+</section>
+<section id="operation-modes">
+<h2>Operation Modes<a class="headerlink" href="#operation-modes" title="Link to this heading"></a></h2>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>Mode Name</p></td>
+<td><p>Description</p></td>
+<td><p>Configuration Bits</p></td>
+<td><p>Typical Use Case</p></td>
+</tr>
+<tr class="row-even"><td><p>ADE9113_STREAM_NORMAL
+MODE</p></td>
+<td><p>Standard operation mode
+for stream debugging.</p></td>
+<td><p>Not specified</p></td>
+<td><p>Used for regular operation
+without special data handling
+or debugging actions.</p></td>
+</tr>
+<tr class="row-odd"><td><p>ADE9113_STREAM_STATIC
+MODE</p></td>
+<td><p>ADC registers hold values
+until overwritten,
+facilitating static data
+read/write.</p></td>
+<td><p>STREAM_DBG[3:2] = 01b</p></td>
+<td><p>Used to verify data
+transmission integrity by
+outputting known ADC values.</p></td>
+</tr>
+<tr class="row-even"><td><p>ADE9113_STREAM
+_INCREMENTS_MODE</p></td>
+<td><p>Data increments at ADC
+conversion rate, available
+for waveform streaming
+verification.</p></td>
+<td><p>STREAM_DBG[3:2] = 10b</p></td>
+<td><p>Ensures continuous data
+reading/writing interface
+integrity through incremented
+data streaming.</p></td>
+</tr>
+<tr class="row-odd"><td><p>ADE9113_STREAM
+_FUNCTIONAL_MODE</p></td>
+<td><p>Similar to ADE9113 normal
+functional mode, typically
+used in standard operation.</p></td>
+<td><p>Not specified</p></td>
+<td><p>Regular operational use
+similar to standard mode.</p></td>
+</tr>
+<tr class="row-even"><td><p>ADE9113_L_OP</p></td>
+<td><p>Long read/write operations
+for extended communication
+sessions.</p></td>
+<td><p>ADE9113_OP_MODE_LONG
+(NO_OS_BIT(6))</p></td>
+<td><p>Used for comprehensive data
+transactions with the device,
+involving more data than
+covered by short operations.</p></td>
+</tr>
+<tr class="row-odd"><td><p>ADE9113_S_OP</p></td>
+<td><p>Short read/write operations
+limiting communication to
+concise sessions.</p></td>
+<td><p>Not specified</p></td>
+<td><p>Optimized for scenarios with
+smaller, less data-intensive
+communications.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="device-configuration">
+<h2>Device Configuration<a class="headerlink" href="#device-configuration" title="Link to this heading"></a></h2>
+<section id="initialization-and-configuration">
+<h3>Initialization and Configuration<a class="headerlink" href="#initialization-and-configuration" title="Link to this heading"></a></h3>
+<p>The ADE9113 is initialized using <code class="docutils literal notranslate"><span class="pre">ade9113_init</span></code>, setting up
+communication descriptors, GPIO, IRQ configurations, and handling
+daisy-chain configurations when necessary. Operational modes are
+configured with <code class="docutils literal notranslate"><span class="pre">ade9113_set_normal_mode</span></code>,
+<code class="docutils literal notranslate"><span class="pre">ade9113_set_static_mode</span></code>, and <code class="docutils literal notranslate"><span class="pre">ade9113_set_data_increments_mode</span></code>.
+Digital signal processing parameters, including sampling rates and
+filtering options, are set with <code class="docutils literal notranslate"><span class="pre">ade9113_set_dsp_config</span></code>.</p>
+</section>
+<section id="communication-management">
+<h3>Communication Management<a class="headerlink" href="#communication-management" title="Link to this heading"></a></h3>
+<p>SPI communication is managed through <code class="docutils literal notranslate"><span class="pre">ade9113_read</span></code>,
+<code class="docutils literal notranslate"><span class="pre">ade9113_read_dc</span></code>, <code class="docutils literal notranslate"><span class="pre">ade9113_write</span></code>, and <code class="docutils literal notranslate"><span class="pre">ade9113_write_dc</span></code> for
+register operations, supporting the daisy-chain setup. Communication
+integrity is verified with CRC checks via <code class="docutils literal notranslate"><span class="pre">ade9113_set_crc_en_state</span></code>
+and <code class="docutils literal notranslate"><span class="pre">ade9113_get_crc_en_state</span></code>. Soft and hard resets are executed
+using <code class="docutils literal notranslate"><span class="pre">ade9113_sw_reset</span></code> and <code class="docutils literal notranslate"><span class="pre">ade9113_hw_reset</span></code>.</p>
+</section>
+<section id="error-and-interrupt-handling">
+<h3>Error and Interrupt Handling<a class="headerlink" href="#error-and-interrupt-handling" title="Link to this heading"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">ade9113_enable_status1x_int</span></code>, <code class="docutils literal notranslate"><span class="pre">ade9113_disable_status1x_int</span></code>,
+<code class="docutils literal notranslate"><span class="pre">ade9113_enable_com_up_int</span></code> manage various interrupts. Zero crossing
+detection configuration is managed by
+<code class="docutils literal notranslate"><span class="pre">ade9113_select_zero_crossing_edge</span></code> and
+<code class="docutils literal notranslate"><span class="pre">ade9113_select_zero_crossing_channel</span></code>. Error counts are retrieved
+with <code class="docutils literal notranslate"><span class="pre">ade9113_get_err_count</span></code>, ensuring communication integrity.</p>
+</section>
+<section id="device-control-and-utility">
+<h3>Device Control and Utility<a class="headerlink" href="#device-control-and-utility" title="Link to this heading"></a></h3>
+<p>Polarity inversion of input channels is controlled with
+<code class="docutils literal notranslate"><span class="pre">ade9113_invert_i_inputs</span></code> and <code class="docutils literal notranslate"><span class="pre">ade9113_invert_v1_inputs</span></code>. ADC data
+is converted to millivolts using <code class="docutils literal notranslate"><span class="pre">ade9113_convert_to_millivolts</span></code>.
+EFuse memory updates are refreshed with <code class="docutils literal notranslate"><span class="pre">ade9113_efuse_refresh</span></code>.
+Secure write operations are managed with <code class="docutils literal notranslate"><span class="pre">ade9113_wr_lock</span></code> and
+<code class="docutils literal notranslate"><span class="pre">ade9113_wr_unlock</span></code>.</p>
+</section>
+</section>
+<section id="driver-initialization-example">
+<h2>Driver Initialization Example<a class="headerlink" href="#driver-initialization-example" title="Link to this heading"></a></h2>
+<div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;ade9113.h&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;no_os_spi.h&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;no_os_gpio.h&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;no_os_irq.h&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;no_os_uart.h&quot;</span>
+
+<span class="cp">#define SPI_MAX_SPEED_HZ 10000000</span>
+<span class="cp">#define SPI_CHIP_SELECT 0</span>
+<span class="cp">#define GPIO_RDY_NUMBER 5</span>
+<span class="cp">#define GPIO_RESET_NUMBER 6</span>
+<span class="cp">#define IRQ_PLATFORM_OPS some_platform_irq_ops</span>
+<span class="cp">#define UART_BAUDRATE 115200</span>
+
+<span class="c1">// SPI, GPIO, and IRQ initialization parameters</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">no_os_spi_init_param</span><span class="w"> </span><span class="n">spi_init</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="p">.</span><span class="n">max_speed_hz</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1000000</span><span class="p">,</span>
+<span class="w">    </span><span class="p">.</span><span class="n">chip_select</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">    </span><span class="p">.</span><span class="n">mode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">NO_OS_SPI_MODE_0</span><span class="p">,</span>
+<span class="w">    </span><span class="p">.</span><span class="n">platform_ops</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">max_spi_ops</span>
+<span class="p">};</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">no_os_gpio_init_param</span><span class="w"> </span><span class="n">gpio_rdy_init</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="p">.</span><span class="n">number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">15</span><span class="p">,</span>
+<span class="w">    </span><span class="p">.</span><span class="n">pull</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">NO_OS_PULL_NONE</span><span class="p">,</span>
+<span class="w">    </span><span class="p">.</span><span class="n">platform_ops</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">max_gpio_ops</span>
+<span class="p">};</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">no_os_gpio_init_param</span><span class="w"> </span><span class="n">gpio_reset_init</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="p">.</span><span class="n">number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">    </span><span class="p">.</span><span class="n">pull</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">NO_OS_PULL_NONE</span><span class="p">,</span>
+<span class="w">    </span><span class="p">.</span><span class="n">platform_ops</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">max_gpio_ops</span>
+<span class="p">};</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">no_os_irq_ctrl_desc</span><span class="w"> </span><span class="n">irq_ctrl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="p">.</span><span class="n">platform_ops</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">max_gpio_irq_ops</span>
+<span class="p">};</span>
+
+<span class="c1">// ADE9113 initialization parameters</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">ade9113_init_param</span><span class="w"> </span><span class="n">ade9113_ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="p">.</span><span class="n">spi_init</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">spi_init</span><span class="p">,</span>
+<span class="w">    </span><span class="p">.</span><span class="n">gpio_rdy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">gpio_rdy_init</span><span class="p">,</span>
+<span class="w">    </span><span class="p">.</span><span class="n">gpio_reset</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">gpio_reset_init</span><span class="p">,</span>
+<span class="w">    </span><span class="p">.</span><span class="n">irq_ctrl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">irq_ctrl</span><span class="p">,</span>
+<span class="w">    </span><span class="p">.</span><span class="n">drdy_callback</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="w"> </span><span class="c1">// Use the default callback</span>
+<span class="p">};</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">ade9113_dev</span><span class="w"> </span><span class="o">*</span><span class="n">dev</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// Initialize ADE9113 device</span>
+<span class="w">    </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ade9113_init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">dev</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">ade9113_ip</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Initialization failed with error: %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ret</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// Set device to normal mode</span>
+<span class="w">    </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ade9113_set_normal_mode</span><span class="p">(</span><span class="n">dev</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Failed to set normal mode: %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ret</span><span class="p">);</span>
+<span class="w">        </span><span class="n">ade9113_remove</span><span class="p">(</span><span class="n">dev</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// Enable data ready interrupt</span>
+<span class="w">    </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ade9113_drdy_int_enable</span><span class="p">(</span><span class="n">dev</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Failed to enable DRDY interrupt: %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ret</span><span class="p">);</span>
+<span class="w">        </span><span class="n">ade9113_remove</span><span class="p">(</span><span class="n">dev</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;ADE9113 initialization successful.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="c1">// Implement additional functionality or application logic here</span>
+
+<span class="w">    </span><span class="c1">// Clean up and release resources</span>
+<span class="w">    </span><span class="n">ade9113_remove</span><span class="p">(</span><span class="n">dev</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+          </div>
+              <div class="related">
+                &nbsp;
+    <a href="ade7913.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">ADE7913 no-OS Driver</a>
+    <a href="madura.html" title="Next document (Alt+Shift+RightArrow)" class="next">ADRV902x (Madura) no-OS Driver</a>
+              </div>
+          
+        </div>
+      </div>
+  </div>
+
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
+    <footer>
+      &#169;2023-2024, Analog Devices, Inc.
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
+</html>

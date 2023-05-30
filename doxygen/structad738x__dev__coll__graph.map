@@ -1,0 +1,21 @@
+<map id="ad738x_dev" name="ad738x_dev">
+<area shape="rect" id="Node000001" title=" " alt="" coords="940,143,1041,169"/>
+<area shape="rect" id="Node000002" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="689,89,812,114"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="821,114,940,142,939,147,820,120"/>
+<area shape="poly" id="edge6_Node000002_Node000002" title=" " alt="" coords="725,74,733,65,751,62,766,64,775,71,777,80,773,90,768,87,772,80,770,74,764,69,751,67,736,70,729,77"/>
+<area shape="rect" id="Node000003" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="355,57,501,82"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="515,75,689,93,689,98,515,81"/>
+<area shape="rect" id="Node000004" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="10,13,189,38"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="202,17,300,17,415,21,538,35,659,60,726,86,724,91,658,65,538,40,415,27,300,22,202,23"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="203,37,218,39,355,57,354,62,217,44,202,42"/>
+<area shape="rect" id="Node000005" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="353,107,503,147"/>
+<area shape="poly" id="edge5_Node000002_Node000005" title=" " alt="" coords="516,124,658,116,690,111,690,117,659,121,517,129"/>
+<area shape="rect" id="Node000006" href="$structno__os__pwm__desc.html" title="Structure representing an PWM generator device." alt="" coords="683,171,819,197"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="832,180,916,172,944,166,946,171,916,177,833,185"/>
+<area shape="rect" id="Node000007" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="362,171,494,197"/>
+<area shape="poly" id="edge8_Node000006_Node000007" title=" " alt="" coords="508,181,682,181,682,187,508,187"/>
+<area shape="rect" id="Node000008" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="5,171,193,197"/>
+<area shape="poly" id="edge9_Node000007_Node000008" title=" " alt="" coords="207,181,361,181,361,187,207,187"/>
+<area shape="rect" id="Node000009" href="$structno__os__pwm__platform__ops.html" title="Structure holding PWM function pointers that point to the platform specific function." alt="" coords="332,221,524,246"/>
+<area shape="poly" id="edge10_Node000006_Node000009" title=" " alt="" coords="537,219,658,201,695,194,696,199,659,207,538,224"/>
+</map>

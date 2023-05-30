@@ -1,0 +1,11 @@
+<map id="projects/adv7511/src/cf_hdmi.h" name="projects/adv7511/src/cf_hdmi.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="120,5,277,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,93,123,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="168,48,97,89,94,84,165,43"/>
+<area shape="rect" id="Node000003" href="$adv7511_2src_2app__config_8h.html" title="Config file of ADV7511 no&#45;OS project." alt="" coords="147,93,251,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="201,46,201,79,196,79,196,46"/>
+<area shape="rect" id="Node000004" href="$clk__axi__clkgen_8h.html" title="Driver for the Analog Devices AXI CLKGEN." alt="" coords="275,93,405,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="234,43,308,84,306,89,231,48"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="305,167,375,192"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="343,119,343,153,337,153,337,119"/>
+</map>

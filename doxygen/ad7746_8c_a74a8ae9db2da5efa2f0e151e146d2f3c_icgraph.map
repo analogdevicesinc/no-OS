@@ -1,0 +1,12 @@
+<map id="ad7746_reg_read" name="ad7746_reg_read">
+<area shape="rect" id="Node000001" title="Reads data from AD7746 registers, starting from the selected register address pointer." alt="" coords="320,55,455,80"/>
+<area shape="rect" id="Node000002" href="$ad7746_8c.html#a58fa38513e2e6b5f781d8dccd072b523" title="Perform offset/gain calibration." alt="" coords="123,5,257,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="322,54,241,33,242,28,324,49"/>
+<area shape="rect" id="Node000003" href="$ad7746_8c.html#ae3d0541802a583196755c4e068b83673" title="Waits until a conversion on the capacitive channel has been finished and returns the output data." alt="" coords="108,55,272,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="306,70,272,70,272,65,306,65"/>
+<area shape="rect" id="Node000005" href="$ad7746_8c.html#a9e658ccc3e9028043a62c11dc180c531" title="Waits until a conversion on a voltage/temperature channel has been finished and returns the output da..." alt="" coords="113,104,267,129"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="324,86,242,107,241,101,322,81"/>
+<area shape="rect" id="Node000004" href="$ad7746-ebz_2src_2app_2headless_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,80,60,105"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="98,85,60,91,60,86,97,80"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="98,105,60,99,61,94,99,100"/>
+</map>

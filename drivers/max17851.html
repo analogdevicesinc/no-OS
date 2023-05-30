@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>MAX17851 no-OS driver &#8212; no-OS  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="../_static/app.min.css?v=25ed7d6a" />
+    <script defer="" src="../_static/app.umd.js?v=80d097f0"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="MAX42500 no-OS driver" href="max42500.html" />
+    <link rel="prev" title="LTP8800 no-OS driver" href="ltp8800.html" />
+   
+  
+  <meta name="repository" content="no-OS">
+  <meta name="version" content="">
+  
+    <meta name="page_source_suffix" content=".rst">
+  
+  
+
+
+<style>
+  body {
+    
+  }
+
+  body.dark {
+    
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body:not(.light) {
+      
+    }
+  }
+</style>
+  </head><body>
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
+  <input type="checkbox" id="input-show-repotoc">
+
+  
+  <div class="search-area">
+    <form action="" method="get">
+      <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+      <button class="icon"></button>
+    </form>
+  </div>
+  
+
+  <header>
+    <div id="left">
+      <label id="show-sidebar" class="icon" for="input-show-toc" title="Show/hide index"></label>
+    </div>
+    <div id="right">
+      <span>
+        <a id="logo-org" href="https://analog.com"></a>
+        <div class="vertical-divider"></div>
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
+        <a id="logo" href="../index.html">
+          <div>no-OS</div>
+        </a>
+      </span>
+      <span class="reverse">
+        <label id="show-localtoc" class="icon" for="input-show-localtoc" title="Show/hide contents"></label>
+      </span>
+    </div>
+  </header>
+
+
+  <div class="repotoc-tree overlay">
+    <root>
+  <a href="../index.html" class="current">no-OS</a>
+</root>
+
+  </div>
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div>
+          <div class="localtoc-header"></div>
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">MAX17851 no-OS driver</a><ul>
+<li><a class="reference internal" href="#supported-devices">Supported Devices</a></li>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#applications">Applications</a></li>
+<li><a class="reference internal" href="#maxim-battery-management-system-uart-protocol">Maxim Battery Management System UART Protocol</a></li>
+<li><a class="reference internal" href="#driver-initialization">Driver Initialization</a></li>
+<li><a class="reference internal" href="#general-configuration">General Configuration</a></li>
+<li><a class="reference internal" href="#alert-packet-configuration">Alert Packet Configuration</a></li>
+<li><a class="reference internal" href="#read-writing-messages-configuration">Read/Writing Messages Configuration</a></li>
+<li><a class="reference internal" href="#transmitting-messages">Transmitting Messages:</a></li>
+<li><a class="reference internal" href="#receving-messages">Receving Messages:</a></li>
+<li><a class="reference internal" href="#register-access">Register Access</a></li>
+<li><a class="reference internal" href="#no-os-platform-operations">No-OS platform operations</a></li>
+<li><a class="reference internal" href="#max17851-driver-initialization-example">MAX17851 Driver Initialization Example</a></li>
+<li><a class="reference internal" href="#max17851-uart-descriptor-initialization-example">MAX17851 UART Descriptor Initialization Example</a></li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
+  
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+    <a id="no-logo" href="../index.html">
+      no-OS
+    </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
+All content
+</label>
+<label id="show-toc" for="input-switch-toc">
+Content on this topic
+</label>
+<div class="repotoc-tree">
+  <root>
+  <a href="../index.html" class="current">no-OS</a>
+</root>
+
+</div>
+<div class="toc-tree">
+  <html>
+  <body><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../drivers_guide.html">no-OS drivers guide</a></li>
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1" checked=""/><div class="collapse"><a class="reference internal" href="../drivers_doc.html">no-OS drivers list</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="adxl355.html">ADXL355 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adxl38x.html">ADXL38x no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad405x.html">AD405X no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad7768.html">AD7768 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad7768-1.html">AD7768-1 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad796x.html">AD796X no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad9083.html">AD9083 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad9208.html">AD9208 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adm1177.html">ADM1177 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pulsar_adc.html">AD400X no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad9625.html">AD9625 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad74416h.html">AD74416H no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="axi_sysid.html">System ID (AXI_SYSID) no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max14914.html">MAX14914 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max14919.html">MAX14919 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max149x6.html">MAX149X6 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22190.html">MAX22190 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22196.html">MAX22196 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22200.html">MAX22200 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad8460.html">AD8460 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22017.html">MAX22017 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad3552r.html">AD3552R no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4030.html">ADF4030 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4368.html">ADF4368 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4377.html">ADF4377 No-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4382.html">ADF4382 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf5611.html">ADF5611 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admfm2000.html">ADMFM2000 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4350.html">ADF4350 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="imu.html">ADIS no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max25603.html">MAX25603 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ade7816.html">ADE7816 no-OS documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ade7913.html">ADE7913 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ade9113.html">ADE9113 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="madura.html">ADRV902x (Madura) no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="talise.html">ADRV9009 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc2983.html">LTC2983 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max31827.html">MAX31827 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max31855.html">MAX31855 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adt75.html">ADT75 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ades1754.html">ADES1754 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adp1050.html">ADP1050 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adp1055.html">ADP1055 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adp5055.html">ADP5055 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt3074.html">LT3074 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt7170.html">LT7170 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt7182s.html">LT7182S no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt8491.html">LT8491 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt8722.html">LT8722 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc2992.html">LTC2992 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc4162l.html">LTC4162L no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc4296.html">LTC4296 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc7841.html">LTC7841 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc7871.html">LTC7871 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltm4686.html">LTM4686 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltp8800.html">LTP8800 no-OS driver</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">MAX17851 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max42500.html">MAX42500 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad5293.html">AD5293 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adin1110.html">ADIN1110 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adxrs290.html">ADXRS290 no-OS Driver</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2"/><div class="collapse"><a class="reference internal" href="../projects_doc.html">no-OS projects list</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad469x_evb.html">AD469x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7091r8-sdz.html">AD7091R-2/-4/-8 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7606x-fmc.html">AD7606x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7616-st.html">AD7616 no-OS Example Project on SDP-K1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7768-1fmcz.html">AD7768-1 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad796x_fmcz.html">AD796x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/pulsar-adc.html">AD400x no-OS Example Project on ZED and SDP-K1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad9467.html">AD9467 no-OS Example project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad9081.html">ad9081 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad74416h.html">AD74416H no-OS Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adf4030.html">Evaluating the ADF4030</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adf4368.html">Evaluating the ADF4368</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adf4377_sdz.html">Evaluating the ADF4377 Wideband Synthesizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adf4382.html">ADF4382 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adf5611.html">Evaluating the ADF5611</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1646x.html">ADIS1646X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1647x.html">ADIS1647X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1650x.html">ADIS1650X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1654x.html">ADIS1654X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1655x.html">ADIS1655X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1657x.html">ADIS1657X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-ade7913.html">EVAL-ADE7913 no-OS Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-ade9430.html">EVAL-ADE9430 Sensor-to-Cloud no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adrv902x.html">adrv902x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adrv9001.html">ADRV9001 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/apard32690.html">AD-APARD32690-SL no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max14914.html">MAX14914 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max14919.html">MAX14919 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ades1754.html">Evaluating the EVAL-ADES1754</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adp1050.html">ADP1050 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adp1055.html">ADP1055 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adp5055.html">ADP5055 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/dc2703a.html">Evaluating the LT8491</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/lt3074.html">Evaluating the LT3074</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/lt7170.html">Evaluating the LT7170</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/lt7182s.html">Evaluating the LT7182S</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/lt8722.html">Evaluating the LT8722</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc4162l.html">Evaluating the LTC4162L</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc4296.html">LTC4296 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc7841.html">Evaluating the LTC7841</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc7871.html">Evaluating the LTC7871</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltm4686.html">Evaluating the LTM4686</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltp8800.html">Evaluating the LTP8800</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max42500.html">MAX42500 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-ad8460.html">Evaluating the EVAL-AD8460</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max22017.html">MAX22017 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad3552r_fmcz.html">EVAL-AD3552R no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc2983.html">Evaluating the LTC2983</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max31827-evkit.html">Evaluating the MAX31827</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adxrs290-pmdz.html">ADXRS290-PMDZ no-OS Project</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3" id="toctree-collapse-3"/><div class="collapse"><a class="reference internal" href="../build_guide.html">No-OS Build Guide</a><label for="toctree-collapse-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../build_guides/build_maxim.html">Maxim Build Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../build_guides/build_ftd2xx.html">Build against FTD2XX library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../build_guides/build_win.html">Windows Build Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../build_guides/build_mac.html">MAC Build Prerequisites</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to no-OS</a></li>
+</ul>
+</body>
+</html>
+
+</div>
+        </div>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body-header">
+    <nav class="breadcrumb">
+        <ol>
+          <li><a href="../drivers_doc.html">no-OS drivers list</a></li>
+          </ol>
+    </nav>
+  </div>
+
+          <div class="body" role="main">
+            
+  <section id="max17851-no-os-driver">
+<h1>MAX17851 no-OS driver<a class="headerlink" href="#max17851-no-os-driver" title="Link to this heading"></a></h1>
+<p><span>See </span><a class="reference external" href="../doxygen/dir_87e5b64e34cdee7968face7ed7e55cf6.html"><span>drivers/power/max17851 (doxygen)</span></a><span> for the Doxygen documentation.</span></p>
+<section id="supported-devices">
+<h2>Supported Devices<a class="headerlink" href="#supported-devices" title="Link to this heading"></a></h2>
+<p><a class="reference external" href="https://www.analog.com/MAX17851">MAX17851</a></p>
+</section>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>The MAX17851 SPI to UART safety monitoring bridge translates communication from
+SPI format to universal asynchronous receiver transmitter (UART) format
+specially designed to interface with Maxim's Battery Management Data
+Acquisition System.</p>
+<p>The safety monitoring bridge enables robust communication with baud rates
+extending up to 4Mbps in both single and dual daisy-chain system architectures.
+High throughput, dual UART systems can read 96 cells of battery voltages within
+1173us.</p>
+<p>THIS Uart Device is meant to be used alongside devices using Maxim's Battery
+Management System UART Protocol!</p>
+</section>
+<section id="applications">
+<h2>Applications<a class="headerlink" href="#applications" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Battery Management Systems (BMS)</p></li>
+<li><p>Electric and Hybrid Electric Vehicles (EV/HEV)</p></li>
+<li><p>Energy Storage Systems (ESS)</p></li>
+</ul>
+</section>
+<section id="maxim-battery-management-system-uart-protocol">
+<h2>Maxim Battery Management System UART Protocol<a class="headerlink" href="#maxim-battery-management-system-uart-protocol" title="Link to this heading"></a></h2>
+<p>A message is defined as a sequence of UART characters.
+The message starts with a preamble character, followed by
+data characters, and ending with a stop character.</p>
+<p>Each character consists of the following 12 bits:
+* One START bit
+* Eight data bits (LSB first)
+* One parity bit (even)
+* Two STOP bits</p>
+<p>More than this, every data byte is transmitted and received as two separate
+characters (separated from one byte to two bytes), since every nibble is
+Manchester Encoded. Therefore each  nibble becomes a byte (the bit number
+doubles), so a data byte splits into two characters.</p>
+</section>
+<section id="driver-initialization">
+<h2>Driver Initialization<a class="headerlink" href="#driver-initialization" title="Link to this heading"></a></h2>
+<p>In order to be able to use the device, you will have to provide the support for
+the communication protocol (SPI).</p>
+<p>The first API to be called is <strong>max17851_init</strong>. Make sure that it returns 0,
+which means that the driver was initialized correctly.</p>
+<p>Usually, this function is to be called from <strong>no_os_uart_init</strong> function, since
+max17851 can also be seen as a UART peripheral inside no-OS infrastructure.</p>
+<p>For more details regarding UART API, please see
+<a class="reference external" href="https://wiki.analog.com/resources/no-os/drivers/uart">No-OS UART API</a>.</p>
+</section>
+<section id="general-configuration">
+<h2>General Configuration<a class="headerlink" href="#general-configuration" title="Link to this heading"></a></h2>
+<p>Baud Rate, Single/Dual UART and Operation Mode are properties that should be set
+at the initialization of the device, therefore they are found in the
+<strong>max17851_init</strong> function, although other configurations can be found there
+such as the :
+* Alert Debounce (<strong>max17851_set_alert_debounce</strong>).
+* GPIO Recovery Delay (<strong>max17851_reg_write</strong> to CONFIG_SAFEMON0 Register).
+* Contact Timer Delay (<strong>max17851_reg_write</strong> to CONFIG_SAFEMON1 Register).
+* Communication Timeout Retry Count (<strong>max17851_set_comm</strong>).
+* Safemon Delay (<strong>max17851_set_safemon_dly</strong>).</p>
+<p>But more than this, the MAX17851 no-OS driver also provides access to UART
+related general configuration, that can be performed at run-time, such as :
+* MAX17851_TX_NOPREAMBLE_SEL - Transmits Message with no Preamble Byte.
+* MAX17851_TX_NOSTOP_SEL - Disables Stop Character from UART TX packages.
+* MAX17851_TX_PAUSE_SEL - Puts TX in idle state.
+* MAX17851_TX_ODDPARITY_SEL - Selects ODD parity for UART bits instead of EVEN.
+* MAX17851_TX_QUEUE_SEL - Enables transmission of the message from the queue.
+* MAX17851_TX_PREAMBLES_SEL - Transmits preambles continuously.
+* MAX17851_TX_RAW_DATA_SEL - Disables Manchester encoding from transmitted data.
+* MAX17851_RX_RAW_DATA_SEL - Disables Manchester encoding from received data.</p>
+</section>
+<section id="alert-packet-configuration">
+<h2>Alert Packet Configuration<a class="headerlink" href="#alert-packet-configuration" title="Link to this heading"></a></h2>
+<p>MAX17851 also comes with the Alert Packet feature, therefore ALERT pins can
+be initialized from the Slave BMS chip used alongside MAX17851 and receive
+an alert packet. MAX17851 gives the chance to monitor the specific alerts
+or enable/disable them, so an interrupt inside the MCU host unit can be
+performed in case of failures.</p>
+<p><strong>max17851_set_alrtpckt_time</strong> Sets the time for generating Alert Packets or
+sending keep-alive (stop) characters throughout UART.</p>
+<p><strong>max17851_set_alert</strong> and <strong>max17851_get_alert</strong> enable/disable specific
+alerts, respectively checks if a specific alert is triggered.</p>
+</section>
+<section id="read-writing-messages-configuration">
+<h2>Read/Writing Messages Configuration<a class="headerlink" href="#read-writing-messages-configuration" title="Link to this heading"></a></h2>
+<p>In order to send/receive UART messages using the MAX17851, a specific routine
+has to be performed for each operation.</p>
+</section>
+<section id="transmitting-messages">
+<h2>Transmitting Messages:<a class="headerlink" href="#transmitting-messages" title="Link to this heading"></a></h2>
+<p>For transmitting messages there are 4 queues, each one of them consisting of 32
+bytes, first byte being the length of the message, rest of them being the
+data bytes need to be sent over UART (can or cannot be encoded, default
+settings require them not to be encoded, since the IC is taking care of
+the Mancheste Encoding).</p>
+<p>Therefore the user can select wich queue is to be loaded (written to inside
+the IC memory) and which one to be sent over UART using the
+<strong>max17851_select_queue</strong>, each one being able to be seleted as the
+transmitt/load queue in case of manual message sending.</p>
+<p><strong>max17851_write_msg</strong> handles the whole transmitting of the message, using the
+first queue, therefore in this case the message can not be grater than 31 bytes.</p>
+</section>
+<section id="receving-messages">
+<h2>Receving Messages:<a class="headerlink" href="#receving-messages" title="Link to this heading"></a></h2>
+<p><strong>max17851_read_msg</strong> is the API to be used in order to read the received
+buffer over UART.</p>
+<p>For both transmitting and receiving messages, the read/write message API's
+handle the buffer clearance after the buffers are properly written/read.</p>
+</section>
+<section id="register-access">
+<h2>Register Access<a class="headerlink" href="#register-access" title="Link to this heading"></a></h2>
+<p>In case the user wants to use even more specific functionalities of the
+MAX17851 such as using the Continuously Preambles mode, or no STOP
+characters mode, etc. in order for a Hardware-In-The-Loop test or such,
+register access is provided as well as the whole register map being defined
+in the header file.</p>
+<p><strong>max17851_reg_write</strong> - Is to be used for register writing.
+<strong>max17851_reg_read</strong> - Is to be used for register reading.</p>
+</section>
+<section id="no-os-platform-operations">
+<h2>No-OS platform operations<a class="headerlink" href="#no-os-platform-operations" title="Link to this heading"></a></h2>
+<p>Since the MAX17851 is to be used as a UART peripheral in order to communicate
+with other BMS chips, it can be used as such inside the No-OS infrastructure
+and having specific platform ops, therefore a no-OS uart descriptor can be
+used and parsed for initialization in other BMS device drivers.</p>
+<p><strong>max17851_uart_init</strong> - Initializes the UART descriptor.
+<strong>max17851_uart_read</strong> - Reads data over the UART.
+<strong>max17851_uart_write</strong> - Writes data over the UART.
+<strong>max17851_uart_get_errors</strong> - Gets errors from the Alert Loop.
+<strong>max17851_uart_remove</strong> - Removes the UART descriptor.</p>
+</section>
+<section id="max17851-driver-initialization-example">
+<h2>MAX17851 Driver Initialization Example<a class="headerlink" href="#max17851-driver-initialization-example" title="Link to this heading"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>struct<span class="w"> </span>max17851_desc<span class="w"> </span>*max17851_desc<span class="p">;</span>
+struct<span class="w"> </span>no_os_spi_init_param<span class="w"> </span><span class="nv">max17851_spi_ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>.device_id<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">4</span>,
+<span class="w">        </span>.extra<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>max17851_spi_extra,
+<span class="w">        </span>.mode<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_SPI_MODE_0,
+<span class="w">        </span>.max_speed_hz<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">100000</span>,
+<span class="w">        </span>.platform_ops<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>max_spi_ops,
+<span class="w">        </span>.chip_select<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span>,
+<span class="o">}</span><span class="p">;</span>
+struct<span class="w"> </span>max17851_init_param<span class="w"> </span><span class="nv">max17851_ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>.spi_param<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>max17851_spi_ip,
+<span class="w">        </span>.gpio1_param<span class="w"> </span><span class="o">=</span><span class="w"> </span>NULL,
+<span class="w">        </span>.gpio2_param<span class="w"> </span><span class="o">=</span><span class="w"> </span>NULL,
+<span class="w">        </span>.op_mode<span class="w"> </span><span class="o">=</span><span class="w"> </span>MAX17851_MASTER_DUAL_UART,
+<span class="w">        </span>.baud_rate<span class="w"> </span><span class="o">=</span><span class="w"> </span>MAX17851_UART_BAUD_500K,
+<span class="w">        </span>.no_dev<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span>,
+<span class="w">        </span>.single<span class="w"> </span><span class="o">=</span><span class="w"> </span>false,
+<span class="w">        </span>.contact_tmr_dly_4xmin<span class="w"> </span><span class="o">=</span><span class="w"> </span>MAX17851_CONTACT_TIMER_DELAY_INFINITE,
+<span class="w">        </span>.gpio_rec_dly_csec<span class="w"> </span><span class="o">=</span><span class="w"> </span>MAX17851_GPIO_RECOVERY_DELAY_DISABLED,
+<span class="w">        </span>.safemon_dly<span class="w"> </span><span class="o">=</span><span class="w"> </span>MAX17851_SAFEMON_DLY_500MS,
+<span class="o">}</span><span class="p">;</span>
+
+<span class="nv">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>max17851_init<span class="o">(</span><span class="p">&amp;</span>max17851_desc,<span class="w"> </span><span class="p">&amp;</span>max17851_ip<span class="o">)</span><span class="p">;</span>
+<span class="k">if</span><span class="w"> </span><span class="o">(</span>ret<span class="o">)</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span>ret<span class="p">;</span>
+</pre></div>
+</div>
+</section>
+<section id="max17851-uart-descriptor-initialization-example">
+<h2>MAX17851 UART Descriptor Initialization Example<a class="headerlink" href="#max17851-uart-descriptor-initialization-example" title="Link to this heading"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>struct<span class="w"> </span>no_os_uart_desc<span class="w"> </span>*uart_desc<span class="p">;</span>
+struct<span class="w"> </span>max_spi_init_param<span class="w"> </span><span class="nv">max17851_spi_extra</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>.num_slaves<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span>,
+<span class="w">        </span>.polarity<span class="w"> </span><span class="o">=</span><span class="w"> </span>SPI_SS_POL_LOW,
+<span class="w">        </span>.vssel<span class="w"> </span><span class="o">=</span><span class="w"> </span>MXC_GPIO_VSSEL_VDDIOH
+<span class="o">}</span><span class="p">;</span>
+struct<span class="w"> </span>no_os_spi_init_param<span class="w"> </span><span class="nv">max17851_spi_ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>.device_id<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">4</span>,
+<span class="w">        </span>.extra<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>max17851_spi_extra,
+<span class="w">        </span>.mode<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_SPI_MODE_0,
+<span class="w">        </span>.max_speed_hz<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">100000</span>,
+<span class="w">        </span>.platform_ops<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>max_spi_ops,
+<span class="w">        </span>.chip_select<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span>,
+<span class="o">}</span><span class="p">;</span>
+struct<span class="w"> </span>max17851_init_param<span class="w"> </span><span class="nv">uart_extra</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>.spi_param<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>max17851_spi_ip,
+<span class="w">        </span>.gpio1_param<span class="w"> </span><span class="o">=</span><span class="w"> </span>NULL,
+<span class="w">        </span>.gpio2_param<span class="w"> </span><span class="o">=</span><span class="w"> </span>NULL,
+<span class="w">        </span>.op_mode<span class="w"> </span><span class="o">=</span><span class="w"> </span>MAX17851_MASTER_DUAL_UART,
+<span class="w">        </span>.baud_rate<span class="w"> </span><span class="o">=</span><span class="w"> </span>MAX17851_UART_BAUD_500K,
+<span class="w">        </span>.no_dev<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span>,
+<span class="w">        </span>.single<span class="w"> </span><span class="o">=</span><span class="w"> </span>false,
+<span class="w">        </span>.contact_tmr_dly_4xmin<span class="w"> </span><span class="o">=</span><span class="w"> </span>MAX17851_CONTACT_TIMER_DELAY_INFINITE,
+<span class="w">        </span>.gpio_rec_dly_csec<span class="w"> </span><span class="o">=</span><span class="w"> </span>MAX17851_GPIO_RECOVERY_DELAY_DISABLED,
+<span class="w">        </span>.safemon_dly<span class="w"> </span><span class="o">=</span><span class="w"> </span>MAX17851_SAFEMON_DLY_500MS,
+<span class="o">}</span><span class="p">;</span>
+struct<span class="w"> </span>no_os_uart_init_param<span class="w"> </span><span class="nv">uart_ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>.device_id<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span>,
+<span class="w">        </span>.irq_id<span class="w"> </span><span class="o">=</span><span class="w"> </span>NULL,
+<span class="w">        </span>.baud_rate<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">500000</span>,
+<span class="w">        </span>.size<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_UART_CS_8,
+<span class="w">        </span>.platform_ops<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>max17851_uart_ops,
+<span class="w">        </span>.parity<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_UART_PAR_EVEN,
+<span class="w">        </span>.stop<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_UART_STOP_2_BIT,
+<span class="w">        </span>.extra<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>uart_extra,
+<span class="o">}</span><span class="p">;</span>
+<span class="nv">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>no_os_uart_init<span class="o">(</span><span class="p">&amp;</span>uart_desc,<span class="w"> </span><span class="p">&amp;</span>uart_ip<span class="o">)</span><span class="p">;</span>
+<span class="k">if</span><span class="w"> </span><span class="o">(</span>ret<span class="o">)</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span>ret<span class="p">;</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+          </div>
+              <div class="related">
+                &nbsp;
+    <a href="ltp8800.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">LTP8800 no-OS driver</a>
+    <a href="max42500.html" title="Next document (Alt+Shift+RightArrow)" class="next">MAX42500 no-OS driver</a>
+              </div>
+          
+        </div>
+      </div>
+  </div>
+
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
+    <footer>
+      &#169;2023-2024, Analog Devices, Inc.
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
+</html>

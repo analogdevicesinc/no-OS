@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>ADRV9009 no-OS Driver &#8212; no-OS  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="../_static/app.min.css?v=25ed7d6a" />
+    <script defer="" src="../_static/app.umd.js?v=80d097f0"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="LTC2983 no-OS driver" href="ltc2983.html" />
+    <link rel="prev" title="ADRV902x (Madura) no-OS Driver" href="madura.html" />
+   
+  
+  <meta name="repository" content="no-OS">
+  <meta name="version" content="">
+  
+    <meta name="page_source_suffix" content=".rst">
+  
+  
+
+
+<style>
+  body {
+    
+  }
+
+  body.dark {
+    
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body:not(.light) {
+      
+    }
+  }
+</style>
+  </head><body>
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
+  <input type="checkbox" id="input-show-repotoc">
+
+  
+  <div class="search-area">
+    <form action="" method="get">
+      <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+      <button class="icon"></button>
+    </form>
+  </div>
+  
+
+  <header>
+    <div id="left">
+      <label id="show-sidebar" class="icon" for="input-show-toc" title="Show/hide index"></label>
+    </div>
+    <div id="right">
+      <span>
+        <a id="logo-org" href="https://analog.com"></a>
+        <div class="vertical-divider"></div>
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
+        <a id="logo" href="../index.html">
+          <div>no-OS</div>
+        </a>
+      </span>
+      <span class="reverse">
+        <label id="show-localtoc" class="icon" for="input-show-localtoc" title="Show/hide contents"></label>
+      </span>
+    </div>
+  </header>
+
+
+  <div class="repotoc-tree overlay">
+    <root>
+  <a href="../index.html" class="current">no-OS</a>
+</root>
+
+  </div>
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div>
+          <div class="localtoc-header"></div>
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">ADRV9009 no-OS Driver</a><ul>
+<li><a class="reference internal" href="#supported-devices">Supported Devices</a></li>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#applications">Applications</a></li>
+<li><a class="reference internal" href="#device-configuration">Device Configuration</a><ul>
+<li><a class="reference internal" href="#device-initialization-and-core-control">Device Initialization and Core Control</a></li>
+<li><a class="reference internal" href="#jesd204b-link-configuration-and-management">JESD204B Link Configuration and Management</a></li>
+<li><a class="reference internal" href="#automatic-gain-control-agc-configuration">Automatic Gain Control (AGC) Configuration</a></li>
+<li><a class="reference internal" href="#transmit-tx-path-configuration">Transmit (Tx) Path Configuration</a></li>
+<li><a class="reference internal" href="#receive-rx-path-and-data-formatting-configuration">Receive (Rx) Path and Data Formatting Configuration</a></li>
+<li><a class="reference internal" href="#calibration-and-tracking">Calibration and Tracking</a></li>
+<li><a class="reference internal" href="#arm-processor-interface">ARM Processor Interface</a></li>
+<li><a class="reference internal" href="#hardware-abstraction-layer-hal">Hardware Abstraction Layer (HAL)</a></li>
+<li><a class="reference internal" href="#gpio-configuration">GPIO Configuration</a><ul>
+<li><a class="reference internal" href="#low-voltage-3-3v-gpio-control">Low Voltage &amp; 3.3V GPIO Control</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#monitor-interrupt-and-auxiliary-interfaces">Monitor, Interrupt, and Auxiliary Interfaces</a></li>
+<li><a class="reference internal" href="#radio-control-and-pin-management">Radio Control and Pin Management</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#driver-initialization-example">Driver Initialization Example</a></li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
+  
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+    <a id="no-logo" href="../index.html">
+      no-OS
+    </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
+All content
+</label>
+<label id="show-toc" for="input-switch-toc">
+Content on this topic
+</label>
+<div class="repotoc-tree">
+  <root>
+  <a href="../index.html" class="current">no-OS</a>
+</root>
+
+</div>
+<div class="toc-tree">
+  <html>
+  <body><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../drivers_guide.html">no-OS drivers guide</a></li>
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1" checked=""/><div class="collapse"><a class="reference internal" href="../drivers_doc.html">no-OS drivers list</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="adxl355.html">ADXL355 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adxl38x.html">ADXL38x no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad405x.html">AD405X no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad7768.html">AD7768 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad7768-1.html">AD7768-1 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad796x.html">AD796X no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad9083.html">AD9083 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad9208.html">AD9208 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adm1177.html">ADM1177 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pulsar_adc.html">AD400X no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad9625.html">AD9625 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad74416h.html">AD74416H no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="axi_sysid.html">System ID (AXI_SYSID) no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max14914.html">MAX14914 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max14919.html">MAX14919 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max149x6.html">MAX149X6 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22190.html">MAX22190 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22196.html">MAX22196 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22200.html">MAX22200 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad8460.html">AD8460 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22017.html">MAX22017 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad3552r.html">AD3552R no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4030.html">ADF4030 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4368.html">ADF4368 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4377.html">ADF4377 No-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4382.html">ADF4382 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf5611.html">ADF5611 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admfm2000.html">ADMFM2000 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4350.html">ADF4350 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="imu.html">ADIS no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max25603.html">MAX25603 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ade7816.html">ADE7816 no-OS documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ade7913.html">ADE7913 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ade9113.html">ADE9113 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="madura.html">ADRV902x (Madura) no-OS Driver</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">ADRV9009 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc2983.html">LTC2983 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max31827.html">MAX31827 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max31855.html">MAX31855 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adt75.html">ADT75 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ades1754.html">ADES1754 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adp1050.html">ADP1050 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adp1055.html">ADP1055 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adp5055.html">ADP5055 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt3074.html">LT3074 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt7170.html">LT7170 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt7182s.html">LT7182S no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt8491.html">LT8491 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt8722.html">LT8722 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc2992.html">LTC2992 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc4162l.html">LTC4162L no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc4296.html">LTC4296 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc7841.html">LTC7841 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc7871.html">LTC7871 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltm4686.html">LTM4686 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltp8800.html">LTP8800 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max17851.html">MAX17851 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max42500.html">MAX42500 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad5293.html">AD5293 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adin1110.html">ADIN1110 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adxrs290.html">ADXRS290 no-OS Driver</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2"/><div class="collapse"><a class="reference internal" href="../projects_doc.html">no-OS projects list</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad469x_evb.html">AD469x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7091r8-sdz.html">AD7091R-2/-4/-8 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7606x-fmc.html">AD7606x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7616-st.html">AD7616 no-OS Example Project on SDP-K1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7768-1fmcz.html">AD7768-1 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad796x_fmcz.html">AD796x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/pulsar-adc.html">AD400x no-OS Example Project on ZED and SDP-K1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad9467.html">AD9467 no-OS Example project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad9081.html">ad9081 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad74416h.html">AD74416H no-OS Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adf4030.html">Evaluating the ADF4030</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adf4368.html">Evaluating the ADF4368</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adf4377_sdz.html">Evaluating the ADF4377 Wideband Synthesizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adf4382.html">ADF4382 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adf5611.html">Evaluating the ADF5611</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1646x.html">ADIS1646X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1647x.html">ADIS1647X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1650x.html">ADIS1650X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1654x.html">ADIS1654X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1655x.html">ADIS1655X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1657x.html">ADIS1657X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-ade7913.html">EVAL-ADE7913 no-OS Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-ade9430.html">EVAL-ADE9430 Sensor-to-Cloud no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adrv902x.html">adrv902x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adrv9001.html">ADRV9001 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/apard32690.html">AD-APARD32690-SL no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max14914.html">MAX14914 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max14919.html">MAX14919 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ades1754.html">Evaluating the EVAL-ADES1754</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adp1050.html">ADP1050 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adp1055.html">ADP1055 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adp5055.html">ADP5055 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/dc2703a.html">Evaluating the LT8491</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/lt3074.html">Evaluating the LT3074</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/lt7170.html">Evaluating the LT7170</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/lt7182s.html">Evaluating the LT7182S</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/lt8722.html">Evaluating the LT8722</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc4162l.html">Evaluating the LTC4162L</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc4296.html">LTC4296 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc7841.html">Evaluating the LTC7841</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc7871.html">Evaluating the LTC7871</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltm4686.html">Evaluating the LTM4686</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltp8800.html">Evaluating the LTP8800</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max42500.html">MAX42500 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-ad8460.html">Evaluating the EVAL-AD8460</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max22017.html">MAX22017 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad3552r_fmcz.html">EVAL-AD3552R no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc2983.html">Evaluating the LTC2983</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max31827-evkit.html">Evaluating the MAX31827</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adxrs290-pmdz.html">ADXRS290-PMDZ no-OS Project</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3" id="toctree-collapse-3"/><div class="collapse"><a class="reference internal" href="../build_guide.html">No-OS Build Guide</a><label for="toctree-collapse-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../build_guides/build_maxim.html">Maxim Build Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../build_guides/build_ftd2xx.html">Build against FTD2XX library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../build_guides/build_win.html">Windows Build Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../build_guides/build_mac.html">MAC Build Prerequisites</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to no-OS</a></li>
+</ul>
+</body>
+</html>
+
+</div>
+        </div>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body-header">
+    <nav class="breadcrumb">
+        <ol>
+          <li><a href="../drivers_doc.html">no-OS drivers list</a></li>
+          </ol>
+    </nav>
+  </div>
+
+          <div class="body" role="main">
+            
+  <section id="adrv9009-no-os-driver">
+<h1>ADRV9009 no-OS Driver<a class="headerlink" href="#adrv9009-no-os-driver" title="Link to this heading"></a></h1>
+<section id="supported-devices">
+<h2>Supported Devices<a class="headerlink" href="#supported-devices" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="icon adi reference external" href="https://www.analog.com/ADRV9009">ADRV9009</a></p></li>
+</ul>
+</section>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>The ADRV9009 is a highly integrated radio frequency (RF) agile
+transceiver offering dual transmitters and receivers, integrated
+synthesizers, and digital signal processing functions. The IC delivers a
+versatile combination of high performance and low power consumption
+demanded by 3G, 4G, and 5G macro cell time division duplex (TDD) base
+station applications. The receive path consists of two independent, wide
+bandwidth, direct conversion receivers with state-of-the-art dynamic
+range, and it supports a wide bandwidth, time-shared observation
+receiver (ORx) for use in TDD applications. The transmitters use an
+innovative direct conversion modulator that achieves high modulation
+accuracy with exceptionally low noise, while the fully integrated
+phase-locked loop (PLL) provides high performance, low power,
+fractional-N RF frequency synthesis for the transmitter (Tx) and
+receiver (Rx) signal paths.</p>
+</section>
+<section id="applications">
+<h2>Applications<a class="headerlink" href="#applications" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>3G, 4G, and 5G TDD macrocell base stations</p></li>
+<li><p>TDD active antenna systems</p></li>
+<li><p>Massive multiple input, multiple output (MIMO)</p></li>
+<li><p>Phased array radar</p></li>
+<li><p>Electronic warfare</p></li>
+<li><p>Military communications</p></li>
+<li><p>Portable test equipment</p></li>
+</ul>
+</section>
+<section id="device-configuration">
+<h2>Device Configuration<a class="headerlink" href="#device-configuration" title="Link to this heading"></a></h2>
+<section id="device-initialization-and-core-control">
+<h3>Device Initialization and Core Control<a class="headerlink" href="#device-initialization-and-core-control" title="Link to this heading"></a></h3>
+<p>Initialization functions allocate and initialize core data structures,
+set up SPI, clocks, and JESD204B settings, and parse user-provided or
+default AGC parameters. Key routines include:</p>
+<ul>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">adrv9009_init</span></code> – Allocates the RF PHY structure, copies</dt><dd><p>initialization parameters, and invokes helper routines such as AGC
+parameter parsing.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">adrv9009_setup</span></code> – Performs low‑level hardware initialization</dt><dd><p>including SPI configuration and clock descriptor setup for various
+sample clocks, while reading device revision and API versions.</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><code class="docutils literal notranslate"><span class="pre">adrv9009_post_setup</span></code> – Finalizes ADC/DAC configuration by</dt><dd><p>programming per‑channel conversion settings, updating DAC rate
+registers, and computing DAC clock frequency.</p>
+<p>Additional helper macros (e.g., __adrv9009_of_get_param and
+ADRV9009_OF_PROP) are used to apply default values when necessary.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="jesd204b-link-configuration-and-management">
+<h3>JESD204B Link Configuration and Management<a class="headerlink" href="#jesd204b-link-configuration-and-management" title="Link to this heading"></a></h3>
+<p>This function group is dedicated to setting up and monitoring the high‑speed
+JESD204B serial interface that connects the transceiver with downstream
+processing. These routines configure serializer/deserializer hardware,
+manage framer/deframer parameters, and enable SYSREF signals for proper
+synchronization. Notable functions include:</p>
+<ul>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">adrv9009_jesd204_link_init</span></code> – Initializes JESD204 links by</dt><dd><p>assigning lane mappings and calculating lane rates.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">TALISE_setupSerializers</span></code> or <code class="docutils literal notranslate"><span class="pre">TALISE_setupDeserializers</span></code> – Configure</dt><dd><p>serializer and deserializer settings such as pre‑emphasis and lane
+polarity.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">TALISE_setupJesd204bFramer</span></code> or <code class="docutils literal notranslate"><span class="pre">TALISE_setupJesd204bDeframer</span></code> –</dt><dd><p>Program framer/deframer parameters including bank IDs and SYSREF
+routing.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">adrv9009_jesd204_clks_enable</span></code> and <code class="docutils literal notranslate"><span class="pre">adrv9009_jesd204_link_enable</span></code></dt><dd><p>– Enable SYSREF signals and activate the JESD204B links.</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><code class="docutils literal notranslate"><span class="pre">adrv9009_jesd204_setup_stage1</span> <span class="pre">…</span> <span class="pre">stage5</span></code> – Execute a multi‑stage</dt><dd><p>state machine covering multi‑chip sync, ARM/stream processor binary
+loading, PLL lock verification, and calibration triggering.</p>
+<p>These routines combine low‑level SPI operations with integrated
+error handling to ensure robust JESD204B communication.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="automatic-gain-control-agc-configuration">
+<h3>Automatic Gain Control (AGC) Configuration<a class="headerlink" href="#automatic-gain-control-agc-configuration" title="Link to this heading"></a></h3>
+<p>AGC routines dynamically adjust signal strength to optimize performance
+under varying conditions. These functions set gain limits, adjust delay
+parameters, manage peak detection timing, and handle power measurement
+settings. Essential routines include:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">TALISE_setupRxAgc</span></code> and <code class="docutils literal notranslate"><span class="pre">TALISE_resetRxAgc</span></code> – Initialize and reset</dt><dd><p>the AGC for Rx channels by writing configuration values to device
+registers.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">TALISE_setupDualBandRxAgc</span></code> – Configure dual‑band AGC for Rx</dt><dd><p>channels when external LNAs are used, including setting 3.3V GPIO
+parameters for dual‑band LNA gains.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Readback functions such as <code class="docutils literal notranslate"><span class="pre">TALISE_getAgcCtrlRegisters</span></code>,</dt><dd><p><code class="docutils literal notranslate"><span class="pre">TALISE_getAgcPeakRegisters</span></code>, and <code class="docutils literal notranslate"><span class="pre">TALISE_getAgcPowerRegisters</span></code>
+provide monitoring capabilities.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">TALISE_setRxAgcMinMaxGainIndex</span></code> – Dynamically adjusts the gain</dt><dd><p>range for receive channels.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="transmit-tx-path-configuration">
+<h3>Transmit (Tx) Path Configuration<a class="headerlink" href="#transmit-tx-path-configuration" title="Link to this heading"></a></h3>
+<p>Tx configuration routines control output attenuation, DAC full‑scale
+settings, test tone generation via NCOs, and PA protection. This section
+enables fine‑grained manipulation of transmit signal characteristics.
+Key functions include:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">TALISE_setTxAttenuation</span></code> and <code class="docutils literal notranslate"><span class="pre">TALISE_getTxAttenuation</span></code> – Set or</dt><dd><p>retrieve Tx attenuation levels by converting milli‑dB values into
+register settings.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">TALISE_setTxAttenCtrlPin</span></code> and <code class="docutils literal notranslate"><span class="pre">TALISE_getTxAttenCtrlPin</span></code> – Manage</dt><dd><p>GPIO‑based controls for dynamic attenuation adjustments.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">TALISE_setDacFullScale</span></code> – Program the Tx DAC’s full‑scale value</dt><dd><p>before the ARM firmware is loaded.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">TALISE_txNcoShifterSet</span></code> and <code class="docutils literal notranslate"><span class="pre">TALISE_enableTxNco</span></code> – Configure the</dt><dd><p>on‑chip NCO for generating test tones with precise phase control.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">TALISE_setPaProtectionCfg</span></code>, <code class="docutils literal notranslate"><span class="pre">TALISE_getPaProtectionCfg</span></code>, and</dt><dd><p><code class="docutils literal notranslate"><span class="pre">TALISE_enablePaProtection</span></code> – Set PA protection thresholds and
+monitor power levels to prevent overdriving.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">TALISE_getTxSamplePower</span></code> – Read and convert raw ADC values to</dt><dd><p>dBFS for transmit power monitoring.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="receive-rx-path-and-data-formatting-configuration">
+<h3>Receive (Rx) Path and Data Formatting Configuration<a class="headerlink" href="#receive-rx-path-and-data-formatting-configuration" title="Link to this heading"></a></h3>
+<p>Rx configuration involves setting gain tables, controlling gain modes,
+and formatting ADC output for subsequent processing. This section
+provides routines for both manual and automated gain adjustments, as
+well as for selecting data output formats. Featured functions include:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">TALISE_programRxGainTable</span></code> and <code class="docutils literal notranslate"><span class="pre">TALISE_programOrxGainTable</span></code> –</dt><dd><p>Load gain table entries for normal and observation Rx channels,
+establishing front‑end, external, and digital gain settings.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">TALISE_setRxManualGain</span></code>, <code class="docutils literal notranslate"><span class="pre">TALISE_getRxGain</span></code>,</dt><dd><p><code class="docutils literal notranslate"><span class="pre">TALISE_setObsRxManualGain</span></code>, and <code class="docutils literal notranslate"><span class="pre">TALISE_getObsRxGain</span></code> – Enable
+and query manual gain modes.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">TALISE_setRxGainControlMode</span></code> – Select between manual gain control</dt><dd><p>and various AGC modes.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">TALISE_setRxDataFormat</span></code>, <code class="docutils literal notranslate"><span class="pre">TALISE_getRxDataFormat</span></code>, and</dt><dd><p><code class="docutils literal notranslate"><span class="pre">TALISE_getSlicerPosition</span></code> – Define the digital data output format,
+whether floating‑point or integer with slicer bits.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">TALISE_setRxGainCtrlPin</span></code> and <code class="docutils literal notranslate"><span class="pre">TALISE_getRxGainCtrlPin</span></code> – Allow</dt><dd><p>external gain control via GPIO, and
+<code class="docutils literal notranslate"><span class="pre">TALISE_setGainTableExtCtrlPins</span></code> maps GPIO outputs to the current
+gain index.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="calibration-and-tracking">
+<h3>Calibration and Tracking<a class="headerlink" href="#calibration-and-tracking" title="Link to this heading"></a></h3>
+<p>Calibration routines optimize performance across both the Tx and Rx
+paths by correcting DC offsets, IQ imbalances, and phase misalignments.
+This section is divided into initialization and continuous tracking
+calibrations. Core functions include:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">TALISE_runInitCals</span></code>, <code class="docutils literal notranslate"><span class="pre">TALISE_waitInitCals</span></code>,</dt><dd><p><code class="docutils literal notranslate"><span class="pre">TALISE_checkInitCalComplete</span></code>, <code class="docutils literal notranslate"><span class="pre">TALISE_abortInitCals</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">TALISE_getInitCalStatus</span></code> – Execute and verify the initial
+calibration process (including DC offset, LO leakage, and quadrature
+corrections).</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">TALISE_enableTrackingCals</span></code>, <code class="docutils literal notranslate"><span class="pre">TALISE_getEnabledTrackingCals</span></code>,</dt><dd><p><code class="docutils literal notranslate"><span class="pre">TALISE_getPendingTrackingCals</span></code>, <code class="docutils literal notranslate"><span class="pre">TALISE_rescheduleTrackingCal</span></code>,
+<code class="docutils literal notranslate"><span class="pre">TALISE_setAllTrackCalState</span></code>, and <code class="docutils literal notranslate"><span class="pre">TALISE_getAllTrackCalState</span></code> –
+Manage continuous tracking calibrations to adapt to changing
+operational conditions.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Status query functions like <code class="docutils literal notranslate"><span class="pre">TALISE_getTxLolStatus</span></code>,</dt><dd><p><code class="docutils literal notranslate"><span class="pre">TALISE_getTxQecStatus</span></code>, <code class="docutils literal notranslate"><span class="pre">TALISE_getRxQecStatus</span></code>,
+<code class="docutils literal notranslate"><span class="pre">TALISE_getOrxQecStatus</span></code>, and <code class="docutils literal notranslate"><span class="pre">TALISE_getRxHd2Status</span></code> provide
+detailed metrics on calibration performance.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="arm-processor-interface">
+<h3>ARM Processor Interface<a class="headerlink" href="#arm-processor-interface" title="Link to this heading"></a></h3>
+<p>The Talise transceiver integrates an embedded ARM processor to offload
+tasks such as calibration, digital processing, and system monitoring.
+The ARM interface provides functions for memory transfer, command
+execution, and debugging. Key routines include:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">TALISE_initArm</span></code>, <code class="docutils literal notranslate"><span class="pre">TALISE_writeArmProfile</span></code>,</dt><dd><p><code class="docutils literal notranslate"><span class="pre">TALISE_loadArmFromBinary</span></code>, and <code class="docutils literal notranslate"><span class="pre">TALISE_loadAdcProfiles</span></code> –
+Initialize the ARM processor by loading firmware and configuration
+profiles, setting DMA, and verifying firmware integrity.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">TALISE_readArmMem</span></code>, <code class="docutils literal notranslate"><span class="pre">TALISE_writeArmMem</span></code>,</dt><dd><p><code class="docutils literal notranslate"><span class="pre">TALISE_writeArmConfig</span></code>, and <code class="docutils literal notranslate"><span class="pre">TALISE_readArmConfig</span></code> – Perform
+low‑level memory operations using DMA and auto‑increment mechanisms.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">TALISE_sendArmCommand</span></code>, <code class="docutils literal notranslate"><span class="pre">TALISE_readArmCmdStatus</span></code>, and</dt><dd><p><code class="docutils literal notranslate"><span class="pre">TALISE_waitArmCmdStatus</span></code> – Facilitate a command-control interface
+via the ARM mailbox.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">TALISE_getArmVersion_v2</span></code> and <code class="docutils literal notranslate"><span class="pre">TALISE_verifyArmChecksum</span></code> –</dt><dd><p>Retrieve firmware version info and verify checksum integrity.
+Additional error handling functions such as
+<code class="docutils literal notranslate"><span class="pre">talGetArmErrorMessage</span></code> and <code class="docutils literal notranslate"><span class="pre">talArmCmdErrorHandler</span></code> ensure
+reliable ARM communication.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="hardware-abstraction-layer-hal">
+<h3>Hardware Abstraction Layer (HAL)<a class="headerlink" href="#hardware-abstraction-layer-hal" title="Link to this heading"></a></h3>
+<p>HAL functions provide a consistent interface for low‑level SPI
+operations and logging, abstracting the hardware details away from
+higher‑level configuration routines. These functions manage timeout
+settings, handle retries, and encapsulate register read/write
+operations. Core routines include:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">talSpiReadByte</span></code> and <code class="docutils literal notranslate"><span class="pre">talSpiWriteByte</span></code> – Handle single‑byte SPI</dt><dd><p>transactions with built‑in timeout and retry logic.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">talSpiReadBytes</span></code> and <code class="docutils literal notranslate"><span class="pre">talSpiWriteBytes</span></code> – Manage multi‑byte</dt><dd><p>buffer SPI transfers.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">talSpiReadField</span></code> and <code class="docutils literal notranslate"><span class="pre">talSpiWriteField</span></code> – Offer fine‑grained</dt><dd><p>access to specific bit fields within registers.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">talWriteToLog</span></code> – Integrate logging support via ADI HAL routines for</dt><dd><p>error and diagnostic tracking.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="gpio-configuration">
+<h3>GPIO Configuration<a class="headerlink" href="#gpio-configuration" title="Link to this heading"></a></h3>
+<p>GPIO configuration functions provide control over various pin operations
+used for SPI, external gain control, debug signal monitoring, and
+auxiliary interfacing. These functions are organized into logical
+groups:</p>
+<section id="low-voltage-3-3v-gpio-control">
+<h4>Low Voltage &amp; 3.3V GPIO Control<a class="headerlink" href="#low-voltage-3-3v-gpio-control" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">TALISE_setGpioOe</span></code> and <code class="docutils literal notranslate"><span class="pre">TALISE_getGpioOe</span></code> – Set and read output</dt><dd><p>enable settings for low‑voltage GPIOs.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">TALISE_setGpioSourceCtrl</span></code> and <code class="docutils literal notranslate"><span class="pre">TALISE_getGpioSourceCtrl</span></code> –</dt><dd><p>Configure multiplexer selections for low‑voltage GPIOs.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">TALISE_setGpioPinLevel</span></code>, <code class="docutils literal notranslate"><span class="pre">TALISE_getGpioPinLevel</span></code>, and</dt><dd><p><code class="docutils literal notranslate"><span class="pre">TALISE_getGpioSetLevel</span></code> – Drive and verify pin levels in bit‑bang
+mode; similar functions with the 3v3 prefix handle 3.3V GPIOs.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+</section>
+<section id="monitor-interrupt-and-auxiliary-interfaces">
+<h3>Monitor, Interrupt, and Auxiliary Interfaces<a class="headerlink" href="#monitor-interrupt-and-auxiliary-interfaces" title="Link to this heading"></a></h3>
+<p>These functions cover the routing of debug signals, interrupt management,
+and auxiliary DAC/ADC operations. Key routines include:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">TALISE_setGpioMonitorOut</span></code> and <code class="docutils literal notranslate"><span class="pre">TALISE_getGpioMonitorOut</span></code> – Route</dt><dd><p>internal signals for external debugging.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">TALISE_setGpIntMask</span></code>, <code class="docutils literal notranslate"><span class="pre">TALISE_getGpIntMask</span></code>,</dt><dd><p><code class="docutils literal notranslate"><span class="pre">TALISE_getGpIntStatus</span></code>, and <code class="docutils literal notranslate"><span class="pre">TALISE_gpIntHandler</span></code> – Manage
+general purpose interrupts.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">TALISE_setupAuxDacs</span></code> and <code class="docutils literal notranslate"><span class="pre">TALISE_writeAuxDac</span></code> – Configure and</dt><dd><p>update auxiliary DAC outputs.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">TALISE_setAuxAdcPinModeGpio</span></code>, <code class="docutils literal notranslate"><span class="pre">TALISE_getAuxAdcPinModeGpio</span></code>,</dt><dd><p><code class="docutils literal notranslate"><span class="pre">TALISE_startAuxAdc</span></code>, and <code class="docutils literal notranslate"><span class="pre">TALISE_readAuxAdc</span></code> – Set up and read
+from the auxiliary ADC.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">TALISE_setSpi2Enable</span></code> and <code class="docutils literal notranslate"><span class="pre">TALISE_getSpi2Enable</span></code> – Control the</dt><dd><p>secondary SPI interface used for Tx attenuation.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">TALISE_getTemperature</span></code> – Retrieve on‑chip temperature sensor data</dt><dd><p>via the ARM processor, with <code class="docutils literal notranslate"><span class="pre">talGetGpioErrorMessage</span></code> providing
+human‑readable error descriptions.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="radio-control-and-pin-management">
+<h3>Radio Control and Pin Management<a class="headerlink" href="#radio-control-and-pin-management" title="Link to this heading"></a></h3>
+<p>Radio control functions integrate firmware streaming, power management,
+and frequency configuration to enable dynamic adaptation of the
+transceiver. These routines handle control pin settings, LO
+configuration, and mapping between transmit and observation channels.
+Featured functions include:</p>
+<ul>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">TALISE_loadStreamFromBinary</span></code> – Load the stream processor’s firmware</dt><dd><p>image.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">TALISE_setArmGpioPins</span></code> – Configure ARM‑assigned GPIOs for</dt><dd><p>time‑division duplex and radio control purposes.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">TALISE_setRadioCtlPinMode</span></code> and <code class="docutils literal notranslate"><span class="pre">TALISE_getRadioCtlPinMode</span></code> – Set</dt><dd><p>and query radio control pin modes.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">TALISE_setOrxLoCfg</span></code> and <code class="docutils literal notranslate"><span class="pre">TALISE_getOrxLoCfg</span></code> – Configure</dt><dd><p>observation receiver LO settings.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">TALISE_radioOn</span></code>, <code class="docutils literal notranslate"><span class="pre">TALISE_radioOff</span></code>, and <code class="docutils literal notranslate"><span class="pre">TALISE_getRadioState</span></code></dt><dd><p>– Control and monitor the overall radio power state.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">TALISE_setRxTxEnable</span></code> and <code class="docutils literal notranslate"><span class="pre">TALISE_getRxTxEnable</span></code> – Manage signal</dt><dd><p>path enablement and channel mapping.</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><code class="docutils literal notranslate"><span class="pre">TALISE_setTxToOrxMapping</span></code> – Map Tx channels to ORx channels for</dt><dd><p>calibration purposes.</p>
+<p>Additional routines control RF PLL frequency, set loop filters,
+manage frequency hopping (e.g., <code class="docutils literal notranslate"><span class="pre">TALISE_setFhmConfig</span></code>,
+<code class="docutils literal notranslate"><span class="pre">TALISE_setFhmMode</span></code>, <code class="docutils literal notranslate"><span class="pre">TALISE_setFhmHop</span></code>, etc.), and adjust
+external LO outputs.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+</section>
+<section id="driver-initialization-example">
+<h2>Driver Initialization Example<a class="headerlink" href="#driver-initialization-example" title="Link to this heading"></a></h2>
+<div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;no_os_error.h&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;no_os_alloc.h&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;no_os_delay.h&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;adrv9009.h&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;talise_types.h&quot;</span>
+
+<span class="cm">/* Platform-specific objects defined elsewhere */</span>
+<span class="k">extern</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">no_os_spi_init_param</span><span class="w"> </span><span class="n">adrv9009_spi_ip</span><span class="p">;</span>
+<span class="k">extern</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">no_os_clk_desc</span><span class="w"> </span><span class="o">*</span><span class="n">dev_clk</span><span class="p">;</span>
+<span class="k">extern</span><span class="w"> </span><span class="n">taliseDevice_t</span><span class="w"> </span><span class="o">*</span><span class="n">adrv9009_device_ptr</span><span class="p">;</span>
+
+<span class="cm">/* Example RX AGC configuration parameters; populate with valid values */</span>
+<span class="n">taliseAgcCfg_t</span><span class="w"> </span><span class="n">rxAgcCfg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">   </span><span class="p">.</span><span class="n">agcPeak</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="p">.</span><span class="n">agcUnderRangeLowInterval_ns</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="mi">205</span><span class="p">,</span>
+<span class="w">      </span><span class="p">.</span><span class="n">agcUnderRangeMidInterval</span><span class="w">           </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>
+<span class="w">      </span><span class="p">.</span><span class="n">agcUnderRangeHighInterval</span><span class="w">          </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span>
+<span class="w">      </span><span class="p">.</span><span class="n">apdHighThresh</span><span class="w">                      </span><span class="o">=</span><span class="w"> </span><span class="mi">39</span><span class="p">,</span>
+<span class="w">      </span><span class="p">.</span><span class="n">apdLowGainModeHighThresh</span><span class="w">           </span><span class="o">=</span><span class="w"> </span><span class="mi">36</span><span class="p">,</span>
+<span class="w">      </span><span class="p">.</span><span class="n">apdLowThresh</span><span class="w">                       </span><span class="o">=</span><span class="w"> </span><span class="mi">23</span><span class="p">,</span>
+<span class="w">      </span><span class="p">.</span><span class="n">apdLowGainModeLowThresh</span><span class="w">            </span><span class="o">=</span><span class="w"> </span><span class="mi">19</span><span class="p">,</span>
+<span class="w">      </span><span class="p">.</span><span class="n">apdUpperThreshPeakExceededCnt</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span>
+<span class="w">      </span><span class="p">.</span><span class="n">apdLowerThreshPeakExceededCnt</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span>
+<span class="w">      </span><span class="p">.</span><span class="n">apdGainStepAttack</span><span class="w">                  </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span>
+<span class="w">      </span><span class="p">.</span><span class="n">apdGainStepRecovery</span><span class="w">                </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span>
+<span class="w">   </span><span class="p">},</span>
+<span class="w">   </span><span class="p">.</span><span class="n">agcPower</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="p">.</span><span class="n">powerEnableMeasurement</span><span class="w">             </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">      </span><span class="p">.</span><span class="n">powerUseRfirOut</span><span class="w">                    </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">      </span><span class="p">.</span><span class="n">powerUseBBDC2</span><span class="w">                      </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">      </span><span class="p">.</span><span class="n">underRangeHighPowerThresh</span><span class="w">          </span><span class="o">=</span><span class="w"> </span><span class="mi">9</span><span class="p">,</span>
+<span class="w">      </span><span class="p">.</span><span class="n">underRangeLowPowerThresh</span><span class="w">           </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>
+<span class="w">      </span><span class="p">.</span><span class="n">underRangeHighPowerGainStepRecovery</span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span>
+<span class="w">      </span><span class="p">.</span><span class="n">underRangeLowPowerGainStepRecovery</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span>
+<span class="w">      </span><span class="p">.</span><span class="n">powerMeasurementDuration</span><span class="w">           </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span>
+<span class="w">      </span><span class="p">.</span><span class="n">rx1TddPowerMeasDuration</span><span class="w">            </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span>
+<span class="w">      </span><span class="p">.</span><span class="n">rx1TddPowerMeasDelay</span><span class="w">               </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">      </span><span class="p">.</span><span class="n">rx2TddPowerMeasDuration</span><span class="w">            </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span>
+<span class="w">      </span><span class="p">.</span><span class="n">rx2TddPowerMeasDelay</span><span class="w">               </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">      </span><span class="p">.</span><span class="n">upper0PowerThresh</span><span class="w">                  </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>
+<span class="w">      </span><span class="p">.</span><span class="n">upper1PowerThresh</span><span class="w">                  </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">      </span><span class="p">.</span><span class="n">powerLogShift</span><span class="w">                      </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">   </span><span class="p">},</span>
+<span class="w">   </span><span class="p">.</span><span class="n">agcPeakWaitTime</span><span class="w">                     </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span>
+<span class="w">   </span><span class="p">.</span><span class="n">agcRx1MaxGainIndex</span><span class="w">                  </span><span class="o">=</span><span class="w"> </span><span class="mi">255</span><span class="p">,</span>
+<span class="w">   </span><span class="p">.</span><span class="n">agcRx1MinGainIndex</span><span class="w">                  </span><span class="o">=</span><span class="w"> </span><span class="mi">195</span><span class="p">,</span>
+<span class="w">   </span><span class="p">.</span><span class="n">agcRx2MaxGainIndex</span><span class="w">                  </span><span class="o">=</span><span class="w"> </span><span class="mi">255</span><span class="p">,</span>
+<span class="w">   </span><span class="p">.</span><span class="n">agcRx2MinGainIndex</span><span class="w">                  </span><span class="o">=</span><span class="w"> </span><span class="mi">195</span><span class="p">,</span>
+<span class="w">   </span><span class="p">.</span><span class="n">agcGainUpdateCounter_us</span><span class="w">             </span><span class="o">=</span><span class="w"> </span><span class="mi">250</span><span class="p">,</span>
+<span class="w">   </span><span class="p">.</span><span class="n">agcRx1AttackDelay</span><span class="w">                   </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span>
+<span class="w">   </span><span class="p">.</span><span class="n">agcRx2AttackDelay</span><span class="w">                   </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span>
+<span class="w">   </span><span class="p">.</span><span class="n">agcSlowLoopSettlingDelay</span><span class="w">            </span><span class="o">=</span><span class="w"> </span><span class="mi">16</span><span class="p">,</span>
+<span class="w">   </span><span class="p">.</span><span class="n">agcLowThreshPreventGain</span><span class="w">             </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">   </span><span class="p">.</span><span class="n">agcChangeGainIfThreshHigh</span><span class="w">           </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">   </span><span class="p">.</span><span class="n">agcPeakThreshGainControlMode</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">   </span><span class="p">.</span><span class="n">agcResetOnRxon</span><span class="w">                      </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">   </span><span class="p">.</span><span class="n">agcEnableSyncPulseForGainCounter</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">   </span><span class="p">.</span><span class="n">agcEnableIp3OptimizationThresh</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">   </span><span class="p">.</span><span class="n">ip3OverRangeThresh</span><span class="w">                  </span><span class="o">=</span><span class="w"> </span><span class="mi">31</span><span class="p">,</span>
+<span class="w">   </span><span class="p">.</span><span class="n">ip3OverRangeThreshIndex</span><span class="w">             </span><span class="o">=</span><span class="w"> </span><span class="mi">246</span><span class="p">,</span>
+<span class="w">   </span><span class="p">.</span><span class="n">ip3PeakExceededCnt</span><span class="w">                  </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span>
+<span class="w">   </span><span class="p">.</span><span class="n">agcEnableFastRecoveryLoop</span><span class="w">           </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
+<span class="p">};</span>
+
+<span class="n">adrv9009_init_param</span><span class="w"> </span><span class="n">init_param</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">   </span><span class="p">.</span><span class="n">spi_init</span><span class="w">          </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">adrv9009_spi_ip</span><span class="p">,</span>
+<span class="w">   </span><span class="p">.</span><span class="n">dev_clk</span><span class="w">           </span><span class="o">=</span><span class="w"> </span><span class="n">dev_clk</span><span class="p">,</span>
+<span class="w">   </span><span class="p">.</span><span class="n">adrv9009_device</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">adrv9009_device_ptr</span><span class="p">,</span>
+<span class="w">   </span><span class="p">.</span><span class="n">streamImageFile</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;stream.bin&quot;</span><span class="p">,</span>
+<span class="w">   </span><span class="p">.</span><span class="n">armImageFile</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;arm.bin&quot;</span><span class="p">,</span>
+<span class="w">   </span><span class="p">.</span><span class="n">rxAgcConfig_init_param</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">rxAgcCfg</span><span class="p">,</span>
+<span class="w">   </span><span class="p">.</span><span class="n">trx_lo_frequency</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mi">2400000000ULL</span><span class="p">,</span>
+<span class="w">   </span><span class="p">.</span><span class="n">tx_pa_protection</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="p">.</span><span class="n">tx1PowerThreshold</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4096</span><span class="p">,</span>
+<span class="w">      </span><span class="p">.</span><span class="n">tx2PowerThreshold</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4096</span><span class="p">,</span>
+<span class="w">      </span><span class="p">.</span><span class="n">tx1PeakThreshold</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mi">128</span><span class="p">,</span>
+<span class="w">      </span><span class="p">.</span><span class="n">tx2PeakThreshold</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mi">128</span><span class="p">,</span>
+<span class="w">   </span><span class="p">}</span>
+<span class="p">};</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">adrv9009_rf_phy</span><span class="w"> </span><span class="o">*</span><span class="n">phy</span><span class="p">;</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span>
+
+<span class="cm">/* Initialize the ADRV9009 device */</span>
+<span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">adrv9009_init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">phy</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">init_param</span><span class="p">);</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">   </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;ADRV9009 initialization failed: %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ret</span><span class="p">);</span>
+<span class="w">   </span><span class="k">goto</span><span class="w"> </span><span class="n">init_error</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">&quot;ADRV9009 initialization successful</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+
+<span class="cm">/* Set AGC min/max gain index for RX1 */</span>
+<span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TALISE_setRxAgcMinMaxGainIndex</span><span class="p">(</span><span class="n">phy</span><span class="o">-&gt;</span><span class="n">talise</span><span class="p">,</span><span class="w"> </span><span class="n">TAL_RX1</span><span class="p">,</span><span class="w"> </span><span class="mi">195</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">);</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">   </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Failed to set RX1 AGC min/max gain index: %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ret</span><span class="p">);</span>
+<span class="w">   </span><span class="k">goto</span><span class="w"> </span><span class="n">init_error</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* Read back AGC control registers */</span>
+<span class="n">taliseAgcCtrl_t</span><span class="w"> </span><span class="n">agc_ctrl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+<span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TALISE_getAgcCtrlRegisters</span><span class="p">(</span><span class="n">phy</span><span class="o">-&gt;</span><span class="n">talise</span><span class="p">,</span><span class="w"> </span><span class="n">TAL_RX1</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">agc_ctrl</span><span class="p">);</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">   </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Failed to read RX1 AGC control registers: %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ret</span><span class="p">);</span>
+<span class="w">   </span><span class="k">goto</span><span class="w"> </span><span class="n">init_error</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* Reset AGC for RX1 */</span>
+<span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TALISE_resetRxAgc</span><span class="p">(</span><span class="n">phy</span><span class="o">-&gt;</span><span class="n">talise</span><span class="p">,</span><span class="w"> </span><span class="n">TAL_RX1</span><span class="p">);</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">   </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Failed to reset RX1 AGC: %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ret</span><span class="p">);</span>
+<span class="w">   </span><span class="k">goto</span><span class="w"> </span><span class="n">init_error</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* Enable radio */</span>
+<span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TALISE_radioOn</span><span class="p">(</span><span class="n">phy</span><span class="o">-&gt;</span><span class="n">talise</span><span class="p">);</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">   </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Failed to turn radio on: %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ret</span><span class="p">);</span>
+<span class="w">   </span><span class="k">goto</span><span class="w"> </span><span class="n">init_error</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* Set Tx attenuation for channel 1 */</span>
+<span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TALISE_setTxAttenuation</span><span class="p">(</span><span class="n">phy</span><span class="o">-&gt;</span><span class="n">talise</span><span class="p">,</span><span class="w"> </span><span class="n">TAL_TX1</span><span class="p">,</span><span class="w"> </span><span class="mi">10000</span><span class="p">);</span><span class="w"> </span><span class="cm">/* 10 dB */</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">   </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Failed to set TX1 attenuation: %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ret</span><span class="p">);</span>
+<span class="w">   </span><span class="k">goto</span><span class="w"> </span><span class="n">init_error</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* Get temperature */</span>
+<span class="kt">int16_t</span><span class="w"> </span><span class="n">temp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="cm">/* Initialize to a default value */</span>
+<span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TALISE_getTemperature</span><span class="p">(</span><span class="n">phy</span><span class="o">-&gt;</span><span class="n">talise</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">temp</span><span class="p">);</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">   </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Failed to read temperature: %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ret</span><span class="p">);</span>
+<span class="w">   </span><span class="k">goto</span><span class="w"> </span><span class="n">init_error</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">&quot;Device temperature: %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">temp</span><span class="p">);</span>
+
+<span class="n">printf</span><span class="p">(</span><span class="s">&quot;AGC configuration and queries successful</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="k">goto</span><span class="w"> </span><span class="n">exit</span><span class="p">;</span>
+
+<span class="nl">init_error</span><span class="p">:</span>
+<span class="w">   </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Error encountered during ADRV9009 initialization or AGC configuration</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+
+<span class="nl">exit</span><span class="p">:</span>
+<span class="w">   </span><span class="p">;</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+          </div>
+              <div class="related">
+                &nbsp;
+    <a href="madura.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">ADRV902x (Madura) no-OS Driver</a>
+    <a href="ltc2983.html" title="Next document (Alt+Shift+RightArrow)" class="next">LTC2983 no-OS driver</a>
+              </div>
+          
+        </div>
+      </div>
+  </div>
+
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
+    <footer>
+      &#169;2023-2024, Analog Devices, Inc.
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
+</html>

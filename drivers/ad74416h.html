@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>AD74416H no-OS Driver &#8212; no-OS  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="../_static/app.min.css?v=25ed7d6a" />
+    <script defer="" src="../_static/app.umd.js?v=80d097f0"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="System ID (AXI_SYSID) no-OS Driver" href="axi_sysid.html" />
+    <link rel="prev" title="AD9625 no-OS Driver" href="ad9625.html" />
+   
+  
+  <meta name="repository" content="no-OS">
+  <meta name="version" content="">
+  
+    <meta name="page_source_suffix" content=".rst">
+  
+  
+
+
+<style>
+  body {
+    
+  }
+
+  body.dark {
+    
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body:not(.light) {
+      
+    }
+  }
+</style>
+  </head><body>
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
+  <input type="checkbox" id="input-show-repotoc">
+
+  
+  <div class="search-area">
+    <form action="" method="get">
+      <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+      <button class="icon"></button>
+    </form>
+  </div>
+  
+
+  <header>
+    <div id="left">
+      <label id="show-sidebar" class="icon" for="input-show-toc" title="Show/hide index"></label>
+    </div>
+    <div id="right">
+      <span>
+        <a id="logo-org" href="https://analog.com"></a>
+        <div class="vertical-divider"></div>
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
+        <a id="logo" href="../index.html">
+          <div>no-OS</div>
+        </a>
+      </span>
+      <span class="reverse">
+        <label id="show-localtoc" class="icon" for="input-show-localtoc" title="Show/hide contents"></label>
+      </span>
+    </div>
+  </header>
+
+
+  <div class="repotoc-tree overlay">
+    <root>
+  <a href="../index.html" class="current">no-OS</a>
+</root>
+
+  </div>
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div>
+          <div class="localtoc-header"></div>
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">AD74416H no-OS Driver</a><ul>
+<li><a class="reference internal" href="#supported-devices">Supported Devices</a></li>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#applications">Applications</a></li>
+<li><a class="reference internal" href="#operation-modes">Operation Modes</a></li>
+<li><a class="reference internal" href="#device-configuration">Device Configuration</a><ul>
+<li><a class="reference internal" href="#initialization-and-deinitialization">Initialization and Deinitialization</a></li>
+<li><a class="reference internal" href="#register-access-functions">Register Access Functions</a></li>
+<li><a class="reference internal" href="#dac-conversion-and-channel-output-configuration">DAC Conversion and Channel Output Configuration</a></li>
+<li><a class="reference internal" href="#adc-configuration-and-conversion-functions">ADC Configuration and Conversion Functions</a></li>
+<li><a class="reference internal" href="#feedback-rtd-and-open-circuit-detection-configuration">Feedback, RTD, and Open-Circuit Detection Configuration</a></li>
+<li><a class="reference internal" href="#digital-i-o-and-gpio-configuration">Digital I/O and GPIO Configuration</a></li>
+<li><a class="reference internal" href="#diagnostic-and-live-status-functions">Diagnostic and Live Status Functions</a></li>
+<li><a class="reference internal" href="#power-and-thermal-management">Power and Thermal Management</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#driver-initialization-example">Driver Initialization Example</a></li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
+  
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+    <a id="no-logo" href="../index.html">
+      no-OS
+    </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
+All content
+</label>
+<label id="show-toc" for="input-switch-toc">
+Content on this topic
+</label>
+<div class="repotoc-tree">
+  <root>
+  <a href="../index.html" class="current">no-OS</a>
+</root>
+
+</div>
+<div class="toc-tree">
+  <html>
+  <body><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../drivers_guide.html">no-OS drivers guide</a></li>
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1" checked=""/><div class="collapse"><a class="reference internal" href="../drivers_doc.html">no-OS drivers list</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="adxl355.html">ADXL355 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adxl38x.html">ADXL38x no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad405x.html">AD405X no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad7768.html">AD7768 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad7768-1.html">AD7768-1 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad796x.html">AD796X no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad9083.html">AD9083 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad9208.html">AD9208 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adm1177.html">ADM1177 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pulsar_adc.html">AD400X no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad9625.html">AD9625 no-OS Driver</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">AD74416H no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="axi_sysid.html">System ID (AXI_SYSID) no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max14914.html">MAX14914 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max14919.html">MAX14919 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max149x6.html">MAX149X6 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22190.html">MAX22190 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22196.html">MAX22196 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22200.html">MAX22200 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad8460.html">AD8460 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22017.html">MAX22017 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad3552r.html">AD3552R no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4030.html">ADF4030 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4368.html">ADF4368 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4377.html">ADF4377 No-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4382.html">ADF4382 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf5611.html">ADF5611 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admfm2000.html">ADMFM2000 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4350.html">ADF4350 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="imu.html">ADIS no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max25603.html">MAX25603 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ade7816.html">ADE7816 no-OS documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ade7913.html">ADE7913 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ade9113.html">ADE9113 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="madura.html">ADRV902x (Madura) no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="talise.html">ADRV9009 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc2983.html">LTC2983 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max31827.html">MAX31827 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max31855.html">MAX31855 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adt75.html">ADT75 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ades1754.html">ADES1754 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adp1050.html">ADP1050 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adp1055.html">ADP1055 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adp5055.html">ADP5055 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt3074.html">LT3074 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt7170.html">LT7170 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt7182s.html">LT7182S no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt8491.html">LT8491 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt8722.html">LT8722 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc2992.html">LTC2992 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc4162l.html">LTC4162L no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc4296.html">LTC4296 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc7841.html">LTC7841 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc7871.html">LTC7871 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltm4686.html">LTM4686 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltp8800.html">LTP8800 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max17851.html">MAX17851 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max42500.html">MAX42500 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad5293.html">AD5293 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adin1110.html">ADIN1110 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adxrs290.html">ADXRS290 no-OS Driver</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2"/><div class="collapse"><a class="reference internal" href="../projects_doc.html">no-OS projects list</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad469x_evb.html">AD469x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7091r8-sdz.html">AD7091R-2/-4/-8 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7606x-fmc.html">AD7606x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7616-st.html">AD7616 no-OS Example Project on SDP-K1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7768-1fmcz.html">AD7768-1 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad796x_fmcz.html">AD796x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/pulsar-adc.html">AD400x no-OS Example Project on ZED and SDP-K1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad9467.html">AD9467 no-OS Example project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad9081.html">ad9081 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad74416h.html">AD74416H no-OS Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adf4030.html">Evaluating the ADF4030</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adf4368.html">Evaluating the ADF4368</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adf4377_sdz.html">Evaluating the ADF4377 Wideband Synthesizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adf4382.html">ADF4382 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adf5611.html">Evaluating the ADF5611</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1646x.html">ADIS1646X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1647x.html">ADIS1647X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1650x.html">ADIS1650X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1654x.html">ADIS1654X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1655x.html">ADIS1655X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1657x.html">ADIS1657X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-ade7913.html">EVAL-ADE7913 no-OS Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-ade9430.html">EVAL-ADE9430 Sensor-to-Cloud no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adrv902x.html">adrv902x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adrv9001.html">ADRV9001 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/apard32690.html">AD-APARD32690-SL no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max14914.html">MAX14914 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max14919.html">MAX14919 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ades1754.html">Evaluating the EVAL-ADES1754</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adp1050.html">ADP1050 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adp1055.html">ADP1055 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adp5055.html">ADP5055 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/dc2703a.html">Evaluating the LT8491</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/lt3074.html">Evaluating the LT3074</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/lt7170.html">Evaluating the LT7170</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/lt7182s.html">Evaluating the LT7182S</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/lt8722.html">Evaluating the LT8722</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc4162l.html">Evaluating the LTC4162L</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc4296.html">LTC4296 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc7841.html">Evaluating the LTC7841</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc7871.html">Evaluating the LTC7871</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltm4686.html">Evaluating the LTM4686</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltp8800.html">Evaluating the LTP8800</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max42500.html">MAX42500 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-ad8460.html">Evaluating the EVAL-AD8460</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max22017.html">MAX22017 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad3552r_fmcz.html">EVAL-AD3552R no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc2983.html">Evaluating the LTC2983</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max31827-evkit.html">Evaluating the MAX31827</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adxrs290-pmdz.html">ADXRS290-PMDZ no-OS Project</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3" id="toctree-collapse-3"/><div class="collapse"><a class="reference internal" href="../build_guide.html">No-OS Build Guide</a><label for="toctree-collapse-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../build_guides/build_maxim.html">Maxim Build Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../build_guides/build_ftd2xx.html">Build against FTD2XX library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../build_guides/build_win.html">Windows Build Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../build_guides/build_mac.html">MAC Build Prerequisites</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to no-OS</a></li>
+</ul>
+</body>
+</html>
+
+</div>
+        </div>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body-header">
+    <nav class="breadcrumb">
+        <ol>
+          <li><a href="../drivers_doc.html">no-OS drivers list</a></li>
+          </ol>
+    </nav>
+  </div>
+
+          <div class="body" role="main">
+            
+  <section id="ad74416h-no-os-driver">
+<h1>AD74416H no-OS Driver<a class="headerlink" href="#ad74416h-no-os-driver" title="Link to this heading"></a></h1>
+<section id="supported-devices">
+<h2>Supported Devices<a class="headerlink" href="#supported-devices" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD74416H">AD74416H</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD74414H">AD74414H</a></p></li>
+</ul>
+</section>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>The AD74416H is a quad-channel, software-configurable input and output
+device designed for industrial control applications, providing a wide
+range of use cases integrated on a single chip. It features quad-channel
+software-configurable input and output that supports analog
+input/output, digital input/output, current measurement capability, and
+temperature sensor measurements through a single SPI interface. The
+device implements adaptive power switching, which reduces overall power
+dissipation by 40%, thereby optimizing performance and thermal
+management. Additionally, it incorporates a 16-bit monotonic DAC per
+channel and a 24-bit, Σ-∆ ADC along with an integrated HART modem per
+channel, offering versatile and reliable communication in demanding
+environments.</p>
+</section>
+<section id="applications">
+<h2>Applications<a class="headerlink" href="#applications" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Industrial control systems</p></li>
+<li><p>Process control</p></li>
+<li><p>Factory automation</p></li>
+</ul>
+</section>
+<section id="operation-modes">
+<h2>Operation Modes<a class="headerlink" href="#operation-modes" title="Link to this heading"></a></h2>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>Mode Name</p></td>
+<td><p>Description</p></td>
+<td><p>Configuration Bits</p></td>
+<td><p>Typical Use Case</p></td>
+</tr>
+<tr class="row-even"><td><p>AD74416H_HIGH_Z</p></td>
+<td><p>Puts the channel into a
+high impedance state,
+effectively disconnecting
+it from any active
+drive signals.</p></td>
+<td><p>0x0 or
+AD74416H_HIGH_Z (via
+CH_FUNC_SETUP mask)</p></td>
+<td><p>Safely disabling a
+channel; sensor
+isolation and
+transition between
+active configurations.</p></td>
+</tr>
+<tr class="row-odd"><td><p>AD74416H_VOLTAGE_OUT</p></td>
+<td><p>Configures the channel
+for analog output by
+converting a provided
+millivolt value to a
+corresponding DAC code.</p></td>
+<td><p>0x1 (set in
+CH_FUNC_SETUP);
+optionally enables
+VOUT_4W_EN for 4-wire
+mode</p></td>
+<td><p>Driving loads requiring
+precise voltage levels
+(e.g., analog signal
+generation, actuator
+control, instrumentation</p></td>
+</tr>
+<tr class="row-even"><td><p>AD74416H_CURRENT_OUT</p></td>
+<td><p>Sets the channel to
+drive a constant current
+output. In some
+configurations (e.g.,
+with HART support)
+additional bits (like
+SLEW_EN) are required.</p></td>
+<td><p>0x2 (via CH_FUNC_SETUP)</p></td>
+<td><p>Driving devices such as
+LEDs and motors that
+require a stable,
+accurate current signal.</p></td>
+</tr>
+<tr class="row-odd"><td><p>AD74416H_VOLTAGE_IN</p></td>
+<td><p>Uses the channel as an
+ADC input to measure
+incoming voltage levels.
+The internal ADC is
+configured with the
+proper range (typically
+0V to 12V or bipolar
+ranges).</p></td>
+<td><p>0x3 (via CH_FUNC_SETUP)</p></td>
+<td><p>Acquiring analog voltage
+measurements from
+sensors in data
+acquisition systems.</p></td>
+</tr>
+<tr class="row-even"><td><p>AD74416H_CURRENT_IN_EXT</p></td>
+<td><p>Configures the channel
+to measure externally
+provided current, with
+the internal ADC
+digitizing the voltage
+across an internal
+sensing resistor.</p></td>
+<td><p>0x4 (via CH_FUNC_SETUP)</p></td>
+<td><p>Measuring current from
+external sensors or
+sources where the
+current-sensing path is
+externally powered.</p></td>
+</tr>
+<tr class="row-odd"><td><p>AD74416H_CURRENT_IN_LOOP</p></td>
+<td><p>Selects the internal
+loopback measurement
+mode for current, where
+the channel both
+sources and measures
+current for self-
+calibration or testing.</p></td>
+<td><p>0x5 (via CH_FUNC_SETUP)</p></td>
+<td><p>On-board current
+loopback tests and
+calibration routines.</p></td>
+</tr>
+<tr class="row-even"><td><p>AD74416H_RESISTANCE</p></td>
+<td><p>Enables resistance
+measurement by
+leveraging internal
+excitation and sensing
+circuitry. Variants
+(e.g., 3-wire or 2-wire
+RTD measurements) may
+be applied for accurate
+lead compensation.</p></td>
+<td><p>0x7 (via CH_FUNC_SETUP)</p></td>
+<td><p>Resistance sensing for
+circuit diagnostics,
+RTD sensor measurements,
+or component
+characterization.</p></td>
+</tr>
+<tr class="row-odd"><td><p>AD74416H_DIGITAL_INPUT</p></td>
+<td><p>Sets the channel as a
+digital input for
+reading logic-level
+signals. Additional
+configuration (such as
+debounce or diagnostic
+detection) may be
+available in extended
+designs.</p></td>
+<td><p>0x8 (via CH_FUNC_SETUP)</p></td>
+<td><p>Monitoring digital
+sensor outputs, user
+inputs, or interfacing
+with control logic.</p></td>
+</tr>
+<tr class="row-even"><td><p>AD74416H_DIGITAL_INPUT
+_LOOP</p></td>
+<td><p>Configures the channel
+for digital input
+loopback operation,
+enabling internal
+diagnostics and self-
+test mechanisms.</p></td>
+<td><p>0x9 (via CH_FUNC_SETUP)</p></td>
+<td><p>System integrity checks
+and internal digital I/O
+loopback tests.</p></td>
+</tr>
+<tr class="row-odd"><td><p>AD74416H_CURRENT_OUT
+_HART</p></td>
+<td><p>Adjusts the current
+output mode for HART-
+enabled applications—
+ensuring that the
+current drive meets the
+protocol’s requirements.</p></td>
+<td><p>0x10 (via CH_FUNC_SETUP)
+may require SLEW_EN bit</p></td>
+<td><p>Industrial process
+control applications
+where HART communication
+protocols are used for
+enhanced device
+interfacing.</p></td>
+</tr>
+<tr class="row-even"><td><p>AD74416H_CURRENT_IN_EXT
+_HART</p></td>
+<td><p>Provides an externally
+powered current
+measurement mode with
+HART compatibility,
+ensuring that voltage/
+current thresholds meet
+HART standards.</p></td>
+<td><p>0x11 (via CH_FUNC_SETUP)</p></td>
+<td><p>Externally powered
+current sensing in
+systems that require
+HART protocol
+integration.</p></td>
+</tr>
+<tr class="row-odd"><td><p>AD74416H_CURRENT_IN_LOOP
+_HART</p></td>
+<td><p>Enables loop-powered
+current measurement
+with HART support,
+combining on-board
+current sourcing and
+diagnostic loopback
+tailored for HART
+networks.</p></td>
+<td><p>0x12 (via CH_FUNC_SETUP)</p></td>
+<td><p>On-board current
+loopback in HART-
+enabled devices for
+self-diagnostic and
+standardized industrial
+sensor monitoring.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="device-configuration">
+<h2>Device Configuration<a class="headerlink" href="#device-configuration" title="Link to this heading"></a></h2>
+<section id="initialization-and-deinitialization">
+<h3>Initialization and Deinitialization<a class="headerlink" href="#initialization-and-deinitialization" title="Link to this heading"></a></h3>
+<p>These functions initialize the AD74416H device into a
+known state and perform necessary cleanup operations when the device is
+no longer required. These routines include <code class="docutils literal notranslate"><span class="pre">ad74416h_init()</span></code> to
+allocate and initialize the device descriptor, <code class="docutils literal notranslate"><span class="pre">ad74416h_reset()</span></code> to
+issue hardware or software resets and enforce delays,
+<code class="docutils literal notranslate"><span class="pre">ad74416h_remove()</span></code> to free resources, and optionally
+<code class="docutils literal notranslate"><span class="pre">ad74416h_device_id_check()</span></code> to verify proper communication with the
+device.</p>
+</section>
+<section id="register-access-functions">
+<h3>Register Access Functions<a class="headerlink" href="#register-access-functions" title="Link to this heading"></a></h3>
+<p>These functions provide low-level access to device registers and include
+mechanisms to read, write, and update registers using SPI transactions
+with CRC validation. The entire set consists of <code class="docutils literal notranslate"><span class="pre">ad74416h_reg_write()</span></code>
+for writing a 16-bit value, <code class="docutils literal notranslate"><span class="pre">ad74416h_reg_read()</span></code> for reading a
+register value with CRC verification, <code class="docutils literal notranslate"><span class="pre">ad74416h_reg_read_raw()</span></code> for
+retrieving a raw communication frame, <code class="docutils literal notranslate"><span class="pre">ad74416h_reg_update()</span></code> for
+read-modify-write operations, and <code class="docutils literal notranslate"><span class="pre">ad74416h_nb_active_channels()</span></code> to
+query the number of active channels.</p>
+</section>
+<section id="dac-conversion-and-channel-output-configuration">
+<h3>DAC Conversion and Channel Output Configuration<a class="headerlink" href="#dac-conversion-and-channel-output-configuration" title="Link to this heading"></a></h3>
+<p>Dedicated to configuring the DAC and output channels, this group
+converts user-friendly analog values to DAC codes and sets the channel
+output modes. The functions include <code class="docutils literal notranslate"><span class="pre">ad74416h_dac_voltage_to_code()</span></code>
+for converting voltage values, <code class="docutils literal notranslate"><span class="pre">ad74416h_dac_current_to_code()</span></code> for
+converting current values, <code class="docutils literal notranslate"><span class="pre">ad74416h_set_channel_function()</span></code> to set a
+channel’s operational mode, <code class="docutils literal notranslate"><span class="pre">ad74416h_set_channel_dac_code()</span></code> to load
+a specific DAC code, <code class="docutils literal notranslate"><span class="pre">ad74416h_set_channel_vout_range()</span></code> to define the
+voltage output range, <code class="docutils literal notranslate"><span class="pre">ad74416h_set_channel_i_limit()</span></code> to specify
+current limits, as well as <code class="docutils literal notranslate"><span class="pre">ad74416h_dac_slew_enable()</span></code> and
+<code class="docutils literal notranslate"><span class="pre">ad74416h_dac_slew_disable()</span></code> for controlling the DAC slew rate.</p>
+</section>
+<section id="adc-configuration-and-conversion-functions">
+<h3>ADC Configuration and Conversion Functions<a class="headerlink" href="#adc-configuration-and-conversion-functions" title="Link to this heading"></a></h3>
+<p>This set of functions handles the precise analog-to-digital conversion
+process and includes configuration of ADC channels and retrieval of
+conversion results. The functions are
+<code class="docutils literal notranslate"><span class="pre">ad74416h_set_adc_channel_enable()</span></code> to enable or disable ADC
+conversion on a channel, <code class="docutils literal notranslate"><span class="pre">ad74416h_set_adc_conv_seq()</span></code> to manage the
+ADC conversion sequence, <code class="docutils literal notranslate"><span class="pre">ad74416h_get_raw_adc_result()</span></code> for obtaining
+raw ADC data, <code class="docutils literal notranslate"><span class="pre">ad74416h_get_adc_single()</span></code> to perform a complete
+single-shot conversion, <code class="docutils literal notranslate"><span class="pre">ad74416h_get_adc_range()</span></code> and
+<code class="docutils literal notranslate"><span class="pre">ad74416h_set_adc_range()</span></code> for managing ADC measurement ranges,
+<code class="docutils literal notranslate"><span class="pre">ad74416h_get_adc_rate()</span></code> and <code class="docutils literal notranslate"><span class="pre">ad74416h_set_adc_rate()</span></code> for
+conversion speed, and <code class="docutils literal notranslate"><span class="pre">ad74416h_get_adc_conv_mux()</span></code> together with
+<code class="docutils literal notranslate"><span class="pre">ad74416h_set_adc_conv_mux()</span></code> for input node selection.</p>
+</section>
+<section id="feedback-rtd-and-open-circuit-detection-configuration">
+<h3>Feedback, RTD, and Open-Circuit Detection Configuration<a class="headerlink" href="#feedback-rtd-and-open-circuit-detection-configuration" title="Link to this heading"></a></h3>
+<p>Focused on specialized sensor measurements, these functions configure
+the device for 3-wire RTD measurements, 2-wire sensing, and
+open-circuit/short-circuit detection. The full complement includes
+<code class="docutils literal notranslate"><span class="pre">ad74416h_enable_4wire_mode()</span></code> for 4-wire voltage output,
+<code class="docutils literal notranslate"><span class="pre">ad74416h_configure_3wire_feedback()</span></code> for RTD sensing,
+<code class="docutils literal notranslate"><span class="pre">ad74416h_configure_2wire_feedback()</span></code> for alternative sensing modes,
+<code class="docutils literal notranslate"><span class="pre">ad74416h_set_rtd_config()</span></code> to select RTD operating modes and
+excitation parameters, <code class="docutils literal notranslate"><span class="pre">ad74416h_config_oc_detection()</span></code> for
+open-circuit detection configuration, <code class="docutils literal notranslate"><span class="pre">ad74416h_get_oc_status()</span></code> to
+read alert statuses, <code class="docutils literal notranslate"><span class="pre">ad74416h_read_adc_code()</span></code> for current sensing,
+and <code class="docutils literal notranslate"><span class="pre">ad74416h_calculate_rsense_current()</span></code> to convert ADC codes into
+current measurements.</p>
+</section>
+<section id="digital-i-o-and-gpio-configuration">
+<h3>Digital I/O and GPIO Configuration<a class="headerlink" href="#digital-i-o-and-gpio-configuration" title="Link to this heading"></a></h3>
+<p>These functions manage the digital input/output capabilities, including
+GPIO control, debounce settings, threshold configuration, and direct
+digital manipulation. The functions under this category include
+<code class="docutils literal notranslate"><span class="pre">ad74416h_set_debounce_mode()</span></code> to configure input debounce filtering,
+<code class="docutils literal notranslate"><span class="pre">ad74416h_set_debounce_time()</span></code> to set the debounce delay,
+<code class="docutils literal notranslate"><span class="pre">ad74416h_gpio_get()</span></code> and <code class="docutils literal notranslate"><span class="pre">ad74416h_gpio_set()</span></code> for reading and
+writing GPIO states, <code class="docutils literal notranslate"><span class="pre">ad74416h_set_gpio_config()</span></code> to set GPIO
+operational modes, <code class="docutils literal notranslate"><span class="pre">ad74416h_do_set()</span></code> for direct digital output, and
+<code class="docutils literal notranslate"><span class="pre">ad74416h_set_threshold()</span></code> to configure voltage threshold levels.</p>
+</section>
+<section id="diagnostic-and-live-status-functions">
+<h3>Diagnostic and Live Status Functions<a class="headerlink" href="#diagnostic-and-live-status-functions" title="Link to this heading"></a></h3>
+<p>For real-time monitoring and fault management, this grouping provides
+access to diagnostic data and live operational statuses. The functions
+include <code class="docutils literal notranslate"><span class="pre">ad74416h_get_temp()</span></code> to read die temperature,
+<code class="docutils literal notranslate"><span class="pre">ad74416h_set_diag()</span></code> and <code class="docutils literal notranslate"><span class="pre">ad74416h_get_diag()</span></code> to configure and
+retrieve diagnostic information, and <code class="docutils literal notranslate"><span class="pre">ad74416h_get_live()</span></code> to access
+live status flags such as ADC busy indicators, temperature alerts, and
+power supply information.</p>
+</section>
+<section id="power-and-thermal-management">
+<h3>Power and Thermal Management<a class="headerlink" href="#power-and-thermal-management" title="Link to this heading"></a></h3>
+<p>Efficient power usage and thermal stability are managed by functions
+that control thermal reset thresholds and buffer power states. This
+category includes <code class="docutils literal notranslate"><span class="pre">ad74416h_set_therm_rst()</span></code> to configure the thermal
+reset threshold, and optionally <code class="docutils literal notranslate"><span class="pre">ad74416h_power_control_enable()</span></code> for
+enabling power control on sense buffers and
+<code class="docutils literal notranslate"><span class="pre">ad74416h_set_buffer_power_mode()</span></code> to place unused buffers in
+low-power standby mode.</p>
+</section>
+</section>
+<section id="driver-initialization-example">
+<h2>Driver Initialization Example<a class="headerlink" href="#driver-initialization-example" title="Link to this heading"></a></h2>
+<div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;xparameters.h&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;ad74416h.h&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;no_os_spi.h&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;no_os_gpio.h&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;no_os_delay.h&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;stdio.h&quot;</span>
+
+<span class="cm">/* SPI initialization parameters */</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">no_os_spi_init_param</span><span class="w"> </span><span class="n">spi_ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="p">.</span><span class="n">device_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">        </span><span class="p">.</span><span class="n">max_speed_hz</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1000000</span><span class="p">,</span>
+<span class="w">        </span><span class="p">.</span><span class="n">chip_select</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ARDUINO_UNO_D10</span><span class="p">,</span>
+<span class="w">        </span><span class="p">.</span><span class="n">mode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">NO_OS_SPI_MODE_0</span><span class="p">,</span>
+<span class="w">        </span><span class="p">.</span><span class="n">platform_ops</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">mbed_spi_ops</span><span class="p">,</span>
+<span class="w">        </span><span class="p">.</span><span class="n">extra</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">ad74416h_spi_extra</span><span class="p">,</span>
+<span class="p">};</span>
+
+<span class="cm">/* GPIO initialization parameters for reset */</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">no_os_gpio_init_param</span><span class="w"> </span><span class="n">reset_gpio_param</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="p">.</span><span class="n">number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="c1">// Replace with the actual GPIO number</span>
+<span class="w">        </span><span class="p">.</span><span class="n">platform_ops</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">mbed_gpio_ops</span><span class="p">,</span>
+<span class="w">        </span><span class="p">.</span><span class="n">extra</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span>
+<span class="p">};</span>
+
+<span class="cm">/* AD74416H device initialization parameters */</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">ad74416h_init_param</span><span class="w"> </span><span class="n">init_param</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ID_AD74416H</span><span class="p">,</span>
+<span class="w">        </span><span class="p">.</span><span class="n">dev_addr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x01</span><span class="p">,</span><span class="w">           </span><span class="cm">/* Device address */</span>
+<span class="w">        </span><span class="p">.</span><span class="n">spi_ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spi_ip</span><span class="p">,</span>
+<span class="w">        </span><span class="p">.</span><span class="n">reset_gpio_param</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">reset_gpio_param</span>
+<span class="p">};</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">ad74416h_desc</span><span class="w"> </span><span class="o">*</span><span class="n">ad74416h_dev</span><span class="p">;</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span>
+
+<span class="cm">/* Initialize the AD74416H device */</span>
+<span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ad74416h_init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ad74416h_dev</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">init_param</span><span class="p">);</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;AD74416H initialization failed (err: %d)</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ret</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span><span class="w"> </span><span class="c1">// Exit on failure</span>
+<span class="p">}</span>
+
+<span class="cm">/* Configure Channel A as a voltage output */</span>
+<span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ad74416h_set_channel_function</span><span class="p">(</span><span class="n">ad74416h_dev</span><span class="p">,</span><span class="w"> </span><span class="n">AD74416H_CH_A</span><span class="p">,</span><span class="w"> </span><span class="n">AD74416H_VOLTAGE_OUT</span><span class="p">);</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Channel A function setup failed (err: %d)</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ret</span><span class="p">);</span>
+<span class="w">        </span><span class="n">ad74416h_remove</span><span class="p">(</span><span class="n">ad74416h_dev</span><span class="p">);</span><span class="w"> </span><span class="c1">// Cleanup</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* Set the voltage output range for Channel A to 0-12V */</span>
+<span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ad74416h_set_channel_vout_range</span><span class="p">(</span><span class="n">ad74416h_dev</span><span class="p">,</span><span class="w"> </span><span class="n">AD74416H_CH_A</span><span class="p">,</span><span class="w"> </span><span class="n">AD74416H_VOUT_RANGE_0_12V</span><span class="p">);</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Channel A vout range configuration failed (err: %d)</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ret</span><span class="p">);</span>
+<span class="w">        </span><span class="n">ad74416h_remove</span><span class="p">(</span><span class="n">ad74416h_dev</span><span class="p">);</span><span class="w"> </span><span class="c1">// Cleanup</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* Convert 0 mV to a DAC code and load it on Channel A */</span>
+<span class="kt">uint16_t</span><span class="w"> </span><span class="n">dac_code</span><span class="p">;</span>
+<span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ad74416h_dac_voltage_to_code</span><span class="p">(</span><span class="n">ad74416h_dev</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">dac_code</span><span class="p">,</span><span class="w"> </span><span class="n">AD74416H_CH_A</span><span class="p">);</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;DAC voltage-to-code conversion failed (err: %d)</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ret</span><span class="p">);</span>
+<span class="w">        </span><span class="n">ad74416h_remove</span><span class="p">(</span><span class="n">ad74416h_dev</span><span class="p">);</span><span class="w"> </span><span class="c1">// Cleanup</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ad74416h_set_channel_dac_code</span><span class="p">(</span><span class="n">ad74416h_dev</span><span class="p">,</span><span class="w"> </span><span class="n">AD74416H_CH_A</span><span class="p">,</span><span class="w"> </span><span class="n">dac_code</span><span class="p">);</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Setting DAC code failed (err: %d)</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ret</span><span class="p">);</span>
+<span class="w">        </span><span class="n">ad74416h_remove</span><span class="p">(</span><span class="n">ad74416h_dev</span><span class="p">);</span><span class="w"> </span><span class="c1">// Cleanup</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* Read live status bits from the device */</span>
+<span class="k">union</span><span class="w"> </span><span class="nc">ad74416h_live_status</span><span class="w"> </span><span class="n">live_status</span><span class="p">;</span>
+<span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ad74416h_get_live</span><span class="p">(</span><span class="n">ad74416h_dev</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">live_status</span><span class="p">);</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Failed to read live status (err: %d)</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ret</span><span class="p">);</span>
+<span class="w">        </span><span class="n">ad74416h_remove</span><span class="p">(</span><span class="n">ad74416h_dev</span><span class="p">);</span><span class="w"> </span><span class="c1">// Cleanup</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* Cleanup resources */</span>
+<span class="n">ad74416h_remove</span><span class="p">(</span><span class="n">ad74416h_dev</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+          </div>
+              <div class="related">
+                &nbsp;
+    <a href="ad9625.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">AD9625 no-OS Driver</a>
+    <a href="axi_sysid.html" title="Next document (Alt+Shift+RightArrow)" class="next">System ID (AXI_SYSID) no-OS Driver</a>
+              </div>
+          
+        </div>
+      </div>
+  </div>
+
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
+    <footer>
+      &#169;2023-2024, Analog Devices, Inc.
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
+</html>

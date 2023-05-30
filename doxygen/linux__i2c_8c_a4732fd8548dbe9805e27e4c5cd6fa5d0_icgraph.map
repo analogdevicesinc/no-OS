@@ -1,0 +1,7 @@
+<map id="linux_i2c_send_msg" name="linux_i2c_send_msg">
+<area shape="rect" id="Node000001" title="Send a combined I2C R/W transaction with only one stop bit." alt="" coords="173,31,327,56"/>
+<area shape="rect" id="Node000002" href="$linux__i2c_8c.html#a18a87954043a468f2109aa4042d94be6" title="Read data from a slave device." alt="" coords="7,5,123,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="159,34,123,29,124,23,160,28"/>
+<area shape="rect" id="Node000003" href="$linux__i2c_8c.html#a50aeb30a9ebd55a04a42015c02aaef7f" title="Write data to a slave device." alt="" coords="5,55,125,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="160,58,126,62,125,57,159,52"/>
+</map>

@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>AD74416H no-OS Project &#8212; no-OS  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="../_static/app.min.css?v=25ed7d6a" />
+    <script defer="" src="../_static/app.umd.js?v=80d097f0"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Evaluating the ADF4030" href="adf4030.html" />
+    <link rel="prev" title="ad9081 no-OS Example Project" href="ad9081.html" />
+   
+  
+  <meta name="repository" content="no-OS">
+  <meta name="version" content="">
+  
+    <meta name="page_source_suffix" content=".rst">
+  
+  
+
+
+<style>
+  body {
+    
+  }
+
+  body.dark {
+    
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body:not(.light) {
+      
+    }
+  }
+</style>
+  </head><body>
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
+  <input type="checkbox" id="input-show-repotoc">
+
+  
+  <div class="search-area">
+    <form action="" method="get">
+      <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+      <button class="icon"></button>
+    </form>
+  </div>
+  
+
+  <header>
+    <div id="left">
+      <label id="show-sidebar" class="icon" for="input-show-toc" title="Show/hide index"></label>
+    </div>
+    <div id="right">
+      <span>
+        <a id="logo-org" href="https://analog.com"></a>
+        <div class="vertical-divider"></div>
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
+        <a id="logo" href="../index.html">
+          <div>no-OS</div>
+        </a>
+      </span>
+      <span class="reverse">
+        <label id="show-localtoc" class="icon" for="input-show-localtoc" title="Show/hide contents"></label>
+      </span>
+    </div>
+  </header>
+
+
+  <div class="repotoc-tree overlay">
+    <root>
+  <a href="../index.html" class="current">no-OS</a>
+</root>
+
+  </div>
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div>
+          <div class="localtoc-header"></div>
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">AD74416H no-OS Project</a><ul>
+<li><a class="reference internal" href="#supported-evaluation-boards">Supported Evaluation Boards</a></li>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#applications">Applications</a></li>
+<li><a class="reference internal" href="#hardware-specifications">Hardware Specifications</a><ul>
+<li><a class="reference internal" href="#power-supply-requirements">Power Supply Requirements</a></li>
+<li><a class="reference internal" href="#voltage-requirements">Voltage Requirements</a></li>
+<li><a class="reference internal" href="#quiescent-current-requirements">Quiescent Current Requirements</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pin-description">Pin Description</a></li>
+<li><a class="reference internal" href="#no-os-build-setup">No-OS Build Setup</a></li>
+<li><a class="reference internal" href="#no-os-supported-examples">No-OS Supported Examples</a><ul>
+<li><a class="reference internal" href="#basic-example">Basic Example</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#no-os-supported-platforms">No-OS Supported Platforms</a><ul>
+<li><a class="reference internal" href="#stm32-platform">STM32 Platform</a><ul>
+<li><a class="reference internal" href="#used-hardware">Used Hardware</a></li>
+<li><a class="reference internal" href="#connections">Connections</a></li>
+<li><a class="reference internal" href="#build-command">Build Command</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#mbed-platform">Mbed Platform</a><ul>
+<li><a class="reference internal" href="#id1">Used Hardware</a></li>
+<li><a class="reference internal" href="#id2">Connections</a></li>
+<li><a class="reference internal" href="#id3">Build Command</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
+  
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+    <a id="no-logo" href="../index.html">
+      no-OS
+    </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
+All content
+</label>
+<label id="show-toc" for="input-switch-toc">
+Content on this topic
+</label>
+<div class="repotoc-tree">
+  <root>
+  <a href="../index.html" class="current">no-OS</a>
+</root>
+
+</div>
+<div class="toc-tree">
+  <html>
+  <body><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../drivers_guide.html">no-OS drivers guide</a></li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1"/><div class="collapse"><a class="reference internal" href="../drivers_doc.html">no-OS drivers list</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adxl355.html">ADXL355 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adxl38x.html">ADXL38x no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ad405x.html">AD405X no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ad7768.html">AD7768 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ad7768-1.html">AD7768-1 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ad796x.html">AD796X no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ad9083.html">AD9083 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ad9208.html">AD9208 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adm1177.html">ADM1177 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/pulsar_adc.html">AD400X no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ad9625.html">AD9625 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ad74416h.html">AD74416H no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/axi_sysid.html">System ID (AXI_SYSID) no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max14914.html">MAX14914 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max14919.html">MAX14919 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max149x6.html">MAX149X6 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max22190.html">MAX22190 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max22196.html">MAX22196 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max22200.html">MAX22200 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ad8460.html">AD8460 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max22017.html">MAX22017 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ad3552r.html">AD3552R no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adf4030.html">ADF4030 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adf4368.html">ADF4368 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adf4377.html">ADF4377 No-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adf4382.html">ADF4382 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adf5611.html">ADF5611 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/admfm2000.html">ADMFM2000 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adf4350.html">ADF4350 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/imu.html">ADIS no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max25603.html">MAX25603 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ade7816.html">ADE7816 no-OS documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ade7913.html">ADE7913 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ade9113.html">ADE9113 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/madura.html">ADRV902x (Madura) no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/talise.html">ADRV9009 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ltc2983.html">LTC2983 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max31827.html">MAX31827 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max31855.html">MAX31855 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adt75.html">ADT75 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ades1754.html">ADES1754 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adp1050.html">ADP1050 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adp1055.html">ADP1055 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adp5055.html">ADP5055 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/lt3074.html">LT3074 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/lt7170.html">LT7170 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/lt7182s.html">LT7182S no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/lt8491.html">LT8491 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/lt8722.html">LT8722 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ltc2992.html">LTC2992 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ltc4162l.html">LTC4162L no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ltc4296.html">LTC4296 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ltc7841.html">LTC7841 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ltc7871.html">LTC7871 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ltm4686.html">LTM4686 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ltp8800.html">LTP8800 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max17851.html">MAX17851 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max42500.html">MAX42500 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ad5293.html">AD5293 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adin1110.html">ADIN1110 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adxrs290.html">ADXRS290 no-OS Driver</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2" checked=""/><div class="collapse"><a class="reference internal" href="../projects_doc.html">no-OS projects list</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="ad469x_evb.html">AD469x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad7091r8-sdz.html">AD7091R-2/-4/-8 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad7606x-fmc.html">AD7606x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad7616-st.html">AD7616 no-OS Example Project on SDP-K1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad7768-1fmcz.html">AD7768-1 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad796x_fmcz.html">AD796x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pulsar-adc.html">AD400x no-OS Example Project on ZED and SDP-K1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad9467.html">AD9467 no-OS Example project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad9081.html">ad9081 no-OS Example Project</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">AD74416H no-OS Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4030.html">Evaluating the ADF4030</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4368.html">Evaluating the ADF4368</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4377_sdz.html">Evaluating the ADF4377 Wideband Synthesizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4382.html">ADF4382 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf5611.html">Evaluating the ADF5611</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval-adis1646x.html">ADIS1646X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval-adis1647x.html">ADIS1647X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval-adis1650x.html">ADIS1650X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval-adis1654x.html">ADIS1654X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval-adis1655x.html">ADIS1655X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval-adis1657x.html">ADIS1657X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval-ade7913.html">EVAL-ADE7913 no-OS Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval-ade9430.html">EVAL-ADE9430 Sensor-to-Cloud no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adrv902x.html">adrv902x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adrv9001.html">ADRV9001 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="apard32690.html">AD-APARD32690-SL no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max14914.html">MAX14914 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max14919.html">MAX14919 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ades1754.html">Evaluating the EVAL-ADES1754</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adp1050.html">ADP1050 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adp1055.html">ADP1055 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adp5055.html">ADP5055 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dc2703a.html">Evaluating the LT8491</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt3074.html">Evaluating the LT3074</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt7170.html">Evaluating the LT7170</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt7182s.html">Evaluating the LT7182S</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt8722.html">Evaluating the LT8722</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc4162l.html">Evaluating the LTC4162L</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc4296.html">LTC4296 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc7841.html">Evaluating the LTC7841</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc7871.html">Evaluating the LTC7871</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltm4686.html">Evaluating the LTM4686</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltp8800.html">Evaluating the LTP8800</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max42500.html">MAX42500 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval-ad8460.html">Evaluating the EVAL-AD8460</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22017.html">MAX22017 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad3552r_fmcz.html">EVAL-AD3552R no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc2983.html">Evaluating the LTC2983</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max31827-evkit.html">Evaluating the MAX31827</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adxrs290-pmdz.html">ADXRS290-PMDZ no-OS Project</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3" id="toctree-collapse-3"/><div class="collapse"><a class="reference internal" href="../build_guide.html">No-OS Build Guide</a><label for="toctree-collapse-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../build_guides/build_maxim.html">Maxim Build Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../build_guides/build_ftd2xx.html">Build against FTD2XX library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../build_guides/build_win.html">Windows Build Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../build_guides/build_mac.html">MAC Build Prerequisites</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to no-OS</a></li>
+</ul>
+</body>
+</html>
+
+</div>
+        </div>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body-header">
+    <nav class="breadcrumb">
+        <ol>
+          <li><a href="../projects_doc.html">no-OS projects list</a></li>
+          </ol>
+    </nav>
+  </div>
+
+          <div class="body" role="main">
+            
+  <section id="ad74416h-no-os-project">
+<h1>AD74416H no-OS Project<a class="headerlink" href="#ad74416h-no-os-project" title="Link to this heading"></a></h1>
+<section id="supported-evaluation-boards">
+<h2>Supported Evaluation Boards<a class="headerlink" href="#supported-evaluation-boards" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD74416H">EVAL-AD74416H</a></p></li>
+</ul>
+</section>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>The AD74416H is a quad-channel, software-configurable device designed
+for robust industrial control applications. It offers versatile analog
+and digital I/O capabilities for measuring voltage, current, RTD, and
+thermocouples while incorporating a 16-bit DAC and a 24-bit sigma-delta
+ADC with optional 50Hz/60Hz rejection. Each channel features an
+integrated HART modem that provides both HART and SPI communications
+using configurable pin assignments that support multiple operation
+modes. This is complemented by adaptive power switching, built-in
+diagnostics for open-circuit/short-circuit detection, a high-accuracy
+2.5V reference, and auxiliary channels for sensing and power supply
+measurements.</p>
+</section>
+<section id="applications">
+<h2>Applications<a class="headerlink" href="#applications" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Industrial control systems</p></li>
+<li><p>Process control</p></li>
+<li><p>Factory automation</p></li>
+</ul>
+</section>
+<section id="hardware-specifications">
+<h2>Hardware Specifications<a class="headerlink" href="#hardware-specifications" title="Link to this heading"></a></h2>
+<section id="power-supply-requirements">
+<h3>Power Supply Requirements<a class="headerlink" href="#power-supply-requirements" title="Link to this heading"></a></h3>
+<p>The following tables summarize the power supply requirements for the
+EVAL-AD74416H board.</p>
+</section>
+<section id="voltage-requirements">
+<h3>Voltage Requirements<a class="headerlink" href="#voltage-requirements" title="Link to this heading"></a></h3>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Supply</p></th>
+<th class="head"><p>Minimum Voltage</p></th>
+<th class="head"><p>Typical Voltage</p></th>
+<th class="head"><p>Maximum Voltage</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Operating Supply</p></td>
+<td><p>24 V</p></td>
+<td><p>24 V</p></td>
+<td><p>24 V</p></td>
+</tr>
+<tr class="row-odd"><td><p>AVDD_HI</p></td>
+<td><p>6 V</p></td>
+<td><p>24 V</p></td>
+<td><p>28.8 V</p></td>
+</tr>
+<tr class="row-even"><td><p>AVDD_LO</p></td>
+<td><p>6 V</p></td>
+<td><p>14.5 V</p></td>
+<td><p>28.8 V</p></td>
+</tr>
+<tr class="row-odd"><td><p>AVSS</p></td>
+<td><p>-18 V</p></td>
+<td><p>-15 V</p></td>
+<td><p>-2.5 V</p></td>
+</tr>
+<tr class="row-even"><td><p>DVCC</p></td>
+<td><p>2.7 V</p></td>
+<td><p>3.3 V</p></td>
+<td><p>5.5 V</p></td>
+</tr>
+<tr class="row-odd"><td><p>AVCC</p></td>
+<td><p>4.5 V</p></td>
+<td><p>5.0 V</p></td>
+<td><p>5.5 V</p></td>
+</tr>
+<tr class="row-even"><td><p>DO_VDD</p></td>
+<td><p>10 V</p></td>
+<td><p>24 V</p></td>
+<td><p>35 V</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="quiescent-current-requirements">
+<h3>Quiescent Current Requirements<a class="headerlink" href="#quiescent-current-requirements" title="Link to this heading"></a></h3>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Supply Rail</p></th>
+<th class="head"><p>Minimum Current</p></th>
+<th class="head"><p>Typical Current</p></th>
+<th class="head"><p>Maximum Current</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>High Impedance
+AVDD_HI</p></td>
+<td><p>5.5 mA</p></td>
+<td><p>7.5 mA</p></td>
+<td><p>9.0 mA</p></td>
+</tr>
+<tr class="row-odd"><td><p>AVDD_LO</p></td>
+<td><p>0 mA</p></td>
+<td><p>0.3 mA</p></td>
+<td><p>0.5 mA</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="pin-description">
+<h2>Pin Description<a class="headerlink" href="#pin-description" title="Link to this heading"></a></h2>
+<p>The following tables list the pin assignments of the EVAL-AD74416H board
+connectors that users will interact with.</p>
+<p><strong>SPI Connectors</strong></p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>Pin Number</p></td>
+<td><p>Pin Name</p></td>
+<td><p>Pin Function</p></td>
+<td><p>Description</p></td>
+</tr>
+<tr class="row-even"><td><p>P11</p></td>
+<td><p>SPI Address
+Header</p></td>
+<td><p>SPI Address
+Configuration</p></td>
+<td><p>Sets the SPI
+address of the
+AD74416H;
+jumper settings
+between Pins 1
+&amp; 2 (for AD0)
+and Pins 3 &amp; 4
+(for AD1)
+determine the
+default address
+00.</p></td>
+</tr>
+<tr class="row-odd"><td><p>P36</p></td>
+<td><p>SDO Enable</p></td>
+<td><p>SPI Data Output
+Enable</p></td>
+<td><p>Hosts the SDO
+enable jumper;
+when enabled,
+the AD74416H
+generates the
+SDO signal.</p></td>
+</tr>
+<tr class="row-even"><td><p>P38</p></td>
+<td><p>SPI Signals</p></td>
+<td><p>SPI
+Communication</p></td>
+<td><p>Routes SPI
+signals
+including SYNC,
+SDI, and SCLK.</p></td>
+</tr>
+<tr class="row-odd"><td><p>P62</p></td>
+<td><p>SPI
+Interconnection</p></td>
+<td><p>SPI Enable</p></td>
+<td><p>Enables the
+overall SPI
+interconnection</p></td>
+</tr>
+<tr class="row-even"><td><p>P8</p></td>
+<td><p>SYNC Signal
+Header</p></td>
+<td><p>SYNC Source
+Selection</p></td>
+<td><p>Selects the
+source for the
+SYNC (chip
+select) signal;
+for evaluation
+with ACE
+software, the
+jumper must be
+set between Pin
+1 and Pin 3.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>SPI/Digital Power</strong></p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>Pin Number</p></td>
+<td><p>Pin Name</p></td>
+<td><p>Pin Function</p></td>
+<td><p>Description</p></td>
+</tr>
+<tr class="row-even"><td><p>P7</p></td>
+<td><p>+3V3_IO Power</p></td>
+<td><p>Digital Power
+Supply</p></td>
+<td><p>Supplies
++3V3_IO power
+to the
+isolators on
+the Arduino
+side via a
+jumper
+connection
+between Pin 1
+and Pin 2.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Digital Signals and Reset</strong></p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>Pin Number</p></td>
+<td><p>Pin Name</p></td>
+<td><p>Pin Function</p></td>
+<td><p>Description</p></td>
+</tr>
+<tr class="row-even"><td><p>P34</p></td>
+<td><p>ALERT Driver
+Bypass</p></td>
+<td><p>Digital Signal</p></td>
+<td><p>Bypasses the
+open collector
+driver for the
+ALERT signal; a
+red LED (DS8)
+indicates
+activation.</p></td>
+</tr>
+<tr class="row-odd"><td><p>P35</p></td>
+<td><p>ADC_RDY Driver
+Bypass</p></td>
+<td><p>Digital Signal</p></td>
+<td><p>Bypasses the
+open collector
+driver for the
+ADC_RDY signal;
+an orange LED
+(DS9) indicates
+activation.</p></td>
+</tr>
+<tr class="row-even"><td><p>P37</p></td>
+<td><p>ALERT/ADC_RDY
+Enable</p></td>
+<td><p>Signal Enable</p></td>
+<td><p>Enables the
+ALERT and
+ADC_RDY signals
+generated by
+the AD74416H.</p></td>
+</tr>
+<tr class="row-odd"><td><p>P39</p></td>
+<td><p>RESET/GPIO</p></td>
+<td><p>Reset and GPIO</p></td>
+<td><p>Manages the
+RESET signal
+along with
+additional GPIO
+functions on
+the Arduino
+side.</p></td>
+</tr>
+<tr class="row-even"><td><p>P40</p></td>
+<td><p>Additional GPIO</p></td>
+<td><p>GPIO</p></td>
+<td><p>Provides
+additional GPIO
+control on the
+Arduino side.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Arduino Header Connector</strong></p>
+<p>Facilitates integration with the Arduino ecosystem by providing power
+through isolators and enabling signals; works in conjunction with jumper
+settings on P36 and P38.</p>
+</section>
+<section id="no-os-build-setup">
+<h2>No-OS Build Setup<a class="headerlink" href="#no-os-build-setup" title="Link to this heading"></a></h2>
+<p>Please see: <a class="reference external" href="https://wiki.analog.com/resources/no-os/build">No-OS Build Setup</a></p>
+</section>
+<section id="no-os-supported-examples">
+<h2>No-OS Supported Examples<a class="headerlink" href="#no-os-supported-examples" title="Link to this heading"></a></h2>
+<p>The initialization data used in the examples is taken from the
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main//projects/ad74416h/src/common">Project Common Data Path</a>.
+The macros used in Common Data are defined in platform-specific files found in:
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main//projects/ad74416h/src/platform">Platform Platform Configuration Path</a>.</p>
+<section id="basic-example">
+<h3>Basic Example<a class="headerlink" href="#basic-example" title="Link to this heading"></a></h3>
+<p>The Basic Example demonstrates the fundamental initialization and
+configuration of the AD74416H device by setting up communication
+interfaces such as UART, SPI, and GPIO using common data structures in a
+no-OS environment. To enable the Basic Example and disable other
+examples, update the <a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main//projects/ad74416h/Makefile">Makefile</a>
+with the following settings:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Enable Basic Example</span>
+<span class="nv">EXAMPLE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>basic
+</pre></div>
+</div>
+</section>
+</section>
+<section id="no-os-supported-platforms">
+<h2>No-OS Supported Platforms<a class="headerlink" href="#no-os-supported-platforms" title="Link to this heading"></a></h2>
+<section id="stm32-platform">
+<h3>STM32 Platform<a class="headerlink" href="#stm32-platform" title="Link to this heading"></a></h3>
+<section id="used-hardware">
+<h4>Used Hardware<a class="headerlink" href="#used-hardware" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD74416H">EVAL-AD74416H</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-SDP-CK1Z">EVAL-SDP-CK1Z</a></p></li>
+</ul>
+</section>
+<section id="connections">
+<h4>Connections<a class="headerlink" href="#connections" title="Link to this heading"></a></h4>
+<p>Below is a table summarizing the physical connections between the
+EVAL-AD74416H board and the EVAL-SDP-CK1Z evaluation board:</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>Connection</p></td>
+<td><p>EVAL-AD74416H Board
+Pin &amp; Function</p></td>
+<td><p>EVAL-SDP-CK1Z Board
+Pin &amp; Function</p></td>
+</tr>
+<tr class="row-even"><td><p>SPI_CS (SYNC)</p></td>
+<td><p>Arduino Header P8
+- configured via
+jumper (Pins 1 &amp; 3)
+to select the default
+SPI address and
+designate the SYNC
+signal (chip select)</p></td>
+<td><p>PA15 – SPI1 chip
+select; configured as
+a GPIO output with
+very high speed</p></td>
+</tr>
+<tr class="row-odd"><td><p>SPI_MOSI</p></td>
+<td><p>Arduino Header
+- ARDUINO_UNO_D11,
+serving as Master Out
+Slave In</p></td>
+<td><p>PA7 – SPI1_MOSI
+output</p></td>
+</tr>
+<tr class="row-even"><td><p>SPI_MISO</p></td>
+<td><p>Arduino Header
+- ARDUINO_UNO_D12,
+serving as MISO
+(Master In, Slave
+Out)</p></td>
+<td><p>PB4 – SPI1_MISO input</p></td>
+</tr>
+<tr class="row-odd"><td><p>SPI_CLK</p></td>
+<td><p>Arduino Header
+- ARDUINO_UNO_D13,
+delivering the SPI
+clock signal</p></td>
+<td><p>PB3 – SPI1_SCK;
+configured with
+pull-up and set for a
+12 Mbps clock rate</p></td>
+</tr>
+<tr class="row-even"><td><p>UART_TX</p></td>
+<td><p>Defined by the
+UART_TX_PIN macro in
+parameters.c (UART
+transmit interface)</p></td>
+<td><p>PC12 – UART5_TX
+output</p></td>
+</tr>
+<tr class="row-odd"><td><p>UART_RX</p></td>
+<td><p>Defined by the
+UART_RX_PIN macro in
+parameters.c (UART
+receive interface)</p></td>
+<td><p>PD2 – UART5_RX input</p></td>
+</tr>
+<tr class="row-even"><td><p>I2C_SDA</p></td>
+<td><p>Defined by the
+I2C_SDA macro in
+parameters.c (I2C
+data line)</p></td>
+<td><p>Refer to board
+documentation for
+exact I2C SDA pin
+assignment on the
+SDP-CK1Z board</p></td>
+</tr>
+<tr class="row-odd"><td><p>I2C_SCL</p></td>
+<td><p>Defined by the
+I2C_SCL macro in
+parameters.c (I2C
+clock line)</p></td>
+<td><p>Refer to board
+documentation for
+exact I2C SCL pin
+assignment on the
+SDP-CK1Z board</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="build-command">
+<h4>Build Command<a class="headerlink" href="#build-command" title="Link to this heading"></a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Clean the build environment</span>
+make<span class="w"> </span>clean
+
+<span class="c1"># Build the project</span>
+make<span class="w"> </span>all
+
+<span class="c1"># Flash the firmware</span>
+make<span class="w"> </span>flash
+
+<span class="c1"># Debug the project</span>
+make<span class="w"> </span>debug
+</pre></div>
+</div>
+</section>
+</section>
+<section id="mbed-platform">
+<h3>Mbed Platform<a class="headerlink" href="#mbed-platform" title="Link to this heading"></a></h3>
+<section id="id1">
+<h4>Used Hardware<a class="headerlink" href="#id1" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD74416H">EVAL-AD74416H</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-SDP-CK1Z">EVAL-SDP-CK1Z</a></p></li>
+</ul>
+</section>
+<section id="id2">
+<h4>Connections<a class="headerlink" href="#id2" title="Link to this heading"></a></h4>
+<p>The table below summarizes the wiring between the EVAL‑AD74416H board
+and the EVAL‑SDP‑CK1Z evaluation board:</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>Connection
+Mnemonic</p></td>
+<td><p>EVAL‑AD74416H
+Board
+(Pin/Connector)</p></td>
+<td><p>EVAL‑SDP‑CK1Z
+Board
+(Pin/Connector)</p></td>
+<td><p>Function /
+Description</p></td>
+</tr>
+<tr class="row-even"><td><p>SPI_MISO</p></td>
+<td><p>MISO pin</p></td>
+<td><p>Arduino Uno D12</p></td>
+<td><p>SPI data
+Master In,
+Slave Out</p></td>
+</tr>
+<tr class="row-odd"><td><p>SPI_MOSI</p></td>
+<td><p>MOSI pin</p></td>
+<td><p>Arduino Uno D11</p></td>
+<td><p>SPI data
+Master Out,
+Slave In</p></td>
+</tr>
+<tr class="row-even"><td><p>SPI_SCLK</p></td>
+<td><p>SPI_CLK pin</p></td>
+<td><p>Arduino Uno D13</p></td>
+<td><p>SPI clock
+signal</p></td>
+</tr>
+<tr class="row-odd"><td><p>SPI_CS (SYNC)</p></td>
+<td><p>SYNC (via
+header P8,
+jumper between
+Pin 1 and 3)</p></td>
+<td><p>Arduino header
+(chip select
+via header P8)</p></td>
+<td><p>SPI chip select
+(active low)
+- ensure proper
+jumper settings</p></td>
+</tr>
+<tr class="row-even"><td><p>UART_TX</p></td>
+<td><p>UART_TX_PIN (as
+defined in
+parameters)</p></td>
+<td><p>UART_RX pin (as
+defined in
+parameters)</p></td>
+<td><p>Serial
+transmission
+from AD74416H</p></td>
+</tr>
+<tr class="row-odd"><td><p>UART_RX</p></td>
+<td><p>UART_RX_PIN (as
+defined in
+parameters)</p></td>
+<td><p>UART_TX pin (as
+defined in
+parameters)</p></td>
+<td><p>Serial
+reception to
+AD74416H from
+SDP‑CK1Z board</p></td>
+</tr>
+<tr class="row-even"><td><p>I2C_SDA</p></td>
+<td><p>I2C_SDA line</p></td>
+<td><p>SDA_0 (per
+SDP‑CK1Z
+mapping)</p></td>
+<td><p>I2C data line</p></td>
+</tr>
+<tr class="row-odd"><td><p>I2C_SCL</p></td>
+<td><p>I2C_SCL line</p></td>
+<td><p>SCL_0 (per
+SDP‑CK1Z
+mapping)</p></td>
+<td><p>I2C clock line</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id3">
+<h4>Build Command<a class="headerlink" href="#id3" title="Link to this heading"></a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="w"> </span><span class="c1"># Ensure you are in the project directory where the Makefile is located</span>
+<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>path/to/your/project
+
+<span class="w"> </span><span class="c1"># Set the target platform</span>
+<span class="w"> </span>make<span class="w"> </span><span class="nv">TARGET</span><span class="o">=</span>mbed
+
+<span class="w"> </span><span class="c1"># Set the board type</span>
+<span class="w"> </span>make<span class="w"> </span><span class="nv">BOARD</span><span class="o">=</span>EVAL-AD74416H
+
+<span class="c1"># Clean previous build artifacts (if applicable)</span>
+<span class="w"> </span>make<span class="w"> </span>clean
+
+<span class="w"> </span><span class="c1"># Build the project with MBED-specific drivers and configuration</span>
+<span class="w"> </span>make<span class="w"> </span>all
+
+<span class="w"> </span><span class="c1"># Flash the project to your hardware (modify to your flash tool if needed)</span>
+<span class="w"> </span>make<span class="w"> </span>flash<span class="w">  </span><span class="c1"># or use: mbed flash</span>
+
+<span class="w"> </span><span class="c1"># Start a debugging session</span>
+<span class="w"> </span>make<span class="w"> </span>debug<span class="w">  </span><span class="c1"># or use: mbed debug --run</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+</section>
+
+
+          </div>
+              <div class="related">
+                &nbsp;
+    <a href="ad9081.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">ad9081 no-OS Example Project</a>
+    <a href="adf4030.html" title="Next document (Alt+Shift+RightArrow)" class="next">Evaluating the ADF4030</a>
+              </div>
+          
+        </div>
+      </div>
+  </div>
+
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
+    <footer>
+      &#169;2023-2024, Analog Devices, Inc.
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
+</html>

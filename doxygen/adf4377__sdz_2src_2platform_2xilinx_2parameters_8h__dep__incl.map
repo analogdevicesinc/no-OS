@@ -1,0 +1,7 @@
+<map id="projects/adf4377_sdz/src/platform/xilinx/parameters.h" name="projects/adf4377_sdz/src/platform/xilinx/parameters.h">
+<area shape="rect" id="Node000001" title="Platform dependent parameters." alt="" coords="97,5,257,60"/>
+<area shape="rect" id="Node000002" href="$adf4377__sdz_2src_2platform_2xilinx_2main_8c.html" title="Main file for xilinx platform of adf4377 project." alt="" coords="5,108,165,163"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="146,72,111,110,107,106,142,69"/>
+<area shape="rect" id="Node000003" href="$adf4377__sdz_2src_2platform_2xilinx_2parameters_8c.html" title="Definition of Mbed platform data used by adf4377 project." alt="" coords="189,108,349,163"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="213,69,247,106,243,110,209,72"/>
+</map>

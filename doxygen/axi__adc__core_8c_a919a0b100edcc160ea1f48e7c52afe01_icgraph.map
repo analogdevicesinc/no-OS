@@ -1,0 +1,9 @@
+<map id="axi_slave_adc_write" name="axi_slave_adc_write">
+<area shape="rect" id="Node000001" title="Slave AXI ADC Data Write." alt="" coords="424,42,579,67"/>
+<area shape="rect" id="Node000002" href="$axi__adc__core_8c.html#a7e7072ec229da6c82b28c7b0190de9e7" title="Update active AXI ADC channels." alt="" coords="205,35,376,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="410,57,376,57,376,52,410,52"/>
+<area shape="rect" id="Node000003" href="$iio__axi__adc_8c.html#af7d00c44f5edd36cdca063ce45d767db" title="Update active channels." alt="" coords="5,5,157,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="191,43,157,39,158,33,192,38"/>
+<area shape="rect" id="Node000004" href="$adrv9001_2src_2app_2headless_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="54,70,109,95"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="192,71,109,82,108,76,191,65"/>
+</map>

@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>EVAL-AD3552R no-OS Example Project &#8212; no-OS  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="../_static/app.min.css?v=25ed7d6a" />
+    <script defer="" src="../_static/app.umd.js?v=80d097f0"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Evaluating the LTC2983" href="ltc2983.html" />
+    <link rel="prev" title="MAX22017 no-OS Example Project" href="max22017.html" />
+   
+  
+  <meta name="repository" content="no-OS">
+  <meta name="version" content="">
+  
+    <meta name="page_source_suffix" content=".rst">
+  
+  
+
+
+<style>
+  body {
+    
+  }
+
+  body.dark {
+    
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body:not(.light) {
+      
+    }
+  }
+</style>
+  </head><body>
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
+  <input type="checkbox" id="input-show-repotoc">
+
+  
+  <div class="search-area">
+    <form action="" method="get">
+      <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+      <button class="icon"></button>
+    </form>
+  </div>
+  
+
+  <header>
+    <div id="left">
+      <label id="show-sidebar" class="icon" for="input-show-toc" title="Show/hide index"></label>
+    </div>
+    <div id="right">
+      <span>
+        <a id="logo-org" href="https://analog.com"></a>
+        <div class="vertical-divider"></div>
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
+        <a id="logo" href="../index.html">
+          <div>no-OS</div>
+        </a>
+      </span>
+      <span class="reverse">
+        <label id="show-localtoc" class="icon" for="input-show-localtoc" title="Show/hide contents"></label>
+      </span>
+    </div>
+  </header>
+
+
+  <div class="repotoc-tree overlay">
+    <root>
+  <a href="../index.html" class="current">no-OS</a>
+</root>
+
+  </div>
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div>
+          <div class="localtoc-header"></div>
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">EVAL-AD3552R no-OS Example Project</a><ul>
+<li><a class="reference internal" href="#supported-evaluation-boards">Supported Evaluation Boards</a></li>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#applications">Applications</a></li>
+<li><a class="reference internal" href="#hardware-specifications">Hardware Specifications</a><ul>
+<li><a class="reference internal" href="#power-supply-requirements">Power Supply Requirements</a><ul>
+<li><a class="reference internal" href="#pin-assignment-on-power-supply-connector-p3">Pin Assignment on Power Supply Connector P3</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#digital-signals">Digital Signals</a><ul>
+<li><a class="reference internal" href="#pin-assignment-on-connector-p5">Pin Assignment on Connector P5</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#no-os-build-setup">No-OS Build Setup</a></li>
+<li><a class="reference internal" href="#no-os-supported-examples">No-OS Supported Examples</a><ul>
+<li><a class="reference internal" href="#axi-quad-spi-example">AXI Quad SPI example</a></li>
+<li><a class="reference internal" href="#generic-spi-example">Generic SPI example</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#iio-example">IIO example</a></li>
+<li><a class="reference internal" href="#no-os-supported-platforms">No-OS Supported Platforms</a><ul>
+<li><a class="reference internal" href="#xilinx">Xilinx</a><ul>
+<li><a class="reference internal" href="#hardware-used">Hardware Used</a></li>
+<li><a class="reference internal" href="#connections">Connections</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#build-command">Build Command</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
+  
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+    <a id="no-logo" href="../index.html">
+      no-OS
+    </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
+All content
+</label>
+<label id="show-toc" for="input-switch-toc">
+Content on this topic
+</label>
+<div class="repotoc-tree">
+  <root>
+  <a href="../index.html" class="current">no-OS</a>
+</root>
+
+</div>
+<div class="toc-tree">
+  <html>
+  <body><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../drivers_guide.html">no-OS drivers guide</a></li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1"/><div class="collapse"><a class="reference internal" href="../drivers_doc.html">no-OS drivers list</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adxl355.html">ADXL355 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adxl38x.html">ADXL38x no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ad405x.html">AD405X no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ad7768.html">AD7768 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ad7768-1.html">AD7768-1 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ad796x.html">AD796X no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ad9083.html">AD9083 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ad9208.html">AD9208 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adm1177.html">ADM1177 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/pulsar_adc.html">AD400X no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ad9625.html">AD9625 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ad74416h.html">AD74416H no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/axi_sysid.html">System ID (AXI_SYSID) no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max14914.html">MAX14914 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max14919.html">MAX14919 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max149x6.html">MAX149X6 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max22190.html">MAX22190 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max22196.html">MAX22196 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max22200.html">MAX22200 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ad8460.html">AD8460 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max22017.html">MAX22017 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ad3552r.html">AD3552R no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adf4030.html">ADF4030 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adf4368.html">ADF4368 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adf4377.html">ADF4377 No-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adf4382.html">ADF4382 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adf5611.html">ADF5611 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/admfm2000.html">ADMFM2000 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adf4350.html">ADF4350 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/imu.html">ADIS no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max25603.html">MAX25603 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ade7816.html">ADE7816 no-OS documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ade7913.html">ADE7913 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ade9113.html">ADE9113 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/madura.html">ADRV902x (Madura) no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/talise.html">ADRV9009 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ltc2983.html">LTC2983 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max31827.html">MAX31827 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max31855.html">MAX31855 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adt75.html">ADT75 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ades1754.html">ADES1754 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adp1050.html">ADP1050 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adp1055.html">ADP1055 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adp5055.html">ADP5055 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/lt3074.html">LT3074 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/lt7170.html">LT7170 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/lt7182s.html">LT7182S no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/lt8491.html">LT8491 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/lt8722.html">LT8722 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ltc2992.html">LTC2992 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ltc4162l.html">LTC4162L no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ltc4296.html">LTC4296 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ltc7841.html">LTC7841 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ltc7871.html">LTC7871 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ltm4686.html">LTM4686 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ltp8800.html">LTP8800 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max17851.html">MAX17851 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max42500.html">MAX42500 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ad5293.html">AD5293 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adin1110.html">ADIN1110 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adxrs290.html">ADXRS290 no-OS Driver</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2" checked=""/><div class="collapse"><a class="reference internal" href="../projects_doc.html">no-OS projects list</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="ad469x_evb.html">AD469x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad7091r8-sdz.html">AD7091R-2/-4/-8 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad7606x-fmc.html">AD7606x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad7616-st.html">AD7616 no-OS Example Project on SDP-K1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad7768-1fmcz.html">AD7768-1 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad796x_fmcz.html">AD796x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pulsar-adc.html">AD400x no-OS Example Project on ZED and SDP-K1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad9467.html">AD9467 no-OS Example project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad9081.html">ad9081 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad74416h.html">AD74416H no-OS Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4030.html">Evaluating the ADF4030</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4368.html">Evaluating the ADF4368</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4377_sdz.html">Evaluating the ADF4377 Wideband Synthesizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4382.html">ADF4382 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf5611.html">Evaluating the ADF5611</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval-adis1646x.html">ADIS1646X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval-adis1647x.html">ADIS1647X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval-adis1650x.html">ADIS1650X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval-adis1654x.html">ADIS1654X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval-adis1655x.html">ADIS1655X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval-adis1657x.html">ADIS1657X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval-ade7913.html">EVAL-ADE7913 no-OS Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval-ade9430.html">EVAL-ADE9430 Sensor-to-Cloud no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adrv902x.html">adrv902x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adrv9001.html">ADRV9001 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="apard32690.html">AD-APARD32690-SL no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max14914.html">MAX14914 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max14919.html">MAX14919 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ades1754.html">Evaluating the EVAL-ADES1754</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adp1050.html">ADP1050 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adp1055.html">ADP1055 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adp5055.html">ADP5055 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dc2703a.html">Evaluating the LT8491</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt3074.html">Evaluating the LT3074</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt7170.html">Evaluating the LT7170</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt7182s.html">Evaluating the LT7182S</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt8722.html">Evaluating the LT8722</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc4162l.html">Evaluating the LTC4162L</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc4296.html">LTC4296 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc7841.html">Evaluating the LTC7841</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc7871.html">Evaluating the LTC7871</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltm4686.html">Evaluating the LTM4686</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltp8800.html">Evaluating the LTP8800</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max42500.html">MAX42500 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval-ad8460.html">Evaluating the EVAL-AD8460</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22017.html">MAX22017 no-OS Example Project</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">EVAL-AD3552R no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc2983.html">Evaluating the LTC2983</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max31827-evkit.html">Evaluating the MAX31827</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adxrs290-pmdz.html">ADXRS290-PMDZ no-OS Project</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3" id="toctree-collapse-3"/><div class="collapse"><a class="reference internal" href="../build_guide.html">No-OS Build Guide</a><label for="toctree-collapse-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../build_guides/build_maxim.html">Maxim Build Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../build_guides/build_ftd2xx.html">Build against FTD2XX library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../build_guides/build_win.html">Windows Build Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../build_guides/build_mac.html">MAC Build Prerequisites</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to no-OS</a></li>
+</ul>
+</body>
+</html>
+
+</div>
+        </div>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body-header">
+    <nav class="breadcrumb">
+        <ol>
+          <li><a href="../projects_doc.html">no-OS projects list</a></li>
+          </ol>
+    </nav>
+  </div>
+
+          <div class="body" role="main">
+            
+  <section id="eval-ad3552r-no-os-example-project">
+<h1>EVAL-AD3552R no-OS Example Project<a class="headerlink" href="#eval-ad3552r-no-os-example-project" title="Link to this heading"></a></h1>
+<section id="supported-evaluation-boards">
+<h2>Supported Evaluation Boards<a class="headerlink" href="#supported-evaluation-boards" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD3552RFMCZ">EVAL-AD3552RFMCZ</a></p></li>
+</ul>
+</section>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>The EVAL-AD3552RFMCZ Evaluation Board is designed for the dual-channel,
+16-bit AD3552R digital-to-analog converter (DAC). It features two
+channels with distinct transimpedance amplifiers—one for dynamic
+performance and one for DC precision over temperature. The board
+supports comprehensive testing across all DAC outputs, waveform
+generation, and offers various power supply and reference options.
+Connectivity is facilitated through the USB port using the SDP-H1 system
+demonstration platform or via a pin header for ZedBoard or other
+controllers.</p>
+</section>
+<section id="applications">
+<h2>Applications<a class="headerlink" href="#applications" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Instrumentation</p></li>
+<li><p>Hardware in the loop</p></li>
+<li><p>Process control equipment</p></li>
+<li><p>Medical devices</p></li>
+<li><p>Automated test equipment</p></li>
+<li><p>Data acquisition systems</p></li>
+<li><p>Programmable voltage sources</p></li>
+<li><p>Optical communications</p></li>
+</ul>
+</section>
+<section id="hardware-specifications">
+<h2>Hardware Specifications<a class="headerlink" href="#hardware-specifications" title="Link to this heading"></a></h2>
+<section id="power-supply-requirements">
+<h3>Power Supply Requirements<a class="headerlink" href="#power-supply-requirements" title="Link to this heading"></a></h3>
+<p>To power the EVAL-AD3552RFMCZ board, connect it using either a
+controller board or external power supplies via connector P3.</p>
+<section id="pin-assignment-on-power-supply-connector-p3">
+<h4>Pin Assignment on Power Supply Connector P3<a class="headerlink" href="#pin-assignment-on-power-supply-connector-p3" title="Link to this heading"></a></h4>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>Pin Number</p></td>
+<td><p>Signal</p></td>
+<td><p>Description</p></td>
+</tr>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>EXT_PVDD</p></td>
+<td><p>External positive
+supply for
+transconductance
+amplifier. 12V ± 5%.</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>EXT_PVSS</p></td>
+<td><p>External negative
+supply for
+transconductance
+amplifier. −12V ± 5%</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>EXT_VDD</p></td>
+<td><p>External AVDD analog
+supply for AD3552R.
+5V ± 5%.</p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>EXT_DVDD</p></td>
+<td><p>External DVDD digital
+supply for AD3552R.
+1.8V ± 5%.</p></td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p>EXT_VLOGIC</p></td>
+<td><p>External VLOGIC
+digital I/O supply
+for AD3552R. 1.1V to
+1.9V.</p></td>
+</tr>
+<tr class="row-odd"><td><p>6</p></td>
+<td><p>GND</p></td>
+<td><p>Ground.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="digital-signals">
+<h3>Digital Signals<a class="headerlink" href="#digital-signals" title="Link to this heading"></a></h3>
+<section id="pin-assignment-on-connector-p5">
+<h4>Pin Assignment on Connector P5<a class="headerlink" href="#pin-assignment-on-connector-p5" title="Link to this heading"></a></h4>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Pin Number</p></th>
+<th class="head"><p>Signal</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>+12V_FMC</p></td>
+<td><p>External 12 V power supply. Use this pin to supply the
+EVAL-AD3552RFMCZ board when using a custom controller
+different from the SDP-H1 or the ZedBoard.</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>POWER_ON_FMC</p></td>
+<td><p>Enable signal for the onboard regulators. This pin is used to
+turn on the LDOs and DC/DC converters. Set a voltage higher
+than 1.24 V to turn on.</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>VIO</p></td>
+<td><p>Voltage supply used for AD3552R I/O pins. If this pin is
+used to supply VLOGIC, remove the VLOGIC link or set it to
+EXT.</p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>SPI_QPI1</p></td>
+<td><p>Signal SPI_QPI. A high level sets the bus in Quad SPI mode.
+A low level sets the bus in classic SPI mode.</p></td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p>GND</p></td>
+<td><p>Ground.</p></td>
+</tr>
+<tr class="row-odd"><td><p>6</p></td>
+<td><p>SPI_CS1</p></td>
+<td><p>SPI chip select signal.</p></td>
+</tr>
+<tr class="row-even"><td><p>7</p></td>
+<td><p>SPI_SCK1</p></td>
+<td><p>SPI clock signal.</p></td>
+</tr>
+<tr class="row-odd"><td><p>8</p></td>
+<td><p>SPI_SDI1</p></td>
+<td><p>SPI data input signal.</p></td>
+</tr>
+<tr class="row-even"><td><p>9</p></td>
+<td><p>GND</p></td>
+<td><p>Ground.</p></td>
+</tr>
+<tr class="row-odd"><td><p>10</p></td>
+<td><p>SPI_SDIO01</p></td>
+<td><p>SDO/MISO signal in Classic SPI mode or SDIO0 signal in
+Dual/Quad SPI modes.</p></td>
+</tr>
+<tr class="row-even"><td><p>11</p></td>
+<td><p>GND</p></td>
+<td><p>Ground.</p></td>
+</tr>
+<tr class="row-odd"><td><p>12</p></td>
+<td><p>SPI_SDIO11</p></td>
+<td><p>SDO/MISO signal in Classic SPI mode or SDIO1 signal in
+Dual/Quad SPI modes.</p></td>
+</tr>
+<tr class="row-even"><td><p>13</p></td>
+<td><p>GND</p></td>
+<td><p>Ground.</p></td>
+</tr>
+<tr class="row-odd"><td><p>14</p></td>
+<td><p>SPI_SDIO21</p></td>
+<td><p>SPI SDIO2 signal in Quad SPI mode.</p></td>
+</tr>
+<tr class="row-even"><td><p>15</p></td>
+<td><p>GND</p></td>
+<td><p>Ground.</p></td>
+</tr>
+<tr class="row-odd"><td><p>16</p></td>
+<td><p>SPI_SDIO31</p></td>
+<td><p>SPI SDIO3 signal in Quad SPI mode.</p></td>
+</tr>
+<tr class="row-even"><td><p>17</p></td>
+<td><p>GND</p></td>
+<td><p>Ground.</p></td>
+</tr>
+<tr class="row-odd"><td><p>18</p></td>
+<td><p>/LDAC1</p></td>
+<td><p>LDAC signal.</p></td>
+</tr>
+<tr class="row-even"><td><p>19</p></td>
+<td><p>/RESET1</p></td>
+<td><p>RESET signal.</p></td>
+</tr>
+<tr class="row-odd"><td><p>20</p></td>
+<td><p>/ALERT1</p></td>
+<td><p>ALERT signal.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+</section>
+<section id="no-os-build-setup">
+<h2>No-OS Build Setup<a class="headerlink" href="#no-os-build-setup" title="Link to this heading"></a></h2>
+<p>Please see: <a class="reference external" href="https://wiki.analog.com/resources/no-os/build">No-OS Build Guide</a></p>
+</section>
+<section id="no-os-supported-examples">
+<h2>No-OS Supported Examples<a class="headerlink" href="#no-os-supported-examples" title="Link to this heading"></a></h2>
+<p>The initialization data used in the examples is taken out from the
+<a class="reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad3552r_fmcz/src/common">Project Common Data Path</a></p>
+<p>The macros used in Common Data are defined in platform specific files
+found in the <a class="reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad3552r_fmcz/src/platform/">Project Platform Configuration Path:</a></p>
+<section id="axi-quad-spi-example">
+<h3>AXI Quad SPI example<a class="headerlink" href="#axi-quad-spi-example" title="Link to this heading"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">axi_qspi_example.c</span></code> demonstrates using the AD3552R DAC via the
+AXI QSPI interface, emphasizing hardware initialization, such as GPIOs,
+SPI, and the DAC itself. It showcases data writing operations, including
+raw sample data transfer to the DAC, with cyclic DMA capabilities. The
+example supports sine wave generation via the <code class="docutils literal notranslate"><span class="pre">no_os_sine_lut_16</span></code>
+lookup table, with provisions for IIO integration for broader
+compatibility with Linux kernel subsystems, offering a flexible
+foundation suitable for diverse signal processing applications.</p>
+<p>In order to build the axi_qspi example, make sure you have the following
+configuration in the <a class="reference external" href="https://github.com/analogdevicesinc/no-OS/blob/main/projects/ad3552r_fmcz/Makefile">Makefile:</a></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Enable AXI QSPI Example</span>
+<span class="nv">EXAMPLE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>axi_qspi
+</pre></div>
+</div>
+</section>
+<section id="generic-spi-example">
+<h3>Generic SPI example<a class="headerlink" href="#generic-spi-example" title="Link to this heading"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">generic_spi_example.c</span></code> code functions by initializing hardware
+components like GPIOs and the SPI interface to facilitate communication
+with the AD3552R DAC. It configures SPI parameters and utilizes a sine
+wave lookup table for data generation. The code supports conditional
+compilation to enable standalone operation or integration with the IIO
+framework, which enhances data handling and device management. The main
+function orchestrates system setup, ensuring proper DAC operation by
+managing the initialization and execution of GPIO and SPI
+configurations, ultimately allowing the DAC to process and output the
+sine wave data accurately.</p>
+<p>In order to build the axi_qspi example, make sure you have the following
+configuration in the Makefile:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Enable Generic SPI Example</span>
+<span class="nv">EXAMPLE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>generic_spi
+</pre></div>
+</div>
+</section>
+</section>
+<section id="iio-example">
+<h2>IIO example<a class="headerlink" href="#iio-example" title="Link to this heading"></a></h2>
+<p>The IIO demo is a standard example, provided in most
+<a class="reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/projects">no-OS projects</a>,
+that launches an IIOD server on the board so that the user may connect
+to it via an IIO client. Using the IIO-Oscilloscope application, the
+user can configure the device attributes and visualize DAC sequence
+executions.</p>
+<p>If you are not familiar with ADI IIO Application, please take a look at:
+<a class="reference external" href="https://wiki.analog.com/resources/tools-software/no-os-software/iio">IIO No-OS</a></p>
+<p>If you are not familiar with ADI IIO-Oscilloscope Client, please take a
+look at: <a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/iio_oscilloscope">IIO Oscilloscope</a></p>
+<p>To build the IIOD demo, add the following flags when invoking make. This
+will build the IIOD server and the IIO section of the driver:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Enable IIO example for AXI QSPI</span>
+<span class="nv">EXAMPLE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>axi_qspi
+<span class="nv">IIOD</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>y
+
+<span class="c1"># Enable IIO example for Generic SPI</span>
+<span class="nv">EXAMPLE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>generic_spi
+<span class="nv">IIOD</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>y
+</pre></div>
+</div>
+</section>
+<section id="no-os-supported-platforms">
+<h2>No-OS Supported Platforms<a class="headerlink" href="#no-os-supported-platforms" title="Link to this heading"></a></h2>
+<section id="xilinx">
+<h3>Xilinx<a class="headerlink" href="#xilinx" title="Link to this heading"></a></h3>
+<section id="hardware-used">
+<h4>Hardware Used<a class="headerlink" href="#hardware-used" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>EVAL-AD3552RFMCZ</p></li>
+<li><p>ZedBoard</p></li>
+</ul>
+</section>
+<section id="connections">
+<h4>Connections<a class="headerlink" href="#connections" title="Link to this heading"></a></h4>
+<p>The EVAL-AD3552RFMCZ board interfaces with the ZedBoard via connector
+P5, which handles both digital signal transmission and power
+requirements. For power, utilize the +12V_FMC pin, and activate the
+POWER_ON_FMC pin to enable the board’s regulators. I/O voltage is
+selected through the VIO pin, while grounding is managed by the GND pin.
+The SPI bus can operate in either Quad mode or the classic configuration
+controlled by the SPI_QPI pin. Voltage reference is adjustable via
+jumper J_REF for external configurations. Proper initialization requires
+setting GPIO_RESET_N and GPIO_LDAC_N pins high at startup.</p>
+<ul class="simple">
+<li><p>Connect the <a class="icon adi reference external" href="https://www.analog.com/EVAL-AD3552RFMCZ">EVAL-AD3552RFMCZ</a> board into the ZedBoard FMC connector.</p></li>
+<li><p>Connect USB UART J14 (Micro USB) to your host PC.</p></li>
+<li><p>Plug your ethernet cable into the RJ45 ethernet connector(J11).</p></li>
+<li><p>Plug the Power Supply into the 12V Power input connector (J20).</p></li>
+</ul>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><strong>Pin Function</strong></p></td>
+<td><p><strong>Pin Name</strong></p></td>
+<td><p><strong>Description</strong></p></td>
+</tr>
+<tr class="row-even"><td><p>SPI Mode Selector</p></td>
+<td><p>SPI_QPI1</p></td>
+<td><p>High level sets to
+Quad SPI; low level
+sets to Classic SPI.</p></td>
+</tr>
+<tr class="row-odd"><td><p>SPI Chip Select</p></td>
+<td><p>SPI_CS1</p></td>
+<td><p>SPI chip select
+signal.</p></td>
+</tr>
+<tr class="row-even"><td><p>SPI Clock</p></td>
+<td><p>SPI_SCK1</p></td>
+<td><p>SPI clock signal.</p></td>
+</tr>
+<tr class="row-odd"><td><p>SPI Data Input</p></td>
+<td><p>SPI_SDI1</p></td>
+<td><p>SPI data input
+signal.</p></td>
+</tr>
+<tr class="row-even"><td><p>SPI SDIO Bit 0</p></td>
+<td><p>SPI_SDIO01</p></td>
+<td><p>SDO/MISO in Classic
+SPI or SDIO0 in
+Dual/Quad mode.</p></td>
+</tr>
+<tr class="row-odd"><td><p>SPI SDIO Bit 1</p></td>
+<td><p>SPI_SDIO11</p></td>
+<td><p>SDO/MISO in Classic
+SPI or SDIO1 in
+Dual/Quad mode.</p></td>
+</tr>
+<tr class="row-even"><td><p>SPI SDIO Bit 2</p></td>
+<td><p>SPI_SDIO21</p></td>
+<td><p>SDIO2 in Quad SPI
+mode.</p></td>
+</tr>
+<tr class="row-odd"><td><p>SPI SDIO Bit 3</p></td>
+<td><p>SPI_SDIO31</p></td>
+<td><p>SDIO3 in Quad SPI
+mode.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Special Purpose
+Pins</strong></p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Load DAC Data</p></td>
+<td><p>/LDAC1</p></td>
+<td><p>Load DAC data.</p></td>
+</tr>
+<tr class="row-even"><td><p>Reset</p></td>
+<td><p>/RESET1</p></td>
+<td><p>Reset signal to
+initialize the board.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Alert</p></td>
+<td><p>/ALERT1</p></td>
+<td><p>Indicates errors or
+alerts.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="build-command">
+<h3>Build Command<a class="headerlink" href="#build-command" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cp<span class="w"> </span>&lt;SOME_PATH&gt;/system_top.xsa<span class="w"> </span>.
+<span class="c1"># to delete current build</span>
+make<span class="w"> </span>reset<span class="w"> </span><span class="nv">PLATFORM</span><span class="o">=</span>xilinx
+<span class="c1"># to build the basic project</span>
+make<span class="w"> </span><span class="nv">EXAMPLE</span><span class="o">=</span>axi_qspi<span class="w"> </span><span class="nv">PLATFORM</span><span class="o">=</span>xilinx
+<span class="c1"># to flash the code</span>
+make<span class="w"> </span>run
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+          </div>
+              <div class="related">
+                &nbsp;
+    <a href="max22017.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">MAX22017 no-OS Example Project</a>
+    <a href="ltc2983.html" title="Next document (Alt+Shift+RightArrow)" class="next">Evaluating the LTC2983</a>
+              </div>
+          
+        </div>
+      </div>
+  </div>
+
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
+    <footer>
+      &#169;2023-2024, Analog Devices, Inc.
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
+</html>

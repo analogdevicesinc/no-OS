@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>ADF4030 no-OS driver &#8212; no-OS  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="../_static/app.min.css?v=25ed7d6a" />
+    <script defer="" src="../_static/app.umd.js?v=80d097f0"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ADF4368 no-OS driver" href="adf4368.html" />
+    <link rel="prev" title="AD3552R no-OS Driver" href="ad3552r.html" />
+   
+  
+  <meta name="repository" content="no-OS">
+  <meta name="version" content="">
+  
+    <meta name="page_source_suffix" content=".rst">
+  
+  
+
+
+<style>
+  body {
+    
+  }
+
+  body.dark {
+    
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body:not(.light) {
+      
+    }
+  }
+</style>
+  </head><body>
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
+  <input type="checkbox" id="input-show-repotoc">
+
+  
+  <div class="search-area">
+    <form action="" method="get">
+      <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+      <button class="icon"></button>
+    </form>
+  </div>
+  
+
+  <header>
+    <div id="left">
+      <label id="show-sidebar" class="icon" for="input-show-toc" title="Show/hide index"></label>
+    </div>
+    <div id="right">
+      <span>
+        <a id="logo-org" href="https://analog.com"></a>
+        <div class="vertical-divider"></div>
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
+        <a id="logo" href="../index.html">
+          <div>no-OS</div>
+        </a>
+      </span>
+      <span class="reverse">
+        <label id="show-localtoc" class="icon" for="input-show-localtoc" title="Show/hide contents"></label>
+      </span>
+    </div>
+  </header>
+
+
+  <div class="repotoc-tree overlay">
+    <root>
+  <a href="../index.html" class="current">no-OS</a>
+</root>
+
+  </div>
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div>
+          <div class="localtoc-header"></div>
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">ADF4030 no-OS driver</a><ul>
+<li><a class="reference internal" href="#supported-devices">Supported Devices</a></li>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#applications">Applications</a></li>
+<li><a class="reference internal" href="#adf4030-device-configuration">ADF4030 Device Configuration</a></li>
+<li><a class="reference internal" href="#driver-initialization">Driver Initialization</a></li>
+<li><a class="reference internal" href="#reference-clock-configuration">Reference Clock Configuration</a></li>
+<li><a class="reference internal" href="#reference-divider-configuration">Reference Divider Configuration</a></li>
+<li><a class="reference internal" href="#vco-configuration">VCO Configuration</a></li>
+<li><a class="reference internal" href="#bsync-frequency-configuration">BSYNC Frequency Configuration</a></li>
+<li><a class="reference internal" href="#tdc-configuration">TDC Configuration</a></li>
+<li><a class="reference internal" href="#alignment-configuration">Alignment Configuration</a></li>
+<li><a class="reference internal" href="#bsync-delay-configuration">BSYNC Delay Configuration</a></li>
+<li><a class="reference internal" href="#bsync-direction-configuration">BSYNC Direction Configuration</a></li>
+<li><a class="reference internal" href="#bsync-termination-configuration">BSYNC Termination Configuration</a></li>
+<li><a class="reference internal" href="#bsync-output-prbs-configuration">BSYNC Output PRBS Configuration</a></li>
+<li><a class="reference internal" href="#bsync-output-divider-configuration">BSYNC Output Divider Configuration</a></li>
+<li><a class="reference internal" href="#bsync-output-inverter-configuration">BSYNC Output Inverter Configuration</a></li>
+<li><a class="reference internal" href="#bsync-output-voltage-level-configuration">BSYNC Output Voltage Level Configuration</a></li>
+<li><a class="reference internal" href="#adf4030-driver-initialization-example">ADF4030 Driver Initialization Example</a></li>
+<li><a class="reference internal" href="#spi-communication-example">SPI Communication Example</a></li>
+<li><a class="reference internal" href="#adf4030-no-os-iio-support">ADF4030 no-OS IIO support</a></li>
+<li><a class="reference internal" href="#adf4030-iio-device-configuration">ADF4030 IIO Device Configuration</a></li>
+<li><a class="reference internal" href="#device-attributes">Device Attributes</a></li>
+<li><a class="reference internal" href="#device-channels">Device Channels</a></li>
+<li><a class="reference internal" href="#adf4030-iio-driver-initialization-example">ADF4030 IIO Driver Initialization Example</a></li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
+  
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+    <a id="no-logo" href="../index.html">
+      no-OS
+    </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
+All content
+</label>
+<label id="show-toc" for="input-switch-toc">
+Content on this topic
+</label>
+<div class="repotoc-tree">
+  <root>
+  <a href="../index.html" class="current">no-OS</a>
+</root>
+
+</div>
+<div class="toc-tree">
+  <html>
+  <body><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../drivers_guide.html">no-OS drivers guide</a></li>
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1" checked=""/><div class="collapse"><a class="reference internal" href="../drivers_doc.html">no-OS drivers list</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="adxl355.html">ADXL355 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adxl38x.html">ADXL38x no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad405x.html">AD405X no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad7768.html">AD7768 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad7768-1.html">AD7768-1 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad796x.html">AD796X no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad9083.html">AD9083 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad9208.html">AD9208 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adm1177.html">ADM1177 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pulsar_adc.html">AD400X no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad9625.html">AD9625 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad74416h.html">AD74416H no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="axi_sysid.html">System ID (AXI_SYSID) no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max14914.html">MAX14914 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max14919.html">MAX14919 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max149x6.html">MAX149X6 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22190.html">MAX22190 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22196.html">MAX22196 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22200.html">MAX22200 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad8460.html">AD8460 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22017.html">MAX22017 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad3552r.html">AD3552R no-OS Driver</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">ADF4030 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4368.html">ADF4368 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4377.html">ADF4377 No-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4382.html">ADF4382 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf5611.html">ADF5611 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admfm2000.html">ADMFM2000 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4350.html">ADF4350 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="imu.html">ADIS no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max25603.html">MAX25603 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ade7816.html">ADE7816 no-OS documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ade7913.html">ADE7913 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ade9113.html">ADE9113 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="madura.html">ADRV902x (Madura) no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="talise.html">ADRV9009 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc2983.html">LTC2983 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max31827.html">MAX31827 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max31855.html">MAX31855 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adt75.html">ADT75 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ades1754.html">ADES1754 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adp1050.html">ADP1050 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adp1055.html">ADP1055 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adp5055.html">ADP5055 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt3074.html">LT3074 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt7170.html">LT7170 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt7182s.html">LT7182S no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt8491.html">LT8491 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt8722.html">LT8722 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc2992.html">LTC2992 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc4162l.html">LTC4162L no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc4296.html">LTC4296 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc7841.html">LTC7841 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc7871.html">LTC7871 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltm4686.html">LTM4686 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltp8800.html">LTP8800 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max17851.html">MAX17851 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max42500.html">MAX42500 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad5293.html">AD5293 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adin1110.html">ADIN1110 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adxrs290.html">ADXRS290 no-OS Driver</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2"/><div class="collapse"><a class="reference internal" href="../projects_doc.html">no-OS projects list</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad469x_evb.html">AD469x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7091r8-sdz.html">AD7091R-2/-4/-8 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7606x-fmc.html">AD7606x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7616-st.html">AD7616 no-OS Example Project on SDP-K1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7768-1fmcz.html">AD7768-1 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad796x_fmcz.html">AD796x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/pulsar-adc.html">AD400x no-OS Example Project on ZED and SDP-K1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad9467.html">AD9467 no-OS Example project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad9081.html">ad9081 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad74416h.html">AD74416H no-OS Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adf4030.html">Evaluating the ADF4030</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adf4368.html">Evaluating the ADF4368</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adf4377_sdz.html">Evaluating the ADF4377 Wideband Synthesizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adf4382.html">ADF4382 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adf5611.html">Evaluating the ADF5611</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1646x.html">ADIS1646X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1647x.html">ADIS1647X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1650x.html">ADIS1650X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1654x.html">ADIS1654X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1655x.html">ADIS1655X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1657x.html">ADIS1657X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-ade7913.html">EVAL-ADE7913 no-OS Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-ade9430.html">EVAL-ADE9430 Sensor-to-Cloud no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adrv902x.html">adrv902x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adrv9001.html">ADRV9001 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/apard32690.html">AD-APARD32690-SL no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max14914.html">MAX14914 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max14919.html">MAX14919 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ades1754.html">Evaluating the EVAL-ADES1754</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adp1050.html">ADP1050 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adp1055.html">ADP1055 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adp5055.html">ADP5055 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/dc2703a.html">Evaluating the LT8491</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/lt3074.html">Evaluating the LT3074</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/lt7170.html">Evaluating the LT7170</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/lt7182s.html">Evaluating the LT7182S</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/lt8722.html">Evaluating the LT8722</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc4162l.html">Evaluating the LTC4162L</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc4296.html">LTC4296 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc7841.html">Evaluating the LTC7841</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc7871.html">Evaluating the LTC7871</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltm4686.html">Evaluating the LTM4686</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltp8800.html">Evaluating the LTP8800</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max42500.html">MAX42500 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-ad8460.html">Evaluating the EVAL-AD8460</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max22017.html">MAX22017 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad3552r_fmcz.html">EVAL-AD3552R no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc2983.html">Evaluating the LTC2983</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max31827-evkit.html">Evaluating the MAX31827</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adxrs290-pmdz.html">ADXRS290-PMDZ no-OS Project</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3" id="toctree-collapse-3"/><div class="collapse"><a class="reference internal" href="../build_guide.html">No-OS Build Guide</a><label for="toctree-collapse-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../build_guides/build_maxim.html">Maxim Build Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../build_guides/build_ftd2xx.html">Build against FTD2XX library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../build_guides/build_win.html">Windows Build Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../build_guides/build_mac.html">MAC Build Prerequisites</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to no-OS</a></li>
+</ul>
+</body>
+</html>
+
+</div>
+        </div>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body-header">
+    <nav class="breadcrumb">
+        <ol>
+          <li><a href="../drivers_doc.html">no-OS drivers list</a></li>
+          </ol>
+    </nav>
+  </div>
+
+          <div class="body" role="main">
+            
+  <section id="adf4030-no-os-driver">
+<h1>ADF4030 no-OS driver<a class="headerlink" href="#adf4030-no-os-driver" title="Link to this heading"></a></h1>
+<section id="supported-devices">
+<h2>Supported Devices<a class="headerlink" href="#supported-devices" title="Link to this heading"></a></h2>
+<p><a class="reference external" href="https://www.analog.com/en/products/adf4030.html">ADF4030</a></p>
+</section>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>The <a class="reference external" href="https://www.analog.com/en/products/adf4030.html">ADF4030</a> provides for 10 bidirectional synchronized clock
+(BSYNC) channels and accepts a reference clock input (REFIN)
+signal as a frequency reference for generating an output clock
+on any BSYNC channels that are configured as an output. The
+hallmark feature of the <a class="reference external" href="https://www.analog.com/en/products/adf4030.html">ADF4030</a> is the ability to time align the clock
+edges of any one or more BSYNC channels to &lt;5 ps (at the device
+pins) with respect to the BSYNC channel selected as the reference
+BSYNC channel.
+The <a class="reference external" href="https://www.analog.com/en/products/adf4030.html">ADF4030</a>  is well adapted for multiple connections with other
+<a class="reference external" href="https://www.analog.com/en/products/adf4030.html">ADF4030</a>  devices for synchronizing clock signals in a system. Each
+BSYNC is bidirectional, allowing for reversing the direction of the
+clock signal to measure the propagation delay of the transmission
+medium. Round trip constructions that use replica paths are also
+supported. The bidirectional nature of the round trip delay measurement greatly reduces the error in determining the propagation delay
+through the BSYNC transmission medium as compared to using
+a replica path. This feature makes the <a class="reference external" href="https://www.analog.com/en/products/adf4030.html">ADF4030</a>  capable to time
+align the clock edges of BSYNC channels across multiple <a class="reference external" href="https://www.analog.com/en/products/adf4030.html">ADF4030</a>
+devices, independent of the tree or cascade architecture in which
+the <a class="reference external" href="https://www.analog.com/en/products/adf4030.html">ADF4030</a>  system is designed. The benefits of bidirectional
+clocking extend to devices other than the <a class="reference external" href="https://www.analog.com/en/products/adf4030.html">ADF4030</a>  (assuming
+those devices support bidirectional clock exchanges).</p>
+</section>
+<section id="applications">
+<h2>Applications<a class="headerlink" href="#applications" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>5G timing transport high precision synchronization</p></li>
+<li><p>Phased array radar</p></li>
+<li><p>Automatic test equipment (ATE) pin electronics</p></li>
+<li><p>JESD204B/JESD204C support for analog-to-digital converter (ADC) and digital-to-analog converter (DAC) clocking</p></li>
+</ul>
+</section>
+<section id="adf4030-device-configuration">
+<h2>ADF4030 Device Configuration<a class="headerlink" href="#adf4030-device-configuration" title="Link to this heading"></a></h2>
+</section>
+<section id="driver-initialization">
+<h2>Driver Initialization<a class="headerlink" href="#driver-initialization" title="Link to this heading"></a></h2>
+<p>In order to be able to use the device, you will have to provide the support for
+the communication protocol (SPI).</p>
+<p>The first API to be called is <strong>adf4030_init</strong>. Make sure that it returns 0,
+which means that the driver was initialized correctly. This function will also
+reset the ADF4030 by performing a soft reset, putting the device in a known
+state.</p>
+</section>
+<section id="reference-clock-configuration">
+<h2>Reference Clock Configuration<a class="headerlink" href="#reference-clock-configuration" title="Link to this heading"></a></h2>
+<p>By default, the device is set to use a 125MHz clock. This can be changed to any
+value, which is supported by the device, by using the function
+<strong>adf4030_set_ref_clk</strong>. The current configuration can be read out using
+<strong>adf4030_get_ref_clk</strong>.The input reference clock value for the function will
+have to be expressed in Hz.</p>
+</section>
+<section id="reference-divider-configuration">
+<h2>Reference Divider Configuration<a class="headerlink" href="#reference-divider-configuration" title="Link to this heading"></a></h2>
+<p>On the reference input path there is a divider, allowing the input reference
+frequency to be divided by up to 31. Default this is set to 1 and can be changed
+using <strong>adf4030_set_ref_div</strong>. The current configuration can be read out using
+<strong>adf4030_get_ref_div</strong>.</p>
+</section>
+<section id="vco-configuration">
+<h2>VCO Configuration<a class="headerlink" href="#vco-configuration" title="Link to this heading"></a></h2>
+<p>The VCO frequency can be set using the function <strong>adf4030_set_vco_freq</strong>. The
+current frequency can be read out using <strong>adf4030_get_vco_freq</strong>. The input
+VCO frequency value for the function will have to be expressed in Hz. The
+frequency range is between 2.375 GHz and 2.625 GHz.</p>
+</section>
+<section id="bsync-frequency-configuration">
+<h2>BSYNC Frequency Configuration<a class="headerlink" href="#bsync-frequency-configuration" title="Link to this heading"></a></h2>
+<p>The BSYNC channels frequencies can be set using the function
+<strong>adf4030_set_bsync_freq</strong>. The current frequency can be read out using
+<strong>adf4030_get_bsync_freq</strong>. The input BSYNC frequency value for the function
+will have to be expressed in Hz. The frequency range is between 650 kHz and
+200 MHz. There are 2 different output divider for the BSYNC channels. Output dividers
+can be selected with the argument <strong>odivb_sel</strong> in the function
+<strong>adf4030_set_bsync_freq</strong>.</p>
+</section>
+<section id="tdc-configuration">
+<h2>TDC Configuration<a class="headerlink" href="#tdc-configuration" title="Link to this heading"></a></h2>
+<p>The TDC source channel can be set using the function <strong>adf4030_set_tdc_source</strong>. The
+current TDC source channel can be read out using <strong>adf4030_get_tdc_source</strong>. TDC source
+needs to be set before performing TDC measurement or alignments.</p>
+<p>The TDC measurement can be performed using the function <strong>adf4030_set_tdc_measurement</strong>.
+Function takes TDC target channel as argument. The TDC measurement will be triggered with this function.
+TDC Result can be read out using the function <strong>adf4030_get_tdc_result</strong>. This architecture has
+designed to support the paralilism idea for the multiple Aion systems.</p>
+</section>
+<section id="alignment-configuration">
+<h2>Alignment Configuration<a class="headerlink" href="#alignment-configuration" title="Link to this heading"></a></h2>
+<p>The alignment source channel can be set using the function <strong>adf4030_set_tdc_source</strong>. The
+current alignment source channel can be read out using <strong>adf4030_get_tdc_source</strong>. Alignment source
+needs to be set before performing TDC measurement or alignments.</p>
+<p>The single channel alignment can be performed using the function <strong>adf4030_set_single_ch_alignment</strong>.
+Function takes the target channel as argument. Alignemnt will be triggered with this function.
+The alignment result can be read out using the function <strong>adf4030_set_tdc_measurement</strong> and
+<strong>adf4030_get_tdc_result</strong> functions.</p>
+<p>The number of iterations for the one alignment can be set using the function
+<strong>adf4030_set_alignment_iter</strong>. The current number of iterations can be read out using
+<strong>adf4030_get_alignment_iter</strong>.</p>
+<p>The threshold for the alignment can be set using the function <strong>adf4030_set_alignment_threshold</strong>. The
+current threshold can be read out using <strong>adf4030_get_alignment_threshold</strong>. If the iteration number is
+set previously, the alignment will be continued until the threshold is reached or the number of
+iterations is reached.</p>
+</section>
+<section id="bsync-delay-configuration">
+<h2>BSYNC Delay Configuration<a class="headerlink" href="#bsync-delay-configuration" title="Link to this heading"></a></h2>
+<p>The BSYNC channels can be configured to have a delay using the function <strong>adf4030_set_channel_delay</strong>.
+The current delay can be read out using <strong>adf4030_get_channel_delay</strong>. The input and output delay
+value is represented in femto-seconds (fs). Delay will be applied after an alignment.</p>
+</section>
+<section id="bsync-direction-configuration">
+<h2>BSYNC Direction Configuration<a class="headerlink" href="#bsync-direction-configuration" title="Link to this heading"></a></h2>
+<p>The BSYNC channels can be configured to be inputs or outputs using
+<strong>adf4030_set_channel_direction</strong>. The current configuration can be read out using
+<strong>adf4030_get_channel_direction</strong>. The BSYNC channels can be configured to be</p>
+</section>
+<section id="bsync-termination-configuration">
+<h2>BSYNC Termination Configuration<a class="headerlink" href="#bsync-termination-configuration" title="Link to this heading"></a></h2>
+<p>The BSYNC channels can be configured to have a termination using
+<strong>adf4030_set_channel_termination</strong>. The current configuration can be read out using
+<strong>adf4030_get_channel_termination</strong>. Terminations can be set for RX and TX channels.
+<strong>adf4030_terminations_e</strong> enumeration is used as argument to set the termination.</p>
+<p>There are 3 terminations available for Tx Channels:
+* Voltage Driver
+* Current Driver Unterminated
+* Current Driver Terminated</p>
+<p>There are 3 terminations available for Rx Channels:
+* DC coupled clocks
+* AC coupled clocks
+* DC coupled high speed current steering logic (HCSL) clocks</p>
+</section>
+<section id="bsync-output-prbs-configuration">
+<h2>BSYNC Output PRBS Configuration<a class="headerlink" href="#bsync-output-prbs-configuration" title="Link to this heading"></a></h2>
+<p>The BSYNC channels output a gapped periodic clock (GPC) signal. The PRBS generator produces a
+pseudorandom sequence of ones and zeros at the same rate as the ODIV divider
+output clock signal. The BSYNC channels can be configured to have a PRBS using
+<strong>adf4030_set_channel_prbs</strong>. The current configuration can be read out using
+<strong>adf4030_get_channel_prbs</strong>.</p>
+</section>
+<section id="bsync-output-divider-configuration">
+<h2>BSYNC Output Divider Configuration<a class="headerlink" href="#bsync-output-divider-configuration" title="Link to this heading"></a></h2>
+<p>The BSYNC channels can be configured to select odiva or odivb for the output divider.
+Channels' ouput divider can be set using the function <strong>adf4030_set_channel_odivb</strong>. The current configuration can be read out using
+<strong>adf4030_get_channel_odivb</strong>. The output divider can be set for each channel separately.</p>
+</section>
+<section id="bsync-output-inverter-configuration">
+<h2>BSYNC Output Inverter Configuration<a class="headerlink" href="#bsync-output-inverter-configuration" title="Link to this heading"></a></h2>
+<p>The BYNC channels can be configured to have an inverter using
+<strong>adf4030_set_channel_inverter</strong>. The current configuration can be read out using
+<strong>adf4030_get_channel_inverter</strong>. This will add channel output to 180 degrees analog phase shift.</p>
+</section>
+<section id="bsync-output-voltage-level-configuration">
+<h2>BSYNC Output Voltage Level Configuration<a class="headerlink" href="#bsync-output-voltage-level-configuration" title="Link to this heading"></a></h2>
+<p>The BSYNC channels can be configured to have a voltage level using
+<strong>adf4030_set_channel_voltage</strong>. The current configuration can be read out using
+<strong>adf4030_get_channel_voltage</strong>. The voltage level can be set for each channel separately.
+The voltage level can be set between 0.504 V to 1.304 V.</p>
+</section>
+<section id="adf4030-driver-initialization-example">
+<h2>ADF4030 Driver Initialization Example<a class="headerlink" href="#adf4030-driver-initialization-example" title="Link to this heading"></a></h2>
+</section>
+<section id="spi-communication-example">
+<h2>SPI Communication Example<a class="headerlink" href="#spi-communication-example" title="Link to this heading"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="w">    </span>struct<span class="w"> </span>adf4030_dev<span class="w"> </span>*dev<span class="p">;</span>
+<span class="w">    </span>int<span class="w"> </span>ret<span class="p">;</span>
+
+struct<span class="w"> </span>no_os_uart_init_param<span class="w"> </span><span class="nv">adf4030_uart_ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span>.device_id<span class="w"> </span><span class="o">=</span><span class="w"> </span>UART_DEVICE_ID,
+<span class="w">    </span>.irq_id<span class="w"> </span><span class="o">=</span><span class="w"> </span>UART_IRQ_ID,
+<span class="w">    </span>.asynchronous_rx<span class="w"> </span><span class="o">=</span><span class="w"> </span>true,
+<span class="w">    </span>.baud_rate<span class="w"> </span><span class="o">=</span><span class="w"> </span>UART_BAUDRATE,
+<span class="w">    </span>.size<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_UART_CS_8,
+<span class="w">    </span>.parity<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_UART_PAR_NO,
+<span class="w">    </span>.stop<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_UART_STOP_1_BIT,
+<span class="w">    </span>.extra<span class="w"> </span><span class="o">=</span><span class="w"> </span>UART_EXTRA,
+<span class="w">    </span>.platform_ops<span class="w"> </span><span class="o">=</span><span class="w"> </span>UART_OPS,
+<span class="o">}</span><span class="p">;</span>
+
+struct<span class="w"> </span>no_os_spi_init_param<span class="w"> </span><span class="nv">adf4030_spi_ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span>.device_id<span class="w"> </span><span class="o">=</span><span class="w"> </span>SPI_DEVICE_ID,
+<span class="w">    </span>.max_speed_hz<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">3000000</span>,
+<span class="w">    </span>.bit_order<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_SPI_BIT_ORDER_MSB_FIRST,
+<span class="w">    </span>.mode<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_SPI_MODE_0,
+<span class="w">    </span>.platform_ops<span class="w"> </span><span class="o">=</span><span class="w"> </span>SPI_OPS,
+<span class="w">    </span>.chip_select<span class="w"> </span><span class="o">=</span><span class="w"> </span>SPI_CS,
+<span class="w">    </span>.extra<span class="w"> </span><span class="o">=</span><span class="w"> </span>SPI_EXTRA,
+<span class="o">}</span><span class="p">;</span>
+
+struct<span class="w"> </span>adf4030_init_param<span class="w"> </span><span class="nv">adf4030_ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span>.spi_init<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>adf4030_spi_ip,
+<span class="w">    </span>.spi_4wire_en<span class="w"> </span><span class="o">=</span><span class="w"> </span>true,
+<span class="w">    </span>.cmos_3v3<span class="w"> </span><span class="o">=</span><span class="w"> </span>false,
+<span class="w">    </span>.ref_freq<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">125000000</span>,
+<span class="w">    </span>.vco_freq<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">2500000000</span>,
+<span class="w">    </span>.bsync_freq<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">100000000</span>,
+<span class="w">    </span>.ref_div<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span>,
+<span class="w">    </span>.chip_addr<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span>,
+<span class="o">}</span><span class="p">;</span>
+
+<span class="w">    </span><span class="nv">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>adf4030_init<span class="o">(</span><span class="p">&amp;</span>dev,<span class="w"> </span><span class="p">&amp;</span>adf4030_ip<span class="o">)</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">(</span>ret<span class="o">)</span>
+<span class="w">            </span>goto<span class="w"> </span>remove_adf4030<span class="p">;</span>
+
+<span class="w">    </span><span class="nv">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>adf4030_set_channel_direction<span class="o">(</span>dev,<span class="w"> </span><span class="m">2</span>,<span class="w"> </span><span class="nb">true</span><span class="o">)</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">(</span>ret<span class="o">)</span>
+<span class="w">            </span>goto<span class="w"> </span>remove_adf4030<span class="p">;</span>
+
+<span class="w">    </span><span class="nv">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>adf4030_set_tdc_source<span class="o">(</span>dev,<span class="w"> </span><span class="m">1</span><span class="o">)</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">(</span>ret<span class="o">)</span>
+<span class="w">            </span>goto<span class="w"> </span>remove_adf4030<span class="p">;</span>
+
+<span class="w">    </span><span class="nv">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>adf4030_set_channel_delay<span class="o">(</span>dev,<span class="w"> </span><span class="m">2</span>,<span class="w"> </span><span class="m">200000</span><span class="o">)</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">(</span>ret<span class="o">)</span>
+<span class="w">            </span>goto<span class="w"> </span>remove_adf4030<span class="p">;</span>
+
+<span class="w">    </span><span class="nv">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>adf4030_set_single_ch_alignment<span class="o">(</span>dev,<span class="w"> </span><span class="m">2</span><span class="o">)</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">(</span>ret<span class="o">)</span>
+<span class="w">            </span>goto<span class="w"> </span>remove_adf4030<span class="p">;</span>
+
+<span class="w">    </span><span class="nv">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>adf4030_set_tdc_measurement<span class="o">(</span>dev,<span class="w"> </span><span class="m">2</span><span class="o">)</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">(</span>ret<span class="o">)</span>
+<span class="w">            </span>goto<span class="w"> </span>remove_adf4030<span class="p">;</span>
+
+<span class="w">    </span>int64_t<span class="w"> </span>tdc_res<span class="p">;</span>
+<span class="w">    </span><span class="nv">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>adf4030_get_tdc_measurement<span class="o">(</span>dev,<span class="w"> </span><span class="p">&amp;</span>tdc_res<span class="o">)</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">(</span>ret<span class="o">)</span>
+<span class="w">            </span>goto<span class="w"> </span>remove_adf4030<span class="p">;</span>
+
+<span class="w">    </span>pr_info<span class="o">(</span><span class="s2">&quot;tdc_res : %lld\n&quot;</span>,<span class="w"> </span>tdc_res<span class="o">)</span><span class="p">;</span>
+</pre></div>
+</div>
+</section>
+<section id="adf4030-no-os-iio-support">
+<h2>ADF4030 no-OS IIO support<a class="headerlink" href="#adf4030-no-os-iio-support" title="Link to this heading"></a></h2>
+<p>The ADF4030 IIO driver comes on top of ADF4030 driver and offers support for
+interfacing IIO clients through IIO lib.</p>
+</section>
+<section id="adf4030-iio-device-configuration">
+<h2>ADF4030 IIO Device Configuration<a class="headerlink" href="#adf4030-iio-device-configuration" title="Link to this heading"></a></h2>
+</section>
+<section id="device-attributes">
+<h2>Device Attributes<a class="headerlink" href="#device-attributes" title="Link to this heading"></a></h2>
+<p>Device attributes are used to configure the ADF4030 device. These attributes
+affects all channels. The device attributes are:</p>
+<ul class="simple">
+<li><p>default_register : Loads the default register values for eval board configuration</p></li>
+<li><p>chip_address : Chip address for the ADF4030 device</p></li>
+<li><p>reference_frequency : Reference frequency for the ADF4030 device</p></li>
+<li><p>vco_frequency : VCO frequency for the ADF4030 device</p></li>
+<li><p>bsync_freq_odiva : BSYNC frequency for the channels assigned to odiva</p></li>
+<li><p>bsync_freq_odivb : BSYNC frequency for the channels assigned to odivb</p></li>
+<li><p>tdc_source_ch : TDC source channel</p></li>
+<li><p>tdc_measurement : TDC measurement with given TDC source and argument TDC target</p></li>
+<li><p>alignment_iter : Number of iterations for the alignment</p></li>
+<li><p>alignment_threshold : Threshold for the alignment</p></li>
+<li><p>single_ch_alignment : Single channel alignment with given target channel</p></li>
+<li><p>serial_alignment : Serial alignment with given channel flags</p></li>
+<li><p>background_serial_alignment : Background serial alignment with given channel flags</p></li>
+<li><p>temperature : Temperature of the ADF4030</p></li>
+</ul>
+</section>
+<section id="device-channels">
+<h2>Device Channels<a class="headerlink" href="#device-channels" title="Link to this heading"></a></h2>
+<p>ADF4030 IIO device has 10 BSYNC channels.</p>
+<ul class="simple">
+<li><p>outpu/input bsync0 - corresponding to BSYNC channel 0 on the device</p></li>
+<li><p>outpu/input bsync1 - corresponding to BSYNC channel 1 on the device</p></li>
+<li><p>outpu/input bsync2 - corresponding to BSYNC channel 2 on the device</p></li>
+<li><p>outpu/input bsync3 - corresponding to BSYNC channel 3 on the device</p></li>
+<li><p>outpu/input bsync4 - corresponding to BSYNC channel 4 on the device</p></li>
+<li><p>outpu/input bsync5 - corresponding to BSYNC channel 5 on the device</p></li>
+<li><p>outpu/input bsync6 - corresponding to BSYNC channel 6 on the device</p></li>
+<li><p>outpu/input bsync7 - corresponding to BSYNC channel 7 on the device</p></li>
+<li><p>outpu/input bsync8 - corresponding to BSYNC channel 8 on the device</p></li>
+<li><p>outpu/input bsync9 - corresponding to BSYNC channel 9 on the device</p></li>
+</ul>
+<p>Each channel has 7 independent attributes:
+* direction : Channel direction (input/output)
+* delay : Channel delay
+* odivb_en : Channel output divider (odiva/odivb)
+* termination : Channel termination
+* prbs : Channel PRBS (enabled/disabled)
+* inverter : Channel inverter (enabled/disabled)
+* voltage : Channel voltage level (0.504V to 1.304V)</p>
+</section>
+<section id="adf4030-iio-driver-initialization-example">
+<h2>ADF4030 IIO Driver Initialization Example<a class="headerlink" href="#adf4030-iio-driver-initialization-example" title="Link to this heading"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>struct<span class="w"> </span>adf4030_iio_dev<span class="w"> </span>*adf4030_iio_dev<span class="p">;</span>
+struct<span class="w"> </span>adf4030_iio_dev_init_param<span class="w"> </span>adf4030_iio_ip<span class="p">;</span>
+struct<span class="w"> </span>iio_app_desc<span class="w"> </span>*app<span class="p">;</span>
+struct<span class="w"> </span>iio_app_init_param<span class="w"> </span><span class="nv">app_init_param</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">}</span><span class="p">;</span>
+int<span class="w"> </span>ret<span class="p">;</span>
+
+struct<span class="w"> </span>no_os_uart_init_param<span class="w"> </span><span class="nv">adf4030_uart_ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>.device_id<span class="w"> </span><span class="o">=</span><span class="w"> </span>UART_DEVICE_ID,
+<span class="w">        </span>.irq_id<span class="w"> </span><span class="o">=</span><span class="w"> </span>UART_IRQ_ID,
+<span class="w">        </span>.asynchronous_rx<span class="w"> </span><span class="o">=</span><span class="w"> </span>true,
+<span class="w">        </span>.baud_rate<span class="w"> </span><span class="o">=</span><span class="w"> </span>UART_BAUDRATE,
+<span class="w">        </span>.size<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_UART_CS_8,
+<span class="w">        </span>.parity<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_UART_PAR_NO,
+<span class="w">        </span>.stop<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_UART_STOP_1_BIT,
+<span class="w">        </span>.extra<span class="w"> </span><span class="o">=</span><span class="w"> </span>UART_EXTRA,
+<span class="w">        </span>.platform_ops<span class="w"> </span><span class="o">=</span><span class="w"> </span>UART_OPS,
+<span class="o">}</span><span class="p">;</span>
+
+struct<span class="w"> </span>no_os_spi_init_param<span class="w"> </span><span class="nv">adf4030_spi_ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>.device_id<span class="w"> </span><span class="o">=</span><span class="w"> </span>SPI_DEVICE_ID,
+<span class="w">        </span>.max_speed_hz<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">3000000</span>,
+<span class="w">        </span>.bit_order<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_SPI_BIT_ORDER_MSB_FIRST,
+<span class="w">        </span>.mode<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_SPI_MODE_0,
+<span class="w">        </span>.platform_ops<span class="w"> </span><span class="o">=</span><span class="w"> </span>SPI_OPS,
+<span class="w">        </span>.chip_select<span class="w"> </span><span class="o">=</span><span class="w"> </span>SPI_CS,
+<span class="w">        </span>.extra<span class="w"> </span><span class="o">=</span><span class="w"> </span>SPI_EXTRA,
+<span class="o">}</span><span class="p">;</span>
+
+struct<span class="w"> </span>adf4030_init_param<span class="w"> </span><span class="nv">adf4030_ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>.spi_init<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>adf4030_spi_ip,
+<span class="w">        </span>.spi_4wire_en<span class="w"> </span><span class="o">=</span><span class="w"> </span>true,
+<span class="w">        </span>.cmos_3v3<span class="w"> </span><span class="o">=</span><span class="w"> </span>false,
+<span class="w">        </span>.ref_freq_hz<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">125000000</span>,
+<span class="w">        </span>.freq<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">8000000000</span>,
+<span class="w">        </span>.ref_doubler_en<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span>,
+<span class="w">        </span>.ref_div<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span>,
+<span class="w">        </span>.cp_i<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">14</span>,
+<span class="w">        </span>.ld_count<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">12</span>,
+<span class="o">}</span><span class="p">;</span>
+
+adf4030_iio_ip.adf4030_dev_init<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>adf4030_ip<span class="p">;</span>
+<span class="nv">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>adf4030_iio_init<span class="o">(</span><span class="p">&amp;</span>adf4030_iio_dev,<span class="w"> </span><span class="p">&amp;</span>adf4030_iio_ip<span class="o">)</span><span class="p">;</span>
+<span class="k">if</span><span class="w"> </span><span class="o">(</span>ret<span class="o">)</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span>ret<span class="p">;</span>
+
+struct<span class="w"> </span>iio_app_device<span class="w"> </span>iio_devices<span class="o">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span><span class="o">{</span>
+<span class="w">                </span>.name<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;adf4030&quot;</span>,
+<span class="w">                </span>.dev<span class="w"> </span><span class="o">=</span><span class="w"> </span>adf4030_iio_dev,
+<span class="w">                </span>.dev_descriptor<span class="w"> </span><span class="o">=</span><span class="w"> </span>adf4030_iio_dev-&gt;iio_dev,
+<span class="w">        </span><span class="o">}</span>
+<span class="o">}</span><span class="p">;</span>
+
+app_init_param.devices<span class="w"> </span><span class="o">=</span><span class="w"> </span>iio_devices<span class="p">;</span>
+app_init_param.nb_devices<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_ARRAY_SIZE<span class="o">(</span>iio_devices<span class="o">)</span><span class="p">;</span>
+app_init_param.uart_init_params<span class="w"> </span><span class="o">=</span><span class="w"> </span>adf4030_uart_ip<span class="p">;</span>
+
+<span class="nv">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>iio_app_init<span class="o">(</span><span class="p">&amp;</span>app,<span class="w"> </span>app_init_param<span class="o">)</span><span class="p">;</span>
+<span class="k">if</span><span class="w"> </span><span class="o">(</span>ret<span class="o">)</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span>ret<span class="p">;</span>
+
+<span class="k">return</span><span class="w"> </span>iio_app_run<span class="o">(</span>app<span class="o">)</span><span class="p">;</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+          </div>
+              <div class="related">
+                &nbsp;
+    <a href="ad3552r.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">AD3552R no-OS Driver</a>
+    <a href="adf4368.html" title="Next document (Alt+Shift+RightArrow)" class="next">ADF4368 no-OS driver</a>
+              </div>
+          
+        </div>
+      </div>
+  </div>
+
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
+    <footer>
+      &#169;2023-2024, Analog Devices, Inc.
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
+</html>

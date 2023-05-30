@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>AD7768-1 no-OS Driver &#8212; no-OS  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="../_static/app.min.css?v=25ed7d6a" />
+    <script defer="" src="../_static/app.umd.js?v=80d097f0"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="AD796X no-OS driver" href="ad796x.html" />
+    <link rel="prev" title="AD7768 no-OS Driver" href="ad7768.html" />
+   
+  
+  <meta name="repository" content="no-OS">
+  <meta name="version" content="">
+  
+    <meta name="page_source_suffix" content=".rst">
+  
+  
+
+
+<style>
+  body {
+    
+  }
+
+  body.dark {
+    
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body:not(.light) {
+      
+    }
+  }
+</style>
+  </head><body>
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
+  <input type="checkbox" id="input-show-repotoc">
+
+  
+  <div class="search-area">
+    <form action="" method="get">
+      <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+      <button class="icon"></button>
+    </form>
+  </div>
+  
+
+  <header>
+    <div id="left">
+      <label id="show-sidebar" class="icon" for="input-show-toc" title="Show/hide index"></label>
+    </div>
+    <div id="right">
+      <span>
+        <a id="logo-org" href="https://analog.com"></a>
+        <div class="vertical-divider"></div>
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
+        <a id="logo" href="../index.html">
+          <div>no-OS</div>
+        </a>
+      </span>
+      <span class="reverse">
+        <label id="show-localtoc" class="icon" for="input-show-localtoc" title="Show/hide contents"></label>
+      </span>
+    </div>
+  </header>
+
+
+  <div class="repotoc-tree overlay">
+    <root>
+  <a href="../index.html" class="current">no-OS</a>
+</root>
+
+  </div>
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div>
+          <div class="localtoc-header"></div>
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">AD7768-1 no-OS Driver</a><ul>
+<li><a class="reference internal" href="#supported-devices">Supported Devices</a></li>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#applications">Applications</a></li>
+<li><a class="reference internal" href="#operational-modes">Operational Modes</a></li>
+<li><a class="reference internal" href="#driver-configuration">Driver Configuration</a><ul>
+<li><a class="reference internal" href="#initialization">Initialization</a></li>
+<li><a class="reference internal" href="#power-configurations">Power Configurations</a></li>
+<li><a class="reference internal" href="#conversion-modes">Conversion Modes</a></li>
+<li><a class="reference internal" href="#buffer-and-reference-settings">Buffer and Reference Settings</a></li>
+<li><a class="reference internal" href="#filter-configurations">Filter Configurations</a></li>
+<li><a class="reference internal" href="#gain-and-offset-adjustments">Gain and Offset Adjustments</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#driver-initialization-example">Driver Initialization Example</a></li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
+  
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+    <a id="no-logo" href="../index.html">
+      no-OS
+    </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
+All content
+</label>
+<label id="show-toc" for="input-switch-toc">
+Content on this topic
+</label>
+<div class="repotoc-tree">
+  <root>
+  <a href="../index.html" class="current">no-OS</a>
+</root>
+
+</div>
+<div class="toc-tree">
+  <html>
+  <body><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../drivers_guide.html">no-OS drivers guide</a></li>
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1" checked=""/><div class="collapse"><a class="reference internal" href="../drivers_doc.html">no-OS drivers list</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="adxl355.html">ADXL355 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adxl38x.html">ADXL38x no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad405x.html">AD405X no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad7768.html">AD7768 no-OS Driver</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">AD7768-1 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad796x.html">AD796X no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad9083.html">AD9083 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad9208.html">AD9208 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adm1177.html">ADM1177 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pulsar_adc.html">AD400X no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad9625.html">AD9625 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad74416h.html">AD74416H no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="axi_sysid.html">System ID (AXI_SYSID) no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max14914.html">MAX14914 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max14919.html">MAX14919 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max149x6.html">MAX149X6 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22190.html">MAX22190 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22196.html">MAX22196 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22200.html">MAX22200 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad8460.html">AD8460 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22017.html">MAX22017 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad3552r.html">AD3552R no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4030.html">ADF4030 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4368.html">ADF4368 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4377.html">ADF4377 No-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4382.html">ADF4382 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf5611.html">ADF5611 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admfm2000.html">ADMFM2000 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4350.html">ADF4350 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="imu.html">ADIS no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max25603.html">MAX25603 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ade7816.html">ADE7816 no-OS documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ade7913.html">ADE7913 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ade9113.html">ADE9113 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="madura.html">ADRV902x (Madura) no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="talise.html">ADRV9009 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc2983.html">LTC2983 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max31827.html">MAX31827 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max31855.html">MAX31855 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adt75.html">ADT75 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ades1754.html">ADES1754 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adp1050.html">ADP1050 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adp1055.html">ADP1055 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adp5055.html">ADP5055 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt3074.html">LT3074 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt7170.html">LT7170 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt7182s.html">LT7182S no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt8491.html">LT8491 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt8722.html">LT8722 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc2992.html">LTC2992 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc4162l.html">LTC4162L no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc4296.html">LTC4296 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc7841.html">LTC7841 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc7871.html">LTC7871 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltm4686.html">LTM4686 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltp8800.html">LTP8800 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max17851.html">MAX17851 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max42500.html">MAX42500 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad5293.html">AD5293 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adin1110.html">ADIN1110 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adxrs290.html">ADXRS290 no-OS Driver</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2"/><div class="collapse"><a class="reference internal" href="../projects_doc.html">no-OS projects list</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad469x_evb.html">AD469x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7091r8-sdz.html">AD7091R-2/-4/-8 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7606x-fmc.html">AD7606x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7616-st.html">AD7616 no-OS Example Project on SDP-K1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7768-1fmcz.html">AD7768-1 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad796x_fmcz.html">AD796x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/pulsar-adc.html">AD400x no-OS Example Project on ZED and SDP-K1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad9467.html">AD9467 no-OS Example project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad9081.html">ad9081 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad74416h.html">AD74416H no-OS Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adf4030.html">Evaluating the ADF4030</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adf4368.html">Evaluating the ADF4368</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adf4377_sdz.html">Evaluating the ADF4377 Wideband Synthesizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adf4382.html">ADF4382 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adf5611.html">Evaluating the ADF5611</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1646x.html">ADIS1646X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1647x.html">ADIS1647X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1650x.html">ADIS1650X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1654x.html">ADIS1654X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1655x.html">ADIS1655X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1657x.html">ADIS1657X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-ade7913.html">EVAL-ADE7913 no-OS Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-ade9430.html">EVAL-ADE9430 Sensor-to-Cloud no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adrv902x.html">adrv902x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adrv9001.html">ADRV9001 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/apard32690.html">AD-APARD32690-SL no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max14914.html">MAX14914 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max14919.html">MAX14919 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ades1754.html">Evaluating the EVAL-ADES1754</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adp1050.html">ADP1050 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adp1055.html">ADP1055 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adp5055.html">ADP5055 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/dc2703a.html">Evaluating the LT8491</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/lt3074.html">Evaluating the LT3074</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/lt7170.html">Evaluating the LT7170</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/lt7182s.html">Evaluating the LT7182S</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/lt8722.html">Evaluating the LT8722</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc4162l.html">Evaluating the LTC4162L</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc4296.html">LTC4296 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc7841.html">Evaluating the LTC7841</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc7871.html">Evaluating the LTC7871</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltm4686.html">Evaluating the LTM4686</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltp8800.html">Evaluating the LTP8800</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max42500.html">MAX42500 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-ad8460.html">Evaluating the EVAL-AD8460</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max22017.html">MAX22017 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad3552r_fmcz.html">EVAL-AD3552R no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc2983.html">Evaluating the LTC2983</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max31827-evkit.html">Evaluating the MAX31827</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adxrs290-pmdz.html">ADXRS290-PMDZ no-OS Project</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3" id="toctree-collapse-3"/><div class="collapse"><a class="reference internal" href="../build_guide.html">No-OS Build Guide</a><label for="toctree-collapse-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../build_guides/build_maxim.html">Maxim Build Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../build_guides/build_ftd2xx.html">Build against FTD2XX library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../build_guides/build_win.html">Windows Build Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../build_guides/build_mac.html">MAC Build Prerequisites</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to no-OS</a></li>
+</ul>
+</body>
+</html>
+
+</div>
+        </div>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body-header">
+    <nav class="breadcrumb">
+        <ol>
+          <li><a href="../drivers_doc.html">no-OS drivers list</a></li>
+          </ol>
+    </nav>
+  </div>
+
+          <div class="body" role="main">
+            
+  <section id="ad7768-1-no-os-driver">
+<h1>AD7768-1 no-OS Driver<a class="headerlink" href="#ad7768-1-no-os-driver" title="Link to this heading"></a></h1>
+<p><span>See </span><a class="reference external" href="../doxygen/dir_3e25e8f22a645d4077b5d0157a491ed1.html"><span>drivers/adc/ad7768-1 (doxygen)</span></a><span> for the Doxygen documentation.</span></p>
+<section id="supported-devices">
+<h2>Supported Devices<a class="headerlink" href="#supported-devices" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7768-1">AD7768-1</a></p></li>
+</ul>
+</section>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>The <a class="icon adi reference external" href="https://www.analog.com/AD7768-1">AD7768-1</a> is a precision 24-bit analog-to-digital converter (ADC)
+optimized for high-performance applications in dynamic signal analysis.
+It offers flexible operational modes, including continuous, one-shot,
+single, periodic, and standby, making it adaptable to various scenarios.
+The converter supports SPI and pin control modes, providing functions
+like digital filtering, power mode adjustments, and GPIO configurations.
+The AD7768-1 optimizes data transfer with features such as continuous
+read enable, programmable finite impulse response (FIR) filters, and
+support for high-speed data acquisition.</p>
+</section>
+<section id="applications">
+<h2>Applications<a class="headerlink" href="#applications" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><dl class="simple">
+<dt>Platform ADC to serve a superset of measurements and sensor types</dt><dd><ul>
+<li><p>Sound and vibration, acoustic, and material science research and development</p></li>
+<li><p>Control and hardware in loop verification</p></li>
+<li><p>Condition monitoring for predictive maintenance</p></li>
+<li><p>Electrical test and measurement</p></li>
+<li><p>Audio testing and current and voltage measurement</p></li>
+<li><p>Clinical electroencephalogram (EEG), electromyogram (EMG), and electrocardiogram (ECG) vital signs monitoring</p></li>
+<li><p>USB-, PXI-, and Ethernet-based modular data acquisition (DAQ)</p></li>
+<li><p>Channel to channel isolated modular DAQ designs</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="operational-modes">
+<h2>Operational Modes<a class="headerlink" href="#operational-modes" title="Link to this heading"></a></h2>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Mode Name</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Configuration</p></th>
+<th class="head"><p>Typical Use Case</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Continuous</p></td>
+<td><p>Uninterrupted data conversion,
+ideal for continuous signal
+monitoring.</p></td>
+<td><p>AD77681_CONV_CONTINUOUS</p></td>
+<td><p>Real-time sound measurement.</p></td>
+</tr>
+<tr class="row-odd"><td><p>One-shot</p></td>
+<td><p>Single conversion on demand,
+suitable for low power
+applications.</p></td>
+<td><p>AD77681_CONV_ONE_SHOT</p></td>
+<td><p>Intermittent readings in
+battery-powered devices.</p></td>
+</tr>
+<tr class="row-even"><td><p>Periodic</p></td>
+<td><p>Converts data at regular
+intervals, balancing power
+consumption and performance.</p></td>
+<td><p>AD77681_CONV_PERIODIC</p></td>
+<td><p>Environmental monitoring
+with scheduled readings.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Standby</p></td>
+<td><p>Low-power state, ready for quick
+conversion resumption.</p></td>
+<td><p>AD77681_CONV_STANDBY</p></td>
+<td><p>Devices needing quick
+wake up capability.</p></td>
+</tr>
+<tr class="row-even"><td><p>Single</p></td>
+<td><p>Similar to one-shot but implied
+more for one-time single use
+without a signal.</p></td>
+<td><p>AD77681_CONV_SINGLE</p></td>
+<td><p>Single event measurement
+and precision testing.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="driver-configuration">
+<h2>Driver Configuration<a class="headerlink" href="#driver-configuration" title="Link to this heading"></a></h2>
+<section id="initialization">
+<h3>Initialization<a class="headerlink" href="#initialization" title="Link to this heading"></a></h3>
+<p>To initialize the AD7768-1 device, ensure SPI communication connections
+and adequate power supply. Begin software setup by defining the
+<code class="docutils literal notranslate"><span class="pre">ad77681_init_param</span></code> structure for initialization parameters. This
+includes configuring the SPI using <code class="docutils literal notranslate"><span class="pre">spi_eng_dev_init</span></code>, setting power
+mode to <code class="docutils literal notranslate"><span class="pre">AD77681_FAST</span></code>, selecting master clock division as
+<code class="docutils literal notranslate"><span class="pre">AD77681_MCLK_DIV_8</span></code>, and choosing the conversion mode as
+<code class="docutils literal notranslate"><span class="pre">AD77681_CONV_CONTINUOUS</span></code>. Execute the <code class="docutils literal notranslate"><span class="pre">ad77681_setup</span></code> function to
+allocate memory for the device structures and configure the ADC
+operational parameters.</p>
+</section>
+<section id="power-configurations">
+<h3>Power Configurations<a class="headerlink" href="#power-configurations" title="Link to this heading"></a></h3>
+<p>Control the ADC power mode using <code class="docutils literal notranslate"><span class="pre">ad77681_set_power_mode</span></code>, selecting from
+<code class="docutils literal notranslate"><span class="pre">AD77681_ECO</span></code>, <code class="docutils literal notranslate"><span class="pre">AD77681_MEDIAN</span></code>, or <code class="docutils literal notranslate"><span class="pre">AD77681_FAST</span> <span class="pre">modes</span></code>. Adjust the master
+clock with <code class="docutils literal notranslate"><span class="pre">ad77681_set_mclk_div</span></code> using dividers such as
+<code class="docutils literal notranslate"><span class="pre">AD77681_MCLK_DIV_16</span></code>, <code class="docutils literal notranslate"><span class="pre">AD77681_MCLK_DIV_8</span></code>, <code class="docutils literal notranslate"><span class="pre">AD77681_MCLK_DIV_4</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">AD77681_MCLK_DIV_2</span></code>.</p>
+</section>
+<section id="conversion-modes">
+<h3>Conversion Modes<a class="headerlink" href="#conversion-modes" title="Link to this heading"></a></h3>
+<p>Mode Selection for the AD7768-1 ADC involves using the
+<code class="docutils literal notranslate"><span class="pre">ad77681_set_conv_mode</span> <span class="pre">function</span></code> to configure the conversion mode and
+related settings. The available conversion modes are continuous
+(<code class="docutils literal notranslate"><span class="pre">AD77681_CONV_CONTINUOUS</span></code>), one-shot (<code class="docutils literal notranslate"><span class="pre">AD77681_CONV_ONE_SHOT</span></code>), single
+(<code class="docutils literal notranslate"><span class="pre">AD77681_CONV_SINGLE</span></code>), periodic (<code class="docutils literal notranslate"><span class="pre">AD77681_CONV_PERIODIC</span></code>), and standby.
+The conversion length can be defined with <code class="docutils literal notranslate"><span class="pre">ad77681_set_convlen</span></code>, selecting
+between 24-bit (<code class="docutils literal notranslate"><span class="pre">AD77681_CONV_24BIT</span></code>) and 16-bit (<code class="docutils literal notranslate"><span class="pre">AD77681_CONV_16BIT</span></code>).
+These configurations are written to the device’s registers via SPI.</p>
+</section>
+<section id="buffer-and-reference-settings">
+<h3>Buffer and Reference Settings<a class="headerlink" href="#buffer-and-reference-settings" title="Link to this heading"></a></h3>
+<p>To configure the AD7768-1 ADC input and reference buffers, use
+<code class="docutils literal notranslate"><span class="pre">ad77681_set_AINn_buffer</span></code> and <code class="docutils literal notranslate"><span class="pre">ad77681_set_AINp_buffer</span></code> for the negative and
+positive analog input precharge buffers, respectively. For managing the
+negative and positive reference voltages, utilize
+<code class="docutils literal notranslate"><span class="pre">ad77681_set_REFn_buffer</span></code> and <code class="docutils literal notranslate"><span class="pre">ad77681_set_REFp_buffer</span></code>.</p>
+</section>
+<section id="filter-configurations">
+<h3>Filter Configurations<a class="headerlink" href="#filter-configurations" title="Link to this heading"></a></h3>
+<p>The filter type for SINC filters can be set using the
+<code class="docutils literal notranslate"><span class="pre">ad77681_set_filter_type</span></code> function, while power line rejection can be
+enabled using the <code class="docutils literal notranslate"><span class="pre">ad77681_set_50HZ_rejection</span></code> function for the AD7768-1
+ADC device.</p>
+</section>
+<section id="gain-and-offset-adjustments">
+<h3>Gain and Offset Adjustments<a class="headerlink" href="#gain-and-offset-adjustments" title="Link to this heading"></a></h3>
+<p>The functions <code class="docutils literal notranslate"><span class="pre">ad77681_apply_gain</span></code> and <code class="docutils literal notranslate"><span class="pre">ad77681_apply_offset</span></code> are used to
+calibrate the AD7768-1 ADC by writing specific 24-bit values to its gain
+and offset registers.</p>
+<p><code class="docutils literal notranslate"><span class="pre">ad77681_apply_gain</span></code> accepts a 24-bit gain value,
+splits it into three 8-bit segments (high, middle, and low), and writes
+each to the GAIN_HI, GAIN_MID, and GAIN_LO registers using SPI
+communication. Similarly, <code class="docutils literal notranslate"><span class="pre">ad77681_apply_offset</span></code> configures the offset
+setting by dividing a 24-bit offset value into high, middle, and low
+bytes, then writing them to the OFFSET_HI, OFFSET_MID, and OFFSET_LO
+registers via SPI. Both functions return 0 on successful execution or a
+negative error code if any SPI write operations fail.</p>
+<p><strong>Note:</strong> When configuring the AD7768-1 device, verify that all
+configuration values are consistent with the specific platform or
+hardware in use, especially regarding clock speeds, power modes, and SPI
+settings. Accurate device-specific configurations are crucial to avoid
+performance or compatibility issues.</p>
+</section>
+</section>
+<section id="driver-initialization-example">
+<h2>Driver Initialization Example<a class="headerlink" href="#driver-initialization-example" title="Link to this heading"></a></h2>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;ad77681.h&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;no_os_spi.h&quot;</span>
+
+<span class="c1">// Driver Initialization Code for AD7768-1 ADC</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">ad77681_init_param</span><span class="w"> </span><span class="n">ADC_default_init_param</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="cm">/* SPI Configuration */</span>
+<span class="w">    </span><span class="p">.</span><span class="n">spi_eng_dev_init</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="p">.</span><span class="n">chip_select</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">AD77681_SPI_CS</span><span class="p">,</span><span class="w">       </span><span class="c1">// Chip select configuration</span>
+<span class="w">        </span><span class="p">.</span><span class="n">max_speed_hz</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1000000</span><span class="p">,</span><span class="w">            </span><span class="c1">// Max speed of SPI in Hz</span>
+<span class="w">        </span><span class="p">.</span><span class="n">mode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">NO_OS_SPI_MODE_3</span><span class="p">,</span><span class="w">           </span><span class="c1">// SPI mode 3</span>
+<span class="w">        </span><span class="p">.</span><span class="n">platform_ops</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">spi_eng_platform_ops</span><span class="p">,</span>
+<span class="w">        </span><span class="p">.</span><span class="n">extra</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">spi_eng_init_param</span><span class="w"> </span><span class="c1">// Additional configuration parameters</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="cm">/* ADC Configuration */</span>
+<span class="w">    </span><span class="p">.</span><span class="n">power_mode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">AD77681_FAST</span><span class="p">,</span><span class="w">              </span><span class="c1">// High-speed power mode</span>
+<span class="w">    </span><span class="p">.</span><span class="n">mclk_div</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">AD77681_MCLK_DIV_8</span><span class="p">,</span><span class="w">          </span><span class="c1">// Master clock division</span>
+<span class="w">    </span><span class="p">.</span><span class="n">conv_mode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">AD77681_CONV_CONTINUOUS</span><span class="p">,</span><span class="w">    </span><span class="c1">// Continuous conversion mode</span>
+<span class="w">    </span><span class="p">.</span><span class="n">diag_mux_sel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">AD77681_POSITIVE_FS</span><span class="p">,</span><span class="w">     </span><span class="c1">// Diagnostic mux selection</span>
+<span class="w">    </span><span class="p">.</span><span class="n">conv_diag_sel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">,</span><span class="w">                  </span><span class="c1">// Conversion diagnostics disabled</span>
+<span class="w">    </span><span class="p">.</span><span class="n">conv_len</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">AD77681_CONV_16BIT</span><span class="p">,</span><span class="w">          </span><span class="c1">// Conversion bit length</span>
+<span class="w">    </span><span class="p">.</span><span class="n">crc_sel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">AD77681_CRC</span><span class="p">,</span><span class="w">                  </span><span class="c1">// CRC data integrity check enabled</span>
+<span class="w">    </span><span class="p">.</span><span class="n">status_bit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">                         </span><span class="c1">// Default status</span>
+<span class="w">    </span><span class="p">.</span><span class="n">vcmo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">AD77681_VCM_HALF_VCC</span><span class="p">,</span><span class="w">            </span><span class="c1">// VCM configuration</span>
+<span class="w">    </span><span class="p">.</span><span class="n">ainn_buf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">AD77681_AINn_ENABLED</span><span class="p">,</span><span class="w">        </span><span class="c1">// Negative input precharge buffer enabled</span>
+<span class="w">    </span><span class="p">.</span><span class="n">ainp_buf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">AD77681_AINp_ENABLED</span><span class="p">,</span><span class="w">        </span><span class="c1">// Positive input precharge buffer enabled</span>
+<span class="w">    </span><span class="p">.</span><span class="n">refn_buf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">AD77681_BUFn_ENABLED</span><span class="p">,</span><span class="w">        </span><span class="c1">// REF- buffer enabled</span>
+<span class="w">    </span><span class="p">.</span><span class="n">refp_buf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">AD77681_BUFp_ENABLED</span><span class="p">,</span><span class="w">        </span><span class="c1">// REF+ buffer enabled</span>
+<span class="w">    </span><span class="p">.</span><span class="n">fir_filter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">AD77681_FIR</span><span class="p">,</span><span class="w">               </span><span class="c1">// FIR filter configuration</span>
+<span class="w">    </span><span class="p">.</span><span class="n">dec_rate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">AD77681_SINC5_FIR_DECx32</span><span class="p">,</span><span class="w">    </span><span class="c1">// Decimation rate</span>
+<span class="w">    </span><span class="p">.</span><span class="n">sinc3_osr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">                         </span><span class="c1">// Oversampling rate of SINC3</span>
+<span class="w">    </span><span class="p">.</span><span class="n">ref_voltage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4096</span><span class="p">,</span><span class="w">                     </span><span class="c1">// Reference voltage in mV</span>
+<span class="w">    </span><span class="p">.</span><span class="n">mclk_freq</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">16384</span><span class="w">                       </span><span class="c1">// MCLK frequency in kHz</span>
+
+<span class="p">};</span>
+
+<span class="c1">// Function to initialize the AD7768-1 device</span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">ad77681_dev</span><span class="w"> </span><span class="o">*</span><span class="n">adc_dev</span><span class="p">;</span>
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">ad77681_status_registers</span><span class="w"> </span><span class="o">*</span><span class="n">adc_status</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">adc_data</span><span class="p">[</span><span class="mi">5</span><span class="p">];</span>
+<span class="w">    </span><span class="kt">int32_t</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// Perform setup using the predefined initialization parameters</span>
+<span class="w">    </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ad77681_setup</span><span class="p">(</span><span class="o">&amp;</span><span class="n">adc_dev</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">ADC_default_init_param</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">adc_status</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;AD7768-1 ADC device setup failed</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// Enter continuous data reading loop</span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">ad77681_spi_read_adc_data</span><span class="p">(</span><span class="n">adc_dev</span><span class="p">,</span><span class="w"> </span><span class="n">adc_data</span><span class="p">,</span><span class="w"> </span><span class="n">AD77681_CONTINUOUS_DATA_READ</span><span class="p">);</span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;[ADC DATA]: 0x&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">adc_data</span><span class="p">);</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%02x&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">adc_data</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">no_os_mdelay</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span><span class="w">  </span><span class="c1">// Delay for 1 second</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+          </div>
+              <div class="related">
+                &nbsp;
+    <a href="ad7768.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">AD7768 no-OS Driver</a>
+    <a href="ad796x.html" title="Next document (Alt+Shift+RightArrow)" class="next">AD796X no-OS driver</a>
+              </div>
+          
+        </div>
+      </div>
+  </div>
+
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
+    <footer>
+      &#169;2023-2024, Analog Devices, Inc.
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
+</html>

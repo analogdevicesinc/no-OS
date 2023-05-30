@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>AD8460 no-OS driver &#8212; no-OS  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="../_static/app.min.css?v=25ed7d6a" />
+    <script defer="" src="../_static/app.umd.js?v=80d097f0"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="MAX22017 no-OS Driver" href="max22017.html" />
+    <link rel="prev" title="MAX22200 no-OS driver" href="max22200.html" />
+   
+  
+  <meta name="repository" content="no-OS">
+  <meta name="version" content="">
+  
+    <meta name="page_source_suffix" content=".rst">
+  
+  
+
+
+<style>
+  body {
+    
+  }
+
+  body.dark {
+    
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body:not(.light) {
+      
+    }
+  }
+</style>
+  </head><body>
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
+  <input type="checkbox" id="input-show-repotoc">
+
+  
+  <div class="search-area">
+    <form action="" method="get">
+      <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+      <button class="icon"></button>
+    </form>
+  </div>
+  
+
+  <header>
+    <div id="left">
+      <label id="show-sidebar" class="icon" for="input-show-toc" title="Show/hide index"></label>
+    </div>
+    <div id="right">
+      <span>
+        <a id="logo-org" href="https://analog.com"></a>
+        <div class="vertical-divider"></div>
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
+        <a id="logo" href="../index.html">
+          <div>no-OS</div>
+        </a>
+      </span>
+      <span class="reverse">
+        <label id="show-localtoc" class="icon" for="input-show-localtoc" title="Show/hide contents"></label>
+      </span>
+    </div>
+  </header>
+
+
+  <div class="repotoc-tree overlay">
+    <root>
+  <a href="../index.html" class="current">no-OS</a>
+</root>
+
+  </div>
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div>
+          <div class="localtoc-header"></div>
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">AD8460 no-OS driver</a><ul>
+<li><a class="reference internal" href="#supported-devices">Supported Devices</a></li>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#applications">Applications</a></li>
+<li><a class="reference internal" href="#id1">AD8460</a></li>
+<li><a class="reference internal" href="#ad8460-device-configuration">AD8460 Device Configuration</a></li>
+<li><a class="reference internal" href="#driver-initialization">Driver Initialization</a></li>
+<li><a class="reference internal" href="#reseting-ad8460">Reseting AD8460</a></li>
+<li><a class="reference internal" href="#reading-and-writing-hvdac-values">Reading and Writing HVDAC Values</a></li>
+<li><a class="reference internal" href="#switching-between-apg-and-awg-modes">Switching between APG and AWG Modes</a></li>
+<li><a class="reference internal" href="#shutdown-flag">Shutdown Flag</a></li>
+<li><a class="reference internal" href="#resetting-hv-driver">Resetting HV Driver</a></li>
+<li><a class="reference internal" href="#setting-a-sample">Setting a Sample</a></li>
+<li><a class="reference internal" href="#ad8460-driver-initialization-example">AD8460 Driver Initialization Example</a></li>
+<li><a class="reference internal" href="#ad8460-no-os-iio-support">AD8460 no-OS IIO support</a></li>
+<li><a class="reference internal" href="#ad8460-iio-device-configuration">AD8460 IIO Device Configuration</a></li>
+<li><a class="reference internal" href="#channel-attributes">Channel Attributes</a></li>
+<li><a class="reference internal" href="#ad8460-iio-driver-initialization-example">AD8460 IIO Driver Initialization Example</a></li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
+  
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+    <a id="no-logo" href="../index.html">
+      no-OS
+    </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
+All content
+</label>
+<label id="show-toc" for="input-switch-toc">
+Content on this topic
+</label>
+<div class="repotoc-tree">
+  <root>
+  <a href="../index.html" class="current">no-OS</a>
+</root>
+
+</div>
+<div class="toc-tree">
+  <html>
+  <body><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../drivers_guide.html">no-OS drivers guide</a></li>
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1" checked=""/><div class="collapse"><a class="reference internal" href="../drivers_doc.html">no-OS drivers list</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="adxl355.html">ADXL355 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adxl38x.html">ADXL38x no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad405x.html">AD405X no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad7768.html">AD7768 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad7768-1.html">AD7768-1 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad796x.html">AD796X no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad9083.html">AD9083 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad9208.html">AD9208 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adm1177.html">ADM1177 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pulsar_adc.html">AD400X no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad9625.html">AD9625 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad74416h.html">AD74416H no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="axi_sysid.html">System ID (AXI_SYSID) no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max14914.html">MAX14914 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max14919.html">MAX14919 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max149x6.html">MAX149X6 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22190.html">MAX22190 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22196.html">MAX22196 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22200.html">MAX22200 no-OS driver</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">AD8460 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22017.html">MAX22017 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad3552r.html">AD3552R no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4030.html">ADF4030 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4368.html">ADF4368 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4377.html">ADF4377 No-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4382.html">ADF4382 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf5611.html">ADF5611 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admfm2000.html">ADMFM2000 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4350.html">ADF4350 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="imu.html">ADIS no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max25603.html">MAX25603 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ade7816.html">ADE7816 no-OS documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ade7913.html">ADE7913 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ade9113.html">ADE9113 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="madura.html">ADRV902x (Madura) no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="talise.html">ADRV9009 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc2983.html">LTC2983 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max31827.html">MAX31827 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max31855.html">MAX31855 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adt75.html">ADT75 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ades1754.html">ADES1754 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adp1050.html">ADP1050 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adp1055.html">ADP1055 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adp5055.html">ADP5055 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt3074.html">LT3074 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt7170.html">LT7170 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt7182s.html">LT7182S no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt8491.html">LT8491 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt8722.html">LT8722 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc2992.html">LTC2992 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc4162l.html">LTC4162L no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc4296.html">LTC4296 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc7841.html">LTC7841 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc7871.html">LTC7871 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltm4686.html">LTM4686 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltp8800.html">LTP8800 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max17851.html">MAX17851 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max42500.html">MAX42500 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad5293.html">AD5293 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adin1110.html">ADIN1110 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adxrs290.html">ADXRS290 no-OS Driver</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2"/><div class="collapse"><a class="reference internal" href="../projects_doc.html">no-OS projects list</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad469x_evb.html">AD469x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7091r8-sdz.html">AD7091R-2/-4/-8 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7606x-fmc.html">AD7606x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7616-st.html">AD7616 no-OS Example Project on SDP-K1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7768-1fmcz.html">AD7768-1 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad796x_fmcz.html">AD796x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/pulsar-adc.html">AD400x no-OS Example Project on ZED and SDP-K1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad9467.html">AD9467 no-OS Example project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad9081.html">ad9081 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad74416h.html">AD74416H no-OS Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adf4030.html">Evaluating the ADF4030</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adf4368.html">Evaluating the ADF4368</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adf4377_sdz.html">Evaluating the ADF4377 Wideband Synthesizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adf4382.html">ADF4382 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adf5611.html">Evaluating the ADF5611</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1646x.html">ADIS1646X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1647x.html">ADIS1647X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1650x.html">ADIS1650X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1654x.html">ADIS1654X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1655x.html">ADIS1655X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1657x.html">ADIS1657X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-ade7913.html">EVAL-ADE7913 no-OS Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-ade9430.html">EVAL-ADE9430 Sensor-to-Cloud no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adrv902x.html">adrv902x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adrv9001.html">ADRV9001 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/apard32690.html">AD-APARD32690-SL no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max14914.html">MAX14914 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max14919.html">MAX14919 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ades1754.html">Evaluating the EVAL-ADES1754</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adp1050.html">ADP1050 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adp1055.html">ADP1055 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adp5055.html">ADP5055 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/dc2703a.html">Evaluating the LT8491</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/lt3074.html">Evaluating the LT3074</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/lt7170.html">Evaluating the LT7170</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/lt7182s.html">Evaluating the LT7182S</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/lt8722.html">Evaluating the LT8722</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc4162l.html">Evaluating the LTC4162L</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc4296.html">LTC4296 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc7841.html">Evaluating the LTC7841</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc7871.html">Evaluating the LTC7871</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltm4686.html">Evaluating the LTM4686</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltp8800.html">Evaluating the LTP8800</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max42500.html">MAX42500 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-ad8460.html">Evaluating the EVAL-AD8460</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max22017.html">MAX22017 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad3552r_fmcz.html">EVAL-AD3552R no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc2983.html">Evaluating the LTC2983</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max31827-evkit.html">Evaluating the MAX31827</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adxrs290-pmdz.html">ADXRS290-PMDZ no-OS Project</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3" id="toctree-collapse-3"/><div class="collapse"><a class="reference internal" href="../build_guide.html">No-OS Build Guide</a><label for="toctree-collapse-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../build_guides/build_maxim.html">Maxim Build Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../build_guides/build_ftd2xx.html">Build against FTD2XX library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../build_guides/build_win.html">Windows Build Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../build_guides/build_mac.html">MAC Build Prerequisites</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to no-OS</a></li>
+</ul>
+</body>
+</html>
+
+</div>
+        </div>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body-header">
+    <nav class="breadcrumb">
+        <ol>
+          <li><a href="../drivers_doc.html">no-OS drivers list</a></li>
+          </ol>
+    </nav>
+  </div>
+
+          <div class="body" role="main">
+            
+  <section id="ad8460-no-os-driver">
+<h1>AD8460 no-OS driver<a class="headerlink" href="#ad8460-no-os-driver" title="Link to this heading"></a></h1>
+<p><span>See </span><a class="reference external" href="../doxygen/dir_e1c1304107706fcc6c52c14b0ff32742.html"><span>drivers/dac/ad8460 (doxygen)</span></a><span> for the Doxygen documentation.</span></p>
+<section id="supported-devices">
+<h2>Supported Devices<a class="headerlink" href="#supported-devices" title="Link to this heading"></a></h2>
+<p><a class="reference external" href="https://www.analog.com/AD8460">AD8460</a></p>
+</section>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>The AD8460 is a “bits in, power out” high voltage, high-power, high-speed driver
+optimized for large output current (up to ±1 A) and high slew rate (up to ±1800
+V/μs) at high voltage (up to ±40 V) into capacitive loads. Combining a 14-bit
+high-speed DAC, a high voltage, high output current (HV-HI) analog driver, and
+fault monitoring and protection circuits, the AD8460 is ideally suited for high
+power applications such as arbitrary waveform generation (AWG), programmable
+power supplies, and high voltage automated test equipment (ATE).</p>
+<p>A proprietary high-voltage BCDMOS process, novel high voltage architecture, and
+thermally enhanced package from Analog Devices Inc. enable this high-performance
+driver. A digital engine implements user-configurable features: modes for
+digital input, programmable supply current, and fault monitoring and
+programmable protection settings for output current, output voltage, and
+junction temperature. Analog features extend functionality: external
+compensation enables unlimited capacitive load drive, programmable shutdown
+delay, and full-scale adjustment. The AD8460 operates on high voltage dual
+supplies up to ±55 V and a single low voltage supply of 5 V.</p>
+</section>
+<section id="applications">
+<h2>Applications<a class="headerlink" href="#applications" title="Link to this heading"></a></h2>
+</section>
+<section id="id1">
+<h2>AD8460<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Automatic test equipment (ATE)</p></li>
+<li><p>Display panel formation and testing</p></li>
+<li><p>Piezo drivers</p></li>
+<li><p>Programmable power supplies</p></li>
+</ul>
+</section>
+<section id="ad8460-device-configuration">
+<h2>AD8460 Device Configuration<a class="headerlink" href="#ad8460-device-configuration" title="Link to this heading"></a></h2>
+</section>
+<section id="driver-initialization">
+<h2>Driver Initialization<a class="headerlink" href="#driver-initialization" title="Link to this heading"></a></h2>
+<p>In order to be able to use the device, you will have to provide the support
+for the communication protocol (SPI).</p>
+<p>The first API to be called is <strong>ad8460_init</strong>. Make sure that it returns 0,
+which means that the driver was initialized correctly.</p>
+</section>
+<section id="reseting-ad8460">
+<h2>Reseting AD8460<a class="headerlink" href="#reseting-ad8460" title="Link to this heading"></a></h2>
+<p>Manual POR can be achieved by pulling RESETB LOW and then HIGH, which resets all
+the digital registers to default. Also, reset to defaults can also be commanded
+at any time through the SOFT_RESET register bit. These are done using the API
+<strong>ad8460_reset</strong>.</p>
+</section>
+<section id="reading-and-writing-hvdac-values">
+<h2>Reading and Writing HVDAC Values<a class="headerlink" href="#reading-and-writing-hvdac-values" title="Link to this heading"></a></h2>
+<p>Reading and writing HVDAC values is done using <strong>ad8460_get_hvdac_word</strong> and
+<strong>ad8460_set_hvdac_word</strong> APIs, respectively.</p>
+</section>
+<section id="switching-between-apg-and-awg-modes">
+<h2>Switching between APG and AWG Modes<a class="headerlink" href="#switching-between-apg-and-awg-modes" title="Link to this heading"></a></h2>
+<p>The AD8460 can be switched between APG and AWG modes using
+<strong>ad8460_enable_apg_mode</strong> API. If 1 is passed as a parameter, the device will
+be switched to APG mode; otherwise, it will be switched to AWG mode.</p>
+</section>
+<section id="shutdown-flag">
+<h2>Shutdown Flag<a class="headerlink" href="#shutdown-flag" title="Link to this heading"></a></h2>
+<p>The shutdown flag can be read using <strong>ad8460_read_shutdown_flag</strong> API. If the
+value read is 1, the device is in shutdown mode; otherwise, it is not.</p>
+</section>
+<section id="resetting-hv-driver">
+<h2>Resetting HV Driver<a class="headerlink" href="#resetting-hv-driver" title="Link to this heading"></a></h2>
+<p>The HV driver can be reset using <strong>ad8460_hv_reset</strong> API.</p>
+</section>
+<section id="setting-a-sample">
+<h2>Setting a Sample<a class="headerlink" href="#setting-a-sample" title="Link to this heading"></a></h2>
+<p>A single sample can be set in APG mode using <strong>ad8460_set_sample</strong> API.</p>
+</section>
+<section id="ad8460-driver-initialization-example">
+<h2>AD8460 Driver Initialization Example<a class="headerlink" href="#ad8460-driver-initialization-example" title="Link to this heading"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>struct<span class="w"> </span>ad8460_device<span class="w"> </span>*dev<span class="p">;</span>
+
+struct<span class="w"> </span>no_os_uart_init_param<span class="w"> </span><span class="nv">uip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>.device_id<span class="w"> </span><span class="o">=</span><span class="w"> </span>UART_DEVICE_ID,
+<span class="w">        </span>.baud_rate<span class="w"> </span><span class="o">=</span><span class="w"> </span>UART_BAUDRATE,
+<span class="w">        </span>.size<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_UART_CS_8,
+<span class="w">        </span>.parity<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_UART_PAR_NO,
+<span class="w">        </span>.stop<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_UART_STOP_1_BIT,
+<span class="w">        </span>.platform_ops<span class="w"> </span><span class="o">=</span><span class="w"> </span>UART_OPS,
+<span class="w">        </span>.extra<span class="w"> </span><span class="o">=</span><span class="w"> </span>UART_EXTRA,
+<span class="o">}</span><span class="p">;</span>
+
+const<span class="w"> </span>struct<span class="w"> </span>no_os_spi_init_param<span class="w"> </span><span class="nv">ad8460_spi_ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>.device_id<span class="w"> </span><span class="o">=</span><span class="w"> </span>SPI_DEVICE_ID,
+<span class="w">        </span>.max_speed_hz<span class="w"> </span><span class="o">=</span><span class="w"> </span>SPI_MAX_SPEED,
+<span class="w">        </span>.chip_select<span class="w"> </span><span class="o">=</span><span class="w"> </span>SPI_CS,
+<span class="w">        </span>.mode<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_SPI_MODE_0,
+<span class="w">        </span>.bit_order<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_SPI_BIT_ORDER_MSB_FIRST,
+<span class="w">        </span>.platform_ops<span class="w"> </span><span class="o">=</span><span class="w"> </span>SPI_OPS,
+<span class="w">        </span>.extra<span class="w"> </span><span class="o">=</span><span class="w"> </span>SPI_EXTRA,
+<span class="w">        </span>.parent<span class="w"> </span><span class="o">=</span><span class="w"> </span>NULL,
+<span class="o">}</span><span class="p">;</span>
+
+const<span class="w"> </span>struct<span class="w"> </span>no_os_gpio_init_param<span class="w"> </span><span class="nv">ad8460_gpio_rstn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>.port<span class="w"> </span><span class="o">=</span><span class="w"> </span>GPIO_RSTN_PORT_NUM,
+<span class="w">        </span>.number<span class="w"> </span><span class="o">=</span><span class="w"> </span>GPIO_RSTN_PIN_NUM,
+<span class="w">        </span>.platform_ops<span class="w"> </span><span class="o">=</span><span class="w"> </span>GPIO_OPS,
+<span class="w">        </span>.extra<span class="w"> </span><span class="o">=</span><span class="w"> </span>GPIO_EXTRA,
+<span class="o">}</span><span class="p">;</span>
+
+struct<span class="w"> </span>ad8460_init_param<span class="w"> </span><span class="nv">ad8460_ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>.spi_init_param<span class="w"> </span><span class="o">=</span><span class="w"> </span>ad8460_spi_ip,
+<span class="w">        </span>.gpio_rstn<span class="w"> </span><span class="o">=</span><span class="w"> </span>ad8460_gpio_rstn,
+<span class="w">        </span>.refio_1p2v_mv<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1200</span>,
+<span class="w">        </span>.ext_resistor_ohms<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">2000</span>,
+<span class="o">}</span><span class="p">;</span>
+
+<span class="nv">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>ad8460_init<span class="o">(</span><span class="p">&amp;</span>dev,<span class="w"> </span><span class="p">&amp;</span>ad8460_ip<span class="o">)</span><span class="p">;</span>
+<span class="k">if</span><span class="w"> </span><span class="o">(</span>ret<span class="o">)</span>
+<span class="w">        </span>goto<span class="w"> </span>error<span class="p">;</span>
+</pre></div>
+</div>
+</section>
+<section id="ad8460-no-os-iio-support">
+<h2>AD8460 no-OS IIO support<a class="headerlink" href="#ad8460-no-os-iio-support" title="Link to this heading"></a></h2>
+<p>The AD8460 IIO driver comes on top of the AD8460 driver and offers support
+for interfacing IIO clients through libiio.</p>
+</section>
+<section id="ad8460-iio-device-configuration">
+<h2>AD8460 IIO Device Configuration<a class="headerlink" href="#ad8460-iio-device-configuration" title="Link to this heading"></a></h2>
+</section>
+<section id="channel-attributes">
+<h2>Channel Attributes<a class="headerlink" href="#channel-attributes" title="Link to this heading"></a></h2>
+<p>AD8460 has a total of 22 channel attributes:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">out_voltage_raw</span> <span class="pre">-</span> <span class="pre">raw</span> <span class="pre">single</span> <span class="pre">HVDAC</span> <span class="pre">data</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">out_voltage_scale</span> <span class="pre">-</span> <span class="pre">scale</span> <span class="pre">that</span> <span class="pre">has</span> <span class="pre">to</span> <span class="pre">be</span> <span class="pre">applied</span> <span class="pre">to</span> <span class="pre">the</span> <span class="pre">raw</span> <span class="pre">value</span> <span class="pre">in</span> <span class="pre">order</span> <span class="pre">to</span> <span class="pre">obtain</span> <span class="pre">the</span> <span class="pre">voltage</span> <span class="pre">value</span> <span class="pre">in</span> <span class="pre">mV</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">out_voltage_raw0</span> <span class="pre">-</span> <span class="pre">raw</span> <span class="pre">HVDAC</span> <span class="pre">data</span> <span class="pre">word</span> <span class="pre">0</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">out_voltage_raw1</span> <span class="pre">-</span> <span class="pre">raw</span> <span class="pre">HVDAC</span> <span class="pre">data</span> <span class="pre">word</span> <span class="pre">1</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">out_voltage_raw2</span> <span class="pre">-</span> <span class="pre">raw</span> <span class="pre">HVDAC</span> <span class="pre">data</span> <span class="pre">word</span> <span class="pre">2</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">out_voltage_raw3</span> <span class="pre">-</span> <span class="pre">raw</span> <span class="pre">HVDAC</span> <span class="pre">data</span> <span class="pre">word</span> <span class="pre">3</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">out_voltage_raw4</span> <span class="pre">-</span> <span class="pre">raw</span> <span class="pre">HVDAC</span> <span class="pre">data</span> <span class="pre">word</span> <span class="pre">4</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">out_voltage_raw5</span> <span class="pre">-</span> <span class="pre">raw</span> <span class="pre">HVDAC</span> <span class="pre">data</span> <span class="pre">word</span> <span class="pre">5</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">out_voltage_raw6</span> <span class="pre">-</span> <span class="pre">raw</span> <span class="pre">HVDAC</span> <span class="pre">data</span> <span class="pre">word</span> <span class="pre">6</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">out_voltage_raw7</span> <span class="pre">-</span> <span class="pre">raw</span> <span class="pre">HVDAC</span> <span class="pre">data</span> <span class="pre">word</span> <span class="pre">7</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">out_voltage_raw8</span> <span class="pre">-</span> <span class="pre">raw</span> <span class="pre">HVDAC</span> <span class="pre">data</span> <span class="pre">word</span> <span class="pre">8</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">out_voltage_raw9</span> <span class="pre">-</span> <span class="pre">raw</span> <span class="pre">HVDAC</span> <span class="pre">data</span> <span class="pre">word</span> <span class="pre">9</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">out_voltage_raw10</span> <span class="pre">-</span> <span class="pre">raw</span> <span class="pre">HVDAC</span> <span class="pre">data</span> <span class="pre">word</span> <span class="pre">10</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">out_voltage_raw11</span> <span class="pre">-</span> <span class="pre">raw</span> <span class="pre">HVDAC</span> <span class="pre">data</span> <span class="pre">word</span> <span class="pre">11</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">out_voltage_raw12</span> <span class="pre">-</span> <span class="pre">raw</span> <span class="pre">HVDAC</span> <span class="pre">data</span> <span class="pre">word</span> <span class="pre">12</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">out_voltage_raw13</span> <span class="pre">-</span> <span class="pre">raw</span> <span class="pre">HVDAC</span> <span class="pre">data</span> <span class="pre">word</span> <span class="pre">13</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">out_voltage_raw14</span> <span class="pre">-</span> <span class="pre">raw</span> <span class="pre">HVDAC</span> <span class="pre">data</span> <span class="pre">word</span> <span class="pre">14</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">out_voltage_raw15</span> <span class="pre">-</span> <span class="pre">raw</span> <span class="pre">HVDAC</span> <span class="pre">data</span> <span class="pre">word</span> <span class="pre">15</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">out_voltage_toggle_en</span> <span class="pre">-</span> <span class="pre">enable</span> <span class="pre">or</span> <span class="pre">disable</span> <span class="pre">APG</span> <span class="pre">mode</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">out_voltage_symbol</span> <span class="pre">-</span> <span class="pre">how</span> <span class="pre">many</span> <span class="pre">symbols</span> <span class="pre">of</span> <span class="pre">HVDAC</span> <span class="pre">data</span> <span class="pre">to</span> <span class="pre">be</span> <span class="pre">used</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">out_voltage_powerdown</span> <span class="pre">-</span> <span class="pre">power</span> <span class="pre">down</span> <span class="pre">the</span> <span class="pre">HV</span> <span class="pre">driver</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">out_current_raw</span> <span class="pre">-</span> <span class="pre">raw</span> <span class="pre">quiescent</span> <span class="pre">current</span> <span class="pre">value</span> <span class="pre">of</span> <span class="pre">HV</span> <span class="pre">driver</span></code></p></li>
+</ul>
+</section>
+<section id="ad8460-iio-driver-initialization-example">
+<h2>AD8460 IIO Driver Initialization Example<a class="headerlink" href="#ad8460-iio-driver-initialization-example" title="Link to this heading"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>int<span class="w"> </span>ret<span class="p">;</span>
+
+struct<span class="w"> </span>ad8460_iio_device<span class="w"> </span>*ad8460_iio_dev<span class="p">;</span>
+struct<span class="w"> </span>ad8460_iio_init_param<span class="w"> </span><span class="nv">ad8460_iio_ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>.ad8460_init_param<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>ad8460_ip,
+<span class="o">}</span><span class="p">;</span>
+
+struct<span class="w"> </span>iio_app_desc<span class="w"> </span>*app<span class="p">;</span>
+struct<span class="w"> </span>iio_app_init_param<span class="w"> </span><span class="nv">app_init_param</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span><span class="m">0</span><span class="o">}</span><span class="p">;</span>
+
+<span class="nv">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>ad8460_iio_init<span class="o">(</span><span class="p">&amp;</span>ad8460_iio_dev,<span class="w"> </span><span class="p">&amp;</span>ad8460_iio_ip<span class="o">)</span><span class="p">;</span>
+<span class="k">if</span><span class="w"> </span><span class="o">(</span>ret<span class="o">)</span>
+<span class="w">        </span>goto<span class="w"> </span>exit<span class="p">;</span>
+
+struct<span class="w"> </span>iio_app_device<span class="w"> </span>iio_devices<span class="o">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span><span class="o">{</span>
+<span class="w">                </span>.name<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;ad8460&quot;</span>,
+<span class="w">                </span>.dev<span class="w"> </span><span class="o">=</span><span class="w"> </span>ad8460_iio_dev,
+<span class="w">                </span>.dev_descriptor<span class="w"> </span><span class="o">=</span><span class="w"> </span>ad8460_iio_dev-&gt;iio_dev,
+<span class="w">        </span><span class="o">}</span>,
+<span class="o">}</span><span class="p">;</span>
+
+app_init_param.devices<span class="w"> </span><span class="o">=</span><span class="w"> </span>iio_devices<span class="p">;</span>
+app_init_param.nb_devices<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_ARRAY_SIZE<span class="o">(</span>iio_devices<span class="o">)</span><span class="p">;</span>
+app_init_param.uart_init_params<span class="w"> </span><span class="o">=</span><span class="w"> </span>uip<span class="p">;</span>
+
+<span class="nv">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>iio_app_init<span class="o">(</span><span class="p">&amp;</span>app,<span class="w"> </span>app_init_param<span class="o">)</span><span class="p">;</span>
+<span class="k">if</span><span class="w"> </span><span class="o">(</span>ret<span class="o">)</span>
+<span class="w">        </span>goto<span class="w"> </span>remove_iio_ad8460<span class="p">;</span>
+
+<span class="k">return</span><span class="w"> </span>iio_app_run<span class="o">(</span>app<span class="o">)</span><span class="p">;</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+          </div>
+              <div class="related">
+                &nbsp;
+    <a href="max22200.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">MAX22200 no-OS driver</a>
+    <a href="max22017.html" title="Next document (Alt+Shift+RightArrow)" class="next">MAX22017 no-OS Driver</a>
+              </div>
+          
+        </div>
+      </div>
+  </div>
+
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
+    <footer>
+      &#169;2023-2024, Analog Devices, Inc.
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
+</html>

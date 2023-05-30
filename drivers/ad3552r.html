@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>AD3552R no-OS Driver &#8212; no-OS  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="../_static/app.min.css?v=25ed7d6a" />
+    <script defer="" src="../_static/app.umd.js?v=80d097f0"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ADF4030 no-OS driver" href="adf4030.html" />
+    <link rel="prev" title="MAX22017 no-OS Driver" href="max22017.html" />
+   
+  
+  <meta name="repository" content="no-OS">
+  <meta name="version" content="">
+  
+    <meta name="page_source_suffix" content=".rst">
+  
+  
+
+
+<style>
+  body {
+    
+  }
+
+  body.dark {
+    
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body:not(.light) {
+      
+    }
+  }
+</style>
+  </head><body>
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
+  <input type="checkbox" id="input-show-repotoc">
+
+  
+  <div class="search-area">
+    <form action="" method="get">
+      <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+      <button class="icon"></button>
+    </form>
+  </div>
+  
+
+  <header>
+    <div id="left">
+      <label id="show-sidebar" class="icon" for="input-show-toc" title="Show/hide index"></label>
+    </div>
+    <div id="right">
+      <span>
+        <a id="logo-org" href="https://analog.com"></a>
+        <div class="vertical-divider"></div>
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
+        <a id="logo" href="../index.html">
+          <div>no-OS</div>
+        </a>
+      </span>
+      <span class="reverse">
+        <label id="show-localtoc" class="icon" for="input-show-localtoc" title="Show/hide contents"></label>
+      </span>
+    </div>
+  </header>
+
+
+  <div class="repotoc-tree overlay">
+    <root>
+  <a href="../index.html" class="current">no-OS</a>
+</root>
+
+  </div>
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div>
+          <div class="localtoc-header"></div>
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">AD3552R no-OS Driver</a><ul>
+<li><a class="reference internal" href="#supported-devices">Supported Devices</a></li>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#applications">Applications</a></li>
+<li><a class="reference internal" href="#operation-modes">Operation Modes</a></li>
+<li><a class="reference internal" href="#device-configuration">Device Configuration</a><ul>
+<li><a class="reference internal" href="#initialization">Initialization</a></li>
+<li><a class="reference internal" href="#data-transfer-and-access">Data Transfer and Access</a></li>
+<li><a class="reference internal" href="#configuration-and-mode-setting">Configuration and Mode Setting</a></li>
+<li><a class="reference internal" href="#error-handling">Error Handling</a></li>
+<li><a class="reference internal" href="#reset-and-utilities">Reset and Utilities</a></li>
+<li><a class="reference internal" href="#initialization-and-configuration">Initialization and Configuration</a></li>
+<li><a class="reference internal" href="#register-access-and-data-transfer">Register Access and Data Transfer</a></li>
+<li><a class="reference internal" href="#device-control-and-customization">Device Control and Customization</a></li>
+<li><a class="reference internal" href="#id1">Error Handling</a></li>
+<li><a class="reference internal" href="#utility-and-support">Utility and Support</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#device-initialization-example">Device Initialization Example</a></li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
+  
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+    <a id="no-logo" href="../index.html">
+      no-OS
+    </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
+All content
+</label>
+<label id="show-toc" for="input-switch-toc">
+Content on this topic
+</label>
+<div class="repotoc-tree">
+  <root>
+  <a href="../index.html" class="current">no-OS</a>
+</root>
+
+</div>
+<div class="toc-tree">
+  <html>
+  <body><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../drivers_guide.html">no-OS drivers guide</a></li>
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1" checked=""/><div class="collapse"><a class="reference internal" href="../drivers_doc.html">no-OS drivers list</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="adxl355.html">ADXL355 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adxl38x.html">ADXL38x no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad405x.html">AD405X no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad7768.html">AD7768 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad7768-1.html">AD7768-1 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad796x.html">AD796X no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad9083.html">AD9083 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad9208.html">AD9208 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adm1177.html">ADM1177 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pulsar_adc.html">AD400X no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad9625.html">AD9625 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad74416h.html">AD74416H no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="axi_sysid.html">System ID (AXI_SYSID) no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max14914.html">MAX14914 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max14919.html">MAX14919 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max149x6.html">MAX149X6 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22190.html">MAX22190 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22196.html">MAX22196 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22200.html">MAX22200 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad8460.html">AD8460 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22017.html">MAX22017 no-OS Driver</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">AD3552R no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4030.html">ADF4030 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4368.html">ADF4368 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4377.html">ADF4377 No-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4382.html">ADF4382 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf5611.html">ADF5611 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admfm2000.html">ADMFM2000 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4350.html">ADF4350 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="imu.html">ADIS no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max25603.html">MAX25603 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ade7816.html">ADE7816 no-OS documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ade7913.html">ADE7913 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ade9113.html">ADE9113 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="madura.html">ADRV902x (Madura) no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="talise.html">ADRV9009 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc2983.html">LTC2983 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max31827.html">MAX31827 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max31855.html">MAX31855 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adt75.html">ADT75 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ades1754.html">ADES1754 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adp1050.html">ADP1050 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adp1055.html">ADP1055 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adp5055.html">ADP5055 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt3074.html">LT3074 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt7170.html">LT7170 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt7182s.html">LT7182S no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt8491.html">LT8491 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt8722.html">LT8722 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc2992.html">LTC2992 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc4162l.html">LTC4162L no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc4296.html">LTC4296 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc7841.html">LTC7841 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc7871.html">LTC7871 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltm4686.html">LTM4686 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltp8800.html">LTP8800 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max17851.html">MAX17851 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max42500.html">MAX42500 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad5293.html">AD5293 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adin1110.html">ADIN1110 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adxrs290.html">ADXRS290 no-OS Driver</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2"/><div class="collapse"><a class="reference internal" href="../projects_doc.html">no-OS projects list</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad469x_evb.html">AD469x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7091r8-sdz.html">AD7091R-2/-4/-8 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7606x-fmc.html">AD7606x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7616-st.html">AD7616 no-OS Example Project on SDP-K1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7768-1fmcz.html">AD7768-1 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad796x_fmcz.html">AD796x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/pulsar-adc.html">AD400x no-OS Example Project on ZED and SDP-K1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad9467.html">AD9467 no-OS Example project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad9081.html">ad9081 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad74416h.html">AD74416H no-OS Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adf4030.html">Evaluating the ADF4030</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adf4368.html">Evaluating the ADF4368</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adf4377_sdz.html">Evaluating the ADF4377 Wideband Synthesizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adf4382.html">ADF4382 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adf5611.html">Evaluating the ADF5611</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1646x.html">ADIS1646X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1647x.html">ADIS1647X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1650x.html">ADIS1650X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1654x.html">ADIS1654X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1655x.html">ADIS1655X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1657x.html">ADIS1657X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-ade7913.html">EVAL-ADE7913 no-OS Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-ade9430.html">EVAL-ADE9430 Sensor-to-Cloud no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adrv902x.html">adrv902x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adrv9001.html">ADRV9001 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/apard32690.html">AD-APARD32690-SL no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max14914.html">MAX14914 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max14919.html">MAX14919 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ades1754.html">Evaluating the EVAL-ADES1754</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adp1050.html">ADP1050 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adp1055.html">ADP1055 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adp5055.html">ADP5055 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/dc2703a.html">Evaluating the LT8491</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/lt3074.html">Evaluating the LT3074</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/lt7170.html">Evaluating the LT7170</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/lt7182s.html">Evaluating the LT7182S</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/lt8722.html">Evaluating the LT8722</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc4162l.html">Evaluating the LTC4162L</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc4296.html">LTC4296 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc7841.html">Evaluating the LTC7841</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc7871.html">Evaluating the LTC7871</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltm4686.html">Evaluating the LTM4686</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltp8800.html">Evaluating the LTP8800</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max42500.html">MAX42500 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-ad8460.html">Evaluating the EVAL-AD8460</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max22017.html">MAX22017 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad3552r_fmcz.html">EVAL-AD3552R no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc2983.html">Evaluating the LTC2983</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max31827-evkit.html">Evaluating the MAX31827</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adxrs290-pmdz.html">ADXRS290-PMDZ no-OS Project</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3" id="toctree-collapse-3"/><div class="collapse"><a class="reference internal" href="../build_guide.html">No-OS Build Guide</a><label for="toctree-collapse-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../build_guides/build_maxim.html">Maxim Build Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../build_guides/build_ftd2xx.html">Build against FTD2XX library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../build_guides/build_win.html">Windows Build Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../build_guides/build_mac.html">MAC Build Prerequisites</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to no-OS</a></li>
+</ul>
+</body>
+</html>
+
+</div>
+        </div>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body-header">
+    <nav class="breadcrumb">
+        <ol>
+          <li><a href="../drivers_doc.html">no-OS drivers list</a></li>
+          </ol>
+    </nav>
+  </div>
+
+          <div class="body" role="main">
+            
+  <section id="ad3552r-no-os-driver">
+<h1>AD3552R no-OS Driver<a class="headerlink" href="#ad3552r-no-os-driver" title="Link to this heading"></a></h1>
+<section id="supported-devices">
+<h2>Supported Devices<a class="headerlink" href="#supported-devices" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD3552R">AD3552R</a></p></li>
+</ul>
+</section>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>The AD3552R is a dual-channel digital-to-analog converter (DAC) designed
+for precision signal processing applications, supporting bipolar (-10V
+to 10V) and unipolar (0V to 5V) output configurations. It operates
+via SPI communication in single, dual, and quad modes. The DAC features
+adjustable gain and offset, a scratch pad test, and allows for both
+hardware and software resets. Dedicated registers provide control over
+channel attributes, streaming, and input/output settings.</p>
+</section>
+<section id="applications">
+<h2>Applications<a class="headerlink" href="#applications" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Instrumentation</p></li>
+<li><p>Hardware in the loop</p></li>
+<li><p>Process control equipment</p></li>
+<li><p>Medical devices</p></li>
+<li><p>Automated test equipment</p></li>
+<li><p>Data acquisition systems</p></li>
+<li><p>Programmable voltage sources</p></li>
+<li><p>Optical communications</p></li>
+</ul>
+</section>
+<section id="operation-modes">
+<h2>Operation Modes<a class="headerlink" href="#operation-modes" title="Link to this heading"></a></h2>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>Mode Name</p></td>
+<td><p>Description</p></td>
+<td><p>Configuration</p></td>
+<td><p>Typical Use</p></td>
+</tr>
+<tr class="row-even"><td><p>Single</p></td>
+<td><p>SPI mode with
+unidirectional SDI/SDIO0
+and SDO/SDIO1 lines for
+basic serial communication.</p></td>
+<td><p><em>AD3552R_SPI_MULTI_IO_MODE</em>
+set to 0</p></td>
+<td><p>Basic applications
+requiring standard SPI
+communication.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Dual</p></td>
+<td><p>Bidirectional communication
+on SDI/SDIO lines for
+enhanced throughput.</p></td>
+<td><p>Set <em>multi_io_mode</em> to 1
+in <em>ad3552_transfer_config</em></p></td>
+<td><p>Applications requiring
+higher data throughput.</p></td>
+</tr>
+<tr class="row-even"><td><p>Quad</p></td>
+<td><p>Utilizes four lines for
+data transfer for
+significantly increased
+throughput.</p></td>
+<td><p>Set <em>multi_io_mode</em> to 2
+in <em>ad3552_transfer_config</em></p></td>
+<td><p>High-speed data-
+intensive applications.</p></td>
+</tr>
+<tr class="row-odd"><td><p>DDR Mode</p></td>
+<td><p>Double Data Rate transfer
+using both edges of the
+clock for faster data
+transfers.</p></td>
+<td><p><em>AD3552R_MASK_SPI_CONFIG_DDR</em>
+used to enable this mode</p></td>
+<td><p>Situations requiring
+rapid data updates.</p></td>
+</tr>
+<tr class="row-even"><td><p>Synchronous</p></td>
+<td><p>Dual SPI synchronous mode
+for synchronized data
+transfer across channels.</p></td>
+<td><p><em>AD3552R_SPI_SYNCHRONOUS_ENABLE</em>
+for enabling this feature</p></td>
+<td><p>Systems needing
+synchronized operations
+for data integrity.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="device-configuration">
+<h2>Device Configuration<a class="headerlink" href="#device-configuration" title="Link to this heading"></a></h2>
+<section id="initialization">
+<h3>Initialization<a class="headerlink" href="#initialization" title="Link to this heading"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">ad3552r_init</span></code> function initializes the AD3552R DAC, configuring
+SPI or AXI interfaces based on parameters and setting up GPIOs for reset
+and LDAC signals. It includes programming CRC settings for data
+integrity and writing initial configuration registers.</p>
+</section>
+<section id="data-transfer-and-access">
+<h3>Data Transfer and Access<a class="headerlink" href="#data-transfer-and-access" title="Link to this heading"></a></h3>
+<p>Key functions for data transfer include <code class="docutils literal notranslate"><span class="pre">ad3552r_write_reg</span></code>, which
+writes data to specific registers, and <code class="docutils literal notranslate"><span class="pre">ad3552r_transfer</span></code>, which
+handles data transfer operations. For read operations,
+<code class="docutils literal notranslate"><span class="pre">ad3552r_read_reg</span></code> retrieves data from specified registers.</p>
+</section>
+<section id="configuration-and-mode-setting">
+<h3>Configuration and Mode Setting<a class="headerlink" href="#configuration-and-mode-setting" title="Link to this heading"></a></h3>
+<p>Functions like <code class="docutils literal notranslate"><span class="pre">ad3552r_set_dev_value</span></code> adjust specific device
+settings, such as enabling or disabling CRC. The <code class="docutils literal notranslate"><span class="pre">ad3552r_axi_init</span></code>
+function is used for additional initialization when configured in AXI
+mode. <code class="docutils literal notranslate"><span class="pre">_ad3552r_update_reg_field</span></code> updates specific fields in
+configuration registers.</p>
+</section>
+<section id="error-handling">
+<h3>Error Handling<a class="headerlink" href="#error-handling" title="Link to this heading"></a></h3>
+<p>Error handling is managed by functions like <code class="docutils literal notranslate"><span class="pre">ad3552r_get_status</span></code>,
+which retrieves and optionally clears error states. This functionality
+assists in managing and reporting errors related to interface
+configurations, CRC mismatches, and access attempts to invalid
+registers.</p>
+</section>
+<section id="reset-and-utilities">
+<h3>Reset and Utilities<a class="headerlink" href="#reset-and-utilities" title="Link to this heading"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">ad3552r_reset</span></code> function handles resetting the device to its
+initial state. It is important for re-initialization and
+troubleshooting. Additional utility functions exist to support various
+device-specific operations.</p>
+</section>
+<section id="initialization-and-configuration">
+<h3>Initialization and Configuration<a class="headerlink" href="#initialization-and-configuration" title="Link to this heading"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">ad3552r_init</span></code> function initializes the AD3552R DAC, setting up
+SPI or AXI interfaces and configuring necessary GPIOs. Additional
+configurations may include enabling CRC and setting the device’s
+operational parameters. Functions like <code class="docutils literal notranslate"><span class="pre">ad3552r_reset</span></code> are used to
+restore the device to its initial state, important for both
+initialization and troubleshooting. <code class="docutils literal notranslate"><span class="pre">ad3552r_axi_init</span></code> is particularly
+used when configured in AXI mode. The reset capabilities are crucial to
+establish a known state for successful operations.</p>
+</section>
+<section id="register-access-and-data-transfer">
+<h3>Register Access and Data Transfer<a class="headerlink" href="#register-access-and-data-transfer" title="Link to this heading"></a></h3>
+<p>Functions such as <code class="docutils literal notranslate"><span class="pre">ad3552r_write_reg</span></code> and <code class="docutils literal notranslate"><span class="pre">ad3552r_read_reg</span></code> are
+designed for register access to update settings or retrieve data from
+the DAC. <code class="docutils literal notranslate"><span class="pre">ad3552r_single_transfer</span></code> and <code class="docutils literal notranslate"><span class="pre">ad3552r_transfer</span></code> handle
+data transactions, ensuring efficient communication via SPI or AXI
+setups. Operations like <code class="docutils literal notranslate"><span class="pre">ad3552r_write_simulatneously</span></code> allow multiple
+channel updates, enhancing the DAC’s data throughput in high-speed
+applications. DMA support is facilitated through the
+<code class="docutils literal notranslate"><span class="pre">ad3552r_axi_write_data</span></code> for bulk data operations.</p>
+</section>
+<section id="device-control-and-customization">
+<h3>Device Control and Customization<a class="headerlink" href="#device-control-and-customization" title="Link to this heading"></a></h3>
+<p>Functions under this category, like <code class="docutils literal notranslate"><span class="pre">ad3552r_set_dev_value</span></code> and
+<code class="docutils literal notranslate"><span class="pre">ad3552r_get_dev_value</span></code>, handle device parameter adjustments.
+<code class="docutils literal notranslate"><span class="pre">ad3552r_config_custom_gain</span></code> and <code class="docutils literal notranslate"><span class="pre">ad3552r_configure_device</span></code> allow
+configuration of custom output ranges and gain. <code class="docutils literal notranslate"><span class="pre">ad3552r_ldac_trigger</span></code>
+is utilized for asynchronous operations. These functions enable
+adaptation of the DAC to specific operational needs, ensuring accurate
+performance.</p>
+</section>
+<section id="id1">
+<h3>Error Handling<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<p>Error detection and handling functions like <code class="docutils literal notranslate"><span class="pre">ad3552r_get_status</span></code>
+provide mechanisms to monitor and address device malfunctions. This is
+crucial for identifying issues such as CRC mismatches or illegal
+accesses, ensuring system reliability. Error states can be retrieved for
+diagnostic purposes, facilitating robust device integration.</p>
+</section>
+<section id="utility-and-support">
+<h3>Utility and Support<a class="headerlink" href="#utility-and-support" title="Link to this heading"></a></h3>
+<p>Utility functions, including <code class="docutils literal notranslate"><span class="pre">ad3552r_remove</span></code>, manage device cleanup
+and resource deallocation. Functions like <code class="docutils literal notranslate"><span class="pre">ad3552r_check_scratch_pad</span></code>
+and <code class="docutils literal notranslate"><span class="pre">ad3552r_get_scale</span></code> offer additional support for device
+diagnostics and calibration checks. This holistic approach covers
+various operational needs, enhancing device management and support
+throughout its lifecycle.</p>
+</section>
+</section>
+<section id="device-initialization-example">
+<h2>Device Initialization Example<a class="headerlink" href="#device-initialization-example" title="Link to this heading"></a></h2>
+<div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;ad3552r.h&quot;</span>
+<span class="k">static</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">ad3552r_init_param</span><span class="w"> </span><span class="n">default_ad3552r_param</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="p">.</span><span class="n">chip_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x4008</span><span class="p">,</span>
+<span class="w">    </span><span class="p">.</span><span class="n">spi_param</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="p">.</span><span class="n">device_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">        </span><span class="p">.</span><span class="n">chip_select</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">        </span><span class="p">.</span><span class="n">mode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">NO_OS_SPI_MODE_0</span><span class="p">,</span>
+<span class="w">        </span><span class="p">.</span><span class="n">max_speed_hz</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">66000000</span><span class="p">,</span>
+<span class="w">        </span><span class="p">.</span><span class="n">bit_order</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">NO_OS_SPI_BIT_ORDER_MSB_FIRST</span><span class="p">,</span>
+<span class="w">        </span><span class="p">.</span><span class="n">platform_ops</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">xil_spi_ops</span><span class="p">,</span>
+<span class="w">        </span><span class="p">.</span><span class="n">extra</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SPI_EXTRA</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">.</span><span class="n">ldac_gpio_param_optional</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">gpio_ldac_param</span><span class="p">,</span>
+<span class="w">    </span><span class="p">.</span><span class="n">reset_gpio_param_optional</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">gpio_reset_param</span><span class="p">,</span>
+<span class="w">    </span><span class="p">.</span><span class="n">sdo_drive_strength</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">    </span><span class="p">.</span><span class="n">channels</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="p">.</span><span class="n">en</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">            </span><span class="p">.</span><span class="n">range</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">AD3552R_CH_OUTPUT_RANGE_NEG_10__10V</span><span class="p">,</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="p">.</span><span class="n">en</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">            </span><span class="p">.</span><span class="n">range</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">AD3552R_CH_OUTPUT_RANGE_NEG_10__10V</span><span class="p">,</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">.</span><span class="n">crc_en</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">    </span><span class="p">.</span><span class="n">single_transfer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="p">};</span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">example_main</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="kt">int32_t</span><span class="w"> </span><span class="n">err</span><span class="p">;</span>
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">ad3552r_desc</span><span class="w"> </span><span class="o">*</span><span class="n">dac</span><span class="p">;</span>
+<span class="w">    </span><span class="n">err</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">init_gpios_to_defaults</span><span class="p">();</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">NO_OS_IS_ERR_VALUE</span><span class="p">(</span><span class="n">err</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">pr_err</span><span class="p">(</span><span class="s">&quot;init_gpios_to_defaults failed: %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">err</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">err</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">err</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ad3552r_init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">dac</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">default_ad3552r_param</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">NO_OS_IS_ERR_VALUE</span><span class="p">(</span><span class="n">err</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">pr_err</span><span class="p">(</span><span class="s">&quot;ad3552r_init failed with code: %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">err</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">err</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">set_power_up_success_led</span><span class="p">();</span>
+<span class="w">    </span><span class="n">err</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">run_example</span><span class="p">(</span><span class="n">dac</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">NO_OS_IS_ERR_VALUE</span><span class="p">(</span><span class="n">err</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">pr_debug</span><span class="p">(</span><span class="s">&quot;Example failed with code: %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">err</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">err</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">ad3552r_remove</span><span class="p">(</span><span class="n">dac</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+          </div>
+              <div class="related">
+                &nbsp;
+    <a href="max22017.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">MAX22017 no-OS Driver</a>
+    <a href="adf4030.html" title="Next document (Alt+Shift+RightArrow)" class="next">ADF4030 no-OS driver</a>
+              </div>
+          
+        </div>
+      </div>
+  </div>
+
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
+    <footer>
+      &#169;2023-2024, Analog Devices, Inc.
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
+</html>

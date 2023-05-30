@@ -1,0 +1,13 @@
+<map id="adt7420_spi_reg_write" name="adt7420_spi_reg_write">
+<area shape="rect" id="Node000001" title="Write a value of a register via SPI." alt="" coords="693,55,863,80"/>
+<area shape="rect" id="Node000002" href="$adt7420_8c.html#a0af155dc632cc1c7658d2e56122ba56a" title="Sets the value of a register SPI/I2C." alt="" coords="503,55,645,80"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="680,70,646,70,646,65,680,65"/>
+<area shape="rect" id="Node000003" href="$adt7420_8c.html#aa37e104e0f4f67268bb38e7ab79fe910" title="Sets the value of a register SPI/I2C." alt="" coords="268,29,455,55"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="488,60,455,56,455,50,489,55"/>
+<area shape="rect" id="Node000006" href="$adt7420-pmdz_2src_2examples_2dummy_2dummy__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Dummy example main execution." alt="" coords="302,79,421,104"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="489,80,421,87,420,82,489,74"/>
+<area shape="rect" id="Node000004" href="$adt7420_8c.html#a6b22b40bd3315083e90bd52beacb1627" title="Sets the operational mode for ADT7420/ADT7320." alt="" coords="5,5,220,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="254,34,220,31,220,26,254,29"/>
+<area shape="rect" id="Node000005" href="$adt7420_8c.html#af3c4b14319003f5a2edf1dd69ac4dcad" title="Sets the resolution for ADT7420/ADT7320." alt="" coords="25,55,200,80"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="254,56,201,61,200,56,254,50"/>
+</map>

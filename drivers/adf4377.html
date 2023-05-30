@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>ADF4377 No-OS Driver &#8212; no-OS  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="../_static/app.min.css?v=25ed7d6a" />
+    <script defer="" src="../_static/app.umd.js?v=80d097f0"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ADF4382 no-OS driver" href="adf4382.html" />
+    <link rel="prev" title="ADF4368 no-OS driver" href="adf4368.html" />
+   
+  
+  <meta name="repository" content="no-OS">
+  <meta name="version" content="">
+  
+    <meta name="page_source_suffix" content=".rst">
+  
+  
+
+
+<style>
+  body {
+    
+  }
+
+  body.dark {
+    
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body:not(.light) {
+      
+    }
+  }
+</style>
+  </head><body>
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
+  <input type="checkbox" id="input-show-repotoc">
+
+  
+  <div class="search-area">
+    <form action="" method="get">
+      <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+      <button class="icon"></button>
+    </form>
+  </div>
+  
+
+  <header>
+    <div id="left">
+      <label id="show-sidebar" class="icon" for="input-show-toc" title="Show/hide index"></label>
+    </div>
+    <div id="right">
+      <span>
+        <a id="logo-org" href="https://analog.com"></a>
+        <div class="vertical-divider"></div>
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
+        <a id="logo" href="../index.html">
+          <div>no-OS</div>
+        </a>
+      </span>
+      <span class="reverse">
+        <label id="show-localtoc" class="icon" for="input-show-localtoc" title="Show/hide contents"></label>
+      </span>
+    </div>
+  </header>
+
+
+  <div class="repotoc-tree overlay">
+    <root>
+  <a href="../index.html" class="current">no-OS</a>
+</root>
+
+  </div>
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div>
+          <div class="localtoc-header"></div>
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">ADF4377 No-OS Driver</a><ul>
+<li><a class="reference internal" href="#supported-devices">Supported Devices</a></li>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#applications">Applications</a></li>
+<li><a class="reference internal" href="#adf4377-device-configuration">ADF4377 Device Configuration</a></li>
+<li><a class="reference internal" href="#driver-initialization">Driver Initialization</a></li>
+<li><a class="reference internal" href="#reference-clock-configuration">Reference Clock Configuration</a></li>
+<li><a class="reference internal" href="#reference-doubler-configuration">Reference Doubler Configuration</a></li>
+<li><a class="reference internal" href="#reference-divider-configuration">Reference Divider Configuration</a></li>
+<li><a class="reference internal" href="#charge-pump-current-configuration">Charge Pump Current Configuration</a></li>
+<li><a class="reference internal" href="#bleed-current-configuration">Bleed Current Configuration</a></li>
+<li><a class="reference internal" href="#output-frequency-configuration">Output Frequency Configuration</a></li>
+<li><a class="reference internal" href="#output-power-configuration">Output Power Configuration</a></li>
+<li><a class="reference internal" href="#output-enable-configuration">Output Enable Configuration</a></li>
+<li><a class="reference internal" href="#sysref-output-configuration">SYSREF Output Configuration</a></li>
+<li><a class="reference internal" href="#adf4377-frequency-generation">ADF4377 Frequency Generation</a></li>
+<li><a class="reference internal" href="#frequency-setting">Frequency Setting</a></li>
+<li><a class="reference internal" href="#adf4377-driver-initialization-example">ADF4377 Driver Initialization Example</a></li>
+<li><a class="reference internal" href="#spi-communication-example">SPI Communication Example</a></li>
+<li><a class="reference internal" href="#adf4377-no-os-iio-support">ADF4377 no-OS IIO support</a></li>
+<li><a class="reference internal" href="#adf4377-iio-device-configuration">ADF4377 IIO Device Configuration</a></li>
+<li><a class="reference internal" href="#device-attributes">Device Attributes</a></li>
+<li><a class="reference internal" href="#device-channels">Device Channels</a></li>
+<li><a class="reference internal" href="#adf4377-iio-driver-initialization-example">ADF4377 IIO Driver Initialization Example</a></li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
+  
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+    <a id="no-logo" href="../index.html">
+      no-OS
+    </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
+All content
+</label>
+<label id="show-toc" for="input-switch-toc">
+Content on this topic
+</label>
+<div class="repotoc-tree">
+  <root>
+  <a href="../index.html" class="current">no-OS</a>
+</root>
+
+</div>
+<div class="toc-tree">
+  <html>
+  <body><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../drivers_guide.html">no-OS drivers guide</a></li>
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1" checked=""/><div class="collapse"><a class="reference internal" href="../drivers_doc.html">no-OS drivers list</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="adxl355.html">ADXL355 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adxl38x.html">ADXL38x no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad405x.html">AD405X no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad7768.html">AD7768 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad7768-1.html">AD7768-1 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad796x.html">AD796X no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad9083.html">AD9083 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad9208.html">AD9208 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adm1177.html">ADM1177 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pulsar_adc.html">AD400X no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad9625.html">AD9625 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad74416h.html">AD74416H no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="axi_sysid.html">System ID (AXI_SYSID) no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max14914.html">MAX14914 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max14919.html">MAX14919 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max149x6.html">MAX149X6 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22190.html">MAX22190 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22196.html">MAX22196 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22200.html">MAX22200 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad8460.html">AD8460 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22017.html">MAX22017 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad3552r.html">AD3552R no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4030.html">ADF4030 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4368.html">ADF4368 no-OS driver</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">ADF4377 No-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4382.html">ADF4382 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf5611.html">ADF5611 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admfm2000.html">ADMFM2000 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4350.html">ADF4350 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="imu.html">ADIS no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max25603.html">MAX25603 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ade7816.html">ADE7816 no-OS documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ade7913.html">ADE7913 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ade9113.html">ADE9113 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="madura.html">ADRV902x (Madura) no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="talise.html">ADRV9009 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc2983.html">LTC2983 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max31827.html">MAX31827 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max31855.html">MAX31855 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adt75.html">ADT75 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ades1754.html">ADES1754 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adp1050.html">ADP1050 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adp1055.html">ADP1055 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adp5055.html">ADP5055 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt3074.html">LT3074 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt7170.html">LT7170 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt7182s.html">LT7182S no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt8491.html">LT8491 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt8722.html">LT8722 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc2992.html">LTC2992 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc4162l.html">LTC4162L no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc4296.html">LTC4296 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc7841.html">LTC7841 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc7871.html">LTC7871 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltm4686.html">LTM4686 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltp8800.html">LTP8800 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max17851.html">MAX17851 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max42500.html">MAX42500 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad5293.html">AD5293 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adin1110.html">ADIN1110 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adxrs290.html">ADXRS290 no-OS Driver</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2"/><div class="collapse"><a class="reference internal" href="../projects_doc.html">no-OS projects list</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad469x_evb.html">AD469x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7091r8-sdz.html">AD7091R-2/-4/-8 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7606x-fmc.html">AD7606x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7616-st.html">AD7616 no-OS Example Project on SDP-K1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7768-1fmcz.html">AD7768-1 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad796x_fmcz.html">AD796x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/pulsar-adc.html">AD400x no-OS Example Project on ZED and SDP-K1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad9467.html">AD9467 no-OS Example project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad9081.html">ad9081 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad74416h.html">AD74416H no-OS Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adf4030.html">Evaluating the ADF4030</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adf4368.html">Evaluating the ADF4368</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adf4377_sdz.html">Evaluating the ADF4377 Wideband Synthesizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adf4382.html">ADF4382 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adf5611.html">Evaluating the ADF5611</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1646x.html">ADIS1646X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1647x.html">ADIS1647X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1650x.html">ADIS1650X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1654x.html">ADIS1654X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1655x.html">ADIS1655X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1657x.html">ADIS1657X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-ade7913.html">EVAL-ADE7913 no-OS Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-ade9430.html">EVAL-ADE9430 Sensor-to-Cloud no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adrv902x.html">adrv902x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adrv9001.html">ADRV9001 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/apard32690.html">AD-APARD32690-SL no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max14914.html">MAX14914 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max14919.html">MAX14919 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ades1754.html">Evaluating the EVAL-ADES1754</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adp1050.html">ADP1050 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adp1055.html">ADP1055 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adp5055.html">ADP5055 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/dc2703a.html">Evaluating the LT8491</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/lt3074.html">Evaluating the LT3074</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/lt7170.html">Evaluating the LT7170</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/lt7182s.html">Evaluating the LT7182S</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/lt8722.html">Evaluating the LT8722</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc4162l.html">Evaluating the LTC4162L</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc4296.html">LTC4296 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc7841.html">Evaluating the LTC7841</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc7871.html">Evaluating the LTC7871</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltm4686.html">Evaluating the LTM4686</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltp8800.html">Evaluating the LTP8800</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max42500.html">MAX42500 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-ad8460.html">Evaluating the EVAL-AD8460</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max22017.html">MAX22017 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad3552r_fmcz.html">EVAL-AD3552R no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc2983.html">Evaluating the LTC2983</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max31827-evkit.html">Evaluating the MAX31827</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adxrs290-pmdz.html">ADXRS290-PMDZ no-OS Project</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3" id="toctree-collapse-3"/><div class="collapse"><a class="reference internal" href="../build_guide.html">No-OS Build Guide</a><label for="toctree-collapse-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../build_guides/build_maxim.html">Maxim Build Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../build_guides/build_ftd2xx.html">Build against FTD2XX library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../build_guides/build_win.html">Windows Build Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../build_guides/build_mac.html">MAC Build Prerequisites</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to no-OS</a></li>
+</ul>
+</body>
+</html>
+
+</div>
+        </div>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body-header">
+    <nav class="breadcrumb">
+        <ol>
+          <li><a href="../drivers_doc.html">no-OS drivers list</a></li>
+          </ol>
+    </nav>
+  </div>
+
+          <div class="body" role="main">
+            
+  <section id="adf4377-no-os-driver">
+<h1>ADF4377 No-OS Driver<a class="headerlink" href="#adf4377-no-os-driver" title="Link to this heading"></a></h1>
+<p><span>See </span><a class="reference external" href="../doxygen/dir_4266e7710ee9b94ab56a68155bf07107.html"><span>drivers/frequency/adf4377 (doxygen)</span></a><span> for the Doxygen documentation.</span></p>
+<section id="supported-devices">
+<h2>Supported Devices<a class="headerlink" href="#supported-devices" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.analog.com/en/products/adf4377.html">ADF4377</a></p></li>
+<li><p><a class="reference external" href="https://www.analog.com/en/products/adf4378.html">ADF4378</a></p></li>
+</ul>
+</section>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>The ADF4377 is a high performance, ultralow jitter, dual output
+integer-N phased locked loop (PLL) with an integrated voltage
+controlled oscillator (VCO) ideally suited for data converter and mixed
+signal front end (MxFE) clock applications. The high performance
+PLL has a figure of merit of −239 dBc/Hz, ultralow 1/f noise, and
+a high phase frequency detector (PFD) frequency that can achieve
+ultralow in-band noise and integrated jitter. The fundamental VCO
+and output divider of the ADF4377 generate frequencies from 800
+MHz to 12.8 GHz. The ADF4377 integrates all necessary power
+supply bypass capacitors, saving board space on compact boards.</p>
+<p>For multiple data converter and MxFE clock applications, the
+ADF4377 simplifies clock alignment and calibration routines required
+with other clock solutions by implementing the automatic
+reference to output synchronization feature, the matched reference
+to output delays across process, voltage, and temperature feature,
+and the less than ±0.1 ps, jitter free reference to output delay
+adjustment capability feature.</p>
+<p>These features allow for predictable and precise multichip clock and
+system reference (SYSREF) alignment. JESD204B and JESD204C
+Subclass 1 solutions are supported by pairing the ADF4377 with
+an integrated circuit (IC) that distributes pairs of reference and
+SYSREF signals.</p>
+</section>
+<section id="applications">
+<h2>Applications<a class="headerlink" href="#applications" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>High performance data converters</p></li>
+<li><p>Wireless infrastructure (MC-GSM, 5G)</p></li>
+<li><p>Test and measurement equipment</p></li>
+</ul>
+</section>
+<section id="adf4377-device-configuration">
+<h2>ADF4377 Device Configuration<a class="headerlink" href="#adf4377-device-configuration" title="Link to this heading"></a></h2>
+</section>
+<section id="driver-initialization">
+<h2>Driver Initialization<a class="headerlink" href="#driver-initialization" title="Link to this heading"></a></h2>
+<p>In order to be able to use the device, you will have to provide the support for
+the communication protocol (SPI).</p>
+<p>The first API to be called is <strong>adf4377_init</strong>. Make sure that it returns 0,
+which means that the driver was initialized correctly. This function will also
+reset the ADF4377 by performing a soft reset, putting the device in a known
+state.</p>
+</section>
+<section id="reference-clock-configuration">
+<h2>Reference Clock Configuration<a class="headerlink" href="#reference-clock-configuration" title="Link to this heading"></a></h2>
+<p>By default, the device is set to use a 125MHz clock. This can be changed to any
+value, which is supported by the device, by using the function
+<strong>adf4377_set_ref_clk</strong>. The current configuration can be read out using
+<strong>adf4377_get_ref_clk</strong>.The input reference clock value for the function will
+have to be expressed in Hz.</p>
+</section>
+<section id="reference-doubler-configuration">
+<h2>Reference Doubler Configuration<a class="headerlink" href="#reference-doubler-configuration" title="Link to this heading"></a></h2>
+<p>The ADF4377 has a reference doubler on the input path for the reference frequency.
+By default it is enabled and can be disabled using <strong>adf4377_set_en_ref_doubler</strong>.
+The current configuration can be read out using <strong>adf4377_get_en_ref_doubler</strong>.</p>
+<p>This feature can only be enable or disabled.</p>
+<p>Together with the reference divider this feature will determine the PFD frequency.</p>
+</section>
+<section id="reference-divider-configuration">
+<h2>Reference Divider Configuration<a class="headerlink" href="#reference-divider-configuration" title="Link to this heading"></a></h2>
+<p>On the reference input path there is a divider, allowing the input reference
+frequency to be divided by up to 63. Default this is set to 2 and can be changed
+using <strong>adf4377_set_ref_div</strong>. The current configuration can be read out using
+<strong>adf4377_get_ref_div</strong>.</p>
+<p>Together with the reference doubler this feature will determine the PFD frequency.</p>
+</section>
+<section id="charge-pump-current-configuration">
+<h2>Charge Pump Current Configuration<a class="headerlink" href="#charge-pump-current-configuration" title="Link to this heading"></a></h2>
+<p>The ADF4377 has the option for 16 preset charge pump currents, ranging from 0.79
+mA to 11.1 mA. By default the charge pump current is set to 11.1 mA. The
+supported currents can be configured using <strong>adf4377_set_cp_i</strong> API, which will
+expect the register value, ranging form 0 to 15, as inputs. The current
+configuration can be read out using <strong>adf4377_get_cp_i</strong>, which will also return
+the value in the same range.</p>
+<p>In order to determine which value corresponds to your design charge pump
+current, please refer to the datasheet
+<a class="reference external" href="https://www.analog.com/en/products/adf4377.html">ADF4377</a> in the register details
+section for register REG0015.</p>
+</section>
+<section id="bleed-current-configuration">
+<h2>Bleed Current Configuration<a class="headerlink" href="#bleed-current-configuration" title="Link to this heading"></a></h2>
+<p>The charge pump current can be optimized using the bleed current feature, set
+by default to 1023. This can be configured using the <strong>adf4377_set_bleed_word</strong>
+API, by providing the bleed word as a parameter on 10 bits. The current
+configuration can be read out using <strong>adf4377_get_bleed_word</strong>.</p>
+</section>
+<section id="output-frequency-configuration">
+<h2>Output Frequency Configuration<a class="headerlink" href="#output-frequency-configuration" title="Link to this heading"></a></h2>
+<p>The ADF4377 has two channels which can be configured to output the a frequency
+in the range of 800 MHz to 12.8 GHZ. By default the output frequency is set to
+10 GHz and can be reconfigured by using the <strong>adf4377_set_rfout</strong> API. The
+output frequency set by the API is expressed in Hz. The previously configured
+output frequency can be read out using <strong>adf4377_get_rfout</strong>.</p>
+<p>This attribute will set the frequency for both channels as they are not
+independently configurable.</p>
+</section>
+<section id="output-power-configuration">
+<h2>Output Power Configuration<a class="headerlink" href="#output-power-configuration" title="Link to this heading"></a></h2>
+<p>Though the ADF4377 does not permit independent frequencies on each channel,
+the output power on each channel can be configured using
+<strong>adf4377_set_out_power</strong> API by providing the channel and the desired power
+output expressed in mV.The current configuration of each channel can be read
+out using <strong>adf4377_get_out_power</strong>.</p>
+<p>Power of each channel is between 0 to 3, by default they are both set to 1
+(420mV).</p>
+</section>
+<section id="output-enable-configuration">
+<h2>Output Enable Configuration<a class="headerlink" href="#output-enable-configuration" title="Link to this heading"></a></h2>
+<p>Each channel can be activated individually using <strong>adf4377_set_en_chan</strong> API.
+The API expects the channel number and a boolean value for enable or disable. To
+determine if a channel is currently set the <strong>adf4377_get_en_chan</strong> API can be
+used.</p>
+<p>By default only channel 1 is enabled.</p>
+</section>
+<section id="sysref-output-configuration">
+<h2>SYSREF Output Configuration<a class="headerlink" href="#sysref-output-configuration" title="Link to this heading"></a></h2>
+<p>There are two distinct ways to configure the SYSREF output:</p>
+<p>using the <strong>adf4377_set_sr_del_adj</strong> API, which will set the delay adjustment
+value for the SYSREF signal incrementally. While <strong>adf4377_get_sr_del_adj</strong> will
+return the current register value of the SYSREF delay.</p>
+<p>using the <strong>adf4377_set_sr_inv_adj</strong> API, which will apply a constant delay
+adjustment value for the SYSREF signal. While <strong>adf4377_get_sr_inv_adj</strong> will
+return the current register value of the SYSREF delay.</p>
+<p>The SYSREF monitoring feature can be enabled/disabled using <strong>adf4377_set_en_sysref_monitor</strong>
+while the current configuration can be read out using <strong>adf4377_get_en_sysref_monitor</strong>.
+This api will power up/down the SYSREF monitoring feature as well as toggle the reset
+signal.</p>
+</section>
+<section id="adf4377-frequency-generation">
+<h2>ADF4377 Frequency Generation<a class="headerlink" href="#adf4377-frequency-generation" title="Link to this heading"></a></h2>
+</section>
+<section id="frequency-setting">
+<h2>Frequency Setting<a class="headerlink" href="#frequency-setting" title="Link to this heading"></a></h2>
+<p>As mentioned above, using the default values the generated frequency will be of
+10 GHz. This frequency depends on all of the previous configurations and is
+recalculated based on them using the <strong>adf4377_set_freq</strong> API. When the API is
+called, it will calculate the VCO, the output divider, the integer parts of feedback
+loop for the PLL while trying to obtain the configured output frequency. The API
+will also write the corresponding registers with the computed values.</p>
+<p>Because of the link between the calculated values and the configurations, when
+an attribute is reconfigured using the corresponding API it will not have any
+effect until the <strong>adf4377_set_freq</strong> API is called.</p>
+</section>
+<section id="adf4377-driver-initialization-example">
+<h2>ADF4377 Driver Initialization Example<a class="headerlink" href="#adf4377-driver-initialization-example" title="Link to this heading"></a></h2>
+</section>
+<section id="spi-communication-example">
+<h2>SPI Communication Example<a class="headerlink" href="#spi-communication-example" title="Link to this heading"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="w">    </span>struct<span class="w"> </span>adf4377_dev<span class="w"> </span>*dev<span class="p">;</span>
+<span class="w">    </span>int<span class="w"> </span>ret<span class="p">;</span>
+
+<span class="w">    </span>struct<span class="w"> </span>no_os_spi_init_param<span class="w"> </span><span class="nv">adf4377_spi_ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span>.device_id<span class="w"> </span><span class="o">=</span><span class="w"> </span>SPI_DEVICE_ID,
+<span class="w">    </span>.max_speed_hz<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">2000000</span>,
+<span class="w">    </span>.chip_select<span class="w"> </span><span class="o">=</span><span class="w"> </span>SPI_CS,
+<span class="w">    </span>.mode<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_SPI_MODE_0,
+<span class="w">    </span>.bit_order<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_SPI_BIT_ORDER_MSB_FIRST,
+<span class="w">    </span>.platform_ops<span class="w"> </span><span class="o">=</span><span class="w"> </span>SPI_OPS,
+<span class="w">    </span>.extra<span class="w"> </span><span class="o">=</span><span class="w"> </span>SPI_EXTRA
+<span class="o">}</span><span class="p">;</span>
+
+struct<span class="w"> </span>no_os_gpio_init_param<span class="w"> </span><span class="nv">gpio_ce_param</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span>.number<span class="w"> </span><span class="o">=</span><span class="w"> </span>GPIO_CE,
+<span class="w">    </span>.platform_ops<span class="w"> </span><span class="o">=</span><span class="w"> </span>GPIO_OPS,
+<span class="w">    </span>.extra<span class="w"> </span><span class="o">=</span><span class="w"> </span>GPIO_EXTRA
+<span class="o">}</span><span class="p">;</span>
+
+struct<span class="w"> </span>no_os_gpio_init_param<span class="w"> </span><span class="nv">gpio_enclk1_param</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span>.number<span class="w"> </span><span class="o">=</span><span class="w"> </span>GPIO_ENCLK1,
+<span class="w">    </span>.platform_ops<span class="w"> </span><span class="o">=</span><span class="w"> </span>GPIO_OPS,
+<span class="w">    </span>.extra<span class="w"> </span><span class="o">=</span><span class="w"> </span>GPIO_EXTRA
+<span class="o">}</span><span class="p">;</span>
+
+struct<span class="w"> </span>no_os_gpio_init_param<span class="w"> </span><span class="nv">gpio_enclk2_param</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span>.number<span class="w"> </span><span class="o">=</span><span class="w"> </span>GPIO_ENCLK2,
+<span class="w">    </span>.platform_ops<span class="w"> </span><span class="o">=</span><span class="w"> </span>GPIO_OPS,
+<span class="w">    </span>.extra<span class="w"> </span><span class="o">=</span><span class="w"> </span>GPIO_EXTRA
+<span class="o">}</span><span class="p">;</span>
+
+struct<span class="w"> </span>no_os_uart_init_param<span class="w"> </span><span class="nv">adf4377_uart_ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span>.device_id<span class="w"> </span><span class="o">=</span><span class="w"> </span>UART_DEVICE_ID,
+<span class="w">    </span>.irq_id<span class="w"> </span><span class="o">=</span><span class="w"> </span>UART_IRQ_ID,
+<span class="w">    </span>.asynchronous_rx<span class="w"> </span><span class="o">=</span><span class="w"> </span>true,
+<span class="w">    </span>.baud_rate<span class="w"> </span><span class="o">=</span><span class="w"> </span>UART_BAUDRATE,
+<span class="w">    </span>.size<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_UART_CS_8,
+<span class="w">    </span>.parity<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_UART_PAR_NO,
+<span class="w">    </span>.stop<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_UART_STOP_1_BIT,
+<span class="w">    </span>.extra<span class="w"> </span><span class="o">=</span><span class="w"> </span>UART_EXTRA,
+<span class="w">    </span>.platform_ops<span class="w"> </span><span class="o">=</span><span class="w"> </span>UART_OPS,
+<span class="o">}</span><span class="p">;</span>
+
+struct<span class="w"> </span>adf4377_init_param<span class="w"> </span><span class="nv">adf4377_ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span>.dev_id<span class="w"> </span><span class="o">=</span><span class="w"> </span>ADF4377,
+<span class="w">    </span>.spi_init<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>adf4377_spi_ip,
+<span class="w">    </span>.spi4wire<span class="w"> </span><span class="o">=</span><span class="w"> </span>true,
+<span class="w">    </span>.gpio_ce_param<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>gpio_ce_param,
+<span class="w">    </span>.gpio_enclk1_param<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>gpio_enclk1_param,
+<span class="w">    </span>.gpio_enclk2_param<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>gpio_enclk2_param,
+<span class="w">    </span>.clkin_freq<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">125000000</span>,
+<span class="w">    </span>.ref_doubler_en<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span>,
+<span class="w">    </span>.f_clk<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">10000000000</span>,
+<span class="w">    </span>.ref_div_factor<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">2</span>,
+<span class="w">    </span>.clkout_op<span class="w"> </span><span class="o">=</span><span class="w"> </span>ADF4377_CLKOUT_420MV,
+<span class="w">    </span>.muxout_select<span class="w"> </span><span class="o">=</span><span class="w"> </span>ADF4377_MUXOUT_HIGH_Z,
+<span class="w">    </span>.cp_i<span class="w"> </span><span class="o">=</span><span class="w"> </span>ADF4377_CP_10MA1,
+<span class="o">}</span><span class="p">;</span>
+
+<span class="w">    </span><span class="nv">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>adf4377_init<span class="o">(</span><span class="p">&amp;</span>dev,<span class="w"> </span><span class="p">&amp;</span>adf4377_ip<span class="o">)</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">(</span>ret<span class="o">)</span>
+<span class="w">            </span>goto<span class="w"> </span>error<span class="p">;</span>
+<span class="w">    </span><span class="nv">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>no_os_gpio_get<span class="o">(</span><span class="p">&amp;</span>arduino_gpio,<span class="w"> </span><span class="p">&amp;</span>adf4377_gpio_ip<span class="o">)</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">(</span>ret<span class="o">)</span>
+<span class="w">            </span>goto<span class="w"> </span>error<span class="p">;</span>
+<span class="w">    </span><span class="nv">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>no_os_gpio_direction_output<span class="o">(</span>arduino_gpio,<span class="w"> </span><span class="m">1</span><span class="o">)</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">(</span>ret<span class="o">)</span>
+<span class="w">            </span>goto<span class="w"> </span>error<span class="p">;</span>
+
+<span class="w">    </span><span class="nv">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>adf4377_set_rfout<span class="o">(</span>dev,<span class="w"> </span><span class="m">10000000000</span><span class="o">)</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">(</span>ret<span class="o">)</span>
+<span class="w">            </span>goto<span class="w"> </span>error<span class="p">;</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span>ret<span class="p">;</span>
+</pre></div>
+</div>
+</section>
+<section id="adf4377-no-os-iio-support">
+<h2>ADF4377 no-OS IIO support<a class="headerlink" href="#adf4377-no-os-iio-support" title="Link to this heading"></a></h2>
+<p>The ADF4377 IIO driver comes on top of ADF4377 driver and offers support for
+interfacing IIO clients through IIO lib.</p>
+</section>
+<section id="adf4377-iio-device-configuration">
+<h2>ADF4377 IIO Device Configuration<a class="headerlink" href="#adf4377-iio-device-configuration" title="Link to this heading"></a></h2>
+</section>
+<section id="device-attributes">
+<h2>Device Attributes<a class="headerlink" href="#device-attributes" title="Link to this heading"></a></h2>
+<p>While the ADF4377 has two channels these cannot output independent frequencies,
+therefore most of the attributes will be device attributes.</p>
+<p>The attributes are:</p>
+<ul class="simple">
+<li><p>bleed_current - is the adjustment value for the set charge pump current.</p></li>
+<li><p>charge_pump_current - is the current set in your design.</p></li>
+<li><dl class="simple">
+<dt>charge_pump_current_available - lists the available and predefined charge</dt><dd><p>pump currents of the ADF4377.</p>
+</dd>
+</dl>
+</li>
+<li><p>reference_divider - is the current value of the input divider.</p></li>
+<li><p>rfout_divider - sets the current value of the output divider.</p></li>
+<li><dl class="simple">
+<dt>rfout_divider_available - lists the available and predefined output dividers</dt><dd><p>of the ADF4377.</p>
+</dd>
+</dl>
+</li>
+<li><p>reference_doubler_en - enables the input doubler.</p></li>
+<li><p>reference_frequency - is the current set input frequency.</p></li>
+<li><p>sysref_delay_adjust - is the delay adjustment value for the SYSREF signal.</p></li>
+<li><p>sysref_invert_adjust - is a constant delay adjustment value for the SYSREF signal.</p></li>
+<li><p>sysref_monitoring - enables the SYSREF monitoring feature.</p></li>
+</ul>
+</section>
+<section id="device-channels">
+<h2>Device Channels<a class="headerlink" href="#device-channels" title="Link to this heading"></a></h2>
+<p>ADF4377 IIO device has 2 output channels which can have independent output
+powers.</p>
+<p>The channels are:</p>
+<ul class="simple">
+<li><p>output altvoltage0 - corresponding to channel 1 on the device</p></li>
+<li><p>output altvoltage1 - corresponding to channel 2 on the device</p></li>
+</ul>
+<p>Each channel has 2 individual attributes:</p>
+<ul class="simple">
+<li><p>en - enables the channel.</p></li>
+<li><p>output_power - determines the output power of the channel between 0 and 15.</p></li>
+</ul>
+<p>Each channel has 2 common attributes:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>frequency - is the desired output frequency which the driver will try</dt><dd><p>to obtain given the configuration.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="adf4377-iio-driver-initialization-example">
+<h2>ADF4377 IIO Driver Initialization Example<a class="headerlink" href="#adf4377-iio-driver-initialization-example" title="Link to this heading"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>struct<span class="w"> </span>adf4377_iio_dev<span class="w"> </span>*adf4377_iio_dev<span class="p">;</span>
+<span class="w">    </span>struct<span class="w"> </span>adf4377_iio_dev_init_param<span class="w"> </span>adf4377_iio_ip<span class="p">;</span>
+<span class="w">    </span>struct<span class="w"> </span>iio_app_desc<span class="w"> </span>*app<span class="p">;</span>
+<span class="w">    </span>struct<span class="w"> </span>iio_app_init_param<span class="w"> </span><span class="nv">app_init_param</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">}</span><span class="p">;</span>
+<span class="w">    </span>int<span class="w"> </span>ret<span class="p">;</span>
+
+struct<span class="w"> </span>no_os_spi_init_param<span class="w"> </span><span class="nv">adf4377_spi_ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span>.device_id<span class="w"> </span><span class="o">=</span><span class="w"> </span>SPI_DEVICE_ID,
+<span class="w">    </span>.max_speed_hz<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">2000000</span>,
+<span class="w">    </span>.chip_select<span class="w"> </span><span class="o">=</span><span class="w"> </span>SPI_CS,
+<span class="w">    </span>.mode<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_SPI_MODE_0,
+<span class="w">    </span>.bit_order<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_SPI_BIT_ORDER_MSB_FIRST,
+<span class="w">    </span>.platform_ops<span class="w"> </span><span class="o">=</span><span class="w"> </span>SPI_OPS,
+<span class="w">    </span>.extra<span class="w"> </span><span class="o">=</span><span class="w"> </span>SPI_EXTRA
+<span class="o">}</span><span class="p">;</span>
+
+struct<span class="w"> </span>no_os_gpio_init_param<span class="w"> </span><span class="nv">gpio_ce_param</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span>.number<span class="w"> </span><span class="o">=</span><span class="w"> </span>GPIO_CE,
+<span class="w">    </span>.platform_ops<span class="w"> </span><span class="o">=</span><span class="w"> </span>GPIO_OPS,
+<span class="w">    </span>.extra<span class="w"> </span><span class="o">=</span><span class="w"> </span>GPIO_EXTRA
+<span class="o">}</span><span class="p">;</span>
+
+struct<span class="w"> </span>no_os_gpio_init_param<span class="w"> </span><span class="nv">gpio_enclk1_param</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span>.number<span class="w"> </span><span class="o">=</span><span class="w"> </span>GPIO_ENCLK1,
+<span class="w">    </span>.platform_ops<span class="w"> </span><span class="o">=</span><span class="w"> </span>GPIO_OPS,
+<span class="w">    </span>.extra<span class="w"> </span><span class="o">=</span><span class="w"> </span>GPIO_EXTRA
+<span class="o">}</span><span class="p">;</span>
+
+struct<span class="w"> </span>no_os_gpio_init_param<span class="w"> </span><span class="nv">gpio_enclk2_param</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span>.number<span class="w"> </span><span class="o">=</span><span class="w"> </span>GPIO_ENCLK2,
+<span class="w">    </span>.platform_ops<span class="w"> </span><span class="o">=</span><span class="w"> </span>GPIO_OPS,
+<span class="w">    </span>.extra<span class="w"> </span><span class="o">=</span><span class="w"> </span>GPIO_EXTRA
+<span class="o">}</span><span class="p">;</span>
+
+struct<span class="w"> </span>no_os_uart_init_param<span class="w"> </span><span class="nv">adf4377_uart_ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span>.device_id<span class="w"> </span><span class="o">=</span><span class="w"> </span>UART_DEVICE_ID,
+<span class="w">    </span>.irq_id<span class="w"> </span><span class="o">=</span><span class="w"> </span>UART_IRQ_ID,
+<span class="w">    </span>.asynchronous_rx<span class="w"> </span><span class="o">=</span><span class="w"> </span>true,
+<span class="w">    </span>.baud_rate<span class="w"> </span><span class="o">=</span><span class="w"> </span>UART_BAUDRATE,
+<span class="w">    </span>.size<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_UART_CS_8,
+<span class="w">    </span>.parity<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_UART_PAR_NO,
+<span class="w">    </span>.stop<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_UART_STOP_1_BIT,
+<span class="w">    </span>.extra<span class="w"> </span><span class="o">=</span><span class="w"> </span>UART_EXTRA,
+<span class="w">    </span>.platform_ops<span class="w"> </span><span class="o">=</span><span class="w"> </span>UART_OPS,
+<span class="o">}</span><span class="p">;</span>
+
+struct<span class="w"> </span>adf4377_init_param<span class="w"> </span><span class="nv">adf4377_ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span>.dev_id<span class="w"> </span><span class="o">=</span><span class="w"> </span>ADF4377,
+<span class="w">    </span>.spi_init<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>adf4377_spi_ip,
+<span class="w">    </span>.spi4wire<span class="w"> </span><span class="o">=</span><span class="w"> </span>true,
+<span class="w">    </span>.gpio_ce_param<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>gpio_ce_param,
+<span class="w">    </span>.gpio_enclk1_param<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>gpio_enclk1_param,
+<span class="w">    </span>.gpio_enclk2_param<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>gpio_enclk2_param,
+<span class="w">    </span>.clkin_freq<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">125000000</span>,
+<span class="w">    </span>.ref_doubler_en<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span>,
+<span class="w">    </span>.f_clk<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">10000000000</span>,
+<span class="w">    </span>.ref_div_factor<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">2</span>,
+<span class="w">    </span>.clkout_op<span class="w"> </span><span class="o">=</span><span class="w"> </span>ADF4377_CLKOUT_420MV,
+<span class="w">    </span>.muxout_select<span class="w"> </span><span class="o">=</span><span class="w"> </span>ADF4377_MUXOUT_HIGH_Z,
+<span class="w">    </span>.cp_i<span class="w"> </span><span class="o">=</span><span class="w"> </span>ADF4377_CP_10MA1,
+<span class="o">}</span><span class="p">;</span>
+
+adf4377_iio_ip.adf4377_dev_init<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>adf4377_ip<span class="p">;</span>
+<span class="w">    </span><span class="nv">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>adf4377_iio_init<span class="o">(</span><span class="p">&amp;</span>adf4377_iio_dev,<span class="w"> </span><span class="p">&amp;</span>adf4377_iio_ip<span class="o">)</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">(</span>ret<span class="o">)</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span>ret<span class="p">;</span>
+
+<span class="w">    </span>struct<span class="w"> </span>iio_app_device<span class="w"> </span>iio_devices<span class="o">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">            </span><span class="o">{</span>
+<span class="w">                    </span>.name<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;adf4377&quot;</span>,
+<span class="w">                    </span>.dev<span class="w"> </span><span class="o">=</span><span class="w"> </span>adf4377_iio_dev,
+<span class="w">                    </span>.dev_descriptor<span class="w"> </span><span class="o">=</span><span class="w"> </span>adf4377_iio_dev-&gt;iio_dev,
+<span class="w">            </span><span class="o">}</span>
+<span class="w">    </span><span class="o">}</span><span class="p">;</span>
+
+app_init_param.devices<span class="w"> </span><span class="o">=</span><span class="w"> </span>iio_devices<span class="p">;</span>
+<span class="w">    </span>app_init_param.nb_devices<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_ARRAY_SIZE<span class="o">(</span>iio_devices<span class="o">)</span><span class="p">;</span>
+<span class="w">    </span>app_init_param.uart_init_params<span class="w"> </span><span class="o">=</span><span class="w"> </span>adf4377_uart_ip<span class="p">;</span>
+<span class="w">    </span><span class="nv">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>iio_app_init<span class="o">(</span><span class="p">&amp;</span>app,<span class="w"> </span>app_init_param<span class="o">)</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">(</span>ret<span class="o">)</span>
+<span class="w">            </span>goto<span class="w"> </span>exit<span class="p">;</span>
+
+<span class="w">    </span>iio_app_run<span class="o">(</span>app<span class="o">)</span><span class="p">;</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+          </div>
+              <div class="related">
+                &nbsp;
+    <a href="adf4368.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">ADF4368 no-OS driver</a>
+    <a href="adf4382.html" title="Next document (Alt+Shift+RightArrow)" class="next">ADF4382 no-OS driver</a>
+              </div>
+          
+        </div>
+      </div>
+  </div>
+
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
+    <footer>
+      &#169;2023-2024, Analog Devices, Inc.
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
+</html>

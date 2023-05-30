@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>ADXRS290-PMDZ no-OS Project &#8212; no-OS  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="../_static/app.min.css?v=25ed7d6a" />
+    <script defer="" src="../_static/app.umd.js?v=80d097f0"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="No-OS Build Guide" href="../build_guide.html" />
+    <link rel="prev" title="Evaluating the MAX31827" href="max31827-evkit.html" />
+   
+  
+  <meta name="repository" content="no-OS">
+  <meta name="version" content="">
+  
+    <meta name="page_source_suffix" content=".rst">
+  
+  
+
+
+<style>
+  body {
+    
+  }
+
+  body.dark {
+    
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body:not(.light) {
+      
+    }
+  }
+</style>
+  </head><body>
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
+  <input type="checkbox" id="input-show-repotoc">
+
+  
+  <div class="search-area">
+    <form action="" method="get">
+      <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+      <button class="icon"></button>
+    </form>
+  </div>
+  
+
+  <header>
+    <div id="left">
+      <label id="show-sidebar" class="icon" for="input-show-toc" title="Show/hide index"></label>
+    </div>
+    <div id="right">
+      <span>
+        <a id="logo-org" href="https://analog.com"></a>
+        <div class="vertical-divider"></div>
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
+        <a id="logo" href="../index.html">
+          <div>no-OS</div>
+        </a>
+      </span>
+      <span class="reverse">
+        <label id="show-localtoc" class="icon" for="input-show-localtoc" title="Show/hide contents"></label>
+      </span>
+    </div>
+  </header>
+
+
+  <div class="repotoc-tree overlay">
+    <root>
+  <a href="../index.html" class="current">no-OS</a>
+</root>
+
+  </div>
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div>
+          <div class="localtoc-header"></div>
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">ADXRS290-PMDZ no-OS Project</a><ul>
+<li><a class="reference internal" href="#supported-evaluation-boards">Supported Evaluation Boards</a></li>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#applications">Applications</a></li>
+<li><a class="reference internal" href="#hardware-specifications">Hardware Specifications</a><ul>
+<li><a class="reference internal" href="#power-supply-requirements">Power Supply Requirements</a></li>
+<li><a class="reference internal" href="#pin-description">Pin Description</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#no-os-build-setup">No-OS Build Setup</a></li>
+<li><a class="reference internal" href="#no-os-supported-examples">No-OS Supported Examples</a><ul>
+<li><a class="reference internal" href="#iio-example">IIO Example</a></li>
+<li><a class="reference internal" href="#iio-trigger-example">IIO Trigger Example</a></li>
+<li><a class="reference internal" href="#iio-timer-trigger-example">IIO Timer Trigger Example</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#no-os-supported-platforms">No-OS Supported Platforms</a><ul>
+<li><a class="reference internal" href="#aducm-platform">ADuCM Platform</a><ul>
+<li><a class="reference internal" href="#used-hardware">Used Hardware</a></li>
+<li><a class="reference internal" href="#connections">Connections</a></li>
+<li><a class="reference internal" href="#build-command">Build Command</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#maxim-platform">Maxim Platform</a><ul>
+<li><a class="reference internal" href="#id1">Used Hardware</a></li>
+<li><a class="reference internal" href="#id2">Connections</a></li>
+<li><a class="reference internal" href="#id3">Build Command</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pico-platform">PICO Platform</a><ul>
+<li><a class="reference internal" href="#id4">Used Hardware</a></li>
+<li><a class="reference internal" href="#id5">Connections</a></li>
+<li><a class="reference internal" href="#id6">Build Command</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#stm32-platform">STM32 Platform</a><ul>
+<li><a class="reference internal" href="#id7">Used Hardware</a></li>
+<li><a class="reference internal" href="#id8">Connections</a></li>
+<li><a class="reference internal" href="#id9">Build Command</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
+  
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+    <a id="no-logo" href="../index.html">
+      no-OS
+    </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
+All content
+</label>
+<label id="show-toc" for="input-switch-toc">
+Content on this topic
+</label>
+<div class="repotoc-tree">
+  <root>
+  <a href="../index.html" class="current">no-OS</a>
+</root>
+
+</div>
+<div class="toc-tree">
+  <html>
+  <body><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../drivers_guide.html">no-OS drivers guide</a></li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1"/><div class="collapse"><a class="reference internal" href="../drivers_doc.html">no-OS drivers list</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adxl355.html">ADXL355 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adxl38x.html">ADXL38x no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ad405x.html">AD405X no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ad7768.html">AD7768 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ad7768-1.html">AD7768-1 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ad796x.html">AD796X no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ad9083.html">AD9083 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ad9208.html">AD9208 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adm1177.html">ADM1177 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/pulsar_adc.html">AD400X no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ad9625.html">AD9625 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ad74416h.html">AD74416H no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/axi_sysid.html">System ID (AXI_SYSID) no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max14914.html">MAX14914 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max14919.html">MAX14919 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max149x6.html">MAX149X6 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max22190.html">MAX22190 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max22196.html">MAX22196 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max22200.html">MAX22200 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ad8460.html">AD8460 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max22017.html">MAX22017 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ad3552r.html">AD3552R no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adf4030.html">ADF4030 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adf4368.html">ADF4368 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adf4377.html">ADF4377 No-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adf4382.html">ADF4382 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adf5611.html">ADF5611 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/admfm2000.html">ADMFM2000 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adf4350.html">ADF4350 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/imu.html">ADIS no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max25603.html">MAX25603 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ade7816.html">ADE7816 no-OS documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ade7913.html">ADE7913 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ade9113.html">ADE9113 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/madura.html">ADRV902x (Madura) no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/talise.html">ADRV9009 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ltc2983.html">LTC2983 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max31827.html">MAX31827 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max31855.html">MAX31855 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adt75.html">ADT75 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ades1754.html">ADES1754 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adp1050.html">ADP1050 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adp1055.html">ADP1055 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adp5055.html">ADP5055 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/lt3074.html">LT3074 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/lt7170.html">LT7170 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/lt7182s.html">LT7182S no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/lt8491.html">LT8491 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/lt8722.html">LT8722 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ltc2992.html">LTC2992 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ltc4162l.html">LTC4162L no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ltc4296.html">LTC4296 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ltc7841.html">LTC7841 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ltc7871.html">LTC7871 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ltm4686.html">LTM4686 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ltp8800.html">LTP8800 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max17851.html">MAX17851 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max42500.html">MAX42500 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ad5293.html">AD5293 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adin1110.html">ADIN1110 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adxrs290.html">ADXRS290 no-OS Driver</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2" checked=""/><div class="collapse"><a class="reference internal" href="../projects_doc.html">no-OS projects list</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="ad469x_evb.html">AD469x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad7091r8-sdz.html">AD7091R-2/-4/-8 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad7606x-fmc.html">AD7606x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad7616-st.html">AD7616 no-OS Example Project on SDP-K1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad7768-1fmcz.html">AD7768-1 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad796x_fmcz.html">AD796x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pulsar-adc.html">AD400x no-OS Example Project on ZED and SDP-K1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad9467.html">AD9467 no-OS Example project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad9081.html">ad9081 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad74416h.html">AD74416H no-OS Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4030.html">Evaluating the ADF4030</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4368.html">Evaluating the ADF4368</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4377_sdz.html">Evaluating the ADF4377 Wideband Synthesizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4382.html">ADF4382 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf5611.html">Evaluating the ADF5611</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval-adis1646x.html">ADIS1646X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval-adis1647x.html">ADIS1647X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval-adis1650x.html">ADIS1650X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval-adis1654x.html">ADIS1654X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval-adis1655x.html">ADIS1655X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval-adis1657x.html">ADIS1657X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval-ade7913.html">EVAL-ADE7913 no-OS Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval-ade9430.html">EVAL-ADE9430 Sensor-to-Cloud no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adrv902x.html">adrv902x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adrv9001.html">ADRV9001 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="apard32690.html">AD-APARD32690-SL no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max14914.html">MAX14914 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max14919.html">MAX14919 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ades1754.html">Evaluating the EVAL-ADES1754</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adp1050.html">ADP1050 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adp1055.html">ADP1055 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adp5055.html">ADP5055 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dc2703a.html">Evaluating the LT8491</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt3074.html">Evaluating the LT3074</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt7170.html">Evaluating the LT7170</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt7182s.html">Evaluating the LT7182S</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lt8722.html">Evaluating the LT8722</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc4162l.html">Evaluating the LTC4162L</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc4296.html">LTC4296 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc7841.html">Evaluating the LTC7841</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc7871.html">Evaluating the LTC7871</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltm4686.html">Evaluating the LTM4686</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltp8800.html">Evaluating the LTP8800</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max42500.html">MAX42500 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval-ad8460.html">Evaluating the EVAL-AD8460</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22017.html">MAX22017 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad3552r_fmcz.html">EVAL-AD3552R no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc2983.html">Evaluating the LTC2983</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max31827-evkit.html">Evaluating the MAX31827</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">ADXRS290-PMDZ no-OS Project</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3" id="toctree-collapse-3"/><div class="collapse"><a class="reference internal" href="../build_guide.html">No-OS Build Guide</a><label for="toctree-collapse-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../build_guides/build_maxim.html">Maxim Build Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../build_guides/build_ftd2xx.html">Build against FTD2XX library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../build_guides/build_win.html">Windows Build Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../build_guides/build_mac.html">MAC Build Prerequisites</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to no-OS</a></li>
+</ul>
+</body>
+</html>
+
+</div>
+        </div>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body-header">
+    <nav class="breadcrumb">
+        <ol>
+          <li><a href="../projects_doc.html">no-OS projects list</a></li>
+          </ol>
+    </nav>
+  </div>
+
+          <div class="body" role="main">
+            
+  <section id="adxrs290-pmdz-no-os-project">
+<h1>ADXRS290-PMDZ no-OS Project<a class="headerlink" href="#adxrs290-pmdz-no-os-project" title="Link to this heading"></a></h1>
+<section id="supported-evaluation-boards">
+<h2>Supported Evaluation Boards<a class="headerlink" href="#supported-evaluation-boards" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-ADXRS290-PMDZ">EVAL-ADXRS290-PMDZ</a></p></li>
+</ul>
+</section>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>The EVAL-ADXRS290-PMDZ offers a robust evaluation platform for the
+ADXRS290 high-performance MEMS gyroscope, specifically designed for
+stabilization applications. The sensor measures angular rates for roll
+and pitch within a ±100°/s full-scale range and outputs 16-bit two’s
+complement data via a 4-wire SPI interface operating at clock speeds up
+to 12 MHz. This board also features an ultralow noise floor of 0.004°/s/√Hz,
+rapid startup, and low latency.</p>
+</section>
+<section id="applications">
+<h2>Applications<a class="headerlink" href="#applications" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Optical image stabilization</p></li>
+<li><p>Platform stabilization</p></li>
+<li><p>Wearable products</p></li>
+</ul>
+</section>
+<section id="hardware-specifications">
+<h2>Hardware Specifications<a class="headerlink" href="#hardware-specifications" title="Link to this heading"></a></h2>
+<section id="power-supply-requirements">
+<h3>Power Supply Requirements<a class="headerlink" href="#power-supply-requirements" title="Link to this heading"></a></h3>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>Parameter</p></td>
+<td><p>Specification</p></td>
+<td><p>Notes</p></td>
+</tr>
+<tr class="row-even"><td><p>Primary Supply
+Voltage</p></td>
+<td><p>5V (4.75V to 5.25V
+tolerance)</p></td>
+<td><p>Regulated DC supply required for both digital
+and analog circuits.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="pin-description">
+<h3>Pin Description<a class="headerlink" href="#pin-description" title="Link to this heading"></a></h3>
+<p><strong>SPI Connector</strong></p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>Pin Name</p></td>
+<td><p>Pin Function</p></td>
+<td><p>Description</p></td>
+</tr>
+<tr class="row-even"><td><p>SCLK (P4)</p></td>
+<td><p>Clock</p></td>
+<td><p>Provides the timing signal for SPI communication.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Data In (P2)</p></td>
+<td><p>Input Data</p></td>
+<td><p>Receives data from the host processor.</p></td>
+</tr>
+<tr class="row-even"><td><p>Data Out (P3)</p></td>
+<td><p>Output Data</p></td>
+<td><p>Transmits data from the board to the host processor.</p></td>
+</tr>
+<tr class="row-odd"><td><p>CS (P1)</p></td>
+<td><p>Chip Select</p></td>
+<td><p>Selects the sensor during SPI communication.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Power and Ground Connector</strong></p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>Pin Name</p></td>
+<td><p>Pin Function</p></td>
+<td><p>Description</p></td>
+</tr>
+<tr class="row-even"><td><p>VDD  (P6, P12)</p></td>
+<td><p>Power Supply</p></td>
+<td><p>Supplies the positive operating voltage to the board.</p></td>
+</tr>
+<tr class="row-odd"><td><p>GND  (P5, P11)</p></td>
+<td><p>Ground</p></td>
+<td><p>Provides the common ground reference for the board.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="no-os-build-setup">
+<h2>No-OS Build Setup<a class="headerlink" href="#no-os-build-setup" title="Link to this heading"></a></h2>
+<p>For detailed build setup instructions, please refer to the
+<a class="reference external" href="https://wiki.analog.com/resources/no-os/build">no-OS build guide</a>.</p>
+</section>
+<section id="no-os-supported-examples">
+<h2>No-OS Supported Examples<a class="headerlink" href="#no-os-supported-examples" title="Link to this heading"></a></h2>
+<p>The initialization data used in the examples is sourced from the
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main//projects/adxrs290-pmdz/src/common">Project Common Data Path</a>.
+The macros used in Common Data are defined in platform-specific files found in the
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main//projects/adxrs290-pmdz/src/platform">Project Platform Configuration Path</a>.</p>
+<section id="iio-example">
+<h3>IIO Example<a class="headerlink" href="#iio-example" title="Link to this heading"></a></h3>
+<p>This example demonstrates basic sensor initialization and data
+acquisition using the IIO framework in a no-OS environment. It shows how
+to capture and stream data from the ADXRS290 gyroscope with minimal
+configuration.</p>
+<p>In order to build the IIO project make sure you have the following configuration in the
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/projects/adxrs290-pmdz/Makefile">Makefile</a>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Enable Standard IIO Example</span>
+<span class="w"> </span><span class="nv">IIO_EXAMPLE</span><span class="o">=</span>y
+<span class="w"> </span><span class="nv">IIO_TRIGGER_EXAMPLE</span><span class="o">=</span>n
+<span class="w"> </span><span class="nv">IIO_TIMER_TRIGGER_EXAMPLE</span><span class="o">=</span>n
+</pre></div>
+</div>
+</section>
+<section id="iio-trigger-example">
+<h3>IIO Trigger Example<a class="headerlink" href="#iio-trigger-example" title="Link to this heading"></a></h3>
+<p>This example extends the basic IIO setup by incorporating hardware or
+software triggers to synchronize sensor data capture with external
+events. It is ideal for scenarios where sensor readings must be
+initiated by specific trigger conditions.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Enable IIO Trigger Example</span>
+<span class="nv">IIO_EXAMPLE</span><span class="o">=</span>n
+<span class="nv">IIO_TRIGGER_EXAMPLE</span><span class="o">=</span>y
+<span class="nv">IIO_TIMER_TRIGGER_EXAMPLE</span><span class="o">=</span>n
+</pre></div>
+</div>
+</section>
+<section id="iio-timer-trigger-example">
+<h3>IIO Timer Trigger Example<a class="headerlink" href="#iio-timer-trigger-example" title="Link to this heading"></a></h3>
+<p>This example uses timer-based triggers to achieve periodic sensor
+sampling through timer interrupts. It is suited for applications
+requiring consistent sample intervals to reliably monitor the ADXRS290
+sensor data.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Enable IIO Timer Trigger Example</span>
+<span class="nv">IIO_EXAMPLE</span><span class="o">=</span>n
+<span class="nv">IIO_TRIGGER_EXAMPLE</span><span class="o">=</span>n
+<span class="nv">IIO_TIMER_TRIGGER_EXAMPLE</span><span class="o">=</span>y
+</pre></div>
+</div>
+</section>
+</section>
+<section id="no-os-supported-platforms">
+<h2>No-OS Supported Platforms<a class="headerlink" href="#no-os-supported-platforms" title="Link to this heading"></a></h2>
+<section id="aducm-platform">
+<h3>ADuCM Platform<a class="headerlink" href="#aducm-platform" title="Link to this heading"></a></h3>
+<section id="used-hardware">
+<h4>Used Hardware<a class="headerlink" href="#used-hardware" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-ADXRS290-PMDZ">EVAL-ADXRS290-PMDZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-ADICUP3029">EVAL-ADICUP3029</a></p></li>
+</ul>
+</section>
+<section id="connections">
+<h4>Connections<a class="headerlink" href="#connections" title="Link to this heading"></a></h4>
+<ol class="arabic simple">
+<li><p>Connect <strong>EVAL-ADXRS290-PMDZ</strong> board at connector <strong>P8</strong> of the
+<strong>EVAL-ADICUP3029</strong>.</p></li>
+<li><p>Connect a micro-USB cable to the P10 connector of the EVAL-ADICUP3029
+and connect it to a computer.</p></li>
+</ol>
+<p>The table below summarizes the primary physical connections between the
+ADXRS290 sensor board (EVAL-ADXRS290-PMDZ) and the evaluation board
+(EVAL-ADICUP3029). The table lists the board pin (or connector pin
+number), a suggested connection mnemonic, and the pin function.</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>ADXRS290-PMDZ
+Board Pin /
+Connector</p></td>
+<td><p>EVAL-ADICUP3029
+Board Pin /
+Connector</p></td>
+<td><p>Connection
+Mnemonic</p></td>
+<td><p>Pin Function</p></td>
+</tr>
+<tr class="row-even"><td><p>P1-4 (SPI SCLK)</p></td>
+<td><p>SPI_SCLK (as
+configured in
+pinmux)</p></td>
+<td><p>SCLK</p></td>
+<td><p>SPI clock – Synchronizes SPI data.</p></td>
+</tr>
+<tr class="row-odd"><td><p>P1-2 (SPI MOSI)</p></td>
+<td><p>SPI_MOSI (as
+defined in
+configuration)</p></td>
+<td><p>MOSI</p></td>
+<td><p>SPI data out from master to sensor.</p></td>
+</tr>
+<tr class="row-even"><td><p>P1-3 (SPI MISO)</p></td>
+<td><p>SPI_MISO (as
+defined in
+configuration)</p></td>
+<td><p>MISO</p></td>
+<td><p>SPI data in to master from sensor.</p></td>
+</tr>
+<tr class="row-odd"><td><p>P1-1 (SPI SS /
+Chip Select)</p></td>
+<td><p>SPI_CS (e.g.,
+CS_0 in
+configuration)</p></td>
+<td><p>CS</p></td>
+<td><p>Chip Select – Enables SPI sensor.
+Active low.</p></td>
+</tr>
+<tr class="row-even"><td><p>UART0_TX (per
+configuration)</p></td>
+<td><p>UART_RX (per
+pinmux setup)</p></td>
+<td><p>TX</p></td>
+<td><p>UART transmit – MCU to host PC.</p></td>
+</tr>
+<tr class="row-odd"><td><p>UART0_RX (per
+configuration)</p></td>
+<td><p>UART_TX (per
+pinmux setup)</p></td>
+<td><p>RX</p></td>
+<td><p>UART receive – Host PC to MCU.</p></td>
+</tr>
+<tr class="row-even"><td><p>Dedicated GPIO
+(SYNC signal)</p></td>
+<td><p>GPIO_SYNC (as
+configured)</p></td>
+<td><p>SYNC</p></td>
+<td><p>Sync signal – Triggers/captures.</p></td>
+</tr>
+<tr class="row-odd"><td><p>IOVDD (power
+supply)</p></td>
+<td><p>VDD (power
+input)</p></td>
+<td><p>Power</p></td>
+<td><p>Power – Regulated supply for sensor.</p></td>
+</tr>
+<tr class="row-even"><td><p>GND</p></td>
+<td><p>GND</p></td>
+<td><p>GND</p></td>
+<td><p>Ground – Common reference.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="build-command">
+<h4>Build Command<a class="headerlink" href="#build-command" title="Link to this heading"></a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Clean previous build artifacts</span>
+make<span class="w"> </span>clean
+
+<span class="c1"># Build the project with ADuCM3029-specific settings</span>
+make<span class="w"> </span>aducm3029
+
+<span class="c1"># Flash the newly compiled firmware onto the ADuCM device</span>
+make<span class="w"> </span>flash
+
+<span class="c1"># Launch a debugging session for the ADuCM platform</span>
+make<span class="w"> </span>debug
+</pre></div>
+</div>
+</section>
+</section>
+<section id="maxim-platform">
+<h3>Maxim Platform<a class="headerlink" href="#maxim-platform" title="Link to this heading"></a></h3>
+<section id="id1">
+<h4>Used Hardware<a class="headerlink" href="#id1" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-ADXRS290-PMDZ">EVAL-ADXRS290-PMDZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/MAX32655EVKIT">MAX32655EVKIT</a></p></li>
+</ul>
+</section>
+<section id="id2">
+<h4>Connections<a class="headerlink" href="#id2" title="Link to this heading"></a></h4>
+<p>The table below summarizes the required connections between the
+EVAL‑ADXRS290‑PMDZ board and the MAX32655EVKIT evaluation board. Each
+row lists the connection mnemonic, the pin identifier on each board, and
+a brief description of the pin function.</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>Connection
+Mnemonic</p></td>
+<td><p>EVAL‑ADXRS290‑PMDZ</p></td>
+<td><p>MAX32655EVKIT
+Board Pin</p></td>
+<td><p>Function</p></td>
+</tr>
+<tr class="row-even"><td><p>SPI1_SCLK</p></td>
+<td><p>Sensor SCLK
+(per board’s
+schematic)</p></td>
+<td><p>GPIO1.12
+(SPI1_SCLK)</p></td>
+<td><p>Serial Clock for SPI
+communication</p></td>
+</tr>
+<tr class="row-odd"><td><p>SPI1_MISO</p></td>
+<td><p>Sensor MISO
+(per board’s
+schematic)</p></td>
+<td><p>GPIO1.14
+(SPI1_MISO)</p></td>
+<td><p>Master In Slave Out for SPI
+data</p></td>
+</tr>
+<tr class="row-even"><td><p>SPI1_MOSI</p></td>
+<td><p>Sensor MOSI
+(per board’s
+schematic)</p></td>
+<td><p>GPIO1.16
+(SPI1_MOSI)</p></td>
+<td><p>Master Out Slave In for SPI
+data</p></td>
+</tr>
+<tr class="row-odd"><td><p>SPI1_CS_0</p></td>
+<td><p>Sensor CS
+(per board’s
+schematic)</p></td>
+<td><p>GPIO1.18
+(SPI1_CS_0)</p></td>
+<td><p>Chip Select for gyroscope
+sensor</p></td>
+</tr>
+<tr class="row-even"><td><p>UART0_TX</p></td>
+<td><p>Debug TX
+(per board’s
+schematic)</p></td>
+<td><p>GPIO0.20
+(UART0_TX)</p></td>
+<td><p>Transmit line for UART
+debugging</p></td>
+</tr>
+<tr class="row-odd"><td><p>UART0_RX</p></td>
+<td><p>Debug RX
+(per board’s
+schematic)</p></td>
+<td><p>GPIO0.22
+(UART0_RX)</p></td>
+<td><p>Receive line for UART
+communication</p></td>
+</tr>
+<tr class="row-even"><td><p>GPIO_SYNC</p></td>
+<td><p>Sync/Interrupt
+(per board’s
+schematic)</p></td>
+<td><p>GPIO1.9
+(Sensor Sync)</p></td>
+<td><p>Sensor synchronization and
+interrupt</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id3">
+<h4>Build Command<a class="headerlink" href="#id3" title="Link to this heading"></a></h4>
+<p>Below is a consolidated set of commands to clean, build, flash, and
+debug the ADXRS290-PMDZ project on a Maxim platform:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Clean the project (from the project root: no-OS/projects/adxrs290-pmdz)</span>
+make<span class="w"> </span>clean
+
+<span class="c1"># Full project build for the MAXIM target (uses settings from builds.json)</span>
+make<span class="w"> </span><span class="nv">TARGET</span><span class="o">=</span>maxim
+
+<span class="c1"># Build the IIO example application:</span>
+<span class="nb">cd</span><span class="w"> </span>no-OS/projects/adxrs290-pmdz/src/examples/iio_example<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>make<span class="w"> </span>-f<span class="w"> </span>example.mk
+
+<span class="c1"># Build the IIO Timer Trigger example:</span>
+<span class="nb">cd</span><span class="w"> </span>no-OS/projects/adxrs290-pmdz/src/examples/iio_timer_trigger_example<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>make<span class="w"> </span>-f<span class="w"> </span>example.mk
+
+<span class="c1"># Flash the compiled binary to the MAXIM hardware</span>
+make<span class="w"> </span>flash<span class="w"> </span><span class="nv">TARGET</span><span class="o">=</span>maxim
+
+<span class="c1"># Start a debug session with debugging symbols for the MAXIM target</span>
+make<span class="w"> </span>debug<span class="w"> </span><span class="nv">TARGET</span><span class="o">=</span>maxim
+</pre></div>
+</div>
+</section>
+</section>
+<section id="pico-platform">
+<h3>PICO Platform<a class="headerlink" href="#pico-platform" title="Link to this heading"></a></h3>
+<section id="id4">
+<h4>Used Hardware<a class="headerlink" href="#id4" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-ADXRS290-PMDZ">EVAL-ADXRS290-PMDZ</a></p></li>
+<li><p><a class="reference external" href="https://www.raspberrypi.com/products/raspberry-pi-pico/">Raspberry Pi Pico</a></p></li>
+</ul>
+</section>
+<section id="id5">
+<h4>Connections<a class="headerlink" href="#id5" title="Link to this heading"></a></h4>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>Interface</p></td>
+<td><p>Raspberry Pi Pico
+Pin (Function)</p></td>
+<td><p>EVAL-ADXRS290-PMDZ
+Pin (Signal)</p></td>
+<td><p>Connection
+Mnemonic</p></td>
+<td><p>Pin Function / Description</p></td>
+</tr>
+<tr class="row-even"><td><p>SPI</p></td>
+<td><p>SPI0_TX (GP19)</p></td>
+<td><p>MOSI (Data In)</p></td>
+<td><p>SPI_TX</p></td>
+<td><p>Transmits data from Pico
+to sensor</p></td>
+</tr>
+<tr class="row-odd"><td><p>SPI</p></td>
+<td><p>SPI0_RX (GP16)</p></td>
+<td><p>MISO (Data Out)</p></td>
+<td><p>SPI_RX</p></td>
+<td><p>Receives sensor data on Pico</p></td>
+</tr>
+<tr class="row-even"><td><p>SPI</p></td>
+<td><p>SPI0_SCK (GP18)</p></td>
+<td><p>SCLK</p></td>
+<td><p>SPI_CLK</p></td>
+<td><p>Provides clock signal for
+SPI communication</p></td>
+</tr>
+<tr class="row-odd"><td><p>SPI</p></td>
+<td><p>SPI0_CS (GP17)</p></td>
+<td><p>CS (Chip Select)</p></td>
+<td><p>SPI_CS</p></td>
+<td><p>Activates sensor
+communication (active low)</p></td>
+</tr>
+<tr class="row-even"><td><p>UART</p></td>
+<td><p>UART0_TX (GP0)</p></td>
+<td><p>UART_RX</p></td>
+<td><p>UART_TX</p></td>
+<td><p>Transmits debug/command
+data from Pico</p></td>
+</tr>
+<tr class="row-odd"><td><p>UART</p></td>
+<td><p>UART0_RX (GP1)</p></td>
+<td><p>UART_TX</p></td>
+<td><p>UART_RX</p></td>
+<td><p>Receives debug/command
+data on Pico</p></td>
+</tr>
+<tr class="row-even"><td><p>GPIO</p></td>
+<td><p>GPIO_SYNC (GP20)</p></td>
+<td><p>Sync/Interrupt</p></td>
+<td><p>GPIO_SYNC</p></td>
+<td><p>Synchronization and sensor
+interrupt trigger</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Ensure that the pin numbers and functions detailed here align with your
+platform-specific header files and the ADXRS290 documentation before
+wiring the boards.</p>
+</section>
+<section id="id6">
+<h4>Build Command<a class="headerlink" href="#id6" title="Link to this heading"></a></h4>
+<p>Below is a single code block containing the primary commands for
+cleaning, building, flashing, and debugging the ADXRS290 project on the
+PICO platform:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="w"> </span><span class="c1"># Navigate to the project directory (if not already there)</span>
+<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>no-OS/projects/adxrs290-pmdz/src/examples/iio_example
+
+<span class="w"> </span><span class="c1"># Set the target platform to PICO</span>
+<span class="w"> </span>make<span class="w"> </span><span class="nv">TARGET</span><span class="o">=</span>pico
+
+<span class="c1"># Clean: remove previous build artifacts</span>
+<span class="w"> </span>make<span class="w"> </span>clean<span class="w"> </span><span class="nv">PLATFORM</span><span class="o">=</span>pico
+
+<span class="w"> </span><span class="c1"># Build:</span>
+<span class="w"> </span><span class="c1">#   - Default full build (using &#39;all&#39; target or simply &#39;make&#39;)</span>
+<span class="w"> </span>make<span class="w"> </span>all<span class="w"> </span><span class="nv">PLATFORM</span><span class="o">=</span>pico
+
+<span class="w"> </span><span class="c1"># Build specific IIO examples:</span>
+<span class="w"> </span><span class="c1">#   IIO example build</span>
+<span class="w"> </span>make<span class="w"> </span>iio_example<span class="w"> </span><span class="nv">TARGET</span><span class="o">=</span>pico
+<span class="w"> </span><span class="c1">#   IIO trigger example build</span>
+<span class="w"> </span>make<span class="w"> </span>iio_trigger_example<span class="w"> </span><span class="nv">TARGET</span><span class="o">=</span>pico
+<span class="w"> </span><span class="c1">#   IIO timer trigger example build</span>
+<span class="w"> </span>make<span class="w"> </span>iio_timer_trigger<span class="w"> </span><span class="nv">TARGET</span><span class="o">=</span>pico
+
+<span class="w"> </span><span class="c1"># Flash: program the firmware onto the PICO board</span>
+<span class="w"> </span>make<span class="w"> </span>flash<span class="w"> </span><span class="nv">PLATFORM</span><span class="o">=</span>pico
+
+<span class="w"> </span><span class="c1"># Debug: launch a GDB debugging session for troubleshooting</span>
+<span class="w"> </span>make<span class="w"> </span>debug<span class="w"> </span><span class="nv">PLATFORM</span><span class="o">=</span>pico
+</pre></div>
+</div>
+</section>
+</section>
+<section id="stm32-platform">
+<h3>STM32 Platform<a class="headerlink" href="#stm32-platform" title="Link to this heading"></a></h3>
+<section id="id7">
+<h4>Used Hardware<a class="headerlink" href="#id7" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-ADXRS290-PMDZ">EVAL-ADXRS290-PMDZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-SDP-CK1Z">EVAL-SDP-CK1Z</a></p></li>
+</ul>
+</section>
+<section id="id8">
+<h4>Connections<a class="headerlink" href="#id8" title="Link to this heading"></a></h4>
+<p><strong>SPI Connections</strong></p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>EVAL-ADXRS290-PMDZ
+Board Pin</p></td>
+<td><p>EVAL-SDP-CK1Z
+Board Pin
+(STM32F469NIH6)</p></td>
+<td><p>Connection
+Mnemonic</p></td>
+<td><p>Pin Function</p></td>
+</tr>
+<tr class="row-even"><td><p>SCLK (e.g., Pin 1)</p></td>
+<td><p>SPI1_SCLK (PA5)</p></td>
+<td><p>SCLK</p></td>
+<td><p>SPI Clock – synchronizes
+data transfer</p></td>
+</tr>
+<tr class="row-odd"><td><p>MOSI (e.g., Pin 2)</p></td>
+<td><p>SPI1_MOSI (PA7)</p></td>
+<td><p>MOSI</p></td>
+<td><p>Master Out, Slave In –
+transmit data</p></td>
+</tr>
+<tr class="row-even"><td><p>MISO (e.g., Pin 3)</p></td>
+<td><p>SPI1_MISO (PA6)</p></td>
+<td><p>MISO</p></td>
+<td><p>Master In, Slave Out –
+receive data</p></td>
+</tr>
+<tr class="row-odd"><td><p>CS (e.g., Pin 4)</p></td>
+<td><p>SPI1_CS (PA4)</p></td>
+<td><p>CS</p></td>
+<td><p>Chip Select – enables the
+sensor</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>UART Connections</strong></p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>EVAL-ADXRS290-PMDZ
+Board Pin</p></td>
+<td><p>EVAL-SDP-CK1Z
+Board Pin
+(STM32F469NIH6)</p></td>
+<td><p>Connection
+Mnemonic</p></td>
+<td><p>Pin Function</p></td>
+</tr>
+<tr class="row-even"><td><p>RX (e.g., Pin 5)</p></td>
+<td><p>UART_TX (e.g., PB6)</p></td>
+<td><p>UART_TX</p></td>
+<td><p>UART Transmit – sends data to
+sensor RX</p></td>
+</tr>
+<tr class="row-odd"><td><p>TX (e.g., Pin 6)</p></td>
+<td><p>UART_RX (e.g., PB7)</p></td>
+<td><p>UART_RX</p></td>
+<td><p>UART Receive – receives data
+from sensor TX</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id9">
+<h4>Build Command<a class="headerlink" href="#id9" title="Link to this heading"></a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="w"> </span><span class="c1"># Navigate to the project directory (if not already there)</span>
+<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>no-OS/projects/adxrs290-pmdz/src/examples/iio_example
+
+<span class="w"> </span><span class="c1"># Set the target platform to STM32</span>
+<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">TARGET</span><span class="o">=</span>stm32
+
+<span class="c1"># Clean previous build artifacts</span>
+<span class="w"> </span>make<span class="w"> </span>clean
+
+<span class="w"> </span><span class="c1"># Build the project for the STM32 platform (compiles both core and example applications)</span>
+<span class="w"> </span>make<span class="w"> </span>all
+
+<span class="w"> </span><span class="c1"># Flash the compiled firmware onto the STM32F469NIH6 microcontroller</span>
+<span class="w"> </span>make<span class="w"> </span>flash
+
+<span class="w"> </span><span class="c1"># Launch the debugging environment for development and troubleshooting</span>
+<span class="w"> </span>make<span class="w"> </span>debug
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+</section>
+
+
+          </div>
+              <div class="related">
+                &nbsp;
+    <a href="max31827-evkit.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">Evaluating the MAX31827</a>
+    <a href="../build_guide.html" title="Next document (Alt+Shift+RightArrow)" class="next">No-OS Build Guide</a>
+              </div>
+          
+        </div>
+      </div>
+  </div>
+
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
+    <footer>
+      &#169;2023-2024, Analog Devices, Inc.
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
+</html>
