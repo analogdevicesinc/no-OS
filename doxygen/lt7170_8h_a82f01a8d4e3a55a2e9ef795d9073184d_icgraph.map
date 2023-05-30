@@ -1,0 +1,9 @@
+<map id="lt7170_remove" name="lt7170_remove">
+<area shape="rect" id="Node000001" title="Free or remove device instance." alt="" coords="404,31,524,56"/>
+<area shape="rect" id="Node000002" href="$lt7170_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="196,5,356,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="390,36,356,31,357,26,391,31"/>
+<area shape="rect" id="Node000003" href="$iio__lt7170_8c.html#a1e61605d9746c7fd3e7071e0c1772284" title="Free resources allocated by the init function." alt="" coords="205,55,347,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="390,55,348,61,347,56,390,50"/>
+<area shape="rect" id="Node000004" href="$lt7170_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="5,55,148,80"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="191,70,149,70,149,65,191,65"/>
+</map>

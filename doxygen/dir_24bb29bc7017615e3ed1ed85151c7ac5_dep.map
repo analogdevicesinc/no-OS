@@ -1,0 +1,20 @@
+<map id="projects/adxrs290&#45;pmdz/src/platform" name="projects/adxrs290&#45;pmdz/src/platform">
+<area shape="rect" id="node2" href="dir_7b03b88f027f26a036e8f8bcd91cc341.html" title="aducm3029" alt="" coords="291,63,389,88"/>
+<area shape="rect" id="node6" href="dir_14bc92f4b96c8519b376567118ac28b3.html" title="drivers" alt="" coords="116,136,183,161"/>
+<area shape="poly" id="edge1" href="dir_000205_000430.html" alt="" coords="322,91,280,112,197,139,195,134,278,107,319,86"/>
+<area shape="rect" id="edge1-headlabel" href="dir_000205_000430.html" title="7" alt="" coords="198,136,207,150"/>
+<area shape="rect" id="node7" href="dir_d44c64559bbebec7f509842c48db8b23.html" title="include" alt="" coords="256,136,325,161"/>
+<area shape="poly" id="edge2" href="dir_000205_000627.html" alt="" coords="334,90,309,126,304,123,330,87"/>
+<area shape="rect" id="edge2-headlabel" href="dir_000205_000627.html" title="1" alt="" coords="311,119,321,133"/>
+<area shape="rect" id="node3" href="dir_e00d2d98cca203f4aadd017c76410864.html" title="maxim" alt="" coords="198,63,266,88"/>
+<area shape="rect" id="node4" href="dir_ddd3fa739e03ead73b1bb0fd2b5eb0a2.html" title="pico" alt="" coords="125,63,174,88"/>
+<area shape="poly" id="edge3" href="dir_000803_000430.html" alt="" coords="152,88,152,122,147,122,147,88"/>
+<area shape="rect" id="edge3-headlabel" href="dir_000803_000430.html" title="6" alt="" coords="153,110,162,125"/>
+<area shape="poly" id="edge4" href="dir_000803_000627.html" alt="" coords="162,86,188,107,244,132,242,137,185,112,159,90"/>
+<area shape="rect" id="edge4-headlabel" href="dir_000803_000627.html" title="2" alt="" coords="237,117,246,132"/>
+<area shape="rect" id="node5" href="dir_d4de0105f227f9952053499a59a19881.html" title="stm32" alt="" coords="38,63,101,88"/>
+<area shape="poly" id="edge5" href="dir_001055_000430.html" alt="" coords="84,86,128,125,124,129,80,90"/>
+<area shape="rect" id="edge5-headlabel" href="dir_001055_000430.html" title="6" alt="" coords="124,110,133,125"/>
+<area shape="rect" id="clust2" href="dir_24bb29bc7017615e3ed1ed85151c7ac5.html" alt="" coords="27,52,504,99"/>
+<area shape="rect" id="clust1" href="dir_e9d26f83da9b74ecf3f223d703876f05.html" title="src" alt="" coords="16,16,515,109"/>
+</map>

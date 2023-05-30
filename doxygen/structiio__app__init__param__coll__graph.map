@@ -1,0 +1,33 @@
+<map id="iio_app_init_param" name="iio_app_init_param">
+<area shape="rect" id="Node000001" title="IIO application descriptor initialization parameters." alt="" coords="605,391,751,416"/>
+<area shape="rect" id="Node000002" href="$structiio__ctx__attr.html" title="Structure holding the context attribute members." alt="" coords="425,303,520,328"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="505,333,567,364,636,388,634,393,565,369,502,337"/>
+<area shape="rect" id="Node000003" href="$structiio__app__device.html" title=" " alt="" coords="544,303,663,328"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="622,337,645,365,668,389,664,392,641,368,618,341"/>
+<area shape="rect" id="Node000004" href="$structiio__device.html" title="Structure holding channels and attributes of a device." alt="" coords="347,200,435,225"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="418,231,452,254,491,276,557,300,556,305,489,281,449,259,415,236"/>
+<area shape="rect" id="Node000005" href="$structno__os__irq__ctrl__desc.html" title=" " alt="" coords="86,103,235,128"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="202,131,364,197,362,202,200,136"/>
+<area shape="rect" id="Node000006" href="$structno__os__irq__platform__ops.html" title="Structure holding IRQ function pointers that point to the platform specific function." alt="" coords="5,5,183,31"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="112,41,155,101,150,104,108,44"/>
+<area shape="rect" id="Node000007" href="$structiio__channel.html" title="Struct describing the scan type." alt="" coords="323,103,419,128"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="379,141,391,199,386,200,374,142"/>
+<area shape="rect" id="Node000008" href="$structiio__chan__type.html" title="IIO channel types." alt="" coords="207,5,319,31"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="283,40,309,67,354,100,351,105,306,71,279,43"/>
+<area shape="rect" id="Node000009" href="$structscan__type.html" title=" " alt="" coords="343,5,431,31"/>
+<area shape="poly" id="edge8_Node000007_Node000009" title=" " alt="" coords="376,44,373,55,370,80,372,102,367,103,365,80,367,54,371,43"/>
+<area shape="rect" id="Node000010" href="$structiio__attribute.html" title="Structure holding pointers to show and store functions." alt="" coords="507,5,609,31"/>
+<area shape="poly" id="edge10_Node000004_Node000010" title=" " alt="" coords="553,45,542,71,504,129,454,178,417,202,415,198,451,174,500,126,537,68,548,43"/>
+<area shape="poly" id="edge9_Node000007_Node000010" title=" " alt="" coords="515,38,473,57,390,105,388,100,470,52,513,33"/>
+<area shape="rect" id="Node000013" href="$structiio__trigger.html" title=" " alt="" coords="693,103,781,128"/>
+<area shape="poly" id="edge14_Node000013_Node000010" title=" " alt="" coords="593,35,716,100,714,105,590,39"/>
+<area shape="rect" id="Node000011" href="$structiio__data__buffer.html" title=" " alt="" coords="543,200,661,225"/>
+<area shape="poly" id="edge11_Node000003_Node000011" title=" " alt="" coords="600,239,599,249,599,278,603,302,598,303,594,279,594,249,595,239"/>
+<area shape="rect" id="Node000012" href="$structiio__trigger__init.html" title=" " alt="" coords="675,251,791,277"/>
+<area shape="poly" id="edge12_Node000001_Node000012" title=" " alt="" coords="728,291,700,368,688,392,683,389,696,366,723,289"/>
+<area shape="poly" id="edge13_Node000012_Node000013" title=" " alt="" coords="739,142,736,251,730,251,733,142"/>
+<area shape="rect" id="Node000014" href="$structno__os__uart__init__param.html" title="Structure holding the parameters for UART initialization." alt="" coords="777,303,947,328"/>
+<area shape="poly" id="edge15_Node000001_Node000014" title=" " alt="" coords="826,336,704,393,702,388,824,332"/>
+<area shape="rect" id="Node000015" href="$structno__os__uart__platform__ops.html" title="Structure holding UART function pointers that point to the platform specific function." alt="" coords="770,200,957,225"/>
+<area shape="poly" id="edge16_Node000014_Node000015" title=" " alt="" coords="866,239,865,303,859,303,860,239"/>
+</map>

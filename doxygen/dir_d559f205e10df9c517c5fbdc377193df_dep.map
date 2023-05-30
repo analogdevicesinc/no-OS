@@ -1,0 +1,16 @@
+<map id="projects/ad9371/src/app" name="projects/ad9371/src/app">
+<area shape="rect" id="node1" href="dir_203aee6c9530e1dfa8bf78910cc257a4.html" title="devices" alt="" coords="27,125,99,151"/>
+<area shape="rect" id="node2" href="dir_a24d923ac76843d0ea5b24c23c1c1407.html" title="firmware" alt="" coords="123,125,203,151"/>
+<area shape="rect" id="node3" href="dir_d559f205e10df9c517c5fbdc377193df.html" title="app" alt="" coords="147,52,194,77"/>
+<area shape="poly" id="edge2" href="dir_000232_000416.html" alt="" coords="155,80,93,120,90,115,152,75"/>
+<area shape="rect" id="edge2-headlabel" href="dir_000232_000416.html" title="5" alt="" coords="95,115,105,130"/>
+<area shape="poly" id="edge3" href="dir_000232_000539.html" alt="" coords="172,78,168,112,163,112,167,77"/>
+<area shape="rect" id="edge3-headlabel" href="dir_000232_000539.html" title="1" alt="" coords="170,101,179,115"/>
+<area shape="rect" id="node4" href="dir_14bc92f4b96c8519b376567118ac28b3.html" title="drivers" alt="" coords="227,125,293,151"/>
+<area shape="poly" id="edge1" href="dir_000232_000430.html" alt="" coords="187,75,236,114,233,119,183,79"/>
+<area shape="rect" id="edge1-headlabel" href="dir_000232_000430.html" title="7" alt="" coords="232,100,241,115"/>
+<area shape="rect" id="node5" href="dir_d44c64559bbebec7f509842c48db8b23.html" title="include" alt="" coords="317,125,387,151"/>
+<area shape="poly" id="edge4" href="dir_000232_000627.html" alt="" coords="195,73,311,118,309,123,193,78"/>
+<area shape="rect" id="edge4-headlabel" href="dir_000232_000627.html" title="3" alt="" coords="304,103,314,118"/>
+<area shape="rect" id="clust1" href="dir_47d6823a3d28a149966ff78b37e98e5d.html" title="src" alt="" coords="16,16,213,161"/>
+</map>

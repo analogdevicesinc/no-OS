@@ -1,0 +1,34 @@
+<map id="ad405x_read" name="ad405x_read">
+<area shape="rect" id="Node000001" title="Read device register." alt="" coords="767,158,873,183"/>
+<area shape="rect" id="Node000002" href="$ad405x_8c.html#a0b7dbc056b13300fbf25ddd0e10a7cfb" title="Initialize the device." alt="" coords="61,11,160,36"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="787,152,738,121,672,86,596,51,517,26,419,12,320,8,231,12,160,19,160,14,230,7,320,3,419,6,518,21,598,46,675,81,741,117,790,148"/>
+<area shape="rect" id="Node000003" href="$ad405x_8c.html#a683206b2c6482e8181918922eb34a7f4" title="Update specific register bits." alt="" coords="565,300,719,326"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="794,194,661,302,657,298,790,190"/>
+<area shape="rect" id="Node000004" href="$ad405x_8c.html#a112d94464fc72ac320766fa1b27e9141" title="Disable INVERT_ON_CHOP." alt="" coords="306,86,475,126"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="627,289,610,255,586,214,554,174,516,140,475,121,477,116,519,136,558,171,590,211,615,252,632,286"/>
+<area shape="rect" id="Node000005" href="$ad405x_8c.html#a91647373d66a6f0e1425951e81084a1e" title="Enable INVERT_ON_CHOP." alt="" coords="307,150,474,190"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="620,292,575,247,547,224,516,205,473,188,475,183,519,200,550,220,579,243,623,288"/>
+<area shape="rect" id="Node000006" href="$ad405x_8c.html#af7b58be286e4da075eccbdf214589655" title="Enter ADC Mode." alt="" coords="305,215,476,240"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="606,296,564,275,516,255,470,243,472,238,518,250,566,270,608,291"/>
+<area shape="rect" id="Node000008" href="$ad405x_8c.html#a4b8c3a93ff433390235d94fd4eed6e80" title="Set averaging filter window length." alt="" coords="306,265,475,305"/>
+<area shape="poly" id="edge7_Node000003_Node000008" title=" " alt="" coords="551,306,475,297,476,292,552,300"/>
+<area shape="rect" id="Node000009" href="$ad405x_8c.html#aa76d3887d52b3b1ff3b2034f404e9564" title="Enter Averaging Mode." alt="" coords="284,330,497,355"/>
+<area shape="poly" id="edge8_Node000003_Node000009" title=" " alt="" coords="552,326,498,332,497,327,551,321"/>
+<area shape="rect" id="Node000010" href="$ad405x_8c.html#a2e2ca9b7ad51006af1b2b3fd0951b6b8" title="Enter Burst Averaging Mode." alt="" coords="264,379,517,404"/>
+<area shape="poly" id="edge10_Node000003_Node000010" title=" " alt="" coords="604,334,518,369,469,381,468,376,517,364,602,329"/>
+<area shape="rect" id="Node000011" href="$ad405x_8c.html#ac488927d2c6e855a0e47421ab2cb80ed" title="Set output data format." alt="" coords="299,428,483,454"/>
+<area shape="poly" id="edge12_Node000003_Node000011" title=" " alt="" coords="622,338,577,379,549,400,518,418,484,431,482,426,516,413,546,396,574,375,618,334"/>
+<area shape="rect" id="Node000012" href="$ad405x_8c.html#a7acf8afe789e34e5496504bcadffe837" title="Set DEV_EN signal polarity." alt="" coords="287,478,495,503"/>
+<area shape="poly" id="edge13_Node000003_Node000012" title=" " alt="" coords="630,339,587,404,556,439,519,467,491,480,489,475,516,463,552,435,583,401,626,336"/>
+<area shape="rect" id="Node000013" href="$ad405x_8c.html#a98a2df6a7855d9aa718f00399aabcbce" title="Set GP mode." alt="" coords="309,527,473,552"/>
+<area shape="poly" id="edge14_Node000003_Node000013" title=" " alt="" coords="635,340,619,380,595,428,562,476,542,498,519,516,497,528,474,536,472,531,495,523,516,512,538,494,558,473,591,425,615,377,630,338"/>
+<area shape="rect" id="Node000014" href="$ad405x_8c.html#a000fb460ab0e58ad9c4ebadf14ce89b4" title="Select sample rate for Burst and Autonomous Modes." alt="" coords="298,576,483,602"/>
+<area shape="poly" id="edge15_Node000003_Node000014" title=" " alt="" coords="638,340,626,389,603,450,568,513,545,541,519,566,485,583,483,578,516,561,541,538,564,510,598,448,620,387,633,339"/>
+<area shape="rect" id="Node000015" href="$ad405x_8c.html#a2ad41fe31ec82635d42c6f83c782a79a" title="Software reset the device." alt="" coords="320,36,461,62"/>
+<area shape="poly" id="edge16_Node000003_Node000015" title=" " alt="" coords="632,287,619,241,596,183,562,125,541,99,516,76,490,62,461,54,462,49,492,57,519,72,544,95,567,122,601,181,624,239,638,286"/>
+<area shape="rect" id="Node000007" href="$ad405x_8c.html#a09c204a1bf949ac99e72ab02b3571613" title="Set operation mode." alt="" coords="5,330,216,355"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="294,246,265,255,226,273,189,294,131,332,128,327,186,289,224,268,263,250,292,241"/>
+<area shape="poly" id="edge9_Node000009_Node000007" title=" " alt="" coords="270,345,216,345,216,340,270,340"/>
+<area shape="poly" id="edge11_Node000010_Node000007" title=" " alt="" coords="304,379,183,358,184,352,305,374"/>
+<area shape="poly" id="edge17_Node000015_Node000002" title=" " alt="" coords="306,44,160,31,160,25,306,39"/>
+</map>

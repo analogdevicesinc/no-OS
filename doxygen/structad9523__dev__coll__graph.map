@@ -1,0 +1,20 @@
+<map id="ad9523_dev" name="ad9523_dev">
+<area shape="rect" id="Node000001" title=" " alt="" coords="459,284,560,309"/>
+<area shape="rect" id="Node000002" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="216,196,339,221"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="322,224,479,281,477,286,320,229"/>
+<area shape="poly" id="edge6_Node000002_Node000002" title=" " alt="" coords="354,200,365,209,357,216,339,219,338,214,355,212,360,209,351,205"/>
+<area shape="rect" id="Node000003" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="151,101,297,126"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="240,137,273,195,268,197,235,139"/>
+<area shape="rect" id="Node000004" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,5,184,31"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="76,42,60,63,48,86,43,110,45,121,50,132,66,149,84,164,127,185,173,198,216,204,215,209,172,203,125,190,81,168,62,153,46,135,40,123,38,110,43,84,56,60,72,39"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="123,36,210,98,206,103,120,41"/>
+<area shape="rect" id="Node000005" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="321,93,471,133"/>
+<area shape="poly" id="edge5_Node000002_Node000005" title=" " alt="" coords="363,144,294,198,291,194,360,140"/>
+<area shape="rect" id="Node000006" href="$structad9523__state.html" title=" " alt="" coords="575,196,686,221"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="604,232,527,286,524,282,601,227"/>
+<area shape="rect" id="Node000007" href="$structad9523__platform__data.html" title="platform specific information" alt="" coords="529,101,698,126"/>
+<area shape="poly" id="edge10_Node000001_Node000007" title=" " alt="" coords="583,136,551,162,524,197,515,220,511,243,511,284,505,284,506,243,510,218,519,195,547,159,580,132"/>
+<area shape="poly" id="edge8_Node000006_Node000007" title=" " alt="" coords="621,139,631,195,626,196,615,140"/>
+<area shape="rect" id="Node000008" href="$structad9523__channel__spec.html" title="Output channel configuration." alt="" coords="531,5,696,31"/>
+<area shape="poly" id="edge9_Node000007_Node000008" title=" " alt="" coords="616,44,616,101,611,101,611,44"/>
+</map>

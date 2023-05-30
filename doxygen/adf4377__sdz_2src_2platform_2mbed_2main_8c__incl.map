@@ -1,0 +1,40 @@
+<map id="projects/adf4377_sdz/src/platform/mbed/main.c" name="projects/adf4377_sdz/src/platform/mbed/main.c">
+<area shape="rect" id="Node000001" title="Main file for Mbed platform of adf4377 project." alt="" coords="484,5,679,45"/>
+<area shape="rect" id="Node000002" href="$adf4377__sdz_2src_2platform_2mbed_2parameters_8h.html" title="Definitions specific to Mbed platform used by adf4377 project." alt="" coords="384,93,493,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="548,48,473,89,470,84,546,43"/>
+<area shape="rect" id="Node000014" title=" " alt="" coords="518,93,645,119"/>
+<area shape="poly" id="edge20_Node000001_Node000014" title=" " alt="" coords="584,46,584,79,579,79,579,46"/>
+<area shape="rect" id="Node000015" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="669,93,779,119"/>
+<area shape="poly" id="edge21_Node000001_Node000015" title=" " alt="" coords="617,43,692,84,690,89,614,48"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="567,167,667,192"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="468,116,577,159,575,164,466,121"/>
+<area shape="rect" id="Node000004" href="$mbed__uart_8h.html" title="Header containing extra types required for UART interface." alt="" coords="5,167,109,192"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="384,120,124,168,123,163,383,115"/>
+<area shape="rect" id="Node000007" href="$mbed__spi_8h.html" title="Header containing extra types required for SPI interface." alt="" coords="265,167,362,192"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="420,121,347,162,344,157,417,116"/>
+<area shape="rect" id="Node000008" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="386,167,491,192"/>
+<area shape="poly" id="edge9_Node000002_Node000008" title=" " alt="" coords="441,119,441,153,436,153,436,119"/>
+<area shape="rect" id="Node000012" href="$mbed__gpio_8h.html" title="Header containing extra types required for GPIO interface." alt="" coords="133,167,240,192"/>
+<area shape="poly" id="edge16_Node000002_Node000012" title=" " alt="" coords="399,121,242,165,240,160,397,116"/>
+<area shape="rect" id="Node000013" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="567,240,673,265"/>
+<area shape="poly" id="edge18_Node000002_Node000013" title=" " alt="" coords="455,117,596,229,593,233,452,121"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="153,240,220,265"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="79,190,154,231,152,235,77,194"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="255,313,337,339"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="68,190,99,226,143,263,192,289,242,307,240,312,190,294,140,268,95,229,64,194"/>
+<area shape="poly" id="edge7_Node000007_Node000005" title=" " alt="" coords="294,194,221,235,218,231,292,190"/>
+<area shape="poly" id="edge8_Node000007_Node000006" title=" " alt="" coords="313,193,305,240,300,300,295,299,300,240,308,192"/>
+<area shape="poly" id="edge11_Node000008_Node000006" title=" " alt="" coords="416,194,382,214,349,242,326,272,309,302,304,300,321,269,345,238,379,210,414,190"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="494,313,565,339"/>
+<area shape="poly" id="edge10_Node000008_Node000009" title=" " alt="" coords="458,190,483,211,506,239,520,269,528,299,523,300,515,271,502,241,479,215,454,194"/>
+<area shape="rect" id="Node000010" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="359,240,492,265"/>
+<area shape="poly" id="edge12_Node000008_Node000010" title=" " alt="" coords="439,193,433,227,427,226,434,192"/>
+<area shape="poly" id="edge15_Node000010_Node000006" title=" " alt="" coords="406,268,331,309,328,304,403,263"/>
+<area shape="poly" id="edge14_Node000010_Node000009" title=" " alt="" coords="444,263,502,303,499,307,441,268"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="390,313,461,339"/>
+<area shape="poly" id="edge13_Node000010_Node000011" title=" " alt="" coords="428,266,428,300,423,300,423,266"/>
+<area shape="poly" id="edge17_Node000012_Node000005" title=" " alt="" coords="189,192,189,226,184,226,184,192"/>
+<area shape="poly" id="edge19_Node000013_Node000009" title=" " alt="" coords="607,267,557,307,553,302,604,263"/>
+<area shape="rect" id="Node000016" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="691,167,759,192"/>
+<area shape="poly" id="edge22_Node000015_Node000016" title=" " alt="" coords="727,119,728,153,722,153,722,119"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="iio_channel" name="iio_channel">
+<area shape="rect" id="Node000001" title="Struct describing the scan type." alt="" coords="137,93,233,119"/>
+<area shape="rect" id="Node000002" href="$structiio__chan__type.html" title="IIO channel types." alt="" coords="5,5,117,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="87,38,125,67,165,91,162,96,123,72,84,42"/>
+<area shape="rect" id="Node000003" href="$structscan__type.html" title=" " alt="" coords="141,5,229,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="188,45,188,93,183,93,183,45"/>
+<area shape="rect" id="Node000004" href="$structiio__attribute.html" title="Structure holding pointers to show and store functions." alt="" coords="253,5,355,31"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="290,44,263,71,219,96,216,91,260,67,286,40"/>
+</map>

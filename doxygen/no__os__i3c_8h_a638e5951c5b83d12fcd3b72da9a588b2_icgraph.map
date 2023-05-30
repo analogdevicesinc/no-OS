@@ -1,0 +1,9 @@
+<map id="no_os_i3c_addr_set_status" name="no_os_i3c_addr_set_status">
+<area shape="rect" id="Node000001" title="Set status of an address." alt="" coords="433,35,583,75"/>
+<area shape="rect" id="Node000002" href="$stm32__i3c_8c.html#acb7fd673626d22c159a56f5d9efdc703" title="I3C target request a dynamic address callback. When called, assigns a dynamic address to the target." alt="" coords="168,5,385,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="419,46,385,42,386,36,420,41"/>
+<area shape="rect" id="Node000003" href="$no__os__i3c_8c.html#a1a8b6ccd9d5a915e699054af2a8e3f68" title="Initialize the I3C bus." alt="" coords="205,70,349,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="420,68,349,77,348,71,419,63"/>
+<area shape="rect" id="Node000004" href="$no__os__i3c_8c.html#ab54a357ab3d63706a3fbe455a4cd6fd8" title="Initialize the I3C device. If the bus of the I3C device is not initialized, it will call to init it." alt="" coords="5,70,120,95"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="191,85,120,85,120,80,191,80"/>
+</map>

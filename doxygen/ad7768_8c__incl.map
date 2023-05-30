@@ -1,0 +1,31 @@
+<map id="drivers/adc/ad7768/ad7768.c" name="drivers/adc/ad7768/ad7768.c">
+<area shape="rect" id="Node000001" title="Implementation of AD7768 Driver." alt="" coords="191,5,337,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,167,72,192"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="191,37,158,45,125,57,93,73,66,95,50,123,43,154,37,153,45,121,62,92,90,69,123,52,157,40,190,32"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="97,167,167,192"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="255,47,231,82,201,120,159,160,155,156,197,117,227,79,250,44"/>
+<area shape="rect" id="Node000004" href="$ad7768_8h.html" title="Header file of AD7768 Driver." alt="" coords="263,93,345,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="276,44,294,80,289,82,271,47"/>
+<area shape="rect" id="Node000008" href="$no__os__alloc_8h.html" title=" " alt="" coords="77,93,187,119"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="234,48,165,88,162,84,231,43"/>
+<area shape="rect" id="Node000009" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="585,93,695,119"/>
+<area shape="poly" id="edge12_Node000001_Node000009" title=" " alt="" coords="338,39,572,88,571,93,337,45"/>
+<area shape="rect" id="Node000011" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="414,93,514,119"/>
+<area shape="poly" id="edge14_Node000001_Node000011" title=" " alt="" coords="313,43,423,86,421,91,311,48"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="323,240,394,265"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="283,121,261,135,241,152,229,171,229,181,233,191,248,208,267,222,311,240,309,245,265,227,245,212,228,193,224,182,224,170,237,149,257,131,280,117"/>
+<area shape="rect" id="Node000006" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="243,167,349,192"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="305,119,301,153,296,153,300,119"/>
+<area shape="rect" id="Node000007" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="373,167,472,192"/>
+<area shape="poly" id="edge7_Node000004_Node000007" title=" " alt="" coords="324,116,393,157,390,162,322,121"/>
+<area shape="poly" id="edge6_Node000006_Node000005" title=" " alt="" coords="308,191,341,228,337,231,304,194"/>
+<area shape="poly" id="edge8_Node000007_Node000005" title=" " alt="" coords="414,194,380,232,376,228,410,191"/>
+<area shape="poly" id="edge10_Node000008_Node000002" title=" " alt="" coords="119,121,66,160,63,156,115,117"/>
+<area shape="poly" id="edge11_Node000008_Node000003" title=" " alt="" coords="135,119,135,153,129,153,129,119"/>
+<area shape="rect" id="Node000010" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="654,167,722,192"/>
+<area shape="poly" id="edge13_Node000009_Node000010" title=" " alt="" coords="650,118,675,154,670,157,646,121"/>
+<area shape="poly" id="edge16_Node000011_Node000003" title=" " alt="" coords="414,121,182,170,180,165,413,115"/>
+<area shape="poly" id="edge15_Node000011_Node000005" title=" " alt="" coords="475,118,490,153,492,174,486,193,471,212,451,226,408,244,406,239,448,221,467,208,482,191,487,173,485,154,470,120"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="547,167,629,192"/>
+<area shape="poly" id="edge17_Node000011_Node000012" title=" " alt="" coords="485,116,557,157,555,162,483,121"/>
+</map>

@@ -1,0 +1,40 @@
+<map id="projects/adf5611/src/platform/mbed/main.c" name="projects/adf5611/src/platform/mbed/main.c">
+<area shape="rect" id="Node000001" title="Main file for Mbed platform of ADF5611 project." alt="" coords="487,5,657,45"/>
+<area shape="rect" id="Node000002" href="$adf5611_2src_2platform_2mbed_2parameters_8h.html" title="Definitions specific to Mbed platform used by ADF5611 project." alt="" coords="375,93,484,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="539,48,463,89,461,84,537,43"/>
+<area shape="rect" id="Node000014" title=" " alt="" coords="509,93,635,119"/>
+<area shape="poly" id="edge20_Node000001_Node000014" title=" " alt="" coords="575,46,575,79,569,79,569,46"/>
+<area shape="rect" id="Node000015" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="660,93,769,119"/>
+<area shape="poly" id="edge21_Node000001_Node000015" title=" " alt="" coords="607,43,683,84,681,89,605,48"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="558,167,658,192"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="459,116,567,159,565,164,457,121"/>
+<area shape="rect" id="Node000004" href="$mbed__uart_8h.html" title="Header containing extra types required for UART interface." alt="" coords="5,167,109,192"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="375,120,123,168,122,163,374,115"/>
+<area shape="rect" id="Node000007" href="$mbed__spi_8h.html" title="Header containing extra types required for SPI interface." alt="" coords="255,167,353,192"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="411,121,338,162,335,157,408,116"/>
+<area shape="rect" id="Node000008" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="377,167,482,192"/>
+<area shape="poly" id="edge9_Node000002_Node000008" title=" " alt="" coords="432,119,432,153,427,153,427,119"/>
+<area shape="rect" id="Node000012" href="$mbed__i2c_8h.html" title="Header containing extra types required for I2C interface." alt="" coords="134,167,231,192"/>
+<area shape="poly" id="edge16_Node000002_Node000012" title=" " alt="" coords="390,121,236,165,235,160,389,116"/>
+<area shape="rect" id="Node000013" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="560,240,659,265"/>
+<area shape="poly" id="edge18_Node000002_Node000013" title=" " alt="" coords="446,117,586,229,583,233,442,121"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="149,240,216,265"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="79,190,152,231,149,235,76,194"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="248,313,331,339"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="67,190,97,226,139,263,187,289,236,307,234,312,185,294,136,268,93,229,63,194"/>
+<area shape="poly" id="edge7_Node000007_Node000005" title=" " alt="" coords="286,194,215,235,213,231,283,190"/>
+<area shape="poly" id="edge8_Node000007_Node000006" title=" " alt="" coords="305,192,299,240,294,300,288,299,293,240,300,192"/>
+<area shape="poly" id="edge11_Node000008_Node000006" title=" " alt="" coords="408,194,375,215,342,242,319,272,302,302,298,300,315,269,338,238,372,210,405,190"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="487,313,558,339"/>
+<area shape="poly" id="edge10_Node000008_Node000009" title=" " alt="" coords="449,190,475,211,500,239,514,269,522,299,516,300,509,271,495,241,472,215,446,194"/>
+<area shape="rect" id="Node000010" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="352,240,485,265"/>
+<area shape="poly" id="edge12_Node000008_Node000010" title=" " alt="" coords="430,193,425,227,420,226,425,192"/>
+<area shape="poly" id="edge15_Node000010_Node000006" title=" " alt="" coords="399,268,324,309,322,304,397,263"/>
+<area shape="poly" id="edge14_Node000010_Node000009" title=" " alt="" coords="437,263,496,303,493,307,434,268"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="383,313,454,339"/>
+<area shape="poly" id="edge13_Node000010_Node000011" title=" " alt="" coords="421,266,421,300,416,300,416,266"/>
+<area shape="poly" id="edge17_Node000012_Node000005" title=" " alt="" coords="185,192,185,226,180,226,180,192"/>
+<area shape="poly" id="edge19_Node000013_Node000009" title=" " alt="" coords="597,267,549,307,546,302,594,263"/>
+<area shape="rect" id="Node000016" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="682,167,750,192"/>
+<area shape="poly" id="edge22_Node000015_Node000016" title=" " alt="" coords="718,119,718,153,713,153,712,119"/>
+</map>

@@ -1,0 +1,19 @@
+<map id="projects/ltc4296/src" name="projects/ltc4296/src">
+<area shape="rect" id="node2" href="dir_33623c5ea6542a995669e07232342e97.html" title="common" alt="" coords="38,63,117,88"/>
+<area shape="rect" id="node5" href="dir_14bc92f4b96c8519b376567118ac28b3.html" title="drivers" alt="" coords="52,136,119,161"/>
+<area shape="poly" id="edge1" href="dir_000385_000430.html" alt="" coords="81,88,85,122,80,123,76,89"/>
+<area shape="rect" id="edge1-headlabel" href="dir_000385_000430.html" title="1" alt="" coords="86,110,95,124"/>
+<area shape="rect" id="node6" href="dir_d44c64559bbebec7f509842c48db8b23.html" title="include" alt="" coords="149,136,219,161"/>
+<area shape="poly" id="edge2" href="dir_000385_000627.html" alt="" coords="96,86,157,126,154,131,93,90"/>
+<area shape="rect" id="edge2-headlabel" href="dir_000385_000627.html" title="3" alt="" coords="151,111,161,126"/>
+<area shape="rect" id="node3" href="dir_75aea54e6eba3019ba61cd6bcd527813.html" title="examples" alt="" coords="141,63,227,88"/>
+<area shape="poly" id="edge3" href="dir_000516_000430.html" alt="" coords="170,90,114,130,111,126,167,86"/>
+<area shape="rect" id="edge3-headlabel" href="dir_000516_000430.html" title="1" alt="" coords="116,125,126,139"/>
+<area shape="poly" id="edge4" href="dir_000516_000627.html" alt="" coords="187,88,187,122,181,122,181,88"/>
+<area shape="rect" id="edge4-headlabel" href="dir_000516_000627.html" title="5" alt="" coords="188,110,197,125"/>
+<area shape="rect" id="node4" href="dir_0e233eb7563b42eef4dd4c1dd7a9d4c0.html" title="platform" alt="" coords="251,63,330,88"/>
+<area shape="poly" id="edge5" href="dir_000876_000627.html" alt="" coords="275,90,214,131,211,126,272,86"/>
+<area shape="rect" id="edge5-headlabel" href="dir_000876_000627.html" title="1" alt="" coords="217,125,226,140"/>
+<area shape="rect" id="clust2" href="dir_08c7cc785d10212f6e9b7a15cb28f311.html" alt="" coords="27,52,407,99"/>
+<area shape="rect" id="clust1" href="dir_8cdd6c5c5e27e391e70f6c6e64ab9c66.html" title="ltc4296" alt="" coords="16,16,417,109"/>
+</map>

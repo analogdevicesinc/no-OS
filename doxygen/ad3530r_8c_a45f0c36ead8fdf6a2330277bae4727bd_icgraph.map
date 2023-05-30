@@ -1,0 +1,7 @@
+<map id="ad3530r_set_crc_enable" name="ad3530r_set_crc_enable">
+<area shape="rect" id="Node000001" title=" " alt="" coords="375,5,553,31"/>
+<area shape="rect" id="Node000002" href="$ad3530r_8c.html#adf657d70dc5ad1db0cc23dad3e739158" title="Configures the device." alt="" coords="156,5,327,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="361,21,327,21,327,15,361,15"/>
+<area shape="rect" id="Node000003" href="$ad3530r_8c.html#a9f4f360a67fe344a9ec9d26973046ed8" title="Initialize the device structure." alt="" coords="5,5,108,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="142,21,108,21,108,15,142,15"/>
+</map>
