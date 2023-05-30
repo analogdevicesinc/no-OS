@@ -1,0 +1,7 @@
+<map id="ad9434_spi_read" name="ad9434_spi_read">
+<area shape="rect" id="Node000001" title="ad9434_spi_read" alt="" coords="269,5,401,31"/>
+<area shape="rect" id="Node000002" href="$ad9434_8c.html#a71d0943da2f014cd0ac18dc5a093f59a" title="ad9434_setup" alt="" coords="108,5,221,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="256,21,221,21,221,15,256,15"/>
+<area shape="rect" id="Node000003" href="$ad9434__fmc__500ebz_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="5,5,60,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="94,21,60,21,60,15,94,15"/>
+</map>

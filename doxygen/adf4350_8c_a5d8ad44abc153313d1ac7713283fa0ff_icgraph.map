@@ -1,0 +1,9 @@
+<map id="gcd" name="gcd">
+<area shape="rect" id="Node000001" title="Computes the greatest common divider of two numbers." alt="" coords="587,13,632,38"/>
+<area shape="rect" id="Node000002" href="$adf4350_8c.html#a36f6fb1f03a7c1b263bdf4787defbeb0" title="Sets the ADF4350 frequency." alt="" coords="404,13,539,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="573,28,539,28,539,23,573,23"/>
+<area shape="rect" id="Node000003" href="$adf4350_8c.html#a8c919c6b19796b92b775d6727856ef46" title="Stores PLL 0 frequency in Hz." alt="" coords="172,5,356,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="390,28,356,28,356,23,390,23"/>
+<area shape="rect" id="Node000004" href="$adf4350_8c.html#a734d328a485aa08ca8dfd42241997f51" title="Initializes the ADF4350." alt="" coords="5,13,124,38"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="158,28,124,28,124,23,158,23"/>
+</map>

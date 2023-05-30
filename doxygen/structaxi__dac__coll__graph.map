@@ -1,0 +1,5 @@
+<map id="axi_dac" name="axi_dac">
+<area shape="rect" id="Node000001" title="AXI DAC Device Descriptor." alt="" coords="35,93,107,119"/>
+<area shape="rect" id="Node000002" href="$structaxi__dac__channel.html" title=" " alt="" coords="5,5,136,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="73,45,73,93,68,93,68,45"/>
+</map>

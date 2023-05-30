@@ -1,0 +1,17 @@
+<map id="nhd_c12832a1z_dev" name="nhd_c12832a1z_dev">
+<area shape="rect" id="Node000001" title="nhd_c12832a1z device structure." alt="" coords="911,60,1065,85"/>
+<area shape="rect" id="Node000002" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="669,9,801,35"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="814,35,925,57,924,63,813,40"/>
+<area shape="rect" id="Node000003" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="323,5,511,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="525,17,669,19,669,24,525,22"/>
+<area shape="rect" id="Node000004" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="674,104,797,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="810,101,914,83,915,88,811,106"/>
+<area shape="poly" id="edge8_Node000004_Node000004" title=" " alt="" coords="711,89,719,81,735,77,750,80,758,86,760,96,756,105,751,103,755,95,754,89,747,85,735,83,721,85,715,93"/>
+<area shape="rect" id="Node000005" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="343,119,490,144"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="503,125,674,117,674,122,504,130"/>
+<area shape="rect" id="Node000006" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,88,184,113"/>
+<area shape="poly" id="edge6_Node000004_Node000006" title=" " alt="" coords="198,89,208,89,321,87,450,89,646,98,674,102,673,107,645,103,450,94,321,92,208,94,198,94"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="198,108,343,122,343,127,198,113"/>
+<area shape="rect" id="Node000007" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="342,169,491,209"/>
+<area shape="poly" id="edge7_Node000004_Node000007" title=" " alt="" coords="505,172,645,142,696,127,698,132,646,147,506,177"/>
+</map>

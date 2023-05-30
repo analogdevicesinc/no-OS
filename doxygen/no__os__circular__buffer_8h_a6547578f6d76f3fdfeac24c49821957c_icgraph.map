@@ -1,0 +1,11 @@
+<map id="no_os_cb_read" name="no_os_cb_read">
+<area shape="rect" id="Node000001" title=" " alt="" coords="447,55,565,80"/>
+<area shape="rect" id="Node000002" href="$iio_8c.html#a0fdf7ff5b58a4fcd96f07aad7b420c79" title=" " alt="" coords="248,29,399,55"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="433,60,399,55,400,50,433,55"/>
+<area shape="rect" id="Node000005" href="$iio__pqm_8c.html#a5049c1a1897c0c058c807dd7bdbd8a24" title="Write a pqm device attribute." alt="" coords="263,79,384,104"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="433,80,384,86,384,81,433,74"/>
+<area shape="rect" id="Node000003" href="$iio__dac__demo_8c.html#aab99831cbcc20534c7e55fc74d789429" title="Handles trigger: reads one data&#45;set from iio buffer and writes it to the dac buffer." alt="" coords="5,5,200,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="234,35,200,31,200,26,234,30"/>
+<area shape="rect" id="Node000004" href="$iio__dac__demo_8c.html#a0537b74656e351303315bc8b4043e455" title="function for writing samples to the device." alt="" coords="23,55,182,80"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="234,55,182,61,182,56,234,50"/>
+</map>

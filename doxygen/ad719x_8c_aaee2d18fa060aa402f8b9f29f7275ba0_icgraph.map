@@ -1,0 +1,12 @@
+<map id="ad719x_range_setup" name="ad719x_range_setup">
+<area shape="rect" id="Node000001" title="Selects the polarity of the conversion and the ADC input range." alt="" coords="575,31,732,56"/>
+<area shape="rect" id="Node000002" href="$ad719x_8c.html#abe338e9c6992908df702bb106f1e651d" title="Initializes the communication peripheral and the initial Values for AD719X Board and resets the devic..." alt="" coords="380,5,479,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="561,36,478,26,479,21,562,30"/>
+<area shape="rect" id="Node000005" href="$ad719x_8c.html#a5919c2732fd2a5703b71fbd65325b318" title="Read data from temperature sensor and converts it to Celsius degrees." alt="" coords="332,55,527,80"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="561,56,527,60,526,54,561,51"/>
+<area shape="rect" id="Node000003" href="$ad719x_2src_2examples_2dummy_2dummy__example_8c.html#aab59a6c65a45a3bcf47030189141a81c" title="Dummy example main execution." alt="" coords="108,31,284,56"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="366,27,285,36,284,31,366,22"/>
+<area shape="rect" id="Node000004" href="$ad719x_2src_2platform_2xilinx_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for XILINX platform." alt="" coords="5,31,60,56"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="94,46,60,46,60,41,94,41"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="318,59,284,55,284,50,319,53"/>
+</map>

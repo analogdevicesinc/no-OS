@@ -1,0 +1,26 @@
+var adrv9001_2src_2hal_2parameters_8h =
+[
+    [ "ADC_BUFFER_SAMPLES", "adrv9001_2src_2hal_2parameters_8h.html#a33a13980fd0a374fdf37c4f05771845f", null ],
+    [ "ADRV9001_I_Q_CHANNELS", "adrv9001_2src_2hal_2parameters_8h.html#afa1bd6526c696cc831f2a0198622e35a", null ],
+    [ "DAC_BUFFER_SAMPLES", "adrv9001_2src_2hal_2parameters_8h.html#aedf6bcd08713312107a8ee51be21a8c5", null ],
+    [ "GPIO_DEVICE_ID", "adrv9001_2src_2hal_2parameters_8h.html#a1556d56c40da47e192e6767b8b15003b", null ],
+    [ "GPIO_OFFSET", "adrv9001_2src_2hal_2parameters_8h.html#a3196329f7a722d065bfc558c8ba760a7", null ],
+    [ "GPIO_RESET", "adrv9001_2src_2hal_2parameters_8h.html#ae6182aa06e6f0c1a7eb8c8eb4a15deef", null ],
+    [ "GPIO_SSI_SYNC", "adrv9001_2src_2hal_2parameters_8h.html#a8ab12f612293f02d0be0e6cb51df975e", null ],
+    [ "IIO_DEV_CHANNELS", "adrv9001_2src_2hal_2parameters_8h.html#a6e846e5ccdd57ba866badc8f26d1b515", null ],
+    [ "IIO_DEV_COUNT", "adrv9001_2src_2hal_2parameters_8h.html#a456c331b50b7a191f75b1a3758439bd4", null ],
+    [ "INTC_DEVICE_ID", "adrv9001_2src_2hal_2parameters_8h.html#a90bc74590962865fc1ab7ee1be0f4b64", null ],
+    [ "RX1_ADC_BASEADDR", "adrv9001_2src_2hal_2parameters_8h.html#a0b80ed589a1eefd042aac21c4e0f1821", null ],
+    [ "RX1_DMA_BASEADDR", "adrv9001_2src_2hal_2parameters_8h.html#abcbd97b63447e2425c4cf3a45ad61b93", null ],
+    [ "RX2_ADC_BASEADDR", "adrv9001_2src_2hal_2parameters_8h.html#a84a8deaa5060ae522d3c4e992d842e79", null ],
+    [ "RX2_DMA_BASEADDR", "adrv9001_2src_2hal_2parameters_8h.html#acc0a65a0e876420968bc52ecc6450731", null ],
+    [ "SPI_CS", "adrv9001_2src_2hal_2parameters_8h.html#ade4259fa3cbb71732a4e73c18dcb9b0d", null ],
+    [ "SPI_DEVICE_ID", "adrv9001_2src_2hal_2parameters_8h.html#a2264889066fc41987d29395b4772bd17", null ],
+    [ "TX1_DAC_BASEADDR", "adrv9001_2src_2hal_2parameters_8h.html#a85286c850693eaec70252c91d99658b0", null ],
+    [ "TX1_DMA_BASEADDR", "adrv9001_2src_2hal_2parameters_8h.html#a452c1131b4615e1e9a7bdd9756667bfe", null ],
+    [ "TX2_DAC_BASEADDR", "adrv9001_2src_2hal_2parameters_8h.html#ae2745273967300677e486ecedd1c4637", null ],
+    [ "TX2_DMA_BASEADDR", "adrv9001_2src_2hal_2parameters_8h.html#a0dcdd732301a8d99d4ccfc1b3b8d706d", null ],
+    [ "UART_BAUDRATE", "adrv9001_2src_2hal_2parameters_8h.html#a2c7ed0283bd6f2f9d791860d6254ef4f", null ],
+    [ "UART_DEVICE_ID", "adrv9001_2src_2hal_2parameters_8h.html#a0f4ff52ed3a5a46691f6a4d03988923d", null ],
+    [ "UART_IRQ_ID", "adrv9001_2src_2hal_2parameters_8h.html#adff4ff00d8f3375e4fb198270ae24597", null ]
+];

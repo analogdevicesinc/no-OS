@@ -1,0 +1,22 @@
+<map id="projects/lt3074/src/common/common_data.h" name="projects/lt3074/src/common/common_data.h">
+<area shape="rect" id="Node000001" title="Defines common data to be used by lt3074 examples." alt="" coords="5,5,197,45"/>
+<area shape="rect" id="Node000002" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="8,167,107,192"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="76,47,54,68,37,94,34,109,35,124,45,154,40,155,30,125,29,109,32,92,50,65,72,44"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="47,93,156,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="104,46,104,79,99,79,99,46"/>
+<area shape="rect" id="Node000005" href="$lt3074_8h.html" title=" " alt="" coords="180,93,255,119"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="131,43,190,83,187,88,128,48"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="109,240,179,265"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="73,190,121,229,118,233,70,194"/>
+<area shape="poly" id="edge11_Node000005_Node000002" title=" " alt="" coords="193,121,97,163,95,159,191,116"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="208,121,189,142,172,168,159,198,151,227,146,226,154,196,167,165,185,139,203,117"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="182,167,253,192"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="220,119,220,153,215,153,215,119"/>
+<area shape="rect" id="Node000007" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="277,167,377,192"/>
+<area shape="poly" id="edge7_Node000005_Node000007" title=" " alt="" coords="236,116,299,157,296,161,233,121"/>
+<area shape="poly" id="edge8_Node000007_Node000003" title=" " alt="" coords="298,195,188,237,186,232,296,190"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="247,240,318,265"/>
+<area shape="poly" id="edge9_Node000007_Node000008" title=" " alt="" coords="322,194,299,230,295,227,317,191"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="343,240,425,265"/>
+<area shape="poly" id="edge10_Node000007_Node000009" title=" " alt="" coords="338,191,368,227,364,231,334,194"/>
+</map>

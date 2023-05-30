@@ -1,0 +1,26 @@
+var ltp8800_8c =
+[
+    [ "ltp8800_init", "ltp8800_8c.html#a560a898903409b89d4063940b94e4c0e", null ],
+    [ "ltp8800_interleave_order", "ltp8800_8c.html#a613ac6d7323b5995e0e60723902f6cbe", null ],
+    [ "ltp8800_loop_compensation", "ltp8800_8c.html#a957cff13308f6c42a9d7869d98365a75", null ],
+    [ "ltp8800_read_block_data", "ltp8800_8c.html#a31bb2ed8d03eecd85410044cc2048f25", null ],
+    [ "ltp8800_read_byte", "ltp8800_8c.html#af3622fef7eaa69000eb7a84c4e41373a", null ],
+    [ "ltp8800_read_status", "ltp8800_8c.html#aadb528b31012f3e99bac083b6f33cfce", null ],
+    [ "ltp8800_read_value", "ltp8800_8c.html#a6b4bf00310c6727864ac8ac8c601a43d", null ],
+    [ "ltp8800_read_word", "ltp8800_8c.html#a7a6fdcf41d144060741ec2e7198ca64c", null ],
+    [ "ltp8800_read_word_data", "ltp8800_8c.html#af01d8d377ad762a7229ac5d274fe50d2", null ],
+    [ "ltp8800_remove", "ltp8800_8c.html#a4401c20b4e2fa05cb96efdaf0ac7d138", null ],
+    [ "ltp8800_restore_user_settings", "ltp8800_8c.html#a9d09ec6599d408c0a882c9da5bb67115", null ],
+    [ "ltp8800_send_byte", "ltp8800_8c.html#a4145e97966d358994ddf08b8ad90fe6d", null ],
+    [ "ltp8800_set_device_state", "ltp8800_8c.html#a6a458740d683ef37ca50638a0731cdab", null ],
+    [ "ltp8800_set_fault_limit", "ltp8800_8c.html#acf160b5e41252593ae47988845aa8aae", null ],
+    [ "ltp8800_set_vin", "ltp8800_8c.html#ae0e78a7f7c33f18b56412a8ff393f5cc", null ],
+    [ "ltp8800_store_user_settings", "ltp8800_8c.html#aa220bf82c63c0fa840b0466f30ff5a2d", null ],
+    [ "ltp8800_sync_config", "ltp8800_8c.html#ab98c274210399e147f51fc94f296c36f", null ],
+    [ "ltp8800_vout_settings", "ltp8800_8c.html#a0c4e0a76ceb3b8ef7b23e8481479ea77", null ],
+    [ "ltp8800_vout_value", "ltp8800_8c.html#ae352a6346715bc18065e55f1eb77ad36", null ],
+    [ "ltp8800_write_byte", "ltp8800_8c.html#ac27564edd1a6999f78a39256105d2aeb", null ],
+    [ "ltp8800_write_word", "ltp8800_8c.html#a84a4646c361e218d30692ab3caccf99c", null ],
+    [ "ltp8800_write_word_data", "ltp8800_8c.html#a4d90e4db30fcb51e52ec90f40ca84f82", null ],
+    [ "NO_OS_DECLARE_CRC8_TABLE", "ltp8800_8c.html#a2ecb64e4506db0da486fdccb7ba50c18", null ]
+];

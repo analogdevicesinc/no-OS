@@ -1,0 +1,5 @@
+<map id="lt8491_read_pin" name="lt8491_read_pin">
+<area shape="rect" id="Node000001" title="Read the telemetry battery input power." alt="" coords="213,5,340,31"/>
+<area shape="rect" id="Node000002" href="$dc2703a_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="5,5,165,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="200,21,165,21,165,15,200,15"/>
+</map>

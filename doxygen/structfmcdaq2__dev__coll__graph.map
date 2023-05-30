@@ -1,0 +1,68 @@
+<map id="fmcdaq2_dev" name="fmcdaq2_dev">
+<area shape="rect" id="Node000001" title=" " alt="" coords="1269,405,1380,431"/>
+<area shape="rect" id="Node000002" href="$structad9523__dev.html" title=" " alt="" coords="1002,339,1103,364"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1117,354,1180,364,1246,379,1301,403,1299,408,1245,385,1179,369,1117,360"/>
+<area shape="rect" id="Node000003" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="693,172,815,197"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="791,202,1030,336,1027,341,788,206"/>
+<area shape="poly" id="edge7_Node000003_Node000003" title=" " alt="" coords="722,157,732,149,754,145,773,148,784,154,787,164,781,173,777,170,782,163,780,157,771,153,754,151,734,154,726,161"/>
+<area shape="rect" id="Node000010" href="$structad9144__dev.html" title=" " alt="" coords="1002,191,1103,216"/>
+<area shape="poly" id="edge13_Node000010_Node000003" title=" " alt="" coords="829,192,872,197,1002,201,1002,206,872,202,829,198"/>
+<area shape="rect" id="Node000013" href="$structad9680__dev.html" title=" " alt="" coords="1002,141,1103,167"/>
+<area shape="poly" id="edge17_Node000013_Node000003" title=" " alt="" coords="829,174,1002,156,1002,162,829,180"/>
+<area shape="rect" id="Node000004" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="339,100,485,125"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="499,124,637,151,708,169,707,175,635,157,498,130"/>
+<area shape="rect" id="Node000005" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,176,184,201"/>
+<area shape="poly" id="edge5_Node000003_Node000005" title=" " alt="" coords="192,201,323,214,412,218,501,214,602,204,692,192,693,197,603,210,502,219,412,223,322,219,192,206"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="161,170,357,123,358,128,162,175"/>
+<area shape="rect" id="Node000006" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="337,150,487,190"/>
+<area shape="poly" id="edge6_Node000003_Node000006" title=" " alt="" coords="501,171,692,179,692,185,501,176"/>
+<area shape="rect" id="Node000007" href="$structad9523__state.html" title=" " alt="" coords="699,339,809,364"/>
+<area shape="poly" id="edge8_Node000002_Node000007" title=" " alt="" coords="823,349,1002,349,1002,354,823,354"/>
+<area shape="rect" id="Node000008" href="$structad9523__platform__data.html" title="platform specific information" alt="" coords="327,339,497,364"/>
+<area shape="poly" id="edge11_Node000002_Node000008" title=" " alt="" coords="488,364,571,378,660,389,754,394,848,389,929,377,1001,361,1002,367,930,382,848,394,754,400,660,394,570,383,487,369"/>
+<area shape="poly" id="edge9_Node000007_Node000008" title=" " alt="" coords="510,349,698,349,698,354,510,354"/>
+<area shape="rect" id="Node000009" href="$structad9523__channel__spec.html" title="Output channel configuration." alt="" coords="12,295,177,320"/>
+<area shape="poly" id="edge19_Node000001_Node000009" title=" " alt="" coords="191,297,296,290,411,287,1054,287,1111,289,1155,296,1197,312,1247,338,1287,371,1316,403,1312,407,1284,375,1244,343,1195,317,1153,302,1110,294,1054,293,411,293,297,296,191,302"/>
+<area shape="poly" id="edge10_Node000008_Node000009" title=" " alt="" coords="191,318,208,321,327,337,326,342,208,326,191,324"/>
+<area shape="poly" id="edge12_Node000001_Node000010" title=" " alt="" coords="1117,211,1184,232,1217,248,1247,269,1276,302,1298,340,1322,404,1317,406,1293,343,1272,306,1244,273,1214,253,1182,237,1116,216"/>
+<area shape="rect" id="Node000011" href="$structjesd204__link.html" title="JESD204 link configuration settings." alt="" coords="702,55,806,80"/>
+<area shape="poly" id="edge14_Node000010_Node000011" title=" " alt="" coords="802,82,873,109,920,120,941,127,964,141,973,151,977,160,981,169,988,177,1007,188,1005,193,985,181,976,172,972,162,968,154,961,145,939,132,919,126,871,114,800,87"/>
+<area shape="poly" id="edge18_Node000013_Node000011" title=" " alt="" coords="820,65,890,73,928,80,964,92,1006,114,1038,139,1035,143,1003,119,962,96,926,86,889,78,820,71"/>
+<area shape="rect" id="Node000012" href="$structjesd204__sysref.html" title="JESD204 parameters for SYSREF." alt="" coords="352,51,472,76"/>
+<area shape="poly" id="edge15_Node000011_Node000012" title=" " alt="" coords="485,62,702,64,702,69,485,67"/>
+<area shape="poly" id="edge16_Node000001_Node000013" title=" " alt="" coords="1117,151,1150,156,1184,164,1218,177,1247,197,1269,221,1286,249,1309,308,1321,364,1325,405,1320,405,1316,365,1304,310,1281,251,1265,224,1244,201,1215,182,1183,169,1149,161,1117,157"/>
+<area shape="rect" id="Node000014" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="987,507,1119,532"/>
+<area shape="poly" id="edge20_Node000001_Node000014" title=" " alt="" coords="1132,529,1189,527,1217,522,1244,512,1269,495,1289,472,1315,430,1320,432,1293,476,1272,499,1247,516,1219,527,1190,533,1132,534"/>
+<area shape="rect" id="Node000015" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="660,507,848,532"/>
+<area shape="poly" id="edge21_Node000014_Node000015" title=" " alt="" coords="862,517,986,517,986,522,862,522"/>
+<area shape="rect" id="Node000016" href="$structadxcvr.html" title="ADI JESD204B/C AXI_ADXCVR Highspeed Transceiver Device structure." alt="" coords="1019,731,1086,756"/>
+<area shape="poly" id="edge22_Node000001_Node000016" title=" " alt="" coords="1100,746,1135,746,1174,742,1211,730,1244,709,1258,689,1272,657,1295,575,1310,490,1319,430,1324,431,1316,491,1300,576,1277,659,1263,691,1247,713,1213,735,1175,747,1135,751,1100,751"/>
+<area shape="rect" id="Node000017" href="$structxilinx__xcvr.html" title="xilinx_xcvr parameters structure." alt="" coords="1278,776,1371,801"/>
+<area shape="poly" id="edge24_Node000017_Node000016" title=" " alt="" coords="1100,753,1143,762,1278,781,1277,787,1142,767,1099,758"/>
+<area shape="poly" id="edge23_Node000016_Node000017" title=" " alt="" coords="1276,808,1212,820,1176,820,1142,813,1118,802,1096,787,1064,758,1067,754,1100,783,1121,797,1143,807,1177,814,1211,814,1275,803"/>
+<area shape="rect" id="Node000018" href="$structno__os__clk__desc.html" title="Structure holding CLK descriptor." alt="" coords="693,652,815,677"/>
+<area shape="poly" id="edge25_Node000016_Node000018" title=" " alt="" coords="817,678,1020,732,1018,737,816,684"/>
+<area shape="rect" id="Node000020" href="$structaxi__jesd204__tx.html" title=" " alt="" coords="993,655,1113,680"/>
+<area shape="poly" id="edge29_Node000020_Node000018" title=" " alt="" coords="829,663,992,664,992,669,829,668"/>
+<area shape="rect" id="Node000022" href="$structaxi__jesd204__rx.html" title=" " alt="" coords="993,556,1113,581"/>
+<area shape="poly" id="edge32_Node000022_Node000018" title=" " alt="" coords="807,645,1011,579,1013,584,808,650"/>
+<area shape="rect" id="Node000019" href="$structno__os__clk__platform__ops.html" title="Structure holding CLK function pointers that point to the platform specific function." alt="" coords="323,652,501,677"/>
+<area shape="poly" id="edge26_Node000018_Node000019" title=" " alt="" coords="515,662,693,662,693,667,515,667"/>
+<area shape="poly" id="edge27_Node000001_Node000020" title=" " alt="" coords="1126,674,1157,674,1188,669,1217,660,1244,644,1266,621,1284,593,1298,563,1307,532,1318,473,1321,431,1326,431,1323,474,1313,533,1303,565,1289,596,1271,624,1247,648,1219,665,1189,674,1157,679,1126,679"/>
+<area shape="rect" id="Node000021" href="$structjesd204__tx__config.html" title=" " alt="" coords="685,743,823,768"/>
+<area shape="poly" id="edge28_Node000020_Node000021" title=" " alt="" coords="837,756,899,750,961,734,1034,678,1037,682,964,739,900,756,837,761"/>
+<area shape="poly" id="edge30_Node000001_Node000022" title=" " alt="" coords="1126,575,1187,570,1216,562,1244,549,1273,523,1294,490,1309,457,1318,430,1323,432,1314,458,1299,492,1277,526,1247,554,1218,567,1188,576,1127,580"/>
+<area shape="rect" id="Node000023" href="$structjesd204__rx__config.html" title=" " alt="" coords="685,556,823,581"/>
+<area shape="poly" id="edge31_Node000022_Node000023" title=" " alt="" coords="837,566,992,566,992,571,837,571"/>
+<area shape="rect" id="Node000024" href="$structaxi__adc.html" title="AXI ADC Device Descriptor." alt="" coords="1017,605,1089,631"/>
+<area shape="poly" id="edge33_Node000001_Node000024" title=" " alt="" coords="1102,623,1136,624,1174,621,1211,612,1244,594,1263,577,1278,557,1301,510,1314,465,1319,431,1325,432,1319,466,1306,512,1283,559,1267,581,1247,599,1212,617,1174,626,1137,629,1102,628"/>
+<area shape="rect" id="Node000025" href="$structaxi__dac.html" title="AXI DAC Device Descriptor." alt="" coords="1017,452,1089,477"/>
+<area shape="poly" id="edge34_Node000001_Node000025" title=" " alt="" coords="1102,455,1245,431,1269,427,1270,432,1246,437,1103,460"/>
+<area shape="rect" id="Node000026" href="$structaxi__dac__channel.html" title=" " alt="" coords="689,452,819,477"/>
+<area shape="poly" id="edge36_Node000001_Node000026" title=" " alt="" coords="833,450,872,445,1007,428,1143,417,1269,414,1269,420,1143,422,1007,433,872,450,833,455"/>
+<area shape="poly" id="edge35_Node000025_Node000026" title=" " alt="" coords="833,462,1016,462,1016,467,833,467"/>
+<area shape="rect" id="Node000027" href="$structaxi__dmac.html" title=" " alt="" coords="1010,48,1095,73"/>
+<area shape="poly" id="edge37_Node000001_Node000027" title=" " alt="" coords="1110,66,1144,75,1181,89,1217,109,1247,135,1272,168,1291,206,1305,245,1314,284,1324,356,1326,405,1321,405,1319,356,1309,285,1300,246,1286,208,1267,171,1243,138,1214,113,1179,94,1143,80,1108,71"/>
+<area shape="rect" id="Node000028" href="$structaxi__dma__transfer.html" title=" " alt="" coords="686,5,822,31"/>
+<area shape="poly" id="edge38_Node000027_Node000028" title=" " alt="" coords="836,27,963,45,1010,52,1009,57,962,50,835,32"/>
+</map>

@@ -1,0 +1,30 @@
+<map id="drivers/platform/stm32/stm32_i2c.c" name="drivers/platform/stm32/stm32_i2c.c">
+<area shape="rect" id="Node000001" title="Implementation of stm32 i2c driver." alt="" coords="196,5,368,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="188,167,259,192"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="277,47,235,155,230,153,272,45"/>
+<area shape="rect" id="Node000003" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="129,93,197,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="255,48,194,88,191,84,252,43"/>
+<area shape="rect" id="Node000004" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="5,93,105,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="229,48,102,91,101,86,227,43"/>
+<area shape="rect" id="Node000007" href="$no__os__alloc_8h.html" title=" " alt="" coords="273,93,384,119"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="296,44,317,80,312,83,291,47"/>
+<area shape="rect" id="Node000009" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="374,167,473,192"/>
+<area shape="poly" id="edge10_Node000001_Node000009" title=" " alt="" coords="333,43,368,63,399,92,415,122,423,152,418,154,410,124,395,95,365,68,330,48"/>
+<area shape="rect" id="Node000010" href="$stm32__i2c_8h.html" title="Header file for the stm32 i2c driver." alt="" coords="459,93,561,119"/>
+<area shape="poly" id="edge12_Node000001_Node000010" title=" " alt="" coords="337,43,464,86,463,91,336,48"/>
+<area shape="poly" id="edge5_Node000004_Node000002" title=" " alt="" coords="83,116,184,159,182,164,81,121"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="388,240,459,265"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="70,117,115,153,176,190,228,209,281,224,375,243,374,248,279,229,226,214,174,194,112,157,67,121"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="14,167,97,192"/>
+<area shape="poly" id="edge6_Node000004_Node000006" title=" " alt="" coords="58,119,58,153,53,153,53,119"/>
+<area shape="poly" id="edge9_Node000007_Node000002" title=" " alt="" coords="313,121,253,161,250,157,310,116"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="283,167,350,192"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="329,119,324,154,318,153,324,119"/>
+<area shape="poly" id="edge11_Node000009_Node000005" title=" " alt="" coords="426,192,426,226,421,226,421,192"/>
+<area shape="poly" id="edge13_Node000010_Node000005" title=" " alt="" coords="511,120,503,154,487,193,470,215,452,233,448,229,466,211,482,191,498,152,506,118"/>
+<area shape="poly" id="edge14_Node000010_Node000009" title=" " alt="" coords="498,121,450,160,446,156,494,117"/>
+<area shape="rect" id="Node000011" href="$stm32__hal_8h.html" title=" " alt="" coords="548,167,651,192"/>
+<area shape="poly" id="edge15_Node000010_Node000011" title=" " alt="" coords="526,117,576,156,572,160,523,121"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="566,240,633,265"/>
+<area shape="poly" id="edge16_Node000011_Node000012" title=" " alt="" coords="602,192,602,226,597,226,597,192"/>
+</map>

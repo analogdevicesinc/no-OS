@@ -1,0 +1,35 @@
+<map id="drivers/adc&#45;dac/ad74416h/ad74416h.h" name="drivers/adc&#45;dac/ad74416h/ad74416h.h">
+<area shape="rect" id="Node000001" title="Header file of AD74416h Driver." alt="" coords="1481,5,1672,45"/>
+<area shape="rect" id="Node000002" href="$ad74416h_8c.html" title="Source file of AD74416H Driver." alt="" coords="5,108,196,148"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1468,31,1187,37,824,50,468,69,321,81,209,96,153,110,152,105,208,91,320,76,468,63,824,44,1187,32,1468,26"/>
+<area shape="rect" id="Node000003" href="$ad74416h_2src_2common_2common__data_8h.html" title="Defines common data to be used by eval&#45;ad74416h examples." alt="" coords="221,108,413,148"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="1467,32,928,54,638,72,518,83,427,96,370,111,368,105,425,91,517,78,637,67,928,48,1467,27"/>
+<area shape="rect" id="Node000005" href="$ad74416h_2src_2examples_2basic_2basic__example_8c.html" title="Basic example header for eval&#45;ad74416h project." alt="" coords="437,101,604,155"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="1468,33,1021,56,787,74,691,84,617,96,589,103,588,98,616,91,690,79,786,68,1021,50,1467,28"/>
+<area shape="rect" id="Node000006" href="$current__input__ext_8c.html" title="Current input in External power mode example for ad74416h&#45;pmdz." alt="" coords="628,101,808,155"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="1467,31,1336,37,1174,48,997,67,821,96,792,103,791,98,820,91,996,62,1173,43,1336,31,1467,26"/>
+<area shape="rect" id="Node000007" href="$current__input__loop_8c.html" title="Current input in Loop power mode example code for ad74416h&#45;pmdz." alt="" coords="832,101,1025,155"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="1468,37,1267,58,1152,75,1039,96,1009,103,1008,98,1037,91,1151,70,1267,53,1467,32"/>
+<area shape="rect" id="Node000008" href="$current__output_8c.html" title="Current Output example code for ad74416h&#45;pmdz project." alt="" coords="1050,101,1239,155"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="1468,49,1363,70,1252,96,1226,103,1225,98,1251,91,1362,65,1467,44"/>
+<area shape="rect" id="Node000009" href="$digital__input__logic_8c.html" title="Digital Input Logic example code for ad74416h&#45;pmdz project This example configures Channel A as a Dig..." alt="" coords="1263,101,1458,155"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="1525,54,1418,103,1416,98,1523,49"/>
+<area shape="rect" id="Node000010" href="$digital__input__loop_8c.html" title="Digital Input Loop Powered example code for ad74416h&#45;pmdz project This example configures Channel A a..." alt="" coords="1483,101,1671,155"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="1579,59,1579,100,1574,100,1574,59"/>
+<area shape="rect" id="Node000011" href="$digital__output_8c.html" title="Digital Output example code for ad74416h&#45;pmdz project." alt="" coords="1695,101,1879,155"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="1630,49,1734,98,1731,103,1627,54"/>
+<area shape="rect" id="Node000012" href="$multiple__devices_8c.html" title="Example code with multiple AD74416H devices for ad74416h&#45;pmdz project." alt="" coords="1903,101,2109,155"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="1686,45,1892,91,1919,98,1918,103,1891,96,1685,50"/>
+<area shape="rect" id="Node000013" href="$temperature__2wire__rtd_8c.html" title="Temperature measurement 2&#45;Wire RTD Pt&#45;1000 example code for ad74416h&#45;pmdz project." alt="" coords="2133,93,2308,163"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="1686,31,1889,51,2006,68,2121,91,2134,94,2133,99,2120,96,2005,74,1889,57,1686,36"/>
+<area shape="rect" id="Node000014" href="$temperature__3wire__rtd_8c.html" title="Temperature measurement 3&#45;Wire RTD Pt&#45;1000 example code for ad74416h&#45;pmdz project." alt="" coords="2332,93,2507,163"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="1686,26,1816,31,1975,42,2149,61,2321,91,2333,93,2331,99,2320,96,2148,67,1975,48,1815,36,1686,31"/>
+<area shape="rect" id="Node000015" href="$voltage__input_8c.html" title="Voltage input example code for ad74416h&#45;pmdz project." alt="" coords="2531,101,2713,155"/>
+<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="1686,23,1849,26,2057,35,2289,56,2406,71,2520,91,2550,98,2548,103,2519,96,2405,76,2288,61,2057,41,1849,31,1686,28"/>
+<area shape="rect" id="Node000016" href="$voltage__input__irq_8c.html" title="Voltage input with interrupt example code for ad74416h&#45;pmdz project." alt="" coords="2737,101,2920,155"/>
+<area shape="poly" id="edge15_Node000001_Node000016" title=" " alt="" coords="1686,27,2225,47,2515,66,2635,78,2727,91,2757,98,2756,103,2725,96,2634,83,2515,71,2224,53,1686,32"/>
+<area shape="rect" id="Node000017" href="$voltage__output_8c.html" title="Voltage Output example code for ad74416h&#45;pmdz project." alt="" coords="2945,101,3137,155"/>
+<area shape="poly" id="edge16_Node000001_Node000017" title=" " alt="" coords="1686,26,1965,32,2324,44,2677,64,2822,76,2933,91,2965,98,2964,103,2932,96,2822,81,2676,69,2324,50,1965,38,1686,31"/>
+<area shape="rect" id="Node000004" href="$ad74416h_2src_2common_2common__data_8c.html" title="Defines common data to be used by eval&#45;ad74416h examples." alt="" coords="221,211,412,251"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="319,162,319,211,314,211,314,162"/>
+</map>

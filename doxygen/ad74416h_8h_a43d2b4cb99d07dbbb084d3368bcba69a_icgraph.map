@@ -1,0 +1,13 @@
+<map id="ad74416h_set_gpio_config" name="ad74416h_set_gpio_config">
+<area shape="rect" id="Node000001" title="Set the GPIO operation mode." alt="" coords="415,55,609,80"/>
+<area shape="rect" id="Node000002" href="$ad74416h_8c.html#aa943be99182003f3cf55f06b5f5eca51" title="Set the logic value of a GPO pin." alt="" coords="195,5,343,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="435,55,332,33,333,28,436,49"/>
+<area shape="rect" id="Node000004" href="$digital__output_8c.html#aa133008ddcc9aefc6da6b37d8f8fc064" title=" " alt="" coords="172,55,367,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="401,70,367,70,367,65,401,65"/>
+<area shape="rect" id="Node000006" href="$digital__input__logic_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Digital Input Logic example main execution." alt="" coords="210,104,329,129"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="436,85,329,107,328,102,435,80"/>
+<area shape="rect" id="Node000003" href="$ad74416h_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="181,21,124,21,124,15,181,15"/>
+<area shape="rect" id="Node000005" href="$digital__output_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Digital Output example main execution." alt="" coords="5,55,124,80"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="158,70,124,70,124,65,158,65"/>
+</map>

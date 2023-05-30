@@ -1,0 +1,28 @@
+<map id="projects/ad3552r_fmcz/src/common/common_data.h" name="projects/ad3552r_fmcz/src/common/common_data.h">
+<area shape="rect" id="Node000001" title="Defines common data to be used by iio examples." alt="" coords="82,5,297,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,93,115,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="159,48,92,88,89,84,157,43"/>
+<area shape="rect" id="Node000003" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="139,93,239,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="192,46,192,79,187,79,187,46"/>
+<area shape="rect" id="Node000007" href="$ad3552r_8h.html" title="Header file of ad3552r Driver." alt="" coords="294,93,381,119"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="226,43,305,84,302,89,224,48"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="354,240,425,265"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="151,121,117,134,88,151,77,160,72,170,71,180,77,190,94,203,120,215,190,231,270,242,340,247,340,252,269,247,189,237,118,220,91,208,73,194,66,181,67,168,73,157,85,146,115,129,149,116"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="87,167,158,192"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="180,121,145,158,141,155,176,117"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="183,167,265,192"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="197,118,215,153,210,155,193,120"/>
+<area shape="poly" id="edge7_Node000007_Node000004" title=" " alt="" coords="335,119,327,153,326,172,330,191,344,212,362,229,358,233,340,215,326,193,321,173,321,152,330,118"/>
+<area shape="poly" id="edge8_Node000007_Node000006" title=" " alt="" coords="321,121,255,162,252,157,318,116"/>
+<area shape="rect" id="Node000008" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="340,167,439,192"/>
+<area shape="poly" id="edge9_Node000007_Node000008" title=" " alt="" coords="348,117,375,154,371,157,344,121"/>
+<area shape="rect" id="Node000009" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="463,167,569,192"/>
+<area shape="poly" id="edge11_Node000007_Node000009" title=" " alt="" coords="367,116,475,159,473,164,365,121"/>
+<area shape="rect" id="Node000010" href="$no__os__crc8_8h.html" title="Header file of CRC&#45;8 computation." alt="" coords="593,167,700,192"/>
+<area shape="poly" id="edge13_Node000007_Node000010" title=" " alt="" coords="382,115,584,161,583,166,380,120"/>
+<area shape="poly" id="edge10_Node000008_Node000004" title=" " alt="" coords="392,192,392,226,387,226,387,192"/>
+<area shape="poly" id="edge12_Node000009_Node000004" title=" " alt="" coords="497,194,423,235,421,231,494,190"/>
+<area shape="poly" id="edge14_Node000010_Node000004" title=" " alt="" coords="606,195,438,241,437,235,605,189"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="609,240,684,265"/>
+<area shape="poly" id="edge15_Node000010_Node000011" title=" " alt="" coords="649,192,649,226,644,226,644,192"/>
+</map>

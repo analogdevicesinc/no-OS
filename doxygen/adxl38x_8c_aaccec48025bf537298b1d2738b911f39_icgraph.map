@@ -1,0 +1,12 @@
+<map id="adxl38x_init" name="adxl38x_init">
+<area shape="rect" id="Node000001" title="Initializes the device and checks for valid peripheral communication." alt="" coords="331,55,433,80"/>
+<area shape="rect" id="Node000002" href="$basic__example__main_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Example main execution." alt="" coords="115,5,275,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="320,54,244,33,245,28,321,49"/>
+<area shape="rect" id="Node000003" href="$fifo__example__main_8c.html#af9ba15b05e7f1ce5a5a3db1b2ff1caba" title="Example main execution." alt="" coords="122,55,269,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="317,70,269,70,269,65,317,65"/>
+<area shape="rect" id="Node000005" href="$selftest__example__main_8c.html#af83d8efd4ed237eb5c8a2e18b3333cdb" title="Example main execution." alt="" coords="108,104,283,129"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="321,86,245,106,244,101,320,81"/>
+<area shape="rect" id="Node000004" href="$eval-adxl38x_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="5,80,60,105"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="109,84,61,91,60,86,108,78"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="96,105,60,99,61,94,96,99"/>
+</map>

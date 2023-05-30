@@ -1,0 +1,40 @@
+<map id="adxl38x_register_update_bits" name="adxl38x_register_update_bits">
+<area shape="rect" id="Node000001" title="Updates register with specified bits using given mask." alt="" coords="869,197,1084,222"/>
+<area shape="rect" id="Node000002" href="$adxl38x_8c.html#a944f63c06ca5b13b97b52ad69c47cc40" title="Resets the self test registers for the part." alt="" coords="665,5,809,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="954,188,896,129,859,96,820,66,787,48,789,43,823,62,863,92,900,125,957,185"/>
+<area shape="rect" id="Node000003" href="$adxl38x_8c.html#ac7d2f189eea39934e801c243fbb6175f" title="Reads the raw output data using burst read." alt="" coords="436,222,605,247"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="856,219,606,233,605,227,855,213"/>
+<area shape="rect" id="Node000006" href="$adxl38x_8c.html#ada2c338dfa91317699e28a7febad15d3" title="Reads the raw output data using continuous read." alt="" coords="439,70,602,95"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="943,192,887,161,820,133,765,118,707,106,602,91,603,86,708,101,766,112,822,128,889,156,945,187"/>
+<area shape="rect" id="Node000007" href="$adxl38x_8c.html#a84bdfe34c402d7941796106b0885cc3a" title="Reads the raw temperature data using burst read." alt="" coords="449,119,592,145"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="930,194,878,176,821,161,700,144,592,136,592,131,701,139,822,156,880,171,932,189"/>
+<area shape="rect" id="Node000008" href="$adxl38x_8c.html#a491ab20d0eb87e53ac22b04c8693cff5" title="Executed Selftest on the sensing axes and returns the outcome of the test." alt="" coords="456,383,585,409"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="963,235,941,269,909,309,869,347,823,377,762,398,699,408,638,410,585,407,586,402,638,405,699,402,761,393,820,372,866,343,905,305,936,266,959,232"/>
+<area shape="rect" id="Node000011" href="$adxl38x_8c.html#a20129b1b0642592cd8d9ddb063349f29" title="Places the device into the given operation mode." alt="" coords="653,171,821,197"/>
+<area shape="poly" id="edge11_Node000001_Node000011" title=" " alt="" coords="855,199,821,196,822,190,856,194"/>
+<area shape="rect" id="Node000013" href="$adxl38x_8c.html#ad0e94d2a5abb2ab06575734f75b0ff85" title="Sets the measurement range register value." alt="" coords="448,327,593,353"/>
+<area shape="poly" id="edge19_Node000001_Node000013" title=" " alt="" coords="919,228,567,330,565,325,917,223"/>
+<area shape="rect" id="Node000014" href="$adxl38x_8c.html#ac6b45701313e55606223d6271d92f6ab" title="Sets the part to execute self&#45;test routine." alt="" coords="655,323,819,363"/>
+<area shape="poly" id="edge23_Node000001_Node000014" title=" " alt="" coords="947,232,823,306,785,325,783,320,820,302,944,227"/>
+<area shape="rect" id="Node000004" href="$adxl38x_8c.html#afa7f79f725e45d0a8813ffeb79533545" title="Reads the raw output data of each axis and converts it to g." alt="" coords="215,221,386,246"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="422,237,386,237,386,231,422,231"/>
+<area shape="rect" id="Node000005" href="$basic__example__main_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Example main execution." alt="" coords="5,246,165,271"/>
+<area shape="poly" id="edge5_Node000003_Node000005" title=" " alt="" coords="445,252,388,260,271,265,165,265,166,259,271,260,388,255,445,247"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="202,248,166,252,165,247,201,242"/>
+<area shape="rect" id="Node000009" href="$selftest__example__main_8c.html#af83d8efd4ed237eb5c8a2e18b3333cdb" title="Example main execution." alt="" coords="213,423,388,449"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="443,413,371,426,370,421,442,408"/>
+<area shape="rect" id="Node000010" href="$eval-adxl38x_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="58,373,113,398"/>
+<area shape="poly" id="edge10_Node000009_Node000010" title=" " alt="" coords="232,423,112,394,114,389,233,417"/>
+<area shape="poly" id="edge12_Node000011_Node000003" title=" " alt="" coords="670,202,576,225,575,219,668,197"/>
+<area shape="poly" id="edge16_Node000011_Node000005" title=" " alt="" coords="639,182,548,180,441,183,327,192,214,211,159,228,113,248,111,243,157,223,213,205,326,187,441,178,548,175,639,176"/>
+<area shape="poly" id="edge13_Node000011_Node000006" title=" " alt="" coords="705,166,659,137,604,109,573,98,575,93,606,104,661,132,708,161"/>
+<area shape="poly" id="edge14_Node000011_Node000007" title=" " alt="" coords="670,171,574,147,575,142,671,165"/>
+<area shape="poly" id="edge15_Node000011_Node000008" title=" " alt="" coords="723,210,666,297,634,339,607,367,573,386,570,381,604,363,630,336,662,294,719,207"/>
+<area shape="rect" id="Node000012" href="$fifo__example__main_8c.html#af9ba15b05e7f1ce5a5a3db1b2ff1caba" title="Example main execution." alt="" coords="227,322,374,347"/>
+<area shape="poly" id="edge17_Node000011_Node000012" title=" " alt="" coords="708,206,661,235,606,261,547,282,485,300,375,325,374,320,484,295,545,277,604,256,658,230,705,202"/>
+<area shape="poly" id="edge18_Node000012_Node000010" title=" " alt="" coords="233,353,114,382,112,376,232,348"/>
+<area shape="poly" id="edge20_Node000013_Node000005" title=" " alt="" coords="465,359,411,370,347,378,279,377,245,372,212,362,175,344,142,320,95,273,99,270,145,316,178,340,214,358,246,366,279,371,347,372,410,365,464,354"/>
+<area shape="poly" id="edge22_Node000013_Node000009" title=" " alt="" coords="469,360,437,374,414,390,389,406,343,426,341,421,387,402,411,386,435,370,467,355"/>
+<area shape="poly" id="edge21_Node000013_Node000012" title=" " alt="" coords="434,341,374,339,374,334,434,335"/>
+<area shape="poly" id="edge24_Node000014_Node000008" title=" " alt="" coords="643,369,574,386,572,381,642,363"/>
+</map>

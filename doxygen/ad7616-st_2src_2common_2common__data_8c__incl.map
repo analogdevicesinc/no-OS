@@ -1,0 +1,16 @@
+<map id="projects/ad7616&#45;st/src/common/common_data.c" name="projects/ad7616&#45;st/src/common/common_data.c">
+<area shape="rect" id="Node000001" title="Defines common data to be used by eval&#45;ad7616 examples." alt="" coords="104,5,319,45"/>
+<area shape="rect" id="Node000002" href="$ad7616-st_2src_2common_2common__data_8h.html" title="Defines common data to be used by eval&#45;ad7616 examples." alt="" coords="88,93,215,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="199,47,171,84,166,81,195,44"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="239,93,306,119"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="228,44,257,81,253,84,224,47"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,167,156,192"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="142,121,104,159,100,155,138,117"/>
+<area shape="rect" id="Node000004" href="$ad7616_8h.html" title="Header file of AD7616 Driver." alt="" coords="181,167,263,192"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="165,117,203,155,199,159,161,121"/>
+<area shape="rect" id="Node000005" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="123,240,230,265"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="217,194,194,230,189,227,212,191"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="187,313,257,339"/>
+<area shape="poly" id="edge6_Node000004_Node000006" title=" " alt="" coords="230,191,245,240,244,272,235,302,230,300,238,271,239,240,225,193"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="186,264,210,300,205,303,182,267"/>
+</map>

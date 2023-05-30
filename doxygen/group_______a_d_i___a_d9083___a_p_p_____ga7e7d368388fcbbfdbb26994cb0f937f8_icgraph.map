@@ -1,0 +1,9 @@
+<map id="get_uc_settings" name="get_uc_settings">
+<area shape="rect" id="Node000001" title="Get use case settings." alt="" coords="291,31,415,56"/>
+<area shape="rect" id="Node000002" href="$ad9083_2src_2app__clocking_8c.html#a38d8e42d7fcb81eb03edad7f6675c0b5" title="Initialize the clocking app." alt="" coords="108,5,243,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="276,35,242,30,243,25,277,30"/>
+<area shape="rect" id="Node000004" href="$ad9083_2src_2app__jesd_8c.html#a3fc69d9cce4bef3b10d0ea379c5cbd86" title="Application JESD setup." alt="" coords="121,55,229,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="277,56,230,63,230,57,276,51"/>
+<area shape="rect" id="Node000003" href="$ad9083_2src_2app_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="Main application." alt="" coords="5,5,60,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="94,21,60,21,60,15,94,15"/>
+</map>

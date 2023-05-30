@@ -1,0 +1,16 @@
+<map id="drivers/adc/ad7779/ad7779.h" name="drivers/adc/ad7779/ad7779.h">
+<area shape="rect" id="Node000001" title="Header file of AD7779 Driver." alt="" coords="117,5,263,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="221,167,292,192"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="117,41,71,53,31,70,17,80,10,91,9,103,16,117,28,127,46,136,97,152,208,170,208,176,95,157,44,141,25,132,12,120,4,104,5,89,14,76,28,65,69,48,116,36"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="26,93,109,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="162,48,99,88,96,84,159,43"/>
+<area shape="rect" id="Node000004" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="133,93,247,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="193,46,193,79,187,79,187,46"/>
+<area shape="rect" id="Node000005" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="271,93,378,119"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="224,43,295,84,292,89,221,48"/>
+<area shape="rect" id="Node000006" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="402,93,501,119"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="253,43,401,87,399,92,252,48"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="203,117,239,155,235,158,199,121"/>
+<area shape="poly" id="edge6_Node000005_Node000002" title=" " alt="" coords="315,121,279,158,275,155,312,117"/>
+<area shape="poly" id="edge8_Node000006_Node000002" title=" " alt="" coords="421,121,302,164,300,159,419,116"/>
+</map>

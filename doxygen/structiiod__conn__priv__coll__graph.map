@@ -1,0 +1,10 @@
+<map id="iiod_conn_priv" name="iiod_conn_priv">
+<area shape="rect" id="Node000001" title=" " alt="" coords="107,181,223,207"/>
+<area shape="rect" id="Node000002" href="$structcomand__desc.html" title=" " alt="" coords="5,93,116,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="67,131,79,156,96,169,116,179,114,184,93,174,75,159,62,134"/>
+<area shape="rect" id="Node000003" href="$structiiod__run__cmd__result.html" title=" " alt="" coords="239,93,392,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="285,128,186,183,184,179,282,123"/>
+<area shape="rect" id="Node000004" href="$structiiod__buff.html" title=" " alt="" coords="147,5,225,31"/>
+<area shape="poly" id="edge4_Node000001_Node000004" title=" " alt="" coords="186,45,169,181,163,181,180,44"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="216,36,299,91,296,95,213,40"/>
+</map>

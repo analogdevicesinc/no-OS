@@ -1,0 +1,17 @@
+<map id="projects/eval&#45;adxl367z/src/common/common_data.h" name="projects/eval&#45;adxl367z/src/common/common_data.h">
+<area shape="rect" id="Node000001" title="Defines common data to be used by eval&#45;adxl367z examples." alt="" coords="44,5,259,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,93,156,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="136,47,102,85,98,81,132,44"/>
+<area shape="rect" id="Node000003" href="$adxl367_8h.html" title="Header file of ADXL367 Driver." alt="" coords="180,93,267,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="171,44,205,81,201,85,167,47"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="245,240,316,265"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="186,121,154,134,126,150,111,170,110,179,115,190,139,214,169,230,201,240,232,246,231,251,200,246,166,235,135,218,110,194,105,180,106,168,123,146,152,129,184,116"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="125,167,207,192"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="216,121,186,158,182,154,212,117"/>
+<area shape="rect" id="Node000006" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="231,167,330,192"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="235,117,265,154,261,158,231,121"/>
+<area shape="rect" id="Node000007" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="354,167,453,192"/>
+<area shape="poly" id="edge7_Node000003_Node000007" title=" " alt="" coords="253,116,362,159,360,164,251,121"/>
+<area shape="poly" id="edge6_Node000006_Node000004" title=" " alt="" coords="283,192,283,226,278,226,278,192"/>
+<area shape="poly" id="edge8_Node000007_Node000004" title=" " alt="" coords="385,194,314,235,311,231,382,190"/>
+</map>

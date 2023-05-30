@@ -1,0 +1,29 @@
+<map id="ad7799_read" name="ad7799_read">
+<area shape="rect" id="Node000001" title="Read device register." alt="" coords="827,208,933,233"/>
+<area shape="rect" id="Node000002" href="$ad7799_8c.html#a18800a95ed9485ca8e6390800551e52f" title="Read the /RDY bit of status register and check the status of the device." alt="" coords="629,5,774,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="867,196,834,125,808,86,777,52,745,33,747,28,780,48,813,83,839,122,872,194"/>
+<area shape="rect" id="Node000003" href="$ad7799_8c.html#a078b67608f7960dbe19be8d97cd2dea3" title="Read specific ADC channel." alt="" coords="217,81,373,107"/>
+<area shape="poly" id="edge6_Node000001_Node000003" title=" " alt="" coords="855,200,820,171,778,147,745,137,701,129,593,115,373,100,374,94,593,110,702,123,746,132,780,142,823,167,858,196"/>
+<area shape="rect" id="Node000005" href="$ad7799_8c.html#a424e4b340124d033e7590e04ddff1f42" title="Set the device mode." alt="" coords="428,56,569,81"/>
+<area shape="poly" id="edge13_Node000001_Node000005" title=" " alt="" coords="863,197,829,147,805,123,777,103,726,82,672,71,618,66,570,65,570,60,618,60,672,65,728,77,780,98,809,119,833,144,868,194"/>
+<area shape="rect" id="Node000006" href="$ad7799_8c.html#ade22f5ff6c7eafdce95952246caa89ac" title="Get the ADC gain." alt="" coords="635,157,768,183"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="821,207,746,185,748,180,822,202"/>
+<area shape="rect" id="Node000007" href="$ad7799_8c.html#a29c76300e6bd41f44f6248c3cb5ca2a3" title="Initialize the device." alt="" coords="449,259,548,284"/>
+<area shape="poly" id="edge8_Node000001_Node000007" title=" " alt="" coords="813,228,624,249,549,263,548,258,624,243,812,223"/>
+<area shape="rect" id="Node000008" href="$ad7799_8c.html#a110505fddc9c9ab83e769c67869bddc0" title="Select the ADC channel." alt="" coords="421,333,576,359"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="870,247,836,301,810,328,780,348,751,360,721,367,660,373,601,369,551,361,552,356,601,364,659,367,720,362,750,355,777,344,807,324,831,298,865,244"/>
+<area shape="rect" id="Node000009" href="$ad7799_8c.html#a76aff4822d5897bf3755d2484ce1736f" title="Set the ADC gain." alt="" coords="635,259,767,284"/>
+<area shape="poly" id="edge11_Node000001_Node000009" title=" " alt="" coords="822,240,748,261,746,256,821,235"/>
+<area shape="rect" id="Node000010" href="$ad7799_8c.html#aae396916539b5fe342eb3d9404ebf85e" title="Set ADC polarity." alt="" coords="624,308,779,333"/>
+<area shape="poly" id="edge14_Node000001_Node000010" title=" " alt="" coords="856,244,821,272,780,298,750,310,748,306,777,293,818,267,853,240"/>
+<area shape="rect" id="Node000011" href="$ad7799_8c.html#a88b03084d9542b44987004214efafd6d" title="Enable or disable the reference detect function." alt="" coords="630,409,773,435"/>
+<area shape="poly" id="edge16_Node000001_Node000011" title=" " alt="" coords="872,248,838,318,812,357,780,392,747,412,745,407,777,388,808,354,834,315,867,245"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="615,22,522,29,422,46,368,64,323,84,321,79,366,59,421,41,521,24,615,17"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="637,37,551,59,549,53,636,32"/>
+<area shape="rect" id="Node000004" href="$ad7799_8c.html#a9d4023bec85661f9d865525d3f311a6b" title="Read data from specific ADC channel with specified precision." alt="" coords="5,81,169,107"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="203,97,170,97,170,91,203,91"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="415,82,374,87,373,82,414,76"/>
+<area shape="poly" id="edge10_Node000008_Node000003" title=" " alt="" coords="459,328,419,297,378,247,343,192,300,108,305,106,348,190,382,243,423,293,463,324"/>
+<area shape="poly" id="edge12_Node000009_Node000007" title=" " alt="" coords="622,274,548,274,548,269,622,269"/>
+<area shape="poly" id="edge15_Node000010_Node000007" title=" " alt="" coords="635,307,548,286,549,281,636,302"/>
+</map>

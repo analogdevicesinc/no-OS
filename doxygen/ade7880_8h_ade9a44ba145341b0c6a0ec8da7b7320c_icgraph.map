@@ -1,0 +1,18 @@
+<map id="ade7880_read" name="ade7880_read">
+<area shape="rect" id="Node000001" title="Read device register." alt="" coords="563,81,677,107"/>
+<area shape="rect" id="Node000002" href="$ade7880_8c.html#a6da76df48af0aff69fc8f39df82bb502" title="Get interrupt indicator from STATUS0 register." alt="" coords="329,5,515,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="576,78,514,52,460,33,462,28,516,48,578,73"/>
+<area shape="rect" id="Node000003" href="$ade7880_8c.html#acbb1d0b3d6852f6d53dc0d73afa6c559" title="Initialize the device." alt="" coords="141,108,248,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="549,101,249,120,248,115,549,96"/>
+<area shape="rect" id="Node000005" href="$ade7880_8c.html#a179f9fbceb7e17054896ccb25e64503d" title="Read the power/energy for specific phase." alt="" coords="108,57,281,83"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="549,93,282,78,282,72,549,87"/>
+<area shape="rect" id="Node000006" href="$ade7880_8c.html#a289029d193e186764383568d4f8f2c29" title="Update specific register bits." alt="" coords="341,157,503,183"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="578,115,516,140,462,160,460,155,514,136,576,110"/>
+<area shape="rect" id="Node000004" href="$eval-ade7880_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,108,60,133"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="128,123,60,123,60,118,128,118"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="140,89,109,99,61,115,59,110,107,94,138,84"/>
+<area shape="poly" id="edge7_Node000006_Node000003" title=" " alt="" coords="349,157,248,135,249,130,350,152"/>
+<area shape="rect" id="Node000007" href="$ade7880_8c.html#ab0cc4bba34968c40a2b2d5dbe79f305c" title="Setup the device." alt="" coords="134,157,255,183"/>
+<area shape="poly" id="edge8_Node000006_Node000007" title=" " alt="" coords="327,173,255,173,255,167,327,167"/>
+<area shape="poly" id="edge9_Node000007_Node000004" title=" " alt="" coords="132,156,107,149,59,133,61,128,109,143,134,151"/>
+</map>
