@@ -1,0 +1,21 @@
+<map id="projects/eval&#45;adxl355&#45;pmdz/src/platform/maxim/main.c" name="projects/eval&#45;adxl355&#45;pmdz/src/platform/maxim/main.c">
+<area shape="rect" id="Node000001" title="Main file for Maxim platform of eval&#45;adxl355&#45;pmdz project." alt="" coords="473,5,669,60"/>
+<area shape="rect" id="Node000002" href="$eval-adxl355-pmdz_2src_2platform_2maxim_2parameters_8h.html" title="Definitions specific to Maxim platform used by eval&#45;adxl355&#45;pmdz project." alt="" coords="336,108,445,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="517,62,428,105,426,100,515,58"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="507,108,634,133"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="573,60,573,94,568,94,568,60"/>
+<area shape="rect" id="Node000009" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="677,108,787,133"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="621,58,699,99,697,104,619,62"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,181,109,207"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="338,136,123,181,122,176,337,131"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="133,181,240,207"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="359,136,233,179,232,174,357,131"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="264,181,379,207"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="381,136,344,173,340,170,377,132"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="403,181,517,207"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="404,132,441,170,437,173,400,136"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="541,181,693,207"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="428,131,568,175,567,180,426,136"/>
+<area shape="rect" id="Node000010" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="718,181,786,207"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="738,133,748,167,743,169,733,134"/>
+</map>

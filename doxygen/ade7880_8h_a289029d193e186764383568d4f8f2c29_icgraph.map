@@ -1,0 +1,10 @@
+<map id="ade7880_update_bits" name="ade7880_update_bits">
+<area shape="rect" id="Node000001" title="Update specific register bits." alt="" coords="277,31,439,56"/>
+<area shape="rect" id="Node000002" href="$ade7880_8c.html#acbb1d0b3d6852f6d53dc0d73afa6c559" title="Initialize the device." alt="" coords="115,5,222,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="263,33,222,28,223,22,264,28"/>
+<area shape="rect" id="Node000004" href="$ade7880_8c.html#ab0cc4bba34968c40a2b2d5dbe79f305c" title="Setup the device." alt="" coords="108,55,229,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="264,58,230,62,229,57,263,53"/>
+<area shape="rect" id="Node000003" href="$eval-ade7880_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,31,60,56"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="102,33,61,41,60,36,101,28"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="94,57,60,51,61,45,95,52"/>
+</map>

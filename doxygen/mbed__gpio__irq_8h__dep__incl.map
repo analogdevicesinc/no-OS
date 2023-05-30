@@ -1,0 +1,9 @@
+<map id="drivers/platform/mbed/mbed_gpio_irq.h" name="drivers/platform/mbed/mbed_gpio_irq.h">
+<area shape="rect" id="Node000001" title="Header containing extra types required for GPIO IRQ drivers." alt="" coords="115,5,283,45"/>
+<area shape="rect" id="Node000002" href="$ad74416h_2src_2platform_2mbed_2parameters_8h.html" title="Definitions specific to Mbed platform used by ad74416h project." alt="" coords="91,93,306,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="201,59,201,93,196,93,196,59"/>
+<area shape="rect" id="Node000003" href="$ad74416h_2src_2platform_2mbed_2main_8c.html" title="Main file for Mbed platform of ad74416h project." alt="" coords="5,181,176,221"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="166,144,116,183,113,179,162,140"/>
+<area shape="rect" id="Node000004" href="$ad74416h_2src_2platform_2mbed_2parameters_8c.html" title="Definition of Mbed platform data used by ad74416h project." alt="" coords="200,181,413,221"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="235,140,284,179,281,183,232,144"/>
+</map>

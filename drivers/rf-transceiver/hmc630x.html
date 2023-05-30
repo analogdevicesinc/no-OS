@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content="See drivers/rf-transceiver/hmc630x (doxygen) for the Doxygen documentation." name="description" />
+
+    <title>HMC630X no-OS Driver &#8212; no-OS  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=a525f648" />
+    <script async="async" src="../../_static/app.umd.js?v=fcf3088a"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="ADRV904x (Koror) no-OS Driver" href="koror.html" />
+    <link rel="prev" title="ADG2404/ADG6404 Driver" href="../mux/adg2404.html" />
+   
+  
+  
+  <meta name="repository" content="no-OS">
+  <meta name="version" content="">
+  
+    <meta name="page_source_suffix" content=".rst">
+  
+  
+  
+
+
+<style>
+  body {
+    
+  }
+
+  body.dark {
+    
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body:not(.light) {
+      
+    }
+  }
+</style>
+  </head>
+  
+    <body>
+  
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
+  <input type="checkbox" id="input-show-repotoc">
+
+  
+  <div class="search-area">
+    <form action="" method="get">
+      <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+      <button class="icon"></button>
+    </form>
+  </div>
+  
+
+  <header>
+    <div id="left">
+      <label id="show-sidebar" class="icon" for="input-show-toc" title="Show/hide index"></label>
+    </div>
+    <div id="right">
+      <span>
+        <a id="logo-org" href="https://analog.com" aria-label="Analog Devices Inc. landing page"></a>
+        <div class="vertical-divider"></div>
+        
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
+        
+        <a id="logo" href="../../index.html">
+          <div>no-OS</div>
+        </a>
+      </span>
+      <span class="reverse">
+        <label id="show-localtoc" class="icon" for="input-show-localtoc" title="Show/hide contents"></label>
+      </span>
+    </div>
+  </header>
+
+
+  <div class="repotoc-tree overlay">
+    <root>
+  <a href="../../index.html" class="current">no-OS</a>
+</root>
+
+  </div>
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div class="header localtoc-header">
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">HMC630X no-OS Driver</a><ul>
+<li><a class="reference internal" href="#supported-devices">Supported Devices</a></li>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#applications">Applications</a></li>
+<li><a class="reference internal" href="#device-configuration">Device Configuration</a><ul>
+<li><a class="reference internal" href="#initialization">Initialization</a></li>
+<li><a class="reference internal" href="#configuration">Configuration</a></li>
+<li><a class="reference internal" href="#reading">Reading</a></li>
+<li><a class="reference internal" href="#writing">Writing</a></li>
+<li><a class="reference internal" href="#temperature-control">Temperature Control</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#driver-initialization-example">Driver Initialization Example</a></li>
+<li><a class="reference internal" href="#hmc630x-no-os-iio-support">HMC630X no-OS IIO Support</a></li>
+<li><a class="reference internal" href="#hmc630x-iio-device-configuration">HMC630X IIO Device Configuration</a><ul>
+<li><a class="reference internal" href="#attribute-handling">Attribute Handling</a></li>
+<li><a class="reference internal" href="#temperature-and-frequency-management">Temperature and Frequency Management</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#hmc630x-iio-driver-initialization-example">HMC630X IIO Driver Initialization Example</a></li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
+  
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+    <a id="no-logo" href="../../index.html">
+      no-OS
+    </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
+All content
+</label>
+<label id="show-toc" for="input-switch-toc">
+Content on this topic
+</label>
+<div class="repotoc-tree">
+  <root>
+  <a href="../../index.html" class="current">no-OS</a>
+</root>
+
+</div>
+<div class="toc-tree">
+  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../drivers_guide.html">no-OS drivers guide</a></li>
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1" checked=""/><div class="collapse"><a class="reference internal" href="../../drivers_doc.html">no-OS drivers list</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../amplifiers/adl8113.html">ADL8113 Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../accel/adxl355.html">ADXL355 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../accel/adxl38x.html">ADXL38x no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adc/ad405x.html">AD405X no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adc/ad4080.html">AD4080 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adc/ad717x.html">AD717X no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adc/ad7490.html">AD7490 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adc/ad7768.html">AD7768 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adc/ad7768-1.html">AD7768-1 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adc/ad7799.html">AD7799 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adc/ad796x.html">AD796X no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adc/ad9081.html">AD9081 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adc/ad9083.html">AD9083 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adc/ad9208.html">AD9208 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adc/ad9265.html">AD9265 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adc/ad9434.html">AD9434 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adc/ad9467.html">AD9467 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adc/ad9625.html">AD9625 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adc/ad9680.html">AD9680 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adc/adaq7980.html">ADAQ7980 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adc/adm1177.html">ADM1177 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adc/ltc2378.html">LTC2378-20 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adc/max9611pmb.html">MAX9611 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adc/pulsar_adc.html">AD400X no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adc-dac/ad5592r.html">AD5592R no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adc-dac/ad5592r.html#ad5592r-ad5593r-iio-support">AD5592R/AD5593R IIO Support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adc-dac/ad74416h.html">AD74416H no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi/axi_sysid.html">System ID (AXI_SYSID) no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../digital-io/max14914.html">MAX14914 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../digital-io/max14919.html">MAX14919 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../digital-io/max149x6.html">MAX149X6 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../digital-io/max22190.html">MAX22190 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../digital-io/max22196.html">MAX22196 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../digital-io/max22200.html">MAX22200 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dac/ad3552r.html">AD3552R no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dac/ad5706r.html">AD5706R no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dac/ad5710r.html">AD5710R no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dac/ad8460.html">AD8460 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dac/ad9152.html">AD9152 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dac/ad917x.html">AD917x no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dac/ad9739a.html">AD9739A no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dac/max22007.html">MAX22007 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dac/max22017.html">MAX22017 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../filter/admv8818.html">ADMV8818 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../frequency/ad9523.html">AD9523 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../frequency/ad9545.html">AD9545 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../frequency/ad9553.html">AD9553 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../frequency/adf4030.html">ADF4030 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../frequency/adf4350.html">ADF4350 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../frequency/adf4368.html">ADF4368 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../frequency/adf4371.html">ADF4371 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../frequency/adf4377.html">ADF4377 No-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../frequency/adf4382.html">ADF4382 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../frequency/adf5611.html">ADF5611 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../frequency/admfm2000.html">ADMFM2000 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../imu.html">ADIS no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../io-link/max22516.html">MAX22516 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../led/ltc3208.html">LTC3208 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../led/ltc3220.html">LTC3220 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../led/max25603.html">MAX25603 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../meter/ade7816.html">ADE7816 no-OS documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../meter/ade7913.html">ADE7913 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../meter/ade9000.html">ADE9000 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../meter/ade9113.html">ADE9113 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../meter/ade9153a.html">ADE9153A no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../mux/adg2404.html">ADG2404/ADG6404 Driver</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">HMC630X no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="koror.html">ADRV904x (Koror) no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="madura.html">ADRV902x (Madura) no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="navassa.html">ADRV9002 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="talise.html">ADRV9009 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../switch/adg1712.html">ADG1712 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../switch/adg1736.html">ADG736/ADG1736 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../switch/adgm3121.html">ADGM3144/ADGM3121 MEMS Switch Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../switch/adgs6414d.html">ADGS6414D Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../temperature/adt75.html">ADT75 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../temperature/lm75.html">LM75 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../temperature/ltc2983.html">LTC2983 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../temperature/max31827.html">MAX31827 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../temperature/max31855.html">MAX31855 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../power/ades1754.html">ADES1754 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../power/adp1050.html">ADP1050 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../power/adp1055.html">ADP1055 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../power/adp5055.html">ADP5055 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../power/lt3074.html">LT3074 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../power/lt7170.html">LT7170 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../power/lt7182s.html">LT7182S no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../power/lt8491.html">LT8491 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../power/lt8722.html">LT8722 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../power/ltc2992.html">LTC2992 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../power/ltc4162l.html">LTC4162L no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../power/ltc4296.html">LTC4296 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../power/ltc7841.html">LTC7841 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../power/ltc7871.html">LTC7871 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../power/ltm3360b.html">LTM3360B no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../power/ltm4686.html">LTM4686 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../power/ltp8800.html">LTP8800 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../power/max17616.html">MAX17616 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../power/max17851.html">MAX17851 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../power/max42500.html">MAX42500 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../potentiometer/ad5293.html">AD5293 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ethernet/adin1110.html">ADIN1110 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../gyroscope/adxrs290.html">ADXRS290 no-OS Driver</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2"/><div class="collapse"><a class="reference internal" href="../../projects_doc.html">no-OS projects list</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adc/ad405x.html">AD405X no-OS Example Project STM32</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adc/ad463x_fmcz.html">AD463x-FMCZ no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adc/ad469x_evb.html">AD469x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adc/ad6676-ebz.html">AD6676-EBZ no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adc/ad7091r8-sdz.html">AD7091R-2/-4/-8 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adc/ad7124-4sdz.html">AD7124-4SDZ no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adc/ad713x_fmcz.html">AD713x FMCZ no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adc/ad719x.html">AD719X no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adc/ad738x_fmcz.html">AD738x_FMCZ no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adc/ad7606x-fmc.html">AD7606x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adc/ad7616-sdz.html">AD7616-SDZ no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adc/ad7616-st.html">AD7616 no-OS Example Project on SDP-K1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adc/ad7768-1fmcz.html">AD7768-1 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adc/ad7768-evb.html">AD7768-EVB no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adc/ad796x_fmcz.html">AD796x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adc/ad9081.html">ad9081 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adc/ad9083.html">AD9083 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adc/ad9208.html">AD9208 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adc/ad9265-fmc-125ebz.html">AD9265-FMC-125EBZ no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adc/ad9434-fmc-500ebz.html">AD9434-FMC-500EBZ no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adc/ad9467.html">AD9467 no-OS Example project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adc/adalm-mmsc.html">AD4080 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adc/cn0552.html">CN0552 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adc/eval-ad7490sdz.html">EVAL-AD7490SDZ no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adc/ltc2378.html">Evaluating the LTC2378-20</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adc/max11205pmb1.html">MAX11205PMB1 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adc/pulsar-adc.html">AD400x no-OS Example Project on ZED and SDP-K1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adc-dac/ad74416h.html">AD74416H no-OS Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adc-dac/adalm-lsmspg.html">AD5592R/AD5593R/LM75 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/accel/eval-adxl355-pmdz.html">EVAL-ADXL355-PMDZ no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/afe/ad413x.html">AD413x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/frequency/adf4030.html">Evaluating the ADF4030</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/frequency/adf4368.html">Evaluating the ADF4368</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/frequency/adf4371.html">ADF4371 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/frequency/adf4377_sdz.html">Evaluating the ADF4377 Wideband Synthesizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/frequency/adf4382.html">ADF4382 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/frequency/adf5611.html">Evaluating the ADF5611</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/imu/eval-adis1646x.html">ADIS1646X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/imu/eval-adis1647x.html">ADIS1647X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/imu/eval-adis1650x.html">ADIS1650X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/imu/eval-adis1654x.html">ADIS1654X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/imu/eval-adis1655x.html">ADIS1655X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/imu/eval-adis1657x.html">ADIS1657X Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/meter/ade7816.html">ADE7816 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/meter/eval-ade7913.html">EVAL-ADE7913 no-OS Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/meter/eval-ade9000.html">EVAL-ADE9000 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/meter/eval-ade9153a.html">EVAL-ADE9153A no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/meter/eval-ade9430.html">EVAL-ADE9430 Sensor-to-Cloud no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/rf-transceiver/adrv9001.html">ADRV9001 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/rf-transceiver/adrv902x.html">adrv902x no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/rf-transceiver/adrv904x.html">adrv904x no-OS Sample Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/eval/ad-acevsecrdset-sl.html">AD-ACEVSECRDSET-SL no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/eval/apard32690.html">AD-APARD32690-SL no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/eval/apardpfwd.html">AD-APARDPFWD-SL no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/eval/cn0531.html">CN0531 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/eval/cn0561.html">CN0561 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/eval/cn0565.html">CN0565 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/eval/eval-adg1712.html">ADG1712 Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/eval/eval-adg1736.html">Evaluating the EVAL-ADG1736</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/eval/eval-adg2404.html">EVAL-ADG2404 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/eval/eval-adgm3121.html">ADGM3121 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/eval/eval-adgs6414d.html">ADGS6414D Family no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/eval/eval-adl8113.html">EVAL-ADL8113 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/eval/eval-pqmon.html">AD-PQMON-SL Kit no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/eval/fmcdaq3.html">FMCDAQ3 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/digital-io/max14906.html">MAX14906 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/digital-io/max14914.html">MAX14914 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/digital-io/max14919.html">MAX14919 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/power/ades1754.html">Evaluating the EVAL-ADES1754</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/power/adp1050.html">ADP1050 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/power/adp1055.html">ADP1055 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/power/adp5055.html">ADP5055 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/power/dc2703a.html">Evaluating the LT8491</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/power/lt3074.html">Evaluating the LT3074</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/power/lt7170.html">Evaluating the LT7170</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/power/lt7182s.html">Evaluating the LT7182S</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/power/lt8722.html">Evaluating the LT8722</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/power/ltc4162l.html">Evaluating the LTC4162L</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/power/ltc4296.html">LTC4296 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/power/ltc7841.html">Evaluating the LTC7841</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/power/ltc7871.html">Evaluating the LTC7871</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/power/ltm3360b.html">Evaluating the LTM3360B</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/power/ltm4686.html">Evaluating the LTM4686</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/power/ltp8800.html">Evaluating the LTP8800</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/power/max17616.html">Evaluating the MAX17616</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/power/max42500.html">MAX42500 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/dac/ad3552r_fmcz.html">EVAL-AD3552R no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/dac/ad5460.html">AD5460 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/dac/ad5758-sdz.html">AD5758-SDZ no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/dac/ad5766-sdz.html">AD5766-SDZ no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/dac/dc2903a.html">DC2903A no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/dac/eval-ad8460.html">Evaluating the EVAL-AD8460</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/dac/max22007.html">MAX22007EVKIT no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/dac/max22017.html">MAX22017 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/temperature/adt7420-pmdz.html">ADT7420-PMDZ no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/temperature/adt75.html">ADT75 no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/temperature/ltc2983.html">Evaluating the LTC2983</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/temperature/max31827-evkit.html">Evaluating the MAX31827</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/gyroscope/adxrs290-pmdz.html">ADXRS290-PMDZ no-OS Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/cdc/ad7746-ebz.html">AD7746-EBZ no-OS Example Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/led/ltc3208.html">Evaluating the LTC3208</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/led/ltc3220.html">Evaluating the LTC3220</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3" id="toctree-collapse-3"/><div class="collapse"><a class="reference internal" href="../../build_guide.html">No-OS Build Guide</a><label for="toctree-collapse-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../build_guides/build_maxim.html">Maxim Build Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../build_guides/build_ftd2xx.html">Build against FTD2XX library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../build_guides/build_win.html">Windows Build Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../build_guides/build_mac.html">MAC Build Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../build_guides/build_xilinx_vitis2025.html">Debugging with Xilinx Vitis IDE</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing to no-OS</a></li>
+</ul>
+
+
+</div>
+        </div>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body-header">
+  <nav class="breadcrumb"><ol><li><a href="../../drivers_doc.html">no-OS drivers list</a></li></ol></nav>
+</div>
+          <div class="body" role="main">
+            
+  <section id="hmc630x-no-os-driver">
+<h1>HMC630X no-OS Driver<a class="headerlink" href="#hmc630x-no-os-driver" title="Link to this heading"></a></h1>
+<p><span>See </span><a class="reference external" href="../../doxygen/dir_800530c666b44857813facfa99e43e62.html"><span>drivers/rf-transceiver/hmc630x (doxygen)</span></a><span> for the Doxygen documentation.</span></p>
+<section id="supported-devices">
+<h2>Supported Devices<a class="headerlink" href="#supported-devices" title="Link to this heading"></a></h2>
+<p><a class="icon link reference external" href="https://www.analog.com/HMC6300" target="_blank">HMC6300</a>
+<a class="icon link reference external" href="https://www.analog.com/HMC6301" target="_blank">HMC6301</a></p>
+</section>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>The HMC6300 is a complete millimeterwave transmitter integrated circuit that
+operates from 57 GHz to 64 GHz with up to 1.8 GHz modulation bandwidth. An
+integrated synthesizer provides tuning in 250 MHz, 500 MHz, or 540 MHz steps
+with excellent phase noise to support up to 64 QAM modulation. The transmitter
+provides up to 15 dBm linear output power into a 100 ohm differential load.
+Key features include digital and analog RF and IF gain control, an integrated
+image reject filter, and support for an external local oscillator (LO).</p>
+<p>The HMC6301 is the companion millimeterwave receiver that, together with the
+HMC6300, forms a complete 60 GHz transceiver chipset for multiple Gbps operation
+in the unlicensed 60 GHz ISM band. Both devices feature a 3-wire serial digital
+interface for configuration and an on-chip temperature sensor.</p>
+</section>
+<section id="applications">
+<h2>Applications<a class="headerlink" href="#applications" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Small cell backhaul</p></li>
+<li><p>60 GHz ISM band data transfer</p></li>
+<li><p>Multiple Gbps data communication</p></li>
+<li><p>WiGig/802.11ad radio</p></li>
+<li><p>High definition video transmission</p></li>
+<li><p>Radar/high resolution imaging</p></li>
+</ul>
+</section>
+<section id="device-configuration">
+<h2>Device Configuration<a class="headerlink" href="#device-configuration" title="Link to this heading"></a></h2>
+<section id="initialization">
+<h3>Initialization<a class="headerlink" href="#initialization" title="Link to this heading"></a></h3>
+<p>The HMC630X driver initializes the device with <code class="docutils literal notranslate"><span class="pre">hmc630x_init</span></code>, using
+parameters defined in <code class="docutils literal notranslate"><span class="pre">hmc630x_init_param</span></code>. The initialization
+configures the device type (HMC6300 or HMC6301), the reference clock,
+GPIO signals for the 3-wire serial interface (EN, CLK, DATA, SCANOUT),
+VCO frequency, and attenuation settings.</p>
+</section>
+<section id="configuration">
+<h3>Configuration<a class="headerlink" href="#configuration" title="Link to this heading"></a></h3>
+<p>Device configurations are set with functions like
+<code class="docutils literal notranslate"><span class="pre">hmc630x_set_enable</span></code>, <code class="docutils literal notranslate"><span class="pre">hmc630x_set_vco</span></code>, <code class="docutils literal notranslate"><span class="pre">hmc630x_set_if_attn</span></code>,
+and <code class="docutils literal notranslate"><span class="pre">hmc630x_write_regmap</span></code>. These handle enabling the device, VCO
+frequencies, and register map configurations. Additional
+HMC6301-specific configurations are available through
+<code class="docutils literal notranslate"><span class="pre">hmc6301_set_lna_gain</span></code>, <code class="docutils literal notranslate"><span class="pre">hmc6301_set_bb_attn</span></code>,
+<code class="docutils literal notranslate"><span class="pre">hmc6301_set_bb_attn_fine</span></code>, and <code class="docutils literal notranslate"><span class="pre">hmc6301_set_bb_lpc_hpc</span></code>.</p>
+</section>
+<section id="reading">
+<h3>Reading<a class="headerlink" href="#reading" title="Link to this heading"></a></h3>
+<p>Data retrieval functions include <code class="docutils literal notranslate"><span class="pre">hmc630x_read</span></code>, <code class="docutils literal notranslate"><span class="pre">hmc630x_read_row</span></code>,
+and <code class="docutils literal notranslate"><span class="pre">hmc630x_read_regmap</span></code>, which access individual parameters, rows,
+or the full register map. <code class="docutils literal notranslate"><span class="pre">hmc630x_get_if_attn</span></code> and
+<code class="docutils literal notranslate"><span class="pre">hmc630x_get_vco</span></code> provide access to intermediate frequency attenuation
+settings and VCO frequencies respectively. For HMC6301-specific gain
+measurements, use <code class="docutils literal notranslate"><span class="pre">hmc6301_get_lna_gain</span></code>, <code class="docutils literal notranslate"><span class="pre">hmc6301_get_bb_attn</span></code>,
+<code class="docutils literal notranslate"><span class="pre">hmc6301_get_bb_attn_fine</span></code>, and <code class="docutils literal notranslate"><span class="pre">hmc6301_get_bb_lpc_hpc</span></code>.</p>
+</section>
+<section id="writing">
+<h3>Writing<a class="headerlink" href="#writing" title="Link to this heading"></a></h3>
+<p>Writing operations utilize <code class="docutils literal notranslate"><span class="pre">hmc630x_write</span></code>, <code class="docutils literal notranslate"><span class="pre">hmc630x_write_row</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">hmc630x_write_regmap</span></code> to alter specific parameters, rows, or the full
+register map. RF gain settings can be adjusted with
+<code class="docutils literal notranslate"><span class="pre">hmc6300_set_rf_attn</span></code>, and FM mode with <code class="docutils literal notranslate"><span class="pre">hmc6300_set_fm_en</span></code>.</p>
+</section>
+<section id="temperature-control">
+<h3>Temperature Control<a class="headerlink" href="#temperature-control" title="Link to this heading"></a></h3>
+<p>Temperature management is facilitated by <code class="docutils literal notranslate"><span class="pre">hmc630x_set_temp_en</span></code>,
+<code class="docutils literal notranslate"><span class="pre">hmc630x_get_temp_en</span></code>, and <code class="docutils literal notranslate"><span class="pre">hmc630x_get_temp</span></code>. These functions
+enable and monitor the temperature reading capabilities of the device,
+crucial for maintaining operational stability.</p>
+</section>
+</section>
+<section id="driver-initialization-example">
+<h2>Driver Initialization Example<a class="headerlink" href="#driver-initialization-example" title="Link to this heading"></a></h2>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="nc">hmc630x_dev</span><span class="w"> </span><span class="o">*</span><span class="n">dev</span><span class="p">;</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">hmc630x_init_param</span><span class="w"> </span><span class="n">txip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="p">.</span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HMC6300</span><span class="p">,</span>
+<span class="w">        </span><span class="p">.</span><span class="n">ref_clk</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HMC6300_REF_CLK_75MHz</span><span class="p">,</span>
+<span class="w">        </span><span class="p">.</span><span class="n">en</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="p">.</span><span class="n">port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_EN_PORT</span><span class="p">,</span>
+<span class="w">                </span><span class="p">.</span><span class="n">number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_EN_PIN</span><span class="p">,</span>
+<span class="w">                </span><span class="p">.</span><span class="n">platform_ops</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_OPS</span><span class="p">,</span>
+<span class="w">                </span><span class="p">.</span><span class="n">extra</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_EXTRA</span><span class="p">,</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="p">.</span><span class="n">clk</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="p">.</span><span class="n">port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_CLK_PORT</span><span class="p">,</span>
+<span class="w">                </span><span class="p">.</span><span class="n">number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_CLK_PIN</span><span class="p">,</span>
+<span class="w">                </span><span class="p">.</span><span class="n">platform_ops</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_OPS</span><span class="p">,</span>
+<span class="w">                </span><span class="p">.</span><span class="n">extra</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_EXTRA</span><span class="p">,</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="p">.</span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="p">.</span><span class="n">port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_DATA_PORT</span><span class="p">,</span>
+<span class="w">                </span><span class="p">.</span><span class="n">number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_DATA_PIN</span><span class="p">,</span>
+<span class="w">                </span><span class="p">.</span><span class="n">platform_ops</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_OPS</span><span class="p">,</span>
+<span class="w">                </span><span class="p">.</span><span class="n">extra</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_EXTRA</span><span class="p">,</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="p">.</span><span class="n">scanout</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="p">.</span><span class="n">port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_SCANOUT_PORT</span><span class="p">,</span>
+<span class="w">                </span><span class="p">.</span><span class="n">number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_SCANOUT_PIN</span><span class="p">,</span>
+<span class="w">                </span><span class="p">.</span><span class="n">platform_ops</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_OPS</span><span class="p">,</span>
+<span class="w">                </span><span class="p">.</span><span class="n">extra</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_EXTRA</span><span class="p">,</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="p">.</span><span class="n">vco</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">        </span><span class="p">.</span><span class="n">enabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">,</span>
+<span class="w">        </span><span class="p">.</span><span class="n">temp_en</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">,</span>
+<span class="w">        </span><span class="p">.</span><span class="n">if_attn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">        </span><span class="p">.</span><span class="n">tx</span><span class="p">.</span><span class="n">rf_attn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="p">};</span>
+
+<span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hmc630x_init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">dev</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">txip</span><span class="p">);</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="p">)</span>
+<span class="w">        </span><span class="k">goto</span><span class="w"> </span><span class="n">error</span><span class="p">;</span>
+</pre></div>
+</div>
+</section>
+<section id="hmc630x-no-os-iio-support">
+<h2>HMC630X no-OS IIO Support<a class="headerlink" href="#hmc630x-no-os-iio-support" title="Link to this heading"></a></h2>
+<p>The HMC630X IIO driver comes on top of the HMC630X driver and offers support
+for interfacing IIO clients through libiio.</p>
+</section>
+<section id="hmc630x-iio-device-configuration">
+<h2>HMC630X IIO Device Configuration<a class="headerlink" href="#hmc630x-iio-device-configuration" title="Link to this heading"></a></h2>
+<section id="attribute-handling">
+<h3>Attribute Handling<a class="headerlink" href="#attribute-handling" title="Link to this heading"></a></h3>
+<p>The IIO driver provides register management and attribute handling for the
+HMC6300 and HMC6301 devices. Attributes such as enabled state, VCO frequency,
+VCO band, lock detect, IF attenuation, and temperature enable are accessible
+through <code class="docutils literal notranslate"><span class="pre">hmc630x_iio_read_attr</span></code> and <code class="docutils literal notranslate"><span class="pre">hmc630x_iio_write_attr</span></code>. For
+HMC6300-specific attributes, RF attenuation is available. For HMC6301-specific
+attributes, LNA gain, baseband attenuation, fine attenuation, and baseband
+filter corner frequencies are supported.</p>
+</section>
+<section id="temperature-and-frequency-management">
+<h3>Temperature and Frequency Management<a class="headerlink" href="#temperature-and-frequency-management" title="Link to this heading"></a></h3>
+<p>Temperature monitoring is exposed through the IIO interface via
+<code class="docutils literal notranslate"><span class="pre">hmc630x_iio_read_raw</span></code>. For frequency management,
+<code class="docutils literal notranslate"><span class="pre">hmc630x_iio_read_vco_available</span></code> provides access to available VCO
+frequencies, allowing for dynamic adjustments to optimize device operation.</p>
+</section>
+</section>
+<section id="hmc630x-iio-driver-initialization-example">
+<h2>HMC630X IIO Driver Initialization Example<a class="headerlink" href="#hmc630x-iio-driver-initialization-example" title="Link to this heading"></a></h2>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">hmc630x_iio_dev</span><span class="w"> </span><span class="o">*</span><span class="n">hmc630x_iio_dev</span><span class="p">;</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">hmc630x_iio_init_param</span><span class="w"> </span><span class="n">hmc630x_iio_ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="p">.</span><span class="n">ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">txip</span><span class="p">,</span>
+<span class="p">};</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">iio_app_desc</span><span class="w"> </span><span class="o">*</span><span class="n">app</span><span class="p">;</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">iio_app_init_param</span><span class="w"> </span><span class="n">app_init_param</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+
+<span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hmc630x_iio_init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">hmc630x_iio_dev</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">hmc630x_iio_ip</span><span class="p">);</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="p">)</span>
+<span class="w">        </span><span class="k">goto</span><span class="w"> </span><span class="n">exit</span><span class="p">;</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">iio_app_device</span><span class="w"> </span><span class="n">iio_devices</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">                </span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;hmc6300&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="p">.</span><span class="n">dev</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hmc630x_iio_dev</span><span class="p">,</span>
+<span class="w">                </span><span class="p">.</span><span class="n">dev_descriptor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hmc630x_iio_dev</span><span class="o">-&gt;</span><span class="n">iio_dev</span><span class="p">,</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="p">};</span>
+
+<span class="n">app_init_param</span><span class="p">.</span><span class="n">devices</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">iio_devices</span><span class="p">;</span>
+<span class="n">app_init_param</span><span class="p">.</span><span class="n">nb_devices</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">NO_OS_ARRAY_SIZE</span><span class="p">(</span><span class="n">iio_devices</span><span class="p">);</span>
+<span class="n">app_init_param</span><span class="p">.</span><span class="n">uart_init_params</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">uip</span><span class="p">;</span>
+
+<span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">iio_app_init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">app</span><span class="p">,</span><span class="w"> </span><span class="n">app_init_param</span><span class="p">);</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="p">)</span>
+<span class="w">        </span><span class="k">goto</span><span class="w"> </span><span class="n">remove_iio_hmc630x</span><span class="p">;</span>
+
+<span class="k">return</span><span class="w"> </span><span class="n">iio_app_run</span><span class="p">(</span><span class="n">app</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+          </div>
+              <div class="related">
+                &nbsp;
+    <a href="../mux/adg2404.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">ADG2404/ADG6404 Driver</a>
+    <a href="koror.html" title="Next document (Alt+Shift+RightArrow)" class="next">ADRV904x (Koror) no-OS Driver</a>
+              </div>
+          
+        </div>
+      </div>
+  </div>
+
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
+    <footer>
+      &#169;2023-2024, Analog Devices, Inc.
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
+</html>

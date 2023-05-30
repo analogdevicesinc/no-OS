@@ -1,0 +1,17 @@
+<map id="drivers/dac/ad5460/ad5460.h" name="drivers/dac/ad5460/ad5460.h">
+<area shape="rect" id="Node000001" title="Header file of AD5460 Driver." alt="" coords="505,5,652,45"/>
+<area shape="rect" id="Node000002" href="$ad5460_8c.html" title="Source file of AD5460 Driver." alt="" coords="5,108,152,148"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="492,38,338,59,251,75,165,96,122,110,121,105,163,91,249,70,337,54,491,33"/>
+<area shape="rect" id="Node000003" href="$ad5460_2src_2common_2common__data_8h.html" title="Defines common data to be used by eval&#45;ad5460 examples." alt="" coords="176,108,368,148"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="509,52,330,110,329,105,508,47"/>
+<area shape="rect" id="Node000005" href="$ad5460_2src_2examples_2basic_2basic__example_8c.html" title="Basic example header for eval&#45;ad5460 project." alt="" coords="393,101,559,155"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="552,57,505,102,501,98,548,53"/>
+<area shape="rect" id="Node000006" href="$channel__output__example_8c.html" title="implementation of channel output configuration for eval&#45;ad5460 project" alt="" coords="584,93,779,163"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="609,53,649,91,645,95,606,57"/>
+<area shape="rect" id="Node000007" href="$current__output__example_8c.html" title="implementation of current output configuration for eval&#45;ad5460 project" alt="" coords="803,93,992,163"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="652,47,803,94,802,99,650,52"/>
+<area shape="rect" id="Node000008" href="$voltage__output__example_8c.html" title="Implementation of channel output configuration for eval&#45;ad5460 project." alt="" coords="1016,93,1208,163"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="666,34,824,56,1005,91,1016,94,1015,99,1003,96,823,62,665,39"/>
+<area shape="rect" id="Node000004" href="$ad5460_2src_2common_2common__data_8c.html" title="Defines common data to be used by eval&#45;ad5460 examples." alt="" coords="177,211,367,251"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="275,162,275,211,269,211,269,162"/>
+</map>

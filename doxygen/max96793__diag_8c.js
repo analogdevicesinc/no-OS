@@ -1,0 +1,27 @@
+var max96793__diag_8c =
+[
+    [ "ASSERT_DETECT_STR", "group___a_d_i___g_m_s_l___c_a_m___s_e_r2___d_i_a_g___a_p_i.html#ga658ef0cfcc81e8e212d5e04600a83dbc", null ],
+    [ "MAX96793_PHY_1x4_MODE", "group___a_d_i___g_m_s_l___c_a_m___s_e_r2___d_i_a_g___a_p_i.html#ga9a060348657badbe4149fc901a3c9b15", null ],
+    [ "MAX96793_PORT_B", "group___a_d_i___g_m_s_l___c_a_m___s_e_r2___d_i_a_g___a_p_i.html#gae573bf825d476ccc3ff93891d6ca5595", null ],
+    [ "max96793_csi_diag_check_fec_status", "group___a_d_i___g_m_s_l___c_a_m___s_e_r2___d_i_a_g___a_p_i.html#ga403424b3ad3fef5b07c3c4a00ccda9fd", null ],
+    [ "max96793_csi_diag_check_mipi_phy_pkt_cnt_status", "group___a_d_i___g_m_s_l___c_a_m___s_e_r2___d_i_a_g___a_p_i.html#gae5156ad6d230b4e03b840badaad3b530", null ],
+    [ "max96793_csi_diag_check_mipi_rx_err_status", "group___a_d_i___g_m_s_l___c_a_m___s_e_r2___d_i_a_g___a_p_i.html#gae67b6cf26bc92d81a9a2c520f4bb7399", null ],
+    [ "max96793_csi_diag_check_pclk_detect_status", "group___a_d_i___g_m_s_l___c_a_m___s_e_r2___d_i_a_g___a_p_i.html#gab4922796b82ec9b8fcdc18b641a7e0b9", null ],
+    [ "max96793_csi_diag_check_vid_tx_pclk_drift_err_status", "group___a_d_i___g_m_s_l___c_a_m___s_e_r2___d_i_a_g___a_p_i.html#ga15007e01541825d04e8363b0291c48c4", null ],
+    [ "max96793_dev_diag_check_device_rev", "group___a_d_i___g_m_s_l___c_a_m___s_e_r2___d_i_a_g___a_p_i.html#gaeb665c7d93548f9a2754eaa2aa2e0d07", null ],
+    [ "max96793_dev_diag_check_part_config_status", "group___a_d_i___g_m_s_l___c_a_m___s_e_r2___d_i_a_g___a_p_i.html#ga26d22e270d769c2370bee096642cf768", null ],
+    [ "max96793_dev_diag_check_remote_error_status", "group___a_d_i___g_m_s_l___c_a_m___s_e_r2___d_i_a_g___a_p_i.html#ga4794ddd9c002303d4416a6b426e982fa", null ],
+    [ "max96793_dev_diag_get_device_id", "group___a_d_i___g_m_s_l___c_a_m___s_e_r2___d_i_a_g___a_p_i.html#ga9e06643b557bf2a51d10f9e9a2051c0b", null ],
+    [ "max96793_dev_diag_get_errb_status", "group___a_d_i___g_m_s_l___c_a_m___s_e_r2___d_i_a_g___a_p_i.html#ga227f87ed6f7cbe2179a0bc5c873d1fe7", null ],
+    [ "max96793_link_diag_check_decode_error_status", "group___a_d_i___g_m_s_l___c_a_m___s_e_r2___d_i_a_g___a_p_i.html#ga015734fbc75d239879b4623480c2ba07", null ],
+    [ "max96793_link_diag_check_eye_open_monitor_status", "group___a_d_i___g_m_s_l___c_a_m___s_e_r2___d_i_a_g___a_p_i.html#ga6f6d42f0fab619ffef0e16e6d583a2f0", null ],
+    [ "max96793_link_diag_check_idle_error_status", "group___a_d_i___g_m_s_l___c_a_m___s_e_r2___d_i_a_g___a_p_i.html#ga8a2c93a5f4bbb661df75e9dc92c29d2d", null ],
+    [ "max96793_link_diag_check_line_fault_status", "group___a_d_i___g_m_s_l___c_a_m___s_e_r2___d_i_a_g___a_p_i.html#ga0c5b61f5c09e5b2807c63914b4cfff73", null ],
+    [ "max96793_link_diag_check_link_lock_status", "group___a_d_i___g_m_s_l___c_a_m___s_e_r2___d_i_a_g___a_p_i.html#ga56f1e59015c92b45be20911056eae690", null ],
+    [ "max96793_link_diag_check_max_retransmission_error_status", "group___a_d_i___g_m_s_l___c_a_m___s_e_r2___d_i_a_g___a_p_i.html#ga7335434cc53b9f8c0139f573cb5211b2", null ],
+    [ "max96793_link_diag_check_phy_low_power_state_error_status", "group___a_d_i___g_m_s_l___c_a_m___s_e_r2___d_i_a_g___a_p_i.html#ga02a6361e579c834f6476319ca20eb914", null ],
+    [ "max96793_link_diag_get_link_lock_status", "group___a_d_i___g_m_s_l___c_a_m___s_e_r2___d_i_a_g___a_p_i.html#gabc9136d9dd54ec9fcfd7717ba3f8d072", null ],
+    [ "max96793_mem_diag_check_uncorrectable_2b_mem_ecc_err_status", "group___a_d_i___g_m_s_l___c_a_m___s_e_r2___d_i_a_g___a_p_i.html#ga71c576a8196e31a5a65c8c06835404f1", null ],
+    [ "max96793_pipe_diag_check_stream_id", "group___a_d_i___g_m_s_l___c_a_m___s_e_r2___d_i_a_g___a_p_i.html#ga3bafbe228655ea7a0ea01422657e81c1", null ],
+    [ "max96793_pipe_diag_check_vid_tx_overflow_status", "group___a_d_i___g_m_s_l___c_a_m___s_e_r2___d_i_a_g___a_p_i.html#ga2bc6aaa5cbcfa24958d371a987405fd1", null ]
+];

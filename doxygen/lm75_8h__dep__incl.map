@@ -1,0 +1,11 @@
+<map id="drivers/temperature/lm75/lm75.h" name="drivers/temperature/lm75/lm75.h">
+<area shape="rect" id="Node000001" title="Header file of LM75 Driver." alt="" coords="192,5,344,45"/>
+<area shape="rect" id="Node000002" href="$iio__lm75_8h.html" title="IIO Header file of LM75 Driver." alt="" coords="104,93,256,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="240,57,201,95,198,91,237,53"/>
+<area shape="rect" id="Node000005" href="$lm75_8c.html" title="Source file of LM75 Driver." alt="" coords="280,93,432,133"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="299,53,338,91,335,95,296,57"/>
+<area shape="rect" id="Node000003" href="$iio__lm75_8c.html" title="IIO Source file of LM75 Driver." alt="" coords="5,189,157,229"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="152,145,103,191,99,187,148,141"/>
+<area shape="rect" id="Node000004" href="$adalm-lsmspg_2src_2examples_2iio__example_2iio__example_8c.html" title=" " alt="" coords="181,181,379,236"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="212,141,254,179,250,183,208,145"/>
+</map>

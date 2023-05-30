@@ -1,0 +1,282 @@
+/**
+ * @file harmonic.css
+ * @brief Harmonic CSS overrides for Doxygen
+ *
+ * Copyright (c) 2024 Analog Devices, Inc. All Rights Reserved. This software
+ * is proprietary and confidential to Analog Devices, Inc. and its licensors.
+ */
+
+@import url(doxygen-awesome.css);
+
+/**
+ * doxygen-awesome overrides
+ * @see https://harmonic.app.analog.com/1816b7bc5/p/77d2c4-color
+ * @see https://jothepro.github.io/doxygen-awesome-css/md_docs_2customization.html#autotoc_md35
+ */
+
+/* fonts */
+html {
+  --font-family: "Inter", sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Barlow", sans-serif;
+}
+
+/**
+ * Light mode
+ */
+html.light-mode {
+  color-scheme: light;
+
+  /* primary theme color. This will affect the entire websites color scheme: links, arrows, labels, ... */
+  --primary-color: var(--hmc-color-blue-700);
+  --primary-dark-color: var(--hmc-color-blue-900);
+  --primary-light-color: var(--hmc-color-blue-300);
+
+  /* page base colors */
+  --page-background-color: var(--hmc-color-gray-white);
+  --page-foreground-color: var(--hmc-color-gray-black);
+  --page-secondary-foreground-color: var(--hmc-color-gray-900);
+
+  /* other colors */
+  --separator-color: var(--hmc-color-gray-200);
+  --fragment-background: var(--hmc-color-gray-100);
+  --side-nav-background: var(--hmc-color-gray-white);
+}
+
+/**
+ * Dark mode
+ */
+html.dark-mode {
+  color-scheme: dark;
+
+  /* primary theme color. This will affect the entire websites color scheme: links, arrows, labels, ... */
+  --primary-color: var(--hmc-color-blue-300);
+  --primary-dark-color: var(--hmc-color-blue-200);
+  --primary-light-color: var(--hmc-color-blue-700);
+
+  /* page base colors */
+  --page-background-color: var(--hmc-color-gray-1000);
+  --page-foreground-color: var(--hmc-color-gray-white);
+  --page-secondary-foreground-color: var(--hmc-color-gray-100);
+
+  /* other colors */
+  --separator-color: var(--hmc-color-gray-800);
+  --fragment-background: var(--hmc-color-gray-black);
+  --side-nav-background: var(--hmc-color-gray-black);
+}
+
+/*
+* Harmonic variables
+*/
+:root {
+  --font-family-heading: "Barlow", sans-serif;
+  --font-family-body: "Inter", sans-serif;
+
+  --font-size-small: 12px;
+  --font-size-default: 14px;
+  --font-size-medium: 16px;
+
+  --hmc-color-pink-1000: #571140;
+  --hmc-color-pink-900: #761a57;
+  --hmc-color-pink-800: #9a196f;
+  --hmc-color-pink-700: #b32d87;
+  --hmc-color-pink-600: #d3379f;
+  --hmc-color-pink-500: #e84db4;
+  --hmc-color-pink-400: #f07ac9;
+  --hmc-color-pink-300: #f7a1da;
+  --hmc-color-pink-200: #f9c7e8;
+  --hmc-color-pink-100: #feecf8;
+  --hmc-color-teal-1000: #053347;
+  --hmc-color-teal-900: #034663;
+  --hmc-color-teal-800: #07597e;
+  --hmc-color-teal-700: #0e6d95;
+  --hmc-color-teal-600: #1981ae;
+  --hmc-color-teal-500: #1694ca;
+  --hmc-color-teal-400: #2cafe8;
+  --hmc-color-teal-300: #68c6ee;
+  --hmc-color-teal-200: #a8def5;
+  --hmc-color-teal-100: #e3f5fc;
+  --hmc-color-red-1000: #64060e;
+  --hmc-color-red-900: #840d17;
+  --hmc-color-red-800: #a71420;
+  --hmc-color-red-700: #c81a28;
+  --hmc-color-red-600: #e13745;
+  --hmc-color-red-500: #f64c5a;
+  --hmc-color-red-400: #fe7b86;
+  --hmc-color-red-300: #ffa3ab;
+  --hmc-color-red-200: #fccace;
+  --hmc-color-red-100: #feeeef;
+  --hmc-color-orange-1000: #551e03;
+  --hmc-color-orange-900: #702c0a;
+  --hmc-color-orange-800: #91370b;
+  --hmc-color-orange-700: #ae4410;
+  --hmc-color-orange-600: #cd5215;
+  --hmc-color-orange-500: #e76423;
+  --hmc-color-orange-400: #fb8246;
+  --hmc-color-orange-300: #fea77c;
+  --hmc-color-orange-200: #fccab1;
+  --hmc-color-orange-100: #feefe7;
+  --hmc-color-green-1000: #0d3624;
+  --hmc-color-green-900: #114a32;
+  --hmc-color-green-800: #115f3f;
+  --hmc-color-green-700: #16744d;
+  --hmc-color-green-600: #1f895e;
+  --hmc-color-green-500: #2e9e6f;
+  --hmc-color-green-400: #3db885;
+  --hmc-color-green-300: #6fcea6;
+  --hmc-color-green-200: #abe3cd;
+  --hmc-color-green-100: #e4f6ef;
+  --hmc-color-purple-1000: #431c5f;
+  --hmc-color-purple-900: #5d2287;
+  --hmc-color-purple-800: #7531a5;
+  --hmc-color-purple-700: #8e3dc7;
+  --hmc-color-purple-600: #a451df;
+  --hmc-color-purple-500: #b16ee0;
+  --hmc-color-purple-400: #c48eeb;
+  --hmc-color-purple-300: #d4adf0;
+  --hmc-color-purple-200: #e5cef6;
+  --hmc-color-purple-100: #f6eefc;
+  --hmc-color-blue-1000: #00305b;
+  --hmc-color-blue-900: #00427a;
+  --hmc-color-blue-800: #00549a;
+  --hmc-color-blue-700: #0067b9;
+  --hmc-color-blue-600: #0c79df;
+  --hmc-color-blue-500: #3a8ee9;
+  --hmc-color-blue-400: #6ca7ef;
+  --hmc-color-blue-300: #92befc;
+  --hmc-color-blue-200: #c6d8f6;
+  --hmc-color-blue-100: #edf3fc;
+  --hmc-color-gray-white: #fff;
+  --hmc-color-gray-black: #101820;
+  --hmc-color-gray-1000: #293038;
+  --hmc-color-gray-900: #3a424b;
+  --hmc-color-gray-800: #4b545d;
+  --hmc-color-gray-700: #5e6773;
+  --hmc-color-gray-600: #717984;
+  --hmc-color-gray-500: #848b95;
+  --hmc-color-gray-400: #9fa4ad;
+  --hmc-color-gray-300: #b7bbc3;
+  --hmc-color-gray-200: #d5d8dc;
+  --hmc-color-gray-100: #f0f1f3;
+  --hmc-color-dataviz-background: var(--hmc-color-gray-white);
+  --hmc-color-dataviz-sequential-e-6: var(--hmc-color-pink-1000);
+  --hmc-color-dataviz-sequential-e-5: var(--hmc-color-pink-900);
+  --hmc-color-dataviz-sequential-e-4: var(--hmc-color-pink-800);
+  --hmc-color-dataviz-sequential-e-3: var(--hmc-color-pink-700);
+  --hmc-color-dataviz-sequential-e-2: var(--hmc-color-pink-600);
+  --hmc-color-dataviz-sequential-e-1: var(--hmc-color-pink-500);
+  --hmc-color-dataviz-sequential-d-6: var(--hmc-color-green-1000);
+  --hmc-color-dataviz-sequential-d-5: var(--hmc-color-green-900);
+  --hmc-color-dataviz-sequential-d-4: var(--hmc-color-green-800);
+  --hmc-color-dataviz-sequential-d-3: var(--hmc-color-green-700);
+  --hmc-color-dataviz-sequential-d-2: var(--hmc-color-green-600);
+  --hmc-color-dataviz-sequential-d-1: var(--hmc-color-green-500);
+  --hmc-color-dataviz-sequential-c-6: var(--hmc-color-purple-1000);
+  --hmc-color-dataviz-sequential-c-5: var(--hmc-color-purple-900);
+  --hmc-color-dataviz-sequential-c-4: var(--hmc-color-purple-800);
+  --hmc-color-dataviz-sequential-c-3: var(--hmc-color-purple-700);
+  --hmc-color-dataviz-sequential-c-2: var(--hmc-color-purple-600);
+  --hmc-color-dataviz-sequential-c-1: var(--hmc-color-purple-500);
+  --hmc-color-dataviz-sequential-b-6: var(--hmc-color-orange-1000);
+  --hmc-color-dataviz-sequential-b-5: var(--hmc-color-orange-900);
+  --hmc-color-dataviz-sequential-b-4: var(--hmc-color-orange-800);
+  --hmc-color-dataviz-sequential-b-3: var(--hmc-color-orange-700);
+  --hmc-color-dataviz-sequential-b-2: var(--hmc-color-orange-600);
+  --hmc-color-dataviz-sequential-b-1: var(--hmc-color-orange-500);
+  --hmc-color-dataviz-sequential-a-6: var(--hmc-color-teal-1000);
+  --hmc-color-dataviz-sequential-a-5: var(--hmc-color-teal-900);
+  --hmc-color-dataviz-sequential-a-4: var(--hmc-color-teal-800);
+  --hmc-color-dataviz-sequential-a-3: var(--hmc-color-teal-700);
+  --hmc-color-dataviz-sequential-a-2: var(--hmc-color-teal-600);
+  --hmc-color-dataviz-sequential-a-1: var(--hmc-color-teal-500);
+  --hmc-color-dataviz-categorical-6: var(--hmc-color-teal-1000);
+  --hmc-color-dataviz-categorical-5: var(--hmc-color-pink-800);
+  --hmc-color-dataviz-categorical-4: var(--hmc-color-green-800);
+  --hmc-color-dataviz-categorical-3: var(--hmc-color-purple-700);
+  --hmc-color-dataviz-categorical-2: var(--hmc-color-orange-500);
+  --hmc-color-dataviz-categorical-1: var(--hmc-color-teal-500);
+  --hmc-color-notification-info-default-border: var(--hmc-color-gray-400);
+  --hmc-color-interactive-silent-pressed: var(--hmc-color-gray-200);
+  --hmc-color-interactive-silent-hover: var(--hmc-color-gray-200);
+  --hmc-color-interactive-subtle-disabled: var(--hmc-color-gray-200);
+  --hmc-color-interactive-subtle-pressed: var(--hmc-color-gray-700);
+  --hmc-color-interactive-subtle-hover: var(--hmc-color-gray-700);
+  --hmc-color-interactive-subtle-idle: var(--hmc-color-gray-500);
+  --hmc-color-layout-divider-silent: var(--hmc-color-gray-200);
+  --hmc-color-layout-divider-default: var(--hmc-color-gray-300);
+  --hmc-color-layout-overlay: rgba(41, 48, 56, 0.5);
+  --hmc-color-layout-canvas: var(--hmc-color-gray-100);
+  --hmc-color-layout-container: var(--hmc-color-gray-white);
+  --hmc-color-content-inverse: var(--hmc-color-gray-white);
+  --hmc-color-content-silent: var(--hmc-color-gray-400);
+  --hmc-color-content-subtle: var(--hmc-color-gray-700);
+  --hmc-color-content-default: var(--hmc-color-gray-black);
+  --hmc-color-system-highlight-silent: var(--hmc-color-purple-100);
+  --hmc-color-system-highlight-strong: var(--hmc-color-purple-700);
+  --hmc-color-system-highlight-default: var(--hmc-color-purple-500);
+  --hmc-color-system-danger-silent: var(--hmc-color-red-100);
+  --hmc-color-system-danger-default: var(--hmc-color-red-700);
+  --hmc-color-system-warning-silent: var(--hmc-color-orange-100);
+  --hmc-color-system-warning-strong: var(--hmc-color-orange-700);
+  --hmc-color-system-warning-default: var(--hmc-color-orange-500);
+  --hmc-color-system-success-silent: var(--hmc-color-green-100);
+  --hmc-color-system-success-strong: var(--hmc-color-green-700);
+  --hmc-color-system-success-default: var(--hmc-color-green-500);
+  --hmc-color-system-info-silent: var(--hmc-color-gray-100);
+  --hmc-color-system-primary-silent: var(--hmc-color-blue-100);
+  --hmc-color-system-primary-faint: var(--hmc-color-blue-200);
+  --hmc-color-system-primary-subtle: var(--hmc-color-blue-300);
+  --hmc-color-system-primary-strong: var(--hmc-color-blue-900);
+  --hmc-color-system-primary-default: var(--hmc-color-blue-700);
+  --hmc-color-logo-inverse: var(--hmc-color-content-inverse);
+  --hmc-color-logo-subtle: var(--hmc-color-content-default);
+  --hmc-color-logo-default: var(--hmc-color-system-primary-default);
+  --hmc-color-notification-highlight-strong-graphic: var(--hmc-color-content-inverse);
+  --hmc-color-notification-highlight-strong-text: var(--hmc-color-content-inverse);
+  --hmc-color-notification-highlight-strong-background: var(--hmc-color-system-highlight-strong);
+  --hmc-color-notification-highlight-default-graphic: var(--hmc-color-system-highlight-default);
+  --hmc-color-notification-highlight-default-text: var(--hmc-color-content-default);
+  --hmc-color-notification-highlight-default-border: var(--hmc-color-system-highlight-default);
+  --hmc-color-notification-highlight-default-background: var(--hmc-color-system-highlight-silent);
+  --hmc-color-notification-danger-strong-graphic: var(--hmc-color-content-inverse);
+  --hmc-color-notification-danger-strong-text: var(--hmc-color-content-inverse);
+  --hmc-color-notification-danger-strong-background: var(--hmc-color-system-danger-default);
+  --hmc-color-notification-danger-default-graphic: var(--hmc-color-system-danger-default);
+  --hmc-color-notification-danger-default-text: var(--hmc-color-system-danger-default);
+  --hmc-color-notification-danger-default-border: var(--hmc-color-system-danger-default);
+  --hmc-color-notification-danger-default-background: var(--hmc-color-system-danger-silent);
+  --hmc-color-notification-warning-strong-graphic: var(--hmc-color-content-inverse);
+  --hmc-color-notification-warning-strong-text: var(--hmc-color-content-inverse);
+  --hmc-color-notification-warning-strong-background: var(--hmc-color-system-warning-strong);
+  --hmc-color-notification-warning-default-graphic: var(--hmc-color-system-warning-default);
+  --hmc-color-notification-warning-default-text: var(--hmc-color-content-default);
+  --hmc-color-notification-warning-default-border: var(--hmc-color-system-warning-default);
+  --hmc-color-notification-warning-default-background: var(--hmc-color-system-warning-silent);
+  --hmc-color-notification-success-strong-graphic: var(--hmc-color-content-inverse);
+  --hmc-color-notification-success-strong-text: var(--hmc-color-content-inverse);
+  --hmc-color-notification-success-strong-background: var(--hmc-color-system-success-strong);
+  --hmc-color-notification-success-default-graphic: var(--hmc-color-system-success-default);
+  --hmc-color-notification-success-default-text: var(--hmc-color-content-default);
+  --hmc-color-notification-success-default-border: var(--hmc-color-system-success-default);
+  --hmc-color-notification-success-default-background: var(--hmc-color-system-success-silent);
+  --hmc-color-notification-info-strong-graphic: var(--hmc-color-content-inverse);
+  --hmc-color-notification-info-strong-text: var(--hmc-color-content-inverse);
+  --hmc-color-notification-info-strong-background: var(--hmc-color-content-default);
+  --hmc-color-notification-info-default-background: var(--hmc-color-system-info-silent);
+  --hmc-color-interactive-focus: var(--hmc-color-system-highlight-default);
+  --hmc-color-interactive-primary-disabled: var(--hmc-color-system-primary-subtle);
+  --hmc-color-interactive-primary-pressed: var(--hmc-color-system-primary-strong);
+  --hmc-color-interactive-primary-hover: var(--hmc-color-system-primary-strong);
+  --hmc-color-interactive-primary-idle: var(--hmc-color-system-primary-default);
+  --hmc-color-layout-divider-strong: var(--hmc-color-content-default);
+  --hmc-color-system-info-default: var(--hmc-color-content-default);
+  --hmc-color-notification-info-default-graphic: var(--hmc-color-system-info-default);
+  --hmc-color-notification-info-default-text: var(--hmc-color-system-info-default);
+}

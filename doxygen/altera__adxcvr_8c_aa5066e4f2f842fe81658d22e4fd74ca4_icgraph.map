@@ -1,0 +1,41 @@
+<map id="adxcfg_update" name="adxcfg_update">
+<area shape="rect" id="Node000001" title="adxcfg_update" alt="" coords="1047,153,1165,179"/>
+<area shape="rect" id="Node000002" href="$altera__a10__cdr__pll_8c.html#acd3ba325a22ad7690f934b858087ce25" title="altera_a10_cdr_pll_set_rate" alt="" coords="701,178,842,218"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1033,176,843,194,842,189,1033,170"/>
+<area shape="rect" id="Node000017" href="$altera__adxcvr_8c.html#aecd3c23ef57fd83ab95939ea6322532d" title="xcvr_calib_tx" alt="" coords="891,125,999,151"/>
+<area shape="poly" id="edge16_Node000001_Node000017" title=" " alt="" coords="1033,156,998,150,999,145,1034,151"/>
+<area shape="rect" id="Node000003" href="$altera__adxcvr_8c.html#a684db50fe066ad6dd6df4aac1cad609c" title="adxcvr_init" alt="" coords="517,153,644,179"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="687,186,644,179,645,174,687,181"/>
+<area shape="rect" id="Node000015" href="$altera__a10__cdr__pll_8c.html#ae16cfdb6dcf52acfad2cd4480144d642" title="altera_a10_cdr_pll_recalc_rate" alt="" coords="510,203,651,243"/>
+<area shape="poly" id="edge14_Node000002_Node000015" title=" " alt="" coords="688,212,652,217,651,211,687,207"/>
+<area shape="rect" id="Node000004" href="$altera__adxcvr_8c.html#a67ef0bb38e4648e42b5cfa3a7991c49c" title="adxcvr_init" alt="" coords="341,153,436,179"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="503,169,436,169,436,163,503,163"/>
+<area shape="rect" id="Node000005" href="$ad9083_2src_2app__jesd_8c.html#a3fc69d9cce4bef3b10d0ea379c5cbd86" title="Application JESD setup." alt="" coords="134,5,242,31"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="329,149,314,139,297,114,290,89,283,66,266,44,241,30,244,25,270,40,288,64,295,88,301,112,318,135,332,145"/>
+<area shape="rect" id="Node000006" href="$ad9081_2src_2app__jesd_8c.html#a5ef8f40129d0245e81e1a76cc451d2a6" title="Application JESD setup." alt="" coords="134,55,242,80"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="335,150,315,139,300,127,290,115,281,104,267,94,241,82,243,77,269,89,285,100,294,112,304,123,317,134,338,145"/>
+<area shape="rect" id="Node000008" href="$adrv902x_2src_2examples_2basic__example_2basic__example_8c.html#ac5f0064cb4ac7ddab3ec02b10217b456" title="Basic example main execution." alt="" coords="108,104,268,129"/>
+<area shape="poly" id="edge7_Node000004_Node000008" title=" " alt="" coords="327,154,240,132,241,127,328,149"/>
+<area shape="rect" id="Node000009" href="$adrv902x_2src_2examples_2dma__example_2dma__example_8c.html#a6fab3c4f8551a0a277a9058ddb0f1914" title="DMA example main execution." alt="" coords="111,153,265,179"/>
+<area shape="poly" id="edge8_Node000004_Node000009" title=" " alt="" coords="327,169,266,169,266,163,327,163"/>
+<area shape="rect" id="Node000011" href="$app__transceiver_8c.html#ab75f92d0fa79151108cc487cd7829c98" title=" " alt="" coords="131,203,245,228"/>
+<area shape="poly" id="edge10_Node000004_Node000011" title=" " alt="" coords="328,183,241,205,240,200,327,178"/>
+<area shape="rect" id="Node000013" href="$adrv902x_2src_2examples_2iio__example_2iio__example_8c.html#a692b15b864d48091dc3d7095bea120b4" title="IIO example main execution." alt="" coords="117,252,259,277"/>
+<area shape="poly" id="edge12_Node000004_Node000013" title=" " alt="" coords="360,189,318,217,269,243,239,254,237,249,267,238,316,212,357,185"/>
+<area shape="rect" id="Node000014" href="$ad6676__ebz_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="161,301,215,327"/>
+<area shape="poly" id="edge13_Node000004_Node000014" title=" " alt="" coords="372,192,329,242,301,269,269,292,243,305,216,312,215,307,241,300,267,288,297,265,325,239,368,188"/>
+<area shape="rect" id="Node000007" href="$ad9081_2src_2app_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,55,60,80"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="120,70,60,70,60,65,120,65"/>
+<area shape="rect" id="Node000010" href="$adrv902x_2src_2platform_2xilinx_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for XILINX platform." alt="" coords="5,153,60,179"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="97,169,60,169,60,163,97,163"/>
+<area shape="rect" id="Node000012" href="$headless__arm_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,203,60,228"/>
+<area shape="poly" id="edge11_Node000011_Node000012" title=" " alt="" coords="117,218,60,218,60,213,117,213"/>
+<area shape="rect" id="Node000016" href="$altera__adxcvr_8c.html#ad38d3c03f1f00faab758b63fbaf9794d" title="adxcvr_recalc_rate" alt="" coords="316,100,461,125"/>
+<area shape="poly" id="edge15_Node000015_Node000016" title=" " alt="" coords="516,199,508,193,493,180,483,167,474,155,460,143,430,128,433,123,463,138,478,152,488,164,497,176,511,189,519,194"/>
+<area shape="rect" id="Node000018" href="$altera__a10__atx__pll_8c.html#a8f2ce655c0c78b93dee5a8b121cc8f73" title="altera_a10_atx_pll_set_rate" alt="" coords="700,114,843,154"/>
+<area shape="poly" id="edge17_Node000017_Node000018" title=" " alt="" coords="877,139,843,138,843,133,877,134"/>
+<area shape="poly" id="edge18_Node000018_Node000003" title=" " alt="" coords="687,151,644,158,644,153,686,146"/>
+<area shape="rect" id="Node000019" href="$altera__a10__atx__pll_8c.html#ac5f5e49c8c41f6c40c74b5afa05d53a1" title="altera_a10_atx_pll_recalc_rate" alt="" coords="509,89,652,129"/>
+<area shape="poly" id="edge19_Node000018_Node000019" title=" " alt="" coords="686,125,652,121,652,115,687,120"/>
+<area shape="poly" id="edge20_Node000019_Node000016" title=" " alt="" coords="495,113,462,114,462,108,495,108"/>
+</map>

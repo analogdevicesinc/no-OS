@@ -1,0 +1,47 @@
+var ltm3360b_8h =
+[
+    [ "ltm3360b_dev", "structltm3360b__dev.html", "structltm3360b__dev" ],
+    [ "ltm3360b_init_param", "structltm3360b__init__param.html", "structltm3360b__init__param" ],
+    [ "LTM3360B_ADC_CONV_TIME_MS", "ltm3360b_8h.html#a5f2318b8cebd2db620ee533b7e1c4e30", null ],
+    [ "LTM3360B_ADC_CTRL", "ltm3360b_8h.html#ac0001656338134fe6684ccfd83d80c74", null ],
+    [ "LTM3360B_ADC_OUTPUT", "ltm3360b_8h.html#afe828ecb3b213ffe1e8211cebad14081", null ],
+    [ "LTM3360B_ADC_SEL_IN", "ltm3360b_8h.html#aaa4f5b857a77b1e03c8beb67ca4519bf", null ],
+    [ "LTM3360B_ADC_SELECT", "ltm3360b_8h.html#ad1087b3d2dea8018a29ee744b3a21c05", null ],
+    [ "LTM3360B_EN_ADC_BIT", "ltm3360b_8h.html#ae062d7d7d22fa3d4c98f6a7a73901bf7", null ],
+    [ "LTM3360B_EN_I2C_BIT", "ltm3360b_8h.html#adbecbb380c03baf8c8a535e6c9a97504", null ],
+    [ "LTM3360B_EN_IMON_CTRL", "ltm3360b_8h.html#a0c4cf2c7a19dfa01359c16addbaacf47", null ],
+    [ "LTM3360B_I2C_ADDR", "ltm3360b_8h.html#ae63b2f38f6e492146d77d62dc44e45b3", null ],
+    [ "LTM3360B_IGNORE_EN_IN_BIT", "ltm3360b_8h.html#a69cceb6da888431803df8f4d95b159c3", null ],
+    [ "LTM3360B_OPT_IMON_TH", "ltm3360b_8h.html#af4a5eb4bc0e93b7ad6687cd1a4fcf7ed", null ],
+    [ "LTM3360B_OPT_IMON_TH_MSK", "ltm3360b_8h.html#a6a0ed9d36bbaa3c17fe427a52ae1ee92", null ],
+    [ "LTM3360B_VOUT_CODE_TO_MV", "ltm3360b_8h.html#ac15f04ffb8d13a4b41c8da606e521b12", null ],
+    [ "LTM3360B_VOUT_LSB_MV", "ltm3360b_8h.html#afd1ee85edb162785360054f348baf1f2", null ],
+    [ "LTM3360B_VOUT_MAX_MV", "ltm3360b_8h.html#a59f850966ccd29d03ccce06319dd4eed", null ],
+    [ "LTM3360B_VOUT_MIN_MV", "ltm3360b_8h.html#a06291da2b836a86a8a6edc5fd293ac27", null ],
+    [ "LTM3360B_VOUT_MV_TO_CODE", "ltm3360b_8h.html#a309e4d843915cb7ccf7eb438188705c9", null ],
+    [ "LTM3360B_VOUT_SETTING", "ltm3360b_8h.html#af9621790f058c7eb1531a0489e72fc87", null ],
+    [ "ltm3360b_adc_channel", "ltm3360b_8h.html#a8e526f3f4fe1fcb9366b1fdc66f7ca9c", [
+      [ "LTM3360B_ADC_IMON", "ltm3360b_8h.html#a8e526f3f4fe1fcb9366b1fdc66f7ca9ca89fc07881fc92a234f55a4ca83f27c26", null ],
+      [ "LTM3360B_ADC_TEMP", "ltm3360b_8h.html#a8e526f3f4fe1fcb9366b1fdc66f7ca9ca8c0ee24d00b220c5b928c157a4382372", null ],
+      [ "LTM3360B_ADC_VOUT_P", "ltm3360b_8h.html#a8e526f3f4fe1fcb9366b1fdc66f7ca9ca1aad187001197398e7e0c84494b8bca7", null ],
+      [ "LTM3360B_ADC_VOUT_N", "ltm3360b_8h.html#a8e526f3f4fe1fcb9366b1fdc66f7ca9ca7ddc7b3458c9f438ec296f2961910108", null ],
+      [ "LTM3360B_ADC_VIN", "ltm3360b_8h.html#a8e526f3f4fe1fcb9366b1fdc66f7ca9ca91e91c163dbc6f8c58ab7f064be06e45", null ]
+    ] ],
+    [ "ltm3360b_imon_threshold", "ltm3360b_8h.html#ab7dab2976296a6a74beacc4d64f74fcb", [
+      [ "LTM3360B_IMON_TH_99_PERCENT", "ltm3360b_8h.html#ab7dab2976296a6a74beacc4d64f74fcba1ebd20c1074a547c788b607d608eccc3", null ],
+      [ "LTM3360B_IMON_TH_89_PERCENT", "ltm3360b_8h.html#ab7dab2976296a6a74beacc4d64f74fcbaf33dbd6cf3b95b35e81ec47f4b185efb", null ],
+      [ "LTM3360B_IMON_TH_79_PERCENT", "ltm3360b_8h.html#ab7dab2976296a6a74beacc4d64f74fcba11eedd10f57f1042d6a17798ff916b36", null ],
+      [ "LTM3360B_IMON_TH_69_PERCENT", "ltm3360b_8h.html#ab7dab2976296a6a74beacc4d64f74fcba695892f589241793e10bea2faa573933", null ]
+    ] ],
+    [ "ltm3360b_adc_enable", "ltm3360b_8h.html#af479ea15e3a9410de40e9716665b68a2", null ],
+    [ "ltm3360b_adc_read_raw", "ltm3360b_8h.html#aa02e29a73d3df9f56950298615092147", null ],
+    [ "ltm3360b_enable_device", "ltm3360b_8h.html#a3e1ca5fedc9a3e899cf3f5a4602e46e7", null ],
+    [ "ltm3360b_get_vout_mv", "ltm3360b_8h.html#ab7fe55dd80e768e032efdf874b7087c5", null ],
+    [ "ltm3360b_init", "ltm3360b_8h.html#a54e53f89a19daca5d0068c8a4d9f88ce", null ],
+    [ "ltm3360b_reg_read", "ltm3360b_8h.html#a7a40b619294fa5515c2caf9f3c74b0aa", null ],
+    [ "ltm3360b_reg_update", "ltm3360b_8h.html#a21045d7ac46ee730da1384e6c72e4f41", null ],
+    [ "ltm3360b_reg_write", "ltm3360b_8h.html#ad299ca2ccedb2b81981e8003419b3624", null ],
+    [ "ltm3360b_remove", "ltm3360b_8h.html#a95a9927ad4fcf873351417abd5bd4928", null ],
+    [ "ltm3360b_set_imon_threshold", "ltm3360b_8h.html#aadd89ca0a187c7dfee7b4277690249b0", null ],
+    [ "ltm3360b_set_vout_mv", "ltm3360b_8h.html#a1db61c160df7ab99c241707ff711930a", null ]
+];

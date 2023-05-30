@@ -1,0 +1,57 @@
+<map id="ade9113_get_int_status" name="ade9113_get_int_status">
+<area shape="rect" id="Node000001" title="Get interrupt indicator from STATUS register." alt="" coords="833,608,1011,633"/>
+<area shape="rect" id="Node000002" href="$ade9113_8c.html#ac07342aad30106c1373b0cd92d60f64e" title="Get ADC_SYNC_DONE indicator." alt="" coords="572,5,784,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="915,594,902,476,875,310,857,225,836,148,811,86,798,62,783,44,769,33,772,29,787,40,802,59,816,83,841,147,863,224,881,309,907,475,921,594"/>
+<area shape="rect" id="Node000003" href="$ade9113_8c.html#a15aaf923d728390cfd7b40e72f2501b1" title="Get COM_UP indicator." alt="" coords="596,55,760,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="915,595,900,485,872,334,854,257,833,188,809,131,783,93,759,78,761,73,787,89,814,128,838,186,859,256,877,333,905,485,920,594"/>
+<area shape="rect" id="Node000008" href="$ade9113_8c.html#a183988e328ed2fda01ee826cb7e8ac17" title="Get COMFLT_ERR indicator." alt="" coords="589,104,767,129"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="914,594,897,494,869,358,851,289,830,227,808,176,783,143,766,131,769,126,787,139,812,174,835,225,856,288,874,357,903,493,919,593"/>
+<area shape="rect" id="Node000009" href="$ade9113_8c.html#ad8b6326e254e9b5442565bb3c5ddfb0b" title="Get CRC_CHG indicator." alt="" coords="597,153,759,179"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="918,594,914,515,907,463,895,406,879,348,855,291,824,238,784,192,758,177,761,172,787,188,828,235,860,288,884,346,901,405,912,462,919,515,924,594"/>
+<area shape="rect" id="Node000010" href="$ade9113_8c.html#a97407c6d4f8092f4651e69d66e5dc18f" title="Get CRC_DONE indicator." alt="" coords="577,203,779,228"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="917,594,909,523,889,427,872,377,849,327,820,281,784,241,767,230,770,226,787,237,824,278,854,324,877,375,894,426,915,522,922,594"/>
+<area shape="rect" id="Node000011" href="$ade9113_8c.html#a6ecc3569c1c23aec580731e3b5da2e93" title="Get EFUSE_MEM_ERR indicator." alt="" coords="571,252,785,277"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="915,595,905,532,882,449,865,406,843,363,816,324,784,291,766,280,769,275,787,287,820,321,848,361,870,403,887,447,910,531,921,594"/>
+<area shape="rect" id="Node000012" href="$ade9113_8c.html#aa7ee2ec13907c5aa96c349c1ac3e77d5" title="Get I_WAV_OVRNG indicator." alt="" coords="581,301,775,327"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="913,595,900,541,875,472,858,436,837,401,812,369,784,341,763,329,766,325,787,337,816,366,842,398,863,434,880,470,905,540,918,594"/>
+<area shape="rect" id="Node000013" href="$ade9113_8c.html#a6c19e18b8c0709e6d7864b90aeefce98" title="Get ISO_CLK_STBL_ERR indicator." alt="" coords="599,351,757,391"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="909,596,892,554,865,502,829,450,807,426,784,406,756,390,759,386,787,401,811,422,833,447,869,500,896,552,914,594"/>
+<area shape="rect" id="Node000014" href="$ade9113_8c.html#a9c4580d035fbb6dfa2350b8051997b2e" title="Get ISO_DIG_MOD_I_OVF indicator." alt="" coords="599,415,757,455"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="903,598,855,534,822,499,784,470,756,456,759,451,787,465,825,495,859,530,908,595"/>
+<area shape="rect" id="Node000015" href="$ade9113_8c.html#aab58481692c8cccf8f064aac5e1f58f3" title="Get ISO_DIG_MOD_V1_OVF indicator." alt="" coords="599,479,757,519"/>
+<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="892,602,843,567,784,534,755,522,757,517,786,529,846,563,895,597"/>
+<area shape="rect" id="Node000016" href="$ade9113_8c.html#a8d47289d0de45bd7c2b46912dbb7c057" title="Get ISO_DIG_MOD_V2_OVF indicator." alt="" coords="599,543,757,583"/>
+<area shape="poly" id="edge15_Node000001_Node000016" title=" " alt="" coords="853,607,757,584,758,579,854,602"/>
+<area shape="rect" id="Node000017" href="$ade9113_8c.html#a12efdda72554040d4d6d057b79bcc88b" title="Get ISO_ECC_ERR indicator." alt="" coords="585,608,771,633"/>
+<area shape="poly" id="edge16_Node000001_Node000017" title=" " alt="" coords="820,623,771,623,771,618,820,618"/>
+<area shape="rect" id="Node000018" href="$ade9113_8c.html#a8087931b11f8cf7f6612ff1c7f6a4cda" title="Get ISO_EFUSE_MEM_ERR indicator." alt="" coords="591,658,765,698"/>
+<area shape="poly" id="edge17_Node000001_Node000018" title=" " alt="" coords="854,639,764,661,763,655,853,634"/>
+<area shape="rect" id="Node000019" href="$ade9113_8c.html#a9fe64b5b0a312deefbdbc82b989ee343" title="Get ISO_PHY_CRC_ERR indicator." alt="" coords="597,722,759,762"/>
+<area shape="poly" id="edge18_Node000001_Node000019" title=" " alt="" coords="895,644,846,679,786,712,757,724,755,719,784,708,843,674,892,640"/>
+<area shape="rect" id="Node000020" href="$ade9113_8c.html#a0a139d4d62daef09e6a847cb6afdebf7" title="Get ISO_PHY_ERR indicator." alt="" coords="584,787,772,812"/>
+<area shape="poly" id="edge19_Node000001_Node000020" title=" " alt="" coords="908,647,860,712,826,747,787,776,758,789,756,784,784,772,822,743,856,709,904,644"/>
+<area shape="rect" id="Node000021" href="$ade9113_8c.html#a5b3801f7398908bfd4fda50cf8baf091" title="Get ISO_STATUS_RD_ECC_ERR indicator." alt="" coords="589,837,767,877"/>
+<area shape="poly" id="edge20_Node000001_Node000021" title=" " alt="" coords="913,648,894,687,867,735,831,784,787,825,764,839,762,834,784,821,827,780,862,732,889,685,908,646"/>
+<area shape="rect" id="Node000022" href="$ade9113_8c.html#acdf4a4fbd92a34a27bafc7695270f675" title="Get ISO_TEST_MMR_ERR indicator." alt="" coords="596,901,760,941"/>
+<area shape="poly" id="edge21_Node000001_Node000022" title=" " alt="" coords="917,647,903,699,877,764,839,832,815,863,787,891,762,906,759,902,784,887,811,860,835,829,872,762,898,697,912,646"/>
+<area shape="rect" id="Node000023" href="$ade9113_8c.html#ae1a622415243b36f75fbccbff0fc7f77" title="Get RESET_DONE indicator." alt="" coords="585,965,771,991"/>
+<area shape="poly" id="edge22_Node000001_Node000023" title=" " alt="" coords="921,648,910,710,887,794,870,838,848,880,820,920,787,955,767,967,764,963,784,951,816,917,843,878,865,835,882,792,905,709,915,647"/>
+<area shape="rect" id="Node000024" href="$ade9113_8c.html#a744fce7e1911cdd5fe3e0356b24fd9b3" title="Get SPI_CRC_ERR indicator." alt="" coords="587,1015,769,1040"/>
+<area shape="poly" id="edge23_Node000001_Node000024" title=" " alt="" coords="922,647,914,719,894,815,876,866,854,917,824,963,787,1004,768,1017,765,1012,784,1000,820,960,849,914,872,864,889,814,909,718,917,647"/>
+<area shape="rect" id="Node000025" href="$ade9113_8c.html#affbfb5ba4f7bf0489af821fb86285ccd" title="Get STATUS1 indicator." alt="" coords="593,1064,763,1089"/>
+<area shape="poly" id="edge24_Node000001_Node000025" title=" " alt="" coords="923,647,919,726,912,779,900,836,883,895,859,953,828,1006,787,1053,764,1068,761,1063,784,1049,823,1003,855,950,878,893,895,835,906,778,913,726,918,647"/>
+<area shape="rect" id="Node000026" href="$ade9113_8c.html#a44f5f5a5b613ccd73e0895f15cfe98ec" title="Get STATUS2 indicator." alt="" coords="593,1113,763,1139"/>
+<area shape="poly" id="edge25_Node000001_Node000026" title=" " alt="" coords="919,648,902,748,874,885,855,954,835,1016,812,1068,787,1103,765,1117,762,1113,783,1099,807,1065,830,1014,850,952,868,883,897,747,914,647"/>
+<area shape="rect" id="Node000027" href="$ade9113_8c.html#a6dadfb9485fd867898ba61594ec1a16f" title="Get V1_WAV_OVRNG indicator." alt="" coords="597,1163,759,1203"/>
+<area shape="poly" id="edge26_Node000001_Node000027" title=" " alt="" coords="920,647,904,756,876,907,858,984,837,1054,813,1112,787,1152,761,1170,758,1166,783,1148,809,1110,832,1052,852,982,871,906,899,755,915,646"/>
+<area shape="rect" id="Node000028" href="$ade9113_8c.html#aa16499c63ab925f8302140b9ad3f7a26" title="Get V2_WAV_OVRNG indicator." alt="" coords="597,1227,759,1267"/>
+<area shape="poly" id="edge27_Node000001_Node000028" title=" " alt="" coords="921,648,907,768,880,939,862,1026,841,1106,816,1172,802,1197,787,1217,761,1236,758,1231,783,1213,798,1195,811,1170,836,1104,857,1025,875,938,902,768,915,647"/>
+<area shape="rect" id="Node000004" href="$ade9113_8c.html#ac8de97a314fe1275ee03d3d5c5379c14" title="Initialize the device." alt="" coords="416,55,523,80"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="582,70,523,70,523,65,582,65"/>
+<area shape="rect" id="Node000005" href="$supply_8c.html#a4a47d1b835fa05b58961e7215c9feafb" title="Initialize supply component." alt="" coords="275,55,368,80"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="402,70,368,70,368,65,402,65"/>
+<area shape="rect" id="Node000006" href="$state__machine_8c.html#a92bc605df80f651e105fe804f43d615b" title="State machine main execution." alt="" coords="108,55,227,80"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="261,70,227,70,227,65,261,65"/>
+<area shape="rect" id="Node000007" href="$ad-acevsecrdset-sl_2src_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="5,55,60,80"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="94,70,60,70,60,65,94,65"/>
+</map>

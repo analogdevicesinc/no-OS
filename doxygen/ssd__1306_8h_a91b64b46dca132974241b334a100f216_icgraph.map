@@ -1,0 +1,20 @@
+<map id="ssd_1306_move_cursor" name="ssd_1306_move_cursor">
+<area shape="rect" id="Node000001" title="Moves cursor to desired row/column." alt="" coords="805,31,980,56"/>
+<area shape="rect" id="Node000002" href="$ssd__1306_8c.html#a340aebe8804fe85f08151b8724baa370" title="Prints character at selected position." alt="" coords="596,5,753,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="791,34,753,30,754,24,792,29"/>
+<area shape="rect" id="Node000003" href="$ssd__1306_8c.html#a361f0ba36e9c64b13ca2a5e742f8aab3" title="Print entire screen buffer." alt="" coords="592,55,757,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="792,57,758,61,757,56,791,52"/>
+<area shape="rect" id="Node000004" href="$example_8c.html#a1ff907d245456012c4fb2039d8aced30" title=" " alt="" coords="441,55,544,80"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="578,70,544,70,544,65,578,65"/>
+<area shape="rect" id="Node000005" href="$example_8c.html#a4056343f8d19b5be8c881c353c2b1fbb" title="Initialize the display task." alt="" coords="282,29,386,55"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="427,60,386,53,387,48,428,54"/>
+<area shape="rect" id="Node000009" href="$example_8c.html#aa9a7a5e060a37124936df2cc4d0abbb7" title="Display startup screen." alt="" coords="275,79,393,104"/>
+<area shape="poly" id="edge8_Node000004_Node000009" title=" " alt="" coords="428,80,394,85,393,80,427,74"/>
+<area shape="rect" id="Node000006" href="$example_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="Main function." alt="" coords="108,55,227,80"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="269,55,227,61,227,56,268,49"/>
+<area shape="rect" id="Node000007" href="$ad3552r__fmcz_2src_2platform_2xilinx_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for xilinx platform." alt="" coords="5,29,60,55"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="94,56,60,50,61,44,95,51"/>
+<area shape="rect" id="Node000008" href="$eval-adg1736_2src_2platform_2maxim_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,79,60,104"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="95,83,61,89,60,84,94,78"/>
+<area shape="poly" id="edge9_Node000009_Node000006" title=" " alt="" coords="261,83,226,78,227,73,261,78"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="ad74416h_get_raw_adc_result" name="ad74416h_get_raw_adc_result">
+<area shape="rect" id="Node000001" title="Read the raw ADC raw conversion value." alt="" coords="244,47,419,87"/>
+<area shape="rect" id="Node000002" href="$ad74416h_8c.html#a60e2214d680d2e7461601ef123fb09a9" title="Get a single ADC raw value for a specific channel, then power down the ADC." alt="" coords="5,5,196,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="230,48,160,33,161,28,231,43"/>
+<area shape="rect" id="Node000003" href="$voltage__input__irq_8c.html#a319988b5beb17a6d7af5d87a152874a6" title=" " alt="" coords="14,55,187,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="230,70,188,70,188,65,230,65"/>
+<area shape="rect" id="Node000004" href="$current__input__ext_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Current input External power example main execution." alt="" coords="41,104,160,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="231,91,161,107,160,101,230,86"/>
+</map>

@@ -1,0 +1,26 @@
+var eval_adl8113_2src_2platform_2maxim_2parameters_8h =
+[
+    [ "BUTTON1_PIN", "eval-adl8113_2src_2platform_2maxim_2parameters_8h.html#a959fbfc26c1b74d4c3e938994113f9ab", null ],
+    [ "BUTTON1_PORT", "eval-adl8113_2src_2platform_2maxim_2parameters_8h.html#a3c251c39549580ff297e48a17942e3cf", null ],
+    [ "BUTTON2_PIN", "eval-adl8113_2src_2platform_2maxim_2parameters_8h.html#ad8d0f2535ca20affce17b40fb762f776", null ],
+    [ "BUTTON2_PORT", "eval-adl8113_2src_2platform_2maxim_2parameters_8h.html#afa46568a22ee61a82aad097bd351fd7f", null ],
+    [ "GPIO_EXTRA", "eval-adl8113_2src_2platform_2maxim_2parameters_8h.html#a1b3d6026509c7f462a79b5d9f86f9e71", null ],
+    [ "GPIO_OPS", "eval-adl8113_2src_2platform_2maxim_2parameters_8h.html#aa00c79541f5bcf66f6cfadcdc90e82e1", null ],
+    [ "GPIO_VA_PIN", "eval-adl8113_2src_2platform_2maxim_2parameters_8h.html#a6a3712bac98122e4eb63091a2b0595cd", null ],
+    [ "GPIO_VA_PORT", "eval-adl8113_2src_2platform_2maxim_2parameters_8h.html#ada18a61efa700c113fa9f47c9feee31c", null ],
+    [ "GPIO_VB_PIN", "eval-adl8113_2src_2platform_2maxim_2parameters_8h.html#aca07ec62339366d90e005a70ed8d72d3", null ],
+    [ "GPIO_VB_PORT", "eval-adl8113_2src_2platform_2maxim_2parameters_8h.html#a121ed6ea11efd31bd507a48199c4c0e6", null ],
+    [ "LED_BLUE_PIN", "eval-adl8113_2src_2platform_2maxim_2parameters_8h.html#a5aec9d3b503fb1a30a21b16c7be86cff", null ],
+    [ "LED_BLUE_PORT", "eval-adl8113_2src_2platform_2maxim_2parameters_8h.html#af221b8e5f51eca1e53070bd462fff271", null ],
+    [ "LED_GREEN_PIN", "eval-adl8113_2src_2platform_2maxim_2parameters_8h.html#a0539be032702009fb24beec89c6fa0c0", null ],
+    [ "LED_GREEN_PORT", "eval-adl8113_2src_2platform_2maxim_2parameters_8h.html#a3ed8b1ac183679013d04fa3ebe0e44e5", null ],
+    [ "LED_RED_PIN", "eval-adl8113_2src_2platform_2maxim_2parameters_8h.html#ab9824ab080c30006c1baaa0dd7e863c5", null ],
+    [ "LED_RED_PORT", "eval-adl8113_2src_2platform_2maxim_2parameters_8h.html#a7959a54f2383757d0007ee4b96071186", null ],
+    [ "UART_BAUDRATE", "eval-adl8113_2src_2platform_2maxim_2parameters_8h.html#a2c7ed0283bd6f2f9d791860d6254ef4f", null ],
+    [ "UART_DEVICE_ID", "eval-adl8113_2src_2platform_2maxim_2parameters_8h.html#a0f4ff52ed3a5a46691f6a4d03988923d", null ],
+    [ "UART_EXTRA", "eval-adl8113_2src_2platform_2maxim_2parameters_8h.html#aef2e6b5fc83c0dc37191e4212e578f7f", null ],
+    [ "UART_IRQ_ID", "eval-adl8113_2src_2platform_2maxim_2parameters_8h.html#adff4ff00d8f3375e4fb198270ae24597", null ],
+    [ "UART_OPS", "eval-adl8113_2src_2platform_2maxim_2parameters_8h.html#ae64afa3f3792f9fce17061e4e8733413", null ],
+    [ "adl8113_gpio_extra_ip", "eval-adl8113_2src_2platform_2maxim_2parameters_8h.html#a786b289fe626c82e8e5109b04d3c72fd", null ],
+    [ "adl8113_uart_extra_ip", "eval-adl8113_2src_2platform_2maxim_2parameters_8h.html#a1c7ee87b57aa69d6376b796ee359d729", null ]
+];

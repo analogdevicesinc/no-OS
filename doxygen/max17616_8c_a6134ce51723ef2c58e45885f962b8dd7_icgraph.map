@@ -1,0 +1,5 @@
+<map id="max17616_get_overcurrent_timeout" name="max17616_get_overcurrent_timeout">
+<area shape="rect" id="Node000001" title="Get short&#45;term overcurrent duration." alt="" coords="233,5,435,45"/>
+<area shape="rect" id="Node000002" href="$iio__max17616_8c.html#a06842d04ba8765565503d1949435b14f" title="Read attribute function for MAX17616 PMBus IIO driver." alt="" coords="5,13,185,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="220,28,185,28,185,23,220,23"/>
+</map>

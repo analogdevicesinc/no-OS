@@ -1,0 +1,20 @@
+<map id="ad4080_set_fifo_mode" name="ad4080_set_fifo_mode">
+<area shape="rect" id="Node000001" title="Set AD4080 Conversion Data FIFO Mode." alt="" coords="773,60,943,85"/>
+<area shape="rect" id="Node000002" href="$ad4080_8c.html#ad684669bd8f62b7f60b7f70aa0d52137" title="Configure the data interface during initialization." alt="" coords="562,19,725,44"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="777,60,709,47,710,41,778,55"/>
+<area shape="rect" id="Node000006" href="$iio__ad4080_8c.html#afcc7435d86502c8e3f839b1562ee37b0" title="Unset the watermark configuration and data structure fors ad4080 driver." alt="" coords="561,81,725,121"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="760,88,726,93,725,87,759,83"/>
+<area shape="rect" id="Node000003" href="$ad4080_8c.html#a6be625eab0c78d752ef062135f8fd836" title="Initialize the device." alt="" coords="390,5,489,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="548,28,489,24,489,19,549,22"/>
+<area shape="rect" id="Node000004" href="$iio__ad4080_8c.html#a4c3881b748799947d1bc735745dd48a8" title="Initializes the IIO AD4080 descriptor." alt="" coords="196,85,317,111"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="398,39,366,52,287,88,285,83,364,48,395,34"/>
+<area shape="rect" id="Node000005" href="$adalm-mmsc_2src_2examples_2iio__example_2iio__example_8c.html#a692b15b864d48091dc3d7095bea120b4" title="IIO example main execution." alt="" coords="5,115,148,140"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="183,113,149,118,148,113,182,107"/>
+<area shape="poly" id="edge10_Node000006_Node000004" title=" " alt="" coords="547,98,513,97,365,97,318,98,318,93,365,91,513,91,548,93"/>
+<area shape="rect" id="Node000007" href="$iio__ad4080_8c.html#aacf74c6dd1acb9626c23d5356c4b3c96" title="Sets the FIFO watermark for the AD4080 device." alt="" coords="365,106,513,146"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="548,115,514,119,513,114,548,110"/>
+<area shape="rect" id="Node000008" href="$iio__ad4080_8c.html#a0d027c587f47f7cde05f71c9495b060c" title="teardown the ad4080 IIO driver" alt="" coords="197,139,317,164"/>
+<area shape="poly" id="edge8_Node000006_Node000008" title=" " alt="" coords="597,130,557,147,514,161,462,168,410,170,317,163,317,158,410,164,462,163,513,155,555,142,594,125"/>
+<area shape="poly" id="edge7_Node000007_Node000004" title=" " alt="" coords="351,115,317,110,318,105,352,110"/>
+<area shape="poly" id="edge9_Node000008_Node000005" title=" " alt="" coords="182,144,148,140,149,134,183,139"/>
+</map>

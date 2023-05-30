@@ -1,0 +1,7 @@
+<map id="adf4030_get_vco_freq" name="adf4030_get_vco_freq">
+<area shape="rect" id="Node000001" title="Get the VCO frequency in Hz." alt="" coords="191,31,357,56"/>
+<area shape="rect" id="Node000002" href="$adf4030_8c.html#ab1e838c87f325bcf55d22dba4ae191aa" title="Set the N divider (NDIV) value." alt="" coords="5,5,143,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="176,34,143,29,144,24,177,28"/>
+<area shape="rect" id="Node000003" href="$adf4030_8c.html#ad5e4a598fe3fe8708cbca6dfb050a28a" title="Set the reference divider (RDIV) value." alt="" coords="7,55,141,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="177,58,142,62,141,57,176,52"/>
+</map>

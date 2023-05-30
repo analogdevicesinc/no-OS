@@ -1,0 +1,11 @@
+<map id="drivers/switch/adgm3121/adgm3121.h" name="drivers/switch/adgm3121/adgm3121.h">
+<area shape="rect" id="Node000001" title="Header file of ADGM3121 Driver." alt="" coords="231,5,417,45"/>
+<area shape="rect" id="Node000002" href="$adgm3121_8c.html" title="Implementation of ADGM3121 Driver." alt="" coords="5,101,192,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="267,53,145,103,143,98,265,48"/>
+<area shape="rect" id="Node000003" href="$eval-adgm3121_2src_2common_2common__data_8h.html" title="Defines common data to be used by eval&#45;adgm3121 example." alt="" coords="217,101,431,141"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="327,59,327,101,321,101,321,59"/>
+<area shape="rect" id="Node000005" href="$eval-adgm3121_2src_2examples_2basic_2basic__example_8c.html" title="Source file for basic example." alt="" coords="456,93,645,148"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="384,48,488,91,486,96,382,53"/>
+<area shape="rect" id="Node000004" href="$eval-adgm3121_2src_2common_2common__data_8c.html" title="Defines common data to be used by eval&#45;adgm3121 example." alt="" coords="217,196,431,236"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="327,154,327,196,321,196,321,154"/>
+</map>

@@ -1,0 +1,15 @@
+<map id="adt7420_remove" name="adt7420_remove">
+<area shape="rect" id="Node000001" title="Free the resources allocated by adt7420_init()." alt="" coords="549,54,681,80"/>
+<area shape="rect" id="Node000002" href="$iio__adt7420_8c.html#a6cbb1d170acd8a5a0de1aa4890fd8340" title="Initializes the adt7420 IIO driver." alt="" coords="172,54,299,80"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="580,50,543,32,501,19,458,11,424,8,390,11,347,19,299,36,258,57,256,52,297,31,346,14,389,5,424,3,459,5,502,14,545,27,582,45"/>
+<area shape="rect" id="Node000004" href="$iio__adt7420_8c.html#a6f99a0f08df4284b452792705428fffe" title="Free the resources allocated by adt7420_iio_init()." alt="" coords="347,29,501,54"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="535,59,501,54,502,49,536,54"/>
+<area shape="rect" id="Node000005" href="$adt7420_8c.html#a002fbfa6b776f9d63d6e394710c6fc49" title="Initializes the communication peripheral and checks if the device is present." alt="" coords="373,78,475,104"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="536,80,476,87,475,82,535,74"/>
+<area shape="rect" id="Node000006" href="$adt7420-pmdz_2src_2examples_2dummy_2dummy__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Dummy example main execution." alt="" coords="176,104,295,129"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="581,89,544,106,502,119,447,127,392,130,295,126,295,120,392,124,447,122,501,114,542,101,579,84"/>
+<area shape="rect" id="Node000003" href="$adt7420-pmdz_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="IIO example main execution." alt="" coords="5,54,124,80"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="158,70,124,70,124,64,158,64"/>
+<area shape="poly" id="edge5_Node000005_Node000002" title=" " alt="" coords="358,85,299,78,299,72,359,80"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="359,102,295,111,295,106,359,97"/>
+</map>

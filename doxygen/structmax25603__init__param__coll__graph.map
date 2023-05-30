@@ -1,0 +1,12 @@
+<map id="max25603_init_param" name="max25603_init_param">
+<area shape="rect" id="Node000001" title=" " alt="" coords="163,347,331,372"/>
+<area shape="rect" id="Node000002" href="$structno__os__gpio__init__param.html" title="Structure holding the parameters for GPIO initialization." alt="" coords="225,93,397,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="318,132,323,171,324,221,317,274,309,300,298,324,287,338,273,349,269,344,283,334,294,321,304,298,312,273,318,220,317,172,313,133"/>
+<area shape="rect" id="Node000004" href="$structno__os__pwm__init__param.html" title="Structure containing the init parameters needed by the PWM generator." alt="" coords="91,183,267,209"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="261,126,226,145,204,164,189,185,184,181,200,161,222,140,258,121"/>
+<area shape="rect" id="Node000003" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="217,5,405,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="313,45,313,93,308,93,308,45"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="187,221,201,269,222,321,238,345,234,348,218,324,196,270,182,223"/>
+<area shape="rect" id="Node000005" href="$structno__os__pwm__platform__ops.html" title="Structure holding PWM function pointers that point to the platform specific function." alt="" coords="5,93,197,119"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="100,133,101,145,105,156,119,171,137,181,135,186,116,175,100,159,95,146,94,133"/>
+</map>

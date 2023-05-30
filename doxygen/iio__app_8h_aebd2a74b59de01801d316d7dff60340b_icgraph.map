@@ -1,0 +1,47 @@
+<map id="iio_app_init" name="iio_app_init">
+<area shape="rect" id="Node000001" title=" " alt="" coords="667,277,764,303"/>
+<area shape="rect" id="Node000002" href="$eval-pqmon_2src_2examples_2basic_2basic__example_8c.html#a1681c88b1933ada9b895fe6c81a8aac6" title="PQM example main execution." alt="" coords="423,5,580,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="709,264,702,216,686,156,659,95,640,68,617,44,599,33,579,25,581,20,602,28,620,40,644,64,664,93,691,154,707,215,715,263"/>
+<area shape="rect" id="Node000004" href="$axi__qspi__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="442,55,561,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="707,264,696,225,679,179,653,132,636,111,617,94,590,79,560,72,561,66,592,74,620,89,640,108,657,129,684,177,701,224,712,263"/>
+<area shape="rect" id="Node000005" href="$ltc7841_2src_2examples_2iio__example_2iio__example_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="Basic example main executiont." alt="" coords="442,104,561,129"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="703,265,671,203,647,170,617,143,590,130,560,122,562,117,592,125,620,138,651,166,676,200,707,263"/>
+<area shape="rect" id="Node000006" href="$adalm-lsmspg_2src_2examples_2iio__example_2iio__example_8c.html#a897b461801f0c5c236b9fb1279569532" title=" " alt="" coords="450,153,553,179"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="696,268,663,228,641,209,617,192,586,179,552,172,554,167,587,174,620,188,645,204,667,225,700,265"/>
+<area shape="rect" id="Node000007" href="$ad463x__fmcz_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="430,203,573,228"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="681,273,618,242,572,229,574,224,620,237,684,268"/>
+<area shape="rect" id="Node000013" href="$adalm-mmsc_2src_2examples_2iio__example_2iio__example_8c.html#a692b15b864d48091dc3d7095bea120b4" title="IIO example main execution." alt="" coords="430,252,573,277"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="653,285,572,276,573,270,653,280"/>
+<area shape="rect" id="Node000014" href="$iio__sw__trigger__example_8c.html#a89aade8edb6d89b267280af1c3bb6ac0" title="IIO sw trigger example main execution." alt="" coords="393,301,610,327"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="653,300,611,304,610,299,653,294"/>
+<area shape="rect" id="Node000016" href="$ad7091r8-sdz_2src_2examples_2iio__timer__trigger__example_2iio__timer__trigger__example_8c.html#a7bab3a90f71c4ddf1bc5fff9fc70b3fb" title="IIO trigger example main execution." alt="" coords="384,351,619,376"/>
+<area shape="poly" id="edge15_Node000001_Node000016" title=" " alt="" coords="683,312,620,342,580,353,578,348,618,337,681,307"/>
+<area shape="rect" id="Node000018" href="$eval-adis1646x_2src_2examples_2iio__trigger__example_2iio__trigger__example_8c.html#aa6785eab0c37adc61db331ebebdc40ee" title="IIO trigger example main execution." alt="" coords="405,400,597,425"/>
+<area shape="poly" id="edge17_Node000001_Node000018" title=" " alt="" coords="700,316,666,355,644,375,620,391,593,402,591,397,617,386,641,370,662,351,696,312"/>
+<area shape="rect" id="Node000020" href="$ad713x__fmc_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="474,449,529,475"/>
+<area shape="poly" id="edge19_Node000001_Node000020" title=" " alt="" coords="707,317,676,379,651,413,620,440,598,452,574,459,529,465,529,460,573,454,596,447,617,436,647,409,671,377,702,314"/>
+<area shape="rect" id="Node000021" href="$ad6676__ebz_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="474,499,529,524"/>
+<area shape="poly" id="edge20_Node000001_Node000021" title=" " alt="" coords="712,317,701,356,684,403,657,450,640,471,620,489,598,502,574,510,529,515,529,510,573,505,596,497,617,485,636,467,653,447,679,401,696,354,706,316"/>
+<area shape="rect" id="Node000022" href="$swiot__fw_8c.html#a427f9beea005fab8fccd9774acb53fc3" title="IIO example main execution." alt="" coords="440,548,563,573"/>
+<area shape="poly" id="edge21_Node000001_Node000022" title=" " alt="" coords="714,317,707,365,691,425,663,487,644,515,620,539,593,554,564,562,562,557,591,549,617,535,640,511,659,484,686,424,702,364,709,317"/>
+<area shape="rect" id="Node000003" href="$eval-pqmon_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function that executes on Maxim platform." alt="" coords="271,5,326,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="408,21,326,21,326,15,408,15"/>
+<area shape="rect" id="Node000008" href="$iio__demo__free_r_t_o_s_2src_2platform_2maxim_2main_8c.html#a24add404325f00727126e8cf06932df2" title="IIOD example task." alt="" coords="261,153,336,179"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="425,202,383,193,336,179,337,174,385,187,426,197"/>
+<area shape="rect" id="Node000011" href="$ad463x__fmcz_2src_2platform_2stm32_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for STM32 platform." alt="" coords="271,203,326,228"/>
+<area shape="poly" id="edge10_Node000007_Node000011" title=" " alt="" coords="416,218,326,218,326,213,416,213"/>
+<area shape="rect" id="Node000012" href="$adalm-mmsc_2src_2platform_2maxim_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="271,252,326,277"/>
+<area shape="poly" id="edge11_Node000007_Node000012" title=" " alt="" coords="421,233,385,242,327,259,326,254,383,237,420,228"/>
+<area shape="rect" id="Node000009" href="$iio__demo__free_r_t_o_s_2src_2platform_2maxim_2main_8c.html#afab0d0904f72955eece2f60990b73944" title="Creating iio example with blinking led task." alt="" coords="108,153,213,179"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="248,169,214,169,214,163,248,163"/>
+<area shape="rect" id="Node000010" href="$iio__demo__free_r_t_o_s_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function of iio_demo_freeRTOS project." alt="" coords="5,153,60,179"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="94,169,60,169,60,163,94,163"/>
+<area shape="rect" id="Node000015" href="$iio__demo_2src_2platform_2aducm3029_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for aducm3029 platform." alt="" coords="271,301,326,327"/>
+<area shape="poly" id="edge14_Node000014_Node000015" title=" " alt="" coords="379,317,326,317,326,311,379,311"/>
+<area shape="rect" id="Node000017" href="$ad7091r8-sdz_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="271,351,326,376"/>
+<area shape="poly" id="edge16_Node000016_Node000017" title=" " alt="" coords="370,366,326,366,326,361,370,361"/>
+<area shape="rect" id="Node000019" href="$eval-adis1646x_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="271,400,326,425"/>
+<area shape="poly" id="edge18_Node000018_Node000019" title=" " alt="" coords="392,415,326,415,326,410,392,410"/>
+<area shape="rect" id="Node000023" href="$swiot1l_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function." alt="" coords="271,548,326,573"/>
+<area shape="poly" id="edge22_Node000022_Node000023" title=" " alt="" coords="426,563,326,563,326,558,426,558"/>
+</map>

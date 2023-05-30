@@ -1,0 +1,28 @@
+<map id="adaq7980_init_param" name="adaq7980_init_param">
+<area shape="rect" id="Node000001" title="Structure containing the init parameters needed by the adaq7980 device." alt="" coords="1351,177,1513,202"/>
+<area shape="rect" id="Node000002" href="$structno__os__spi__init__param.html" title="Structure holding the parameters for SPI initialization." alt="" coords="1007,89,1169,114"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1179,114,1252,129,1327,148,1401,174,1399,179,1326,153,1251,134,1178,119"/>
+<area shape="rect" id="Node000003" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,49,184,74"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="196,44,329,30,495,19,678,18,771,23,862,33,915,44,968,57,1055,86,1053,91,967,63,914,49,861,39,771,29,678,24,495,25,329,35,197,50"/>
+<area shape="rect" id="Node000005" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="704,87,827,113"/>
+<area shape="poly" id="edge7_Node000005_Node000003" title=" " alt="" coords="198,62,404,71,646,85,704,91,703,96,645,91,404,76,197,67"/>
+<area shape="rect" id="Node000006" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="343,110,490,135"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="147,76,209,92,343,113,342,118,207,97,146,81"/>
+<area shape="rect" id="Node000004" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="342,163,491,203"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="505,174,645,163,861,136,1014,111,1015,117,862,141,646,168,505,180"/>
+<area shape="poly" id="edge8_Node000005_Node000004" title=" " alt="" coords="504,164,645,133,724,110,726,115,646,139,506,169"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="840,98,1006,98,1006,104,840,103"/>
+<area shape="poly" id="edge9_Node000005_Node000005" title=" " alt="" coords="733,73,743,64,765,61,784,63,796,69,799,79,793,89,789,86,794,78,792,73,783,68,765,66,745,69,736,77"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="503,114,703,101,704,107,504,120"/>
+<area shape="rect" id="Node000007" href="$structspi__engine__offload__init__param.html" title="Structure containing the init parameters needed by the offload module." alt="" coords="1016,140,1160,180"/>
+<area shape="poly" id="edge10_Node000001_Node000007" title=" " alt="" coords="1174,165,1351,180,1350,185,1173,170"/>
+<area shape="rect" id="Node000008" href="$structno__os__pwm__init__param.html" title="Structure containing the init parameters needed by the PWM generator." alt="" coords="1000,267,1176,293"/>
+<area shape="poly" id="edge11_Node000001_Node000008" title=" " alt="" coords="1190,275,1258,266,1326,249,1375,226,1413,200,1416,204,1377,231,1328,255,1259,272,1190,280"/>
+<area shape="rect" id="Node000009" href="$structno__os__gpio__init__param.html" title="Structure holding the parameters for GPIO initialization." alt="" coords="679,235,851,261"/>
+<area shape="poly" id="edge15_Node000001_Node000009" title=" " alt="" coords="865,237,1350,194,1351,199,865,242"/>
+<area shape="poly" id="edge12_Node000008_Node000009" title=" " alt="" coords="866,255,1000,269,999,274,865,261"/>
+<area shape="rect" id="Node000010" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="323,235,511,261"/>
+<area shape="poly" id="edge13_Node000009_Node000010" title=" " alt="" coords="525,245,679,245,679,251,525,251"/>
+<area shape="rect" id="Node000011" href="$structno__os__pwm__platform__ops.html" title="Structure holding PWM function pointers that point to the platform specific function." alt="" coords="669,286,861,311"/>
+<area shape="poly" id="edge14_Node000008_Node000011" title=" " alt="" coords="875,298,976,295,1016,290,1016,295,976,300,875,304"/>
+</map>

@@ -1,0 +1,1 @@
+.. include:: ../../../../../drivers/power/ades1754/README.rst

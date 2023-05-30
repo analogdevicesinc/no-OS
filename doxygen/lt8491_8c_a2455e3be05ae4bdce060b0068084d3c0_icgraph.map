@@ -1,0 +1,5 @@
+<map id="lt8491_read_charging_stage" name="lt8491_read_charging_stage">
+<area shape="rect" id="Node000001" title="Read the telemetry battery charging stage." alt="" coords="213,5,376,45"/>
+<area shape="rect" id="Node000002" href="$dc2703a_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="5,13,165,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="199,28,166,28,166,23,199,23"/>
+</map>

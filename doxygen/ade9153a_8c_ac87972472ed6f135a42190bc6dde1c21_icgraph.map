@@ -1,0 +1,57 @@
+<map id="ade9153a_get_int_status" name="ade9153a_get_int_status">
+<area shape="rect" id="Node000001" title="Get interrupt indicator from STATUS register." alt="" coords="665,597,851,623"/>
+<area shape="rect" id="Node000002" href="$ade9153a_8c.html#a5900330af664e03211d461792fe33c76" title="Get APA (active power) sign change indicator." alt="" coords="412,5,617,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="751,584,736,468,708,305,690,222,668,146,643,85,630,61,615,44,601,33,604,29,619,40,634,58,648,83,673,145,695,221,714,304,741,467,756,583"/>
+<area shape="rect" id="Node000003" href="$ade9153a_8c.html#a99dd155f9f68f5a37b609c74e0b8757c" title="Get CF1 pulse issued indicator." alt="" coords="444,55,585,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="751,584,734,477,705,329,686,254,665,186,641,130,615,93,601,83,584,76,586,71,604,78,619,89,646,128,670,184,691,252,710,328,739,476,756,583"/>
+<area shape="rect" id="Node000004" href="$ade9153a_8c.html#ad6156a7b1a5ee7b47df9cac991b41db4" title="Get CF1 polarity change indicator." alt="" coords="429,104,600,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="755,584,751,498,745,441,734,379,717,315,692,252,659,193,616,143,599,131,602,127,619,139,663,190,697,250,722,313,739,378,750,440,757,498,760,583"/>
+<area shape="rect" id="Node000005" href="$ade9153a_8c.html#a50a790b901c1c0c252ce35ace4754f19" title="Get CF2 pulse issued indicator." alt="" coords="444,153,585,179"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="754,584,747,506,740,455,728,400,710,343,686,288,655,237,616,192,601,182,585,175,587,170,604,177,619,188,659,233,691,285,715,342,733,399,745,454,753,505,759,583"/>
+<area shape="rect" id="Node000006" href="$ade9153a_8c.html#af858607d8c42cebc209676bf73d8f8fe" title="Get CF2 polarity change indicator." alt="" coords="429,203,600,228"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="752,584,743,515,721,422,704,373,681,324,651,280,616,241,599,230,602,226,619,237,656,277,685,322,708,370,726,420,749,514,758,583"/>
+<area shape="rect" id="Node000007" href="$ade9153a_8c.html#ab102603c73021574525977582ee5811e" title="Get chip status indicator." alt="" coords="425,252,605,277"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="751,584,739,524,715,444,697,402,675,361,648,323,616,291,598,280,601,275,619,287,652,320,679,358,702,399,720,442,744,522,756,583"/>
+<area shape="rect" id="Node000008" href="$ade9153a_8c.html#a795feb91e1df87a4c8aca6d905368b3c" title="Get CRC change indicator." alt="" coords="429,301,600,327"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="749,585,734,533,708,466,669,398,644,367,616,340,597,329,599,324,619,336,648,363,673,395,713,464,739,531,754,584"/>
+<area shape="rect" id="Node000009" href="$ade9153a_8c.html#a1ef0cd963c4dd874405bb11fe6444df4" title="Get CRC done indicator." alt="" coords="425,351,604,376"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="746,585,728,542,701,489,663,435,641,410,616,390,595,378,598,374,619,385,644,407,667,431,705,486,733,540,750,583"/>
+<area shape="rect" id="Node000010" href="$ade9153a_8c.html#a998c503c9f3ef4934fb1ca0544389474" title="Get new waveform samples ready indicator." alt="" coords="431,400,598,425"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="742,587,721,553,693,512,658,472,616,439,593,428,595,423,619,434,661,469,697,509,726,550,746,584"/>
+<area shape="rect" id="Node000011" href="$ade9153a_8c.html#ab7a23853e43f3ce42572465bb453871c" title="Get power values egy ready indicator." alt="" coords="431,449,598,475"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="736,589,685,538,652,511,616,488,589,477,591,472,619,484,655,507,688,534,739,585"/>
+<area shape="rect" id="Node000012" href="$ade9153a_8c.html#a12627d10ca88b7e277ef6a7592c2304b" title="Get event status indicator." alt="" coords="419,499,610,524"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="724,592,674,564,616,538,580,527,582,522,618,533,677,560,726,588"/>
+<area shape="rect" id="Node000013" href="$ade9153a_8c.html#a0237039b90c920fcfb327a3c83af93aa" title="Get fundamental reactive energy no load condition indicator." alt="" coords="435,548,594,573"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="681,597,578,576,579,571,682,592"/>
+<area shape="rect" id="Node000014" href="$ade9153a_8c.html#a40f308df3428fc7f907d7e4da34200a4" title="Get MS status indicator." alt="" coords="428,597,601,623"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="652,613,601,613,601,607,652,607"/>
+<area shape="rect" id="Node000015" href="$ade9153a_8c.html#a532aa0769531b09bf2629657d65086a6" title="Get PF ready indicator." alt="" coords="433,647,596,672"/>
+<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="682,628,579,649,578,644,681,623"/>
+<area shape="rect" id="Node000016" href="$ade9153a_8c.html#ade9d493a4c4ffd0703505d4dae920e3e" title="Get power values registers update indicator." alt="" coords="431,696,598,721"/>
+<area shape="poly" id="edge15_Node000001_Node000016" title=" " alt="" coords="726,632,676,660,618,686,578,699,576,693,616,681,674,655,723,627"/>
+<area shape="rect" id="Node000017" href="$ade9153a_8c.html#a9cb3bf7b1c0609065ae3abe541f6ef0d" title="Get RMS_OC values update indicator." alt="" coords="417,745,613,771"/>
+<area shape="poly" id="edge16_Node000001_Node000017" title=" " alt="" coords="739,635,688,686,655,712,619,735,587,748,585,743,616,730,651,708,684,682,735,631"/>
+<area shape="rect" id="Node000018" href="$ade9153a_8c.html#a495403440bbb7f7dcf66d4ff808c4d4c" title="Get RPA (reactive power) sign change indicator." alt="" coords="413,795,616,820"/>
+<area shape="poly" id="edge17_Node000001_Node000018" title=" " alt="" coords="746,636,726,670,697,710,661,750,619,784,592,797,590,792,616,780,657,746,693,707,721,667,741,633"/>
+<area shape="rect" id="Node000019" href="$ade9153a_8c.html#aaae8ca3efebb8f84d21d72ce3c55f94b" title="Get reset done indicator." alt="" coords="429,844,600,869"/>
+<area shape="poly" id="edge18_Node000001_Node000019" title=" " alt="" coords="750,637,733,680,705,733,667,787,644,812,619,834,595,846,592,842,616,829,641,808,663,784,700,730,728,677,745,635"/>
+<area shape="rect" id="Node000020" href="$ade9153a_8c.html#afbafce13b8a8beac8d506ea37286f826" title="Get new temperature reading ready indicator." alt="" coords="423,893,606,919"/>
+<area shape="poly" id="edge19_Node000001_Node000020" title=" " alt="" coords="753,637,738,689,712,756,673,824,648,856,619,883,597,896,594,891,616,879,644,852,669,821,707,753,733,687,748,636"/>
+<area shape="rect" id="Node000023" href="$ade9153a_8c.html#a2d47824fc9cbf1bb93d61738606a24c6" title="Get total apparent energy no load condition indicator." alt="" coords="440,943,589,968"/>
+<area shape="poly" id="edge22_Node000001_Node000023" title=" " alt="" coords="756,637,744,698,719,777,701,820,679,861,652,899,619,932,591,948,588,943,616,928,648,895,674,858,696,817,714,776,738,696,751,636"/>
+<area shape="rect" id="Node000024" href="$ade9153a_8c.html#ae057c4e4c170d5ba1f1519a7aad1b36d" title="Get total active energy no load condition indicator." alt="" coords="433,992,596,1017"/>
+<area shape="poly" id="edge23_Node000001_Node000024" title=" " alt="" coords="757,637,748,706,726,799,708,849,685,897,655,942,619,981,598,995,595,990,616,977,651,939,680,894,703,847,721,797,743,705,752,636"/>
+<area shape="rect" id="Node000025" href="$ade9153a_8c.html#ad68e3c2fd6a64ce58af4b468be0b6efb" title="Get zero crossing detect on I ch A indicator." alt="" coords="441,1041,589,1067"/>
+<area shape="poly" id="edge24_Node000001_Node000025" title=" " alt="" coords="759,637,752,714,732,820,715,877,690,933,659,985,619,1031,590,1048,587,1043,616,1027,655,982,686,931,710,875,727,819,747,713,754,636"/>
+<area shape="rect" id="Node000026" href="$ade9153a_8c.html#a1216adc20441193ac2d978a132ab9ade" title="Get zero crossing detect on V ch indicator." alt="" coords="439,1091,591,1116"/>
+<area shape="poly" id="edge25_Node000001_Node000026" title=" " alt="" coords="760,636,756,722,750,779,739,841,721,906,696,969,663,1028,619,1080,592,1096,590,1092,616,1076,658,1025,691,967,716,904,733,840,745,778,751,721,755,636"/>
+<area shape="rect" id="Node000027" href="$ade9153a_8c.html#a0cdbfa2f7008aeec74b68aaeba2186f7" title="Get zero crossing detect on I ch B indicator." alt="" coords="441,1140,589,1165"/>
+<area shape="poly" id="edge26_Node000001_Node000027" title=" " alt="" coords="756,637,739,744,710,892,691,967,670,1035,646,1091,619,1129,590,1147,588,1142,616,1125,641,1088,665,1033,686,965,705,890,734,743,750,636"/>
+<area shape="rect" id="Node000028" href="$ade9153a_8c.html#afdeb67169c05afa9f7b4a8725ffbf4b0" title="Get zero crossing timout on V ch indicator." alt="" coords="432,1189,597,1215"/>
+<area shape="poly" id="edge27_Node000001_Node000028" title=" " alt="" coords="756,637,741,752,713,915,695,998,673,1074,648,1136,634,1160,619,1179,599,1192,596,1188,616,1175,629,1157,643,1134,668,1072,689,997,708,914,736,752,751,636"/>
+<area shape="rect" id="Node000021" href="$ade9153a_8c.html#a97870faa000dbef25c9705e5aefdc356" title="Temperature value in deg C." alt="" coords="209,893,364,919"/>
+<area shape="poly" id="edge20_Node000020_Node000021" title=" " alt="" coords="410,909,364,909,364,903,410,903"/>
+<area shape="rect" id="Node000022" href="$eval-ade9153a_2src_2common_2common__data_8c.html#a9b065d0400a39009e3266707f94e0439" title="Read measurements." alt="" coords="5,893,161,919"/>
+<area shape="poly" id="edge21_Node000021_Node000022" title=" " alt="" coords="195,909,162,909,162,903,195,903"/>
+</map>

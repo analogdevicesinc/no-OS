@@ -1,0 +1,37 @@
+<map id="ad5141_dpot_send_cmd" name="ad5141_dpot_send_cmd">
+<area shape="rect" id="Node000001" title="Send command word to the AD5141 digital potentiometer." alt="" coords="483,397,661,423"/>
+<area shape="rect" id="Node000002" href="$ad5141_8c.html#a907e5c311348eafa3500f1092699b34c" title="Read the AD5141 digital potentiometer channel." alt="" coords="225,5,397,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="567,384,559,315,538,222,520,173,498,126,469,82,433,44,416,33,397,26,399,21,419,28,436,40,473,78,502,123,525,171,543,221,564,314,572,383"/>
+<area shape="rect" id="Node000003" href="$ad5141_8c.html#a5a8ef2e8576e8b9fce785499abbd1c83" title="Write to the digital potentiometer channel." alt="" coords="223,55,399,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="565,384,554,324,530,245,513,203,491,163,465,126,433,95,417,84,398,77,400,72,419,80,436,91,469,123,496,160,518,201,535,243,559,323,570,383"/>
+<area shape="rect" id="Node000004" href="$ad5141_8c.html#a351f3ce62d5b6d2c0c477139d4e7f5ec" title="Copy NVM/EEPROM data to RDAC." alt="" coords="221,105,401,145"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="562,385,546,336,520,275,483,212,460,183,433,159,400,141,403,136,436,155,464,180,487,209,525,272,551,334,567,383"/>
+<area shape="rect" id="Node000005" href="$ad5141_8c.html#aad00cc22237063351a148c29a62abfe5" title="Copy RDAC register to NVM/EEPROM." alt="" coords="222,169,401,209"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="557,386,538,349,511,305,476,260,433,223,400,206,402,202,436,218,480,257,515,302,543,347,562,384"/>
+<area shape="rect" id="Node000006" href="$ad5141_8c.html#a534df1dded697423ae6269669a08a0b6" title="Read the AD5141 digital potentiometer input register." alt="" coords="206,233,417,259"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="552,388,503,329,470,299,433,274,403,261,405,256,436,269,474,295,507,326,556,384"/>
+<area shape="rect" id="Node000007" href="$ad5141_8c.html#a8e8b53fe74c426c3ff0bfc8a8b7e28d3" title="Write to the digital potentiometer input register." alt="" coords="224,283,399,323"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="538,392,490,365,434,338,398,326,400,321,436,333,493,360,541,388"/>
+<area shape="rect" id="Node000008" href="$ad5141_8c.html#ae84bbdae3ef0250d6d6c0f5beb7bc90d" title="Read the NVM (non&#45;volatile) memory data." alt="" coords="222,348,401,373"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="490,397,379,376,380,371,491,392"/>
+<area shape="rect" id="Node000009" href="$ad5141_8c.html#a4ec13b4ca9248c40f39c99d99687b7ee" title="Write data to NVM (non&#45;volatile) memory." alt="" coords="220,397,403,423"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="469,413,403,413,403,407,469,407"/>
+<area shape="rect" id="Node000010" href="$ad5141_8c.html#a0c8c14a72f26df8720f24c5e39176136" title="Perform RDAC 6dB increment/decrement." alt="" coords="225,447,397,487"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="501,428,398,451,397,446,500,423"/>
+<area shape="rect" id="Node000011" href="$ad5141_8c.html#a0a7ce27cb66c40da33ba7e2622f44cf0" title="Perform RDAC linear increment/decrement." alt="" coords="219,511,404,551"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="546,433,496,468,436,502,404,514,402,509,434,497,494,464,543,429"/>
+<area shape="rect" id="Node000012" href="$ad5141_8c.html#a8215a33871d7b83c17d0889918acb45f" title="Reset the AD5141 digital potentiometer." alt="" coords="238,576,385,601"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="558,436,510,502,476,537,436,566,412,577,386,584,384,579,410,572,433,561,472,533,506,498,554,433"/>
+<area shape="rect" id="Node000014" href="$ad5141_8c.html#a00b3da420a14813921fef1784e64d78b" title="Set the AD5141 digital potentiometer operating mode." alt="" coords="188,625,435,651"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="564,437,546,477,518,525,482,574,460,596,436,615,411,627,409,623,433,610,457,592,478,571,514,522,541,474,559,434"/>
+<area shape="rect" id="Node000015" href="$ad5141_8c.html#a8dfbbcd38880ddecd8ddc4ed3aafa4f0" title="Shutdown the AD5141 digital potentiometer channel." alt="" coords="223,675,399,700"/>
+<area shape="poly" id="edge15_Node000001_Node000015" title=" " alt="" coords="567,437,552,486,526,548,488,611,464,640,436,664,401,682,398,677,433,660,460,636,484,608,521,546,547,485,562,436"/>
+<area shape="rect" id="Node000016" href="$ad5141_8c.html#aac0c0463aa436c14f84dd557247d04a6" title="Copy input register to RDAC (software LRDAC)." alt="" coords="226,725,397,765"/>
+<area shape="poly" id="edge17_Node000001_Node000016" title=" " alt="" coords="569,437,556,495,532,569,514,608,493,647,467,682,436,713,418,726,398,735,396,730,416,721,433,709,463,679,488,644,509,606,527,567,551,493,564,436"/>
+<area shape="rect" id="Node000017" href="$ad5141_8c.html#a5b09b41805ec05c55f374dc0e3547375" title="Enter/Exit the top scale or bottom scale ." alt="" coords="217,789,405,829"/>
+<area shape="poly" id="edge18_Node000001_Node000017" title=" " alt="" coords="572,437,563,505,541,597,524,647,501,695,472,740,436,779,407,797,404,792,433,775,468,736,496,692,519,644,536,596,557,504,566,436"/>
+<area shape="rect" id="Node000013" href="$ad5141_8c.html#af112ac33db934f34c57aac2f0705d744" title="Initialize the AD5141 digital potentiometer." alt="" coords="5,625,140,651"/>
+<area shape="poly" id="edge12_Node000012_Node000013" title=" " alt="" coords="231,607,189,615,131,628,130,623,187,610,230,601"/>
+<area shape="poly" id="edge14_Node000014_Node000013" title=" " alt="" coords="174,641,140,641,140,635,174,635"/>
+<area shape="poly" id="edge16_Node000015_Node000013" title=" " alt="" coords="235,674,187,665,134,653,135,648,189,659,236,669"/>
+</map>

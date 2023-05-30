@@ -1,0 +1,37 @@
+<map id="ad463x_spi_reg_write" name="ad463x_spi_reg_write">
+<area shape="rect" id="Node000001" title="Write device register." alt="" coords="1061,169,1225,195"/>
+<area shape="rect" id="Node000002" href="$ad463x_8c.html#a21a02068593b02844ec89b5f7039118d" title="Exit register configuration mode." alt="" coords="592,5,793,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1123,160,1077,109,1046,83,1012,62,958,41,902,28,846,21,793,18,794,12,846,16,903,23,960,36,1015,57,1049,78,1081,105,1127,157"/>
+<area shape="rect" id="Node000005" href="$ad463x_8c.html#abc56c626223c4f5ba9812f75491260a5" title="Initialize the device." alt="" coords="643,55,742,80"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="1117,162,1071,126,1042,109,1012,95,941,76,867,67,799,65,742,66,742,61,799,59,868,62,942,71,1014,90,1045,104,1074,122,1120,158"/>
+<area shape="rect" id="Node000011" href="$ad463x_8c.html#ad2fb5f15232fd26ebaf44aa6286e1368" title="Set average frame length." alt="" coords="592,240,793,265"/>
+<area shape="poly" id="edge12_Node000001_Node000011" title=" " alt="" coords="1128,208,1082,261,1051,288,1014,308,974,320,931,324,889,321,847,314,772,291,718,268,720,263,774,286,848,309,889,316,931,318,973,315,1012,304,1048,284,1079,258,1124,204"/>
+<area shape="rect" id="Node000012" href="$ad463x_8c.html#a8c2811c9b1ec87b0dd00bf31a0b4f1ad" title="Set channel gain." alt="" coords="850,169,1005,195"/>
+<area shape="poly" id="edge13_Node000001_Node000012" title=" " alt="" coords="1047,185,1005,185,1005,179,1047,179"/>
+<area shape="rect" id="Node000013" href="$ad463x_8c.html#aedc0c5576bc1fcef9c26b2f4bd0364a3" title="Set channel offset." alt="" coords="846,219,1009,244"/>
+<area shape="poly" id="edge14_Node000001_Node000013" title=" " alt="" coords="1075,200,984,221,983,216,1073,195"/>
+<area shape="rect" id="Node000014" href="$ad463x_8c.html#af4480f41b5fd8d1e6dc8446e6fbcf00f" title="Set power mode." alt="" coords="841,268,1013,293"/>
+<area shape="poly" id="edge15_Node000001_Node000014" title=" " alt="" coords="1113,205,1067,232,1014,258,979,270,977,265,1012,253,1065,227,1110,200"/>
+<area shape="rect" id="Node000015" href="$ad463x_8c.html#a81b60fac99038ab0daaac6d522de62d6" title="SPI write device register using a mask." alt="" coords="845,105,1009,145"/>
+<area shape="poly" id="edge16_Node000001_Node000015" title=" " alt="" coords="1081,168,1002,147,1004,142,1082,163"/>
+<area shape="rect" id="Node000003" href="$ad463x__fmcz_2src_2examples_2basic__example_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="384,5,544,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="578,21,544,21,544,15,578,15"/>
+<area shape="rect" id="Node000004" href="$ad463x__fmcz_2src_2platform_2stm32_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for STM32 platform." alt="" coords="271,5,326,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="370,21,326,21,326,15,370,15"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="629,56,523,33,524,28,630,51"/>
+<area shape="rect" id="Node000006" href="$ad463x__fmcz_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="393,55,535,80"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="630,70,536,70,536,65,630,65"/>
+<area shape="poly" id="edge10_Node000006_Node000004" title=" " alt="" coords="407,53,326,29,327,23,409,48"/>
+<area shape="rect" id="Node000007" href="$iio__demo__free_r_t_o_s_2src_2platform_2maxim_2main_8c.html#a24add404325f00727126e8cf06932df2" title="IIOD example task." alt="" coords="261,104,336,129"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="408,87,337,108,335,103,407,82"/>
+<area shape="rect" id="Node000010" href="$adalm-mmsc_2src_2platform_2maxim_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="271,55,326,80"/>
+<area shape="poly" id="edge11_Node000006_Node000010" title=" " alt="" coords="378,70,326,70,326,65,378,65"/>
+<area shape="rect" id="Node000008" href="$iio__demo__free_r_t_o_s_2src_2platform_2maxim_2main_8c.html#afab0d0904f72955eece2f60990b73944" title="Creating iio example with blinking led task." alt="" coords="108,104,213,129"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="248,119,214,119,214,114,248,114"/>
+<area shape="rect" id="Node000009" href="$iio__demo__free_r_t_o_s_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function of iio_demo_freeRTOS project." alt="" coords="5,104,60,129"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="94,119,60,119,60,114,94,114"/>
+<area shape="poly" id="edge17_Node000015_Node000005" title=" " alt="" coords="831,104,742,82,743,77,832,99"/>
+<area shape="poly" id="edge18_Node000015_Node000011" title=" " alt="" coords="856,153,843,159,769,203,712,242,709,238,766,198,840,154,854,148"/>
+<area shape="rect" id="Node000016" href="$ad463x_8c.html#a08d9553de4a80a4ca6aeccc581142250" title="Set drive strength." alt="" coords="593,112,792,137"/>
+<area shape="poly" id="edge19_Node000015_Node000016" title=" " alt="" coords="831,127,792,127,792,122,831,122"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="ltc2378_read_raw" name="ltc2378_read_raw">
+<area shape="rect" id="Node000001" title="Read a single raw ADC conversion result." alt="" coords="191,31,328,56"/>
+<area shape="rect" id="Node000002" href="$ltc2378_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="15,5,133,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="177,35,133,29,134,23,178,29"/>
+<area shape="rect" id="Node000003" href="$ltc2378_8c.html#a3193c5036de070ecc223dbcbf9d46c1c" title="Read and average multiple ADC conversion results." alt="" coords="5,55,143,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="178,57,144,61,143,56,177,51"/>
+</map>

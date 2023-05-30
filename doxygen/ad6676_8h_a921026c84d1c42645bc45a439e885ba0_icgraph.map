@@ -1,0 +1,9 @@
+<map id="ad6676_spi_read" name="ad6676_spi_read">
+<area shape="rect" id="Node000001" title="SPI read from device." alt="" coords="275,31,407,56"/>
+<area shape="rect" id="Node000002" href="$ad6676_8c.html#a706178c48615ef723085c9ac90457ce2" title="Get the target IF frequency." alt="" coords="108,5,227,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="261,34,226,29,227,24,261,29"/>
+<area shape="rect" id="Node000003" href="$ad6676_8c.html#aedb88fef3a85bf43afd102855bd959cb" title="Initialize the device." alt="" coords="111,55,224,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="261,57,224,62,224,57,261,52"/>
+<area shape="rect" id="Node000004" href="$ad6676__ebz_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="5,55,60,80"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="97,70,60,70,60,65,97,65"/>
+</map>

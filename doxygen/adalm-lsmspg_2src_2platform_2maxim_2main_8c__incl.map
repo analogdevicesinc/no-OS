@@ -1,0 +1,16 @@
+<map id="projects/adalm&#45;lsmspg/src/platform/maxim/main.c" name="projects/adalm&#45;lsmspg/src/platform/maxim/main.c">
+<area shape="rect" id="Node000001" title=" " alt="" coords="196,5,399,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,93,96,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="239,48,100,92,99,87,237,43"/>
+<area shape="rect" id="Node000003" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="120,93,216,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="267,48,200,88,197,84,265,43"/>
+<area shape="rect" id="Node000005" href="$no__os__timer_8h.html" title="Timer control module header." alt="" coords="241,93,354,119"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="300,46,300,79,295,79,295,46"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="379,93,483,119"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="331,43,401,84,398,89,328,48"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="507,93,634,119"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="364,43,518,87,517,92,362,48"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="197,167,267,192"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="181,117,215,155,211,158,177,121"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="289,121,254,158,250,155,285,117"/>
+</map>

@@ -1,0 +1,128 @@
+<map id="include/no_os_clk.h" name="include/no_os_clk.h">
+<area shape="rect" id="Node000001" title="Header file of Clock Driver." alt="" coords="4059,5,4208,31"/>
+<area shape="rect" id="Node000002" href="$ad9081_8h.html" title="Header file of AD9081 Driver." alt="" coords="3889,79,4036,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="4097,39,4005,81,4003,76,4095,34"/>
+<area shape="rect" id="Node000005" href="$ad9083_8c.html" title="Implementation of ad9083 Driver." alt="" coords="133,79,280,119"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="4045,22,3286,26,2111,36,965,54,541,66,292,81,280,83,280,78,292,76,541,61,964,48,2110,31,3285,21,4045,17"/>
+<area shape="rect" id="Node000006" href="$axi__adxcvr_8c.html" title="Driver for the ADI AXI&#45;ADXCVR Module." alt="" coords="304,79,485,119"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="4045,22,3388,21,2362,26,1813,33,1292,44,843,60,504,81,486,83,486,78,504,76,842,54,1292,38,1812,27,2362,20,3388,15,4045,16"/>
+<area shape="rect" id="Node000007" href="$axi__jesd204__rx_8c.html" title="Driver for the Analog Devices AXI&#45;JESD204&#45;RX peripheral." alt="" coords="5,174,187,214"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="4045,22,3197,22,1894,27,1244,34,686,45,289,60,172,70,139,75,123,81,107,101,99,125,96,174,91,174,94,124,103,98,120,76,137,70,172,65,288,55,686,40,1244,29,1894,22,3197,16,4045,16"/>
+<area shape="rect" id="Node000008" href="$axi__jesd204__rx_8h.html" title="Driver for the Analog Devices AXI&#45;JESD204&#45;RX peripheral." alt="" coords="1637,79,1819,119"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="4045,25,1819,97,1819,92,4045,20"/>
+<area shape="rect" id="Node000010" href="$jesd204__clk_8c.html" title="Analog Devices JESD204 clock." alt="" coords="3588,269,3769,309"/>
+<area shape="poly" id="edge57_Node000001_Node000010" title=" " alt="" coords="4222,22,4453,41,4554,57,4588,66,4607,77,4632,113,4640,150,4632,187,4607,223,4590,234,4563,244,4483,260,4375,272,4250,280,3986,289,3770,291,3770,286,3986,284,4250,275,4375,266,4482,255,4562,239,4588,230,4603,219,4627,185,4635,150,4627,116,4604,81,4586,71,4553,62,4452,47,4221,27"/>
+<area shape="rect" id="Node000013" href="$ad9083_2src_2app__jesd_8h.html" title="Application JESD initialization." alt="" coords="436,269,585,309"/>
+<area shape="poly" id="edge77_Node000001_Node000013" title=" " alt="" coords="4045,22,3244,25,2654,32,2020,43,1407,61,877,87,662,104,493,123,375,144,339,156,319,169,311,181,308,193,312,206,319,220,343,244,372,261,404,273,436,280,435,285,402,278,370,266,340,248,315,223,307,208,303,193,306,179,315,165,337,151,374,139,492,117,662,98,876,82,1407,56,2020,38,2654,26,3244,20,4045,17"/>
+<area shape="rect" id="Node000031" href="$axi__jesd204__tx_8c.html" title="Driver for the Analog Devices AXI&#45;JESD204&#45;TX peripheral." alt="" coords="3844,174,4025,214"/>
+<area shape="poly" id="edge37_Node000001_Node000031" title=" " alt="" coords="4045,21,3951,24,3849,33,3802,41,3761,51,3728,64,3706,80,3700,90,3698,98,3706,117,3725,128,3763,142,3862,171,3861,176,3762,147,3723,133,3702,120,3693,99,3695,88,3702,77,3725,60,3759,46,3801,35,3848,28,3950,19,4045,16"/>
+<area shape="rect" id="Node000032" href="$axi__jesd204__tx_8h.html" title="Driver for the Analog Devices AXI&#45;JESD204&#45;TX peripheral." alt="" coords="2813,79,2995,119"/>
+<area shape="poly" id="edge38_Node000001_Node000032" title=" " alt="" coords="4045,28,2995,94,2995,89,4045,22"/>
+<area shape="rect" id="Node000034" href="$ad9172_8c.html" title="Implementation of AD9172 Driver." alt="" coords="4060,79,4207,119"/>
+<area shape="poly" id="edge58_Node000001_Node000034" title=" " alt="" coords="4136,44,4136,79,4131,79,4131,44"/>
+<area shape="rect" id="Node000035" href="$drivers_2frequency_2ad9528_2ad9528_8c.html" title="Implementation of AD9528 Driver." alt="" coords="4231,79,4419,119"/>
+<area shape="poly" id="edge59_Node000001_Node000035" title=" " alt="" coords="4175,33,4280,76,4278,81,4173,38"/>
+<area shape="rect" id="Node000036" href="$ad9545_8c.html" title="Implementation of ad9545 Clock Driver." alt="" coords="4669,174,4857,214"/>
+<area shape="poly" id="edge60_Node000001_Node000036" title=" " alt="" coords="4222,20,4332,26,4456,37,4570,53,4616,64,4651,76,4683,97,4712,123,4752,172,4748,176,4708,126,4680,101,4648,81,4614,69,4569,58,4455,42,4331,31,4221,25"/>
+<area shape="rect" id="Node000037" href="$ad9545_8h.html" title="Header file for ad9545 Driver." alt="" coords="4801,79,4989,119"/>
+<area shape="poly" id="edge61_Node000001_Node000037" title=" " alt="" coords="4222,25,4742,76,4801,83,4800,88,4741,81,4222,30"/>
+<area shape="rect" id="Node000040" href="$ad9545_2src_2common_2common__data_8c.html" title="Defines common data to be used by ad9545 example." alt="" coords="5358,269,5549,309"/>
+<area shape="poly" id="edge78_Node000001_Node000040" title=" " alt="" coords="4222,17,4499,20,4870,29,5239,47,5392,60,5507,76,5584,86,5648,93,5677,100,5704,114,5730,135,5756,165,5767,193,5767,206,5762,218,5743,237,5713,253,5676,265,5634,274,5549,285,5549,280,5633,269,5675,260,5711,248,5740,233,5758,215,5762,205,5762,194,5751,168,5726,138,5701,118,5675,105,5647,98,5584,91,5506,81,5391,65,5238,52,4870,34,4499,25,4222,22"/>
+<area shape="rect" id="Node000042" href="$ad9545_2src_2examples_2basic_2basic__example_8c.html" title="Basic example header for ad9545 project." alt="" coords="5574,167,5741,221"/>
+<area shape="poly" id="edge79_Node000001_Node000042" title=" " alt="" coords="4222,18,4892,37,5241,54,5368,65,5443,76,5494,94,5543,117,5622,164,5619,169,5540,122,5492,99,5442,81,5368,70,5241,60,4891,43,4222,24"/>
+<area shape="rect" id="Node000043" href="$adf4371_8c.html" title="Implementation of ADF4371 Driver." alt="" coords="5013,79,5206,119"/>
+<area shape="poly" id="edge69_Node000001_Node000043" title=" " alt="" coords="4222,20,4565,37,4782,54,5002,76,5013,77,5012,83,5001,81,4782,59,4564,43,4222,25"/>
+<area shape="rect" id="Node000044" href="$hmc7044_8c.html" title="Implementation of HMC7044, HMC7043 Driver." alt="" coords="5231,79,5431,119"/>
+<area shape="poly" id="edge70_Node000001_Node000044" title=" " alt="" coords="4222,18,4652,33,4934,50,5219,76,5231,77,5230,83,5218,81,4933,56,4652,39,4222,24"/>
+<area shape="rect" id="Node000045" href="$app__clock_8h.html" title="Application clocks initialization." alt="" coords="4444,79,4593,119"/>
+<area shape="poly" id="edge71_Node000001_Node000045" title=" " alt="" coords="4206,31,4433,76,4445,79,4443,84,4431,81,4205,36"/>
+<area shape="rect" id="Node000047" href="$ad9081_2src_2app__jesd_8h.html" title="Application JESD initialization." alt="" coords="3716,79,3865,119"/>
+<area shape="poly" id="edge74_Node000001_Node000047" title=" " alt="" coords="4071,36,3866,83,3865,78,4070,31"/>
+<area shape="rect" id="Node000003" href="$ad9081_8c.html" title="Implementation of AD9081 Driver." alt="" coords="4273,174,4420,214"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="4050,116,4262,164,4288,171,4286,176,4261,169,4049,122"/>
+<area shape="rect" id="Node000004" href="$ad9081_2src_2app_8c.html" title="AD9081 application example." alt="" coords="4100,174,4249,214"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="4019,122,4133,171,4131,176,4017,127"/>
+<area shape="poly" id="edge18_Node000008_Node000004" title=" " alt="" coords="1833,99,3011,126,3659,145,3897,155,4038,164,4100,174,4099,179,4037,169,3896,160,3659,150,3010,131,1833,105"/>
+<area shape="poly" id="edge8_Node000008_Node000007" title=" " alt="" coords="1624,103,1380,107,1041,117,652,137,452,151,256,169,187,179,186,173,256,164,451,146,651,132,1041,112,1380,102,1624,98"/>
+<area shape="rect" id="Node000009" href="$jesd204__clk_8h.html" title="Analog Devices JESD204 clock." alt="" coords="957,174,1139,214"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="1624,111,1408,133,1158,169,1122,177,1121,171,1157,164,1408,128,1623,106"/>
+<area shape="rect" id="Node000011" href="$ad9081_2src_2app__jesd_8c.html" title="Application JESD setup." alt="" coords="2463,269,2612,309"/>
+<area shape="poly" id="edge19_Node000008_Node000011" title=" " alt="" coords="1624,109,1501,118,1369,131,1259,148,1222,158,1203,169,1195,181,1192,194,1194,207,1203,219,1220,227,1257,235,1378,248,1547,259,1745,267,2156,279,2463,284,2462,290,2155,284,1745,273,1547,264,1378,253,1256,240,1219,232,1200,223,1190,209,1186,194,1190,179,1200,165,1220,153,1258,143,1368,125,1500,112,1624,103"/>
+<area shape="rect" id="Node000012" href="$ad9083_2src_2app__jesd_8c.html" title="Application JESD setup." alt="" coords="845,357,995,397"/>
+<area shape="poly" id="edge20_Node000008_Node000012" title=" " alt="" coords="1624,104,1439,110,1227,121,1128,130,1044,140,981,153,960,161,947,169,931,189,920,213,913,239,910,265,912,317,918,357,913,357,906,317,905,265,908,238,915,211,926,186,944,165,957,156,979,148,1043,135,1127,124,1227,116,1439,105,1624,99"/>
+<area shape="poly" id="edge21_Node000008_Node000013" title=" " alt="" coords="1624,104,1295,109,876,121,678,129,509,140,389,153,352,161,335,169,327,181,325,193,328,206,335,220,356,241,381,258,408,269,437,277,435,282,406,274,378,262,352,245,331,223,323,208,319,193,322,179,332,165,351,156,388,148,509,135,677,124,876,115,1295,104,1623,98"/>
+<area shape="rect" id="Node000015" href="$fmcdaq2_8c.html" title="Implementation of Main Function." alt="" coords="1009,269,1167,309"/>
+<area shape="poly" id="edge35_Node000008_Node000015" title=" " alt="" coords="1624,104,1299,109,886,121,690,129,524,140,405,153,370,161,352,169,344,181,341,194,344,207,353,219,364,228,385,235,447,249,530,259,628,268,836,279,1009,284,1009,289,835,284,628,273,530,265,446,254,383,240,362,232,349,223,339,209,336,194,339,179,349,165,368,156,405,148,524,135,690,124,886,116,1299,104,1624,98"/>
+<area shape="rect" id="Node000016" href="$ad6676__ebz_8c.html" title="Implementation of Main Function." alt="" coords="728,174,883,214"/>
+<area shape="poly" id="edge17_Node000008_Node000016" title=" " alt="" coords="1624,105,1480,111,1300,122,1101,141,902,169,869,177,867,171,901,164,1100,136,1299,117,1480,105,1623,100"/>
+<area shape="rect" id="Node000017" href="$ad9208_2src_2main_8c.html" title="Implementation of Main Function." alt="" coords="363,174,512,214"/>
+<area shape="poly" id="edge22_Node000008_Node000017" title=" " alt="" coords="1624,105,1058,126,749,145,621,156,524,169,493,177,492,171,524,164,621,151,749,139,1058,121,1624,100"/>
+<area shape="rect" id="Node000018" href="$ad9371_2src_2app_2headless_8c.html" title="Implementation of Main Function." alt="" coords="2649,174,2799,214"/>
+<area shape="poly" id="edge23_Node000008_Node000018" title=" " alt="" coords="1832,98,1989,102,2190,112,2413,132,2526,146,2637,164,2668,171,2667,177,2635,169,2525,152,2413,137,2190,117,1989,107,1832,103"/>
+<area shape="rect" id="Node000019" href="$ad9656__fmc_8c.html" title="Implementation of Main Function." alt="" coords="536,174,704,214"/>
+<area shape="poly" id="edge24_Node000008_Node000019" title=" " alt="" coords="1624,103,1450,106,1224,116,971,136,842,151,716,169,683,177,682,171,716,164,841,146,970,131,1224,111,1450,101,1624,97"/>
+<area shape="rect" id="Node000020" href="$adrv9009_2src_2app_2app__jesd_8c.html" title="JESD setup and initialization routines." alt="" coords="2823,174,2985,214"/>
+<area shape="poly" id="edge25_Node000008_Node000020" title=" " alt="" coords="1833,97,2017,99,2261,108,2536,128,2675,144,2811,164,2844,171,2843,176,2810,169,2674,149,2535,134,2261,113,2017,104,1832,102"/>
+<area shape="rect" id="Node000021" href="$app__talise_8c.html" title="Talise initialization and control routines." alt="" coords="3009,174,3172,214"/>
+<area shape="poly" id="edge26_Node000008_Node000021" title=" " alt="" coords="1833,100,2430,121,2758,140,2894,151,2998,164,3031,171,3030,177,2997,169,2894,156,2758,145,2429,126,1833,105"/>
+<area shape="rect" id="Node000022" href="$headless__mb_8c.html" title="Contains example code for user integration with their application. This file contains code for MicroB..." alt="" coords="3196,174,3359,214"/>
+<area shape="poly" id="edge27_Node000008_Node000022" title=" " alt="" coords="1833,99,2129,106,2519,118,2904,137,3063,149,3184,164,3219,171,3217,177,3184,169,3063,155,2903,142,2519,123,2129,111,1832,104"/>
+<area shape="rect" id="Node000023" href="$headless__zu_8c.html" title="Contains example code for user integration with their application. This file contains code for ZU11EG..." alt="" coords="3383,174,3545,214"/>
+<area shape="poly" id="edge28_Node000008_Node000023" title=" " alt="" coords="1833,98,2163,104,2607,115,3049,134,3232,148,3371,164,3405,171,3404,177,3370,169,3232,153,3048,140,2607,120,2163,109,1833,104"/>
+<area shape="rect" id="Node000024" href="$adrv902x_2src_2examples_2basic__example_2basic__example_8c.html" title="Basic example for the adrv902x project." alt="" coords="1213,167,1405,221"/>
+<area shape="poly" id="edge29_Node000008_Node000024" title=" " alt="" coords="1625,124,1418,169,1406,172,1405,167,1417,164,1624,119"/>
+<area shape="rect" id="Node000025" href="$adrv902x_2src_2examples_2dma__example_2dma__example_8c.html" title="DMA example for the adrv902x project." alt="" coords="1429,167,1616,221"/>
+<area shape="poly" id="edge30_Node000008_Node000025" title=" " alt="" coords="1675,127,1582,169,1579,164,1673,122"/>
+<area shape="rect" id="Node000026" href="$adrv902x_2src_2examples_2iio__example_2iio__example_8c.html" title="IIO example for the adrv902x project." alt="" coords="1641,167,1815,221"/>
+<area shape="poly" id="edge31_Node000008_Node000026" title=" " alt="" coords="1731,132,1731,167,1725,167,1725,132"/>
+<area shape="rect" id="Node000027" href="$adrv904x_2src_2examples_2basic__example_2basic__example_8c.html" title="Basic example for the adrv904x project." alt="" coords="1840,167,2032,221"/>
+<area shape="poly" id="edge32_Node000008_Node000027" title=" " alt="" coords="1784,122,1879,164,1876,169,1781,127"/>
+<area shape="rect" id="Node000028" href="$adrv904x_2src_2examples_2dma__example_2dma__example_8c.html" title="DMA example for the adrv904x project." alt="" coords="2056,167,2243,221"/>
+<area shape="poly" id="edge33_Node000008_Node000028" title=" " alt="" coords="1833,118,2045,164,2056,167,2055,172,2043,169,1831,124"/>
+<area shape="rect" id="Node000029" href="$adrv904x_2src_2examples_2iio__example_2iio__example_8c.html" title="IIO example for the adrv904x project." alt="" coords="2267,167,2442,221"/>
+<area shape="poly" id="edge34_Node000008_Node000029" title=" " alt="" coords="1833,107,2029,129,2255,164,2268,167,2266,172,2254,169,2029,134,1832,112"/>
+<area shape="rect" id="Node000030" href="$fmcdaq3_8c.html" title="Implementation of Main Function." alt="" coords="2466,174,2625,214"/>
+<area shape="poly" id="edge36_Node000008_Node000030" title=" " alt="" coords="1833,101,2114,120,2284,138,2454,164,2485,171,2484,176,2453,169,2284,143,2114,125,1832,106"/>
+<area shape="poly" id="edge10_Node000009_Node000010" title=" " alt="" coords="1153,212,1202,219,1356,228,1617,238,2328,257,3588,284,3588,289,2328,262,1617,243,1356,233,1201,224,1152,218"/>
+<area shape="poly" id="edge11_Node000009_Node000011" title=" " alt="" coords="1132,214,1158,219,1277,232,1434,243,1812,262,2463,284,2462,289,1812,268,1434,249,1276,237,1157,224,1131,220"/>
+<area shape="poly" id="edge12_Node000009_Node000012" title=" " alt="" coords="1029,227,935,359,931,356,1024,224"/>
+<area shape="poly" id="edge13_Node000009_Node000013" title=" " alt="" coords="944,216,586,278,585,272,943,211"/>
+<area shape="poly" id="edge16_Node000009_Node000015" title=" " alt="" coords="1064,225,1082,268,1077,270,1059,227"/>
+<area shape="poly" id="edge15_Node000013_Node000012" title=" " alt="" coords="600,306,846,358,845,363,599,312"/>
+<area shape="rect" id="Node000014" href="$ad9083_2src_2app_8c.html" title="AD9083 application example." alt="" coords="436,357,585,397"/>
+<area shape="poly" id="edge14_Node000013_Node000014" title=" " alt="" coords="513,323,513,357,508,357,508,323"/>
+<area shape="poly" id="edge41_Node000032_Node000004" title=" " alt="" coords="3008,99,3200,104,3456,116,3746,135,4038,164,4100,174,4099,179,4037,169,3745,140,3456,121,3200,110,3008,104"/>
+<area shape="poly" id="edge40_Node000032_Node000009" title=" " alt="" coords="2800,102,2522,104,2127,112,1668,132,1432,148,1202,169,1139,178,1139,173,1201,164,1432,143,1668,127,2127,107,2522,98,2800,97"/>
+<area shape="poly" id="edge42_Node000032_Node000011" title=" " alt="" coords="3008,97,3215,101,3459,110,3573,119,3670,130,3743,145,3768,154,3783,165,3793,179,3796,194,3793,209,3783,223,3765,232,3731,239,3619,252,3280,271,2900,283,2612,289,2612,284,2900,278,3280,266,3618,246,3730,234,3764,227,3780,219,3788,207,3791,194,3788,181,3779,169,3765,159,3742,150,3669,136,3572,124,3458,116,3215,106,3008,103"/>
+<area shape="poly" id="edge55_Node000032_Node000015" title=" " alt="" coords="3009,100,3163,107,3335,120,3482,138,3532,150,3559,165,3569,179,3572,194,3569,209,3559,224,3466,233,3234,242,2512,262,1168,289,1168,284,2512,257,3234,237,3466,227,3556,219,3564,207,3567,194,3564,181,3556,169,3530,155,3481,143,3335,125,3163,113,3008,106"/>
+<area shape="poly" id="edge44_Node000032_Node000018" title=" " alt="" coords="2857,127,2762,176,2759,172,2854,123"/>
+<area shape="poly" id="edge45_Node000032_Node000020" title=" " alt="" coords="2907,132,2907,174,2901,174,2901,132"/>
+<area shape="poly" id="edge46_Node000032_Node000021" title=" " alt="" coords="2955,122,3054,172,3052,176,2953,127"/>
+<area shape="poly" id="edge47_Node000032_Node000022" title=" " alt="" coords="3000,119,3185,164,3212,171,3210,176,3183,169,2999,124"/>
+<area shape="poly" id="edge48_Node000032_Node000023" title=" " alt="" coords="3009,108,3179,131,3371,164,3402,171,3400,177,3370,169,3179,136,3008,114"/>
+<area shape="poly" id="edge49_Node000032_Node000024" title=" " alt="" coords="2799,105,2099,125,1705,144,1542,156,1418,169,1406,171,1405,166,1417,164,1541,151,1705,139,2099,120,2799,99"/>
+<area shape="poly" id="edge50_Node000032_Node000025" title=" " alt="" coords="2799,106,2200,128,1869,146,1732,157,1628,169,1617,171,1616,166,1628,164,1732,152,1869,141,2199,123,2799,100"/>
+<area shape="poly" id="edge51_Node000032_Node000026" title=" " alt="" coords="2800,102,2616,105,2374,115,2102,135,1964,150,1828,169,1816,171,1815,166,1828,164,1963,145,2101,130,2374,110,2616,100,2799,97"/>
+<area shape="poly" id="edge52_Node000032_Node000027" title=" " alt="" coords="2799,105,2651,112,2462,123,2253,142,2044,169,2033,171,2032,166,2044,164,2253,137,2462,118,2651,106,2799,100"/>
+<area shape="poly" id="edge53_Node000032_Node000028" title=" " alt="" coords="2800,109,2550,130,2402,147,2255,169,2243,171,2242,166,2254,164,2402,142,2550,125,2799,104"/>
+<area shape="poly" id="edge54_Node000032_Node000029" title=" " alt="" coords="2800,115,2637,137,2454,169,2443,172,2442,166,2453,164,2636,132,2799,109"/>
+<area shape="poly" id="edge56_Node000032_Node000030" title=" " alt="" coords="2813,125,2638,169,2611,177,2610,171,2637,164,2812,119"/>
+<area shape="poly" id="edge39_Node000032_Node000031" title=" " alt="" coords="3008,99,3167,105,3371,116,3598,135,3826,164,3864,171,3863,177,3825,169,3597,141,3371,122,3167,110,3008,105"/>
+<area shape="rect" id="Node000033" href="$ad9172_2src_2main_8c.html" title="Implementation of Main Function." alt="" coords="3620,174,3769,214"/>
+<area shape="poly" id="edge43_Node000032_Node000033" title=" " alt="" coords="3009,102,3279,121,3441,139,3602,164,3634,171,3633,177,3601,169,3440,144,3278,126,3009,107"/>
+<area shape="poly" id="edge62_Node000037_Node000036" title=" " alt="" coords="4858,129,4791,176,4788,172,4855,125"/>
+<area shape="rect" id="Node000038" href="$ad9545__i2c_8c.html" title="Implementation of ad9545 I2C Driver." alt="" coords="4933,174,5121,214"/>
+<area shape="poly" id="edge63_Node000037_Node000038" title=" " alt="" coords="4934,125,5002,172,4998,176,4931,129"/>
+<area shape="rect" id="Node000039" href="$ad9545__spi_8c.html" title="Implementation of ad9545 SPI Driver." alt="" coords="5145,174,5333,214"/>
+<area shape="poly" id="edge64_Node000037_Node000039" title=" " alt="" coords="4978,120,5170,171,5168,177,4977,125"/>
+<area shape="poly" id="edge65_Node000037_Node000040" title=" " alt="" coords="4895,132,4900,178,4909,201,4923,219,4953,238,4997,253,5051,265,5112,273,5241,283,5358,286,5357,291,5241,288,5111,279,5050,270,4996,258,4951,243,4920,223,4904,203,4895,179,4890,132"/>
+<area shape="rect" id="Node000041" href="$ad9545_2src_2common_2common__data_8h.html" title="Defines common data to be used by ad9545 example." alt="" coords="5357,174,5549,214"/>
+<area shape="poly" id="edge66_Node000037_Node000041" title=" " alt="" coords="5002,116,5176,138,5252,148,5346,164,5380,171,5379,177,5345,169,5251,153,5176,144,5002,121"/>
+<area shape="poly" id="edge68_Node000037_Node000042" title=" " alt="" coords="5003,116,5161,131,5285,136,5407,143,5562,164,5574,166,5573,172,5561,169,5407,148,5284,141,5161,136,5002,121"/>
+<area shape="poly" id="edge67_Node000041_Node000040" title=" " alt="" coords="5456,228,5456,269,5451,269,5451,228"/>
+<area shape="poly" id="edge72_Node000045_Node000004" title=" " alt="" coords="4431,125,4262,169,4237,176,4235,171,4261,164,4430,119"/>
+<area shape="rect" id="Node000046" href="$app__clock_8c.html" title="Application clocks initialization." alt="" coords="4444,174,4593,214"/>
+<area shape="poly" id="edge73_Node000045_Node000046" title=" " alt="" coords="4521,132,4521,174,4516,174,4516,132"/>
+<area shape="poly" id="edge75_Node000047_Node000004" title=" " alt="" coords="3879,116,4082,164,4110,171,4108,177,4081,169,3878,122"/>
+<area shape="poly" id="edge76_Node000047_Node000011" title=" " alt="" coords="3880,119,3983,145,4039,165,4048,180,4052,195,4049,209,4039,223,4017,233,3974,242,3836,256,3643,267,3418,276,2953,286,2613,290,2612,285,2953,281,3418,270,3643,262,3835,251,3974,236,4016,228,4036,219,4044,207,4047,195,4043,182,4036,169,3981,150,3878,124"/>
+</map>

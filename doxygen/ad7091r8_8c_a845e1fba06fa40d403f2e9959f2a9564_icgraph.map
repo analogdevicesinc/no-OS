@@ -1,0 +1,13 @@
+<map id="ad7091r8_remove" name="ad7091r8_remove">
+<area shape="rect" id="Node000001" title="Free the resources allocated by ad7091r8_init()." alt="" coords="601,55,741,80"/>
+<area shape="rect" id="Node000002" href="$iio__ad7091r8_8c.html#a4f0d29f889d307fcf448982517b1268d" title="Free the resources allocated by ad7091r8_iio_init()." alt="" coords="391,29,553,55"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="587,59,553,55,554,50,588,54"/>
+<area shape="rect" id="Node000006" href="$ad7091r8-sdz_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="392,79,552,104"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="588,80,553,84,552,79,587,75"/>
+<area shape="rect" id="Node000003" href="$ad7091r8-sdz_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="154,5,297,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="377,35,296,28,297,22,377,30"/>
+<area shape="rect" id="Node000004" href="$ad7091r8-sdz_2src_2examples_2iio__timer__trigger__example_2iio__timer__trigger__example_8c.html#a7bab3a90f71c4ddf1bc5fff9fc70b3fb" title="IIO trigger example main execution." alt="" coords="108,55,343,80"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="377,54,343,58,342,53,377,49"/>
+<area shape="rect" id="Node000005" href="$ad7091r8-sdz_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="5,55,60,80"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="94,70,60,70,60,65,94,65"/>
+</map>

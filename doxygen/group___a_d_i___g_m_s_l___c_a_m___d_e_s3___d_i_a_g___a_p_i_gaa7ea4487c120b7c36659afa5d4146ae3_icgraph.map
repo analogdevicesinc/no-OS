@@ -1,0 +1,5 @@
+<map id="max96792_link_diag_get_lmn_status" name="max96792_link_diag_get_lmn_status">
+<area shape="rect" id="Node000001" title="Get the link diagnostic status for a specified LMN." alt="" coords="236,5,393,45"/>
+<area shape="rect" id="Node000002" href="$group___a_d_i___g_m_s_l___c_a_m___d_e_s3___d_i_a_g___a_p_i.html#ga845ee37ec079ab938e8de31bd1cccd32" title="Check the line fault status of the max96792 deserializer." alt="" coords="5,5,188,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="222,28,188,28,188,23,222,23"/>
+</map>

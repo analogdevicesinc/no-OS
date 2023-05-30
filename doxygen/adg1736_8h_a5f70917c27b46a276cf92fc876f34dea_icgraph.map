@@ -1,0 +1,5 @@
+<map id="adg1736_init" name="adg1736_init">
+<area shape="rect" id="Node000001" title="Initialize the ADG1736 device." alt="" coords="172,5,279,31"/>
+<area shape="rect" id="Node000002" href="$eval-adg1736_2src_2examples_2basic_2basic__example_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="Basic example main executiont." alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="158,21,124,21,124,15,158,15"/>
+</map>

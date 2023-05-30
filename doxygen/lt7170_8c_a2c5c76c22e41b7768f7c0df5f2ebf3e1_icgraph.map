@@ -1,0 +1,20 @@
+<map id="lt7170_write_byte" name="lt7170_write_byte">
+<area shape="rect" id="Node000001" title="Perform a raw PMBus write byte operation." alt="" coords="749,80,888,105"/>
+<area shape="rect" id="Node000002" href="$lt7170_8c.html#abc0d64fcd7709ef5a279d9193f8955d2" title="Configure ADC control." alt="" coords="549,5,695,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="777,77,700,44,667,33,669,28,702,40,779,72"/>
+<area shape="rect" id="Node000003" href="$lt7170_8c.html#a04128a0d564876f87e321f863270f63e" title="Perform commands for non&#45;volatile memory (NVM)" alt="" coords="555,55,689,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="735,85,689,79,690,73,736,79"/>
+<area shape="rect" id="Node000004" href="$lt7170_8c.html#ad1a0da4a1de1dba3aa561c64b1cbd7a9" title="Set channel operation." alt="" coords="543,104,701,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="736,105,702,110,701,104,735,100"/>
+<area shape="rect" id="Node000009" href="$lt7170_8c.html#ae06710b1248bd6cd365141212504488c" title="Configure SYNC pin for clock synchronization." alt="" coords="549,153,695,179"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="777,113,702,143,665,156,664,151,700,138,775,108"/>
+<area shape="rect" id="Node000005" href="$lt7170_8c.html#ab0301706845e4d14a472712bf0a95823" title="Initialize the device structure." alt="" coords="404,129,495,155"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="530,133,495,138,494,133,529,128"/>
+<area shape="rect" id="Node000006" href="$lt7170_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="196,104,356,129"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="390,136,356,131,357,126,391,131"/>
+<area shape="rect" id="Node000007" href="$iio__lt7170_8c.html#a649c3cbc7a1d85cb02446a741dcb9b30" title="Initializes the LT7170 IIO descriptor." alt="" coords="219,153,333,179"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="390,153,334,161,333,155,390,147"/>
+<area shape="rect" id="Node000008" href="$lt7170_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="5,153,148,179"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="205,169,148,169,148,163,205,163"/>
+<area shape="poly" id="edge9_Node000009_Node000005" title=" " alt="" coords="535,157,494,151,495,146,536,151"/>
+</map>

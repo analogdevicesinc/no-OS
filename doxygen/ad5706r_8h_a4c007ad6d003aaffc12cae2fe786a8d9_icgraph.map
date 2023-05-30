@@ -1,0 +1,76 @@
+<map id="ad5706r_spi_reg_write" name="ad5706r_spi_reg_write">
+<area shape="rect" id="Node000001" title="Write to device." alt="" coords="1143,498,1312,523"/>
+<area shape="rect" id="Node000002" href="$ad5706r_8c.html#a0a5ed099aeb489e4de301edf8890056e" title="Initialize the device." alt="" coords="5,79,108,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1218,485,1204,427,1179,349,1143,265,1119,225,1093,188,1016,104,981,72,944,48,904,30,859,17,808,10,748,8,481,8,370,16,261,36,166,60,96,82,94,77,165,55,260,31,369,11,481,3,748,3,809,5,861,12,906,25,946,43,984,68,1020,100,1097,185,1124,222,1147,263,1184,347,1209,425,1223,483"/>
+<area shape="rect" id="Node000003" href="$ad5706r_8c.html#a1a07fddf14b280c8b5bbbfda871bd89e" title="Set dac value on DAC input register A." alt="" coords="904,574,1095,599"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="1176,530,1039,576,1038,571,1175,525"/>
+<area shape="rect" id="Node000004" href="$ad5706r_8c.html#afc196df15df0078b17cd663a9846344a" title="Set dac value on DAC input register B." alt="" coords="904,623,1095,649"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="1205,535,1157,576,1096,614,1066,626,1064,621,1093,610,1154,571,1202,531"/>
+<area shape="rect" id="Node000005" href="$ad5706r_8c.html#acba62faa06b9c4a2d198705f0cc5b0e0" title="Set device spi settings." alt="" coords="657,43,836,69"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="1210,488,1162,408,1084,297,1035,238,980,180,919,127,855,82,830,71,833,66,857,78,923,123,983,176,1039,234,1088,294,1167,405,1215,485"/>
+<area shape="rect" id="Node000006" href="$ad5706r_8c.html#afc735a36043ff3db5327cc6dfbad1d9b" title="Set period for dither function generator." alt="" coords="673,925,820,965"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="1129,523,989,542,934,553,906,565,889,585,877,606,870,627,867,648,870,691,880,735,890,779,894,824,892,847,885,870,875,892,858,915,841,929,822,939,819,934,838,925,854,912,870,890,880,868,886,846,889,824,885,780,875,736,865,692,862,648,865,626,872,604,884,582,902,561,932,548,989,537,1129,518"/>
+<area shape="rect" id="Node000010" href="$ad5706r_8c.html#a216a5636ef5780ba43ab2f93b9e0874c" title="Set phase for dither function generator." alt="" coords="673,861,820,901"/>
+<area shape="poly" id="edge11_Node000001_Node000010" title=" " alt="" coords="1175,497,1114,483,1042,476,1005,478,969,486,936,499,906,519,888,538,876,557,869,576,866,595,868,636,877,677,887,720,892,764,884,808,874,829,858,851,841,865,821,875,819,870,838,861,854,848,869,827,879,806,886,764,882,721,872,679,863,636,860,595,864,574,871,554,884,534,902,515,933,494,967,480,1004,473,1042,471,1115,477,1177,491"/>
+<area shape="rect" id="Node000011" href="$ad5706r_8c.html#a8915d4bcf418b428ac795b203b4c289e" title="Set dac value on Multi DAC input register A." alt="" coords="913,673,1086,713"/>
+<area shape="poly" id="edge14_Node000001_Node000011" title=" " alt="" coords="1213,536,1166,599,1133,634,1096,664,1074,676,1072,671,1093,659,1130,630,1162,596,1209,533"/>
+<area shape="rect" id="Node000012" href="$ad5706r_8c.html#a54f3da7e11114f2303c588d2cbed0d99" title="SPI write to device using a mask." alt="" coords="907,422,1091,447"/>
+<area shape="poly" id="edge15_Node000001_Node000012" title=" " alt="" coords="1175,496,1038,450,1039,445,1176,491"/>
+<area shape="poly" id="edge5_Node000005_Node000002" title=" " alt="" coords="644,64,108,92,108,87,643,59"/>
+<area shape="rect" id="Node000007" href="$ad5706r_8c.html#a54821cf6888799afbce8c8dcc9654ad5" title="Set ldac config for single channel." alt="" coords="391,747,573,773"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="659,927,636,916,589,881,547,841,491,775,495,771,551,838,592,877,639,911,661,922"/>
+<area shape="rect" id="Node000009" href="$ad5706r_8c.html#a4a3ecc73cb1fd9754903a166253319ac" title="Set ldac config for multiple channels." alt="" coords="393,668,571,708"/>
+<area shape="poly" id="edge10_Node000006_Node000009" title=" " alt="" coords="659,932,635,915,619,893,611,870,609,826,608,782,602,760,587,738,570,722,550,711,553,706,574,718,591,734,607,758,614,781,614,826,616,869,623,890,639,911,662,927"/>
+<area shape="rect" id="Node000008" href="$ad5706r_8c.html#a5d7d1fe6f6b4c28b78f78d1420c5a25b" title="Configures the device." alt="" coords="156,321,327,346"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="406,744,373,722,336,675,306,623,283,567,267,512,247,412,241,347,246,346,252,411,272,510,288,565,311,620,340,672,376,718,409,740"/>
+<area shape="poly" id="edge9_Node000008_Node000002" title=" " alt="" coords="220,311,66,107,70,103,224,308"/>
+<area shape="poly" id="edge12_Node000010_Node000007" title=" " alt="" coords="659,861,636,852,560,812,501,775,503,771,562,808,638,847,661,856"/>
+<area shape="poly" id="edge13_Node000010_Node000009" title=" " alt="" coords="659,867,636,851,623,837,615,823,610,794,605,766,598,752,587,738,569,723,547,711,549,706,572,718,591,734,603,749,610,764,615,793,621,821,627,834,639,847,662,862"/>
+<area shape="poly" id="edge27_Node000012_Node000005" title=" " alt="" coords="981,411,943,341,902,252,893,225,890,201,888,158,881,120,871,101,854,82,835,69,838,65,858,78,876,98,886,118,893,158,895,200,899,224,906,250,947,338,986,409"/>
+<area shape="poly" id="edge34_Node000012_Node000009" title=" " alt="" coords="928,453,767,494,692,517,639,540,596,570,557,605,500,669,496,666,553,602,592,566,636,535,690,512,766,488,926,448"/>
+<area shape="rect" id="Node000013" href="$ad5706r_8c.html#ada2cc0ed67c18c2d5823c012a1b8626b" title="Configures the CRC selection bit ." alt="" coords="406,346,558,371"/>
+<area shape="poly" id="edge16_Node000012_Node000013" title=" " alt="" coords="924,422,856,409,696,386,558,369,558,364,697,381,856,404,925,417"/>
+<area shape="rect" id="Node000014" href="$ad5706r_8c.html#a9bc2fc70d92c0eaff0f1c12ae6348b0d" title="Set the function generator enable configuration." alt="" coords="680,647,813,673"/>
+<area shape="poly" id="edge18_Node000012_Node000014" title=" " alt="" coords="923,455,906,469,891,489,884,510,884,553,883,595,875,617,858,638,837,652,814,659,813,654,835,647,854,634,870,614,877,594,878,552,879,509,886,487,902,465,920,451"/>
+<area shape="rect" id="Node000015" href="$ad5706r_8c.html#a66a954242ebc1360b4ee40cecd3ba5c5" title="Set function generator mode for a channel." alt="" coords="647,762,847,787"/>
+<area shape="poly" id="edge21_Node000012_Node000015" title=" " alt="" coords="921,456,906,468,884,504,877,539,878,574,884,609,890,644,891,680,882,716,858,751,841,764,838,760,854,748,877,713,886,679,885,645,879,610,873,575,871,538,879,502,902,465,917,452"/>
+<area shape="rect" id="Node000016" href="$ad5706r_8c.html#a69895ce3724c6a23e9fac1311119604d" title="Trigger Multi DAC SW LDAC." alt="" coords="661,697,832,737"/>
+<area shape="poly" id="edge24_Node000012_Node000016" title=" " alt="" coords="922,456,906,468,888,495,881,522,880,549,883,576,886,604,885,631,877,659,858,687,834,705,831,700,854,683,872,657,880,630,881,604,878,577,875,549,875,522,883,493,902,465,918,451"/>
+<area shape="rect" id="Node000017" href="$ad5706r_8c.html#afb7e22cb482a1169cb35221d5ed00175" title="Set output range for a channel." alt="" coords="395,396,569,436"/>
+<area shape="poly" id="edge25_Node000012_Node000017" title=" " alt="" coords="893,434,569,422,569,416,893,428"/>
+<area shape="rect" id="Node000018" href="$ad5706r_8c.html#a73f9c58e1b6026121e4d16d600c04684" title="Set LDAC/TGP/DCLK edge trigger." alt="" coords="651,811,842,837"/>
+<area shape="poly" id="edge28_Node000012_Node000018" title=" " alt="" coords="920,456,906,468,891,490,881,510,873,552,876,593,885,635,893,676,896,718,886,760,874,781,858,802,844,813,841,809,854,798,870,778,881,758,890,718,888,677,880,636,871,594,868,552,876,509,887,487,902,465,917,452"/>
+<area shape="rect" id="Node000019" href="$ad5706r_8c.html#a8ffd02ce685a7b9e90cb99d60df164d5" title="Set the hardware and software ldac configuration." alt="" coords="653,549,840,574"/>
+<area shape="poly" id="edge31_Node000012_Node000019" title=" " alt="" coords="931,455,906,469,891,484,883,499,874,516,858,532,816,551,814,546,854,527,870,512,878,497,886,481,902,465,929,450"/>
+<area shape="rect" id="Node000020" href="$ad5706r_8c.html#a9ad487377a5135c26c6ddf31e7be7e3e" title="Set the multiplexer output mode." alt="" coords="377,461,587,486"/>
+<area shape="poly" id="edge35_Node000012_Node000020" title=" " alt="" coords="894,445,588,468,587,463,894,440"/>
+<area shape="rect" id="Node000021" href="$ad5706r_8c.html#ad48718f31d9bfd37f4de52d83aa7b12d" title="Set the multiplexer output select register." alt="" coords="399,183,565,223"/>
+<area shape="poly" id="edge37_Node000012_Node000021" title=" " alt="" coords="980,412,930,347,895,313,855,285,782,252,706,230,631,216,565,209,566,204,632,211,707,225,784,247,857,280,898,309,934,344,985,409"/>
+<area shape="rect" id="Node000022" href="$ad5706r_8c.html#ac57503554ea44b075baa08f92139be77" title="Set output operating mode of a channel." alt="" coords="375,297,589,322"/>
+<area shape="poly" id="edge39_Node000012_Node000022" title=" " alt="" coords="961,418,911,395,855,375,787,357,718,342,589,323,590,317,718,337,788,351,857,369,914,390,963,413"/>
+<area shape="rect" id="Node000023" href="$ad5706r_8c.html#acfe0c8891280aaf3fde3f995aaefff36" title="Set reference configuration." alt="" coords="397,247,567,273"/>
+<area shape="poly" id="edge41_Node000012_Node000023" title=" " alt="" coords="973,415,921,372,889,351,855,333,782,307,705,288,632,276,567,268,568,263,633,270,706,283,783,302,857,328,892,346,925,368,977,411"/>
+<area shape="rect" id="Node000024" href="$ad5706r_8c.html#a731891318c9a6100e35778763d6c908c" title="Set sync/async ldac configuration." alt="" coords="637,598,856,623"/>
+<area shape="poly" id="edge43_Node000012_Node000024" title=" " alt="" coords="925,455,906,469,894,483,888,498,883,528,879,559,871,574,858,589,840,600,837,596,854,585,867,571,874,557,878,527,883,496,889,480,902,465,922,451"/>
+<area shape="rect" id="Node000025" href="$ad5706r_8c.html#a4584d0bf7979f54b5eb03b0f53bbdb77" title="Trigger the LDAC using software." alt="" coords="655,93,839,118"/>
+<area shape="poly" id="edge46_Node000012_Node000025" title=" " alt="" coords="982,411,902,252,890,218,884,190,875,165,854,139,821,120,824,116,858,135,880,162,889,188,895,216,906,250,987,409"/>
+<area shape="rect" id="Node000026" href="$ad5706r_8c.html#a318fb2f8aac3eec2dfda63b20147b3f0" title="Perform soft reset." alt="" coords="171,123,311,149"/>
+<area shape="poly" id="edge47_Node000012_Node000026" title=" " alt="" coords="978,412,902,305,889,283,881,264,872,248,854,231,788,193,716,165,642,146,566,134,493,127,424,126,312,131,311,125,424,120,493,122,567,128,643,141,718,160,791,189,858,227,876,244,886,262,894,281,906,303,982,409"/>
+<area shape="poly" id="edge17_Node000013_Node000008" title=" " alt="" coords="391,352,327,345,327,340,392,347"/>
+<area shape="poly" id="edge19_Node000014_Node000007" title=" " alt="" coords="668,677,639,688,615,704,591,722,526,750,524,745,588,718,611,700,636,683,666,672"/>
+<area shape="poly" id="edge20_Node000014_Node000009" title=" " alt="" coords="667,671,571,681,571,676,666,666"/>
+<area shape="poly" id="edge22_Node000015_Node000007" title=" " alt="" coords="633,771,574,768,574,762,633,766"/>
+<area shape="poly" id="edge23_Node000015_Node000009" title=" " alt="" coords="670,761,636,752,528,711,529,706,638,747,671,756"/>
+<area shape="poly" id="edge26_Node000017_Node000008" title=" " alt="" coords="398,394,374,387,273,349,275,344,376,381,400,389"/>
+<area shape="poly" id="edge29_Node000018_Node000007" title=" " alt="" coords="672,811,637,803,530,775,531,770,638,797,674,806"/>
+<area shape="poly" id="edge30_Node000018_Node000009" title=" " alt="" coords="647,808,636,802,619,787,610,770,602,754,588,738,565,723,540,710,543,706,568,718,591,734,607,751,615,768,623,783,639,798,649,804"/>
+<area shape="poly" id="edge32_Node000019_Node000007" title=" " alt="" coords="646,583,639,589,626,604,619,620,615,653,611,687,604,704,591,722,569,738,545,750,542,745,567,734,587,718,600,702,606,685,610,652,614,618,621,601,635,585,643,579"/>
+<area shape="poly" id="edge33_Node000019_Node000009" title=" " alt="" coords="663,580,638,589,566,629,509,670,506,666,564,624,636,584,661,575"/>
+<area shape="poly" id="edge36_Node000020_Node000008" title=" " alt="" coords="393,459,373,450,335,426,301,398,252,348,255,344,304,394,338,422,376,446,395,454"/>
+<area shape="poly" id="edge38_Node000021_Node000008" title=" " alt="" coords="394,230,376,238,308,282,258,323,255,318,305,277,373,234,392,225"/>
+<area shape="poly" id="edge40_Node000022_Node000008" title=" " alt="" coords="361,324,327,328,327,322,361,319"/>
+<area shape="poly" id="edge42_Node000023_Node000008" title=" " alt="" coords="409,279,375,288,275,323,273,318,374,283,408,273"/>
+<area shape="poly" id="edge44_Node000024_Node000007" title=" " alt="" coords="649,631,639,638,622,657,615,678,608,700,591,722,566,738,539,750,537,745,564,734,588,718,603,697,610,676,618,655,636,634,647,627"/>
+<area shape="poly" id="edge45_Node000024_Node000009" title=" " alt="" coords="674,629,638,639,539,670,538,665,637,633,672,624"/>
+<area shape="poly" id="edge48_Node000026_Node000002" title=" " alt="" coords="173,123,107,107,109,102,175,117"/>
+</map>
