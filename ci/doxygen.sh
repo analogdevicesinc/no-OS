@@ -37,6 +37,9 @@ then
 
         git checkout gh-pages
 
+        # Clear previous content in the doxygen folder
+        rm -rf ${TOP_DIR}/doxygen
+
 	mkdir -p ${TOP_DIR}/doxygen
         cp -R ${TOP_DIR}/doc/doxygen/build/doxygen_doc/html/* ${TOP_DIR}/doxygen/
 
