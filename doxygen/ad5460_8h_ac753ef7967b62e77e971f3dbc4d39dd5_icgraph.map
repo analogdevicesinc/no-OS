@@ -1,0 +1,45 @@
+<map id="ad5460_reg_write" name="ad5460_reg_write">
+<area shape="rect" id="Node000001" title="Write a register&#39;s value." alt="" coords="805,507,944,533"/>
+<area shape="rect" id="Node000002" href="$ad5460_8c.html#a7f1cc29bbfc9e74ad54e30883e4f61e8" title="Update a register&#39;s field." alt="" coords="599,234,749,259"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="854,498,683,261,687,258,858,495"/>
+<area shape="rect" id="Node000014" href="$ad5460_8c.html#a507cbf56f052a62f3851dc3140092911" title="Perform software or hardware reset and wait for device reset time." alt="" coords="619,450,729,475"/>
+<area shape="poly" id="edge17_Node000001_Node000014" title=" " alt="" coords="816,506,718,478,720,473,817,501"/>
+<area shape="rect" id="Node000016" href="$ad5460_8c.html#a9ba37e9e23b7c6c38888dea52e8fadfc" title="Set and load a code for the DAC on a specific channel." alt="" coords="597,500,751,540"/>
+<area shape="poly" id="edge20_Node000001_Node000016" title=" " alt="" coords="792,523,751,523,751,517,792,517"/>
+<area shape="rect" id="Node000017" href="$ad5460_8c.html#a7a6710c7006173d8579f07bb3f1029ab" title="Set which diagnostic value to be loaded in the DIAG_RESULT register." alt="" coords="608,565,740,590"/>
+<area shape="poly" id="edge22_Node000001_Node000017" title=" " alt="" coords="817,539,720,567,718,562,816,534"/>
+<area shape="rect" id="Node000018" href="$ad5460_8c.html#a19d42ace63365a4d6dadaa3c95ccd0fb" title="Enable or disable the higher thermal reset." alt="" coords="591,614,757,639"/>
+<area shape="poly" id="edge24_Node000001_Node000018" title=" " alt="" coords="850,544,809,575,759,605,729,616,727,611,756,600,806,571,847,539"/>
+<area shape="rect" id="Node000003" href="$ad5460_8c.html#ad471a43947952188e3a610532cdbd3b6" title="Disable the slew rate control." alt="" coords="352,234,543,259"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="585,249,543,249,543,244,585,244"/>
+<area shape="rect" id="Node000004" href="$ad5460_8c.html#aac918d0ef7ccced541dd5a2dea1c1f5a" title="Configure and enable slew rate control for a DAC on a specific channel." alt="" coords="353,413,541,438"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="661,273,615,338,582,373,544,402,517,415,515,410,541,398,578,369,610,334,656,270"/>
+<area shape="rect" id="Node000006" href="$ad5460_8c.html#a6cd01d861931c7143b76dcf328f38834" title="Set the logic value of a GPO pin." alt="" coords="172,159,304,185"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="644,228,598,198,571,185,542,175,480,163,417,159,357,161,305,165,304,160,357,155,417,154,481,158,543,169,573,180,601,194,647,223"/>
+<area shape="rect" id="Node000008" href="$ad5460_8c.html#a2600dd2518974e069aabe05ffc13df08" title="Set the operation mode for a specific channel." alt="" coords="370,284,525,324"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="611,265,526,287,524,282,609,260"/>
+<area shape="rect" id="Node000009" href="$ad5460_8c.html#ab28233c258899eb128072d1a9ba0a3da" title="Set the current limit for a specific DAC channel in vout mode." alt="" coords="370,5,525,45"/>
+<area shape="poly" id="edge9_Node000002_Node000009" title=" " alt="" coords="659,223,641,186,615,142,582,98,541,59,521,48,524,43,544,55,585,94,620,139,646,184,664,220"/>
+<area shape="rect" id="Node000010" href="$ad5460_8c.html#a23a5339051563cc2c6c7661da874e6ea" title="Set the current range for a specific channel." alt="" coords="370,69,525,109"/>
+<area shape="poly" id="edge10_Node000002_Node000010" title=" " alt="" coords="650,225,603,178,541,130,505,112,508,107,544,126,606,174,654,222"/>
+<area shape="rect" id="Node000012" href="$ad5460_8c.html#ad7956bd7223b6059837e6f5338e7e917" title="Set the voltage range for a specific channel." alt="" coords="370,348,525,388"/>
+<area shape="poly" id="edge12_Node000002_Node000012" title=" " alt="" coords="648,270,601,304,544,338,516,350,514,345,541,334,598,300,645,266"/>
+<area shape="rect" id="Node000013" href="$ad5460_8c.html#a95c59e288f1bd30c50076e67c742d2e0" title="Set the GPIO operation mode." alt="" coords="358,185,537,210"/>
+<area shape="poly" id="edge14_Node000002_Node000013" title=" " alt="" coords="601,234,506,213,507,207,602,228"/>
+<area shape="rect" id="Node000005" href="$channel__output__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Channel output example main execution." alt="" coords="179,437,297,462"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="340,440,298,445,297,440,339,435"/>
+<area shape="rect" id="Node000007" href="$ad5460_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="5,159,124,185"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="158,175,124,175,124,169,158,169"/>
+<area shape="poly" id="edge8_Node000008_Node000005" title=" " alt="" coords="364,332,353,338,321,362,292,390,251,438,247,435,288,386,318,358,351,334,362,328"/>
+<area shape="rect" id="Node000011" href="$current__output__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Current output example main execution." alt="" coords="179,77,297,102"/>
+<area shape="poly" id="edge11_Node000010_Node000011" title=" " alt="" coords="356,92,298,92,298,87,356,87"/>
+<area shape="poly" id="edge13_Node000012_Node000005" title=" " alt="" coords="376,395,353,404,269,439,267,434,351,399,374,390"/>
+<area shape="poly" id="edge16_Node000013_Node000005" title=" " alt="" coords="362,219,354,225,329,249,308,277,276,338,255,395,244,437,239,436,250,394,271,336,303,274,325,245,350,221,359,214"/>
+<area shape="poly" id="edge15_Node000013_Node000006" title=" " alt="" coords="344,187,304,183,304,177,345,182"/>
+<area shape="rect" id="Node000015" href="$ad5460_8c.html#af4e1a757302a5c10c40466ab29fcacdf" title="Initialize the device structure." alt="" coords="398,462,497,487"/>
+<area shape="poly" id="edge18_Node000014_Node000015" title=" " alt="" coords="605,469,497,475,497,469,605,464"/>
+<area shape="poly" id="edge19_Node000015_Node000005" title=" " alt="" coords="384,470,297,459,298,454,384,464"/>
+<area shape="poly" id="edge21_Node000016_Node000005" title=" " alt="" coords="583,526,471,521,411,514,351,503,302,485,260,465,263,460,304,480,353,497,412,509,472,516,583,520"/>
+<area shape="poly" id="edge23_Node000017_Node000005" title=" " alt="" coords="594,577,477,563,413,549,351,529,322,515,294,497,252,464,255,460,297,493,324,510,353,524,414,544,478,558,594,572"/>
+<area shape="poly" id="edge25_Node000018_Node000005" title=" " alt="" coords="577,630,523,626,465,617,406,601,351,577,315,551,284,520,245,464,249,461,288,516,318,547,353,572,408,596,466,611,524,621,577,625"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="create_tasks" name="create_tasks">
+<area shape="rect" id="Node000001" title="Creating iio example with blinking led task." alt="" coords="108,5,213,31"/>
+<area shape="rect" id="Node000002" href="$iio__demo__free_r_t_o_s_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function of iio_demo_freeRTOS project." alt="" coords="5,5,60,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="94,21,60,21,60,15,94,15"/>
+</map>

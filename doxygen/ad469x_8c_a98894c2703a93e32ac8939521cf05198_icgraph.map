@@ -1,0 +1,14 @@
+<map id="ad469x_set_channel_sequence" name="ad469x_set_channel_sequence">
+<area shape="rect" id="Node000001" title="Set channel sequence." alt="" coords="592,23,747,63"/>
+<area shape="rect" id="Node000002" href="$ad469x_8c.html#a8c42a57e73b808c98550cb1b8eccbaa3" title=" " alt="" coords="394,5,510,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="578,35,510,27,510,22,579,30"/>
+<area shape="rect" id="Node000006" href="$ad469x_8c.html#a10a460881b625198baafdb96a81eb6b6" title=" " alt="" coords="360,55,544,80"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="578,56,544,60,544,55,578,51"/>
+<area shape="rect" id="Node000003" href="$ad469x_8c.html#afb4be83cfe5fae9af7ddf637bf2e82c3" title=" " alt="" coords="213,31,312,56"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="380,30,313,39,312,34,380,25"/>
+<area shape="rect" id="Node000004" href="$ad469x__evb_2src_2examples_2basic__example_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="5,5,165,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="200,37,165,32,166,27,200,32"/>
+<area shape="rect" id="Node000005" href="$ad469x__evb_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="14,55,157,80"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="200,54,157,60,157,55,199,49"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="346,57,312,52,313,47,347,51"/>
+</map>

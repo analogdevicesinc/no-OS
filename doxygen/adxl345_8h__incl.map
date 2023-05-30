@@ -1,0 +1,11 @@
+<map id="drivers/accel/adxl345/adxl345.h" name="drivers/accel/adxl345/adxl345.h">
+<area shape="rect" id="Node000001" title="Header file of ADXL345 Driver." alt="" coords="5,5,167,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="51,167,121,192"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="63,47,43,68,27,94,25,111,32,128,44,143,59,157,55,160,40,147,27,130,20,112,22,92,39,65,60,44"/>
+<area shape="rect" id="Node000003" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="37,93,135,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="89,46,89,79,83,79,83,46"/>
+<area shape="rect" id="Node000004" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="159,93,258,119"/>
+<area shape="poly" id="edge4_Node000001_Node000004" title=" " alt="" coords="117,43,180,84,178,88,114,48"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="89,119,89,153,83,153,83,119"/>
+<area shape="poly" id="edge5_Node000004_Node000002" title=" " alt="" coords="190,121,119,162,116,157,188,116"/>
+</map>

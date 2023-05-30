@@ -1,0 +1,5 @@
+<map id="no_os_i3c_remove_bus" name="no_os_i3c_remove_bus">
+<area shape="rect" id="Node000001" title="Free the resources allocated by no_os_i3c_init_bus. Must remove all devices first,..." alt="" coords="196,5,369,31"/>
+<area shape="rect" id="Node000002" href="$no__os__i3c_8c.html#a3308e15e643ca2475b5064f3021d6e56" title="Free the resources allocated by no_os_i3c_init()." alt="" coords="5,5,148,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="182,21,148,21,148,15,182,15"/>
+</map>

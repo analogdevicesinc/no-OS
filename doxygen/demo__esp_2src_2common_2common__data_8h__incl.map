@@ -1,0 +1,26 @@
+<map id="projects/demo_esp/src/common/common_data.h" name="projects/demo_esp/src/common/common_data.h">
+<area shape="rect" id="Node000001" title="Defines common data to be used by demo_esp examples." alt="" coords="252,5,444,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="26,93,177,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="290,48,151,92,149,87,288,43"/>
+<area shape="rect" id="Node000003" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="201,93,306,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="327,48,280,86,277,82,323,43"/>
+<area shape="rect" id="Node000008" href="$no__os__timer_8h.html" title="Timer control module header." alt="" coords="291,167,405,192"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="351,46,351,153,345,153,345,46"/>
+<area shape="rect" id="Node000009" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="429,167,536,192"/>
+<area shape="poly" id="edge11_Node000001_Node000009" title=" " alt="" coords="367,44,465,154,461,158,363,48"/>
+<area shape="rect" id="Node000010" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="523,93,619,119"/>
+<area shape="poly" id="edge13_Node000001_Node000010" title=" " alt="" coords="402,43,526,86,524,91,400,48"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="313,240,383,265"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="258,119,265,152,282,191,300,212,321,230,317,234,296,216,278,193,260,154,252,120"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="5,240,88,265"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="201,121,126,142,93,155,73,169,63,181,57,196,50,227,45,226,52,195,59,179,69,165,91,150,124,137,200,116"/>
+<area shape="rect" id="Node000006" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="83,167,216,192"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="238,121,179,161,176,156,235,116"/>
+<area shape="poly" id="edge7_Node000006_Node000004" title=" " alt="" coords="182,190,303,233,302,238,180,195"/>
+<area shape="poly" id="edge8_Node000006_Node000005" title=" " alt="" coords="134,194,76,234,73,230,131,190"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="114,240,185,265"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="152,192,152,226,147,226,147,192"/>
+<area shape="poly" id="edge10_Node000008_Node000004" title=" " alt="" coords="351,192,351,226,345,226,345,192"/>
+<area shape="poly" id="edge12_Node000009_Node000004" title=" " alt="" coords="462,194,383,236,381,231,460,190"/>
+<area shape="poly" id="edge14_Node000010_Node000004" title=" " alt="" coords="574,119,569,155,562,176,550,194,515,220,475,237,435,247,397,252,397,247,434,242,474,232,513,215,546,190,557,173,564,154,568,119"/>
+</map>

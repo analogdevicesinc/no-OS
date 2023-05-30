@@ -1,0 +1,5 @@
+<map id="max96793_csi_set_pipe_enable" name="max96793_csi_set_pipe_enable">
+<area shape="rect" id="Node000001" title="Enable or disable the pipe of the MAX96793 device." alt="" coords="232,5,411,45"/>
+<area shape="rect" id="Node000002" href="$group___a_d_i___g_m_s_l___c_a_m___s_e_r2___c_f_g___a_p_i.html#ga892b5a56984e75de8e551574caf1ad80" title="Initialize the pipe for the MAX96793 device." alt="" coords="5,13,184,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="218,28,184,28,184,23,218,23"/>
+</map>

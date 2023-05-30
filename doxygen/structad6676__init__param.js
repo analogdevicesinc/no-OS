@@ -1,0 +1,25 @@
+var structad6676__init__param =
+[
+    [ "attenuation", "structad6676__init__param.html#ab6e88e653a672fe1b40cf9b563e02e87", null ],
+    [ "bw_hz", "structad6676__init__param.html#af7e7f1b6de1544ce4226189634acef29", null ],
+    [ "bw_margin_high_mhz", "structad6676__init__param.html#ae21ca30d772576f1d7e3cd0c436e5b60", null ],
+    [ "bw_margin_if_mhz", "structad6676__init__param.html#a9ba4c8869f99eca676d538f2ceda33a0", null ],
+    [ "bw_margin_low_mhz", "structad6676__init__param.html#a08d15977486bad1cf3f4a72bded30d75", null ],
+    [ "decimation", "structad6676__init__param.html#aec64bb49f7138aa7d248514efdf673bb", null ],
+    [ "ext_l", "structad6676__init__param.html#aa8065aa9e85946c70b6562358594c89d", null ],
+    [ "f_adc_hz", "structad6676__init__param.html#af83aff16c32419d8c8ceea99e948996f", null ],
+    [ "f_if_hz", "structad6676__init__param.html#aa759ed76c4cac7846988dc3bb2581d30", null ],
+    [ "frames_per_multiframe", "structad6676__init__param.html#aab25be871225097f799e595cc537a248", null ],
+    [ "lvds_syncb", "structad6676__init__param.html#ae9556dd093bc753a8262009babeb8d6f", null ],
+    [ "m", "structad6676__init__param.html#a4c8ab51fb5c256f794998da93daa32b4", null ],
+    [ "n_lanes", "structad6676__init__param.html#a46fe33e141e8f6d2305e294151a08358", null ],
+    [ "ref_clk", "structad6676__init__param.html#a503cc1edbc0ee1272c258cadd46517ef", null ],
+    [ "scale", "structad6676__init__param.html#a7cbcddc19c79fc5f5c9b175ce0e8ede7", null ],
+    [ "scrambling_en", "structad6676__init__param.html#a317ab854bdd8bf76605a17c42d1ac7c4", null ],
+    [ "shuffle_ctrl", "structad6676__init__param.html#a7fd0030abd0a91645520965d7b23fabc", null ],
+    [ "shuffle_thresh", "structad6676__init__param.html#adcd616132bb6ca9a6d1364cb7aa9690c", null ],
+    [ "spi3wire", "structad6676__init__param.html#acfa1d83e8467993b09924cbf6b0c7e27", null ],
+    [ "spi_init", "structad6676__init__param.html#a6c8f0a0e173c1612b7e45223a2c43a22", null ],
+    [ "sysref_pd", "structad6676__init__param.html#aa69b698a4b485daed1e17695dc0df804", null ],
+    [ "use_extclk", "structad6676__init__param.html#acb2d27fb6dad190d68eede080df66b23", null ]
+];

@@ -1,0 +1,9 @@
+<map id="drivers/platform/freeRTOS/freertos_semaphore.c" name="drivers/platform/freeRTOS/freertos_semaphore.c">
+<area shape="rect" id="Node000001" title=" " alt="" coords="106,5,297,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,93,101,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="167,48,89,89,86,84,165,43"/>
+<area shape="rect" id="Node000003" href="$no__os__semaphore_8h.html" title=" " alt="" coords="125,93,277,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="204,46,204,79,199,79,199,46"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="301,93,384,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="236,43,311,84,308,89,234,48"/>
+</map>
