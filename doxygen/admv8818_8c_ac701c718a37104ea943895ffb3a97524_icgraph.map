@@ -1,0 +1,7 @@
+<map id="admv8818_spi_read" name="admv8818_spi_read">
+<area shape="rect" id="node1" title="Reads data from ADMV8818 over SPI." alt="" coords="420,57,573,83"/>
+<area shape="rect" id="node2" href="$admv8818_8h.html#ab2a128203022a3ed084779326ecef8be" title="Initializes the admv8818." alt="" coords="5,57,124,83"/>
+<area shape="rect" id="node3" href="$admv8818_8h.html#a3995afeb482e0ae93b0fb4599c81b510" title="Get the HPF Frequency." alt="" coords="178,31,366,58"/>
+<area shape="rect" id="node4" href="$admv8818_8h.html#ae377c301fc68f8be5179621514f7dd00" title="Get the HPF Frequency." alt="" coords="180,82,364,109"/>
+<area shape="rect" id="node5" href="$admv8818_8h.html#a102eb627539d9e5417a77c819c9579e8" title="Update ADMV8818 register." alt="" coords="172,133,372,159"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="no_os_list_remove" name="no_os_list_remove">
+<area shape="rect" id="node1" title=" " alt="" coords="691,63,835,89"/>
+<area shape="rect" id="node2" href="$no__os__dma_8c.html#ad21295aaac65733af5cbd7db38e5ae4e" title="Initialize the DMA controller." alt="" coords="262,5,386,32"/>
+<area shape="rect" id="node3" href="$no__os__dma_8c.html#a935f01d6ca284b7605900f40ca188748" title="Remove resources allocated for the DMA controller." alt="" coords="475,63,628,89"/>
+<area shape="rect" id="node7" href="$xilinx__gpio__irq_8c.html#a607992ac5707856c00e5c9ae436269e9" title="Remove the GPIO IRQ controller." alt="" coords="460,113,643,140"/>
+<area shape="rect" id="node4" href="$stm32__spi_8c.html#a846f9f0ed225045f8ca4b67afb1c2bbc" title="Configure and start a series of transfers using DMA." alt="" coords="236,57,412,98"/>
+<area shape="rect" id="node6" href="$stm32__spi_8c.html#a47037db6bcb66e4a80008e659e38b577" title="Free the resources allocated by no_os_spi_init()." alt="" coords="251,123,397,149"/>
+<area shape="rect" id="node5" href="$stm32__spi_8c.html#adfcb8034a96850d7940dd91d67f273eb" title="Configure and start a series of transfers using DMA. Wait for the completion before returning." alt="" coords="5,57,188,98"/>
+</map>

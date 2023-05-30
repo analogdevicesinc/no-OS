@@ -1,0 +1,23 @@
+<map id="projects/adxrs290&#45;pmdz/src/platform/stm32/parameters.c" name="projects/adxrs290&#45;pmdz/src/platform/stm32/parameters.c">
+<area shape="rect" id="node1" title="Definition of STM32 platform data used by eval&#45;adxrs290&#45;pmdz project." alt="" coords="308,5,548,47"/>
+<area shape="rect" id="node2" href="$adxrs290-pmdz_2src_2platform_2stm32_2parameters_8h.html" title="Definitions specific to STM32 platform used by eval&#45;adxrs290&#45;pmdz project." alt="" coords="373,95,483,121"/>
+<area shape="rect" id="node3" href="$stm32__hal_8h.html" title=" " alt="" coords="402,319,505,345"/>
+<area shape="rect" id="node5" href="$stm32__irq_8h.html" title="Header file for stm32 irq specifics." alt="" coords="491,244,589,271"/>
+<area shape="rect" id="node8" href="$stm32__spi_8h.html" title="Header file for the stm32 spi driver." alt="" coords="704,244,805,271"/>
+<area shape="rect" id="node16" href="$stm32__gpio_8h.html" title="Header file for stm32 gpio specifics." alt="" coords="305,244,415,271"/>
+<area shape="rect" id="node17" href="$stm32__uart_8h.html" title="Header file of UART driver for STM32." alt="" coords="166,244,274,271"/>
+<area shape="rect" id="node20" href="$stm32__uart__stdio_8h.html" title="Header file of stm32 UART driver stdout/stdin redirection." alt="" coords="99,169,245,196"/>
+<area shape="rect" id="node4" title=" " alt="" coords="401,393,468,420"/>
+<area shape="rect" id="node6" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="492,393,588,420"/>
+<area shape="rect" id="node7" title=" " alt="" coords="505,468,575,495"/>
+<area shape="rect" id="node9" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="1124,319,1223,345"/>
+<area shape="rect" id="node10" href="$no__os__dma_8h.html" title="Platform independent function definitions and data types for the DMA API." alt="" coords="701,319,809,345"/>
+<area shape="rect" id="node11" title=" " alt="" coords="983,393,1049,420"/>
+<area shape="rect" id="node12" title=" " alt="" coords="266,468,337,495"/>
+<area shape="rect" id="node13" href="$no__os__list_8h.html" title="List library header." alt="" coords="663,393,761,420"/>
+<area shape="rect" id="node15" href="$no__os__mutex_8h.html" title=" " alt="" coords="837,393,958,420"/>
+<area shape="rect" id="node14" title=" " alt="" coords="13,468,96,495"/>
+<area shape="rect" id="node18" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="69,319,174,345"/>
+<area shape="rect" id="node19" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="92,393,225,420"/>
+<area shape="rect" id="node21" title=" " alt="" coords="5,244,91,271"/>
+</map>

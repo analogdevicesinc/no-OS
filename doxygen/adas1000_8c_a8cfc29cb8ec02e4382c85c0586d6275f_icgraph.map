@@ -1,0 +1,4 @@
+<map id="adas1000_set_frame_rate" name="adas1000_set_frame_rate">
+<area shape="rect" id="node1" title="Sets the frame rate." alt="" coords="167,5,357,32"/>
+<area shape="rect" id="node2" href="$adas1000_8h.html#a53655dc2232c9d893f208871217abcbf" title="Initializes the SPI communication with ADAS1000. The ADAS1000 is configured with the specified frame ..." alt="" coords="5,5,119,32"/>
+</map>

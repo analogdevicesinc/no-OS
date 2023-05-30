@@ -1,0 +1,6 @@
+<map id="ad9467_transfer" name="ad9467_transfer">
+<area shape="rect" id="node1" title="Initiates a transfer and waits for the operation to end." alt="" coords="269,56,397,83"/>
+<area shape="rect" id="node2" href="$ad9467_8h.html#af1eea7aa6b5fe4a6c7e0b72a479340a9" title="Configures the test mode and the output mode to a default state." alt="" coords="108,5,221,32"/>
+<area shape="rect" id="node3" href="$ad9467__fmc_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function." alt="" coords="5,56,60,83"/>
+<area shape="rect" id="node4" href="$ad9467__fmc_8c.html#afc006e4134a35aad96e8224c95db5d43" title=" " alt="" coords="126,107,203,133"/>
+</map>

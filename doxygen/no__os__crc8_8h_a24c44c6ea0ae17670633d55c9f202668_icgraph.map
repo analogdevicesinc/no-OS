@@ -1,0 +1,228 @@
+<map id="no_os_crc8" name="no_os_crc8">
+<area shape="rect" id="node1" title=" " alt="" coords="1700,5370,1795,5397"/>
+<area shape="rect" id="node2" href="$ad413x_8h.html#a0ab9d625d88ef3338fbf4f2e1fbe1486" title=" " alt="" coords="1501,952,1635,978"/>
+<area shape="rect" id="node24" href="$ad413x_8h.html#a17b3b457fcc0869cc1e1c1c0c27488ee" title=" " alt="" coords="1499,470,1637,497"/>
+<area shape="rect" id="node26" href="$ad5460_8h.html#a61d232b50171a80d809b8662273f01ba" title="Read a register&#39;s value." alt="" coords="1501,1522,1635,1549"/>
+<area shape="rect" id="node43" href="$ad74413r_8h.html#af6bbcca515f3e345ce02191674d3ad7e" title="Read a register&#39;s value." alt="" coords="1495,2733,1641,2760"/>
+<area shape="rect" id="node78" href="$ad74416h_8h.html#afd042d04ab164145d36d42de74310c0d" title="Read a register&#39;s value." alt="" coords="1493,3457,1643,3484"/>
+<area shape="rect" id="node108" href="$ad7606_8h.html#ab7974a111bd5ae75e6e5ae212509c2f1" title="Read a device register via SPI." alt="" coords="1488,4468,1648,4494"/>
+<area shape="rect" id="node109" href="$ad7606_8h.html#a5438391d9471eaea26f267ca8a49f946" title="Write a device register via SPI." alt="" coords="1237,4341,1401,4368"/>
+<area shape="rect" id="node118" href="$ade9113_8h.html#a20c6ba63204d38a43a03e3c4a31de7a5" title="Read device register." alt="" coords="1511,5370,1625,5397"/>
+<area shape="rect" id="node159" href="$ade9113_8h.html#a75a061f783f74b6f3c357bf38175b562" title="Write device register." alt="" coords="1509,6464,1627,6490"/>
+<area shape="rect" id="node183" href="$adin1110_8h.html#a3ff5742f3a4039bedf915fb119306d7f" title="Read a register&#39;s value." alt="" coords="1495,7500,1641,7526"/>
+<area shape="rect" id="node197" href="$adin1110_8h.html#a7f157de82c57768ef1e93c512c97f608" title="Write a register&#39;s value." alt="" coords="1493,7576,1643,7602"/>
+<area shape="rect" id="node200" href="$wethlink_2src_2app_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="1541,7626,1595,7653"/>
+<area shape="rect" id="node201" href="$max2201x_8h.html#a2167b471d778e640b99182a94b38d9bf" title="Read the value of a device register." alt="" coords="1491,7956,1645,7982"/>
+<area shape="rect" id="node221" href="$max2201x_8h.html#a9241b984acd2f90764cc7e754b2cfdd7" title="Write the value of a device register." alt="" coords="1489,8570,1647,8597"/>
+<area shape="rect" id="node226" href="$mwc_8h.html#a9304b4706a2361d3ef1ce91d004305d6" title=" " alt="" coords="1484,8621,1652,8648"/>
+<area shape="rect" id="node3" href="$ad413x_8h.html#a7887134fbf7282b4c3f6350d9c2beffa" title=" " alt="" coords="672,901,859,928"/>
+<area shape="rect" id="node4" href="$ad413x_8h.html#ab877cd5b2f4339b7bcd8e7d1dab39679" title=" " alt="" coords="463,572,561,598"/>
+<area shape="rect" id="node5" href="$ad413x_8h.html#ab1bdd37fb9e74e8edbc2eaceef383393" title=" " alt="" coords="1232,470,1405,497"/>
+<area shape="rect" id="node12" href="$ad413x_8h.html#aabddf95dcf6e79e062bbcfa8d2fb55ec" title=" " alt="" coords="688,952,843,978"/>
+<area shape="rect" id="node6" href="$ad413x_8h.html#a65138fc773c2ff218cd9575a9b32e3ea" title=" " alt="" coords="689,800,841,826"/>
+<area shape="rect" id="node7" href="$ad413x_8h.html#a07d7447f9cab04065daa405671075cd0" title=" " alt="" coords="708,344,823,370"/>
+<area shape="rect" id="node8" href="$ad413x_8h.html#a9b0ecd68b5b373d5277a2a2970cefd9b" title=" " alt="" coords="684,394,847,421"/>
+<area shape="rect" id="node9" href="$ad413x_8h.html#a93db4312709a2f9d935d323c2f0cb5a3" title=" " alt="" coords="685,445,846,472"/>
+<area shape="rect" id="node10" href="$ad413x_8h.html#af51cd95249a61de230de9092bcb19724" title=" " alt="" coords="698,496,833,522"/>
+<area shape="rect" id="node11" href="$ad413x_8h.html#a6644a3847c54d55c985646e2ebb48f52" title=" " alt="" coords="955,850,1125,877"/>
+<area shape="rect" id="node13" href="$ad413x_8h.html#af351963cf8d7bc1ce8396918ac5f49df" title=" " alt="" coords="682,546,849,573"/>
+<area shape="rect" id="node14" href="$ad413x_8h.html#adba4797ea3acc5467cf00f7b20d961b2" title=" " alt="" coords="950,90,1130,117"/>
+<area shape="rect" id="node16" href="$ad413x_8h.html#ae1954327b60d599b8eba3d0af3b05223" title=" " alt="" coords="973,141,1107,168"/>
+<area shape="rect" id="node17" href="$ad413x_8h.html#a93b2fbaaf6fbcb2a4087a4ba021f38e6" title=" " alt="" coords="974,192,1106,218"/>
+<area shape="rect" id="node18" href="$ad413x_8h.html#a086375145590bba6fb3d60814062553b" title=" " alt="" coords="692,597,839,624"/>
+<area shape="rect" id="node19" href="$ad413x_8h.html#ab1573ce379f6b31e3adcad5a8f98a719" title=" " alt="" coords="697,648,833,674"/>
+<area shape="rect" id="node20" href="$ad413x_8h.html#aef6373006d37fe37be9805513128de1f" title=" " alt="" coords="979,242,1101,269"/>
+<area shape="rect" id="node21" href="$ad413x_8h.html#adef15bbc89948f2ac6d9c06cf1033191" title=" " alt="" coords="965,293,1115,320"/>
+<area shape="rect" id="node22" href="$ad413x_8h.html#a59535b75401147357ab29dd17337de17" title=" " alt="" coords="951,40,1129,66"/>
+<area shape="rect" id="node23" href="$ad413x_8h.html#a0529738d3c606e74b2f9b3cb95d56d97" title=" " alt="" coords="673,698,857,725"/>
+<area shape="rect" id="node15" href="$ad413x_8h.html#af462fdf54bee7e364300aef242a2c61e" title=" " alt="" coords="686,192,845,218"/>
+<area shape="rect" id="node25" href="$ad413x_8h.html#a07657458d6a9257b39ee266d59e51880" title=" " alt="" coords="692,65,839,92"/>
+<area shape="rect" id="node27" href="$ad5460_8h.html#ae57c7427b36b42beb1c7fcbad35dec7a" title="Read the live status bits." alt="" coords="1254,1573,1383,1600"/>
+<area shape="rect" id="node28" href="$channel__output__example_8h.html#ae839d5b557e7413ee71a7d30f7b5f8fa" title="Channel output example main execution." alt="" coords="652,1464,879,1490"/>
+<area shape="rect" id="node30" href="$ad5460_8h.html#adadcf7fc1bf80e2520c82893bff4800e" title="Get the GPO value for a specific channel." alt="" coords="1252,1522,1385,1549"/>
+<area shape="rect" id="node31" href="$ad5460_8h.html#a08c7febef35caf12c403e76398eb6b71" title="Update a register&#39;s field." alt="" coords="1243,1405,1394,1432"/>
+<area shape="rect" id="node37" href="$current__output__example_8h.html#a8d0ccace5dc4c241ce6ae16991f6847a" title="Current output example main execution." alt="" coords="655,1145,876,1172"/>
+<area shape="rect" id="node38" href="$voltage__output__example_8h.html#af594133c13e2cf78c6d9d72028181857" title="Voltage output example main execution." alt="" coords="653,1229,877,1256"/>
+<area shape="rect" id="node29" href="$ad5460_2src_2platform_2mbed_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function for Mbed platform." alt="" coords="485,1229,539,1256"/>
+<area shape="rect" id="node32" href="$ad5460_8h.html#af6dce2561d89992c6132034a42cb6477" title="Disable the slew rate control." alt="" coords="945,1288,1135,1314"/>
+<area shape="rect" id="node33" href="$ad5460_8h.html#ace4100908d1c6f6c7220eb77641d0aea" title="Configure and enable slew rate control for a DAC on a specific channel." alt="" coords="946,1405,1134,1432"/>
+<area shape="rect" id="node34" href="$ad5460_8h.html#ad820aff697367d02c3df2bc2803507f8" title="Set the logic value of a GPO pin." alt="" coords="699,1649,831,1676"/>
+<area shape="rect" id="node36" href="$ad5460_8h.html#a3ac149b8ac0e51abe4a0a543f5cff2d6" title="Set the operation mode for a specific channel." alt="" coords="963,1222,1117,1263"/>
+<area shape="rect" id="node39" href="$ad5460_8h.html#a83ab0c31b4c6787df032e94e1ce55f49" title="Set the current limit for a specific DAC channel in vout mode." alt="" coords="963,1456,1117,1498"/>
+<area shape="rect" id="node40" href="$ad5460_8h.html#a15df7e48eca2a50e452eff927a9fc29b" title="Set the current range for a specific channel." alt="" coords="963,1104,1117,1146"/>
+<area shape="rect" id="node41" href="$ad5460_8h.html#a7c17c388ab71313269c2a441ae2a6dbc" title="Set the voltage range for a specific channel." alt="" coords="963,1339,1117,1380"/>
+<area shape="rect" id="node42" href="$ad5460_8h.html#a09df865017b68029dfe0d01b3151cb98" title="Set the GPIO operation mode." alt="" coords="951,1624,1129,1650"/>
+<area shape="rect" id="node35" href="$ad5460_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="432,1649,592,1676"/>
+<area shape="rect" id="node44" href="$ad74413r_8h.html#ad8ad82e04c90fc157a2d468235510f87" title="Get the rejection setting for a specific channel." alt="" coords="1231,2820,1407,2862"/>
+<area shape="rect" id="node49" href="$ad74413r_8h.html#a16d2de0ded1a1444a245f965fe33199f" title="Get the ADC measurement range for a specific channel." alt="" coords="1226,2704,1411,2730"/>
+<area shape="rect" id="node50" href="$ad74413r_8h.html#a8067cbe5598b1155264049e24b5566a7" title="Get the rejection setting for a specific channel." alt="" coords="1216,2900,1421,2926"/>
+<area shape="rect" id="node52" href="$ad74413r_8h.html#a194c5c1823b534d265b2ff8402eafe98" title="Get the diagnostic value for a specific channel." alt="" coords="1245,1776,1392,1802"/>
+<area shape="rect" id="node54" href="$ad74413r_8h.html#aaea37e9bf9b2fc6a52daf78866cd1ec1" title="Read the live status bits." alt="" coords="441,1864,583,1890"/>
+<area shape="rect" id="node55" href="$ad74413r_8h.html#afd8a5153239eda88ad930cb44b5e9e85" title="Read the raw ADC raw conversion value." alt="" coords="1233,2951,1405,2992"/>
+<area shape="rect" id="node56" href="$ad74413r_8h.html#a8d853f1af457b7794b13bbf40bc39842" title="Get the GPO value for a specific channel." alt="" coords="441,1928,583,1954"/>
+<area shape="rect" id="node57" href="$ad74413r_8h.html#a4516d35a4966c4f22d80c4dbccad1f8b" title="Get the number of active channels." alt="" coords="1242,2755,1395,2796"/>
+<area shape="rect" id="node58" href="$ad74413r_8h.html#a7ce87336ec6be9a669d53837915fb69e" title="Update a register&#39;s field." alt="" coords="1237,2358,1400,2385"/>
+<area shape="rect" id="node45" href="$ad74413r_8h.html#a161a873b1f007f475d8a61656baf4859" title="Get the ADC sample rate for the diagnostics channels." alt="" coords="935,2870,1145,2897"/>
+<area shape="rect" id="node46" href="$ad74413r_8h.html#ae5b5d0636b18c601de28dbdc25b909e6" title="Get a single ADC raw value for a specific channel, then power down the ADC." alt="" coords="672,2718,859,2745"/>
+<area shape="rect" id="node47" href="$ad74413r_8h.html#ac66c658f628c3af7046d3f9ebb71f586" title="Get the ADC real value, according to the operation mode." alt="" coords="420,2581,604,2608"/>
+<area shape="rect" id="node48" href="$ad74413r_2src_2examples_2dummy_2dummy__example_8c.html#aab59a6c65a45a3bcf47030189141a81c" title="Dummy example main execution." alt="" coords="196,2146,372,2173"/>
+<area shape="rect" id="node51" href="$ad74413r_8h.html#a0f0b937846309275fff4a4325115d637" title="Get the ADC sample rate." alt="" coords="953,2972,1127,2998"/>
+<area shape="rect" id="node53" href="$ad74413r_8h.html#ac8f2a6e1ed073e8acd21f266e695f1c4" title="Read the die&#39;s temperature from the diagnostic register." alt="" coords="436,1801,588,1828"/>
+<area shape="rect" id="node59" href="$ad74413r_8h.html#a616ec2580d5e530cfd5feb5bb0c461dd" title="Clear the DAC (to the code in DAC_CLR_CODE register)" alt="" coords="964,2434,1116,2461"/>
+<area shape="rect" id="node60" href="$ad74413r_8h.html#ab10b09fc8236f9f4b4318fe70e6a17e9" title="Disable the slew rate control." alt="" coords="938,2485,1142,2512"/>
+<area shape="rect" id="node61" href="$ad74413r_8h.html#ab6466b2dd407b5accccbfaeea9042f75" title="Configure and enable slew rate control for a DAC on a specific channel." alt="" coords="939,2536,1141,2562"/>
+<area shape="rect" id="node62" href="$ad74413r_8h.html#a848dec7dd3b0f971e38486d2c02eb10c" title="Set the logic value of a GPO pin." alt="" coords="695,1928,836,1954"/>
+<area shape="rect" id="node63" href="$ad74413r_8h.html#aad9e00c68f2ff4a3d5da09da02497e32" title="Enable/disable a specific ADC channel." alt="" coords="941,2652,1139,2694"/>
+<area shape="rect" id="node64" href="$ad74413r_8h.html#a52644a6378136dbd4e2676463fff1fec" title="Start or stop ADC conversions." alt="" coords="936,2718,1144,2745"/>
+<area shape="rect" id="node65" href="$ad74413r_8h.html#ad84f8c43da29bf0fd97915eb492be5db" title="Set the ADC sample rate for the diagnostics channels." alt="" coords="936,2181,1144,2208"/>
+<area shape="rect" id="node68" href="$ad74413r_8h.html#a1451fd07297d8643a53907c18800d610" title="Set the rejection setting for a specific channel." alt="" coords="938,2130,1142,2157"/>
+<area shape="rect" id="node70" href="$ad74413r_8h.html#a321774430421c0f76cec172113f26b32" title="Set the operation mode for a specific channel." alt="" coords="956,2064,1124,2106"/>
+<area shape="rect" id="node71" href="$ad74413r_8h.html#a1c9d3f797477cc94885acac1eedcb77b" title="Set the debounce mode for the IOx inputs when the ADC is running in digital input mode." alt="" coords="928,2333,1152,2360"/>
+<area shape="rect" id="node72" href="$ad74413r_8h.html#a591c0a8ec0569ff7e68aa0ccbbf15ea8" title="Set which diagnostic value to be loaded in the DIAG_RESULT register." alt="" coords="439,2276,585,2302"/>
+<area shape="rect" id="node73" href="$ad74413r_8h.html#aa3d6f1a8bfcf7b076eadbb2cb306504f" title="Enable conversions on a diagnostic register." alt="" coords="939,2587,1141,2628"/>
+<area shape="rect" id="node74" href="$ad74413r_8h.html#acfe06137db94ea0ed21795cd544c4ccc" title="Set the GPO operation mode." alt="" coords="947,2004,1133,2030"/>
+<area shape="rect" id="node76" href="$ad74413r_8h.html#aa7eb45929e78919c26309e36af5a1f81" title="Select which information the device will respond with (in the readback field) when a read operation i..." alt="" coords="969,2384,1111,2410"/>
+<area shape="rect" id="node77" href="$ad74413r_8h.html#a823eb0f0f44a1d034272122f280ae26e" title="Set the threshold, for which a signal would be considered high, when the ADC is running in digital in..." alt="" coords="423,2213,601,2240"/>
+<area shape="rect" id="node66" href="$swiot__fw_8h.html#a427f9beea005fab8fccd9774acb53fc3" title="IIO example main execution." alt="" coords="704,2181,827,2208"/>
+<area shape="rect" id="node67" href="$swiot1l_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function." alt="" coords="485,2156,539,2182"/>
+<area shape="rect" id="node69" href="$swiot1l__mqtt_8h.html#ab4316fc56ae71292fd2845eb8cb6fd42" title=" " alt="" coords="712,2130,819,2157"/>
+<area shape="rect" id="node75" href="$ad74413r_8h.html#a2870a77c140d0932b234263eff8789e5" title="Set multiple GPO values at once." alt="" coords="664,1978,867,2005"/>
+<area shape="rect" id="node79" href="$ad74416h_8h.html#aa0a393aecab8df30bfb71692202970d3" title="Get the ADC Input Node for conversion." alt="" coords="1209,3377,1428,3404"/>
+<area shape="rect" id="node80" href="$ad74416h_8h.html#ae35c642556a31a62c305dcf873753b55" title="Get the ADC measurement range for a specific channel." alt="" coords="1225,3428,1413,3454"/>
+<area shape="rect" id="node81" href="$ad74416h_8h.html#af9c14e36b88db8f6238f1c7ef0dfc832" title="Get the ADC Conversion Rate for a specific channel." alt="" coords="1230,3326,1407,3353"/>
+<area shape="rect" id="node83" href="$ad74416h_8h.html#a455e9f54ecf81fbfff98f4f369c214ee" title="Get the diagnostic value for a specific channel." alt="" coords="1244,3276,1393,3302"/>
+<area shape="rect" id="node85" href="$ad74416h_8h.html#a6a2406b4dbfaeb8682db58749c7cc1b3" title="Read the live status bits." alt="" coords="1246,3596,1391,3622"/>
+<area shape="rect" id="node86" href="$ad74416h_8h.html#a54375cfadad5b89804b5658c283ae0d9" title="Read the raw ADC raw conversion value." alt="" coords="1231,3647,1406,3688"/>
+<area shape="rect" id="node87" href="$ad74416h_8h.html#a213f77fa616a9396863dd4b41024e4c0" title="Get the GPO value for a specific channel." alt="" coords="1244,3225,1393,3252"/>
+<area shape="rect" id="node88" href="$ad74416h_8h.html#af577d885d6a1aaadfbb7f1dbf9dbefcd" title="Get the number of active channels." alt="" coords="1241,3479,1397,3520"/>
+<area shape="rect" id="node89" href="$ad74416h_8h.html#acf8447bab1d929853002a134a64958e1" title="Update a register&#39;s field." alt="" coords="1235,3545,1402,3572"/>
+<area shape="rect" id="node82" href="$ad74416h_8h.html#a330eedb302abc5b997f5cde48e58a38c" title="Get a single ADC raw value for a specific channel, then power down the ADC." alt="" coords="670,3149,861,3176"/>
+<area shape="rect" id="node84" href="$ad74416h_8h.html#ada267d6352cfe89288b9be230f7ad357" title="Read the die&#39;s temperature from the diagnostic register." alt="" coords="963,3022,1117,3049"/>
+<area shape="rect" id="node90" href="$ad74416h_8h.html#abc59102ec483d952d870e47d794431be" title="Disable the slew rate control." alt="" coords="937,3342,1143,3369"/>
+<area shape="rect" id="node91" href="$ad74416h_8h.html#ab50ac784343083e2d6650fd97807e356" title="Configure and enable slew rate control for a DAC on a specific channel." alt="" coords="938,3393,1142,3420"/>
+<area shape="rect" id="node92" href="$ad74416h_8h.html#a19b7055a69ac5e060b4df329db3f8503" title="Set the DO value of a channel." alt="" coords="972,3444,1108,3470"/>
+<area shape="rect" id="node93" href="$ad74416h_8h.html#a1f78b57089351637513641367e1e8cee" title="Set the logic value of a GPO pin." alt="" coords="691,3778,839,3805"/>
+<area shape="rect" id="node95" href="$ad74416h_8h.html#a4260e4717e768e202aa3c7426d8aea7c" title="Enable/disable a specific ADC channel." alt="" coords="939,3226,1141,3267"/>
+<area shape="rect" id="node96" href="$ad74416h_8h.html#ae20f662ed7c9c2fab2197e918351c3c0" title="Set the ADC Input Node for conversion." alt="" coords="931,3545,1149,3572"/>
+<area shape="rect" id="node97" href="$ad74416h_8h.html#a88daa759aee670e104e43119908e682a" title="Start or stop ADC conversions." alt="" coords="935,3174,1145,3201"/>
+<area shape="rect" id="node98" href="$ad74416h_8h.html#ab71c6367818f0dd8b1ad8aeab57da934" title="Set the ADC measurement range for a specific channel." alt="" coords="947,3596,1133,3622"/>
+<area shape="rect" id="node99" href="$ad74416h_8h.html#a3fc5401c4208a8e585bc3919db31c35a" title="Set the ADC Conversion Rate for a specific channel." alt="" coords="952,3646,1128,3673"/>
+<area shape="rect" id="node100" href="$ad74416h_8h.html#abc70a3364d76a693d2feebbe83f4fe11" title="Set the operation mode for a specific channel." alt="" coords="955,3698,1125,3739"/>
+<area shape="rect" id="node101" href="$ad74416h_8h.html#a114663608f8422749cadb6ca608a8588" title="Set the current limit for a specific DAC channel in vout mode." alt="" coords="955,3763,1125,3804"/>
+<area shape="rect" id="node102" href="$ad74416h_8h.html#a6b15b8f15f2c5fae771f149145ffc055" title="Set the voltage range for a specific channel." alt="" coords="955,3828,1125,3870"/>
+<area shape="rect" id="node103" href="$ad74416h_8h.html#af31d6e0eda6bf3092932c935dedaceb0" title="Set the debounce mode for the IOx inputs when the ADC is running in digital input mode." alt="" coords="927,3894,1153,3921"/>
+<area shape="rect" id="node104" href="$ad74416h_8h.html#ae49d0a596785b33dfe06cf4274362fbb" title="Set which diagnostic value to be loaded in the DIAG_RESULT register." alt="" coords="966,3945,1114,3972"/>
+<area shape="rect" id="node105" href="$ad74416h_8h.html#a35358091fd9f02e8f8dd3f4b5364fcee" title="Enable conversions on a diagnostic register." alt="" coords="937,3996,1143,4038"/>
+<area shape="rect" id="node106" href="$ad74416h_8h.html#a43d2b4cb99d07dbbb084d3368bcba69a" title="Set the GPIO operation mode." alt="" coords="943,4062,1137,4089"/>
+<area shape="rect" id="node107" href="$ad74416h_8h.html#a52ff223aaede1c83d9f7d0ee2a0adf87" title="Set the threshold, for which a signal would be considered high, when the ADC is running in digital in..." alt="" coords="949,3292,1131,3318"/>
+<area shape="rect" id="node94" href="$ad74416h_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="432,3778,592,3805"/>
+<area shape="rect" id="node117" href="$ad7606_8h.html#a6adb5704bfa72226e1fa25e0ac6db8f4" title="Write a device register via SPI with masking." alt="" coords="951,4468,1129,4494"/>
+<area shape="rect" id="node110" href="$ad7606_8h.html#af543646f8ff88bb2104880eff9881aa6" title="Toggle the CONVST pin to start a conversion." alt="" coords="980,4113,1100,4140"/>
+<area shape="rect" id="node111" href="$ad7606_8h.html#a8b8917b88bf8a962cf4c03bbcc32d787" title="Set the channel gain." alt="" coords="963,4164,1117,4190"/>
+<area shape="rect" id="node112" href="$ad7606_8h.html#abc9cacda6c8f8496a798487f9bbc727d" title="Set the channel offset." alt="" coords="959,4214,1121,4241"/>
+<area shape="rect" id="node113" href="$ad7606_8h.html#a7c95873d263944b0a6fe60ac8491bc4a" title="Set the channel phase." alt="" coords="957,4265,1123,4292"/>
+<area shape="rect" id="node114" href="$ad7606_8h.html#a805c34e6e494c53ab140d91581f9e59e" title="Set the device config register." alt="" coords="969,4316,1111,4342"/>
+<area shape="rect" id="node115" href="$ad7606_8h.html#a1417edc65b2d70eef23d8cb08b39f915" title="Set the device digital diagnostics configuration." alt="" coords="950,4366,1130,4393"/>
+<area shape="rect" id="node116" href="$ad7606_8h.html#abc4948edb50ed62de9ab4a96119360d9" title="Set the oversampling ratio." alt="" coords="943,4417,1137,4444"/>
+<area shape="rect" id="node119" href="$ade9113_8h.html#a021aef42c8122bdba9212a1936753248" title="Get register map CRC." alt="" coords="1253,5129,1385,5156"/>
+<area shape="rect" id="node120" href="$ade9113_8h.html#ae98a14422abb6af74b3661b65010a3de" title="Get CRC enable on SPI write setting." alt="" coords="1241,5180,1396,5222"/>
+<area shape="rect" id="node121" href="$ade9113_8h.html#acb24a05b5763017f45057217890d54c0" title="Get EMI HI limit." alt="" coords="1240,5246,1397,5287"/>
+<area shape="rect" id="node122" href="$ade9113_8h.html#abf0849e3b80c573302d6f37989c709d5" title="Get EMI HI mask." alt="" coords="1219,5312,1419,5338"/>
+<area shape="rect" id="node123" href="$ade9113_8h.html#abe55829c5e2b25846f8f4ae8977e0ded" title="Get EMI LO limit." alt="" coords="1240,5363,1397,5404"/>
+<area shape="rect" id="node124" href="$ade9113_8h.html#a5607a916152e062ba2e494d53996a7a0" title="Get EMI LO mask." alt="" coords="1219,5429,1419,5456"/>
+<area shape="rect" id="node125" href="$ade9113_8h.html#af3b5568eb8a231ecd93af66de15fb5b8" title="Get EMI MID limit." alt="" coords="1233,5480,1404,5522"/>
+<area shape="rect" id="node126" href="$ade9113_8h.html#a431ea1d79a0cfdda9a85ef929e9b98e2" title="Get ECC or PHY Error Count on ISO to NONISO Communications." alt="" coords="1231,5546,1406,5573"/>
+<area shape="rect" id="node127" href="$ade9113_8h.html#a2f97c22926adcbae167087a7df90d2c0" title="Get interrupt indicator from STATUS register." alt="" coords="1230,4977,1407,5004"/>
+<area shape="rect" id="node151" href="$ade9113_8h.html#a4852eb88325b2942700bc44cdbaecca7" title="Get SILICON_REVISION value." alt="" coords="1241,5663,1396,5704"/>
+<area shape="rect" id="node152" href="$ade9113_8h.html#ac560c1e9d5bf11c956fd30c7ad6d33d5" title="Get STATUSx register value." alt="" coords="1225,5729,1413,5756"/>
+<area shape="rect" id="node153" href="$ade9113_8h.html#aedee79125f760aa7685a92f876595b0f" title="Get STREAM_DBG mode." alt="" coords="1239,5780,1398,5822"/>
+<area shape="rect" id="node154" href="$ade9113_8h.html#abaa622bce58906fe82dc2a2a6869c4f5" title="Get VERSION_PRODUCT value." alt="" coords="1238,5598,1399,5639"/>
+<area shape="rect" id="node157" href="$ade9113_8h.html#ab7917ca96deaaf5eabec8ec171be43bb" title="Get wave value." alt="" coords="1249,5028,1389,5054"/>
+<area shape="rect" id="node158" href="$ade9113_8h.html#ae11f2c9078bb5b74c0876f0f5e44ebed" title="Get the value stired in the scratchpad register." alt="" coords="1223,5078,1415,5105"/>
+<area shape="rect" id="node128" href="$ade9113_8h.html#ac07342aad30106c1373b0cd92d60f64e" title="Get ADC_SYNC_DONE indicator." alt="" coords="934,5036,1146,5062"/>
+<area shape="rect" id="node129" href="$ade9113_8h.html#a15aaf923d728390cfd7b40e72f2501b1" title="Get COM_UP indicator." alt="" coords="958,5086,1122,5113"/>
+<area shape="rect" id="node130" href="$ade9113_8h.html#a183988e328ed2fda01ee826cb7e8ac17" title="Get COMFLT_ERR indicator." alt="" coords="951,5137,1129,5164"/>
+<area shape="rect" id="node131" href="$ade9113_8h.html#ad8b6326e254e9b5442565bb3c5ddfb0b" title="Get CRC_CHG indicator." alt="" coords="959,5188,1121,5214"/>
+<area shape="rect" id="node132" href="$ade9113_8h.html#a97407c6d4f8092f4651e69d66e5dc18f" title="Get CRC_DONE indicator." alt="" coords="939,5238,1141,5265"/>
+<area shape="rect" id="node133" href="$ade9113_8h.html#a6ecc3569c1c23aec580731e3b5da2e93" title="Get EFUSE_MEM_ERR indicator." alt="" coords="933,5289,1147,5316"/>
+<area shape="rect" id="node134" href="$ade9113_8h.html#aa7ee2ec13907c5aa96c349c1ac3e77d5" title="Get I_WAV_OVRNG indicator." alt="" coords="943,5340,1137,5366"/>
+<area shape="rect" id="node135" href="$ade9113_8h.html#a6c19e18b8c0709e6d7864b90aeefce98" title="Get ISO_CLK_STBL_ERR indicator." alt="" coords="961,5391,1119,5432"/>
+<area shape="rect" id="node136" href="$ade9113_8h.html#a9c4580d035fbb6dfa2350b8051997b2e" title="Get ISO_DIG_MOD_I_OVF indicator." alt="" coords="961,5456,1119,5498"/>
+<area shape="rect" id="node137" href="$ade9113_8h.html#aab58481692c8cccf8f064aac5e1f58f3" title="Get ISO_DIG_MOD_V1_OVF indicator." alt="" coords="961,5522,1119,5563"/>
+<area shape="rect" id="node138" href="$ade9113_8h.html#a8d47289d0de45bd7c2b46912dbb7c057" title="Get ISO_DIG_MOD_V2_OVF indicator." alt="" coords="961,5587,1119,5628"/>
+<area shape="rect" id="node139" href="$ade9113_8h.html#a12efdda72554040d4d6d057b79bcc88b" title="Get ISO_ECC_ERR indicator." alt="" coords="947,5653,1133,5680"/>
+<area shape="rect" id="node140" href="$ade9113_8h.html#a8087931b11f8cf7f6612ff1c7f6a4cda" title="Get ISO_EFUSE_MEM_ERR indicator." alt="" coords="953,5704,1127,5746"/>
+<area shape="rect" id="node141" href="$ade9113_8h.html#a9fe64b5b0a312deefbdbc82b989ee343" title="Get ISO_PHY_CRC_ERR indicator." alt="" coords="959,5770,1121,5811"/>
+<area shape="rect" id="node142" href="$ade9113_8h.html#a0a139d4d62daef09e6a847cb6afdebf7" title="Get ISO_PHY_ERR indicator." alt="" coords="946,4518,1134,4545"/>
+<area shape="rect" id="node143" href="$ade9113_8h.html#a5b3801f7398908bfd4fda50cf8baf091" title="Get ISO_STATUS_RD_ECC_ERR indicator." alt="" coords="951,4570,1129,4611"/>
+<area shape="rect" id="node144" href="$ade9113_8h.html#acdf4a4fbd92a34a27bafc7695270f675" title="Get ISO_TEST_MMR_ERR indicator." alt="" coords="958,4635,1122,4676"/>
+<area shape="rect" id="node145" href="$ade9113_8h.html#ae1a622415243b36f75fbccbff0fc7f77" title="Get RESET_DONE indicator." alt="" coords="947,4701,1133,4728"/>
+<area shape="rect" id="node146" href="$ade9113_8h.html#a744fce7e1911cdd5fe3e0356b24fd9b3" title="Get SPI_CRC_ERR indicator." alt="" coords="949,4752,1131,4778"/>
+<area shape="rect" id="node147" href="$ade9113_8h.html#affbfb5ba4f7bf0489af821fb86285ccd" title="Get STATUS1 indicator." alt="" coords="955,4802,1125,4829"/>
+<area shape="rect" id="node148" href="$ade9113_8h.html#a44f5f5a5b613ccd73e0895f15cfe98ec" title="Get STATUS2 indicator." alt="" coords="955,4853,1125,4880"/>
+<area shape="rect" id="node149" href="$ade9113_8h.html#a6dadfb9485fd867898ba61594ec1a16f" title="Get V1_WAV_OVRNG indicator." alt="" coords="959,4904,1121,4946"/>
+<area shape="rect" id="node150" href="$ade9113_8h.html#aa16499c63ab925f8302140b9ad3f7a26" title="Get V2_WAV_OVRNG indicator." alt="" coords="959,4970,1121,5011"/>
+<area shape="rect" id="node155" href="$ade9113_8h.html#af4c8fffd5d44a93755fa934d137b240b" title="Reset the device using SW reset." alt="" coords="968,5836,1112,5862"/>
+<area shape="rect" id="node156" href="$ade9113_8h.html#ac36c5f753e2d4a5b42a6024a05f8ef9d" title="Reset the device using SW reset." alt="" coords="969,6117,1111,6144"/>
+<area shape="rect" id="node160" href="$ade9113_8h.html#aa48a26f583c2e287a64f0ac7a68fa8f9" title="Clear the ADC_SYNC_DONE int mask." alt="" coords="1227,6398,1411,6439"/>
+<area shape="rect" id="node161" href="$ade9113_8h.html#a648ceb0471f713f4aca1511739e164d9" title="Clear the COM_UP int mask." alt="" coords="1219,6464,1418,6490"/>
+<area shape="rect" id="node162" href="$ade9113_8h.html#a14dc7bda1983c4d0f2910b39f1b52bbe" title="Clear the COMFLT_ERR int mask." alt="" coords="1236,6515,1401,6556"/>
+<area shape="rect" id="node163" href="$ade9113_8h.html#ab07c8b3fab1688ca6b84d4abca0d417b" title="Clear the CRC_CHG int mask." alt="" coords="1220,6581,1417,6608"/>
+<area shape="rect" id="node164" href="$ade9113_8h.html#a033fd20b1eaa07744912426218b2bf8e" title="Clear the CRC_DONE int mask." alt="" coords="1215,6632,1422,6658"/>
+<area shape="rect" id="node165" href="$ade9113_8h.html#a37afd8457eb1d33049531e564784864f" title="Clear the I_WAV_OVRNG int mask." alt="" coords="1237,6683,1400,6724"/>
+<area shape="rect" id="node166" href="$ade9113_8h.html#a0ad7707f463b1179a63dc027220d78cd" title="Clear the ISO_CLK_STBL_ERR int mask." alt="" coords="1234,6748,1403,6790"/>
+<area shape="rect" id="node167" href="$ade9113_8h.html#a27fb062acf418425338d7abbc260eb5b" title="Clear the ISO_DIG_MOD_I_OVF int mask." alt="" coords="1233,6814,1404,6855"/>
+<area shape="rect" id="node168" href="$ade9113_8h.html#af432506c1d55163d66ef2e736f4384ea" title="Clear the ISO_DIG_MOD_V1_OVF int mask." alt="" coords="1233,6879,1404,6920"/>
+<area shape="rect" id="node169" href="$ade9113_8h.html#a8e9d67aeac0d8043ee734fec0153cfec" title="Clear the ISO_DIG_MOD_V2_OVF int mask." alt="" coords="1233,6944,1404,6986"/>
+<area shape="rect" id="node170" href="$ade9113_8h.html#a19d7cece724c21dda6d700dd9cade7f0" title="Clear the ISO_EFUSE_MEM_ERR int mask." alt="" coords="1225,7010,1412,7051"/>
+<area shape="rect" id="node171" href="$ade9113_8h.html#a665304c5f3d3e2ddf2361bb0350ce271" title="Clear the ISO_PHY_CRC_ERR int mask." alt="" coords="1231,7075,1406,7116"/>
+<area shape="rect" id="node172" href="$ade9113_8h.html#a98bba4eafe3a44c90480901d5de220da" title="Clear the ISO_TEST_MMR_ERR int mask." alt="" coords="1231,7140,1406,7182"/>
+<area shape="rect" id="node173" href="$ade9113_8h.html#a9ac075177cb951abdde200394b42a606" title="Clear the RESET_DONE int mask." alt="" coords="1240,7206,1397,7247"/>
+<area shape="rect" id="node174" href="$ade9113_8h.html#ac2a026cedfe95885b1484ce20e2c141d" title="Clear the SPI_CRC_ERR int mask." alt="" coords="1234,5846,1403,5887"/>
+<area shape="rect" id="node175" href="$ade9113_8h.html#acfcad64e5dde47e541ee277d25ad7ff0" title="Clear the V1_WAV_OVRNG int mask." alt="" coords="1231,5911,1406,5952"/>
+<area shape="rect" id="node176" href="$ade9113_8h.html#aab1abd59e6e362bde4cb362b7fb6c63d" title="Clear the V2_WAV_OVRNG int mask." alt="" coords="1231,5976,1406,6018"/>
+<area shape="rect" id="node177" href="$ade9113_8h.html#a65751bdaa8618aef969cfae43bd75410" title="Force background register map CRC recalculation." alt="" coords="1201,6042,1436,6069"/>
+<area shape="rect" id="node178" href="$ade9113_8h.html#ae4892af117d6109a3cdd6e06e9051c0b" title="Set EMI HI mask." alt="" coords="1219,6093,1418,6120"/>
+<area shape="rect" id="node179" href="$ade9113_8h.html#af3b8e235bfb6eb235e389a1f40b30e99" title="Set EMI LO mask." alt="" coords="1219,6144,1418,6170"/>
+<area shape="rect" id="node180" href="$ade9113_8h.html#a7842241d63e8d4fcc2c5778a1e5222f3" title="Lock device." alt="" coords="1251,6194,1386,6221"/>
+<area shape="rect" id="node181" href="$ade9113_8h.html#adc9881539f9cf29fef3e7044aea6ac52" title="Unlock device." alt="" coords="1243,6245,1394,6272"/>
+<area shape="rect" id="node182" href="$ade9113_8h.html#a36f2f440a8793ee17bc4032579740c5d" title="Write value in the scratchpad register." alt="" coords="1221,6296,1417,6322"/>
+<area shape="rect" id="node184" href="$adin1110_8c.html#adff719efae401e69148b2ffdc2fc1657" title="Drop a MAC address filter." alt="" coords="1223,7626,1415,7653"/>
+<area shape="rect" id="node186" href="$adin1110_8h.html#a27e02adfe419b1646c268d291e25333a" title="Reset both the MAC and PHY." alt="" coords="1242,7272,1395,7298"/>
+<area shape="rect" id="node187" href="$adin1110_8h.html#a9f5add21eeddbb548eb4c86436a6b00c" title="Reset the MAC device." alt="" coords="1240,7728,1397,7754"/>
+<area shape="rect" id="node188" href="$adin1110_8h.html#a976ff9c87dee57812cdc31869fb00afa" title="Read a PHY register using clause 22." alt="" coords="1239,7778,1398,7805"/>
+<area shape="rect" id="node189" href="$adin1110_8h.html#a36cc242f605b3251d5a5662fea41f534" title="Read a PHY register using clause 45." alt="" coords="1225,7424,1413,7450"/>
+<area shape="rect" id="node190" href="$adin1110_8h.html#af976653778ae7d9acc44b2e745987a73" title="Write a PHY register using clause 22." alt="" coords="1237,7474,1400,7501"/>
+<area shape="rect" id="node191" href="$adin1110_8h.html#aa2b694efd5f31849bdeb6228b7070394" title="Write a PHY register using clause 45." alt="" coords="1223,7525,1415,7552"/>
+<area shape="rect" id="node192" href="$adin1110_8h.html#a9f59c78bf9e0857b7522f1410725f373" title="Reset the PHY device." alt="" coords="1242,7322,1395,7349"/>
+<area shape="rect" id="node193" href="$adin1110_8h.html#a72d9ad4ea11c49d3a4a76ec024d4be81" title="Update a register&#39;s value based on a mask." alt="" coords="1237,7576,1400,7602"/>
+<area shape="rect" id="node194" href="$adin1110_8h.html#a05609f0807a1f98ed266f3f75073ddea" title="Set a MAC address destination filter, frames who&#39;s DA doesn&#39;t match are dropped." alt="" coords="1229,7677,1409,7704"/>
+<area shape="rect" id="node195" href="$frame__rx__tx__example_8h.html#abe0fb5a74cb63c5acfcb582ace42a4ee" title="Frame receive an transmit example main execution." alt="" coords="663,7553,868,7580"/>
+<area shape="rect" id="node185" href="$adin1110_8h.html#a32b2d0fa3b54c8b0219e6b8ed5992d14" title="Set/clear a broadcast filter. By enabling this, broadcast frames will be forwarded to the host." alt="" coords="963,7644,1117,7686"/>
+<area shape="rect" id="node196" href="$adin1110_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="485,7553,539,7580"/>
+<area shape="rect" id="node198" href="$adin1110_8h.html#aedf3f21c23621ec1abcdec2374996711" title="Reset both the MAC and PHY." alt="" coords="1245,7829,1392,7856"/>
+<area shape="rect" id="node199" href="$adin1110_8h.html#a635de87c5f9555429501be7482f7d2bb" title="Initialize the device." alt="" coords="985,7757,1095,7784"/>
+<area shape="rect" id="node202" href="$max2201x_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="204,8297,364,8324"/>
+<area shape="rect" id="node203" href="$max2201x_8h.html#a2e56b70c90f2d33df6c2ffd5f9d06747" title="Get data from requestec channel." alt="" coords="1241,7930,1396,7957"/>
+<area shape="rect" id="node204" href="$max2201x_8h.html#a03abb44bbdb6ff32ced0acab6e48fc01" title="Get the direction of the specified GPIO." alt="" coords="1209,7981,1428,8008"/>
+<area shape="rect" id="node205" href="$max2201x_8h.html#a7fa7f757d5a03d7be0a7b0f6d80c10fc" title="Get the value of the specified GPIO." alt="" coords="1220,7880,1417,7906"/>
+<area shape="rect" id="node206" href="$max2201x_8h.html#a5da960f1ae6ad4665875da702dc628fa" title="Update the value of a device register (read/write sequence)." alt="" coords="1233,8326,1404,8353"/>
+<area shape="rect" id="node207" href="$max2201x_8h.html#acee32cbb7f578be48da02d120b503fef" title="Set AO configuration." alt="" coords="443,8322,581,8349"/>
+<area shape="rect" id="node208" href="$max2201x_8h.html#a5df73eb41b5e99589aef1299bace511a" title="Enable the input direction of the specified GPIO." alt="" coords="945,8504,1135,8546"/>
+<area shape="rect" id="node209" href="$max2201x_8h.html#a31187e0b4f054e0c02a043588bf3b50f" title="Enable the output direction of the specified GPIO." alt="" coords="945,8184,1135,8226"/>
+<area shape="rect" id="node210" href="$max2201x_8h.html#aa8f8ab21e2af1a8440c332dde2bb7adc" title="Obtain the GPIO decriptor." alt="" coords="963,8250,1117,8277"/>
+<area shape="rect" id="node211" href="$max2201x_8h.html#a8241bc6ecdea4fc1d0dec88195b78453" title="Free the resources allocated by no_os_gpio_get()." alt="" coords="949,8301,1131,8328"/>
+<area shape="rect" id="node212" href="$max2201x_8h.html#a55580c315d04a7712d46c2b5f6176e68" title="Set the value of the specified GPIO." alt="" coords="942,8352,1138,8378"/>
+<area shape="rect" id="node213" href="$max2201x_8h.html#a4b5fe59a02150a00efad7e6b13a03f1b" title="Initialize and configure the MAX2201X device." alt="" coords="453,8108,571,8134"/>
+<area shape="rect" id="node216" href="$max2201x_8h.html#aa2d8950536271086d20215d4f0a6cb40" title="Set operation mode for requested channel." alt="" coords="961,8402,1119,8429"/>
+<area shape="rect" id="node217" href="$max2201x_8h.html#a2cb9bed62541ba72f86f47f0795a4e6b" title="Set timeout settings for MAX2201X device." alt="" coords="952,8453,1128,8480"/>
+<area shape="rect" id="node218" href="$max2201x_8h.html#ab1f0c2698cf2892bd7c7814fcd38ad5a" title="Soft reset requested channel." alt="" coords="959,8133,1121,8160"/>
+<area shape="rect" id="node214" href="$iio__max2201x_8h.html#a1a5e62a02277f0856f6a84262b00db64" title=" " alt="" coords="213,8108,355,8134"/>
+<area shape="rect" id="node215" href="$max2201x_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="5,8133,148,8160"/>
+<area shape="rect" id="node219" href="$max2201x_8h.html#afe3e48c359a42b5899f75a5ba9aadc0d" title="Free the resources allocated during init and perform a soft reset." alt="" coords="691,8133,839,8160"/>
+<area shape="rect" id="node220" href="$iio__max2201x_8h.html#a0412eee94e1d48f15b1927dc2e3759a4" title=" " alt="" coords="199,8158,369,8185"/>
+<area shape="rect" id="node222" href="$max2201x_8h.html#a3864a04f2d1e0c91f1573b4149426ebd" title="Set gain value for calibration of requested channel." alt="" coords="1237,8621,1401,8648"/>
+<area shape="rect" id="node223" href="$max2201x_8h.html#a7e68142dac491ed055c13091574fabd1" title="Set offset value for output calibration." alt="" coords="1232,8672,1405,8698"/>
+<area shape="rect" id="node224" href="$max2201x_8h.html#a00108d8a8993705afaa1bd3b9a3f8f5b" title="Set data of the selected channel." alt="" coords="435,8676,589,8702"/>
+<area shape="rect" id="node225" href="$max2201x_8h.html#a68c42b8a2dc5e4ac5216d6590293d9e4" title="Set slew rate settings for requested channels." alt="" coords="431,8457,593,8484"/>
+</map>

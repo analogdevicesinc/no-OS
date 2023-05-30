@@ -1,0 +1,14 @@
+<map id="spi_engine_offload_transfer" name="spi_engine_offload_transfer">
+<area shape="rect" id="node1" title="Initiate a SPI transfer in offload mode." alt="" coords="705,125,849,166"/>
+<area shape="rect" id="node2" href="$ad463x_8h.html#a354bac86baa990ef631a0316640aa6ef" title="Read from device. Enter register mode to read/write registers." alt="" coords="474,5,617,32"/>
+<area shape="rect" id="node4" href="$ad469x_8h.html#abda6b9d65e0b6e2a82390a09a8f08eb8" title="Exit conversion mode. Enter register mode to read/write registers." alt="" coords="433,56,657,83"/>
+<area shape="rect" id="node5" href="$ad469x_8h.html#a92cd606b28fd68b3a2c52717552818df" title="Read from device. Enter register mode to read/write registers." alt="" coords="474,107,617,133"/>
+<area shape="rect" id="node8" href="$ad738x_8h.html#a7e9ed97589f47833975ca0d0010ab31b" title="Read from device. Enter register mode to read/write registers." alt="" coords="474,157,617,184"/>
+<area shape="rect" id="node10" href="$adaq7980_8h.html#a1d04d6c8c5b30c8f739bb4ed0f7deecd" title="Read from device. Enter register mode to read/write registers." alt="" coords="474,208,617,235"/>
+<area shape="rect" id="node12" href="$ad77681evb_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="518,259,573,285"/>
+<area shape="rect" id="node3" href="$ad463x__fmc_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="272,5,327,32"/>
+<area shape="rect" id="node6" href="$ad469x_8h.html#a947efb0cc9183e2dc0d9aeb3d697601b" title="Read from device when converter has the channel sequencer activated. Enter register mode to read/writ..." alt="" coords="213,56,385,83"/>
+<area shape="rect" id="node7" href="$ad469x__fmcz_2src_2examples_2basic__example_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="5,81,165,108"/>
+<area shape="rect" id="node9" href="$ad738x__fmc_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="272,157,327,184"/>
+<area shape="rect" id="node11" href="$adaq7980__sdz_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="272,208,327,235"/>
+</map>

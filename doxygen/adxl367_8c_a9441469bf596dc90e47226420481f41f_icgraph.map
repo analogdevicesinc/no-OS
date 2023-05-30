@@ -1,0 +1,4 @@
+<map id="adxl367_init" name="adxl367_init">
+<area shape="rect" id="node1" title="Initializes communication with the device and checks if the part is present by reading the device id." alt="" coords="229,5,332,32"/>
+<area shape="rect" id="node2" href="$eval-adxl367z_2src_2examples_2dummy_2dummy__example_8c.html#aab59a6c65a45a3bcf47030189141a81c" title="Dummy example main execution." alt="" coords="5,5,181,32"/>
+</map>

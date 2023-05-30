@@ -1,0 +1,13 @@
+<map id="projects/ad5460/src/examples/basic/basic_example.c" name="projects/ad5460/src/examples/basic/basic_example.c">
+<area shape="rect" id="node1" title="Basic example header for eval&#45;ad5460 project." alt="" coords="309,5,476,61"/>
+<area shape="rect" id="node2" href="$ad5460_2src_2examples_2basic_2basic__example_8h.html" title="Basic example header for eval&#45;ad5460 project." alt="" coords="5,109,137,136"/>
+<area shape="rect" id="node3" title=" " alt="" coords="161,109,288,136"/>
+<area shape="rect" id="node4" href="$ad5460_8h.html" title="Header file of AD5460 Driver." alt="" coords="313,109,395,136"/>
+<area shape="rect" id="node8" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="379,184,486,211"/>
+<area shape="rect" id="node9" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="511,184,624,211"/>
+<area shape="rect" id="node10" href="$no__os__print__log_8h.html" title="Print messages helpers." alt="" coords="610,109,746,136"/>
+<area shape="rect" id="node5" title=" " alt="" coords="333,259,404,285"/>
+<area shape="rect" id="node6" title=" " alt="" coords="150,184,233,211"/>
+<area shape="rect" id="node7" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="257,184,355,211"/>
+<area shape="rect" id="node11" title=" " alt="" coords="649,184,715,211"/>
+</map>

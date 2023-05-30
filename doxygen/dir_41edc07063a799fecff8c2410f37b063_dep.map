@@ -1,0 +1,6 @@
+<map id="drivers/ecg/adas1000" name="drivers/ecg/adas1000">
+<area shape="rect" id="node1" href="dir_41edc07063a799fecff8c2410f37b063.html" title="adas1000" alt="" coords="27,52,112,100"/>
+<area shape="rect" id="node2" href="dir_d44c64559bbebec7f509842c48db8b23.html" title="include" alt="" coords="33,148,105,196"/>
+<area shape="rect" id="edge1-headlabel" href="dir_000128_000237.html" title="4" alt="" coords="73,122,82,137"/>
+<area shape="rect" id="clust1" href="dir_dbfccb1e63b7880c944b1ad0948a2b7b.html" title="ecg" alt="" coords="16,16,123,111"/>
+</map>

@@ -1,0 +1,8 @@
+<map id="ade9113_convert_to_millivolts" name="ade9113_convert_to_millivolts">
+<area shape="rect" id="node1" title="Convert a 24&#45;bit raw sample to millivolts." alt="" coords="684,74,839,115"/>
+<area shape="rect" id="node2" href="$self__test_8h.html#ab90abaf3d3379353831d0949dea7cad7" title="Startup test for power supply." alt="" coords="508,56,636,83"/>
+<area shape="rect" id="node6" href="$supply_8h.html#ad521c456c4e849693998a9d5ebb5988b" title="Convert values measured by the ADE9113 device to mV (mA val for I)" alt="" coords="275,107,460,133"/>
+<area shape="rect" id="node3" href="$self__test_8h.html#a793eb94846dc445e72d969b182ce1f7f" title="Startup test." alt="" coords="302,5,433,32"/>
+<area shape="rect" id="node4" href="$state__machine_8h.html#a92bc605df80f651e105fe804f43d615b" title="State machine main execution." alt="" coords="108,56,227,83"/>
+<area shape="rect" id="node5" href="$ad-acevsecrdset-sl_2src_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="5,56,60,83"/>
+</map>

@@ -1,0 +1,4 @@
+<map id="adis_cmd_fifo_flush" name="adis_cmd_fifo_flush">
+<area shape="rect" id="node1" title="Command: fifo flush." alt="" coords="204,5,355,32"/>
+<area shape="rect" id="node2" href="$iio__adis__internals_8h.html#a7c6f3c09bd105d1251188d1b52d7cf27" title="API to be called before trigger is enabled." alt="" coords="5,5,156,32"/>
+</map>

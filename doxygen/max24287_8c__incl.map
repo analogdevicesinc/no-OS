@@ -1,0 +1,15 @@
+<map id="drivers/net/max24287.c" name="drivers/net/max24287.c">
+<area shape="rect" id="node1" title=" " alt="" coords="328,5,504,32"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,155,72,181"/>
+<area shape="rect" id="node3" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="603,80,671,107"/>
+<area shape="rect" id="node4" href="$no__os__alloc_8h.html" title=" " alt="" coords="77,80,187,107"/>
+<area shape="rect" id="node6" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="499,229,613,256"/>
+<area shape="rect" id="node8" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="421,155,528,181"/>
+<area shape="rect" id="node9" href="$mdio__bitbang_8h.html" title="Header file for MDIO implementation using gpio bit banging." alt="" coords="355,80,477,107"/>
+<area shape="rect" id="node10" href="$max24287_8h.html" title=" " alt="" coords="227,80,330,107"/>
+<area shape="rect" id="node5" title=" " alt="" coords="93,304,163,331"/>
+<area shape="rect" id="node7" title=" " alt="" coords="351,304,422,331"/>
+<area shape="rect" id="node11" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="147,229,247,256"/>
+<area shape="rect" id="node13" href="$no__os__mdio_8h.html" title="Header file for MDIO interface driver." alt="" coords="231,155,343,181"/>
+<area shape="rect" id="node12" title=" " alt="" coords="225,304,308,331"/>
+</map>

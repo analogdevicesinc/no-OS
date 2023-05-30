@@ -1,0 +1,4 @@
+<map id="TRANSMITTER_NewEdidSegment" name="TRANSMITTER_NewEdidSegment">
+<area shape="rect" id="node1" title="Parse the new EDID segment." alt="" coords="251,5,488,32"/>
+<area shape="rect" id="node2" href="$transmitter_8h.html#ad65fcbe407bb46ad6698c3f1602144e5" title="Performs the notification operations." alt="" coords="5,5,203,32"/>
+</map>

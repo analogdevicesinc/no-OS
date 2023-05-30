@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Evaluating the ADIS1654X Family &#8212; no-OS  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="../_static/style.min.css?v=a3ba2641" />
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script defer="" src="../_static/app.umd.js?v=7e1fdd13"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Evaluating the ADIS1655X Family" href="eval-adis1655x.html" />
+    <link rel="prev" title="Evaluating the ADIS1650X Family" href="eval-adis1650x.html" />
+   
+  
+    <meta name="robots" content="noindex">
+  
+  <meta name="repo" content="no-OS">
+  
+
+
+<style>
+  body {
+    
+  }
+
+  body.dark {
+    
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body:not(.light) {
+      
+    }
+  }
+</style>
+  </head><body>
+  <div class="banner"></div>
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
+  <input type="checkbox" id="input-show-repotoc">
+
+  
+  <div class="search-area">
+    <form action="" method="get">
+      <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+      <button value="search" class="icon"></button>
+      <span id="search-progress"></span>
+    </form>
+  </div>
+  
+
+  <header>
+    <div id="left">
+      <label id="show-sidebar" class="icon" for="input-show-toc" title="Show/hide index"></label>
+    </div>
+    <div id="right">
+      <span>
+        <a id="logo-org" href="https://analog.com"></a>
+        <div class="vertical-divider"></div>
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
+        <a id="logo" href="../index.html">
+          <div>no-OS</div>
+        </a>
+      </span>
+      <span class="reverse">
+        <label id="show-localtoc" class="icon" for="input-show-localtoc" title="Show/hide contents"></label>
+      </span>
+    </div>
+  </header>
+
+
+  <div class="repotoc-tree overlay">
+    <root>
+  <a href="../../documentation/eval/index.html">Evaluation Boards</a>
+  <a href="../../documentation/university/index.html">University Program</a>
+  <a href="../../hdl/index.html">HDL</a>
+  <a href="../index.html" class="current">no-OS</a>
+  <a href="../../pyadi-iio/index.html">Hardware Python Interfaces</a>
+  <a href="../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
+  <a href="../../doctools/index.html">Doctools</a>
+  <a href="../../PrecisionToolbox/index.html">Precision Toolbox</a>
+</root>
+
+  </div>
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div>
+          <div class="localtoc-header">On this page</div>
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">Evaluating the ADIS1654X Family</a><ul>
+<li><a class="reference internal" href="#contents">Contents</a></li>
+<li><a class="reference internal" href="#supported-evaluation-boards">Supported Evaluation Boards</a></li>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#applications">Applications</a></li>
+<li><a class="reference internal" href="#hardware-specifications">Hardware Specifications</a><ul>
+<li><a class="reference internal" href="#power-supply-requirements">Power Supply Requirements</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#no-os-build-setup">No-OS Build Setup</a></li>
+<li><a class="reference internal" href="#no-os-supported-examples">No-OS Supported Examples</a><ul>
+<li><a class="reference internal" href="#basic-example">Basic example</a></li>
+<li><a class="reference internal" href="#iio-example">IIO example</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#no-os-supported-platforms">No-OS Supported Platforms</a><ul>
+<li><a class="reference internal" href="#stm32-platform">STM32 Platform</a></li>
+<li><a class="reference internal" href="#maxim-platform">Maxim Platform</a></li>
+<li><a class="reference internal" href="#pico-platform">Pico Platform</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
+  
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+    <a id="no-logo" href="../index.html">
+      no-OS
+    </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
+All content
+</label>
+<label id="show-toc" for="input-switch-toc">
+Content on this topic
+</label>
+<div class="repotoc-tree">
+  <root>
+  <a href="../../documentation/eval/index.html">Evaluation Boards</a>
+  <a href="../../documentation/university/index.html">University Program</a>
+  <a href="../../hdl/index.html">HDL</a>
+  <a href="../index.html" class="current">no-OS</a>
+  <a href="../../pyadi-iio/index.html">Hardware Python Interfaces</a>
+  <a href="../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
+  <a href="../../doctools/index.html">Doctools</a>
+  <a href="../../PrecisionToolbox/index.html">Precision Toolbox</a>
+</root>
+
+</div>
+<div class="toc-tree">
+  <html>
+  <body><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../drivers_guide.html">no-OS drivers guide</a></li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1"/><div class="collapse"><a class="reference internal" href="../drivers_doc.html">no-OS drivers list</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adxl355.html">ADXL355 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adm1177.html">ADM1177 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ad405x.html">AD405X no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ad796x.html">AD796X no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ad400x.html">AD400X no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/axi_sysid.html">System ID (AXI_SYSID) no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max14914.html">MAX14914 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max14919.html">MAX14919 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max149x6.html">MAX149X6 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max22190.html">MAX22190 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max22196.html">MAX22196 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max22200.html">MAX22200 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max2201x.html">MAX2201X no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adf4382.html">ADF4382 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/imu.html">ADIS no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/madura.html">ADRV902x (Madura) no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adp1050.html">ADP1050 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ltc2992.html">LTC2992 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ltc4296.html">LTC4296 no-OS driver</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2" checked=""/><div class="collapse"><a class="reference internal" href="../projects_doc.html">no-OS projects list</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="ad7091r8-sdz.html">Evaluating AD7091R-2/-4/-8 Devices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad7616-st.html">Evaluating AD7616 on SDP-K1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad796x_fmcz.html">Evaluating the AD796x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad400x-fmcz.html">Evaluating AD400x on ZED and SDP-K1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad469x_fmcz.html">Evaluating the AD469x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4382.html">Evaluating the ADF4382</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval-adis1646x.html">Evaluating the ADIS1646X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval-adis1647x.html">Evaluating the ADIS1647X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval-adis1650x.html">Evaluating the ADIS1650X Family</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Evaluating the ADIS1654X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval-adis1655x.html">Evaluating the ADIS1655X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval-adis1657x.html">Evaluating the ADIS1657X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval-ade9430.html">EVAL-ADE9430 Sensor-to-Cloud</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adrv902x.html">adrv902x no-OS Sample Poject</a></li>
+<li class="toctree-l2"><a class="reference internal" href="apard32690.html">Evaluating the AD-APARD32690-SL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max14914.html">Evaluating the MAX14914</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max14919.html">Evaluating the MAX14919</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adp1050.html">Evaluating the ADP1050</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc4296.html">Evaluating the LTC4296</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max2201x.html">Evaluating the MAX2201X</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to no-OS</a></li>
+</ul>
+</body>
+</html>
+
+</div>
+        </div>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body" role="main">
+            
+  <section id="evaluating-the-adis1654x-family">
+<h1><a class="toc-backref" href="#id5" role="doc-backlink">Evaluating the ADIS1654X Family</a><a class="headerlink" href="#evaluating-the-adis1654x-family" title="Link to this heading">¶</a></h1>
+<section id="contents">
+<h2><a class="toc-backref" href="#id6" role="doc-backlink">Contents</a><a class="headerlink" href="#contents" title="Link to this heading">¶</a></h2>
+<nav class="contents" id="table-of-contents">
+<p class="topic-title">Table of Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#evaluating-the-adis1654x-family" id="id5">Evaluating the ADIS1654X Family</a></p>
+<ul>
+<li><p><a class="reference internal" href="#contents" id="id6">Contents</a></p></li>
+<li><p><a class="reference internal" href="#supported-evaluation-boards" id="id7">Supported Evaluation Boards</a></p></li>
+<li><p><a class="reference internal" href="#overview" id="id8">Overview</a></p></li>
+<li><p><a class="reference internal" href="#applications" id="id9">Applications</a></p></li>
+<li><p><a class="reference internal" href="#hardware-specifications" id="id10">Hardware Specifications</a></p>
+<ul>
+<li><p><a class="reference internal" href="#power-supply-requirements" id="id11">Power Supply Requirements</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#no-os-build-setup" id="id12">No-OS Build Setup</a></p></li>
+<li><p><a class="reference internal" href="#no-os-supported-examples" id="id13">No-OS Supported Examples</a></p>
+<ul>
+<li><p><a class="reference internal" href="#basic-example" id="id14">Basic example</a></p></li>
+<li><p><a class="reference internal" href="#iio-example" id="id15">IIO example</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#no-os-supported-platforms" id="id16">No-OS Supported Platforms</a></p>
+<ul>
+<li><p><a class="reference internal" href="#stm32-platform" id="id17">STM32 Platform</a></p></li>
+<li><p><a class="reference internal" href="#maxim-platform" id="id18">Maxim Platform</a></p></li>
+<li><p><a class="reference internal" href="#pico-platform" id="id19">Pico Platform</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</section>
+<section id="supported-evaluation-boards">
+<h2><a class="toc-backref" href="#id7" role="doc-backlink">Supported Evaluation Boards</a><a class="headerlink" href="#supported-evaluation-boards" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.analog.com/ADIS16545">ADIS16545</a></p></li>
+<li><p><a class="reference external" href="https://www.analog.com/ADIS16547">ADIS16547</a></p></li>
+</ul>
+</section>
+<section id="overview">
+<h2><a class="toc-backref" href="#id8" role="doc-backlink">Overview</a><a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
+<p>The ADIS16545/ADIS16547 are a complete inertial system that includes a triaxis
+gyroscope and a triaxis accelerometer. Each inertial sensor in the
+ADIS16545/ADIS16547 combines with signal conditioning that optimizes dynamic
+performance. The factory calibration characterizes each sensor for sensitivity,
+bias, and alignment. As a result, each sensor has its own dynamic compensation
+formulas that provide accurate sensor measurements.</p>
+<p>The ADIS16545/ADIS16547 provide a simple, cost effective method for integrating
+accurate, multiaxis inertial sensing into industrial systems, especially when
+compared with the complexity and investment associated with discrete designs.
+All necessary motion testing and calibration are part of the production process
+at the factory, greatly reducing system integration time. Tight orthogonal
+alignment and precision alignment features simplify inertial frame alignment in
+navigation systems. The serial peripheral interface (SPI) and register structure
+provide a simple interface for data collection and configuration control.</p>
+</section>
+<section id="applications">
+<h2><a class="toc-backref" href="#id9" role="doc-backlink">Applications</a><a class="headerlink" href="#applications" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Precision instrumentation, stabilization</p></li>
+<li><p>Guidance, navigation, and control</p></li>
+<li><p>Avionics, unmanned vehicles</p></li>
+<li><p>Precision autonomous machines and robotics</p></li>
+</ul>
+</section>
+<section id="hardware-specifications">
+<h2><a class="toc-backref" href="#id10" role="doc-backlink">Hardware Specifications</a><a class="headerlink" href="#hardware-specifications" title="Link to this heading">¶</a></h2>
+<section id="power-supply-requirements">
+<h3><a class="toc-backref" href="#id11" role="doc-backlink">Power Supply Requirements</a><a class="headerlink" href="#power-supply-requirements" title="Link to this heading">¶</a></h3>
+<p>The ADIS1654X eval devices have to be supplied with 3.3V voltage on VDD pin.</p>
+<p><strong>Pin Description</strong></p>
+<blockquote>
+<div><p>Please see the following table for the pin assignments for the interface connector (J1).</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>Pin</p></td>
+<td><p>Name</p></td>
+<td><p>Description</p></td>
+</tr>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>DIO3</p></td>
+<td><p>Configurable Digital Input and Output 3</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>DIO4</p></td>
+<td><p>Configurable Digital Input and Output 4</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>SCLK</p></td>
+<td><p>Serial Clock (Serial Peripheral Interface)</p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>DOUT</p></td>
+<td><p>Data Output (Serial Peripheral Interface)</p></td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p>DIN</p></td>
+<td><p>Data Input (Serial Peripheral Interface)</p></td>
+</tr>
+<tr class="row-odd"><td><p>6</p></td>
+<td><p>~CS</p></td>
+<td><p>Chip Select (Serial Peripheral Interface), Active Low</p></td>
+</tr>
+<tr class="row-even"><td><p>7</p></td>
+<td><p>DIO1</p></td>
+<td><p>Configurable Digital Input and Output 1</p></td>
+</tr>
+<tr class="row-odd"><td><p>8</p></td>
+<td><p>~RST</p></td>
+<td><p>Reset, active low</p></td>
+</tr>
+<tr class="row-even"><td><p>9</p></td>
+<td><p>DIO2</p></td>
+<td><p>Configurable Digital Input and Output 2</p></td>
+</tr>
+<tr class="row-odd"><td><p>10, 11</p></td>
+<td><p>VDD</p></td>
+<td><p>Power Supply, +5V</p></td>
+</tr>
+<tr class="row-even"><td><p>12, 15</p></td>
+<td><p>NO PIN</p></td>
+<td><p>No pin</p></td>
+</tr>
+<tr class="row-odd"><td><p>13, 14</p></td>
+<td><p>GND</p></td>
+<td><p>Ground</p></td>
+</tr>
+<tr class="row-even"><td><p>16 to 24</p></td>
+<td><p>DNC</p></td>
+<td><p>Do not connect these pins.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div></blockquote>
+<p><strong>Cabling</strong></p>
+<blockquote>
+<div><p>ADIS1654X is compatible with <a class="reference external" href="https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-ADIS16IMU1.html">ADIS16IMU1/PCBZ</a>
+which has a J1 connector.</p>
+<p>Please see the following table for the pin assignments for the interface connector (J1).</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>Pin</p></td>
+<td><p>Name</p></td>
+<td><p>Description</p></td>
+</tr>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>~RST</p></td>
+<td><p>Reset, active low</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>SCLK</p></td>
+<td><p>Serial Clock (Serial Peripheral Interface)</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>~CS</p></td>
+<td><p>Chip Select (Serial Peripheral Interface), Active Low</p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>DOUT</p></td>
+<td><p>Data Output (Serial Peripheral Interface)</p></td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p>DNC</p></td>
+<td><p>Do not connect</p></td>
+</tr>
+<tr class="row-odd"><td><p>6</p></td>
+<td><p>DIN</p></td>
+<td><p>Data Input (Serial Peripheral Interface)</p></td>
+</tr>
+<tr class="row-even"><td><p>7</p></td>
+<td><p>GND</p></td>
+<td><p>Ground</p></td>
+</tr>
+<tr class="row-odd"><td><p>8</p></td>
+<td><p>GND</p></td>
+<td><p>Ground</p></td>
+</tr>
+<tr class="row-even"><td><p>9</p></td>
+<td><p>GND</p></td>
+<td><p>Ground</p></td>
+</tr>
+<tr class="row-odd"><td><p>10</p></td>
+<td><p>VDD</p></td>
+<td><p>Power Supply, +3.3V</p></td>
+</tr>
+<tr class="row-even"><td><p>11</p></td>
+<td><p>VDD</p></td>
+<td><p>Power Supply, +3.3V</p></td>
+</tr>
+<tr class="row-odd"><td><p>12</p></td>
+<td><p>VDD</p></td>
+<td><p>Power Supply, +3.3V</p></td>
+</tr>
+<tr class="row-even"><td><p>13</p></td>
+<td><p>DIO1</p></td>
+<td><p>Configurable Digital Input and Output 1</p></td>
+</tr>
+<tr class="row-odd"><td><p>14</p></td>
+<td><p>DIO2</p></td>
+<td><p>Configurable Digital Input and Output 2</p></td>
+</tr>
+<tr class="row-even"><td><p>15</p></td>
+<td><p>DIO3</p></td>
+<td><p>Configurable Digital Input and Output 3</p></td>
+</tr>
+<tr class="row-odd"><td><p>16</p></td>
+<td><p>DIO4</p></td>
+<td><p>Configurable Digital Input and Output 4</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>J1 supports connection with the following style of cables: 2.00 mm IDC Ribbon Cable Assembly.</p>
+<p>TIP: Use “2.00 mm IDC Ribbon Cable Assembly” as search criteria to find the latest options on the market.</p>
+<p>At the time of initial release for these breakout boards, we were most familiar with the <a class="reference external" href="https://www.samtec.com/products/tcsd">TCSD Series from Samtec</a>.</p>
+</div></blockquote>
+</section>
+</section>
+<section id="no-os-build-setup">
+<h2><a class="toc-backref" href="#id12" role="doc-backlink">No-OS Build Setup</a><a class="headerlink" href="#no-os-build-setup" title="Link to this heading">¶</a></h2>
+<p>Please see: <a class="reference external" href="https://wiki.analog.com/resources/no-os/build">https://wiki.analog.com/resources/no-os/build</a></p>
+</section>
+<section id="no-os-supported-examples">
+<h2><a class="toc-backref" href="#id13" role="doc-backlink">No-OS Supported Examples</a><a class="headerlink" href="#no-os-supported-examples" title="Link to this heading">¶</a></h2>
+<p>The initialization data used in the examples is taken out from:
+<a class="reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/projects/eval-adis1654x/src/common">Project Common Data Path</a></p>
+<p>The macros used in Common Data are defined in platform specific files found in:
+<a class="reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/projects/eval-adis1654x/src/platform">Project Platform Configuration Path</a></p>
+<section id="basic-example">
+<h3><a class="toc-backref" href="#id14" role="doc-backlink">Basic example</a><a class="headerlink" href="#basic-example" title="Link to this heading">¶</a></h3>
+<p>This is a simple example which initializes the adis1654x selected device and
+performs angular velocity, acceleration and temperature readings in a while loop
+with a period of 1s. The data is printed on the serial interface.</p>
+<p>In order to build the IIO project make sure you have the following configuration in the
+<a class="reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/projects/eval-adis1654x/Makefile">Makefile</a></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Select the example you want to enable by choosing y for enabling and n for disabling</span>
+<span class="nv">BASIC_EXAMPLE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>y
+<span class="nv">IIO_TRIGGER_EXAMPLE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>n
+</pre></div>
+</div>
+</section>
+<section id="iio-example">
+<h3><a class="toc-backref" href="#id15" role="doc-backlink">IIO example</a><a class="headerlink" href="#iio-example" title="Link to this heading">¶</a></h3>
+<p>This project is actually a IIOD demo for EVAL-ADIS1654X device series.
+The project launches a IIOD server on the board so that the user may connect
+to it via an IIO client.
+Using IIO-Oscilloscope, the user can configure the IMU and view the measured data on a plot.</p>
+<p>If you are not familiar with ADI IIO Application, please take a look at:
+<a class="reference external" href="https://wiki.analog.com/resources/tools-software/no-os-software/iio">IIO No-OS</a></p>
+<p>If you are not familiar with ADI IIO-Oscilloscope Client, please take a look at:
+<a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/iio_oscilloscope">IIO Oscilloscope</a></p>
+<p>The No-OS IIO Application together with the No-OS IIO ADIS driver take care of
+all the back-end logic needed to setup the IIO server.</p>
+<p>This example initializes the IIO device and calls the IIO app as shown in:
+<a class="reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/projects/eval-adis1654x/src/examples/iio_trigger_example">IIO Trigger Example</a></p>
+<p>The read buffer is used for storing the burst data which shall be retrieved periodically by any LibIIO client.
+The measured data is sampled using a hardware trigger (e.g. interrupts).
+ADIS1654X offers the capability to use DATA_READY pin as a flag which shows when
+new measurements are available. Thus, DATA_READY pin is used as a hardware trigger.
+The example code maps the DATA_READY pin as GPIO input with interrupt capabilities.
+When DATA_READY pin transitions from low to high, new data is available and will
+be read based on is_synchronous flag setting used in adis_iio_trigger_desc.
+If the flag is set to true, the data will be read immediately, in the interrupt context.
+If the flag is set to false, the data will be read from application context. In this case some samples might be missed.</p>
+<p>In order to build the IIO project make sure you have the following configuration in the
+<a class="reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/projects/eval-adis1654x/Makefile">Makefile</a></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Select the example you want to enable by choosing y for enabling and n for disabling</span>
+<span class="nv">BASIC_EXAMPLE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>n
+<span class="nv">IIO_TRIGGER_EXAMPLE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>y
+</pre></div>
+</div>
+</section>
+</section>
+<section id="no-os-supported-platforms">
+<h2><a class="toc-backref" href="#id16" role="doc-backlink">No-OS Supported Platforms</a><a class="headerlink" href="#no-os-supported-platforms" title="Link to this heading">¶</a></h2>
+<section id="stm32-platform">
+<h3><a class="toc-backref" href="#id17" role="doc-backlink">STM32 Platform</a><a class="headerlink" href="#stm32-platform" title="Link to this heading">¶</a></h3>
+<p><strong>Used hardware</strong>:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.analog.com/en/products/adis16545.html">ADIS16545</a> with</p></li>
+<li><p><a class="reference external" href="https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/sdp-k1.html">SDP-K1</a> and</p></li>
+<li><p><a class="reference external" href="https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-ADIS16IMU1.html">ADIS16IMU1/PCBZ</a> and</p></li>
+<li><p>ST debugger</p></li>
+</ul>
+<p><strong>Connections</strong>:</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>ADIS16IMU1/PCBZ J1 with ADIS1654X</p></td>
+<td><p>Mnemonic</p></td>
+<td><p>Function</p></td>
+<td><p>SDP-K1 Pin Number</p></td>
+</tr>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>~RST</p></td>
+<td><p>Reset, active low</p></td>
+<td><p>ANALOG IN A1</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>SCLK</p></td>
+<td><p>Serial Clock</p></td>
+<td><p>DIGITAL 13</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>~CS</p></td>
+<td><p>Chip Select (Serial Peripheral Interface), Active Low</p></td>
+<td><p>DIGITAL 10</p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>DOUT</p></td>
+<td><p>Data Output (Serial Peripheral Interface)</p></td>
+<td><p>DIGITAL 12</p></td>
+</tr>
+<tr class="row-even"><td><p>6</p></td>
+<td><p>DIN</p></td>
+<td><p>Data Input (Serial Peripheral Interface)</p></td>
+<td><p>DIGITAL 11</p></td>
+</tr>
+<tr class="row-odd"><td><p>7</p></td>
+<td><p>GND</p></td>
+<td><p>Ground</p></td>
+<td><p>DIGITAL GND</p></td>
+</tr>
+<tr class="row-even"><td><p>10</p></td>
+<td><p>VDD</p></td>
+<td><p>Power Supply, +3.3V</p></td>
+<td><p>POWER 3.3V</p></td>
+</tr>
+<tr class="row-odd"><td><p>14</p></td>
+<td><p>DIO2</p></td>
+<td><p>Configurable Digital Input and Output 2</p></td>
+<td><p>ANALOG IN A0</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Build Command</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># to delete current build</span>
+make<span class="w"> </span>reset
+<span class="c1"># to build the project</span>
+make<span class="w"> </span><span class="nv">PLATFORM</span><span class="o">=</span>stm32
+<span class="c1"># to flash the code</span>
+make<span class="w"> </span>run
+<span class="c1"># to debug the code</span>
+make<span class="w"> </span>debug
+</pre></div>
+</div>
+</section>
+<section id="maxim-platform">
+<h3><a class="toc-backref" href="#id18" role="doc-backlink">Maxim Platform</a><a class="headerlink" href="#maxim-platform" title="Link to this heading">¶</a></h3>
+<p><strong>Used hardware</strong>:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.analog.com/en/products/adis16545.html">ADIS16545</a> with</p></li>
+<li><p><a class="reference external" href="https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-ADIS16IMU1.html">ADIS16IMU1/PCBZ</a> and</p></li>
+<li><p><a class="reference external" href="https://www.analog.com/en/products/max78000.html">MAX78000</a></p></li>
+</ul>
+<p><strong>Connections</strong>:</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>ADIS16IMU1/PCBZ J1 with ADIS1654X</p></td>
+<td><p>Mnemonic</p></td>
+<td><p>Function</p></td>
+<td><p>MAX78000 Pin Number</p></td>
+</tr>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>~RST</p></td>
+<td><p>Reset, active low</p></td>
+<td><p>P0_19</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>SCLK</p></td>
+<td><p>Serial Clock</p></td>
+<td><p>P0_7</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>~CS</p></td>
+<td><p>Chip Select (Serial Peripheral Interface), Active Low</p></td>
+<td><p>P0_11</p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>DOUT</p></td>
+<td><p>Data Output (Serial Peripheral Interface)</p></td>
+<td><p>P0_6</p></td>
+</tr>
+<tr class="row-even"><td><p>6</p></td>
+<td><p>DIN</p></td>
+<td><p>Data Input (Serial Peripheral Interface)</p></td>
+<td><p>P0_5</p></td>
+</tr>
+<tr class="row-odd"><td><p>7</p></td>
+<td><p>GND</p></td>
+<td><p>Ground</p></td>
+<td><p>GND</p></td>
+</tr>
+<tr class="row-even"><td><p>10</p></td>
+<td><p>VDD</p></td>
+<td><p>Power Supply, +3.3V</p></td>
+<td><p>3V3</p></td>
+</tr>
+<tr class="row-odd"><td><p>14</p></td>
+<td><p>DIO2</p></td>
+<td><p>Configurable Digital Input and Output 2</p></td>
+<td><p>P1_6</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Build Command</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># to delete current build</span>
+make<span class="w"> </span>reset
+<span class="c1"># to build the project</span>
+make<span class="w"> </span><span class="nv">PLATFORM</span><span class="o">=</span>maxim<span class="w"> </span><span class="nv">TARGET</span><span class="o">=</span>max78000
+<span class="c1"># to flash the code</span>
+make<span class="w"> </span>run
+<span class="c1"># to debug the code</span>
+make<span class="w"> </span>debug
+</pre></div>
+</div>
+</section>
+<section id="pico-platform">
+<h3><a class="toc-backref" href="#id19" role="doc-backlink">Pico Platform</a><a class="headerlink" href="#pico-platform" title="Link to this heading">¶</a></h3>
+<p><strong>Used hardware</strong>:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.analog.com/en/products/adis16545.html">ADIS16545</a> with</p></li>
+<li><p><a class="reference external" href="https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-ADIS16IMU1.html">ADIS16IMU1/PCBZ</a> and</p></li>
+<li><p>Raspberry Pi Pico with</p></li>
+<li><p><a class="reference external" href="https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/ADALM-UARTJTAG.html">ADALM-UARTJTAG</a> Adapter for Raspberry Pi Pico UART to USB Connection</p></li>
+</ul>
+<p><strong>Connections</strong>:</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>ADIS16IMU1/PCBZ J1 with ADIS1654X</p></td>
+<td><p>Mnemonic</p></td>
+<td><p>Function</p></td>
+<td><p>MAX78000 Pin Number</p></td>
+</tr>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>~RST</p></td>
+<td><p>Reset, active low</p></td>
+<td><p>GP20</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>SCLK</p></td>
+<td><p>Serial Clock</p></td>
+<td><p>GP18</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>~CS</p></td>
+<td><p>Chip Select (Serial Peripheral Interface), Active Low</p></td>
+<td><p>GP17</p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>DOUT</p></td>
+<td><p>Data Output (Serial Peripheral Interface)</p></td>
+<td><p>GP16</p></td>
+</tr>
+<tr class="row-even"><td><p>6</p></td>
+<td><p>DIN</p></td>
+<td><p>Data Input (Serial Peripheral Interface)</p></td>
+<td><p>GP19</p></td>
+</tr>
+<tr class="row-odd"><td><p>7</p></td>
+<td><p>GND</p></td>
+<td><p>Ground</p></td>
+<td><p>GND</p></td>
+</tr>
+<tr class="row-even"><td><p>10</p></td>
+<td><p>VDD</p></td>
+<td><p>Power Supply, +3.3V</p></td>
+<td><p>3V3</p></td>
+</tr>
+<tr class="row-odd"><td><p>14</p></td>
+<td><p>DIO2</p></td>
+<td><p>Configurable Digital Input and Output 2</p></td>
+<td><p>GP21</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The following table shows how the connection between ADALM-UARTJTAG and Raspberry Pi Pico is realized in this project example.</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>ADALM-UARTJTAG Pin Number</p></td>
+<td><p>Raspberry Pi Pico Pin Number</p></td>
+<td><p>Function</p></td>
+</tr>
+<tr class="row-even"><td><p>VIO</p></td>
+<td><p>VBUS</p></td>
+<td><p>Bus voltage</p></td>
+</tr>
+<tr class="row-odd"><td><p>GND</p></td>
+<td><p>GND</p></td>
+<td><p>Ground</p></td>
+</tr>
+<tr class="row-even"><td><p>TX</p></td>
+<td><p>GP1 (Pico RX)</p></td>
+<td><p>Pico UART RX</p></td>
+</tr>
+<tr class="row-odd"><td><p>RX</p></td>
+<td><p>GP0 (Pico Tx)</p></td>
+<td><p>Pico UART TX</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Build Command</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># to delete current build</span>
+make<span class="w"> </span>reset
+<span class="c1"># to build the project</span>
+make<span class="w"> </span><span class="nv">PLATFORM</span><span class="o">=</span>pico
+<span class="c1"># to flash the code</span>
+make<span class="w"> </span>run
+<span class="c1"># to debug the code</span>
+make<span class="w"> </span>debug
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+          </div>
+              <div class="related">
+                &nbsp;
+    <a href="eval-adis1650x.html" title="Previous document (Ctrl+LeftArrow)" class="prev">Evaluating the ADIS1650X Family</a>
+    <a href="eval-adis1655x.html" title="Next document (Ctrl+RightArrow)" class="next">Evaluating the ADIS1655X Family</a>
+              </div>
+          
+        </div>
+      </div>
+  </div>
+
+  <div id="vertical-border"></div>
+
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
+    <footer>
+      &#169;2023-2024, Analog Devices, Inc.
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
+</html>

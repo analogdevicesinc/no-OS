@@ -1,0 +1,26 @@
+<map id="ade9113_get_int_status" name="ade9113_get_int_status">
+<area shape="rect" id="node1" title="Get interrupt indicator from STATUS register." alt="" coords="268,623,445,649"/>
+<area shape="rect" id="node2" href="$ade9113_8h.html#ac07342aad30106c1373b0cd92d60f64e" title="Get ADC_SYNC_DONE indicator." alt="" coords="7,5,219,32"/>
+<area shape="rect" id="node3" href="$ade9113_8h.html#a15aaf923d728390cfd7b40e72f2501b1" title="Get COM_UP indicator." alt="" coords="31,56,195,83"/>
+<area shape="rect" id="node4" href="$ade9113_8h.html#a183988e328ed2fda01ee826cb7e8ac17" title="Get COMFLT_ERR indicator." alt="" coords="23,107,202,133"/>
+<area shape="rect" id="node5" href="$ade9113_8h.html#ad8b6326e254e9b5442565bb3c5ddfb0b" title="Get CRC_CHG indicator." alt="" coords="31,157,194,184"/>
+<area shape="rect" id="node6" href="$ade9113_8h.html#a97407c6d4f8092f4651e69d66e5dc18f" title="Get CRC_DONE indicator." alt="" coords="11,208,214,235"/>
+<area shape="rect" id="node7" href="$ade9113_8h.html#a6ecc3569c1c23aec580731e3b5da2e93" title="Get EFUSE_MEM_ERR indicator." alt="" coords="5,259,220,285"/>
+<area shape="rect" id="node8" href="$ade9113_8h.html#aa7ee2ec13907c5aa96c349c1ac3e77d5" title="Get I_WAV_OVRNG indicator." alt="" coords="15,309,210,336"/>
+<area shape="rect" id="node9" href="$ade9113_8h.html#a6c19e18b8c0709e6d7864b90aeefce98" title="Get ISO_CLK_STBL_ERR indicator." alt="" coords="33,361,192,402"/>
+<area shape="rect" id="node10" href="$ade9113_8h.html#a9c4580d035fbb6dfa2350b8051997b2e" title="Get ISO_DIG_MOD_I_OVF indicator." alt="" coords="33,426,192,467"/>
+<area shape="rect" id="node11" href="$ade9113_8h.html#aab58481692c8cccf8f064aac5e1f58f3" title="Get ISO_DIG_MOD_V1_OVF indicator." alt="" coords="33,491,192,533"/>
+<area shape="rect" id="node12" href="$ade9113_8h.html#a8d47289d0de45bd7c2b46912dbb7c057" title="Get ISO_DIG_MOD_V2_OVF indicator." alt="" coords="33,557,192,598"/>
+<area shape="rect" id="node13" href="$ade9113_8h.html#a12efdda72554040d4d6d057b79bcc88b" title="Get ISO_ECC_ERR indicator." alt="" coords="19,623,206,649"/>
+<area shape="rect" id="node14" href="$ade9113_8h.html#a8087931b11f8cf7f6612ff1c7f6a4cda" title="Get ISO_EFUSE_MEM_ERR indicator." alt="" coords="25,674,200,715"/>
+<area shape="rect" id="node15" href="$ade9113_8h.html#a9fe64b5b0a312deefbdbc82b989ee343" title="Get ISO_PHY_CRC_ERR indicator." alt="" coords="31,739,194,781"/>
+<area shape="rect" id="node16" href="$ade9113_8h.html#a0a139d4d62daef09e6a847cb6afdebf7" title="Get ISO_PHY_ERR indicator." alt="" coords="19,805,207,832"/>
+<area shape="rect" id="node17" href="$ade9113_8h.html#a5b3801f7398908bfd4fda50cf8baf091" title="Get ISO_STATUS_RD_ECC_ERR indicator." alt="" coords="23,857,202,898"/>
+<area shape="rect" id="node18" href="$ade9113_8h.html#acdf4a4fbd92a34a27bafc7695270f675" title="Get ISO_TEST_MMR_ERR indicator." alt="" coords="31,922,195,963"/>
+<area shape="rect" id="node19" href="$ade9113_8h.html#ae1a622415243b36f75fbccbff0fc7f77" title="Get RESET_DONE indicator." alt="" coords="20,988,205,1015"/>
+<area shape="rect" id="node20" href="$ade9113_8h.html#a744fce7e1911cdd5fe3e0356b24fd9b3" title="Get SPI_CRC_ERR indicator." alt="" coords="21,1039,204,1065"/>
+<area shape="rect" id="node21" href="$ade9113_8h.html#affbfb5ba4f7bf0489af821fb86285ccd" title="Get STATUS1 indicator." alt="" coords="28,1089,197,1116"/>
+<area shape="rect" id="node22" href="$ade9113_8h.html#a44f5f5a5b613ccd73e0895f15cfe98ec" title="Get STATUS2 indicator." alt="" coords="28,1140,197,1167"/>
+<area shape="rect" id="node23" href="$ade9113_8h.html#a6dadfb9485fd867898ba61594ec1a16f" title="Get V1_WAV_OVRNG indicator." alt="" coords="31,1191,194,1233"/>
+<area shape="rect" id="node24" href="$ade9113_8h.html#aa16499c63ab925f8302140b9ad3f7a26" title="Get V2_WAV_OVRNG indicator." alt="" coords="31,1257,194,1298"/>
+</map>

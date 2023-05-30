@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>MAX22196 no-OS driver &#8212; no-OS  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="../_static/style.min.css?v=a3ba2641" />
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script defer="" src="../_static/app.umd.js?v=7e1fdd13"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="MAX22200 no-OS driver" href="max22200.html" />
+    <link rel="prev" title="MAX22190 no-OS driver" href="max22190.html" />
+   
+  
+    <meta name="robots" content="noindex">
+  
+  <meta name="repo" content="no-OS">
+  
+
+
+<style>
+  body {
+    
+  }
+
+  body.dark {
+    
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body:not(.light) {
+      
+    }
+  }
+</style>
+  </head><body>
+  <div class="banner"></div>
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
+  <input type="checkbox" id="input-show-repotoc">
+
+  
+  <div class="search-area">
+    <form action="" method="get">
+      <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+      <button value="search" class="icon"></button>
+      <span id="search-progress"></span>
+    </form>
+  </div>
+  
+
+  <header>
+    <div id="left">
+      <label id="show-sidebar" class="icon" for="input-show-toc" title="Show/hide index"></label>
+    </div>
+    <div id="right">
+      <span>
+        <a id="logo-org" href="https://analog.com"></a>
+        <div class="vertical-divider"></div>
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
+        <a id="logo" href="../index.html">
+          <div>no-OS</div>
+        </a>
+      </span>
+      <span class="reverse">
+        <label id="show-localtoc" class="icon" for="input-show-localtoc" title="Show/hide contents"></label>
+      </span>
+    </div>
+  </header>
+
+
+  <div class="repotoc-tree overlay">
+    <root>
+  <a href="../../documentation/eval/index.html">Evaluation Boards</a>
+  <a href="../../documentation/university/index.html">University Program</a>
+  <a href="../../hdl/index.html">HDL</a>
+  <a href="../index.html" class="current">no-OS</a>
+  <a href="../../pyadi-iio/index.html">Hardware Python Interfaces</a>
+  <a href="../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
+  <a href="../../doctools/index.html">Doctools</a>
+  <a href="../../PrecisionToolbox/index.html">Precision Toolbox</a>
+</root>
+
+  </div>
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div>
+          <div class="localtoc-header">On this page</div>
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">MAX22196 no-OS driver</a><ul>
+<li><a class="reference internal" href="#supported-devices">Supported Devices</a></li>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#applications">Applications</a></li>
+<li><a class="reference internal" href="#max22196-device-configuration">MAX22196 Device Configuration</a></li>
+<li><a class="reference internal" href="#channel-configuration">Channel configuration</a></li>
+<li><a class="reference internal" href="#filter-configuration">Filter configuration</a></li>
+<li><a class="reference internal" href="#global-configuration">Global configuration</a></li>
+<li><a class="reference internal" href="#fault-mask-configuration">Fault mask configuration</a></li>
+<li><a class="reference internal" href="#max22196-driver-initialization-example">MAX22196 Driver Initialization Example</a></li>
+<li><a class="reference internal" href="#max22196-no-os-iio-support">MAX22196 no-OS IIO support</a></li>
+<li><a class="reference internal" href="#max22196-iio-device-configuration">MAX22196 IIO Device Configuration</a></li>
+<li><a class="reference internal" href="#channel-attributes">Channel Attributes</a></li>
+<li><a class="reference internal" href="#global-attributes">Global Attributes</a></li>
+<li><a class="reference internal" href="#debug-attributes">Debug Attributes</a></li>
+<li><a class="reference internal" href="#device-channels">Device Channels</a></li>
+<li><a class="reference internal" href="#max22196-iio-driver-initialization-example">MAX22196 IIO Driver Initialization Example</a></li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
+  
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+    <a id="no-logo" href="../index.html">
+      no-OS
+    </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
+All content
+</label>
+<label id="show-toc" for="input-switch-toc">
+Content on this topic
+</label>
+<div class="repotoc-tree">
+  <root>
+  <a href="../../documentation/eval/index.html">Evaluation Boards</a>
+  <a href="../../documentation/university/index.html">University Program</a>
+  <a href="../../hdl/index.html">HDL</a>
+  <a href="../index.html" class="current">no-OS</a>
+  <a href="../../pyadi-iio/index.html">Hardware Python Interfaces</a>
+  <a href="../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
+  <a href="../../doctools/index.html">Doctools</a>
+  <a href="../../PrecisionToolbox/index.html">Precision Toolbox</a>
+</root>
+
+</div>
+<div class="toc-tree">
+  <html>
+  <body><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../drivers_guide.html">no-OS drivers guide</a></li>
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1" checked=""/><div class="collapse"><a class="reference internal" href="../drivers_doc.html">no-OS drivers list</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="adxl355.html">ADXL355 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adm1177.html">ADM1177 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad405x.html">AD405X no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad796x.html">AD796X no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad400x.html">AD400X no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="axi_sysid.html">System ID (AXI_SYSID) no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max14914.html">MAX14914 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max14919.html">MAX14919 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max149x6.html">MAX149X6 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22190.html">MAX22190 no-OS driver</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">MAX22196 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22200.html">MAX22200 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max2201x.html">MAX2201X no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4382.html">ADF4382 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="imu.html">ADIS no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="madura.html">ADRV902x (Madura) no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adp1050.html">ADP1050 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc2992.html">LTC2992 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc4296.html">LTC4296 no-OS driver</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2"/><div class="collapse"><a class="reference internal" href="../projects_doc.html">no-OS projects list</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7091r8-sdz.html">Evaluating AD7091R-2/-4/-8 Devices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7616-st.html">Evaluating AD7616 on SDP-K1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad796x_fmcz.html">Evaluating the AD796x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad400x-fmcz.html">Evaluating AD400x on ZED and SDP-K1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad469x_fmcz.html">Evaluating the AD469x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adf4382.html">Evaluating the ADF4382</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1646x.html">Evaluating the ADIS1646X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1647x.html">Evaluating the ADIS1647X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1650x.html">Evaluating the ADIS1650X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1654x.html">Evaluating the ADIS1654X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1655x.html">Evaluating the ADIS1655X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1657x.html">Evaluating the ADIS1657X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-ade9430.html">EVAL-ADE9430 Sensor-to-Cloud</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adrv902x.html">adrv902x no-OS Sample Poject</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/apard32690.html">Evaluating the AD-APARD32690-SL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max14914.html">Evaluating the MAX14914</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max14919.html">Evaluating the MAX14919</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adp1050.html">Evaluating the ADP1050</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc4296.html">Evaluating the LTC4296</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max2201x.html">Evaluating the MAX2201X</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to no-OS</a></li>
+</ul>
+</body>
+</html>
+
+</div>
+        </div>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body" role="main">
+            
+  <section id="max22196-no-os-driver">
+<h1>MAX22196 no-OS driver<a class="headerlink" href="#max22196-no-os-driver" title="Link to this heading">¶</a></h1>
+<section id="supported-devices">
+<h2>Supported Devices<a class="headerlink" href="#supported-devices" title="Link to this heading">¶</a></h2>
+<p><cite>MAX22196 &lt;https://www.analog.com/MAX22196&gt;</cite>
+<cite>MAX22194 &lt;https://www.analog.com/MAX22194&gt;</cite></p>
+</section>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
+<p>The MAX22196 is an industrial octal digital input that translates eight
+industrial 24V or TTL level inputs to logic level outputs.
+The device has a serial interface allowing configuration and reading of
+serialized data through SPI.</p>
+<p>The input channels are individually configurable as sinking (p-type) or
+sourcing (n-type) inputs. Current limiters on each digital input minimize
+power dissipation while ensuring compliance with the IEC 61131-2 standard.
+With a single current-setting resistor, the inputs are individually
+configurable for Type 1/3, Type 2, TTL or HTL (high-impedance 24V levels).
+The current sinks or sources can be individually disabled.</p>
+<p>If using MAX22194 channels 5 to 8 won’t be available so any API call with one of these
+channels will result in a -EINVAL errno code being returned.</p>
+</section>
+<section id="applications">
+<h2>Applications<a class="headerlink" href="#applications" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Programmable Logic Controllers</p></li>
+<li><p>Factory Automation</p></li>
+<li><p>Process Control</p></li>
+</ul>
+</section>
+<section id="max22196-device-configuration">
+<h2>MAX22196 Device Configuration<a class="headerlink" href="#max22196-device-configuration" title="Link to this heading">¶</a></h2>
+<p>In order to be able to use the device, you will have to provide the support
+for the communication protocol (SPI).</p>
+<p>The first API to be called is <strong>max22196_init</strong>. Make sure that it returns 0,
+which means that the driver was initialized correctly.</p>
+</section>
+<section id="channel-configuration">
+<h2>Channel configuration<a class="headerlink" href="#channel-configuration" title="Link to this heading">¶</a></h2>
+<p>Each channel can be configured in source mode or sink mode with the
+<strong>max22196_set_mode</strong> API.
+More than that each channel’s voltage threshold state and sink/source current
+can be set with <strong>max22196_chan_cfg</strong> API, as well as the channel counter
+that can be changed for both MSB and LSB Byte’s with the help of
+<strong>max22196_set_chan_cnt</strong>, or read with <strong>max22196_get_chan_cnt</strong>.</p>
+</section>
+<section id="filter-configuration">
+<h2>Filter configuration<a class="headerlink" href="#filter-configuration" title="Link to this heading">¶</a></h2>
+<p>Each channel also has a filter that can be enabled/disabled, but also have
+a delay attached to it. The filter data can be set with the help of
+<strong>max22196_filter_set</strong>, and read with <strong>max22196_filter_get</strong> API.</p>
+</section>
+<section id="global-configuration">
+<h2>Global configuration<a class="headerlink" href="#global-configuration" title="Link to this heading">¶</a></h2>
+<p>In case of wanting to configure the global_cfg register, it can be done
+using the <strong>max22196_global_cfg</strong> API.</p>
+</section>
+<section id="fault-mask-configuration">
+<h2>Fault mask configuration<a class="headerlink" href="#fault-mask-configuration" title="Link to this heading">¶</a></h2>
+<p>Any fault mask can be separately configured with <strong>max22196_fault_mask_set</strong>
+API, and also read with <strong>max22196_fault_mask_get</strong> API.</p>
+</section>
+<section id="max22196-driver-initialization-example">
+<h2>MAX22196 Driver Initialization Example<a class="headerlink" href="#max22196-driver-initialization-example" title="Link to this heading">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>struct<span class="w"> </span>max22196_desc<span class="w"> </span>*max22196<span class="p">;</span>
+struct<span class="w"> </span>no_os_spi_init_param<span class="w"> </span><span class="nv">spi_ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>.device_id<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span>,
+<span class="w">        </span>.extra<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>max22196_spi_extra,
+<span class="w">        </span>.max_speed_hz<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">100000</span>,
+<span class="w">        </span>.platform_ops<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>max_spi_ops,
+<span class="w">        </span>.chip_select<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span>,
+<span class="o">}</span><span class="p">;</span>
+struct<span class="w"> </span>max22196_init_param<span class="w"> </span><span class="nv">max22196_ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>.chip_id<span class="w"> </span><span class="o">=</span><span class="w"> </span>ID_MAX22196,
+<span class="w">        </span>.chip_address<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span>,
+<span class="w">        </span>.comm_desc<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>spi_ip,
+<span class="o">}</span><span class="p">;</span>
+
+<span class="nv">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>max22196_init<span class="o">(</span><span class="p">&amp;</span>max22196,<span class="w"> </span><span class="p">&amp;</span>max22196_ip<span class="o">)</span><span class="p">;</span>
+<span class="k">if</span><span class="w"> </span><span class="o">(</span>ret<span class="o">)</span>
+<span class="w">        </span>goto<span class="w"> </span>error<span class="p">;</span>
+</pre></div>
+</div>
+</section>
+<section id="max22196-no-os-iio-support">
+<h2>MAX22196 no-OS IIO support<a class="headerlink" href="#max22196-no-os-iio-support" title="Link to this heading">¶</a></h2>
+<p>The MAX22196 IIO driver comes on top of the MAX22196 driver and offers support
+for interfacing IIO clients through IIO lib.</p>
+</section>
+<section id="max22196-iio-device-configuration">
+<h2>MAX22196 IIO Device Configuration<a class="headerlink" href="#max22196-iio-device-configuration" title="Link to this heading">¶</a></h2>
+</section>
+<section id="channel-attributes">
+<h2>Channel Attributes<a class="headerlink" href="#channel-attributes" title="Link to this heading">¶</a></h2>
+<p>MAX22196 has a total of 10 channel attributes :</p>
+<ul class="simple">
+<li><p>raw - the state of the cannel.</p></li>
+<li><p>offset - always 0.</p></li>
+<li><p>scale - always 1.</p></li>
+<li><p>filter_enable - 0 or 1 (depending on the state of the filter).</p></li>
+<li><p>filter_delay - The filter’s delay value if it is enabled (otherwise it is 50us).</p></li>
+<li><p>filter_delay_available - List of delay available values.</p></li>
+<li><p>di_mode - Digital Input mode, is the mode in which each channel is configured.</p></li>
+<li><p>di_mode_available - List of digital input modes (Sink/Source).</p></li>
+<li><p>current_source - Current source to be selected for each channel.</p></li>
+<li><p>current_source_available - Current sources available for selection.</p></li>
+</ul>
+</section>
+<section id="global-attributes">
+<h2>Global Attributes<a class="headerlink" href="#global-attributes" title="Link to this heading">¶</a></h2>
+<p>MAX22196 has 7 global attributes that can be configured as enabled/disabled :</p>
+<ul class="simple">
+<li><p>refdi_sht_cfg - REFDI pin short detection.</p></li>
+<li><p>clrf_filtr - Fix all input glitch filters to mid-scale value.</p></li>
+<li><p>fspi_clr - Configures how the bits in the FAULT1 register are cleared.</p></li>
+<li><p>led9 - LED9 control. (attribute does not apply to MAX22194).</p></li>
+<li><p>led_int - LED matrix user control of autonomous control selection.</p></li>
+<li><p>gpo - Configure LO1 - LO6 outputs to be LED matrix or GPO drivers.</p></li>
+</ul>
+</section>
+<section id="debug-attributes">
+<h2>Debug Attributes<a class="headerlink" href="#debug-attributes" title="Link to this heading">¶</a></h2>
+<p>MAX22196 has 12 debug attributes :</p>
+<ul class="simple">
+<li><p>fault1 - fault1 register value.</p></li>
+<li><p>fault2 - fault2 register value.</p></li>
+<li><p>vmlow_mask - Vm low voltage mask in the FAULT1EN register.</p></li>
+<li><p>v24uv_mask - V24 undervoltage mask in the FAULT1EN register.</p></li>
+<li><p>temp_alarm_mask - Temperature alarm mask in the FAULT1EN register.</p></li>
+<li><p>otshdn1_mask - Thermal shutdown mask in the FAULT1EN register.</p></li>
+<li><p>fault2_mask - Mask corresponding to FAULT2 bit in the FAULT1EN register.</p></li>
+<li><p>rfdis_mask - Mask for short-circuit error on the REFDI pin in the FAULT2EN register.</p></li>
+<li><p>rfdio_mask - Mask for open-circuit error on the REFDI pin in the FAULT2EN register.</p></li>
+<li><p>otshdn2_mask - System thermal shutdown mask in the FAULT2EN register.</p></li>
+<li><p>spi8clk_mask - Mask for number of SCLK cycles error in the FAULT2EN register.</p></li>
+<li><p>vauv_mask - VA undervoltage mask in the FAULT2EN register.</p></li>
+</ul>
+</section>
+<section id="device-channels">
+<h2>Device Channels<a class="headerlink" href="#device-channels" title="Link to this heading">¶</a></h2>
+<p>MAX22196 has a specific API, <strong>max22196_iio_setup_channels</strong> for configuring the
+channels at the initialization, therefore the channels can be configured as
+enabled/disabled and attributes are assigned to each channel (if enabled).</p>
+</section>
+<section id="max22196-iio-driver-initialization-example">
+<h2>MAX22196 IIO Driver Initialization Example<a class="headerlink" href="#max22196-iio-driver-initialization-example" title="Link to this heading">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>struct<span class="w"> </span>max22196_iio_desc<span class="w"> </span>*max22196_iio_desc<span class="p">;</span>
+struct<span class="w"> </span>max22196_iio_desc_init_param<span class="w"> </span><span class="nv">max22196_iio_ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>.max22196_init_param<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>max22196_ip,
+<span class="w">        </span>.chans_enabled<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">                </span>true,<span class="w"> </span>true,<span class="w"> </span>true,<span class="w"> </span>false,<span class="w"> </span>false,<span class="w"> </span>false,<span class="w"> </span>false,<span class="w"> </span><span class="nb">false</span>
+<span class="w">        </span><span class="o">}</span>,
+<span class="o">}</span><span class="p">;</span>
+
+struct<span class="w"> </span>iio_app_desc<span class="w"> </span>*app<span class="p">;</span>
+struct<span class="w"> </span>iio_app_init_param<span class="w"> </span><span class="nv">app_init_param</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">}</span><span class="p">;</span>
+
+<span class="nv">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>max22196_iio_init<span class="o">(</span><span class="p">&amp;</span>max22196_iio_desc,<span class="w"> </span><span class="p">&amp;</span>max22196_iio_ip<span class="o">)</span><span class="p">;</span>
+<span class="k">if</span><span class="w"> </span><span class="o">(</span>ret<span class="o">)</span>
+<span class="w">        </span>goto<span class="w"> </span>error<span class="p">;</span>
+
+struct<span class="w"> </span>iio_app_device<span class="w"> </span>iio_devices<span class="o">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span><span class="o">{</span>
+<span class="w">                </span>.name<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;max22196&quot;</span>,
+<span class="w">                </span>.dev<span class="w"> </span><span class="o">=</span><span class="w"> </span>max22196_iio_desc,
+<span class="w">                </span>.dev_descriptor<span class="w"> </span><span class="o">=</span><span class="w"> </span>max22196_iio_desc-&gt;iio_dev,
+<span class="w">        </span><span class="o">}</span>,
+<span class="o">}</span><span class="p">;</span>
+
+app_init_param.devices<span class="w"> </span><span class="o">=</span><span class="w"> </span>iio_devices<span class="p">;</span>
+app_init_param.nb_devices<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_ARRAY_SIZE<span class="o">(</span>iio_devices<span class="o">)</span><span class="p">;</span>
+app_init_param.uart_init_params<span class="w"> </span><span class="o">=</span><span class="w"> </span>max22196_uart_ip<span class="p">;</span>
+
+<span class="nv">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>iio_app_init<span class="o">(</span><span class="p">&amp;</span>app,<span class="w"> </span>app_init_param<span class="o">)</span><span class="p">;</span>
+<span class="k">if</span><span class="w"> </span><span class="o">(</span>ret<span class="o">)</span>
+<span class="w">        </span>goto<span class="w"> </span>app_error<span class="p">;</span>
+
+<span class="k">return</span><span class="w"> </span>iio_app_run<span class="o">(</span>app<span class="o">)</span><span class="p">;</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+          </div>
+              <div class="related">
+                &nbsp;
+    <a href="max22190.html" title="Previous document (Ctrl+LeftArrow)" class="prev">MAX22190 no-OS driver</a>
+    <a href="max22200.html" title="Next document (Ctrl+RightArrow)" class="next">MAX22200 no-OS driver</a>
+              </div>
+          
+        </div>
+      </div>
+  </div>
+
+  <div id="vertical-border"></div>
+
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
+    <footer>
+      &#169;2023-2024, Analog Devices, Inc.
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
+</html>

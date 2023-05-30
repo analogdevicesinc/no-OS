@@ -1,0 +1,14 @@
+<map id="drivers/platform/stm32/stm32_spi.h" name="drivers/platform/stm32/stm32_spi.h">
+<area shape="rect" id="node1" title="Header file for the stm32 spi driver." alt="" coords="54,5,226,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="30,244,101,271"/>
+<area shape="rect" id="node3" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="27,95,126,121"/>
+<area shape="rect" id="node4" href="$no__os__dma_8h.html" title="Platform independent function definitions and data types for the DMA API." alt="" coords="176,95,284,121"/>
+<area shape="rect" id="node11" href="$stm32__hal_8h.html" title=" " alt="" coords="484,95,586,121"/>
+<area shape="rect" id="node5" title=" " alt="" coords="103,169,170,196"/>
+<area shape="rect" id="node6" title=" " alt="" coords="194,169,265,196"/>
+<area shape="rect" id="node7" href="$no__os__list_8h.html" title="List library header." alt="" coords="410,169,508,196"/>
+<area shape="rect" id="node9" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="290,169,386,196"/>
+<area shape="rect" id="node10" href="$no__os__mutex_8h.html" title=" " alt="" coords="533,169,654,196"/>
+<area shape="rect" id="node8" title=" " alt="" coords="418,244,500,271"/>
+<area shape="rect" id="node12" title=" " alt="" coords="679,169,746,196"/>
+</map>

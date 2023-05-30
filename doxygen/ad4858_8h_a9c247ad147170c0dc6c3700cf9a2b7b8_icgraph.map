@@ -1,0 +1,15 @@
+<map id="ad4858_reg_read" name="ad4858_reg_read">
+<area shape="rect" id="node1" title="Read device register." alt="" coords="852,148,987,175"/>
+<area shape="rect" id="node2" href="$ad4858_8h.html#a308fdf9132f0909bcd601d763cf979f9" title="Enable/Disable seamless hdr." alt="" coords="564,97,804,124"/>
+<area shape="rect" id="node3" href="$ad4858_8h.html#a01cf4315146b2fe3860aa3a171dcd644" title="Enable/Disable channel sleep." alt="" coords="591,148,777,175"/>
+<area shape="rect" id="node4" href="$ad4858_8h.html#a7131dedc19333c6712e7b4bc32ad9238" title="Update specific register bits of an input register." alt="" coords="613,199,755,225"/>
+<area shape="rect" id="node5" href="$ad4858_8h.html#ad2bdbbdba4d502b8a8c96f5bbf5e8189" title="Enable OSR." alt="" coords="337,5,485,32"/>
+<area shape="rect" id="node6" href="$ad4858_8h.html#a6500f08e53800e01a79955829a763530" title="Enable/Disable test pattern on ADC data output." alt="" coords="334,57,487,98"/>
+<area shape="rect" id="node7" href="$ad4858_8h.html#aaff675e9d2d77ef52a0839e5bf0867b7" title="Set channel softspan." alt="" coords="316,123,505,149"/>
+<area shape="rect" id="node8" href="$ad4858_8h.html#a49169412cb6a0c76f99dda26d2eb3de3" title="Set device data interface mode." alt="" coords="10,249,253,276"/>
+<area shape="rect" id="node9" href="$ad4858_8h.html#a9d6ef9a6bda2fdf0e875556b9746cbde" title="Set the device operating mode." alt="" coords="305,224,516,251"/>
+<area shape="rect" id="node10" href="$ad4858_8h.html#ac4534c16451ccffc90d7b041cca684e0" title="Set OSR ratio." alt="" coords="330,275,491,301"/>
+<area shape="rect" id="node11" href="$ad4858_8h.html#a13c8857e1fc1b833747502e75bbbb58c" title="Set packet format." alt="" coords="311,325,510,352"/>
+<area shape="rect" id="node12" href="$ad4858_8h.html#a32913ac6515364e2f71f91e9c17f0e1a" title="Set the SPI data mode." alt="" coords="309,376,512,403"/>
+<area shape="rect" id="node13" href="$ad4858_8h.html#a66fa4d0c785ded69d94ef45d087233cb" title="Set device config interface mode." alt="" coords="5,376,257,403"/>
+</map>

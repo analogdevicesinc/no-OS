@@ -1,0 +1,5 @@
+<map id="adp1050_pwm_duty_cycle" name="adp1050_pwm_duty_cycle">
+<area shape="rect" id="node1" title="Set VOUT duty cycle for requested channel." alt="" coords="232,31,427,57"/>
+<area shape="rect" id="node2" href="$adp1050_8h.html#a84fff15376ebe1860172704bff6695d2" title="Set requested ADP1050 channel in Open Loop operation mode." alt="" coords="5,5,184,32"/>
+<area shape="rect" id="node3" href="$adp1050_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="15,56,175,83"/>
+</map>

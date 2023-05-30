@@ -1,0 +1,13 @@
+<map id="stm32_spi_desc" name="stm32_spi_desc">
+<area shape="rect" id="node1" title="stm32 platform specific SPI descriptor" alt="" coords="965,229,1092,256"/>
+<area shape="rect" id="node2" href="$structno__os__dma__ch.html" title="Describes the state of a DMA channel." alt="" coords="357,129,475,156"/>
+<area shape="rect" id="node3" href="$structno__os__dma__default__handler__data.html" title="IRQ parameter for the default inter transfer handler." alt="" coords="908,87,1149,113"/>
+<area shape="rect" id="node4" href="$structno__os__dma__desc.html" title="Describes the state of the DMA controller." alt="" coords="649,229,783,256"/>
+<area shape="rect" id="node5" href="$structno__os__dma__platform__ops.html" title=" " alt="" coords="321,237,511,264"/>
+<area shape="rect" id="node6" href="$structno__os__irq__ctrl__desc.html" title=" " alt="" coords="341,288,491,315"/>
+<area shape="rect" id="node7" href="$structno__os__irq__platform__ops.html" title="Structure holding IRQ function pointers that point to the platform specific function." alt="" coords="5,288,183,315"/>
+<area shape="rect" id="node8" href="$structno__os__callback__desc.html" title="Structure describing a callback to be registered." alt="" coords="15,153,173,180"/>
+<area shape="rect" id="node9" href="$structno__os__list__desc.html" title="Structure storing the list and function wrapper for usual list types." alt="" coords="32,103,156,129"/>
+<area shape="rect" id="node10" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="650,303,782,329"/>
+<area shape="rect" id="node11" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="322,339,510,365"/>
+</map>

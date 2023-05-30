@@ -1,0 +1,5 @@
+<map id="drivers/accel/adxl362/adxl362.h" name="drivers/accel/adxl362/adxl362.h">
+<area shape="rect" id="node1" title="Header file of ADXL362 Driver." alt="" coords="5,5,167,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="51,169,121,196"/>
+<area shape="rect" id="node3" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="81,95,179,121"/>
+</map>

@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>ADXL355 no-OS driver &#8212; no-OS  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="../_static/style.min.css?v=a3ba2641" />
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script defer="" src="../_static/app.umd.js?v=7e1fdd13"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ADM1177 no-OS Driver" href="adm1177.html" />
+    <link rel="prev" title="no-OS drivers list" href="../drivers_doc.html" />
+   
+  
+    <meta name="robots" content="noindex">
+  
+  <meta name="repo" content="no-OS">
+  
+
+
+<style>
+  body {
+    
+  }
+
+  body.dark {
+    
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body:not(.light) {
+      
+    }
+  }
+</style>
+  </head><body>
+  <div class="banner"></div>
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
+  <input type="checkbox" id="input-show-repotoc">
+
+  
+  <div class="search-area">
+    <form action="" method="get">
+      <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+      <button value="search" class="icon"></button>
+      <span id="search-progress"></span>
+    </form>
+  </div>
+  
+
+  <header>
+    <div id="left">
+      <label id="show-sidebar" class="icon" for="input-show-toc" title="Show/hide index"></label>
+    </div>
+    <div id="right">
+      <span>
+        <a id="logo-org" href="https://analog.com"></a>
+        <div class="vertical-divider"></div>
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
+        <a id="logo" href="../index.html">
+          <div>no-OS</div>
+        </a>
+      </span>
+      <span class="reverse">
+        <label id="show-localtoc" class="icon" for="input-show-localtoc" title="Show/hide contents"></label>
+      </span>
+    </div>
+  </header>
+
+
+  <div class="repotoc-tree overlay">
+    <root>
+  <a href="../../documentation/eval/index.html">Evaluation Boards</a>
+  <a href="../../documentation/university/index.html">University Program</a>
+  <a href="../../hdl/index.html">HDL</a>
+  <a href="../index.html" class="current">no-OS</a>
+  <a href="../../pyadi-iio/index.html">Hardware Python Interfaces</a>
+  <a href="../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
+  <a href="../../doctools/index.html">Doctools</a>
+  <a href="../../PrecisionToolbox/index.html">Precision Toolbox</a>
+</root>
+
+  </div>
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div>
+          <div class="localtoc-header">On this page</div>
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">ADXL355 no-OS driver</a><ul>
+<li><a class="reference internal" href="#supported-devices">Supported Devices</a></li>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#applications">Applications</a></li>
+<li><a class="reference internal" href="#adxl355-device-configuration">ADXL355 Device Configuration</a></li>
+<li><a class="reference internal" href="#driver-initialization">Driver Initialization</a></li>
+<li><a class="reference internal" href="#range-configuration">Range Configuration</a></li>
+<li><a class="reference internal" href="#filters-configuration">Filters Configuration</a></li>
+<li><a class="reference internal" href="#axis-calibration-configuration">Axis Calibration Configuration</a></li>
+<li><a class="reference internal" href="#fifo-configuration">FIFO Configuration</a></li>
+<li><a class="reference internal" href="#activity-detection-configuration">Activity Detection Configuration</a></li>
+<li><a class="reference internal" href="#interrupts-configuration">Interrupts Configuration</a></li>
+<li><a class="reference internal" href="#adxl355-device-measurements">ADXL355 Device Measurements</a></li>
+<li><a class="reference internal" href="#operation-mode-setting">Operation Mode Setting</a></li>
+<li><a class="reference internal" href="#temperature-data">Temperature Data</a></li>
+<li><a class="reference internal" href="#acceleration-data">Acceleration Data</a></li>
+<li><a class="reference internal" href="#single-data-set">Single Data Set</a></li>
+<li><a class="reference internal" href="#fifo-data">FIFO Data</a></li>
+<li><a class="reference internal" href="#adxl355-driver-initialization-example">ADXL355 Driver Initialization Example</a></li>
+<li><a class="reference internal" href="#spi-communication-example">SPI Communication Example</a></li>
+<li><a class="reference internal" href="#adxl355-no-os-iio-support">ADXL355 no-OS IIO support</a></li>
+<li><a class="reference internal" href="#adxl355-iio-device-configuration">ADXL355 IIO Device Configuration</a></li>
+<li><a class="reference internal" href="#device-attributes">Device Attributes</a></li>
+<li><a class="reference internal" href="#device-channels">Device Channels</a></li>
+<li><a class="reference internal" href="#acceleration-channels">Acceleration channels</a></li>
+<li><a class="reference internal" href="#temperature-channel">Temperature channel</a></li>
+<li><a class="reference internal" href="#device-buffers">Device buffers</a></li>
+<li><a class="reference internal" href="#adxl355-iio-driver-initialization-example">ADXL355 IIO Driver Initialization Example</a></li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
+  
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+    <a id="no-logo" href="../index.html">
+      no-OS
+    </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
+All content
+</label>
+<label id="show-toc" for="input-switch-toc">
+Content on this topic
+</label>
+<div class="repotoc-tree">
+  <root>
+  <a href="../../documentation/eval/index.html">Evaluation Boards</a>
+  <a href="../../documentation/university/index.html">University Program</a>
+  <a href="../../hdl/index.html">HDL</a>
+  <a href="../index.html" class="current">no-OS</a>
+  <a href="../../pyadi-iio/index.html">Hardware Python Interfaces</a>
+  <a href="../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
+  <a href="../../doctools/index.html">Doctools</a>
+  <a href="../../PrecisionToolbox/index.html">Precision Toolbox</a>
+</root>
+
+</div>
+<div class="toc-tree">
+  <html>
+  <body><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../drivers_guide.html">no-OS drivers guide</a></li>
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1" checked=""/><div class="collapse"><a class="reference internal" href="../drivers_doc.html">no-OS drivers list</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">ADXL355 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adm1177.html">ADM1177 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad405x.html">AD405X no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad796x.html">AD796X no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad400x.html">AD400X no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="axi_sysid.html">System ID (AXI_SYSID) no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max14914.html">MAX14914 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max14919.html">MAX14919 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max149x6.html">MAX149X6 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22190.html">MAX22190 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22196.html">MAX22196 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22200.html">MAX22200 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max2201x.html">MAX2201X no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4382.html">ADF4382 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="imu.html">ADIS no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="madura.html">ADRV902x (Madura) no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adp1050.html">ADP1050 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc2992.html">LTC2992 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc4296.html">LTC4296 no-OS driver</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2"/><div class="collapse"><a class="reference internal" href="../projects_doc.html">no-OS projects list</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7091r8-sdz.html">Evaluating AD7091R-2/-4/-8 Devices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7616-st.html">Evaluating AD7616 on SDP-K1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad796x_fmcz.html">Evaluating the AD796x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad400x-fmcz.html">Evaluating AD400x on ZED and SDP-K1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad469x_fmcz.html">Evaluating the AD469x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adf4382.html">Evaluating the ADF4382</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1646x.html">Evaluating the ADIS1646X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1647x.html">Evaluating the ADIS1647X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1650x.html">Evaluating the ADIS1650X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1654x.html">Evaluating the ADIS1654X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1655x.html">Evaluating the ADIS1655X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1657x.html">Evaluating the ADIS1657X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-ade9430.html">EVAL-ADE9430 Sensor-to-Cloud</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adrv902x.html">adrv902x no-OS Sample Poject</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/apard32690.html">Evaluating the AD-APARD32690-SL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max14914.html">Evaluating the MAX14914</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max14919.html">Evaluating the MAX14919</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adp1050.html">Evaluating the ADP1050</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc4296.html">Evaluating the LTC4296</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max2201x.html">Evaluating the MAX2201X</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to no-OS</a></li>
+</ul>
+</body>
+</html>
+
+</div>
+        </div>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body" role="main">
+            
+  <section id="adxl355-no-os-driver">
+<h1>ADXL355 no-OS driver<a class="headerlink" href="#adxl355-no-os-driver" title="Link to this heading">¶</a></h1>
+<section id="supported-devices">
+<h2>Supported Devices<a class="headerlink" href="#supported-devices" title="Link to this heading">¶</a></h2>
+<p><a class="reference external" href="https://www.analog.com/ADXL355">ADXL355</a></p>
+</section>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
+<p>The digital output <a class="reference external" href="https://www.analog.com/ADXL355">ADXL355</a> is low noise
+density, low 0 g offset drift, low power, 3-axis accelerometer with selectable
+measurement ranges. The <a class="reference external" href="https://www.analog.com/ADXL355">ADXL355</a> supports
+the ±2 g, ±4 g, and ±8 g ranges. The
+<a class="reference external" href="https://www.analog.com/ADXL355">ADXL355</a> offer industry leading noise,
+minimal offset drift over temperature, and long-term stability enabling
+precision applications with minimal calibration.</p>
+<p>Highly integrated in a compact form factor, the low power
+<a class="reference external" href="https://www.analog.com/ADXL355">ADXL355</a> is ideal in an Internet of Things
+(IoT) sensor node and other wireless product designs.</p>
+<p>The <a class="reference external" href="https://www.analog.com/ADXL355">ADXL355</a> multifunction pin names may be
+referenced by their relevant function only for either the serial peripheral
+interface (SPI) or I2C interface.</p>
+</section>
+<section id="applications">
+<h2>Applications<a class="headerlink" href="#applications" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Inertial measurement units (IMUs)/altitude and heading reference systems (AHRS)</p></li>
+<li><p>Platform stabilization systems</p></li>
+<li><p>Structural health monitoring</p></li>
+<li><p>Seismic imaging</p></li>
+<li><p>Tilt sensing</p></li>
+<li><p>Robotics</p></li>
+<li><p>Condition Monitoring</p></li>
+</ul>
+</section>
+<section id="adxl355-device-configuration">
+<h2>ADXL355 Device Configuration<a class="headerlink" href="#adxl355-device-configuration" title="Link to this heading">¶</a></h2>
+</section>
+<section id="driver-initialization">
+<h2>Driver Initialization<a class="headerlink" href="#driver-initialization" title="Link to this heading">¶</a></h2>
+<p>In order to be able to use the device, you will have to provide the support for
+the communication protocol (SPI or I2C) as mentioned above.</p>
+<p>The first API to be called is <strong>adxl355_init</strong>. Make sure that it returns 0,
+which means that the driver was initialized correctly.</p>
+<p>After, it is recommended to perform a soft reset, by calling
+<strong>adxl355_soft_reset</strong>, in order to put the device in a known state.</p>
+</section>
+<section id="range-configuration">
+<h2>Range Configuration<a class="headerlink" href="#range-configuration" title="Link to this heading">¶</a></h2>
+<p>By default, the device uses +/- 2g range configuration. You may modify this
+value to +/- 4g or +/- 8g by using <strong>adxl355_set_range</strong> API.</p>
+</section>
+<section id="filters-configuration">
+<h2>Filters Configuration<a class="headerlink" href="#filters-configuration" title="Link to this heading">¶</a></h2>
+<p>The ADXL355 uses an analog, low-pass, antialiasing filter to reduce out of band
+noise and to limit bandwidth. The ADXL355 provides further digital filtering
+options to maintain optimal noise performance at various output data rates
+(ODRs). The default configuration for output data rate and low-pass filter
+corner is 4000Hz and 1000 Hz respectively. You may modify the ODR and low-pass
+filter configuration using <strong>adxl355_set_odr_lpf</strong> API.</p>
+<p>The ADXL355 also includes an optional digital high-pass filter with a
+programmable corner frequency. By default, the high-pass filter is disabled.
+You may enable it with the desired configuration by using
+<strong>adxl355_set_hpf_corner</strong> API.</p>
+</section>
+<section id="axis-calibration-configuration">
+<h2>Axis Calibration Configuration<a class="headerlink" href="#axis-calibration-configuration" title="Link to this heading">¶</a></h2>
+<p>You may set an offset for each axis for calibration purposes by using
+<strong>adxl355_set_offset</strong>.</p>
+<p>The offset is disabled by default.</p>
+<p>The data provided in <strong>adxl355_set_offset</strong> all be in two’s complement format.</p>
+<p>The offset is added after all other signal processing is taking place.</p>
+</section>
+<section id="fifo-configuration">
+<h2>FIFO Configuration<a class="headerlink" href="#fifo-configuration" title="Link to this heading">¶</a></h2>
+<p>There are 96 locations in the FIFO. Each location contains an acceleration data
+point on an axis.</p>
+<p>In case you want to use the FIFO, you are able to modify the number of FIFO
+samples to be stored in the FIFO. The default and maximum value is 96, but can
+be modified using <strong>adxl355_set_fifo_samples</strong> API.</p>
+</section>
+<section id="activity-detection-configuration">
+<h2>Activity Detection Configuration<a class="headerlink" href="#activity-detection-configuration" title="Link to this heading">¶</a></h2>
+<p>In case you want to use the activity detection algorithm, you can enable this
+feature on any axis using <strong>adxl355_conf_act_en</strong> API. By default the activity
+detection feature is disabled.</p>
+<p>If activity detection feature is enabled, you will also have to specify a
+threshold for the activity detection using <strong>adxl355_conf_act_thr</strong> API and a
+number of consecutive measurements above the threshold which would trigger the
+detection of an activity. This number has to be set using
+<strong>adxl355_set_act_cnt_reg</strong>. The default value is 1.</p>
+</section>
+<section id="interrupts-configuration">
+<h2>Interrupts Configuration<a class="headerlink" href="#interrupts-configuration" title="Link to this heading">¶</a></h2>
+<p>The device allows the usage of interrupts which can be mapped to INT1 or INT2
+pins.</p>
+<p>In case you want to use interrupts, make sure you configure the interrupt map
+by using <strong>adxl355_config_int_pins</strong> API. You may also configure the polarity
+of the interrupt, whether is active high or active low, by using
+<strong>adxl355_set_int_pol</strong> API.</p>
+<p>The following events can be mapped to the interrupt pins:</p>
+<ul class="simple">
+<li><p>DATA READY interrupt - it is triggered when new acceleration data is available to the interface and it is cleared on a read of the status register, using <strong>adxl355_get_sts_reg</strong> API.</p></li>
+<li><p>FIFO FULL interrupt - it is triggered when the entries  in the FIFO are equal to the setting made when calling <strong>adxl355_set_fifo_samples</strong> API. It is cleared when the number of entries in the FIFO is less than the number of samples indicated by <strong>adxl355_get_nb_of_fifo_entries</strong> API, which is only the case if sufficient data is read from the FIFO. It can also be cleared on a read of the status register, using <strong>adxl355_get_sts_reg</strong> API, but only when the entries in the FIFO are less than the value returned by <strong>adxl355_get_nb_of_fifo_entries</strong> API.</p></li>
+<li><p>FIFO OVERFLOW interrupt - it is triggered when the FIFO is so far overrange that data is lost. The specified side of the FIFO is 96 locations. The interrupt is triggered only when there is an attempt to write past this 96-location limit. A read to the status register, using <strong>adxl355_get_sts_reg</strong> API clears the interrupt.</p></li>
+<li><p>ACTIVITY interrupt - it is set when the measured acceleration on any axis is above the set threshold, using <strong>adxl355_conf_act_thr</strong> API for a number of consecutive measurement, equal with the value set using <strong>adxl355_set_act_cnt_reg</strong> API. A read of the status register, using <strong>adxl355_get_sts_reg</strong> API clears the interrupt, but this interrupt is triggered again at the end of the next measurement if the activity conditions are still satisfied.</p></li>
+</ul>
+</section>
+<section id="adxl355-device-measurements">
+<h2>ADXL355 Device Measurements<a class="headerlink" href="#adxl355-device-measurements" title="Link to this heading">¶</a></h2>
+</section>
+<section id="operation-mode-setting">
+<h2>Operation Mode Setting<a class="headerlink" href="#operation-mode-setting" title="Link to this heading">¶</a></h2>
+<p>After the specific configuration was performed as mentioned above, you can set
+the device in the desired measurement mode, using <strong>adxl355_set_op_mode</strong> API.
+The available operation modes for measurement are as follows:</p>
+<ul class="simple">
+<li><p><strong>ADXL355_MEASUREMENT_TEMP_ON_DRDY_ON</strong> - measurement mode, with temperature measurement enabled and data ready pin functionality enabled.</p></li>
+<li><p><strong>ADXL355_MEASUREMENT_TEMP_OFF_DRDY_ON</strong> - measurement mode, with temperature measurement disabled and data ready pin functionality enabled.</p></li>
+<li><p><strong>ADXL355_MEASUREMENT_TEMP_ON_DRDY_OFF</strong> - measurement mode, with temperature measurement enabled and data ready pin functionality disabled.</p></li>
+<li><p><strong>ADXL355_MEASUREMENT_TEMP_OFF_DRDY_OFF</strong> - measurement mode, with temperature measurement disabled and data ready pin functionality disabled.</p></li>
+</ul>
+</section>
+<section id="temperature-data">
+<h2>Temperature Data<a class="headerlink" href="#temperature-data" title="Link to this heading">¶</a></h2>
+<p>In case the operation mode selected includes the temperature measurement, then
+data can be obtained by calling <strong>adxl355_get_temp</strong> API. The temperature is in
+millidegrees Celsius, with scaling already applied.</p>
+<p>If you want to obtain the raw temperature data without any scaling applies,
+simply call <strong>adxl355_get_raw_temp</strong> API.</p>
+</section>
+<section id="acceleration-data">
+<h2>Acceleration Data<a class="headerlink" href="#acceleration-data" title="Link to this heading">¶</a></h2>
+</section>
+<section id="single-data-set">
+<h2>Single Data Set<a class="headerlink" href="#single-data-set" title="Link to this heading">¶</a></h2>
+<p>If you want to obtain a single data set, you may use <strong>adxl355_get_xyz</strong> API to
+obtain the data converted to g, or <strong>adxl355_get_raw_xyz</strong> API to obtain the
+raw data. The raw data is in two’s complement format and it does not have the
+scaling applied.</p>
+</section>
+<section id="fifo-data">
+<h2>FIFO Data<a class="headerlink" href="#fifo-data" title="Link to this heading">¶</a></h2>
+<p>If you want to read from the FIFO, you may use <strong>adxl355_get_fifo_data</strong> API to
+obtain the data converted to g, or <strong>adxl355_get_raw_fifo_data</strong> api to obtain
+the raw data. The raw data is in two’s complement format and it does not have
+the scaling applied.</p>
+<p>The parameter fifo_entries shows the number of valid measurements in the FIFO
+which were read.</p>
+</section>
+<section id="adxl355-driver-initialization-example">
+<h2>ADXL355 Driver Initialization Example<a class="headerlink" href="#adxl355-driver-initialization-example" title="Link to this heading">¶</a></h2>
+</section>
+<section id="spi-communication-example">
+<h2>SPI Communication Example<a class="headerlink" href="#spi-communication-example" title="Link to this heading">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>struct<span class="w"> </span>adxl355_dev<span class="w"> </span>*adxl355<span class="p">;</span>
+//<span class="w"> </span>Particular<span class="w"> </span>SPI<span class="w"> </span>configuration
+struct<span class="w"> </span>no_os_spi_init_param<span class="w"> </span><span class="nv">sip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>.max_speed_hz<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">10000000</span>,
+<span class="w">        </span>.bit_order<span class="w"> </span><span class="o">=</span><span class="w"> </span>SPI_BIT_ORDER_MSB_FIRST,
+<span class="w">        </span>.mode<span class="w"> </span><span class="o">=</span><span class="w"> </span>SPI_CPOL0_SPI_CPHA0,
+<span class="o">}</span><span class="p">;</span>
+struct<span class="w"> </span>adxl355_init_param<span class="w"> </span><span class="nv">init_data_adxl355</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>.comm_init.spi_init<span class="w"> </span><span class="o">=</span><span class="w"> </span>sip,
+<span class="w">        </span>.comm_type<span class="w"> </span><span class="o">=</span><span class="w"> </span>ADXL355_SPI_COMM,
+<span class="o">}</span><span class="p">;</span>
+
+<span class="nv">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>adxl355_init<span class="o">(</span><span class="p">&amp;</span>adxl355,<span class="w"> </span>init_data_adxl355<span class="o">)</span><span class="p">;</span>
+<span class="k">if</span><span class="w"> </span><span class="o">(</span>ret<span class="w"> </span>&lt;<span class="w"> </span><span class="m">0</span><span class="o">)</span>
+<span class="w">        </span>goto<span class="w"> </span>error<span class="p">;</span>
+<span class="nv">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>adxl355_soft_reset<span class="o">(</span>adxl355<span class="o">)</span><span class="p">;</span>
+<span class="k">if</span><span class="w"> </span><span class="o">(</span>ret<span class="w"> </span>&lt;<span class="w"> </span><span class="m">0</span><span class="o">)</span>
+<span class="w">        </span>goto<span class="w"> </span>error<span class="p">;</span>
+<span class="nv">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>adxl355_set_odr_lpf<span class="o">(</span>adxl355,<span class="w"> </span>ADXL355_ODR_4000HZ<span class="o">)</span><span class="p">;</span>
+<span class="k">if</span><span class="w"> </span><span class="o">(</span>ret<span class="w"> </span>&lt;<span class="w"> </span><span class="m">0</span><span class="o">)</span>
+<span class="w">        </span>goto<span class="w"> </span>error<span class="p">;</span>
+<span class="nv">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>adxl355_set_op_mode<span class="o">(</span>adxl355,<span class="w"> </span>ADXL355_MEAS_TEMP_ON_DRDY_OFF<span class="o">)</span><span class="p">;</span>
+<span class="k">if</span><span class="w"> </span><span class="o">(</span>ret<span class="w"> </span>&lt;<span class="w"> </span><span class="m">0</span><span class="o">)</span>
+<span class="w">        </span>goto<span class="w"> </span>error<span class="p">;</span>
+
+//<span class="w"> </span>Read<span class="w"> </span>single<span class="w"> </span>accel<span class="w"> </span>data
+struct<span class="w"> </span>adxl355_frac_repr<span class="w"> </span>x<span class="p">;</span>
+struct<span class="w"> </span>adxl355_frac_repr<span class="w"> </span>y<span class="p">;</span>
+struct<span class="w"> </span>adxl355_frac_repr<span class="w"> </span>z<span class="p">;</span>
+
+<span class="nv">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>adxl355_get_xyz<span class="o">(</span>adxl355,<span class="p">&amp;</span>x<span class="o">[</span><span class="m">0</span><span class="o">]</span>,<span class="w"> </span><span class="p">&amp;</span>y<span class="o">[</span><span class="m">0</span><span class="o">]</span>,<span class="w"> </span><span class="p">&amp;</span>z<span class="o">[</span><span class="m">0</span><span class="o">])</span><span class="p">;</span>
+<span class="k">if</span><span class="w"> </span><span class="o">(</span>ret<span class="w"> </span>&lt;<span class="w"> </span><span class="m">0</span><span class="o">)</span>
+<span class="w">        </span>goto<span class="w"> </span>error<span class="p">;</span>
+
+//<span class="w"> </span>Read<span class="w"> </span>FIFO<span class="w"> </span>accel<span class="w"> </span>data
+struct<span class="w"> </span>adxl355_frac_repr<span class="w"> </span>x<span class="o">[</span><span class="m">32</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span><span class="m">0</span><span class="o">}</span><span class="p">;</span>
+struct<span class="w"> </span>adxl355_frac_repr<span class="w"> </span>y<span class="o">[</span><span class="m">32</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span><span class="m">0</span><span class="o">}</span><span class="p">;</span>
+struct<span class="w"> </span>adxl355_frac_repr<span class="w"> </span>z<span class="o">[</span><span class="m">32</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span><span class="m">0</span><span class="o">}</span><span class="p">;</span>
+uint8_t<span class="w"> </span><span class="nv">fifo_entries</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="p">;</span>
+<span class="nv">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>adxl355_get_fifo_data<span class="o">(</span>adxl355,<span class="w"> </span><span class="p">&amp;</span>fifo_entries,
+<span class="w">                            </span><span class="p">&amp;</span>x<span class="o">[</span><span class="m">0</span><span class="o">]</span>,<span class="w"> </span><span class="p">&amp;</span>y<span class="o">[</span><span class="m">0</span><span class="o">]</span>,<span class="w"> </span><span class="p">&amp;</span>z<span class="o">[</span><span class="m">0</span><span class="o">])</span><span class="p">;</span>
+<span class="k">if</span><span class="w"> </span><span class="o">(</span>ret<span class="w"> </span>&lt;<span class="w"> </span><span class="m">0</span><span class="o">)</span>
+<span class="w">        </span>goto<span class="w"> </span>error<span class="p">;</span>
+
+//<span class="w"> </span>Read<span class="w"> </span>temperature<span class="w"> </span>data
+struct<span class="w"> </span>adxl355_frac_repr<span class="w"> </span>temp<span class="p">;</span>
+<span class="nv">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>adxl355_get_temp<span class="o">(</span>adxl355,<span class="w"> </span><span class="p">&amp;</span>temp<span class="o">)</span><span class="p">;</span>
+<span class="k">if</span><span class="w"> </span><span class="o">(</span>ret<span class="w"> </span>&lt;<span class="w"> </span><span class="m">0</span><span class="o">)</span>
+<span class="w">        </span>goto<span class="w"> </span>error<span class="p">;</span>
+</pre></div>
+</div>
+</section>
+<section id="adxl355-no-os-iio-support">
+<h2>ADXL355 no-OS IIO support<a class="headerlink" href="#adxl355-no-os-iio-support" title="Link to this heading">¶</a></h2>
+<p>The ADXL355 IIO driver comes on top of ADXL355 driver and offers support for interfacing IIO clients through IIO lib.</p>
+</section>
+<section id="adxl355-iio-device-configuration">
+<h2>ADXL355 IIO Device Configuration<a class="headerlink" href="#adxl355-iio-device-configuration" title="Link to this heading">¶</a></h2>
+</section>
+<section id="device-attributes">
+<h2>Device Attributes<a class="headerlink" href="#device-attributes" title="Link to this heading">¶</a></h2>
+<p>ADXL355 IIO device does not have any device specific attributes.</p>
+</section>
+<section id="device-channels">
+<h2>Device Channels<a class="headerlink" href="#device-channels" title="Link to this heading">¶</a></h2>
+<p>ADXL355 IIO device has 0 output channels and 4 input channels: 3 acceleration channels and 1 temperature channel.</p>
+</section>
+<section id="acceleration-channels">
+<h2>Acceleration channels<a class="headerlink" href="#acceleration-channels" title="Link to this heading">¶</a></h2>
+<p>The acceleration channels are:</p>
+<ul class="simple">
+<li><p>Channel 0: accel_x</p></li>
+<li><p>Channel 1: accel_y</p></li>
+<li><p>Channel 2: accel_z</p></li>
+</ul>
+<p>Each acceleration channel has 7 attributes. 5 of these attributes are shared in value with the other acceleration channels and 2 of these attributes can have different values for each channel.</p>
+<p>The attributes are:</p>
+<ul class="simple">
+<li><p>calibbias - offset added to the axis after all other signal processing. The calibbias value will be applied as an offset to the raw value bits [19:4]. See formula bellow.</p></li>
+<li><p>filter_high_pass_3db_frequency (shared) - is the current setting for the high pass filter corner frequency. This value is common for all three acceleration channels and the value is influenced by the current sampling frequency (see table below).</p></li>
+<li><p>filter_high_pass_3db_frequency_available (shared) - is the list of available high pass filter corner frequency values. This list is common for all three acceleration channels and the values are influenced by the current sampling frequency (see table below).</p></li>
+<li><p>raw - is the raw acceleration value read from the device.</p></li>
+<li><p>sampling_frequency (shared) - is the sampling frequency for acceleration data. This value is common for all three acceleration channels.</p></li>
+<li><p>sampling_frequency_available (shared) - is the list of available sampling frequency values. This list is common for all three acceleration channels.</p></li>
+<li><p>scale (shared) - is the scale that has to be applied to the raw value in order to obtain the converted real value in m/s^2 (see formula below). It has a constant value equal to: <strong>0.000038245</strong>.</p></li>
+</ul>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>Sampling frequency (Hz)</p></td>
+<td colspan="7"><p>High Pass Filter Corner Frequency available values (Hz)</p></td>
+</tr>
+<tr class="row-even"><td><p>4000.000000</p></td>
+<td><p>0.000000</p></td>
+<td><p>9.880000</p></td>
+<td><p>2.483360</p></td>
+<td><p>0.621800</p></td>
+<td><p>0.154480</p></td>
+<td><p>0.038160</p></td>
+<td><p>0.009520</p></td>
+</tr>
+<tr class="row-odd"><td><p>2000.000000</p></td>
+<td><p>0.000000</p></td>
+<td><p>4.940000</p></td>
+<td><p>1.241680</p></td>
+<td><p>0.310900</p></td>
+<td><p>0.077240</p></td>
+<td><p>0.019080</p></td>
+<td><p>0.004760</p></td>
+</tr>
+<tr class="row-even"><td><p>1000.000000</p></td>
+<td><p>0.000000</p></td>
+<td><p>2.470000</p></td>
+<td><p>0.620840</p></td>
+<td><p>0.155450</p></td>
+<td><p>0.038620</p></td>
+<td><p>0.009540</p></td>
+<td><p>0.002380</p></td>
+</tr>
+<tr class="row-odd"><td><p>500.000000</p></td>
+<td><p>0.000000</p></td>
+<td><p>1.235000</p></td>
+<td><p>0.310420</p></td>
+<td><p>0.077725</p></td>
+<td><p>0.019310</p></td>
+<td><p>0.004770</p></td>
+<td><p>0.001190</p></td>
+</tr>
+<tr class="row-even"><td><p>250.000000</p></td>
+<td><p>0.000000</p></td>
+<td><p>0.617500</p></td>
+<td><p>0.155210</p></td>
+<td><p>0.038862</p></td>
+<td><p>0.009655</p></td>
+<td><p>0.002385</p></td>
+<td><p>0.000595</p></td>
+</tr>
+<tr class="row-odd"><td><p>125.000000</p></td>
+<td><p>0.000000</p></td>
+<td><p>0.308750</p></td>
+<td><p>0.077605</p></td>
+<td><p>0.019431</p></td>
+<td><p>0.004827</p></td>
+<td><p>0.001192</p></td>
+<td><p>0.000297</p></td>
+</tr>
+<tr class="row-even"><td><p>62.500000</p></td>
+<td><p>0.000000</p></td>
+<td><p>0.154375</p></td>
+<td><p>0.038802</p></td>
+<td><p>0.009715</p></td>
+<td><p>0.002413</p></td>
+<td><p>0.000596</p></td>
+<td><p>0.000148</p></td>
+</tr>
+<tr class="row-odd"><td><p>31.250000</p></td>
+<td><p>0.000000</p></td>
+<td><p>0.077187</p></td>
+<td><p>0.019401</p></td>
+<td><p>0.004857</p></td>
+<td><p>0.001206</p></td>
+<td><p>0.000298</p></td>
+<td><p>0.000074</p></td>
+</tr>
+<tr class="row-even"><td><p>15.625000</p></td>
+<td><p>0.000000</p></td>
+<td><p>0.038593</p></td>
+<td><p>0.009700</p></td>
+<td><p>0.002428</p></td>
+<td><p>0.000603</p></td>
+<td><p>0.000149</p></td>
+<td><p>0.000037</p></td>
+</tr>
+<tr class="row-odd"><td><p>7.813000</p></td>
+<td><p>0.000000</p></td>
+<td><p>0.019298</p></td>
+<td><p>0.004850</p></td>
+<td><p>0.001214</p></td>
+<td><p>0.000301</p></td>
+<td><p>0.000074</p></td>
+<td><p>0.000018</p></td>
+</tr>
+<tr class="row-even"><td><p>3.906000</p></td>
+<td><p>0.000000</p></td>
+<td><p>0.009647</p></td>
+<td><p>0.002425</p></td>
+<td><p>0.000607</p></td>
+<td><p>0.000150</p></td>
+<td><p>0.000037</p></td>
+<td><p>0.000009</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>In order to obtain the value in the m/s^2 units, raw has to be scaled by scale:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>converted_accel<span class="w"> </span><span class="o">[</span>m/s^2<span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">(</span>raw<span class="w"> </span>+<span class="w"> </span>calibbias<span class="w"> </span><span class="s">&lt;&lt; 4) * scale</span>
+<span class="s">converted_accel [m/s^2] = (raw + calibbias &lt;&lt; 4</span><span class="o">)</span><span class="w"> </span>*<span class="w"> </span><span class="m">0</span>.000038245
+</pre></div>
+</div>
+</section>
+<section id="temperature-channel">
+<h2>Temperature channel<a class="headerlink" href="#temperature-channel" title="Link to this heading">¶</a></h2>
+<p>The temperature channel is:</p>
+<ul class="simple">
+<li><p>Channel 4: temp</p></li>
+</ul>
+<p>The channel has 3 attributes, as follows:</p>
+<ul class="simple">
+<li><p>offset - is the offset that has to be applied to the raw value in order to obtain the converted real value in degrees Celsius (see formula below). It has a constant value equal to <strong>-2111.250000</strong>.</p></li>
+<li><p>raw - is the raw temperature value read from the device.</p></li>
+<li><p>scale - is the scale that has to be applied to the raw value in order to obtain the converted real value in degrees Celsius (see formula below). It has a constant value equal to: <strong>-110.497238</strong>.</p></li>
+</ul>
+<p>In order to obtain the value in the degrees Celsius units, offset has to be added to raw prior to scaling by scale:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>converted_temp<span class="w"> </span><span class="o">[</span>degrees<span class="w"> </span>Celsius<span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">(</span>raw<span class="w"> </span>+<span class="w"> </span>offset<span class="o">)</span><span class="w"> </span>*<span class="w"> </span>scale
+converted_temp<span class="w"> </span><span class="o">[</span>degrees<span class="w"> </span>Celsius<span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">(</span><span class="m">2111</span>.25<span class="w"> </span>-<span class="w"> </span>raw<span class="o">)</span><span class="w"> </span>*<span class="w"> </span><span class="m">110</span>.497238
+</pre></div>
+</div>
+</section>
+<section id="device-buffers">
+<h2>Device buffers<a class="headerlink" href="#device-buffers" title="Link to this heading">¶</a></h2>
+<p>The ADXL355 IIO devices driver supports the usage of a data buffer for reading purposes.</p>
+</section>
+<section id="adxl355-iio-driver-initialization-example">
+<h2>ADXL355 IIO Driver Initialization Example<a class="headerlink" href="#adxl355-iio-driver-initialization-example" title="Link to this heading">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1">#define DATA_BUFFER_SIZE 400</span>
+uint8_t<span class="w"> </span>iio_data_buffer<span class="o">[</span>DATA_BUFFER_SIZE*4*sizeof<span class="o">(</span>int<span class="o">)]</span><span class="p">;</span>
+
+struct<span class="w"> </span>adxl355_iio_dev<span class="w"> </span>*adxl355_iio_desc<span class="p">;</span>
+struct<span class="w"> </span>adxl355_iio_init_param<span class="w"> </span>adxl355_init_par<span class="p">;</span>
+
+//<span class="w"> </span>Particular<span class="w"> </span>SPI<span class="w"> </span>configuration
+struct<span class="w"> </span>no_os_spi_init_param<span class="w"> </span><span class="nv">sip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>.max_speed_hz<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">10000000</span>,
+<span class="w">        </span>.bit_order<span class="w"> </span><span class="o">=</span><span class="w"> </span>SPI_BIT_ORDER_MSB_FIRST,
+<span class="w">        </span>.mode<span class="w"> </span><span class="o">=</span><span class="w"> </span>SPI_CPOL0_SPI_CPHA0,
+<span class="o">}</span><span class="p">;</span>
+
+struct<span class="w"> </span>iio_data_buffer<span class="w"> </span><span class="nv">accel_buff</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>.buff<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">(</span>void<span class="w"> </span>*<span class="o">)</span>iio_data_buffer,
+<span class="w">        </span>.size<span class="w"> </span><span class="o">=</span><span class="w"> </span>DATA_BUFFER_SIZE*4*sizeof<span class="o">(</span>int<span class="o">)</span>
+<span class="o">}</span><span class="p">;</span>
+
+struct<span class="w"> </span>adxl355_init_param<span class="w"> </span><span class="nv">init_data_adxl355</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>.comm_init.spi_init<span class="w"> </span><span class="o">=</span><span class="w"> </span>sip,
+<span class="w">        </span>.comm_type<span class="w"> </span><span class="o">=</span><span class="w"> </span>ADXL355_SPI_COMM,
+<span class="o">}</span><span class="p">;</span>
+
+<span class="nv">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>adxl355_iio_init<span class="o">(</span><span class="p">&amp;</span>adxl355_iio_desc,<span class="w"> </span><span class="p">&amp;</span>adxl355_init_par<span class="o">)</span><span class="p">;</span>
+<span class="k">if</span><span class="w"> </span><span class="o">(</span>ret<span class="w"> </span>!<span class="o">=</span><span class="w"> </span>SUCCESS<span class="o">)</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span>ret<span class="p">;</span>
+
+struct<span class="w"> </span>iio_app_device<span class="w"> </span>iio_devices<span class="o">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span><span class="o">{</span>
+<span class="w">                </span>.name<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;adxl355&quot;</span>,
+<span class="w">                </span>.dev<span class="w"> </span><span class="o">=</span><span class="w"> </span>adxl355_iio_desc,
+<span class="w">                </span>.dev_descriptor<span class="w"> </span><span class="o">=</span><span class="w"> </span>adxl355_iio_desc-&gt;iio_dev,
+<span class="w">                </span>.read_buff<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>accel_buff,
+<span class="w">                </span>.write_buff<span class="w"> </span><span class="o">=</span><span class="w"> </span>NULL
+<span class="w">        </span><span class="o">}</span>
+<span class="o">}</span><span class="p">;</span>
+
+<span class="k">return</span><span class="w"> </span>iio_app_run<span class="o">(</span>iio_devices,<span class="w"> </span>NO_OS_ARRAY_SIZE<span class="o">(</span>iio_devices<span class="o">))</span><span class="p">;</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+          </div>
+              <div class="related">
+                &nbsp;
+    <a href="../drivers_doc.html" title="Previous document (Ctrl+LeftArrow)" class="prev">no-OS drivers list</a>
+    <a href="adm1177.html" title="Next document (Ctrl+RightArrow)" class="next">ADM1177 no-OS Driver</a>
+              </div>
+          
+        </div>
+      </div>
+  </div>
+
+  <div id="vertical-border"></div>
+
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
+    <footer>
+      &#169;2023-2024, Analog Devices, Inc.
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
+</html>

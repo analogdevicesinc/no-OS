@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Evaluating the MAX14919 &#8212; no-OS  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="../_static/style.min.css?v=a3ba2641" />
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script defer="" src="../_static/app.umd.js?v=7e1fdd13"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Evaluating the ADP1050" href="adp1050.html" />
+    <link rel="prev" title="Evaluating the MAX14914" href="max14914.html" />
+   
+  
+    <meta name="robots" content="noindex">
+  
+  <meta name="repo" content="no-OS">
+  
+
+
+<style>
+  body {
+    
+  }
+
+  body.dark {
+    
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body:not(.light) {
+      
+    }
+  }
+</style>
+  </head><body>
+  <div class="banner"></div>
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
+  <input type="checkbox" id="input-show-repotoc">
+
+  
+  <div class="search-area">
+    <form action="" method="get">
+      <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+      <button value="search" class="icon"></button>
+      <span id="search-progress"></span>
+    </form>
+  </div>
+  
+
+  <header>
+    <div id="left">
+      <label id="show-sidebar" class="icon" for="input-show-toc" title="Show/hide index"></label>
+    </div>
+    <div id="right">
+      <span>
+        <a id="logo-org" href="https://analog.com"></a>
+        <div class="vertical-divider"></div>
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
+        <a id="logo" href="../index.html">
+          <div>no-OS</div>
+        </a>
+      </span>
+      <span class="reverse">
+        <label id="show-localtoc" class="icon" for="input-show-localtoc" title="Show/hide contents"></label>
+      </span>
+    </div>
+  </header>
+
+
+  <div class="repotoc-tree overlay">
+    <root>
+  <a href="../../documentation/eval/index.html">Evaluation Boards</a>
+  <a href="../../documentation/university/index.html">University Program</a>
+  <a href="../../hdl/index.html">HDL</a>
+  <a href="../index.html" class="current">no-OS</a>
+  <a href="../../pyadi-iio/index.html">Hardware Python Interfaces</a>
+  <a href="../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
+  <a href="../../doctools/index.html">Doctools</a>
+  <a href="../../PrecisionToolbox/index.html">Precision Toolbox</a>
+</root>
+
+  </div>
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div>
+          <div class="localtoc-header">On this page</div>
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">Evaluating the MAX14919</a><ul>
+<li><a class="reference internal" href="#supported-evaluation-boards">Supported Evaluation Boards</a></li>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#applications">Applications</a></li>
+<li><a class="reference internal" href="#hardware-specifications">Hardware Specifications</a><ul>
+<li><a class="reference internal" href="#power-supply-requirments">Power Supply Requirments</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#no-os-build-setup">No-OS Build Setup</a></li>
+<li><a class="reference internal" href="#no-os-supported-examples">No-OS Supported Examples</a><ul>
+<li><a class="reference internal" href="#basic-example">Basic example</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#no-os-supported-platforms">No-OS Supported Platforms</a><ul>
+<li><a class="reference internal" href="#maxim-platform">Maxim Platform</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
+  
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+    <a id="no-logo" href="../index.html">
+      no-OS
+    </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
+All content
+</label>
+<label id="show-toc" for="input-switch-toc">
+Content on this topic
+</label>
+<div class="repotoc-tree">
+  <root>
+  <a href="../../documentation/eval/index.html">Evaluation Boards</a>
+  <a href="../../documentation/university/index.html">University Program</a>
+  <a href="../../hdl/index.html">HDL</a>
+  <a href="../index.html" class="current">no-OS</a>
+  <a href="../../pyadi-iio/index.html">Hardware Python Interfaces</a>
+  <a href="../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
+  <a href="../../doctools/index.html">Doctools</a>
+  <a href="../../PrecisionToolbox/index.html">Precision Toolbox</a>
+</root>
+
+</div>
+<div class="toc-tree">
+  <html>
+  <body><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../drivers_guide.html">no-OS drivers guide</a></li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1"/><div class="collapse"><a class="reference internal" href="../drivers_doc.html">no-OS drivers list</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adxl355.html">ADXL355 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adm1177.html">ADM1177 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ad405x.html">AD405X no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ad796x.html">AD796X no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ad400x.html">AD400X no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/axi_sysid.html">System ID (AXI_SYSID) no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max14914.html">MAX14914 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max14919.html">MAX14919 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max149x6.html">MAX149X6 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max22190.html">MAX22190 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max22196.html">MAX22196 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max22200.html">MAX22200 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max2201x.html">MAX2201X no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adf4382.html">ADF4382 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/imu.html">ADIS no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/madura.html">ADRV902x (Madura) no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adp1050.html">ADP1050 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ltc2992.html">LTC2992 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ltc4296.html">LTC4296 no-OS driver</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2" checked=""/><div class="collapse"><a class="reference internal" href="../projects_doc.html">no-OS projects list</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="ad7091r8-sdz.html">Evaluating AD7091R-2/-4/-8 Devices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad7616-st.html">Evaluating AD7616 on SDP-K1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad796x_fmcz.html">Evaluating the AD796x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad400x-fmcz.html">Evaluating AD400x on ZED and SDP-K1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad469x_fmcz.html">Evaluating the AD469x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4382.html">Evaluating the ADF4382</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval-adis1646x.html">Evaluating the ADIS1646X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval-adis1647x.html">Evaluating the ADIS1647X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval-adis1650x.html">Evaluating the ADIS1650X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval-adis1654x.html">Evaluating the ADIS1654X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval-adis1655x.html">Evaluating the ADIS1655X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval-adis1657x.html">Evaluating the ADIS1657X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval-ade9430.html">EVAL-ADE9430 Sensor-to-Cloud</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adrv902x.html">adrv902x no-OS Sample Poject</a></li>
+<li class="toctree-l2"><a class="reference internal" href="apard32690.html">Evaluating the AD-APARD32690-SL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max14914.html">Evaluating the MAX14914</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Evaluating the MAX14919</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adp1050.html">Evaluating the ADP1050</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc4296.html">Evaluating the LTC4296</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max2201x.html">Evaluating the MAX2201X</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to no-OS</a></li>
+</ul>
+</body>
+</html>
+
+</div>
+        </div>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body" role="main">
+            
+  <section id="evaluating-the-max14919">
+<h1><a class="toc-backref" href="#id2" role="doc-backlink">Evaluating the MAX14919</a><a class="headerlink" href="#evaluating-the-max14919" title="Link to this heading">¶</a></h1>
+<nav class="contents" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#evaluating-the-max14919" id="id2">Evaluating the MAX14919</a></p>
+<ul>
+<li><p><a class="reference internal" href="#supported-evaluation-boards" id="id3">Supported Evaluation Boards</a></p></li>
+<li><p><a class="reference internal" href="#overview" id="id4">Overview</a></p></li>
+<li><p><a class="reference internal" href="#applications" id="id5">Applications</a></p></li>
+<li><p><a class="reference internal" href="#hardware-specifications" id="id6">Hardware Specifications</a></p>
+<ul>
+<li><p><a class="reference internal" href="#power-supply-requirments" id="id7">Power Supply Requirments</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#no-os-build-setup" id="id8">No-OS Build Setup</a></p></li>
+<li><p><a class="reference internal" href="#no-os-supported-examples" id="id9">No-OS Supported Examples</a></p>
+<ul>
+<li><p><a class="reference internal" href="#basic-example" id="id10">Basic example</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#no-os-supported-platforms" id="id11">No-OS Supported Platforms</a></p>
+<ul>
+<li><p><a class="reference internal" href="#maxim-platform" id="id12">Maxim Platform</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+<section id="supported-evaluation-boards">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">Supported Evaluation Boards</a><a class="headerlink" href="#supported-evaluation-boards" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.analog.com/MAX14919PMB">MAX14919PMB</a></p></li>
+</ul>
+</section>
+<section id="overview">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">Overview</a><a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
+<p>The MAX14919 PMB provides a proven design to evaluate the MAX14919 industrial-grade quad low-side
+switch with 140mΩ (typ) RON and ±1kV/42Ω surge protection.</p>
+</section>
+<section id="applications">
+<h2><a class="toc-backref" href="#id5" role="doc-backlink">Applications</a><a class="headerlink" href="#applications" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Industrial Digital Outputs</p></li>
+<li><p>Motor Control</p></li>
+<li><p>PLC and DCS Systems</p></li>
+<li><p>Relay and Solenoid Drivers</p></li>
+</ul>
+</section>
+<section id="hardware-specifications">
+<h2><a class="toc-backref" href="#id6" role="doc-backlink">Hardware Specifications</a><a class="headerlink" href="#hardware-specifications" title="Link to this heading">¶</a></h2>
+<section id="power-supply-requirments">
+<h3><a class="toc-backref" href="#id7" role="doc-backlink">Power Supply Requirments</a><a class="headerlink" href="#power-supply-requirments" title="Link to this heading">¶</a></h3>
+<p>The MAX14919PMB device needs to be supplied with a 3.3V voltage.</p>
+<p><strong>Pin Description</strong></p>
+<blockquote>
+<div><p>Please see te following table for the pin assignments for the
+following connectors:</p>
+<p>T1:</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>Pin</p></td>
+<td><p>Name</p></td>
+<td><p>Description</p></td>
+</tr>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>IN1</p></td>
+<td><p>IN1 Logic Input (GPIO)</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>IN2</p></td>
+<td><p>IN2 Logic Input (GPIO)</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>IN3</p></td>
+<td><p>IN3 Logic Input (GPIO)</p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>IN4</p></td>
+<td><p>IN4 Logic Input (GPIO)</p></td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p>GND</p></td>
+<td><p>Connect to Ground.</p></td>
+</tr>
+<tr class="row-odd"><td><p>6</p></td>
+<td><p>VL</p></td>
+<td><p>Power Supply, +3.3V</p></td>
+</tr>
+<tr class="row-even"><td><p>7</p></td>
+<td><p>INRUSH</p></td>
+<td><p>IN_RUSH Logic Input (GPIO)</p></td>
+</tr>
+<tr class="row-odd"><td><p>8</p></td>
+<td><p>FAULT</p></td>
+<td><p>FAULT Logic Output (GPIO)</p></td>
+</tr>
+<tr class="row-even"><td><p>9</p></td>
+<td><p>REV</p></td>
+<td><p>REV Logic Output (GPIO)</p></td>
+</tr>
+<tr class="row-odd"><td><p>10</p></td>
+<td><p>DNC</p></td>
+<td><p>Do Not Connect</p></td>
+</tr>
+<tr class="row-even"><td><p>11</p></td>
+<td><p>GND</p></td>
+<td><p>Connect to GROUND</p></td>
+</tr>
+<tr class="row-odd"><td><p>12</p></td>
+<td><p>VL</p></td>
+<td><p>Power Supply, +3.3V</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div></blockquote>
+</section>
+</section>
+<section id="no-os-build-setup">
+<h2><a class="toc-backref" href="#id8" role="doc-backlink">No-OS Build Setup</a><a class="headerlink" href="#no-os-build-setup" title="Link to this heading">¶</a></h2>
+<p>Please see: <a class="reference external" href="https://wiki.analog.com/resources/no-os/build">https://wiki.analog.com/resources/no-os/build</a></p>
+</section>
+<section id="no-os-supported-examples">
+<h2><a class="toc-backref" href="#id9" role="doc-backlink">No-OS Supported Examples</a><a class="headerlink" href="#no-os-supported-examples" title="Link to this heading">¶</a></h2>
+<p>The initialization data used in the examples is taken out from:
+<a class="reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/projects/max14919/src/common">Project Common Data Path</a></p>
+<p>The macros used in Common Data are defined in platform specific files found in:
+<a class="reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/projects/max14919/src/platform">Project Platform Configuration Path</a></p>
+<section id="basic-example">
+<h3><a class="toc-backref" href="#id10" role="doc-backlink">Basic example</a><a class="headerlink" href="#basic-example" title="Link to this heading">¶</a></h3>
+<p>This is a simple example which initializes the max14919 and sets the output
+channel 2 on, after which is detects faults, reverse polarity and sets 2x
+current limit for the device.</p>
+<p>In order to build the basic example make sure you have the following configuration in the Makefile
+<a class="reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/projects/max14919/Makefile">Makefile</a></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Select the example you want to enable by choosing y for enabling and n for disabling</span>
+<span class="nv">BASIC_EXAMPLE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>y
+</pre></div>
+</div>
+</section>
+</section>
+<section id="no-os-supported-platforms">
+<h2><a class="toc-backref" href="#id11" role="doc-backlink">No-OS Supported Platforms</a><a class="headerlink" href="#no-os-supported-platforms" title="Link to this heading">¶</a></h2>
+<section id="maxim-platform">
+<h3><a class="toc-backref" href="#id12" role="doc-backlink">Maxim Platform</a><a class="headerlink" href="#maxim-platform" title="Link to this heading">¶</a></h3>
+<p><strong>Used hardware</strong></p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.analog.com/MAX14919PMB">MAX14919PMB</a></p></li>
+<li><p><a class="reference external" href="https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/ad-apard32690-sl.html">AD-APARD32690-SL</a></p></li>
+</ul>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>MAX14919PMB Pin Name</p></td>
+<td><p>Mnemonic</p></td>
+<td><p>Function</p></td>
+<td><p>AD-APARD32690-SL Pin Number</p></td>
+</tr>
+<tr class="row-even"><td><p>IN1(1)</p></td>
+<td><p>IN1</p></td>
+<td><p>IN1 LOGIC INPUT(GPIO)</p></td>
+<td><p>P1_0</p></td>
+</tr>
+<tr class="row-odd"><td><p>IN1(2)</p></td>
+<td><p>IN2</p></td>
+<td><p>IN2 LOGIC INPUT(GPIO)</p></td>
+<td><p>P1_1</p></td>
+</tr>
+<tr class="row-even"><td><p>IN1(3)</p></td>
+<td><p>IN3</p></td>
+<td><p>IN3 LOGIC INPUT(GPIO)</p></td>
+<td><p>P1_2</p></td>
+</tr>
+<tr class="row-odd"><td><p>IN1(4)</p></td>
+<td><p>IN4</p></td>
+<td><p>IN LOGIC INPUT(GPIO)</p></td>
+<td><p>P1_3</p></td>
+</tr>
+<tr class="row-even"><td><p>FAULT</p></td>
+<td><p>FAULT</p></td>
+<td><p>FAULT LOGIC OUTPUT(GPIO)</p></td>
+<td><p>P1_6</p></td>
+</tr>
+<tr class="row-odd"><td><p>REV</p></td>
+<td><p>REV</p></td>
+<td><p>REV LOGIC OUTPUT(GPIO)</p></td>
+<td><p>P1_4</p></td>
+</tr>
+<tr class="row-even"><td><p>INRUSH</p></td>
+<td><p>IN_RUSH</p></td>
+<td><p>INRUSH LOGIC INPUT(GPIO)</p></td>
+<td><p>P2_21</p></td>
+</tr>
+<tr class="row-odd"><td><p>GND</p></td>
+<td><p>GND</p></td>
+<td><p>Ground</p></td>
+<td><p>GND</p></td>
+</tr>
+<tr class="row-even"><td><p>GNDB</p></td>
+<td><p>GND</p></td>
+<td><p>Ground</p></td>
+<td><p>GND</p></td>
+</tr>
+<tr class="row-odd"><td><p>VL</p></td>
+<td><p>VL</p></td>
+<td><p>Power Supply, +3.3V</p></td>
+<td><p>3V3</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Build Command</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># to delete current build</span>
+make<span class="w"> </span>reset
+<span class="c1"># to build the project</span>
+make<span class="w"> </span><span class="nv">PLATFORM</span><span class="o">=</span>maxim<span class="w"> </span><span class="nv">TARGET</span><span class="o">=</span>max32690
+<span class="c1"># to flash the code</span>
+make<span class="w"> </span>run
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+          </div>
+              <div class="related">
+                &nbsp;
+    <a href="max14914.html" title="Previous document (Ctrl+LeftArrow)" class="prev">Evaluating the MAX14914</a>
+    <a href="adp1050.html" title="Next document (Ctrl+RightArrow)" class="next">Evaluating the ADP1050</a>
+              </div>
+          
+        </div>
+      </div>
+  </div>
+
+  <div id="vertical-border"></div>
+
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
+    <footer>
+      &#169;2023-2024, Analog Devices, Inc.
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
+</html>

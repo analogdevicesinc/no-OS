@@ -1,0 +1,9 @@
+<map id="drivers/power/adp1050" name="drivers/power/adp1050">
+<area shape="rect" id="node1" href="dir_019850bbbf36ee3ed674bd7a8a4ce22f.html" title="adp1050" alt="" coords="27,52,106,100"/>
+<area shape="rect" id="node2" href="dir_d44c64559bbebec7f509842c48db8b23.html" title="include" alt="" coords="29,244,101,292"/>
+<area shape="rect" id="edge2-headlabel" href="dir_000208_000237.html" title="12" alt="" coords="58,217,75,232"/>
+<area shape="rect" id="node3" href="dir_0bb79d6a83cfcf0ad99764c4144043fa.html" title="iio" alt="" coords="67,148,139,196"/>
+<area shape="rect" id="edge3-headlabel" href="dir_000208_000235.html" title="1" alt="" coords="91,121,100,135"/>
+<area shape="rect" id="edge1-headlabel" href="dir_000235_000237.html" title="17" alt="" coords="80,223,98,238"/>
+<area shape="rect" id="clust1" href="dir_4193bd08c802ba1a2c4defb96811bb36.html" title="power" alt="" coords="16,16,117,111"/>
+</map>

@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>MAX22200 no-OS driver &#8212; no-OS  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="../_static/style.min.css?v=a3ba2641" />
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script defer="" src="../_static/app.umd.js?v=7e1fdd13"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="MAX2201X no-OS Driver" href="max2201x.html" />
+    <link rel="prev" title="MAX22196 no-OS driver" href="max22196.html" />
+   
+  
+    <meta name="robots" content="noindex">
+  
+  <meta name="repo" content="no-OS">
+  
+
+
+<style>
+  body {
+    
+  }
+
+  body.dark {
+    
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body:not(.light) {
+      
+    }
+  }
+</style>
+  </head><body>
+  <div class="banner"></div>
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
+  <input type="checkbox" id="input-show-repotoc">
+
+  
+  <div class="search-area">
+    <form action="" method="get">
+      <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+      <button value="search" class="icon"></button>
+      <span id="search-progress"></span>
+    </form>
+  </div>
+  
+
+  <header>
+    <div id="left">
+      <label id="show-sidebar" class="icon" for="input-show-toc" title="Show/hide index"></label>
+    </div>
+    <div id="right">
+      <span>
+        <a id="logo-org" href="https://analog.com"></a>
+        <div class="vertical-divider"></div>
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
+        <a id="logo" href="../index.html">
+          <div>no-OS</div>
+        </a>
+      </span>
+      <span class="reverse">
+        <label id="show-localtoc" class="icon" for="input-show-localtoc" title="Show/hide contents"></label>
+      </span>
+    </div>
+  </header>
+
+
+  <div class="repotoc-tree overlay">
+    <root>
+  <a href="../../documentation/eval/index.html">Evaluation Boards</a>
+  <a href="../../documentation/university/index.html">University Program</a>
+  <a href="../../hdl/index.html">HDL</a>
+  <a href="../index.html" class="current">no-OS</a>
+  <a href="../../pyadi-iio/index.html">Hardware Python Interfaces</a>
+  <a href="../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
+  <a href="../../doctools/index.html">Doctools</a>
+  <a href="../../PrecisionToolbox/index.html">Precision Toolbox</a>
+</root>
+
+  </div>
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div>
+          <div class="localtoc-header">On this page</div>
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">MAX22200 no-OS driver</a><ul>
+<li><a class="reference internal" href="#supported-devices">Supported Devices</a></li>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#applications">Applications</a></li>
+<li><a class="reference internal" href="#max22200-device-configuration">MAX22200 Device Configuration</a></li>
+<li><a class="reference internal" href="#external-trigger-configuration">External trigger configuration</a></li>
+<li><a class="reference internal" href="#channel-configuration">Channel configuration</a></li>
+<li><a class="reference internal" href="#fault-mask-configuration">Fault mask configuration</a></li>
+<li><a class="reference internal" href="#dpm-configuration">DPM configuration</a></li>
+<li><a class="reference internal" href="#max22200-driver-initialization-example">MAX22200 Driver Initialization Example</a></li>
+<li><a class="reference internal" href="#basic-example-channel-configuration-table">Basic Example Channel Configuration Table</a></li>
+<li><a class="reference internal" href="#max22200-no-os-iio-support">MAX22200 no-OS IIO support</a></li>
+<li><a class="reference internal" href="#channel-attributes">Channel Attributes</a></li>
+<li><a class="reference internal" href="#global-attributes">Global Attributes</a></li>
+<li><a class="reference internal" href="#debug-attributes">Debug Attributes</a></li>
+<li><a class="reference internal" href="#device-channels">Device Channels</a></li>
+<li><a class="reference internal" href="#max22200-iio-driver-initialization-example">MAX22200 IIO Driver Initialization Example</a></li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
+  
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+    <a id="no-logo" href="../index.html">
+      no-OS
+    </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
+All content
+</label>
+<label id="show-toc" for="input-switch-toc">
+Content on this topic
+</label>
+<div class="repotoc-tree">
+  <root>
+  <a href="../../documentation/eval/index.html">Evaluation Boards</a>
+  <a href="../../documentation/university/index.html">University Program</a>
+  <a href="../../hdl/index.html">HDL</a>
+  <a href="../index.html" class="current">no-OS</a>
+  <a href="../../pyadi-iio/index.html">Hardware Python Interfaces</a>
+  <a href="../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
+  <a href="../../doctools/index.html">Doctools</a>
+  <a href="../../PrecisionToolbox/index.html">Precision Toolbox</a>
+</root>
+
+</div>
+<div class="toc-tree">
+  <html>
+  <body><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../drivers_guide.html">no-OS drivers guide</a></li>
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1" checked=""/><div class="collapse"><a class="reference internal" href="../drivers_doc.html">no-OS drivers list</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="adxl355.html">ADXL355 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adm1177.html">ADM1177 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad405x.html">AD405X no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad796x.html">AD796X no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad400x.html">AD400X no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="axi_sysid.html">System ID (AXI_SYSID) no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max14914.html">MAX14914 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max14919.html">MAX14919 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max149x6.html">MAX149X6 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22190.html">MAX22190 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22196.html">MAX22196 no-OS driver</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">MAX22200 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max2201x.html">MAX2201X no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4382.html">ADF4382 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="imu.html">ADIS no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="madura.html">ADRV902x (Madura) no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adp1050.html">ADP1050 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc2992.html">LTC2992 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc4296.html">LTC4296 no-OS driver</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2"/><div class="collapse"><a class="reference internal" href="../projects_doc.html">no-OS projects list</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7091r8-sdz.html">Evaluating AD7091R-2/-4/-8 Devices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7616-st.html">Evaluating AD7616 on SDP-K1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad796x_fmcz.html">Evaluating the AD796x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad400x-fmcz.html">Evaluating AD400x on ZED and SDP-K1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad469x_fmcz.html">Evaluating the AD469x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adf4382.html">Evaluating the ADF4382</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1646x.html">Evaluating the ADIS1646X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1647x.html">Evaluating the ADIS1647X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1650x.html">Evaluating the ADIS1650X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1654x.html">Evaluating the ADIS1654X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1655x.html">Evaluating the ADIS1655X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1657x.html">Evaluating the ADIS1657X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-ade9430.html">EVAL-ADE9430 Sensor-to-Cloud</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adrv902x.html">adrv902x no-OS Sample Poject</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/apard32690.html">Evaluating the AD-APARD32690-SL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max14914.html">Evaluating the MAX14914</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max14919.html">Evaluating the MAX14919</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adp1050.html">Evaluating the ADP1050</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc4296.html">Evaluating the LTC4296</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max2201x.html">Evaluating the MAX2201X</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to no-OS</a></li>
+</ul>
+</body>
+</html>
+
+</div>
+        </div>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body" role="main">
+            
+  <section id="max22200-no-os-driver">
+<h1>MAX22200 no-OS driver<a class="headerlink" href="#max22200-no-os-driver" title="Link to this heading">¶</a></h1>
+<section id="supported-devices">
+<h2>Supported Devices<a class="headerlink" href="#supported-devices" title="Link to this heading">¶</a></h2>
+<p><cite>MAX22200 &lt;https://www.analog.com/MAX22200&gt;</cite></p>
+</section>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
+<p>The MAX22200 is an octal 36V serial-controlled solenoid driver.
+Each channel features a low impedance (200mΩ typ) push-pull output stage with
+sink-and-source driving capability and up to 1ARMS driving current.
+A serial interface (SPI) that also supports daisy-chain configurations is
+provided to individually control each channel.</p>
+</section>
+<section id="applications">
+<h2>Applications<a class="headerlink" href="#applications" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Relays Driver</p></li>
+<li><p>Solenoid, Valves, Electromagnetic Drivers</p></li>
+<li><p>Generic Low-Side and High-Side Switch Applications</p></li>
+<li><p>Latched (Bi-Stable) Solenoid Valve Drivers</p></li>
+<li><p>Brushed DC Motor Driver</p></li>
+</ul>
+</section>
+<section id="max22200-device-configuration">
+<h2>MAX22200 Device Configuration<a class="headerlink" href="#max22200-device-configuration" title="Link to this heading">¶</a></h2>
+<p>In order to use the MAX22200, you will have to provide support for the
+communication protocol (SPI), but also a GPIO for the CMD pin since before every
+SPI transaction  there needs to be a SPI write to the Command Register while
+CMD pin is logic high, and then performing the actual SPI transaction with CMD
+pin logic low.
+Also the ENABLE pin needs to be logic high for the device to be able to be
+initialized.</p>
+<p>The first API to be called is <strong>max22200_init</strong>. Make sure that it returns 0,
+which means that the driver was initialized correctly.</p>
+<p>Chopping frequency can also be changed with <strong>max22200_set_chop_freq</strong>.</p>
+</section>
+<section id="external-trigger-configuration">
+<h2>External trigger configuration<a class="headerlink" href="#external-trigger-configuration" title="Link to this heading">¶</a></h2>
+<p>An external trigger can be assigned to the TRIG pin, but in order for that to
+work a GPIO initalization parameter for the trig pin needs to be set so the GPIO
+is initialized and controlled by the master.
+This can be used in both Half and Full Bridge modes for applications like
+DC motor drivers.</p>
+<p>The state of the trigger can be change with the help of
+<strong>max22200_set_trig_state</strong> API.</p>
+</section>
+<section id="channel-configuration">
+<h2>Channel configuration<a class="headerlink" href="#channel-configuration" title="Link to this heading">¶</a></h2>
+<p>Each channel can be configured in a lot of ways, but the first one of all is
+the <strong>max22200_set_ch_state</strong> which is to be called by the user after the
+initialization is performed correctly in order to activate a specific channel.</p>
+<p>After that the channel’s configuration can be changed on-the-fly.</p>
+<p>HIT time and current can be changed with <strong>max22200_set_ch_hit</strong>.
+HOLD current can be changed with <strong>max222000_set_ch_hold</strong>.</p>
+<p>Scale can be set for a channel with <strong>max22200_set_ch_scale</strong> which for
+half the fullscale will double the resistor and the current will be reduced
+to half.</p>
+<p>Channel trigger can be changed to be either controlled by the SPI interface
+or the external trigger with <strong>max22200_set_ch_trig</strong>.</p>
+<p>Channel mode and frequency can also be set with the help of
+<strong>max22200_set_ch_mode</strong> and <strong>max22200_set_ch_freq</strong>.</p>
+<p>And at last for every channel there are some specific enables that the user
+can enable/disable with the help of <strong>max22200_set_ch_enable</strong>.</p>
+<p>For every API to set a channel configuration in the CFG CH register there is
+also a API to get a channel configuration form the CFG CH register.</p>
+</section>
+<section id="fault-mask-configuration">
+<h2>Fault mask configuration<a class="headerlink" href="#fault-mask-configuration" title="Link to this heading">¶</a></h2>
+<p>Fault masks can be set for the whole device in the STATUS register with the
+help of <strong>max22200_fault_mask_set</strong>, and read with <strong>max22200_fault_mask_get</strong>.</p>
+</section>
+<section id="dpm-configuration">
+<h2>DPM configuration<a class="headerlink" href="#dpm-configuration" title="Link to this heading">¶</a></h2>
+<p>Detection of plunger movement can be configured as well with the help of the
+<strong>max22200_set_cfg_dpm</strong> where the user can set specific values for the DPM.
+The same specific values can be read with the help of <strong>max22200_get_cfg_dpm</strong>.</p>
+</section>
+<section id="max22200-driver-initialization-example">
+<h2>MAX22200 Driver Initialization Example<a class="headerlink" href="#max22200-driver-initialization-example" title="Link to this heading">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>struct<span class="w"> </span>max22200_desc<span class="w"> </span>*max22200<span class="p">;</span>
+struct<span class="w"> </span>no_os_spi_init_param<span class="w"> </span><span class="nv">spi_ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>.device_id<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span>,
+<span class="w">        </span>.extra<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>max22200_spi_extra,
+<span class="w">        </span>.max_speed_hz<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">100000</span>,
+<span class="w">        </span>.platform_ops<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>max_spi_ops,
+<span class="w">        </span>.chip_select<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span>,
+<span class="o">}</span><span class="p">;</span>
+struct<span class="w"> </span>no_os_gpio_init_param<span class="w"> </span><span class="nv">cmd_ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>.port<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span>,
+<span class="w">        </span>.pull<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_PULL_NONE,
+<span class="w">        </span>.number<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">5</span>,
+<span class="w">        </span>.platform_ops<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>max_gpio_ops,
+<span class="w">        </span>.extra<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>max22200_gpio_extra,
+<span class="o">}</span><span class="p">;</span>
+struct<span class="w"> </span>max22200_init_param<span class="w"> </span><span class="nv">max22200_ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>.comm_desc<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>spi_ip,
+<span class="w">        </span>.cmd_param<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>cmd_ip,
+<span class="w">        </span>.ch_config<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>MAX22200_INDEPENDENT_MODE,
+<span class="w">        </span>MAX22200_INDEPENDENT_MODE,
+<span class="w">        </span>MAX22200_INDEPENDENT_MODE,
+<span class="w">        </span>MAX22200_INDEPENDENT_MODE,
+<span class="w">        </span><span class="o">}</span>
+<span class="o">}</span><span class="p">;</span>
+
+<span class="nv">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>max22200_init<span class="o">(</span><span class="p">&amp;</span>max22200,<span class="w"> </span><span class="p">&amp;</span>max22200_ip<span class="o">)</span><span class="p">;</span>
+<span class="k">if</span><span class="w"> </span><span class="o">(</span>ret<span class="o">)</span>
+<span class="w">        </span>goto<span class="w"> </span>error<span class="p">;</span>
+</pre></div>
+</div>
+</section>
+<section id="basic-example-channel-configuration-table">
+<h2>Basic Example Channel Configuration Table<a class="headerlink" href="#basic-example-channel-configuration-table" title="Link to this heading">¶</a></h2>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>Channel</p></td>
+<td><p>State</p></td>
+<td><p>Operation Mode</p></td>
+<td><p>Drive</p></td>
+<td><p>Side</p></td>
+<td><p>Frequency</p></td>
+<td><p>Scale</p></td>
+<td><p>Trigger</p></td>
+</tr>
+<tr class="row-even"><td><p>OUT0</p></td>
+<td><p>Enabled</p></td>
+<td><p>HALF-BRIDGE</p></td>
+<td><p>CDR</p></td>
+<td><p>LS</p></td>
+<td><p>40KHz</p></td>
+<td><p>FS</p></td>
+<td><p>SPI</p></td>
+</tr>
+<tr class="row-odd"><td><p>OUT1</p></td>
+<td><p>Enabled</p></td>
+<td><p>HALF-BRIDGE</p></td>
+<td><p>CDR</p></td>
+<td><p>LS</p></td>
+<td><p>40KHz</p></td>
+<td><p>FS</p></td>
+<td><p>SPI</p></td>
+</tr>
+<tr class="row-even"><td><p>OUT2</p></td>
+<td><p>Disabled</p></td>
+<td><p>INDEPENDENT</p></td>
+<td><p>CDR</p></td>
+<td><p>LS</p></td>
+<td><p>80KHz</p></td>
+<td><p>FS</p></td>
+<td><p>SPI</p></td>
+</tr>
+<tr class="row-odd"><td><p>OUT3</p></td>
+<td><p>Disabled</p></td>
+<td><p>INDEPENDENT</p></td>
+<td><p>CDR</p></td>
+<td><p>LS</p></td>
+<td><p>80KHZ</p></td>
+<td><p>FS</p></td>
+<td><p>SPI</p></td>
+</tr>
+<tr class="row-even"><td><p>OUT4</p></td>
+<td><p>Disabled</p></td>
+<td><p>INDEPENDENT</p></td>
+<td><p>CDR</p></td>
+<td><p>LS</p></td>
+<td><p>80KHZ</p></td>
+<td><p>FS</p></td>
+<td><p>SPI</p></td>
+</tr>
+<tr class="row-odd"><td><p>OUT5</p></td>
+<td><p>Disabled</p></td>
+<td><p>INDEPENDENT</p></td>
+<td><p>CDR</p></td>
+<td><p>LS</p></td>
+<td><p>80KHZ</p></td>
+<td><p>FS</p></td>
+<td><p>SPI</p></td>
+</tr>
+<tr class="row-even"><td><p>OUT6</p></td>
+<td><p>Disabled</p></td>
+<td><p>INDEPENDENT</p></td>
+<td><p>CDR</p></td>
+<td><p>LS</p></td>
+<td><p>80KHZ</p></td>
+<td><p>FS</p></td>
+<td><p>SPI</p></td>
+</tr>
+<tr class="row-odd"><td><p>OUT7</p></td>
+<td><p>Disabled</p></td>
+<td><p>INDEPENDENT</p></td>
+<td><p>CDR</p></td>
+<td><p>LS</p></td>
+<td><p>80KHZ</p></td>
+<td><p>FS</p></td>
+<td><p>SPI</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="max22200-no-os-iio-support">
+<h2>MAX22200 no-OS IIO support<a class="headerlink" href="#max22200-no-os-iio-support" title="Link to this heading">¶</a></h2>
+</section>
+<section id="channel-attributes">
+<h2>Channel Attributes<a class="headerlink" href="#channel-attributes" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>raw - state of the channel.</p></li>
+<li><p>scale - scale of the channel.</p></li>
+<li><p>scale_available - available scales for the channel.</p></li>
+<li><p>hit_current - HIT current to be set in the CFG_CH register.</p></li>
+<li><p>hit_time - HIT time to be set in the CFG_CH register.</p></li>
+<li><p>hold_current - HOLD current to be set in the CFG_CH register.</p></li>
+<li><p>channel_trig - ONCH_SPI/EXT_TRIG trigger selection for the channel.</p></li>
+<li><p>channel_trig_available - available trigger for the channel.</p></li>
+<li><p>channel_drive - Channel’s voltage or current drive.</p></li>
+<li><p>channel_drive_available - Channel available drives.</p></li>
+<li><p>channel_side - LOW/HIGH SIDE selection for the channel.</p></li>
+<li><p>channel_side_available - Available sides for the channel.</p></li>
+<li><p>channel_op_mode - Channel operation mode selection.</p></li>
+<li><p>channel_op_mode_available - Channel operation modes available for the channel.</p></li>
+<li><p>channel_freq - Channel frequency to be selected. Calculated using the device frequency.</p></li>
+<li><p>channel_freq_available - Channel frequencies available for the channel.</p></li>
+<li><p>slew_rate_control - Slew Rate Control enable/disable.</p></li>
+<li><p>open_load_detection - Open Load Detection enable/disable.</p></li>
+<li><p>dpm_enable - Detection of Plunger Movement enable/disable.</p></li>
+<li><p>hit_current_check - HIT current check enable/disable.</p></li>
+</ul>
+</section>
+<section id="global-attributes">
+<h2>Global Attributes<a class="headerlink" href="#global-attributes" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>chopping_frequency - Chopping frequency selection.</p></li>
+<li><p>chopping_frequency_available  Chopping frequencies available for the device.</p></li>
+<li><p>external_trig_state - External trigger’s state (enabled = 1/disabled = 0).</p></li>
+</ul>
+</section>
+<section id="debug-attributes">
+<h2>Debug Attributes<a class="headerlink" href="#debug-attributes" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>thermal_protection_mask - Mask for the thermal protection of the device.</p></li>
+<li><p>overcurrent_protection_mask - Mask for the overcurrent protection of the device.</p></li>
+<li><p>open_load_mask - Mask for the open load detection of the device.</p></li>
+<li><p>hit_current_fault_mask - Mask for the hit current fault of the device.</p></li>
+<li><p>dpm_fault_mask - Mask for the detection of plunger movement fault of the device.</p></li>
+<li><p>com_err_mask - Mask for the communication error detection of the device.</p></li>
+<li><p>uvlo_mask - Mask for the Undervoltage Low detection of the device.</p></li>
+</ul>
+</section>
+<section id="device-channels">
+<h2>Device Channels<a class="headerlink" href="#device-channels" title="Link to this heading">¶</a></h2>
+<p>MAX22200 has a specific API, <strong>max22200_iio_setup_channels</strong> for configuring the
+channels at the initialization, therefore the channels can be configured as
+enabled/disabled and attributes are assigned to each channel (if enabled).</p>
+</section>
+<section id="max22200-iio-driver-initialization-example">
+<h2>MAX22200 IIO Driver Initialization Example<a class="headerlink" href="#max22200-iio-driver-initialization-example" title="Link to this heading">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>struct<span class="w"> </span>max22200_iio_desc<span class="w"> </span>*max22200_iio_desc<span class="p">;</span>
+struct<span class="w"> </span>max22200_iio_desc_init_param<span class="w"> </span><span class="nv">max22200_iio_ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>.max22200_init_param<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>max22200_ip,
+<span class="w">        </span>.ch_enable<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">                </span>true,<span class="w"> </span>false,<span class="w"> </span>false,<span class="w"> </span>false,<span class="w"> </span>false,<span class="w"> </span>false,<span class="w"> </span>false,<span class="w"> </span><span class="nb">false</span>
+<span class="w">        </span><span class="o">}</span>,
+<span class="o">}</span><span class="p">;</span>
+
+struct<span class="w"> </span>iio_app_desc<span class="w"> </span>*app<span class="p">;</span>
+struct<span class="w"> </span>iio_app_init_param<span class="w"> </span><span class="nv">app_init_param</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">}</span><span class="p">;</span>
+
+<span class="nv">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>max22200_iio_init<span class="o">(</span><span class="p">&amp;</span>max22200_iio_desc,<span class="w"> </span><span class="p">&amp;</span>max22200_iio_ip<span class="o">)</span><span class="p">;</span>
+<span class="k">if</span><span class="w"> </span><span class="o">(</span>ret<span class="o">)</span>
+<span class="w">        </span>goto<span class="w"> </span>exit<span class="p">;</span>
+
+struct<span class="w"> </span>iio_app_device<span class="w"> </span>iio_devices<span class="o">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span><span class="o">{</span>
+<span class="w">                </span>.name<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;max22200&quot;</span>,
+<span class="w">                </span>.dev<span class="w"> </span><span class="o">=</span><span class="w"> </span>max22200_iio_desc,
+<span class="w">                </span>.dev_descriptor<span class="w"> </span><span class="o">=</span><span class="w"> </span>max22200_iio_desc-&gt;iio_dev,
+<span class="w">                </span>.read_buff<span class="w"> </span><span class="o">=</span><span class="w"> </span>NULL,
+<span class="w">        </span><span class="o">}</span>,
+<span class="o">}</span><span class="p">;</span>
+
+app_init_param.devices<span class="w"> </span><span class="o">=</span><span class="w"> </span>iio_devices<span class="p">;</span>
+app_init_param.nb_devices<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_ARRAY_SIZE<span class="o">(</span>iio_devices<span class="o">)</span><span class="p">;</span>
+app_init_param.uart_init_params<span class="w"> </span><span class="o">=</span><span class="w"> </span>max22200_uart_ip<span class="p">;</span>
+
+<span class="nv">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>iio_app_init<span class="o">(</span><span class="p">&amp;</span>app,<span class="w"> </span>app_init_param<span class="o">)</span><span class="p">;</span>
+<span class="k">if</span><span class="w"> </span><span class="o">(</span>ret<span class="o">)</span>
+<span class="w">        </span>goto<span class="w"> </span>remove_iio_max22200<span class="p">;</span>
+
+<span class="nv">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>iio_app_run<span class="o">(</span>app<span class="o">)</span><span class="p">;</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+          </div>
+              <div class="related">
+                &nbsp;
+    <a href="max22196.html" title="Previous document (Ctrl+LeftArrow)" class="prev">MAX22196 no-OS driver</a>
+    <a href="max2201x.html" title="Next document (Ctrl+RightArrow)" class="next">MAX2201X no-OS Driver</a>
+              </div>
+          
+        </div>
+      </div>
+  </div>
+
+  <div id="vertical-border"></div>
+
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
+    <footer>
+      &#169;2023-2024, Analog Devices, Inc.
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
+</html>

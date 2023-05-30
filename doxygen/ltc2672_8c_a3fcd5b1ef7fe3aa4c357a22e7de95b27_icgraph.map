@@ -1,0 +1,18 @@
+<map id="ltc2672_transaction" name="ltc2672_transaction">
+<area shape="rect" id="node1" title="Write raw register value." alt="" coords="696,299,847,326"/>
+<area shape="rect" id="node2" href="$ltc2672_8h.html#a850efd657cabbae8b96d9e1f24408762" title="power down ltc2672" alt="" coords="213,26,407,52"/>
+<area shape="rect" id="node4" href="$ltc2672_8h.html#a0872a6dfdc83e5a3dc81b7b46600b0e3" title="configures the fault detection bits" alt="" coords="457,55,645,82"/>
+<area shape="rect" id="node5" href="$ltc2672_8h.html#a938e9af411c0fbfa8d7b7f48e497a501" title="enables or disables selected channel/s for toggling" alt="" coords="225,98,395,140"/>
+<area shape="rect" id="node6" href="$ltc2672_8h.html#a7ea1e5501d92731ae1c396828b752ca1" title="enables or disables global toggle bit" alt="" coords="227,164,393,191"/>
+<area shape="rect" id="node7" href="$ltc2672_8h.html#a9fb4d37cebb58443472da1d52d6b8cd0" title="configures mux output depending on target measurement" alt="" coords="228,215,392,242"/>
+<area shape="rect" id="node8" href="$ltc2672_8h.html#ac446819af4b066980eb27da07ee58646" title="power down ALL channels" alt="" coords="472,258,631,300"/>
+<area shape="rect" id="node9" href="$ltc2672_8h.html#a462ee3391a58948b3c4beb0a3d7e1fba" title="power down a channel" alt="" coords="472,324,631,365"/>
+<area shape="rect" id="node10" href="$ltc2672_8h.html#a0abababa3db467fe8eef14e63f3d2894" title="sets the same dac code for all channels" alt="" coords="472,389,631,430"/>
+<area shape="rect" id="node12" href="$ltc2672_8h.html#a2ad5dfbec025fdd04cd81e92d1e86c6c" title="sets the dac code for channel" alt="" coords="455,455,648,482"/>
+<area shape="rect" id="node14" href="$ltc2672_8h.html#ada52a49dad505778d179a6fb8b3231e2" title="sets the same output span for all channels" alt="" coords="231,498,389,540"/>
+<area shape="rect" id="node15" href="$ltc2672_8h.html#a9bb67e86de7634c93a2ca321b502f1d2" title="sets output span for channel" alt="" coords="455,556,648,583"/>
+<area shape="rect" id="node16" href="$ltc2672_8h.html#a5428c939daaf8ed732ae006ed8dc7959" title="setup toggle parameters for a channel" alt="" coords="471,608,632,649"/>
+<area shape="rect" id="node3" href="$dc2903a_2src_2examples_2basic__example_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="5,215,165,242"/>
+<area shape="rect" id="node11" href="$ltc2672_8h.html#a91a7b29cb54abd98b1c3a5c66592f28f" title="sets the same current for all channels" alt="" coords="235,317,385,358"/>
+<area shape="rect" id="node13" href="$ltc2672_8h.html#aab22f0fdadb3206dd3c454df8a0e9c9a" title="set the current for a selected DAC channel" alt="" coords="235,433,385,474"/>
+</map>

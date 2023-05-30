@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>AD405X no-OS Driver &#8212; no-OS  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="../_static/style.min.css?v=a3ba2641" />
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script defer="" src="../_static/app.umd.js?v=7e1fdd13"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="AD796X no-OS driver" href="ad796x.html" />
+    <link rel="prev" title="ADM1177 no-OS Driver" href="adm1177.html" />
+   
+  
+    <meta name="robots" content="noindex">
+  
+  <meta name="repo" content="no-OS">
+  
+
+
+<style>
+  body {
+    
+  }
+
+  body.dark {
+    
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body:not(.light) {
+      
+    }
+  }
+</style>
+  </head><body>
+  <div class="banner"></div>
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
+  <input type="checkbox" id="input-show-repotoc">
+
+  
+  <div class="search-area">
+    <form action="" method="get">
+      <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+      <button value="search" class="icon"></button>
+      <span id="search-progress"></span>
+    </form>
+  </div>
+  
+
+  <header>
+    <div id="left">
+      <label id="show-sidebar" class="icon" for="input-show-toc" title="Show/hide index"></label>
+    </div>
+    <div id="right">
+      <span>
+        <a id="logo-org" href="https://analog.com"></a>
+        <div class="vertical-divider"></div>
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
+        <a id="logo" href="../index.html">
+          <div>no-OS</div>
+        </a>
+      </span>
+      <span class="reverse">
+        <label id="show-localtoc" class="icon" for="input-show-localtoc" title="Show/hide contents"></label>
+      </span>
+    </div>
+  </header>
+
+
+  <div class="repotoc-tree overlay">
+    <root>
+  <a href="../../documentation/eval/index.html">Evaluation Boards</a>
+  <a href="../../documentation/university/index.html">University Program</a>
+  <a href="../../hdl/index.html">HDL</a>
+  <a href="../index.html" class="current">no-OS</a>
+  <a href="../../pyadi-iio/index.html">Hardware Python Interfaces</a>
+  <a href="../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
+  <a href="../../doctools/index.html">Doctools</a>
+  <a href="../../PrecisionToolbox/index.html">Precision Toolbox</a>
+</root>
+
+  </div>
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div>
+          <div class="localtoc-header">On this page</div>
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">AD405X no-OS Driver</a><ul>
+<li><a class="reference internal" href="#supported-devices">Supported Devices</a></li>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#ad405x-device-configuration">AD405X Device Configuration</a></li>
+<li><a class="reference internal" href="#driver-initialization">Driver Initialization</a></li>
+<li><a class="reference internal" href="#gpio-configuration">GPIO Configuration</a></li>
+<li><a class="reference internal" href="#channel-configuration">Channel Configuration</a></li>
+<li><a class="reference internal" href="#soft-reset">Soft Reset</a></li>
+<li><a class="reference internal" href="#max2201x-driver-initialization-example">MAX2201X Driver Initialization Example</a></li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
+  
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+    <a id="no-logo" href="../index.html">
+      no-OS
+    </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
+All content
+</label>
+<label id="show-toc" for="input-switch-toc">
+Content on this topic
+</label>
+<div class="repotoc-tree">
+  <root>
+  <a href="../../documentation/eval/index.html">Evaluation Boards</a>
+  <a href="../../documentation/university/index.html">University Program</a>
+  <a href="../../hdl/index.html">HDL</a>
+  <a href="../index.html" class="current">no-OS</a>
+  <a href="../../pyadi-iio/index.html">Hardware Python Interfaces</a>
+  <a href="../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
+  <a href="../../doctools/index.html">Doctools</a>
+  <a href="../../PrecisionToolbox/index.html">Precision Toolbox</a>
+</root>
+
+</div>
+<div class="toc-tree">
+  <html>
+  <body><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../drivers_guide.html">no-OS drivers guide</a></li>
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1" checked=""/><div class="collapse"><a class="reference internal" href="../drivers_doc.html">no-OS drivers list</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="adxl355.html">ADXL355 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adm1177.html">ADM1177 no-OS Driver</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">AD405X no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad796x.html">AD796X no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad400x.html">AD400X no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="axi_sysid.html">System ID (AXI_SYSID) no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max14914.html">MAX14914 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max14919.html">MAX14919 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max149x6.html">MAX149X6 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22190.html">MAX22190 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22196.html">MAX22196 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22200.html">MAX22200 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max2201x.html">MAX2201X no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4382.html">ADF4382 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="imu.html">ADIS no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="madura.html">ADRV902x (Madura) no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adp1050.html">ADP1050 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc2992.html">LTC2992 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc4296.html">LTC4296 no-OS driver</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2"/><div class="collapse"><a class="reference internal" href="../projects_doc.html">no-OS projects list</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7091r8-sdz.html">Evaluating AD7091R-2/-4/-8 Devices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7616-st.html">Evaluating AD7616 on SDP-K1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad796x_fmcz.html">Evaluating the AD796x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad400x-fmcz.html">Evaluating AD400x on ZED and SDP-K1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad469x_fmcz.html">Evaluating the AD469x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adf4382.html">Evaluating the ADF4382</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1646x.html">Evaluating the ADIS1646X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1647x.html">Evaluating the ADIS1647X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1650x.html">Evaluating the ADIS1650X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1654x.html">Evaluating the ADIS1654X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1655x.html">Evaluating the ADIS1655X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1657x.html">Evaluating the ADIS1657X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-ade9430.html">EVAL-ADE9430 Sensor-to-Cloud</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adrv902x.html">adrv902x no-OS Sample Poject</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/apard32690.html">Evaluating the AD-APARD32690-SL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max14914.html">Evaluating the MAX14914</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max14919.html">Evaluating the MAX14919</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adp1050.html">Evaluating the ADP1050</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc4296.html">Evaluating the LTC4296</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max2201x.html">Evaluating the MAX2201X</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to no-OS</a></li>
+</ul>
+</body>
+</html>
+
+</div>
+        </div>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body" role="main">
+            
+  <section id="ad405x-no-os-driver">
+<h1>AD405X no-OS Driver<a class="headerlink" href="#ad405x-no-os-driver" title="Link to this heading">¶</a></h1>
+<section id="supported-devices">
+<h2>Supported Devices<a class="headerlink" href="#supported-devices" title="Link to this heading">¶</a></h2>
+<p><a class="reference external" href="https://www.analog.com/AD4052">AD4052</a></p>
+</section>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
+<p>The AD4052 is a low power, compact 16-bit successive approximation register (SAR) analog-to-digital converter (ADC) designed
+for battery powered precision measurement and monitoring applications. The AD4052 feature set supports event-driven programming
+for dynamic tradeoff between system power and precision. Using
+a patented, power efficient window comparator, the AD4052 autonomously monitors signals while the host sleeps. The programmable
+averaging filter enables on-demand high resolution measurements
+for optimizing precision for the power consumed.</p>
+<p>The AD4052 includes AFE control signals to minimize the complexity of host timers. The control signals automate the power cycling
+of the AFE relative to ADC sampling to reduce system power while
+minimizing settling error artifacts. The Easy Drive analog inputs
+enables compact and low power signal conditioning circuitry by
+reducing the dependence on high-speed ADC driver amplifiers. The
+small 3.4 pF sampling capacitors result in low dynamic and average
+input current, broadening compatibility with low power amplifiers or
+direct sensor interfacing. The AD4052 wide common mode input
+range supports both differential and single-ended input signals.</p>
+<p>The AD4052 features a 4-wire SPI with a dedicated CNV input.
+Cyclic redundancy check (CRC) is available on all interface read
+and write operations and internal memory to ensure reliable device
+configuration and operation.</p>
+</section>
+<section id="ad405x-device-configuration">
+<h2>AD405X Device Configuration<a class="headerlink" href="#ad405x-device-configuration" title="Link to this heading">¶</a></h2>
+</section>
+<section id="driver-initialization">
+<h2>Driver Initialization<a class="headerlink" href="#driver-initialization" title="Link to this heading">¶</a></h2>
+<p>In order to be able to use the device, you will have to provide the support for
+the communication protocol (SPI) as well as 3 external GPIOs for the CNV pin and two
+general-purpose input/output pins (GP0 and GP1).</p>
+<p>The first API to be called is <strong>ad405x_init</strong>. Make sure that it returns 0,
+which means that the driver was intialized correctly.</p>
+</section>
+<section id="gpio-configuration">
+<h2>GPIO Configuration<a class="headerlink" href="#gpio-configuration" title="Link to this heading">¶</a></h2>
+<p>The device has two general purpose input/output pins GPIO controller.
+General Purpose Output 1, GP1, is a digital output hat can be configured as multiple device status signals.
+General Purpose Input/Output 0. GP0 is a digital input/output that can be configured as multiple device
+control or status signals.
+In the driver files the <strong>ad405x_set_gp_mode</strong> can be found and used to choose the specific signal for the GPIOs.</p>
+</section>
+<section id="channel-configuration">
+<h2>Channel Configuration<a class="headerlink" href="#channel-configuration" title="Link to this heading">¶</a></h2>
+<p>Channel data can be fetched with <strong>ad405x_read_val</strong>.</p>
+<p>The channel data format can be set using <strong>ad405x_set_data_format</strong></p>
+<p>Channel operation mode can also be configured using <strong>ad405x_set_operating_mode</strong>.</p>
+</section>
+<section id="soft-reset">
+<h2>Soft Reset<a class="headerlink" href="#soft-reset" title="Link to this heading">¶</a></h2>
+<p>The device can be soft reseted by using <strong>ad405x_soft_reset</strong>.</p>
+</section>
+<section id="max2201x-driver-initialization-example">
+<h2>MAX2201X Driver Initialization Example<a class="headerlink" href="#max2201x-driver-initialization-example" title="Link to this heading">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>struct<span class="w"> </span>ad405x_dev<span class="w"> </span>*ad405x<span class="p">;</span>
+struct<span class="w"> </span>no_os_spi_init_param<span class="w"> </span><span class="nv">spi_init_params</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>.device_id<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span>,
+<span class="w">        </span>.max_speed_hz<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">22500000</span>,
+<span class="w">        </span>.mode<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_SPI_MODE_0,
+<span class="w">        </span>.chip_select<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">15</span>,
+<span class="w">        </span>.bit_order<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_SPI_BIT_ORDER_MSB_FIRST,
+<span class="w">        </span>.platform_ops<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>spi_ops,
+<span class="w">        </span>.extra<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>spi_extra_init_params,
+<span class="o">}</span><span class="p">;</span>
+struct<span class="w"> </span>no_os_gpio_init_param<span class="w"> </span><span class="nv">gpio_cnv_param</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>.port<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span>,
+<span class="w">        </span>.number<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">10</span>,
+<span class="w">        </span>.platform_ops<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>gpio_ops,
+<span class="w">        </span>.extra<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>cnv_extra_init_params
+<span class="o">}</span><span class="p">;</span>
+struct<span class="w"> </span>no_os_gpio_init_param<span class="w"> </span><span class="nv">gpio_gpio0_param</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>.port<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span>,
+<span class="w">        </span>.number<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">15</span>,
+<span class="w">        </span>.platform_ops<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>gpio_ops,
+<span class="w">        </span>.extra<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>gp0_extra_init_params
+<span class="o">}</span><span class="p">;</span>
+struct<span class="w"> </span>no_os_gpio_init_param<span class="w"> </span><span class="nv">gpio_gpio1_param</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>.port<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">6</span>,
+<span class="w">        </span>.number<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">11</span>,
+<span class="w">        </span>.platform_ops<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>gpio_ops,
+<span class="w">        </span>.extra<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>gp1_extra_init_params
+<span class="o">}</span><span class="p">;</span>
+struct<span class="w"> </span>ad405x_init_param<span class="w"> </span><span class="nv">ad405x_init_params</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>.spi_init<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>spi_init_params,
+<span class="w">        </span>.active_device<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span>,
+<span class="w">        </span>.gpio_cnv<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>gpio_cnv_param,
+<span class="w">        </span>.gpio_gpio0<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>gpio_gpio0_param,
+<span class="w">        </span>.gpio_gpio1<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>gpio_gpio1_param,
+<span class="w">        </span>.rate<span class="w"> </span><span class="o">=</span><span class="w"> </span>AD405X_2_MSPS,
+<span class="w">        </span>.filter_length<span class="w"> </span><span class="o">=</span><span class="w"> </span>AD405X_LENGTH_2,
+<span class="w">        </span>.operation_mode<span class="w"> </span><span class="o">=</span><span class="w"> </span>AD405X_CONFIG_MODE_OP
+<span class="o">}</span><span class="p">;</span>
+<span class="nv">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>ad405x_init<span class="o">(</span><span class="p">&amp;</span>ad405x,<span class="w"> </span><span class="p">&amp;</span>ad405x_init_params<span class="o">)</span><span class="p">;</span>
+<span class="k">if</span><span class="w"> </span><span class="o">(</span>ret<span class="o">)</span>
+<span class="w">        </span>goto<span class="w"> </span>error<span class="p">;</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+          </div>
+              <div class="related">
+                &nbsp;
+    <a href="adm1177.html" title="Previous document (Ctrl+LeftArrow)" class="prev">ADM1177 no-OS Driver</a>
+    <a href="ad796x.html" title="Next document (Ctrl+RightArrow)" class="next">AD796X no-OS driver</a>
+              </div>
+          
+        </div>
+      </div>
+  </div>
+
+  <div id="vertical-border"></div>
+
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
+    <footer>
+      &#169;2023-2024, Analog Devices, Inc.
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
+</html>

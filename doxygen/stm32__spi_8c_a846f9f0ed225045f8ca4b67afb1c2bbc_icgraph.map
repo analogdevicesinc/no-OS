@@ -1,0 +1,4 @@
+<map id="stm32_config_dma_and_start" name="stm32_config_dma_and_start">
+<area shape="rect" id="node1" title="Configure and start a series of transfers using DMA." alt="" coords="236,5,412,47"/>
+<area shape="rect" id="node2" href="$stm32__spi_8c.html#adfcb8034a96850d7940dd91d67f273eb" title="Configure and start a series of transfers using DMA. Wait for the completion before returning." alt="" coords="5,5,188,47"/>
+</map>

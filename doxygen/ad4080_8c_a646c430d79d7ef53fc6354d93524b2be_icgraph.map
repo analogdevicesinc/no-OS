@@ -1,0 +1,4 @@
+<map id="ad4080_set_fifo_mode" name="ad4080_set_fifo_mode">
+<area shape="rect" id="node1" title="Set AD4080 Conversion Data FIFO Mode." alt="" coords="216,5,385,32"/>
+<area shape="rect" id="node2" href="$ad4080_8h.html#a39a7f7a31ecbd353673ef4094dca02e4" title="Configure the data interface during initialization." alt="" coords="5,5,168,32"/>
+</map>

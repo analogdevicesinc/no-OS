@@ -1,0 +1,13 @@
+<map id="ad463x_dev" name="ad463x_dev">
+<area shape="rect" id="node1" title="Device initialization parameters." alt="" coords="1001,153,1103,180"/>
+<area shape="rect" id="node2" href="$structaxi__clkgen.html" title=" " alt="" coords="709,5,801,32"/>
+<area shape="rect" id="node3" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="693,95,816,121"/>
+<area shape="rect" id="node4" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="10,51,189,77"/>
+<area shape="rect" id="node6" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="355,95,501,121"/>
+<area shape="rect" id="node5" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="353,146,503,187"/>
+<area shape="rect" id="node7" href="$structspi__engine__offload__init__param.html" title="Structure containing the init parameters needed by the offload module." alt="" coords="683,146,827,187"/>
+<area shape="rect" id="node8" href="$structno__os__pwm__desc.html" title="Structure representing an PWM generator device." alt="" coords="687,304,823,331"/>
+<area shape="rect" id="node9" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="362,257,494,284"/>
+<area shape="rect" id="node10" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="5,257,193,284"/>
+<area shape="rect" id="node11" href="$structno__os__pwm__platform__ops.html" title="Structure holding PWM function pointers that point to the platform specific function." alt="" coords="332,323,524,349"/>
+</map>

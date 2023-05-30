@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Evaluating AD400x on ZED and SDP-K1 &#8212; no-OS  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="../_static/style.min.css?v=a3ba2641" />
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script defer="" src="../_static/app.umd.js?v=7e1fdd13"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Evaluating the AD469x" href="ad469x_fmcz.html" />
+    <link rel="prev" title="Evaluating the AD796x" href="ad796x_fmcz.html" />
+   
+  
+    <meta name="robots" content="noindex">
+  
+  <meta name="repo" content="no-OS">
+  
+
+
+<style>
+  body {
+    
+  }
+
+  body.dark {
+    
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body:not(.light) {
+      
+    }
+  }
+</style>
+  </head><body>
+  <div class="banner"></div>
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
+  <input type="checkbox" id="input-show-repotoc">
+
+  
+  <div class="search-area">
+    <form action="" method="get">
+      <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+      <button value="search" class="icon"></button>
+      <span id="search-progress"></span>
+    </form>
+  </div>
+  
+
+  <header>
+    <div id="left">
+      <label id="show-sidebar" class="icon" for="input-show-toc" title="Show/hide index"></label>
+    </div>
+    <div id="right">
+      <span>
+        <a id="logo-org" href="https://analog.com"></a>
+        <div class="vertical-divider"></div>
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
+        <a id="logo" href="../index.html">
+          <div>no-OS</div>
+        </a>
+      </span>
+      <span class="reverse">
+        <label id="show-localtoc" class="icon" for="input-show-localtoc" title="Show/hide contents"></label>
+      </span>
+    </div>
+  </header>
+
+
+  <div class="repotoc-tree overlay">
+    <root>
+  <a href="../../documentation/eval/index.html">Evaluation Boards</a>
+  <a href="../../documentation/university/index.html">University Program</a>
+  <a href="../../hdl/index.html">HDL</a>
+  <a href="../index.html" class="current">no-OS</a>
+  <a href="../../pyadi-iio/index.html">Hardware Python Interfaces</a>
+  <a href="../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
+  <a href="../../doctools/index.html">Doctools</a>
+  <a href="../../PrecisionToolbox/index.html">Precision Toolbox</a>
+</root>
+
+  </div>
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div>
+          <div class="localtoc-header">On this page</div>
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">Evaluating AD400x on ZED and SDP-K1</a><ul>
+<li><a class="reference internal" href="#contents">Contents</a></li>
+<li><a class="reference internal" href="#supported-evaluation-boards">Supported Evaluation Boards</a></li>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#applications">Applications</a></li>
+<li><a class="reference internal" href="#no-os-build-setup">No-OS Build Setup</a></li>
+<li><a class="reference internal" href="#no-os-supported-examples">No-OS Supported Examples</a><ul>
+<li><a class="reference internal" href="#basic-example">Basic example</a></li>
+<li><a class="reference internal" href="#iio-example">IIO example</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#no-os-supported-platforms">No-OS Supported Platforms</a><ul>
+<li><a class="reference internal" href="#zedboard-platform">ZEDBOARD Platform</a></li>
+<li><a class="reference internal" href="#stm32-platform">STM32 Platform</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#project-options">Project Options</a></li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
+  
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+    <a id="no-logo" href="../index.html">
+      no-OS
+    </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
+All content
+</label>
+<label id="show-toc" for="input-switch-toc">
+Content on this topic
+</label>
+<div class="repotoc-tree">
+  <root>
+  <a href="../../documentation/eval/index.html">Evaluation Boards</a>
+  <a href="../../documentation/university/index.html">University Program</a>
+  <a href="../../hdl/index.html">HDL</a>
+  <a href="../index.html" class="current">no-OS</a>
+  <a href="../../pyadi-iio/index.html">Hardware Python Interfaces</a>
+  <a href="../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
+  <a href="../../doctools/index.html">Doctools</a>
+  <a href="../../PrecisionToolbox/index.html">Precision Toolbox</a>
+</root>
+
+</div>
+<div class="toc-tree">
+  <html>
+  <body><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../drivers_guide.html">no-OS drivers guide</a></li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1"/><div class="collapse"><a class="reference internal" href="../drivers_doc.html">no-OS drivers list</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adxl355.html">ADXL355 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adm1177.html">ADM1177 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ad405x.html">AD405X no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ad796x.html">AD796X no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ad400x.html">AD400X no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/axi_sysid.html">System ID (AXI_SYSID) no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max14914.html">MAX14914 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max14919.html">MAX14919 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max149x6.html">MAX149X6 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max22190.html">MAX22190 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max22196.html">MAX22196 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max22200.html">MAX22200 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max2201x.html">MAX2201X no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adf4382.html">ADF4382 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/imu.html">ADIS no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/madura.html">ADRV902x (Madura) no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adp1050.html">ADP1050 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ltc2992.html">LTC2992 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ltc4296.html">LTC4296 no-OS driver</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2" checked=""/><div class="collapse"><a class="reference internal" href="../projects_doc.html">no-OS projects list</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="ad7091r8-sdz.html">Evaluating AD7091R-2/-4/-8 Devices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad7616-st.html">Evaluating AD7616 on SDP-K1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad796x_fmcz.html">Evaluating the AD796x</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Evaluating AD400x on ZED and SDP-K1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad469x_fmcz.html">Evaluating the AD469x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4382.html">Evaluating the ADF4382</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval-adis1646x.html">Evaluating the ADIS1646X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval-adis1647x.html">Evaluating the ADIS1647X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval-adis1650x.html">Evaluating the ADIS1650X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval-adis1654x.html">Evaluating the ADIS1654X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval-adis1655x.html">Evaluating the ADIS1655X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval-adis1657x.html">Evaluating the ADIS1657X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval-ade9430.html">EVAL-ADE9430 Sensor-to-Cloud</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adrv902x.html">adrv902x no-OS Sample Poject</a></li>
+<li class="toctree-l2"><a class="reference internal" href="apard32690.html">Evaluating the AD-APARD32690-SL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max14914.html">Evaluating the MAX14914</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max14919.html">Evaluating the MAX14919</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adp1050.html">Evaluating the ADP1050</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc4296.html">Evaluating the LTC4296</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max2201x.html">Evaluating the MAX2201X</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to no-OS</a></li>
+</ul>
+</body>
+</html>
+
+</div>
+        </div>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body" role="main">
+            
+  <section id="evaluating-ad400x-on-zed-and-sdp-k1">
+<h1><a class="toc-backref" href="#id2" role="doc-backlink">Evaluating AD400x on ZED and SDP-K1</a><a class="headerlink" href="#evaluating-ad400x-on-zed-and-sdp-k1" title="Link to this heading">¶</a></h1>
+<section id="contents">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">Contents</a><a class="headerlink" href="#contents" title="Link to this heading">¶</a></h2>
+<nav class="contents" id="table-of-contents">
+<p class="topic-title">Table of Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#evaluating-ad400x-on-zed-and-sdp-k1" id="id2">Evaluating AD400x on ZED and SDP-K1</a></p>
+<ul>
+<li><p><a class="reference internal" href="#contents" id="id3">Contents</a></p></li>
+<li><p><a class="reference internal" href="#supported-evaluation-boards" id="id4">Supported Evaluation Boards</a></p></li>
+<li><p><a class="reference internal" href="#overview" id="id5">Overview</a></p></li>
+<li><p><a class="reference internal" href="#applications" id="id6">Applications</a></p></li>
+<li><p><a class="reference internal" href="#no-os-build-setup" id="id7">No-OS Build Setup</a></p></li>
+<li><p><a class="reference internal" href="#no-os-supported-examples" id="id8">No-OS Supported Examples</a></p>
+<ul>
+<li><p><a class="reference internal" href="#basic-example" id="id9">Basic example</a></p></li>
+<li><p><a class="reference internal" href="#iio-example" id="id10">IIO example</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#no-os-supported-platforms" id="id11">No-OS Supported Platforms</a></p>
+<ul>
+<li><p><a class="reference internal" href="#zedboard-platform" id="id12">ZEDBOARD Platform</a></p></li>
+<li><p><a class="reference internal" href="#stm32-platform" id="id13">STM32 Platform</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#project-options" id="id14">Project Options</a></p></li>
+</ul>
+</li>
+</ul>
+</nav>
+</section>
+<section id="supported-evaluation-boards">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">Supported Evaluation Boards</a><a class="headerlink" href="#supported-evaluation-boards" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD400x-FMCZ.html">AD400x</a></p></li>
+</ul>
+</section>
+<section id="overview">
+<h2><a class="toc-backref" href="#id5" role="doc-backlink">Overview</a><a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
+<p>Features and Benefits</p>
+<p>Product Details
+The AD4000/AD4001/AD4002/AD4003/AD4020 family of evaluation boards enable quick,
+simplified evaluation of the AD4000 family of 16-/18-/20-bit, precision
+successive approx-imation register (SAR) analog-to-digital converters (ADCs).</p>
+<p>The AD4000/AD4001/AD4002/AD4003/AD4020 are low power, 16-bit/18-bit/20-bit,
+precision SAR ADCs that offer high performance with throughputs up to 2 MSPS
+(1.8 MSPS for the AD4020). The evaluation board demonstrates the performance
+of the AD4000/AD4001/AD4002/AD4003/AD4020 family of ADCs and provides a
+simplified interface for a variety of system applications.</p>
+</section>
+<section id="applications">
+<h2><a class="toc-backref" href="#id6" role="doc-backlink">Applications</a><a class="headerlink" href="#applications" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Industrial Automation Technology</p></li>
+<li><p>Instrumentation and Measurement Solutions</p></li>
+<li><p>Intelligent Building Solutions</p></li>
+<li><p>Healthcare Solutions</p></li>
+<li><p>Aerospace and Defense Systems</p></li>
+<li><p>Wireless Communication Solutions</p></li>
+</ul>
+</section>
+<section id="no-os-build-setup">
+<h2><a class="toc-backref" href="#id7" role="doc-backlink">No-OS Build Setup</a><a class="headerlink" href="#no-os-build-setup" title="Link to this heading">¶</a></h2>
+<p>Please see: <a class="reference external" href="https://wiki.analog.com/resources/no-os/build">https://wiki.analog.com/resources/no-os/build</a></p>
+</section>
+<section id="no-os-supported-examples">
+<h2><a class="toc-backref" href="#id8" role="doc-backlink">No-OS Supported Examples</a><a class="headerlink" href="#no-os-supported-examples" title="Link to this heading">¶</a></h2>
+<section id="basic-example">
+<h3><a class="toc-backref" href="#id9" role="doc-backlink">Basic example</a><a class="headerlink" href="#basic-example" title="Link to this heading">¶</a></h3>
+<p>This example prints sample data out to the uart.</p>
+<p>Here is an example on how see the sample data of the basic example using zedboard:</p>
+<div class="line-block">
+<div class="line">minicom -b 115200 -D /dev/ttyACM1 -C ~/serial.dat</div>
+<div class="line">make run</div>
+<div class="line">cat ~/serial.dat | grep  ADC | cut -d ‘ ‘ -f 2 &gt; ~/plot.dat</div>
+<div class="line">echo “set terminal jpeg; set output ‘~/o.jpeg’;plot ‘~/plot.dat’ with lines” | gnuplot</div>
+</div>
+</section>
+<section id="iio-example">
+<h3><a class="toc-backref" href="#id10" role="doc-backlink">IIO example</a><a class="headerlink" href="#iio-example" title="Link to this heading">¶</a></h3>
+<p>This project is actually a IIOD demo for EVAL-AD400X device.
+The project launches a IIOD server on the board so that the user may connect
+to it via an IIO client.
+Using IIO-Oscilloscope, the user can configure the ADC and view the measured data
+on a plot.</p>
+<p>If you are not familiar with ADI IIO Application, please take a look at:
+<a class="reference external" href="https://wiki.analog.com/resources/tools-software/no-os-software/iio">IIO No-OS</a></p>
+<p>If you are not familiar with ADI IIO-Oscilloscope Client, please take a look at:
+<a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/iio_oscilloscope">IIO Oscilloscope</a></p>
+<p>The No-OS IIO Application together with the No-OS IIO AD400X driver take care of
+all the back-end logic needed to setup the IIO server.</p>
+<p>The read buffer is used for storing the burst data which shall be retrieved
+by any LibIIO client.</p>
+</section>
+</section>
+<section id="no-os-supported-platforms">
+<h2><a class="toc-backref" href="#id11" role="doc-backlink">No-OS Supported Platforms</a><a class="headerlink" href="#no-os-supported-platforms" title="Link to this heading">¶</a></h2>
+<section id="zedboard-platform">
+<h3><a class="toc-backref" href="#id12" role="doc-backlink">ZEDBOARD Platform</a><a class="headerlink" href="#zedboard-platform" title="Link to this heading">¶</a></h3>
+<p><strong>Used hardware:</strong></p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.analog.com/eval-ad400x-fmcz.html">EVAL-AD400x</a></p></li>
+<li><p><a class="reference external" href="https://www.analog.com/en/resources/reference-designs/powering-zynq-evaluation-development-board-zedboard.html">Zedboard</a></p></li>
+</ul>
+<p><strong>Prerequisites</strong></p>
+<ul class="simple">
+<li><p>Vitis/Vivado software installed</p></li>
+<li><p>export PATH=$PATH:”&lt;YOUR_PATH&gt;/Xilinx/Vivado/2023.2/bin”</p></li>
+<li><p>export PATH=$PATH:”&lt;YOUR_PATH&gt;/Xilinx/Vitis/2023.2/bin”</p></li>
+<li><p>(optional) export ADI_IGNORE_VERSION_CHECK=1</p></li>
+<li><p>HDL code (<strong>system_top.xsa</strong>) in the porject folder</p></li>
+</ul>
+<p><strong>Build and flash</strong></p>
+<ul class="simple">
+<li><p>make</p></li>
+<li><p>make run</p></li>
+</ul>
+</section>
+<section id="stm32-platform">
+<h3><a class="toc-backref" href="#id13" role="doc-backlink">STM32 Platform</a><a class="headerlink" href="#stm32-platform" title="Link to this heading">¶</a></h3>
+<p><strong>Used hardware:</strong></p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.analog.com/eval-ad400x-fmcz.html">EVAL-AD400x</a></p></li>
+<li><p><a class="reference external" href="https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/sdp-k1.html">SDP-K1</a></p></li>
+<li><p>ST debugger</p></li>
+</ul>
+<p><strong>Prerequisites</strong></p>
+<ul class="simple">
+<li><p>Vitis/Vivado software installed</p></li>
+<li><p>HDL code (<strong>system_top.xsa</strong>) placed in the porject folder</p></li>
+<li><p>export STM32CUBEMX=&lt;YOUR_PATH&gt;/STMicroelectronics/STM32Cube/STM32CubeMX/</p></li>
+<li><p>export STM32CUBEIDE=&lt;YOUR_PATH&gt;/stm32cubeide_1.14.0/</p></li>
+<li><p>sdp-ck1z.ioc file in the porject folder</p></li>
+</ul>
+<p><strong>Build and flash</strong></p>
+<ul class="simple">
+<li><p>make</p></li>
+<li><p>openocd -f ./build/ad400x-fmcz.elf.openocd -c “program ./build/ad400x-fmcz.elf verify reset exit”</p></li>
+</ul>
+</section>
+</section>
+<section id="project-options">
+<h2><a class="toc-backref" href="#id14" role="doc-backlink">Project Options</a><a class="headerlink" href="#project-options" title="Link to this heading">¶</a></h2>
+<ul>
+<li><dl>
+<dt>Use basic example that prints samples to uart (zed-only)s</dt><dd><div class="line-block">
+<div class="line">./Makefile</div>
+<div class="line-block">
+<div class="line">BASIC_EXAMPLE = n</div>
+<div class="line">IIO_EXAMPLE = y</div>
+</div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>Specify the 400x part in use:</dt><dd><div class="line-block">
+<div class="line">src/common/common_data.c:</div>
+<div class="line-block">
+<div class="line">struct ad400x_init_param ad400x_init_param = {</div>
+<div class="line-block">
+<div class="line">.dev_id = <strong>ID_AD4020</strong>,</div>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+</section>
+
+
+          </div>
+              <div class="related">
+                &nbsp;
+    <a href="ad796x_fmcz.html" title="Previous document (Ctrl+LeftArrow)" class="prev">Evaluating the AD796x</a>
+    <a href="ad469x_fmcz.html" title="Next document (Ctrl+RightArrow)" class="next">Evaluating the AD469x</a>
+              </div>
+          
+        </div>
+      </div>
+  </div>
+
+  <div id="vertical-border"></div>
+
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
+    <footer>
+      &#169;2023-2024, Analog Devices, Inc.
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
+</html>

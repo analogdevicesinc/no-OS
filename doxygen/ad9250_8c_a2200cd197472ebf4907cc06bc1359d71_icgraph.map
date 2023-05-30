@@ -1,0 +1,4 @@
+<map id="ad9250_soft_reset" name="ad9250_soft_reset">
+<area shape="rect" id="node1" title="Resets all registers to their default values." alt="" coords="167,5,308,32"/>
+<area shape="rect" id="node2" href="$ad9250_8h.html#a68f5ae795f91832c2eb63c5836bf2861" title="Configures the device." alt="" coords="5,5,119,32"/>
+</map>

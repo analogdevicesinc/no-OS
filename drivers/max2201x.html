@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>MAX2201X no-OS Driver &#8212; no-OS  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="../_static/style.min.css?v=a3ba2641" />
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script defer="" src="../_static/app.umd.js?v=7e1fdd13"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ADF4382 no-OS driver" href="adf4382.html" />
+    <link rel="prev" title="MAX22200 no-OS driver" href="max22200.html" />
+   
+  
+    <meta name="robots" content="noindex">
+  
+  <meta name="repo" content="no-OS">
+  
+
+
+<style>
+  body {
+    
+  }
+
+  body.dark {
+    
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body:not(.light) {
+      
+    }
+  }
+</style>
+  </head><body>
+  <div class="banner"></div>
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
+  <input type="checkbox" id="input-show-repotoc">
+
+  
+  <div class="search-area">
+    <form action="" method="get">
+      <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+      <button value="search" class="icon"></button>
+      <span id="search-progress"></span>
+    </form>
+  </div>
+  
+
+  <header>
+    <div id="left">
+      <label id="show-sidebar" class="icon" for="input-show-toc" title="Show/hide index"></label>
+    </div>
+    <div id="right">
+      <span>
+        <a id="logo-org" href="https://analog.com"></a>
+        <div class="vertical-divider"></div>
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
+        <a id="logo" href="../index.html">
+          <div>no-OS</div>
+        </a>
+      </span>
+      <span class="reverse">
+        <label id="show-localtoc" class="icon" for="input-show-localtoc" title="Show/hide contents"></label>
+      </span>
+    </div>
+  </header>
+
+
+  <div class="repotoc-tree overlay">
+    <root>
+  <a href="../../documentation/eval/index.html">Evaluation Boards</a>
+  <a href="../../documentation/university/index.html">University Program</a>
+  <a href="../../hdl/index.html">HDL</a>
+  <a href="../index.html" class="current">no-OS</a>
+  <a href="../../pyadi-iio/index.html">Hardware Python Interfaces</a>
+  <a href="../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
+  <a href="../../doctools/index.html">Doctools</a>
+  <a href="../../PrecisionToolbox/index.html">Precision Toolbox</a>
+</root>
+
+  </div>
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div>
+          <div class="localtoc-header">On this page</div>
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">MAX2201X no-OS Driver</a><ul>
+<li><a class="reference internal" href="#supported-devices">Supported Devices</a></li>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#max2201x-device-configuration">MAX2201X Device Configuration</a></li>
+<li><a class="reference internal" href="#driver-initialization">Driver Initialization</a></li>
+<li><a class="reference internal" href="#gpio-controller-configuration">GPIO Controller Configuration</a></li>
+<li><a class="reference internal" href="#channel-configuration">Channel Configuration</a></li>
+<li><a class="reference internal" href="#soft-reset">Soft Reset</a></li>
+<li><a class="reference internal" href="#max2201x-driver-initialization-example">MAX2201X Driver Initialization Example</a></li>
+<li><a class="reference internal" href="#max2201x-no-os-iio-support">MAX2201X no-OS IIO Support</a></li>
+<li><a class="reference internal" href="#max2201x-iio-device-configuration">MAX2201X IIO Device Configuration</a></li>
+<li><a class="reference internal" href="#device-attributes">Device Attributes</a></li>
+<li><a class="reference internal" href="#channel-attributes">Channel Attributes</a></li>
+<li><a class="reference internal" href="#debug-attributes">Debug Attributes</a></li>
+<li><a class="reference internal" href="#device-channels">Device Channels</a></li>
+<li><a class="reference internal" href="#max2201x-iio-driver-initialization-example">MAX2201X IIO Driver Initialization Example</a></li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
+  
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+    <a id="no-logo" href="../index.html">
+      no-OS
+    </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
+All content
+</label>
+<label id="show-toc" for="input-switch-toc">
+Content on this topic
+</label>
+<div class="repotoc-tree">
+  <root>
+  <a href="../../documentation/eval/index.html">Evaluation Boards</a>
+  <a href="../../documentation/university/index.html">University Program</a>
+  <a href="../../hdl/index.html">HDL</a>
+  <a href="../index.html" class="current">no-OS</a>
+  <a href="../../pyadi-iio/index.html">Hardware Python Interfaces</a>
+  <a href="../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
+  <a href="../../doctools/index.html">Doctools</a>
+  <a href="../../PrecisionToolbox/index.html">Precision Toolbox</a>
+</root>
+
+</div>
+<div class="toc-tree">
+  <html>
+  <body><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../drivers_guide.html">no-OS drivers guide</a></li>
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1" checked=""/><div class="collapse"><a class="reference internal" href="../drivers_doc.html">no-OS drivers list</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="adxl355.html">ADXL355 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adm1177.html">ADM1177 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad405x.html">AD405X no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad796x.html">AD796X no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad400x.html">AD400X no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="axi_sysid.html">System ID (AXI_SYSID) no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max14914.html">MAX14914 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max14919.html">MAX14919 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max149x6.html">MAX149X6 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22190.html">MAX22190 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22196.html">MAX22196 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22200.html">MAX22200 no-OS driver</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">MAX2201X no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4382.html">ADF4382 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="imu.html">ADIS no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="madura.html">ADRV902x (Madura) no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adp1050.html">ADP1050 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc2992.html">LTC2992 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc4296.html">LTC4296 no-OS driver</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2"/><div class="collapse"><a class="reference internal" href="../projects_doc.html">no-OS projects list</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7091r8-sdz.html">Evaluating AD7091R-2/-4/-8 Devices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7616-st.html">Evaluating AD7616 on SDP-K1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad796x_fmcz.html">Evaluating the AD796x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad400x-fmcz.html">Evaluating AD400x on ZED and SDP-K1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad469x_fmcz.html">Evaluating the AD469x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adf4382.html">Evaluating the ADF4382</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1646x.html">Evaluating the ADIS1646X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1647x.html">Evaluating the ADIS1647X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1650x.html">Evaluating the ADIS1650X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1654x.html">Evaluating the ADIS1654X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1655x.html">Evaluating the ADIS1655X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1657x.html">Evaluating the ADIS1657X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-ade9430.html">EVAL-ADE9430 Sensor-to-Cloud</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adrv902x.html">adrv902x no-OS Sample Poject</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/apard32690.html">Evaluating the AD-APARD32690-SL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max14914.html">Evaluating the MAX14914</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max14919.html">Evaluating the MAX14919</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adp1050.html">Evaluating the ADP1050</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc4296.html">Evaluating the LTC4296</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max2201x.html">Evaluating the MAX2201X</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to no-OS</a></li>
+</ul>
+</body>
+</html>
+
+</div>
+        </div>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body" role="main">
+            
+  <section id="max2201x-no-os-driver">
+<h1>MAX2201X no-OS Driver<a class="headerlink" href="#max2201x-no-os-driver" title="Link to this heading">¶</a></h1>
+<section id="supported-devices">
+<h2>Supported Devices<a class="headerlink" href="#supported-devices" title="Link to this heading">¶</a></h2>
+<p><a class="reference external" href="https://www.analog.com/MAX22017">MAX22017</a>
+<a class="reference external" href="https://www.analog.com/MAX22018">MAX22018</a></p>
+</section>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
+<p>The MAX22017 is a two-channel industrial-grade
+configurable analog output device that can be changed
+on-the-fly in software to voltage or current output mode.
+The MAX22017 offers one 16-bit DAC per output
+channel. The MAX22017 can operate from an internal or
+external reference.</p>
+<p>The MAX22018 is a single-channel industrial-grade
+configurable analog output device that can be changed
+on-the-fly in software to voltage or current output mode.
+The MAX22018 can operate from an internal or external
+reference. The MAX22018 features zero-drift high-voltage amplifiers
+and high voltage switches to be compliant with standard industrial-grade
+voltage and current ranges.</p>
+<p>Both MAX22017 and MAX22018 have pretty much the same register map except
+channel’s 2 registers in case of MAX22018, therefor the max2201x.c and
+max2201x.h driver files support both devices.</p>
+</section>
+<section id="max2201x-device-configuration">
+<h2>MAX2201X Device Configuration<a class="headerlink" href="#max2201x-device-configuration" title="Link to this heading">¶</a></h2>
+</section>
+<section id="driver-initialization">
+<h2>Driver Initialization<a class="headerlink" href="#driver-initialization" title="Link to this heading">¶</a></h2>
+<p>In order to be able to use the device, you will have to provide the support for
+the communication protocol (SPI) as well as an external GPIO for the RSTB pin.</p>
+<p>The first API to be called is <strong>max2201x_init</strong>. Make sure that it returns 0,
+which means that the driver was intialized correctly.</p>
+</section>
+<section id="gpio-controller-configuration">
+<h2>GPIO Controller Configuration<a class="headerlink" href="#gpio-controller-configuration" title="Link to this heading">¶</a></h2>
+<p>Both devices have an internal GPIO controller, only difference is that MAX22017
+supports 6 GPIOs meanwhile MAX22018 only supports 4 GPIOs.
+In the driver files the <strong>max2201x_gpio_ops</strong> can be found and used when
+declaring a no-OS GPIO initializaon parameter, therefor all the platform
+specific operation are called from the no-OS GPIO API as a standalone platform.</p>
+</section>
+<section id="channel-configuration">
+<h2>Channel Configuration<a class="headerlink" href="#channel-configuration" title="Link to this heading">¶</a></h2>
+<p>Channel data can be set/get with the <strong>max2201x_set_data</strong> and
+<strong>max2201x_get_data</strong>.</p>
+<p>Channel slew-rate configuration can also be set using <strong>max2201x_slew_rate</strong></p>
+<p>Channel gain and offset can be calibrated with <strong>max2201x_offset_calib</strong> and
+<strong>max2201x_gain_calib</strong>.</p>
+<p>Channel operation mode can also be configured using <strong>max2201x_op_mode</strong> as well
+as other channel specific configurations that can be changed using
+<strong>max2201x_config</strong></p>
+</section>
+<section id="soft-reset">
+<h2>Soft Reset<a class="headerlink" href="#soft-reset" title="Link to this heading">¶</a></h2>
+<p>Both devices can be soft reseted by using <strong>max2201x_soft_reset</strong>.</p>
+</section>
+<section id="max2201x-driver-initialization-example">
+<h2>MAX2201X Driver Initialization Example<a class="headerlink" href="#max2201x-driver-initialization-example" title="Link to this heading">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>struct<span class="w"> </span>max2201x_desc<span class="w"> </span>*max2201x<span class="p">;</span>
+struct<span class="w"> </span>no_os_spi_init_param<span class="w"> </span><span class="nv">spi_ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>.device_id<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span>,
+<span class="w">        </span>.extra<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>max2201x_spi_extra,
+<span class="w">        </span>.max_speed_hz<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">100000</span>,
+<span class="w">        </span>.platform_ops<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>max_spi_ops,
+<span class="w">        </span>.chip_select<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span>,
+<span class="o">}</span><span class="p">;</span>
+struct<span class="w"> </span>no_os_gpio_init_param<span class="w"> </span><span class="nv">max2201x_rstb_ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>.port<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span>,
+<span class="w">        </span>.pull<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_PULL_NONE,
+<span class="w">        </span>.number<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">6</span>,
+<span class="w">        </span>.platform_ops<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>max_gpio_ops,
+<span class="w">        </span>.extra<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>max2201x_gpio_extra,
+<span class="o">}</span><span class="p">;</span>
+struct<span class="w"> </span>max2201x_init_param<span class="w"> </span><span class="nv">max2201x_ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>.chip_id<span class="w"> </span><span class="o">=</span><span class="w"> </span>ID_MAX22017,
+<span class="w">        </span>.comm_param<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>max2201x_spi_ip,
+<span class="w">        </span>.crc_en<span class="w"> </span><span class="o">=</span><span class="w"> </span>false,
+<span class="w">        </span>.ext_dac_ref<span class="w"> </span><span class="o">=</span><span class="w"> </span>false,
+<span class="w">        </span>.rstb_param<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>max2201x_rstb_ip,
+<span class="o">}</span><span class="p">;</span>
+
+<span class="nv">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>max2201x_init<span class="o">(</span><span class="p">&amp;</span>max2201x,<span class="w"> </span><span class="p">&amp;</span>max2201x_ip<span class="o">)</span><span class="p">;</span>
+<span class="k">if</span><span class="w"> </span><span class="o">(</span>ret<span class="o">)</span>
+<span class="w">        </span>goto<span class="w"> </span>error<span class="p">;</span>
+</pre></div>
+</div>
+</section>
+<section id="max2201x-no-os-iio-support">
+<h2>MAX2201X no-OS IIO Support<a class="headerlink" href="#max2201x-no-os-iio-support" title="Link to this heading">¶</a></h2>
+<p>The MAX2201X IIO driver comes on top of the MAX2201X driver and offers support
+for interfacing IIO clients through IIO lib.</p>
+</section>
+<section id="max2201x-iio-device-configuration">
+<h2>MAX2201X IIO Device Configuration<a class="headerlink" href="#max2201x-iio-device-configuration" title="Link to this heading">¶</a></h2>
+</section>
+<section id="device-attributes">
+<h2>Device Attributes<a class="headerlink" href="#device-attributes" title="Link to this heading">¶</a></h2>
+</section>
+<section id="channel-attributes">
+<h2>Channel Attributes<a class="headerlink" href="#channel-attributes" title="Link to this heading">¶</a></h2>
+<p>MAX2201X has a total of 2 channel attributes:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">raw</span> <span class="pre">-</span> <span class="pre">the</span> <span class="pre">output</span> <span class="pre">data</span> <span class="pre">to</span> <span class="pre">be</span> <span class="pre">transmitted</span> <span class="pre">to</span> <span class="pre">the</span> <span class="pre">channel's</span> <span class="pre">DAC</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">offset</span> <span class="pre">-</span> <span class="pre">offset</span> <span class="pre">value</span> <span class="pre">used</span> <span class="pre">for</span> <span class="pre">channel's</span> <span class="pre">offset</span> <span class="pre">calibration</span></code></p></li>
+</ul>
+</section>
+<section id="debug-attributes">
+<h2>Debug Attributes<a class="headerlink" href="#debug-attributes" title="Link to this heading">¶</a></h2>
+<p>The device has a total of 37 debug attributes.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ow_detect</span> <span class="pre">-</span> <span class="pre">Open</span> <span class="pre">Wire</span> <span class="pre">detection</span> <span class="pre">status</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ow_detect_available</span> <span class="pre">-</span> <span class="pre">List</span> <span class="pre">of</span> <span class="pre">possible</span> <span class="pre">options</span> <span class="pre">for</span> <span class="pre">Open</span> <span class="pre">Wire</span> <span class="pre">detection</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">timeout</span> <span class="pre">-</span> <span class="pre">Timeout</span> <span class="pre">value</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">device</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">timeout_available</span> <span class="pre">-</span> <span class="pre">List</span> <span class="pre">of</span> <span class="pre">possible</span> <span class="pre">values</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">timeout</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">timeout_cfg</span> <span class="pre">-</span> <span class="pre">Timeout</span> <span class="pre">Configuration</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">timeout_cfg_available</span> <span class="pre">-</span> <span class="pre">List</span> <span class="pre">of</span> <span class="pre">possible</span> <span class="pre">options</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">timeout</span> <span class="pre">configuration</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">timeout_en</span> <span class="pre">-</span> <span class="pre">Timeout</span> <span class="pre">enable/disable</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">timeout_en_available</span> <span class="pre">-</span> <span class="pre">List</span> <span class="pre">of</span> <span class="pre">possible</span> <span class="pre">options</span> <span class="pre">for</span> <span class="pre">timeout</span> <span class="pre">status</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">thermal_shutdown</span> <span class="pre">-</span> <span class="pre">Thermal</span> <span class="pre">Shutdown</span> <span class="pre">status</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">thermal_shutdown_available</span> <span class="pre">-</span> <span class="pre">List</span> <span class="pre">of</span> <span class="pre">possible</span> <span class="pre">options</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">thermal</span> <span class="pre">shutdown</span> <span class="pre">status</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">overcurrent_shutdown</span> <span class="pre">-</span> <span class="pre">Overcurrent</span> <span class="pre">Shutdown</span> <span class="pre">status</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">overcurrent_shutdown_available</span> <span class="pre">-</span> <span class="pre">List</span> <span class="pre">of</span> <span class="pre">possible</span> <span class="pre">options</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">overcurrrent</span> <span class="pre">shutdown</span> <span class="pre">status</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">current_limit</span> <span class="pre">-</span> <span class="pre">Current</span> <span class="pre">Limit</span> <span class="pre">value</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">current_limit_available</span> <span class="pre">-</span> <span class="pre">List</span> <span class="pre">of</span> <span class="pre">possible</span> <span class="pre">values</span> <span class="pre">for</span> <span class="pre">current</span> <span class="pre">limit</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dac_ref</span> <span class="pre">-</span> <span class="pre">DAC</span> <span class="pre">reference</span> <span class="pre">status</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dac_ref_available</span> <span class="pre">-</span> <span class="pre">List</span> <span class="pre">of</span> <span class="pre">possible</span> <span class="pre">options</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">DAC</span> <span class="pre">reference</span> <span class="pre">status</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">interrupts</span> <span class="pre">-</span> <span class="pre">Interrupts</span> <span class="pre">Word</span> <span class="pre">value</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">interrupts_enable</span> <span class="pre">-</span> <span class="pre">Interrups</span> <span class="pre">Enable</span> <span class="pre">Word</span> <span class="pre">value</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ld_ctrl</span> <span class="pre">-</span> <span class="pre">Load</span> <span class="pre">DAC</span> <span class="pre">ctrl</span> <span class="pre">configuration</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ld_ctrl_available</span> <span class="pre">-</span> <span class="pre">List</span> <span class="pre">of</span> <span class="pre">possible</span> <span class="pre">options</span> <span class="pre">for</span> <span class="pre">Load</span> <span class="pre">DAC</span> <span class="pre">ctrl</span> <span class="pre">configuration</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gain</span> <span class="pre">-</span> <span class="pre">gain</span> <span class="pre">value</span> <span class="pre">used</span> <span class="pre">for</span> <span class="pre">channel's</span> <span class="pre">gain</span> <span class="pre">calibration</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">slew_rate</span> <span class="pre">-</span> <span class="pre">enable/disable</span> <span class="pre">slew</span> <span class="pre">rate</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">slew_rate_available</span> <span class="pre">-</span> <span class="pre">list</span> <span class="pre">of</span> <span class="pre">possible</span> <span class="pre">options</span> <span class="pre">for</span> <span class="pre">slew</span> <span class="pre">rate</span> <span class="pre">status</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">range</span> <span class="pre">-</span> <span class="pre">Channel's</span> <span class="pre">AO</span> <span class="pre">slew</span> <span class="pre">rate</span> <span class="pre">range</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">range_available</span> <span class="pre">-</span> <span class="pre">List</span> <span class="pre">of</span> <span class="pre">possible</span> <span class="pre">ranges</span> <span class="pre">depending</span> <span class="pre">on</span> <span class="pre">the</span> <span class="pre">application</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">step_size</span> <span class="pre">-</span> <span class="pre">Step</span> <span class="pre">size</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">slew</span> <span class="pre">rate</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">step_size_available</span> <span class="pre">-</span> <span class="pre">list</span> <span class="pre">of</span> <span class="pre">possible</span> <span class="pre">values</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">step</span> <span class="pre">size</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">update_rate</span> <span class="pre">-</span> <span class="pre">Update</span> <span class="pre">rate</span> <span class="pre">valuof</span> <span class="pre">the</span> <span class="pre">Channel's</span> <span class="pre">AO</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">update_rate_available</span> <span class="pre">-</span> <span class="pre">List</span> <span class="pre">of</span> <span class="pre">possible</span> <span class="pre">update</span> <span class="pre">rates</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">operation_mode</span> <span class="pre">-</span> <span class="pre">Operation</span> <span class="pre">mode</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">channel</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">operation_mode_available</span> <span class="pre">-</span> <span class="pre">List</span> <span class="pre">of</span> <span class="pre">possible</span> <span class="pre">operation</span> <span class="pre">modes</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">polarity</span> <span class="pre">-</span> <span class="pre">Polarity</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">channel</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">polarity_available</span> <span class="pre">-</span> <span class="pre">List</span> <span class="pre">of</span> <span class="pre">possible</span> <span class="pre">polarities</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cm_sense</span> <span class="pre">-</span> <span class="pre">Common</span> <span class="pre">mode</span> <span class="pre">sense</span> <span class="pre">restistor</span> <span class="pre">value</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cm_sense_available</span> <span class="pre">-</span> <span class="pre">List</span> <span class="pre">of</span> <span class="pre">possible</span> <span class="pre">values</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">common</span> <span class="pre">mode</span> <span class="pre">resistor</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ldac</span> <span class="pre">-</span> <span class="pre">Load</span> <span class="pre">DAC</span> <span class="pre">status</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ldac</span> <span class="pre">-</span> <span class="pre">List</span> <span class="pre">of</span> <span class="pre">possible</span> <span class="pre">options</span> <span class="pre">for</span> <span class="pre">Load</span> <span class="pre">DAC</span> <span class="pre">status</span></code></p></li>
+</ul>
+</section>
+<section id="device-channels">
+<h2>Device Channels<a class="headerlink" href="#device-channels" title="Link to this heading">¶</a></h2>
+<p>MAX2201X has a specific API, <strong>max2201x_iio_setup_channels</strong> for configuring the
+channels at initialization depending on the chip id. Therefore the channels can
+be enabled/disabled only at initialization.</p>
+</section>
+<section id="max2201x-iio-driver-initialization-example">
+<h2>MAX2201X IIO Driver Initialization Example<a class="headerlink" href="#max2201x-iio-driver-initialization-example" title="Link to this heading">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>int<span class="w"> </span>ret<span class="p">;</span>
+
+struct<span class="w"> </span>max2201x_iio_desc<span class="w"> </span>*max2201x_iio_desc<span class="p">;</span>
+struct<span class="w"> </span>max2201x_iio_desc_init_param<span class="w"> </span><span class="nv">max2201x_iio_ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>.max2201x_init_param<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>max2201x_ip,
+<span class="o">}</span><span class="p">;</span>
+
+struct<span class="w"> </span>iio_app_desc<span class="w"> </span>*app<span class="p">;</span>
+struct<span class="w"> </span>iio_app_init_param<span class="w"> </span><span class="nv">app_init_param</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">}</span><span class="p">;</span>
+
+<span class="nv">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>max2201x_iio_init<span class="o">(</span><span class="p">&amp;</span>max2201x_iio_desc,<span class="w"> </span><span class="p">&amp;</span>max2201x_iio_ip<span class="o">)</span><span class="p">;</span>
+<span class="k">if</span><span class="w"> </span><span class="o">(</span>ret<span class="o">)</span>
+<span class="w">        </span>goto<span class="w"> </span>error<span class="p">;</span>
+
+struct<span class="w"> </span>iio_app_device<span class="w"> </span>iio_devices<span class="o">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span><span class="o">{</span>
+<span class="w">                </span>.name<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;max2201x&quot;</span>,
+<span class="w">                </span>.dev<span class="w"> </span><span class="o">=</span><span class="w"> </span>max2201x_iio_desc,
+<span class="w">                </span>.dev_descriptor<span class="w"> </span><span class="o">=</span><span class="w"> </span>max2201x_iio_desc-&gt;iio_dev,
+<span class="w">        </span><span class="o">}</span>,
+<span class="o">}</span><span class="p">;</span>
+
+app_init_param.devices<span class="w"> </span><span class="o">=</span><span class="w"> </span>iio_devices<span class="p">;</span>
+app_init_param.nb_devices<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_ARRAY_SIZE<span class="o">(</span>iio_devices<span class="o">)</span><span class="p">;</span>
+app_init_param.uart_init_params<span class="w"> </span><span class="o">=</span><span class="w"> </span>max2201x_uart_ip<span class="p">;</span>
+
+<span class="nv">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>iio_app_init<span class="o">(</span><span class="p">&amp;</span>app,<span class="w"> </span>app_init_param<span class="o">)</span><span class="p">;</span>
+<span class="k">if</span><span class="w"> </span><span class="o">(</span>ret<span class="o">)</span>
+<span class="w">        </span>goto<span class="w"> </span>app_error<span class="p">;</span>
+
+<span class="k">return</span><span class="w"> </span>iio_app_run<span class="o">(</span>app<span class="o">)</span><span class="p">;</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+          </div>
+              <div class="related">
+                &nbsp;
+    <a href="max22200.html" title="Previous document (Ctrl+LeftArrow)" class="prev">MAX22200 no-OS driver</a>
+    <a href="adf4382.html" title="Next document (Ctrl+RightArrow)" class="next">ADF4382 no-OS driver</a>
+              </div>
+          
+        </div>
+      </div>
+  </div>
+
+  <div id="vertical-border"></div>
+
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
+    <footer>
+      &#169;2023-2024, Analog Devices, Inc.
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
+</html>

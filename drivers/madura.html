@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>ADRV902x (Madura) no-OS Driver &#8212; no-OS  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="../_static/style.min.css?v=a3ba2641" />
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script defer="" src="../_static/app.umd.js?v=7e1fdd13"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ADP1050 no-OS driver" href="adp1050.html" />
+    <link rel="prev" title="ADIS no-OS driver" href="imu.html" />
+   
+  
+    <meta name="robots" content="noindex">
+  
+  <meta name="repo" content="no-OS">
+  
+
+
+<style>
+  body {
+    
+  }
+
+  body.dark {
+    
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body:not(.light) {
+      
+    }
+  }
+</style>
+  </head><body>
+  <div class="banner"></div>
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
+  <input type="checkbox" id="input-show-repotoc">
+
+  
+  <div class="search-area">
+    <form action="" method="get">
+      <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+      <button value="search" class="icon"></button>
+      <span id="search-progress"></span>
+    </form>
+  </div>
+  
+
+  <header>
+    <div id="left">
+      <label id="show-sidebar" class="icon" for="input-show-toc" title="Show/hide index"></label>
+    </div>
+    <div id="right">
+      <span>
+        <a id="logo-org" href="https://analog.com"></a>
+        <div class="vertical-divider"></div>
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
+        <a id="logo" href="../index.html">
+          <div>no-OS</div>
+        </a>
+      </span>
+      <span class="reverse">
+        <label id="show-localtoc" class="icon" for="input-show-localtoc" title="Show/hide contents"></label>
+      </span>
+    </div>
+  </header>
+
+
+  <div class="repotoc-tree overlay">
+    <root>
+  <a href="../../documentation/eval/index.html">Evaluation Boards</a>
+  <a href="../../documentation/university/index.html">University Program</a>
+  <a href="../../hdl/index.html">HDL</a>
+  <a href="../index.html" class="current">no-OS</a>
+  <a href="../../pyadi-iio/index.html">Hardware Python Interfaces</a>
+  <a href="../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
+  <a href="../../doctools/index.html">Doctools</a>
+  <a href="../../PrecisionToolbox/index.html">Precision Toolbox</a>
+</root>
+
+  </div>
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div>
+          <div class="localtoc-header">On this page</div>
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">ADRV902x (Madura) no-OS Driver</a><ul>
+<li><a class="reference internal" href="#supported-devices">Supported Devices</a></li>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#applications">Applications</a></li>
+<li><a class="reference internal" href="#markets-and-technologies">Markets and Technologies</a></li>
+<li><a class="reference internal" href="#driver-structure">Driver Structure</a></li>
+<li><a class="reference internal" href="#adrv902x-device-configuration">ADRV902x Device Configuration</a></li>
+<li><a class="reference internal" href="#driver-initialization">Driver Initialization</a></li>
+<li><a class="reference internal" href="#configuration">Configuration</a></li>
+<li><a class="reference internal" href="#adrv9025-driver-initialization-example">ADRV9025 Driver Initialization Example</a></li>
+<li><a class="reference internal" href="#adrv9025-no-os-iio-support">ADRV9025 no-OS IIO support</a></li>
+<li><a class="reference internal" href="#adrv9025-iio-device-configuration">ADRV9025 IIO Device Configuration</a></li>
+<li><a class="reference internal" href="#device-attributes">Device Attributes</a></li>
+<li><a class="reference internal" href="#device-channels">Device Channels</a></li>
+<li><a class="reference internal" href="#adrv9025-iio-driver-initialization-example">ADRV9025 IIO Driver Initialization Example</a></li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
+  
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+    <a id="no-logo" href="../index.html">
+      no-OS
+    </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
+All content
+</label>
+<label id="show-toc" for="input-switch-toc">
+Content on this topic
+</label>
+<div class="repotoc-tree">
+  <root>
+  <a href="../../documentation/eval/index.html">Evaluation Boards</a>
+  <a href="../../documentation/university/index.html">University Program</a>
+  <a href="../../hdl/index.html">HDL</a>
+  <a href="../index.html" class="current">no-OS</a>
+  <a href="../../pyadi-iio/index.html">Hardware Python Interfaces</a>
+  <a href="../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
+  <a href="../../doctools/index.html">Doctools</a>
+  <a href="../../PrecisionToolbox/index.html">Precision Toolbox</a>
+</root>
+
+</div>
+<div class="toc-tree">
+  <html>
+  <body><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../drivers_guide.html">no-OS drivers guide</a></li>
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1" checked=""/><div class="collapse"><a class="reference internal" href="../drivers_doc.html">no-OS drivers list</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="adxl355.html">ADXL355 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adm1177.html">ADM1177 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad405x.html">AD405X no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad796x.html">AD796X no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad400x.html">AD400X no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="axi_sysid.html">System ID (AXI_SYSID) no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max14914.html">MAX14914 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max14919.html">MAX14919 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max149x6.html">MAX149X6 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22190.html">MAX22190 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22196.html">MAX22196 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22200.html">MAX22200 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max2201x.html">MAX2201X no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4382.html">ADF4382 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="imu.html">ADIS no-OS driver</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">ADRV902x (Madura) no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adp1050.html">ADP1050 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc2992.html">LTC2992 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc4296.html">LTC4296 no-OS driver</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2"/><div class="collapse"><a class="reference internal" href="../projects_doc.html">no-OS projects list</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7091r8-sdz.html">Evaluating AD7091R-2/-4/-8 Devices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7616-st.html">Evaluating AD7616 on SDP-K1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad796x_fmcz.html">Evaluating the AD796x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad400x-fmcz.html">Evaluating AD400x on ZED and SDP-K1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad469x_fmcz.html">Evaluating the AD469x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adf4382.html">Evaluating the ADF4382</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1646x.html">Evaluating the ADIS1646X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1647x.html">Evaluating the ADIS1647X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1650x.html">Evaluating the ADIS1650X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1654x.html">Evaluating the ADIS1654X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1655x.html">Evaluating the ADIS1655X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1657x.html">Evaluating the ADIS1657X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-ade9430.html">EVAL-ADE9430 Sensor-to-Cloud</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adrv902x.html">adrv902x no-OS Sample Poject</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/apard32690.html">Evaluating the AD-APARD32690-SL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max14914.html">Evaluating the MAX14914</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max14919.html">Evaluating the MAX14919</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adp1050.html">Evaluating the ADP1050</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc4296.html">Evaluating the LTC4296</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max2201x.html">Evaluating the MAX2201X</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to no-OS</a></li>
+</ul>
+</body>
+</html>
+
+</div>
+        </div>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body" role="main">
+            
+  <section id="adrv902x-madura-no-os-driver">
+<h1>ADRV902x (Madura) no-OS Driver<a class="headerlink" href="#adrv902x-madura-no-os-driver" title="Link to this heading">¶</a></h1>
+<section id="supported-devices">
+<h2>Supported Devices<a class="headerlink" href="#supported-devices" title="Link to this heading">¶</a></h2>
+<p><a class="reference external" href="https://www.analog.com/ADRV9026">ADRV9026</a></p>
+<p><a class="reference external" href="https://www.analog.com/ADRV9029">ADRV9029</a></p>
+</section>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
+<p>As demand for data increases globally, telecom infrastructure manufacturers are challenged by shorter time to market, increased antenna count, ever-growing cost pressure, and proliferation in variants of form factors, frequency bands, output power, and software. The <a class="reference external" href="https://www.analog.com/ADRV9026">ADRV9026</a>, <a class="reference external" href="https://www.analog.com/en/index.html">ADI</a>’s 4th generation wideband RF transceiver, delivers quad-channel integration with the lowest power, smallest size, common platform solution available to simplify design and reduce system power, size, weight, and costs for 3G/4G/5G applications, including multi-standard base stations, massive MIMO, and small cells.</p>
+<p>The <a class="reference external" href="https://www.analog.com/ADRV9026">ADRV9026</a> is a highly integrated, radio frequency (RF) agile transceiver offering four independently controlled transmitters, dedicated observation receiver inputs for monitoring each transmitter channel, four independently controlled receivers, integrated synthesizers, and digital signal processing functions providing a complete transceiver solution. The device provides the performance demanded by cellular infrastructure applications, such as small cell base station radios, macro 3G/4G/5G systems, and massive multiple in/multiple out (MIMO) base stations.</p>
+<p>The <a class="reference external" href="https://www.analog.com/ADRV9029">ADRV9029</a> is a highly integrated, radio frequency (RF) agile transceiver offering four independently controlled transmitters, dedicated observation receiver inputs for monitoring each transmitter channel, four independently controlled receivers, integrated synthesizers, and digital signal processing functions providing a complete transceiver solution. The device provides the performance demanded by cellular infrastructure applications, such as small cell base station radios, macro 3G/4G/5G systems, and massive multiple in/multiple out (MIMO) base stations.</p>
+</section>
+<section id="applications">
+<h2>Applications<a class="headerlink" href="#applications" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Macro base stations</p></li>
+<li><p>Massive MIMO</p></li>
+<li><p>Small cells</p></li>
+</ul>
+</section>
+<section id="markets-and-technologies">
+<h2>Markets and Technologies<a class="headerlink" href="#markets-and-technologies" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Aerospace and Defense</p></li>
+<li><p>Communications</p></li>
+</ul>
+</section>
+<section id="driver-structure">
+<h2>Driver Structure<a class="headerlink" href="#driver-structure" title="Link to this heading">¶</a></h2>
+<p>Note that ADRV9025 is the generic transceiver reference number for the <a class="reference external" href="https://www.analog.com/en/applications/technology/sdr-radioverse-pavilion-home/wideband-transceivers/adrv9026-wideband-transceiver.html">ADRV902x</a> family; all API functions use the ADRV9025 number to delineate the product from other transceiver products. With
+respect to this user guide, ADRV9025 is interchangeable with <a class="reference external" href="https://www.analog.com/ADRV9026">ADRV9026</a> and <a class="reference external" href="https://www.analog.com/ADRV9029">ADRV9029</a>.</p>
+<div class="line-block">
+<div class="line">no-OS/drivers/rf-transceiver/madura/</div>
+<div class="line">├── adrv9025.c</div>
+<div class="line">├── adrv9025_conv.c</div>
+<div class="line">├── adrv9025.c.orig</div>
+<div class="line">├── adrv9025.h</div>
+<div class="line">├── common</div>
+<div class="line">│   ├── adi_common.h</div>
+<div class="line">│   ├── adi_common_macros.h</div>
+<div class="line">│   ├── adi_common_types.h</div>
+<div class="line">│   ├── adi_common_user.h</div>
+<div class="line">│   ├── adi_error</div>
+<div class="line">│   │   ├── adi_common_error.c</div>
+<div class="line">│   │   ├── adi_common_error.h</div>
+<div class="line">│   │   └── adi_common_error_types.h</div>
+<div class="line">│   ├── adi_hal</div>
+<div class="line">│   │   ├── adi_common_hal.c</div>
+<div class="line">│   │   ├── adi_common_hal.h</div>
+<div class="line">│   │   └── adi_common_hal_types.h</div>
+<div class="line">│   └── adi_logging</div>
+<div class="line">│       ├── adi_common_log.c</div>
+<div class="line">│       ├── adi_common_log.h</div>
+<div class="line">│       └── adi_common_log_types.h</div>
+<div class="line">├── devices</div>
+<div class="line">│   └── adrv9025</div>
+<div class="line">│       ├── private</div>
+<div class="line">│       │   ├── include</div>
+<div class="line">│       │   └── src</div>
+<div class="line">│       └── public</div>
+<div class="line">│           ├── include</div>
+<div class="line">│           └── src</div>
+<div class="line">├── platforms</div>
+<div class="line">│   ├── adi_platform.h</div>
+<div class="line">│   └── adi_platform_types.h</div>
+<div class="line">└── README.rst</div>
+</div>
+<p>The <em>common</em> folder contains the API code for the ADI HAL, for logging, and for error handling. The user modificable defines can be placed in the <em>adi_common_user.h</em> file.</p>
+<p>The <em>devices</em> folder includes the main API code for the transceiver. The <em>/adrv9025</em> folder contains the high
+level function prototypes, data types, macros, and source code to build the final user software system.
+The user is strictly forbidden to modify the files contained in this folder. Note that software support cannot be provided if these files have been modified.
+Analog Devices maintains this code.
+The only exception is that the developer may modify user-selectable <em>#define macros</em>, such as <em>ADI_ADRV9025_VERBOSE</em> mode to enable or disable API logging, and
+user configurable macros defined in <em>/adrv9025/public/include/adi_adrv9025_user.h</em>.</p>
+<p>The <em>platforms</em> folder provides the means for a developer to insert custom platform hardware driver code for
+system integration with the API. The files here contain the required prototypes necessary for the API
+to work correctly. The developer is responsible for implementing the code for each function with the prototype declared in <em>adi_platform.h</em> and <em>adi_platform_types.h</em> in the application layer.
+The correct hardware drivers must be called for the platform hardware of the user.</p>
+</section>
+<section id="adrv902x-device-configuration">
+<h2>ADRV902x Device Configuration<a class="headerlink" href="#adrv902x-device-configuration" title="Link to this heading">¶</a></h2>
+</section>
+<section id="driver-initialization">
+<h2>Driver Initialization<a class="headerlink" href="#driver-initialization" title="Link to this heading">¶</a></h2>
+<p>In order to be able to use the device, you will have to provide the support for
+the SPI communication protocol.</p>
+<p>The SPI settings must be provided as follows:</p>
+<div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="cm">/* SPI settings */</span>
+<span class="k">static</span><span class="w"> </span><span class="n">adi_adrv9025_SpiSettings_t</span><span class="w"> </span><span class="n">spiSettings</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="p">.</span><span class="n">msbFirst</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">        </span><span class="p">.</span><span class="n">enSpiStreaming</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">        </span><span class="p">.</span><span class="n">autoIncAddrUp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">        </span><span class="p">.</span><span class="n">fourWireMode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">        </span><span class="p">.</span><span class="n">cmosPadDrvStrength</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ADI_ADRV9025_CMOSPAD_DRV_STRONG</span><span class="p">,</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>The following function will then be used by the driver for obtaining the SPI settings in the initialization phase:</p>
+<div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="n">adi_adrv9025_SpiSettings_t</span><span class="w"> </span><span class="o">*</span><span class="nf">adrv9025_spi_settings_get</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="o">&amp;</span><span class="n">spiSettings</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Before calling the <em>adrv9025_init</em> function, the initialization parameter structure must be populated with the expected values. An example is given below:</p>
+<div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="n">adrv9025_init_par</span><span class="p">.</span><span class="n">adrv9025_device</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">adrv9025_device</span><span class="p">;</span>
+<span class="n">adrv9025_init_par</span><span class="p">.</span><span class="n">dev_clk</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ad9528_device</span><span class="o">-&gt;</span><span class="n">clk_desc</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+<span class="n">adrv9025_init_par</span><span class="p">.</span><span class="n">streamImageFile</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ADRV9025_STREAM_IMAGE_FILE</span><span class="p">;</span>
+</pre></div>
+</div>
+<p><em>adrv9025_device</em> is an <em>adi_adrv9025_Device</em> structure initialized with zeros, <em>ad9528_device-&gt;clk_desc[1]</em> is the device clock (here, channel 1 of the AD9528 chip), while <em>ADRV9025_STREAM_IMAGE_FILE</em> is the name of the stream image generated for the embedded ARM processor core in the ADRV902x family devices (defined in <em>app_config.h</em>).</p>
+<p>Make sure that <em>adrv9025_init</em> returns 0, which means that the driver was initialized correctly.</p>
+<p>The following sequence of instructions is then required for initializing the AXI ADC and AXI DAC cores, before calling <em>adrv9025_post_setup</em>:</p>
+<div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">axi_dac_init_begin</span><span class="p">(</span><span class="o">&amp;</span><span class="n">adrv9025_phy</span><span class="o">-&gt;</span><span class="n">tx_dac</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">tx_dac_init</span><span class="p">);</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">status</span><span class="p">)</span>
+<span class="w">        </span><span class="k">goto</span><span class="w"> </span><span class="n">error_6</span><span class="p">;</span>
+<span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">axi_adc_init_begin</span><span class="p">(</span><span class="o">&amp;</span><span class="n">adrv9025_phy</span><span class="o">-&gt;</span><span class="n">rx_adc</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">rx_adc_init</span><span class="p">);</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">status</span><span class="p">)</span>
+<span class="w">        </span><span class="k">goto</span><span class="w"> </span><span class="n">error_7</span><span class="p">;</span>
+
+<span class="c1">// Reset Tx DAC</span>
+<span class="n">axi_adc_write</span><span class="p">(</span><span class="n">adrv9025_phy</span><span class="o">-&gt;</span><span class="n">rx_adc</span><span class="p">,</span><span class="w"> </span><span class="mh">0x4040</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="n">axi_adc_write</span><span class="p">(</span><span class="n">adrv9025_phy</span><span class="o">-&gt;</span><span class="n">rx_adc</span><span class="p">,</span><span class="w"> </span><span class="mh">0x4040</span><span class="p">,</span>
+<span class="w">              </span><span class="n">NO_OS_BIT</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">NO_OS_BIT</span><span class="p">(</span><span class="mi">0</span><span class="p">));</span>
+
+<span class="c1">// Reset Rx ADC</span>
+<span class="n">axi_adc_write</span><span class="p">(</span><span class="n">adrv9025_phy</span><span class="o">-&gt;</span><span class="n">rx_adc</span><span class="p">,</span><span class="w"> </span><span class="n">AXI_ADC_REG_RSTN</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="n">axi_adc_write</span><span class="p">(</span><span class="n">adrv9025_phy</span><span class="o">-&gt;</span><span class="n">rx_adc</span><span class="p">,</span><span class="w"> </span><span class="n">AXI_ADC_REG_RSTN</span><span class="p">,</span>
+<span class="w">              </span><span class="n">AXI_ADC_MMCM_RSTN</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">AXI_ADC_RSTN</span><span class="p">);</span>
+
+<span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">adrv9025_post_setup</span><span class="p">(</span><span class="n">adrv9025_phy</span><span class="p">);</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">status</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">pr_err</span><span class="p">(</span><span class="s">&quot;error: adrv9025_post_setup() failed</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="k">goto</span><span class="w"> </span><span class="n">error_8</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Link to this heading">¶</a></h2>
+<p>All configurations are handled by the functions in the <em>adrv9025.c</em> and <em>adrv9025_conv.c</em> files.
+More information regarding the system operation and setup can be found in the <a class="reference external" href="https://www.analog.com/media/radioverse-adrv9026/adrv9026-system-development-user-guide-ug-1727.pdf">ADRV9026/ADRV9029 System Development User Guide</a>.</p>
+</section>
+<section id="adrv9025-driver-initialization-example">
+<h2>ADRV9025 Driver Initialization Example<a class="headerlink" href="#adrv9025-driver-initialization-example" title="Link to this heading">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>/*<span class="w"> </span>SPI<span class="w"> </span>settings<span class="w"> </span>*/
+static<span class="w"> </span>adi_adrv9025_SpiSettings_t<span class="w"> </span><span class="nv">spiSettings</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>.msbFirst<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span>,
+<span class="w">        </span>.enSpiStreaming<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span>,
+<span class="w">        </span>.autoIncAddrUp<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span>,
+<span class="w">        </span>.fourWireMode<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span>,
+<span class="w">        </span>.cmosPadDrvStrength<span class="w"> </span><span class="o">=</span><span class="w"> </span>ADI_ADRV9025_CMOSPAD_DRV_STRONG,
+<span class="o">}</span><span class="p">;</span>
+
+/***************************************************************************//**
+*<span class="w"> </span>@brief<span class="w"> </span>Function<span class="w"> </span><span class="k">for</span><span class="w"> </span>obtaining<span class="w"> </span>SPI<span class="w"> </span>settings.
+*
+*<span class="w"> </span>@return<span class="w"> </span>SPI<span class="w"> </span>settings
+*******************************************************************************/
+adi_adrv9025_SpiSettings_t<span class="w"> </span>*adrv9025_spi_settings_get<span class="o">(</span>void<span class="o">)</span>
+<span class="o">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="p">&amp;</span>spiSettings<span class="p">;</span>
+<span class="o">}</span>
+
+...
+
+struct<span class="w"> </span>adrv9025_init_param<span class="w"> </span><span class="nv">adrv9025_init_par</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">}</span><span class="p">;</span>
+struct<span class="w"> </span>adi_adrv9025_Device<span class="w"> </span><span class="nv">adrv9025_device</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">}</span><span class="p">;</span>
+struct<span class="w"> </span>adrv9025_rf_phy<span class="w"> </span>*phy<span class="p">;</span>
+int<span class="w"> </span>status<span class="p">;</span>
+
+struct<span class="w"> </span>axi_adc_init<span class="w"> </span><span class="nv">rx_adc_init</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>.name<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;rx_adc&quot;</span>,
+<span class="w">        </span>.base<span class="w"> </span><span class="o">=</span><span class="w"> </span>RX_CORE_BASEADDR,
+<span class="w">        </span>.num_channels<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">8</span>
+<span class="o">}</span><span class="p">;</span>
+struct<span class="w"> </span>axi_dac_init<span class="w"> </span><span class="nv">tx_dac_init</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>.name<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;tx_dac&quot;</span>,
+<span class="w">        </span>.base<span class="w"> </span><span class="o">=</span><span class="w"> </span>TX_CORE_BASEADDR,
+<span class="w">        </span>.channels<span class="w"> </span><span class="o">=</span><span class="w"> </span>NULL,
+<span class="w">        </span>.rate<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">3</span>,
+<span class="w">        </span>.num_channels<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">8</span>
+<span class="o">}</span><span class="p">;</span>
+
+...
+
+adrv9025_init_par.adrv9025_device<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>adrv9025_device<span class="p">;</span>
+adrv9025_init_par.dev_clk<span class="w"> </span><span class="o">=</span><span class="w"> </span>ad9528_device-&gt;clk_desc<span class="o">[</span><span class="m">1</span><span class="o">]</span><span class="p">;</span>
+adrv9025_init_par.streamImageFile<span class="w"> </span><span class="o">=</span><span class="w"> </span>ADRV9025_STREAM_IMAGE_FILE<span class="p">;</span>
+
+<span class="nv">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>adrv9025_init<span class="o">(</span><span class="p">&amp;</span>phy,<span class="w"> </span><span class="p">&amp;</span>adrv9025_init_par<span class="o">)</span><span class="p">;</span>
+<span class="k">if</span><span class="w"> </span><span class="o">(</span>status<span class="o">)</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>pr_err<span class="o">(</span><span class="s2">&quot;error: adrv9025_init() failed\n&quot;</span><span class="o">)</span><span class="p">;</span>
+<span class="w">        </span>goto<span class="w"> </span>error_5<span class="p">;</span>
+<span class="o">}</span>
+
+<span class="nv">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>axi_dac_init_begin<span class="o">(</span><span class="p">&amp;</span>phy-&gt;tx_dac,<span class="w"> </span><span class="p">&amp;</span>tx_dac_init<span class="o">)</span><span class="p">;</span>
+<span class="k">if</span><span class="w"> </span><span class="o">(</span>status<span class="o">)</span>
+<span class="w">        </span>goto<span class="w"> </span>error_6<span class="p">;</span>
+<span class="nv">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>axi_adc_init_begin<span class="o">(</span><span class="p">&amp;</span>phy-&gt;rx_adc,<span class="w"> </span><span class="p">&amp;</span>rx_adc_init<span class="o">)</span><span class="p">;</span>
+<span class="k">if</span><span class="w"> </span><span class="o">(</span>status<span class="o">)</span>
+<span class="w">        </span>goto<span class="w"> </span>error_7<span class="p">;</span>
+
+//<span class="w"> </span>Reset<span class="w"> </span>Tx<span class="w"> </span>DAC
+axi_adc_write<span class="o">(</span>phy-&gt;rx_adc,<span class="w"> </span>0x4040,<span class="w"> </span><span class="m">0</span><span class="o">)</span><span class="p">;</span>
+axi_adc_write<span class="o">(</span>phy-&gt;rx_adc,<span class="w"> </span>0x4040,
+<span class="w">              </span>NO_OS_BIT<span class="o">(</span><span class="m">1</span><span class="o">)</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>NO_OS_BIT<span class="o">(</span><span class="m">0</span><span class="o">))</span><span class="p">;</span>
+
+//<span class="w"> </span>Reset<span class="w"> </span>Rx<span class="w"> </span>ADC
+axi_adc_write<span class="o">(</span>phy-&gt;rx_adc,<span class="w"> </span>AXI_ADC_REG_RSTN,<span class="w"> </span><span class="m">0</span><span class="o">)</span><span class="p">;</span>
+axi_adc_write<span class="o">(</span>phy-&gt;rx_adc,<span class="w"> </span>AXI_ADC_REG_RSTN,
+<span class="w">              </span>AXI_ADC_MMCM_RSTN<span class="w"> </span><span class="p">|</span><span class="w"> </span>AXI_ADC_RSTN<span class="o">)</span><span class="p">;</span>
+
+<span class="nv">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>adrv9025_post_setup<span class="o">(</span>phy<span class="o">)</span><span class="p">;</span>
+<span class="k">if</span><span class="w"> </span><span class="o">(</span>status<span class="o">)</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>pr_err<span class="o">(</span><span class="s2">&quot;error: adrv9025_post_setup() failed\n&quot;</span><span class="o">)</span><span class="p">;</span>
+<span class="w">        </span>goto<span class="w"> </span>error_8<span class="p">;</span>
+<span class="o">}</span>
+
+<span class="nv">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>axi_dmac_init<span class="o">(</span><span class="p">&amp;</span>tx_dmac,<span class="w"> </span><span class="p">&amp;</span>tx_dmac_init<span class="o">)</span><span class="p">;</span>
+<span class="k">if</span><span class="w"> </span><span class="o">(</span>status<span class="o">)</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>printf<span class="o">(</span><span class="s2">&quot;axi_dmac_init tx init error: %d\n&quot;</span>,<span class="w"> </span>status<span class="o">)</span><span class="p">;</span>
+<span class="w">        </span>goto<span class="w"> </span>error_8<span class="p">;</span>
+<span class="o">}</span>
+<span class="nv">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>axi_dmac_init<span class="o">(</span><span class="p">&amp;</span>rx_dmac,<span class="w"> </span><span class="p">&amp;</span>rx_dmac_init<span class="o">)</span><span class="p">;</span>
+<span class="k">if</span><span class="w"> </span><span class="o">(</span>status<span class="o">)</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>printf<span class="o">(</span><span class="s2">&quot;axi_dmac_init rx init error: %d\n&quot;</span>,<span class="w"> </span>status<span class="o">)</span><span class="p">;</span>
+<span class="w">        </span>goto<span class="w"> </span>error_9<span class="p">;</span>
+<span class="o">}</span>
+
+...
+</pre></div>
+</div>
+</section>
+<section id="adrv9025-no-os-iio-support">
+<h2>ADRV9025 no-OS IIO support<a class="headerlink" href="#adrv9025-no-os-iio-support" title="Link to this heading">¶</a></h2>
+<p>The ADRV9025 suppord is based on the AXI DAC and AXI ADC IIO drivers.</p>
+</section>
+<section id="adrv9025-iio-device-configuration">
+<h2>ADRV9025 IIO Device Configuration<a class="headerlink" href="#adrv9025-iio-device-configuration" title="Link to this heading">¶</a></h2>
+</section>
+<section id="device-attributes">
+<h2>Device Attributes<a class="headerlink" href="#device-attributes" title="Link to this heading">¶</a></h2>
+<p>The ADRV9025 IIO device does not have any device specific attributes.</p>
+</section>
+<section id="device-channels">
+<h2>Device Channels<a class="headerlink" href="#device-channels" title="Link to this heading">¶</a></h2>
+<p>The ADRV9025 IIO device has 4 output voltage channels and 4 input voltage channels.</p>
+</section>
+<section id="adrv9025-iio-driver-initialization-example">
+<h2>ADRV9025 IIO Driver Initialization Example<a class="headerlink" href="#adrv9025-iio-driver-initialization-example" title="Link to this heading">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1">#define DAC_BUFFER_SAMPLES 8192</span>
+<span class="c1">#define ADC_BUFFER_SAMPLES              16384</span>
+<span class="c1">#define ADC_CHANNELS                    4</span>
+uint32_t<span class="w"> </span>dac_buffer<span class="o">[</span>DAC_BUFFER_SAMPLES<span class="o">]</span><span class="w"> </span>__attribute__<span class="w"> </span><span class="o">((</span>aligned<span class="o">))</span><span class="p">;</span>
+uint16_t<span class="w"> </span>adc_buffer<span class="o">[</span>ADC_BUFFER_SAMPLES<span class="w"> </span>*<span class="w"> </span>ADC_CHANNELS<span class="o">]</span><span class="w"> </span>__attribute__<span class="w"> </span><span class="o">((</span>
+<span class="w">                </span>aligned<span class="o">))</span><span class="p">;</span>
+
+/**
+<span class="w"> </span>*<span class="w"> </span>IIO<span class="w"> </span>application<span class="w"> </span>descriptor
+<span class="w"> </span>*/
+struct<span class="w"> </span>iio_app_desc<span class="w"> </span>*app<span class="p">;</span>
+
+/**
+<span class="w"> </span>*<span class="w"> </span>IIO<span class="w"> </span>application<span class="w"> </span>initialization<span class="w"> </span>parameters
+<span class="w"> </span>*/
+struct<span class="w"> </span>iio_app_init_param<span class="w"> </span><span class="nv">app_init_param</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">}</span><span class="p">;</span>
+
+/**
+<span class="w"> </span>*<span class="w"> </span>iio<span class="w"> </span>axi<span class="w"> </span>adc<span class="w"> </span>configurations.
+<span class="w"> </span>*/
+struct<span class="w"> </span>iio_axi_adc_init_param<span class="w"> </span>iio_axi_adc_init_par<span class="p">;</span>
+
+/**
+<span class="w"> </span>*<span class="w"> </span>iio<span class="w"> </span>axi<span class="w"> </span>dac<span class="w"> </span>configurations.
+<span class="w"> </span>*/
+struct<span class="w"> </span>iio_axi_dac_init_param<span class="w"> </span>iio_axi_dac_init_par<span class="p">;</span>
+
+/**
+<span class="w"> </span>*<span class="w"> </span>iio<span class="w"> </span>instance<span class="w"> </span>descriptor.
+<span class="w"> </span>*/
+struct<span class="w"> </span>iio_axi_adc_desc<span class="w"> </span>*iio_axi_adc_desc<span class="p">;</span>
+
+/**
+<span class="w"> </span>*<span class="w"> </span>iio<span class="w"> </span>instance<span class="w"> </span>descriptor.
+<span class="w"> </span>*/
+struct<span class="w"> </span>iio_axi_dac_desc<span class="w"> </span>*iio_axi_dac_desc<span class="p">;</span>
+
+/**
+<span class="w"> </span>*<span class="w"> </span>iio<span class="w"> </span>device<span class="w"> </span>instance<span class="w"> </span>descriptor.
+<span class="w"> </span>*/
+struct<span class="w"> </span>iio_device<span class="w"> </span>*adc_dev_desc,<span class="w"> </span>*dac_dev_desc<span class="p">;</span>
+
+<span class="nv">iio_axi_adc_init_par</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">(</span>struct<span class="w"> </span>iio_axi_adc_init_param<span class="o">)</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>.rx_adc<span class="w"> </span><span class="o">=</span><span class="w"> </span>phy-&gt;rx_adc,
+<span class="w">        </span>.rx_dmac<span class="w"> </span><span class="o">=</span><span class="w"> </span>rx_dmac,
+<span class="w">        </span>.dcache_invalidate_range<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">(</span>void<span class="w"> </span><span class="o">(</span>*<span class="o">)(</span>uint32_t,
+<span class="w">                                             </span>uint32_t<span class="o">))</span>Xil_DCacheInvalidateRange,
+<span class="o">}</span><span class="p">;</span>
+
+<span class="nv">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>iio_axi_adc_init<span class="o">(</span><span class="p">&amp;</span>iio_axi_adc_desc,<span class="w"> </span><span class="p">&amp;</span>iio_axi_adc_init_par<span class="o">)</span><span class="p">;</span>
+<span class="k">if</span><span class="o">(</span>status<span class="w"> </span>&lt;<span class="w"> </span><span class="m">0</span><span class="o">)</span>
+<span class="w">        </span>goto<span class="w"> </span>error_10<span class="p">;</span>
+
+struct<span class="w"> </span>iio_data_buffer<span class="w"> </span><span class="nv">read_buff</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>.buff<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">(</span>void<span class="w"> </span>*<span class="o">)</span>adc_buffer,
+<span class="w">        </span>.size<span class="w"> </span><span class="o">=</span><span class="w"> </span>sizeof<span class="o">(</span>adc_buffer<span class="o">)</span>,
+<span class="o">}</span><span class="p">;</span>
+iio_axi_adc_get_dev_descriptor<span class="o">(</span>iio_axi_adc_desc,<span class="w"> </span><span class="p">&amp;</span>adc_dev_desc<span class="o">)</span><span class="p">;</span>
+
+<span class="nv">iio_axi_dac_init_par</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">(</span>struct<span class="w"> </span>iio_axi_dac_init_param<span class="o">)</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>.tx_dac<span class="w"> </span><span class="o">=</span><span class="w"> </span>phy-&gt;tx_dac,
+<span class="w">        </span>.tx_dmac<span class="w"> </span><span class="o">=</span><span class="w"> </span>tx_dmac,
+<span class="w">        </span>.dcache_flush_range<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">(</span>void<span class="w"> </span><span class="o">(</span>*<span class="o">)(</span>uint32_t,<span class="w"> </span>uint32_t<span class="o">))</span>Xil_DCacheFlushRange,
+<span class="o">}</span><span class="p">;</span>
+
+<span class="nv">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>iio_axi_dac_init<span class="o">(</span><span class="p">&amp;</span>iio_axi_dac_desc,<span class="w"> </span><span class="p">&amp;</span>iio_axi_dac_init_par<span class="o">)</span><span class="p">;</span>
+<span class="k">if</span><span class="o">(</span>status<span class="w"> </span>&lt;<span class="w"> </span><span class="m">0</span><span class="o">)</span>
+<span class="w">        </span>goto<span class="w"> </span>error_11<span class="p">;</span>
+struct<span class="w"> </span>iio_data_buffer<span class="w"> </span><span class="nv">write_buff</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>.buff<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">(</span>void<span class="w"> </span>*<span class="o">)</span>dac_buffer,
+<span class="w">        </span>.size<span class="w"> </span><span class="o">=</span><span class="w"> </span>sizeof<span class="o">(</span>dac_buffer<span class="o">)</span>,
+<span class="o">}</span><span class="p">;</span>
+iio_axi_dac_get_dev_descriptor<span class="o">(</span>iio_axi_dac_desc,<span class="w"> </span><span class="p">&amp;</span>dac_dev_desc<span class="o">)</span><span class="p">;</span>
+struct<span class="w"> </span>iio_app_device<span class="w"> </span>devices<span class="o">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>IIO_APP_DEVICE<span class="o">(</span><span class="s2">&quot;cf-adrv9025-lpc&quot;</span>,<span class="w"> </span>iio_axi_adc_desc,<span class="w"> </span>adc_dev_desc,<span class="w"> </span><span class="p">&amp;</span>read_buff,<span class="w"> </span>NULL,<span class="w"> </span>NULL<span class="o">)</span>,
+<span class="w">        </span>IIO_APP_DEVICE<span class="o">(</span><span class="s2">&quot;cf-adrv9025-dds-core-lpc&quot;</span>,<span class="w"> </span>iio_axi_dac_desc,<span class="w"> </span>dac_dev_desc,<span class="w"> </span>NULL,<span class="w"> </span><span class="p">&amp;</span>write_buff,<span class="w"> </span>NULL<span class="o">)</span>
+<span class="o">}</span><span class="p">;</span>
+
+app_init_param.devices<span class="w"> </span><span class="o">=</span><span class="w"> </span>devices<span class="p">;</span>
+app_init_param.nb_devices<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_ARRAY_SIZE<span class="o">(</span>devices<span class="o">)</span><span class="p">;</span>
+app_init_param.uart_init_params<span class="w"> </span><span class="o">=</span><span class="w"> </span>iio_uart_ip<span class="p">;</span>
+
+<span class="nv">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>iio_app_init<span class="o">(</span><span class="p">&amp;</span>app,<span class="w"> </span>app_init_param<span class="o">)</span><span class="p">;</span>
+<span class="k">if</span><span class="w"> </span><span class="o">(</span>status<span class="o">)</span>
+<span class="w">        </span>goto<span class="w"> </span>error_12<span class="p">;</span>
+
+<span class="k">return</span><span class="w"> </span>iio_app_run<span class="o">(</span>app<span class="o">)</span><span class="p">;</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+          </div>
+              <div class="related">
+                &nbsp;
+    <a href="imu.html" title="Previous document (Ctrl+LeftArrow)" class="prev">ADIS no-OS driver</a>
+    <a href="adp1050.html" title="Next document (Ctrl+RightArrow)" class="next">ADP1050 no-OS driver</a>
+              </div>
+          
+        </div>
+      </div>
+  </div>
+
+  <div id="vertical-border"></div>
+
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
+    <footer>
+      &#169;2023-2024, Analog Devices, Inc.
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
+</html>

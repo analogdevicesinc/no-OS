@@ -1,0 +1,12 @@
+<map id="projects/dc2903a/src/common/common_data.c" name="projects/dc2903a/src/common/common_data.c">
+<area shape="rect" id="node1" title="Defines common data to be used by DC2903A examples." alt="" coords="56,5,247,47"/>
+<area shape="rect" id="node2" href="$dc2903a_2src_2common_2common__data_8h.html" title="Defines common data to be used by DC2903A examples." alt="" coords="88,95,215,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,169,156,196"/>
+<area shape="rect" id="node4" href="$ltc2672_8h.html" title="Header file of ltc2672 Driver." alt="" coords="181,169,263,196"/>
+<area shape="rect" id="node5" title=" " alt="" coords="91,319,161,345"/>
+<area shape="rect" id="node6" title=" " alt="" coords="66,244,149,271"/>
+<area shape="rect" id="node7" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="173,244,271,271"/>
+<area shape="rect" id="node8" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="295,244,405,271"/>
+<area shape="rect" id="node10" href="$no__os__units_8h.html" title="Header file of Units." alt="" coords="429,244,540,271"/>
+<area shape="rect" id="node9" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="316,319,384,345"/>
+</map>

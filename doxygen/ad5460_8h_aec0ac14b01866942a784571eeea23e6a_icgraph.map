@@ -1,0 +1,6 @@
+<map id="ad5460_dac_voltage_to_code" name="ad5460_dac_voltage_to_code">
+<area shape="rect" id="node1" title="Converts a millivolt value in the corresponding DAC 16 bit code." alt="" coords="383,23,539,65"/>
+<area shape="rect" id="node2" href="$channel__output__example_8h.html#ae839d5b557e7413ee71a7d30f7b5f8fa" title="Channel output example main execution." alt="" coords="108,5,335,32"/>
+<area shape="rect" id="node4" href="$voltage__output__example_8h.html#af594133c13e2cf78c6d9d72028181857" title="Voltage output example main execution." alt="" coords="109,56,333,83"/>
+<area shape="rect" id="node3" href="$ad5460_2src_2platform_2mbed_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function for Mbed platform." alt="" coords="5,31,60,57"/>
+</map>

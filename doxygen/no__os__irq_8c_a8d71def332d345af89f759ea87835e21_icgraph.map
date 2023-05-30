@@ -1,0 +1,9 @@
+<map id="no_os_irq_ctrl_remove" name="no_os_irq_ctrl_remove">
+<area shape="rect" id="node1" title="Free the resources allocated by no_os_irq_ctrl_init()." alt="" coords="453,107,623,133"/>
+<area shape="rect" id="node2" href="$eval-adis1646x_2src_2examples_2iio__trigger__example_2iio__trigger__example_8c.html#aa6785eab0c37adc61db331ebebdc40ee" title="IIO trigger example main execution." alt="" coords="213,5,405,32"/>
+<area shape="rect" id="node3" href="$demo__esp_2src_2examples_2basic_2basic__example_8c.html#adf61ab6fc732b20dc9f8a4be75985c1a" title=" " alt="" coords="228,56,391,83"/>
+<area shape="rect" id="node5" href="$aducm3029__flash__demo_2src_2main_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title="main" alt="" coords="282,107,337,133"/>
+<area shape="rect" id="node6" href="$stm32__dma_8c.html#a9a2bedfbb3463411630b83a164f4e782" title="Free the resources allocated for a DMA descriptor." alt="" coords="231,157,387,184"/>
+<area shape="rect" id="node7" href="$stm32__pwm_8c.html#a5ff7d5e9da25abfc072d54a07144b3f5" title="Free the resources allocated by stm32_pwm_init()" alt="" coords="230,208,389,235"/>
+<area shape="rect" id="node4" href="$demo__esp_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="5,56,165,83"/>
+</map>

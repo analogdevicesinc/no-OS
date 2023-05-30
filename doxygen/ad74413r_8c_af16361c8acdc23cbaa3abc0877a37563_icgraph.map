@@ -1,0 +1,7 @@
+<map id="ad74413r_get_adc_rejection" name="ad74413r_get_adc_rejection">
+<area shape="rect" id="node1" title="Get the rejection setting for a specific channel." alt="" coords="696,31,901,57"/>
+<area shape="rect" id="node2" href="$ad74413r_8h.html#a0f0b937846309275fff4a4325115d637" title="Get the ADC sample rate." alt="" coords="467,5,642,32"/>
+<area shape="rect" id="node3" href="$ad74413r_8h.html#ae5b5d0636b18c601de28dbdc25b909e6" title="Get a single ADC raw value for a specific channel, then power down the ADC." alt="" coords="461,56,648,83"/>
+<area shape="rect" id="node4" href="$ad74413r_8h.html#ac66c658f628c3af7046d3f9ebb71f586" title="Get the ADC real value, according to the operation mode." alt="" coords="229,56,413,83"/>
+<area shape="rect" id="node5" href="$ad74413r_2src_2examples_2dummy_2dummy__example_8c.html#aab59a6c65a45a3bcf47030189141a81c" title="Dummy example main execution." alt="" coords="5,56,181,83"/>
+</map>

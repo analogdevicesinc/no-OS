@@ -1,0 +1,22 @@
+<map id="no_os_pwm_remove" name="no_os_pwm_remove">
+<area shape="rect" id="node1" title="Free the resources allocated by no_os_pwm_init()." alt="" coords="807,259,963,285"/>
+<area shape="rect" id="node2" href="$ad400x_8h.html#a00696492ee30af5a4cadffde824262f0" title="Free the resources allocated by ad400x_init()." alt="" coords="622,81,749,108"/>
+<area shape="rect" id="node7" href="$ad463x_8h.html#a374808fb7455b4797fabf216071869cb" title="Free the memory allocated by ad463x_init()." alt="" coords="622,157,749,184"/>
+<area shape="rect" id="node9" href="$ad469x_8h.html#a3542558ed10a8d3820dbeea607a0e93c" title="Free the memory allocated by ad469x_init()." alt="" coords="622,208,749,235"/>
+<area shape="rect" id="node11" href="$ad7616_8h.html#a24c719144fe6a36190f82580daaf84aa" title=" " alt="" coords="622,259,749,285"/>
+<area shape="rect" id="node12" href="$ad796x_8h.html#abd440e98810ef648a03653bb6ba5046b" title="Remove the device and release resources." alt="" coords="622,309,749,336"/>
+<area shape="rect" id="node14" href="$adp1050_8h.html#a32c3b80439e7763db28ba844977aa755" title="Free the resources allocated by the adp1050_init()" alt="" coords="618,360,753,387"/>
+<area shape="rect" id="node20" href="$stm32__spi_8c.html#a47037db6bcb66e4a80008e659e38b577" title="Free the resources allocated by no_os_spi_init()." alt="" coords="612,411,759,437"/>
+<area shape="rect" id="node3" href="$iio__ad400x_8h.html#a79dd43b3b8a864f5a2b21aa0516851b6" title="Release resources." alt="" coords="409,5,559,32"/>
+<area shape="rect" id="node4" href="$ad400x_8h.html#aa687296d0489743858a3518864d8e46a" title=" " alt="" coords="435,56,533,83"/>
+<area shape="rect" id="node5" href="$max31855_2src_2examples_2basic_2basic__example_8h.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="196,81,356,108"/>
+<area shape="rect" id="node6" href="$ad400x-fmcz_2src_2platform_2stm32_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for STM32 platform." alt="" coords="49,81,104,108"/>
+<area shape="rect" id="node8" href="$ad463x__fmc_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="457,157,511,184"/>
+<area shape="rect" id="node10" href="$ad469x__fmcz_2src_2examples_2basic__example_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="404,208,564,235"/>
+<area shape="rect" id="node13" href="$ad796x__fmcz_2src_2examples_2basic__example_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="BASIC example main execution." alt="" coords="404,284,564,311"/>
+<area shape="rect" id="node15" href="$iio__adp1050_8h.html#a87f7c028317506b27121bc0282daf195" title="Free resources allocated by the init function." alt="" coords="197,335,355,361"/>
+<area shape="rect" id="node17" href="$adp1050_8h.html#a291859820787f9ea2f050cf385d5b188" title="Initialize the ADP1050 device." alt="" coords="431,385,537,412"/>
+<area shape="rect" id="node19" href="$adp1050_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="196,436,356,463"/>
+<area shape="rect" id="node16" href="$adp1050_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="5,360,148,387"/>
+<area shape="rect" id="node18" href="$iio__adp1050_8h.html#a561f78b3cec9e1a2749433eaf8c84013" title="Initializes the ADP1050 IIO descriptor." alt="" coords="211,385,341,412"/>
+</map>

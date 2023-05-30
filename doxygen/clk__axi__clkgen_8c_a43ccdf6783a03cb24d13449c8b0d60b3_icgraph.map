@@ -1,0 +1,15 @@
+<map id="axi_clkgen_calc_params" name="axi_clkgen_calc_params">
+<area shape="rect" id="node1" title="axi_clkgen_calc_params" alt="" coords="839,132,1020,159"/>
+<area shape="rect" id="node2" href="$clk__axi__clkgen_8h.html#ae7548d3825bf1f445bbdcd39983b96bf" title="axi_clkgen_set_rate" alt="" coords="639,132,791,159"/>
+<area shape="rect" id="node3" href="$ad400x_8h.html#aa687296d0489743858a3518864d8e46a" title=" " alt="" coords="423,5,521,32"/>
+<area shape="rect" id="node6" href="$ad469x_8h.html#afb4be83cfe5fae9af7ddf637bf2e82c3" title=" " alt="" coords="423,56,521,83"/>
+<area shape="rect" id="node8" href="$ad7616_8h.html#a28a5328adc3dd216fad7dbe17b37dfd8" title=" " alt="" coords="415,107,529,133"/>
+<area shape="rect" id="node10" href="$ad713x__fmc_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="445,157,499,184"/>
+<area shape="rect" id="node11" href="$cf__hdmi_8h.html#a3a7e63e57e99e2fea790462707ed6ae8" title="SetVideoResolution." alt="" coords="397,208,547,235"/>
+<area shape="rect" id="node12" href="$transmitter_8h.html#a8b3e85ee90b00b7bc69e6a9b8eaf8a88" title="Parse the new EDID segment." alt="" coords="353,259,591,285"/>
+<area shape="rect" id="node4" href="$max31855_2src_2examples_2basic_2basic__example_8h.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="127,5,287,32"/>
+<area shape="rect" id="node5" href="$ad400x-fmcz_2src_2platform_2stm32_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for STM32 platform." alt="" coords="5,5,60,32"/>
+<area shape="rect" id="node7" href="$ad469x__fmcz_2src_2examples_2basic__example_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="127,56,287,83"/>
+<area shape="rect" id="node9" href="$ad7616__sdz_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="179,107,234,133"/>
+<area shape="rect" id="node13" href="$transmitter_8h.html#ad65fcbe407bb46ad6698c3f1602144e5" title="Performs the notification operations." alt="" coords="108,259,305,285"/>
+</map>

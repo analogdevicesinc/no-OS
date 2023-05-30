@@ -1,0 +1,11 @@
+<map id="adf4106_dev" name="adf4106_dev">
+<area shape="rect" id="node1" title=" " alt="" coords="941,124,1048,151"/>
+<area shape="rect" id="node2" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="681,48,804,75"/>
+<area shape="rect" id="node3" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,17,184,44"/>
+<area shape="rect" id="node5" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="343,48,490,75"/>
+<area shape="rect" id="node4" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="342,99,491,141"/>
+<area shape="rect" id="node6" href="$structadf4106__settings__t.html" title="store the value of all the latch and the input reference frequency" alt="" coords="669,99,816,125"/>
+<area shape="rect" id="node7" href="$structadf4106__chip__info.html" title=" " alt="" coords="672,149,813,176"/>
+<area shape="rect" id="node8" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="677,236,809,263"/>
+<area shape="rect" id="node9" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="323,236,511,263"/>
+</map>

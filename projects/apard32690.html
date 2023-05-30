@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Evaluating the AD-APARD32690-SL &#8212; no-OS  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="../_static/style.min.css?v=a3ba2641" />
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script defer="" src="../_static/app.umd.js?v=7e1fdd13"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Evaluating the MAX14914" href="max14914.html" />
+    <link rel="prev" title="adrv902x no-OS Sample Poject" href="adrv902x.html" />
+   
+  
+    <meta name="robots" content="noindex">
+  
+  <meta name="repo" content="no-OS">
+  
+
+
+<style>
+  body {
+    
+  }
+
+  body.dark {
+    
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body:not(.light) {
+      
+    }
+  }
+</style>
+  </head><body>
+  <div class="banner"></div>
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
+  <input type="checkbox" id="input-show-repotoc">
+
+  
+  <div class="search-area">
+    <form action="" method="get">
+      <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+      <button value="search" class="icon"></button>
+      <span id="search-progress"></span>
+    </form>
+  </div>
+  
+
+  <header>
+    <div id="left">
+      <label id="show-sidebar" class="icon" for="input-show-toc" title="Show/hide index"></label>
+    </div>
+    <div id="right">
+      <span>
+        <a id="logo-org" href="https://analog.com"></a>
+        <div class="vertical-divider"></div>
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
+        <a id="logo" href="../index.html">
+          <div>no-OS</div>
+        </a>
+      </span>
+      <span class="reverse">
+        <label id="show-localtoc" class="icon" for="input-show-localtoc" title="Show/hide contents"></label>
+      </span>
+    </div>
+  </header>
+
+
+  <div class="repotoc-tree overlay">
+    <root>
+  <a href="../../documentation/eval/index.html">Evaluation Boards</a>
+  <a href="../../documentation/university/index.html">University Program</a>
+  <a href="../../hdl/index.html">HDL</a>
+  <a href="../index.html" class="current">no-OS</a>
+  <a href="../../pyadi-iio/index.html">Hardware Python Interfaces</a>
+  <a href="../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
+  <a href="../../doctools/index.html">Doctools</a>
+  <a href="../../PrecisionToolbox/index.html">Precision Toolbox</a>
+</root>
+
+  </div>
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div>
+          <div class="localtoc-header">On this page</div>
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">Evaluating the AD-APARD32690-SL</a><ul>
+<li><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li><a class="reference internal" href="#building-the-project">Building the project</a></li>
+<li><a class="reference internal" href="#programming-the-mcu">Programming the MCU</a></li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
+  
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+    <a id="no-logo" href="../index.html">
+      no-OS
+    </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
+All content
+</label>
+<label id="show-toc" for="input-switch-toc">
+Content on this topic
+</label>
+<div class="repotoc-tree">
+  <root>
+  <a href="../../documentation/eval/index.html">Evaluation Boards</a>
+  <a href="../../documentation/university/index.html">University Program</a>
+  <a href="../../hdl/index.html">HDL</a>
+  <a href="../index.html" class="current">no-OS</a>
+  <a href="../../pyadi-iio/index.html">Hardware Python Interfaces</a>
+  <a href="../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
+  <a href="../../doctools/index.html">Doctools</a>
+  <a href="../../PrecisionToolbox/index.html">Precision Toolbox</a>
+</root>
+
+</div>
+<div class="toc-tree">
+  <html>
+  <body><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../drivers_guide.html">no-OS drivers guide</a></li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1"/><div class="collapse"><a class="reference internal" href="../drivers_doc.html">no-OS drivers list</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adxl355.html">ADXL355 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adm1177.html">ADM1177 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ad405x.html">AD405X no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ad796x.html">AD796X no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ad400x.html">AD400X no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/axi_sysid.html">System ID (AXI_SYSID) no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max14914.html">MAX14914 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max14919.html">MAX14919 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max149x6.html">MAX149X6 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max22190.html">MAX22190 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max22196.html">MAX22196 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max22200.html">MAX22200 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max2201x.html">MAX2201X no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adf4382.html">ADF4382 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/imu.html">ADIS no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/madura.html">ADRV902x (Madura) no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adp1050.html">ADP1050 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ltc2992.html">LTC2992 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ltc4296.html">LTC4296 no-OS driver</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2" checked=""/><div class="collapse"><a class="reference internal" href="../projects_doc.html">no-OS projects list</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="ad7091r8-sdz.html">Evaluating AD7091R-2/-4/-8 Devices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad7616-st.html">Evaluating AD7616 on SDP-K1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad796x_fmcz.html">Evaluating the AD796x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad400x-fmcz.html">Evaluating AD400x on ZED and SDP-K1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad469x_fmcz.html">Evaluating the AD469x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4382.html">Evaluating the ADF4382</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval-adis1646x.html">Evaluating the ADIS1646X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval-adis1647x.html">Evaluating the ADIS1647X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval-adis1650x.html">Evaluating the ADIS1650X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval-adis1654x.html">Evaluating the ADIS1654X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval-adis1655x.html">Evaluating the ADIS1655X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval-adis1657x.html">Evaluating the ADIS1657X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval-ade9430.html">EVAL-ADE9430 Sensor-to-Cloud</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adrv902x.html">adrv902x no-OS Sample Poject</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Evaluating the AD-APARD32690-SL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max14914.html">Evaluating the MAX14914</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max14919.html">Evaluating the MAX14919</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adp1050.html">Evaluating the ADP1050</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc4296.html">Evaluating the LTC4296</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max2201x.html">Evaluating the MAX2201X</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to no-OS</a></li>
+</ul>
+</body>
+</html>
+
+</div>
+        </div>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body" role="main">
+            
+  <section id="evaluating-the-ad-apard32690-sl">
+<h1>Evaluating the AD-APARD32690-SL<a class="headerlink" href="#evaluating-the-ad-apard32690-sl" title="Link to this heading">¶</a></h1>
+<section id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading">¶</a></h2>
+<p>Prior to building the project, a couple steps are necessary in order to get the Maxim Micros SDK and setup the environment. These are presented in the <strong>*Build Prerequisites*</strong> section of no-OS build guide available here: <a class="reference external" href="https://wiki.analog.com/resources/no-os/build">https://wiki.analog.com/resources/no-os/build</a> .</p>
+<p>The MaximSDK provides distributions of <cite>arm-none-eabi-</cite> GCC compiler + utilities and <cite>OpenOCD</cite>, so you don’t have to install these separately.</p>
+</section>
+<section id="building-the-project">
+<h2>Building the project<a class="headerlink" href="#building-the-project" title="Link to this heading">¶</a></h2>
+<p>The project includes 2 different examples:</p>
+<p>1. basic_example - may be selected by setting the APARD32690_BASIC_EXAMPLE = y (and all the other examples to n) in the main Makefile.
+This example is meant to print “Hello world” over UART0. Make sure to have jumpers in the position 2-3 on headers P50 and P55.</p>
+<p>2. tcp_echo_server (selected by default) - may be selected by setting the APARD32690_ECHO_SERVER_EXAMPLE = y (and all the other examples to n) in the main Makefile.
+This will start a TCP server using the interface ADIN1110 is connected to (the default settings are IP: 192.168.97.40 port: 10000). It will reply back to the connected client with the
+characters it receives. The actual IP address, netmask, and gateway used at runtime are printed on the serial port connected through the debug adapter.</p>
+<p>The host running the client may require network settings in order to communicate with a device using the 192.168.97.40 IP. These usually include manually adding a static IP for the host’s network interface. You may go though the following guide on how to do this: <a class="reference external" href="https://wiki.analog.com/resources/no-os/misc_guides/static_ip_setting?rev=1715173602">https://wiki.analog.com/resources/no-os/misc_guides/static_ip_setting?rev=1715173602</a> (choose an IP in the 192.168.97.x/24 range that’s different from the board’s address).</p>
+<p>The project may be tested by using netcat on the host:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>netcat<span class="w"> </span><span class="m">192</span>.168.97.40<span class="w"> </span><span class="m">10000</span>
+</pre></div>
+</div>
+<ol class="arabic simple">
+<li><p>Open a terminal and navigate to this project directory (if building on Windows, <cite>Git Bash</cite> has to be used).</p></li>
+<li><p>Type <cite>make RELEASE=y -j</cite>, in order to build the project. The <cite>RELEASE</cite> flag adds <cite>-O2</cite> optimization. It should be omitted during debugging.</p></li>
+</ol>
+<p>A successful build should end with the following terminal output:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">[</span><span class="m">11</span>:11:27<span class="o">]</span><span class="w"> </span><span class="o">[</span>HEX<span class="o">]</span><span class="w"> </span>apard32690.hex
+<span class="o">[</span><span class="m">11</span>:11:27<span class="o">]</span><span class="w"> </span>apard32690.hex<span class="w"> </span>is<span class="w"> </span>ready
+rm<span class="w"> </span>/home/xvr/MaximSDK_new/Libraries/CMSIS/Device/Maxim/MAX32690/Source/GCC/startup_max32690.s
+<span class="o">[</span><span class="m">11</span>:11:21<span class="o">]</span><span class="w"> </span>Done<span class="w"> </span><span class="o">(</span>build/apard32690.elf<span class="o">)</span>
+</pre></div>
+</div>
+<p>The binary and executable files are now available in the <cite>build</cite> directory (<cite>apard32690.hex</cite> and <cite>apard32690.elf</cite> files).</p>
+</section>
+<section id="programming-the-mcu">
+<h2>Programming the MCU<a class="headerlink" href="#programming-the-mcu" title="Link to this heading">¶</a></h2>
+<p>Before the MCU can be programmed a few steps are necessary:</p>
+<ol class="arabic">
+<li><p>Replace the DAPLINK firmware for the MAX32625PICO. This is only required to be done one time.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Download the firmware image from the following link: <a class="reference external" href="https://github.com/MaximIntegrated/max32625pico-firmware-images/raw/master/bin/max32625_max32650fthr_if_crc_swd_v1.0.6.bin">https://github.com/MaximIntegrated/max32625pico-firmware-images/raw/master/bin/max32625_max32650fthr_if_crc_swd_v1.0.6.bin</a> .</p></li>
+<li><p>Make sure the MAX32625PICO is not connected to the PC.</p></li>
+<li><p>Press the button on the MAX32625PICO, and keep it pressed while you plug the USB cable in the MAX32625PICO.</p></li>
+<li><p>Release the button once you can see a <cite>MAINTENANCE</cite> drive being mounted.</p></li>
+<li><p>Copy the firmware binary file to the <cite>MAINTANANCE</cite> drive. It should unmount and a <cite>DAPLINK</cite> drive should appear instead.</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Connect the MAX32625PICO board to the PC and the APARD32690 board. If everything went well, you should see a mass storage device named <cite>DAPLINK</cite> in your filesystem.</p></li>
+<li><p>Power on the APARD32690 board.</p></li>
+</ol>
+<p>The microcontroller may be programmed in 2 ways:
+1. Drag-and-drop the binary (.hex) file in the <cite>DAPLINK</cite> directory. The drive should be unmounted and mounted again, once the programming is done.
+2. While in the project’s root directory, type <cite>make RELEASE=y run</cite>. This method uses OpenOCD in order to load the binary file. If the programming is successful, you should see the following terminal output:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>**<span class="w"> </span>Programming<span class="w"> </span>Started<span class="w"> </span>**
+**<span class="w"> </span>Programming<span class="w"> </span>Finished<span class="w"> </span>**
+**<span class="w"> </span>Verify<span class="w"> </span>Started<span class="w"> </span>**
+**<span class="w"> </span>Verified<span class="w"> </span>OK<span class="w"> </span>**
+**<span class="w"> </span>Resetting<span class="w"> </span>Target<span class="w"> </span>**
+shutdown<span class="w"> </span><span class="nb">command</span><span class="w"> </span>invoked
+<span class="o">[</span><span class="m">11</span>:27:42<span class="o">]</span><span class="w"> </span>apard32690.elf<span class="w"> </span>uploaded<span class="w"> </span>to<span class="w"> </span>board
+</pre></div>
+</div>
+</section>
+</section>
+
+
+          </div>
+              <div class="related">
+                &nbsp;
+    <a href="adrv902x.html" title="Previous document (Ctrl+LeftArrow)" class="prev">adrv902x no-OS Sample Poject</a>
+    <a href="max14914.html" title="Next document (Ctrl+RightArrow)" class="next">Evaluating the MAX14914</a>
+              </div>
+          
+        </div>
+      </div>
+  </div>
+
+  <div id="vertical-border"></div>
+
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
+    <footer>
+      &#169;2023-2024, Analog Devices, Inc.
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
+</html>

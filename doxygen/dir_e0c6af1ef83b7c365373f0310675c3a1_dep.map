@@ -1,0 +1,6 @@
+<map id="drivers/potentiometer/ad525x" name="drivers/potentiometer/ad525x">
+<area shape="rect" id="node1" href="dir_e0c6af1ef83b7c365373f0310675c3a1.html" title="ad525x" alt="" coords="37,52,109,100"/>
+<area shape="rect" id="node2" href="dir_d44c64559bbebec7f509842c48db8b23.html" title="include" alt="" coords="37,148,109,196"/>
+<area shape="rect" id="edge1-headlabel" href="dir_000206_000237.html" title="5" alt="" coords="77,122,86,137"/>
+<area shape="rect" id="clust1" href="dir_e419f953571bbde52e1b066c5b259aad.html" title="potentiometer" alt="" coords="16,16,131,111"/>
+</map>

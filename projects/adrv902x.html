@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>adrv902x no-OS Sample Poject &#8212; no-OS  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="../_static/style.min.css?v=a3ba2641" />
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script defer="" src="../_static/app.umd.js?v=7e1fdd13"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Evaluating the AD-APARD32690-SL" href="apard32690.html" />
+    <link rel="prev" title="EVAL-ADE9430 Sensor-to-Cloud" href="eval-ade9430.html" />
+   
+  
+    <meta name="robots" content="noindex">
+  
+  <meta name="repo" content="no-OS">
+  
+
+
+<style>
+  body {
+    
+  }
+
+  body.dark {
+    
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body:not(.light) {
+      
+    }
+  }
+</style>
+  </head><body>
+  <div class="banner"></div>
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
+  <input type="checkbox" id="input-show-repotoc">
+
+  
+  <div class="search-area">
+    <form action="" method="get">
+      <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+      <button value="search" class="icon"></button>
+      <span id="search-progress"></span>
+    </form>
+  </div>
+  
+
+  <header>
+    <div id="left">
+      <label id="show-sidebar" class="icon" for="input-show-toc" title="Show/hide index"></label>
+    </div>
+    <div id="right">
+      <span>
+        <a id="logo-org" href="https://analog.com"></a>
+        <div class="vertical-divider"></div>
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
+        <a id="logo" href="../index.html">
+          <div>no-OS</div>
+        </a>
+      </span>
+      <span class="reverse">
+        <label id="show-localtoc" class="icon" for="input-show-localtoc" title="Show/hide contents"></label>
+      </span>
+    </div>
+  </header>
+
+
+  <div class="repotoc-tree overlay">
+    <root>
+  <a href="../../documentation/eval/index.html">Evaluation Boards</a>
+  <a href="../../documentation/university/index.html">University Program</a>
+  <a href="../../hdl/index.html">HDL</a>
+  <a href="../index.html" class="current">no-OS</a>
+  <a href="../../pyadi-iio/index.html">Hardware Python Interfaces</a>
+  <a href="../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
+  <a href="../../doctools/index.html">Doctools</a>
+  <a href="../../PrecisionToolbox/index.html">Precision Toolbox</a>
+</root>
+
+  </div>
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div>
+          <div class="localtoc-header">On this page</div>
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">adrv902x no-OS Sample Poject</a><ul>
+<li><a class="reference internal" href="#supported-devices">Supported Devices</a></li>
+<li><a class="reference internal" href="#supported-carriers">Supported Carriers</a></li>
+<li><a class="reference internal" href="#naming-conventions">Naming Conventions</a></li>
+<li><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li><a class="reference internal" href="#building-and-running-the-project">Building and Running the Project</a></li>
+<li><a class="reference internal" href="#project-layout-and-hdl-generation">Project Layout and HDL Generation</a></li>
+<li><a class="reference internal" href="#switching-between-use-cases">Switching Between Use Cases</a></li>
+<li><a class="reference internal" href="#demo-applications">Demo Applications</a><ul>
+<li><a class="reference internal" href="#basic-example">Basic Example</a></li>
+<li><a class="reference internal" href="#dma-example">DMA Example</a></li>
+<li><a class="reference internal" href="#iio-example">IIO Example</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
+  
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+    <a id="no-logo" href="../index.html">
+      no-OS
+    </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
+All content
+</label>
+<label id="show-toc" for="input-switch-toc">
+Content on this topic
+</label>
+<div class="repotoc-tree">
+  <root>
+  <a href="../../documentation/eval/index.html">Evaluation Boards</a>
+  <a href="../../documentation/university/index.html">University Program</a>
+  <a href="../../hdl/index.html">HDL</a>
+  <a href="../index.html" class="current">no-OS</a>
+  <a href="../../pyadi-iio/index.html">Hardware Python Interfaces</a>
+  <a href="../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
+  <a href="../../doctools/index.html">Doctools</a>
+  <a href="../../PrecisionToolbox/index.html">Precision Toolbox</a>
+</root>
+
+</div>
+<div class="toc-tree">
+  <html>
+  <body><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../drivers_guide.html">no-OS drivers guide</a></li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1"/><div class="collapse"><a class="reference internal" href="../drivers_doc.html">no-OS drivers list</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adxl355.html">ADXL355 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adm1177.html">ADM1177 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ad405x.html">AD405X no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ad796x.html">AD796X no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ad400x.html">AD400X no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/axi_sysid.html">System ID (AXI_SYSID) no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max14914.html">MAX14914 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max14919.html">MAX14919 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max149x6.html">MAX149X6 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max22190.html">MAX22190 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max22196.html">MAX22196 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max22200.html">MAX22200 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/max2201x.html">MAX2201X no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adf4382.html">ADF4382 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/imu.html">ADIS no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/madura.html">ADRV902x (Madura) no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/adp1050.html">ADP1050 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ltc2992.html">LTC2992 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/ltc4296.html">LTC4296 no-OS driver</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2" checked=""/><div class="collapse"><a class="reference internal" href="../projects_doc.html">no-OS projects list</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="ad7091r8-sdz.html">Evaluating AD7091R-2/-4/-8 Devices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad7616-st.html">Evaluating AD7616 on SDP-K1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad796x_fmcz.html">Evaluating the AD796x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad400x-fmcz.html">Evaluating AD400x on ZED and SDP-K1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad469x_fmcz.html">Evaluating the AD469x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4382.html">Evaluating the ADF4382</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval-adis1646x.html">Evaluating the ADIS1646X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval-adis1647x.html">Evaluating the ADIS1647X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval-adis1650x.html">Evaluating the ADIS1650X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval-adis1654x.html">Evaluating the ADIS1654X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval-adis1655x.html">Evaluating the ADIS1655X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval-adis1657x.html">Evaluating the ADIS1657X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eval-ade9430.html">EVAL-ADE9430 Sensor-to-Cloud</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">adrv902x no-OS Sample Poject</a></li>
+<li class="toctree-l2"><a class="reference internal" href="apard32690.html">Evaluating the AD-APARD32690-SL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max14914.html">Evaluating the MAX14914</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max14919.html">Evaluating the MAX14919</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adp1050.html">Evaluating the ADP1050</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc4296.html">Evaluating the LTC4296</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max2201x.html">Evaluating the MAX2201X</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to no-OS</a></li>
+</ul>
+</body>
+</html>
+
+</div>
+        </div>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body" role="main">
+            
+  <section id="adrv902x-no-os-sample-poject">
+<h1>adrv902x no-OS Sample Poject<a class="headerlink" href="#adrv902x-no-os-sample-poject" title="Link to this heading">¶</a></h1>
+<section id="supported-devices">
+<h2>Supported Devices<a class="headerlink" href="#supported-devices" title="Link to this heading">¶</a></h2>
+<p><a class="reference external" href="https://www.analog.com/ADRV9026">ADRV9026</a></p>
+<p><a class="reference external" href="https://www.analog.com/ADRV9029">ADRV9029</a></p>
+</section>
+<section id="supported-carriers">
+<h2>Supported Carriers<a class="headerlink" href="#supported-carriers" title="Link to this heading">¶</a></h2>
+<p><a class="reference external" href="https://www.xilinx.com/ZCU102">ZCU102</a></p>
+</section>
+<section id="naming-conventions">
+<h2>Naming Conventions<a class="headerlink" href="#naming-conventions" title="Link to this heading">¶</a></h2>
+<p>This guide is a source of information for system engineers and software developers using the Analog Devices, Inc., ADRV902x
+family of software defined radio transceivers. This family consists of the ADRV9026 integrated quad RF transceiver and the ADRV9029
+integrated quad RF transceiver with digital predistortion (DPD) and crest factor reduction (CFR) capability.</p>
+</section>
+<section id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading">¶</a></h2>
+<p>Prior to building the project, the environment for the development of Xilinx projects must be set up. These are presented in the <em>Build Prerequisites</em> section of no-OS build guide available here: <a class="reference external" href="https://wiki.analog.com/resources/no-os/build">https://wiki.analog.com/resources/no-os/build</a>.</p>
+</section>
+<section id="building-and-running-the-project">
+<h2>Building and Running the Project<a class="headerlink" href="#building-and-running-the-project" title="Link to this heading">¶</a></h2>
+<p>The steps indicated at the following address have to be followed for building the project, for debugging, and running. These steps are adapted to the used platform and host OS: <a class="reference external" href="https://wiki.analog.com/resources/no-os/build">https://wiki.analog.com/resources/no-os/build</a>.</p>
+<p>Currently, the project is only intended to be run on the <a class="reference external" href="https://www.xilinx.com/ZCU102">ZCU102</a> target, so the Xilinx procedure is to be followed.</p>
+<ol class="arabic simple">
+<li><p>Open a terminal and navigate to this project directory (if building on Windows, <cite>Git Bash</cite> has to be used).</p></li>
+<li><p>Type <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">-j</span></code> in order to build the project.</p></li>
+</ol>
+<p>A successful build should end with the following terminal output:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">[</span><span class="m">23</span>:38:48<span class="o">]</span><span class="w"> </span>Creating<span class="w"> </span>BOOT.BIN<span class="w"> </span>and<span class="w"> </span>archive<span class="w"> </span>with<span class="w"> </span>files
+text<span class="w">       </span>data<span class="w">     </span>bss<span class="w">     </span>dec<span class="w">     </span>hex<span class="w"> </span>filename
+<span class="m">1213864</span><span class="w">  </span><span class="m">368588</span><span class="w"> </span><span class="m">1239608</span><span class="w"> </span><span class="m">2822060</span><span class="w">  </span>2b0fac<span class="w"> </span>/home/george/max_workspace/no-OS/projects/adrv902x/build/adrv902x.elf
+<span class="o">[</span><span class="m">23</span>:36:50<span class="o">]</span><span class="w"> </span>Done<span class="w"> </span><span class="o">(</span>build/adrv902x.elf<span class="o">)</span>
+</pre></div>
+</div>
+<p>Make sure to connect your adrv902x evaluation board to the correct FMC connector or the carrier you use before programming it.</p>
+<p>Fore more details about the available make rules, check out <a class="reference external" href="https://wiki.analog.com/resources/no-os/make">this page</a>.</p>
+</section>
+<section id="project-layout-and-hdl-generation">
+<h2>Project Layout and HDL Generation<a class="headerlink" href="#project-layout-and-hdl-generation" title="Link to this heading">¶</a></h2>
+<p>This is how the <a class="reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/projects/adrv902x">adrv902x no-OS project</a> looks like as a file tree:</p>
+<div class="line-block">
+<div class="line">no-OS/projects/adrv902x/</div>
+<div class="line">├── Makefile</div>
+<div class="line">├── README.rst</div>
+<div class="line">├── src</div>
+<div class="line">│   ├── common</div>
+<div class="line">│   │   ├── ADRV9025_RxGainTable.h</div>
+<div class="line">│   │   ├── ADRV9025_TxAttenTable.h</div>
+<div class="line">│   │   ├── app_config.h</div>
+<div class="line">│   │   ├── common_data.c</div>
+<div class="line">│   │   ├── common_data.h</div>
+<div class="line">│   │   ├── firmware</div>
+<div class="line">│   │   │   ├── ActiveUseCase_profile.h</div>
+<div class="line">│   │   │   ├── ActiveUtilInit_profile.h</div>
+<div class="line">│   │   │   ├── ADRV9025_DPDCORE_FW.h</div>
+<div class="line">│   │   │   ├── ADRV9025_FW.h</div>
+<div class="line">│   │   │   └── stream_image_6E3E00EFB74FE7D465FA88A171B81B8F.h</div>
+<div class="line">│   │   └── hal</div>
+<div class="line">│   │       ├── no_os_platform.c</div>
+<div class="line">│   │       └── no_os_platform.h</div>
+<div class="line">│   ├── examples</div>
+<div class="line">│   │   ├── basic_example</div>
+<div class="line">│   │   │   ├── basic_example.c</div>
+<div class="line">│   │   │   └── basic_example.h</div>
+<div class="line">│   │   ├── dma_example</div>
+<div class="line">│   │   │   ├── dma_example.c</div>
+<div class="line">│   │   │   └── dma_example.h</div>
+<div class="line">│   │   ├── examples_src.mk</div>
+<div class="line">│   │   └── iio_example</div>
+<div class="line">│   │       ├── iio_example.c</div>
+<div class="line">│   │       └── iio_example.h</div>
+<div class="line">│   ├── LICENSE_API</div>
+<div class="line">│   ├── LICENSE_FW</div>
+<div class="line">│   └── platform</div>
+<div class="line">│       ├── platform_includes.h</div>
+<div class="line">│       └── xilinx</div>
+<div class="line">│           ├── main.c</div>
+<div class="line">│           ├── parameters.c</div>
+<div class="line">│           ├── parameters.h</div>
+<div class="line">│           └── platform_src.mk</div>
+<div class="line">├── src.mk</div>
+<div class="line">└── system_top.xsa</div>
+</div>
+<p>Note the presence of the system_top.xsa. In order to build this <a class="reference external" href="https://wiki.analog.com/resources/no-os">no-OS</a> project, you need such an .xsa file present in the project directory, as shown above. In case you don’t have one, either obtain a pre-built file or build it yourself by following the <a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/build">Building HDL guide</a>.</p>
+<p>And this is how the corresponding <a class="reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/drivers/rf-transceiver/madura">drivers section</a> looks like as a file tree (the Madura API can be found under common and devices directories):</p>
+<div class="line-block">
+<div class="line">no-OS/drivers/rf-transceiver/madura/</div>
+<div class="line">├── adrv9025.c</div>
+<div class="line">├── adrv9025_conv.c</div>
+<div class="line">├── adrv9025.c.orig</div>
+<div class="line">├── adrv9025.h</div>
+<div class="line">├── common</div>
+<div class="line">│   ├── adi_common.h</div>
+<div class="line">│   ├── adi_common_macros.h</div>
+<div class="line">│   ├── adi_common_types.h</div>
+<div class="line">│   ├── adi_common_user.h</div>
+<div class="line">│   ├── adi_error</div>
+<div class="line">│   ├── adi_halMake sure to connect your adrv9002 evaluation board to the correct FMC connector or the carrier you use:</div>
+<div class="line">│   └── adi_logging</div>
+<div class="line">├── devices</div>
+<div class="line">│   └── adrv9025</div>
+<div class="line">└── platforms</div>
+<div class="line-block">
+<div class="line">├── adi_platform.h</div>
+<div class="line">└── adi_platform_types.h</div>
+</div>
+</div>
+</section>
+<section id="switching-between-use-cases">
+<h2>Switching Between Use Cases<a class="headerlink" href="#switching-between-use-cases" title="Link to this heading">¶</a></h2>
+<p>When the implementation of a different use case than the one in the project folder is desired, the following steps have to be followed:</p>
+<ol class="arabic simple">
+<li><p>From the Madura TES GUI, generate the resources folder that contains the files listed below:</p></li>
+</ol>
+<ul class="simple">
+<li><p>Firmware files (ADRV9025_FW.bin and ADRV9025_DPDCORE_FW.bin),</p></li>
+<li><p>Stream binary (e.g., stream_image_6E3E00EFB74FE7D465FA88A171B81B8F.bin),</p></li>
+<li><p>ActiveUseCase.profile and ActiveUtilInit.profile.</p></li>
+</ul>
+<ol class="arabic simple" start="2">
+<li><p>Since no-OS does not have mechanisms for manipulating files, create a hex dump for each .bin file. As can be seen in the project structure, these are added as header files to the project.</p></li>
+</ol>
+<ul>
+<li><p>Use the following command for storing the hex dump in a file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xxd</span> <span class="o">-</span><span class="n">i</span> <span class="n">ADRV9025_FW</span><span class="o">.</span><span class="n">bin</span> <span class="o">&gt;</span> <span class="n">ADRV9025_FW</span><span class="o">.</span><span class="n">h</span>
+</pre></div>
+</div>
+</li>
+<li><p>Copy the generated unsigned char array to the correspoding header file in the <a class="reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/projects/adrv902x/src/common/firmware">project structure</a> (ADRV9025_FW.bin, ADRV9025_DPDCORE_FW.bin or stream_image_x.bin).</p></li>
+</ul>
+<ol class="arabic simple" start="3">
+<li><p>Profile files also have to be transformed for being included in the project:</p></li>
+</ol>
+<ul>
+<li><p>Generate string literals from the json files using the <a class="reference external" href="https://github.com/analogdevicesinc/no-OS/blob/main/projects/adrv902x/json2cstring.sh">json2cstring.sh</a> script in the <a class="reference external" href="https://github.com/analogdevicesinc/no-OS/blob/main/projects/adrv902x">no-OS project</a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">json2cstring</span> <span class="n">path</span><span class="o">/</span><span class="n">ActiveUseCase</span><span class="o">.</span><span class="n">profile</span>
+</pre></div>
+</div>
+</li>
+<li><p>Copy the contents of the generated files to the correspoding header files in the <a class="reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/projects/adrv902x/src/common/firmware">project structure</a> (ActiveUseCase_profile.h and ActiveUtilInit_profile.h).</p></li>
+</ul>
+<ol class="arabic simple" start="4">
+<li><p>Modify the code in the project so that the new settings are correctly used (e.g., <a class="reference external" href="https://github.com/analogdevicesinc/no-OS/blob/main/projects/adrv902x/src/common/app_config.h">app_config.h</a>).</p></li>
+<li><p>Build the project.</p></li>
+</ol>
+</section>
+<section id="demo-applications">
+<h2>Demo Applications<a class="headerlink" href="#demo-applications" title="Link to this heading">¶</a></h2>
+<p>The demo applications highlight the functionality of the adrv902x evaluation board. Three examples are provided in the sample project:</p>
+<ul class="simple">
+<li><p>Basic Example</p></li>
+<li><p>DMA Example</p></li>
+<li><p>IIO Example</p></li>
+</ul>
+<p>An example is selected by specifying <code class="docutils literal notranslate"><span class="pre">y</span></code> as the value of the corresponding variable in the project Makefile. Below is an example for activating the basic example:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">BASIC_EXAMPLE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>y
+<span class="nv">DMA_EXAMPLE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>n
+<span class="nv">IIO_EXAMPLE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>n
+</pre></div>
+</div>
+<p>Another way of selecting a demo is by passing variables to <code class="docutils literal notranslate"><span class="pre">make</span></code> through command line arguments:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">DMA_EXAMPLE</span><span class="o">=</span>y<span class="w"> </span><span class="nv">IIO_EXAMPLE</span><span class="o">=</span>n
+</pre></div>
+</div>
+<p>Note that only one example can be enabled at a time. Therefore, when using command line arguments, the settings in the Makefile should be taken into account. The command line overwrites the values in the Makefile.</p>
+<section id="basic-example">
+<h3>Basic Example<a class="headerlink" href="#basic-example" title="Link to this heading">¶</a></h3>
+<p>The basic example simply initializes the components on the evaluation board and enables a JESD link. Tx will transmit a DDS waveform with the default parameters set by the DAC driver. The output looks like the one below:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>adrv9025-phy<span class="w"> </span>Rev<span class="w"> </span><span class="m">0</span>,<span class="w"> </span>API<span class="w"> </span>version:<span class="w"> </span><span class="m">6</span>.4.0.14<span class="w"> </span>found
+tx_adxcvr:<span class="w"> </span>OK<span class="w"> </span><span class="o">(</span><span class="m">9830400</span><span class="w"> </span>kHz<span class="o">)</span>
+rx_adxcvr:<span class="w"> </span>OK<span class="w"> </span><span class="o">(</span><span class="m">9830400</span><span class="w"> </span>kHz<span class="o">)</span>
+adrv9025-phy<span class="w"> </span>Rev<span class="w"> </span><span class="m">176</span>,<span class="w"> </span>Firmware<span class="w"> </span><span class="m">6</span>.4.0.6<span class="w"> </span>API<span class="w"> </span>version:<span class="w"> </span><span class="m">6</span>.4.0.14<span class="w"> </span>Stream<span class="w"> </span>version:<span class="w"> </span><span class="m">9</span>.4.0.1<span class="w"> </span>successfully<span class="w"> </span>initialized<span class="w"> </span>via<span class="w"> </span>jesd204-fsm
+tx_jesd<span class="w"> </span>status:
+<span class="w">    </span>Link<span class="w"> </span>is<span class="w"> </span>enabled
+<span class="w">    </span>Measured<span class="w"> </span>Link<span class="w"> </span>Clock:<span class="w"> </span><span class="m">245</span>.778<span class="w"> </span>MHz
+<span class="w">    </span>Reported<span class="w"> </span>Link<span class="w"> </span>Clock:<span class="w"> </span><span class="m">245</span>.760<span class="w"> </span>MHz
+<span class="w">    </span>Lane<span class="w"> </span>rate:<span class="w"> </span><span class="m">9830</span>.400<span class="w"> </span>MHz
+<span class="w">    </span>Lane<span class="w"> </span>rate<span class="w"> </span>/<span class="w"> </span><span class="m">40</span>:<span class="w"> </span><span class="m">245</span>.760<span class="w"> </span>MHz
+<span class="w">    </span>LMFC<span class="w"> </span>rate:<span class="w"> </span><span class="m">7</span>.680<span class="w"> </span>MHz
+<span class="w">    </span>SYNC~:<span class="w"> </span>deasserted
+<span class="w">    </span>Link<span class="w"> </span>status:<span class="w"> </span>DATA
+<span class="w">    </span>SYSREF<span class="w"> </span>captured:<span class="w"> </span>Yes
+<span class="w">    </span>SYSREF<span class="w"> </span>alignment<span class="w"> </span>error:<span class="w"> </span>No
+rx_jesd<span class="w"> </span>status:
+<span class="w">    </span>Link<span class="w"> </span>is<span class="w"> </span>enabled
+<span class="w">    </span>Measured<span class="w"> </span>Link<span class="w"> </span>Clock:<span class="w"> </span><span class="m">245</span>.778<span class="w"> </span>MHz
+<span class="w">    </span>Reported<span class="w"> </span>Link<span class="w"> </span>Clock:<span class="w"> </span><span class="m">245</span>.760<span class="w"> </span>MHz
+<span class="w">    </span>Lane<span class="w"> </span>rate:<span class="w"> </span><span class="m">9830</span>.400<span class="w"> </span>MHz
+<span class="w">    </span>Lane<span class="w"> </span>rate<span class="w"> </span>/<span class="w"> </span><span class="m">40</span>:<span class="w"> </span><span class="m">245</span>.760<span class="w"> </span>MHz
+<span class="w">    </span>LMFC<span class="w"> </span>rate:<span class="w"> </span><span class="m">7</span>.680<span class="w"> </span>MHz
+<span class="w">    </span>Link<span class="w"> </span>status:<span class="w"> </span>DATA
+<span class="w">    </span>SYSREF<span class="w"> </span>captured:<span class="w"> </span>Yes
+<span class="w">    </span>SYSREF<span class="w"> </span>alignment<span class="w"> </span>error:<span class="w"> </span>No
+Bye
+</pre></div>
+</div>
+</section>
+<section id="dma-example">
+<h3>DMA Example<a class="headerlink" href="#dma-example" title="Link to this heading">¶</a></h3>
+<p>DMA example is a standard example that sends a sinewave on Tx channels using DMA from a lookup table. If you physically loopback a Tx channel to an Rx channel via an electrical wire, you may run the DMA_EXAMPLE and read the received data at Rx from its particular memory address.</p>
+<p>Select the example through command line arguments as below:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">BASIC_EXAMPLE</span><span class="o">=</span>n<span class="w"> </span><span class="nv">DMA_EXAMPLE</span><span class="o">=</span>y<span class="w"> </span><span class="nv">IIO_EXAMPLE</span><span class="o">=</span>n
+</pre></div>
+</div>
+<p>To run the DMA example, you simply need to run the application as usual by:</p>
+<ul class="simple">
+<li><p>making sure it was built with the <code class="docutils literal notranslate"><span class="pre">DMA_EXAMPLE</span></code> flag (<code class="docutils literal notranslate"><span class="pre">DMA_EXAMPLE</span> <span class="pre">=</span> <span class="pre">y</span></code> in the Makefile or as command line argument for <code class="docutils literal notranslate"><span class="pre">make</span></code>), as already mentioned</p></li>
+<li><p>monitoring the serial terminal for messages printed by the application</p></li>
+</ul>
+<p>After the output from the basic example, the application will eventually print something like this:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>DMA_EXAMPLE<span class="w"> </span>Tx:<span class="w"> </span><span class="nv">address</span><span class="o">=</span>0x1dc900<span class="w"> </span><span class="nv">samples</span><span class="o">=</span><span class="m">8192</span><span class="w"> </span><span class="nv">channels</span><span class="o">=</span><span class="m">8</span><span class="w"> </span><span class="nv">bits</span><span class="o">=</span><span class="m">32</span>
+DMA_EXAMPLE<span class="w"> </span>Rx:<span class="w"> </span><span class="nv">address</span><span class="o">=</span>0x1e4900<span class="w"> </span><span class="nv">samples</span><span class="o">=</span><span class="m">65536</span><span class="w"> </span><span class="nv">channels</span><span class="o">=</span><span class="m">8</span><span class="w"> </span><span class="nv">bits</span><span class="o">=</span><span class="m">16</span>
+</pre></div>
+</div>
+<p>This means that the memory address where the data at Rx is stored is <code class="docutils literal notranslate"><span class="pre">0x1e4900</span></code>. There are a total of 65536 samples, 16-bit wide across 8 channels, which is equivalent to 8192, 16-bit samples per channel. The location of the transmitted data is also given (0x1dc900).</p>
+<p>At this point you may use a Tcl script to retrieve data from memory and store it into .csv files for processing:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>xsct<span class="w"> </span>tools/scripts/platform/xilinx/capture.tcl<span class="w"> </span>ZYNQ_PSU<span class="w"> </span>0x1e4900<span class="w"> </span><span class="m">65536</span><span class="w"> </span><span class="m">8</span><span class="w"> </span><span class="m">16</span>
+</pre></div>
+</div>
+<p>You can find more information about  the data <a class="reference external" href="https://wiki.analog.com/resources/no-os/dac_dma_example">here</a>.</p>
+<p>The data in the .csv files generated can be visualised using the <a class="reference external" href="https://github.com/analogdevicesinc/no-OS/blob/main/tools/scripts/platform/xilinx/plot.py">plot.py</a> script in the <a class="reference external" href="https://github.com/analogdevicesinc/no-OS">no-OS repo</a>. The following command will display the data on all 8 channels:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>do_graph.py<span class="w"> </span><span class="m">8</span>
+</pre></div>
+</div>
+</section>
+<section id="iio-example">
+<h3>IIO Example<a class="headerlink" href="#iio-example" title="Link to this heading">¶</a></h3>
+<p>IIO demo is a standard example, provided in most <a class="reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/projects">no-OS projects</a>, that launches a IIOD server on the board so that the user may connect to it via an IIO client. Using iio-oscilloscope, the user can configure the DAC and view the ADC data on a plot.</p>
+<p>To build the IIOD demo, add the following flags when invoking make which will build the IIOD server and the IIO section of the driver:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">BASIC_EXAMPLE</span><span class="o">=</span>n<span class="w"> </span><span class="nv">DMA_EXAMPLE</span><span class="o">=</span>n<span class="w"> </span><span class="nv">IIO_EXAMPLE</span><span class="o">=</span>y
+</pre></div>
+</div>
+<p>To run the IIOD demo, first connect to the board via UART to see the runtime output messages with the following settings:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Baud<span class="w"> </span>Rate:<span class="w"> </span>115200bps
+Data:<span class="w"> </span><span class="m">8</span><span class="w"> </span>bit
+Parity:<span class="w"> </span>None
+Stop<span class="w"> </span>bits:<span class="w"> </span><span class="m">1</span><span class="w"> </span>bit
+Flow<span class="w"> </span>Control:<span class="w"> </span>none
+</pre></div>
+</div>
+<p>Please note that for proper message display, you may need to convert all LF characters to CRLF, if your serial terminal supports it.</p>
+<p>With a serial terminal correctly configured and listening to incoming messages, launch the application (make run or click the debug button in your SDK). Runtime messages specific to the application will apear on your serial terminal screen, and eventually the following message is printed, after the output from the basic example:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Running<span class="w"> </span>IIOD<span class="w"> </span>server...
+If<span class="w"> </span>successful,<span class="w"> </span>you<span class="w"> </span>may<span class="w"> </span>connect<span class="w"> </span>an<span class="w"> </span>IIO<span class="w"> </span>client<span class="w"> </span>application<span class="w"> </span>by:
+<span class="m">1</span>.<span class="w"> </span>Disconnecting<span class="w"> </span>the<span class="w"> </span>serial<span class="w"> </span>terminal<span class="w"> </span>you<span class="w"> </span>use<span class="w"> </span>to<span class="w"> </span>view<span class="w"> </span>this<span class="w"> </span>message.
+<span class="m">2</span>.<span class="w"> </span>Connecting<span class="w"> </span>the<span class="w"> </span>IIO<span class="w"> </span>client<span class="w"> </span>application<span class="w"> </span>using<span class="w"> </span>the<span class="w"> </span>serial<span class="w"> </span>backend<span class="w"> </span>configured<span class="w"> </span>as<span class="w"> </span>shown:
+<span class="w">    </span>Baudrate:<span class="w"> </span><span class="m">115200</span>
+<span class="w">    </span>Data<span class="w"> </span>size:<span class="w"> </span><span class="m">8</span><span class="w"> </span>bits
+<span class="w">    </span>Parity:<span class="w"> </span>none
+<span class="w">    </span>Stop<span class="w"> </span>bits:<span class="w"> </span><span class="m">1</span>
+<span class="w">    </span>Flow<span class="w"> </span>control:<span class="w"> </span>none
+</pre></div>
+</div>
+<p>This message implies a IIOD server is being run and you may connect to it using a serial-backend enabled <a class="reference external" href="https://github.com/analogdevicesinc/iio-oscilloscope">iio-oscilloscope</a> and with the settings indicated at the serial terminal.</p>
+</section>
+</section>
+</section>
+
+
+          </div>
+              <div class="related">
+                &nbsp;
+    <a href="eval-ade9430.html" title="Previous document (Ctrl+LeftArrow)" class="prev">EVAL-ADE9430 Sensor-to-Cloud</a>
+    <a href="apard32690.html" title="Next document (Ctrl+RightArrow)" class="next">Evaluating the AD-APARD32690-SL</a>
+              </div>
+          
+        </div>
+      </div>
+  </div>
+
+  <div id="vertical-border"></div>
+
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
+    <footer>
+      &#169;2023-2024, Analog Devices, Inc.
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
+</html>

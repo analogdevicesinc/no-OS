@@ -1,0 +1,4 @@
+<map id="iio_hw_trig_remove" name="iio_hw_trig_remove">
+<area shape="rect" id="node1" title="Free the resources allocated by iio_hw_trig_init()." alt="" coords="245,5,396,32"/>
+<area shape="rect" id="node2" href="$eval-adis1646x_2src_2examples_2iio__trigger__example_2iio__trigger__example_8c.html#aa6785eab0c37adc61db331ebebdc40ee" title="IIO trigger example main execution." alt="" coords="5,5,197,32"/>
+</map>

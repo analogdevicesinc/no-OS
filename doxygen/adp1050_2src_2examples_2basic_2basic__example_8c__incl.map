@@ -1,0 +1,17 @@
+<map id="projects/adp1050/src/examples/basic/basic_example.c" name="projects/adp1050/src/examples/basic/basic_example.c">
+<area shape="rect" id="node1" title="Basic example source file for adp1050 project." alt="" coords="503,5,669,61"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,109,132,136"/>
+<area shape="rect" id="node3" href="$adp1050_2src_2examples_2basic_2basic__example_8h.html" title="Basic example header file for adp1050 project." alt="" coords="156,109,288,136"/>
+<area shape="rect" id="node4" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="312,109,425,136"/>
+<area shape="rect" id="node6" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="693,184,791,211"/>
+<area shape="rect" id="node7" href="$no__os__print__log_8h.html" title="Print messages helpers." alt="" coords="450,109,586,136"/>
+<area shape="rect" id="node9" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="951,184,1051,211"/>
+<area shape="rect" id="node12" href="$no__os__pwm_8h.html" title="Header file of PWM Interface." alt="" coords="816,184,927,211"/>
+<area shape="rect" id="node13" href="$adp1050_8h.html" title="Header file for the ADP1050 Driver." alt="" coords="610,109,701,136"/>
+<area shape="rect" id="node5" title=" " alt="" coords="639,259,709,285"/>
+<area shape="rect" id="node8" title=" " alt="" coords="234,184,301,211"/>
+<area shape="rect" id="node10" title=" " alt="" coords="965,259,1036,285"/>
+<area shape="rect" id="node11" title=" " alt="" coords="830,259,913,285"/>
+<area shape="rect" id="node14" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="461,184,567,211"/>
+<area shape="rect" id="node15" href="$no__os__units_8h.html" title="Header file of Units." alt="" coords="325,184,436,211"/>
+</map>

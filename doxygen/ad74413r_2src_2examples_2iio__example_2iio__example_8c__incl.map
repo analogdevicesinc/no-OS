@@ -1,0 +1,20 @@
+<map id="projects/ad74413r/src/examples/iio_example/iio_example.c" name="projects/ad74413r/src/examples/iio_example/iio_example.c">
+<area shape="rect" id="node1" title="Implementation of IIO example for AD74413R project." alt="" coords="547,5,722,61"/>
+<area shape="rect" id="node2" href="$ad74413r_2src_2examples_2iio__example_2iio__example_8h.html" title="IIO example header for AD74413R project." alt="" coords="364,109,479,136"/>
+<area shape="rect" id="node3" href="$iio__ad74413r_8h.html" title="Header file of the IIO AD74413r Driver." alt="" coords="503,109,620,136"/>
+<area shape="rect" id="node17" title=" " alt="" coords="645,109,771,136"/>
+<area shape="rect" id="node18" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="966,408,1066,435"/>
+<area shape="rect" id="node4" href="$iio_8h.html" title="Header file of iio." alt="" coords="615,259,665,285"/>
+<area shape="rect" id="node12" href="$ad74413r_8h.html" title="Header file of AD74413r Driver." alt="" coords="189,333,283,360"/>
+<area shape="rect" id="node15" href="$iio__trigger_8h.html" title="Header file for iio_trigger." alt="" coords="507,184,605,211"/>
+<area shape="rect" id="node5" href="$iio__types_8h.html" title="Header file for iio_types." alt="" coords="521,333,615,360"/>
+<area shape="rect" id="node9" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="675,333,781,360"/>
+<area shape="rect" id="node6" title=" " alt="" coords="729,483,812,509"/>
+<area shape="rect" id="node7" title=" " alt="" coords="410,483,481,509"/>
+<area shape="rect" id="node8" href="$no__os__circular__buffer_8h.html" title="Circular buffer library header." alt="" coords="360,408,531,435"/>
+<area shape="rect" id="node10" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="808,408,941,435"/>
+<area shape="rect" id="node11" title=" " alt="" coords="910,483,981,509"/>
+<area shape="rect" id="node13" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="187,408,285,435"/>
+<area shape="rect" id="node14" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="5,408,112,435"/>
+<area shape="rect" id="node16" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="353,259,449,285"/>
+</map>

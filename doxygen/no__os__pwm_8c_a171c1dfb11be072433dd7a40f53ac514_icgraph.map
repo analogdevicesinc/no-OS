@@ -1,0 +1,13 @@
+<map id="no_os_pwm_enable" name="no_os_pwm_enable">
+<area shape="rect" id="node1" title="Enable PWM signal generation." alt="" coords="716,107,867,133"/>
+<area shape="rect" id="node2" href="$ad463x_8h.html#a354bac86baa990ef631a0316640aa6ef" title="Read from device. Enter register mode to read/write registers." alt="" coords="485,5,627,32"/>
+<area shape="rect" id="node4" href="$ad469x_8h.html#abda6b9d65e0b6e2a82390a09a8f08eb8" title="Exit conversion mode. Enter register mode to read/write registers." alt="" coords="444,56,668,83"/>
+<area shape="rect" id="node5" href="$ad469x_8h.html#a92cd606b28fd68b3a2c52717552818df" title="Read from device. Enter register mode to read/write registers." alt="" coords="485,107,627,133"/>
+<area shape="rect" id="node8" href="$adaq7980_8h.html#a0db55892937414f2d5dc84a14fd89677" title=" " alt="" coords="491,157,621,184"/>
+<area shape="rect" id="node10" href="$stm32__spi_8c.html#a846f9f0ed225045f8ca4b67afb1c2bbc" title="Configure and start a series of transfers using DMA." alt="" coords="468,209,644,250"/>
+<area shape="rect" id="node3" href="$ad463x__fmc_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="277,5,332,32"/>
+<area shape="rect" id="node6" href="$ad469x_8h.html#a947efb0cc9183e2dc0d9aeb3d697601b" title="Read from device when converter has the channel sequencer activated. Enter register mode to read/writ..." alt="" coords="219,56,391,83"/>
+<area shape="rect" id="node7" href="$ad469x__fmcz_2src_2examples_2basic__example_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="5,81,165,108"/>
+<area shape="rect" id="node9" href="$adaq7980__sdz_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="277,157,332,184"/>
+<area shape="rect" id="node11" href="$stm32__spi_8c.html#adfcb8034a96850d7940dd91d67f273eb" title="Configure and start a series of transfers using DMA. Wait for the completion before returning." alt="" coords="213,209,396,250"/>
+</map>

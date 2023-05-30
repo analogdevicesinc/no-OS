@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>ADP1050 no-OS driver &#8212; no-OS  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="../_static/style.min.css?v=a3ba2641" />
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script defer="" src="../_static/app.umd.js?v=7e1fdd13"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="LTC2992 no-OS driver" href="ltc2992.html" />
+    <link rel="prev" title="ADRV902x (Madura) no-OS Driver" href="madura.html" />
+   
+  
+    <meta name="robots" content="noindex">
+  
+  <meta name="repo" content="no-OS">
+  
+
+
+<style>
+  body {
+    
+  }
+
+  body.dark {
+    
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body:not(.light) {
+      
+    }
+  }
+</style>
+  </head><body>
+  <div class="banner"></div>
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
+  <input type="checkbox" id="input-show-repotoc">
+
+  
+  <div class="search-area">
+    <form action="" method="get">
+      <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+      <button value="search" class="icon"></button>
+      <span id="search-progress"></span>
+    </form>
+  </div>
+  
+
+  <header>
+    <div id="left">
+      <label id="show-sidebar" class="icon" for="input-show-toc" title="Show/hide index"></label>
+    </div>
+    <div id="right">
+      <span>
+        <a id="logo-org" href="https://analog.com"></a>
+        <div class="vertical-divider"></div>
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
+        <a id="logo" href="../index.html">
+          <div>no-OS</div>
+        </a>
+      </span>
+      <span class="reverse">
+        <label id="show-localtoc" class="icon" for="input-show-localtoc" title="Show/hide contents"></label>
+      </span>
+    </div>
+  </header>
+
+
+  <div class="repotoc-tree overlay">
+    <root>
+  <a href="../../documentation/eval/index.html">Evaluation Boards</a>
+  <a href="../../documentation/university/index.html">University Program</a>
+  <a href="../../hdl/index.html">HDL</a>
+  <a href="../index.html" class="current">no-OS</a>
+  <a href="../../pyadi-iio/index.html">Hardware Python Interfaces</a>
+  <a href="../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
+  <a href="../../doctools/index.html">Doctools</a>
+  <a href="../../PrecisionToolbox/index.html">Precision Toolbox</a>
+</root>
+
+  </div>
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div>
+          <div class="localtoc-header">On this page</div>
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">ADP1050 no-OS driver</a><ul>
+<li><a class="reference internal" href="#supported-devices">Supported Devices</a></li>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#applications">Applications</a></li>
+<li><a class="reference internal" href="#id1">ADP1050</a></li>
+<li><a class="reference internal" href="#adp1050-device-configuration">ADP1050 Device Configuration</a></li>
+<li><a class="reference internal" href="#driver-initialization">Driver Initialization</a></li>
+<li><a class="reference internal" href="#vout-configuration">VOUT Configuration</a></li>
+<li><a class="reference internal" href="#vin-configuration">VIN Configuration</a></li>
+<li><a class="reference internal" href="#cs1-configuration">CS1 Configuration</a></li>
+<li><a class="reference internal" href="#status-configuration">Status Configuration</a></li>
+<li><a class="reference internal" href="#pwm-configuration">PWM configuration</a></li>
+<li><a class="reference internal" href="#feedforward-and-pulse-skipping-configuration">Feedforward and Pulse Skipping configuration</a></li>
+<li><a class="reference internal" href="#loop-configuration">Loop Configuration</a></li>
+<li><a class="reference internal" href="#frequency-synchronization">Frequency Synchronization</a></li>
+<li><a class="reference internal" href="#flgi-pin-configuration">FLGI pin configuration</a></li>
+<li><a class="reference internal" href="#trim-configuration">Trim configuration</a></li>
+<li><a class="reference internal" href="#passwords-configuration">Passwords configuration</a></li>
+<li><a class="reference internal" href="#software-reset-configuration">Software Reset Configuration</a></li>
+<li><a class="reference internal" href="#adp1050-driver-initialization-example">ADP1050 Driver Initialization Example</a></li>
+<li><a class="reference internal" href="#adp1050-no-os-iio-support">ADP1050 no-OS IIO support</a></li>
+<li><a class="reference internal" href="#adp1050-iio-device-configuration">ADP1050 IIO Device Configuration</a></li>
+<li><a class="reference internal" href="#input-channel-attributes">Input Channel Attributes</a></li>
+<li><a class="reference internal" href="#output-channel-attributes">Output Channel Attributes</a></li>
+<li><a class="reference internal" href="#global-attributes">Global Attributes</a></li>
+<li><a class="reference internal" href="#debug-attributes">Debug Attributes</a></li>
+<li><a class="reference internal" href="#adp1050-iio-driver-initialization-example">ADP1050 IIO Driver Initialization Example</a></li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
+  
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+    <a id="no-logo" href="../index.html">
+      no-OS
+    </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
+All content
+</label>
+<label id="show-toc" for="input-switch-toc">
+Content on this topic
+</label>
+<div class="repotoc-tree">
+  <root>
+  <a href="../../documentation/eval/index.html">Evaluation Boards</a>
+  <a href="../../documentation/university/index.html">University Program</a>
+  <a href="../../hdl/index.html">HDL</a>
+  <a href="../index.html" class="current">no-OS</a>
+  <a href="../../pyadi-iio/index.html">Hardware Python Interfaces</a>
+  <a href="../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
+  <a href="../../doctools/index.html">Doctools</a>
+  <a href="../../PrecisionToolbox/index.html">Precision Toolbox</a>
+</root>
+
+</div>
+<div class="toc-tree">
+  <html>
+  <body><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../drivers_guide.html">no-OS drivers guide</a></li>
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1" checked=""/><div class="collapse"><a class="reference internal" href="../drivers_doc.html">no-OS drivers list</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="adxl355.html">ADXL355 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adm1177.html">ADM1177 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad405x.html">AD405X no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad796x.html">AD796X no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad400x.html">AD400X no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="axi_sysid.html">System ID (AXI_SYSID) no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max14914.html">MAX14914 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max14919.html">MAX14919 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max149x6.html">MAX149X6 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22190.html">MAX22190 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22196.html">MAX22196 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22200.html">MAX22200 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max2201x.html">MAX2201X no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adf4382.html">ADF4382 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="imu.html">ADIS no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="madura.html">ADRV902x (Madura) no-OS Driver</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">ADP1050 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc2992.html">LTC2992 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc4296.html">LTC4296 no-OS driver</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2"/><div class="collapse"><a class="reference internal" href="../projects_doc.html">no-OS projects list</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7091r8-sdz.html">Evaluating AD7091R-2/-4/-8 Devices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7616-st.html">Evaluating AD7616 on SDP-K1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad796x_fmcz.html">Evaluating the AD796x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad400x-fmcz.html">Evaluating AD400x on ZED and SDP-K1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad469x_fmcz.html">Evaluating the AD469x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adf4382.html">Evaluating the ADF4382</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1646x.html">Evaluating the ADIS1646X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1647x.html">Evaluating the ADIS1647X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1650x.html">Evaluating the ADIS1650X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1654x.html">Evaluating the ADIS1654X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1655x.html">Evaluating the ADIS1655X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1657x.html">Evaluating the ADIS1657X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-ade9430.html">EVAL-ADE9430 Sensor-to-Cloud</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adrv902x.html">adrv902x no-OS Sample Poject</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/apard32690.html">Evaluating the AD-APARD32690-SL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max14914.html">Evaluating the MAX14914</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max14919.html">Evaluating the MAX14919</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adp1050.html">Evaluating the ADP1050</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc4296.html">Evaluating the LTC4296</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max2201x.html">Evaluating the MAX2201X</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to no-OS</a></li>
+</ul>
+</body>
+</html>
+
+</div>
+        </div>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body" role="main">
+            
+  <section id="adp1050-no-os-driver">
+<h1>ADP1050 no-OS driver<a class="headerlink" href="#adp1050-no-os-driver" title="Link to this heading">¶</a></h1>
+<section id="supported-devices">
+<h2>Supported Devices<a class="headerlink" href="#supported-devices" title="Link to this heading">¶</a></h2>
+<p><a class="reference external" href="https://www.analog.com/ADP1050">ADP1050</a></p>
+</section>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
+<p>The ADP1050 is an advanced digital controller with a PMBus™ interface targeting
+high density, high efficiency dc-to-dc power conversion.
+This controller implements voltage mode control with high speed, input voltage
+feedforward operation for enhanced transient and noise performance.
+The ADP1050 has four programmable pulse-width modulation (PWM) outputs capable
+of controlling most high efficiency power supply topologies,
+with the added control of synchronous rectification (SR).</p>
+</section>
+<section id="applications">
+<h2>Applications<a class="headerlink" href="#applications" title="Link to this heading">¶</a></h2>
+</section>
+<section id="id1">
+<h2>ADP1050<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>High density, isolated dc-to-dc power supplies</p></li>
+<li><p>Intermediate bus converters</p></li>
+<li><p>High availability parallel power systems</p></li>
+<li><p>Server, storage, industrial, networking, and communications infrastructure</p></li>
+</ul>
+</section>
+<section id="adp1050-device-configuration">
+<h2>ADP1050 Device Configuration<a class="headerlink" href="#adp1050-device-configuration" title="Link to this heading">¶</a></h2>
+</section>
+<section id="driver-initialization">
+<h2>Driver Initialization<a class="headerlink" href="#driver-initialization" title="Link to this heading">¶</a></h2>
+<p>In order to be able to use the device, you will have to provide the support
+for the communication protocol (I2C) alongside other GPIO pins if needed in the
+specific application (depends on the way the device is used).</p>
+<p>The first API to be called is <strong>adp1050_init</strong>. Make sure that it return 0,
+which means that the driver was initialized correctly.</p>
+<p>The initialization API uses the device descriptor and an initialization
+parameter, which contains an unsigned 8-bit integer variable on_off_config
+containing the information to be sent to the ON_OFF_CONFIG command in the
+PMBus commands which tells the device how it will be started-up, default
+configuration for this can be found in the header file of the driver.</p>
+</section>
+<section id="vout-configuration">
+<h2>VOUT Configuration<a class="headerlink" href="#vout-configuration" title="Link to this heading">¶</a></h2>
+<p>Since the device is to be connected in parallel to other circuit, VOUT is
+referring to the VS pins which are actually Voltage Input pins to which a
+resistor divider is applied in orde to have the VS differential voltage at 1V.
+Depending on the resistor divider information a scale is to be set for the
+VOUT using the <strong>adp1050_vout_scale</strong> API.</p>
+<p>The VOUT_COMMAND sets the output voltage referrence which commands the PWMs
+(actual outputs of the ADP1050), if the voltage sensed by the VS pins is greater
+than VOUT_COMMAND, the PWMs will be set off, regarding the state set by the user.
+Also the VOUT_MAX value can be changed with the same API, and this applies a
+limit to the previous mentioned VOUT_COMMAND. The API used for setting these
+two values is <strong>adp1050_vout_value</strong>.</p>
+<p>VOUT also has an offset that can be set in order to correctly sense the voltage
+output of the parallel-connected circuit using <strong>adp1050_vout_offset</strong> API, and
+also a transition rate using <strong>adp1050_vout_tr</strong> API.</p>
+<p>For VOUT margins can also be set for the case where at the start-up of the
+device margin low/high values will be used for the voltage output value using
+<strong>adp1050_vout_margin</strong> API.</p>
+<p>Voltage value sensed on the VS pins can be read using <strong>adp1050_read_vsense</strong>
+API, correct values will be returned only if vout scale is set using the
+previous mentioned API.</p>
+</section>
+<section id="vin-configuration">
+<h2>VIN Configuration<a class="headerlink" href="#vin-configuration" title="Link to this heading">¶</a></h2>
+<p>VIN_ON and VIN_OFF command values can be set using <strong>adp1050_set_vin</strong> API and
+they refer to the input voltage at which the unit starts, respectively stops the
+power conversion.</p>
+<p>More than that the value of the input voltage(value read at the VF pin) can be
+read using <strong>adp1050_read_value</strong> API, and correct values will be returned only
+if VIN_SCALE_MONITOR command value is written accordingly to the datasheet using
+<strong>adp1050_write</strong> API.</p>
+</section>
+<section id="cs1-configuration">
+<h2>CS1 Configuration<a class="headerlink" href="#cs1-configuration" title="Link to this heading">¶</a></h2>
+<p>Current Sense fast fault configuration and limit reference can be set using
+<strong>adp1050_set_climit</strong> API, and other settings as debounce time and leading edge
+can be set using <strong>adp1050_set_cs1_settings</strong> API.</p>
+<p>Also the currrent value at the CS1 pin can be read using <strong>adp1050_read_value</strong>,
+and will return correct values only if the IN_SCALE_MONITOR command value is
+written accordingly to the datasheet using <strong>adp1050_write</strong> API.</p>
+</section>
+<section id="status-configuration">
+<h2>Status Configuration<a class="headerlink" href="#status-configuration" title="Link to this heading">¶</a></h2>
+<p>Statuses bytes/words of the device can be read using <strong>adp1050_read_status</strong>
+API.</p>
+</section>
+<section id="pwm-configuration">
+<h2>PWM configuration<a class="headerlink" href="#pwm-configuration" title="Link to this heading">¶</a></h2>
+<p>PWMs duty-cycle and modulation can be set using the <strong>adp1050_pwm_duty_cycle</strong>
+andd <strong>adp1050_pwm_modulation</strong> API but also each PWM can be enabled using
+<strong>adp1050_set_pwm</strong> API which also selects the frequency of the specific set
+PWM channel.</p>
+</section>
+<section id="feedforward-and-pulse-skipping-configuration">
+<h2>Feedforward and Pulse Skipping configuration<a class="headerlink" href="#feedforward-and-pulse-skipping-configuration" title="Link to this heading">¶</a></h2>
+<p>Feedforward operation at the VF pin can be set using <strong>adp1050_set_feedforward</strong>
+API and also Pulse Skipping can be set using <strong>adp1050_pulse_skipping</strong> API.
+Pulse Skipping can be set only if open-loop operation is set for the device.</p>
+</section>
+<section id="loop-configuration">
+<h2>Loop Configuration<a class="headerlink" href="#loop-configuration" title="Link to this heading">¶</a></h2>
+<p>The ADP1050 can be set to work on a closed-loop using <strong>adp1050_set_close_loop</strong>
+API or on a open-loop using <strong>adp1050_set_open_loop</strong>.</p>
+</section>
+<section id="frequency-synchronization">
+<h2>Frequency Synchronization<a class="headerlink" href="#frequency-synchronization" title="Link to this heading">¶</a></h2>
+<p>Frequency Synchronization can be disabled or enabled using <strong>adp1050_freq_sync</strong>
+API if the SYNI/FLGI pin is used as a SYNI pin.</p>
+</section>
+<section id="flgi-pin-configuration">
+<h2>FLGI pin configuration<a class="headerlink" href="#flgi-pin-configuration" title="Link to this heading">¶</a></h2>
+<p>FLGI pin response can be set using the <strong>adp1050_set_flgi_response</strong> if
+SYNI/FLGI pin is set as an FLGI pin.</p>
+</section>
+<section id="trim-configuration">
+<h2>Trim configuration<a class="headerlink" href="#trim-configuration" title="Link to this heading">¶</a></h2>
+<p>VOUT/VIN/IIN can be trimmed accordingly to the datasheet values using the
+<strong>adp1050_trim</strong> API.</p>
+</section>
+<section id="passwords-configuration">
+<h2>Passwords configuration<a class="headerlink" href="#passwords-configuration" title="Link to this heading">¶</a></h2>
+<p>Passwords for the CHIP/EEPROM/TRIM commands can be unlocked, locked and changed
+using <strong>adp1050_unlock_pass</strong>, <strong>adp1050_lock_pass</strong> and <strong>adp1050_change_pass</strong>
+APIs.</p>
+</section>
+<section id="software-reset-configuration">
+<h2>Software Reset Configuration<a class="headerlink" href="#software-reset-configuration" title="Link to this heading">¶</a></h2>
+<p>Software Reset operation is available through <strong>adp1050_software_reset</strong> API.</p>
+</section>
+<section id="adp1050-driver-initialization-example">
+<h2>ADP1050 Driver Initialization Example<a class="headerlink" href="#adp1050-driver-initialization-example" title="Link to this heading">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>struct<span class="w"> </span>adp1050_desc<span class="w"> </span>*adp1050_desc<span class="p">;</span>
+struct<span class="w"> </span>no_os_i2c_init_param<span class="w"> </span><span class="nv">adp1050_i2c_ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>.device_id<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span>,
+<span class="w">        </span>.max_speed_hz<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">100000</span>,
+<span class="w">        </span>.platform_ops<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>max_i2c_ops,
+<span class="w">        </span>.slave_address<span class="w"> </span><span class="o">=</span><span class="w"> </span>ADP1050_PMBUS_10KOHM_ADDRESS,
+<span class="w">        </span>.extra<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>adp1050_i2c_extra,
+<span class="o">}</span><span class="p">;</span>
+struct<span class="w"> </span>no_os_gpio_init_param<span class="w"> </span><span class="nv">adp1050_pg_alt_ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>.port<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span>,
+<span class="w">        </span>.number<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">24</span>,
+<span class="w">        </span>.pull<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_PULL_NONE,
+<span class="w">        </span>.platform_ops<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>max_gpio_ops,
+<span class="w">        </span>.extra<span class="w"> </span><span class="o">=</span><span class="w"> </span>*<span class="p">&amp;</span>adp1050_gpio_extra_ip,
+<span class="o">}</span><span class="p">;</span>
+struct<span class="w"> </span>adp1050_init_param<span class="w"> </span><span class="nv">adp1050_ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>.i2c_param<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>adp1050_i2c_ip,
+<span class="w">        </span>.pg_alt_param<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>adp1050_pg_alt_ip,
+<span class="w">        </span>.flgi_param<span class="w"> </span><span class="o">=</span><span class="w"> </span>NULL,
+<span class="w">        </span>.syni_param<span class="w"> </span><span class="o">=</span><span class="w"> </span>NULL,
+<span class="w">        </span>.on_off_config<span class="w"> </span><span class="o">=</span><span class="w"> </span>ADP1050_ON_OFF_DEFAULT_CFG,
+<span class="o">}</span><span class="p">;</span>
+<span class="nv">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>adp1050_init<span class="o">(</span><span class="p">&amp;</span>adp1050_desc,<span class="w"> </span><span class="p">&amp;</span>adp1050_ip<span class="o">)</span><span class="p">;</span>
+<span class="k">if</span><span class="w"> </span><span class="o">(</span>ret<span class="o">)</span>
+<span class="w">        </span>goto<span class="w"> </span>error<span class="p">;</span>
+</pre></div>
+</div>
+</section>
+<section id="adp1050-no-os-iio-support">
+<h2>ADP1050 no-OS IIO support<a class="headerlink" href="#adp1050-no-os-iio-support" title="Link to this heading">¶</a></h2>
+<p>The ADP1050 IIO driver comes on top of the ADP1050 driver and offers support
+for interfacing IIO clients through libiio.</p>
+</section>
+<section id="adp1050-iio-device-configuration">
+<h2>ADP1050 IIO Device Configuration<a class="headerlink" href="#adp1050-iio-device-configuration" title="Link to this heading">¶</a></h2>
+</section>
+<section id="input-channel-attributes">
+<h2>Input Channel Attributes<a class="headerlink" href="#input-channel-attributes" title="Link to this heading">¶</a></h2>
+<p>VOUT/VIN/IIN/TEMP channels are the input channels of the ADP1050 IIO device
+and each of them has a total of 2 channel attributes:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">raw</span> <span class="pre">-</span> <span class="pre">the</span> <span class="pre">raw</span> <span class="pre">value</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">channel</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">scale</span> <span class="pre">-</span> <span class="pre">the</span> <span class="pre">scale</span> <span class="pre">value</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">channel</span> <span class="pre">calculated</span> <span class="pre">accordingly</span> <span class="pre">to</span> <span class="pre">each</span> <span class="pre">specific</span> <span class="pre">channel</span> <span class="pre">using</span> <span class="pre">a</span> <span class="pre">priv</span></code></p></li>
+</ul>
+</section>
+<section id="output-channel-attributes">
+<h2>Output Channel Attributes<a class="headerlink" href="#output-channel-attributes" title="Link to this heading">¶</a></h2>
+<p>OUTA/OUTB/SR1/SR2 channels are thee output channels of the ADP1050 IIO device
+and each of them has a total of 7 channel attributes:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">enable</span> <span class="pre">-</span> <span class="pre">state</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">channel</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">enable_available</span> <span class="pre">-</span> <span class="pre">list</span> <span class="pre">of</span> <span class="pre">available</span> <span class="pre">states</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">channel</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">frequency</span> <span class="pre">-</span> <span class="pre">frequency</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">channel,</span> <span class="pre">all</span> <span class="pre">channels</span> <span class="pre">share</span> <span class="pre">the</span> <span class="pre">same</span> <span class="pre">frequency</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">frequency_available</span> <span class="pre">-</span> <span class="pre">list</span> <span class="pre">of</span> <span class="pre">available</span> <span class="pre">frequency</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">output</span> <span class="pre">channels</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">duty_cycle</span> <span class="pre">-</span> <span class="pre">duty</span> <span class="pre">cylce</span> <span class="pre">value</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">channel</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">modulation</span> <span class="pre">-</span> <span class="pre">modulation</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">channel</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">modulation_available</span> <span class="pre">-</span> <span class="pre">types</span> <span class="pre">of</span> <span class="pre">modulation</span> <span class="pre">available</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">output</span> <span class="pre">channels</span></code></p></li>
+</ul>
+</section>
+<section id="global-attributes">
+<h2>Global Attributes<a class="headerlink" href="#global-attributes" title="Link to this heading">¶</a></h2>
+<p>The device has a total of 13 global attributes:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">vout_command</span> <span class="pre">-</span> <span class="pre">VOUT_COMMAND</span> <span class="pre">value</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">device</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">vout_margin_low</span> <span class="pre">-</span> <span class="pre">VOUT_MARGIN_LOW</span> <span class="pre">value</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">device</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">vout_margin_high</span> <span class="pre">-</span> <span class="pre">VOUT_MARGIN_HIGH</span> <span class="pre">value</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">device</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">vout_scale_monitor</span> <span class="pre">-</span> <span class="pre">VOUT_SCALE_MONITOR</span> <span class="pre">value</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">device</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">vout_offset</span> <span class="pre">-</span> <span class="pre">VOUT_OFFSET</span> <span class="pre">value</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">device</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">freq_sync</span> <span class="pre">-</span> <span class="pre">Frequency</span> <span class="pre">synchronization</span> <span class="pre">state</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">device</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">freq_sync_available</span> <span class="pre">-</span> <span class="pre">Frequency</span> <span class="pre">synchronization</span> <span class="pre">avilable</span> <span class="pre">states</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">device</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">feedforward</span> <span class="pre">-</span> <span class="pre">Feedforward</span> <span class="pre">state</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">device</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">feedforward_available</span> <span class="pre">-</span> <span class="pre">Feedforward</span> <span class="pre">avilable</span> <span class="pre">states</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">device</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">loop</span> <span class="pre">-</span> <span class="pre">loop</span> <span class="pre">operation</span> <span class="pre">mode</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">device</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">loop_available</span> <span class="pre">-</span> <span class="pre">loop</span> <span class="pre">operation</span> <span class="pre">modes</span> <span class="pre">available</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">device</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pulse_skipping</span> <span class="pre">-</span> <span class="pre">pulse</span> <span class="pre">skipping</span> <span class="pre">state</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">device,</span> <span class="pre">can</span> <span class="pre">be</span> <span class="pre">enabled</span> <span class="pre">only</span> <span class="pre">in</span> <span class="pre">open-loop</span> <span class="pre">mode</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pulse_skipping_available</span> <span class="pre">-</span> <span class="pre">pulse</span> <span class="pre">skipping</span> <span class="pre">available</span> <span class="pre">states</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">device</span></code></p></li>
+</ul>
+</section>
+<section id="debug-attributes">
+<h2>Debug Attributes<a class="headerlink" href="#debug-attributes" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">status_vout</span> <span class="pre">-</span> <span class="pre">VOUT</span> <span class="pre">status</span> <span class="pre">byte</span> <span class="pre">value</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">device</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">status_input</span> <span class="pre">-</span> <span class="pre">INPUT</span> <span class="pre">status</span> <span class="pre">byte</span> <span class="pre">value</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">device</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">status_temperature</span> <span class="pre">-</span> <span class="pre">TEMPERATURE</span> <span class="pre">status</span> <span class="pre">byte</span> <span class="pre">value</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">device</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">status_cml</span> <span class="pre">-</span> <span class="pre">CML</span> <span class="pre">status</span> <span class="pre">byte</span> <span class="pre">value</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">device</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">status_word</span> <span class="pre">-</span> <span class="pre">Status</span> <span class="pre">word</span> <span class="pre">value</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">device</span></code></p></li>
+</ul>
+</section>
+<section id="adp1050-iio-driver-initialization-example">
+<h2>ADP1050 IIO Driver Initialization Example<a class="headerlink" href="#adp1050-iio-driver-initialization-example" title="Link to this heading">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>int<span class="w"> </span>ret<span class="p">;</span>
+
+struct<span class="w"> </span>adp1050_iio_desc<span class="w"> </span>*adp1050_iio_desc<span class="p">;</span>
+struct<span class="w"> </span>adp1050_iio_desc_init_param<span class="w"> </span><span class="nv">adp1050_iio_ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>.adp1050_init_param<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>adp1050_ip,
+<span class="w">        </span>.vout_scale_monitor<span class="w"> </span><span class="o">=</span><span class="w"> </span>0xA155,
+<span class="w">        </span>.vin_scale_monitor<span class="w"> </span><span class="o">=</span><span class="w"> </span>0xB033,
+<span class="w">        </span>.iin_scale_monitor<span class="w"> </span><span class="o">=</span><span class="w"> </span>0x01,
+<span class="o">}</span><span class="p">;</span>
+
+struct<span class="w"> </span>iio_app_desc<span class="w"> </span>*app<span class="p">;</span>
+struct<span class="w"> </span>iio_app_init_param<span class="w"> </span><span class="nv">app_init_param</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">}</span><span class="p">;</span>
+
+<span class="nv">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>adp1050_iio_init<span class="o">(</span><span class="p">&amp;</span>adp1050_iio_desc,<span class="w"> </span><span class="p">&amp;</span>adp1050_iio_ip<span class="o">)</span><span class="p">;</span>
+<span class="k">if</span><span class="w"> </span><span class="o">(</span>ret<span class="o">)</span>
+<span class="w">        </span>goto<span class="w"> </span>exit<span class="p">;</span>
+
+struct<span class="w"> </span>iio_app_device<span class="w"> </span>iio_devices<span class="o">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span><span class="o">{</span>
+<span class="w">                </span>.name<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;adp1050&quot;</span>,
+<span class="w">                </span>.dev<span class="w"> </span><span class="o">=</span><span class="w"> </span>adp1050_iio_desc,
+<span class="w">                </span>.dev_descriptor<span class="w"> </span><span class="o">=</span><span class="w"> </span>adp1050_iio_desc-&gt;iio_dev,
+<span class="w">        </span><span class="o">}</span>
+<span class="o">}</span><span class="p">;</span>
+
+app_init_param.devices<span class="w"> </span><span class="o">=</span><span class="w"> </span>iio_devices<span class="p">;</span>
+app_init_param.nb_devices<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_ARRAY_SIZE<span class="o">(</span>iio_devices<span class="o">)</span><span class="p">;</span>
+app_init_param.uart_init_params<span class="w"> </span><span class="o">=</span><span class="w"> </span>adp1050_uart_ip<span class="p">;</span>
+
+<span class="nv">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>iio_app_init<span class="o">(</span><span class="p">&amp;</span>app,<span class="w"> </span>app_init_param<span class="o">)</span><span class="p">;</span>
+<span class="k">if</span><span class="w"> </span><span class="o">(</span>ret<span class="o">)</span>
+<span class="w">        </span>goto<span class="w"> </span>remove_iio_adp1050<span class="p">;</span>
+
+<span class="k">return</span><span class="w"> </span>iio_app_run<span class="o">(</span>app<span class="o">)</span><span class="p">;</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+          </div>
+              <div class="related">
+                &nbsp;
+    <a href="madura.html" title="Previous document (Ctrl+LeftArrow)" class="prev">ADRV902x (Madura) no-OS Driver</a>
+    <a href="ltc2992.html" title="Next document (Ctrl+RightArrow)" class="next">LTC2992 no-OS driver</a>
+              </div>
+          
+        </div>
+      </div>
+  </div>
+
+  <div id="vertical-border"></div>
+
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
+    <footer>
+      &#169;2023-2024, Analog Devices, Inc.
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
+</html>

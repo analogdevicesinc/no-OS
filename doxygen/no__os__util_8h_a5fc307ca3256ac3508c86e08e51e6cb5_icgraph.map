@@ -1,0 +1,392 @@
+<map id="no_os_get_unaligned_be16" name="no_os_get_unaligned_be16">
+<area shape="rect" id="node1" title=" " alt="" coords="1767,3791,1965,3817"/>
+<area shape="rect" id="node2" href="$ad3552r_8h.html#acf6f55ec6fb20867e06bcc1237f91909" title=" " alt="" coords="1551,523,1690,549"/>
+<area shape="rect" id="node3" href="$ad405x_8h.html#a0b7dbc056b13300fbf25ddd0e10a7cfb" title="Initialize the device." alt="" coords="1571,573,1670,600"/>
+<area shape="rect" id="node4" href="$ad405x_8h.html#afc422a9dd5287bdd85ab5dc208414991" title="Read conversion data." alt="" coords="1537,624,1705,651"/>
+<area shape="rect" id="node6" href="$ad5460_8h.html#a61d232b50171a80d809b8662273f01ba" title="Read a register&#39;s value." alt="" coords="1553,675,1688,701"/>
+<area shape="rect" id="node23" href="$ad5754r_8h.html#adb48bb39763887cfbaa3835dcf2ef059" title="Read device register." alt="" coords="1565,951,1676,977"/>
+<area shape="rect" id="node37" href="$ad7091r8_8h.html#ad8bc81ef9c5b911903d3a99b049532c1" title=" " alt="" coords="1523,1212,1719,1239"/>
+<area shape="rect" id="node39" href="$ad7091r8_8h.html#aedf26e2818e2887fe67ddd8886fec738" title=" " alt="" coords="1534,1313,1707,1340"/>
+<area shape="rect" id="node49" href="$ad74413r_8h.html#af6bbcca515f3e345ce02191674d3ad7e" title="Read a register&#39;s value." alt="" coords="1547,2384,1694,2411"/>
+<area shape="rect" id="node84" href="$ad74416h_8h.html#afd042d04ab164145d36d42de74310c0d" title="Read a register&#39;s value." alt="" coords="1545,3281,1696,3308"/>
+<area shape="rect" id="node114" href="$ade9430_8h.html#a1ee0658090ed9860852cf0be219d4353" title="Read device register." alt="" coords="1563,3703,1678,3729"/>
+<area shape="rect" id="node121" href="$adin1110_8c.html#adff719efae401e69148b2ffdc2fc1657" title="Drop a MAC address filter." alt="" coords="1525,3765,1717,3792"/>
+<area shape="rect" id="node123" href="$adin1110_8h.html#a05609f0807a1f98ed266f3f75073ddea" title="Set a MAC address destination filter, frames who&#39;s DA doesn&#39;t match are dropped." alt="" coords="1531,3816,1711,3843"/>
+<area shape="rect" id="node124" href="$adis1654x_8c.html#a869c26c00f78c2459822ebbf23d20756" title="Read burst data." alt="" coords="457,3896,659,3923"/>
+<area shape="rect" id="node125" href="$adis1657x_8c.html#ac442d3460a938b11ed36834c5c1bbd59" title="Read burst data." alt="" coords="457,3997,659,4024"/>
+<area shape="rect" id="node126" href="$adis_8h.html#add978372da385dea5434585683a94449" title="Read burst data." alt="" coords="477,4048,639,4075"/>
+<area shape="rect" id="node127" href="$adis_8h.html#a56d0b080b2929be203f7ab3a4c9215d3" title="Read N bytes from register." alt="" coords="1564,7159,1677,7185"/>
+<area shape="rect" id="node342" href="$adis__internals_8h.html#aeb9394f91223d674d4ff3611730d61b4" title="Check if the checksum for burst data is correct." alt="" coords="729,4023,911,4049"/>
+<area shape="rect" id="node343" href="$adt7420_8h.html#aa5f01f1b6ff9473615fe75b13b1e7d97" title="Reads the value of a register I2C interface device." alt="" coords="1538,10023,1703,10049"/>
+<area shape="rect" id="node353" href="$adt75_8h.html#ad1de995173ed100c6b9994dd3d3e49f0" title="Read the raw value of a register." alt="" coords="1559,12988,1682,13015"/>
+<area shape="rect" id="node358" href="$ltc2992_8h.html#a01dc481b67cb8e663696ae65d65be645" title="Read raw data from device register." alt="" coords="1553,13115,1688,13141"/>
+<area shape="rect" id="node365" href="$max14001_8h.html#a73ed1580c63243a693a1df2ed5479271" title="Read from device." alt="" coords="1557,13292,1684,13319"/>
+<area shape="rect" id="node390" href="$max9611_8h.html#ab11d851aa93b5e5c315ff23a468ba24a" title="Receive data from ADC (single value only)." alt="" coords="1549,13343,1692,13369"/>
+<area shape="rect" id="node5" href="$ad405x_8h.html#ad8537455e65de0a05a94542e6fb39497" title="Trigger conversion and read data." alt="" coords="1299,5,1432,32"/>
+<area shape="rect" id="node7" href="$ad5460_8h.html#ae57c7427b36b42beb1c7fcbad35dec7a" title="Read the live status bits." alt="" coords="1301,624,1430,651"/>
+<area shape="rect" id="node8" href="$channel__output__example_8h.html#ae839d5b557e7413ee71a7d30f7b5f8fa" title="Channel output example main execution." alt="" coords="707,464,933,491"/>
+<area shape="rect" id="node10" href="$ad5460_8h.html#adadcf7fc1bf80e2520c82893bff4800e" title="Get the GPO value for a specific channel." alt="" coords="1299,573,1432,600"/>
+<area shape="rect" id="node11" href="$ad5460_8h.html#a08c7febef35caf12c403e76398eb6b71" title="Update a register&#39;s field." alt="" coords="1290,332,1441,359"/>
+<area shape="rect" id="node17" href="$current__output__example_8h.html#a8d0ccace5dc4c241ce6ae16991f6847a" title="Current output example main execution." alt="" coords="709,365,931,392"/>
+<area shape="rect" id="node18" href="$voltage__output__example_8h.html#af594133c13e2cf78c6d9d72028181857" title="Voltage output example main execution." alt="" coords="708,515,932,541"/>
+<area shape="rect" id="node9" href="$ad5460_2src_2platform_2mbed_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function for Mbed platform." alt="" coords="531,464,585,491"/>
+<area shape="rect" id="node12" href="$ad5460_8h.html#af6dce2561d89992c6132034a42cb6477" title="Disable the slew rate control." alt="" coords="999,157,1190,184"/>
+<area shape="rect" id="node13" href="$ad5460_8h.html#ace4100908d1c6f6c7220eb77641d0aea" title="Configure and enable slew rate control for a DAC on a specific channel." alt="" coords="1001,456,1189,483"/>
+<area shape="rect" id="node14" href="$ad5460_8h.html#ad820aff697367d02c3df2bc2803507f8" title="Set the logic value of a GPO pin." alt="" coords="754,157,886,184"/>
+<area shape="rect" id="node16" href="$ad5460_8h.html#a3ac149b8ac0e51abe4a0a543f5cff2d6" title="Set the operation mode for a specific channel." alt="" coords="1017,390,1172,431"/>
+<area shape="rect" id="node19" href="$ad5460_8h.html#a83ab0c31b4c6787df032e94e1ce55f49" title="Set the current limit for a specific DAC channel in vout mode." alt="" coords="1017,259,1172,301"/>
+<area shape="rect" id="node20" href="$ad5460_8h.html#a15df7e48eca2a50e452eff927a9fc29b" title="Set the current range for a specific channel." alt="" coords="1017,325,1172,366"/>
+<area shape="rect" id="node21" href="$ad5460_8h.html#a7c17c388ab71313269c2a441ae2a6dbc" title="Set the voltage range for a specific channel." alt="" coords="1017,507,1172,549"/>
+<area shape="rect" id="node22" href="$ad5460_8h.html#a09df865017b68029dfe0d01b3151cb98" title="Set the GPIO operation mode." alt="" coords="1005,208,1184,235"/>
+<area shape="rect" id="node15" href="$ad5460_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="478,157,638,184"/>
+<area shape="rect" id="node24" href="$ad5754r_8h.html#a344b4a76cb99cdb2e01e4f35c7a51b6e" title="Get Over&#45;current status bit for specific channel." alt="" coords="1273,812,1457,839"/>
+<area shape="rect" id="node25" href="$ad5754r_8h.html#a32970b5f5357e1ba02f31e4ebae39453" title="Get Thermal Shutdown status bit." alt="" coords="1282,863,1449,889"/>
+<area shape="rect" id="node26" href="$ad5754r_8h.html#ad1bfc4d9c2f5248d68eeb0ba926b5f7f" title="Read DAC register value for specific channel." alt="" coords="1284,914,1447,955"/>
+<area shape="rect" id="node27" href="$ad5754r_8h.html#a1d2888ba68a1b85656c84727efe81148" title="Write to and read back a register to verify SPI." alt="" coords="1293,1085,1438,1112"/>
+<area shape="rect" id="node29" href="$ad5754r_8h.html#a55822587e388a1a94b2cd2f1bf413c86" title="Update specific register bits." alt="" coords="1286,980,1445,1007"/>
+<area shape="rect" id="node28" href="$ad5754r_8h.html#a9ccf291f05624d517a9a12d62725b06c" title="Initialize the device." alt="" coords="507,1031,609,1057"/>
+<area shape="rect" id="node30" href="$ad5754r_8h.html#a679e14945072b4e54cdbfba468fbc192" title="Set power&#45;up state for specific channel." alt="" coords="1009,776,1180,803"/>
+<area shape="rect" id="node32" href="$ad5754r_8h.html#a86eb2633b3da97e164056f31216264a8" title="Set clear mode setting for device." alt="" coords="1002,827,1187,853"/>
+<area shape="rect" id="node33" href="$ad5754r_8h.html#a7fde54cb94c1b6632bc7f26f0502b2b1" title="Apply current clamp setting for device." alt="" coords="1017,878,1172,919"/>
+<area shape="rect" id="node34" href="$ad5754r_8h.html#a3c216ae4b41db1538b59025b9d0e122d" title="Set Internal Reference Enable/Disable state for device." alt="" coords="1019,943,1170,985"/>
+<area shape="rect" id="node35" href="$ad5754r_8h.html#aebf248be160290a179b4b7992be0e1ae" title="Set SDO Enable/Disable state for device." alt="" coords="1001,1009,1188,1036"/>
+<area shape="rect" id="node36" href="$ad5754r_8h.html#ad1e19f86104f644876be104c09a5791c" title="Apply TSD setting for device." alt="" coords="1019,1060,1171,1087"/>
+<area shape="rect" id="node31" href="$ad5754r_8h.html#a87d79e32a1b64db9ffcb64b4099acf6a" title="Initialize registers based on init parameters." alt="" coords="755,951,885,977"/>
+<area shape="rect" id="node38" href="$ad7091r8-sdz_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="478,1187,638,1213"/>
+<area shape="rect" id="node40" href="$ad7091r8_8h.html#a40429299260cc7c1810b535a7bb4f07e" title=" " alt="" coords="1291,1364,1439,1391"/>
+<area shape="rect" id="node41" href="$ad7091r8_8h.html#a420a2870fd9a78afc10d726097c09e50" title=" " alt="" coords="1291,1212,1439,1239"/>
+<area shape="rect" id="node42" href="$ad7091r8_8h.html#aea7926691861dac9633c5525e80bc1c2" title=" " alt="" coords="1290,1263,1441,1289"/>
+<area shape="rect" id="node43" href="$ad7091r8_8h.html#abebb64ecf2aa02f00937291bbeae084f" title=" " alt="" coords="1269,1313,1461,1340"/>
+<area shape="rect" id="node44" href="$ad7091r8_8c.html#aeda1a717753c7bfacfb1c767762b25d2" title="Initiate a software reset or hardware reset through the RESET pin." alt="" coords="1033,1212,1156,1239"/>
+<area shape="rect" id="node46" href="$ad7091r8_8h.html#a7a246a61b90d79cb30bf8a897fc8aece" title=" " alt="" coords="998,1313,1191,1340"/>
+<area shape="rect" id="node47" href="$ad7091r8_8h.html#a895fbeec7666e2c44ecaffa6dd2d1381" title=" " alt="" coords="1023,1364,1166,1391"/>
+<area shape="rect" id="node48" href="$ad7091r8_8h.html#a5b948870147de8f86b56a19dcb908423" title="Set device sleep mode." alt="" coords="997,1263,1193,1289"/>
+<area shape="rect" id="node45" href="$ad7091r8_8h.html#a88b4ef5f944b82a2e35a53b9a5170478" title=" " alt="" coords="765,1212,875,1239"/>
+<area shape="rect" id="node50" href="$ad74413r_8h.html#ad8ad82e04c90fc157a2d468235510f87" title="Get the rejection setting for a specific channel." alt="" coords="1277,2293,1453,2334"/>
+<area shape="rect" id="node55" href="$ad74413r_8h.html#a16d2de0ded1a1444a245f965fe33199f" title="Get the ADC measurement range for a specific channel." alt="" coords="1273,2409,1458,2436"/>
+<area shape="rect" id="node56" href="$ad74413r_8h.html#a8067cbe5598b1155264049e24b5566a7" title="Get the rejection setting for a specific channel." alt="" coords="1263,2359,1468,2385"/>
+<area shape="rect" id="node58" href="$ad74413r_8h.html#a194c5c1823b534d265b2ff8402eafe98" title="Get the diagnostic value for a specific channel." alt="" coords="1292,2527,1439,2553"/>
+<area shape="rect" id="node60" href="$ad74413r_8h.html#aaea37e9bf9b2fc6a52daf78866cd1ec1" title="Read the live status bits." alt="" coords="487,2540,629,2567"/>
+<area shape="rect" id="node61" href="$ad74413r_8h.html#afd8a5153239eda88ad930cb44b5e9e85" title="Read the raw ADC raw conversion value." alt="" coords="1279,2461,1451,2502"/>
+<area shape="rect" id="node62" href="$ad74413r_8h.html#a8d853f1af457b7794b13bbf40bc39842" title="Get the GPO value for a specific channel." alt="" coords="487,1499,629,1525"/>
+<area shape="rect" id="node63" href="$ad74413r_8h.html#a4516d35a4966c4f22d80c4dbccad1f8b" title="Get the number of active channels." alt="" coords="1289,1698,1442,1739"/>
+<area shape="rect" id="node64" href="$ad74413r_8h.html#a7ce87336ec6be9a669d53837915fb69e" title="Update a register&#39;s field." alt="" coords="1284,1928,1447,1955"/>
+<area shape="rect" id="node51" href="$ad74413r_8h.html#a161a873b1f007f475d8a61656baf4859" title="Get the ADC sample rate for the diagnostics channels." alt="" coords="990,2375,1199,2401"/>
+<area shape="rect" id="node52" href="$ad74413r_8h.html#ae5b5d0636b18c601de28dbdc25b909e6" title="Get a single ADC raw value for a specific channel, then power down the ADC." alt="" coords="727,1844,913,1871"/>
+<area shape="rect" id="node53" href="$ad74413r_8h.html#ac66c658f628c3af7046d3f9ebb71f586" title="Get the ADC real value, according to the operation mode." alt="" coords="466,1871,650,1897"/>
+<area shape="rect" id="node54" href="$ad74413r_2src_2examples_2dummy_2dummy__example_8c.html#aab59a6c65a45a3bcf47030189141a81c" title="Dummy example main execution." alt="" coords="233,2053,409,2080"/>
+<area shape="rect" id="node57" href="$ad74413r_8h.html#a0f0b937846309275fff4a4325115d637" title="Get the ADC sample rate." alt="" coords="1007,2476,1182,2503"/>
+<area shape="rect" id="node59" href="$ad74413r_8h.html#ac8f2a6e1ed073e8acd21f266e695f1c4" title="Read the die&#39;s temperature from the diagnostic register." alt="" coords="482,2413,634,2440"/>
+<area shape="rect" id="node65" href="$ad74413r_8h.html#a616ec2580d5e530cfd5feb5bb0c461dd" title="Clear the DAC (to the code in DAC_CLR_CODE register)" alt="" coords="1019,1684,1171,1711"/>
+<area shape="rect" id="node66" href="$ad74413r_8h.html#ab10b09fc8236f9f4b4318fe70e6a17e9" title="Disable the slew rate control." alt="" coords="993,1735,1197,1761"/>
+<area shape="rect" id="node67" href="$ad74413r_8h.html#ab6466b2dd407b5accccbfaeea9042f75" title="Configure and enable slew rate control for a DAC on a specific channel." alt="" coords="994,1785,1195,1812"/>
+<area shape="rect" id="node68" href="$ad74413r_8h.html#a848dec7dd3b0f971e38486d2c02eb10c" title="Set the logic value of a GPO pin." alt="" coords="749,2273,891,2300"/>
+<area shape="rect" id="node69" href="$ad74413r_8h.html#aad9e00c68f2ff4a3d5da09da02497e32" title="Enable/disable a specific ADC channel." alt="" coords="995,1567,1194,1609"/>
+<area shape="rect" id="node70" href="$ad74413r_8h.html#a52644a6378136dbd4e2676463fff1fec" title="Start or stop ADC conversions." alt="" coords="991,1633,1199,1660"/>
+<area shape="rect" id="node71" href="$ad74413r_8h.html#ad84f8c43da29bf0fd97915eb492be5db" title="Set the ADC sample rate for the diagnostics channels." alt="" coords="991,2055,1199,2081"/>
+<area shape="rect" id="node74" href="$ad74413r_8h.html#a1451fd07297d8643a53907c18800d610" title="Set the rejection setting for a specific channel." alt="" coords="993,1903,1197,1929"/>
+<area shape="rect" id="node76" href="$ad74413r_8h.html#a321774430421c0f76cec172113f26b32" title="Set the operation mode for a specific channel." alt="" coords="1011,2157,1179,2198"/>
+<area shape="rect" id="node77" href="$ad74413r_8h.html#a1c9d3f797477cc94885acac1eedcb77b" title="Set the debounce mode for the IOx inputs when the ADC is running in digital input mode." alt="" coords="983,1953,1207,1980"/>
+<area shape="rect" id="node78" href="$ad74413r_8h.html#a591c0a8ec0569ff7e68aa0ccbbf15ea8" title="Set which diagnostic value to be loaded in the DIAG_RESULT register." alt="" coords="485,2215,631,2241"/>
+<area shape="rect" id="node79" href="$ad74413r_8h.html#aa3d6f1a8bfcf7b076eadbb2cb306504f" title="Enable conversions on a diagnostic register." alt="" coords="993,1837,1196,1878"/>
+<area shape="rect" id="node80" href="$ad74413r_8h.html#acfe06137db94ea0ed21795cd544c4ccc" title="Set the GPO operation mode." alt="" coords="1001,2324,1188,2351"/>
+<area shape="rect" id="node82" href="$ad74413r_8h.html#aa7eb45929e78919c26309e36af5a1f81" title="Select which information the device will respond with (in the readback field) when a read operation i..." alt="" coords="1023,2004,1166,2031"/>
+<area shape="rect" id="node83" href="$ad74413r_8h.html#a823eb0f0f44a1d034272122f280ae26e" title="Set the threshold, for which a signal would be considered high, when the ADC is running in digital in..." alt="" coords="469,1591,647,1617"/>
+<area shape="rect" id="node72" href="$swiot__fw_8h.html#a427f9beea005fab8fccd9774acb53fc3" title="IIO example main execution." alt="" coords="759,2055,881,2081"/>
+<area shape="rect" id="node73" href="$swiot1l_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function." alt="" coords="531,2080,585,2107"/>
+<area shape="rect" id="node75" href="$swiot1l__mqtt_8h.html#ab4316fc56ae71292fd2845eb8cb6fd42" title=" " alt="" coords="767,2105,873,2132"/>
+<area shape="rect" id="node81" href="$ad74413r_8h.html#a2870a77c140d0932b234263eff8789e5" title="Set multiple GPO values at once." alt="" coords="719,2375,921,2401"/>
+<area shape="rect" id="node85" href="$ad74416h_8h.html#aa0a393aecab8df30bfb71692202970d3" title="Get the ADC Input Node for conversion." alt="" coords="1256,3420,1475,3447"/>
+<area shape="rect" id="node86" href="$ad74416h_8h.html#ae35c642556a31a62c305dcf873753b55" title="Get the ADC measurement range for a specific channel." alt="" coords="1271,3471,1459,3497"/>
+<area shape="rect" id="node87" href="$ad74416h_8h.html#af9c14e36b88db8f6238f1c7ef0dfc832" title="Get the ADC Conversion Rate for a specific channel." alt="" coords="1277,2729,1454,2756"/>
+<area shape="rect" id="node89" href="$ad74416h_8h.html#a455e9f54ecf81fbfff98f4f369c214ee" title="Get the diagnostic value for a specific channel." alt="" coords="1291,3201,1440,3228"/>
+<area shape="rect" id="node91" href="$ad74416h_8h.html#a6a2406b4dbfaeb8682db58749c7cc1b3" title="Read the live status bits." alt="" coords="1293,3252,1438,3279"/>
+<area shape="rect" id="node92" href="$ad74416h_8h.html#a54375cfadad5b89804b5658c283ae0d9" title="Read the raw ADC raw conversion value." alt="" coords="1278,3303,1453,3345"/>
+<area shape="rect" id="node93" href="$ad74416h_8h.html#a213f77fa616a9396863dd4b41024e4c0" title="Get the GPO value for a specific channel." alt="" coords="1291,3369,1440,3396"/>
+<area shape="rect" id="node94" href="$ad74416h_8h.html#af577d885d6a1aaadfbb7f1dbf9dbefcd" title="Get the number of active channels." alt="" coords="1287,2882,1443,2923"/>
+<area shape="rect" id="node95" href="$ad74416h_8h.html#acf8447bab1d929853002a134a64958e1" title="Update a register&#39;s field." alt="" coords="1282,3151,1449,3177"/>
+<area shape="rect" id="node88" href="$ad74416h_8h.html#a330eedb302abc5b997f5cde48e58a38c" title="Get a single ADC raw value for a specific channel, then power down the ADC." alt="" coords="725,2708,915,2735"/>
+<area shape="rect" id="node90" href="$ad74416h_8h.html#ada267d6352cfe89288b9be230f7ad357" title="Read the die&#39;s temperature from the diagnostic register." alt="" coords="1017,3668,1172,3695"/>
+<area shape="rect" id="node96" href="$ad74416h_8h.html#abc59102ec483d952d870e47d794431be" title="Disable the slew rate control." alt="" coords="991,2847,1198,2873"/>
+<area shape="rect" id="node97" href="$ad74416h_8h.html#ab50ac784343083e2d6650fd97807e356" title="Configure and enable slew rate control for a DAC on a specific channel." alt="" coords="993,2897,1197,2924"/>
+<area shape="rect" id="node98" href="$ad74416h_8h.html#a19b7055a69ac5e060b4df329db3f8503" title="Set the DO value of a channel." alt="" coords="1027,2948,1163,2975"/>
+<area shape="rect" id="node99" href="$ad74416h_8h.html#a1f78b57089351637513641367e1e8cee" title="Set the logic value of a GPO pin." alt="" coords="746,3024,894,3051"/>
+<area shape="rect" id="node101" href="$ad74416h_8h.html#a4260e4717e768e202aa3c7426d8aea7c" title="Enable/disable a specific ADC channel." alt="" coords="994,2730,1195,2771"/>
+<area shape="rect" id="node102" href="$ad74416h_8h.html#ae20f662ed7c9c2fab2197e918351c3c0" title="Set the ADC Input Node for conversion." alt="" coords="986,3100,1203,3127"/>
+<area shape="rect" id="node103" href="$ad74416h_8h.html#a88daa759aee670e104e43119908e682a" title="Start or stop ADC conversions." alt="" coords="989,2796,1200,2823"/>
+<area shape="rect" id="node104" href="$ad74416h_8h.html#ab71c6367818f0dd8b1ad8aeab57da934" title="Set the ADC measurement range for a specific channel." alt="" coords="1001,3151,1188,3177"/>
+<area shape="rect" id="node105" href="$ad74416h_8h.html#a3fc5401c4208a8e585bc3919db31c35a" title="Set the ADC Conversion Rate for a specific channel." alt="" coords="1007,3201,1183,3228"/>
+<area shape="rect" id="node106" href="$ad74416h_8h.html#abc70a3364d76a693d2feebbe83f4fe11" title="Set the operation mode for a specific channel." alt="" coords="1009,3253,1180,3294"/>
+<area shape="rect" id="node107" href="$ad74416h_8h.html#a114663608f8422749cadb6ca608a8588" title="Set the current limit for a specific DAC channel in vout mode." alt="" coords="1009,3318,1180,3359"/>
+<area shape="rect" id="node108" href="$ad74416h_8h.html#a6b15b8f15f2c5fae771f149145ffc055" title="Set the voltage range for a specific channel." alt="" coords="1009,3383,1180,3425"/>
+<area shape="rect" id="node109" href="$ad74416h_8h.html#af31d6e0eda6bf3092932c935dedaceb0" title="Set the debounce mode for the IOx inputs when the ADC is running in digital input mode." alt="" coords="981,3449,1208,3476"/>
+<area shape="rect" id="node110" href="$ad74416h_8h.html#ae49d0a596785b33dfe06cf4274362fbb" title="Set which diagnostic value to be loaded in the DIAG_RESULT register." alt="" coords="1021,3500,1169,3527"/>
+<area shape="rect" id="node111" href="$ad74416h_8h.html#a35358091fd9f02e8f8dd3f4b5364fcee" title="Enable conversions on a diagnostic register." alt="" coords="991,3551,1198,3593"/>
+<area shape="rect" id="node112" href="$ad74416h_8h.html#a43d2b4cb99d07dbbb084d3368bcba69a" title="Set the GPIO operation mode." alt="" coords="997,3049,1192,3076"/>
+<area shape="rect" id="node113" href="$ad74416h_8h.html#a52ff223aaede1c83d9f7d0ee2a0adf87" title="Set the threshold, for which a signal would be considered high, when the ADC is running in digital in..." alt="" coords="1004,3617,1185,3644"/>
+<area shape="rect" id="node100" href="$ad74416h_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="478,3024,638,3051"/>
+<area shape="rect" id="node115" href="$ade9430_8h.html#a78b85dafde68e237a91fa9fdaa984e01" title="Initialize the device." alt="" coords="1041,3820,1148,3847"/>
+<area shape="rect" id="node117" href="$ade9430_8h.html#a41447f5ba8b5e0739328ada3bbae63d5" title="Read the power/energy for specific phase." alt="" coords="1279,3601,1452,3628"/>
+<area shape="rect" id="node119" href="$ade9430_8h.html#accf20aba0ba1faa72a1d10d63de51da3" title="Read the temperature." alt="" coords="1017,3769,1172,3796"/>
+<area shape="rect" id="node120" href="$ade9430_8h.html#a931208decd557cdbd43246b0076f6845" title="Update specific register bits." alt="" coords="1285,3703,1446,3729"/>
+<area shape="rect" id="node116" href="$eval-ade9430_2src_2app_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for maxim platform." alt="" coords="793,3820,847,3847"/>
+<area shape="rect" id="node118" href="$eval-ade9430_2src_2app_2main_8c.html#af63cfd0ea49a83c85fbec01fa6b99ed7" title=" " alt="" coords="760,3744,880,3771"/>
+<area shape="rect" id="node122" href="$adin1110_8h.html#a32b2d0fa3b54c8b0219e6b8ed5992d14" title="Set/clear a broadcast filter. By enabling this, broadcast frames will be forwarded to the host." alt="" coords="1289,3805,1442,3846"/>
+<area shape="rect" id="node128" href="$iio__adis__internals_8h.html#a57ed53ce25df6d0b42a4f1298f1a6564" title="Wrapper for reading adis register." alt="" coords="1297,6824,1433,6851"/>
+<area shape="rect" id="node129" href="$adis_8h.html#adbba62f95a88d948f1239872997f8eed" title="Read diag status register and update device diag flags." alt="" coords="1289,11737,1441,11764"/>
+<area shape="rect" id="node163" href="$adis__internals_8h.html#a50222f9a887a27f2ce9e27ad662744a0" title="Read field to int32 value." alt="" coords="483,7887,633,7913"/>
+<area shape="rect" id="node192" href="$adis__internals_8h.html#a97a0a20d525b6183558206b831f6bd12" title="Read field to uint32 value." alt="" coords="1290,9009,1441,9036"/>
+<area shape="rect" id="node267" href="$adis_8h.html#aa52f10ccfaf0ce64d749ff3dbec17903" title="Read FIR Filter Coefficient C_coef_idx value." alt="" coords="1295,6875,1435,6901"/>
+<area shape="rect" id="node268" href="$adis_8h.html#adc1376aeab2cd0a51440d82c17ad36fd" title="Read FIR Filter Coefficient Bank A idx value." alt="" coords="1295,6926,1435,6967"/>
+<area shape="rect" id="node269" href="$adis_8h.html#a20ce1bfb4c1dacab9b6e433622a11b7c" title="Read FIR Filter Coefficient Bank B idx value." alt="" coords="1295,6991,1435,7033"/>
+<area shape="rect" id="node270" href="$adis_8h.html#a870adbf532af1e1769989b89bfdce837" title="Read FIR Filter Coefficient Bank C idx value." alt="" coords="1295,7057,1435,7098"/>
+<area shape="rect" id="node271" href="$adis_8h.html#a2b7f5b3888ad2f039fd99518c662de11" title="Read FIR Filter Coefficient Bank D idx value." alt="" coords="1295,7122,1435,7163"/>
+<area shape="rect" id="node272" href="$adis_8h.html#ad6cbbad138d54208f2e5829a4f3355d9" title="Read gpio configured direction." alt="" coords="1293,12261,1437,12288"/>
+<area shape="rect" id="node273" href="$adis_8h.html#a24b3650ff9517f21d35f9e5b66e3b28c" title="Read gpio configured data level." alt="" coords="1294,9927,1437,9953"/>
+<area shape="rect" id="node274" href="$adis_8h.html#a825e25894cecc791fdd0b55f3daf875d" title="Read temperature flags. Currently this implementation is valid only for adis16550...." alt="" coords="1283,7188,1447,7215"/>
+<area shape="rect" id="node275" href="$adis_8h.html#a95ab498c9b8f1ef357cd6e8bc042cf19" title="Update the desired bits of reg in accordance with mask and val." alt="" coords="1280,6340,1451,6367"/>
+<area shape="rect" id="node340" href="$adis_8h.html#a954bf97ce7587cb0c6330d1b4e8f2a25" title="Write gpio direction configuration." alt="" coords="1291,7289,1439,7316"/>
+<area shape="rect" id="node341" href="$adis_8h.html#aa450f6195792768e30d83c7bb18d065a" title="Write gpio level configuration." alt="" coords="1292,7340,1439,7367"/>
+<area shape="rect" id="node130" href="$adis_8h.html#ac138d46e3aaa5696d6000b8309707c82" title="Device initial setup." alt="" coords="485,10813,631,10840"/>
+<area shape="rect" id="node133" href="$adis_8h.html#abe30b2ac68529f4d7504ad3111536b01" title="Diagnosis: read accelerometer self test error flag value." alt="" coords="1018,12355,1171,12397"/>
+<area shape="rect" id="node135" href="$adis_8h.html#a8a76e886134d399da683ea87c2e65bba" title="Diagnosis: read ADuC microcontroller fault flag value." alt="" coords="1015,12421,1174,12462"/>
+<area shape="rect" id="node136" href="$adis_8h.html#adb678e91b25c42d1173e13a12fcdac3f" title="Diagnosis: read boot memory failure error flag value." alt="" coords="1017,12486,1173,12527"/>
+<area shape="rect" id="node137" href="$adis_8h.html#a7ba0b972f5c2a32e6b8f9288eb73e9f5" title="Diagnosis: read clock error flag value." alt="" coords="1009,12552,1180,12579"/>
+<area shape="rect" id="node138" href="$adis_8h.html#a316bc6bf4b23859133f993199cafae94" title="Diagnosis: read configuration and/or calibration CRC error flag value." alt="" coords="1011,12603,1178,12645"/>
+<area shape="rect" id="node139" href="$adis_8h.html#a7b52e6c8a05abffeb1f334bfebe4820e" title="Diagnosis: read data path overrun flag value." alt="" coords="1017,12669,1173,12710"/>
+<area shape="rect" id="node140" href="$adis_8h.html#a01cfb23f23af644a50073f55bc87f176" title="Diagnosis: read external 5V supply error flag value." alt="" coords="1021,10959,1169,11001"/>
+<area shape="rect" id="node141" href="$adis_8h.html#ab9dcb2ade01b32de80a1b4abe24671b1" title="Diagnosis: read flash memory update error flag value." alt="" coords="1013,11025,1177,11066"/>
+<area shape="rect" id="node142" href="$adis_8h.html#af6470af6a3a304778913e10789237294" title="Diagnosis: read gyroscope1 self test error flag value." alt="" coords="1013,11090,1177,11131"/>
+<area shape="rect" id="node143" href="$adis_8h.html#a7f1b633b0630fb67fdc65974de833a1b" title="Diagnosis: read gyroscope2 self test error flag value." alt="" coords="1013,11155,1177,11197"/>
+<area shape="rect" id="node144" href="$adis_8h.html#a063b6c621beddf79cb43f487480af07e" title="Diagnosis: read internal processor supply error flag value." alt="" coords="1023,11221,1167,11262"/>
+<area shape="rect" id="node145" href="$adis_8h.html#a80c12358d97a5cbec383c804ec29da09" title="Diagnosis: read internal regulator error flag value." alt="" coords="1023,10894,1167,10935"/>
+<area shape="rect" id="node146" href="$adis_8h.html#a83e9df53d911f270f84bca297003ce59" title="Diagnosis: read internal sensor supply error flag value." alt="" coords="1023,11286,1167,11327"/>
+<area shape="rect" id="node147" href="$adis_8h.html#a2d8bf61e08a8aad9610a14ff897256d2" title="Diagnosis: read flash memory test error flag value." alt="" coords="1014,11351,1175,11393"/>
+<area shape="rect" id="node148" href="$adis_8h.html#a0340474aa9eee9698529a0cb880d05c3" title="Diagnosis: read overrange for inertial sensors flag value." alt="" coords="998,11417,1191,11444"/>
+<area shape="rect" id="node149" href="$adis_8h.html#a255be6cfb268a7eabff98a5c2d04848b" title="Diagnosis: read power supply error flag value." alt="" coords="1011,11469,1178,11510"/>
+<area shape="rect" id="node150" href="$adis_8h.html#af15a85bf42d6d1df6d42105f20154ec7" title="Diagnosis: read register NVM error flag value." alt="" coords="1021,11534,1169,11575"/>
+<area shape="rect" id="node151" href="$adis_8h.html#a72d4be4919c0f97b0ec876b87b546cd4" title="Diagnosis: read sensor self test error flag value." alt="" coords="1017,11599,1172,11641"/>
+<area shape="rect" id="node152" href="$adis_8h.html#ac1a9d6a5cc64a8215b6defa62990540f" title="Diagnosis: read sensor initialization failure flag value." alt="" coords="1017,11665,1172,11706"/>
+<area shape="rect" id="node153" href="$adis_8h.html#a8888f8eaf682594846b05977239dc0c0" title="Diagnosis: read spi communication error flag value." alt="" coords="1021,11730,1168,11771"/>
+<area shape="rect" id="node154" href="$adis_8h.html#acb3b0c39c1b7de567a82aca95e10616b" title="Diagnosis: read standby mode flag value." alt="" coords="983,11796,1206,11823"/>
+<area shape="rect" id="node155" href="$adis_8h.html#a4ec1f4b60c721b74f110f2127b472dbe" title="Diagnosis: read temperature error flag value." alt="" coords="1001,11847,1188,11873"/>
+<area shape="rect" id="node156" href="$adis_8h.html#a1bc950589dff68f4af58391b9f303fa2" title="Diagnosis: read watchdog timer flag value." alt="" coords="1017,11898,1172,11939"/>
+<area shape="rect" id="node157" href="$adis_8h.html#a48fc58859b392e38b45644af7bd9e61a" title="Diagnosis: read X&#45;Axis Accelerometer failure flag value." alt="" coords="1010,11963,1179,12005"/>
+<area shape="rect" id="node158" href="$adis_8h.html#a26c1a22297b8af746875ebe32006db2d" title="Diagnosis: read X&#45;Axis Gyroscope failure flag value." alt="" coords="1010,12029,1179,12070"/>
+<area shape="rect" id="node159" href="$adis_8h.html#a65ddeda266406d291a7284012a9dea66" title="Diagnosis: read Y&#45;Axis Accelerometer failure flag value." alt="" coords="1010,12094,1179,12135"/>
+<area shape="rect" id="node160" href="$adis_8h.html#ab3fa95f055ecb940a253a57e9cf8ac75" title="Diagnosis: read Y&#45;Axis Gyroscope failure flag value." alt="" coords="1010,12159,1179,12201"/>
+<area shape="rect" id="node161" href="$adis_8h.html#a8a8fffcbcc32164537faad73949e9052" title="Diagnosis: read Z&#45;Axis Accelerometer failure flag value." alt="" coords="1011,12225,1179,12266"/>
+<area shape="rect" id="node162" href="$adis_8h.html#a55e87b91a75d7428caee49a67d8fd76b" title="Diagnosis: read Z&#45;Axis Gyroscope failure flag value." alt="" coords="1011,12290,1179,12331"/>
+<area shape="rect" id="node131" href="$adis_8h.html#a01dad093cb99c894f26a63a71ae2dfdb" title="Initialize adis device." alt="" coords="283,7253,360,7280"/>
+<area shape="rect" id="node132" href="$eval-adis1646x_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Dummy example main execution." alt="" coords="15,7431,175,7457"/>
+<area shape="rect" id="node134" href="$iio__adis__internals_8h.html#ace76ecb27ca5c4368c7e29d77f54ec7d" title="Handles the read request for debug attributes." alt="" coords="743,10094,897,10135"/>
+<area shape="rect" id="node164" href="$adis_8h.html#a36db8ae51d7390f42ef0ba60e8eac164" title="Read raw temperature data." alt="" coords="244,7507,399,7533"/>
+<area shape="rect" id="node166" href="$adis_8h.html#ac8742db0ae6b5b09e9f24f87a5887572" title="Read raw acceleration data on x axis." alt="" coords="255,7557,388,7584"/>
+<area shape="rect" id="node167" href="$adis_8h.html#a47a132c41144a48ffec3f55ad1f3a3bb" title="Read raw delta angle data on x axis." alt="" coords="243,7861,399,7888"/>
+<area shape="rect" id="node168" href="$adis_8h.html#a76d64491528918ff49ef8c1e28ea7601" title="Read raw delta velocity data on x axis." alt="" coords="245,7912,397,7939"/>
+<area shape="rect" id="node169" href="$adis_8h.html#a9156a464b496ef333282f3bb06829eff" title="Read raw gyroscope data on x axis." alt="" coords="253,7608,389,7635"/>
+<area shape="rect" id="node170" href="$adis_8h.html#a9c258cfc2bc18e15cc2feedb3c993bd2" title="Read raw acceleration offset correction on x axis." alt="" coords="250,8267,393,8293"/>
+<area shape="rect" id="node172" href="$adis_8h.html#aa5921035934b7e532b0c2e43c11e2c23" title="Read raw acceleration scale adjustment on x axis." alt="" coords="247,8165,396,8192"/>
+<area shape="rect" id="node174" href="$adis_8h.html#a353a5f22d62f0b7a36aa8f6b15fbfa0c" title="Read raw gyroscope offset correction on x axis." alt="" coords="250,8317,393,8344"/>
+<area shape="rect" id="node175" href="$adis_8h.html#aff83327d6dde25dcac4e475b9017e3b9" title="Read raw gyroscope scale adjustment on x axis." alt="" coords="247,8216,396,8243"/>
+<area shape="rect" id="node176" href="$adis_8h.html#aa81242e3a496e9c06178d64731a2324a" title="Read raw acceleration data on y axis." alt="" coords="255,7304,388,7331"/>
+<area shape="rect" id="node177" href="$adis_8h.html#abee671f832770a7f4f88b7536068ea9f" title="Read raw delta angle data on y axis." alt="" coords="243,7659,399,7685"/>
+<area shape="rect" id="node178" href="$adis_8h.html#a9564607ae5ddb9a6aef87d2a2969baa6" title="Read raw delta velocity data on y axis." alt="" coords="245,7709,397,7736"/>
+<area shape="rect" id="node179" href="$adis_8h.html#a34005ac0792987ea8460c88cf1a2f27e" title="Read raw gyroscope data on y axis." alt="" coords="253,7355,389,7381"/>
+<area shape="rect" id="node180" href="$adis_8h.html#a100648f8e49f4f0f5026f2bdc67db39c" title="Read raw acceleration offset correction on y axis." alt="" coords="250,8368,393,8395"/>
+<area shape="rect" id="node181" href="$adis_8h.html#a2aad002cf671b3123812fa3a1dd7c693" title="Read raw acceleration scale adjustment on y axis." alt="" coords="247,7963,396,7989"/>
+<area shape="rect" id="node182" href="$adis_8h.html#a9d1bfae66fe1c74c9138bafaab17a3dc" title="Read raw gyroscope offset correction on y axis." alt="" coords="250,8419,393,8445"/>
+<area shape="rect" id="node183" href="$adis_8h.html#a733a04a6bc2935de76cda8711bff3284" title="Read raw gyroscope scale adjustment on y axis." alt="" coords="247,8013,396,8040"/>
+<area shape="rect" id="node184" href="$adis_8h.html#aaa776d92d2944988cb57385a547c1028" title="Read raw acceleration data on z axis." alt="" coords="255,7405,387,7432"/>
+<area shape="rect" id="node185" href="$adis_8h.html#a0779f9820a9dda34ea31e3b6956385a1" title="Read raw delta angle data on z axis." alt="" coords="244,7760,399,7787"/>
+<area shape="rect" id="node186" href="$adis_8h.html#a9993363049ee765afffeeafc221c67d8" title="Read raw delta velocity data on z axis." alt="" coords="246,7811,397,7837"/>
+<area shape="rect" id="node187" href="$adis_8h.html#a923431c5b825bb48123638dacda62e93" title="Read raw gyroscope data on z axis." alt="" coords="254,7456,389,7483"/>
+<area shape="rect" id="node188" href="$adis_8h.html#a108b910611edeac000074499e7e8034a" title="Read raw acceleration offset correction on z axis." alt="" coords="251,8469,392,8496"/>
+<area shape="rect" id="node189" href="$adis_8h.html#a4099e5677e853938baf80b8d3fb75e56" title="Read raw acceleration scale adjustment on z axis." alt="" coords="247,8064,395,8091"/>
+<area shape="rect" id="node190" href="$adis_8h.html#a5e7c1a01a2bfea61c370dd33b06ddf84" title="Read raw gyroscope offset correction on z axis." alt="" coords="251,8520,392,8547"/>
+<area shape="rect" id="node191" href="$adis_8h.html#a8eb48d6b07700c7a4e41efc174a22d9c" title="Read raw gyroscope scale adjustment on z axis." alt="" coords="247,8115,395,8141"/>
+<area shape="rect" id="node165" href="$iio__adis__internals_8h.html#a6c6d17dd4a8320c17bde427cf5387f9b" title="Handles the read request for raw attribute." alt="" coords="26,7608,165,7635"/>
+<area shape="rect" id="node171" href="$iio__adis__internals_8h.html#aa3917a9da23da634bfd781829196a31f" title="Handles the read request for calibbias attribute." alt="" coords="9,8393,182,8420"/>
+<area shape="rect" id="node173" href="$iio__adis__internals_8h.html#a7c5174eeea19d0677ba78481174e773b" title="Handles the read request for calibscale attribute." alt="" coords="5,8089,185,8116"/>
+<area shape="rect" id="node193" href="$adis_8h.html#abdea6e8c0a22b7e22471c2a9647313ff" title="Read accelerometer FIR filter control bit value." alt="" coords="1025,10507,1164,10549"/>
+<area shape="rect" id="node194" href="$adis_8h.html#aeb0f28353d2ce451f4542578f7da9d9c" title="Read alarm enable encoded value." alt="" coords="1004,7391,1185,7417"/>
+<area shape="rect" id="node195" href="$adis_8h.html#a16054ca0366c9292b8e4cb5a5e25af95" title="Read alarm polarity encoded value." alt="" coords="1001,7441,1188,7468"/>
+<area shape="rect" id="node196" href="$adis_8h.html#abca262fd354f7c258e7dacb3dd691897" title="Read alarm selection encoded value." alt="" coords="997,7492,1193,7519"/>
+<area shape="rect" id="node197" href="$adis_8h.html#a6e7c47b4a55f2b65af111faf8a61a74f" title="Read x axis accelerometer bias correction enable bit value." alt="" coords="1019,7543,1170,7585"/>
+<area shape="rect" id="node198" href="$adis_8h.html#af238c8bdaca0260a8a7ceeb96a83d766" title="Read x axis gyroscope bias correction enable bit value." alt="" coords="1019,7609,1170,7650"/>
+<area shape="rect" id="node199" href="$adis_8h.html#ae5e121604e300ea02aff4a70d498af4f" title="Read y axis accelerometer bias correction enable bit value." alt="" coords="1019,7674,1170,7715"/>
+<area shape="rect" id="node200" href="$adis_8h.html#a3e414a5ab9c2de69ee81702664e2d5cd" title="Read y axis gyroscope bias correction enable bit value." alt="" coords="1019,7739,1170,7781"/>
+<area shape="rect" id="node201" href="$adis_8h.html#ad2280b4446f5deba667bd18f341bf369" title="Read z axis accelerometer bias correction enable bit value." alt="" coords="1019,7805,1170,7846"/>
+<area shape="rect" id="node202" href="$adis_8h.html#a31c6cb8920c6b01fcb36ed98c012c9b8" title="Read z axis gyroscope bias correction enable bit value." alt="" coords="1019,7870,1170,7911"/>
+<area shape="rect" id="node203" href="$adis_8h.html#a1ffb62aae3c585b9d2a959742f0e8dfa" title="Read time base control value." alt="" coords="1005,7936,1184,7963"/>
+<area shape="rect" id="node204" href="$adis_8h.html#aa60bfa5462438adb62c0db2fb0a10d91" title="Read boot loader revision value." alt="" coords="1020,7987,1169,8013"/>
+<area shape="rect" id="node205" href="$adis_8h.html#a7d30013c39ea33188843398ffbd2eec5" title="Read burst32 enable bit value." alt="" coords="1024,8037,1165,8064"/>
+<area shape="rect" id="node206" href="$adis_8h.html#ace2086dbc11799012110e01dd0661726" title="Read burst selection encoded value." alt="" coords="1019,8088,1170,8115"/>
+<area shape="rect" id="node207" href="$adis_8h.html#a8898946a51b655206699361bceca5333" title="Read data counter value." alt="" coords="1018,8139,1171,8165"/>
+<area shape="rect" id="node208" href="$adis_8h.html#a38cc08a16e081bde8aaca4dc0ec6665d" title="Read decimation rate value." alt="" coords="1021,8189,1169,8216"/>
+<area shape="rect" id="node209" href="$adis_8h.html#aebedc2eb82c4fc5a40e580fcbca59fb5" title="Read data ready enable encoded value." alt="" coords="1017,8240,1173,8267"/>
+<area shape="rect" id="node210" href="$adis_8h.html#a0bdf48f82fa73f43e7687dd0ce3f4b6e" title="Read data ready polarity encoded value." alt="" coords="1013,8291,1176,8317"/>
+<area shape="rect" id="node211" href="$adis_8h.html#a86313fe1aef9dea9cf7d25e188846d73" title="Read data ready selection encoded value." alt="" coords="1009,8341,1180,8368"/>
+<area shape="rect" id="node212" href="$adis_8h.html#a400fc35c20cf22a3a88a69a7e223476b" title="Read output FIFO sample count." alt="" coords="1025,10573,1165,10600"/>
+<area shape="rect" id="node214" href="$adis_8h.html#a9a96598b6a2c9aacef92e65e6685283b" title=" " alt="" coords="1027,8392,1163,8419"/>
+<area shape="rect" id="node215" href="$adis_8h.html#adb47b78fcecef1c2bdebbfb2ee35c334" title="Read FIFO overflow bit value." alt="" coords="1007,8443,1183,8469"/>
+<area shape="rect" id="node216" href="$adis_8h.html#ac5a19fdcb51f25462df96da9340d3bef" title="Read FIFO watermark interrupt enable bit value." alt="" coords="999,8493,1190,8520"/>
+<area shape="rect" id="node217" href="$adis_8h.html#aa796492e8cd721e6013b76933f21fac9" title="Read FIFO watermark interrupt polarity bit value." alt="" coords="997,8544,1192,8571"/>
+<area shape="rect" id="node218" href="$adis_8h.html#a46c0d41fec6e0f4578013234cf479b28" title="Read FIFO watermark threshold level value." alt="" coords="1011,8595,1178,8621"/>
+<area shape="rect" id="node219" href="$adis_8h.html#ae097e5a5100a26eea161e6c1922af62c" title="Read filter size variable B value." alt="" coords="1023,10726,1166,10767"/>
+<area shape="rect" id="node222" href="$adis_8h.html#ad94d44fd78a93b1b2b6e6a5b2b115e10" title="Read x axis accelerometer filter bank selection encoded value." alt="" coords="1023,8646,1167,8687"/>
+<area shape="rect" id="node223" href="$adis_8h.html#ac5891a8076ca774a6642abbc0e0c085c" title="Read x axis gyroscope filter bank selection encoded value." alt="" coords="1023,8711,1167,8753"/>
+<area shape="rect" id="node224" href="$adis_8h.html#a90fb3a135c95bacffbbb75b8e323e46d" title="Read y axis accelerometer filter bank selection encoded value." alt="" coords="1023,8777,1167,8818"/>
+<area shape="rect" id="node225" href="$adis_8h.html#a33e4a7c669763445d5738dd482e9b82d" title="Read y axis gyroscope filter bank selection encoded value." alt="" coords="1023,8842,1167,8883"/>
+<area shape="rect" id="node226" href="$adis_8h.html#aafad3f10a39f4a8cc6e170bdfefabe2c" title="Read z axis accelerometer filter bank selection encoded value." alt="" coords="1023,9061,1167,9102"/>
+<area shape="rect" id="node227" href="$adis_8h.html#a2d2d7d788f2f370d0916f7c44c2dc40e" title="Read z axis gyroscope filter bank selection encoded value." alt="" coords="1023,9497,1167,9538"/>
+<area shape="rect" id="node228" href="$adis_8h.html#acef13f3bed64f5b1876bbfcae730aaa8" title="Read x axis accelerometer filter enable bit value." alt="" coords="1019,9563,1170,9589"/>
+<area shape="rect" id="node229" href="$adis_8h.html#a217a897f2615af6c9fc9885f08ef4dbc" title="Read x axis gyroscope filter enable bit value." alt="" coords="1019,9613,1170,9640"/>
+<area shape="rect" id="node230" href="$adis_8h.html#a4eae8d4701cda47fbba8e65d2f1152c1" title="Read y axis accelerometer filter enable bit value." alt="" coords="1019,9664,1170,9691"/>
+<area shape="rect" id="node231" href="$adis_8h.html#aa566bd6f48cd4c8c5a1fcc43e646ecb1" title="Read y axis gyroscope filter enable bit value." alt="" coords="1019,9715,1170,9741"/>
+<area shape="rect" id="node232" href="$adis_8h.html#aed43777ae41921a8780e0b4df931668f" title="Read z axis accelerometer filter enable bit value." alt="" coords="1019,9765,1170,9792"/>
+<area shape="rect" id="node233" href="$adis_8h.html#a7e50e01cc9e22f9dd278bad6d3948e56" title="Read z axis gyroscope filter enable bit value." alt="" coords="1019,9816,1170,9843"/>
+<area shape="rect" id="node234" href="$adis_8h.html#a2d4d5c29a281be1a418ee6ba6be8978a" title="Read firmware factory configuration day value." alt="" coords="1028,10624,1161,10651"/>
+<area shape="rect" id="node235" href="$adis_8h.html#a9d752f0f0a2991f6703019fafa1bf789" title="Read firmware factory configuration month value." alt="" coords="1025,10675,1164,10701"/>
+<area shape="rect" id="node236" href="$adis_8h.html#a43f72c8cb0368324e9428afdd9f7dafb" title="Read firmware revision value." alt="" coords="1021,8908,1168,8935"/>
+<area shape="rect" id="node237" href="$adis_8h.html#af537878e6b183598c06067b65e249761" title="Read firmware factory configuration year value." alt="" coords="1028,8959,1161,8985"/>
+<area shape="rect" id="node238" href="$adis_8h.html#a3967a408e0966aabbea248156628e47c" title="Read flash memory write cycle counter value." alt="" coords="993,7289,1196,7316"/>
+<area shape="rect" id="node240" href="$adis_8h.html#a278ddc73392bf1b1f8bd0e3f6a9bbb2b" title="Read gyroscope FIR filter control bit value." alt="" coords="1024,9867,1165,9909"/>
+<area shape="rect" id="node241" href="$adis_8h.html#ae1b50ba2051adbb141744f3515ff4be1" title="Read gyroscope measurement range value." alt="" coords="1013,9126,1177,9167"/>
+<area shape="rect" id="node242" href="$adis_8h.html#ad5ea47ab2bc3f6bc7fb277df1661536d" title="Read linear acceleration compensation enable bit value." alt="" coords="992,9933,1197,9960"/>
+<area shape="rect" id="node243" href="$adis_8h.html#a9a4e20875dfae56d0c7035e824fd7872" title="Read lot specific number value." alt="" coords="1022,9192,1167,9219"/>
+<area shape="rect" id="node244" href="$adis_8h.html#a54437cc7b7e14670a8cde3e2718b781d" title="Read processor revision value." alt="" coords="1021,9984,1169,10011"/>
+<area shape="rect" id="node245" href="$adis_8h.html#a05622e3c23a893206c21446b72cc0526" title="Read product id value." alt="" coords="1025,9243,1165,9269"/>
+<area shape="rect" id="node246" href="$adis_8h.html#ac226aeaca66bd64f9165c94fd584bf42" title="Read point of percussion alignment enable bit value." alt="" coords="1015,10035,1175,10077"/>
+<area shape="rect" id="node247" href="$adis_8h.html#a39df78927f8879e1872e3426a5a917bd" title="Read internal sensor bandwidth encoded value." alt="" coords="1021,10101,1169,10128"/>
+<area shape="rect" id="node248" href="$adis_8h.html#a3c665fd7f3420850f002f1b1708553c9" title="Read serial number value." alt="" coords="1013,9293,1177,9320"/>
+<area shape="rect" id="node249" href="$adis_8h.html#ab281e123a3b65904bab6b6695904a1f7" title="Read current sample SPI transaction checksum." alt="" coords="1010,10152,1179,10179"/>
+<area shape="rect" id="node250" href="$adis_8h.html#a2379b5808dbbf03237e77b265e6eadcb" title="Read 4khz internal sync enable bit value." alt="" coords="1015,10203,1175,10229"/>
+<area shape="rect" id="node251" href="$adis_8h.html#a7c27f09c91231b6e199b04654092e806" title="Read synchronization mode encoded value." alt="" coords="1011,7340,1178,7367"/>
+<area shape="rect" id="node258" href="$adis_8h.html#a1fd43c602a91ad0eebcfe91cce3b1cf7" title="Read sync polarity encoded value." alt="" coords="1005,10253,1184,10280"/>
+<area shape="rect" id="node259" href="$adis_8h.html#a8cdb022e4f99126681a5572f58a64105" title="Read sync selection encoded value." alt="" coords="1001,10304,1189,10331"/>
+<area shape="rect" id="node260" href="$adis_8h.html#aa86f0b4c765fad0317beb466360e6291" title="Read raw time stamp data." alt="" coords="1009,10355,1180,10381"/>
+<area shape="rect" id="node261" href="$adis_8h.html#a4d0d6aecc0f9709d8e34129d935421d1" title="Read timestamp32 enable bit value." alt="" coords="1005,10405,1184,10432"/>
+<area shape="rect" id="node262" href="$adis_8h.html#adf4f74f1795b080d4c817c94fe448ddc" title="Read external clock scale factor value." alt="" coords="1020,10456,1169,10483"/>
+<area shape="rect" id="node263" href="$adis_8h.html#ae31d2cc0c3e78042f406bea29d7e2cea" title="Read user scratch register 1 value." alt="" coords="1018,9344,1171,9371"/>
+<area shape="rect" id="node264" href="$adis_8h.html#a26abc28a4842b7c575252939cbeb391e" title="Read user scratch register 2 value." alt="" coords="1018,9395,1171,9421"/>
+<area shape="rect" id="node265" href="$adis_8h.html#acda50da33ae81acf6b18ce8c3ed66dc4" title="Read user scratch register 3 value." alt="" coords="1018,9445,1171,9472"/>
+<area shape="rect" id="node266" href="$adis_8h.html#aeeddf7cd40e3262aa3995a7641b1a02a" title="Read user scratch register 4 value." alt="" coords="1018,9009,1171,9036"/>
+<area shape="rect" id="node213" href="$iio__adis__internals_8h.html#aa3fb4f6fcd0868abc263f5db5b782538" title="Handles trigger: reads all available samples in FIFO and writes them to the buffer." alt="" coords="731,10566,909,10607"/>
+<area shape="rect" id="node220" href="$adis_8h.html#a9383b11add51276beed4be42beeae199" title="Read configured filter frequency." alt="" coords="765,10733,875,10760"/>
+<area shape="rect" id="node221" href="$iio__adis__internals_8h.html#a8b816d4fafaeb9b303a5d948fc240318" title="Handles the read request for lpf attribute." alt="" coords="492,10733,624,10760"/>
+<area shape="rect" id="node239" href="$adis_8h.html#ad20edced99aea5826a8b71374c1c9d3d" title="Command: flash memory update." alt="" coords="721,7441,919,7468"/>
+<area shape="rect" id="node252" href="$adis_8h.html#a54ef11afd65d0bf5b6d93a6ad776abdf" title="Read adis synchronization clock frequency value in Hertz." alt="" coords="733,7543,907,7569"/>
+<area shape="rect" id="node253" href="$iio__adis__internals_8h.html#a7c6f3c09bd105d1251188d1b52d7cf27" title="API to be called before trigger is enabled." alt="" coords="246,7152,397,7179"/>
+<area shape="rect" id="node254" href="$adis_8h.html#a7f088977b566a1c27c547d070015f3c2" title="Update external clock frequency." alt="" coords="726,7593,914,7620"/>
+<area shape="rect" id="node255" href="$adis_8h.html#a358ff26569317c1d7376c00a23abfbc7" title="Write external clock scale factor value." alt="" coords="743,7340,897,7367"/>
+<area shape="rect" id="node256" href="$adis_8h.html#af3f09f782cb5607fb43ebcc7c8f36c7f" title="Update synchronization mode." alt="" coords="473,7244,643,7271"/>
+<area shape="rect" id="node257" href="$iio__adis__internals_8h.html#a8b8ea22e9082e5bd826bcc4ce8104e08" title="Handles the write request for debug attributes." alt="" coords="242,6951,401,6993"/>
+<area shape="rect" id="node276" href="$adis__internals_8h.html#af31ac4aed35022666bc21bd791872782" title="Write field from uint32 value." alt="" coords="1017,5829,1172,5856"/>
+<area shape="rect" id="node339" href="$adis_8h.html#a8662479ca0ccedc3d7da6a239f454d51" title="Write FIR Filter Coefficient C_coef_idx value." alt="" coords="1023,6340,1167,6367"/>
+<area shape="rect" id="node277" href="$adis_8h.html#a29cc37efa52777d3f1160b0bad6191be" title="Write accelerometer FIR filter control bit value." alt="" coords="749,7223,891,7265"/>
+<area shape="rect" id="node278" href="$adis_8h.html#a06c809427d10100673eeb82bac049bc7" title="Write alarm enable encoded value." alt="" coords="727,4124,913,4151"/>
+<area shape="rect" id="node279" href="$adis_8h.html#a8d3109f6306d08497d7e9ed937b90ed1" title="Write alarm polarity encoded value." alt="" coords="725,4175,915,4201"/>
+<area shape="rect" id="node280" href="$adis_8h.html#a45c185f2cf92d2104eb6e49cc5e16aa6" title="Write alarm selection encoded value." alt="" coords="720,4225,920,4252"/>
+<area shape="rect" id="node281" href="$adis_8h.html#a8e75e96eeec046986ddaa428e2b38bf1" title="Write x axis accelerometer bias correction enable bit value." alt="" coords="743,4277,897,4318"/>
+<area shape="rect" id="node282" href="$adis_8h.html#a286fe9dd83dc9144b6c4faf4950acced" title="Write x axis gyroscope bias correction enable bit value." alt="" coords="743,4342,897,4383"/>
+<area shape="rect" id="node283" href="$adis_8h.html#a8eefbed56894c47242c6a2f46f5263b4" title="Write y axis accelerometer bias correction enable bit value." alt="" coords="743,4407,897,4449"/>
+<area shape="rect" id="node284" href="$adis_8h.html#a52c9d9e0797e5f7c2ff4f02bb4ecfe74" title="Write y axis gyroscope bias correction enable bit value." alt="" coords="743,4473,897,4514"/>
+<area shape="rect" id="node285" href="$adis_8h.html#abe5074bdd8a8739f78e9537033bf4e2c" title="Write z axis accelerometer bias correction enable bit value." alt="" coords="743,4538,897,4579"/>
+<area shape="rect" id="node286" href="$adis_8h.html#a22a9e6c58ba482c609310fde2a2ccdfb" title="Write z axis gyroscope bias correction enable bit value." alt="" coords="743,4603,897,4645"/>
+<area shape="rect" id="node287" href="$adis_8h.html#a19faab713d2c965c8ae50e9ddb725974" title="Write time base control value." alt="" coords="729,4669,911,4696"/>
+<area shape="rect" id="node288" href="$adis_8h.html#ad2ac754c4ad285a2d2774be0020fe079" title="Write burst32 enable bit value." alt="" coords="747,6007,893,6033"/>
+<area shape="rect" id="node289" href="$adis_8h.html#aaa796b8131feb7d199b52b8e307ace10" title="Write burst selection encoded value." alt="" coords="743,3972,897,3999"/>
+<area shape="rect" id="node290" href="$adis_8h.html#a564fc028339629102517b80fac70065b" title="Write decimation rate value." alt="" coords="744,4720,896,4747"/>
+<area shape="rect" id="node291" href="$adis_8h.html#a67bda7d4d19829d47566a819c0e1b082" title="Write data ready enable encoded value." alt="" coords="478,6767,638,6793"/>
+<area shape="rect" id="node292" href="$adis_8h.html#abb94501ce03ae5c47ea0c5fc138db12d" title="Write data ready polarity encoded value." alt="" coords="475,6817,641,6844"/>
+<area shape="rect" id="node293" href="$adis_8h.html#a68ba892298fc0e46496e6cd818991a2a" title="Write data ready selection encoded value." alt="" coords="471,6868,645,6895"/>
+<area shape="rect" id="node294" href="$adis_8h.html#a9b083a98a1c653f5fb4274e4d9af9e0a" title="Write FIFO enable bit value." alt="" coords="488,7543,628,7569"/>
+<area shape="rect" id="node296" href="$adis_8h.html#aac50ca4413fea35cfb810802e0f57351" title="Write FIFO overflow bit value." alt="" coords="468,7168,648,7195"/>
+<area shape="rect" id="node297" href="$adis_8h.html#a2a64cb19b898ce41c01ee7df18d318fb" title="Write FIFO watermark interrupt enable bit value." alt="" coords="484,6919,632,6961"/>
+<area shape="rect" id="node298" href="$adis_8h.html#a879be8ba570ef90ec3b0f064df416bff" title="Write FIFO watermark interrupt polarity bit value." alt="" coords="484,6985,632,7026"/>
+<area shape="rect" id="node299" href="$adis_8h.html#a7992482f1877af1860279bc29cda581e" title="Write FIFO watermark threshold level value." alt="" coords="473,7051,643,7077"/>
+<area shape="rect" id="node300" href="$adis_8h.html#a90db9c14edf21aa48eae2cc3b5b5ce20" title="Write filter size variable B value." alt="" coords="485,7102,631,7143"/>
+<area shape="rect" id="node301" href="$adis_8h.html#a5d9d740282e11ace70f7b89a97ce5cb7" title="Write x axis accelerometer filter bank selection encoded value." alt="" coords="746,4771,894,4813"/>
+<area shape="rect" id="node302" href="$adis_8h.html#a9737db36b4bb0ef73589e82dd2043258" title="Write x axis gyroscope filter bank selection encoded value." alt="" coords="746,4837,894,4878"/>
+<area shape="rect" id="node303" href="$adis_8h.html#a7f115f26e6f765433500063664fc69b8" title="Write y axis accelerometer filter bank selection encoded value." alt="" coords="746,4902,894,4943"/>
+<area shape="rect" id="node304" href="$adis_8h.html#aecfd52752b005871836b61a56a1ee99b" title="Write y axis gyroscope filter bank selection encoded value." alt="" coords="746,4967,894,5009"/>
+<area shape="rect" id="node305" href="$adis_8h.html#a2f62cdc981bc7644b9b407dd1ebc27ba" title="Write z axis accelerometer filter bank selection encoded value." alt="" coords="746,5033,894,5074"/>
+<area shape="rect" id="node306" href="$adis_8h.html#a933538d2f9fd1b6d9bb1fa15dd0a6817" title="Write z axis gyroscope filter bank selection encoded value." alt="" coords="746,5098,894,5139"/>
+<area shape="rect" id="node307" href="$adis_8h.html#a87e792a0ac1cfcdd22ca7275e65eb65e" title="Write x axis accelerometer filter enable bit value." alt="" coords="743,5164,897,5191"/>
+<area shape="rect" id="node308" href="$adis_8h.html#a01fdb468ca75187fe8a1c7f995afe526" title="Write x axis gyroscope filter enable bit value." alt="" coords="743,5215,897,5241"/>
+<area shape="rect" id="node309" href="$adis_8h.html#a66ecc2d3c61017d315eacab161eb9bb4" title="Write y axis accelerometer filter enable bit value." alt="" coords="743,5265,897,5292"/>
+<area shape="rect" id="node310" href="$adis_8h.html#aa61960920535ebe3fea63db4a88b0114" title="Write y axis gyroscope filter enable bit value." alt="" coords="743,5316,897,5343"/>
+<area shape="rect" id="node311" href="$adis_8h.html#a93d808d55c0bee692622730121826d18" title="Write z axis accelerometer filter enable bit value." alt="" coords="743,5367,897,5393"/>
+<area shape="rect" id="node312" href="$adis_8h.html#aa2a2d9e1dd2e20612ce682cecc06bbc5" title="Write z axis gyroscope filter enable bit value." alt="" coords="743,5417,897,5444"/>
+<area shape="rect" id="node313" href="$adis_8h.html#a1614f6a8ee1839203f704d6f2082cd28" title="Write gyroscope FIR filter control bit value." alt="" coords="747,5469,893,5510"/>
+<area shape="rect" id="node314" href="$adis_8h.html#ab528508506c3fee9aacf0f9d4d061f52" title="Write linear acceleration compensation enable bit value." alt="" coords="715,5535,925,5561"/>
+<area shape="rect" id="node315" href="$adis_8h.html#a12be31fe34df79c0fc5468c7c94d747d" title="Write point of percussion alignment enable bit value." alt="" coords="738,5586,902,5627"/>
+<area shape="rect" id="node316" href="$adis_8h.html#a97a6dc5551898a29ed8adfa09768b98a" title="Write internal sensor bandwidth encoded value." alt="" coords="744,5652,896,5679"/>
+<area shape="rect" id="node317" href="$adis_8h.html#a25500ec3c1b0f1bbed19311d73867732" title="Write 4khz internal sync enable bit value." alt="" coords="738,5703,902,5729"/>
+<area shape="rect" id="node318" href="$adis_8h.html#a1766410c489f867c5fc5f98435e83c39" title="Write sync polarity encoded value." alt="" coords="467,6665,649,6692"/>
+<area shape="rect" id="node319" href="$adis_8h.html#a3b274d7f1818635bc163cad48dfd80c4" title="Write sync selection encoded value." alt="" coords="462,6716,654,6743"/>
+<area shape="rect" id="node320" href="$adis_8h.html#a04274eeb313f80ac67cd3f5fb8054b37" title="Write timestamp32 enable bit value." alt="" coords="729,5753,911,5780"/>
+<area shape="rect" id="node321" href="$adis_8h.html#acb5ea74de74e42bb6bd4be96a1a32e94" title="Write user scratch register 1 value." alt="" coords="741,5804,899,5831"/>
+<area shape="rect" id="node322" href="$adis_8h.html#a28196805e6891507c8e1326cf4e82801" title="Write user scratch register 2 value." alt="" coords="741,5855,899,5881"/>
+<area shape="rect" id="node323" href="$adis_8h.html#a126fdeaf5c03f3b9f155a13a33fa2bcf" title="Write user scratch register 3 value." alt="" coords="741,5905,899,5932"/>
+<area shape="rect" id="node324" href="$adis_8h.html#a76746e80a2f66c744989438d2fd0a23a" title="Write user scratch register 4 value." alt="" coords="741,5956,899,5983"/>
+<area shape="rect" id="node325" href="$adis_8h.html#ada2bedbc6369c85eb3abf0c8135b20ba" title="Write raw acceleration offset correction on x axis." alt="" coords="747,6209,893,6236"/>
+<area shape="rect" id="node327" href="$adis_8h.html#a9842713e523f38646bf673a0ba3cb79d" title="Write raw acceleration scale adjustment on x axis." alt="" coords="743,6513,897,6540"/>
+<area shape="rect" id="node329" href="$adis_8h.html#a5d75043de5d8cc6db932328c13ed1be3" title="Write raw gyroscope offset correction on x axis." alt="" coords="747,6260,893,6287"/>
+<area shape="rect" id="node330" href="$adis_8h.html#aaba22b64f65dbee3128cf9c588d5e12d" title="Write raw gyroscope scale adjustment on x axis." alt="" coords="743,6564,897,6591"/>
+<area shape="rect" id="node331" href="$adis_8h.html#a4f5ad59ecbca09b05b6b7d7bd6fb4743" title="Write raw acceleration offset correction on y axis." alt="" coords="747,6311,893,6337"/>
+<area shape="rect" id="node332" href="$adis_8h.html#aa8beabfc4fa4dfa73388aeb285cd8f2d" title="Write raw acceleration scale adjustment on y axis." alt="" coords="743,6615,897,6641"/>
+<area shape="rect" id="node333" href="$adis_8h.html#aa671999a278387ae70e7d7fcc0ef6d4a" title="Write raw gyroscope offset correction on y axis." alt="" coords="747,6057,893,6084"/>
+<area shape="rect" id="node334" href="$adis_8h.html#ad377a4a0ce1349ad502f84f7ce1b0266" title="Write raw gyroscope scale adjustment on y axis." alt="" coords="743,6361,897,6388"/>
+<area shape="rect" id="node335" href="$adis_8h.html#a68f893814446f484e050a83fb854cfdd" title="Write raw acceleration offset correction on z axis." alt="" coords="747,6108,893,6135"/>
+<area shape="rect" id="node336" href="$adis_8h.html#a6fd1c63035d763d40aeb8f577fb96512" title="Write raw acceleration scale adjustment on z axis." alt="" coords="744,6412,896,6439"/>
+<area shape="rect" id="node337" href="$adis_8h.html#abb914fb94b5f49e93a9bd08a6c331505" title="Write raw gyroscope offset correction on z axis." alt="" coords="747,6159,893,6185"/>
+<area shape="rect" id="node338" href="$adis_8h.html#a148aec1a1f2bf3ee7e49182e994f2619" title="Write raw gyroscope scale adjustment on z axis." alt="" coords="744,6463,896,6489"/>
+<area shape="rect" id="node295" href="$iio__adis__internals_8h.html#a59559d0650b39a30f0c2e98189eaca69" title="API to be called after trigger is disabled." alt="" coords="241,7203,402,7229"/>
+<area shape="rect" id="node326" href="$iio__adis__internals_8h.html#a668f0e032ce85e71e07e298e044488d3" title="Handles the write request for calibbias attribute." alt="" coords="469,6184,647,6211"/>
+<area shape="rect" id="node328" href="$iio__adis__internals_8h.html#aedca9e1cc912124ab7272928dcf8c349" title="Handles the write request for calibscale attribute." alt="" coords="466,6488,650,6515"/>
+<area shape="rect" id="node344" href="$adt7420_8h.html#ae8c9a7ec123d3b672f551de3dc2bebd6" title="Reads the value of a register." alt="" coords="1296,12836,1435,12863"/>
+<area shape="rect" id="node345" href="$adt7420_8h.html#a04499e58b0fca74cdc4dc704a5e44c6a" title="Reads the temperature data and converts it to Celsius degrees." alt="" coords="999,12836,1190,12863"/>
+<area shape="rect" id="node346" href="$adt7420-pmdz_2src_2examples_2dummy_2dummy__example_8c.html#aab59a6c65a45a3bcf47030189141a81c" title="Dummy example main execution." alt="" coords="732,12836,908,12863"/>
+<area shape="rect" id="node347" href="$adt7420_8h.html#a002fbfa6b776f9d63d6e394710c6fc49" title="Initializes the communication peripheral and checks if the device is present." alt="" coords="1043,12887,1146,12913"/>
+<area shape="rect" id="node350" href="$adt7420_8h.html#aa37e104e0f4f67268bb38e7ab79fe910" title="Sets the value of a register SPI/I2C." alt="" coords="1001,12937,1188,12964"/>
+<area shape="rect" id="node348" href="$iio__adt7420_8h.html#a6cbb1d170acd8a5a0de1aa4890fd8340" title="Initializes the adt7420 IIO driver." alt="" coords="757,12887,883,12913"/>
+<area shape="rect" id="node349" href="$adt7420-pmdz_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="487,12887,629,12913"/>
+<area shape="rect" id="node351" href="$adt7420_8h.html#a6b22b40bd3315083e90bd52beacb1627" title="Sets the operational mode for ADT7420/ADT7320." alt="" coords="713,12988,927,13015"/>
+<area shape="rect" id="node352" href="$adt7420_8h.html#af3c4b14319003f5a2edf1dd69ac4dcad" title="Sets the resolution for ADT7420/ADT7320." alt="" coords="733,12937,907,12964"/>
+<area shape="rect" id="node354" href="$adt75_8h.html#ac560d739d40415c90549577bf308285d" title="Read the current temperature sample (in milliCelsius)" alt="" coords="1278,12988,1453,13015"/>
+<area shape="rect" id="node356" href="$state__machine_8h.html#a92bc605df80f651e105fe804f43d615b" title="State machine main execution." alt="" coords="1306,13039,1425,13065"/>
+<area shape="rect" id="node355" href="$adt75_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="1015,12988,1175,13015"/>
+<area shape="rect" id="node357" href="$ad-acevsecrdset-sl_2src_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="1067,13039,1122,13065"/>
+<area shape="rect" id="node359" href="$ltc2992_8h.html#abecde49247db59f84eb2ba3a8d2f7751" title="Get fault status." alt="" coords="1298,13140,1433,13167"/>
+<area shape="rect" id="node360" href="$ltc2992_8h.html#aea961d47ceba8c7c09c8746652d0fbc7" title="Initialize communication peripheral for the device." alt="" coords="1316,13191,1415,13217"/>
+<area shape="rect" id="node361" href="$ltc2992_8h.html#a3dfe86d10ef3623a6ebf07e7ff86d5c3" title="Update register value in the device." alt="" coords="1290,13089,1441,13116"/>
+<area shape="rect" id="node362" href="$ltc2992_8h.html#aa4a1f71b696f9294e5d0a06337297d10" title="Clear fault status." alt="" coords="1021,13089,1168,13116"/>
+<area shape="rect" id="node363" href="$ltc2992_8h.html#ab551f128b2c4b618f6a83d8281cfc872" title="Reset alert pin (GPI04) status." alt="" coords="1007,13140,1182,13167"/>
+<area shape="rect" id="node364" href="$ltc2992_8h.html#ad93c1f2a307644ad2400567de082a410" title="Enable alert." alt="" coords="1027,13191,1162,13217"/>
+<area shape="rect" id="node366" href="$max14001_8h.html#aee5f9e0507987747ebb75e55ac75ff50" title="Get filtered adc data." alt="" coords="1261,13241,1469,13268"/>
+<area shape="rect" id="node367" href="$max14001_8h.html#a9b0ce3c935e25f57bc5305da606cff30" title="Get adc data." alt="" coords="1272,13292,1459,13319"/>
+<area shape="rect" id="node368" href="$max14001_8h.html#a6ad7e18e91c998d372f07b418d2f7bc2" title="Initialize the configurations of device." alt="" coords="737,13773,903,13800"/>
+<area shape="rect" id="node369" href="$max14001_8h.html#af03b76b231f573f5de1acb95cc122d23" title="SPI write to device using a mask." alt="" coords="1280,13393,1451,13420"/>
+<area shape="rect" id="node370" href="$max14001_8h.html#aee9cd5354ccbc9fdb66516e1f64dc3bd" title="Write to config registers then to corresponding verification register." alt="" coords="1277,13867,1454,13909"/>
+<area shape="rect" id="node371" href="$max14001_8h.html#a0b2f4d8ad26efe3ac037a9064c6c78a7" title="Set maximum duty cycle for inrush current over the last 10 seconds." alt="" coords="1015,14255,1175,14281"/>
+<area shape="rect" id="node372" href="$max14001_8h.html#ae36880ade2d30a024621b266b5b9771f" title="Enable dynamic FAULT signal." alt="" coords="1007,14305,1183,14332"/>
+<area shape="rect" id="node373" href="$max14001_8h.html#a94ffb87e3d95b570027818f91aae6f17" title="Enable ADC fault." alt="" coords="1007,14356,1182,14383"/>
+<area shape="rect" id="node374" href="$max14001_8h.html#a2bf03d709bfdb701c158d5631bc75bcd" title="Enable COM fault." alt="" coords="1005,13444,1185,13471"/>
+<area shape="rect" id="node375" href="$max14001_8h.html#a4f14bbd8d3a52e7d06b75de48c0fff9f" title="Enable CRCF fault." alt="" coords="1007,13495,1183,13521"/>
+<area shape="rect" id="node376" href="$max14001_8h.html#a53cf5087f9616db42ec263c1151d34e2" title="Enable CRCL fault." alt="" coords="1007,13545,1182,13572"/>
+<area shape="rect" id="node377" href="$max14001_8h.html#a8c0d9be020758f98c85e639795439f83" title="Enable FET fault." alt="" coords="1009,13596,1180,13623"/>
+<area shape="rect" id="node378" href="$max14001_8h.html#aa5d8550f4b5091575b73610b58563c8a" title="Enable INRD fault." alt="" coords="1006,13647,1183,13673"/>
+<area shape="rect" id="node379" href="$max14001_8h.html#a61ce80a51e7b2284f8e217f7701aaae2" title="Enable MV fault." alt="" coords="1008,14153,1181,14180"/>
+<area shape="rect" id="node380" href="$max14001_8h.html#ac599de4d4c5102ceee4220caf7cbbc75" title="Enable/Disable field&#45;side current sink." alt="" coords="1011,14204,1179,14231"/>
+<area shape="rect" id="node381" href="$max14001_8h.html#aad2c248c340c80506637d1f2e24cc502" title="Enable SPI fault." alt="" coords="1009,13697,1180,13724"/>
+<area shape="rect" id="node382" href="$max14001_8h.html#a611aea7e41eb22080b84b9583a81f596" title="Selects the voltage reference source for the ADC." alt="" coords="1009,13748,1180,13775"/>
+<area shape="rect" id="node383" href="$max14001_8h.html#a0ad4afb2d5167c8774a7b8dadc721ed4" title="Current source connection." alt="" coords="1010,13799,1179,13825"/>
+<area shape="rect" id="node384" href="$max14001_8h.html#a59f898278a18ce26d75c91d046f7ccff" title="Enable/Disable fast inrush mode." alt="" coords="1010,13849,1179,13876"/>
+<area shape="rect" id="node385" href="$max14001_8h.html#ad5ab80cfb23b61a3a4691653099918eb" title="Set number of readings averaged in the ADC filter." alt="" coords="1018,13900,1171,13927"/>
+<area shape="rect" id="node386" href="$max14001_8h.html#acde5a4183e929bab1b8585850dfa40dc" title="Configure 4&#45;bit bias current." alt="" coords="1007,13951,1182,13977"/>
+<area shape="rect" id="node387" href="$max14001_8h.html#aa81e4e1dc2618341e95293ea4a9722d2" title="Configure 4&#45;bit inrush current." alt="" coords="1012,14001,1177,14028"/>
+<area shape="rect" id="node388" href="$max14001_8h.html#ab2cd98d2d0a35869c71e8fa021bb6d43" title="Selects Inrush comparator input multiplexer." alt="" coords="1009,14052,1181,14079"/>
+<area shape="rect" id="node389" href="$max14001_8h.html#ad4fe38ceb1888a46e3475cd0f8f08004" title="Configure 4&#45;bit inrush time." alt="" coords="1011,14103,1178,14129"/>
+</map>

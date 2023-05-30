@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>ADF4382 no-OS driver &#8212; no-OS  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="../_static/style.min.css?v=a3ba2641" />
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script defer="" src="../_static/app.umd.js?v=7e1fdd13"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ADIS no-OS driver" href="imu.html" />
+    <link rel="prev" title="MAX2201X no-OS Driver" href="max2201x.html" />
+   
+  
+    <meta name="robots" content="noindex">
+  
+  <meta name="repo" content="no-OS">
+  
+
+
+<style>
+  body {
+    
+  }
+
+  body.dark {
+    
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body:not(.light) {
+      
+    }
+  }
+</style>
+  </head><body>
+  <div class="banner"></div>
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
+  <input type="checkbox" id="input-show-repotoc">
+
+  
+  <div class="search-area">
+    <form action="" method="get">
+      <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+      <button value="search" class="icon"></button>
+      <span id="search-progress"></span>
+    </form>
+  </div>
+  
+
+  <header>
+    <div id="left">
+      <label id="show-sidebar" class="icon" for="input-show-toc" title="Show/hide index"></label>
+    </div>
+    <div id="right">
+      <span>
+        <a id="logo-org" href="https://analog.com"></a>
+        <div class="vertical-divider"></div>
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
+        <a id="logo" href="../index.html">
+          <div>no-OS</div>
+        </a>
+      </span>
+      <span class="reverse">
+        <label id="show-localtoc" class="icon" for="input-show-localtoc" title="Show/hide contents"></label>
+      </span>
+    </div>
+  </header>
+
+
+  <div class="repotoc-tree overlay">
+    <root>
+  <a href="../../documentation/eval/index.html">Evaluation Boards</a>
+  <a href="../../documentation/university/index.html">University Program</a>
+  <a href="../../hdl/index.html">HDL</a>
+  <a href="../index.html" class="current">no-OS</a>
+  <a href="../../pyadi-iio/index.html">Hardware Python Interfaces</a>
+  <a href="../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
+  <a href="../../doctools/index.html">Doctools</a>
+  <a href="../../PrecisionToolbox/index.html">Precision Toolbox</a>
+</root>
+
+  </div>
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div>
+          <div class="localtoc-header">On this page</div>
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">ADF4382 no-OS driver</a><ul>
+<li><a class="reference internal" href="#supported-devices">Supported Devices</a></li>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#applications">Applications</a></li>
+<li><a class="reference internal" href="#adf4382-device-configuration">ADF4382 Device Configuration</a></li>
+<li><a class="reference internal" href="#driver-initialization">Driver Initialization</a></li>
+<li><a class="reference internal" href="#reference-clock-configuration">Reference Clock Configuration</a></li>
+<li><a class="reference internal" href="#reference-doubler-configuration">Reference Doubler Configuration</a></li>
+<li><a class="reference internal" href="#reference-divider-configuration">Reference Divider Configuration</a></li>
+<li><a class="reference internal" href="#charge-pump-current-configuration">Charge Pump Current Configuration</a></li>
+<li><a class="reference internal" href="#bleed-current-configuration">Bleed Current Configuration</a></li>
+<li><a class="reference internal" href="#output-frequency-configuration">Output Frequency Configuration</a></li>
+<li><a class="reference internal" href="#output-power-configuration">Output Power Configuration</a></li>
+<li><a class="reference internal" href="#output-enable-configuration">Output Enable Configuration</a></li>
+<li><a class="reference internal" href="#phase-adjustment-configuration">Phase Adjustment Configuration</a></li>
+<li><a class="reference internal" href="#synchronization-enable-configuration">Synchronization Enable Configuration</a></li>
+<li><a class="reference internal" href="#adf4382-frequency-generation">ADF4382 Frequency Generation</a></li>
+<li><a class="reference internal" href="#frequency-setting">Frequency Setting</a></li>
+<li><a class="reference internal" href="#adf4382-driver-initialization-example">ADF4382 Driver Initialization Example</a></li>
+<li><a class="reference internal" href="#spi-communication-example">SPI Communication Example</a></li>
+<li><a class="reference internal" href="#adf4382-no-os-iio-support">ADF4382 no-OS IIO support</a></li>
+<li><a class="reference internal" href="#adf4382-iio-device-configuration">ADF4382 IIO Device Configuration</a></li>
+<li><a class="reference internal" href="#device-attributes">Device Attributes</a></li>
+<li><a class="reference internal" href="#device-channels">Device Channels</a></li>
+<li><a class="reference internal" href="#adf4382-iio-driver-initialization-example">ADF4382 IIO Driver Initialization Example</a></li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
+  
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+    <a id="no-logo" href="../index.html">
+      no-OS
+    </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
+All content
+</label>
+<label id="show-toc" for="input-switch-toc">
+Content on this topic
+</label>
+<div class="repotoc-tree">
+  <root>
+  <a href="../../documentation/eval/index.html">Evaluation Boards</a>
+  <a href="../../documentation/university/index.html">University Program</a>
+  <a href="../../hdl/index.html">HDL</a>
+  <a href="../index.html" class="current">no-OS</a>
+  <a href="../../pyadi-iio/index.html">Hardware Python Interfaces</a>
+  <a href="../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
+  <a href="../../doctools/index.html">Doctools</a>
+  <a href="../../PrecisionToolbox/index.html">Precision Toolbox</a>
+</root>
+
+</div>
+<div class="toc-tree">
+  <html>
+  <body><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../drivers_guide.html">no-OS drivers guide</a></li>
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1" checked=""/><div class="collapse"><a class="reference internal" href="../drivers_doc.html">no-OS drivers list</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="adxl355.html">ADXL355 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adm1177.html">ADM1177 no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad405x.html">AD405X no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad796x.html">AD796X no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad400x.html">AD400X no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="axi_sysid.html">System ID (AXI_SYSID) no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max14914.html">MAX14914 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max14919.html">MAX14919 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max149x6.html">MAX149X6 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22190.html">MAX22190 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22196.html">MAX22196 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max22200.html">MAX22200 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="max2201x.html">MAX2201X no-OS Driver</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">ADF4382 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="imu.html">ADIS no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="madura.html">ADRV902x (Madura) no-OS Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adp1050.html">ADP1050 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc2992.html">LTC2992 no-OS driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ltc4296.html">LTC4296 no-OS driver</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2"/><div class="collapse"><a class="reference internal" href="../projects_doc.html">no-OS projects list</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7091r8-sdz.html">Evaluating AD7091R-2/-4/-8 Devices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7616-st.html">Evaluating AD7616 on SDP-K1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad796x_fmcz.html">Evaluating the AD796x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad400x-fmcz.html">Evaluating AD400x on ZED and SDP-K1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad469x_fmcz.html">Evaluating the AD469x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adf4382.html">Evaluating the ADF4382</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1646x.html">Evaluating the ADIS1646X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1647x.html">Evaluating the ADIS1647X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1650x.html">Evaluating the ADIS1650X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1654x.html">Evaluating the ADIS1654X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1655x.html">Evaluating the ADIS1655X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-adis1657x.html">Evaluating the ADIS1657X Family</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/eval-ade9430.html">EVAL-ADE9430 Sensor-to-Cloud</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adrv902x.html">adrv902x no-OS Sample Poject</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/apard32690.html">Evaluating the AD-APARD32690-SL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max14914.html">Evaluating the MAX14914</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max14919.html">Evaluating the MAX14919</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adp1050.html">Evaluating the ADP1050</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc4296.html">Evaluating the LTC4296</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max2201x.html">Evaluating the MAX2201X</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to no-OS</a></li>
+</ul>
+</body>
+</html>
+
+</div>
+        </div>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body" role="main">
+            
+  <section id="adf4382-no-os-driver">
+<h1>ADF4382 no-OS driver<a class="headerlink" href="#adf4382-no-os-driver" title="Link to this heading">¶</a></h1>
+<section id="supported-devices">
+<h2>Supported Devices<a class="headerlink" href="#supported-devices" title="Link to this heading">¶</a></h2>
+<p><a class="reference external" href="www.analog.com/en/products/adf4382a.html">ADF4382</a></p>
+</section>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
+<p>The <a class="reference external" href="www.analog.com/en/products/adf4382a.html">ADF4382</a> is a high performance,
+ultralow jitter, Frac-N PLL with integrated VCO ideally suited for LO generation
+for 5G applications or data converter clock applications. The high performance
+PLL has a figure of merit of -238 dBc/Hz, low 1/f Noise and high PFD frequency
+of 625MHz in integer mode that can achieve ultra-low in-band noise and
+integrated jitter. The ADF4382 can generate  frequencies from 687.5 MHz to
+22 GHz without an external doubler, thereby  eliminating the need for
+sub-harmonic filters.</p>
+<p>For multiple data converter clock applications, the
+<a class="reference external" href="www.analog.com/en/products/adf4382a.html">ADF4382</a> automatically aligns its
+output to the input reference edge by including the output divider in the PLL
+feedback loop. For applications that require deterministic delay or delay
+adjustment capability, a programmable reference to output delay with &lt;1ps
+resolution is provided. The reference to output delay matching across multiple
+devices and over temperature, allows for predictable and precise multi-chip
+clock and SYSREF alignment.</p>
+</section>
+<section id="applications">
+<h2>Applications<a class="headerlink" href="#applications" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>High Performance Data Converter Clocking</p></li>
+<li><p>Wireless infrastructure (MC-GSM, 5G, 6G)</p></li>
+<li><p>Test and Measurement</p></li>
+</ul>
+</section>
+<section id="adf4382-device-configuration">
+<h2>ADF4382 Device Configuration<a class="headerlink" href="#adf4382-device-configuration" title="Link to this heading">¶</a></h2>
+</section>
+<section id="driver-initialization">
+<h2>Driver Initialization<a class="headerlink" href="#driver-initialization" title="Link to this heading">¶</a></h2>
+<p>In order to be able to use the device, you will have to provide the support for
+the communication protocol (SPI).</p>
+<p>The first API to be called is <strong>adf4382_init</strong>. Make sure that it returns 0,
+which means that the driver was initialized correctly. This function will also
+reset the ADF4382 by performing a soft reset, putting the device in a known
+state.</p>
+</section>
+<section id="reference-clock-configuration">
+<h2>Reference Clock Configuration<a class="headerlink" href="#reference-clock-configuration" title="Link to this heading">¶</a></h2>
+<p>By default, the device is set to use a 125MHz clock. This can be changed to any
+value, which is supported by the device, by using the function
+<strong>adf4382_set_ref_clk</strong>. The current configuration can be read out using
+<strong>adf4382_get_ref_clk</strong>.The input reference clock value for the function will
+have to be expressed in KHz.</p>
+</section>
+<section id="reference-doubler-configuration">
+<h2>Reference Doubler Configuration<a class="headerlink" href="#reference-doubler-configuration" title="Link to this heading">¶</a></h2>
+<p>The ADF4382 uses has a reference doubler on the input path for the reference
+frequency. By default it is enabled and can be disabled using
+<strong>adf4382_set_en_ref_doubler</strong>. The current configuration can be read out using
+<strong>adf4382_get_en_ref_doubler</strong>.</p>
+<p>This feature can only be enable or disabled.</p>
+<p>Together with the reference divider this feature will determine the PFD
+requency.</p>
+</section>
+<section id="reference-divider-configuration">
+<h2>Reference Divider Configuration<a class="headerlink" href="#reference-divider-configuration" title="Link to this heading">¶</a></h2>
+<p>On the reference input path there is a divider, allowing the input reference
+frequency to be divided by up to 64. Default this is set to 1 and can be changed
+using <strong>adf4382_set_ref_div</strong>. The current configuration can be read out using
+<strong>adf4382_get_ref_div</strong>.</p>
+<p>Together with the reference doubler this feature will determine the PFD frequency.</p>
+</section>
+<section id="charge-pump-current-configuration">
+<h2>Charge Pump Current Configuration<a class="headerlink" href="#charge-pump-current-configuration" title="Link to this heading">¶</a></h2>
+<p>The ADF4382 has the option for 16 preset charge pump currents, ranging from 0.7
+mA to 11.1 mA. by default the charge pump current is set to 11.1 mA. The
+supported currents can be configured using <strong>adf4382_set_cp_i</strong> API, which will
+expect the register value, ranging form 0 to 15, as inputs. The current
+configuration can be read out using <strong>adf4382_set_cp_i</strong>, which will also return
+the value in the same range.</p>
+<p>In order to determine which value corresponds to your design charge pump
+current, please refer to the datasheet
+<a class="reference external" href="www.analog.com/en/products/adf4382a.html">ADF4382</a> in the register details
+section for register REG001F.</p>
+</section>
+<section id="bleed-current-configuration">
+<h2>Bleed Current Configuration<a class="headerlink" href="#bleed-current-configuration" title="Link to this heading">¶</a></h2>
+<p>The charge pump current can be optimized using the bleed current feature, set
+by default to 4903. This can be configured using the <strong>adf4382_set_bleed_word</strong>
+API, by providing the bleed word as a parameter on 13 bits. The current
+configuration can be read out using <strong>adf4382_get_bleed_word</strong>.</p>
+<p>The bleed word is composed of the coarse bleed current, which is the upper 4
+bits of the bleed word, and the fine bleed current representing the lower 9 bits
+of the bleed word.</p>
+</section>
+<section id="output-frequency-configuration">
+<h2>Output Frequency Configuration<a class="headerlink" href="#output-frequency-configuration" title="Link to this heading">¶</a></h2>
+<p>The ADF4382 has two channels which can be configured to output the a frequency
+in the range of 687.5 MHz to 22 GHZ. By default the output frequency is set to
+2.8 GHz and can be reconfigured by using the <strong>adf4382_set_rfout</strong> API. The
+output frequency set by the API is expressed in KHz. The previously configured
+output frequency can be read out using <strong>adf4382_get_rfout</strong>.</p>
+<p>This attribute will set the frequency for both channels as they are not
+independently configurable.</p>
+</section>
+<section id="output-power-configuration">
+<h2>Output Power Configuration<a class="headerlink" href="#output-power-configuration" title="Link to this heading">¶</a></h2>
+<p>Even though the ADF4382 does not permit independent frequencies on each channel,
+the output power on each channel can be configured using
+<strong>adf4382_set_out_power</strong> API by providing the channel and the desired power
+output.The current configuration of each channel can be read out using
+<strong>adf4382_get_out_power</strong>.</p>
+<p>Power of each channel is between 0 to 15 with 0 and by default they are both set
+to 9.</p>
+</section>
+<section id="output-enable-configuration">
+<h2>Output Enable Configuration<a class="headerlink" href="#output-enable-configuration" title="Link to this heading">¶</a></h2>
+<p>Each channel can be activated individually using <strong>adf4382_set_en_chan</strong> API.
+The API expects the channel number and a boolean value for enable or disable. To
+determine if a channel is currently set the <strong>adf4382_get_en_chan</strong> API can be
+used.</p>
+<p>By default only channel 1 is enabled.</p>
+</section>
+<section id="phase-adjustment-configuration">
+<h2>Phase Adjustment Configuration<a class="headerlink" href="#phase-adjustment-configuration" title="Link to this heading">¶</a></h2>
+<p>The phase of the generated output frequency can be adjusted using
+<strong>adf4382_set_phase_adjust</strong>. This will skew the phase of the requested
+frequency by the desired amount in pico-seconds. The API will automatically
+transform the input value from a time adjustment to a phase adjustment relative
+to the set output frequency. If the phase exceeds 360 degrees, it will apply
+only the overshoot.</p>
+<p>By default there is no phase adjustment set.</p>
+<p>When applying the phase adjust, this can add or subtract the desired amount of
+the phase using <strong>adf4382_set_phase_pol</strong>. It expects a boolean value, 0 for
+positive polarity and 1 for negative polarity.</p>
+<p>To determine the current phase adjustment and polarity,
+<strong>adf4382_get_phase_adjust</strong> and <strong>adf4382_get_phase_pol</strong> should be used.</p>
+<p>By default the polarity is positive.</p>
+</section>
+<section id="synchronization-enable-configuration">
+<h2>Synchronization Enable Configuration<a class="headerlink" href="#synchronization-enable-configuration" title="Link to this heading">¶</a></h2>
+<p>The ADF4382 has a synchronization feature wherein Both RF Output signals are
+synchronized to an input signal at this pin. It is used for multi-chip phase
+synchronization. This can be enabled or disabled using the
+<strong>adf4382_set_en_sync</strong> API.</p>
+<p>By default it is disabled.</p>
+</section>
+<section id="adf4382-frequency-generation">
+<h2>ADF4382 Frequency Generation<a class="headerlink" href="#adf4382-frequency-generation" title="Link to this heading">¶</a></h2>
+</section>
+<section id="frequency-setting">
+<h2>Frequency Setting<a class="headerlink" href="#frequency-setting" title="Link to this heading">¶</a></h2>
+<p>As mentioned above, using the default values the generated frequency will be of
+2.8 GHz. This frequency depends on all of the previous configurations and is
+recalculated based on them using the <strong>adf4382_set_freq</strong> API. When the API is
+called, it will calculate the VCO, the output divider, the integer and
+fractional parts of feedback loop for the PLL while trying to obtain the
+configured output frequency. The API will also write the corresponding registers
+with the computed values.</p>
+<p>Because of the link between the calculated values and the configurations, when
+an attribute is reconfigured using the corresponding API it will not have any
+effect until the <strong>adf4382_set_freq</strong> API is called.</p>
+</section>
+<section id="adf4382-driver-initialization-example">
+<h2>ADF4382 Driver Initialization Example<a class="headerlink" href="#adf4382-driver-initialization-example" title="Link to this heading">¶</a></h2>
+</section>
+<section id="spi-communication-example">
+<h2>SPI Communication Example<a class="headerlink" href="#spi-communication-example" title="Link to this heading">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>struct<span class="w"> </span>adf4382_dev<span class="w"> </span>*dev<span class="p">;</span>
+int<span class="w"> </span>ret<span class="p">;</span>
+
+struct<span class="w"> </span>no_os_uart_init_param<span class="w"> </span><span class="nv">adf4382_uart_ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>.device_id<span class="w"> </span><span class="o">=</span><span class="w"> </span>UART_DEVICE_ID,
+<span class="w">        </span>.irq_id<span class="w"> </span><span class="o">=</span><span class="w"> </span>UART_IRQ_ID,
+<span class="w">        </span>.asynchronous_rx<span class="w"> </span><span class="o">=</span><span class="w"> </span>true,
+<span class="w">        </span>.baud_rate<span class="w"> </span><span class="o">=</span><span class="w"> </span>UART_BAUDRATE,
+<span class="w">        </span>.size<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_UART_CS_8,
+<span class="w">        </span>.parity<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_UART_PAR_NO,
+<span class="w">        </span>.stop<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_UART_STOP_1_BIT,
+<span class="w">        </span>.extra<span class="w"> </span><span class="o">=</span><span class="w"> </span>UART_EXTRA,
+<span class="w">        </span>.platform_ops<span class="w"> </span><span class="o">=</span><span class="w"> </span>UART_OPS,
+<span class="o">}</span><span class="p">;</span>
+
+struct<span class="w"> </span>no_os_spi_init_param<span class="w"> </span><span class="nv">adf4382_spi_ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>.device_id<span class="w"> </span><span class="o">=</span><span class="w"> </span>SPI_DEVICE_ID,
+<span class="w">        </span>.max_speed_hz<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1000000</span>,
+<span class="w">        </span>.bit_order<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_SPI_BIT_ORDER_MSB_FIRST,
+<span class="w">        </span>.mode<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_SPI_MODE_0,
+<span class="w">        </span>.platform_ops<span class="w"> </span><span class="o">=</span><span class="w"> </span>SPI_OPS,
+<span class="w">        </span>.chip_select<span class="w"> </span><span class="o">=</span><span class="w"> </span>SPI_CS,
+<span class="w">        </span>.extra<span class="w"> </span><span class="o">=</span><span class="w"> </span>SPI_EXTRA,
+<span class="o">}</span><span class="p">;</span>
+
+struct<span class="w"> </span>adf4382_init_param<span class="w"> </span><span class="nv">adf4382_ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>.spi_init<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>adf4382_spi_ip,
+<span class="w">        </span>.spi_3wire_en<span class="w"> </span><span class="o">=</span><span class="w"> </span>false,
+<span class="w">        </span>.cmos_3v3<span class="w"> </span><span class="o">=</span><span class="w"> </span>false,
+<span class="w">        </span>.ref_freq_hz<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">125000000</span>,
+<span class="w">        </span>.freq<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">2800000000</span>,
+<span class="w">        </span>.ref_doubler_en<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span>,
+<span class="w">        </span>.ref_div<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span>,
+<span class="w">        </span>.cp_i<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">15</span>,
+<span class="w">        </span>.bleed_word<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">4903</span>,
+<span class="w">        </span>.ld_count<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">10</span>,
+<span class="w">        </span>.adf4382a<span class="w"> </span><span class="o">=</span><span class="w"> </span>true,
+<span class="o">}</span><span class="p">;</span>
+
+<span class="nv">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>adf4382_init<span class="o">(</span><span class="p">&amp;</span>dev,<span class="w"> </span><span class="p">&amp;</span>adf4382_ip<span class="o">)</span><span class="p">;</span>
+<span class="k">if</span><span class="w"> </span><span class="o">(</span>ret<span class="o">)</span>
+<span class="w">        </span>goto<span class="w"> </span>error<span class="p">;</span>
+
+<span class="nv">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>adf4382_set_freq<span class="o">(</span>dev,<span class="w"> </span><span class="m">20000000000</span><span class="o">)</span><span class="p">;</span>
+<span class="k">if</span><span class="w"> </span><span class="o">(</span>ret<span class="o">)</span>
+<span class="w">        </span>goto<span class="w"> </span>error<span class="p">;</span>
+
+<span class="nv">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>adf4382_set_phase_adjust<span class="o">(</span>dev,<span class="w"> </span><span class="m">10</span><span class="o">)</span><span class="p">;</span>
+<span class="k">if</span><span class="w"> </span><span class="o">(</span>ret<span class="o">)</span>
+<span class="w">        </span>goto<span class="w"> </span>error<span class="p">;</span>
+</pre></div>
+</div>
+</section>
+<section id="adf4382-no-os-iio-support">
+<h2>ADF4382 no-OS IIO support<a class="headerlink" href="#adf4382-no-os-iio-support" title="Link to this heading">¶</a></h2>
+<p>The ADF4382 IIO driver comes on top of ADF4382 driver and offers support for
+interfacing IIO clients through IIO lib.</p>
+</section>
+<section id="adf4382-iio-device-configuration">
+<h2>ADF4382 IIO Device Configuration<a class="headerlink" href="#adf4382-iio-device-configuration" title="Link to this heading">¶</a></h2>
+</section>
+<section id="device-attributes">
+<h2>Device Attributes<a class="headerlink" href="#device-attributes" title="Link to this heading">¶</a></h2>
+<p>While the ADF4382 has two channels these cannot output independent frequencies,
+therefor most of the attributes will be device attributes.</p>
+<p>The attributes are:</p>
+<ul class="simple">
+<li><p>bleed_current - is the adjustment value for the set charge pump current.</p></li>
+<li><p>charge_pump_current - is the current set in your design.</p></li>
+<li><dl class="simple">
+<dt>charge_pump_current_available - lists the available and predefined charge</dt><dd><p>pump currents of the ADF4382.</p>
+</dd>
+</dl>
+</li>
+<li><p>reference_divider - is the current value of the input divider.</p></li>
+<li><p>reference_doubler_en - enables the input doubler.</p></li>
+<li><p>reference_frequency - is the current set input frequency.</p></li>
+<li><p>sync_en - enables the synchronization feature to an external signal.</p></li>
+</ul>
+</section>
+<section id="device-channels">
+<h2>Device Channels<a class="headerlink" href="#device-channels" title="Link to this heading">¶</a></h2>
+<p>ADXL355 IIO device has 2 output channels which can have independent output
+powers.</p>
+<p>The channels are:</p>
+<ul class="simple">
+<li><p>output altvoltage0 - corresponding to channel 1 on the device</p></li>
+<li><p>output altvoltage1 - corresponding to channel 2 on the device</p></li>
+</ul>
+<p>Each channel has 2 individual attributes:</p>
+<ul class="simple">
+<li><p>en - enables the channel.</p></li>
+<li><p>output_power - determines the output power of the channel between 0 and 15.</p></li>
+</ul>
+<p>Each channel has 2 common attributes:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>frequency - is the desired output frequency which the driver will try</dt><dd><p>to obtain given the configuration.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>phase - is the current phase adjustment of the frequency. The phase can be</dt><dd><p>subtracted by placing the “-” in fornt of the introduced phase value.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="adf4382-iio-driver-initialization-example">
+<h2>ADF4382 IIO Driver Initialization Example<a class="headerlink" href="#adf4382-iio-driver-initialization-example" title="Link to this heading">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>struct<span class="w"> </span>adf4382_iio_dev<span class="w"> </span>*adf4382_iio_dev<span class="p">;</span>
+struct<span class="w"> </span>adf4382_iio_dev_init_param<span class="w"> </span>adf4382_iio_ip<span class="p">;</span>
+struct<span class="w"> </span>iio_app_desc<span class="w"> </span>*app<span class="p">;</span>
+struct<span class="w"> </span>iio_app_init_param<span class="w"> </span><span class="nv">app_init_param</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">}</span><span class="p">;</span>
+int<span class="w"> </span>ret<span class="p">;</span>
+
+struct<span class="w"> </span>no_os_uart_init_param<span class="w"> </span><span class="nv">adf4382_uart_ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>.device_id<span class="w"> </span><span class="o">=</span><span class="w"> </span>UART_DEVICE_ID,
+<span class="w">        </span>.irq_id<span class="w"> </span><span class="o">=</span><span class="w"> </span>UART_IRQ_ID,
+<span class="w">        </span>.asynchronous_rx<span class="w"> </span><span class="o">=</span><span class="w"> </span>true,
+<span class="w">        </span>.baud_rate<span class="w"> </span><span class="o">=</span><span class="w"> </span>UART_BAUDRATE,
+<span class="w">        </span>.size<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_UART_CS_8,
+<span class="w">        </span>.parity<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_UART_PAR_NO,
+<span class="w">        </span>.stop<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_UART_STOP_1_BIT,
+<span class="w">        </span>.extra<span class="w"> </span><span class="o">=</span><span class="w"> </span>UART_EXTRA,
+<span class="w">        </span>.platform_ops<span class="w"> </span><span class="o">=</span><span class="w"> </span>UART_OPS,
+<span class="o">}</span><span class="p">;</span>
+
+struct<span class="w"> </span>no_os_spi_init_param<span class="w"> </span><span class="nv">adf4382_spi_ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>.device_id<span class="w"> </span><span class="o">=</span><span class="w"> </span>SPI_DEVICE_ID,
+<span class="w">        </span>.max_speed_hz<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1000000</span>,
+<span class="w">        </span>.bit_order<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_SPI_BIT_ORDER_MSB_FIRST,
+<span class="w">        </span>.mode<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_SPI_MODE_0,
+<span class="w">        </span>.platform_ops<span class="w"> </span><span class="o">=</span><span class="w"> </span>SPI_OPS,
+<span class="w">        </span>.chip_select<span class="w"> </span><span class="o">=</span><span class="w"> </span>SPI_CS,
+<span class="w">        </span>.extra<span class="w"> </span><span class="o">=</span><span class="w"> </span>SPI_EXTRA,
+<span class="o">}</span><span class="p">;</span>
+
+struct<span class="w"> </span>adf4382_init_param<span class="w"> </span><span class="nv">adf4382_ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>.spi_init<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>adf4382_spi_ip,
+<span class="w">        </span>.spi_3wire_en<span class="w"> </span><span class="o">=</span><span class="w"> </span>false,
+<span class="w">        </span>.cmos_3v3<span class="w"> </span><span class="o">=</span><span class="w"> </span>false,
+<span class="w">        </span>.ref_freq_hz<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">125000000</span>,
+<span class="w">        </span>.freq<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">2800000000</span>,
+<span class="w">        </span>.ref_doubler_en<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span>,
+<span class="w">        </span>.ref_div<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span>,
+<span class="w">        </span>.cp_i<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">15</span>,
+<span class="w">        </span>.bleed_word<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">4903</span>,
+<span class="w">        </span>.ld_count<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">10</span>,
+<span class="w">        </span>.adf4382a<span class="w"> </span><span class="o">=</span><span class="w"> </span>true,
+<span class="o">}</span><span class="p">;</span>
+
+adf4382_iio_ip.adf4382_dev_init<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&amp;</span>adf4382_ip<span class="p">;</span>
+<span class="nv">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>adf4382_iio_init<span class="o">(</span><span class="p">&amp;</span>adf4382_iio_dev,<span class="w"> </span><span class="p">&amp;</span>adf4382_iio_ip<span class="o">)</span><span class="p">;</span>
+<span class="k">if</span><span class="w"> </span><span class="o">(</span>ret<span class="o">)</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span>ret<span class="p">;</span>
+
+struct<span class="w"> </span>iio_app_device<span class="w"> </span>iio_devices<span class="o">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span><span class="o">{</span>
+<span class="w">                </span>.name<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;adf4382&quot;</span>,
+<span class="w">                </span>.dev<span class="w"> </span><span class="o">=</span><span class="w"> </span>adf4382_iio_dev,
+<span class="w">                </span>.dev_descriptor<span class="w"> </span><span class="o">=</span><span class="w"> </span>adf4382_iio_dev-&gt;iio_dev,
+<span class="w">        </span><span class="o">}</span>
+<span class="o">}</span><span class="p">;</span>
+
+app_init_param.devices<span class="w"> </span><span class="o">=</span><span class="w"> </span>iio_devices<span class="p">;</span>
+app_init_param.nb_devices<span class="w"> </span><span class="o">=</span><span class="w"> </span>NO_OS_ARRAY_SIZE<span class="o">(</span>iio_devices<span class="o">)</span><span class="p">;</span>
+app_init_param.uart_init_params<span class="w"> </span><span class="o">=</span><span class="w"> </span>adf4382_uart_ip<span class="p">;</span>
+
+<span class="nv">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>iio_app_init<span class="o">(</span><span class="p">&amp;</span>app,<span class="w"> </span>app_init_param<span class="o">)</span><span class="p">;</span>
+<span class="k">if</span><span class="w"> </span><span class="o">(</span>ret<span class="o">)</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span>ret<span class="p">;</span>
+
+<span class="k">return</span><span class="w"> </span>iio_app_run<span class="o">(</span>app<span class="o">)</span><span class="p">;</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+          </div>
+              <div class="related">
+                &nbsp;
+    <a href="max2201x.html" title="Previous document (Ctrl+LeftArrow)" class="prev">MAX2201X no-OS Driver</a>
+    <a href="imu.html" title="Next document (Ctrl+RightArrow)" class="next">ADIS no-OS driver</a>
+              </div>
+          
+        </div>
+      </div>
+  </div>
+
+  <div id="vertical-border"></div>
+
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
+    <footer>
+      &#169;2023-2024, Analog Devices, Inc.
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
+</html>

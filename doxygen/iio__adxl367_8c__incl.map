@@ -1,0 +1,21 @@
+<map id="drivers/accel/adxl367/iio_adxl367.c" name="drivers/accel/adxl367/iio_adxl367.c">
+<area shape="rect" id="node1" title="IIO part of the ADXL367 driver." alt="" coords="283,5,445,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="310,393,381,420"/>
+<area shape="rect" id="node3" title=" " alt="" coords="235,169,301,196"/>
+<area shape="rect" id="node4" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="5,95,115,121"/>
+<area shape="rect" id="node6" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="339,319,439,345"/>
+<area shape="rect" id="node9" href="$no__os__alloc_8h.html" title=" " alt="" coords="139,95,250,121"/>
+<area shape="rect" id="node10" href="$iio__adxl367_8h.html" title="Header file of IIO ADXL367 Driver." alt="" coords="436,95,545,121"/>
+<area shape="rect" id="node16" href="$adxl367_8h.html" title="Header file of ADXL367 Driver." alt="" coords="1075,244,1162,271"/>
+<area shape="rect" id="node19" title=" " alt="" coords="638,95,709,121"/>
+<area shape="rect" id="node5" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="26,169,94,196"/>
+<area shape="rect" id="node7" title=" " alt="" coords="813,393,883,420"/>
+<area shape="rect" id="node8" title=" " alt="" coords="540,393,623,420"/>
+<area shape="rect" id="node11" href="$iio_8h.html" title="Header file of iio." alt="" coords="512,169,563,196"/>
+<area shape="rect" id="node12" href="$iio__types_8h.html" title="Header file for iio_types." alt="" coords="715,244,808,271"/>
+<area shape="rect" id="node14" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="494,244,599,271"/>
+<area shape="rect" id="node13" href="$no__os__circular__buffer_8h.html" title="Circular buffer library header." alt="" coords="824,319,995,345"/>
+<area shape="rect" id="node15" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="515,319,648,345"/>
+<area shape="rect" id="node17" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="1069,319,1168,345"/>
+<area shape="rect" id="node18" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="1192,319,1291,345"/>
+</map>
