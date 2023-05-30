@@ -1,0 +1,15 @@
+<map id="drivers/platform/linux/linux_uart.h" name="drivers/platform/linux/linux_uart.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="221,5,384,45"/>
+<area shape="rect" id="Node000002" href="$linux__uart_8c.html" title="Implementation of Linux platform UART Driver." alt="" coords="11,93,173,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="245,53,139,96,137,91,243,48"/>
+<area shape="rect" id="Node000003" href="$max14916_2src_2platform_2linux_2parameters_8h.html" title="Definition of FTD2XX platform data used by max14916 project." alt="" coords="198,93,407,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="305,59,305,93,300,93,300,59"/>
+<area shape="rect" id="Node000006" href="$max31827-evkit_2src_2platform_2linux_2parameters_8h.html" title=" " alt="" coords="432,93,664,133"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="370,47,495,91,493,96,369,52"/>
+<area shape="rect" id="Node000004" href="$max14916_2src_2platform_2linux_2main_8c.html" title="Main file for FTD2XX platform of max14916 project." alt="" coords="5,181,176,221"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="245,141,138,184,136,179,243,136"/>
+<area shape="rect" id="Node000005" href="$max14916_2src_2platform_2linux_2parameters_8c.html" title="Definition of FTD2XX platform data used by max14916 project." alt="" coords="200,181,408,221"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="306,147,306,181,301,181,301,147"/>
+<area shape="rect" id="Node000007" href="$max31827-evkit_2src_2platform_2linux_2parameters_8c.html" title=" " alt="" coords="433,181,663,221"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="551,147,551,181,545,181,545,147"/>
+</map>

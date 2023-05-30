@@ -1,0 +1,7 @@
+<map id="max_uart_desc" name="max_uart_desc">
+<area shape="rect" id="Node000001" title="Platform specific UART state." alt="" coords="33,181,155,207"/>
+<area shape="rect" id="Node000002" href="$structno__os__irq__ctrl__desc.html" title=" " alt="" coords="19,93,169,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="97,133,97,181,91,181,91,133"/>
+<area shape="rect" id="Node000003" href="$structno__os__irq__platform__ops.html" title="Structure holding IRQ function pointers that point to the platform specific function." alt="" coords="5,5,183,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="97,45,97,93,91,93,91,45"/>
+</map>

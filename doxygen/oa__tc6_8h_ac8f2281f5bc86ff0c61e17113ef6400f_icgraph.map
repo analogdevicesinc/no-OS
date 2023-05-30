@@ -1,0 +1,7 @@
+<map id="oa_tc6_put_tx_frame" name="oa_tc6_put_tx_frame">
+<area shape="rect" id="Node000001" title="Mark a frame buffer as ready to be transmitted." alt="" coords="371,5,529,31"/>
+<area shape="rect" id="Node000002" href="$adin1110_8c.html#a8e8d12f2a6d69ae272e8ae78d1d05f9a" title="Write a frame to the TX FIFO." alt="" coords="172,5,323,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="357,21,323,21,323,15,357,15"/>
+<area shape="rect" id="Node000003" href="$frame__rx__tx__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Frame receive an transmit example main execution." alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="158,21,124,21,124,15,158,15"/>
+</map>

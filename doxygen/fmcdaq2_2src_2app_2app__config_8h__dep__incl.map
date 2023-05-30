@@ -1,0 +1,8 @@
+<map id="projects/fmcdaq2/src/app/app_config.h" name="projects/fmcdaq2/src/app/app_config.h">
+<area shape="rect" id="Node000001" title="Config file for DAQ2 project." alt="" coords="5,5,164,45"/>
+<area shape="rect" id="Node000002" href="$fmcdaq2_8c.html" title="Implementation of Main Function." alt="" coords="5,181,164,221"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="68,58,54,94,51,113,54,133,63,158,75,180,70,182,58,160,49,134,46,113,49,93,63,57"/>
+<area shape="rect" id="Node000003" href="$fmcdaq2_2src_2app_2parameters_8h.html" title="Platform dependent parameters." alt="" coords="64,93,223,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="107,55,133,92,128,95,103,58"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="125,146,100,183,95,180,121,143"/>
+</map>

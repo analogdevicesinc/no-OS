@@ -1,0 +1,13 @@
+<map id="drivers/power/lt8491/lt8491.h" name="drivers/power/lt8491/lt8491.h">
+<area shape="rect" id="Node000001" title="Implementation of LT8491 Driver." alt="" coords="284,5,440,45"/>
+<area shape="rect" id="Node000002" href="$iio__lt8491_8c.html" title="Implementation of IIO LT8491 Driver." alt="" coords="5,101,161,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="294,52,140,103,139,98,292,47"/>
+<area shape="rect" id="Node000003" href="$lt8491_8c.html" title="Implementation of LT8491 Driver." alt="" coords="185,101,341,141"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="334,57,285,103,281,99,330,53"/>
+<area shape="rect" id="Node000004" href="$dc2703a_2src_2common_2common__data_8h.html" title=" " alt="" coords="366,101,558,141"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="394,53,444,99,440,103,390,57"/>
+<area shape="rect" id="Node000006" href="$dc2703a_2src_2examples_2basic_2basic__example_8c.html" title=" " alt="" coords="583,93,749,148"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="438,47,583,91,581,96,436,52"/>
+<area shape="rect" id="Node000005" href="$dc2703a_2src_2common_2common__data_8c.html" title=" " alt="" coords="367,196,557,236"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="465,154,465,196,459,196,459,154"/>
+</map>

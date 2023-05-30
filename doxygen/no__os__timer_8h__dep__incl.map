@@ -1,0 +1,172 @@
+<map id="include/no_os_timer.h" name="include/no_os_timer.h">
+<area shape="rect" id="Node000001" title="Timer control module header." alt="" coords="3087,5,3251,31"/>
+<area shape="rect" id="Node000002" href="$no__os__timer_8c.html" title="Implementation of the timer Interface." alt="" coords="287,101,472,126"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="3073,22,2516,27,1707,37,934,54,651,66,484,81,444,91,408,103,407,98,443,86,483,76,650,61,934,49,1707,31,2516,21,3073,17"/>
+<area shape="rect" id="Node000003" href="$ad3552r_8c.html" title="Implementation of ad3552r Driver." alt="" coords="496,93,647,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="3073,22,2550,27,1798,36,1083,54,821,66,667,81,616,96,615,91,665,76,820,61,1083,49,1798,31,2550,21,3073,17"/>
+<area shape="rect" id="Node000004" href="$aducm3029__delay_8c.html" title="Implementation of DELAY functions for ADuCM302x." alt="" coords="5,203,212,243"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="3072,22,2530,23,1761,29,1383,37,1056,47,817,62,743,71,705,81,689,96,683,114,676,133,660,150,620,167,569,177,446,188,320,192,224,199,186,206,185,201,223,193,320,186,445,182,568,172,619,161,656,146,672,130,678,112,685,93,702,76,742,66,817,57,1056,42,1382,31,1761,24,2530,17,3072,16"/>
+<area shape="rect" id="Node000005" href="$aducm3029__irq_8c.html" title="Implementation of External IRQ driver for ADuCM302x." alt="" coords="236,203,443,243"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="3073,22,2541,24,1789,31,1419,39,1099,49,866,63,793,72,755,81,738,96,731,113,722,133,705,150,671,169,640,180,585,189,526,190,454,199,421,206,420,201,454,193,526,185,584,183,639,175,669,164,702,146,718,130,726,111,734,93,753,76,792,66,865,58,1099,44,1418,33,1789,26,2541,18,3073,17"/>
+<area shape="rect" id="Node000006" href="$aducm3029__timer_8c.html" title="Implementation of TIMER driver for ADuCM302x." alt="" coords="467,203,673,243"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="3073,22,2553,25,1820,33,1459,41,1148,51,921,64,849,72,812,81,794,95,784,112,774,131,756,150,699,183,640,206,638,201,696,178,752,146,769,128,779,110,790,92,810,76,849,67,920,59,1148,46,1459,36,1820,28,2553,20,3073,17"/>
+<area shape="rect" id="Node000007" href="$aducm3029__timer_8h.html" title="Header file of TIMER driver for ADuCM302x." alt="" coords="824,93,1031,133"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="3073,22,2661,22,2076,29,1770,36,1484,47,1237,62,1050,81,986,96,985,91,1050,76,1236,57,1483,42,1770,31,2076,24,2661,17,3073,16"/>
+<area shape="rect" id="Node000008" href="$adxrs290-pmdz_2src_2platform_2aducm3029_2parameters_8h.html" title="Definitions specific to STM32 platform used by eval&#45;adxrs290&#45;pmdz project." alt="" coords="976,196,1161,251"/>
+<area shape="poly" id="edge67_Node000001_Node000008" title=" " alt="" coords="3073,22,2614,23,1982,30,1674,38,1409,48,1217,63,1157,71,1127,81,1104,105,1088,136,1078,167,1073,196,1068,195,1073,166,1083,134,1100,102,1125,76,1156,66,1216,57,1409,43,1674,32,1982,25,2614,18,3073,17"/>
+<area shape="rect" id="Node000013" href="$iio__adpd1080_2src_2main_8c.html" title="Implementation of Main Function." alt="" coords="1186,203,1351,243"/>
+<area shape="poly" id="edge85_Node000001_Node000013" title=" " alt="" coords="3073,23,2609,29,1973,41,1405,58,1221,69,1168,75,1146,81,1136,96,1134,111,1138,128,1147,147,1160,164,1176,179,1214,201,1211,205,1173,183,1156,168,1142,149,1133,130,1128,112,1131,94,1143,76,1167,70,1221,64,1404,53,1972,35,2609,24,3073,18"/>
+<area shape="rect" id="Node000014" href="$generic__timer_8c.html" title="Timer control module source." alt="" coords="1157,93,1335,133"/>
+<area shape="poly" id="edge16_Node000001_Node000014" title=" " alt="" coords="3073,22,2713,22,2214,29,1955,36,1713,47,1505,62,1348,81,1294,96,1293,91,1347,76,1504,56,1713,41,1955,31,2214,23,2713,17,3073,16"/>
+<area shape="rect" id="Node000015" href="$linux__timer_8c.html" title="Source file for Linux timer platform driver." alt="" coords="1359,93,1522,133"/>
+<area shape="poly" id="edge17_Node000001_Node000015" title=" " alt="" coords="3073,22,2746,23,2301,30,2072,37,1858,48,1673,62,1535,81,1485,96,1484,91,1533,76,1673,57,1857,42,2072,32,2301,25,2746,17,3073,16"/>
+<area shape="rect" id="Node000016" href="$linux__timer_8h.html" title="Header file for Linux timer platform driver." alt="" coords="1546,93,1709,133"/>
+<area shape="poly" id="edge18_Node000001_Node000016" title=" " alt="" coords="3073,22,2780,25,2389,33,2002,51,1842,64,1721,81,1672,96,1670,91,1720,76,1842,59,2002,46,2389,28,2780,19,3073,17"/>
+<area shape="rect" id="Node000017" href="$max32650_2maxim__timer_8h.html" title="Header file for Maxim timer platform driver." alt="" coords="1733,93,1932,133"/>
+<area shape="poly" id="edge19_Node000001_Node000017" title=" " alt="" coords="3073,24,2822,29,2496,40,2176,57,2044,68,1944,81,1886,96,1885,91,1943,76,2044,63,2176,52,2496,35,2821,24,3073,18"/>
+<area shape="rect" id="Node000019" href="$max32655_2maxim__timer_8h.html" title="Header file for Maxim timer platform driver." alt="" coords="1956,93,2155,133"/>
+<area shape="poly" id="edge21_Node000001_Node000019" title=" " alt="" coords="3073,25,2603,44,2350,61,2246,70,2167,81,2109,96,2108,91,2165,76,2245,65,2350,55,2603,39,3073,19"/>
+<area shape="rect" id="Node000021" href="$max32660_2maxim__timer_8h.html" title="Header file for Maxim timer platform driver." alt="" coords="2179,93,2377,133"/>
+<area shape="poly" id="edge23_Node000001_Node000021" title=" " alt="" coords="3073,23,2938,26,2767,36,2578,53,2389,81,2333,96,2331,91,2388,76,2577,48,2767,31,2938,21,3073,17"/>
+<area shape="rect" id="Node000023" href="$max32665_2maxim__timer_8h.html" title="Header file for Maxim timer platform driver." alt="" coords="2401,93,2600,133"/>
+<area shape="poly" id="edge25_Node000001_Node000023" title=" " alt="" coords="3073,27,2860,44,2736,60,2612,81,2557,96,2555,91,2611,76,2735,55,2860,39,3072,21"/>
+<area shape="rect" id="Node000025" href="$max32670_2maxim__timer_8h.html" title="Header file for Maxim timer platform driver." alt="" coords="2624,93,2823,133"/>
+<area shape="poly" id="edge27_Node000001_Node000025" title=" " alt="" coords="3076,35,2960,55,2835,81,2782,96,2780,91,2833,76,2959,50,3075,30"/>
+<area shape="rect" id="Node000027" href="$max32690_2maxim__timer_8h.html" title="Header file for Maxim timer platform driver." alt="" coords="2847,93,3045,133"/>
+<area shape="poly" id="edge29_Node000001_Node000027" title=" " alt="" coords="3130,38,2992,96,2990,91,3128,33"/>
+<area shape="rect" id="Node000029" href="$max78000_2maxim__timer_8h.html" title="Header file for Maxim timer platform driver." alt="" coords="3069,93,3268,133"/>
+<area shape="poly" id="edge31_Node000001_Node000029" title=" " alt="" coords="3171,44,3171,93,3166,93,3166,44"/>
+<area shape="rect" id="Node000031" href="$pico__irq_8c.html" title="Implementation of external irq driver." alt="" coords="2925,203,3084,243"/>
+<area shape="poly" id="edge33_Node000001_Node000031" title=" " alt="" coords="3227,34,3257,51,3282,77,3291,96,3295,114,3292,132,3281,150,3262,170,3241,183,3220,189,3199,191,3151,191,3125,193,3096,199,3070,206,3069,201,3095,193,3124,188,3151,186,3198,186,3219,184,3239,178,3258,166,3277,146,3287,130,3290,114,3286,98,3277,80,3254,55,3224,38"/>
+<area shape="rect" id="Node000032" href="$pico__timer_8c.html" title="Implementation of pico timer driver." alt="" coords="3108,203,3267,243"/>
+<area shape="poly" id="edge34_Node000001_Node000032" title=" " alt="" coords="3262,32,3297,50,3325,77,3335,96,3338,113,3335,130,3326,149,3311,168,3293,183,3253,206,3251,201,3290,179,3307,164,3321,147,3330,129,3333,113,3330,97,3321,80,3294,54,3260,37"/>
+<area shape="rect" id="Node000033" href="$pico__timer_8h.html" title="Header file for the pico timer driver." alt="" coords="3393,93,3552,133"/>
+<area shape="poly" id="edge35_Node000001_Node000033" title=" " alt="" coords="3224,32,3375,76,3419,91,3418,96,3373,81,3222,37"/>
+<area shape="rect" id="Node000052" href="$stm32__timer_8c.html" title="Implementation of stm32 timer driver." alt="" coords="5249,203,5421,243"/>
+<area shape="poly" id="edge56_Node000001_Node000052" title=" " alt="" coords="3265,23,3434,41,3511,57,3565,76,3583,94,3591,113,3600,131,3617,146,3659,159,3724,170,3911,184,4152,190,4419,191,4931,187,5122,187,5237,193,5274,201,5273,206,5236,199,5122,193,4931,192,4419,196,4152,196,3911,190,3723,175,3657,165,3614,150,3595,134,3586,115,3578,97,3562,81,3509,62,3433,47,3264,28"/>
+<area shape="rect" id="Node000053" href="$stm32__timer_8h.html" title="Header file for the stm32 timer driver." alt="" coords="3628,93,3800,133"/>
+<area shape="poly" id="edge57_Node000001_Node000053" title=" " alt="" coords="3265,25,3427,44,3519,58,3609,76,3662,91,3660,96,3608,81,3518,63,3426,49,3264,30"/>
+<area shape="rect" id="Node000056" href="$xilinx__timer_8c.html" title="Timer and GIC control module source." alt="" coords="3824,93,3991,133"/>
+<area shape="poly" id="edge61_Node000001_Node000056" title=" " alt="" coords="3264,18,3376,23,3514,33,3663,50,3812,76,3861,91,3860,96,3811,81,3663,55,3513,38,3376,28,3264,24"/>
+<area shape="rect" id="Node000057" href="$ad7091r8-sdz_2src_2platform_2maxim_2parameters_8h.html" title="Definitions specific to Maxim platform used by eval&#45;ad7091r8&#45;sdz project." alt="" coords="4015,93,4261,133"/>
+<area shape="poly" id="edge62_Node000001_Node000057" title=" " alt="" coords="3265,18,3408,23,3592,33,3797,50,4002,76,4072,91,4071,96,4002,81,3797,55,3592,38,3408,28,3264,24"/>
+<area shape="rect" id="Node000059" href="$adv7511_2src_2main_8c.html" title="The implementation of the main function of the app." alt="" coords="4286,93,4443,133"/>
+<area shape="poly" id="edge64_Node000001_Node000059" title=" " alt="" coords="3264,18,3492,24,3783,34,4067,51,4184,63,4273,76,4322,91,4320,96,4272,81,4183,68,4067,56,3783,39,3492,29,3264,24"/>
+<area shape="rect" id="Node000060" href="$wrapper_8c.html" title=" " alt="" coords="4467,93,4625,133"/>
+<area shape="poly" id="edge65_Node000001_Node000060" title=" " alt="" coords="3264,17,3527,21,3871,30,4210,48,4350,60,4456,76,4504,91,4503,96,4455,81,4349,66,4209,53,3871,36,3527,26,3264,23"/>
+<area shape="rect" id="Node000061" href="$adxrs290-pmdz_2src_2examples_2iio__timer__trigger__example_2iio__timer__trigger__example_8c.html" title="Implementation of IIO trigger example for iio_demo project." alt="" coords="4649,79,4848,148"/>
+<area shape="poly" id="edge66_Node000001_Node000061" title=" " alt="" coords="3265,17,3561,22,3957,31,4350,49,4513,61,4637,76,4649,78,4648,84,4636,81,4513,66,4350,54,3957,37,3561,27,3264,23"/>
+<area shape="rect" id="Node000062" href="$demo__esp_2src_2common_2common__data_8h.html" title="Defines common data to be used by demo_esp examples." alt="" coords="4873,93,5065,133"/>
+<area shape="poly" id="edge68_Node000001_Node000062" title=" " alt="" coords="3264,17,3601,19,4062,27,4523,45,4715,59,4860,76,4918,91,4916,96,4859,81,4714,64,4523,50,4062,33,3601,24,3264,22"/>
+<area shape="rect" id="Node000064" href="$demo__esp_2src_2examples_2basic_2basic__example_8c.html" title="Basic example header for demo_esp project." alt="" coords="5089,86,5257,141"/>
+<area shape="poly" id="edge70_Node000001_Node000064" title=" " alt="" coords="3265,18,4240,37,4769,54,4963,64,5077,76,5106,83,5105,88,5076,81,4962,70,4769,59,4239,42,3265,23"/>
+<area shape="rect" id="Node000065" href="$eval-ade9430_2src_2app_2main_8c.html" title="Main file for EVAL&#45;ADE9430 project." alt="" coords="5281,93,5448,133"/>
+<area shape="poly" id="edge71_Node000001_Node000065" title=" " alt="" coords="3265,18,3712,23,4337,35,4926,52,5142,63,5269,76,5321,91,5319,96,5268,81,5141,69,4926,57,4336,40,3712,29,3264,23"/>
+<area shape="rect" id="Node000066" href="$eval-pqmon_2src_2common_2common__data_8h.html" title=" " alt="" coords="6395,93,6609,133"/>
+<area shape="poly" id="edge72_Node000001_Node000066" title=" " alt="" coords="3264,19,5459,76,6394,106,6394,111,5459,81,3264,24"/>
+<area shape="rect" id="Node000076" href="$iio__demo_2src_2platform_2maxim_2parameters_8h.html" title="Definitions specific to Maxim platform used by iio_demo project." alt="" coords="6633,93,6856,133"/>
+<area shape="poly" id="edge86_Node000001_Node000076" title=" " alt="" coords="3264,17,3961,20,5011,29,6026,47,6400,60,6533,67,6621,76,6687,91,6686,96,6620,81,6532,73,6400,65,6026,52,5011,34,3961,25,3264,22"/>
+<area shape="rect" id="Node000078" href="$iio__demo__free_r_t_o_s_2src_2platform_2maxim_2parameters_8h.html" title="Definitions specific to Maxim platform used by iio_demo project." alt="" coords="6880,93,7127,133"/>
+<area shape="poly" id="edge88_Node000001_Node000078" title=" " alt="" coords="3264,17,4005,20,5133,29,6226,47,6630,60,6773,68,6868,76,6940,91,6939,96,6867,81,6772,73,6630,65,6226,52,5133,35,4005,26,3264,22"/>
+<area shape="rect" id="Node000080" href="$swiot1l__mqtt_8c.html" title="Source file for the swiot1l mqtt example." alt="" coords="7151,86,7328,141"/>
+<area shape="poly" id="edge90_Node000001_Node000080" title=" " alt="" coords="3264,16,4054,16,5267,21,5890,27,6448,38,6884,54,7038,64,7140,76,7171,83,7169,88,7139,81,7037,70,6883,60,6448,44,5890,33,5267,26,4054,21,3264,22"/>
+<area shape="poly" id="edge7_Node000007_Node000004" title=" " alt="" coords="811,136,704,151,569,164,463,172,358,180,224,199,186,206,185,201,223,193,357,175,463,166,568,159,703,145,810,131"/>
+<area shape="poly" id="edge8_Node000007_Node000005" title=" " alt="" coords="820,139,754,151,604,174,454,199,419,206,418,201,454,193,603,169,754,145,819,133"/>
+<area shape="poly" id="edge9_Node000007_Node000006" title=" " alt="" coords="853,140,633,206,632,201,851,135"/>
+<area shape="poly" id="edge10_Node000007_Node000008" title=" " alt="" coords="964,139,1036,194,1033,198,961,144"/>
+<area shape="rect" id="Node000011" href="$demo__esp_2src_2platform_2aducm3029_2parameters_8h.html" title="Definitions specific to aducm3029 platform used by demo_esp project." alt="" coords="698,203,951,243"/>
+<area shape="poly" id="edge13_Node000007_Node000011" title=" " alt="" coords="902,145,845,205,841,201,898,141"/>
+<area shape="poly" id="edge15_Node000007_Node000013" title=" " alt="" coords="1000,135,1210,201,1208,206,999,140"/>
+<area shape="rect" id="Node000009" href="$adxrs290-pmdz_2src_2platform_2aducm3029_2main_8c.html" title="Main file for STM32 platform of eval&#45;adxrs290&#45;pmdz project." alt="" coords="1185,299,1371,353"/>
+<area shape="poly" id="edge11_Node000008_Node000009" title=" " alt="" coords="1137,254,1225,296,1222,301,1134,259"/>
+<area shape="rect" id="Node000010" href="$adxrs290-pmdz_2src_2platform_2aducm3029_2parameters_8c.html" title="Definition of STM32 platform data used by eval&#45;adxrs290&#45;pmdz project." alt="" coords="976,299,1161,353"/>
+<area shape="poly" id="edge12_Node000008_Node000010" title=" " alt="" coords="1071,264,1071,299,1066,299,1066,264"/>
+<area shape="rect" id="Node000012" href="$demo__esp_2src_2platform_2aducm3029_2parameters_8c.html" title="Definition of aducm3029 platform data used by demo_esp." alt="" coords="699,306,951,346"/>
+<area shape="poly" id="edge14_Node000011_Node000012" title=" " alt="" coords="827,257,827,306,822,306,822,257"/>
+<area shape="rect" id="Node000018" href="$max32650_2maxim__timer_8c.html" title="Source file for Maxim timer platform driver." alt="" coords="1375,203,1573,243"/>
+<area shape="poly" id="edge20_Node000017_Node000018" title=" " alt="" coords="1758,140,1538,206,1536,201,1756,135"/>
+<area shape="rect" id="Node000020" href="$max32655_2maxim__timer_8c.html" title="Source file for Maxim timer platform driver." alt="" coords="1597,203,1794,243"/>
+<area shape="poly" id="edge22_Node000019_Node000020" title=" " alt="" coords="1980,140,1759,206,1758,201,1979,135"/>
+<area shape="rect" id="Node000022" href="$max32660_2maxim__timer_8c.html" title="Source file for Maxim timer platform driver." alt="" coords="1818,203,2015,243"/>
+<area shape="poly" id="edge24_Node000021_Node000022" title=" " alt="" coords="2203,140,2167,151,1980,206,1979,201,2165,145,2201,135"/>
+<area shape="rect" id="Node000024" href="$max32665_2maxim__timer_8c.html" title="Source file for Maxim timer platform driver." alt="" coords="2039,203,2237,243"/>
+<area shape="poly" id="edge26_Node000023_Node000024" title=" " alt="" coords="2426,140,2389,151,2203,206,2201,201,2388,145,2424,135"/>
+<area shape="rect" id="Node000026" href="$max32670_2maxim__timer_8c.html" title="Source file for Maxim timer platform driver." alt="" coords="2261,203,2458,243"/>
+<area shape="poly" id="edge28_Node000025_Node000026" title=" " alt="" coords="2648,140,2612,151,2424,206,2423,201,2611,145,2647,135"/>
+<area shape="rect" id="Node000028" href="$max32690_2maxim__timer_8c.html" title="Source file for Maxim timer platform driver." alt="" coords="2482,203,2679,243"/>
+<area shape="poly" id="edge30_Node000027_Node000028" title=" " alt="" coords="2871,140,2835,151,2646,206,2645,201,2833,145,2869,135"/>
+<area shape="rect" id="Node000030" href="$max78000_2maxim__timer_8c.html" title="Source file for Maxim timer platform driver." alt="" coords="2703,203,2901,243"/>
+<area shape="poly" id="edge32_Node000029_Node000030" title=" " alt="" coords="3094,140,3057,151,2868,206,2866,201,3056,145,3092,135"/>
+<area shape="poly" id="edge36_Node000033_Node000031" title=" " alt="" coords="3380,138,3324,151,3210,173,3096,199,3069,206,3067,201,3095,193,3209,168,3323,145,3379,133"/>
+<area shape="poly" id="edge37_Node000033_Node000032" title=" " alt="" coords="3411,141,3238,206,3236,201,3409,136"/>
+<area shape="rect" id="Node000034" href="$adxrs290-pmdz_2src_2platform_2pico_2parameters_8h.html" title="Definitions specific to pico platform used by adxrs290 project." alt="" coords="4497,203,4723,243"/>
+<area shape="poly" id="edge38_Node000033_Node000034" title=" " alt="" coords="3533,135,3572,145,3709,167,3826,178,3929,180,4026,179,4227,175,4345,180,4484,193,4528,201,4527,206,4483,199,4345,185,4227,180,4026,184,3929,186,3825,183,3708,173,3571,151,3532,140"/>
+<area shape="rect" id="Node000037" href="$eval-adis1646x_2src_2platform_2pico_2parameters_8h.html" title="Definitions specific to pico platform used by eval&#45;adis1646x project." alt="" coords="4747,203,4974,243"/>
+<area shape="poly" id="edge41_Node000033_Node000037" title=" " alt="" coords="3533,135,3572,145,3747,172,3896,184,4028,185,4151,181,4275,175,4408,172,4559,177,4736,193,4781,201,4780,206,4735,199,4558,182,4408,178,4276,181,4152,186,4028,191,3896,189,3746,177,3571,151,3531,140"/>
+<area shape="rect" id="Node000039" href="$eval-adis1647x_2src_2platform_2pico_2parameters_8h.html" title="Definitions specific to pico platform used by eval&#45;adis1647x project." alt="" coords="4998,203,5225,243"/>
+<area shape="poly" id="edge43_Node000033_Node000039" title=" " alt="" coords="3533,135,3572,145,3784,177,3966,190,4126,190,4276,183,4427,175,4588,170,4771,174,4986,193,5032,201,5031,206,4986,199,4771,180,4588,175,4427,180,4277,189,4126,196,3966,195,3784,182,3571,151,3531,140"/>
+<area shape="rect" id="Node000041" href="$eval-adis1650x_2src_2platform_2pico_2parameters_8h.html" title="Definitions specific to pico platform used by eval&#45;adis1650x project." alt="" coords="3291,203,3518,243"/>
+<area shape="poly" id="edge45_Node000033_Node000041" title=" " alt="" coords="3456,146,3419,205,3414,202,3451,143"/>
+<area shape="rect" id="Node000043" href="$eval-adis1654x_2src_2platform_2pico_2parameters_8h.html" title="Definitions specific to pico platform used by eval&#45;adis1654x project." alt="" coords="3542,203,3769,243"/>
+<area shape="poly" id="edge47_Node000033_Node000043" title=" " alt="" coords="3517,138,3625,201,3622,205,3515,142"/>
+<area shape="rect" id="Node000045" href="$eval-adis1655x_2src_2platform_2pico_2parameters_8h.html" title="Definitions specific to pico platform used by eval&#45;adis1655x project." alt="" coords="3793,203,4019,243"/>
+<area shape="poly" id="edge49_Node000033_Node000045" title=" " alt="" coords="3538,135,3572,145,3817,201,3816,206,3571,151,3537,140"/>
+<area shape="rect" id="Node000047" href="$eval-adis1657x_2src_2platform_2pico_2parameters_8h.html" title="Definitions specific to pico platform used by eval&#45;adis1657x project." alt="" coords="4043,203,4270,243"/>
+<area shape="poly" id="edge51_Node000033_Node000047" title=" " alt="" coords="3535,135,3572,145,3700,167,3801,174,3902,179,4032,193,4073,201,4072,206,4031,199,3902,184,3800,179,3699,172,3571,151,3533,140"/>
+<area shape="rect" id="Node000049" href="$eval-adxl355-pmdz_2src_2platform_2pico_2parameters_8h.html" title="Definitions specific to pico platform used by eval&#45;adxl355&#45;pmdz project." alt="" coords="4295,196,4472,251"/>
+<area shape="poly" id="edge53_Node000033_Node000049" title=" " alt="" coords="3534,135,3572,145,3679,163,3770,172,3850,174,3926,174,4083,173,4175,179,4282,193,4295,196,4294,201,4282,199,4174,185,4083,179,3926,179,3850,180,3769,177,3678,168,3571,151,3532,140"/>
+<area shape="rect" id="Node000035" href="$adxrs290-pmdz_2src_2platform_2pico_2main_8c.html" title="Main file for pico platform of adxrs290 project." alt="" coords="4747,306,4931,346"/>
+<area shape="poly" id="edge39_Node000034_Node000035" title=" " alt="" coords="4667,247,4797,303,4795,308,4665,251"/>
+<area shape="rect" id="Node000036" href="$adxrs290-pmdz_2src_2platform_2pico_2parameters_8c.html" title="Definition of pico platform data used by adxrs290 project." alt="" coords="4497,306,4723,346"/>
+<area shape="poly" id="edge40_Node000034_Node000036" title=" " alt="" coords="4613,257,4613,306,4607,306,4607,257"/>
+<area shape="rect" id="Node000038" href="$eval-adis1646x_2src_2platform_2pico_2parameters_8c.html" title="Definition of pico platform data used by eval&#45;adis1646x project." alt="" coords="4955,306,5182,346"/>
+<area shape="poly" id="edge42_Node000037_Node000038" title=" " alt="" coords="4913,247,5031,304,5029,308,4911,252"/>
+<area shape="rect" id="Node000040" href="$eval-adis1647x_2src_2platform_2pico_2parameters_8c.html" title="Definition of pico platform data used by eval&#45;adis1647x project." alt="" coords="5206,306,5433,346"/>
+<area shape="poly" id="edge44_Node000039_Node000040" title=" " alt="" coords="5164,247,5282,304,5279,308,5162,252"/>
+<area shape="rect" id="Node000042" href="$eval-adis1650x_2src_2platform_2pico_2parameters_8c.html" title="Definition of pico platform data used by eval&#45;adis1650x project." alt="" coords="3090,306,3317,346"/>
+<area shape="poly" id="edge46_Node000041_Node000042" title=" " alt="" coords="3356,252,3242,308,3240,304,3354,247"/>
+<area shape="rect" id="Node000044" href="$eval-adis1654x_2src_2platform_2pico_2parameters_8c.html" title="Definition of pico platform data used by eval&#45;adis1654x project." alt="" coords="3341,306,3567,346"/>
+<area shape="poly" id="edge48_Node000043_Node000044" title=" " alt="" coords="3607,252,3493,308,3491,304,3604,247"/>
+<area shape="rect" id="Node000046" href="$eval-adis1655x_2src_2platform_2pico_2parameters_8c.html" title="Definition of pico platform data used by eval&#45;adis1655x project." alt="" coords="3591,306,3818,346"/>
+<area shape="poly" id="edge50_Node000045_Node000046" title=" " alt="" coords="3857,252,3744,308,3741,304,3855,247"/>
+<area shape="rect" id="Node000048" href="$eval-adis1657x_2src_2platform_2pico_2parameters_8c.html" title="Definition of pico platform data used by eval&#45;adis1657x project." alt="" coords="3842,306,4069,346"/>
+<area shape="poly" id="edge52_Node000047_Node000048" title=" " alt="" coords="4108,252,3994,308,3992,304,4106,247"/>
+<area shape="rect" id="Node000050" href="$eval-adxl355-pmdz_2src_2platform_2pico_2main_8c.html" title="Main file for pico platform of eval&#45;adxl355&#45;pmdz project." alt="" coords="4295,299,4472,353"/>
+<area shape="poly" id="edge54_Node000049_Node000050" title=" " alt="" coords="4386,264,4386,299,4381,299,4381,264"/>
+<area shape="rect" id="Node000051" href="$eval-adxl355-pmdz_2src_2platform_2pico_2parameters_8c.html" title="Definition of pico platform data used by eval&#45;adxl355&#45;pmdz project." alt="" coords="4093,299,4271,353"/>
+<area shape="poly" id="edge55_Node000049_Node000051" title=" " alt="" coords="4320,259,4236,301,4233,296,4318,254"/>
+<area shape="poly" id="edge58_Node000053_Node000052" title=" " alt="" coords="3773,135,3812,145,3924,164,4026,177,4209,188,4371,187,4522,178,4674,168,4837,163,5021,170,5124,179,5237,193,5273,201,5272,206,5236,199,5124,184,5021,175,4837,168,4675,173,4523,183,4371,192,4209,194,4026,182,3923,169,3811,151,3772,140"/>
+<area shape="rect" id="Node000054" href="$iio__demo_2src_2platform_2stm32_2parameters_8h.html" title="Definitions specific to stm32 platform used by iio_demo project." alt="" coords="5446,203,5665,243"/>
+<area shape="poly" id="edge59_Node000053_Node000054" title=" " alt="" coords="3773,135,3812,145,3884,156,3968,164,4164,174,4386,178,4621,177,5078,177,5275,182,5433,193,5478,201,5477,206,5432,199,5275,187,5078,182,4621,183,4386,183,4164,179,3968,169,3884,161,3811,151,3772,140"/>
+<area shape="rect" id="Node000055" href="$iio__demo_2src_2platform_2stm32_2parameters_8c.html" title="Definition of stm32 platform data used by iio_demo project." alt="" coords="5457,306,5675,346"/>
+<area shape="poly" id="edge60_Node000054_Node000055" title=" " alt="" coords="5561,257,5567,306,5561,306,5556,257"/>
+<area shape="rect" id="Node000058" href="$ad7091r8-sdz_2src_2platform_2maxim_2parameters_8c.html" title="Definitions specific to Maxim platform used by eval&#45;ad7091r8&#45;sdz project." alt="" coords="5689,203,5934,243"/>
+<area shape="poly" id="edge63_Node000057_Node000058" title=" " alt="" coords="4216,134,4274,145,4486,169,4667,179,4826,180,4975,175,5123,170,5283,168,5464,175,5677,193,5725,201,5725,206,5676,199,5464,180,5283,174,5123,175,4975,180,4826,185,4667,184,4486,174,4274,151,4215,139"/>
+<area shape="rect" id="Node000063" href="$demo__esp_2src_2common_2common__data_8c.html" title="Defines common data to be used by demo_esp examples." alt="" coords="5959,203,6149,243"/>
+<area shape="poly" id="edge69_Node000062_Node000063" title=" " alt="" coords="5034,135,5077,145,5208,165,5319,174,5418,176,5511,174,5702,172,5815,178,5946,193,5985,201,5984,206,5946,199,5814,183,5702,177,5511,179,5418,181,5319,179,5207,170,5076,151,5032,140"/>
+<area shape="rect" id="Node000067" href="$afe__config_8h.html" title=" " alt="" coords="6407,203,6597,243"/>
+<area shape="poly" id="edge73_Node000066_Node000067" title=" " alt="" coords="6505,147,6505,203,6499,203,6499,147"/>
+<area shape="rect" id="Node000070" href="$iio__pqm_8h.html" title=" " alt="" coords="6559,401,6733,441"/>
+<area shape="poly" id="edge83_Node000066_Node000070" title=" " alt="" coords="6542,139,6573,163,6599,195,6623,250,6635,308,6644,401,6638,401,6630,309,6618,251,6594,197,6569,167,6539,143"/>
+<area shape="rect" id="Node000074" href="$eval-pqmon_2src_2common_2common__data_8c.html" title=" " alt="" coords="6696,203,6911,243"/>
+<area shape="poly" id="edge82_Node000066_Node000074" title=" " alt="" coords="6568,135,6751,201,6750,206,6566,140"/>
+<area shape="rect" id="Node000075" href="$pqlib__convert_8c.html" title=" " alt="" coords="6173,203,6383,243"/>
+<area shape="poly" id="edge84_Node000066_Node000075" title=" " alt="" coords="6452,142,6318,206,6316,201,6450,137"/>
+<area shape="rect" id="Node000068" href="$afe__config_8c.html" title=" " alt="" coords="6200,306,6388,346"/>
+<area shape="poly" id="edge74_Node000067_Node000068" title=" " alt="" coords="6452,252,6334,308,6332,304,6449,247"/>
+<area shape="rect" id="Node000069" href="$pqlib__afe_8h.html" title=" " alt="" coords="6412,306,6595,346"/>
+<area shape="poly" id="edge75_Node000067_Node000069" title=" " alt="" coords="6505,257,6506,306,6500,306,6500,257"/>
+<area shape="poly" id="edge76_Node000069_Node000070" title=" " alt="" coords="6545,351,6619,399,6616,404,6542,356"/>
+<area shape="rect" id="Node000072" href="$pqlib__afe_8c.html" title=" " alt="" coords="6351,489,6533,529"/>
+<area shape="poly" id="edge81_Node000069_Node000072" title=" " alt="" coords="6495,360,6451,490,6446,488,6490,358"/>
+<area shape="poly" id="edge77_Node000070_Node000066" title=" " alt="" coords="6653,387,6655,347,6651,298,6640,246,6618,197,6604,178,6587,162,6548,136,6551,131,6590,158,6608,175,6623,195,6645,244,6656,297,6660,347,6658,388"/>
+<area shape="rect" id="Node000071" href="$iio__pqm_8c.html" title=" " alt="" coords="6799,489,6973,529"/>
+<area shape="poly" id="edge78_Node000070_Node000071" title=" " alt="" coords="6712,443,6834,487,6833,492,6710,448"/>
+<area shape="poly" id="edge79_Node000070_Node000072" title=" " alt="" coords="6590,449,6488,492,6486,487,6588,444"/>
+<area shape="rect" id="Node000073" href="$pqlib__example_8c.html" title=" " alt="" coords="6557,489,6775,529"/>
+<area shape="poly" id="edge80_Node000070_Node000073" title=" " alt="" coords="6656,454,6664,489,6659,490,6651,456"/>
+<area shape="rect" id="Node000077" href="$iio__demo_2src_2platform_2maxim_2parameters_8c.html" title="Definition of Maxim platform data used by iio_demo project." alt="" coords="6935,203,7157,243"/>
+<area shape="poly" id="edge87_Node000076_Node000077" title=" " alt="" coords="6811,135,6994,201,6992,206,6809,140"/>
+<area shape="rect" id="Node000079" href="$iio__demo__free_r_t_o_s_2src_2platform_2maxim_2parameters_8c.html" title="Definition of Maxim platform data used by iio_demo_freeRTOS project." alt="" coords="7182,203,7427,243"/>
+<area shape="poly" id="edge89_Node000078_Node000079" title=" " alt="" coords="7069,135,7253,201,7251,206,7068,140"/>
+</map>

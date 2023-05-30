@@ -1,0 +1,27 @@
+<map id="projects/eval&#45;ad8460/src/examples/basic/basic_example.c" name="projects/eval&#45;ad8460/src/examples/basic/basic_example.c">
+<area shape="rect" id="Node000001" title=" " alt="" coords="194,5,383,60"/>
+<area shape="rect" id="Node000002" href="$eval-ad8460_2src_2examples_2basic_2basic__example_8h.html" title=" " alt="" coords="5,108,137,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="223,63,114,105,112,101,221,58"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="161,108,288,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="271,62,244,99,239,95,267,58"/>
+<area shape="rect" id="Node000004" href="$ad8460_8h.html" title="Implementation of AD8460 Driver." alt="" coords="313,108,395,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="311,58,339,95,335,99,307,62"/>
+<area shape="rect" id="Node000011" href="$no__os__print__log_8h.html" title="Print messages helpers." alt="" coords="469,108,605,133"/>
+<area shape="poly" id="edge12_Node000001_Node000011" title=" " alt="" coords="365,58,491,101,490,106,364,63"/>
+<area shape="rect" id="Node000005" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="149,181,255,207"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="331,136,240,178,238,173,328,131"/>
+<area shape="rect" id="Node000007" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="279,181,378,207"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="352,135,340,169,335,168,347,133"/>
+<area shape="rect" id="Node000008" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="403,181,503,207"/>
+<area shape="poly" id="edge8_Node000004_Node000008" title=" " alt="" coords="371,131,427,171,424,175,368,136"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="293,255,364,280"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="224,204,297,245,295,250,221,209"/>
+<area shape="poly" id="edge7_Node000007_Node000006" title=" " alt="" coords="331,207,331,241,326,241,326,207"/>
+<area shape="poly" id="edge9_Node000008_Node000006" title=" " alt="" coords="434,209,362,250,359,245,431,204"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="403,255,473,280"/>
+<area shape="poly" id="edge10_Node000008_Node000009" title=" " alt="" coords="453,208,446,242,441,241,448,206"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="498,255,581,280"/>
+<area shape="poly" id="edge11_Node000008_Node000010" title=" " alt="" coords="468,205,516,244,513,248,465,209"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="527,181,594,207"/>
+<area shape="poly" id="edge13_Node000011_Node000012" title=" " alt="" coords="543,133,555,167,550,169,538,135"/>
+</map>

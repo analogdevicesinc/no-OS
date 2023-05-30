@@ -1,0 +1,13 @@
+<map id="ad74413r_set_channel_dac_code" name="ad74413r_set_channel_dac_code">
+<area shape="rect" id="Node000001" title="Set and load a code for the DAC on a specific channel." alt="" coords="491,25,659,65"/>
+<area shape="rect" id="Node000002" href="$ad74413r_8c.html#ac7a8259b117e5b66845d0390bc12e846" title="Set the operation mode for a specific channel." alt="" coords="275,25,443,65"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="477,47,443,47,443,42,477,42"/>
+<area shape="rect" id="Node000003" href="$ad74413r_2src_2examples_2dummy_2dummy__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Dummy example main execution." alt="" coords="108,5,227,31"/>
+<area shape="poly" id="edge5_Node000001_Node000003" title=" " alt="" coords="491,24,442,15,396,11,359,11,275,15,227,17,227,12,275,10,359,6,396,6,443,10,492,19"/>
+<area shape="rect" id="Node000004" href="$swiot1l__mqtt_8c.html#ab4316fc56ae71292fd2845eb8cb6fd42" title=" " alt="" coords="114,59,221,84"/>
+<area shape="poly" id="edge6_Node000001_Node000004" title=" " alt="" coords="492,71,443,79,396,83,359,83,275,79,221,77,221,72,275,74,359,78,396,78,442,74,491,65"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="261,34,227,29,227,24,262,28"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="262,61,221,67,221,61,261,56"/>
+<area shape="rect" id="Node000005" href="$swiot1l_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function." alt="" coords="5,59,60,84"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="100,74,60,74,60,69,100,69"/>
+</map>

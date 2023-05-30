@@ -1,0 +1,24 @@
+<map id="ad9833_tx_spi" name="ad9833_tx_spi">
+<area shape="rect" id="Node000001" title="Transmits 16 bits on SPI." alt="" coords="391,198,507,223"/>
+<area shape="poly" id="edge10_Node000001_Node000001" title=" " alt="" coords="484,188,474,180,449,177,427,179,416,183,414,189,420,196,416,199,409,189,412,180,426,173,449,171,477,175,488,184"/>
+<area shape="rect" id="Node000002" href="$ad9833_8c.html#aaf7b32900432e682c63e548c4a7236ce" title="Initialize the SPI communication with the device." alt="" coords="5,198,104,223"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="438,186,426,150,406,109,378,70,361,53,341,39,291,16,247,8,203,16,153,39,133,55,115,74,88,119,70,164,61,198,56,197,65,162,83,117,111,71,129,51,151,35,201,11,247,3,293,11,344,35,364,49,382,66,411,107,431,148,443,184"/>
+<area shape="rect" id="Node000003" href="$ad9833_8c.html#a3eddeea5234c70b3dd9c720df3eb781f" title="Selects the type of output." alt="" coords="176,50,319,75"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="431,188,394,137,370,111,341,89,318,78,320,73,344,84,373,107,399,133,435,185"/>
+<area shape="rect" id="Node000004" href="$ad9833_8c.html#a36c1b9b625e03f7ce94e3f71e663d786" title="Select the frequency register to be used." alt="" coords="159,99,336,125"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="421,191,385,163,342,138,311,127,313,122,344,133,388,159,424,187"/>
+<area shape="rect" id="Node000005" href="$ad9833_8c.html#a1af4bb76b620dc35547a2512018115bb" title="Select the phase register to be used." alt="" coords="152,149,343,174"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="382,197,299,177,301,171,384,192"/>
+<area shape="rect" id="Node000006" href="$ad9833_8c.html#ad88cffd6da72850056046f3cbafd5e98" title="Loads a frequency value in a register." alt="" coords="182,198,313,223"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="377,213,313,213,313,208,377,208"/>
+<area shape="rect" id="Node000007" href="$ad9833_8c.html#a772f3c2619170aa5a922f5dfbd9c26bb" title="Loads a phase value in a register." alt="" coords="176,247,319,273"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="384,229,301,250,299,245,382,224"/>
+<area shape="rect" id="Node000008" href="$ad9833_8c.html#af145878574f8f17a5ade366abc643a80" title="Enable / Disable the sleep function." alt="" coords="169,297,325,322"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="424,234,387,261,344,286,309,299,308,294,342,281,384,257,420,230"/>
+<area shape="rect" id="Node000009" href="$ad9833_8c.html#afa3d57144eb1dd2e4ee1abb8e8501c6c" title="Configures the control register for logic output. (only for AD9834 &amp; AD9838)" alt="" coords="169,346,326,371"/>
+<area shape="poly" id="edge11_Node000001_Node000009" title=" " alt="" coords="435,237,398,287,373,313,344,335,317,348,315,343,341,331,369,309,394,283,431,233"/>
+<area shape="rect" id="Node000010" href="$ad9833_8c.html#a08b0d0d82ecd248afda6fd6a1c2bfe4b" title="Sets the programming method. (only for AD9834 &amp; AD9838)" alt="" coords="171,396,323,436"/>
+<area shape="poly" id="edge12_Node000001_Node000010" title=" " alt="" coords="441,237,406,310,378,350,344,385,323,398,320,393,341,380,374,346,401,307,436,235"/>
+<area shape="poly" id="edge6_Node000006_Node000002" title=" " alt="" coords="168,213,104,213,104,208,168,208"/>
+<area shape="poly" id="edge8_Node000007_Node000002" title=" " alt="" coords="183,246,103,226,105,220,185,241"/>
+</map>

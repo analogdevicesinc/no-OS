@@ -1,0 +1,20 @@
+<map id="adf4368_set_freq" name="adf4368_set_freq">
+<area shape="rect" id="Node000001" title="Set the output frequency." alt="" coords="549,120,684,145"/>
+<area shape="rect" id="Node000002" href="$adf4368_8c.html#a2a137ef36451ebb33a35077ed19f03d0" title="Initializes the adf4368." alt="" coords="373,5,475,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="590,112,550,78,500,46,471,33,473,28,503,41,553,74,593,108"/>
+<area shape="rect" id="Node000006" href="$adf4368_8c.html#ae0411e5c2e9caa1c428e64e12a69931c" title="Set the reference doubler to enable or disable based on the passed parameter. If the parameter is dif..." alt="" coords="349,55,499,95"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="560,119,491,98,492,93,561,114"/>
+<area shape="rect" id="Node000007" href="$adf4368_8c.html#a490f37ba07ae0bbe064e5a8e55d9146a" title="Set the desired reference frequency and reset everything over to maximum supported value of 4GHz to t..." alt="" coords="347,120,501,145"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="535,135,501,135,501,130,535,130"/>
+<area shape="rect" id="Node000008" href="$adf4368_8c.html#a09a46391238432b71f49b061451230b1" title="Set the reference divider value and reset everything over to maximum supported value of 63 to the max..." alt="" coords="347,169,501,195"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="554,151,475,172,474,167,553,146"/>
+<area shape="rect" id="Node000009" href="$adf4368_8c.html#a9c60b517f7deb58ce3165685a3734278" title="Set the desired output frequency and reset everything over to maximum supported value of 12...." alt="" coords="354,219,494,244"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="589,156,549,184,502,210,474,221,472,216,500,205,546,179,586,152"/>
+<area shape="rect" id="Node000003" href="$iio__adf4368_8c.html#aed6935c2bd59341698bbb423c2eb8911" title="Initializes the ADF4368 IIO driver." alt="" coords="172,5,299,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="359,21,299,21,299,15,359,15"/>
+<area shape="rect" id="Node000005" href="$adf4368_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="176,136,295,161"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="362,38,348,46,317,68,289,93,249,138,245,134,286,89,314,63,345,41,360,33"/>
+<area shape="rect" id="Node000004" href="$adf4368_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="IIO example main execution." alt="" coords="5,5,124,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="158,21,124,21,124,15,158,15"/>
+<area shape="poly" id="edge9_Node000009_Node000005" title=" " alt="" coords="364,217,346,210,297,187,257,164,259,159,300,182,348,205,366,212"/>
+</map>

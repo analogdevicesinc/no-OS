@@ -1,0 +1,13 @@
+<map id="drivers/rf&#45;transceiver/adf7023/adf7023_config.h" name="drivers/rf&#45;transceiver/adf7023/adf7023_config.h">
+<area shape="rect" id="Node000001" title="Configuration file of ADF7023 Driver." alt="" coords="5,5,200,45"/>
+<area shape="rect" id="Node000002" href="$adf7023_8h.html" title="Header file of ADF7023 Driver." alt="" coords="59,93,146,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="105,46,105,79,100,79,100,46"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="67,240,138,265"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="86,121,63,141,44,168,42,185,48,201,60,216,75,230,71,234,56,220,43,204,36,185,39,166,59,137,83,117"/>
+<area shape="rect" id="Node000004" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="53,167,152,192"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="105,119,105,153,100,153,100,119"/>
+<area shape="rect" id="Node000005" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="176,167,283,192"/>
+<area shape="poly" id="edge5_Node000002_Node000005" title=" " alt="" coords="124,116,198,157,195,162,122,121"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="105,192,105,226,100,226,100,192"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="210,194,137,235,134,231,208,190"/>
+</map>

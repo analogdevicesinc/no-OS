@@ -1,0 +1,9 @@
+<map id="ADIAPI_mw_edid_parse" name="ADIAPI_mw_edid_parse">
+<area shape="rect" id="Node000001" title=" " alt="" coords="536,42,711,67"/>
+<area shape="rect" id="Node000002" href="$edid_8c.html#a7df1330839074f74a70aea9a7ebcf3ba" title=" " alt="" coords="282,5,457,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="522,46,456,38,457,33,523,40"/>
+<area shape="rect" id="Node000003" href="$transmitter_8c.html#a8b3e85ee90b00b7bc69e6a9b8eaf8a88" title="Parse the new EDID segment and set the resolution and the pixel clock according to EDID data." alt="" coords="251,70,488,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="523,68,485,73,484,67,522,63"/>
+<area shape="rect" id="Node000004" href="$transmitter_8c.html#ad65fcbe407bb46ad6698c3f1602144e5" title="Performs the notification operations." alt="" coords="5,70,203,95"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="237,85,203,85,203,80,237,80"/>
+</map>

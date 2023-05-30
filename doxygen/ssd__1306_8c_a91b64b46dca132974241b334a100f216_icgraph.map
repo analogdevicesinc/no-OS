@@ -1,0 +1,5 @@
+<map id="ssd_1306_move_cursor" name="ssd_1306_move_cursor">
+<area shape="rect" id="Node000001" title="Moves cursor to desired row/column." alt="" coords="211,5,385,31"/>
+<area shape="rect" id="Node000002" href="$ssd__1306_8c.html#a340aebe8804fe85f08151b8724baa370" title="Prints character at selected position." alt="" coords="5,5,163,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="196,21,163,21,163,15,196,15"/>
+</map>

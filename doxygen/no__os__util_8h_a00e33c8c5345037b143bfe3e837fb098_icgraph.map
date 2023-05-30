@@ -1,0 +1,24 @@
+<map id="no_os_hweight32" name="no_os_hweight32">
+<area shape="rect" id="Node000001" title=" " alt="" coords="851,107,985,132"/>
+<area shape="rect" id="Node000002" href="$aducm3029__adc_8c.html#a4af7379d1fc099dae34fbdb5c9d67d13" title="Read adc data. aducm3029_adc_update_active_channels should be called in order to enable channeles." alt="" coords="635,5,799,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="885,101,801,52,755,33,758,28,804,48,888,97"/>
+<area shape="rect" id="Node000003" href="$iio__aducm3029_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="497,31,552,56"/>
+<area shape="poly" id="edge5_Node000001_Node000003" title=" " alt="" coords="847,106,802,97,552,50,553,45,803,91,848,101"/>
+<area shape="rect" id="Node000004" href="$iio__axi__adc_8c.html#aca23a80aa2cbb5c102d031473a0d9189" title="Update active channels." alt="" coords="636,107,799,132"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="837,122,799,122,799,117,837,117"/>
+<area shape="rect" id="Node000005" href="$iio__axi__dac_8c.html#a5391d278882dec3aab5b3caccbb8fdc7" title="Update active channels." alt="" coords="632,156,803,181"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="853,138,770,159,769,153,852,133"/>
+<area shape="rect" id="Node000006" href="$max31827_8c.html#acf60373c1d4f07f1fb9850b75c1ae299" title="Initialize MAX31827 device setup." alt="" coords="636,205,799,231"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="890,143,850,169,804,195,770,208,768,203,802,190,848,165,887,138"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="622,33,553,42,552,37,621,28"/>
+<area shape="rect" id="Node000007" href="$max31827_8c.html#af2a1841b0ff4828abe3e45fe8be2cbbc" title="Device and comm init function." alt="" coords="465,205,584,231"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="622,221,584,221,584,215,622,215"/>
+<area shape="rect" id="Node000008" href="$max31827-evkit_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="287,180,405,205"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="451,210,405,204,406,198,452,205"/>
+<area shape="rect" id="Node000009" href="$iio__max31827_8c.html#a4dd055100a02994fb2af0330e10557bc" title="Initializes the MAX31827 IIO driver." alt="" coords="275,229,417,255"/>
+<area shape="poly" id="edge9_Node000007_Node000009" title=" " alt="" coords="452,230,418,235,417,230,451,225"/>
+<area shape="rect" id="Node000010" href="$max31827-evkit_2src_2examples_2iio__example_2iio__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main execution." alt="" coords="108,229,227,255"/>
+<area shape="poly" id="edge10_Node000009_Node000010" title=" " alt="" coords="261,245,227,245,227,239,261,239"/>
+<area shape="rect" id="Node000011" href="$ad3552r__fmcz_2src_2platform_2xilinx_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for xilinx platform." alt="" coords="5,229,60,255"/>
+<area shape="poly" id="edge11_Node000010_Node000011" title=" " alt="" coords="94,245,60,245,60,239,94,239"/>
+</map>

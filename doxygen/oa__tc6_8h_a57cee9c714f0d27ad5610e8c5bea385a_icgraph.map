@@ -1,0 +1,15 @@
+<map id="oa_tc6_remove" name="oa_tc6_remove">
+<area shape="rect" id="Node000001" title="Free a device descriptor." alt="" coords="504,42,627,67"/>
+<area shape="rect" id="Node000002" href="$adin1110_8c.html#a230ee39d596b871f215c208d06d5526b" title="Initialize the device." alt="" coords="331,17,442,42"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="490,47,442,40,443,35,491,41"/>
+<area shape="rect" id="Node000006" href="$adin1110_8c.html#a48ba7d6d74b17f7baca20cbf6e2dbc40" title="Free a device descriptor." alt="" coords="317,66,456,91"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="491,67,457,72,456,67,490,62"/>
+<area shape="rect" id="Node000003" href="$adin1110__standalone__example_8c.html#acbf661085a642e031f672cda6c6da4fe" title="Configure the ADIN1110 and read the device ID." alt="" coords="108,5,269,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="317,31,270,30,270,24,317,25"/>
+<area shape="rect" id="Node000005" href="$frame__rx__tx__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Frame receive an transmit example main execution." alt="" coords="129,70,248,95"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="326,48,237,73,236,67,325,43"/>
+<area shape="rect" id="Node000004" href="$apard32690_2src_2examples_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution." alt="" coords="5,13,60,38"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="94,28,60,28,60,23,94,23"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="325,65,263,48,264,43,326,60"/>
+<area shape="poly" id="edge7_Node000006_Node000005" title=" " alt="" coords="304,83,248,84,248,79,304,78"/>
+</map>

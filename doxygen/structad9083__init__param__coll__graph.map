@@ -1,0 +1,30 @@
+<map id="ad9083_init_param" name="ad9083_init_param">
+<area shape="rect" id="Node000001" title="Structure holding the parameters for ad9083 initialization." alt="" coords="1284,198,1431,223"/>
+<area shape="rect" id="Node000002" href="$structno__os__spi__init__param.html" title="Structure holding the parameters for SPI initialization." alt="" coords="991,110,1154,135"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1129,137,1316,195,1315,201,1127,142"/>
+<area shape="rect" id="Node000003" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,45,184,70"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="196,40,327,27,490,17,669,19,760,26,848,39,905,52,960,71,1047,108,1045,112,959,76,904,57,848,44,759,32,669,25,490,23,327,32,196,46"/>
+<area shape="rect" id="Node000005" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="693,93,815,118"/>
+<area shape="poly" id="edge7_Node000005_Node000003" title=" " alt="" coords="198,59,401,70,636,88,692,94,692,100,636,93,400,75,197,64"/>
+<area shape="rect" id="Node000006" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="339,106,485,131"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="147,71,209,88,339,109,338,114,207,93,146,77"/>
+<area shape="rect" id="Node000004" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="337,159,487,199"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="500,170,636,160,991,128,991,133,636,165,501,175"/>
+<area shape="poly" id="edge8_Node000005_Node000004" title=" " alt="" coords="500,160,635,132,704,115,705,121,637,137,501,165"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="830,107,991,116,991,121,829,112"/>
+<area shape="poly" id="edge9_Node000005_Node000005" title=" " alt="" coords="722,78,732,69,754,66,773,68,784,75,787,84,781,94,777,91,782,84,780,78,771,73,754,71,734,74,726,82"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="499,113,692,105,692,110,499,118"/>
+<area shape="rect" id="Node000007" href="$structno__os__gpio__init__param.html" title="Structure holding the parameters for GPIO initialization." alt="" coords="987,219,1159,245"/>
+<area shape="poly" id="edge10_Node000001_Node000007" title=" " alt="" coords="1173,222,1283,213,1284,219,1173,227"/>
+<area shape="rect" id="Node000008" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="660,230,848,255"/>
+<area shape="poly" id="edge11_Node000007_Node000008" title=" " alt="" coords="861,236,986,232,986,238,862,242"/>
+<area shape="rect" id="Node000009" href="$structno__os__clk.html" title=" " alt="" coords="1029,289,1116,314"/>
+<area shape="poly" id="edge12_Node000001_Node000009" title=" " alt="" coords="1128,282,1259,241,1319,221,1321,226,1261,247,1130,287"/>
+<area shape="rect" id="Node000010" href="$structno__os__clk__hw.html" title=" " alt="" coords="1301,311,1413,337"/>
+<area shape="poly" id="edge14_Node000010_Node000009" title=" " alt="" coords="1130,303,1301,317,1301,322,1129,308"/>
+<area shape="poly" id="edge13_Node000009_Node000010" title=" " alt="" coords="1301,342,1244,351,1213,351,1182,348,1136,334,1097,317,1099,312,1138,329,1183,343,1213,346,1243,346,1300,337"/>
+<area shape="rect" id="Node000011" href="$structno__os__clk__desc.html" title="Structure holding CLK descriptor." alt="" coords="693,289,815,314"/>
+<area shape="poly" id="edge15_Node000009_Node000011" title=" " alt="" coords="829,299,1029,299,1029,304,829,304"/>
+<area shape="rect" id="Node000012" href="$structno__os__clk__platform__ops.html" title="Structure holding CLK function pointers that point to the platform specific function." alt="" coords="323,289,501,314"/>
+<area shape="poly" id="edge16_Node000011_Node000012" title=" " alt="" coords="515,299,693,299,693,304,515,304"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="no_os_irq_init_param" name="no_os_irq_init_param">
+<area shape="rect" id="Node000001" title="Structure holding the initial parameters for Interrupt Request." alt="" coords="13,93,175,119"/>
+<area shape="rect" id="Node000002" href="$structno__os__irq__platform__ops.html" title="Structure holding IRQ function pointers that point to the platform specific function." alt="" coords="5,5,183,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="97,45,97,93,91,93,91,45"/>
+</map>

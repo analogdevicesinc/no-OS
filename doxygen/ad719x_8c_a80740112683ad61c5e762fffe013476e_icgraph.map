@@ -1,0 +1,9 @@
+<map id="ad719x_set_operating_mode" name="ad719x_set_operating_mode">
+<area shape="rect" id="Node000001" title="Sets device into the specified operating mode." alt="" coords="479,5,689,31"/>
+<area shape="rect" id="Node000002" href="$ad719x_8c.html#abe338e9c6992908df702bb106f1e651d" title="Initializes the communication peripheral and the initial Values for AD719X Board and resets the devic..." alt="" coords="332,5,431,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="465,21,431,21,431,15,465,15"/>
+<area shape="rect" id="Node000003" href="$ad719x_2src_2examples_2dummy_2dummy__example_8c.html#aab59a6c65a45a3bcf47030189141a81c" title="Dummy example main execution." alt="" coords="108,5,284,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="318,21,284,21,284,15,318,15"/>
+<area shape="rect" id="Node000004" href="$ad719x_2src_2platform_2xilinx_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for XILINX platform." alt="" coords="5,5,60,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="94,21,60,21,60,15,94,15"/>
+</map>

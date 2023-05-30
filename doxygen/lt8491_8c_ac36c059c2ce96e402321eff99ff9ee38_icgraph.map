@@ -1,0 +1,43 @@
+<map id="lt8491_reg_read" name="lt8491_reg_read">
+<area shape="rect" id="Node000001" title="Read a register value." alt="" coords="431,331,557,357"/>
+<area shape="rect" id="Node000002" href="$lt8491_8c.html#a2455e3be05ae4bdce060b0068084d3c0" title="Read the telemetry battery charging stage." alt="" coords="217,5,379,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="487,318,478,265,459,196,427,123,406,89,381,59,365,48,369,43,385,55,411,86,432,120,464,194,483,264,492,317"/>
+<area shape="rect" id="Node000004" href="$lt8491_8c.html#a41839457101d482143d6d0b4731cda17" title="Read the telemetry battery charging status." alt="" coords="217,69,379,109"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="484,319,471,276,450,224,420,170,402,145,381,123,364,112,367,107,384,119,406,142,425,167,455,222,476,275,489,317"/>
+<area shape="rect" id="Node000005" href="$lt8491_8c.html#a76296ee1ccfc66eba8e215232589237b" title="Read the telemetry battery efficiency." alt="" coords="213,134,383,159"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="481,320,466,286,445,246,416,207,381,173,361,162,364,157,384,169,420,203,449,244,471,284,486,317"/>
+<area shape="rect" id="Node000006" href="$lt8491_8c.html#ab0fe4584eb75af25b6fc3c451bdbb324" title="Read the telemetry battery charging enable." alt="" coords="223,183,373,209"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="475,321,436,271,410,245,381,222,358,211,361,206,384,218,414,241,440,267,480,318"/>
+<area shape="rect" id="Node000007" href="$lt8491_8c.html#a5ff93ad3a67f01662b260e3f85dd1ede" title="Read the telemetry battery input current." alt="" coords="237,233,359,258"/>
+<area shape="poly" id="edge9_Node000001_Node000007" title=" " alt="" coords="465,325,427,297,382,272,352,261,354,256,384,267,429,293,468,321"/>
+<area shape="rect" id="Node000008" href="$lt8491_8c.html#a74de9fc049454ed9d6e0730cc85c0f8c" title="Read the telemetry battery output current." alt="" coords="233,282,363,307"/>
+<area shape="poly" id="edge11_Node000001_Node000008" title=" " alt="" coords="429,331,349,310,350,305,430,325"/>
+<area shape="rect" id="Node000009" href="$lt8491_8c.html#ae8a21be83572f64f4415e5ea079aad42" title="Read the telemetry battery input power." alt="" coords="235,331,361,357"/>
+<area shape="poly" id="edge13_Node000001_Node000009" title=" " alt="" coords="417,347,361,347,361,341,417,341"/>
+<area shape="rect" id="Node000010" href="$lt8491_8c.html#aee30f2820e5ef0f8f76a850503ebd17e" title="Read the telemetry battery output power." alt="" coords="231,381,365,406"/>
+<area shape="poly" id="edge15_Node000001_Node000010" title=" " alt="" coords="430,363,350,383,349,378,429,357"/>
+<area shape="rect" id="Node000011" href="$lt8491_8c.html#adb32f41dc200268123047f1fc84e904c" title="Read the scratch register." alt="" coords="221,430,375,455"/>
+<area shape="poly" id="edge17_Node000001_Node000011" title=" " alt="" coords="467,367,429,394,384,420,351,432,349,427,382,415,426,390,464,363"/>
+<area shape="rect" id="Node000012" href="$lt8491_8c.html#a169de5932319a2a6b567bd19e1ea37ab" title="Read the serial ID." alt="" coords="217,479,379,505"/>
+<area shape="poly" id="edge19_Node000001_Node000012" title=" " alt="" coords="479,370,440,420,414,446,384,469,357,482,355,477,381,464,410,442,436,416,475,367"/>
+<area shape="rect" id="Node000013" href="$lt8491_8c.html#af432981e12bdacaca21613cbdc859f03" title="Read the telemetry battery temperature." alt="" coords="232,529,364,554"/>
+<area shape="poly" id="edge21_Node000001_Node000013" title=" " alt="" coords="485,371,470,404,448,444,420,484,384,518,361,531,358,526,381,514,416,480,444,441,466,402,481,369"/>
+<area shape="rect" id="Node000014" href="$lt8491_8c.html#ac09058333c0b63be4aa7479f47e7db38" title="Read the telemetry battery voltage." alt="" coords="231,578,365,603"/>
+<area shape="poly" id="edge23_Node000001_Node000014" title=" " alt="" coords="490,371,477,413,456,466,426,520,407,545,384,567,363,580,361,576,381,563,403,542,421,518,451,464,472,411,484,369"/>
+<area shape="rect" id="Node000015" href="$lt8491_8c.html#aa2b4676bfb14ce7600261dcd2991fb41" title="Read the telemetry input voltage." alt="" coords="235,627,361,653"/>
+<area shape="poly" id="edge25_Node000001_Node000015" title=" " alt="" coords="492,371,482,423,463,489,432,557,410,589,384,617,363,630,360,626,381,613,406,585,427,554,458,487,477,421,487,370"/>
+<area shape="rect" id="Node000003" href="$dc2703a_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="5,331,165,357"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="220,55,215,59,186,92,161,129,141,169,125,209,102,282,91,332,86,331,97,280,120,207,136,167,157,127,182,89,211,55,216,51"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="221,119,215,123,190,148,168,176,132,236,107,292,93,332,88,330,102,290,128,234,164,173,186,144,212,119,218,114"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="224,167,215,173,172,212,137,257,111,300,95,333,90,330,106,298,133,254,168,208,212,169,221,163"/>
+<area shape="poly" id="edge8_Node000006_Node000003" title=" " alt="" coords="227,216,215,222,178,249,145,279,98,333,94,329,141,275,174,244,212,218,224,211"/>
+<area shape="poly" id="edge10_Node000007_Node000003" title=" " alt="" coords="233,265,214,272,154,303,106,334,103,329,151,299,212,267,231,260"/>
+<area shape="poly" id="edge12_Node000008_Node000003" title=" " alt="" coords="230,313,142,334,140,329,229,308"/>
+<area shape="poly" id="edge14_Node000009_Node000003" title=" " alt="" coords="221,347,166,347,166,341,221,341"/>
+<area shape="poly" id="edge16_Node000010_Node000003" title=" " alt="" coords="229,380,140,359,142,354,230,375"/>
+<area shape="poly" id="edge18_Node000011_Node000003" title=" " alt="" coords="234,428,212,420,152,389,104,359,107,355,155,384,214,415,236,423"/>
+<area shape="poly" id="edge20_Node000012_Node000003" title=" " alt="" coords="227,477,212,469,175,442,141,412,94,359,98,355,145,408,178,438,215,464,230,472"/>
+<area shape="poly" id="edge22_Node000013_Node000003" title=" " alt="" coords="224,525,212,518,169,479,133,434,107,391,90,358,95,356,112,388,138,431,173,475,215,514,226,521"/>
+<area shape="poly" id="edge24_Node000014_Node000003" title=" " alt="" coords="222,574,212,567,186,543,163,515,126,455,102,398,88,358,93,356,106,396,131,452,167,512,189,539,215,563,225,570"/>
+<area shape="poly" id="edge26_Node000015_Node000003" title=" " alt="" coords="220,623,212,617,182,586,157,551,137,514,120,476,97,406,86,358,91,356,102,405,125,474,141,511,162,548,186,583,215,613,224,619"/>
+</map>

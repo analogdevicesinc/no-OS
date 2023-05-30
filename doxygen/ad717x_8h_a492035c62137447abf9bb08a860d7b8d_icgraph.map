@@ -1,0 +1,5 @@
+<map id="ad717x_connect_analog_input" name="ad717x_connect_analog_input">
+<area shape="rect" id="Node000001" title="Set Analog Inputs to channel." alt="" coords="156,5,335,45"/>
+<area shape="rect" id="Node000002" href="$ad717x_8c.html#af92ad585cabc0f6ef31f41589946bb34" title="Initializes the AD717X." alt="" coords="5,13,108,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="142,28,108,28,108,23,142,23"/>
+</map>

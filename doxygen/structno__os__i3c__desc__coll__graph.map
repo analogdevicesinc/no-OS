@@ -1,0 +1,13 @@
+<map id="no_os_i3c_desc" name="no_os_i3c_desc">
+<area shape="rect" id="Node000001" title="Structure holding I3C device descriptor." alt="" coords="5,93,128,119"/>
+<area shape="rect" id="Node000003" href="$structno__os__i3c__bus__desc.html" title="Structure holding I3C bus descriptor." alt="" coords="101,196,254,221"/>
+<area shape="poly" id="edge4_Node000003_Node000001" title=" " alt="" coords="60,132,58,152,64,171,80,186,102,196,99,201,77,190,59,173,52,153,55,132"/>
+<area shape="rect" id="Node000002" href="$structno__os__i3c__platform__ops.html" title="Structure holding I3C function pointers that point to the platform specific function." alt="" coords="32,5,211,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="84,40,70,56,66,75,67,93,61,93,60,74,66,53,80,37"/>
+<area shape="poly" id="edge6_Node000003_Node000002" title=" " alt="" coords="150,38,161,53,175,93,181,133,181,196,176,196,176,134,170,94,156,56,146,42"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="148,190,129,174,76,121,80,117,132,170,152,185"/>
+<area shape="rect" id="Node000004" href="$structno__os__i3c__daa__lut.html" title="Stores the PID + DA information to look&#45;up during the DAA. Should be used only for device initializat..." alt="" coords="292,93,433,119"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="331,128,200,198,197,194,328,123"/>
+<area shape="rect" id="Node000005" href="$structno__os__i3c__ccc__info.html" title=" " alt="" coords="457,93,604,119"/>
+<area shape="poly" id="edge5_Node000003_Node000005" title=" " alt="" coords="502,128,457,153,405,175,328,193,255,204,254,199,327,188,403,169,455,148,500,124"/>
+</map>
