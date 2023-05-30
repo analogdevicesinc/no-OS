@@ -1,0 +1,14 @@
+<map id="projects/adf4382/src/common/common_data.h" name="projects/adf4382/src/common/common_data.h">
+<area shape="rect" id="node1" title="Defines common data to be used by adf4382 examples." alt="" coords="227,5,419,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,95,156,121"/>
+<area shape="rect" id="node3" href="$adf4382_8h.html" title="Implementation of adf4382 Driver." alt="" coords="413,95,500,121"/>
+<area shape="rect" id="node7" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="272,169,372,196"/>
+<area shape="rect" id="node10" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="678,169,777,196"/>
+<area shape="rect" id="node11" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="180,95,285,121"/>
+<area shape="rect" id="node4" title=" " alt="" coords="288,244,359,271"/>
+<area shape="rect" id="node5" title=" " alt="" coords="583,169,653,196"/>
+<area shape="rect" id="node6" href="$no__os__units_8h.html" title="Header file of Units." alt="" coords="448,169,559,196"/>
+<area shape="rect" id="node8" title=" " alt="" coords="193,244,264,271"/>
+<area shape="rect" id="node9" title=" " alt="" coords="86,244,169,271"/>
+<area shape="rect" id="node12" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="63,169,197,196"/>
+</map>

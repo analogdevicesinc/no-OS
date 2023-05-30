@@ -1,0 +1,4 @@
+<map id="ad405x_spi_data_read" name="ad405x_spi_data_read">
+<area shape="rect" id="node1" title="Read conversion data." alt="" coords="187,5,355,32"/>
+<area shape="rect" id="node2" href="$ad405x_8h.html#ad8537455e65de0a05a94542e6fb39497" title="Trigger conversion and read data." alt="" coords="5,5,139,32"/>
+</map>

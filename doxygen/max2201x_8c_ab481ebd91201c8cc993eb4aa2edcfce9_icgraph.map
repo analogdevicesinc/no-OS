@@ -1,0 +1,18 @@
+<map id="max2201x_reg_update" name="max2201x_reg_update">
+<area shape="rect" id="node1" title="Update the value of a device register (read/write sequence)." alt="" coords="1063,311,1233,337"/>
+<area shape="rect" id="node2" href="$max2201x_8h.html#acee32cbb7f578be48da02d120b503fef" title="Set AO configuration." alt="" coords="628,107,765,133"/>
+<area shape="rect" id="node4" href="$max2201x_8h.html#a5df73eb41b5e99589aef1299bace511a" title="Enable the input direction of the specified GPIO." alt="" coords="821,209,1012,250"/>
+<area shape="rect" id="node5" href="$max2201x_8h.html#a31187e0b4f054e0c02a043588bf3b50f" title="Enable the output direction of the specified GPIO." alt="" coords="821,274,1012,315"/>
+<area shape="rect" id="node6" href="$max2201x_8h.html#aa8f8ab21e2af1a8440c332dde2bb7adc" title="Obtain the GPIO decriptor." alt="" coords="839,340,994,367"/>
+<area shape="rect" id="node7" href="$max2201x_8h.html#a8241bc6ecdea4fc1d0dec88195b78453" title="Free the resources allocated by no_os_gpio_get()." alt="" coords="825,391,1008,417"/>
+<area shape="rect" id="node8" href="$max2201x_8h.html#a55580c315d04a7712d46c2b5f6176e68" title="Set the value of the specified GPIO." alt="" coords="819,441,1015,468"/>
+<area shape="rect" id="node9" href="$max2201x_8h.html#a4b5fe59a02150a00efad7e6b13a03f1b" title="Initialize and configure the MAX2201X device." alt="" coords="430,157,549,184"/>
+<area shape="rect" id="node12" href="$max2201x_8h.html#aa2d8950536271086d20215d4f0a6cb40" title="Set operation mode for requested channel." alt="" coords="837,492,996,519"/>
+<area shape="rect" id="node13" href="$max2201x_8h.html#a2cb9bed62541ba72f86f47f0795a4e6b" title="Set timeout settings for MAX2201X device." alt="" coords="829,543,1005,569"/>
+<area shape="rect" id="node14" href="$max2201x_8h.html#ab1f0c2698cf2892bd7c7814fcd38ad5a" title="Soft reset requested channel." alt="" coords="835,56,998,83"/>
+<area shape="rect" id="node3" href="$max2201x_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="196,107,356,133"/>
+<area shape="rect" id="node10" href="$iio__max2201x_8h.html#a1a5e62a02277f0856f6a84262b00db64" title=" " alt="" coords="205,157,347,184"/>
+<area shape="rect" id="node11" href="$max2201x_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="5,107,148,133"/>
+<area shape="rect" id="node15" href="$max2201x_8h.html#afe3e48c359a42b5899f75a5ba9aadc0d" title="Free the resources allocated during init and perform a soft reset." alt="" coords="623,56,771,83"/>
+<area shape="rect" id="node16" href="$iio__max2201x_8h.html#a0412eee94e1d48f15b1927dc2e3759a4" title=" " alt="" coords="404,5,575,32"/>
+</map>

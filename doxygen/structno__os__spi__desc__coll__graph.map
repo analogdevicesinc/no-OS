@@ -1,0 +1,6 @@
+<map id="no_os_spi_desc" name="no_os_spi_desc">
+<area shape="rect" id="node1" title="Structure holding SPI descriptor." alt="" coords="200,199,323,225"/>
+<area shape="rect" id="node2" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,5,184,32"/>
+<area shape="rect" id="node4" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="188,102,335,129"/>
+<area shape="rect" id="node3" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="359,95,508,136"/>
+</map>

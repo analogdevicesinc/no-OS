@@ -1,0 +1,10 @@
+<map id="projects/adrv902x/src/platform/xilinx/parameters.h" name="projects/adrv902x/src/platform/xilinx/parameters.h">
+<area shape="rect" id="node1" title="Platform dependent parameters." alt="" coords="156,5,369,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,95,123,121"/>
+<area shape="rect" id="node3" href="$xilinx__gpio_8h.html" title=" " alt="" coords="146,95,251,121"/>
+<area shape="rect" id="node6" title=" " alt="" coords="276,95,380,121"/>
+<area shape="rect" id="node7" href="$xilinx__spi_8h.html" title=" " alt="" coords="404,95,500,121"/>
+<area shape="rect" id="node4" title=" " alt="" coords="330,244,401,271"/>
+<area shape="rect" id="node5" title=" " alt="" coords="236,169,319,196"/>
+<area shape="rect" id="node8" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="403,169,501,196"/>
+</map>

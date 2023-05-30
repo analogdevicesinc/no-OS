@@ -1,0 +1,17 @@
+<map id="tmc7300_reg_read" name="tmc7300_reg_read">
+<area shape="rect" id="node1" title="Read a register." alt="" coords="525,157,668,184"/>
+<area shape="rect" id="node2" href="$tmc7300_8h.html#a4e4be4c578ae70ceb9f9ca9d75b296b2" title="Get the comparator blank time register." alt="" coords="281,5,467,32"/>
+<area shape="rect" id="node3" href="$tmc7300_8h.html#adf2d2b5af1a1925919b5c5e9ff2a49a5" title="Read the driver status register." alt="" coords="283,56,465,83"/>
+<area shape="rect" id="node4" href="$tmc7300_8h.html#a8f019d7072aab2a74eb1395cf8985406" title="Get the number of UART valid write accesses. Wraps around at 255." alt="" coords="303,107,445,133"/>
+<area shape="rect" id="node5" href="$tmc7300_8h.html#a64693336ee371cb59f317d723e1f7829" title="Read the IOIN register." alt="" coords="305,157,443,184"/>
+<area shape="rect" id="node6" href="$tmc7300_8h.html#a1c3a046ea520f4f545b459687bfb19b3" title="Get the load indicator." alt="" coords="271,208,477,235"/>
+<area shape="rect" id="node7" href="$tmc7300_8h.html#a4fcbdb65bf0f51854172a8872ecc0332" title="Get the frequency of the PWM signal." alt="" coords="285,259,463,285"/>
+<area shape="rect" id="node8" href="$tmc7300_8h.html#aa1e60f88d1fb8766bc4818873b148166" title="Update a register." alt="" coords="295,309,453,336"/>
+<area shape="rect" id="node9" href="$tmc7300_8h.html#ab856211cc81990c6ca06c8c31e30fbf8" title="Enable the bridge driver." alt="" coords="35,157,193,184"/>
+<area shape="rect" id="node10" href="$tmc7300_8h.html#a4426d8fd03399282f65235db55383e9f" title="Initialize the TMC7300 driver." alt="" coords="61,208,167,235"/>
+<area shape="rect" id="node11" href="$tmc7300_8h.html#a558ef2d094c410c1e1cc41f9f886d195" title="Set the comparator blank time register." alt="" coords="21,259,207,285"/>
+<area shape="rect" id="node12" href="$tmc7300_8h.html#a7655e595b5f083d6085014c09fd6bca1" title="Set the PWM duty cycle." alt="" coords="23,309,205,336"/>
+<area shape="rect" id="node13" href="$tmc7300_8h.html#a33f587fc0e0a2b9a15ad2806f9a2458e" title="Set the PWM duty cycle and direction." alt="" coords="11,360,217,387"/>
+<area shape="rect" id="node14" href="$tmc7300_8h.html#ae99e390551fd30f6db5f2006539d5d18" title="Set the frequency of the PWM signal." alt="" coords="25,411,203,437"/>
+<area shape="rect" id="node15" href="$tmc7300_8h.html#a4cbd6fe045e5e03007e33b74c9d40ae7" title="Set the standstill mode. The motorrun bit will be set to 0." alt="" coords="5,461,223,488"/>
+</map>

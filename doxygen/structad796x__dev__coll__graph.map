@@ -1,0 +1,11 @@
+<map id="ad796x_dev" name="ad796x_dev">
+<area shape="rect" id="node1" title="AD796X Device structure." alt="" coords="208,288,309,315"/>
+<area shape="rect" id="node2" href="$structaxi__adc.html" title="AXI ADC Device Descriptor." alt="" coords="5,184,77,211"/>
+<area shape="rect" id="node3" href="$structaxi__dmac.html" title=" " alt="" coords="103,184,188,211"/>
+<area shape="rect" id="node4" href="$structaxi__dma__transfer.html" title=" " alt="" coords="77,95,213,121"/>
+<area shape="rect" id="node5" href="$structaxi__clkgen.html" title=" " alt="" coords="213,184,305,211"/>
+<area shape="rect" id="node6" href="$structno__os__pwm__desc.html" title="Structure representing an PWM generator device." alt="" coords="433,184,569,211"/>
+<area shape="rect" id="node7" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="287,95,419,121"/>
+<area shape="rect" id="node8" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="259,5,447,32"/>
+<area shape="rect" id="node9" href="$structno__os__pwm__platform__ops.html" title="Structure holding PWM function pointers that point to the platform specific function." alt="" coords="444,95,636,121"/>
+</map>

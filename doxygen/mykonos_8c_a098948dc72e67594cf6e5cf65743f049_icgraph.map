@@ -1,0 +1,11 @@
+<map id="MYKONOS_writeArmConfig" name="MYKONOS_writeArmConfig">
+<area shape="rect" id="node1" title="Low level helper function used by Mykonos API to write the ARM memory config structures." alt="" coords="563,165,759,192"/>
+<area shape="rect" id="node2" href="$mykonos_8h.html#a366f39050ef5877e4f98ccfe0744b284" title="This function will configure CLGC settings." alt="" coords="315,5,478,32"/>
+<area shape="rect" id="node3" href="$mykonos_8h.html#a9abc5ff152769a26905f0a454d1713ad" title="This function will configure DPD settings." alt="" coords="317,56,477,83"/>
+<area shape="rect" id="node4" href="$mykonos_8h.html#a7baa5941b75ba68d467285adda7dc8b5" title="This function, when called during RadioOff, will configure VSWR settings." alt="" coords="313,107,480,133"/>
+<area shape="rect" id="node5" href="$mykonos_8h.html#a16cf26692afd555ee9e355493f365679" title="CLGC feature to set the TX attenuation tuning range to a relative range around a nominal value." alt="" coords="287,158,507,199"/>
+<area shape="rect" id="node6" href="$mykonos_8h.html#a476245e3463907bbcc2a6a227abc5700" title="Sets the default Obs Rx channel to enter when device moves from radioOff to radioOn." alt="" coords="280,224,513,251"/>
+<area shape="rect" id="node8" href="$mykonos_8h.html#a6dde751ed5cc38f1086a158760e5bb9d" title="DPD feature to set the actuator gain difference check. If the gain before and after the actuator exce..." alt="" coords="279,275,515,301"/>
+<area shape="rect" id="node9" href="$mykonos_8h.html#aec69a32ff6353cfe1178f07c584f90ce" title="DPD feature to set the bypassing actuator when Tx signal power is below a programmable threshold give..." alt="" coords="282,325,511,352"/>
+<area shape="rect" id="node7" href="$mykonos_8h.html#a354bf76c64b7ef66cb177fcc18347942" title="Loads binary byte array into ARM program memory." alt="" coords="5,224,231,251"/>
+</map>

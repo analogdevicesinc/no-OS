@@ -1,0 +1,5 @@
+<map id="ad463x_spi_reg_write_masked" name="ad463x_spi_reg_write_masked">
+<area shape="rect" id="node1" title="SPI write device register using a mask." alt="" coords="255,23,419,65"/>
+<area shape="rect" id="node2" href="$ad463x_8h.html#ad2fb5f15232fd26ebaf44aa6286e1368" title="Set average frame length." alt="" coords="5,5,207,32"/>
+<area shape="rect" id="node3" href="$ad463x_8h.html#a08d9553de4a80a4ca6aeccc581142250" title="Set drive strength." alt="" coords="7,56,205,83"/>
+</map>

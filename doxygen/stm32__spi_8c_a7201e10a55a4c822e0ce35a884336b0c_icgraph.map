@@ -1,0 +1,4 @@
+<map id="stm32_spi_transfer" name="stm32_spi_transfer">
+<area shape="rect" id="node1" title="Write/read multiple messages to/from SPI." alt="" coords="249,5,396,32"/>
+<area shape="rect" id="node2" href="$stm32__spi_8c.html#a47162b967d49c6b66582d793c8c24ecc" title="Write and read data to/from SPI." alt="" coords="5,5,201,32"/>
+</map>

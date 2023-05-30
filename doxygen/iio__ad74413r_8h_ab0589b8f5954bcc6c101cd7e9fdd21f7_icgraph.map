@@ -1,0 +1,8 @@
+<map id="ad74413r_iio_init" name="ad74413r_iio_init">
+<area shape="rect" id="node1" title="Initializes the AD74413R IIO descriptor." alt="" coords="348,56,483,83"/>
+<area shape="rect" id="node2" href="$ad74413r_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="133,5,275,32"/>
+<area shape="rect" id="node3" href="$eval-adxl355-pmdz_2src_2examples_2iio__trigger__example_2iio__trigger__example_8h.html#aa6785eab0c37adc61db331ebebdc40ee" title="IIO trigger example main execution." alt="" coords="108,56,300,83"/>
+<area shape="rect" id="node5" href="$swiot__fw_8h.html#a427f9beea005fab8fccd9774acb53fc3" title="IIO example main execution." alt="" coords="143,107,265,133"/>
+<area shape="rect" id="node4" href="$ad74413r_2src_2platform_2stm32_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for STM32 platform." alt="" coords="5,56,60,83"/>
+<area shape="rect" id="node6" href="$swiot1l_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function." alt="" coords="5,107,60,133"/>
+</map>

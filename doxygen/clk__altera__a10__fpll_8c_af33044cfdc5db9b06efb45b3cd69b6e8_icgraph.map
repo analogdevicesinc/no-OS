@@ -1,0 +1,6 @@
+<map id="altera_a10_fpll_calc_params" name="altera_a10_fpll_calc_params">
+<area shape="rect" id="node1" title="altera_a10_fpll_calc_params" alt="" coords="496,23,648,65"/>
+<area shape="rect" id="node2" href="$clk__altera__a10__fpll_8c.html#a6c3f5d315237e418fdc3db745707c5b3" title="altera_a10_fpll_round_rate" alt="" coords="252,5,448,32"/>
+<area shape="rect" id="node3" href="$clk__altera__a10__fpll_8h.html#a8174d4dc2a66720898b92f4fafe84d55" title="altera_a10_fpll_set_rate" alt="" coords="261,56,439,83"/>
+<area shape="rect" id="node4" href="$clk__altera__a10__fpll_8c.html#a58ce7ef2b7a816eeeb0e1a4b082313ea" title="altera_a10_fpll_recalc_rate" alt="" coords="5,56,204,83"/>
+</map>

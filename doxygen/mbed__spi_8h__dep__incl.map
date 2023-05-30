@@ -1,0 +1,9 @@
+<map id="drivers/platform/mbed/mbed_spi.h" name="drivers/platform/mbed/mbed_spi.h">
+<area shape="rect" id="node1" title="Header containing extra types required for SPI interface." alt="" coords="267,5,435,47"/>
+<area shape="rect" id="node2" href="$ad5460_2src_2platform_2mbed_2parameters_8h.html" title="Definitions specific to Mbed platform used by ad5460 project." alt="" coords="5,95,220,136"/>
+<area shape="rect" id="node4" href="$ad74416h_2src_2platform_2mbed_2parameters_8h.html" title="Definitions specific to Mbed platform used by ad74416h project." alt="" coords="244,95,459,136"/>
+<area shape="rect" id="node6" href="$adf4382_2src_2platform_2mbed_2parameters_8h.html" title="Definitions specific to Mbed platform used by ADF4382 project." alt="" coords="483,95,697,136"/>
+<area shape="rect" id="node3" href="$ad5460_2src_2platform_2mbed_2parameters_8c.html" title="Definition of Mbed platform data used by ad5460 project." alt="" coords="6,184,219,225"/>
+<area shape="rect" id="node5" href="$ad74416h_2src_2platform_2mbed_2parameters_8c.html" title="Definition of Mbed platform data used by ad74416h project." alt="" coords="245,184,458,225"/>
+<area shape="rect" id="node7" href="$adf4382_2src_2platform_2mbed_2parameters_8c.html" title="Definition of Mbed platform data used by ADF4382 project." alt="" coords="483,184,697,225"/>
+</map>

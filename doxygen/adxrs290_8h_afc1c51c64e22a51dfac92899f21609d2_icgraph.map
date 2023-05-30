@@ -1,0 +1,7 @@
+<map id="adxrs290_set_hpf" name="adxrs290_set_hpf">
+<area shape="rect" id="node1" title="Set the low&#45;pass filter pole location." alt="" coords="447,56,584,83"/>
+<area shape="rect" id="node2" href="$adxrs290_8h.html#a577b03b60bb2ad4cd1713c1bf712368c" title=" " alt="" coords="288,56,399,83"/>
+<area shape="rect" id="node3" href="$adxrs290-pmdz_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="51,5,194,32"/>
+<area shape="rect" id="node4" href="$adxrs290-pmdz_2src_2examples_2iio__timer__trigger__example_2iio__timer__trigger__example_8c.html#a7bab3a90f71c4ddf1bc5fff9fc70b3fb" title="IIO trigger example main execution." alt="" coords="5,56,240,83"/>
+<area shape="rect" id="node5" href="$adxrs290-pmdz_2src_2examples_2iio__trigger__example_2iio__trigger__example_8c.html#aa6785eab0c37adc61db331ebebdc40ee" title="IIO trigger example main execution." alt="" coords="27,107,219,133"/>
+</map>

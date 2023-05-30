@@ -1,0 +1,5 @@
+<map id="altera_a10_acquire_arbitration" name="altera_a10_acquire_arbitration">
+<area shape="rect" id="node1" title="altera_a10_acquire_arbitration" alt="" coords="479,5,625,47"/>
+<area shape="rect" id="node2" href="$clk__altera__a10__fpll_8c.html#a58ce7ef2b7a816eeeb0e1a4b082313ea" title="altera_a10_fpll_recalc_rate" alt="" coords="5,13,204,39"/>
+<area shape="rect" id="node3" href="$clk__altera__a10__fpll_8h.html#a8174d4dc2a66720898b92f4fafe84d55" title="altera_a10_fpll_set_rate" alt="" coords="252,38,431,65"/>
+</map>

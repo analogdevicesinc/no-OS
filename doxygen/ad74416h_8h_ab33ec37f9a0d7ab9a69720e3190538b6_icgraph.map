@@ -1,0 +1,4 @@
+<map id="ad74416h_dac_voltage_to_code" name="ad74416h_dac_voltage_to_code">
+<area shape="rect" id="node1" title="Converts a millivolt value in the corresponding DAC 16 bit code." alt="" coords="224,5,396,47"/>
+<area shape="rect" id="node2" href="$ad74416h_8h.html#abc70a3364d76a693d2feebbe83f4fe11" title="Set the operation mode for a specific channel." alt="" coords="5,5,176,47"/>
+</map>

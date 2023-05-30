@@ -1,0 +1,6 @@
+<map id="nhd_c12832a1z_write_cmd" name="nhd_c12832a1z_write_cmd">
+<area shape="rect" id="node1" title="nhd_c12832a1z write command." alt="" coords="543,31,741,57"/>
+<area shape="rect" id="node2" href="$nhd__c12832a1z_8h.html#af4d7416ecda76c826ce4213ebf20153c" title="nhd_c12832a1z clear LCD." alt="" coords="307,5,495,32"/>
+<area shape="rect" id="node3" href="$nhd__c12832a1z_8h.html#a2bf6b2b56cebe2f0b4d5a759a92e2610" title="Initializes nhd_c12832a1z for display screening." alt="" coords="108,31,259,57"/>
+<area shape="rect" id="node4" href="$eval-ade9430_2src_2app_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for maxim platform." alt="" coords="5,31,60,57"/>
+</map>

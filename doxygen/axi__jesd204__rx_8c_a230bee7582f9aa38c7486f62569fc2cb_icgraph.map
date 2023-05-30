@@ -1,0 +1,8 @@
+<map id="axi_jesd204_rx_apply_config_legacy" name="axi_jesd204_rx_apply_config_legacy">
+<area shape="rect" id="node1" title="Apply the JESD204 RX configuration." alt="" coords="460,49,623,90"/>
+<area shape="rect" id="node2" href="$axi__jesd204__rx_8h.html#ae48629d98618ad14c1bcbf268d59ce96" title="Device initialization." alt="" coords="264,49,412,90"/>
+<area shape="rect" id="node3" href="$ad9083_2src_2app__jesd_8h.html#a3fc69d9cce4bef3b10d0ea379c5cbd86" title="Application JESD setup." alt="" coords="108,5,216,32"/>
+<area shape="rect" id="node4" href="$adrv9009_2src_2app_2app__jesd_8h.html#ae5553405b03de1193a617ca30d31a455" title=" " alt="" coords="123,56,201,83"/>
+<area shape="rect" id="node6" href="$ad9208_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="135,107,189,133"/>
+<area shape="rect" id="node5" href="$adrv9009_2src_2app_2headless_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,56,60,83"/>
+</map>

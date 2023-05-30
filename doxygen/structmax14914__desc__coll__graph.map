@@ -1,0 +1,5 @@
+<map id="max14914_desc" name="max14914_desc">
+<area shape="rect" id="node1" title="Structure holding the MAX14914 device descriptor." alt="" coords="35,243,163,269"/>
+<area shape="rect" id="node2" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="33,95,165,121"/>
+<area shape="rect" id="node3" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="5,5,193,32"/>
+</map>

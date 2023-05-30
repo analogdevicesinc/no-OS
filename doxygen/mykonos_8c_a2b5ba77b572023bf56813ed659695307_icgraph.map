@@ -1,0 +1,4 @@
+<map id="MYKONOS_loadAdcProfiles" name="MYKONOS_loadAdcProfiles">
+<area shape="rect" id="node1" title="Function called automatically that loads the ADC profiles into the ARM." alt="" coords="196,5,391,32"/>
+<area shape="rect" id="node2" href="$mykonos_8h.html#a6f62c877342da46ec31250276e7fb49d" title="Resets the ARM processor and performs initialization." alt="" coords="5,5,148,32"/>
+</map>

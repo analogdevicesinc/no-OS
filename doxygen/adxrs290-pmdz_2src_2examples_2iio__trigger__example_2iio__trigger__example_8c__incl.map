@@ -1,0 +1,16 @@
+<map id="projects/adxrs290&#45;pmdz/src/examples/iio_trigger_example/iio_trigger_example.c" name="projects/adxrs290&#45;pmdz/src/examples/iio_trigger_example/iio_trigger_example.c">
+<area shape="rect" id="node1" title="Implementation of IIO trigger example for eval&#45;adxrs290&#45;pmdz project." alt="" coords="185,5,416,61"/>
+<area shape="rect" id="node2" href="$adxrs290-pmdz_2src_2examples_2iio__trigger__example_2iio__trigger__example_8h.html" title="IIO trigger example header for eval&#45;adxrs290&#45;pmdz project." alt="" coords="5,109,169,136"/>
+<area shape="rect" id="node3" href="$iio__adxrs290_8h.html" title="Implementation of ADXRS290 iio." alt="" coords="194,109,311,136"/>
+<area shape="rect" id="node8" href="$iio__trigger_8h.html" title="Header file for iio_trigger." alt="" coords="299,184,398,211"/>
+<area shape="rect" id="node14" title=" " alt="" coords="387,109,513,136"/>
+<area shape="rect" id="node4" href="$iio__types_8h.html" title="Header file for iio_types." alt="" coords="339,333,433,360"/>
+<area shape="rect" id="node5" title=" " alt="" coords="603,483,686,509"/>
+<area shape="rect" id="node6" title=" " alt="" coords="351,483,421,509"/>
+<area shape="rect" id="node7" href="$no__os__circular__buffer_8h.html" title="Circular buffer library header." alt="" coords="178,408,349,435"/>
+<area shape="rect" id="node9" href="$iio_8h.html" title="Header file of iio." alt="" coords="423,259,474,285"/>
+<area shape="rect" id="node13" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="253,259,349,285"/>
+<area shape="rect" id="node10" href="$no__os__uart_8h.html" title="Header file of UART interface." alt="" coords="472,333,577,360"/>
+<area shape="rect" id="node11" href="$no__os__lf256fifo_8h.html" title="SPSC lock&#45;free fifo of fixed size (256), specialized for UART." alt="" coords="474,408,607,435"/>
+<area shape="rect" id="node12" title=" " alt="" coords="505,483,576,509"/>
+</map>

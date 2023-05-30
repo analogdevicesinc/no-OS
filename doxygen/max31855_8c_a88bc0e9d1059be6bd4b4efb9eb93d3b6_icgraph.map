@@ -1,0 +1,4 @@
+<map id="max31855_read_temp" name="max31855_read_temp">
+<area shape="rect" id="node1" title="Read thermocouple and internal temperatures (converted in deg. C)" alt="" coords="213,5,381,32"/>
+<area shape="rect" id="node2" href="$max31855_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="5,5,165,32"/>
+</map>

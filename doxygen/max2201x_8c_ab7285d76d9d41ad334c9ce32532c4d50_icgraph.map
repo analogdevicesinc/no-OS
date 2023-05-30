@@ -1,0 +1,9 @@
+<map id="max2201x_soft_reset" name="max2201x_soft_reset">
+<area shape="rect" id="node1" title="Soft reset requested channel." alt="" coords="819,56,981,83"/>
+<area shape="rect" id="node2" href="$max2201x_8h.html#afe3e48c359a42b5899f75a5ba9aadc0d" title="Free the resources allocated during init and perform a soft reset." alt="" coords="623,56,771,83"/>
+<area shape="rect" id="node3" href="$max2201x_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="196,56,356,83"/>
+<area shape="rect" id="node4" href="$iio__max2201x_8h.html#a0412eee94e1d48f15b1927dc2e3759a4" title=" " alt="" coords="404,5,575,32"/>
+<area shape="rect" id="node6" href="$max2201x_8h.html#a4b5fe59a02150a00efad7e6b13a03f1b" title="Initialize and configure the MAX2201X device." alt="" coords="430,107,549,133"/>
+<area shape="rect" id="node5" href="$max2201x_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="5,56,148,83"/>
+<area shape="rect" id="node7" href="$iio__max2201x_8h.html#a1a5e62a02277f0856f6a84262b00db64" title=" " alt="" coords="205,107,347,133"/>
+</map>

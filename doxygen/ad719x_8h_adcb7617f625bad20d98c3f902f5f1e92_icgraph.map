@@ -1,0 +1,5 @@
+<map id="ad719x_continuous_read_avg" name="ad719x_continuous_read_avg">
+<area shape="rect" id="node1" title="Returns the average of several conversion results." alt="" coords="332,5,547,32"/>
+<area shape="rect" id="node2" href="$eval-adxl367z_2src_2examples_2dummy_2dummy__example_8h.html#aab59a6c65a45a3bcf47030189141a81c" title="Dummy example main execution." alt="" coords="108,5,284,32"/>
+<area shape="rect" id="node3" href="$ad719x_2src_2platform_2xilinx_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for XILINX platform." alt="" coords="5,5,60,32"/>
+</map>

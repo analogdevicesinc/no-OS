@@ -1,0 +1,7 @@
+<map id="projects/eval&#45;ade7913/src/platform/platform.h" name="projects/eval&#45;ade7913/src/platform/platform.h">
+<area shape="rect" id="node1" title="Defines platform data to be used by ADE7913 example project." alt="" coords="341,5,519,47"/>
+<area shape="rect" id="node2" href="$eval-ade7913_2src_2common_2common__data_8c.html" title="Defines common data to be used by ADE7913 example project." alt="" coords="5,95,220,136"/>
+<area shape="rect" id="node3" href="$interrupt_8c.html" title=" " alt="" coords="245,95,421,136"/>
+<area shape="rect" id="node4" href="$eval-ade7913_2src_2main_8c.html" title="Main function of ADE7913 example." alt="" coords="445,95,612,136"/>
+<area shape="rect" id="node5" href="$platform_8c.html" title="Defines platform data to be used by ADE7913 example project." alt="" coords="637,95,813,136"/>
+</map>

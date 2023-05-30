@@ -1,0 +1,7 @@
+<map id="ad5629r_set_input_reg" name="ad5629r_set_input_reg">
+<area shape="rect" id="node1" title="Write to input register and read from output register via SPI." alt="" coords="280,81,451,108"/>
+<area shape="rect" id="node2" href="$ad5629r_8h.html#a6bf25c9f2fb6762e45a5f60ba02d5dd3" title="Updates selected DAC register." alt="" coords="33,5,205,32"/>
+<area shape="rect" id="node3" href="$ad5629r_8h.html#a19898251ca79798aed0c626041054596" title="Writes a value to Input Register N of selected DAC channel." alt="" coords="39,56,198,83"/>
+<area shape="rect" id="node4" href="$ad5629r_8h.html#a2bebcfaa968939b044b912f80f419dae" title="Writes a value to Input Register N of selected DAC channel, then updates all." alt="" coords="5,107,232,133"/>
+<area shape="rect" id="node5" href="$ad5629r_8h.html#ae8c205a7c078f25538b4901d387ee914" title="Writes a value to Input Register N and updates the respective DAC channel." alt="" coords="9,157,228,184"/>
+</map>

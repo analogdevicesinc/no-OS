@@ -1,0 +1,11 @@
+<map id="ad7124_dev" name="ad7124_dev">
+<area shape="rect" id="node1" title="Device Structure." alt="" coords="940,81,1041,108"/>
+<area shape="rect" id="node2" href="$structad7124__st__reg.html" title=" " alt="" coords="676,5,793,32"/>
+<area shape="rect" id="node3" href="$structad7124__channel__map.html" title="Channel mapping." alt="" coords="653,56,817,83"/>
+<area shape="rect" id="node4" href="$structad7124__analog__inputs.html" title="Positive and negative analog inputs." alt="" coords="323,56,491,83"/>
+<area shape="rect" id="node5" href="$structad7124__channel__setup.html" title="Channel setup." alt="" coords="649,107,820,133"/>
+<area shape="rect" id="node6" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="673,196,796,223"/>
+<area shape="rect" id="node7" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,165,184,192"/>
+<area shape="rect" id="node9" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="333,196,480,223"/>
+<area shape="rect" id="node8" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="332,247,481,289"/>
+</map>

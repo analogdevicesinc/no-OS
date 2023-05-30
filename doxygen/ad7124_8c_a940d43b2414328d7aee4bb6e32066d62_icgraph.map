@@ -1,0 +1,5 @@
+<map id="ad7124_fltcoff_get" name="ad7124_fltcoff_get">
+<area shape="rect" id="node1" title="Get the filter coefficient for the sample rate." alt="" coords="180,31,323,57"/>
+<area shape="rect" id="node2" href="$ad7124_8h.html#a05375c928a9b39188f69ad5fb69d6cc9" title="Calculate ODR of the device." alt="" coords="5,5,132,32"/>
+<area shape="rect" id="node3" href="$ad7124_8h.html#a6338ac1c083b20bf0b6170032907f0f2" title="Set ODR of the device." alt="" coords="6,56,131,83"/>
+</map>

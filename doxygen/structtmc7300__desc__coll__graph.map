@@ -1,0 +1,8 @@
+<map id="tmc7300_desc" name="tmc7300_desc">
+<area shape="rect" id="node1" title=" " alt="" coords="196,199,312,225"/>
+<area shape="rect" id="node2" href="$structtmc7300__bridge__priv.html" title=" " alt="" coords="5,95,164,121"/>
+<area shape="rect" id="node3" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="188,95,320,121"/>
+<area shape="rect" id="node4" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="147,5,335,32"/>
+<area shape="rect" id="node5" href="$structno__os__uart__desc.html" title="Stucture holding the UART descriptor." alt="" coords="359,95,490,121"/>
+<area shape="rect" id="node6" href="$structno__os__uart__platform__ops.html" title="Structure holding UART function pointers that point to the platform specific function." alt="" coords="359,5,546,32"/>
+</map>

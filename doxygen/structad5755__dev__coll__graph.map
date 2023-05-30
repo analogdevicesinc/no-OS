@@ -1,0 +1,10 @@
+<map id="ad5755_dev" name="ad5755_dev">
+<area shape="rect" id="node1" title=" " alt="" coords="936,95,1037,121"/>
+<area shape="rect" id="node2" href="$structad5755__setup.html" title="Stores the settings that will be written to the device when the &quot;AD5755_Init&quot; functions is called." alt="" coords="679,5,792,32"/>
+<area shape="rect" id="node3" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="674,95,797,121"/>
+<area shape="rect" id="node4" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,60,184,87"/>
+<area shape="rect" id="node6" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="343,91,490,117"/>
+<area shape="rect" id="node5" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="342,142,491,183"/>
+<area shape="rect" id="node7" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="669,204,801,231"/>
+<area shape="rect" id="node8" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="323,208,511,235"/>
+</map>

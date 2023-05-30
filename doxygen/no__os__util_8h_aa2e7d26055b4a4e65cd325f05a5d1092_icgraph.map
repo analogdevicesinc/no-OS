@@ -1,0 +1,13 @@
+<map id="no_os_div_s64" name="no_os_div_s64">
+<area shape="rect" id="node1" title=" " alt="" coords="516,132,633,159"/>
+<area shape="rect" id="node2" href="$adxl38x_8h.html#a491ab20d0eb87e53ac22b04c8693cff5" title="Executed Selftest on the sensing axes and returns the outcome of the test." alt="" coords="337,56,467,83"/>
+<area shape="rect" id="node5" href="$iio_8h.html#a5de19adb6399a7b8b228beba45f1e739" title=" " alt="" coords="336,157,468,184"/>
+<area shape="rect" id="node3" href="$selftest__example__main_8h.html#af83d8efd4ed237eb5c8a2e18b3333cdb" title="Example main execution." alt="" coords="111,5,285,32"/>
+<area shape="rect" id="node4" href="$eval-adxl38x_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="5,5,60,32"/>
+<area shape="rect" id="node6" href="$iio__adis__internals_8h.html#aa3917a9da23da634bfd781829196a31f" title="Handles the read request for calibbias attribute." alt="" coords="111,56,285,83"/>
+<area shape="rect" id="node7" href="$iio__adis__internals_8h.html#a7c5174eeea19d0677ba78481174e773b" title="Handles the read request for calibscale attribute." alt="" coords="108,107,288,133"/>
+<area shape="rect" id="node8" href="$iio__adis__internals_8h.html#a8b816d4fafaeb9b303a5d948fc240318" title="Handles the read request for lpf attribute." alt="" coords="132,157,264,184"/>
+<area shape="rect" id="node9" href="$iio__adis__internals_8h.html#aaedb46cc4fe942a8837df6283c46684c" title="Handles the read request for offset attribute." alt="" coords="122,208,274,235"/>
+<area shape="rect" id="node10" href="$iio__adis__internals_8h.html#a6c6d17dd4a8320c17bde427cf5387f9b" title="Handles the read request for raw attribute." alt="" coords="129,259,267,285"/>
+<area shape="rect" id="node11" href="$iio__adis__internals_8h.html#a3af5eca69087d95aeae7f3374198c25c" title="Handles the read request for scale attribute." alt="" coords="123,309,273,336"/>
+</map>

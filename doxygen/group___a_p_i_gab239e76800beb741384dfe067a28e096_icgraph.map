@@ -1,0 +1,29 @@
+<map id="ad917x_register_read" name="ad917x_register_read">
+<area shape="rect" id="node1" title="Perform SPI register read access to AD917X Device." alt="" coords="463,692,625,719"/>
+<area shape="rect" id="node2" href="$group___a_p_i.html#gaf7c8586a63c40c2642d54875bcf2a27e" title="Get DC Test Tone enable status." alt="" coords="219,5,407,32"/>
+<area shape="rect" id="node3" href="$group___a_p_i.html#ga417dc89142884e87474ed4491b8c728d" title="Set DC Test Tone enable status." alt="" coords="220,56,407,83"/>
+<area shape="rect" id="node4" href="$group___a_p_i.html#ga45fcbdbcecb280893d0f33e1346e3adc" title="Set NCO." alt="" coords="21,169,148,196"/>
+<area shape="rect" id="node5" href="$group___a_p_i.html#ga8a05df66d7e35e06f3b759ebd47fc0b9" title="Get Main DAC Cal DC Input." alt="" coords="233,158,394,199"/>
+<area shape="rect" id="node6" href="$group___a_p_i.html#ga50323fcdd15472080734e542b5f8d5ff" title="Set Main DAC Cal DC Input." alt="" coords="233,223,394,265"/>
+<area shape="rect" id="node7" href="$group___a_p_i.html#ga7627466a2921129ec5401eac5ff852bb" title="Get Channel gain." alt="" coords="218,289,409,316"/>
+<area shape="rect" id="node8" href="$group___a_p_i.html#gadb7938aa76e889c64c3a4ea63c246ee0" title="Get Chip Identification Data." alt="" coords="238,340,389,367"/>
+<area shape="rect" id="node9" href="$group___a_p_i.html#ga20ab040477469a41eebdf84270bf7eac" title="Get DAC CLK Status." alt="" coords="236,391,391,433"/>
+<area shape="rect" id="node10" href="$group___a_p_i.html#ga2c9a0b35c8b6e306f5a12d9d4ec88706" title="Get select page index." alt="" coords="231,457,395,484"/>
+<area shape="rect" id="node11" href="$group___a_p_i.html#ga859a5bfb0cff6f2bdfe9045c55e4c15d" title="Configure the JESD Datapath for AD917X." alt="" coords="238,509,389,550"/>
+<area shape="rect" id="node12" href="$group___a_p_i.html#ga0ba18ba647ff38a682d855562b30f4e8" title="Enable JESD Link." alt="" coords="220,575,407,601"/>
+<area shape="rect" id="node13" href="$group___a_p_i.html#ga940cb7e37a3ca1590f5529627ff0b8f5" title="Get JESD Configuration Status." alt="" coords="234,626,393,667"/>
+<area shape="rect" id="node14" href="$group___a_p_i.html#ga5c122a8692aa158e997eda5a21fd8c48" title="Get current Lane Cross Bar configuration for the JESD datalink layer." alt="" coords="212,692,415,719"/>
+<area shape="rect" id="node15" href="$group___a_p_i.html#ga2577ac9e2e02a5b65b93cd599a3be254" title="Get SERDES PLL Status." alt="" coords="236,743,391,785"/>
+<area shape="rect" id="node16" href="$group___a_p_i.html#ga25f0b01855c483b7a333c30f77ce2c3d" title="Get the current SYSREF Input." alt="" coords="224,809,403,850"/>
+<area shape="rect" id="node17" href="$group___a_p_i.html#ga1cf81afbec962b0860020d8e318f31f5" title="Invert or un&#45;invert logical lanes." alt="" coords="221,875,405,901"/>
+<area shape="rect" id="node18" href="$group___a_p_i.html#ga0b495f25f7df98691a07611ca00f935c" title="Configure the Lane Cross Bar in the JESD datalink layer." alt="" coords="212,925,415,952"/>
+<area shape="rect" id="node19" href="$group___a_p_i.html#ga5eb602a6442b863bd4a0b6b1e8568331" title="Enable the SYNCOUTB Output Signal." alt="" coords="215,977,412,1018"/>
+<area shape="rect" id="node20" href="$group___a_p_i.html#gafc5f1dcc522a197410c60a03873fc728" title="Enable SysRef Input." alt="" coords="224,1042,403,1083"/>
+<area shape="rect" id="node21" href="$group___a_p_i.html#ga5d5c005883a660aee704aa237f0a9baf" title="NCO Enable." alt="" coords="238,1108,389,1135"/>
+<area shape="rect" id="node22" href="$group___a_p_i.html#ga79a35bfef4335f69b22040e0e327a66a" title="Get FTW, ACC and MOD values." alt="" coords="236,1159,391,1185"/>
+<area shape="rect" id="node23" href="$group___a_p_i.html#gac1a2d7c182f1ef6c144394282548030c" title="Get NCO phase offset." alt="" coords="226,1210,401,1251"/>
+<area shape="rect" id="node24" href="$group___a_p_i.html#ga2274d16fc5e9a818b0d13195895e8c04" title="Set FTW, ACC and MOD values." alt="" coords="236,1276,391,1303"/>
+<area shape="rect" id="node25" href="$ad917x__reg_8h.html#a09443a6d2b1285baccabb2e288ad177b" title=" " alt="" coords="232,1327,395,1369"/>
+<area shape="rect" id="node27" href="$group___a_p_i.html#ga77c4f50cdadbf9c3640755920a6054bd" title="Set CLKOUT configuration." alt="" coords="219,1393,408,1420"/>
+<area shape="rect" id="node26" href="$group___a_p_i.html#gaed087fcdd4589975dc7d589138dc0dab" title="Read back all current JESD parameter settings." alt="" coords="5,1327,164,1369"/>
+</map>

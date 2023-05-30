@@ -1,0 +1,18 @@
+<map id="adf4382_spi_write" name="adf4382_spi_write">
+<area shape="rect" id="node1" title="Writes data to ADF4382 over SPI." alt="" coords="920,186,1061,212"/>
+<area shape="rect" id="node2" href="$adf4382_8h.html#aad3b3b7dccac477d903ba363f90e3f68" title="Initializes the ADF4382." alt="" coords="729,76,831,103"/>
+<area shape="rect" id="node4" href="$adf4382_8h.html#a757680a0978c8bab202e3877011aaa22" title="Updates the values of the ADF4382 register." alt="" coords="688,211,872,238"/>
+<area shape="rect" id="node3" href="$adf4382_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="5,342,165,368"/>
+<area shape="rect" id="node5" href="$adf4382_8h.html#a852efef52e399e72459cce02555bb5dd" title="Set the output channel to enable or disable based on the passed parameter. If the parameter is differ..." alt="" coords="461,110,624,136"/>
+<area shape="rect" id="node6" href="$adf4382_8h.html#a39d6e730499cc17888538d8c92fc4ef6" title="Set the sync to enable or disable based on the passed parameter. If the parameter is different then 0..." alt="" coords="461,160,624,187"/>
+<area shape="rect" id="node7" href="$adf4382_8h.html#a42f85422e7f1541fcd6235b2a678df73" title="Set the output frequency." alt="" coords="475,211,610,238"/>
+<area shape="rect" id="node14" href="$adf4382_8h.html#abaccee7f877e8f82d1aebdb37237cedf" title="Set the output power register value of a channel and reset everything over to maximum supported value..." alt="" coords="454,262,631,288"/>
+<area shape="rect" id="node15" href="$adf4382_8h.html#abfbbf0996cba0aaa13b6f84647673daa" title="Set the phase adjustment in pico&#45;seconds. The phase adjust will enable the Bleed current option as we..." alt="" coords="445,312,640,339"/>
+<area shape="rect" id="node16" href="$adf4382_8h.html#ae04f11139e36334d3ee35c44016217e5" title="Set the phase polarity. If pol = 0 then it will add the phase value otherwise it will subtract the ph..." alt="" coords="455,363,630,390"/>
+<area shape="rect" id="node8" href="$adf4382_8h.html#a90a2e1956072778acaeb2885373e50e7" title="Set the bleed word, which represents the value of the bleed current written to the register space." alt="" coords="213,72,397,99"/>
+<area shape="rect" id="node9" href="$adf4382_8h.html#a9545e93dd75ebffedeedd8a88a19c5ce" title="Set the charge pump value which will be written to the register. The value will be between 0 and 15 o..." alt="" coords="238,123,373,150"/>
+<area shape="rect" id="node10" href="$adf4382_8h.html#a437e2d35a220c2ea09744e8147550366" title="Set the reference doubler to enable or disable based on the passed parameter. If the parameter is dif..." alt="" coords="230,174,381,216"/>
+<area shape="rect" id="node11" href="$adf4382_8h.html#ad97aa58924c0eeca883bfdd340ae4817" title="Set the desired reference frequency and reset everything over to maximum supported value of 5GHz to t..." alt="" coords="229,240,382,267"/>
+<area shape="rect" id="node12" href="$adf4382_8h.html#af6e5b66e0da30c50bd332f340ad7adff" title="Set the reference divider value and reset everything over to maximum supported value of 63 to the max..." alt="" coords="228,291,383,318"/>
+<area shape="rect" id="node13" href="$adf4382_8h.html#a6c3387b311effd620ce0264c6db07674" title="Set the desired output frequency and reset everything over to maximum supported value of 22GHz (21GHz..." alt="" coords="235,342,375,368"/>
+</map>

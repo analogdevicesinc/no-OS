@@ -1,0 +1,5 @@
+<map id="ltc2983_init" name="ltc2983_init">
+<area shape="rect" id="node1" title="Device and comm init function." alt="" coords="213,31,312,57"/>
+<area shape="rect" id="node2" href="$ltc2983_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="5,5,165,32"/>
+<area shape="rect" id="node3" href="$iio__ltc2983_8h.html#a775884a0df62b521424fb4c6ff61df66" title="Initializes the LTC2983 IIO driver." alt="" coords="25,56,146,83"/>
+</map>

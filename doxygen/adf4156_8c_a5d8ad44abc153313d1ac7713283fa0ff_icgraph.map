@@ -1,0 +1,6 @@
+<map id="gcd" name="gcd">
+<area shape="rect" id="node1" title="Computes the greatest common divider of two numbers." alt="" coords="240,56,285,83"/>
+<area shape="rect" id="node2" href="$group___a_p_i.html#ga45fcbdbcecb280893d0f33e1346e3adc" title="Set NCO." alt="" coords="35,5,162,32"/>
+<area shape="rect" id="node3" href="$ad9208__api_8h.html#a8085bba558039c73e537e3f0bd479de6" title="Set AD9208 NCO based on the Channel Carrier Frequency." alt="" coords="5,56,192,83"/>
+<area shape="rect" id="node4" href="$adf4156_8h.html#a14d2922ab161e99b4135b71c08fe5d97" title="Sets the ADF4156 output frequency." alt="" coords="31,107,166,133"/>
+</map>

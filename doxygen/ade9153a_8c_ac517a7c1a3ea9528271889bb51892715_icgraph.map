@@ -1,0 +1,53 @@
+<map id="ade9153a_control_interrupt" name="ade9153a_control_interrupt">
+<area shape="rect" id="node1" title="Enable/disable interrupt." alt="" coords="553,1319,755,1345"/>
+<area shape="rect" id="node2" href="$ade9153a_8h.html#a120418a4c51229640e6eafc4cc8b806d" title="Disable CF1 interrupt." alt="" coords="300,5,491,32"/>
+<area shape="rect" id="node3" href="$ade9153a_8h.html#a7d0ed08cba2774f5d5affdcf37bbee84" title="Disable CF2 interrupt." alt="" coords="300,56,491,83"/>
+<area shape="rect" id="node4" href="$ade9153a_8h.html#ae1d911586a0909befba3a3705b7b1d88" title="Disable CHIP_STAT interrupt." alt="" coords="308,107,483,149"/>
+<area shape="rect" id="node5" href="$ade9153a_8h.html#a82927e928625fdc38cd612f9a5121f76" title="Disable crc change interrupt." alt="" coords="312,173,479,214"/>
+<area shape="rect" id="node6" href="$ade9153a_8h.html#a1ab78cd45449388955018968c7ea8814" title="Disable crc done interrupt." alt="" coords="312,238,479,279"/>
+<area shape="rect" id="node7" href="$ade9153a_8h.html#a0aeca469ad3c515e12a566ceedad9295" title="Disable data ready interrupt." alt="" coords="287,304,503,331"/>
+<area shape="rect" id="node8" href="$ade9153a_8h.html#a5fe216be54cbd41c5abd1a6ee56887a1" title="Disable EGYRDY interrupt." alt="" coords="287,355,503,381"/>
+<area shape="rect" id="node9" href="$ade9153a_8h.html#a9d80290f0882f28548ead1592b834097" title="Disable EVENT_STAT interrupt." alt="" coords="303,406,487,447"/>
+<area shape="rect" id="node10" href="$ade9153a_8h.html#a7389a9f7893901e96ea4dee06ad52c94" title="Disable fundamental reactive energy no load condition interrupt." alt="" coords="291,472,500,499"/>
+<area shape="rect" id="node11" href="$ade9153a_8h.html#a639445af824e320e1715d0e87c95efa5" title="Disable MS_STAT interrupt." alt="" coords="312,523,479,565"/>
+<area shape="rect" id="node12" href="$ade9153a_8h.html#a85d4cfe6639a8848e008ac0ad68b51d6" title="Disable pf ready interrupt." alt="" coords="315,589,475,630"/>
+<area shape="rect" id="node13" href="$ade9153a_8h.html#a291d957fb6d3b920e3cf4b1811964615" title="Disable PWRRDY interrupt." alt="" coords="287,655,503,681"/>
+<area shape="rect" id="node14" href="$ade9153a_8h.html#a158fa906ec57c2f80c1f69390f8b3264" title="Disable Phase A total active power changed sign interrupt." alt="" coords="287,705,503,732"/>
+<area shape="rect" id="node15" href="$ade9153a_8h.html#aea11edaed411235411cd10410659e23f" title="Disable CF1 polarity change sign interrupt." alt="" coords="285,756,505,783"/>
+<area shape="rect" id="node16" href="$ade9153a_8h.html#af83bbe5041826d6ac3daba6f4a782d1e" title="Disable CF2 polarity change sign interrupt." alt="" coords="285,807,505,833"/>
+<area shape="rect" id="node17" href="$ade9153a_8h.html#af075cc585b206646fcd05ab5e1aa8071" title="Disable Phase A fundamental reactive power changed sign interrupt." alt="" coords="289,857,502,884"/>
+<area shape="rect" id="node18" href="$ade9153a_8h.html#a6cf7a38eac371c5ccb70d642198f9c30" title="Disable RMS_OC values update interrupt." alt="" coords="309,909,481,950"/>
+<area shape="rect" id="node19" href="$ade9153a_8h.html#a288159dd6e2b3a53a5f886a8ad6af646" title="Disable new temperature reading interrupt." alt="" coords="305,974,486,1015"/>
+<area shape="rect" id="node20" href="$ade9153a_8h.html#ab063b5caf782c5e41caeacda495e65c8" title="Disable total apparent energy no load condition interrupt." alt="" coords="296,1040,495,1067"/>
+<area shape="rect" id="node21" href="$ade9153a_8h.html#a26f5369ea5f8c3fbb06699f9d44ace64" title="Disable total active energy no load condition interrupt." alt="" coords="289,1091,501,1117"/>
+<area shape="rect" id="node22" href="$ade9153a_8h.html#af5ff497ad0da8ee901165ed21f2aaaa1" title="Disable zero corssing detected on I ch A interrupt." alt="" coords="296,1141,495,1168"/>
+<area shape="rect" id="node23" href="$ade9153a_8h.html#acc018341c5be08a8a55910ac75e76674" title="Disable zero corssing detected on V ch interrupt." alt="" coords="294,1192,497,1219"/>
+<area shape="rect" id="node24" href="$ade9153a_8h.html#ad9bf6a295a90c23e829c374ebba25f0b" title="Disable zero corssing detected on I ch B interrupt." alt="" coords="296,1243,495,1269"/>
+<area shape="rect" id="node25" href="$ade9153a_8h.html#a76e49535558171b05613d28e44afd0ed" title="Disable zero corssing timeout on voltage ch interrupt." alt="" coords="288,1293,503,1320"/>
+<area shape="rect" id="node26" href="$ade9153a_8h.html#a77c59e2f7e7232fd290eee9793f704cc" title="Enable CF1 interrupt." alt="" coords="301,1344,489,1371"/>
+<area shape="rect" id="node27" href="$ade9153a_8h.html#aa20f6a31f57fa348f93e3fd195adb042" title="Enable CF2 interrupt." alt="" coords="301,1395,489,1421"/>
+<area shape="rect" id="node28" href="$ade9153a_8h.html#ad6e4c0900487eca7fde715d375befaab" title="Enable an interrupt when any bit in CHIP_STATUS reg is set." alt="" coords="310,1446,481,1487"/>
+<area shape="rect" id="node29" href="$ade9153a_8h.html#a8cb23d486ba09ab4d02b08632671cacb" title="Enable crc change interrupt." alt="" coords="314,1511,477,1553"/>
+<area shape="rect" id="node30" href="$ade9153a_8h.html#a2246cb1aeb7adf423740a02db4fbf4eb" title="Enable crc done interrupt." alt="" coords="314,1577,477,1618"/>
+<area shape="rect" id="node31" href="$ade9153a_8h.html#a0c70ba1049aa7681a6b0a9635d51314b" title="Enable data ready interrupt." alt="" coords="289,1643,502,1669"/>
+<area shape="rect" id="node32" href="$ade9153a_8h.html#ae640a2cf3a16dba06dbce3c44c39be5e" title="Enable EGYRDY interrupt." alt="" coords="289,1693,502,1720"/>
+<area shape="rect" id="node35" href="$ade9153a_8h.html#a4a64ee36e2cb0eb9834e3a50dea2d35a" title="Enable an interrupt when any bit in EVENT_STATUS reg is set." alt="" coords="305,1745,486,1786"/>
+<area shape="rect" id="node36" href="$ade9153a_8h.html#a99c2bc5150d557ee4ef1b3011e407f4f" title="Enable fundamental reactive energy no load condition interrupt." alt="" coords="292,1811,499,1837"/>
+<area shape="rect" id="node37" href="$ade9153a_8h.html#a2ea1dc2ceb76e3739555592771cbf059" title="Enable an interrupt when any bit in MS_STATUS_IRQ reg is set." alt="" coords="313,1862,477,1903"/>
+<area shape="rect" id="node38" href="$ade9153a_8h.html#a0dc4e6e63841e4fb5eb67ba1fa946e8e" title="Enable pf ready interrupt." alt="" coords="317,1927,474,1969"/>
+<area shape="rect" id="node39" href="$ade9153a_8h.html#ab07bc9430562dec5eefe8d8a0001db13" title="Enable PWRRDY interrupt." alt="" coords="289,1993,502,2020"/>
+<area shape="rect" id="node40" href="$ade9153a_8h.html#ac30d88867cb0f5350ca9a078ce9af912" title="Enable Phase A total active power changed sign interrupt." alt="" coords="289,2044,502,2071"/>
+<area shape="rect" id="node41" href="$ade9153a_8h.html#abb19f458f28f38a0bce1b524b344bb02" title="Enable CF1 polarity change sign interrupt." alt="" coords="287,2095,504,2121"/>
+<area shape="rect" id="node42" href="$ade9153a_8h.html#a6b400192fa9a5b54c1271b4ea71aa0ab" title="Enable CF2 polarity change sign interrupt." alt="" coords="287,2145,504,2172"/>
+<area shape="rect" id="node43" href="$ade9153a_8h.html#a612657bb229695c9c8bf5bdb704cae12" title="Enable Phase A fundamental reactive power changed sign interrupt." alt="" coords="290,2196,501,2223"/>
+<area shape="rect" id="node44" href="$ade9153a_8h.html#ae9077bbd1dec4c630201740c7f0c29dc" title="Enable RMS_OC values update interrupt." alt="" coords="311,2247,480,2289"/>
+<area shape="rect" id="node45" href="$ade9153a_8h.html#a4184e30c0cdf529701bd046fa20a76ac" title="Enable new temperature reading interrupt." alt="" coords="306,2313,485,2354"/>
+<area shape="rect" id="node46" href="$ade9153a_8h.html#a413f2bc184526cb23a98c34e74c2a859" title="Enable total apparent energy no load condition interrupt." alt="" coords="297,2379,493,2405"/>
+<area shape="rect" id="node47" href="$ade9153a_8h.html#adf84982842ffdc91348918bbd7ab29e2" title="Enable total active energy no load condition interrupt." alt="" coords="291,2429,500,2456"/>
+<area shape="rect" id="node48" href="$ade9153a_8h.html#a37508f0a393ae6a26419aec8a3026788" title="Enable zero corssing detected on I ch A interrupt." alt="" coords="298,2480,493,2507"/>
+<area shape="rect" id="node49" href="$ade9153a_8h.html#a59ad9013babbfb3f0a7392c3e2b24ef5" title="Enable zero corssing detected on V ch interrupt." alt="" coords="296,2531,495,2557"/>
+<area shape="rect" id="node50" href="$ade9153a_8h.html#a6b877783493322c64421a0eec4dc870b" title="Enable zero corssing detected on I ch B interrupt." alt="" coords="298,2581,493,2608"/>
+<area shape="rect" id="node51" href="$ade9153a_8h.html#a3d7c554994fc8f3e0804dfdfd82e3f32" title="Enable zero corssing timeout on voltage ch interrupt." alt="" coords="289,2632,501,2659"/>
+<area shape="rect" id="node33" href="$ade9153a_8h.html#a1b0d3202f129c89f6d407e01ed421bd9" title="ADE9153A setup." alt="" coords="108,1693,237,1720"/>
+<area shape="rect" id="node34" href="$eval-ade9153a_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,1693,60,1720"/>
+</map>

@@ -1,0 +1,6 @@
+<map id="pilot_setup_adc" name="pilot_setup_adc">
+<area shape="rect" id="node1" title="Set PMW duty cycle." alt="" coords="401,5,525,32"/>
+<area shape="rect" id="node2" href="$pilot_8h.html#aedec5c4e1f1d4b7245a861b2de7e2332" title="Initialize pilot phase." alt="" coords="275,5,353,32"/>
+<area shape="rect" id="node3" href="$state__machine_8h.html#a92bc605df80f651e105fe804f43d615b" title="State machine main execution." alt="" coords="108,5,227,32"/>
+<area shape="rect" id="node4" href="$ad-acevsecrdset-sl_2src_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="5,5,60,32"/>
+</map>

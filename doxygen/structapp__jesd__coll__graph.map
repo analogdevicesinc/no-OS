@@ -1,0 +1,14 @@
+<map id="app_jesd" name="app_jesd">
+<area shape="rect" id="node1" title="Structure holding jesd app descriptor." alt="" coords="509,363,589,389"/>
+<area shape="rect" id="node2" href="$structaxi__jesd204__rx.html" title=" " alt="" coords="49,184,169,211"/>
+<area shape="rect" id="node8" href="$structjesd204__clk.html" title=" " alt="" coords="235,273,333,300"/>
+<area shape="rect" id="node3" href="$structjesd204__rx__config.html" title=" " alt="" coords="5,95,144,121"/>
+<area shape="rect" id="node4" href="$structno__os__clk__desc.html" title="Structure holding CLK descriptor." alt="" coords="384,95,507,121"/>
+<area shape="rect" id="node6" href="$structno__os__clk.html" title=" " alt="" coords="654,184,741,211"/>
+<area shape="rect" id="node9" href="$structaxi__jesd204__tx.html" title=" " alt="" coords="193,184,313,211"/>
+<area shape="rect" id="node11" href="$structadxcvr.html" title="ADI JESD204B/C AXI_ADXCVR Highspeed Transceiver Device structure." alt="" coords="440,184,507,211"/>
+<area shape="rect" id="node5" href="$structno__os__clk__platform__ops.html" title="Structure holding CLK function pointers that point to the platform specific function." alt="" coords="356,5,535,32"/>
+<area shape="rect" id="node7" href="$structno__os__clk__hw.html" title=" " alt="" coords="643,273,755,300"/>
+<area shape="rect" id="node10" href="$structjesd204__tx__config.html" title=" " alt="" coords="168,95,307,121"/>
+<area shape="rect" id="node12" href="$structxilinx__xcvr.html" title="xilinx_xcvr parameters structure." alt="" coords="371,273,464,300"/>
+</map>

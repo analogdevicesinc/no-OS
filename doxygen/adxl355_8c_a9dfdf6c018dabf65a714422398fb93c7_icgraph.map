@@ -1,0 +1,5 @@
+<map id="adxl355_get_raw_xyz" name="adxl355_get_raw_xyz">
+<area shape="rect" id="node1" title="Reads the raw output data." alt="" coords="409,5,572,32"/>
+<area shape="rect" id="node2" href="$adxl355_8h.html#a31457c441689b591b9177bc6e4d877d0" title="Reads the raw output data of each axis and converts it to g." alt="" coords="229,5,361,32"/>
+<area shape="rect" id="node3" href="$eval-adxl355-pmdz_2src_2examples_2dummy_2dummy__example_8c.html#aab59a6c65a45a3bcf47030189141a81c" title="Dummy example main execution." alt="" coords="5,5,181,32"/>
+</map>

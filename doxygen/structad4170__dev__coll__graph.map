@@ -1,0 +1,26 @@
+<map id="ad4170_dev" name="ad4170_dev">
+<area shape="rect" id="node1" title="AD4170 device descriptor." alt="" coords="1313,181,1415,208"/>
+<area shape="rect" id="node2" href="$structno__os__gpio__init__param.html" title="Structure holding the parameters for GPIO initialization." alt="" coords="968,41,1140,68"/>
+<area shape="rect" id="node3" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="631,69,819,96"/>
+<area shape="rect" id="node24" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="988,97,1120,124"/>
+<area shape="rect" id="node4" href="$structad4170__spi__settings.html" title="AD4170 SPI settings." alt="" coords="977,151,1131,177"/>
+<area shape="rect" id="node5" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="663,203,786,229"/>
+<area shape="rect" id="node9" href="$structno__os__spi__init__param.html" title="Structure holding the parameters for SPI initialization." alt="" coords="973,273,1135,300"/>
+<area shape="rect" id="node6" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,203,184,229"/>
+<area shape="rect" id="node8" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="324,151,471,177"/>
+<area shape="rect" id="node7" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="323,269,472,310"/>
+<area shape="rect" id="node10" href="$structad4170__config.html" title="AD4170 configuration." alt="" coords="996,596,1112,623"/>
+<area shape="rect" id="node11" href="$structad4170__dac__config.html" title="DAC Config settings (registers HW_LDAC_Mask, HW_Toggle_Mask, Channel_En and DAC_Span)" alt="" coords="651,697,798,724"/>
+<area shape="rect" id="node12" href="$structad4170__clock__ctrl.html" title="Clock_Ctrl register settings." alt="" coords="655,748,794,775"/>
+<area shape="rect" id="node13" href="$structad4170__fir__control.html" title="FIR_Control register settings." alt="" coords="653,799,796,825"/>
+<area shape="rect" id="node14" href="$structad4170__ref__control.html" title="Ref_Control register settings." alt="" coords="651,849,798,876"/>
+<area shape="rect" id="node15" href="$structad4170__current__source.html" title="Current_Source register settings." alt="" coords="638,393,811,420"/>
+<area shape="rect" id="node16" href="$structad4170__channel__map.html" title="Channel_Map register settings. Selects Analog Inputs for This Sequencer Channel." alt="" coords="643,444,807,471"/>
+<area shape="rect" id="node17" href="$structad4170__adc__ctrl.html" title="ADC_Ctrl register settings." alt="" coords="661,495,789,521"/>
+<area shape="rect" id="node18" href="$structad4170__setup.html" title="Sequencer Setup register settings." alt="" coords="668,545,781,572"/>
+<area shape="rect" id="node19" href="$structad4170__misc.html" title="Misc register settings." alt="" coords="343,596,451,623"/>
+<area shape="rect" id="node20" href="$structad4170__filter.html" title="Filter register settings." alt="" coords="344,495,451,521"/>
+<area shape="rect" id="node21" href="$structad4170__afe.html" title="AFE register settings." alt="" coords="348,545,447,572"/>
+<area shape="rect" id="node22" href="$structad4170__channel__setup.html" title="Channel_Setup register settings." alt="" coords="639,596,810,623"/>
+<area shape="rect" id="node23" href="$structad4170__pin__muxing.html" title="Pin_Muxing register settings." alt="" coords="648,647,801,673"/>
+</map>

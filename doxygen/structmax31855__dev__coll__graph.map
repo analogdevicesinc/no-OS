@@ -1,0 +1,9 @@
+<map id="max31855_dev" name="max31855_dev">
+<area shape="rect" id="node1" title="MAX31855 descriptor." alt="" coords="971,107,1093,133"/>
+<area shape="rect" id="node2" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="701,77,824,104"/>
+<area shape="rect" id="node3" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,17,184,44"/>
+<area shape="rect" id="node5" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="351,48,498,75"/>
+<area shape="rect" id="node4" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="350,99,499,141"/>
+<area shape="rect" id="node6" href="$unionmax31855__fault__sts.html" title=" " alt="" coords="685,132,840,159"/>
+<area shape="rect" id="node7" href="$struct__max31855__fault__sts__mask.html" title=" " alt="" coords="323,165,527,192"/>
+</map>

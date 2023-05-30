@@ -1,0 +1,20 @@
+<map id="projects/ad469x_fmcz/src/examples/basic_example/basic_example.c" name="projects/ad469x_fmcz/src/examples/basic_example/basic_example.c">
+<area shape="rect" id="node1" title="Implementation of Basic example." alt="" coords="219,5,433,61"/>
+<area shape="rect" id="node2" href="$ad469x__fmcz_2src_2examples_2basic__example_2basic__example_8h.html" title="Basic example header for ad469x project." alt="" coords="5,109,137,136"/>
+<area shape="rect" id="node3" title=" " alt="" coords="161,109,288,136"/>
+<area shape="rect" id="node4" href="$ad469x_8h.html" title="Header file for ad469x Driver." alt="" coords="483,109,566,136"/>
+<area shape="rect" id="node11" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="439,333,539,360"/>
+<area shape="rect" id="node17" href="$no__os__print__log_8h.html" title="Print messages helpers." alt="" coords="713,109,849,136"/>
+<area shape="rect" id="node5" title=" " alt="" coords="306,408,389,435"/>
+<area shape="rect" id="node6" href="$spi__engine_8h.html" title=" " alt="" coords="517,184,621,211"/>
+<area shape="rect" id="node14" href="$clk__axi__clkgen_8h.html" title="Driver for the Analog Devices AXI CLKGEN." alt="" coords="889,259,1019,285"/>
+<area shape="rect" id="node15" href="$no__os__pwm_8h.html" title="Header file of PWM Interface." alt="" coords="252,333,363,360"/>
+<area shape="rect" id="node16" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="695,184,802,211"/>
+<area shape="rect" id="node7" title=" " alt="" coords="715,408,785,435"/>
+<area shape="rect" id="node8" href="$xilinx__spi_8h.html" title=" " alt="" coords="718,259,814,285"/>
+<area shape="rect" id="node10" href="$spi__engine__private_8h.html" title=" " alt="" coords="414,259,571,285"/>
+<area shape="rect" id="node13" href="$axi__dmac_8h.html" title="Driver for the Analog Devices AXI&#45;DMAC core." alt="" coords="596,259,693,285"/>
+<area shape="rect" id="node9" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="614,333,713,360"/>
+<area shape="rect" id="node12" title=" " alt="" coords="453,408,524,435"/>
+<area shape="rect" id="node18" title=" " alt="" coords="826,184,893,211"/>
+</map>
