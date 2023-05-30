@@ -1,0 +1,7 @@
+<map id="projects/ad74416h/src/platform/stm32/parameters.h" name="projects/ad74416h/src/platform/stm32/parameters.h">
+<area shape="rect" id="Node000001" title="Definitions specific to STM32 platform used by eval&#45;ad74416h project." alt="" coords="93,5,311,45"/>
+<area shape="rect" id="Node000002" href="$ad74416h_2src_2platform_2stm32_2main_8c.html" title="Main file for STM32 platform of eval&#45;ad74416h project." alt="" coords="5,93,180,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="169,56,119,95,115,91,165,52"/>
+<area shape="rect" id="Node000003" href="$ad74416h_2src_2platform_2stm32_2parameters_8c.html" title="Definition of STM32 platform data used by eval&#45;ad74416h project." alt="" coords="204,93,421,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="239,52,290,91,287,95,236,56"/>
+</map>

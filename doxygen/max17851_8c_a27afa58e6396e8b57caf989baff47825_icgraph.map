@@ -1,0 +1,22 @@
+<map id="max17851_reg_update" name="max17851_reg_update">
+<area shape="rect" id="Node000001" title="MAX17851 register update function." alt="" coords="485,156,656,181"/>
+<area shape="rect" id="Node000002" href="$max17851_8c.html#ab2819fe18407dcc6b6d80efe28b0d708" title="Configure general settings for MAX17851." alt="" coords="241,5,417,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="548,148,500,99,469,74,436,52,389,33,391,28,439,48,472,70,503,95,552,144"/>
+<area shape="rect" id="Node000003" href="$max17851_8c.html#a66a3ec73171c8be3fcdeb686807a4d6f" title="MAX17851 device initialization function." alt="" coords="29,81,148,107"/>
+<area shape="poly" id="edge4_Node000001_Node000003" title=" " alt="" coords="541,150,494,120,466,107,437,97,360,83,282,79,209,82,149,88,148,82,209,77,282,74,361,78,438,91,468,102,496,116,544,145"/>
+<area shape="rect" id="Node000005" href="$max17851_8c.html#a747d53ad47c9e1a833cd8c06ee034755" title="Set timing for Alert Packets/Keep&#45;Alive Packets." alt="" coords="223,107,434,132"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="494,156,391,135,392,129,495,151"/>
+<area shape="rect" id="Node000006" href="$max17851_8c.html#a766cf6d2fba7f456b491fda2f4a0de3c" title="Select queue for transmitting/loading TX buffer for UART." alt="" coords="237,156,421,181"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="472,171,421,171,421,166,472,166"/>
+<area shape="rect" id="Node000007" href="$max17851_8c.html#ab4f00c981af9b07707bfa0c352f538de" title="Enable/Disable specific alert." alt="" coords="251,205,406,231"/>
+<area shape="poly" id="edge8_Node000001_Node000007" title=" " alt="" coords="495,187,392,208,391,203,494,182"/>
+<area shape="rect" id="Node000008" href="$max17851_8c.html#aee729ee5a1f5d21baf9d56b14ab0a5fc" title="Select the number of unmasked consecutive Alert Packet status alerts, which must happen prior to taki..." alt="" coords="251,255,406,295"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="540,191,493,219,438,246,406,258,404,253,436,241,490,214,537,186"/>
+<area shape="rect" id="Node000009" href="$max17851_8c.html#a19992131052ac04b693280f6dcd78666" title="Select which GPIO pins to be configured as SAFEMON output." alt="" coords="220,320,437,345"/>
+<area shape="poly" id="edge11_Node000001_Node000009" title=" " alt="" coords="555,195,508,253,475,284,439,310,409,322,407,317,436,305,472,280,504,249,551,191"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="271,37,221,53,127,84,125,79,219,47,269,32"/>
+<area shape="rect" id="Node000004" href="$max17851_8c.html#a224e1263a89dc84e1736d4acdc4ddefc" title="Write message over UART using MAX17851." alt="" coords="5,5,172,31"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="227,21,172,21,172,15,227,15"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="210,109,148,103,149,98,210,104"/>
+<area shape="poly" id="edge10_Node000008_Node000003" title=" " alt="" coords="237,256,219,246,177,212,142,174,95,109,100,105,146,170,181,208,221,241,240,251"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="ad4170_set_channel_map" name="ad4170_set_channel_map">
+<area shape="rect" id="Node000001" title="Set the AD4170 Channel specific map." alt="" coords="152,5,343,31"/>
+<area shape="rect" id="Node000002" href="$ad4170_8c.html#a61651f5be9b72ce38cc055d8621e686b" title="Initialize an AD4170 device structure." alt="" coords="5,5,104,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="138,21,104,21,104,15,138,15"/>
+</map>

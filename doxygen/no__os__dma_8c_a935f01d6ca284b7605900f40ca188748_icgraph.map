@@ -1,0 +1,18 @@
+<map id="no_os_dma_remove" name="no_os_dma_remove">
+<area shape="rect" id="Node000001" title="Remove resources allocated for the DMA controller." alt="" coords="460,85,613,111"/>
+<area shape="rect" id="Node000002" href="$no__os__dma_8c.html#ad21295aaac65733af5cbd7db38e5ae4e" title="Initialize the DMA controller." alt="" coords="262,5,386,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="489,83,411,52,359,33,361,28,413,48,491,78"/>
+<area shape="rect" id="Node000004" href="$stm32__spi_8c.html#ab30b6267353de9d9f7d9dab38b808021" title="Initialize the SPI communication peripheral." alt="" coords="38,55,155,80"/>
+<area shape="poly" id="edge7_Node000001_Node000004" title=" " alt="" coords="446,94,155,74,156,69,446,89"/>
+<area shape="rect" id="Node000005" href="$stm32__spi_8c.html#ab6cca445715be6bcb7bf563bf8388829" title="Configure and start a series of transfers using DMA." alt="" coords="236,106,412,146"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="446,113,412,117,412,112,446,107"/>
+<area shape="rect" id="Node000008" href="$stm32__spi_8c.html#a47037db6bcb66e4a80008e659e38b577" title="Free the resources allocated by no_os_spi_init()." alt="" coords="251,171,397,196"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="502,119,413,160,375,173,374,168,411,156,499,115"/>
+<area shape="rect" id="Node000003" href="$max32650_2maxim__spi_8c.html#aa4c18a500f7b61d872b99f2d8ca86351" title="Initialize the SPI communication peripheral." alt="" coords="44,5,149,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="248,21,150,21,150,15,248,15"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="252,36,156,57,155,52,251,31"/>
+<area shape="rect" id="Node000006" href="$stm32__spi_8c.html#a523da63f0a8b55feff12987dd565df18" title="Configure and start a series of transfers using DMA. Wait for the completion before returning." alt="" coords="5,108,188,133"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="222,126,188,125,188,120,222,121"/>
+<area shape="rect" id="Node000007" href="$stm32__spi_8c.html#ac1bb3dc339d72e8eeb06ff5cdba6ce5a" title="Configure and start a series of transfers using DMA. Don&#39;t Wait for the completion before returning." alt="" coords="23,158,170,198"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="223,152,171,164,169,159,222,147"/>
+</map>

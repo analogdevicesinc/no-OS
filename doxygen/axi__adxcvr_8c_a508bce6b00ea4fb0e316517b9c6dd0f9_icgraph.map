@@ -1,0 +1,13 @@
+<map id="adxcvr_clk_enable" name="adxcvr_clk_enable">
+<area shape="rect" id="Node000001" title="AXI ADXCVR Clock Enable." alt="" coords="344,80,487,105"/>
+<area shape="rect" id="Node000002" href="$axi__adxcvr_8c.html#a32cf9657d258ef0794e9c9e5c2d9337c" title=" " alt="" coords="108,5,296,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="374,77,295,45,257,33,259,28,297,39,376,72"/>
+<area shape="rect" id="Node000003" href="$app__transceiver_8c.html#ab75f92d0fa79151108cc487cd7829c98" title=" " alt="" coords="145,55,259,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="330,85,259,77,260,71,330,80"/>
+<area shape="rect" id="Node000005" href="$jesd204__clk_8c.html#a6e197a63ac1e02eb48611524cfe27f67" title=" " alt="" coords="127,104,277,129"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="330,105,278,111,277,106,330,100"/>
+<area shape="rect" id="Node000006" href="$ad6676__ebz_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="175,153,229,179"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="374,113,297,143,230,162,229,157,295,138,372,108"/>
+<area shape="rect" id="Node000004" href="$headless__arm_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,55,60,80"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="131,70,60,70,60,65,131,65"/>
+</map>

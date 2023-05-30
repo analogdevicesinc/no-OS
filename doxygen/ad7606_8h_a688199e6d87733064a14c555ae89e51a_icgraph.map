@@ -1,0 +1,11 @@
+<map id="ad7606_set_ch_range" name="ad7606_set_ch_range">
+<area shape="rect" id="Node000001" title="Set the channel operation range." alt="" coords="424,31,587,56"/>
+<area shape="rect" id="Node000002" href="$ad7606_8c.html#a2afb3414c61b03e45af8e3564bcf4e24" title="Initialize the ad7606 device structure." alt="" coords="277,31,376,56"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="410,46,376,46,376,41,410,41"/>
+<area shape="rect" id="Node000003" href="$iio__ad7606_8c.html#a711196dffba30114293e1db85fd666e1" title="Initialize AD7606 for IIO interfacing." alt="" coords="108,5,229,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="263,36,229,30,230,25,264,31"/>
+<area shape="rect" id="Node000005" href="$ad7606x-fmc_2src_2basic__example_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="141,55,196,80"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="264,56,197,66,196,61,263,50"/>
+<area shape="rect" id="Node000004" href="$ad7606x-fmc_2src_2iio__example_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title="main" alt="" coords="5,5,60,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="94,21,60,21,60,15,94,15"/>
+</map>

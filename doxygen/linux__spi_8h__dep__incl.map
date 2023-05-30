@@ -1,0 +1,15 @@
+<map id="drivers/platform/linux/linux_spi.h" name="drivers/platform/linux/linux_spi.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="216,5,379,45"/>
+<area shape="rect" id="Node000002" href="$linux__spi_8c.html" title="Implementation of Linux platform SPI Driver." alt="" coords="5,93,168,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="240,53,134,96,132,91,238,48"/>
+<area shape="rect" id="Node000003" href="$ad9545_2src_2platform_2linux_2parameters_8h.html" title="Definitions specific to Maxim platform used by ad9545 project." alt="" coords="193,93,402,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="300,59,300,93,295,93,295,59"/>
+<area shape="rect" id="Node000005" href="$max14916_2src_2platform_2linux_2parameters_8h.html" title="Definition of FTD2XX platform data used by max14916 project." alt="" coords="426,93,635,133"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="362,48,480,91,479,96,360,53"/>
+<area shape="rect" id="Node000004" href="$ad9545_2src_2platform_2linux_2parameters_8c.html" title="Definitions specific to Linux platform used by ad9545 project." alt="" coords="193,181,401,221"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="300,147,300,181,295,181,295,147"/>
+<area shape="rect" id="Node000006" href="$max14916_2src_2platform_2linux_2main_8c.html" title="Main file for FTD2XX platform of max14916 project." alt="" coords="435,181,605,221"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="529,147,525,181,520,181,524,147"/>
+<area shape="rect" id="Node000007" href="$max14916_2src_2platform_2linux_2parameters_8c.html" title="Definition of FTD2XX platform data used by max14916 project." alt="" coords="629,181,837,221"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="589,136,690,179,688,184,586,141"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="adis_read_fls_mem_wr_cntr" name="adis_read_fls_mem_wr_cntr">
+<area shape="rect" id="Node000001" title="Read flash memory write cycle counter value." alt="" coords="459,42,661,67"/>
+<area shape="rect" id="Node000002" href="$adis_8c.html#ad20edced99aea5826a8b71374c1c9d3d" title="Command: flash memory update." alt="" coords="212,13,411,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="445,44,411,40,411,34,446,38"/>
+<area shape="rect" id="Node000004" href="$iio__adis_8c.html#ace76ecb27ca5c4368c7e29d77f54ec7d" title="Handles the read request for debug attributes." alt="" coords="234,63,389,103"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="445,70,389,77,389,71,445,65"/>
+<area shape="rect" id="Node000003" href="$iio__adis_8c.html#a8b8ea22e9082e5bd826bcc4ce8104e08" title="Handles the write request for debug attributes." alt="" coords="5,5,164,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="198,28,164,28,164,23,198,23"/>
+</map>

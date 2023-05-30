@@ -1,0 +1,35 @@
+<map id="drivers/adc/ad7779/ad7779.c" name="drivers/adc/ad7779/ad7779.c">
+<area shape="rect" id="Node000001" title="Implementation of AD7779 Driver." alt="" coords="181,5,328,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,167,72,192"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="182,34,147,41,111,53,79,70,51,95,44,108,39,123,38,153,33,153,34,122,39,106,47,92,76,66,109,48,145,36,180,29"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="111,167,182,192"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="243,47,165,157,161,154,239,44"/>
+<area shape="rect" id="Node000004" href="$ad7779_8h.html" title="Header file of AD7779 Driver." alt="" coords="401,93,484,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="301,43,403,85,401,90,299,48"/>
+<area shape="rect" id="Node000010" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="249,93,349,119"/>
+<area shape="poly" id="edge12_Node000001_Node000010" title=" " alt="" coords="268,44,288,80,283,83,263,47"/>
+<area shape="rect" id="Node000011" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="647,93,756,119"/>
+<area shape="poly" id="edge16_Node000001_Node000011" title=" " alt="" coords="329,37,634,90,633,95,328,42"/>
+<area shape="rect" id="Node000013" href="$no__os__alloc_8h.html" title=" " alt="" coords="62,93,173,119"/>
+<area shape="poly" id="edge18_Node000001_Node000013" title=" " alt="" coords="223,48,151,89,148,84,220,43"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="437,240,507,265"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="433,120,410,153,404,172,406,191,422,213,442,230,438,234,418,216,402,193,398,172,405,151,429,117"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="257,167,340,192"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="421,121,336,163,333,158,418,116"/>
+<area shape="rect" id="Node000007" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="415,167,529,192"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="450,118,464,153,460,155,445,120"/>
+<area shape="rect" id="Node000008" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="553,167,660,192"/>
+<area shape="poly" id="edge8_Node000004_Node000008" title=" " alt="" coords="470,116,569,159,566,164,468,121"/>
+<area shape="rect" id="Node000009" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="684,167,783,192"/>
+<area shape="poly" id="edge10_Node000004_Node000009" title=" " alt="" coords="485,115,674,161,673,166,484,120"/>
+<area shape="poly" id="edge7_Node000007_Node000005" title=" " alt="" coords="475,192,475,226,469,226,469,192"/>
+<area shape="poly" id="edge9_Node000008_Node000005" title=" " alt="" coords="586,194,507,236,505,231,584,190"/>
+<area shape="poly" id="edge11_Node000009_Node000005" title=" " alt="" coords="692,195,521,241,520,236,691,189"/>
+<area shape="poly" id="edge14_Node000010_Node000003" title=" " alt="" coords="275,121,185,163,183,158,273,116"/>
+<area shape="poly" id="edge13_Node000010_Node000005" title=" " alt="" coords="284,121,266,136,251,154,243,173,243,182,247,190,258,200,275,209,321,224,424,243,423,248,319,229,273,213,255,204,243,194,238,183,237,172,246,151,263,132,281,117"/>
+<area shape="poly" id="edge15_Node000010_Node000006" title=" " alt="" coords="301,119,301,153,296,153,296,119"/>
+<area shape="rect" id="Node000012" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="807,167,875,192"/>
+<area shape="poly" id="edge17_Node000011_Node000012" title=" " alt="" coords="725,116,808,158,805,163,723,121"/>
+<area shape="poly" id="edge19_Node000013_Node000002" title=" " alt="" coords="106,121,63,159,60,156,103,117"/>
+<area shape="poly" id="edge20_Node000013_Node000003" title=" " alt="" coords="125,118,139,153,134,155,120,120"/>
+</map>

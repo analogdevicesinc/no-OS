@@ -1,0 +1,13 @@
+<map id="drivers/dac/ad8460/ad8460.h" name="drivers/dac/ad8460/ad8460.h">
+<area shape="rect" id="Node000001" title="Implementation of AD8460 Driver." alt="" coords="279,5,425,45"/>
+<area shape="rect" id="Node000002" href="$ad8460_8c.html" title="Implementation of AD8460 Driver." alt="" coords="5,101,152,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="285,52,135,103,133,98,283,47"/>
+<area shape="rect" id="Node000003" href="$iio__ad8460_8c.html" title="Implementation of IIO AD8460 Driver." alt="" coords="176,101,323,141"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="323,57,272,103,268,99,319,53"/>
+<area shape="rect" id="Node000004" href="$eval-ad8460_2src_2common_2common__data_8h.html" title=" " alt="" coords="347,101,562,141"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="385,53,436,99,432,103,381,57"/>
+<area shape="rect" id="Node000006" href="$eval-ad8460_2src_2examples_2basic_2basic__example_8c.html" title=" " alt="" coords="587,93,776,148"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="432,47,589,91,588,96,431,52"/>
+<area shape="rect" id="Node000005" href="$eval-ad8460_2src_2common_2common__data_8c.html" title=" " alt="" coords="347,196,562,236"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="457,154,457,196,452,196,452,154"/>
+</map>

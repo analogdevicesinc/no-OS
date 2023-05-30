@@ -1,0 +1,18 @@
+<map id="drivers/net/max24287.h" name="drivers/net/max24287.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="107,5,285,31"/>
+<area shape="rect" id="Node000002" href="$iio__max24287_8c.html" title=" " alt="" coords="30,159,229,185"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="179,43,156,80,141,123,133,159,128,158,136,122,151,78,175,40"/>
+<area shape="rect" id="Node000003" href="$iio__max24287_8h.html" title=" " alt="" coords="165,79,365,104"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="219,39,256,77,252,80,215,43"/>
+<area shape="rect" id="Node000004" href="$net_8c.html" title=" " alt="" coords="153,240,311,280"/>
+<area shape="poly" id="edge9_Node000001_Node000004" title=" " alt="" coords="155,38,99,66,44,103,24,123,11,145,9,167,19,190,46,217,80,235,116,247,153,254,152,259,115,252,78,240,43,221,15,194,4,168,6,143,20,120,41,98,96,61,152,34"/>
+<area shape="rect" id="Node000007" href="$max24287_8c.html" title=" " alt="" coords="389,79,565,104"/>
+<area shape="poly" id="edge8_Node000001_Node000007" title=" " alt="" coords="255,31,432,76,431,81,254,37"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="235,113,151,161,148,157,232,109"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="263,118,238,240,233,239,258,117"/>
+<area shape="rect" id="Node000005" href="$net_8h.html" title=" " alt="" coords="303,152,460,192"/>
+<area shape="poly" id="edge5_Node000003_Node000005" title=" " alt="" coords="295,110,355,150,352,154,292,114"/>
+<area shape="poly" id="edge7_Node000005_Node000004" title=" " alt="" coords="338,201,266,242,263,238,335,196"/>
+<area shape="rect" id="Node000006" href="$wethlink_2src_2app_2main_8c.html" title=" " alt="" coords="335,240,492,280"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="395,204,409,239,404,241,390,206"/>
+</map>

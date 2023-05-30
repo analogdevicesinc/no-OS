@@ -1,0 +1,26 @@
+var eval_pqmon_2src_2common_2common__data_8h =
+[
+    [ "pqm_desc", "structpqm__desc.html", "structpqm__desc" ],
+    [ "pqm_init_para", "structpqm__init__para.html", "structpqm__init__para" ],
+    [ "FW_VERSION", "eval-pqmon_2src_2common_2common__data_8h.html#a80bd8a83eaaf4466b44c61321c39b11b", null ],
+    [ "IIO_BUFF_TYPE", "eval-pqmon_2src_2common_2common__data_8h.html#ae11d5812ce20e44f7413fc4f065d35dd", null ],
+    [ "MAX_CH_ATTRS", "eval-pqmon_2src_2common_2common__data_8h.html#a6c227b83b8eadd024fb534a98c561bb5", null ],
+    [ "MAX_EVENT_NUMBER", "eval-pqmon_2src_2common_2common__data_8h.html#ad3a9b999f7d425a99245789728b06d78", null ],
+    [ "MAX_SIZE_BASE_ADDR", "eval-pqmon_2src_2common_2common__data_8h.html#afa3248d9c02c4abec5b76edea62a3e38", null ],
+    [ "MAX_SIZE_BASE_ADDR_WITH_SIZE", "eval-pqmon_2src_2common_2common__data_8h.html#aaaa5a8c26d011b53c6b4898511759441", null ],
+    [ "PQM_DEVICE_ATTR_NUMBER", "eval-pqmon_2src_2common_2common__data_8h.html#ac8da698b0521fbf9b27c0f1959c40c61", null ],
+    [ "SAMPLES_PER_CHANNEL_PLATFORM", "eval-pqmon_2src_2common_2common__data_8h.html#a76b04f754009fd7731f1d52bd873162c", null ],
+    [ "TOTAL_PQM_CHANNELS", "eval-pqmon_2src_2common_2common__data_8h.html#a1cbe6c7c211dd3ab00660fe1feaaf392", null ],
+    [ "VOLTAGE_CH_NUMBER", "eval-pqmon_2src_2common_2common__data_8h.html#af89de9972e9a2d49b63860f02810b6e1", null ],
+    [ "WAVEFORM_BUFFER_LENGTH", "eval-pqmon_2src_2common_2common__data_8h.html#a83e0c6dbb900dc47dcd9fc5aee95808d", null ],
+    [ "afe0_callback_desc", "eval-pqmon_2src_2common_2common__data_8h.html#a44b8c3c412fd58d5e5939502aa90c0aa", null ],
+    [ "afe_callback_ctrl_ip", "eval-pqmon_2src_2common_2common__data_8h.html#a60213d2b8951a846f3f2ac9150252a8a", null ],
+    [ "i2c_ip", "eval-pqmon_2src_2common_2common__data_8h.html#af6ef8505a7438d635343bbcabd7c54fd", null ],
+    [ "iio_data_buffer_loc", "eval-pqmon_2src_2common_2common__data_8h.html#abfb9d8eb4249adac675f29090e5b0237", null ],
+    [ "intr_gpio_ip", "eval-pqmon_2src_2common_2common__data_8h.html#a3c70b354b357311c4293465f087ed8e0", null ],
+    [ "pqm_ip", "eval-pqmon_2src_2common_2common__data_8h.html#af56cce140fcae4a601928d5219e405c2", null ],
+    [ "reset_gpio_ip", "eval-pqmon_2src_2common_2common__data_8h.html#a5a569f936dd3190cc751d2af73184309", null ],
+    [ "spi_egy_ip", "eval-pqmon_2src_2common_2common__data_8h.html#abfb49002133698c28453f42c3c446404", null ],
+    [ "timer_ip", "eval-pqmon_2src_2common_2common__data_8h.html#a6fc6281ef66505008c8b6bb417810d4e", null ],
+    [ "uart_ip_stdio", "eval-pqmon_2src_2common_2common__data_8h.html#a1bd1e6c2aff53228ecca2af94eb71333", null ]
+];

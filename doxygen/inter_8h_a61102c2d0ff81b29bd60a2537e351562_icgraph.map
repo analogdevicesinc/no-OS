@@ -1,0 +1,9 @@
+<map id="inter_init" name="inter_init">
+<area shape="rect" id="Node000001" title="Initialize inter phase." alt="" coords="275,31,355,56"/>
+<area shape="rect" id="Node000002" href="$eval-ade7913_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="140,5,195,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="261,37,194,25,195,20,261,32"/>
+<area shape="rect" id="Node000003" href="$state__machine_8c.html#a92bc605df80f651e105fe804f43d615b" title="State machine main execution." alt="" coords="108,55,227,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="262,55,228,60,227,55,261,49"/>
+<area shape="rect" id="Node000004" href="$ad-acevsecrdset-sl_2src_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="5,55,60,80"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="94,70,60,70,60,65,94,65"/>
+</map>

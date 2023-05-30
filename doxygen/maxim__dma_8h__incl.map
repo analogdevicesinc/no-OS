@@ -1,0 +1,24 @@
+<map id="drivers/platform/maxim/common/maxim_dma.h" name="drivers/platform/maxim/common/maxim_dma.h">
+<area shape="rect" id="Node000001" title="Maxim platform specific header DMA API." alt="" coords="66,5,247,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="93,240,164,265"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="126,48,96,69,64,96,34,130,11,168,8,180,10,190,25,210,51,225,81,237,79,242,49,230,22,214,5,193,3,180,6,166,29,126,60,92,93,65,123,43"/>
+<area shape="rect" id="Node000003" href="$no__os__dma_8h.html" title="Platform independent function definitions and data types for the DMA API." alt="" coords="103,93,211,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="159,46,159,79,154,79,154,46"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="235,93,297,119"/>
+<area shape="poly" id="edge12_Node000001_Node000010" title=" " alt="" coords="185,43,240,83,237,87,181,48"/>
+<area shape="poly" id="edge5_Node000003_Node000002" title=" " alt="" coords="103,118,57,136,36,150,20,168,16,178,16,188,29,206,53,222,81,234,79,239,50,226,25,210,11,190,10,178,16,165,33,146,55,131,101,113"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="30,167,97,192"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="143,121,91,160,88,156,140,117"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="121,167,192,192"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="159,119,159,153,154,153,154,119"/>
+<area shape="rect" id="Node000006" href="$no__os__list_8h.html" title="List library header." alt="" coords="337,167,435,192"/>
+<area shape="poly" id="edge6_Node000003_Node000006" title=" " alt="" coords="194,116,336,160,335,165,193,121"/>
+<area shape="rect" id="Node000008" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="217,167,313,192"/>
+<area shape="poly" id="edge9_Node000003_Node000008" title=" " alt="" coords="175,116,237,157,234,161,172,121"/>
+<area shape="rect" id="Node000009" href="$no__os__mutex_8h.html" title=" " alt="" coords="460,167,581,192"/>
+<area shape="poly" id="edge11_Node000003_Node000009" title=" " alt="" coords="211,115,449,161,448,167,210,120"/>
+<area shape="poly" id="edge7_Node000006_Node000002" title=" " alt="" coords="345,195,178,241,176,235,344,189"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="345,240,427,265"/>
+<area shape="poly" id="edge8_Node000006_Node000007" title=" " alt="" coords="389,192,389,226,383,226,383,192"/>
+<area shape="poly" id="edge10_Node000008_Node000002" title=" " alt="" coords="244,194,164,236,161,231,241,190"/>
+</map>

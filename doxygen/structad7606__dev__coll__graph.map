@@ -1,0 +1,23 @@
+<map id="ad7606_dev" name="ad7606_dev">
+<area shape="rect" id="Node000001" title="Device driver structure." alt="" coords="1016,257,1117,282"/>
+<area shape="rect" id="Node000002" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="691,49,814,74"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="828,52,869,53,912,59,955,72,994,94,1012,112,1027,132,1049,178,1061,223,1067,256,1061,257,1056,224,1044,180,1023,135,1008,115,990,98,953,77,911,64,868,58,828,57"/>
+<area shape="poly" id="edge6_Node000002_Node000002" title=" " alt="" coords="721,34,730,25,753,22,771,24,783,31,786,40,780,50,775,47,780,40,779,34,770,29,753,27,733,30,724,38"/>
+<area shape="rect" id="Node000003" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="343,49,490,74"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="504,59,691,59,691,64,504,64"/>
+<area shape="rect" id="Node000004" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,18,184,43"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="198,20,208,20,331,17,427,18,523,25,646,39,692,46,691,51,645,44,523,30,427,23,331,22,208,25,198,26"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="198,38,343,52,343,57,198,43"/>
+<area shape="rect" id="Node000005" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="342,99,491,139"/>
+<area shape="poly" id="edge5_Node000002_Node000005" title=" " alt="" coords="505,102,645,79,690,70,691,76,646,84,506,107"/>
+<area shape="rect" id="Node000006" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="687,207,819,233"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="833,227,992,251,1016,255,1015,261,992,256,832,232"/>
+<area shape="rect" id="Node000007" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="323,207,511,233"/>
+<area shape="poly" id="edge8_Node000006_Node000007" title=" " alt="" coords="525,217,686,217,686,223,525,223"/>
+<area shape="rect" id="Node000008" href="$structad7606__oversampling.html" title=" " alt="" coords="669,257,836,282"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="850,267,1016,267,1016,272,850,272"/>
+<area shape="rect" id="Node000009" href="$structad7606__config.html" title="AD7606_REG_CONFIG configuration parameters." alt="" coords="695,306,811,331"/>
+<area shape="poly" id="edge10_Node000001_Node000009" title=" " alt="" coords="824,310,905,301,991,287,1022,279,1024,285,993,292,906,306,825,315"/>
+<area shape="rect" id="Node000010" href="$structad7606__digital__diag.html" title="Oversampling settings." alt="" coords="676,355,829,381"/>
+<area shape="poly" id="edge11_Node000001_Node000010" title=" " alt="" coords="843,361,917,349,955,339,991,326,1025,304,1051,280,1055,284,1028,308,993,330,956,344,918,354,843,366"/>
+</map>

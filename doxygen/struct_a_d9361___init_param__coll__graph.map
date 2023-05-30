@@ -1,0 +1,27 @@
+<map id="AD9361_InitParam" name="AD9361_InitParam">
+<area shape="rect" id="Node000001" title=" " alt="" coords="1269,172,1412,197"/>
+<area shape="rect" id="Node000002" href="$structno__os__gpio__init__param.html" title="Structure holding the parameters for GPIO initialization." alt="" coords="957,51,1129,76"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1089,79,1309,169,1307,174,1087,84"/>
+<area shape="rect" id="Node000003" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="631,5,819,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="828,30,957,48,956,54,827,35"/>
+<area shape="rect" id="Node000004" href="$structno__os__spi__init__param.html" title="Structure holding the parameters for SPI initialization." alt="" coords="962,145,1125,171"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="1139,164,1269,176,1269,181,1138,169"/>
+<area shape="rect" id="Node000005" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,108,184,133"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="194,104,319,90,475,79,647,78,734,82,819,91,872,101,924,115,1009,143,1008,148,923,120,871,106,818,97,734,87,647,83,476,84,320,95,194,109"/>
+<area shape="rect" id="Node000007" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="663,145,786,171"/>
+<area shape="poly" id="edge9_Node000007_Node000005" title=" " alt="" coords="198,122,607,145,663,149,663,155,606,150,198,127"/>
+<area shape="rect" id="Node000008" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="324,169,471,195"/>
+<area shape="poly" id="edge8_Node000008_Node000005" title=" " alt="" coords="148,135,209,151,324,171,323,176,207,157,147,140"/>
+<area shape="rect" id="Node000006" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="323,222,472,262"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="486,234,606,223,807,196,974,168,974,173,808,202,607,229,486,239"/>
+<area shape="poly" id="edge10_Node000007_Node000006" title=" " alt="" coords="485,222,606,193,685,168,687,173,607,198,486,227"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="800,155,962,155,962,161,800,161"/>
+<area shape="poly" id="edge11_Node000007_Node000007" title=" " alt="" coords="693,131,702,122,725,119,743,121,755,127,758,137,752,147,747,144,752,136,751,131,742,126,725,124,705,127,696,135"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="484,173,663,160,663,165,484,178"/>
+<area shape="rect" id="Node000009" href="$structaxi__adc__init.html" title="AXI ADC Initialization Parameters structure." alt="" coords="993,195,1093,220"/>
+<area shape="poly" id="edge12_Node000001_Node000009" title=" " alt="" coords="1107,207,1174,207,1245,202,1288,195,1289,200,1246,207,1174,212,1107,212"/>
+<area shape="rect" id="Node000010" href="$structaxi__dac__init.html" title=" " alt="" coords="993,268,1093,293"/>
+<area shape="poly" id="edge13_Node000001_Node000010" title=" " alt="" coords="1106,266,1173,250,1244,228,1315,195,1317,200,1246,232,1175,255,1107,271"/>
+<area shape="rect" id="Node000011" href="$structaxi__dac__channel.html" title=" " alt="" coords="659,293,790,319"/>
+<area shape="poly" id="edge14_Node000010_Node000011" title=" " alt="" coords="804,297,993,282,993,287,804,302"/>
+</map>

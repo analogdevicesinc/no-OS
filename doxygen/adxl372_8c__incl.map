@@ -1,0 +1,36 @@
+<map id="drivers/accel/adxl372/adxl372.c" name="drivers/accel/adxl372/adxl372.c">
+<area shape="rect" id="Node000001" title="Implementation of adxl372 Core Driver." alt="" coords="137,5,298,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,167,72,192"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="137,37,108,45,79,57,54,73,33,95,27,108,25,123,31,153,26,154,20,123,22,107,28,92,50,69,77,52,106,40,136,32"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="157,240,227,265"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="218,46,197,227,192,226,213,45"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="271,240,353,265"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="224,45,240,111,253,152,270,191,295,228,291,231,266,193,248,154,235,113,218,46"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="565,93,635,119"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="299,39,552,90,551,96,298,44"/>
+<area shape="rect" id="Node000006" href="$adxl372_8h.html" title="Header file for adxl372 Driver." alt="" coords="454,93,541,119"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="285,43,444,87,442,92,284,48"/>
+<area shape="rect" id="Node000013" href="$no__os__alloc_8h.html" title=" " alt="" coords="43,93,154,119"/>
+<area shape="poly" id="edge19_Node000001_Node000013" title=" " alt="" coords="190,48,129,88,126,84,187,43"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="553,240,623,265"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="507,118,576,227,571,230,502,121"/>
+<area shape="rect" id="Node000008" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="281,167,381,192"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="472,121,371,164,369,159,470,116"/>
+<area shape="rect" id="Node000009" href="$no__os__delay_8h.html" title="Header file of Delay functions." alt="" coords="579,167,693,192"/>
+<area shape="poly" id="edge11_Node000006_Node000009" title=" " alt="" coords="521,116,602,158,600,163,518,121"/>
+<area shape="rect" id="Node000010" href="$no__os__gpio_8h.html" title="Header file of GPIO Interface." alt="" coords="717,167,824,192"/>
+<area shape="poly" id="edge13_Node000006_Node000010" title=" " alt="" coords="542,116,714,161,713,166,541,121"/>
+<area shape="rect" id="Node000011" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="848,167,947,192"/>
+<area shape="poly" id="edge15_Node000006_Node000011" title=" " alt="" coords="541,114,554,116,835,164,834,169,553,121,540,119"/>
+<area shape="rect" id="Node000012" href="$no__os__spi_8h.html" title="Header file of SPI Interface." alt="" coords="405,167,504,192"/>
+<area shape="poly" id="edge17_Node000006_Node000012" title=" " alt="" coords="493,120,471,156,466,154,488,118"/>
+<area shape="poly" id="edge9_Node000008_Node000003" title=" " alt="" coords="310,194,228,236,226,231,307,190"/>
+<area shape="poly" id="edge10_Node000008_Node000004" title=" " alt="" coords="330,193,321,228,316,226,325,192"/>
+<area shape="poly" id="edge8_Node000008_Node000007" title=" " alt="" coords="373,189,540,235,539,241,371,195"/>
+<area shape="poly" id="edge12_Node000009_Node000007" title=" " alt="" coords="630,194,606,230,601,227,626,191"/>
+<area shape="poly" id="edge14_Node000010_Node000007" title=" " alt="" coords="742,195,632,237,630,232,740,190"/>
+<area shape="poly" id="edge16_Node000011_Node000007" title=" " alt="" coords="849,195,637,243,636,238,847,189"/>
+<area shape="poly" id="edge18_Node000012_Node000007" title=" " alt="" coords="477,190,555,231,553,236,475,194"/>
+<area shape="poly" id="edge20_Node000013_Node000002" title=" " alt="" coords="91,121,59,158,55,154,87,117"/>
+<area shape="poly" id="edge21_Node000013_Node000003" title=" " alt="" coords="109,118,179,227,175,230,104,121"/>
+</map>
