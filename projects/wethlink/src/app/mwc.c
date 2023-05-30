@@ -376,6 +376,10 @@ static int mwc_iio_read_attr(void *device, char *buf,
 	case MWC_IIO_ATTR_RX_AUTO_IFVGA_RFLNA:
 		val = iiodev->rx_auto_ifvga_rflna;
 		break;
+	case MWC_IIO_ATTR_RESET:
+	case MWC_IIO_ATTR_SAVE:
+		val = 0; // dummy, to avoid attribute read error
+		break;
 	default:
 		return -EINVAL;
 	};
@@ -582,11 +586,13 @@ static struct iio_attribute mwc_iio_attrs[] = {
 	{
 		.name = "reset",
 		.priv = MWC_IIO_ATTR_RESET,
+		.show = mwc_iio_read_attr,
 		.store = mwc_iio_write_attr,
 	},
 	{
 		.name = "save",
 		.priv = MWC_IIO_ATTR_SAVE,
+		.show = mwc_iio_read_attr,
 		.store = mwc_iio_write_attr,
 	},
 	END_ATTRIBUTES_ARRAY
