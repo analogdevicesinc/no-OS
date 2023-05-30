@@ -388,8 +388,13 @@ int32_t max_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 				return ret;
 		}
 
-		ret = no_os_list_read_first(_events[NO_OS_EVT_TIM_ELAPSED].actions,
-					    (void **)&action);
+		ret = no_os_list_read_find(_events[callback_desc->event].actions,
+					   (void **)&action,
+					   &action_key);
+		/*
+		 * If an action with the same irq_id as the function parameter does not exists, insert a new one,
+		 * otherwise update
+		 */
 		if (ret) {
 			action = no_os_calloc(1, sizeof(*action));
 			if (!action)
@@ -400,7 +405,7 @@ int32_t max_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 			action->callback = callback_desc->callback;
 			action->ctx = callback_desc->ctx;
 
-			ret = no_os_list_add_first(_events[NO_OS_EVT_TIM_ELAPSED].actions, action);
+			ret = no_os_list_add_last(_events[callback_desc->event].actions, action);
 			if (ret)
 				goto free_action;
 
