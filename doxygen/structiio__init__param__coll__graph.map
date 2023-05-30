@@ -1,0 +1,33 @@
+<map id="iio_init_param" name="iio_init_param">
+<area shape="rect" id="Node000001" title=" " alt="" coords="340,387,455,412"/>
+<area shape="rect" id="Node000002" href="$structno__os__uart__desc.html" title="Stucture holding the UART descriptor." alt="" coords="33,299,164,324"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="132,328,208,360,276,377,340,389,339,394,275,383,206,365,130,333"/>
+<area shape="rect" id="Node000003" href="$structno__os__uart__platform__ops.html" title="Structure holding UART function pointers that point to the platform specific function." alt="" coords="5,200,192,225"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="101,239,101,299,96,299,96,239"/>
+<area shape="rect" id="Node000004" href="$structiio__local__backend.html" title="Structure holding the local backend init parameters." alt="" coords="189,299,326,324"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="272,334,296,361,320,374,346,384,344,389,318,379,293,365,269,338"/>
+<area shape="rect" id="Node000005" href="$structiio__ctx__attr.html" title="Structure holding the context attribute members." alt="" coords="350,299,445,324"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="400,338,400,386,395,386,395,338"/>
+<area shape="rect" id="Node000006" href="$structiio__device__init.html" title=" " alt="" coords="469,299,585,324"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="505,335,465,365,423,389,420,384,463,360,502,331"/>
+<area shape="rect" id="Node000007" href="$structiio__device.html" title="Structure holding channels and attributes of a device." alt="" coords="415,200,503,225"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="477,235,521,297,516,300,472,238"/>
+<area shape="rect" id="Node000008" href="$structno__os__irq__ctrl__desc.html" title=" " alt="" coords="135,103,284,128"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="253,130,429,197,428,202,251,135"/>
+<area shape="rect" id="Node000009" href="$structno__os__irq__platform__ops.html" title="Structure holding IRQ function pointers that point to the platform specific function." alt="" coords="39,5,217,31"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="149,39,201,101,197,104,145,43"/>
+<area shape="rect" id="Node000010" href="$structiio__channel.html" title="Struct describing the scan type." alt="" coords="363,103,459,128"/>
+<area shape="poly" id="edge9_Node000007_Node000010" title=" " alt="" coords="425,139,455,198,450,201,420,142"/>
+<area shape="rect" id="Node000011" href="$structiio__chan__type.html" title="IIO channel types." alt="" coords="241,5,353,31"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="317,40,343,67,391,100,388,105,340,71,313,43"/>
+<area shape="rect" id="Node000012" href="$structscan__type.html" title=" " alt="" coords="377,5,465,31"/>
+<area shape="poly" id="edge11_Node000010_Node000012" title=" " alt="" coords="410,44,407,55,406,80,410,102,404,103,400,80,401,54,405,43"/>
+<area shape="rect" id="Node000013" href="$structiio__attribute.html" title="Structure holding pointers to show and store functions." alt="" coords="541,5,643,31"/>
+<area shape="poly" id="edge13_Node000007_Node000013" title=" " alt="" coords="586,45,558,109,537,145,511,178,481,202,477,198,507,174,533,142,554,106,581,43"/>
+<area shape="poly" id="edge12_Node000010_Node000013" title=" " alt="" coords="549,38,507,57,428,105,426,100,504,52,546,33"/>
+<area shape="rect" id="Node000015" href="$structiio__trigger.html" title=" " alt="" coords="727,103,815,128"/>
+<area shape="poly" id="edge16_Node000015_Node000013" title=" " alt="" coords="627,35,750,100,748,105,624,39"/>
+<area shape="rect" id="Node000014" href="$structiio__trigger__init.html" title=" " alt="" coords="641,249,757,275"/>
+<area shape="poly" id="edge14_Node000001_Node000014" title=" " alt="" coords="670,284,597,326,563,347,526,365,450,389,449,384,524,360,560,343,595,322,667,279"/>
+<area shape="poly" id="edge15_Node000014_Node000015" title=" " alt="" coords="761,142,707,250,702,248,756,140"/>
+</map>

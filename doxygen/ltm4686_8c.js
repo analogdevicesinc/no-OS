@@ -1,0 +1,28 @@
+var ltm4686_8c =
+[
+    [ "ltm4686_init", "ltm4686_8c.html#a0b6e2147eb5b7bf8eaee8910cda56cb3", null ],
+    [ "ltm4686_nvm_cmd", "ltm4686_8c.html#a16c6fb8d263e000fbfd2ac79105f8a7e", null ],
+    [ "ltm4686_pwm_mode", "ltm4686_8c.html#a306c50c5863288699cc4ee356b4245ae", null ],
+    [ "ltm4686_read_block_data", "ltm4686_8c.html#ab5a10c842a48003c14478e696e027b54", null ],
+    [ "ltm4686_read_byte", "ltm4686_8c.html#ac4ce3ad4965d3e3ab38f1d6fe497eec9", null ],
+    [ "ltm4686_read_status", "ltm4686_8c.html#a66a76854d4d41f63bf79db51df919d78", null ],
+    [ "ltm4686_read_value", "ltm4686_8c.html#a629cc1e16d3a790dedae59367f07e3a1", null ],
+    [ "ltm4686_read_word", "ltm4686_8c.html#a15c9327d4686624c503b4d76cf597185", null ],
+    [ "ltm4686_read_word_data", "ltm4686_8c.html#a677479368e7d8efe30d29ef89dcbfffb", null ],
+    [ "ltm4686_remove", "ltm4686_8c.html#accb02faab143b12038f033bb8529c1c7", null ],
+    [ "ltm4686_send_byte", "ltm4686_8c.html#ad29bdf5059dd297e2e0125241e51d200", null ],
+    [ "ltm4686_set_operation", "ltm4686_8c.html#a1a7e5bae59f54ed5ab0f7acb932d8bbc", null ],
+    [ "ltm4686_set_page", "ltm4686_8c.html#a155de2444955376d383b354709d559b0", null ],
+    [ "ltm4686_set_timing", "ltm4686_8c.html#adcd418b520d8f121977b500e2aa1d913", null ],
+    [ "ltm4686_set_vin", "ltm4686_8c.html#a77908151239205b389786e6286619937", null ],
+    [ "ltm4686_software_reset", "ltm4686_8c.html#a95a538945d5db84e44b95d9a6a1c52fa", null ],
+    [ "ltm4686_switch_freq", "ltm4686_8c.html#af3bb558d214e9f9228312e0fc0cd0ee8", null ],
+    [ "ltm4686_vout_margin", "ltm4686_8c.html#acca230c7b546f8c032601bbc0ca407a6", null ],
+    [ "ltm4686_vout_tr", "ltm4686_8c.html#a303213529cf5be0b6eaef00dd9338d61", null ],
+    [ "ltm4686_vout_value", "ltm4686_8c.html#aef661dbab0ec14fa13df72d60c1194f2", null ],
+    [ "ltm4686_write_byte", "ltm4686_8c.html#a4a2cadbbf887d3f5e1ee56f79da445d5", null ],
+    [ "ltm4686_write_word", "ltm4686_8c.html#a4fe8fbbce8b9357c23bbd97a635ff6eb", null ],
+    [ "ltm4686_write_word_data", "ltm4686_8c.html#a8f96f283daa0f832af5192d5aebca7fb", null ],
+    [ "NO_OS_DECLARE_CRC8_TABLE", "ltm4686_8c.html#a65cf80876c687684f140c607234e34d3", null ],
+    [ "ltm4686_info", "ltm4686_8c.html#a2e9c1cfde8eaa45446cff3145e23965c", null ]
+];

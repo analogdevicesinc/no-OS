@@ -1,0 +1,9 @@
+<map id="ad7293_spi_update_bits" name="ad7293_spi_update_bits">
+<area shape="rect" id="Node000001" title="Update AD7293 register." alt="" coords="235,55,413,80"/>
+<area shape="rect" id="Node000002" href="$ad7293_8c.html#a20cbc717189b2bc5dc8de8e8e2f9033e" title="Set the range value for ADC channels." alt="" coords="11,5,181,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="251,54,155,33,156,28,252,49"/>
+<area shape="rect" id="Node000003" href="$ad7293_8c.html#a04a360cb13161e6c482fb5553e97e1be" title="Set the DAC output raw value." alt="" coords="11,55,181,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="221,70,181,70,181,65,221,65"/>
+<area shape="rect" id="Node000004" href="$ad7293_8c.html#aaf8a483dd479746d930dd36d71a6848a" title="Set the gain value for ISENSE channels." alt="" coords="5,104,187,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="252,86,156,107,155,101,251,80"/>
+</map>

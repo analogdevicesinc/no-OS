@@ -1,0 +1,11 @@
+<map id="drivers/temperature/max31889/max31889.c" name="drivers/temperature/max31889/max31889.c">
+<area shape="rect" id="Node000001" title="Temperature sensor functionalities." alt="" coords="5,5,184,45"/>
+<area shape="rect" id="Node000002" href="$max31889_8h.html" title="Temperature sensor functionalities." alt="" coords="43,93,146,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="97,46,97,79,92,79,92,46"/>
+<area shape="rect" id="Node000003" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="7,167,75,192"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="88,121,60,157,56,154,84,117"/>
+<area shape="rect" id="Node000004" href="$no__os__i2c_8h.html" title="Header file of I2C Interface." alt="" coords="100,167,199,192"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="106,117,134,154,130,157,102,121"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="114,240,185,265"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="152,192,152,226,147,226,147,192"/>
+</map>

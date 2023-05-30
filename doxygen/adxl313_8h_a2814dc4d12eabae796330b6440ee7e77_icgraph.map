@@ -1,0 +1,11 @@
+<map id="adxl313_set_odr" name="adxl313_set_odr">
+<area shape="rect" id="Node000001" title=" " alt="" coords="669,26,799,52"/>
+<area shape="rect" id="Node000002" href="$adxl313_8c.html#ac1a3c5c02583812f53aa9def997270c0" title=" " alt="" coords="213,26,351,52"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="674,26,621,16,510,8,399,16,331,29,330,24,398,11,510,3,622,11,675,20"/>
+<area shape="rect" id="Node000003" href="$eval-adxl313z_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="5,52,165,77"/>
+<area shape="poly" id="edge5_Node000001_Node000003" title=" " alt="" coords="672,57,622,66,497,75,372,77,166,72,166,66,372,72,497,69,621,60,671,52"/>
+<area shape="rect" id="Node000004" href="$adxl313_8c.html#ade1c190e5fb1b1358e19f81f8169cfba" title=" " alt="" coords="399,26,621,52"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="656,42,622,42,622,36,656,36"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="200,52,166,57,165,51,199,47"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="385,42,351,42,351,36,385,36"/>
+</map>

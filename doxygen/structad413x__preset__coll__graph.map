@@ -1,0 +1,5 @@
+<map id="ad413x_preset" name="ad413x_preset">
+<area shape="rect" id="Node000001" title="Preset setting." alt="" coords="7,93,126,119"/>
+<area shape="rect" id="Node000002" href="$structad413x__ref__buf.html" title="ADC reference buffer selection." alt="" coords="5,5,128,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="69,45,69,93,64,93,64,45"/>
+</map>

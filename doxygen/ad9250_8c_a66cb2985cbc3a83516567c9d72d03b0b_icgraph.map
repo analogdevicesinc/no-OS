@@ -1,0 +1,67 @@
+<map id="ad9250_is_shadow_register" name="ad9250_is_shadow_register">
+<area shape="rect" id="Node000001" title="Checks if the register is shadowed." alt="" coords="1047,1059,1249,1084"/>
+<area shape="rect" id="Node000002" href="$ad9250_8c.html#ac1ea3ba6761add56213beb1ce18bc9f7" title="Sets a bit/group of bits inside a register without modifying other bits." alt="" coords="659,475,835,500"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1128,1049,755,502,759,499,1133,1046"/>
+<area shape="rect" id="Node000021" href="$ad9250_8c.html#aa4f141feb408ddb2ec43699c234a2d80" title="Writes a value to the selected register." alt="" coords="888,1084,999,1109"/>
+<area shape="poly" id="edge22_Node000001_Node000021" title=" " alt="" coords="1033,1088,999,1092,999,1087,1033,1083"/>
+<area shape="rect" id="Node000003" href="$ad9250_8c.html#ad302673d9bd396559f0ca119e7b41dc0" title="Enables the Build&#45;In&#45;Self&#45;Test." alt="" coords="423,301,575,327"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="728,465,677,402,643,368,604,340,574,328,576,323,607,336,646,364,681,398,732,461"/>
+<area shape="rect" id="Node000004" href="$ad9250_8c.html#ae8077c73dca227904bbd6f1d31107721" title="Resets the Build&#45;In&#45;Self&#45;Test." alt="" coords="429,351,570,376"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="720,468,669,428,604,390,569,378,571,373,606,385,672,423,723,463"/>
+<area shape="rect" id="Node000005" href="$ad9250_8c.html#a3d85c8bb5b1511ae1cba7405dcda00eb" title="Configures the power mode of the chip." alt="" coords="410,400,589,425"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="700,472,605,439,561,428,563,423,606,434,702,467"/>
+<area shape="rect" id="Node000006" href="$ad9250_8c.html#aa945a337893b06659be7f256c50e64e9" title="Selects the bandwidth value for the DC correction circuit." alt="" coords="412,449,587,475"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="644,480,587,474,587,468,645,474"/>
+<area shape="rect" id="Node000007" href="$ad9250_8c.html#a00e69938d680fd76ddefdfacdbe789ff" title="Enables DC correction for use in the output data signal path." alt="" coords="424,499,575,524"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="645,500,575,507,575,501,644,495"/>
+<area shape="rect" id="Node000008" href="$ad9250_8c.html#a607beaaca56af408cd22032bc5940eac" title="Freezes DC correction value." alt="" coords="426,548,573,573"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="699,507,606,538,558,551,557,545,605,533,698,502"/>
+<area shape="rect" id="Node000009" href="$ad9250_8c.html#ac29e8576e6dc14c9f6abe7be170842fa" title="Inverts the logic of JESD204B bits." alt="" coords="409,649,590,689"/>
+<area shape="poly" id="edge8_Node000002_Node000009" title=" " alt="" coords="730,513,678,572,644,604,607,632,570,651,567,646,604,628,641,600,675,568,726,509"/>
+<area shape="rect" id="Node000010" href="$ad9250_8c.html#a551739be15001adffde6400d724f2940" title="Configures the JESD204B interface." alt="" coords="167,955,345,980"/>
+<area shape="poly" id="edge13_Node000002_Node000010" title=" " alt="" coords="738,514,720,556,692,607,654,659,632,683,607,703,578,719,550,727,499,728,449,730,423,738,395,754,368,776,345,802,306,860,279,915,264,955,259,953,275,913,302,857,341,799,365,772,392,749,421,733,448,725,499,723,549,722,576,714,604,698,628,679,650,656,687,604,715,554,733,512"/>
+<area shape="rect" id="Node000011" href="$ad9250_8c.html#a68f5ae795f91832c2eb63c5836bf2861" title="Configures the device." alt="" coords="5,1059,119,1084"/>
+<area shape="poly" id="edge20_Node000002_Node000011" title=" " alt="" coords="722,511,671,550,606,587,575,599,547,605,497,608,449,614,423,623,395,639,331,688,273,745,222,808,177,871,108,985,71,1060,67,1057,104,983,172,868,218,804,269,742,328,684,392,634,421,618,448,609,496,603,546,600,573,594,604,582,668,545,719,507"/>
+<area shape="rect" id="Node000012" href="$ad9250_8c.html#aafd21c34825b7575735a69ffa1dcaeb9" title="Configures the power mode of the JESD204B data transmit block." alt="" coords="394,764,605,789"/>
+<area shape="poly" id="edge11_Node000002_Node000012" title=" " alt="" coords="741,515,724,564,697,626,659,691,634,721,607,747,571,766,569,762,604,743,630,717,654,688,693,624,719,562,736,513"/>
+<area shape="rect" id="Node000013" href="$ad9250_8c.html#ab9800992ef707e3cd8194dcf4119b1c5" title="Selects the point in the processing path of a lane, where the test data will be inserted." alt="" coords="408,814,591,854"/>
+<area shape="poly" id="edge12_Node000002_Node000013" title=" " alt="" coords="744,514,730,573,705,651,687,692,665,732,638,770,607,803,587,816,584,812,604,799,634,766,660,729,682,689,700,649,725,572,738,513"/>
+<area shape="rect" id="Node000014" href="$ad9250_8c.html#a00a105897e7fb39e9071002c74a09393" title="Selects a JESD204B test mode." alt="" coords="393,879,605,904"/>
+<area shape="poly" id="edge14_Node000002_Node000014" title=" " alt="" coords="746,514,738,585,716,680,698,731,674,781,644,828,607,868,587,881,585,876,604,864,640,824,669,779,693,729,710,679,732,584,741,513"/>
+<area shape="rect" id="Node000015" href="$ad9250_8c.html#a9528c853339aed3b05740ad2e491c39c" title="Disables (1) or enables (0) the data output. Note: This function modifies a shadowed register,..." alt="" coords="413,5,586,31"/>
+<area shape="poly" id="edge15_Node000002_Node000015" title=" " alt="" coords="743,461,738,379,731,325,719,266,702,206,677,146,645,92,604,44,585,32,588,27,607,40,649,88,682,144,707,204,725,265,736,324,743,379,748,460"/>
+<area shape="rect" id="Node000016" href="$ad9250_8c.html#ae34131b64e1143ee14d24a25ff88f73d" title="Specifies the output format. Note: This function modifies a shadowed register, therefore a call of ad..." alt="" coords="414,55,585,80"/>
+<area shape="poly" id="edge16_Node000002_Node000016" title=" " alt="" coords="742,461,734,387,713,288,695,235,672,183,641,135,604,93,584,81,586,76,607,89,646,132,676,180,700,233,718,286,739,387,747,460"/>
+<area shape="rect" id="Node000017" href="$ad9250_8c.html#a7f9cc51f41a39617eba3900c54e4ddce" title="Activates the inverted (1) or normal (0) output mode. Note: This function modifies a shadowed registe..." alt="" coords="417,104,581,129"/>
+<area shape="poly" id="edge17_Node000002_Node000017" title=" " alt="" coords="740,461,730,396,706,310,689,264,666,219,638,178,604,143,580,129,583,124,607,139,642,175,671,216,694,262,712,308,735,395,745,461"/>
+<area shape="rect" id="Node000018" href="$ad9250_8c.html#a6d2c7ccead677f4a870683bba4335282" title="Sets (1) or clears (0) the reset long PN sequence bit(PN23)." alt="" coords="425,153,574,179"/>
+<area shape="poly" id="edge18_Node000002_Node000018" title=" " alt="" coords="738,461,725,405,700,331,682,293,660,256,634,222,604,192,573,176,576,172,607,188,638,218,665,253,687,290,705,329,730,403,743,460"/>
+<area shape="rect" id="Node000019" href="$ad9250_8c.html#aaab791e9f2a18673e99f76021fb9e4a9" title="Sets (1) or clears (0) the reset short PN sequence bit(PN9)." alt="" coords="429,203,570,228"/>
+<area shape="poly" id="edge19_Node000002_Node000019" title=" " alt="" coords="736,462,720,414,693,354,654,293,631,265,604,242,569,225,571,220,607,237,634,261,659,290,697,352,725,412,741,461"/>
+<area shape="rect" id="Node000020" href="$ad9250_8c.html#ae07ff9dde005814f4467fc2b1be7ceb5" title="Sets the ADC&#39;s test mode." alt="" coords="426,252,573,277"/>
+<area shape="poly" id="edge21_Node000002_Node000020" title=" " alt="" coords="732,463,713,424,685,377,649,330,604,291,572,276,574,271,607,286,653,326,690,374,718,422,737,461"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="412,697,395,709,367,739,342,772,303,843,277,909,263,955,258,954,272,907,298,841,337,769,363,735,392,705,409,693"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="220,989,88,1061,86,1056,218,984"/>
+<area shape="poly" id="edge30_Node000021_Node000002" title=" " alt="" coords="931,1071,750,501,755,500,936,1070"/>
+<area shape="poly" id="edge27_Node000021_Node000010" title=" " alt="" coords="930,1072,916,1044,896,1012,870,982,839,959,800,946,747,939,684,936,614,937,471,945,346,958,345,953,470,940,614,931,684,931,747,934,801,941,841,954,874,978,900,1009,921,1041,935,1070"/>
+<area shape="poly" id="edge32_Node000021_Node000011" title=" " alt="" coords="874,1097,119,1076,119,1070,874,1092"/>
+<area shape="rect" id="Node000022" href="$ad9250_8c.html#a64ea273282daac0d017bf2d7fa060573" title="Configures the Fast&#45;Detect module." alt="" coords="181,1134,331,1174"/>
+<area shape="poly" id="edge23_Node000021_Node000022" title=" " alt="" coords="875,1113,840,1118,700,1133,559,1143,332,1154,332,1149,559,1138,699,1127,840,1113,874,1108"/>
+<area shape="rect" id="Node000023" href="$ad9250_8c.html#a11a4249e4a442897738293bf7c1a3537" title="Sets number of frames per multiframe (K)." alt="" coords="665,969,828,1009"/>
+<area shape="poly" id="edge25_Node000021_Node000023" title=" " alt="" coords="913,1078,839,1030,800,1011,802,1006,841,1025,916,1074"/>
+<area shape="rect" id="Node000024" href="$ad9250_8c.html#a94ea5e510a5fc80bdc0abee7c60160b1" title="Sets the offset adjustment." alt="" coords="676,1185,817,1211"/>
+<area shape="poly" id="edge28_Node000021_Node000024" title=" " alt="" coords="917,1120,882,1144,841,1168,793,1188,791,1183,839,1164,879,1140,914,1115"/>
+<area shape="rect" id="Node000025" href="$ad9250_8c.html#aa310e837dac77ac2e47a984c619c43e5" title="Selects a channel as the current channel for further configurations." alt="" coords="659,1235,834,1275"/>
+<area shape="poly" id="edge29_Node000021_Node000025" title=" " alt="" coords="930,1123,894,1174,870,1202,842,1226,820,1238,818,1233,838,1221,866,1198,890,1171,926,1120"/>
+<area shape="rect" id="Node000026" href="$ad9250_8c.html#a82fcfc2d802d00ff518988135ae5397a" title="Configures a User Test Pattern." alt="" coords="653,1300,840,1325"/>
+<area shape="poly" id="edge31_Node000021_Node000026" title=" " alt="" coords="938,1124,925,1161,906,1206,878,1251,842,1289,820,1302,817,1298,838,1285,874,1248,901,1203,920,1159,933,1122"/>
+<area shape="rect" id="Node000027" href="$ad9250_8c.html#a2200cd197472ebf4907cc06bc1359d71" title="Resets all registers to their default values." alt="" coords="185,1275,327,1300"/>
+<area shape="poly" id="edge33_Node000021_Node000027" title=" " alt="" coords="943,1123,935,1172,918,1232,905,1263,888,1293,867,1319,842,1340,806,1360,768,1375,729,1385,689,1391,607,1392,526,1382,449,1364,381,1343,282,1303,284,1298,383,1338,451,1359,527,1377,607,1387,688,1386,728,1380,767,1370,804,1355,838,1336,863,1315,884,1290,900,1261,913,1231,930,1171,937,1123"/>
+<area shape="rect" id="Node000028" href="$ad9250_8c.html#ae077d0fae76bbf9790d7d5faa8c6f4fa" title="Initiates a transfer and waits for the operation to end. Note: This function may be called after a sh..." alt="" coords="435,1033,563,1059"/>
+<area shape="poly" id="edge35_Node000021_Node000028" title=" " alt="" coords="874,1086,840,1081,691,1064,563,1053,564,1048,692,1058,840,1075,875,1081"/>
+<area shape="poly" id="edge24_Node000022_Node000011" title=" " alt="" coords="195,1131,92,1087,94,1082,197,1126"/>
+<area shape="poly" id="edge26_Node000023_Node000010" title=" " alt="" coords="651,987,346,974,346,969,652,982"/>
+<area shape="poly" id="edge34_Node000027_Node000011" title=" " alt="" coords="232,1266,73,1086,77,1083,236,1262"/>
+<area shape="poly" id="edge36_Node000028_Node000010" title=" " alt="" coords="445,1032,295,983,297,977,447,1026"/>
+<area shape="poly" id="edge37_Node000028_Node000011" title=" " alt="" coords="422,1053,119,1071,119,1065,422,1048"/>
+</map>

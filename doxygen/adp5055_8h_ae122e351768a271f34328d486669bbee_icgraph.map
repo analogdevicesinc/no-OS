@@ -1,0 +1,15 @@
+<map id="adp5055_read" name="adp5055_read">
+<area shape="rect" id="Node000001" title="Read data from ADP5055." alt="" coords="389,121,504,146"/>
+<area shape="rect" id="Node000002" href="$adp5055_8c.html#aa8cce68657104326a6d9ffbb8045363f" title="Reads the latched status of a specified channel." alt="" coords="172,5,341,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="418,114,382,86,340,60,315,48,317,43,343,55,385,82,421,110"/>
+<area shape="rect" id="Node000003" href="$adp5055_8c.html#a89ef478f678c7091ac27ce677adcfc8b" title="Reads real&#45;time power good status of specified channel." alt="" coords="188,70,325,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="384,120,305,98,306,93,386,114"/>
+<area shape="rect" id="Node000004" href="$adp5055_2src_2examples_2basic_2basic__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="Basic example main executiont." alt="" coords="5,121,124,146"/>
+<area shape="poly" id="edge7_Node000001_Node000004" title=" " alt="" coords="376,136,125,136,125,131,376,131"/>
+<area shape="rect" id="Node000005" href="$adp5055_8c.html#a43bcea1b1207fcbf1f9fa950d2b9d817" title="Read statuses." alt="" coords="176,171,337,197"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="386,152,306,174,305,169,384,147"/>
+<area shape="rect" id="Node000006" href="$adp5055_8c.html#a59e199bf3b4bec1a27f7cfb487b1dbd1" title="Sets both enable and disable delay per channel." alt="" coords="179,221,335,261"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="421,157,385,184,343,210,315,224,312,219,340,206,382,180,417,153"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="195,101,114,123,113,118,194,96"/>
+<area shape="poly" id="edge6_Node000006_Node000004" title=" " alt="" coords="186,218,171,210,120,178,80,148,83,144,123,174,173,206,189,213"/>
+</map>

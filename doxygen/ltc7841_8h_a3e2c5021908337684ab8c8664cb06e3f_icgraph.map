@@ -1,0 +1,11 @@
+<map id="ltc7841_change_vout_command" name="ltc7841_change_vout_command">
+<area shape="rect" id="Node000001" title="Change Vout command." alt="" coords="488,23,648,63"/>
+<area shape="rect" id="Node000002" href="$ltc7841_8c.html#a2fcb18b33431e2e40329ccc8befa7fdf" title="Initialize the device structure." alt="" coords="341,31,440,56"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="474,46,440,46,440,41,474,41"/>
+<area shape="rect" id="Node000003" href="$ltc7841_2src_2examples_2basic_2basic__example_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="Basic example main executiont." alt="" coords="173,5,292,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="327,36,292,30,293,25,328,31"/>
+<area shape="rect" id="Node000004" href="$iio__ltc7841_8c.html#a08c7b193ba1977f985581017243ec512" title="Initializes the LTC7841 IIO descriptor." alt="" coords="172,55,293,80"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="328,55,294,61,293,55,327,50"/>
+<area shape="rect" id="Node000005" href="$ltc7841_2src_2examples_2iio__example_2iio__example_8c.html#a423407bf3827741dfe2f6e0def8ba0c3" title="Basic example main executiont." alt="" coords="5,55,124,80"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="158,70,124,70,124,65,158,65"/>
+</map>

@@ -1,0 +1,39 @@
+<map id="ltc2672_transaction" name="ltc2672_transaction">
+<area shape="rect" id="Node000001" title="Write raw register value." alt="" coords="696,296,847,322"/>
+<area shape="rect" id="Node000002" href="$ltc2672_8c.html#a54f9f1b347663b30f4f5df972f617ae8" title="power down ltc2672" alt="" coords="213,27,407,52"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="764,283,754,230,734,163,718,129,699,97,675,68,647,45,611,26,572,15,532,9,492,8,415,16,353,30,352,24,414,11,491,3,533,4,573,10,613,22,649,40,679,64,703,94,723,126,739,161,760,228,770,282"/>
+<area shape="rect" id="Node000004" href="$ltc2672_8c.html#ac5d36a739c06f7c4c60a5f6338aa4e01" title="configures the fault detection bits" alt="" coords="457,55,645,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="759,284,744,244,720,195,687,145,646,102,611,83,614,78,650,98,692,142,724,192,748,242,764,282"/>
+<area shape="rect" id="Node000005" href="$ltc2672_8c.html#a3a1d0b24cd65568eeea113ff402b0bb5" title="enables or disables selected channel/s for toggling" alt="" coords="225,98,395,138"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="753,287,710,231,680,203,647,179,584,153,518,135,453,125,395,121,395,116,454,120,519,130,586,148,649,175,684,199,714,228,757,283"/>
+<area shape="rect" id="Node000006" href="$ltc2672_8c.html#abfb6482f1f409d593eed6fe8846e734a" title="enables or disables global toggle bit" alt="" coords="227,163,393,188"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="747,288,703,250,676,232,647,217,583,196,515,184,451,178,393,176,393,170,451,172,516,179,584,191,649,212,679,227,706,246,750,284"/>
+<area shape="rect" id="Node000007" href="$ltc2672_8c.html#a1d36170a7754cb809ffd2684e6c51be1" title="configures mux output depending on target measurement" alt="" coords="228,212,392,238"/>
+<area shape="poly" id="edge8_Node000001_Node000007" title=" " alt="" coords="739,291,697,267,647,248,581,234,514,226,392,223,392,218,514,221,582,228,649,243,699,262,742,287"/>
+<area shape="rect" id="Node000008" href="$ltc2672_8c.html#a36631880a13e9f7a623bb1ec896a0b3b" title="power down ALL channels" alt="" coords="472,257,631,297"/>
+<area shape="poly" id="edge10_Node000001_Node000008" title=" " alt="" coords="682,299,631,291,631,286,683,294"/>
+<area shape="rect" id="Node000009" href="$ltc2672_8c.html#aa60a564b4108d96e5839d4c000117b8a" title="power down a channel" alt="" coords="472,321,631,361"/>
+<area shape="poly" id="edge11_Node000001_Node000009" title=" " alt="" coords="683,325,631,332,631,327,682,319"/>
+<area shape="rect" id="Node000010" href="$ltc2672_8c.html#a0abababa3db467fe8eef14e63f3d2894" title="sets the same dac code for all channels" alt="" coords="472,385,631,425"/>
+<area shape="poly" id="edge12_Node000001_Node000010" title=" " alt="" coords="738,331,649,375,618,387,616,382,647,371,735,326"/>
+<area shape="rect" id="Node000012" href="$ltc2672_8c.html#a2ad5dfbec025fdd04cd81e92d1e86c6c" title="sets the dac code for channel" alt="" coords="455,450,648,475"/>
+<area shape="poly" id="edge15_Node000001_Node000012" title=" " alt="" coords="756,335,712,388,682,416,649,439,621,452,619,447,647,435,679,411,708,384,752,331"/>
+<area shape="rect" id="Node000014" href="$ltc2672_8c.html#a6920eca6de621459b93ccf003eb4aed6" title="sets the same output span for all channels" alt="" coords="231,493,389,533"/>
+<area shape="poly" id="edge17_Node000001_Node000014" title=" " alt="" coords="763,335,747,371,723,414,691,456,649,489,618,504,585,515,516,528,449,531,389,528,390,522,449,526,516,523,584,510,616,499,647,484,687,452,719,411,743,369,758,333"/>
+<area shape="rect" id="Node000015" href="$ltc2672_8c.html#a0b950ef76098e6cc78274e22acbcc49c" title="sets output span for channel" alt="" coords="455,551,648,576"/>
+<area shape="poly" id="edge19_Node000001_Node000015" title=" " alt="" coords="765,336,750,378,727,432,693,486,673,511,650,534,614,553,612,549,646,530,669,508,689,483,722,429,745,376,760,334"/>
+<area shape="rect" id="Node000016" href="$ltc2672_8c.html#a0e6e9a7425d2717f6a620a886255637e" title="setup toggle parameters for a channel" alt="" coords="471,601,632,641"/>
+<area shape="poly" id="edge20_Node000001_Node000016" title=" " alt="" coords="768,336,757,389,735,457,700,529,677,562,650,591,633,603,630,599,646,587,673,558,695,526,730,455,752,387,763,335"/>
+<area shape="rect" id="Node000003" href="$dc2903a_2src_2examples_2basic__example_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="basic example main execution." alt="" coords="5,212,165,238"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="264,60,215,89,178,120,145,155,98,214,94,210,141,152,174,117,212,84,261,56"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="231,146,214,153,155,185,107,215,104,210,152,180,212,148,229,141"/>
+<area shape="poly" id="edge7_Node000006_Node000003" title=" " alt="" coords="239,194,145,215,143,210,238,189"/>
+<area shape="poly" id="edge9_Node000007_Node000003" title=" " alt="" coords="214,228,166,228,166,222,214,222"/>
+<area shape="rect" id="Node000011" href="$ltc2672_8c.html#a1925a7ba84e10d9845b6663853a1a5d2" title="sets the same current for all channels" alt="" coords="235,313,385,353"/>
+<area shape="poly" id="edge13_Node000010_Node000011" title=" " alt="" coords="470,384,377,356,379,351,471,379"/>
+<area shape="poly" id="edge14_Node000011_Node000003" title=" " alt="" coords="254,309,112,240,114,236,256,305"/>
+<area shape="rect" id="Node000013" href="$ltc2672_8c.html#ac94ad5cab8fa0c407aeda8139638dd8c" title="set the current for a selected DAC channel" alt="" coords="235,429,385,469"/>
+<area shape="poly" id="edge16_Node000012_Node000013" title=" " alt="" coords="441,459,385,456,386,451,441,454"/>
+<area shape="poly" id="edge18_Node000014_Node000003" title=" " alt="" coords="217,488,212,483,183,454,159,421,122,350,99,284,87,239,92,237,104,283,127,348,164,418,187,451,215,479,221,483"/>
+<area shape="poly" id="edge21_Node000016_Node000003" title=" " alt="" coords="457,625,397,620,332,607,268,583,239,567,212,547,177,511,150,469,129,424,112,378,92,295,85,238,90,237,98,294,117,377,133,422,155,467,182,508,215,543,242,563,270,579,333,602,397,615,457,620"/>
+</map>

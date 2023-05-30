@@ -1,0 +1,11 @@
+<map id="projects/iio_demo/src/platform/xilinx/parameters.c" name="projects/iio_demo/src/platform/xilinx/parameters.c">
+<area shape="rect" id="Node000001" title="Definition of xilinx platform data used by iio_demo project." alt="" coords="89,5,301,45"/>
+<area shape="rect" id="Node000002" href="$iio__demo_2src_2platform_2xilinx_2parameters_8h.html" title="Definitions specific to xilinx platform used by iio_demo project." alt="" coords="140,93,249,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="197,46,197,79,192,79,192,46"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,167,123,192"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="175,121,98,162,96,158,172,116"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="147,167,242,192"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="197,119,197,153,192,153,192,119"/>
+<area shape="rect" id="Node000005" href="$xilinx__uart_8h.html" title=" " alt="" coords="266,167,369,192"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="216,116,287,157,284,162,213,121"/>
+</map>

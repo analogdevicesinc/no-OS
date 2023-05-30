@@ -1,0 +1,15 @@
+<map id="ad7091r8_set_sleep_mode" name="ad7091r8_set_sleep_mode">
+<area shape="rect" id="Node000001" title="Set device sleep mode." alt="" coords="757,55,953,80"/>
+<area shape="rect" id="Node000002" href="$ad7091r8_8c.html#a88b4ef5f944b82a2e35a53b9a5170478" title=" " alt="" coords="599,55,709,80"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="744,70,709,70,709,65,744,65"/>
+<area shape="rect" id="Node000003" href="$iio__ad7091r8_8c.html#ab9ebf560e86c6769048fec90dbed9f65" title="Initializes the AD7091R8 IIO driver." alt="" coords="403,29,538,55"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="584,60,538,54,539,49,585,55"/>
+<area shape="rect" id="Node000007" href="$ad7091r8-sdz_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="391,79,551,104"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="585,79,551,83,551,78,585,74"/>
+<area shape="rect" id="Node000004" href="$ad7091r8-sdz_2src_2examples_2iio__example_2iio__example_8c.html#a7d58fb707a91d4615d3bf949fabaa1e2" title="IIO example main execution." alt="" coords="154,5,297,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="389,37,296,28,297,22,390,31"/>
+<area shape="rect" id="Node000005" href="$ad7091r8-sdz_2src_2examples_2iio__timer__trigger__example_2iio__timer__trigger__example_8c.html#a7bab3a90f71c4ddf1bc5fff9fc70b3fb" title="IIO trigger example main execution." alt="" coords="108,55,343,80"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="390,53,343,58,343,53,389,48"/>
+<area shape="rect" id="Node000006" href="$ad7091r8-sdz_2src_2platform_2maxim_2main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Main function execution for Maxim platform." alt="" coords="5,55,60,80"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="94,70,60,70,60,65,94,65"/>
+</map>

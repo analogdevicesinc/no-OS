@@ -1,0 +1,11 @@
+<map id="ADIHAL_sysrefReq" name="ADIHAL_sysrefReq">
+<area shape="rect" id="Node000001" title="Performs a SYSREF request to the clock generation device." alt="" coords="327,26,469,51"/>
+<area shape="rect" id="Node000002" href="$headless__arm_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,26,60,51"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="335,26,278,16,193,8,156,10,109,16,61,30,59,25,107,11,155,4,193,3,279,11,336,20"/>
+<area shape="rect" id="Node000003" href="$app__talise_8c.html#a51c2ee9f37b849d981c6de38835f5eca" title=" " alt="" coords="108,26,279,51"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="313,41,279,41,279,36,313,36"/>
+<area shape="rect" id="Node000004" href="$app__talise_8c.html#a887ab26824e71cac7ea00bd35ab73c18" title=" " alt="" coords="143,75,244,101"/>
+<area shape="poly" id="edge4_Node000001_Node000004" title=" " alt="" coords="332,57,245,78,243,73,331,52"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="94,41,60,41,60,36,94,36"/>
+<area shape="poly" id="edge5_Node000004_Node000002" title=" " alt="" coords="135,74,107,65,60,50,61,45,109,60,137,69"/>
+</map>
