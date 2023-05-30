@@ -1,0 +1,19 @@
+<map id="adf4382_iio_dev_init_param" name="adf4382_iio_dev_init_param">
+<area shape="rect" id="Node000001" title=" " alt="" coords="187,460,344,500"/>
+<area shape="rect" id="Node000002" href="$structadf4382__init__param.html" title="ADF4382 Initialization Parameters structure." alt="" coords="189,372,341,397"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="268,411,268,460,263,460,263,411"/>
+<area shape="rect" id="Node000003" href="$structno__os__spi__init__param.html" title="Structure holding the parameters for SPI initialization." alt="" coords="184,284,347,309"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="268,323,268,371,263,371,263,323"/>
+<area shape="rect" id="Node000004" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,5,184,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="76,43,55,70,37,103,29,138,30,154,37,171,53,193,73,212,119,244,168,267,214,281,212,286,166,272,116,249,69,216,49,196,32,173,25,156,23,137,32,101,51,67,72,39"/>
+<area shape="rect" id="Node000006" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="204,196,327,221"/>
+<area shape="poly" id="edge8_Node000006_Node000004" title=" " alt="" coords="93,44,93,88,98,111,109,132,130,154,155,171,210,194,208,198,152,176,126,158,104,135,93,113,88,89,88,44"/>
+<area shape="rect" id="Node000007" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="209,101,356,126"/>
+<area shape="poly" id="edge7_Node000007_Node000004" title=" " alt="" coords="131,34,261,98,258,103,129,39"/>
+<area shape="rect" id="Node000005" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="380,93,529,133"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="451,148,436,186,425,206,411,223,385,244,357,262,302,286,300,281,354,257,382,240,407,219,421,203,432,184,446,146"/>
+<area shape="poly" id="edge9_Node000006_Node000005" title=" " alt="" coords="370,140,327,160,300,178,278,198,275,194,296,174,324,155,368,135"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="268,235,268,283,263,283,263,235"/>
+<area shape="poly" id="edge10_Node000006_Node000006" title=" " alt="" coords="342,200,353,209,345,216,327,219,326,214,343,212,348,209,339,205"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="275,140,269,158,267,196,262,196,264,157,269,138"/>
+</map>

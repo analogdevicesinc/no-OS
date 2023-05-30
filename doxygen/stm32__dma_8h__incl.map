@@ -1,0 +1,25 @@
+<map id="drivers/platform/stm32/stm32_dma.h" name="drivers/platform/stm32/stm32_dma.h">
+<area shape="rect" id="Node000001" title="Platform independent function definitions and data types for the DMA API." alt="" coords="269,5,441,45"/>
+<area shape="rect" id="Node000002" href="$no__os__dma_8h.html" title="Platform independent function definitions and data types for the DMA API." alt="" coords="237,93,345,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="341,47,311,84,307,81,337,44"/>
+<area shape="rect" id="Node000010" href="$stm32__hal_8h.html" title=" " alt="" coords="491,93,594,119"/>
+<area shape="poly" id="edge11_Node000001_Node000010" title=" " alt="" coords="401,43,503,85,501,90,399,48"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,167,72,192"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="251,121,86,167,85,162,249,116"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="97,167,167,192"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="266,121,171,163,169,159,264,116"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="255,240,326,265"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="274,121,257,135,241,152,232,171,233,191,246,212,264,229,260,233,242,215,228,193,226,170,237,149,253,131,271,117"/>
+<area shape="rect" id="Node000006" href="$no__os__list_8h.html" title="List library header." alt="" coords="363,167,461,192"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="312,116,382,157,379,162,309,121"/>
+<area shape="rect" id="Node000008" href="$no__os__irq_8h.html" title="Header file of IRQ interface." alt="" coords="243,167,339,192"/>
+<area shape="poly" id="edge8_Node000002_Node000008" title=" " alt="" coords="293,119,293,153,288,153,288,119"/>
+<area shape="rect" id="Node000009" href="$no__os__mutex_8h.html" title=" " alt="" coords="486,167,607,192"/>
+<area shape="poly" id="edge10_Node000002_Node000009" title=" " alt="" coords="333,116,493,160,492,166,331,121"/>
+<area shape="poly" id="edge6_Node000006_Node000005" title=" " alt="" coords="394,194,323,235,321,231,391,190"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="371,240,453,265"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="415,192,415,226,409,226,409,192"/>
+<area shape="poly" id="edge9_Node000008_Node000005" title=" " alt="" coords="293,192,293,226,288,226,288,192"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="632,167,699,192"/>
+<area shape="poly" id="edge12_Node000010_Node000011" title=" " alt="" coords="564,116,635,157,632,162,561,121"/>
+</map>

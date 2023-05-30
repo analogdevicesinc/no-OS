@@ -1,0 +1,12 @@
+<map id="adxl313_get_no_of_fifo_entries" name="adxl313_get_no_of_fifo_entries">
+<area shape="rect" id="Node000001" title=" " alt="" coords="673,23,847,63"/>
+<area shape="rect" id="Node000002" href="$adxl313_8c.html#afb5853f98ca82a851683cd7ea02455c8" title=" " alt="" coords="428,31,625,56"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="659,46,626,46,626,41,659,41"/>
+<area shape="rect" id="Node000003" href="$adxl313_8c.html#abe3973b9472473f33e98502f802b7241" title=" " alt="" coords="213,5,380,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="414,34,380,30,381,25,415,28"/>
+<area shape="rect" id="Node000005" href="$adxl313_8c.html#ac1a3c5c02583812f53aa9def997270c0" title=" " alt="" coords="228,55,365,80"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="415,58,366,63,365,58,414,52"/>
+<area shape="rect" id="Node000004" href="$eval-adxl313z_2src_2examples_2basic_2basic__example_8c.html#a72943dc9011d36293cb05ca5d7cb6899" title="Basic example main execution." alt="" coords="5,31,165,56"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="200,32,166,36,165,31,199,27"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="214,61,165,55,166,50,214,55"/>
+</map>

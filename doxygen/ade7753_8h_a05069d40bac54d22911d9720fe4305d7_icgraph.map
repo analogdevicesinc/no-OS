@@ -1,0 +1,7 @@
+<map id="ade7753_sw_reset" name="ade7753_sw_reset">
+<area shape="rect" id="Node000001" title="Reset the device using SW reset." alt="" coords="263,5,405,31"/>
+<area shape="rect" id="Node000002" href="$ade7753_8c.html#addadcb98eacc7f2cf23a46210b546a98" title="Initialize the device." alt="" coords="108,5,215,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="249,21,215,21,215,15,249,15"/>
+<area shape="rect" id="Node000003" href="$eval-ade7753_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,5,60,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="94,21,60,21,60,15,94,15"/>
+</map>

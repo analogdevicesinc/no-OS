@@ -1,0 +1,25 @@
+<map id="ad9250_init_param" name="ad9250_init_param">
+<area shape="rect" id="Node000001" title=" " alt="" coords="1245,225,1392,250"/>
+<area shape="rect" id="Node000002" href="$structno__os__spi__init__param.html" title="Structure holding the parameters for SPI initialization." alt="" coords="935,142,1097,167"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1077,168,1272,222,1270,227,1076,174"/>
+<area shape="rect" id="Node000003" href="$structno__os__spi__platform__ops.html" title="Structure holding SPI function pointers that point to the platform specific function." alt="" coords="5,46,184,71"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="183,41,307,26,464,17,549,16,637,21,724,30,809,47,866,66,919,91,998,140,996,144,917,96,864,71,807,52,723,36,636,26,549,22,464,22,307,32,183,47"/>
+<area shape="rect" id="Node000005" href="$structno__os__spi__desc.html" title="Structure holding SPI descriptor." alt="" coords="658,101,781,126"/>
+<area shape="poly" id="edge7_Node000005_Node000003" title=" " alt="" coords="198,61,388,73,607,93,658,100,657,106,606,99,388,79,198,66"/>
+<area shape="rect" id="Node000006" href="$structno__os__spibus__desc.html" title="SPI bus descriptor." alt="" coords="324,107,471,133"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="148,73,209,89,324,109,323,114,207,95,147,78"/>
+<area shape="rect" id="Node000004" href="$structno__os__platform__spi__delays.html" title="Delays resulted from components in the SPI signal path. The values is ns." alt="" coords="323,160,472,200"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="486,174,934,155,935,161,486,179"/>
+<area shape="poly" id="edge8_Node000005_Node000004" title=" " alt="" coords="485,161,606,136,663,123,664,129,607,141,486,166"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="795,121,935,141,934,146,794,126"/>
+<area shape="poly" id="edge9_Node000005_Node000005" title=" " alt="" coords="689,86,698,77,719,74,737,76,748,83,750,92,745,102,740,99,745,92,743,86,735,81,719,79,701,82,693,90"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="484,116,658,112,658,117,484,121"/>
+<area shape="rect" id="Node000007" href="$structad9250__state.html" title=" " alt="" coords="961,255,1071,281"/>
+<area shape="poly" id="edge10_Node000001_Node000007" title=" " alt="" coords="1085,263,1221,252,1252,247,1253,253,1222,257,1085,268"/>
+<area shape="rect" id="Node000008" href="$structad9250__platform__data.html" title="Platform specific information." alt="" coords="635,231,804,257"/>
+<area shape="poly" id="edge11_Node000007_Node000008" title=" " alt="" coords="818,249,960,261,960,266,818,255"/>
+<area shape="rect" id="Node000009" href="$structad9250__jesd204b__cfg.html" title="JESD204B interface configuration." alt="" coords="638,281,801,306"/>
+<area shape="poly" id="edge12_Node000007_Node000009" title=" " alt="" coords="814,284,910,276,960,271,960,277,911,281,814,289"/>
+<area shape="rect" id="Node000010" href="$structad9250__fast__detect__cfg.html" title="Fast Detect module configuration." alt="" coords="631,330,808,355"/>
+<area shape="poly" id="edge13_Node000007_Node000010" title=" " alt="" coords="807,325,910,301,980,278,982,283,911,307,808,330"/>
+</map>

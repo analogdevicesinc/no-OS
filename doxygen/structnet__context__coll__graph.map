@@ -1,0 +1,21 @@
+<map id="net_context" name="net_context">
+<area shape="rect" id="Node000001" title=" " alt="" coords="242,269,341,295"/>
+<area shape="rect" id="Node000002" href="$structadin1300__desc.html" title=" " alt="" coords="232,181,351,207"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="294,221,294,269,289,269,289,221"/>
+<area shape="rect" id="Node000003" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="200,93,332,119"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="276,131,290,180,285,182,271,133"/>
+<area shape="rect" id="Node000007" href="$structmax24287__desc.html" title=" " alt="" coords="79,181,207,207"/>
+<area shape="poly" id="edge7_Node000007_Node000003" title=" " alt="" coords="230,127,201,145,156,183,153,179,198,141,228,123"/>
+<area shape="rect" id="Node000004" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="172,5,360,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="269,45,269,93,263,93,263,45"/>
+<area shape="rect" id="Node000005" href="$structno__os__mdio__desc.html" title="MDIO device descriptor created with no_os_mdio_init()." alt="" coords="5,93,143,119"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="98,126,140,155,179,167,232,179,231,184,178,172,138,160,95,130"/>
+<area shape="poly" id="edge8_Node000007_Node000005" title=" " alt="" coords="61,131,57,144,60,156,73,169,91,179,88,184,70,174,56,159,52,144,56,130"/>
+<area shape="rect" id="Node000006" href="$structno__os__mdio__ops.html" title="Collection of MDIO ops that point to specific implementations." alt="" coords="9,5,139,31"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="77,45,77,93,71,93,71,45"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="170,213,214,243,263,267,261,272,211,248,167,217"/>
+<area shape="rect" id="Node000008" href="$structno__os__irq__ctrl__desc.html" title=" " alt="" coords="374,181,523,207"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="419,216,363,248,316,272,314,267,361,243,417,211"/>
+<area shape="rect" id="Node000009" href="$structno__os__irq__platform__ops.html" title="Structure holding IRQ function pointers that point to the platform specific function." alt="" coords="360,93,537,119"/>
+<area shape="poly" id="edge10_Node000008_Node000009" title=" " alt="" coords="451,133,451,181,446,181,446,133"/>
+</map>

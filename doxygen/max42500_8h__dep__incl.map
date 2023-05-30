@@ -1,0 +1,9 @@
+<map id="drivers/power/max42500/max42500.h" name="drivers/power/max42500/max42500.h">
+<area shape="rect" id="Node000001" title="Header file of MAX42500 Driver." alt="" coords="111,5,295,45"/>
+<area shape="rect" id="Node000002" href="$max42500_8c.html" title="Source file of MAX42500 Driver." alt="" coords="5,93,189,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="171,56,122,95,119,91,167,52"/>
+<area shape="rect" id="Node000003" href="$max42500_2src_2common_2common__data_8h.html" title="Defines common data to be used by max42500 examples." alt="" coords="213,93,405,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="239,52,287,91,284,95,235,56"/>
+<area shape="rect" id="Node000004" href="$max42500_2src_2common_2common__data_8c.html" title="Defines common data to be used by max42500 examples." alt="" coords="214,181,405,221"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="312,147,312,181,307,181,307,147"/>
+</map>

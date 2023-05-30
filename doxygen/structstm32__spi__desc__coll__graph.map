@@ -1,0 +1,36 @@
+<map id="stm32_spi_desc" name="stm32_spi_desc">
+<area shape="rect" id="Node000001" title="stm32 platform specific SPI descriptor" alt="" coords="1545,131,1672,156"/>
+<area shape="rect" id="Node000002" href="$structno__os__gpio__desc.html" title="Structure holding the GPIO descriptor." alt="" coords="1267,55,1399,80"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1413,74,1467,83,1522,98,1557,112,1587,128,1585,133,1555,117,1520,103,1466,89,1412,79"/>
+<area shape="rect" id="Node000003" href="$structno__os__gpio__platform__ops.html" title="Structure holding gpio function pointers that point to the platform specific function." alt="" coords="892,29,1080,55"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="1094,47,1131,50,1266,60,1266,65,1130,55,1094,53"/>
+<area shape="rect" id="Node000013" href="$structno__os__gpio__init__param.html" title="Structure holding the parameters for GPIO initialization." alt="" coords="1247,5,1419,31"/>
+<area shape="poly" id="edge17_Node000013_Node000003" title=" " alt="" coords="1094,32,1246,21,1247,27,1094,37"/>
+<area shape="rect" id="Node000004" href="$structno__os__dma__desc.html" title="Describes the state of the DMA controller." alt="" coords="649,157,783,183"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="796,154,806,153,985,139,1125,135,1444,134,1521,134,1545,135,1545,141,1521,139,1444,139,1125,140,986,144,807,158,797,159"/>
+<area shape="rect" id="Node000008" href="$structno__os__dma__default__handler__data.html" title="IRQ parameter for the default inter transfer handler." alt="" coords="865,219,1107,244"/>
+<area shape="poly" id="edge9_Node000008_Node000004" title=" " alt="" coords="761,185,807,201,881,216,880,221,806,206,759,190"/>
+<area shape="rect" id="Node000005" href="$structno__os__dma__ch.html" title="Describes the state of a DMA channel." alt="" coords="1273,192,1392,217"/>
+<area shape="poly" id="edge14_Node000001_Node000005" title=" " alt="" coords="1405,188,1521,163,1560,153,1562,159,1522,169,1406,193"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="1259,200,1221,197,979,183,783,175,783,169,980,177,1222,191,1260,195"/>
+<area shape="poly" id="edge10_Node000008_Node000005" title=" " alt="" coords="1259,213,1107,225,1106,219,1259,208"/>
+<area shape="rect" id="Node000006" href="$structno__os__list__desc.html" title="Structure storing the list and function wrapper for usual list types." alt="" coords="924,365,1048,391"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="1053,359,1094,345,1138,326,1181,302,1219,272,1227,261,1230,250,1234,238,1244,227,1272,212,1274,216,1247,231,1239,241,1235,252,1232,264,1223,276,1184,306,1140,331,1096,350,1054,364"/>
+<area shape="poly" id="edge6_Node000006_Node000006" title=" " alt="" coords="955,351,964,342,986,339,1004,341,1016,347,1019,357,1013,367,1008,364,1013,356,1011,351,1003,346,986,344,966,347,958,355"/>
+<area shape="rect" id="Node000007" href="$structno__os__callback__desc.html" title="Structure describing a callback to be registered." alt="" coords="907,415,1065,440"/>
+<area shape="poly" id="edge7_Node000005_Node000007" title=" " alt="" coords="1079,419,1117,410,1155,397,1190,377,1219,350,1228,334,1232,319,1230,289,1228,259,1232,243,1243,227,1257,216,1272,209,1274,214,1260,221,1247,230,1237,245,1233,259,1235,289,1237,320,1233,336,1223,353,1193,381,1157,402,1118,415,1080,424"/>
+<area shape="poly" id="edge8_Node000005_Node000008" title=" " alt="" coords="1080,243,1161,251,1196,250,1220,246,1232,237,1244,226,1272,215,1274,220,1247,231,1235,241,1222,251,1196,256,1161,256,1079,249"/>
+<area shape="rect" id="Node000009" href="$structno__os__dma__platform__ops.html" title=" " alt="" coords="321,133,511,159"/>
+<area shape="poly" id="edge11_Node000004_Node000009" title=" " alt="" coords="525,152,649,162,649,167,524,157"/>
+<area shape="rect" id="Node000010" href="$structno__os__irq__ctrl__desc.html" title=" " alt="" coords="341,183,491,208"/>
+<area shape="poly" id="edge12_Node000004_Node000010" title=" " alt="" coords="504,189,625,181,649,178,649,183,626,186,505,195"/>
+<area shape="rect" id="Node000011" href="$structno__os__irq__platform__ops.html" title="Structure holding IRQ function pointers that point to the platform specific function." alt="" coords="5,183,183,208"/>
+<area shape="poly" id="edge13_Node000010_Node000011" title=" " alt="" coords="197,193,341,193,341,198,197,198"/>
+<area shape="rect" id="Node000012" href="$structstm32__gpio__init__param.html" title="Structure holding the initialization parameters for stm32 platform." alt="" coords="1245,241,1420,267"/>
+<area shape="poly" id="edge15_Node000001_Node000012" title=" " alt="" coords="1416,236,1468,221,1520,201,1559,178,1591,154,1594,158,1562,182,1522,206,1470,226,1417,241"/>
+<area shape="poly" id="edge16_Node000001_Node000013" title=" " alt="" coords="1433,28,1479,41,1523,60,1546,75,1568,94,1599,128,1595,132,1564,98,1543,80,1520,64,1477,46,1431,33"/>
+<area shape="rect" id="Node000014" href="$structstm32__dma__channel.html" title="STM32 DMA Channels." alt="" coords="1254,423,1411,448"/>
+<area shape="poly" id="edge18_Node000001_Node000014" title=" " alt="" coords="1360,412,1435,348,1519,264,1565,204,1597,155,1602,158,1570,207,1523,268,1438,352,1363,416"/>
+<area shape="rect" id="Node000015" href="$structstm32__dma__trigger.html" title="Trigger descriptor for triggering a DMA transfer." alt="" coords="911,464,1061,489"/>
+<area shape="poly" id="edge19_Node000014_Node000015" title=" " alt="" coords="1074,478,1146,477,1221,469,1262,459,1300,446,1302,451,1264,464,1222,474,1147,482,1075,483"/>
+</map>

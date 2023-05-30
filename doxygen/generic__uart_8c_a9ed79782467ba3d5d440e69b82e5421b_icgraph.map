@@ -1,0 +1,97 @@
+<map id="no_os_uart_write" name="no_os_uart_write">
+<area shape="rect" id="Node000001" title="Write data to UART device." alt="" coords="745,277,879,303"/>
+<area shape="rect" id="Node000002" href="$stm32__uart__stdio_8c.html#a0c1fa2d02c07b22bf2ebd769a028b852" title=" " alt="" coords="585,5,647,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="803,264,792,216,771,157,740,96,719,68,696,44,672,31,647,24,648,18,674,26,699,40,723,65,744,93,776,155,797,215,809,263"/>
+<area shape="rect" id="Node000003" href="$max32650_2maxim__uart__stdio_8c.html#aa025a12d45f60c7d0eae249e61f0c7f9" title=" " alt="" coords="585,55,647,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="800,265,786,227,764,180,734,133,696,93,672,81,647,73,648,68,674,76,699,89,738,130,769,178,791,224,805,263"/>
+<area shape="rect" id="Node000004" href="$ades1754_8c.html#a8d5454b5a79290f87d6e85bf54768cd5" title="ADES1754 HELLO ALL specific command message to wake&#45;up devices alongside daisy&#45;chain." alt="" coords="543,104,689,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="796,266,756,204,729,171,696,143,674,132,677,127,699,138,732,167,761,201,800,263"/>
+<area shape="rect" id="Node000007" href="$ades1754_8c.html#a1e2642c939bb958615c13fd33919e079" title="ADES1754 read all command message." alt="" coords="544,153,688,179"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="789,269,748,230,696,192,671,181,673,176,699,188,752,226,792,265"/>
+<area shape="rect" id="Node000008" href="$ades1754_8c.html#a69b25b97b9db645b88777f94641bd5ef" title="ADES1754 read block command message." alt="" coords="535,203,697,228"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="771,274,696,242,663,231,664,226,698,237,773,269"/>
+<area shape="rect" id="Node000009" href="$ades1754_8c.html#a3043ee917cdcdbf9cb3ef43134f920ac" title="ADES1754 read device command message." alt="" coords="540,252,692,277"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="731,282,692,277,692,272,732,277"/>
+<area shape="rect" id="Node000022" href="$ades1754_8c.html#afe3771223472e5f0001a4b60cbe92857" title="ADES1754 write all command message." alt="" coords="542,301,690,327"/>
+<area shape="poly" id="edge23_Node000001_Node000022" title=" " alt="" coords="732,302,690,308,690,302,731,297"/>
+<area shape="rect" id="Node000023" href="$ades1754_8c.html#abaf68f627944f3c9dd0cc7ca32472ce3" title="ADES1754 write device command message." alt="" coords="538,351,694,376"/>
+<area shape="poly" id="edge24_Node000001_Node000023" title=" " alt="" coords="771,311,698,340,661,353,659,348,696,336,769,306"/>
+<area shape="rect" id="Node000026" href="$iio_8c.html#a3cd4e4597f478a8e0d9cd06f4202a28a" title="Set communication ops and read/write ops." alt="" coords="583,400,649,425"/>
+<area shape="poly" id="edge29_Node000001_Node000026" title=" " alt="" coords="791,315,750,353,699,390,651,408,649,403,696,385,747,349,788,311"/>
+<area shape="rect" id="Node000027" href="$iio__aducm3029_2src_2main_8c.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="589,449,643,475"/>
+<area shape="poly" id="edge30_Node000001_Node000027" title=" " alt="" coords="800,316,760,377,732,410,699,439,672,453,644,460,643,455,670,448,696,434,728,407,756,374,796,313"/>
+<area shape="rect" id="Node000028" href="$tmc7300_8c.html#aafd152b1a5ef5f7c35536a00b9bc0de8" title="Read a register." alt="" coords="545,600,687,625"/>
+<area shape="poly" id="edge31_Node000001_Node000028" title=" " alt="" coords="799,316,700,487,628,601,623,598,695,485,795,313"/>
+<area shape="rect" id="Node000043" href="$tmc7300_8c.html#a61d65614166c73f1cc9732b4fa2ff27c" title="Write a register." alt="" coords="543,823,689,848"/>
+<area shape="poly" id="edge46_Node000001_Node000043" title=" " alt="" coords="805,317,762,454,700,638,625,823,620,821,695,636,757,453,800,315"/>
+<area shape="rect" id="Node000005" href="$ades1754_8c.html#a8d3cb097da679fab95e936f8b2cb626f" title="ADES1754 device intialization function." alt="" coords="327,71,440,96"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="529,107,440,94,441,89,529,102"/>
+<area shape="rect" id="Node000006" href="$spi__uart__bridge__example_8c.html#ac25cbf8ae523e89cb0617e68c98bc697" title="SPI&#45;to&#45;UART example main execution." alt="" coords="59,63,178,88"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="313,84,178,80,178,74,313,79"/>
+<area shape="rect" id="Node000010" href="$ades1754_8c.html#ab10ca7d0a1c2731a054bb4fdc0ef4877" title="Read specific alert state." alt="" coords="308,136,459,161"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="552,250,533,242,509,225,485,207,409,164,411,159,488,202,512,221,536,237,554,245"/>
+<area shape="rect" id="Node000011" href="$ades1754_8c.html#a01fb57c7549f06f25260bd31a6e0bb5b" title="ADES1754 read cell data." alt="" coords="294,217,473,243"/>
+<area shape="poly" id="edge11_Node000009_Node000011" title=" " alt="" coords="526,254,469,245,469,240,527,249"/>
+<area shape="rect" id="Node000012" href="$ades1754_8c.html#adab9ebabc29ae19de65b72649e194884" title="ADES1754 update device command message." alt="" coords="299,276,467,301"/>
+<area shape="poly" id="edge13_Node000009_Node000012" title=" " alt="" coords="526,277,468,283,467,277,526,271"/>
+<area shape="poly" id="edge10_Node000010_Node000006" title=" " alt="" coords="333,134,231,102,178,89,179,84,233,97,335,129"/>
+<area shape="poly" id="edge12_Node000011_Node000006" title=" " alt="" coords="337,214,307,197,278,175,263,154,255,135,247,118,230,101,205,89,177,82,179,77,207,84,234,97,251,115,260,133,267,152,282,171,310,192,340,209"/>
+<area shape="rect" id="Node000013" href="$ades1754_8c.html#abf0336a8c2479fe281f6890b1e22072e" title="Set ADC scan method." alt="" coords="19,112,218,137"/>
+<area shape="poly" id="edge14_Node000012_Node000013" title=" " alt="" coords="304,273,278,256,266,243,260,229,254,202,248,176,242,164,230,152,209,140,212,135,234,148,246,161,253,174,259,201,265,227,271,240,282,252,307,268"/>
+<area shape="rect" id="Node000014" href="$ades1754_8c.html#a6b3a12d5e93621a0113c20b392f28a17" title="Cell&#45;Balancing Calibration Period Selection." alt="" coords="27,162,210,202"/>
+<area shape="poly" id="edge15_Node000012_Node000014" title=" " alt="" coords="319,274,279,256,254,236,245,226,231,216,204,205,206,200,233,212,248,222,258,232,281,252,321,269"/>
+<area shape="rect" id="Node000015" href="$ades1754_8c.html#a568a6c93f7660701c4a318aa9b830d49" title="Cell&#45;Ballancing Measurement Enable/Disable." alt="" coords="6,227,231,252"/>
+<area shape="poly" id="edge16_Node000012_Node000015" title=" " alt="" coords="301,276,187,255,188,249,302,271"/>
+<area shape="rect" id="Node000016" href="$ades1754_8c.html#a9f3596b0241f3b820fb2fdf73114c513" title="Set Cell Balancing mode." alt="" coords="5,276,232,301"/>
+<area shape="poly" id="edge17_Node000012_Node000016" title=" " alt="" coords="285,291,232,291,232,286,285,286"/>
+<area shape="rect" id="Node000017" href="$ades1754_8c.html#a2a54ad8c942bb8f9c87a12c1b97a8ed9" title="Set Buffer mode for data acquisition." alt="" coords="18,325,219,351"/>
+<area shape="poly" id="edge18_Node000012_Node000017" title=" " alt="" coords="302,306,188,328,187,323,301,301"/>
+<area shape="rect" id="Node000018" href="$ades1754_8c.html#a9badaadef8c37481a4ccceae8b42170c" title="Set IIR filter coefficient." alt="" coords="53,375,185,400"/>
+<area shape="poly" id="edge19_Node000012_Node000018" title=" " alt="" coords="316,308,281,323,267,333,258,344,248,354,233,364,186,381,184,376,231,360,245,350,254,340,264,329,279,318,314,303"/>
+<area shape="rect" id="Node000019" href="$ades1754_8c.html#aed1fbc41b15d76f6174710a8077ec948" title="Set speciic IIR filter settings." alt="" coords="39,424,199,449"/>
+<area shape="poly" id="edge20_Node000012_Node000019" title=" " alt="" coords="304,309,282,323,265,344,259,367,252,391,234,413,200,430,198,425,230,409,247,388,254,366,260,342,278,319,301,305"/>
+<area shape="rect" id="Node000020" href="$ades1754_8c.html#a415d67f8019842750759f13156278777" title="ADES1754 Start/Stop Scanning function." alt="" coords="39,523,198,548"/>
+<area shape="poly" id="edge21_Node000012_Node000020" title=" " alt="" coords="298,310,282,322,266,346,259,369,258,392,260,416,261,440,260,464,252,488,234,512,218,524,200,532,197,527,215,519,230,508,247,486,255,463,256,440,254,416,252,392,253,368,261,343,278,319,295,306"/>
+<area shape="rect" id="Node000021" href="$ades1754_8c.html#a9f0bfa3719e1e1684c7f16b2aad35599" title="Select Scan Mode of the cells." alt="" coords="11,473,226,499"/>
+<area shape="poly" id="edge22_Node000012_Node000021" title=" " alt="" coords="300,309,282,323,269,339,262,356,259,392,256,427,248,445,234,463,215,475,212,471,230,459,244,443,251,426,254,391,257,355,264,337,278,319,297,305"/>
+<area shape="poly" id="edge28_Node000023_Node000012" title=" " alt="" coords="559,349,534,341,486,323,426,304,427,299,488,318,536,335,561,344"/>
+<area shape="poly" id="edge27_Node000023_Node000020" title=" " alt="" coords="564,349,501,335,427,328,388,330,351,336,314,348,282,367,266,382,259,398,257,435,256,474,249,494,234,512,218,523,200,531,198,526,215,519,230,508,244,491,250,473,252,435,254,397,262,379,278,363,312,343,349,331,388,324,427,323,502,330,565,344"/>
+<area shape="rect" id="Node000024" href="$ades1754_8c.html#a552231693c2b02463cdb088adf5c3dfe" title="Set specific alert thershold value." alt="" coords="296,377,471,403"/>
+<area shape="poly" id="edge25_Node000023_Node000024" title=" " alt="" coords="524,376,471,383,470,377,524,371"/>
+<area shape="rect" id="Node000025" href="$ades1754_8c.html#a9087eadd5c714393fed847f75f1419f1" title="Set Cell Polarity." alt="" coords="299,427,468,452"/>
+<area shape="poly" id="edge26_Node000023_Node000025" title=" " alt="" coords="554,383,536,390,512,403,488,416,448,429,446,424,486,412,509,399,534,385,552,378"/>
+<area shape="rect" id="Node000029" href="$tmc7300_8c.html#ac763ab28b2dbdfa11548f430a9daf8d8" title="Get the comparator blank time register." alt="" coords="290,476,477,501"/>
+<area shape="poly" id="edge32_Node000028_Node000029" title=" " alt="" coords="591,592,544,552,516,532,486,515,455,504,457,499,488,510,519,528,548,548,594,588"/>
+<area shape="rect" id="Node000030" href="$tmc7300_8c.html#acacee6e2207b3d336088cf45e838ede4" title="Read the driver status register." alt="" coords="292,525,475,551"/>
+<area shape="poly" id="edge33_Node000028_Node000030" title=" " alt="" coords="573,597,486,565,445,553,446,548,487,559,574,592"/>
+<area shape="rect" id="Node000031" href="$tmc7300_8c.html#a6d0daddd1f0bf31c5b15a3c2836036da" title="Get the number of UART valid write accesses. Wraps around at 255." alt="" coords="312,575,455,600"/>
+<area shape="poly" id="edge34_Node000028_Node000031" title=" " alt="" coords="531,606,455,598,455,592,531,601"/>
+<area shape="rect" id="Node000032" href="$tmc7300_8c.html#a5d469805df1c0b4f0b8df54c8d3b4438" title="Read the IOIN register." alt="" coords="314,624,453,649"/>
+<area shape="poly" id="edge35_Node000028_Node000032" title=" " alt="" coords="531,624,453,632,453,627,531,619"/>
+<area shape="rect" id="Node000033" href="$tmc7300_8c.html#a40d1093037953b2b58e9c7972205edf6" title="Get the load indicator." alt="" coords="280,673,487,699"/>
+<area shape="poly" id="edge36_Node000028_Node000033" title=" " alt="" coords="572,633,487,663,442,676,440,671,486,658,570,628"/>
+<area shape="rect" id="Node000034" href="$tmc7300_8c.html#a89185b2a2f02ff79ce77d64c96e0d8a0" title="Get the frequency of the PWM signal." alt="" coords="294,723,473,748"/>
+<area shape="poly" id="edge37_Node000028_Node000034" title=" " alt="" coords="593,637,547,676,488,712,453,725,451,720,485,708,544,671,590,633"/>
+<area shape="rect" id="Node000035" href="$tmc7300_8c.html#a58f3b9b30d60ca1dd2c027640c12abfa" title="Update a register." alt="" coords="304,772,463,797"/>
+<area shape="poly" id="edge38_Node000028_Node000035" title=" " alt="" coords="602,639,557,701,525,734,488,762,460,774,458,769,485,757,521,730,553,697,598,636"/>
+<area shape="rect" id="Node000036" href="$tmc7300_8c.html#a666dc6dc776d6bfe0b112b71fd1cd8c7" title="Enable the bridge driver." alt="" coords="39,600,198,625"/>
+<area shape="poly" id="edge39_Node000035_Node000036" title=" " alt="" coords="290,770,278,761,265,746,258,730,254,698,250,667,243,653,230,639,215,629,197,621,199,617,217,624,234,635,247,650,255,666,259,697,263,728,269,743,282,757,293,766"/>
+<area shape="rect" id="Node000037" href="$tmc7300_8c.html#afa24e691fc8e073c42eccef568793994" title="Initialize the TMC7300 driver." alt="" coords="65,649,172,675"/>
+<area shape="poly" id="edge40_Node000035_Node000037" title=" " alt="" coords="290,769,278,761,261,743,254,723,246,705,230,688,202,675,172,667,173,662,204,670,234,684,251,702,259,721,266,740,282,757,293,764"/>
+<area shape="rect" id="Node000038" href="$tmc7300_8c.html#ae24f277cba551330a667bd6a3037df4d" title="Set the comparator blank time register." alt="" coords="25,699,212,724"/>
+<area shape="poly" id="edge41_Node000035_Node000038" title=" " alt="" coords="308,771,279,762,255,750,231,738,192,727,193,721,233,733,257,745,281,757,309,766"/>
+<area shape="rect" id="Node000039" href="$tmc7300_8c.html#ac0effb4a4767211744380e79804e46d4" title="Set the PWM duty cycle." alt="" coords="28,748,209,773"/>
+<area shape="poly" id="edge42_Node000035_Node000039" title=" " alt="" coords="290,779,209,772,210,766,290,774"/>
+<area shape="rect" id="Node000040" href="$tmc7300_8c.html#ac5d47fc049d6d3813161ad971e1d374b" title="Set the PWM duty cycle and direction." alt="" coords="16,797,221,823"/>
+<area shape="poly" id="edge43_Node000035_Node000040" title=" " alt="" coords="290,796,222,803,221,798,290,791"/>
+<area shape="rect" id="Node000041" href="$tmc7300_8c.html#af10ce624c541d2e1a2f3b56a5ee2c92a" title="Set the frequency of the PWM signal." alt="" coords="29,847,208,872"/>
+<area shape="poly" id="edge44_Node000035_Node000041" title=" " alt="" coords="328,804,281,819,233,837,183,849,182,844,231,831,279,814,326,799"/>
+<area shape="rect" id="Node000042" href="$tmc7300_8c.html#a016377d64687a2ee849e237849181cfe" title="Set the standstill mode. The motorrun bit will be set to 0." alt="" coords="10,896,227,921"/>
+<area shape="poly" id="edge45_Node000035_Node000042" title=" " alt="" coords="308,805,282,819,267,835,259,852,250,869,234,886,208,898,205,894,230,881,246,866,254,849,262,832,278,815,305,800"/>
+<area shape="poly" id="edge47_Node000043_Node000035" title=" " alt="" coords="543,822,442,800,443,795,544,817"/>
+<area shape="poly" id="edge50_Node000043_Node000042" title=" " alt="" coords="529,836,410,842,344,850,281,863,257,874,233,886,188,898,187,893,231,881,255,869,279,858,344,845,409,836,528,831"/>
+<area shape="rect" id="Node000044" href="$tmc7300_8c.html#af67ae6edb940da6e3c3000fe05aec17c" title="Set the current limit." alt="" coords="304,873,463,913"/>
+<area shape="poly" id="edge48_Node000043_Node000044" title=" " alt="" coords="551,854,463,876,462,871,550,849"/>
+<area shape="rect" id="Node000045" href="$tmc7300_8c.html#a3a2b24fd6c2195a5f4b3076fc35ec6c8" title="Set the UART response delay." alt="" coords="290,937,477,963"/>
+<area shape="poly" id="edge49_Node000043_Node000045" title=" " alt="" coords="591,859,545,894,488,927,452,940,450,935,486,922,542,890,588,855"/>
+</map>

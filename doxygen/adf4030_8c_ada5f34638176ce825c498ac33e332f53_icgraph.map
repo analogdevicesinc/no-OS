@@ -1,0 +1,5 @@
+<map id="adf4030_set_temperature" name="adf4030_set_temperature">
+<area shape="rect" id="Node000001" title="Set Temperature Readback feature&#39;s initial state. This function should be called before reading tempe..." alt="" coords="239,13,429,38"/>
+<area shape="rect" id="Node000002" href="$adf4030_8c.html#a3e092fbc3e52eb01dd07cfbe55e8db19" title="Set background serial alignment for multiple BSYNC channels." alt="" coords="5,5,191,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="225,28,191,28,191,23,225,23"/>
+</map>

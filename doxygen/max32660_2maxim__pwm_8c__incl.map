@@ -1,0 +1,36 @@
+<map id="drivers/platform/maxim/max32660/maxim_pwm.c" name="drivers/platform/maxim/max32660/maxim_pwm.c">
+<area shape="rect" id="Node000001" title="Maxim platform specific implementation PWM API." alt="" coords="217,5,411,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="118,167,174,192"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="291,48,233,95,169,158,165,154,230,91,288,44"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="398,93,494,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="347,43,416,84,413,88,344,48"/>
+<area shape="rect" id="Node000004" href="$no__os__alloc_8h.html" title=" " alt="" coords="5,93,116,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="254,48,112,92,110,87,253,43"/>
+<area shape="rect" id="Node000007" href="$no__os__error_8h.html" title="Error codes definition." alt="" coords="518,93,627,119"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="377,43,523,87,521,92,375,48"/>
+<area shape="rect" id="Node000009" href="$no__os__util_8h.html" title="Header file of utility functions." alt="" coords="199,167,299,192"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="286,47,263,68,246,94,241,124,244,153,239,154,235,124,241,92,259,65,283,43"/>
+<area shape="rect" id="Node000012" href="$no__os__units_8h.html" title="Header file of Units." alt="" coords="652,93,763,119"/>
+<area shape="poly" id="edge12_Node000001_Node000012" title=" " alt="" coords="409,43,639,88,638,94,408,48"/>
+<area shape="rect" id="Node000013" href="$max32660_2maxim__pwm_8h.html" title="Maxim platform specific implementation PWM API." alt="" coords="255,93,373,119"/>
+<area shape="poly" id="edge13_Node000001_Node000013" title=" " alt="" coords="317,46,317,79,311,79,311,46"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="27,167,94,192"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="63,119,63,153,58,153,58,119"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="61,240,132,265"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="49,121,35,135,22,153,15,172,18,191,36,214,59,231,56,235,32,218,13,193,9,171,17,150,30,132,45,117"/>
+<area shape="rect" id="Node000008" href="$errno_8h.html" title="Error macro definition for ARM Compiler." alt="" coords="544,167,612,192"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="576,119,579,153,573,153,571,119"/>
+<area shape="poly" id="edge10_Node000009_Node000006" title=" " alt="" coords="225,194,135,237,133,232,223,190"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="400,240,471,265"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="280,190,393,233,391,237,278,195"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="235,240,318,265"/>
+<area shape="poly" id="edge11_Node000009_Node000011" title=" " alt="" coords="256,191,270,226,265,228,251,193"/>
+<area shape="poly" id="edge14_Node000013_Node000002" title=" " alt="" coords="288,121,187,164,185,159,286,116"/>
+<area shape="poly" id="edge19_Node000013_Node000009" title=" " alt="" coords="305,121,270,158,267,155,301,117"/>
+<area shape="rect" id="Node000014" title=" " alt="" coords="323,167,385,192"/>
+<area shape="poly" id="edge15_Node000013_Node000014" title=" " alt="" coords="323,118,343,153,338,156,318,120"/>
+<area shape="rect" id="Node000015" href="$no__os__pwm_8h.html" title="Header file of PWM Interface." alt="" coords="409,167,520,192"/>
+<area shape="poly" id="edge16_Node000013_Node000015" title=" " alt="" coords="339,116,429,158,426,163,337,121"/>
+<area shape="poly" id="edge17_Node000015_Node000010" title=" " alt="" coords="462,193,448,228,443,226,457,191"/>
+<area shape="poly" id="edge18_Node000015_Node000011" title=" " alt="" coords="435,195,321,237,319,232,434,190"/>
+</map>

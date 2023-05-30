@@ -1,0 +1,9 @@
+<map id="ad5171_dpot_send_cmd" name="ad5171_dpot_send_cmd">
+<area shape="rect" id="Node000001" title="Send command word to the ad5171 digital potentiometer." alt="" coords="229,55,408,80"/>
+<area shape="rect" id="Node000002" href="$ad5171_8c.html#a27e9bf4b402ad2f16d6cd8ff0e8b4117" title="Read the ad5171 digital potentiometer channel." alt="" coords="7,5,179,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="246,54,152,33,153,28,247,49"/>
+<area shape="rect" id="Node000003" href="$ad5171_8c.html#a9f63096ec5392afa93ee36ddad28771f" title="Write to the digital potentiometer channel." alt="" coords="5,55,181,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="216,70,182,70,182,65,216,65"/>
+<area shape="rect" id="Node000004" href="$ad5171_8c.html#a320e10da826b4cab60b346fab99cfd8f" title="Write to the digital potentiometer channel." alt="" coords="5,105,181,145"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="256,86,173,107,172,102,254,81"/>
+</map>

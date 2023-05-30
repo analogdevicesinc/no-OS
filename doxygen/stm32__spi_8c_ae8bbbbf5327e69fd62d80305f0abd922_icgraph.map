@@ -1,0 +1,13 @@
+<map id="stm32_spi_altrnate_cs_enable" name="stm32_spi_altrnate_cs_enable">
+<area shape="rect" id="Node000001" title="enable CS gpio alternate function" alt="" coords="471,35,617,75"/>
+<area shape="rect" id="Node000002" href="$stm32__spi_8c.html#ab6cca445715be6bcb7bf563bf8388829" title="Configure and start a series of transfers using DMA." alt="" coords="241,5,417,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="457,45,417,40,418,35,457,40"/>
+<area shape="rect" id="Node000005" href="$stm32__spi_8c.html#a50f1db6c12a130f00d92ae3acf9c0589" title=" " alt="" coords="236,70,423,95"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="457,69,423,73,423,68,457,63"/>
+<area shape="rect" id="Node000003" href="$stm32__spi_8c.html#a523da63f0a8b55feff12987dd565df18" title="Configure and start a series of transfers using DMA. Wait for the completion before returning." alt="" coords="5,13,188,38"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="228,28,188,28,188,23,228,23"/>
+<area shape="rect" id="Node000004" href="$stm32__spi_8c.html#ac1bb3dc339d72e8eeb06ff5cdba6ce5a" title="Configure and start a series of transfers using DMA. Don&#39;t Wait for the completion before returning." alt="" coords="23,63,170,103"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="235,51,171,67,170,62,234,46"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="263,69,148,41,150,35,265,64"/>
+<area shape="poly" id="edge6_Node000005_Node000004" title=" " alt="" coords="222,85,170,85,170,80,222,80"/>
+</map>
